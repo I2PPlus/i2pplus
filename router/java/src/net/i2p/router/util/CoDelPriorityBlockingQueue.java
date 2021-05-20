@@ -184,7 +184,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
             return false;
         return _dropping ||
                _context.clock().now() - e.getEnqueueTime() >= BACKLOG_TIME ||
-               size() >= BACKLOG_SIZE;
+               size() >= _context.getProperty(PROP_BACKLOG_SIZE, DEFAULT_BACKLOG_SIZE);
     }
 
     /////// private below here

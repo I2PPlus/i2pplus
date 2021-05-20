@@ -2739,14 +2739,12 @@ div.sorry hr {
 
 .newsDate {
   opacity: .7;
-  font-style: italic;
-  margin-right: 2px;
 }
 
 .messages i {
-  text-align: left;
-  float: none;
   display: inline-block;
+  float: none;
+  text-align: left;
 }
 
 .messages #newsDisplay {
@@ -3712,7 +3710,7 @@ h2, h3, h4, .confignav {
 }
 
 .news h3 {
-  padding-left: 22px !important;
+  padding-left: 23px !important;
   font-size: 11pt !important;
   border: none !important;
   border-bottom: var(--innerborder) !important;

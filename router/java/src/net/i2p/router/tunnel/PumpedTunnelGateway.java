@@ -51,6 +51,10 @@ class PumpedTunnelGateway extends TunnelGateway {
     private static final int MAX_IB_MSGS_PER_PUMP = 24;
     private static final int INITIAL_OB_QUEUE = 64;
     private static final int MAX_IB_QUEUE = 1024;
+    public static final String PROP_MAX_OB_MSGS_PER_PUMP = "router.pumpMaxOutboundMsgs";
+    public static final String PROP_MAX_IB_MSGS_PER_PUMP = "router.pumpMaxInboundMsgs";
+    public static final String PROP_INITIAL_OB_QUEUE = "router.pumpInitialOutboundQueue";
+    public static final String PROP_MAX_IB_QUEUE = "router.pumpInitialInboundQueue";
 
     /**
      * @param preprocessor this pulls Pending messages off a list, builds some
@@ -67,12 +71,13 @@ class PumpedTunnelGateway extends TunnelGateway {
         if (getClass() == PumpedTunnelGateway.class) {
             // Unbounded priority queue for outbound
             // fixme lint PendingGatewayMessage is not a CDPQEntry
-            _prequeue = new CoDelPriorityBlockingQueue(context, "OBGW", INITIAL_OB_QUEUE);
+            _prequeue = new CoDelPriorityBlockingQueue(context, "OBGW", context.getProperty(PROP_INITIAL_OB_QUEUE, INITIAL_OB_QUEUE));
             _nextHop = receiver.getSendTo();
             _isInbound = false;
         } else {  // extended by ThrottledPTG for IB
             // Bounded non-priority queue for inbound
-            _prequeue = new CoDelBlockingQueue<PendingGatewayMessage>(context, "IBGW", MAX_IB_QUEUE);
+//            _prequeue = new CoDelBlockingQueue<PendingGatewayMessage>(context, "IBGW", MAX_IB_QUEUE);
+            _prequeue = new CoDelBlockingQueue<PendingGatewayMessage>(context, "IBGW", context.getProperty(PROP_MAX_IB_QUEUE, MAX_IB_QUEUE));
             _nextHop = receiver.getSendTo();
             _isInbound = true;
         }
@@ -131,9 +136,11 @@ class PumpedTunnelGateway extends TunnelGateway {
             max = _isInbound ? 1 : 2;
 */
         if (backlogged)
-            max = _isInbound ? MAX_IB_MSGS_PER_PUMP / 4 : MAX_OB_MSGS_PER_PUMP / 4;
+            max = _isInbound ? _context.getProperty(PROP_MAX_IB_MSGS_PER_PUMP, MAX_IB_MSGS_PER_PUMP) / 4 :
+                               _context.getProperty(PROP_MAX_OB_MSGS_PER_PUMP, MAX_OB_MSGS_PER_PUMP) / 4;
         else
-            max = _isInbound ? MAX_IB_MSGS_PER_PUMP : MAX_OB_MSGS_PER_PUMP;
+            max = _isInbound ? _context.getProperty(PROP_MAX_IB_MSGS_PER_PUMP, MAX_IB_MSGS_PER_PUMP) :
+                               _context.getProperty(PROP_MAX_OB_MSGS_PER_PUMP, MAX_OB_MSGS_PER_PUMP);
         _prequeue.drainTo(queueBuf, max);
         if (queueBuf.isEmpty())
             return false;

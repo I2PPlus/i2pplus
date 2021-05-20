@@ -32,8 +32,10 @@ public class PriBlockingQueue<E extends PQEntry> extends PriorityBlockingQueue<E
     protected static final long[] RATES = {60*1000, 10*60*1000, 60*60*1000};
 //    protected static final int BACKLOG_SIZE = 256;
 //    protected static final int MAX_SIZE = 512;
-    protected static final int BACKLOG_SIZE = 128;
-    protected static final int MAX_SIZE = 768;
+    protected static final int DEFAULT_BACKLOG_SIZE = 128;
+    protected static final int DEFAULT_MAX_SIZE = 768;
+    public static final String PROP_MAX_SIZE = "router.codelMaxQueue";
+    public static final String PROP_BACKLOG_SIZE = "router.codelBacklog";
 /*
     protected static final int BACKLOG_SIZE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 256 : 384;
     protected static final int MAX_SIZE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 512 : 1024;
@@ -61,7 +63,7 @@ public class PriBlockingQueue<E extends PQEntry> extends PriorityBlockingQueue<E
     @Override
     public boolean add(E o) {
         timestamp(o);
-        if (size() >= MAX_SIZE) {
+        if (size() >= _context.getProperty(PROP_MAX_SIZE, DEFAULT_MAX_SIZE)) {
             _context.statManager().addRateData(STAT_FULL, 1);
             return false;
         }
@@ -74,7 +76,7 @@ public class PriBlockingQueue<E extends PQEntry> extends PriorityBlockingQueue<E
     @Override
     public boolean offer(E o) {
         timestamp(o);
-        if (size() >= MAX_SIZE) {
+        if (size() >= _context.getProperty(PROP_MAX_SIZE, DEFAULT_MAX_SIZE)) {
             _context.statManager().addRateData(STAT_FULL, 1);
             return false;
         }
@@ -92,7 +94,7 @@ public class PriBlockingQueue<E extends PQEntry> extends PriorityBlockingQueue<E
     @Override
     public boolean offer(E o, long timeout, TimeUnit unit) {
         timestamp(o);
-        if (size() >= MAX_SIZE) {
+        if (size() >= _context.getProperty(PROP_MAX_SIZE, DEFAULT_MAX_SIZE)) {
             _context.statManager().addRateData(STAT_FULL, 1);
             return false;
         }
@@ -115,7 +117,7 @@ public class PriBlockingQueue<E extends PQEntry> extends PriorityBlockingQueue<E
      *  Is the queue too big?
      */
     public boolean isBacklogged() {
-        return size() >= BACKLOG_SIZE;
+        return size() >= _context.getProperty(PROP_BACKLOG_SIZE, DEFAULT_BACKLOG_SIZE);
     }
 
     /////// private below here

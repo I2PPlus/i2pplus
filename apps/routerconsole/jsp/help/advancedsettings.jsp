@@ -140,6 +140,12 @@
 <tr><th>router.codelInterval={n} <span class="plus">I2P+</span></th></tr>
 <tr><td>This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]</td></tr>
 
+<tr><th>router.router.codelMaxQueue={n} <span class="plus">I2P+</span></th></tr>
+<tr><td>This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]</td></tr>
+
+<tr><th>router.router.codelBacklog={n} <span class="plus">I2P+</span></th></tr>
+<tr><td>This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]</td></tr>
+
 <tr><th>router.codelTarget={n} <span class="plus">I2P+</span></th></tr>
 <tr><td>This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]</td></tr>
 
