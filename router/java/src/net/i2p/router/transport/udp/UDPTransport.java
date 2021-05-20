@@ -3475,9 +3475,9 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         if (status != old) {
             if (_log.shouldLog(Log.WARN))
                 _log.warn("Old status: " + old + " New status: " + status +
-                          "\n* Caused by update: " + newStatus +
+                          "\n* Caused by update: " + newStatus);
 //                          " from: ", new Exception("traceback"));
-                          " from: ");
+//                          " from: ");
             if (old != Status.UNKNOWN && _context.router().getUptime() > 5*60*1000L) {
                 _context.router().eventLog().addEvent(EventLog.REACHABILITY,
                    "from " + _t(old.toStatusString()) + " to " +  _t(status.toStatusString()));
