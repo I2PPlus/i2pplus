@@ -875,7 +875,7 @@ public class Blocklist {
      * Public for console only, not a public API
      *
      * @since 0.9.45 split out from above, public since 0.9.48 for console
-     */ 
+     */
     public boolean isPermanentlyBlocklisted(int ip) {
         return isPermanentlyBlocklisted(ip, _blocklist, _blocklistSize);
     }
@@ -887,7 +887,7 @@ public class Blocklist {
      * Each long is ((from << 32) | to)
      *
      * @since 0.9.48 split out from above
-     */ 
+     */
     private static boolean isPermanentlyBlocklisted(int ip, long[] blocklist, int blocklistSize) {
         int hi = blocklistSize - 1;
         if (hi <= 0)
@@ -1024,7 +1024,7 @@ public class Blocklist {
      */
     private void banlist(Hash peer, byte[] ip) {
         // Temporary reason, until the job finishes
-        String reason = " <b>➜</b> " + _x("IP banned by blocklist.txt entry {0}").replace("blocklist.txt", "blocklist").replace(" entry", "");
+        String reason = " <b>➜</b> " + _x("IP banned by blocklist.txt");
         _context.banlist().banlistRouterForever(peer, reason, Addresses.toString(ip));
         if (!_context.getBooleanPropertyDefaultTrue(PROP_BLOCKLIST_DETAIL))
             return;
