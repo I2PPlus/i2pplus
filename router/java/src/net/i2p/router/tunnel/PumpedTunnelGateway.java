@@ -54,7 +54,7 @@ class PumpedTunnelGateway extends TunnelGateway {
     public static final String PROP_MAX_OB_MSGS_PER_PUMP = "router.pumpMaxOutboundMsgs";
     public static final String PROP_MAX_IB_MSGS_PER_PUMP = "router.pumpMaxInboundMsgs";
     public static final String PROP_INITIAL_OB_QUEUE = "router.pumpInitialOutboundQueue";
-    public static final String PROP_MAX_IB_QUEUE = "router.pumpInitialInboundQueue";
+    public static final String PROP_MAX_IB_QUEUE = "router.pumpMaxInboundQueue";
 
     /**
      * @param preprocessor this pulls Pending messages off a list, builds some
