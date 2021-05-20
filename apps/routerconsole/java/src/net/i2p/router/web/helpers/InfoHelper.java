@@ -199,8 +199,11 @@ public class InfoHelper extends HelperBase {
                        _t("Shared") + ":</b> " + bwShare() + "% (" + shareBW + "KB/s) &ensp;<a href=\"/config\">" +
                        _t("Configure") + "</a></td></tr>\n");
         }
-        buf.append("<tr><td><b>CoDel:</b></td><td><b>" + _t("Target") + ":</b> " + codelTarget() + "ms &ensp;<b>" +
-                   _t("Interval") + ":</b> " + codelInterval() + "ms</td></tr>\n");
+        Boolean isAdvanced = _context.getBooleanProperty("routerconsole.advanced");
+        if (isAdvanced) {
+            buf.append("<tr><td><b>CoDel:</b></td><td><b>" + _t("Target") + ":</b> " + codelTarget() + "ms &ensp;<b>" +
+                       _t("Interval") + ":</b> " + codelInterval() + "ms</td></tr>\n");
+        }
         if (firstInstalled() != null && firstVersion() != null && lastUpdated() != null) {
             buf.append("<tr><td><b>" + _t("Installed") + ":</b></td><td>" + installDate + " (" + firstVersion() + ")" +
                        " &ensp;<span class=\"nowrap\"><b>" + _t("Location") + ":</b> " + appDir.toString() + "</span>" +
