@@ -676,11 +676,11 @@ class PacketHandler {
                     }
                     _context.statManager().addRateData("udp.destroyedInvalidSkew", skew);
                     if (_log.shouldWarn())
-                        _log.warn("Dropped connection - packet too far in the past: " + new Date(sendOn) + ": " + packet +
+                        _log.warn("Dropped connection - packet too far in the past: " + new Date(sendOn) + packet +
                                   " PeerState: " + state);
                 } else {
                     if (_log.shouldWarn())
-                        _log.warn("Packet too far in the past: " + new Date(sendOn) + ": " + packet +
+                        _log.warn("Packet too far in the past: " + new Date(sendOn) + packet +
                                   " PeerState: " + state);
                 }
                 return;
