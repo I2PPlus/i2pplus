@@ -11,7 +11,7 @@
     -->
     <property file="override.properties"/>
     <property file="build.properties"/>
-    <!--  
+    <!--
          When changing, also change javadoc URL in build.properties,
          and checksum in apps/jetty/build.xml
          and versions in gradle.properties and apps/jetty/build.gradle
@@ -1948,7 +1948,7 @@
     <target name="izpack-patches" >
         <taskdef name="izpack" classpath="${basedir}/installer/lib/izpack/patches.jar:${basedir}/installer/lib/izpack/standalone-compiler.jar"
                                classname="com.izforge.izpack.ant.IzPackTask" />
-        <jar destfile="${basedir}/installer/lib/izpack/patches.jar" 
+        <jar destfile="${basedir}/installer/lib/izpack/patches.jar"
              basedir="${basedir}/installer/lib/izpack/patches" />
     </target>
 
@@ -2123,7 +2123,7 @@
     </target>
 
     <!-- IzPack 4 -->
-    <target name="installer-windows" depends="clean, preppkg-windows-only, util-list-changes, izpack-patches, buildUtilityJar" >
+    <target name="installer-windows" depends="clean, preppkg-windows-only, izpack-patches, buildUtilityJar" >
         <fixcrlf srcdir="pkg-temp" includes="*.config *.bat *.cmd **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="crlf"/>
         <izpack input="${basedir}/installer/install.xml" output="${basedir}/install.jar" installerType="standard" basedir="${basedir}" />
         <ant target="installerexe" />
@@ -2132,7 +2132,7 @@
     </target>
 
     <!-- IzPack 5 -->
-    <target name="installer5-windows" depends="clean, izpack5-patches, preppkg-windows-only, util-list-changes, buildUtilityJar" >
+    <target name="installer5-windows" depends="clean, izpack5-patches, preppkg-windows-only, buildUtilityJar" >
         <fixcrlf srcdir="pkg-temp" includes="*.config *.bat *.cmd **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="crlf"/>
         <izpack5 input="${basedir}/installer/install5.xml" output="${basedir}/install.jar" installerType="standard" basedir="${basedir}" />
         <ant target="installer5exe" />
