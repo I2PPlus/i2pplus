@@ -2012,6 +2012,13 @@ td.tabletextarea {
   border: 1px solid var(--borderinner);
 }
 
+#routerinformation #revision:active {
+  color: #d30 !important;
+  border: none;
+  box-shadow: none;
+  background: none;
+}
+
 #routerinformation tr:nth-child(n+2) a:not(#revision){
   font-size: 90%;
   margin: -1px 0 -1px 2px;
@@ -2019,7 +2026,7 @@ td.tabletextarea {
 }
 
 #routerinformation table:hover tr:nth-child(n+2) a {
-  display: inline;
+  display: inline !important;
 }
 
 .newsentry + hr + #newsStatus, .newsentry + hr + #newsStatus + #newsDisplay {
@@ -2032,9 +2039,9 @@ hr + #newsStatus, hr + #newsStatus + #newsDisplay {
 }
 
 #news #newsStatus {
+  margin-bottom: 6px !important;
   float: left;
   text-align: justify;
-  margin-bottom: 6px !important;
 }
 
 #newsDisplay {

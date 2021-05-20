@@ -6493,6 +6493,15 @@ table[id$="logs"] ul {
   list-style: none !important;
 }
 
+.nologs i {
+  padding: 8px;
+  display: inline-block;
+}
+
+#wrapperlogs .nologs i {
+  padding: 12px;
+}
+
 /* Override error log colors */
 
 font[color="#006600"] { /* debug/notify */

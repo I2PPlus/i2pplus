@@ -149,6 +149,18 @@
 <tr><th>router.codelTarget={n} <span class="plus">I2P+</span></th></tr>
 <tr><td>This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]</td></tr>
 
+<tr><th>router.pumpInitialOutboundQueue={n} <span class="plus">I2P+</span></th></tr>
+<tr><td>This setting configures the initial size of the outbound message queue. [Default is 64]</td></tr>
+
+<tr><th>router.pumpMaxInboundQueue={n} <span class="plus">I2P+</span></th></tr>
+<tr><td>This setting configures the maximum size of the inbound message queue. [Default is 1024]</td></tr>
+
+<tr><th>router.pumpMaxInboundMsgs={n} <span class="plus">I2P+</span></th></tr>
+<tr><td>This setting configures the maximum number of inbound messages queued per cycle (pump). [Default is 24]</td></tr>
+
+<tr><th>router.pumpMaxOutboundMsgs={n} <span class="plus">I2P+</span></th></tr>
+<tr><td>This setting configures the maximum number of outbound messages queued per cycle (pump). [Default is 64]</td></tr>
+
 <tr><th>router.refreshRouterDelay={n} <span class="plus">I2P+</span></th></tr>
 <tr><td>This setting (in milliseconds) allows you to manually configure the delay between router refresh updates run by the Refresh Routers Job. By default the pause between refreshes is determined by the size of the NetDb, and introduces some randomness in the timing to mitigate traffic analysis. For values lower than 2000 milliseconds, increasing the value of <code>router.refreshTimeout</code> is recommended. Note that setting this value below 2000 milliseconds will increase your network traffic and may introduce job lag, and is not recommended for sustained use.</td></tr>
 
