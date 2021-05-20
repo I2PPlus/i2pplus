@@ -39,6 +39,8 @@ import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
 
+import net.i2p.util.SystemVersion;
+
 /**
  * Handle the received tunnel build message requests and replies,
  * including sending responses to requests, updating the
@@ -76,22 +78,19 @@ class BuildHandler implements Runnable {
 
     /** TODO these may be too high, review and adjust */
 //    private static final int MIN_QUEUE = 18;
-    private static final int MIN_QUEUE = 8;
 //    private static final int MAX_QUEUE = 192;
-    private static final int MAX_QUEUE = 128;
+    private static final int MIN_QUEUE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 16 : 32;
+    private static final int MAX_QUEUE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 192 : 512;
 
 //    private static final int NEXT_HOP_LOOKUP_TIMEOUT = 15*1000;
-    private static final int NEXT_HOP_LOOKUP_TIMEOUT = 12*1000;
+    private static final int NEXT_HOP_LOOKUP_TIMEOUT = 10*1000;
     private static final int PRIORITY = OutNetMessage.PRIORITY_BUILD_REPLY;
 
     /** limits on concurrent next-hop RI lookup */
-//    private static final int MIN_LOOKUP_LIMIT = 10;
-    private static final int MIN_LOOKUP_LIMIT = 16;
-//    private static final int MAX_LOOKUP_LIMIT = 100;
-    private static final int MAX_LOOKUP_LIMIT = 128;
+    private static final int MIN_LOOKUP_LIMIT = 10;
+    private static final int MAX_LOOKUP_LIMIT = 100;
     /** limit lookups to this % of current participating tunnels */
-//    private static final int PERCENT_LOOKUP_LIMIT = 3;
-    private static final int PERCENT_LOOKUP_LIMIT = 5;
+    private static final int PERCENT_LOOKUP_LIMIT = 3;
 
     /**
      *  This must be high, as if we timeout the send we remove the tunnel from
@@ -100,8 +99,7 @@ class BuildHandler implements Runnable {
      *  all the traffic in TunnelDispatcher.dispatch(TunnelDataMessage msg, Hash recvFrom).
      *  10s was not enough.
      */
-//    private static final int NEXT_HOP_SEND_TIMEOUT = 25*1000;
-    private static final int NEXT_HOP_SEND_TIMEOUT = 20*1000;
+    private static final int NEXT_HOP_SEND_TIMEOUT = 25*1000;
 
     private static final long MAX_REQUEST_FUTURE = 5*60*1000;
     /** must be > 1 hour due to rounding down */
@@ -119,7 +117,8 @@ class BuildHandler implements Runnable {
         _manager = manager;
         _exec = exec;
         // Queue size = 12 * share BW / 48K
-        int sz = Math.min(MAX_QUEUE, Math.max(MIN_QUEUE, TunnelDispatcher.getShareBandwidth(ctx) * MIN_QUEUE / 48));
+//        int sz = Math.min(MAX_QUEUE, Math.max(MIN_QUEUE, TunnelDispatcher.getShareBandwidth(ctx) * MIN_QUEUE / 48));
+        int sz = SystemVersion.isSlow() || SystemVersion.getCores() <= 4 ? MAX_QUEUE / 2 : MAX_QUEUE;
         //_inboundBuildMessages = new CoDelBlockingQueue(ctx, "BuildHandler", sz);
         _inboundBuildMessages = new LinkedBlockingQueue<BuildMessageState>(sz);
 
@@ -783,7 +782,7 @@ class BuildHandler implements Runnable {
 
         int response;
         if (_context.router().isHidden()) {
-            _context.throttle().setTunnelStatus(_x("Declining all tunnel requests" + ":<br>" + _x("Hidden Mode")));
+            _context.throttle().setTunnelStatus(_x("Declining requests" + ":" + _x("Hidden Mode")));
             response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
         } else {
             response = _context.throttle().acceptTunnelRequest();

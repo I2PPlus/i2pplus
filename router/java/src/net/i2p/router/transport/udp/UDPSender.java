@@ -302,9 +302,10 @@ class UDPSender {
                         _context.statManager().addRateData("udp.pushTime", packet.getLifetime());
                         _context.statManager().addRateData("udp.sendPacketSize", size);
                     } catch (IOException ioe) {
+                        String ipaddress = packet.getPacket().getAddress().toString().replace("/", "");
                         if (_log.shouldLog(Log.WARN))
 //                            _log.warn("Error sending to " + packet.getPacket().getAddress(), ioe);
-                            _log.warn("Error sending to " + packet.getPacket().getAddress() + "\n* Error: " + ioe.getMessage());
+                            _log.warn("Error sending to " + ipaddress + "\n* Error: " + ioe.getMessage());
                         _context.statManager().addRateData("udp.sendException", 1);
                         if (_socket.isClosed()) {
                             if (_keepRunning) {

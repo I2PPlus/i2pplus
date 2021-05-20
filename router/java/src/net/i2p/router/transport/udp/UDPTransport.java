@@ -3456,7 +3456,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                     (STATUS_FW.contains(status) && STATUS_FW.contains(old))) {
                     if (status != _reachabilityStatusPending) {
                         if (_log.shouldLog(Log.WARN))
-                            _log.warn("Old status: " + old + " status pending confirmation: " + status +
+                            _log.warn("Old status: " + old + "\n* Status (pending confirmation): " + status +
                                       "\n* Caused by update: " + newStatus);
                         _reachabilityStatusPending = status;
                         _testEvent.forceRunSoon(isIPv6);
@@ -3475,9 +3475,9 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         if (status != old) {
             if (_log.shouldLog(Log.WARN))
                 _log.warn("Old status: " + old + " New status: " + status +
-                          "\n* Caused by update: " + newStatus +
+                          "\n* Caused by update: " + newStatus);
 //                          " from: ", new Exception("traceback"));
-                          " from: ");
+//                          " from: ");
             if (old != Status.UNKNOWN && _context.router().getUptime() > 5*60*1000L) {
                 _context.router().eventLog().addEvent(EventLog.REACHABILITY,
                    "from " + _t(old.toStatusString()) + " to " +  _t(status.toStatusString()));
@@ -3511,8 +3511,8 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             if (newStatus == Status.UNKNOWN && status != _reachabilityStatusPending) {
                 // still have something pending, try again
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("Old status: " + status + " status pending confirmation: " + _reachabilityStatusPending +
-                              " Caused by update: " + newStatus);
+                    _log.warn("Old status: " + status + "\n* Status (pending confirmation): " + _reachabilityStatusPending +
+                              "\n* Caused by update: " + newStatus);
                 _testEvent.forceRunSoon(isIPv6);
             }
             if (_log.shouldLog(Log.INFO))
