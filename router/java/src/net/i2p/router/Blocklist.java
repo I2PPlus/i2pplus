@@ -1110,7 +1110,7 @@ public class Blocklist {
                     }
                     if (match(ipint, toEntry(e.ip1, e.ip2))) {
                         try { br.close(); } catch (IOException ioe) {}
-                        String reason = " <b>➜</b> " + _x("IP banned by blocklist.txt entry {0}").replace("blocklist.txt", "blocklist").replace(" entry", "");
+                        String reason = " <b>➜</b> " + _x("IP banned by blocklist.txt");
                         // only one translate parameter for now
                         //for (int i = 0; i < 4; i++) {
                         //    reason = reason + (ip[i] & 0xff);
@@ -1119,7 +1119,7 @@ public class Blocklist {
                         //}
                         //reason = reason + " banned by " + BLOCKLIST_FILE_DEFAULT + " entry \"" + buf + "\"";
                         if (_log.shouldLog(Log.WARN))
-                            _log.warn("Banlisting " + peer + " " + reason);
+                            _log.warn("Banlisting " + peer + " (blocklist.txt)");
                         _context.banlist().banlistRouterForever(peer, reason, buf.toString());
                         return;
                     }
