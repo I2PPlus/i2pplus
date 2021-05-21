@@ -1122,34 +1122,20 @@ div.news hr {
   float: left;
 }
 
-#newsDisplay {
-  margin-left: 10px;
-  white-space: nowrap;
-}
-
-#news #newsDisplay, #graphopts {
-  color: transparent;
-}
-
-#newsStatus, #news #newsDisplay, #news #newsDisplay a {
-  display: inline-block;
-}
-
-#news #newsDisplay a, #graphopts a, #routerinfo a, #routerinformation tr:nth-child(n+2) a:not(#revision),
+#newsDisplay a, #graphopts a, #routerinfo a, #routerinformation tr:nth-child(n+2) a:not(#revision),
 #fullhistory a, .graphstat, .graphstat:visited {
   margin: 0 -2px;
   padding: 1px 10px;
   color: #494;
-  border: 1px solid #010;
+  border: 1px solid rgba(0,24,0,.5);
   border-radius: 15px;
-  box-shadow: 0 0 0 1px #000;
-  background: #020;
-  background: rgba(0,48,0,.6);
+  box-shadow: va(--highlight);
+  background: rgba(0,48,0,.3);
 }
 
 #news #newsDisplay a:hover, #news #newsDisplay a:focus, #graphopts a:hover, #graphopts a:focus, .graphstat:hover, .graphstat:focus,
 #routerinformation tr:nth-child(n+2) a:not(#revision):hover, #routerinformation tr:nth-child(n+2) a:not(#revision):focus, #fullhistory a:hover, #fullhistory a:focus {
-  border: 1px solid #020;
+  border: 1px solid #030;
   background: #030;
   background: linear-gradient(to bottom, #030 50%, #010 50%);
 }
@@ -1161,6 +1147,29 @@ div.news hr {
 
 .news #newsDisplay, .news #newsStatus {
   margin-top: 3px !important;
+  display: inline-block;
+}
+
+.messages #newsDisplay {
+  margin-right: 4px;
+  float: right;
+  white-space: nowrap;
+  color: transparent;
+}
+
+.messages #newsDisplay a:first-child {
+  display: none;
+}
+
+.messages #newsDisplay a:last-child {
+  font-size: smaller;
+}
+
+#news #newsDisplay, #graphopts {
+  color: transparent;
+}
+
+#newsStatus, #news #newsDisplay, #news #newsDisplay a {
   display: inline-block;
 }
 
