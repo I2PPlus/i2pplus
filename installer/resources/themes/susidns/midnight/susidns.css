@@ -1692,7 +1692,7 @@ input#exporthosts {
   min-width: 0 !important;
   display: inline-block;
   font-size: 0 !important;
-  background: url(/themes/console/images/svg/inbound.svg) center center no-repeat, linear-gradient(to bottom, #010, #000) !important;
+  background: url(images/download.svg) center center no-repeat, linear-gradient(to bottom, #010, #000) !important;
   background-size: 16px, 100% !important;
 }
 
@@ -1705,7 +1705,7 @@ input#exporthosts:hover, #addressbook input#exporthosts:focus {
   border: 1px solid #652787;
   box-shadow: var(--highlight), inset 0 0 1px 1px #757;
   background: #000 !important;
-  background: url(/themes/console/images/svg/inbound.svg) center center no-repeat, linear-gradient(to bottom, #202 50%, #000 50%) !important;
+  background: url(images/download.svg) center center no-repeat, linear-gradient(to bottom, #202 50%, #000 50%) !important;
   background-size: 16px, 100% !important;
   background-blend-mode: luminosity;
 }
@@ -1714,7 +1714,7 @@ input#exporthosts:active {
   text-shadow: 0 1px 1px #3C1751;
   box-shadow: var(--highlight), inset 3px 3px 3px #000 !important;
   background: #652787 !important;
-  background: url(/themes/console/images/svg/inbound.svg) center center no-repeat, linear-gradient(to bottom, #401856, #501f6c) !important;
+  background: url(images/download.svg) center center no-repeat, linear-gradient(to bottom, #401856, #501f6c) !important;
   background-size: 16px, 100% !important;
 }
 

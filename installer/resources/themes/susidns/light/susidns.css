@@ -1647,7 +1647,7 @@ input#exporthosts {
   min-width: 0;
   display: inline-block;
   font-size: 0 !important;
-  background: url(/themes/console/images/svg/inbound.svg) center center no-repeat, linear-gradient(to bottom, #fff, #eef);
+  background: url(images/download.svg) center center no-repeat, linear-gradient(to bottom, #fff, #eef);
   background-size: 16px, 100%;
 }
 
