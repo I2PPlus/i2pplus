@@ -1120,7 +1120,7 @@ class NetDbRenderer {
                     buf.append("<li>");
                 buf.append("<b class=\"netdb_transport\"");
                 int cost = addr.getCost();
-                if (!((style.equals("SSU") && cost == 5) || (style.equals("NTCP") && cost == 10))) {
+                if (!((style.equals("SSU") && cost == 5) || (style.startsWith("NTCP") && cost == 10))) {
                     buf.append(" title=\"").append(_t("Cost")).append(": ").append(cost).append("\"");
                 }
                 buf.append(">").append(DataHelper.stripHTML(style)).append("</b> ");
