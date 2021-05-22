@@ -1,4 +1,44 @@
-* 2021-05-18 0.9.50 released
+* 2021-05-22 0.9.50+ released
+
+2021-05-21 dr|z3d
+ * Router: Increase chance of rekey to ECIES to 1 in 2
+
+2021-05-20 dr|z3d
+ * Console: Add PumpedTunnelGateway configs to advanced settings help
+ * Router:
+   - Bump our own OB messages to max priority so they don't get dropped
+   - Add configurable values for codel queue max size and backlog
+     - router.codelMaxQueue={n}
+     - router.codelBacklog={n}
+   - Make PumperTunnelGateway inbound/outbound message per pump/queues configurable
+     - router.pumpMaxOutboundMsgs={n}
+     - router.pumpMaxInboundMsgs={n}
+     - router.pumpInitialOutboundQueue={n}
+     - router.pumpMaxInboundQueue={n}
+
+2021-05-19 dr|z3d
+ * Console:
+   - Add CoDel target / interval values to /info if in Advanced mode
+   - Document router.codelTarget and router.codelInterval in /help/ section
+ * Router:
+   - Allow user configuration of CoDel target and interval values
+     - router.codelTarget={n}
+     - router.codelInterval={n}
+   - Relax codel target / interval values (100ms / 1000ms)
+   - Increase target/interval for codel queues to mitigate message dropping
+   - Reduce max in/out messages by factor of 4 if backlogged (tgwpumper)
+
+2021-05-18 dr|z3d
+ * Router:
+   - Cut new connections a bit more slack before marking backlogged
+   - Use CoDelPriorityBlocking queue instead of PriBlockingQueue
+     for NTCPConnection
+
+2021-05-17 dr|z3d
+ * Router: bump minimum version for local tunnels to 0.9.49
+
+2021-05-15 dr|z3d
+ * Router: standardize EventPumper stat periods for consistent graph timeframes
 
 2021-05-14 zzz
  * SAM: Remove ancient client demo code
@@ -8,8 +48,29 @@
  * Sybil: Fix retention of analysis files when configured
    to never delete
 
+2021-05-10 dr|z3d
+ * Console: Display job lag in microseconds in sidebar if < 1ms
+ * Router:
+   - Ensure router.exploreWhenFloodfill works as intended
+   - Reduce concurrent tunnel builds for slow systems and routers
+      with <= 4 cores
+
+2021-05-09 dr|z3d
+ * I2PTunnel:
+   - Allow custom i2p.streaming.connectDelay value in IRC client tunnel
+   - Increase default connectDelay to 150ms
+ * Router:
+   - Increase delay before running startGeoIP (was 5s, now 15s)
+   - Reduce max to follow in SingleSearchLookup job; less if isSlow()
+
 2021-05-07 zzz
  * Console: /configpeer improvements
+
+2021-05-07 dr|z3d
+ * Router: Double max share bandwidth to 32768KB (was 16384)
+ * Console:
+     - Remove potential target="_blank" dupes in news feed
+     - Lazy scroll news entries on 'All News' page
 
 2021-05-04 zzz
  * GeoIP 2021-05
@@ -17,8 +78,13 @@
 2021-05-02 zzz
  * Console: Update bug report URLs
 
-2021-04-25 zzz
- * Console: Add author for initial news
+2021-04-27 dr|z3d
+ * Console:
+   - Ensure pageloader displays (dark/midnight)
+   - Add lazy scrolling to /profiles -> floodfills
+
+2021-04-26 dr|z3d
+ * Console: Address sluggish dark theme performance on webkit (dark)
 
 2021-04-24 zzz
  * Jetty: Patch for CVE-2021-28165 Jetty #6072 -
@@ -31,8 +97,19 @@
      (trac ticket #2202, gitlab ticket #17)
    - Fix corruption of large messages (ticket #2765)
 
+2021-04-24 dr|z3d
+ * SusiDNS: Refresh fallback png help image
+
 2021-04-23 idk
  * Router: Fix update on Windows from very old versions (gitlab ticket #16)
+
+2021-04-23 dr|z3d
+ * Console: Convert stat labels to buttons on /configstats
+
+2021-04-21 dr|z3d
+ * Console:
+   - Don't bother showing NTCP version on /peers
+   - Lazy load peers and tunnel peer count tables
 
 2021-04-20 zzz
  * NTCP:
@@ -47,6 +124,14 @@
 
 2021-04-17 zzz
  * Transport: IPv6 state transition fixes
+
+2021-04-17 15:39:38 dr|z3d
+ * Scripts: Add GRACEFUL_UPDATE.md to installer/resources dir (thanks term99!)
+
+2021-04-16 dr|z3d
+ * Console:
+   - Log downloaded update as critical to ensure it remains visible
+   - Fix display of git revisions on /jars
 
 2021-04-12 zzz
  * SSU: Fix peer test getting stuck
@@ -70,6 +155,9 @@
 2021-04-04 zzz
  * Tunnels: Fix timestamp checking for ECIES records
 
+2021-04-03 dr|z3d
+ * Console: Use procedural backgrounds (dark theme)
+
 2021-04-03 zzz
  * SAM: Remove subsessions when primary session closes
  * SSU: Remove restrictions on IPv6 introducers (prop. 158)
@@ -86,12 +174,27 @@
 2021-03-30 zzz
  * Transport: Fix NTCP removing IPv4 address when SSU removes IPv6 address
 
+2020-03-30 dr|z3d
+ * Logging: Convert status error codes to strings in OBClientMessageOneShotJob
+
+2021-03-29 dr|z3d
+ * Console/Webapps: allow img-src data: in preparation for inlined css images
+
 2021-03-29 zzz
  * SSU: Don't request introducers when hidden
  * Transport: Don't open UPnP ports when hidden or force-firewalled
 
+2021-03-28 dr|z3d
+ * Router: Refresh remote leasesets more frequently (was 5 mins, now 90s)
+
 2021-03-27 zzz
  * Router: Fix decryption of blinded leasesets
+
+2021-03-27 dr|z3d
+ * Console: only show active peers in last 5 minutes in sidebar
+
+2021-03-25 dr|z3d
+ * Console: Ensure sybil routers in banlist display consistently
 
 2021-03-25 zzz
  * i2ptunnel: Force non-SSL socket to local target for SSL ports
@@ -102,12 +205,21 @@
  * NetDB: Sort published addresses for consistency
  * SSU: Fix IPv6 transition from firewalled to non-firewalled
 
+2021-03-22 dr|z3d
+ * Util: Allow individual sub-systems to set their own thread priority
+
 2021-03-22 zzz
  * Sybil: Persist blocklist
  * Tunnels: Don't count established routers as new in OBEP throttle (ticket #2245)
 
 2021-03-20 zzz
  * Tunnels: Fix RED dropping for part. tunnels (Gitlab MR #24)
+
+2021-03-19 dr|z3d
+ * ProfileOrganizer: If less than min highcap peers, promote from non-failing
+
+2021-03-18 dr|z3d
+ * Console: Show successful / total averages for peer test in sidebar
 
 2021-03-18 zzz
  * Util:
@@ -132,6 +244,11 @@
  * NetDB: Queue RI file deletion and delete in a single thread
  * SSU: Limit port changes
 
+2021-03-09 dr|z3d
+ * Profile Organzier:
+   - Retain profiles for 1 week
+   - Don't create profiles for peers older than 0.9.48
+
 2021-03-09 zzz
  * Throttle: Don't do exponential calculation unless necessary
  * Util: Consolidate dup BandwidthEstimator interfaces
@@ -140,8 +257,20 @@
  * NTCP: Remove NTCP 1 suppport
  * SSU: Increase CoDel drop threshold at UDPSender queue
 
+2021-03-07 dr|z3d
+ * PeerTestJob: Don't test peers older than 0.9.48
+
+2021-03-07 dr|z3d
+ * Profile Organizer: don't create profiles for K,L,M and unreachable peers
+
+2021-03-06 dr|z3d
+ * Profile Organizer: Forcibly evict K,L,M or unreachable peers from high cap group
+
 2021-03-06 zzz
  * SSU: Require confirmation for IPv6 firewalled state transitions
+
+2021-03-04 dr|z3d
+ * PeerTestJob: Use successful test average as router.peerTestTimeout floor
 
 2021-03-04 zzz
  * I2CP: More prep for different release and API versions
@@ -163,16 +292,32 @@
    - Increase hole punch rate limit
  * UPnP: Fix retention of deprecated addresses
 
+2021-03-03 dr|z3d
+ * Console: Don't show enviro table on /logs if in advanced mode
+
 2021-03-02 zzz
  * UPnP:
    - Limit event subscription time
    - Subscribe to IPv6 service also
+
+2021-03-02 dr|z3d
+ * Console: Add cake.i2p to /home
+ * Imagegen: Change displayed random art hostname when host submitted
 
 2021-03-01 zzz
  * UPnP:
    - Fix mappings not being renewed before expiration
    - IPv6 port forwarding fixes
    - Continue to forward deprecated addresses for a while
+
+2021-03-01 term99
+ * Scripts (linux): cleanup graceful_update
+
+2021-03-01 dr|z3d
+ * Streaming: Add tunable config router.passiveFlushDelay={n} (ms)
+
+2021-02-28 dr|z3d
+ * Console: Add tube.i2p to /home
 
 2021-02-28 zzz
  * SSU: Fix set of states requiring address confirmation
@@ -182,6 +327,14 @@
 
 2021-02-27 zzz
  * UPnP: Move IPv6 checks from Parser to ControlPoint
+
+2021-02-25 dr|z3d
+ * BuildExecutor: Downgrade councurruncy throttling log to debug
+ * I2PTunnel:
+   - Increase minimum size to compress for http headers
+   - Increase max retries for clients to 20 (was 8)
+ * Router: reduce max peers in DHT before skipping exploratory search
+ * RefreshRoutersJob: Suspend if job lag > 500ms or > 10K known peers
 
 2021-02-25 zzz
  * NetDB: Fix NPE validating expired blinded LS2
@@ -197,19 +350,37 @@
  * Build: Prep for different release and API versions
  * Transports: Add 4/6 transport caps
 
+2021-02-22 dr|z3d
+ * IterativeSearchJob:
+   - Don't search so hard when > 6000 known peers
+   - Increase totalsearchlimit when < 4000 known peers
+ * PeerTestJob: Ensure timeout is never lower than total average
+
 2021-02-21 zzz
  * Console: List all Jetty servers in sidebar
- * Profiles: Disable peer test (ticket #2456) and tunnel test response time stat
 
 2021-02-20 zzz
  * Router: Don't rekey previous ECIES every restart on ARM
 
-2021-02-19 zzz
- * i2psnark: Fix theme selection
+2021-02-19 dr|z3d
+  * Console: Use floats for tunnel percentages on /tunnelpeercount
+  * SusiDNS: Move info identicon to own column and add header
 
 2021-02-18 zzz
  * Build: Remove empty jars and wars from installers
  * NTP: Year 2036 fixes (gitlab ticket #12)
+
+2021-02-18 dr|z3d
+ * Eepsite: Alternative dark green jetty-dir.css
+ * Console:
+   - Add padlock icon for encryption type in NetDb section
+   - Only show View Profile icon on router infos if profile available
+
+2021-02-17 dr|z3d
+ * Console:
+   - Fix ipv4/ipv6 links on NetDb router infos
+   - Truncate NetDb search queries for ipv6 router addresses to return results
+   - Don't display advanced stats for routers with no profile
 
 * 2021-02-17 0.9.49+ released
 
