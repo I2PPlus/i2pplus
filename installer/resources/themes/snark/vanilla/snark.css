@@ -2822,10 +2822,13 @@ td#bwHelp a {
 }
 
 td .commentAuthorName {
+  margin-left: 8px;
   width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
   text-align: left;
   border-radius: 1px;
-  box-shadow: 0 0 0 1px #f2f0ed;
+  box-shadow: 0 0 0 1px rgba(77, 69, 62, .7);
   background: #fff5ef url(images/author.png) 4px center no-repeat;
   background: url(images/author.png) 4px center no-repeat, linear-gradient(to bottom, #fff5ef, #fff4de);
 }
@@ -2845,9 +2848,10 @@ td .commentAuthorName {
 }
 
 .commentWrapper {
-  border: 1px solid #6f533e;
   margin: 4px 2px;
   padding: 8px 10px 8px 26px;
+  text-align: left;
+  border: 1px solid #6f533e;
   border-radius: 2px;
   box-shadow: 0 0 0 1px #fff inset, 0 0 1px 0 rgba(77, 69, 62, .7);
   background: url(images/comment.png) 6px center no-repeat #fff6df;
