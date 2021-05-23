@@ -961,6 +961,8 @@ public class SnarkManager implements CompleteListener, ClientApp {
                     String name = dirnames[i].getName();
                     if (skipOld && (name.equals("midnight") || name.equals("classic")))
                         continue;
+                    if (name.equals("images"))
+                        continue;
                     th.add(name);
                 }
                 themes = th.toArray(new String[th.size()]);
