@@ -2882,12 +2882,12 @@ public class I2PSnarkServlet extends BasicServlet {
                   "<form action=\"_post\" method=\"POST\">\n");
         writeHiddenInputs(out, req, "Add");
         out.write("<div class=\"addtorrentsection\">" +
-                  "<input class=\"toggle_input\" id=\"toggle_addtorrent\" type=\"checkbox\"");
+                  "<input hidden class=\"toggle_input\" id=\"toggle_addtorrent\" type=\"checkbox\"");
         if (newURL.length() > 0)
             out.write(" checked=\"checked\">");  // force toggle open
         else
             out.write('>');
-        out.write("<label class=\"toggleview\" for=\"toggle_addtorrent\">");
+        out.write("<label id=\"tab_addtorrent\" class=\"toggleview\" for=\"toggle_addtorrent\">");
         out.write(toThemeImg("add"));
         out.write(' ');
         out.write(_t("Add Torrent"));
@@ -2926,7 +2926,8 @@ public class I2PSnarkServlet extends BasicServlet {
         // *not* enctype="multipart/form-data", so that the input type=file sends the filename, not the file
                   "<form action=\"_post\" method=\"POST\">\n");
         writeHiddenInputs(out, req, "Create");
-        out.write("<input class=\"toggle_input\" id=\"toggle_createtorrent\" type=\"checkbox\"><label class=\"toggleview\" for=\"toggle_createtorrent\">");
+        out.write("<input hidden class=\"toggle_input\" id=\"toggle_createtorrent\" type=\"checkbox\">" +
+                  "<label id=\"tab_newtorrent\" class=\"toggleview\" for=\"toggle_createtorrent\">");
         out.write(toThemeImg("create"));
         out.write(' ');
         out.write(_t("Create Torrent"));
@@ -3037,8 +3038,8 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write(toThemeImg("config"));
         out.write(' ');
         out.write(_t("Configuration"));
-        out.write("</span><hr>\n"   +
-                  "<table border=\"0\" id=\"configs\">");
+        out.write("</span><hr>\n" +
+                  "<table border=\"0\" id=\"configs\">\n");
 
 // user interface
 
@@ -3513,7 +3514,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
     private void writeConfigLink(PrintWriter out) throws IOException {
         out.write("\n<div class=\"configsection\">\n<span class=\"snarkConfig\">" +
-                  "<span class=\"snarkConfigTitle\"><a href=\"configure\">");
+                  "<span id=\"tab_config\" class=\"snarkConfigTitle\"><a href=\"configure\">");
         out.write(toThemeImg("config"));
         out.write(' ');
         out.write(_t("Configuration"));
