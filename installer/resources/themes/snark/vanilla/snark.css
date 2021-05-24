@@ -420,8 +420,8 @@ th, th b {
 
 td {
   padding: 2px 4px;
-  color: #4d2200 !important;
   vertical-align: middle;
+  color: #453221 !important;
 }
 
 thead, tfoot {
@@ -1234,21 +1234,20 @@ thead img.disable, img.disable:hover {
   border-right: 1px solid #998;
   border-radius: 1px;
   box-shadow: inset 0 0 0 1px #efe6e0;
-  background: #cfc1b5;
-  background: linear-gradient(to bottom, rgba(255, 247, 239, .8) 50%, rgba(207, 193, 181, .9) 50%, rgba(207, 193, 181, 1));
+  background: linear-gradient(to bottom, rgba(255,247,239, .8) 50%, rgba(207,193,181,.9) 50%, rgba(207,193,181,1));
 }
 
 .snarkTorrentDownloaded .percentBarInner {
-  background: linear-gradient(rgba(255, 255, 255, .4) 50%, rgba(0, 0, 0, .25) 50%), linear-gradient(to right, rgba(255, 100, 0, .3) 37px, rgba(255, 255, 0, .2) 74px, rgba(0, 255, 0, .2));
+  background: linear-gradient(to right, rgba(255,64,0,.3) 20px, rgba(255,255,0,.3) 50px, rgba(0,255,0,.3)), linear-gradient(to bottom, rgba(255,255,255,.1), rgba(0,0,0,.1)), rgba(255,255,255,.5);
 }
 
 .snarkDirInfo .percentBarInner {
-  background: linear-gradient(to bottom, rgba(255, 247, 239, .75) 50%, rgba(207, 193, 181, .8) 50%, rgba(207, 193, 181, .9)), linear-gradient(to right, rgba(255, 100, 0, .5) 30px, rgba(255, 255, 0, .5) 60px, rgba(0, 255, 0, .5));
+  background: linear-gradient(to bottom, rgba(255,247,239,.75) 50%, rgba(207,193,181,.8) 50%, rgba(207,193,181,.9)), linear-gradient(to right, rgba(255,100,0,.5) 30px, rgba(255,255,0,.5) 60px, rgba(0, 255, 0, .5));
 }
 
 .peerinfo .percentBarInner {
   height: 14px;
-  background: linear-gradient(to bottom, rgba(255, 247, 239, .75) 50%, rgba(207, 193, 181, .8) 50%, rgba(207, 193, 181, .9)) !important;
+  background: linear-gradient(to bottom, rgba(255,255,255,.1), rgba(0,0,0,.1)), rgba(255,255,255,.5) !important;
 }
 
 .percentBarText, .percentBarOuter {
@@ -1303,9 +1302,9 @@ thead img.disable, img.disable:hover {
 }
 
 @supports not (-moz-appearance: none) {
-.percentBarComplete {
-  padding: 2px 0 0 !important;
-}
+  .percentBarComplete {
+    line-height: 1.1;
+  }
 }
 
 /* end download bars */
@@ -2992,7 +2991,7 @@ td.snarkGraphicStatus img {
 }
 
 .snarkTorrentDownloaded .percentBarInner {
-  background: linear-gradient(to bottom, rgba(255, 255, 255, .1) 50%, rgba(0, 0, 0, .1) 50%, rgba(0, 0, 0, .3)), linear-gradient(to right, rgba(255, 100, 0, .5) 33px, rgba(255, 255, 0, .5) 66px, rgba(0, 255, 0, .5));
+  background: linear-gradient(to right, rgba(255,64,0,.3) 15px, rgba(255,255,0,.3) 30px, rgba(0,255,0,.3)), linear-gradient(to bottom, rgba(255,255,255,.1), rgba(0,0,0,.1)), rgba(255,255,255,.5);
 }
 
 .snarkDirInfo .percentBarInner {
@@ -3673,7 +3672,7 @@ tr#torrentInfoStats td {
   min-width: 154px !important;
   display: inline-block;
   text-align: right;
-  color: #3f2510;
+  color: #453221;
 }
 
 #configs td label b:hover {
