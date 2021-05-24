@@ -1399,12 +1399,12 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
 }
 
 .snarkAddInfo {
-  display: inline-block;
   margin-top: 7px;
-  background: url(images/infocircle.png) left center no-repeat;
-  background-size: 14px auto;
   padding-left: 20px;
   min-height: 16px;
+  display: inline-block;
+  background: url(images/details.svg) left center no-repeat;
+  background-size: 14px;
 }
 
 .snarkAddInfo code {
@@ -2586,8 +2586,8 @@ td#bwHelp {
   padding-left: 28px !important;
   width: 90%;
   line-height: 100%;
-  background: url(images/infocircle.png) left 10px center no-repeat;
-  background-size: 14px auto;
+  background: url(images/details.svg) left 10px center no-repeat;
+  background-size: 14px;
 }
 
 td#bwHelp a {
@@ -3891,7 +3891,7 @@ input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilte
 
 #bwHelp {
   margin-left: -184px;
-  padding: 15px 15px 15px 55px;
+  padding: 15px 15px 15px 50px;
   display: block;
   width: 320px;
   visibility: hidden;
@@ -3905,8 +3905,8 @@ input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilte
   font-size: 10pt;
   font-weight: 700;
   opacity: 0;
-  background: #ffe url(/themes/console/images/i2psnark.png) 10px center no-repeat;
-  background-size: 28px 28px !important;
+  background: #ffe var(--snark) 10px center no-repeat;
+  background-size: 26px !important;
   background-blend-mode: luminosity;
   filter: drop-shadow(0 0 1px #7f766f);
   will-change: transform;
