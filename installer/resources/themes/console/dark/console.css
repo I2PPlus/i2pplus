@@ -4528,9 +4528,9 @@ h3#servicedebug a, h3#graphinfo a {
   margin-bottom: 10px;
 }
 
-#tunnels .tunnels_participating tbody tr:first-child {
+/*#tunnels .tunnels_participating tbody tr:first-child {
   display: none !important;
-}
+}*/
 
 .main#tunnels h3 a {
   float: right;
