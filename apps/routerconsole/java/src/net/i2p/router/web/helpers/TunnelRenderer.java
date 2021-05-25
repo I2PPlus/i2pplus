@@ -176,81 +176,90 @@ class TunnelRenderer {
                         inactive++;
                         continue;
                     }
-
-                DataHelper.sort(participating, new TunnelComparator());
-                // everything that isn't 'recent' is already in the tunnel.participatingMessageCount stat
-                processed += cfg.getRecentMessagesCount();
-                if (++displayed > DISPLAY_LIMIT)
-                    continue;
-                out.write("<tr class=\"lazy\">");
-                if (cfg.getSendTo() == null)
-                    out.write("<td class=\"cells obep\" align=\"center\" title=\"" + _t("Outbound Endpoint") + "\">" + _t("Outbound Endpoint") + "</td>");
-                else if (cfg.getReceiveFrom() == null)
-                    out.write("<td class=\"cells ibgw\" align=\"center\" title=\"" + _t("Inbound Gateway") + "\">" + _t("Inbound Gateway") + "</td>");
-                else
-                    out.write("<td class=\"cells ptcp\" align=\"center\" title=\"" + _t("Participant") + "\">" + _t("Participant") + "</td>");
-                long timeLeft = cfg.getExpiration()-_context.clock().now();
-                if (timeLeft > 0)
-                    out.write("<td class=\"cells expiry\" align=\"center\">" + DataHelper.formatDuration2(timeLeft) + "</td>");
-                else
-                    out.write("<td class=\"cells\" align=\"center\"><i>" + _t("grace period") + "</i></td>");
-                out.write("<td class=\"cells datatransfer\" align=\"center\"><span class=\"right\">" + (count * 1024 / 1000) +  "</span><span class=\"left\">&#8239;KB</span></td>");
-                int lifetime = (int) ((_context.clock().now() - cfg.getCreation()) / 1000);
-                if (lifetime <= 0)
-                    lifetime = 1;
-                if (lifetime > 10*60)
-                    lifetime = 10*60;
-                long bps = 1024L * count / lifetime;
-                out.write("<td class=\"cells bps\" align=\"center\"><span class=\"right\">" + DataHelper.formatSize2(bps, true).replace("i", "")
-                    .replace("K", "&#8239;</span><span class=\"left\">K").replace("M", "&#8239;</span><span class=\"left\">M"));
-                if (bps > 1023)
-                    out.write(_t("/s"));
-                else
-                    out.write("</span><span class=\"left\">" + _t("B/s"));
-                out.write("</span></td>");
-                long recv = cfg.getReceiveTunnelId();
-                if (debug) {
-                    if (recv != 0)
-                        out.write("<td class=\"cells\" align=\"center\" title=\"" + _t("Tunnel identity") + "\"><span class=\"tunnel_id\">" +
-                                  recv + "</span></td>");
+                    DataHelper.sort(participating, new TunnelComparator());
+                    // everything that isn't 'recent' is already in the tunnel.participatingMessageCount stat
+                    processed += cfg.getRecentMessagesCount();
+                    if (++displayed > DISPLAY_LIMIT)
+                        continue;
+                    out.write("<tr class=\"lazy\">");
+                    if (cfg.getSendTo() == null)
+                        out.write("<td class=\"cells obep\" align=\"center\" title=\"" + _t("Outbound Endpoint") + "\">" + _t("Outbound Endpoint") + "</td>");
+                    else if (cfg.getReceiveFrom() == null)
+                        out.write("<td class=\"cells ibgw\" align=\"center\" title=\"" + _t("Inbound Gateway") + "\">" + _t("Inbound Gateway") + "</td>");
                     else
-                        out.write("<td class=\"cells\" align=\"center\">" + _t("n/a") + "</td>");
-                }
-                if (cfg.getReceiveFrom() != null)
-                    out.write("<td class=\"cells\" align=\"center\"><span class=\"tunnel_peer\">" + netDbLink(cfg.getReceiveFrom()) +
-                              "</span>&nbsp;<b class=\"tunnel_cap\" title=\"" + _t("Bandwidth tier") + "\">" + getCapacity(cfg.getReceiveFrom()) + "</b></td>");
-                else
-                    out.write("<td class=\"cells\"></td>");
-                long send = cfg.getSendTunnelId();
-                if (debug) {
-                    if (send != 0)
-                        out.write("<td class=\"cells\" align=\"center\" title=\"" + _t("Tunnel identity") + "\"><span class=\"tunnel_id\">" +
-                                  send + "</span></td>");
+                        out.write("<td class=\"cells ptcp\" align=\"center\" title=\"" + _t("Participant") + "\">" + _t("Participant") + "</td>");
+                    long timeLeft = cfg.getExpiration()-_context.clock().now();
+                    if (timeLeft > 0)
+//                        out.write("<td class=\"cells expiry\" align=\"center\">" + DataHelper.formatDuration2(timeLeft) + "</td>");
+                        out.write("<td class=\"cells expiry\" align=\"center\"><span class=\"right\">" + timeLeft / 1000 +
+                                  "</span><span class=\"left\">&#8239;" + _t("sec") + "</span></td>");
+                    else
+                        out.write("<td class=\"cells\" align=\"center\"><i>" + _t("grace period") + "</i></td>");
+                    out.write("<td class=\"cells datatransfer\" align=\"center\"><span class=\"right\">" + (count * 1024 / 1000) +
+                              "</span><span class=\"left\">&#8239;KB</span></td>");
+                    int lifetime = (int) ((_context.clock().now() - cfg.getCreation()) / 1000);
+                    if (lifetime <= 0)
+                        lifetime = 1;
+                    if (lifetime > 10*60)
+                        lifetime = 10*60;
+//                    long bps = 1024L * count / lifetime;
+                    float bps = 1024 * count / lifetime;
+                    float kbps = bps / 1024;
+                    out.write("<td class=\"cells bps\" align=\"center\"><span class=\"right\">" + fmt.format(kbps) +
+                              "&#8239;</span><span class=\"left\">KB/s</span></td>");
+/*
+                    out.write("<td class=\"cells bps\" align=\"center\"><span class=\"right\">" + DataHelper.formatSize2(bps, true).replace("i", "")
+                        .replace("K", "&#8239;</span><span class=\"left\">K").replace("M", "&#8239;</span><span class=\"left\">M"));
+                    if (bps > 1023)
+                        out.write(_t("/s"));
+                    else
+                        out.write("</span><span class=\"left\">" + _t("B/s"));
+                    out.write("</span></td>");
+*/
+                    long recv = cfg.getReceiveTunnelId();
+                    if (debug) {
+                        if (recv != 0)
+                            out.write("<td class=\"cells\" align=\"center\" title=\"" + _t("Tunnel identity") + "\"><span class=\"tunnel_id\">" +
+                                      recv + "</span></td>");
+                        else
+                            out.write("<td class=\"cells\" align=\"center\">" + _t("n/a") + "</td>");
+                    }
+                    if (cfg.getReceiveFrom() != null)
+                        out.write("<td class=\"cells\" align=\"center\"><span class=\"tunnel_peer\">" + netDbLink(cfg.getReceiveFrom()) +
+                                  "</span>&nbsp;<b class=\"tunnel_cap\" title=\"" + _t("Bandwidth tier") + "\">" + getCapacity(cfg.getReceiveFrom()) + "</b></td>");
                     else
                         out.write("<td class=\"cells\"></td>");
+                    long send = cfg.getSendTunnelId();
+                    if (debug) {
+                        if (send != 0)
+                            out.write("<td class=\"cells\" align=\"center\" title=\"" + _t("Tunnel identity") + "\"><span class=\"tunnel_id\">" +
+                                      send + "</span></td>");
+                        else
+                            out.write("<td class=\"cells\"></td>");
+                    }
+                    if (cfg.getSendTo() != null)
+                        out.write("<td class=\"cells\" align=\"center\"><span class=\"tunnel_peer\">" + netDbLink(cfg.getSendTo()) +
+                                  "</span>&nbsp;<b class=\"tunnel_cap\" title=\"" + _t("Bandwidth tier") + "\">" + getCapacity(cfg.getSendTo()) + "</b></td>");
+                    else
+                        out.write("<td class=\"cells\"></td>");
+                    out.write("</tr>\n");
                 }
-                if (cfg.getSendTo() != null)
-                    out.write("<td class=\"cells\" align=\"center\"><span class=\"tunnel_peer\">" + netDbLink(cfg.getSendTo()) +
-                              "</span>&nbsp;<b class=\"tunnel_cap\" title=\"" + _t("Bandwidth tier") + "\">" + getCapacity(cfg.getSendTo()) + "</b></td>");
-                else
-                    out.write("<td class=\"cells\"></td>");
-                out.write("</tr>\n");
-            }
-            out.write("</table>\n");
-            if (displayed > DISPLAY_LIMIT) {
-//                out.write("<div class=\"statusnotes\"><b>" + _t("Limited display to the {0} tunnels with the highest usage", DISPLAY_LIMIT)  + "</b></div>\n");
-                out.write("<div class=\"statusnotes\"><b>" + _t("Limited display to the {0} most recent tunnels", DISPLAY_LIMIT)  + "</b></div>\n");
-            } else if (displayed >= 2) {
-                out.write("<div class=\"statusnotes\"><b>" + _t("Active")  + ":</b>&nbsp" + (displayed - 1));
-                if (inactive > 0) {
-                    out.write("&nbsp;&bullet;&nbsp;<b>" + _t("Inactive") + ":</b>&nbsp;" + inactive + "&nbsp;&bullet;&nbsp;<b>" + _t("Total") + ":</b>&nbsp;" + (inactive + displayed -1));
+                out.write("</table>\n");
+                if (displayed > DISPLAY_LIMIT) {
+//                    out.write("<div class=\"statusnotes\"><b>" + _t("Limited display to the {0} tunnels with the highest usage", DISPLAY_LIMIT)  + "</b></div>\n");
+                    out.write("<div class=\"statusnotes\"><b>" + _t("Limited display to the {0} most recent tunnels", DISPLAY_LIMIT)  + "</b></div>\n");
+                } else if (displayed >= 2) {
+                    out.write("<div class=\"statusnotes\"><b>" + _t("Active")  + ":</b>&nbsp" + displayed);
+                    if (inactive > 0) {
+                        out.write("&nbsp;&bullet;&nbsp;<b>" + _t("Inactive") + ":</b>&nbsp;" + inactive + "&nbsp;&bullet;&nbsp;<b>" +
+                                  _t("Total") + ":</b>&nbsp;" + (inactive + displayed));
+                    }
+                    out.write("</div>");
+                } else if (inactive > 0) {
+                    out.write("<div class=\"statusnotes\"><b>" + _t("Inactive") + ":</b>&nbsp;" + inactive + "</div>");
                 }
-                out.write("</div>");
-            } else if (inactive > 0) {
-                out.write("<div class=\"statusnotes\"><b>" + _t("Inactive") + ":</b>&nbsp;" + inactive + "</div>");
-            }
-            out.write("<div class=\"statusnotes\"><b>" + _t("Lifetime bandwidth usage") + ":</b>&nbsp;" +
-                      DataHelper.formatSize2(processed*1024, true).replace("i", "") + "B</div>\n");
+                out.write("<div class=\"statusnotes\"><b>" + _t("Lifetime bandwidth usage") + ":</b>&nbsp;" +
+                          DataHelper.formatSize2(processed*1024, true).replace("i", "") + "B</div>\n");
             } else { // bwShare < 12K/s
                 out.write("<div class=\"statusnotes noparticipate\"><b>" + _t("Not enough shared bandwidth to build participating tunnels.") +
                           "</b> <a href=\"config\">[" + _t("Configure") + "]</a></div>\n");
