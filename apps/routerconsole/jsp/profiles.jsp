@@ -12,9 +12,11 @@
 <head>
 <%@include file="css.jsi" %>
 <%=intl.title("peer profiles")%>
+
 <!-- tablesort.js https://github.com/tristen/tablesort/ -->
 <script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.js" type="text/javascript"></script>
 <script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.number.js" type="text/javascript"></script>
+<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.natural.js" type="text/javascript"></script>
 <link href="/themes/console/tablesort.css" rel="stylesheet" type="text/css">
 <!-- end tablesort.js -->
 </head>
