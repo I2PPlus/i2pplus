@@ -1506,7 +1506,10 @@ class Connection {
                     _log.debug(Connection.this + " not cutting ssthresh and window");
 
                 toResend = new ArrayList<>(_outboundPackets.values());
-                toResend = toResend.subList(0, Math.min(MAX_RTX, (toResend.size() + 1) / 2));
+//                toResend = toResend.subList(0, Math.min(MAX_RTX, (toResend.size() + 1) / 2));
+                // round down (RFC 5681 section 4.3 "MUST be no more than half")
+                // https://datatracker.ietf.org/doc/html/rfc5681#section-4.3
+                toResend = toResend.subList(0, Math.max(1, Math.min(MAX_RTX, toResend.size() / 2)));
             }
 
             // 3. Retransmit up to half of the packets in flight (RFC 6298 section 5.4 and RFC 5681 section 4.3)
