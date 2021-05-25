@@ -4458,8 +4458,9 @@ h3#servicedebug a, h3#graphinfo a {
 }
 
 #tunnels h3#participating {
-  padding-left: 35px;
-  background: var(--share) 6px center no-repeat,
+  padding: 6px 6px 4px 35px !important;
+  letter-spacing: .1em;
+  background: var(--share) 10px center no-repeat,
               linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
               var(--h3), var(--h3_fade) !important;
   background-size: 18px, 100%, 4px 100%, 100% !important;
