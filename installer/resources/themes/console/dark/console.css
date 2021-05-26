@@ -949,12 +949,13 @@ h1 + .sorry, #console_404 .sorry {
   font-size: 9pt;
   text-align: left;
   border-radius: 0 0 3px 3px;
-  background: repeating-linear-gradient(to right, rgba(0,0,0,.6) 2px, rgba(0,24,0,.5) 4px) !important;
-  background-size: 4px 100% !important;
+  background: repeating-linear-gradient(to right, rgba(0,0,0,.3) 2px, rgba(0,24,0,.6) 4px),
+              repeating-linear-gradient(to bottom, rgba(0,0,0,.3) 2px, rgba(0,24,0,.2) 4px) !important;
+  background-size: 4px 100%, 100% 4px !important;
   z-index: 10 !important;
 }
 
-@supports (-moz-appearance: none) {
+/*@supports (-moz-appearance: none) {
   .main::after {
     content: "";
     display: inline-block;
@@ -969,7 +970,7 @@ h1 + .sorry, #console_404 .sorry {
     opacity: .15;
     mix-blend-mode: overlay;
   }
-}
+}*/
 
 .main#dns {
   padding: 0 0 3px;
