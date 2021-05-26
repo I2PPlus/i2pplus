@@ -5886,39 +5886,34 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 
 .configOption input[type=checkbox], #commentsToggle input[type=checkbox] {
   margin-left: 1px;
-  width: 40px;
+  width: 42px;
   height: 21px;
   border: none;
   border-radius: 0;
   position: relative;
-  box-shadow: inset 0 0 0 1px rgba(255,220,255,.6), inset 3px 3px 3px rgba(0,0,0,.7), 0 0 0 1px #101;
-  background: linear-gradient(to bottom, #1f141f, #301e30);
+  box-shadow: inset 0 0 0 1px #522d52, inset 0 0 0 2px #101, inset 3px 3px 3px rgba(0,0,0,.7), 0 0 0 1px #101;
+  background: linear-gradient(to bottom, #2f1e2f, #3f273f);
   outline: none;
   transition: ease-in left .15s;
   appearance: none;
   filter: none;
 }
 
-.configOption input[type=checkbox]:checked, #commentsToggle input[type=checkbox]:checked {
-  background: linear-gradient(to bottom, #030, #141);
-}
-
-.configOption input[type=checkbox]:not(:checked), #commentsToggle input[type=checkbox]:not(:checked) {
-  background: linear-gradient(to bottom, #300, #400);
+.configOption input[type=checkbox]:hover, .configOption input[type=checkbox]:focus,
+#commentsToggle input[type=checkbox]:hover, #commentsToggle input[type=checkbox]:focus  {
+  border-radius: 1px;
+  box-shadow: 0 0 0 #101, inset 0 0 0 1px #f60, inset 0 0 0 2px #000;
+  background: linear-gradient(to bottom, #1f141f, #301e30);
 }
 
 .configOption input[type=checkbox]:not(:checked):active, #commentsToggle input[type=checkbox]:not(:checked):active {
   background: linear-gradient(to bottom, #393, #4a4);
+  box-shadow: 0 0 0 #101, inset 0 0 0 1px #f60, inset 3px 3px 3px rgba(0,0,0,.7);
 }
 
 .configOption input[type=checkbox]:checked:active, #commentsToggle input[type=checkbox]:checked:active {
   background: linear-gradient(to bottom, #cf0f00, #f00);
-}
-
-.configOption input[type=checkbox]:hover, .configOption input[type=checkbox]:focus,
-#commentsToggle input[type=checkbox]:hover, #commentsToggle input[type=checkbox]:focus  {
-  border-radius: 1px;
-  box-shadow: 0 0 0 1px #6f645d, 0 0 0 2px #f60, inset 0 0 0 1px #f9f5f2, inset 3px 3px 3px rgba(0,0,0,.2);
+  box-shadow: 0 0 0 #101, inset 0 0 0 1px #f60, inset 3px 3px 3px rgba(0,0,0,.7);
 }
 
 .configOption input[type=checkbox]::before,
@@ -5933,18 +5928,18 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
   height: 100%;
   position: absolute;
   top: 0;
-  left: 0;
+  left: 1px;
   border-radius: 0;
   box-shadow: inset 0 0 0 1px #414, inset 0 0 0 2px #a11, 0 2px 5px rgba(0,0,0,.2);
-  background: linear-gradient(to bottom, #a11, #900);
+  background: linear-gradient(to bottom, #a11, #900, #700);
   content: "";
   transform: scale(.85);
   transition: ease-in left .15s;
 }
 
 .configOption input[type=checkbox]:checked::before, #commentsToggle input[type=checkbox]:checked::before {
-  background: linear-gradient(to bottom, #4a4, #393);
-  box-shadow: inset 0 0 0 1px #414, inset 0 0 0 2px #4a4, 0 2px 5px rgba(0,0,0,.2);
+  background: linear-gradient(to bottom, #f60, #d50, #930);
+  box-shadow: inset 0 0 0 1px #414, inset 0 0 0 2px #f60, 0 2px 5px rgba(0,0,0,.2);
 }
 
 .configOption input[type=checkbox]:hover::before, #commentsToggle input[type=checkbox]:hover::before,
@@ -5954,7 +5949,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 }
 
 .configOption input[type=checkbox]:checked::before, #commentsToggle input[type=checkbox]:checked::before {
-  left: 19px;
+  left: 21px;
 }
 
 .configOption input[type=checkbox]:disabled, .configOption input[type=checkbox]:disabled + label {
