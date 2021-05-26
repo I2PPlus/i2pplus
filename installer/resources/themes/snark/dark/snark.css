@@ -2254,6 +2254,10 @@ img:hover {
   width: 120px;
 }
 
+.addtorrentsection table, .newtorrentsection table {
+  background: none !important;
+}
+
 /* newtorrent tracker selection */
 
 #trackerselect {
