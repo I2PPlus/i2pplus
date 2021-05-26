@@ -2935,17 +2935,6 @@ td .commentAuthorName {
 
 /* end Comments section */
 
-/* MS Edge fix */
-_:-ms-lang(x), * {
-  filter: none !important;
-}
-
-_:-ms-lang(x), input[type=radio], input[type=checkbox] {
-  filter: sepia(50%) invert(80%) hue-rotate(150deg) !important;
-}
-
-/* end Edge fix */
-
 /* responsive layout */
 
 @media screen and (max-width: 1000px) {
