@@ -4080,42 +4080,38 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
 /* torrent column delimiters */
 
 @media screen and (min-width: 1000px) {
-.snarkTorrentAction {
-  padding-left: 4px !important;
-  padding-right: 3px !important;
-}
+  .snarkTorrentAction {
+    padding-left: 4px !important;
+    padding-right: 3px !important;
+  }
 
-/*.snarkTrackerDetails {
-  padding-left: 4px !important;
-}*/
+  .snarkTorrentName {
+    padding-right: 3px;
+  }
 
-.snarkTorrentName {
-  padding-right: 3px;
-}
+  .snarkTorrentDownloaded {
+    padding-left: 9px !important;
+    padding-right: 9px !important;
+  }
 
-.snarkTorrentDownloaded {
-  padding-left: 9px !important;
-  padding-right: 9px !important;
-}
+  .snarkTorrentETA, .snarkTorrentRateUp, .snarkTorrentUploaded, .snarkTorrentRateDown {
+    padding-right: 8px !important;
+    padding-left: 8px !important;
+  }
 
-.snarkTorrentETA, .snarkTorrentRateUp, .snarkTorrentUploaded, .snarkTorrentRateDown {
-  padding-right: 8px !important;
-  padding-left: 8px !important;
-}
+  .snarkTorrents th:nth-child(n+4) {
+    text-align: center;
+  }
 
-.snarkTorrents th:nth-child(n+4) {
-  text-align: center;
-}
+  td.snarkGraphicStatus, td.snarkTorrentStatus, td.snarkTrackerDetails, td.snarkTorrentDetails, td.snarkTorrentPeerCount, td.snarkTorrentName,
+  td.snarkTorrentDownloaded, td.snarkTorrentUploaded, td.snarkTorrentAction {
+    background: rgba(255,255,255,.15);
+  }
 
-td.snarkGraphicStatus, td.snarkTorrentStatus, td.snarkTrackerDetails, td.snarkTorrentDetails, td.snarkTorrentPeerCount, td.snarkTorrentName,
-td.snarkTorrentDownloaded, td.snarkTorrentUploaded, td.snarkTorrentAction {
-  background: rgba(255,255,255,.3);
-}
-
-tr:hover td.snarkGraphicStatus, tr:hover td.snarkTorrentStatus,  tr:hover td.snarkTrackerDetails, tr:hover td.snarkTorrentDetails, tr:hover td.snarkTorrentPeerCount,
-tr:hover td.snarkTorrentName, tr:hover td.snarkTorrentDownloaded, tr:hover td.snarkTorrentUploaded, tr:hover td.snarkTorrentAction, .peerinfo td {
-  background: none;
-}
+  tr:hover td.snarkGraphicStatus, tr:hover td.snarkTorrentStatus,  tr:hover td.snarkTrackerDetails, tr:hover td.snarkTorrentDetails, tr:hover td.snarkTorrentPeerCount,
+  tr:hover td.snarkTorrentName, tr:hover td.snarkTorrentDownloaded, tr:hover td.snarkTorrentUploaded, tr:hover td.snarkTorrentAction, .peerinfo td {
+    background: none;
+  }
 }
 
 td.snarkGraphicStatus img {
