@@ -5771,13 +5771,12 @@ th.snarkTorrentPeerCount img {
   animation: ease-out active .5s forwards;
 }
 
-@supports (background-blend-mode: luminosity) { /* exclude ms browsers */
 input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
-  width: 19px !important;
-  height: 19px !important;
+  width: 19px;
+  height: 19px;
   position: relative;
-  vertical-align: middle !important;
-  border: 1px solid #101 !important;
+  vertical-align: middle;
+  border: 1px solid #101;
   border-radius: 2px;
   box-shadow: inset 1px 1px 1px rgba(72, 0, 72, .6), inset -1px -1px 1px #101, inset 2px 2px 3px rgba(0, 0, 0, .8);
   background: #202;
@@ -5785,28 +5784,26 @@ input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disable
   background-size: 96px 96px;
   box-sizing: border-box;
   filter: drop-shadow(0 0 1px #101);
-  -moz-appearance: none;
-  -webkit-appearance: inherit;
+  appearance: none;
 }
 
 #torrentOrderControl input[type=checkbox], #torrentOrderControl input[type=checkbox]:checked, #torrentOrderControl input[type=checkbox][disabled], #torrentOrderControl input[type=checkbox][disabled]:checked {
-  border: 1px solid #313 !important;
+  border: 1px solid #313;
 }
 
 input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
   position: relative;
-  width: 19px !important;
-  height: 19px !important;
+  width: 19px;
+  height: 19px;
   box-sizing: border-box;
-  vertical-align: middle !important;
+  vertical-align: middle;
   box-shadow: inset 0 0 2px #202;
   box-shadow: inset 1px 1px 1px rgba(92, 0, 92, .6), inset -1px -1px 1px #101, inset 3px 3px 2px rgba(0, 0, 0, .8);
-  border: 1px solid #101 !important;
+  border: 1px solid #101;
   border-radius: 50%;
   background: url(images/graytile.png) #212;
   background-size: 96px 96px;
-  -moz-appearance: none;
-  -webkit-appearance: none;
+  appearance: none;
   filter: drop-shadow(0 0 1px #101);
 }
 
@@ -5858,22 +5855,22 @@ input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::bef
 
 input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus, input[type=radio]:focus {
   background: #101;
-  width: 19px !important;
-  height: 19px !important;
-  border: 1px solid #f60 !important;
-  box-shadow: 0 0 2px #f60 !important;
-  filter: drop-shadow(0 0 3px #101) !important;
+  width: 19px;
+  height: 19px;
+  border: 1px solid #f60;
+  box-shadow: 0 0 2px #f60;
+  filter: drop-shadow(0 0 3px #101);
 }
 
 input[type=radio][disabled]:hover, input[type=radio][disabled]:checked:hover {
-  border: 1px solid #101 !important;
-  box-shadow: none !important;
+  border: 1px solid #101;
+  box-shadow: none;
 }
 
 input[type=checkbox][disabled], input[type=radio][disabled], input[type=checkbox][disabled]:hover, input[type=radio][disabled]:hover,
 input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, input[type=checkbox][disabled]:checked:hover, input[type=radio][disabled]:checked:hover {
-  filter: none !important;
-  box-shadow: none !important;
+  filter: none;
+  box-shadow: none;
   opacity: .5;
 }
 
@@ -5884,7 +5881,88 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 .iframed #trackerselect tr:last-child input[type=radio]:checked::before {
   top: 24%;
 }
+
+/* option sliders */
+
+.configOption input[type=checkbox], #commentsToggle input[type=checkbox] {
+  margin-left: 1px;
+  width: 40px;
+  height: 21px;
+  border: none;
+  border-radius: 0;
+  position: relative;
+  box-shadow: inset 0 0 0 1px rgba(255,220,255,.6), inset 3px 3px 3px rgba(0,0,0,.7), 0 0 0 1px #101;
+  background: linear-gradient(to bottom, #1f141f, #301e30);
+  outline: none;
+  transition: ease-in left .15s;
+  appearance: none;
+  filter: none;
 }
+
+.configOption input[type=checkbox]:checked, #commentsToggle input[type=checkbox]:checked {
+  background: linear-gradient(to bottom, #030, #141);
+}
+
+.configOption input[type=checkbox]:not(:checked), #commentsToggle input[type=checkbox]:not(:checked) {
+  background: linear-gradient(to bottom, #300, #400);
+}
+
+.configOption input[type=checkbox]:not(:checked):active, #commentsToggle input[type=checkbox]:not(:checked):active {
+  background: linear-gradient(to bottom, #393, #4a4);
+}
+
+.configOption input[type=checkbox]:checked:active, #commentsToggle input[type=checkbox]:checked:active {
+  background: linear-gradient(to bottom, #cf0f00, #f00);
+}
+
+.configOption input[type=checkbox]:hover, .configOption input[type=checkbox]:focus,
+#commentsToggle input[type=checkbox]:hover, #commentsToggle input[type=checkbox]:focus  {
+  border-radius: 1px;
+  box-shadow: 0 0 0 1px #6f645d, 0 0 0 2px #f60, inset 0 0 0 1px #f9f5f2, inset 3px 3px 3px rgba(0,0,0,.2);
+}
+
+.configOption input[type=checkbox]::before,
+.configOption input[type=checkbox]:hover::before,
+.configOption input[type=checkbox]:focus::before,
+.configOption input[type=checkbox]:active::before,
+#commentsToggle input[type=checkbox]::before,
+#commentsToggle input[type=checkbox]:hover::before,
+#commentsToggle input[type=checkbox]:focus::before,
+#commentsToggle input[type=checkbox]:active::before {
+  width: 20px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 0;
+  box-shadow: inset 0 0 0 1px #414, inset 0 0 0 2px #a11, 0 2px 5px rgba(0,0,0,.2);
+  background: linear-gradient(to bottom, #a11, #900);
+  content: "";
+  transform: scale(.85);
+  transition: ease-in left .15s;
+}
+
+.configOption input[type=checkbox]:checked::before, #commentsToggle input[type=checkbox]:checked::before {
+  background: linear-gradient(to bottom, #4a4, #393);
+  box-shadow: inset 0 0 0 1px #414, inset 0 0 0 2px #4a4, 0 2px 5px rgba(0,0,0,.2);
+}
+
+.configOption input[type=checkbox]:hover::before, #commentsToggle input[type=checkbox]:hover::before,
+.configOption input[type=checkbox]:focus::before, #commentsToggle input[type=checkbox]:focus::before {
+  box-shadow: inset 0 0 0 1px #414, inset 0 0 0 2px #fdf, 0 2px 5px rgba(0,0,0,.2);
+  background: linear-gradient(#fff, #fdf);
+}
+
+.configOption input[type=checkbox]:checked::before, #commentsToggle input[type=checkbox]:checked::before {
+  left: 19px;
+}
+
+.configOption input[type=checkbox]:disabled, .configOption input[type=checkbox]:disabled + label {
+  opacity: .45;
+  pointer-events: none;
+}
+
+/* end option sliders */
 
 /* end custom radios/checkboxes */
 
@@ -6048,6 +6126,10 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
 #commentstoggle input {
   margin: 1px 0 0 0 !important;
   vertical-align: top;
+}
+
+#commentstoggle input[type=submit] {
+  background-position: center center !important;
 }
 
 #metacomment {
