@@ -5928,7 +5928,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
   height: 100%;
   position: absolute;
   top: 0;
-  left: 1px;
+  left: 0;
   border-radius: 0;
   box-shadow: inset 0 0 0 1px #414, inset 0 0 0 2px #a11, 0 2px 5px rgba(0,0,0,.2);
   background: linear-gradient(to bottom, #a11, #900, #700);
