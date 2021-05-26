@@ -422,7 +422,7 @@ th, th b {
 td {
   padding: 2px 4px;
   vertical-align: middle;
-  color: #453221 !important;
+  color: #453221;
 }
 
 thead, tfoot {
@@ -676,11 +676,11 @@ tr:hover .snarkTrackerDetails img {
 }
 
 .snarkTorrentRateDown, .snarkTorrentDownloaded {
-  color: #439 !important;
+  color: #439;
 }
 
 .snarkTorrentUploaded, .snarkTorrentRateUp {
-  color: #626 !important;
+  color: #626;
 }
 
 .snarkTorrentUploaded {
@@ -1297,9 +1297,28 @@ thead img.disable, img.disable:hover {
   line-height: 100%;
   text-align: center;
   border-radius: 20px;
-  box-shadow: inset 0 0 0 1px #afa9a4, inset 0 0 2px 2px #efe7e0;
+  box-shadow: inset 0 0 0 1px #b5a79b, inset 0 0 2px 2px #efe7e0;
   background: #fff8df;
   background: linear-gradient(to bottom, #fffbef, #dfd7d1);
+}
+
+.active .percentBarComplete {
+  box-shadow: inset 0 0 0 1px #b5a79b, inset 0 0 2px 2px #efe7e0;
+  background: radial-gradient(at center bottom, rgba(220, 220, 180,.8) 10%, rgba(0, 0, 0, 0) 70%), linear-gradient(to bottom, #fffbef, #dfd7d1);
+  animation: ease seeding .15s reverse;
+}
+
+@keyframes seeding {
+  from {
+    color: #439;
+    background: radial-gradient(at center bottom, rgba(220, 220, 180,.8) 10%, rgba(0, 0, 0, 0) 70%), linear-gradient(to bottom, #fffbef, #dfd7d1);
+    box-shadow: inset 0 0 0 1px #b5a79b, inset 0 0 2px 2px #efe7e0;
+  }
+  to {
+    color: #5540bf;
+    background: radial-gradient(at center bottom, rgba(240, 240, 148,.8) 10%, rgba(0, 0, 0, 0) 70%), linear-gradient(to bottom, #fffbef, #dfd7d1);
+    box-shadow: inset 0 0 0 1px #c2a68e, inset 0 0 2px 2px #f6f2ee;
+  }
 }
 
 @supports not (-moz-appearance: none) {
