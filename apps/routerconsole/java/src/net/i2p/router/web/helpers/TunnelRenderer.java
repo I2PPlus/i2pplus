@@ -157,10 +157,10 @@ class TunnelRenderer {
                               _t("Role") + "</th><th>" + _t("Expiry") + "</th><th title=\"" + _t("Data transferred") + "\">" +
                               _t("Usage") + "</th><th>" + _t("Rate") + "</th><th>");
                     if (debug)
-                        out.write(_t("Receive on") + "</th><th>");
+                        out.write(_t("Receive on") + "</th><th data-sort-method=\"none\">");
                     out.write(_t("From") + "</th><th>");
                     if (debug)
-                        out.write(_t("Send on") + "</th><th>");
+                        out.write(_t("Send on") + "</th><th data-sort-method=\"none\">");
                     out.write(_t("To") + "</th></tr></thead>\n");
                 }
                 long processed = 0;
