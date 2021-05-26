@@ -4080,42 +4080,38 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
 /* torrent column delimiters */
 
 @media screen and (min-width: 1000px) {
-.snarkTorrentAction {
-  padding-left: 4px !important;
-  padding-right: 3px !important;
-}
+  .snarkTorrentAction {
+    padding-left: 4px !important;
+    padding-right: 3px !important;
+  }
 
-/*.snarkTrackerDetails {
-  padding-left: 4px !important;
-}*/
+  .snarkTorrentName {
+    padding-right: 3px;
+  }
 
-.snarkTorrentName {
-  padding-right: 3px;
-}
+  .snarkTorrentDownloaded {
+    padding-left: 9px !important;
+    padding-right: 9px !important;
+  }
 
-.snarkTorrentDownloaded {
-  padding-left: 9px !important;
-  padding-right: 9px !important;
-}
+  .snarkTorrentETA, .snarkTorrentRateUp, .snarkTorrentUploaded, .snarkTorrentRateDown {
+    padding-right: 8px !important;
+    padding-left: 8px !important;
+  }
 
-.snarkTorrentETA, .snarkTorrentRateUp, .snarkTorrentUploaded, .snarkTorrentRateDown {
-  padding-right: 8px !important;
-  padding-left: 8px !important;
-}
+  .snarkTorrents th:nth-child(n+4) {
+    text-align: center;
+  }
 
-.snarkTorrents th:nth-child(n+4) {
-  text-align: center;
-}
+  td.snarkGraphicStatus, td.snarkTorrentStatus, td.snarkTrackerDetails, td.snarkTorrentDetails, td.snarkTorrentPeerCount, td.snarkTorrentName,
+  td.snarkTorrentDownloaded, td.snarkTorrentUploaded, td.snarkTorrentAction {
+    background: rgba(255,255,255,.15);
+  }
 
-td.snarkGraphicStatus, td.snarkTorrentStatus, td.snarkTrackerDetails, td.snarkTorrentDetails, td.snarkTorrentPeerCount, td.snarkTorrentName,
-td.snarkTorrentDownloaded, td.snarkTorrentUploaded, td.snarkTorrentAction {
-  background: rgba(255,255,255,.3);
-}
-
-tr:hover td.snarkGraphicStatus, tr:hover td.snarkTorrentStatus,  tr:hover td.snarkTrackerDetails, tr:hover td.snarkTorrentDetails, tr:hover td.snarkTorrentPeerCount,
-tr:hover td.snarkTorrentName, tr:hover td.snarkTorrentDownloaded, tr:hover td.snarkTorrentUploaded, tr:hover td.snarkTorrentAction, .peerinfo td {
-  background: none;
-}
+  tr:hover td.snarkGraphicStatus, tr:hover td.snarkTorrentStatus,  tr:hover td.snarkTrackerDetails, tr:hover td.snarkTorrentDetails, tr:hover td.snarkTorrentPeerCount,
+  tr:hover td.snarkTorrentName, tr:hover td.snarkTorrentDownloaded, tr:hover td.snarkTorrentUploaded, tr:hover td.snarkTorrentAction, .peerinfo td {
+    background: none;
+  }
 }
 
 td.snarkGraphicStatus img {
@@ -4687,14 +4683,12 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
 
 /* end comment indicator */
 
-/* custom radios/checkboxes to enforce color scheme when OS widgets are non-standard  */
-@supports (background-blend-mode: luminosity) { /* exclude ms browsers */
 input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
-  width: 19px !important;
-  height: 19px !important;
+  width: 19px;
+  height: 19px;
   position: relative;
-  vertical-align: middle !important;
-  border: 1px solid #512f15 !important;
+  vertical-align: middle;
+  border: 1px solid #512f15;
   border-radius: 2px;
   box-shadow: inset 0 0 2px 1px #f2f2f2;
   background: #faf1eb;
@@ -4709,8 +4703,8 @@ input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disable
 
 input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
   position: relative;
-  width: 19px !important;
-  height: 19px !important;
+  width: 19px;
+  height: 19px;
   box-sizing: border-box;
   vertical-align: middle !important;
   box-shadow: inset 0 0 2px 1px #f2f2f2;
@@ -4776,20 +4770,81 @@ input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::bef
 
 input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus, input[type=radio]:focus {
   background: #fff;
-  width: 19px !important;
-  height: 19px !important;
+  width: 19px;
+  height: 19px;
   box-shadow: none;
-  border: 1px solid #b32 !important;
+  border: 1px solid #b32;
 }
 
 input[type=checkbox][disabled], input[type=radio][disabled], input[type=checkbox][disabled]:hover, input[type=radio][disabled]:hover,
 input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, input[type=checkbox][disabled]:checked:hover, input[type=radio][disabled]:checked:hover {
-  display: inline-block !important;
-  width: 19px !important;
-  height: 19px !important;
+  display: inline-block;
+  width: 19px;
+  height: 19px;
   opacity: .5;
 }
+
+/* option sliders */
+
+.configOption input[type=checkbox] {
+  margin-left: 5px;
+  width: 40px;
+  height: 21px;
+  border: none;
+  border-radius: 1px;
+  position: relative;
+  box-shadow: 0 0 0 1px #6f645d, inset 0 0 0 1px #f9f5f2, inset 3px 3px 3px rgba(0,0,0,.2);
+  background: linear-gradient(to bottom, #dcc9bc, #efe6e0);
+  background: #efe6e0;
+  outline: none;
+  transition: ease-in left .15s;
+  appearance: none;
 }
+
+.configOption input[type=checkbox]:checked {
+  box-shadow: 0 0 0 1px #6f645d, inset 0 0 0 1px #dfd, inset 3px 3px 3px rgba(0,16,0,.4);
+  background: linear-gradient(to bottom, #393, #4a4);
+}
+
+.configOption input[type=checkbox]:not(:checked):active {
+  background: linear-gradient(to bottom, #393, #4a4);
+}
+
+.configOption input[type=checkbox]:checked:active {
+  background: linear-gradient(to bottom, #cf0f00, #f00);
+}
+
+.configOption input[type=checkbox]:hover, .configOption input[type=checkbox]:focus {
+  box-shadow: 0 0 0 1px #6f645d, 0 0 0 2px #f60, inset 0 0 0 1px #f9f5f2, inset 3px 3px 3px rgba(0,0,0,.2);
+}
+
+.configOption input[type=checkbox]::before,
+.configOption input[type=checkbox]:hover::before,
+.configOption input[type=checkbox]:focus::before,
+.configOption input[type=checkbox]:active::before {
+  width: 20px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 1px;
+  box-shadow: inset 0 0 0 1px #74573e, inset 0 0 0 2px #f6f1ee, 0 2px 5px rgba(0,0,0,.2);
+  background: linear-gradient(#fff, #f6f1ee, #efe6e0, #e5d6cd);
+  content: "";
+  transform: scale(.85);
+  transition: ease-in left .15s;
+}
+
+.configOption input[type=checkbox]:checked::before {
+  left: 19px;
+}
+
+.configOption input[type=checkbox]:disabled, .configOption input[type=checkbox]:disabled + label {
+  opacity: .45;
+  pointer-events: none;
+}
+
+/* end option sliders */
 
 /* end custom radios/checkboxes */
 
