@@ -5,6 +5,7 @@
 
 @import url(/themes/fonts/DroidSans.css);
 @import url(/themes/console/light/optbox.css);
+@import url(sliders.css);
 
 :root {
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
@@ -449,13 +450,13 @@ button::-moz-focus-inner, input::-moz-focus-inner {
 
 .snarkMessages li::before {
   margin: -1px 0 1px;
-  content: '';
   display: inline-block;
   width: 14px;
   height: 10px;
+  vertical-align: middle;
   background: url(images/bullet.png) left bottom no-repeat;
   background-size: 9px 9px;
-  vertical-align: middle;
+  content: "";
 }
 
 #closelog, #expand, #shrink {
@@ -484,8 +485,8 @@ button::-moz-focus-inner, input::-moz-focus-inner {
 
 #closeLog img:hover, #expand img:hover, #shrink img:hover {
   border: 1px solid #77b;
-  opacity: 1;
   background: #fff;
+  opacity: 1;
 }
 
 #closeLog, #expand, #shrink {
@@ -512,12 +513,6 @@ a:link, a:visited {
   word-wrap: break-word;
   font-size: 9pt;
 }
-
-/*a:visited {
-  color: #2c4e8f;
-  color: rgba(44, 78, 143, .9);
-  text-decoration: none;
-}*/
 
 a:hover, a:focus, .trackerName a:visited:hover, .trackerName a:visited:focus {
   color: #f60;
@@ -546,7 +541,6 @@ th {
   color: #5b5b71;
   border-top: 1px solid #afafcf;
   border-bottom: 1px solid #afafcf;
-  background: #f2f2ff;
   background: linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
 }
 
@@ -622,7 +616,6 @@ th.snarkTorrentStatus {
 
 .snarkTorrents tfoot tr:first-child th {
   padding: 5px 0 5px 4px;
-  background: #fff;
   background: linear-gradient(to bottom, #fafaff 50%, rgb(240, 240, 255)) #fafaff;
   vertical-align: middle;
   font-weight: 700;
@@ -631,9 +624,9 @@ th.snarkTorrentStatus {
 }
 
 @media screen and (max-width: 1000px) {
-.snarkTorrents tfoot tr:first-child th {
-  padding: 3px 0 3px 2px !important;
-}
+  .snarkTorrents tfoot tr:first-child th {
+    padding: 3px 0 3px 2px !important;
+  }
 }
 
 .snarkTorrents td {
@@ -1974,6 +1967,7 @@ img[src$="details.png"] {
   padding: 0;
   word-wrap: break-word;
   text-align: center;
+  background: linear-gradient(to bottom, #fff, #eef);
   opacity: 1 !important;
 }
 
@@ -2822,7 +2816,7 @@ hr.debug {
 }
 
 .snarkCommentInfo textarea {
-  font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", Verdana, "Lucida Grande", Helvetica, sans-serif !important;
+  font-family: var(--bodyfont) !important;
   font-weight: 400;
   font-size: 10pt;
   width: 100%;
@@ -2869,14 +2863,14 @@ hr.debug {
 }
 
 @media screen and (max-width: 1000px) {
-.snarkCommentInfo td:first-child, .snarkComments td:first-child {
-  width: 120px !important;
-  min-width: 120px !important;
-}
+  .snarkCommentInfo td:first-child, .snarkComments td:first-child {
+    width: 120px !important;
+    min-width: 120px !important;
+  }
 
-.commentDate {
-  white-space: normal !important;
-}
+  .commentDate {
+    white-space: normal !important;
+  }
 }
 
 .commentAuthorName {
@@ -2900,9 +2894,9 @@ td.commentAuthor .commentAuthorName {
 }
 
 @media screen and (max-width: 1000px) {
-td.commentAuthor .commentAuthorName {
-  width: 100px;
-}
+  td.commentAuthor .commentAuthorName {
+    width: 100px;
+  }
 }
 
 .commentText {
@@ -3014,11 +3008,6 @@ td.commentAuthor .commentAuthorName {
 
 .priority input[type=radio] {
   transform: scale(0.8);
-}
-
-/* MS Edge 14+ rendering bug fix */
-_:-ms-lang(x), *, *:hover, *:focus, input, input:hover, input:focus, a:hover, a:focus {
-  filter: none !important;
 }
 
 /*responsive layout */
