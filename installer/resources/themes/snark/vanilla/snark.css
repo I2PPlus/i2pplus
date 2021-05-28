@@ -2957,6 +2957,10 @@ th.snarkTorrentStatus {
   text-align: right !important;
 }
 
+.snarkTorrents thead th a img[src$="showpeers.png"] {
+  display: none !important;
+}
+
 td.snarkTorrentStatus {
   white-space: nowrap;
   font-weight: 700;
@@ -3058,10 +3062,6 @@ td.snarkGraphicStatus img {
 .snarknavbar {
   width: calc(100% - 22px);
   transition: ease width .5s .5s;
-}
-
-.snarkTorrents thead th a img[src$="showpeers.png"] {
-  display: none !important;
 }
 
 .snarkTorrentAction input[type=image], .snarkTorrents th:last-child input[type=image] {
