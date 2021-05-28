@@ -4660,8 +4660,8 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
   position: absolute;
   display: inline-block;
   z-index: 20;
-  top: -1px;
-  right: 2px;
+  top: 1px;
+  right: 3px;
   line-height: 0;
   font-size: 0;
 }
@@ -4671,6 +4671,7 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
   height: 9px !important;
   width: auto !important;
   border: none !important;
+  box-shadow: none !important;
 }
 
 /* end comment indicator */
