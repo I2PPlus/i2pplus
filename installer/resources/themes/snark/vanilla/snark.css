@@ -4465,8 +4465,8 @@ td.snarkTorrentDetails {
 .clientid {
   margin: 0 0 0 -3px;
   padding: 2px 4px;
-  max-width: 60px;
-  min-width: 60px;
+  max-width: 55px;
+  min-width: 55px;
   display: inline-block;
   overflow: hidden;
   white-space: nowrap;
