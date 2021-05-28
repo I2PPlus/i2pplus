@@ -5038,10 +5038,6 @@ input[name="nofilter_commentsName"] {
 }
 
 @media screen and (min-width: 1500px) {
-/*.snarkGraphicStatus {
-  min-width: 38px;
-}*/
-
 td.snarkTorrentStatus {
   text-align: left !important;
 }
