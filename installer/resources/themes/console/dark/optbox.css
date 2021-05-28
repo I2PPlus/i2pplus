@@ -29,8 +29,7 @@
 
   .optbox:checked::before, .optbox:not(:checked)::before {
     position: absolute;
-    box-shadow: inset 0 0 0 1px #6b6, 0 0 0 1px #000;
-    background: #5a5;
+    box-shadow: inset 0 0 0 1px #6b6, 0 0 0 1px #050, 0 0 0 2px rgba(0,16,0,.3);
     background: linear-gradient(135deg, #5a5, #383);
     content: "";
     transition: ease transform .15s;
