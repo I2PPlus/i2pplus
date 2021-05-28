@@ -1,4 +1,3 @@
-@supports (background-blend-mode: luminosity) { /* exclude ms browsers */
 input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
   width: 19px !important;
   height: 19px !important;
@@ -13,8 +12,6 @@ input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input
 
 input[type=checkbox]:checked::before, input[type=radio]:checked::before {
   position: absolute;
-  background: #3c6bc3;
-  background: linear-gradient(135deg, #4f7ac9, #3c6bc3);
   background: linear-gradient(135deg, #6389cf, #3c6bc3);
   box-shadow: inset 1px 1px 1px 1px #6389cf, inset -1px -1px 1px 1px #3c6bc3;
   content: "";
@@ -35,6 +32,7 @@ input[type=radio]:checked::before {
   width: 9px;
   height: 9px;
   border-radius: 50%;
+  box-shadow: inset 1px 1px 1px 1px #6389cf, inset -1px -1px 1px 1px #3c6bc3, 0 0 0 1px #7698d5;
 }
 
 input[type=checkbox]:not(:checked) {
@@ -71,20 +69,15 @@ input[type=radio]:not(:checked) {
   box-shadow: 0 0 2px #f60 !important;
 }
 
-.optbox:checked::before {
-  transform: scale(1);
-}
-
 .optbox:not(:checked)::before {
   position: absolute;
   top: 25%;
   left: 4px;
-  content: "";
   color: transparent;
   background: transparent;
+  content: "";
 }
 
 input[type=radio]:not(:checked)::before {
   border-radius: 50%;
-}
 }
