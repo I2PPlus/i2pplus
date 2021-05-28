@@ -5837,7 +5837,7 @@ input[type=radio]:checked::before {
   content: "";
   border-radius: 50%;
   top: 25%;
-  left: 24%;
+  left: 23%;
   width: 9px;
   height: 9px;
   background: #f60;
@@ -5846,7 +5846,6 @@ input[type=radio]:checked::before {
 
 .iframed input[type=radio]:checked::before {
   top: 24%;
-  left: 23%;
 }
 
 input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
