@@ -1038,7 +1038,7 @@ td:first-child {
 
 .snarkTorrentOdd, .snarkTorrentEven {
   background: #270027;
-  background: linear-gradient(to bottom, #301030, #1f001f);
+  background: linear-gradient(to bottom, #260d26, #1f001f);
 }
 
 .snarkDirInfo .snarkTorrentOdd {
@@ -5890,7 +5890,6 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
   border-radius: 0;
   position: relative;
   box-shadow: inset 0 0 0 1px #280028, inset 0 0 0 2px #101, inset 3px 3px 3px rgba(0,0,0,.7), 0 0 0 1px #101;
-  background: linear-gradient(to bottom, #2f1e2f, #3f273f);
   background: url(images/graytile.png) #212;
   background-size: 96px 96px;
   outline: none;
