@@ -689,11 +689,11 @@ tr:hover .snarkTrackerDetails img {
 }
 
 .snarkTorrentRateDown, .snarkTorrentDownloaded {
-  color: #439;
+  color: rgba(122,102,92,.9);
 }
 
 .snarkTorrentUploaded, .snarkTorrentRateUp {
-  color: #626;
+  color: rgba(112,102,92,.8);
 }
 
 .snarkTorrentUploaded {
@@ -1331,12 +1331,14 @@ thead img.disable, img.disable:hover {
   min-width: 84px;
   line-height: 1.2;
   text-align: center;
+  color: rgba(122,102,82,.7);
   border-radius: 20px;
   box-shadow: inset 0 0 0 1px #b5a79b, inset 0 2px 2px 2px rgba(239,231,224,.3), inset 0 -2px 2px 2px rgba(236,200,172,.3);
   background: linear-gradient(to bottom, #fffbef, #dfd7d1);
 }
 
 .active .percentBarComplete {
+  color: rgba(1173, 102, 31,.7);
   box-shadow: inset 0 0 0 1px #b5a79b, inset 0 2px 2px 2px rgba(239,231,224,.6), inset 0 -2px 2px 2px rgba(236,200,172,.6);
   background: radial-gradient(at center bottom, rgba(220,180,0,.1) 10%, rgba(0, 0, 0, 0) 70%), linear-gradient(to bottom, #fffbef, #f0d6c2);
 }
@@ -4660,8 +4662,8 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
   position: absolute;
   display: inline-block;
   z-index: 20;
-  top: -1px;
-  right: 2px;
+  top: 1px;
+  right: 3px;
   line-height: 0;
   font-size: 0;
 }
@@ -4671,6 +4673,7 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
   height: 9px !important;
   width: auto !important;
   border: none !important;
+  box-shadow: none !important;
 }
 
 /* end comment indicator */
