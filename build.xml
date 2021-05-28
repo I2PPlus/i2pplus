@@ -47,6 +47,7 @@
         <echo message=" slackpkg                                     Build Slackware package in ./Slackware/i2p" />
         <echo message=" tarball                                      Create tar archive for clean install &#10140; ./i2p.tar.bz2" />
         <echo message=" updater                                      Build updater for existing installs &#10140; ./i2pupdate.zip" />
+        <echo message=" signed-updater                               Signed Updater &#10140; ./i2pupdate.su3 (Java14+ compatible)" />
         <echo message=" updaterRouter                                Updater with i2p.jar and router.jar only" />
         <echo message=" updaterSmall                                 Updater with essentials (no SAM/I2PSnark/SusiMail/SusiDNS/history.txt)" />
         <echo message=" updaterWithGeoIP                             Updater + GeoIP files" />
@@ -66,7 +67,6 @@
         <echo message=" updater200WithJettyAndGeoIP                  Updater (pack200) + Jetty + GeoIP files" />
         <echo message=" updater200WithJettyFixesAndGeoIP             Updater (pack200) + local Jetty patches + GeoIP files" />
         <echo message=" updater200WithJetty                          Updater (pack200) + Jetty" />
-        <echo message=" signed-updater                               Signed Updater &#10140; ./i2pupdate.su3 (Java14+ compatible)" />
         <echo message=" signed-updater200                            Signed Updater (pack200) &#10140; ./i2pupdate.su3" />
         <echo message=" signed-updater200WithJavadocAndJetty         Signed Updater (pack200) + javadocs + Jetty &#10140; ./i2pupdate.su3" />
         <echo message=" signed-updater200WithJavadoc                 Signed Updater (pack200) + javadocs &#10140; ./i2pupdate.su3" />

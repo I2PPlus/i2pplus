@@ -5842,6 +5842,7 @@ input[type=radio]:checked::before {
   height: 9px;
   background: #f60;
   box-shadow: 0 0 0 1px #000, inset 1px 1px 3px #f90;
+  box-shadow: 0 0 0 1px #730, inset 1px 1px 3px #f90;
 }
 
 .iframed input[type=radio]:checked::before {
@@ -5857,9 +5858,7 @@ input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus,
   background: #101;
   width: 19px;
   height: 19px;
-  border: 1px solid #f60;
-  box-shadow: 0 0 2px #f60;
-  filter: drop-shadow(0 0 3px #101);
+  box-shadow: 0 0 0 2px #f60, 0 0 0 3px #101, inset 0 0 0 1px #101;
 }
 
 input[type=radio][disabled]:hover, input[type=radio][disabled]:checked:hover {
