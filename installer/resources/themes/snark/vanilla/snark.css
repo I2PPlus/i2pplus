@@ -848,6 +848,16 @@ td:hover .percentBarText {
   }
 }
 
+.active .snarkTorrentAction, .active:hover .snarkTorrentAction {
+  background: linear-gradient(to left, rgba(223,0,103,.7) 3px, rgba(0,0,0,0) 3px);
+  animation: ease-in-out active .7s 3s forwards;
+}
+
+@keyframes active {
+  from {background: none}
+  to {background: linear-gradient(to left, rgba(223,0,103,.7) 3px, rgba(0,0,0,0) 3px)}
+}
+
 .peerinfo td[colspan="4"], .debuginfo td[colspan="10"] {
   padding-left: 0;
 }
