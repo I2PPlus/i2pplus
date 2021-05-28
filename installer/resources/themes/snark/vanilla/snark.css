@@ -720,7 +720,7 @@ tr:not(.peerinfo) .snarkTorrentUploaded:empty::after {
   border: 1px solid #4d453e;
   box-shadow: inset 0 0 0 1px #efe6e0;
   border-radius: 2px;
-  background: linear-gradient(to bottom, #fff7ef 51%, #cfc1b5 52%, #cfc1b5);
+  background: linear-gradient(to bottom, #fff7ef 51%, #ffe6cc 52%, #cfc1b5);
   cursor: pointer;
 }
 
@@ -1677,7 +1677,6 @@ a.control, input[type=submit], input[type=reset] {
   font: 8pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, Verdana, Helvetica, sans-serif;
   font-weight: 400;
   background-size: 14px 14px, 100% !important;
-  box-shadow: inset 0 0 0 1px #efe6e0, 0 0 1px 0 #4d453e;
   box-shadow: inset 0 0 0 1px #efe6e0, 0 0 1px 0 rgba(77, 69, 62, .3);
   display: inline-block;
 }
@@ -1702,7 +1701,7 @@ a.controld {
 
 a.control:hover, a.control:focus {
   color: #930 !important;
-  background: linear-gradient(to bottom, #fff7ef 51%, #cfc1b5 52%);
+  background: linear-gradient(to bottom, #fff7ef 51%, #ffe6cc 52%);
   filter: drop-shadow(0px 0 1px #f60);
 }
 
@@ -1757,12 +1756,15 @@ input[type=submit] {
 input[type=submit]:hover, input[type=submit]:focus, a.control:hover, a.control:focus {
   color: #4d2100 !important;
   border: 1px solid #2f1a09;
-  box-shadow: inset 0 0 0 1px #d50;
+  box-shadow: inset 0 0 0 1px #fff7ef, inset 0 0 0 2px #d50;
+  -webkit-text-stroke: 1px rgba(77,34,0,.1);
+  background-blend-mode: luminosity;
 }
 
 input[type=submit]:active, a.control:active {
-  color: #603110 !important;
-  box-shadow: inset 0 0 0 1px #efe6e0, inset 2px 2px 2px 1px #3f362f;
+  color: #70645c !important;
+  box-shadow: inset 0 0 0 1px #efe6e0, inset 3px 3px 3px rgba(0,0,0,.5);
+  -webkit-text-stroke: 0;
 }
 
 input[type=image] {
@@ -1819,81 +1821,81 @@ a.controld img, a.controld:hover img, a.controld:focus img, a.controld:active im
 }
 
 input.accept, input.disabled[name="savepri"] {
-  padding: 5px 6px 5px 22px !important;
-  background: var(--confirm) no-repeat 5px center, linear-gradient(to bottom, #f4f2f1, #ded9d5);
+  padding: 5px 6px 5px 24px !important;
+  background: var(--confirm) no-repeat 6px center, linear-gradient(to bottom, #f4f2f1, #ded9d5);
 }
 
 input.accept:hover, input.accept:focus {
-  background: var(--confirm) no-repeat 5px center, linear-gradient(to bottom, #fff7ef 51%, #cfc1b5 52%);
+  background: var(--confirm) no-repeat 6px center, linear-gradient(to bottom, #fff7ef 51%, #ffe6cc 52%);
 }
 
 input.accept:active {
-  background: var(--confirm) no-repeat 5px center, linear-gradient(to bottom, #fff7ef, #cfc1b5);
+  background: var(--confirm) no-repeat 6px center, linear-gradient(to bottom, #fff7ef, #cfc1b5);
 }
 
 input.add {
-  padding: 5px 6px 5px 22px !important;
-  background: var(--add) no-repeat 5px center, linear-gradient(to bottom, #f4f2f1, #ded9d5);
+  padding: 5px 6px 5px 24px !important;
+  background: var(--add) no-repeat 6px center, linear-gradient(to bottom, #f4f2f1, #ded9d5);
 }
 
 input.add:hover, input.add:focus {
-  background: var(--add) no-repeat 5px center, linear-gradient(to bottom, #fff7ef 51%, #cfc1b5 52%);
+  background: var(--add) no-repeat 6px center, linear-gradient(to bottom, #fff7ef 51%, #ffe6cc 52%);
 }
 
 input.add:active {
-  background: var(--add) no-repeat 5px center, linear-gradient(to bottom, #fff7ef, #cfc1b5);
+  background: var(--add) no-repeat 6px center, linear-gradient(to bottom, #fff7ef, #cfc1b5);
 }
 
 input.cancel {
-  padding: 5px 6px 5px 22px !important;
-  background: url(images/cancel.png) no-repeat 5px center, linear-gradient(to bottom, #f4f2f1, #ded9d5);
+  padding: 5px 6px 5px 24px !important;
+  background: url(images/cancel.png) no-repeat 6px center, linear-gradient(to bottom, #f4f2f1, #ded9d5);
 }
 
 input.cancel:hover, input.cancel:focus {
-  background: url(images/cancel.png) no-repeat 5px center, linear-gradient(to bottom, #fff7ef 51%, #cfc1b5 52%);
+  background: url(images/cancel.png) no-repeat 6px center, linear-gradient(to bottom, #fff7ef 51%, #ffe6cc 52%);
 }
 
 input.cancel:active {
-  background: url(images/cancel.png) no-repeat 5px center, linear-gradient(to bottom, #fff7ef, #cfc1b5);
+  background: url(images/cancel.png) no-repeat 6px center, linear-gradient(to bottom, #fff7ef, #cfc1b5);
 }
 
 input.create {
-  padding: 5px 6px 5px 22px !important;
-  background: var(--wizard) no-repeat 5px center, linear-gradient(to bottom, #f4f2f1, #ded9d5);
+  padding: 5px 6px 5px 24px !important;
+  background: var(--wizard) no-repeat 6px center, linear-gradient(to bottom, #f4f2f1, #ded9d5);
 }
 
 input.create:hover, input.create:focus {
-  background: var(--wizard) no-repeat 5px center, linear-gradient(to bottom, #fff7ef 51%, #cfc1b5 52%);
+  background: var(--wizard) no-repeat 6px center, linear-gradient(to bottom, #fff7ef 51%, #ffe6cc 52%);
 }
 
 input.create:active {
-  background: var(--wizard) no-repeat 5px center, linear-gradient(to bottom, #fff7ef, #cfc1b5);
+  background: var(--wizard) no-repeat 6px center, linear-gradient(to bottom, #fff7ef, #cfc1b5);
 }
 
 input.delete {
-  padding: 5px 6px 5px 22px !important;
-  background: var(--nuke) no-repeat 5px center, linear-gradient(to bottom, #f4f2f1, #ded9d5);
+  padding: 5px 6px 5px 24px !important;
+  background: var(--nuke) no-repeat 6px center, linear-gradient(to bottom, #f4f2f1, #ded9d5);
 }
 
 input.delete:hover, input.delete:focus {
-  background: var(--nuke) no-repeat 5px center, linear-gradient(to bottom, #fff7ef 51%, #cfc1b5 52%);
+  background: var(--nuke) no-repeat 6px center, linear-gradient(to bottom, #fff7ef 51%, #ffe6cc 52%);
 }
 
 input.delete:active {
-  background: var(--nuke) no-repeat 5px center, linear-gradient(to bottom, #fff7ef, #cfc1b5);
+  background: var(--nuke) no-repeat 6px center, linear-gradient(to bottom, #fff7ef, #cfc1b5);
 }
 
 input.reload {
-  padding: 5px 6px 5px 22px !important;
-  background: var(--restore) no-repeat 5px center, linear-gradient(to bottom, #f4f2f1, #ded9d5);
+  padding: 5px 6px 5px 24px !important;
+  background: var(--restore) no-repeat 6px center, linear-gradient(to bottom, #f4f2f1, #ded9d5);
 }
 
 input.reload:hover, input.reload:focus {
-  background: var(--restore) no-repeat 5px center, linear-gradient(to bottom, #fff7ef 51%, #cfc1b5 52%);
+  background: var(--restore) no-repeat 6px center, linear-gradient(to bottom, #fff7ef 51%, #ffe6cc 52%);
 }
 
 input.reload:active {
-  background: var(--restore) no-repeat 5px center, linear-gradient(to bottom, #fff7ef, #cfc1b5);
+  background: var(--restore) no-repeat 6px center, linear-gradient(to bottom, #fff7ef, #cfc1b5);
 }
 
 input.reload[name="recheck"], input.disabled[name="recheck"] {
@@ -1903,7 +1905,7 @@ input.reload[name="recheck"], input.disabled[name="recheck"] {
 }
 
 input.reload[name="recheck"]:hover, input.reload[name="recheck"]:focus {
-  background: var(--refresh) no-repeat 8px center, linear-gradient(to bottom, #fff7ef 51%, #cfc1b5 52%);
+  background: var(--refresh) no-repeat 8px center, linear-gradient(to bottom, #fff7ef 51%, #ffe6cc 52%);
 }
 
 input.reload[name="recheck"]:active {
@@ -1918,7 +1920,7 @@ input.starttorrent {
 }
 
 input.starttorrent:hover, input.starttorrent:focus {
-  background: url(images/start.svg) no-repeat 8px center, linear-gradient(to bottom, #fff7ef 51%, #cfc1b5 52%);
+  background: url(images/start.svg) no-repeat 8px center, linear-gradient(to bottom, #fff7ef 51%, #ffe6cc 52%);
 }
 
 input.starttorrent:active {
@@ -1933,7 +1935,7 @@ input.stoptorrent {
 }
 
 input.stoptorrent:hover, input.stoptorrent:focus {
-  background: url(images/stop.svg) no-repeat 8px center, linear-gradient(to bottom, #fff7ef 51%, #cfc1b5 52%);
+  background: url(images/stop.svg) no-repeat 8px center, linear-gradient(to bottom, #fff7ef 51%, #ffe6cc 52%);
 }
 
 input.stoptorrent:active {
