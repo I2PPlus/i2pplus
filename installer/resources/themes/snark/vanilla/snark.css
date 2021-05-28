@@ -88,7 +88,6 @@ input[type=submit], input[type="reset"], button, a:link, input[type=checkbox], i
 .page {
   margin: 5px 0 0 0;
   padding: 10px 10px 0;
-/*  min-width: 934px !important;*/
   line-height: 160% !important;
   text-align: center;
   font-size: 9pt !important;
@@ -141,7 +140,6 @@ a:active, a:visited:active, th a:active, th a:visited:active, td a:active, td a:
   position: sticky;
   top: -2px;
   z-index: 999;
-  min-width: 800px;
   width: 70%;
   border: 1px solid #463e39;
   border-radius: 0 0 2px 2px;
@@ -689,7 +687,7 @@ tr:hover .snarkTrackerDetails img {
 }
 
 .snarkTorrentRateDown, .snarkTorrentDownloaded {
-  color: #785a3a;
+  color: #6b5a47;
 }
 
 .snarkTorrentUploaded, .snarkTorrentRateUp {
@@ -3060,6 +3058,10 @@ td.snarkGraphicStatus img {
 .snarknavbar {
   width: calc(100% - 22px);
   transition: ease width .5s .5s;
+}
+
+.snarkTorrents thead th a img[src$="showpeers.png"] {
+  display: none !important;
 }
 
 .snarkTorrentAction input[type=image], .snarkTorrents th:last-child input[type=image] {
