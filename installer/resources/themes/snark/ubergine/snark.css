@@ -1265,22 +1265,18 @@ _:-ms-lang(x), .snarkTorrents tbody tr:hover, .snarkDirInfo tbody tr:hover {
 }
 
 @media screen and (min-width: 1500px) {
-.snarkTorrentInfo th:first-child img, #torrentinfostats img,  {
-  margin: -3px 5px 0 !important;
-  max-height: 18px !important;
-}
+  .snarkTorrentInfo th:first-child img, #torrentinfostats img,  {
+    margin: -3px 5px 0 !important;
+    max-height: 18px !important;
+  }
 
-#trackers {
-  padding-bottom: 6px !important;
-}
+  .configsectionpanel .snarkConfigTitle img, #trackers .snarkConfigTitle img {
+    margin: -2px -2px 0 0 !important;
+  }
 
-.configsectionpanel .snarkConfigTitle img, #trackers .snarkConfigTitle img {
-  margin: -2px -2px 0 0 !important;
-}
-
-#torrentInfoStats .nowrap {
-  margin-right: 6px;
-}
+  #torrentInfoStats .nowrap {
+    margin-right: 6px;
+  }
 }
 
 #torrentInfoStats img[src$="head_tx.png"], #torrentInfoStats img[src$="head_rx.png"] {
