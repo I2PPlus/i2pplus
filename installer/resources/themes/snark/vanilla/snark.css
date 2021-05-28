@@ -744,7 +744,7 @@ input[type=image]:hover, input[type=image]:focus {
 
 .snarkTorrentAction input[type=image]:active, .snarkTorrents th:last-child input[type=image]:active {
   box-shadow: inset 0 0 0 1px #efe6e0, inset 3px 3px 3px rgba(0,0,0,.6);
-  background: linear-gradient(to bottom, #cfc1b5, #fff7ef) !important;
+  background: linear-gradient(to bottom, #e1d8d1, #fff2e6) !important;
 }
 
 .snarkTorrents thead th a img, .snarkTorrents thead th input[type=image] {
@@ -1815,7 +1815,7 @@ input.accept:hover, input.accept:focus {
 }
 
 input.accept:active {
-  background: var(--confirm) no-repeat 6px center, linear-gradient(to bottom, #fff7ef, #cfc1b5);
+  background: var(--confirm) no-repeat 6px center, linear-gradient(to bottom, #e1d8d1, #fff2e6);
 }
 
 input.add {
@@ -1828,7 +1828,7 @@ input.add:hover, input.add:focus {
 }
 
 input.add:active {
-  background: var(--add) no-repeat 6px center, linear-gradient(to bottom, #fff7ef, #cfc1b5);
+  background: var(--add) no-repeat 6px center, linear-gradient(to bottom, #e1d8d1, #fff2e6);
 }
 
 input.cancel {
@@ -1841,7 +1841,7 @@ input.cancel:hover, input.cancel:focus {
 }
 
 input.cancel:active {
-  background: url(images/cancel.png) no-repeat 6px center, linear-gradient(to bottom, #fff7ef, #cfc1b5);
+  background: url(images/cancel.png) no-repeat 6px center, linear-gradient(to bottom, #e1d8d1, #fff2e6);
 }
 
 input.create {
@@ -1854,7 +1854,7 @@ input.create:hover, input.create:focus {
 }
 
 input.create:active {
-  background: var(--wizard) no-repeat 6px center, linear-gradient(to bottom, #fff7ef, #cfc1b5);
+  background: var(--wizard) no-repeat 6px center, linear-gradient(to bottom, #e1d8d1, #fff2e6);
 }
 
 input.delete {
@@ -1867,7 +1867,7 @@ input.delete:hover, input.delete:focus {
 }
 
 input.delete:active {
-  background: var(--nuke) no-repeat 6px center, linear-gradient(to bottom, #fff7ef, #cfc1b5);
+  background: var(--nuke) no-repeat 6px center, linear-gradient(to bottom, #e1d8d1, #fff2e6);
 }
 
 input.reload {
@@ -1880,7 +1880,7 @@ input.reload:hover, input.reload:focus {
 }
 
 input.reload:active {
-  background: var(--restore) no-repeat 6px center, linear-gradient(to bottom, #fff7ef, #cfc1b5);
+  background: var(--restore) no-repeat 6px center, linear-gradient(to bottom, #e1d8d1, #fff2e6);
 }
 
 input.reload[name="recheck"], input.disabled[name="recheck"] {
@@ -1894,7 +1894,7 @@ input.reload[name="recheck"]:hover, input.reload[name="recheck"]:focus {
 }
 
 input.reload[name="recheck"]:active {
-  background: var(--refresh) no-repeat 8px center, linear-gradient(to bottom, #fff7ef, #cfc1b5);
+  background: var(--refresh) no-repeat 8px center, linear-gradient(to bottom, #e1d8d1, #fff2e6);
 }
 
 input.starttorrent {
@@ -1909,7 +1909,7 @@ input.starttorrent:hover, input.starttorrent:focus {
 }
 
 input.starttorrent:active {
-  background: url(images/start.svg) no-repeat 8px center, linear-gradient(to bottom, #fff7ef, #cfc1b5);
+  background: url(images/start.svg) no-repeat 8px center, linear-gradient(to bottom, #e1d8d1, #fff2e6);
 }
 
 input.stoptorrent {
@@ -1924,7 +1924,7 @@ input.stoptorrent:hover, input.stoptorrent:focus {
 }
 
 input.stoptorrent:active {
-  background: url(images/stop.svg) no-repeat 8px center, linear-gradient(to bottom, #fff7ef, #cfc1b5);
+  background: url(images/stop.svg) no-repeat 8px center, linear-gradient(to bottom, #e1d8d1, #fff2e6);
 }
 
 select {
