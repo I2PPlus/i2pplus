@@ -1326,34 +1326,19 @@ thead img.disable, img.disable:hover {
 }
 
 .percentBarComplete {
-  padding: 3px 0 2px;
+  padding: 1px 0;
   display: inline-block;
   min-width: 84px;
-  line-height: 100%;
+  line-height: 1.2;
   text-align: center;
   border-radius: 20px;
-  box-shadow: inset 0 0 0 1px #b5a79b, inset 0 0 2px 2px #efe7e0;
-  background: #fff8df;
+  box-shadow: inset 0 0 0 1px #b5a79b, inset 0 2px 2px 2px rgba(239,231,224,.3), inset 0 -2px 2px 2px rgba(236,200,172,.3);
   background: linear-gradient(to bottom, #fffbef, #dfd7d1);
 }
 
 .active .percentBarComplete {
-  box-shadow: inset 0 0 0 1px #b5a79b, inset 0 0 2px 2px #efe7e0;
-  background: radial-gradient(at center bottom, rgba(220, 220, 180,.8) 10%, rgba(0, 0, 0, 0) 70%), linear-gradient(to bottom, #fffbef, #dfd7d1);
-  animation: ease seeding .15s reverse;
-}
-
-@keyframes seeding {
-  from {
-    color: #439;
-    background: radial-gradient(at center bottom, rgba(220, 220, 180,.8) 10%, rgba(0, 0, 0, 0) 70%), linear-gradient(to bottom, #fffbef, #dfd7d1);
-    box-shadow: inset 0 0 0 1px #b5a79b, inset 0 0 2px 2px #efe7e0;
-  }
-  to {
-    color: #5540bf;
-    background: radial-gradient(at center bottom, rgba(240, 240, 148,.8) 10%, rgba(0, 0, 0, 0) 70%), linear-gradient(to bottom, #fffbef, #dfd7d1);
-    box-shadow: inset 0 0 0 1px #c2a68e, inset 0 0 2px 2px #f6f2ee;
-  }
+  box-shadow: inset 0 0 0 1px #b5a79b, inset 0 2px 2px 2px rgba(239,231,224,.6), inset 0 -2px 2px 2px rgba(236,200,172,.6);
+  background: radial-gradient(at center bottom, rgba(220,180,0,.1) 10%, rgba(0, 0, 0, 0) 70%), linear-gradient(to bottom, #fffbef, #f0d6c2);
 }
 
 @supports not (-moz-appearance: none) {
@@ -4967,10 +4952,10 @@ td.snarkTorrentStatus b {
   position: relative;
   line-height: 1;
   font-size: 95%;
+  color: #eee;
   text-shadow: 0 1px 1px #111;
   border-radius: 2px;
   background: #a970a9;
-  color: #eee;
 }
 
 .lang_fr td.snarkTorrentStatus b, .lang_hu td.snarkTorrentStatus b, .lang_tr td.snarkTorrentStatus b {
