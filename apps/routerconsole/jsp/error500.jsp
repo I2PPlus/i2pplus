@@ -47,6 +47,7 @@
 </div>
 <h1 class="err"><%=intl._t("ERROR")%>&ensp;<%=ERROR_CODE%>: <%=intl._t("Internal Server Error")%><br>
 <!--<span id="errmsg"><%=ERROR_MESSAGE%></span>--></h1>
+<!--
 <div class="sorry" id="warning">
 <%=intl._t("Sorry! There has been an internal error.")%>
 <hr>
@@ -57,8 +58,9 @@
            "<a href=\"https://i2pgit.org/i2p-hackers/i2p.i2p/-/issues\">i2pgit.org</a>")%>
 <p><%=intl._t("Please include this information in bug reports")%>:</p>
 </div>
+-->
 <div class="sorry" id="warning2">
-<h3><%=intl._t("Error Details")%></h3>
+<!--<h3><%=intl._t("Error Details")%></h3>-->
 <div id="stacktrace">
 <p><%=intl._t("Error {0}", ERROR_CODE)%>: &ensp;<%=ERROR_URI%>&ensp;-&ensp;<%=ERROR_MESSAGE%></p>
 <p>
