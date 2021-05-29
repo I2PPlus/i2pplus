@@ -4154,7 +4154,14 @@ td.snarkGraphicStatus img {
   border-left: 1px solid #6f533e !important;
 }
 
-@media screen and (max-width: 900px) {
+#torrentDisplay input:checked + .filterbutton {
+  text-shadow: 0 1px 1px #ebe5e0;
+  background: linear-gradient(to bottom, rgba(207, 193, 181, .6), #d7cbc1), repeating-linear-gradient(45deg, #75604e 1px, #a09286 1px, #bfafa2 2px) !important;
+  transition: ease background .15s;
+  pointer-events: none;
+}
+
+@supports (display: flex) {
   #torrentDisplay {
     display: flex;
   }
