@@ -5486,12 +5486,6 @@ td.snarkTorrentStatus b::before {
 }
 
 .pagenavcontrols {
-/*  margin-top: 3px;
-  display: inline-block;
-  position: absolute;
-  z-index: 600;
-  left: 0;
-  right: 0;*/
   display: block;
   font-weight: 700;
   border-bottom: 1px solid #313;
