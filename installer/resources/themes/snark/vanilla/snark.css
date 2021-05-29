@@ -305,19 +305,23 @@ a:active, a:visited:active, th a:active, th a:visited:active, td a:active, td a:
 /* screenlog */
 
 .snarkMessages {
-  margin: 0 1px 10px;
+  margin: 2px 1px 11px;
   padding: 0 3px;
   height: 56px;
-  width: auto;
+  width: calc(100% - 14px);
+  display: inline-block;
   overflow: hidden;
   text-align: left;
   font: bold 8.5pt var(--monospaced) !important;
   color: #cfc7c2;
   border: 1px solid #6f533e;
-  border-radius: 1px;
-  box-shadow: 0 0 0 1px rgba(70,62,57,.4), 0 0 0 2px rgba(198,190,185,.3), inset 0 0 4px #3f2307;
+  box-shadow: 0 0 0 1px #efe6e0, 0 0 0 3px rgba(70,62,57,.5);
   background: url(images/whippy.png) no-repeat scroll right 5px bottom -7px, linear-gradient(to bottom, #5f554d, #3f3833);
-  background-size: auto 105%, 100%;
+  background-size: auto 105%, 100% !important;
+}
+
+.snarkMessages.configpage {
+  width: calc(100% - 10px);
 }
 
 .snarkMessages, #screenlog.collapsed, #screenlog.xpanded {
@@ -326,7 +330,7 @@ a:active, a:visited:active, th a:active, th a:visited:active, td a:active, td a:
               url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true") no-repeat,
               linear-gradient(to bottom, #5f554d, #3f3833);
   background-size: 100%, 60px auto, calc(100% - 80px) 100%, 100% !important;
-  background-position: center center, right -4px bottom -10px, left bottom 1px, center center !important;
+  background-position: center center, right -4px bottom -10px, left bottom, center center !important;
   background-blend-mode: darken, lighten, luminosity, normal, normal;
 }
 
@@ -359,8 +363,8 @@ a:active, a:visited:active, th a:active, th a:visited:active, td a:active, td a:
 }
 
 .snarkMessages a:link:not(#closeLog):not(#expand):not(#shrink), .snarkMessages .infohash, .snarkMessages a:visited {
-  mix-blend-mode: exclusion;
   color: #f60 !important;
+  mix-blend-mode: exclusion;
 }
 
 .snarkMessages a:link:hover:not(#closeLog):not(#expand):not(#shrink) {
@@ -3460,7 +3464,7 @@ tr#torrentInfoStats td {
     font-size: 0;
   }
 
-  .snarkTorrentDetails, snarkCommentDetails {
+  .snarkTorrentDetails, .snarkCommentDetails {
     padding-left: 5px !important;
     padding-right: 0 !important;
   }
