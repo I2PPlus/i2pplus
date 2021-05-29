@@ -844,22 +844,6 @@ div.refresh {
 
 /* console error messages */
 
-img[src="/themes/console/images/i2plogo.png"] {
-  margin-top: 2px !important;
-  margin-left: -1px !important;
-  width: 180px !important;
-  filter: invert(1) sepia(100%) hue-rotate(70deg) !important;
-}
-
-img[src="/themes/console/images/i2plogo.png"]:hover,
-img[src="/themes/console/images/i2plogo.png"]:focus {
-  filter: invert(1) sepia(100%) hue-rotate(70deg) drop-shadow(0 0 2px #930) !important;
-}
-
-a:active img[src="/themes/console/images/i2plogo.png"] {
-  filter: invert(1) sepia(100%) hue-rotate(70deg) drop-shadow(0 0 3px #f60) !important;
-}
-
 h1 + .sorry, #console_404 .sorry {
   margin: -1px 5px 10px 226px;
   padding: 20px 20px 20px 70px;
@@ -888,6 +872,10 @@ h1 + .sorry, #console_404 .sorry {
   padding: 10px 20px 5px;
   min-width: 610px;
   background: #010;
+}
+
+#error500 #warning2 {
+  border: 1px solid #252;
 }
 
 #warning2 h3 {
@@ -10851,9 +10839,9 @@ table[id$="logs"] ul {
 
 #logs li:hover {
   text-shadow: 0 1px 1px #000;
-  box-shadow: inset 0 0 0 1px #000;
-  border-color: #330;
-  background: repeating-linear-gradient(to right, rgba(0,0,0,.3) 2px, rgba(0,24,0,.3) 4px),
+  box-shadow: inset 0 0 0 1px rgba(192,192,0,.4), inset 0 0 0 2px #000;
+  border-color: rgba(192,192,0,.4);
+  background: repeating-linear-gradient(to right, rgba(0,0,0,.3) 2px, rgba(96,96,0,.3) 4px),
               repeating-linear-gradient(to bottom, #002800 2px, #010 4px);
   background-size: 4px 100%, 100% 4px;
 }
