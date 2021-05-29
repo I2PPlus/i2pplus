@@ -19,6 +19,7 @@
   --wizard: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3ClinearGradient id='a' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0' stop-color='%23b3b3b3'/%3E%3Cstop offset='.36' stop-color='%23fff'/%3E%3Cstop offset='.75' stop-color='%23ccc'/%3E%3Cstop offset='1' stop-color='%23999'/%3E%3C/linearGradient%3E%3ClinearGradient id='b' gradientTransform='matrix(1.15 .15 .15 1.15 -156.96 -1085.43)' x1='82.54' x2='89.91' xlink:href='%23a' y1='962.43' y2='969.8'/%3E%3ClinearGradient id='c' gradientTransform='matrix(.91 .91 -.7 .7 -154.35 -1070.86)' gradientUnits='userSpaceOnUse' x1='738.91' x2='749.33' y1='632.15' y2='632.15'%3E%3Cstop offset='0' stop-color='%23333'/%3E%3Cstop offset='.36' stop-color='%23666'/%3E%3Cstop offset='.751' stop-color='%23333'/%3E%3Cstop offset='1' stop-color='%231a1a1a'/%3E%3C/linearGradient%3E%3CradialGradient id='d' cx='-84.1' cy='857.71' gradientTransform='matrix(.36 0 0 .41 129.42 -326.09)' gradientUnits='userSpaceOnUse' r='96.98'%3E%3Cstop offset='0' stop-color='%23ffd42a'/%3E%3Cstop offset='1' stop-color='%23f3361a'/%3E%3C/radialGradient%3E%3ClinearGradient id='e' gradientTransform='matrix(1.15 .15 .15 1.15 -156.96 -1085.43)' x1='8.8' x2='16.17' xlink:href='%23a' y1='1036.17' y2='1043.54'/%3E%3Cg transform='matrix(.48 0 0 .48 1.04 1.05)'%3E%3Cpath d='m110.09 22.36 17.41-1.41-15.79 7.48 15.79 7.48-17.41-1.41 9.93 14.37-14.37-9.93 1.41 17.41-7.48-15.79-7.48 15.79 1.41-17.41-14.37 9.93 9.93-14.37-17.41 1.41 15.79-7.48-15.79-7.48 17.41 1.41-9.93-14.37 14.37 9.93-1.41-17.41 7.48 15.79 7.48-15.79-1.41 17.41 14.37-9.93z' fill='url(%23d)' stroke='%23f60' stroke-linejoin='round' stroke-opacity='.65'/%3E%3Cpath d='m96.8 21.39 9.6 9.6-94.47 94.47-9.6-9.6z' fill='%23241c1c' stroke='%23333' stroke-width='3.4'/%3E%3Cpath d='m96.81 21.39-20.74 20.74 9.6 9.6 20.74-20.74z' fill='url(%23b)'/%3E%3Cpath d='m23.02 95.17-20.69 20.69 9.6 9.6 20.69-20.69z' fill='url(%23e)'/%3E%3Cpath d='m76.18 42.25 9.48 9.48-53.08 53.04-9.48-9.48z' fill='url(%23c)'/%3E%3C/g%3E%3C/svg%3E");
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, Bitstream Vera Sans, Verdana, sans-serif;
+  --tab: linear-gradient(to top, #ffeadf, #cfb6a8);
 }
 
 html {
@@ -1597,7 +1598,7 @@ input[type=submit], .trackerconfig input[type=submit], input[name="savepri"], se
   vertical-align: middle !important;
   border: 1px solid #a39375;
   border-radius: 50%;
-  background: var(--add) center center no-repeat, linear-gradient(to top, #ffeadf, #cfb6a8);
+  background: var(--add) center center no-repeat, var(--tab);
   background-size: 18px, 100%;
   opacity: 1;
   content: "";
@@ -1610,30 +1611,30 @@ input[type=submit], .trackerconfig input[type=submit], input[name="savepri"], se
 
 #tab_newtorrent::after {
   box-shadow: inset 0 0 0 2px #ffeadf;
-  background: var(--wizard) center center no-repeat, linear-gradient(to top, #ffeadf, #cfb6a8);
+  background: var(--wizard) center center no-repeat, var(--tab);
   background-size: 18px, 100%;
 }
 
 .toggleview[for="toggle_files"]::after {
   box-shadow: none;
-  background: var(--folder) center center no-repeat, linear-gradient(to top, #ffeadf, #cfb6a8);
+  background: var(--folder) center center no-repeat, var(--tab);
   background-size: 14px, 100%;
 }
 
 .toggleview[for="toggle_comments"]::after {
   box-shadow: none;
-  background: var(--chat) center center no-repeat, linear-gradient(to top, #ffeadf, #cfb6a8);
+  background: var(--chat) center center no-repeat, var(--tab);
   background-size: 14px, 100%;
 }
 
 #tab_config a::after {
   box-shadow: inset 0 0 0 2px #ffeadf;
-  background: var(--configure) center center no-repeat, linear-gradient(to top, #ffeadf, #cfb6a8);
+  background: var(--configure) center center no-repeat, var(--tab);
   background-size: 16px, 100%;
 }
 
 #tab_config:active, .toggleview:active {
-  box-shadow:  0 0 2px #4d453e, inset 0 0 0 1px #f0e9e4, inset 2px 2px 3px 1px #59513b;
+  box-shadow: 0 0 2px #4d453e, inset 0 0 0 1px #f0e9e4, inset 2px 2px 3px 1px #59513b;
   background: linear-gradient(to bottom, #e5d2c8, #baa397);
 }
 
