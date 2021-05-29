@@ -501,6 +501,8 @@ public class I2PSnarkServlet extends BasicServlet {
         List<UIMessages.Message> msgs = _manager.getMessages();
         if (!msgs.isEmpty()) {
             out.write("<div id=\"screenlog\" class=\"snarkMessages");
+            if (isConfigure)
+                out.write(" configpage");
             if (!_manager.util().connected())
                 out.write(" init");
              out.write("\" tabindex=\"0\">\n" +
