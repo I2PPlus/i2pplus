@@ -85,8 +85,8 @@ class HopProcessor {
 
         boolean okIV = _validator.receiveIV(orig, offset, orig, offset + IV_LENGTH);
         if (!okIV) {
-            if (_log.shouldLog(Log.WARN))
-                _log.warn("Invalid IV, dropping at hop... " + _config);
+            if (_log.shouldLog(Log.INFO))
+                _log.info("Invalid IV, dropping at hop... " + _config);
             return false;
         }
 
