@@ -37,6 +37,8 @@
   --b_search: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m9.58 47.42 12.67-12.64c.03.03.03.05.03.09-1.46-2.59-2.29-5.57-2.29-8.75 0-9.89 8.03-17.9 17.92-17.9s17.92 8 17.92 17.9c0 9.87-8.03 17.9-17.92 17.9-3.07 0-6.11-.77-8.78-2.29.03.03.05.03.09.05l-12.67 12.59a4.88 4.88 0 0 1 -6.88 0l-.09-.09a4.88 4.88 0 0 1 0-6.88zm17.58-7.02s-.03-.03-.09-.05c.03.03.05.05.09.05zm-3.55-3.55c.03.03.03.05.05.09-.03-.03-.05-.09-.05-.09zm14.34.41c6.17 0 11.15-4.99 11.15-11.12 0-2.95-1.18-5.79-3.27-7.89s-4.96-3.27-7.91-3.27c-6.17 0-11.15 4.99-11.15 11.12.03 6.13 4.99 11.12 11.15 11.12zm0 0' fill='%233d2619' stroke='%233d2619' stroke-linejoin='round' stroke-width='2.5'/%3E%3C/svg%3E");
   --b_search_hover: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m9.58 47.42 12.67-12.64c.03.03.03.05.03.09-1.46-2.59-2.29-5.57-2.29-8.75 0-9.89 8.03-17.9 17.92-17.9s17.92 8 17.92 17.9c0 9.87-8.03 17.9-17.92 17.9-3.07 0-6.11-.77-8.78-2.29.03.03.05.03.09.05l-12.67 12.59a4.88 4.88 0 0 1 -6.88 0l-.09-.09a4.88 4.88 0 0 1 0-6.88zm17.58-7.02s-.03-.03-.09-.05c.03.03.05.05.09.05zm-3.55-3.55c.03.03.03.05.05.09-.03-.03-.05-.09-.05-.09zm14.34.41c6.17 0 11.15-4.99 11.15-11.12 0-2.95-1.18-5.79-3.27-7.89s-4.96-3.27-7.91-3.27c-6.17 0-11.15 4.99-11.15 11.12.03 6.13 4.99 11.12 11.15 11.12zm0 0' fill='%23930' stroke='%23930' stroke-linejoin='round' stroke-width='2.5'/%3E%3C/svg%3E");
   --b_search_active: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m9.58 47.42 12.67-12.64c.03.03.03.05.03.09-1.46-2.59-2.29-5.57-2.29-8.75 0-9.89 8.03-17.9 17.92-17.9s17.92 8 17.92 17.9c0 9.87-8.03 17.9-17.92 17.9-3.07 0-6.11-.77-8.78-2.29.03.03.05.03.09.05l-12.67 12.59a4.88 4.88 0 0 1 -6.88 0l-.09-.09a4.88 4.88 0 0 1 0-6.88zm17.58-7.02s-.03-.03-.09-.05c.03.03.05.05.09.05zm-3.55-3.55c.03.03.03.05.05.09-.03-.03-.05-.09-.05-.09zm14.34.41c6.17 0 11.15-4.99 11.15-11.12 0-2.95-1.18-5.79-3.27-7.89s-4.96-3.27-7.91-3.27c-6.17 0-11.15 4.99-11.15 11.12.03 6.13 4.99 11.12 11.15 11.12zm0 0' fill='%23eee' stroke='%23eee' stroke-linejoin='round' stroke-width='2.5'/%3E%3C/svg%3E");
+  --dropdown: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m5.29 17.93 26.71 28.14 26.71-28.14' fill='none' stroke='%234d2200' stroke-linecap='round' stroke-linejoin='round' stroke-width='10'/%3E%3C/svg%3E");
+  --dropdown_hover: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m5.29 17.93 26.71 28.14 26.71-28.14' fill='none' stroke='%235f1227' stroke-linecap='round' stroke-linejoin='round' stroke-width='10'/%3E%3C/svg%3E");
 }
 
 html {
@@ -1917,22 +1919,22 @@ input.stoptorrent:active {
 
 select {
   margin: 2px 0 2px 4px;
-  padding: 5px 20px 5px 5px;
+  padding: 5px 22px 5px 5px;
   font: 8pt var(--bodyfont);
   font-weight: 400;
   color: #4d2200;
   border-radius: 2px;
   border: 1px solid #2f1500;
   box-shadow: inset 0 0 0 1px #f9f5f2, 0 0 1px 0 rgba(77, 69, 62, .3);
-  background: #efe6e0 url(images/dropdown.svg) right 6px center no-repeat !important;
-  background-size: 10px 10px !important;
+  background: #efe6e0 var(--dropdown) right 7px center no-repeat !important;
+  background-size: 10px !important;
   appearance: none;
 }
 
 select:hover, select:focus {
   color: #5f1227 !important;
-  background: #fffcdf url(images/dropdown_hover.svg) right 6px center no-repeat !important;
-  background-size: 10px 10px !important;
+  background: #fffcdf var(--dropdown_hover) right 7px center no-repeat !important;
+  background-size: 10px !important;
 }
 
 @-moz-document url-prefix() {
