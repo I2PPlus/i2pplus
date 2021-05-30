@@ -363,20 +363,16 @@ a:active, a:visited:active, th a:active, th a:visited:active, td a:active, td a:
 }
 
 .snarkMessages a:link:not(#closeLog):not(#expand):not(#shrink), .snarkMessages .infohash, .snarkMessages a:visited {
-  color: #f60 !important;
-  mix-blend-mode: exclusion;
-}
-
-.snarkMessages a:link:hover:not(#closeLog):not(#expand):not(#shrink) {
-  mix-blend-mode: normal;
+  color: #f90 !important;
+  text-shadow: 0 0 1px #000;
 }
 
 .snarkMessages a:hover, .snarkMessages a:visited:hover {
-  color: #f60 !important;
+  color: #fb0 !important;
 }
 
 .snarkMessages a:link:active, .snarkMessages a:visited:active  {
-  color: #f30 !important;
+  color: #f60 !important;
 }
 
 .snarkMessages .infohash:hover {
