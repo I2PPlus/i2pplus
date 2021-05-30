@@ -862,13 +862,13 @@ td:hover .percentBarText {
 }
 
 .active .snarkTorrentAction, .active:hover .snarkTorrentAction {
-  background: linear-gradient(to left, rgba(223,0,103,.7) 3px, rgba(0,0,0,0) 3px);
+  background: linear-gradient(to left, #cb4dcb 2px, rgba(0,0,0,0) 2px);
   animation: ease-in-out active .7s 3s forwards;
 }
 
 @keyframes active {
-  from {background: none}
-  to {background: linear-gradient(to left, rgba(223,0,103,.7) 3px, rgba(0,0,0,0) 3px)}
+  from {background: linear-gradient(to left, #f3c 2px, rgba(0,0,0,0) 2px)}
+  to {background: linear-gradient(to left, #cb4dcb 2px, rgba(0,0,0,0) 2px)}
 }
 
 .peerinfo td[colspan="4"], .debuginfo td[colspan="10"] {
