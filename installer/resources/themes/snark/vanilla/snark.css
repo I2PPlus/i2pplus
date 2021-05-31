@@ -327,7 +327,7 @@ a:active, a:visited:active, th a:active, th a:visited:active, td a:active, td a:
 .snarkMessages, #screenlog.collapsed, #screenlog.xpanded {
   background: repeating-linear-gradient(to bottom, rgba(77,69,62,.5) 2px, rgba(111,96,90,.3) 4px),
               url(images/whippy.png) no-repeat scroll,
-              url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true") no-repeat,
+              url(/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true) no-repeat,
               linear-gradient(to bottom, #5f554d, #3f3833);
   background-size: 100%, 60px auto, calc(100% - 80px) 100%, 100% !important;
   background-position: center center, right -4px bottom -10px, left bottom, center center !important;
@@ -339,8 +339,7 @@ a:active, a:visited:active, th a:active, th a:visited:active, td a:active, td a:
 }
 
 .snarkMessages:focus {
-  box-shadow: inset 0 0 6px 0 #3f2307, 0 0 1px #df0067;
-  filter: drop-shadow(0 0 2px rgba(200, 80, 0, .3));
+  box-shadow: 0 0 0 1px #ff1a85, 0 0 0 3px rgba(70,62,57,.5);
 }
 
 .snarkMessages ul {
@@ -362,21 +361,28 @@ a:active, a:visited:active, th a:active, th a:visited:active, td a:active, td a:
   content: "";
 }
 
-.snarkMessages a:link:not(#closeLog):not(#expand):not(#shrink), .snarkMessages .infohash, .snarkMessages a:visited {
+.snarkMessages .infohash, .snarkMessages a, .snarkMessages a:visited {
   color: #f90 !important;
   text-shadow: 0 0 1px #000;
+  opacity: .9;
 }
 
 .snarkMessages a:hover, .snarkMessages a:visited:hover {
   color: #fb0 !important;
+  opacity: 1;
 }
 
 .snarkMessages a:link:active, .snarkMessages a:visited:active  {
   color: #f60 !important;
 }
 
+.snarkMessages .infohash {
+  color: #5b5 !important;
+}
+
 .snarkMessages .infohash:hover {
-  color: #090 !important;
+  color: #9f9 !important;
+  opacity: 1;
 }
 
 #closelog, #expand, #shrink {
@@ -416,7 +422,6 @@ table {
   border: 1px solid #6f533e;
   border-spacing: 0;
   border-collapse: collapse;
-  opacity: 1 !important;
 }
 
 th {
@@ -449,12 +454,12 @@ thead a img, thead img {
 
 thead a:hover img, thead a:focus img {
   mix-blend-mode: normal;
-  filter: drop-shadow(0 0 1px #f60);
+  filter: drop-shadow(0 0 1px #ff1a85) drop-shadow(0 0 1px #df0067);
 }
 
 thead a:active img {
   transform: scale(.9);
-  filter: drop-shadow(0 0 1px #f30);
+  filter: drop-shadow(0 0 1px #990047) drop-shadow(0 0 1px #660030);
 }
 
 th br {
@@ -4404,8 +4409,8 @@ td.snarkTorrentDetails {
   padding: 0;
   border: 1px solid #463e39;
   border-radius: 2px;
-  background: #cfc7c2;
   box-shadow: var(--highlight);
+  background: #cfc7c2;
 }
 
 #ourDest {
@@ -4658,7 +4663,8 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
 
 /* end comment indicator */
 
-input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
+input[type=checkbox], input[type=checkbox]:checked,
+input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
   width: 19px;
   height: 19px;
   position: relative;
@@ -4672,7 +4678,8 @@ input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disable
   appearance: none;
 }
 
-#torrentOrderControl input[type=checkbox], #torrentOrderControl input[type=checkbox]:checked, #torrentOrderControl input[type=checkbox][disabled], #torrentOrderControl input[type=checkbox][disabled]:checked {
+#torrentOrderControl input[type=checkbox], #torrentOrderControl input[type=checkbox]:checked,
+#torrentOrderControl input[type=checkbox][disabled], #torrentOrderControl input[type=checkbox][disabled]:checked {
   border: 1px solid #bbb !important;
 }
 
@@ -4900,12 +4907,12 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 
 .sortIcon:hover .ascending {
   top: 2px !important;
-  border-color: transparent transparent #d90 transparent;
+  border-color: transparent transparent #df0067 transparent;
 }
 
 .sortIcon:hover .descending {
   top: -2px !important;
-  border-color: #d90 transparent transparent transparent;
+  border-color: #df0067 transparent transparent transparent;
 }
 
 #snarkTorrentSort .ascending, th#snarkTorrentSort .descending {
@@ -4913,113 +4920,113 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 }
 
 @supports (animation: ease all .1s) {
-.ascending, .descending {
-  filter: opacity(0);
-  animation: ease fade-in .2s .6s forwards;
-}
+  .ascending, .descending {
+    filter: opacity(0);
+    animation: ease fade-in .2s .6s forwards;
+  }
 }
 
 /* end table sort indicators */
 
 @media screen and (min-width: 1500px) {
-td.snarkTorrentStatus {
-  text-align: left !important;
-}
+  td.snarkTorrentStatus {
+    text-align: left !important;
+  }
 
-td.snarkTorrentStatus b {
-  padding: 3px 5px 5px;
-  min-width: 99px;
-  display: inline-block;
-  text-align: center;
-  position: relative;
-  line-height: 1;
-  font-size: 95%;
-  color: #eee;
-  text-shadow: 0 1px 1px #111;
-  border-radius: 2px;
-  background: #a970a9;
-}
+  td.snarkTorrentStatus b {
+    padding: 3px 5px 5px;
+    min-width: 99px;
+    display: inline-block;
+    text-align: center;
+    position: relative;
+    line-height: 1;
+    font-size: 95%;
+    color: #eee;
+    text-shadow: 0 1px 1px #111;
+    border-radius: 2px;
+    background: #a970a9;
+  }
 
-.lang_fr td.snarkTorrentStatus b, .lang_hu td.snarkTorrentStatus b, .lang_tr td.snarkTorrentStatus b {
-  min-width: 130px;
-}
+  .lang_fr td.snarkTorrentStatus b, .lang_hu td.snarkTorrentStatus b, .lang_tr td.snarkTorrentStatus b {
+    min-width: 130px;
+  }
 
-td.snarkTorrentStatus b::before {
-  width: 0;
-  height: 0;
-  position: absolute;
-  top: calc(50% - 5px);
-  left: -10px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: transparent #a970a9 transparent transparent;
-  content: "";
-}
+  td.snarkTorrentStatus b::before {
+    width: 0;
+    height: 0;
+    position: absolute;
+    top: calc(50% - 5px);
+    left: -10px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent #a970a9 transparent transparent;
+    content: "";
+  }
 
-.active.seeding.complete .snarkTorrentStatus b {
-  background: #937;
-  background: repeating-linear-gradient(135deg, #937, #937 8px, #826 9px, #826 17px);
-}
+  .active.seeding.complete .snarkTorrentStatus b {
+    background: #937;
+    background: repeating-linear-gradient(135deg, #937, #937 8px, #826 9px, #826 17px);
+  }
 
-.active.seeding.complete .snarkTorrentStatus b::before {
-  border-color: transparent #937 transparent transparent;
-}
+  .active.seeding.complete .snarkTorrentStatus b::before {
+    border-color: transparent #937 transparent transparent;
+  }
 
-.active.downloading .snarkTorrentStatus b {
-  background: #252;
-  background: repeating-linear-gradient(135deg, #252, #252 8px, #141 9px, #141 17px);
-}
+  .active.downloading .snarkTorrentStatus b {
+    background: #252;
+    background: repeating-linear-gradient(135deg, #252, #252 8px, #141 9px, #141 17px);
+  }
 
-.active.downloading .snarkTorrentStatus b::before {
-  border-color: transparent #252 transparent transparent;
-}
+  .active.downloading .snarkTorrentStatus b::before {
+    border-color: transparent #252 transparent transparent;
+  }
 
-.inactive.downloading .snarkTorrentStatus b, .active.starting .snarkTorrentStatus b {
-  color: #111;
-  text-shadow: 0 1px 1px #ff3;
-  background: #ff3;
-}
+  .inactive.downloading .snarkTorrentStatus b, .active.starting .snarkTorrentStatus b {
+    color: #111;
+    text-shadow: 0 1px 1px #ff3;
+    background: #ff3;
+  }
 
-.inactive.downloading .snarkTorrentStatus b::before, .active.starting .snarkTorrentStatus b::before {
-  border-color: transparent #ff3 transparent transparent;
-}
+  .inactive.downloading .snarkTorrentStatus b::before, .active.starting .snarkTorrentStatus b::before {
+    border-color: transparent #ff3 transparent transparent;
+  }
 
-.stopped.complete .snarkTorrentStatus b {
-  background: #28f;
-}
+  .stopped.complete .snarkTorrentStatus b {
+    background: #28f;
+  }
 
-.stopped.complete .snarkTorrentStatus b::before {
-  border-color: transparent #28f transparent transparent;
-}
+  .stopped.complete .snarkTorrentStatus b::before {
+    border-color: transparent #28f transparent transparent;
+  }
 
-.nopeers.incomplete .snarkTorrentStatus b {
-  text-shadow: 0 1px 1px #bbb;
-  background: #aaa;
-}
+  .nopeers.incomplete .snarkTorrentStatus b {
+    text-shadow: 0 1px 1px #bbb;
+    background: #aaa;
+  }
 
-.nopeers.incomplete .snarkTorrentStatus b::before {
-  border-color: transparent #aaa transparent transparent;
-}
+  .nopeers.incomplete .snarkTorrentStatus b::before {
+    border-color: transparent #aaa transparent transparent;
+  }
 
-.stopped.incomplete .snarkTorrentStatus b, .neterror .snarkTorrentStatus b {
-  background: #900 !important;
-}
+  .stopped.incomplete .snarkTorrentStatus b, .neterror .snarkTorrentStatus b {
+    background: #900 !important;
+  }
 
-.stopped.incomplete .snarkTorrentStatus b::before, .neterror .snarkTorrentStatus b::before {
-  border-color: transparent #900 transparent transparent !important;
-}
+  .stopped.incomplete .snarkTorrentStatus b::before, .neterror .snarkTorrentStatus b::before {
+    border-color: transparent #900 transparent transparent !important;
+  }
 
-.snarkTorrentDownloaded, .snarkTorrentUploaded, .snarkTorrentRateDown, .snarkTorrentRateUp {
-  min-width: 76px;
-}
+  .snarkTorrentDownloaded, .snarkTorrentUploaded, .snarkTorrentRateDown, .snarkTorrentRateUp {
+    min-width: 76px;
+  }
 
-.neterror .snarkTorrentStatus b {
-  color: #eee !important;
-  text-shadow: 0 1px 1px #111 !important;
-}
+  .neterror .snarkTorrentStatus b {
+    color: #eee !important;
+    text-shadow: 0 1px 1px #111 !important;
+  }
 
-.trackerhome, .trackerannounce, .knowntracker a {
-  width: 400px !important;
-  max-width: 400px !important;
-}
+  .trackerhome, .trackerannounce, .knowntracker a {
+    width: 400px !important;
+    max-width: 400px !important;
+  }
 }
