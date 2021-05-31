@@ -362,21 +362,28 @@ a:active, a:visited:active, th a:active, th a:visited:active, td a:active, td a:
   content: "";
 }
 
-.snarkMessages a:link:not(#closeLog):not(#expand):not(#shrink), .snarkMessages .infohash, .snarkMessages a:visited {
+.snarkMessages .infohash, .snarkMessages a, .snarkMessages a:visited {
   color: #f90 !important;
   text-shadow: 0 0 1px #000;
+  opacity: .9;
 }
 
 .snarkMessages a:hover, .snarkMessages a:visited:hover {
   color: #fb0 !important;
+  opacity: 1;
 }
 
 .snarkMessages a:link:active, .snarkMessages a:visited:active  {
   color: #f60 !important;
 }
 
+.snarkMessages .infohash {
+  color: #5b5 !important;
+}
+
 .snarkMessages .infohash:hover {
-  color: #090 !important;
+  color: #9f9 !important;
+  opacity: 1;
 }
 
 #closelog, #expand, #shrink {
