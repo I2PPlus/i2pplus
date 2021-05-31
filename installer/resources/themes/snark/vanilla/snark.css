@@ -692,7 +692,7 @@ tr:hover .snarkTrackerDetails img {
   vertical-align: middle;
 }
 
-.snarkTorrentRateDown, .snarkTorrentDownloaded {
+.snarkTorrentPeerCount b, .snarkTorrentETA, .snarkTorrentRateDown, .snarkTorrentDownloaded {
   color: #5c4e3d;
 }
 
@@ -1361,12 +1361,7 @@ thead img.disable, img.disable:hover {
 }
 
 .choked, .unchoked {
-  font-style: italic;
-}
-
-.choked, .unchoked {
   font-weight: 700;
-  font-style: italic;
 }
 
 .choked, .idle {
@@ -4495,10 +4490,6 @@ img, input[type=image] {
   opacity: 1;
 }
 
-.snarkTorrentRateUp, .snarkTorrentUploaded {
-  font-style: italic;
-}
-
 .peerSeed {
   content: "";
   display: inline-block;
@@ -4975,12 +4966,12 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
   }
 
   .active.downloading .snarkTorrentStatus b {
-    background: #252;
-    background: repeating-linear-gradient(135deg, #252, #252 8px, #141 9px, #141 17px);
+    background: #373;
+    background: repeating-linear-gradient(135deg, #595, #595 8px, #373 9px, #373 17px);
   }
 
   .active.downloading .snarkTorrentStatus b::before {
-    border-color: transparent #252 transparent transparent;
+    border-color: transparent #595 transparent transparent;
   }
 
   .inactive.downloading .snarkTorrentStatus b, .active.starting .snarkTorrentStatus b {
