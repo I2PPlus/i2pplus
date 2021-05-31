@@ -38,7 +38,7 @@ public class SimpleTimer2 {
     }
 
     private static final int MIN_THREADS = 1;
-    private static final int MAX_THREADS = Math.min(SystemVersion.getCores(), 2);
+    private static final int MAX_THREADS = 6;
 
     private final ScheduledThreadPoolExecutor _executor;
     private final String _name;
@@ -69,10 +69,11 @@ public class SimpleTimer2 {
     protected SimpleTimer2(I2PAppContext context, String name, boolean prestartAllThreads) {
         _name = name;
         long maxMemory = SystemVersion.getMaxMemory();
-        if (SystemVersion.isSlow())
-            _threads = 2;
+        if (SystemVersion.isSlow() || SystemVersion.getCores() <= 4)
+            _threads = 4;
         else
-            _threads = (int) Math.max(MIN_THREADS, Math.min(MAX_THREADS, 1 + (maxMemory / (32*1024*1024))));
+//            _threads = (int) Math.max(MIN_THREADS, Math.min(MAX_THREADS, 1 + (maxMemory / (32*1024*1024))));
+            _threads = MAX_THREADS;
         _executor = new CustomScheduledThreadPoolExecutor(_threads, new CustomThreadFactory());
         if (prestartAllThreads)
             _executor.prestartAllCoreThreads();
