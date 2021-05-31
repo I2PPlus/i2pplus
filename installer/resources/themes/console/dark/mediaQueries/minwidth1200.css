@@ -124,6 +124,10 @@
     margin: -17px 5px 18px 272px !important;
   }
 
+  #error500 #warning2.sorry {
+    margin-top: -1px !important;
+  }
+
   #warning2 p {
     font-size: 10pt;
   }
