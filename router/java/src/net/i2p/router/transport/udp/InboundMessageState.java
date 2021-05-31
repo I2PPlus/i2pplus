@@ -352,7 +352,7 @@ class InboundMessageState implements CDQEntry {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(256);
-        buf.append("Inbound Message: ").append(_messageId);
+        buf.append("\n* Inbound Message: ").append(_messageId);
         buf.append(" from [").append(_from.toString().substring(0,6)).append("]");
         if (isComplete()) {
             buf.append(" completely received with ");
