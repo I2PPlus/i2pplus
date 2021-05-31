@@ -1217,20 +1217,20 @@ class PacketBuilder {
             if (iaddr == null) {
                 if (_log.shouldWarn())
                     _log.warn("Cannot build a relay request for [" + state.getRemoteIdentity().calculateHash().toBase64().substring(0,6) +
-                               "] slot " + i + " -> no address");
+                               "] slot " + i + " -> No address");
                 continue;
             }
             if (ikey == null || tag <= 0) {
                 if (_log.shouldWarn())
                     _log.warn("Cannot build a relay request for [" + state.getRemoteIdentity().calculateHash().toBase64().substring(0,6) +
-                               "] slot " + i + " -> no key/tag");
+                               "] slot " + i + " -> No key/tag");
                 continue;
             }
             if  (exp > 0 && exp < cutoff) {
                 if (_log.shouldWarn())
-                    _log.warn("Cannot build a relay request for [" + state.getRemoteIdentity().calculateHash().toBase64().substring(0,6) +
-                               "] -> expired " + DataHelper.formatTime(exp) +
-                               " : " + Addresses.toString(iaddr.getAddress(), iport));
+                    _log.warn("Cannot build a relay request for " + Addresses.toString(iaddr.getAddress(), iport) +
+                              " [" + state.getRemoteIdentity().calculateHash().toBase64().substring(0,6) +
+                              "] \n* Expired: " + DataHelper.formatTime(exp));
                 continue;
             }
                 // we must use the same isValid() as EstablishmentManager.receiveRelayResponse().
@@ -1277,8 +1277,8 @@ class PacketBuilder {
             if (pkt != null)
                 rv.add(pkt);
             else if (_log.shouldWarn())
-                _log.warn("Cannot build a relay request for [" + state.getRemoteIdentity().calculateHash().toBase64().substring(0,6) +
-                          "] -> no valid address to send to: " + Addresses.toString(iaddr.getAddress(), iport));
+                _log.warn("Cannot build a relay request for " + Addresses.toString(iaddr.getAddress(), iport) + " [" +
+                          state.getRemoteIdentity().calculateHash().toBase64().substring(0,6) + "] -> No valid address to send to");
         }
         return rv;
     }
