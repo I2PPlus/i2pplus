@@ -315,7 +315,9 @@ a:active, a:visited:active, th a:active, th a:visited:active, td a:active, td a:
   color: #cfc7c2;
   border: 1px solid #6f533e;
   box-shadow: 0 0 0 1px #efe6e0, 0 0 0 3px rgba(70,62,57,.5);
-  background: url(images/whippy.png) no-repeat scroll right 5px bottom -7px, linear-gradient(to bottom, #cfbfaf, #3f3833);
+  background: repeating-linear-gradient(to bottom, rgba(77,69,62,.5) 2px, rgba(111,96,90,.3) 4px),
+              url(images/whippy.png) no-repeat scroll right 5px bottom -7px,
+              linear-gradient(to bottom, #5f554d, #3f3833);
   background-size: auto 105%, 100% !important;
   scrollbar-color: #a38a75 rgba(63,56,51,.7);
 }
