@@ -314,7 +314,7 @@ public abstract class LocalHTTPServer {
                                        "<div class=\"warning\" id=\"warning\">\n" +
                                        "<h3>")
                                .append(_t("Your new encryption key"))
-                               .append("</h3>\n<p id=\"key\">" +
+                               .append("</h3>\n<p id=\"key\">")
                                .append(key)
                                .append("</p>\n<p>")
                                .append(_t("Copy the key and send it to the server operator."))
