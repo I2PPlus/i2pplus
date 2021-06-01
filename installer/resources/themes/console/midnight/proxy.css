@@ -347,12 +347,20 @@ hr {
   background: rgba(38, 35, 92,.7);
 }
 
-#b64 {
+#b64, #key {
   white-space: pre-wrap;
   word-break: break-all;
   text-align: justify;
   font-family: var(--monospaced);
   font-size: 90%;
+  user-select: all;
+}
+
+#key {
+  margin: 20px 0 25px;
+  padding: 10px 14px;
+  border: 1px solid 1px solid rgba(38, 35, 92,.7);
+  background: #000;
 }
 
 #proxyNewHost a {

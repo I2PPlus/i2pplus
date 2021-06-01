@@ -23,9 +23,8 @@ html {
 }
 
 ::selection {
-  color: white;
-  background: #22296f !important;
-  background: rgba(34, 41, 111, .9) !important;
+  color: #000;
+  background: rgba(220,220,0,.9) !important;
 }
 
 .logo, button, h3, h4 {
@@ -135,6 +134,10 @@ table {
   width: 100%;
 }
 
+.logo, .warning {
+  animation: ease fade .3s 2s forwards;
+}
+
 .logo {
   margin: -5px 20px 0;
   padding: 10px;
@@ -148,7 +151,6 @@ table {
   background: repeating-linear-gradient(to bottom, rgba(0,0,0,.9) 2px, rgba(0,16,0,.9) 4px), var(--camo) #000;
   background-size: 4px 100%, 1024px;
   opacity: 0;
-  animation: ease fade .3s 2s forwards;
 }
 
 .logo > * {
@@ -212,12 +214,6 @@ table {
   background-size: auto 110px, 100% 4px, 100%;
   background-position: 21px calc(50% + 16px);
   opacity: 0;
-  animation: ease fade .3s 1s forwards;
-}
-
-#warning > *:not(h3) {
-  opacity: 0;
-  animation: ease fade .15s 2.5s forwards;
 }
 
 #proxyerror p:first-of-type {
@@ -341,11 +337,20 @@ table {
   font-weight: 700;
 }
 
-#b64 {
+#b64, #key {
   white-space: pre-wrap;
   word-break: break-all;
+  text-align: justify;
   font-family: var(--monospaced);
   font-size: 90%;
+  user-select: all;
+}
+
+#key {
+  margin: 20px 0 25px;
+  padding: 10px 14px;
+  border: 1px solid #131;
+  background: #000;
 }
 
 #proxyNewHost + hr {

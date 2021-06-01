@@ -229,19 +229,6 @@ table {
 }
 
 .proxyfooter {
-  padding: 0 5px 5px;
-  margin: -50px 8px 0 260px;
-  min-width: 600px;
-  font-size: 8pt;
-}
-
-.proxyfooter p {
-  text-align: right !important;
-  line-height: 115%;
-  color: #6b4612;
-}
-
-#proxyNewAddressHelper .proxyfooter {
   display: none;
 }
 
@@ -261,9 +248,20 @@ table {
   font-weight: 700;
 }
 
-#proxyNewHost #b64 {
+#b64, #key {
   white-space: pre-wrap;
   word-break: break-all;
+  text-align: justify;
+  font-family: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
+  font-size: 90%;
+  user-select: all;
+}
+
+#key {
+  margin: 20px 0 25px;
+  padding: 10px 14px;
+  border: 1px solid #fb7;
+  background: #ffe;
 }
 
 #proxyNewHost textarea:focus {
@@ -365,10 +363,6 @@ button[type=submit]:active {
     width: 25%;
     white-space: nowrap;
     font-size: 10pt;
-  }
-
-  .proxyfooter {
-    display: none;
   }
 }
 
