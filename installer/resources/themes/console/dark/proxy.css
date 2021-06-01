@@ -22,6 +22,16 @@ html {
   background-size: 4px 100%, 100% 4px;
 }
 
+::selection {
+  color: white;
+  background: #22296f !important;
+  background: rgba(34, 41, 111, .9) !important;
+}
+
+.logo, button, h3, h4 {
+  user-select: none;
+}
+
 body, button, select {
   font-family: var(--bodyfont);
 }
