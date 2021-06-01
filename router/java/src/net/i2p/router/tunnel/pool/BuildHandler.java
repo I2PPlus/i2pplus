@@ -631,8 +631,8 @@ class BuildHandler implements Runnable {
                 if (from == null && _state.from != null)
                     from = _state.from.calculateHash();
                 _log.warn("Next hop lookup failure " + _req
-                          + " From: " + from
-                          + " ID: " + _state.msg.getUniqueId());
+                          + "\n* From: " + from
+                          + " [MsgID: " + _state.msg.getUniqueId() + "]");
             }
 
             // ???  should we blame the peer here?   getContext().profileManager().tunnelTimedOut(_nextPeer);
