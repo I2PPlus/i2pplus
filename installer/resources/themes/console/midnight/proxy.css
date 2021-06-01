@@ -261,7 +261,7 @@ button.go:active, button.accept:active {
   padding: 0 0 10px 0;
   text-align: left;
   font-size: 110%;
-  border-bottom: 1px solid #26235c;
+  border-bottom: 1px solid rgba(38, 35, 92,.7);
   box-shadow: none !important;
 }
 
@@ -338,6 +338,13 @@ button.go:active, button.accept:active {
 
 #proxyNewHost + hr {
   display: none;
+}
+
+hr {
+  margin: 20px 0 10px;
+  height: 1px;
+  border: none;
+  background: rgba(38, 35, 92,.7);
 }
 
 #b64 {
