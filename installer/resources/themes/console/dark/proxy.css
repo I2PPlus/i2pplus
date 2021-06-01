@@ -21,11 +21,11 @@ html {
   background: #000;
 }
 
-body, button, input, input[type=text], input[type=password], select, #debug .skm_key td:first-child b {
+body, button, select {
   font-family: var(--bodyfont);
 }
 
-button, input, input[type=text], input[type=password], select {
+button, select {
   font-size: 9pt;
   font-weight: 700;
 }
@@ -124,22 +124,6 @@ table {
   width: 100%;
 }
 
-textarea {
-  margin: 10px;
-  padding: 5px;
-  width: calc(100% - 15px);
-  min-width: 97%;
-  min-height: 100px;
-  font: 8.5pt var(--monospaced);
-  color: #ee9;
-  border-radius: 2px;
-  border: 1px solid #184818;
-  box-shadow: inset 0 0 3px 3px #000;
-  text-align: left;
-  background: #000;
-  background: linear-gradient(to bottom, #000, #010) !important;
-}
-
 .logo { /* proxy error "fake" sidebar */
   margin: -5px 20px 0;
   padding: 10px;
@@ -148,10 +132,10 @@ textarea {
   position: relative;
   text-align: center;
   font-size: 10pt;
-  border: 1px solid #252;
-  box-shadow: inset 0 0 3px 3px #000;
-  background: #000 url(images/camotile2.png);
-  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.6) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px), url(images/camotile2.png);
+  border: 1px solid #131;
+  box-shadow: inset 0 0 0 1px #000;
+  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.9) 2px, rgba(0,16,0,.9) 4px), var(--camo) #000;
+  background-size: 4px 100%, 1024px;
 }
 
 .logo > * {
@@ -191,8 +175,8 @@ textarea {
   margin: 10px -10px 0;
   height: 1px;
   color: #494;
-  border: 0 solid #252;
-  background: #252;
+  border: 0 solid #131;
+  background: #131;
 }
 
 #warning {
@@ -330,22 +314,11 @@ textarea {
   vertical-align: top;
 }
 
-#proxyNewHost textarea {
-  margin: 0 !important;
-  padding: 0 !important;
-  width: 100% !important;
-  height: 6em;
-  resize: none;
+#b64 {
   white-space: pre-wrap;
   word-break: break-all;
-  overflow: auto;
-  border: none;
-  background: none !important;
-  box-shadow: none !important;
-}
-
-#proxyNewHost textarea:focus {
-  filter: none;
+  font-family: var(--monospaced);
+  font-size: 90%;
 }
 
 #proxyNewHost + hr {

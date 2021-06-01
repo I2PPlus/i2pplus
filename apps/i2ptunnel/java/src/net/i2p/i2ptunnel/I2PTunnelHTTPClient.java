@@ -1469,9 +1469,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                       "<td><a href=\"http://" + b32 + ".b32.i2p/\">" + b32 + ".b32.i2p</a></td></tr>");
         } catch(Exception e) {
         }
-        out.write("<tr><td align=\"right\">" + _t("Destination") + "</td><td>" +
-                  "<textarea rows=\"1\" style=\"height: 6em; min-width: 0; min-height: 0;\" cols=\"70\" wrap=\"off\" readonly=\"readonly\" >" + ahelperKey + "</textarea>" +
-                  "</td></tr>\n</table>\n" + "<hr>\n" +
+        out.write("<tr><td align=\"right\">" + _t("Destination") + "</td><td><span id=\"b64\" style=\"user-select:all\">" + ahelperKey +
+                  "</span></td></tr>\n</table>\n" + "<hr>\n" +
 
                 // FIXME if there is a query remaining it is lost
                 "<form method=\"GET\" action=\"" + targetRequest + "\">\n" +

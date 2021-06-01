@@ -1,0 +1,411 @@
+/* I2P+ Router Console: proxy error theme: Midnight */
+/* Author: dr|z3d */
+
+@import url(/themes/fonts/DroidSans.css);
+
+:root {
+  --title: repeating-linear-gradient(to right, rgba(0,0,48,.4) 2px, #000 4px), linear-gradient(to bottom, #003, #002 50%, #001 50%, #000);
+  --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
+  --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
+  --button: linear-gradient(to bottom, #11101c 50%, #000010 50%);
+  --button_hover: linear-gradient(to bottom, #202 50%, #000 50%);
+  --button_active: linear-gradient(to bottom, #401856, #501f6c);
+  --innerborder: 1px solid rgba(38, 35, 92,.7);
+  --tr: linear-gradient(to bottom, #001, #000);
+  --th: repeating-linear-gradient(to right, rgba(0,0,64,.4) 2px, #000 4px), linear-gradient(to bottom, #000018, #000);
+  --panel: linear-gradient(to bottom, #080818, #040410);
+  --helpsection: repeating-linear-gradient(to bottom, #080820 2px, #010010 4px);
+  --highlight: inset 0 0 0 1px #000;
+  --a: #7171d1;
+  --yes: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m55.87 8.64a4.32 4.32 0 0 0 -3.06 1.24 1.78 1.78 0 0 0 0 0l-30.85 30.84-10.76-10.76c-1.6-1.6-4.5-1.56-6.05.05l-4.02 4.16a1.78 1.78 0 0 0 0 0c-1.53 1.58-1.5 4.4.07 5.95l17.78 17.64c1.57 1.56 4.42 1.56 5.98-.01a1.78 1.78 0 0 0 0 0l37.86-37.85c1.57-1.57 1.57-4.43 0-6l-4-4.02a1.78 1.78 0 0 0 0 0 4.29 4.29 0 0 0 -2.93-1.24z' fill='%2371c837'/%3E%3C/svg%3E");
+}
+
+html, body {
+    min-height: 100%;
+}
+
+html {
+    margin: 0;
+}
+
+html {
+  background: repeating-linear-gradient(to right, rgba(0,16,0,.5) 2px, rgba(0,0,0,.3) 4px),
+              repeating-linear-gradient(to bottom, rgba(0,0,32,.6) 2px, rgba(0,0,0,.3) 4px),
+              url(images/tile.png) #001;
+  background-size: 4px 100%, 100% 4px, 171px 148px;
+}
+
+body, p, td {
+  line-height: 1.3;
+  font-family: var(--bodyfont);
+  font-size: 10pt;
+}
+
+body {
+  margin: 2px 0 0;
+  padding: 0;
+  text-align: center;
+  color: #c9ceff;
+}
+
+a:link, a:visited {
+  color: var(--a);
+  text-decoration: none;
+  font-weight: 700;
+  word-wrap: break-word;
+  outline: none;
+}
+
+a:hover, a:focus {
+  color: #bf2295;
+}
+
+a:active {
+  color: #851768 !important;
+}
+
+.logo {
+  margin: 2px 20px 0 20px;
+  padding: 10px 10px 0;
+  width: 185px;
+  float: left;
+  text-align: center;
+  color: #c9ceff;
+  border: var(--innerborder);
+  box-shadow: var(--highlight), 0 0 0 4px #225;
+  background: #000;
+  background: repeating-linear-gradient(to bottom, #000, #002 2px);
+}
+
+.iframed .logo {
+  display: none;
+}
+
+.logo a img {
+  margin: -3px -5px 2px;
+  width: 181px;
+  opacity: .7;
+}
+
+.logo a img:hover {
+  opacity: 1;
+  filter: drop-shadow(0 0 3px #652787);
+}
+
+div.logo hr {
+  margin: 11px -11px 10px;
+  height: 4px;
+  color: #44175f;
+  border: 0 solid #225;
+  background: #225;
+}
+
+.logo a:link {
+  padding: 4px;
+  display: block;
+}
+
+.logo hr ~ a {
+  border: 1px solid #225;
+  background: radial-gradient(at center bottom, rgba(128, 0, 128, .15), rgba(64, 0, 64, .08) 30%, rgba(0, 0, 0, 0) 90%),
+              linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)),
+              linear-gradient(to right, rgba(0,0,16,.1), rgba(0,0,0,0), rgba(0,0,16,.1)),
+              linear-gradient(to bottom, #0a0a1a 50%, #040414 50%) !important;
+}
+
+.logo hr ~ a:hover {
+  z-index: 10;
+  box-shadow: var(--highlight);
+  background: radial-gradient(at center bottom, rgba(96, 32, 96, .6) 0, rgba(0, 0, 0, 0) 80%),
+              linear-gradient(to right, rgba(64,0,64,.03), rgba(96,0,96,.1), rgba(64,0,64,.03)),
+              linear-gradient(to bottom, #1d1a2d 50%, #000 50%) !important;
+}
+
+.logo hr ~ a:active {
+  box-shadow: var(--highlight), inset 0 0 1px 1px #737, inset 0 0 0 3px #101, inset 5px 5px 5px 2px #000;
+  background: radial-gradient(at center bottom, rgba(160,48,160,.2), rgba(0, 0, 0, 0) 35%),
+              linear-gradient(to right, rgba(64,0,64,.1), rgba(64,0,64,.2), rgba(64,0,64,.1)),
+              linear-gradient(to bottom, #080820, #1d1a2d) !important;
+}
+
+.formaction {
+  text-align: right;
+
+}
+
+button, select {
+  border-radius: 1px;
+  box-shadow: var(--highlight), inset 0 0 2px 0 #559;
+  background: 8px 5px no-repeat, var(-button);
+  cursor: pointer;
+}
+
+button {
+  margin: 2px 3px;
+  font: bold 9pt var(--bodyfont);
+  color: var(--a);
+  text-decoration: none;
+  text-align: center;
+  text-shadow: 0 1px 1px #000;
+  vertical-align: middle;
+  border: 1px solid #27235c;
+  background: #000;
+  background: var(--button) !important;
+}
+
+button:hover, button:focus,
+select:hover, select:focus {
+  color: #652787;
+  border: 1px solid #652787;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #757;
+  cursor: pointer;
+}
+
+button {
+  min-width: 0 !important;
+  background-size: 12px, 100%;
+}
+
+button:hover {
+  background-blend-mode: luminosity;
+  background-size: 12px, 100%;
+}
+
+button:active {
+  color: #83529f !important;
+  text-shadow: 0 1px 1px #3c1751;
+  border: 1px solid #652787;
+  box-shadow: var(--highlight), inset 3px 3px 3px #000;
+  background: #652787;
+  background-size: 12px, 100%;
+  background-blend-mode: luminosity !important;
+}
+
+button.go, button.accept {
+  padding: 7px 9px 7px 25px !important;
+  background: var(--yes) 8px center no-repeat, var(--button) !important;
+  background-size: 12px, 100% !important;
+}
+
+button.go:hover, button.go:focus,
+button.accept:hover, button.accept:focus {
+  background: var(--yes) 8px center no-repeat, var(--button_hover) !important;
+  background-size: 12px, 100% !important;
+}
+
+button.go:active, button.accept:active {
+  background: var(--yes) 8px center no-repeat, var(--button_active) !important;
+  background-size: 12px, 100% !important;
+}
+
+.warning {
+  margin: 20px 20px 20px 250px;
+  padding: 14px 40px 40px 100px;
+  min-width: 300px;
+  text-align: left;
+  word-wrap: break-word;
+  color: #c9ceff;
+  text-align: justify;
+  text-shadow: 0 1px 1px #000;
+  box-shadow: inset 0 0 0 1px #44175f;
+  border: 5px solid #26235c;
+  border-image: repeating-linear-gradient(135deg, #003 0px, #003 20px, #550 20px, #550 40px, #003 40px) 5 repeat repeat;
+  border-image-width: 5px;
+  border-image-outset: 1px;
+  box-shadow: inset 0 0 0 1px #44175f, inset 0 0 3px 3px #000, 0 0 0 2px #26235c;
+  background: url(/themes/console/images/itoopie_sm.png) 20px center no-repeat, repeating-linear-gradient(to bottom, #000, #002 2px);
+  background-position: 20px calc(50% + 16px), center center;
+  background-size: auto 110px, 100% 4px;
+}
+
+.iframed .warning, #servletError .iframed #warning2 {
+  margin-left: 20px !important;
+}
+
+#proxy_error {
+  height: calc(100% - 20px);
+}
+
+#proxy_error .warning p:first-of-type {
+  padding-top: 15px !important;
+}
+
+#proxy_error .warning p:last-of-type {
+  padding-bottom: 5px !important;
+}
+
+#proxy_error p + a {
+  margin-top: -8px;
+  display: inline-block;
+}
+
+#proxy_error hr {
+  margin-bottom: 20px;
+}
+
+.warning p, .warning a {
+  line-height: 130%;
+}
+
+.warning h3 {
+  margin: -13px -39px 25px -99px;
+  padding: 12px;
+  text-align: left;
+  font-size: 120%;
+  border: none;
+  border-bottom: 1px solid #44175f;
+}
+
+.warning h4 {
+  margin: 5px 0 10px 0;
+  padding: 0 0 10px 0;
+  text-align: left;
+  font-size: 110%;
+  border-bottom: 1px solid #26235c;
+  box-shadow: none !important;
+}
+
+#warning td {
+  border: var(--innerborder);
+}
+
+#warning_localhost {
+  margin: 20px;
+  background-position: 20px calc(50% + 16px);
+}
+
+#warning_localhost p {
+  padding: 20px 10px 15px;
+}
+
+#warning_localhost + .proxyfooter {
+  display: none !important;
+}
+
+#jumplinks a {
+  padding: 2px 0;
+  display: inline-block;
+  line-height: 16px;
+}
+
+#jumplinks a::before {
+  padding: 4px 5px 4px 0;
+  display: inline-block;
+  vertical-align: sub;
+  line-height: 16px;
+  font-size: 200%;
+  content: "\279F\00A0";
+}
+
+#proxyNewAddressHelper .warning {
+  padding-bottom: 0 !important;
+}
+
+#proxyNewHost {
+  margin-bottom: 30px;
+  border-collapse: collapse;
+}
+
+#proxyNewHost td {
+  padding: 8px;
+}
+
+#proxyNewHost td:first-child {
+  font-weight: 700;
+}
+
+#proxyNewHost tr:last-child td:first-child {
+  vertical-align: top;
+}
+
+#proxyNewHost textarea {
+  margin: 0 !important;
+  padding: 0 !important;
+  height: 6em;
+  width: 100% !important;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+  border: none;
+  box-shadow: none !important;
+  background: none !important;
+  resize: none;
+}
+
+#proxyNewHost textarea:focus {
+  filter: none;
+}
+
+#proxyNewHost + hr {
+  display: none;
+}
+
+#b64 {
+  white-space: pre-wrap;
+  word-break: break-all;
+  text-align: justify;
+  font-family: var(--monospaced);
+  font-size: 90%;
+}
+
+#proxyNewHost a {
+  display: inline-block;
+  word-break: break-all;
+}
+
+.warning p + .formaction {
+  margin: 0 0 20px;
+  padding: 0;
+}
+
+.proxyfooter {
+  margin: 0 20px 10px 240px;
+  padding: 20px 25px 20px 75px;
+  color: #652787;
+  font-size: 7pt;
+  text-align: right !important;
+  border-radius: 2px;
+  border: 1px solid #000;
+  display: none;
+}
+
+@media screen and (max-width: 799px) {
+  body, p, td, h3, h4, #b64 {
+    font-size: 90%;
+  }
+
+  .logo {
+    display: none;
+  }
+
+  .logo hr ~ a {
+    margin: -8px -3px 12px !important;
+    padding: 6px 8px !important;
+    min-width: 110px;
+    position: relative;
+    background: #225;
+  }
+
+  .warning {
+    margin-left: 20px !important;
+    padding-left: 25px !important;
+    background: #000 !important;
+ }
+
+ .warning h3 {
+   margin: -4px -29px 10px;
+   padding: 7px 10px;
+ }
+}
+
+@media screen and (min-width: 800px) {
+  .logo hr + a {
+    margin-top: -20px !important;
+  }
+
+  .logo hr ~ a {
+    margin: 0 -11px -1px;
+    padding: 10px 4px !important;
+    display: inline-block;
+  }
+}
