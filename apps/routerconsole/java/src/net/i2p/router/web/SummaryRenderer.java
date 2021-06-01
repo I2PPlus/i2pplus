@@ -180,7 +180,7 @@ class SummaryRenderer {
         String theme = _context.getProperty(PROP_THEME_NAME, DEFAULT_THEME);
 
         try {
-            RrdGraphDef def = new RrdGraphDef();
+            RrdGraphDef def = new RrdGraphDef(start/1000, end/1000);
             boolean hiDPI = _context.getBooleanProperty("routerconsole.graphHiDpi");
             if ((width == 250 && height == 50 && hideTitle && hideLegend && hideGrid) ||
                 (width == 2000 && height == 160 && hideTitle && hideLegend && hideGrid)) {
@@ -332,7 +332,6 @@ class SummaryRenderer {
             def.setFont(RrdGraphDef.FONTTAG_TITLE, large);
 
 
-            def.setTimeSpan(start/1000, end/1000);
             def.setMinValue(0d);
             String name = _listener.getRate().getRateStat().getName();
 
