@@ -163,7 +163,10 @@ public abstract class LocalHTTPServer {
                 out.write("HTTP/1.1 200 OK\r\nContent-Type: ".getBytes("UTF-8"));
                 out.write(type.getBytes("UTF-8"));
                 out.write("\r\nAccess-Control-Allow-Origin: *".getBytes("UTF-8"));
-                out.write("\r\nCache-Control: no-cache, private, max-age=2628000\r\nConnection: close\r\nProxy-Connection: close\r\n\r\n".getBytes("UTF-8"));
+                if (filename.endsWith(".css") || filename.endsWith(".jpg") || filename.endsWith(".png") || filename.endsWith(".ttf") || filename.endsWith(".svg"))
+                    out.write("\r\nCache-Control: max-age=604800\r\nConnection: close\r\nProxy-Connection: close\r\n\r\n".getBytes("UTF-8"));
+                else
+                    out.write("\r\nCache-Control: no-cache, private\r\nConnection: close\r\nProxy-Connection: close\r\n\r\n".getBytes("UTF-8"));
                 FileUtil.readFile(filename, themesDir.getAbsolutePath(), out);
                 return;
             }
@@ -311,14 +314,13 @@ public abstract class LocalHTTPServer {
                                        "<div class=\"warning\" id=\"warning\">\n" +
                                        "<h3>")
                                .append(_t("Your new encryption key"))
-                               .append("</h3>\n<p>" +
-                                       "<textarea rows=\"1\" style=\"min-width: 0; min-height: 0;\" cols=\"70\" wrap=\"off\" readonly=\"readonly\" >")
+                               .append("</h3>\n<p id=\"key\">")
                                .append(key)
-                               .append("</textarea><p>")
+                               .append("</p>\n<p>")
                                .append(_t("Copy the key and send it to the server operator."))
                                .append(' ')
                                .append(_t("After you are granted permission, you may proceed to the website."))
-                               .append("<p><a href=\"")
+                               .append("</p>\n<p><a href=\"")
                                .append(url)
                                .append("\">")
                                .append(url)

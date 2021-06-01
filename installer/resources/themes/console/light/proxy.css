@@ -23,7 +23,7 @@ body {
   font-size: 10pt;
   line-height: 130%;
   background: #a4a4cb url(images/tile2.png) fixed;
-  background-size: 32px 32px;
+  background-size: 32px;
 }
 
 body, input, button, select, table {
@@ -208,13 +208,6 @@ hr {
 }
 
 .proxyfooter {
-  margin: 0 20px 10px 240px;
-  padding: 20px 25px 20px 75px;
-  color: #f00;
-  font-size: 7pt;
-  text-align: right;
-  border-radius: 2px;
-  border: 1px solid #7b7b9d;
   display: none;
 }
 
@@ -222,11 +215,19 @@ hr {
     padding-bottom: 5px;
 }
 
-#b64 {
+#b64, #key {
   white-space: pre-wrap;
   word-break: break-all;
   font-family: var(--monospaced);
   font-size: 90%;
+  user-select: all;
+}
+
+#key {
+  margin: 20px 0 25px;
+  padding: 10px 14px;
+  border: 1px solid #7b7b9d;
+  background: #ffe;
 }
 
 #proxyNewHost {

@@ -1,7 +1,6 @@
 HTTP/1.1 500 Domain Not Found
 Content-Type: text/html; charset=UTF-8
 Referrer-Policy: no-referrer
-Cache-Control: must-revalidate
 Connection: close
 Proxy-Connection: close
 X-XSS-Protection: 1; mode=block
