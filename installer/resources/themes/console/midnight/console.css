@@ -12058,7 +12058,7 @@ input[type=radio]:checked::before, input[type=radio][disabled]:checked:hover::be
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  box-shadow: 0 0 0 2px #655fb9, inset 0 0 1px 1px #655fb9;
+  box-shadow: 0 0 1px #655fb9, 0 0 0 1px rgba(0,0,16,.5), inset 0 0 1px 1px #655fb9;
 }
 
 input[type=radio]:checked:hover::before, input[type=radio][disabled]:checked:hover::before {
