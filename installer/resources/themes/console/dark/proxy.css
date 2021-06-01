@@ -18,7 +18,7 @@ html, body {
 
 html {
   scrollbar-color: rgba(16,72,16,.8) rgba(0,16,0,.5);
-  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.3) 2px, rgba(0,32,0,.3) 4px), repeating-linear-gradient(to bottom, #000 2px, #010 4px);
+  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.3) 2px, rgba(0,32,0,.3) 4px), repeating-linear-gradient(to bottom, #000 2px, #010 4px) #000;
   background-size: 4px 100%, 100% 4px;
 }
 
@@ -31,12 +31,15 @@ button, select {
   font-weight: 700;
 }
 
+body {
+  color: #ee9;
+}
+
 body#proxy_error {
   margin: 5px 0 0 0;
   padding: 0;
   min-height: 100% !important;
   text-align: center;
-  color: #ee9;
   font: 8.5pt/130% var(--bodyfont);
 }
 
@@ -90,7 +93,7 @@ button::-moz-focus-inner, input::-moz-focus-inner {
 }
 
 input[type=submit], input[type=reset], select, button {
-  padding: 7px 8px;
+  padding: 7px 10px;
   line-height: 120%;
   font-size: 9.5pt;
   font-weight: 700;
@@ -238,16 +241,23 @@ table {
   font-size: 11.5pt;
   text-transform: uppercase;
   text-shadow: 0 0 2px #010;
-  border: none;
   border-bottom: 1px solid #700;
 }
 
 #warning h4 {
-  margin: 12px 0 5px;
-  padding: 0 0 5px;
+  margin: 12px 0 10px;
+  padding: 0 0 10px;
   font-size: 10pt;
   border-bottom: 1px solid #131;
-  box-shadow: none;
+}
+
+#warning .formaction + h4 {
+  margin-top: -10px;
+}
+
+#warning h4 + p {
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 #warning hr {
@@ -269,8 +279,8 @@ table {
 }
 
 #warning .formaction {
+  padding: 10px 0 0;
   text-align: right;
-  box-shadow: none !important;
 }
 
 #jumplinks {
@@ -306,20 +316,19 @@ table {
 }
 
 #proxyNewHost {
-  margin-bottom: 20px;
+  margin: 20px auto;
+  border-collapse: collapse;
 }
 
 #proxyNewHost td {
   padding: 8px !important;
   font-size: 10pt !important;
+  border: 1px solid #131;
+  background: #000;
 }
 
 #proxyNewHost td:first-child {
   font-weight: 700;
-}
-
-#proxyNewHost tr:last-child td:first-child {
-  vertical-align: top;
 }
 
 #b64 {
@@ -346,7 +355,6 @@ table {
 
 #warning p + .formaction {
   margin: 0 0 20px;
-  padding: 0;
 }
 
 #denied {
