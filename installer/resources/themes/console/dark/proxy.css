@@ -18,16 +18,31 @@ html, body {
 
 html {
   scrollbar-color: rgba(16,72,16,.8) rgba(0,16,0,.5);
-  background: #000;
+  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.3) 2px, rgba(0,32,0,.3) 4px), repeating-linear-gradient(to bottom, #000 2px, #010 4px) #000;
+  background-size: 4px 100%, 100% 4px;
 }
 
-body, button, input, input[type=text], input[type=password], select, #debug .skm_key td:first-child b {
+::selection {
+  color: white;
+  background: #22296f !important;
+  background: rgba(34, 41, 111, .9) !important;
+}
+
+.logo, button, h3, h4 {
+  user-select: none;
+}
+
+body, button, select {
   font-family: var(--bodyfont);
 }
 
-button, input, input[type=text], input[type=password], select {
+button, select {
   font-size: 9pt;
   font-weight: 700;
+}
+
+body {
+  color: #ee9;
 }
 
 body#proxy_error {
@@ -35,9 +50,7 @@ body#proxy_error {
   padding: 0;
   min-height: 100% !important;
   text-align: center;
-  color: #ee9;
   font: 8.5pt/130% var(--bodyfont);
-  background: #000;
 }
 
 @supports (text-justify: auto) { /* Firefox 55+ */
@@ -73,11 +86,10 @@ img {
 }
 
 hr {
-  color: #242;
-  background: #242;
-  height: 1px;
-  border: 0 solid #242;
   margin: 20px 0 10px;
+  height: 1px;
+  border: none;
+  background: #131;
 }
 
 hr:last-child {
@@ -91,7 +103,7 @@ button::-moz-focus-inner, input::-moz-focus-inner {
 }
 
 input[type=submit], input[type=reset], select, button {
-  padding: 7px 8px;
+  padding: 7px 10px;
   line-height: 120%;
   font-size: 9.5pt;
   font-weight: 700;
@@ -107,7 +119,6 @@ button:hover, button:focus {
   color: #f60;
   border: 1px solid #f60;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000 !important;
-  background: #000;
   background: radial-gradient(at center bottom, rgba(96, 48, 0, .4) 0, rgba(0, 0, 0, 0) 80%), #000;
   cursor: pointer;
 }
@@ -124,23 +135,7 @@ table {
   width: 100%;
 }
 
-textarea {
-  margin: 10px;
-  padding: 5px;
-  width: calc(100% - 15px);
-  min-width: 97%;
-  min-height: 100px;
-  font: 8.5pt var(--monospaced);
-  color: #ee9;
-  border-radius: 2px;
-  border: 1px solid #184818;
-  box-shadow: inset 0 0 3px 3px #000;
-  text-align: left;
-  background: #000;
-  background: linear-gradient(to bottom, #000, #010) !important;
-}
-
-.logo { /* proxy error "fake" sidebar */
+.logo {
   margin: -5px 20px 0;
   padding: 10px;
   width: 185px;
@@ -148,10 +143,12 @@ textarea {
   position: relative;
   text-align: center;
   font-size: 10pt;
-  border: 1px solid #252;
-  box-shadow: inset 0 0 3px 3px #000;
-  background: #000 url(images/camotile2.png);
-  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.6) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px), url(images/camotile2.png);
+  border: 1px solid #131;
+  box-shadow: inset 0 0 0 1px #000, 0 0 0 1px #000;
+  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.9) 2px, rgba(0,16,0,.9) 4px), var(--camo) #000;
+  background-size: 4px 100%, 1024px;
+  opacity: 0;
+  animation: ease fade .3s 2s forwards;
 }
 
 .logo > * {
@@ -191,8 +188,8 @@ textarea {
   margin: 10px -10px 0;
   height: 1px;
   color: #494;
-  border: 0 solid #252;
-  background: #252;
+  border: 0 solid #131;
+  background: #131;
 }
 
 #warning {
@@ -207,13 +204,20 @@ textarea {
   border-image: repeating-linear-gradient(135deg, #010, #010 20px, #660 20px, #660 40px, #010 40px) 5 repeat repeat;
   border-image-width: 5px;
   border-image-outset: 1px;
-  box-shadow: inset 0 0 0 1px #700, inset 0 0 0 1px #000, 0 0 0 2px #131, 0 0 0 3px #000, 0 0 0 5px #020;
+  box-shadow: inset 0 0 0 1px #700, inset 0 0 0 1px #000, 0 0 0 2px #131, 0 0 0 3px #000, 0 0 0 5px #020, 0 0 0 6px #000;
   background: #000 url(/themes/console/images/itoopie_sm.png) 21px center no-repeat;
   background: url(/themes/console/images/itoopie_sm.png) 21px center no-repeat,
-              repeating-linear-gradient(to bottom, rgba(0,0,0,.6) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px),
-              url(images/camotile2.png);
-  background-size: auto 110px, 100%, 175px;
+              repeating-linear-gradient(to bottom, rgba(0,0,0,.9) 2px, rgba(0,16,0,.9) 4px),
+              var(--camo);
+  background-size: auto 110px, 100% 4px, 100%;
   background-position: 21px calc(50% + 16px);
+  opacity: 0;
+  animation: ease fade .3s 1s forwards;
+}
+
+#warning > *:not(h3) {
+  opacity: 0;
+  animation: ease fade .15s 2.5s forwards;
 }
 
 #proxyerror p:first-of-type {
@@ -247,15 +251,23 @@ textarea {
   font-size: 11.5pt;
   text-transform: uppercase;
   text-shadow: 0 0 2px #010;
-  border: none;
   border-bottom: 1px solid #700;
 }
 
 #warning h4 {
-  margin: 12px 0 5px;
-  padding: 0 0 5px;
+  margin: 12px 0 10px;
+  padding: 0 0 10px;
   font-size: 10pt;
-  box-shadow: none;
+  border-bottom: 1px solid #131;
+}
+
+#warning .formaction + h4 {
+  margin-top: -10px;
+}
+
+#warning h4 + p {
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 #warning hr {
@@ -277,8 +289,8 @@ textarea {
 }
 
 #warning .formaction {
+  padding: 10px 0 0;
   text-align: right;
-  box-shadow: none !important;
 }
 
 #jumplinks {
@@ -314,38 +326,26 @@ textarea {
 }
 
 #proxyNewHost {
-  margin-bottom: 20px;
+  margin: 20px auto;
+  border-collapse: collapse;
 }
 
 #proxyNewHost td {
   padding: 8px !important;
   font-size: 10pt !important;
+  border: 1px solid #131;
+  background: #000;
 }
 
 #proxyNewHost td:first-child {
   font-weight: 700;
 }
 
-#proxyNewHost tr:last-child td:first-child {
-  vertical-align: top;
-}
-
-#proxyNewHost textarea {
-  margin: 0 !important;
-  padding: 0 !important;
-  width: 100% !important;
-  height: 6em;
-  resize: none;
+#b64 {
   white-space: pre-wrap;
   word-break: break-all;
-  overflow: auto;
-  border: none;
-  background: none !important;
-  box-shadow: none !important;
-}
-
-#proxyNewHost textarea:focus {
-  filter: none;
+  font-family: var(--monospaced);
+  font-size: 90%;
 }
 
 #proxyNewHost + hr {
@@ -365,12 +365,16 @@ textarea {
 
 #warning p + .formaction {
   margin: 0 0 20px;
-  padding: 0;
 }
 
 #denied {
   padding: 30px 0;
   font-weight: 700;
+}
+
+@keyframes fade {
+  from {opacity: 0}
+  to {opacity: 1}
 }
 
 @media screen and (max-width: 800px) {

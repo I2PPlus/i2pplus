@@ -92,7 +92,7 @@ public abstract class LocalHTTPServer {
 
     private final static String headerLinks =
         "<link rel=\"icon\" href=\"http://proxy.i2p/themes/console/default/images/favicon.svg\">\n" +
-        "<link href=\"http://proxy.i2p/themes/console/default/console.css\" rel=\"stylesheet\" type=\"text/css\">\n";
+        "<link href=\"http://proxy.i2p/themes/console/default/proxy.css\" rel=\"stylesheet\" type=\"text/css\">\n";
 
     private final static String logo =
         "<img src=\"http://proxy.i2p/themes/console/default/images/i2plogo.png\" alt=\"I2P Router Console\" border=\"0\">";
@@ -140,7 +140,7 @@ public abstract class LocalHTTPServer {
             }
             // theme hack
             if (filename.startsWith("console/default/"))
-                filename = filename.replaceFirst("default", context.getProperty("routerconsole.theme", "light"));
+                filename = filename.replaceFirst("default", context.getProperty("routerconsole.theme", "dark"));
             File themesDir = new File(context.getBaseDir(), "docs/themes");
             File file = new File(themesDir, filename);
             if (file.exists() && !file.isDirectory()) {

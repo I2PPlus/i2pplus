@@ -1,0 +1,355 @@
+/* I2P+ Router Console: proxy error theme: Light */
+/* Author: dr|z3d */
+
+@import url(/themes/fonts/DroidSans.css);
+
+:root {
+  --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, Verdana, Helvetica, sans-serif;
+  --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
+}
+
+html, body {
+  min-height: 100%;
+}
+
+html {
+  margin: 0;
+}
+
+body {
+  margin: 6px;
+  text-align: center;
+  color: #4f4f63;
+  font-size: 10pt;
+  line-height: 130%;
+  background: #a4a4cb url(images/tile2.png) fixed;
+  background-size: 32px 32px;
+}
+
+body, input, button, select, table {
+  font-family: var(--bodyfont);
+}
+
+tt, code, pre, textarea {
+  font-family: var(--monospaced);
+}
+
+* {
+  outline: none;
+  text-rendering: optimizeLegibility;
+}
+
+a:link {
+  word-wrap: break-word;
+  font-weight: 700;
+  text-decoration: none;
+  color: #3b6bbf;
+  outline: none;
+}
+
+a:visited {
+  color: #2c4e8f;
+}
+
+a:hover, a:focus {
+  color: #f60;
+}
+
+a:active {
+  color: #f30;
+}
+
+img {
+  border: none;
+  font-size: 0;
+}
+
+a img {
+  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
+}
+
+a:hover img {
+  filter: drop-shadow(0 0 1px #f60);
+}
+
+h3 {
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  background: linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%);
+}
+
+.logo {
+  margin: 0 10px;
+  padding: 10px 0;
+  width: 205px;
+  float: left;
+  text-align: center;
+  border: 1px solid #7b7b9d;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px #dbdbe1;
+  background: #f8f8ff;
+}
+
+.iframed .logo {
+  display: none;
+}
+
+.logo img {
+  margin: 2px 0;
+  width: 182px;
+}
+
+.proxyfooter {
+  display: none;
+}
+
+hr {
+  margin: 10px 0;
+  height: 1px;
+  color: #b6b6c9;
+  border: 0 solid #b6b6c9;
+  background: #b6b6c9;
+}
+
+.logo hr {
+  margin: 8px 0;
+}
+
+.logo a {
+  width: 100%;
+  display: inline-block;
+}
+
+.logo hr ~ a {
+  margin: 4px 0;
+}
+
+.warning {
+  margin: 16px 12px 30px 232px;
+  padding: 40px 35px 30px 110px;
+  min-width: 370px;
+  word-wrap: break-word;
+  text-align: justify;
+  color: #4f4f63;
+  border: 1px solid #7b7b9d;
+  border-radius: 2px;
+  box-shadow: inset 0 0 1px 0 #d00;
+  background-image: url(/themes/console/images/itoopie_sm.png);
+  background-position: 15px center;
+  background-repeat: no-repeat;
+}
+
+.warning:not(old) {
+  background: url(/themes/console/images/itoopie_sm.png) no-repeat scroll 10px center, linear-gradient(to bottom, rgba(248,248,255,.8), rgba(240,240,255,.8)) #f8f8ff;
+  background-size: 70px auto, 100%;
+  background-position: 21px calc(50% + 16px);
+}
+
+.iframed #warning {
+  margin: 28px 10px 0;
+}
+
+#proxyerror .warning {
+  margin-left: 12px;
+  background: url(/themes/console/images/info/errortriangle.png) 25px center no-repeat, linear-gradient(to bottom, rgba(255,255,255,.8), rgba(255,255,255,.3)) #f8f8ff;
+  background-position: 25px calc(50% + 10px);
+}
+
+#proxyerror p {
+  padding-left: 15px;
+  padding-right: 25px;
+}
+
+#proxyerror p:first-of-type {
+  padding-top: 5px;
+}
+
+.warning h3 {
+  margin: -29px -29px 25px -24px;
+  padding: 10px 10px 8px;
+  text-align: left;
+  font-size: 115%;
+  border: none;
+  border-bottom: 1px solid #7b7b9d;
+  border-radius: 2px 2px 0 0;
+}
+
+#warning_localhost {
+  margin: 20px;
+  background-position: 20px calc(50% + 16px);
+}
+
+#warning_localhost p {
+  padding: 20px 10px 15px;
+  font-weight: 700;
+}
+
+#jumplinks {
+  margin-top: -15px;
+}
+
+#jumplinks h3 {
+  margin: 0 0 10px;
+}
+
+#jumplinks a {
+  display: inline-block;
+  padding: 2px 0;
+  line-height: 16px;
+}
+
+#jumplinks a::before {
+  content: "\279F\00A0";
+  font-size: 16pt;
+  display: inline-block;
+  padding: 3px 0;
+  vertical-align: sub;
+  line-height: 16px;
+}
+
+.proxyfooter {
+  margin: 0 20px 10px 240px;
+  padding: 20px 25px 20px 75px;
+  color: #f00;
+  font-size: 7pt;
+  text-align: right;
+  border-radius: 2px;
+  border: 1px solid #7b7b9d;
+  display: none;
+}
+
+#proxyNewAddressHelper .warning {
+    padding-bottom: 5px;
+}
+
+#b64 {
+  white-space: pre-wrap;
+  word-break: break-all;
+  font-family: var(--monospaced);
+  font-size: 90%;
+}
+
+#proxyNewHost {
+    margin-bottom: 20px;
+}
+
+#proxyNewHost td {
+    padding: 8px;
+    font-size: 9.5pt;
+}
+
+#proxyNewHost tr:last-child td:first-child {
+    vertical-align: top;
+}
+
+#proxyNewHost + hr {
+    display: none;
+}
+
+#proxyNewHost a {
+    display: inline-block;
+    word-break: break-all;
+}
+
+#proxyNewHost td:first-child {
+    font-weight: 700;
+}
+
+#proxyNewHost tr:last-child td:first-child {
+    vertical-align: top;
+}
+
+.warning h4 {
+    box-shadow: none;
+    text-align: left;
+    font-size: 10pt;
+    margin-top: 20px;
+    text-transform: none;
+    letter-spacing: 0;
+    word-spacing: 0;
+    background: none;
+    border-radius: 0;
+    border: none;
+    border-bottom: 1px solid #7b7b9d;
+    padding-left: 0;
+    margin-bottom: -5px;
+}
+
+#jumplinks h4 {
+    margin-bottom: 10px;
+    border-color: #b6b6c9;
+    color: #5b5b71;
+    padding-bottom: 10px;
+}
+
+.warning p + .formaction {
+    margin: -5px -3px 10px 0;
+    padding: 0;
+    background: none;
+    border: none;
+    box-shadow: none;
+}
+
+@media screen and (max-width: 800px) {
+  .warning {
+    margin: 120px 5px 0;
+    padding: 35px 30px 20px;
+    background-image: none;
+  }
+
+  @supports (background-blend-mode: overlay) {
+    .warning {
+      font-size: 95%;
+      background-image: url(/themes/console/images/itoopie_sm.png);
+      background-size: auto 90%;
+      background-position: right 5px bottom;
+      background-blend-mode: overlay;
+    }
+  }
+
+  #proxyerror .warning {
+    margin-top: 16px;
+  }
+
+  #proxyerror p {
+    padding-left: 65px;
+    padding-right: 20px;
+  }
+
+  .warning h3 {
+    margin: -34px -29px 20px;
+    font-size: 10pt;
+  }
+
+  .logo {
+    position: absolute;
+    top: 0;
+    width: calc(100% - 24px);
+    min-width: 430px;
+    margin: 12px 5px 0;
+  }
+
+  .logo a:link:not(img) {
+    margin: 0 5px;
+    width: auto;
+    display: inline-block;
+  }
+}
+
+@media screen and (min-width: 800px) {
+  .warning h3 {
+    margin: -39px -34px 30px -109px;
+  }
+}
+
+@media screen and (min-width: 1400px) {
+  #jumplinks h4 {
+    font-size: 10.5pt;
+  }
+}
+
+@media screen and (min-height: 700px) {
+  .warning {
+    margin-bottom: 30px;
+  }
+}

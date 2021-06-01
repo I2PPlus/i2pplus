@@ -1,0 +1,383 @@
+/* I2P+ Router Console: proxy error theme: Classic */
+/* Author: dr|z3d */
+
+@import url(/themes/fonts/DroidSans.css);
+
+html, body {
+    min-height: 100%;
+}
+
+html {
+    margin: 0;
+}
+
+body {
+  margin: 3px;
+  padding: 0;
+  text-align: left;
+  font: 9pt/130% Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
+  color: #41444d;
+  background: #e2e2f3 url(images/bg0.png) center center scroll;
+  background-size: 90px 90px;
+}
+
+* {
+  outline: none;
+}
+
+a {
+  font-weight: 600;
+  text-decoration: none;
+}
+
+a, a:visited {
+  color: #575779;
+}
+
+a:hover {
+  color: #f60;
+}
+
+a:active {
+  color: #f93;
+}
+
+/* Sidepanel for proxy errors */
+
+.logo {
+  margin: 0 0 0 20px;
+  padding: 10px 5px 8px;
+  width: 200px;
+  float: left;
+  position: relative;
+  text-align: center;
+  border: 5px solid #bbf;
+  background: #eff1ff;
+}
+
+.logo img {
+  width: 182px;
+  mix-blend-mode: luminosity;
+}
+
+.logo img:hover {
+  mix-blend-mode: normal;
+}
+
+.logo hr {
+  margin: 8px -5px 8px;
+  height: 5px;
+  color: #bbf;
+  border: 0 solid #bbf;
+  background: #bbf;
+}
+
+.logo a {
+  padding: 4px 0;
+  width: 100%;
+  display: inline-block;
+}
+
+.logo a:nth-child(n+2):active {
+  color: #f60;
+  border-radius: 4px;
+  box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 3px #999 !important;
+}
+
+.logo a:hover {
+  color: #900;
+}
+
+.logo a:hover img {
+  filter: drop-shadow(0 0 1px #f60);
+}
+
+/* HTTP Proxy warning Main box */
+
+.warning {
+  margin: 25px 20px 0 260px;
+  padding: 0 20px 40px;
+  border: 5px solid #fb7;
+  text-align: left;
+  color: inherit;
+  background: #ffd;
+  box-shadow: inset 0 0 0 2px #f60;
+  min-width: 500px;
+  position: relative;
+}
+
+.jumplinks::after {
+  content: "";
+  display: inline-block;
+  width: 80px;
+  height: 120px;
+}
+
+#proxyerror .warning {
+  margin-left: 20px;
+}
+
+.warning a:link, .warning a:visited {
+  color: #f60 !important;
+}
+
+.warning a:hover, .warning a:focus, .warning a:visited:focus {
+  color: #d30 !important;
+}
+
+.warning a:active {
+  color: #900 !important;
+}
+
+.warning hr {
+  color: #fb7;
+  background: #fb7;
+  height: 1px;
+  border: 0 solid #fb7;
+  margin: 5px 0;
+}
+
+#warning_localhost {
+  margin: 25px 20px;
+  background-position: 20px calc(50% + 16px);
+}
+
+#warning_localhost p {
+  margin-bottom: 0;
+  padding: 20px 10px 0;
+  font-weight: 700;
+}
+
+#warning_localhost + .proxyfooter {
+  margin-top: -65px;
+}
+
+#jumplinks {
+  margin-bottom: -22px;
+  position: relative;
+}
+
+#jumplinks h3 {
+  border: 0;
+  border-top: 1px solid #fb7;
+  border-bottom: 1px solid #fb7;
+  padding-bottom: 10px;
+  background: #ffe !important;
+  padding-left: 15px;
+  font-size: 10.5pt;
+  margin-top: 20px;
+}
+
+.warning h3:first-child {
+  margin: 2px -18px 10px -18px;
+  padding: 10px 10px 8px 36px;
+  font-size: 12pt;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  border: none;
+  border-bottom: 1px solid #fb7;
+  word-spacing: .1em;
+  background: #ffe url(/themes/console/images/errortriangle.png) 8px center no-repeat !important;
+  background-size: auto 60% !important;
+}
+
+.warning p {
+  padding: 5px 0 0;
+}
+
+.warning > br + br {
+  display: none;
+}
+
+.warning textarea {
+  width: 100%;
+  resize: none;
+  white-space: pre-wrap;
+  word-break: break-all;
+  height: 100% !important;
+  font-size: 8pt;
+  border: none;
+}
+
+.warning button {
+  margin-right: 0;
+}
+
+table {
+  width: 100%;
+}
+
+.warning table {
+  margin-bottom: 15px;
+  font-size: 9pt;
+  background: #fb7;
+}
+
+.warning tr {
+  background: #ffe !important;
+  border: 1px solid #fb7;
+}
+
+.warning table td:first-child {
+  font-weight: 700;
+}
+
+#jumplinks a::before {
+  display: inline-block;
+  font-size: 14pt;
+  content: "\279F\00A0";
+}
+
+.proxyfooter {
+  padding: 0 5px 5px;
+  margin: -50px 8px 0 260px;
+  min-width: 600px;
+  font-size: 8pt;
+}
+
+.proxyfooter p {
+  text-align: right !important;
+  line-height: 115%;
+  color: #6b4612;
+}
+
+#proxyNewAddressHelper .proxyfooter {
+  display: none;
+}
+
+#proxyNewAddressHelper .warning {
+  padding-bottom: 0 !important;
+}
+
+#proxyNewHost {
+  margin-bottom: 15px;
+}
+
+#proxyNewHost td {
+  padding: 8px !important;
+}
+
+#proxyNewHost td:first-child {
+  font-weight: 700;
+}
+
+#proxyNewHost #b64 {
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+#proxyNewHost textarea:focus {
+  filter: none;
+}
+
+#proxyNewHost + hr {
+  display: none;
+}
+
+.warning h4 {
+  box-shadow: none !important;
+  text-align: left;
+  font-size: 10pt;
+  margin: 0 -18px -5px;
+  background: #ffe;
+  border: 1px solid #fb7;
+  border-left: none;
+  border-right: none;
+  padding: 8px 10px;
+}
+
+#jumplinks h4 {
+  margin: 15px -18px 8px;
+}
+
+#proxyNewHost a {
+  display: inline-block;
+  word-break: break-all;
+}
+
+.formaction {
+  margin: 0;
+  padding: 8px 5px;
+  text-align: right;
+}
+
+.warning p + .formaction {
+  margin: -5px -5px 10px 0;
+  padding: 0;
+}
+
+button[type=submit] {
+  margin: 3px 8px 3px 0;
+  padding: 6px 8px;
+  text-decoration: none;
+  font: 9pt Droid Sans, Ubuntu, Noto Sans, Segoe UI, Lucida Grande, Verdana, Helvetica, sans-serif;
+  color: #5e626e;
+  border: 1px solid #aaafce;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px #fff, 0 0 1px #ddd;
+  background: #eee;
+  background: linear-gradient(to bottom, #fff, #f4f5ff);
+  cursor: pointer;
+}
+
+button[type=submit]:hover, button[type=submit]:focus {
+  color: #41444d;
+  border: 1px solid #aaafce;
+  box-shadow: inset 0 0 0 1px #fff, 0 0 1px #89f;
+  background: #ddd;
+  background: linear-gradient(to bottom, #ddd, #fff);
+}
+
+button[type=submit]:active {
+  color: #555;
+  border: 1px solid #999;
+  box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 3px 1px #555;
+  background-color: #ddd;
+  background-blend-mode: luminosity;
+}
+
+@media screen and (max-width: 1000px) {
+  .logo {
+    float: none;
+    position: absolute;
+    top: 10px !important;
+    margin: 0 5px !important;
+    display: block;
+    background-size: 200px auto !important;
+    min-width: 530px;
+    width: calc(100% - 36px);
+  }
+
+  .warning {
+    margin: 140px 5px 0 !important;
+  }
+
+  #proxyerror .warning {
+    margin-top: 10px !important;
+    padding-bottom: 10px !important;
+  }
+
+  .warning h3:first-child {
+    font-size: 11pt;
+  }
+
+  .logo a:nth-child(n+2) {
+    width: 25%;
+    white-space: nowrap;
+    font-size: 10pt;
+  }
+
+  .proxyfooter {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 1500px) {
+  body, p, td, button, input, select {
+    font-size: 10pt !important;
+  }
+
+  #warning {
+    margin-left: 252px !important;
+  }
+}

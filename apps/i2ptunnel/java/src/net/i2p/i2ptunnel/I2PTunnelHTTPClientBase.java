@@ -1092,7 +1092,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         //   .append(new Date().toString())
         //   .append("</i></div>\n</body>\n</html>\n");
         //return buf.toString();
-        return "</body>\n</html>\n";
+        return "<style type=\"text/css\">body{opacity:1}</style>\n</body>\n</html>\n";
     }
 
     /**
