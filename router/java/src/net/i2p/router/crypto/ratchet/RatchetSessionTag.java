@@ -26,7 +26,7 @@ public class RatchetSessionTag {
             throw new IllegalArgumentException();
         _data = DataHelper.fromLong8(val, 0);
     }
-    
+
     /**
      *  @return data as a byte array
      */
@@ -35,7 +35,7 @@ public class RatchetSessionTag {
         DataHelper.toLong8(rv, 0, _data);
         return rv;
     }
-    
+
     /**
      *  @return data as a long value
      *  @since 0.9.46
@@ -43,7 +43,7 @@ public class RatchetSessionTag {
     public long getLong() {
         return _data;
     }
-    
+
     public int length() {
         return LENGTH;
     }
@@ -79,9 +79,8 @@ public class RatchetSessionTag {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(33);
-        buf.append("[RatchetSessionTag: ");
+        buf.append("RatchetSessionTag: ");
         buf.append(toBase64());
-        buf.append(']');
         return buf.toString();
     }
 
