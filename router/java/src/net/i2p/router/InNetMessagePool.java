@@ -104,9 +104,9 @@ public class InNetMessagePool implements Service {
         }
         _log = _context.logManager().getLog(InNetMessagePool.class);
         _context.statManager().createRateStat("inNetPool.dropped", "How often we drop a message", "InNetPool", new long[] { 60*1000, 60*60*1000l });
-        _context.statManager().createRateStat("inNetPool.droppedDeliveryStatusDelay", "Return of delivery status message for too slow messages (ms)", "InNetPool", new long[] { 60*1000, 60*60*1000l });
+        _context.statManager().createRateStat("inNetPool.droppedDeliveryStatusDelay", "Notification latency for dropped messages (ms)", "InNetPool", new long[] { 60*1000, 60*60*1000l });
         _context.statManager().createRateStat("inNetPool.duplicate", "How often we receive a duplicate message", "InNetPool", new long[] { 60*1000, 60*60*1000l });
-        _context.statManager().createRateStat("inNetPool.droppedDbLookupResponseMessage", "How often we drop a slow-to-arrive db search response", "InNetPool", new long[] { 60*1000, 60*60*1000l });
+        _context.statManager().createRateStat("inNetPool.droppedDbLookupResponseMessage", "Frequency of DbLookup response drops", "InNetPool", new long[] { 60*1000, 60*60*1000l });
     }
 
     /**
@@ -183,9 +183,8 @@ public class InNetMessagePool implements Service {
             _context.statManager().addRateData("inNetPool.duplicate", 1);
             if (doHistory) {
                 history.droppedOtherMessage(messageBody, (fromRouter != null ? fromRouter.calculateHash() : fromRouterHash));
-                history.messageProcessingError(messageBody.getUniqueId(),
-                                                                messageBody.getClass().getSimpleName(),
-                                                                "Duplicate/expired");
+                history.messageProcessingError(messageBody.getUniqueId(), messageBody.getClass().getSimpleName(),
+                                               "Duplicate/expired");
             }
             return -1;
         }
