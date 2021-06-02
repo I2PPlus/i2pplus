@@ -29,16 +29,16 @@ html {
 }
 
 html {
-  background: repeating-linear-gradient(to right, rgba(0,16,0,.5) 2px, rgba(0,0,0,.3) 4px),
-              repeating-linear-gradient(to bottom, rgba(0,0,32,.6) 2px, rgba(0,0,0,.3) 4px),
+  background: repeating-linear-gradient(to right, rgba(0,0,48,.7) 2px, rgba(0,0,0,.5) 4px),
+              repeating-linear-gradient(to bottom, rgba(0,0,32,.7) 2px, rgba(0,0,0,.5) 4px),
               url(images/tile.png) #001;
-  background-size: 4px 100%, 100% 4px, 171px 148px;
+  background-size: 100% 4px, 4px 100%, 171px 148px;
 }
 
 body, p, td {
   line-height: 1.3;
   font-family: var(--bodyfont);
-  font-size: 10pt;
+  font-size: 10.5pt;
 }
 
 body {
@@ -65,16 +65,17 @@ a:active {
 }
 
 .logo {
-  margin: 2px 20px 0 20px;
-  padding: 10px 10px 0;
+  margin: -2px 20px 0 25px;
+  padding: 16px 10px 0;
   width: 185px;
   float: left;
   text-align: center;
   color: #c9ceff;
   border: var(--innerborder);
-  box-shadow: var(--highlight), 0 0 0 4px #225;
+  box-shadow: var(--highlight), 0 0 0 4px #225, 0 0 0 5px #000;
   background: #000;
-  background: repeating-linear-gradient(to bottom, #000, #002 2px);
+  background: repeating-linear-gradient(to bottom, rgba(0,0,80,.4) 2px, rgba(0,0,0,.4) 4px);
+  background-size: 4px 100%;
 }
 
 .iframed .logo {
@@ -82,8 +83,8 @@ a:active {
 }
 
 .logo a img {
-  margin: -3px -5px 2px;
-  width: 181px;
+  margin: -8px -5px -3px;
+  width: 177px;
   opacity: .7;
 }
 
@@ -199,7 +200,7 @@ button.go:active, button.accept:active {
 }
 
 .warning {
-  margin: 20px 20px 20px 250px;
+  margin: 24px 26px 24px 260px;
   padding: 14px 40px 40px 100px;
   min-width: 300px;
   text-align: left;
@@ -212,7 +213,7 @@ button.go:active, button.accept:active {
   border-image: repeating-linear-gradient(135deg, #003 0px, #003 20px, #550 20px, #550 40px, #003 40px) 5 repeat repeat;
   border-image-width: 5px;
   border-image-outset: 1px;
-  box-shadow: inset 0 0 0 1px #44175f, inset 0 0 3px 3px #000, 0 0 0 2px #26235c;
+  box-shadow: inset 0 0 0 1px #44175f, inset 0 0 3px 3px #000, 0 0 0 2px #26235c, 0 0 0 3px #000, 0 0 0 6px #115, 0 0 0 7px #000;
   background: url(/themes/console/images/itoopie_sm.png) 20px center no-repeat, repeating-linear-gradient(to bottom, #000, #002 2px);
   background-position: 20px calc(50% + 16px), center center;
   background-size: auto 110px, 100% 4px;
@@ -249,7 +250,7 @@ button.go:active, button.accept:active {
 
 .warning h3 {
   margin: -13px -39px 25px -99px;
-  padding: 12px;
+  padding: 12px 16px;
   text-align: left;
   font-size: 120%;
   border: none;
@@ -260,7 +261,7 @@ button.go:active, button.accept:active {
   margin: 5px 0 10px 0;
   padding: 0 0 10px 0;
   text-align: left;
-  font-size: 110%;
+  font-size: 105%;
   border-bottom: 1px solid rgba(38, 35, 92,.7);
   box-shadow: none !important;
 }
@@ -283,9 +284,9 @@ button.go:active, button.accept:active {
 }
 
 #jumplinks a {
-  padding: 2px 0;
+  padding: 2px 30px;
   display: inline-block;
-  line-height: 16px;
+  line-height: 2;
 }
 
 #jumplinks a::before {
@@ -374,18 +375,15 @@ hr {
 }
 
 .proxyfooter {
-  margin: 0 20px 10px 240px;
-  padding: 20px 25px 20px 75px;
-  color: #652787;
-  font-size: 7pt;
-  text-align: right !important;
-  border-radius: 2px;
-  border: 1px solid #000;
   display: none;
 }
 
 @media screen and (max-width: 799px) {
-  body, p, td, h3, h4, #b64 {
+  body {
+    font-size: 10pt;
+  }
+
+  p, td, h3, h4, #b64, a {
     font-size: 90%;
   }
 
@@ -408,8 +406,8 @@ hr {
  }
 
  .warning h3 {
-   margin: -4px -29px 10px;
-   padding: 7px 10px;
+   margin: -10px -40px 10px -25px;
+   padding: 7px 14px;
  }
 }
 
