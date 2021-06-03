@@ -451,11 +451,13 @@ thead, tfoot {
 
 thead a img, thead img {
   max-height: 20px;
+  opacity: .85;
+  filter: saturate(.35);
   image-rendering: -webkit-optimize-contrast;
 }
 
 thead a:hover img, thead a:focus img {
-  mix-blend-mode: normal;
+  opacity: 1;
   filter: drop-shadow(0 0 1px #ff1a85) drop-shadow(0 0 1px #df0067);
 }
 
