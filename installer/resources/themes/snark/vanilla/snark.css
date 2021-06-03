@@ -696,8 +696,12 @@ tr:hover .snarkTrackerDetails img {
   color: #5c4e3d;
 }
 
-.snarkTorrentUploaded, .snarkTorrentRateUp {
+.snarkTorrentUploaded {
   color: #67594c;
+}
+
+.snarkTorrentRateUp, .peerinfo .snarkTorrentRateUp .unchoked {
+  color: #cb4dcb !important;
 }
 
 .snarkTorrentUploaded {
@@ -865,13 +869,24 @@ td:hover .percentBarText {
 }
 
 .active .snarkTorrentAction, .active:hover .snarkTorrentAction {
-  background: linear-gradient(to left, #cb4dcb 2px, rgba(0,0,0,0) 2px);
-  animation: ease-in-out active .7s 3s forwards;
+  background: linear-gradient(to left, #cb4dcb 3px, rgba(0,0,0,0) 3px);
+  animation: ease-in-out active .5s 3s forwards;
 }
 
 @keyframes active {
-  from {background: linear-gradient(to left, #f3c 2px, rgba(0,0,0,0) 2px)}
-  to {background: linear-gradient(to left, #cb4dcb 2px, rgba(0,0,0,0) 2px)}
+  from {background: linear-gradient(to left, #f3c 3px, rgba(0,0,0,0) 3px)}
+  to {background: linear-gradient(to left, #cb4dcb 3px, rgba(0,0,0,0) 3px)}
+}
+
+.active.downloading .snarkTorrentAction, .active.downloading:hover .snarkTorrentAction,
+.active.RX .snarkTorrentAction, .active.RX:hover .snarkTorrentAction {
+  background: linear-gradient(to left, #3d3 3px, rgba(0,0,0,0) 3px);
+  animation: ease-in-out downloading .5s 3s forwards;
+}
+
+@keyframes downloading {
+  from {background: linear-gradient(to left, #3d3 3px, rgba(0,0,0,0) 3px)}
+  to {background: linear-gradient(to left, #7f7 3px, rgba(0,0,0,0) 3px)}
 }
 
 .peerinfo td[colspan="4"], .debuginfo td[colspan="10"] {
