@@ -62,7 +62,8 @@ public final class ByteCache extends TryCache<ByteArray> {
     private static final int MAX_CACHE;
     static {
         long maxMemory = SystemVersion.getMaxMemory();
-        MAX_CACHE = (int) Math.min(4*1024*1024l, Math.max(128*1024l, maxMemory / 128));
+//        MAX_CACHE = (int) Math.min(4*1024*1024l, Math.max(128*1024l, maxMemory / 128));
+        MAX_CACHE = (int) Math.min(16*1024*1024l, Math.max(128*1024l, maxMemory / 128));
     }
 
     /**
