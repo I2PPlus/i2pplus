@@ -62,7 +62,8 @@ public final class ByteCache extends TryCache<ByteArray> {
     private static final int MAX_CACHE;
     static {
         long maxMemory = SystemVersion.getMaxMemory();
-        MAX_CACHE = (int) Math.min(4*1024*1024l, Math.max(128*1024l, maxMemory / 128));
+//        MAX_CACHE = (int) Math.min(4*1024*1024l, Math.max(128*1024l, maxMemory / 128));
+        MAX_CACHE = (int) Math.min(16*1024*1024l, Math.max(128*1024l, maxMemory / 128));
     }
 
     /**
@@ -133,7 +134,7 @@ public final class ByteCache extends TryCache<ByteArray> {
         _entrySize = entrySize;
         int stagger = SystemVersion.isAndroid() ? 0 : (entrySize % 777);
         SimpleTimer2.getInstance().addPeriodicEvent(new Cleanup(), CLEANUP_FREQUENCY + stagger);
-        I2PAppContext.getGlobalContext().statManager().createRateStat("byteCache.memory." + entrySize, "Memory usage (B)", "Router [ByteCache]", new long[] { 10*60*1000 });
+        I2PAppContext.getGlobalContext().statManager().createRateStat("byteCache.memory." + entrySize, "Memory usage (B)", "Router [ByteCache]", new long[] { 60*1000, 10*60*1000 });
     }
 
     private void resize(int maxCachedEntries) {

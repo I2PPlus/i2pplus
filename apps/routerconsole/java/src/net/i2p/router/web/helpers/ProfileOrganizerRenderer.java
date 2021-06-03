@@ -508,7 +508,7 @@ class ProfileOrganizerRenderer {
             buf.append("<tr><td><b>")
                .append(_t("latency"))
                .append(":</b></td><td>")
-               .append(_t("Is the peer responding to tests in a timely fashion? To configure the timeout value: <code>router.peerTestTimeout={n}</code> (value is milliseconds, default 3000)"))
+               .append(_t("Is the peer responding to tests in a timely fashion? To configure the timeout value: <code>router.peerTestTimeout={n}</code> (value is milliseconds, default 1000ms)"))
                .append("</td></tr>\n");
             buf.append("<tr><td><b>")
                .append(_t("capacity"))
