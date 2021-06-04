@@ -326,6 +326,34 @@ pre {
   background-size: 4px 100%, 100% 4px, 1800px;
 }
 
+#sb_logo:hover {
+  background: linear-gradient(to bottom, #030, #010) !important;
+}
+
+#sb_logo {
+  width: 100%;
+  margin: -8px 0 -9px -10px;
+  padding: 8px 10px 9px;
+  display: inline-block;
+  border-radius: 3px 3px 0 0;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #050, inset 0 0 0 3px #000;
+  background: linear-gradient(to bottom, rgba(0,64,0,.3), rgba(0,32,0,.3)),
+              repeating-linear-gradient(to right, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px) !important;
+  background-size: 100%, 100% 4px !important;
+}
+
+#sb_logo:hover {
+  box-shadow: var(--highlight), inset 0 0 2px 1px #f60, inset 0 0 0 3px #000;
+  background: linear-gradient(to bottom, rgba(0,64,0,.6), rgba(0,32,0,.6)),
+              repeating-linear-gradient(to right, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px) !important;
+  background-size: 100%, 100% 4px !important;
+  transition: ease background .15s;
+}
+
+#sb_logo:active {
+  box-shadow: var(--highlight), inset 0 0 2px 2px #f90, inset 0 0 0 3px #000;
+}
+
 .routersummary img[src$="i2plogo.png"] {
   margin-top: -3px;
   margin-left: -6px;
@@ -10631,27 +10659,6 @@ a:hover .tier, a:focus .tier {
 
 .main {
   box-shadow: var(--highlight), 0 1px 5px #000;
-}
-
-.routersummary div[style="height: 36px;"] {
-  width: 100%;
-  margin: -8px 0 -9px -10px;
-  padding: 8px 10px 9px;
-  display: inline-block;
-  border-radius: 3px 3px 0 0;
-  box-shadow: var(--highlight), inset 0 0 2px 1px #050, inset 0 0 0 3px #000;
-  background: rgba(0,16,0,.1) !important;
-  background: repeating-linear-gradient(to right, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px) !important;
-}
-
-.routersummary div[style="height: 36px;"]:hover {
-  box-shadow: var(--highlight), inset 0 0 2px 1px #f60, inset 0 0 0 3px #000;
-  background: rgba(0,96,0,.1) !important;
-  transition: ease background .15s;
-}
-
-.routersummary div[style="height: 36px;"]:active {
-  box-shadow: var(--highlight), inset 0 0 2px 2px #f90, inset 0 0 0 3px #000;
 }
 
 .routersummary table, .routersummary form {
