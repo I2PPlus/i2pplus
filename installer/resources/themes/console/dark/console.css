@@ -331,14 +331,18 @@ pre {
   margin-left: -6px;
   width: 206px;
   height: auto;
-  opacity: .9;
-  transition: ease filter .15s, ease opacity .15s;
+  filter: saturate(.7) opacity(.9);
+  transition: ease filter .2s, ease opacity .15s;
 }
 
 .routersummary img[src$="i2plogo.png"]:hover {
-  opacity: 1;
-  transition: ease filter .15s, ease opacity .15s;
-  filter: saturate(200%);
+  transition: ease all .1s;
+  filter: saturate(1.2);
+}
+
+.routersummary img[src$="i2plogo.png"]:active {
+  filter: saturate(2);
+  transition: none;
 }
 
 .routersummary a[href="/"], .routersummary a[href="/console"] {
@@ -10709,7 +10713,7 @@ a:hover .tier, a:focus .tier {
   padding: 6px 2px !important;
 }
 
-/* logs */
+/* logs */i2
 
 #logs pre, #logs li {
   font-weight: 700;
