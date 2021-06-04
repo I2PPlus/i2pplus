@@ -9851,7 +9851,7 @@ table#reseedconfig input[type=text], table#reseedconfig input[type=password] {
 }
 
 .routersummary img[src$="i2plogo.png"] {
-  margin-top: -2px;
+  margin-top: -1px;
   margin-left: -4px;
   width: 244px;
   transform: none;
