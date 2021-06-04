@@ -336,22 +336,24 @@ pre {
   padding: 8px 10px 9px;
   display: inline-block;
   border-radius: 3px 3px 0 0;
-  box-shadow: var(--highlight), inset 0 0 2px 1px #050, inset 0 0 0 3px #000;
-  background: linear-gradient(to bottom, rgba(0,64,0,.3), rgba(0,32,0,.3)),
+  box-shadow: var(--highlight), inset 0 0 0 2px rgba(32,80,32,.3);
+  background: linear-gradient(to bottom, rgba(0,64,0,.3), rgba(0,24,0,.3)),
               repeating-linear-gradient(to right, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px) !important;
   background-size: 100%, 100% 4px !important;
 }
 
 #sb_logo:hover {
-  box-shadow: var(--highlight), inset 0 0 2px 1px #f60, inset 0 0 0 3px #000;
-  background: linear-gradient(to bottom, rgba(0,64,0,.6), rgba(0,32,0,.6)),
+  box-shadow: var(--highlight), inset 0 0 0 2px rgba(255,96,0,.6);
+  background: linear-gradient(to bottom, rgba(0,64,0,.6), rgba(0,24,0,.6)),
               repeating-linear-gradient(to right, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px) !important;
   background-size: 100%, 100% 4px !important;
   transition: ease background .15s;
 }
 
 #sb_logo:active {
-  box-shadow: var(--highlight), inset 0 0 2px 2px #f90, inset 0 0 0 3px #000;
+  box-shadow: var(--highlight), inset 0 0 0 2px rgba(255,144,0,.5), inset 6px 6px 6px rgba(0,0,0,.7);
+  background: linear-gradient(to bottom, rgba(0,32,0,.3), rgba(0,48,0,.3)),
+              repeating-linear-gradient(to right, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px) !important;
 }
 
 .routersummary img[src$="i2plogo.png"] {
@@ -359,13 +361,13 @@ pre {
   margin-left: -6px;
   width: 206px;
   height: auto;
-  filter: saturate(.7) opacity(.9);
-  transition: ease filter .2s, ease opacity .15s;
+  filter: saturate(.5);
+  transition: ease all .15s;
 }
 
 .routersummary img[src$="i2plogo.png"]:hover {
   transition: ease all .1s;
-  filter: saturate(1.2);
+  filter: saturate(1);
 }
 
 .routersummary img[src$="i2plogo.png"]:active {
