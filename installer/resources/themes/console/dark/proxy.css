@@ -176,14 +176,18 @@ table {
   width: 180px;
   text-align: center;
   font-size: 0;
+  filter: saturate(.7) opacity(.9);
+  transition: ease all .2s;
 }
 
 .logo a:hover img {
-  filter: drop-shadow(0 0 1px #f60);
+  filter: saturate(1.2);
+  transition: ease all .1s;
 }
 
 .logo a:active img {
-  filter: drop-shadow(0 0 2px #d30);
+  filter: saturate(2);
+  transition: none;
 }
 
 .logo hr {
