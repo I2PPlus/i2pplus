@@ -362,16 +362,17 @@ pre {
   width: 206px;
   height: auto;
   filter: saturate(.5);
-  transition: ease all .15s;
+  transition: ease filter .05s;
 }
 
 .routersummary img[src$="i2plogo.png"]:hover {
-  transition: ease all .1s;
   filter: saturate(1);
+  transition: ease filter .1s;
 }
 
 .routersummary img[src$="i2plogo.png"]:active {
-  filter: saturate(2);
+  transform: scale(.97);
+  filter: sepia(1) hue-rotate(45deg) saturate(2) opacity(.65);
   transition: none;
 }
 
