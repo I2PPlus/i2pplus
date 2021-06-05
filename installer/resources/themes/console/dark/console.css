@@ -363,6 +363,7 @@ pre {
   height: auto;
   filter: saturate(.5);
   transition: ease filter .05s;
+  will-change: transform;
 }
 
 .routersummary img[src$="i2plogo.png"]:hover {
@@ -372,7 +373,7 @@ pre {
 
 .routersummary img[src$="i2plogo.png"]:active {
   transform: scale(.97);
-  filter: sepia(1) hue-rotate(45deg) saturate(2) opacity(.65);
+  filter: sepia(1) hue-rotate(45deg) saturate(2) opacity(.65) drop-shadow(0 0 1px rgba(156,32,0,.3));
   transition: none;
 }
 
