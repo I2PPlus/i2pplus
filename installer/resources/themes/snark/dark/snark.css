@@ -4848,8 +4848,7 @@ td.snarkTorrentPeerCount {
 .clientid {
   margin-left: -8px;
   padding: 2px 4px;
-  max-width: 60px;
-  min-width: 60px;
+  width: 54px;
   display: inline-block;
   overflow: hidden;
   white-space: nowrap;
@@ -5366,4 +5365,107 @@ td.snarkTrackerDetails img {
 #snarkhead tr {
   background: var(--title);
   background-size: 4px 100%, 100%;
+}
+
+@media screen and (min-width: 1500px) {
+  td.snarkTorrentStatus {
+    text-align: left !important;
+  }
+
+  td.snarkTorrentStatus b {
+    padding: 3px 5px 5px;
+    min-width: 99px;
+    display: inline-block;
+    text-align: center;
+    position: relative;
+    line-height: 1;
+    font-size: 95%;
+    color: #eee;
+    text-shadow: 0 1px 1px #111;
+    border-radius: 2px;
+    background: #747;
+  }
+
+  .lang_fr td.snarkTorrentStatus b, .lang_hu td.snarkTorrentStatus b, .lang_tr td.snarkTorrentStatus b {
+    min-width: 130px;
+  }
+
+  td.snarkTorrentStatus b::before {
+    width: 0;
+    height: 0;
+    position: absolute;
+    top: calc(50% - 5px);
+    left: -10px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent #747 transparent transparent;
+    content: "";
+  }
+
+  .active.seeding.complete .snarkTorrentStatus b {
+    background: #937;
+    background: repeating-linear-gradient(135deg, #937, #937 8px, #826 9px, #826 17px);
+  }
+
+  .active.seeding.complete .snarkTorrentStatus b::before {
+    border-color: transparent #937 transparent transparent;
+  }
+
+  .active.downloading .snarkTorrentStatus b {
+    background: #373;
+    background: repeating-linear-gradient(135deg, #141, #141 8px, #262 9px, #262 17px);
+  }
+
+  .active.downloading .snarkTorrentStatus b::before {
+    border-color: transparent #141 transparent transparent;
+  }
+
+  .inactive.downloading .snarkTorrentStatus b, .active.starting .snarkTorrentStatus b {
+    color: #111;
+    text-shadow: 0 1px 1px #ff3;
+    background: #ff3;
+  }
+
+  .inactive.downloading .snarkTorrentStatus b::before, .active.starting .snarkTorrentStatus b::before {
+    border-color: transparent #ff3 transparent transparent;
+  }
+
+  .stopped.complete .snarkTorrentStatus b {
+    background: #28f;
+  }
+
+  .stopped.complete .snarkTorrentStatus b::before {
+    border-color: transparent #28f transparent transparent;
+  }
+
+  .nopeers.incomplete .snarkTorrentStatus b {
+    text-shadow: 0 1px 1px #bbb;
+    background: #aaa;
+  }
+
+  .nopeers.incomplete .snarkTorrentStatus b::before {
+    border-color: transparent #aaa transparent transparent;
+  }
+
+  .stopped.incomplete .snarkTorrentStatus b, .neterror .snarkTorrentStatus b {
+    background: #900 !important;
+  }
+
+  .stopped.incomplete .snarkTorrentStatus b::before, .neterror .snarkTorrentStatus b::before {
+    border-color: transparent #900 transparent transparent !important;
+  }
+
+  .snarkTorrentDownloaded, .snarkTorrentUploaded, .snarkTorrentRateDown, .snarkTorrentRateUp {
+    min-width: 76px;
+  }
+
+  .neterror .snarkTorrentStatus b {
+    color: #eee !important;
+    text-shadow: 0 1px 1px #111 !important;
+  }
+
+  .trackerhome, .trackerannounce, .knowntracker a {
+    width: 400px !important;
+    max-width: 400px !important;
+  }
 }
