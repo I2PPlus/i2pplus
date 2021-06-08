@@ -195,7 +195,7 @@ public class BuildRequestRecord {
     private static final int OFF_OPTIONS_SHORT = OFF_SEND_MSG_ID_EC_SHORT + 4;
     private static final int LENGTH_EC_SHORT = 172;
     private static final int MAX_OPTIONS_LENGTH_SHORT = LENGTH_EC_SHORT - OFF_OPTIONS_SHORT; // includes options length
-    
+
     private static final boolean TEST = false;
     private static KeyFactory TESTKF;
 
@@ -352,7 +352,7 @@ public class BuildRequestRecord {
             return _data[OFF_LAYER_ENC_TYPE] & 0xff;
         return 0;
     }
-    
+
     /**
      * Encrypt the record to the specified peer.  The result is formatted as: <pre>
      *   bytes 0-15: truncated SHA-256 of the current hop's identity (the toPeer parameter)
@@ -630,7 +630,7 @@ public class BuildRequestRecord {
     }
 
     /**
-     * Populate this instance with data.  A new buffer is created to contain the data, with the 
+     * Populate this instance with data.  A new buffer is created to contain the data, with the
      * necessary randomized padding.
      *
      * ECIES short record only. ElGamal constructor above.
@@ -650,7 +650,7 @@ public class BuildRequestRecord {
         byte buf[] = new byte[LENGTH_EC_SHORT];
         _data = buf;
         _isEC = true;
-        
+
         DataHelper.toLong(buf, OFF_RECV_TUNNEL, 4, receiveTunnelId);
         DataHelper.toLong(buf, OFF_SEND_TUNNEL_EC, 4, nextTunnelId);
         System.arraycopy(nextHop.getData(), 0, buf, OFF_SEND_IDENT_EC, Hash.HASH_LENGTH);
@@ -703,7 +703,7 @@ public class BuildRequestRecord {
         buf.append("]")
            .append("\n* Time: ").append(new Date(readRequestTime()))
            .append(" -> Expires in: ").append(DataHelper.formatDuration(readExpiration()))
-           .append("\n* Target: [").append(readNextIdentity().toBase64().substring(0,6)).append("]"));
+           .append("\n* Target: [").append(readNextIdentity().toBase64().substring(0,6)).append("]");
         if (_data.length != LENGTH_EC_SHORT) {
             buf.append("\n* Layer Key: ").append(readLayerKey())
                .append("\n* IV Key: ").append(readIVKey())
