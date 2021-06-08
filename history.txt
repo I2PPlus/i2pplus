@@ -1,3 +1,19 @@
+2021-06-07 zzz
+ Tunnels:
+ - More work on short tunnel build messages (proposal 157)
+ - Fix compare logic in ITBM parser (ticket #2814)
+
+2021-06-01 zzz
+ * i2psnark: Fix autostart for magnets
+ * Router: Fix JobQueue getLastJobBegin() and getLastJobEnd() (ticket #2809)
+
+2021-05-23 zzz
+ * UPnP: Fix IPv6 address check (ticket #2811)
+
+2021-05-21 zzz
+ * Router: Increase rekey probability
+ * RRD4J 3.8
+
 * 2021-05-22 0.9.50+ released
 
 2021-05-21 dr|z3d
@@ -53,7 +69,7 @@
  * Router:
    - Ensure router.exploreWhenFloodfill works as intended
    - Reduce concurrent tunnel builds for slow systems and routers
-      with <= 4 cores
+     with <= 4 cores
 
 2021-05-09 dr|z3d
  * I2PTunnel:
@@ -69,8 +85,8 @@
 2021-05-07 dr|z3d
  * Router: Double max share bandwidth to 32768KB (was 16384)
  * Console:
-     - Remove potential target="_blank" dupes in news feed
-     - Lazy scroll news entries on 'All News' page
+   - Remove potential target="_blank" dupes in news feed
+   - Lazy scroll news entries on 'All News' page
 
 2021-05-04 zzz
  * GeoIP 2021-05

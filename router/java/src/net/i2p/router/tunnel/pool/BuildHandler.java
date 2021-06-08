@@ -13,11 +13,15 @@ import net.i2p.data.EmptyProperties;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
+import net.i2p.data.SessionKey;
 import net.i2p.data.TunnelId;
 import net.i2p.data.i2np.BuildRequestRecord;
 import net.i2p.data.i2np.BuildResponseRecord;
 import net.i2p.data.i2np.EncryptedBuildRecord;
 import net.i2p.data.i2np.I2NPMessage;
+import net.i2p.data.i2np.InboundTunnelBuildMessage;
+import net.i2p.data.i2np.OutboundTunnelBuildReplyMessage;
+import net.i2p.data.i2np.ShortTunnelBuildMessage;
 import net.i2p.data.i2np.TunnelBuildMessage;
 import net.i2p.data.i2np.TunnelBuildReplyMessage;
 import net.i2p.data.i2np.TunnelGatewayMessage;
@@ -28,6 +32,8 @@ import net.i2p.router.Job;
 import net.i2p.router.JobImpl;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;
+import net.i2p.router.crypto.ratchet.RatchetSessionTag;
+import net.i2p.router.networkdb.kademlia.MessageWrapper;
 import net.i2p.router.peermanager.TunnelHistory;
 import net.i2p.router.tunnel.BuildMessageProcessor;
 import net.i2p.router.tunnel.BuildReplyHandler;
@@ -110,6 +116,8 @@ class BuildHandler implements Runnable {
 
     private static final long[] RATES = { 60*1000, 60*60*1000l };
 
+    // TODO remove when finished
+    private static final boolean HANDLE_SHORT = false;
 
     public BuildHandler(RouterContext ctx, TunnelPoolManager manager, BuildExecutor exec) {
         _context = ctx;
@@ -174,6 +182,9 @@ class BuildHandler implements Runnable {
         ctx.inNetMessagePool().registerHandlerJobBuilder(TunnelBuildReplyMessage.MESSAGE_TYPE, tbrmhjb);
         ctx.inNetMessagePool().registerHandlerJobBuilder(VariableTunnelBuildMessage.MESSAGE_TYPE, tbmhjb);
         ctx.inNetMessagePool().registerHandlerJobBuilder(VariableTunnelBuildReplyMessage.MESSAGE_TYPE, tbrmhjb);
+        ctx.inNetMessagePool().registerHandlerJobBuilder(InboundTunnelBuildMessage.MESSAGE_TYPE, tbmhjb);
+        ctx.inNetMessagePool().registerHandlerJobBuilder(ShortTunnelBuildMessage.MESSAGE_TYPE, tbmhjb);
+        ctx.inNetMessagePool().registerHandlerJobBuilder(OutboundTunnelBuildReplyMessage.MESSAGE_TYPE, tbrmhjb);
     }
 
     /**
@@ -323,6 +334,7 @@ class BuildHandler implements Runnable {
         if (_log.shouldLog(Log.INFO))
             _log.info("[MsgID " + msg.getUniqueId() + "] Handling the reply after " + rtt + "ms, delayed " + delay + "ms waiting for config" + cfg);
 
+        // TODO OTBRM
         List<Integer> order = cfg.getReplyOrder();
         int statuses[] = _buildReplyHandler.decrypt(msg, cfg, order);
         if (statuses != null) {
@@ -731,6 +743,21 @@ class BuildHandler implements Runnable {
                     _log.warn("Dropping hostile build request, we are the previous hop: " + req);
                 return;
             }
+            if (state.msg.getType() == InboundTunnelBuildMessage.MESSAGE_TYPE) {
+                // can only be at IBGW
+                _context.statManager().addRateData("tunnel.rejectHostile", 1);
+                if (_log.shouldWarn())
+                    _log.warn("Dropping hostile InboundTunnelBuildMessage, -> we are not InboundGateway " + req);
+                return;
+            }
+        } else {
+            if (state.msg.getType() == ShortTunnelBuildMessage.MESSAGE_TYPE) {
+                // cannot be at IBGW
+                _context.statManager().addRateData("tunnel.rejectHostile", 1);
+                if (_log.shouldWarn())
+                    _log.warn("Dropping hostile ShortTunnelBuildMessage -> we are InboundGateway " + req);
+                return;
+            }
         }
         if ((!isOutEnd) && (!isInGW)) {
             // Previous and next hop the same? Don't help somebody be evil. Drop it without a reply.
@@ -957,20 +984,53 @@ class BuildHandler implements Runnable {
         if (isEC) {
             // TODO options
             Properties props = EmptyProperties.INSTANCE;
+            if (state.msg.getType() == ShortTunnelBuildMessage.MESSAGE_TYPE) {
+                if (!HANDLE_SHORT) {
+                    if (_log.shouldWarn())
+                        _log.warn("Unsupported ShortTunnelBuildMessage");
+                    return;
+                }
+                if (isOutEnd) {
+                    // reply will be sent in plaintext in a OTBRM, see below
+                    reply = null;
+                } else {
+                    reply = BuildResponseRecord.createShort(_context, response, req.getChaChaReplyKey(), req.getChaChaReplyAD(), props);
+                }
+            } else {
             reply = BuildResponseRecord.create(_context, response, req.getChaChaReplyKey(), req.getChaChaReplyAD(), props);
+            }
         } else {
             reply = BuildResponseRecord.create(_context, response, req.readReplyKey(), req.readReplyIV(), state.msg.getUniqueId());
         }
         int records = state.msg.getRecordCount();
         int ourSlot = -1;
-        for (int j = 0; j < records; j++) {
-            if (state.msg.getRecord(j) == null) {
-                ourSlot = j;
-                state.msg.setRecord(j, reply);
-                //if (_log.shouldLog(Log.DEBUG))
-                //    _log.debug("Full reply record for slot " + ourSlot + "/" + ourId + "/" + nextId + "/" + req.readReplyMessageId()
-                //               + ": " + Base64.encode(reply));
-                break;
+        ShortTunnelBuildMessage stbm = null;
+        if (state.msg.getType() == InboundTunnelBuildMessage.MESSAGE_TYPE) {
+            if (!HANDLE_SHORT) {
+                if (_log.shouldWarn())
+                    _log.warn("Unsupported InboundTunnelBuildMessage");
+                return;
+            }
+            // IBGW only (enforced above)
+            // Create a ShortTunnelBuildMessage and populate it for sending
+            InboundTunnelBuildMessage itbm = (InboundTunnelBuildMessage) state.msg;
+            ourSlot = itbm.getPlaintextSlot();
+            stbm = new ShortTunnelBuildMessage(_context, records);
+            for (int j = 0; j < records; j++) {
+                if (j == ourSlot)
+                    stbm.setRecord(j, reply);
+                else
+                    stbm.setRecord(j, itbm.getRecord(j));
+            }
+        } else {
+            for (int j = 0; j < records; j++) {
+                if (state.msg.getRecord(j) == null) {
+                    ourSlot = j;
+                    if (!(isOutEnd && state.msg.getType() == ShortTunnelBuildMessage.MESSAGE_TYPE))
+                        state.msg.setRecord(j, reply);
+                    // else reply will be sent in plaintext
+                    break;
+                }
             }
         }
 
@@ -981,9 +1041,14 @@ class BuildHandler implements Runnable {
         // now actually send the response
         long expires = now + NEXT_HOP_SEND_TIMEOUT;
         if (!isOutEnd) {
-            state.msg.setUniqueId(req.readReplyMessageId());
-            state.msg.setMessageExpiration(expires);
-            OutNetMessage msg = new OutNetMessage(_context, state.msg, expires, PRIORITY, nextPeerInfo);
+            TunnelBuildMessage nextMessage;
+            if (stbm != null)
+                nextMessage = stbm;
+            else
+                nextMessage = state.msg;
+            nextMessage.setUniqueId(req.readReplyMessageId());
+            nextMessage.setMessageExpiration(expires);
+            OutNetMessage msg = new OutNetMessage(_context, nextMessage, expires, PRIORITY, nextPeerInfo);
             if (response == 0)
                 msg.setOnFailedSendJob(new TunnelBuildNextHopFailJob(_context, cfg));
             _context.outNetMessagePool().add(msg);
@@ -992,16 +1057,36 @@ class BuildHandler implements Runnable {
             // send it to the reply tunnel on the reply peer within a new TunnelBuildReplyMessage
             // (enough layers jrandom?)
             TunnelBuildReplyMessage replyMsg;
-            if (records == TunnelBuildMessage.MAX_RECORD_COUNT)
+            if (state.msg.getType() == ShortTunnelBuildMessage.MESSAGE_TYPE) {
+                OutboundTunnelBuildReplyMessage otbrm  = new OutboundTunnelBuildReplyMessage(_context, records);
+                otbrm.setPlaintextRecord(ourSlot, null); // TODO
+                replyMsg = otbrm;
+            } else if (records == TunnelBuildMessage.MAX_RECORD_COUNT) {
                 replyMsg = new TunnelBuildReplyMessage(_context);
-            else
+            } else {
                 replyMsg = new VariableTunnelBuildReplyMessage(_context, records);
-            for (int i = 0; i < records; i++)
+            }
+            for (int i = 0; i < records; i++) {
                 replyMsg.setRecord(i, state.msg.getRecord(i));
+            }
             replyMsg.setUniqueId(req.readReplyMessageId());
             replyMsg.setMessageExpiration(expires);
+            I2NPMessage outMessage;
+            if (state.msg.getType() == ShortTunnelBuildMessage.MESSAGE_TYPE) {
+                // garlic encrypt
+                SessionKey sk = null; // TODO
+                RatchetSessionTag st = null; // TODO
+                outMessage = MessageWrapper.wrap(_context, replyMsg, sk, st);
+                if (outMessage == null) {
+                    if (_log.shouldWarn())
+                        _log.warn("OTBRM encrypt fail");
+                    return;
+                }
+            } else {
+                outMessage = replyMsg;
+            }
             TunnelGatewayMessage m = new TunnelGatewayMessage(_context);
-            m.setMessage(replyMsg);
+            m.setMessage(outMessage);
             m.setMessageExpiration(expires);
             m.setTunnelId(new TunnelId(nextId));
             if (_context.routerHash().equals(nextPeer)) {

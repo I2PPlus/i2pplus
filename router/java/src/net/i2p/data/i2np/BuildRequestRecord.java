@@ -24,8 +24,10 @@ import net.i2p.router.RouterContext;
 
 /**
  * As of 0.9.48, supports two formats.
- * The original 222-byte ElGamal format and the new 464-byte ECIES format.
- * See proposal 152 for details on the new format.
+ * As of 0.9.51, supports three formats.
+ * The original 222-byte ElGamal format, the new 464-byte ECIES format,
+ * and the newest 172-byte ECIES format.
+ * See proposal 152 and 157 for details on the new formats.
  *
  * None of the readXXX() calls are cached. For efficiency,
  * they should only be called once.
@@ -58,7 +60,7 @@ import net.i2p.router.RouterContext;
  *   bytes  16-527: ElGamal encrypted block (discarding zero bytes at elg[0] and elg[257])
  * </pre>
  *
- * New ECIES format, ref: proposal 152:
+ * ECIES long record format, ref: proposal 152:
  *
  * Holds the unencrypted 464-byte tunnel request record,
  * with a constructor for ECIES decryption and a method for ECIES encryption.
@@ -89,6 +91,36 @@ import net.i2p.router.RouterContext;
  *   bytes   16-47: Sender's ephemeral X25519 public key
  *   bytes  48-511: ChaCha20 encrypted BuildRequestRecord
  *   bytes 512-527: Poly1305 MAC
+ * </pre>
+ *
+ * ECIES short record format, ref: proposal 157:
+ *
+ * Holds the unencrypted 172-byte tunnel request record,
+ * with a constructor for ECIES decryption and a method for ECIES encryption.
+ * Iterative AES encryption/decryption is done elsewhere.
+ *
+ * Cleartext:
+ * <pre>
+ *   bytes     0-3: tunnel ID to receive messages as, nonzero
+ *   bytes     4-7: next tunnel ID, nonzero
+ *   bytes    8-39: next router identity hash
+ *   byte       40: flags
+ *   bytes   41-42: more flags, unused, set to 0 for compatibility
+ *   byte       43: layer enc. type
+ *   bytes   44-47: request time (in minutes since the epoch, rounded down)
+ *   bytes   48-51: request expiration (in seconds since creation)
+ *   bytes   52-55: next message ID
+ *   bytes    56-x: tunnel build options (Mapping)
+ *   bytes     x-x: other data as implied by flags or options
+ *   bytes   x-171: random padding
+ * </pre>
+ *
+ * Encrypted:
+ * <pre>
+ *   bytes    0-15: Hop's truncated identity hash
+ *   bytes   16-47: Sender's ephemeral X25519 public key
+ *   bytes  48-219: ChaCha20 encrypted BuildRequestRecord
+ *   bytes 220-235: Poly1305 MAC
  * </pre>
  *
  */
@@ -139,7 +171,7 @@ public class BuildRequestRecord {
     // 222
     private static final int LENGTH = OFF_SEND_MSG_ID + 4 + PADDING_SIZE;
 
-    // New ECIES format
+    // ECIES long record format
     private static final int OFF_SEND_TUNNEL_EC = OFF_OUR_IDENT;
     private static final int OFF_SEND_IDENT_EC = OFF_SEND_TUNNEL_EC + 4;
     private static final int OFF_LAYER_KEY_EC = OFF_SEND_IDENT_EC + Hash.HASH_LENGTH;
@@ -153,6 +185,16 @@ public class BuildRequestRecord {
     private static final int OFF_OPTIONS = OFF_SEND_MSG_ID_EC + 4;
     private static final int LENGTH_EC = 464;
     private static final int MAX_OPTIONS_LENGTH = LENGTH_EC - OFF_OPTIONS; // includes options length
+
+    // ECIES short record format
+    private static final int OFF_FLAG_EC_SHORT = OFF_SEND_IDENT_EC + Hash.HASH_LENGTH;
+    private static final int OFF_LAYER_ENC_TYPE = OFF_FLAG_EC_SHORT + 3;
+    private static final int OFF_REQ_TIME_EC_SHORT = OFF_LAYER_ENC_TYPE + 1;
+    private static final int OFF_EXPIRATION_SHORT = OFF_REQ_TIME_EC + 4;
+    private static final int OFF_SEND_MSG_ID_EC_SHORT = OFF_EXPIRATION + 4;
+    private static final int OFF_OPTIONS_SHORT = OFF_SEND_MSG_ID_EC_SHORT + 4;
+    private static final int LENGTH_EC_SHORT = 172;
+    private static final int MAX_OPTIONS_LENGTH_SHORT = LENGTH_EC_SHORT - OFF_OPTIONS_SHORT; // includes options length
 
     private static final boolean TEST = false;
     private static KeyFactory TESTKF;
@@ -201,7 +243,8 @@ public class BuildRequestRecord {
     }
 
     /**
-     * Session key that should be used to encrypt the reply
+     * AES Session key that should be used to encrypt the reply.
+     * Not to be used for short ECIES records; use the ChaChaReplyKey instead.
      */
     public SessionKey readReplyKey() {
         byte key[] = new byte[SessionKey.KEYSIZE_BYTES];
@@ -211,7 +254,9 @@ public class BuildRequestRecord {
     }
 
     /**
-     * IV that should be used to encrypt the reply
+     * AES IV that should be used to encrypt the reply.
+     * Not to be used for short ECIES records.
+     * @return 16 bytes
      */
     public byte[] readReplyIV() {
         byte iv[] = new byte[IV_SIZE];
@@ -226,7 +271,8 @@ public class BuildRequestRecord {
      *
      */
     public boolean readIsInboundGateway() {
-        int off = _isEC ? OFF_FLAG_EC : OFF_FLAG;
+        int off = _isEC ? (_data.length == LENGTH_EC_SHORT ? OFF_FLAG_EC_SHORT : OFF_FLAG_EC)
+                        : OFF_FLAG;
         return (_data[off] & FLAG_UNRESTRICTED_PREV) != 0;
     }
 
@@ -235,7 +281,8 @@ public class BuildRequestRecord {
      * fields refer to where the reply should be sent.
      */
     public boolean readIsOutboundEndpoint() {
-        int off = _isEC ? OFF_FLAG_EC : OFF_FLAG;
+        int off = _isEC ? (_data.length == LENGTH_EC_SHORT ? OFF_FLAG_EC_SHORT : OFF_FLAG_EC)
+                        : OFF_FLAG;
         return (_data[off] & FLAG_OUTBOUND_ENDPOINT) != 0;
     }
 
@@ -245,8 +292,10 @@ public class BuildRequestRecord {
      * This ignores leap seconds.
      */
     public long readRequestTime() {
-        if (_isEC)
-            return DataHelper.fromLong(_data, OFF_REQ_TIME_EC, 4) * (60 * 1000L);
+        if (_isEC) {
+            int off = _data.length == LENGTH_EC_SHORT ? OFF_REQ_TIME_EC_SHORT : OFF_REQ_TIME_EC;
+            return DataHelper.fromLong(_data, off, 4) * (60 * 1000L);
+        }
         return DataHelper.fromLong(_data, OFF_REQ_TIME, 4) * (60 * 60 * 1000L);
     }
 
@@ -255,7 +304,8 @@ public class BuildRequestRecord {
      * this specifies the message ID with which the reply should be sent.
      */
     public long readReplyMessageId() {
-        int off = _isEC ? OFF_SEND_MSG_ID_EC : OFF_SEND_MSG_ID;
+        int off = _isEC ? (_data.length == LENGTH_EC_SHORT ? OFF_SEND_MSG_ID_EC_SHORT : OFF_SEND_MSG_ID_EC)
+                        : OFF_SEND_MSG_ID;
         return DataHelper.fromLong(_data, off, 4);
     }
 
@@ -266,7 +316,8 @@ public class BuildRequestRecord {
     public long readExpiration() {
         if (!_isEC)
             return DEFAULT_EXPIRATION_SECONDS * 1000L;
-        return DataHelper.fromLong(_data, OFF_EXPIRATION, 4) * 1000L;
+        int off = _data.length == LENGTH_EC_SHORT ? OFF_EXPIRATION_SHORT : OFF_EXPIRATION;
+        return DataHelper.fromLong(_data, off, 4) * 1000L;
     }
 
     /**
@@ -277,7 +328,11 @@ public class BuildRequestRecord {
     public Properties readOptions() {
         if (!_isEC)
             return null;
-        ByteArrayInputStream in = new ByteArrayInputStream(_data, OFF_OPTIONS, MAX_OPTIONS_LENGTH);
+        ByteArrayInputStream in;
+        if (_data.length == LENGTH_EC_SHORT)
+            in = new ByteArrayInputStream(_data, OFF_OPTIONS_SHORT, MAX_OPTIONS_LENGTH_SHORT);
+        else
+            in = new ByteArrayInputStream(_data, OFF_OPTIONS, MAX_OPTIONS_LENGTH);
         try {
             return DataHelper.readProperties(in, null);
         } catch (DataFormatException dfe) {
@@ -285,6 +340,17 @@ public class BuildRequestRecord {
         } catch (IOException ioe) {
             return null;
         }
+    }
+
+    /**
+     * ECIES short record only.
+     * @return 0 for ElGamal or ECIES long record
+     * @since 0.9.51
+     */
+    public int readLayerEncryptionType() {
+        if (_data.length == LENGTH_EC_SHORT)
+            return _data[OFF_LAYER_ENC_TYPE] & 0xff;
+        return 0;
     }
 
     /**
@@ -325,7 +391,8 @@ public class BuildRequestRecord {
         EncType type = toKey.getType();
         if (type != EncType.ECIES_X25519)
             throw new IllegalArgumentException();
-        byte[] out = new byte[EncryptedBuildRecord.LENGTH];
+        boolean isShort = _data.length == LENGTH_EC_SHORT;
+        byte[] out = new byte[isShort ? ShortEncryptedBuildRecord.LENGTH : EncryptedBuildRecord.LENGTH];
         System.arraycopy(toPeer.getData(), 0, out, 0, PEER_SIZE);
         HandshakeState state = null;
         try {
@@ -333,8 +400,8 @@ public class BuildRequestRecord {
             state = new HandshakeState(HandshakeState.PATTERN_ID_N, HandshakeState.INITIATOR, kf);
             state.getRemotePublicKey().setPublicKey(toKey.getData(), 0);
             state.start();
-            state.writeMessage(out, PEER_SIZE, _data, 0, LENGTH_EC);
-            EncryptedBuildRecord rv = new EncryptedBuildRecord(out);
+            state.writeMessage(out, PEER_SIZE, _data, 0, _data.length);
+            EncryptedBuildRecord rv = isShort ? new ShortEncryptedBuildRecord(out) : new EncryptedBuildRecord(out);
             _chachaReplyKey = new SessionKey(state.getChainingKey());
             _chachaReplyAD = new byte[32];
             System.arraycopy(state.getHandshakeHash(), 0, _chachaReplyAD, 0, 32);
@@ -415,8 +482,10 @@ public class BuildRequestRecord {
                 state.getLocalKeyPair().setKeys(ourKey.getData(), 0,
                                                 ourKey.toPublic().getData(), 0);
                 state.start();
-                decrypted = new byte[LENGTH_EC];
-                state.readMessage(encrypted, PEER_SIZE, EncryptedBuildRecord.LENGTH - PEER_SIZE,
+                int len = encryptedRecord.length();
+                boolean isShort = len == ShortEncryptedBuildRecord.LENGTH;
+                decrypted = new byte[isShort ? LENGTH_EC_SHORT : LENGTH_EC];
+                state.readMessage(encrypted, PEER_SIZE, len - PEER_SIZE,
                                   decrypted, 0);
                 _chachaReplyKey = new SessionKey(state.getChainingKey());
                 _chachaReplyAD = new byte[32];
@@ -508,7 +577,7 @@ public class BuildRequestRecord {
      * Populate this instance with data.  A new buffer is created to contain the data, with the
      * necessary randomized padding.
      *
-     * ECIES only. ElGamal constructor above.
+     * ECIES long record only. ElGamal constructor above.
      *
      * @param receiveTunnelId tunnel the current hop will receive messages on
      * @param nextTunnelId id for the next hop, or where we send the reply (if we are the outbound endpoint)
@@ -561,6 +630,55 @@ public class BuildRequestRecord {
     }
 
     /**
+     * Populate this instance with data.  A new buffer is created to contain the data, with the
+     * necessary randomized padding.
+     *
+     * ECIES short record only. ElGamal constructor above.
+     *
+     * @param receiveTunnelId tunnel the current hop will receive messages on
+     * @param nextTunnelId id for the next hop, or where we send the reply (if we are the outbound endpoint)
+     * @param nextHop next hop's identity, or where we send the reply (if we are the outbound endpoint)
+     * @param nextMsgId message ID to use when sending on to the next hop (or for the reply)
+     * @param isInGateway are we the gateway of an inbound tunnel?
+     * @param isOutEndpoint are we the endpoint of an outbound tunnel?
+     * @param options 116 bytes max when serialized
+     * @since 0.9.51
+     * @throws IllegalArgumentException if options too long
+     */
+    public BuildRequestRecord(I2PAppContext ctx, long receiveTunnelId, long nextTunnelId, Hash nextHop, long nextMsgId,
+                              boolean isInGateway, boolean isOutEndpoint, Properties options) {
+        byte buf[] = new byte[LENGTH_EC_SHORT];
+        _data = buf;
+        _isEC = true;
+
+        DataHelper.toLong(buf, OFF_RECV_TUNNEL, 4, receiveTunnelId);
+        DataHelper.toLong(buf, OFF_SEND_TUNNEL_EC, 4, nextTunnelId);
+        System.arraycopy(nextHop.getData(), 0, buf, OFF_SEND_IDENT_EC, Hash.HASH_LENGTH);
+        if (isInGateway)
+            buf[OFF_FLAG_EC_SHORT] |= FLAG_UNRESTRICTED_PREV;
+        else if (isOutEndpoint)
+            buf[OFF_FLAG_EC_SHORT] |= FLAG_OUTBOUND_ENDPOINT;
+        // 2 bytes unused flags = 0
+        // 1 byte layer enc. type = 0
+        long truncatedMinute = ctx.clock().now();
+        // prevent hop identification at top of the minute
+        truncatedMinute -= ctx.random().nextInt(2048);
+        // this ignores leap seconds
+        truncatedMinute /= (60*1000L);
+        DataHelper.toLong(buf, OFF_REQ_TIME_EC_SHORT, 4, truncatedMinute);
+        DataHelper.toLong(buf, OFF_EXPIRATION_SHORT, 4, DEFAULT_EXPIRATION_SECONDS);
+        DataHelper.toLong(buf, OFF_SEND_MSG_ID_EC_SHORT, 4, nextMsgId);
+        try {
+            int off = DataHelper.toProperties(buf, OFF_OPTIONS_SHORT, options);
+            int sz = LENGTH_EC_SHORT - off;
+            if (sz > 0)
+                ctx.random().nextBytes(buf, off, sz);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("options", e);
+        }
+    }
+
+    /**
      *  @since 0.9.24
      */
     @Override
@@ -568,6 +686,8 @@ public class BuildRequestRecord {
         StringBuilder buf = new StringBuilder(256);
         buf.append("\n* ");
         buf.append(_isEC ? "ECIES" : "ElGamal");
+        if (_data.length == LENGTH_EC_SHORT)
+            buf.append("Short ");
         buf.append(" BuildRequestRecord: [");
         boolean isIBGW = readIsInboundGateway();
         boolean isOBEP = readIsOutboundEndpoint();
@@ -583,13 +703,15 @@ public class BuildRequestRecord {
         buf.append("]")
            .append("\n* Time: ").append(new Date(readRequestTime()))
            .append(" -> Expires in: ").append(DataHelper.formatDuration(readExpiration()))
-           .append("\n* Target: [").append(readNextIdentity().toBase64().substring(0,6)).append("]")
-           .append("\n* Layer Key: ").append(readLayerKey())
-           .append("\n* IV Key: ").append(readIVKey())
-           .append("\n* Reply MsgID: ").append(readReplyMessageId())
-           .append("\n* Reply Key: ").append(readReplyKey())
-           .append("\n* Reply IV: ").append(Base64.encode(readReplyIV()));
-        if (_isEC && readOptions() != null) {
+           .append("\n* Target: [").append(readNextIdentity().toBase64().substring(0,6)).append("]");
+        if (_data.length != LENGTH_EC_SHORT) {
+            buf.append("\n* Layer Key: ").append(readLayerKey())
+               .append("\n* IV Key: ").append(readIVKey())
+               .append("\n* Reply MsgID: ").append(readReplyMessageId())
+               .append("\n* Reply Key: ").append(readReplyKey())
+               .append("\n* Reply IV: ").append(Base64.encode(readReplyIV()));
+        }
+        if (_isEC && readOptions() != null && readOptions().size() > 0) {
             buf.append("\n* Options: ").append(readOptions());
             if (_chachaReplyKey != null) {
                 buf.append("\n* ChaCha Reply Key: ").append(_chachaReplyKey)
