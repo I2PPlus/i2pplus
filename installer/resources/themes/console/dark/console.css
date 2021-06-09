@@ -1356,7 +1356,7 @@ div.messages {
   background: #000;
   background: var(--infohelp) no-repeat 12px center, repeating-linear-gradient(to bottom, rgba(0,0,0,.6) 2px, rgba(0,32,0,.3) 4px),
               var(--hat) right 2px bottom -2px no-repeat, linear-gradient(to bottom, #010, #000400);
-  background-size: 28px, 4px 100%, auto 93%;
+  background-size: 28px, 100% 4px, auto 93%, 100%;
 }
 
 .main:not(#config_update) div.messages, #config_update #messages {
@@ -1371,7 +1371,7 @@ div.messages {
   background: var(--infohelp) no-repeat 12px center, var(--close) right 7px top 6px no-repeat,
               repeating-linear-gradient(to bottom, rgba(0,0,0,.6) 2px, rgba(0,32,0,.3) 4px),
               var(--hat) right 2px bottom -2px no-repeat, linear-gradient(to bottom, #010, #000400);
-  background-size: 28px, 14px, 4px 100%, auto 93%;
+  background-size: 28px, 14px, 100% 4px, auto 93%, 100%;
   background-blend-mode: normal, luminosity, normal, normal, normal;
 }
 
@@ -1379,7 +1379,7 @@ div.messages {
   background: var(--infohelp) no-repeat 12px center, var(--close_hover) right 7px top 6px no-repeat,
               repeating-linear-gradient(to bottom, rgba(0,0,0,.6) 2px, rgba(0,32,0,.3) 4px),
               var(--hat) right 2px bottom -2px no-repeat, linear-gradient(to bottom, #010, #000400);
-  background-size: 28px, 14px, 4px 100%, auto 93%;
+  background-size: 28px, 14px, 100% 4px, auto 93%, 100%;
   background-blend-mode: normal, normal, normal, normal, normal;
   cursor: crosshair;
 }

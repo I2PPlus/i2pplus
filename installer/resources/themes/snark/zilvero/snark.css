@@ -11,21 +11,26 @@
 	--dropdown_hover: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m5.29 17.93 26.71 28.14 26.71-28.14' fill='none' stroke='%23b23' stroke-linecap='round' stroke-linejoin='round' stroke-width='10'/%3E%3C/svg%3E");
 	--nuke: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3CradialGradient id='a' cx='8.15' cy='56.16' gradientTransform='matrix(-.82 -.82 -.82 .82 84.62 24.7)' gradientUnits='userSpaceOnUse' r='39.39'%3E%3Cstop offset='0' stop-color='%23fb8bbf'/%3E%3Cstop offset='1' stop-color='%23d3285c'/%3E%3C/radialGradient%3E%3Cpath d='m64.12 24.99-32.22 31.53-24.82-24.34 32.12-32.12z' fill='%23d4aa00'/%3E%3Cpath d='m64.11 25.01-32.01 32.02-12.4-12.72 31.96-31.79z' fill='%23ffce47'/%3E%3Cpath d='m32 69.98a17.59 17.59 0 0 1 -17.57-17.57v-17.8l35.12-.01.01 17.8c0 9.7-7.86 17.57-17.56 17.57z' fill='url(%23a)' transform='matrix(.71 .71 -.71 .71 32 -13.25)'/%3E%3Cpath d='m32.75 56.38 10.05-10.02-24.95-24.94-10.03 10.04z' fill='%23174461'/%3E%3Cpath d='m42.73 46.33-10 10.07-12.56-12.55 10.09-10' fill='%236f7c91'/%3E%3C/svg%3E");
 	--user: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m51.42 27.01c0-.94-.19-1.83-.53-2.65-1.3-3.07-4.94-4.33-8.07-3.19-1.71.62-4.91 1.31-10.69 1.31s-8.98-.69-10.69-1.31c-3.13-1.13-6.78.12-8.07 3.19-.35.81-.53 1.71-.53 2.65l-.03 10.35c0 7.13.55 11.51 5.93 16.62 1.93 1.83 4.2 3.24 6.39 4.73 2.19 1.48 4.13 3.45 6.97 3.45s4.78-1.96 6.97-3.45c2.19-1.48 4.46-2.9 6.39-4.73 5.37-5.1 5.97-9.62 5.97-16.75z' fill='%23fca'/%3E%3Cpath d='m53.37 13.49c-.71-3.8-3.85-6.6-7.28-8.06-6.75-3.32-14.66-4.27-22.01-2.68-2.45.77-4.08 2.95-6.47 3.87-2.39 1.05-4.2 3.13-4.86 5.66-.85 2.32-2.98 4.04-3.2 6.63-.82 4.81 1.01 9.59 3.25 13.77.16-2.75-.37-5.62.5-8.27 1.28-3.07 5.21-4.51 8.22-3.19 5.55 1.59 11.44 1.42 17.13.89 2.13-.22 4.15-1.07 6.27-1.38 3.27-.21 6.57 2.51 6.45 5.9.15 2.34 0 4.69.06 7.03 2-.68 2.73-3.04 3.06-4.94.88-5.08-.13-10.24-1.1-15.23z' fill='%236c5d53'/%3E%3C/svg%3E");
+	--link: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cg stroke-width='8'%3E%3Cpath d='m58.35 24.87-16.74 16.74c-5.45 5.45-14.33 5.45-19.78 0s-5.45-14.33 0-19.78l16.74-16.74c5.45-5.45 14.33-5.45 19.78 0s5.45 14.33 0 19.78zm-30.43 3.04c-2.1 2.1-2.1 5.51 0 7.61s5.51 2.1 7.61 0l16.74-16.74c2.1-2.1 2.1-5.51 0-7.61s-5.51-2.1-7.61 0z' fill='%236f7c91'/%3E%3Cpath d='m26.4 44.65-7.61 7.61c-2.1 2.1-5.51 2.1-7.61 0s-2.1-5.51 0-7.61l16.74-16.74c2.1-2.1 5.51-2.1 7.61 0s2.1 5.51 0 7.61l9.13-9.13c-.68-1.66-1.69-3.22-3.04-4.57-5.45-5.45-14.33-5.45-19.78 0l-16.74 16.74c-5.45 5.45-5.45 14.33 0 19.78s14.33 5.45 19.78 0l16.74-16.74c-4.11 4.11-10.15 5.12-15.21 3.04z' fill='%23939dac'/%3E%3C/g%3E%3C/svg%3E");
+	--noise: url("data:image/svg+xml,%3Csvg viewBox='0 0 248 248' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cfilter id='a' x='0' y='0'%3E%3CfeTurbulence baseFrequency='3' stitchTiles='stitch' type='fractalNoise'/%3E%3CfeTile/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Cpath d='m-4-4h256v256h-256z' fill='%ffffff77'/%3E%3Cpath d='m-29.6-29.6h256v256h-256z' filter='url(%23a)' opacity='.5'/%3E%3C/svg%3E");
+}
+
+html {
+	border-right: 1px solid #999;
+	background: var(--noise), repeating-linear-gradient(to bottom, #ddd 2px, #bbb 4px) #bbb;
+	background-size: 248px, 100% 4px !important;
+	scrollbar-color: #999 #eee;
 }
 
 body, html {
-	height: calc(100% - 5px);
+	min-height: calc(100% - 5px);
 }
 
 body {
 	margin: 0 !important;
-	padding: 5px;
+	padding: 5px 5px 0;
 	min-width: 800px;
 	color: #555;
-	background: #777;
-	background: repeating-linear-gradient(45deg, #fff, #ddd 2px, #eee 3px), repeating-linear-gradient(135deg, #fff, #ddd 2px, #eee 3px);
-	background-blend-mode: multiply, normal;
-	background-size: 100% 100%, 100% 100%;
 }
 
 body.iframed {
@@ -62,7 +67,8 @@ body, td, th, span, table a, input[type=submit], input[type=text], textarea {
 	padding: 5px;
 	border: 1px solid #999;
 	box-shadow: inset 0 0 0 1px #fff;
-	background: #ddd;
+	background: var(--noise), #ddd;
+	background-size: 248px;
 }
 
 .iframed .page, .iframed .snarknavbar {
@@ -1167,7 +1173,8 @@ tt {
 .addtorrentsection, .newtorrentsection, .configsection, .configsectionpanel, .snarkConfig, .snarknavbar, .snarkMessages, #torrentDisplay {
 	box-shadow: inset 0 0 0 1px #fff;
 	background: #eee;
-	background: linear-gradient(to bottom, #fafafa, #eee);
+	background: var(--noise), linear-gradient(to bottom, #fafafa, #eee);
+	background-size: 248px, 100%;
 }
 
 .addtorrentsection, .newtorrentsection {
@@ -1432,37 +1439,37 @@ td.snarkTorrentRateDown, td.snarkTorrentRateUp, td.snarkTorrentRateDown span, td
 /* torrent column delimiters */
 
 @media screen and (min-width: 1000px) {
-.snarkTorrentAction {
-	padding-left: 4px !important;
-	padding-right: 3px !important;
-}
+	.snarkTorrentAction {
+		padding-left: 4px !important;
+		padding-right: 3px !important;
+	}
 
-.snarkTrackerDetails {
-	padding-left: 10px !important;
-}
+	.snarkTrackerDetails {
+		padding-left: 10px !important;
+	}
 
-.snarkTorrentName {
-	padding-right: 3px;
-}
+	.snarkTorrentName {
+		padding-right: 3px;
+	}
 
-.snarkTorrentDownloaded {
-	padding-left: 9px !important;
-	padding-right: 9px !important;
-}
+	.snarkTorrentDownloaded {
+		padding-left: 9px !important;
+		padding-right: 9px !important;
+	}
 
-.snarkTorrentETA, .snarkTorrentRateUp, .snarkTorrentUploaded, .snarkTorrentRateDown {
-	padding-right: 8px !important;
-	padding-left: 8px !important;
-}
+	.snarkTorrentETA, .snarkTorrentRateUp, .snarkTorrentUploaded, .snarkTorrentRateDown {
+		padding-right: 8px !important;
+		padding-left: 8px !important;
+	}
 
-.snarkTorrents th:nth-child(n+4) {
-	text-align: center;
-}
+	.snarkTorrents th:nth-child(n+4) {
+		text-align: center;
+	}
 
-tr:hover td.snarkTrackerDetails, tr:hover td.snarkTorrentDetails, tr:hover td.snarkTorrentName, tr:hover td.snarkTorrentDownloaded,
-tr:hover td.snarkTorrentRateDown, tr:hover td.snarkTorrentAction {
-	background: none;
-}
+	tr:hover td.snarkTrackerDetails, tr:hover td.snarkTorrentDetails, tr:hover td.snarkTorrentName, tr:hover td.snarkTorrentDownloaded,
+	tr:hover td.snarkTorrentRateDown, tr:hover td.snarkTorrentAction {
+		background: none;
+	}
 }
 
 .snarkDirInfo .ParentDir a, .snarkDirInfo .snarkFileName a, .snarkTorrents .snarkTorrentName a {
@@ -1512,13 +1519,27 @@ tr:hover td.snarkTorrentRateDown, tr:hover td.snarkTorrentAction {
 	border: none !important;
 }
 
+td.snarkTrackerDetails a {
+	width: 20px;
+	height: 20px;
+	display: inline-block;
+	background: var(--link) center center no-repeat;
+	background-size: 16px;
+}
+
+td.snarkTrackerDetails a:hover {
+	box-shadow: inset 0 0 0 1px #fff, 0 0 0 1px #b32;
+	background-color: #eee;
+}
+
+td.snarkTrackerDetails a:active {
+  box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 3px rgba(0,0,0,.4), 0 0 0 1px #b32;
+}
+
 .snarkTrackerDetails img {
 	width: 16px;
 	height: 16px;
-}
-
-tr:hover .snarkTrackerDetails img {
-	filter: saturate(2) brightness(1.6);
+	opacity: 0;
 }
 
 #bwHoverHelp img {
@@ -2461,7 +2482,7 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
 }
 
 #snarkTorrentSort .ascending, th#snarkTorrentSort .descending {
-	right: -11px !important;
+	right: -14px !important;
 }
 
 @keyframes fade-in {
