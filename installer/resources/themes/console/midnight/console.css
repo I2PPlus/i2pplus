@@ -1390,13 +1390,14 @@ div.logo hr {
 
 .routersummary img[src*="i2plogo"] {
   margin-top: -1px;
-  margin-left: -5px;
+  margin-left: -7px;
   width: 190px;
   height: auto;
   font-size: 0;
   opacity: .7;
-  transition: ease-out opacity .3s, ease filter .3s;
+  transition: ease-out opacity .2s, ease filter .2s;
   filter: sepia(1) hue-rotate(180deg);
+  filter: saturate(0) sepia(1) hue-rotate(180deg);
 }
 
 #error500 .routersummary img[src$="i2plogo.png"] {
@@ -1405,18 +1406,19 @@ div.logo hr {
 
 .routersummary img[src*="i2plogo"]:hover {
   opacity: 1;
-  transition: ease-in opacity .3s, ease filter .3s;
-  filter: saturate(1);
+  transition: ease-in opacity .15s, ease filter .15s;
+  filter: saturate(.7);
 }
 
 .routersummary a:active img[src*="i2plogo"] {
-  filter: drop-shadow(0 0 5px #450519) saturate(1.4) !important;
-  transition: ease-out opacity .3s, ease filter .3s;
+  filter: drop-shadow(0 0 5px #450519) saturate(1) !important;
+  transition: ease-out opacity .15s;
+  transform: scale(.97);
 }
 
 .routersummary a[href="/"]:focus img, .routersummary a[href="/console"]:focus img {
   opacity: 1;
-  transition: ease-in opacity .3s, ease filter .3s;
+  transition: ease-in opacity .15s, ease filter .15s;
   filter: saturate(2);
 }
 
@@ -9577,7 +9579,7 @@ input.download[value^="Dump"]:focus, button.download[value^="Dump"]:focus {
 
 .routersummary img[src$="i2plogo.png"] {
   margin-top: -4px;
-  margin-left: -4px;
+  margin-left: -6px;
   transform: none;
   width: 224px;
 }
@@ -9852,7 +9854,7 @@ table#reseedconfig input[type=text], table#reseedconfig input[type=password] {
 
 .routersummary img[src$="i2plogo.png"] {
   margin-top: -1px;
-  margin-left: -4px;
+  margin-left: -6px;
   width: 244px;
   transform: none;
 }
