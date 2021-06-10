@@ -1406,13 +1406,14 @@ div.logo hr {
 
 .routersummary img[src*="i2plogo"]:hover {
   opacity: 1;
-  transition: ease-in opacity .15s, ease filter .15s;
-  filter: saturate(.7);
+  transition: ease-in opacity .15s;
+  filter: saturate(1) drop-shadow(0 0 1px #450519) drop-shadow(0 0 3px #450519);
 }
 
 .routersummary a:active img[src*="i2plogo"] {
-  filter: drop-shadow(0 0 5px #450519) saturate(1) !important;
-  transition: ease-out opacity .15s;
+  opacity: .5;
+  filter: saturate(1.5) !important;
+  transition: ease-out opacity .05s;
   transform: scale(.97);
 }
 
