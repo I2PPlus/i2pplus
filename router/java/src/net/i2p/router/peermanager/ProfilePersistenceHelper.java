@@ -164,7 +164,7 @@ class ProfilePersistenceHelper {
             buf.append("#").append(TAB).append("Speed:").append(TAB).append(TAB).append(speed).append(" Bps").append(NL);
             buf.append("#").append(TAB).append("Capacity:").append(TAB).append(capacity).append(" tunnels/hour").append(NL);
             buf.append("#").append(TAB).append("Integration:").append(TAB).append(integration).append(" peers").append(NL);
-            buf.append("#").append(TAB).append("Groups:").append(TAB).append(TAB).append(groups).append(NL);
+            buf.append("#").append(TAB).append("Groups:").append(TAB).append(groups).append(NL);
             buf.append(HR).append(NL).append(NL);
         }
         if (profile.getSpeedBonus() != 0)
