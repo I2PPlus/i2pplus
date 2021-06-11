@@ -404,7 +404,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 // shouldn't happen unless unsupported encryption
                 if (_log.shouldLog(Log.WARN))
 //                    _log.warn("Received Lease but can't send to it, failure code " + rc + " (to=" + _toString + ")");
-                    _log.warn("Received Lease but can't send to it, unsupported encryption? \n* Target: " + _toString);
+                    _log.warn("Received Lease " + _toString + " but can't send to it (unsupported encryption)");
                 dieFatal(rc);
             }
         }
