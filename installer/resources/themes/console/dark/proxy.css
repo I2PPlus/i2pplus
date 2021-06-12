@@ -239,7 +239,7 @@ table {
 }
 
 #proxyrequest {
-  margin: 3px 15px 10px;
+  margin: 3px 30px 10px;
   display: inline-block;
 }
 
@@ -255,10 +255,18 @@ table {
 }
 
 #warning h4 {
-  margin: 12px 0 10px;
+  margin: 12px 15px 10px;
   padding: 0 0 10px;
   font-size: 10pt;
-  border-bottom: 1px solid #131;
+}
+
+#warning h4::after {
+  margin: 15px -15px -15px;
+  width: 100%;
+  height: 1px;
+  display: inline-block;
+  background: #131;
+  content: "";
 }
 
 #warning .formaction + h4 {
@@ -271,8 +279,7 @@ table {
 }
 
 #warning hr {
-  margin-top: 15px !important;
-  margin-bottom: 15px !important;
+  margin: 20px 0 !important;
 }
 
 #warning_localhost {
@@ -294,7 +301,7 @@ table {
 }
 
 #jumplinks {
-  margin: 0 15px 15px;
+  margin-bottom: 15px;
 }
 
 #jumplinks h4 {
@@ -303,6 +310,7 @@ table {
 }
 
 #jumplinks a {
+  margin: 3px 15px 3px 30px;
   padding: 2px 0;
   display: inline-block;
   line-height: 16px;
