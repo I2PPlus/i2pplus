@@ -576,7 +576,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (_log.shouldInfo())
             _log.info("UTC rollover, blind cache updated");
     }
-    
+
     /**
      *  @return RouterInfo, LeaseSet, or null, validated
      *  @since 0.8.3
@@ -1224,7 +1224,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         // flushing some from memory, while keeping all on disk.
         long adjustedExpiration;
         String expireRI = _context.getProperty("router.expireRouterInfo");
-        String routerId = routerInfo.toBase64().substring(0,4);
+        String routerId = routerInfo.toBase64().substring(0,6);
         if (expireRI != null)
             adjustedExpiration = Integer.valueOf(expireRI)*60*60*1000;
         else if (floodfillEnabled())
