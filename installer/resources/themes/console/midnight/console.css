@@ -1405,22 +1405,23 @@ div.logo hr {
 }
 
 .routersummary img[src*="i2plogo"]:hover {
-  opacity: 1;
+  opacity: .5;
   transition: ease-in opacity .15s;
-  filter: saturate(1) drop-shadow(0 0 1px #450519) drop-shadow(0 0 3px #450519);
+  filter: saturate(.2) drop-shadow(0 0 1px #450519) drop-shadow(0 0 3px #450519);
+  filter: saturate(.7) opacity(.7);
+}
+
+.routersummary a:hover img[src*="i2plogo"], a:focus img[src*="i2plogo"] {
+  opacity: .8;
+  transition: ease filter .15s;
+  filter: saturate(.8);
 }
 
 .routersummary a:active img[src*="i2plogo"] {
   opacity: .5;
-  filter: saturate(1.5) !important;
-  transition: ease-out opacity .05s;
+  filter: saturate(.4) !important;
+  transition: none;
   transform: scale(.97);
-}
-
-.routersummary a[href="/"]:focus img, .routersummary a[href="/console"]:focus img {
-  opacity: 1;
-  transition: ease-in opacity .15s, ease filter .15s;
-  filter: saturate(2);
 }
 
 .routersummary input[type=text] {
