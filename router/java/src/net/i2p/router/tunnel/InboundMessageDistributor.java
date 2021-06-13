@@ -13,6 +13,7 @@ import net.i2p.data.i2np.DeliveryInstructions;
 import net.i2p.data.i2np.DeliveryStatusMessage;
 import net.i2p.data.i2np.GarlicMessage;
 import net.i2p.data.i2np.I2NPMessage;
+import net.i2p.data.i2np.OutboundTunnelBuildReplyMessage;
 import net.i2p.data.i2np.TunnelBuildReplyMessage;
 import net.i2p.data.i2np.VariableTunnelBuildReplyMessage;
 import net.i2p.router.ClientMessage;
@@ -132,6 +133,7 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
 
                 case DeliveryStatusMessage.MESSAGE_TYPE:
                 case GarlicMessage.MESSAGE_TYPE:
+                case OutboundTunnelBuildReplyMessage.MESSAGE_TYPE:
                 case TunnelBuildReplyMessage.MESSAGE_TYPE:
                 case VariableTunnelBuildReplyMessage.MESSAGE_TYPE:
                     // these are safe, handled below
@@ -163,6 +165,7 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                 case DatabaseSearchReplyMessage.MESSAGE_TYPE:
                 case DeliveryStatusMessage.MESSAGE_TYPE:
                 case GarlicMessage.MESSAGE_TYPE:
+                case OutboundTunnelBuildReplyMessage.MESSAGE_TYPE:
                 case TunnelBuildReplyMessage.MESSAGE_TYPE:
                 case VariableTunnelBuildReplyMessage.MESSAGE_TYPE:
                     // these are safe, handled below
