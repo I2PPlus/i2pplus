@@ -29,8 +29,8 @@ html {
 }
 
 html {
-  background: repeating-linear-gradient(to right, rgba(0,0,48,.7) 2px, rgba(0,0,0,.5) 4px),
-              repeating-linear-gradient(to bottom, rgba(0,0,32,.7) 2px, rgba(0,0,0,.5) 4px),
+  background: repeating-linear-gradient(to right, rgba(0,0,16,.7) 2px, rgba(0,0,0,.5) 4px),
+              repeating-linear-gradient(to bottom, rgba(0,0,32,.7) 2px, rgba(0,0,0,.8) 4px),
               url(images/tile.png) #001;
   background-size: 100% 4px, 4px 100%, 171px 148px;
 }
@@ -74,8 +74,8 @@ a:active {
   border: var(--innerborder);
   box-shadow: var(--highlight), 0 0 0 4px #225, 0 0 0 5px #000;
   background: #000;
-  background: repeating-linear-gradient(to bottom, rgba(0,0,80,.4) 2px, rgba(0,0,0,.4) 4px);
-  background-size: 4px 100%;
+  background: repeating-linear-gradient(to bottom, rgba(0,0,24,.4) 2px, rgba(0,0,8,.4) 4px), linear-gradient(to bottom, #0a0a1a, #040414);
+  background-size: 4px 100%, 100%;
 }
 
 .iframed .logo {
@@ -86,11 +86,17 @@ a:active {
   margin: -8px -5px -3px;
   width: 177px;
   opacity: .7;
+  filter: sepia(1) hue-rotate(180deg);
 }
 
 .logo a img:hover {
-  opacity: 1;
-  filter: drop-shadow(0 0 3px #652787);
+  opacity: 95;
+  filter: drop-shadow(0 0 1px #652787);
+}
+
+.logo a img:active {
+  transform: scale(.95);
+  opacity: .7;
 }
 
 div.logo hr {
@@ -131,7 +137,6 @@ div.logo hr {
 
 .formaction {
   text-align: right;
-
 }
 
 button, select {
@@ -201,7 +206,7 @@ button.go:active, button.accept:active {
 
 .warning {
   margin: 24px 26px 24px 260px;
-  padding: 14px 40px 40px 100px;
+  padding: 14px 40px 40px 120px;
   min-width: 300px;
   text-align: left;
   word-wrap: break-word;
@@ -214,8 +219,8 @@ button.go:active, button.accept:active {
   border-image-width: 5px;
   border-image-outset: 1px;
   box-shadow: inset 0 0 0 1px #44175f, inset 0 0 3px 3px #000, 0 0 0 2px #26235c, 0 0 0 3px #000, 0 0 0 6px #115, 0 0 0 7px #000;
-  background: url(/themes/console/images/itoopie_sm.png) 20px center no-repeat, repeating-linear-gradient(to bottom, #000, #002 2px);
-  background-position: 20px calc(50% + 16px), center center;
+  background: url(/themes/console/images/itoopie_sm.png) no-repeat, repeating-linear-gradient(to bottom, #000, #002 2px);
+  background-position: 30px calc(50% + 16px), center center;
   background-size: auto 130px, 100% 4px;
 }
 
@@ -249,9 +254,11 @@ button.go:active, button.accept:active {
 }
 
 .warning h3 {
-  margin: -13px -39px 25px -99px;
+  margin: -13px -39px 25px -119px;
   padding: 12px 16px;
+  letter-spacing: .1em;
   text-align: left;
+  text-transform: uppercase;
   font-size: 120%;
   border: none;
   border-bottom: 1px solid #44175f;
@@ -284,15 +291,16 @@ button.go:active, button.accept:active {
 }
 
 #jumplinks a {
-  padding: 2px 30px;
+  padding: 4px 0;
   display: inline-block;
   line-height: 2;
 }
 
 #jumplinks a::before {
+  margin: -3px 0 0 10px;
   padding: 4px 5px 4px 0;
   display: inline-block;
-  vertical-align: sub;
+  vertical-align: middle;
   line-height: 16px;
   font-size: 200%;
   content: "\279F\00A0";
@@ -376,6 +384,10 @@ hr {
 
 .proxyfooter {
   display: none;
+}
+
+#proxyrequest {
+  padding: 5px 10px;
 }
 
 @media screen and (max-width: 799px) {
