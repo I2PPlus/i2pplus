@@ -148,6 +148,7 @@ a:hover, a:focus, .snarkConfigTitle a:hover, .toggleview:hover, .trackerName a:v
 }
 
 input[type=submit], a.control, select {
+	font-size: 105%;
 	text-shadow: 0 1px 1px #fff;
 }
 
@@ -2584,9 +2585,30 @@ td.snarkGraphicStatus {
 }
 
 #configs .suboption {
-	text-align: left;
-	border: 1px solid #999;
 	padding: 6px 10px;
+	text-align: left;
+	font-size: 11pt;
+	border: 1px solid #999;
+}
+
+#configs .suboption::before {
+	width: 24px;
+	height: 18px;
+	display: inline-block;
+	vertical-align: middle;
+	background: url(images/nopeers.svg) left center no-repeat;
+	background-size: auto 18px;
+	content: "";
+}
+
+#configs .suboption a {
+	margin-top: 4px;
+	font-size: 70%;
+	vertical-align: middle;
+}
+
+#configs .optionList {
+	margin: 4px 8px;
 }
 
 #configs input {
