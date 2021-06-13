@@ -139,10 +139,9 @@ class BuildReplyHandler {
             byte iv[] = new byte[12];
             for (int j = start; j >= end; j--) {
                 byte[] replyKey = cfg.getChaChaReplyKey(j).getData();
-                if (log.shouldDebug()) {
-                    log.debug(reply.getUniqueId() + ": Decrypting ChaCha record " + recordNum + "/" + hop + "/" + j + " with replyKey " 
+                if (log.shouldDebug())
+                    log.debug(reply.getUniqueId() + ": Decrypting ChaCha record " + recordNum + "/" + hop + "/" + j + " with replyKey "
                               + Base64.encode(replyKey) + " : " + cfg);
-                }
                 // slot number, little endian
                 iv[0] = (byte) recordNum;
                 ChaCha20.encrypt(replyKey, iv, data, 0, data, 0, ShortEncryptedBuildRecord.LENGTH);
@@ -152,7 +151,7 @@ class BuildReplyHandler {
                 SessionKey replyKey = cfg.getAESReplyKey(j);
                 byte replyIV[] = cfg.getAESReplyIV(j);
                 if (log.shouldDebug()) {
-                    log.debug(reply.getUniqueId() + ": Decrypting AES record " + recordNum + "/" + hop + "/" + j + " with replyKey " 
+                    log.debug(reply.getUniqueId() + ": Decrypting AES record " + recordNum + "/" + hop + "/" + j + " with replyKey "
                               + replyKey.toBase64() + "/" + Base64.encode(replyIV) + ": " + cfg);
                     //log.debug(reply.getUniqueId() + ": before decrypt: " + Base64.encode(data));
                     //log.debug(reply.getUniqueId() + ": Full reply rec: sz=" + data.length + " data=" + Base64.encode(data));
@@ -160,6 +159,7 @@ class BuildReplyHandler {
                 ctx.aes().decrypt(data, 0, data, 0, replyKey, replyIV, 0, data.length);
                 //if (log.shouldDebug()) {
                 //    log.debug("[" + reply.getUniqueId() + "] After decrypt: " + Base64.encode(data));
+            }
         }
         // ok, all of the layered encryption is stripped, so let's verify it
         // (formatted per BuildResponseRecord.create)
