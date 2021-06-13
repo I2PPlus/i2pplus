@@ -46,6 +46,8 @@ body {
 	padding: 5px 5px 0;
 	min-width: 800px;
 	color: #555;
+	background: var(--b_snark_hover), var(--b_snark_active), var(--b_tracker_hover), var(--b_tracker_active), var(--b_forum_hover), var(--b_forum_active);
+	background-size: 0;
 }
 
 body.iframed {
