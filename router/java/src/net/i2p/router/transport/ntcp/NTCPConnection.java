@@ -1198,7 +1198,7 @@ public class NTCPConnection implements Closeable {
 
 //    private static final int MAX_HANDLERS = 8;
     private static final int MAX_HANDLERS = (SystemVersion.isSlow() || SystemVersion.getCores() <= 4 ||
-                                             SystemVersion.getMaxMemory() < 512*1024*1024) ? 4 : 6;
+                                             SystemVersion.getMaxMemory() < 512*1024*1024) ? 4 : 8;
 
     /**
      *  FIXME static queue mixes handlers from different contexts in multirouter JVM
