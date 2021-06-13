@@ -262,7 +262,7 @@ table {
 
 #warning h4::after {
   margin: 15px -15px -15px;
-  width: 100%;
+  width: calc(100% + 30px);
   height: 1px;
   display: inline-block;
   background: #131;
@@ -317,11 +317,12 @@ table {
 }
 
 #jumplinks a::before {
+  margin-right: 4px;
   padding: 3px 0;
   display: inline-block;
   vertical-align: sub;
   line-height: 16px;
-  font-size: 16pt;
+  font-size: 20pt;
   content: "\279F\00A0";
 }
 
