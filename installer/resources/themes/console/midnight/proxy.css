@@ -26,6 +26,7 @@ html, body {
 
 html {
     margin: 0;
+    scrollbar-color: #225 #001;
 }
 
 html {
@@ -208,6 +209,7 @@ button.go:active, button.accept:active {
   margin: 24px 26px 24px 260px;
   padding: 14px 40px 40px 120px;
   min-width: 300px;
+  position: relative;
   text-align: left;
   word-wrap: break-word;
   color: #c9ceff;
@@ -222,6 +224,7 @@ button.go:active, button.accept:active {
   background: url(/themes/console/images/itoopie_sm.png) no-repeat, repeating-linear-gradient(to bottom, #000, #002 2px);
   background-position: 30px calc(50% + 16px), center center;
   background-size: auto 130px, 100% 4px;
+  min-height: 180px;
 }
 
 .iframed .warning, #servletError .iframed #warning2 {
@@ -262,6 +265,7 @@ button.go:active, button.accept:active {
   font-size: 120%;
   border: none;
   border-bottom: 1px solid #44175f;
+  background: linear-gradient(to bottom, #001 50%, #000 50%);
 }
 
 .warning h4 {
@@ -290,6 +294,11 @@ button.go:active, button.accept:active {
   display: none !important;
 }
 
+#denied {
+  position: absolute;
+  top: calc(50% - 12px);
+}
+
 #jumplinks a {
   padding: 4px 0;
   display: inline-block;
@@ -306,51 +315,8 @@ button.go:active, button.accept:active {
   content: "\279F\00A0";
 }
 
-#proxyNewAddressHelper .warning {
-  padding-bottom: 0 !important;
-}
-
-#proxyNewHost {
-  margin-bottom: 30px;
-  border-collapse: collapse;
-}
-
-#proxyNewHost td {
-  padding: 8px;
-}
-
-#proxyNewHost td:first-child {
-  font-weight: 700;
-}
-
-#proxyNewHost tr:last-child td:first-child {
-  vertical-align: top;
-}
-
-#proxyNewHost textarea {
-  margin: 0 !important;
-  padding: 0 !important;
-  height: 6em;
-  width: 100% !important;
-  overflow: auto;
-  white-space: pre-wrap;
-  word-break: break-all;
-  border: none;
-  box-shadow: none !important;
-  background: none !important;
-  resize: none;
-}
-
-#proxyNewHost textarea:focus {
-  filter: none;
-}
-
-#proxyNewHost + hr {
-  display: none;
-}
-
 hr {
-  margin: 20px 0 10px;
+  margin: 20px 0;
   height: 1px;
   border: none;
   background: rgba(38, 35, 92,.7);
@@ -390,6 +356,75 @@ hr {
   padding: 5px 10px;
 }
 
+#proxyNewAddressHelper .warning {
+  padding-bottom: 25px;
+}
+
+#proxyNewAddressHelper hr {
+  margin-left: -6px;
+  margin-right: -6px;
+}
+
+#proxyNewHost {
+  border-collapse: collapse;
+}
+
+#proxyNewHost td {
+  padding: 8px;
+}
+
+#proxyNewHost td:first-child {
+  font-weight: 700;
+}
+
+#proxyNewHost tr:last-child td:first-child {
+  vertical-align: top;
+}
+
+#proxyNewHost textarea {
+  margin: 0 !important;
+  padding: 0 !important;
+  height: 6em;
+  width: 100% !important;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+  border: none;
+  box-shadow: none !important;
+  background: none !important;
+  resize: none;
+}
+
+#proxyNewHost textarea:focus {
+  filter: none;
+}
+
+#proxyNewHost + hr {
+  display: none;
+}
+
+.option {
+  padding: 10px 20px 0;
+  border: 1px solid #225;
+  box-shadow: 0 0 0 1px #000, 0 0 0 5px #225, 0 0 0 6px #000;
+  background: linear-gradient(to bottom, #113, #002);
+}
+
+.warning .option h4 {
+  margin-bottom: 20px;
+}
+
+.option p {
+  margin: 5px 20px;
+}
+
+.option .formaction {
+  margin: 20px -20px 0 !important;
+  padding: 12px 10px !important;
+  border-top: 1px solid #225;
+  background: #002;
+}
+
 @media screen and (max-width: 799px) {
   body {
     font-size: 10pt;
@@ -417,10 +452,16 @@ hr {
     background: #000 !important;
  }
 
- .warning h3 {
-   margin: -10px -40px 10px -25px;
-   padding: 7px 14px;
- }
+  .warning h3 {
+    margin: -10px -40px 10px -25px;
+    padding: 7px 14px;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  #proxyNewAddressHelper .logo {
+    display: none;
+  }
 }
 
 @media screen and (min-width: 800px) {

@@ -326,30 +326,6 @@ table {
   content: "\279F\00A0";
 }
 
-#proxyNewAddressHelper .proxyfooter {
-  display: none;
-}
-
-#proxyNewAddressHelper #warning {
-  padding-bottom: 0 !important;
-}
-
-#proxyNewHost {
-  margin: 20px auto;
-  border-collapse: collapse;
-}
-
-#proxyNewHost td {
-  padding: 8px !important;
-  font-size: 10pt !important;
-  border: 1px solid #131;
-  background: #000;
-}
-
-#proxyNewHost td:first-child {
-  font-weight: 700;
-}
-
 #b64, #key {
   white-space: pre-wrap;
   word-break: break-all;
@@ -366,19 +342,10 @@ table {
   background: #000;
 }
 
-#proxyNewHost + hr {
-  display: none;
-}
-
 #warning h4 {
   text-align: left;
   font-size: 10pt;
   box-shadow: none !important;
-}
-
-#proxyNewHost a {
-  display: inline-block;
-  word-break: break-all;
 }
 
 #warning p + .formaction {
@@ -388,6 +355,66 @@ table {
 #denied {
   padding: 30px 0;
   font-weight: 700;
+}
+
+#proxyNewAddressHelper .proxyfooter {
+  display: none;
+}
+
+#proxyNewHost {
+  margin: 20px auto -6px;
+  border-collapse: collapse;
+}
+
+#proxyNewHost + hr {
+  display: none;
+}
+
+#proxyNewHost td {
+  padding: 8px !important;
+  font-size: 10pt !important;
+  border: 1px solid #131;
+  background: #000;
+}
+
+#proxyNewHost td:first-child {
+  font-weight: 700;
+}
+
+#proxyNewHost a {
+  display: inline-block;
+  word-break: break-all;
+}
+
+#proxyNewAddressHelper #warning {
+  padding-bottom: 16px;
+}
+
+#proxyNewAddressHelper #warning hr {
+  margin-left: -6px !important;
+  margin-right: -6px !important;
+}
+
+.option {
+  padding: 10px 20px 0;
+  border: 1px solid #252;
+  box-shadow: 0 0 0 1px #000, 0 0 0 5px #141, 0 0 0 6px #000;
+  background: linear-gradient(to bottom, rgba(0,32,0,.5), rgba(0,16,0,.5));
+}
+
+#warning .option h4 {
+  margin-bottom: 24px;
+}
+
+#warning .option p {
+  margin: 5px 20px;
+}
+
+.option .formaction {
+  margin: 20px -20px 0 !important;
+  padding: 12px 10px !important;
+  border-top: 1px solid #252;
+  background: #010;
 }
 
 @keyframes fade {
