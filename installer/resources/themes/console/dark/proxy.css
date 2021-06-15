@@ -273,7 +273,7 @@ table {
   margin-top: -10px;
 }
 
-#warning h4 + p {
+#warning h4 + p, #warning br + b {
   padding-left: 20px;
   padding-right: 20px;
 }
