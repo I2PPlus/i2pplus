@@ -1510,7 +1510,9 @@ thead a img:hover {
 	padding: 5px;
 	max-height: 14px !important;
 	vertical-align: middle;
+	border: 1px solid #666;
 	border-radius: 0;
+	opacity: .7;
 }
 
 td.snarkTorrentAction input[type="image"] {
@@ -1520,6 +1522,7 @@ td.snarkTorrentAction input[type="image"] {
 .snarkTorrentAction input[type="image"]:hover {
 	border: 1px solid #b23;
 	background: linear-gradient(to bottom, #fff 50%, #eee 50%);
+	opacity: 1;
 	filter: none;
 }
 
