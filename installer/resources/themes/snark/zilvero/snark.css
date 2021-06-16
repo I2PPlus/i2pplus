@@ -307,10 +307,6 @@ th img {
 	padding: 4px 5px;
 }
 
-.snarkFileStatus {
-	text-align: center;
-}
-
 .snarkConfigTitle img {
 	display: none;
 }
@@ -342,6 +338,10 @@ th img {
 .snarkTorrentOdd, .snarkTorrentInfo tr:nth-child(odd), #trackerselect tr:nth-child(2n+2), .knownTracker:nth-child(odd),
 #mediaContainer th, .snarkCommentInfo tr:first-child {
 	background: #fafafa;
+}
+
+#trackers td {
+	border-top: 1px solid #999;
 }
 
 .peerinfo td {
@@ -1555,7 +1555,7 @@ td.snarkTorrentAction input[type="image"] {
 }
 
 .snarkTorrentInfo img {
-	max-height: 16px;
+	max-height: 16px !important;
 	vertical-align: text-top;
 	filter: saturate(0);
 }
@@ -1609,6 +1609,7 @@ td.snarkTorrentAction input[type="image"] {
 }
 
 .snarkFileStatus {
+	min-width: 40px;
 	text-align: center !important;
 }
 
@@ -2619,6 +2620,13 @@ input[name="i2cpOpts"], input[name="nofilter_dataDir"] {
 	width: calc(100% - 220px);
 }
 
+.snarkTorrents td:empty, .snarkTorrents th:empty, .snarkTorrentStatus {
+	padding: 3px !important;
+	width: 0 !important;
+	min-width: 0;
+	font-size: 0;
+}
+
 @media screen and (max-width: 1000px) {
 	input[name="i2cpOpts"], input[name="nofilter_dataDir"] {
 		width: 436px;
@@ -2649,13 +2657,6 @@ input[name="i2cpOpts"], input[name="nofilter_dataDir"] {
 		background-size: 24px auto !important;
 	}
 
-	.snarkTorrents td:empty, .snarkTorrents th:empty, .snarkTorrentStatus {
-		padding: 0 !important;
-		width: 0 !important;
-		min-width: 0;
-		font-size: 0;
-	}
-
 	.snarkTorrentStatus b, .snarkTorrentStatus b.alwaysShow	{
 		display: none !important;
 	}
@@ -2673,7 +2674,7 @@ input[name="i2cpOpts"], input[name="nofilter_dataDir"] {
 		text-align: center;
 		position: relative;
 		line-height: 1;
-		font-size: 95% !important;
+		font-size: 8.5pt !important;
 		color: #eee;
 		text-shadow: 0 1px 1px #111;
 		border-radius: 2px;
@@ -2761,5 +2762,12 @@ input[name="i2cpOpts"], input[name="nofilter_dataDir"] {
 	.trackerhome, .trackerannounce, .knowntracker a {
 		width: 400px !important;
 		max-width: 400px !important;
+	}
+
+	.snarkTorrents td:empty, .snarkTorrents th:empty, .snarkTorrentStatus {
+		padding: 5px !important;
+		width: 0 !important;
+		min-width: 0;
+		font-size: 0;
 	}
 }
