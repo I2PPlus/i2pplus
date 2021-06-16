@@ -278,6 +278,10 @@ table {
   padding-right: 20px;
 }
 
+#warning br + b {
+  margin-top: 10px;
+}
+
 #warning hr {
   margin: 20px 0 !important;
 }
