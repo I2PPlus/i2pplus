@@ -955,13 +955,16 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
             // Long URLs are handled in CSS
             out.write(decodeIDNURI(uri));
             out.write("</a>");
+            String pName = wwwProxy.toString();
+            if (wwwProxy.length() > 30)
+                pName = wwwProxy.substring(0,30) + "&hellip;";
             if (usingWWWProxy) {
                 out.write("<hr><span id=\"outproxy\"><b>");
                 out.write(_t("HTTP Outproxy"));
-                out.write(":</b> <span id=\"outproxydest\">" + wwwProxy + "</span></span><br><br>");
+                out.write(":</b> <span id=\"outproxydest\">" + pName + "</span></span><br><br>");
             }
             if (extraMessage != null) {
-                out.write("<br><b>" + DataHelper.escapeHTML(extraMessage) + "</b><br><br>");
+                out.write("<br><b id=\"extraMsg\">" + DataHelper.escapeHTML(extraMessage) + "</b><br><br>");
             }
             if (jumpServers != null && jumpServers.length() > 0) {
                 boolean first = true;
