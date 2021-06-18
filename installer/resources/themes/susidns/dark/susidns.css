@@ -5,6 +5,7 @@
 @import url(/themes/console/dark/optbox.css);
 @import url(/themes/console/dark/chromescroll.css);
 @import url(/themes/console/images/images.css);
+@import url(/themes/console/dark/images/images.css);
 
 :root {
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
@@ -413,7 +414,8 @@ div#messages:hover {
   padding: 15px 15px 15px 50px !important;
   color: #ee9;
   border-radius: 0;
-  background: url(/themes/console/dark/images/infohelp.png) 6px center no-repeat;
+  background: car(--infohelp) 6px center no-repeat;
+  background-size: 32px;
 }
 
 #messages + p, p.book {
@@ -599,7 +601,7 @@ li {
 
 #helpsubs {
   padding: 15px 0 10px 40px;
-  background: url(/themes/console/dark/images/infohelp.png) 15px center no-repeat, repeating-linear-gradient(to right, #000 2px, #010 4px) !important;
+  background: var(--infohelp) 15px center no-repeat, repeating-linear-gradient(to right, #000 2px, #010 4px) !important;
   background-size: 32px, 4px 100% !important;
 }
 
