@@ -4343,6 +4343,14 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 
 .buttonTop img, .buttonBottom img, .buttonUp img, .buttonDown img {
   opacity: 0;
+  height: 0;
+  width: 0;
+}
+
+.buttonTop, .buttonBottom, .buttonUp, .buttonDown {
+  box-sizing: border-box;
+  height: 26px;
+  width: 26px;
 }
 
 .buttonTop {
