@@ -1496,13 +1496,17 @@ td.snarkTrackerDetails a:active {
 	display: inline-block;
 }
 
-.snarkTorrentAction input[type="image"], thead img {
+.snarkTorrentAction input[type="image"] {
 	font-size: 0;
 	filter: saturate(0);
 }
 
+thead img {
+	font-size: 0;
+}
+
 thead a img:hover {
-	filter: saturate(0) drop-shadow(0 0 1px #b32);
+	filter: drop-shadow(0 0 1px #b23) drop-shadow(0 0 1px #b23);
 }
 
 .snarkTorrentAction input[type="image"] {
