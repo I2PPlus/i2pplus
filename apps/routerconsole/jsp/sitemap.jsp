@@ -439,14 +439,14 @@
 
 <a href="/help/legal">
 <span class="sitemapLink" title="<%=intl._t("Licensing and copyright notices")%>">
-<img src="/themes/console/images/info/legal.png">
+<img src="/themes/console/images/svg/legal.svg">
 <span class="sitemapLabel"><%=intl._t("Legal")%></span>
 </span>
 </a>
 
 <a href="/help/newusers">
 <span class="sitemapLink" title="<%=intl._t("Information for new users")%>">
-<img src="/themes/console/images/info/notice.png">
+<img src="/themes/console/images/svg/help.svg">
 <span class="sitemapLabel"><%=intl._t("New Users")%></span>
 </span>
 </a>
@@ -460,14 +460,14 @@
 
 <a href="/help/troubleshoot">
 <span class="sitemapLink" title="<%=intl._t("What to do in the event I2P isn't working")%>">
-<img src="/themes/console/images/wrench_orange.png">
+<img src="/themes/console/images/svg/wrench.svg">
 <span class="sitemapLabel"><%=intl._t("Troubleshooting")%></span>
 </span>
 </a>
 
 <a href="/help/tunnelfilter">
 <span class="sitemapLink" title="<%=intl._t("Introduction to tunnel filters")%>">
-<img src="/themes/console/images/info/filter.png">
+<img src="/themes/console/images/svg/filter.svg">
 <span class="sitemapLabel"><%=intl._t("Tunnel Filters")%></span>
 </span>
 </a>

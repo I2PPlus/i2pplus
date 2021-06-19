@@ -167,7 +167,8 @@ public class Banlist {
         }
         if (peer.equals(_context.routerHash())) {
             if (_log.shouldWarn())
-                _log.warn("not banning us", new Exception());
+//                _log.warn("Not banning our own router!", new Exception());
+                _log.warn("Not banning our own router!");
             return false;
         }
         boolean wasAlready = false;

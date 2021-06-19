@@ -1359,7 +1359,7 @@ div.messages {
   background-size: 28px, 100% 4px, auto 93%, 100%;
 }
 
-.main:not(#config_update) div.messages, #config_update #messages {
+.main:not(#config_update):not(#graphs) div.messages, #config_update #messages {
   margin-left: -11px;
   margin-right: -11px;
   width: calc(100% - 60px);
@@ -4343,6 +4343,14 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 
 .buttonTop img, .buttonBottom img, .buttonUp img, .buttonDown img {
   opacity: 0;
+  height: 0;
+  width: 0;
+}
+
+.buttonTop, .buttonBottom, .buttonUp, .buttonDown {
+  box-sizing: border-box;
+  height: 26px;
+  width: 26px;
 }
 
 .buttonTop {
