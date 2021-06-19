@@ -68,7 +68,7 @@ class TestJob extends JobImpl {
         long lag = ctx.jobQueue().getMaxLag();
         if (lag > 300) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Deferred test due to job lag (" + lag + "ms)" + _cfg);
+                _log.warn("Deferred test due to job lag (" + lag + "ms) -> " + _cfg);
             ctx.statManager().addRateData("tunnel.testAborted", _cfg.getLength());
             scheduleRetest();
             return;
