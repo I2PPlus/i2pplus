@@ -460,7 +460,7 @@
 
 <a href="/help/troubleshoot">
 <span class="sitemapLink" title="<%=intl._t("What to do in the event I2P isn't working")%>">
-<img src="/themes/console/svg/wrench.svg">
+<img src="/themes/console/images/svg/wrench.svg">
 <span class="sitemapLabel"><%=intl._t("Troubleshooting")%></span>
 </span>
 </a>
