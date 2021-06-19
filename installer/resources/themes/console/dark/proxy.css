@@ -295,6 +295,11 @@ table {
   padding: 20px 10px 15px;
 }
 
+#outproxy {
+  padding: 5px 15px;
+  display: inline-block;
+}
+
 #warning_localhost + .proxyfooter {
   display: none !important;
 }
@@ -420,6 +425,8 @@ table {
   border-top: 1px solid #252;
   background: #010;
 }
+
+
 
 @keyframes fade {
   from {opacity: 0}

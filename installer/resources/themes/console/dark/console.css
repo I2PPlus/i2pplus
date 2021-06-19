@@ -1359,7 +1359,7 @@ div.messages {
   background-size: 28px, 100% 4px, auto 93%, 100%;
 }
 
-.main:not(#config_update) div.messages, #config_update #messages {
+.main:not(#config_update):not(#graphs) div.messages, #config_update #messages {
   margin-left: -11px;
   margin-right: -11px;
   width: calc(100% - 60px);
