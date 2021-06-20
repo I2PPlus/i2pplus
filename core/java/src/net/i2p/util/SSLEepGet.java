@@ -262,12 +262,12 @@ public class SSLEepGet extends EepGet {
         if (_sslContext == null)
             _log.error("Failed to initialize custom SSL context, using default context");
     }
-   
+
     /**
      * SSLEepGet https://foo/bar
      *   or to save cert chain:
      * SSLEepGet -s https://foo/bar
-     */ 
+     */
     public static void main(String args[]) {
         int saveCerts = 0;
         boolean noVerify = false;
@@ -370,7 +370,7 @@ public class SSLEepGet extends EepGet {
         if(!get.fetch(45*1000, -1, 60*1000))
             System.exit(1);
     }
-    
+
     private static void usage() {
         System.err.println("Usage: SSLEepGet [-dpsyz] https://url\n" +
                            "  -d use DNSOverHTTPS\n" +
@@ -489,7 +489,7 @@ public class SSLEepGet extends EepGet {
         }
         return null;
     }
-    
+
     /**
      *  From http://blogs.sun.com/andreas/resource/InstallCert.java
      *  This just saves the certificate chain for later inspection.
@@ -585,7 +585,7 @@ public class SSLEepGet extends EepGet {
         readHeaders();
         if (_aborted)
             throw new IOException("Timed out reading the HTTP headers");
-        
+
         // _proxy is the socket, even if not proxied.
         // We never use the timeout inactivity timer; only socket SoTimeout.
         if (timeout != null) {
@@ -596,7 +596,7 @@ public class SSLEepGet extends EepGet {
                 timeout.cancel();
                 timeout = null;
             }
-        }        
+        }
         if (_fetchInactivityTimeout > 0)
             _proxy.setSoTimeout(_fetchInactivityTimeout);
         else
@@ -625,10 +625,10 @@ public class SSLEepGet extends EepGet {
             doFetch(timeout);
             return;
         }
-        
+
         if (_log.shouldLog(Log.DEBUG))
             _log.debug("Headers read completely, reading " + _bytesRemaining);
-        
+
         boolean strictSize = (_bytesRemaining >= 0);
 
         Thread pusher = null;
@@ -681,12 +681,12 @@ public class SSLEepGet extends EepGet {
             if (_bytesRemaining >= read) // else chunked?
                 _bytesRemaining -= read;
             if (read > 0) {
-                for (int i = 0; i < _listeners.size(); i++) 
+                for (int i = 0; i < _listeners.size(); i++)
                     _listeners.get(i).bytesTransferred(
-                            _alreadyTransferred, 
-                            read, 
-                            _bytesTransferred, 
-                            _encodingChunked?-1:_bytesRemaining, 
+                            _alreadyTransferred,
+                            read,
+                            _bytesTransferred,
+                            _encodingChunked?-1:_bytesRemaining,
                             _url);
                 // This seems necessary to properly resume a partial download into a stream,
                 // as nothing else increments _alreadyTransferred, and there's no file length to check.
@@ -694,11 +694,11 @@ public class SSLEepGet extends EepGet {
                 _alreadyTransferred += read;
             }
         }
-            
+
         if (_out != null)
             _out.close();
         _out = null;
-        
+
         if (_isGzippedResponse) {
             try {
                 pusher.join();
@@ -713,25 +713,25 @@ public class SSLEepGet extends EepGet {
 
         if (_aborted)
             throw new IOException("Timed out reading the HTTP data");
-        
+
         if (timeout != null)
             timeout.cancel();
-        
+
         if (_transferFailed) {
             // 404, etc - transferFailed is called after all attempts fail, by fetch() above
-            for (int i = 0; i < _listeners.size(); i++) 
+            for (int i = 0; i < _listeners.size(); i++)
                 _listeners.get(i).attemptFailed(_url, _bytesTransferred, _bytesRemaining, _currentAttempt, _numRetries, new Exception("Attempt failed"));
         } else if ( (_bytesRemaining == -1) || (remaining == 0) ) {
-            for (int i = 0; i < _listeners.size(); i++) 
+            for (int i = 0; i < _listeners.size(); i++)
                 _listeners.get(i).transferComplete(
-                        _alreadyTransferred, 
-                        _bytesTransferred, 
-                        _encodingChunked?-1:_bytesRemaining, 
-                        _url, 
-                        _outputFile, 
+                        _alreadyTransferred,
+                        _bytesTransferred,
+                        _encodingChunked?-1:_bytesRemaining,
+                        _url,
+                        _outputFile,
                         _notModified);
         } else {
-            throw new IOException("Disconnection on attempt " + _currentAttempt + " after " + _bytesTransferred);
+            throw new IOException("Disconnection on attempt " + (_currentAttempt + 1) + " after " + _bytesTransferred);
         }
     }
 
@@ -878,7 +878,7 @@ public class SSLEepGet extends EepGet {
 
         _proxyIn = _proxy.getInputStream();
         _proxyOut = _proxy.getOutputStream();
-        
+
         // This is where the cert errors happen
         try {
             _proxyOut.write(DataHelper.getUTF8(req));
@@ -900,7 +900,7 @@ public class SSLEepGet extends EepGet {
         }
 
         _proxyIn = new BufferedInputStream(_proxyIn);
-        
+
         if (_log.shouldLog(Log.DEBUG))
             _log.debug("Request flushed");
     }
