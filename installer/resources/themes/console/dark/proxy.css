@@ -442,6 +442,12 @@ table {
   to {opacity: 1}
 }
 
+@media screen and (max-width: 1500px) {
+  #proxyNewAddressHelper #warning {
+    background-position: 40px 120px, left top, left top;
+  }
+}
+
 @media screen and (max-width: 800px) {
   #warning {
     margin-left: 20px !important;
