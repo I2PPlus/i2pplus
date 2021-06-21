@@ -366,12 +366,13 @@ table {
   font-weight: 700;
 }
 
-#proxyNewAddressHelper .proxyfooter {
+#proxyNewAddressHelper .proxyfooter, #proxyNewAddressHelper .logo {
   display: none;
 }
 
 #proxyNewHost {
-  margin: 20px auto -6px;
+  margin: 20px auto -6px 100px;
+  width: calc(100% - 95px);
   border-collapse: collapse;
 }
 
@@ -396,12 +397,22 @@ table {
 }
 
 #proxyNewAddressHelper #warning {
-  padding-bottom: 16px;
+  margin: 30px 20px;
+  padding: 10px 30px 16px;
+  background-position: 40px 100px, left top, left top;
+}
+
+#proxyNewAddressHelper #warning h3 {
+  margin-left: -29px;
 }
 
 #proxyNewAddressHelper #warning hr {
   margin-left: -6px !important;
   margin-right: -6px !important;
+}
+
+#proxyNewAddressHelper #warning h3 + p, #proxyNewAddressHelper #proxyNewHost {
+  margin-left: 100px;
 }
 
 .option {
@@ -412,7 +423,7 @@ table {
 }
 
 #warning .option h4 {
-  margin-bottom: 24px;
+  margin: 5px 15px 24px;
 }
 
 #warning .option p {
@@ -426,11 +437,15 @@ table {
   background: #010;
 }
 
-
-
 @keyframes fade {
   from {opacity: 0}
   to {opacity: 1}
+}
+
+@media screen and (max-width: 1500px) {
+  #proxyNewAddressHelper #warning {
+    background-position: 40px 120px, left top, left top;
+  }
 }
 
 @media screen and (max-width: 800px) {
@@ -438,7 +453,22 @@ table {
     margin-left: 20px !important;
     margin-top: 140px !important;
     padding: 5px 20px 15px !important;
-    background: repeating-linear-gradient(to bottom, rgba(0,0,0,.8) 1px, rgba(0,0,0,.8) 2px, rgba(0,32,0,.8) 3px), url(images/camotile2.png) !important;
+    background: repeating-linear-gradient(to bottom, rgba(0,0,0,.8) 2px, rgba(0,32,0,.8) 4px), url(images/camotile2.png) !important;
+    background-size: 100% 4px, auto !important;
+  }
+
+  #proxyNewAddressHelper #warning {
+    margin-top: 30px !important;
+    padding-bottom: 5px !important;
+  }
+
+  #proxyNewAddressHelper #warning h3 + p, #proxyNewAddressHelper #proxyNewHost {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  #proxyNewHost {
+    width: 100%;
   }
 
   #proxyerror #warning {
