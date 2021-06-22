@@ -58,6 +58,7 @@ Java14:
 #    - ./installer/resources/makegeoip.sh
 #    - ant pkg // izpack fail
     - ant updater
+    - ant javadoc-zip
 
 Java17:
   stage: build

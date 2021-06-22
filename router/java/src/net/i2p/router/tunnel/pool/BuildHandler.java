@@ -19,7 +19,6 @@ import net.i2p.data.i2np.BuildRequestRecord;
 import net.i2p.data.i2np.BuildResponseRecord;
 import net.i2p.data.i2np.EncryptedBuildRecord;
 import net.i2p.data.i2np.I2NPMessage;
-import net.i2p.data.i2np.InboundTunnelBuildMessage;
 import net.i2p.data.i2np.OutboundTunnelBuildReplyMessage;
 import net.i2p.data.i2np.ShortTunnelBuildMessage;
 import net.i2p.data.i2np.ShortTunnelBuildReplyMessage;
@@ -84,8 +83,8 @@ class BuildHandler implements Runnable {
     /** TODO these may be too high, review and adjust */
 //    private static final int MIN_QUEUE = 18;
 //    private static final int MAX_QUEUE = 192;
-    private static final int MIN_QUEUE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 16 : 32;
-    private static final int MAX_QUEUE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 192 : 512;
+    private static final int MIN_QUEUE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 18 : 36;
+    private static final int MAX_QUEUE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 192 : 384;
 
 //    private static final int NEXT_HOP_LOOKUP_TIMEOUT = 15*1000;
     private static final int NEXT_HOP_LOOKUP_TIMEOUT = 10*1000;
@@ -95,7 +94,8 @@ class BuildHandler implements Runnable {
     private static final int MIN_LOOKUP_LIMIT = 10;
     private static final int MAX_LOOKUP_LIMIT = 100;
     /** limit lookups to this % of current participating tunnels */
-    private static final int PERCENT_LOOKUP_LIMIT = 3;
+//    private static final int PERCENT_LOOKUP_LIMIT = 3;
+    private static final int PERCENT_LOOKUP_LIMIT = 5;
 
     /**
      *  This must be high, as if we timeout the send we remove the tunnel from
@@ -181,7 +181,6 @@ class BuildHandler implements Runnable {
         ctx.inNetMessagePool().registerHandlerJobBuilder(TunnelBuildReplyMessage.MESSAGE_TYPE, tbrmhjb);
         ctx.inNetMessagePool().registerHandlerJobBuilder(VariableTunnelBuildMessage.MESSAGE_TYPE, tbmhjb);
         ctx.inNetMessagePool().registerHandlerJobBuilder(VariableTunnelBuildReplyMessage.MESSAGE_TYPE, tbrmhjb);
-        ctx.inNetMessagePool().registerHandlerJobBuilder(InboundTunnelBuildMessage.MESSAGE_TYPE, tbmhjb);
         ctx.inNetMessagePool().registerHandlerJobBuilder(ShortTunnelBuildMessage.MESSAGE_TYPE, tbmhjb);
         ctx.inNetMessagePool().registerHandlerJobBuilder(OutboundTunnelBuildReplyMessage.MESSAGE_TYPE, tbrmhjb);
     }
@@ -745,21 +744,6 @@ class BuildHandler implements Runnable {
                     _log.warn("Dropping hostile build request, we are the previous hop: " + req);
                 return;
             }
-            if (state.msg.getType() == InboundTunnelBuildMessage.MESSAGE_TYPE) {
-                // can only be at IBGW
-                _context.statManager().addRateData("tunnel.rejectHostile", 1);
-                if (_log.shouldWarn())
-                    _log.warn("Dropping hostile InboundTunnelBuildMessage, -> we are not InboundGateway " + req);
-                return;
-            }
-        } else {
-            if (state.msg.getType() == ShortTunnelBuildMessage.MESSAGE_TYPE) {
-                // cannot be at IBGW
-                _context.statManager().addRateData("tunnel.rejectHostile", 1);
-                if (_log.shouldWarn())
-                    _log.warn("Dropping hostile ShortTunnelBuildMessage -> we are InboundGateway " + req);
-                return;
-            }
         }
         if ((!isOutEnd) && (!isInGW)) {
             // Previous and next hop the same? Don't help somebody be evil. Drop it without a reply.
@@ -999,40 +983,20 @@ class BuildHandler implements Runnable {
                     reply = BuildResponseRecord.createShort(_context, response, req.getChaChaReplyKey(), req.getChaChaReplyAD(), props);
                 }
             } else {
-            reply = BuildResponseRecord.create(_context, response, req.getChaChaReplyKey(), req.getChaChaReplyAD(), props);
+                reply = BuildResponseRecord.create(_context, response, req.getChaChaReplyKey(), req.getChaChaReplyAD(), props);
             }
         } else {
             reply = BuildResponseRecord.create(_context, response, req.readReplyKey(), req.readReplyIV(), state.msg.getUniqueId());
         }
         int records = state.msg.getRecordCount();
         int ourSlot = -1;
-        ShortTunnelBuildMessage stbm = null;
-        if (state.msg.getType() == InboundTunnelBuildMessage.MESSAGE_TYPE) {
-            if (!HANDLE_SHORT) {
-                if (_log.shouldWarn())
-                    _log.warn("Unsupported InboundTunnelBuildMessage");
-                return;
-            }
-            // IBGW only (enforced above)
-            // Create a ShortTunnelBuildMessage and populate it for sending
-            InboundTunnelBuildMessage itbm = (InboundTunnelBuildMessage) state.msg;
-            ourSlot = itbm.getPlaintextSlot();
-            stbm = new ShortTunnelBuildMessage(_context, records);
-            for (int j = 0; j < records; j++) {
-                if (j == ourSlot)
-                    stbm.setRecord(j, reply);
-                else
-                    stbm.setRecord(j, itbm.getRecord(j));
-            }
-        } else {
-            for (int j = 0; j < records; j++) {
-                if (state.msg.getRecord(j) == null) {
-                    ourSlot = j;
-                    if (!(isOutEnd && state.msg.getType() == ShortTunnelBuildMessage.MESSAGE_TYPE))
-                        state.msg.setRecord(j, reply);
-                    // else reply will be sent in plaintext
-                    break;
-                }
+        for (int j = 0; j < records; j++) {
+            if (state.msg.getRecord(j) == null) {
+                ourSlot = j;
+                if (!(isOutEnd && state.msg.getType() == ShortTunnelBuildMessage.MESSAGE_TYPE))
+                    state.msg.setRecord(j, reply);
+                // else reply will be sent in plaintext
+                break;
             }
         }
 
@@ -1043,11 +1007,7 @@ class BuildHandler implements Runnable {
         // now actually send the response
         long expires = now + NEXT_HOP_SEND_TIMEOUT;
         if (!isOutEnd) {
-            TunnelBuildMessage nextMessage;
-            if (stbm != null)
-                nextMessage = stbm;
-            else
-                nextMessage = state.msg;
+            TunnelBuildMessage nextMessage = state.msg;
             nextMessage.setUniqueId(req.readReplyMessageId());
             nextMessage.setMessageExpiration(expires);
             OutNetMessage msg = new OutNetMessage(_context, nextMessage, expires, PRIORITY, nextPeerInfo);

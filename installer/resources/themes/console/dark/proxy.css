@@ -220,7 +220,13 @@ table {
   opacity: 0;
 }
 
-#proxyerror p:first-of-type {
+#proxy_error.misconfigured #warning {
+  padding-top: 40px;
+  padding-bottom: 40px;
+  margin: 40px;
+}
+
+#proxy_error p:first-of-type {
   padding-top: 10px;
 }
 
@@ -252,6 +258,11 @@ table {
   text-transform: uppercase;
   text-shadow: 0 0 2px #010;
   border-bottom: 1px solid #700;
+}
+
+#proxy_error.misconfigured #warning h3 {
+  margin-top: -39px;
+  margin-bottom: 40px
 }
 
 #warning h4 {

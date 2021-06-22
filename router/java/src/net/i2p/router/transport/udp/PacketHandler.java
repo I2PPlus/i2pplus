@@ -48,7 +48,7 @@ class PacketHandler {
     private static final int MIN_NUM_HANDLERS = 1;  // if < 32MB
 //    private static final int MAX_NUM_HANDLERS = 1;
     private static final int MAX_NUM_HANDLERS = (SystemVersion.isSlow() || SystemVersion.getCores() <= 4 ||
-                                                 SystemVersion.getMaxMemory() < 512*1024*1024) ? 4 : 8;
+                                                 SystemVersion.getMaxMemory() < 512*1024*1024) ? 4 : Math.max(SystemVersion.getCores(), 8);
     /**
      *  Let packets be up to this much skewed.
      *  This is the same limit as in InNetMessagePool's MessageValidator.
