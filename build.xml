@@ -1669,19 +1669,6 @@
         <copy todir="pkg-temp/docs/" >
           <fileset dir="installer/resources/readme/" includes="readme*.html" />
           <fileset dir="installer/resources/proxy/" includes="*.ht" />
-          <!--
-               As of 0.9.36:
-               All new and changed flags must go in the flags16x11/ dir,
-               which will be checked first by flags.jsp.
-               The flags/ dir is the original set from famfamfam,
-               which may be symlinked in package installs.
-          -->
-<!-- don't bother updating flags unless and until there are new ones to add -->
-<!--          <fileset dir="installer/resources/" includes="icons/flags16x11/*" /> -->
-          <!-- flags48x48 added in 0.9.32 -->
-          <fileset dir="installer/resources/" includes="icons/flags48x48/*" />
-          <!-- flags_svg added in I2P+ 0.9.47 -->
-          <fileset dir="installer/resources/" includes="icons/flags_svg/*" />
         </copy>
     </target>
 
