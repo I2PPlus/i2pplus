@@ -17,7 +17,7 @@
     <target name="depend" if="depend.available">
         <depend
             cache="../../../build"
-            srcdir="./src" 
+            srcdir="./src"
             destdir="./build/obj" >
             <!-- Depend on classes instead of jars where available -->
             <classpath>
@@ -55,9 +55,9 @@
     <target name="compile" depends="prepare, depend, dependVersion">
         <mkdir dir="./build" />
         <mkdir dir="./build/obj" />
-        <javac 
-            srcdir="./src" 
-            debug="true" deprecation="on" source="${javac.version}" target="${javac.version}" 
+        <javac
+            srcdir="./src"
+            debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
             release="${javac.release}"
             includeAntRuntime="false"
             encoding="UTF-8"
@@ -93,10 +93,10 @@
     <target name="compileNewsOnly" depends="prepare, depend, dependVersion">
         <mkdir dir="./build" />
         <mkdir dir="./build/obj" />
-        <javac 
-            srcdir="./src" 
+        <javac
+            srcdir="./src"
             includes="net/i2p/router/news/*.java"
-            debug="true" deprecation="on" source="${javac.version}" target="${javac.version}" 
+            debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
             release="${javac.release}"
             includeAntRuntime="false"
             encoding="UTF-8"
@@ -140,7 +140,7 @@
         <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_nl_NL.properties" tofile="build/obj/edu/internet2/ndt/locale/Tcpbw100_msgs_nl.properties" />
         <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_pt_BR.properties" tofile="build/obj/edu/internet2/ndt/locale/Tcpbw100_msgs_pt.properties" />
         <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_ru_RU.properties" tofile="build/obj/edu/internet2/ndt/locale/Tcpbw100_msgs_ru.properties" />
-        <jar destfile="./build/routerconsole.jar" basedir="./build/obj" excludes="net/i2p/router/web/helpers/* net/i2p/router/web/servlets/*">
+        <jar destfile="./build/routerconsole.jar" basedir="./build/obj" excludes="net/i2p/router/web/helpers/* net/i2p/router/web/servlets/* net/i2p/router/web/resources/**/*">
             <manifest>
                 <!-- DTG added in 0.8.4, not in the classpath for very old installs, before we changed wrapper.config to specify * -->
                 <!-- very old installs don't have i2psnark,jstl,standard in the classpath... not added in WebAppConfiguration any more -->
@@ -176,11 +176,11 @@
         <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="${require.gettext}" >
             <arg value="./bundle-messages.sh" />
         </exec>
-		<!-- multi-lang is optional -->
+        <!-- multi-lang is optional -->
         <exec executable="sh" osfamily="windows" failifexecutionfails="false" >
             <arg value="./bundle-messages.sh" />
         </exec>
-        <javac source="${javac.version}" target="${javac.version}" 
+        <javac source="${javac.version}" target="${javac.version}"
                release="${javac.release}"
                includeAntRuntime="false"
                encoding="UTF-8"
@@ -239,7 +239,7 @@
         <exec executable="sh" osfamily="windows" failifexecutionfails="false" >
             <arg value="./bundle-messages-news.sh" />
         </exec>
-        <javac source="${javac.version}" target="${javac.version}" 
+        <javac source="${javac.version}" target="${javac.version}"
                release="${javac.release}"
                includeAntRuntime="false"
                encoding="UTF-8"
@@ -260,7 +260,7 @@
         <exec executable="sh" osfamily="windows" failifexecutionfails="false" >
             <arg value="./bundle-messages-countries.sh" />
         </exec>
-        <javac source="${javac.version}" target="${javac.version}" 
+        <javac source="${javac.version}" target="${javac.version}"
                release="${javac.release}"
                includeAntRuntime="false"
                encoding="UTF-8"
@@ -339,6 +339,10 @@
         <!-- set if unset -->
         <property name="workspace.changes.w.tr" value="" />
         <!-- Don't include the css in the war, the main build.xml will copy it to docs/themes/console/ -->
+        <mkdir dir="build/obj/net/i2p/router/web/resources" />
+        <copy todir="build/obj/net/i2p/router/web/resources" >
+            <fileset dir="../resources" />
+        </copy>
         <war destfile="build/routerconsole.war" webxml="../jsp/web-out.xml"
              basedir="../jsp/" excludes="web.xml, *.css, **/*.java, *.jsp, *.jsi, web-fragment.xml, web-out.xml">
             <manifest>
@@ -350,7 +354,7 @@
                 <attribute name="X-Compile-Source-JDK" value="${javac.version}" />
                 <attribute name="X-Compile-Target-JDK" value="${javac.version}" />
             </manifest>
-            <classes dir="./build/obj" includes="net/i2p/router/web/helpers/* net/i2p/router/web/servlets/*" />
+            <classes dir="./build/obj" includes="net/i2p/router/web/helpers/* net/i2p/router/web/servlets/* net/i2p/router/web/resources/**/*" />
         </war>
     </target>
 
@@ -475,12 +479,12 @@
             <arg value="-webapp" />
             <arg value="../jsp/" />
         </java>
-        
-        <javac debug="true" deprecation="on" source="${javac.version}" target="${javac.version}" 
+
+        <javac debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
                release="${javac.release}"
                encoding="UTF-8"
                includeAntRuntime="false"
-               destdir="../jsp/WEB-INF/classes/" 
+               destdir="../jsp/WEB-INF/classes/"
                srcdir="../jsp/WEB-INF/classes" includes="**/*.java">
             <compilerarg line="${javac.compilerargs}" />
             <classpath>
@@ -545,11 +549,11 @@
     <target name="javadoc">
         <mkdir dir="./build" />
         <mkdir dir="./build/javadoc" />
-        <javadoc 
-            sourcepath="./src:../../../core/java/src:../../../router/java/src:../../systray/java/src:../../desktopgui/src" destdir="./build/javadoc" 
-            packagenames="*" 
-            use="true" 
-            splitindex="true" 
+        <javadoc
+            sourcepath="./src:../../../core/java/src:../../../router/java/src:../../systray/java/src:../../desktopgui/src" destdir="./build/javadoc"
+            packagenames="*"
+            use="true"
+            splitindex="true"
             windowtitle="Router Console" />
     </target>
 
