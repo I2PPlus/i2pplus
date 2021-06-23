@@ -916,9 +916,8 @@ h1 + .sorry, #console_404 .sorry {
 
 #error500 #warning2 {
   border: 1px solid #252;
-  background:  linear-gradient(to bottom, rgba(255,255,255,.05), rgba(0,0,0,.4)),
-               repeating-linear-gradient(to bottom, rgba(0,0,0,.4) 2px, rgba(0,48,0,.7) 4px) !important;
-  background-size: 100%, 100% 4px !important;
+  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.7) 2px, rgba(0,32,0,.7) 4px) top left !important;
+  background-size: 100% 4px !important;
 }
 
 #error500 #stacktrace {
