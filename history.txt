@@ -1,3 +1,6 @@
+2021-06-23 dr|z3d
+  * Console: Move svg and 48x48 flags into routerconsole.war
+
 2021-06-22 zzz
  * Tests: Fix duplicate classes in i2ptest.jar
  * Tunnels: Changes for new build messages (Prop. 157)
@@ -32,6 +35,9 @@
    - Fix compare logic in ITBM parser (ticket #2814)
    - Extend use of high cap peers in expl. tunnels at startup, after extended downtime
    - Switch from SHA256 to SipHash for peer ordering
+
+2021-06-01 dr|z3d
+ * Proxy: split proxy-related css into own files
 
 2021-06-01 zzz
  * i2psnark: Fix autostart for magnets
