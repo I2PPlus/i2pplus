@@ -31,11 +31,12 @@ if (c != null && (c.length() == 2 || c.length() == 7) && c.replaceAll("[a-z0-9_]
         ext = ".png";
     }
     java.io.File ffile;
-    long lastmod;
+    long lastmod = 0;
     java.io.InputStream fin = flags_jsp.class.getResourceAsStream("/net/i2p/router/web/resources/icons/" + flagSet + '/' + c + ext);
     if (fin != null) {
         java.io.File war = new java.io.File(net.i2p.I2PAppContext.getGlobalContext().getBaseDir(), "webapps/routerconsole.war");
         ffile = null;
+        lastmod = war.lastModified();
     } else {
         // fallback to flags dir, which will be symlinked to /usr/share/flags/countries/16x11 for package builds
         String base = net.i2p.I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath() +
@@ -48,15 +49,23 @@ if (c != null && (c.length() == 2 || c.length() == 7) && c.replaceAll("[a-z0-9_]
             return;
         } else {
             response.setHeader("Content-Length", Long.toString(length));
+            lastmod = ffile.lastModified();
         }
     }
+    if (lastmod > 0) {
+        long iflast = request.getDateHeader("If-Modified-Since");
+        // iflast is -1 if not present; round down file time
+        if (iflast >= ((lastmod / 1000) * 1000)) {
+            response.setStatus(304);
+            if (fin != null)
+                fin.close();
+            return;
+        }
+        response.setDateHeader("Last-Modified", lastmod);
+    }
     // cache for a month
-    response.setHeader("Cache-Control", "private, max-age=2628000");
+    response.setHeader("Cache-Control", "max-age=2628000, immutable");
     response.setHeader("X-Content-Type-Options", "nosniff");
-    if (ext.equals(".svg"))
-        response.setContentType("image/svg+xml; charset=utf-8");
-    else
-        response.setContentType("image/png");
     if (ext.equals(".svg"))
         response.setContentType("image/svg+xml; charset=utf-8");
     else
