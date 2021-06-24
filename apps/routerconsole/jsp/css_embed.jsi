@@ -50,8 +50,8 @@
    if (uri.contains("override.css"))
        response.setHeader("Cache-Control", "no-store");
    else if (uri.contains(".png") || uri.contains(".svg") || uri.contains(".jpg") || uri.contains(".ttf") ||
-            uri.contains("viewstat") || uri.contains("flags.jsp") || uri.contains(".js"))
-       response.setHeader("Cache-Control", "private, max-age=2628000");
+            uri.contains("flags.jsp") || uri.contains(".js"))
+       response.setHeader("Cache-Control", "private, max-age=2628000, immutable");
    else
        response.setHeader("Cache-Control", "no-cache, private, max-age=2628000");
    String conNonceParam = request.getParameter("consoleNonce");
