@@ -396,13 +396,21 @@ public class ProfileOrganizer {
         getReadLock();
         try {
             for (PeerProfile profile : _failingPeers.values()) {
-                if (profile.getLastSendSuccessful() >= hideBefore)
+                if (profile.getIsActive(60*60*1000))
+                    activePeers++;
+                else if (profile.getLastSendSuccessful() >= hideBefore)
+                    activePeers++;
+                else if (profile.getLastSendFailed() >= hideBefore)
                     activePeers++;
                 else if (profile.getLastHeardFrom() >= hideBefore)
                     activePeers++;
             }
             for (PeerProfile profile : _notFailingPeers.values()) {
-                if (profile.getLastSendSuccessful() >= hideBefore)
+                if (profile.getIsActive(60*60*1000))
+                    activePeers++;
+                else if (profile.getLastSendSuccessful() >= hideBefore)
+                    activePeers++;
+                else if (profile.getLastSendFailed() >= hideBefore)
                     activePeers++;
                 else if (profile.getLastHeardFrom() >= hideBefore)
                     activePeers++;
