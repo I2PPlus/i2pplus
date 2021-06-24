@@ -82,7 +82,7 @@
     if (uri.contains("override.css"))
         response.setHeader("Cache-Control", "no-cache, private, max-age=84600, must-revalidate");
     else if (uri.contains(".png") || uri.contains(".svg") || uri.contains(".jpg") || uri.contains(".ttf") ||
-             uri.contains(uri.contains("flags.jsp") || uri.contains(".js"))
+             uri.contains("flags.jsp") || uri.contains(".js"))
         response.setHeader("Cache-Control", "private, max-age=2628000, immutable");
     else
         response.setHeader("Cache-Control", "no-cache, private, max-age=2628000");
