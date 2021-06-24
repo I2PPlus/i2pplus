@@ -726,10 +726,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 if (_shouldCompress) {
                     CompressedResponseOutputStream compressedOut = new CompressedResponseOutputStream(browserout);
                     compressedOut.write(DataHelper.getUTF8(modifiedHeaders));
-                    s = new Sender(compressedOut, serverin, "server: server to browser compressor", _log);
+                    s = new Sender(compressedOut, serverin, "Server: server to browser compressor", _log);
                 } else {
                     browserout.write(DataHelper.getUTF8(modifiedHeaders));
-                    s = new Sender(browserout, serverin, "server: server to browser uncompressed", _log);
+                    s = new Sender(browserout, serverin, "Server: server to browser uncompressed", _log);
                 }
                 s.run(); // same thread
             } catch (SSLException she) {

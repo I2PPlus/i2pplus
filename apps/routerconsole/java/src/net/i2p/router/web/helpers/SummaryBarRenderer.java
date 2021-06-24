@@ -76,12 +76,16 @@ class SummaryBarRenderer {
 
     private final RouterContext _context;
     private final SummaryHelper _helper;
+    private static final String PROP_ADVANCED = "routerconsole.advanced";
 
     public SummaryBarRenderer(RouterContext context, SummaryHelper helper) {
         _context = context;
         _helper = helper;
     }
 
+    public boolean isAdvanced() {
+        return _context.getBooleanProperty(PROP_ADVANCED);
+    }
 
     /**
      *  Note - ensure all links in here are absolute, as the summary bar may be displayed
@@ -829,17 +833,23 @@ class SummaryBarRenderer {
 
                    "<table id=\"sb_peers\">\n" +
 
-                   "<tr title=\"")
-           .append(_t("Peers we've been talking to in the last few minutes/last hour").replace("last few minutes/last hour", "last 5 minutes"))
-           .append("\">" +
+                   "<tr title=\"");
+        if (isAdvanced())
+            buf.append(_t("Peers we've been talking to in the last few minutes/last hour").replace("last few minutes/last hour", "last minute / last hour"));
+        else {
+           buf.append(_t("Peers we've been talking to in the last few minutes/last hour").replace("last few minutes/last hour", "last minute"));
+        }
+        buf.append("\">" +
                    "<td align=\"left\"><a href=\"/peers\"><b>")
            .append(_t("Active"))
            .append("</b></a></td><td class=\"digits\" align=\"right\">");
         int active = _helper.getActivePeers();
-        buf.append(active)
-//           .append(SummaryHelper.THINSP)
-//           .append(Math.max(active, _helper.getActiveProfiles()))
-           .append("</td></tr>\n" +
+        buf.append(active);
+        if (isAdvanced()) {
+            buf.append(SummaryHelper.THINSP)
+           .append(Math.max(active, _helper.getActiveProfiles()));
+       }
+       buf.append("</td></tr>\n" +
 
                    "<tr title=\"")
            .append(_t("The number of peers available for building client tunnels"))
@@ -913,15 +923,15 @@ class SummaryBarRenderer {
                    "<table id=\"sb_peersadvanced\">\n" +
 
                    "<tr title=\"")
-           .append(_t("Peers we've been talking to in the last few minutes/last hour").replace("last few minutes/last hour", "last 5 minutes"))
+           .append(_t("Peers we've been talking to in the last few minutes/last hour").replace("last few minutes/last hour", "last minute / last hour"))
            .append("\">" +
                    "<td align=\"left\"><b>")
            .append(_t("Active"))
            .append("</b></td><td class=\"digits\" align=\"right\">");
         int active = _helper.getActivePeers();
         buf.append(active)
-//           .append(SummaryHelper.THINSP)
-//           .append(Math.max(active, _helper.getActiveProfiles()))
+           .append(SummaryHelper.THINSP)
+           .append(Math.max(active, _helper.getActiveProfiles()))
            .append("</td></tr>\n" +
 
                    "<tr title=\"")

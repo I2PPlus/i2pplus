@@ -1,5 +1,5 @@
 2021-06-23 dr|z3d
-  * Console: Move svg and 48x48 flags into routerconsole.war
+ * Console: Move svg and 48x48 flags into routerconsole.war
 
 2021-06-22 zzz
  * Tests: Fix duplicate classes in i2ptest.jar
