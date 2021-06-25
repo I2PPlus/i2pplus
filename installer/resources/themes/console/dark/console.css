@@ -1860,7 +1860,7 @@ code {
   line-height: 160% !important;
 }
 
-/* welcome */w
+/* welcome */
 
 .twocol {
   display: block;
@@ -1875,7 +1875,7 @@ code {
 }
 
 .twocol li:first-child {
-  margin-top: 0 !important;
+  margin-top: -5px !important;
 }
 
 div[lang="pt"] .twocol, div[lang="es"] .twocol, div[lang="sv"] .twocol {
@@ -1896,6 +1896,10 @@ div[lang="sv"] li::first-letter {
 
 p + .twocol {
   margin: 10px 25px !important;
+}
+
+.links + .twocol {
+  margin-top: -5px;
 }
 
 .main#console p {
