@@ -15,6 +15,10 @@ Once I2P+ has had time to test your network connectivity, the Network Status ind
 In order for I2P+ to be able to resolve .i2p hostnames automatically, it relies primarily on subscriptions to services that provide DNS translation for known hosts. If you installed I2P+ instead of upgrading from I2P, you will already have sufficient <a href="/susidns/subscriptions" class="consolelink">addressbook subscriptions</a> configured; after installation, your <a href="/dns" class="consolelink">addressbook</a> should populate with hostnames for active services on the network without intervention. If you've upgraded from I2P, check the <a href="/help/faq#addressbooksubs" class="consolelink">addressbook subscription section</a> in the <a href="/help/faq" class="consolelink">FAQ</a> for help adding additional subscriptions.
 </li>
 
+<li><b>Browser Configuration</b><br>
+To browse websites on the network, you will need to configure your browser to use the default HTTP proxy configured on port 4444, which also provides an <i>outproxy</i> which permits anonymous browsing of clearnet sites. A <a href="/help/configuration#browserconfig" class="consolelink">mini-guide to configuring Firefox</a> is provided on the Configuration page in the help section, or refer to the section below for a link to the multi-browser setup guide. Once you have configured your browser and addressbook subscriptions, <a href="http://notbob.i2p/" target="_blank">notbob.i2p</a> is a great site for discovering content on the network.
+</li>
+
 </ul>
 
 <h3>Services on I2P</h3>
@@ -22,7 +26,7 @@ In order for I2P+ to be able to resolve .i2p hostnames automatically, it relies 
 <ul class="links twocol">
 
 <li><b>Invisible Internet &amp; Public Web Browsing</b><br>
-On I2P you can access I2P-hosted websites ("eepsites") or browse the normal web anonymously via I2P's built-in web proxy (outproxy). <a href="https://geti2p.net/en/about/browser-config" class="sitelink external" target="_blank" rel="noreferrer">Configure your browser</a> to use the HTTP proxy at <code>127.0.0.1 port 4444</code>, then browse to a hidden service website or a normal, unencrypted <code>http://</code> address. To disable or change outproxy access to the normal internet, remove or modify the outproxy entry for <code>false.i2p</code> under the <i>Outproxies</i> section on the <a href="/i2ptunnel/edit?tunnel=0" target="_blank" rel="noreferrer" class="consolelink">edit page</a> of the HTTP Proxy client tunnel in the <a href="/i2ptunnelmgr" class="consolelink">Tunnel Manager</a>.</li>
+On I2P you can access I2P-hosted websites ("eepsites") or browse the normal web anonymously via I2P's built-in web proxy (outproxy). <a href="https://geti2p.net/en/about/browser-config" class="sitelink external" target="_blank" rel="noreferrer">Configure your browser</a> to use the HTTP proxy at <code>127.0.0.1 port 4444</code>, then browse to a hidden service website or a normal, unencrypted <code>http://</code> address. To disable or change outproxy access to the normal internet, remove or modify the outproxy entry for <code>false.i2p</code> or <code>purokishi.i2p</code> under the <i>Outproxies</i> section on the <a href="/i2ptunnel/edit?tunnel=0" target="_blank" rel="noreferrer" class="consolelink">edit page</a> of the HTTP Proxy client tunnel in the <a href="/i2ptunnelmgr" class="consolelink">Tunnel Manager</a>. If you have upgraded to I2P+ from I2P, you may wish to replace <code>false.i2p</code> with <code>purokishi.i2p</code> for a more robust, ad-blocking service.</li>
 
 <li><b>Anonymous E-Mail</b><br>
 Postman's I2P-based mail system can be accessed either via <a href="/webmail" class="consolelink">I2P's built-in mail client</a> (Susimail) or any standard mail client. A mail gateway allows mail to be received from normal internet addresses; your <code>@mail.i2p</code> address is also contactable via <code>@i2pmail.org</code>. For an account, visit <a href="http://hq.postman.i2p/" class="sitelink" target="_blank" rel="noreferrer">hq.postman.i2p</a>.</li>
@@ -41,6 +45,7 @@ Visit <a href="http://stats.i2p/i2p/plugins/" class="sitelink" target="_blank" r
 
 </ul>
 
+<!--
 <h3 id="eepsites">Sites of Interest</h3>
 
 <ul class="links twocol">
@@ -70,6 +75,7 @@ Visit <a href="http://stats.i2p/i2p/plugins/" class="sitelink" target="_blank" r
 There are many more sites on I2P, not least several that track active eepsites including <a href="http://identiguy.i2p/" class="sitelink" target="_blank" rel="noreferrer">Identiguy</a>, <a href="http://reg.i2p/" class="sitelink" target="_blank" rel="noreferrer">Reg Name Registry</a> &amp; <a href="http://notbob.i2p/" class="sitelink" target="_blank" rel="noreferrer">notbob.i2p</a>, so don't be afraid to explore!</li>
 
 </ul>
+-->
 
 <h3 id="trouble">Information for Developers &amp; Contributors</h3>
 
