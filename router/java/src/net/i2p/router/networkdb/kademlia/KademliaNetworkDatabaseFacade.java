@@ -316,7 +316,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     String getDbDir() { return _dbDir; }
 
     public synchronized void startup() {
-        _log.info("Starting up the Kademlia Network Database");
+        _log.info("Starting up the Kademlia Network Database...");
         RouterInfo ri = _context.router().getRouterInfo();
         String dbDir = _context.getProperty(PROP_DB_DIR, DEFAULT_DB_DIR);
         String exploreBucketSize = _context.getProperty("router.exploreBucketSize");
