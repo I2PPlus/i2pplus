@@ -6,7 +6,7 @@ _("Please {0}have patience{1} as I2P+ boots up and finds peers.", "<b>", "</b>")
 </p>
 <p>
 _("While you are waiting, please {0}adjust your bandwidth settings{1} on the {2}configuration page{3}.", "<b>", "</b>", "<a href=\"config.jsp\">", "</a>")
-_("You can also run the bandwidth test via the {0}Setup Wizard{1} to help with determining your bandwidth, and a guide for new users and additional documentation is available in the <a href="/help/">{2}help section{1}.", "<a href=\"/wizard\">", "</a>", "<a href=\"/help/\">")
+_("You can also run the bandwidth test via the {0}Setup Wizard{1} to help with determining your bandwidth, and a guide for new users and additional documentation is available in the {2}help section{1}.", "<a href=\"/wizard\">", "</a>", "<a href=\"/help/\">")
 </p>
 <p>
 _("Also you can setup your browser to use the I2P proxy to reach eepsites.")
