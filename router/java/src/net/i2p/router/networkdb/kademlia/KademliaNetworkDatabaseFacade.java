@@ -363,7 +363,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         // Don't run until after RefreshRoutersJob has run, and after validate() will return invalid for old routers.
         if (!_context.commSystem().isDummy()) {
             Job erj = new ExpireRoutersJob(_context, this);
-            erj.getTiming().setStartAfter(_context.clock().now() + ROUTER_INFO_EXPIRATION_FLOODFILL + 10*60*1000);
+            erj.getTiming().setStartAfter(_context.clock().now() + _context.getProperty(PROP_ROUTER_INFO_EXPIRATION_ADJUSTED, ROUTER_INFO_EXPIRATION_FLOODFILL) + 10*60*1000);
             _context.jobQueue().addJob(erj);
         }
 
