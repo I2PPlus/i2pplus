@@ -316,7 +316,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     String getDbDir() { return _dbDir; }
 
     public synchronized void startup() {
-        _log.info("Starting up the Kademlia Network Database");
+        _log.info("Starting up the Kademlia Network Database...");
         RouterInfo ri = _context.router().getRouterInfo();
         String dbDir = _context.getProperty(PROP_DB_DIR, DEFAULT_DB_DIR);
         String exploreBucketSize = _context.getProperty("router.exploreBucketSize");
@@ -363,7 +363,11 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         // Don't run until after RefreshRoutersJob has run, and after validate() will return invalid for old routers.
         if (!_context.commSystem().isDummy()) {
             Job erj = new ExpireRoutersJob(_context, this);
-            erj.getTiming().setStartAfter(_context.clock().now() + ROUTER_INFO_EXPIRATION_FLOODFILL + 10*60*1000);
+            String expireRI = _context.getProperty("router.expireRouterInfo");
+            if (expireRI != null)
+                erj.getTiming().setStartAfter(_context.clock().now() + (Integer.valueOf(expireRI)*60*60*1000) + 10*60*1000);
+            else
+                erj.getTiming().setStartAfter(_context.clock().now() + ROUTER_INFO_EXPIRATION_FLOODFILL + 10*60*1000);
             _context.jobQueue().addJob(erj);
         }
 

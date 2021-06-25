@@ -1860,7 +1860,7 @@ code {
   line-height: 160% !important;
 }
 
-/* welcome */w
+/* welcome */
 
 .twocol {
   display: block;
@@ -1875,7 +1875,7 @@ code {
 }
 
 .twocol li:first-child {
-  margin-top: 0 !important;
+  margin-top: -5px !important;
 }
 
 div[lang="pt"] .twocol, div[lang="es"] .twocol, div[lang="sv"] .twocol {
@@ -1896,6 +1896,10 @@ div[lang="sv"] li::first-letter {
 
 p + .twocol {
   margin: 10px 25px !important;
+}
+
+.links + .twocol {
+  margin-top: -5px;
 }
 
 .main#console p {
@@ -5784,7 +5788,7 @@ h3#bannedpeers {
   display: none;
 }
 
- #home .welcome {
+#home .welcome {
   display: none;
 }
 
@@ -5818,6 +5822,11 @@ h4.app img, h4.app2 img {
 #chooselang img {
   margin-top: -1px;
   margin-right: 10px;
+  display: inline-block;
+}
+
+#chooselang::after {
+  content: none;
 }
 
 h4.app:hover img, h4.app2:hover img {
@@ -5840,6 +5849,7 @@ h4.app img:active, h4.app2 img:active {
 h4.app, h4.app2 {
   margin: 11px -6px -9px;
   padding: 9px 8px 7px 35px;
+  overflow: hidden;
   letter-spacing: .15em;
   word-spacing: 0;
   font-size: 10.5pt;
@@ -11620,7 +11630,7 @@ h3#scheduledjobs {
 
 #homepage .main h4 a {
   margin: -9px 0;
-  padding: 10px 4px 10px 12px;
+  padding: 11px 4px 10px 12px;
   border-left: var(--border);
 }
 

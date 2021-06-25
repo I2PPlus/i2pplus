@@ -236,9 +236,11 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         int max = MAX_TO_FLOOD;
         // increase candidates because we will be skipping some
         if (type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2)
-            max *= 4;
+//            max *= 4;
+            max *= 3;
         else if (isls2)
-            max *= 2;
+//            max *= 2;
+            max += 3;
         List<Hash> peers = sel.selectFloodfillParticipants(rkey, max, getKBuckets());
 
         // todo key cert skip?
