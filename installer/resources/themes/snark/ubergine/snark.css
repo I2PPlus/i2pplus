@@ -5,20 +5,25 @@
 @import url(/themes/fonts/DroidSans.css);
 @import url(chromescroll.css);
 
+:root {
+  --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, sans-serif;
+  --monospaced: Droid Sans Mono, Noto Mono, Lucida Console, DejaVu Sans Mono, monospace;
+  --highlight: inset 0 0 0 1px #000;
+  --nav: radial-gradient(at center bottom, rgba(148, 48, 0, .25), rgba(80, 16, 0, .15) 80%, rgba(0, 0, 0, 0)), linear-gradient(to bottom, #a68058 1%, #7a6045 27%, #5e4730 50%, #2e1700 51%, #1f0f00);
+  --nav_hover: radial-gradient(at center bottom, rgba(200, 96, 200, .6) 0, rgba(0, 0, 0, 0) 90%), linear-gradient(to bottom, #a15b73, #7e4062 50%, #591c3e 51%, #46133e);
+  --nav_active: radial-gradient(at center bottom, rgba(255, 200, 0, .5) 0, rgba(0, 0, 0, 0) 70%), linear-gradient(to bottom, #f50, #f70);
+}
+
 html, body {
   min-height: 100%;
   scrollbar-color: #441840 #180818;
 }
 
-body {
-  font: 8pt "DejaVu Sans", Verdana, "Noto Sans", Ubuntu, Helvetica, sans-serif;
-  color: #ddd;
-  background: #130313 url(images/graytile.png) scroll left top / 96px 96px;
-}
-
 /* preload top navigation mouseovers */
 
-body:not(old) {
+body {
+  font: 8pt DejaVu Sans, Verdana, Noto Sans, Ubuntu, Helvetica, sans-serif;
+  color: #ddd;
   background: url(images/graytile.png) left top,
   url(images/button_snark_hover.png) top center no-repeat,
   url(images/button_snark_active.png) top center no-repeat,
@@ -31,15 +36,11 @@ body:not(old) {
   url(images/dropdown_hover.svg) top center no-repeat,
   url(images/offline.svg) top center no-repeat,
   #130313 !important;
-  background-size: 96px 96px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0 !important;
+  background-size: 96px, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 !important;
 }
 
 body.iframed {
   margin: 0 !important;
-  background: transparent url(/themes/console/images/transparent.gif) !important;
-}
-
-body.iframed:not(old) {
   background: url(images/button_snark_hover.png) no-repeat,
   url(images/button_snark_active.png) no-repeat,
   url(images/button_tracker_hover.png) no-repeat,
@@ -48,17 +49,12 @@ body.iframed:not(old) {
   url(images/button_search_active.png) top center no-repeat,
   url(images/button_forum_hover.png) no-repeat,
   url(images/button_forum_active.png) no-repeat transparent !important;
-  background-size: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0 !important;
+  background-size: 0 !important;
 }
 
 @supports (text-justify: auto) { /* Firefox 55+ */
-body {
-  background-attachment: fixed;
-}
-
-.iframed body {
-  background-attachment: scroll;
-}
+  body {background-attachment: fixed}
+  .iframed body {background-attachment: scroll}
 }
 
 input[type="image"], th img, a img {
@@ -67,9 +63,6 @@ input[type="image"], th img, a img {
 }
 
 .toggleview, .snarkConfigTitle, .snarknavbar, img, input[type="image"], label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
-  -ms-user-select: none;
-  -moz-user-select: none;
-  -webkit-user-select: none;
   user-select: none;
 }
 
@@ -81,7 +74,6 @@ input[type="image"], th img, a img {
   box-shadow: inset 0 0 3px 0 #101, 0 0 2px 2px rgba(16,0,16,.4);
   background: repeating-linear-gradient(to bottom, #2b172f 2px, #1f081f 4px);
   background-size: 100% 4px;
-  will-change: transform;
 }
 
 .iframed .page {
@@ -94,9 +86,7 @@ input[type="image"], th img, a img {
 }
 
 @media screen and (min-width: 1048px) {
-.iframed .page {
-  margin-bottom: 0 !important;
-}
+  .iframed .page {margin-bottom: 0 !important}
 }
 
 ::selection {
@@ -134,10 +124,6 @@ input[type="image"], th img, a img {
   will-change: transform;
 }
 
-_:-ms-lang(x), .snarknavbar {
-  padding: 8px 10px 6px;
-}
-
 .iframed .snarknavbar {
   margin-top: 3px !important;
   margin-bottom: -8px !important;
@@ -151,14 +137,15 @@ _:-ms-lang(x), .snarknavbar {
 }
 
 @supports (justify-content: center) {
-.snarknavbar {
-  display: flex;
-  justify-content: center;
-}
-.snarkNav:link, .snarkNav:visited {
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-}
+  .snarknavbar {
+    display: flex;
+    justify-content: center;
+  }
+
+  .snarkNav:link, .snarkNav:visited {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
 }
 
 .snarkNav:link, .snarkNav:visited {
@@ -166,7 +153,7 @@ _:-ms-lang(x), .snarknavbar {
   padding: 4px 12px 4px 29px !important;
   display: inline-block;
   line-height: 130%;
-  font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", "DejaVu Sans", Verdana, sans-serif;
+  font-family: var(--bodyfont)
   font-size: 10.5pt;
   font-weight: 700;
   color: #f70;
@@ -179,11 +166,10 @@ _:-ms-lang(x), .snarknavbar {
   border-radius: 0;
   box-shadow: 0 0 1px #000, inset 0 0 0 1px rgba(16, 0, 16, .7), inset 0 0 2px 0 rgba(255,128,0,.5);
   background: #310 url(images/button_tracker.png) 11px center no-repeat;
-  background: url(images/button_tracker.png) 11px center no-repeat,
-              radial-gradient(at center bottom, rgba(148, 48, 0, .25), rgba(80, 16, 0, .15) 80%, rgba(0, 0, 0, 0)),
-              linear-gradient(to bottom, #a68058 1%, #7a6045 27%, #5e4730 50%, #2e1700 51%, #1f0f00);
+  background: url(images/button_tracker.png) 11px center no-repeat, var(--nav);
   background-size: 16px auto, 100% 100%;
-  transition: ease-in-out box-shadow .1s;
+  transition: ease-in-out box-shadow .01s;
+  will-change: transform;
 }
 
 .iframed .snarkNav:link, .iframed .snarkNav:visited {
@@ -196,10 +182,6 @@ _:-ms-lang(x), .snarknavbar {
   }
 }
 
-_:-ms-lang(x), .snarkNav:link, .snarkNav:visited {
-  padding-top: 1px !important;
-}
-
 .iframed .snarkNav:first-child, .iframed .snarkNav:last-child {
   border-radius: 0 !important;
 }
@@ -209,11 +191,9 @@ _:-ms-lang(x), .snarkNav:link, .snarkNav:visited {
   border: 1px solid #820b64;
   box-shadow: 0 0 1px #000, inset 0 0 0 1px rgba(16, 0, 16, .9), inset 0 0 2px 0 #515;
   background: #707 url(images/button_tracker_hover.png) 11px center no-repeat;
-  background: url(images/button_tracker_hover.png) 11px center no-repeat,
-              radial-gradient(at center bottom, rgba(200, 96, 200, .6) 0, rgba(0, 0, 0, 0) 90%),
-              linear-gradient(to bottom, #a15b73, #7e4062 50%, #591c3e 51%, #46133e);
+  background: url(images/button_tracker_hover.png) 11px center no-repeat, var(--nav_hover);
   background-size: 16px auto, 100% 100%, 100% 100%;
-  transition: ease border .3s .1s, ease-in-out box-shadow .1s;
+  transition: ease border .3s .1s, ease-in-out box-shadow .01s;
 }
 
 .snarkNav:hover + .snarkNav:nth-last-child(1n-2), .snarkNav:focus + .snarkNav:nth-last-child(1n-2) {
@@ -228,21 +208,18 @@ _:-ms-lang(x), .snarkNav:link, .snarkNav:visited {
   color: #fff !important;
   text-shadow: none;
   border: 1px solid #730;
-  box-shadow: 0 0 1px 0 #000, inset 0 0 0 1px #000, inset 3px 3px 3px 2px #3f1900 !important;
+  box-shadow: 0 0 1px 0 #000, var(--highlight), inset 3px 3px 3px 2px #3f1900 !important;
   background: #f60 url(images/button_tracker_active.png) 11px center no-repeat;
-  background: url(images/button_tracker_active.png) 11px center no-repeat,
-              radial-gradient(at center bottom, rgba(255, 200, 0, .5) 0, rgba(0, 0, 0, 0) 70%),
-              linear-gradient(to bottom, #f50, #f70);
+  background: url(images/button_tracker_active.png) 11px center no-repeat, var(--nav_active);
   background-size: 16px auto, 100% 100%, 100% 100%;
-  transition: ease box-shadow .1s;
+  transition: ease box-shadow .01s;
 }
 
 .snarkNav:link:first-child, .snarkNav:last-child[href="/i2psnark/"] {
   padding-left: 28px !important;
   background: #310 url(images/button_snark.png) 11px center no-repeat;
   background: url(images/button_snark.png) 11px center no-repeat,
-              radial-gradient(at center bottom, rgba(148, 48, 0, .25), rgba(80, 16, 0, .15) 80%, rgba(0, 0, 0, 0)),
-              linear-gradient(to bottom, #a68058 1%, #7a6045 27%, #5e4730 50%, #2e1700 51%, #1f0f00);
+              var(--nav);
   background-size: 18px auto, 100% 100%;
 }
 
@@ -254,70 +231,54 @@ _:-ms-lang(x), .snarkNav:link, .snarkNav:visited {
 .nav_main:link:hover, .nav_main:link:focus {
   color: #d2baff !important;
   background: #707 url(images/button_snark_hover.png) 11px center no-repeat;
-  background: url(images/button_snark_hover.png) 11px center no-repeat,
-              radial-gradient(at center bottom, rgba(200, 96, 200, .6) 0, rgba(0, 0, 0, 0) 90%),
-              linear-gradient(to bottom, #a15b73, #7e4062 50%, #591c3e 51%, #46133e);
+  background: url(images/button_snark_hover.png) 11px center no-repeat, var(--nav_hover);
   background-size: 18px auto, 100% 100%;
 }
 
 .nav_main:link:active, .snarkNav:last-child[href="/i2psnark/"]:active {
   color: #fff !important;
   background: #f60 url(images/button_snark_active.png) 11px center no-repeat;
-  background: url(images/button_snark_active.png) 11px center no-repeat,
-              radial-gradient(at center bottom, rgba(255, 200, 0, .5) 0, rgba(0, 0, 0, 0) 70%),
-              linear-gradient(to bottom, #f50, #f70);
+  background: url(images/button_snark_active.png) 11px center no-repeat, var(--nav_active);
   background-size: 18px auto, 100% 100%, 100% 100%;
 }
 
 .nav_forum:link {
   background: #310 url(images/button_forum.png) 11px center no-repeat;
-  background: url(images/button_forum.png) 11px center no-repeat,
-              radial-gradient(at center bottom, rgba(148, 48, 0, .25), rgba(80, 16, 0, .15) 80%, rgba(0, 0, 0, 0)),
-              linear-gradient(to bottom, #a68058 1%, #7a6045 27%, #5e4730 50%, #2e1700 51%, #1f0f00);
+  background: url(images/button_forum.png) 11px center no-repeat, var(--nav);
   background-size: 16px auto, 100% 100%;
 }
 
 .nav_forum:link:hover, .nav_forum:link:focus {
   color: #d2baff !important;
   background: #707 url(images/button_forum_hover.png) 11px center no-repeat;
-  background: url(images/button_forum_hover.png) 11px center no-repeat,
-              radial-gradient(at center bottom, rgba(200, 96, 200, .6) 0, rgba(0, 0, 0, 0) 90%),
-              linear-gradient(to bottom, #a15b73, #7e4062 50%, #591c3e 51%, #46133e);
+  background: url(images/button_forum_hover.png) 11px center no-repeat, var(--nav_hover);
   background-size: 16px auto, 100% 100%;
 }
 
 .nav_forum:link:active {
   color: #fff !important;
   background: #f60 url(images/button_forum_active.png) 11px center no-repeat;
-  background: url(images/button_forum_active.png) 11px center no-repeat,
-              radial-gradient(at center bottom, rgba(255, 200, 0, .5) 0, rgba(0, 0, 0, 0) 70%),
-              linear-gradient(to bottom, #f50, #f70);
+  background: url(images/button_forum_active.png) 11px center no-repeat, var(--nav_active);
   background-size: 16px auto, 100% 100%, 100% 100%;
 }
 
 .nav_search:link {
   background: #310 url(images/button_forum.png) 11px center no-repeat;
-  background: url(images/button_search.png) 11px center no-repeat,
-              radial-gradient(at center bottom, rgba(148, 48, 0, .25), rgba(80, 16, 0, .15) 80%, rgba(0, 0, 0, 0)),
-              linear-gradient(to bottom, #a68058 1%, #7a6045 27%, #5e4730 50%, #2e1700 51%, #1f0f00);
+  background: url(images/button_search.png) 11px center no-repeat, var(--nav);
   background-size: 16px auto, 100% 100%;
 }
 
 .nav_search:link:hover, .nav_search:link:focus {
   color: #d2baff !important;
   background: #707 url(images/button_search_hover.png) 11px center no-repeat;
-  background: url(images/button_search_hover.png) 11px center no-repeat,
-              radial-gradient(at center bottom, rgba(200, 96, 200, .6) 0, rgba(0, 0, 0, 0) 90%),
-              linear-gradient(to bottom, #a15b73, #7e4062 50%, #591c3e 51%, #46133e);
+  background: url(images/button_search_hover.png) 11px center no-repeat, var(--nav_hover);
   background-size: 16px auto, 100% 100%;
 }
 
 .nav_search:link:active {
   color: #fff !important;
   background: #f60 url(images/button_search_active.png) 11px center no-repeat;
-  background: url(images/button_search_active.png) 11px center no-repeat,
-              radial-gradient(at center bottom, rgba(255, 200, 0, .5) 0, rgba(0, 0, 0, 0) 70%),
-              linear-gradient(to bottom, #f50, #f70);
+  background: url(images/button_search_active.png) 11px center no-repeat, var(--nav_active);
   background-size: 16px auto, 100% 100%, 100% 100%;
 }
 
@@ -342,7 +303,7 @@ _:-ms-lang(x), .snarkNav:link, .snarkNav:visited {
   width: calc(100% - 12px);
   overflow: hidden;
   text-align: left;
-  font: bold 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", "DejaVu Sans", Verdana, sans-serif !important;
+  font: bold 9pt var(--bodyfont) !important;
   color: #2c6aef;
   border-spacing: 0;
   border-radius: 4px;
@@ -865,7 +826,7 @@ th.snarkTorrentAction input[type="image"] {
 }
 
 .snarkTorrents tt {
-  font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
+  font-family: var(--monospaced);
   font-weight: 700;
   font-size: 8.5pt !important;
   color: #cc0;
@@ -1764,7 +1725,7 @@ th.priority br, .snarkTorrents thead th br {
 .configsectionpanel .snarkConfigTitle, .configsectionpanel .snarkConfigTitle:hover, .configsectionpanel .snarkConfigTitle:active {
   padding: 4px 1px 3px;
   min-width: 500px;
-  font: bold 10pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", "DejaVu Sans", Verdana, sans-serif;
+  font: bold 10pt var(--bodyfont)
   color: #f7e3fc;
   text-transform: uppercase;
   letter-spacing: .15em;
@@ -1965,7 +1926,7 @@ input:checked + .toggleview:active > img {
 /* buttons & inputs */
 
 input, a.control {
-  font: 8pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", "DejaVu Sans", Verdana, sans-serif;
+  font: 8pt var(--bodyfont)
   font-weight: 700;
 }
 
@@ -2059,7 +2020,7 @@ input[type=submit]:disabled:active, a.control:disabled:active {
 
 #pagenavbottom, .pagenavcontrols {
   letter-spacing: .1em;
-  font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", "DejaVu Sans", Verdana, sans-serif !important;
+  font-family: var(--bodyfont) !important;
 }
 
 .pagenavcontrols img:not(old) {
@@ -2561,7 +2522,7 @@ img:hover {
 
 .configsectionpanel, .configsectionpanel td, .snarkNewTorrent, .snarkNewTorrent td, .snarkAddInfo,
 select, input, input.r, input[name="nofilter_dataDir"], textarea[name="i2cpOpts"], a.control {
-  font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", "DejaVu Sans", Verdana, sans-serif;
+  font-family: var(--bodyfont)
   font-size: 9pt !important;
 }
 
@@ -2646,7 +2607,7 @@ select, input, input.r, input[name="nofilter_dataDir"], textarea[name="i2cpOpts"
 code {
   padding: 0 2px;
   color: #b8b;
-  font-family: "DejaVu Sans Mono", "Droid Sans Mono", "Lucida Console", monospace;
+  font-family: var(--monospaced);
   font-size: 8.5pt;
   font-weight: 700;
 }
@@ -2792,7 +2753,7 @@ input#toggle_files:checked + label + hr, input#toggle_comments:checked + label +
   font-size: 0 !important;
   border: 1px solid #414;
   border-radius: 50%;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
   opacity: 0;
   background: url(images/debug.png) center center no-repeat, linear-gradient(to bottom, #313 50%, #101 50%);
 }
@@ -2806,7 +2767,7 @@ input#toggle_files:checked + label + hr, input#toggle_comments:checked + label +
 }
 
 .debuginfo, .debugConnection, .debugConnStat, .debugRequests {
-  font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace !important;
+  font-family: var(--monospaced) !important;
 }
 
 .debuginfo {
@@ -3000,7 +2961,7 @@ input#toggle_debug:checked + label + #dhtDebugInner {
   border: 1px solid #313;
   border-top: none;
   border-radius: 0 0 4px 4px;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
   background: linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,.7) 35%, rgba(0,0,0,.7) 65%,  rgba(0,0,0,0)), linear-gradient(to bottom, #202 50%, #000 50%);
   filter: drop-shadow(0 1px 1px #000);
 }
@@ -3017,7 +2978,7 @@ input#toggle_debug:checked + label + #dhtDebugInner {
   margin: 0 15px;
   text-align: center;
   border: 1px solid #313;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
   filter: drop-shadow(0 0 2px #000);
 }
 
@@ -3044,7 +3005,7 @@ input#toggle_debug:checked + label + #dhtDebugInner {
   text-overflow: ellipsis;
   color: #993;
   font-family: monospace;
-  box-shadow: 0 0 0 1px #313, 0 0 0 2px #000, inset 0 0 0 1px #000;
+  box-shadow: 0 0 0 1px #313, 0 0 0 2px #000, var(--highlight);
   background: #101;
   -moz-user-select: all;
   -webkit-user-select: all;
@@ -3352,7 +3313,7 @@ input#toggle_debug:checked + label + #dhtDebugInner {
 }
 
 .snarkCommentInfo textarea, .snarkCommentInfo textarea:focus {
-  font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", "DejaVu Sans", Verdana, sans-serif;
+  font-family: var(--bodyfont)
   width: 100%;
   min-height: 64px;
   height: 64px;
@@ -3978,7 +3939,7 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
   }
 
   .debuginfo td {
-    font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace !important;
+    font-family: var(--monospaced) !important;
   }
 
   .snarknavbar {
@@ -4356,7 +4317,7 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
 
 .noscriptWarning {
   margin-right: 7px !important;
-  font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", "DejaVu Sans", Verdana, sans-serif;
+  font-family: var(--bodyfont)
   font-size: 9pt;
   mix-blend-mode: luminosity;
   position: relative;
@@ -5435,14 +5396,14 @@ td.snarkTorrentStatus b::before {
 #torrentDisplay input:checked + label, #torrentDisplay input:checked + label:hover, #torrentDisplay label:active {
   color: #fb0 !important;
   text-shadow: 0 1px 1px #000;
-  box-shadow: inset 0 0 0 1px #000, inset 2px 2px 2px 2px #3f1900;
+  box-shadow: var(--highlight), inset 2px 2px 2px 2px #3f1900;
   background: linear-gradient(to bottom, #f30, #f60);
 }
 
 #torrentDisplay input:checked + label {
   color: #979 !important;
   text-shadow: 0 1px 1px #000;
-  box-shadow: inset 0 0 0 1px #000, inset 2px 2px 2px 2px #101;
+  box-shadow: var(--highlight), inset 2px 2px 2px 2px #101;
   background: radial-gradient(at center bottom, rgba(255, 32, 160, .25), rgba(128, 64, 128, .15) 80%, rgba(0, 0, 0, 0)), linear-gradient(to bottom, #180818, #280828) !important;
 }
 
@@ -5959,7 +5920,7 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
   font-size: 80%;
   font-weight: 400;
   text-shadow: 0 0 1px #101;
-  font-family: "Droid Sans";
+  font-family: var(--bodyfont);
 }
 
 .snarkTorrentUploaded .left, .snarkTorrentUploaded .right {
@@ -6083,12 +6044,10 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
 }
 
 .infohash {
-  font-family: "Droid Sans Mono", "DejaVu Sans Mono", "Lucida Console", monospace;
+  font-family: var(--monospaced);
   color: #cc0;
   text-transform: uppercase;
   text-shadow: 0 1px 1px #000;
-  -moz-user-select: all;
-  -webkit-user-select: all;
   user-select: all;
 }
 
@@ -6185,14 +6144,14 @@ td.snarkTorrentPeerCount:empty::after {
 
 .customalert {
    border: 1px solid #535 !important;
-   box-shadow: 0 0 3px 1px rgba(0,0,0,.6), inset 0 0 0 1px #000 !important;
+   box-shadow: 0 0 3px 1px rgba(0,0,0,.6), var(--highlight) !important;
    background: #000 !important;
    background: linear-gradient(to top, #212, #000) !important;
 }
 
 .customalert .header {
    border-bottom: 1px solid #535 !important;
-   box-shadow: inset 0 0 0 1px #000 !important;
+   box-shadow: var(--highlight) !important;
    background: #002 !important;
    background: linear-gradient(to bottom, #202, #000) !important;
 }
