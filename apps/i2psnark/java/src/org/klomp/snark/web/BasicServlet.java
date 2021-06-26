@@ -100,8 +100,8 @@ class BasicServlet extends HttpServlet
     private static final int BUFSIZE = 16*1024;
     private transient ByteCache _cache = ByteCache.getInstance(16, BUFSIZE);
 
-    private static final int WAR_CACHE_CONTROL_SECS = 24*60*60;
-    private static final int FILE_CACHE_CONTROL_SECS = 24*60*60;
+    private static final int WAR_CACHE_CONTROL_SECS = 7*24*60*60;
+    private static final int FILE_CACHE_CONTROL_SECS = 30*24*60*60;
 
     public BasicServlet() {
         super();
@@ -422,7 +422,7 @@ class BasicServlet extends HttpServlet
         long ct = content.getCacheTime();
         if (ct >= 0) {
             if (ctype.contains("javascript") || ctype.contains("text/") || ctype.contains("image/"))
-                response.setHeader("Cache-Control", "private, max-age=" + ct * 30 + ", immutable");
+                response.setHeader("Cache-Control", "private, max-age=" + (ct * 30) + ", immutable");
             else
                 response.setHeader("Cache-Control", "no-cache, private, max-age=" + ct);
         }
