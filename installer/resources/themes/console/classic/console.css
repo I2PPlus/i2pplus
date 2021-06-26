@@ -2,6 +2,8 @@
 /* I2P Description: Light blue "classic" I2P theme; optimized for less capable browsers and system specifications. */
 /* Author: dr|z3d */
 
+@import url(/themes/console/images/images.css);
+
 html, body {
   min-height: 100%;
 }
@@ -1887,14 +1889,12 @@ input.accept[value^="Create"]:focus, button.accept[value^="Create"]:focus {
 
 input.accept[value^="Filter"], button.accept[value^="Filter"] {
   padding: 5px 8px 5px 23px;
-  background: #eee url(/themes/console/images/buttons/filter.png) no-repeat 7px center;
-  background: url(/themes/console/images/buttons/filter.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #f4f5ff);
+  background: var(--filter) no-repeat scroll 7px center / 18px, linear-gradient(to bottom, #fff, #f4f5ff);
 }
 
 input.accept[value^="Filter"]:hover, button.accept[value^="Filter"]:hover,
 input.accept[value^="Filter"]:focus, button.accept[value^="Filter"]:focus {
-  background: #fff url(/themes/console/images/buttons/filter.png) no-repeat 7px center;
-  background: url(/themes/console/images/buttons/filter.png) no-repeat 7px center, linear-gradient(to bottom, #ddd, #fff);
+  background: var(--filter) no-repeat scroll 7px center / 18px, linear-gradient(to bottom, #ddd, #fff);
 }
 
 input.add, button.add {
@@ -5510,32 +5510,12 @@ p#helptranslate {
   filter: drop-shadow(0 0 2px #f60);
 }
 
-/*
-.langselect input[name="lang"]:checked + img + .ui_lang {
-  margin: -24px -4px 0;
-}
-*/
-
 @keyframes glow {
-0% {
-  filter: drop-shadow(0 0 1px rgba(256, 100, 0, .1));
-}
-
-20% {
-  filter: drop-shadow(0 0 1px #f60);
-}
-
-50% {
-  filter: drop-shadow(0 0 2px #930);
-}
-
-80% {
-  filter: drop-shadow(0 0 1px #d40);
-}
-
-100% {
-  filter: drop-shadow(0 0 1px rgba(256, 100, 0, .1));
-}
+  0% {filter: drop-shadow(0 0 1px rgba(256, 100, 0, .1))}
+  20% {filter: drop-shadow(0 0 1px #f60)}
+  50% {filter: drop-shadow(0 0 2px #930)}
+  80% {filter: drop-shadow(0 0 1px #d40)}
+  100% {filter: drop-shadow(0 0 1px rgba(256, 100, 0, .1))}
 }
 
 /* end large flags */
@@ -5547,8 +5527,8 @@ p#helptranslate {
 }
 
 #consolepass tr:first-child td {
-  background: #fff url("/themes/console/images/info/user_add.png") no-repeat scroll 12px center / 28px 28px;
   padding: 15px 15px 15px 50px;
+  background: #fff var(--useradd) no-repeat scroll 12px center / 28px 28px;
 }
 
 #consolepass td {
@@ -5827,7 +5807,7 @@ a.viewfullentry:hover {
   margin: -16px -16px 15px;
   padding: 5px 5px 2px;
   background: #eff1ff;
-  columns: 5 200px;
+  columns: auto 280px;
   column-gap: 3px;
 }
 
@@ -5845,6 +5825,7 @@ a.viewfullentry:hover {
 #sybilnav li, #sybilnav li:first-child {
   margin: 0 0 3px !important;
   padding: 3px;
+  width: calc(100% - 4px);
   list-style: none;
   border: 1px solid #ddf;
   border-bottom: 2px solid #ccf;
@@ -5852,9 +5833,9 @@ a.viewfullentry:hover {
   background: linear-gradient(to bottom, #fff 0%, #eef 100%);
   border-radius: 2px 2px 0 0;
   box-sizing: border-box;
+  -webkit-column-break-inside: avoid;
   break-inside: avoid;
   page-break-inside: avoid;
-  -webkit-column-break-inside: avoid;
 }
 
 #sybilnav li:first-child {
@@ -6823,6 +6804,7 @@ p.infowarn, #sybilanalysis {
   border: 1px solid #aaafce;
   padding: 15px 15px 15px 50px;
   background: #fff url(/themes/console/images/info/infowarn.png) 10px center no-repeat;
+/*  background: #fff var(--infowarn) no-repeat scroll 10px center / 28px;*/
   line-height: 130%;
 }
 
@@ -6849,25 +6831,18 @@ p.infowarn, #sybilanalysis {
 
 #bandwidthconfig tr:first-child .infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fff url(/themes/console/images/svg/speedometer.svg) 12px center no-repeat;
-  background-size: 28px;
+  background: #fff var(--speed) no-repeat scroll 12px center / 28px;
 }
 
 #addkeyring td.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fff url(/themes/console/images/svg/keys.svg) 12px center no-repeat;
-  background-size: 28px;
-}
-
-#oldhome td:first-child {
-  background: #fff url(/themes/console/images/svg/home.svg) 12px center no-repeat;
-  padding: 15px 15px 15px 50px;
+  background: #fff var(--keys) no-repeat scroll 12px center / 28px;
   background-size: 28px;
 }
 
 #floodfillconfig tr:first-child .infohelp {
-  background: #fff url(/themes/console/images/svg/floodfill.svg) 12px center no-repeat;
   padding: 15px 15px 15px 50px;
+  background: #fff var(--floodfill) no-repeat scroll 12px center / 28px;
   background-size: 28px;
 }
 
@@ -6884,15 +6859,13 @@ p.infowarn, #sybilanalysis {
 }
 
 p#clientconf.infohelp, p#webappconfigtext.infohelp {
-  background: #fff url(/themes/console/images/svg/editclient.svg) 12px center no-repeat;
   padding: 15px 15px 15px 50px;
-  background-size: 28px;
+  background: #fff var(--editclient) no-repeat scroll 12px center / 28px;
 }
 
 p#pluginconfigtext {
-  background: #fff url(/themes/console/images/svg/pluginconfig.svg) 12px center no-repeat;
   padding: 15px 15px 15px 50px;
-  background-size: 28px;
+  background: #fff var(--pluginconfig) no-repeat scroll 12px center / 28px;
 }
 
 #plugininstall .infohelp {
@@ -6903,39 +6876,36 @@ p#pluginconfigtext {
 
 #plugininstall tr:nth-child(3) td:nth-last-child(2), #manualreseed tr:nth-child(3) td:nth-last-child(2) {
   padding: 15px 15px 15px 50px;
-  background: #fff url(/themes/console/images/svg/link.svg) 12px center no-repeat;
-  background-size: 28px;
+  background: #fff var(--link) no-repeat scroll 12px center / 28px;
 }
 
 #manualreseed tr:nth-child(5) td:nth-last-child(2), #plugininstall2 tr:nth-child(2) td:nth-last-child(2) {
-  background: #fff url(/themes/console/images/svg/files.svg) 12px center no-repeat;
   padding: 15px 15px 15px 50px;
-  background-size: 28px;
+  background: #fff var(--files) no-repeat scroll 12px center / 28px;
 }
 
 #manualreseed tr:nth-last-child(2) td.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fff url(/themes/console/images/svg/package.svg) 12px center no-repeat;
-  background-size: 28px;
+  background: #fff var(--package) no-repeat scroll 12px center / 28px;
+}
+
+#config_peers tr:nth-child(3) td.infohelp, #bannedpeercount {
+  padding: 15px 15px 15px 50px;
+  background: #fff var(--ban) no-repeat scroll 12px center / 28px;
 }
 
 #config_peers tr:nth-child(3) td.infohelp {
-  padding: 15px 15px 15px 50px;
   border-right: none;
-  background: #fff url(/themes/console/images/svg/ban.svg) 12px center no-repeat;
-  background-size: 28px;
 }
 
 h3#shutdownrouter + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fff url(/themes/console/images/info/power.png) 12px center no-repeat;
-  background-size: 28px;
+  background: #fff var(--power) no-repeat scroll 12px center / 28px;
 }
 
 h3#restartrouter + p.infohelp, #config_family .infohelp.needrestart {
   padding: 15px 15px 15px 50px;
-  background: #fff url(/themes/console/images/info/reboot.png) 12px center no-repeat;
-  background-size: 28px;
+  background: #fff var(--reboot) no-repeat scroll 12px center / 28px;
 }
 
 h3#systray + p.infohelp {
@@ -6946,33 +6916,28 @@ h3#systray + p.infohelp {
 
 h3#servicedebug + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fff url(/themes/console/images/svg/bug.svg) 12px center no-repeat;
-  background-size: 28px;
+  background: #fff var(--bug) no-repeat scroll 12px center / 28px;
 }
 
 h3#browseronstart + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fff url(/themes/console/images/svg/firefox.svg) 12px center no-repeat;
-  background-size: 28px;
+  background: #fff var(--firefox) no-repeat scroll 12px center / 28px;
 }
 
 .main#config_reseed p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fff url(/themes/console/images/svg/reseed.svg) 12px center no-repeat;
-  background-size: 28px;
+  background: #fff var(--reseed) no-repeat scroll 12px center / 28px;
 }
 
 p#enablefullstats, p#gatherstats {
   padding: 15px 15px 15px 50px;
-  background: #fff url(/themes/console/images/svg/stats.svg) 12px center no-repeat;
-  background-size: 28px;
+  background: #fff var(--stats) no-repeat scroll 12px center / 28px;
 }
 
 #config_family .infohelp {
   margin-bottom: -1px !important;
   padding: 15px 15px 15px 50px;
-  background: #fff url(/themes/console/images/svg/family.svg) 12px center no-repeat;
-  background-size: 28px;
+  background: #fff var(--family) no-repeat scroll 12px center / 28px;
 }
 
 #certs .infohelp:first-of-type {
@@ -6984,23 +6949,18 @@ p#enablefullstats, p#gatherstats {
 
 /* login inputs */
 
-#consolepass input[name="name"], #externali2cp input[name="user"] {
-  background: #fff url(/themes/console/images/buttons/user.png) 5px center no-repeat;
+#consolepass input[name="name"], #externali2cp input[name="user"], #consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"] {
   padding: 4px 5px 4px 26px !important;
-  background-size: 16px !important;
+  background: #fff var(--user) no-repeat scroll 5px center / 16px;
 }
 
 #consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"] {
-  background: #fff url(/themes/console/images/buttons/password.png) 5px center no-repeat;
-  padding: 4px 5px 4px 26px !important;
-  background-size: 16px !important;
+  background: #fff var(--key) no-repeat scroll 5px center / 16px;
 }
 
 /* logs */
 
 #logs #enviro {
-  -moz-user-select: all;
-  -webkit-user-select: all;
   user-select: all;
   cursor: text;
 }
@@ -7016,10 +6976,10 @@ p#enablefullstats, p#gatherstats {
 }
 
 #logs #enviro td:first-child {
-  text-align: right;
-  width: 1%;
-  white-space: nowrap;
   padding-right: 0;
+  width: 1%;
+  text-align: right;
+  white-space: nowrap;
 }
 
 #enviro td:last-child b {
@@ -10727,48 +10687,39 @@ div.app.js:hover::before {
 }
 
 #help_configuration {
-  background: #eef url(/themes/console/images/info/optimize.png) 15px center no-repeat;
-  background: url(/themes/console/images/info/optimize.png) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
+  background: var(--wrench) no-repeat scroll 15px center / 32px, linear-gradient(135deg, #fff, #f8f8ff);
 }
 
 #help_filter {
-  background: #eef url(/themes/console/images/svg/configure.svg) 15px center no-repeat;
-  background: url(/themes/console/images/svg/configure.svg) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
+  background: var(--filter) no-repeat scroll 15px center / 32px, linear-gradient(135deg, #fff, #f8f8ff);
 }
 
 #help_configadv {
-  background: #eef url(/themes/console/images/svg/configure.svg) 15px center no-repeat;
-  background: url(/themes/console/images/svg/configure.svg) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
+  background: var(--configure) no-repeat scroll 15px center / 32px, linear-gradient(135deg, #fff, #f8f8ff);
 }
 
 #help_ui {
-  background: #eef url(/themes/console/images/svg/ui.svg) 15px center no-repeat;
-  background: url(/themes/console/images/svg/ui.svg) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
+  background: var(--ui) no-repeat scroll 15px center / 32px, linear-gradient(135deg, #fff, #f8f8ff);
 }
 
 #help_reseed {
-  background: #eef url(/themes/console/images/svg/reseed.svg) 15px center no-repeat;
-  background: url(/themes/console/images/svg/reseed.svg) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
+  background: var(--reseed) no-repeat scroll 15px center / 32px, linear-gradient(135deg, #fff, #f8f8ff);
 }
 
 #help_faq, #help_glossary {
-  background: #eef url(/themes/console/images/svg/faq.svg) 15px center no-repeat;
   background: url(/themes/console/images/svg/faq.svg) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
 }
 
 #help_troubleshoot {
-  background: #eef url(/themes/console/images/svg/wrench.svg) 15px center no-repeat;
-  background: url(/themes/console/images/svg/wrench.svg) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
+  background: var(--wrench) no-repeat scroll 15px center / 32px, linear-gradient(135deg, #fff, #f8f8ff);
 }
 
 #help_legal {
-  background: #eef url(/themes/console/images/svg/legal.svg) 15px center no-repeat;
-  background: url(/themes/console/images/svg/legal.svg) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
+  background: var(--legal) no-repeat scroll 15px center / 32px, linear-gradient(135deg, #fff, #f8f8ff);
 }
 
 #help_changelog {
-  background: #eef url(/themes/console/images/svg/changelog.svg) 15px center no-repeat;
-  background: url(/themes/console/images/svg/changelog.svg) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
+  background: var(--changelog) no-repeat scroll 15px center / 32px, linear-gradient(135deg, #fff, #f8f8ff);
 }
 
 #help_newusers {
@@ -10777,26 +10728,22 @@ div.app.js:hover::before {
 }
 
 #help_webhosting {
-  background: #eef url(/themes/console/images/svg/server.svg) 15px center no-repeat;
-  background: url(/themes/console/images/svg/server.svg) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
+  background: var(--webserver) no-repeat scroll 15px center / 32px, linear-gradient(135deg, #fff, #f8f8ff);
 }
 
 #configurationhelp h2, #advancedsettings h2, #filterlist h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/svg/configure.svg) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
-  background-size: 24px, 100%, 100%, 100% !important;
+  background: var(--configure) no-repeat scroll 8px center / 24px, linear-gradient(to bottom, #fff 50%, #fafbff 50%);
 }
 
 #sidebarhelp h2, #reachabilityhelp h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/svg/sidebar.svg) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
-  background-size: 24px, 100%, 100%, 100% !important;
+  background: url(/themes/console/images/svg/sidebar.svg) no-repeat scroll 8px center / 24px, linear-gradient(to bottom, #fff 50%, #fafbff 50%);
 }
 
 #reseedhelp h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/svg/reseed.svg) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
-  background-size: 24px, 100%, 100%, 100% !important;
+  background: var(--reseed) no-repeat scroll 8px center / 24px, linear-gradient(to bottom, #fff 50%, #fafbff 50%);
 }
 
 #faq h2, #glossary h2 {
@@ -10807,76 +10754,68 @@ div.app.js:hover::before {
 
 #troubleshoot h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/svg/wrench.svg) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
-  background-size: 24px, 100%, 100%, 100% !important;
+  background: var(--wrench) no-repeat scroll 8px center / 24px, linear-gradient(to bottom, #fff 50%, #fafbff 50%);
 }
 
 #legal h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/svg/legal.svg) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
-  background-size: 24px, 100%, 100%, 100% !important;
+  background: var(--legal) no-repeat scroll 8px center / 24px, linear-gradient(to bottom, #fff 50%, #fafbff 50%);
 }
 
 #changelog h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/svg/logs.svg) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
-  background-size: 24px, 100%, 100%, 100% !important;
+  background: var(--changelog) no-repeat scroll 8px center / 24px, linear-gradient(to bottom, #fff 50%, #fafbff 50%);
 }
 
 #newuserguide h2 {
   padding-left: 38px;
-  background: url(images/favicon.svg) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
-  background-size: 24px, 100%, 100%, 100% !important;
+  background: url(images/favicon.svg) no-repeat scroll 8px center / 24px, linear-gradient(to bottom, #fff 50%, #fafbff 50%);
 }
 
 #webhosting h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/svg/server.svg) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
-  background-size: 24px, 100%, 100%, 100% !important;
+  background: var(--webserver) no-repeat scroll 8px center / 24px, linear-gradient(to bottom, #fff 50%, #fafbff 50%);
 }
 
 #themeoverride h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/svg/ui.svg) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
-  background-size: 24px, 100%, 100%, 100% !important;
+  background: var(--ui) no-repeat scroll 8px center / 24px, linear-gradient(to bottom, #fff 50%, #fafbff 50%);
 }
 
 #browserconfig h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/svg/firefox.svg) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
-  background-size: 24px, 100%, 100%, 100% !important;
+  background: var(--firefox) no-repeat scroll 8px center / 24px, linear-gradient(to bottom, #fff 50%, #fafbff 50%);
 }
 
 #tunnman h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/svg/hardhat.svg) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
-  background-size: 24px, 100%, 100%, 100% !important;
+  background: var(--hardhat) no-repeat scroll 8px center / 24px, linear-gradient(to bottom, #fff 50%, #fafbff 50%);
 }
 
 /* end help toc */
 
 /* link icons for new user guide */
 
-.sitelink, .chatlink, .consolelink {
-  border-radius: 1px;
-  white-space: nowrap;
+.consolelink {
+  background: url(images/favicon.svg) no-repeat scroll 2px center / 12px;
 }
 
 .sitelink {
-  padding: 0 3px 0 16px;
-  background: url(/themes/console/images/svg/link.svg) 2px center no-repeat;
-  background-size: 12px, 100% !important;
+  background: var(--link) no-repeat scroll 2px center / 12px;
 }
 
 .chatlink {
-  padding: 0 3px 0 20px;
-  background: url(/themes/snark/ubergine/images/comment.png) 2px center no-repeat;
+  background: var(--chat) no-repeat scroll 2px center / 12px;
 }
 
 .sitelink.external {
-  padding: 0 3px 0 18px;
-  background: url(/themes/console/images/svg/planet.svg) 3px center no-repeat;
-  background-size: 12px, 100% !important;
+  background: var(--planet) no-repeat scroll 2px center / 12px;
+}
+
+.sitelink, .chatlink, .consolelink {
+  padding: 0 3px 0 16px;
+  border-radius: 1px;
+  white-space: nowrap;
 }
 
 /* end link icons */
@@ -10897,9 +10836,12 @@ div.app.js:hover::before {
   margin-top: -10px !important;
 }
 
-#bannedpeercount {
-  background-image: url(/themes/console/images/svg/ban.svg);
-  background-size: 28px;
+#newuserguide .links + .twocol {
+  margin-top: -20px !important;
+}
+
+#newuserguide .links + .twocol li:first-child {
+  margin-top: 5px !important;
 }
 
 .debug_pubkey {
