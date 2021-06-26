@@ -897,35 +897,35 @@ div.refresh {
 }
 
 .sb_netstatus.error::before {
-  background: url(/themes/console/images/info/network_status/network_error.svg) center center no-repeat;
+  background: var(--net_error) center center no-repeat;
 }
 
 .sb_netstatus.warn::before {
-  background: url(/themes/console/images/info/network_status/network_warning.svg) center center no-repeat;
+  background: var(--net_warning) center center no-repeat;
 }
 
 .sb_netstatus.testing::before {
-  background: url(/themes/console/images/info/network_status/network_starting.svg) center center no-repeat;
+  background: var(--net_starting) center center no-repeat;
 }
 
 .sb_netstatus.hidden::before {
-  background: url(/themes/console/images/info/network_status/network_hidden.svg) center center no-repeat;
+  background: var(--net_hidden) center center no-repeat;
 }
 
 .sb_netstatus.running::before {
-  background: url(/themes/console/images/info/network_status/network_ok.svg) center center no-repeat;
+  background: var(--net_ok) center center no-repeat;
 }
 
 .sb_netstatus.firewalled::before {
-  background: url(/themes/console/images/info/network_status/network_firewalled.svg) center center no-repeat;
+  background: var(--net_firewalled) center center no-repeat;
 }
 
 .sb_netstatus.vmcomm::before {
-  background: url(/themes/console/images/info/network_status/network_vm.svg) center center no-repeat;
+  background: var(--net_vm) center center no-repeat;
 }
 
 .sb_netstatus.clockskew::before {
-  background: url(/themes/console/images/info/network_status/network_clockskew.svg) center center no-repeat;
+  background: var(--net_clockskew) center center no-repeat;
 }
 
 /* end network status */
@@ -11634,12 +11634,12 @@ div.app, .sitemapLink, .sitemapLabel {
 }
 
 #peers #ntcpconnections th:nth-last-child(2)::after, #peers #ntcpconnections th:nth-last-child(3)::after {
-  content: "";
-  display: inline-block;
   width: 16px;
   height: 16px;
-  background: url(/themes/console/images/info/network_status/network_clockskew.svg) center center no-repeat;
+  display: inline-block;
+  background: var(--net_clockskew) center center no-repeat;
   background-size: 16px;
+  content: "";
 }
 
 #peers #ntcpconnections th:nth-last-child(3)::after {
