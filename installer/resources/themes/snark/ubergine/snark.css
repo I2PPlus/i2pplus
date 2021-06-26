@@ -9,9 +9,13 @@
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, sans-serif;
   --monospaced: Droid Sans Mono, Noto Mono, Lucida Console, DejaVu Sans Mono, monospace;
   --highlight: inset 0 0 0 1px #000;
-  --nav: radial-gradient(at center bottom, rgba(148, 48, 0, .25), rgba(80, 16, 0, .15) 80%, rgba(0, 0, 0, 0)), linear-gradient(to bottom, #a68058 1%, #7a6045 27%, #5e4730 50%, #2e1700 51%, #1f0f00);
-  --nav_hover: radial-gradient(at center bottom, rgba(200, 96, 200, .6) 0, rgba(0, 0, 0, 0) 90%), linear-gradient(to bottom, #a15b73, #7e4062 50%, #591c3e 51%, #46133e);
-  --nav_active: radial-gradient(at center bottom, rgba(255, 200, 0, .5) 0, rgba(0, 0, 0, 0) 70%), linear-gradient(to bottom, #f50, #f70);
+  --nav: radial-gradient(at center bottom, rgba(148, 48, 0, .25), rgba(80, 16, 0, .15) 80%, rgba(0,0,0,0)), linear-gradient(to bottom, #a68058 1%, #7a6045 27%, #5e4730 50%, #2e1700 51%, #1f0f00);
+  --nav_hover: radial-gradient(at center bottom, rgba(200, 96, 200, .6) 0, rgba(0,0,0,0) 90%), linear-gradient(to bottom, #a15b73, #7e4062 50%, #591c3e 51%, #46133e);
+  --nav_active: radial-gradient(at center bottom, rgba(255, 200, 0, .5) 0, rgba(0,0,0,0) 70%), linear-gradient(to bottom, #f50, #f70);
+  --select: linear-gradient(to bottom, rgba(96,0,96,.2) 50%, rgba(16,0,16,.3) 50%), url(images/graytile.png);
+  --select_hover: linear-gradient(to bottom, #f60 50%, #f40 50%);
+  --btn: linear-gradient(to bottom, #989, #878);
+  --btn_hover: linear-gradient(to bottom, #767, #989);
 }
 
 html, body {
@@ -167,7 +171,7 @@ input[type="image"], th img, a img {
   box-shadow: 0 0 1px #000, inset 0 0 0 1px rgba(16, 0, 16, .7), inset 0 0 2px 0 rgba(255,128,0,.5);
   background: #310 url(images/button_tracker.png) 11px center no-repeat;
   background: url(images/button_tracker.png) 11px center no-repeat, var(--nav);
-  background-size: 16px auto, 100% 100%;
+  background-size: 16px auto, 100%;
   transition: ease-in-out box-shadow .01s;
   will-change: transform;
 }
@@ -190,9 +194,8 @@ input[type="image"], th img, a img {
   color: #d2baff !important;
   border: 1px solid #820b64;
   box-shadow: 0 0 1px #000, inset 0 0 0 1px rgba(16, 0, 16, .9), inset 0 0 2px 0 #515;
-  background: #707 url(images/button_tracker_hover.png) 11px center no-repeat;
   background: url(images/button_tracker_hover.png) 11px center no-repeat, var(--nav_hover);
-  background-size: 16px auto, 100% 100%, 100% 100%;
+  background-size: 16px auto, 100%, 100%;
   transition: ease border .3s .1s, ease-in-out box-shadow .01s;
 }
 
@@ -209,18 +212,15 @@ input[type="image"], th img, a img {
   text-shadow: none;
   border: 1px solid #730;
   box-shadow: 0 0 1px 0 #000, var(--highlight), inset 3px 3px 3px 2px #3f1900 !important;
-  background: #f60 url(images/button_tracker_active.png) 11px center no-repeat;
   background: url(images/button_tracker_active.png) 11px center no-repeat, var(--nav_active);
-  background-size: 16px auto, 100% 100%, 100% 100%;
+  background-size: 16px auto, 100%, 100%;
   transition: ease box-shadow .01s;
 }
 
 .snarkNav:link:first-child, .snarkNav:last-child[href="/i2psnark/"] {
   padding-left: 28px !important;
-  background: #310 url(images/button_snark.png) 11px center no-repeat;
-  background: url(images/button_snark.png) 11px center no-repeat,
-              var(--nav);
-  background-size: 18px auto, 100% 100%;
+  background: url(images/button_snark.png) 11px center no-repeat, var(--nav);
+  background-size: 18px auto, 100%;
 }
 
 .snarkNav:last-child[href="/i2psnark/"] {
@@ -230,56 +230,55 @@ input[type="image"], th img, a img {
 
 .nav_main:link:hover, .nav_main:link:focus {
   color: #d2baff !important;
-  background: #707 url(images/button_snark_hover.png) 11px center no-repeat;
   background: url(images/button_snark_hover.png) 11px center no-repeat, var(--nav_hover);
-  background-size: 18px auto, 100% 100%;
+  background-size: 18px auto, 100%;
 }
 
 .nav_main:link:active, .snarkNav:last-child[href="/i2psnark/"]:active {
   color: #fff !important;
   background: #f60 url(images/button_snark_active.png) 11px center no-repeat;
   background: url(images/button_snark_active.png) 11px center no-repeat, var(--nav_active);
-  background-size: 18px auto, 100% 100%, 100% 100%;
+  background-size: 18px auto, 100%, 100%;
 }
 
 .nav_forum:link {
   background: #310 url(images/button_forum.png) 11px center no-repeat;
   background: url(images/button_forum.png) 11px center no-repeat, var(--nav);
-  background-size: 16px auto, 100% 100%;
+  background-size: 16px auto, 100%;
 }
 
 .nav_forum:link:hover, .nav_forum:link:focus {
   color: #d2baff !important;
   background: #707 url(images/button_forum_hover.png) 11px center no-repeat;
   background: url(images/button_forum_hover.png) 11px center no-repeat, var(--nav_hover);
-  background-size: 16px auto, 100% 100%;
+  background-size: 16px auto, 100%;
 }
 
 .nav_forum:link:active {
   color: #fff !important;
   background: #f60 url(images/button_forum_active.png) 11px center no-repeat;
   background: url(images/button_forum_active.png) 11px center no-repeat, var(--nav_active);
-  background-size: 16px auto, 100% 100%, 100% 100%;
+  background-size: 16px auto, 100%, 100%;
 }
 
 .nav_search:link {
   background: #310 url(images/button_forum.png) 11px center no-repeat;
   background: url(images/button_search.png) 11px center no-repeat, var(--nav);
-  background-size: 16px auto, 100% 100%;
+  background-size: 16px auto, 100%;
 }
 
 .nav_search:link:hover, .nav_search:link:focus {
   color: #d2baff !important;
   background: #707 url(images/button_search_hover.png) 11px center no-repeat;
   background: url(images/button_search_hover.png) 11px center no-repeat, var(--nav_hover);
-  background-size: 16px auto, 100% 100%;
+  background-size: 16px auto, 100%;
 }
 
 .nav_search:link:active {
   color: #fff !important;
   background: #f60 url(images/button_search_active.png) 11px center no-repeat;
   background: url(images/button_search_active.png) 11px center no-repeat, var(--nav_active);
-  background-size: 16px auto, 100% 100%, 100% 100%;
+  background-size: 16px auto, 100%, 100%;
 }
 
 .snarkNav:last-child {
@@ -321,7 +320,7 @@ input[type="image"], th img, a img {
               url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true") no-repeat,
               linear-gradient(to bottom, rgba(255,200,255,.1), rgba(255,240,255,.05), rgba(0,0,0,.1)),
               linear-gradient(to bottom, #2a192a, #202) !important;
-  background-size: 80px auto, 100% 100%, calc(100% - 80px) calc(100% - 4px), 100% 100%, 100% 100% !important;
+  background-size: 80px auto, 100%, calc(100% - 80px) calc(100% - 4px), 100%, 100% !important;
   background-position: right -4px bottom -10px, center center, left bottom 2px, center center, center top !important;
   background-blend-mode: lighten, darken, luminosity, normal, normal;
 }
@@ -366,13 +365,13 @@ input[type="image"], th img, a img {
 }
 
 .snarkMessages li::before {
-  content: '';
-  display: inline-block;
-  background: url(images/bullet.png) left bottom no-repeat;
+  margin: 1px 1px -1px -6px;
   width: 12px;
   height: 11px;
-  background-size: 9px 9px;
-  margin: 1px 1px -1px -6px;
+  display: inline-block;
+  background: url(images/bullet.png) left bottom no-repeat;
+  background-size: 9px;
+  content: "";
 }
 
 #closeLog, #expand, #shrink {
@@ -1040,7 +1039,7 @@ tr[id] + .peerinfo td {
 
 .peerinfo td:first-child {
   background: url(images/peer.svg) right 7px center no-repeat;
-  background-size: 18px 18px;
+  background-size: 18px;
 }
 
 @media screen and (max-width: 1100px) {
@@ -1428,7 +1427,7 @@ tr.active:hover .percentBarInner, tr.active:hover .peerinfo .percentBarInner {
   box-shadow: 0 0 0 1px rgba(0,0,0,.7), inset 0 0 0 1px rgba(16,0,16,.75), inset 3px 3px 3px rgba(0,0,0,.6);
   background: repeating-linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,0) 7px, rgba(0,0,0,.2) 7px, rgba(0,0,0,.2) 8px, rgba(0,0,0,0) 8px),
               linear-gradient(to left, rgba(0, 255, 0, .3), rgba(255, 255, 0, .3), rgba(255, 0, 0, .3));
-  background-size: 100% 100%, 400% 100%, 100% 100%
+  background-size: 100%, 400% 100%, 100%
   opacity: 1;
 }
 
@@ -1495,7 +1494,7 @@ tr.active:hover .percentBarInner, tr.active:hover .peerinfo .percentBarInner {
   border-radius: 15px;
   background: #313;
   background: linear-gradient(to bottom, #313, #101);
-  background: radial-gradient(at center bottom, rgba(64, 16, 64, .5) 10%, rgba(16, 0, 16, .1) 80%, rgba(0, 0, 0, 0) 70%),
+  background: radial-gradient(at center bottom, rgba(64, 16, 64, .5) 10%, rgba(16, 0, 16, .1) 80%, rgba(0,0,0,0) 70%),
               linear-gradient(to bottom, rgba(51,17,51,.9), rgba(17,0,17,.9));
 }
 
@@ -1512,7 +1511,7 @@ tr.active:hover .percentBarInner, tr.active:hover .peerinfo .percentBarInner {
 tr:hover .percentBarComplete {
   color: #8d7cc1;
   box-shadow: inset 0 0 0 1px rgba(16,0,16,.85), inset 0 1px 2px rgba(192,96,192,.7), inset 0 -1px 3px rgba(48,0,48,.75);
-  background: radial-gradient(at center bottom, rgba(72, 24, 72, .6) 10%, rgba(16, 0, 16, .15) 60%, rgba(0, 0, 0, 0) 70%),
+  background: radial-gradient(at center bottom, rgba(72, 24, 72, .6) 10%, rgba(16, 0, 16, .15) 60%, rgba(0,0,0,0) 70%),
               linear-gradient(to bottom, rgba(64,28,64,.9), rgba(17,0,17,.9));
 }
 
@@ -1527,14 +1526,14 @@ tr:hover .percentBarComplete {
 .active.seeding .percentBarComplete {
   color: #86b;
   box-shadow: inset 0 0 0 1px rgba(18,0,16,.85), inset 0 1px 2px rgba(136,96,128,.7), inset 0 -1px 3px rgba(0,0,0,.75);
-  background: radial-gradient(at center bottom, rgba(96, 32, 64, .5) 10%, rgba(16, 0, 16, .1) 80%, rgba(0, 0, 0, 0) 70%),
+  background: radial-gradient(at center bottom, rgba(96, 32, 64, .5) 10%, rgba(16, 0, 16, .1) 80%, rgba(0,0,0,0) 70%),
               linear-gradient(to bottom, rgba(64,17,51,.9), rgba(17,0,17,.9));
 }
 
 .active.seeding:hover .percentBarComplete {
   color: #97c;
   box-shadow: inset 0 0 0 1px rgba(16,0,16,.85), inset 0 1px 2px rgba(192,96,192,.9), inset 0 -1px 3px rgba(0,0,0,.9);
-  background: radial-gradient(at center bottom, rgba(128, 48, 72, .6) 10%, rgba(16, 0, 16, .15) 80%, rgba(0, 0, 0, 0) 70%),
+  background: radial-gradient(at center bottom, rgba(128, 48, 72, .6) 10%, rgba(16, 0, 16, .15) 80%, rgba(0,0,0,0) 70%),
               linear-gradient(to bottom, rgba(64,17,51,.9), rgba(17,0,17,.9));
 }
 
@@ -1684,29 +1683,28 @@ a:active, a:visited:active {
 #configs a[href^="/config"]::after {
   margin: -7px 0 0 -3px;
   padding: 2px;
-  content: "";
-  display: inline-block;
   width: 24px;
   height: 24px;
+  display: inline-block;
   vertical-align: middle;
   border: 1px solid transparent;
   border-radius: 2px;
   background: url(images/configure.svg) center center no-repeat;
-  background-size: 20px 20px;
+  background-size: 20px;
+  content: "";
 }
 
 #configs a[href^="/config"]:hover::after {
   border: 1px solid #f60 !important;
-  background: #515 url(images/configure_hover.svg) center center no-repeat;
   background: url(images/configure_hover.svg) center center no-repeat, linear-gradient(to bottom, #717 50%, #414 50%);
-  background-size: 20px 20px, 100% 100%;
+  background-size: 20px, 100%;
 }
 
 #configs a[href^="/config"]:active::after {
   border: 1px solid #212 !important;
   box-shadow: inset 3px 3px 2px 1px #202;
   background: #414 url(images/configure_hover.svg) center center no-repeat;
-  background-size: 20px 20px;
+  background-size: 20px;
   mix-blend-mode: multiply;
   transform: scale(0.9) !important;
   transition: none !important;
@@ -2100,7 +2098,7 @@ input[type=text], input.r, input[name="nofilter_dataDir"] {
   box-shadow: inset 0 0 0 1px #280028, inset 2px 2px 2px 1px #101;
   letter-spacing: .03em;
   background: url(images/graytile.png) #212;
-  background-size: 96px 96px;
+  background-size: 96px;
   transition: ease box-shadow .05s, ease color .05s;
 }
 
@@ -2108,7 +2106,7 @@ input[type=text]:disabled {
   color: rgba(192,160,192,.5) !important;
   box-shadow: inset 1px 1px 2px 1px #101 !important;
   background: url(images/graytile.png) #212 !important;
-  background-size: 96px 96px !important;
+  background-size: 96px !important;
   cursor: not-allowed;
 }
 
@@ -2187,8 +2185,8 @@ a.control, a.controld, a.control:active {
   border-radius: 2px;
   box-shadow: 0 0 1px 1px rgba(48,16,48,.7);
   background: #989;
-  background: linear-gradient(to bottom, #989, #878);
-  background-size: 100% 100% !important;
+  background: var(--btn);
+  background-size: 100% !important;
   filter: drop-shadow(0 0 1px #313) !important;
 }
 
@@ -2230,9 +2228,8 @@ input[type=submit], input[type="reset"] {
   color: #1c081e;
   border: 1px inset #bbb;
   box-shadow: 0 0 1px 1px rgba(48,16,48,.7);
-  background: #989;
-  background: linear-gradient(to bottom, #989, #878);
-  background-size: 14px 14px, 100% 100% !important;
+  background: var(--btn);
+  background-size: 14px, 100% !important;
   background-position: 6px center, center center !important;
   background-repeat: no-repeat, repeat !important;
 }
@@ -2253,64 +2250,56 @@ input[type=submit]:focus, input[type="reset"]:focus, a.control:focus {
 
 input.accept, input.accept:active {
   padding: 4px 6px 4px 23px !important;
-  background: #989 url(images/confirm.svg);
-  background: url(images/confirm.svg), linear-gradient(to bottom, #989, #878);
-  background-size: 13px 13px, 100% 100% !important;
+  background: url(images/confirm.svg), var(--btn);
+  background-size: 13px, 100% !important;
 }
 
 input.accept:hover, input.accept:focus {
-  background: #767 url(images/confirm.svg);
-  background: url(images/confirm.svg), linear-gradient(to bottom, #767, #989);
+  background: url(images/confirm.svg), var(--btn_hover);
 }
 
 input.add, input.add:active {
   padding: 4px 6px 4px 23px !important;
-  background: #989 url(images/add.svg);
-  background: url(images/add.svg), linear-gradient(to bottom, #989, #878);
-  background-size: 13px 13px, 100% 100% !important;
+  background: url(images/add.svg), var(--btn);
+  background-size: 13px, 100% !important;
 }
 
 input.add:hover, input.add:focus {
-  background: #767 url(images/add.svg);
-  background: url(images/add.svg), linear-gradient(to bottom, #767, #989);
+  background: url(images/add.svg), var(--btn_hover);
 }
 
 input.create, input.create:active {
-  background: #989 url(images/create.svg);
-  background: url(images/create.svg), linear-gradient(to bottom, #989, #878);
-  background-size: 16px 16px, 100% 100% !important;
+  background: url(images/create.svg), var(--btn);
+  background-size: 16px, 100% !important;
   background-position: 6px calc(50% - 2px), center center !important;
 }
 
 input.create:hover, input.create:focus {
-  background: #767 url(images/create.svg);
-  background: url(images/create.svg), linear-gradient(to bottom, #767, #989);
+  background: url(images/create.svg), var(--btn_hover);
 }
 
 input.delete, input.delete:active {
-  background: #989 url(images/nuke.svg);
-  background: url(images/nuke.svg), linear-gradient(to bottom, #989, #878);
-  background-size: 13px 13px, 100% 100% !important;
+  background: url(images/nuke.svg), var(--btn);
+  background-size: 13px, 100% !important;
 }
 
 input.delete:hover, input.delete:focus {
-  background: #767 url(images/nuke.svg);
-  background: url(images/nuke.svg), linear-gradient(to bottom, #767, #989);
+  background: url(images/nuke.svg), var(--btn_hover);
 }
 
 input.reload, input.reload:active {
   padding: 4px 6px 4px 23px !important;
-  background: url(images/restore.svg), linear-gradient(to bottom, #989, #878);
+  background: url(images/restore.svg), var(--btn);
   background-size: 10px, 100%;
 }
 
 input.reload:hover, input.reload:focus {
-  background: url(images/restore.svg), linear-gradient(to bottom, #767, #989);
+  background: url(images/restore.svg), var(--btn_hover);
 }
 
 input.reload[name="recheck"], input.reload[name="recheck"]:active, input.disabled[name="recheck"] {
   margin: 0 2px !important;
-  background: url(images/refresh.svg), linear-gradient(to bottom, #989, #878);
+  background: url(images/refresh.svg), var(--btn);
 }
 
 input.disabled[name="recheck"]:hover {
@@ -2318,26 +2307,26 @@ input.disabled[name="recheck"]:hover {
 }
 
 input.reload[name="recheck"]:hover, input.reload[name="recheck"]:focus {
-  background: url(images/refresh.svg), linear-gradient(to bottom, #767, #989);
+  background: url(images/refresh.svg), var(--btn_hover);
 }
 
 input.starttorrent, input.starttorrent:active {
   padding: 4px 6px 4px 20px !important;
-  background: url(images/start.svg), linear-gradient(to bottom, #989, #878);
+  background: url(images/start.svg), var(--btn);
   background-size: 10px, 100% !important;
 }
 
 input.starttorrent:hover, input.starttorrent:focus {
-  background: url(images/start.svg), linear-gradient(to bottom, #767, #989);
+  background: url(images/start.svg), var(--btn_hover);
 }
 
 input.stoptorrent, input.stoptorrent:active {
-  background: url(images/stop.svg), linear-gradient(to bottom, #989, #878);
+  background: url(images/stop.svg), var(--btn);
   background-size: 10px, 100% !important;
 }
 
 input.stoptorrent:hover, input.stoptorrent:focus {
-  background: url(images/stop.svg), linear-gradient(to bottom, #767, #989);
+  background: url(images/stop.svg), var(--btn_hover);
 }
 
 a.control:active, input[type=submit]:active, input[type="reset"]:active {
@@ -2364,9 +2353,8 @@ select {
   border: 1px solid rgba(17,0,17,.3);
   border-radius: 2px;
   box-shadow: 0 0 0 1px rgba(34,0,34,.2), inset 0 0 0 1px #313;
-  background: #212 !important;
-  background: url(images/dropdown.svg) right 10px center no-repeat, linear-gradient(to bottom, rgba(96,0,96,.2) 50%, rgba(16,0,16,.3) 50%), url(images/graytile.png) #212 !important;
-  background-size: 10px 10px, 100% 100%, 96px 96px !important;
+  background: url(images/dropdown.svg) right 10px center no-repeat, var(--select) #212 !important;
+  background-size: 10px, 100%, 96px !important;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -2377,9 +2365,8 @@ select:hover, select:focus, select:active  {
   text-shadow: 0 1px 1px #101;
   border: 1px solid #101 !important;
   box-shadow: inset 0 0 0 1px #ffffcf;
-  background: #f60 !important;
-  background: url(images/dropdown_hover.svg) right 10px center no-repeat, linear-gradient(to bottom, #f60 50%, #f40 50%) !important;
-  background-size: 10px 10px, 100% 100% !important;
+  background: url(images/dropdown_hover.svg) right 10px center no-repeat, var(--select_hover) !important;
+  background-size: 10px, 100% !important;
   outline: none;
 }
 
@@ -2387,7 +2374,7 @@ select[disabled], select[disabled]:hover, select[disabled]:focus {
   color: #f60 !important;
   background: #212 url(images/dropdown.svg) right 10px center no-repeat !important;
   background: url(images/dropdown.svg) right 10px center no-repeat, url(images/graytile.png) #212 !important;
-  background-size: 10px 10px, 96px 96px !important;
+  background-size: 10px, 96px !important;
   opacity: .5;
   cursor: not-allowed;
 }
@@ -2419,7 +2406,7 @@ textarea {
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #280028, inset 2px 2px 2px 1px #101;
   background: #212 url(images/graytile.png);
-  background-size: 96px 96px;
+  background-size: 96px;
   transition: ease box-shadow .15s;
 }
 
@@ -2620,7 +2607,7 @@ code {
   border-radius: 3px;
   box-shadow: inset 0 0 0 1px #313, inset 0 0 6px 4px #101, inset 0 0 0 8px rgba(0,0,0,.7);
   background: linear-gradient(to right, #101, rgba(64,16,64,.5), #101), linear-gradient(to right, #303, #000, #303) center center;
-  background-size: 100% 100%;
+  background-size: 100%;
   animation: ease-in-out routerdown 1s forwards infinite;
 }
 
@@ -2629,7 +2616,7 @@ code {
 }
 
 @keyframes routerdown {
-from {background-size: 100% 100%, 15% 100%}
+from {background-size: 100%, 15% 100%}
 }
 
 .routerdown::after {
@@ -2638,7 +2625,7 @@ from {background-size: 100% 100%, 15% 100%}
   width: 40px;
   height: 40px;
   background: url(images/offline.svg) center center no-repeat;
-  background-size: 40px 40px;
+  background-size: 40px;
   mix-blend-mode: difference;
   animation: linear spin 5s reverse infinite;
 }
@@ -2663,23 +2650,7 @@ from {background-size: 100% 100%, 15% 100%}
   border-left: 1px solid #101;
   border-radius: 2px 0 0 2px;
   background: url(images/nuke.svg) center center no-repeat !important;
-  background-size: 16px 16px !important;
-}
-
-_:-ms-lang(x), .trackerconfig th {
-  box-shadow: none;
-  background: #313;
-  filter: none;
-}
-
-_:-ms-lang(x), .trackerconfig th:first-child {
-  border-right: 1px solid #313 !important;
-  background: url(images/nuke.svg) center right 6px no-repeat #313;
-  background-size: 16px 16px !important;
-}
-
-_:-ms-lang(x), .trackerconfig th:nth-child(7) {
-  border-left: 1px solid #313 !important;
+  background-size: 16px !important;
 }
 
 .trackerconfig th:nth-child(n+4), .trackerconfig th:nth-child(n+5), .trackerconfig td:nth-child(n+4), .trackerconfig td:nth-child(n+5) {
@@ -2789,7 +2760,7 @@ input#toggle_files:checked + label + hr, input#toggle_comments:checked + label +
 
 .debuginfo td:first-child {
   background: url(images/debuginfo.png) center center no-repeat;
-  background-size: 14px 14px;
+  background-size: 14px;
 }
 
 .debuginfo br {
@@ -3041,7 +3012,7 @@ input#toggle_debug:checked + label + #dhtDebugInner {
 
 .resourceError th {
   background: url(/themes/console/images/info/errortriangle.png) left 10px center no-repeat, linear-gradient(to bottom, #212 50%, #101 50%);
-  background-size: 24px auto, 100% 100%;
+  background-size: 24px auto, 100%;
   padding: 10px 10px 10px 40px;
   font-size: 10pt !important;
 }
@@ -3110,24 +3081,24 @@ input#toggle_debug:checked + label + #dhtDebugInner {
 
 .priorityHigh {
   background: url(/i2psnark/.resources/icons/clock_red.png) left 26px center no-repeat;
-  background-size: 18px 18px;
+  background-size: 18px;
 }
 
 .priorityNormal {
   background: url(/i2psnark/.resources/icons/clock.png) left 26px center no-repeat;
-  background-size: 18px 18px;
+  background-size: 18px;
 }
 
 .prioritySkip {
   background: url(/i2psnark/.resources/icons/block.png) left 25px center no-repeat;
-  background-size: 18px 18px;
+  background-size: 18px;
 }
 
 .priority {
   padding: 5px !important;
-  text-align: center !important;
   width: 1%;
   white-space: nowrap;
+  text-align: center !important;
 }
 
 #setPriority th {
@@ -3233,13 +3204,13 @@ input#toggle_debug:checked + label + #dhtDebugInner {
 #mediaContainer th {
   padding: 8px 5px 8px 30px !important;
   background: url(/i2psnark/.resources/icons/video.png) 8px center no-repeat, linear-gradient(to bottom, #202, #101);
-  background-size: 16px 16px, 100% 100%;
+  background-size: 16px, 100%;
 }
 
 #mediaContainer th.audio {
   padding: 8px 5px 8px 30px !important;
   background: url(/i2psnark/.resources/icons/music.png) 8px center no-repeat, linear-gradient(to bottom, #202, #101);
-  background-size: 16px 16px, 100% 100%;
+  background-size: 16px, 100%;
 }
 
 #mediaContainer td {
@@ -3456,7 +3427,7 @@ td .commentAuthorName {
   text-align: center;
   padding: 5px 8px 5px 22px !important;
   background: url(images/nuke.svg) 2px center no-repeat;
-  background-size: 14px 14px !important;
+  background-size: 14px !important;
 }
 
 .commentDelete .optbox {
@@ -3671,7 +3642,7 @@ td.snarkTorrentStatus, td.snarkTorrentStatus a {
 }
 
 .snarkNav:link, .snarkNav:visited, .iframed .snarkNav:link, .iframed .snarkNav:visited {
-  background-size: 15px auto, 100% 100% !important;
+  background-size: 15px auto, 100% !important;
   background-position: 6px 50%, center center !important;
   padding: 4px 8px 4px 22px !important;
 }
@@ -3744,7 +3715,7 @@ td.snarkTorrentStatus, td.snarkTorrentStatus a {
 
 _:-ms-lang(x), .snarkNav:link, .snarkNav:visited {
   background-position: 11px 5px, center center !important;
-  background-size: 15px auto, 100% 100% !important;
+  background-size: 15px auto, 100% !important;
 }
 
 .snarkMessages {
@@ -3977,7 +3948,7 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
   .snarkMessages li::before {
     width: 14px;
     height: 12px;
-    background-size: 10px 10px;
+    background-size: 10px;
   }
 
   #torrentlist {
@@ -4147,7 +4118,7 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
   }
   .snarkNav:link, .snarkNav:visited {
     font-size: 9pt !important;
-    background-size: 10pt auto, 100% 100% !important;
+    background-size: 10pt auto, 100% !important;
   }
   #expand img, #shrink img {
     margin-top: -3px !important;
@@ -4505,7 +4476,7 @@ span.trackerName::before {
 .info_tracker:hover {
   box-shadow: 0 0 0 1px #202, inset 0 0 0 1px rgba(96,32,96,.3);
   background: url(images/button_tracker_hover.png) left 3px center no-repeat, linear-gradient(to bottom, #313 50%, #101 50%);
-  background-size: 14px auto, 100% 100%;
+  background-size: 14px auto, 100%;
 }
 
 .info_tracker:active, .info_tracker:active a {
@@ -4604,7 +4575,7 @@ span.trackerName::before {
   background: linear-gradient(to bottom, rgba(68,51,68,.8) 50%, rgba(28,0,28,.8) 50%);
   background: url(/themes/console/images/i2psnark.png) 7px center no-repeat, linear-gradient(135deg, rgba(16,0,16,.6), rgba(16,0,16,.3)), linear-gradient(to bottom, rgba(68,51,68,.8) 50%, rgba(28,0,28,.8) 50%);
   background-blend-mode: luminosity, normal, normal;
-  background-size: 20px 20px, 100% 100%, 100% 100%;
+  background-size: 20px, 100%, 100%;
 }
 
 #configs td {
@@ -5316,7 +5287,7 @@ td.snarkTorrentStatus b::before {
 #torrentlist.filterbarActive {
   border: 1px solid rgba(119, 102, 119, .65);
   border-radius: 4px;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, .5), 0 0 1px 1px rgba(0, 0, 0, .25);
+  box-shadow: 0 0 0 1px rgba(0,0,0,.5), 0 0 1px 1px rgba(0,0,0,.25);
 }
 
 .iframed #torrentlist {
@@ -5404,7 +5375,7 @@ td.snarkTorrentStatus b::before {
   color: #979 !important;
   text-shadow: 0 1px 1px #000;
   box-shadow: var(--highlight), inset 2px 2px 2px 2px #101;
-  background: radial-gradient(at center bottom, rgba(255, 32, 160, .25), rgba(128, 64, 128, .15) 80%, rgba(0, 0, 0, 0)), linear-gradient(to bottom, #180818, #280828) !important;
+  background: radial-gradient(at center bottom, rgba(255, 32, 160, .25), rgba(128, 64, 128, .15) 80%, rgba(0,0,0,0)), linear-gradient(to bottom, #180818, #280828) !important;
 }
 
 .pagenavcontrols {
@@ -5686,10 +5657,9 @@ input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disable
   vertical-align: middle;
   border: 1px solid #101;
   border-radius: 2px;
-  box-shadow: inset 1px 1px 1px rgba(72, 0, 72, .6), inset -1px -1px 1px #101, inset 2px 2px 3px rgba(0, 0, 0, .8);
-  background: #202;
+  box-shadow: inset 1px 1px 1px rgba(72,0,72,.6), inset -1px -1px 1px #101, inset 2px 2px 3px rgba(0,0,0,.8);
   background: url(images/graytile.png) #212;
-  background-size: 96px 96px;
+  background-size: 96px;
   box-sizing: border-box;
   filter: drop-shadow(0 0 1px #101);
   appearance: none;
@@ -5705,12 +5675,11 @@ input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input
   height: 19px;
   box-sizing: border-box;
   vertical-align: middle;
-  box-shadow: inset 0 0 2px #202;
-  box-shadow: inset 1px 1px 1px rgba(92, 0, 92, .6), inset -1px -1px 1px #101, inset 3px 3px 2px rgba(0, 0, 0, .8);
+  box-shadow: inset 1px 1px 1px rgba(92, 0, 92, .6), inset -1px -1px 1px #101, inset 3px 3px 2px rgba(0,0,0,.8);
   border: 1px solid #101;
   border-radius: 50%;
   background: url(images/graytile.png) #212;
-  background-size: 96px 96px;
+  background-size: 96px;
   appearance: none;
   filter: drop-shadow(0 0 1px #101);
 }
@@ -5798,7 +5767,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
   position: relative;
   box-shadow: inset 0 0 0 1px #280028, inset 0 0 0 2px #101, inset 3px 3px 3px rgba(0,0,0,.7), 0 0 0 1px #101;
   background: url(images/graytile.png) #212;
-  background-size: 96px 96px;
+  background-size: 96px;
   outline: none;
   transition: ease-in left .15s;
   appearance: none;
@@ -6091,7 +6060,7 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
 .snarkTorrentInfo .infohash {
   padding: 4px 4px 4px 20px;
   background: url(images/hash.png) 4px center no-repeat, linear-gradient(to bottom, #dd0 50%, #cc0 50%);
-  background-size: 14px 14px, 100% 100% !important;
+  background-size: 14px, 100% !important;
 }
 
 #torrentDisplay label {
@@ -6593,6 +6562,6 @@ td.snarkTorrentPeerCount b a:not(:hover):not(:focus), td.snarkTorrentPeerCount b
   padding: 0 1px 4px;
   background: linear-gradient(to bottom, #101 1px, rgba(0,0,0,0) 1px), linear-gradient(to right, #940, rgba(0,0,0,0) 3%, rgba(0,0,0,0) 97%, #940);
   background-size: 200% 100%;
-  background-position: 100% 100%;
+  background-position: 100%;
   animation: linear initializing 5s alternate infinite;
 }
