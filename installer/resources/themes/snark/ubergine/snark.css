@@ -1662,16 +1662,6 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
   text-overflow: ellipsis;
 }
 
-.snarkAddInfo {
-  margin-top: 5px;
-  padding: 4px 2px 4px 24px;
-  display: inline-block;
-  white-space: normal;
-  line-height: 100% !important;
-  background: url(images/infocircle.png) left center no-repeat;
-  background-size: 18px auto;
-}
-
 .snarkAddInfo code {
   padding: 2px 4px;
   font-size: 8.5pt !important;
@@ -1680,8 +1670,6 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
   box-shadow: inset 0 0 0 1px #212;
   background: #101;
   background: rgba(17, 0, 17, .7);
-  -moz-user-select: all;
-  -webkit-user-select: all;
   user-select: all;
 }
 
@@ -2351,20 +2339,17 @@ input.delete:hover, input.delete:focus {
 
 input.reload, input.reload:active {
   padding: 4px 6px 4px 23px !important;
-  background: #989 url(images/restore.svg);
   background: url(images/restore.svg), linear-gradient(to bottom, #989, #878);
-  background-size: 10px 10px, 100% 100%;
+  background-size: 10px, 100%;
 }
 
 input.reload:hover, input.reload:focus {
-  background: #767 url(images/restore.svg);
   background: url(images/restore.svg), linear-gradient(to bottom, #767, #989);
 }
 
 input.reload[name="recheck"], input.reload[name="recheck"]:active, input.disabled[name="recheck"] {
-  margin: 0 2px !important
-  background: #989 url(images/recheck.png);
-  background: url(images/recheck.png), linear-gradient(to bottom, #989, #878);
+  margin: 0 2px !important;
+  background: url(images/refresh.svg), linear-gradient(to bottom, #989, #878);
 }
 
 input.disabled[name="recheck"]:hover {
@@ -2372,29 +2357,26 @@ input.disabled[name="recheck"]:hover {
 }
 
 input.reload[name="recheck"]:hover, input.reload[name="recheck"]:focus {
-  background: #767 url(images/recheck.png);
-  background: url(images/recheck.png), linear-gradient(to bottom, #767, #989);
+  background: url(images/refresh.svg), linear-gradient(to bottom, #767, #989);
 }
 
 input.starttorrent, input.starttorrent:active {
-  background: #989 url(images/next.png);
-  background: url(images/next.png), linear-gradient(to bottom, #989, #878);
   padding: 4px 6px 4px 20px !important;
+  background: url(images/start.svg), linear-gradient(to bottom, #989, #878);
+  background-size: 10px, 100% !important;
 }
 
 input.starttorrent:hover, input.starttorrent:focus {
-  background: #767 url(images/next.png);
-  background: url(images/next.png), linear-gradient(to bottom, #767, #989);
+  background: url(images/start.svg), linear-gradient(to bottom, #767, #989);
 }
 
 input.stoptorrent, input.stoptorrent:active {
-  background: #989 url(images/btn_stop.png);
-  background: url(images/btn_stop.png), linear-gradient(to bottom, #989, #878);
+  background: url(images/stop.svg), linear-gradient(to bottom, #989, #878);
+  background-size: 10px, 100% !important;
 }
 
 input.stoptorrent:hover, input.stoptorrent:focus {
-  background: #767 url(images/btn_stop.png);
-  background: url(images/btn_stop.png), linear-gradient(to bottom, #767, #989);
+  background: url(images/stop.svg), linear-gradient(to bottom, #767, #989);
 }
 
 a.control:active, input[type=submit]:active, input[type="reset"]:active {
@@ -2464,19 +2446,7 @@ select option:hover {
 }
 
 @supports not (-moz-appearance: none) { /* adjust dropdown padding in webkit */
-select {
-  padding: 5px 18px 5px 7px !important;
-}
-}
-
-@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-select {
-  padding: 4px;
-}
-}
-
-select::-ms-expand {
-  display: none;
+  select {padding: 5px 18px 5px 7px !important}
 }
 
 textarea {
@@ -2507,21 +2477,13 @@ img:hover {
 }
 
 @keyframes slide-in {
-  0% {
-    transform: translateY(-50px);
-  }
-  100% {
-    transform: translateY(0);
-  }
+  0% {transform: translateY(-50px)}
+  100% {transform: translateY(0)}
 }
 
 @keyframes fade-in {
-  0% {
-    filter: opacity(0);
-  }
-  100% {
-    filter: opacity(1);
-  }
+  0% {filter: opacity(0)}
+  100% {filter: opacity(1)}
 }
 
 .addtorrentsection table, .newtorrentsection table:not(#trackerselect) {
@@ -2580,9 +2542,7 @@ img:hover {
 }
 
 @supports not (-moz-appearance: none) {
-  .section, .mainsection {
-    padding-top: 9px;
-  }
+  .section, .mainsection {padding-top: 9px}
 }
 
 .configsection {
@@ -5262,10 +5222,11 @@ td.snarkTorrentStatus b::before {
 #bwHoverHelp img {
   width: 0;
   height: 0;
+  display: none;
 }
 
 #bwHoverHelp::before {
-  margin: 0 -4px 0 8px;
+  margin: 0 4px 0 8px;
   width: 24px;
   height: 24px;
   display: inline-block;
@@ -5281,21 +5242,21 @@ td.snarkTorrentStatus b::before {
 }
 
 #bwHoverHelp:hover + #bwHelp {
+  padding: 20px !important;
+  width: 100%;
   display: block;
-  position: fixed;
   float: left;
+  position: fixed;
   top: 48px;
   left: 0;
   z-index: 9999;
-  background: #313;
-  border-bottom: 5px solid #212;
-  border-top: 5px solid #212;
-  box-shadow: 0 1px 3px #101;
-  padding: 20px !important;
-  width: 100%;
   white-space: nowrap;
   text-align: center;
   font-size: 12pt;
+  border-bottom: 5px solid #212;
+  border-top: 5px solid #212;
+  box-shadow: 0 1px 3px #101;
+  background: #313;
 }
 
 /* end tooltip */

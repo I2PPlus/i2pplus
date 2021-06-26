@@ -726,10 +726,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 if (_shouldCompress) {
                     CompressedResponseOutputStream compressedOut = new CompressedResponseOutputStream(browserout);
                     compressedOut.write(DataHelper.getUTF8(modifiedHeaders));
-                    s = new Sender(compressedOut, serverin, "Server: server to browser compressor", _log);
+                    s = new Sender(compressedOut, serverin, "Server -> Client compressor", _log);
                 } else {
                     browserout.write(DataHelper.getUTF8(modifiedHeaders));
-                    s = new Sender(browserout, serverin, "Server: server to browser uncompressed", _log);
+                    s = new Sender(browserout, serverin, "Server -> Client uncompressed", _log);
                 }
                 s.run(); // same thread
             } catch (SSLException she) {
@@ -818,7 +818,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             } catch (IOException ioe) {
                 if (_log.shouldLog(Log.WARN))
 //                    _log.debug("[HTTPServer] " + _name + ": Error sending", ioe);
-                    _log.warn("[HTTPServer] " + _name + ": Error sending \n* " + ioe.getMessage());
+                    _log.warn("[HTTPServer] " + _name + ": Error sending (" + ioe.getMessage() + ")");
                 synchronized(this) {
                     _failure = ioe;
                 }
