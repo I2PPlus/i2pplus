@@ -11,6 +11,8 @@
   --btn: linear-gradient(to bottom, #fff, #f4f5ff);
   --btn_hover: linear-gradient(to bottom, #ddd, #fff);
   --highlight: inset 0 0 0 1px #fff;
+  --dropdown: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m5.29 17.93 26.71 28.14 26.71-28.14' fill='none' stroke='%235e626e' stroke-linecap='round' stroke-linejoin='round' stroke-width='10'/%3E%3C/svg%3E");
+  --dropdown_hover: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m5.29 17.93 26.71 28.14 26.71-28.14' fill='none' stroke='%2341444d' stroke-linecap='round' stroke-linejoin='round' stroke-width='10'/%3E%3C/svg%3E");
 }
 
 html, body {
@@ -441,7 +443,6 @@ img[src="/themes/console/images/i2plogo.png"] {
   text-transform: uppercase;
   font-size: 9.5pt;
   border: none;
-  background: #fff url(images/tinytitle.png) center center repeat;
   background: linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
 }
 
@@ -1412,9 +1413,7 @@ select {
   border: 1px solid #aaafce;
   border-radius: 2px;
   box-shadow: var(--highlight);
-  background: url(images/dropdown.png) right 8px center no-repeat #eee;
-  background: url(images/dropdown.png) right 8px center no-repeat, var(--btn);
-  background-size: 10px auto, 100% !important;
+  background: var(--dropdown) no-repeat scroll right 8px center / 10px, var(--btn);
   cursor: pointer;
   -moz-appearance: none;
   -webkit-appearance: none;
@@ -1433,16 +1432,12 @@ select option {
 
 select:hover, select:active {
   color: #41444d;
-  background: #ddd url(images/dropdown_hover.png) right center no-repeat !important;
-  background: url(images/dropdown_hover.png) right 8px center no-repeat, var(--btn_hover) !important;
-  background-size: 10px auto, 100% !important;
+  background: var(--dropdown_hover) no-repeat scroll right 8px center / 10px, var(--btn_hover) !important;
   outline: none;
 }
 
 select:focus {
-  background: #fafbff url(images/dropdown_hover.png) right center no-repeat !important;
-  background: url(images/dropdown_hover.png) right 8px center no-repeat, var(--btn_hover) !important;
-  background-size: 10px auto, 100% !important;
+  background: var(--dropdown_hover) no-repeat scroll right 8px center / 10px, var(--btn_hover) !important;
   outline: none;
 }
 
@@ -3166,7 +3161,6 @@ ul#banlist + h3.tabletitle {
 }
 
 #ipv4, #ipv6, #permabanned tr:nth-child(2) {
-  background: url(images/tinytitle.png) center center repeat-x;
   background: linear-gradient(to bottom, #fff 50%, #fafbff 50%);
   border-top: 1px solid #aaafce;
   border-bottom: 1px solid #aaafce;
@@ -3751,7 +3745,6 @@ h2 {
 }
 
 h2, h3, h4#updateplugins {
-  background: #fafbff url(images/titlebg.png) right center no-repeat;
   background: linear-gradient(to bottom, #fff 50%, #fafbff 50%);
   box-shadow: var(--highlight);
 }
@@ -3761,7 +3754,6 @@ h4#updateplugins {
 }
 
 .routersummary h2, .routersummary h3 {
-  background: url(images/tinytitle.png) center center repeat-x;
   background: linear-gradient(to bottom, #fff 50%, #fafbff 50%);
 }
 
@@ -5197,27 +5189,26 @@ p#helptranslate {
 }
 
 .themelabel {
-  border-top: 1px solid #aaafce;
   margin: -25px -4px 0;
   padding: 3px 2px;
-  background: #eef url(images/tinytitle.png) center center;
-  background: linear-gradient(to bottom, #fff 50%, #fafbff 50%);
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  border-top: 1px solid #aaafce;
+  background: linear-gradient(to bottom, #fff 50%, #fafbff 50%);
 }
 
 #themesettings {
+  margin: -1px 0;
+  padding: 4px 5px 0;
   clear: both;
   border: 1px solid #aaafce;
-  padding: 4px 5px 0;
-  margin: -1px 0;
   background: #eff1ff;
 }
 
 #langsettings {
-  border: 1px solid #aaafce;
   padding: 4px 5px 0;
+  border: 1px solid #aaafce;
   background: #eff1ff;
 }
 
@@ -5327,26 +5318,25 @@ p#helptranslate {
 }
 
 .ui_lang {
+  margin: -32px -4px 0;
   text-align: center;
-  background: #eef url(images/tinytitle.png) center center;
-  background: linear-gradient(to bottom, #fff 50%, #fafbff 50%);
   padding: 3px 2px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  margin: -32px -4px 0;
-  border-top: 1px solid #aaafce;
-  border-radius: 0 0 2px 2px;
   text-transform: capitalize;
   font-size: 9pt;
   z-index: 2;
+  border-top: 1px solid #aaafce;
+  border-radius: 0 0 2px 2px;
+  background: linear-gradient(to bottom, #fff 50%, #fafbff 50%);
 }
 
 p#helptranslate {
-  clear: both;
-  padding: 5px 10px 10px;
-  text-align: right;
   margin: 0 -5px;
+  padding: 5px 10px 10px;
+  clear: both;
+  text-align: right;
 }
 
 /* large flags */
