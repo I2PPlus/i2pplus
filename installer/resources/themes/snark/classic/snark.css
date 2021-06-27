@@ -2033,7 +2033,7 @@ img:hover {
 }
 
 .trackerconfig th:first-child {
-  background: url(/themes/snark/ubergine/images/nuke.png) center right 8px no-repeat, linear-gradient(to bottom, #fff, #eef);
+  background: var(--nuke) no-repeat scroll center center / 14px, linear-gradient(to bottom, #fff, #eef);
 }
 
 .trackerconfig th:last-child, .trackerconfig td:last-child {
@@ -2047,6 +2047,10 @@ img:hover {
 .trackerconfig tr:last-child {
   border: 1px solid #aaafce;
   background: #fff;
+}
+
+.trackerconfig .knownTracker td:first-child {
+  text-align: center !important;
 }
 
 .knownTracker input[type=radio] {
@@ -2079,6 +2083,7 @@ img:hover {
 .trackerconfig td:first-child {
   padding: 5px 2px;
   width: 24px !important;
+  text-align: center !important;
 }
 
 .trackerconfig tr:nth-child(even), .snarkConfig tr:nth-child(even) {
@@ -2124,10 +2129,6 @@ img:hover {
 .trackerconfig th, .trackerconfig td,
 .trackerconfig th:last-child, .trackerconfig td:last-child {
   text-align: left !important;
-}
-
-.trackerconfig td:first-child {
-  text-align: right !important;
 }
 
 .configsectionpanel tr:last-child td[colspan="3"] {
@@ -2689,7 +2690,7 @@ td.commentAuthor .commentAuthorName {
 }
 
 .commentDelete {
-  background: url(../ubergine/images/nuke.png) 2px center no-repeat;
+  background: var(--nuke) no-repeat scroll 2px center / 14px;
   text-align: left;
   padding-left: 24px !important;
 }

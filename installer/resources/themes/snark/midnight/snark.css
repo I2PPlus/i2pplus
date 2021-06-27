@@ -1027,14 +1027,14 @@ th .magnetlink img, th .torrentlink img {
   color: #000;
   border-radius: 2px;
   background: #bb0 url(../ubergine/images/hash.png) 4px center no-repeat;
-  background-size: 12px 12px !important;
+  background-size: 12px !important;
 }
 
 @media screen and (min-width: 1500px) {
 .snarkTorrentInfo .infohash {
   padding: 3px 0 3px 20px;
   max-width: 130px;
-  background-size: 14px 14px !important;
+  background-size: 14px !important;
 }
 }
 
@@ -2236,7 +2236,7 @@ a:hover img, a:focus img {
 }
 
 .trackerconfig th:first-child {
-  background: url(/themes/snark/ubergine/images/nuke.png) center center no-repeat;
+  background: var(--nuke) no-repeat scroll center center / 14px, var(--title) !important;
 }
 
 .trackerconfig td:first-child {
@@ -3216,7 +3216,7 @@ td .commentAuthorName {
 .commentDelete {
   padding-left: 22px !important;
   text-align: center;
-  background: url(../ubergine/images/nuke.png) 2px center no-repeat;
+  background: var(--nuke) no-repeat scroll 2px center / 14px;
 }
 
 #newRating td {
