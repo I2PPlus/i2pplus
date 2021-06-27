@@ -13,6 +13,13 @@
   --highlight: inset 0 0 0 1px #fff;
   --nav: linear-gradient(to bottom, #fff 50%, #eef 51%, #eef 100%);
   --nav_hover: linear-gradient(to bottom, #fcfaf7 50%, #ffe8bf 50%, #efd9b3 100%);
+  --user: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m51.42 27.01c0-.94-.19-1.83-.53-2.65-1.3-3.07-4.94-4.33-8.07-3.19-1.71.62-4.91 1.31-10.69 1.31s-8.98-.69-10.69-1.31c-3.13-1.13-6.78.12-8.07 3.19-.35.81-.53 1.71-.53 2.65l-.03 10.35c0 7.13.55 11.51 5.93 16.62 1.93 1.83 4.2 3.24 6.39 4.73 2.19 1.48 4.13 3.45 6.97 3.45s4.78-1.96 6.97-3.45c2.19-1.48 4.46-2.9 6.39-4.73 5.37-5.1 5.97-9.62 5.97-16.75z' fill='%23fca'/%3E%3Cpath d='m53.37 13.49c-.71-3.8-3.85-6.6-7.28-8.06-6.75-3.32-14.66-4.27-22.01-2.68-2.45.77-4.08 2.95-6.47 3.87-2.39 1.05-4.2 3.13-4.86 5.66-.85 2.32-2.98 4.04-3.2 6.63-.82 4.81 1.01 9.59 3.25 13.77.16-2.75-.37-5.62.5-8.27 1.28-3.07 5.21-4.51 8.22-3.19 5.55 1.59 11.44 1.42 17.13.89 2.13-.22 4.15-1.07 6.27-1.38 3.27-.21 6.57 2.51 6.45 5.9.15 2.34 0 4.69.06 7.03 2-.68 2.73-3.04 3.06-4.94.88-5.08-.13-10.24-1.1-15.23z' fill='%236c5d53'/%3E%3C/svg%3E");
+  --nuke: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3CradialGradient id='A' cx='8.15' cy='56.16' gradientTransform='matrix(-.82 -.82 -.82 .82 84.62 24.7)' gradientUnits='userSpaceOnUse' r='39.39'%3E%3Cstop offset='0' stop-color='%23fb8bbf'/%3E%3Cstop offset='1' stop-color='%23d3285c'/%3E%3C/radialGradient%3E%3Cpath d='M64.12 25L31.9 56.52 7.08 32.18 39.2.06z' fill='%23d4aa00'/%3E%3Cpath d='M64.1 25l-32 32.02L19.7 44.3l31.96-31.8z' fill='%23ffce47'/%3E%3Cpath d='M32 69.98c-9.7-.01-17.56-7.87-17.57-17.57V34.6h35.12l.01 17.8A17.57 17.57 0 0 1 32 69.97z' fill='url(%23A)' transform='matrix(.71 .71 -.71 .71 32 -13.25)'/%3E%3Cpath d='M32.75 56.38L42.8 46.36 17.85 21.42 7.82 31.46z' fill='%23174461'/%3E%3Cpath d='m42.73 46.33-10 10.07-12.56-12.55 10.09-10' fill='%236f7c91'/%3E%3C/svg%3E");
+  --add: url("data:image/svg+xml,%3Csvg height='64' width='64' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='32' cy='32' fill='%2371c837' r='32'/%3E%3Ccircle cx='32' cy='32' fill='%23fff' r='27.07'/%3E%3Ccircle cx='32' cy='32' fill='%2371c837' r='22.17'/%3E%3Cpath d='m34.63 17.36a1.58 1.58 0 0 0 -1.12-.46.81.81 0 0 0 0 0h-3c-.85 0-1.58.73-1.58 1.58a.81.81 0 0 0 0 0l.04 10.44-10.46-.02c-.85 0-1.57.73-1.57 1.58v3.03c0 .85.73 1.58 1.58 1.58l10.45.04-.02 10.38c0 .85.73 1.58 1.58 1.58h3.03a1.6 1.6 0 0 0 1.58-1.58l.02-10.4h10.38c.87 0 1.6-.72 1.58-1.6v-3c0-.85-.73-1.58-1.58-1.58a.81.81 0 0 0 0 0l-10.37.04-.05-10.46a1.58 1.58 0 0 0 -.46-1.12z' fill='%23fff'/%3E%3C/svg%3E");
+  --create: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='64' width='64'%3E%3ClinearGradient id='A' gradientTransform='matrix(.63 -.49 .63 .49 -647.49 -398.37)' gradientUnits='userSpaceOnUse' x1='82.54' x2='89.91' y1='962.43' y2='969.8'%3E%3Cstop offset='0' stop-color='%23b3b3b3'/%3E%3Cstop offset='.4' stop-color='%23fff'/%3E%3Cstop offset='.75' stop-color='%23ddd'/%3E%3Cstop offset='1' stop-color='%23aaa'/%3E%3C/linearGradient%3E%3ClinearGradient id='B' gradientUnits='userSpaceOnUse' x1='10.18' x2='19.454' y1='34.772' y2='34.772'%3E%3Cstop offset='0' stop-color='%23333'/%3E%3Cstop offset='.4' stop-color='%23666'/%3E%3Cstop offset='.75' stop-color='%23333'/%3E%3Cstop offset='1' stop-color='%231a1a1a'/%3E%3C/linearGradient%3E%3CradialGradient id='C' cx='-84.1' cy='857.71' gradientTransform='matrix(.4 0 0 .46 75.57 -376.46)' gradientUnits='userSpaceOnUse' r='96.98'%3E%3Cstop offset='0' stop-color='%23ffd42a'/%3E%3Cstop offset='1' stop-color='%23f3361a'/%3E%3C/radialGradient%3E%3Cg transform='matrix(.87 0 0 .87 0 8.22)'%3E%3Cpath d='M53.85 15.13l19.57-1.58-17.74 8.4 17.74 8.4-19.57-1.6L65 44.93 48.86 33.77l1.58 19.57-8.4-17.74-8.4 17.74 1.6-19.57-16.15 11.16L30.2 28.78l-19.56 1.6 17.74-8.4-17.74-8.4 19.56 1.58L19.06-1.02 35.2 10.14l-1.6-19.57 8.4 17.74 8.4-17.74-1.58 19.57L65-1.02z' fill='url(%23C)'/%3E%3Cg fill-rule='evenodd' transform='matrix(.66 .66 -.66 .66 40.33 .95)'%3E%3Cpath d='M12.6 15.5h9.32v54.33H12.6z' fill='%23241c1c' stroke='%23000' stroke-width='4'/%3E%3Cpath d='M12.6 15.5V35.6h9.3V15.5z' fill='url(%23A)'/%3E%3Cpath d='M12.6 33.1h9.3v36.6h-9.3z' fill='url(%23B)'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  --config: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3CradialGradient id='A' cx='31.994' cy='31.995' gradientTransform='matrix(1.158 0 0 1.181 -5.055 -5.784)' r='30.671'%3E%3Cstop offset='0' stop-color='%23fff'/%3E%3Cstop offset='1' stop-color='%23eee'/%3E%3C/radialGradient%3E%3Cpath d='M25.75 1.221c-.74 0-1.471.6-1.471 1.33l-.74 8.099c-2.06.88-3.97 1.911-5.59 3.241L10.59 10.5c-.74-.29-1.62 0-1.91.6L2.34 21.99c-.44.74-.151 1.621.439 2.061L9.4 28.75c-.15 1.03-.291 2.06-.291 3.24s.151 2.21.291 3.24l-6.92 4.7c-.6.44-.881 1.33-.441 2.06l6.33 10.901c.44.74 1.18 1.029 1.91.599l7.362-3.39a26.35 26.35 0 0 0 5.589 3.24l.741 8.099c.15.74.738 1.331 1.468 1.331h12.67c.74 0 1.471-.601 1.471-1.331l.74-8.099c2.06-.88 3.97-1.91 5.59-3.24l7.36 3.39c.74.29 1.62.001 1.91-.599l6.33-10.901c.44-.74.15-1.62-.44-2.06l-6.179-4.69c.15-1.03.289-2.06.289-3.24s-.149-2.21-.289-3.24l6.619-4.699c.6-.44.879-1.331.439-2.061L55.48 11.1c-.44-.74-1.18-1.03-1.91-.6l-7.359 3.391a26.35 26.35 0 0 0-5.592-3.241l-.738-8.099c-.15-.74-.741-1.33-1.471-1.33zm6.18 18.703A12.11 12.11 0 0 1 43.998 32c0 6.637-5.431 12.076-12.068 12.076-6.646 0-12.078-5.43-12.078-12.076s5.432-12.076 12.078-12.076z' fill='url(%23A)' stroke-width='2px' stroke='%23337'/%3E%3C/svg%3E");
+  --folder: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m5.33 10.53h20.87c.35 0 .68.14.93.38l5.41 5.27h26.13a1.34 1.34 0 0 1 1.33 1.34v34.62c0 .73-.6 1.33-1.33 1.33h-53.34a1.34 1.34 0 0 1 -1.33-1.34v-40.26a1.34 1.34 0 0 1 1.33-1.34z' fill='%23aaf'/%3E%3Cpath d='m6.67 16.18h22.06l-3.06-2.98h-19z' fill='%2388f'/%3E%3C/svg%3E");
+  --comment: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3CradialGradient id='A' cx='18.08' cy='18.39' gradientTransform='matrix(1.63 0 0 1.29 -12.01 -8.82)' gradientUnits='userSpaceOnUse' r='30.5'%3E%3Cstop offset='0' stop-color='%23fffff9'/%3E%3Cstop offset='1' stop-color='%23e9ddaf'/%3E%3C/radialGradient%3E%3Cpath d='M32.18 1c-16.54 0-30 11.8-30 26.31 0 5.92 2.29 11.69 6.46 16.32 1.65 3.13-.69 11.2-5.64 15.69 10.06 2.03 12.35-2.14 15.06-8.79 4.34 2.03 9.19 3.09 14.12 3.09 16.54 0 30-11.8 30-26.31S48.72 1 32.18 1z' fill='url(%23A)' stroke='%23a05a2c' stroke-width='2'/%3E%3C/svg%3E");
 }
 
 body {
@@ -58,7 +65,7 @@ body.iframed::before {
 }
 
 /* accelerate rendering */
-.snarkNav, .snarkTorrentName a, .snarkTorrents:hover .percentBarText, .toggleview, .configsectionpanel .snarkConfigTitle, .addtorrentsection, .neworrentsection {
+.snarkNav, .snarkTorrentName a, .snarkTorrents:hover .percentBarText, .toggleview {
   will-change: transform;
 }
 
@@ -1278,22 +1285,11 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
   font-size: 9pt;
 }
 
-.snarkConfigTitle a {
-  font-size: 11pt !important;
-  display: inline-block;
-  width: 100%;
-  margin-top: -1px;
-}
-
-.snarkConfigTitle:hover a, .snarkConfigTitle:focus a {
-  color: #f60 !important;
-}
-
 .toggleview, .configsection .snarkConfigTitle {
   will-change: transform;
 }
 
-.snarkConfigTitle, .toggleview, .configsectionpanel .snarkConfigTitle:hover {
+.snarkConfigTitle, .toggleview {
   margin: 0 0 -3px 0 !important;
   padding: 3px 15px;
   min-width: 260px;
@@ -1310,81 +1306,22 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
   background: linear-gradient(to bottom, #fff 50%, #f2f2ff 50%) !important;
 }
 
-.snarkConfigTitle img:hover { /* inert titles */
-  color: #40404f;
-}
-
-.snarkConfigTitle:hover, .toggleview:hover, .snarkConfigTitle:active, .toggleview:active, input.toggle_input:focus + .toggleview {
-  background: var(--nav_hover) !important;
-}
-
-@supports not (-moz-appearance: none) {
-.snarkConfigTitle, .snarkConfigTitle a, .toggleview,
-.configsectionpanel .snarkConfigTitle, .configsectionpanel .snarkConfigTitle:hover {
-  padding: 4px 15px;
-}
-
-.snarkConfigTitle a {
-  padding: 0 1px !important;
-}
-}
-
-.snarkConfigTitle a:visited {
-  color: #559;
-}
-
-.snarkConfigTitle a:hover, .snarkConfigTitle a:focus, .toggleview:hover, input.toggle_input:focus + .toggleview {
-  color: #f60 !important;
-  cursor: pointer;
-}
-
 .snarkConfigTitle:active, .toggleview:active {
-  color: #f30 !important;
   box-shadow: var(--highlight), inset 2px 2px 3px #7f756f;
-}
-
-.snarkConfigTitle img, .toggleview img {
-  margin: -2px -1px 0 0;
-  vertical-align: middle;
-  will-change: transform;
-}
-
-.addtorrentsection .toggleview img {
-  margin-top: -1px;
-}
-
-.configsectionpanel .snarkConfigTitle img {
-  margin: 1px -1px 2px 0;
-}
-
-.toggleview:hover img, input.toggle_input:focus + .toggleview img,
-.configsection .snarkConfigTitle a:focus img, .configsection .snarkConfigTitle:hover a img {
-  box-shadow: 0 0 1px #f60;
-}
-
-.snarkConfigTitle:active a img, .toggleview:active img {
-  transform: rotate(90deg);
-  transition: linear transform .05s;
-}
-
-input:checked + .toggleview:active > img {
-  transform: rotate(-90deg);
 }
 
 .snarkConfigTitle {
   color: #446;
 }
 
-.configsectionpanel .snarkConfigTitle, .configsectionpanel .snarkConfigTitle:hover {
+.configsectionpanel .snarkConfigTitle {
+  padding: 7px 0 5px;
   min-width: 400px;
   letter-spacing: 2px;
   font-size: 110%;
   color: #555875 !important;
-}
-
-.configsectionpanel .snarkConfigTitle, .configsectionpanel .snarkConfigTitle:hover,
-.iframed .configsectionpanel .snarkConfigTitle, .iframed .configsectionpanel .snarkConfigTitle:hover {
-  background: linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%) !important;
+  background: linear-gradient(to bottom, #fcfcff, #fafaff 51%, #f6f6ff 100%) !important;
+  pointer-events: none;
 }
 
 .snarkConfig {
@@ -2752,7 +2689,7 @@ hr.debug {
 .snarkCommentInfo th {
   padding: 5px;
   padding-left: 30px;
-  background: url(images/comment.png) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, rgb(240, 240, 255));
+  background: var(--comment) no-repeat scroll 8px center / 16px, linear-gradient(to bottom, #fff 50%, rgb(240, 240, 255));
 }
 
 #mediaContainer {
@@ -2874,8 +2811,8 @@ hr.debug {
 }
 
 .commentAuthorName {
-  padding: 8px 5px 7px 20px;
-  background: url(images/author.png) left center no-repeat;
+  padding: 8px 5px 7px 18px;
+  background: var(--user) no-repeat scroll left center / 14px;
 }
 
 td.commentAuthor {
@@ -2883,14 +2820,14 @@ td.commentAuthor {
 }
 
 td.commentAuthor .commentAuthorName {
-  padding: 0 5px 0 24px;
+  padding: 0 5px 0 22px;
   width: 120px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   text-align: left;
   box-shadow: 0 0 0 1px #bbd;
-  background: url(images/author.png) 4px center no-repeat, linear-gradient(to bottom, #fff, #ddf);
+  background: var(--user) no-repeat scroll 4px center / 14px; linear-gradient(to bottom, #fff, #ddf);
 }
 
 @media screen and (max-width: 1000px) {
@@ -2916,7 +2853,7 @@ td.commentAuthor .commentAuthorName {
   border: 1px solid #ccccf0;
   border-radius: 3px;
   box-shadow: var(--highlight);
-  background: url(images/comment.png) 6px center no-repeat #eef;
+  background: #eef var(--comment) no-repeat scroll 6px center / 16px;
   background-blend-mode: luminosity;
 }
 
@@ -3114,10 +3051,6 @@ td.commentAuthor .commentAuthorName {
 code, .snarkTorrents tt {
   font-size: 8pt !important;
 }
-
-.configsection .snarkConfigTitle a img {
-  margin-left: 27px !important;
-}
 }
 
 /* end mini-mode */
@@ -3184,14 +3117,6 @@ th.snarkTorrentStatus {
 
 b.alwaysShow {
   display: inline;
-}
-}
-
-@supports not (-moz-appearance: none) {
-@media screen and (max-width: 1000px) {
-.snarkConfigTitle a, .toggleview, .configsectionpanel .snarkConfigTitle {
-  font-size: 12pt !important;
-}
 }
 }
 
@@ -3302,19 +3227,6 @@ b.alwaysShow {
     background-size: 16px auto, 100% 100% !important;
   }
 
-  .configsectionpanel .snarkConfigTitle:hover {
-    padding: 3px 15px !important;
-    font-size: 12pt !important;
-  }
-
-  .snarkConfigTitle, .snarkConfigTitle a, .toggleview {
-    font-size: 12pt !important;
-  }
-
-  .toggleview img, .configsection .snarkConfigTitle img {
-    margin: 2px 0 !important;
-  }
-
   input[type=submit] {
     min-width: 100px;
   }
@@ -3323,10 +3235,9 @@ b.alwaysShow {
     height: 60px;
   }
 
-  .snarkConfigTitle, .toggleview, .configsectionpanel .snarkConfigTitle, .configsectionpanel .snarkConfigTitle:hover {
+  .toggleview, #tab_config {
     padding: 4px 1px 3px !important;
     min-width: 400px;
-    font-size: 11pt !important;
   }
 
   .snarkTorrentStatus b {
@@ -3358,15 +3269,6 @@ b.alwaysShow {
     padding-bottom: 4px !important;
     word-spacing: 0;
     font-size: 10pt !important;
-  }
-}
-
-@supports not (-moz-appearance: none) {
-  @media screen and (min-width: 1500px) {
-    .toggleview, .configsectionpanel .snarkConfigTitle, .configsectionpanel .snarkConfigTitle:hover {
-      font-size: 11pt !important;
-      padding: 4px 1px 4px !important;
-    }
   }
 }
 
@@ -3826,8 +3728,64 @@ input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilte
 
 /* iconized panel tabs */
 
-.toggleview img, .configsection .snarkConfigTitle {
+.snarkConfigTitle a {
+  display: inline-block;
+  width: 100%;
+}
+
+.tab_label::after {
+  margin: 1px;
+  padding: 2px;
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  vertical-align: middle;
+  background: #f00;
+  border-radius: 50%;
+  border: 1px solid #afafcf;
+  box-shadow: inset 0 0 0 1px #fff;
+  content: "";
+  mix-blend-mode: luminosity;
+  filter: none !important;
+  pointer-events: none;
   will-change: transform;
+}
+
+#tab_addtorrent .tab_label::after {
+  background: var(--add) no-repeat scroll center center / 16px, linear-gradient(to bottom, #f8f8ff 50%, #e2e2ff 50%, #bbf);
+}
+
+#tab_newtorrent .tab_label::after {
+  background: var(--create) no-repeat scroll right 2px top 2px / 16px, linear-gradient(to bottom, #f8f8ff 50%, #e2e2ff 50%, #bbf);
+}
+
+#tab_config .tab_label::after {
+  background: var(--config) no-repeat scroll center center / 16px, linear-gradient(to bottom, #f8f8ff 50%, #e2e2ff 50%, #bbf);
+}
+
+#tab_files .tab_label::after {
+  background: var(--folder) no-repeat scroll center center / 16px, linear-gradient(to bottom, #f8f8ff 50%, #e2e2ff 50%, #bbf);
+}
+
+#tab_comments .tab_label::after {
+  background: var(--comment) no-repeat scroll center center / 16px, linear-gradient(to bottom, #f8f8ff 50%, #e2e2ff 50%, #bbf);
+}
+
+.toggleview:hover .tab_label::after, input:focus + .toggleview .tab_label::after, #tab_config:hover .tab_label::after {
+  border: 1px solid #f60;
+  box-shadow: inset 0 0 0 1px #fff, 0 0 1px 1px rgba(255,96,0,.3);
+  background-color: #fff;
+  mix-blend-mode: normal !important;
+}
+
+.toggleview:active .tab_label::after, #tab_config:active .tab_label::after {
+  transform: rotate(90deg);
+  transition: ease transform .15s;
+}
+
+input:checked + .toggleview:active .tab_label::after {
+  transform: rotate(-90deg);
+  transition: linear transform .15s;
 }
 
 .toggleview, .configsection .snarkConfigTitle a {
@@ -3836,32 +3794,7 @@ input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilte
 
 .toggleview, .configsection .snarkConfigTitle {
   text-align: center;
-  padding: 4px 0 !important;
   width: 300px;
-}
-
-.toggleview img, .configsection .snarkConfigTitle a img {
-  margin: 0 20px -1px !important;
-  padding: 3px !important;
-  min-width: 16px;
-  min-height: 16px;
-  display: inline-block !important;
-  border: 1px solid #afafcf;
-  border-radius: 50%;
-  box-shadow: inset 0 0 0 2px #fff, 0 0 0 1px #e0e0ff;
-  background: #eef;
-  background: linear-gradient(to bottom, #f8f8ff 50%, #f2f2ff 50%);
-}
-
-.configsection .snarkConfigTitle a img {
-  margin: 0 0 -1px !important;
-  display: inline-block;
-  font-size: 0 !important;
-}
-
-.toggleview:hover img, .configsection .snarkConfigTitle:hover img {
-  background: #fff;
-  border: 1px solid #f60;
 }
 
 /* torrent column delimiters */
@@ -4535,10 +4468,6 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
   box-shadow: inset 2px 2px 2px #adadeb !important;
   transform: scale(0.9) !important;
   transition: none !important;
-}
-
-.toggleview img, .snarkConfigTitle a img {
-  transform: none !important;
 }
 
 #snarkFiles input + .toggleview, #snarkCommentSection input + .toggleview  {
