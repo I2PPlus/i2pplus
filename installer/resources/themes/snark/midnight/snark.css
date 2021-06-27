@@ -1264,19 +1264,7 @@ tr:hover .percentBarText {
   background: linear-gradient(to bottom, #080818, #010010) !important;
 }
 
-/*.snarkTorrentEven:nth-child(even) {
-  background: #080811;
-}
-
-.snarkTorrentEven:nth-child(odd) {
-  background: #080811;
-}*/
-
 .snarkTorrentOdd, .snarkTorrentOdd td, .SnarkTorrentEven, .SnarkTorrentEven td, .peerinfo td, .knownTracker td {
-  border-top: 1px solid #113 !important;
-}
-
-_:-ms-lang(x), .snarkTorrentOdd, .snarkTorrentOdd td, .SnarkTorrentEven, .SnarkTorrentEven td {
   border-top: 1px solid #113 !important;
 }
 
@@ -1284,19 +1272,6 @@ _:-ms-lang(x), .snarkTorrentOdd, .snarkTorrentOdd td, .SnarkTorrentEven, .SnarkT
   background: #040408 !important;
   background: linear-gradient(to bottom, #080818, #010010) !important;
 }
-
-/*.snarkTorrentOdd:nth-child(even) {
-  background: #040408 !important;
-}
-
-.snarkTorrentOdd:nth-child(odd) {
-  background: #040408 !important;
-}
-
-.snarkTorrentOdd tr:nth-child(odd) {
-  background: #010010;
-}
-*/
 
 .snarkTorrentOdd td, .snarkTorrentEven td {
   color: #ccd1ff !important;
@@ -2254,14 +2229,6 @@ a:hover img, a:focus img {
   background: #040408;
 }
 
-_:-ms-lang(x), #trackerselect tr:nth-child(odd) {
-  border-bottom: 1px solid #000;
-}
-
-_:-ms-lang(x), #trackerselect tr:last-child {
-  border-bottom: 1px solid #120f35;
-}
-
 #trackerselect tr:first-child td {
   font-weight: 700;
   border-bottom: 1px solid #120f35;
@@ -3195,12 +3162,6 @@ td#bwHelp a {
   padding: 0;
 }
 
-.commentDate {
-  width: 100px;
-  background: url(images/clock.png) left center no-repeat;
-  padding-left: 20px !important;
-}
-
 .snarkCommentInfo td:first-child, .snarkComments td:first-child {
   width: 160px !important;
   min-width: 160px !important;
@@ -3285,9 +3246,9 @@ td .commentAuthorName {
 }
 
 .commentDelete {
-  background: url(../ubergine/images/nuke.png) 2px center no-repeat;
-  text-align: center;
   padding-left: 22px !important;
+  text-align: center;
+  background: url(../ubergine/images/nuke.png) 2px center no-repeat;
 }
 
 #newRating td {
@@ -3321,11 +3282,6 @@ td .commentAuthorName {
 }
 
 /* end Comments section */
-
-/* MS Edge fix */
-_:-ms-lang(x), * {
-  filter: none !important;
-}
 
 /* responsive layout */
 
@@ -3962,9 +3918,6 @@ input[name="nofilter_commentsName"] {
 /* end language overrides */
 
 #configs {
-  -ms-user-select: none;
-  -moz-user-select: none;
-  -webkit-user-select: none;
   user-select: none;
 }
 
