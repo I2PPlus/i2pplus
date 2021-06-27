@@ -5,7 +5,7 @@
 
 :root {
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
-  --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
+  --monospaced: var(--monospaced);
   --title: repeating-linear-gradient(to right, rgba(0,0,48,.4) 2px, #000 4px), linear-gradient(to bottom, #003, #002 50%, #001 50%, #000);
   --highlight: inset 0 0 0 1px #000;
   --dropdown: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m5.29 17.93 26.71 28.14 26.71-28.14' fill='none' stroke='%236c66bc' stroke-linecap='round' stroke-linejoin='round' stroke-width='10'/%3E%3C/svg%3E");
@@ -594,7 +594,7 @@ tfoot tr:nth-child(n+1) {
   padding: 2px 3px;
   display: inline-block;
   letter-spacing: .1em;
-  font: bold 8.5pt "Droid Sans Mono", "Noto Mono", "Noto Mono", "DejaVu Sans Mono", "Lucida Console", monospace;
+  font: bold 8.5pt var(--monospaced);
   color: #fff;
   border-radius: 2px;
   background: #2d103f;
@@ -1000,7 +1000,7 @@ th .magnetlink img, th .torrentlink img {
 }
 
 .infohash, .snarkAddInfo code {
-  font-family: "Droid Sans Mono", "Noto Mono", "DejaVu Sans Mono", "Lucida Console", monospace !important;
+  font-family: var(--monospaced) !important;
   color: #cc0;
   -moz-user-select: all;
   -webkit-user-select: all;
@@ -1393,11 +1393,12 @@ to {
 
 .percentBarComplete {
   margin-bottom: -1px;
-  padding: 5px 0 1px;
+  padding: 0 0 2px;
   width: 84px;
   max-width: 84px;
   display: inline-block;
-  line-height: 1;
+  vertical-align: middle;
+  line-height: 1.4;
   color: #a7acff;
   text-align: center;
   text-shadow: 0 1px 1px #000;
@@ -1407,20 +1408,10 @@ to {
   background: radial-gradient(at center bottom, rgba(32, 32, 80, .55) 10%, rgba(16, 16, 64, .1) 60%, rgba(0, 0, 0, 0) 70%), linear-gradient(to bottom, #113, #000008);
 }
 
-.percentBarComplete::after {
-  height: 18px;
-  display: inline-block;
-  vertical-align: middle;
-  content: "";
-}
-
 @media screen and (max-width: 1500px) {
-.percentBarComplete {
-  padding: 4px 0 2px;
-}
-.percentBarComplete::after {
-  height: 15px;
-}
+  .percentBarComplete {
+    padding: 3px 0;
+  }
 }
 
 tr:hover .percentBarInner {
@@ -1571,8 +1562,8 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
 }
 
 .snarkConfigTitle:active, .toggleview:active {
-  box-shadow: var(--highlight), inset 3px 3px 3px 3px #000;
-  background: linear-gradient(to right, rgba(0,0,16,.1), rgba(64,0,64,.2), rgba(0,0,16,.1)), linear-gradient(to bottom, #080008, #0a000a) !important;
+  box-shadow: var(--highlight), inset 0 0 0 1px #000, inset 3px 3px 3px 3px #000;
+  background: linear-gradient(to right, rgba(0,0,32,.1), rgba(64,0,64,.2), rgba(0,0,32,.1)), linear-gradient(to bottom, #080008, #0a000a) !important;
   transition: ease all .01s;
 }
 
@@ -1703,8 +1694,8 @@ input:checked + .toggleview:active .tab_label::after {
 /* end section headings */
 
 .snarkConfig {
-  font-size: 10pt;
   width: 100%;
+  font-size: 10pt;
 }
 
 form {
@@ -1783,7 +1774,6 @@ input:disabled[type=submit], input:disabled:hover[type=submit], input:disabled:a
   border: 1px solid #26225c;
   border-radius: 1px;
   box-shadow: var(--highlight), inset 0 0 2px 0 #559;
-  background: #000;
   background: linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
 }
 
@@ -1813,7 +1803,6 @@ input[type=submit]:hover, input[type=submit]:focus, input[type="reset"]:hover, i
   color: #652787 !important;
   border: 1px solid #652787 !important;
   box-shadow: var(--highlight), inset 0 0 2px 1px #757;
-  background: #000 !important;
   background: linear-gradient(to bottom, #202 50%, #000 50%) !important;
 }
 
@@ -1891,7 +1880,6 @@ input[type=text]:hover, input.r:hover {
 input[type=text]:focus, textarea:focus, input.r:focus, textarea[name="i2cpOpts"]:focus, input[name="nofilter_dataDir"]:focus {
   color: #7166ff;
   background: #000;
-  box-shadow: 0 0 0 1px rgba(101, 39, 135, .5);
   box-shadow: 0 0 0 1px rgba(101, 39, 135, .5), 0 0 2px 2px #202;
   transition: ease all .3s;
 }
@@ -1903,7 +1891,7 @@ textarea[name="i2cpOpts"], input[name="nofilter_dataDir"] {
   width: 70%;
   resize: none;
   overflow: hidden;
-  font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
+  font-family: var(--bodyfont);
   cursor: text;
 }
 
@@ -2582,7 +2570,7 @@ form:last-child > .configsectionpanel {
 
 code {
   padding: 0 2px;
-  font-family: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
+  font-family: var(--monospaced);
   font-size: 8.5pt;
   font-weight: 700;
   color: #7166ff;
@@ -2699,17 +2687,17 @@ input:checked + label + hr + table + table {
 
 .debugConnection {
   line-height: 130%;
-  font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
+  font-family: var(--monospaced);
   color: #090 !important;
   padding: 0 5px;
 }
 
 .from, .to {
+  vertical-align: middle;
+  line-height: .5;
   font-family: sans-serif;
   font-size: 12pt;
   font-weight: 700;
-  vertical-align: middle;
-  line-height: 50%;
   text-shadow: 0 0 1px #000;
 }
 
@@ -2719,9 +2707,8 @@ input:checked + label + hr + table + table {
 }
 
 .debugConnStat, .debugRequests {
-  font-family: "Droid Sans Mono", "Noto Mono", "Noto Mono", "DejaVu Sans Mono", "Lucida Console", monospace;
-  color: #ee0;
-  color: #995FBF;
+  font-family: var(--monospaced);
+  color: #995fbf;
 }
 
 .debugConnStat b {
@@ -2750,10 +2737,10 @@ tfoot .dhtDebug th {
 }
 
 #dhtDebugInner {
-  text-align: center;
-  padding: 5px;
-  background: #000;
   margin: -23px 0 -12px;
+  padding: 5px;
+  text-align: center;
+  background: #000;
 }
 
 input#toggle_debug:not(checked) + label {
