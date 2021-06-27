@@ -712,7 +712,7 @@ public class LeaseSet2 extends LeaseSet {
         buf.append("\n* Expires: ").append(new java.util.Date(_expires));
         buf.append("\n* Leases: ").append(getLeaseCount());
         for (int i = 0; i < getLeaseCount(); i++) {
-            buf.append("\n* ").append(getLease(i));
+            buf.append(getLease(i));
         }
         return buf.toString();
     }
