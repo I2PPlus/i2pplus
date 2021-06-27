@@ -1486,12 +1486,10 @@ tr:hover .percentBarComplete {
 audio, video {
   padding: 1px;
   width: 240px;
-/*  border: 1px solid #26235c;*/
   box-shadow: 0 0 0 1px #26235c, var(--highlight);
 }
 
 audio:hover, audio:focus, video:hover, video:focus {
-/*  border: 1px solid #652787;*/
   box-shadow: 0 0 0 1px #652787, var(--highlight);
 }
 
@@ -1561,10 +1559,6 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
               linear-gradient(to bottom, #181828 50%, #000 50%);
 }
 
-/*.toggleview {
-  padding: 3px 1px 5px 1px;
-}*/
-
 .configsection .snarkConfigTitle, .toggleview {
   font-size: 0 !important;
 }
@@ -1574,7 +1568,6 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
   background: #002 !important;
   background: linear-gradient(to right, rgba(0,0,16,.05), rgba(96,0,96,.15), rgba(0,0,16,.05)),
               linear-gradient(to bottom, #1d1a2d 50%, #000 50%) !important;
-  opacity: 1;
 }
 
 .snarkConfigTitle:active, .toggleview:active {
@@ -1638,18 +1631,6 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
   will-change: transform;
 }
 
-.toggleview:hover .tab_label::after, #tab_config:hover .tab_label::after {
-  border: 2px solid #101;
-  box-shadow: 0 0 1px 1px rgba(255,128,0,.2) !important;
-  filter: drop-shadow(0 0 1px #000) drop-shadow(0 0 2px #730) !important;
-  mix-blend-mode: normal !important;
-}
-
-.toggleview:active .tab_label::after, #tab_config:active .tab_label::after {
-  transform: rotate(90deg);
-  transition: ease transform .01s;
-}
-
 input:checked + .toggleview:active .tab_label::after {
   transform: rotate(-90deg);
   transition: linear transform .01s;
@@ -1675,11 +1656,15 @@ input:checked + .toggleview:active .tab_label::after {
   background: var(--comment) no-repeat scroll center center / 16px, linear-gradient(to bottom, #002, #000 50%, #1f1e32 50%, #191729);
 }
 
+.toggleview:hover .tab_label::after, #tab_config:hover .tab_label::after {
+  border: 2px solid #101;
+  box-shadow: 0 0 1px 1px rgba(255,128,255,.2);
+  filter: drop-shadow(0 0 1px #000) drop-shadow(0 0 2px #652787);
+  mix-blend-mode: normal !important;
+}
+
 #tab_addtorrent:hover .tab_label::after, input:focus + .toggleview .tab_label::after  {
-  box-shadow: 0 0 1px 1px rgba(64,0,64,.5) !important;
   background: var(--add) no-repeat scroll center center / 16px, linear-gradient(to bottom, #003, #000 50%, #3f3f4a 50%, #31313a);
-  background-blend-mode: normal;
-  filter: drop-shadow(0 0 2px #652787);
 }
 
 #tab_newtorrent:hover .tab_label::after {
@@ -1688,6 +1673,13 @@ input:checked + .toggleview:active .tab_label::after {
 
 #tab_config .tab_label:hover::after {
   background: var(--config) no-repeat scroll center center / 16px, linear-gradient(to bottom, #003, #000 50%, #3f3f4a 50%, #31313a);
+}
+
+.toggleview:active .tab_label::after, #tab_config:active .tab_label::after {
+  box-shadow: 0 0 0 2px #321343;
+  filter: drop-shadow(0 0 1px #461b5e);
+  transform: rotate(90deg);
+  transition: ease transform .01s;
 }
 
 /* miminal tabs */
@@ -1699,17 +1691,6 @@ input:checked + .toggleview:active .tab_label::after {
 
 .toggleview, .configsection .snarkConfigTitle a {
   font-size: 0 !important;
-}
-
-.toggleview:hover img, .configsection .snarkConfigTitle:hover img {
-  background-blend-mode: normal;
-  filter: drop-shadow(0 0 2px #652787);
-  background: linear-gradient(to bottom, #003, #000 50%, #3f3f4a 50%, #31313a) !important;
-}
-
-.toggleview:active img, .configsection .snarkConfigTitle:active img {
-  box-shadow: 0 0 0 2px #321343;
-  filter: drop-shadow(0 0 1px #461b5e);
 }
 
 .snarkConfig .snarkConfigTitle a {
