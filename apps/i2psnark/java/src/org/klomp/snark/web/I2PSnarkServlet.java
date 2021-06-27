@@ -1115,7 +1115,8 @@ public class I2PSnarkServlet extends BasicServlet {
                     out.write("</tr>\n<tr class=\"dhtDebug volatile\">\n");
                     out.write("<th colspan=\"12\">\n" +
                               "<div id=\"dhtDebugPanel\">\n" +
-                              "<input class=\"toggle_input\" id=\"toggle_debug\" type=\"checkbox\"><label class=\"toggleview\" for=\"toggle_debug\">");
+                              "<input class=\"toggle_input\" id=\"toggle_debug\" type=\"checkbox\">" +
+                              "<label class=\"toggleview\" for=\"toggle_debug\">");
                     out.write(toThemeImg("debug"));
                     out.write(' ');
                     out.write(_t("Dht Debug"));
@@ -2889,11 +2890,11 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write(" checked=\"checked\">");  // force toggle open
         else
             out.write('>');
-        out.write("<label id=\"tab_addtorrent\" class=\"toggleview\" for=\"toggle_addtorrent\">");
-        out.write(toThemeImg("add"));
-        out.write(' ');
+        out.write("<label id=\"tab_addtorrent\" class=\"toggleview\" for=\"toggle_addtorrent\"><span class=\"tab_label\">");
+//        out.write(toThemeImg("add"));
+//        out.write(' ');
         out.write(_t("Add Torrent"));
-        out.write("</label>");
+        out.write("</span></label>");
 
         out.write("<hr>\n<table border=\"0\"><tr><td>");
         out.write(_t("From URL"));
@@ -2929,11 +2930,11 @@ public class I2PSnarkServlet extends BasicServlet {
                   "<form action=\"_post\" method=\"POST\">\n");
         writeHiddenInputs(out, req, "Create");
         out.write("<input hidden class=\"toggle_input\" id=\"toggle_createtorrent\" type=\"checkbox\">" +
-                  "<label id=\"tab_newtorrent\" class=\"toggleview\" for=\"toggle_createtorrent\">");
-        out.write(toThemeImg("create"));
-        out.write(' ');
+                  "<label id=\"tab_newtorrent\" class=\"toggleview\" for=\"toggle_createtorrent\"><span class=\"tab_label\">");
+//        out.write(toThemeImg("create"));
+//        out.write(' ');
         out.write(_t("Create Torrent"));
-        out.write("</label><hr>\n<table border=\"0\"><tr><td>");
+        out.write("</span></label><hr>\n<table border=\"0\"><tr><td>");
         //out.write("From file: <input type=\"file\" name=\"newFile\" size=\"50\" value=\"" + newFile + "\" /><br>\n");
         out.write(_t("Data to seed"));
         out.write(":</td><td>"
@@ -3037,8 +3038,8 @@ public class I2PSnarkServlet extends BasicServlet {
                   "<div class=\"configsectionpanel lang_" + lang + "\"><div class=\"snarkConfig\">\n");
         writeHiddenInputs(out, req, "Save");
         out.write("<span class=\"snarkConfigTitle\">");
-        out.write(toThemeImg("config"));
-        out.write(' ');
+//        out.write(toThemeImg("config"));
+//        out.write(' ');
         out.write(_t("Configuration"));
         out.write("</span><hr>\n" +
                   "<table border=\"0\" id=\"configs\">\n");
@@ -3427,8 +3428,8 @@ public class I2PSnarkServlet extends BasicServlet {
                    "<div class=\"configsectionpanel\" id=\"trackers\"><div class=\"snarkConfig\">\n");
         writeHiddenInputs(buf, req, "Save2");
         buf.append("<span class=\"snarkConfigTitle\">");
-        toThemeImg(buf, "config");
-        buf.append(' ');
+//        toThemeImg(buf, "config");
+//        buf.append(' ');
         buf.append(_t("Trackers"));
         buf.append("</span><hr>\n"   +
                    "<table class=\"trackerconfig\"><tr><th title=\"")
@@ -3516,11 +3517,11 @@ public class I2PSnarkServlet extends BasicServlet {
 
     private void writeConfigLink(PrintWriter out) throws IOException {
         out.write("\n<div class=\"configsection\">\n<span class=\"snarkConfig\">" +
-                  "<span id=\"tab_config\" class=\"snarkConfigTitle\"><a href=\"configure\">");
-        out.write(toThemeImg("config"));
-        out.write(' ');
+                  "<span id=\"tab_config\" class=\"snarkConfigTitle\"><a href=\"configure\"><span class=\"tab_label\">");
+//        out.write(toThemeImg("config"));
+//        out.write(' ');
         out.write(_t("Configuration"));
-        out.write("</a></span></span>\n</div>\n");
+        out.write("</span></a></span></span>\n</div>\n");
     }
 
     /**
@@ -3530,7 +3531,7 @@ public class I2PSnarkServlet extends BasicServlet {
      */
     private void addMagnet(String url, File dataDir) {
         if (url.startsWith(MagnetURI.MAGNET_FULL_V2)) {
-            _manager.addMessage("Version 2 magnet links are not supported");
+            _manager.addMessage("Cannot add magnet: version 2 magnet links are not supported");
             return;
         }
         try {
@@ -4289,11 +4290,11 @@ public class I2PSnarkServlet extends BasicServlet {
                 buf.append("<input class=\"toggle_input\" id=\"toggle_comments\" type=\"checkbox\"");
                 if (comments != null && !comments.isEmpty())
                     buf.append(" checked");
-                buf.append(">\n<label class=\"toggleview\" for=\"toggle_comments\">");
-                buf.append(toThemeImg("comment"));
-                buf.append(' ');
+                buf.append(">\n<label id=\"tab_comments\" class=\"toggleview\" for=\"toggle_comments\"><span class=\"tab_label\">");
+//                buf.append(toThemeImg("comment"));
+//                buf.append(' ');
                 buf.append(_t("Comments &amp; Ratings"));
-                buf.append("</label><hr>\n");
+                buf.append("</span></label><hr>\n");
                 displayComments(snark, er, ec, esc, buf);
                 buf.append("</div>\n");
             }
@@ -4341,11 +4342,11 @@ public class I2PSnarkServlet extends BasicServlet {
         if (!isTopLevel || fileList.size() <= 10 || sortParam != null || getQueryString(up) != null)
             buf.append(" checked");
         buf.append(">");
-        buf.append("<label class=\"toggleview\" for=\"toggle_files\">");
-        buf.append(toImg("folder", ""));
-        buf.append(' ');
+        buf.append("<label id=\"tab_files\" class=\"toggleview\" for=\"toggle_files\"><span class=\"tab_label\">");
+//        buf.append(toImg("folder", ""));
+//        buf.append(' ');
         buf.append(_t("Files"));
-        buf.append("</label><hr>\n");
+        buf.append("</span></label><hr>\n");
         buf.append("<table class=\"snarkDirInfo\">\n<thead>\n" +
                    "<tr>\n" +
                    "<th colspan=2>");
@@ -4660,11 +4661,11 @@ public class I2PSnarkServlet extends BasicServlet {
                 buf.append("<input class=\"toggle_input\" id=\"toggle_comments\" type=\"checkbox\"");
                 if (comments != null && !comments.isEmpty())
                     buf.append(" checked");
-                buf.append(">\n<label class=\"toggleview\" for=\"toggle_comments\">");
-                buf.append(toThemeImg("comment"));
-                buf.append(' ');
+                buf.append(">\n<label id=\"tab_comments\" class=\"toggleview\" for=\"toggle_comments\"><span class=\"tab_label\">");
+//                buf.append(toThemeImg("comment"));
+//                buf.append(' ');
                 buf.append(_t("Comments"));
-            buf.append("</label><hr>\n");
+            buf.append("</span></label><hr>\n");
             displayComments(snark, er, ec, esc, buf);
             // for stop/start/check
             buf.append("</div>\n");
@@ -5188,6 +5189,38 @@ public class I2PSnarkServlet extends BasicServlet {
      */
     private String toImg(String icon, String classText, String altText, String titleText) {
         return "<img class=\"" + classText + "\" alt=\"" + altText + "\" height=\"16\" width=\"16\" src=\"" + _contextPath + WARBASE + "icons/" + icon + ".png\" title=\"" + titleText + "\">";
+    }
+
+    /**
+     *  Icon file (svg) in the .war. Always 16x16.
+     *
+     *  @param icon name without the ".svg"
+     *  @since 0.9.51+
+     */
+    private String toSVG(String icon) {
+        return toSVG(icon, "");
+    }
+
+    /**
+     *  Icon file (svg) in the .war. Always 16x16.
+     *
+     *  @param icon name without the ".svg"
+     *  @since 0.8.2
+     */
+    private String toSVG(String icon, String altText) {
+        return "<img alt=\"" + altText + "\" height=\"16\" width=\"16\" src=\"" + _contextPath + WARBASE + "icons/" + icon + ".svg\">";
+    }
+
+    /**
+     *  Icon file (svg) in the .war. Always 16x16.
+     *
+     *  @param image name without the ".svg"
+     *  @param altText non-null
+     *  @param titleText non-null
+     *  @since 0.9.33
+     */
+    private String toSVG(String icon, String classText, String altText, String titleText) {
+        return "<img class=\"" + classText + "\" alt=\"" + altText + "\" height=\"16\" width=\"16\" src=\"" + _contextPath + WARBASE + "icons/" + icon + ".svg\" title=\"" + titleText + "\">";
     }
 
     /**
