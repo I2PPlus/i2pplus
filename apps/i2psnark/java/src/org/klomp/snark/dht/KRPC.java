@@ -700,7 +700,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                    "<b>Rcvd tokens:</b> ").append(_incomingTokens.size()).append(" &nbsp;" +
                    "<b>Pending queries:</b> ").append(_sentQueries.size()).append("</div>");
         _tracker.renderStatusHTML(buf);
-        _knownNodes.renderStatusHTML(buf);
+//        _knownNodes.renderStatusHTML(buf);
         return buf.toString();
     }
 
