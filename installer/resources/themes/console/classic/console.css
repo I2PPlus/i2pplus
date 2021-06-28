@@ -1368,7 +1368,7 @@ pre {
 }
 
 tt, code, .bucket {
-  font: bold 8.5pt -var(--monospaced) !important;
+  font: bold 8.5pt var(--monospaced) !important;
   color: darkgreen;
 }
 
@@ -1419,10 +1419,6 @@ select[disabled], select[disabled]:hover, select[disabled]:focus, select[disable
   color: #757a8a !important;
   cursor: default;
   opacity: .7;
-}
-
-select::-ms-expand {
-  display: none;
 }
 
 select[name="newlogclass"] {
@@ -4083,7 +4079,7 @@ div.app img {
 }
 
 tt, pre, textarea, code {
-  font: 8.5pt --var(monospaced);
+  font: 8.5pt var(--monospaced);
 }
 
 textarea {
@@ -4649,7 +4645,7 @@ p#enablefullstats {
 
 .tidylist code {
   text-align: left;
-  font: 9pt -var(--monospaced);
+  font: 9pt var(--monospaced);
   font-weight: 700;
   color: #723;
 }
@@ -5383,7 +5379,7 @@ td#pw_adduser input {
 .netdbentry th code, .sybil_routerinfo th code, .leaseset th code {
   margin-left: 4px;
   padding: 1px 3px;
-  font-family: --var(monospaced) !important;
+  font-family: var(--monospaced) !important;
   font-weight: 700;
   color: #030 !important;
   border-radius: 3px;
@@ -6525,7 +6521,7 @@ p#fullhistory {
 
 #configinfo th {
   text-align: left;
-  font-family: --var(monospaced);
+  font-family: var(--monospaced);
   padding: 7px 10px;
   color: #050;
 }
@@ -7097,7 +7093,7 @@ span.b32 {
   float: right;
   line-height: 120%;
   letter-spacing: .1em;
-  font-family: --var(monospaced);
+  font-family: var(--monospaced);
   font-size: 80%;
   color: #070;
   border-radius: 2px;
@@ -8540,26 +8536,6 @@ div.news {
 }
 
 /* end responsive layout */
-
-/* Edge/IE tweaks */
-
-_:-ms-lang(x), #sidebarconf tr, .homelinkedit tr, #clientconfig tr, #webappconfig tr,  #configstats tr, #tunnelconfig tr, #profiles tr,
-#floodfills tr, #netdboverview tr, .netdbentry tr, #leasesetdebug tr, #leasesetsummary tr, .leaseset tr,
-.sybil_routerinfo tr, #enviro tr, #schedjobs tr, #jobstats tr, #eventlog tr, .tunneldisplay tr, #udpconnections tr, #ntcpconnections tr {
-  border-top: 1px solid #cfd6ff;
-}
-
-_:-ms-lang(x), #peerdefs td:first-child {
-  border-right: 1px solid #cfd6ff;
-}
-
-_:-ms-lang(x), .tunnels_client th:first-child::after {
-  letter-spacing: -.05em;
-  font-weight: 400;
-}
-
-/* end Edge/IE tweaks */
-
 
 /* TO DO: Merge with main classes */
 
