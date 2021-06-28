@@ -6516,12 +6516,12 @@ h3#udpcon {
 
 #tunnels h3.server {
   padding-left: 32px;
-  background: var(--server) 7px center no-repeat / 18px, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  background: var(--server) no-repeat 7px center / 18px, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
 }
 
 #tunnels h3.client {
   padding-left: 32px;
-  background: var(--client) 7px center no-repeat / 18px, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  background: var(--client) no-repeat 7px center / 18px, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
 }
 
 #tunnels h3.ping {
