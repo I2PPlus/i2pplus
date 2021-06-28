@@ -5273,11 +5273,11 @@ button.download.control:hover, button.download.control:focus {
 
 #updateAvailable + br + button + br + #updateAvailable::before {
   margin: 2px 0 4px;
-  content: "";
-  display: inline-block;
-  height: 1px;
-  background: #ddf;
   width: calc(100% - 20px);
+  height: 1px;
+  display: inline-block;
+  background: #ddf;
+  content: "";
 }
 
 #updateAvailable + br + button + br + #updateAvailable {
@@ -5304,13 +5304,11 @@ button.download.control:hover, button.download.control:focus {
 }
 
 #sidebar .reload {
-  background: var(--restart) no-repeat center center, var(--button) !important;
-  background-size: 16px, 100% !important;
+  background: var(--restart) no-repeat center center / 16px, var(--button) !important;
 }
 
 #sidebar .reload:hover, #sidebar .reload:focus {
-  background: var(--shutdown_hover) 37% center no-repeat, var(--restart_hover) 63% center no-repeat, var(--button_hover) !important;
-  background-size: 16px, 16px, 100% !important;
+  background: var(--shutdown_hover) no-repeat 37% center / 16px, var(--restart_hover) no-repeat 63% center / 16px, var(--button_hover) !important;
   border: 1px solid #f60;
 }
 
@@ -6518,38 +6516,32 @@ h3#udpcon {
 
 #tunnels h3.server {
   padding-left: 32px;
-  background: var(--server) 7px center no-repeat, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
-  background-size: 18px, 100%, 100% !important;
+  background: var(--server) 7px center no-repeat / 18px, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
 }
 
 #tunnels h3.client {
   padding-left: 32px;
-  background: var(--client) 7px center no-repeat, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
-  background-size: 18px, 100%, 100% !important;
+  background: var(--client) 7px center no-repeat / 18px, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
 }
 
 #tunnels h3.ping {
   padding-left: 32px;
-  background: var(--ping) no-repeat 8px center, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
-  background-size: 18px, 100%, 100% !important;
+  background: var(--ping) no-repeat 8px center / 18px, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
 }
 
 #tunnels h3#participating {
   padding-left: 32px;
-  background: var(--share) no-repeat 8px center, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
-  background-size: 18px, 100%, 100% !important;
+  background: var(--share) no-repeat 8px center / 18px, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
 }
 
 #tunnels h3#exploratory {
   padding-left: 32px;
-  background: var(--globe) no-repeat 8px center, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
-  background-size: 18px, 100%, 100% !important;
+  background: var(--globe) no-repeat 8px center / 18px, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
 }
 
 #tunnels h3:last-of-type {
   padding-left: 32px;
-  background: var(--speed) no-repeat 8px center, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
-  background-size: 18px, 100%, 100% !important;
+  background: var(--speed) no-repeat 8px center / 18px, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
 }
 
 #tunnels h3 + h3 {
@@ -6732,7 +6724,6 @@ p:empty { /* empty paragraph nuke */
   border: 1px solid var(--borderinner);
   box-shadow: 0 0 1px #e0e0eb;
   border-radius: 2px;
-  background: #f2f2ff;
   background: linear-gradient(to right, #f2f2ff, #f8f8ff, #f2f2ff);
 }
 
@@ -6748,8 +6739,7 @@ p:empty { /* empty paragraph nuke */
   letter-spacing: .08em;
   text-transform: uppercase;
   font-size: 11pt !important;
-  background:  var(--globe) no-repeat 8px center, var(--h2) !important;
-  background-size: 18px 18px, 100%, 100% !important;
+  background:  var(--globe) no-repeat 8px center / 18px, var(--h2) !important;
 }
 
 #netdblookup input[type=checkbox] {
@@ -7276,8 +7266,7 @@ b.netdb_transport {
   vertical-align: middle;
   border: 1px solid #bbc;
   border-radius: 2px;
-  background: var(--edit) no-repeat center center;
-  background-size: 12px;
+  background: var(--edit) no-repeat center center / 12px;
   content: "";
 }
 
@@ -7584,8 +7573,7 @@ h3.sybils {
   list-style: none;
   border-radius: 2px;
   box-shadow: 0 0 0 1px rgba(200,200,255,.8), var(--highlight);
-  background: var(--eye) no-repeat 6px center, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,240,.4)) #e7e7ff;
-  background-size: 16px, 100% !important;
+  background: var(--eye) no-repeat 6px center / 16px, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,240,.4)) #e7e7ff;
 }
 
 #sybilnav li:hover {
@@ -7707,14 +7695,14 @@ h3.sybils {
 }
 
 .sybil_routerinfo th img[src^="/flags"] {
+  margin-right: 3px;
   height: 11px;
   width: 16px;
-  margin-right: 3px;
 }
 
 .sybil_routerinfo td:first-child, .netdbentry td:first-child {
-  text-align: right !important;
   padding-right: 0;
+  text-align: right !important;
 }
 
 .sybil_routerinfo td:first-child {
@@ -7744,9 +7732,9 @@ h3.sybils {
   padding: 1px 0;
   width: 100%;
   min-width: 240px;
+  -webkit-column-break-inside: avoid;
   break-inside: avoid;
   page-break-inside: avoid;
-  -webkit-column-break-inside: avoid;
 }
 
 p.sybil_info, p.family, p.threatpoints, p.hashdist, p#sybil_totals, p.notfound {
@@ -7757,8 +7745,7 @@ p.sybil_info, p.family, p.threatpoints, p.hashdist, p#sybil_totals, p.notfound {
   font-weight: 700;
   color: var(--inklite);
   text-align: left;
-  background: var(--eye) no-repeat 8px center, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
-  background-size: 16px, 100%;
+  background: var(--eye) no-repeat 8px center / 16px, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
 }
 
 p.sybil_info {
@@ -7767,19 +7754,17 @@ p.sybil_info {
 
 p.threatpoints {
   padding-left: 33px;
-  background: var(--eye_static) no-repeat 8px center, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
-  background-size: 20px, 100%;
+  background: var(--eye_static) no-repeat 8px center / 20px, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
 }
 
 p.threatpoints.hot {
-  background: var(--eye_static) no-repeat 8px center, url(/themes/console/images/info/hot.png) right 4px center no-repeat, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
-  background-size: 20px, 24px, 100%;
+  background: var(--eye_static) no-repeat 8px center / 20px, url(/themes/console/images/info/hot.png) no-repeat right 4px center / 24px,
+              repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
 }
 
 p#sybil_totals {
   font-weight: 400;
-  background: var(--eye_static) no-repeat 8px center, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
-  background-size: 16px, 100%;
+  background: var(--eye_static) no-repeat 8px center / 16px, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
 }
 
 p.family + p.family, p.sybil_info + p.sybil_info {
@@ -7788,14 +7773,12 @@ p.family + p.family, p.sybil_info + p.sybil_info {
 
 p.family:nth-child(even) {
   background: #efefff;
-  background: var(--eye) no-repeat 8px center, repeating-linear-gradient(45deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fafaff 5px), #fafaff;
-  background-size: 16px, 100% !important;
+  background: var(--eye) no-repeat 8px center / 16px, repeating-linear-gradient(45deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fafaff 5px), #fafaff;
 }
 
 p.family:nth-child(odd) {
   background: #f7f8ff;
-  background: var(--eye) no-repeat 8px center, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fff;
-  background-size: 16px, 100% !important;
+  background: var(--eye) no-repeat 8px center / 16px, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fff;
 }
 
 p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sybil_routerinfo, table.sybil_routerinfo + p {
@@ -7809,7 +7792,6 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   display: inline-block;
   border: 1px solid var(--borderinner);
   box-shadow: var(--highlight);
-  background: #eef;
   background: repeating-linear-gradient(45deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fafaff 5px), #fafaff;
 }
 
@@ -7823,9 +7805,9 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 }
 
 @supports not (-moz-appearance: none) {
-.leaseset th:last-child, .leaseset td:last-child, .sybil_routerinfo th:last-child {
-  border-right: 1px solid var(--borderinner) !important;
-}
+  .leaseset th:last-child, .leaseset td:last-child, .sybil_routerinfo th:last-child {
+    border-right: 1px solid var(--borderinner) !important;
+  }
 }
 
 .sybilinfo_params {
@@ -8119,13 +8101,11 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   border: 1px solid #bbd;
   border-radius: 2px;
   box-shadow: var(--highlight);
-  background: url(/themes/console/images/buttons/cryptokey.png) 1px center no-repeat, linear-gradient(to bottom, #fff, #eef);
-  background-size: 14px, 100%;
+  background: url(/themes/console/images/buttons/cryptokey.png) no-repeat 1px center / 14px, linear-gradient(to bottom, #fff, #eef);
 }
 
 .signingkey.encryption {
-  background: var(--lock) 1px center no-repeat, linear-gradient(to bottom, #fff, #eef);
-  background-size: 14px, 100%;
+  background: var(--lock) no-repeat 1px center / 14px, linear-gradient(to bottom, #fff, #eef);
 }
 
 #netdb_ram {
@@ -8136,7 +8116,6 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   box-shadow: var(--highlight);
   border: 1px solid #bbd;
   border-radius: 2px;
-  background: #eef;
   background: linear-gradient(to bottom, #fff, #eef);
 }
 
@@ -8214,7 +8193,6 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   border: 1px solid var(--borderinner);
   border-radius: 2px;
   box-shadow: var(--highlight), inset 0 0 1px 1px #ddf;
-  background: #eef;
   background: linear-gradient(to bottom, rgba(255,255,255,.2), rgba(228,228,255,.2)), repeating-linear-gradient(135deg, rgba(252,252,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fff 4px) #fafaff;
   -webkit-break-inside: avoid;
   break-inside: avoid;
@@ -8297,7 +8275,6 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 
 #banlist li hr {
   margin: 4px 4px 3px 0 !important;
-  background: #7e7fb9;
   background: linear-gradient(to right, #7e7fb9 70%, rgba(0,0,0,0) 95%);
   opacity: .75;
 }
@@ -8305,7 +8282,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 #bannedips table tr {
   box-shadow: var(--highlight) !important;
 }
-#s
+
 #bannedips table td {
   background: rgba(240,240,255,.4);
 }
@@ -8313,14 +8290,14 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 /* end banned peers */
 
 #tunnelconfig th[colspan="3"] {
-  text-transform: uppercase;
-  letter-spacing: .08em;
   word-spacing: .1em;
+  letter-spacing: .08em;
+  text-transform: uppercase;
 }
 
 #tunnelconfig font[color="red"] {
-  background: url(images/warn.png) no-repeat left center;
   padding: 4px 5px 4px 20px;
+  background: url(images/warn.png) no-repeat left center;
 }
 
 #tunnelconfig td:nth-child(n+2) {
@@ -8351,15 +8328,15 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 }
 
 .sortup, .sortdown, .sortupactive, .sortdownactive {
-  padding: 1px 0;
-  border: 1px solid #97a2ce;
-  border-radius: 2px;
   margin: 3px 1px 0 !important;
-  vertical-align: middle;
-  text-align: center;
-  display: inline-block;
+  padding: 1px 0;
   width: 16px;
   height: 12px;
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+  border: 1px solid #97a2ce;
+  border-radius: 2px;
   background-size: 9px auto, 100% !important;
 }
 
@@ -8394,11 +8371,11 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 }
 
 .sortup a:focus, .sortdown a:focus {
-  background: rgba(255,102,0,.15);
-  border-radius: 2px;
-  box-shadow: var(--highlight);
   margin-top: -1px;
   display: inline-block;
+  border-radius: 2px;
+  box-shadow: var(--highlight);
+  background: rgba(255,102,0,.15);
 }
 
 .sortupactive {
@@ -8493,7 +8470,6 @@ table#schedjobs {
   border: 1px solid #bbc;
   border-radius: 2px;
   box-shadow: var(--highlight);
-  background: #dbecff;
   background: linear-gradient(to bottom, #fff, #dbecff);
 }
 
@@ -8518,33 +8494,27 @@ table#schedjobs {
 }
 
 #profilelist .reachable, #floodfills .reachable, #capabilities_key .reachable, .netdbentry .reachable, .sybil_routerinfo .reachable {
-  background: #e2ffe2;
   background: linear-gradient(to bottom, #fff, #e2ffe2);
 }
 
 #profilelist .unreachable, #floodfills .unreachable, #capabilities_key .unreachable, .netdbentry .unreachable  {
-  background: #faa;
   background: linear-gradient(to bottom, #fff, #faa);
 }
 
 #profilelist .ff, #floodfills .ff, #capabilities_key .ff, .netdbentry .ff, .sybil_routerinfo .ff {
-  background: #ffe2ad;
   background: linear-gradient(to bottom, #fff, #ffe2ad);
 }
 
 #profilelist .hidden, #floodfills .hidden, #capabilities_key .hidden, .netdbentry .hidden {
   color: #999 !important;
-  background: #dbecff;
   background: linear-gradient(to bottom, #fff, #ddd);
 }
 
 #profilelist .ssutesting, #floodfills .ssutesting, #capabilities_key .ssutesting, .netdbentry .ssutesting {
-  background: #ffb;
   background: linear-gradient(to bottom, #fff, #ffb);
 }
 
 #profilelist .ssuintro, #floodfills .ssuintro, #capabilities_key .ssuintro, .netdbentry .ssuintro {
-  background: #fbf;
   background: linear-gradient(to bottom, #fff, #fbf);
 }
 
@@ -8588,18 +8558,18 @@ table#schedjobs {
 
 #floodfills td:empty::before, #ntcpconnections td:empty::before, #udpconnections td:empty::before, #profilelist td:empty::before,
 #tunnels .cells:empty:before {
-  content: "‒";
-  display: inline-block;
-  opacity: .8;
   width: 100%;
+  display: inline-block;
   text-align: center;
+  opacity: .8;
+  content: "‒";
 }
 
 #floodfills td:nth-child(3) span, #profilelist td:nth-last-child(3) span, #profilelist td:nth-last-child(4) span,
 #profilelist td:nth-last-child(6) span, #profilelist td:nth-last-child(2) span {
+  min-width: 20px;
   display: inline-block;
   text-align: right;
-  min-width: 20px;
 }
 
 #profilelist td:nth-child(6) span, #profilelist td:nth-child(9) span {
@@ -8610,8 +8580,8 @@ table#schedjobs {
 
 #floodfills .percentBarOuter, #floodfills .percentBarText,
 #tunnels .percentBarOuter, #tunnels .percentBarText {
-  display: inline-block;
   width: 50px;
+  display: inline-block;
 }
 
 #floodfills .percentBarOuter, #tunnels .percentBarOuter {
@@ -8626,13 +8596,11 @@ table#schedjobs {
 #floodfills .percentBarInner, #tunnels .percentBarInner {
   display: inline-block;
   width: inherit;
-  background: #900;
   background: linear-gradient(to bottom, rgba(255,255,255,.1) 50%, rgba(0,0,0,.1) 50%), linear-gradient(to right, #900 25px, #a00 40px, #b00 50px);
 }
 
 #floodfills .percentBarInner[style="width:0%"] {
   width: 100% !important;
-  background: #090;
   background: linear-gradient(to bottom, rgba(255,255,255,.1) 50%, rgba(0,0,0,.1) 50%), linear-gradient(to right, #090, #0b0);
 }
 
@@ -8646,8 +8614,8 @@ table#schedjobs {
 }
 
 #profilelist td:nth-child(2) {
-  white-space: nowrap;
   width: 1%;
+  white-space: nowrap;
 }
 
 #profilelist td:nth-child(2) i {
@@ -8703,14 +8671,14 @@ table#schedjobs {
 }
 
 #profilelist td:nth-last-child(2) span, #profilelist td:nth-last-child(3) span {
-  display: inline-block;
   min-width: 28px;
+  display: inline-block;
   text-align: right;
 }
 
 #profilelist td[colspan="10"], #profilelist td[colspan="10"]:hover {
-  background: #77f;
   padding: 0;
+  background: #77f;
 }
 
 #profilelist .nospeed {
@@ -8737,10 +8705,10 @@ table#schedjobs {
 }
 
 #profile_defs td:first-child {
+  padding: 5px;
   width: 5% !important;
   white-space: nowrap;
   text-align: right;
-  padding: 5px;
 }
 
 #profile_defs td:last-child {
@@ -8797,15 +8765,15 @@ table#schedjobs {
 }
 
 #capabilities_key td:first-child, #capabilities_key  td:nth-child(3) {
+  padding: 3px 5px !important;
   width: 1% !important;
   text-align: center !important;
-  padding: 3px 5px !important
 }
 
 #capabilities_key b {
-  min-width: 16px;
-  padding: 1px 2px;
   margin: 0 !important;
+  padding: 1px 2px;
+  min-width: 16px;
 }
 
 /* end /profiles */
@@ -8887,7 +8855,6 @@ table#schedjobs {
   border: 1px solid var(--borderinner);
   border-radius: 4px 0 0 0;
   box-shadow: var(--highlight);
-  background: #eef;
   background: linear-gradient(to bottom, #fff 50%, #e2e2ff 50%);
   user-select: none;
 }
@@ -8991,7 +8958,9 @@ select[name="newlogclass"] {
 }
 
 #help #volunteer, #wrapperlogs pre {
-  background: linear-gradient(to bottom, #fafaff, rgba(248,248,255,.3)), url(/themes/snark/ubergine/images/hat.png) no-repeat right -3px bottom -3px / auto 80%, repeating-linear-gradient(135deg, rgba(252,252,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fafaff 5px) #fafaff !important;
+  background: linear-gradient(to bottom, #fafaff, rgba(248,248,255,.3)),
+              url(/themes/snark/ubergine/images/hat.png) no-repeat right -3px bottom -3px / auto 80%,
+              repeating-linear-gradient(135deg, rgba(252,252,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fafaff 5px) #fafaff !important;
   box-shadow: var(--highlight);
 }
 
@@ -9037,8 +9006,8 @@ select[name="newlogclass"] {
 }
 
 #sidebarhelp ul {
-  display: inline-block;
   margin-bottom: 0 !important;
+  display: inline-block;
 }
 
 #sidebarhelp ul:last-child {
@@ -9101,12 +9070,11 @@ select[name="newlogclass"] {
 
 #faq h3 {
   padding: 5px 10px 6px 35px;
-  background: url(/themes/console/images/info/question.png) 10px center no-repeat, var(--h2) !important;
-  background-size: 18px 18px, 100%, 100% !important;
-  background-blend-mode: luminosity, normal, normal;
-  text-transform: none;
-  letter-spacing: 0;
   word-spacing: 0;
+  letter-spacing: 0;
+  text-transform: none;
+  background: url(/themes/console/images/info/question.png) no-repeat 10px center / 18px, var(--h2) !important;
+  background-blend-mode: luminosity, normal, normal;
 }
 
 #faq ul li {
@@ -9116,8 +9084,6 @@ select[name="newlogclass"] {
 #faq code, #advancedsettings code {
   font-weight: 700;
   user-select: all;
-  -moz-user-select: all;
-  -webkit-user-select: all;
 }
 
 #portfaq {
@@ -9125,11 +9091,11 @@ select[name="newlogclass"] {
 }
 
 #portfaq th:first-child, #portfaq td:first-child {
-  font-weight: 700;
-  text-align: right;
   padding-top: 6px;
   padding-bottom: 6px;
   padding-left: 10px;
+  text-align: right;
+  font-weight: 700;
 }
 
 #portfaq .infohelp {
@@ -9138,10 +9104,10 @@ select[name="newlogclass"] {
 }
 
 #portfaq th[colspan="3"] {
+  word-spacing: .1em;
+  letter-spacing: .08em;
   text-align: left;
   font-size: 11pt !important;
-  letter-spacing: .08em;
-  word-spacing: .1em;
 }
 
 #portfaq td:nth-child(2) {
@@ -9176,14 +9142,12 @@ select[name="newlogclass"] {
   height: 18px;
   display: inline-block;
   vertical-align: middle;
-  background: var(--eye) no-repeat left center !important;
-  background-size: 16px !important;
+  background: var(--eye) no-repeat left center / 16px !important;
   content: "";
 }
 
 #fullhistory a:hover::before, #fullhistory a:focus::before {
-  background: var(--eye_hover) no-repeat left center !important;
-  background-size: 16px !important;
+  background: var(--eye_hover) no-repeat left center / 16px !important;
 }
 
 #fullhistory a:active {
@@ -9203,9 +9167,9 @@ select[name="newlogclass"] {
 }
 
 #terms p {
+  -webkit-column-break-inside: avoid;
   break-inside: avoid;
   page-break-inside: avoid;
-  -webkit-column-break-inside: avoid;
 }
 
 #terms p:first-child {
@@ -9223,17 +9187,16 @@ select[name="newlogclass"] {
   background-size: 100%, auto 120px, 100% !important;
   max-height: 500px;
   box-shadow: inset 0 0 0 1px #ddf, inset 0 0 0 2px #fff;
-  background: url(/themes/snark/ubergine/images/hat.png) no-repeat right -3px bottom -3px / auto 120px #f3f3ff !important;
+  background: url(/themes/snark/ubergine/images/hat.png) no-repeat right -3px bottom -3px / auto 120px, #f3f3ff !important;
 }
 
 #routerinfo p {
   margin: 20px 5px 10px;
   padding: 10px 0;
   line-height: 180%;
-  background: #f2f2ff;
-  background: var(--p);
   border: 1px solid #99b;
   box-shadow: var(--highlight), 0 0 1px #e0e0eb;
+  background: var(--p);
 }
 
 #routerinfo code {
@@ -9284,8 +9247,7 @@ select[name="newlogclass"] {
   width: 5%;
   text-align: center;
   font-size: 0 !important;
-  background: var(--nuke) no-repeat center center, linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%) !important;
-  background-size: 16px, 100% !important;
+  background: var(--nuke) no-repeat center center / 16px, linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%) !important;
 }
 
 .homelinkedit tr:nth-last-child(n+2) td:nth-child(2) {
@@ -9321,10 +9283,7 @@ select[name="newlogclass"] {
 }
 
 .homelinkedit .noicon {
-  background-image: var(--search);
-  background-position: center center;
-  background-size: 20px;
-  background-repeat: no-repeat;
+  background: var(--search) no-repeat center center / 18px;
 }
 
 .main#config_homepage input.delete {
@@ -12764,12 +12723,10 @@ i {
 
 @keyframes grid-fade {
   from {
-    background: #f6f6ff;
     background: repeating-linear-gradient(to right, rgba(0,0,0,0), #efefef 1px, rgba(0,0,0,0) 1px, rgba(0,0,0,0) 10px),
                 repeating-linear-gradient(to bottom, #efefff, #efefff 1px, #f6f6ff 1px, #f6f6ff 10px);
   }
   to {
-    background: #f6f6ff;
     background: repeating-linear-gradient(to right, rgba(0,0,0,0), #f6f6ff 1px, rgba(0,0,0,0) 1px, rgba(0,0,0,0) 10px),
                 repeating-linear-gradient(to bottom, #f6f6ff, #f6f6ff 1px, #f6f6ff 1px, #f6f6ff 10px);
   }
