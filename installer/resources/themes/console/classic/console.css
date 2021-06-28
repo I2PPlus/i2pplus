@@ -3,6 +3,7 @@
 /* Author: dr|z3d */
 
 @import url(/themes/console/images/images.css);
+@import url(images/images.css);
 
 :root {
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
@@ -11,8 +12,6 @@
   --btn: linear-gradient(to bottom, #fff, #f4f5ff);
   --btn_hover: linear-gradient(to bottom, #ddd, #fff);
   --highlight: inset 0 0 0 1px #fff;
-  --dropdown: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m5.29 17.93 26.71 28.14 26.71-28.14' fill='none' stroke='%235e626e' stroke-linecap='round' stroke-linejoin='round' stroke-width='10'/%3E%3C/svg%3E");
-  --dropdown_hover: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m5.29 17.93 26.71 28.14 26.71-28.14' fill='none' stroke='%2341444d' stroke-linecap='round' stroke-linejoin='round' stroke-width='10'/%3E%3C/svg%3E");
 }
 
 html, body {
@@ -3414,59 +3413,59 @@ h1 {
 /* h1 icons */
 
 h1 {
-  background-image: url(images/netwrk.png);
+  background-image: var(--netwrk);
 }
 
 h1.home {
-  background-image: url(images/home.png);
+  background-image: var(--home);
 }
 
 h1.perf {
-  background-image: url(images/perf.png);
+  background-image: var(--perf);
 }
 
 h1.nfo, h1.newspage {
-  background-image: url(images/info.png);
+  background-image: var(--info);
 }
 
 h1.hlp {
-  background-image: url(images/header_help.png);
+  background-image: var(--header_help);
 }
 
 h1.addbook {
-  background-image: url(images/addbook.png);
+  background-image: var(--addbook);
 }
 
 h1.snark {
-  background-image: url(images/app_snark.png);
+  background-image: var(--app_snark);
 }
 
 h1.mail {
-  background-image: url(images/app_mail.png);
+  background-image: var(--app_mail);
 }
 
-h1.conf {
-  background-image: url(images/cog.png);
+h1.conf, #wizardpage h1 {
+  background-image: var(--cog);
 }
 
 h1.adv {
-  background-image: url(images/info.png);
+  background-image: var(--info);
 }
 
 h1.err {
-  background-image: url(images/error.png);
+  background-image: var(--error);
 }
 
 h1.sched {
-  background-image: url(images/tasks.png);
+  background-image: var(--tasks);
 }
 
 h1.log {
-  background-image: url(images/logs.png);
+  background-image: var(--logs);
 }
 
 h1.webapp {
-  background-image: url(images/webapp.png);
+  background-image: var(--webapp);
 }
 
 h1[class], h1 {
@@ -10672,18 +10671,17 @@ p#gatherstats {
 .ibgw::after, .obep::after, .ptcp::after {
   content: "";
   display: inline-block;
-  width: 24px;
-  height: 16px;
-  background: url(images/ibgw.png) center center no-repeat;
-  background-size: auto 16px !important;
+  width: 28px;
+  height: 20px;
+  background: var(--ibgw) no-repeat center center / auto 28px;
 }
 
 .obep::after {
-  background: url(images/obep.png) center center no-repeat;
+  background: var(--obep) no-repeat center center / auto 28px;
 }
 
 .ptcp::after {
-  background: url(images/ptcp.png) center center no-repeat;
+  background: var(--ptcp) no-repeat center center / auto 28px;
 }
 
 #tunnels .cells:first-child {
