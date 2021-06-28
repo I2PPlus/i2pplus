@@ -985,7 +985,6 @@ to {
   height: 16px;
   display: inline-block;
   background: var(--plugin) no-repeat center center / 16px;
-  background-size: 16px;
   content: "";
 }
 
@@ -998,40 +997,39 @@ to {
 }
 
 #sb_services a[href="/webmail"]::before {
-  background: var(--mail) no-repeat center center;
+  background-image: var(--mail);
 }
 
 #sb_services a[href="/torrents"]::before {
-  background: var(--snark) no-repeat center center;
+  background-image: var(--snark);
 }
 
 #sb_services a[href="/dns"]::before {
-  background: var(--abook) no-repeat center center;
+  background-image: var(--abook);
 }
 
 #sb_services a[href="/i2ptunnelmgr"]::before {
-  background: var(--tunnman) no-repeat center center;
+  background-image: var(--tunnman);
 }
 
 #sb_services a[href$=":7658/"]::before, #sb_services a[href$=":7668/"]::before {
-  background: var(--webserver) no-repeat center center;
+  background-image: var(--webserver);
 }
 
 #sb_services a[href="/orchid/"]::before, #sb_services a[href*="/orchid/"]::before {
-  background: var(--orchid) no-repeat center center;
+  background-image: var(--orchid);
 }
 
 #sb_services a[href*="bote"]::before {
-  background: url(images/mail_black.png) no-repeat center center;
+  background-image: url(images/mail_black.png);
 }
 
 #sb_services a[href*="/tracker"]::before {
-  background: url(/themes/console/images/zzzot.png) no-repeat center center;
+  background-image: url(/themes/console/images/zzzot.png);
 }
 
 #sb_services a::before {
   vertical-align: sub !important;
-  background-size: 16px !important;
   filter: saturate(.05);
 }
 
@@ -1239,42 +1237,40 @@ to {
 
 /* sidebar news */
 
-.sb_newsheadings {
+#sidebar .sb_newsheadings {
   margin: -5px 0 0 8px;
 }
 
-.sb_newsheadings table {
-  table-layout: auto;
-  width: 204px !important;
+#sidebar .sb_newsheadings table {
   margin: -12px 0 -9px -14px !important;
+  width: 204px !important;
+  table-layout: auto;
 }
 
-.sb_newsheadings td a {
+#sidebar .sb_newsheadings td a {
   padding: 2px 0 !important;
   display: inline-block;
   width: 100%;
 }
 
-.sb_newsheadings a {
-  display: inline-block;
+#sidebar .sb_newsheadings a {
   margin: -1px 0 -2px;
+  display: inline-block;
 }
 
-.sb_newsheadings td {
-  padding: 6px 1px 6px 21px;
+#sidebar .sb_newsheadings td {
+  padding: 6px 1px 6px 21px !important;
   line-height: 100%;
   text-align: left;
   border-bottom: 1px dotted #ddf !important;
-  background: var(--newsbullet) 3px center no-repeat !important;
-  background-size: 16px !important;
+  background: var(--newsbullet) no-repeat 3px center / 16px !important;
 }
 
-.sb_newsheadings tr:hover td {
-  background: var(--newsbullet_hover) 3px center no-repeat #ffe !important;
-  background-size: 16px !important;
+#sidebar .sb_newsheadings tr:hover td {
+  background: #ffd var(--newsbullet_hover) no-repeat 3px center / 16px !important;
 }
 
-.sb_newsheadings tr:last-child td {
+#sidebar .sb_newsheadings tr:last-child td {
   border-bottom: none !important;
 }
 
@@ -2355,8 +2351,7 @@ h3#iptransport a::after, h3#advancedconfig a::after, h3#reseedsetup a::after {
   height: 20px;
   display: inline-block;
   vertical-align: middle;
-  background: var(--helplink) no-repeat center center;
-  background-size: 20px;
+  background: var(--helplink) no-repeat center center / 20px;
   content: "";
 }
 
@@ -3790,8 +3785,7 @@ button.search {
 }
 
 button.search:hover, button.search:focus, button.search:active {
-  background: var(--search) no-repeat 8px center, var(--button_hover) !important;
-  background-size: 14px, 100% !important;
+  background: var(--search) no-repeat 8px center / 14px, var(--button_hover) !important;
   background-blend-mode: normal;
 }
 
@@ -3931,8 +3925,7 @@ p.infohelp, p.sybilinfo, p#debugmode, p#upnpstatus, p#pluginconfigtext, p#gather
   line-height: 130%;
   border: 1px solid var(--borderinner);
   box-shadow: var(--highlight), inset 0 0 0 2px #bbc;
-  background: url(/themes/console/images/svg/infohelp.svg) no-repeat 15px center,
-              var(--infohelp);
+  background: url(/themes/console/images/svg/infohelp.svg) no-repeat 15px center / 28px, var(--infohelp);
   background-size: 28px, 100% 4px, 100%;
 }
 
@@ -3997,8 +3990,7 @@ p#profiles_overview {
   padding: 10px 15px 10px 40px;
   text-align: justify;
   border: none !important;
-  background: var(--bug) no-repeat left center !important;
-  background-size: 28px;
+  background: var(--bug) no-repeat left center / 28px !important;
 }
 
 p#debugmode {
@@ -4866,9 +4858,8 @@ input, input:visited, button, button:visited {
   border-radius: 2px;
   box-shadow: var(--highlight), var(--highlight);
   box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.08) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.08);
-  background: #eee;
   background: var(--button);
-  background-size: 14px auto, 100% !important;
+  background-size: 14px, 100% !important;
   opacity: 1;
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
@@ -6335,9 +6326,8 @@ table#addkeyring tr:last-child td {
 
 #refreshsidebar tr:first-child td {
   padding-left: 50px;
-  background: var(--timer) no-repeat 15px center, linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)),
+  background: var(--timer) no-repeat 15px center / 28px, linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)),
               repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px), #fff !important;
-  background-size: 28px, 100%, 100% !important;
 }
 
 #refreshsidebar tr:first-child td:last-child {
@@ -8987,10 +8977,10 @@ select[name="newlogclass"] {
 }
 
 #help td.infohelp, #help td.infowarn, #help td.infohelp:hover, #help td.infowarn:hover {
-  background-size: 24px !important;
   padding-left: 50px !important;
-  color: var(--ink) !important;
   padding-right: 15px !important;
+  color: var(--ink) !important;
+  background-size: 24px !important;
 }
 
 #configinfo td.infowarn, #configinfo tr:hover td.infowarn {
@@ -9192,7 +9182,6 @@ select[name="newlogclass"] {
 /* end help */
 
 #wrapperlogs pre {
-  background-size: 100%, auto 120px, 100% !important;
   max-height: 500px;
   box-shadow: inset 0 0 0 1px #ddf, inset 0 0 0 2px #fff;
   background: url(/themes/snark/ubergine/images/hat.png) no-repeat right -3px bottom -3px / auto 120px, #f3f3ff !important;
@@ -10872,24 +10861,22 @@ form[action="configplugins"] input.reload {
   font-weight: 700;
   border-radius: 15px;
   box-shadow: 0 0 0 1px #cfcfff;
-  background: #e2e2ff;
   background: linear-gradient(to bottom, #f2f2ff, #e2e2ff);
 }
 
 #pluginconfig td:first-child label::before {
   margin-bottom: -4px;
-  content: "";
-  display: inline-block;
-  height: 18px;
   width: 26px;
-  background: var(--plugin) 5px bottom no-repeat !important;
-  background-size: 16px !important;
+  height: 18px;
+  display: inline-block;
+  background: var(--plugin) no-repeat 5px bottom / 16px !important;
+  content: "";
   mix-blend-mode: luminosity;
 }
 
 #pluginconfigtext input {
-  float: right;
   margin: -6px -6px 0 0 !important;
+  float: right;
 }
 
 #pluginconfig table {
@@ -10918,24 +10905,20 @@ form[action="configplugins"] input.reload {
 
 #newfamily .optionsingle {
   padding: 5px 5px 0 45px;
-  background: #eaeaff var(--tag) no-repeat 12px center !important;
-  background-size: 28px, 100%, 100% !important;
+  background: #eaeaff var(--tag) no-repeat 12px center / 28px !important;
 }
 
 #newfamily .optionsingle:hover {
-  background: #ffd var(--tag) no-repeat 12px center !important;
-  background-size: 28px !important;
+  background: #ffd var(--tag) no-repeat 12px center / 28px !important;
 }
 
 #joinfamily .optionsingle {
   padding: 5px 5px 0 45px;
-  background: #eaeaff var(--key) no-repeat 12px center !important;
-  background-size: 28px, 100%, 100% !important;
+  background: #eaeaff var(--key) no-repeat 12px center / 28px !important;
 }
 
 #joinfamily .optionsingle:hover {
-  background: #ffd var(--key) no-repeat 12px center !important;
-  background-size: 28px !important;
+  background: #ffd var(--key) no-repeat 12px center / 28px !important;
 }
 
 /* end /configfamily */
@@ -11348,7 +11331,7 @@ tt {
   width: 242px !important;
 }
 
-.sb_newsheadings table {
+#sidebar .sb_newsheadings table {
   width: 240px !important;
 }
 
