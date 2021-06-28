@@ -154,6 +154,7 @@ class MessageInputStream extends InputStream {
                 if (_log.shouldWarn())
                     _log.warn("Dropping message " + messageId + ", inbound buffer exceeded: available = " +
                               available);
+                _dataLock.notifyAll();
                 return false;
             }
             // following code screws up if available < 0
@@ -162,12 +163,14 @@ class MessageInputStream extends InputStream {
                 if (_log.shouldWarn())
                     _log.warn("Dropping message " + messageId + ", inbound buffer exceeded: " +
                               _highestReadyBlockId + '/' + (_highestReadyBlockId + allowedBlocks) + '/' + available);
+                _dataLock.notifyAll();
                 return false;
             }
             // This prevents us from getting DoSed by accepting unlimited in-order small messages
             if (_readyDataBlocks.size() >= 4 * _maxWindowSize) {
                 if (_log.shouldWarn())
                     _log.warn("Dropping message " + messageId + ", too many ready blocks");
+                _dataLock.notifyAll();
                 return false;
             }
         }
@@ -328,7 +331,6 @@ class MessageInputStream extends InputStream {
             if (messageId <= _highestReadyBlockId) {
                 if (_log.shouldLog(Log.INFO))
                     _log.info("Ignoring duplicate [MsgID " + messageId + "]");
-                _dataLock.notifyAll();
                 return false; // already received
             }
             if (messageId > _highestBlockId)
@@ -354,6 +356,7 @@ class MessageInputStream extends InputStream {
                     cur++;
                     _highestReadyBlockId++;
                 }
+                _dataLock.notifyAll();
             } else {
                 // _notYetReadyBlocks size is limited in canAccept()
                 if (_locallyClosed) {
@@ -367,7 +370,6 @@ class MessageInputStream extends InputStream {
                     _notYetReadyBlocks.put(Long.valueOf(messageId), payload);
                 }
             }
-            _dataLock.notifyAll();
         }
         return true;
     }

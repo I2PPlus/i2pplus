@@ -162,7 +162,8 @@ public class InfoHelper extends HelperBase {
         StringBuilder buf = new StringBuilder(4*1024);
         Hash h = _context.routerHash();
         Date installDate = new Date();
-        installDate.setTime(Long.parseLong(firstInstalled()));
+        if (installDate != null)
+            installDate.setTime(Long.parseLong(firstInstalled()));
         Date lastUpdate = new Date();
         lastUpdate.setTime(Long.parseLong(lastUpdated()));
         float bwO = Integer.parseInt(bwOut());

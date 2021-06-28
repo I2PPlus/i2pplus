@@ -43,8 +43,8 @@ class ExpireLeasesJob extends JobImpl {
     public void runJob() {
         Set<Hash> toExpire = selectKeysToExpire();
         if (!toExpire.isEmpty()) {
-        StringBuilder buf = new StringBuilder();
-        buf.append("Leases to expire:\n* ");
+        StringBuilder buf = new StringBuilder(16);
+        buf.append("Leases to expire: ");
         for (Hash h : toExpire) {
             buf.append("[").append(h.toBase64().substring(0,6)).append("]"); buf.append(" ");
         }
@@ -74,7 +74,10 @@ class ExpireLeasesJob extends JobImpl {
                 if (!ls.isCurrent(Router.CLOCK_FUDGE_FACTOR))
                     toExpire.add(entry.getKey());
                 else if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("Lease [" + ls.getDestination().calculateHash().toBase64().substring(0,6) + "] is current - not expiring");
+                    if (ls.getDestination() != null)
+                        _log.debug("Lease [" + ls.getDestination().calculateHash().toBase64().substring(0,6) + "] is current - not expiring");
+                    else
+                        _log.debug("Not expiring current but unidentified Lease (no destination)");
             }
         }
         return toExpire;
