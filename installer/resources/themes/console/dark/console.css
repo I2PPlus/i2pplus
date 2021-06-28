@@ -201,8 +201,8 @@ pre {
   border-image-width: 5px;
   border-image-outset: 1px;
   box-shadow: inset 0 0 0 1px #700, inset 0 0 3px 3px #000, 0 0 0 2px #000;
-  background: #010 url(/themes/console/images/itoopie_sm.png) 21px center no-repeat;
-  background: url(/themes/console/images/itoopie_sm.png) 21px center no-repeat,
+  background: #010 url(/themes/console/images/itoopie_sm.png) no-repeat 21px center;
+  background: url(/themes/console/images/itoopie_sm.png) no-repeat 21px center,
               repeating-linear-gradient(to bottom, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 4px),
               var(--camotile);
   background-size: auto 110px, 100% 4px, 175px;
@@ -550,10 +550,7 @@ pre {
 }
 
 #sb_localtunnels td:first-child {
-  background-image: var(--client) !important;
-  background-position: center center !important;
-  background-repeat: no-repeat !important;
-  background-size: 16px;
+  background: var(--client) no-repeat center center / 16px !important;
 }
 
 #sb_localtunnels tr:last-child td:first-child {
@@ -562,19 +559,14 @@ pre {
 
 #sb_localtunnels td.tunnelServer {
   background-image: var(--server) !important;
-  background-size: 16px;
 }
 
 #sb_localtunnels td.ping {
   background-image: var(--ping) !important;
-  background-size: 16px;
 }
 
 #sb_localtunnels td:last-child {
-  background-image: var(--local_inprogress) !important;
-  background-position: right 1px center !important;
-  background-repeat: no-repeat !important;
-  background-size: 16px;
+  background: var(--local_inprogress) no-repeat right 1px center / 16px !important;
 }
 
 #sb_localtunnels td.tunnelReady {
@@ -751,8 +743,7 @@ div.refresh {
   padding: 4px 5px 4px 23px;
   text-align: left;
   border-bottom: var(--softborder) !important;
-  background: var(--newsbullet) 4px center no-repeat !important;
-  background-size: 14px !important;
+  background: var(--newsbullet) no-repeat 4px center / 14px !important;
 }
 
 .sb_newsheadings tr:last-child td {
@@ -890,8 +881,8 @@ h1 + .sorry, #console_404 .sorry {
   border: var(--border);
   border-radius: 0 0 4px 4px;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 0 2px #600, inset 0 0 0 3px #000;
-  background:  var(--err) no-repeat 15px 45%, linear-gradient(to bottom, rgba(255,255,255,.05), rgba(0,0,0,.4)),
-               repeating-linear-gradient(to bottom, rgba(0,0,0,.4) 2px, rgba(0,48,0,.7) 4px) !important;
+  background: var(--err) no-repeat 15px 45%, linear-gradient(to bottom, rgba(255,255,255,.05), rgba(0,0,0,.4)),
+              repeating-linear-gradient(to bottom, rgba(0,0,0,.4) 2px, rgba(0,48,0,.7) 4px) !important;
   background-size: 44px, 100%, 100% 4px !important;
 }
 
@@ -986,34 +977,17 @@ h1 + .sorry, #console_404 .sorry {
 .main {
   margin: -1px 5px 5px 226px;
   padding: 0 10px 1px 10px;
-  position: relative;
   width: auto;
   min-width: 620px;
-  font-size: 9pt;
+  position: relative;
+  z-index: 10 !important;
   text-align: left;
+  font-size: 9pt;
   border-radius: 0 0 3px 3px;
   background: repeating-linear-gradient(to right, rgba(0,0,0,.3) 2px, rgba(0,24,0,.6) 4px),
               repeating-linear-gradient(to bottom, rgba(0,0,0,.3) 2px, rgba(0,24,0,.2) 4px) !important;
   background-size: 4px 100%, 100% 4px !important;
-  z-index: 10 !important;
 }
-
-/*@supports (-moz-appearance: none) {
-  .main::after {
-    content: "";
-    display: inline-block;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    background: var(--camo);
-    background-size: 2048px;
-    opacity: .15;
-    mix-blend-mode: overlay;
-  }
-}*/
 
 .main#dns {
   padding: 0 0 3px;
@@ -1021,8 +995,8 @@ h1 + .sorry, #console_404 .sorry {
 }
 
 .main#webmail, .main#torrents {
-  padding: 0;
   margin-top: -1px;
+  padding: 0;
   background: #000 !important;
 }
 
@@ -1119,11 +1093,6 @@ div.news {
   margin-bottom: -4px;
 }
 
-/* MS Edge 14+ fix (no support for blend-mode) */
-_:-ms-lang(x), div.news {
-  background: #000 url(images/news.png) no-repeat scroll bottom right;
-}
-
 div.news li {
   margin: 0 0 5px;
   padding: 5px 5px 5px 0;
@@ -1173,7 +1142,7 @@ div.news hr {
   color: #494;
   border: 1px solid rgba(0,24,0,.5);
   border-radius: 15px;
-  box-shadow: va(--highlight);
+  box-shadow: var(--highlight);
   background: rgba(0,48,0,.3);
 }
 
@@ -1223,9 +1192,8 @@ div.news hr {
   float: right;
   font-size: 8pt !important;
   text-transform: none;
+  background: var(--user) no-repeat 2px center / 12px;
   opacity: .7;
-  background: var(--user) 2px center no-repeat;
-  background-size: 12px;
 }
 
 .newsDate {
@@ -1734,11 +1702,11 @@ td img {
 }
 
 .sortup {
-  background: var(--sortup) center center no-repeat, linear-gradient(to bottom, #040, #000);
+  background: var(--sortup) no-repeat center center, linear-gradient(to bottom, #040, #000);
 }
 
 .sortup:hover {
-  background: var(--sortup) center center no-repeat, linear-gradient(to bottom, #000, #040);
+  background: var(--sortup) no-repeat center center, linear-gradient(to bottom, #000, #040);
   border: 1px solid #f60;
 }
 
@@ -1752,20 +1720,20 @@ td img {
 }
 
 .sortupactive {
-  background: var(--sortup) center center no-repeat, #050;
+  background: var(--sortup) no-repeat center center, #050;
 }
 
 .sortdown {
-  background: var(--sortdown) center center no-repeat, linear-gradient(to bottom, #040, #000);
+  background: var(--sortdown) no-repeat center center, linear-gradient(to bottom, #040, #000);
 }
 
 .sortdown:hover {
-  background: var(--sortdown) center center no-repeat, linear-gradient(to bottom, #000, #040);
+  background: var(--sortdown) no-repeat center center, linear-gradient(to bottom, #000, #040);
   border: 1px solid #f60;
 }
 
 .sortdownactive {
-  background: var(--sortdown) center center no-repeat, #050;
+  background: var(--sortdown) no-repeat center center, #050;
   border: 1px solid #050;
 }
 
@@ -1956,11 +1924,11 @@ p:empty {
 }
 
 #newtab {
-  background: var(--newtab) center center no-repeat;
+  background: var(--newtab) no-repeat center center;
 }
 
 #newtab:hover {
-  background: var(--newtab_hover) center center no-repeat;
+  background: var(--newtab_hover) no-repeat center center;
 }
 
 h2, h2.welcome {
@@ -2025,7 +1993,7 @@ h1, h4.app, h4.app2, #news h3 {
   padding: 6px 8px 6px 30px;
   word-spacing: normal !important;
   letter-spacing: .08em !important;
-  background: var(--news) 8px center no-repeat, var(--h1) !important;
+  background: var(--news) no-repeat 8px center, var(--h1) !important;
   background-size: 16px, 4px 100%, 100%, 175px !important;
   background-blend-mode: normal, normal, exclusion, exclusion;
 }
@@ -2117,87 +2085,75 @@ button.control {
 }
 
 button.accept.control {
-  background: var(--start) center center no-repeat, var(--button);
+  background: var(--start) no-repeat center center, var(--button);
 }
 
 button.accept.control:hover, button.accept.control:focus {
-  background: #000 var(--start_hover) center center no-repeat;
+  background: #000 var(--start_hover) no-repeat center center;
 }
 
 button.accept.control:active {
-  background: #f60 var(--start_active) center center no-repeat;
+  background: #f60 var(--start_active) no-repeat center center;
 }
 
 button.stop.control {
-  background: var(--stop) center center no-repeat, var(--button);
+  background: var(--stop) no-repeat center center, var(--button);
 }
 
 button.stop.control:hover, button.stop.control:focus {
-  background: #000 var(--stop_hover) center center no-repeat;
+  background: #000 var(--stop_hover) no-repeat center center;
 }
 
 button.stop.control:active {
-  background: #f60 var(--stop_active) center center no-repeat;
+  background: #f60 var(--stop_active) no-repeat center center;
 }
 
 button.add.control {
-  background: var(--edit) center center no-repeat, var(--button);
-  background-size: 16px, 100%;
+  background: var(--edit) no-repeat center center / 16px, var(--button);
 }
 
 button.add.control:hover, button.add.control:focus {
-  background: #000 var(--edit_hover) center center no-repeat;
-  background-size: 16px;
+  background: #000 var(--edit_hover) no-repeat center center / 16px;
 }
 
 button.add.control:active {
-  background: #f60 var(--edit_active) center center no-repeat;
-  background-size: 16px;
+  background: #f60 var(--edit_active) no-repeat center center / 16px;
 }
 
 button.delete.control {
-  background: var(--nuke) center center no-repeat, var(--button);
-  background-size: 14px;
+  background: var(--nuke) no-repeat center center / 14px, var(--button);
 }
 
 button.delete.control:hover, button.delete.control:focus {
-  background: #000 var(--nuke) center center no-repeat;
-  background-size: 14px;
+  background: #000 var(--nuke) no-repeat center center / 14px;
 }
 
 button.delete.control:active {
-  background: #f60 var(--nuke) center center no-repeat;
-  background-size: 14px;
+  background: #f60 var(--nuke) no-repeat center center / 14px;
 }
 
 button.check.control {
-  background: var(--refresh) center center no-repeat, var(--button);
-  background-size: 14px, 100%;
+  background: var(--refresh) no-repeat center center / 14px, var(--button);
 }
 
 button.check.control:hover, button.check.control:focus {
-  background: #000 var(--refresh_hover) center center no-repeat;
-  background-size: 14px;
+  background: #000 var(--refresh_hover) no-repeat center center / 14px;
 }
 
 button.check.control:active {
-  background: #f60 var(--refresh_active) center center no-repeat;
-  background-size: 14px;
+  background: #f60 var(--refresh_active) no-repeat center center / 14px;
 }
 
 button.download.control {
-  background: var(--download) center center no-repeat, var(--button);
-  background-size: 14px, 100%;
+  background: var(--download) no-repeat center center / 14px, var(--button);
 }
 
 button.download.control:hover, button.download.control:focus {
-  background: #000 var(--download_hover) center center no-repeat;
-  background-size: 14px;
+  background: #000 var(--download_hover) no-repeat center center / 14px;
 }
 
 button.download.control:active {
-  background: #f60 var(--download_active) center center no-repeat;
-  background-size: 14px;
+  background: #f60 var(--download_active) no-repeat center center / 14px;
 }
 
 /* end project "X" */
@@ -2237,9 +2193,9 @@ button.download.control:active {
 }
 
 .underline {
-  border-bottom: 1px solid #ee9;
-  padding: 5px 0 5px 0;
   margin: 0 0 10px 0;
+  padding: 5px 0 5px 0;
+  border-bottom: 1px solid #ee9;
 }
 
 .langbox {
@@ -2474,10 +2430,6 @@ select:hover, select:focus, select:active {
   background-size: 10px, 100% !important;
 }
 
-select::-ms-expand {
-  display: none;
-}
-
 #config_tunnels select {
   margin-left: 0;
   width: 50%;
@@ -2544,23 +2496,19 @@ input[readonly]:focus {
 
 #consolepass input[name="name"], #externali2cp input[name="user"] {
   padding: 6px 5px 6px 24px !important;
-  background: var(--user) 5px center no-repeat, var(--txtinput);
-  background-size: 16px, 100% !important;
+  background: var(--user) no-repeat 5px center / 16px, var(--txtinput);
 }
 
 #consolepass input[name="name"]:focus, #externali2cp input[name="user"]:focus {
-  background: #000 var(--user) 5px center no-repeat !important;
-  background-size: 16px, 100% !important;
+  background: #000 var(--user) no-repeat 5px center / 16px !important;
 }
 
 #consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"] {
   padding: 6px 5px 6px 24px !important;
-  background: var(--key) 3px center no-repeat, var(--txtinput);
-  background-size: 16px, 100% !important;
+  background: var(--key) no-repeat 3px center / 16px, var(--txtinput);
 }
 #consolepass input[name="nofilter_pw"]:focus, #externali2cp input[name="nofilter_pw"]:focus {
-  background: #000 var(--key) 3px center no-repeat !important;
-  background-size: 16px, 100% !important;
+  background: #000 var(--key) no-repeat 3px center / 16px !important;
 }
 
 textarea#advancedsettings:focus {
@@ -2674,25 +2622,23 @@ h3#finishedjobs + ol li, h3#scheduledjobs + ol li, h3#activejobs + ol li, h3#rea
   list-style: none !important;
 }
 
-h3#activejobs + ol li::before, #scheduledjobs + ol li::before, h3#readyjobs + ol li::before, h3#finishedjobs + ol li::before,
-#schedjobs li::before {
+h3#activejobs + ol li::before, #scheduledjobs + ol li::before, h3#readyjobs + ol li::before,
+h3#finishedjobs + ol li::before, #schedjobs li::before {
   margin: 0 6px 0 2px;
   width: 16px;
   height: 16px;
   display: inline-block;
   vertical-align: text-top;
-  background: var(--clock) center center no-repeat;
-  background-size: 16px;
+  background: var(--clock) no-repeat center center / 16px;
   content: "";
 }
 
 h3#activejobs + ol li::before {
-  background: var(--start) center center no-repeat;
+  background: var(--start) no-repeat center center;
 }
 
 h3#finishedjobs + ol li::before {
-  background: var(--yes) center center no-repeat;
-  background-size: 12px;
+  background: var(--yes) no-repeat center center / 12px;
 }
 
 h3#readyjobs + ol li::before {
@@ -2723,16 +2669,16 @@ h3#scheduledjobs + ol li::before, #scheduledjobs + ol li::before {
 }
 
 .joblog th:first-child {
-  text-align: left;
   padding-left: 6px;
+  text-align: left;
 }
 
 /* /jobs */
 
 .main#jobs h2 {
-  border-radius: 0;
   margin: -16px 0 -15px !important;
   display: inline-block;
+  border-radius: 0;
 }
 
 .main#jobs h3 + ol + h3 {
@@ -3284,7 +3230,7 @@ a[name="chelp"]:hover, a[name="help"]:hover, a[name="chelp"]:active, a[name="hel
 }
 
 .homelinkedit td.noicon {
-  background: var(--search) center center no-repeat;
+  background: var(--search) no-repeat center center;
   background-size: 22px;
 }
 
@@ -3984,8 +3930,8 @@ form[action="events"] > .formaction {
 
 p#keyringhelp, p#webappconfig, p#availableplugins, p#pluginconfigtext, p#clientdefaultshelp, p#bwshare, p#editclients, p#upnpstatus, p#gatherstats {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--infohelp) 12px center no-repeat;
   border: var(--border);
+  background: #000 var(--infohelp) 12px center no-repeat;
 }
 
 p#gatherstats {
@@ -4143,7 +4089,7 @@ form > table {
   letter-spacing: 0;
   word-spacing: 0;
   text-shadow: 0 1px 1px #000;
-  background: var(--infowarn) 10px center no-repeat,
+  background: var(--infowarn) no-repeat 10px center,
               linear-gradient(to bottom, rgba(128,128,128,.05), rgba(0,0,0,.3)),
               repeating-linear-gradient(to bottom, #300 2px, #100 4px);
   background-size: 18px, 100%, 100% 4px;
@@ -4155,16 +4101,12 @@ form > table {
 
 #tunnelconfig th:not([colspan="3"]):nth-child(n+2) {
   padding-left: 20px !important;
-  background: url(images/in.png), linear-gradient(to bottom, #002000, #000 75%);
-  background-repeat: no-repeat, repeat !important;
-  background-position: 20px center !important;
-  background-size: 14px, 100% !important;
+  background: url(images/in.png) no-repeat 20px center / 14px, linear-gradient(to bottom, #002000, #000 75%);
 }
 
 #tunnelconfig th:not([colspan="3"]):last-child {
   padding-left: 17px !important;
-  background: url(images/out.png), linear-gradient(to bottom, #002000, #000 75%);
-  background-size: 14px, 100% !important;
+  background: url(images/out.png) no-repeat 20px center / 14px, linear-gradient(to bottom, #002000, #000 75%);
 }
 
 #tunnelconfig td:first-child {
@@ -4340,7 +4282,7 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 #sidebarconf th:nth-child(1), .homelinkedit th:first-child, #consolepass th:first-child {
   text-align: center;
   font-size: 0 !important;
-  background: var(--nuke) center center no-repeat, linear-gradient(to bottom, #002000, #000 75%) !important;
+  background: var(--nuke) no-repeat center center, linear-gradient(to bottom, #002000, #000 75%) !important;
   background-size: 16px, 100% !important;
 }
 
@@ -4357,51 +4299,51 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 }
 
 .buttonTop {
-  background: var(--mv_top) center center no-repeat, var(--button);
+  background: var(--mv_top) no-repeat center center, var(--button);
 }
 
 .buttonUp {
-  background: var(--mv_up) center center no-repeat, var(--button);
+  background: var(--mv_up) no-repeat center center, var(--button);
 }
 
 .buttonDown {
-  background: var(--mv_down) center center no-repeat, var(--button);
+  background: var(--mv_down) no-repeat center center, var(--button);
 }
 
 .buttonBottom {
-  background: var(--mv_bottom) center center no-repeat, var(--button);
+  background: var(--mv_bottom) no-repeat center center, var(--button);
 }
 
 .buttonTop:hover, .buttonTop:focus {
-  background: #000 var(--mv_top_hover) center center no-repeat;
+  background: #000 var(--mv_top_hover) no-repeat center center;
 }
 
 .buttonUp:hover, .buttonUp:focus {
-  background: #000 var(--mv_up_hover) center center no-repeat;
+  background: #000 var(--mv_up_hover) no-repeat center center;
 }
 
 .buttonDown:hover, .buttonDown:focus {
-  background: #000 var(--mv_down_hover) center center no-repeat;
+  background: #000 var(--mv_down_hover) no-repeat center center;
 }
 
 .buttonBottom:hover, .buttonBottom:focus {
-  background: #000 var(--mv_bottom_hover) center center no-repeat;
+  background: #000 var(--mv_bottom_hover) no-repeat center center;
 }
 
 .buttonTop:active {
-  background: #f60 var(--mv_top_active) center center no-repeat;
+  background: #f60 var(--mv_top_active) no-repeat center center;
 }
 
 .buttonUp:active {
-  background: #f60 var(--mv_up_active) center center no-repeat;
+  background: #f60 var(--mv_up_active) no-repeat center center;
 }
 
 .buttonDown:active {
-  background: #f60 var(--mv_down_active) center center no-repeat;
+  background: #f60 var(--mv_down_active) no-repeat center center;
 }
 
 .buttonBottom:active {
-  background: #f60 var(--mv_bottom_active) center center no-repeat;
+  background: #f60 var(--mv_bottom_active) no-repeat center center;
 }
 
 .buttonTop, .buttonBottom, .buttonUp, .buttonDown {
@@ -4425,11 +4367,11 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 }
 
 #config_service a[href$="#alternative_browser"]::after, h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after {
-  background: var(--helplink) center center no-repeat;
+  background: var(--helplink) no-repeat center center;
 }
 
 #config_service a[href$="#alternative_browser"]:hover::after, h3#iptransport a:hover::after, h3#advancedconfig a:hover::after, #reseedsetup a:hover::after {
-  background: var(--helplink_hover) center center no-repeat;
+  background: var(--helplink_hover) no-repeat center center;
 }
 
 #config_service a[href$="#alternative_browser"]::after {
@@ -4606,7 +4548,7 @@ h4.app img, h4.app2 img {
   width: 16px;
   height: 16px;
   float: right;
-  background: var(--settings) center center no-repeat;
+  background: var(--settings) no-repeat center center;
   background-size: 16px !important;
   content: "";
 }
@@ -4615,7 +4557,7 @@ h4.app img, h4.app2 img {
 .main#tunnels h3 a[href$="/i2ptunnelmgr"]:hover::after, .main#tunnels h3 a[href$="/i2ptunnelmgr"]:focus::after,
  #logs a.configure:hover::after, #logs a.configure:focus::after,
  h4.app a:hover::after, h4.app a:focus::after, h4.app2 a:hover::after, h4.app2 a:focus::after {
-  background: var(--settings_hover) center center no-repeat;
+  background: var(--settings_hover) no-repeat center center;
 }
 
 .main#tunnels h3 a[href^="/configtunnels#"]:active::after, .main#tunnels h3 a[href$="/i2ptunnelmgr"]:active::after,
@@ -4634,12 +4576,12 @@ h4.app img, h4.app2 img {
 }
 
 #logs a.delete::after {
-  background: var(--close) center center no-repeat;
+  background: var(--close) no-repeat center center;
   background-size: 14px !important;
 }
 
 #logs a.delete:hover::after {
-  background: var(--close_hover) center center no-repeat;
+  background: var(--close_hover) no-repeat center center;
 }
 
 #logs a.configure:active::after {
@@ -5797,13 +5739,13 @@ h3#bannedpeers {
 }
 
 h4.app {
-  background: url(images/favicon.svg) 8px center no-repeat, var(--h1) !important;
+  background: url(images/favicon.svg) no-repeat 8px center, var(--h1) !important;
   background-size: 18px, 4px 100%, 100%, 175px !important;
   background-blend-mode: var(--h3_blend) !important;
 }
 
 h4.app2 {
-  background: var(--globe) 8px center no-repeat, var(--h1) !important;
+  background: var(--globe) no-repeat 8px center, var(--h1) !important;
   background-size: 18px, 4px 100%, 100%, 175px !important;
   background-blend-mode: var(--h3_blend) !important;
 }
@@ -6215,8 +6157,8 @@ span#distance {
 }
 
 .netdbentry .netdb_family > *, .netdbentry .netdb_info, .netdbentry tr:nth-child(2) td:first-child b {
-  vertical-align: text-bottom;
   display: inline-block;
+  vertical-align: text-bottom;
 }
 
 .netdbentry td, .leaseset td, #leasesetdebug td, .sybil_routerinfo td {
@@ -6233,8 +6175,8 @@ span#distance {
 }
 
 #netdb a[href$="i2p"] {
-  display: inline-block;
   margin-left: 6px;
+  display: inline-block;
 }
 
 .netdbentry td b, .leaseset td b, #leasesetdebug td b, .sybil_routerinfo td b {
@@ -6349,7 +6291,6 @@ span#distance {
   border: 1px solid #020;
   border-radius: 2px;
   box-shadow: 0 0 0 1px #000;
-  background: #020;
   background: var(--element);
 }
 
@@ -6358,23 +6299,17 @@ span#distance {
   border-radius: 0;
   border-left-width: 4px;
   border-right-width: 4px;
-  background: var(--hardhat) 4px center no-repeat, var(--element);
-  background-size: 14px, 100%;
+  background: var(--hardhat) no-repeat 4px center / 14px, var(--element);
 }
 
 .lsdest.published {
   padding-left: 38px;
-  background: var(--hardhat) 4px center no-repeat,
-              var(--globe) 22px center no-repeat,
-              var(--element);
-  background-size: 14px, 12px, 100%;
+  background: var(--hardhat) no-repeat 4px center / 14px, var(--globe) no-repeat 22px center / 12px, var(--element);
 }
 
 .leaseset th:last-child a[href$="i2p/"] {
   padding-left: 22px;
-  background: #020 var(--link) 5px center no-repeat;
-  background: var(--link) 5px center no-repeat, var(--element);
-  background-size: 12px, 100%;
+  background: var(--link) no-repeat 5px center / 12px, var(--element);
 }
 
 .addtobook {
@@ -6392,10 +6327,9 @@ span#distance {
   height: 26px;
   display: inline-block;
   vertical-align: middle;
-  background: var(--ahelp) center center no-repeat;
-  background-size: 14px;
-  content: "";
   border-left: var(--border);
+  background: var(--ahelp) no-repeat center center / 14px;
+  content: "";
 }
 
 .addtobook a:hover {
@@ -6454,8 +6388,7 @@ span#distance {
   padding: 15px 15px 15px 50px;
   text-align: left;
   border: var(--border);
-  background: #000 var(--infohelp) 12px center no-repeat;
-  background-size: 28px;
+  background: #000 var(--infohelp) no-repeat 12px center / 28px;
 }
 
 #sybilnav, #sybils_summary {
@@ -6469,8 +6402,7 @@ span#distance {
 #sybils_summary {
   padding: 12px 15px 12px 55px;
   line-height: 200%;
-  background: #000 var(--floodfill) 12px center no-repeat;
-  background-size: 32px;
+  background: #000 var(--floodfill) no-repeat 12px center / 32px;
 }
 
 #sybilnav {
@@ -6583,8 +6515,7 @@ p.sybil_info, p.family, p.threatpoints, p.hashdist, p#sybil_totals, p.notfound {
   color: #cc0;
   border: var(--border);
   box-shadow: inset 0 0 0 1px #300;
-  background: var(--eye) 8px center no-repeat, linear-gradient(to right, #000, #000800 80%, #001000);
-  background-size: 16px, 100%;
+  background: var(--eye) no-repeat 8px center / 16px, linear-gradient(to right, #000, #000800 80%, #001000);
 }
 
 p.sybil_info, p#sybil_totals {
@@ -6595,18 +6526,17 @@ p.sybil_info, p#sybil_totals {
 }
 
 p.threatpoints {
-  background: var(--eye_threat) 8px center no-repeat, linear-gradient(to right, #000, #000800 80%, #001000);
-  background-size: 20px, 100%;
+  background: var(--eye_threat) no-repeat 8px center / 20px, linear-gradient(to right, #000, #000800 80%, #001000);
 }
 
 p.threatpoints.hot {
-  background: var(--eye_threat) 8px center no-repeat, url(/themes/console/images/info/hot.png) right 2px center no-repeat, linear-gradient(to right, #000, #000800 80%, #001000);
-  background-size: 20px, 24px, 100%;
+  background: var(--eye_threat) no-repeat 8px center / 20px, url(/themes/console/images/info/hot.png) no-repeat right 2px center / 24px,
+              linear-gradient(to right, #000, #000800 80%, #001000);
 }
 
 p.family {
   white-space: nowrap;
-  background: url(/themes/console/images/buttons/users.png) 8px center no-repeat, linear-gradient(to right, #000, #000800 80%, #001000);
+  background: url(/themes/console/images/buttons/users.png) no-repeat 8px center, linear-gradient(to right, #000, #000800 80%, #001000);
   background-blend-mode: normal;
 }
 
@@ -6744,8 +6674,7 @@ h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after {
 }
 
 h3#iptransport a:hover::after, h3#advancedconfig a:hover::after, #reseedsetup a:hover::after {
-  background: var(--helplink_hover) center center no-repeat;
-  background-size: 16px !important;
+  background: var(--helplink_hover) no-repeat center center / 16px;
 }
 
 #logs h3 a {
@@ -6811,13 +6740,11 @@ textarea#advancedsettings {
   text-align: justify;
   border-bottom: var(--border);
   border-top: var(--border);
-  background: #000 var(--infohelp) 12px center no-repeat !important;
-  background-size: 28px !important;
+  background: #000 var(--infohelp) no-repeat 12px center / 28px !important;
 }
 
 #bannedpeercount {
-  background: #000 var(--ban) 12px center no-repeat !important;
-  background-size: 28px !important;
+  background: #000 var(--ban) no-repeat 12px center / 28px !important;
 }
 
 #profiles #bannedpeercount {
@@ -6829,8 +6756,7 @@ textarea#advancedsettings {
 }
 
 #config_ui .infohelp {
-  background: #000 var(--ui) 12px center no-repeat !important;
-  background-size: 28px !important;
+  background: #000 var(--ui) no-repeat 12px center / 28px !important;
 }
 
 table.logtable, #logs #enviro {
@@ -6846,8 +6772,7 @@ p.infowarn, td.infowarn {
   padding: 15px 15px 15px 50px;
   border: var(--border);
   box-shadow: var(--highlight), inset 0 0 2px 1px #900;
-  background: #000 var(--infowarn) 12px center no-repeat !important;
-  background-size: 28px !important;
+  background: #000 var(--infowarn) no-repeat 12px center / 28px !important;
 }
 
 .infowarn#clientconf {
@@ -6972,7 +6897,7 @@ h3#i2pclientconfig, h3#pconfig, h3#pluginfromurl, h3#pluginfromfile, h3#webappco
 p#javaclienthelp {
   padding: 10px 10px 10px 50px !important;
   border: var(--border);
-  background: var(--infohelp) 12px center no-repeat !important;
+  background: var(--infohelp) no-repeat 12px center !important;
 }
 
 div#clientsconfig {
@@ -7147,54 +7072,37 @@ p#enablefullstats {
 
 #bugreports td.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--bug) 12px center no-repeat !important;
-  background-size: 28px !important;
+  background: #000 var(--bug) no-repeat 12px center / 28px !important;
 }
 
 p#debugmode {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--bug) 12px center no-repeat !important;
-  background-size: 28px !important;
+  background: #000 var(--bug) no-repeat 12px center / 28px !important;
 }
 
 p.sybilinfo {
   margin: 8px 0;
   padding: 15px 15px 15px 50px;
-  background: #000 var(--sybil) 12px center no-repeat !important;
-  background-size: 28px !important;
+  background: #000 var(--sybil) no-repeat 12px center / 28px !important;
 }
 
 p.sybilinfo.experimental {
-  background: #000 var(--experimental) 12px center no-repeat !important;
-  background-size: 28px !important;
+  background: #000 var(--experimental) no-repeat 12px center / 28px !important;
 }
 
 #bandwidthconfig tr:first-child .infohelp, #bandwidth.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--speed) 12px center no-repeat !important;
-  background-size: 28px !important;
+  background: #000 var(--speed) no-repeat 12px center / 28px !important;
 }
 
 #addkeyring td.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--keys) 12px center no-repeat !important;
-  background-size: 28px !important;
-}
-
-#oldhome td:first-child {
-  padding: 15px 15px 15px 50px;
-  background: var(--home) 12px center no-repeat !important;
-  background-size: 28px, 100%, 100% !important;
-}
-
-#oldhome input[type=checkbox], #enablefullstats input[type=checkbox] {
-  vertical-align: middle;
+  background: #000 var(--keys) no-repeat 12px center / 28px !important;
 }
 
 #floodfillconfig tr:first-child .infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--floodfill) 12px center no-repeat !important;
-  background-size: 28px !important;
+  background: #000 var(--floodfill) no-repeat 12px center / 28px !important;
 }
 
 #floodfillconfig tr:nth-child(2) td {
@@ -7209,86 +7117,72 @@ p#clientconf.infohelp, p#webappconfigtext.infohelp {
   padding: 15px 15px 15px 50px;
   position: relative;
   z-index: 10;
-  background: #000 var(--editclient) 12px center no-repeat !important;
-  background-size: 28px !important;
+  background: #000 var(--editclient) no-repeat 12px center / 28px !important;
 }
 
 p#pluginconfigtext {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--pluginconfig) 12px center no-repeat !important;
-  background-size: 28px !important;
+  background: #000 var(--pluginconfig) no-repeat 12px center / 28px !important;
 }
 
 #plugininstall .infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--plugin) 12px center no-repeat !important;
-  background-size: 28px !important;
+  background: #000 var(--plugin) no-repeat 12px center / 28px !important;
 }
 
 #manualreseed tr:nth-last-child(2) td.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--package) 12px center no-repeat !important;
-  background-size: 28px !important;
+  background: #000 var(--package) no-repeat 12px center / 28px !important;
 }
 
 #config_peers tr:nth-child(3) td.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--ban) 12px center no-repeat !important;
-  background-size: 28px !important;
+  background: #000 var(--ban) no-repeat 12px center / 28px !important;
 }
 
 h3#shutdownrouter + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--power) 12px center no-repeat !important;
-  background-size: 28px !important;
+  background: #000 var(--power) no-repeat 12px center / 28px !important;
 }
 
 h3#restartrouter + p.infohelp, #config_family .infohelp.needrestart {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--reboot) 12px center no-repeat !important;
-  background-size: 28px !important;
+  background: #000 var(--reboot) no-repeat 12px center / 28px !important;
 }
 
 h3#systray + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/info/systray.png) 12px center no-repeat !important;
-  background-size: 28px !important;
+  background: #000 url(/themes/console/images/info/systray.png) no-repeat 12px center / 28px !important;
 }
 
 h3#servicedebug + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--bug) 12px center no-repeat !important;
-  background-size: 28px !important;
+  background: #000 var(--bug) no-repeat 12px center / 28px !important;
 }
 
 h3#browseronstart + p.infohelp, .infohelp#webbrowser {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--firefox) 12px center no-repeat !important;
-  background-size: 28px !important;
+  background: #000 var(--firefox) no-repeat 12px center / 28px !important;
 }
 
 .main#config_reseed p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--reseed) 12px center no-repeat !important;
-  background-size: 28px !important;
+  background: #000 var(--reseed) no-repeat 12px center / 28px !important;
 }
 
 .infohelp#flags {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/info/flags.png) 12px center no-repeat !important;
-  background-size: 28px !important;
+  background: #000 url(/themes/console/images/info/flags.png) no-repeat 12px center / 28px !important;
 }
 
 p#enablefullstats, p#gatherstats {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--stats) 12px center no-repeat !important;
-  background-size: 28px !important;
+  background: #000 var(--stats) no-repeat 12px center / 28px !important;
 }
 
 #config_family .infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--family) 12px center no-repeat !important;
-  background-size: 28px !important;
+  background: #000 var(--family) no-repeat 12px center / 28px !important;
 }
 
 #consolepass tr:first-child td {
@@ -7484,35 +7378,35 @@ h4#sb_shutdownstatus span {
 }
 
 .sb_netstatus.error::before {
-  background: var(--net_error) center center no-repeat;
+  background: var(--net_error) no-repeat center center;
 }
 
 .sb_netstatus.warn::before {
-  background: var(--net_warning) center center no-repeat;
+  background: var(--net_warning) no-repeat center center;
 }
 
 .sb_netstatus.testing::before {
-  background: var(--net_starting) center center no-repeat;
+  background: var(--net_starting) no-repeat center center;
 }
 
 .sb_netstatus.hidden::before {
-  background: var(--net_hidden) center center no-repeat;
+  background: var(--net_hidden) no-repeat center center;
 }
 
 .sb_netstatus.running::before {
-  background: var(--net_ok) center center no-repeat;
+  background: var(--net_ok) no-repeat center center;
 }
 
 .sb_netstatus.firewalled::before {
-  background: var(--net_firewalled) center center no-repeat;
+  background: var(--net_firewalled) no-repeat center center;
 }
 
 .sb_netstatus.vmcomm::before {
-  background: var(--net_vm) center center no-repeat;
+  background: var(--net_vm) no-repeat center center;
 }
 
 .sb_netstatus.clockskew::before {
-  background: var(--net_vm) center center no-repeat;
+  background: var(--net_vm) no-repeat center center;
 }
 
 /* end network status */
@@ -8181,12 +8075,12 @@ th code {
 
 #debug h3.debug_outboundsessions {
   margin-top: -2px !important;
-  background: var(--out) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
+  background: var(--out) no-repeat 8px center, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
               repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.4) 3px), var(--h3_fade) !important;
 }
 
 #debug h3.debug_inboundsessions {
-  background: var(--in) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
+  background: var(--in) no-repeat 8px center, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
               repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px,
               rgba(0,16,0,.5) 2px, rgba(0,16,0,.4) 3px), var(--h3_fade) !important;
 }
@@ -8408,7 +8302,7 @@ th code {
 #jardump a[href^="https://gitlab.com/i2pplus"] {
   margin-left: -4px;
   padding-left: 14px;
-  background: var(--gitlab) left center no-repeat;
+  background: var(--gitlab) no-repeat left center;
   background-size: 11px;
 }
 
@@ -8495,15 +8389,6 @@ th code {
 
 /* end jardump */
 
-/* Edge/IE tweaks */
-
-_:-ms-lang(x), .tunnels_client th:first-child::after {
-  letter-spacing: -.05em;
-  font-weight: 400;
-}
-
-/* end Edge/IE tweaks */
-
 /* TO DO: Merge with main classes */
 
 .optionlist {
@@ -8513,9 +8398,9 @@ _:-ms-lang(x), .tunnels_client th:first-child::after {
 
 .optionlist label {
   min-width: 300px;
+  -webkit-column-break-inside: avoid;
   break-inside: avoid;
   page-break-inside: avoid !important;
-  -webkit-column-break-inside: avoid;
 }
 
 th.options, #externali2cp th {
@@ -8676,9 +8561,9 @@ th.options, #externali2cp th {
 }
 
 #banlist .routerid, #banlist .routerid .flag {
-  border: none;
   padding: 0;
   vertical-align: middle;
+  border: none;
 }
 
 #banlist .routerid {
@@ -8690,9 +8575,9 @@ th.options, #externali2cp th {
 }
 
 .tunneldisplay .routerid, .tunnel_local {
-  min-width: 64px;
   margin-right: 2px !important;
   margin-left: 0 !important;
+  min-width: 64px;
 }
 
 .tunneldisplay .routerid, .tunnel_cap {
@@ -8723,14 +8608,14 @@ th.options, #externali2cp th {
 #reseedconfig td .nowrap b {
   margin-right: 8px;
   min-width: 120px;
-  text-align: right;
   display: inline-block;
+  text-align: right;
 }
 
 .configtable th {
-  text-transform: none !important;
-  letter-spacing: 0 !important;
   word-spacing: 0 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
 }
 
 /* config overhaul */
@@ -8766,7 +8651,6 @@ th.options, #externali2cp th {
   box-shadow: inset 0 0 0 2px #000;
   column-gap: 1px;
   transition: ease box-shadow .2s;
-  background: #000 !important;
   background: repeating-linear-gradient(to bottom, #000 1px, #000800 2px, #000800 3px) !important;
 }
 
@@ -8788,9 +8672,9 @@ th.options, #externali2cp th {
 
 .optionlist label, .optionlist .nowrap {
   min-width: 300px;
+  -webkit-column-break-inside: avoid;
   break-inside: avoid;
   page-break-inside: avoid !important;
-  -webkit-column-break-inside: avoid;
   will-change: transform;
 }
 
@@ -8823,7 +8707,6 @@ b.suboption {
   border: var(--softborder);
   border-bottom: none;
   box-shadow: var(--highlight);
-  background: #010;
   background: linear-gradient(to bottom, #010 50%, #000 50%);
 }
 
@@ -8863,8 +8746,7 @@ b.suboption {
 
 #bandwidthconfig td:first-child:not(.infohelp):not(.optionsave) {
   padding: 0 50px 0 5px;
-  background: #000800 url(/themes/console/images/svg/arrow_right.svg) right 12px center no-repeat !important;
-  background-size: 24px !important;
+  background: #000800 url(/themes/console/images/svg/arrow_right.svg) no-repeat right 12px center / 24px !important;
   background-blend-mode: luminosity;
 }
 
@@ -8875,15 +8757,15 @@ b.suboption {
 }
 
 #bandwidthconfig .bw_out {
-  background: #002500 url(/themes/console/images/svg/outbound.svg) 10px calc(50% + 14px) no-repeat !important;
+  background: #002500 url(/themes/console/images/svg/outbound.svg) no-repeat 10px calc(50% + 14px) !important;
 }
 
 #bandwidthconfig .bw_in {
-  background: #002500 url(/themes/console/images/svg/inbound.svg) 10px calc(50% + 14px) no-repeat !important;
+  background: #002500 url(/themes/console/images/svg/inbound.svg) no-repeat 10px calc(50% + 14px) !important;
 }
 
 #bandwidthconfig .bw_share {
-  background: #002500 var(--share) 10px calc(50% + 14px) no-repeat !important;
+  background: #002500 var(--share) no-repeat 10px calc(50% + 14px) !important;
 }
 
 #bandwidthconfig .bw_out, #bandwidthconfig .bw_in, #bandwidthconfig .bw_share {
@@ -8904,14 +8786,13 @@ b.suboption {
 }
 
 .net_bw {
-  display: inline-block;
+  margin: 3px;
   padding: 5px 8px;
-  background: #020;
-  background: linear-gradient(to bottom, #020, #000);
-  box-shadow: 0 0 0 1px #020, var(--highlight);
+  display: inline-block;
   white-space: nowrap;
   text-align: center;
-  margin: 3px;
+  box-shadow: 0 0 0 1px #020, var(--highlight);
+  background: linear-gradient(to bottom, #020, #000);
 }
 
 .net_bwrate {
@@ -9294,8 +9175,7 @@ b.suboption {
 #manualreseed td.infohelp {
   padding: 15px 15px 15px 50px;
   box-shadow: var(--highlight), inset 0 0 2px 1px #040 !important;
-  background: #000 var(--infohelp) 12px center no-repeat !important;
-  background-size: 28px !important;
+  background: #000 var(--infohelp) no-repeat 12px center / 28px !important;
 }
 
 #config_reseed #manualreseed .optionsingle table,
@@ -9446,7 +9326,7 @@ input[type=file] {
   min-width: 40px;
   display: inline-block;
   vertical-align: middle;
-  background: var(--experimental) 12px center no-repeat !important;
+  background: var(--experimental) no-repeat 12px center !important;
   background-size: 16px auto !important;
   content: "";
 }
@@ -9483,14 +9363,12 @@ input[type=file] {
 
 #installPluginUrl td:first-child {
   padding: 15px 15px 15px 50px !important;
-  background: var(--link) 12px center no-repeat !important;
-  background-size: 28px !important;
+  background: var(--link) no-repeat 12px center / 28px !important;
 }
 
 #installPluginFile td:first-child {
   padding: 15px 15px 15px 50px;
-  background: var(--files) 12px center no-repeat !important;
-  background-size: 28px !important;
+  background: var(--files) no-repeat 12px center / 28px !important;
 }
 
 /* /configfamily */
@@ -9538,14 +9416,12 @@ input[type=file] {
 
 #joinfamily .infohelp {
   box-shadow: var(--highlight), inset 0 0 2px 1px #040 !important;
-  background: #000 var(--joinfamily) 12px center no-repeat !important;
-  background-size: 28px !important;
+  background: #000 var(--joinfamily) no-repeat 12px center / 28px !important;
 }
 
 #newfamily .infohelp {
   box-shadow: var(--highlight), inset 0 0 2px 1px #040 !important;
-  background: #000 var(--newfamily) 12px center no-repeat !important;
-  background-size: 28px !important;
+  background: #000 var(--newfamily) no-repeat 12px center / 28px !important;
 }
 
 #config_service .infohelp {
@@ -9565,8 +9441,8 @@ input[type=file] {
   font-weight: 700;
   border-radius: 2px 15px 15px 2px;
   box-shadow: 0 0 0 1px #010, 0 0 0 2px rgba(0,0,0,.7);
-  background: #020 var(--plugin) 5px center no-repeat;
-  background: var(--plugin) 5px center no-repeat, linear-gradient(to bottom, #020, #000);
+  background: #020 var(--plugin) no-repeat 5px center;
+  background: var(--plugin) no-repeat 5px center, linear-gradient(to bottom, #020, #000);
   background-size: 14px, 100%;
   background-blend-mode: luminosity;
 }
@@ -9848,14 +9724,13 @@ input[type=file] {
 #netdb .netdbentry th code, #netdb .sybil_routerinfo th code, #netdb .leaseset th code {
   margin: 2px 5px 2px 7px;
   padding: 1px 4px 2px;
-  font-family: -var(--bodyfont) !important;
+  font-family: var(--bodyfont) !important;
   font-weight: 700 !important;
   letter-spacing: .12em;
   color: #bb0;
   text-shadow: none;
   border-radius: 2px;
   box-shadow: 0 0 0 1px #000;
-  background: #020;
   background: var(--element);
 }
 
@@ -10141,15 +10016,12 @@ input[type=file] {
   padding: 2px 4px 2px 18px;
   display: inline-block;
   color: #ee9 !important;
-  background: #020 url(/themes/console/images/buttons/cryptokey.png) 3px center no-repeat;
-  background: url(/themes/console/images/buttons/cryptokey.png) 3px center no-repeat, var(--element);
-  background-size: 14px, 100%;
+  background: url(/themes/console/images/buttons/cryptokey.png) no-repeat 3px center / 16px, var(--element);
 }
 
 .signingkey.encryption {
   padding-left: 20px;
-  background: var(--lock) 5px center no-repeat, var(--element);
-  background-size: 12px, 100%;
+  background: var(--lock) no-repeat 5px center / 12px, var(--element);
 }
 
 .leaseset th:last-child, .leasesets_container .leaseset tr:nth-child(2) {
@@ -10160,7 +10032,6 @@ input[type=file] {
   margin: 0 0 0 -7px;
   padding: 3px 3px 4px;
   display: inline-block;
-  background: #020;
   background: var(--element);
 }
 
@@ -10560,7 +10431,7 @@ input[type=text]:focus::placeholder, #homesearch input.search:focus::placeholder
   height: 26px;
   vertical-align: middle;
   display: inline-block;
-  background: var(--update) center center no-repeat;
+  background: var(--update) no-repeat center center;
   background-size: 26px;
   content: "";
   transform: rotate(0);
@@ -10648,16 +10519,16 @@ input[type=text]:focus::placeholder, #homesearch input.search:focus::placeholder
 }
 
 #bandwidthconfig tr:nth-child(2) .net_bwrate::before {
-  background: url(/themes/console/images/svg/inbound.svg) center center no-repeat;
+  background: url(/themes/console/images/svg/inbound.svg) no-repeat center center;
 }
 
 #bandwidthconfig tr:nth-child(3) .net_bwrate::before, #bandwidthconfig tr:nth-child(4) .net_bwrate::before {
-  background: url(/themes/console/images/svg/outbound.svg) center center no-repeat;
+  background: url(/themes/console/images/svg/outbound.svg) no-repeat center center;
 }
 
 .net_bwrate::before, #bandwidthconfig tr:nth-child(4) .net_bwrate::before {
-  background: var(--share) left center no-repeat;
-  background: url(/themes/console/images/svg/share5.svg) left center no-repeat !important;
+  background: var(--share) no-repeat left center;
+  background: url(/themes/console/images/svg/share5.svg) no-repeat left center !important;
   background-size: 18px !important;
 }
 
@@ -10770,7 +10641,7 @@ a:hover .tier, a:focus .tier {
 
 #bugreports td {
   padding: 15px 10px 15px 50px;
-  background: var(--infohelp) 12px center no-repeat !important;
+  background: var(--infohelp) no-repeat 12px center !important;
 }
 
 #logs #enviro:hover {
@@ -10796,13 +10667,13 @@ a:hover .tier, a:focus .tier {
 
 #logs #enviro td:first-child {
   width: 1%;
-  text-align: right;
   white-space: nowrap;
+  text-align: right;
 }
 
 #enviro #revision {
   padding-left: 14px;
-  background: var(--gitlab) left center no-repeat;
+  background: var(--gitlab) no-repeat left center;
   background-size: 11px;
 }
 
@@ -11145,12 +11016,12 @@ a[href^="/netdb"]:hover span {
 
 #netconfig td.infohelp, #reseedconfig td.infohelp {
   box-shadow: var(--highlight), inset 0 0 1px 1px #040 !important;
-  background: #000 var(--infohelp) 12px center no-repeat !important;
+  background: #000 var(--infohelp) no-repeat 12px center !important;
   background-size: 32px !important;
 }
 
 #netconfig td.infowarn {
-  background: #000 var(--infowarn) 12px center no-repeat !important;
+  background: #000 var(--infowarn) no-repeat 12px center !important;
   background-size: 32px !important;
 }
 
@@ -11358,33 +11229,29 @@ h1[class], h1 {
 
 .consolelink {
   padding: 0 3px 0 18px;
-  background: rgba(0,64,0,.3) url(images/favicon.svg) 3px center no-repeat;
+  background: rgba(0,64,0,.3) url(images/favicon.svg) no-repeat 3px center;
   background-size: 12px, 100% !important;
 }
 
 .sitelink.external {
   padding: 0 3px 0 18px;
-  background: rgba(0,64,0,.3) var(--planet) 3px center no-repeat;
-  background-size: 12px, 100% !important;
+  background: rgba(0,64,0,.3) var(--planet) no-repeat 2px center / 12px;
 }
 
 .sitelink:hover {
-  background: var(--link) 2px center no-repeat, linear-gradient(to bottom, #020 50%, #000 50%);
-  background-size: 12px, 100% !important;
+  background: var(--link) no-repeat 2px center / 12px, linear-gradient(to bottom, #020 50%, #000 50%);
 }
 
 .consolelink:hover {
-  background: url(images/favicon.svg) 3px center no-repeat, linear-gradient(to bottom, #020 50%, #000 50%);
-  background-size: 12px, 100% !important;
+  background: url(images/favicon.svg) no-repeat 2px center / 12px, linear-gradient(to bottom, #020 50%, #000 50%);
 }
 
 .sitelink.external:hover {
-  background: var(--planet) 3px center no-repeat, linear-gradient(to bottom, #020 50%, #000 50%);
-  background-size: 12px, 100% !important;
+  background: var(--planet) no-repeat 2px center / 12px, linear-gradient(to bottom, #020 50%, #000 50%);
 }
 
 .chatlink:hover {
-  background: var(--chat) 2px center no-repeat, linear-gradient(to bottom, #020 50%, #000 50%);
+  background: var(--chat) 2px center no-repeat / 12px, linear-gradient(to bottom, #020 50%, #000 50%);
 }
 
 .sitelink:active, .chatlink:active, .consolelink:active {
@@ -11603,16 +11470,16 @@ h3#scheduledjobs {
   display: inline-block;
   width: 26px;
   height: 26px;
-  background: var(--ibgw) center center no-repeat;
+  background: var(--ibgw) no-repeat center center;
   background-size: 26px !important;
 }
 
 .obep::after {
-  background: var(--obep) center center no-repeat;
+  background: var(--obep) no-repeat center center;
 }
 
 .ptcp::after {
-  background: var(--ptcp) center center no-repeat;
+  background: var(--ptcp) no-repeat center center;
 }
 
 #tunnels .cells:first-child {
@@ -12407,7 +12274,7 @@ h3 + table {
   border: var(--softborder);
   border-left-width: 3px;
   box-shadow: var(--highlight), inset 4px 4px 4px rgba(0,0,0,.6) !important;
-  background: var(--yes) 8px center no-repeat, linear-gradient(to bottom, #010, #020);
+  background: var(--yes) no-repeat 8px center, linear-gradient(to bottom, #010, #020);
   background-size: 8px, 100% !important;
   background-blend-mode: normal, normal !important;
 }
@@ -12418,7 +12285,7 @@ h3 + table {
 }
 
 .optbox:checked + label > .stattograph:hover {
-  background: #d50 var(--yes) 8px center no-repeat;
+  background: #d50 var(--yes) no-repeat 8px center;
   background-size: 8px;
 }
 
@@ -12492,15 +12359,14 @@ h3 + table {
 }
 
 #enablefullstats {
-  background: #000 var(--stats) 12px center no-repeat !important;
-  background-size: 28px !important;
+  background: #000 var(--stats) no-repeat 12px center / 28px !important;
 }
 
 /* TunnelPeerCount */
 
 #tunnels #peercount {
   margin-bottom: -3px !important;
-  background: var(--hardhat) 8px center no-repeat,
+  background: var(--hardhat) no-repeat 8px center,
               linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3),
               var(--h3_fade) !important;
   background-size: 20px, 100%, 4px 100%, 100% !important;
@@ -12528,14 +12394,13 @@ h3 + table {
   height: 18px;
   display: inline-block;
   vertical-align: middle;
-  background: var(--refresh) center center no-repeat;
-  background-size: 18px !important;
+  background: var(--refresh) no-repeat center center / 18px !important;
   content: "";
 }
 
 #tunnels #participating a:hover::after, #tunnels #participating a:focus::after,
 #tunnels #peercount a:hover::after, #tunnels #peercount a:focus::after {
-  background: var(--refresh_hover) center center no-repeat;
+  background: var(--refresh_hover) no-repeat center center;
 }
 
 #tunnels #participating a:active::after, #tunnels #peercount a:active::after {
@@ -12663,8 +12528,7 @@ h3 + table {
   height: 14px;
   display: inline-block;
   vertical-align: middle;
-  background: var(--in) center center no-repeat;
-  background-size: 14px !important;
+  background: var(--in) no-repeat center center / 14px !important;
 }
 
 .inbound.small, .outbound.small {
@@ -12683,7 +12547,7 @@ h3 + table {
 }
 
 .outbound  {
-  background: var(--out) center center no-repeat;
+  background: var(--out) no-repeat center center;
 }
 
 #peerdefs li {
@@ -12859,13 +12723,13 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 }
 
 #profilelist .fast.integrated {
-  background: var(--fast) left center no-repeat,
-              var(--highcap) center center no-repeat,
+  background: var(--fast) no-repeat left center,
+              var(--highcap) no-repeat center center,
               var(--integrated) right center no-repeat !important;
 }
 
 #profilelist .highcap {
-  background: var(--highcap) center center no-repeat;
+  background: var(--highcap) no-repeat center center;
 }
 
 #profilelist .highcap.integrated {
@@ -12874,7 +12738,7 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 }
 
 #profilelist .standard {
-  background: var(--standard) center center no-repeat;
+  background: var(--standard) no-repeat center center;
 }
 
 #profilelist .standard.integrated {
@@ -12892,19 +12756,19 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 }
 
 .profilegroup.fast::before {
-  background: var(--fast) left center no-repeat;
+  background: var(--fast) no-repeat left center;
 }
 
 .profilegroup.highcap::before {
-  background: var(--highcap) left center no-repeat;
+  background: var(--highcap) no-repeat left center;
 }
 
 .profilegroup.integrated::before {
-  background: var(--integrated) left center no-repeat;
+  background: var(--integrated) no-repeat left center;
 }
 
 .profilegroup.standard::before {
-  background: var(--standard) left center no-repeat;
+  background: var(--standard) no-repeat left center;
 }
 
 .profilegroup::before {
