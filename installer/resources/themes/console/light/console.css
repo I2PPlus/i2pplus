@@ -2,7 +2,7 @@
 /* Description: Light blue highlights. */
 /* Author: dr|z3d */
 
-@import url(import.css);
+@import url(optbox.css);
 
 :root {
   --h1: var(--bg), linear-gradient(135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px);
@@ -37,8 +37,7 @@ body {
   text-align: center;
   font-size: 9pt;
   color: var(--ink);
-  background: #a4a4cb url(images/tile2.png) scroll;
-  background-size: 32px;
+  background: #a4a4cb url(images/tile2.png) top left / 32px;
 }
 
 .routersummary, h1, .main, iframe {
@@ -273,13 +272,11 @@ pre {
   padding: 5px 7px 5px 22px !important;
   display: inline-block;
   vertical-align: middle;
-  background: var(--download) 6px center no-repeat, var(--button);
-  background-size: 15px 15px, 100% !important;
+  background: var(--download) no-repeat 6px center / 15px, var(--button);
 }
 
 #sidebar form button.download:hover, #sidebar form button.download:focus {
-  background: var(--download_hover) 6px center no-repeat, var(--button_hover);
-  background-size: 15px 15px, 100% !important;
+  background: var(--download_hover) no-repeat 6px center / 15px, var(--button_hover);
 }
 
 #sidebar input[type=text] {
@@ -287,12 +284,12 @@ pre {
 }
 
 #sidebar hr {
-  color: #adadeb;
-  background: #adadeb;
-  height: 1px;
-  border-bottom: 1px solid #afafcf;
   margin: 8px -7px;
+  height: 1px;
+  color: #adadeb;
+  border-bottom: 1px solid #afafcf;
   box-shadow: inset 0 1px 1px 1px #fff;
+  background: #adadeb;
 }
 
 #sidebar hr.b {
@@ -702,15 +699,14 @@ a:active #sb_bandwidthgraph {
   text-align: center;
   border: 1px solid #afafcf;
   box-shadow: 0 0 1px rgba(200,200,200,.8), inset 0 0 0 1px rgba(255,255,255,.6), inset 0 0 0 2px rgba(200,200,255,.6), inset 0 3px 3px rgba(0,0,0,.2);
-  background: #eef;
   background: linear-gradient(to right, rgba(0,255,0,.05) 50%, rgba(255,255,0,.05) 75%, rgba(255,128,0,.05) 90%, rgba(255,0,0,.1)),
               repeating-linear-gradient(to right, rgba(180, 180, 255,.7) 1px, rgba(180, 180, 255, .7) 2px, rgba(221, 221, 255, .7) 2px, rgba(221, 221, 255, .7) 4px);
 }
 
 @media screen and (min-width: 1500px) {
-.percentBarOuter {
-  width: 232px;
-}
+  .percentBarOuter {
+    width: 232px;
+  }
 }
 
 .percentBarInner {
@@ -720,7 +716,6 @@ a:active #sb_bandwidthgraph {
   border: none;
   border-right: 1px solid #afafcf;
   box-shadow: var(--highlight);
-  background: #ccccf0;
   background: linear-gradient(to bottom, rgba(238, 238, 255, .6), rgba(255, 255, 255,.6) 50%, rgba(180, 180, 255, .7) 50%, rgba(140, 140, 255, .7));
 }
 
@@ -918,7 +913,7 @@ p:empty + .sb_notice {
   box-shadow: inset 0 0 0 1px #800, inset 0 0 4px 2px #ffe, inset 0 0 5px 0 #ffd;
   background: #fffff2;
   background: repeating-linear-gradient(135deg, #fffff2, #fffff2 10px, #ddddd2 10px, #ddddd2 20px);
-  background-size: 300% 300%;
+  background-size: 300%;
   animation: down linear 10s reverse infinite;
 }
 
@@ -931,8 +926,7 @@ p:empty + .sb_notice {
   height: 26px;
   vertical-align: middle;
   display: inline-block;
-  background: var(--update) center center no-repeat;
-  background-size: 24px;
+  background: var(--update) no-repeat center center / 24px;
   content: "";
   transform: rotate(0);
   filter: sepia(1);
@@ -990,7 +984,7 @@ to {
   width: 16px;
   height: 16px;
   display: inline-block;
-  background: var(--plugin) no-repeat center center;
+  background: var(--plugin) no-repeat center center / 16px;
   background-size: 16px;
   content: "";
 }
@@ -1147,36 +1141,36 @@ to {
 }
 
 .sb_netstatus.error::before {
-  background: var(--net_error) center center no-repeat;
+  background: var(--net_error) no-repeat center center;
 
 }
 
 .sb_netstatus.warn::before {
-  background: var(--net_warning) center center no-repeat;
+  background: var(--net_warning) no-repeat center center;
 }
 
 .sb_netstatus.testing::before {
-  background: var(--net_starting) center center no-repeat;
+  background: var(--net_starting) no-repeat center center;
 }
 
 .sb_netstatus.hidden::before {
-  background: var(--net_hidden) center center no-repeat;
+  background: var(--net_hidden) no-repeat center center;
 }
 
 .sb_netstatus.running::before {
-  background: var(--net_ok) center center no-repeat;
+  background: var(--net_ok) no-repeat center center;
 }
 
 .sb_netstatus.firewalled::before {
-  background: var(--net_firewalled) center center no-repeat;
+  background: var(--net_firewalled) no-repeat center center;
 }
 
 .sb_netstatus.vmcomm::before {
-  background: var(--net_vm) center center no-repeat;
+  background: var(--net_vm) no-repeat center center;
 }
 
 .sb_netstatus.clockskew::before {
-  background: var(--net_clockskew) center center no-repeat;
+  background: var(--net_clockskew) no-repeat center center;
 }
 
 /* end network status */
@@ -1350,10 +1344,8 @@ to {
 }
 
 .warning:not(old) {
-  background: url(/themes/console/images/itoopie_sm.png) no-repeat scroll 10px center, linear-gradient(to bottom, rgba(248,248,255,.8), rgba(240,240,255,.8)) #f8f8ff;
-  background-size: 70px auto, 100%;
+  background: url(/themes/console/images/itoopie_sm.png) no-repeat 10px center / 70px auto, linear-gradient(to bottom, rgba(248,248,255,.8), rgba(240,240,255,.8)) #f8f8ff;
   background-position: 21px calc(50% + 16px);
-  will-change: transform;
 }
 
 .iframed #warning {
@@ -1362,7 +1354,7 @@ to {
 
 #proxyerror .warning {
   margin-left: 12px;
-  background: url(/themes/console/images/info/errortriangle.png) 25px center no-repeat, linear-gradient(to bottom, rgba(255,255,255,.8), rgba(255,255,255,.3)) #f8f8ff !important;
+  background: url(/themes/console/images/info/errortriangle.png) no-repeat 25px center, linear-gradient(to bottom, rgba(255,255,255,.8), rgba(255,255,255,.3)) #f8f8ff !important;
   background-position: 25px calc(50% + 10px) !important;
 }
 
@@ -1442,9 +1434,7 @@ to {
 
   @supports (background-blend-mode: overlay) {
     .warning {
-      background-image: url(/themes/console/images/itoopie_sm.png) !important;
-      background-size: auto 90% !important;
-      background-position: right 5px bottom !important;
+      background-image: url(/themes/console/images/itoopie_sm.png) no-repeat right 5px bottom / auto 90% !important;
       background-blend-mode: overlay;
     }
   }
@@ -1759,15 +1749,14 @@ to {
 }
 
 #warning2 {
-  background: #f8f8ff url(/themes/snark/ubergine/images/hat.png) no-repeat scroll right bottom;
-  background: linear-gradient(to bottom, rgba(248,248,255,.5), rgba(240,240,255,.5)), url(/themes/snark/ubergine/images/hat.png) no-repeat right bottom, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #f8f8ff !important;
-  background-size: 100%, auto 160px, 100% !important;
+  background: linear-gradient(to bottom, rgba(248,248,255,.5), rgba(240,240,255,.5)),
+              url(/themes/snark/ubergine/images/hat.png) no-repeat right bottom / auto 160px,
+              repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #f8f8ff !important;
 }
 
 @supports (background-blend-mode: multiply) {
   #warning2, .news#news {
-    background: url(/themes/snark/ubergine/images/hat.png) no-repeat scroll right -4px bottom -2px, var(--bg) #fafaff !important;
-    background-size: auto 150px, 4px !important;
+    background: url(/themes/snark/ubergine/images/hat.png) no-repeat right -4px bottom -2px / auto 150px, var(--bg) center center / 4px, #fafaff !important;
     background-blend-mode: multiply, multiply, normal !important;
   }
 }
@@ -2074,11 +2063,10 @@ hr + #newsStatus, hr + #newsStatus + #newsDisplay {
 .newsAuthor {
   padding-left: 15px;
   float: right;
-  background: var(--user) 2px center no-repeat;
-  background-size: 11px;
-  font-size: 8pt !important;
   letter-spacing: .1em !important;
   text-transform: none;
+  font-size: 8pt !important;
+  background: var(--user) no-repeat 2px center / 11px;
   animation: linear fade 1s 1s both;
 }
 
@@ -2088,8 +2076,8 @@ hr + #newsStatus, hr + #newsStatus + #newsDisplay {
 }
 
 .newsDate {
-  opacity: .9;
   margin-right: 1px;
+  opacity: .9;
 }
 
 .news h3, #news h3 {
@@ -2102,9 +2090,7 @@ hr + #newsStatus, hr + #newsStatus + #newsDisplay {
   font-size: 10pt !important;
   border: 1px solid var(--borderinner);
   border-radius: 2px 2px 0 0;
-  background: var(--news) 6px center no-repeat, var(--h3),
-              linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8)) 15% !important;
-  background-size: 16px, 100%, 100% !important;
+  background: var(--news) no-repeat 6px center / 16px, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8)) 15% !important;
   filter: none;
 }
 
@@ -2369,7 +2355,7 @@ h3#iptransport a::after, h3#advancedconfig a::after, h3#reseedsetup a::after {
   height: 20px;
   display: inline-block;
   vertical-align: middle;
-  background: var(--helplink) center center no-repeat;
+  background: var(--helplink) no-repeat center center;
   background-size: 20px;
   content: "";
 }
@@ -2381,8 +2367,7 @@ h3#iptransport a::after, h3#advancedconfig a::after, h3#reseedsetup a::after {
 }
 
 #iptransport a:hover::after, #advancedconfig a:hover::after, #reseedsetup a:hover::after {
-  background: var(--helplink_hover) center center no-repeat;
-  background-size: 20px;
+  background: var(--helplink_hover) no-repeat center center / 20px;
 }
 
 h3#transports, h3#upnp {
@@ -2408,7 +2393,6 @@ pre#activetransports b {
   margin: -16px 0 5px;
   padding: 5px 10px;
   border: 1px solid var(--borderinner);
-  background: #fafaff;
   background: repeating-linear-gradient(135deg, rgba(255, 255, 255, .5) 2px, rgba(240, 240, 255, .3) 3px, #fff 5px);
 }
 
@@ -2434,15 +2418,13 @@ h3#exploratory {
   height: 16px;
   display: inline-block;
   float: right;
-  background: var(--settings) center center no-repeat;
-  background-size: 16px;
+  background: var(--settings) no-repeat center center / 16px;
   content: "";
 }
 
 #tunnels h3 a[href^="/configtunnels#"]:hover::after, #tunnels h3 a[href$="i2ptunnelmgr"]:hover::after,
 #logs a.delete::after, #logs a.configure:hover::after {
-  background: var(--settings_hover) center center no-repeat;
-  background-size: 16px;
+  background: var(--settings_hover) no-repeat center center / 16px;
 }
 
 #logs a.delete::after, #logs a.configure::after {
@@ -2457,13 +2439,11 @@ h3#exploratory {
 }
 
 #tunnels h3 a[href^="/configtunnels#"]:hover, #logs a.configure:hover::after {
-  background: var(-settings_hover) center center no-repeat;
-  background-size: 16px;
+  background: var(-settings_hover) no-repeat center center / 16px;
 }
 
 #logs a.delete:hover::after {
-  background: var(--close_hover) center center no-repeat;
-  background-size: 14px;
+  background: var(--close_hover) no-repeat center center / 14px;
 }
 
 #tunnels h3 a[href^="/configtunnels#"]:active, #logs a.configure:active::after, #logs a.delete:active::after {
@@ -2474,8 +2454,7 @@ h3#exploratory {
   width: 16px;
   height: 16px;
   display: inline-block;
-  background: var(--close) center center no-repeat;
-  background-size: 14px;
+  background: var(--close) no-repeat center center / 14px;
   content: "";
 }
 
@@ -2558,51 +2537,51 @@ p#enablefullstats {
 }
 
 .buttonTop {
-  background: var(--mv_top) center center no-repeat, var(--button) !important;
+  background: var(--mv_top) no-repeat center center, var(--button) !important;
 }
 
 .buttonUp {
-  background: var(--mv_up) center center no-repeat, var(--button) !important;
+  background: var(--mv_up) no-repeat center center, var(--button) !important;
 }
 
 .buttonDown {
-  background: var(--mv_down) center center no-repeat, var(--button) !important;
+  background: var(--mv_down) no-repeat center center, var(--button) !important;
 }
 
 .buttonBottom {
-  background: var(--mv_bottom) center center no-repeat, var(--button) !important;
+  background: var(--mv_bottom) no-repeat center center, var(--button) !important;
 }
 
 .buttonTop:hover, .buttonTop:focus {
-  background: var(--mv_top_hover) center center no-repeat, var(--button_hover) !important;
+  background: var(--mv_top_hover) no-repeat center center, var(--button_hover) !important;
 }
 
 .buttonUp:hover, .buttonUp:focus {
-  background: var(--mv_up_hover) center center no-repeat, var(--button_hover) !important;
+  background: var(--mv_up_hover) no-repeat center center, var(--button_hover) !important;
 }
 
 .buttonDown:hover, .buttonDown:focus {
-  background: var(--mv_down_hover) center center no-repeat, var(--button_hover) !important;
+  background: var(--mv_down_hover) no-repeat center center, var(--button_hover) !important;
 }
 
 .buttonBottom:hover, .buttonBottom:focus {
-  background: var(--mv_bottom_hover) center center no-repeat, var(--button_hover) !important;
+  background: var(--mv_bottom_hover) no-repeat center center, var(--button_hover) !important;
 }
 
 .buttonTop:active {
-  background: var(--mv_top_active) center center no-repeat !important;
+  background: var(--mv_top_active) no-repeat center center !important;
 }
 
 .buttonUp:active {
-  background: var(--mv_up_active) center center no-repeat !important;
+  background: var(--mv_up_active) no-repeat center center !important;
 }
 
 .buttonDown:active {
-  background: var(--mv_down_active) center center no-repeat !important;
+  background: var(--mv_down_active) no-repeat center center !important;
 }
 
 .buttonBottom:active {
-  background: var(--mv_bottom_active) center center no-repeat !important;
+  background: var(--mv_bottom_active) no-repeat center center !important;
 }
 
 .buttonTop, .buttonBottom, .buttonUp, .buttonDown, .buttonTop,
@@ -2851,15 +2830,13 @@ to {
   border: 1px solid var(--borderinner);
   border-radius: 2px;
   background: #eef;
-  background: url(/themes/snark/ubergine/images/hat.png) bottom right no-repeat, linear-gradient(to right, #fafaff, #eef);
-  background-size: auto 100%, 100%;
+  background: url(/themes/snark/ubergine/images/hat.png) no-repeat bottom right / auto 100%, linear-gradient(to right, #fafaff, #eef);
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
 .main#config_update .messages {
   padding: 20px 15px 20px 50px;
-  background: var(--news) 15px center no-repeat, url(/themes/snark/ubergine/images/hat.png) bottom right no-repeat, var(--infohelp);
-  background-size: 28px, auto 100%, 100% !important;
+  background: var(--news) no-repeat 15px center / 28px, url(/themes/snark/ubergine/images/hat.png) no-repeat bottom right / auto 100%, var(--infohelp);
 }
 
 .main#graphs .messages {
@@ -2897,7 +2874,7 @@ to {
   text-align: justify !important;
   font-weight: 700;
   border: none !important;
-  background: url(images/warning.png) left center no-repeat;
+  background: url(images/warning.png) no-repeat left center;
 }
 
 .messages li br + b {
@@ -2912,14 +2889,13 @@ to {
   margin-right: 15px !important;
   display: inline-block;
   list-style: none !important;
-  background: var(--yes) left center no-repeat !important;
-  background-size: 16px;
+  background: var(--yes) no-repeat left center / 16px !important;
 }
 
 .error li {
   display: list-item;
   list-style: none !important;
-  background: url(images/warn.png) left center no-repeat !important;
+  background: url(images/warn.png) no-repeat left center !important;
 }
 
 table {
@@ -2948,13 +2924,14 @@ td.optionsave {
 }
 
 td.optionsave, .formaction, form[action="configpeer"] tr:last-child td, table#addkeyring tr:last-child td {
-  background: linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) !important;
+  background: linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)),
+              repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) !important;
 }
 
 #pluginupdater {
   padding: 15px 5px 15px 50px;
-  background: var(--refresh) 15px center no-repeat, linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) !important;
-  background-size: 28px, 100% !important;
+  background: var(--refresh) no-repeat 15px center / 28px, linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)),
+              repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) !important;
 }
 
 .configtable {
@@ -2987,23 +2964,22 @@ td.infohelp, #help tr:hover td.infohelp, #eventlog tr:hover .infohelp, td.infowa
 }
 
 td.infohelp, #help tr:hover td.infohelp, #eventlog tr:hover .infohelp {
-  background: url(/themes/console/images/svg/infohelp.svg) 15px center no-repeat, var(--infohelp);
+  background: url(/themes/console/images/svg/infohelp.svg) no-repeat 15px center, var(--infohelp);
 }
 
 td.infowarn, #help tr:hover td.infowarn {
-  background: url(/themes/console/images/svg/infowarn.svg) 15px center no-repeat, var(--infohelp);
+  background: url(/themes/console/images/svg/infowarn.svg) no-repeat 15px center, var(--infohelp);
 }
 
 #manualpeercontrol tr:nth-child(3) td.infohelp {
   padding: 20px 15px 20px 50px !important;
-  background: var(--ban) 15px center no-repeat,
+  background: var(--ban) no-repeat 15px center / 28px,
               linear-gradient(to bottom, #fafaff 50%, rgba(220, 220, 255, .3)), rgba(0, 0, 0, 0),
               repeating-linear-gradient(135deg, rgba(255, 255, 255, .5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) !important;
-  background-size: 28px, 100% !important;
 }
 
 #bannedpeercount {
-  background: var(--ban) 15px center no-repeat, var(--infohelp);
+  background: var(--ban) no-repeat 15px center, var(--infohelp);
 }
 
 #config_peers #bannedpeercount {
@@ -3513,25 +3489,23 @@ h4.app, h4.app2 {
 
 h4.app {
   margin-top: 15px;
-  background: url(images/favicon.svg) 10px center no-repeat, var(--h3), linear-gradient(to right, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) #f8f8ff !important;
-  background-size: 16px, 100%, 100% !important;
+  background: url(images/favicon.svg) no-repeat 10px center / 16px, var(--h3), linear-gradient(to right, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) #f8f8ff !important;
 }
 
 h4.app2 {
   clear: left;
   margin-top: 10px !important;
-  background: var(--globe) 10px center no-repeat, var(--h3), linear-gradient(to right, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) #f8f8ff !important;
-  background-size: 16px, 100%, 100% !important;
+  background: var(--globe) no-repeat 10px center / 16px, var(--h3), linear-gradient(to right, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) #f8f8ff !important;
 }
 
 h4.app img, h4.app2 img, #sitemap h3 img {
   margin: -8px 0;
   padding: 9px 0 7px 10px;
+  display: none;
+  border-left: 1px solid var(--borderinner);
   opacity: .8;
   filter: none !important;
   transition: ease all 1s;
-  border-left: 1px solid var(--borderinner);
-  display: none;
 }
 
 #home h4 a {
@@ -3546,8 +3520,7 @@ h4.app img, h4.app2 img, #sitemap h3 img {
   height: 18px;
   display: inline-block;
   vertical-align: middle;
-  background: var(--settings) center center no-repeat;
-  background-size: 16px;
+  background: var(--settings) no-repeat center center / 16px;
   content: "";
 }
 
@@ -3558,8 +3531,7 @@ h4.app img, h4.app2 img, #sitemap h3 img {
 }
 
 #home h4 a:hover::after, #home h4 a:focus::after {
-  background: var(--settings_hover) center center no-repeat;
-  background-size: 16px;
+  background: var(--settings_hover) no-repeat center center / 16px;
 }
 
 #home h4 a:active::after {
@@ -3632,7 +3604,6 @@ div.app:hover img.app, .app:hover img {
 
 div.app:hover .applabel, .sitemapLink:hover .sitemapLabel {
   border-color: #f60;
-  background: #fff !important;
   background: linear-gradient(to bottom, #fff 50%, #ffe8bf 50%, #efd9b3) !important;
   box-shadow: var(--highlight);
 }
@@ -3651,9 +3622,8 @@ div.app:hover .appimg .extlink::after, .sitemaplink.extlink:hover::after {
   height: 18px;
   border: 1px solid #f50;
   border-radius: 0 2px 0 2px;
+  background: url(images/newtab.png) no-repeat 4.5px center / 12.5px 10px;
   opacity: .75;
-  background: url(images/newtab.png) 4.5px center no-repeat;
-  background-size: 12.5px 10px;
 }
 
 div.app.js:hover::before {
@@ -3834,15 +3804,13 @@ input.search[type=text] {
   line-height: 140%;
   box-sizing: border-box;
   border: 1px solid #transparent;
-  background: #fbfbff var(--search) no-repeat 8px center !important;
-  background-size: 15px !important;
+  background: #fbfbff var(--search) no-repeat 8px center / 15px !important;
   background-blend-mode: luminosity;
 }
 
 input.search[type=text]:focus {
   padding: 5px 5px 5px 28px;
-  background: #fff var(--search) no-repeat 8px center !important;
-  background-size: 15px !important;
+  background: #fff var(--search) no-repeat 8px center / 15px !important;
   background-blend-mode: normal;
 }
 
@@ -3963,7 +3931,7 @@ p.infohelp, p.sybilinfo, p#debugmode, p#upnpstatus, p#pluginconfigtext, p#gather
   line-height: 130%;
   border: 1px solid var(--borderinner);
   box-shadow: var(--highlight), inset 0 0 0 2px #bbc;
-  background: url(/themes/console/images/svg/infohelp.svg) 15px center no-repeat,
+  background: url(/themes/console/images/svg/infohelp.svg) no-repeat 15px center,
               var(--infohelp);
   background-size: 28px, 100% 4px, 100%;
 }
@@ -4035,34 +4003,30 @@ p#profiles_overview {
 
 p#debugmode {
   padding: 20px 15px 20px 50px;
-  background: var(--bug) 15px center no-repeat, var(--infohelp);
-  background-size: 28px;
+  background: var(--bug) no-repeat 15px center / 28px, var(--infohelp);
 }
 
 p.sybilinfo, #sybilanalysis {
   padding: 20px 15px 20px 50px;
-  background: var(--sybil) 15px center no-repeat, var(--infohelp);
-  background-size: 28px;
   border-radius: 2px;
+  background: var(--sybil) no-repeat 15px center / 28px, var(--infohelp);
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
 p.sybilinfo.experimental {
-  background: var(--experimental) 15px center no-repeat, var(--infohelp);
-  background-size: 28px, 100%;
+  background: var(--experimental) no-repeat 15px center / 28px, var(--infohelp);
 }
 
 p.infowarn {
   padding: 20px 15px 20px 50px;
   line-height: 130%;
   border: 1px solid var(--borderinner);
-  background: url(/themes/console/images/svg/infowarn.svg) 15px center no-repeat, var(--infohelp);
+  background: url(/themes/console/images/svg/infowarn.svg) no-repeat 15px center / 28px, var(--infohelp);
 }
 
 #addkeyring td.infohelp {
   padding: 20px 15px 20px 50px;
-  background: var(--keys) 15px center no-repeat, var(--infohelp);
-  background-size: 28px;
+  background: var(--keys) no-repeat 15px center / 28px, var(--infohelp);
 }
 
 #addkeyring input[name="key"], #addkeyring input[type=text], #addkeyring select, #addkeyring .password {
@@ -4080,18 +4044,16 @@ p.infowarn {
 
 #leavefamily tr:last-child td:first-child {
   padding: 20px 15px 20px 50px;
-  background: var(--leavefamily) 15px center no-repeat,
+  background: var(--leavefamily) no-repeat 15px center / 28px,
               linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)),
               repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px), #fff !important;
-  background-size: 28px, 100%, 100%;
 }
 
 #oldhome td:first-child {
   padding: 10px 15px 10px 50px;
-  background: var(--home) 15px center no-repeat,
+  background: var(--home) no-repeat 15px center / 28px,
               linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)),
               repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px), #fff !important;
-  background-size: 28px, 100%, 100%;
 }
 
 #oldhome input[type=checkbox], #enablefullstats input[type=checkbox] {
@@ -4100,8 +4062,7 @@ p.infowarn {
 
 #floodfillconfig tr:first-child .infohelp {
   padding: 20px 15px 20px 50px;
-  background: var(--floodfill) 15px center no-repeat, var(--infohelp);
-  background-size: 28px, 100%;
+  background: var(--floodfill) no-repeat 15px center / 28px, var(--infohelp);
 }
 
 #floodfillconfig label {
@@ -4111,15 +4072,14 @@ p.infowarn {
 p#clientconf.infohelp, p#webappconfigtext.infohelp {
   padding: 20px 15px 20px 50px;
   box-shadow: var(--highlight);
-  background: var(--editclient) 15px center no-repeat, var(--infohelp);
-  background-size: 28px, 100%;
+  background: var(--editclient) no-repeat 15px center / 28px, var(--infohelp);
 }
 
 p#pluginconfigtext {
   margin-top: 14px;
   padding: 20px 15px 20px 50px;
   box-shadow: none;
-  background: var(--pluginconfig) 15px center no-repeat, var(--infohelp);
+  background: var(--pluginconfig) no-repeat 15px center / 28px, var(--infohelp);
 }
 
 @media screen and (max-width: 1499px) {
@@ -4130,8 +4090,7 @@ p#pluginconfigtext {
 
 #plugininstall .infohelp {
   padding: 20px 15px 20px 50px;
-  background: var(--plugin) 15px center no-repeat, var(--infohelp);
-  background-size: 28px, 100%;
+  background: var(--plugin) no-repeat 15px center / 28px, var(--infohelp);
 }
 
 #installPluginUrl .cancel {
@@ -4145,22 +4104,19 @@ p#pluginconfigtext {
 
 #config_peers tr:nth-child(3) td.infohelp {
   padding: 20px 15px 20px 50px;
-  background: var(--ban) 15px center no-repeat, var(--infohelp);
-  background-size: 28px, 100%;
+  background: var(--ban) no-repeat 15px center / 28px, var(--infohelp);
 }
 
 h3#shutdownrouter + p.infohelp {
   padding: 20px 15px 20px 50px;
   box-shadow: var(--highlight);
-  background: var(--power) 15px center no-repeat, var(--infohelp);
-  background-size: 28px, 100%;
+  background: var(--power) no-repeat 15px center / 28px, var(--infohelp);
 }
 
 h3#restartrouter + p.infohelp, #config_family .infohelp.needrestart {
   padding: 20px 15px 20px 50px;
   box-shadow: var(--highlight);
-  background: var(--reboot) 15px center no-repeat, var(--infohelp);
-  background-size: 28px, 100%;
+  background: var(--reboot) no-repeat 15px center / 28px, var(--infohelp);
 }
 
 h3#shutdownrouter, h3#systray, h3#servicedebug {
@@ -4170,60 +4126,51 @@ h3#shutdownrouter, h3#systray, h3#servicedebug {
 h3#systray + p.infohelp {
   padding: 20px 15px 20px 50px;
   box-shadow: var(--highlight);
-  background: url(/themes/console/images/info/systray.png) 15px center no-repeat, var(--infohelp);
-  background-size: 28px, 100%;
+  background: url(/themes/console/images/info/systray.png) no-repeat 15px center / 28px, var(--infohelp);
 }
 
 h3#servicedebug + p.infohelp {
   padding: 20px 15px 20px 50px;
   box-shadow: var(--highlight);
-  background: var(--bug) 15px center no-repeat, var(--infohelp);
-  background-size: 28px, 100%;
+  background: var(--bug) no-repeat 15px center / 28px, var(--infohelp);
 }
 
 h3#browseronstart + p.infohelp {
   padding: 20px 15px 20px 50px;
   box-shadow: var(--highlight);
-  background: var(--firefox) 15px center no-repeat, var(--infohelp);
-  background-size: 28px, 100%;
+  background: var(--firefox) no-repeat 15px center / 28px, var(--infohelp);
 }
 
 .main#config_reseed p.infohelp {
   padding: 20px 15px 20px 50px;
-  background: var(--reseed) 15px center no-repeat, var(--infohelp);
-  background-size: 28px, 100%;
+  background: var(--reseed) no-repeat 15px center / 28px, var(--infohelp);
   border-radius: 2px;
   box-shadow: 0 0 1px #e0e0eb;
 }
 
 p#enablefullstats, p#gatherstats {
   padding: 20px 15px 20px 50px;
-  background: var(--stats) 15px center no-repeat, var(--infohelp);
-  background-size: 28px, 100% 4px, 100%;
+  background: var(--stats) no-repeat 15px center / 28px, var(--infohelp);
 }
 
 #config_family .infohelp {
   padding: 20px 15px 20px 50px !important;
-  background: var(--family) 15px center no-repeat, var(--infohelp) !important;
-  background-size: 28px, 100% !important;
+  background: var(--family) no-repeat 15px center / 28px, var(--infohelp) !important;
 }
 
 #newfamily .infohelp {
   padding: 20px 15px 20px 50px !important;
-  background: var(--newfamily) 15px center no-repeat, var(--infohelp) !important;
-  background-size: 28px, 100% !important;
+  background: var(--newfamily) no-repeat 15px center / 28px, var(--infohelp) !important;
 }
 
 #joinfamily .infohelp {
   padding: 20px 15px 20px 50px !important;
-  background: var(--joinfamily) 15px center no-repeat, var(--infohelp) !important;
-  background-size: 28px, 100% !important;
+  background: var(--joinfamily) no-repeat 15px center / 28px, var(--infohelp) !important;
 }
 
 #config_ui .infohelp {
   padding: 20px 15px 20px 50px !important;
-  background: var(--ui) 15px center no-repeat, var(--infohelp) !important;
-  background-size: 28px, 100% !important;
+  background: var(--ui) no-repeat 15px center / 28px, var(--infohelp) !important;
 }
 
 /* stats page */
@@ -4272,21 +4219,21 @@ ul.statlist {
 }
 
 .statlist li::before, .statlist li a[href^="graph"]::before {
-  content: "";
-  display: inline-block;
+  margin-top: -4px;
+  margin-right: 10px;
+  margin-left: -17px;
   height: 4px !important;
   width: 4px !important;
-  margin-left: -17px;
-  margin-right: 10px;
-  margin-top: -4px;
-  transform: rotate(45deg);
+  display: inline-block;
   vertical-align: middle;
+  content: "";
   opacity: .8;
+  transform: rotate(45deg);
 }
 
 .statlist li::before {
-  background: #779;
   border: 1px solid #335;
+  background: #779;
 }
 
 .statlist li li br {
@@ -4448,60 +4395,59 @@ h1 {
   border: 1px solid var(--border);
   border-radius: 2px 2px 0 0;
   box-shadow: inset 0 0 0 1px rgba(185,185,198,.65);
-  background: var(--netwrk) 8px center no-repeat, var(--h1) #fafaff !important;
-  background-size: 38px auto, 100%, 100%, 100%, 100% !important;
+  background: var(--netwrk) no-repeat 10px center / 38px, var(--h1) #fafaff;
 }
 
 h1.home {
-  background: var(--home) 10px center no-repeat, var(--h1) #fafaff !important;
+  background-image: var(--home);
 }
 
 h1.perf {
-  background: var(--perf) 10px center no-repeat, var(--h1) #fafaff !important;
+  background-image: var(--perf);
 }
 
 h1.nfo, h1.newspage {
-  background: var(--info) 10px center no-repeat, var(--h1) #fafaff !important;
+  background-image: var(--info);
 }
 
 h1.hlp {
-  background: var(--header_help) 10px center no-repeat, var(--h1) #fafaff !important;
+  background-image: var(--header_help);
 }
 
 h1.addbook {
-  background: var(--addbook) 10px center no-repeat, var(--h1) #fafaff !important;
+  background-image: var(--addbook);
 }
 
 h1.snark {
-  background: var(--app_snark) 10px center no-repeat, var(--h1) #fafaff !important;
+  background-image: var(--app_snark);
 }
 
 h1.mail {
-  background: var(--app_mail) 8px center no-repeat, var(--h1) #fafaff !important;
+  background-image: var(--app_mail);
 }
 
 h1.conf, #wizardpage h1 {
-  background: var(--cog) 10px center no-repeat, var(--h1) #fafaff !important;
+  background-image: var(--cog);
 }
 
 h1.adv {
-  background: var(--info) 10px center no-repeat, var(--h1) #fafaff !important;
+  background-image: var(--info);
 }
 
 h1.err {
-  background: var(--error) 10px center no-repeat, var(--h1) #fafaff !important;
+  background-image: var(--error);
 }
 
 h1.sched {
-  background: var(--tasks) 10px center no-repeat, var(--h1) #fafaff !important;
+  background-image: var(--tasks);
 }
 
 h1.log {
-  background: var(--logs) 10px center no-repeat, var(--h1) #fafaff !important;
+  background-image: var(--logs);
 }
 
 h1.webapp {
-  background: var(--webapp) 10px center no-repeat, var(--h1) #fafaff !important;
+  background-image: var(--webapp);
 }
 
 h1[class], #wizardpage h1 {
@@ -4552,8 +4498,7 @@ h2 {
 #console .welcome h2 { /* fixes occluded langbox rendering bug */
   white-space: nowrap;
   box-shadow: var(--highlight), 0 0 1px rgba(220,220,220,.3);
-  background: url(images/favicon.svg) right 8px center no-repeat, var(--h2) !important;
-  background-size: 20px, 100%, 100% !important;
+  background: url(images/favicon.svg) no-repeat right 8px center / 20px, var(--h2) !important;
   background-blend-mode: luminosity, normal, normal;
   filter: none;
 }
@@ -4615,7 +4560,6 @@ h3.ptitle, h3#bannedpeers {
 }
 
 h2, h3 {
-  background: #fcfcff !important;
   background: var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
 }
 
@@ -4637,7 +4581,6 @@ h2, h3 {
 
 #permabanned tr:nth-child(2) td, #ipv4 td, #ipv6 td {
   border-bottom: 1px solid var(--borderinner);
-  background: #fff !important;
   background: linear-gradient(to bottom, #fff 50%, rgba(238, 238, 255, .2) 50%, #eef 100%) #fff !important;
 }
 
@@ -4646,9 +4589,9 @@ h2, h3 {
 }
 
 #bannedips table {
+  margin: -1px 0 !important;
   border: none;
   border-bottom: 1px solid var(--borderinner);
-  margin: -1px 0 !important;
 }
 
 #bannedips table th, #bannedips table td {
@@ -4664,10 +4607,10 @@ h2, h3 {
 }
 
 #permabanned td:first-child {
-  border-left: 1px solid var(--borderinner);
-  text-align: right;
   padding-right: 10px;
   width: 49%;
+  text-align: right;
+  border-left: 1px solid var(--borderinner);
 }
 
 #permabanned td:nth-child(2) {
@@ -4675,14 +4618,14 @@ h2, h3 {
 }
 
 #permabanned td:last-child {
-  text-align: left;
   padding-left: 10px;
   width: 49%;
+  text-align: left;
 }
 
 #banneduntilrestart td {
-  border-right: 1px solid var(--borderinner);
   text-align: right !important;
+  border-right: 1px solid var(--borderinner);
 }
 
 #banneduntilrestart td:last-child {
@@ -4690,12 +4633,10 @@ h2, h3 {
 }
 
 #bannedips tr:nth-child(even) {
-  background: #eef;
   background: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fff 5px);
 }
 
 #bannedips tr:nth-child(odd) {
-  background: #f7f8ff;
   background: repeating-linear-gradient(45deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px);
 }
 
@@ -4724,13 +4665,13 @@ h4 {
 }
 
 #certs h4 {
-  border-radius: 0;
   padding: 8px 8px 6px;
+  border-radius: 0;
 }
 
 #certs h3 + p, #certs h4 + p:not(.infohelp) {
-  border: 1px solid var(--borderinner);
   padding: 15px;
+  border: 1px solid var(--borderinner);
 }
 
 #certs h3 + p {
@@ -4953,7 +4894,6 @@ button a, button a:visited {
 button:hover, input[type=submit]:hover, input[type=reset]:hover, button:focus, input[type=submit]:focus, input[type=reset]:focus {
   color: #19191f;
   border: 1px solid #f60;
-  box-shadow: var(--highlight);
   box-shadow: var(--highlight), inset 0 -8px 3px 8px rgba(255,96,0,.02), inset 0 0 10px rgba(255,96,0,.05), 0 0 1px rgba(255,96,0,.1), 0 7px 4px -4px rgba(0,0,0,.1);
   background: var(--button_hover);
   filter: saturate(100%) drop-shadow(0 0 1px rgba(204, 204, 204, .8));
@@ -4971,9 +4911,7 @@ input[type=file]::file-selector-button {
   text-shadow: 0 1px 1px #fff;
   border: 1px solid #97a2ce;
   border-radius: 2px;
-  box-shadow: var(--highlight), var(--highlight);
   box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
-  background: #eee;
   background: var(--button);
   background-size: 14px auto, 100% !important;
   opacity: 1;
@@ -5007,13 +4945,11 @@ button a:active {
 
 input.accept, button.accept {
   padding: 5px 9px 5px 24px;
-  background: var(--yes) no-repeat 8px center, var(--button);
-  background-size: 12px, 100% !important;
+  background: var(--yes) no-repeat 8px center / 12px, var(--button);
 }
 
 input.accept:hover, button.accept:hover, input.accept:focus, button.accept:focus {
-  background: var(--yes) no-repeat 8px center, var(--button_hover);
-  background-size: 12px, 100% !important;
+  background: var(--yes) no-repeat 8px center / 12px, var(--button_hover);
 }
 
 input.accept[value^="Unban"], button.accept[value^="Unban"] {
@@ -5028,38 +4964,32 @@ input.accept[value^="Unban"]:focus, button.accept[value^="Unban"]:focus {
 
 input.accept[value^="Create"], button.accept[value^="Create"] {
   padding: 5px 9px 5px 26px;
-  background: var(--wizard) no-repeat 8px center, var(--button);
-  background-size: 16px, 100% !important;
+  background: var(--wizard) no-repeat 8px center / 16px, var(--button);
 }
 
 input.accept[value^="Create"]:hover, button.accept[value^="Create"]:hover,
 input.accept[value^="Create"]:focus, button.accept[value^="Create"]:focus {
-  background: var(--wizard) no-repeat 8px center, var(--button_hover);
-  background-size: 16px, 100% !important;
+  background: var(--wizard) no-repeat 8px center / 16px, var(--button_hover);
 }
 
 input.accept[value^="Filter"], button.accept[value^="Filter"] {
   padding: 5px 9px 5px 27px;
-  background: var(--filter) no-repeat 8px center, var(--button);
-  background-size: 16px, 100%;
+  background: var(--filter) no-repeat 8px center / 16px, var(--button);
 }
 
 input.accept[value^="Filter"]:hover, button.accept[value^="Filter"]:hover,
 input.accept[value^="Filter"]:focus, button.accept[value^="Filter"]:focus {
-  background: var(--filter) no-repeat 8px center, var(--button_hover);
-  background-size: 16px, 100%;
+  background: var(--filter) no-repeat 8px center / 16px, var(--button_hover);
 }
 
 input.add, button.add {
   padding: 5px 7px 5px 22px;
-  background: var(--add) no-repeat 8px center, var(--button);
-  background-size: 11px, 100% !important;
+  background: var(--add) no-repeat 8px center / 11px, var(--button);
 }
 
 input.add:hover, button.add:hover,
 input.add:focus, button.add:focus {
-  background: var(--add) no-repeat 8px center, var(--button_hover);
-  background-size: 11px, 100% !important;
+  background: var(--add) no-repeat 8px center / 11px, var(--button_hover);
 }
 
 input.add[value^="Adjust"], button.add[value^="Adjust"] {
@@ -5074,14 +5004,12 @@ input.add[value^="Adjust"]:focus, button.add[value^="Adjust"]:focus {
 
 input.cancel, button.cancel {
   padding: 5px 9px 5px 22px;
-  background: var(--no) no-repeat 8px center, var(--button);
-  background-size: 10px, 100% !important;
+  background: var(--no) no-repeat 8px center / 10px, var(--button);
 }
 
 input.cancel:hover, button.cancel:hover,
 input.cancel:focus, button.cancel:focus {
-  background: var(--no) no-repeat 8px center, var(--button_hover);
-  background-size: 10px, 100% !important;
+  background: var(--no) no-repeat 8px center / 10px, var(--button_hover);
 }
 
 input.showconsole {
@@ -5134,14 +5062,12 @@ input.delete:focus, button.delete:focus {
 
 input.delete[value^="Ban"], button.delete[value^="Ban"] {
   padding: 5px 9px 5px 24px;
-  background: var(--doban) no-repeat 8px center, var(--button);
-  background-size: 16px, 100%;
+  background: var(--doban) no-repeat 8px center / 16px, var(--button);
 }
 
 input.delete[value^="Ban"]:hover, button.delete[value^="Ban"]:hover,
 input.delete[value^="Ban"]:focus, button.delete[value^="Ban"]:focus {
-  background: var(--doban) no-repeat 8px center, var(--button_hover);
-  background-size: 16px, 100%;
+  background: var(--doban) no-repeat 8px center / 16px, var(--button_hover);
 }
 
 input.download, button.download {
@@ -5200,19 +5126,17 @@ input.go:hover, button.go:hover, input[value="GO"]:hover, input.go:focus, button
 
 input.go[value^="Create"], button.go[value^="Create"], #reseedcreatefile .go {
   padding: 5px 9px 5px 26px;
-  background: var(--wizard) no-repeat 8px center, var(--button);
-  background-size: 15px, 100% !important;
+  background: var(--wizard) no-repeat 8px center / 15px, var(--button);
 }
 
 input.go[value^="Create"]:hover, button.go[value^="Create"]:hover,
 input.go[value^="Create"]:focus, button.go[value^="Create"]:focus {
-  background: var(--wizard) no-repeat 8px center, var(--button_hover);
-  background-size: 15px, 100% !important;
+  background: var(--wizard) no-repeat 8px center / 15px, var(--button_hover);
 }
 
 input.back {
-  background: url(/themes/console/images/buttons/back.png) no-repeat 8px center, var(--button);
   padding: 5px 9px 5px 24px;
+  background: url(/themes/console/images/buttons/back.png) no-repeat 8px center, var(--button);
 }
 
 input.back:hover,
@@ -5232,8 +5156,7 @@ input.reload:focus, button.reload:focus {
 
 input.reload[value$="restart"], button.reload[value$="restart"] {
   padding: 5px 9px 5px 24px;
-  background: var(--restart) no-repeat 8px center, var(--button);
-  background-size: 12px, 100%;
+  background: var(--restart) no-repeat 8px center / 12px, var(--button);
 }
 
 input.reload[value$="restart"]:hover, button.reload[value$="restart"]:hover,
@@ -5270,8 +5193,7 @@ input.reload[value="Force garbage collection"]:focus, button.reload[value="Force
 
 input.stop, button.stop {
   padding: 5px 9px 5px 24px;
-  background: var(--shutdown) no-repeat 8px center, var(--button);
-  background-size: 12px, 100% !important;
+  background: var(--shutdown) no-repeat 8px center / 12px, var(--button);
 }
 
 input.stop:hover, button.stop:hover,
@@ -5289,57 +5211,51 @@ button.control {
 }
 
 button.accept.control {
-  background: var(--start) center center no-repeat, var(--button);
-  background-size: 14px, 100% !important;
+  background: var(--start) no-repeat center center / 14px, var(--button);
 }
 
 button.accept.control:hover, button.accept.control:focus {
-  background: var(--start_hover) center center no-repeat, var(--button_hover);
-  background-size: 14px, 100% !important;
+  background: var(--start_hover) no-repeat center center / 14px, var(--button_hover);
 }
 
 button.stop.control {
-  background: var(--stop) center center no-repeat, var(--button);
+  background: var(--stop) no-repeat center center, var(--button);
 }
 
 button.stop.control:hover, button.stop.control:focus {
-  background: var(--stop_hover) center center no-repeat, var(--button_hover);
+  background: var(--stop_hover) no-repeat center center, var(--button_hover);
 }
 
 button.add.control {
-  background: var(--edit) center center no-repeat, var(--button);
-  background-size: 16px, 100% !important;
+  background: var(--edit) no-repeat center center / 16px, var(--button);
 }
 
 button.add.control:hover, button.add.control:focus {
-  background: var(--edit_hover) center center no-repeat, var(--button_hover);
-  background-size: 16px, 100% !important;
+  background: var(--edit_hover) no-repeat center center / 16px, var(--button_hover);
 }
 
 button.delete.control {
-  background: var(--nuke) center center no-repeat, var(--button);
+  background: var(--nuke) no-repeat center center, var(--button);
 }
 
 button.delete.control:hover, button.delete.control:focus {
-  background: var(--nuke) center center no-repeat, var(--button_hover);
+  background: var(--nuke) no-repeat center center, var(--button_hover);
 }
 
 button.check.control {
-  background: var(--refresh) center center no-repeat, var(--button);
-  background-size: 16px, 100% !important;
+  background: var(--refresh) no-repeat center center / 16px, var(--button);
 }
 
 button.check.control:hover, button.check.control:focus {
-  background: var(--refresh_hover) center center no-repeat, var(--button_hover);
-  background-size: 16px, 100% !important;
+  background: var(--refresh_hover) no-repeat center center / 16px, var(--button_hover);
 }
 
 button.download.control {
-  background: var(--download) center center no-repeat, var(--button);
+  background: var(--download) no-repeat center center, var(--button);
 }
 
 button.download.control:hover, button.download.control:focus {
-  background: var(--download_hover) center center no-repeat, var(--button_hover);
+  background: var(--download_hover) no-repeat center center, var(--button_hover);
 }
 
 /* end project "X" */
@@ -5357,11 +5273,11 @@ button.download.control:hover, button.download.control:focus {
 
 #updateAvailable + br + button + br + #updateAvailable::before {
   margin: 2px 0 4px;
-  content: "";
-  display: inline-block;
-  height: 1px;
-  background: #ddf;
   width: calc(100% - 20px);
+  height: 1px;
+  display: inline-block;
+  background: #ddf;
+  content: "";
 }
 
 #updateAvailable + br + button + br + #updateAvailable {
@@ -5388,13 +5304,11 @@ button.download.control:hover, button.download.control:focus {
 }
 
 #sidebar .reload {
-  background: var(--restart) center center no-repeat, var(--button) !important;
-  background-size: 16px, 100% !important;
+  background: var(--restart) no-repeat center center / 16px, var(--button) !important;
 }
 
 #sidebar .reload:hover, #sidebar .reload:focus {
-  background: var(--shutdown_hover) 37% center no-repeat, var(--restart_hover) 63% center no-repeat, var(--button_hover) !important;
-  background-size: 16px, 16px, 100% !important;
+  background: var(--shutdown_hover) no-repeat 37% center / 16px, var(--restart_hover) no-repeat 63% center / 16px, var(--button_hover) !important;
   border: 1px solid #f60;
 }
 
@@ -5406,27 +5320,27 @@ button.download.control:hover, button.download.control:focus {
   text-indent: 0;
   text-align: left;
   min-width: 0;
-  background: var(--download) center left 6px no-repeat, var(--button) !important;
+  background: var(--download) no-repeat center left 6px, var(--button) !important;
 }
 
 #sidebar .reload[value="Reseed"]:hover, #sidebar .reload[value="Reseed"]:focus {
-  background: var(--download_hover) center left 6px no-repeat, var(--button_hover) !important;
+  background: var(--download_hover) no-repeat center left 6px, var(--button_hover) !important;
   padding: 5px 7px 5px 22px !important;
 }
 
 #sidebar .stop {
-  background: var(--shutdown) center center no-repeat, var(--button);
+  background: var(--shutdown) no-repeat center center, var(--button);
   background-size: 16px, 100% !important;
 }
 
 #sidebar .stop:hover, #sidebar .stop:focus {
   border: 1px solid #f60;
-  background: var(--shutdown_hover) center center no-repeat, var(--button_hover);
+  background: var(--shutdown_hover) no-repeat center center, var(--button_hover);
   background-size: 16px, 100% !important;
 }
 
 #sidebar .download {
-  background: var(--download) 6px center no-repeat, var(--button);
+  background: var(--download) no-repeat 6px center, var(--button);
   background-size: 14px, 100% !important;
   padding: 5px 7px 5px 22px !important;
 }
@@ -5452,39 +5366,32 @@ button.download.control:hover, button.download.control:focus {
 }
 
 #sidebar .reload[value="restartImmediate"] {
-  background: var(--restart) center left 6px no-repeat, var(--button) !important;
-  background-size: 12px, 100% !important;
+  background: var(--restart) no-repeat center left 6px / 12px, var(--button) !important;
 }
 
 #sidebar .reload[value="restartImmediate"]:hover, #sidebar .reload[value="restartImmediate"]:focus, #sidebar .reload[value="restartImmediate"]:active {
-  background: var(--restart_hover) center left 6px no-repeat, var(--button_hover) !important;
-  background-size: 12px, 100% !important;
+  background: var(--restart_hover) no-repeat center left 6px / 12px, var(--button_hover) !important;
 }
 
 #sidebar .stop[value="shutdownImmediate"] {
-  background: var(--shutdown) center left 6px no-repeat, var(--button) !important;
-  background-size: 12px, 100% !important;
+  background: var(--shutdown) no-repeat center left 6px / 12px, var(--button) !important;
 }
 
 #sidebar .stop[value="shutdownImmediate"]:hover, #sidebar .stop[value="shutdownImmediate"]:focus, #sidebar .stop[value="shutdownImmediate"]:active {
-  background: var(--shutdown_hover) center left 6px no-repeat, var(--button_hover) !important;
-  background-size: 12px, 100% !important;
+  background: var(--shutdown_hover) no-repeat center left 6px / 12px, var(--button_hover) !important;
 }
 
 #sidebar .reload[value="Reseed"] {
-  background: url(/themes/console/images/buttons/download.png) center left 6px no-repeat, var(--button) !important;
-  background-size: 14px, 100% !important;
+  background: url(/themes/console/images/buttons/download.png) no-repeat center left 6px / 14px, var(--button) !important;
 }
 
 #sidebar .reload[value="Reseed"]:hover, #sidebar .reload[value="Reseed"]:focus, #sidebar .reload[value="Reseed"]:active {
-  background: var(--download) center left 6px no-repeat, var(--button_hover);
-  background-size: 14px, 100% !important;
+  background: var(--download) no-repeat center left 6px / 14px, var(--button_hover);
 }
 
 #sidebar .download:hover, #sidebar .download:focus, #sidebar .download:active {
-  background: var(--download_hover) 6px center no-repeat, var(--button_hover);
-  background-size: 14px, 100% !important;
   padding: 5px 7px 5px 22px !important;
+  background: var(--download_hover) no-repeat 6px center / 14px, var(--button_hover);
 }
 
 /* end sidebar buttons */
@@ -5522,10 +5429,10 @@ input[type=text]:focus, input[type=password]:focus {
 }
 
 input[type="file"] {
-  border: none;
   padding: 0;
-  background: none;
+  border: none;
   box-shadow: none;
+  background: none;
   cursor: pointer;
 }
 
@@ -5573,18 +5480,9 @@ select, select[disabled]:hover, select[disabled]:focus  {
   border-radius: 2px;
   box-shadow: var(--highlight);
   box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
-  background: var(--dropdown) right 8px center no-repeat, var(--button);
-  background-size: 10px auto, 100% !important;
-  -moz-appearance: none;
-  -webkit-appearance: none;
+  background: var(--dropdown) no-repeat right 8px center / 10px, var(--button);
   appearance: none;
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
-}
-
-@supports not (-moz-appearance: none) {
-select {
-  padding: 5px 16px 5px 6px !important;
-}
 }
 
 select:-moz-focusring {
@@ -5606,21 +5504,18 @@ select:hover, select:focus, select:active {
 select:hover, select:active {
   color: #19191f;
   box-shadow: var(--highlight), 0 2px 1px #ddf;
-  background: var(--dropdown_hover) right 8px center no-repeat, var(--button_hover) !important;
-  background-size: 10px auto, 100% !important;
+  background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--button_hover) !important;
 }
 
 select:focus {
   color: #19191f;
-  background: var(--dropdown_hover) right 8px center no-repeat, var(--button_hover) !important;
-  background-size: 10px auto, 100% !important;
   box-shadow: 0 0 1px #89f;
+  background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--button_hover) !important;
 }
 
 select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active {
   border: 1px solid #97a2ce !important;
   box-shadow: var(--highlight) !important;
-  background: #fff !important;
   background: var(--button) !important;
   opacity: .8;
   cursor: default;
@@ -5639,7 +5534,6 @@ input[readonly], input[disabled], input[readonly]:focus, input[disabled]:focus {
   color: #4d4d5f;
   border: 1px solid #a8b1d6;
   box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6);
-  background: #e9e9e9;
   background: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(220, 220, 255, .3) 3px, #fafaff 4px), #fafaff;
   filter: none;
   cursor: default;
@@ -5688,7 +5582,6 @@ textarea:focus {
   border: 1px solid var(--borderinner) !important;
   border-top: 0 !important;
   box-shadow: var(--highlight);
-  background: #eef;
   background: linear-gradient(to right, #efefff, #fafaff, #efefff) #fff;
 }
 
@@ -5743,7 +5636,6 @@ h3 + .statusnotes {
   padding: 4px 2px 2px;
   border: 1px solid var(--borderinner);
   box-shadow: var(--highlight);
-  background: #efefff;
   background: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fff 5px), #fff;
   columns: 440px auto;
   column-gap: 0;
@@ -5787,7 +5679,6 @@ h3#activejobs + ol li::before, h3#scheduledjobs + ol li::before, h3#readyjobs + 
   height: 12px;
   font-weight: 700;
   color: var(--inklite);
-  background: var(--yes) 6px center no-repeat;
   background-size: 12px;
   content: "";
 }
@@ -5800,9 +5691,16 @@ h3#readyjobs + ol li::before {
   color: #dd3;
 }
 
+h3#finishedjobs + ol li {
+  background: var(--yes) no-repeat 6px center / 12px !important;
+}
+
+h3#activejobs + ol li::before {
+  background: var(--start) no-repeat 6px center / 12px !important;
+}
+
 h3#scheduledjobs + ol li::before {
-  background: var(--timer) 6px center no-repeat;
-  background-size: 12px;
+  background: var(--timer) no-repeat 6px center / 12px !important;
 }
 
 #schedjobs {
@@ -5822,7 +5720,7 @@ h3#scheduledjobs + ol li::before {
 }
 
 #schedjobs tr:hover td:first-child {
-  background-image: var(--timer) 6px center no-repeat;
+  background-image: var(--timer) no-repeat 6px center;
 }
 
 #schedjobs ul {
@@ -5843,8 +5741,7 @@ h3#scheduledjobs + ol li::before {
 @media screen and (min-width: 1200px) {
   #jobstats td:first-child, #jobstats tr:hover td:first-child {
     padding: 6px 0 6px 26px;
-    background: var(--yes) 8px center no-repeat;
-    background-size: 12px;
+    background: var(--yes) no-repeat 8px center / 12px !important;
   }
 
   #jobstats tr:last-child td:first-child, #jobstats tr:last-child:hover td:first-child {
@@ -5865,8 +5762,7 @@ h3#scheduledjobs + ol li::before {
   margin-right: 10px;
   padding: 2px 10px 2px 16px;
   white-space: nowrap;
-  background: var(--timer) left center no-repeat;
-  background-size: 12px;
+  background: var(--timer) no-repeat left center / 12px;
 }
 
 /* end /jobs */
@@ -5934,61 +5830,15 @@ h3#scheduledjobs + ol li::before {
 }
 
 @media screen and (min-width: 1000px) {
-th.queue {
-  white-space: nowrap;
-}
-}
-
-.cells.peer {
-  width: 1%;
-/*  max-width: 70px !important;
-  min-width: 70px !important;*/
-  padding: 5px;
-  text-align: center;
-}
-
-.cells.idle, .cells.inout {
-  width: 1%;
-  min-width: 120px;
-}
-
-.cells.inout {
-  min-width: 110px;
-}
-
-.cells.uptime {
-  width: 1%;
-  min-width: 70px;
-}
-
-.cells.skew, .cells.clockskew {
-  width: 1%;
-  min-width: 64px;
-}
-
-.cells.tx, .cells.rx, .cells.duptx, .cells.duprx {
-  width: 1%;
-  min-width: 48px;
-}
-
-.cells.mtu {
-  white-space: nowrap;
-}
-
-.cells.spacer {
-  width: 35%;
+  th.queue {white-space: nowrap}
 }
 
 @media screen and (max-width: 1200px) {
-td.spacer, th.spacer {
-  display: none;
-}
+  td.spacer, th.spacer {display: none}
 }
 
 @media screen and (min-width: 1200px) {
-#ntcpconnections .spacer {
-  display: none;
-}
+  #ntcpconnections .spacer {display: none}
 }
 
 .mediumtags {
@@ -5996,11 +5846,11 @@ td.spacer, th.spacer {
 }
 
 .cells {
+  padding-top: 4px;
+  padding-bottom: 4px;
   border-left: 1px solid #e0e0eb;
   border-top: 1px solid #e0e0eb !important;
   border-bottom: 1px solid #e0e0eb !important;
-  padding-top: 4px;
-  padding-bottom: 4px;
 }
 
 .tablefooter {
@@ -6008,19 +5858,19 @@ td.spacer, th.spacer {
 }
 
 .tablefooter tr, .tablefooter td {
-  background: #f8f8ff;
+  padding: 8px 2px;
+  line-height: 110%;
+  font-size: 9pt;
   border-top: 1px solid var(--borderinner);
   border-bottom: 1px solid var(--borderinner) !important;
-  padding: 8px 2px;
-  font-size: 9pt;
-  line-height: 110%;
+  background: #f8f8ff;
 }
 
 .formaction {
-  text-align: right;
-  border: 1px solid var(--borderinner);
   margin-top: -15px;
   padding: 5px;
+  text-align: right;
+  border: 1px solid var(--borderinner);
   background: #fafaff;
 }
 
@@ -6032,37 +5882,16 @@ td.spacer, th.spacer {
   margin-top: -6px;
 }
 
-.footnote {
-  margin: 0 !important;
-  line-height: 120%;
-  text-align: right;
-  font-size: 90%;
-}
-
-.footnote hr {
-  margin: 24px 0 5px !important;
-  background: var(--border);
-  background: linear-gradient(to right, #77a, #669, #77a);
-  height: 1px;
-  border-bottom: 1px solid #fff;
-}
-
-@supports not (-moz-appearance: none) {
-div.footnote hr {
-  height: 1px;
-}
-}
-
 .footnote, .footnote hr {
   display: none;
 }
 
 .topness {
+  margin-top: 0;
+  margin-right: 5px;
+  margin-bottom: 5px;
   font-size: 8pt;
   text-align: right;
-  margin-top: 0;
-  margin-bottom: 5px;
-  margin-right: 5px;
 }
 
 iframe.iframed {
@@ -6092,10 +5921,10 @@ body.iframed {
 /* Theme choice & Language selection in /configui */
 
 #themeui.formaction, #langui.formaction {
+  margin: 5px -5px 0;
   border: none;
   border-top: 1px solid var(--borderinner);
   background: none;
-  margin: 5px -5px 0;
 }
 
 #themeui .cancel, #langui .cancel {
@@ -6112,9 +5941,8 @@ body.iframed {
 }
 
 #consolepass tr:first-child td {
-  background: var(--useradd) 15px center no-repeat, var(--infohelp);
-  background-size: 28px;
   padding: 20px 15px 20px 50px;
+  background: var(--useradd) no-repeat 15px center / 28px, var(--infohelp);
 }
 
 #consolepass input.delete {
@@ -6134,7 +5962,6 @@ body.iframed {
   text-overflow: ellipsis;
   white-space: nowrap;
   text-align: center;
-  border: 1px solid var(--borderinner);
   border: 1px solid #999adf;
   box-shadow: var(--highlight);
   background: #f8f8ff;
@@ -6151,7 +5978,6 @@ body.iframed {
 .themechoice:hover > img ~ .themelabel {
   color: #f60;
   border-top: 1px solid #f60 !important;
-  background: #fff !important;
   background: linear-gradient(to bottom, #fff 50%, #ffe8bf 50%, #efd9b3) !important;
 }
 
@@ -6171,10 +5997,10 @@ body.iframed {
 #config_ui .themechoice .optbox {
   margin-top: 0;
   margin-left: -38px !important;
-  position: absolute;
-  z-index: 999 !important;
   min-height: 88px !important;
   min-width: 123px !important;
+  position: absolute;
+  z-index: 999 !important;
   opacity: 0;
 }
 
@@ -6184,9 +6010,7 @@ body.iframed {
 }
 
 @media screen and (max-width: 1480px) {
-.themechoice img {
-  margin-bottom: 29px !important;
-}
+  .themechoice img {margin-bottom: 29px !important}
 }
 
 .themechoice .optbox:checked + img, .themechoice .optbox:checked + img {
@@ -6225,8 +6049,7 @@ p#helptranslate {
   top: 4px;
   text-align: left !important;
   border-top: 1px solid var(--borderinner);
-  background: url(images/favicon.svg) left 14px center no-repeat, var(--infohelp);
-  background-size: 28px;
+  background: url(images/favicon.svg)  no-repeat left 14px center / 28px, var(--infohelp);
 }
 
 #themeoptions input {
@@ -6265,7 +6088,6 @@ p#helptranslate {
 
 .themechoice .optbox:active + img ~ .themelabel {
   color: #fff !important;
-  box-shadow: var(--highlight);
   box-shadow: var(--highlight), inset 3px 3px 3px rgba(0,0,0,.2);
   background: #f60 !important;
 }
@@ -6280,7 +6102,6 @@ p#helptranslate {
   margin: -16px 0 0;
   padding: 4px 5px 0;
   border: 1px solid var(--borderinner);
-  background: #fafaff;
   background: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(248,248,255,.3) 3px, #fafaff 4px);
 }
 
@@ -6313,8 +6134,8 @@ p#helptranslate {
 
 #config_ui .langselect .optbox, #config_ui .langselect .optbox:hover, #config_ui .langselect .optbox:focus {
   margin-top: -2px;
-  margin-left: -2px;
   margin-bottom: 6px;
+  margin-left: -2px;
   width: 118px !important;
   height: 56px !important;
   min-height: 56px !important;
@@ -6331,9 +6152,9 @@ p#helptranslate {
   margin-bottom: 42px;
   margin-left: 0;
   margin-top: -52px;
-  opacity: 1;
   z-index: 3;
   position: relative;
+  opacity: 1;
 }
 
 .langselect input, .themechoice input {
@@ -6342,14 +6163,12 @@ p#helptranslate {
 
 .langselect input[name="lang"]:checked + img {
   transform: scale(1.1);
-  -webkit-transform: scale(1.1);
   filter: drop-shadow(0 0 1px rgba(256, 100, 0, .1));
 }
 
 .langselect:hover > input[name="lang"] + img + .ui_lang {
   color: #f60;
   border-top: 1px solid #f60;
-  background: #fff !important;
   background: linear-gradient(to bottom, #fff 50%, #ffe8bf 50%, #efd9b3 100%) !important;
 }
 
@@ -6423,10 +6242,10 @@ p#helptranslate {
 /* end large flags */
 
 p#helptranslate {
-  clear: both;
-  padding: 5px 10px 10px;
-  text-align: right;
   margin: 0 -5px;
+  padding: 5px 10px 10px;
+  clear: both;
+  text-align: right;
 }
 
 .ui_lang {
@@ -6516,7 +6335,7 @@ table#addkeyring tr:last-child td {
 
 #refreshsidebar tr:first-child td {
   padding-left: 50px;
-  background: var(--timer) 15px center no-repeat, linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)),
+  background: var(--timer) no-repeat 15px center, linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)),
               repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px), #fff !important;
   background-size: 28px, 100%, 100% !important;
 }
@@ -6705,38 +6524,32 @@ h3#udpcon {
 
 #tunnels h3.server {
   padding-left: 32px;
-  background: var(--server) 7px center no-repeat, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
-  background-size: 18px, 100%, 100% !important;
+  background: var(--server) no-repeat 7px center / 18px, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
 }
 
 #tunnels h3.client {
   padding-left: 32px;
-  background: var(--client) 7px center no-repeat, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
-  background-size: 18px, 100%, 100% !important;
+  background: var(--client) no-repeat 7px center / 18px, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
 }
 
 #tunnels h3.ping {
   padding-left: 32px;
-  background: var(--ping) 8px center no-repeat, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
-  background-size: 18px, 100%, 100% !important;
+  background: var(--ping) no-repeat 8px center / 18px, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
 }
 
 #tunnels h3#participating {
   padding-left: 32px;
-  background: var(--share) 8px center no-repeat, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
-  background-size: 18px, 100%, 100% !important;
+  background: var(--share) no-repeat 8px center / 18px, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
 }
 
 #tunnels h3#exploratory {
   padding-left: 32px;
-  background: var(--globe) 8px center no-repeat, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
-  background-size: 18px, 100%, 100% !important;
+  background: var(--globe) no-repeat 8px center / 18px, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
 }
 
 #tunnels h3:last-of-type {
   padding-left: 32px;
-  background: var(--speed) 8px center no-repeat, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
-  background-size: 18px, 100%, 100% !important;
+  background: var(--speed) no-repeat 8px center / 18px, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
 }
 
 #tunnels h3 + h3 {
@@ -6919,7 +6732,6 @@ p:empty { /* empty paragraph nuke */
   border: 1px solid var(--borderinner);
   box-shadow: 0 0 1px #e0e0eb;
   border-radius: 2px;
-  background: #f2f2ff;
   background: linear-gradient(to right, #f2f2ff, #f8f8ff, #f2f2ff);
 }
 
@@ -6935,8 +6747,7 @@ p:empty { /* empty paragraph nuke */
   letter-spacing: .08em;
   text-transform: uppercase;
   font-size: 11pt !important;
-  background:  var(--globe) 8px center no-repeat, var(--h2) !important;
-  background-size: 18px 18px, 100%, 100% !important;
+  background:  var(--globe) no-repeat 8px center / 18px, var(--h2) !important;
 }
 
 #netdblookup input[type=checkbox] {
@@ -7463,8 +7274,7 @@ b.netdb_transport {
   vertical-align: middle;
   border: 1px solid #bbc;
   border-radius: 2px;
-  background: var(--edit) center center no-repeat;
-  background-size: 12px;
+  background: var(--edit) no-repeat center center / 12px;
   content: "";
 }
 
@@ -7479,7 +7289,7 @@ b.netdb_transport {
 }
 
 .configpeer:hover::after, .configpeer:focus::after {
-  background: var(--edit_hover) center center no-repeat;
+  background: var(--edit_hover) no-repeat center center;
 }
 
 .viewprofile img:hover, .viewfullentry img:hover, .familysearch img:hover, .configpeer img:hover, .profiledump img:hover,
@@ -7746,7 +7556,7 @@ img.unknownflag {
 #sybils_summary {
   padding: 20px 10px 20px 50px;
   line-height: 160%;
-  background: var(--floodfill) 8px center no-repeat,
+  background: var(--floodfill) no-repeat 8px center,
               repeating-linear-gradient(135deg, rgba(248,238,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
   columns: 400px auto;
 }
@@ -7771,18 +7581,17 @@ h3.sybils {
   list-style: none;
   border-radius: 2px;
   box-shadow: 0 0 0 1px rgba(200,200,255,.8), var(--highlight);
-  background: var(--eye) 6px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,240,.4)) #e7e7ff;
-  background-size: 16px, 100% !important;
+  background: var(--eye) no-repeat 6px center / 16px, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,240,.4)) #e7e7ff;
 }
 
 #sybilnav li:hover {
   box-shadow: 0 0 0 1px rgba(255,96,0,.5), var(--highlight);
-  background: #fff var(--eye_hover) 6px center no-repeat;
+  background: #fff var(--eye_hover) no-repeat 6px center;
 }
 
 #sybilnav li:active {
   box-shadow: 0 0 0 1px rgba(255,96,0,.5), var(--highlight), inset 3px 3px 3px #ccc;
-  background: #fff var(--eye_active) 6px center no-repeat;
+  background: #fff var(--eye_active) no-repeat 6px center;
 
 }
 
@@ -7894,14 +7703,14 @@ h3.sybils {
 }
 
 .sybil_routerinfo th img[src^="/flags"] {
+  margin-right: 3px;
   height: 11px;
   width: 16px;
-  margin-right: 3px;
 }
 
 .sybil_routerinfo td:first-child, .netdbentry td:first-child {
-  text-align: right !important;
   padding-right: 0;
+  text-align: right !important;
 }
 
 .sybil_routerinfo td:first-child {
@@ -7931,9 +7740,9 @@ h3.sybils {
   padding: 1px 0;
   width: 100%;
   min-width: 240px;
+  -webkit-column-break-inside: avoid;
   break-inside: avoid;
   page-break-inside: avoid;
-  -webkit-column-break-inside: avoid;
 }
 
 p.sybil_info, p.family, p.threatpoints, p.hashdist, p#sybil_totals, p.notfound {
@@ -7944,8 +7753,7 @@ p.sybil_info, p.family, p.threatpoints, p.hashdist, p#sybil_totals, p.notfound {
   font-weight: 700;
   color: var(--inklite);
   text-align: left;
-  background: var(--eye) 8px center no-repeat, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
-  background-size: 16px, 100%;
+  background: var(--eye) no-repeat 8px center / 16px, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
 }
 
 p.sybil_info {
@@ -7954,19 +7762,17 @@ p.sybil_info {
 
 p.threatpoints {
   padding-left: 33px;
-  background: var(--eye_static) 8px center no-repeat, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
-  background-size: 20px, 100%;
+  background: var(--eye_static) no-repeat 8px center / 20px, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
 }
 
 p.threatpoints.hot {
-  background: var(--eye_static) 8px center no-repeat, url(/themes/console/images/info/hot.png) right 4px center no-repeat, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
-  background-size: 20px, 24px, 100%;
+  background: var(--eye_static) no-repeat 8px center / 20px, url(/themes/console/images/info/hot.png) no-repeat right 4px center / 24px,
+              repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
 }
 
 p#sybil_totals {
   font-weight: 400;
-  background: var(--eye_static) 8px center no-repeat, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
-  background-size: 16px, 100%;
+  background: var(--eye_static) no-repeat 8px center / 16px, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
 }
 
 p.family + p.family, p.sybil_info + p.sybil_info {
@@ -7975,14 +7781,12 @@ p.family + p.family, p.sybil_info + p.sybil_info {
 
 p.family:nth-child(even) {
   background: #efefff;
-  background: var(--eye) 8px center no-repeat, repeating-linear-gradient(45deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fafaff 5px), #fafaff;
-  background-size: 16px, 100% !important;
+  background: var(--eye) no-repeat 8px center / 16px, repeating-linear-gradient(45deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fafaff 5px), #fafaff;
 }
 
 p.family:nth-child(odd) {
   background: #f7f8ff;
-  background: var(--eye) 8px center no-repeat, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fff;
-  background-size: 16px, 100% !important;
+  background: var(--eye) no-repeat 8px center / 16px, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fff;
 }
 
 p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sybil_routerinfo, table.sybil_routerinfo + p {
@@ -7996,7 +7800,6 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   display: inline-block;
   border: 1px solid var(--borderinner);
   box-shadow: var(--highlight);
-  background: #eef;
   background: repeating-linear-gradient(45deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fafaff 5px), #fafaff;
 }
 
@@ -8010,9 +7813,9 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 }
 
 @supports not (-moz-appearance: none) {
-.leaseset th:last-child, .leaseset td:last-child, .sybil_routerinfo th:last-child {
-  border-right: 1px solid var(--borderinner) !important;
-}
+  .leaseset th:last-child, .leaseset td:last-child, .sybil_routerinfo th:last-child {
+    border-right: 1px solid var(--borderinner) !important;
+  }
 }
 
 .sybilinfo_params {
@@ -8306,13 +8109,11 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   border: 1px solid #bbd;
   border-radius: 2px;
   box-shadow: var(--highlight);
-  background: url(/themes/console/images/buttons/cryptokey.png) 1px center no-repeat, linear-gradient(to bottom, #fff, #eef);
-  background-size: 14px, 100%;
+  background: url(/themes/console/images/buttons/cryptokey.png) no-repeat 1px center / 14px, linear-gradient(to bottom, #fff, #eef);
 }
 
 .signingkey.encryption {
-  background: var(--lock) 1px center no-repeat, linear-gradient(to bottom, #fff, #eef);
-  background-size: 14px, 100%;
+  background: var(--lock) no-repeat 1px center / 14px, linear-gradient(to bottom, #fff, #eef);
 }
 
 #netdb_ram {
@@ -8323,7 +8124,6 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   box-shadow: var(--highlight);
   border: 1px solid #bbd;
   border-radius: 2px;
-  background: #eef;
   background: linear-gradient(to bottom, #fff, #eef);
 }
 
@@ -8401,7 +8201,6 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   border: 1px solid var(--borderinner);
   border-radius: 2px;
   box-shadow: var(--highlight), inset 0 0 1px 1px #ddf;
-  background: #eef;
   background: linear-gradient(to bottom, rgba(255,255,255,.2), rgba(228,228,255,.2)), repeating-linear-gradient(135deg, rgba(252,252,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fff 4px) #fafaff;
   -webkit-break-inside: avoid;
   break-inside: avoid;
@@ -8484,7 +8283,6 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 
 #banlist li hr {
   margin: 4px 4px 3px 0 !important;
-  background: #7e7fb9;
   background: linear-gradient(to right, #7e7fb9 70%, rgba(0,0,0,0) 95%);
   opacity: .75;
 }
@@ -8492,7 +8290,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 #bannedips table tr {
   box-shadow: var(--highlight) !important;
 }
-#s
+
 #bannedips table td {
   background: rgba(240,240,255,.4);
 }
@@ -8500,14 +8298,14 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 /* end banned peers */
 
 #tunnelconfig th[colspan="3"] {
-  text-transform: uppercase;
-  letter-spacing: .08em;
   word-spacing: .1em;
+  letter-spacing: .08em;
+  text-transform: uppercase;
 }
 
 #tunnelconfig font[color="red"] {
-  background: url(images/warn.png) left center no-repeat;
   padding: 4px 5px 4px 20px;
+  background: url(images/warn.png) no-repeat left center;
 }
 
 #tunnelconfig td:nth-child(n+2) {
@@ -8538,15 +8336,15 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 }
 
 .sortup, .sortdown, .sortupactive, .sortdownactive {
-  padding: 1px 0;
-  border: 1px solid #97a2ce;
-  border-radius: 2px;
   margin: 3px 1px 0 !important;
-  vertical-align: middle;
-  text-align: center;
-  display: inline-block;
+  padding: 1px 0;
   width: 16px;
   height: 12px;
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+  border: 1px solid #97a2ce;
+  border-radius: 2px;
   background-size: 9px auto, 100% !important;
 }
 
@@ -8571,39 +8369,39 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 }
 
 .sortup {
-  background: url(images/sort_up.png) center center no-repeat, var(--button);
+  background: url(images/sort_up.png) no-repeat center center, var(--button);
 }
 
 .sortup:hover {
-  background: url(images/sort_up.png) center center no-repeat, var(--button_hover);
+  background: url(images/sort_up.png) no-repeat center center, var(--button_hover);
   border: 1px solid #f60;
   opacity: 1;
 }
 
 .sortup a:focus, .sortdown a:focus {
-  background: rgba(255,102,0,.15);
-  border-radius: 2px;
-  box-shadow: var(--highlight);
   margin-top: -1px;
   display: inline-block;
+  border-radius: 2px;
+  box-shadow: var(--highlight);
+  background: rgba(255,102,0,.15);
 }
 
 .sortupactive {
-  background: url(images/sort_up.png) center center no-repeat, #fff;
+  background: url(images/sort_up.png) no-repeat center center, #fff;
 }
 
 .sortdown {
-  background: url(images/sort_down.png) center center no-repeat, var(--button);
+  background: url(images/sort_down.png) no-repeat center center, var(--button);
 }
 
 .sortdown:hover {
-  background: url(images/sort_down.png) center center no-repeat, var(--button_hover);
+  background: url(images/sort_down.png) no-repeat center center, var(--button_hover);
   border: 1px solid #f60;
   opacity: 1;
 }
 
 .sortdownactive {
-  background: url(images/sort_down.png) center center no-repeat, #fff;
+  background: url(images/sort_down.png) no-repeat center center, #fff;
 }
 
 /* end peer sort */
@@ -8680,7 +8478,6 @@ table#schedjobs {
   border: 1px solid #bbc;
   border-radius: 2px;
   box-shadow: var(--highlight);
-  background: #dbecff;
   background: linear-gradient(to bottom, #fff, #dbecff);
 }
 
@@ -8705,33 +8502,27 @@ table#schedjobs {
 }
 
 #profilelist .reachable, #floodfills .reachable, #capabilities_key .reachable, .netdbentry .reachable, .sybil_routerinfo .reachable {
-  background: #e2ffe2;
   background: linear-gradient(to bottom, #fff, #e2ffe2);
 }
 
 #profilelist .unreachable, #floodfills .unreachable, #capabilities_key .unreachable, .netdbentry .unreachable  {
-  background: #faa;
   background: linear-gradient(to bottom, #fff, #faa);
 }
 
 #profilelist .ff, #floodfills .ff, #capabilities_key .ff, .netdbentry .ff, .sybil_routerinfo .ff {
-  background: #ffe2ad;
   background: linear-gradient(to bottom, #fff, #ffe2ad);
 }
 
 #profilelist .hidden, #floodfills .hidden, #capabilities_key .hidden, .netdbentry .hidden {
   color: #999 !important;
-  background: #dbecff;
   background: linear-gradient(to bottom, #fff, #ddd);
 }
 
 #profilelist .ssutesting, #floodfills .ssutesting, #capabilities_key .ssutesting, .netdbentry .ssutesting {
-  background: #ffb;
   background: linear-gradient(to bottom, #fff, #ffb);
 }
 
 #profilelist .ssuintro, #floodfills .ssuintro, #capabilities_key .ssuintro, .netdbentry .ssuintro {
-  background: #fbf;
   background: linear-gradient(to bottom, #fff, #fbf);
 }
 
@@ -8775,18 +8566,18 @@ table#schedjobs {
 
 #floodfills td:empty::before, #ntcpconnections td:empty::before, #udpconnections td:empty::before, #profilelist td:empty::before,
 #tunnels .cells:empty:before {
-  content: "‒";
-  display: inline-block;
-  opacity: .8;
   width: 100%;
+  display: inline-block;
   text-align: center;
+  opacity: .8;
+  content: "‒";
 }
 
 #floodfills td:nth-child(3) span, #profilelist td:nth-last-child(3) span, #profilelist td:nth-last-child(4) span,
 #profilelist td:nth-last-child(6) span, #profilelist td:nth-last-child(2) span {
+  min-width: 20px;
   display: inline-block;
   text-align: right;
-  min-width: 20px;
 }
 
 #profilelist td:nth-child(6) span, #profilelist td:nth-child(9) span {
@@ -8797,8 +8588,8 @@ table#schedjobs {
 
 #floodfills .percentBarOuter, #floodfills .percentBarText,
 #tunnels .percentBarOuter, #tunnels .percentBarText {
-  display: inline-block;
   width: 50px;
+  display: inline-block;
 }
 
 #floodfills .percentBarOuter, #tunnels .percentBarOuter {
@@ -8813,13 +8604,11 @@ table#schedjobs {
 #floodfills .percentBarInner, #tunnels .percentBarInner {
   display: inline-block;
   width: inherit;
-  background: #900;
   background: linear-gradient(to bottom, rgba(255,255,255,.1) 50%, rgba(0,0,0,.1) 50%), linear-gradient(to right, #900 25px, #a00 40px, #b00 50px);
 }
 
 #floodfills .percentBarInner[style="width:0%"] {
   width: 100% !important;
-  background: #090;
   background: linear-gradient(to bottom, rgba(255,255,255,.1) 50%, rgba(0,0,0,.1) 50%), linear-gradient(to right, #090, #0b0);
 }
 
@@ -8833,8 +8622,8 @@ table#schedjobs {
 }
 
 #profilelist td:nth-child(2) {
-  white-space: nowrap;
   width: 1%;
+  white-space: nowrap;
 }
 
 #profilelist td:nth-child(2) i {
@@ -8890,14 +8679,14 @@ table#schedjobs {
 }
 
 #profilelist td:nth-last-child(2) span, #profilelist td:nth-last-child(3) span {
-  display: inline-block;
   min-width: 28px;
+  display: inline-block;
   text-align: right;
 }
 
 #profilelist td[colspan="10"], #profilelist td[colspan="10"]:hover {
-  background: #77f;
   padding: 0;
+  background: #77f;
 }
 
 #profilelist .nospeed {
@@ -8924,10 +8713,10 @@ table#schedjobs {
 }
 
 #profile_defs td:first-child {
+  padding: 5px;
   width: 5% !important;
   white-space: nowrap;
   text-align: right;
-  padding: 5px;
 }
 
 #profile_defs td:last-child {
@@ -8984,15 +8773,15 @@ table#schedjobs {
 }
 
 #capabilities_key td:first-child, #capabilities_key  td:nth-child(3) {
+  padding: 3px 5px !important;
   width: 1% !important;
   text-align: center !important;
-  padding: 3px 5px !important
 }
 
 #capabilities_key b {
-  min-width: 16px;
-  padding: 1px 2px;
   margin: 0 !important;
+  padding: 1px 2px;
+  min-width: 16px;
 }
 
 /* end /profiles */
@@ -9074,7 +8863,6 @@ table#schedjobs {
   border: 1px solid var(--borderinner);
   border-radius: 4px 0 0 0;
   box-shadow: var(--highlight);
-  background: #eef;
   background: linear-gradient(to bottom, #fff 50%, #e2e2ff 50%);
   user-select: none;
 }
@@ -9178,7 +8966,9 @@ select[name="newlogclass"] {
 }
 
 #help #volunteer, #wrapperlogs pre {
-  background: linear-gradient(to bottom, #fafaff, rgba(248,248,255,.3)), url(/themes/snark/ubergine/images/hat.png) no-repeat right -3px bottom -3px / auto 80%, repeating-linear-gradient(135deg, rgba(252,252,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fafaff 5px) #fafaff !important;
+  background: linear-gradient(to bottom, #fafaff, rgba(248,248,255,.3)),
+              url(/themes/snark/ubergine/images/hat.png) no-repeat right -3px bottom -3px / auto 80%,
+              repeating-linear-gradient(135deg, rgba(252,252,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fafaff 5px) #fafaff !important;
   box-shadow: var(--highlight);
 }
 
@@ -9224,8 +9014,8 @@ select[name="newlogclass"] {
 }
 
 #sidebarhelp ul {
-  display: inline-block;
   margin-bottom: 0 !important;
+  display: inline-block;
 }
 
 #sidebarhelp ul:last-child {
@@ -9288,12 +9078,11 @@ select[name="newlogclass"] {
 
 #faq h3 {
   padding: 5px 10px 6px 35px;
-  background: url(/themes/console/images/info/question.png) 10px center no-repeat, var(--h2) !important;
-  background-size: 18px 18px, 100%, 100% !important;
-  background-blend-mode: luminosity, normal, normal;
-  text-transform: none;
-  letter-spacing: 0;
   word-spacing: 0;
+  letter-spacing: 0;
+  text-transform: none;
+  background: url(/themes/console/images/info/question.png) no-repeat 10px center / 18px, var(--h2) !important;
+  background-blend-mode: luminosity, normal, normal;
 }
 
 #faq ul li {
@@ -9303,8 +9092,6 @@ select[name="newlogclass"] {
 #faq code, #advancedsettings code {
   font-weight: 700;
   user-select: all;
-  -moz-user-select: all;
-  -webkit-user-select: all;
 }
 
 #portfaq {
@@ -9312,11 +9099,11 @@ select[name="newlogclass"] {
 }
 
 #portfaq th:first-child, #portfaq td:first-child {
-  font-weight: 700;
-  text-align: right;
   padding-top: 6px;
   padding-bottom: 6px;
   padding-left: 10px;
+  text-align: right;
+  font-weight: 700;
 }
 
 #portfaq .infohelp {
@@ -9325,10 +9112,10 @@ select[name="newlogclass"] {
 }
 
 #portfaq th[colspan="3"] {
+  word-spacing: .1em;
+  letter-spacing: .08em;
   text-align: left;
   font-size: 11pt !important;
-  letter-spacing: .08em;
-  word-spacing: .1em;
 }
 
 #portfaq td:nth-child(2) {
@@ -9363,14 +9150,12 @@ select[name="newlogclass"] {
   height: 18px;
   display: inline-block;
   vertical-align: middle;
-  background: var(--eye) left center no-repeat !important;
-  background-size: 16px !important;
+  background: var(--eye) no-repeat left center / 16px !important;
   content: "";
 }
 
 #fullhistory a:hover::before, #fullhistory a:focus::before {
-  background: var(--eye_hover) left center no-repeat !important;
-  background-size: 16px !important;
+  background: var(--eye_hover) no-repeat left center / 16px !important;
 }
 
 #fullhistory a:active {
@@ -9390,9 +9175,9 @@ select[name="newlogclass"] {
 }
 
 #terms p {
+  -webkit-column-break-inside: avoid;
   break-inside: avoid;
   page-break-inside: avoid;
-  -webkit-column-break-inside: avoid;
 }
 
 #terms p:first-child {
@@ -9410,17 +9195,16 @@ select[name="newlogclass"] {
   background-size: 100%, auto 120px, 100% !important;
   max-height: 500px;
   box-shadow: inset 0 0 0 1px #ddf, inset 0 0 0 2px #fff;
-  background: url(/themes/snark/ubergine/images/hat.png) no-repeat right -3px bottom -3px / auto 120px #f3f3ff !important;
+  background: url(/themes/snark/ubergine/images/hat.png) no-repeat right -3px bottom -3px / auto 120px, #f3f3ff !important;
 }
 
 #routerinfo p {
   margin: 20px 5px 10px;
   padding: 10px 0;
   line-height: 180%;
-  background: #f2f2ff;
-  background: var(--p);
   border: 1px solid #99b;
   box-shadow: var(--highlight), 0 0 1px #e0e0eb;
+  background: var(--p);
 }
 
 #routerinfo code {
@@ -9471,8 +9255,7 @@ select[name="newlogclass"] {
   width: 5%;
   text-align: center;
   font-size: 0 !important;
-  background: var(--nuke) center center no-repeat, linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%) !important;
-  background-size: 16px, 100% !important;
+  background: var(--nuke) no-repeat center center / 16px, linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%) !important;
 }
 
 .homelinkedit tr:nth-last-child(n+2) td:nth-child(2) {
@@ -9508,10 +9291,7 @@ select[name="newlogclass"] {
 }
 
 .homelinkedit .noicon {
-  background-image: var(--search);
-  background-position: center center;
-  background-size: 20px;
-  background-repeat: no-repeat;
+  background: var(--search) no-repeat center center / 18px;
 }
 
 .main#config_homepage input.delete {
@@ -9626,7 +9406,7 @@ h3#displayevents {
   padding: 10px 10px 10px 50px;
   border: 1px solid var(--borderinner);
   box-shadow: var(--highlight);
-  background: #f2f2ff var(--log_icon) 15px center no-repeat;
+  background: #f2f2ff var(--log_icon) no-repeat 15px center;
   background-size: 28px;
 }
 
@@ -9650,14 +9430,14 @@ a[href^="configpeer?peer"]::after {
   vertical-align: middle;
   height: 16px;
   width: 16px;
-  background: var(--edit) center center no-repeat;
+  background: var(--edit) no-repeat center center;
   background-size: 14px;
   content: "";
 
 }
 
 a[href^="configpeer?peer"]:hover::after {
-  background: var(--edit_hover) center center no-repeat;
+  background: var(--edit_hover) no-repeat center center;
   background-size: 14px;
 }
 
@@ -9949,11 +9729,11 @@ a[href^="configpeer?peer"]:hover::after {
 }
 
 #debug h3.debug_outboundsessions {
-  background: url(/themes/console/images/outbound.png) 6px center no-repeat, linear-gradient(to bottom, #fcfcff 50%, rgba(255, 255, 255, .6) 50%, rgba(240, 240, 255, .4)), linear-gradient(to right, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  background: url(/themes/console/images/outbound.png) no-repeat 6px center, linear-gradient(to bottom, #fcfcff 50%, rgba(255, 255, 255, .6) 50%, rgba(240, 240, 255, .4)), linear-gradient(to right, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) !important;
 }
 
 #debug h3.debug_inboundsessions {
-  background: url(/themes/console/images/inbound.png) 6px center no-repeat, linear-gradient(to bottom, #fcfcff 50%, rgba(255, 255, 255, .6) 50%, rgba(240, 240, 255, .4)), linear-gradient(to right, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  background: url(/themes/console/images/inbound.png) no-repeat 6px center, linear-gradient(to bottom, #fcfcff 50%, rgba(255, 255, 255, .6) 50%, rgba(240, 240, 255, .4)), linear-gradient(to right, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) !important;
 }
 
 .debug_version {
@@ -10342,7 +10122,7 @@ b.suboption {
 
 #bandwidthconfig tr:first-child .infohelp {
   padding: 20px 15px 20px 50px;
-  background: var(--speed) 15px center no-repeat, var(--infohelp);
+  background: var(--speed) no-repeat 15px center, var(--infohelp);
   background-size: 28px;
 }
 
@@ -10447,15 +10227,15 @@ b.suboption {
 }
 
 #bandwidthconfig tr:nth-child(2) .net_bwrate::before {
-  background: url(/themes/console/images/svg/inbound.svg) center center no-repeat;
+  background: url(/themes/console/images/svg/inbound.svg) no-repeat center center;
 }
 
 #bandwidthconfig tr:nth-child(3) .net_bwrate::before, #bandwidthconfig tr:nth-child(4) .net_bwrate::before {
-  background: url(/themes/console/images/svg/outbound.svg) center center no-repeat;
+  background: url(/themes/console/images/svg/outbound.svg) no-repeat center center;
 }
 
 .net_bwrate::before, #bandwidthconfig tr:nth-child(4) .net_bwrate::before {
-  background: var(--share) left center no-repeat;
+  background: var(--share) no-repeat left center;
   background-size: 18px 18px !important;
 }
 
@@ -10637,8 +10417,7 @@ b.suboption {
   width: 16px;
   height: 16px;
   display: inline-block;
-  background: var(--experimental) right center no-repeat;
-  background-size: 16px;
+  background: var(--experimental) no-repeat right center / 16px;
   content: "";
 }
 
@@ -10717,9 +10496,9 @@ b.suboption {
 }
 
 @media screen and (max-width: 1000px) {
-#updateHelper select {
-  max-width: 200px !important;
-}
+  #updateHelper select {
+    max-width: 200px !important;
+  }
 }
 
 #updateProxyHostPort input {
@@ -10731,9 +10510,9 @@ b.suboption {
 }
 
 @media screen and (min-width: 1500px) {
-#updateHelper .nowrap::after, #updateProxyHostPort .nowrap::after, #i2pupdates .nowrap::after {
-  min-height: 60px;
-}
+  #updateHelper .nowrap::after, #updateProxyHostPort .nowrap::after, #i2pupdates .nowrap::after {
+    min-height: 60px;
+  }
 }
 
 #i2pupdates .optiontextarea .nowrap::after {
@@ -10741,16 +10520,16 @@ b.suboption {
 }
 
 #updateHelper .optionlist, #updateProxyHostPort .optionlist {
+  margin: -1px 0;
   column-gap: 2px;
   columns:  500px 2;
-  margin: -1px 0;
 }
 
 #updateHelper b, #updateProxyHostPort b, #i2pupdates b {
+  margin-right: 9px;
   min-width: 190px !important;
   display: inline-block;
   text-align: right;
-  margin-right: 9px;
 }
 
 #i2pupdates .nowrap, #i2pupdates .nowrap b {
@@ -10759,9 +10538,9 @@ b.suboption {
 }
 
 #i2pupdates .optiontextarea .nowrap b {
-  height: 76px;
   margin-top: -48px;
   margin-bottom: -28px;
+  height: 76px;
   vertical-align: middle;
 }
 
@@ -10820,20 +10599,20 @@ b.suboption {
 }
 
 @supports not (-moz-appearance: none) {
-#reseedconfig .optbox[type=radio] {
-  margin: 4px 4px 4px 15px !important;
-}
+  #reseedconfig .optbox[type=radio] {
+    margin: 4px 4px 4px 15px !important;
+  }
 
-#manualreseed th:last-child, #manualreseed td:last-child {
-  border-right: 1px solid var(--borderinner);
-}
+  #manualreseed th:last-child, #manualreseed td:last-child {
+    border-right: 1px solid var(--borderinner);
+  }
 }
 
 @media screen and (max-width: 1000px) {
-#reseedconfig tr:nth-child(3) td label {
-  padding: 5px 4px 5px 0 !important;
-  width: calc(100% - 4px) !important;
-}
+  #reseedconfig tr:nth-child(3) td label {
+    padding: 5px 4px 5px 0 !important;
+    width: calc(100% - 4px) !important;
+  }
 }
 
 #config_reseed .optionsingle {
@@ -10847,12 +10626,12 @@ b.suboption {
 }
 
 #config_reseed .optionsingle.optiontextarea textarea {
+  margin: 7px 6px !important;
+  padding: 2px 5px;
+  width: calc(100% - 12px);
   height: 90px !important;
   max-height: 90px !important;
   min-height: 90px !important;
-  margin: 7px 6px !important;
-  width: calc(100% - 12px);
-  padding: 2px 5px;
 }
 
 #reseed_urlselection.optionsingle, #reseedproxytype {
@@ -10894,7 +10673,6 @@ b.suboption {
   padding: 4px 10px;
   min-width: 100px !important;
   width: calc(100% - 10px);
-  background: #eaeaff !important;
   background: rgba(234,234,255,.7) !important;
 }
 
@@ -10994,34 +10772,28 @@ b.suboption {
 }
 
 #config_reseed #reseedurl, #installPluginUrl {
-  background: rgba(234,234,255,.7) var(--link) 12px center no-repeat !important;
-  background-size: 28px, 100%, 100% !important;
+  background: rgba(234,234,255,.7) var(--link) no-repeat 12px center / 28px !important;
 }
 
 #config_reseed #reseedurl:hover, #installPluginUrl:hover {
-  background: #ffd var(--link) 12px center no-repeat !important;
-  background-size: 28px !important;
+  background: #ffd var(--link) no-repeat 12px center / 28px !important;
 }
 
 #config_reseed  #reseedzip, #installPluginFile {
-  background: rgba(234,234,255,.7) var(--files) 12px center no-repeat !important;
-  background-size: 28px, 100%, 100% !important;
+  background: rgba(234,234,255,.7) var(--files) no-repeat 12px center / 28px !important;
 }
 
 #config_reseed #reseedzip:hover, #installPluginFile:hover {
-  background: #ffd var(--files) 12px center no-repeat !important;
-  background-size: 28px !important;
+  background: #ffd var(--files) no-repeat 12px center / 28px !important;
 }
 
 #config_reseed #reseedcreatefile {
   text-align: justify;
-  background: rgba(234,234,255,.7) var(--package) 12px center no-repeat !important;
-  background-size: 28px, 100%, 100% !important;
+  background: rgba(234,234,255,.7) var(--package) no-repeat 12px center / 28px !important;
 }
 
 #config_reseed #reseedcreatefile:hover {
-  background: #ffd var(--package) 12px center no-repeat !important;
-  background-size: 28px !important;
+  background: #ffd var(--package) no-repeat 12px center / 28px !important;
 }
 
 #reseedcreatefile p {
@@ -11046,10 +10818,9 @@ b.suboption {
 
 #manualreseed tr:last-child td.infohelp {
   padding: 20px 15px 20px 50px;
-  background: var(--package) 15px center no-repeat,
+  background: var(--package) no-repeat 15px center / 28px,
               linear-gradient(to bottom, #fafaff 50%, rgba(220, 220, 255, .3)), rgba(0, 0, 0, 0),
               repeating-linear-gradient(135deg, rgba(255, 255, 255, .5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px);
-  background-size: 28px, 100%, 100%;
 }
 
 /* end configreseed */
@@ -11147,23 +10918,23 @@ form[action="configplugins"] input.reload {
 
 #newfamily .optionsingle {
   padding: 5px 5px 0 45px;
-  background: #eaeaff var(--tag) 12px center no-repeat !important;
+  background: #eaeaff var(--tag) no-repeat 12px center !important;
   background-size: 28px, 100%, 100% !important;
 }
 
 #newfamily .optionsingle:hover {
-  background: #ffd var(--tag) 12px center no-repeat !important;
+  background: #ffd var(--tag) no-repeat 12px center !important;
   background-size: 28px !important;
 }
 
 #joinfamily .optionsingle {
   padding: 5px 5px 0 45px;
-  background: #eaeaff var(--key) 12px center no-repeat !important;
+  background: #eaeaff var(--key) no-repeat 12px center !important;
   background-size: 28px, 100%, 100% !important;
 }
 
 #joinfamily .optionsingle:hover {
-  background: #ffd var(--key) 12px center no-repeat !important;
+  background: #ffd var(--key) no-repeat 12px center !important;
   background-size: 28px !important;
 }
 
@@ -12188,110 +11959,99 @@ h1.webapp {
 }
 
 #help_configuration {
-  background: var(--configure) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
-  background-size: 32px, 100%;
+  background: var(--configure) no-repeat 15px center / 32px, linear-gradient(135deg, #fff, #f8f8ff);
 }
 
 #help_filter {
-  background: var(--filter) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
-  background-size: 32px, 100%;
+  background: var(--filter) no-repeat 15px center / 32px, linear-gradient(135deg, #fff, #f8f8ff);
 }
 
 #help_configadv {
-  background: var(--configure) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
-  background-size: 32px, 100%;
+  background: var(--configure) no-repeat 15px center / 32px, linear-gradient(135deg, #fff, #f8f8ff);
 }
 
 #help_ui {
-  background: var(--ui) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
-  background-size: 32px, 100%;
+  background: var(--ui) no-repeat 15px center / 32px, linear-gradient(135deg, #fff, #f8f8ff);
 }
 
 #help_reseed {
-  background: var(--reseed) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
-  background-size: 32px, 100%;
+  background: var(--reseed) no-repeat 15px center / 32px, linear-gradient(135deg, #fff, #f8f8ff);
 }
 
 #help_faq, #help_glossary {
-  background: var(--question) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
-  background-size: 32px, 100%;
+  background: var(--question) no-repeat 15px center / 32px, linear-gradient(135deg, #fff, #f8f8ff);
 }
 
 #help_troubleshoot {
-  background: var(--wrench) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
-  background-size: 32px, 100%;
+  background: var(--wrench) no-repeat 15px center / 32px, linear-gradient(135deg, #fff, #f8f8ff);
 }
 
 #help_legal {
-  background: var(--legal) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
-  background-size: 32px, 100%;
+  background: var(--legal) no-repeat 15px center / 32px, linear-gradient(135deg, #fff, #f8f8ff);
 }
 
 #help_changelog {
-  background: var(--changelog) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
-  background-size: 32px, 100%;
+  background: var(--changelog) no-repeat 15px center / 32px, linear-gradient(135deg, #fff, #f8f8ff);
 }
 
 #help_newusers {
-  background: url(images/favicon.svg) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
-  background-size: 32px, 100%;
+  background: url(images/favicon.svg) no-repeat 15px center / 32px, linear-gradient(135deg, #fff, #f8f8ff);
 }
 
 #help_webhosting {
-  background: var(--webserver) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
-  background-size: 32px, 100%;
+  background: var(--webserver) no-repeat 15px center / 32px, linear-gradient(135deg, #fff, #f8f8ff);
 }
 
 #configurationhelp h2, #advancedsettings h2 {
-  background: var(--configure) 8px center no-repeat, var(--h2) !important;
+  background: var(--configure) no-repeat 8px center, var(--h2) !important;
 }
 
 #filterlist h2 {
-  background: var(--filter) 8px center no-repeat, var(--h2) !important;
+  background: var(--filter) no-repeat 8px center, var(--h2) !important;
 }
 
 #browserconfig h2 {
-  background: var(--firefox) 8px center no-repeat, var(--h2) !important;
+  background: var(--firefox) no-repeat 8px center, var(--h2) !important;
 }
 
 #tunnman h2 {
-  background: var(--hardhat) 8px center no-repeat, var(--h2) !important;
+  background: var(--hardhat) no-repeat 8px center, var(--h2) !important;
 }
 
 #sidebarhelp h2, #reachabilityhelp h2 {
-  background: url(/themes/console/images/svg/sidebar.svg) 8px center no-repeat, var(--h2) !important;
+  background: url(/themes/console/images/svg/sidebar.svg) no-repeat 8px center, var(--h2) !important;
 }
 
 #reseedhelp h2 {
-  background: var(--reseed) 8px center no-repeat, var(--h2) !important;
+  background: var(--reseed) no-repeat 8px center, var(--h2) !important;
 }
 
 #faq h2, #glossary h2 {
-  background: var(--question) 8px center no-repeat, var(--h2) !important;
+  background: var(--question) no-repeat 8px center, var(--h2) !important;
 }
 
 #troubleshoot h2 {
-  background: var(--wrench) 8px center no-repeat, var(--h2) !important;
+  background: var(--wrench) no-repeat 8px center, var(--h2) !important;
 }
 
 #legal h2 {
-  background: var(--legal) 8px center no-repeat, var(--h2) !important;
+  background: var(--legal) no-repeat 8px center, var(--h2) !important;
 }
 
 #changelog h2 {
-  background: var(--changelog) 8px center no-repeat, var(--h2) !important;
+  background: var(--changelog) no-repeat 8px center, var(--h2) !important;
 }
 
 #newuserguide h2 {
-  background: url(images/favicon.svg) 8px center no-repeat, var(--h2) !important;
+  background: url(images/favicon.svg) no-repeat 8px center, var(--h2) !important;
 }
 
 #webhosting h2 {
-  background: var(--webserver) 8px center no-repeat, var(--h2) !important;
+  background: var(--webserver) no-repeat 8px center, var(--h2) !important;
 }
 
 #themeoverride h2 {
-  background: var(--ui) 8px center no-repeat, var(--h2) !important;
+  background: var(--ui) no-repeat 8px center, var(--h2) !important;
 }
 
 #help h2, #help #newuserguide h2 {
@@ -12314,7 +12074,7 @@ h1.webapp {
   margin: 14px 0 6px !important;
   padding: 10px 10px 8px 50px !important;
   border: 1px solid var(--borderinner);
-  background: var(--sybil) 15px center no-repeat, var(--infohelp);
+  background: var(--sybil) no-repeat 15px center, var(--infohelp);
 }
 
 #sybilanalysis form {
@@ -12353,13 +12113,11 @@ div.app a, div.app a:visited, #sitemap a:link, #sitemap a:visited, .warning a {
 }
 
 #wizardpage .yes {
-  background: var(--yes) center center no-repeat;
-  background-size: 11px !important;
+  background: var(--yes) no-repeat center center / 11px;
 }
 
 #wizardpage .no {
-  background: var(--no) center center no-repeat;
-  background-size: 10px !important;
+  background: var(--no) no-repeat center center / 10px;
 }
 
 #wizardpage #bandwidth ~ p {
@@ -12379,8 +12137,7 @@ div.app a, div.app a:visited, #sitemap a:link, #sitemap a:visited, .warning a {
   width: 18px;
   height: 16px;
   vertical-align: middle;
-  background: var(--link) left center no-repeat;
-  background-size: 12px;
+  background: var(--link) no-repeat left center / 12px;
 }
 
 #wizardpage #bandwidth ~ p:last-of-type {
@@ -12457,12 +12214,11 @@ th[aria-sort] {
   display: inline-block;
   width: 16px;
   height: 16px;
-  background: var(--net_clockskew) center center no-repeat;
-  background-size: 16px;
+  background: var(--net_clockskew) no-repeat center center / 16px;
 }
 
 #peers #ntcpconnections th:nth-last-child(3)::after {
-  background: url(/themes/console/images/info/queued.png) center center no-repeat;
+  background: url(/themes/console/images/info/queued.png) no-repeat center center;
 }
 
 #peers #ntcpconnections th:nth-last-child(4) {
@@ -12490,20 +12246,17 @@ th[aria-sort] {
 
 .sitelink {
   padding: 0 3px 0 16px;
-  background: var(--link) 2px center no-repeat;
-  background-size: 12px, 100% !important;
+  background: var(--link) no-repeat 2px center / 12px;
 }
 
 .chatlink {
   padding: 0 3px 0 18px;
-  background: var(--chat) 2px center no-repeat;
-  background-size: 12px;
+  background: var(--chat) no-repeat 2px center / 12px;
 }
 
 .sitelink.external {
   padding: 0 3px 0 18px;
-  background: var(--planet) 3px center no-repeat;
-  background-size: 12px, 100% !important;
+  background: var(--planet) no-repeat 2px center / 12px;
 }
 
 /* end link icons */
@@ -12635,16 +12388,15 @@ p#gatherstats {
   display: inline-block;
   width: 26px;
   height: 26px;
-  background: var(--ibgw) center center no-repeat;
-  background-size: 26px !important;
+  background: var(--ibgw) no-repeat center center / 26px;
 }
 
 .obep::after {
-  background: var(--obep) center center no-repeat;
+  background: var(--obep) no-repeat center center;
 }
 
 .ptcp::after {
-  background: var(--ptcp) center center no-repeat;
+  background: var(--ptcp) no-repeat center center;
 }
 
 #tunnels .cells:first-child {
@@ -12979,12 +12731,10 @@ i {
 
 @keyframes grid-fade {
   from {
-    background: #f6f6ff;
     background: repeating-linear-gradient(to right, rgba(0,0,0,0), #efefef 1px, rgba(0,0,0,0) 1px, rgba(0,0,0,0) 10px),
                 repeating-linear-gradient(to bottom, #efefff, #efefff 1px, #f6f6ff 1px, #f6f6ff 10px);
   }
   to {
-    background: #f6f6ff;
     background: repeating-linear-gradient(to right, rgba(0,0,0,0), #f6f6ff 1px, rgba(0,0,0,0) 1px, rgba(0,0,0,0) 10px),
                 repeating-linear-gradient(to bottom, #f6f6ff, #f6f6ff 1px, #f6f6ff 1px, #f6f6ff 10px);
   }
@@ -13061,8 +12811,8 @@ i {
 
 #configstats .graphableStat td {
   padding: 4px 6px;
-  columns: auto;
   white-space: normal !important;
+  columns: auto;
 }
 
 #enablefull label {
@@ -13095,13 +12845,12 @@ i {
   border-left-width: 3px;
   border-radius: 1px;
   background: linear-gradient(to bottom, #fff, #eef);
-  will-change: transform;
   outline: none !important;
+  will-change: transform;
 }
 
 .stattograph:hover {
   box-shadow: 0 0 0 1px #f60;
-  background: #fff;
   background: linear-gradient(to bottom, #eef, #fff);
 }
 
@@ -13127,8 +12876,7 @@ i {
   padding-left: 18px;
   border-left-width: 3px;
   box-shadow: inset 0 0 0 1px #eef, inset 3px 3px 3px rgba(0,0,32,.2);
-  background: var(--yes) 8px center no-repeat, linear-gradient(to bottom, #eef, #fff);
-  background-size: 8px, 100%;
+  background: var(--yes) no-repeat 8px center / 8px, linear-gradient(to bottom, #eef, #fff);
 }
 
 .optbox:checked + label > .stattograph:hover b {
@@ -13143,8 +12891,7 @@ i {
 }
 
 .optbox:checked + label > .stattograph:hover {
-  background: #d50 var(--yes) 8px center no-repeat;
-  background-size: 8px;
+  background: #d50 var(--yes) no-repeat 8px center / 8px;
   box-shadow: none !important;
 }
 
@@ -13173,17 +12920,17 @@ i {
 
 #configstats label::after {
   padding: 4px 8px;
-  content: attr(data-tooltip);
   display: none;
   position: absolute;
   top: -30px;
   left: 1px;
-  background: #ffe;
-  white-space: nowrap;
   z-index: 10;
-  border-radius: 1px;
+  white-space: nowrap;
   font-size: 110%;
+  border-radius: 1px;
   box-shadow: 0 0 0 1px #999, var(--highlight);
+  background: #ffe;
+  content: attr(data-tooltip);
 }
 
 #configstats label:hover::after {
@@ -13203,17 +12950,15 @@ i {
 }
 
 #enablefullstats {
-  background: var(--stats) 15px center no-repeat, var(--infohelp);
-  background-size: 28px, 100%;
+  background: var(--stats) no-repeat 15px center / 28px, var(--infohelp);
 }
 
 /* /tunnelpeercount */
 
 #tunnels #peercount {
   padding-left: 30px !important;
-  background: var(--hardhat) 7px 6px no-repeat, var(--h3),
+  background: var(--hardhat) no-repeat 7px 6px / 18px, var(--h3),
               linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
-  background-size: 18px, 100%, 100% !important;
 }
 
 #peercount a img, #participating a img {
@@ -13225,13 +12970,13 @@ i {
   height: 18px;
   width: 18px;
   display: inline-block;
-  background: var(--refresh) center center no-repeat;
+  background: var(--refresh) no-repeat center center;
   content: "";
 }
 
 #peercount a:hover::after, #peercount a:focus::after,
 #participating a:hover::after, #participating a:focus::after {
-  background: var(--refresh_hover) center center no-repeat;
+  background: var(--refresh_hover) no-repeat center center;
 }
 
 #tunnels #tunnelPeerCount .cells {
@@ -13309,18 +13054,14 @@ i {
 }
 
 @media screen and (max-width: 1000px) {
-#tunnels .confignav {
-  margin-left: -5px;
-  margin-right: -5px;
-  margin: -1px -5px -10px;
-}
+  #tunnels .confignav {margin: -1px -5px -10px}
 }
 
 @media screen and (max-width: 1200px) {
-#tunnels .percentBarOuter, #tunnels .percentBarText {
-  width: 70px;
-  margin: 0 2px;
-}
+  #tunnels .percentBarOuter, #tunnels .percentBarText {
+    margin: 0 2px;
+    width: 70px;
+  }
 }
 
 #tunnels .left, #tunnels .right {
@@ -13336,16 +13077,15 @@ i {
 }
 
 .inbound, .outbound  {
-  display: inline-block;
   width: 16px;
   height: 16px;
+  display: inline-block;
   vertical-align: middle;
-  background: url(images/in.png) center center no-repeat;
-  background-size: 16px !important;
+  background: url(images/in.png) no-repeat center center / 16px;
 }
 
 .outbound  {
-  background: url(images/out.png) center center no-repeat;
+  background-image: url(images/out.png);
 }
 
 .inbound.small, .outbound.small {
@@ -13460,7 +13200,6 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
   display: inline-block;
   border: 1px solid #bbc;
   border-radius: 2px;
-  background: #f2f2ff;
   background: linear-gradient(to bottom, #fff, #eef);
 }
 
@@ -13469,22 +13208,18 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
   border-radius: 0;
   border-left-width: 4px;
   border-right-width: 4px;
-  background: var(--hardhat) 4px center no-repeat, linear-gradient(to bottom, #fff, #eef);
-  background-size: auto 14px, 100%;
+  background: var(--hardhat) no-repeat 4px center / 14px, linear-gradient(to bottom, #fff, #eef);
 }
 
 .lsdest.published {
   padding-left: 38px;
-  background: var(--hardhat) 4px center no-repeat,
-              var(--globe) 22px center no-repeat,
+  background: var(--hardhat) no-repeat 4px center / 14px, var(--globe) no-repeat 2px center / 12px,
               linear-gradient(to bottom, #fff, #eef);
-  background-size: auto 14px, auto 12px, 100%;
 }
 
 .leaseset th:last-child a[href$="i2p/"] {
   padding-left: 22px;
-  background: var(--link) 5px center no-repeat, linear-gradient(to bottom, #fff, #eef);
-  background-size: 12px, 100%;
+  background: var(--link) no-repeat 5px center / 12px, linear-gradient(to bottom, #fff, #eef);
 }
 
 /* /profiles group icons */
@@ -13509,27 +13244,27 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
 }
 
 #profilelist .fast {
-  background: var(--fast) calc(50% - 10px) center no-repeat,
-              var(--highcap) calc(50% + 10px) center no-repeat;
+  background: var(--fast) no-repeat calc(50% - 10px) center,
+              var(--highcap) no-repeat calc(50% + 10px) center;
 }
 
 #profilelist .fast.integrated {
-  background: var(--fast) left center no-repeat,
-              var(--highcap) center center no-repeat,
-              var(--integrated) right center no-repeat !important;
+  background: var(--fast) no-repeat left center,
+              var(--highcap) no-repeat center center,
+              var(--integrated) no-repeat right center !important;
 }
 
 #profilelist .highcap {
-  background: var(--highcap) center center no-repeat;
+  background: var(--highcap) no-repeat center center;
 }
 
 #profilelist .highcap.integrated {
-  background: var(--highcap) calc(50% - 10px) center no-repeat,
-              var(--integrated) calc(50% + 10px) center no-repeat;
+  background: var(--highcap) no-repeat calc(50% - 10px) center,
+              var(--integrated) no-repeat calc(50% + 10px) center;
 }
 
 #profilelist .standard {
-  background: var(--standard) center center no-repeat;
+  background: var(--standard) no-repeat center center;
 }
 
 #profilelist .standard.integrated {
@@ -13546,19 +13281,19 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
 }
 
 .profilegroup.fast::before {
-  background: var(--fast) left center no-repeat;
+  background: var(--fast) no-repeat left center;
 }
 
 .profilegroup.highcap::before {
-  background: var(--highcap) left center no-repeat;
+  background: var(--highcap) no-repeat left center;
 }
 
 .profilegroup.integrated::before {
-  background: var(--integrated) left center no-repeat;
+  background: var(--integrated) no-repeat left center;
 }
 
 .profilegroup.standard::before {
-  background: var(--standard) left center no-repeat;
+  background: var(--standard) no-repeat left center;
 }
 
 @media screen and (max-width: 1200px) {
