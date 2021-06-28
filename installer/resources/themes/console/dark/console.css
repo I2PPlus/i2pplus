@@ -1817,8 +1817,8 @@ code {
 }
 
 .links {
-  text-align: justify;
   margin-top: 10px;
+  text-align: justify;
 }
 
 .links li {
@@ -3192,16 +3192,6 @@ a[name="chelp"]:hover, a[name="help"]:hover, a[name="chelp"]:active, a[name="hel
 
 /* /confighome */
 
-#oldhome td.optionsave {
-  background: none;
-}
-
-#oldhome input[type=checkbox] {
-  vertical-align: sub;
-  min-width: 16px;
-  min-height: 16px;
-}
-
 .homelinkedit img {
   width: 22px !important;
   height: 22px !important;
@@ -4458,7 +4448,7 @@ h3#servicedebug a, h3#graphinfo a {
 #tunnels h3#participating {
   padding: 6px 6px 4px 35px !important;
   letter-spacing: .1em;
-  background: var(--share) 10px center no-repeat,
+  background: var(--share) no-repeat 10px center,
               linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
               var(--h3), var(--h3_fade) !important;
   background-size: 18px, 100%, 4px 100%, 100% !important;
@@ -4783,14 +4773,12 @@ p#fullhistory {
   height: 20px;
   display: inline-block;
   vertical-align: middle;
-  background: var(--eye) left 45% no-repeat;
-  background-size: 16px;
+  background: var(--eye) no-repeat left 45% / 16px;
   content: "";
 }
 
 #fullhistory a:hover::before {
-  background: var(--eye_hover) left 45% no-repeat;
-  background-size: 16px;
+  background-image: var(--eye_hover);
 }
 
 ul#upnphelp li:last-child, #legal ul li:last-child {
@@ -4844,7 +4832,7 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 
 #faq h3 {
   padding-left: 35px !important;
-  background: var(--ask) 10px center no-repeat, linear-gradient(to bottom, #0000 50%, #000 50%), repeating-linear-gradient(to right, #00000080 1px, #00000080 2px, #00100080 3px), var(--h3_fade) !important;
+  background: var(--ask) no-repeat 10px center, linear-gradient(to bottom, #0000 50%, #000 50%), repeating-linear-gradient(to right, #00000080 1px, #00000080 2px, #00100080 3px), var(--h3_fade) !important;
   background-size: 18px, 100% !important;
   text-transform: none;
   font-size: 10.5pt !important;
@@ -8371,14 +8359,12 @@ th code {
 }
 
 .subheading.routerfiles {
-  background: url(images/favicon.svg) right 5px center no-repeat, linear-gradient(to right, #000, #001000 40%) !important;
-  background-size: 16px, 100% !important;
+  background: url(images/favicon.svg) no-repeat right 5px center / 16px, linear-gradient(to right, #000, #001000 40%) !important;
   background-blend-mode: luminosity, normal;
 }
 
 .subheading.pluginfiles {
-  background: var(--plugin) right 5px center no-repeat, linear-gradient(to right, #000, #001000 40%) !important;
-  background-size: 16px, 100% !important;
+  background: var(--plugin) no-repeat right 5px center / 16px, linear-gradient(to right, #000, #001000 40%) !important;
   background-blend-mode: luminosity, normal;
 }
 
@@ -8588,7 +8574,7 @@ th.options, #externali2cp th {
   box-shadow: none;
 }
 
-#plugininstall, #reseedconfig, #oldhome {
+#plugininstall, #reseedconfig {
   margin-bottom: 10px !important;
 }
 
@@ -9209,7 +9195,7 @@ b.suboption {
 }
 
 #config_reseed #reseedurl:hover {
-  background: #002500 var(--link) 10px center no-repeat !important;
+  background: #002500 var(--link) no-repeat 10px center !important;
   background-size: 28px !important;
 }
 
@@ -9385,7 +9371,7 @@ input[type=file] {
 #newfamily .optionsingle {
   padding: 5px 5px 0 45px;
   box-shadow: inset 0 0 0 1px #010, inset 0 0 2px 1px #191939 !important;
-  background: #010 var(--tag) 10px center no-repeat !important;
+  background: #010 var(--tag) no-repeat 10px center !important;
   background-size: 28px, 100%, 100% !important;
 }
 
@@ -9400,7 +9386,7 @@ input[type=file] {
 #joinfamily .optionsingle {
   padding: 5px 5px 0 45px;
   box-shadow: inset 0 0 0 1px #010, inset 0 0 2px 1px #191939 !important;
-  background: #010 var(--key) 10px center no-repeat !important;
+  background: #010 var(--key) no-repeat 10px center !important;
   background-size: 28px, 100%, 100% !important;
 }
 
@@ -10266,8 +10252,7 @@ div.app {
 
 div.app:hover .extlink::after, .sitemapLink.extlink:hover::after {
   border: 1px solid #f50 !important;
-  background: #000 var(--newtab_hover) 4.5px center no-repeat;
-  background-size: 12.5px 10px;
+  background: #000 var(--newtab_hover) no-repeat 4.5px center / 12.5px 10px;
   opacity: 1;
   transform: scale(1);
 }
@@ -10417,7 +10402,7 @@ input[type=text]:focus::placeholder, #homesearch input.search:focus::placeholder
   box-shadow: 0 0 1px 0 #030, var(--highlight), inset 0 0 1px 3px #131, inset 0 0 0 4px #000, inset 0 0 7px 3px #010;
   background: repeating-linear-gradient(135deg, #131, #131 10px, #300 11px, #000 12px, #000 19px, #300 19px, #000 20px);
   background-position: right center;
-  background-size: 125% 125%;
+  background-size: 125%;
   animation: routerdown linear 3s forwards infinite;
 }
 
@@ -10990,7 +10975,7 @@ a[href^="/netdb"]:hover span {
   background: #000 !important;
 }
 
-#oldhome .optionsave, #config_peers .optionsave, #refreshsidebar .optionsave {
+#config_peers .optionsave, #refreshsidebar .optionsave {
   box-shadow: none !important;
 }
 
@@ -11049,7 +11034,7 @@ a[href^="/netdb"]:hover span {
 }
 
 #config_logging tr, #tunnelconfig tr, #config_summarybar tr, .homelinkedit tr, #config_bandwidth tr, #bandwidthconfig tr, #config_clients tr,
- #config_webapps tr, #config_peers #bannedips td:first-child tr:nth-child(n+3):not(#ipv6), #configstats tr:not(.tablefooter), #oldhome tr {
+#config_webapps tr, #config_peers #bannedips td:first-child tr:nth-child(n+3):not(#ipv6), #configstats tr:not(.tablefooter) {
   box-shadow: var(--highlight), inset 0 -1px 0 1px #000, inset -1px 0 0 1px #000, inset 0 0 2px 0 #020, inset 0 -1px 2px 0 #020, inset -1px 0 2px 0 #020;
 }
 
@@ -11120,63 +11105,63 @@ h1::first-letter {
 }
 
 h1 {
-  background: var(--netwrk) 10px center no-repeat, var(--h1) !important;
+  background: var(--netwrk) no-repeat 10px center, var(--h1) !important;
 }
 
 h1.home {
-  background: var(--home) 10px center no-repeat, var(--h1) !important;
+  background: var(--home) no-repeat 10px center, var(--h1) !important;
 }
 
 h1.perf {
-  background: var(--perf) 10px center no-repeat, var(--h1) !important;
+  background: var(--perf) no-repeat 10px center, var(--h1) !important;
 }
 
 h1.nfo {
-  background: var(--nfo) 10px center no-repeat, var(--h1) !important;
+  background: var(--nfo) no-repeat 10px center, var(--h1) !important;
 }
 
 h1.hlp {
-  background: var(--header_help) 10px center no-repeat, var(--h1) !important;
+  background: var(--header_help) no-repeat 10px center, var(--h1) !important;
 }
 
 h1.addbook {
-  background: var(--addbook) 10px center no-repeat, var(--h1) !important;
+  background: var(--addbook) no-repeat 10px center, var(--h1) !important;
 }
 
 h1.snark {
-  background: var(--app_snark) 10px center no-repeat, var(--h1) !important;
+  background: var(--app_snark) no-repeat 10px center, var(--h1) !important;
 }
 
 h1.mail {
-  background: var(--app_mail) 10px center no-repeat, var(--h1) !important;
+  background: var(--app_mail) no-repeat 10px center, var(--h1) !important;
 }
 
 h1.conf {
-  background: var(--cog) 10px center no-repeat, var(--h1) !important;
+  background: var(--cog) no-repeat 10px center, var(--h1) !important;
 }
 
 h1.debug {
-  background: var(--debug) 10px center no-repeat, var(--h1) !important;
+  background: var(--debug) no-repeat 10px center, var(--h1) !important;
 }
 
 h1.err {
-  background: var(--error) 10px center no-repeat, var(--h1) !important;
+  background: var(--error) no-repeat 10px center, var(--h1) !important;
 }
 
 h1.sched {
-  background: var(--tasks) 10px center no-repeat, var(--h1) !important;
+  background: var(--tasks) no-repeat 10px center, var(--h1) !important;
 }
 
 h1.log {
-  background: var(--logs) 10px center no-repeat, var(--h1) !important;
+  background: var(--logs) no-repeat 10px center, var(--h1) !important;
 }
 
 h1.webapp {
-  background: var(--webapp) 10px center no-repeat, var(--h1) !important;
+  background: var(--webapp) no-repeat 10px center, var(--h1) !important;
 }
 
 h1.newspage {
-  background: var(--h1news) 10px center no-repeat, var(--h1) !important;
+  background: var(--h1news) no-repeat 10px center, var(--h1) !important;
 }
 
 h1[class], h1 {
@@ -11204,54 +11189,48 @@ h1[class], h1 {
 #config_bandwidth td.optionsave, #config_advanced td.optionsave, #config_clients .formaction, #config_homepage .formaction, #config_i2cp td.optionsave, #config_keyring tr:last-child,
 #config_logging td.optionsave, #config_network td.optionsave, #config_peers .configtable tr:nth-child(4) td, #config_peers .configtable tr:last-child td, #pluginconfigactions.formaction,
 #reseedconfig td.optionsave, #config_service .formaction, #configstats tr.tablefooter, #config_summarybar .formaction,#sidebarconf tr:last-child, #tunnelconfigsave.formaction, #config_ui .formaction,
-#graphing.formaction, #i2pupdates tr:nth-child(2), #i2pupdates tr.tablefooter, #webappconfigactions.formaction, #oldhome tr, #sybilTask .optionsave {
+#graphing.formaction, #i2pupdates tr:nth-child(2), #i2pupdates tr.tablefooter, #webappconfigactions.formaction, #sybilTask .optionsave {
   background: var(--h3), linear-gradient(to bottom, #020, #000 75%) !important;
   background-size: 4px 100%, 100%, 100%, 100% !important;
 }
 
 .sitelink, .chatlink, .consolelink {
+  padding: 0 3px 0 18px;
   white-space: nowrap;
   border-radius: 1px;
   box-shadow: 0 0 0 1px #000;
 }
 
 .sitelink {
-  padding: 0 3px 0 16px;
-  background: rgba(0,64,0,.3) var(--link) 2px center no-repeat;
-  background-size: 12px, 100% !important;
+  background: rgba(0,64,0,.3) var(--link) no-repeat 3px center / 12px;
 }
 
 .chatlink {
-  padding: 0 3px 0 17px;
-  background: rgba(0,64,0,.3) var(--chat) 2px center no-repeat;
-  background-size: 12px, 100% !important;
+  background: rgba(0,64,0,.3) var(--chat) no-repeat 3px center / 12px;
 }
 
 .consolelink {
-  padding: 0 3px 0 18px;
-  background: rgba(0,64,0,.3) url(images/favicon.svg) no-repeat 3px center;
-  background-size: 12px, 100% !important;
+  background: rgba(0,64,0,.3) url(images/favicon.svg) no-repeat 3px center / 12px;
 }
 
 .sitelink.external {
-  padding: 0 3px 0 18px;
-  background: rgba(0,64,0,.3) var(--planet) no-repeat 2px center / 12px;
+  background: rgba(0,64,0,.3) var(--planet) no-repeat 3px center / 12px;
 }
 
 .sitelink:hover {
-  background: var(--link) no-repeat 2px center / 12px, linear-gradient(to bottom, #020 50%, #000 50%);
+  background: var(--link) no-repeat 3px center / 12px, linear-gradient(to bottom, #020 50%, #000 50%);
 }
 
 .consolelink:hover {
-  background: url(images/favicon.svg) no-repeat 2px center / 12px, linear-gradient(to bottom, #020 50%, #000 50%);
+  background: url(images/favicon.svg) no-repeat 3px center / 12px, linear-gradient(to bottom, #020 50%, #000 50%);
 }
 
 .sitelink.external:hover {
-  background: var(--planet) no-repeat 2px center / 12px, linear-gradient(to bottom, #020 50%, #000 50%);
+  background: var(--planet) no-repeat 3px center / 12px, linear-gradient(to bottom, #020 50%, #000 50%);
 }
 
 .chatlink:hover {
-  background: var(--chat) 2px center no-repeat / 12px, linear-gradient(to bottom, #020 50%, #000 50%);
+  background: var(--chat) 3px center no-repeat / 12px, linear-gradient(to bottom, #020 50%, #000 50%);
 }
 
 .sitelink:active, .chatlink:active, .consolelink:active {
@@ -11280,14 +11259,13 @@ h1[class], h1 {
   list-style: none;
   box-shadow: 0 0 0 1px #242, var(--highlight), inset 0 0 0 2px #020;
   background-blend-mode: luminosity;
+  -webkit-column-break-inside: avoid;
   break-inside: avoid;
   page-break-inside: avoid;
-  -webkit-column-break-inside: avoid;
   transition: ease box-shadow .2s;
 }
 
 #helptoc li:hover {
-  box-shadow: 0 0 0 1px #242, var(--highlight), inset 0 0 0 2px #930;
   box-shadow: 0 0 0 1px #242, var(--highlight), inset 0 0 0 2px rgba(146,48,0,.7);
   background-blend-mode: normal;
   transition: ease box-shadow .3s;
@@ -11307,123 +11285,112 @@ h1[class], h1 {
 }
 
 #help_configuration {
-  background: var(--wrench) 15px center no-repeat, var(--helpbox);
-  background-size: 32px, 100%;
+  background: var(--wrench) no-repeat 15px center / 32px, var(--helpbox);
 }
 
 #help_filter {
-  background: var(--filter) 15px center no-repeat, var(--helpbox);
-  background-size: 32px, 100%;
+  background: var(--filter) no-repeat 15px center / 32px, var(--helpbox);
 }
 
 #help_configadv {
-  background: var(--configure) 15px center no-repeat, var(--helpbox);
-  background-size: 32px, 100%;
+  background: var(--configure) no-repeat 15px center / 32px, var(--helpbox);
 }
 
 #help_ui {
-  background: var(--ui) 15px center no-repeat, var(--helpbox);
-  background-size: 32px, 100%;
+  background: var(--ui) no-repeat 15px center / 32px, var(--helpbox);
 }
 
 #help_reseed {
-  background: var(--reseed) 15px center no-repeat, var(--helpbox);
-  background-size: 32px, 100%;
+  background: var(--reseed) no-repeat 15px center / 32px, var(--helpbox);
 }
 
 #help_faq, #help_glossary {
-  background: var(--ask) 15px center no-repeat, var(--helpbox);
-  background-size: 32px, 100%;
+  background: var(--ask) no-repeat 15px center / 32px, var(--helpbox);
 }
 
 #help_troubleshoot {
-  background: var(--wrench) 15px center no-repeat, var(--helpbox);
-  background-size: 32px, 100%;
+  background: var(--wrench) no-repeat 15px center / 32px, var(--helpbox);
 }
 
 #help_newusers {
-  background: url(images/favicon.svg) 15px center no-repeat, var(--helpbox);
-  background-size: 32px, 100%;
+  background: url(images/favicon.svg) no-repeat 15px center / 32px, var(--helpbox);
 }
 
 #help_legal {
-  background: var(--legal) 15px center no-repeat, var(--helpbox);
-  background-size: 32px, 100%;
+  background: var(--legal) no-repeat 15px center / 32px, var(--helpbox);
 }
 
 #help_changelog {
-  background: var(--changelog) 15px center no-repeat, var(--helpbox);
-  background-size: 32px, 100%;
+  background: var(--changelog) no-repeat 15px center / 32px, var(--helpbox);
 }
 
 #help_webhosting {
-  background: var(--server) 15px center no-repeat, var(--helpbox);
-  background-size: 32px, 100%;
+  background: var(--server) no-repeat 15px center / 32px, var(--helpbox);
 }
 
 #configurationhelp h2, #advancedsettings h2, #filterlist h2 {
   padding-left: 38px;
-  background: var(--settings_inert) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
+  background: var(--settings_inert) no-repeat 10px center, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 20px, 100%, 4px 100%, 100% !important;
 }
 
 #sidebarhelp h2, #reachabilityhelp h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/svg/sidebar.svg) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
+  background: url(/themes/console/images/svg/sidebar.svg) no-repeat 10px center, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 20px, 100%, 4px 100%, 100% !important;
 }
 
 #reseedhelp h2 {
   padding-left: 38px;
-  background: var(--reseed) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
+  background: var(--reseed) no-repeat 10px center, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 20px, 100%, 4px 100%, 100% !important;
 }
 
 #newuserguide h2 {
   padding-left: 38px;
-  background: url(images/favicon.svg) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
+  background: url(images/favicon.svg) no-repeat 10px center, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 20px, 100%, 4px 100%, 100% !important;
 }
 
 #troubleshoot h2 {
   padding-left: 38px;
-  background: var(--wrench) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
+  background: var(--wrench) no-repeat 10px center, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 20px, 100%, 4px 100%, 100% !important;
 }
 
 #legal h2 {
   padding-left: 38px;
-  background: var(--legal) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
+  background: var(--legal) no-repeat 10px center, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 20px, 100%, 4px 100%, 100% !important;
 }
 
 #changelog h2 {
   padding-left: 38px;
-  background: var(--changelog) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
+  background: var(--changelog) no-repeat 10px center, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 20px, 100%, 4px 100%, 100% !important;
 }
 
 #faq h2, #glossary h2 {
   padding-left: 38px;
-  background: var(--ask) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
+  background: var(--ask) no-repeat 10px center, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 20px, 100%, 4px 100%, 100% !important;
 }
 
 #webhosting h2 {
   padding-left: 38px;
-  background: var(--server) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
+  background: var(--server) no-repeat 10px center, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 20px, 100%, 4px 100%, 100% !important;
 }
 
 #themeoverride h2 {
   padding-left: 38px;
-  background: var(--ui) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
+  background: var(--ui) no-repeat 10px center, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 20px, 100%, 4px 100%, 100% !important;
 }
 
 #browserconfig h2 {
   padding-left: 38px;
-  background: var(--firefox) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
+  background: var(--firefox) no-repeat 10px center, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 20px, 100%, 4px 100%, 100% !important;
 }
 
@@ -11434,7 +11401,7 @@ h1[class], h1 {
 
 #tunnman h2 {
   padding-left: 38px;
-  background: var(--hardhat) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
+  background: var(--hardhat) no-repeat 10px center, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 20px, 100%, 4px 100%, 100% !important;
 }
 
