@@ -5691,8 +5691,16 @@ h3#readyjobs + ol li::before {
   color: #dd3;
 }
 
+h3#finishedjobs + ol li {
+  background: var(--yes) no-repeat 6px center / 12px !important;
+}
+
+h3#activejobs + ol li::before {
+  background: var(--start) no-repeat 6px center / 12px !important;
+}
+
 h3#scheduledjobs + ol li::before {
-  background: var(--timer) no-repeat 6px center / 12px;
+  background: var(--timer) no-repeat 6px center / 12px !important;
 }
 
 #schedjobs {
@@ -5733,7 +5741,7 @@ h3#scheduledjobs + ol li::before {
 @media screen and (min-width: 1200px) {
   #jobstats td:first-child, #jobstats tr:hover td:first-child {
     padding: 6px 0 6px 26px;
-    background: var(--yes) no-repeat 8px center / 12px;
+    background: var(--yes) no-repeat 8px center / 12px !important;
   }
 
   #jobstats tr:last-child td:first-child, #jobstats tr:last-child:hover td:first-child {
