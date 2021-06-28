@@ -1,5 +1,3 @@
-@import url(/themes/console/images/images.css);
-@import url(images/images.css);
 @import url(optbox.css);
 @import url(chromescroll.css);
 @import url(mediaQueries/minwidth1200.css) screen and (min-width: 1200px);

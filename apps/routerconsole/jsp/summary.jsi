@@ -29,7 +29,8 @@
             intl.setDisableRefresh(d);
         }
         if (false && !intl.getDisableRefresh())
-            out.print("<noscript>\n<iframe src=\"/summaryframe.jsp" + newDelay + "\" height=\"1500\" width=\"200\" scrolling=\"auto\" frameborder=\"0\" title=\"sidepanel\">\n</noscript>\n");
+            out.print("<noscript>\n<iframe src=\"/summaryframe.jsp" + newDelay + "\" height=\"1500\" width=\"200\" " +
+                      "scrolling=\"auto\" frameborder=\"0\" title=\"sidepanel\">\n</noscript>\n");
     }
 %>
 <div class="routersummary" id="sidebar">

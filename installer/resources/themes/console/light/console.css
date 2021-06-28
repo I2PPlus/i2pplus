@@ -2,7 +2,7 @@
 /* Description: Light blue highlights. */
 /* Author: dr|z3d */
 
-@import url(import.css);
+@import url(optbox.css);
 
 :root {
   --h1: var(--bg), linear-gradient(135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px);

@@ -46,8 +46,8 @@
    boolean hasImport = imports.exists();
    boolean hasImages = inlineImages.exists();
 %>
-<link rel="preload" href="<%=themePath%>images/i2plogo.png" as="image">
 <link rel="preload" href="/themes/fonts/DroidSans.css" as="style">
+<link rel="preload" href="<%=themePath%>images/i2plogo.png" as="image">
 <link rel="preload" href="/themes/console/images/images.css" as="style">
 <%
     if (hasImages) {
@@ -68,7 +68,7 @@
     }
     // unsafe-inline is a fallback for browsers not supporting nonce
     // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src
-    response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline' 'nonce-" + cspNonce + "'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; media-src 'none'");
+    response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline' 'nonce-" + cspNonce + "'; form-action 'self'; frame-ancestors 'self'; font-src 'self'; object-src 'none'; media-src 'none'");
     response.setHeader("X-XSS-Protection", "1; mode=block");
     response.setHeader("X-Content-Type-Options", "nosniff");
     response.setHeader("Permissions-Policy", "accelerometer=(), ambient-light-sensor=(), autoplay=(), battery=(), camera=(), display-capture(), fullscreen=(self), geolocation=(), gyroscope=(), interest-cohort=(), magnetometer=(), microphone=(), midi=(), payment=(), usb=(), vibrate=(), vr=()");
@@ -93,7 +93,8 @@
     }
 %>
 <link href="/themes/fonts/DroidSans.css" rel="stylesheet" type="text/css">
-<link href="/themes/console/images/images.css" rel="stylesheet" type="text/css">
+<link href="/themes/console/images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
+<link href="<%=themePath%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
 <link href="<%=themePath%>console.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css" title="<%=theme%>">
 <%
     if (intl.getLang().equals("zh")) {
