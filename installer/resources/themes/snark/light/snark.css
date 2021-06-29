@@ -2332,149 +2332,16 @@ input:checked + label + hr + table, input:checked + label + hr + table + table {
   color: #272e3f;
 }
 
-.dhtDebug th, .dhtDebug:hover {
-  padding: 0 10px 10px !important;
-  word-break: break-all;
+#dhtDebug th {
+  text-align: center !important;
   font-weight: 400;
-  background: repeating-linear-gradient(45deg, rgba(255,255,255,.5) 2px, rgba(230, 230, 255, .3) 3px, #fff 5px) #fff !important;
-  overflow: hidden;
 }
-
-/* debug panel */
-
-#dhtdebugPanel {
-  background: linear-gradient(to top, rgba(224, 224, 255, .5), #fafaff), repeating-linear-gradient(135deg, rgba(255, 255, 255, .5) 2px, rgb(221, 221, 255) 3px, #fff 5px);
-  box-shadow: inset 0 0 0 1px #efefff;
-  border: 1px solid #afafcf;
-  border-top: none;
-  text-align: center;
-  padding-bottom: 13px;
-}
-
-#dhtDebugInner {
-  text-align: center;
-  padding: 5px;
-  background: #efefff;
-  box-shadow: var(--highlight), 0 0 1px 0 rgba(160,160,160,.5);
-  margin: -31px 0 -12px;
-}
-
-/*.dhtDebug th b:first-of-type, .dhtDebug th b:first-of-type + br + hr.debug {
-  display: none;
-}
-*/
-input#toggle_debug:not(checked) + label {
-  padding-bottom: 2px;
-}
-
-input#toggle_debug:not(checked) + label > img::before {
-  display: none;
-}
-
-input#toggle_debug:not(checked) + label + #dhtDebugInner {
-  display: block;
-}
-
-input#toggle_debug:checked + label + #dhtDebugInner {
-  display: none;
-}
-
-.iframed input#toggle_debug:not(checked) + label + #dhtDebugInner {
-  display: block;
-}
-
-.iframed input#toggle_debug:checked + label + #dhtDebugInner {
-  display: none;
-}
-
-#debugDHT, #debugStats, .bucketCount, #bucketSet {
-  font-size: 110%;
-}
-
-#debugStats {
-  margin-top: 10px;
-}
-
-#debugDHT {
-  margin: 1px 0 10px;
-}
-
-#bucketSet {
-  margin: 15px 0 -5px;
-}
-
-#bucketSet code {
-  color: #050;
-  font-size: 9pt;
-  -moz-user-select: all;
-  -webkit-user-select: all;
-  user-select: all;
-}
-
-#bucketSet code::-moz-selection {
-  background: #050 !important;
-}
-
-#bucketSet code::selection {
-  background: #050 !important;
-}
-
-.bucketsContainer, .bucketCount {
-  margin: 0 15%;
-  text-align: center;
-  border: 1px solid #afafcf;
-  box-shadow: var(--highlight);
-}
-
-.bucketsContainer {
-  margin: -1px 15% -20px;
-  padding: 5px;
-  background: #f2f2ff;
-}
-
-.bucketCount {
-  padding: 3px 0;
-  background: linear-gradient(to right, rgba(255,255,255,0), rgba(250,250,255,.7), rgba(255,255,255,0)), linear-gradient(to bottom, #f2f2ff 50%, #ddf 50%);
-}
-
-.bucket {
-  margin: 3px 2px;
-  padding: 1px 4px;
-  max-width: 120px;
-  display: inline-block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap !important;
-  font-family: var(--monospaced)
-  color: #274;
-  box-shadow: 0 0 0 1px rgba(185,185,198,.65), var(--highlight);
-  border-radius: 2px;
-  background: #f8f8ff;
-  -moz-user-select: all;
-  -webkit-user-select: all;
-  user-select: all;
-}
-
-.bucket::-moz-selection {
-  color: #fff;
-  background: #050 !important;
-}
-
-.bucket::selection {
-  color: #fff;
-  background: #050 !important;
-}
-
-.bucket:empty {
-  display: none;
-}
-
-/* end debug panel */
 
 hr.debug {
-  width: 100%;
   margin: 3px 0 -5px;
+  width: 100%;
   height: 1px;
+  display: none;
   border-bottom: 1px solid #fff;
 }
 
@@ -3259,10 +3126,6 @@ b.alwaysShow {
 
   .snarkTorrentAction input[type="image"] {
     padding: 4px !important;
-  }
-
-  #dhtDebugInner {
-    margin-top: -29px !important;
   }
 
   .debuginfo td {

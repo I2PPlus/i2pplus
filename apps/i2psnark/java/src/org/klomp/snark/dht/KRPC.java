@@ -687,7 +687,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     public String renderStatusHTML() {
         long uptime = Math.max(1000, _context.clock().now() - _started);
         StringBuilder buf = new StringBuilder(256);
-        buf.append("<br><br><div id=\"debugStats\">" +
+        buf.append("<div id=\"debugStats\">" +
                    "<b>TX:</b> ").append(_txPkts.get()).append(" pkts / ")
            .append(DataHelper.formatSize2(_txBytes.get())).append("B / ")
            .append(DataHelper.formatSize2Decimal(_txBytes.get() * 1000 / uptime)).append("Bps &nbsp;" +

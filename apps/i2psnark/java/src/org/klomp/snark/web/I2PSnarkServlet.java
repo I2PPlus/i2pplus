@@ -979,7 +979,7 @@ public class I2PSnarkServlet extends BasicServlet {
             writePageNav(out, req, start, pageSize, total, noThinsp);
             out.write("</div></td></tr>\n</tbody>\n");
         }
-        out.write("<tfoot id=\"snarkFoot\">\n<tr>\n<th id=\"snarkTorrentTotals\" align=\"left\" colspan=\"6\">");
+        out.write("<tfoot id=\"snarkFoot\">\n<tr class=\"volatile\">\n<th id=\"snarkTorrentTotals\" align=\"left\" colspan=\"6\">");
         out.write("<span id=\"totals\"><span class=\"canhide\">");
         out.write(_t("Totals"));
         out.write(":&nbsp;</span>");
@@ -1111,75 +1111,26 @@ public class I2PSnarkServlet extends BasicServlet {
             } else {
                 out.write("<th colspan=\"6\"></th>");
             }
-            // TODO javascript handler to remember checkbox status for debug panel visibility (otherwise resets with ajax/meta refresh)
-            if (dht != null) {
-                if (showDebug) {
-                    out.write("</tr>\n<tr class=\"dhtDebug volatile\">\n");
-                    out.write("<th colspan=\"12\">\n" +
-                              "<div id=\"dhtDebugPanel\">\n" +
-                              "<input class=\"toggle_input\" id=\"toggle_debug\" type=\"checkbox\">" +
-                              "<label class=\"toggleview\" for=\"toggle_debug\">");
-                    out.write(toThemeImg("debug"));
-                    out.write(' ');
-                    out.write(_t("Dht Debug"));
-                    out.write("</label>\n<div id=\"dhtDebugInner\">\n");
+            out.write("\n</tr>\n");
+
+            if (showDebug) {
+                out.write("<tr id=\"dhtDebug\">\n");
+                out.write("<th colspan=\"12\">\n<span class=\"volatile\">");
+                if (dht != null) {
                     out.write(dht.renderStatusHTML());
-                    out.write("\n</div>\n</div>\n</th>");
+                } else {
+                    out.write("<b>");
+                    out.write(_t("No DHT Peers"));
+                    out.write("</b>");
                 }
+                out.write("\n</span>\n</th>\n</tr>\n");
             }
-            out.write("\n</tr>\n</tfoot>\n");
+            out.write("</tfoot>\n");
         }
 
         out.write("</table>\n");
         if (isForm)
             out.write("</form>\n");
-
-/*
-        out.write("<div id=\"torrentsummary\" hidden>\n");
-        if (_manager.util().connected() && total > 0) {
-            out.write("<span><b>Torrents loaded:</b> ");
-            out.write(total);
-            out.write(" (");
-            if (stats[5] > 0) {
-               out.write(DataHelper.formatSize2(stats[5]) + "B" + ")");
-            } else {
-                out.write("0</span>");
-            }
-
-            out.write("<br><span><b>Peers connected:</b> ");
-            if (total > 0 && stats[4] > 0) {
-                out.write((int)(stats[4]));
-            } else {
-                out.write("0</span>");
-            }
-
-            out.write("<br><span><b>Upload Speed:</b> ");
-
-            boolean isUploading = false;
-            int end = Math.min(start + pageSize, snarks.size());
-            for (int i = start; i < end; i++) {
-                if ((snarks.get(i).getPeerCount() > 0) && (snarks.get(i).getUploadRate() > 0)) {
-                    isUploading = true;
-                    break;
-                }
-            }
-            if (stats[3] > 0 && isUploading) {
-                out.write(formatSize(stats[3]).replaceAll("iB", "") + "ps");
-            } else {
-                out.write("0</span>");
-            }
-            out.write("<br><span><b>Downloaded:</b> ");
-            if (stats[0] > 0) {
-                out.write(formatSize(stats[0]).replaceAll("iB", ""));
-            } else {
-                out.write(_t("0"));
-            }
-            out.write("</b></span>");
-        } else {
-            out.write(_t("No torrents loaded."));
-        }
-        out.write("</div>\n");
-*/
 
         // load torrentDisplay script here to ensure table has loaded into dom
         if (_contextName.equals(DEFAULT_NAME) && showStatusFilter) {

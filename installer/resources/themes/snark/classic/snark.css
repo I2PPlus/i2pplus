@@ -1,19 +1,8 @@
 /* I2PSnark theme "Classic" */
 /* Author: dr|z3d */
 
-@import url("/themes/fonts/DroidSans.css");
-
-:root {
-  --add: url("data:image/svg+xml,%3Csvg height='64' width='64' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='32' cy='32' fill='%2371c837' r='32'/%3E%3Ccircle cx='32' cy='32' fill='%23fff' r='27.07'/%3E%3Ccircle cx='32' cy='32' fill='%2371c837' r='22.17'/%3E%3Cpath d='m34.63 17.36a1.58 1.58 0 0 0 -1.12-.46.81.81 0 0 0 0 0h-3c-.85 0-1.58.73-1.58 1.58a.81.81 0 0 0 0 0l.04 10.44-10.46-.02c-.85 0-1.57.73-1.57 1.58v3.03c0 .85.73 1.58 1.58 1.58l10.45.04-.02 10.38c0 .85.73 1.58 1.58 1.58h3.03a1.6 1.6 0 0 0 1.58-1.58l.02-10.4h10.38c.87 0 1.6-.72 1.58-1.6v-3c0-.85-.73-1.58-1.58-1.58a.81.81 0 0 0 0 0l-10.37.04-.05-10.46a1.58 1.58 0 0 0 -.46-1.12z' fill='%23fff'/%3E%3C/svg%3E");
-  --comment: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3CradialGradient id='A' cx='18.08' cy='18.39' gradientTransform='matrix(1.63 0 0 1.29 -12.01 -8.82)' gradientUnits='userSpaceOnUse' r='30.5'%3E%3Cstop offset='0' stop-color='%23fffff9'/%3E%3Cstop offset='1' stop-color='%23e9ddaf'/%3E%3C/radialGradient%3E%3Cpath d='M32.18 1c-16.54 0-30 11.8-30 26.31 0 5.92 2.29 11.69 6.46 16.32 1.65 3.13-.69 11.2-5.64 15.69 10.06 2.03 12.35-2.14 15.06-8.79 4.34 2.03 9.19 3.09 14.12 3.09 16.54 0 30-11.8 30-26.31S48.72 1 32.18 1z' fill='url(%23A)' stroke='%23a05a2c' stroke-width='2'/%3E%3C/svg%3E");
-  --config: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3CradialGradient id='A' cx='31.994' cy='31.995' gradientTransform='matrix(1.158 0 0 1.181 -5.055 -5.784)' r='30.671'%3E%3Cstop offset='0' stop-color='%23fff'/%3E%3Cstop offset='1' stop-color='%23eee'/%3E%3C/radialGradient%3E%3Cpath d='M25.75 1.221c-.74 0-1.471.6-1.471 1.33l-.74 8.099c-2.06.88-3.97 1.911-5.59 3.241L10.59 10.5c-.74-.29-1.62 0-1.91.6L2.34 21.99c-.44.74-.151 1.621.439 2.061L9.4 28.75c-.15 1.03-.291 2.06-.291 3.24s.151 2.21.291 3.24l-6.92 4.7c-.6.44-.881 1.33-.441 2.06l6.33 10.901c.44.74 1.18 1.029 1.91.599l7.362-3.39a26.35 26.35 0 0 0 5.589 3.24l.741 8.099c.15.74.738 1.331 1.468 1.331h12.67c.74 0 1.471-.601 1.471-1.331l.74-8.099c2.06-.88 3.97-1.91 5.59-3.24l7.36 3.39c.74.29 1.62.001 1.91-.599l6.33-10.901c.44-.74.15-1.62-.44-2.06l-6.179-4.69c.15-1.03.289-2.06.289-3.24s-.149-2.21-.289-3.24l6.619-4.699c.6-.44.879-1.331.439-2.061L55.48 11.1c-.44-.74-1.18-1.03-1.91-.6l-7.359 3.391a26.35 26.35 0 0 0-5.592-3.241l-.738-8.099c-.15-.74-.741-1.33-1.471-1.33zm6.18 18.703A12.11 12.11 0 0 1 43.998 32c0 6.637-5.431 12.076-12.068 12.076-6.646 0-12.078-5.43-12.078-12.076s5.432-12.076 12.078-12.076z' fill='url(%23A)' stroke-width='2px' stroke='%23337'/%3E%3C/svg%3E");
-  --create: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='64' width='64'%3E%3ClinearGradient id='A' gradientTransform='matrix(.63 -.49 .63 .49 -647.49 -398.37)' gradientUnits='userSpaceOnUse' x1='82.54' x2='89.91' y1='962.43' y2='969.8'%3E%3Cstop offset='0' stop-color='%23b3b3b3'/%3E%3Cstop offset='.4' stop-color='%23fff'/%3E%3Cstop offset='.75' stop-color='%23ddd'/%3E%3Cstop offset='1' stop-color='%23aaa'/%3E%3C/linearGradient%3E%3ClinearGradient id='B' gradientUnits='userSpaceOnUse' x1='10.18' x2='19.454' y1='34.772' y2='34.772'%3E%3Cstop offset='0' stop-color='%23333'/%3E%3Cstop offset='.4' stop-color='%23666'/%3E%3Cstop offset='.75' stop-color='%23333'/%3E%3Cstop offset='1' stop-color='%231a1a1a'/%3E%3C/linearGradient%3E%3CradialGradient id='C' cx='-84.1' cy='857.71' gradientTransform='matrix(.4 0 0 .46 75.57 -376.46)' gradientUnits='userSpaceOnUse' r='96.98'%3E%3Cstop offset='0' stop-color='%23ffd42a'/%3E%3Cstop offset='1' stop-color='%23f3361a'/%3E%3C/radialGradient%3E%3Cg transform='matrix(.87 0 0 .87 0 8.22)'%3E%3Cpath d='M53.85 15.13l19.57-1.58-17.74 8.4 17.74 8.4-19.57-1.6L65 44.93 48.86 33.77l1.58 19.57-8.4-17.74-8.4 17.74 1.6-19.57-16.15 11.16L30.2 28.78l-19.56 1.6 17.74-8.4-17.74-8.4 19.56 1.58L19.06-1.02 35.2 10.14l-1.6-19.57 8.4 17.74 8.4-17.74-1.58 19.57L65-1.02z' fill='url(%23C)'/%3E%3Cg fill-rule='evenodd' transform='matrix(.66 .66 -.66 .66 40.33 .95)'%3E%3Cpath d='M12.6 15.5h9.32v54.33H12.6z' fill='%23241c1c' stroke='%23000' stroke-width='4'/%3E%3Cpath d='M12.6 15.5V35.6h9.3V15.5z' fill='url(%23A)'/%3E%3Cpath d='M12.6 33.1h9.3v36.6h-9.3z' fill='url(%23B)'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-  --folder: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m5.33 10.53h20.87c.35 0 .68.14.93.38l5.41 5.27h26.13a1.34 1.34 0 0 1 1.33 1.34v34.62c0 .73-.6 1.33-1.33 1.33h-53.34a1.34 1.34 0 0 1 -1.33-1.34v-40.26a1.34 1.34 0 0 1 1.33-1.34z' fill='%23aaf'/%3E%3Cpath d='m6.67 16.18h22.06l-3.06-2.98h-19z' fill='%2388f'/%3E%3C/svg%3E");
- --nuke: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3CradialGradient id='A' cx='8.15' cy='56.16' gradientTransform='matrix(-.82 -.82 -.82 .82 84.62 24.7)' gradientUnits='userSpaceOnUse' r='39.39'%3E%3Cstop offset='0' stop-color='%23fb8bbf'/%3E%3Cstop offset='1' stop-color='%23d3285c'/%3E%3C/radialGradient%3E%3Cpath d='M64.12 25L31.9 56.52 7.08 32.18 39.2.06z' fill='%23d4aa00'/%3E%3Cpath d='M64.1 25l-32 32.02L19.7 44.3l31.96-31.8z' fill='%23ffce47'/%3E%3Cpath d='M32 69.98c-9.7-.01-17.56-7.87-17.57-17.57V34.6h35.12l.01 17.8A17.57 17.57 0 0 1 32 69.97z' fill='url(%23A)' transform='matrix(.71 .71 -.71 .71 32 -13.25)'/%3E%3Cpath d='M32.75 56.38L42.8 46.36 17.85 21.42 7.82 31.46z' fill='%23174461'/%3E%3Cpath d='m42.73 46.33-10 10.07-12.56-12.55 10.09-10' fill='%236f7c91'/%3E%3C/svg%3E");
-  --user: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m51.42 27.01c0-.94-.19-1.83-.53-2.65-1.3-3.07-4.94-4.33-8.07-3.19-1.71.62-4.91 1.31-10.69 1.31s-8.98-.69-10.69-1.31c-3.13-1.13-6.78.12-8.07 3.19-.35.81-.53 1.71-.53 2.65l-.03 10.35c0 7.13.55 11.51 5.93 16.62 1.93 1.83 4.2 3.24 6.39 4.73 2.19 1.48 4.13 3.45 6.97 3.45s4.78-1.96 6.97-3.45c2.19-1.48 4.46-2.9 6.39-4.73 5.37-5.1 5.97-9.62 5.97-16.75z' fill='%23fca'/%3E%3Cpath d='m53.37 13.49c-.71-3.8-3.85-6.6-7.28-8.06-6.75-3.32-14.66-4.27-22.01-2.68-2.45.77-4.08 2.95-6.47 3.87-2.39 1.05-4.2 3.13-4.86 5.66-.85 2.32-2.98 4.04-3.2 6.63-.82 4.81 1.01 9.59 3.25 13.77.16-2.75-.37-5.62.5-8.27 1.28-3.07 5.21-4.51 8.22-3.19 5.55 1.59 11.44 1.42 17.13.89 2.13-.22 4.15-1.07 6.27-1.38 3.27-.21 6.57 2.51 6.45 5.9.15 2.34 0 4.69.06 7.03 2-.68 2.73-3.04 3.06-4.94.88-5.08-.13-10.24-1.1-15.23z' fill='%236c5d53'/%3E%3C/svg%3E");
-  --dropdown: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m5.29 17.93 26.71 28.14 26.71-28.14' fill='none' stroke='%235e626e' stroke-linecap='round' stroke-linejoin='round' stroke-width='10'/%3E%3C/svg%3E");
-  --dropdown_hover: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m5.29 17.93 26.71 28.14 26.71-28.14' fill='none' stroke='%2341444d' stroke-linecap='round' stroke-linejoin='round' stroke-width='10'/%3E%3C/svg%3E");
-}
+@import url(/themes/fonts/DroidSans.css);
+@import url(images/images.css);
 
 body {
   margin: 3px 4px;
@@ -24,34 +13,18 @@ body {
 }
 
 /* preload top navigation mouseovers */
-body:not(old) {
-  background: url(/themes/console/classic/images/bg0.png) repeat scroll center bottom,
-  url(images/button_snark_hover.png) no-repeat,
-  url(images/button_snark_active.png) no-repeat,
-  url(images/button_tracker_hover.png) no-repeat,
-  url(images/button_tracker_active.png) no-repeat,
-  url(images/button_forum_hover.png) no-repeat,
-  url(images/button_forum_active.png) no-repeat,
-  url(images/button_search_hover.png) no-repeat,
-  url(images/button_search_active.png) no-repeat, #eef;
-  background-size: 120px, 0, 0, 0, 0, 0, 0, 0, 0 !important;
+body::before {
+  width: 0;
+  height: 0;
+  display: inline-block;
+  background: var(--snark_hover), var(--snark_active), var(--tracker_hover), var(--tracker_active),
+              var(--forum_hover), var(--forum_active), var(--search_hover), var(--search_active), #eef;
+  content: "";
 }
 
 body.iframed {
   margin: 1px 0 !important;
   background: transparent !important;
-}
-
-body.iframed:not(old) {
-  background: url(images/button_snark_hover.png) no-repeat,
-  url(images/button_snark_active.png) no-repeat,
-  url(images/button_tracker_hover.png) no-repeat,
-  url(images/button_tracker_active.png) no-repeat,
-  url(images/button_search_hover.png) no-repeat,
-  url(images/button_search_active.png) no-repeat,
-  url(images/button_forum_hover.png) no-repeat,
-  url(images/button_forum_active.png) no-repeat !important;
-  background-size: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0 !important;
 }
 
 * {
@@ -177,20 +150,20 @@ td input[type="image"]::after {
 }
 
 .nav_main:link {
-  background: url(images/button_snark.png) 7px center no-repeat, linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
+  background: var(--snark) no-repeat 7px center, linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
   border-radius: 3px 0 0 3px;
 }
 
 .nav_forum:link {
-  background: url(images/button_forum.png) 7px center no-repeat, linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
+  background: var(--forum) no-repeat 7px center, linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
 }
 
 .nav_tracker:link {
-  background: url(images/button_tracker.png) 7px center no-repeat, linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
+  background: var(--tracker) no-repeat 7px center, linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
 }
 
 .nav_search:link {
-  background: url(images/button_search.png) 7px center no-repeat, linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
+  background: var(--search) no-repeat 7px center, linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
 }
 
 .snarkNav.nav_main:last-child {
@@ -206,23 +179,19 @@ td input[type="image"]::after {
 }
 
 .nav_main:hover, .nav_main:focus {
-  background: url(images/button_snark_hover.png) 7px center no-repeat #eee !important;
-  background: url(images/button_snark_hover.png) 7px center no-repeat, linear-gradient(to bottom, #eff2ff, #fff) !important;
+  background: var(--snark_hover) no-repeat 7px center, linear-gradient(to bottom, #eff2ff, #fff) !important;
 }
 
 .nav_forum:hover, .nav_forum:focus {
-  background: url(images/button_forum_hover.png) 7px center no-repeat #eee !important;
-  background: url(images/button_forum_hover.png) 7px center no-repeat, linear-gradient(to bottom, #eff2ff, #fff) !important;
+  background: var(--forum_hover) no-repeat 7px center, linear-gradient(to bottom, #eff2ff, #fff) !important;
 }
 
 .nav_tracker:hover, .nav_tracker:focus {
-  background: url(images/button_tracker_hover.png) 7px center no-repeat #eee !important;
-  background: url(images/button_tracker_hover.png) 7px center no-repeat, linear-gradient(to bottom, #eff2ff, #fff) !important;
+  background: var(--tracker_hover) no-repeat 7px center, linear-gradient(to bottom, #eff2ff, #fff) !important;
 }
 
 .nav_search:hover, .nav_search:focus {
-  background: url(images/button_search_hover.png) 7px center no-repeat #eee !important;
-  background: url(images/button_search_hover.png) 7px center no-repeat, linear-gradient(to bottom, #eff2ff, #fff) !important;
+  background: var(--search_hover) no-repeat 7px center, linear-gradient(to bottom, #eff2ff, #fff) !important;
 }
 
 .snarkNav:active {
@@ -234,23 +203,23 @@ td input[type="image"]::after {
 }
 
 .nav_main:active {
-  background: url(images/button_snark_active.png) 7px center no-repeat #f50 !important;
+  background: #f50 var(--snark_active) no-repeat 7px center !important;
 }
 
 .nav_forum:active {
-  background: url(images/button_forum_active.png) 7px center no-repeat #f50 !important;
+  background: #f50 var(--forum_active) no-repeat 7px center !important;
 }
 
 .nav_tracker:active {
-  background: url(images/button_tracker_active.png) 7px center no-repeat #f50 !important;
+  background: #f50 var(--tracker_active) no-repeat 7px center !important;
 }
 
 .nav_search:active {
-  background: url(images/button_search_active.png) 7px center no-repeat #f50 !important;
+  background: #f50 var(--search_active) no-repeat 7px center !important;
 }
 
 .snarkNav:link, .snarkNav:hover, .snarkNav:focus {
-  background-size: 16px 16px, 100% !important;
+  background-size: 16px, 100% !important;
 }
 
 /* end top nav */
@@ -308,8 +277,7 @@ td input[type="image"]::after {
   width: 14px;
   height: 11px;
   display: inline-block;
-  background: url(images/bullet.png) 1px bottom no-repeat;
-  background-size: 9px 9px;
+  background: var(--bullet) no-repeat 1px bottom / 9px;
   content: "";
   opacity: .7;
 }
@@ -1051,18 +1019,18 @@ td:first-child {
 }
 
 .snarkTorrentNoneLoaded i::before {
-  content: url(images/bullet.png);
+  margin: 1px 4px 0 0 !important;
   display: inline-block;
   vertical-align: top;
-  margin: 1px 4px 0 0 !important;
-  transform: scale(0.95);
   opacity: .85;
+  content: var(--bullet);
+  transform: scale(.95);
 }
 
 .snarkTorrentStatus {
-  text-align: left !important;
-  white-space: nowrap;
   padding: 3px;
+  white-space: nowrap;
+  text-align: left !important;
 }
 
 .snarkTorrentStatus b {
@@ -1074,12 +1042,11 @@ td:first-child {
 }
 
 .snarkTorrentstatus:first-child {
+  padding: 1px !important;
+  min-width: 48px;
+  text-align: left !important;
   font-size: 8pt;
   font-weight: 700;
-  min-width: 48px;
-  padding: 1px !important;
-  padding-left: 0;
-  text-align: left !important;
   color: #dd9 !important;
 }
 
@@ -1120,7 +1087,7 @@ tr:not(.peerinfo) .snarkTorrentUploaded:empty::after {
 }
 
 .peerinfo:hover td:first-child {
-  background: #ffd url(images/peer.png) center center no-repeat !important;
+  background: #ffd url(images/peer.png) no-repeat center center !important;
 }
 
 tr:hover .percentBarText {
@@ -2376,7 +2343,7 @@ input#toggle_createtorrent:checked + label + hr + table {
 }
 
 .peerinfo td:first-child {
-  background: url(images/peer.png) center center no-repeat;
+  background: url(images/peer.png) no-repeat center center;
 }
 
 .peerinfo td:first-child::after {
@@ -2832,10 +2799,6 @@ body {
 .snarkDirInfo .percentBarText, .snarkDirInfo .percentBarOuter {
   width: 60px;
 }
-
-#dhtDebugInner {
-  margin-top: -25px !important;
-}
 }
 
 @media screen and (max-width: 1200px) {
@@ -2933,10 +2896,6 @@ td.snarkTorrentDownloaded {
 
 #configs td:first-child {
   min-width: 220px !important;
-}
-
-#dhtDebugInner {
-  margin-top: -23px !important;
 }
 }
 
@@ -3139,10 +3098,6 @@ th a img {
 .snarkComments .commentDelete {
   background: none !important;
   padding-left: 0 !important;
-}
-
-#dhtDebugInner {
-  margin-top: -19px !important;
 }
 }
 
@@ -4111,9 +4066,9 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 /* debug */
 
 #debugMode {
-  font-size: 0 !important;
-  background: url(images/debug.png) center center no-repeat;
   padding: 8px;
+  font-size: 0 !important;
+  background: var(--debug) no-repeat center center;
   opacity: 0;
 }
 
@@ -4123,49 +4078,9 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 
 .debuginfo td:first-child {
   padding: 3px;
-  background: url(images/debuginfo.png) center center no-repeat;
-  background-size: 14px 14px;
+  background: var(--debuginfo) no-repeat center center / 14px;
   background-blend-mode: luminosity;
 }
-
-/*
-.debugConnection {
-  color: #030;
-  font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
-  word-spacing: -0.1em;
-  margin-left: 2px;
-  margin-right: 5px;
-  font-weight: 700;
-}
-
-.debugConnStat {
-  margin-right: 4px;
-  font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
-  color: #030;
-  font-weight: 700;
-  white-space: nowrap;
-}
-
-.debugConnStat b {
-  font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Verdana, Bitstream Vera Sans, DejaVu Sans, Lucida Grande, Helvetica, sans-serif;
-  color: #111;
-}
-
-.debugRequests {
-  font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
-  color: #030;
-  font-weight: 700;
-}
-
-.from, .to {
-  font-family: sans-serif;
-  font-size: 12pt;
-  font-weight: 700;
-  vertical-align: middle;
-  line-height: 50%;
-  text-shadow: 0 0 1px #fff;
-}
-*/
 
 .debuginfo td {
   line-height: 120% !important;
@@ -4177,175 +4092,18 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 
 /* debug panel */
 
-#dhtdebugPanel {
-  margin: 0 -2px;
-  padding-bottom: 13px;
-  background: linear-gradient(to bottom, #fff, #eef);
-  box-shadow: 0 0 2px 0 #ccc inset, 0 0 1px #bbb;
-  border: 1px solid #aaafce;
-  border-top: none;
-  text-align: center;
-}
-
-#dhtDebugInner {
-  text-align: center;
-  padding: 5px;
-  background: #efefff;
-  box-shadow: 0 0 1px 0 rgba(160,160,160,.5);
-  margin: -25px 0 -12px;
-}
-
-/*.dhtDebug th b:first-of-type, .dhtDebug th b:first-of-type + br + hr.debug {
-  display: none;
-}*/
-
-.dhtDebug th b:first-of-type + br + hr.debug {
-  display: none;
-}
-
-input#toggle_debug:not(checked) + label {
-  padding-top: 6px;
-  padding-bottom: 5px;
-}
-
-input#toggle_debug:not(checked) + label > img {
-  margin-right: -2px !important;
-  margin-top: -3px !important;
-}
-
-input#toggle_debug:not(checked) + label + #dhtDebugInner {
-  display: block;
-}
-
-input#toggle_debug:checked + label + #dhtDebugInner {
-  display: none;
-}
-
-.iframed input#toggle_debug:not(checked) + label + #dhtDebugInner {
-  display: block;
-}
-
-.iframed input#toggle_debug:checked + label + #dhtDebugInner {
-  display: none;
-}
-
-.debug_container {
-  margin-top: 15px;
-  padding-bottom: 5px;
-}
-
-#debugStats, #dhtTracker {
-  text-align: center;
-  padding-top: 10px;
-  margin-bottom: -5px;
-}
-
-#debugDHT {
-  margin-top: 5px;
-}
-
-#debugDHT, #debugStats, .bucketCount, #bucketSet {
-  font-size: 110%;
-}
-
-#bucketSet {
-  margin-bottom: -5px;
-}
-
-#bucketSet code {
-  color: #050;
-  font-size: 9pt;
-  -moz-user-select: all;
-  -webkit-user-select: all;
-  user-select: all;
-}
-
-#bucketSet code::-moz-selection {
-  background: #050 !important;
-  color: #fff;
-}
-
-#bucketSet code::selection {
-  background: #050 !important;
-  color: #fff;
-}
-
-.bucketsContainer, .bucketCount {
-  text-align: center;
-  margin: 0 15%;
-  border: 1px solid #aaafce;
-}
-
-.bucketsContainer {
-  margin: -1px 15% -20px;
-  padding: 5px;
-  background: #f2f2ff;
-}
-
-.bucketCount {
-  padding: 3px 0;
-  background: linear-gradient(to right, rgba(255,255,255,0), rgba(250,250,255,.7), rgba(255,255,255,0)), linear-gradient(to bottom, #f2f2ff 50%, #ddf 50%);
-}
-
-.bucketsContainer + br + br + hr {
-  display: none;
-}
-
-#debugStats b, .bucketCount b {
-  display: inline !important;
-}
-
-.bucket {
-  margin: 3px 1px;
-  padding: 1px 4px;
-  display: inline-block;
-  white-space: nowrap !important;
-  color: #274;
-  font-family: monospace;
-  box-shadow: 0 0 0 1px #bbf, inset 0 0 0 1px #fff;
-  border-radius: 2px;
-  background: #f8f8ff;
-  -moz-user-select: all;
-  -webkit-user-select: all;
-  user-select: all;
-}
-
-.bucket::-moz-selection {
-  background: #050;
-  color: #fff;
-}
-
-.bucket::selection {
-  background: #050;
-  color: #fff;
-}
-
-.bucket:empty {
-  display: none;
-}
-
-.dhtDebug th {
-  padding: 0 10px 8px !important;
-  word-break: break-all;
+#dhtDebug th {
+  text-align: center !important;
   font-weight: 400;
-  background: #fff;
 }
 
 hr.debug {
   margin: 10px 0 -5px;
   width: 100%;
+  display: none;
   color: #efefff;
   border: none;
-  background: #ccf;
   background: linear-gradient(to right, #eef, #ccf, #eef);
-}
-
-hr.debug + hr {
-  margin-bottom: -5px;
-}
-
-hr.debug:nth-child(n+7) {
-  margin: -10px 0 3px;
 }
 
 .inactivity {
@@ -4356,8 +4114,8 @@ hr.debug:nth-child(n+7) {
   display: inline-block;
   border-radius: 2px;
   box-shadow: 0 0 0 1px #bbf, inset 0 0 0 1px #fff;
-  background: #99b;
-  background: repeating-linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,0) 15px, rgba(220,220,255,.9) 15px, rgba(220,220,255,.9) 16px, rgba(0,0,0,0) 16px), linear-gradient(to right, #ee0 100px, #900);
+  background: repeating-linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,0) 15px, rgba(220,220,255,.9) 15px, rgba(220,220,255,.9) 16px, rgba(0,0,0,0) 16px),
+              linear-gradient(to right, #ee0 100px, #900);
 }
 
 .inactivity[style="width: 0px;"], .inactivity[style="width: 1px;"], .inactivity[style="width: 2px;"],
@@ -4371,15 +4129,13 @@ hr.debug:nth-child(n+7) {
   height: 16px;
   width: 20px;
   font-size: 0;
-  background: url(images/peerseed.png) center center no-repeat;
+  background: url(images/peerseed.png) no-repeat center center;
   background-size: 14px auto;
 }
 
 .infohash {
   font-family: "Droid Sans Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
   color: #070;
-  -moz-user-select: all;
-  -webkit-user-select: all;
   user-select: all;
 }
 
