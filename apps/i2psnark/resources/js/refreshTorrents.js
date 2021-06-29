@@ -126,12 +126,6 @@ function refreshTorrents(timestamp) {
             if (thead && typeof theadResponse !== "undefined" && !Object.is(thead.innerHTML, theadResponse.innerHTML))
               thead.innerHTML = theadResponse.innerHTML;
           }
-          if (tfoot) {
-            var tfootParent = tfoot.parentNode;
-            var tfootResponse = xhrsnark.responseXML.getElementById("snarkFoot").getElementsByTagName("tr")[0];
-            if (typeof tfootResponse !== "undefined" && !Object.is(tfoot.innerHTML, tfootResponse.innerHTML))
-              tfoot.innerHTML = tfootResponse.innerHTML;
-          }
         }
 
         function refreshAll(timestamp) {
