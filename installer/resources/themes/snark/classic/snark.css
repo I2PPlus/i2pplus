@@ -277,8 +277,7 @@ td input[type="image"]::after {
   width: 14px;
   height: 11px;
   display: inline-block;
-  background: url(images/bullet.png) 1px bottom no-repeat;
-  background-size: 9px 9px;
+  background: var(--bullet) no-repeat 1px bottom / 9px;
   content: "";
   opacity: .7;
 }
@@ -1020,18 +1019,18 @@ td:first-child {
 }
 
 .snarkTorrentNoneLoaded i::before {
-  content: url(images/bullet.png);
+  margin: 1px 4px 0 0 !important;
   display: inline-block;
   vertical-align: top;
-  margin: 1px 4px 0 0 !important;
-  transform: scale(0.95);
   opacity: .85;
+  content: var(--bullet);
+  transform: scale(.95);
 }
 
 .snarkTorrentStatus {
-  text-align: left !important;
-  white-space: nowrap;
   padding: 3px;
+  white-space: nowrap;
+  text-align: left !important;
 }
 
 .snarkTorrentStatus b {
@@ -1043,12 +1042,11 @@ td:first-child {
 }
 
 .snarkTorrentstatus:first-child {
+  padding: 1px !important;
+  min-width: 48px;
+  text-align: left !important;
   font-size: 8pt;
   font-weight: 700;
-  min-width: 48px;
-  padding: 1px !important;
-  padding-left: 0;
-  text-align: left !important;
   color: #dd9 !important;
 }
 
@@ -1089,7 +1087,7 @@ tr:not(.peerinfo) .snarkTorrentUploaded:empty::after {
 }
 
 .peerinfo:hover td:first-child {
-  background: #ffd url(images/peer.png) center center no-repeat !important;
+  background: #ffd url(images/peer.png) no-repeat center center !important;
 }
 
 tr:hover .percentBarText {
@@ -2345,7 +2343,7 @@ input#toggle_createtorrent:checked + label + hr + table {
 }
 
 .peerinfo td:first-child {
-  background: url(images/peer.png) center center no-repeat;
+  background: url(images/peer.png) no-repeat center center;
 }
 
 .peerinfo td:first-child::after {
@@ -4068,9 +4066,9 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 /* debug */
 
 #debugMode {
-  font-size: 0 !important;
-  background: url(images/debug.png) center center no-repeat;
   padding: 8px;
+  font-size: 0 !important;
+  background: var(--debug) no-repeat center center;
   opacity: 0;
 }
 
@@ -4080,8 +4078,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 
 .debuginfo td:first-child {
   padding: 3px;
-  background: url(images/debuginfo.png) center center no-repeat;
-  background-size: 14px 14px;
+  background: var(--debuginfo) no-repeat center center / 14px;
   background-blend-mode: luminosity;
 }
 
@@ -4132,7 +4129,7 @@ hr.debug {
   height: 16px;
   width: 20px;
   font-size: 0;
-  background: url(images/peerseed.png) center center no-repeat;
+  background: url(images/peerseed.png) no-repeat center center;
   background-size: 14px auto;
 }
 
