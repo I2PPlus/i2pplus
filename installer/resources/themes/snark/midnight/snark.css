@@ -181,6 +181,16 @@ td input[type="image"]::after {
   border-radius: 0;
 }
 
+.snarknavbar {
+  transform: translateY(-200px);
+  animation: ease-out navslide .2s .5s forwards;
+}
+
+@keyframes navslide {
+  from {transform: translateY(-200px)}
+  to {transform: translateY(0)}
+}
+
 .snarkNav:link, .snarkNav:visited {
   margin: 0 -2px;
   padding: 4px 9px 4px 26px !important;
