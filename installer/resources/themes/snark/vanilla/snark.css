@@ -2656,12 +2656,6 @@ td#bwHelp a {
   color: #ff7200;
 }
 
-.commentDate {
-  padding-left: 20px !important;
-  width: 100px;
-  background: url(images/clock.png) left center no-repeat;
-}
-
 .snarkCommentInfo td:first-child, .snarkComments td:first-child {
   padding-right: 2px;
   width: 1%;
