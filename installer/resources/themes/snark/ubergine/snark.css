@@ -13,7 +13,7 @@
   --nav: radial-gradient(at center bottom, rgba(148, 48, 0, .25), rgba(80, 16, 0, .15) 80%, rgba(0,0,0,0)), linear-gradient(to bottom, #a68058 1%, #7a6045 27%, #5e4730 50%, #2e1700 51%, #1f0f00);
   --nav_hover: radial-gradient(at center bottom, rgba(200, 96, 200, .6) 0, rgba(0,0,0,0) 90%), linear-gradient(to bottom, #a15b73, #7e4062 50%, #591c3e 51%, #46133e);
   --nav_active: radial-gradient(at center bottom, rgba(255, 200, 0, .5) 0, rgba(0,0,0,0) 70%), linear-gradient(to bottom, #f50, #f70);
-  --select: linear-gradient(to bottom, rgba(96,0,96,.2) 50%, rgba(16,0,16,.3) 50%), url(images/graytile.png);
+  --select: linear-gradient(to bottom, rgba(96,0,96,.2) 50%, rgba(16,0,16,.3) 50%), var(--tile);
   --select_hover: linear-gradient(to bottom, #f60 50%, #f40 50%);
   --btn: linear-gradient(to bottom, #989, #878);
   --btn_hover: linear-gradient(to bottom, #767, #989);
@@ -29,17 +29,13 @@ html, body {
 body {
   font: 8pt DejaVu Sans, Verdana, Noto Sans, Ubuntu, Helvetica, sans-serif;
   color: #ddd;
-  background: var(--graytile) left top, var(--offline) top center no-repeat, #130313 !important;
-  background-size: 96px, 0 !important;
+  background: repeating-linear-gradient(to right, rgba(0,0,0,.5) 2px, rgba(48,0,48,.5) 4px),
+              repeating-linear-gradient(to bottom, #080008 2px, #212 4px), var(--offline) no-repeat, #130313 !important;
+  background-size: 4px 100%, 100% 4px, 0 !important;
 }
 
 body.iframed {
   margin: 0 !important;
-}
-
-@supports (text-justify: auto) { /* Firefox 55+ */
-  body {background-attachment: fixed}
-  .iframed body {background-attachment: scroll}
 }
 
 input[type="image"], th img, a img {
@@ -126,14 +122,9 @@ input[type="image"], th img, a img {
     display: flex;
     justify-content: center;
   }
-
-  .snarkNav:link, .snarkNav:visited {
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-  }
 }
 
-.snarkNav:link, .snarkNav:visited {
+.snarkNav {
   margin: -1px -4px 0 0;
   padding: 4px 12px 4px 29px !important;
   display: inline-block;
@@ -151,12 +142,12 @@ input[type="image"], th img, a img {
   border-radius: 0;
   box-shadow: 0 0 1px #000, inset 0 0 0 1px rgba(16, 0, 16, .7), inset 0 0 2px 0 rgba(255,128,0,.5);
   background: var(--tracker) 11px center no-repeat, var(--nav);
-  background-size: 16px auto, 100%;
+  background-size: 16px, 100%;
   transition: ease-in-out box-shadow .01s;
   will-change: transform;
 }
 
-.iframed .snarkNav:link, .iframed .snarkNav:visited {
+.iframed .snarkNav {
   padding: 3px 12px 3px 29px !important;
 }
 
@@ -170,12 +161,12 @@ input[type="image"], th img, a img {
   border-radius: 0 !important;
 }
 
-.snarkNav:hover, .snarkNav:visited:hover, .snarkNav:focus, .snarkNav:visited:focus {
+.snarkNav:hover, .snarkNav:hover {
   color: #d2baff !important;
   border: 1px solid #820b64;
   box-shadow: 0 0 1px #000, inset 0 0 0 1px rgba(16, 0, 16, .9), inset 0 0 2px 0 #515;
   background: var(--tracker_hover) 11px center no-repeat, var(--nav_hover);
-  background-size: 16px auto, 100%, 100%;
+  background-size: 16px, 100%, 100%;
   transition: ease border .3s .1s, ease-in-out box-shadow .01s;
 }
 
@@ -187,13 +178,13 @@ input[type="image"], th img, a img {
   border-left: 1px solid #730;
 }
 
-.snarkNav:active, .snarkNav:visited:active {
+.snarkNav:active {
   color: #fff !important;
   text-shadow: none;
   border: 1px solid #730;
   box-shadow: 0 0 1px 0 #000, var(--highlight), inset 3px 3px 3px 2px #3f1900 !important;
   background: var(--tracker_active) 11px center no-repeat, var(--nav_active);
-  background-size: 16px auto, 100%, 100%;
+  background-size: 16px, 100%, 100%;
   transition: ease box-shadow .01s;
 }
 
@@ -234,7 +225,7 @@ input[type="image"], th img, a img {
 .nav_forum:link:active {
   color: #fff !important;
   background: var(--forum_active) 11px center no-repeat, var(--nav_active);
-  background-size: 16px auto, 100%, 100%;
+  background-size: 16px, 100%, 100%;
 }
 
 .nav_search:link {
@@ -251,7 +242,7 @@ input[type="image"], th img, a img {
 .nav_search:link:active {
   color: #fff !important;
   background: var(--search_active) 11px center no-repeat, var(--nav_active);
-  background-size: 16px auto, 100%, 100%;
+  background-size: 16px, 100%, 100%;
 }
 
 .snarkNav:last-child {
@@ -1899,7 +1890,7 @@ input {
   color: #f60;
   border: 1px solid #101;
   border-radius: 2px;
-  background: #212 url(images/graytile.png);
+  background: #212 var(--tile);
 }
 
 input[type=submit], input[type=reset], a.control {
@@ -1912,7 +1903,7 @@ input[type=submit]:hover, input[type=reset]:hover, a.control:hover, input[disabl
 
 input.r {
   text-align: right;
-  background: url(images/graytile.png);
+  background: var(--tile);
 }
 
 input[type=image], thead img {
@@ -2060,7 +2051,7 @@ input[type=text], input.r, input[name="nofilter_dataDir"] {
   padding: 6px 8px !important;
   box-shadow: inset 0 0 0 1px #280028, inset 2px 2px 2px 1px #101;
   letter-spacing: .03em;
-  background: url(images/graytile.png) #212;
+  background: var(--tile) #212;
   background-size: 96px;
   transition: ease box-shadow .05s, ease color .05s;
 }
@@ -2068,7 +2059,7 @@ input[type=text], input.r, input[name="nofilter_dataDir"] {
 input[type=text]:disabled {
   color: rgba(192,160,192,.5) !important;
   box-shadow: inset 1px 1px 2px 1px #101 !important;
-  background: url(images/graytile.png) #212 !important;
+  background: var(--tile) #212 !important;
   background-size: 96px !important;
   cursor: not-allowed;
 }
@@ -2335,7 +2326,7 @@ select:hover, select:focus, select:active  {
 
 select[disabled], select[disabled]:hover, select[disabled]:focus {
   color: #f60 !important;
-  background: var(--dropdown) right 10px center no-repeat, url(images/graytile.png) #212 !important;
+  background: var(--dropdown) right 10px center no-repeat, var(--tile) #212 !important;
   background-size: 10px, 96px !important;
   opacity: .5;
   cursor: not-allowed;
@@ -2367,7 +2358,7 @@ textarea {
   border: 1px solid #000;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #280028, inset 2px 2px 2px 1px #101;
-  background: #212 url(images/graytile.png);
+  background: #212 var(--tile);
   background-size: 96px;
   transition: ease box-shadow .15s;
 }
@@ -5585,7 +5576,7 @@ input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disable
   border: 1px solid #101;
   border-radius: 2px;
   box-shadow: inset 1px 1px 1px rgba(72,0,72,.6), inset -1px -1px 1px #101, inset 2px 2px 3px rgba(0,0,0,.8);
-  background: url(images/graytile.png) #212;
+  background: var(--tile) #212;
   background-size: 96px;
   box-sizing: border-box;
   filter: drop-shadow(0 0 1px #101);
@@ -5605,7 +5596,7 @@ input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input
   box-shadow: inset 1px 1px 1px rgba(92, 0, 92, .6), inset -1px -1px 1px #101, inset 3px 3px 2px rgba(0,0,0,.8);
   border: 1px solid #101;
   border-radius: 50%;
-  background: url(images/graytile.png) #212;
+  background: var(--tile) #212;
   background-size: 96px;
   appearance: none;
   filter: drop-shadow(0 0 1px #101);
@@ -5693,7 +5684,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
   border-radius: 0;
   position: relative;
   box-shadow: inset 0 0 0 1px #280028, inset 0 0 0 2px #101, inset 3px 3px 3px rgba(0,0,0,.7), 0 0 0 1px #101;
-  background: url(images/graytile.png) #212;
+  background: var(--tile) #212;
   background-size: 96px;
   outline: none;
   transition: ease-in left .15s;
