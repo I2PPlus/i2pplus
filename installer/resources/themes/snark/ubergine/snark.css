@@ -38,6 +38,15 @@ body.iframed {
   margin: 0 !important;
 }
 
+body::before {
+ width: 0;
+ height: 0;
+ display: inline-block;
+ background: var(--snark_hover), var(--tracker_hover), var(--forum_hover), var(--search_hover),
+             var(--snark_active), var(--tracker_active), var(--forum_active), var(--search_active);
+ content: "";
+}
+
 input[type="image"], th img, a img {
   font-size: 0 !important;
   overflow: hidden;
@@ -272,7 +281,6 @@ input[type="image"], th img, a img {
   border-radius: 4px;
   border: 1px solid #101;
   background: #2a192a url(images/hat.png) no-repeat scroll right center;
-  box-shadow: inset 0 0 0 1px rgba(180,152,180,.3), inset 0 0 3px 1px rgba(16, 0, 16, .6), 0 0 1px 1px rgba(16, 8, 16, .3);
   box-shadow: inset 0 0 0 1px #545, inset 0 0 3px 1px rgba(16, 0, 16, .6), 0 0 1px 1px rgba(16, 8, 16, .3);
   outline: none;
   scrollbar-width: thin;
@@ -752,13 +760,16 @@ th.snarkTorrentAction input[type="image"] {
   margin-top: 2px !important;
 }
 
+.iframed th.snarkTorrentAction input[type="image"] {
+  margin-bottom: 1px !important;
+}
+
 @supports not (-moz-appearance: none) {
   th.snarkTorrentAction input[type="image"] {
     margin-top: 0 !important;
     margin-bottom: 0 !important;
   }
 }
-
 
 .snarkTorrents tfoot {
   background: #101;
@@ -2743,210 +2754,25 @@ input#toggle_files:checked + label + hr, input#toggle_comments:checked + label +
   color: #b9b;
 }
 
+#dhtDebug th {
+  text-align: center !important;
+  border-top: 1px solid #313;
+  border-bottom: none;
+  border-radius: 0 0 4px 4px;
+}
+
 hr.debug {
   width: 100%;
   height: 1px;
   border-bottom: 1px solid rgba(128, 0, 128, .3);
   background: rgba(32,16,32,.3);
+  display: none;
 }
 
 @-moz-document url-prefix() {
-  hr.debug {
-    height: 2px;
-  }
+  hr.debug {height: 2px}
 }
 
-.dhtDebug th {
-  padding: 0 0 4px;
-  white-space: normal;
-  word-break: break-all;
-  border-top: 1px solid #313;
-  border-bottom: none;
-  background: #1f021f;
-  background: linear-gradient(to right, rgba(30,0,30,.4), rgba(55,0,55,.5) 50%, rgba(30,0,30,.4) 100%), url(images/tile2.png);
-}
-
-.dhtdebug th:first-child {
-  border-radius: 0 0 0 4px;
-}
-
-.dhtdebug th:last-child {
-  border-radius: 0 0 4px 0;
-}
-
-.dhtDebug th > br:first-child {
-  display: none;
-}
-
-/* debug panel */
-
-#dhtDebugPanel {
-  margin: -5px 4px 1px;
-  padding-bottom: 13px;
-  text-align: center;
-  border: 1px solid #414;
-  border-top: none;
-  border-radius: 0 0 4px 4px;
-  box-shadow: 0 1px 2px 0 rgba(16,0,16,.6);
-  background: #101;
-  background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,.2) 30%, rgba(0,0,0,1)), linear-gradient(to right, rgba(128,0,128,0) 30%, #414 50%, rgba(128,0,128,0) 70%), linear-gradient(to bottom, #101, #000);
-}
-
-#dhtDebugPanel label {
-  margin: 0 auto -13px !important;
-  display: block;
-  border-color: #101;
-  border-radius: 0;
-  box-shadow: none !important;
-  background: #202;
-}
-
-#dhtDebugPanel .toggleview {
-  animation: none !important;
-}
-
-input#toggle_debug:not(checked) + label {
-  text-align: center;
-  border-color: #313;
-  background: #101;
-  background: linear-gradient(to bottom, #212 50%, #101 50%);
-  filter: drop-shadow(0 1px 1px #000);
-}
-
-input#toggle_debug:checked + label {
-  border-color: #000;
-}
-
-#dhtDebugInner {
-  margin: -30px -1px -13px;
-  padding: 3px 10px 14px;
-  text-align: center;
-  border-left: 1px solid #414;
-  border-right: 1px solid #414;
-  border-radius: 0 0 4px 4px;
-  background: #000;
-  background: linear-gradient(to bottom, rgba(0,0,0,.5), rgba(0,0,0,.6)), repeating-linear-gradient(to bottom, #1f081f 1px, #2b172f 1px, #1f081f 3px);
-}
-
-@supports not (-moz-appearance: none) {
-  #dhtDebugInner {
-    margin-top: -33px;
-  }
-}
-
-input#toggle_debug:not(checked) + label {
-  padding-bottom: 2px;
-}
-
-input#toggle_debug:not(checked) + label > img {
-  margin-right: -2px !important;
-}
-
-input#toggle_debug:not(checked) + label + #dhtDebugInner {
-  display: block;
-}
-
-input#toggle_debug:checked + label + #dhtDebugInner {
-  display: none;
-}
-
-.iframed input#toggle_debug:not(checked) + label + #dhtDebugInner {
-  display: block;
-}
-
-.iframed input#toggle_debug:checked + label + #dhtDebugInner {
-  display: none;
-}
-
-#debugDHT, #debugStats, .bucketCount, #bucketSet {
-  font-size: 110%;
-}
-
-#debugStats {
-  margin-top: 8px;
-  line-height: 150%;
-}
-
-#debugDHT {
-  margin: 1px 0 10px;
-}
-
-#bucketSet {
-  margin: -7px 15px 5px;
-  padding: 8px 6px;
-  border: 1px solid #313;
-  border-top: none;
-  border-radius: 0 0 4px 4px;
-  box-shadow: var(--highlight);
-  background: linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,.7) 35%, rgba(0,0,0,.7) 65%,  rgba(0,0,0,0)), linear-gradient(to bottom, #202 50%, #000 50%);
-  filter: drop-shadow(0 1px 1px #000);
-}
-
-#bucketSet code {
-  color: #cc0;
-  opacity: .7;
-  -moz-user-select: all;
-  -webkit-user-select: all;
-  user-select: all;
-}
-
-.bucketsContainer, .bucketCount {
-  margin: 0 15px;
-  text-align: center;
-  border: 1px solid #313;
-  box-shadow: var(--highlight);
-  filter: drop-shadow(0 0 2px #000);
-}
-
-.bucketsContainer {
-  margin: -1px 15px -20px;
-  padding: 5px;
-  border-radius: 0 0 4px 4px;
-  background: #080008;
-}
-
-.bucketCount {
-  padding: 5px 0;
-  background: linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,.7), rgba(0,0,0,0)), linear-gradient(to bottom, #202 50%, #000 50%);
-  border-radius: 4px 4px 0 0;
-}
-
-.bucket {
-  margin: 4px 3px;
-  padding: 2px 4px;
-  width: 80px;
-  display: inline-block;
-  white-space: nowrap !important;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  color: #993;
-  font-family: monospace;
-  box-shadow: 0 0 0 1px #313, 0 0 0 2px #000, var(--highlight);
-  background: #101;
-  -moz-user-select: all;
-  -webkit-user-select: all;
-  user-select: all;
-}
-
-.bucket:hover {
-  color: #cc0;
-}
-
-.bucket::-moz-selection {
-  color: #000;
-  background: #cc0 !important;
-}
-
-.bucket::selection {
-  color: #000;
-  background: #cc0 !important;
-}
-
-.bucket:empty {
-  display: none;
-}
-
-/* end debug panel */
 /* end debug */
 
 /* Resource Errors */
@@ -6476,7 +6302,7 @@ td.snarkTorrentPeerCount b a:not(:hover):not(:focus), td.snarkTorrentPeerCount b
   from {background-position: 200% 100%}
 }
 
-#snarkFoot tr:not(.dhtDebug) th[colspan="12"] {
+#snarkFoot tr:not(#dhtDebug) th[colspan="12"] {
   padding: 0 1px 4px;
   background: linear-gradient(to bottom, #101 1px, rgba(0,0,0,0) 1px), linear-gradient(to right, #940, rgba(0,0,0,0) 3%, rgba(0,0,0,0) 97%, #940);
   background-size: 200% 100%;

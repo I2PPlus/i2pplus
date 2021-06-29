@@ -2685,131 +2685,17 @@ input:checked + label + hr + table + table {
   color: #c9ceff;
 }
 
-tfoot .dhtDebug th {
-  padding: 0 !important;
-  word-break: break-all;
+#dhtDebug th {
+  border-top: 1px solid #26235c !important;
+  text-align: center !important;
+  font-weight: 400;
+  background: linear-gradient(to bottom, #001, #000) !important;
 }
-
-/* debug panel */
-
-#dhtDebugPanel {
-  padding-bottom: 13px;
-  text-align: center;
-  border: none;
-  border-top: 1px solid #26235c;
-  box-shadow: var(--highlight);
-  background: linear-gradient(to bottom, #001, #000009);
-}
-
-#dhtDebugPanel .toggleview {
-  padding-bottom: 2px !important;
-}
-
-#dhtDebugInner {
-  margin: -23px 0 -12px;
-  padding: 5px;
-  text-align: center;
-  background: #000;
-}
-
-input#toggle_debug:not(checked) + label {
-  padding-bottom: 2px;
-}
-
-input#toggle_debug:not(checked) + label + #dhtDebugInner {
-  display: block;
-}
-
-input#toggle_debug:checked + label + #dhtDebugInner {
-  display: none;
-}
-
-.iframed input#toggle_debug:not(checked) + label + #dhtDebugInner {
-  display: block;
-}
-
-.iframed input#toggle_debug:checked + label + #dhtDebugInner {
-  display: none;
-}
-
-#debugDHT, #debugStats, .bucketCount, #bucketSet {
-  font-size: 110%;
-}
-
-#debugStats {
-  margin-top: 8px;
-  line-height: 150%;
-}
-
-#debugDHT {
-  margin: 1px 0 10px;
-}
-
-#bucketSet {
-  margin: 15px 0 -5px;
-}
-
-#bucketSet code {
-  color: #880;
-  user-select: all;
-}
-
-.bucketsContainer, .bucketCount {
-  margin: 0 5%;
-  text-align: center;
-  border: 1px solid #120f35;
-  box-shadow: var(--highlight);
-}
-
-.bucketsContainer {
-  margin: -1px 5% -20px;
-  padding: 8px;
-  text-align: left;
-  background: #000;
-}
-
-.bucketCount {
-  padding: 6px 8px;
-  width: 240px;
-  background: linear-gradient(to bottom, #002 50%, #000008 50%);
-}
-
-.bucket {
-  margin: 4px 3px;
-  padding: 4px;
-  width: 120px;
-  display: inline-block;
-  white-space: nowrap !important;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  color: #880;
-  font-family: monospace;
-  border: 1px solid #225;
-  border-radius: 3px;
-  box-shadow: var(--highlight);
-  background: #113;
-  user-select: all;
-}
-
-.bucket::-moz-selection, #bucketSet code::-moz-selection {
-  background: #770 !important;
-  color: #fff;
-}
-
-.bucket::selection, #bucketSet code::selection {
-  background: #770 !important;
-  color: #fff;
-}
-
-.bucket:empty {
-  display: none;
-}
-
-/* end debug panel */
 
 hr.debug {
   margin: 3px 0 -5px;
   width: 100%;
+  display: none;
   background: #120f35;
 }
 

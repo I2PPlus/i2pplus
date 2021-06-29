@@ -2650,109 +2650,10 @@ input:checked + .toggleview + hr + table, input:checked + .toggleview + hr + tab
   text-transform: capitalize;
 }
 
-.dhtdebug th {
-  word-break: break-all;
-  padding: 0 10px 10px !important;
+#dhtDebug th {
+  text-align: center !important;
 }
 
-/* debug panel */
-
-#dhtdebugPanel {
-  padding-bottom: 13px;
-  border: 1px solid #252;
-  border-top: none;
-  box-shadow: var(--highlight);
-  text-align: center;
-  background: linear-gradient(to bottom, rgba(0,0,0,.6) 0%, rgba(0,0,0,.7) 100%), url(/themes/console/dark/images/camotile2.png) top left repeat;
-}
-
-#dhtDebugInner {
-  text-align: center;
-  padding: 5px;
-  margin: -23px 0 -12px;
-}
-
-input#toggle_debug:not(checked) + label {
-  padding-bottom: 2px;
-}
-
-input#toggle_debug:not(checked) + label > img {
-  margin-right: -2px !important;
-}
-
-input#toggle_debug:not(checked) + label + #dhtDebugInner {
-  display: block;
-}
-
-input#toggle_debug:checked + label + #dhtDebugInner {
-  display: none;
-}
-
-.iframed input#toggle_debug:not(checked) + label + #dhtDebugInner {
-  display: block;
-}
-
-.iframed input#toggle_debug:checked + label + #dhtDebugInner {
-  display: none;
-}
-
-#debugDHT, #debugStats, .bucketCount, #bucketSet {
-  font-size: 110%;
-}
-
-#debugDHT {
-  margin: 1px 0 10px;
-}
-
-#bucketSet {
-  margin: 15px 0 -5px;
-}
-
-.bucketsContainer, .bucketCount {
-  margin: 0 5%;
-  text-align: center;
-  border: 1px solid #131;
-  box-shadow: var(--highlight), inset 0 0 2px 1px #030;
-}
-
-.bucketsContainer {
-  margin: -1px 5% -20px;
-  padding: 8px;
-  background: #000700;
-}
-
-.bucketCount {
-  padding: 6px;
-  background: linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,.7), rgba(0,0,0,0)), linear-gradient(to bottom, #020 50%, #000 50%);
-}
-
-.bucket {
-  margin: 3px;
-  padding: 1px 4px;
-  display: inline-block;
-  white-space: nowrap !important;
-  color: #274;
-  font-family: monospace;
-  box-shadow: 0 0 0 1px #020, var(--highlight);
-  background: #010;
-  -moz-user-select: all;
-  -webkit-user-select: all;
-  user-select: all;
-}
-
-.bucket::-moz-selection {
-  background: #050 !important;
-  color: #fff;
-}
-
-.bucket::selection {
-  background: #050 !important;
-  color: #fff;
-}
-
-.bucket:empty {
-  display: none;
-}
 /* end debug panel */
 
 hr.debug {
@@ -2760,35 +2661,8 @@ hr.debug {
   width: 100%;
   background: #131;
   background: linear-gradient(to right, #000700, #131, #000700);
+  display: none;
 }
-
-/*hr.debug + b {
-  color: #ff7;
-  text-transform: uppercase;
-}
-
-hr.debug:first-of-type {
-  background: transparent;
-  margin-bottom: -5px;
-  margin-top: -2px;
-}
-
-hr.debug + hr {
-  display: block;
-  background: transparent;
-  margin-bottom: -3px;
-}
-
-hr.debug:nth-child(n+7) {
-  margin-top: -11px;
-  margin-bottom: 2px;
-  opacity: .5;
-}
-
-hr.debug:last-child {
-  background: #000;
-  margin-bottom: -5px;
-}*/
 
 /* end debug */
 

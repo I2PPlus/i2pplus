@@ -435,6 +435,17 @@ tfoot .snarkTorrentRateUp:not(:empty)::before, tfoot .snarkTorrentUploaded:not(:
 	transform: rotate(-90deg) scaleX(0.6);
 }
 
+#dhtDebug th {
+	padding: 4px 8px;
+	text-align: center;
+	font-weight: 400;
+	border-top: 1px solid #999;
+}
+
+#dhtDebug hr {
+	display: none;
+}
+
 .snarkTorrents td {
 	width: 1%;
 	white-space: nowrap;
@@ -1707,10 +1718,6 @@ td.snarkTorrentAction input[type="image"] {
 	opacity: 1;
 }
 
-.toggleview[for="toggle_debug"] {
-	margin: 0 -6px -25px;
-}
-
 .info_tracker {
 	margin: 0 1px 4px;
 	padding: 0 4px;
@@ -1949,15 +1956,8 @@ select {
 }
 
 @keyframes progress {
-from {
-background-position: 0;
-}
-to {
-background-position: 200%
-}
-}
-
-.active .percentBarOuter {
+	from {background-position: 0}
+	to {background-position: 200%}
 }
 
 .snarkTorrents thead img {
@@ -1970,10 +1970,6 @@ background-position: 200%
 
 .snarkTorrentAction {
 	padding-right: 5px !important;
-}
-
-#dhtDebugPanel .toggleview {
-	margin-top: -8px !important;
 }
 
 #configs a[href^="/config"] {
