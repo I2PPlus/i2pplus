@@ -3,6 +3,7 @@
 /* Author: dr|z3d */
 
 @import url(/themes/fonts/DroidSans.css);
+@import url(images/images.css);
 @import url(chromescroll.css);
 
 :root {
@@ -16,21 +17,6 @@
   --select_hover: linear-gradient(to bottom, #f60 50%, #f40 50%);
   --btn: linear-gradient(to bottom, #989, #878);
   --btn_hover: linear-gradient(to bottom, #767, #989);
-  --dropdown: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m5.29 17.93 26.71 28.14 26.71-28.14' fill='none' stroke='%23f60' stroke-linecap='round' stroke-linejoin='round' stroke-width='10'/%3E%3C/svg%3E");
-  --dropdown_hover: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m5.29 17.93 26.71 28.14 26.71-28.14' fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='10'/%3E%3C/svg%3E");
-  --comment: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3CradialGradient id='A' cx='18.08' cy='18.39' gradientTransform='matrix(1.63 0 0 1.29 -12.01 -8.82)' gradientUnits='userSpaceOnUse' r='30.5'%3E%3Cstop offset='0' stop-color='%23fffff9'/%3E%3Cstop offset='1' stop-color='%23e9ddaf'/%3E%3C/radialGradient%3E%3Cpath d='M32.18 1c-16.54 0-30 11.8-30 26.31 0 5.92 2.29 11.69 6.46 16.32 1.65 3.13-.69 11.2-5.64 15.69 10.06 2.03 12.35-2.14 15.06-8.79 4.34 2.03 9.19 3.09 14.12 3.09 16.54 0 30-11.8 30-26.31S48.72 1 32.18 1z' fill='url(%23A)' stroke='%23a05a2c' stroke-width='2'/%3E%3C/svg%3E");
-  --user: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m51.42 27.01c0-.94-.19-1.83-.53-2.65-1.3-3.07-4.94-4.33-8.07-3.19-1.71.62-4.91 1.31-10.69 1.31s-8.98-.69-10.69-1.31c-3.13-1.13-6.78.12-8.07 3.19-.35.81-.53 1.71-.53 2.65l-.03 10.35c0 7.13.55 11.51 5.93 16.62 1.93 1.83 4.2 3.24 6.39 4.73 2.19 1.48 4.13 3.45 6.97 3.45s4.78-1.96 6.97-3.45c2.19-1.48 4.46-2.9 6.39-4.73 5.37-5.1 5.97-9.62 5.97-16.75z' fill='%23fca'/%3E%3Cpath d='m53.37 13.49c-.71-3.8-3.85-6.6-7.28-8.06-6.75-3.32-14.66-4.27-22.01-2.68-2.45.77-4.08 2.95-6.47 3.87-2.39 1.05-4.2 3.13-4.86 5.66-.85 2.32-2.98 4.04-3.2 6.63-.82 4.81 1.01 9.59 3.25 13.77.16-2.75-.37-5.62.5-8.27 1.28-3.07 5.21-4.51 8.22-3.19 5.55 1.59 11.44 1.42 17.13.89 2.13-.22 4.15-1.07 6.27-1.38 3.27-.21 6.57 2.51 6.45 5.9.15 2.34 0 4.69.06 7.03 2-.68 2.73-3.04 3.06-4.94.88-5.08-.13-10.24-1.1-15.23z' fill='%236c5d53'/%3E%3C/svg%3E");
-  --infohelp: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='64' width='64'%3E%3Cpath d='M64 32a32 31.81 0 1 1-64 0 32 31.81 0 1 1 64 0z' fill='%23ddafe9'/%3E%3Cpath d='M56 32.08a24 24.08 0 0 1-48 0A24 24.08 0 0 1 32 8a24 24.08 0 0 1 24 24.08z' fill='%23505'/%3E%3Cg fill='%23fff'%3E%3Cpath d='M35.6 47.9H28.4V26.7h7.22z'/%3E%3Ccircle cx='32' cy='19.7' r='3.61'/%3E%3C/g%3E%3C/svg%3E");
-  --peer: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='64' width='64'%3E%3ClinearGradient id='A' gradientUnits='userSpaceOnUse' x1='7.78' x2='23.12' y1='10.41' y2='33.31'%3E%3Cstop offset='0' stop-color='%23ffd5f6'/%3E%3Cstop offset='1' stop-color='%23fae'/%3E%3C/linearGradient%3E%3Cpath d='m35.17 44.85 1.06 7.68h-8.45l1.06-7.68z' fill='%239d93ac'/%3E%3Cpath d='M60 46.03c0 1.3-1.1 2.4-2.4 2.4H6.4c-1.3 0-2.4-1.1-2.4-2.4V9.95c0-1.3 1.1-2.4 2.4-2.4h51.2c1.3 0 2.4 1.1 2.4 2.4zm-37.05 6.2h18.1a2 2 0 0 1 2 2v.2a2 2 0 0 1-2 2h-18.1a2 2 0 0 1-2-2v-.2a2 2 0 0 1 2-2z' fill='%23beb7c8'/%3E%3Ccircle cx='32' cy='44.83' fill='%23dedbe3' r='1.3'/%3E%3Cpath d='M8.1 12l.04 29.26H56.2l-.02-29.2z' fill='%23de87cd'/%3E%3Cpath d='m7.5 12.46.04 28.97 49-28.98z' fill='url(%23A)' transform='matrix(.98 0 0 1.01 .73 -.56)'/%3E%3Cpath d='M7.96 12L8 41.27h48.05l-.02-29.2z' fill='none' stroke='%23442178' stroke-width='2'/%3E%3C/svg%3E");
-  --offline: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m28.05 2v4.75c-12.35 1.68-21.8 12.35-21.65 25.12-.16 13.85 10.94 25.2 24.8 25.37l.06.06-.02.1c.04 0 .08 0 .13.01l4.6 4.6v-4.76c12.34-1.7 21.8-12.34 21.65-25.13.16-13.85-10.94-25.2-24.78-25.37l-.06-.06.02-.1c-.04 0-.08 0-.13-.01zm0 15.97v7.2l7.12-7.12c6.64 1.27 11.64 7.1 11.64 14.08 0 6.72-4.63 12.36-10.9 13.9v-7.2l-7.12 7.12a14.35 14.35 0 0 1 -11.63-14.08c0-6.72 4.62-12.36 10.9-13.9z' fill='%23500' stroke='%23500' stroke-linejoin='round' stroke-width='2'/%3E%3Cpath d='m31.2 6.5c.53 0 1.04.05 1.56.08l-1.56 7.1v3.86c-7.8.17-14.04 6.54-14.04 14.34s6.24 14.17 14.04 14.32l1.57-.1-1.57 11.12c-13.85-.12-24.98-11.49-24.8-25.35-.16-13.87 10.94-25.22 24.8-25.37z' fill='%23d400aa'/%3E%3Cpath d='m36.03 38.83-11.6 11.57 11.6 11.6' fill='none' stroke='%23500' stroke-width='2'/%3E%3Cg fill='%23cd87de' transform='matrix(-1.65 0 0 -1.65 40.11 67.62)'%3E%3Cpath d='m4.43 6.13c.32 0 .63.03.94.05l-.94 4.29v2.33c-4.72.1-8.49 3.95-8.49 8.67s3.77 8.57 8.49 8.67l.95-.06-.95 6.72c-8.38-.09-15.1-6.96-15-15.34-.09-8.38 6.62-15.25 15-15.34z'/%3E%3Cpath d='m2.53 3.4v14l7-7z'/%3E%3C/g%3E%3Cpath d='m27.95 25.15 11.6-11.58-11.6-11.57' fill='none' stroke='%23500' stroke-width='2'/%3E%3Cpath d='m28.05 2v23.16l11.6-11.58z' fill='%23d400aa'/%3E%3C/svg%3E");
-  --nuke: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3CradialGradient id='A' cx='8.15' cy='56.16' gradientTransform='matrix(-.82 -.82 -.82 .82 84.62 24.7)' gradientUnits='userSpaceOnUse' r='39.39'%3E%3Cstop offset='0' stop-color='%23fb8bbf'/%3E%3Cstop offset='1' stop-color='%23d3285c'/%3E%3C/radialGradient%3E%3Cpath d='M64.12 25L31.9 56.52 7.08 32.18 39.2.06z' fill='%23d4aa00'/%3E%3Cpath d='M64.1 25l-32 32.02L19.7 44.3l31.96-31.8z' fill='%23ffce47'/%3E%3Cpath d='M32 69.98c-9.7-.01-17.56-7.87-17.57-17.57V34.6h35.12l.01 17.8A17.57 17.57 0 0 1 32 69.97z' fill='url(%23A)' transform='matrix(.71 .71 -.71 .71 32 -13.25)'/%3E%3Cpath d='M32.75 56.38L42.8 46.36 17.85 21.42 7.82 31.46z' fill='%23174461'/%3E%3Cpath d='m42.73 46.33-10 10.07-12.56-12.55 10.09-10' fill='%236f7c91'/%3E%3C/svg%3E");
-  --refresh: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cg transform='matrix(-1 0 0 1 64 0)'%3E%3Ccircle cx='32' cy='32' fill='%234069df' r='32'/%3E%3Cg fill='%23fff' stroke='%23fff' stroke-linejoin='round'%3E%3Cpath d='m49.58 38.66c-1.77 7.33-8.82 12.49-16.14 13.23-5.01.61-10.24-1.02-13.93-4.48-3.15-2.8-5.46-6.67-5.95-10.89l7.23 2.02c2.4 5.52 9.29 8.49 14.95 6.45 4.6-1.51 7.72-4.95 8.26-10.77.14-2.68-.56-4.87-1.85-6.94-3.34-5.12-10.02-7.41-15.41-4.84-1.07.61-2.03 1.3-3.23.63l-5.93-1.65c4.27-5.58 12.07-7.51 18.71-5.76 5.86 1.39 11.08 5.74 12.85 11.58 1.34 3.63 1.34 7.69.44 11.42z' stroke-width='2.01'/%3E%3Cpath d='m-15.45-1.97v15.8l-13.68-7.9z' stroke-width='2' transform='matrix(.72 -.33 .48 1.06 31.95 9.11)'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-  --restore: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='32' cy='32' fill='%234069df' r='32'/%3E%3Cg fill='%23fff' stroke='%23fff' stroke-linejoin='round'%3E%3Cpath d='m49.58 38.66c-1.77 7.33-8.82 12.49-16.14 13.23-5.01.61-10.24-1.02-13.93-4.48-3.15-2.8-5.46-6.67-5.95-10.89l7.23 2.02c2.4 5.52 9.29 8.49 14.95 6.45 4.6-1.51 7.72-4.95 8.26-10.77.14-2.68-.56-4.87-1.85-6.94-3.34-5.12-10.02-7.41-15.41-4.84-1.07.61-2.03 1.3-3.23.63l-5.93-1.65c4.27-5.58 12.07-7.51 18.71-5.76 5.86 1.39 11.08 5.74 12.85 11.58 1.34 3.63 1.34 7.69.44 11.42z' stroke-width='2.01'/%3E%3Cpath d='m-15.45-1.97v15.8l-13.68-7.9z' stroke-width='2' transform='matrix(.72 -.33 .48 1.06 31.95 9.11)'/%3E%3C/g%3E%3C/svg%3E");
-  --add: url("data:image/svg+xml,%3Csvg height='64' width='64' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='32' cy='32' fill='%2371c837' r='32'/%3E%3Ccircle cx='32' cy='32' fill='%23fff' r='27.07'/%3E%3Ccircle cx='32' cy='32' fill='%2371c837' r='22.17'/%3E%3Cpath d='m34.63 17.36a1.58 1.58 0 0 0 -1.12-.46.81.81 0 0 0 0 0h-3c-.85 0-1.58.73-1.58 1.58a.81.81 0 0 0 0 0l.04 10.44-10.46-.02c-.85 0-1.57.73-1.57 1.58v3.03c0 .85.73 1.58 1.58 1.58l10.45.04-.02 10.38c0 .85.73 1.58 1.58 1.58h3.03a1.6 1.6 0 0 0 1.58-1.58l.02-10.4h10.38c.87 0 1.6-.72 1.58-1.6v-3c0-.85-.73-1.58-1.58-1.58a.81.81 0 0 0 0 0l-10.37.04-.05-10.46a1.58 1.58 0 0 0 -.46-1.12z' fill='%23fff'/%3E%3C/svg%3E");
-  --create: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='64' width='64'%3E%3ClinearGradient id='A' gradientTransform='matrix(.63 -.49 .63 .49 -647.49 -398.37)' gradientUnits='userSpaceOnUse' x1='82.54' x2='89.91' y1='962.43' y2='969.8'%3E%3Cstop offset='0' stop-color='%23b3b3b3'/%3E%3Cstop offset='.4' stop-color='%23fff'/%3E%3Cstop offset='.75' stop-color='%23ddd'/%3E%3Cstop offset='1' stop-color='%23aaa'/%3E%3C/linearGradient%3E%3ClinearGradient id='B' gradientUnits='userSpaceOnUse' x1='10.18' x2='19.454' y1='34.772' y2='34.772'%3E%3Cstop offset='0' stop-color='%23333'/%3E%3Cstop offset='.4' stop-color='%23666'/%3E%3Cstop offset='.75' stop-color='%23333'/%3E%3Cstop offset='1' stop-color='%231a1a1a'/%3E%3C/linearGradient%3E%3CradialGradient id='C' cx='-84.1' cy='857.71' gradientTransform='matrix(.4 0 0 .46 75.57 -376.46)' gradientUnits='userSpaceOnUse' r='96.98'%3E%3Cstop offset='0' stop-color='%23ffd42a'/%3E%3Cstop offset='1' stop-color='%23f3361a'/%3E%3C/radialGradient%3E%3Cg transform='matrix(.87 0 0 .87 0 8.22)'%3E%3Cpath d='M53.85 15.13l19.57-1.58-17.74 8.4 17.74 8.4-19.57-1.6L65 44.93 48.86 33.77l1.58 19.57-8.4-17.74-8.4 17.74 1.6-19.57-16.15 11.16L30.2 28.78l-19.56 1.6 17.74-8.4-17.74-8.4 19.56 1.58L19.06-1.02 35.2 10.14l-1.6-19.57 8.4 17.74 8.4-17.74-1.58 19.57L65-1.02z' fill='url(%23C)'/%3E%3Cg fill-rule='evenodd' transform='matrix(.66 .66 -.66 .66 40.33 .95)'%3E%3Cpath d='M12.6 15.5h9.32v54.33H12.6z' fill='%23241c1c' stroke='%23000' stroke-width='4'/%3E%3Cpath d='M12.6 15.5V35.6h9.3V15.5z' fill='url(%23A)'/%3E%3Cpath d='M12.6 33.1h9.3v36.6h-9.3z' fill='url(%23B)'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-  --config: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3CradialGradient id='A' cx='31.994' cy='31.995' gradientTransform='matrix(1.158 0 0 1.181 -5.055 -5.784)' r='30.671'%3E%3Cstop offset='0' stop-color='%23e6e6e6'/%3E%3Cstop offset='1' stop-color='%23f9f9f9'/%3E%3C/radialGradient%3E%3Cpath d='M25.75 1.221c-.74 0-1.471.6-1.471 1.33l-.74 8.099c-2.06.88-3.97 1.911-5.59 3.241L10.59 10.5c-.74-.29-1.62 0-1.91.6L2.34 21.99c-.44.74-.151 1.621.439 2.061L9.4 28.75c-.15 1.03-.291 2.06-.291 3.24s.151 2.21.291 3.24l-6.92 4.7c-.6.44-.881 1.33-.441 2.06l6.33 10.901c.44.74 1.18 1.029 1.91.599l7.362-3.39a26.35 26.35 0 0 0 5.589 3.24l.741 8.099c.15.74.738 1.331 1.468 1.331h12.67c.74 0 1.471-.601 1.471-1.331l.74-8.099c2.06-.88 3.97-1.91 5.59-3.24l7.36 3.39c.74.29 1.62.001 1.91-.599l6.33-10.901c.44-.74.15-1.62-.44-2.06l-6.179-4.69c.15-1.03.289-2.06.289-3.24s-.149-2.21-.289-3.24l6.619-4.699c.6-.44.879-1.331.439-2.061L55.48 11.1c-.44-.74-1.18-1.03-1.91-.6l-7.359 3.391a26.35 26.35 0 0 0-5.592-3.241l-.738-8.099c-.15-.74-.741-1.33-1.471-1.33zm6.18 18.703A12.11 12.11 0 0 1 43.998 32c0 6.637-5.431 12.076-12.068 12.076-6.646 0-12.078-5.43-12.078-12.076s5.432-12.076 12.078-12.076z' fill='url(%23A)' stroke='%234d4d4d'/%3E%3C/svg%3E");
-  --confirm: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='32' cy='32' fill='%2371c837' r='32'/%3E%3Ccircle cx='32' cy='32' fill='%23fff' r='27.07'/%3E%3Ccircle cx='32' cy='32' fill='%2371c837' r='22.17'/%3E%3Cpath d='m44 19.37a2.17 2.17 0 0 0 -1.54.62l-15.5 15.5-5.4-5.4c-.8-.8-2.26-.78-3.04.03l-2.02 2.1c-.77.8-.75 2.2.04 3l8.93 8.86c.8.78 2.22.78 3-.01l19.02-19.02c.8-.8.8-2.23 0-3l-2-2.02a2.16 2.16 0 0 0 -1.47-.62z' fill='%23fff'/%3E%3C/svg%3E");
-  --folder: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m5.33 10.53h20.87c.35 0 .68.14.93.38l5.41 5.27h26.13a1.34 1.34 0 0 1 1.33 1.34v34.62c0 .73-.6 1.33-1.33 1.33h-53.34a1.34 1.34 0 0 1 -1.33-1.34v-40.26a1.34 1.34 0 0 1 1.33-1.34z' fill='%23eae'/%3E%3Cpath d='m6.67 16.18h22.06l-3.06-2.98h-19z' fill='%23959'/%3E%3C/svg%3E");
 }
 
 html, body {
@@ -43,32 +29,12 @@ html, body {
 body {
   font: 8pt DejaVu Sans, Verdana, Noto Sans, Ubuntu, Helvetica, sans-serif;
   color: #ddd;
-  background: url(images/graytile.png) left top,
-  url(images/button_snark_hover.png) top center no-repeat,
-  url(images/button_snark_active.png) top center no-repeat,
-  url(images/button_tracker_hover.png) top center no-repeat,
-  url(images/button_tracker_active.png) top center no-repeat,
-  url(images/button_forum_hover.png) top center no-repeat,
-  url(images/button_forum_active.png) top center no-repeat,
-  url(images/button_search_hover.png) top center no-repeat,
-  url(images/button_search_active.png) top center no-repeat,
-  url(images/dropdown_hover.svg) top center no-repeat,
-  var(--offline) top center no-repeat,
-  #130313 !important;
-  background-size: 96px, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 !important;
+  background: var(--graytile) left top, var(--offline) top center no-repeat, #130313 !important;
+  background-size: 96px, 0 !important;
 }
 
 body.iframed {
   margin: 0 !important;
-  background: url(images/button_snark_hover.png) no-repeat,
-  url(images/button_snark_active.png) no-repeat,
-  url(images/button_tracker_hover.png) no-repeat,
-  url(images/button_tracker_active.png) no-repeat,
-  url(images/button_search_hover.png) top center no-repeat,
-  url(images/button_search_active.png) top center no-repeat,
-  url(images/button_forum_hover.png) no-repeat,
-  url(images/button_forum_active.png) no-repeat transparent !important;
-  background-size: 0 !important;
 }
 
 @supports (text-justify: auto) { /* Firefox 55+ */
@@ -184,8 +150,7 @@ input[type="image"], th img, a img {
   border: 1px solid #730;
   border-radius: 0;
   box-shadow: 0 0 1px #000, inset 0 0 0 1px rgba(16, 0, 16, .7), inset 0 0 2px 0 rgba(255,128,0,.5);
-  background: #310 url(images/button_tracker.png) 11px center no-repeat;
-  background: url(images/button_tracker.png) 11px center no-repeat, var(--nav);
+  background: var(--tracker) 11px center no-repeat, var(--nav);
   background-size: 16px auto, 100%;
   transition: ease-in-out box-shadow .01s;
   will-change: transform;
@@ -209,7 +174,7 @@ input[type="image"], th img, a img {
   color: #d2baff !important;
   border: 1px solid #820b64;
   box-shadow: 0 0 1px #000, inset 0 0 0 1px rgba(16, 0, 16, .9), inset 0 0 2px 0 #515;
-  background: url(images/button_tracker_hover.png) 11px center no-repeat, var(--nav_hover);
+  background: var(--tracker_hover) 11px center no-repeat, var(--nav_hover);
   background-size: 16px auto, 100%, 100%;
   transition: ease border .3s .1s, ease-in-out box-shadow .01s;
 }
@@ -227,14 +192,14 @@ input[type="image"], th img, a img {
   text-shadow: none;
   border: 1px solid #730;
   box-shadow: 0 0 1px 0 #000, var(--highlight), inset 3px 3px 3px 2px #3f1900 !important;
-  background: url(images/button_tracker_active.png) 11px center no-repeat, var(--nav_active);
+  background: var(--tracker_active) 11px center no-repeat, var(--nav_active);
   background-size: 16px auto, 100%, 100%;
   transition: ease box-shadow .01s;
 }
 
 .snarkNav:link:first-child, .snarkNav:last-child[href="/i2psnark/"] {
   padding-left: 28px !important;
-  background: url(images/button_snark.png) 11px center no-repeat, var(--nav);
+  background: var(--snark) 11px center no-repeat, var(--nav);
   background-size: 18px auto, 100%;
 }
 
@@ -245,54 +210,47 @@ input[type="image"], th img, a img {
 
 .nav_main:link:hover, .nav_main:link:focus {
   color: #d2baff !important;
-  background: url(images/button_snark_hover.png) 11px center no-repeat, var(--nav_hover);
+  background: var(--snark_hover) 11px center no-repeat, var(--nav_hover);
   background-size: 18px auto, 100%;
 }
 
 .nav_main:link:active, .snarkNav:last-child[href="/i2psnark/"]:active {
   color: #fff !important;
-  background: #f60 url(images/button_snark_active.png) 11px center no-repeat;
-  background: url(images/button_snark_active.png) 11px center no-repeat, var(--nav_active);
+  background: var(--snark_active) 11px center no-repeat, var(--nav_active);
   background-size: 18px auto, 100%, 100%;
 }
 
 .nav_forum:link {
-  background: #310 url(images/button_forum.png) 11px center no-repeat;
-  background: url(images/button_forum.png) 11px center no-repeat, var(--nav);
+  background: var(--forum) 11px center no-repeat, var(--nav);
   background-size: 16px auto, 100%;
 }
 
 .nav_forum:link:hover, .nav_forum:link:focus {
   color: #d2baff !important;
-  background: #707 url(images/button_forum_hover.png) 11px center no-repeat;
-  background: url(images/button_forum_hover.png) 11px center no-repeat, var(--nav_hover);
+  background: var(--forum_hover) 11px center no-repeat, var(--nav_hover);
   background-size: 16px auto, 100%;
 }
 
 .nav_forum:link:active {
   color: #fff !important;
-  background: #f60 url(images/button_forum_active.png) 11px center no-repeat;
-  background: url(images/button_forum_active.png) 11px center no-repeat, var(--nav_active);
+  background: var(--forum_active) 11px center no-repeat, var(--nav_active);
   background-size: 16px auto, 100%, 100%;
 }
 
 .nav_search:link {
-  background: #310 url(images/button_forum.png) 11px center no-repeat;
-  background: url(images/button_search.png) 11px center no-repeat, var(--nav);
+  background: var(--search) 11px center no-repeat, var(--nav);
   background-size: 16px auto, 100%;
 }
 
 .nav_search:link:hover, .nav_search:link:focus {
   color: #d2baff !important;
-  background: #707 url(images/button_search_hover.png) 11px center no-repeat;
-  background: url(images/button_search_hover.png) 11px center no-repeat, var(--nav_hover);
+  background: var(--search_hover) 11px center no-repeat, var(--nav_hover);
   background-size: 16px auto, 100%;
 }
 
 .nav_search:link:active {
   color: #fff !important;
-  background: #f60 url(images/button_search_active.png) 11px center no-repeat;
-  background: url(images/button_search_active.png) 11px center no-repeat, var(--nav_active);
+  background: var(--search_active) 11px center no-repeat, var(--nav_active);
   background-size: 16px auto, 100%, 100%;
 }
 
@@ -384,8 +342,7 @@ input[type="image"], th img, a img {
   width: 12px;
   height: 11px;
   display: inline-block;
-  background: url(images/bullet.png) left bottom no-repeat;
-  background-size: 9px;
+  background: var(--bullet)  no-repeat left bottom / 9px;
   content: "";
 }
 
@@ -2724,7 +2681,7 @@ input#toggle_files:checked + label + hr, input#toggle_comments:checked + label +
   border-radius: 50%;
   box-shadow: var(--highlight);
   opacity: 0;
-  background: url(images/debug.png) center center no-repeat, linear-gradient(to bottom, #313 50%, #101 50%);
+  background: var(--debug) no-repeat center center, linear-gradient(to bottom, #313 50%, #101 50%);
 }
 
 #debugMode:hover {
@@ -2757,7 +2714,7 @@ input#toggle_files:checked + label + hr, input#toggle_comments:checked + label +
 }
 
 .debuginfo td:first-child {
-  background: url(images/debuginfo.png) center center no-repeat;
+  background: var(--debuginfo) center center no-repeat;
   background-size: 14px;
 }
 
@@ -2771,7 +2728,7 @@ input#toggle_files:checked + label + hr, input#toggle_comments:checked + label +
 }
 
 .debuginfo b, .debugConnStat b {
-  font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
+  font-family: var(--bodyfont);
 }
 
 .debuginfo b {
@@ -2799,7 +2756,6 @@ hr.debug {
   width: 100%;
   height: 1px;
   border-bottom: 1px solid rgba(128, 0, 128, .3);
-  background: linear-gradient(to right, #313, #414, #313);
   background: rgba(32,16,32,.3);
 }
 
@@ -6030,7 +5986,7 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
 @media screen and (min-width: 1500px) {
 .snarkTorrentInfo .infohash {
   padding: 4px 4px 4px 20px;
-  background: url(images/hash.png) 4px center no-repeat, linear-gradient(to bottom, #dd0 50%, #cc0 50%);
+  background: var(--hash) 4px center no-repeat, linear-gradient(to bottom, #dd0 50%, #cc0 50%);
   background-size: 14px, 100% !important;
 }
 
