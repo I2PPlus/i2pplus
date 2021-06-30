@@ -71,6 +71,7 @@ public class RandomArtServlet extends HttpServlet {
 				}
 				response.setHeader("X-Content-Type-Options", "nosniff");
 				response.setHeader("Accept-Ranges", "none");
+				response.setHeader("Cache-control", "max-age=2628000, immutable");
 				buf.append(RandomArt.gnutls_key_fingerprint_randomart(h.getData(), "SHA", 256, "", true, html));
 				if (html)
 					buf.append("\n</body>\n</html>");
