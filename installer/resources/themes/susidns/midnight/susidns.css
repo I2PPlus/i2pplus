@@ -129,65 +129,71 @@ div#navi  {
   box-shadow: var(--highlight), inset 3px 3px 3px #000 !important;
 }
 
-#navi a.abook {
+#navi .abook {
   padding: 5px 8px 5px 23px;
   background: var(--abook) no-repeat 6px center, var(--nav);
 }
 
-#navi a.abook:hover, #navi a.abook:focus {
+#navi .abook:hover, #navi .abook:focus {
   box-shadow: inset 0 1px 1px 0 #c9ceff;
   background: var(--abook_hover) no-repeat 6px center / 14px, var(--nav_hover);
 }
 
-#navi a.abook:active {
-  background: #652787 var(--abook_hover) 6px center no-repeat / 14px;
+#navi .abook:active {
+  background: #652787 var(--abook_hover) no-repeat 6px center / 14px;
 }
 
-#navi a#subs {
+#navi #subs {
   padding: 5px 8px 5px 23px;
   background: var(--subs) no-repeat 6px center, var(--nav);
 }
 
-#navi a#subs:hover, #navi a#subs:focus  {
+#navi #subs:hover, #navi #subs:focus  {
   box-shadow: inset 0 1px 1px 0 #c9ceff;
   background: var(--subs_hover) no-repeat 6px center / 14px, var(--nav_hover);
 }
 
-#navi a#subs:active {
-  background: #652787 var(--subs_hover) 6px center no-repeat / 14px;
+#navi #subs:active {
+  background: #652787 var(--subs_hover) no-repeat 6px center/ 14px;
 }
 
-#navi a#configlink {
+#navi #configlink {
   padding: 5px 8px 5px 23px;
   background: var(--configure) no-repeat 6px center / 14px, var(--nav);
 }
 
-#navi a#configlink:hover, #navi a#configlink:focus {
-  box-shadow: inset 0 1px 1px 0 #c9ceff;
+#navi #configlink:hover, #navi #configlink:focus {
   background: var(--configure_hover) no-repeat 6px center / 14px, var(--nav_hover);
 }
 
-#navi a#configlink:active {
-  background: #652787 var(--configure_hover) 6px center no-repeat / 14px;
+#navi #configlink:active {
+  background: #652787 var(--configure_hover) no-repeat 6px center/ 14px;
 }
 
-#navi a#overview {
+#navi #overview {
   padding: 5px 8px 5px 23px;
   background: var(--overview) no-repeat 6px center / 14px, var(--nav);
 }
 
-#navi a#overview:hover, #navi a#overview:focus {
+#navi #overview:hover, #navi #overview:focus {
   box-shadow: inset 0 1px 1px 0 #c9ceff;
   background: var(--overview_hover) no-repeat 6px center / 14px, var(--nav_hover);
 }
 
-#navi a#overview:active {
-  background: #652787 var(--overview_hover) 6px center no-repeat / 14px;
+#navi #overview:active {
+  background: #652787 var(--overview_hover) no-repeat 6px center/ 14px;
 }
 
 #navi a, #navi a:visited, #navi a:hover, #navi a:focus, #navi a:active {
   padding: 5px 8px 5px 23px;
   background-size: 14px, 100% !important;
+}
+
+@media screen and (max-width: 1200px) {
+  #navi a, #navi a:visited, #navi a:hover, #navi a:focus, #navi a:active {
+  padding-left: 21px !important;
+  background-size: 12px, 100% !important;
+  }
 }
 
 #navi > * {
