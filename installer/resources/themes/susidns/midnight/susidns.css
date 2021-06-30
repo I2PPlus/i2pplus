@@ -1,7 +1,8 @@
 /* SusiDNS "Midnight" theme */
 /* Author: dr|z3d */
 
-@import url("/themes/fonts/DroidSans.css");
+@import url(/themes/fonts/DroidSans.css);
+@import url(images/images.css);
 
 :root {
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
@@ -130,68 +131,58 @@ div#navi  {
 
 #navi a.abook {
   padding: 5px 8px 5px 23px;
-  background: url(images/abook.png) 6px center no-repeat, var(--nav);
+  background: var(--abook) no-repeat 6px center, var(--nav);
 }
 
 #navi a.abook:hover, #navi a.abook:focus {
   box-shadow: inset 0 1px 1px 0 #c9ceff;
-  background: url(images/abook_hover.png) 6px center no-repeat, var(--nav_hover);
-  background-size: 14px, 100% !important;
+  background: var(--abook_hover) no-repeat 6px center / 14px, var(--nav_hover);
 }
 
 #navi a.abook:active {
-  background: #652787 url(images/abook_hover.png) 6px center no-repeat;
-  background-size: 14px !important;
+  background: #652787 var(--abook_hover) 6px center no-repeat / 14px;
 }
 
 #navi a#subs {
   padding: 5px 8px 5px 23px;
-  background: url(images/subs.png) 6px center no-repeat, var(--nav);
+  background: var(--subs) no-repeat 6px center, var(--nav);
 }
 
 #navi a#subs:hover, #navi a#subs:focus  {
   box-shadow: inset 0 1px 1px 0 #c9ceff;
-  background: url(images/subs_hover.png) 6px center no-repeat, var(--nav_hover);
-  background-size: 14px, 100% !important;
+  background: var(--subs_hover) no-repeat 6px center / 14px, var(--nav_hover);
 }
 
 #navi a#subs:active {
-  background: #652787 url(images/subs_hover.png) 6px center no-repeat;
-  background-size: 14px !important;
+  background: #652787 var(--subs_hover) 6px center no-repeat / 14px;
 }
 
 #navi a#configlink {
   padding: 5px 8px 5px 23px;
-  background: url(images/configure.png) 6px center no-repeat, var(--nav);
+  background: var(--configure) no-repeat 6px center / 14px, var(--nav);
 }
 
 #navi a#configlink:hover, #navi a#configlink:focus {
   box-shadow: inset 0 1px 1px 0 #c9ceff;
-  background: url(images/configure_hover.png) 6px center no-repeat, var(--nav_hover);
-  background-size: 14px, 100% !important;
+  background: var(--configure_hover) no-repeat 6px center / 14px, var(--nav_hover);
 }
 
 #navi a#configlink:active {
-  background: #652787 url(images/configure_hover.png) 6px center no-repeat;
-  background-size: 14px !important;
+  background: #652787 var(--configure_hover) 6px center no-repeat / 14px;
 }
 
 #navi a#overview {
   padding: 5px 8px 5px 23px;
-  background: #001 url(images/overview.png) 6px center no-repeat;
-  background: url(images/overview.png) 6px center no-repeat, var(--nav);
+  background: var(--overview) no-repeat 6px center / 14px, var(--nav);
 }
 
 #navi a#overview:hover, #navi a#overview:focus {
   box-shadow: inset 0 1px 1px 0 #c9ceff;
-  background: #000 url(images/overview_hover.png) 6px center no-repeat;
-  background: url(images/overview_hover.png) 6px center no-repeat, var(--nav_hover);
-  background-size: 14px, 100% !important;
+  background: var(--overview_hover) no-repeat 6px center / 14px, var(--nav_hover);
 }
 
 #navi a#overview:active {
-  background: #652787 url(images/overview_hover.png) 6px center no-repeat;
-  background-size: 14px !important;
+  background: #652787 var(--overview_hover) 6px center no-repeat / 14px;
 }
 
 #navi a, #navi a:visited, #navi a:hover, #navi a:focus, #navi a:active {
