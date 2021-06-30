@@ -407,8 +407,7 @@ div#messages:hover {
   padding: 20px 20px 20px 50px !important;
   border: 1px solid #242;
   box-shadow: var(--highlight), inset 0 0 2px 1px #030;
-  background: #000 url(images/addressbook.svg) 10px center no-repeat;
-  background-size: 20px 20px;
+  background: #000 var(--addressbook) no-repeat 10px center / 20px;
 }
 
 #messages:empty {
@@ -833,7 +832,7 @@ div#empty {
 }
 
 #book th:last-child {
-  background: url(../images/nuke.svg) center center no-repeat !important;
+  background: url(../images/nuke.svg) no-repeat center center !important;
   background-size: 15px 15px !important;
 }
 
@@ -1112,7 +1111,7 @@ textarea:focus {
   padding: 10px 5px 10px 35px;
   text-transform: uppercase;
   font-size: 11.5pt;
-  background: url(images/addressbook.svg) 9px center no-repeat,
+  background: var(--addressbook) 9px center no-repeat,
               linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
               repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px),
               linear-gradient(to bottom, #004000, #000 75%);
@@ -1132,7 +1131,7 @@ textarea:focus {
 }
 
 .headline#configure h3 {
-  background: url(images/configure.svg) 9px center no-repeat,
+  background: var(--config) 9px center no-repeat,
               linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
               repeating-linear-gradient(to right, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px),
               linear-gradient(to bottom, #004000, #000 75%);
@@ -1149,8 +1148,7 @@ p.book {
 
 #messages + p, p.book {
   border: 1px solid #242;
-  background: #000 url(images/addressbook.svg) 5px center no-repeat;
-  background-size: 20px 20px;
+  background: #000 var(--addressbook) no-repeat 5px center / 20px;
 }
 
 /* host details page */
@@ -1291,7 +1289,7 @@ p.book {
   height: 16px;
   display: inline-block;
   text-align: center;
-  background: url(/themes/console/images/svg/link.svg) center center no-repeat;
+  background: url(/themes/console/images/svg/link.svg) no-repeat center center;
   background-size: 16px;
   content: "";
   cursor: pointer;
@@ -1301,7 +1299,7 @@ p.book {
   width: 16px;
   height: 16px;
   display: inline-block;
-  background: url(images/helper.svg) center center no-repeat;
+  background: var(--helper) no-repeat center center / 16px;
   background-size: 16px;
   cursor: pointer;
   content: "";
@@ -1471,13 +1469,11 @@ input#exporthosts {
   min-width: 0 !important;
   display: inline-block;
   font-size: 0 !important;
-  background: url(images/download.svg) center center no-repeat, linear-gradient(to bottom, #010, #000) !important;
-  background-size: 16px, 100% !important;
+  background: var(--download) no-repeat center center / 16px, linear-gradient(to bottom, #010, #000) !important;
 }
 
 input#exporthosts:hover {
-  background: #000 url(images/download_hover.svg) center center no-repeat !important;
-  background-size: 16px !important;
+  background: #000 var(--download_hover) no-repeat center center / 16px !important;
 }
 
 #exporthosts:disabled {
