@@ -1,7 +1,8 @@
 /* SusiDNS "Midnight" theme */
 /* Author: dr|z3d */
 
-@import url("/themes/fonts/DroidSans.css");
+@import url(/themes/fonts/DroidSans.css);
+@import url(images/images.css);
 
 :root {
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
@@ -128,75 +129,71 @@ div#navi  {
   box-shadow: var(--highlight), inset 3px 3px 3px #000 !important;
 }
 
-#navi a.abook {
+#navi .abook {
   padding: 5px 8px 5px 23px;
-  background: url(images/abook.png) 6px center no-repeat, var(--nav);
+  background: var(--abook) no-repeat 6px center, var(--nav);
 }
 
-#navi a.abook:hover, #navi a.abook:focus {
+#navi .abook:hover, #navi .abook:focus {
   box-shadow: inset 0 1px 1px 0 #c9ceff;
-  background: url(images/abook_hover.png) 6px center no-repeat, var(--nav_hover);
-  background-size: 14px, 100% !important;
+  background: var(--abook_hover) no-repeat 6px center / 14px, var(--nav_hover);
 }
 
-#navi a.abook:active {
-  background: #652787 url(images/abook_hover.png) 6px center no-repeat;
-  background-size: 14px !important;
+#navi .abook:active {
+  background: #652787 var(--abook_hover) no-repeat 6px center / 14px;
 }
 
-#navi a#subs {
+#navi #subs {
   padding: 5px 8px 5px 23px;
-  background: url(images/subs.png) 6px center no-repeat, var(--nav);
+  background: var(--subs) no-repeat 6px center, var(--nav);
 }
 
-#navi a#subs:hover, #navi a#subs:focus  {
+#navi #subs:hover, #navi #subs:focus  {
   box-shadow: inset 0 1px 1px 0 #c9ceff;
-  background: url(images/subs_hover.png) 6px center no-repeat, var(--nav_hover);
-  background-size: 14px, 100% !important;
+  background: var(--subs_hover) no-repeat 6px center / 14px, var(--nav_hover);
 }
 
-#navi a#subs:active {
-  background: #652787 url(images/subs_hover.png) 6px center no-repeat;
-  background-size: 14px !important;
+#navi #subs:active {
+  background: #652787 var(--subs_hover) no-repeat 6px center/ 14px;
 }
 
-#navi a#configlink {
+#navi #configlink {
   padding: 5px 8px 5px 23px;
-  background: url(images/configure.png) 6px center no-repeat, var(--nav);
+  background: var(--configure) no-repeat 6px center / 14px, var(--nav);
 }
 
-#navi a#configlink:hover, #navi a#configlink:focus {
-  box-shadow: inset 0 1px 1px 0 #c9ceff;
-  background: url(images/configure_hover.png) 6px center no-repeat, var(--nav_hover);
-  background-size: 14px, 100% !important;
+#navi #configlink:hover, #navi #configlink:focus {
+  background: var(--configure_hover) no-repeat 6px center / 14px, var(--nav_hover);
 }
 
-#navi a#configlink:active {
-  background: #652787 url(images/configure_hover.png) 6px center no-repeat;
-  background-size: 14px !important;
+#navi #configlink:active {
+  background: #652787 var(--configure_hover) no-repeat 6px center/ 14px;
 }
 
-#navi a#overview {
+#navi #overview {
   padding: 5px 8px 5px 23px;
-  background: #001 url(images/overview.png) 6px center no-repeat;
-  background: url(images/overview.png) 6px center no-repeat, var(--nav);
+  background: var(--overview) no-repeat 6px center / 14px, var(--nav);
 }
 
-#navi a#overview:hover, #navi a#overview:focus {
+#navi #overview:hover, #navi #overview:focus {
   box-shadow: inset 0 1px 1px 0 #c9ceff;
-  background: #000 url(images/overview_hover.png) 6px center no-repeat;
-  background: url(images/overview_hover.png) 6px center no-repeat, var(--nav_hover);
-  background-size: 14px, 100% !important;
+  background: var(--overview_hover) no-repeat 6px center / 14px, var(--nav_hover);
 }
 
-#navi a#overview:active {
-  background: #652787 url(images/overview_hover.png) 6px center no-repeat;
-  background-size: 14px !important;
+#navi #overview:active {
+  background: #652787 var(--overview_hover) no-repeat 6px center/ 14px;
 }
 
 #navi a, #navi a:visited, #navi a:hover, #navi a:focus, #navi a:active {
   padding: 5px 8px 5px 23px;
   background-size: 14px, 100% !important;
+}
+
+@media screen and (max-width: 1200px) {
+  #navi a, #navi a:visited, #navi a:hover, #navi a:focus, #navi a:active {
+  padding-left: 21px !important;
+  background-size: 12px, 100% !important;
+  }
 }
 
 #navi > * {
