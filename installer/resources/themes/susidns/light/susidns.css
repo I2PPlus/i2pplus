@@ -5,6 +5,7 @@
 
 @import url(/themes/fonts/DroidSans.css);
 @import url(/themes/console/light/optbox.css);
+@import url(images/images.css);
 
 :root {
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, Verdana, Helvetica, sans-serif;
@@ -166,52 +167,52 @@ code, tt, .destaddress {
   box-shadow: var(--highlight), inset 3px 3px 2px #999;
 }
 
-#navi a.abook {
-  background: url(/themes/susidns/light/images/abook.png) 6px center no-repeat, var(--nav);
+#navi .abook {
+  background: var(--abook) no-repeat 6px center, var(--nav);
 }
 
-#navi a.abook:hover, #navi a.abook:focus {
-  background: url(/themes/susidns/dark/images/abook_hover.png) 6px center no-repeat, var(--nav);
+#navi .abook:hover, #navi .abook:focus {
+  background: var(--abook_hover) no-repeat 6px center, var(--nav);
 }
 
-#navi a.abook:active {
-  background: url(/themes/susidns/light/images/abook_active.png) 6px center no-repeat, var(--nav);
+#navi .abook:active {
+  background: var(--abook_active) no-repeat 6px center, var(--nav);
 }
 
-#navi a#subs {
-  background: url(/themes/susidns/light/images/subs.png) 6px center no-repeat, var(--nav);
+#navi #subs {
+  background: var(--subs) no-repeat 6px center, var(--nav);
 }
 
-#navi a#subs:hover, #navi a#subs:focus {
-  background: url(/themes/susidns/dark/images/subs_hover.png) 6px center no-repeat, var(--nav);
+#navi #subs:hover, #navi #subs:focus {
+  background: var(--subs_hover) no-repeat 6px center, var(--nav);
 }
 
-#navi a#subs:active {
-  background: url(/themes/susidns/light/images/subs_active.png) 6px center no-repeat, var(--nav);
+#navi #subs:active {
+  background: var(--subs_active) no-repeat 6px center, var(--nav);
 }
 
-#navi a#configlink {
-  background: url(/themes/susidns/light/images/configure.png) 6px center no-repeat, var(--nav);
+#navi #configlink {
+  background: var(--configure) no-repeat 6px center, var(--nav);
 }
 
-#navi a#configlink:hover, #navi a#configlink:focus {
-  background: url(/themes/susidns/dark/images/configure_hover.png) 6px center no-repeat, var(--nav);
+#navi #configlink:hover, #navi #configlink:focus {
+  background: var(--configure_hover) no-repeat 6px center, var(--nav);
 }
 
-#navi a#configlink:active {
-  background: url(/themes/susidns/light/images/configure_active.png) 6px center no-repeat, var(--nav);
+#navi #configlink:active {
+  background: var(--configure_active) no-repeat 6px center, var(--nav);
 }
 
-#navi a#overview {
-  background: url(/themes/susidns/light/images/overview.png) 6px center no-repeat, var(--nav);
+#navi #overview {
+  background: var(--overview) no-repeat 6px center, var(--nav);
 }
 
-#navi a#overview:hover, #navi a#overview:focus {
-  background: url(/themes/susidns/dark/images/overview_hover.png) 6px center no-repeat, var(--nav);
+#navi #overview:hover, #navi #overview:focus {
+  background: var(--overview_hover) no-repeat 6px center, var(--nav);
 }
 
-#navi a#overview:active {
-  background: url(/themes/susidns/light/images/overview_active.png) 6px center no-repeat, var(--nav);
+#navi #overview:active {
+  background: var(--overview_active) no-repeat 6px center, var(--nav);
 }
 
 .headline {
@@ -236,13 +237,11 @@ h3 {
 
 .headline h3 {
   font-size: 11.5pt;
-  background: url(images/addressbook.svg) 7px calc(50% + 2px) no-repeat #fcfcff;
-  background-size: 20px;
+  background: #fcfcff url(images/addressbook.svg) no-repeat 7px calc(50% + 2px) / 20px;
 }
 
 .headline#subscriptions h3 {
-  background: url(/themes/susidns/images/subs_24.png) 6px center no-repeat #fcfcff;
-  background-size: 22px;
+  background: #fcfcff url(/themes/susidns/images/subs_24.png) no-repeat 6px center / 22px;
 }
 
 #subscriptions a {
@@ -250,8 +249,7 @@ h3 {
 }
 
 .headline#configure h3 {
-  background: url(../images/configure.svg) 7px calc(50% + 1px) no-repeat #fcfcff;
-  background-size: 18px;
+  background: #fcfcff url(../images/configure.svg) no-repeat 7px calc(50% + 1px) / 18px;
 }
 
 .headline#subscriptions h3, .headline#configure h3, .headline#addressbook h3, .headline h3 {
