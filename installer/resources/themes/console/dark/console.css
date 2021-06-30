@@ -12513,7 +12513,7 @@ h3 + table {
   width: 12px !important;
 }
 
-.outbound  {
+.outbound {
   background: var(--out) no-repeat center center / 14px !important;
 }
 
