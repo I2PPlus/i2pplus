@@ -180,6 +180,7 @@ public class IdenticonServlet extends HttpServlet {
 			response.setContentType(IDENTICON_IMAGE_MIMETYPE);
 			response.setHeader("X-Content-Type-Options", "nosniff");
 			response.setHeader("Accept-Ranges", "none");
+			response.setHeader("Cache-control", "max-age=2628000, immutable");
 			response.setContentLength(imageBytes.length);
 			response.getOutputStream().write(imageBytes);
 		}
