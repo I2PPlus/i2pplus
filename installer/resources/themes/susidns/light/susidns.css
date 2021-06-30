@@ -63,8 +63,8 @@ b, td.search {
   text-align: center;
   border: 1px solid #8d8daa;
   box-shadow: var(--highlight);
-  background: #eef url(/themes/susidns/images/logo.png) center center no-repeat;
-  background: url(/themes/susidns/images/logo.png) center center no-repeat, linear-gradient(to bottom, #fff, #eef);
+  background: #eef url(/themes/susidns/images/logo.png) no-repeat center center;
+  background: url(/themes/susidns/images/logo.png) no-repeat center center, linear-gradient(to bottom, #fff, #eef);
   background-size: auto 50px, 100%;
 }
 
@@ -76,7 +76,7 @@ b, td.search {
   width: 100%;
   height: 55px;
   display: inline-block;
-  background: url(/themes/susidns/images/logo.png) center center no-repeat;
+  background: url(/themes/susidns/images/logo.png) no-repeat center center;
   background-size: auto 50px;
   opacity: .7;
   filter: sepia(100%) hue-rotate(180deg);
@@ -237,7 +237,7 @@ h3 {
 
 .headline h3 {
   font-size: 11.5pt;
-  background: #fcfcff url(images/addressbook.svg) no-repeat 7px calc(50% + 2px) / 20px;
+  background: #fcfcff var(--addressbook) no-repeat 7px calc(50% + 2px) / 20px;
 }
 
 .headline#subscriptions h3 {
@@ -854,7 +854,7 @@ table.book {
 
 #host_list th.checkbox  {
   width: 16px;
-  background: url(../images/nuke.svg) center center no-repeat, linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
+  background: url(../images/nuke.svg) no-repeat center center, linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
   background-size: 14px;
 }
 
@@ -942,11 +942,11 @@ tr:hover .destaddress {
 }
 
 #host_list td.b32link a::after {
-  background: url(../images/link.svg) center center no-repeat;
+  background: url(../images/link.svg) no-repeat center center;
 }
 
 #host_list td.helper a::after {
-  background: url(images/helper.svg) center center no-repeat;
+  background: var(--helper) no-repeat center center;
 }
 
 #host_list .destaddress:focus {
@@ -1645,8 +1645,7 @@ input#exporthosts {
   min-width: 0;
   display: inline-block;
   font-size: 0 !important;
-  background: url(images/download.svg) center center no-repeat, linear-gradient(to bottom, #fff, #eef);
-  background-size: 16px, 100%;
+  background: var(--download) no-repeat center center / 16px, linear-gradient(to bottom, #fff, #eef);
 }
 
 #exporthosts:disabled {
