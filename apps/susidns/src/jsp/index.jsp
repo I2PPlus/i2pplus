@@ -23,12 +23,14 @@
  * $Revision: 1.2 $
  */
 
+    String cspNonce = Integer.toHexString(net.i2p.util.RandomSource.getInstance().nextInt());
+
     // http://www.crazysquirrel.com/computing/general/form-encoding.jspx
     if (request.getCharacterEncoding() == null)
         request.setCharacterEncoding("UTF-8");
 
     response.setHeader("X-Frame-Options", "SAMEORIGIN");
-    response.setHeader("Content-Security-Policy", "default-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'");
+    response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline' 'nonce-" + cspNonce + "'");
     response.setHeader("X-XSS-Protection", "1; mode=block");
     response.setHeader("X-Content-Type-Options", "nosniff");
     response.setHeader("Referrer-Policy", "no-referrer");
@@ -85,7 +87,6 @@
 </p>
 <div class="illustrate" id="svg">
 <% /* load svg via ajax (with noscript fallback) so we can style per theme */ %>
-<% String cspNonce = Integer.toHexString(net.i2p.util.RandomSource.getInstance().nextInt()); %>
 <script nonce="<%=cspNonce%>" type="text/javascript">
 var now = Date.now();
 xhr = new XMLHttpRequest();

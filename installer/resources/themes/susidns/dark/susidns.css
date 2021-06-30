@@ -6,11 +6,13 @@
 @import url(/themes/console/dark/chromescroll.css);
 @import url(/themes/console/images/images.css);
 @import url(/themes/console/dark/images/images.css);
+@import url(images/images.css);
 
 :root {
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
   --highlight: inset 0 0 0 1px #000;
+  --nav: linear-gradient(to bottom, #002900, #000400);
 }
 
 body, html {
@@ -73,9 +75,6 @@ body.iframed {
 }
 
 #navi, .buttons, #buttons, #host_list tr:first-child, #host_list img, #host_list td:nth-child(n+2) a {
-  -ms-user-select: none;
-  -moz-user-select: none;
-  -webkit-user-select: none;
   user-select: none;
 }
 
@@ -160,63 +159,51 @@ body.iframed {
 }
 
 #navi a.abook {
-  background: url(/themes/susidns/dark/images/abook.png) 6px center no-repeat, linear-gradient(to bottom, #002900, #000400);
-  background-size: 14px, 100%;
+  background: var(--abook) no-repeat 6px center / 14px, var(--nav);
 }
 
 #navi a.abook:hover, #navi a.abook:focus {
-  background: #000 url(/themes/susidns/dark/images/abook_hover.png) 6px center no-repeat !important;
-  background-size: 14px !important;
+  background: #000 var(--abook_hover) no-repeat 6px center / 14px !important;
 }
 
 #navi a.abook:active {
-  background: #f60 url(/themes/susidns/dark/images/abook_active.png) 6px center no-repeat !important;
-  background-size: 14px !important;
+  background: #f60 var(--abook_active) no-repeat 6px center / 14px !important;
 }
 
 #navi a#subs {
-  background: url(/themes/susidns/dark/images/subs.png) 6px center no-repeat, linear-gradient(to bottom, #002900, #000400);
-  background-size: 14px, 100%;
+  background: var(--subs) no-repeat 6px center / 14px, var(--nav);
 }
 
 #navi a#subs:hover, #navi a#subs:focus {
-  background: #000 url(/themes/susidns/dark/images/subs_hover.png) 6px center no-repeat !important;
-  background-size: 14px !important;
+  background: #000 var(--subs_hover) no-repeat 6px center / 14px !important;
 }
 
 #navi a#subs:active {
-  background: #f60 url(/themes/susidns/dark/images/subs_active.png) 6px center no-repeat !important;
-  background-size: 14px !important;
+  background: #f60 var(--subs_active) no-repeat 6px center / 14px !important;
 }
 
 #navi a#configlink {
-  background: url(/themes/susidns/dark/images/configure.png) 6px center no-repeat, linear-gradient(to bottom, #002900, #000400);
-  background-size: 14px, 100%;
+  background: var(--configure) no-repeat 6px center / 14px, var(--nav);
 }
 
 #navi a#configlink:hover, #navi a#configlink:focus {
-  background: #000 url(/themes/susidns/dark/images/configure_hover.png) 6px center no-repeat !important;
-  background-size: 14px !important;
+  background: #000 var(--configure_hover) no-repeat 6px center / 14px !important;
 }
 
 #navi a#configlink:active {
-  background: #f60 url(/themes/susidns/dark/images/configure_active.png) 6px center no-repeat !important;
-  background-size: 14px !important;
+  background: #f60 var(--configure_active) no-repeat 6px center / 14px !important;
 }
 
 #navi a#overview {
-  background: url(/themes/susidns/dark/images/overview.png) 6px center no-repeat, linear-gradient(to bottom, #002900, #000400);
-  background-size: 14px, 100%;
+  background: var(--overview) no-repeat 6px center / 14px, var(--nav);
 }
 
 #navi a#overview:hover, #navi a#overview:focus {
-  background: #000 url(/themes/susidns/dark/images/overview_hover.png) 6px center no-repeat !important;
-  background-size: 14px !important;
+  background: #000 var(--overview_hover) no-repeat 6px center / 14px !important;
 }
 
 #navi a#overview:active {
-  background: #f60 url(/themes/susidns/dark/images/overview_active.png) 6px center no-repeat !important;
-  background-size: 14px !important;
+  background: #f60 var(--overview_active) no-repeat 6px center / 14px !important;
 }
 
 /* end topnav */
@@ -286,7 +273,6 @@ hr {
   text-transform: capitalize;
   font-size: 105%;
   box-shadow: 0 0 0 1px #030, 0 0 2px 1px rgba(0,0,0,.8), var(--highlight);
-  background: #000;
   background: linear-gradient(to bottom, #020 0%, #000 100%);
 }
 
@@ -359,7 +345,6 @@ h3 {
   letter-spacing: .12em;
   word-spacing: .1em;
   border: 1px solid #242;
-  background: url(/themes/console/images/info/question.png) 8px center no-repeat #000;
   background: url(/themes/console/images/info/question.png) 8px center no-repeat,
               linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
               repeating-linear-gradient(to right, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px),
@@ -414,7 +399,7 @@ div#messages:hover {
   padding: 15px 15px 15px 50px !important;
   color: #ee9;
   border-radius: 0;
-  background: car(--infohelp) 6px center no-repeat;
+  background: car(--infohelp) no-repeat 6px center;
   background-size: 32px;
 }
 
@@ -448,7 +433,6 @@ h4 {
   font-size: 9pt;
   border: 1px solid #242;
   box-shadow: var(--highlight), inset 0 0 2px 1px #030 !important;
-  background: url(/themes/susidns/images/drive.png) 9px center no-repeat #000 !important;
   background: url(/themes/susidns/images/drive.png) 9px center no-repeat, linear-gradient(to right, #000, #000800) !important;
   display: none; /* largely useless information */
 }

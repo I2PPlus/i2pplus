@@ -25,7 +25,7 @@ Le système de messagerie de Postman, basé sur I2P, est utilisable soit par le 
 <a href="/torrents">I2PSnark</a> est intégré dans le router I2P. Il permet de faire des transferts <a href="https://secure.wikimedia.org/wikipedia/fr/wiki/BitTorrent_%28protocole%29" target="_blank">BitTorrent</a> anonymes et cryptés. Sponge a développé un autre client bittorrent appelé <a href="http://bob.i2p/Robert.html">Robert</a> écrit en Python. Il existe aussi un portage d'<a href="http://www.emule-project.net/" target="_blank">eMule/aMule</a> sur I2P appelé <a href="http://echelon.i2p/imule/">iMule</a> [Besoin de développeurs !]. Il existe aussi une implémentation anonyme et sécurisée d'un <a href="https://secure.wikimedia.org/wikipedia/fr/wiki/Gnutella" target="_blank">réseau Gnutella</a> accessible par <a href="http://echelon.i2p/i2phex/" target="_blank">I2Phex</a> [maintenu par Complication, mais on cherche de nouveaux développeurs !], ainsi que d'autres utilitaires dont l'hébergement de fichiers basé sur navigateur.</li>
 
 <li><b>Tchat anonyme</b><br>
-Lancez votre logiciel client IRC (p.e. Chatzilla, Pidgin, XChat, etc&hellip;) et connectez-vous au <a href="irc://127.0.0.1:6668/i2p-help">serveur</a> sur <code>127.0.0.1 port 6668</code>. Vous n'avez pas besoin de configurer un proxy dans votre client IRC: I2P vous fournit un tunnel IRC local (configuré dans votre client IRC en tant que serveur IRC ou hôte distant). Votre tunnel IRC local sur <code>localhost:6668</code> vous emmènera sur un des deux serveurs hébergés sur I2P par Postman and Badger, mais ni vous ni eux ne sauront où se trouve l'autre, et ni ta maman ni ton FAI ni ton gouvernement ne seront capables d'intercepter la conversation !. Une fois là-bas, /join <code>#i2p-help</code>, <code>#i2p-chat</code>, <code>#i2p</code>, <code>#i2p-chat</code> ou <code>#i2p-dev</code> sonts quelques-uns des canaux que vous pourrez joindre. Il y a aussi une <a href="http://echelon.i2p/qti2pmessenger/">messagerie instantanée</a> basée-I2P, permettant de faire du tchat anonyme non surveillable et non censurable, ainsi que d'autres serveurs IRC alternatifs, serveurs Jabber, tchat basé-site-web, et davantage. Et bien sûr vous avez l'entière liberté de faire tourner vos propres serveurs sur I2P, quelques soient les versions qui vous plaisent, et si vous êtes un développeur, d'écrire vos propres <a href="http://i2p-projekt.i2p/fr/get-involved/develop/applications" target="_blank">applications I2P</a> (les protocoles <a href="https://secure.wikimedia.org/wikipedia/fr/wiki/User_Datagram_Protocol" target="_blank">UDP</a> et <a href="https://secure.wikimedia.org/wikipedia/fr/wiki/Transmission_Control_Protocol" target="_blank">TCP</a> sont tous deux <a href="http://i2p-projekt.i2p/fr/docs/how/tech-intro#op.transport" target="_blank">compatibles</a>), et <a href="http://i2p-projekt.i2p/fr/docs/api/streaming" target="_blank">les flux en temps réel</a> sont aussi possibles. Nous fournissons aussi un accès complet à l'<a href="http://http://docs.i2p-projekt.de/javadoc/" target="_blank">API Java</a>.</li>
+Lancez votre logiciel client IRC (p.e. Chatzilla, Pidgin, XChat, etc&hellip;) et connectez-vous au <a href="irc://127.0.0.1:6668/i2p-help">serveur</a> sur <code>127.0.0.1 port 6668</code>. Vous n'avez pas besoin de configurer un proxy dans votre client IRC: I2P vous fournit un tunnel IRC local (configuré dans votre client IRC en tant que serveur IRC ou hôte distant). Votre tunnel IRC local sur <code>localhost:6668</code> vous emmènera sur un des deux serveurs hébergés sur I2P par Postman and Badger, mais ni vous ni eux ne sauront où se trouve l'autre, et ni ta maman ni ton FAI ni ton gouvernement ne seront capables d'intercepter la conversation !. Une fois là-bas, /join <code>#i2p-help</code>, <code>#i2p-chat</code>, <code>#i2p</code>, <code>#i2p-chat</code> ou <code>#i2p-dev</code> sonts quelques-uns des canaux que vous pourrez joindre. Il y a aussi une <a href="https://vituperative.github.io/i2pchat/">messagerie instantanée</a> basée-I2P, permettant de faire du tchat anonyme non surveillable et non censurable, ainsi que d'autres serveurs IRC alternatifs, serveurs Jabber, tchat basé-site-web, et davantage. Et bien sûr vous avez l'entière liberté de faire tourner vos propres serveurs sur I2P, quelques soient les versions qui vous plaisent, et si vous êtes un développeur, d'écrire vos propres <a href="http://i2p-projekt.i2p/fr/get-involved/develop/applications" target="_blank">applications I2P</a> (les protocoles <a href="https://secure.wikimedia.org/wikipedia/fr/wiki/User_Datagram_Protocol" target="_blank">UDP</a> et <a href="https://secure.wikimedia.org/wikipedia/fr/wiki/Transmission_Control_Protocol" target="_blank">TCP</a> sont tous deux <a href="http://i2p-projekt.i2p/fr/docs/how/tech-intro#op.transport" target="_blank">compatibles</a>), et <a href="http://i2p-projekt.i2p/fr/docs/api/streaming" target="_blank">les flux en temps réel</a> sont aussi possibles. Nous fournissons aussi un accès complet à l'<a href="http://http://docs.i2p-projekt.de/javadoc/" target="_blank">API Java</a>.</li>
 
 <li><b>Forums &amp; Blogs</b><br>
 Si vous cherchez à faire votre propre blog ou forum, vous pourriez être intéressé par <a href="http://syndie.i2p2.de/" target="_blank">Syndie</a>, qui est une plateforme décentralisée de forums et blogs pour I2P [Besoin de développeurs!]. Bien entendu, tous les logiciels habituels de blog, forum et CMS fonctionnent sur I2P, bien qu'il vous soit conseillé de faire très attention à la sécurité quand vous les configurez, et tenir tous les logiciels associés (p.e. Php, MySql, Python, Apache) bien à jour et verrouillés ! Aussi, vous trouverez dans I2P quelques forums communautaires dans diverses langues : voir <a href="#eepsites">plus bas</a> d'autres suggestions.</li>
@@ -43,38 +43,6 @@ I2P est fourni avec un serveur web intégré, prêt à héberger votre propre si
 
 <li><b>Démarrez votre tunnel</b><br>
 Après le démarrage de votre <a href="/i2ptunnel/" target="_blank">tunnel serveur web I2P</a>, votre eepsite sera visible (mais pas encore découvrable) par les autres utilisateurs d'I2P. Les instructions détaillées de démarrage de votre eepsite, d'enregistrement d'un domaine .i2p, et de promotion de votre site, sont accessibles via votre propre serveur web I2P à l'adresse <a href="http://127.0.0.1:7658/help/" target="_blank">http://127.0.0.1:7658/help/</a>.</li></ul>
-
-<a name="eepsites"></a>
-<h3>Sites I2P intéressants</h3>
-
-<ul class="links twocol">
-
-<li><b>Le site officiel de l'Invisible Internet Project (I2P)</b><br>
-<a href="http://i2p-projekt.i2p/" target="_blank">i2p-projekt.i2p</a> et son miroir <a href="http://i2p-projekt.i2p/" target="_blank">i2p-projekt.i2p</a> : connexions anonymes et sécurisées à <a href="https://geti2p.net/" target="_blank">geti2p.net</a>. Si vous êtes curieux du fonctionnement d'I2P et de la façon d'y contribuer, ceci est la première porte d'entrée.</li>
-
-<li><b>Forums de la communauté I2P</b><br>
-<a href="http://zzz.i2p/" target="_blank">forum développeurs de zzz</a> offre des discussions concernant le développement d'I2P.
-
-<!--
-<a href="http://forum.i2p/" target="_blank">forum.i2p</a> : connexion anoyme et sécurisée au forum communautaire dans lequel sont discutés les problèmes et idées concernant I2P, et sujets apparentés. Il y a aussi le <a href="http://zzz.i2p/" target="_blank">forum développeurs de zzz</a> concernant les discussions relatives à I2P.</li>
--->
-
-<li><b>Pastebin anonyme I2P</b><br>
-<a href="http://zerobin.i2p/" target="_blank">zerobin.i2p</a> : service de collage sécurisé et anonyme permettant le partage de texte et de code au format textuel via I2P.</li>
-
-<li><b>Les ressources I2P d'Echelon</b><br>
-<a href="http://echelon.i2p/" target="_blank">echelon.i2p</a> : dépôt de logiciels I2P avec leurs code sources (quand cela est permis), informations concernant I2P, dont le <a href="http://echelon.i2p/I2Pguide/index.html" target="_blank">guide du débutant</a>, et pour les plus téméraires des pré-versions d'I2P à essayer.</li>
-
-<li><b>Le Wiki d'i2pwiki</b><br><a href="http://i2pwiki.i2p/" target="_blank">i2pwiki.i2p</a> : un wiki ouvert et anonyme dans lequel chacun peut modifier toutes sortes d'informations concernant I2P, aide pour les débutants, liens supplémentaires dans le réseau, et plus.</li>
-
-<li><b>The Planet (sur I2P)</b><br><a href="http://planet.i2p/" target="_blank">planet.i2p</a> : un site web agrégateur RSS qui collecte les nouvelles et évènements concernant I2P et les publie toutes regroupée en un seul endroit. C'est un bon site pour voir la communauté au travail !</li>
-
-<li><b>Météo du réseau I2P</b><br>
-<a href="http://stats.i2p/cgi-bin/dashboard.cgi" target="_blank">stats.i2p</a>: vérifiez divers aspects des performances du réseau I2P avec ce site superviseur maintenu par zzz.</li>
-
-<li><b>Découvrez I2P</b><br>Il y a beaucoup d'autres eepsites : suivez simplement les liens que vous rencontrez, marquez-les en favoris, et retournez-y souvent !<br></li>
-
-</ul>
 
 <h3 id="trouble">Résolution de problèmes et assistance supplémentaire</h3>
 
@@ -95,10 +63,7 @@ Voir plus bas pour d'autres solutions.
 Si vous n'avez accès à aucun site eep (même pas à <a href="http://i2p-projekt.i2p/" target="_blank">i2p-projekt.i2p</a>), assurez-vous que le mandataire de votre navigateur est réglé pour accéder au trafic HTTP (<i>pas</i> https, <i>ni</i> socks) via <code>127.0.0.1 port 4444</code>. Si vous avez besoin d'aide, voici le <a href="http://i2p-projekt.i2p/fr/about/browser-config" target="_blank">guide</a> de configuration du navigateur pour l'utilisation avec I2P, également <a href="https://geti2p.net/fr/about/browser-config" target="_blank">disponible sur le web normal</a>.</li>
 
 <li><b>Vérifiez vos historiques</b><br>
-
-<!--
-Les <a href="/logs">historiques</a> peuvent aider à diagnostiquer un problème. Vous pouvez en coller un extrait sur un <a href="http://forum.i2p/viewforum.php?f=10" target="_blank">forum</a> pour obtenir de l'aide, ou plutôt le <a href="http://zerobin.i2p/" target="_blank">coller ici</a> et demander de l'aide sur IRC en faisant référence à ce lien.</li>
--->
+Les <a href="/logs">historiques</a> peuvent aider à diagnostiquer un problème. Vous pouvez en coller un extrait sur un <a href="http://forum.i2p/viewforum.php?f=10" target="_blank">forum</a> pour obtenir de l'aide, ou plutôt le <a href="http://cake.i2p/pastebin/" target="_blank">coller ici</a> et demander de l'aide sur IRC en faisant référence à ce lien.</li>
 
 <li><b>Vérifiez que Java est à jour</b><br>
 Assurez-vous que vous avez la dernière version de Java [vers. 1.7 ou plus récente recommandée, et impérative pour certaines fonctionnalités]. Vérifez la version de votre JRE (<a href="https://secure.wikimedia.org/wikipedia/fr/wiki/Environnement_d%27ex%C3%A9cution_Java" target="_blank">Java Runtime Environment</a>) en haut de page de la <a href="/logs">page historiques</a>. Si vous êtes un développeur, un <a href="https://secure.wikimedia.org/wikipedia/fr/wiki/Java_Development_Kit" target="_blank">SDK Java</a> et <a href="http://ant.apache.org/" target="_blank">Apache Ant</a> sont nécessaires à la compilation des sources.</li>
