@@ -12490,7 +12490,7 @@ h3 + table {
   opacity: 0;
 }
 
-.inbound, .outbound  {
+.inbound, .outbound {
   width: 14px;
   height: 14px;
   display: inline-block;
@@ -12514,7 +12514,7 @@ h3 + table {
 }
 
 .outbound  {
-  background: var(--out) no-repeat center center;
+  background: var(--out) no-repeat center center / 14px !important;
 }
 
 #peerdefs li {
