@@ -774,7 +774,7 @@ p:empty + .sb_notice {
   vertical-align: middle;
   text-align: left;
   word-spacing: .1em;
-  background: url(images/star2.svg) no-repeat 4px 4px / 12px !important;
+  background: var(--star2) no-repeat 4px 4px / 12px !important;
   transition: ease background .2s;
 }
 
@@ -1235,16 +1235,8 @@ div[lang="pt"] li br {
 }
 
 .links li {
-  list-style-image: url(images/link.png) !important;
-  padding: 5px 10px 0 !important;
-}
-
-.links:not(old) {
   margin-left: -15px !important;
   margin-right: -15px !important;
-}
-
-.links li:not(old) {
   padding: 5px 10px 0 !important;
   list-style: url(/themes/console/images/transparent.gif) !important;
   list-style-position: outside;
@@ -1256,7 +1248,7 @@ div[lang="pt"] li br {
   width: 16px;
   height: 18px;
   display: inline-block;
-  background: url(images/star.svg) no-repeat left top 4px / 12px  !important;
+  background: var(--star) no-repeat left top 4px / 12px !important;
   content: "";
 }
 
@@ -1934,59 +1926,50 @@ input.reload, button.reload {
 
 input.reload:hover, button.reload:hover,
 input.reload:focus, button.reload:focus {
-  background: #fff url(/themes/console/images/buttons/restore_hover.png) no-repeat 7px center;
   background: url(/themes/console/images/buttons/restore_hover.png) no-repeat 7px center, var(--btn_hover);
 }
 
 input.reload[value$="restart"], button.reload[value$="restart"] {
   padding: 5px 8px 5px 23px;
-  background: #eee url(images/restart.svg) no-repeat 7px center;
-  background: url(images/restart.svg) no-repeat 7px center, var(--btn);
+  background: var(--restart) no-repeat 7px center, var(--btn);
   background-size: 12px, 100% !important;
 }
 
 input.reload[value$="restart"]:hover, button.reload[value$="restart"]:hover,
 input.reload[value$="restart"]:focus, button.reload[value$="restart"]:focus {
-  background: #fff url(images/restart_hover.svg) no-repeat 7px center;
-  background: url(images/restart_hover.svg) no-repeat 7px center, var(--btn_hover);
+  background: var(--restart_hover) no-repeat 7px center, var(--btn_hover);
   background-size: 12px, 100% !important;
 }
 
 input.reload[value^="Update"], button.reload[value^="Update"] {
   padding: 5px 8px 5px 23px;
-  background: #eee url(/themes/console/images/buttons/update.png) no-repeat 7px center;
   background: url(/themes/console/images/buttons/update.png) no-repeat 7px center, var(--btn);
 }
 
 input.reload[value^="Update"]:hover, button.reload[value^="Update"]:hover,
 input.reload[value^="Update"]:focus, button.reload[value^="Update"]:focus {
-  background: #fff url(/themes/console/images/buttons/update_hover.png) no-repeat 7px center;
   background: url(/themes/console/images/buttons/update_hover.png) no-repeat 7px center, var(--btn_hover);
 }
 
 input.reload[value="Force GC"], button.reload[value="Force GC"] {
   padding: 5px 8px 5px 23px;
-  background: #eee url(/themes/console/images/buttons/clean.png) no-repeat 7px center;
   background: url(/themes/console/images/buttons/clean.png) no-repeat 7px center, var(--btn);
 }
 
 input.reload[value="Force GC"]:hover, button.reload[value="Force GC"]:hover,
 input.reload[value="Force GC"]:focus, button.reload[value="Force GC"]:focus {
-  background: #fff url(/themes/console/images/buttons/clean_hover.png) no-repeat 7px center;
   background: url(/themes/console/images/buttons/clean_hover.png) no-repeat 7px center, var(--btn_hover);
 }
 
 input.stop, button.stop {
   padding: 5px 8px 5px 23px;
-  background: #eee url(images/shutdown.svg) no-repeat 7px center;
-  background: url(images/shutdown.svg) no-repeat 7px center, var(--btn);
+  background: var(--shutdown) no-repeat 7px center, var(--btn);
   background-size: 12px, 100% !important;
 }
 
 input.stop:hover, button.stop:hover,
 input.stop:focus, button.stop:focus {
-  background: #fff url(images/shutdown_hover.svg) no-repeat 7px center;
-  background: url(images/shutdown_hover.svg) no-repeat 7px center, var(--btn_hover);
+  background: var(--shutdown_hover) no-repeat 7px center, var(--btn_hover);
 }
 
 button.search {
@@ -2009,62 +1992,50 @@ button.control {
 }
 
 button.accept.control {
-  background: #eee url(/themes/console/images/buttons/Xstart.png) center center no-repeat;
   background: url(/themes/console/images/buttons/Xstart.png) center center no-repeat, var(--btn);
 }
 
 button.accept.control:hover, button.accept.control:focus {
-  background: #fff url(/themes/console/images/buttons/Xstart.png) center center no-repeat;
   background: url(/themes/console/images/buttons/Xstart.png) center center no-repeat, var(--btn_hover);
 }
 
 button.stop.control {
-  background: #eee url(/themes/console/images/buttons/Xstop.png) center center no-repeat;
   background: url(/themes/console/images/buttons/Xstop.png) center center no-repeat, var(--btn);
 }
 
 button.stop.control:hover, button.stop.control:focus {
-  background: #fff url(/themes/console/images/buttons/Xstop.png) center center no-repeat;
   background: url(/themes/console/images/buttons/Xstop.png) center center no-repeat, var(--btn_hover);
 }
 
 button.add.control {
-  background: #eee url(/themes/console/images/buttons/edit2.png) center center no-repeat;
   background: url(/themes/console/images/buttons/edit2.png) center center no-repeat, var(--btn);
 }
 
 button.add.control:hover, button.add.control:focus {
-  background: #fff url(/themes/console/images/buttons/edit2.png) center center no-repeat;
   background: url(/themes/console/images/buttons/edit2.png) center center no-repeat, var(--btn_hover);
 }
 
 button.delete.control {
-  background: #eee url(/themes/console/images/buttons/delete.png) center center no-repeat;
   background: url(/themes/console/images/buttons/delete.png) center center no-repeat, var(--btn);
 }
 
 button.delete.control:hover, button.delete.control:focus {
-  background: #fff url(/themes/console/images/buttons/delete_hover.png) center center no-repeat;
   background: url(/themes/console/images/buttons/delete_hover.png) center center no-repeat, var(--btn_hover);
 }
 
 button.check.control {
-  background: #eee url(/themes/console/images/buttons/update.png) center center no-repeat;
   background: url(/themes/console/images/buttons/update.png) center center no-repeat, var(--btn);
 }
 
 button.check.control:hover, button.check.control:focus {
-  background: #fff url(/themes/console/images/buttons/update_hover.png) center center no-repeat;
   background: url(/themes/console/images/buttons/update_hover.png) center center no-repeat, var(--btn_hover);
 }
 
 button.download.control {
-  background: #eee url(/themes/console/images/buttons/download.png) center center no-repeat;
   background: url(/themes/console/images/buttons/download.png) center center no-repeat, var(--btn);
 }
 
 button.download.control:hover, button.download.control:focus {
-  background: #fff url(/themes/console/images/buttons/download.png) center center no-repeat;
   background: url(/themes/console/images/buttons/download.png) center center no-repeat, var(--btn_hover);
 }
 
@@ -2093,7 +2064,7 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 
 .routersummary button.reload:hover, .routersummary button.reload:focus {
   border: 1px solid #aaafce;
-  background: url(images/shutdown_hover.svg) no-repeat 37% center / 14px, url(images/restart_hover.svg) no-repeat 63% center / 14px, var(--btn_hover) !important;
+  background: var(--shutdown_hover) no-repeat 37% center / 14px, var(--restart_hover) no-repeat 63% center / 14px, var(--btn_hover) !important;
 }
 
 .routersummary .reload:active, .routersummary .stop:active, .routersummary .download:active {
@@ -2102,12 +2073,12 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 }
 
 .routersummary .stop {
-  background: url(images/shutdown.svg) no-repeat center center / 14px, var(--btn) !important;
+  background: var(--shutdown) no-repeat center center / 14px, var(--btn) !important;
 }
 
 .routersummary .stop:hover, .routersummary .stop:focus {
   border: 1px solid #aaafce;
-  background: url(images/shutdown_hover.svg) no-repeat center center / 14px, var(--btn_hover) !important;
+  background: var(--shutdown_hover) no-repeat center center / 14px, var(--btn_hover) !important;
 }
 
 /* Show text on context specific buttons (eg deferred shutdown) */
@@ -2125,19 +2096,19 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 }
 
 .routersummary .reload[value="restartImmediate"] {
-  background: url(images/restart.svg) no-repeat 7px center / 12px, var(--btn) !important;
+  background: var(--restart) no-repeat 7px center / 12px, var(--btn) !important;
 }
 
 .routersummary .reload[value="restartImmediate"]:hover, .routersummary .reload[value="restartImmediate"]:focus, .routersummary .reload[value="restartImmediate"]:active {
-  background: url(images/restart_hover.svg) no-repeat 7px center / 12px, var(--btn_hover) !important;
+  background: var(--restart_hover) no-repeat 7px center / 12px, var(--btn_hover) !important;
 }
 
 .routersummary .stop[value="shutdownImmediate"] {
-  background: url(images/shutdown.svg) no-repeat 7px center / 12px, var(--btn) !important;
+  background: var(--shutdown) no-repeat 7px center / 12px, var(--btn) !important;
 }
 
 .routersummary .stop[value="shutdownImmediate"]:hover, .routersummary .stop[value="shutdownImmediate"]:focus, .routersummary .stop[value="shutdownImmediate"]:active {
-  background: url(images/shutdown_hover.svg) no-repeat 7px center / 12px, var(--btn_hover) !important;
+  background: var(--shutdown_hover) no-repeat 7px center / 12px, var(--btn_hover) !important;
 }
 
 .routersummary .reload[value="Reseed"] {
@@ -3859,8 +3830,8 @@ h4.app, h4.app2 {
 
 h4.app {
   margin-top: -5px;
-  background: #fefeff url(/themes/console/images/favicon.ico) 8px center no-repeat;
-  background: url(/themes/console/images/eepsite.png) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%);
+  background: #fefeff url(/themes/console/images/favicon.ico) no-repeat 8px center;
+  background: url(/themes/console/images/eepsite.png) no-repeat 8px center, linear-gradient(to bottom, #fff 50%, #fafbff 50%);
   background-size: 16px, 100%;
   background-blend-mode: luminosity, normal;
   padding-left: 32px;
@@ -5629,12 +5600,15 @@ a.viewfullentry:hover {
 }
 
 #sybilnav li::before {
-  content: '\00A0\1F441\00A0';
-  content: url(images/eye.png);
   padding: 0 5px;
-  font-size: 16pt;
-  line-height: 50%;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
   vertical-align: middle;
+  line-height: 50%;
+  font-size: 16pt;
+  background: var(--eye) no-repeat center center / 16px;
+  content: "";
 }
 
 p.sybil_info, p.family, p.threatpoints, p.hashdist, p.notfound, p#sybil_totals {
@@ -5643,8 +5617,7 @@ p.sybil_info, p.family, p.threatpoints, p.hashdist, p.notfound, p#sybil_totals {
   margin: 3px 0;
   font-weight: 700;
   text-align: left;
-  background: #ffe url(images/eye.png) 8px center no-repeat;
-  background: url(images/eye.png) 8px center no-repeat, linear-gradient(to right, #fff 40%, #dde1ff);
+  background: var(--eye) no-repeat 8px center / 16px, linear-gradient(to right, #fff 40%, #dde1ff);
 }
 
 p#sybil_totals {
@@ -10436,7 +10409,7 @@ div.app.js:hover::before {
 
 #faq h2, #glossary h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/info/question.png) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
+  background: url(/themes/console/images/info/question.png) no-repeat 8px center, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
   background-size: 24px, 100%, 100%, 100% !important;
 }
 
