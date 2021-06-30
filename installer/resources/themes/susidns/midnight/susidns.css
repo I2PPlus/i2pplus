@@ -191,8 +191,8 @@ div#navi  {
 
 @media screen and (max-width: 1200px) {
   #navi a, #navi a:visited, #navi a:hover, #navi a:focus, #navi a:active {
-  padding-left: 21px !important;
-  background-size: 12px, 100% !important;
+    padding-left: 21px !important;
+    background-size: 12px, 100% !important;
   }
 }
 
@@ -757,16 +757,11 @@ svg #arrow stop:last-child {
   stop-color: #001;
 }
 
-_:-ms-lang(x), img.illustrate {
-  width: auto;
-  max-width: 600px;
-}
-
 /* end overview -> svg */
 
 div#book, #emptybook {
-  padding: 0;
   margin: -15px 0 -10px;
+  padding: 0;
 }
 
 #emptybook {
@@ -798,16 +793,13 @@ div#book, #emptybook {
 #book table th {
   font-size: 8.5pt;
   border-bottom: 1px solid #26235c;
-  background: url(/themes/console/midnight/images/titles.png) repeat-x scroll center center #000;
   background: linear-gradient(to bottom, #080818, #000008 75%) !important;
 }
 
 #book th:last-child {
   padding: 0 !important;
   font-size: 0;
-  background: url(../images/nuke.svg) center center no-repeat, url(/themes/console/midnight/images/titles.png) repeat-x scroll center center #000 !important;
-  background: url(../images/nuke.svg) center center no-repeat, linear-gradient(to bottom, #080818, #000008 75%) !important;
-  background-size: 14px, 100% !important;
+  background: url(../images/nuke.svg) no-repeat center center / 14px, linear-gradient(to bottom, #080818, #000008 75%) !important;
 }
 
 #book td {
@@ -969,7 +961,7 @@ div#add {
 input {
   margin: 2px 4px 2px 0;
   padding: 4px !important;
-  font: bold 9pt var(--bodyfont);
+  font: 700 9pt var(--bodyfont);
   font-size: 9pt;
   font-weight: 700;
   text-align: left;
@@ -990,7 +982,7 @@ input[type=submit]::-moz-focus-inner, input[type=reset]::-moz-focus-inner {
 input[type=submit], input[type=reset], .fakebutton, .fakebutton:visited {
   padding: 6px 10px !important;
   min-width: 100px !important;
-  font: bold 9pt var(--bodyfont);
+  font: 700 9pt var(--bodyfont);
   color: #7171d1;
   text-align: center;
   border: 1px solid #27235c;
@@ -1002,7 +994,7 @@ input[type=submit], input[type=reset], .fakebutton, .fakebutton:visited {
 input[type=file]::file-selector-button {
   padding: 6px 10px !important;
   min-width: 100px !important;
-  font: bold 9pt var(--bodyfont);
+  font: 700 9pt var(--bodyfont);
   color: #7171d1;
   text-align: center;
   border: 1px solid #27235c;
@@ -1056,7 +1048,7 @@ textarea, #subslog pre {
   width: 100%;
   height: 120px;
   resize: none;
-  font: bold 8.5pt var(--monospaced);
+  font: 700 8.5pt var(--monospaced);
   line-height: 140%;
   color: #7670c2;
   border: 1px solid #26225d;
@@ -1181,7 +1173,7 @@ input.export {
 }
 
 .headline#configure h3 {
-  background: url(images/configure.svg) 10px center no-repeat, var(--title) !important;
+  background: var(--config) no-repeat 10px center / 18px, var(--title) !important;
   background-size: 18px, 4px 100%, 100% !important;
 }
 
@@ -1382,9 +1374,8 @@ td.names:hover, #host_list td.b32link:hover, #host_list td.helper:hover, #host_l
 }
 
 #host_list .b32link, #host_list .helper {
-  width: 35px;
-  width: 5%;
   padding: 0 5px !important;
+  width: 5%;
   white-space: nowrap;
   text-align: center;
 }
@@ -1398,13 +1389,13 @@ td.names:hover, #host_list td.b32link:hover, #host_list td.helper:hover, #host_l
   height: 16px;
   display: inline-block;
   text-align: center;
+  background: url(../images/link.svg) no-repeat center center;
   cursor: pointer;
   content: "";
-  background: url(../images/link.svg) center center no-repeat;
 }
 
 #host_list td.helper a::after {
-  background: url(images/helper.svg) center center no-repeat;
+  background: var(--helper) no-repeat center center;
 }
 
 #host_list td.b32link a:hover, #host_list td.helper a:hover,
@@ -1421,8 +1412,6 @@ td.names:hover, #host_list td.b32link:hover, #host_list td.helper:hover, #host_l
   font-weight: 400;
   text-shadow: 0 1px 1px #000;
   opacity: .7;
-  -moz-user-select: all;
-  -webkit-user-select: all;
   user-select: all;
 }
 
@@ -1528,14 +1517,6 @@ h3 {
   }
 }
 /* end responsive layout */
-
-/* Edge/IE tweaks */
-
-_:-ms-lang(x), * {
-  filter: none !important;
-}
-
-/* end Edge/IE tweaks */
 
 input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked,
 input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
@@ -1689,8 +1670,7 @@ input#exporthosts {
   min-width: 0 !important;
   display: inline-block;
   font-size: 0 !important;
-  background: url(images/download.svg) center center no-repeat, linear-gradient(to bottom, #010, #000) !important;
-  background-size: 16px, 100% !important;
+  background: var(--download) no-repeat center center / 16px, linear-gradient(to bottom, #010, #000) !important;
 }
 
 #exporthosts:disabled {
@@ -1702,8 +1682,7 @@ input#exporthosts:hover, #addressbook input#exporthosts:focus {
   border: 1px solid #652787;
   box-shadow: var(--highlight), inset 0 0 1px 1px #757;
   background: #000 !important;
-  background: url(images/download.svg) center center no-repeat, linear-gradient(to bottom, #202 50%, #000 50%) !important;
-  background-size: 16px, 100% !important;
+  background: var(--download) no-repeat center center / 16px, linear-gradient(to bottom, #202 50%, #000 50%) !important;
   background-blend-mode: luminosity;
 }
 
@@ -1711,8 +1690,7 @@ input#exporthosts:active {
   text-shadow: 0 1px 1px #3C1751;
   box-shadow: var(--highlight), inset 3px 3px 3px #000 !important;
   background: #652787 !important;
-  background: url(images/download.svg) center center no-repeat, linear-gradient(to bottom, #401856, #501f6c) !important;
-  background-size: 16px, 100% !important;
+  background: var(--download) no-repeat center center / 16px, linear-gradient(to bottom, #401856, #501f6c) !important;
 }
 
 #activefilter, .selected {
