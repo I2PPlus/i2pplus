@@ -2360,12 +2360,19 @@ div.news hr:last-child {
 }
 
 .newsAuthor {
-  padding: 2px 4px 0 14px;
+  padding: 2px 4px 2px 14px;
   float: right;
   text-transform: none;
   font-size: 8.5pt;
-  background: url(/themes/console/images/info/author.png) no-repeat left 2px bottom 3px / 10px;
+  background: var(--user) no-repeat left 2px center / 10px;
   opacity: .8;
+}
+
+@media screen and (min-width: 1500px) {
+  .newsAuthor i {
+    margin-top: -1px;
+    display: inline-block;
+  }
 }
 
 .newsDate {

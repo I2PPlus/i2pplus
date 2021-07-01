@@ -321,7 +321,7 @@ form[action="subscriptions"] #content {
   border: 1px solid #8d8daa;
   border-radius: 2px;
   box-shadow: var(--highlight), 0 0 1px #ccc;
-  background: url(/themes/console/images/info/question.png) 8px center no-repeat,
+  background: url(/themes/console/images/info/question.png) no-repeat 8px center,
               linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
               linear-gradient(135deg, #fcfcff 5%, rgba(231, 231, 255, .8) 15%) !important;
   background-size: 20px, 100%, 100% !important;
@@ -823,8 +823,7 @@ p#filtered {
   margin-bottom: 16px !important;
   padding: 15px 200px 18px 32px !important;
   box-shadow: var(--highlight), inset 0 0 2px 1px #ddf;
-  background: #eef url(/themes/console/images/buttons/filter.png) 8px center no-repeat;
-  background: url(/themes/console/images/buttons/filter.png) 8px center no-repeat,
+  background: var(--filter) no-repeat 8px center / 28px,
               repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .5) 2px, #fff 4px), #fff;
 }
 

@@ -10,6 +10,7 @@
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
   --button: linear-gradient(to bottom, #11101c 50%, #000010 50%);
   --button_hover: linear-gradient(to bottom, #202 50%, #000 50%);
+  --user: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m51.42 27.01c0-.94-.19-1.83-.53-2.65-1.3-3.07-4.94-4.33-8.07-3.19-1.71.62-4.91 1.31-10.69 1.31s-8.98-.69-10.69-1.31c-3.13-1.13-6.78.12-8.07 3.19-.35.81-.53 1.71-.53 2.65l-.03 10.35c0 7.13.55 11.51 5.93 16.62 1.93 1.83 4.2 3.24 6.39 4.73 2.19 1.48 4.13 3.45 6.97 3.45s4.78-1.96 6.97-3.45c2.19-1.48 4.46-2.9 6.39-4.73 5.37-5.1 5.97-9.62 5.97-16.75z' fill='%23fca'/%3E%3Cpath d='m53.37 13.49c-.71-3.8-3.85-6.6-7.28-8.06-6.75-3.32-14.66-4.27-22.01-2.68-2.45.77-4.08 2.95-6.47 3.87-2.39 1.05-4.2 3.13-4.86 5.66-.85 2.32-2.98 4.04-3.2 6.63-.82 4.81 1.01 9.59 3.25 13.77.16-2.75-.37-5.62.5-8.27 1.28-3.07 5.21-4.51 8.22-3.19 5.55 1.59 11.44 1.42 17.13.89 2.13-.22 4.15-1.07 6.27-1.38 3.27-.21 6.57 2.51 6.45 5.9.15 2.34 0 4.69.06 7.03 2-.68 2.73-3.04 3.06-4.94.88-5.08-.13-10.24-1.1-15.23z' fill='%236c5d53'/%3E%3C/svg%3E");
 }
 
 html, body {
@@ -432,17 +433,16 @@ td {
 }
 
 td.mailListSender {
-  width: 1%;
-  text-align: left;
-  white-space: nowrap;
-  background: url(/themes/console/images/info/author_dark.png) 6px center no-repeat;
-  background-size: 12px 12px;
   padding-left: 21px !important;
+  width: 1%;
+  white-space: nowrap;
+  text-align: left;
+  background: var(--user) no-repeat 6px center / 12px;
 }
 
 .mailListSender a, .mailListDate, .mailListSize {
-  color: #c9ceff !important;
   font-weight: 400 !important;
+  color: #c9ceff !important;
 }
 
 img.sort {
@@ -450,9 +450,9 @@ img.sort {
   max-width: 10px !important;
   vertical-align: middle;
   font-size: 0;
-  opacity: .6;
   border: 1px solid #26225c;
   border-radius: 2px;
+  opacity: .6;
 }
 
 .sort.selected {

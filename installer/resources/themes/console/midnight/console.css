@@ -3536,7 +3536,7 @@ h2, h2.welcome {
 
 .welcome h2 {
   background: url(images/favicon.svg) right 6px center no-repeat, var(--th) !important;
-  background-size: 24px, 100% !important;
+  background-size: 24px, 4px 100%, 100% !important;
 }
 
 h2 a:visited {
@@ -3895,9 +3895,10 @@ h3#finishedjobs + ol li, h3#scheduledjobs + ol li, h3#activejobs + ol li, h3#rea
 
 #activejobs + ol li, #scheduledjobs + ol li, #readyjobs + ol li, #finishedjobs + ol li, #schedjobs li {
   padding-left: 24px !important;
-  background-image: url(/themes/console/images/info/task.png) !important;
+  background-image: var(--clock) !important;
   background-repeat: no-repeat;
   background-position: 5px center;
+  background-size: 14px !important;
 }
 
 #activejobs + ol li {
