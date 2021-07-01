@@ -1171,8 +1171,7 @@ tr:not(.peerinfo) .snarkTorrentUploaded:empty::after {
 }
 
 .peerinfo:hover td:first-child {
-  background: #030 url(images/peer.svg) 9px center no-repeat !important;
-  background-size: 18px 18px !important;
+  background: #030 var(--peer) no-repeat 9px center / 18px !important;
 }
 
 tr:hover .percentBarText {
@@ -1182,12 +1181,6 @@ tr:hover .percentBarText {
 tr.peerinfo:hover .percentBarText {
   opacity: .8;
   font-size: 95%;
-}
-
-/* MS Edge fix */
-_:-ms-lang(x), .snarkTorrents tr, .snarkTorrents tr:hover, .snarkDirInfo tr:hover {
-  border-top: 1px solid #000 !important;
-  border-bottom: 1px solid #000 !important;
 }
 
 .snarkTorrentOdd, .snarkTorrentEven {
@@ -1208,10 +1201,6 @@ _:-ms-lang(x), .snarkTorrents tr, .snarkTorrents tr:hover, .snarkDirInfo tr:hove
 
 .snarkTorrents tbody tr:last-child td {
   border-bottom: 1px solid #252;
-}
-
-_:-ms-lang(x), .snarkTorrentOdd, .SnarkTorrentEven {
-  border-bottom: 1px solid #000 !important;
 }
 
 .snarkTorrentOdd td, .snarkTorrentEven td {
@@ -1631,12 +1620,11 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
 
 .snarkConfig #bwHoverHelp::before {
   margin-left: 4px;
-  width: 16px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   display: inline-block;
   vertical-align: middle;
-  background: url(images/infocircle.svg) center calc(50% - 1px) no-repeat;
-  background-size: 16px 16px;
+  background: var(--infocircle) no-repeat center calc(50% - 1px) / 18px;
   content: "";
   opacity: .8;
 }
@@ -2340,21 +2328,21 @@ _:-ms-lang(x), #trackerselect tr:last-child {
   vertical-align: middle;
   border: 1px solid transparent;
   border-radius: 2px;
-  background: url(images/configure.svg) center center no-repeat;
+  background: url(images/configure.svg) no-repeat center center;
   background-size: 16px 16px;
 }
 
 #configs a[href^="/config"]:hover::after {
   border: 1px solid #252 !important;
-  background: #030 url(images/configure.svg) center center no-repeat;
-  background: url(images/configure.svg) center center no-repeat, linear-gradient(to bottom, #050 50%, #010 50%);
+  background: #030 url(images/configure.svg) no-repeat center center;
+  background: url(images/configure.svg) no-repeat center center, linear-gradient(to bottom, #050 50%, #010 50%);
   background-size: 16px 16px, 100% 100%;
 }
 
 #configs a[href^="/config"]:active::after {
   border: 1px solid #f60 !important;
   box-shadow: inset 3px 3px 2px 1px #000;
-  background: #020 url(images/configure.svg) center center no-repeat;
+  background: #020 url(images/configure.svg) no-repeat center center;
   background-size: 16px 16px, 100% 100%;
   transform: scale(0.9) !important;
   transition: none !important;
@@ -2564,8 +2552,7 @@ code {
   width: 40px;
   height: 40px;
   display: inline-block;
-  background: url(images/offline.svg) center center no-repeat;
-  background-size: 40px 40px;
+  background: var(--offline) no-repeat center center / 40px;
   content: "";
   animation: linear spin 5s reverse infinite;
 }
@@ -2614,8 +2601,7 @@ input:checked + .toggleview + hr + table, input:checked + .toggleview + hr + tab
 }
 
 .peerinfo td:first-child {
-  background: url(images/peer.svg) 9px center no-repeat;
-  background-size: 18px 18px !important;
+  background: var(--peer) no-repeat 9px center / 18px;
 }
 
 .snarkTorrents .peerinfo td, .snarkTorrents .debuginfo td {
@@ -4792,7 +4778,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
   height: 16px;
   width: 20px;
   font-size: 0;
-  background: url(images/peerseed.png) center center no-repeat;
+  background: url(images/peerseed.png) no-repeat center center;
   background-size: 14px auto;
 }
 
