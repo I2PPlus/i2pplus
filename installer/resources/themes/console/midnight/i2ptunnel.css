@@ -4,6 +4,7 @@
 @import url(/themes/fonts/DroidSans.css);
 @import url(/themes/console/images/images.css);
 @import url(images/images.css);
+@import url(/themes/console/images/i2ptunnel.css);
 
 :root {
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
@@ -112,22 +113,22 @@ br {
 
 .statusNotRunning {
   color: #d00;
-  background: url(/themes/console/images/info/tunnelStopped.png);
+  background: var(--tunnelStopped);
 }
 
 .statusRunning {
   color: #0b0;
-  background: url(/themes/console/images/info/tunnelRunning.png);
+  background: var(--tunnelRunning);
 }
 
 .statusStarting {
   color: #393;
-  background: url(/themes/console/images/info/tunnelStarting.png);
+  background: var(--tunnelStarting);
 }
 
 .statusStandby {
   color: #d30;
-  background: url(/themes/console/images/info/tunnelStandby.png);
+  background: var(--tunnelStandby);
 }
 
 div[class^="status"] {

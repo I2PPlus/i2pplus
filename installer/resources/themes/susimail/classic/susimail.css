@@ -1,7 +1,7 @@
 /* Susimail "Classic" Theme */
 /* Author: dr|z3d */
 
-@import url("/themes/fonts/DroidSans.css");
+@import url(/themes/fonts/DroidSans.css);
 
 body {
   margin: 3px 4px;

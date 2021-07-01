@@ -117,7 +117,7 @@ allow file /path/unlimited_destinations.txt
 60/5 record /path/very_aggressive.txt
 </code>
 
-<p>You can use a recorder to log aggressive destinations to a given file, and then use that same file to throttle them. The following snippet defines a filter that initially allows all connection attempts, but if any single destination exceeds 30 attempts in 5 seconds, it gets throttled down to 15 attempts every 5 seconds:</p>
+<p>You can use a recorder to log the destinations of aggressive clients to a specified file, and then use that same file to throttle them. The following snippet defines a filter that initially allows all connection requests, but if any single destination exceeds 180 requests in 60 seconds, it gets throttled down to 30 requests every 60 seconds:</p>
 
 <code>
 # by default there are no limits<br>

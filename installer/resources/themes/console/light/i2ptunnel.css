@@ -6,6 +6,7 @@
 @import url(optbox.css);
 @import url(../images/images.css);
 @import url(images/images.css);
+@import url(/themes/console/images/i2ptunnel.css);
 
 :root {
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, Verdana, Helvetica, sans-serif;
@@ -216,22 +217,22 @@ br {
 
 .statusNotRunning {
   color: #d00;
-  background: url(/themes/console/images/info/tunnelStopped.png);
+  background: var(--tunnelStopped);
 }
 
 .statusRunning {
   color: #0b0;
-  background: url(/themes/console/images/info/tunnelRunning.png);
+  background: var(--tunnelRunning);
 }
 
 .statusStarting {
   color: #ff3;
-  background: url(/themes/console/images/info/tunnelStarting.png);
+  background: var(--tunnelStarting);
 }
 
 .statusStandby {
   color: #d30;
-  background: url(/themes/console/images/info/tunnelStandby.png);
+  background: var(--tunnelStandby);
 }
 
 .statusNotRunning, .statusRunning, .statusStarting, .statusStandby {

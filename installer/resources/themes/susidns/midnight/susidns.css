@@ -1179,17 +1179,17 @@ input.export {
 
 .headline h4 {
   padding: 10px 10px 10px 35px;
-  background: #001 url(/themes/susidns/images/drive.png) 13px center no-repeat;
+  background: #001 url(/themes/susidns/images/drive.png) no-repeat 13px center;
 }
 
 p#filtered {
   padding: 15px 250px 15px 35px !important;
-  background: url(/themes/console/images/buttons/filter.png) 13px center no-repeat;
+  background: var(--filter) no-repeat 13px center / 28px;
 }
 
 p.book {
   padding: 10px 10px 10px 35px !important;
-  background: url(/themes/susidns/images/abook.png) 13px center no-repeat;
+  background: url(/themes/susidns/images/abook.png) no-repeat 13px center;
 }
 
 /* export hosts button adjustments */
