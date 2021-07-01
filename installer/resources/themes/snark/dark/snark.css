@@ -315,7 +315,7 @@ _:-ms-lang(x), .snarkMessages {
 
 #closelog, #expand, #shrink {
   position: sticky;
-  top: 0;
+  top: -2px;
   z-index: 10;
   float: right;
   font-size: 0 !important;
@@ -338,10 +338,25 @@ _:-ms-lang(x), .snarkMessages {
   border-right: 1px solid #252;
 }
 
-@media screen and (min-width: 1500px) {
-#closelog img, #expand img, #shrink img {
-  width: 13px;
+@media screen and (max-width: 1499px) {
+  #expand img, #shrink img {
+    padding-top: 6px !important;
+  }
 }
+
+@media screen and (min-width: 1500px) {
+  #closelog, #expand, #shrink {
+    margin-top: -4px !important;
+  }
+
+  .iframed #closelog, .iframed #expand, .iframed #shrink {
+    margin-top: -1px !important;
+  }
+
+  #closelog img, #expand img, #shrink img {
+    margin-top: -1px;
+    padding: 5px 6px;
+  }
 }
 
 .snarkMessages:focus #closelog img, .snarkMessages:focus #expand img, .snarkMessages:focus #shrink img {
