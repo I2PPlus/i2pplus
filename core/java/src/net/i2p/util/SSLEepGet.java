@@ -731,7 +731,7 @@ public class SSLEepGet extends EepGet {
                         _outputFile,
                         _notModified);
         } else {
-            throw new IOException("Disconnection on attempt " + (_currentAttempt + 1) + " after " + _bytesTransferred);
+            throw new IOException("Disconnected on attempt " + (_currentAttempt + 1) + " after " + _bytesTransferred + " bytes transferred");
         }
     }
 
