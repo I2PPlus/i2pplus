@@ -5,6 +5,7 @@
 
 @import url(/themes/fonts/DroidSans.css);
 @import url(/themes/console/light/optbox.css);
+@import url(../images/images.css);
 @import url(images/images.css);
 
 :root {
@@ -249,7 +250,7 @@ h3 {
 }
 
 .headline#configure h3 {
-  background: #fcfcff url(../images/configure.svg) no-repeat 7px calc(50% + 1px) / 18px;
+  background: #fcfcff var(--config) no-repeat 7px calc(50% + 1px) / 18px;
 }
 
 .headline#subscriptions h3, .headline#configure h3, .headline#addressbook h3, .headline h3 {
@@ -417,8 +418,7 @@ div.help {
 .help#helpsubs {
   padding: 0 15px 0 45px;
   font-size: 10pt;
-  background: url(/themes/console/images/svg/infohelp.svg) 10px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
-  background-size: 26px, 100%;
+  background: var(--infohelp) no-repeat 10px center / 26px, linear-gradient(135deg, #fafaff, #f8f8ff);
 }
 
 div.help h3, #add h3, #import h3 {
@@ -853,8 +853,7 @@ table.book {
 
 #host_list th.checkbox  {
   width: 16px;
-  background: url(../images/nuke.svg) no-repeat center center, linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
-  background-size: 14px;
+  background: var(--nuke) no-repeat center center / 14px, linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
 }
 
 .book th {
@@ -941,7 +940,7 @@ tr:hover .destaddress {
 }
 
 #host_list td.b32link a::after {
-  background: url(../images/link.svg) no-repeat center center;
+  background: var(--link) no-repeat center center;
 }
 
 #host_list td.helper a::after {
@@ -1356,76 +1355,58 @@ input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selec
 
 input.accept {
   padding: 5px 7px 5px 22px;
-  background: #eee url(/themes/console/images/buttons/yes.png) no-repeat 6px center;
-  background: url(/themes/console/images/buttons/yes.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
-  background-size: 14px, 100%;
+  background: var(--yes) no-repeat 6px center / 13px, linear-gradient(to bottom, #fff, #efefff);
 }
 
 input.accept:hover, input.accept:focus {
-  background: #fff url(/themes/console/images/buttons/yes.png) no-repeat 6px center;
-  background: url(/themes/console/images/buttons/yes.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
-  background-size: 14px, 100%;
+  background: var(--yes) no-repeat 6px center / 13px, linear-gradient(to bottom, #eee, #fff);
 }
 
 input.add {
-  padding: 5px 7px 5px 22px;
-  background: #eee url(/themes/console/images/buttons/add.png) no-repeat 6px center;
-  background: url(/themes/console/images/buttons/add.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
-  background-size: 14px, 100%;
+  padding: 5px 7px 5px 20px;
+  background: var(--add) no-repeat 6px center / 11px, linear-gradient(to bottom, #fff, #efefff);
 }
 
 input.add:hover, input.add:focus {
-  background: #fff url(/themes/console/images/buttons/add.png) no-repeat 6px center;
-  background: url(/themes/console/images/buttons/add.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
-  background-size: 14px, 100%;
+  background: var(--add) no-repeat 6px center / 11px, linear-gradient(to bottom, #eee, #fff);
 }
 
 input.cancel {
-  padding: 5px 7px 5px 22px;
-  background: #eee url(/themes/console/images/buttons/no.png) no-repeat 6px center;
-  background: url(/themes/console/images/buttons/no.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
-  background-size: 14px, 100%;
+  padding: 5px 7px 5px 19px;
+  background: var(--no) no-repeat 6px center / 10px, linear-gradient(to bottom, #fff, #efefff);
 }
 
 input.cancel:hover, input.cancel:focus {
-  background: #fff url(/themes/console/images/buttons/no.png) no-repeat 6px center;
-  background: url(/themes/console/images/buttons/no.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
-  background-size: 14px, 100%;
+  background: var(--no) no-repeat 6px center / 10px, linear-gradient(to bottom, #eee, #fff);
 }
 
 input.delete {
-  padding: 5px 7px 5px 22px;
-  background: #eee url(/../images/nuke.svg) no-repeat 6px center;
-  background: url(../images/nuke.svg) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
+  padding: 5px 7px 5px 23px;
+  background: var(--nuke) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
   background-size: 13px, 100%;
 }
 
 input.delete:hover, input.delete:focus {
-  background: #fff url(../images/nuke.svg) no-repeat 6px center;
-  background: url(../images/nuke.svg) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
+  background: var(--nuke) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
   background-size: 13px, 100%;
 }
 
 input.export {
   margin-top: 5px;
   padding: 5px 7px 5px 22px;
-  background: #eee url(/themes/console/images/buttons/go.png) no-repeat 6px center;
   background: url(/themes/console/images/buttons/go.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
   background-size: 13px, 100%;
 }
 
 input.export:hover, input.export:focus {
-  background: #fff url(/themes/console/images/buttons/go.png) no-repeat 6px center;
   background: url(/themes/console/images/buttons/go.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
   background-size: 14px, 100%;
 }
 
 input.download, input.update {
   margin-top: 5px;
-  padding: 5px 7px 5px 22px;
-  background: #eee url(/themes/console/images/buttons/download.png) no-repeat 6px center;
-  background: url(/themes/console/images/buttons/download.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
-  background-size: 14px, 100%;
+  padding: 5px 7px 5px 21px;
+  background: var(--download) no-repeat 6px center / 13px, linear-gradient(to bottom, #fff, #efefff);
 }
 
 input.update {
@@ -1434,21 +1415,16 @@ input.update {
 
 input.download:hover, input.download:focus,
 input.update:hover, input.update:focus {
-  background: #fff url(/themes/console/images/buttons/download.png) no-repeat 6px center;
-  background: url(/themes/console/images/buttons/download.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
-  background-size: 14px, 100%;
+  background: var(--download) no-repeat 6px center / 13px, linear-gradient(to bottom, #eee, #fff);
 }
 
 input.reload {
   padding: 5px 7px 5px 22px;
-  background: #eee url(/themes/console/images/buttons/update.png) no-repeat 6px center;
-  background: url(/themes/console/images/buttons/update.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
-  background-size: 14px, 100%;
+  background: var(--refresh) no-repeat 6px center / 14px, linear-gradient(to bottom, #fff, #efefff);
 }
 
 input.reload:hover, input.reload:focus {
-  background: #fff url(/themes/console/images/buttons/update_hover.png) no-repeat 6px center;
-  background: url(/themes/console/images/buttons/update_hover.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
+  background: var(--refresh_hover) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
   background-size: 14px, 100%;
 }
 
@@ -1457,8 +1433,8 @@ input.search[type=submit] {
   width: 44px;
   color: transparent;
   text-shadow: none;
-  background: url(/themes/console/images/svg/search.svg) no-repeat center center, linear-gradient(to bottom, #fff, #efefff);
-  background-size: 14px, 100%;
+  background: var(--search) no-repeat center center / 14px, linear-gradient(to bottom, #fff, #efefff);
+  background-blend-mode: luminosity;
 }
 
 @media screen and (max-width: 1499px) {
@@ -1468,33 +1444,29 @@ input.search[type=submit] {
 }
 
 input.search[type=submit]:hover, input.search[type=submit]:focus {
-  background: url(/themes/console/images/svg/search.svg) no-repeat center center, linear-gradient(to bottom, #eee, #fff);
-  background-size: 14px, 100%;
+  background: var(--search) no-repeat center center / 14px, linear-gradient(to bottom, #eee, #fff);
+  background-blend-mode: normal;
 }
 
 input.search[type=text] {
   margin: 1px 0 0;
   padding: 5px 5px 5px 26px !important;
-  background: #fbfbff url(/themes/console/images/svg/search.svg) no-repeat 6px center;
-  background-size: 14px !important;
+  background: #fbfbff var(--search) no-repeat 6px center / 14px;
   background-blend-mode: luminosity;
 }
 
 input.search[type=text]:focus {
-  background: #fff url(/themes/console/images/svg/search.svg) no-repeat 6px center !important;
-  background-size: 14px !important;
+  background: #fff var(--search) no-repeat 6px center / 14px !important;
   background-blend-mode: normal;
 }
 
 #visualid .fakebutton {
   padding: 6px 8px 6px 22px;
-  background: #eee url(/themes/console/images/buttons/go.png) no-repeat 6px center;
   background: url(/themes/console/images/buttons/go.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
   background-size: 14px, 100%;
 }
 
 #visualid .fakebutton:hover, #visualid .fakebutton:focus {
-  background: #fff url(/themes/console/images/buttons/go.png) no-repeat 6px center;
   background: url(/themes/console/images/buttons/go.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
   background-size: 14px, 100%;
 }
