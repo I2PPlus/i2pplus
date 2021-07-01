@@ -2,6 +2,7 @@
 /* Author: dr|z3d */
 
 @import url(/themes/fonts/DroidSans.css);
+@import url(../images/images.css);
 @import url(images/images.css);
 
 :root {
@@ -243,14 +244,12 @@ td.search > * {
 #search input[type=text] {
   margin-left: 5px;
   padding: 6px 6px 6px 30px !important;
-  background: url(/themes/console/images/svg/search.svg) 8px center no-repeat, linear-gradient(to bottom, #000 0%, #000019 100%) !important;
-  background-size: 14px, 100% !important;
+  background: var(--search) no-repeat 8px center / 14px, linear-gradient(to bottom, #000 0%, #000019 100%) !important;
   background-blend-mode: luminosity;
 }
 
 #search input[type=text]:focus {
-  background: #000 url(/themes/console/images/svg/search.svg) 8px center no-repeat !important;
-  background-size: 14px !important;
+  background: #000 var(--search) no-repeat 8px center / 14px !important;
   background-blend-mode: normal;
 }
 
@@ -347,8 +346,7 @@ p {
 #messages + p, p.book {
   padding: 20px 20px 20px 42px !important;
   border: 1px solid #26235c;
-  background: #001 url(images/addressbook.svg) 10px center no-repeat;
-  background-size: 24px;
+  background: #001 var(--addressbook) no-repeat 10px center / 24px;
 }
 
 #messages {
@@ -799,7 +797,7 @@ div#book, #emptybook {
 #book th:last-child {
   padding: 0 !important;
   font-size: 0;
-  background: url(../images/nuke.svg) no-repeat center center / 14px, linear-gradient(to bottom, #080818, #000008 75%) !important;
+  background: var(--nuke) no-repeat center center / 14px, linear-gradient(to bottom, #080818, #000008 75%) !important;
 }
 
 #book td {
@@ -1154,12 +1152,12 @@ input.export {
   letter-spacing: .08em;
   text-transform: uppercase;
   font-size: 11pt;
-  background: url(images/addressbook.svg) 10px center no-repeat, var(--title) !important;
+  background: var(--addressbook) no-repeat 10px center, var(--title) !important;
   background-size: 18px, 4px 100%, 100% !important;
 }
 
 .headline#subscriptions h3 {
-  background: url(/themes/susidns/images/subs_24.png) 10px center no-repeat, var(--title) !important;
+  background: url(/themes/susidns/images/subs_24.png) no-repeat 10px center, var(--title) !important;
   background-size: 18px, 4px 100%, 100% !important;
 }
 
@@ -1200,8 +1198,7 @@ p.book {
 
 #messages + p, p.book {
   border: 1px solid #26235c;
-  background: #000 url(images/addressbook.svg) 5px center no-repeat;
-  background-size: 24px;
+  background: #000 var(--addressbook) no-repeat 5px center / 24px;
 }
 
 /* host details page */
@@ -1389,7 +1386,7 @@ td.names:hover, #host_list td.b32link:hover, #host_list td.helper:hover, #host_l
   height: 16px;
   display: inline-block;
   text-align: center;
-  background: url(../images/link.svg) no-repeat center center;
+  background: var(--link) no-repeat center center;
   cursor: pointer;
   content: "";
 }
