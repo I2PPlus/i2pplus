@@ -6,6 +6,7 @@
 @import url(/themes/console/dark/chromescroll.css);
 @import url(/themes/console/images/images.css);
 @import url(/themes/console/dark/images/images.css);
+@import url(../images/images.css);
 @import url(images/images.css);
 
 :root {
@@ -832,8 +833,7 @@ div#empty {
 }
 
 #book th:last-child {
-  background: url(../images/nuke.svg) no-repeat center center !important;
-  background-size: 15px 15px !important;
+  background: var(--nuke) no-repeat center center / 15px !important;
 }
 
 #book tr:hover td {
@@ -1289,8 +1289,7 @@ p.book {
   height: 16px;
   display: inline-block;
   text-align: center;
-  background: url(/themes/console/images/svg/link.svg) no-repeat center center;
-  background-size: 16px;
+  background: var(--link) no-repeat center center / 16px;
   content: "";
   cursor: pointer;
 }

@@ -1,7 +1,13 @@
 /* SusiDNS theme "Classic" */
 /* Author: dr|z3d */
 
-@import url("/themes/fonts/DroidSans.css");
+@import url(/themes/fonts/DroidSans.css);
+@import url(../images/images.css);
+
+:root {
+  --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
+  --monospaced: Droid Sans Mono, Andale Mono, DejaVu Sans Mono, Lucida Console, monospace;
+}
 
 html, body {
   min-height: 100%;
@@ -11,15 +17,15 @@ html, body {
 body {
   min-width: 700px;
   color: #41444d;
-  font: 9pt/130% Droid Sans, Open Sans, Noto Sans, Ubuntu, Bitstream Vera Sans, Lucida Grande, DejaVu Sans, Segoe UI, Verdana, Helvetica, sans-serif;
+  font: 9pt/130% var(--bodyfont);
   background: #eef;
   background: #eef url(/themes/console/classic/images/bg0.png);
   background-size: 120px 120px;
 }
 
 body.iframed {
-  background: transparent !important;
   margin: 0;
+  background: transparent !important;
 }
 
 *, *:active {
@@ -27,9 +33,6 @@ body.iframed {
 }
 
 #navi, .buttons, #buttons, #host_list tr:first-child, #host_list img, #host_list td:nth-child(n+2) a {
-  -ms-user-select: none;
-  -moz-user-select: none;
-  -webkit-user-select: none;
   user-select: none;
 }
 
@@ -312,8 +315,7 @@ p.help {
   margin: 0;
   padding: 15px 15px 15px 45px;
   line-height: 120%;
-  background: #ffe url(/themes/console/images/svg/infohelp.svg) 8px center no-repeat;
-  background-size: 32px 32px;
+  background: #ffe var(--infohelp) no-repeat 8px center / 32px;
 }
 
 .iframed p.help {
@@ -322,9 +324,8 @@ p.help {
 }
 
 p.book, #messages + p {
-  background: url(/themes/console/images/svg/addressbook.svg) center left no-repeat;
-  background-size: 32px 32px;
   padding: 10px 10px 10px 38px;
+  background: var(--addressbook) no-repeat center left / 32px;
 }
 
 p.footer {
@@ -365,9 +366,8 @@ div#filter {
   font-size: 10pt;
   color: #575779;
   border: 1px solid #aaafce;
-  border-radius: 2px;
+  border-radius: 1px;
   box-shadow: inset 0 0 0 1px #fff;
-  background: #fff;
   background: linear-gradient(to bottom, #fff, #eef);
 }
 
@@ -432,8 +432,7 @@ div#filter {
 #search input[type=text] {
   width: 200px;
   padding: 5px 5px 5px 25px;
-  background: #fff url(/themes/console/images/svg/search.svg) 5px center no-repeat;
-  background-size: 14px;
+  background: #fff var(--search) no-repeat 5px center / 15px;
 }
 
 #messages:empty {
@@ -558,7 +557,7 @@ p.buttons {
 }
 
 .fakebutton, input, select {
-  font: 9pt/130% "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Bitstream Vera Sans", "Lucida Grande", "DejaVu Sans", "Segoe UI", Verdana, Helvetica, sans-serif;
+  font: 9pt/130% var(--bodyfont);
 }
 
 .fakebutton, input[type=submit], input[type="reset"], input[type=checkbox], input[type=radio], select {
@@ -570,7 +569,7 @@ input[type=text], input[type=password], textarea {
   padding: 6px 10px;
   min-width: 160px;
   vertical-align: middle;
-  font: 9pt/130% "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Bitstream Vera Sans", "Lucida Grande", "DejaVu Sans", "Segoe UI", Verdana, Helvetica, sans-serif;
+  font: 9pt/130% var(--bodyfont);
   color: #222;
   border: 1px solid #aaafce;
   border-radius: 2px;
@@ -580,7 +579,6 @@ input[type=text], input[type=password], textarea {
 
 input[type=text]:focus, input[type=password]:focus, textarea:focus {
   color: #000;
-  box-shadow: inset 0 0 0 1px #89f;
   box-shadow: inset 0 0 0 1px #89f, 0 0 1px rgba(136, 153, 255, .4);
 }
 
@@ -593,6 +591,32 @@ input[type=submit], input[type="reset"] {
   min-width: 80px;
 }
 
+input[type=file]::file-selector-button {
+  margin: 3px 3px 3px 0;
+  padding: 6px 10px;
+  font: 9pt/130% var(--bodyfont);
+  color: #222;
+  border: 1px solid #aaafce;
+  border-radius: 2px;
+  box-shadow: inset 1px 1px 1px #ddd;
+  background: #fff;
+}
+
+input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
+  color: #222;
+  border: 1px solid #aaafce;
+  background: #fff;
+  background: linear-gradient(to bottom, #ddd, #fff);
+  filter: drop-shadow(0 0 1px #89f);
+  cursor: pointer;
+}
+
+input[type=file]:active::file-selector-button {
+  color: #333;
+  border: 1px solid #bbb;
+  box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 3px #999;
+}
+
 textarea {
   margin: 0 auto 10px;
   width: 100%;
@@ -603,7 +627,7 @@ textarea {
 td.destinations textarea, td.destinations textarea:focus {
   margin: 0 0 0 5px !important;
   padding: 0 !important;
-  font: normal 8pt "Noto Mono", "Droid Sans Mono", "Andale Mono", "DejaVu Sans Mono", "Lucida Console", monospace;
+  font: normal 8pt var(--monospaced);
   resize: none;
   border: none;
   border-left: 1px solid #888 !important;
@@ -616,7 +640,7 @@ td.destinations textarea, td.destinations textarea:focus {
 #subsLog pre {
   padding: 8px 10px;
   white-space: pre-wrap;
-  font: normal 8pt "Noto Mono", "Droid Sans Mono", "Andale Mono", "DejaVu Sans Mono", "Lucida Console", monospace;
+  font: normal 8pt var(--monospaced);
 }
 
 .fakebutton, input[type=submit], input[type="reset"] {
@@ -626,7 +650,6 @@ td.destinations textarea, td.destinations textarea:focus {
   border-radius: 2px;
   border: 1px solid #aaafce;
   box-shadow: inset 0 0 0 1px #fff, 0 0 1px 0 #ddd;
-  background: #eee;
   background: linear-gradient(to bottom, #fff, #eef);
 }
 
@@ -638,7 +661,6 @@ input.update {
 .fakebutton:focus, input[type=submit]:focus, input[type="reset"]:focus {
   color: #222;
   border: 1px solid #aaafce;
-  background: #fff;
   background: linear-gradient(to bottom, #ddd, #fff);
   filter: drop-shadow(0 0 1px #89f);
 }
@@ -646,7 +668,6 @@ input.update {
 .fakebutton:active, input[type=submit]:active, input[type="reset"]:active {
   color: #333;
   border: 1px solid #bbb;
-  box-shadow: inset 3px 3px 3px #999;
   box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 3px #999;
 }
 
@@ -694,12 +715,17 @@ textarea[name="config"], textarea[name="content"] {
 /* topnav */
 
 #navi {
+}
+
+#navi {
   padding: 3px !important;
+  display: flex;
   text-align: center !important;
+  flex-flow: wrap;
+  justify-content: center;
 }
 
 #navi a, #navi a:visited {
-  border: 1px solid #6b78bf;
   border: 1px solid #aaafce;
   border-radius: 2px;
   margin: 3px 0 !important;
@@ -709,56 +735,53 @@ textarea[name="config"], textarea[name="content"] {
   color: #575779;
 }
 
+#navi a {
+  margin: -4px -3px !important;
+  padding: 5px 12px 4px !important;
+  background: linear-gradient(to bottom, #fff 50%, #eaebff 50%) !important;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  flex-grow: 1;
+  border-radius: 0;
+  position: relative;
+  z-index: 1;
+}
+
+#navi a:first-child {
+  border-left: none;
+}
+
+#navi a:last-child {
+  border-right: none;
+}
+
+#navi a.selected {
+  z-index: 10;
+}
+
+#navi a.selected:not(.details), #navi a:active {
+  box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 3px #aaabcc !important;
+  background: linear-gradient(to bottom, #e8e9ff, #fafbff) !important;
+}
+
+#navi a.selected.details::after {
+  content: "*";
+}
+
 #navi a:hover, #navi a:focus {
-  border: 1px solid #f60;
+  z-index: 10;
   color: #f60 !important;
+  border-color: 1px solid #f60;
+}
+
+.iframed #navi a:hover, .iframed #navi a:focus {
+  z-index: 1;
+  border-color: #aaafce;
 }
 
 #navi a:active {
+  color: #778 !important;
   border: 1px solid #f90;
-  box-shadow: inset 2px 2px 2px #555;
-  background-blend-mode: luminosity;
-  color: #777 !important;
-}
-
-#navi a.abook {
-  background: #fff url(/themes/susidns/images/abook.png) 5px center no-repeat;
-  background: url(/themes/susidns/images/abook.png) 5px center no-repeat, linear-gradient(to bottom, #fff, #eef);
-  padding: 3px 5px 3px 24px;
-}
-
-#navi a.abook:hover {
-  background: url(/themes/susidns/images/abook.png) 5px center no-repeat, linear-gradient(to bottom, #fff 50%, #ffd 50%);
-}
-
-#navi a#subs {
-  background: #fff url(/themes/susidns/images/subs.png) 5px center no-repeat;
-  background: url(/themes/susidns/images/subs.png) 5px center no-repeat, linear-gradient(to bottom, #fff, #eef);
-  padding: 3px 5px 3px 24px;
-}
-
-#navi a#subs:hover {
-  background: url(/themes/susidns/images/subs.png) 5px center no-repeat, linear-gradient(to bottom, #fff 50%, #ffd 50%);
-}
-
-#navi a#configlink {
-  background: #fff url(/themes/console/images/buttons/configure.png) 5px center no-repeat;
-  background: url(/themes/console/images/buttons/configure.png) 5px center no-repeat, linear-gradient(to bottom, #fff, #eef);
-  padding: 3px 5px 3px 24px;
-}
-
-#navi a#configlink:hover {
-  background: url(/themes/console/images/buttons/configure_hover.png) 5px center no-repeat, linear-gradient(to bottom, #fff 50%, #ffd 50%);
-}
-
-#navi a#overview {
-  background: #fff url(/themes/susidns/images/overview.png) 5px center no-repeat;
-  background: url(/themes/susidns/images/overview.png) 5px center no-repeat, linear-gradient(to bottom, #fff, #eef);
-  padding: 3px 5px 3px 24px;
-}
-
-#navi a#overview:hover {
-  background: url(/themes/susidns/images/overview.png) 5px center no-repeat, linear-gradient(to bottom, #fff 50%, #ffd 50%);
 }
 
 .headline + #book > table {
@@ -788,20 +811,15 @@ textarea[name="config"], textarea[name="content"] {
   letter-spacing: .08em;
   text-transform: uppercase;
   font-size: 12pt;
-  background: url(/themes/console/images/svg/addressbook.svg) 10px center no-repeat;
-  background: url(/themes/console/images/svg/addressbook.svg) 10px center no-repeat, linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
-  background-size: 22px 22px, 100% 100%;
+  background: var(--addressbook) no-repeat 10px center / 22px, linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
 }
 
 .headline#subscriptions h3 {
-  background: url(/themes/susidns/images/subs_24.png) 10px center no-repeat;
-  background: url(/themes/susidns/images/subs_24.png) 10px center no-repeat, linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
+  background: url(/themes/susidns/images/subs_24.png) no-repeat 10px center, linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
 }
 
 .headline#configure h3 {
-  background: url(/themes/console/images/svg/configure.svg) 10px center no-repeat;
-  background: url(/themes/console/images/svg/configure.svg) 10px center no-repeat, linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
-  background-size: 22px 22px, 100% 100%;
+  background: var(--config) no-repeat 10px center / 22px, linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
 }
 
 .headline h4 {
@@ -860,7 +878,7 @@ p.book {
 }
 
 #host_details .destaddress {
-  font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace !important;
+  font-family: var(--monospaced) !important;
   word-break: break-all !important;
   white-space: normal !important;
 }
@@ -899,6 +917,14 @@ p.book {
 
 #host_list td {
   border: 1px solid #ced1e3;
+}
+
+#host_list td:first-child {
+  border-left: 1px solid #aaafce;
+}
+
+#host_list td:last-child {
+  border-right: 1px solid #aaafce;
 }
 
 #host_list .info {
@@ -986,7 +1012,7 @@ p.book {
   padding: 3px !important;
   white-space: nowrap;
   overflow: auto !important;
-  font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace !important;
+  font-family: var(--monospaced) !important;
   font-weight: 400;
   color: #555;
   -webkit-user-select: all;
@@ -1240,8 +1266,7 @@ input#exporthosts {
   min-width: 0;
   display: inline-block;
   font-size: 0 !important;
-  background: url(images/download.svg) center center no-repeat, linear-gradient(to bottom, #fff, #eef);
-  background-size: 16px 16px, 100% 100%;
+  background: var(--download) no-repeat center center / 16px, linear-gradient(to bottom, #fff, #eef);
 }
 
 #exporthosts:disabled {
@@ -1267,53 +1292,6 @@ input#exporthosts {
 input[disabled] {
   opacity: .6;
   pointer-events: none;
-}
-
-#navi {
-  display: flex;
-  flex-flow: wrap;
-  justify-content: center;
-}
-
-#navi a {
-  margin: -4px -3px !important;
-  padding: 5px 12px 4px !important;
-  background: linear-gradient(to bottom, #fff 50%, #eaebff 50%) !important;
-  text-transform: uppercase;
-  letter-spacing: .08em;
-  flex-grow: 1;
-  border-radius: 0;
-  position: relative;
-  z-index: 1;
-}
-
-#navi a:first-child {
-  border-left: none;
-}
-
-#navi a:last-child {
-  border-right: none;
-}
-
-#navi a.selected {
-  z-index: 10;
-}
-
-#navi a.selected:not(.details) {
-  box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 3px #aaabcc !important;
-  background: linear-gradient(to bottom, #fafbff 50%, #e8e9ff 50%) !important;
-}
-
-#navi a.selected.details::after {
-  content: "*";
-}
-
-#navi a:hover, #navi a:focus {
-  border-color: #aaafce;
-}
-
-#navi a:active {
-  box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 3px #aaa;
 }
 
 #paginate {
