@@ -88,11 +88,11 @@
 }
 
 #wizardpage .yes {
-  background: url(/themes/console/images/buttons/yes.png) center center no-repeat;
+  background: var(--yes) no-repeat center center / 12px;
 }
 
 #wizardpage .no {
-  background: url(/themes/console/images/buttons/no.png) center center no-repeat;
+  background: var(--no) no-repeat center center / 11px;
 }
 
 #wizardpage #messages {
