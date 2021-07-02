@@ -1390,23 +1390,23 @@ input[disabled] {
 }
 
 @media screen and (max-width: 1200px) {
-.iframed #prev a, .iframed #next a {
-  padding: 11px 10px !important;
-}
+  .iframed #prev a, .iframed #next a {
+    padding: 11px 10px !important;
+  }
 
-.iframed #prev::after, .iframed #next::after {
-  top: calc(50% - 4px);
-}
+  .iframed #prev::after, .iframed #next::after {
+    top: calc(50% - 4px);
+  }
 
-.headline h3 {
-  padding-left: 36px;
-  font-size: 10pt;
-  background-size: 20px 20px;
-}
+  .headline h3 {
+    padding-left: 36px;
+    font-size: 10pt;
+    background-size: 20px, 100%;
+  }
 
-#filtered, #results {
-  font-size: 9.5pt;
-}
+  #filtered, #results {
+    font-size: 9.5pt;
+  }
 }
 
 div#messages {
