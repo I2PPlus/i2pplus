@@ -1241,7 +1241,7 @@ div#book, #emptybook {
 
 p.book {
   padding: 5px 5px 5px 24px;
-  background: url(/themes/susidns/images/abook.png) 2px center no-repeat;
+  background: var(--addressbook) no-repeat 2px center / 16px;
 }
 
 #buttons {

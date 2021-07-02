@@ -366,9 +366,8 @@ div#filter {
   font-size: 10pt;
   color: #575779;
   border: 1px solid #aaafce;
-  border-radius: 2px;
+  border-radius: 1px;
   box-shadow: inset 0 0 0 1px #fff;
-  background: #fff;
   background: linear-gradient(to bottom, #fff, #eef);
 }
 
@@ -716,12 +715,17 @@ textarea[name="config"], textarea[name="content"] {
 /* topnav */
 
 #navi {
+}
+
+#navi {
   padding: 3px !important;
+  display: flex;
   text-align: center !important;
+  flex-flow: wrap;
+  justify-content: center;
 }
 
 #navi a, #navi a:visited {
-  border: 1px solid #6b78bf;
   border: 1px solid #aaafce;
   border-radius: 2px;
   margin: 3px 0 !important;
@@ -731,56 +735,53 @@ textarea[name="config"], textarea[name="content"] {
   color: #575779;
 }
 
+#navi a {
+  margin: -4px -3px !important;
+  padding: 5px 12px 4px !important;
+  background: linear-gradient(to bottom, #fff 50%, #eaebff 50%) !important;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  flex-grow: 1;
+  border-radius: 0;
+  position: relative;
+  z-index: 1;
+}
+
+#navi a:first-child {
+  border-left: none;
+}
+
+#navi a:last-child {
+  border-right: none;
+}
+
+#navi a.selected {
+  z-index: 10;
+}
+
+#navi a.selected:not(.details), #navi a:active {
+  box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 3px #aaabcc !important;
+  background: linear-gradient(to bottom, #e8e9ff, #fafbff) !important;
+}
+
+#navi a.selected.details::after {
+  content: "*";
+}
+
 #navi a:hover, #navi a:focus {
-  border: 1px solid #f60;
+  z-index: 10;
   color: #f60 !important;
+  border-color: 1px solid #f60;
+}
+
+.iframed #navi a:hover, .iframed #navi a:focus {
+  z-index: 1;
+  border-color: #aaafce;
 }
 
 #navi a:active {
+  color: #778 !important;
   border: 1px solid #f90;
-  box-shadow: inset 2px 2px 2px #555;
-  background-blend-mode: luminosity;
-  color: #777 !important;
-}
-
-#navi a.abook {
-  background: #fff url(/themes/susidns/images/abook.png) no-repeat 5px center;
-  background: url(/themes/susidns/images/abook.png) no-repeat 5px center, linear-gradient(to bottom, #fff, #eef);
-  padding: 3px 5px 3px 24px;
-}
-
-#navi a.abook:hover {
-  background: url(/themes/susidns/images/abook.png) no-repeat 5px center, linear-gradient(to bottom, #fff 50%, #ffd 50%);
-}
-
-#navi a#subs {
-  background: #fff url(/themes/susidns/images/subs.png) no-repeat 5px center;
-  background: url(/themes/susidns/images/subs.png) no-repeat 5px center, linear-gradient(to bottom, #fff, #eef);
-  padding: 3px 5px 3px 24px;
-}
-
-#navi a#subs:hover {
-  background: url(/themes/susidns/images/subs.png) no-repeat 5px center, linear-gradient(to bottom, #fff 50%, #ffd 50%);
-}
-
-#navi a#configlink {
-  background: #fff url(/themes/console/images/buttons/configure.png) no-repeat 5px center;
-  background: url(/themes/console/images/buttons/configure.png) no-repeat 5px center, linear-gradient(to bottom, #fff, #eef);
-  padding: 3px 5px 3px 24px;
-}
-
-#navi a#configlink:hover {
-  background: url(/themes/console/images/buttons/configure_hover.png) no-repeat 5px center, linear-gradient(to bottom, #fff 50%, #ffd 50%);
-}
-
-#navi a#overview {
-  background: #fff url(/themes/susidns/images/overview.png) no-repeat 5px center;
-  background: url(/themes/susidns/images/overview.png) no-repeat 5px center, linear-gradient(to bottom, #fff, #eef);
-  padding: 3px 5px 3px 24px;
-}
-
-#navi a#overview:hover {
-  background: url(/themes/susidns/images/overview.png) no-repeat 5px center, linear-gradient(to bottom, #fff 50%, #ffd 50%);
 }
 
 .headline + #book > table {
@@ -1291,53 +1292,6 @@ input#exporthosts {
 input[disabled] {
   opacity: .6;
   pointer-events: none;
-}
-
-#navi {
-  display: flex;
-  flex-flow: wrap;
-  justify-content: center;
-}
-
-#navi a {
-  margin: -4px -3px !important;
-  padding: 5px 12px 4px !important;
-  background: linear-gradient(to bottom, #fff 50%, #eaebff 50%) !important;
-  text-transform: uppercase;
-  letter-spacing: .08em;
-  flex-grow: 1;
-  border-radius: 0;
-  position: relative;
-  z-index: 1;
-}
-
-#navi a:first-child {
-  border-left: none;
-}
-
-#navi a:last-child {
-  border-right: none;
-}
-
-#navi a.selected {
-  z-index: 10;
-}
-
-#navi a.selected:not(.details) {
-  box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 3px #aaabcc !important;
-  background: linear-gradient(to bottom, #fafbff 50%, #e8e9ff 50%) !important;
-}
-
-#navi a.selected.details::after {
-  content: "*";
-}
-
-#navi a:hover, #navi a:focus {
-  border-color: #aaafce;
-}
-
-#navi a:active {
-  box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 3px #aaa;
 }
 
 #paginate {

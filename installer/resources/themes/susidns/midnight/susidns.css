@@ -1187,7 +1187,7 @@ p#filtered {
 
 p.book {
   padding: 10px 10px 10px 35px !important;
-  background: url(/themes/susidns/images/abook.png) no-repeat 13px center;
+  background: var(--addressbook) no-repeat 13px center / 16px;
 }
 
 /* export hosts button adjustments */
