@@ -3033,13 +3033,9 @@ div.widepanel h3 {
 
 /* graphs */
 
-@keyframes graphfadein {
-from {
-  opacity: 0;
-}
-to {
-  opacity: 1;
-}
+@keyframes fade {
+  from {opacity: 0}
+  to {opacity: 1}
 }
 
 #graphdisplay + form {
@@ -3050,7 +3046,7 @@ to {
 
 #graphdisplay:hover + form, #graphdisplay + form:hover {
   display: block;
-  animation: ease .5s .2s graphfadein forwards;
+  animation: ease .5s .2s fade forwards;
 }
 
 #graphs .messages {

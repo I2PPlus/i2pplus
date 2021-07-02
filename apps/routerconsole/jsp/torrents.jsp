@@ -65,7 +65,7 @@
   });
   window.addEventListener("pageshow", progressx.hide());
 </script>
-<style type="text/css">iframe{opacity:1}</style>
+<style type="text/css">iframe{opacity:1} #torrents::before{animation:ease fade 1s 2s forwards reverse, linear reloader 1s forwards}</style>
 <%@include file="summaryajax.jsi" %>
 </body>
 </html>
