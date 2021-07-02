@@ -13,7 +13,7 @@
 <head>
 <meta charset="utf-8">
 <title><%=intl._t("Tunnel Manager")%></title>
-<link href="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%" rel="preload" as="script"> 
+<link href="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>" rel="preload" as="script"> 
 <link href="<%=indexBean.getTheme()%>../images/i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css"> 
 <link href="<%=indexBean.getTheme()%>i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css"> 
 <link href="<%=indexBean.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css"> 
