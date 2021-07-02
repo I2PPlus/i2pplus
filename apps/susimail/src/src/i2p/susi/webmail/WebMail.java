@@ -2327,34 +2327,36 @@ public class WebMail extends HttpServlet
                     "<head>\n" +
                     "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n" +
                     "<title>" + _t("I2PMail") + " - " + subtitle + "</title>\n" +
-                    "<link rel=\"shortcut icon\" type=\"image/x-icon\" href=\"/themes/susimail/images/favicon.ico?v=" + CoreVersion.VERSION + "\">\n" +
+                    "<link rel=\"preload\" as=\"style\" href=\"" + sessionObject.themePath + "../images/images.css?" + CoreVersion.VERSION + "\">\n" +
+                    "<link rel=\"preload\" as=\"style\" href=\"" + sessionObject.themePath + "images/images.css?" + CoreVersion.VERSION + "\">\n" +
                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + sessionObject.themePath + "susimail.css?" + CoreVersion.VERSION + "\">\n" +
-                    "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + sessionObject.themePath + "override.css?" + CoreVersion.VERSION + "\">");
+                    "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + sessionObject.themePath + "override.css?" + CoreVersion.VERSION + "\">\n" + 
+                    "<link rel=\"shortcut icon\" type=\"image/x-icon\" href=\"/themes/susimail/images/favicon.ico?v=" + CoreVersion.VERSION + "\">\n");
                 if (sessionObject.isMobile) {
                     out.println("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes\" />\n" +
                         "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + sessionObject.themePath + "mobile.css?" + CoreVersion.VERSION + "\" />");
                 }
                 if(state == State.LIST)
-                    out.println("<link rel=\"stylesheet\" href=\"/susimail/css/print.css?" + CoreVersion.VERSION + "\" type=\"text/css\" media=\"print\" />");
+                    out.println("<link rel=\"stylesheet\" href=\"/susimail/css/print.css?" + CoreVersion.VERSION + "\" type=\"text/css\" media=\"print\" />\n");
                 if (state == State.NEW || state == State.CONFIG) {
                     // TODO cancel if to and body are empty
-                    out.println("<script src=\"/susimail/js/compose.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>");
+                    out.println("<script src=\"/susimail/js/compose.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
                 } else if (state == State.LIST) {
-                    out.println("<script src=\"/susimail/js/folder.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>");
-                    out.println("<script src=\"/js/scrollTo.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>");
+                    out.println("<script src=\"/susimail/js/folder.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
+                    out.println("<script src=\"/js/scrollTo.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
                 } else if (state == State.LOADING) {
                     // TODO JS?
-                    out.println("<noscript><meta http-equiv=\"refresh\" content=\"5;url=" + myself + "\"></noscript>");
+                    out.println("<noscript><meta http-equiv=\"refresh\" content=\"5;url=" + myself + "\"></noscript>\n");
                 }
                 // setup noscript style so we can hide js buttons when js is disabled
-                out.println("<noscript><style type=\"text/css\">.script {display: none !important;}</style></noscript>");
-                out.println("<script type=\"text/javascript\" src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" + CoreVersion.VERSION + "\"></script>");
+                out.println("<noscript><style type=\"text/css\">.script {display: none !important;}</style></noscript>\n");
+                out.println("<script type=\"text/javascript\" src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" + CoreVersion.VERSION + "\"></script>\n");
 //                out.println("<script src=\"/susimail/js/notifications.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>");
                 out.println("</head>\n");
                 if (state == State.LIST)
                     out.print("<body id=\"main\">\n");
                 else
-                    out.print("<body>");
+                    out.print("<body>\n");
                 String nonce = state == State.AUTH ? LOGIN_NONCE : Long.toString(ctx.random().nextLong());
                 sessionObject.addNonce(nonce);
                 out.println(

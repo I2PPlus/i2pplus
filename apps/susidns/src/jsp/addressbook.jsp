@@ -56,6 +56,8 @@
 <head>
 <meta charset="utf-8">
 <title>${book.book} <%=intl._t("address book")%> - susidns</title>
+<link rel="preload" href="<%=book.getTheme()%>../images/images.css?<%=net.i2p.CoreVersion.VERSION%>" as="style">
+<link rel="preload" href="<%=book.getTheme()%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" as="style">
 <link rel="stylesheet" type="text/css" href="<%=book.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
 <link rel="stylesheet" type="text/css" href="<%=book.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>">
 <script type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
