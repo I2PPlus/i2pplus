@@ -433,7 +433,7 @@ h4 {
   font-size: 9pt;
   border: 1px solid #242;
   box-shadow: var(--highlight), inset 0 0 2px 1px #030 !important;
-  background: url(/themes/susidns/images/drive.png) 9px center no-repeat, linear-gradient(to right, #000, #000800) !important;
+  background: var(--files) no-repeat 9px center / 16px, linear-gradient(to right, #000, #000800) !important;
   display: none; /* largely useless information */
 }
 

@@ -6,20 +6,8 @@
 @import url(/themes/fonts/DroidSans.css);
 @import url(/themes/console/dark/optbox.css);
 @import url(/themes/console/dark/chromescroll.css);
-
-:root {
-  --camo: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cfilter id='a'%3E%3CfeTurbulence baseFrequency='.2' numOctaves='4' seed='7' stitchTiles='stitch' type='fractalNoise'/%3E%3CfeTile/%3E%3CfeComponentTransfer%3E%3CfeFuncR slope='0.9469288793103452' tableValues='0 0 0 0 1 1' type='discrete'/%3E%3CfeFuncG slope='1.1477696210488517' tableValues='0 0 0 1 1' type='discrete'/%3E%3CfeFuncB intercept='4.3091942798132177' slope='-1.9643779184626435' tableValues='0 1' type='discrete'/%3E%3CfeFuncA intercept='-3.5179822198275872' slope='3.4636819773706904' type='discrete'/%3E%3C/feComponentTransfer%3E%3CfeColorMatrix values='1 0 0 0 0 -1 1 0 0 0 -1 -1 1 0 0 0 0 0 0 1'/%3E%3CfeColorMatrix type='matrix' values='-0.08 0.42 0.09 0 0.08 -0.17 0.35 -0.08 0 0.17 -0.08 0.15 -0.04 0 0.08 0 0 0 0 1'/%3E%3C/filter%3E%3Cpath d='m-29.6-29.6h256v256h-256z' filter='url(%23a)'/%3E%3Cpath d='m-4-4h256v256h-256z' fill='%23080000' opacity='.7'/%3E%3C/svg%3E");
-  --folder: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m5.33 10.53h20.87c.35 0 .68.14.93.38l5.41 5.27h26.13a1.34 1.34 0 0 1 1.33 1.34v34.62c0 .73-.6 1.33-1.33 1.33h-53.34a1.34 1.34 0 0 1 -1.33-1.34v-40.26a1.34 1.34 0 0 1 1.33-1.34z' fill='%23494'/%3E%3Cpath d='m6.67 16.18h22.06l-3.06-2.98h-19z' fill='%235b5'/%3E%3C/svg%3E");
-  --folder_hover: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m5.33 10.53h20.87c.35 0 .68.14.93.38l5.41 5.27h26.13a1.34 1.34 0 0 1 1.33 1.34v34.62c0 .73-.6 1.33-1.33 1.33h-53.34a1.34 1.34 0 0 1 -1.33-1.34v-40.26a1.34 1.34 0 0 1 1.33-1.34z' fill='%23f60'/%3E%3Cpath d='m6.67 16.18h22.06l-3.06-2.98h-19z' fill='%23d30'/%3E%3C/svg%3E");
-  --folder_active: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m5.33 10.53h20.87c.35 0 .68.14.93.38l5.41 5.27h26.13a1.34 1.34 0 0 1 1.33 1.34v34.62c0 .73-.6 1.33-1.33 1.33h-53.34a1.34 1.34 0 0 1 -1.33-1.34v-40.26a1.34 1.34 0 0 1 1.33-1.34z' fill='%23ee9'/%3E%3Cpath d='m6.67 16.18h22.06l-3.06-2.98h-19z' fill='%23bb7'/%3E%3C/svg%3E");
-  --attached: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m55.5 4.96c5.16 5.16 5.16 13.56 0 18.72l-26.82 26.81a8.24 8.24 0 0 1 -11.64 0 8.24 8.24 0 0 1 0-11.64l18.64-18.62c2.69-2.69 5.6.47 3.04 3.04l-18.64 18.62c-1.53 1.53-1.53 4.03 0 5.57 1.53 1.53 4.03 1.53 5.57 0l26.82-26.82c3.49-3.49 3.49-9.16 0-12.65s-9.16-3.49-12.65 0l-26.82 26.82a13.97 13.97 0 0 0 0 19.73 13.97 13.97 0 0 0 19.73 0l18.63-18.63c2.52-2.52 5.5.57 3.04 3.04l-18.63 18.63c-7.11 7.11-18.69 7.11-25.8 0s-7.11-18.69 0-25.8l26.81-26.82c5.16-5.16 13.56-5.16 18.72 0z' fill='%23494' stroke='%23494' stroke-linejoin='round' stroke-width='2'/%3E%3C/svg%3E");
-  --yes: url("data:image/svg+xml,%3Csvg height='64' width='64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m55.87 8.64a4.32 4.32 0 0 0 -3.06 1.24 1.78 1.78 0 0 0 0 0l-30.85 30.84-10.76-10.76c-1.6-1.6-4.5-1.56-6.05.05l-4.02 4.16a1.78 1.78 0 0 0 0 0c-1.53 1.58-1.5 4.4.07 5.95l17.78 17.64c1.57 1.56 4.42 1.56 5.98-.01a1.78 1.78 0 0 0 0 0l37.86-37.85c1.57-1.57 1.57-4.43 0-6l-4-4.02a1.78 1.78 0 0 0 0 0 4.29 4.29 0 0 0 -2.93-1.24z' fill='%23494'/%3E%3C/svg%3E");
-  --yes_hover: url("data:image/svg+xml,%3Csvg height='64' width='64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m55.87 8.64a4.32 4.32 0 0 0 -3.06 1.24 1.78 1.78 0 0 0 0 0l-30.85 30.84-10.76-10.76c-1.6-1.6-4.5-1.56-6.05.05l-4.02 4.16a1.78 1.78 0 0 0 0 0c-1.53 1.58-1.5 4.4.07 5.95l17.78 17.64c1.57 1.56 4.42 1.56 5.98-.01a1.78 1.78 0 0 0 0 0l37.86-37.85c1.57-1.57 1.57-4.43 0-6l-4-4.02a1.78 1.78 0 0 0 0 0 4.29 4.29 0 0 0 -2.93-1.24z' fill='%23f60'/%3E%3C/svg%3E");
-  --yes_active: url("data:image/svg+xml,%3Csvg height='64' width='64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m55.87 8.64a4.32 4.32 0 0 0 -3.06 1.24 1.78 1.78 0 0 0 0 0l-30.85 30.84-10.76-10.76c-1.6-1.6-4.5-1.56-6.05.05l-4.02 4.16a1.78 1.78 0 0 0 0 0c-1.53 1.58-1.5 4.4.07 5.95l17.78 17.64c1.57 1.56 4.42 1.56 5.98-.01a1.78 1.78 0 0 0 0 0l37.86-37.85c1.57-1.57 1.57-4.43 0-6l-4-4.02a1.78 1.78 0 0 0 0 0 4.29 4.29 0 0 0 -2.93-1.24z' fill='%23ee9'/%3E%3C/svg%3E");
-  --no: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m12.49 4c-.93 0-1.86.38-2.55 1.07a1.86 1.86 0 0 0 -.01.01l-4.87 4.91c-1.38 1.38-1.38 3.74 0 5.12a1.86 1.86 0 0 0 .01.01l17.01 16.88-17.02 16.92c-1.38 1.38-1.38 3.74 0 5.12l4.92 4.92c1.38 1.38 3.74 1.38 5.12 0l17.01-16.89 16.8 16.89c1.38 1.38 3.74 1.38 5.12 0l4.92-4.92c1.38-1.38 1.38-3.73 0-5.12l-16.84-16.92 16.8-16.89c1.42-1.4 1.44-3.76-.04-5.16l-4.88-4.9c-1.38-1.38-3.73-1.38-5.12 0a1.86 1.86 0 0 0 -.01.01l-16.75 16.89-17.06-16.89c-.69-.68-1.62-1.06-2.56-1.06z' fill='%23494'/%3E%3C/svg%3E");
-  --no_hover: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m12.49 4c-.93 0-1.86.38-2.55 1.07a1.86 1.86 0 0 0 -.01.01l-4.87 4.91c-1.38 1.38-1.38 3.74 0 5.12a1.86 1.86 0 0 0 .01.01l17.01 16.88-17.02 16.92c-1.38 1.38-1.38 3.74 0 5.12l4.92 4.92c1.38 1.38 3.74 1.38 5.12 0l17.01-16.89 16.8 16.89c1.38 1.38 3.74 1.38 5.12 0l4.92-4.92c1.38-1.38 1.38-3.73 0-5.12l-16.84-16.92 16.8-16.89c1.42-1.4 1.44-3.76-.04-5.16l-4.88-4.9c-1.38-1.38-3.73-1.38-5.12 0a1.86 1.86 0 0 0 -.01.01l-16.75 16.89-17.06-16.89c-.69-.68-1.62-1.06-2.56-1.06z' fill='%23f60'/%3E%3C/svg%3E");
-  --no_active: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m12.49 4c-.93 0-1.86.38-2.55 1.07a1.86 1.86 0 0 0 -.01.01l-4.87 4.91c-1.38 1.38-1.38 3.74 0 5.12a1.86 1.86 0 0 0 .01.01l17.01 16.88-17.02 16.92c-1.38 1.38-1.38 3.74 0 5.12l4.92 4.92c1.38 1.38 3.74 1.38 5.12 0l17.01-16.89 16.8 16.89c1.38 1.38 3.74 1.38 5.12 0l4.92-4.92c1.38-1.38 1.38-3.73 0-5.12l-16.84-16.92 16.8-16.89c1.42-1.4 1.44-3.76-.04-5.16l-4.88-4.9c-1.38-1.38-3.73-1.38-5.12 0a1.86 1.86 0 0 0 -.01.01l-16.75 16.89-17.06-16.89c-.69-.68-1.62-1.06-2.56-1.06z' fill='%23ee9'/%3E%3C/svg%3E");
-}
+@import url(../images/images.css);
+@import url(images/images.css);
 
 html {
   min-height: 100%;
@@ -101,9 +89,6 @@ textarea:hover {
 }
 
 .pagenav, .sort, .topbuttons, h3, .footer, .bottombuttons, .topbuttons, th img, h3, #dologin, th, #loading  {
-  -ms-user-select: none;
-  -moz-user-select: none;
-  -webkit-user-select: none;
   user-select: none;
 }
 
@@ -471,164 +456,143 @@ input[type=submit], input[type=reset], #settings, .topbuttons .fakebutton {
 
 input.cancel, #nukemail input.clearselection {
   padding: 7px 10px 7px 24px;
-  background: #000 url(images/no.svg) 8px center no-repeat;
-  background: var(--no) 8px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--no) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
   background-size: 12px, 100% !important;
 }
 
 input.cancel:hover, #nukemail input.clearselection:hover {
-  background: #010 url(images/no_hover.svg) 8px center no-repeat;
-  background: var(--no_hover) 8px center no-repeat, linear-gradient(to bottom, #000, #010);
+  background: var(--no_hover) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
   background-size: 12px, 100% !important;
 }
 
 input.cancel:active, #nukemail input.clearselection:active {
-  background: #f60 url(images/no_active.svg) 8px center no-repeat;
-  background: #f60 var(--no_active) 8px center no-repeat;
+  background: #f60 var(--no_active) no-repeat 8px center;
   background-size: 12px !important;
 }
 
 input.clearselection {
   padding: 7px 10px 7px 26px;
-  background: #000 url(/themes/susimail/images/none.png) 8px center no-repeat;
-  background: url(/themes/susimail/images/none.png) 8px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: url(/themes/susimail/images/none.png) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
 }
 
 input.clearselection:hover {
-  background: #010 url(/themes/susimail/images/none.png) 8px center no-repeat;
-  background: url(/themes/susimail/images/none.png) 8px center no-repeat, linear-gradient(to bottom, #000, #010);
+  background: #010 url(/themes/susimail/images/none.png) no-repeat 8px center;
+  background: url(/themes/susimail/images/none.png) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
 }
 
 input.clearselection:active {
-  background: #f60 url(/themes/susimail/images/none.png) 8px center no-repeat;
+  background: #f60 url(/themes/susimail/images/none.png) no-repeat 8px center;
 }
 
 input.delete, input.delete_attachment, input.really_delete {
   padding: 7px 10px 7px 26px;
-  background: #000 url(images/delete.svg) 8px center no-repeat;
-  background: url(images/delete.svg) 8px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--delete) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
   background-size: 16px, 100% !important;
 }
 
 input.delete:hover, input.delete_attachment:hover, input.really_delete:hover {
-  background: #010 url(images/delete_hover.svg) 8px center no-repeat;
-  background: url(images/delete_hover.svg) 8px center no-repeat, linear-gradient(to bottom, #000, #010);
+  background: var(--delete_hover) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
   background-size: 16px, 100% !important;
 }
 
 input.delete:active, input.delete_attachment:active, input.really_delete:active {
-  background: #f60 url(images/delete_active.svg) 8px center no-repeat;
+  background: #f60 var(--delete_active) no-repeat 8px center;
   background-size: 16px !important;
 }
 
 input.download {
   padding: 7px 10px 7px 26px;
-  background: #000 url(/themes/console/images/buttons/download.png) 8px center no-repeat;
-  background: url(/themes/console/images/buttons/download.png) 8px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: url(/themes/console/images/buttons/download.png) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
 }
 
 input.download:hover {
-  background: #010 url(/themes/console/images/buttons/download.png) 8px center no-repeat;
-  background: url(/themes/console/images/buttons/download.png) 8px center no-repeat, linear-gradient(to bottom, #000, #010);
+  background: url(/themes/console/images/buttons/download.png) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
 }
 
 input.download:active {
-  background: #f60 url(/themes/console/images/buttons/download.png) 8px center no-repeat;
-  background: url(/themes/console/images/buttons/download.png) 8px center no-repeat, linear-gradient(to bottom, #000, #010);
+  background: url(/themes/console/images/buttons/download.png) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
 }
 
 input.offline {
   padding: 7px 10px 7px 26px;
-  background: #000 url(images/offline.svg) 8px center no-repeat;
-  background: url(images/offline.svg) 8px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--offline) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
   background-size: 14px, 100% !important;
 }
 
 input.offline:hover {
-  background: #010 url(images/offline_hover.svg) 8px center no-repeat;
-  background: url(images/offline_hover.svg) 8px center no-repeat, linear-gradient(to bottom, #000, #010);
+  background: var(--offline_hover) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
   background-size: 14px, 100% !important;
 }
 
 input.offline:active {
-  background: #f60 url(images/offline_active.svg) 8px center no-repeat;
+  background: #f60 var(--offline_active) no-repeat 8px center;
   background-size: 14px !important;
 }
 
 input.list, input.moveto, #pagenav input.switchto {
-  background: #000 url(images/folder.svg) 8px center no-repeat;
-  background: var(--folder) 8px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
   padding: 7px 10px 7px 26px;
+  background: var(--folder) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
 }
 
 input.list:hover, input.moveto:hover, #pagenav input.switchto:hover {
-  background: #000 url(images/folder_hover.svg) 8px center no-repeat;
-  background: var(--folder_hover) 8px center no-repeat, linear-gradient(to bottom, #000, #010);
+  background: var(--folder_hover) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
 }
 
 input.list:active, input.moveto:active, #pagenav input.switchto:active {
-  background: #f60 url(images/folder_active.svg) 8px center no-repeat;
-  background: #f60 var(--folder_active) 8px center no-repeat;
+  background: #f60 var(--folder_active) no-repeat 8px center;
 }
 
 input.forward {
   padding: 7px 10px 7px 26px;
-  background: #000 url(images/forward.svg) 8px center no-repeat;
-  background: url(images/forward.svg) 8px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--forward) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
   background-size: 14px, 100% !important;
 }
 
 input.forward:hover {
-  background: #010 url(images/forward_hover.svg) 8px center no-repeat;
-  background: url(images/forward_hover.svg) 8px center no-repeat, linear-gradient(to bottom, #000, #010);
+  background: var(--forward_hover) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
   background-size: 14px, 100% !important;
 }
 
 input.forward:active {
-  background: #f60 url(images/forward_active.svg) 8px center no-repeat;
+  background: #f60 var(--forward_active) no-repeat 8px center;
   background-size: 14px !important;
 }
 
 input.login {
   padding: 7px 10px 7px 26px;
-  background: #000 url(images/login.svg) 8px center no-repeat;
-  background: url(images/login.svg) 8px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--login) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
   background-size: 15px, 100% !important;
 }
 
 input.login:hover {
-  background: #010 url(images/login_hover.svg) 8px center no-repeat;
-  background: url(images/login_hover.svg) 8px center no-repeat, linear-gradient(to bottom, #000, #010);
+  background: var(--login_hover) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
   background-size: 15px, 100% !important;
 }
 
 input.login:active {
-  background: #f60 url(images/login_active.svg) 8px center no-repeat;
+  background: #f60 var(--login_active) no-repeat 8px center;
   background-size: 14px !important;
 }
 
 input.logout {
   padding: 7px 10px 7px 26px;
-  background: #000 url(images/logout.svg) 8px center no-repeat;
-  background: url(images/logout.svg) 8px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--logout) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
   background-size: 15px, 100% !important;
 }
 
 input.logout:hover {
-  background: #010 url(images/logout_hover.svg) 8px center no-repeat;
-  background: url(images/logout_hover.svg) 8px center no-repeat, linear-gradient(to bottom, #000, #010);
+  background: var(--logout_hover) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
   background-size: 15px, 100% !important;
 }
 
 input.logout:active {
-  background: #f60 url(images/logout_active.svg) 8px center no-repeat;
+  background: #f60 var(--logout_active) no-repeat 8px center;
   background-size: 15px !important;
 }
 
 input.reload, input.refresh, input[name="refresh"][disabled], .topbuttons .fakebutton {
   padding: 7px 10px 7px 26px;
-  background: #000 url(images/refresh.svg) 8px center no-repeat !important;
-  background: url(images/refresh.svg) 8px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000) !important;
+  background: var(--refresh) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000) !important;
   background-size: 13px, 100% !important;
 }
 
@@ -642,114 +606,100 @@ input[name="refresh"][disabled] {
 }
 
 input.reload:hover, input.refresh:hover, .fakebutton:hover {
-  background: #000 url(images/refresh_hover.svg) 8px center no-repeat !important;
-  background: url(images/refresh_hover.svg) 8px center no-repeat, linear-gradient(to bottom, #000, #010) !important;
+  background: var(--refresh_hover) no-repeat 8px center, linear-gradient(to bottom, #000, #010) !important;
   background-size: 13px, 100% !important;
 }
 
 input.reload:active, input.refresh:active, .fakebutton:active {
-  background: #f60 url(images/refresh_active.svg) 8px center no-repeat !important;
+  background: #f60 var(--refresh_active) no-repeat 8px center !important;
   background-size: 13px !important;
 }
 
 input.invertselection {
-  background: #000 url(/themes/susimail/images/selection.png) 8px center no-repeat;
-  background: url(/themes/susimail/images/selection.png) 8px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: url(/themes/susimail/images/selection.png) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
   padding: 7px 10px 7px 26px;
 }
 
 input.invertselection:hover {
-  background: #000 url(/themes/susimail/images/selection.png) 8px center no-repeat;
-  background: url(/themes/susimail/images/selection.png) 8px center no-repeat, linear-gradient(to bottom, #000, #010);
+  background: url(/themes/susimail/images/selection.png) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
 }
 
 input.invertselection:active {
-  background: #f60 url(/themes/susimail/images/selection.png) 8px center no-repeat;
+  background: #f60 url(/themes/susimail/images/selection.png) no-repeat 8px center;
 }
 
 input.show {
   padding: 7px 10px 7px 26px;
-  background: #000 url(/themes/console/images/buttons/yes.png) 8px center no-repeat;
-  background: -var(--yes) 8px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: -var(--yes) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
 }
 
 input.show:hover {
-  background: #010 url(/themes/console/images/buttons/yes.png) 8px center no-repeat;
-  background: var(--yes_hover) 8px center no-repeat, linear-gradient(to bottom, #000, #010);
+  background: var(--yes_hover) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
 }
 
 input.show:active {
-  background: #f60 url(/themes/console/images/buttons/yes.png) 8px center no-repeat;
-  background: #f60 var(--yes_active) 8px center no-repeat;
+  background: #f60 var(--yes_active) no-repeat 8px center;
   background-size: 12px !important;
 }
 
 input.markall {
   padding: 7px 10px 7px 26px;
-  background: #000 url(/themes/susimail/images/all.png) 8px center no-repeat;
-  background: url(/themes/susimail/images/all.png) 8px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: url(/themes/susimail/images/all.png) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
 }
 
 input.markall:hover {
-  background: #010 url(/themes/susimail/images/all.png) 8px center no-repeat;
-  background: url(/themes/susimail/images/all.png) 8px center no-repeat, linear-gradient(to bottom, #000, #010);
+  background: url(/themes/susimail/images/all.png) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
 }
 
 input.markall:active {
-  background: #f60 url(/themes/susimail/images/all.png) 8px center no-repeat;
+  background: #f60 url(/themes/susimail/images/all.png) no-repeat 8px center;
 }
 
 input.new {
   padding: 7px 10px 7px 26px;
-  background: #000 url(images/compose.svg) 8px center no-repeat;
-  background: url(images/compose.svg) 8px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--compose) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
   background-size: 14px, 100% !important;
 }
 
 input.new:hover {
-  background: #010 url(images/compose_hover.svg) 8px center no-repeat;
-  background: url(images/compose_hover.svg) 8px center no-repeat, linear-gradient(to bottom, #000, #010);
+  background: var(--compose_hover) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
   background-size: 14px, 100% !important;
 }
 
 input.new:active {
-  background: #f60 url(images/compose_active.svg) 8px center no-repeat;
+  background: #f60 var(--compose_active) no-repeat 8px center;
   background-size: 14px, 100% !important;
 }
 
 input.reply {
   padding: 7px 10px 7px 26px;
-  background: #000 url(images/reply.svg) 8px center no-repeat;
-  background: url(images/reply.svg) 8px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--reply) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
   background-size: 14px, 100% !important;
 }
 
 input.reply:hover {
-  background: #010 url(images/reply_hover.svg) 8px center no-repeat;
-  background: url(images/reply_hover.svg) 8px center no-repeat, linear-gradient(to bottom, #000, #010);
+  background: var(--reply_hover) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
   background-size: 14px, 100% !important;
 }
 
 input.reply:active {
-  background: #f60 url(images/reply_active.svg) 8px center no-repeat;
+  background: #f60 var(--reply_active) no-repeat 8px center;
   background-size: 14px, 100% !important;
 }
 
 input.replyall {
   padding: 7px 10px 7px 26px;
-  background: #000 urlimages/replyall.svg) 8px center no-repeat;
-  background: url(images/replyall.svg) 8px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--replyall) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
   background-size: 14px, 100% !important;
 }
 
 input.replyall:hover {
-  background: #010 url(images/replyall_hover.svg) 8px center no-repeat;
-  background: url(images/replyall_hover.svg) 8px center no-repeat, linear-gradient(to bottom, #000, #010);
+  background: var(--replyall_hover) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
   background-size: 14px, 100% !important;
 }
 
 input.replyall:active {
-  background: #f60 url(images/replyall_active.svg) 8px center no-repeat;
+  background: #f60 var(--replyall_active) no-repeat 8px center;
   background-size: 14px !important;
 }
 
@@ -759,19 +709,16 @@ input.markall {
 
 input.setpagesize, input.save {
   padding: 7px 10px 7px 26px;
-  background: #000 url(/themes/console/images/buttons/yes.png) 8px center no-repeat;
-  background: var(--yes) 8px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--yes) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
 }
 
 input.setpagesize:hover, input.setpagesize:focus, input.save:hover, input.save:focus {
   padding: 7px 10px 7px 26px;
-  background: #010 url(/themes/console/images/buttons/yes.png) 8px center no-repeat;
-  background: var(--yes_hover) 8px center no-repeat, linear-gradient(to bottom, #000, #010);
+  background: var(--yes_hover) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
 }
 
 input.setpagesize:active, input.save:active {
-  background: #f60 url(/themes/console/images/buttons/yes.png) 8px center no-repeat !important;
-  background: #f60 var(--yes_active) 8px center no-repeat !important;
+  background: #f60 var(--yes_active) no-repeat 8px center !important;
   background-size: 12px !important;
 }
 
@@ -781,19 +728,17 @@ input.setpagesize {
 
 input.send {
   padding: 7px 10px 7px 26px;
-  background: #010 url(images/send.svg) 8px center no-repeat;
-  background: url(images/send.svg) 8px center no-repeat, linear-gradient(to bottom, #000, #010);
+  background: var(--send) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
   background-size: 16px, 100% !important;
 }
 
 input.send:hover {
-  background: #010 url(send_hover.svg) 8px center no-repeat;
-  background: url(images/send_hover.svg) 8px center no-repeat, linear-gradient(to bottom, #000, #010);
+  background: var(--send_hover) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
   background-size: 16px, 100% !important;
 }
 
 input.send:active {
-  background: #f60 url(images/send_active.svg) 8px center no-repeat;
+  background: #f60 var(--send_active) no-repeat 8px center;
   background-size: 16px !important;
 }
 
@@ -803,51 +748,45 @@ input.send + input.cancel {
 
 input.configure, #settings {
   padding: 7px 10px 7px 26px;
-  background: #000 url(images/configure.svg) 8px center no-repeat;
-  background: url(images/configure.svg) 8px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--configure) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
   background-size: 14px, 100% !important;
 }
 
 input.configure:hover, #settings:hover {
-  background: #010 url(images/configure_hover.svg) 8px center no-repeat;
-  background: url(images/configure_hover.svg) 8px center no-repeat, linear-gradient(to bottom, #000, #010);
+  background: var(--configure_hover) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
   background-size: 14px, 100% !important;
 }
 
 input.configure:active, #settings:active {
-  background: #f60 url(images/configure_active.svg) 8px center no-repeat;
+  background: #f60 var(--configure_active) no-repeat 8px center;
   background-size: 14px !important;
 }
 
 input.saveas, input.saveasdraft {
   padding: 7px 10px 7px 27px;
-  background: #000 url(images/save.svg) 8px center no-repeat;
-  background: url(images/save.svg) 8px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--save) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
   background-size: 15px, 100% !important;
 }
 
 input.saveas:hover, input.saveasdraft:hover {
-  background: #010 url(images/save_hover.svg) 8px center no-repeat;
-  background: url(images/save_hover.svg) 8px center no-repeat, linear-gradient(to bottom, #000, #010);
+  background: var(--save_hover) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
 }
 
 input.saveas:active, input.saveasdraft:active {
-  background: #f60 url(images/save_active.svg) 8px center no-repeat;
+  background: #f60 var(--save_active) no-repeat 8px center;
 }
 
 input.new_upload {
   padding: 7px 10px 7px 26px;
-  background: #000 url(images/attach.svg) 8px center no-repeat;
-  background: var(--attached) 8px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--attached) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
 }
 
 input.new_upload:hover {
-  background: #010 url(images/attach_hover.svg) 8px center no-repeat;
-  background: url(images/attach_hover.svg) 8px center no-repeat, linear-gradient(to bottom, #000, #010);
+  background: var(--attach_hover) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
 }
 
 input.new_upload:active {
-  background: #f60 url(images/attach_active.svg) 8px center no-repeat;
+  background: #f60 var(--attach_active) no-repeat 8px center;
 }
 
 input.new_upload {
@@ -857,20 +796,17 @@ input.new_upload {
 
 input.switchto, input.moveto {
   padding: 7px 10px 7px 26px;
-  background: #000 url(/themes/susimail/images/folder.png) 8px center no-repeat;
-  background: var(--folder) 8px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--folder) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
   background-size: 14px, 100% !important;
 }
 
 input.switchto:hover, input.moveto:hover {
-  background: #010 url(images/folder_hover.svg) 8px center no-repeat;
-  background: var(--folder_hover) 8px center no-repeat, linear-gradient(to bottom, #000, #010);
+  background: var(--folder_hover) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
   background-size: 14px, 100% !important;
 }
 
 input.switchto:active, input.moveto:active {
-  background: #f60 url(images/folder_active.svg) 8px center no-repeat;
-  background: #f60 var(--folder_active) 8px center no-repeat;
+  background: #f60 var(--folder_active) no-repeat 8px center;
   background-size: 14px;
 }
 
@@ -990,61 +926,53 @@ select::-ms-expand {
 }
 
 #messagenav {
-  float: right;
   margin-right: -1px;
   margin-left: -7px;
+  float: right;
 }
 
 input.firstpage, input[name="firstpage"],
 input.firstpage[disabled]:hover, input[name="firstpage"][disabled]:hover {
-  background: #000 url(images/first.svg) no-repeat center center;
-  background: url(images/first.svg) no-repeat center center, linear-gradient(to bottom, #020, #000);
   padding: 4px 10px;
   text-indent: -99999px;
+  background: var(--first) no-repeat center center, linear-gradient(to bottom, #020, #000);
 }
 
 input.firstpage:hover, input[name="firstpage"]:hover {
-  background: #010 url(images/first_hover.svg) no-repeat center center;
-  background: url(images/first_hover.svg) no-repeat center center, linear-gradient(to bottom, #000, #010);
+  background: var(--first_hover) no-repeat center center, linear-gradient(to bottom, #000, #010);
 }
 
 input.lastpage, input[name="lastpage"],
 input.lastpage[disabled]:hover, input[name="lastpage"][disabled]:hover {
-  background: #000 url(images/last.svg) no-repeat center center;
-  background: url(images/last.svg) no-repeat center center, linear-gradient(to bottom, #020, #000);
   padding: 4px 10px;
+  background: var(--last) no-repeat center center, linear-gradient(to bottom, #020, #000);
   text-indent: -99999px;
 }
 
 input.lastpage:hover, input[name="lastpage"]:hover {
-  background: #010 url(images/last_hover.svg) no-repeat center center;
-  background: url(images/last_hover.svg) no-repeat center center, linear-gradient(to bottom, #000, #010);
+  background: var(--last_hover) no-repeat center center, linear-gradient(to bottom, #000, #010);
 }
 
 input.prevpage, input.prev, input[name="prev"], input[name="prevpage"],
 input.prevpage[disabled]:hover, input.prev[disabled]:hover, input[name="prev"][disabled]:hover, input[name="prevpage"][disabled]:hover {
-  background: #000 url(images/previous.svg) no-repeat center center;
-  background: url(images/previous.svg) no-repeat center center, linear-gradient(to bottom, #020, #000);
   padding: 4px 10px;
   text-indent: -99999px;
+  background: var(--previous) no-repeat center center, linear-gradient(to bottom, #020, #000);
 }
 
 input[name="prev"]:hover, input[name="prevpage"]:hover {
-  background: #010 url(images/previous_hover.svg) no-repeat center center;
-  background: url(images/previous_hover.svg) no-repeat center center, linear-gradient(to bottom, #000, #010);
+  background: var(--previous_hover.svg) no-repeat center center, linear-gradient(to bottom, #000, #010);
 }
 
 input.nextpage, input.next, input[name="nextpage"], input[name="next"],
 input.nextpage[disabled]:hover, input.next[disabled]:hover, input[name="nextpage"][disabled]:hover, input[name="next"][disabled]:hover {
-  background: #000 url(images/next.svg) no-repeat center center;
-  background: url(images/next.svg) no-repeat center center, linear-gradient(to bottom, #020, #000);
   padding: 4px 10px;
   text-indent: -99999px;
+  background: var(--next) no-repeat center center, linear-gradient(to bottom, #020, #000);
 }
 
 input.nextpage:hover, input.next:hover, input[name="nextpage"]:hover {
-  background: #010 url(images/next_hover.svg) no-repeat center center;
-  background: url(images/next_hover.svg) no-repeat center center, linear-gradient(to bottom, #000, #010);
+  background: var(--next_hover) no-repeat center center, linear-gradient(to bottom, #000, #010);
 }
 
 @supports (position: sticky) {
@@ -1444,11 +1372,11 @@ hr {
 }
 
 #dologin input[name="user"] {
-  background: #010 url(/themes/console/images/buttons/user.png) 5px 6px no-repeat !important;
+  background: #010 var(--user) no-repeat 5px 6px / 16px !important;
 }
 
 #dologin input[name="pass"] {
-  background: #010 url(/themes/console/images/buttons/password.png) 5px 5px no-repeat !important;
+  background: #010 url(/themes/console/images/buttons/password.png) no-repeat 5px 5px !important;
 }
 
 #dologin input[name="user"]:focus, #dologin input[name="pass"]:focus {
@@ -1864,16 +1792,14 @@ td p.error {
   font-style: italic;
   border-radius: 2px 15px 15px 2px;
   box-shadow: inset 0 0 0 1px #020, inset 0 0 0 2px #010, 0 0 0 1px #000;
-  background: #010 url(images/attach_active.svg) 9px center no-repeat;
-  background: url(images/attach_active.svg) 9px center no-repeat, linear-gradient(to right, #010 70%, #020);
+  background: var(--attach_active) 9px center no-repeat, linear-gradient(to right, #010 70%, #020);
   background-size: 14px, 100%;
 }
 
 #attachedfile label:hover {
   color: #930;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 0 2px #930;
-  background: #020 url(images/attach_hover.svg) 9px center no-repeat;
-  background: url(images/attach_hover.svg) 9px center no-repeat, linear-gradient(to right, #020 70%, #010);
+  background: var(--attach_hover) 9px center no-repeat, linear-gradient(to right, #020 70%, #010);
   background-size: 14px, 100%;
 }
 
@@ -2045,19 +1971,16 @@ _:-ms-lang(x), tr.list0:hover, tr.list1:hover {
 
 #mailbox th:last-child {
   padding: 6px 0 !important;
-  background: #010 url(/themes/console/images/buttons/delete.png) center center no-repeat;
-  background: url(/themes/console/images/buttons/delete.png) center center no-repeat, linear-gradient(to bottom, #010 50%, #000 50%);
+  background: var(--nuke) no-repeat center center / 14px, linear-gradient(to bottom, #010 50%, #000 50%);
 }
 
 #mailbox th.mailListFlagged {
-  background: #010 url(/themes/susimail/images/status.png) center center no-repeat;
-  background: url(/themes/susimail/images/status.png) center center no-repeat, linear-gradient(to bottom, #010 50%, #000 50%);
+  background: url(/themes/susimail/images/status.png) no-repeat center center, linear-gradient(to bottom, #010 50%, #000 50%);
   background-blend-mode: luminosity, normal;
 }
 
 #mailbox th.MailListAttachment {
-  background: #010 url(images/attach.svg) center center no-repeat !important;
-  background: url(images/attach.svg) center center no-repeat, linear-gradient(to bottom, #010 50%, #000 50%) !important;
+  background: var(--attach) no-repeat center center, linear-gradient(to bottom, #010 50%, #000 50%) !important;
   background-size: 14px, 100% !important;
 }
 
@@ -2084,7 +2007,7 @@ td.mailListSender, tr:hover td.mailListSender {
   padding-right: 6px !important;
   padding-left: 22px !important;
   width: 1%;
-  background-image: url(/themes/console/images/buttons/user.png) !important;
+  background-image: var(--user) !important;
   background-position: 6px center !important;
   background-repeat: no-repeat !important;
   background-size: 12px 12px;
@@ -2164,12 +2087,12 @@ td.mailListFlagged.new img {
 }
 
 td.mailListFlagged img::after {
-  content: "";
-  display: inline-block;
   width: 16px;
   height: 16px;
-  background: url(/themes/susimail/images/new.svg) center center no-repeat;
+  display: inline-block;
+  background: url(/themes/susimail/images/new.svg) no-repeat center center;
   background-size: 14px;
+  content: "";
 }
 
 tr:hover .mailListFlagged img {
@@ -2185,8 +2108,8 @@ td.mailListAttached {
 }
 
 th.mailListDate {
-  text-align: left;
   padding-left: 8px !important;
+  text-align: left;
 }
 
 .listSize, .listDate, .mailListSender, .mailListSubject a {
@@ -2306,12 +2229,12 @@ td.mailListAttachment img {
 }
 
 .mailListAttachment.isAttached {
-  background: url(images/attach.svg) center center no-repeat;
+  background: var(--attach) no-repeat center center;
   background-size: 14px;
 }
 
 tr:hover .mailListAttachment.isAttached {
-  background: url(images/attach_hover.svg) center center no-repeat;
+  background: var(--attach_hover) no-repeat center center;
   background-size: 14px;
 }
 
@@ -2651,7 +2574,7 @@ tr.mailbody td {
   vertical-align: middle;
   font-size: 0;
   border: none;
-  background: url(/themes/console/images/buttons/show.png) center center no-repeat;
+  background: url(/themes/console/images/buttons/show.png) no-repeat center center;
   background-size: 20px 20px !important;
   cursor: pointer;
   mix-blend-mode: luminosity;
@@ -2662,9 +2585,9 @@ tr.mailbody td {
 }
 
 #toggle.hidepass {
-  background: url(/themes/console/images/buttons/hide.png) center center no-repeat;
+  background: url(/themes/console/images/buttons/hide.png) no-repeat center center;
 }
 
 #toggle.showpass {
-  background: url(/themes/console/images/buttons/show.png) center center no-repeat;
+  background: url(/themes/console/images/buttons/show.png) no-repeat center center;
 }
