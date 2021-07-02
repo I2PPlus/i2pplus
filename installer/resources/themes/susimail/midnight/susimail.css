@@ -4,6 +4,7 @@
 
 @import url(/themes/fonts/DroidSans.css);
 @import url(../images/images.css);
+@import url(images/images.css);
 
 :root {
   --highlight: inset 0 0 0 1px #000;
@@ -11,7 +12,6 @@
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
   --button: linear-gradient(to bottom, #11101c 50%, #000010 50%);
   --button_hover: linear-gradient(to bottom, #202 50%, #000 50%);
-  --user: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m51.42 27.01c0-.94-.19-1.83-.53-2.65-1.3-3.07-4.94-4.33-8.07-3.19-1.71.62-4.91 1.31-10.69 1.31s-8.98-.69-10.69-1.31c-3.13-1.13-6.78.12-8.07 3.19-.35.81-.53 1.71-.53 2.65l-.03 10.35c0 7.13.55 11.51 5.93 16.62 1.93 1.83 4.2 3.24 6.39 4.73 2.19 1.48 4.13 3.45 6.97 3.45s4.78-1.96 6.97-3.45c2.19-1.48 4.46-2.9 6.39-4.73 5.37-5.1 5.97-9.62 5.97-16.75z' fill='%23fca'/%3E%3Cpath d='m53.37 13.49c-.71-3.8-3.85-6.6-7.28-8.06-6.75-3.32-14.66-4.27-22.01-2.68-2.45.77-4.08 2.95-6.47 3.87-2.39 1.05-4.2 3.13-4.86 5.66-.85 2.32-2.98 4.04-3.2 6.63-.82 4.81 1.01 9.59 3.25 13.77.16-2.75-.37-5.62.5-8.27 1.28-3.07 5.21-4.51 8.22-3.19 5.55 1.59 11.44 1.42 17.13.89 2.13-.22 4.15-1.07 6.27-1.38 3.27-.21 6.57 2.51 6.45 5.9.15 2.34 0 4.69.06 7.03 2-.68 2.73-3.04 3.06-4.94.88-5.08-.13-10.24-1.1-15.23z' fill='%236c5d53'/%3E%3C/svg%3E");
 }
 
 html, body {
@@ -39,7 +39,7 @@ body:not(old) {
   url(/themes/console/images/buttons/configure_hover.png) no-repeat,
   url(/themes/console/images/buttons/delete_hover.png) no-repeat,
   url(/themes/console/images/buttons/update_hover.png) no-repeat, #000010 !important;
-  background-size: 100% 100%, 171px 148px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0 !important;
+  background-size: 100%, 171px 148px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0 !important;
 }
 
 body.iframed {
@@ -747,7 +747,7 @@ input.delete {
   box-shadow: 0 0 2px 1px #000, var(--highlight), inset 0 0 0 2px #000026;
   background: #000010;
   background: url(images/hatter_med.png) right bottom no-repeat, repeating-linear-gradient(to bottom, rgba(0,0,0,.9), rgba(0,0,32,.5) 2px, rgba(0,0,0,.5) 3px), linear-gradient(to bottom, #000016, #000006);
-  background-size: 27% auto, 100% 100%, 100% 100%;
+  background-size: 27% auto, 100%, 100%;
   filter: opacity(0);
   animation: linear fade-in .15s .6s forwards;
 }
@@ -989,67 +989,68 @@ div#bottombuttons { /* config page button positioning */
 }
 
 .pagenav input.firstpage {
-  background: #000 url(images/first.svg) no-repeat center center !important;
+  background: #000 var(--first) no-repeat center center !important;
 }
 
 .pagenav input.firstpage:hover {
-  background: #000 url(images/first_hover.svg) no-repeat center center !important;
+  background: #000 var(--first_hover) no-repeat center center !important;
 }
 
 .pagenav input.firstpage:active {
-  background: #652787 url(images/first_active.svg) no-repeat center center !important;
+  background: #652787 var(--first_active) no-repeat center center !important;
 }
 
 .pagenav input[name="firstpage"]:disabled {
-  background: #000 url(images/first.svg) no-repeat center center !important;
+  background: #000 var(--first) no-repeat center center !important;
 }
 
 .pagenav input.prevpage {
-  background: #000 url(images/previous.svg) no-repeat center center !important;
+  background: #000 var(--previous) no-repeat center center !important;
 }
 
 .pagenav input.prevpage:hover {
-  background: #000 url(images/previous_hover.svg) no-repeat center center !important;
+  background: #000 var(--previous_hover) no-repeat center center !important;
 }
 
 .pagenav input.prevpage:active {
-  background: #652787 url(images/previous_active.svg) no-repeat center center !important;
+  background: #652787 var(--previous_active) no-repeat center center !important;
 }
 
 .pagenav input[name="prevpage"]:disabled, .pagenav input[name="prevpage"]:hover:disabled {
-  background: #000 url(images/previous.svg) no-repeat center center !important;
+  background: #000 var(--previous) no-repeat center center !important;
 }
 
 .pagenav input[name="nextpage"] {
-  background: #000 url(images/next.svg) no-repeat center center !important;
+  background: #000 var(--next) no-repeat center center !important;
 }
 
 .pagenav input[name="nextpage"]:hover {
-  background: #000 url(images/next_hover.svg) no-repeat center center !important;
+  background: #000 var(--next_hover) no-repeat center center !important;
 }
 
 .pagenav input[name="nextpage"]:active {
-  background: #652787 url(images/next_active.svg) no-repeat center center !important;
+  background: #652787 var(--next_active) no-repeat center center !important;
 }
 
 .pagenav input[name="nextpage"]:disabled, .pagenav input[name="nextpage"]:hover:disabled {
-  background: #000 url(images/next.svg) no-repeat center center !important;
+  background: #000 var(--next) no-repeat center center !important;
 }
 
 .pagenav input.lastpage {
-  background: #000 url(images/last.svg) no-repeat center center !important;
+  background: #000 var(--last) no-repeat center center !important;
 }
 
 .pagenav input.lastpage:hover {
-  background: #000 url(images/last_hover.svg) no-repeat center center !important;
+  background: #000 var(--last_hover) no-repeat center center !important;
 }
 
 .pagenav input.lastpage:active {
-  background: #652787 url(images/last_active.svg) no-repeat center center !important;
+  background: #652787 var(--last_active) no-repeat center center !important;
 }
 
 .pagenav input[name="lastpage"]:disabled, .pagenav input[name="lastpage"]:hover:disabled {
-  background: #000 url(images/last.svg) no-repeat center center !important;
+  background: #000 var(--last) no-repeat center center !important;
+  pointer-events: none;
 }
 
 .pagecount {
@@ -1191,12 +1192,11 @@ input.show:hover, input.show:focus {
 .bottombuttons input.markall {
   padding: 6px 9px 6px 27px !important;
   background: url(/themes/susimail/images/all.png) no-repeat 9px center, var(--button) !important;
-  background-size: 12px 12px, 100% 100% !important;
+  background-size: 12px, 100% !important;
 }
 
 .bottombuttons input.markall:hover, .bottombuttons input.markall:focus {
-  background: url(/themes/susimail/images/all.png) no-repeat 9px center, var(--button_hover) !important;
-  background-size: 12px 12px, 100% 100% !important;
+  background: url(/themes/susimail/images/all.png) no-repeat 9px center / 12px, var(--button_hover) !important;
 }
 
 input.new {
@@ -1311,16 +1311,16 @@ input.firstpage, input[name="firstpage"],
 input.firstpage[disabled]:hover, input[name="firstpage"][disabled]:hover {
   padding: 5px 10px !important;
   text-indent: -99999px;
-  background: url(images/first.svg) no-repeat center center, var(--button) !important;
+  background: var(--first) no-repeat center center, var(--button) !important;
 }
 
 input.firstpage[disabled]:hover, input[name="firstpage"][disabled]:hover {
-  background: #000 url(images/first.svg) no-repeat center center !important;
+  background: #000 var(--first) no-repeat center center !important;
 }
 
 input.firstpage:hover, input[name="firstpage"]:hover,
 input.firstpage:focus, input[name="firstpage"]:focus {
-  background: url(images/first.svg) no-repeat center center, var(--button_hover) !important;
+  background: var(--first) no-repeat center center, var(--button_hover) !important;
 }
 
 input.lastpage, input[name="lastpage"],
@@ -1328,14 +1328,12 @@ input.lastpage[disabled]:hover, input[name="lastpage"][disabled]:hover,
 input.lastpage[disabled]:focus, input[name="lastpage"][disabled]:focus {
   padding: 5px 10px !important;
   text-indent: -99999px;
-  background: #000 url(images/last.svg) no-repeat center center;
-  background: url(images/last.svg) no-repeat center center, var(--button) !important;
+  background: var(--last) no-repeat center center, var(--button) !important;
 }
 
 input.lastpage:hover, input[name="lastpage"]:hover,
 input.lastpage:focus, input[name="lastpage"]:focus {
-  background: #000 url(images/last.svg) no-repeat center center;
-  background: url(images/last.svg) no-repeat center center, var(--button_hover) !important;
+  background: var(--last) no-repeat center center, var(--button_hover) !important;
 }
 
 input.prevpage, input.prev, input[name="prev"], input[name="prevpage"],
@@ -1343,14 +1341,12 @@ input.prevpage[disabled]:hover, input.prev[disabled]:hover, input[name="prev"][d
 input.prevpage[disabled]:focus, input.prev[disabled]:focus, input[name="prev"][disabled]:focus, input[name="prevpage"][disabled]:focus {
   padding: 5px 10px !important;
   text-indent: -99999px;
-  background: #000 url(images/previous.svg) no-repeat center center;
-  background: url(images/previous.svg) no-repeat center center, var(--button) !important;
+  background: var(--previous) no-repeat center center, var(--button) !important;
 }
 
 input.prevpage:hover, input[name="prev"]:hover, input[name="prevpage"]:hover,
 input.prevpage:focus, input[name="prev"]:focus, input[name="prevpage"]:focus {
-  background: #000 url(images/previous.svg) no-repeat center center !important;
-  background: url(images/previous.svg) no-repeat center center, var(--button_hover) !important;
+  background: var(--previous) no-repeat center center, var(--button_hover) !important;
 }
 
 input[name="nextpage"], input.next, input[name="nextpage"], input[name="next"],
@@ -1358,14 +1354,12 @@ input[name="nextpage"][disabled]:hover, input.next[disabled]:hover, input[name="
 input[name="nextpage"][disabled]:focus, input.next[disabled]:focus, input[name="nextpage"][disabled]:focus, input[name="next"][disabled]:focus {
   padding: 5px 10px !important;
   text-indent: -99999px;
-  background: #000 url(images/next.svg) no-repeat center center;
-  background: url(images/next.svg) no-repeat center center, var(--button) !important;
+  background: var(--next) no-repeat center center, var(--button) !important;
 }
 
 input[name="nextpage"]:hover, input.next:hover, input[name="nextpage"]:hover,
 input[name="nextpage"]:focus, input.next:focus, input[name="nextpage"]:focus {
-  background: #000 url(images/next.svg) no-repeat center center !important;
-  background: url(images/next.svg) no-repeat center center, var(--button_hover) !important;
+  background: var(--next) no-repeat center center, var(--button_hover) !important;
 }
 
 input.prev, input[name="next"], input.prev[disabled], input[name="next"][disabled],
@@ -1382,7 +1376,7 @@ input[type=submit][disabled], input[type=submit][disabled]:hover, input[type=sub
 }
 
 #messagenav input {
-  background-size: 16px 16px, 100% 100% !important;
+  background-size: 16px, 100% !important;
 }
 
 input:disabled {
@@ -1410,8 +1404,8 @@ input[type=submit]:active, input.cancel:active {
 
 @media screen and (max-width: 700px) {
 .topbuttons input[type=submit], .topbuttons input[type="reset"] {
-  min-width: 50px !important;
   margin: 3px 5px !important;
+  min-width: 50px !important;
 }
 }
 
@@ -1610,7 +1604,7 @@ select {
   cursor: pointer;
   box-shadow: var(--highlight), inset 0 0 2px 0 #559;
   background: url(/themes/console/midnight/images/dropdown.svg) center right 10px no-repeat, var(--button) !important;
-  background-size: 10px auto, 100% 100% !important;
+  background-size: 10px auto, 100% !important;
   filter: none !important;
 }
 
@@ -1631,7 +1625,7 @@ select:hover, select:focus, select:active {
   border: 1px solid #652787 !important;
   box-shadow: var(--highlight), inset 0 0 2px 1px #757;
   background: url(/themes/console/midnight/images/dropdown_hover.svg) center right 10px no-repeat, var(--button_hover) !important;
-  background-size: 10px auto, 100% 100% !important;
+  background-size: 10px auto, 100% !important;
 }
 
 .topbuttons .folders {

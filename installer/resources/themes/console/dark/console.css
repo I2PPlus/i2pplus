@@ -6081,6 +6081,27 @@ iframe.iframed {
   margin: 0 0 -5px;
 }
 
+iframe {
+  height: 0;
+}
+
+#tunnelmgr, #torrents, #webmail, #dns {
+  position: relative;
+}
+
+#tunnelmgr::before, #torrents::before, #webmail::before, #dns::before {
+  display: block;
+  height: 2px;
+  width: 0;
+  background: linear-gradient(#730, #d30);
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  animation: ease-out reloader 20s forwards;
+}
+
 /* global overrides */
 
 h3[id*="job"] {
@@ -12148,14 +12169,14 @@ i {
   border: none !important;
   box-shadow: none !important;
   filter: opacity(0);
-  animation: ease graph-fade .15s forwards;
+  animation: ease fade .15s forwards;
 }
 
 #graph_single {
-  animation: ease graph-fade .15s .4s forwards;
+  animation: ease fade .15s .4s forwards;
 }
 
-@keyframes graph-fade {
+@keyframes fade {
   from {filter: opacity(0)}
   to {filter: opacity(1)}
 }
