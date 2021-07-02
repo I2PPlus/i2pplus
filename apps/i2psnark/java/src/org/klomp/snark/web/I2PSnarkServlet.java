@@ -306,11 +306,14 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean collapsePanels = _manager.util().collapsePanels();
         setHTMLHeaders(resp, cspNonce, false);
         PrintWriter out = resp.getWriter();
+        boolean isStandalone = !_context.isRouterContext();
         out.write(DOCTYPE + "<html>\n" +
                   "<head>\n<link rel=\"preload\" href=\"/themes/fonts/DroidSans.css\" as=\"style\">\n" +
                   "<link rel=\"preload\" href=\"" + _themePath + "images/images.css\" as=\"style\">\n" +
-                  "<link rel=\"shortcut icon\" href=\"" + _themePath + "favicon.ico\">\n" +
-                  "<title>");
+                  "<link rel=\"shortcut icon\" href=\"" + _themePath + "favicon.ico\">\n");
+        if (!isStandalone)
+            out.write("<link rel=\"preload\" href=\"/js/iframeResizer/iframeResizer.contentWindow.js?" + CoreVersion.VERSION + "\" as=\"script\">");
+        out.write("<title>");
         if (_contextName.equals(DEFAULT_NAME))
             out.write(_t("I2PSnark"));
         else
