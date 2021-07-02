@@ -824,7 +824,7 @@ textarea[name="config"], textarea[name="content"] {
 
 .headline h4 {
   padding: 5px 10px 5px 40px;
-  background: #eff2ff url(/themes/susidns/images/drive.png) 13px center no-repeat;
+  background: #eff2ff var(--files) no-repeat 13px center / 16px;
 }
 
 #filter {

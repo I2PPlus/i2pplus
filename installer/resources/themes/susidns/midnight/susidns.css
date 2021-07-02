@@ -1177,7 +1177,7 @@ input.export {
 
 .headline h4 {
   padding: 10px 10px 10px 35px;
-  background: #001 url(/themes/susidns/images/drive.png) no-repeat 13px center;
+  background: #001 var(--files) no-repeat 13px center / 16px;
 }
 
 p#filtered {

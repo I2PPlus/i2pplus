@@ -274,7 +274,7 @@ span.location {
   margin: 5px -6px 0;
   padding: 8px 10px 0 33px;
   border-top: 1px solid #8d8daa;
-  background: url(/themes/susidns/images/drive.png) 9px 7px no-repeat;
+  background: var(--files) no-repeat 9px 7px / 16px;
 }
 
 .storage {
@@ -1534,7 +1534,7 @@ form[action="addressbook"] table {
   }
 
   .headline h4 {
-    background: url(/themes/susidns/images/drive.png) no-repeat scroll 10px 8px;
+    background: var(--files) no-repeat 10px 8px / 16px;
   }
 }
 
