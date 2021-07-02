@@ -870,35 +870,35 @@ div.refresh {
 }
 
 .sb_netstatus.error::before {
-  background: var(--net_error) center center no-repeat;
+  background: var(--net_error) no-repeat center center;
 }
 
 .sb_netstatus.warn::before {
-  background: var(--net_warning) center center no-repeat;
+  background: var(--net_warning) no-repeat center center;
 }
 
 .sb_netstatus.testing::before {
-  background: var(--net_starting) center center no-repeat;
+  background: var(--net_starting) no-repeat center center;
 }
 
 .sb_netstatus.hidden::before {
-  background: var(--net_hidden) center center no-repeat;
+  background: var(--net_hidden) no-repeat center center;
 }
 
 .sb_netstatus.running::before {
-  background: var(--net_ok) center center no-repeat;
+  background: var(--net_ok) no-repeat center center;
 }
 
 .sb_netstatus.firewalled::before {
-  background: var(--net_firewalled) center center no-repeat;
+  background: var(--net_firewalled) no-repeat center center;
 }
 
 .sb_netstatus.vmcomm::before {
-  background: var(--net_vm) center center no-repeat;
+  background: var(--net_vm) no-repeat center center;
 }
 
 .sb_netstatus.clockskew::before {
-  background: var(--net_clockskew) center center no-repeat;
+  background: var(--net_clockskew) no-repeat center center;
 }
 
 /* end network status */
@@ -1803,62 +1803,52 @@ input.check[value$="updates"], button.check[value$="updates"] {
 
 input.check[value$="updates"]:hover, button.check[value$="updates"]:hover,
 input.check[value$="updates"]:focus, button.check[value$="updates"]:focus {
-  background: #fff url(/themes/console/images/buttons/update_hover.png) no-repeat 7px center;
   background: url(/themes/console/images/buttons/update_hover.png) no-repeat 7px center, var(--btn_hover);
 }
 
 input.delete, button.delete {
   padding: 5px 8px 5px 23px;
-  background: #eee url(/themes/console/images/buttons/delete.png) no-repeat 7px center;
-  background: url(/themes/console/images/buttons/delete.png) no-repeat 7px center, var(--btn);
+  background: var(--nuke) no-repeat 7px center, var(--btn);
 }
 
 input.delete:hover, button.delete:hover,
 input.delete:focus, button.delete:focus {
-  background: #eee url(/themes/console/images/buttons/delete_hover.png) no-repeat 7px center;
-  background: url(/themes/console/images/buttons/delete_hover.png) no-repeat 7px center, var(--btn_hover);
+  background: var(--nuke) no-repeat 7px center, var(--btn_hover);
 }
 
 input.delete[value^="Ban"], button.delete[value^="Ban"] {
   padding: 5px 8px 5px 23px;
-  background: #eee url(/themes/console/images/buttons/ban.png) no-repeat 7px center;
   background: url(/themes/console/images/buttons/ban.png) no-repeat 7px center, var(--btn);
 }
 
 input.delete[value^="Ban"]:hover, button.delete[value^="Ban"]:hover,
 input.delete[value^="Ban"]:focus, button.delete[value^="Ban"]:focus {
-  background: #fff url(/themes/console/images/buttons/ban.png) no-repeat 7px center;
   background: url(/themes/console/images/buttons/ban.png) no-repeat 7px center, var(--btn_hover);
 }
 
 input.download, button.download {
   padding: 5px 8px 5px 23px;
-  background: #eee url(/themes/console/images/buttons/download.png) no-repeat 7px center;
   background: url(/themes/console/images/buttons/download.png) no-repeat 7px center, var(--btn);
 }
 
 input.download:hover, button.download:hover,
 input.download:focus, button.download:focus {
-  background: #fff url(/themes/console/images/buttons/download.png) no-repeat 7px center;
   background: url(/themes/console/images/buttons/download.png) no-repeat 7px center, var(--btn_hover);
 }
 
 input.download[value^="Join"], button.download[value^="Join"] {
   padding: 5px 8px 5px 25px;
-  background: #eee url(/themes/console/images/svg/family.svg) no-repeat 7px center;
   background: url(/themes/console/images/svg/family.svg) no-repeat 7px center, var(--btn);
 }
 
 input.download[value^="Join"]:hover, button.download[value^="Join"]:hover,
 input.download[value^="Join"]:focus, button.download[value^="Join"]:focus {
-  background: #fff url(/themes/console/images/svg/family.svg) no-repeat 7px center;
   background: url(/themes/console/images/svg/family.svg) no-repeat 7px center, var(--btn_hover);
 }
 
 input.download[value$="from File"], button.download[value$="from File"],
 input.download[value$="from file"], button.download[value$="from file"] {
   padding: 5px 8px 5px 25px;
-  background: #eee url(/themes/console/images/svg/files.svg) no-repeat 7px center;
   background: url(/themes/console/images/svg/files.svg) no-repeat 7px center, var(--btn);
 }
 
@@ -1866,61 +1856,50 @@ input.download[value$="from File"]:hover, button.download[value$="from File"]:ho
 input.download[value$="from file"]:hover, button.download[value$="from file"]:hover,
 input.download[value$="from File"]:focus, button.download[value$="from File"]:focus,
 input.download[value$="from file"]:focus, button.download[value$="from file"]:focus {
-  background: #fff url(/themes/console/images/svg/files.svg) no-repeat 7px center;
   background: url(/themes/console/images/svg/files.svg) no-repeat 7px center, var(--btn_hover);
 }
 
 input.download[value^="Dump"], button.download[value^="Dump"] {
   padding: 5px 8px 5px 23px;
-  background: #eee url(/themes/console/images/buttons/dump-threads.png) no-repeat 7px center;
   background: url(/themes/console/images/buttons/dump-threads.png) no-repeat 7px center, var(--btn);
 }
 
 input.download[value^="Dump"]:hover, button.download[value^="Dump"]:hover,
 input.download[value^="Dump"]:focus, button.download[value^="Dump"]:focus {
-  background: #fff url(/themes/console/images/buttons/dump-threads.png) no-repeat 7px center;
   background: url(/themes/console/images/buttons/dump-threads.png) no-repeat 7px center, var(--btn_hover);
 }
 
 input.go, button.go, input[value="GO"], button#run {
   padding: 5px 8px 5px 23px;
-  background: #eee url(/themes/console/images/buttons/go.png) no-repeat 7px center;
   background: url(/themes/console/images/buttons/go.png) no-repeat 7px center, var(--btn);
 }
 
 input.go:hover, button.go:hover, input[value="GO"]:hover,
 input.go:focus, button.go:focus, input[value="GO"]:focus {
-  background: #fff url(/themes/console/images/buttons/go.png) no-repeat 7px center;
   background: url(/themes/console/images/buttons/go.png) no-repeat 7px center, var(--btn_hover);
 }
 
 input.go[value^="Create"], button.go[value^="Create"] {
   padding: 5px 8px 5px 25px;
-  background: #eee url(/themes/console/images/svg/package.svg) no-repeat 7px center;
   background: url(/themes/console/images/svg/package.svg) no-repeat 7px center, var(--btn);
 }
 
 input.go[value^="Create"]:hover, button.go[value^="Create"]:hover,
 input.go[value^="Create"]:focus, button.go[value^="Create"]:focus {
-  background: #fff url(/themes/console/images/svg/package.svg) no-repeat 7px center;
   background: url(/themes/console/images/svg/package.svg) no-repeat 7px center, var(--btn_hover);
 }
 
 input.back {
   padding: 5px 8px 5px 23px;
-  background: #eee url(/themes/console/images/buttons/back.png) no-repeat 7px center;
   background: url(/themes/console/images/buttons/back.png) no-repeat 7px center, var(--btn);
 }
 
-input.back:hover,
-input.back:focus {
-  background: #fff url(/themes/console/images/buttons/back.png) no-repeat 7px center;
+input.back:hover, input.back:focus {
   background: url(/themes/console/images/buttons/back.png) no-repeat 7px center, var(--btn_hover);
 }
 
 input.reload, button.reload {
   padding: 5px 8px 5px 23px;
-  background: #eee url(/themes/console/images/buttons/restore.png) no-repeat 7px center;
   background: url(/themes/console/images/buttons/restore.png) no-repeat 7px center, var(--btn);
 }
 
@@ -1992,51 +1971,51 @@ button.control {
 }
 
 button.accept.control {
-  background: url(/themes/console/images/buttons/Xstart.png) center center no-repeat, var(--btn);
+  background: url(/themes/console/images/buttons/Xstart.png) no-repeat center center, var(--btn);
 }
 
 button.accept.control:hover, button.accept.control:focus {
-  background: url(/themes/console/images/buttons/Xstart.png) center center no-repeat, var(--btn_hover);
+  background: url(/themes/console/images/buttons/Xstart.png) no-repeat center center, var(--btn_hover);
 }
 
 button.stop.control {
-  background: url(/themes/console/images/buttons/Xstop.png) center center no-repeat, var(--btn);
+  background: url(/themes/console/images/buttons/Xstop.png) no-repeat center center, var(--btn);
 }
 
 button.stop.control:hover, button.stop.control:focus {
-  background: url(/themes/console/images/buttons/Xstop.png) center center no-repeat, var(--btn_hover);
+  background: url(/themes/console/images/buttons/Xstop.png) no-repeat center center, var(--btn_hover);
 }
 
 button.add.control {
-  background: url(/themes/console/images/buttons/edit2.png) center center no-repeat, var(--btn);
+  background: url(/themes/console/images/buttons/edit2.png) no-repeat center center, var(--btn);
 }
 
 button.add.control:hover, button.add.control:focus {
-  background: url(/themes/console/images/buttons/edit2.png) center center no-repeat, var(--btn_hover);
+  background: url(/themes/console/images/buttons/edit2.png) no-repeat center center, var(--btn_hover);
 }
 
 button.delete.control {
-  background: url(/themes/console/images/buttons/delete.png) center center no-repeat, var(--btn);
+  background: var(--nuke) no-repeat center center, var(--btn);
 }
 
 button.delete.control:hover, button.delete.control:focus {
-  background: url(/themes/console/images/buttons/delete_hover.png) center center no-repeat, var(--btn_hover);
+  background: var(--nuke) no-repeat center center, var(--btn_hover);
 }
 
 button.check.control {
-  background: url(/themes/console/images/buttons/update.png) center center no-repeat, var(--btn);
+  background: url(/themes/console/images/buttons/update.png) no-repeat center center, var(--btn);
 }
 
 button.check.control:hover, button.check.control:focus {
-  background: url(/themes/console/images/buttons/update_hover.png) center center no-repeat, var(--btn_hover);
+  background: url(/themes/console/images/buttons/update_hover.png) no-repeat center center, var(--btn_hover);
 }
 
 button.download.control {
-  background: url(/themes/console/images/buttons/download.png) center center no-repeat, var(--btn);
+  background: url(/themes/console/images/buttons/download.png) no-repeat center center, var(--btn);
 }
 
 button.download.control:hover, button.download.control:focus {
-  background: url(/themes/console/images/buttons/download.png) center center no-repeat, var(--btn_hover);
+  background: url(/themes/console/images/buttons/download.png) no-repeat center center, var(--btn_hover);
 }
 
 button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset]::-moz-focus-inner {
@@ -2783,11 +2762,11 @@ tr.tablefooter:hover td, tr:hover .infohelp {
 }
 
 .sortup {
-  background: url(images/sort_up.png) center center no-repeat, var(--btn);
+  background: url(images/sort_up.png) no-repeat center center, var(--btn);
 }
 
 .sortup:hover {
-  background: url(images/sort_up.png) center center no-repeat, var(--btn_hover);
+  background: url(images/sort_up.png) no-repeat center center, var(--btn_hover);
   border: 1px solid #aaafce;
   opacity: 1;
 }
@@ -2801,21 +2780,21 @@ tr.tablefooter:hover td, tr:hover .infohelp {
 }
 
 .sortupactive {
-  background: url(images/sort_up.png) center center no-repeat, #fff;
+  background: url(images/sort_up.png) no-repeat center center, #fff;
 }
 
 .sortdown {
-  background: url(images/sort_down.png) center center no-repeat, var(--btn);
+  background: url(images/sort_down.png) no-repeat center center, var(--btn);
 }
 
 .sortdown:hover {
-  background: url(images/sort_down.png) center center no-repeat, var(--btn_hover);
+  background: url(images/sort_down.png) no-repeat center center, var(--btn_hover);
   border: 1px solid #aaafce;
   opacity: 1;
 }
 
 .sortdownactive {
-  background: url(images/sort_down.png) center center no-repeat, #fff;
+  background: url(images/sort_down.png) no-repeat center center, #fff;
 }
 
 /* end peer sort */
@@ -4103,14 +4082,14 @@ h3#servicedebug a, h3#graphinfo a, h3#browseronstart a {
   height: 16px;
   float: right;
   display: inline-block;
-  background: url(/themes/console/light/images/configure.svg) center center no-repeat;
+  background: url(/themes/console/light/images/configure.svg) no-repeat center center;
   background-size: 16px;
   content: "";
 }
 
 .main#tunnels h3 a[href^="/configtunnels#"]:hover::after,
 .main#tunnels h3 a[href$="i2ptunnelmgr"]:hover::after, #logs h3 a:hover::after {
-  background: url(/themes/console/light/images/configure_hover.svg) center center no-repeat;
+  background: url(/themes/console/light/images/configure_hover.svg) no-repeat center center;
   background-size: 16px;
 }
 
@@ -4258,7 +4237,7 @@ h3#activejobs + ol li::before, h3#scheduledjobs + ol li::before, h3#readyjobs + 
   width: 12px;
   height: 12px;
   display: inline-block;
-  background: url(/themes/console/images/svg/timer.svg) center center no-repeat;
+  background: url(/themes/console/images/svg/timer.svg) no-repeat center center;
   background-size: 12px;
   content: "";
 }
@@ -4356,7 +4335,7 @@ h3#totaljobstats {
 .homelinkedit th:first-child, #sidebarconf th:first-child, #consolepass th:first-child {
   width: 5%;
   font-size: 0 !important;
-  background: url(/themes/console/images/buttons/delete.png) center center no-repeat, linear-gradient(to bottom, #fff, #fafbff);
+  background: var(--nuke) no-repeat center center / 14px , linear-gradient(to bottom, #fff, #fafbff);
 }
 
 .homelinkedit th:last-child, .homelinkedit th:nth-child(3) {
@@ -10996,11 +10975,11 @@ p#gatherstats {
 }
 
 #wizardpage .yes {
-  background: var(--yes) center center no-repeat;
+  background: var(--yes) no-repeat center center;
 }
 
 #wizardpage .no {
-  background: var(--no) center center no-repeat;
+  background: var(--no) no-repeat center center;
 }
 
 #wizard #langsettings {
@@ -11463,7 +11442,7 @@ div.app, .sitemapLink, .sitemapLabel {
 }
 
   #peers #ntcpconnections th:nth-last-child(3)::after {
-    background: url(/themes/console/images/info/queued.png) center center no-repeat;
+    background: url(/themes/console/images/info/queued.png) no-repeat center center;
   }
 
   #peers #ntcpconnections th:nth-last-child(4) {
@@ -11906,12 +11885,12 @@ div.app:hover img, .sitemaplink:hover img {
 
 #profilelist .fast.integrated {
   background: url(/themes/console/images/svg/fast.svg) left center no-repeat,
-              url(/themes/console/images/svg/highcap.svg) center center no-repeat,
+              url(/themes/console/images/svg/highcap.svg) no-repeat center center,
               url(/themes/console/images/svg/integrated.svg) right center no-repeat !important;
 }
 
 #profilelist .highcap {
-  background: url(/themes/console/images/svg/highcap.svg) center center no-repeat;
+  background: url(/themes/console/images/svg/highcap.svg) no-repeat center center;
 }
 
 #profilelist .highcap.integrated {
@@ -11920,7 +11899,7 @@ div.app:hover img, .sitemaplink:hover img {
 }
 
 #profilelist .standard {
-  background: url(/themes/console/images/svg/standard.svg) center center no-repeat;
+  background: url(/themes/console/images/svg/standard.svg) no-repeat center center;
 }
 
 #profilelist .standard.integrated {

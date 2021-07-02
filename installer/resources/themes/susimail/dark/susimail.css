@@ -1372,7 +1372,7 @@ hr {
 }
 
 #dologin input[name="user"] {
-  background: #010 var(--user) no-repeat 5px 6px !important;
+  background: #010 var(--user) no-repeat 5px 6px / 16px !important;
 }
 
 #dologin input[name="pass"] {
@@ -1971,16 +1971,16 @@ _:-ms-lang(x), tr.list0:hover, tr.list1:hover {
 
 #mailbox th:last-child {
   padding: 6px 0 !important;
-  background: url(/themes/console/images/buttons/delete.png) center center no-repeat, linear-gradient(to bottom, #010 50%, #000 50%);
+  background: var(--nuke) no-repeat center center / 14px, linear-gradient(to bottom, #010 50%, #000 50%);
 }
 
 #mailbox th.mailListFlagged {
-  background: url(/themes/susimail/images/status.png) center center no-repeat, linear-gradient(to bottom, #010 50%, #000 50%);
+  background: url(/themes/susimail/images/status.png) no-repeat center center, linear-gradient(to bottom, #010 50%, #000 50%);
   background-blend-mode: luminosity, normal;
 }
 
 #mailbox th.MailListAttachment {
-  background: var(--attach) center center no-repeat, linear-gradient(to bottom, #010 50%, #000 50%) !important;
+  background: var(--attach) no-repeat center center, linear-gradient(to bottom, #010 50%, #000 50%) !important;
   background-size: 14px, 100% !important;
 }
 
@@ -2090,7 +2090,7 @@ td.mailListFlagged img::after {
   width: 16px;
   height: 16px;
   display: inline-block;
-  background: url(/themes/susimail/images/new.svg) center center no-repeat;
+  background: url(/themes/susimail/images/new.svg) no-repeat center center;
   background-size: 14px;
   content: "";
 }
@@ -2229,12 +2229,12 @@ td.mailListAttachment img {
 }
 
 .mailListAttachment.isAttached {
-  background: var(--attach) center center no-repeat;
+  background: var(--attach) no-repeat center center;
   background-size: 14px;
 }
 
 tr:hover .mailListAttachment.isAttached {
-  background: var(--attach_hover) center center no-repeat;
+  background: var(--attach_hover) no-repeat center center;
   background-size: 14px;
 }
 
@@ -2574,7 +2574,7 @@ tr.mailbody td {
   vertical-align: middle;
   font-size: 0;
   border: none;
-  background: url(/themes/console/images/buttons/show.png) center center no-repeat;
+  background: url(/themes/console/images/buttons/show.png) no-repeat center center;
   background-size: 20px 20px !important;
   cursor: pointer;
   mix-blend-mode: luminosity;
@@ -2585,9 +2585,9 @@ tr.mailbody td {
 }
 
 #toggle.hidepass {
-  background: url(/themes/console/images/buttons/hide.png) center center no-repeat;
+  background: url(/themes/console/images/buttons/hide.png) no-repeat center center;
 }
 
 #toggle.showpass {
-  background: url(/themes/console/images/buttons/show.png) center center no-repeat;
+  background: url(/themes/console/images/buttons/show.png) no-repeat center center;
 }
