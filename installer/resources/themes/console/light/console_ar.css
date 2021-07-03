@@ -385,9 +385,7 @@ div.news {
 p#helptranslate {
   padding-right: 50px !important;
   text-align: right !important;
-  background-position: right 14px center !important;
-  background-image: url(/themes/console/images/info/infohelp.png);
-  background-size: 28px auto !important;
+  background: var(--infohelp) right 14px center / 28px !important;
 }
 
 #loggingoptions p {

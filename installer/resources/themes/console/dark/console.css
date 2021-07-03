@@ -11009,13 +11009,11 @@ a[href^="/netdb"]:hover span {
 
 #netconfig td.infohelp, #reseedconfig td.infohelp {
   box-shadow: var(--highlight), inset 0 0 1px 1px #040 !important;
-  background: #000 var(--infohelp) no-repeat 12px center !important;
-  background-size: 32px !important;
+  background: #000 var(--infohelp) no-repeat 12px center  / 32px !important;
 }
 
 #netconfig td.infowarn {
-  background: #000 var(--infowarn) no-repeat 12px center !important;
-  background-size: 32px !important;
+  background: #000 var(--infowarn) no-repeat 12px center / 32px !important;
 }
 
 #manualreseed table tr, #newfamily tr:last-child table tr {

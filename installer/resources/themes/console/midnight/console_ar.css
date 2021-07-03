@@ -377,28 +377,28 @@ table#netconfig th, table#externali2cp th, table#plugininstall th, table#plugini
 }
 
 #sidebarconf td:nth-child(3) {
-  text-align: left !important;
   padding-left: 0;
+  text-align: left !important;
 }
 
 .configtable td.infohelp, p.infohelp, td.infohelp, p#debugmode, p#sybilinfo, p.infowarn, td.infowarn, p#keyringhelp, h3#shutdownrouter + p, h3#restartrouter + p, h3#servicedebug + p, h3#browseronstart + p, h3#runonstartup + p, h3#systray + p {
-  background: #000 url(images/infohelp.png) right 8px center no-repeat !important;
   padding: 15px 45px 15px 15px !important;
+  background: #000 var(--infohelp) no-repeat right 8px center / 28px !important;
 }
 
 p.infowarn, td.infowarn {
-  background: #000 url(images/infowarn.png) right 8px center no-repeat !important;
+  background: #000 url(images/infowarn.png) no-repeat right 8px center !important;
 }
 
 .main#config_update .messages {
-  background: #000 url(images/infohelp.png) no-repeat right 10px center !important;
-  text-align: right;
   padding: 15px 55px 15px 15px;
+  background: #000 var(--infohelp) no-repeat right 10px center / 28px !important;
+  text-align: right;
 }
 
 .main#config_update .messages a {
-  float: left;
   margin: 0 5px
+  float: left;
 }
 
 td.optionsave {
@@ -464,10 +464,9 @@ table#addkeyring td.infohelp {
 }
 
 p#helptranslate, #floodfillconfig tr:first-child .infohelp {
-  text-align: right !important;
   padding-right: 50px !important;
-  background-image: url(/themes/console/images/info/infohelp.png);
-  background-position: right 12px center !important;
+  text-align: right !important;
+  background: var(--infohelp) no-repeat right 12px center / 28px !important;
 }
 
 textarea[name="trustedKeys"] {

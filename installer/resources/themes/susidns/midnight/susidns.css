@@ -458,7 +458,7 @@ div#messages > p.messages {
 
 #messages p {
   padding: 15px 15px 15px 40px !important;
-  background: url(/themes/console/images/info/infohelp.png) 6px center no-repeat;
+  background: var(--infohelp) no-repeat 6px center / 28px;
 }
 
 a:link {
@@ -599,7 +599,7 @@ p.messages {
 #helpsubs {
   margin: -18px 0 -11px;
   padding: 15px 15px 15px 52px;
-  background: #001 url(/themes/console/images/info/infohelp.png) 12px center no-repeat;
+  background: #001 var(--infohelp) no-repeat 12px center / 28px;
 }
 
 .iframed #helpsubs {
