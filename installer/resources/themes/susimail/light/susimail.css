@@ -1022,11 +1022,11 @@ hr {
 }
 
 #dologin input[name="user"] {
-  background: #fbfbff url(/themes/console/images/buttons/user.png) 5px 6px no-repeat !important;
+  background: #fbfbff var(--user) no-repeat 5px center !important;
 }
 
 #dologin input[name="pass"] {
-  background: #fbfbff url(/themes/console/images/buttons/password.png) 5px 5px no-repeat !important;
+  background: #fbfbff url(/themes/console/images/buttons/password.png)  no-repeat 5px center !important;
 }
 
 #dologin input[name="user"]:focus, #dologin input[name="pass"]:focus {
@@ -1655,14 +1655,11 @@ td.mailListSender a, td.mailListSender a:hover {
 }
 
 td.mailListSender, tr:hover td.mailListSender {
-  white-space: nowrap;
-  padding-right: 6px;
   padding-left: 22px !important;
+  padding-right: 6px;
   width: 1%;
-  background-image: url(/themes/console/images/buttons/user.png) !important;
-  background-position: 6px center !important;
-  background-repeat: no-repeat !important;
-  background-size: 12px 12px;
+  white-space: nowrap;
+  background: var(--user) no-repeat 6px center / 12px !important;
 }
 
 #mailbox tr:hover .mailListSender a {
@@ -1683,7 +1680,6 @@ td.mailListSubject a {
 tr:hover td.mailListSubject a {
   width: calc(100% - 2px);
   border-radius: 2px 15px 15px 2px;
-  background: #ffc;
   background: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,208,.9) 20%);
 }
 

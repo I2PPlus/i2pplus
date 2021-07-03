@@ -6545,7 +6545,7 @@ p.threatpoints.hot {
 
 p.family {
   white-space: nowrap;
-  background: url(/themes/console/images/buttons/users.png) no-repeat 8px center, linear-gradient(to right, #000, #000800 80%, #001000);
+  background: var(--family) no-repeat 8px center / 28px, linear-gradient(to right, #000, #000800 80%, #001000);
   background-blend-mode: normal;
 }
 
