@@ -6486,7 +6486,7 @@ p#fullhistory {
 #help #configinfo td.infowarn {
   padding: 10px 10px 10px 38px !important;
   border: 1px solid #aaafce;
-  background: #fffff5 url(/themes/console/images/info/infowarn.png) no-repeat 10px center / 20px !important;
+  background: #fffff5 var(--infowarn) no-repeat 10px center / 20px !important;
 }
 
 /* informational images */
@@ -6519,7 +6519,7 @@ p.sybilinfo {
 p.infowarn, #sybilanalysis {
   border: 1px solid #aaafce;
   padding: 15px 15px 15px 50px;
-  background: #fff url(/themes/console/images/info/infowarn.png) no-repeat 10px center / 28px;
+  background: #fff var(--infowarn) no-repeat 10px center / 28px;
   line-height: 130%;
 }
 
