@@ -2923,12 +2923,6 @@ td.optionsave, .formaction, form[action="configpeer"] tr:last-child td, table#ad
               repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) !important;
 }
 
-#pluginupdater {
-  padding: 15px 5px 15px 50px;
-  background: var(--refresh) no-repeat 15px center / 28px, linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)),
-              repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) !important;
-}
-
 .configtable {
   box-shadow: none !important;
 }
@@ -9370,13 +9364,8 @@ h4#updateplugins {
   background: linear-gradient(to bottom, #fff 50%, rgba(238, 238, 255, .2) 50%, #eef 100%) #fff !important;
 }
 
-.formaction#pluginupdater, table#permabanned, table#i2pupdates {
+table#permabanned, table#i2pupdates {
   margin-bottom: 10px;
-}
-
-.formaction#pluginupdater form {
-  padding: 0;
-  margin: 0;
 }
 
 #pluginconfigactions {
@@ -9440,10 +9429,6 @@ a[href^="configpeer?peer"]:hover::after {
 
 #webappconfigactions, #externali2cp {
   margin-bottom: 5px !important;
-}
-
-#pluginupdater {
-  margin-bottom: 10px !important;
 }
 
 /* debug */

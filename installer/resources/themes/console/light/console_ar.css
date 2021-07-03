@@ -407,7 +407,7 @@ p#helptranslate {
 }
 
 .formaction#submitconsolepass, .formaction#tunnelconfigsave, .formaction#homeapps, .formaction#homesites, #sidebardefaults, #loggingoptions,
-#reseedconfig, #addkeyring, #netconfig, #advconf, #bandwidthconfig, #externali2cp, #pluginupdater, #newfamily, #webappconfigactions, #configstats {
+#reseedconfig, #addkeyring, #netconfig, #advconf, #bandwidthconfig, #externali2cp, #newfamily, #webappconfigactions, #configstats {
   margin-bottom: 15px !important;
 }
 
@@ -1042,10 +1042,6 @@ p#profiles_overview, #profiles .widescroll + h3, #thresholds + h3, #profiles #ba
 
 #pluginconfigactions {
   margin: -6px -32px -6px 32px !important;
-}
-
-#pluginupdater.formaction {
-  margin: -16px 0;
 }
 
 #config_service .formaction {
