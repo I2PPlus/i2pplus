@@ -1421,14 +1421,14 @@ div#messages {
   text-align: center;
   border-radius: 0 0 4px 4px;
   box-shadow: 0 1px 2px rgba(100,100,200,.7);
-  background: #113 url(/themes/snark/light/images/delete.png) right 8px top 5px no-repeat !important;
+  background: #113 var(--no) right 8px top 5px no-repeat !important;
   background-size: 16px 16px !important;
   cursor: crosshair;
   animation: 2s hide-up 10s ease-out forwards;
 }
 
 div#messages:hover {
-  background: #113 url(/themes/snark/light/images/delete_hover.png) right 8px top 5px no-repeat !important;
+  background: #113 var(--no) right 8px top 5px no-repeat !important;
   background-size: 16px 16px !important;
 }
 
