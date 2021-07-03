@@ -76,7 +76,7 @@ table.book th {
 }
 
 .book th:last-child {
-  background: url(/themes/console/images/buttons/delete.png) center calc(50% + 2px) no-repeat, linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
+  background: var(--nuke) no-repeat center calc(50% + 1px) / 14px, linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
 }
 
 table.book tr:hover textarea {

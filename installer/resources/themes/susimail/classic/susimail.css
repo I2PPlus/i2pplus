@@ -37,7 +37,7 @@ div.header {
   margin: 0 -10px;
   background: #fff !important;
   border-bottom: 1px solid #aaafce;
-  background: #fff url(/themes/susimail/images/susimail.png) center center no-repeat !important;
+  background: #fff url(/themes/susimail/images/susimail.png) no-repeat center center !important;
   background-size: auto 80% !important;
   display: none;
 }
@@ -319,11 +319,11 @@ _:-ms-lang(x), table#mailbox {
 }
 
 #mailbox th.mailListDelete {
-  background: url(/themes/console/images/buttons/delete.png) center center no-repeat, linear-gradient(to bottom, #fff 0%, #fff 50%, #eff2ff 50%, #eff2ff 100%) !important;
+  background: var(--nuke) no-repeat center center / 14px, linear-gradient(to bottom, #fff 0%, #fff 50%, #eff2ff 50%, #eff2ff 100%) !important;
 }
 
 #mailbox th.mailListFlagged{
-  background: url(/themes/susimail/images/status.png) center center no-repeat, linear-gradient(to bottom, #fff 0%, #fff 50%, #eff2ff 50%, #eff2ff 100%) !important;
+  background: url(/themes/susimail/images/status.png) no-repeat center center, linear-gradient(to bottom, #fff 0%, #fff 50%, #eff2ff 50%, #eff2ff 100%) !important;
   background-blend-mode: luminosity;
 }
 
@@ -640,12 +640,12 @@ input.clearselection:hover, input.clearselection:focus {
 
 input.delete, input.delete_attachment, input.really_delete {
   padding: 5px 8px 5px 24px;
-  background: url(/themes/console/images/buttons/delete.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
+  background: var(--nuke) no-repeat 7px center / 14px, linear-gradient(to bottom, #fff, #eef);
 }
 
 input.delete:hover, input.delete_attachment:hover, input.really_delete:hover,
 input.delete:focus, input.delete_attachment:focus, input.really_delete:focus {
-  background: url(/themes/console/images/buttons/delete_hover.png) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--nuke) no-repeat 7px center / 14px, linear-gradient(to bottom, #ddd 0%, #fff 100%);
 }
 
 .topbuttons input.delete {
@@ -1630,7 +1630,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
   font-size: 0;
   border: none;
   box-shadow: none;
-  background: url(/themes/console/images/buttons/show.png) center center no-repeat;
+  background: url(/themes/console/images/buttons/show.png) no-repeat center center;
   background-size: 20px 20px !important;
   cursor: pointer;
   mix-blend-mode: luminosity;
@@ -1641,9 +1641,9 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 }
 
 #toggle.hidepass {
-  background: url(/themes/console/images/buttons/hide.png) center center no-repeat;
+  background: url(/themes/console/images/buttons/hide.png) no-repeat center center;
 }
 
 #toggle.showpass {
-  background: url(/themes/console/images/buttons/show.png) center center no-repeat;
+  background: url(/themes/console/images/buttons/show.png) no-repeat center center;
 }

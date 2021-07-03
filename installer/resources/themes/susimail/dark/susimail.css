@@ -39,21 +39,6 @@ body {
   background-size: 100%, 1024px;
 }
 
-/* preload button mouseovers */
-/*body {
-  background: url(/themes/console/dark/images/camo.png),
-  url(/themes/susimail/images/compose_hover.png) no-repeat,
-  url(/themes/susimail/images/login_hover.png) no-repeat,
-  url(/themes/susimail/images/logout_hover.png) no-repeat,
-  url(/themes/susimail/images/offline_hover.png) no-repeat,
-  url(/themes/susimail/images/save_hover.png) no-repeat,
-  url(/themes/susimail/images/send_hover.png) no-repeat,
-  url(/themes/console/images/buttons/configure_hover.png),
-  url(/themes/console/images/buttons/delete_hover.png),
-  url(/themes/console/images/buttons/update_hover.png), #a4a4cb !important;
-  background-size: 32px 32px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0 !important;
-}*/
-
 body.iframed {
   background: transparent !important;
   margin: -1px -1px -5px;
@@ -68,10 +53,9 @@ body.iframed {
   url(images/save_hover.svg) no-repeat,
   url(images/send_hover.svg) no-repeat,
   url(images/buttons/configure_hover.svg),
-  url(/themes/console/images/buttons/delete_hover.png),
   url(images/refresh_hover.svg),
   url(/themes/console/images/buttons/dropdown_hover.svg), transparent !important;
-  background-size: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0 !important;
+  background-size: 0 !important;
 }
 
 * {
