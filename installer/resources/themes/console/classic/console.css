@@ -1910,14 +1910,12 @@ input.reload:focus, button.reload:focus {
 
 input.reload[value$="restart"], button.reload[value$="restart"] {
   padding: 5px 8px 5px 23px;
-  background: var(--restart) no-repeat 7px center, var(--btn);
-  background-size: 12px, 100% !important;
+  background: var(--restart) no-repeat 7px center / 12px, var(--btn) !important;
 }
 
 input.reload[value$="restart"]:hover, button.reload[value$="restart"]:hover,
 input.reload[value$="restart"]:focus, button.reload[value$="restart"]:focus {
-  background: var(--restart_hover) no-repeat 7px center, var(--btn_hover);
-  background-size: 12px, 100% !important;
+  background: var(--restart_hover) no-repeat 7px center / 12px, var(--btn_hover) !important;
 }
 
 input.reload[value^="Update"], button.reload[value^="Update"] {
@@ -2038,7 +2036,7 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 }
 
 .routersummary button.reload {
-  background: url(images/restart.svg) no-repeat center center / 14px, var(--btn) !important;
+  background: var(--restart) no-repeat center center / 14px, var(--btn) !important;
 }
 
 .routersummary button.reload:hover, .routersummary button.reload:focus {
