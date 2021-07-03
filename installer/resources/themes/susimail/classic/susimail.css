@@ -3,6 +3,7 @@
 
 @import url(/themes/fonts/DroidSans.css);
 @import url(../images/images.css);
+@import url(images/images.css);
 
 :root {
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
@@ -885,22 +886,18 @@ input[disabled] {
 
 select {
   margin: 3px;
-  padding: 3px 20px 3px 4px;
+  padding: 4px 20px 4px 5px;
   vertical-align: middle;
   text-overflow: ellipsis;
   font-size: 9pt;
   color: #333;
-  box-shadow: 0 0 0 1px #fff inset, 0 0 1px 0 #ddd;
-  background: url(/themes/console/classic/images/dropdown.png) right 8px center no-repeat #fff;
-  background: url(/themes/console/classic/images/dropdown.png) right 8px center no-repeat, linear-gradient(to bottom, #fff, #f4f5ff);
-  background-size: 10px auto, 100% 100%;
   border-radius: 2px;
   border: 1px solid #aaafce;
   box-shadow: inset 0 0 0 1px #fff;
-  cursor: pointer;
-  -moz-appearance: none;
-  -webkit-appearance: none;
+  box-shadow: 0 0 0 1px #fff inset, 0 0 1px 0 #ddd;
+  background: var(--dropdown) no-repeat right 8px center / 10px, linear-gradient(to bottom, #fff, #f4f5ff);
   appearance: none;
+  cursor: pointer;
 }
 
 .folders select {
@@ -912,31 +909,23 @@ select option {
 }
 
 select:hover, select:active {
-  background: #ddd url(/themes/console/classic/images/dropdown_hover.png) right 8px center no-repeat !important;
-  background: url(/themes/console/classic/images/dropdown_hover.png) right 8px center no-repeat, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
-  background-size: 10px auto, 100% 100% !important;
+  background: var(--dropdown_hover) no-repeat right 8px center / 10px, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
 }
 
 select:focus {
   color: #000;
-  background: #fff url(/themes/console/classic/images/dropdown_hover.png) right 8px center no-repeat !important;
-  background: url(/themes/console/classic/images/dropdown_hover.png) right center 8px no-repeat,  linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
-  background-size: 10px auto, 100% 100% !important;
+  background: var(--dropdown_hover) no-repeat right 8px center / 10px,  linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
   outline: none !important;
 }
 
-select::-ms-expand {
-  display: none;
-}
-
-div#composemail {
-  text-align: center !important;
+#composemail {
   padding: 10px;
+  text-align: center !important;
 }
 
 #composemail table {
-  width: auto;
   margin: auto;
+  width: auto;
 }
 
 #composemail input {
@@ -964,10 +953,10 @@ div#composemail {
 }
 
 #mailhead td:first-child {
-  white-space: nowrap;
-  width: 20px;
-  text-align: right;
   padding-left: 10px;
+  width: 20px;
+  white-space: nowrap;
+  text-align: right;
   font-weight: 700;
 }
 
@@ -981,7 +970,7 @@ div#composemail {
   box-shadow: 0 0 0 1px #fff;
   background: #fefefe;
   background: linear-gradient(to bottom, rgba(240,240,255,.4), rgba(220,220,255,.5)) #fefefe;
-  box-shadow: inset 0 0 0 1px #fff, 0 0 1px #999;
+  box-shadow: inset 0 0 0 1px #fff, 0 0 1px #ccc;
   filter: opacity(0);
   animation: linear fade-in .15s .5s forwards;
 }
@@ -1007,7 +996,7 @@ div#composemail {
 
 #dologin input[name="pass"] {
   padding: 4px 5px 4px 26px !important;
-  background: #fff url(/themes/console/images/buttons/password.png) no-repeat 5px center;
+  background: #fff var(--key) no-repeat 5px center / 16px;
 }
 
 #dologin input[name="user"], #dologin input[name="pass"], #dologin input[name="host"] {
@@ -1017,9 +1006,9 @@ div#composemail {
 }
 
 #dologin table {
+  margin: 0 auto;
   width: 100%;
   width: calc(100% - 2px);
-  margin: 0 auto;
   border-collapse: collapse;
 }
 
@@ -1030,14 +1019,14 @@ div#composemail {
 }
 
 #dologin td:first-child {
-  white-space: nowrap;
   padding-left: 0;
+  white-space: nowrap;
   width: 120px !important;
 }
 
 #dologin td:last-child {
-  width: auto !important;
   padding-right: 0;
+  width: auto !important;
 }
 
 #dologin td[colspan="2"] {
@@ -1051,21 +1040,20 @@ div#composemail {
 #dologin h1 {
   margin: -10px 0 10px;
   padding: 10px 15px;
-  background: #fff;
-  background: linear-gradient(to right, #fff 30%, #eff2ff);
-  border-bottom: 1px solid #aaafce;
-  color: #35415f;
-  font-size: 14pt;
-  text-align: left;
   letter-spacing: .08em;
+  text-align: left;
+  font-size: 14pt;
+  color: #35415f;
   word-spacing: .1em;
+  border-bottom: 1px solid #aaafce;
   box-shadow: inset 0 0 0 1px #fff;
+  background: linear-gradient(to right, #fff 30%, #eff2ff);
 }
 
 #dologin hr {
   display: block !important;
-  background: #aaafce;
   box-shadow: 0 0 0 1px rgba(255,255,255,.5);
+  background: #aaafce;
 }
 
 #dologin tr:nth-child(6) hr {
@@ -1085,11 +1073,9 @@ div#composemail {
   padding: 3px 10px;
   display: inline-block;
   font-size: 90%;
-  border: 1px solid rgba(255,255,255,0);
   border: 1px solid rgba(119, 120, 159, .3);
   border-radius: 25px;
   box-shadow: 0 0 1px rgba(255,255,255,0);
-  background: #efefff;
   background: linear-gradient(to right, #f2f2ff, #f6f6ff, #f2f2ff);
   transition: ease all .1s;
 }
