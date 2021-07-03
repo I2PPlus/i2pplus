@@ -1558,7 +1558,7 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
   padding-left: 20px;
   line-height: 160%;
   font-weight: 400;
-  background: url(images/infocircle.png) left center no-repeat;
+  background: url(images/infocircle.png) no-repeat left center;
   background-size: 14px auto;
 }
 
@@ -1613,7 +1613,7 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
   height: 18px;
   display: inline-block;
   vertical-align: middle;
-  background: url(images/configure.svg) no-repeat scroll left calc(50% - 1px) / 16px;
+  background: var(--configure) no-repeat scroll left calc(50% - 1px) / 16px;
   opacity: .8;
   content: "";
 }
@@ -2328,23 +2328,19 @@ _:-ms-lang(x), #trackerselect tr:last-child {
   vertical-align: middle;
   border: 1px solid transparent;
   border-radius: 2px;
-  background: url(images/configure.svg) no-repeat center center;
-  background-size: 16px 16px;
+  background: var(--configure) no-repeat center center / 16px;
 }
 
 #configs a[href^="/config"]:hover::after {
   border: 1px solid #252 !important;
-  background: #030 url(images/configure.svg) no-repeat center center;
-  background: url(images/configure.svg) no-repeat center center, linear-gradient(to bottom, #050 50%, #010 50%);
-  background-size: 16px 16px, 100% 100%;
+  background: var(--configure) no-repeat center center / 16px, linear-gradient(to bottom, #050 50%, #010 50%);
 }
 
 #configs a[href^="/config"]:active::after {
   border: 1px solid #f60 !important;
   box-shadow: inset 3px 3px 2px 1px #000;
-  background: #020 url(images/configure.svg) no-repeat center center;
-  background-size: 16px 16px, 100% 100%;
-  transform: scale(0.9) !important;
+  background: #020 var(--configure) no-repeat center center / 12px;
+  transform: scale(.9) !important;
   transition: none !important;
 }
 
@@ -2725,14 +2721,6 @@ hr.debug {
   white-space: nowrap;
 }
 
-td#bwHelp {
-  background: url(images/infocircle.png) left 10px center no-repeat;
-  background-size: 14px auto;
-  padding-left: 24px !important;
-  width: 90%;
-  line-height: 100%;
-}
-
 /* end configs */
 
 .knownTracker input[type=radio], .knownTracker input[type=radio][disabled], .knownTracker input[type=radio]:hover, .knownTracker input[type=radio]:focus {
@@ -2753,10 +2741,10 @@ td#bwHelp {
 }
 
 #filecheck {
-  display: inline-block;
   margin: 5px 0;
-  background: url(images/progressbar.gif) left center no-repeat;
   padding-left: 22px;
+  display: inline-block;
+  background: var(--progressbar) no-repeat left center;
 }
 
 #filecheck a {
@@ -3007,7 +2995,7 @@ td.commentRating {
 .commentDate {
   padding-left: 20px !important;
   width: 105px;
-  background: url(images/clock.png) left center no-repeat;
+  background: url(images/clock.png) no-repeat left center;
 }
 
 .snarkCommentInfo td:first-child, .snarkComments td:first-child {
