@@ -170,7 +170,7 @@ p.mailbody {
 div.attached {
   padding: 5px 0 5px 25px;
   background: #fff;
-  background: url(images/attach.png) 5px center no-repeat;
+  background: url(images/attach.png) no-repeat 5px center;
   vertical-align: middle;
   text-align: left;
 }
@@ -364,11 +364,8 @@ td.mailListDelete, td.mailListFlagged, td.mailListAttachment {
 }
 
 .mailListSender {
-  background-image: url(/themes/console/images/buttons/user.png);
-  background-position: 2px center;
-  background-repeat: no-repeat;
-  background-size: 12px 12px;
   padding-left: 18px;
+  background: var(--user) no-repeat 2px center / 12px;
 }
 
 #mailbox hr, #newmail hr {
@@ -1015,19 +1012,19 @@ div#composemail {
 }
 
 #dologin input[name="user"] {
-  background: #fff url(/themes/console/images/buttons/user.png) 5px center no-repeat;
   padding: 4px 5px 4px 26px !important;
+  background: #fff var(--user) no-repeat 5px center / 16px;
 }
 
 #dologin input[name="pass"] {
-  background: #fff url(/themes/console/images/buttons/password.png) 5px center no-repeat;
   padding: 4px 5px 4px 26px !important;
+  background: #fff url(/themes/console/images/buttons/password.png) no-repeat 5px center;
 }
 
 #dologin input[name="user"], #dologin input[name="pass"], #dologin input[name="host"] {
+  margin-right: 3px;
   width: 60% !important;
   width: calc(60% + 26px) !important;
-  margin-right: 3px;
 }
 
 #dologin table {

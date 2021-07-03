@@ -853,7 +853,7 @@ input[type="file"] {
 
 .username {
   padding-left: 22px;
-  background: #fff url(/themes/console/images/buttons/user.png) 3px center no-repeat;
+  background: #fff var(--user) no-repeat 3px center / 16px;
 }
 
 .password {
