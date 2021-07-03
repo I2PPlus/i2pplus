@@ -37,27 +37,13 @@ body:not(old) {
   url(/themes/susimail/images/save_hover.png) no-repeat,
   url(/themes/susimail/images/send_hover.png) no-repeat,
   url(/themes/console/images/buttons/configure_hover.png) no-repeat,
-  url(/themes/console/images/buttons/delete_hover.png) no-repeat,
   url(/themes/console/images/buttons/update_hover.png) no-repeat, #000010 !important;
-  background-size: 100%, 171px 148px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0 !important;
+  background-size: 100%, 171px 148px, 0, 0, 0, 0, 0, 0, 0, 0 !important;
 }
 
 body.iframed {
-  background: transparent url(/themes/console/images/transparent.gif) !important;
   margin: 1px 0 0;
-}
-
-body:not(old).iframed {
-  background: url(/themes/susimail/images/compose_hover.png) no-repeat,
-  url(/themes/susimail/images/login_hover.png) no-repeat,
-  url(/themes/susimail/images/logout_hover.png) no-repeat,
-  url(/themes/susimail/images/offline_hover.png) no-repeat,
-  url(/themes/susimail/images/save_hover.png) no-repeat,
-  url(/themes/susimail/images/send_hover.png) no-repeat,
-  url(/themes/console/images/buttons/configure_hover.png) no-repeat,
-  url(/themes/console/images/buttons/delete_hover.png) no-repeat,
-  url(/themes/console/images/buttons/update_hover.png) no-repeat !important;
-  background-size: 0, 0, 0, 0, 0, 0, 0, 0, 0 !important;
+  background: transparent !important;
 }
 
 * {

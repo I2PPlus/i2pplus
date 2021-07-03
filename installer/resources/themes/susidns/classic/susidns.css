@@ -3,6 +3,7 @@
 
 @import url(/themes/fonts/DroidSans.css);
 @import url(../images/images.css);
+@import url(images/images.css);
 
 :root {
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
@@ -76,7 +77,7 @@ table.book th {
 }
 
 .book th:last-child {
-  background: url(/themes/console/images/buttons/delete.png) center calc(50% + 2px) no-repeat, linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
+  background: var(--nuke) no-repeat center calc(50% + 1px) / 14px, linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
 }
 
 table.book tr:hover textarea {
@@ -129,16 +130,17 @@ input:focus::placeholder {
 }
 
 #navi {
-  border: 1px solid #aaafce;
-  background: linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
   margin: -1px -11px 0;
   padding: 0;
   position: sticky;
   top: -1px;
   z-index: 999;
+  border: 1px solid #aaafce;
+  background: linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
 }
 
 .iframed #navi {
+  margin-bottom: -12px;
   position: static;
 }
 

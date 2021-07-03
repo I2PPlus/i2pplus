@@ -3,6 +3,7 @@
 
 @import url(/themes/fonts/DroidSans.css);
 @import url(/themes/console/images/i2ptunnel.css);
+@import url(images/i2ptunnel.css);
 
 body {
   margin: 2.5% 2%;
@@ -272,7 +273,7 @@ select[disabled], select[disabled]:hover, select[disabled]:focus, select[disable
 
 #sigType[disabled] {
   padding-left: 14px !important;
-  background: url(/themes/console/images/buttons/cryptokey.png) left center no-repeat !important;
+  background: url(/themes/console/images/buttons/cryptokey.png) no-repeat left center !important;
 }
 
 a:link, a:visited {
@@ -450,12 +451,12 @@ td.infohelp {
 }
 
 .tunnelName a {
-  padding: 3px 3px 3px 20px !important;
-  background: url(/themes/console/images/buttons/configure.png) left center no-repeat;
+  padding: 3px 3px 3px 18px !important;
+  background: var(--configure) no-repeat 2px center / 14px;
 }
 
 .tunnelName a:hover {
-  background: url(/themes/console/images/buttons/configure_hover.png) left center no-repeat;
+  background: var(--configure_hover) no-repeat 2px center / 14px;
 }
 
 .tunnelName a {

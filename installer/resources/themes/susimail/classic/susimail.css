@@ -3,20 +3,26 @@
 
 @import url(/themes/fonts/DroidSans.css);
 @import url(../images/images.css);
+@import url(images/images.css);
+
+:root {
+  --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
+  --monospaced: Droid Sans Mono, Andale Mono, DejaVu Sans Mono, Lucida Console, monospace;
+}
 
 body {
   margin: 3px 4px;
-  background: #eef url(/themes/console/classic/images/bg0.png);
-  background-size: 120px 120px;
   color: #2c354f;
-  font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
+  font-family: var(--bodyfont);
   font-size: 9pt;
+  background: #eef url(/themes/console/classic/images/bg0.png);
+  background-size: 120px;
 }
 
 body.iframed {
-  background: transparent !important;
   margin: 5px 0 0 0;
   overflow: hidden; /* webkit fix */
+  background: transparent !important;
 }
 
 * {
@@ -33,29 +39,26 @@ b, th, .mailListSender a {
 }
 
 div.header {
-  padding: 30px 10px;
   margin: 0 -10px;
-  background: #fff !important;
-  border-bottom: 1px solid #aaafce;
-  background: #fff url(/themes/susimail/images/susimail.png) center center no-repeat !important;
-  background-size: auto 80% !important;
+  padding: 30px 10px;
   display: none;
+  border-bottom: 1px solid #aaafce;
+  background: #fff url(/themes/susimail/images/susimail.png) no-repeat center center / auto 80% !important;
 }
 
 .header img {
-  transform: scale(0.6);
   display: none;
+  transform: scale(.6);
 }
 
 h3#config {
   margin: -11px auto 10px;
   padding: 5px 10px;
   width: 300px;
-  border: 1px solid #aaafce;
   color: #35415f;
-  background: url(/themes/console/classic/images/titlebg.png) right center no-repeat;
-  background: linear-gradient(to bottom, #fff 0%, #fff 50%, #eff2ff 50%, #eff2ff 100%);
+  border: 1px solid #aaafce;
   border-radius: 0 0 2px 2px;
+  background: linear-gradient(to bottom, #fff 0%, #fff 50%, #eff2ff 50%, #eff2ff 100%);
 }
 
 .iframed h3#config {
@@ -93,17 +96,16 @@ p.text {
 }
 
 p.error, p.info {
-  color: #900;
-  padding: 15px 15px 15px 45px;
-  border: 1px solid #aaafce;
-  background: #ffe url(/themes/console/images/info/errortriangle.png) 8px center no-repeat;
-  background-size: 28px auto;
-  text-align: left;
   margin: -1px -11px;
-  box-shadow: inset 0 0 0 1px #fff;
+  padding: 15px 15px 15px 45px;
   display: block;
-  font-weight: 700;
   line-height: 120%;
+  text-align: left;
+  font-weight: 700;
+  color: #900;
+  border: 1px solid #aaafce;
+  box-shadow: inset 0 0 0 1px #fff;
+  background: #ffe url(/themes/console/images/info/errortriangle.png) no-repeat 8px center / 28px auto;
 }
 
 td p.info, td p.error {
@@ -115,15 +117,15 @@ tr.mailbody p.error {
 }
 
 tr.mailbody:nth-child(n+3) {
-  background: #fff;
   border-top: 1px solid #aaafce;
   border-bottom: 1px solid #aaafce;
+  background: #fff;
 }
 
 p.info {
+  padding: 15px 15px 15px 45px;
   color: #337;
   background: #ffe url(/themes/console/images/info/infohelp.png) 8px center no-repeat;
-  padding: 15px 15px 15px 45px;
 }
 
 span.coloured {
@@ -131,12 +133,11 @@ span.coloured {
 }
 
 div.footer {
-  border-top: 1px solid #aaafce;
   margin: 0 -10px -10px;
-  background: #fff;
-  background: rgba(255,255,255,.5);
   padding: 1px;
   display: none;
+  border-top: 1px solid #aaafce;
+  background: rgba(255,255,255,.5);
 }
 
 p.footer {
@@ -152,9 +153,9 @@ p.footer {
 }
 
 p.mailbody {
-  font: 9pt "Droid Sans Mono", "Andale Mono", "DejaVu Sans Mono", "Lucida Console", monospace;
   margin: 0 20px 10px;
   text-align: left;
+  font: 9pt var(--monospaced);
 }
 
 .iframed p.mailbody {
@@ -169,10 +170,9 @@ p.mailbody {
 
 div.attached {
   padding: 5px 0 5px 25px;
-  background: #fff;
-  background: url(images/attach.png) no-repeat 5px center;
   vertical-align: middle;
   text-align: left;
+  background: url(images/attach.png) no-repeat 5px center;
 }
 
 .iframed .attached {
@@ -180,8 +180,8 @@ div.attached {
 }
 
 .attached img {
-  border: 1px solid #cfd6ff;
   padding: 2px;
+  border: 1px solid #cfd6ff;
   image-orientation: from-image;
 }
 
@@ -236,9 +236,9 @@ a.linknew {
 }
 
 td {
+  padding: 1px 3px;
   line-height: 12pt;
   font-size: 9pt;
-  padding: 1px 3px;
 }
 
 tr.list0 {
@@ -312,33 +312,23 @@ _:-ms-lang(x), table#mailbox {
 
 #mailbox th {
   padding: 6px;
-  border-bottom: 1px solid #aaafce;
-  background: url(/themes/console/classic/images/titlebg.png) right center no-repeat;
-  background: linear-gradient(to bottom, #fff 0%, #fff 50%, #eff2ff 50%, #eff2ff 100%) !important;
   font-size: 70%;
+  border-bottom: 1px solid #aaafce;
+  background: linear-gradient(to bottom, #fff 0%, #fff 50%, #eff2ff 50%, #eff2ff 100%) !important;
 }
 
 #mailbox th.mailListDelete {
-  background: url(/themes/console/images/buttons/delete.png) center center no-repeat, linear-gradient(to bottom, #fff 0%, #fff 50%, #eff2ff 50%, #eff2ff 100%) !important;
+  background: var(--nuke) no-repeat center center / 14px, linear-gradient(to bottom, #fff 0%, #fff 50%, #eff2ff 50%, #eff2ff 100%) !important;
 }
 
 #mailbox th.mailListFlagged{
-  background: url(/themes/susimail/images/status.png) center center no-repeat, linear-gradient(to bottom, #fff 0%, #fff 50%, #eff2ff 50%, #eff2ff 100%) !important;
+  background: url(/themes/susimail/images/status.png) no-repeat center center, linear-gradient(to bottom, #fff 0%, #fff 50%, #eff2ff 50%, #eff2ff 100%) !important;
   background-blend-mode: luminosity;
 }
 
 #mailbox th.mailListAttachment {
   background: url(/susimail/icons/attach.png) center right 3px no-repeat, linear-gradient(to bottom, #fff 0%, #fff 50%, #eff2ff 50%, #eff2ff 100%) !important;
 }
-
-/*
-#mailbox th:last-child, #mailbox td:last-child, #mailbox th:nth-last-child(3), #mailbox td:nth-last-child(3) {
-  text-align: right;
-  width: 100px;
-  white-space: nowrap;
-  padding-right: 5px;
-}
-*/
 
 #mailbox td:nth-child(5) {
   text-align: left;
@@ -431,7 +421,7 @@ img.sort {
 }
 
 pre {
-  font: 8.5pt "Droid Sans Mono", "Andale Mono", "DejaVu Sans Mono", "Lucida Console", monospace;
+  font: 8.5pt var(--monospaced);
   margin-left: 1cm;
   margin-right: 1cm;
 }
@@ -516,7 +506,7 @@ input[type=radio]:hover, input[type=radio]:focus, input[type=checkbox]:hover, in
 }
 
 input { /* opera fix */
-  font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
+  font-family: var(--bodyfont);
   font-size: 9pt;
 }
 
@@ -640,12 +630,12 @@ input.clearselection:hover, input.clearselection:focus {
 
 input.delete, input.delete_attachment, input.really_delete {
   padding: 5px 8px 5px 24px;
-  background: url(/themes/console/images/buttons/delete.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
+  background: var(--nuke) no-repeat 7px center / 14px, linear-gradient(to bottom, #fff, #eef);
 }
 
 input.delete:hover, input.delete_attachment:hover, input.really_delete:hover,
 input.delete:focus, input.delete_attachment:focus, input.really_delete:focus {
-  background: url(/themes/console/images/buttons/delete_hover.png) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--nuke) no-repeat 7px center / 14px, linear-gradient(to bottom, #ddd 0%, #fff 100%);
 }
 
 .topbuttons input.delete {
@@ -896,22 +886,18 @@ input[disabled] {
 
 select {
   margin: 3px;
-  padding: 3px 20px 3px 4px;
+  padding: 4px 20px 4px 5px;
   vertical-align: middle;
   text-overflow: ellipsis;
   font-size: 9pt;
   color: #333;
-  box-shadow: 0 0 0 1px #fff inset, 0 0 1px 0 #ddd;
-  background: url(/themes/console/classic/images/dropdown.png) right 8px center no-repeat #fff;
-  background: url(/themes/console/classic/images/dropdown.png) right 8px center no-repeat, linear-gradient(to bottom, #fff, #f4f5ff);
-  background-size: 10px auto, 100% 100%;
   border-radius: 2px;
   border: 1px solid #aaafce;
   box-shadow: inset 0 0 0 1px #fff;
-  cursor: pointer;
-  -moz-appearance: none;
-  -webkit-appearance: none;
+  box-shadow: 0 0 0 1px #fff inset, 0 0 1px 0 #ddd;
+  background: var(--dropdown) no-repeat right 8px center / 10px, linear-gradient(to bottom, #fff, #f4f5ff);
   appearance: none;
+  cursor: pointer;
 }
 
 .folders select {
@@ -923,31 +909,23 @@ select option {
 }
 
 select:hover, select:active {
-  background: #ddd url(/themes/console/classic/images/dropdown_hover.png) right 8px center no-repeat !important;
-  background: url(/themes/console/classic/images/dropdown_hover.png) right 8px center no-repeat, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
-  background-size: 10px auto, 100% 100% !important;
+  background: var(--dropdown_hover) no-repeat right 8px center / 10px, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
 }
 
 select:focus {
   color: #000;
-  background: #fff url(/themes/console/classic/images/dropdown_hover.png) right 8px center no-repeat !important;
-  background: url(/themes/console/classic/images/dropdown_hover.png) right center 8px no-repeat,  linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
-  background-size: 10px auto, 100% 100% !important;
+  background: var(--dropdown_hover) no-repeat right 8px center / 10px,  linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
   outline: none !important;
 }
 
-select::-ms-expand {
-  display: none;
-}
-
-div#composemail {
-  text-align: center !important;
+#composemail {
   padding: 10px;
+  text-align: center !important;
 }
 
 #composemail table {
-  width: auto;
   margin: auto;
+  width: auto;
 }
 
 #composemail input {
@@ -975,10 +953,10 @@ div#composemail {
 }
 
 #mailhead td:first-child {
-  white-space: nowrap;
-  width: 20px;
-  text-align: right;
   padding-left: 10px;
+  width: 20px;
+  white-space: nowrap;
+  text-align: right;
   font-weight: 700;
 }
 
@@ -992,7 +970,7 @@ div#composemail {
   box-shadow: 0 0 0 1px #fff;
   background: #fefefe;
   background: linear-gradient(to bottom, rgba(240,240,255,.4), rgba(220,220,255,.5)) #fefefe;
-  box-shadow: inset 0 0 0 1px #fff, 0 0 1px #999;
+  box-shadow: inset 0 0 0 1px #fff, 0 0 1px #ccc;
   filter: opacity(0);
   animation: linear fade-in .15s .5s forwards;
 }
@@ -1018,7 +996,7 @@ div#composemail {
 
 #dologin input[name="pass"] {
   padding: 4px 5px 4px 26px !important;
-  background: #fff url(/themes/console/images/buttons/password.png) no-repeat 5px center;
+  background: #fff var(--key) no-repeat 5px center / 16px;
 }
 
 #dologin input[name="user"], #dologin input[name="pass"], #dologin input[name="host"] {
@@ -1028,9 +1006,9 @@ div#composemail {
 }
 
 #dologin table {
+  margin: 0 auto;
   width: 100%;
   width: calc(100% - 2px);
-  margin: 0 auto;
   border-collapse: collapse;
 }
 
@@ -1041,14 +1019,14 @@ div#composemail {
 }
 
 #dologin td:first-child {
-  white-space: nowrap;
   padding-left: 0;
+  white-space: nowrap;
   width: 120px !important;
 }
 
 #dologin td:last-child {
-  width: auto !important;
   padding-right: 0;
+  width: auto !important;
 }
 
 #dologin td[colspan="2"] {
@@ -1062,21 +1040,20 @@ div#composemail {
 #dologin h1 {
   margin: -10px 0 10px;
   padding: 10px 15px;
-  background: #fff;
-  background: linear-gradient(to right, #fff 30%, #eff2ff);
-  border-bottom: 1px solid #aaafce;
-  color: #35415f;
-  font-size: 14pt;
-  text-align: left;
   letter-spacing: .08em;
+  text-align: left;
+  font-size: 14pt;
+  color: #35415f;
   word-spacing: .1em;
+  border-bottom: 1px solid #aaafce;
   box-shadow: inset 0 0 0 1px #fff;
+  background: linear-gradient(to right, #fff 30%, #eff2ff);
 }
 
 #dologin hr {
   display: block !important;
-  background: #aaafce;
   box-shadow: 0 0 0 1px rgba(255,255,255,.5);
+  background: #aaafce;
 }
 
 #dologin tr:nth-child(6) hr {
@@ -1096,11 +1073,9 @@ div#composemail {
   padding: 3px 10px;
   display: inline-block;
   font-size: 90%;
-  border: 1px solid rgba(255,255,255,0);
   border: 1px solid rgba(119, 120, 159, .3);
   border-radius: 25px;
   box-shadow: 0 0 1px rgba(255,255,255,0);
-  background: #efefff;
   background: linear-gradient(to right, #f2f2ff, #f6f6ff, #f2f2ff);
   transition: ease all .1s;
 }
@@ -1230,11 +1205,15 @@ table#pagenav {
   display: none;
 }
 
-div#prefsave {
-  margin: 10px -10px -24px;
+#prefsave {
+  margin: 10px -10px -21px;
   padding: 6px 0 5px;
   border-top: 1px solid #aaafce;
   background: #fff;
+}
+
+.iframed #prefsave {
+  margin-bottom: -24px;
 }
 
 tr.bottombuttons table#pagenav {
@@ -1630,7 +1609,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
   font-size: 0;
   border: none;
   box-shadow: none;
-  background: url(/themes/console/images/buttons/show.png) center center no-repeat;
+  background: url(/themes/console/images/buttons/show.png) no-repeat center center;
   background-size: 20px 20px !important;
   cursor: pointer;
   mix-blend-mode: luminosity;
@@ -1641,9 +1620,9 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 }
 
 #toggle.hidepass {
-  background: url(/themes/console/images/buttons/hide.png) center center no-repeat;
+  background: url(/themes/console/images/buttons/hide.png) no-repeat center center;
 }
 
 #toggle.showpass {
-  background: url(/themes/console/images/buttons/show.png) center center no-repeat;
+  background: url(/themes/console/images/buttons/show.png) no-repeat center center;
 }

@@ -401,7 +401,7 @@ html.bwscheduler, body.bwscheduler {
 }
 
 .bwscheduler .bwaction a::after {
-  content: url(/themes/console/images/buttons/delete.png);
+  content: var(--nuke);
   display: inline-block;
   height: 16px;
   width: 16px;
