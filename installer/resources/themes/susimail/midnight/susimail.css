@@ -101,15 +101,14 @@ p.text {
 }
 
 p.info, p.error {
-  color: #c9ceff;
-  display: block !important;
-  border: 1px solid #27235c;
   margin: 20px 20px 0 !important;
   padding: 15px 10px 15px 45px;
-  background: #000 url(/themes/console/images/info/infohelp.png) 10px center no-repeat;
-  background: url(/themes/console/images/info/infohelp.png) 10px center no-repeat, linear-gradient(to right, #000000, #010015 65%, #020018 90%);
+  display: block !important;
   text-align: left;
+  color: #c9ceff;
+  border: 1px solid #27235c;
   border-radius: 2px;
+  background: var(--infohelp) 10px center no-repeat / 28px, linear-gradient(to right, #000000, #010015 65%, #020018 90%);
 }
 
 p.error {

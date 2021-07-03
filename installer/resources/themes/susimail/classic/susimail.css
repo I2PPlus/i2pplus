@@ -125,7 +125,7 @@ tr.mailbody:nth-child(n+3) {
 p.info {
   padding: 15px 15px 15px 45px;
   color: #337;
-  background: #ffe url(/themes/console/images/info/infohelp.png) 8px center no-repeat;
+  background: #ffe var(--infohelp) no-repeat 8px center / 28px;
 }
 
 span.coloured {
