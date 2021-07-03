@@ -8457,19 +8457,6 @@ input#hideme {
   display: none;
 }
 
-#pluginupdater {
-  margin-top: -11px;
-  margin-bottom: 10px !important;
-  padding: 15px 5px 15px 50px;
-  border: var(--innerborder);
-  background: url(/themes/console/images/info/update.png) 12px center no-repeat, #000;
-  background-size: 28px;
-}
-
-#pluginupdater form {
-  margin-bottom: 0;
-}
-
 .formaction#tunnelconfigsave, .formaction#homeapps {
   margin-bottom: -2px !important;
 }

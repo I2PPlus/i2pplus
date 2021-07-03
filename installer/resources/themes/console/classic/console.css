@@ -4466,7 +4466,7 @@ p#enablefullstats {
   border: 1px solid #aaafce;
 }
 
-.formaction#clientsconfig, .formaction#webappconfigactions, .formaction#pluginupdater, .formaction#sidebardefaults,
+.formaction#clientsconfig, .formaction#webappconfigactions, .formaction#sidebardefaults,
 .formaction#tunnelconfigsave, .formaction#submitconsolepass {
   margin-top: -6px;
   border: 1px solid #aaafce;
@@ -4485,13 +4485,6 @@ p#enablefullstats {
   margin-top: -1px;
   margin-bottom: -9px;
   border: 1px solid #aaafce;
-}
-
-.formaction#pluginupdater {
-  margin-bottom: 6px;
-  padding: 15px 15px 15px 50px;
-  background: url(/themes/console/images/info/update.png) 12px center no-repeat, #fff;
-  background-size: 28px;
 }
 
 .formaction#webappconfigactions, .formaction#clientsconfig {
@@ -6590,7 +6583,7 @@ p#pluginconfigtext {
 
 #plugininstall .infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fff url(/themes/console/images/info/plugin_link.png) no-repeat 12px center / 28px;
+  background: #fff url(/themes/console/images/svg/plugin.svg) no-repeat 12px center / 28px;
 }
 
 #plugininstall tr:nth-child(3) td:nth-last-child(2), #manualreseed tr:nth-child(3) td:nth-last-child(2) {
