@@ -5465,11 +5465,12 @@ a.viewfullentry:hover {
 }
 
 .addtobook a::after {
-  content: url(/themes/console/images/buttons/add_address.png);
-}
-
-.addtobook a:hover {
-  filter: drop-shadow(0 0 1px var(--hover));
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  vertical-align: middle;
+  background: var(--abook_helper) no-repeat center center / 16px;
+  content: "";
 }
 
 #noleasesets, #notinitialized, .netdbnotfound {
