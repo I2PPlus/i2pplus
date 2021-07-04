@@ -7417,9 +7417,12 @@ b.netdb_transport {
 }
 
 .addtobook a::after {
+  width: 16px;
+  height: 16px;
   display: inline-block;
   vertical-align: middle;
-  content: url(/themes/console/images/buttons/add_address.png);
+  background: var(--abook_helper) no-repeat center center / 16px;
+  content: "";
 }
 
 .addtobook a:hover {
@@ -13181,7 +13184,7 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
 
 .lsdest.published {
   padding-left: 38px;
-  background: var(--hardhat) no-repeat 4px center / 14px, var(--globe) no-repeat 2px center / 12px,
+  background: var(--hardhat) no-repeat 4px center / 14px, var(--globe) no-repeat 21px center / 14px,
               linear-gradient(to bottom, #fff, #eef);
 }
 
