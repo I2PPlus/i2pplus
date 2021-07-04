@@ -418,7 +418,7 @@
 
 <a href="/help/configuration">
 <span class="sitemapLink" title="<%=intl._t("Configuring I2P for optimal performance")%>">
-<img src="/themes/console/images/info/optimize.png">
+<img src="/themes/console/images/svg/wrench.svg">
 <span class="sitemapLabel"><%=intl._t("Configuration")%></span>
 </span>
 </a>

@@ -72,8 +72,7 @@
 <% } %>
 
 <div class="service_container">
-<h3 class="ptitle" id="servicedebug"><%=intl._t("Debugging")%>&nbsp;<span class="h3navlinks"><a href="/jobs" title="<%=intl._t("View job queue")%>">
-<img src="/themes/console/images/info/task.png"></a></span></h3>
+<h3 class="ptitle" id="servicedebug"><%=intl._t("Debugging")%></h3>
 <p class="infohelp">
 <% if (net.i2p.util.SystemVersion.hasWrapper()) { %>
 <%=intl._t("To assist in debugging I2P, it may be helpful to generate a thread dump which will be written to the {0}wrapper log{1}.", " <a href=\"/wrapper.log\" target=\"_blank\">", "</a>").replace("I2P", "I2P+")%>

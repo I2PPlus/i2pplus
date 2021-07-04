@@ -6486,40 +6486,34 @@ p#fullhistory {
 #help #configinfo td.infowarn {
   padding: 10px 10px 10px 38px !important;
   border: 1px solid #aaafce;
-  background: #fffff5 url(/themes/console/images/info/infowarn.png) no-repeat 10px center / 20px !important;
+  background: #fffff5 var(--infowarn) no-repeat 10px center / 20px !important;
 }
 
 /* informational images */
 
 #bugreports td.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fff url(/themes/console/images/svg/bug.svg) no-repeat 12px center / 28px !important;
+  background: #fff var(--bug) no-repeat 12px center / 28px !important;
 }
 
 p#debugmode {
   padding: 15px 15px 15px 50px;
-  background: #fff url(/themes/console/images/svg/bug.svg) no-repeat 12px center / 28px;
+  background: #fff var(--bug) no-repeat 12px center / 28px;
 }
 
 p.sybilinfo {
   padding: 15px 15px 15px 50px;
-  background: #fff url(/themes/console/images/svg/sybil.svg) no-repeat 12px center / 28px;
+  background: #fff var(--sybil) no-repeat 12px center / 28px;
 }
 
 p.sybilinfo.experimental {
   background: #fff url(/themes/console/images/svg/experimental.svg) no-repeat 12px center / 28px;
 }
 
-@media screen and (max-width: 1200px) {
-p.sybilinfo {
-  margin: -3px 0 8px;
-}
-}
-
 p.infowarn, #sybilanalysis {
   border: 1px solid #aaafce;
   padding: 15px 15px 15px 50px;
-  background: #fff url(/themes/console/images/info/infowarn.png) no-repeat 10px center / 28px;
+  background: #fff var(--infowarn) no-repeat 10px center / 28px;
   line-height: 130%;
 }
 
@@ -6528,10 +6522,13 @@ p.infowarn, #sybilanalysis {
   background: #fff url(/themes/console/images/svg/sybil.svg) no-repeat 10px center / 28px;
 }
 
-@media screen and (max-width: 1200px) {
-#sybilanalysis {
-  margin: -3px 0 0;
+#sybilanalysis form {
+  margin: 0;
 }
+
+@media screen and (max-width: 1200px) {
+  p.sybilinfo {margin: -3px 0 8px}
+  #sybilanalysis {margin: -3px 0 0}
 }
 
 .infowarn#tunnelconfig {
@@ -6551,7 +6548,6 @@ p.infowarn, #sybilanalysis {
 #addkeyring td.infohelp {
   padding: 15px 15px 15px 50px;
   background: #fff var(--keys) no-repeat 12px center / 28px;
-  background-size: 28px;
 }
 
 #floodfillconfig tr:first-child .infohelp {
@@ -7478,7 +7474,7 @@ th code {
 
 #debug h2 {
   margin: 12px 0 0;
-  background: url(/themes/console/images/svg/bug.svg) no-repeat right 6px center / 20px, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
+  background: var(--bug) no-repeat right 6px center / 20px, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
   background-blend-mode: luminosity, normal, normal;
 }
 
