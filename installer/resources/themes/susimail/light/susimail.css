@@ -18,14 +18,14 @@ body {
 /* preload button mouseovers */
 body {
   background: url(/themes/console/light/images/tile2.png),
-  var(--compose_hover) no-repeat,
-  var(--login_hover) no-repeat,
-  var(--logout_hover) no-repeat,
-  var(--offline_hover) no-repeat,
-  var(--save_hover) no-repeat,
-  var(--send_hover) no-repeat,
-  url(/themes/console/images/buttons/configure_hover.png),
-  url(/themes/console/images/buttons/update_hover.png), #a4a4cb !important;
+  var(--compose_hover),
+  var(--login_hover),
+  var(--logout_hover),
+  var(--offline_hover),
+  var(--save_hover),
+  var(--send_hover),
+  var(--configure_hover),
+  var(--refresh_hover), #a4a4cb !important;
   background-size: 32px, 0, 0, 0, 0, 0, 0, 0, 0 !important;
 }
 
@@ -419,29 +419,29 @@ input.cancel:hover, #nukemail input.clearselection:hover {
 
 input.clearselection {
   padding: 5px 7px 5px 24px;
-  background: var(--none.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
+  background: url(../images/none.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
 }
 
 input.clearselection:hover {
-  background: var(--none.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
+  background: url(../images/none.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
 }
 
 input.delete, input.delete_attachment, input.really_delete {
   padding: 5px 7px 5px 24px;
-  background: var(--nuke) no-repeat 6px center / 14px, linear-gradient(to bottom, #fff, #efefff);
+  background: var(--delete) no-repeat 6px center / 14px, linear-gradient(to bottom, #fff, #efefff);
 }
 
 input.delete:hover, input.delete_attachment:hover, input.really_delete:hover {
-  background: var(--nuke) no-repeat 6px center / 14px, linear-gradient(to bottom, #eee, #fff);
+  background: var(--delete_hover) no-repeat 6px center / 14px, linear-gradient(to bottom, #eee, #fff);
 }
 
 input.download {
   padding: 5px 7px 5px 24px;
-  background: url(/themes/console/images/buttons/download.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
+  background: var(--download) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
 }
 
 input.download:hover {
-  background: url(/themes/console/images/buttons/download.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
+  background: var(--download_hover) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
 }
 
 input.offline {
@@ -511,11 +511,11 @@ input.reload:hover, input.refresh:hover, .fakebutton:hover {
 
 input.invertselection {
   padding: 5px 7px 5px 24px;
-  background: var(--selection.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
+  background: url(../images/selection.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
 }
 
 input.invertselection:hover {
-  background: var(--selection.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
+  background: url(../images/selection.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
 }
 
 input.show {
@@ -1003,7 +1003,7 @@ hr {
 }
 
 #dologin input[name="pass"] {
-  background: #fbfbff url(/themes/console/images/buttons/password.png)  no-repeat 5px center !important;
+  background: #fbfbff var(--key) no-repeat 5px center !important;
 }
 
 #dologin input[name="user"]:focus, #dologin input[name="pass"]:focus {
@@ -1012,13 +1012,12 @@ hr {
 }
 
 #dologin input[name="user"], #dologin input[name="pass"], #dologin input[name="host"] {
-  width: 240px;
   margin-right: 5px;
+  width: 240px;
 }
 
 #dologin hr {
   margin: 16px 0 4px;
-  background: #77789f;
   background: linear-gradient(to right, rgba(119, 120, 159, 0), #1d1f4f, rgba(119, 120, 159, 0));
 }
 
@@ -1036,11 +1035,9 @@ hr {
   margin: 8px -2px 6px;
   padding: 3px 10px;
   color: #327bbf;
-  border: 1px solid rgba(255,255,255,0);
   border: 1px solid rgba(119, 120, 159, .3);
   border-radius: 25px;
   box-shadow: 0 0 1px rgba(255,255,255,0);
-  background: #efefff;
   background: linear-gradient(to right, rgba(252,252,255,.3), #f6f6ff, rgba(252,252,255,.3));
   transition: ease all .1s;
 }
@@ -1597,7 +1594,7 @@ _:-ms-lang(x), tr.list0:hover, tr.list1:hover {
 }
 
 #mailbox th.mailListFlagged {
-  background: var(--status.png) no-repeat center center, linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
+  background: url(../images/status.png) no-repeat center center, linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
   background-blend-mode: luminosity, normal;
 }
 
