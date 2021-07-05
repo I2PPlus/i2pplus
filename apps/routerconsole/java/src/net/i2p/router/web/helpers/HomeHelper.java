@@ -109,6 +109,7 @@ public class HomeHelper extends HelperBase {
         "cake.i2p" + S + _x("Transient server-encrypted filesharing and pastebin") + S + "http://cake.i2p/" + S + I + "svg/cake.svg" + S +
         "ebooks.i2p" + S + _x("Huge collection of books &amp; magazines &amp; comics") + S + "http://ebooks.i2p/" + S + I + "svg/books.svg" + S +
         "fs.i2p" + S + _x("Secure filesharing service") + S + "http://fs.i2p/" + S + I + "svg/cloud.svg" + S +
+        "git.i2p" + S + _x("Community Git hosting") + S + "http://git.i2p/" + S + I + "svg/git.svg" + S +
         "git.idk.i2p" + S + _x("A public anonymous Git hosting site - supports pulling via Git and HTTP and pushing via SSH") + S + "http://git.idk.i2p/explore/projects" + S + I + "svg/gitlab.svg" + S +
         "inclib.i2p" + S + _x("The Radical Militant Library") + S + "http://inclib.i2p/" + S + I + "svg/books.svg" + S +
         "sharefile.i2p" + S + _x("Secure filesharing service") + S + "http://sharefile.i2p/" + S + I + "svg/cloud.svg" + S +
@@ -144,7 +145,7 @@ public class HomeHelper extends HelperBase {
 // forums + social
         //"arc2.i2p" + S + _x("Anarchist Research Center") + S + "http://arc2.i2p/en/view/home" + S + I + "svg/peers.svg" + S +
         //"Cerapadus" + S + _x("Security oriented IRC server") + S + "http://cerapadus.i2p/" + S + I + "cerapadus.png" + S +
-        _x("Dancing Elephants") + S + _x("Rocksolid forums for the darknets") + S + "http://def3.i2p/" + S + I + "svg/forum.svg" + S +
+        //_x("Dancing Elephants") + S + _x("Rocksolid forums for the darknets") + S + "http://def3.i2p/" + S + I + "svg/forum.svg" + S +
         _x("Dev Forum") + S + _x("Development forum") + S + "http://zzz.i2p/" + S + I + "svg/forum.svg" + S +
         //"garden.i2p" + S + _x("Gardening forums") + S + "http://garden.i2p/" + S + I + "svg/garden.svg" + S +
         _x("I2P Forum") + S + _x("I2P-related community forums") + S + "http://i2pforum.i2p/" + S + I + "svg/forum.svg" + S +

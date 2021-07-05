@@ -43,7 +43,7 @@ div.header {
   padding: 30px 10px;
   display: none;
   border-bottom: 1px solid #aaafce;
-  background: #fff url(/themes/susimail/images/susimail.png) no-repeat center center / auto 80% !important;
+  background: #fff url(../images/susimail.png) no-repeat center center / auto 80% !important;
 }
 
 .header img {
@@ -172,7 +172,7 @@ div.attached {
   padding: 5px 0 5px 25px;
   vertical-align: middle;
   text-align: left;
-  background: url(images/attach.png) no-repeat 5px center;
+  background: var(--attach) no-repeat 5px center / 16px;
 }
 
 .iframed .attached {
@@ -322,7 +322,7 @@ _:-ms-lang(x), table#mailbox {
 }
 
 #mailbox th.mailListFlagged{
-  background: url(/themes/susimail/images/status.png) no-repeat center center, linear-gradient(to bottom, #fff 0%, #fff 50%, #eff2ff 50%, #eff2ff 100%) !important;
+  background: url(../images/status.png) no-repeat center center, linear-gradient(to bottom, #fff 0%, #fff 50%, #eff2ff 50%, #eff2ff 100%) !important;
   background-blend-mode: luminosity;
 }
 
@@ -427,26 +427,25 @@ pre {
 }
 
 .page {
-  background: #eef url(/themes/console/classic/images/bg2.png);
-  background: linear-gradient(to bottom, rgba(255,255,255,.7),rgba(255,255,255,.2)), url(/themes/console/classic/images/bg2.png) #eef;
-  background-size: 100% 100%, 120px 120px;
-  color: #0c153d;
   margin: 0;
   padding: 0 10px 10px;
-  border: 1px solid #aaafce;
-  font-size: 9pt !important;
-  line-height: 160% !important;
-  box-shadow: 0 0 0 1px #eee;
-  text-align: center;
   min-width: 800px;
+  line-height: 160% !important;
+  text-align: center;
+  color: #0c153d;
+  font-size: 9pt !important;
+  border: 1px solid #aaafce;
+  box-shadow: 0 0 0 1px #eee;
+  background: linear-gradient(to bottom, rgba(255,255,255,.7),rgba(255,255,255,.2)), url(/themes/console/classic/images/bg2.png) #eef;
+  background-size: 100% 100%, 120px 120px;
 }
 
 .iframed .page {
-  background: transparent;
   margin: -6px 1px 11px;
   min-width: 580px;
   border: none;
   box-shadow: none;
+  background: transparent;
 }
 
 table {
@@ -500,9 +499,9 @@ input[type=checkbox], input[type=radio] {
 }
 
 input[type=radio]:hover, input[type=radio]:focus, input[type=checkbox]:hover, input[type=checkbox]:focus {
-  filter: drop-shadow(0 0 3px #89f);
   box-shadow: inset 0 0 1px 2px #89f;
   outline: none;
+  filter: drop-shadow(0 0 3px #89f);
 }
 
 input { /* opera fix */
@@ -511,7 +510,7 @@ input { /* opera fix */
 }
 
 textarea {
-  font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
+  font-family: var(--monospaced);
   font-size: 9pt;
 }
 
@@ -621,21 +620,21 @@ input.cancel:hover, input.cancel:focus {
 
 input.clearselection {
   padding: 5px 8px 5px 24px;
-  background: url(/themes/susimail/images/none.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
+  background: url(../images/none.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
 }
 
 input.clearselection:hover, input.clearselection:focus {
-  background: url(/themes/susimail/images/none.png) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: url(../images/none.png) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
 }
 
 input.delete, input.delete_attachment, input.really_delete {
   padding: 5px 8px 5px 24px;
-  background: var(--nuke) no-repeat 7px center / 14px, linear-gradient(to bottom, #fff, #eef);
+  background: var(--delete) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
 }
 
 input.delete:hover, input.delete_attachment:hover, input.really_delete:hover,
 input.delete:focus, input.delete_attachment:focus, input.really_delete:focus {
-  background: var(--nuke) no-repeat 7px center / 14px, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--delete_hover) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
 }
 
 .topbuttons input.delete {
@@ -644,61 +643,61 @@ input.delete:focus, input.delete_attachment:focus, input.really_delete:focus {
 
 input.download {
   padding: 5px 8px 5px 24px;
-  background: url(/themes/console/images/buttons/download.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
+  background: var(--download) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
 }
 
 input.download:hover, input.download:focus {
-  background: url(/themes/console/images/buttons/download.png) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--download_hover) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
 }
 
 input.offline {
   padding: 5px 8px 5px 24px;
-  background: url(/themes/susimail/images/offline.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
+  background: var(--offline) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
 }
 
 input.offline:hover, input.offline:focus {
-  background: url(/themes/susimail/images/offline_hover.png) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--offline_hover) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
 }
 
 input.list, input.moveto, input.switchto {
   padding: 5px 8px 5px 24px;
-  background: url(/themes/susimail/images/folder.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
+  background: var(--folder) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
 }
 
 input.list:hover, input.list:focus, input.moveto:hover, input.switchto:hover, input.moveto:focus, input.switchto:focus {
-  background: url(/themes/susimail/images/folder-open.png) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--folder_hover) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
 }
 
 input.forward {
   padding: 5px 8px 5px 24px;
-  background: url(/themes/susimail/images/forward.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
+  background: var(--forward) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
 }
 
 input.forward:hover, input.forward:focus {
-  background: url(/themes/susimail/images/forward.png) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--forward_hover) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
 }
 
 input.login {
   padding: 5px 8px 5px 24px;
-  background: url(/themes/susimail/images/login.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
+  background: var(--login) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
 }
 
 input.login:hover, input.login:focus {
-  background: url(/themes/susimail/images/login_hover.png) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--login_hover) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
 }
 
 input.logout {
   padding: 5px 8px 5px 24px;
-  background: url(/themes/susimail/images/logout.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
+  background: var(--logout) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
 }
 
 input.logout:hover, input.logout:focus {
-  background: url(/themes/susimail/images/logout_hover.png) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--logout_hover) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
 }
 
 input.reload, input.refresh, .fakebutton {
   padding: 5px 8px 5px 24px;
-  background: url(/themes/console/images/buttons/update.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
+  background: var(--refresh) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
 }
 
 .fakebutton, .fakebutton:visited {
@@ -709,16 +708,16 @@ input.reload, input.refresh, .fakebutton {
 }
 
 input.reload:hover, input.refresh:hover, input.reload:focus, input.refresh:focus, .fakebutton:hover, .fakebutton.focus {
-  background: url(/themes/console/images/buttons/update_hover.png) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--refresh_hover) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
 }
 
 input.invertselection {
   padding: 5px 8px 5px 24px;
-  background: url(/themes/susimail/images/selection.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
+  background: url(../images/selection.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
 }
 
 input.invertselection:hover, input.invertselection:focus {
-  background: url(/themes/susimail/images/selection.png) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: url(../images/selection.png) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
 }
 
 input.show {
@@ -733,38 +732,38 @@ input.show:hover, input.show:focus {
 
 input.markall {
   padding: 5px 8px 5px 24px;
-  background: url(/themes/susimail/images/all.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
+  background: url(../images/all.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
 }
 
 input.markall:hover, input.markall:focus {
-  background: url(/themes/susimail/images/all.png) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: url(../images/all.png) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
 }
 
 input.new {
   padding: 5px 8px 5px 24px;
-  background: url(/themes/susimail/images/compose.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
+  background: var(--compose) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
 }
 
 input.new:hover, input.new:focus {
-  background: url(/themes/susimail/images/compose_hover.png) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--compose_hover) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
 }
 
 input.reply {
   padding: 5px 8px 5px 24px;
-  background: url(/themes/susimail/images/reply.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
+  background: var(--reply) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
 }
 
 input.reply:hover, input.reply:focus {
-  background: url(/themes/susimail/images/reply.png) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--reply_hover) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
 }
 
 input.replyall {
   padding: 5px 8px 5px 24px;
-  background: url(/themes/susimail/images/reply-all.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
+  background: var(--replyall) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
 }
 
 input.replyall:hover, input.replyall:focus {
-  background: url(/themes/susimail/images/reply-all.png) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--replyall_hover) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
 }
 
 input.setpagesize, input.save {
@@ -779,40 +778,44 @@ input.setpagesize:hover, input.save:hover, input.setpagesize:focus, input.save:f
 
 input.send {
   padding: 5px 8px 5px 24px;
-  background: url(/themes/susimail/images/send.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
+  background: var(--send) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
 }
 
 input.send:hover, input.send:focus {
-  background: url(/themes/susimail/images/send_hover.png) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--send_hover) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
 }
 
 input.configure, #settings {
   padding: 5px 8px 5px 24px;
-  background: url(/themes/console/images/buttons/configure.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
+  background: var(--configure) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
 }
 
 input.configure:hover, input.configure:focus,
 #settings:hover, #settings:focus {
-  background: url(/themes/console/images/buttons/configure_hover.png) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--configure_hover) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
 }
 
 input.saveas, input.saveasdraft {
   padding: 5px 8px 5px 24px;
-  background: url(/themes/susimail/images/save.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
+  background: var(--save) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
 }
 
 input.saveas:hover, input.saveas:focus, input.saveasdraft:hover, input.saveasdraft:focus {
-  background: url(/themes/susimail/images/save_hover.png) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--save_hover) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
 }
 
 input.new_upload {
   padding: 5px 8px 5px 24px;
-  background: url(/themes/susimail/images/attach.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
+  background: var(--attach) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
 }
 
 input.new_upload:hover, input.new_upload:focus {
   padding: 5px 8px 5px 24px;
-  background: url(/themes/susimail/images/attach.png) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--attach_hover) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+}
+
+input[disabled] {
+  pointer-events: none;
 }
 
 /* pagenav */
@@ -822,12 +825,12 @@ input.firstpage[disabled]:hover, input[name="firstpage"][disabled]:hover,
 input.firstpage[disabled]:focus, input[name="firstpage"][disabled]:focus {
   padding: 5px 14px !important;
   text-indent: -99999px;
-  background: url(/themes/susimail/images/first.png) no-repeat center center, linear-gradient(to bottom, #fff, #eef) !important;
+  background: var(--first) no-repeat center center / 16px, linear-gradient(to bottom, #fff, #eef) !important;
 }
 
 input.firstpage:hover, input[name="firstpage"]:hover,
 input.firstpage:focus, input[name="firstpage"]:focus {
-  background: url(/themes/susimail/images/first.png) no-repeat center center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--first_hover) no-repeat center center / 16px, linear-gradient(to bottom, #ddd 0%, #fff 100%);
 }
 
 input.lastpage, input[name="lastpage"],
@@ -835,12 +838,12 @@ input.lastpage[disabled]:hover, input[name="lastpage"][disabled]:hover,
 input.lastpage[disabled]:focus, input[name="lastpage"][disabled]:focus {
   padding: 5px 14px !important;
   text-indent: -99999px;
-  background: url(/themes/susimail/images/last.png) no-repeat center center, linear-gradient(to bottom, #fff, #eef) !important;
+  background: var(--last) no-repeat center center / 16px, linear-gradient(to bottom, #fff, #eef) !important;
 }
 
 input.lastpage:hover, input[name="lastpage"]:hover,
 input.lastpage:focus, input[name="lastpage"]:focus {
-  background: url(/themes/susimail/images/last.png) no-repeat center center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--last_hover) no-repeat center center / 16px, linear-gradient(to bottom, #ddd 0%, #fff 100%);
 }
 
 input.prevpage, input.prev, input[name="prev"], input[name="prevpage"],
@@ -848,12 +851,12 @@ input.prevpage[disabled]:hover, input.prev[disabled]:hover, input[name="prev"][d
 input.prevpage[disabled]:focus, input.prev[disabled]:focus, input[name="prev"][disabled]:focus, input[name="prevpage"][disabled]:focus {
   padding: 5px 14px !important;
   text-indent: -99999px;
-  background: url(/themes/susimail/images/previous.png) no-repeat center center, linear-gradient(to bottom, #fff, #eef) !important;
+  background: var(--previous) no-repeat center center / 16px, linear-gradient(to bottom, #fff, #eef) !important;
 }
 
 input.prevpage:hover, input.prev, input[name="prev"]:hover, input[name="prevpage"]:hover,
 input.prevpage:focus, input.prev, input[name="prev"]:focus, input[name="prevpage"]:focus {
-  background: url(/themes/susimail/images/previous.png) no-repeat center center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--previous_hover) no-repeat center center / 16px, linear-gradient(to bottom, #ddd 0%, #fff 100%);
 }
 
 input.nextpage, input.next, input[name="nextpage"], input[name="next"],
@@ -861,12 +864,12 @@ input.nextpage[disabled]:hover, input.next[disabled]:hover, input[name="nextpage
 input.nextpage[disabled]:focus, input.next[disabled]:focus, input[name="nextpage"][disabled]:focus, input[name="next"][disabled]:focus {
   padding: 5px 14px !important;
   text-indent: -99999px;
-  background: url(/themes/susimail/images/next.png) no-repeat center center, linear-gradient(to bottom, #fff, #eef) !important;
+  background: var(--next) no-repeat center center / 16px, linear-gradient(to bottom, #fff, #eef) !important;
 }
 
 input.nextpage:hover, input.next:hover, input[name="nextpage"]:hover,
 input.nextpage:focus, input.next:focus, input[name="nextpage"]:focus {
-  background: url(/themes/susimail/images/next.png) no-repeat center center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--next_hover) no-repeat center center / 16px, linear-gradient(to bottom, #ddd 0%, #fff 100%);
 }
 
 input[disabled] {
