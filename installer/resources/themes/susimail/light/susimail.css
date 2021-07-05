@@ -999,11 +999,11 @@ hr {
 }
 
 #dologin input[name="user"] {
-  background: #fbfbff var(--user) no-repeat 5px center !important;
+  background: #fbfbff var(--user) no-repeat 5px center / 14px !important;
 }
 
 #dologin input[name="pass"] {
-  background: #fbfbff var(--key) no-repeat 5px center !important;
+  background: #fbfbff var(--key) no-repeat 5px center / 14px !important;
 }
 
 #dologin input[name="user"]:focus, #dologin input[name="pass"]:focus {
