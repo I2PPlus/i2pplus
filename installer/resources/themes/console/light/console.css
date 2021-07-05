@@ -2344,7 +2344,11 @@ h3#iptransport a:not(old), h3#advancedconfig a:not(old), h3#reseedsetup a:not(ol
   height: 20px;
 }
 
-h3#iptransport a::after, h3#advancedconfig a::after, h3#reseedsetup a::after {
+a[href="/help/faq#alternative_browser"] img {
+  display: none;
+}
+
+h3#iptransport a::after, h3#advancedconfig a::after, h3#reseedsetup a::after, a[href="/help/faq#alternative_browser"]::after {
   margin-top: -2px;
   padding: 2px 0 0;
   width: 20px;
@@ -2361,7 +2365,8 @@ h3#iptransport a::after, h3#advancedconfig a::after, h3#reseedsetup a::after {
   }
 }
 
-#iptransport a:hover::after, #advancedconfig a:hover::after, #reseedsetup a:hover::after {
+#iptransport a:hover::after, #advancedconfig a:hover::after, #reseedsetup a:hover::after,
+a[href="/help/faq#alternative_browser"]:hover::after, a[href="/help/faq#alternative_browser"]:focus::after {
   background: var(--helplink_hover) no-repeat center center / 20px;
 }
 

@@ -23,6 +23,8 @@ import net.i2p.kademlia.KBucketSet;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 
+import net.i2p.util.SystemVersion;
+
 /**
  * Search for a particular key iteratively until we either find a value, we run
  * out of peers, or the bucket the key belongs in has sufficient values in it.
@@ -37,7 +39,7 @@ class ExploreJob extends SearchJob {
     /** how long each exploration should run for
      *  The exploration won't "succeed" so we make it long so we query several peers */
 //    private static final long MAX_EXPLORE_TIME = 30*1000;
-    private static final long MAX_EXPLORE_TIME = 45*1000;
+    private static final long MAX_EXPLORE_TIME = SystemVersion.isSlow() ? 25*1000 : 45*1000;
 
     /** how many peers to explore through concurrently */
     static final String PROP_EXPLORE_BREDTH = "router.exploreBredth";

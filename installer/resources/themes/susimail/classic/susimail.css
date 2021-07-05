@@ -39,16 +39,7 @@ b, th, .mailListSender a {
 }
 
 div.header {
-  margin: 0 -10px;
-  padding: 30px 10px;
   display: none;
-  border-bottom: 1px solid #aaafce;
-  background: #fff url(../images/susimail.png) no-repeat center center / auto 80% !important;
-}
-
-.header img {
-  display: none;
-  transform: scale(.6);
 }
 
 h3#config {
