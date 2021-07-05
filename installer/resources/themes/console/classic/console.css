@@ -2000,6 +2000,50 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
   border: none;
 }
 
+.buttonTop {
+  background-image: var(--mv_top), var(--btn);
+}
+
+.buttonBottom {
+  background-image: var(--mv_bottom), var(--btn);
+}
+
+.buttonUp {
+  background-image: var(--mv_up), var(--btn);
+}
+
+.buttonDown {
+  background-image: var(--mv_down), var(--btn);
+}
+
+.buttonTop:hover, .buttonTop:focus {
+  background-image: var(--mv_top_hover), var(--btn_hover);
+}
+
+.buttonBottom:hover, .buttonBottom:focus {
+  background-image: var(--mv_bottom_hover), var(--btn_hover);
+}
+
+.buttonUp:hover, .buttonUp:focus {
+  background-image: var(--mv_up_hover), var(--btn_hover);
+}
+
+.buttonDown:hover, .buttonDown:focus {
+  background-image: var(--mv_down_hover), var(--btn_hover);
+}
+
+.buttonTop, .buttonBottom, .buttonUp, .buttonDown {
+  width: 20px;
+  height: 20px;
+  background-repeat: no-repeat !important;
+  background-position: center center !important;
+  background-size: 12px, 100% !important;
+}
+
+.buttonTop img, .buttonBottom img, .buttonUp img, .buttonDown img {
+  display: none;
+}
+
 /* end project "X" */
 
 /* sidebar buttons */
@@ -3170,13 +3214,6 @@ div.configure h2:first-child {
 
 #sidebarconf button {
   margin: 2px !important;
-  padding: 2px 3px;
-  background-size: 100% !important;
-}
-
-#sidebarconf button img {
-  height: 14px;
-  width: 14px;
 }
 
 #sidebarconf th:nth-child(1) {
