@@ -891,94 +891,94 @@ button.control, button.control:hover, button.control:focus {
 }
 
 button.accept.control {
-  background: var(--start) center center no-repeat, var(--button) !important;
+  background: var(--start) no-repeat center center, var(--button) !important;
   background-size: 14px, 100% !important;
 }
 
 button.accept.control:hover, button.accept.control:focus {
-  background: var(--start_hover) center center no-repeat, var(--button_hover) !important;
+  background: var(--start_hover) no-repeat center center, var(--button_hover) !important;
   background-size: 14px, 100% !important;
 }
 
 button.accept.control:active {
-  background: var(--start_active) center center no-repeat, var(--button_active) !important;
+  background: var(--start_active) no-repeat center center, var(--button_active) !important;
   background-size: 14px, 100% !important;
 }
 
 button.stop.control {
-  background: var(--stop) center center no-repeat, var(--button) !important;
+  background: var(--stop) no-repeat center center, var(--button) !important;
   background-size: 14px, 100% !important;
 }
 
 button.stop.control:hover, button.stop.control:focus {
-  background: var(--stop_hover) center center no-repeat, var(--button_hover) !important;
+  background: var(--stop_hover) no-repeat center center, var(--button_hover) !important;
   background-size: 14px, 100% !important;
 }
 
 button.stop.control:active {
-  background: var(--stop_active) center center no-repeat, var(--button_active) !important;
+  background: var(--stop_active) no-repeat center center, var(--button_active) !important;
   background-size: 14px, 100% !important;
 }
 
 button.add.control {
-  background: var(--edit) center center no-repeat, var(--button) !important;
+  background: var(--edit) no-repeat center center, var(--button) !important;
   background-size: 16px, 100% !important;
 }
 
 button.add.control:hover, button.add.control:focus {
-  background: var(--edit_hover) center center no-repeat, var(--button_hover) !important;
+  background: var(--edit_hover) no-repeat center center, var(--button_hover) !important;
   background-size: 16px, 100% !important;
 }
 
 button.add.control:active {
-  background: var(--edit_hover) center center no-repeat, var(--button_active) !important;
+  background: var(--edit_hover) no-repeat center center, var(--button_active) !important;
   background-size: 16px, 100% !important;
 }
 
 button.delete.control {
-  background: var(--nuke) center center no-repeat, var(--button) !important;
+  background: var(--nuke) no-repeat center center, var(--button) !important;
   background-size: 14px, 100% !important;
 }
 
 button.delete.control:hover, button.delete.control:focus {
-  background: var(--nuke) center center no-repeat, var(--button_hover) !important;
+  background: var(--nuke) no-repeat center center, var(--button_hover) !important;
   background-size: 14px, 100% !important;
 }
 
 button.delete.control:active {
-  background: var(--nuke) center center no-repeat, var(--button_active) !important;
+  background: var(--nuke) no-repeat center center, var(--button_active) !important;
   background-size: 14px, 100% !important;
   background-blend-mode: luminosity !important;
 }
 
 button.check.control {
-  background: var(--refresh) center center no-repeat, var(--button) !important;
+  background: var(--refresh) no-repeat center center, var(--button) !important;
   background-size: 16px, 100% !important;
 }
 
 button.check.control:hover, button.check.control:focus {
-  background: var(--refresh_hover) center center no-repeat, var(--button_hover) !important;
+  background: var(--refresh_hover) no-repeat center center, var(--button_hover) !important;
   background-size: 16px, 100% !important;
   background-blend-mode: normal;
 }
 
 button.check.control:active {
-  background: var(--refresh_active) center center no-repeat, var(--button_active) !important;
+  background: var(--refresh_active) no-repeat center center, var(--button_active) !important;
   background-size: 16px, 100% !important;
 }
 
 button.download.control {
-  background: var(--download) center center no-repeat, var(--button) !important;
+  background: var(--download) no-repeat center center, var(--button) !important;
   background-size: 14px, 100% !important;
 }
 
 button.download.control:hover, button.download.control:focus {
-  background: var(--download) center center no-repeat, var(--button_hover) !important;
+  background: var(--download) no-repeat center center, var(--button_hover) !important;
   background-size: 14px, 100% !important;
 }
 
 button.download.control:active {
-  background: var(--download) center center no-repeat, var(--button_active) !important;
+  background: var(--download) no-repeat center center, var(--button_active) !important;
   background-size: 14px, 100% !important;
 }
 
@@ -1009,7 +1009,7 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 
 .routersummary .reload, .routersummary .reload[value$="restart"] {
   padding: 6px 5px !important;
-  background: var(--restart) center center no-repeat, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
+  background: var(--restart) no-repeat center center, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
   background-size: 14px, 100%, 100% !important;
 }
 
@@ -1027,19 +1027,19 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 
 .routersummary .stop {
   padding: 6px 5px !important;
-  background: var(--shutdown) center center no-repeat, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
+  background: var(--shutdown) no-repeat center center, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
   background-size: 14px, 100%, 100% !important;
 }
 
 .routersummary .stop:hover, .routersummary .stop:focus {
   padding: 6px 5px !important;
-  background: var(--shutdown_hover) center center no-repeat, var(--button_hover) !important;
+  background: var(--shutdown_hover) no-repeat center center, var(--button_hover) !important;
   background-size: 14px, 100% !important;
 }
 
 .routersummary .stop:active {
   padding: 6px 5px !important;
-  background: var(--shutdown) center center no-repeat, var(--button_active) !important;
+  background: var(--shutdown) no-repeat center center, var(--button_active) !important;
   background-size: 14px, 100% !important;
 }
 
@@ -2262,35 +2262,35 @@ p:empty + .sb_notice {
 }
 
 .sb_netstatus.error::before {
-  background: var(--net_error) center center no-repeat;
+  background: var(--net_error) no-repeat center center;
 }
 
 .sb_netstatus.warn::before {
-  background: var(--net_warning) center center no-repeat;
+  background: var(--net_warning) no-repeat center center;
 }
 
 .sb_netstatus.testing::before {
-  background: var(--net_starting) center center no-repeat;
+  background: var(--net_starting) no-repeat center center;
 }
 
 .sb_netstatus.hidden::before {
-  background: var(--net_hidden) center center no-repeat;
+  background: var(--net_hidden) no-repeat center center;
 }
 
 .sb_netstatus.running::before {
-  background: var(--net_ok) center center no-repeat;
+  background: var(--net_ok) no-repeat center center;
 }
 
 .sb_netstatus.firewalled::before {
-  background: var(--net_firewalled) center center no-repeat;
+  background: var(--net_firewalled) no-repeat center center;
 }
 
 .sb_netstatus.vmcomm::before {
-  background: var(--net_vm) center center no-repeat;
+  background: var(--net_vm) no-repeat center center;
 }
 
 .sb_netstatus.clockskew::before {
-  background: var(--net_vm) center center no-repeat;
+  background: var(--net_vm) no-repeat center center;
 }
 
 /* end network status */
@@ -2875,7 +2875,7 @@ h3 + p, h3 + table {
   width: 16px;
   height: 16px;
   float: right;
-  background: var(--settings) center center no-repeat;
+  background: var(--settings) no-repeat center center;
   background-size: 16px !important;
   content: "";
 }
@@ -2884,12 +2884,12 @@ h3 + p, h3 + table {
 .main#tunnels h3 a[href^="/configtunnels#"]:focus::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]:focus::after,
 #logs a.configure:hover::after, #logs a.configure:focus::after,
 h4.app a:hover::after, h4.app a:focus::after, h4.app2 a:hover::after, h4.app2 a:focus::after {
-  background: var(--settings_hover) center center no-repeat;
+  background: var(--settings_hover) no-repeat center center;
 }
 
 .main#tunnels h3 a[href^="/configtunnels#"]:active::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]:active::after, #logs a.configure:active::after,
 h4.app a:active::after, h4.app2 a:active::after  {
-  background: var(--settings_active) center center no-repeat;
+  background: var(--settings_active) no-repeat center center;
   transform: rotate(90deg);
   transition: linear transform .2s;
 }
@@ -2900,15 +2900,15 @@ h4.app a:active::after, h4.app2 a:active::after  {
 }
 
 #logs a.delete::after {
-  background: var(--close) center center no-repeat;
+  background: var(--close) no-repeat center center;
 }
 
 #logs a.delete:hover::after, #logs a.delete:focus::after {
-  background: var(--close_hover) center center no-repeat;
+  background: var(--close_hover) no-repeat center center;
 }
 
 #logs a.delete:active::after {
-  background: var(--close_active) center center no-repeat;
+  background: var(--close_active) no-repeat center center;
   transform: scale(.85);
 }
 
@@ -2963,7 +2963,7 @@ h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after,
   width: 20px;
   height: 20px;
   float: right;
-  background: var(--helplink) center center no-repeat;
+  background: var(--helplink) no-repeat center center;
   background-size: 20px !important;
   content: "";
 }
@@ -2973,7 +2973,7 @@ h3#advancedconfig a:hover::after, h3#advancedconfig a:focus::after,
 #reseedsetup a:hover::after, #reseedsetup a:focus::after,
 .h3navlinks a[href="/help/faq#alternative_browser"]:hover::after,
 .h3navlinks a[href="/help/faq#alternative_browser"]:focus::after {
-  background: var(--helplink_hover) center center no-repeat;
+  background: var(--helplink_hover) no-repeat center center;
 }
 
 @media screen and (max-width: 1500px) {
@@ -3898,7 +3898,8 @@ h3#finishedjobs + ol li, h3#scheduledjobs + ol li, h3#activejobs + ol li, h3#rea
 }
 
 #activejobs + ol li {
-  background-image: url(/themes/console/images/buttons/Xstart.png) !important;
+  background-image: var(--start) !important;
+  background-size: 12px !important;
 }
 
 #finishedjobs + ol li {
@@ -4124,12 +4125,12 @@ h3[id="udpcon"] {
 }
 
 .sortup {
-  background: url(images/sort_up.svg) center center no-repeat, linear-gradient(to bottom, #004, #000);
+  background: url(images/sort_up.svg) no-repeat center center, linear-gradient(to bottom, #004, #000);
 }
 
 .sortup:hover {
   border: 1px solid #652787;
-  background: url(images/sort_up.svg) center center no-repeat, linear-gradient(to bottom, #000, #004);
+  background: url(images/sort_up.svg) no-repeat center center, linear-gradient(to bottom, #000, #004);
   opacity: 1;
 }
 
@@ -4143,22 +4144,22 @@ h3[id="udpcon"] {
 }
 
 .sortupactive {
-  background: url(images/sort_up.png) center center no-repeat, #005;
+  background: url(images/sort_up.png) no-repeat center center, #005;
 }
 
 .sortdown {
-  background: url(images/sort_down.svg) center center no-repeat, linear-gradient(to bottom, #004, #000);
+  background: url(images/sort_down.svg) no-repeat center center, linear-gradient(to bottom, #004, #000);
 }
 
 .sortdown:hover {
   border: 1px solid #652787;
-  background: url(images/sort_down.svg) center center no-repeat, linear-gradient(to bottom, #000, #004);
+  background: url(images/sort_down.svg) no-repeat center center, linear-gradient(to bottom, #000, #004);
   opacity: 1;
 }
 
 .sortdownactive {
   border: 1px solid #005;
-  background: url(images/sort_svg.png) center center no-repeat, #005;
+  background: url(images/sort_svg.png) no-repeat center center, #005;
 }
 
 /* end peer sort */
@@ -4209,7 +4210,7 @@ a[name="chelp"]:hover, a[name="help"]:hover, a[name="chelp"]:active, a[name="hel
 }
 
 .homelinkedit td.noicon {
-  background: var(--search) center center no-repeat;
+  background: var(--search) no-repeat center center;
   background-size: 20px;
 }
 
@@ -5375,7 +5376,7 @@ table#sidebarconf {
   width: 5%;
   text-align: center;
   text-indent: -99999px;
-  background: var(--nuke) center center no-repeat !important;
+  background: var(--nuke) no-repeat center center !important;
   background-size: 14px !important;
 }
 
@@ -5422,51 +5423,51 @@ table#sidebarconf {
 }
 
 .buttonTop {
-  background: var(--mv_top) center center no-repeat, var(--button) !important;
+  background: var(--mv_top) no-repeat center center, var(--button) !important;
 }
 
 .buttonUp {
-  background: var(--mv_up) center center no-repeat, var(--button) !important;
+  background: var(--mv_up) no-repeat center center, var(--button) !important;
 }
 
 .buttonDown {
-  background: var(--mv_down) center center no-repeat, var(--button) !important;
+  background: var(--mv_down) no-repeat center center, var(--button) !important;
 }
 
 .buttonBottom {
-  background: var(--mv_bottom) center center no-repeat, var(--button) !important;
+  background: var(--mv_bottom) no-repeat center center, var(--button) !important;
 }
 
 .buttonTop:hover, .buttonTop:focus {
-  background: #000 var(--mv_top_hover) center center no-repeat !important;
+  background: #000 var(--mv_top_hover) no-repeat center center !important;
 }
 
 .buttonUp:hover, .buttonUp:focus {
-  background: #000 var(--mv_up_hover) center center no-repeat !important;
+  background: #000 var(--mv_up_hover) no-repeat center center !important;
 }
 
 .buttonDown:hover, .buttonDown:focus {
-  background: #000 var(--mv_down_hover) center center no-repeat !important;
+  background: #000 var(--mv_down_hover) no-repeat center center !important;
 }
 
 .buttonBottom:hover, .buttonBottom:focus {
-  background: #000 var(--mv_bottom_hover) center center no-repeat !important;
+  background: #000 var(--mv_bottom_hover) no-repeat center center !important;
 }
 
 .buttonTop:active {
-  background: #652787 var(--mv_top_active) center center no-repeat !important;
+  background: #652787 var(--mv_top_active) no-repeat center center !important;
 }
 
 .buttonUp:active {
-  background: #652787 var(--mv_up_active) center center no-repeat !important;
+  background: #652787 var(--mv_up_active) no-repeat center center !important;
 }
 
 .buttonDown:active {
-  background: #652787 var(--mv_down_active) center center no-repeat !important;
+  background: #652787 var(--mv_down_active) no-repeat center center !important;
 }
 
 .buttonBottom:active {
-  background: #652787 var(--mv_bottom_active) center center no-repeat !important;
+  background: #652787 var(--mv_bottom_active) no-repeat center center !important;
 }
 
 .buttonTop, .buttonBottom, .buttonUp, .buttonDown, .buttonTop,
@@ -6582,7 +6583,7 @@ a[href^="configpeer?peer"]::after {
   vertical-align: middle;
   margin: 1px 2px 1px 4px !important;
   line-height: 0 !important;
-  background: var(--edit) center center no-repeat;
+  background: var(--edit) no-repeat center center;
   background-size: 16px;
   height: 20px;
   width: 18px;
@@ -6591,7 +6592,7 @@ a[href^="configpeer?peer"]::after {
 }
 
 a[href^="configpeer?peer"]:hover::after {
-  background: var(--edit_hover) center center no-repeat;
+  background: var(--edit_hover) no-repeat center center;
   background-size: 16px;
 }
 
@@ -8007,7 +8008,7 @@ a[href^="viewprofile"]::after {
   display: inline-block;
   vertical-align: middle;
   content: "";
-  background: var(--eye) center center no-repeat;
+  background: var(--eye) no-repeat center center;
   background-size: 16px;
 }
 
@@ -10963,7 +10964,7 @@ label:hover .optbox {
   width: 14px;
   vertical-align: middle;
   display: inline-block;
-  background: var(--experimental) center center no-repeat !important;
+  background: var(--experimental) no-repeat center center !important;
   background-size: 14px !important;
   content: "";
 }
@@ -11626,27 +11627,27 @@ a.configpeer, a.viewprofile, a.profiledump {
   border: 1px solid #113;
   border-radius: 2px;
   box-shadow: var(--highlight);
-  background: var(--edit) center center no-repeat, var(--element);
+  background: var(--edit) no-repeat center center, var(--element);
   background-size: 14px, 100%;
 }
 
 a.viewprofile {
-  background: var(--eye) center center no-repeat, var(--element);
+  background: var(--eye) no-repeat center center, var(--element);
   background-size: 14px, 100%;
 }
 
 a.profiledump {
-  background: var(--log_icon) center center no-repeat, var(--element);
+  background: var(--log_icon) no-repeat center center, var(--element);
   background-size: 14px, 100%;
 }
 
 a.configpeer:hover {
-  background: var(--edit_hover) center center no-repeat, var(--element);
+  background: var(--edit_hover) no-repeat center center, var(--element);
   background-size: 14px, 100%;
 }
 
 a.viewprofile:hover {
-  background: var(--eye_hover) center center no-repeat, var(--element);
+  background: var(--eye_hover) no-repeat center center, var(--element);
   background-size: 14px, 100%;
 }
 
@@ -12309,7 +12310,7 @@ html, body {
   height: 24px;
   vertical-align: middle;
   display: inline-block;
-  background: var(--update) center center no-repeat;
+  background: var(--update) no-repeat center center;
   background-size: 24px;
   content: "";
   transform: rotate(0);
@@ -12393,26 +12394,26 @@ html, body {
 }
 
 #sybilnav ul li#reviewStored::before {
-  background: var(--eye) center center no-repeat;
+  background: var(--eye) no-repeat center center;
   background-size: 16px;
 }
 
 #sybilnav ul li#runNew::before {
-  background: url(/themes/console/images/buttons/Xstart.png) center center no-repeat;
+  background: var(--start) no-repeat center center / 12px;
 }
 
 #sybilnav ul li#configurePeriodic::before {
-  background: var(--settings) center center no-repeat;
+  background: var(--settings) no-repeat center center;
   background-size: 16px;
 }
 
 #sybilnav ul li#floodfillSummary::before {
-  background: var(--floodfill) center center no-repeat;
+  background: var(--floodfill) no-repeat center center;
   background-size: 16px;
 }
 
 #sybilnav ul li#sameFamily::before {
-  background: var(--family) center center no-repeat;
+  background: var(--family) no-repeat center center;
   background-size: 16px;
 }
 
@@ -12859,11 +12860,11 @@ a:hover .sitemapLink {
 /* setup wizard */
 
 #wizardpage .yes {
-  background: var(--yes) center center no-repeat;
+  background: var(--yes) no-repeat center center;
 }
 
 #wizardpage .no {
-  background: var(--no) center center no-repeat;
+  background: var(--no) no-repeat center center;
 }
 
 #wizardpage .yes, #wizardpage .no {
@@ -12940,13 +12941,13 @@ a:hover .sitemapLink {
   width: 16px;
   height: 16px;
   display: inline-block;
-  background: var(--net_clockskew) center center no-repeat;
+  background: var(--net_clockskew) no-repeat center center;
   background-size: 16px;
   content: "";
 }
 
 #peers #ntcpconnections th:nth-last-child(3)::after {
-  background: url(/themes/console/images/info/queued.png) center center no-repeat;
+  background: url(/themes/console/images/info/queued.png) no-repeat center center;
 }
 
 #peers #ntcpconnections th:nth-last-child(4) {
@@ -13271,17 +13272,17 @@ h1[class], h1 {
   width: 28px;
   height: 28px;
   display: inline-block;
-  background: var(--ibgw) center center no-repeat;
+  background: var(--ibgw) no-repeat center center;
   background-size: 28px !important;
   content: "";
 }
 
 .obep::after {
-  background: var(--obep) center center no-repeat;
+  background: var(--obep) no-repeat center center;
 }
 
 .ptcp::after {
-  background: var(--ptcp) center center no-repeat;
+  background: var(--ptcp) no-repeat center center;
 }
 
 #tunnels .cells:first-child {
@@ -13614,13 +13615,13 @@ to {
   width: 16px;
   height: 16px;
   display: inline-block;
-  background: var(--net_clockskew) center center no-repeat;
+  background: var(--net_clockskew) no-repeat center center;
   background-size: 16px;
   content: "";
 }
 
 #peers #ntcpconnections th:nth-last-child(3)::after {
-  background: url(/themes/console/images/info/queued.png) center center no-repeat;
+  background: url(/themes/console/images/info/queued.png) no-repeat center center;
 }
 
 #peers #ntcpconnections th:nth-last-child(4) {
@@ -14016,11 +14017,11 @@ to {
 }
 
 .inbound {
-  background: url(images/in.png) center center no-repeat;
+  background: url(images/in.png) no-repeat center center;
 }
 
 .outbound {
-  background: url(images/out.png) center center no-repeat;
+  background: url(images/out.png) no-repeat center center;
 }
 
 #tunnelconfig th {
@@ -14140,17 +14141,17 @@ h3#bannedpeers {
   width: 18px;
   height: 18px;
   vertical-align: middle;
-  background: var(--refresh) center center no-repeat;
+  background: var(--refresh) no-repeat center center;
   background-size: 18px !important;
 }
 
 #tunnels #participating a:hover::after, #tunnels #participating a:focus::after,
 #tunnels #peercount a:hover::after, #tunnels #peercount a:focus::after {
-  background: var(--refresh_hover) center center no-repeat;
+  background: var(--refresh_hover) no-repeat center center;
 }
 
 #tunnels #participating a:active::after, #tunnels #peercount a:active::after {
-  background: var(--refresh_active) center center no-repeat;
+  background: var(--refresh_active) no-repeat center center;
   transform: rotate(90deg);
   transition: linear transform .2s;
 }
@@ -14424,12 +14425,12 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 
 #profilelist .fast.integrated {
   background: var(--fast) left center no-repeat,
-              var(--highcap) center center no-repeat,
+              var(--highcap) no-repeat center center,
               var(--integrated) right center no-repeat !important;
 }
 
 #profilelist .highcap {
-  background: var(--highcap) center center no-repeat;
+  background: var(--highcap) no-repeat center center;
 }
 
 #profilelist .highcap.integrated {
@@ -14438,7 +14439,7 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 }
 
 #profilelist .standard {
-  background: var(--standard) center center no-repeat;
+  background: var(--standard) no-repeat center center;
 }
 
 #profilelist .standard.integrated {
