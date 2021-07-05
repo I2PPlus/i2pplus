@@ -4930,11 +4930,11 @@ button a:active {
 
 input.accept, button.accept {
   padding: 5px 9px 5px 24px;
-  background: var(--yes) no-repeat 8px center / 12px, var(--button);
+  background: var(--yes) no-repeat 8px center / 12px, var(--button) !important;
 }
 
 input.accept:hover, button.accept:hover, input.accept:focus, button.accept:focus {
-  background: var(--yes) no-repeat 8px center / 12px, var(--button_hover);
+  background: var(--yes) no-repeat 8px center / 12px, var(--button_hover) !important;
 }
 
 input.accept[value^="Unban"], button.accept[value^="Unban"] {
@@ -4969,12 +4969,12 @@ input.accept[value^="Filter"]:focus, button.accept[value^="Filter"]:focus {
 
 input.add, button.add {
   padding: 5px 7px 5px 22px;
-  background: var(--add) no-repeat 8px center / 11px, var(--button);
+  background: var(--add) no-repeat 8px center / 11px, var(--button) !important;
 }
 
 input.add:hover, button.add:hover,
 input.add:focus, button.add:focus {
-  background: var(--add) no-repeat 8px center / 11px, var(--button_hover);
+  background: var(--add) no-repeat 8px center / 11px, var(--button_hover) !important;
 }
 
 input.add[value^="Adjust"], button.add[value^="Adjust"] {
@@ -4989,12 +4989,12 @@ input.add[value^="Adjust"]:focus, button.add[value^="Adjust"]:focus {
 
 input.cancel, button.cancel {
   padding: 5px 9px 5px 22px;
-  background: var(--no) no-repeat 8px center / 10px, var(--button);
+  background: var(--no) no-repeat 8px center / 10px, var(--button) !important;
 }
 
 input.cancel:hover, button.cancel:hover,
 input.cancel:focus, button.cancel:focus {
-  background: var(--no) no-repeat 8px center / 10px, var(--button_hover);
+  background: var(--no) no-repeat 8px center / 10px, var(--button_hover) !important;
 }
 
 input.showconsole {
