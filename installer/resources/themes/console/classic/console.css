@@ -3838,11 +3838,10 @@ h4.app, h4.app2 {
 
 h4.app {
   margin-top: -5px;
-  background: #fefeff url(/themes/console/images/favicon.ico) no-repeat 8px center;
-  background: url(/themes/console/images/eepsite.png) no-repeat 8px center, linear-gradient(to bottom, #fff 50%, #fafbff 50%);
+  padding-left: 32px;
+  background: url(images/favicon.ico) no-repeat 8px center, linear-gradient(to bottom, #fff 50%, #fafbff 50%);
   background-size: 16px, 100%;
   background-blend-mode: luminosity, normal;
-  padding-left: 32px;
 }
 
 h4.app2 {
@@ -3856,6 +3855,27 @@ h4.app2 {
 h4.app img, h4.app2 img {
   margin-top: 1px;
   opacity: .5;
+  display: none;
+}
+
+h4.app a, h4.app2 a {
+  font-size: 0;
+}
+
+h4.app a::after, h4.app2 a::after {
+  margin: 1px -2px 0 0;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  vertical-align: middle;
+  background: var(--configure) no-repeat center center / 16px;
+  content: "";
+  opacity: .8;
+}
+
+h4.app a:hover::after, h4.app2 a:hover::after,
+h4.app a:focus::after, h4.app2 a:focus::after {
+  opacity: 1;
 }
 
 #chooselang img {

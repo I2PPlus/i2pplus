@@ -79,7 +79,7 @@
 </div>
 <div class="ag2">
 <h4 class="app"><%=intl._t("Applications and Configuration")%>
-<a href="/confighome#configapps" style="float: right" title="Customize links"><img src="/themes/console/images/info/configure.png" height="16" width="16" alt="Customize links"></a>
+<a href="/confighome#configapps" style="float: right" title="<%=intl._t("Customize links")%>"><%=intl._t("Customize links")%></a>
 <%
     if (homehelper.shouldShowWelcome()) {
 %>
@@ -91,7 +91,7 @@
 <jsp:getProperty name="homehelper" property="services" /><br>
 </div>
 <div class="ag2">
-<h4 class="app2"><%=intl._t("Sites of Interest")%><a href="/confighome#configsites" style="float: right" title="Customize links"><img src="/themes/console/images/info/configure.png" height="16" width="16" alt="Customize links"></a></h4>
+<h4 class="app2"><%=intl._t("Sites of Interest")%><a href="/confighome#configsites" style="float: right" title="<%=intl._t("Customize links")%>"><%=intl._t("Customize links")%></a></h4>
 <jsp:getProperty name="homehelper" property="favorites" /><br>
 <div class="clearer">&nbsp;</div>
 </div>
