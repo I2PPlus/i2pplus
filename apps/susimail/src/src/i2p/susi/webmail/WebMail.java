@@ -2298,7 +2298,7 @@ public class WebMail extends HttpServlet
                     int sz = folder.getSize();
                     subtitle = mc.getTranslatedName() + " - ";
                     if (sz > 0)
-                        subtitle += ngettext("1 Message", "{0} Messages", folder.getSize());
+                        subtitle += ngettext("1 message", "{0} messages", folder.getSize());
                     else
                         subtitle += _t("No messages");
                 } else if (state == State.SHOW) {
@@ -3241,15 +3241,15 @@ public class WebMail extends HttpServlet
 
         boolean isSpamFolder = folderName.equals(DIR_SPAM);
         boolean showToColumn = folderName.equals(DIR_DRAFTS) || folderName.equals(DIR_SENT);
-        out.println(button(LOGOUT, _t("Logout")));
+//        out.println(button(LOGOUT, _t("Logout")));
         out.println("</span>");
 
         String domain = Config.getProperty(CONFIG_SENDER_DOMAIN, "mail.i2p");
         String name = folderName.equals(DIR_FOLDER) ? "Inbox" : folderName;
         Folder<String> folder = mc.getFolder();
         // TODO: add total filesize of mailbox
-        out.println("<span id=\"info\"><span id=\"infoUser\">" + sessionObject.user + "@" + domain + "</span> <span id=\"folderName\">" + name + "</span>: " +
-            ngettext("1 Message", "{0} Messages", folder.getSize()) + "</span>");
+        out.println("<span id=\"info\"><span id=\"infoUser\">" + sessionObject.user + "@" + domain + "</span> <span id=\"folderName\">" + name + "</span>: "+
+                    "<span id=\"msgcount\">" + ngettext("1 Message", "{0} Messages", folder.getSize()) + "</span>" + button(LOGOUT, _t("Logout")) + "</span>");
 
         int page = 1;
         if (folder.getPages() > 1) {

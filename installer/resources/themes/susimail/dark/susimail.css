@@ -11,10 +11,10 @@
 
 html {
   min-height: 100%;
-  scrollbar-color: rgba(8,48,8,.8) #000800;
   background: #000;
   background: repeating-linear-gradient(to bottom, rgba(0,0,0,.9) 2px, rgba(0,16,0,.9) 4px), var(--camo) #010;
   background-size: 100%, 2048px;
+  scrollbar-color: rgba(8,48,8,.8) #000800;
 }
 
 html:hover {
@@ -37,6 +37,7 @@ body {
 /*  background: #010 url(/themes/console/dark/images/camotile2.png);
   background: repeating-linear-gradient(to bottom, rgba(0,0,0,.9) 2px, rgba(0,8,0,.5) 4px), var(--camo) #010;*/
   background-size: 100%, 1024px;
+  min-width: 920px;
 }
 
 body.iframed {
@@ -430,10 +431,6 @@ input[type=submit], input[type=reset], #settings, .topbuttons .fakebutton {
   background-size: 12px, 100% !important;
 }
 
-/*.topbuttons .fakebutton, .topbuttons input[type=submit], input.configure {
-  background-size: 14px, 100% !important;
-}*/
-
 .topbuttons input.logout {
   background-size: 16px, 100% !important;
 }
@@ -558,20 +555,37 @@ input.login:active {
   background-size: 14px !important;
 }
 
+#info {
+  overflow: hidden;
+}
+
 input.logout {
   padding: 7px 10px 7px 26px;
   background: var(--logout) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--logout) no-repeat 8px center, linear-gradient(to bottom, #020, #010);
   background-size: 15px, 100% !important;
 }
 
 input.logout:hover {
   background: var(--logout_hover) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background: var(--logout_hover) no-repeat 8px center, linear-gradient(to bottom, #020, #010);
   background-size: 15px, 100% !important;
 }
 
 input.logout:active {
   background: #f60 var(--logout_active) no-repeat 8px center;
   background-size: 15px !important;
+}
+
+input.logout, input.logout:hover, input.logout:focus, input.logout:active {
+  margin: -8px -8px -8px 8px !important;
+  border: none !important;
+  border-left: 1px solid #131 !important;
+  border-radius: 0;
+  box-shadow: none !important;
+  filter: none;
+  float: none !important;
+  line-height: normal;
 }
 
 input.reload, input.refresh, input[name="refresh"][disabled], .topbuttons .fakebutton {
@@ -798,14 +812,14 @@ input[type=submit]:hover, input[type=reset]:hover, input[type=submit]:focus, inp
 select:hover, select:focus, select:active, #settings:hover, #settings:focus {
   color: #f60;
   border: 1px solid #f60;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000 !important;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
 }
 
 input[type=submit]:active, input[type=reset]:active, #settings:active {
   border: 1px solid #f60;
   background-color: #f60 !important;
   color: #ee9 !important;
-  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 2px #310 !important;
+  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 2px rgba(0,0,0,.6);
 }
 
 input[disabled], input[disabled]:hover, input[disabled]:focus {
@@ -847,25 +861,15 @@ input[type=file]:active::file-selector-button {
 }
 
 select {
-  padding: 6px 24px 6px 6px !important;
+  padding: 7px 24px 7px 5px !important;
   text-align: left !important;
   font-size: 8.5pt;
   color: #494;
   border: 1px solid #000;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #151, inset 0 0 2px 1px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
-  background: url(/themes/console/dark/images/dropdown.svg) right 10px center no-repeat #000;
-  background: url(/themes/console/dark/images/dropdown.svg) right 10px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
-  background-size: 10px auto, 100% 100% !important;
-  -moz-appearance: none;
-  -webkit-appearance: none;
+  background: var(--dropdown) no-repeat right 10px center / 10px, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
   appearance: none;
-}
-
-@supports not (-moz-appearance: none) {
-select {
-  padding: 7px 18px 7px 7px !important;
-}
 }
 
 select:-moz-focusring {
@@ -879,17 +883,12 @@ select option {
 select:hover, select:active, select:focus {
   cursor: pointer;
   color: #f60;
-  background: url(/themes/console/dark/images/dropdown_hover.svg) right 10px center no-repeat, linear-gradient(to bottom, #000, #010) !important;
-  background-size: 10px auto, 100% 100% !important;
+  background: var(--dropdown_hover) no-repeat right 10px center / 10px, linear-gradient(to bottom, #000, #010) !important;
 }
 
 select::-moz-focus-inner {
   outline: none !important;
   border: none !important;
-}
-
-select::-ms-expand {
-  display: none;
 }
 
 /* end buttons and inputs */
@@ -1104,9 +1103,9 @@ tr.bottombuttons .pagenav {
     border: none;
   }
 
-  #info {
+/*  #info {
     display: none !important;
-  }
+  }*/
 }
 
 @media screen and (max-width: 900px) {
@@ -1507,13 +1506,13 @@ h3#config {
 
 #infoUser {
   margin-right: 6px;
-  padding: 3px 9px 4px 6px;
+  padding: 3px 8px 4px 20px;
   display: inline-block;
   text-align: center;
   color: #ee9;
   font-weight: 700;
   border-right: 1px solid #131;
-  background: linear-gradient(to bottom, #020, #010);
+  background: var(--user) no-repeat 2px center / 15px;
 }
 
 .topbuttons {
@@ -1558,7 +1557,7 @@ h3#config {
   float: none !important;
 }
 
-.topbuttons input.new, .topbuttons input.refresh, .topbuttons input.logout, .topbuttons input.reply, .topbuttons input.replyall,
+.topbuttons input.new, .topbuttons input.refresh, .topbuttons input.reply, .topbuttons input.replyall,
 .topbuttons input.forward, .topbuttons input.saveas, .topbuttons input.delete, .topbuttons .fakebutton {
   float: left;
   margin-left: 2px;
@@ -1569,11 +1568,11 @@ h3#config {
 .topbuttons input.next, .topbuttons input[name="next"], .topbuttons input.nextpage, input[name="nextpage"],
 .topbuttons input.firstpage, .topbuttons input[name="firstpage"], .topbuttons input.lastpage, .topbuttons input[name="lastpage"],
 .topbuttons input.list {
-  min-height: 26px !important;
-  min-width: 26px !important;
-  max-height: 26px !important;
-  max-width: 26px !important;
   margin: 2px;
+  min-width: 26px !important;
+  max-width: 26px !important;
+  min-height: 26px !important;
+  max-height: 26px !important;
 }
 
 .topbuttons br {
@@ -2374,7 +2373,7 @@ background-position: 0;
 
 /* responsive layout */
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 1000px) {
 body {
   margin: 3px;
 }
@@ -2415,9 +2414,43 @@ td.mailListDate {
   font-size: 95%;
 }
 
-#info {
-  display: none !important;
+.switchto, #serverRefresh, .logout {
+  width: 20px;
+  font-size: 0 !important;
+  line-height: 14px;
+  background-position: center center !important;
 }
+
+#info {
+/*  display: none !important;*/
+  float: none !important;
+  margin: 4px 4px 0 -380px !important;
+}
+
+.topbuttons input[type="submit"], .topbuttons input[type="reset"], .topbuttons .fakebutton, .topbuttons select {
+  margin: 2px !important;
+  vertical-align: middle !important;
+}
+
+.topbuttons select {
+  margin-left: -2px !important;
+}
+
+.folders {
+  border: none;
+  margin: 0 0 0 -2px !important;
+}
+}
+
+@media screen and (max-width: 900px) {
+  #infoUser {
+    display: none !important;
+  }
+
+  #info {
+    margin-left: -486px !important;
+    padding: 3px 0 3px 8px !important;
+  }
 }
 
 @media screen and (min-width: 1300px) {
