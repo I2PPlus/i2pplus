@@ -1948,11 +1948,11 @@ button.control {
 }
 
 button.accept.control {
-  background: var(--start) no-repeat center center / 14px, var(--btn);
+  background: var(--start) no-repeat center center / 14px, var(--btn) !important;
 }
 
 button.accept.control:hover, button.accept.control:focus {
-  background: var(--start_hover) no-repeat center center, var(--btn_hover);
+  background: var(--start_hover) no-repeat center center / 14px, var(--btn_hover) !important;
 }
 
 button.stop.control {
