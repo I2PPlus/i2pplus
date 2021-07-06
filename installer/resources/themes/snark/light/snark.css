@@ -189,7 +189,6 @@ button::-moz-focus-inner, input::-moz-focus-inner {
   font-size: 9pt !important;
   border: 1px solid #afafcf;
   border-radius: 2px;
-  background: #fff;
   background: repeating-linear-gradient(to right, #f2f2ff 2px, #dfe0ff 4px);
   background-size: 4px 100%;
 }
@@ -261,7 +260,8 @@ button::-moz-focus-inner, input::-moz-focus-inner {
   transition: ease-in box-shadow .1s;
 }
 
-#top.snarknavbar a, #top.snarknavbar a:visited {
+#top.snarknavbar a, #top.snarknavbar a:visited,
+.snarknavbar a, .snarknavbar a:visited {
   color: #559;
 }
 
@@ -1849,23 +1849,13 @@ img[src$="details.png"] {
 }
 
 @keyframes slide-in {
-0% {
-  transform: translateY(-40px);
-}
-
-100% {
-  transform: translateY(0);
-}
+  0% {transform: translateY(-40px)}
+  100% {transform: translateY(0)}
 }
 
 @keyframes fade-in {
-0% {
-  filter: opacity(0);
-}
-
-100% {
-  filter: opacity(1);
-}
+  0% {filter: opacity(0)}
+  100% {filter: opacity(1)}
 }
 
 .addtorrentsection table, .newtorrentsection table:not(#trackerselect) {
@@ -1900,6 +1890,10 @@ img[src$="details.png"] {
   border-top: 1px solid #afafcf;
 }
 
+#snarkFiles, #snarkCommentSection {
+  background: linear-gradient(to bottom, #fafaff, #efefff);
+}
+
 .iframed #snarkFiles, .iframed #snarkCommentSection {
   margin-top: 8px !important;
 }
@@ -1914,9 +1908,9 @@ img[src$="details.png"] {
 
 .newtorrentsection, .addtorrentsection, .configsection, .configsectionpanel {
   padding: 0 10px;
+  text-align: center;
   border: 1px solid #afafcf;
   box-shadow: var(--highlight);
-  text-align: center;
   background: linear-gradient(to bottom, #fafaff, #efefff) !important;
 }
 
@@ -3153,7 +3147,7 @@ b.alwaysShow {
   color: #ccccf0;
   box-shadow: 0 0 0 1px #ccf;
   border-radius: 3px;
-  background: #fff var(--tracker.png) 3px center no-repeat;
+  background: #fff var(--tracker) no-repeat 3px center / 14px;
   background-size: 14px auto;
 }
 
@@ -3175,8 +3169,7 @@ b.alwaysShow {
 }
 
 .info_tracker:hover {
-  background: var(--tracker_hover.png) 3px center no-repeat, linear-gradient(to bottom, #fff 50%, #ddf 50%) !important;
-  background-size: 14px, 100% !important;
+  background: var(--tracker_hover) no-repeat 3px center / 14px, linear-gradient(to bottom, #fff 50%, #ddf 50%) !important;
 }
 
 .info_tracker:active, .info_tracker:active a {
