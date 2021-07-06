@@ -627,7 +627,6 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean showSort = total > 1;
         out.write("<tr>\n<th class=\"snarkGraphicStatus\">");
         // show incomplete torrents at top on first click
-//        String sort = ("2".equals(currentSort)) ? "-2" : "2";
         String sort = "-2";
         if (showSort) {
             out.write("<span class=\"sortIcon\">");
@@ -1253,9 +1252,9 @@ public class I2PSnarkServlet extends BasicServlet {
                 // First
                 out.write("<a href=\"" + _contextPath);
                 out.write(getQueryString(req, null, "", null));
-                out.write("\">");
+                out.write("\"><span id=\"first\">");
                 out.write(toThemeImg("first", _t("First"), _t("First page")));
-                out.write("</a>");
+                out.write("</span></a>");
                 int prev = Math.max(0, start - pageSize);
                 //if (prev > 0) {
                 if (true) {
@@ -1263,16 +1262,16 @@ public class I2PSnarkServlet extends BasicServlet {
                     out.write("<a href=\"" + _contextPath);
                     String sprev = (prev > 0) ? Integer.toString(prev) : "";
                     out.write(getQueryString(req, null, sprev, null));
-                    out.write("\">");
+                    out.write("\"><span id=\"previous\">");
                     out.write(toThemeImg("previous", _t("Prev"), _t("Previous page")));
-                    out.write("</a>");
+                    out.write("</span></a>");
                 }
             } else {
                 out.write(
-                          "<img alt=\"\" border=\"0\" class=\"disable\" src=\"" +
-                          _imgPath + "first.png\">" +
-                          "<img alt=\"\" border=\"0\" class=\"disable\" src=\"" +
-                          _imgPath + "previous.png\">");
+                          "<span id=\"first\" class=\"disable\"><img alt=\"\" border=\"0\" class=\"disable\" src=\"" +
+                          _imgPath + "first.png\"></span>" +
+                          "<span id=\"previous\" class=\"disable\"><img alt=\"\" border=\"0\" class=\"disable\" src=\"" +
+                          _imgPath + "previous.png\"></span>");
             }
             // Page count
             int pages = 1 + ((total - 1) / pageSize);
@@ -1284,7 +1283,6 @@ public class I2PSnarkServlet extends BasicServlet {
                     page = pages;
                 else
                     page = 1 + (start / pageSize);
-                //out.write("&nbsp;" + _t("Page {0}", page) + thinsp(noThinsp) + pages + "&nbsp;");
                 out.write("<span id=\"pagecount\">" + page + thinsp(noThinsp) + pages + "</span>");
             }
             if (start + pageSize < total) {
@@ -1294,21 +1292,21 @@ public class I2PSnarkServlet extends BasicServlet {
                     // Next
                     out.write("<a href=\"" + _contextPath);
                     out.write(getQueryString(req, null, Integer.toString(next), null));
-                    out.write("\">");
+                    out.write("\"><span id=\"next\">");
                     out.write(toThemeImg("next", _t("Next"), _t("Next page")));
-                    out.write("</a>");
+                    out.write("</span></a>");
                 }
                 // Last
                 int last = ((total - 1) / pageSize) * pageSize;
                 out.write("<a href=\"" + _contextPath);
                 out.write(getQueryString(req, null, Integer.toString(last), null));
-                out.write("\">");
+                out.write("\"><span id=\"last\">");
                 out.write(toThemeImg("last", _t("Last"), _t("Last page")));
-                out.write("</a>");
+                out.write("</span></a>");
             } else {
-                out.write("<img alt=\"\" border=\"0\" class=\"disable\" src=\"" +
-                          _imgPath + "next.png\">" +
-                          "<img alt=\"\" border=\"0\" class=\"disable\" src=\"" +
+                out.write("<span id=\"next\" class=\"disable\"><img alt=\"\" border=\"0\" class=\"disable\" src=\"" +
+                          _imgPath + "next.png\"></span>" +
+                          "<span id=\"last\" class=\"disable\"><img alt=\"\" border=\"0\" class=\"disable\" src=\"" +
                           _imgPath + "last.png\">");
             }
     }
