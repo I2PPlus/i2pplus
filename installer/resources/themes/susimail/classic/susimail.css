@@ -318,7 +318,7 @@ _:-ms-lang(x), table#mailbox {
 }
 
 #mailbox th.mailListAttachment {
-  background: url(/susimail/icons/attach.png) center right 3px no-repeat, linear-gradient(to bottom, #fff 0%, #fff 50%, #eff2ff 50%, #eff2ff 100%) !important;
+  background: var(--attach) no-repeat center center / 14px, linear-gradient(to bottom, #fff 0%, #fff 50%, #eff2ff 50%, #eff2ff 100%) !important;
 }
 
 #mailbox td:nth-child(5) {
@@ -332,6 +332,17 @@ _:-ms-lang(x), table#mailbox {
 td.mailListDelete, td.mailListFlagged, td.mailListAttachment {
   width: 24px;
   text-align: right;
+}
+
+td.mailListAttachment img {
+  display: none;
+}
+
+td.mailListAttachment.isAttached {
+  background-image: var(--attach);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 14px;
 }
 
 .mailListSender a, .mailListSender a:visited,
@@ -539,13 +550,11 @@ button:focus, input[type=submit]:focus, input[type="reset"]:focus, .fakebutton:f
 button, input[type=submit], input[type="reset"], #settings, .fakebutton {
   padding: 5px;
   display: inline-block;
-  line-height: 130%;
   color: #333;
   border: 1px solid #aaafce;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #fff, 0 0 1px 0 #ddd;
   background-size: 14px 14px, 100% 100% !important;
-  background: #eee;
   background: linear-gradient(to bottom, #fff, #eef);
   outline: none !important;
   cursor: pointer;
@@ -560,7 +569,6 @@ button:focus, input[type=submit]:focus, input[type="reset"]:focus,
 #settings:hover, #settings:focus, .fakebutton:focus {
   color: #222;
   border: 1px solid #aaafce;
-  background: #fff;
   background: linear-gradient(to bottom, #ddd 0%, #fff 100%);
   filter: drop-shadow(0 0 1px #89f);
 }
@@ -814,7 +822,7 @@ input[disabled] {
 input.firstpage, input[name="firstpage"],
 input.firstpage[disabled]:hover, input[name="firstpage"][disabled]:hover,
 input.firstpage[disabled]:focus, input[name="firstpage"][disabled]:focus {
-  padding: 5px 14px !important;
+  padding: 3px 12px !important;
   text-indent: -99999px;
   background: var(--first) no-repeat center center / 16px, linear-gradient(to bottom, #fff, #eef) !important;
 }
@@ -827,7 +835,7 @@ input.firstpage:focus, input[name="firstpage"]:focus {
 input.lastpage, input[name="lastpage"],
 input.lastpage[disabled]:hover, input[name="lastpage"][disabled]:hover,
 input.lastpage[disabled]:focus, input[name="lastpage"][disabled]:focus {
-  padding: 5px 14px !important;
+  padding: 3px 12px !important;
   text-indent: -99999px;
   background: var(--last) no-repeat center center / 16px, linear-gradient(to bottom, #fff, #eef) !important;
 }
@@ -840,7 +848,7 @@ input.lastpage:focus, input[name="lastpage"]:focus {
 input.prevpage, input.prev, input[name="prev"], input[name="prevpage"],
 input.prevpage[disabled]:hover, input.prev[disabled]:hover, input[name="prev"][disabled]:hover, input[name="prevpage"][disabled]:hover,
 input.prevpage[disabled]:focus, input.prev[disabled]:focus, input[name="prev"][disabled]:focus, input[name="prevpage"][disabled]:focus {
-  padding: 5px 14px !important;
+  padding: 3px 12px !important;
   text-indent: -99999px;
   background: var(--previous) no-repeat center center / 16px, linear-gradient(to bottom, #fff, #eef) !important;
 }
@@ -853,7 +861,7 @@ input.prevpage:focus, input.prev, input[name="prev"]:focus, input[name="prevpage
 input.nextpage, input.next, input[name="nextpage"], input[name="next"],
 input.nextpage[disabled]:hover, input.next[disabled]:hover, input[name="nextpage"][disabled]:hover, input[name="next"][disabled]:hover,
 input.nextpage[disabled]:focus, input.next[disabled]:focus, input[name="nextpage"][disabled]:focus, input[name="next"][disabled]:focus {
-  padding: 5px 14px !important;
+  padding: 3px 12px !important;
   text-indent: -99999px;
   background: var(--next) no-repeat center center / 16px, linear-gradient(to bottom, #fff, #eef) !important;
 }
@@ -1152,6 +1160,24 @@ div#pagenav {
   border-bottom: 1px solid #aaafce;
 }
 
+.topbuttons #mailboxcontrols, .topbuttons .folders {
+  float: left;
+  vertical-align: middle;
+}
+
+.topbuttons #mailboxcontrols {
+  margin-left: 5px;
+}
+
+.topbuttons #mailboxcontrols input, .topbuttons .folders input, .topbuttons .folders select {
+  margin: 0 1px 1px !important;
+}
+
+.topbuttons #info {
+  margin: 0 5px 0 0;
+  float: right;
+}
+
 .iframed .topbuttons, .iframed p.error, .iframed p.info {
   margin: -1px -11px;
   padding: 20px 42px 20px;
@@ -1162,7 +1188,7 @@ div#pagenav {
 
 .iframed .topbuttons {
   margin-bottom: -2px;
-  padding: 6px 5px 5px;
+  padding: 6px 0 5px;
 }
 
 .iframed .topbuttons > * {
@@ -1189,10 +1215,27 @@ div#pagenav {
   padding-bottom: 0;
 }
 
-table#pagenav {
-  margin: 7px auto -3px;
+.topbuttons .pagenav {
+  margin: 7px 0 -3px;
   width: 100%;
-  border-top: 1px solid #aaafce;
+  border-top: 1px solid #aaafce !important;
+}
+
+.topbuttons .pagenav td {
+  white-space: nowrap;
+  padding-bottom: 4px;
+}
+
+.topbuttons .pagenav input {
+  margin: 5px 1px 2px;
+}
+
+.topbuttons .pagenav td:first-child {
+  width: 99%;
+}
+
+.topbuttons .pagenav td:last-child {
+  padding-right: 4px !important;
 }
 
 .bottombuttons br {
@@ -1210,7 +1253,7 @@ table#pagenav {
   margin-bottom: -24px;
 }
 
-tr.bottombuttons table#pagenav {
+tr.bottombuttons table.pagenav {
   margin: 0;
   width: 100%;
   border-bottom: 1px solid #555;
@@ -1369,7 +1412,7 @@ img.sort {
   width: 1%;
   white-space: nowrap;
   font-weight: 700;
-  font-size: 140% !important;
+  font-size: 110% !important;
   opacity: .7;
 }
 

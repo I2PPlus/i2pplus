@@ -3214,7 +3214,7 @@ public class WebMail extends HttpServlet
      * @param request
      */
     private static void showFolder(PrintWriter out, SessionObject sessionObject, MailCache mc, RequestWrapper request) {
-        out.println("<div class=\"topbuttons\" align=\"center\">");
+        out.println("<div class=\"topbuttons\" align=\"center\">\n<span id=\"mailboxcontrols\">");
         out.println(button(NEW, _t("New")) + spacer);
             // In theory, these are valid and will apply to the first checked message,
             // but that's not obvious and did it work?
@@ -3242,6 +3242,7 @@ public class WebMail extends HttpServlet
         boolean isSpamFolder = folderName.equals(DIR_SPAM);
         boolean showToColumn = folderName.equals(DIR_DRAFTS) || folderName.equals(DIR_SENT);
         out.println(button(LOGOUT, _t("Logout")));
+        out.println("</span>");
 
         String domain = Config.getProperty(CONFIG_SENDER_DOMAIN, "mail.i2p");
         String name = folderName.equals(DIR_FOLDER) ? "Inbox" : folderName;
