@@ -57,7 +57,6 @@ body {
 .routersummary img[src$="i2plogo.png"], .routersummary h3, .routersummary h3 a, #sb_internnals, #sb_advanced, #sb_services,
 .confignav, *::before, *::after, div.app, .themechoice, .langselect, .langbox,
 .newsAuthor, #newsDisplay, #netdbcountrylist img, .viewfullentry, .sybil_routerinfo th img, .graphspanel, h1 {
-  -ms-user-select: none;
   user-select: none;
 }
 
@@ -5390,19 +5389,6 @@ td#pw_adduser input {
 
 }
 
-a.viewfullentry:not(old), #profilelist a[href^="viewprofile"]:not(old) {
-  font-size: 0;
-}
-
-#profilelist a[href^="viewprofile"]::after {
-  content: url(/themes/console/images/buttons/fullview.png);
-  margin: 0 2px;
-}
-
-a.viewfullentry:hover {
-  filter: drop-shadow(0 0 1px var(--hover));
-}
-
 .netdbentry th:first-child, .netdbentry td:first-child {
   white-space: nowrap;
   padding: 4px 6px !important;
@@ -9795,19 +9781,60 @@ th.queue {
   min-width: 30px;
 }
 
-#profilelist td:last-child img, .viewfullentry img, .viewprofile img, .configpeer img, .familysearch img, #view_profile h3 a img {
-  border: 1px solid #bbd;
-  background: #fff;
+#profilelist td:last-child a::after, a[href^="/configpeer"]::after, .profiledump::after,
+.familysearch img, #view_profile h3 a img {
+  margin: 1px 2px;
+  padding: 2px;
   width: 14px;
   height: 14px;
   display: inline-block;
-  padding: 2px;
-  margin: 1px 2px;
+  vertical-align: middle;
+  border: 1px solid #bbd;
   border-radius: 2px;
+  background: #fff;
 }
 
-#view_profile h3 a img {
-  margin-top: -1px;
+a.viewfullentry, #profilelist td:last-child a, .profiledump::after {
+  font-size: 0 !important;
+}
+
+#profilelist td:last-child a::after, a[href^="/configpeer"]::after, .profiledump::after {
+  margin: 0 2px;
+  height: 14px;
+  width: 14px;
+  display: inline-block;
+  vertical-align: middle;
+  background: #fff var(--eye) no-repeat center center / 12px;
+  content: "";
+}
+
+#profilelist td:last-child .viewprofile:hover::after, .profiledump:hover::after {
+  background: #fff var(--eye_hover) no-repeat center center / 12px;
+}
+
+#profilelist td:last-child a[href^="/configpeer"]::after, a[href^="/configpeer"]::after {
+  background: #fff var(--edit) no-repeat center center / 12px;
+}
+
+#profilelist td:last-child a[href^="/configpeer"]:hover::after, a[href^="/configpeer"]:hover::after {
+  background: #fff var(--edit_hover) no-repeat center center / 12px;
+}
+
+a.viewfullentry:hover {
+  filter: drop-shadow(0 0 1px var(--hover));
+}
+
+#profilelist td:last-child img, a[href^="/configpeer"] img, .profiledump img {
+  display: none !important;
+}
+
+#view_profile h3 {
+  position: relative;
+  z-index: 10;
+}
+
+#view_profile h3 a::after {
+  margin-top: -1.5px;
 }
 
 #view_profile .configpeer {
