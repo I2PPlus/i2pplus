@@ -3502,6 +3502,10 @@ h4.app img, h4.app2 img, #sitemap h3 img {
   transition: ease all 1s;
 }
 
+h4.app a, h4.app2 a {
+  font-size: 0;
+}
+
 #home h4 a {
   margin: -7px -10px -10px 0;
   padding: 10px 0 4px 16px;
