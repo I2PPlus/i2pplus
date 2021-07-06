@@ -685,13 +685,26 @@ input.login:hover, input.login:focus {
   background: var(--login_hover) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
 }
 
+input.logout, input.logout:hover, input.logout:focus, input.logout:active {
+  border: none;
+  border-left: 1px solid #bbc;
+  border-radius: 0;
+  box-shadow: none;
+  filter: none;
+}
+
 input.logout {
-  padding: 5px 8px 5px 24px;
+  margin: -8px -6px -8px 6px;
+  padding: 6px 8px 6px 24px;
   background: var(--logout) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
 }
 
 input.logout:hover, input.logout:focus {
   background: var(--logout_hover) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+}
+
+input.logout:active {
+  box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 3px #999;
 }
 
 input.reload, input.refresh, .fakebutton {
@@ -1173,11 +1186,6 @@ div#pagenav {
   margin: 0 1px 1px !important;
 }
 
-.topbuttons #info {
-  margin: 0 5px 0 0;
-  float: right;
-}
-
 .iframed .topbuttons, .iframed p.error, .iframed p.info {
   margin: -1px -11px;
   padding: 20px 42px 20px;
@@ -1196,6 +1204,7 @@ div#pagenav {
 }
 
 .folders {
+  margin-left: -2px;
   padding: 0 5px 5px;
 }
 
@@ -1416,13 +1425,19 @@ img.sort {
   opacity: .7;
 }
 
+.topbuttons #info {
+  margin: 0 5px 0 0;
+  float: right;
+  overflow: hidden;
+}
+
 #info {
   margin: -2px 0 0 3px;
   padding: 5px 6px;
   display: inline-block;
   vertical-align: middle;
-  line-height: 1.3;
-  color: #333;
+  line-height: normal;
+  color: #666;
   border: 1px solid #bbc;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #fff;
@@ -1431,6 +1446,21 @@ img.sort {
 
 .iframed #info {
   margin-top: 0;
+}
+
+#infoUser {
+  padding-left: 17px;
+  background: var(--user) no-repeat left center / 14px;
+}
+
+#infoUser::after {
+  margin: -8px 4px -8px 6px;
+  width: 1px;
+  height: 30px;
+  display: inline-block;
+  vertical-align: middle;
+  background: #bbc;
+  content: "";
 }
 
 .listDate, .listTime, .listClock {

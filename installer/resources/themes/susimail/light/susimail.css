@@ -774,12 +774,8 @@ tr.bottombuttons .pagenav {
 .pagenavcontainer, #messagenav {
   float: right;
   position: absolute;
-  top: 5px;
-  right: 23px;
-}
-
-@media screen and (max-width: 1300px) {
-  .pagenavcontainer {right: 0 !important}
+  top: 4px;
+  right: 22px;
 }
 
 #messagenav {
@@ -791,7 +787,7 @@ tr.bottombuttons .pagenav {
 }
 
 .pagenav {
-  margin: -2px auto -3px !important;
+  margin: -2px -20px -3px 0 !important;
   padding: 2px;
   max-width: 170px;
   width: auto !important;
@@ -1116,11 +1112,12 @@ h3#config {
 /* top buttons */
 
 #info {
-  margin-left: -180px;
-  margin-right: 3px;
+  float: right;
+  margin: 2px 180px -4px 0;
   padding-left: 3px;
   padding-right: 8px;
   display: inline-block;
+  overflow: hidden;
   line-height: 150%;
   text-transform: lowercase;
   color: #5b5b71;
@@ -1146,7 +1143,7 @@ h3#config {
 
 .topbuttons {
   margin: -1px -1px 0;
-  padding: 5px 5px 4px;
+  padding: 5px 5px 0;
   position: sticky;
   top: -1px;
   z-index: 1000;
@@ -1158,19 +1155,17 @@ h3#config {
   font-size: 9pt;
   font-weight: 700;
   border: 1px solid #8d8daa;
-  box-shadow: inset 0 0 1px 1px rgba(230,230,255,.7) !important;
   box-shadow: inset 0 0 0 1px #fff !important;
-  background: #f2f2ff;
   background: linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%) !important;
 }
 
-.topbuttons > * {
+.topbuttons > *, .topbuttons select, .topbuttons input {
   vertical-align: middle !important;
 }
 
 /* float topbuttons, single line  */
 
-.topbuttons input.new, .topbuttons input.refresh, .topbuttons input.logout, .topbuttons input[name="refresh"] {
+.topbuttons input.new, .topbuttons input.refresh, .topbuttons input[name="refresh"] {
   float: left;
 }
 
@@ -1178,15 +1173,15 @@ h3#config {
   float: none;
 }
 
-.topbuttons input[name="pagesize"], .topbuttons .setpagesize, .topbuttons input:not(.delete)[onclick] {
+.topbuttons input[name="pagesize"], .topbuttons .setpagesize, .topbuttons input:not(.delete)[onclick], .topbuttons .logout {
   float: none !important;
 }
 
-.topbuttons input.new, .topbuttons input.refresh, .topbuttons input.logout, .topbuttons input.reply, .topbuttons input.replyall,
+.topbuttons input.new, .topbuttons input.refresh, .topbuttons input.reply, .topbuttons input.replyall,
 .topbuttons input.forward, .topbuttons input.saveas, .topbuttons input.delete {
-  float: left;
-  margin-left: 2px;
   margin-top: 2px !important;
+  margin-left: 2px;
+  float: left;
 }
 
 .topbuttons input.prev, .topbuttons input[name="prev"], .topbuttons input.prevpage, .topbuttons input[name="prevpage"],
@@ -1198,6 +1193,19 @@ h3#config {
   max-height: 26px !important;
   max-width: 26px !important;
   margin: 2px;
+}
+
+input.logout, input.logout:hover, input.logout:focus, input.logout:active {
+  margin: -8px -8px -8px 8px !important;
+  padding: 6px 7px 6px 24px !important;
+  display: inline-block;
+  float: none !important;
+  line-height: normal;
+  border: none !important;
+  border-left: 1px solid #bbd !important;
+  border-radius: 0;
+  box-shadow: none !important;
+  filter: none;
 }
 
 .topbuttons br {
@@ -2037,9 +2045,13 @@ select::-ms-expand {
 }
 
 .folders {
-/*  float: right;*/
+  margin: -3px 0 0 0;
   display: inline-block;
-  margin: 0;
+  float: left;
+}
+
+.folders select {
+  margin-left: -4px;
 }
 
 #viewmail {
@@ -2047,24 +2059,19 @@ select::-ms-expand {
 }
 
 #viewmail .folders {
+  padding: 4px 6px 4px 4px;
   position: absolute;
-/*  top: 5px;
-  right: 6px;*/
-}
-
-#viewmail .folders {
   top: -1px;
   right: -1px;
-  padding: 4px 6px 4px 4px;
   border: 1px solid #8d8daa;
-  box-shadow: inset 0 0 0 1px #fff;
   border-radius: 0 0 0 3px;
+  box-shadow: inset 0 0 0 1px #fff;
   background: linear-gradient(to bottom, rgba(255,255,255,.7) 50%, rgba(240,240,255,.4) 50%), repeating-linear-gradient(to bottom, #eef 1px, #eef 2px, #fff 3px);
 }
 
 input.switchto, input.moveto {
-  background: var(--folder) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
   padding: 5px 7px 5px 24px;
+  background: var(--folder) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
 }
 
 input.switchto:hover, input.moveto:hover {
@@ -2169,12 +2176,27 @@ input[type=text]:focus::placeholder, input[type=password]:focus::placeholder {
 
 @media screen and (max-width: 1000px) {
   #info {
+    margin-top: 1px;
+    padding: 3px 0 3px 6px;
+  }
+
+  #infoUser {
     display: none !important;
   }
 
-  .folders{
-    margin-top: -1px;
+  .topbuttons .logout, .topbuttons .logout:hover, .topbuttons .logout:focus, .topbuttons .logout:active {
+    margin: -4px 0 -3px 4px !important
+  }
+
+  .folders {
+    margin-top: -3px;
     float: left;
+  }
+
+  .folders select {
+    margin-left: -4px !important;
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
   }
 }
 

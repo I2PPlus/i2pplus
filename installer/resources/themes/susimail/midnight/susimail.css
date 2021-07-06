@@ -1147,11 +1147,11 @@ input.login:hover, input.login:focus {
 
 input.logout {
   padding: 6px 9px 6px 27px !important;
-  background: var(--logout) no-repeat 9px center, var(--button) !important;
+  background: var(--logout) no-repeat 9px center / 14px !important;
 }
 
 input.logout:hover, input.logout:focus {
-  background: var(--logout_hover) no-repeat 9px center, var(--button_hover) !important;
+  background: var(--logout_hover) no-repeat 9px center / 14px !important;
 }
 
 input.reload, input.refresh, .fakebutton {
@@ -1394,6 +1394,19 @@ input[type=submit]:active, input.cancel:active {
   background-blend-mode: luminosity;
 }
 
+.topbuttons .logout, .topbuttons .logout:hover, .topbuttons .logout:focus, .topbuttons .logout:active {
+  margin: -8px -8px -8px 8px !important;
+  padding: 6px 7px 6px 24px !important;
+  display: inline-block;
+  float: none !important;
+  line-height: normal;
+  border: none !important;
+  border-left: 1px solid #001 !important;
+  border-radius: 0;
+  box-shadow: none !important;
+  filter: none;
+}
+
 /* responsive layout */
 
 @media screen and (max-width: 700px) {
@@ -1566,9 +1579,10 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 /* end timedate */
 
 #info {
-  margin: 7px 0 2px 4px !important;
+  margin: 7px 0 -11px 4px !important;
   padding: 6px 10px;
   display: inline-block;
+  overflow: hidden;
   font-weight: 700;
   text-shadow: 0 1px 1px #000;
   border-radius: 3px;
