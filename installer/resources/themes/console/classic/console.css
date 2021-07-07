@@ -1906,14 +1906,13 @@ input.reload[value^="Update"]:focus, button.reload[value^="Update"]:focus {
   background: url(/themes/console/images/buttons/update_hover.png) no-repeat 7px center, var(--btn_hover);
 }
 
-input.reload[value="Force GC"], button.reload[value="Force GC"] {
-  padding: 5px 8px 5px 23px;
-  background: url(/themes/console/images/buttons/clean.png) no-repeat 7px center, var(--btn);
+#dumpthreads input.reload {
+  padding: 5px 8px 5px 25px;
+  background: var(--recycle) no-repeat 7px center / 15px, var(--btn) !important;
 }
 
-input.reload[value="Force GC"]:hover, button.reload[value="Force GC"]:hover,
-input.reload[value="Force GC"]:focus, button.reload[value="Force GC"]:focus {
-  background: url(/themes/console/images/buttons/clean_hover.png) no-repeat 7px center, var(--btn_hover);
+#dumpthreads input.reload:hover#dumpthreads input.reload:focus {
+  background: var(--recycle) no-repeat 7px center / 15px, var(--btn_hover) !important;
 }
 
 input.stop, button.stop {
@@ -2574,7 +2573,7 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 
 #exportfamily tr:nth-child(2) td:first-child {
   padding: 15px 15px 15px 50px;
-  background: #fff url(/themes/console/images/info/export_key.png)  no-repeat 12px center / 28px;
+  background: #fff var(--joinfamily) no-repeat 12px center / 28px;
 }
 
 #leavefamily {
@@ -2584,7 +2583,7 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 
 #leavefamily tr:last-child td:first-child {
   padding: 15px 15px 15px 50px;
-  background: #fff url(/themes/console/images/svg/leavefamily.svg) no-repeat 12px center / 28px;
+  background: #fff var(--leavefamily) no-repeat 12px center / 28px;
 }
 
 #peerdefs tr {
@@ -9781,8 +9780,8 @@ th.queue {
   min-width: 30px;
 }
 
-#profilelist td:last-child a::after, a[href^="/configpeer"]::after, .profiledump::after,
-.familysearch img, #view_profile h3 a img {
+#profilelist td:last-child a::after, a[href^="/configpeer?"]::after, a[href^="/viewprofile"]::after, .profiledump::after,
+.familysearch img {
   margin: 1px 2px;
   padding: 2px;
   width: 14px;
@@ -9794,11 +9793,11 @@ th.queue {
   background: #fff;
 }
 
-a.viewfullentry, #profilelist td:last-child a, .profiledump::after {
+a.viewfullentry, #profilelist td:last-child a, a[href^="/viewprofile"], .profiledump::after {
   font-size: 0 !important;
 }
 
-#profilelist td:last-child a::after, a[href^="/configpeer"]::after, .profiledump::after {
+#profilelist td:last-child a::after, a[href^="/viewprofile"]::after, a[href^="/configpeer?"]::after, .profiledump::after {
   margin: 0 2px;
   height: 14px;
   width: 14px;
@@ -9808,15 +9807,15 @@ a.viewfullentry, #profilelist td:last-child a, .profiledump::after {
   content: "";
 }
 
-#profilelist td:last-child .viewprofile:hover::after, .profiledump:hover::after {
+#profilelist td:last-child .viewprofile:hover::after, .viewprofile:hover::after, .profiledump:hover::after {
   background: #fff var(--eye_hover) no-repeat center center / 12px;
 }
 
-#profilelist td:last-child a[href^="/configpeer"]::after, a[href^="/configpeer"]::after {
+#profilelist td:last-child a[href^="/configpeer"]::after, a[href^="/configpeer?"]::after {
   background: #fff var(--edit) no-repeat center center / 12px;
 }
 
-#profilelist td:last-child a[href^="/configpeer"]:hover::after, a[href^="/configpeer"]:hover::after {
+#profilelist td:last-child a[href^="/configpeer"]:hover::after, a[href^="/configpeer?"]:hover::after {
   background: #fff var(--edit_hover) no-repeat center center / 12px;
 }
 
@@ -9824,7 +9823,8 @@ a.viewfullentry:hover {
   filter: drop-shadow(0 0 1px var(--hover));
 }
 
-#profilelist td:last-child img, a[href^="/configpeer"] img, .profiledump img {
+#profilelist td:last-child img, a[href^="/configpeer?"] img,
+a[href^="/viewprofile"] img, .profiledump img {
   display: none !important;
 }
 

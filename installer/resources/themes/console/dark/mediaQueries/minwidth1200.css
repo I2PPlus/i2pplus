@@ -569,8 +569,8 @@
     padding-top: 116px;
   }
 
-  #homepage .main h4 a, #homepage h4.app2 a {
-    padding-left: 14px;
+  h4.app a::after, h4.app2 a::after {
+    margin-left: 11px;
   }
 
   #tunnels h3 a::after {

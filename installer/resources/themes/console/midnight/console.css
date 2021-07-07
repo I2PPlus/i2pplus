@@ -4703,8 +4703,7 @@ table#configclient {
 
 #exportfamily tr:nth-child(2) td:first-child {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/info/export_key.png) 12px center no-repeat;
-  background-size: 28px;
+  background: #000 var(--joinfamily) no-repeat 12px center / 28px;
 }
 
 #leavefamily {
@@ -4713,7 +4712,7 @@ table#configclient {
 
 #leavefamily tr:last-child td:first-child {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--leavefamily) 12px center no-repeat;
+  background: #000 var(--leavefamily) no-repeat 12px center;
   background-size: 28px;
 }
 
@@ -4762,7 +4761,7 @@ table#reseedconfig input[type=text], table#reseedconfig input[type=password] {
 }
 
 #bannedpeercount {
-  background: #000 var(--ban) 12px center no-repeat !important;
+  background: #000 var(--ban) no-repeat 12px center !important;
   background-size: 28px !important;
 }
 
@@ -4876,7 +4875,7 @@ p#defaultswork {
 p#confignotes {
   margin-bottom: -21px;
   padding: 15px 10px 15px 45px;
-  background: var(--infohelp) 12px center no-repeat !important;
+  background: var(--infohelp) no-repeat 12px center !important;
   background-size: 28px !important;
 }
 
@@ -4992,7 +4991,7 @@ table#addkeyring tr:last-child td {
 p#keyringhelp, p#webappconfig, p#availableplugins, p#pluginconfigtext, p#clientdefaultshelp, p#bwshare, p#editclients, p#upnpstatus, p#gatherstats {
   padding: 20px 15px 20px 50px !important;
   border: var(--innerborder);
-  background: #000 var(--infohelp) 12px center no-repeat !important;
+  background: #000 var(--infohelp) no-repeat 12px center !important;
   background-size: 28px !important;
 }
 
@@ -5342,7 +5341,7 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 
 #config_summarybar #refreshsidebar td:not(.optionsave) {
   padding-left: 50px;
-  background: var(--timer) 12px center no-repeat !important;
+  background: var(--timer) no-repeat 12px center !important;
   background-size: 28px !important;
 }
 
@@ -5502,7 +5501,7 @@ h3#shutdownrouter + p, h3#restartrouter + p, h3#servicedebug + p, h3#browseronst
   text-align: left;
   border: var(--innerborder);
   border-bottom: none;
-  background: #010008 var(--infohelp) 12px center no-repeat !important;
+  background: #010008 var(--infohelp) no-repeat 12px center !important;
   background-size: 28px !important;
 }
 
@@ -6261,7 +6260,7 @@ a[name="criticallogs"] + p + h3 + p + ul {
 
 #bugreports td {
   padding: 15px 10px 15px 50px;
-  background: var(--infohelp) 12px center no-repeat !important;
+  background: var(--infohelp) no-repeat 12px center !important;
   background-size: 28px !important;
 }
 
@@ -7939,7 +7938,7 @@ a[href^="viewprofile"]::after {
   text-align: left;
   font-weight: 700;
   border: var(--innerborder);
-  background: #000 var(--infohelp) 12px center no-repeat !important;
+  background: #000 var(--infohelp) no-repeat 12px center !important;
   background-size: 28px !important;
 }
 
@@ -8197,12 +8196,12 @@ textarea#advancedsettings:focus {
   font-weight: 400 !important;
   border-top: var(--innerborder);
   border-bottom: var(--innerborder);
-  background: #001 var(--infohelp) 12px center no-repeat !important;
+  background: #001 var(--infohelp) no-repeat 12px center !important;
   background-size: 28px !important;
 }
 
 #config_ui .infohelp {
-  background: #000 var(--ui) 12px center no-repeat !important;
+  background: #000 var(--ui) no-repeat 12px center !important;
   background-size: 28px !important;
 }
 
@@ -8230,7 +8229,7 @@ p.infohelp, p#debugmode, p.sybilinfo, #sybilanalysis {
 
 #sybilanalysis {
   margin-bottom: 10px;
-  background: #000 var(--sybil) 12px center no-repeat !important;
+  background: #000 var(--sybil) no-repeat 12px center !important;
   background-size: 32px !important;
 }
 
@@ -8387,7 +8386,7 @@ h3#webappconfiguration {
 
 p#webappconfigtext {
   margin: 12px 0 3px 0;
-  background: #000 var(--editclient) 12px center no-repeat !important;
+  background: #000 var(--editclient) no-repeat 12px center !important;
   background-size: 28px !important;
 }
 
@@ -8414,7 +8413,7 @@ table#advconf {
 p#javaclienthelp {
   padding: 10px 10px 10px 50px !important;
   border: var(--innerborder);
-  background: var(--infohelp) 12px center no-repeat !important;
+  background: var(--infohelp) no-repeat 12px center !important;
   background-size: 28px !important;
 }
 
@@ -8631,43 +8630,43 @@ p#enablefullstats {
 }
 
 table#bugreports td.infohelp {
-  background: #001 var(--bug) 12px center no-repeat !important;
+  background: #001 var(--bug) no-repeat 12px center !important;
   padding: 15px 15px 15px 50px;
   background-size: 28px !important;
 }
 
 p#debugmode {
   padding: 15px 15px 15px 50px;
-  background: #001 var(--bug) 12px center no-repeat !important;
+  background: #001 var(--bug) no-repeat 12px center !important;
   background-size: 28px !important;
 }
 
 p.sybilinfo {
   padding: 15px 15px 15px 50px;
   margin-bottom: 10px;
-  background: #001 var(--sybil) 12px center no-repeat !important;
+  background: #001 var(--sybil) no-repeat 12px center !important;
   background-size: 28px !important;
 }
 
 p.sybilinfo.experimental {
-  background: #001 var(--experimental) 12px center no-repeat !important;
+  background: #001 var(--experimental) no-repeat 12px center !important;
   background-size: 28px !important;
 }
 
 #bandwidthconfig tr:first-child .infohelp {
-  background: #001 var(--speed) 12px center no-repeat !important;
+  background: #001 var(--speed) no-repeat 12px center !important;
   padding: 15px 15px 15px 50px;
   background-size: 28px !important;
 }
 
 #addkeyring td.infohelp {
   padding: 20px 15px 20px 50px !important;
-  background: #001 var(--keys) 12px center no-repeat !important;
+  background: #001 var(--keys) no-repeat 12px center !important;
   background-size: 28px !important;
 }
 
 #oldhome td:first-child {
-  background: #001 var(--home) 12px center no-repeat !important;
+  background: #001 var(--home) no-repeat 12px center !important;
   padding: 15px 15px 15px 50px;
   background-size: 28px !important;
 }
@@ -8678,7 +8677,7 @@ p.sybilinfo.experimental {
 
 #floodfillconfig tr:first-child .infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--floodfill) 12px center no-repeat !important;
+  background: #000 var(--floodfill) no-repeat 12px center !important;
   background-size: 28px !important;
 }
 
@@ -8692,104 +8691,104 @@ p.sybilinfo.experimental {
 
 p#clientconf.infohelp, p#webappconfig.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--editclient) 12px center no-repeat !important;
+  background: #000 var(--editclient) no-repeat 12px center !important;
   background-size: 28px !important;
 }
 
 p#pluginconfigtext {
   padding: 15px 15px 15px 50px;
   vertical-align: middle;
-  background: #000 var(--pluginconfig) 12px center no-repeat !important;
+  background: #000 var(--pluginconfig) no-repeat 12px center !important;
   background-size: 28px !important;
 }
 
 #plugininstall .infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--plugin) 12px center no-repeat !important;
+  background: #000 var(--plugin) no-repeat 12px center !important;
   background-size: 28px !important;
 }
 
 #manualreseed tr:nth-last-child(2) td.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--package) 12px center no-repeat !important;
+  background: #000 var(--package) no-repeat 12px center !important;
   background-size: 28px !important;
 }
 
 #config_peers tr:nth-child(3) td.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--ban) 12px center no-repeat !important;
+  background: #000 var(--ban) no-repeat 12px center !important;
   background-size: 28px !important;
 }
 
 h3#shutdownrouter + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--power) 12px center no-repeat !important;
+  background: #000 var(--power) no-repeat 12px center !important;
   background-size: 28px !important;
 }
 
 h3#restartrouter + p.infohelp, #config_family .infohelp.needrestart {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--reboot) 12px center no-repeat !important;
+  background: #000 var(--reboot) no-repeat 12px center !important;
   background-size: 28px !important;
 }
 
 h3#systray + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/info/systray.png) 12px center no-repeat !important;
+  background: #000 url(/themes/console/images/info/systray.png) no-repeat 12px center !important;
   background-size: 28px !important;
 }
 
 h3#servicedebug + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--bug) 12px center no-repeat !important;
+  background: #000 var(--bug) no-repeat 12px center !important;
   background-size: 28px !important;
 }
 
 h3#browseronstart + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--firefox) 12px center no-repeat !important;
+  background: #000 var(--firefox) no-repeat 12px center !important;
   background-size: 28px !important;
 }
 
 .main#config_reseed p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--reseed) 12px center no-repeat !important;
+  background: #000 var(--reseed) no-repeat 12px center !important;
   background-size: 28px !important;
 }
 
 p#enablefullstats, p#gatherstats {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--stats) 12px center no-repeat !important;
+  background: #000 var(--stats) no-repeat 12px center !important;
   background-size: 28px !important;
 }
 
 #config_family .infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--family) 12px center no-repeat !important;
+  background: #000 var(--family) no-repeat 12px center !important;
   background-size: 28px !important;
 }
 
 #config_family .infohelp.joinfamily {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--joinfamily) 12px center no-repeat !important;
+  background: #000 var(--joinfamily) no-repeat 12px center !important;
   background-size: 28px !important;
 }
 
 #config_family .infohelp.newfamily {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--newfamily) 12px center no-repeat !important;
+  background: #000 var(--newfamily) no-repeat 12px center !important;
   background-size: 28px !important;
 }
 
 #consolepass tr:first-child td {
   padding: 20px 15px 20px 50px !important;
-  background: #000 var(--useradd) 12px center no-repeat !important;
+  background: #000 var(--useradd) no-repeat 12px center !important;
   background-size: 28px !important;
 }
 
 #events form[action="events"] {
   padding: 10px 10px 10px 50px;
-  background: #001 var(--log_icon) 12px center no-repeat;
+  background: #001 var(--log_icon) no-repeat 12px center;
   background-size: 28px;
 }
 
@@ -8799,13 +8798,13 @@ p#enablefullstats, p#gatherstats {
 
 #plugininstall tr:nth-child(3) td:nth-last-child(2), #manualreseed tr:nth-child(3) td:nth-last-child(2) {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--link) 12px center no-repeat;
+  background: #000 var(--link) no-repeat 12px center;
   background-size: 28px;
 }
 
 #manualreseed tr:nth-child(5) td:nth-last-child(2), #plugininstall tr:nth-child(5) td:nth-last-child(2) {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--files) 12px center no-repeat;
+  background: #000 var(--files) no-repeat 12px center;
   background-size: 28px;
 }
 
@@ -11183,13 +11182,13 @@ tr:nth-child(4) .net_bwrate::before {
 
 #url td:first-child {
   padding: 15px 15px 15px 50px !important;
-  background: var(--link) 12px center no-repeat !important;
+  background: var(--link) no-repeat 12px center !important;
   background-size: 28px !important;
 }
 
 #installPluginFile td:first-child {
   padding: 10px 15px 10px 50px;
-  background: var(--files) 12px center no-repeat !important;
+  background: var(--files) no-repeat 12px center !important;
   background-size: 28px !important;
 }
 
@@ -13807,7 +13806,7 @@ to {
 }
 
 #enablefullstats {
-  background: #000 var(--stats) 12px center no-repeat !important;
+  background: #000 var(--stats) no-repeat 12px center !important;
   background-size: 28px !important;
 }
 

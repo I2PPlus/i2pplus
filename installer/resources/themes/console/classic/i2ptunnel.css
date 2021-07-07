@@ -3,13 +3,19 @@
 
 @import url(/themes/fonts/DroidSans.css);
 @import url(/themes/console/images/i2ptunnel.css);
+@import url(../images/images.css);
 @import url(images/i2ptunnel.css);
+
+:root {
+  --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
+  --monospaced: Droid Sans Mono, Andale Mono, DejaVu Sans Mono, Lucida Console, monospace;
+}
 
 body {
   margin: 2.5% 2%;
   padding: 0;
   text-align: center;
-  font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
+  font-family: var(--bodyfont);
   font-size: 9pt;
   color: #41444d;
   background: #eef url(images/bg0.png) center center scroll;
@@ -19,12 +25,13 @@ body {
 
 body.iframed {
   margin: 0;
-  background: transparent url(/themes/console/images/transparent.gif) !important;
+  background: none !important;
 }
 
 * {
   outline: none;
 }
+
 div {
   box-sizing: border-box;
 }
@@ -94,7 +101,7 @@ hr {
 .freetext {
   padding: 4px;
   width: 150px;
-  font: 9pt Droid Sans Mono, Noto Mono, Lucida Console, DejaVu Sans Mono, monospace;
+  font: 9pt var(--monospaced);
   color: #5e626e;
   border: 1px solid #aaafce;
   border-radius: 2px;
@@ -222,7 +229,7 @@ select {
   min-width: 140px;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
+  font-family: var(--bodyfont);
   font-size: 9pt;
   color: #5e626e;
   border: 1px solid #aaafce;
@@ -573,13 +580,13 @@ button {
 }
 
 button, input[type=submit], input[type="reset"], a.control {
-  font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", "DejaVu Sans", Verdana, Helvetica, sans-serif;
+  font-family: var(--bodyfont);
   font-size: 9pt;
   cursor: pointer;
 }
 
 textarea {
-  font-family: Droid Sans Mono, Noto Mono, Lucida Console, DejaVu Sans Mono, monospace;
+  font-family: var(--monospaced);
   color: #5e626e;
   border: 1px solid #aaafce;
   border-radius: 2px;
@@ -600,7 +607,7 @@ textarea#statusMessages {
   width: 99%;
   width: calc(100% - 12px);
   word-break: break-all;
-  font-family: "Droid Sans Mono", "Noto Mono", Consolas, "Lucida Console", "DejaVu Sans Mono", monospace;
+  font-family: var(--monospaced);
   font-size: 8.5pt;
   color: #070;
   border: none;
@@ -859,7 +866,7 @@ input[type="file"] {
 
 .password {
   padding-left: 22px;
-  background: #fff url(/themes/console/images/buttons/password.png) 3px center no-repeat;
+  background: #fff var(--key) no-repeat 3px center / 16px;
 }
 
 .proxyList {
@@ -1185,7 +1192,7 @@ input[name="nofilter_blindedPassword"] {
   text-overflow: ellipsis;
   white-space: nowrap;
   word-break: break-all;
-  font-family: Droid Sans Mono, Noto Mono, Lucida Console, DejaVu Sans Mono, monospace;
+  font-family: var(--monospaced);
   border: 1px solid #aaafce;
   border-radius: 2px;
   box-shadow: inset 1px 1px 1px #ddd;
