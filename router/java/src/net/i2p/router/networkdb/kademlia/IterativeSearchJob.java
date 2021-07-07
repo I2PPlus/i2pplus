@@ -152,14 +152,10 @@ public class IterativeSearchJob extends FloodSearchJob {
         int known = ctx.netDb().getKnownRouters();
         int totalSearchLimit = (facade.floodfillEnabled() && ctx.router().getUptime() > 30*60*1000) ?
                                 TOTAL_SEARCH_LIMIT_WHEN_FF : TOTAL_SEARCH_LIMIT;
-        if (known < 2000)
+        if (isLease || known < 2000)
             totalSearchLimit *= 3;
         else if (known < 4000)
             totalSearchLimit *= 2;
-        else if (known > 8000)
-            totalSearchLimit = 1;
-        else if (known > 6000)
-            totalSearchLimit = 2;
         _totalSearchLimit = ctx.getProperty("netdb.searchLimit", totalSearchLimit);
         _ipSet = new MaskedIPSet(2 * (_totalSearchLimit + EXTRA_PEERS));
         _singleSearchTime = ctx.getProperty("netdb.singleSearchTime", SINGLE_SEARCH_TIME);
