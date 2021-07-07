@@ -6234,7 +6234,7 @@ span#distance {
 }
 
 #certs .infohelp:first-of-type {
-  background-image: url(/themes/console/images/info/certs.png) !important;
+  background-image: url(/themes/console/images/svg/certs.svg) !important;
 }
 
 .main#certs p:not(.infohelp) {

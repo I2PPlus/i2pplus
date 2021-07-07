@@ -4685,7 +4685,7 @@ h4 {
 }
 
 #certs .infohelp:first-of-type {
-  background-image: url(/themes/console/images/info/certs.png);
+  background-image: url(/themes/console/images/svg/certs.svg);
 }
 
 #certs p:not(.infohelp) {
