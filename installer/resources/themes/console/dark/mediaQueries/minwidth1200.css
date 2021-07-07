@@ -569,6 +569,10 @@
     padding-top: 116px;
   }
 
+  h4.app a::after, h4.app2 a::after {
+    margin-left: 11px;
+  }
+
   #tunnels h3 a::after {
     margin: -8px -8px -8px 0;
     padding: 9px 8px 9px 16px;
