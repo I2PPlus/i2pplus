@@ -1776,12 +1776,13 @@ input.check:focus, button.check:focus {
 
 input.check[value$="updates"], button.check[value$="updates"] {
   padding: 5px 8px 5px 23px;
-  background: url(/themes/console/images/buttons/update.png) no-repeat 7px center, var(--btn);
+  background: var(--refresh) no-repeat 7px center / 14px, var(--btn);
 }
 
 input.check[value$="updates"]:hover, button.check[value$="updates"]:hover,
-input.check[value$="updates"]:focus, button.check[value$="updates"]:focus {
-  background: url(/themes/console/images/buttons/update_hover.png) no-repeat 7px center, var(--btn_hover);
+input.check[value$="updates"]:focus, button.check[value$="updates"]:focus,
+input.check[value$="updates"]:active, button.check[value$="updates"]:active {
+  background: var(--refresh_hover) no-repeat 7px center / 14px, var(--btn_hover);
 }
 
 input.delete, button.delete {
@@ -1806,22 +1807,22 @@ input.delete[value^="Ban"]:focus, button.delete[value^="Ban"]:focus {
 
 input.download, button.download {
   padding: 5px 8px 5px 23px;
-  background: url(/themes/console/images/buttons/download.png) no-repeat 7px center, var(--btn);
+  background: var(--download) no-repeat 7px center / 14px, var(--btn);
 }
 
 input.download:hover, button.download:hover,
-input.download:focus, button.download:focus {
-  background: url(/themes/console/images/buttons/download.png) no-repeat 7px center, var(--btn_hover);
+input.download:focus, button.download:focus,
+input.download:active, button.download:active {
+  background: var(--download_hover) no-repeat 7px center / 14px, var(--btn_hover);
 }
 
 input.download[value^="Join"], button.download[value^="Join"] {
   padding: 5px 8px 5px 25px;
-  background: url(/themes/console/images/svg/family.svg) no-repeat 7px center, var(--btn);
+  background: var(--family) no-repeat 7px center / 14px, var(--btn);
 }
 
-input.download[value^="Join"]:hover, button.download[value^="Join"]:hover,
-input.download[value^="Join"]:focus, button.download[value^="Join"]:focus {
-  background: url(/themes/console/images/svg/family.svg) no-repeat 7px center, var(--btn_hover);
+input.download[value^="Join"]:hover, input.download[value^="Join"]:focus, input.download[value^="Join"]:active {
+  background: var(--family) no-repeat 7px center / 14px, var(--btn_hover);
 }
 
 input.download[value$="from File"], button.download[value$="from File"],
@@ -1878,12 +1879,11 @@ input.back:hover, input.back:focus {
 
 input.reload, button.reload {
   padding: 5px 8px 5px 23px;
-  background: url(/themes/console/images/buttons/restore.png) no-repeat 7px center, var(--btn);
+  background: var(--reset) no-repeat 7px center / 14px, var(--btn);
 }
 
-input.reload:hover, button.reload:hover,
-input.reload:focus, button.reload:focus {
-  background: url(/themes/console/images/buttons/restore_hover.png) no-repeat 7px center, var(--btn_hover);
+input.reload:hover, input.reload:focus, input.reload:active {
+  background: var(--reset_hover) no-repeat 7px center / 14px, var(--btn_hover);
 }
 
 input.reload[value$="restart"], button.reload[value$="restart"] {
@@ -1898,12 +1898,13 @@ input.reload[value$="restart"]:focus, button.reload[value$="restart"]:focus {
 
 input.reload[value^="Update"], button.reload[value^="Update"] {
   padding: 5px 8px 5px 23px;
-  background: url(/themes/console/images/buttons/update.png) no-repeat 7px center, var(--btn);
+  background: var(--refresh) no-repeat 7px center / 14px, var(--btn);
 }
 
 input.reload[value^="Update"]:hover, button.reload[value^="Update"]:hover,
-input.reload[value^="Update"]:focus, button.reload[value^="Update"]:focus {
-  background: url(/themes/console/images/buttons/update_hover.png) no-repeat 7px center, var(--btn_hover);
+input.reload[value^="Update"]:focus, button.reload[value^="Update"]:focus,
+input.reload[value^="Update"]:active, button.reload[value^="Update"]:active {
+  background: var(--refresh_hover) no-repeat 7px center / 14px, var(--btn_hover);
 }
 
 #dumpthreads input.reload {
@@ -1978,19 +1979,19 @@ button.delete.control:hover, button.delete.control:focus {
 }
 
 button.check.control {
-  background: url(/themes/console/images/buttons/update.png) no-repeat center center, var(--btn);
+  background: var(--refresh) no-repeat center center / 14px, var(--btn);
 }
 
-button.check.control:hover, button.check.control:focus {
-  background: url(/themes/console/images/buttons/update_hover.png) no-repeat center center, var(--btn_hover);
+button.check.control:hover, button.check.control:focus, button.check.control:active {
+  background: var(--refresh_hover) no-repeat center center / 14px, var(--btn_hover);
 }
 
 button.download.control {
-  background: url(/themes/console/images/buttons/download.png) no-repeat center center, var(--btn);
+  background: var(--download) no-repeat center center / 14px, var(--btn);
 }
 
-button.download.control:hover, button.download.control:focus {
-  background: url(/themes/console/images/buttons/download.png) no-repeat center center, var(--btn_hover);
+button.download.control:hover, button.download.control:focus, button.download.control:active {
+  background: var(--download_hover) no-repeat center center / 14px, var(--btn_hover);
 }
 
 button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset]::-moz-focus-inner {
@@ -2110,19 +2111,19 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 }
 
 .routersummary .reload[value="Reseed"] {
-  background: url(/themes/console/images/buttons/download.png) no-repeat 7px center / 12px, var(--btn) !important;
+  background: var(--download) no-repeat 7px center / 12px, var(--btn) !important;
 }
 
 .routersummary .reload[value="Reseed"]:hover, .routersummary .reload[value="Reseed"]:focus, .routersummary .reload[value="Reseed"]:active {
-  background: url(/themes/console/images/buttons/download.png) no-repeat 7px center / 12px, var(--btn_hover) !important;
+  background: var(--download) no-repeat 7px center / 12px, var(--btn_hover) !important;
 }
 
 .routersummary .download {
-  background: url(/themes/console/images/buttons/download.png) no-repeat 7px center / 12px, var(--btn);
+  background: var(--download) no-repeat 7px center / 12px, var(--btn);
 }
 
 .routersummary .download:hover, .routersummary .download:focus, .routersummary .download:active {
-  background: url(/themes/console/images/buttons/download.png) no-repeat 7px center / 12px, var(--btn_hover);
+  background: var(--download) no-repeat 7px center / 12px, var(--btn_hover);
 }
 
 /* end sidebar buttons */

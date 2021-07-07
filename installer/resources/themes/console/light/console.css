@@ -5372,11 +5372,11 @@ button.download.control:hover, button.download.control:focus {
 }
 
 #sidebar .reload[value="Reseed"] {
-  background: url(/themes/console/images/buttons/download.png) no-repeat center left 6px / 14px, var(--button) !important;
+  background: var(--download) no-repeat center left 6px / 14px, var(--button) !important;
 }
 
 #sidebar .reload[value="Reseed"]:hover, #sidebar .reload[value="Reseed"]:focus, #sidebar .reload[value="Reseed"]:active {
-  background: var(--download) no-repeat center left 6px / 14px, var(--button_hover);
+  background: var(--download_hover) no-repeat center left 6px / 14px, var(--button_hover);
 }
 
 #sidebar .download:hover, #sidebar .download:focus, #sidebar .download:active {

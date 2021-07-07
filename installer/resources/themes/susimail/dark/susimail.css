@@ -483,15 +483,15 @@ input.delete:active, input.delete_attachment:active, input.really_delete:active 
 
 input.download {
   padding: 7px 10px 7px 26px;
-  background: url(/themes/console/images/buttons/download.png) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--download) no-repeat 8px center / 14px, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
 }
 
 input.download:hover {
-  background: url(/themes/console/images/buttons/download.png) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background: var(--download) no-repeat 8px center / 14px, linear-gradient(to bottom, #000, #010);
 }
 
 input.download:active {
-  background: url(/themes/console/images/buttons/download.png) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background: var(--download) no-repeat 8px center / 14px, linear-gradient(to bottom, #000, #010);
 }
 
 input.offline {
