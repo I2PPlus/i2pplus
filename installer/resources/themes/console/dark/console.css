@@ -4040,7 +4040,7 @@ h3.tabletitle + .statusnotes, table.tunneldisplay {
   white-space: nowrap;
 }
 
-.tunnels_client th:first-child:not(old) {
+.tunnels_client th:first-child {
   font-size: 0 !important;
 }
 
@@ -4517,24 +4517,17 @@ h3#servicedebug a, h3#graphinfo a {
   margin-bottom: 10px;
 }
 
-/*#tunnels .tunnels_participating tbody tr:first-child {
-  display: none !important;
-}*/
-
 .main#tunnels h3 a {
   float: right;
 }
 
-.main#tunnels h3 a:not(old):not(.lsview), #logs a.configure:not(old), #logs a.delete:not(old) {
+.main#tunnels h3 a:not(.lsview), #logs a.configure, #logs a.delete, h4.app a, h4.app2 a {
   font-size: 0;
-}
-
-h4.app img, h4.app2 img {
-  display: none;
 }
 
 h4.app a, h4.app2 a {
-  font-size: 0;
+  word-spacing: 0;
+  letter-spacing: 0;
 }
 
 .main#tunnels h3 a[href^="/configtunnels#"]::after, .main#tunnels h3 a[href$="/i2ptunnelmgr"]::after,
@@ -4586,6 +4579,10 @@ h4.app a, h4.app2 a {
 #logs a.delete:active::after {
   opacity: .7;
   transform: scale(.85);
+}
+
+h4.app a::after, h4.app2 a::after {
+  margin-left: 9px;
 }
 
 h4.app a::after {
@@ -6329,7 +6326,7 @@ span#distance {
   text-align: right;
 }
 
-.addtobook a:not(old) {
+.addtobook a {
   font-size: 0;
 }
 
@@ -6672,7 +6669,7 @@ th .h3navlinks, #config_stats .h3navlinks, #config_webapps .h3navlinks {
   color: #f60;
 }
 
-h3#iptransport a:not(old), h3#advancedconfig a:not(old), #reseedsetup a:not(old) {
+h3#iptransport a, h3#advancedconfig a, #reseedsetup a {
   font-size: 0;
 }
 
@@ -9313,7 +9310,7 @@ input[type=file] {
 
 /* end reseed help ordered list */
 
-.config_experimental:not(old) {
+.config_experimental {
   font-size: 0;
 }
 
@@ -11474,12 +11471,12 @@ h3#scheduledjobs {
 
 #homepage .main h4 a {
   margin: -9px 0;
-  padding: 11px 4px 10px 12px;
+  padding: 11px 4px 10px;
   border-left: var(--border);
 }
 
 #homepage h4.app2 a {
-  padding: 9px 4px 9px 12px;
+  padding: 9px 4px 9px;
 }
 
 #tunnels h3#exploratory a, #tunnels h3.server a, #tunnels h3.client a {

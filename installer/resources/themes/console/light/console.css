@@ -3508,12 +3508,12 @@ h4.app a, h4.app2 a {
 
 #home h4 a {
   margin: -7px -10px -10px 0;
-  padding: 10px 0 4px 16px;
+  padding: 10px 0 4px;
   border-left: 1px solid var(--borderinner);
 }
 
 #home h4 a::after {
-  margin: -2px 10px 2px -6px;
+  margin: -2px 10px 2px -8px;
   width: 16px;
   height: 18px;
   display: inline-block;
