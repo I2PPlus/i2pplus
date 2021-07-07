@@ -1906,14 +1906,13 @@ input.reload[value^="Update"]:focus, button.reload[value^="Update"]:focus {
   background: url(/themes/console/images/buttons/update_hover.png) no-repeat 7px center, var(--btn_hover);
 }
 
-input.reload[value="Force GC"], button.reload[value="Force GC"] {
-  padding: 5px 8px 5px 23px;
-  background: url(/themes/console/images/buttons/clean.png) no-repeat 7px center, var(--btn);
+#dumpthreads input.reload {
+  padding: 5px 8px 5px 25px;
+  background: var(--recycle) no-repeat 7px center / 15px, var(--btn) !important;
 }
 
-input.reload[value="Force GC"]:hover, button.reload[value="Force GC"]:hover,
-input.reload[value="Force GC"]:focus, button.reload[value="Force GC"]:focus {
-  background: url(/themes/console/images/buttons/clean_hover.png) no-repeat 7px center, var(--btn_hover);
+#dumpthreads input.reload:hover#dumpthreads input.reload:focus {
+  background: var(--recycle) no-repeat 7px center / 15px, var(--btn_hover) !important;
 }
 
 input.stop, button.stop {

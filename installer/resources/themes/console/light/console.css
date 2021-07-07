@@ -5172,17 +5172,13 @@ input.reload[value^="Update"]:focus, button.reload[value^="Update"]:focus {
   background: var(--refresh_hover) no-repeat 8px center, var(--button_hover);
 }
 
-input.reload[value="Force GC"], button.reload[value="Force GC"],
-input.reload[value="Force garbage collection"], button.reload[value="Force garbage collection"] {
-  padding: 5px 9px 5px 24px;
-  background: url(/themes/console/images/buttons/clean.png) no-repeat 8px center, var(--button);
+#dumpthreads input.reload {
+  padding: 5px 9px 5px 26px;
+  background: var(--recycle) no-repeat 8px center / 15px, var(--button);
 }
 
-input.reload[value="Force GC"]:hover, button.reload[value="Force GC"]:hover,
-input.reload[value="Force GC"]:focus, button.reload[value="Force GC"]:focus,
-input.reload[value="Force garbage collection"]:hover, button.reload[value="Force garbage collection"]:hover,
-input.reload[value="Force garbage collection"]:focus, button.reload[value="Force garbage collection"]:focus {
-  background: url(/themes/console/images/buttons/clean_hover.png) no-repeat 8px center, var(--button_hover);
+#dumpthreads input.reload:hover#dumpthreads input.reload:focus {
+  background: var(--recycle) no-repeat 8px center / 15px, var(--button_hover);
 }
 
 input.stop, button.stop {

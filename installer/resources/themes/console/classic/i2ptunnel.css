@@ -3,6 +3,7 @@
 
 @import url(/themes/fonts/DroidSans.css);
 @import url(/themes/console/images/i2ptunnel.css);
+@import url(../images/images.css);
 @import url(images/i2ptunnel.css);
 
 body {
@@ -859,7 +860,7 @@ input[type="file"] {
 
 .password {
   padding-left: 22px;
-  background: #fff url(/themes/console/images/buttons/password.png) 3px center no-repeat;
+  background: #fff var(--key) no-repeat 3px center / 16px;
 }
 
 .proxyList {

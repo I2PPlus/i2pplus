@@ -1359,7 +1359,7 @@ hr {
 }
 
 #dologin input[name="pass"] {
-  background: #010 url(/themes/console/images/buttons/password.png) no-repeat 5px 5px !important;
+  background: #010 var(--key) no-repeat 5px 5px / 16px !important;
 }
 
 #dologin input[name="user"]:focus, #dologin input[name="pass"]:focus {
@@ -1373,7 +1373,6 @@ hr {
 
 #dologin hr {
   margin: 0 0 4px;
-  background: #252;
   background: linear-gradient(to right, rgba(0,0,0,0), rgba(0,64,0,.8) 45%, rgba(0,64,0,.8) 55%, rgba(0,0,0,0));
 }
 
