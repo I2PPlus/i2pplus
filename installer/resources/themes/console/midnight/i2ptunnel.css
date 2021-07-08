@@ -424,18 +424,18 @@ _:-ms-lang(x), .tunnelProperties {
   border: 1px solid rgba(38,35,92,.3);
   border-radius: 3px;
   box-shadow: var(--highlight);
-  background: var(--settings) 6px center no-repeat, linear-gradient(to bottom, rgba(16,16,48,.3), rgba(0,0,16,.3));
-  background-size: 14px, 100% !important;
+  background: var(--settings) no-repeat 6px center / 14px, linear-gradient(to bottom, rgba(16,16,48,.3), rgba(0,0,16,.3));
 }
 
-.tunnelName a:hover {
-  background: var(--settings_hover) 6px center no-repeat, linear-gradient(to bottom, rgba(16,16,48,.3), rgba(0,0,16,.3));
+.tunnelName a:hover, .tunnelName a:focus {
+  border: 1px solid #26235c;
+  background: var(--settings_hover) no-repeat 6px center / 14px, linear-gradient(to bottom, #113, #001);
   background-size: 14px, 100% !important;
 }
 
 .tunnelName a:active {
-  background: var(--settings_active) 6px center no-repeat, linear-gradient(to bottom, rgba(16,16,48,.3), rgba(0,0,16,.3));
-  background-size: 14px, 100% !important;
+  box-shadow: var(--highlight), inset 3px 3px 3px #000;
+  background: #001 var(--settings_active) no-repeat 6px center / 14px;
 }
 
 @media screen and (max-width: 1500px) {
@@ -445,17 +445,6 @@ _:-ms-lang(x), .tunnelProperties {
     width: calc(100% - 40px);
     background-size: 12px, 100% !important;
   }
-}
-
-.tunnelName a:hover, .tunnelName a:focus {
-  border: 1px solid #26235c;
-  background-image: url(images/configure_hover.png), linear-gradient(to bottom, #113, #001);
-}
-
-.tunnelName a:active {
-  box-shadow: var(--highlight), inset 3px 3px 3px #000;
-  background-image: url(images/configure_active.png);
-  background-color: #001;
 }
 
 .tunnelType {
@@ -999,21 +988,21 @@ input.tunnelName, input.tunnelDescriptionText, #userAgents, .tunnelDescription, 
 
 .username {
   padding-left: 26px;
-  background: var(--user) 6px center no-repeat, linear-gradient(to bottom, #001, #000) !important;
+  background: var(--user) no-repeat 6px center, linear-gradient(to bottom, #001, #000) !important;
   background-size: 14px, 100% !important;
   background-blend-mode: luminosity;
 }
 
 .username:focus {
   padding-left: 26px;
-  background: #000 var(--user) 6px center no-repeat !important;
+  background: #000 var(--user) no-repeat 6px center !important;
   background-size: 14px, 100% !important;
   background-blend-mode: normal;
 }
 
 .password {
   padding-left: 26px;
-  background: var(--key) 6px center no-repeat, linear-gradient(to bottom, #001, #000) !important;
+  background: var(--key) no-repeat 6px center, linear-gradient(to bottom, #001, #000) !important;
   background-size: 14px, 100% !important;
   background-blend-mode: luminosity;
 }
@@ -1021,7 +1010,7 @@ input.tunnelName, input.tunnelDescriptionText, #userAgents, .tunnelDescription, 
 
 .password:focus {
   padding-left: 26px;
-  background: #000 var(--key) 6px center no-repeat !important;
+  background: #000 var(--key) no-repeat 6px center !important;
   background-size: 14px, 100% !important;
   background-blend-mode: normal;
 }

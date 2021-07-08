@@ -11475,6 +11475,10 @@ h3#scheduledjobs {
   border-left: var(--border);
 }
 
+#homepage h4.app a {
+  margin-bottom: -12px;
+}
+
 #homepage h4.app2 a {
   padding: 9px 4px 9px;
 }
