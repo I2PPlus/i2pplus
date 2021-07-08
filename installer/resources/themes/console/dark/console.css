@@ -5751,8 +5751,7 @@ h4.app img, h4.app2 img {
 }
 
 #chooselang img {
-  margin-top: -1px;
-  margin-right: 10px;
+  margin: -1px 10px 0;
   display: inline-block;
 }
 
