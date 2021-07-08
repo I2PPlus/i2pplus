@@ -29,9 +29,10 @@ class ConnectionPacketHandler {
     private final ByteCache _cache = ByteCache.getInstance(32, 4*1024);
 
     public static final int MAX_SLOW_START_WINDOW = 64;
-    
+
     // see tickets 1939 and 2584
     private static final int IMMEDIATE_ACK_DELAY = 120;
+    static final String PROP_IMMEDIATE_ACK_DELAY = "i2p.streaming.immediateAckDelay";
 
     public ConnectionPacketHandler(I2PAppContext context) {
         _context = context;
@@ -97,7 +98,7 @@ class ConnectionPacketHandler {
                 int mtu = con.getOptions().getMaxMessageSize();
                 if (size < mtu) {
                     if (_log.shouldInfo())
-                        _log.info("Reducing MTU to " + size 
+                        _log.info("Reducing MTU to " + size
                                   + " from " + mtu);
                     con.getOptions().setMaxMessageSize(size);
                     con.getOutputStream().setBufferSize(size);
@@ -105,7 +106,7 @@ class ConnectionPacketHandler {
                     if (size > mtu)
                         size = mtu;
                     if (_log.shouldInfo())
-                        _log.info("Increasing MTU to " + size 
+                        _log.info("Increasing MTU to " + size
                                   + " from " + con.getOptions().getMaxInitialMessageSize());
                     if (size != mtu)
                         con.getOptions().setMaxMessageSize(size);
@@ -227,7 +228,7 @@ class ConnectionPacketHandler {
                 // can go, however if it goes too fast then we start choking which causes
                 // frequent stalls anyway.
                 // see tickets 1939 and 2584
-                con.setNextSendTime(_context.clock().now() + Math.min(IMMEDIATE_ACK_DELAY, con.getOptions().getRTT() / 8));
+                con.setNextSendTime(_context.clock().now() + Math.min(_context.getProperty(PROP_IMMEDIATE_ACK_DELAY, IMMEDIATE_ACK_DELAY), con.getOptions().getRTT() / 8));
             } else {
                 int delay;
                 if (delayReq) // delayed ACK requested
