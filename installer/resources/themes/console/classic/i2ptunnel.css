@@ -11,6 +11,10 @@
   --monospaced: Droid Sans Mono, Andale Mono, DejaVu Sans Mono, Lucida Console, monospace;
 }
 
+html {
+  scrollbar-color: #acafb9 #e2e2f3;
+}
+
 body {
   margin: 2.5% 2%;
   padding: 0;
@@ -586,13 +590,16 @@ button, input[type=submit], input[type="reset"], a.control {
 }
 
 textarea {
+  line-height: 1.5;
   font-family: var(--monospaced);
+  font-size: .9;
   color: #5e626e;
   border: 1px solid #aaafce;
   border-radius: 2px;
   box-shadow: inset 1px 1px 1px #ddd;
   background: #fff;
   resize: none;
+  scrollbar-color: #acafb9 #f2f2ff;
 }
 
 textarea:focus {
@@ -608,7 +615,6 @@ textarea#statusMessages {
   width: calc(100% - 12px);
   word-break: break-all;
   font-family: var(--monospaced);
-  font-size: 8.5pt;
   color: #070;
   border: none;
   border-radius: 0;
@@ -1113,7 +1119,7 @@ b + .port {
 }
 
 @media screen and (min-width: 1200px) {
-body, .control, button, select, textarea, .freetext {
+body, .control, button, select, .freetext {
   font-size: 10pt !important;
 }
 
@@ -1287,10 +1293,6 @@ th {
 @media screen and (min-width: 1500px) {
 .displayText, .displayText:empty:hover, .displayText:empty:focus {
   width: 552px;
-}
-
-textarea#statusMessages {
-  font-size: 9pt;
 }
 
 #registration .displayText {

@@ -392,19 +392,19 @@ input[type=file]:active::file-selector-button {
 
 input.accept, button.accept {
   padding: 5px 9px 5px 25px !important;
-  background: var(--yes) 8px center no-repeat, var(--button) !important;
+  background: var(--yes) no-repeat 8px center, var(--button) !important;
   background-size: 12px, 100% !important;
 }
 
 input.accept:hover, button.accept:hover,
 input.accept:focus, button.accept:focus {
-  background: var(--yes) 8px center no-repeat, var(--button_hover) !important;
+  background: var(--yes) no-repeat 8px center, var(--button_hover) !important;
   background-size: 12px, 100% !important;
 }
 
 input.accept:active, button.accept:active {
   padding: 5px 9px 5px 25px !important;
-  background: var(--yes) 8px center no-repeat, var(--button_active) !important;
+  background: var(--yes) no-repeat 8px center, var(--button_active) !important;
   background-size: 12px, 100% !important;
 }
 
@@ -425,94 +425,78 @@ input.cancel:active, button.cancel:active {
   background-size: 10px, 100% !important;
 }
 
-input.accept[value^="Unban"], button.accept[value^="Unban"] {
+input.accept[value^="Unban"] {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/unban.png) 8px center no-repeat, var(--button) !important;
-  background-size: 14px, 100% !important;
+  background: var(--unban) no-repeat 8px center / 14px, var(--button) !important;
 }
 
-input.accept[value^="Unban"]:hover, button.accept[value^="Unban"]:hover,
-input.accept[value^="Unban"]:focus, button.accept[value^="Unban"]:focus {
-  background: url(/themes/console/images/buttons/unban.png) 8px center no-repeat, var(--button_hover) !important;
-  background-size: 14px, 100% !important;
+input.accept[value^="Unban"]:hover, input.accept[value^="Unban"]:focus {
+  background: var(--unban) no-repeat 8px center / 14px, var(--button_hover) !important;
 }
 
-input.accept[value^="Unban"]:active, button.accept[value^="Unban"]:active {
+input.accept[value^="Unban"]:active {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/unban.png) 8px center no-repeat, var(--button_active) !important;
-  background-size: 14px, 100% !important;
+  background: var(--unban) no-repeat 8px center / 14px, var(--button_active) !important;
 }
 
 input.accept[value^="Create"], button.accept[value^="Create"] {
   padding: 5px 9px 5px 25px !important;
-  background: var(--add) 8px center no-repeat, var(--button) !important;
-  background-size: 11px, 100% !important;
+  background: var(--add) no-repeat 8px center / 11px, var(--button) !important;
 }
 
 input.accept[value^="Create"]:hover, button.accept[value^="Create"]:hover,
 input.accept[value^="Create"]:focus, button.accept[value^="Create"]:focus {
-  background: var(--add) 8px center no-repeat, var(--button_hover) !important;
-  background-size: 11px, 100% !important;
+  background: var(--add) no-repeat 8px center / 11px, var(--button_hover) !important;
 }
 
 input.accept[value^="Create"]:active, button.accept[value^="Create"]:active {
-  background: var(--add) 8px center no-repeat, var(--button_active) !important;
-  background-size: 11px, 100% !important;
+  background: var(--add) no-repeat 8px center / 11px, var(--button_active) !important;
 }
 
 input.accept[value^="Filter"], button.accept[value^="Filter"] {
   padding: 5px 9px 5px 25px !important;
-  background: var(--filter) 8px center no-repeat, var(--button) !important;
-  background-size: 14px, 100%, 100% !important;
+  background: var(--filter) no-repeat 8px center / 14px, var(--button) !important;
 }
 
 input.accept[value^="Filter"]:hover, button.accept[value^="Filter"]:hover,
 input.accept[value^="Filter"]:focus, button.accept[value^="Filter"]:focus {
-  background: var(--filter) 8px center no-repeat, var(--button_hover) !important;
-  background-size: 14px, 100% !important;
+  background: var(--filter) no-repeat 8px center / 14px, var(--button_hover) !important;
 }
 
 input.add, button.add {
   padding: 5px 9px 5px 22px !important;
-  background: var(--add) 8px center no-repeat, var(--button) !important;
-  background-size: 10px, 100%, 100% !important;
+  background: var(--add) no-repeat 8px center / 10px, var(--button) !important;
 }
 
 input.add:hover, button.add:hover,
 input.add:focus, button.add:focus {
-  background: var(--add) 8px center no-repeat, var(--button_hover) !important;
-  background-size: 10px, 100% !important;
+  background: var(--add) no-repeat 8px center / 10px, var(--button_hover) !important;
 }
 
 input.add:active, button.add:active {
-  background: var(--add) 8px center no-repeat, var(--button_active) !important;
-  background-size: 10px, 100% !important;
+  background: var(--add) no-repeat 8px center / 10px, var(--button_active) !important;
 }
 
 input.add[value^="Adjust"], button.add[value^="Adjust"] {
   padding: 5px 9px 5px 25px !important;
-  background: var(--edit) 8px center no-repeat, var(--button) !important;
-  background-size: 14px, 100%, 100% !important;
+  background: var(--edit) no-repeat 8px center / 14px, var(--button) !important;
 }
 
 input.add[value^="Adjust"]:hover, button.add[value^="Adjust"]:hover,
 input.add[value^="Adjust"]:focus, button.add[value^="Adjust"]:focus {
-  background: var(--edit_hover) 8px center no-repeat, var(--button_hover) !important;
-  background-size: 14px, 100% !important;
+  background: var(--edit_hover) no-repeat 8px center / 14px, var(--button_hover) !important;
 }
 
 input.add[value^="Adjust"]:active, button.add[value^="Adjust"]:active {
   padding: 5px 9px 5px 25px !important;
-  background: var(--edit) 8px center no-repeat, var(--button_active) !important;
-  background-size: 14px, 100% !important;
+  background: var(--edit) no-repeat 8px center / 14px, var(--button_active) !important;
 }
 
 input.accept[value^="Show"], button.accept[value^="Show"],
 input.check[value^="View"], button.check[value^="View"],
 input.showconsole {
   padding: 5px 9px 5px 25px !important;
-  background: var(--eye) 8px center no-repeat, var(--button) !important;
-  background-size: 14px, 100%, 100% !important;
+  background: var(--eye) no-repeat 8px center / 14px, var(--button) !important;
 }
 
 input.accept[value^="Show"]:hover, button.accept[value^="Show"]:hover,
@@ -520,24 +504,21 @@ input.check[value^="View"]:hover, button.check[value^="View"]:hover,
 input.accept[value^="Show"]:focus, button.accept[value^="Show"]:focus,
 input.check[value^="View"]:focus, button.check[value^="View"]:focus,
 input.showconsole:hover, input.showconsole:focus {
-  background: var(--eye) 8px center no-repeat, var(--button_hover) !important;
-  background-size: 14px, 100% !important;
+  background: var(--eye) no-repeat 8px center / 14px, var(--button_hover) !important;
 }
 
 input.accept[value^="Show"]:active, button.accept[value^="Show"]:active,
 input.check[value^="View"]:active, button.check[value^="View"]:active,
 input.showconsole:active {
   padding: 5px 9px 5px 25px !important;
-  background: var(--eye) 8px center no-repeat, var(--button_active) !important;
-  background-size: 14px, 100% !important;
+  background: var(--eye) no-repeat 8px center / 14px, var(--button_active) !important;
 }
 
 input.cancel[value^="Hide"], button.cancel[value^="Hide"],
 input.delete[value^="Do not view"], button.delete[value^="Do not view"],
 input.hideconsole {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/hide.png) 8px center no-repeat, var(--button) !important;
-  background-size: 14px, 100%, 100% !important;
+  background: url(/themes/console/images/buttons/hide.png) no-repeat 8px center / 14px, var(--button) !important;
 }
 
 input.cancel[value^="Hide"]:hover, button.cancel[value^="Hide"]:hover,
@@ -545,53 +526,45 @@ input.delete[value^="Do not view"]:hover, button.delete[value^="Do not view"]:ho
 input.cancel[value^="Hide"]:focus, button.cancel[value^="Hide"]:focus,
 input.delete[value^="Do not view"]:focus, button.delete[value^="Do not view"]:focus,
 input.hideconsole:hover, input.hideconsole:focus {
-  background: url(/themes/console/images/buttons/hide.png) 8px center no-repeat, var(--button_hover) !important;
-  background-size: 14px, 100% !important;
+  background: url(/themes/console/images/buttons/hide.png) no-repeat 8px center / 14px, var(--button_hover) !important;
 }
 
 input.cancel[value^="Hide"]:active, button.cancel[value^="Hide"]:active,
 input.delete[value^="Do not view"]:active, button.delete[value^="Do not view"]:active,
 input.hideconsole:active {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/hide.png) 8px center no-repeat, var(--button_active) !important;
-  background-size: 14px, 100% !important;
+  background: url(/themes/console/images/buttons/hide.png) no-repeat 8px center / 14px, var(--button_active) !important;
 }
 
 input.check, button.check {
   padding: 5px 9px 5px 25px !important;
-  background: var(--yes) 8px center no-repeat, var(--button) !important;
-  background-size: 14px, 100%, 100% !important;
+  background: var(--yes) no-repeat 8px center / 14px, var(--button) !important;
 }
 
 input.check:hover, button.check:hover,
 input.check:focus, button.check:focus {
-  background: var(--yes) 8px center no-repeat, var(--button_hover) !important;
-  background-size: 14px, 100% !important;
+  background: var(--yes) no-repeat 8px center / 14px, var(--button_hover) !important;
 }
 
 input.check:active, button.check:active {
   padding: 5px 9px 5px 27px !important;
-  background: var(--yes) 8px center no-repeat, var(--button_active) !important;
-  background-size: 14px, 100% !important;
+  background: var(--yes) no-repeat 8px center / 14px, var(--button_active) !important;
 }
 
 input.check[value$="updates"], button.check[value$="updates"] {
   padding: 5px 9px 5px 27px !important;
-  background: var(--refresh) 8px center no-repeat, var(--button) !important;
-  background-size: 16px, 100%, 100% !important;
+  background: var(--refresh) no-repeat 8px center / 16px, var(--button) !important;
 }
 
 input.check[value$="updates"]:hover, button.check[value$="updates"]:hover,
 input.check[value$="updates"]:focus, button.check[value$="updates"]:focus {
-  background: var(--refresh_hover) 8px center no-repeat, var(--button_hover) !important;
-  background-size: 16px, 100% !important;
+  background: var(--refresh_hover) no-repeat 8px center / 16px, var(--button_hover) !important;
   background-blend-mode: normal !important;
 }
 
 input.check[value$="updates"]:active, button.check[value$="updates"]:active {
   padding: 5px 9px 5px 27px !important;
-  background: var(--refresh_active) 8px center no-repeat, var(--button_active) !important;
-  background-size: 16px, 100% !important;
+  background: var(--refresh_active) no-repeat 8px center / 16px, var(--button_active) !important;
   background-blend-mode: luminosity !important;
 }
 
@@ -607,276 +580,230 @@ input.check[value$="updates"]:active, button.check[value$="updates"]:active {
 
 input.delete, button.delete {
   padding: 5px 9px 5px 25px !important;
-  background: var(--nuke) 8px center no-repeat, var(--button) !important;
-  background-size: 14px, 100%, 100% !important;
+  background: var(--nuke) no-repeat 8px center / 14px, var(--button) !important;
 }
 
 input.delete:hover, button.delete:hover,
 input.delete:focus, button.delete:focus {
-  background: var(--nuke) 8px center no-repeat, var(--button_hover) !important;
-  background-size: 14px, 100% !important;
+  background: var(--nuke) no-repeat 8px center / 14px, var(--button_hover) !important;
 }
 
 input.delete:active, button.delete:active {
   padding: 5px 9px 5px 25px !important;
-  background: var(--nuke) 8px center no-repeat, var(--button_active) !important;
-  background-size: 14px, 100% !important;
+  background: var(--nuke) no-repeat 8px center / 14px, var(--button_active) !important;
   background-blend-mode: luminosity;
 }
 
 input.delete[value^="Ban"], button.delete[value^="Ban"] {
   padding: 5px 9px 5px 25px !important;
-  background: var(--doban) 8px center no-repeat, var(--button) !important;
-  background-size: 14px, 100% !important;
+  background: var(--doban) no-repeat 8px center / 14px, var(--button) !important;
 }
 
 input.delete[value^="Ban"]:hover, button.delete[value^="Ban"]:hover,
 input.delete[value^="Ban"]:focus, button.delete[value^="Ban"]:focus {
-  background: var(--doban) 8px center no-repeat, var(--button_hover) !important;
-  background-size: 14px, 100% !important;
+  background: var(--doban) no-repeat 8px center / 14px, var(--button_hover) !important;
 }
 
 input.delete[value^="Ban"]:active, button.delete[value^="Ban"]:active {
   padding: 5px 9px 5px 25px !important;
-  background: var(--doban) 8px center no-repeat, var(--button_active) !important;
-  background-size: 14px, 100% !important;
+  background: var(--doban) no-repeat 8px center / 14px, var(--button_active) !important;
 }
 
 input.download, button.download {
   padding: 5px 9px 5px 25px !important;
-  background: var(--download) 8px center no-repeat, var(--button) !important;
-  background-size: 14px, 100% !important;
+  background: var(--download) no-repeat 8px center / 14px, var(--button) !important;
 }
 
 input.download:hover, button.download:hover,
 input.download:focus, button.download:focus {
-  background: var(--download) 8px center no-repeat, var(--button_hover) !important;
-  background-size: 14px, 100% !important;
+  background: var(--download) no-repeat 8px center / 14px, var(--button_hover) !important;
 }
 
 input.download:active, button.download:active {
   padding: 5px 9px 5px 25px !important;
-  background: var(--download) 8px center no-repeat, var(--button_active) !important;
-  background-size: 14px, 100% !important;
+  background: var(--download) no-repeat 8px center / 14px, var(--button_active) !important;
 }
 
 input.download[value^="Join"], button.download[value^="Join"] {
   padding: 5px 9px 5px 27px !important;
-  background: var(--family) 8px center no-repeat, var(--button) !important;
-  background-size: 14px, 100% !important;
+  background: var(--family) no-repeat 8px center / 14px, var(--button) !important;
 }
 
 input.download[value^="Join"]:hover, button.download[value^="Join"]:hover,
 input.download[value^="Join"]:focus, button.download[value^="Join"]:focus {
-  background: var(--family) 8px center no-repeat, var(--button_hover) !important;
-  background-size: 14px, 100% !important;
+  background: var(--family) no-repeat 8px center / 14px, var(--button_hover) !important;
 }
 
 input.download[value^="Join"]:active, button.download[value^="Join"]:active {
-  background: var(--family) 8px center no-repeat, var(--button_active) !important;
-  background-size: 14px, 100% !important;
+  background: var(--family) no-repeat 8px center / 14px, var(--button_active) !important;
 }
 
 input.download[value$="from File"], button.download[value$="from File"],
 input.download[value$="from file"], button.download[value$="from file"] {
   padding: 5px 9px 5px 25px !important;
-  background: var(--package) 8px center no-repeat, var(--button) !important;
-  background-size: 14px, 100% !important;
+  background: var(--package) no-repeat 8px center / 14px, var(--button) !important;
 }
 
 input.download[value$="from File"]:hover, button.download[value$="from File"]:hover,
 input.download[value$="from File"]:focus, button.download[value$="from File"]:focus,
 input.download[value$="from file"]:hover, input.download[value$="from file"]:focus {
-  background: var(--package) 8px center no-repeat, var(--button_hover) !important;
-  background-size: 14px, 100% !important;
+  background: var(--package) no-repeat 8px center / 14px, var(--button_hover) !important;
 }
 
 input.download[value$="from file"]:active, button.download[value$="from file"]:active,
 input.download[value$="from File"]:active, button.download[value$="from File"]:active {
   padding: 5px 9px 5px 25px !important;
-  background: var(--package) 8px center no-repeat, var(--button_active) !important;
-  background-size: 14px, 100% !important;
+  background: var(--package) no-repeat 8px center / 14px, var(--button_active) !important;
 }
 
 input.download[value^="Dump"], button.download[value^="Dump"] {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/dump-threads.png) 8px center no-repeat, var(--button) !important;
-  background-size: 14px, 100% !important;
+  background: url(/themes/console/images/buttons/dump-threads.png) no-repeat 8px center / 14px, var(--button) !important;
 }
 
 input.download[value^="Dump"]:hover, button.download[value^="Dump"]:hover,
 input.download[value^="Dump"]:focus, button.download[value^="Dump"]:focus {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/dump-threads.png) 8px center no-repeat, var(--button_hover) !important;
-  background-size: 14px, 100% !important;
+  background: url(/themes/console/images/buttons/dump-threads.png) no-repeat 8px center / 14px, var(--button_hover) !important;
 }
 
 input.download[value^="Dump"]:active, button.download[value^="Dump"]:active {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/dump-threads.png) 8px center no-repeat, var(--button_active) !important;
-  background-size: 14px, 100% !important;
+  background: url(/themes/console/images/buttons/dump-threads.png) no-repeat 8px center / 14px, var(--button_active) !important;
 }
 
 input.go, button.go, input[value="GO"], button#run {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/go.png) 8px center no-repeat, var(--button) !important;
-  background-size: 14px, 100% !important;
+  background: url(/themes/console/images/buttons/go.png) no-repeat 8px center / 14px, var(--button) !important;
 }
 
 button#run {
-  background: var(--start) 8px center no-repeat, var(--button) !important;
-  background-size: 16px, 100% !important;
+  background: var(--start) no-repeat 8px center / 16px, var(--button) !important;
 }
 
 input.go:hover, button.go:hover, input[value="GO"]:hover,
 input.go:focus, button.go:focus, input[value="GO"]:focus {
-  background: url(/themes/console/images/buttons/go.png) 8px center no-repeat, var(--button_hover) !important;
-  background-size: 14px, 100% !important;
+  background: url(/themes/console/images/buttons/go.png) no-repeat 8px center / 14px, var(--button_hover) !important;
 }
 
 input.go:active, button.go:active, input[value="GO"]:active {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/go.png) 8px center no-repeat, var(--button_active) !important;
-  background-size: 14px, 100% !important;
+  background: url(/themes/console/images/buttons/go.png) no-repeat 8px center / 14px, var(--button_active) !important;
 }
 
 input.go[value^="Create"], button.go[value^="Create"] {
   padding: 5px 9px 5px 25px !important;
-  background: var(--wizard) 8px center no-repeat, var(--button) !important;
-  background-size: 15px, 100% !important;
+  background: var(--wizard) no-repeat 8px center / 15px, var(--button) !important;
 }
 
 input.go[value^="Create"]:hover, button.go[value^="Create"]:hover,
 input.go[value^="Create"]:focus, button.go[value^="Create"]:focus {
-  background: var(--wizard) 8px center no-repeat, var(--button_hover) !important;
-  background-size: 15px, 100% !important;
+  background: var(--wizard) no-repeat 8px center / 15px, var(--button_hover) !important;
 }
 
 input.go[value^="Create"]:active, button.go[value^="Create"]:active {
   padding: 5px 9px 5px 25px !important;
-  background: var(--wizard) 8px center no-repeat, var(--button_active) !important;
-  background-size: 15px, 100% !important;
+  background: var(--wizard) no-repeat 8px center / 15px, var(--button_active) !important;
 }
 
 input.back {
-  background: url(/themes/console/images/buttons/back.png) 6px center no-repeat, var(--button) !important;
-  background-size: 14px, 100% !important;
   padding: 5px 7px 5px 23px !important;
+  background: url(/themes/console/images/buttons/back.png) no-repeat 6px center / 14px, var(--button) !important;
 }
 
-input.back:hover,
-input.back:focus {
-  background: #652787 url(/themes/console/images/buttons/back.png) 6px center no-repeat !important;
-  background-size: 14px !important;
+input.back:hover, input.back:focus {
+  background: #652787 url(/themes/console/images/buttons/back.png) no-repeat 6px center / 14px !important;
 }
 
 input.reload, button.reload {
   padding: 5px 9px 5px 25px !important;
-  background: var(--reset) 8px center no-repeat, var(--button) !important;
-  background-size: 14px, 100% !important;
+  background: var(--reset) no-repeat 8px center / 14px, var(--button) !important;
 }
 
 input.reload:hover, button.reload:hover,
 input.reload:focus, button.reload:focus {
-  background: var(--reset_hover) 8px center no-repeat, var(--button_hover) !important;
-  background-size: 14px, 100% !important;
+  background: var(--reset_hover) no-repeat 8px center / 14px, var(--button_hover) !important;
 }
 
 input.reload:active, button.reload:active {
   padding: 5px 9px 5px 25px !important;
-  background: var(--reset_active) 8px center no-repeat, var(--button_active) !important;
-  background-size: 14px, 100% !important;
+  background: var(--reset_active) no-repeat 8px center / 14px, var(--button_active) !important;
 }
 
 input.reload[value$="restart"], button.reload[value$="restart"] {
   padding: 5px 9px 5px 25px !important;
-  background: var(--restart) 8px center no-repeat, var(--button) !important;
-  background-size: 12px, 100% !important;
+  background: var(--restart) no-repeat 8px center / 12px, var(--button) !important;
 }
 
 input.reload[value$="restart"]:hover, button.reload[value$="restart"]:hover,
 input.reload[value$="restart"]:focus, button.reload[value$="restart"]:focus {
-  background: var(--restart_hover) 8px center no-repeat, var(--button_hover) !important;
+  background: var(--restart_hover) no-repeat 8px center / 12px, var(--button_hover) !important;
   background-blend-mode: normal;
-  background-size: 12px, 100% !important;
 }
 
 input.reload[value$="restart"]:active, button.reload[value$="restart"]:active {
   padding: 5px 9px 5px 25px !important;
-  background: var(--restart_hover) 8px center no-repeat, var(--button_active) !important;
-  background-size: 12px, 100% !important;
+  background: var(--restart_hover) no-repeat 8px center / 12px, var(--button_active) !important;
 }
 
 input.reload[value^="Update"], button.reload[value^="Update"] {
   padding: 5px 9px 5px 25px !important;
-  background: var(--refresh) 8px center no-repeat, var(--button) !important;
-  background-size: 14px, 100% !important;
+  background: var(--refresh) no-repeat 8px center / 14px, var(--button) !important;
 }
 
 input.reload[value^="Update"]:hover, button.reload[value^="Update"]:hover,
 input.reload[value^="Update"]:focus, button.reload[value^="Update"]:focus {
-  background: var(--refresh_hover) 8px center no-repeat, var(--button_hover) !important;
-  background-size: 14px, 100% !important;
+  background: var(--refresh_hover) no-repeat 8px center / 14px, var(--button_hover) !important;
 }
 
 input.reload[value^="Update"]:active, button.reload[value^="Update"]:active {
   padding: 5px 9px 5px 25px !important;
-  background: var(--refresh_hover) 8px center no-repeat, var(--button_active) !important;
-  background-size: 14px, 100% !important;
+  background: var(--refresh_hover) no-repeat 8px center / 14px, var(--button_active) !important;
 }
 
 input.reload[value="Force GC"], input.reload[value="Force garbage collection"] {
   padding: 5px 9px 5px 25px !important;
-  background: var(--recycle) 8px center no-repeat, var(--button) !important;
-  background-size: 13px, 100% !important;
+  background: var(--recycle) no-repeat 8px center / 13px, var(--button) !important;
 }
 
 input.reload[value="Force GC"]:hover, input.reload[value="Force GC"]:focus,
 input.reload[value="Force garbage collection"]:hover, input.reload[value="Force garbage collection"]:focus {
-  background: var(--recycle) 8px center no-repeat, var(--button_hover) !important;
-  background-size: 13px, 100% !important;
+  background: var(--recycle) no-repeat 8px center / 13px, var(--button_hover) !important;
 }
 
 input.reload[value="Force garbage collection"]:active, input.reload[value="Force garbage collection"]:active {
   padding: 5px 9px 5px 25px !important;
-  background: var(--recycle) 8px center no-repeat, var(--button_active) !important;
-  background-size: 13px, 100% !important;
+  background: var(--recycle) no-repeat 8px center / 13px, var(--button_active) !important;
 }
 
 input.stop, button.stop {
   padding: 5px 9px 5px 25px !important;
-  background: var(--shutdown) 8px center no-repeat, var(--button) !important;
-  background-size: 13px, 100% !important;
+  background: var(--shutdown) no-repeat 8px center / 13px, var(--button) !important;
 }
 
 input.stop:hover, button.stop:hover,
 input.stop:focus, button.stop:focus {
   padding: 5px 9px 5px 25px !important;
-  background: var(--shutdown_hover) 8px center no-repeat, var(--button_hover) !important;
-  background-size: 13px, 100% !important;
+  background: var(--shutdown_hover) no-repeat 8px center / 13px, var(--button_hover) !important;
   background-blend-mode: normal;
 }
 
 input.stop:active, button.stop:active {
   padding: 5px 9px 5px 25px !important;
-  background: var(--shutdown_hover) 8px center no-repeat, var(--button_active) !important;
-  background-size: 13px, 100% !important;
+  background: var(--shutdown_hover) no-repeat 8px center / 13px, var(--button_active) !important;
 }
 
 button.search {
   padding: 5px 12px 5px 30px !important;
-  background: var(--search) 11px center no-repeat, var(--button) !important;
-  background-size: 14px, 100% !important;
+  background: var(--search) no-repeat 11px center / 14px, var(--button) !important;
 }
 
 button.search:hover, button.search:focus {
-  background: var(--search) 11px center no-repeat, var(--button_hover) !important;
-  background-size: 14px, 100% !important;
+  background: var(--search) no-repeat 11px center / 14px, var(--button_hover) !important;
 }
 
 button.search:active {
-  background: var(--search) 11px center no-repeat, var(--button_active) !important;
-  background-size: 14px, 100% !important;
+  background: var(--search) no-repeat 11px center / 14px, var(--button_active) !important;
 }
 
 /* client/plugin/webapps buttons aka project "X" */
@@ -891,95 +818,78 @@ button.control, button.control:hover, button.control:focus {
 }
 
 button.accept.control {
-  background: var(--start) no-repeat center center, var(--button) !important;
-  background-size: 14px, 100% !important;
+  background: var(--start) no-repeat center center / 14px, var(--button) !important;
 }
 
 button.accept.control:hover, button.accept.control:focus {
-  background: var(--start_hover) no-repeat center center, var(--button_hover) !important;
-  background-size: 14px, 100% !important;
+  background: var(--start_hover) no-repeat center center / 14px, var(--button_hover) !important;
 }
 
 button.accept.control:active {
-  background: var(--start_active) no-repeat center center, var(--button_active) !important;
-  background-size: 14px, 100% !important;
+  background: var(--start_active) no-repeat center center / 14px, var(--button_active) !important;
 }
 
 button.stop.control {
-  background: var(--stop) no-repeat center center, var(--button) !important;
-  background-size: 14px, 100% !important;
+  background: var(--stop) no-repeat center center / 14px, var(--button) !important;
 }
 
 button.stop.control:hover, button.stop.control:focus {
-  background: var(--stop_hover) no-repeat center center, var(--button_hover) !important;
-  background-size: 14px, 100% !important;
+  background: var(--stop_hover) no-repeat center center / 14px, var(--button_hover) !important;
 }
 
 button.stop.control:active {
-  background: var(--stop_active) no-repeat center center, var(--button_active) !important;
-  background-size: 14px, 100% !important;
+  background: var(--stop_active) no-repeat center center / 14px, var(--button_active) !important;
 }
 
 button.add.control {
-  background: var(--edit) no-repeat center center, var(--button) !important;
+  background: var(--edit) no-repeat center center / 16px, var(--button) !important;
   background-size: 16px, 100% !important;
 }
 
 button.add.control:hover, button.add.control:focus {
-  background: var(--edit_hover) no-repeat center center, var(--button_hover) !important;
-  background-size: 16px, 100% !important;
+  background: var(--edit_hover) no-repeat center center / 16px, var(--button_hover) !important;
 }
 
 button.add.control:active {
-  background: var(--edit_hover) no-repeat center center, var(--button_active) !important;
-  background-size: 16px, 100% !important;
+  background: var(--edit_hover) no-repeat center center / 16px, var(--button_active) !important;
 }
 
 button.delete.control {
-  background: var(--nuke) no-repeat center center, var(--button) !important;
-  background-size: 14px, 100% !important;
+  background: var(--nuke) no-repeat center center / 14px, var(--button) !important;
 }
 
 button.delete.control:hover, button.delete.control:focus {
-  background: var(--nuke) no-repeat center center, var(--button_hover) !important;
-  background-size: 14px, 100% !important;
+  background: var(--nuke) no-repeat center center / 14px, var(--button_hover) !important;
 }
 
 button.delete.control:active {
-  background: var(--nuke) no-repeat center center, var(--button_active) !important;
-  background-size: 14px, 100% !important;
+  background: var(--nuke) no-repeat center center / 14px, var(--button_active) !important;
   background-blend-mode: luminosity !important;
 }
 
 button.check.control {
-  background: var(--refresh) no-repeat center center, var(--button) !important;
-  background-size: 16px, 100% !important;
+  background: var(--refresh) no-repeat center center / 16px, var(--button) !important;
 }
 
 button.check.control:hover, button.check.control:focus {
-  background: var(--refresh_hover) no-repeat center center, var(--button_hover) !important;
-  background-size: 16px, 100% !important;
+  background: var(--refresh_hover) no-repeat center center / 16px, var(--button_hover) !important;
   background-blend-mode: normal;
 }
 
 button.check.control:active {
-  background: var(--refresh_active) no-repeat center center, var(--button_active) !important;
-  background-size: 16px, 100% !important;
+  background: var(--refresh_active) no-repeat center center / 16px, var(--button_active) !important;
 }
 
 button.download.control {
-  background: var(--download) no-repeat center center, var(--button) !important;
-  background-size: 14px, 100% !important;
+  background: var(--download) no-repeat center center / 14px, var(--button) !important;
 }
 
 button.download.control:hover, button.download.control:focus {
-  background: var(--download) no-repeat center center, var(--button_hover) !important;
-  background-size: 14px, 100% !important;
+  background: var(--download) no-repeat center center / 14px, var(--button_hover) !important;
 }
 
 button.download.control:active {
-  background: var(--download) no-repeat center center, var(--button_active) !important;
-  background-size: 14px, 100% !important;
+  background: var(--download) no-repeat center center / 14px, var(--button_active) !important;
 }
 
 button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset]::-moz-focus-inner {
@@ -1937,12 +1847,12 @@ p:empty + .sb_notice {
 }
 
 #sb_services a[href*="mail"] {
-  background: #000010 var(--mail) 6px center no-repeat;
+  background: #000010 var(--mail) no-repeat 6px center;
   background-size: 14px !important;
 }
 
 #sb_services a[href*="mail"]:hover {
-  background: #1e0b28 var(--mail) 6px center no-repeat;
+  background: #1e0b28 var(--mail) no-repeat 6px center;
 }
 
 #sb_services a[href*="dns"] {
@@ -7182,12 +7092,12 @@ table#jardump {
 }
 
 #debug h3.debug_outboundsessions {
-  background: url(images/out.png) 6px center no-repeat, var(--title) !important;
+  background: url(images/out.png) no-repeat 6px center, var(--title) !important;
   background-size: 16px, 4px 100% !important;
 }
 
 #debug h3.debug_inboundsessions {
-  background: url(images/in.png) 6px center no-repeat, var(--title) !important;
+  background: url(images/in.png) no-repeat 6px center, var(--title) !important;
   background-size: 16px, 4px 100% !important;
 }
 
@@ -7692,7 +7602,7 @@ input.search, input.search:hover {
   padding: 5px 5px 5px 28px;
   width: calc(100% - 20px);
   vertical-align: middle;
-  background: var(--search) 8px center no-repeat, linear-gradient(to bottom, #000, #000019);
+  background: var(--search) no-repeat 8px center, linear-gradient(to bottom, #000, #000019);
   background-size: 14px, 100%;
 }
 
@@ -7710,7 +7620,7 @@ input.search:focus::placeholder {
 }
 
 input.search:focus {
-  background: #000 var(--search) 8px center no-repeat;
+  background: #000 var(--search) no-repeat 8px center;
   background-size: 14px;
 }
 
@@ -8057,13 +7967,13 @@ p.sybil_info, p.family, p.threatpoints, p.hashdist, p#sybil_totals, p.notfound {
   font-weight: 700;
   border: var(--innerborder);
   box-shadow: inset 0 0 0 1px #211;
-  background: var(--eye) 8px center no-repeat, linear-gradient(to right, #000, #001 80%, #002);
+  background: var(--eye) no-repeat 8px center, linear-gradient(to right, #000, #001 80%, #002);
   background-size: 16px, 100% !important;
   background-blend-mode: luminosity;
 }
 
 p.threatpoints.hot {
-  background: var(--eye_static) 8px center no-repeat, url(/themes/console/images/info/hot.png) right 4px center no-repeat,
+  background: var(--eye_static) no-repeat 8px center, url(/themes/console/images/info/hot.png) right 4px center no-repeat,
               linear-gradient(to right, #000, #001 80%, #002);
   background-size: 16px, 20px, 100% !important;
   background-blend-mode: luminosity, normal;
@@ -8834,37 +8744,37 @@ h3 .b32 {
 
 #tunnels h3.server {
   padding-left: 34px !important;
-  background: var(--server) 8px center no-repeat, var(--title) !important;
+  background: var(--server) no-repeat 8px center, var(--title) !important;
   background-size: 19px, 4px 100%, 100% !important;
 }
 
 #tunnels h3.client {
   padding-left: 34px !important;
-  background: var(--client) 8px center no-repeat, var(--title) !important;
+  background: var(--client) no-repeat 8px center, var(--title) !important;
   background-size: 19px, 4px 100%, 100% !important;
 }
 
 #tunnels h3.ping {
   padding-left: 34px !important;
-  background: var(--ping) 8px center no-repeat, var(--title) !important;
+  background: var(--ping) no-repeat 8px center, var(--title) !important;
   background-size: 19px, 4px 100%, 100% !important;
 }
 
 #tunnels h3#participating {
   padding-left: 34px !important;
-  background: var(--share) 8px center no-repeat, var(--title) !important;
+  background: var(--share) no-repeat 8px center, var(--title) !important;
   background-size: 19px, 4px 100%, 100% !important;
 }
 
 #tunnels h3#exploratory {
   padding-left: 34px !important;
-  background: var(--globe) 8px center no-repeat, var(--title) !important;
+  background: var(--globe) no-repeat 8px center, var(--title) !important;
   background-size: 19px, 4px 100%, 100% !important;
 }
 
 #tunnels h3:last-of-type {
   padding-left: 34px !important;
-  background: var(--speed) 8px center no-repeat, var(--title) !important;
+  background: var(--speed) no-repeat 8px center, var(--title) !important;
   background-size: 19px, 4px 100%, 100% !important;
 }
 
@@ -12754,43 +12664,43 @@ a:hover .sitemapLink {
 
 #configurationhelp h2, #advancedsettings h2, #filterlist h2 {
   padding-left: 38px !important;
-  background: var(--settings_inert) 8px center no-repeat, var(--title) !important;
+  background: var(--settings_inert) no-repeat 8px center, var(--title) !important;
   background-size: 22px, 4px 100%, 100% !important;
 }
 
 #sidebarhelp h2, #reachabilityhelp h2 {
   padding-left: 38px !important;
-  background: url(/themes/console/images/svg/sidebar.svg) 8px center no-repeat, var(--title) !important;
+  background: url(/themes/console/images/svg/sidebar.svg) no-repeat 8px center, var(--title) !important;
   background-size: 22px, 4px 100%, 100% !important;
 }
 
 #reseedhelp h2 {
   padding-left: 38px !important;
-  background: var(--reseed) 8px center no-repeat, var(--title) !important;
+  background: var(--reseed) no-repeat 8px center, var(--title) !important;
   background-size: 22px, 4px 100%, 100% !important;
 }
 
 #newuserguide h2 {
   padding-left: 38px !important;
-  background: url(/themes/console/images/info/question.png) 8px center no-repeat, var(--title) !important;
+  background: url(/themes/console/images/info/question.png) no-repeat 8px center, var(--title) !important;
   background-size: 22px, 4px 100%, 100% !important;
 }
 
 #newuserguide h2 {
   padding-left: 38px !important;
-  background: url(images/favicon.svg) 8px center no-repeat, var(--title) !important;
+  background: url(images/favicon.svg) no-repeat 8px center, var(--title) !important;
   background-size: 22px, 4px 100%, 100% !important;
 }
 
 #troubleshoot h2 {
   padding-left: 38px !important;
-  background: var(--wrench) 8px center no-repeat, var(--title) !important;
+  background: var(--wrench) no-repeat 8px center, var(--title) !important;
   background-size: 22px, 4px 100%, 100% !important;
 }
 
 #legal h2 {
   padding-left: 38px !important;
-  background: var(--legal) 8px center no-repeat, var(--title) !important;
+  background: var(--legal) no-repeat 8px center, var(--title) !important;
   background-size: 22px, 4px 100%, 100% !important;
 }
 
@@ -12802,31 +12712,31 @@ a:hover .sitemapLink {
 
 #faq h2, #glossary h2 {
   padding-left: 38px !important;
-  background: var(--question) 8px center no-repeat, var(--title) !important;
+  background: var(--question) no-repeat 8px center, var(--title) !important;
   background-size: 22px, 4px 100%, 100% !important;
 }
 
 #webhosting h2 {
   padding-left: 38px !important;
-  background: var(--server) 8px center no-repeat, var(--title) !important;
+  background: var(--server) no-repeat 8px center, var(--title) !important;
   background-size: 22px, 4px 100%, 100% !important;
 }
 
 #themeoverride h2 {
   padding-left: 38px !important;
-  background: var(--ui) 8px center no-repeat, var(--title) !important;
+  background: var(--ui) no-repeat 8px center, var(--title) !important;
   background-size: 22px, 4px 100%, 100% !important;
 }
 
 #browserconfig h2 {
   padding-left: 38px !important;
-  background: var(--firefox) 8px center no-repeat, var(--title) !important;
+  background: var(--firefox) no-repeat 8px center, var(--title) !important;
   background-size: 22px, 4px 100%, 100% !important;
 }
 
 #tunnman h2 {
   padding-left: 38px !important;
-  background: var(--hardhat) 8px center no-repeat, var(--title) !important;
+  background: var(--hardhat) no-repeat 8px center, var(--title) !important;
   background-size: 22px, 4px 100%, 100% !important;
 }
 
@@ -13730,7 +13640,7 @@ to {
   border: 1px solid #26235c;
   border-left-width: 3px;
   box-shadow: var(--lowlight), inset 4px 4px 4px rgba(0,0,0,.6) !important;
-  background: var(--yes) 8px center no-repeat, linear-gradient(to bottom, #001, #002);
+  background: var(--yes) no-repeat 8px center, linear-gradient(to bottom, #001, #002);
   background-size: 8px, 100%;
 }
 
@@ -13741,7 +13651,7 @@ to {
 }
 
 .optbox:checked + label > .stattograph:hover {
-  background: #652787 var(--yes) 8px center no-repeat;
+  background: #652787 var(--yes) no-repeat 8px center;
   background-size: 8px;
 }
 
@@ -13757,7 +13667,7 @@ to {
 
 .optbox:checked + label > .stattograph:active {
   box-shadow: inset 4px 4px 4px rgba(0,0,0,.6) !important;
-  background: #652787 var(--yes) 8px center no-repeat;
+  background: #652787 var(--yes) no-repeat 8px center;
   background-size: 8px, 100%;
 }
 
