@@ -4946,14 +4946,13 @@ input.accept:hover, button.accept:hover, input.accept:focus, button.accept:focus
   background: var(--yes) no-repeat 8px center / 12px, var(--button_hover) !important;
 }
 
-input.accept[value^="Unban"], button.accept[value^="Unban"] {
+input.accept[value^="Unban"] {
   padding: 5px 9px 5px 24px;
-  background: url(/themes/console/images/buttons/unban.png) no-repeat 8px center, var(--button);
+  background: var(--unban) no-repeat 8px center / 14px, var(--button) !important;
 }
 
-input.accept[value^="Unban"]:hover, button.accept[value^="Unban"]:hover,
-input.accept[value^="Unban"]:focus, button.accept[value^="Unban"]:focus {
-  background: url(/themes/console/images/buttons/unban.png) no-repeat 8px center, var(--button_hover);
+input.accept[value^="Unban"]:hover, input.accept[value^="Unban"]:focus, input.accept[value^="Unban"]:active {
+  background: var(--unban) no-repeat 8px center / 14px, var(--button_hover) !important;
 }
 
 input.accept[value^="Create"], button.accept[value^="Create"] {
@@ -4986,14 +4985,13 @@ input.add:focus, button.add:focus {
   background: var(--add) no-repeat 8px center / 11px, var(--button_hover) !important;
 }
 
-input.add[value^="Adjust"], button.add[value^="Adjust"] {
+#clientconfig button.add {
   padding: 5px 9px 5px 24px;
-  background: var(--edit) no-repeat 8px center, var(--button);
+  background: var(--edit) no-repeat 8px center / 14px, var(--button) !important;
 }
 
-input.add[value^="Adjust"]:hover, button.add[value^="Adjust"]:hover,
-input.add[value^="Adjust"]:focus, button.add[value^="Adjust"]:focus {
-  background: var(--edit_hover) no-repeat 8px center, var(--button_hover);
+#clientconfig button.add:hover, #clientconfig button.add:focus, #clientconfig button.add:active {
+  background: var(--edit_hover) no-repeat 8px center / 14px, var(--button_hover) !important;
 }
 
 input.cancel, button.cancel {
@@ -5056,12 +5054,12 @@ input.delete:focus, button.delete:focus {
 
 input.delete[value^="Ban"], button.delete[value^="Ban"] {
   padding: 5px 9px 5px 24px;
-  background: var(--doban) no-repeat 8px center / 16px, var(--button);
+  background: var(--doban) no-repeat 8px center / 14px, var(--button);
 }
 
 input.delete[value^="Ban"]:hover, button.delete[value^="Ban"]:hover,
 input.delete[value^="Ban"]:focus, button.delete[value^="Ban"]:focus {
-  background: var(--doban) no-repeat 8px center / 16px, var(--button_hover);
+  background: var(--doban) no-repeat 8px center / 14px, var(--button_hover);
 }
 
 input.download, button.download {
@@ -5201,11 +5199,11 @@ button.control {
 }
 
 button.accept.control {
-  background: var(--start) no-repeat center center / 14px, var(--button);
+  background: var(--start) no-repeat center center / 14px, var(--button) !important;
 }
 
-button.accept.control:hover, button.accept.control:focus {
-  background: var(--start_hover) no-repeat center center / 14px, var(--button_hover);
+button.accept.control:hover, button.accept.control:focus, button.accept.control:active {
+  background: var(--start_hover) no-repeat center center / 14px, var(--button_hover) !important;
 }
 
 button.stop.control {

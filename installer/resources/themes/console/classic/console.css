@@ -1673,14 +1673,13 @@ input.accept:focus, button.accept:focus {
   background: url(/themes/console/images/svg/yes.svg) no-repeat 7px center, var(--btn_hover);
 }
 
-input.accept[value^="Unban"], button.accept[value^="Unban"] {
-  padding: 5px 8px 5px 23px;
-  background: url(/themes/console/images/buttons/unban.png) no-repeat 7px center, var(--btn);
+input.accept[value^="Unban"] {
+  padding: 5px 8px 5px 24px;
+  background: var(--unban) no-repeat 7px center / 14px, var(--btn) !important;
 }
 
-input.accept[value^="Unban"]:hover, button.accept[value^="Unban"]:hover,
-input.accept[value^="Unban"]:focus, button.accept[value^="Unban"]:focus {
-  background: url(/themes/console/images/buttons/unban.png) no-repeat 7px center, var(--btn_hover);
+input.accept[value^="Unban"]:hover, input.accept[value^="Unban"]:focus, input.accept[value^="Unban"]:active {
+  background: var(--unban) no-repeat 7px center / 14px, var(--btn_hover) !important;
 }
 
 input.accept[value^="Create"], button.accept[value^="Create"] {
@@ -1703,13 +1702,12 @@ input.accept[value^="Filter"]:focus, button.accept[value^="Filter"]:focus {
   background: var(--filter) no-repeat 7px center / 18px, var(--btn_hover);
 }
 
-input.add, button.add {
+input.add {
   padding: 5px 8px 5px 21px;
   background: url(/themes/console/images/svg/add.svg) no-repeat 7px center / 11px, var(--btn) !important;
 }
 
-input.add:hover, button.add:hover,
-input.add:focus, button.add:focus {
+input.add:hover, input.add:focus, input.add:active {
   background: url(/themes/console/images/svg/add.svg) no-repeat 7px center / 11px, var(--btn_hover);
 }
 
@@ -1766,12 +1764,13 @@ input.hideconsole:hover, input.hideconsole:focus {
 
 input.check, button.check {
   padding: 5px 8px 5px 23px;
-  background: url(/themes/console/images/svg/yes.svg) no-repeat 7px center, var(--btn);
+  background: var(--yes) no-repeat 7px center, var(--btn);
 }
 
 input.check:hover, button.check:hover,
-input.check:focus, button.check:focus {
-  background: url(/themes/console/images/svg/yes.svg) no-repeat 7px center, var(--btn_hover);
+input.check:focus, button.check:focus,
+input.check:active, button.check:active {
+  background: var(--yes) no-repeat 7px center, var(--btn_hover);
 }
 
 input.check[value$="updates"], button.check[value$="updates"] {
@@ -1796,13 +1795,13 @@ input.delete:focus, button.delete:focus {
 }
 
 input.delete[value^="Ban"], button.delete[value^="Ban"] {
-  padding: 5px 8px 5px 23px;
-  background: url(/themes/console/images/buttons/ban.png) no-repeat 7px center, var(--btn);
+  padding: 5px 8px 5px 25px;
+  background: var(--ban) no-repeat 7px center / 14px, var(--btn);
 }
 
 input.delete[value^="Ban"]:hover, button.delete[value^="Ban"]:hover,
 input.delete[value^="Ban"]:focus, button.delete[value^="Ban"]:focus {
-  background: url(/themes/console/images/buttons/ban.png) no-repeat 7px center, var(--btn_hover);
+  background: var(--ban) no-repeat 7px center / 14px, var(--btn_hover);
 }
 
 input.download, button.download {
@@ -1828,14 +1827,14 @@ input.download[value^="Join"]:hover, input.download[value^="Join"]:focus, input.
 input.download[value$="from File"], button.download[value$="from File"],
 input.download[value$="from file"], button.download[value$="from file"] {
   padding: 5px 8px 5px 25px;
-  background: url(/themes/console/images/svg/files.svg) no-repeat 7px center, var(--btn);
+  background: var(--files) no-repeat 7px center, var(--btn);
 }
 
 input.download[value$="from File"]:hover, button.download[value$="from File"]:hover,
 input.download[value$="from file"]:hover, button.download[value$="from file"]:hover,
 input.download[value$="from File"]:focus, button.download[value$="from File"]:focus,
 input.download[value$="from file"]:focus, button.download[value$="from file"]:focus {
-  background: url(/themes/console/images/svg/files.svg) no-repeat 7px center, var(--btn_hover);
+  background: var(--files) no-repeat 7px center, var(--btn_hover);
 }
 
 input.download[value^="Dump"], button.download[value^="Dump"] {
@@ -1912,18 +1911,17 @@ input.reload[value^="Update"]:active, button.reload[value^="Update"]:active {
   background: var(--recycle) no-repeat 7px center / 15px, var(--btn) !important;
 }
 
-#dumpthreads input.reload:hover#dumpthreads input.reload:focus {
+#dumpthreads input.reload:hover, #dumpthreads input.reload:focus {
   background: var(--recycle) no-repeat 7px center / 15px, var(--btn_hover) !important;
 }
 
-input.stop, button.stop {
+button.stop {
   padding: 5px 8px 5px 23px;
   background: var(--shutdown) no-repeat 7px center, var(--btn);
   background-size: 12px, 100% !important;
 }
 
-input.stop:hover, button.stop:hover,
-input.stop:focus, button.stop:focus {
+button.stop:hover, button.stop:focus, button.stop:active {
   background: var(--shutdown_hover) no-repeat 7px center, var(--btn_hover);
 }
 
@@ -1962,11 +1960,11 @@ button.stop.control:hover, button.stop.control:focus {
   background: var(--stop_hover) no-repeat center center / 14px, var(--btn_hover);
 }
 
-button.add.control {
+#clientconfig button.add.control {
   background: var(--edit) no-repeat center center / 14px, var(--btn);
 }
 
-button.add.control:hover, button.add.control:focus {
+#clientconfig button.add.control:hover, #clientconfig button.add.control:focus, #clientconfig button.add.control:active {
   background: var(--edit_hover) no-repeat center center / 14px, var(--btn_hover);
 }
 
