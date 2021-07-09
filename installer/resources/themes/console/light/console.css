@@ -7906,9 +7906,10 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 .identicon {
   margin: -1px 0 -1px 2px !important;
   padding: 0 !important;
-  border-left: 1px solid var(--borderinner);
   width: 28px;
   height: 28px;
+  vertical-align: middle;
+  border-left: 1px solid var(--borderinner);
   image-rendering: -webkit-optimize-contrast;
 }
 
@@ -7941,18 +7942,8 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   margin-right: 0;
 }
 
-.sybil_routerinfo .viewprofile img, .sybil_routerinfo .viewfullentry img, .sybil_routerinfo .familysearch img, .sybil_routerinfo .configpeer img {
-  margin-bottom: 3px !important;
-  margin-right: 6px !important;
-}
-
-.sybil_routerinfo .familysearch img {
-  margin-right: 1px !important;
-}
-
-.sybil_routerinfo .netdb_header img[src^="/flags.jsp?c="] {
+.sybil_routerinfo .netdb_header img[src^="/flags"] {
   margin: 0 5px 0 3px !important;
-  vertical-align: calc(50% + 7px) !important;
 }
 
 /* end sybils */
@@ -8022,12 +8013,6 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   margin: 1px 0 -4px;
   display: inline-block;
   vertical-align: middle;
-}
-
-.sybil_routerinfo .netdb_header img[src^="/flags"] {
-  margin-bottom: -3px !important;
-  margin-left: 0 !important;
-  border: 1px solid #dde;
 }
 
 .version, #netdbtiers a {
@@ -11505,20 +11490,6 @@ _:-ms-lang(x), .tab, .tab2 {
 }
 }
 
-/* Edge/IE tweaks */
-
-_:-ms-lang(x), *, *:hover, *:focus, input, input:hover, input:focus, a:hover, a:focus, h1, h2, h3, h4 {
-  filter: none !important;
-  text-shadow: none !important;
-}
-
-_:-ms-lang(x), .tunnels_client th:first-child::after {
-  letter-spacing: -.05em;
-  font-weight: 400;
-}
-
-/* end Edge/IE tweaks */
-
 /* highlight anchored links */
 
 *:target + p, *:target + div, *:target > h2 ~ p, *:target > h2 ~ p + ul li, *:target + ul li, *:target > *,
@@ -13335,7 +13306,7 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
   display: none;
 }
 
-.viewedit a {
+.viewprofile, .configpeer, .familysearch {
   font-size: 0;
 }
 
@@ -13392,7 +13363,8 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
   height: 14px;
 }
 
-.netdbentry .tunnel_cap, .netdbentry .tier, .netdbentry .ff, .netdbentry .reachable, .netdbentry .unreachable, .netdbentry .version {
+.netdbentry .tunnel_cap, .netdbentry .tier, .netdbentry .ff, .netdbentry .reachable, .netdbentry .unreachable, .netdbentry .version,
+.sybil_routerinfo .tunnel_cap, .sybil_routerinfo .tier, .sybil_routerinfo .ff, .sybil_routerinfo .reachable, .sybil_routerinfo .unreachable, .sybil_routerinfo .version {
   margin: 0 2px 0 !important;
   padding: 1px 4px !important;
   line-height: 1.5;
@@ -13400,17 +13372,22 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
 }
 
 @media screen and (max-width: 1499px) {
-  .netdbentry .tunnel_cap, .netdbentry .tier, .netdbentry .ff, .netdbentry .reachable, .netdbentry .unreachable, .netdbentry .version {
+  .netdbentry .tunnel_cap, .netdbentry .tier, .netdbentry .ff, .netdbentry .reachable, .netdbentry .unreachable, .netdbentry .version,
+  .sybil_routerinfo .tunnel_cap, .sybil_routerinfo .tier, .sybil_routerinfo .ff, .sybil_routerinfo .reachable, .sybil_routerinfo .unreachable, .sybil_routerinfo .version {
     padding: 2px 4px !important;
   }
 }
 
 .netdb_header img[src^="/flags"] {
-  margin: -7px 0 0 4px;
   width: 30px !important;
   height: auto !important;
+  margin-left: 4px;
 }
 
-.netdb_header img[src="/flags.jsp?c=a0"] {
+.netdbentry .netdb_header img[src^="/flags"] {
+  margin: -7px 0 0 4px;
+}
+
+.netdbentry .netdb_header img[src="/flags.jsp?c=a0"] {
   margin-top: -6px;
 }
