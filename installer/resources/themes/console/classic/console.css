@@ -12043,3 +12043,7 @@ div.app:hover img, .sitemaplink:hover img {
 #peers img[src$="bound.svg"], #profiles img[src$="bound.svg"], #tunnels img[src$="bound.svg"] {
   opacity: 0;
 }
+
+.viewedit br {
+  display: none;
+}

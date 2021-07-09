@@ -11400,7 +11400,7 @@ input[type="file"]:hover {
 }
 
 .netdb_header {
-  padding: 3px 3px 0;
+  padding: 0 3px;
   min-width: 100px;
   display: inline-block;
   line-height: 0;
@@ -11508,106 +11508,8 @@ input[type="file"]:hover {
   line-height: 0;
 }
 
-.viewprofile img, .viewfullentry img, .familysearch img, .configpeer img, .profiledump img {
-  margin: -1px 5px 1px !important;
-  padding: 3px;
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  line-height: 0;
-  border: 1px solid #113;
-  border-radius: 2px;
-  box-shadow: var(--highlight);
-  background: var(--element);
-}
-
-.viewprofile img:hover, .viewfullentry img:hover, .familysearch img:hover, .configpeer img:hover {
-  border: 1px solid #bf2295;
-}
-
-.configpeer img, .viewprofile img {
-  padding: 0;
-  opacity: 0;
-  margin: 0 -2px;
-}
-
-a.configpeer, a.viewprofile, a.profiledump {
-  margin: 0;
-  padding: 2px 0;
-  display: inline-block;
-  vertical-align: top;
-  line-height: inherit;
-  border: 1px solid #113;
-  border-radius: 2px;
-  box-shadow: var(--highlight);
-  background: var(--edit) no-repeat center center, var(--element);
-  background-size: 14px, 100%;
-}
-
-a.viewprofile {
-  background: var(--eye) no-repeat center center, var(--element);
-  background-size: 14px, 100%;
-}
-
-a.profiledump {
-  background: var(--log_icon) no-repeat center center, var(--element);
-  background-size: 14px, 100%;
-}
-
-a.configpeer:hover {
-  background: var(--edit_hover) no-repeat center center, var(--element);
-  background-size: 14px, 100%;
-}
-
-a.viewprofile:hover {
-  background: var(--eye_hover) no-repeat center center, var(--element);
-  background-size: 14px, 100%;
-}
-
-a.viewprofile + a.configpeer {
-  margin-left: 3px !important;
-}
-
-a.viewfullentry {
-  display: none;
-}
-
-.familysearch img {
-  margin-right: 0 !important;
-  margin-left: 0;
-}
-
-.netdb_header {
-  margin-top: -2px !important;
-}
-
-.netdb_header a.configpeer, .netdb_header a.viewprofile {
-  padding: 0;
-}
-
-.netdb_header a.configpeer {
-  margin-right: 5px !important;
-}
-
-.netdb_header img[src="/flags.jsp?c=a0"] {
-  margin-bottom: -4px !important;
-  margin-right: 0 !important;
-  display: inline-block;
-  opacity: .8;
-}
-
-.sybil_routerinfo .viewprofile img, .sybil_routerinfo .viewfullentry img, .sybil_routerinfo .familysearch img, .sybil_routerinfo .configpeer img {
-  margin-bottom: 3px !important;
-  margin-right: 6px !important;
-}
-
-.sybil_routerinfo .familysearch img {
-  margin-right: 1px !important;
-}
-
 .sybil_routerinfo .netdb_header img[src^="/flags.jsp?c="] {
   margin: 0 5px 0 3px !important;
-  vertical-align: calc(50% + 7px) !important;
 }
 
 .version {
@@ -14434,3 +14336,89 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 }
 
 /* end lazy loading */
+
+.viewprofile, .configpeer, .familysearch {
+  margin: 1px 2px !important;
+  padding: 4px !important;
+  width: 12px;
+  height: 12px;
+  vertical-align: middle;
+  display: inline-block;
+  line-height: 0;
+  border: 1px solid #113;
+  box-shadow: var(--highlight);
+  background: var(--element);
+}
+
+#profilelist .viewprofile, #profilelist .configpeer {
+  margin: 1px !important;
+}
+
+.netdb_header .viewprofile, .netdb_header .configpeer, .netdb_header .familysearch {
+  margin: 3px !important;
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+}
+
+.viewprofile {
+  background: var(--eye) no-repeat center center / 12px, var(--element);
+}
+
+.configpeer {
+  background: var(--edit) no-repeat center center / 12px, var(--element);
+}
+
+.familysearch {
+  background: var(--family) no-repeat center center / 12px, var(--element);
+}
+
+.viewprofile:hover, .viewprofile:focus {
+  background: var(--eye_hover) no-repeat center center / 12px, var(--element);
+}
+
+.viewedit br {
+  display: none;
+}
+
+.viewedit a {
+  font-size: 0;
+}
+
+#profilelist .viewedit {
+  padding: 1px !important;
+}
+
+.viewedit .configpeer:hover, .viewedit .configpeer:focus {
+  background: var(--edit_hover) no-repeat center center / 12px, var(--element);
+}
+
+.viewprofile:hover, .familysearch:hover, .configpeer:hover,
+.viewprofile:focus, .familysearch:focus, .configpeer:focus {
+  border: 1px solid #bf2295;
+}
+
+#profilelist .version {
+  line-height: 1.4;
+}
+
+.netdb_header {
+  margin: 0;
+  min-width: 100px;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 0;
+}
+
+.netdbentry .tunnel_cap, .netdbentry .tier, .netdbentry .ff, .netdbentry .reachable, .netdbentry .unreachable, .netdbentry .version,
+.sybil_routerinfo .tunnel_cap, .sybil_routerinfo .tier, .sybil_routerinfo .ff, .sybil_routerinfo .reachable, .sybil_routerinfo .unreachable, .sybil_routerinfo .version {
+  margin: 0 2px;
+  padding: 0 4px;
+  line-height: 1.6;
+}
+
+@media screen and (max-width: 1499px) {
+  .netdbentry .tunnel_cap, .netdbentry .tier, .netdbentry .ff, .netdbentry .reachable, .netdbentry .unreachable, .netdbentry .version {
+    padding: 2px 4px !important;
+  }
+}

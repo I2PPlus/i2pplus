@@ -1034,24 +1034,17 @@ class NetDbRenderer {
             if (family != null) {
                 buf.append("<a class=\"familysearch\" href=\"/netdb?fam=").append(family)
                    .append("\" title=\"").append(_t("Show all members of the {0} family in NetDb", family))
-                   .append("\" alt=\"[Family routers]\"><img src=\"/themes/console/images/info/family.png\" width=\"16\" height=\"16\"></a>");
+                   .append("\">").append(_t("Family")).append("</a>");
             }
             PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(info.getHash());
             if (prof != null) {
                 buf.append("<a class=\"viewprofile\" href=\"/viewprofile?peer=").append(hash)
                    .append("\" title=\"").append(_t("View profile"))
-                   .append("\" alt=\"[").append(_t("View profile")).append("]\"><img src=\"/themes/console/images/buttons/profile.png\"></a>");
+                   .append("\">").append(_t("Profile")).append("</a>");
             }
-/*
-            if (!full) {
-                buf.append("<a class=\"viewfullentry\" href=\"/netdb?r=").append(hash.substring(0, 6))
-                   .append("\" title=\"").append(_t("View extended router info"))
-                   .append("\" alt=\"[").append(_t("Full entry")).append("]\"><img src=\"/themes/console/images/buttons/fullview.png\"></a>");
-            }
-*/
             buf.append("<a class=\"configpeer\" href=\"/configpeer?peer=").append(hash)
                .append("\" title=\"").append(_t("Configure peer"))
-               .append("\" alt=\"[").append(_t("Configure peer")).append("]\"><img src=\"/themes/console/images/buttons/edit2.png\"></a>");
+               .append("\">").append(_t("Edit")).append("</a>");
             String country = _context.commSystem().getCountry(info.getIdentity().getHash());
             if (country != null) {
                 buf.append("<a href=\"/netdb?c=").append(country).append("\">");

@@ -250,25 +250,6 @@ class ProfileOrganizerRenderer {
 
                 buf.append("<td align=\"center\">");
 
-/**
-                RateStat peerTest = prof.getPeerTestResponseTime();
-                Rate peerTestAvg = peerTest.getRate(60*60*1000);
-                double testAvg = 0;
-                if (peerTestAvg != null)
-                    testAvg = peerTestAvg.getAvgOrLifetimeAvg();
-                if (bonus >= 9999999)
-                    if (isAdvanced)
-                        buf.append("<span class=\"lowlatency\">").append(testAvg).append("</span>");
-                    else
-                        buf.append("<span class=\"lowlatency\" title=\"").append(testAvg).append("ms\">✔</span>");
-                else if (capBonus == -30)
-                    if (isAdvanced)
-                        buf.append("<span class=\"highlatency\">").append(testAvg).append("</span>");
-                    else
-                        buf.append("<span class=\"highlatency\" title=\"").append(testAvg).append("ms\">✖</span>");
-                buf.append("</td>");
-**/
-
                 if (bonus >= 9999999)
                     buf.append("<span class=\"lowlatency\">✔</span>");
                 else if (capBonus == -30)
@@ -290,11 +271,11 @@ class ProfileOrganizerRenderer {
                 if (prof.getIntegrationValue() > 0) {
                     buf.append("<span>").append(integration).append("</span>");
                 }
-                buf.append("</td><td nowrap align=\"center\">");
+                buf.append("</td><td nowrap align=\"center\" class=\"viewedit\">");
                 buf.append("<a class=\"viewprofile\" href=\"/viewprofile?peer=").append(peer.toBase64()).append("\" title=\"").append(_t("View profile"))
-                   .append("\" alt=\"[").append(_t("View profile")).append("]\"><img src=\"/themes/console/images/buttons/profile.png\"></a>");
-                buf.append("<a class=\"configpeer\" href=\"/configpeer?peer=").append(peer.toBase64()).append("\" title=\"").append(_t("Configure peer"))
-                   .append("\" alt=\"[").append(_t("Configure peer")).append("]\"><img src=\"/themes/console/images/buttons/edit2.png\"></a>");
+                   .append("\" alt=\"[").append(_t("View profile")).append("]\">").append(_t("Profile")).append("</a>");
+                buf.append("<br><a class=\"configpeer\" href=\"/configpeer?peer=").append(peer.toBase64()).append("\" title=\"").append(_t("Configure peer"))
+                   .append("\" alt=\"[").append(_t("Configure peer")).append("]\">").append(_t("Edit")).append("</a>");
                 buf.append("</td></tr>\n");
                 // let's not build the whole page in memory (~500 bytes per peer)
                 out.write(buf.toString());
