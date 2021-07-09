@@ -12421,8 +12421,6 @@ h3 + table {
 
 #tunnelPeerCount .configpeer {
   margin: 0 0 0 3px !important;
-  width: auto !important;
-  height: auto !important;
   display: inline-block;
   vertical-align: middle;
 }
@@ -12818,7 +12816,7 @@ body.iframed {
   display: none;
 }
 
-.viewedit a {
+.viewprofile, .configpeer, .familysearch {
   font-size: 0;
 }
 
