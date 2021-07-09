@@ -9908,7 +9908,6 @@ input[type=file] {
 
 .sybil_routerinfo .netdb_header img[src^="/flags.jsp?c="] {
   margin: 0 5px 0 3px !important;
-  vertical-align: calc(50% + 2px) !important;
 }
 
 .version {
@@ -10164,6 +10163,10 @@ input[type=file] {
 
 #view_profile .profiledump img {
   margin-right: 6px !important;
+}
+
+.sybil_routerinfo .identicon {
+  vertical-align: middle;
 }
 
 #view_profile .identicon {
@@ -12790,7 +12793,8 @@ body.iframed {
   margin: 1px !important;
 }
 
-.netdb_header .viewprofile, .netdb_header .configpeer, .netdb_header .familysearch {
+.netdb_header .viewprofile, .netdb_header .configpeer, .netdb_header .familysearch,
+.sybil_routerinfo .viewprofile, .sybil_routerinfo .configpeer, .sybil_routerinfo .familysearch {
   margin: 3px !important;
   width: 14px;
   height: 14px;
@@ -12853,14 +12857,16 @@ body.iframed {
   margin-top: -6px;
 }
 
-.netdbentry .tunnel_cap, .netdbentry .tier, .netdbentry .ff, .netdbentry .reachable, .netdbentry .unreachable, .netdbentry .version {
+.netdbentry .tunnel_cap, .netdbentry .tier, .netdbentry .ff, .netdbentry .reachable, .netdbentry .unreachable, .netdbentry .version,
+.sybil_routerinfo .tunnel_cap, .sybil_routerinfo .tier, .sybil_routerinfo .ff, .sybil_routerinfo .reachable, .sybil_routerinfo .unreachable, .sybil_routerinfo .version {
   margin: 1px 2px 0 !important;
   padding: 0 4px !important;
   line-height: 1.6;
 }
 
 @media screen and (max-width: 1499px) {
-  .netdbentry .tunnel_cap, .netdbentry .tier, .netdbentry .ff, .netdbentry .reachable, .netdbentry .unreachable, .netdbentry .version {
+  .netdbentry .tunnel_cap, .netdbentry .tier, .netdbentry .ff, .netdbentry .reachable, .netdbentry .unreachable, .netdbentry .version,
+  .sybil_routerinfo .tunnel_cap, .sybil_routerinfo .tier, .sybil_routerinfo .ff, .sybil_routerinfo .reachable, .sybil_routerinfo .unreachable, .sybil_routerinfo .version {
     padding: 2px 4px !important;
   }
 }
