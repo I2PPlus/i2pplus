@@ -5929,10 +5929,10 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 }
 
 .netdb_header img[src^="/flags"] {
-  margin-bottom: 1px;
-  width: 24px !important;
-  height: 18px !important;
-  vertical-align: middle;
+  margin: 1px 1px 0 4px;
+  width: 28px !important;
+  height: auto !important;
+  vertical-align: top;
   border: 1px solid #225;
   border-radius: 3px;
 }
@@ -5957,6 +5957,7 @@ table[cellspacing="30"] > tbody > tr > th[colspan="3"] { /* netdb header */
 
 .identicon {
   margin: 0 0 0 6px;
+  vertical-align: middle;
 }
 
 /* Advanced lookup */
@@ -7737,10 +7738,6 @@ span#distance {
   hyphens: none;
 }
 
-.netdbentry img {
-  margin: 1px 0 0 0;
-}
-
 .netdbentry tr:last-child code {
   font-weight: 700;
 }
@@ -9064,31 +9061,6 @@ th code {
 
 .netdb_addresses br:first-child, .sybil_routerinfo tr:last-child td br:first-child {
   display: none;
-}
-
-.netdbentry th:first-child::after {
-  min-height: 20px;
-  display: inline-block;
-  vertical-align: middle;
-  content: "";
-}
-
-.netdbentry th:last-child > *, .sybil_routerinfo th:nth-child(2) > * {
-  display: inline-block;
-  vertical-align: middle !important;
-}
-
-.netdbentry th a img {
-  margin-right: 1px;
-  margin-bottom: 2px;
-  display: inline-block;
-  vertical-align: middle;
-}
-
-.netdbentry a.viewfullentry::after {
-  margin-left: 3px;
-  display: inline-block;
-  vertical-align: middle !important;
 }
 
 .netdbentry td:first-child {
@@ -11397,14 +11369,6 @@ input[type="file"]:hover {
 
 .netdb_addresses {
   line-height: 150%;
-}
-
-.netdb_header {
-  padding: 0 3px;
-  min-width: 100px;
-  display: inline-block;
-  line-height: 0;
-  vertical-align: middle;
 }
 
 .netdb_addresses .netdb_info, .netdb_name, .netdbentry code, #netdb .nowrap, .netdb_transport {
@@ -14354,8 +14318,9 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
   margin: 1px !important;
 }
 
-.netdb_header .viewprofile, .netdb_header .configpeer, .netdb_header .familysearch {
-  margin: 3px !important;
+.netdb_header .viewprofile, .netdb_header .configpeer, .netdb_header .familysearch,
+.sybil_routerinfo .viewprofile, .sybil_routerinfo .configpeer, .sybil_routerinfo .familysearch {
+  margin: 0 3px !important;
   width: 14px;
   height: 14px;
   display: inline-block;
@@ -14381,7 +14346,7 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
   display: none;
 }
 
-.viewedit a {
+.viewprofile, .configpeer, .familysearch {
   font-size: 0;
 }
 
@@ -14407,7 +14372,15 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
   min-width: 100px;
   display: inline-block;
   vertical-align: middle;
-  line-height: 0;
+  white-space: nowrap;
+}
+
+.netdbentry th, .sybil_router th {
+  vertical-align: middle;
+}
+
+.netdbentry th:last-child > *, .sybil_router th:last-child > * {
+  line-height: 1;
 }
 
 .netdbentry .tunnel_cap, .netdbentry .tier, .netdbentry .ff, .netdbentry .reachable, .netdbentry .unreachable, .netdbentry .version,
