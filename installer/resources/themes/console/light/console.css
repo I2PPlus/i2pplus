@@ -16,8 +16,8 @@
   --inklite: #5b5b71;
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, Verdana, Helvetica, sans-serif;
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
-  --button: linear-gradient(to bottom, #fff, #efefff);
-  --button_hover: linear-gradient(to bottom, #eee, #fff);
+  --btn: linear-gradient(to bottom, #fff, #efefff);
+  --btn_hover: linear-gradient(to bottom, #eee, #fff);
   --border: #575775;
   --borderinner: #8d8daa;
 }
@@ -272,11 +272,11 @@ pre {
   padding: 5px 7px 5px 22px !important;
   display: inline-block;
   vertical-align: middle;
-  background: var(--download) no-repeat 6px center / 15px, var(--button);
+  background: var(--download) no-repeat 6px center / 15px, var(--btn);
 }
 
 #sidebar form button.download:hover, #sidebar form button.download:focus {
-  background: var(--download_hover) no-repeat 6px center / 15px, var(--button_hover);
+  background: var(--download_hover) no-repeat 6px center / 15px, var(--btn_hover);
 }
 
 #sidebar input[type=text] {
@@ -2537,35 +2537,35 @@ p#enablefullstats {
 }
 
 .buttonTop {
-  background: var(--mv_top) no-repeat center center, var(--button) !important;
+  background: var(--mv_top) no-repeat center center, var(--btn) !important;
 }
 
 .buttonUp {
-  background: var(--mv_up) no-repeat center center, var(--button) !important;
+  background: var(--mv_up) no-repeat center center, var(--btn) !important;
 }
 
 .buttonDown {
-  background: var(--mv_down) no-repeat center center, var(--button) !important;
+  background: var(--mv_down) no-repeat center center, var(--btn) !important;
 }
 
 .buttonBottom {
-  background: var(--mv_bottom) no-repeat center center, var(--button) !important;
+  background: var(--mv_bottom) no-repeat center center, var(--btn) !important;
 }
 
 .buttonTop:hover, .buttonTop:focus {
-  background: var(--mv_top_hover) no-repeat center center, var(--button_hover) !important;
+  background: var(--mv_top_hover) no-repeat center center, var(--btn_hover) !important;
 }
 
 .buttonUp:hover, .buttonUp:focus {
-  background: var(--mv_up_hover) no-repeat center center, var(--button_hover) !important;
+  background: var(--mv_up_hover) no-repeat center center, var(--btn_hover) !important;
 }
 
 .buttonDown:hover, .buttonDown:focus {
-  background: var(--mv_down_hover) no-repeat center center, var(--button_hover) !important;
+  background: var(--mv_down_hover) no-repeat center center, var(--btn_hover) !important;
 }
 
 .buttonBottom:hover, .buttonBottom:focus {
-  background: var(--mv_bottom_hover) no-repeat center center, var(--button_hover) !important;
+  background: var(--mv_bottom_hover) no-repeat center center, var(--btn_hover) !important;
 }
 
 .buttonTop:active {
@@ -3783,12 +3783,12 @@ table.search select {
 
 button.search {
   padding: 5px 9px 5px 26px;
-  background: var(--search) no-repeat 8px center, var(--button);
+  background: var(--search) no-repeat 8px center, var(--btn);
   background-blend-mode: luminosity;
 }
 
 button.search:hover, button.search:focus, button.search:active {
-  background: var(--search) no-repeat 8px center / 14px, var(--button_hover) !important;
+  background: var(--search) no-repeat 8px center / 14px, var(--btn_hover) !important;
   background-blend-mode: normal;
 }
 
@@ -4861,7 +4861,7 @@ input, input:visited, button, button:visited {
   border-radius: 2px;
   box-shadow: var(--highlight), var(--highlight);
   box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.08) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.08);
-  background: var(--button);
+  background: var(--btn);
   background-size: 14px, 100% !important;
   opacity: 1;
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
@@ -4889,7 +4889,7 @@ button:hover, input[type=submit]:hover, input[type=reset]:hover, button:focus, i
   color: #19191f;
   border: 1px solid #f60;
   box-shadow: var(--highlight), inset 0 -8px 3px 8px rgba(255,96,0,.02), inset 0 0 10px rgba(255,96,0,.05), 0 0 1px rgba(255,96,0,.1), 0 7px 4px -4px rgba(0,0,0,.1);
-  background: var(--button_hover);
+  background: var(--btn_hover);
   filter: saturate(100%) drop-shadow(0 0 1px rgba(204, 204, 204, .8));
   transition: ease border .7s;
 }
@@ -4906,7 +4906,7 @@ input[type=file]::file-selector-button {
   border: 1px solid #97a2ce;
   border-radius: 2px;
   box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
-  background: var(--button);
+  background: var(--btn);
   background-size: 14px auto, 100% !important;
   opacity: 1;
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
@@ -4917,7 +4917,7 @@ input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selec
   color: #19191f;
   border: 1px solid #f60;
   box-shadow: var(--highlight), inset 0 -8px 3px 8px rgba(255,96,0,.02), inset 0 0 10px rgba(255,96,0,.05), 0 0 1px rgba(255,96,0,.1), 0 7px 4px -4px rgba(0,0,0,.1);
-  background: var(--button_hover);
+  background: var(--btn_hover);
   filter: saturate(100%) drop-shadow(0 0 1px rgba(204, 204, 204, .8));
   transition: ease border .7s;
 }
@@ -4939,221 +4939,221 @@ button a:active {
 
 input.accept, button.accept {
   padding: 5px 9px 5px 24px;
-  background: var(--yes) no-repeat 8px center / 12px, var(--button) !important;
+  background: var(--yes) no-repeat 8px center / 12px, var(--btn) !important;
 }
 
 input.accept:hover, button.accept:hover, input.accept:focus, button.accept:focus {
-  background: var(--yes) no-repeat 8px center / 12px, var(--button_hover) !important;
+  background: var(--yes) no-repeat 8px center / 12px, var(--btn_hover) !important;
 }
 
 input.accept[value^="Unban"] {
   padding: 5px 9px 5px 24px;
-  background: var(--unban) no-repeat 8px center / 14px, var(--button) !important;
+  background: var(--unban) no-repeat 8px center / 14px, var(--btn) !important;
 }
 
 input.accept[value^="Unban"]:hover, input.accept[value^="Unban"]:focus, input.accept[value^="Unban"]:active {
-  background: var(--unban) no-repeat 8px center / 14px, var(--button_hover) !important;
+  background: var(--unban) no-repeat 8px center / 14px, var(--btn_hover) !important;
 }
 
 input.accept[value^="Create"], button.accept[value^="Create"] {
   padding: 5px 9px 5px 26px;
-  background: var(--wizard) no-repeat 8px center / 16px, var(--button);
+  background: var(--wizard) no-repeat 8px center / 16px, var(--btn);
 }
 
 input.accept[value^="Create"]:hover, button.accept[value^="Create"]:hover,
 input.accept[value^="Create"]:focus, button.accept[value^="Create"]:focus {
-  background: var(--wizard) no-repeat 8px center / 16px, var(--button_hover);
+  background: var(--wizard) no-repeat 8px center / 16px, var(--btn_hover);
 }
 
 input.accept[value^="Filter"], button.accept[value^="Filter"] {
   padding: 5px 9px 5px 27px;
-  background: var(--filter) no-repeat 8px center / 16px, var(--button);
+  background: var(--filter) no-repeat 8px center / 16px, var(--btn);
 }
 
 input.accept[value^="Filter"]:hover, button.accept[value^="Filter"]:hover,
 input.accept[value^="Filter"]:focus, button.accept[value^="Filter"]:focus {
-  background: var(--filter) no-repeat 8px center / 16px, var(--button_hover);
+  background: var(--filter) no-repeat 8px center / 16px, var(--btn_hover);
 }
 
 input.add, button.add {
   padding: 5px 7px 5px 22px;
-  background: var(--add) no-repeat 8px center / 11px, var(--button) !important;
+  background: var(--add) no-repeat 8px center / 11px, var(--btn) !important;
 }
 
 input.add:hover, button.add:hover,
 input.add:focus, button.add:focus {
-  background: var(--add) no-repeat 8px center / 11px, var(--button_hover) !important;
+  background: var(--add) no-repeat 8px center / 11px, var(--btn_hover) !important;
 }
 
 #clientconfig button.add {
   padding: 5px 9px 5px 24px;
-  background: var(--edit) no-repeat 8px center / 14px, var(--button) !important;
+  background: var(--edit) no-repeat 8px center / 14px, var(--btn) !important;
 }
 
 #clientconfig button.add:hover, #clientconfig button.add:focus, #clientconfig button.add:active {
-  background: var(--edit_hover) no-repeat 8px center / 14px, var(--button_hover) !important;
+  background: var(--edit_hover) no-repeat 8px center / 14px, var(--btn_hover) !important;
 }
 
 input.cancel, button.cancel {
   padding: 5px 9px 5px 22px;
-  background: var(--no) no-repeat 8px center / 10px, var(--button) !important;
+  background: var(--no) no-repeat 8px center / 10px, var(--btn) !important;
 }
 
 input.cancel:hover, button.cancel:hover,
 input.cancel:focus, button.cancel:focus {
-  background: var(--no) no-repeat 8px center / 10px, var(--button_hover) !important;
+  background: var(--no) no-repeat 8px center / 10px, var(--btn_hover) !important;
 }
 
 input.showconsole {
   padding: 5px 9px 5px 24px;
-  background: url(/themes/console/images/buttons/show.png) no-repeat 8px center, var(--button);
+  background: url(/themes/console/images/buttons/show.png) no-repeat 8px center, var(--btn);
 }
 
 input.showconsole:hover, input.showconsole:focus {
-  background: url(/themes/console/images/buttons/show.png) no-repeat 8px center, var(--button_hover);
+  background: url(/themes/console/images/buttons/show.png) no-repeat 8px center, var(--btn_hover);
 }
 
 input.hideconsole {
   padding: 5px 9px 5px 24px;
-  background: url(/themes/console/images/buttons/hide.png) no-repeat 8px center, var(--button);
+  background: url(/themes/console/images/buttons/hide.png) no-repeat 8px center, var(--btn);
 }
 
 input.hideconsole:hover, input.hideconsole:focus {
-  background: url(/themes/console/images/buttons/hide.png) no-repeat 8px center, var(--button_hover);
+  background: url(/themes/console/images/buttons/hide.png) no-repeat 8px center, var(--btn_hover);
 }
 
 input.check, button.check {
   padding: 5px 9px 5px 24px;
-  background: var(--yes) no-repeat 8px center, var(--button);
+  background: var(--yes) no-repeat 8px center, var(--btn);
 }
 
 input.check:hover, button.check:hover,
 input.check:focus, button.check:focus {
-  background: var(--yes) no-repeat 8px center, var(--button_hover);
+  background: var(--yes) no-repeat 8px center, var(--btn_hover);
 }
 
 input.check[value$="updates"], button.check[value$="updates"] {
   padding: 5px 9px 5px 24px;
-  background: var(--refresh) no-repeat 8px center, var(--button);
+  background: var(--refresh) no-repeat 8px center, var(--btn);
 }
 
 input.check[value$="updates"]:hover, button.check[value$="updates"]:hover,
 input.check[value$="updates"]:focus, button.check[value$="updates"]:focus {
-  background: var(--refresh_hover) no-repeat 8px center, var(--button_hover);
+  background: var(--refresh_hover) no-repeat 8px center, var(--btn_hover);
 }
 
 input.delete, button.delete {
   padding: 5px 9px 5px 24px;
-  background: var(--nuke) no-repeat 8px center, var(--button);
+  background: var(--nuke) no-repeat 8px center, var(--btn);
 }
 
 input.delete:hover, button.delete:hover,
 input.delete:focus, button.delete:focus {
-  background: var(--nuke) no-repeat 8px center, var(--button_hover);
+  background: var(--nuke) no-repeat 8px center, var(--btn_hover);
 }
 
 input.delete[value^="Ban"], button.delete[value^="Ban"] {
   padding: 5px 9px 5px 24px;
-  background: var(--doban) no-repeat 8px center / 14px, var(--button);
+  background: var(--doban) no-repeat 8px center / 14px, var(--btn);
 }
 
 input.delete[value^="Ban"]:hover, button.delete[value^="Ban"]:hover,
 input.delete[value^="Ban"]:focus, button.delete[value^="Ban"]:focus {
-  background: var(--doban) no-repeat 8px center / 14px, var(--button_hover);
+  background: var(--doban) no-repeat 8px center / 14px, var(--btn_hover);
 }
 
 input.download, button.download {
   padding: 5px 9px 5px 24px;
-  background: var(--download) no-repeat 8px center, var(--button);
+  background: var(--download) no-repeat 8px center, var(--btn);
 }
 
 input.download:hover, button.download:hover,
 input.download:focus, button.download:focus {
-  background: var(--download_hover) no-repeat 8px center, var(--button_hover);
+  background: var(--download_hover) no-repeat 8px center, var(--btn_hover);
 }
 
 input.download[value^="Join"], button.download[value^="Join"] {
   padding: 5px 9px 5px 26px;
-  background: var(--family) no-repeat 8px center, var(--button);
+  background: var(--family) no-repeat 8px center, var(--btn);
 }
 
 input.download[value^="Join"]:hover, button.download[value^="Join"]:hover,
 input.download[value^="Join"]:focus, button.download[value^="Join"]:focus {
-  background: var(--family) no-repeat 8px center, var(--button_hover);
+  background: var(--family) no-repeat 8px center, var(--btn_hover);
 }
 
 input.download[value$="from File"], button.download[value$="from File"],
 input.download[value$="from file"], button.download[value$="from file"],
 #reseedzip .download {
   padding: 5px 9px 5px 26px;
-  background: var(--package) no-repeat 8px center, var(--button);
+  background: var(--package) no-repeat 8px center, var(--btn);
 }
 
 input.download[value$="from File"]:hover, button.download[value$="from File"]:hover,
 input.download[value$="from file"]:hover, button.download[value$="from file"]:hover,
 input.download[value$="from File"]:focus, button.download[value$="from File"]:focus,
 input.download[value$="from file"]:focus, button.download[value$="from file"]:focus {
-  background: var(--package) no-repeat 8px center, var(--button_hover);
+  background: var(--package) no-repeat 8px center, var(--btn_hover);
 }
 
 input.download[value^="Dump"], button.download[value^="Dump"] {
   padding: 5px 9px 5px 24px;
-  background: url(/themes/console/images/buttons/dump-threads.png) no-repeat 8px center, var(--button);
+  background: url(/themes/console/images/buttons/dump-threads.png) no-repeat 8px center, var(--btn);
 }
 
 input.download[value^="Dump"]:hover, button.download[value^="Dump"]:hover,
 input.download[value^="Dump"]:focus, button.download[value^="Dump"]:focus {
-  background: url(/themes/console/images/buttons/dump-threads.png) no-repeat 8px center, var(--button_hover);
+  background: url(/themes/console/images/buttons/dump-threads.png) no-repeat 8px center, var(--btn_hover);
 }
 
 input.go, button.go, input[value="GO"], #embedurl input[type=submit], button#run {
   padding: 5px 9px 5px 24px;
-  background: url(/themes/console/images/buttons/go.png) no-repeat 8px center, var(--button);
+  background: url(/themes/console/images/buttons/go.png) no-repeat 8px center, var(--btn);
 }
 
 input.go:hover, button.go:hover, input[value="GO"]:hover, input.go:focus, button.go:focus, input[value="GO"]:focus,
 #embedurl input[type=submit]:hover, #embedurl input[type=submit]:focus {
-  background: url(/themes/console/images/buttons/go.png) no-repeat 8px center, var(--button_hover);
+  background: url(/themes/console/images/buttons/go.png) no-repeat 8px center, var(--btn_hover);
 }
 
 input.go[value^="Create"], button.go[value^="Create"], #reseedcreatefile .go {
   padding: 5px 9px 5px 26px;
-  background: var(--wizard) no-repeat 8px center / 15px, var(--button);
+  background: var(--wizard) no-repeat 8px center / 15px, var(--btn);
 }
 
 input.go[value^="Create"]:hover, button.go[value^="Create"]:hover,
 input.go[value^="Create"]:focus, button.go[value^="Create"]:focus {
-  background: var(--wizard) no-repeat 8px center / 15px, var(--button_hover);
+  background: var(--wizard) no-repeat 8px center / 15px, var(--btn_hover);
 }
 
 input.back {
   padding: 5px 9px 5px 24px;
-  background: url(/themes/console/images/buttons/back.png) no-repeat 8px center, var(--button);
+  background: url(/themes/console/images/buttons/back.png) no-repeat 8px center, var(--btn);
 }
 
 input.back:hover,
 input.back:focus {
-  background: url(/themes/console/images/buttons/back.png) no-repeat 8px center, var(--button_hover);
+  background: url(/themes/console/images/buttons/back.png) no-repeat 8px center, var(--btn_hover);
 }
 
 input.reload, button.reload {
   padding: 5px 9px 5px 24px;
-  background: var(--reset) no-repeat 8px center, var(--button);
+  background: var(--reset) no-repeat 8px center, var(--btn);
 }
 
 input.reload:hover, button.reload:hover,
 input.reload:focus, button.reload:focus {
-  background: var(--reset_hover) no-repeat 8px center, var(--button_hover);
+  background: var(--reset_hover) no-repeat 8px center, var(--btn_hover);
 }
 
 input.reload[value$="restart"], button.reload[value$="restart"] {
   padding: 5px 9px 5px 24px;
-  background: var(--restart) no-repeat 8px center / 12px, var(--button);
+  background: var(--restart) no-repeat 8px center / 12px, var(--btn);
 }
 
 input.reload[value$="restart"]:hover, button.reload[value$="restart"]:hover,
 input.reload[value$="restart"]:focus, button.reload[value$="restart"]:focus {
-  background: var(--restart_hover) no-repeat 8px center, var(--button_hover);
+  background: var(--restart_hover) no-repeat 8px center, var(--btn_hover);
 }
 
 .formaction input.reload[value$="restart"] {
@@ -5162,31 +5162,31 @@ input.reload[value$="restart"]:focus, button.reload[value$="restart"]:focus {
 
 input.reload[value^="Update"], button.reload[value^="Update"] {
   padding: 5px 9px 5px 24px;
-  background: var(--refresh) no-repeat 8px center, var(--button);
+  background: var(--refresh) no-repeat 8px center, var(--btn);
 }
 
 input.reload[value^="Update"]:hover, button.reload[value^="Update"]:hover,
 input.reload[value^="Update"]:focus, button.reload[value^="Update"]:focus {
-  background: var(--refresh_hover) no-repeat 8px center, var(--button_hover);
+  background: var(--refresh_hover) no-repeat 8px center, var(--btn_hover);
 }
 
 #dumpthreads input.reload {
   padding: 5px 9px 5px 26px;
-  background: var(--recycle) no-repeat 8px center / 15px, var(--button);
+  background: var(--recycle) no-repeat 8px center / 15px, var(--btn);
 }
 
 #dumpthreads input.reload:hover#dumpthreads input.reload:focus {
-  background: var(--recycle) no-repeat 8px center / 15px, var(--button_hover);
+  background: var(--recycle) no-repeat 8px center / 15px, var(--btn_hover);
 }
 
 input.stop, button.stop {
   padding: 5px 9px 5px 24px;
-  background: var(--shutdown) no-repeat 8px center / 12px, var(--button);
+  background: var(--shutdown) no-repeat 8px center / 12px, var(--btn);
 }
 
 input.stop:hover, button.stop:hover,
 input.stop:focus, button.stop:focus {
-  background: var(--shutdown_hover) no-repeat 8px center, var(--button_hover);
+  background: var(--shutdown_hover) no-repeat 8px center, var(--btn_hover);
 }
 
 /* client config buttons aka project "X" */
@@ -5199,51 +5199,51 @@ button.control {
 }
 
 button.accept.control {
-  background: var(--start) no-repeat center center / 14px, var(--button) !important;
+  background: var(--start) no-repeat center center / 14px, var(--btn) !important;
 }
 
 button.accept.control:hover, button.accept.control:focus, button.accept.control:active {
-  background: var(--start_hover) no-repeat center center / 14px, var(--button_hover) !important;
+  background: var(--start_hover) no-repeat center center / 14px, var(--btn_hover) !important;
 }
 
 button.stop.control {
-  background: var(--stop) no-repeat center center, var(--button);
+  background: var(--stop) no-repeat center center, var(--btn);
 }
 
 button.stop.control:hover, button.stop.control:focus {
-  background: var(--stop_hover) no-repeat center center, var(--button_hover);
+  background: var(--stop_hover) no-repeat center center, var(--btn_hover);
 }
 
 button.add.control {
-  background: var(--edit) no-repeat center center / 16px, var(--button);
+  background: var(--edit) no-repeat center center / 16px, var(--btn);
 }
 
 button.add.control:hover, button.add.control:focus {
-  background: var(--edit_hover) no-repeat center center / 16px, var(--button_hover);
+  background: var(--edit_hover) no-repeat center center / 16px, var(--btn_hover);
 }
 
 button.delete.control {
-  background: var(--nuke) no-repeat center center, var(--button);
+  background: var(--nuke) no-repeat center center, var(--btn);
 }
 
 button.delete.control:hover, button.delete.control:focus {
-  background: var(--nuke) no-repeat center center, var(--button_hover);
+  background: var(--nuke) no-repeat center center, var(--btn_hover);
 }
 
 button.check.control {
-  background: var(--refresh) no-repeat center center / 16px, var(--button);
+  background: var(--refresh) no-repeat center center / 16px, var(--btn);
 }
 
 button.check.control:hover, button.check.control:focus {
-  background: var(--refresh_hover) no-repeat center center / 16px, var(--button_hover);
+  background: var(--refresh_hover) no-repeat center center / 16px, var(--btn_hover);
 }
 
 button.download.control {
-  background: var(--download) no-repeat center center, var(--button);
+  background: var(--download) no-repeat center center, var(--btn);
 }
 
 button.download.control:hover, button.download.control:focus {
-  background: var(--download_hover) no-repeat center center, var(--button_hover);
+  background: var(--download_hover) no-repeat center center, var(--btn_hover);
 }
 
 /* end project "X" */
@@ -5292,11 +5292,11 @@ button.download.control:hover, button.download.control:focus {
 }
 
 #sidebar .reload {
-  background: var(--restart) no-repeat center center / 16px, var(--button) !important;
+  background: var(--restart) no-repeat center center / 16px, var(--btn) !important;
 }
 
 #sidebar .reload:hover, #sidebar .reload:focus {
-  background: var(--shutdown_hover) no-repeat 37% center / 16px, var(--restart_hover) no-repeat 63% center / 16px, var(--button_hover) !important;
+  background: var(--shutdown_hover) no-repeat 37% center / 16px, var(--restart_hover) no-repeat 63% center / 16px, var(--btn_hover) !important;
   border: 1px solid #f60;
 }
 
@@ -5308,27 +5308,27 @@ button.download.control:hover, button.download.control:focus {
   text-indent: 0;
   text-align: left;
   min-width: 0;
-  background: var(--download) no-repeat center left 6px, var(--button) !important;
+  background: var(--download) no-repeat center left 6px, var(--btn) !important;
 }
 
 #sidebar .reload[value="Reseed"]:hover, #sidebar .reload[value="Reseed"]:focus {
-  background: var(--download_hover) no-repeat center left 6px, var(--button_hover) !important;
+  background: var(--download_hover) no-repeat center left 6px, var(--btn_hover) !important;
   padding: 5px 7px 5px 22px !important;
 }
 
 #sidebar .stop {
-  background: var(--shutdown) no-repeat center center, var(--button);
+  background: var(--shutdown) no-repeat center center, var(--btn);
   background-size: 16px, 100% !important;
 }
 
 #sidebar .stop:hover, #sidebar .stop:focus {
   border: 1px solid #f60;
-  background: var(--shutdown_hover) no-repeat center center, var(--button_hover);
+  background: var(--shutdown_hover) no-repeat center center, var(--btn_hover);
   background-size: 16px, 100% !important;
 }
 
 #sidebar .download {
-  background: var(--download) no-repeat 6px center, var(--button);
+  background: var(--download) no-repeat 6px center, var(--btn);
   background-size: 14px, 100% !important;
   padding: 5px 7px 5px 22px !important;
 }
@@ -5354,32 +5354,32 @@ button.download.control:hover, button.download.control:focus {
 }
 
 #sidebar .reload[value="restartImmediate"] {
-  background: var(--restart) no-repeat center left 6px / 12px, var(--button) !important;
+  background: var(--restart) no-repeat center left 6px / 12px, var(--btn) !important;
 }
 
 #sidebar .reload[value="restartImmediate"]:hover, #sidebar .reload[value="restartImmediate"]:focus, #sidebar .reload[value="restartImmediate"]:active {
-  background: var(--restart_hover) no-repeat center left 6px / 12px, var(--button_hover) !important;
+  background: var(--restart_hover) no-repeat center left 6px / 12px, var(--btn_hover) !important;
 }
 
 #sidebar .stop[value="shutdownImmediate"] {
-  background: var(--shutdown) no-repeat center left 6px / 12px, var(--button) !important;
+  background: var(--shutdown) no-repeat center left 6px / 12px, var(--btn) !important;
 }
 
 #sidebar .stop[value="shutdownImmediate"]:hover, #sidebar .stop[value="shutdownImmediate"]:focus, #sidebar .stop[value="shutdownImmediate"]:active {
-  background: var(--shutdown_hover) no-repeat center left 6px / 12px, var(--button_hover) !important;
+  background: var(--shutdown_hover) no-repeat center left 6px / 12px, var(--btn_hover) !important;
 }
 
 #sidebar .reload[value="Reseed"] {
-  background: var(--download) no-repeat center left 6px / 14px, var(--button) !important;
+  background: var(--download) no-repeat center left 6px / 14px, var(--btn) !important;
 }
 
 #sidebar .reload[value="Reseed"]:hover, #sidebar .reload[value="Reseed"]:focus, #sidebar .reload[value="Reseed"]:active {
-  background: var(--download_hover) no-repeat center left 6px / 14px, var(--button_hover);
+  background: var(--download_hover) no-repeat center left 6px / 14px, var(--btn_hover);
 }
 
 #sidebar .download:hover, #sidebar .download:focus, #sidebar .download:active {
   padding: 5px 7px 5px 22px !important;
-  background: var(--download_hover) no-repeat 6px center / 14px, var(--button_hover);
+  background: var(--download_hover) no-repeat 6px center / 14px, var(--btn_hover);
 }
 
 /* end sidebar buttons */
@@ -5468,7 +5468,7 @@ select, select[disabled]:hover, select[disabled]:focus  {
   border-radius: 2px;
   box-shadow: var(--highlight);
   box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
-  background: var(--dropdown) no-repeat right 8px center / 10px, var(--button);
+  background: var(--dropdown) no-repeat right 8px center / 10px, var(--btn);
   appearance: none;
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
@@ -5492,19 +5492,19 @@ select:hover, select:focus, select:active {
 select:hover, select:active {
   color: #19191f;
   box-shadow: var(--highlight), 0 2px 1px #ddf;
-  background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--button_hover) !important;
+  background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover) !important;
 }
 
 select:focus {
   color: #19191f;
   box-shadow: 0 0 1px #89f;
-  background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--button_hover) !important;
+  background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover) !important;
 }
 
 select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active {
   border: 1px solid #97a2ce !important;
   box-shadow: var(--highlight) !important;
-  background: var(--button) !important;
+  background: var(--btn) !important;
   opacity: .8;
   cursor: default;
 }
@@ -7253,7 +7253,7 @@ b.netdb_transport {
   opacity: 0;
 }
 
-#tunnels .configpeer::after, #profiles .configpeer::after {
+/*#tunnels .configpeer::after, #profiles .configpeer::after {
   margin: 0 0 0 -20px;
   height: 18px;
   width: 18px;
@@ -7274,8 +7274,9 @@ b.netdb_transport {
     margin-top: 3px;
   }
 }
+*/
 
-.configpeer:hover::after, .configpeer:focus::after {
+/*.configpeer:hover::after, .configpeer:focus::after {
   background: var(--edit_hover) no-repeat center center;
 }
 
@@ -7288,7 +7289,7 @@ b.netdb_transport {
 .viewprofile img:active, .viewfullentry img:active, .familysearch img:active, .configpeer img:active, .profiledump img:active {
   box-shadow: inset 2px 2px 1px #999;
   transform: scale(.9);
-}
+}*/
 /* end database */
 
 /* leasesets */
@@ -8359,11 +8360,11 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 }
 
 .sortup {
-  background: url(images/sort_up.png) no-repeat center center, var(--button);
+  background: url(images/sort_up.png) no-repeat center center, var(--btn);
 }
 
 .sortup:hover {
-  background: url(images/sort_up.png) no-repeat center center, var(--button_hover);
+  background: url(images/sort_up.png) no-repeat center center, var(--btn_hover);
   border: 1px solid #f60;
   opacity: 1;
 }
@@ -8381,11 +8382,11 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 }
 
 .sortdown {
-  background: url(images/sort_down.png) no-repeat center center, var(--button);
+  background: url(images/sort_down.png) no-repeat center center, var(--btn);
 }
 
 .sortdown:hover {
-  background: url(images/sort_down.png) no-repeat center center, var(--button_hover);
+  background: url(images/sort_down.png) no-repeat center center, var(--btn_hover);
   border: 1px solid #f60;
   opacity: 1;
 }
@@ -13329,3 +13330,87 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
 }
 
 /* end lazy loading */
+
+.viewedit br {
+  display: none;
+}
+
+.viewedit a {
+  font-size: 0;
+}
+
+.viewprofile, .configpeer, .familysearch {
+  margin: 1px 2px !important;
+  padding: 4px;
+  width: 12px;
+  height: 12px;
+  vertical-align: middle;
+  display: inline-block;
+  line-height: 0;
+  border: 1px solid #bbd;
+  border-radius: 2px;
+  box-shadow: var(--highlight);
+}
+
+#profilelist .viewprofile, #profilelist .configpeer {
+  margin: 1px !important;
+}
+
+.netdb_header .viewprofile, .netdb_header .configpeer, .netdb_header .familysearch {
+  margin: 3px !important;
+  width: 14px;
+  height: 14px;
+}
+
+.viewprofile {
+  background: var(--eye) no-repeat center center / 12px, var(--btn);
+}
+
+.viewprofile:hover, .viewprofile:focus {
+  background: var(--eye_hover) no-repeat center center / 12px, var(--btn_hover);
+}
+
+.configpeer {
+  background: var(--edit) no-repeat center center / 12px, var(--btn);
+}
+
+.configpeer:hover, .configpeer:focus {
+  background: var(--edit_hover) no-repeat center center / 12px, var(--btn_hover);
+}
+
+.familysearch {
+  background: var(--family) no-repeat center center / 12px, var(--btn);
+}
+
+.familysearch:hover {
+  background: var(--family) no-repeat center center / 12px, var(--btn_hover);
+}
+
+.netdb_header .viewprofile, .netdb_header .configpeer, .netdb_header .familysearch {
+  margin: 3px !important;
+  width: 14px;
+  height: 14px;
+}
+
+.netdbentry .tunnel_cap, .netdbentry .tier, .netdbentry .ff, .netdbentry .reachable, .netdbentry .unreachable, .netdbentry .version {
+  margin: 0 2px 0 !important;
+  padding: 1px 4px !important;
+  line-height: 1.5;
+  vertical-align: middle;
+}
+
+@media screen and (max-width: 1499px) {
+  .netdbentry .tunnel_cap, .netdbentry .tier, .netdbentry .ff, .netdbentry .reachable, .netdbentry .unreachable, .netdbentry .version {
+    padding: 2px 4px !important;
+  }
+}
+
+.netdb_header img[src^="/flags"] {
+  margin: -7px 0 0 4px;
+  width: 30px !important;
+  height: auto !important;
+}
+
+.netdb_header img[src="/flags.jsp?c=a0"] {
+  margin-top: -6px;
+}

@@ -5288,10 +5288,6 @@ img.unknownflag {
   color: #ee9;
 }
 
-#profilelist td:last-child {
-  text-align: center !important;
-}
-
 #profilelist th, #profilelist td {
   padding-left: 5px;
   text-align: right;
@@ -5312,12 +5308,6 @@ img.unknownflag {
 
 #profilelist td:nth-child(3) {
   letter-spacing: .1em;
-}
-
-#profilelist td:last-child {
-  width: 1%;
-  white-space: nowrap;
-  text-align: center;
 }
 
 #profilelist td[colspan="10"], #profilelist td[colspan="10"]:hover { /* profile class separator */
@@ -5751,8 +5741,7 @@ h4.app img, h4.app2 img {
 }
 
 #chooselang img {
-  margin-top: -1px;
-  margin-right: 10px;
+  margin: -1px 10px 0;
   display: inline-block;
 }
 
@@ -7245,8 +7234,9 @@ form[action="events"] {
 }
 
 #profilelist td:last-child {
-  padding-left: 0;
-  padding-right: 0;
+  width: 1%;
+  white-space: nowrap;
+  text-align: center;
 }
 
 #profiles_overview {
@@ -7745,23 +7735,17 @@ th code {
   display: none;
 }
 
-.netdbentry th:first-child::after {
+/*.netdbentry th:first-child::after {
   min-height: 20px;
   display: inline-block;
   vertical-align: middle;
   content: "";
 }
 
-.netdbentry th:last-child > *, .sybil_routerinfo th:nth-child(2) > * {
-  display: inline-block;
-  vertical-align: middle !important;
-}
-
 .netdbentry th a img {
   display: inline-block;
   vertical-align: middle;
-  margin-right: 1px;
-  margin-bottom: 2px;
+  line-height: 0;
 }
 
 .netdbentry a.viewfullentry::after {
@@ -7769,6 +7753,7 @@ th code {
   display: inline-block;
   vertical-align: middle !important;
 }
+*/
 
 .netdbentry td:first-child {
   padding-right: 5px !important;
@@ -9770,15 +9755,6 @@ input[type=file] {
   line-height: 150%;
 }
 
-.netdb_header {
-  margin: -3px 0 0;
-  padding: 3px 3px 0;
-  min-width: 100px;
-  display: inline-block;
-  line-height: 0;
-  vertical-align: middle;
-}
-
 .netdbentry .netdb_name, .netdb_addresses .netdb_info {
   display: inline-block;
   vertical-align: middle;
@@ -9861,16 +9837,16 @@ input[type=file] {
   font-size: 0;
 }
 
-.viewprofile img, .viewfullentry img, .familysearch img, .configpeer img, .profiledump img {
+.viewfullentry img, .profiledump img {
   margin: -1px 5px 1px !important;
   padding: 4px;
   display: inline-block;
   width: 14px;
   height: 14px;
   line-height: 0;
+  vertical-align: middle;
   border: 1px solid #030;
   box-shadow: 0 0 0 1px #000;
-  background: #020;
   background: var(--element);
 }
 
@@ -9878,7 +9854,7 @@ input[type=file] {
   padding: 3px;
 }
 
-.viewprofile img:hover, .viewfullentry img:hover, .familysearch img:hover, .configpeer img:hover, .profiledump img:hover {
+.viewfullentry img:hover, .profiledump img:hover {
   border: 1px solid #d50;
   background: linear-gradient(to bottom, #030, #000);
 }
@@ -9888,27 +9864,17 @@ input[type=file] {
   margin-right: 1px;
 }
 
+#profilelist .version {
+  line-height: 1.3;
+}
+
 #profilelist th:last-child {
   text-align: left;
+  font-size: 0 !important;
 }
 
-#profilelist th:last-child, #profilelist td:last-child {
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-#profilelist td:last-child img {
-  margin-top: 1px !important;
-  margin-bottom: 1px !important;
-  vertical-align: middle;
-}
-
-#profilelist td:last-child .configpeer img {
-  margin-right: 0 !important;
-}
-
-#profilelist td:last-child .viewprofile img {
-  margin-left: 0 !important;
+#profilelist td {
+  padding: 2px 1px !important;
 }
 
 .familysearch img {
@@ -10024,9 +9990,10 @@ input[type=file] {
 }
 
 #netdb_ram {
-  margin: 0 0 0 -7px;
-  padding: 3px 3px 4px;
+  margin: 0 1px 0 0;
+  padding: 1px 3px;
   display: inline-block;
+  line-height: 1.6;
   background: var(--element);
 }
 
@@ -12807,3 +12774,95 @@ body.iframed {
 }
 
 /* end iframed console fixes */
+
+.viewprofile, .configpeer, .familysearch {
+  margin: 1px 2px !important;
+  padding: 4px;
+  width: 12px;
+  height: 12px;
+  vertical-align: middle;
+  display: inline-block;
+  line-height: 0;
+  border: 1px solid #030;
+  box-shadow: 0 0 0 1px #000;
+  background: var(--element);
+}
+
+#profilelist .viewprofile, #profilelist .configpeer {
+  margin: 1px !important;
+}
+
+.netdb_header .viewprofile, .netdb_header .configpeer, .netdb_header .familysearch {
+  margin: 3px !important;
+  width: 14px;
+  height: 14px;
+}
+
+.viewprofile {
+  background: var(--eye) no-repeat center center / 12px, var(--element);
+}
+
+.configpeer {
+  background: var(--edit) no-repeat center center / 12px, var(--element);
+}
+
+.familysearch {
+  background: var(--family) no-repeat center center / 12px, var(--element);
+}
+
+.viewprofile:hover, .viewprofile:focus {
+  background: var(--eye_hover) no-repeat center center / 12px, var(--element);
+}
+
+.viewedit br {
+  display: none;
+}
+
+.viewedit a {
+  font-size: 0;
+}
+
+#profilelist .viewedit {
+  padding: 1px !important;
+}
+
+.viewedit .configpeer:hover, .viewedit .configpeer:focus {
+  background: var(--edit_hover) no-repeat center center / 12px, var(--element);
+}
+
+.viewprofile:hover, .familysearch:hover, .configpeer:hover {
+  border: 1px solid #d50;
+}
+
+#profilelist .version {
+  line-height: 1.4;
+}
+
+.netdb_header {
+  margin: 0;
+  padding: 0 3px 2px;
+  min-width: 100px;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 0;
+}
+
+.netdb_header img[src^="/flags"] {
+  margin: -7px 0 0 4px;
+}
+
+.netdb_header img[src="/flags.jsp?c=a0"] {
+  margin-top: -6px;
+}
+
+.netdbentry .tunnel_cap, .netdbentry .tier, .netdbentry .ff, .netdbentry .reachable, .netdbentry .unreachable, .netdbentry .version {
+  margin: 1px 2px 0 !important;
+  padding: 0 4px !important;
+  line-height: 1.6;
+}
+
+@media screen and (max-width: 1499px) {
+  .netdbentry .tunnel_cap, .netdbentry .tier, .netdbentry .ff, .netdbentry .reachable, .netdbentry .unreachable, .netdbentry .version {
+    padding: 2px 4px !important;
+  }
+}

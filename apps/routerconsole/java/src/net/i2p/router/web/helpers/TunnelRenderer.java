@@ -545,8 +545,8 @@ class TunnelRenderer {
                           "\"><a href=\"/netdb?v=" + DataHelper.stripHTML(v) + "\">" + DataHelper.stripHTML(v) +
                           "</a></span>");
             if (info != null && info.getHash() != null)
-                out.write("<a class=\"configpeer\" href=\"/configpeer?peer=" + info.getHash() + "\" title=\"Configure peer\" alt=\"[Configure peer]\">" +
-                          "<img src=\"/themes/console/images/buttons/edit2.png\"></a>");
+                out.write("<a class=\"configpeer\" href=\"/configpeer?peer=" + info.getHash() + "\" title=\"Configure peer\">" +
+                          _t("Edit") + "</a>");
             out.write("</td><td class=\"cells\"><span class=\"ipaddress\">");
             if (info != null && ip != null) {
                 if (!ip.toString().equals("null"))

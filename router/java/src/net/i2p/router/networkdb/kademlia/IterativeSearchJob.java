@@ -94,7 +94,7 @@ public class IterativeSearchJob extends FloodSearchJob {
     private static final int IP_CLOSE_BYTES = 3;
     /** TOTAL_SEARCH_LIMIT * SINGLE_SEARCH_TIME, plus some extra */
 //    private static final int MAX_SEARCH_TIME = 30*1000;
-    private static final int MAX_SEARCH_TIME = 25*1000;
+    private static final int MAX_SEARCH_TIME = 20*1000;
     /**
      *  The time before we give up and start a new search - much shorter than the message's expire time
      *  Longer than the typ. response time of 1.0 - 1.5 sec, but short enough that we move
@@ -145,16 +145,19 @@ public class IterativeSearchJob extends FloodSearchJob {
                               Job onFind, Job onFailed, int timeoutMs, boolean isLease, Hash fromLocalDest) {
         super(ctx, facade, key, onFind, onFailed, timeoutMs, isLease);
         // these override the settings in super
-        _timeoutMs = Math.min(timeoutMs, MAX_SEARCH_TIME);
+        if (isLease)
+            _timeoutMs = Math.min(timeoutMs*2, MAX_SEARCH_TIME*2);
+        else
+            _timeoutMs = Math.min(timeoutMs, MAX_SEARCH_TIME);
         _expiration = _timeoutMs + ctx.clock().now();
         _rkey = ctx.routingKeyGenerator().getRoutingKey(key);
         _toTry = new TreeSet<Hash>(new XORComparator<Hash>(_rkey));
         int known = ctx.netDb().getKnownRouters();
         int totalSearchLimit = (facade.floodfillEnabled() && ctx.router().getUptime() > 30*60*1000) ?
                                 TOTAL_SEARCH_LIMIT_WHEN_FF : TOTAL_SEARCH_LIMIT;
-        if (isLease || known < 2000)
+        if (isLease)
             totalSearchLimit *= 3;
-        else if (known < 4000)
+        else if (known < 2000)
             totalSearchLimit *= 2;
         _totalSearchLimit = ctx.getProperty("netdb.searchLimit", totalSearchLimit);
         _ipSet = new MaskedIPSet(2 * (_totalSearchLimit + EXTRA_PEERS));
