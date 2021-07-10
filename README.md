@@ -4,11 +4,11 @@
 
 This is the source code for the soft-fork of the Java implementation of I2P.
 
-Latest release: https://i2pplus.com/
+Latest release: https://i2pplus.github.io/
 
 ## Installing
 
-See INSTALL.txt or https://i2pplus.com/ for installation instructions.
+See INSTALL.txt or https://i2pplus.github.io/ for installation instructions.
 
 ## Documentation
 
