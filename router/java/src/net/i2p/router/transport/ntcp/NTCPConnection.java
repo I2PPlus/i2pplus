@@ -126,7 +126,7 @@ public class NTCPConnection implements Closeable {
      *  Update frequency for send/recv rates in console peers page
      */
 //    private static final long STAT_UPDATE_TIME_MS = 30*1000;
-    private static final long STAT_UPDATE_TIME_MS = 15*1000; // same as ajax refresh
+    private static final long STAT_UPDATE_TIME_MS = 60*1000;
 
     /*
      *  Should be longer than 2 * EventPumper.MAX_EXPIRE_IDLE_TIME so it doesn't
