@@ -4935,6 +4935,25 @@ img[src^="/flags"], img.unknownflag {
   border-right: 1px solid #aad;
 }
 
+.routerid, .routerid > *, .routerid ~ span {
+  vertical-align: middle;
+}
+
+.routerid .flag, .routerid .flag a, .routerid .flag img {
+  line-height: 0 !important;
+}
+
+.routerid .flag img {
+  margin: -1px 0 1px !important;
+  display: inline-block;
+}
+
+@media screen and (min-width: 1500px) {
+  .routerid .flag img {
+    margin: 0 0 2px !important;
+  }
+}
+
 #banlist .flag {
   padding: 0;
   border: none;

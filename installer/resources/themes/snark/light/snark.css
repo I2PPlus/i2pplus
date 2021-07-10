@@ -794,7 +794,7 @@ th.snarkGraphicStatus, th.snarkTorrentStatus {
 
 tfoot .snarkTorrentRateUp, tfoot .snarkTorrentRateDown, td.snarkTorrentRateUp, td.snarkTorrentRateDown,
 tfoot .snarkTorrentUploaded, td.snarkTorrentUploaded {
-  text-align: right !important;
+  text-align: center !important;
 }
 
 .snarkTorrentRateUp:empty, .snarkTorrentRateDown:empty, .snarkTorrentAction:empty {
@@ -809,10 +809,6 @@ tfoot .snarkTorrentUploaded, td.snarkTorrentUploaded {
 .snarkTorrentDownloaded {
   text-align: center;
   white-space: nowrap;
-}
-
-td.snarkTorrentUploaded {
-  text-align: right !important;
 }
 
 .snarkTorrentUploaded:empty {
@@ -4184,7 +4180,7 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
 }
 
 .snarkTorrentUploaded .left {
-  min-width: 12px;
+  min-width: 16px;
 }
 
 .choked .left, .choked .right {
@@ -4193,6 +4189,17 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
 
 .snarkTorrentRateDown, .snarkTorrentRateUp, .snarkTorrentUploaded {
   text-align: center !important;
+}
+
+tfoot .snarkTorrentRateDown, tfoot .snarkTorrentRateUp {
+  text-align: right !important;
+}
+
+tfoot .snarkTorrentRateDown::after, tfoot .snarkTorrentRateUp::after {
+  width: 6px;
+  display: inline-block;
+  vertical-align: middle;
+  content: "";
 }
 
 .snarkCommentInfo th {
