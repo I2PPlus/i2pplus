@@ -7829,13 +7829,8 @@ span#distance {
   content: "";
 }
 
-a.viewfullentry:not(old), a[href^="viewprofile"]:not(old) {
-  font-size: 0;
-}
-
-a[href^="viewprofile"]::after {
-  content: url(/themes/console/images/buttons/fullview.png);
-  vertical-align: text-top;
+.viewfullentry, .viewprofile, .configpeer {
+  font-size: 0 !important;
 }
 
 #noleasesets, #notinitialized, .netdbnotfound {
@@ -11912,11 +11907,11 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 
 }
 
-#view_profile .profiledump, #view_profile .configpeer {
-  margin-right: 48px;
+#view_profile .viewprofile, #view_profile .configpeer {
+  margin: -4px 48px 4px 0 !important;
 }
 
-#view_profile .profiledump {
+#view_profile .viewprofile {
   margin-right: 6px !important;
 }
 

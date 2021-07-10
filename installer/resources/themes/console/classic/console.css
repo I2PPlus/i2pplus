@@ -6307,7 +6307,11 @@ p#fullhistory {
   vertical-align: middle;
   width: 18px;
   height: 20px;
-  background: url(/themes/console/images/buttons/fullview.png) no-repeat left 45% / 14px;
+  background: var(--eye) no-repeat left 45% / 14px;
+}
+
+#fullhistory:hover::before, #fullhistory:focus::before {
+  background: var(--eye_hover) no-repeat left 45% / 14px;
 }
 
 #help td.infohelp, #help td.infowarn, #help td.infohelp, #help p.infohelp {
