@@ -98,8 +98,7 @@ class ConnectionPacketHandler {
                 int mtu = con.getOptions().getMaxMessageSize();
                 if (size < mtu) {
                     if (_log.shouldInfo())
-                        _log.info("Reducing MTU to " + size
-                                  + " from " + mtu);
+                        _log.info("Reducing MTU to " + size + " from " + mtu);
                     con.getOptions().setMaxMessageSize(size);
                     con.getOutputStream().setBufferSize(size);
                 } else if (size > con.getOptions().getMaxInitialMessageSize()) {

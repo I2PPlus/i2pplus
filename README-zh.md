@@ -4,11 +4,11 @@ English version is [here](README.md).
 
 这是JAVA版本的i2p软fork源代码。
 
-最新版本：https://i2pplus.com/
+最新版本：https://i2pplus.github.io/
 
 ## 安装
 
-有关安装说明，请参见INSTALL.txt或https://i2pplus.com/。
+有关安装说明，请参见INSTALL.txt或https://i2pplus.github.io/。
 
 ## 文档
 

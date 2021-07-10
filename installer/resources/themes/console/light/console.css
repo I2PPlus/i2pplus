@@ -5556,6 +5556,10 @@ textarea:focus {
   box-sizing: border-box;
 }
 
+.refreshpage {
+  padding-left: 12px !important;
+}
+
 #tunnels h3 {
   word-spacing: 0;
 }
@@ -12912,7 +12916,7 @@ i {
 }
 
 #peercount a::after, #participating a::after {
-  margin: 1px 0 0 -16px;
+  margin: 1px 0 0 -2px;
   height: 18px;
   width: 18px;
   display: inline-block;

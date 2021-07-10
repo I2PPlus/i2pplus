@@ -4107,8 +4107,26 @@ h3#servicedebug a, h3#graphinfo a, h3#browseronstart a {
   float: right;
 }
 
-.main#tunnels h3 a:not(old):not(.lsview), #logs h3 a:not(old) {
+.main#tunnels h3 a:not(.lsview), #logs h3 a {
   font-size: 0;
+}
+
+.refreshpage {
+  margin: 0 0 -2px;
+  padding: 2px;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  vertical-align: middle;
+  background: var(--refresh) no-repeat center center / 16px;
+}
+
+.refreshpage:hover,.refreshpage:focus {
+  background: var(--refresh_hover) no-repeat center center / 16px;
+}
+
+.refreshpage:active {
+  box-shadow: 0 0 0 1px #bbd, inset 0 0 0 1px #fff, inset 3px 3px 3px rgba(0,0,0,.3);
 }
 
 #version a {
@@ -6289,7 +6307,11 @@ p#fullhistory {
   vertical-align: middle;
   width: 18px;
   height: 20px;
-  background: url(/themes/console/images/buttons/fullview.png) no-repeat left 45% / 14px;
+  background: var(--eye) no-repeat left 45% / 14px;
+}
+
+#fullhistory:hover::before, #fullhistory:focus::before {
+  background: var(--eye_hover) no-repeat left 45% / 14px;
 }
 
 #help td.infohelp, #help td.infowarn, #help td.infohelp, #help p.infohelp {
