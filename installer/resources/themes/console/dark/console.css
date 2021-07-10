@@ -4481,7 +4481,7 @@ h3#servicedebug a, h3#graphinfo a {
 }
 
 #tunnels h3 a:first-child {
-  padding: 8px 4px 14px 8px;
+  padding: 8px 4px 14px 22px;
   border-left: none;
 }
 

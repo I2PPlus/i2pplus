@@ -149,7 +149,7 @@ class TunnelRenderer {
             out.write(_t("Participating"));
             if (!debug)
                 out.write(' ' + _t("tunnels"));
-            out.write("&nbsp;&nbsp;<a style=\"float: right;\" href=\"/tunnelsparticipating\"><img src=\"/themes/console/images/buttons/update.png\"></a></h3>\n");
+            out.write("&nbsp;&nbsp;<a class=\"refreshpage\" style=\"float: right;\" href=\"/tunnelsparticipating\">" + _t("Refresh") + "</a></h3>\n");
             int bwShare = getShareBandwidth();
             if (bwShare > 12) {
                 if (!participating.isEmpty()) {
@@ -526,7 +526,7 @@ class TunnelRenderer {
         List<HopConfig> participating = _context.tunnelDispatcher().listParticipatingTunnels();
 
         out.write("<h3 class=\"tabletitle\" id=\"peercount\">" + _t("Tunnel Count By Peer") +
-                  "&nbsp;&nbsp;<a style=\"float: right;\" href=\"/tunnelpeercount\"><img src=\"/themes/console/images/buttons/update.png\"></a></h3>\n");
+                  "&nbsp;&nbsp;<a class=\"refreshpage\" style=\"float: right;\" href=\"/tunnelpeercount\">" + _t("Refresh") + "</a></h3>\n");
         out.write("<table id=\"tunnelPeerCount\" data-sortable>");
         out.write("<thead>\n<tr><th>" + _t("Peer") + "</th><th title=\"Primary IP address\">Address</th><th title=\"Client and Exploratory Tunnels\">" +
                   _t("Local") + "</th><th class=\"bar\">" + _t("% of total") + "</th>");
