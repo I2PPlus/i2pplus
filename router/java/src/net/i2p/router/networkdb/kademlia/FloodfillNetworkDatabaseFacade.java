@@ -604,8 +604,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         }
 
         // should we skip the search?
-        String forceExplore = _context.getProperty("router.exploreWhenFloodfill");
-        if ((_floodfillEnabled && (forceExplore == null || forceExplore != "true")) ||
+        boolean forceExplore = _context.getBooleanProperty("router.exploreWhenFloodfill");
+        if ((_floodfillEnabled && !forceExplore) ||
             _context.jobQueue().getMaxLag() > 1000 ||
             _context.banlist().isBanlistedForever(peer)) {
 //            getKBucketSetSize() > MAX_DB_BEFORE_SKIPPING_SEARCH) {
@@ -614,7 +614,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             // Also don't queue a search if we have plenty of routerinfos
             // (KBucketSetSize() includes leasesets but avoids locking)
 //            super.lookupBeforeDropping(peer, info); // we don't want the routerinfo deleted, so this is commented out
-            if (_floodfillEnabled && (forceExplore == null || forceExplore != "true")) {
+            if (_floodfillEnabled && !forceExplore) {
                 if (_log.shouldLog(Log.INFO))
                     _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] - Floodfill mode active");
             } else if (_context.banlist().isBanlistedForever(peer)) {
