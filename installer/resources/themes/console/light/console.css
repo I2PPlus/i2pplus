@@ -10193,7 +10193,7 @@ b.suboption {
   height: 20px;
   display: inline-block;
   vertical-align: middle;
-  background-size: 16px !important;
+  background-size: 20px !important;
 }
 
 #bandwidthconfig tr:nth-child(2) .net_bwrate::before {
