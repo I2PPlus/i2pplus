@@ -8765,6 +8765,44 @@ b.suboption {
   margin-top: 16px !important;
 }
 
+.net_bw, .net_bwrate, .net_datausage {
+  display: inline-block;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.net_bwrate {
+  font-size: 120%;
+}
+
+#config_bandwidth tr:nth-last-child(2) .infohelp b {
+  margin-right: -1px;
+  font-size: 120%;
+}
+
+#bandwidthconfig .net_bwrate::before {
+  margin-right: 4px;
+  content: "";
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  vertical-align: middle;
+  background-size: 20px !important;
+}
+
+#bandwidthconfig tr:nth-child(2) .net_bwrate::before {
+  background: url(/themes/console/images/svg/inbound.svg) no-repeat center center;
+}
+
+#bandwidthconfig tr:nth-child(3) .net_bwrate::before, #bandwidthconfig tr:nth-child(4) .net_bwrate::before {
+  background: url(/themes/console/images/svg/outbound.svg) no-repeat center center;
+}
+
+.net_bwrate::before, #bandwidthconfig tr:nth-child(4) .net_bwrate::before {
+  background: var(--share) no-repeat left center;
+  background-size: 18px 18px !important;
+}
+
 .net_bw {
   margin: 3px;
   padding: 5px 8px;
@@ -10461,45 +10499,6 @@ input[type=text]:focus::placeholder, #homesearch input.search:focus::placeholder
 }
 
 /* end /info */
-
-.net_bw, .net_bwrate, .net_datausage {
-  display: inline-block;
-  white-space: nowrap;
-  text-align: center;
-}
-
-.net_bwrate {
-  font-size: 120%;
-}
-
-#bandwidthconfig .net_bwrate::before {
-  margin-right: 4px;
-  content: "";
-  width: 20px;
-  height: 20px;
-  display: inline-block;
-  vertical-align: middle;
-  background-size: 14px !important;
-}
-
-#bandwidthconfig tr:nth-child(2) .net_bwrate::before {
-  background: url(/themes/console/images/svg/inbound.svg) no-repeat center center;
-}
-
-#bandwidthconfig tr:nth-child(3) .net_bwrate::before, #bandwidthconfig tr:nth-child(4) .net_bwrate::before {
-  background: url(/themes/console/images/svg/outbound.svg) no-repeat center center;
-}
-
-.net_bwrate::before, #bandwidthconfig tr:nth-child(4) .net_bwrate::before {
-  background: var(--share) no-repeat left center;
-  background: url(/themes/console/images/svg/share5.svg) no-repeat left center !important;
-  background-size: 18px !important;
-}
-
-#config_bandwidth tr:nth-last-child(2) .infohelp b {
-  margin-right: -1px;
-  font-size: 120%;
-}
 
 .reachability {
   float: right;
