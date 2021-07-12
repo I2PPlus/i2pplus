@@ -331,33 +331,27 @@ h2, h3 {
 /* title images */
 
 #messages h2 {
-  background: url(/themes/console/images/svg/logs.svg) 5px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
-  background-size: 20px auto, 100% 100%, 100% 100% !important;
+  background: var(--logs) no-repeat 5px center / 20px, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
 }
 
 #globalTunnelControl h2 {
-  background: url(/themes/console/images/svg/mouse.svg) 5px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
-  background-size: 20px auto, 100% 100%, 100% 100% !important;
+  background: var(--mouse) no-repeat 5px center / 20px, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
 }
 
 #servers h2 {
-  background: url(/themes/console/images/svg/server.svg) 5px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
-  background-size: 20px auto, 100% 100%, 100% 100% !important;
+  background: var(--server) no-repeat 5px center / 20px, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
 }
 
 #clients h2 {
-  background: url(/themes/console/images/svg/client.svg) 5px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
-  background-size: 20px auto, 100% 100%, 100% 100% !important;
+  background: var(--client) no-repeat 5px center / 20px, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
 }
 
 #tunnelEditPage h2, #tunnelEditPage h3, #registration h2, #registration h3 {
-  background: url(/themes/console/images/svg/configure.svg) 5px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
-  background-size: 20px auto, 100% 100%, 100% 100% !important;
+  background: var(--configure) no-repeat 5px center / 20px, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
 }
 
 #wizardPanel h2, #ssl h2 {
-  background: url(/themes/console/images/svg/wizard.svg) left 6px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
-  background-size: 20px auto, 100% 100%, 100% 100% !important;
+  background: var(--wizard) no-repeat left 6px center / 20px, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
 }
 
 /* end title images */
@@ -463,11 +457,11 @@ td.infohelp {
 
 .tunnelName a {
   padding: 3px 3px 3px 18px !important;
-  background: var(--configure) no-repeat 2px center / 14px;
+  background: var(--settings) no-repeat 2px center / 14px;
 }
 
 .tunnelName a:hover {
-  background: var(--configure_hover) no-repeat 2px center / 14px;
+  background: var(--settings_hover) no-repeat 2px center / 14px;
 }
 
 .tunnelName a {
