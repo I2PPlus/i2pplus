@@ -1348,25 +1348,6 @@ to {
   margin: 28px 10px 0;
 }
 
-#proxyerror .warning {
-  margin-left: 12px;
-  background: url(/themes/console/images/info/errortriangle.png) no-repeat 25px center, linear-gradient(to bottom, rgba(255,255,255,.8), rgba(255,255,255,.3)) #f8f8ff !important;
-  background-position: 25px calc(50% + 10px) !important;
-}
-
-#proxyerror p {
-  padding-left: 15px;
-  padding-right: 25px;
-}
-
-#proxyerror p:first-of-type {
-  padding-top: 5px;
-}
-
-#denied {
-  padding: 30px 0;
-}
-
 .warning h3 {
   margin: -29px -29px 25px -24px !important;
   padding: 10px 10px 8px;
@@ -1375,50 +1356,6 @@ to {
   border: none;
   border-bottom: 1px solid var(--border);
   border-radius: 2px 2px 0 0;
-}
-
-#warning_localhost {
-  margin: 20px;
-  background-position: 20px calc(50% + 16px);
-}
-
-#warning_localhost p {
-  padding: 20px 10px 15px;
-  font-weight: 700;
-}
-
-#jumplinks {
-  margin-top: -15px;
-}
-
-#jumplinks h3 {
-  margin: 0 0 10px;
-}
-
-#jumplinks a {
-  display: inline-block;
-  padding: 2px 0;
-  line-height: 16px;
-}
-
-#jumplinks a::before {
-  content: "\279F\00A0";
-  font-size: 16pt;
-  display: inline-block;
-  padding: 3px 0;
-  vertical-align: sub;
-  line-height: 16px;
-}
-
-.proxyfooter {
-  margin: 0 20px 10px 240px;
-  padding: 20px 25px 20px 75px;
-  color: red;
-  font-size: 7pt;
-  text-align: right !important;
-  border-radius: 2px;
-  border: 1px solid var(--border);
-  display: none;
 }
 
 @media screen and (max-width: 800px) {
@@ -1435,133 +1372,42 @@ to {
     }
   }
 
-#proxyerror .warning {
-  margin-top: 16px !important;
-}
+  .warning h3 {
+    margin: -34px -29px 20px !important;
+    font-size: 10pt !important;
+  }
 
-#proxyerror p {
-  padding-left: 65px;
-  padding-right: 20px;
-}
+  .logo {
+    margin: 10px 5px 0 !important;
+    width: calc(100% - 20px) !important;
+    min-width: 430px;
+    position: absolute;
+    top: 0;
+  }
 
-.warning h3 {
-  margin: -34px -29px 20px !important;
-  font-size: 10pt !important;
-}
-
-.logo {
-  position: absolute;
-  top: 0;
-  width: calc(100% - 20px) !important;
-  min-width: 430px;
-  margin: 10px 5px 0 !important;
-}
-
-.logo a:link:not(img) {
-  display: inline-block;
-  width: auto;
-  margin: 0 5px;
-}
+  .logo a:link:not(img) {
+    margin: 0 5px;
+    width: auto;
+    display: inline-block;
+  }
 }
 
 @media screen and (min-width: 800px) {
-.warning h3 {
-  margin: -39px -34px 30px -109px !important;
-}
+  .warning h3 {
+    margin: -39px -34px 30px -109px !important;
+  }
 }
 
 @media screen and (min-width: 1400px) {
-  #jumplinks h4, .warning p {
+  .warning p {
     font-size: 10.5pt;
   }
 }
 
 @media screen and (min-height: 700px) {
-.proxyfooter {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  padding: 0 20px 0 0;
-  text-align: right;
-  background: #030;
-  width: 100%;
-  opacity: .7;
-  border-top: 1px solid #000;
-}
-
-.proxyfooter p {
-  text-align: right;
-  line-height: 130% !important;
-  margin: 5px 0;
-}
-
-.warning {
-  margin-bottom: 30px;
-}
-}
-
-@media screen and (max-height: 700px) {
-.proxyfooter {
-  display: none;
-}
-}
-
-.proxyfooter p {
-  text-align: right !important;
-  line-height: 115%;
-  color: #6b4612;
-}
-
-#proxyNewAddressHelper .warning {
-  padding-bottom: 5px !important;
-}
-
-#proxyNewHost {
-  margin-bottom: 20px;
-}
-
-#proxyNewHost td {
-  padding: 8px !important;
-  font-size: 10pt !important;
-}
-
-#proxyNewHost tr:last-child td:first-child {
-  vertical-align: top;
-}
-
-#proxyNewHost textarea {
-  white-space: pre-wrap;
-  word-break: break-all;
-  overflow: auto;
-  border: none;
-  resize: none;
-  background: none !important;
-  box-shadow: none !important;
-  width: 100% !important;
-  height: 6em;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-#proxyNewHost textarea:focus {
-  filter: none;
-}
-
-#proxyNewHost + hr {
-  display: none;
-}
-
-#proxyNewHost a {
-  display: inline-block;
-  word-break: break-all;
-}
-
-#proxyNewHost td:first-child {
-  font-weight: 700;
-}
-
-#proxyNewHost tr:last-child td:first-child {
-  vertical-align: top;
+  .warning {
+    margin-bottom: 30px;
+  }
 }
 
 .warning h4 {
@@ -1580,13 +1426,6 @@ to {
   margin-bottom: -5px;
 }
 
-#jumplinks h4 {
-  margin-bottom: 10px;
-  border-color: #7e7fb9 !important;
-  color: var(--inklite);
-  padding-bottom: 10px;
-}
-
 .warning p + .formaction {
   margin: -5px -3px 10px 0;
   padding: 0;
@@ -1602,15 +1441,16 @@ to {
 .sorry {
   margin: -11px 0 10px 214px;
   padding: 20px 25px 20px 70px;
+  min-width: 481px;
+  word-wrap: break-word;
+  text-align: justify;
+  font-weight: 700;
   border: 1px solid var(--border);
   border-radius: 0 0 2px 2px;
-  text-align: justify;
-  background: #fafaff url(/themes/console/images/info/errortriangle.png) 16px 40% no-repeat;
-  background: url(/themes/console/images/info/errortriangle.png) 16px 40% no-repeat, linear-gradient(to top, rgba(250, 250, 255, .5), #f8f8ff 40px), repeating-linear-gradient(135deg, #fafaff 2px, rgba(248, 248, 255, .8) 3px, #fafaff 5px) #f8f8ff;
   box-shadow: inset 0 0 1px red;
-  word-wrap: break-word;
-  font-weight: 700;
-  min-width: 481px;
+  background: var(--err) no-repeat 16px 40% / 40px,
+              linear-gradient(to top, rgba(250, 250, 255, .5), #f8f8ff 40px),
+              repeating-linear-gradient(135deg, #fafaff 2px, rgba(248, 248, 255, .8) 3px, #fafaff 5px) #f8f8ff;
 }
 
 .sorry {
@@ -1618,22 +1458,20 @@ to {
 }
 
 .sorry hr, .sorry hr:last-child {
-  color: #558;
-  background: #558;
-  background: linear-gradient(to right, #558, #77a);
-  height: 1px;
   margin: 10px 0 !important;
+  height: 1px;
+  color: #558;
+  background: linear-gradient(to right, #558, #77a);
 }
 
 #warning2 {
-  min-width: 536px;
   margin-top: -25px;
   margin-bottom: 5px;
   padding: 20px 20px 5px;
-  background: #fafaff;
-  background: linear-gradient(to bottom, rgba(252, 252, 255, .8), rgba(252, 252, 255, .5)) #fafaff;
-  color: var(--ink);
+  min-width: 536px;
   font-weight: 400;
+  color: var(--ink);
+  background: linear-gradient(to bottom, rgba(252, 252, 255, .8), rgba(252, 252, 255, .5)) #fafaff;
 }
 
 #servletError #warning {

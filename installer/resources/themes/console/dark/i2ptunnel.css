@@ -935,13 +935,13 @@ th .help::after {
   width: 16px;
   height: 16px;
   display: inline-block;
-  background: var(--helplink) center center no-repeat;
+  background: var(--helplink) no-repeat center center;
   background-size: 16px;
   content: "";
 }
 
 th .help:hover::after, th .help:focus::after {
-  background: var(--helplink_hover) center center no-repeat;
+  background: var(--helplink_hover) no-repeat center center;
   background-size: 16px;
 }
 
@@ -1178,7 +1178,7 @@ input.tunnelName, input.tunnelDescription, #userAgents {
   height: 40px;
   display: inline-block;
   vertical-align: middle;
-  background: var(--update) center center no-repeat;
+  background: var(--update) no-repeat center center;
   background-size: 40px 40px;
   content: "";
   animation: linear spin 5s forwards infinite;
@@ -1503,8 +1503,7 @@ tr.configerror {
   width: 24px;
   height: 20px;
   vertical-align: middle;
-  background: url(/themes/console/images/info/errortriangle.png) center center no-repeat;
-  background-size: 20px auto;
+  background: var(--err) no-repeat center center / 20px;
 }
 
 .buttons, .newTunnel {
@@ -1545,22 +1544,22 @@ tr.configerror {
   margin: 0 -2px 0 0 !important;
   padding: 2px 5px;
   vertical-align: middle;
-  background: url(images/expand.svg) center center no-repeat;
+  background: url(images/expand.svg) no-repeat center center;
   background-size: 8px;
 }
 
 #toggleInfo:hover, #toggleInfo:focus {
-  background: url(images/expand_hover.svg) center center no-repeat;
+  background: url(images/expand_hover.svg) no-repeat center center;
   background-size: 8px;
 }
 
 #toggleInfo.collapse {
-  background: url(images/collapse.svg) center center no-repeat;
+  background: url(images/collapse.svg) no-repeat center center;
   background-size: 8px;
 }
 
 #toggleInfo.collapse:hover, #toggleInfo.collapse:focus {
-  background: url(images/collapse_hover.svg) center center no-repeat;
+  background: url(images/collapse_hover.svg) no-repeat center center;
   background-size: 8px;
 }
 

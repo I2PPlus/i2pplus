@@ -120,7 +120,7 @@ p.error {
   color: #f33;
   border: 1px solid #652787;
   border-radius: 2px;
-  background: url(/themes/console/images/info/errortriangle.png) no-repeat scroll 12px center #000;
+  background: #000 var(--err) no-repeat 12px center / 28px;
 }
 
 #nukemail {

@@ -345,7 +345,7 @@ div.wideload {
 .sorry {
   margin: 14px 212px 0 0;
   padding: 20px 70px 20px 20px !important;
-  background: url(/themes/console/images/info/errortriangle.png) right 15px center no-repeat #fff;
+  background: #fff var(--err) no-repeat right 15px center / 40px;
 }
 
 .main li {
@@ -755,16 +755,17 @@ table.search {
 }
 
 h4.app {
-  background: url(/themes/console/images/eepsite.png) 10px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to left, #fff 5%, rgba(231, 231, 255, .8) 15%) right center !important;
-  background-size: 16px, 100%, 100% !important;
   margin-top: 15px;
+  background: url(images/favicon.svg) no-repeat 10px center / 16px,
+              linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
+              linear-gradient(to left, #fff 5%, rgba(231, 231, 255, .8) 15%) right center !important;
 }
 
 h4.app2 {
   clear: left;
   margin-top: 10px !important;
-  background: var(--planet) 10px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to left, #fff 5%, rgba(231, 231, 255, .8) 15%) right center !important;
-  background-size: 16px, 100%, 100% !important;
+  background: var(--planet) no-repeat 10px center / 16px, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
+              linear-gradient(to left, #fff 5%, rgba(231, 231, 255, .8) 15%) right center !important;
 }
 
 h4.app, h4.app2, #news h3, .news h3 {

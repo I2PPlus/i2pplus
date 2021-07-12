@@ -531,38 +531,37 @@ h2, h3 {
 
 h2.error {
   padding-left: 40px;
-  background: url(/themes/console/images/errortriangle.png) left 5px center no-repeat, var(--h2) #fff !important;
-  background-size: 24px, 100%, 100% !important;
+  background: var(--err) no-repeat left 5px center / 24px, var(--h2) #fff !important;
   background-position: 8px center, center center, center center !important;
 }
 
 #messages h2 {
-  background: url(/themes/console/images/svg/logs.svg) left 5px center no-repeat, var(--h2) #fff !important;
+  background: var(--logs) no-repeat left 5px center, var(--h2) #fff !important;
 }
 
 #globalTunnelControl h2 {
-  background: url(/themes/console/images/svg/mouse.svg) left 5px center no-repeat, var(--h2) #fff !important;
+  background: var(--mouse) no-repeat left 5px center, var(--h2) #fff !important;
 }
 
 #servers h2 {
-  background: url(/themes/console/images/svg/server.svg) left 5px center no-repeat, var(--h2) #fff !important;
+  background: var(--server) no-repeat left 5px center, var(--h2) #fff !important;
 }
 
 #clients h2 {
-  background: url(/themes/console/images/svg/client.svg) left 5px center no-repeat, var(--h2) #fff !important;
+  background: var(--client) no-repeat left 5px center, var(--h2) #fff !important;
 }
 
 #tunnelEditPage h2, #tunnelEditPage h3, #registration h2, #registration h3 {
-  background: var(--settings_inert) left 5px center no-repeat, var(--h2) #fff !important;
+  background: var(--settings_inert) no-repeat left 5px center, var(--h2) #fff !important;
 }
 
 #wizardPanel h2, #ssl h2 {
-  background: url(/themes/console/images/svg/wizard.svg) left 5px center no-repeat, var(--h2) #fff !important;
+  background: var(--wizard) no-repeat left 5px center, var(--h2) #fff !important;
 }
 
-#messages h2, #globalTunnelControl h2, #servers h2, #clients h2, #tunnelEditPage h2, #tunnelEditPage h3, #registration h2, #registration h3, #wizardPanel h2, #ssl h2 {
+#messages h2, #globalTunnelControl h2, #servers h2, #clients h2, #tunnelEditPage h2,
+#tunnelEditPage h3, #registration h2, #registration h3, #wizardPanel h2, #ssl h2 {
   background-size: 18px, 100%, 100% !important;
-  background-position: 7px center, center center, center center !important;
   background-position: 7px 60%, center center, center center !important;
 }
 
@@ -1505,8 +1504,7 @@ tr {
 #ssl .configerror td {
   padding: 20px 10px 20px 52px;
   font-weight: 700;
-  background: #ffe url(/themes/console/images/errortriangle.png) 12px center no-repeat;
-  background-size: 28px auto;
+  background: #ffe var(--err) no-repeat 12px center / 28px;
 }
 
 .configerror code {
