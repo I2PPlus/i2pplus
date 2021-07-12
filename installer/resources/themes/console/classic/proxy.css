@@ -3,6 +3,10 @@
 
 @import url(/themes/fonts/DroidSans.css);
 
+:root {
+  --err: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3ClinearGradient id='A' gradientUnits='userSpaceOnUse' x1='35.555' x2='35.555' y1='32.852' y2='19.692'%3E%3Cstop offset='0' stop-color='%23d40000'/%3E%3Cstop offset='1' stop-color='%23f55'/%3E%3C/linearGradient%3E%3Cpath d='M13.649 34.595l1.859 1.39 1.744.951 14.734-25.472 14.721 25.469 1.737-.947 1.865-1.396L34.353 6.986c-.488-.844-1.39-1.365-2.366-1.365s-1.878.52-2.366 1.364zm0 0L2.303 54.21c-.488.844-.489 1.883-.001 2.727a2.73 2.73 0 0 0 2.364 1.364h54.618a2.73 2.73 0 0 0 2.365-1.364c.488-.844.488-1.884 0-2.728L50.309 34.59l-1.865 1.396-1.737.947 9.875 17.084H7.371l9.881-17.08-1.744-.951-1.859-1.39z' stroke='%23000' stroke-width='4' stroke-linejoin='round'/%3E%3Cpath d='M32.013 5.653c-.975 0-1.877.52-2.365 1.364L2.341 54.251a2.73 2.73 0 0 0 2.362 4.092h54.593c2.101 0 3.415-2.274 2.364-4.093L34.377 7.019c-.487-.844-1.388-1.365-2.364-1.366z' fill='url(%23A)'/%3E%3Cpath d='M32.01 11.758l24.585 42.559H7.405L32.01 11.758z' fill='%23fff' stroke='red' stroke-linejoin='round'/%3E%3Cpath d='M29.233 23.607h5.533V39.76h-5.533zm0 20.452h5.533v6.158h-5.533z'/%3E%3C/svg%3E");
+}
+
 html, body {
     min-height: 100%;
 }
@@ -177,8 +181,7 @@ a:active {
   border: none;
   border-bottom: 1px solid #fb7;
   word-spacing: .1em;
-  background: #ffe url(/themes/console/images/errortriangle.png) 8px center no-repeat !important;
-  background-size: auto 60% !important;
+  background: #ffe var(--err) no-repeat 8px center / auto 60% !important;
 }
 
 .warning p {

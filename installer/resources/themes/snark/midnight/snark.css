@@ -2709,12 +2709,11 @@ hr.debug {
 }
 
 .resourceError th {
-  background: url(/themes/console/images/info/errortriangle.png) left 10px center no-repeat, linear-gradient(to bottom, #003, #010011);
-  background-size: 24px auto, 100%;
   padding: 10px 10px 10px 40px;
   font-size: 10pt !important;
   border: none;
   border-bottom: 1px solid #26235c;
+  background: var(--err) no-repeat left 10px center / 24px, linear-gradient(to bottom, #003, #010011);
 }
 
 .resourceError td {

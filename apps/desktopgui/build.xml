@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="desktopgui">
 
-	<property name="src" value="src"/>
-	<property name="build" value="build"/>
-	<property name="dist"  location="dist"/>
-	<property name="jar" value="desktopgui.jar"/>
-	<property name="javadoc" value="javadoc"/>
-	<property name="javac.compilerargs" value=""/>
-	<property name="javac.version" value="1.8" />
-	<property name="javac.release" value="8" />
-	<property name="require.gettext" value="true" />
+    <property name="src" value="src"/>
+    <property name="build" value="build"/>
+    <property name="dist"  location="dist"/>
+    <property name="jar" value="desktopgui.jar"/>
+    <property name="javadoc" value="javadoc"/>
+    <property name="javac.compilerargs" value=""/>
+    <property name="javac.version" value="1.8" />
+    <property name="javac.release" value="8" />
+    <property name="require.gettext" value="true" />
 
     <condition property="no.bundle">
         <isfalse value="${require.gettext}" />
     </condition>
 
-	<target name="init">
-	<mkdir dir="${build}"/>
-	<mkdir dir="${build}/messages-src"/>
-	<mkdir dir="${dist}"/>
-	</target>
+    <target name="init">
+    <mkdir dir="${build}"/>
+    <mkdir dir="${build}/messages-src"/>
+    <mkdir dir="${dist}"/>
+    </target>
 
-	<target name="clean">
-		<delete dir="${build}"/>
-		<delete dir="${dist}"/>
-	</target>
+    <target name="clean">
+        <delete dir="${build}"/>
+        <delete dir="${dist}"/>
+    </target>
 
         <target name="compile" depends="init">
             <javac debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
@@ -74,28 +74,28 @@
             <arg value="[:space:]" />
             <arg value="," />
         </exec>
-	</target>
+    </target>
 
-	<target name="jar" depends="compile, bundle, listChangedFiles" unless="jar.uptodate" >
-		<!-- set if unset -->
-		<property name="workspace.changes.tr" value="" />
-                <!-- ideal for linux: 24x24, but transparency doesn't work -->
-                <copy tofile="${build}/desktopgui/resources/images/logo.png" file="../../installer/resources/themes/console/images/eepsite.png" />
-                <copy todir="${build}/desktopgui/resources/images" file="images/itoopie_black_24.png" />
-                <copy todir="${build}/desktopgui/resources/images" file="images/itoopie_white_24.png" />
-		<jar basedir="${build}" excludes="messages-src/**" destfile="${dist}/${jar}">
-			<manifest>
-				<attribute name="Main-Class" value="net.i2p.desktopgui.Main"/>
-				<attribute name="Implementation-Version" value="${full.version}" />
-				<attribute name="Built-By" value="${build.built-by}" />
-				<attribute name="Build-Date" value="${build.timestamp}" />
-				<attribute name="Base-Revision" value="${workspace.version}" />
-				<attribute name="Workspace-Changes" value="${workspace.changes.tr}" />
-				<attribute name="X-Compile-Source-JDK" value="${javac.version}" />
-				<attribute name="X-Compile-Target-JDK" value="${javac.version}" />
-			</manifest>
-		</jar>
-	</target>
+    <target name="jar" depends="compile, bundle, listChangedFiles" unless="jar.uptodate" >
+        <!-- set if unset -->
+        <property name="workspace.changes.tr" value="" />
+        <!-- ideal for linux: 24x24, but transparency doesn't work -->
+        <copy tofile="${build}/desktopgui/resources/images/logo.png" file="images/i2p.png" />
+        <copy todir="${build}/desktopgui/resources/images" file="images/itoopie_black_24.png" />
+        <copy todir="${build}/desktopgui/resources/images" file="images/itoopie_white_24.png" />
+        <jar basedir="${build}" excludes="messages-src/**" destfile="${dist}/${jar}">
+            <manifest>
+                <attribute name="Main-Class" value="net.i2p.desktopgui.Main"/>
+                <attribute name="Implementation-Version" value="${full.version}" />
+                <attribute name="Built-By" value="${build.built-by}" />
+                <attribute name="Build-Date" value="${build.timestamp}" />
+                <attribute name="Base-Revision" value="${workspace.version}" />
+                <attribute name="Workspace-Changes" value="${workspace.changes.tr}" />
+                <attribute name="X-Compile-Source-JDK" value="${javac.version}" />
+                <attribute name="X-Compile-Target-JDK" value="${javac.version}" />
+            </manifest>
+        </jar>
+    </target>
 
     <target name="jarUpToDate">
         <uptodate property="jar.uptodate" targetfile="${dist}/${jar}" >
@@ -147,7 +147,6 @@
         </exec>
     </target>
 
-	<target name="dist" depends="jar" />
-	<target name="all" depends="jar" />
+    <target name="dist" depends="jar" />
+    <target name="all" depends="jar" />
 </project>
-

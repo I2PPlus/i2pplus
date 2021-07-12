@@ -2309,12 +2309,8 @@ img[src="/themes/console/images/i2plogo.png"]:focus, a:active img[src="/themes/c
   word-wrap: break-word;
   border: var(--innerborder);
   border-radius: 0 0 2px 2px;
-  box-shadow: inset 0 0 0 1px #320951;
   box-shadow: var(--highlight), inset 0 0 0 2px #320951, inset 0 0 4px 2px #005;
-  background: #001;
-  background-image:url(/themes/console/images/info/errortriangle.png);
-  background-position: 19px center;
-  background-repeat: no-repeat;
+  background: #001 var(--err) no-repeat 19px center / 40px;
 }
 
 div.sorry hr {
@@ -2328,14 +2324,12 @@ div.sorry hr {
 }
 
 #warning2 {
-  min-width: 580px;
-  background: #001;
-  background: #000 url(images/earth.jpg) no-repeat scroll bottom right !important;
-  background-size: auto 180px !important;
   margin-top: -28px;
   margin-bottom: 5px;
   padding: 20px 30px 10px;
+  min-width: 580px;
   font-size: 10.5pt;
+  background: #000 url(images/earth.jpg) no-repeat scroll bottom right / auto 180px !important;
 }
 
 #warning2 h3 {

@@ -96,7 +96,7 @@ p.error, p.info {
   color: #900;
   border: 1px solid #aaafce;
   box-shadow: inset 0 0 0 1px #fff;
-  background: #ffe url(/themes/console/images/info/errortriangle.png) no-repeat 8px center / 28px auto;
+  background: #ffe var(--err) no-repeat 8px center / 28px;
 }
 
 td p.info, td p.error {

@@ -13,6 +13,7 @@
   --nav_hover: linear-gradient(to bottom, #ffeadf 47%, #cfb6a8 50%);
   --nav_active: linear-gradient(to bottom, #af9178, #dfb899);
   --th: linear-gradient(to bottom, #efefef, #cfc7c2);
+  --panel: linear-gradient(to bottom, #dfd7d1, #cfc7c2);
 }
 
 html {
@@ -2322,8 +2323,7 @@ hr.debug {
 
 .resourceError th {
   padding: 10px 10px 10px 40px;
-  background: url(/themes/console/images/info/errortriangle.png) left 10px center no-repeat, var(--th);
-  background-size: 24px auto, 100%;
+  background: var(--err) no-repeat left 10px center / 24px, var(--th);
 }
 
 .resourceError td {
