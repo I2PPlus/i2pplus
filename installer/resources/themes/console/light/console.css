@@ -9,7 +9,7 @@
   --h2: linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fcfcff 5%, rgba(231, 231, 255, .8) 25%);
   --h3: linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4));
   --p: linear-gradient(135deg, #fafaff, #f8f8ff);
-  --infohelp: repeating-linear-gradient(to bottom, rgba(255,255,255,.4) 2px, rgba(232,232,255,.7) 4px), var(--p);
+  --div_infohelp: repeating-linear-gradient(to bottom, rgba(255,255,255,.4) 2px, rgba(232,232,255,.7) 4px), var(--p);
   --highlight: inset 0 0 0 1px #fff;
   --a: #4d5f80;
   --ink: #4f4f63;
@@ -2836,7 +2836,7 @@ to {
 
 .main#config_update .messages {
   padding: 20px 15px 20px 50px;
-  background: var(--news) no-repeat 15px center / 28px, url(/themes/snark/ubergine/images/hat.png) no-repeat bottom right / auto 100%, var(--infohelp);
+  background: var(--news) no-repeat 15px center / 28px, url(/themes/snark/ubergine/images/hat.png) no-repeat bottom right / auto 100%, var(--div_infohelp);
 }
 
 .main#graphs .messages {
@@ -2958,11 +2958,11 @@ td.infohelp, #help tr:hover td.infohelp, #eventlog tr:hover .infohelp, td.infowa
 }
 
 td.infohelp, #help tr:hover td.infohelp, #eventlog tr:hover .infohelp {
-  background: url(/themes/console/images/svg/infohelp.svg) no-repeat 15px center, var(--infohelp);
+  background: var(--infohelp) no-repeat 15px center, var(--div_infohelp);
 }
 
 td.infowarn, #help tr:hover td.infowarn {
-  background: url(/themes/console/images/svg/infowarn.svg) no-repeat 15px center, var(--infohelp);
+  background: var(--infowarn) no-repeat 15px center, var(--div_infohelp);
 }
 
 #manualpeercontrol tr:nth-child(3) td.infohelp {
@@ -2973,7 +2973,7 @@ td.infowarn, #help tr:hover td.infowarn {
 }
 
 #bannedpeercount {
-  background: var(--ban) no-repeat 15px center, var(--infohelp);
+  background: var(--ban) no-repeat 15px center, var(--div_infohelp);
 }
 
 #config_peers #bannedpeercount {
@@ -3928,7 +3928,7 @@ p.infohelp, p.sybilinfo, p#debugmode, p#upnpstatus, p#pluginconfigtext, p#gather
   line-height: 130%;
   border: 1px solid var(--borderinner);
   box-shadow: var(--highlight), inset 0 0 0 2px #bbc;
-  background: url(/themes/console/images/svg/infohelp.svg) no-repeat 15px center / 28px, var(--infohelp);
+  background: url(/themes/console/images/svg/infohelp.svg) no-repeat 15px center / 28px, var(--div_infohelp);
   background-size: 28px, 100% 4px, 100%;
 }
 
@@ -3998,30 +3998,30 @@ p#profiles_overview {
 
 p#debugmode {
   padding: 20px 15px 20px 50px;
-  background: var(--bug) no-repeat 15px center / 28px, var(--infohelp);
+  background: var(--bug) no-repeat 15px center / 28px, var(--div_infohelp);
 }
 
 p.sybilinfo, #sybilanalysis {
   padding: 20px 15px 20px 50px;
   border-radius: 2px;
-  background: var(--sybil) no-repeat 15px center / 28px, var(--infohelp);
+  background: var(--sybil) no-repeat 15px center / 28px, var(--div_infohelp);
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
 p.sybilinfo.experimental {
-  background: var(--experimental) no-repeat 15px center / 28px, var(--infohelp);
+  background: var(--experimental) no-repeat 15px center / 28px, var(--div_infohelp);
 }
 
 p.infowarn {
   padding: 20px 15px 20px 50px;
   line-height: 130%;
   border: 1px solid var(--borderinner);
-  background: url(/themes/console/images/svg/infowarn.svg) no-repeat 15px center / 28px, var(--infohelp);
+  background: url(/themes/console/images/svg/infowarn.svg) no-repeat 15px center / 28px, var(--div_infohelp);
 }
 
 #addkeyring td.infohelp {
   padding: 20px 15px 20px 50px;
-  background: var(--keys) no-repeat 15px center / 28px, var(--infohelp);
+  background: var(--keys) no-repeat 15px center / 28px, var(--div_infohelp);
 }
 
 #addkeyring input[name="key"], #addkeyring input[type=text], #addkeyring select, #addkeyring .password {
@@ -4057,7 +4057,7 @@ p.infowarn {
 
 #floodfillconfig tr:first-child .infohelp {
   padding: 20px 15px 20px 50px;
-  background: var(--floodfill) no-repeat 15px center / 28px, var(--infohelp);
+  background: var(--floodfill) no-repeat 15px center / 28px, var(--div_infohelp);
 }
 
 #floodfillconfig label {
@@ -4067,14 +4067,14 @@ p.infowarn {
 p#clientconf.infohelp, p#webappconfigtext.infohelp {
   padding: 20px 15px 20px 50px;
   box-shadow: var(--highlight);
-  background: var(--editclient) no-repeat 15px center / 28px, var(--infohelp);
+  background: var(--editclient) no-repeat 15px center / 28px, var(--div_infohelp);
 }
 
 p#pluginconfigtext {
   margin-top: 14px;
   padding: 20px 15px 20px 50px;
   box-shadow: none;
-  background: var(--pluginconfig) no-repeat 15px center / 28px, var(--infohelp);
+  background: var(--pluginconfig) no-repeat 15px center / 28px, var(--div_infohelp);
 }
 
 @media screen and (max-width: 1499px) {
@@ -4085,7 +4085,7 @@ p#pluginconfigtext {
 
 #plugininstall .infohelp {
   padding: 20px 15px 20px 50px;
-  background: var(--plugin) no-repeat 15px center / 28px, var(--infohelp);
+  background: var(--plugin) no-repeat 15px center / 28px, var(--div_infohelp);
 }
 
 #installPluginUrl .cancel {
@@ -4099,19 +4099,19 @@ p#pluginconfigtext {
 
 #config_peers tr:nth-child(3) td.infohelp {
   padding: 20px 15px 20px 50px;
-  background: var(--ban) no-repeat 15px center / 28px, var(--infohelp);
+  background: var(--ban) no-repeat 15px center / 28px, var(--div_infohelp);
 }
 
 h3#shutdownrouter + p.infohelp {
   padding: 20px 15px 20px 50px;
   box-shadow: var(--highlight);
-  background: var(--power) no-repeat 15px center / 28px, var(--infohelp);
+  background: var(--power) no-repeat 15px center / 28px, var(--div_infohelp);
 }
 
 h3#restartrouter + p.infohelp, #config_family .infohelp.needrestart {
   padding: 20px 15px 20px 50px;
   box-shadow: var(--highlight);
-  background: var(--reboot) no-repeat 15px center / 28px, var(--infohelp);
+  background: var(--reboot) no-repeat 15px center / 28px, var(--div_infohelp);
 }
 
 h3#shutdownrouter, h3#systray, h3#servicedebug {
@@ -4121,51 +4121,51 @@ h3#shutdownrouter, h3#systray, h3#servicedebug {
 h3#systray + p.infohelp {
   padding: 20px 15px 20px 50px;
   box-shadow: var(--highlight);
-  background: url(/themes/console/images/info/systray.png) no-repeat 15px center / 28px, var(--infohelp);
+  background: url(/themes/console/images/info/systray.png) no-repeat 15px center / 28px, var(--div_infohelp);
 }
 
 h3#servicedebug + p.infohelp {
   padding: 20px 15px 20px 50px;
   box-shadow: var(--highlight);
-  background: var(--bug) no-repeat 15px center / 28px, var(--infohelp);
+  background: var(--bug) no-repeat 15px center / 28px, var(--div_infohelp);
 }
 
 h3#browseronstart + p.infohelp {
   padding: 20px 15px 20px 50px;
   box-shadow: var(--highlight);
-  background: var(--firefox) no-repeat 15px center / 28px, var(--infohelp);
+  background: var(--firefox) no-repeat 15px center / 28px, var(--div_infohelp);
 }
 
 .main#config_reseed p.infohelp {
   padding: 20px 15px 20px 50px;
-  background: var(--reseed) no-repeat 15px center / 28px, var(--infohelp);
+  background: var(--reseed) no-repeat 15px center / 28px, var(--div_infohelp);
   border-radius: 2px;
   box-shadow: 0 0 1px #e0e0eb;
 }
 
 p#enablefullstats, p#gatherstats {
   padding: 20px 15px 20px 50px;
-  background: var(--stats) no-repeat 15px center / 28px, var(--infohelp);
+  background: var(--stats) no-repeat 15px center / 28px, var(--div_infohelp);
 }
 
 #config_family .infohelp {
   padding: 20px 15px 20px 50px !important;
-  background: var(--family) no-repeat 15px center / 28px, var(--infohelp) !important;
+  background: var(--family) no-repeat 15px center / 28px, var(--div_infohelp) !important;
 }
 
 #newfamily .infohelp {
   padding: 20px 15px 20px 50px !important;
-  background: var(--newfamily) no-repeat 15px center / 28px, var(--infohelp) !important;
+  background: var(--newfamily) no-repeat 15px center / 28px, var(--div_infohelp) !important;
 }
 
 #joinfamily .infohelp {
   padding: 20px 15px 20px 50px !important;
-  background: var(--joinfamily) no-repeat 15px center / 28px, var(--infohelp) !important;
+  background: var(--joinfamily) no-repeat 15px center / 28px, var(--div_infohelp) !important;
 }
 
 #config_ui .infohelp {
   padding: 20px 15px 20px 50px !important;
-  background: var(--ui) no-repeat 15px center / 28px, var(--infohelp) !important;
+  background: var(--ui) no-repeat 15px center / 28px, var(--div_infohelp) !important;
 }
 
 /* stats page */
@@ -5934,7 +5934,7 @@ body.iframed {
 
 #consolepass tr:first-child td {
   padding: 20px 15px 20px 50px;
-  background: var(--useradd) no-repeat 15px center / 28px, var(--infohelp);
+  background: var(--useradd) no-repeat 15px center / 28px, var(--div_infohelp);
 }
 
 #consolepass input.delete {
@@ -6041,7 +6041,7 @@ p#helptranslate {
   top: 4px;
   text-align: left !important;
   border-top: 1px solid var(--borderinner);
-  background: url(images/favicon.svg)  no-repeat left 14px center / 28px, var(--infohelp);
+  background: url(images/favicon.svg)  no-repeat left 14px center / 28px, var(--div_infohelp);
 }
 
 #themeoptions input {
@@ -10092,7 +10092,7 @@ b.suboption {
 
 #bandwidthconfig tr:first-child .infohelp {
   padding: 20px 15px 20px 50px;
-  background: var(--speed) no-repeat 15px center, var(--infohelp);
+  background: var(--speed) no-repeat 15px center, var(--div_infohelp);
   background-size: 28px;
 }
 
@@ -12024,7 +12024,7 @@ h1.webapp {
   margin: 14px 0 6px !important;
   padding: 10px 10px 8px 50px !important;
   border: 1px solid var(--borderinner);
-  background: var(--sybil) no-repeat 15px center, var(--infohelp);
+  background: var(--sybil) no-repeat 15px center, var(--div_infohelp);
 }
 
 #sybilanalysis form {
@@ -12900,7 +12900,7 @@ i {
 }
 
 #enablefullstats {
-  background: var(--stats) no-repeat 15px center / 28px, var(--infohelp);
+  background: var(--stats) no-repeat 15px center / 28px, var(--div_infohelp);
 }
 
 /* /tunnelpeercount */

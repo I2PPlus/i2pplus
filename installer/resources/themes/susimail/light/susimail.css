@@ -2000,8 +2000,7 @@ select {
   border: 1px solid #97a2ce;
   border-radius: 2px;
   box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
-  background: url(/themes/console/light/images/dropdown.svg) right 8px center no-repeat, linear-gradient(to bottom, #fff, #efefff);
-  background-size: 10px auto, 100% 100% !important;
+  background: var(--dropdown) no-repeat right 8px center / 10px, linear-gradient(to bottom, #fff, #efefff);
   appearance: none;
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
@@ -2024,15 +2023,13 @@ select:hover, select:active {
   cursor: pointer;
   color: #19191f;
   box-shadow: inset 0 0 0 1px #fff;
-  background: url(/themes/console/light/images/dropdown_hover.svg) right 8px center no-repeat, linear-gradient(to bottom, #eee, #fff) !important;
-  background-size: 10px auto, 100% 100% !important;
+  background: var(--dropdown_hover) no-repeat right 8px center / 10px, linear-gradient(to bottom, #eee, #fff) !important;
 }
 
 select:focus {
   color: #19191f;
   box-shadow: 0 0 1px #89f;
-  background: url(/themes/console/light/images/dropdown_hover.svg) right 8px center no-repeat, linear-gradient(to bottom, #eee, #fff) !important;
-  background-size: 10px auto, 100% 100% !important;
+  background: var(--dropdown_hover) no-repeat right 8px center / 10px, linear-gradient(to bottom, #eee, #fff) !important;
 }
 
 select::-moz-focus-inner {
