@@ -637,8 +637,7 @@ td.infohelp {
   padding: 10px 10px 10px 34px !important;
   box-shadow: inset 0 0 0 1px #fff, inset 0 0 1px 1px #ddf;
   border: 1px solid #8d8daa;
-  background: url(/themes/console/images/svg/infohelp.svg) 8px center no-repeat;
-  background-size: 20px 20px;
+  background: var(--infohelp) no-repeat 8px center / 20px;
 }
 
 .tunnelconfig tr, .tunnelConfig th:first-child, .tunnelConfig td:first-child {
@@ -821,14 +820,12 @@ td[colspan="2"] > select#profile {
 
 .multiOption#isServer {
   padding-left: 28px;
-  background: url(/themes/console/images/svg/server.svg) 4px center no-repeat;
-  background-size: 22px 22px;
+  background: var(--server) no-repeat 4px center / 22px;
 }
 
 .multiOption#isClient {
   padding-left: 28px;
-  background: url(/themes/console/images/svg/client.svg) 4px center no-repeat;
-  background-size: 22px 22px;
+  background: var(--client) no-repeat 4px center / 22px;
 }
 
 td#throttle, #clientAuthConfig {
@@ -953,17 +950,17 @@ input.tunnelName, input.tunnelDescriptionText, #userAgents, .freetext.tunnelDesc
 }
 
 .username, .clientName {
-  background: var(--user) 8px center no-repeat #fafaff;
+  background: var(--user) no-repeat 8px center #fafaff;
   background-size: 15px;
 }
 
 .password, .clientKey {
-  background: var(--key) 8px center no-repeat #fafaff;
+  background: var(--key) no-repeat 8px center #fafaff;
   background-size: 15px;
 }
 
 .filemanager {
-  background: var(--files) 8px center no-repeat #fafaff;
+  background: var(--files) no-repeat 8px center #fafaff;
   background-size: 15px;
 }
 
@@ -973,17 +970,17 @@ input.tunnelName, input.tunnelDescriptionText, #userAgents, .freetext.tunnelDesc
 }
 
 .username:focus, .clientName:focus {
-  background: var(--user) 8px center no-repeat #fff;
+  background: var(--user) no-repeat 8px center #fff;
   background-size: 15px;
 }
 
 .password:focus, .clientKey:focus {
-  background: var(--key) 8px center no-repeat #fff;
+  background: var(--key) no-repeat 8px center #fff;
   background-size: 15px;
 }
 
 .filemanager:focus {
-  background: var(--files) 8px center no-repeat #fff;
+  background: var(--files) no-repeat 8px center #fff;
   background-size: 15px;
 }
 

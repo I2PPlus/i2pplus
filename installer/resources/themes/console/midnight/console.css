@@ -3811,7 +3811,7 @@ h3#finishedjobs + ol li, h3#scheduledjobs + ol li, h3#activejobs + ol li, h3#rea
 }
 
 #finishedjobs + ol li {
-  background-image: url(/themes/console/images/svg/yes.svg) !important;
+  background-image: var(--yes) !important;
   background-size: 12px !important;
   background-position: 6px center;
 }
@@ -10851,7 +10851,7 @@ label:hover .optbox {
 
 #bandwidthconfig tr:nth-last-child(n+3) td:first-child:not(.infohelp) {
   padding: 0 50px 0 5px;
-  background: #000010 url(/themes/console/images/svg/arrow_right.svg) right 12px center no-repeat !important;
+  background: #000010 url(/themes/console/images/svg/arrow_right.svg) no-repeat right 12px center !important;
   background-size: 24px !important;
   background-blend-mode: luminosity;
 }
@@ -10863,15 +10863,15 @@ label:hover .optbox {
 }
 
 #bandwidthconfig .bw_out {
-  background: #000025 url(/themes/console/images/svg/outbound.svg) 10px calc(50% + 14px) no-repeat !important;
+  background: #000025 url(/themes/console/images/svg/outbound.svg) no-repeat 10px calc(50% + 14px) !important;
 }
 
 #bandwidthconfig .bw_in {
-  background: #000025 url(/themes/console/images/svg/inbound.svg) 10px calc(50% + 14px) no-repeat !important;
+  background: #000025 url(/themes/console/images/svg/inbound.svg) no-repeat 10px calc(50% + 14px) !important;
 }
 
 #bandwidthconfig .bw_share {
-  background: #000025 var(--share) 10px calc(50% + 14px) no-repeat !important;
+  background: #000025 var(--share) no-repeat 10px calc(50% + 14px) !important;
 }
 
 #bandwidthconfig .bw_out, #bandwidthconfig .bw_in, #bandwidthconfig .bw_share {

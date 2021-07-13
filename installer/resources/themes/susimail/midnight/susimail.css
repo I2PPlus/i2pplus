@@ -1071,14 +1071,12 @@ input[type=submit][class]:focus, input[type=reset][class]:focus,
 
 input.cancel, input.cancel.beforePopup, #nukemail input.clearselection {
   padding: 6px 9px 6px 25px !important;
-  background: url(/themes/console/images/svg/no.svg) no-repeat 9px center, var(--button) !important;
-  background-size: 11px, 100% !important;
+  background: var(--no) no-repeat 9px center / 11px, var(--button) !important;
 }
 
 input.cancel:hover, input.cancel:focus, input.cancel.beforePopup:hover, input.cancel.beforePopup:focus,
 #nukemail input.clearselection:hover, #nukemail input.clearselection:focus {
-  background: url(/themes/console/images/svg/no.svg) no-repeat 9px center, var(--button_hover) !important;
-  background-size: 11px, 100% !important;
+  background: var(--no) no-repeat 9px center / 11px, var(--button_hover) !important;
 }
 
 input.clearselection {
@@ -1176,17 +1174,16 @@ input.invertselection:hover, input.invertselection:focus {
 
 input.show {
   padding: 6px 9px 6px 27px !important;
-  background: url(/themes/console/images/svg/yes.svg) no-repeat 9px center, var(--button) !important;
+  background: var(--yes) no-repeat 9px center / 12px, var(--button) !important;
 }
 
 input.show:hover, input.show:focus {
-  background: url(/themes/console/images/svg/yes.svg) no-repeat 9px center, var(--button_hover) !important;
+  background: var(--yes) no-repeat 9px center / 12px, var(--button_hover) !important;
 }
 
 .bottombuttons input.markall {
   padding: 6px 9px 6px 27px !important;
-  background: url(../images/all.png) no-repeat 9px center, var(--button) !important;
-  background-size: 12px, 100% !important;
+  background: url(../images/all.png) no-repeat 9px center / 12px, var(--button) !important;
 }
 
 .bottombuttons input.markall:hover, .bottombuttons input.markall:focus {
@@ -1222,12 +1219,12 @@ input.replyall:hover, input.replyall:focus {
 
 input.setpagesize, input.save {
   padding: 6px 9px 6px 27px !important;
-  background: url(/themes/console/images/svg/yes.svg) no-repeat 9px center, var(--button) !important;
+  background: var(--yes) no-repeat 9px center / 12px, var(--button) !important;
 }
 
 input.setpagesize:hover, input.save:hover,
 input.setpagesize:focus, input.save:focus {
-  background: url(/themes/console/images/svg/yes.svg) no-repeat 9px center, var(--button_hover) !important;
+  background: var(--yes) no-repeat 9px center / 12px, var(--button_hover) !important;
 }
 
 input.send {
