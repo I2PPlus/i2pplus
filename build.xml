@@ -1805,13 +1805,19 @@
     </target>
 
     <target name="prepupdate" depends="build2, prepupdateSmall, prepConsoleDocUpdates, prepCertificates, prep-script-translation, truncatehistory">
+        <!-- supplied with installer, disabling for now (I2P+ 0.9.51+)
         <copy file="build/BOB.jar" todir="pkg-temp/lib/" />
+        -->
         <copy file="build/sam.jar" todir="pkg-temp/lib/" />
         <copy file="build/i2psnark.jar" todir="pkg-temp/lib" />
         <!-- include systray changes in 0.7.5 -->
+        <!-- supplied with installer, disabling for now (I2P+ 0.9.51+)
         <copy file="build/systray.jar" todir="pkg-temp/lib/" />
+        -->
         <!-- removed from updater in 0.9, added back in 0.9.26 -->
+        <!-- supplied with installer, disabling for now (I2P+ 0.9.51+)
         <copy file="build/desktopgui.jar" todir="pkg-temp/lib/" />
+        -->
         <copy file="build/susimail.war" todir="pkg-temp/webapps/" />
         <copy file="build/susidns.war" todir="pkg-temp/webapps/" />
         <copy file="build/imagegen.war" todir="pkg-temp/webapps/" />
