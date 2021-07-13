@@ -1490,20 +1490,10 @@ td p.error {
   width: 20px;
   height: 16px;
   vertical-align: text-bottom;
-  background: url(/themes/console/images/svg/package.svg) left center no-repeat;
-  background-size: 16px;
+  background: var(--package) no-repeat left center / 16px;
 }
 
 /* end attachments */
-
-/* Edge/IE tweaks */
-
-_:-ms-lang(x), * {
-  filter: none !important;
-  text-shadow: none !important;
-}
-
-/* end Edge/IE tweaks */
 
 /* mail list */
 

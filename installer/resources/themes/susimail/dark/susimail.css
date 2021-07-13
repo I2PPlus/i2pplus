@@ -1854,8 +1854,7 @@ td p.error {
   width: 20px;
   height: 16px;
   vertical-align: text-bottom;
-  background: url(/themes/console/images/svg/package.svg) left center no-repeat;
-  background-size: 16px;
+  background: var(--package) no-repeat left center / 16px;
 }
 
 /* end attachments */
@@ -1871,7 +1870,8 @@ _:-ms-lang(x), * {
 
 /* mail list */
 
-tr.pagenavcontrols:hover .pagenavcontrols td, .topbuttons td, .topbuttons:hover td, .topbuttons tr:hover td, .topbuttons:hover td, #mailbox tr:hover, #mailbox tr:hover td  {
+tr.pagenavcontrols:hover .pagenavcontrols td, .topbuttons td, .topbuttons:hover td,
+.topbuttons tr:hover td, .topbuttons:hover td, #mailbox tr:hover, #mailbox tr:hover td  {
   box-shadow: none !important;
 }
 
