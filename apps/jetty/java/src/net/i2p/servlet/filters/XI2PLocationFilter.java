@@ -35,6 +35,7 @@ import net.i2p.util.Log;
  *  @since 0.9.51
  */
 public class XI2PLocationFilter extends HandlerWrapper {
+    private static final String PROP_ENABLE_LOCATION_HEADER = "i2p.tunnel.webserverLocationHeader";
     private String X_I2P_Location = null;
     private long lastFailure = -1;
     private static final long failTimeout = 600000;
@@ -44,7 +45,7 @@ public class XI2PLocationFilter extends HandlerWrapper {
 
     private synchronized void setLocation(String xi2plocation) {
         if (_log.shouldInfo())
-            _log.info("Checking X-I2P-Location header prefix" + xi2plocation);
+            _log.info("Checking X-I2P-Location header prefix: " + xi2plocation);
         if (X_I2P_Location != null)
             return ;
         if (xi2plocation == null)
@@ -53,10 +54,10 @@ public class XI2PLocationFilter extends HandlerWrapper {
             return ;
         X_I2P_Location = xi2plocation;
         if (_log.shouldInfo())
-            _log.info("Caching X-I2P-Location header prefix" + X_I2P_Location);
+            _log.info("Caching X-I2P-Location header prefix: " + X_I2P_Location);
     }
 
-    private synchronized boolean shouldRecheck(){
+    private synchronized boolean shouldRecheck() {
         boolean settable = (X_I2P_Location == null);
         if (!settable) return settable;
         if (lastFailure == -1) {
@@ -77,10 +78,11 @@ public class XI2PLocationFilter extends HandlerWrapper {
     }
 
     private synchronized String getXI2PLocation(String host, String port) {
+        boolean shouldConfigure = I2PAppContext.getGlobalContext().getBooleanProperty(PROP_ENABLE_LOCATION_HEADER);
         File configDir = I2PAppContext.getGlobalContext().getConfigDir();
         File tunnelConfig = new File(configDir, "i2ptunnel.config");
         boolean isSingleFile = tunnelConfig.exists();
-        if (!isSingleFile) {
+        if (!isSingleFile && shouldConfigure) {
             File tunnelConfigD = new File(configDir, "i2ptunnel.config.d");
             File[] configFiles = tunnelConfigD.listFiles(new net.i2p.util.FileSuffixFilter(".config"));
             if (configFiles == null)
@@ -110,7 +112,7 @@ public class XI2PLocationFilter extends HandlerWrapper {
                                         return rv.toBase32();
                                 } catch (I2PException e) {
                                     if (_log.shouldWarn())
-                                        _log.warn("Unable to set X-I2P-Location -> Keys not ready (probably safe to ignore, should resolve after first run)\n* " + e.getMessage());
+                                        _log.warn("Unable to set X-I2P-Location -> Keys not ready (probably safe to ignore, should resolve after first run)\n* Error: " + e.getMessage());
                                     return null;
                                 } catch (IOException e) {
                                     if (_log.shouldWarn())
@@ -156,7 +158,7 @@ public class XI2PLocationFilter extends HandlerWrapper {
                     String encodedURL = uri.toASCIIString();
                     return encodedURL;
                 }
-            }catch(URISyntaxException use){
+            } catch(URISyntaxException use) {
                 return null;
             }
         }
