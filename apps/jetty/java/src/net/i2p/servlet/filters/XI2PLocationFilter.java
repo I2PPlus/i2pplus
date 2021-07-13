@@ -62,13 +62,13 @@ public class XI2PLocationFilter extends HandlerWrapper {
         if (lastFailure == -1) {
             lastFailure = System.currentTimeMillis();
             if (_log.shouldDebug())
-                _log.debug("New instance, attempting to set X-I2P-Location header for the first time");
+                _log.debug("New instance, attempting to set X-I2P-Location header for the first time...");
             return settable;
         }
         if ((System.currentTimeMillis() - lastFailure) > failTimeout){
             lastFailure = System.currentTimeMillis();
             if (_log.shouldDebug())
-                _log.debug("More than ten minutes since failing attempt to re-check X-I2P-Location header");
+                _log.debug("Attempt to re-check X-I2P-Location header failed (10min timeout reached)");
             return settable;
         }
         if (_log.shouldDebug())
@@ -110,22 +110,22 @@ public class XI2PLocationFilter extends HandlerWrapper {
                                         return rv.toBase32();
                                 } catch (I2PException e) {
                                     if (_log.shouldWarn())
-                                        _log.warn("I2PException Unable to set X-I2P-Location, keys arent ready. This is probably safe to ignore and will go away after the first run." + e);
+                                        _log.warn("Unable to set X-I2P-Location -> Keys not ready (probably safe to ignore, should resolve after first run)\n* " + e.getMessage());
                                     return null;
                                 } catch (IOException e) {
                                     if (_log.shouldWarn())
-                                        _log.warn("IOE Unable to set X-I2P-Location, location is uninitialized due file not found. This probably means the keys aren't ready. This is probably safe to ignore." + e);
+                                        _log.warn("Unable to set X-I2P-Location -> Location not initialized (probably safe to ignore)\n* Error: " + e.getMessage());
                                     return null;
                                 }
                             }
                         }
                         if (_log.shouldWarn())
-                            _log.warn("Unable to set X-I2P-Location, location is target not found in any I2PTunnel config file. This should never happen.");
+                            _log.warn("Unable to set X-I2P-Location -> Location target not found in any I2PTunnel config (shouldn't happen!)");
                         return null;
                     }
                 } catch (IOException ioe) {
                     if (_log.shouldWarn())
-                        _log.warn("IOE Unable to set X-I2P-Location, location is uninitialized. This is probably safe to ignore. location='" + ioe + "'");
+                        _log.warn("Unable to set X-I2P-Location -> Location not initialized (probably safe to ignore)\n* Error: " + ioe.getMessage());
                     return null;
                 }
             }
@@ -172,13 +172,13 @@ public class XI2PLocationFilter extends HandlerWrapper {
             if (shouldRecheck()) {
                 String xi2plocation = getXI2PLocation(request.getLocalAddr(), String.valueOf(request.getLocalPort()));
                 if (_log.shouldInfo())
-                   _log.info("Checking X-I2P-Location header IP " + request.getLocalAddr() + " port " + request.getLocalPort() + " prefix " + xi2plocation);
+                   _log.info("Checking X-I2P-Location header for " + request.getLocalAddr() + ":" + request.getLocalPort() + " (Prefix: " + xi2plocation + ")");
                 setLocation(xi2plocation);
             }
             String headerURL = headerContents(httpRequest);
             if (headerURL != null) {
                 if (_log.shouldInfo())
-                    _log.info("Checking X-I2P-Location header" + headerURL);
+                    _log.info("Checking X-I2P-Location header: " + headerURL);
                 httpResponse.addHeader("X-I2P-Location", headerURL);
             }
         }
