@@ -20,6 +20,7 @@ html {
 body {
   padding: 10px 20px;
   min-width: 660px;
+  max-width: 1200px;
   font: 10pt/130% var(--bodyfont);
   color: #4f4f63;
   border-radius: 1px;
@@ -617,4 +618,10 @@ body.iframed.midnight {
 
 .iframed.midnight a:active {
   color: #851768 !important;
+}
+
+@media screen and (min-width: 1300px) and (min-height: 600px) {
+  body {
+    margin: 2% auto;
+  }
 }
