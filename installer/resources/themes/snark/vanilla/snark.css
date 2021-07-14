@@ -2798,7 +2798,8 @@ td .commentAuthorName {
   }
 
   td.snarkGraphicStatus img {
-    height: 16px;
+    width: auto;
+    height: 18px;
   }
 
   .snarkTorrentOdd td, .snarkTorrentEven td {
@@ -3127,6 +3128,7 @@ td .commentAuthorName {
   }
 
   td.snarkGraphicStatus img {
+    width: auto;
     height: 22px !important;
   }
 
@@ -3258,7 +3260,7 @@ td .commentAuthorName {
   }
 
   .snarkGraphicStatus img {
-    width: 18px;
+    height: 17px;
   }
 
   .snarkTorrents th.snarkTorrentPeerCount img, .snarkTorrentUploaded, .snarkTorrentRateUp {
@@ -3928,13 +3930,6 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
   tr:hover td.snarkTorrentName, tr:hover td.snarkTorrentDownloaded, tr:hover td.snarkTorrentUploaded, tr:hover td.snarkTorrentAction, .peerinfo td {
     background: none;
   }
-}
-
-td.snarkGraphicStatus img {
-  margin-top: -2px;
-  margin-bottom: -2px;
-  height: 20px;
-  display: inline-block;
 }
 
 /* torrent filter bar */

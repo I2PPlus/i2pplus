@@ -762,6 +762,7 @@ th.snarkTorrentStatus img:hover {
 
 .snarkTorrents img {
   padding: 2px !important;
+  width: auto;
 }
 
 .snarkTorrents a {
@@ -4019,6 +4020,7 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
 
 th.snarkGraphicStatus img, td.snarkGraphicStatus img {
   margin: 2px !important;
+  width: auto;
   height: 22px;
 }
 

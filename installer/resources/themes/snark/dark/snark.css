@@ -4324,6 +4324,7 @@ input[name="nofilter_commentsName"] {
 td.snarkGraphicStatus img {
   margin-top: -2px;
   margin-bottom: -2px;
+  width: auto;
   height: 20px;
   display: inline-block;
 }

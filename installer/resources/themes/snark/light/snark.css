@@ -1829,6 +1829,7 @@ img[src$="details.png"] {
 .snarkGraphicStatus img {
   padding-top: 3px !important;
   padding-bottom: 3px !important;
+  width: auto !important;
 }
 
 .magnetLabel {
@@ -2921,7 +2922,7 @@ body, td, .snarkMessages li, .snarkMessages a, button, input, select, .snarkAddI
 }
 
 .snarkTorrents td:first-child img {
-  max-height: 16px;
+  height: 17px;
 }
 
 .snarkTorrentName, .snarkTorrentName a {
