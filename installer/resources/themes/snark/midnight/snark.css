@@ -28,7 +28,7 @@ body {
   background: repeating-linear-gradient(to bottom, rgba(0,0,24,.75) 2px, rgba(0,0,0,.7) 4px),
               url(/themes/console/midnight/images/tile.png),
               url(images/offline.svg) no-repeat,
-              url(images/dropdown_hover.svg) center center no-repeat, #000010 !important;
+              url(images/dropdown_hover.svg) no-repeat center center, #000010 !important;
   background-size: 100% 4px, 171px 148px, 0, 0, 0 !important;
 }
 
@@ -1489,7 +1489,7 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
 .snarkAddInfo {
   font-size: 9pt;
   line-height: 180% !important;
-  background: url(images/infocircle.png) left center no-repeat;
+  background: url(images/infocircle.png) no-repeat left center;
   background-size: 20px auto;
   padding-left: 26px;
   margin-top: 5px;
@@ -2559,7 +2559,7 @@ code {
   width: 40px;
   height: 40px;
   display: inline-block;
-  background: url(images/offline.svg) center center no-repeat;
+  background: url(images/offline.svg) no-repeat center center;
   background-size: 40px 40px;
   content: "";
   animation: linear spin 5s reverse infinite;
@@ -2620,7 +2620,7 @@ input:checked + label + hr + table + table {
 }
 
 .peerinfo td:first-child {
-  background: url(images/peer.png) center center no-repeat;
+  background: url(images/peer.png) no-repeat center center;
 }
 
 .peerinfo td, .debuginfo td {
@@ -2841,7 +2841,7 @@ td#bwHelp a {
   margin: 5px 0;
   padding-left: 22px;
   display: inline-block;
-  background: url(images/progressbar.gif) left center no-repeat;
+  background: url(images/progressbar.gif) no-repeat left center;
 }
 
 #filecheck a {
@@ -4277,7 +4277,7 @@ tr:not(.peerinfo) .snarkTorrentDownloaded .percentBarText::after {
   height: 16px;
   width: 20px;
   font-size: 0;
-  background: url(images/peerseed.png) center center no-repeat;
+  background: url(images/peerseed.png) no-repeat center center;
   background-size: 14px auto;
 }
 
@@ -4397,8 +4397,8 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
   width: 32px;
   height: 19px;
   padding: 2px;
-  background: #000 url(/i2psnark/.resources/icons/tick.png) center center no-repeat;
-  background: url(/i2psnark/.resources/icons/tick.png) center center no-repeat, linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
+  background: #000 url(/i2psnark/.resources/icons/tick.png) no-repeat center center;
+  background: url(/i2psnark/.resources/icons/tick.png) no-repeat center center, linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
   background-size: 16px !important;
 }
 

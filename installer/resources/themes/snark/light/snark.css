@@ -2622,7 +2622,7 @@ hr.debug {
 
 .commentDate {
   width: 100px;
-  background: url(images/clock.png) left center no-repeat;
+  background: url(images/clock.png) no-repeat left center;
   padding-left: 20px !important;
 }
 

@@ -935,7 +935,7 @@ img[src$="details.png"] {
   margin: 5px 0;
   padding-left: 22px;
   display: inline-block;
-  background: url(images/progressbar.gif) left center no-repeat;
+  background: url(images/progressbar.gif) no-repeat left center;
 }
 
 #filecheck a {
@@ -1432,7 +1432,7 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
   padding-left: 20px;
   min-height: 16px;
   display: inline-block;
-  background: url(images/details.svg) left center no-repeat;
+  background: url(images/details.svg) no-repeat left center;
   background-size: 14px;
 }
 

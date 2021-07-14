@@ -2321,7 +2321,7 @@ div.news li {
   padding-left: 22px !important;
   letter-spacing: .1em;
   box-shadow: none;
-  background: url(/themes/console/images/svg/news.svg) left center no-repeat !important;
+  background: url(/themes/console/images/svg/news.svg) no-repeat left center !important;
   background-size: 16px !important;
 }
 
@@ -11977,9 +11977,9 @@ div.app:hover img, .sitemaplink:hover img {
 }
 
 #profilelist .fast.integrated {
-  background: var(--fast) left center no-repeat,
+  background: var(--fast) no-repeat left center,
               var(--highcap) no-repeat center center,
-              var(--integrated) right center no-repeat !important;
+              var(--integrated) no-repeat right center !important;
 }
 
 #profilelist .highcap {
@@ -12009,19 +12009,19 @@ div.app:hover img, .sitemaplink:hover img {
 }
 
 .profilegroup.fast::before {
-  background: var(--fast) left center no-repeat;
+  background: var(--fast) no-repeat left center;
 }
 
 .profilegroup.highcap::before {
-  background: var(--highcap) left center no-repeat;
+  background: var(--highcap) no-repeat left center;
 }
 
 .profilegroup.integrated::before {
-  background: var(--integrated) left center no-repeat;
+  background: var(--integrated) no-repeat left center;
 }
 
 .profilegroup.standard::before {
-  background: var(--standard) left center no-repeat;
+  background: var(--standard) no-repeat left center;
 }
 
 @media screen and (max-width: 1200px) {

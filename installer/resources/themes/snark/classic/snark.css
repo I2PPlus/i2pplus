@@ -2413,7 +2413,7 @@ td#bwHelp a {
 #filecheck {
   display: inline-block;
   margin: 5px 0;
-  background: url(images/progressbar.gif) left center no-repeat;
+  background: url(images/progressbar.gif) no-repeat left center;
   padding-left: 22px;
 }
 
@@ -2559,7 +2559,7 @@ td#bwHelp a {
 
 .commentDate {
   width: 100px;
-  background: url(images/clock.png) left center no-repeat;
+  background: url(images/clock.png) no-repeat left center;
   padding-left: 20px !important;
 }
 
