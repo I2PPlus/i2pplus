@@ -3965,7 +3965,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     }
                     if (dates[1] > 0) {
                         String date = fmt.format(new Date(dates[1]));
-                        buf.append("<br>").append(toImg("tick")).append("<b>").append(_t("Completed")).append(":</b> ").append(date);
+                        buf.append("<br>").append(toSVG("tick")).append("<b>").append(_t("Completed")).append(":</b> ").append(date);
                     }
                     if (dat > 0 || dates[0] > 0)
                         buf.append("</span>");
@@ -4424,16 +4424,16 @@ public class I2PSnarkServlet extends BasicServlet {
                 if (storage == null) {
                     // Assume complete, perhaps he removed a completed torrent but kept a bookmark
                     complete = true;
-                    status = toImg("warn", "iconStatus", _t("Not found"), _t("Torrent not found?").replace("?", ""));
+                    status = toSVG("warn", "iconStatus", _t("Not found"), _t("Torrent not found?").replace("?", ""));
                 } else {
 
                             long remaining = fai.remaining;
                             if (remaining < 0 || (remaining < 0 && fai.isDirectory)) {
                                 complete = true;
-                                status = toImg("warn", "iconStatus", _t("Unrecognized"), _t("File not found in torrent?").replace("?", ""));
+                                status = toSVG("warn", "iconStatus", _t("Unrecognized"), _t("File not found in torrent?").replace("?", ""));
                             } else if (remaining == 0 || length <= 0) {
                                 complete = true;
-                                status = toImg("tick", "iconStatus", _t("Complete"), _t("Complete"));
+                                status = toSVG("tick", "iconStatus", _t("Complete"), _t("Complete"));
                             } else {
                                 priority = fai.priority;
                                 if (priority < 0)
