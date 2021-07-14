@@ -1432,8 +1432,7 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
   padding-left: 20px;
   min-height: 16px;
   display: inline-block;
-  background: url(images/details.svg) no-repeat left center;
-  background-size: 14px;
+  background: url(images/details.svg) no-repeat left center / 14px;
 }
 
 .snarkAddInfo code {
@@ -2799,7 +2798,7 @@ td .commentAuthorName {
   }
 
   td.snarkGraphicStatus img {
-    max-height: 16px;
+    height: 16px;
   }
 
   .snarkTorrentOdd td, .snarkTorrentEven td {
@@ -3128,7 +3127,7 @@ td .commentAuthorName {
   }
 
   td.snarkGraphicStatus img {
-    max-height: 22px !important;
+    height: 22px !important;
   }
 
   .snarkGraphicStatus::after {
@@ -3259,7 +3258,7 @@ td .commentAuthorName {
   }
 
   .snarkGraphicStatus img {
-    max-width: 18px;
+    width: 18px;
   }
 
   .snarkTorrents th.snarkTorrentPeerCount img, .snarkTorrentUploaded, .snarkTorrentRateUp {
@@ -3932,10 +3931,10 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
 }
 
 td.snarkGraphicStatus img {
-  display: inline-block;
-  max-height: 20px;
   margin-top: -2px;
   margin-bottom: -2px;
+  height: 20px;
+  display: inline-block;
 }
 
 /* torrent filter bar */

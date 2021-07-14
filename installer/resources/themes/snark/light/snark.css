@@ -2818,9 +2818,13 @@ td.commentAuthor .commentAuthorName {
   display: none;
 }
 
-.snarkGraphicStatus img, .snarkTrackerDetails img, .snarkTorrentDetails img {
+.snarkTrackerDetails img, .snarkTorrentDetails img {
   max-height: 18px !important;
   width: auto;
+}
+
+.snarkGraphicStatus img {
+  height: 18px !important;
 }
 
 .snarkGraphicStatus, .snarkTorrentStatus {
@@ -3675,7 +3679,7 @@ th img {
 td.snarkGraphicStatus img {
   margin-top: -2px;
   margin-bottom: -2px;
-  max-height: 20px;
+  height: 20px;
   display: inline-block;
 }
 

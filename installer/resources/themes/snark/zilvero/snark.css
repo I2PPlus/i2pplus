@@ -643,7 +643,7 @@ tr:hover .percentBarText {
 }
 
 td.snarkGraphicStatus img {
-	max-height: 22px;
+	height: 22px;
 }
 
 .snarkDirInfo, .snarkTorrentInfo, .snarkComments, .snarkCommentInfo, #mediaContainer {
@@ -2510,7 +2510,7 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
 }
 
 td.snarkGraphicStatus img {
-	min-width: 24px !important;
+	width: 24px !important;
 	opacity: 0;
 }
 
