@@ -12670,7 +12670,7 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 #profilelist .fast.integrated {
   background: var(--fast) no-repeat left center,
               var(--highcap) no-repeat center center,
-              var(--integrated) right center no-repeat !important;
+              var(--integrated) no-repeat right center !important;
 }
 
 #profilelist .highcap {

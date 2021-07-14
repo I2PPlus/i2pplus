@@ -5658,18 +5658,18 @@ p#fullhistory {
   height: 20px;
   display: inline-block;
   vertical-align: middle;
-  background: var(--eye) left center no-repeat;
+  background: var(--eye) no-repeat left center;
   background-size: 16px;
   content: "";
 }
 
 #fullhistory:hover::before {
-  background: var(--eye_hover) left center no-repeat;
+  background: var(--eye_hover) no-repeat left center;
   background-size: 16px;
 }
 
 #fullhistory:active::before {
-  background: var(--eye_active) left center no-repeat;
+  background: var(--eye_active) no-repeat left center;
   background-size: 16px;
 }
 
@@ -14192,9 +14192,9 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 }
 
 #profilelist .fast.integrated {
-  background: var(--fast) left center no-repeat,
+  background: var(--fast) no-repeat left center,
               var(--highcap) no-repeat center center,
-              var(--integrated) right center no-repeat !important;
+              var(--integrated) no-repeat right center !important;
 }
 
 #profilelist .highcap {
@@ -14224,19 +14224,19 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 }
 
 .profilegroup.fast::before {
-  background: var(--fast) left center no-repeat;
+  background: var(--fast) no-repeat left center;
 }
 
 .profilegroup.highcap::before {
-  background: var(--highcap) left center no-repeat;
+  background: var(--highcap) no-repeat left center;
 }
 
 .profilegroup.integrated::before {
-  background: var(--integrated) left center no-repeat;
+  background: var(--integrated) no-repeat left center;
 }
 
 .profilegroup.standard::before {
-  background: var(--standard) left center no-repeat;
+  background: var(--standard) no-repeat left center;
 }
 
 @media screen and (max-width: 1200px) {

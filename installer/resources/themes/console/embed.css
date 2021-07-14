@@ -38,8 +38,8 @@ pre {
   border: 1px solid #999daf;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #fff;
-  background: url(/themes/console/light/images/dropdown.png) right center no-repeat #fff;
-  background: url(/themes/console/light/images/dropdown.png) right center no-repeat, linear-gradient(to bottom, #fff, #efefff);
+  background: url(/themes/console/light/images/dropdown.png) no-repeat right center #fff;
+  background: url(/themes/console/light/images/dropdown.png) no-repeat right center, linear-gradient(to bottom, #fff, #efefff);
   background-blend-mode: hard-light, normal;
   filter: drop-shadow(0 0 1px #ccf);
   -moz-appearance: none;

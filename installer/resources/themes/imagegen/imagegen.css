@@ -3,19 +3,25 @@
 
 @import url(/themes/fonts/DroidSans.css);
 
+:root {
+  --dropdown: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m5.29 17.93 26.71 28.14 26.71-28.14' fill='none' stroke='%235e626e' stroke-linecap='round' stroke-linejoin='round' stroke-width='10'/%3E%3C/svg%3E");
+  --dropdown_hover: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m5.29 17.93 26.71 28.14 26.71-28.14' fill='none' stroke='%2341444d' stroke-linecap='round' stroke-linejoin='round' stroke-width='10'/%3E%3C/svg%3E");
+  --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
+}
+
 html {
   padding: 10px;
   border-right: 1px solid #99c;
   background: #ddddef url(/themes/console/classic/images/bg0.png);
-  background: linear-gradient(to bottom, rgba(255,255,255,.4), rgba(255,255,255,.2)), url(/themes/console/classic/images/bg0.png) #ddddef;
-  background-size: 100% 100%, 120px 120px;
+  background: linear-gradient(to bottom, rgba(255,255,255,.4), rgba(255,255,255,.2)), url(/themes/console/classic/images/bg0.png) left top / 120px, #ddddef;
   scrollbar-color: #779 #dde;
 }
 
 body {
   padding: 10px 20px;
   min-width: 660px;
-  font: 10pt/130% Droid Sans, Open Sans, Noto Sans, Ubuntu, Bitstream Vera Sans, DejaVu Sans, Segoe UI, Verdana, Lucida Grande, Helvetica, sans-serif;
+  max-width: 1200px;
+  font: 10pt/130% var(--bodyfont);
   color: #4f4f63;
   border-radius: 1px;
   box-shadow: inset 0 0 0 1px #fff, 0 0 0 1px #99c, 0 0 2px 2px rgba(0,0,0,.05);
@@ -76,8 +82,7 @@ a:active {
 
 .reference {
   padding-right: 14px;
-  background: url(/themes/console/classic/images/newtab.png) top 2px right no-repeat;
-  background-size: 12px 10px;
+  background: url(/themes/console/classic/images/newtab.png) no-repeat top 2px right / 12px 10px;
 }
 
 img {
@@ -289,11 +294,7 @@ select {
   border: 1px solid #99b;
   border-radius: 2px;
   box-shadow: 0 0 0 1px #fff inset, 0 0 1px 0 #ddd;
-  background: url(/themes/console/classic/images/dropdown.png) right 8px center no-repeat #fff;
-  background: url(/themes/console/classic/images/dropdown.png) right 8px center no-repeat, linear-gradient(to bottom, #fff, #f2f2ff);
-  background-size: 10px auto, 100% 100%;
-  -moz-appearance: none;
-  -webit-appearance: none;
+  background: var(--dropdown) no-repeat right 8px center / 10px, linear-gradient(to bottom, #fff, #f2f2ff);
   appearance: none;
 }
 
@@ -304,23 +305,16 @@ select option {
 select:focus, select:active {
   color: #111;
   border: 1px solid #89f;
-  background-size: 10px auto, 100% 100% !important;
   outline: none;
 }
 
 select:hover, select:active {
-  background: url(/themes/console/classic/images/dropdown_hover.png) right 8px center no-repeat, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
-  background-size: 10px auto, 100% 100% !important;
+  background: var(--dropdown_hover) no-repeat right 8px center / 10px, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
 }
 
 select:focus {
   box-shadow: 0 0 0 1px #89f;
-  background: url(/themes/console/classic/images/dropdown_hover.png) right 8px center no-repeat, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
-  background-size: 10px auto, 100% 100% !important;
-}
-
-select::-ms-expand {
-  display: none;
+  background: var(--dropdown_hover) no-repeat right 8px center / 10px, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
 }
 
 /* embedded mode */
@@ -371,7 +365,7 @@ body.iframed.dark  {
   color: #ee9;
   margin: 5px 10px;
   padding: 5px;
-  font: bold 9pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
+  font: bold 9pt var(--bodyfont);
   border: 1px solid #252 !important;
   text-decoration: none;
   border-radius: 2px;
@@ -380,17 +374,15 @@ body.iframed.dark  {
 }
 
 .iframed.dark select {
-  -moz-appearance: none;
-  -webkit-appearance: none;
   appearance: none;
-  background: #000 url(/themes/console/dark/images/dropdown.png) right center no-repeat !important;
-  background: url(/themes/console/dark/images/dropdown.png) right center no-repeat, linear-gradient(to bottom, #020 0%, #000 20%, #000 80%, #010 100%) !important;
+  background: #000 url(/themes/console/dark/images/dropdown.png) no-repeat right center !important;
+  background: url(/themes/console/dark/images/dropdown.png) no-repeat right center, linear-gradient(to bottom, #020 0%, #000 20%, #000 80%, #010 100%) !important;
   color: #494;
   margin: 5px 10px;
   border: 1px outset #191;
   border-radius: 2px;
   min-width: 110px;
-  font: 9pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
+  font: 9pt var(--bodyfont);
   font-weight: 700;
   padding: 4px 18px 4px 4px !important;
   cursor: pointer;
@@ -421,7 +413,7 @@ body.iframed.dark  {
 }
 
 .iframed.dark select:hover, .iframed.dark select:focus, .iframed.dark select:active {
-  background: #000 url(/themes/console/dark/images/dropdown_hover.png) right center no-repeat !important;
+  background: #000 url(/themes/console/dark/images/dropdown_hover.png) no-repeat right center !important;
 }
 
 .iframed.dark select::-ms-expand {
@@ -433,7 +425,7 @@ body.iframed.dark  {
   padding: 5px 8px;
   min-width: 110px;
   line-height: 120%;
-  font: bold 9pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
+  font: bold 9pt var(--bodyfont);
   color: #494;
   text-decoration: none;
   border: 1px solid #8b8;
@@ -441,7 +433,6 @@ body.iframed.dark  {
   border-right: 1px solid #171;
   box-shadow: inset 0 0 0 1px #000;
   border-radius: 2px;
-  background: #000;
   background: linear-gradient(to bottom, #020 0%, #000 20%, #000 80%, #010 100%);
   filter: drop-shadow(0 0 1px #131);
 }
@@ -517,7 +508,6 @@ body.iframed.midnight {
 .iframed.midnight h1, .iframed.midnight h2, .iframed.midnight h3, .iframed.midnight .formtitle, .iframed.midnight .title, .iframed.midnight th {
   text-shadow: 0 0 2px #000;
   border: 1px solid #26225d;
-  box-shadow: inset 0 0 0 1px #000;
   background: linear-gradient(to bottom, #191729 50%, #001 50%) !important;
 }
 
@@ -530,12 +520,12 @@ body.iframed.midnight {
 }
 
 .iframed.midnight button {
-  cursor: pointer;
-  font: bold 9pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
+  font: bold 9pt var(--bodyfont);
   color: #6c66bc;
   border: 1px solid #26225c;
   box-shadow: inset 0 0 0 1px #000;
   background: 8px 5px no-repeat, linear-gradient(to bottom, #11101c 50%, #000010 50%);
+  cursor: pointer;
 }
 
 .iframed.midnight button:hover, .iframed.midnight button:focus {
@@ -558,7 +548,7 @@ body.iframed.midnight {
   color: #c9ceff;
   margin: 5px 10px;
   padding: 4px 2px;
-  font: bold 9pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
+  font: bold 9pt var(--bodyfont);
   border: 1px solid #26225d !important;
   text-decoration: none;
   box-shadow: inset 1px 1px 1px 0 #000;
@@ -569,27 +559,23 @@ body.iframed.midnight {
   margin: 5px 10px;
   padding: 4px 20px 4px 4px !important;
   min-width: 110px;
-  -moz-appearance: none;
-  -webkit-appearance: none;
   appearance: none;
   overflow: hidden;
   text-overflow: ellipsis;
-  font: bold 9pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
+  font: bold 9pt var(--bodyfont);
   color: #6c66bc;
   text-align: center;
   border: 1px solid #27235f;
   cursor: pointer;
   box-shadow: inset 0 0 0 1px #000, 0 0 0 1px #000;
-  background: #000 url(/themes/console/midnight/images/dropdown.png) center right 1px no-repeat !important;
-  background: url(/themes/console/midnight/images/dropdown.png) center right 4px no-repeat, linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
-  background-size: 14px auto, 100% 100% !important;
+  background: url(/themes/console/midnight/images/dropdown.png) no-repeat center right 4px / 10px, linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
   filter: none !important;
 }
 
 @supports not (-moz-appearance: none) {
-.iframed.midnight select {
-  padding: 5px 20px 5px 6px !important;
-}
+  .iframed.midnight select {
+    padding: 5px 20px 5px 6px !important;
+  }
 }
 
 .iframed.midnight select option {
@@ -612,8 +598,7 @@ body.iframed.midnight {
   text-shadow: 0 1px 1px #000;
   border: 1px solid #652787 !important;
   box-shadow: inset 0 0 0 1px #000 !important;
-  background: url(/themes/console/midnight/images/dropdown_hover.png) center right 4px no-repeat, linear-gradient(to bottom, #202 50%, #000 50%) !important;
-  background-size: 14px auto, 100% 100%, 100% 100% !important;
+  background: url(/themes/console/midnight/images/dropdown_hover.png) no-repeat center right 4px / 10px, linear-gradient(to bottom, #202 50%, #000 50%) !important;
 }
 
 .iframed.midnight a:link {
@@ -633,4 +618,10 @@ body.iframed.midnight {
 
 .iframed.midnight a:active {
   color: #851768 !important;
+}
+
+@media screen and (min-width: 1300px) and (min-height: 600px) {
+  body {
+    margin: 2% auto;
+  }
 }

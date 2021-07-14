@@ -1829,6 +1829,7 @@ img[src$="details.png"] {
 .snarkGraphicStatus img {
   padding-top: 3px !important;
   padding-bottom: 3px !important;
+  width: auto !important;
 }
 
 .magnetLabel {
@@ -2622,7 +2623,7 @@ hr.debug {
 
 .commentDate {
   width: 100px;
-  background: url(images/clock.png) left center no-repeat;
+  background: url(images/clock.png) no-repeat left center;
   padding-left: 20px !important;
 }
 
@@ -2818,9 +2819,13 @@ td.commentAuthor .commentAuthorName {
   display: none;
 }
 
-.snarkGraphicStatus img, .snarkTrackerDetails img, .snarkTorrentDetails img {
+.snarkTrackerDetails img, .snarkTorrentDetails img {
   max-height: 18px !important;
   width: auto;
+}
+
+.snarkGraphicStatus img {
+  height: 18px !important;
 }
 
 .snarkGraphicStatus, .snarkTorrentStatus {
@@ -2917,7 +2922,7 @@ body, td, .snarkMessages li, .snarkMessages a, button, input, select, .snarkAddI
 }
 
 .snarkTorrents td:first-child img {
-  max-height: 16px;
+  height: 17px;
 }
 
 .snarkTorrentName, .snarkTorrentName a {
@@ -3675,7 +3680,7 @@ th img {
 td.snarkGraphicStatus img {
   margin-top: -2px;
   margin-bottom: -2px;
-  max-height: 20px;
+  height: 20px;
   display: inline-block;
 }
 

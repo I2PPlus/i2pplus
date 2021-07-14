@@ -206,7 +206,7 @@ th .help::after {
   width: 16px;
   height: 16px;
   display: inline-block;
-  background: var(--helplink) center center no-repeat;
+  background: var(--helplink) no-repeat center center;
   background-size: 16px;
   content: "";
 }
@@ -700,12 +700,12 @@ td.infohelp {
 
 .tunnelName a {
   padding: 3px 3px 3px 18px !important;
-  background: var(--settings) left center no-repeat;
+  background: var(--settings) no-repeat left center;
   background-size: 14px;
 }
 
 .tunnelName a:hover {
-  background: var(--settings_hover) left center no-repeat;
+  background: var(--settings_hover) no-repeat left center;
   background-size: 14px;
 }
 
@@ -1471,7 +1471,7 @@ tr {
   float: right;
   display: inline-block;
   font-size: 90%;
-  background: var(--keys) left center no-repeat;
+  background: var(--keys) no-repeat left center;
   background-size: 20px;
 }
 
@@ -1600,7 +1600,7 @@ select[disabled], select[disabled]:hover, select[disabled]:focus, select[disable
 
 #sigType[disabled] {
   padding-left: 14px !important;
-  background: url(/themes/console/images/buttons/cryptokey.png) left center no-repeat !important;
+  background: url(/themes/console/images/buttons/cryptokey.png) no-repeat left center !important;
 }
 
 #clientAuth {

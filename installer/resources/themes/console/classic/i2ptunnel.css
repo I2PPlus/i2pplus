@@ -1253,7 +1253,7 @@ th .help::after {
   width: 16px;
   height: 16px;
   display: inline-block;
-  background: url(/themes/console/images/svg/helplink.svg) center center no-repeat;
+  background: url(/themes/console/images/svg/helplink.svg) no-repeat center center;
   background-size: 16px 16px;
   content: "";
 }

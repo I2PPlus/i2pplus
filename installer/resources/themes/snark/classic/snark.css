@@ -2413,7 +2413,7 @@ td#bwHelp a {
 #filecheck {
   display: inline-block;
   margin: 5px 0;
-  background: url(images/progressbar.gif) left center no-repeat;
+  background: url(images/progressbar.gif) no-repeat left center;
   padding-left: 22px;
 }
 
@@ -2559,7 +2559,7 @@ td#bwHelp a {
 
 .commentDate {
   width: 100px;
-  background: url(images/clock.png) left center no-repeat;
+  background: url(images/clock.png) no-repeat left center;
   padding-left: 20px !important;
 }
 
@@ -2933,7 +2933,7 @@ th.snarkTorrentStatus a img, .snarkTorrentETA a img, .snarkTrackerDetails a img,
 }
 
 .snarkGraphicStatus img {
-  max-width: 19px;
+  height: 17px;
 }
 
 .snarkTorrentName a:not(old) {
@@ -3621,6 +3621,7 @@ tr:hover td.snarkTorrentName, tr:hover td.snarkTorrentDownloaded, tr:hover td.sn
 }
 
 .snarkTorrentStatus {
+  padding-left: 8px;
   padding-right: 0;
 }
 
@@ -3657,7 +3658,8 @@ td.snarkTorrentPeerCount, .nopeers td.snarkTorrentPeerCount {
 }
 
 .snarkGraphicStatus img {
-  max-height: 20px;
+  width: auto;
+  height: 20px;
 }
 
 .snarkTrackerDetails img {

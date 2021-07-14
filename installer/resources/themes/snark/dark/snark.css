@@ -3372,7 +3372,7 @@ td .commentAuthorName {
   }
 
   td.snarkGraphicStatus img {
-    max-height: 22px !important;
+    height: 22px !important;
   }
 
   .snarkTorrentUploaded, .snarkTorrentRateDown, .snarkTorrentRateUp {
@@ -3502,7 +3502,7 @@ td .commentAuthorName {
   }
 
   .snarkGraphicStatus img {
-    max-width: 20px;
+    width: 20px;
   }
 
   .snarkTorrentPeerCount a, .snarkTorrentPeerCount a:hover, .snarkTorrentPeerCount a:focus, .snarkTorrentPeerCount a:active {
@@ -4324,7 +4324,8 @@ input[name="nofilter_commentsName"] {
 td.snarkGraphicStatus img {
   margin-top: -2px;
   margin-bottom: -2px;
-  max-height: 20px;
+  width: auto;
+  height: 20px;
   display: inline-block;
 }
 
