@@ -3327,7 +3327,7 @@ td .commentAuthorName {
 }
 
 td.snarkGraphicStatus img {
-  height: 16px;
+  height: 20px;
 }
 
 .snarkTorrents td[colspan="10"] {
@@ -3878,7 +3878,7 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
     max-width: 24px !important;
   }
   .snarkGraphicStatus img {
-    width: 20px;
+    height: 17px;
   }
   th.snarkTorrentPeerCount img {
     display: none;
@@ -5132,6 +5132,7 @@ td.snarkGraphicStatus img {
   margin-top: -2px;
   margin-bottom: -2px;
   height: 20px;
+  width: auto;
   display: inline-block;
 }
 
@@ -5149,7 +5150,7 @@ th.snarkGraphicStatus {
 }
 
 td.snarkGraphicStatus img {
-  width: 25px !important;
+  height: 22px;
 }
 
 td.snarkTrackerDetails img {
@@ -5190,6 +5191,9 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
 #torrentDisplay label {
   flex-grow: 1.1;
 }
+
+td.snarkGraphicStatus img {
+  height: 18px;
 }
 
 td.snarkTorrentPeerCount {
