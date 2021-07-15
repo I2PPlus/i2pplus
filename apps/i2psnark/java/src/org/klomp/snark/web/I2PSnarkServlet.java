@@ -2513,7 +2513,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 if (isValid) {
                     pct = (float) (100.0 * peer.completed() / meta.getPieces());
                     if (pct >= 100.0)
-                        out.write("<span class=\"peerSeed\" title=\"" + _t("Seed") + "\">" + _t("Seed") + "</span>");
+                        out.write("<span class=\"peerSeed\" title=\"" + _t("Seed") + "\">" + toSVG("peerseed", _t("Seed"), "") + "</span>");
                     else {
                         String ps = String.valueOf(pct);
                         if (ps.length() > 5)

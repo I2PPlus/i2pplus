@@ -1030,16 +1030,6 @@ tr[id] + .peerinfo td {
   padding-left: 4px;
 }
 
-.peerSeed {
-  width: 20px;
-  height: 16px;
-  display: inline-block;
-  font-size: 0;
-  background: url(images/peerseed.png) no-repeat center center;
-  background-size: 14px auto;
-  content: "";
-}
-
 .snarkTorrents tbody tr:hover, .snarkDirInfo tbody tr:hover {
   background: #58165e !important;
   background: linear-gradient(to bottom, #58165e, #4a0d56) !important;
@@ -4661,7 +4651,7 @@ td.snarkTorrentStatus b {
   font-size: 95%;
   text-shadow: 0 1px 1px #101;
   border-radius: 2px;
-  background: #535;
+  background: #b4649b;
 }
 
 .lang_fr td.snarkTorrentStatus b, .lang_hu td.snarkTorrentStatus b, .lang_tr td.snarkTorrentStatus b {
@@ -4676,7 +4666,7 @@ td.snarkTorrentStatus b::before {
   left: -10px;
   border-width: 5px;
   border-style: solid;
-  border-color: transparent #535 transparent transparent;
+  border-color: transparent #b4649b transparent transparent;
   content: "";
 }
 
@@ -4701,11 +4691,11 @@ td.snarkTorrentStatus b::before {
 .inactive.downloading .snarkTorrentStatus b, .active.starting .snarkTorrentStatus b {
   color: #101;
   text-shadow: 0 1px 1px #dd0;
-  background: #bb0;
+  background: #fc0;
 }
 
 .inactive.downloading .snarkTorrentStatus b::before, .active.starting .snarkTorrentStatus b::before {
-  border-color: transparent #bb0 transparent transparent;
+  border-color: transparent #fc0 transparent transparent;
 }
 
 .stopped.complete .snarkTorrentStatus b {

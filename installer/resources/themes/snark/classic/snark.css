@@ -4119,16 +4119,6 @@ hr.debug {
   display: none;
 }
 
-.peerSeed {
-  content: "";
-  display: inline-block;
-  height: 16px;
-  width: 20px;
-  font-size: 0;
-  background: url(images/peerseed.png) no-repeat center center;
-  background-size: 14px auto;
-}
-
 .infohash {
   font-family: "Droid Sans Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
   color: #070;

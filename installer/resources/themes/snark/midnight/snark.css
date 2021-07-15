@@ -4263,16 +4263,6 @@ tr:not(.peerinfo) .snarkTorrentDownloaded .percentBarText::after {
   display: none;
 }
 
-.peerSeed {
-  content: "";
-  display: inline-block;
-  height: 16px;
-  width: 20px;
-  font-size: 0;
-  background: url(images/peerseed.png) no-repeat center center;
-  background-size: 14px auto;
-}
-
 .magnetLabel {
   font-style: italic;
   display: inline-block;

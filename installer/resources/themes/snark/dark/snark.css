@@ -4752,16 +4752,6 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
   display: none;
 }
 
-.peerSeed {
-  content: "";
-  display: inline-block;
-  height: 16px;
-  width: 20px;
-  font-size: 0;
-  background: url(images/peerseed.png) no-repeat center center;
-  background-size: 14px auto;
-}
-
 .snarkTorrentRateDown .left, .snarkTorrentRateUp .left, .snarkTorrentUploaded .left {
   min-width: 22px;
   display: inline-block;
