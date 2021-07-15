@@ -935,7 +935,7 @@ img[src$="details.png"] {
   margin: 5px 0;
   padding-left: 22px;
   display: inline-block;
-  background: url(images/progressbar.gif) no-repeat left center;
+  background: url(/i2psnark/.resources/icons/progressbar.gif) no-repeat left center;
 }
 
 #filecheck a {

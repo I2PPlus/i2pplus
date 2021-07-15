@@ -1092,7 +1092,7 @@ tr:not(.peerinfo) .snarkTorrentUploaded:empty::after {
 }
 
 .peerinfo:hover td:first-child {
-  background: #ffd url(images/peer.png) no-repeat center center !important;
+  background: #ffd var(--peer) no-repeat center center  / 18px !important;
 }
 
 tr:hover .percentBarText {
@@ -1102,14 +1102,6 @@ tr:hover .percentBarText {
 .snarkTorrentEven {
   background: #eef;
 }
-
-/*.snarkTorrentEven:nth-child(even) {
-  background: #fff;
-}
-
-.snarkTorrentEven:nth-child(odd) {
-  background: #eef;
-}*/
 
 .snarkTorrentOdd, .SnarkTorrentEven {
   border-bottom: 1px solid #ced1e3;
@@ -2337,20 +2329,20 @@ input#toggle_createtorrent:checked + label + hr + table {
 }
 
 .peerinfo td:first-child {
-  background: url(images/peer.png) no-repeat center center;
+  background: var(--peer) no-repeat center center / 18px;
 }
 
 .peerinfo td:first-child::after {
-  content: "";
-  display: inline-block;
-  box-sizing: border-box;
-  vertical-align: middle !important;
   min-height: 24px !important;
+  display: inline-block;
+  vertical-align: middle !important;
+  box-sizing: border-box;
+  content: "";
 }
 
 #totals {
-  display: inline-block;
   margin: 2px 0 2px 5px;
+  display: inline-block;
 }
 
 /* torrent priorities */
@@ -2359,7 +2351,7 @@ input#toggle_createtorrent:checked + label + hr + table {
   width: 52px;
   display: inline-block;
   color: transparent;
-  background-size: 18px 18px !important;
+  background-size: 18px !important;
 }
 
 .priorityHigh {
@@ -2383,9 +2375,9 @@ input#toggle_createtorrent:checked + label + hr + table {
 }
 
 #configs td:first-child {
-  min-width: 180px !important;
-  width: 25%;
   padding-left: 15px !important;
+  width: 25%;
+  min-width: 180px !important;
 }
 
 td#bwHelp {
@@ -2405,10 +2397,10 @@ td#bwHelp a {
 /* end configs */
 
 #filecheck {
-  display: inline-block;
   margin: 5px 0;
-  background: url(images/progressbar.gif) no-repeat left center;
   padding-left: 22px;
+  display: inline-block;
+  background: url(/i2psnark/.resources/icons/progressbar.gif) no-repeat left center;
 }
 
 #filecheck a {

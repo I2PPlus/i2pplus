@@ -2611,7 +2611,7 @@ input:checked + label + hr + table + table {
 }
 
 .peerinfo td:first-child {
-  background: url(images/peer.png) no-repeat center center;
+  background: var(--peer) no-repeat center center / 18px;
 }
 
 .peerinfo td, .debuginfo td {
@@ -2832,7 +2832,7 @@ td#bwHelp a {
   margin: 5px 0;
   padding-left: 22px;
   display: inline-block;
-  background: url(images/progressbar.gif) no-repeat left center;
+  background: url(/i2psnark/.resources/icons/progressbar.gif) no-repeat left center;
 }
 
 #filecheck a {
