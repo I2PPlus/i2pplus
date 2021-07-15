@@ -1554,14 +1554,6 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
   font-size: 9pt;
 }
 
-.snarkAddInfo {
-  padding-left: 20px;
-  line-height: 160%;
-  font-weight: 400;
-  background: url(images/infocircle.png) no-repeat left center;
-  background-size: 14px auto;
-}
-
 .snarkConfigTitle, .toggleview {
   margin: 0 0 -3px !important;
   min-width: 300px;
@@ -1600,7 +1592,7 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
 }
 
 #trackers .snarkConfigTitle img[src$="config.png"], .configsectionpanel .snarkConfigTitle img[src$="config.png"],
-.snarkConfig img[src$="infocircle.png"] {
+.snarkConfig img[src$="details.svg"] {
   margin: 0 !important;
   padding: 0 !important;
   width: 0 !important;
@@ -4942,7 +4934,7 @@ td.snarkTrackerDetails img {
   max-height: 19px !important;
 }
 
-.snarkTorrentDetails img[src$="rateme.png"] {
+.snarkTorrentDetails img[src$="rateme.svg"] {
   margin-top: -3px !important;
   margin-right: -3px !important;
   width: 12px !important;

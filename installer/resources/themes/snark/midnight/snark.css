@@ -1487,16 +1487,6 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
   font-size: 9pt;
 }
 
-.snarkAddInfo {
-  font-size: 9pt;
-  line-height: 180% !important;
-  background: url(images/infocircle.png) no-repeat left center;
-  background-size: 20px auto;
-  padding-left: 26px;
-  margin-top: 5px;
-  display: inline-block;
-}
-
 .snarkAddInfo code {
   color: #990;
 }
@@ -2763,7 +2753,7 @@ hr.debug {
 }
 
 td#bwHelp {
-  background: url(images/infocircle.png) left 12px center no-repeat;
+  background: url(images/details.svg) left 12px center no-repeat;
   background-size: 14px auto;
   padding-left: 30px !important;
   width: 90%;
@@ -3911,7 +3901,7 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
   max-height: 22px !important;
 }
 
-.snarkTorrentDetails img[src$="rateme.png"] {
+.snarkTorrentDetails img[src$="rateme.svg"] {
   margin-top: -3px !important;
   margin-right: -3px !important;
   width: 12px !important;
