@@ -582,7 +582,7 @@ td.snarkTorrentPeerCount:empty {
   padding: 1px !important;
 }
 
-.snarkTorrentDetails img:not([src$="rateme.png"]) {
+.snarkTorrentDetails img:not([src$="rateme.svg"]) {
   min-width: 18px;
   min-height: 18px;
 }
