@@ -5,6 +5,7 @@
 @import url(optbox.css);
 
 :root {
+  --bg: url("data:image/svg+xml,%3Csvg height='4' viewBox='0 0 4 4' width='4' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m1 3h1v1h-1zm2-2h1v1h-1z' fill='%23e2e2ff' fill-opacity='.5'/%3E%3C/svg%3E");
   --h1: var(--bg), linear-gradient(135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px);
   --h2: linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fcfcff 5%, rgba(231, 231, 255, .8) 25%);
   --h3: linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4));
@@ -1475,7 +1476,7 @@ to {
 }
 
 #servletError #warning {
-  padding-bottom: 10px;
+  padding-bottom: 35px;
 }
 
 #servletError #warning2 {
@@ -1586,13 +1587,6 @@ to {
   background: linear-gradient(to bottom, rgba(248,248,255,.5), rgba(240,240,255,.5)),
               url(/themes/snark/ubergine/images/hat.png) no-repeat right bottom / auto 160px,
               repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #f8f8ff !important;
-}
-
-@supports (background-blend-mode: multiply) {
-  #warning2, .news#news {
-    background: url(/themes/snark/ubergine/images/hat.png) no-repeat right -4px bottom -2px / auto 150px, var(--bg) center center / 4px, #fafaff !important;
-    background-blend-mode: multiply, multiply, normal !important;
-  }
 }
 
 .main#news {
