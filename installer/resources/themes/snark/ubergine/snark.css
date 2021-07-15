@@ -1642,22 +1642,19 @@ a:active, a:visited:active {
   vertical-align: middle;
   border: 1px solid transparent;
   border-radius: 2px;
-  background: url(images/configure.svg) no-repeat center center;
-  background-size: 20px;
+  background: var(--configure) no-repeat center center / 20px;
   content: "";
 }
 
 #configs a[href^="/config"]:hover::after {
   border: 1px solid #f60 !important;
-  background: url(images/configure_hover.svg) no-repeat center center, linear-gradient(to bottom, #717 50%, #414 50%);
-  background-size: 20px, 100%;
+  background: var(--configure_hover) no-repeat center center / 20px, linear-gradient(to bottom, #717 50%, #414 50%);
 }
 
 #configs a[href^="/config"]:active::after {
   border: 1px solid #212 !important;
   box-shadow: inset 3px 3px 2px 1px #202;
-  background: #414 url(images/configure_hover.svg) no-repeat center center;
-  background-size: 20px;
+  background: #414 var(--configure_hover) no-repeat center center / 20px;
   mix-blend-mode: multiply;
   transform: scale(0.9) !important;
   transition: none !important;
@@ -2222,13 +2219,13 @@ input.add:hover, input.add:focus {
 }
 
 input.create, input.create:active {
-  background: url(images/create.svg), var(--btn);
+  background: var(--create), var(--btn);
   background-size: 16px, 100% !important;
   background-position: 6px calc(50% - 2px), center center !important;
 }
 
 input.create:hover, input.create:focus {
-  background: url(images/create.svg), var(--btn_hover);
+  background: var(--create), var(--btn_hover);
 }
 
 input.delete, input.delete:active {
