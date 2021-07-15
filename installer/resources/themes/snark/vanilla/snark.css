@@ -3885,7 +3885,7 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
   height: 20px !important;
 }
 
-.snarkTorrentDetails img[src$="rateme.png"] {
+.snarkTorrentDetails img[src$="rateme.svg"] {
   margin-top: -5px !important;
   margin-right: -3px !important;
   width: 12px !important;

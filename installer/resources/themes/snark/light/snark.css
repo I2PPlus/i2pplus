@@ -2444,7 +2444,7 @@ hr.debug {
   line-height: 100%;
 }
 
-#bwHoverHelp img[src$="infocircle.png"] {
+#bwHoverHelp img[src$="details.svg"] {
   opacity: 0;
 }
 
@@ -4055,7 +4055,7 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
   max-height: 20px !important;
 }
 
-.snarkTorrentDetails img[src$="rateme.png"] {
+.snarkTorrentDetails img[src$="rateme.svg"] {
   margin-top: -3px !important;
   margin-right: -2px !important;
   width: 12px !important;

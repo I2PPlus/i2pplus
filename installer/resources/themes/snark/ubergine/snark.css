@@ -939,12 +939,12 @@ td:first-child {
 }
 
 
-.snarkTrackerDetails a:hover img, .snarkTorrentDetails a:hover img:not([src$="rateme.png"]), .snarkFileIcon a:hover img {
+.snarkTrackerDetails a:hover img, .snarkTorrentDetails a:hover img:not([src$="rateme.svg"]), .snarkFileIcon a:hover img {
   border: 1px solid #101 !important;
   box-shadow: inset 0 0 0 1px rgba(255,96,0,.5) !important;
 }
 
-.snarkTrackerDetails a:active img, .snarkTorrentDetails a:active img:not([src$="rateme.png"]), .snarkDirInfo td:not(.parentdir):first-child a:active img {
+.snarkTrackerDetails a:active img, .snarkTorrentDetails a:active img:not([src$="rateme.svg"]), .snarkDirInfo td:not(.parentdir):first-child a:active img {
   border: 1px solid #212 !important;
   box-shadow: inset 3px 3px 2px 1px #202;
   background: #414;
@@ -954,7 +954,7 @@ td:first-child {
   filter: none !important;
 }
 
-.snarkTorrentDetails a:active img[src$="rateme.png"] {
+.snarkTorrentDetails a:active img[src$="rateme.svg"] {
   filter: none !important;
   transform: scale(0.9) !important;
 }
@@ -2885,7 +2885,7 @@ hr.debug {
 }
 
 #bwHelp {
-  background: url(images/infocircle.png) left 8px center no-repeat;
+  background: url(images/details.svg) left 8px center no-repeat;
   background-size: 14px auto;
   padding-left: 26px !important;
   width: 90%;
@@ -3607,7 +3607,7 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
   height: 18px !important;
 }
 
-.snarkTorrentDetails img[src$="rateme.png"] {
+.snarkTorrentDetails img[src$="rateme.svg"] {
   margin-top: -3px !important;
   width: 10px !important;
   height: 10px !important;
@@ -5136,7 +5136,7 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
   height: 20px !important;
 }
 
-.snarkTorrentDetails img[src$="rateme.png"] {
+.snarkTorrentDetails img[src$="rateme.svg"] {
   margin-top: -3px !important;
   width: 12px !important;
   height: 12px !important;

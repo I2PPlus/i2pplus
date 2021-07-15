@@ -656,7 +656,7 @@ th.snarkTorrentStatus {
 }
 
 .snarkTrackerDetails a:hover img, .snarkTrackerDetails a:focus img,
-.snarkTorrentDetails a:hover img:not([src$="rateme.png"]), .snarkTorrentDetails a:focus img:not([src$="rateme.png"]),
+.snarkTorrentDetails a:hover img:not([src$="rateme.svg"]), .snarkTorrentDetails a:focus img:not([src$="rateme.svg"]),
 .snarkCommentDetails a:hover img, .snarkCommentDetails img:hover, .snarkCommentDetails a:focus img,
 .snarkDirInfo td:first-child a:hover img:not(.thumb), .snarkDirInfo td:first-child a:focus img:not(.thumb) {
   border: 1px solid #bf2295 !important;
@@ -666,13 +666,13 @@ th.snarkTorrentStatus {
   filter: none !important;
 }
 
-.snarkTrackerDetails a:active img, .snarkTorrentDetails a:active img:not([src$="rateme.png"]), .snarkDirInfo td:first-child a:active img {
+.snarkTrackerDetails a:active img, .snarkTorrentDetails a:active img:not([src$="rateme.svg"]), .snarkDirInfo td:first-child a:active img {
   border: 1px solid #fc1c66 !important;
   box-shadow: inset 3px 3px 3px 3px #000;
   transform: scale(0.9);
 }
 
-.snarkTorrentDetails a:active img:[src$="rateme.png"] {
+.snarkTorrentDetails a:active img:[src$="rateme.svg"] {
   transform: scale(0.9) !important;
 }
 
@@ -1485,16 +1485,6 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
 
 .snarkNewTorrent {
   font-size: 9pt;
-}
-
-.snarkAddInfo {
-  font-size: 9pt;
-  line-height: 180% !important;
-  background: url(images/infocircle.png) no-repeat left center;
-  background-size: 20px auto;
-  padding-left: 26px;
-  margin-top: 5px;
-  display: inline-block;
 }
 
 .snarkAddInfo code {
@@ -2763,7 +2753,7 @@ hr.debug {
 }
 
 td#bwHelp {
-  background: url(images/infocircle.png) left 12px center no-repeat;
+  background: url(images/details.svg) left 12px center no-repeat;
   background-size: 14px auto;
   padding-left: 30px !important;
   width: 90%;
@@ -3911,7 +3901,7 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
   max-height: 22px !important;
 }
 
-.snarkTorrentDetails img[src$="rateme.png"] {
+.snarkTorrentDetails img[src$="rateme.svg"] {
   margin-top: -3px !important;
   margin-right: -3px !important;
   width: 12px !important;

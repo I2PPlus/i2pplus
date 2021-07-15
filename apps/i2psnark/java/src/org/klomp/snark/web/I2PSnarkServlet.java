@@ -2219,7 +2219,7 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("\">");
             if (comments != null && !comments.isEmpty()) {
                 buf.append("<span class=\"snarkCommented\" title=\"").append(_t("Torrent has comments")).append("\">");
-                toThemeImg(buf, "rateme", "", "");
+                toSVG(buf, "rateme", "", "");
                 buf.append("</span>");
             }
             out.write(buf.toString());
@@ -2738,7 +2738,7 @@ public class I2PSnarkServlet extends BasicServlet {
         if (linkUrl != null) {
             StringBuilder buf = new StringBuilder(128);
             buf.append(linkUrl);
-            buf.append(toThemeSVG("details", _t("Info"), ""));
+            buf.append(toSVG("link", _t("Info"), ""));
             buf.append("</a>");
             return buf.toString();
         }
@@ -3023,7 +3023,7 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("\"><option>");
             out.write(_manager.getTheme());
             out.write("</option></select> <span id=\"bwHoverHelp\">");
-            out.write(toThemeImg("infocircle"));
+            out.write(toThemeSVG("details", "", ""));
             out.write("<span id=\"bwHelp\">");
             out.write(_t("Universal theming is enabled."));
             out.write("</span></span>");
@@ -3198,7 +3198,7 @@ public class I2PSnarkServlet extends BasicServlet {
                   + " title=\"");
         out.write(_t("Maximum bandwidth allocated for uploading"));
         out.write("\"> KBps</label> <span id=\"bwHoverHelp\">");
-        out.write(toThemeImg("infocircle"));
+        out.write(toThemeSVG("details", "", ""));
         out.write("<span id=\"bwHelp\"><i>");
         out.write(_t("Half available bandwidth recommended."));
         out.write("</i></span></span>");
@@ -4933,7 +4933,7 @@ public class I2PSnarkServlet extends BasicServlet {
                         myRating = comments.getMyRating();
                         if (myRating > 0) {
                             buf.append(_t("My Rating")).append(":</td><td colspan=\"2\" class=\"commentRating\">");
-                            String img = toThemeImg("rateme", "★", "");
+                            String img = toSVG("rateme", "★", "");
                             for (int i = 0; i < myRating; i++) {
                                 buf.append(img);
                             }
@@ -4985,7 +4985,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     if (er) {
                         int rt = c.getRating();
                         if (rt > 0) {
-                            String img = toThemeImg("rateme", "★", "");
+                            String img = toSVG("rateme", "★", "");
                             for (int i = 0; i < rt; i++) {
                                 buf.append(img);
                             }
@@ -5237,6 +5237,32 @@ public class I2PSnarkServlet extends BasicServlet {
      */
     private void toThemeImg(StringBuilder buf, String image, String altText, String titleText) {
         buf.append("<img alt=\"").append(altText).append("\" src=\"").append(_imgPath).append(image).append(".png\"");
+        if (titleText.length() > 0)
+            buf.append(" title=\"").append(titleText).append('"');
+        buf.append('>');
+    }
+
+    /**
+     *  SVG image file in the .war
+     *
+     *  @param image name without the ".svg"
+     *  @since 0.9.51+
+     */
+    private void toSVG(StringBuilder buf, String image) {
+        toSVG(buf, image, "", "");
+    }
+
+    /**
+     *  SVG Image file in the .war
+     *
+     *  @param image name without the ".svg"
+     *  @param altText non-null
+     *  @param titleText non-null
+     *  @since 0.9.51 (I2P+)
+     */
+    private void toSVG(StringBuilder buf, String image, String altText, String titleText) {
+        buf.append("<img alt=\"").append(altText).append("\" src=\"").append(_contextPath).append(WARBASE)
+           .append("icons/").append(image).append(".svg\"");
         if (titleText.length() > 0)
             buf.append(" title=\"").append(titleText).append('"');
         buf.append('>');
