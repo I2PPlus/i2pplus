@@ -21,6 +21,13 @@ body {
   font: 9pt var(--bodyfont);
   color: #4f4f63;
   background: #a4a4cb url(/themes/console/light/images/tile2.png) center top / 32px;
+/*  background: repeating-linear-gradient(to bottom, #a4a4cb 2px, #9393ba 4px), #a4a4cb;
+  background-size: 4px 100%;*/
+}
+
+body.iframed {
+  margin: 6px 1px 0 !important;
+  background: transparent !important;
 }
 
 /* preload top navigation mouseovers */
@@ -39,11 +46,6 @@ body::before {
   var(--offline);
   background-size: 0;
   content: "";
-}
-
-body.iframed {
-  margin: 6px 1px 0 !important;
-  background: transparent !important;
 }
 
 /* accelerate rendering */
@@ -3707,7 +3709,7 @@ td.snarkTrackerDetails img {
   border-top: 1px solid #afafcf;
   border-bottom: 1px solid #afafcf;
   position: sticky;
-  top: 41px;
+  top: 43px;
   z-index: 999;
   margin: -1px 0 -2px;
 }
@@ -3765,8 +3767,9 @@ td.snarkTrackerDetails img {
 
 @media screen and (max-width: 1000px) {
 #torrentDisplay {
-  display: flex;
   margin-bottom: 0;
+  display: flex;
+  top: 39px;
 }
 
 #torrentDisplay label {
@@ -4503,4 +4506,15 @@ tfoot .snarkTorrentRateDown::after, tfoot .snarkTorrentRateUp::after {
     width: 400px !important;
     max-width: 400px !important;
   }
+}
+
+
+body:not(.iframed) .snarknavbar, body:not(.iframed) .page {
+  border: 1px solid rgba(168,168,192,.4) !important;
+  border-radius: 0 !important;
+  box-shadow: 0 0 0 1px rgba(96,96,128,.7) !important;
+}
+
+body:not(.iframed) #snarkCommentSection {
+  border-bottom: none;
 }
