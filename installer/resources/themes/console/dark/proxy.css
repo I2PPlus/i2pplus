@@ -22,6 +22,24 @@ html {
   background-size: 100% 4px, 4px 100%;
 }
 
+body::before {
+  width: 0;
+  height: 4px;
+  display: inline-block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  box-shadow: 0 2px 2px rgba(0,0,0,.8);
+  background: linear-gradient(to bottom, rgba(255,255,255,.1) 50%, rgba(0,0,0,.3) 50%), linear-gradient(to right, #d30, #f60);
+  content: "";
+}
+
+@keyframes loader {
+  0 {width: 0}
+  99% {width: 100%}
+  100% {width: 0}
+}
+
 ::selection {
   color: #000;
   background: rgba(220,220,0,.9) !important;
