@@ -1,15 +1,43 @@
+<!DOCTYPE HTML>
 <html>
 <head>
-<!--
-  *  Remove the following three lines to stop redirecting to the i2psnark page.
-  *  If it continues to redirect, clear your browser's cache.
- -->
-<meta http-equiv="refresh" content="1;url=/i2psnark/" />
+<meta charset="utf-8">
+<meta http-equiv="refresh" content="5;url=/i2psnark/">
 <meta http-equiv="pragma" content="no-cache">
 <meta http-equiv="cache-control" content="no-cache">
-<title>I2PSnark Standalone</title>
+<title>I2PSnark</title>
+<link rel="preload" href="/i2psnark/" as="document">
+<link rel="shortcut icon" href="/i2psnark/.resources/icons/favicon.svg">
+<style type="text/css">
+html, body {
+  min-height: 100%;
+  font-weight: 600;
+  font-size: 14pt;
+  color: #525;
+}
+html {
+  background: repeating-linear-gradient(to bottom, rgba(16,0,16,.7) 2px, rgba(32,0,32,.5) 4px),
+              url(/i2psnark/.resources/icons/favicon.svg) no-repeat center calc(50% - 40px) / 20%, #101;
+}
+a {
+  text-decoration: none;
+  outline: none;
+  font-weight: 900;
+  color: #737;
+}
+#footer {
+  padding: 20px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  border-top: 1px solid #313;
+  background: #000;
+}
+</style>
 </head>
 <body>
-Redirecting to <a href="/i2psnark/">i2psnark</a>...
+<div id ="footer">[ Redirecting to <a href="/i2psnark/">I2PSnark&hellip;</a> ]</div>
 </body>
 </html>
