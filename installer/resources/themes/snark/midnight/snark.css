@@ -1997,10 +1997,9 @@ a:hover img, a:focus img {
 
 .pagenavcontrols img {
   padding: 2px 3px;
+  width: 15px;
   border: 1px solid #171c3f;
-  border-radius: 2px;
   opacity: .8;
-  mix-blend-mode: luminosity;
 }
 
 .pagenavcontrols:hover img:not(.disable) {
@@ -2018,14 +2017,18 @@ a:hover img, a:focus img {
 }
 
 #pagenavtop.pagenavcontrols {
-  margin: 14px 0 -40px;
-  margin: 16px 0 -15px;
-  padding: 1px 0 0;
+  margin-bottom: -1px;
+  padding: 6px 0 4px;
+  border: 1px solid #26235c;
+  background: linear-gradient(to bottom, #001, #00000d);
 }
 
-.iframed #pagenavtop.pagenavcontrols {
-  margin: 4px 0 -29px;
-  padding: 1px 0 2px;
+@media screen and (max-width: 1500px) {
+  #pagenavtop.pagenavcontrols {
+    margin-bottom: 0;
+    border: none;
+    border-bottom: 1px solid #26235c;
+  }
 }
 
 #pagenavbottom .pagenavcontrols {
@@ -2036,6 +2039,7 @@ a:hover img, a:focus img {
 
 .pagenavcontrols a {
   display: inline !important;
+  background: linear-gradient(to bottom, #080818 50%, #000 50%);
 }
 
 #pagenav {

@@ -1253,7 +1253,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 out.write("<a href=\"" + _contextPath);
                 out.write(getQueryString(req, null, "", null));
                 out.write("\"><span id=\"first\">");
-                out.write(toThemeImg("first", _t("First"), _t("First page")));
+                out.write(toThemeSVG("first", _t("First"), _t("First page")));
                 out.write("</span></a>");
                 int prev = Math.max(0, start - pageSize);
                 //if (prev > 0) {
@@ -1263,15 +1263,15 @@ public class I2PSnarkServlet extends BasicServlet {
                     String sprev = (prev > 0) ? Integer.toString(prev) : "";
                     out.write(getQueryString(req, null, sprev, null));
                     out.write("\"><span id=\"previous\">");
-                    out.write(toThemeImg("previous", _t("Prev"), _t("Previous page")));
+                    out.write(toThemeSVG("previous", _t("Prev"), _t("Previous page")));
                     out.write("</span></a>");
                 }
             } else {
                 out.write(
                           "<span id=\"first\" class=\"disable\"><img alt=\"\" border=\"0\" class=\"disable\" src=\"" +
-                          _imgPath + "first.png\"></span>" +
+                          _imgPath + "first.svg\"></span>" +
                           "<span id=\"previous\" class=\"disable\"><img alt=\"\" border=\"0\" class=\"disable\" src=\"" +
-                          _imgPath + "previous.png\"></span>");
+                          _imgPath + "previous.svg\"></span>");
             }
             // Page count
             int pages = 1 + ((total - 1) / pageSize);
@@ -1293,7 +1293,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     out.write("<a href=\"" + _contextPath);
                     out.write(getQueryString(req, null, Integer.toString(next), null));
                     out.write("\"><span id=\"next\">");
-                    out.write(toThemeImg("next", _t("Next"), _t("Next page")));
+                    out.write(toThemeSVG("next", _t("Next"), _t("Next page")));
                     out.write("</span></a>");
                 }
                 // Last
@@ -1301,13 +1301,13 @@ public class I2PSnarkServlet extends BasicServlet {
                 out.write("<a href=\"" + _contextPath);
                 out.write(getQueryString(req, null, Integer.toString(last), null));
                 out.write("\"><span id=\"last\">");
-                out.write(toThemeImg("last", _t("Last"), _t("Last page")));
+                out.write(toThemeSVG("last", _t("Last"), _t("Last page")));
                 out.write("</span></a>");
             } else {
                 out.write("<span id=\"next\" class=\"disable\"><img alt=\"\" border=\"0\" class=\"disable\" src=\"" +
-                          _imgPath + "next.png\"></span>" +
+                          _imgPath + "next.svg\"></span>" +
                           "<span id=\"last\" class=\"disable\"><img alt=\"\" border=\"0\" class=\"disable\" src=\"" +
-                          _imgPath + "last.png\">");
+                          _imgPath + "last.svg\">");
             }
     }
 
