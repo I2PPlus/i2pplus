@@ -310,7 +310,7 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write(DOCTYPE + "<html>\n" +
                   "<head>\n<link rel=\"preload\" href=\"/themes/fonts/DroidSans.css\" as=\"style\">\n" +
                   "<link rel=\"preload\" href=\"" + _themePath + "images/images.css\" as=\"style\">\n" +
-                  "<link rel=\"shortcut icon\" href=\"" + _themePath + "favicon.ico\">\n");
+                  "<link rel=\"shortcut icon\" href=\"" + _contextPath + WARBASE + "icons/favicon.svg\">\n");
         if (!isStandalone)
             out.write("<link rel=\"preload\" href=\"/js/iframeResizer/iframeResizer.contentWindow.js?" + CoreVersion.VERSION + "\" as=\"script\">");
         out.write("<title>");
@@ -3760,7 +3760,7 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("\n").append(HEADER_A + _themePath + HEADER_Z); // optional override.css for version-persistent user edits
         // hide javascript-dependent buttons when js is unavailable
         buf.append("<noscript><style type=\"text/css\">.script{display:none}</style></noscript>\n")
-           .append("<link rel=\"shortcut icon\" href=\"" + _themePath + "favicon.ico\">\n");
+           .append("<link rel=\"shortcut icon\" href=\"" + _contextPath + WARBASE + "icons/favicon.svg\">\n");
         //if (showPriority) // TODO fixup with ajax refresh
             //buf.append("<script src=\"").append(_contextPath).append(WARBASE + "js/setPriority.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\" async></script>\n");
             //buf.append("<script src=\"/themes/setPriority.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n"); // debugging
