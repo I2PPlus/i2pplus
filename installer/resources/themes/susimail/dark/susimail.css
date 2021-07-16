@@ -655,7 +655,7 @@ input.markall:active {
 
 input.new {
   padding: 7px 10px 7px 26px;
-  background: var(--compose) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--compose) no-repeat 8px center / 14px, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
   background-size: 14px, 100% !important;
 }
 
@@ -1191,14 +1191,14 @@ a.sort {
 }
 
 img.sort {
-  border: 1px solid #151;
-  border-radius: 2px;
-  background: #020;
-  background: linear-gradient(to bottom, #020, #010);
   margin: 0;
+  padding: 2px;
+  width: 10px;
+  height: 10px;
   vertical-align: middle;
-  width: 14px;
-  height: 14px;
+  border: 1px solid #151;
+  border-radius: 1px;
+  background: linear-gradient(to bottom, #020, #010);
 }
 
 a .sort:hover, a:focus .sort {
@@ -2072,8 +2072,7 @@ td.mailListFlagged img::after {
   width: 16px;
   height: 16px;
   display: inline-block;
-  background: url(/themes/susimail/images/new.svg) no-repeat center center;
-  background-size: 14px;
+  background: url(/themes/susimail/images/new.svg) no-repeat center center / 14px;
   content: "";
 }
 

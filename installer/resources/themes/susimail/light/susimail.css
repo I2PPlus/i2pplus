@@ -853,14 +853,15 @@ a.sort {
 }
 
 img.sort {
+  margin: 0;
+  padding: 2px 3px;
+  width: 10px;
+  height: 10px;
+  vertical-align: middle;
   border: 1px solid #9ea8d1;
   border-radius: 2px;
   background: linear-gradient(to bottom, #fff, #efefff);
-  margin: 0;
-  vertical-align: middle;
   filter: drop-shadow(0 0 1px rgba(204, 204, 204, .6));
-  width: 14px;
-  height: 14px;
 }
 
 a .sort:hover, a:focus .sort {
@@ -1595,6 +1596,7 @@ _:-ms-lang(x), tr.list0:hover, tr.list1:hover {
 #mailbox th {
   padding: 6px 5px;
   white-space: nowrap;
+  font-size: 70%;
   color: #54586f;
   border-bottom: 1px solid #8d8daa;
   background: #f6f6ff;
@@ -1697,10 +1699,6 @@ tr:active td.mailListSubject a {
 
 #mailbox .bottombuttons input[type=submit][disabled] {
   display: none;
-}
-
-#mailbox th {
-  font-size: 8pt;
 }
 
 .mailListFlagged {
@@ -2221,7 +2219,7 @@ input[type=text]:focus::placeholder, input[type=password]:focus::placeholder {
 }
 
 @media screen and (min-width: 1300px) {
-  .iframed body, .iframed td, .iframed textarea, .iframed input, .iframed div, .iframed p.mailbody, .iframed th, .iframed a {
+  .iframed body, .iframed td, .iframed textarea, .iframed input, .iframed div, .iframed p.mailbody, .iframed a {
     font-size: 10pt !important;
   }
 
@@ -2231,8 +2229,12 @@ input[type=text]:focus::placeholder, input[type=password]:focus::placeholder {
 }
 
 @media screen and (min-width: 1500px) {
-  body, td, textarea, input, div, p.mailbody, th, a {
+  body, td, textarea, input, div, p.mailbody, a {
     font-size: 10pt !important;
+  }
+
+  th {
+    font-size: 70%;
   }
 
   td {

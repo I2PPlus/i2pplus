@@ -443,8 +443,9 @@ td.mailListSender {
 }
 
 img.sort {
-  padding: 4px 3px;
-  max-width: 10px !important;
+  padding: 4px 5px;
+  width: 10px;
+  height: 10px;
   vertical-align: middle;
   font-size: 0;
   border: 1px solid #26225c;
