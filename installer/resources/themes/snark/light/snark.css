@@ -4127,16 +4127,6 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
   background: #900;
 }
 
-.peerSeed {
-  content: "";
-  display: inline-block;
-  height: 16px;
-  width: 20px;
-  font-size: 0;
-  background: url(images/peerseed.png) no-repeat center center;
-  background-size: 14px auto;
-}
-
 tfoot .snarkTorrentRateDown:not(:empty)::before, tfoot .snarkTorrentDownloaded:not(:empty)::before,
 tfoot .snarkTorrentRateUp:not(:empty)::before, tfoot .snarkTorrentUploaded:not(:empty)::before {
   margin-right: 1px;

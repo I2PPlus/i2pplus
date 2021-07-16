@@ -1997,10 +1997,9 @@ a:hover img, a:focus img {
 
 .pagenavcontrols img {
   padding: 2px 3px;
+  width: 15px;
   border: 1px solid #171c3f;
-  border-radius: 2px;
   opacity: .8;
-  mix-blend-mode: luminosity;
 }
 
 .pagenavcontrols:hover img:not(.disable) {
@@ -2018,14 +2017,18 @@ a:hover img, a:focus img {
 }
 
 #pagenavtop.pagenavcontrols {
-  margin: 14px 0 -40px;
-  margin: 16px 0 -15px;
-  padding: 1px 0 0;
+  margin-bottom: -1px;
+  padding: 6px 0 4px;
+  border: 1px solid #26235c;
+  background: linear-gradient(to bottom, #001, #00000d);
 }
 
-.iframed #pagenavtop.pagenavcontrols {
-  margin: 4px 0 -29px;
-  padding: 1px 0 2px;
+@media screen and (max-width: 1500px) {
+  #pagenavtop.pagenavcontrols {
+    margin-bottom: 0;
+    border: none;
+    border-bottom: 1px solid #26235c;
+  }
 }
 
 #pagenavbottom .pagenavcontrols {
@@ -2036,6 +2039,7 @@ a:hover img, a:focus img {
 
 .pagenavcontrols a {
   display: inline !important;
+  background: linear-gradient(to bottom, #080818 50%, #000 50%);
 }
 
 #pagenav {
@@ -2611,7 +2615,7 @@ input:checked + label + hr + table + table {
 }
 
 .peerinfo td:first-child {
-  background: url(images/peer.png) no-repeat center center;
+  background: var(--peer) no-repeat center center / 18px;
 }
 
 .peerinfo td, .debuginfo td {
@@ -2832,7 +2836,7 @@ td#bwHelp a {
   margin: 5px 0;
   padding-left: 22px;
   display: inline-block;
-  background: url(images/progressbar.gif) no-repeat left center;
+  background: url(/i2psnark/.resources/icons/progressbar.gif) no-repeat left center;
 }
 
 #filecheck a {
@@ -4261,16 +4265,6 @@ tr:not(.peerinfo) .snarkTorrentDownloaded .percentBarText::after {
 .inactivity[style="width: 0px;"], .inactivity[style="width: 1px;"], .inactivity[style="width: 2px;"],
 .inactivity[style="width: 3px;"], .inactivity[style="width: 4px;"], .inactivity[style="width: 5px;"] {
   display: none;
-}
-
-.peerSeed {
-  content: "";
-  display: inline-block;
-  height: 16px;
-  width: 20px;
-  font-size: 0;
-  background: url(images/peerseed.png) no-repeat center center;
-  background-size: 14px auto;
 }
 
 .magnetLabel {

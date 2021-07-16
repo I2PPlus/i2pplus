@@ -935,7 +935,7 @@ img[src$="details.png"] {
   margin: 5px 0;
   padding-left: 22px;
   display: inline-block;
-  background: url(images/progressbar.gif) no-repeat left center;
+  background: url(/i2psnark/.resources/icons/progressbar.gif) no-repeat left center;
 }
 
 #filecheck a {
@@ -4148,6 +4148,7 @@ td.snarkTorrentDetails {
   top: 30px;
   display: inline-block;
   vertical-align: middle;
+  white-space: nowrap;
   font-size: 9pt;
 }
 
@@ -4330,16 +4331,6 @@ img, input[type=image] {
 .downloading.active .percentBarOuter, .peerinfo.active .percentBarOuter {
   animation: downloadbar 2s linear infinite forwards reverse;
   opacity: 1;
-}
-
-.peerSeed {
-  content: "";
-  display: inline-block;
-  height: 16px;
-  width: 20px;
-  font-size: 0;
-  background: url(images/peerseed.png) no-repeat center center;
-  background-size: 14px auto;
 }
 
 .inactivity {

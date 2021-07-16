@@ -459,16 +459,6 @@ td.snarkTorrentPeerCount:empty::after {
 	background: #555;
 }
 
-.peerSeed {
-	content: "";
-	display: inline-block;
-	height: 16px;
-	width: 20px;
-	font-size: 0;
-	background: var(--seed) no-repeat center center;
-	background-size: 14px auto;
-}
-
 .peerinfo td {
 	border-bottom: 1px solid #bbb;
 }

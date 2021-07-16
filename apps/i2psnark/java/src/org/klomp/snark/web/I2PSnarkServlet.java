@@ -310,7 +310,7 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write(DOCTYPE + "<html>\n" +
                   "<head>\n<link rel=\"preload\" href=\"/themes/fonts/DroidSans.css\" as=\"style\">\n" +
                   "<link rel=\"preload\" href=\"" + _themePath + "images/images.css\" as=\"style\">\n" +
-                  "<link rel=\"shortcut icon\" href=\"" + _themePath + "favicon.ico\">\n");
+                  "<link rel=\"shortcut icon\" href=\"" + _contextPath + WARBASE + "icons/favicon.svg\">\n");
         if (!isStandalone)
             out.write("<link rel=\"preload\" href=\"/js/iframeResizer/iframeResizer.contentWindow.js?" + CoreVersion.VERSION + "\" as=\"script\">");
         out.write("<title>");
@@ -1253,7 +1253,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 out.write("<a href=\"" + _contextPath);
                 out.write(getQueryString(req, null, "", null));
                 out.write("\"><span id=\"first\">");
-                out.write(toThemeImg("first", _t("First"), _t("First page")));
+                out.write(toThemeSVG("first", _t("First"), _t("First page")));
                 out.write("</span></a>");
                 int prev = Math.max(0, start - pageSize);
                 //if (prev > 0) {
@@ -1263,15 +1263,15 @@ public class I2PSnarkServlet extends BasicServlet {
                     String sprev = (prev > 0) ? Integer.toString(prev) : "";
                     out.write(getQueryString(req, null, sprev, null));
                     out.write("\"><span id=\"previous\">");
-                    out.write(toThemeImg("previous", _t("Prev"), _t("Previous page")));
+                    out.write(toThemeSVG("previous", _t("Prev"), _t("Previous page")));
                     out.write("</span></a>");
                 }
             } else {
                 out.write(
                           "<span id=\"first\" class=\"disable\"><img alt=\"\" border=\"0\" class=\"disable\" src=\"" +
-                          _imgPath + "first.png\"></span>" +
+                          _imgPath + "first.svg\"></span>" +
                           "<span id=\"previous\" class=\"disable\"><img alt=\"\" border=\"0\" class=\"disable\" src=\"" +
-                          _imgPath + "previous.png\"></span>");
+                          _imgPath + "previous.svg\"></span>");
             }
             // Page count
             int pages = 1 + ((total - 1) / pageSize);
@@ -1293,7 +1293,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     out.write("<a href=\"" + _contextPath);
                     out.write(getQueryString(req, null, Integer.toString(next), null));
                     out.write("\"><span id=\"next\">");
-                    out.write(toThemeImg("next", _t("Next"), _t("Next page")));
+                    out.write(toThemeSVG("next", _t("Next"), _t("Next page")));
                     out.write("</span></a>");
                 }
                 // Last
@@ -1301,13 +1301,13 @@ public class I2PSnarkServlet extends BasicServlet {
                 out.write("<a href=\"" + _contextPath);
                 out.write(getQueryString(req, null, Integer.toString(last), null));
                 out.write("\"><span id=\"last\">");
-                out.write(toThemeImg("last", _t("Last"), _t("Last page")));
+                out.write(toThemeSVG("last", _t("Last"), _t("Last page")));
                 out.write("</span></a>");
             } else {
                 out.write("<span id=\"next\" class=\"disable\"><img alt=\"\" border=\"0\" class=\"disable\" src=\"" +
-                          _imgPath + "next.png\"></span>" +
+                          _imgPath + "next.svg\"></span>" +
                           "<span id=\"last\" class=\"disable\"><img alt=\"\" border=\"0\" class=\"disable\" src=\"" +
-                          _imgPath + "last.png\">");
+                          _imgPath + "last.svg\">");
             }
     }
 
@@ -2513,7 +2513,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 if (isValid) {
                     pct = (float) (100.0 * peer.completed() / meta.getPieces());
                     if (pct >= 100.0)
-                        out.write("<span class=\"peerSeed\" title=\"" + _t("Seed") + "\">" + _t("Seed") + "</span>");
+                        out.write("<span class=\"peerSeed\" title=\"" + _t("Seed") + "\">" + toSVG("peerseed", _t("Seed"), "") + "</span>");
                     else {
                         String ps = String.valueOf(pct);
                         if (ps.length() > 5)
@@ -3760,7 +3760,7 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("\n").append(HEADER_A + _themePath + HEADER_Z); // optional override.css for version-persistent user edits
         // hide javascript-dependent buttons when js is unavailable
         buf.append("<noscript><style type=\"text/css\">.script{display:none}</style></noscript>\n")
-           .append("<link rel=\"shortcut icon\" href=\"" + _themePath + "favicon.ico\">\n");
+           .append("<link rel=\"shortcut icon\" href=\"" + _contextPath + WARBASE + "icons/favicon.svg\">\n");
         //if (showPriority) // TODO fixup with ajax refresh
             //buf.append("<script src=\"").append(_contextPath).append(WARBASE + "js/setPriority.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\" async></script>\n");
             //buf.append("<script src=\"/themes/setPriority.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n"); // debugging

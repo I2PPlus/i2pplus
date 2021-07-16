@@ -1092,7 +1092,7 @@ tr:not(.peerinfo) .snarkTorrentUploaded:empty::after {
 }
 
 .peerinfo:hover td:first-child {
-  background: #ffd url(images/peer.png) no-repeat center center !important;
+  background: #ffd var(--peer) no-repeat center center  / 18px !important;
 }
 
 tr:hover .percentBarText {
@@ -1102,14 +1102,6 @@ tr:hover .percentBarText {
 .snarkTorrentEven {
   background: #eef;
 }
-
-/*.snarkTorrentEven:nth-child(even) {
-  background: #fff;
-}
-
-.snarkTorrentEven:nth-child(odd) {
-  background: #eef;
-}*/
 
 .snarkTorrentOdd, .SnarkTorrentEven {
   border-bottom: 1px solid #ced1e3;
@@ -1835,10 +1827,10 @@ img:hover {
 
 .pagenavcontrols img {
   margin: 0 3px !important;
-  padding: 5px !important;
+  padding: 2px !important;
   display: inline-block;
   vertical-align: middle;
-  width: 8px;
+  width: 15px;
   border: 1px solid #aaafce;
   border-radius: 2px;
   box-shadow: inset 0 0 1px 1px #fff;
@@ -1864,24 +1856,16 @@ img:hover {
   background: #ddf;
 }
 
-.pagenavcontrols img.disable, .pagenavcontrols img.disable:hover {
-  opacity: .3;
+.pagenavcontrols img {
+  opacity: .9;
 }
 
-.pagenavcontrols a img {
-  opacity: .7;
-}
-
-.pagenavcontrols:hover a img {
+.pagenavcontrols a:hover img, .pagenavcontrols a:focus img {
   opacity: 1;
 }
 
-.pagenavcontrols img::before {
-  width: 14px;
-  height: 16px;
-  display: inline-block;
-  vertical-align: middle;
-  content: "";
+.pagenavcontrols img.disable, .pagenavcontrols img.disable:hover {
+  opacity: .3;
 }
 
 #pagecount {
@@ -1890,20 +1874,16 @@ img:hover {
   display: inline-block;
   vertical-align: middle;
   letter-spacing: .2em;
-  color: #559 !important;
+  color: #9499b8 !important;
   border-radius: 1px;
-  box-shadow: inset 0 0 0 1px #010;
-  box-shadow: 0 0 0 1px #aaf;
-  background: #eef;
+  box-shadow: 0 0 0 1px #aaafce;
   background: linear-gradient(to bottom, #fff, #eef);
 }
 
 .pagenavcontrols:hover #pagecount {
   color: #339 !important;
   box-shadow: 0 0 0 1px #99f, inset 0 0 0 1px #fff;
-  background: #fff;
   background: linear-gradient(to bottom, #fff, #ddf);
-  mix-blend-mode: normal !important;
 }
 
 #pagenavbottom td {
@@ -2337,20 +2317,20 @@ input#toggle_createtorrent:checked + label + hr + table {
 }
 
 .peerinfo td:first-child {
-  background: url(images/peer.png) no-repeat center center;
+  background: var(--peer) no-repeat center center / 18px;
 }
 
 .peerinfo td:first-child::after {
-  content: "";
-  display: inline-block;
-  box-sizing: border-box;
-  vertical-align: middle !important;
   min-height: 24px !important;
+  display: inline-block;
+  vertical-align: middle !important;
+  box-sizing: border-box;
+  content: "";
 }
 
 #totals {
-  display: inline-block;
   margin: 2px 0 2px 5px;
+  display: inline-block;
 }
 
 /* torrent priorities */
@@ -2359,7 +2339,7 @@ input#toggle_createtorrent:checked + label + hr + table {
   width: 52px;
   display: inline-block;
   color: transparent;
-  background-size: 18px 18px !important;
+  background-size: 18px !important;
 }
 
 .priorityHigh {
@@ -2383,9 +2363,9 @@ input#toggle_createtorrent:checked + label + hr + table {
 }
 
 #configs td:first-child {
-  min-width: 180px !important;
-  width: 25%;
   padding-left: 15px !important;
+  width: 25%;
+  min-width: 180px !important;
 }
 
 td#bwHelp {
@@ -2405,10 +2385,10 @@ td#bwHelp a {
 /* end configs */
 
 #filecheck {
-  display: inline-block;
   margin: 5px 0;
-  background: url(images/progressbar.gif) no-repeat left center;
   padding-left: 22px;
+  display: inline-block;
+  background: url(/i2psnark/.resources/icons/progressbar.gif) no-repeat left center;
 }
 
 #filecheck a {
@@ -4117,16 +4097,6 @@ hr.debug {
 .inactivity[style="width: 0px;"], .inactivity[style="width: 1px;"], .inactivity[style="width: 2px;"],
 .inactivity[style="width: 3px;"], .inactivity[style="width: 4px;"], .inactivity[style="width: 5px;"] {
   display: none;
-}
-
-.peerSeed {
-  content: "";
-  display: inline-block;
-  height: 16px;
-  width: 20px;
-  font-size: 0;
-  background: url(images/peerseed.png) no-repeat center center;
-  background-size: 14px auto;
 }
 
 .infohash {

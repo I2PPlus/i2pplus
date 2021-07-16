@@ -2023,6 +2023,7 @@ img:hover {
 .pagenavcontrols {
   padding: 2px 10px;
   display: inline-block;
+  vertical-align: middle;
   line-height: 120%;
   font-weight: 700 !important;
 }
@@ -2037,9 +2038,9 @@ img:hover {
 }
 
 @media screen and (max-width: 1500px) {
-#pagenavtop.pagenavcontrols {
-  padding: 5px 0;
-}
+  #pagenavtop.pagenavcontrols {
+    padding: 7px 0 5px;
+  }
 }
 
 #pagenavbottom td {
@@ -2053,14 +2054,13 @@ img:hover {
 }
 
 .pagenavcontrols img {
-  padding: 4px 5px !important;
-  height: 10px;
+  padding: 2px !important;
+  height: 15px;
   display: inline-block;
   vertical-align: middle;
   border: 1px solid #151 !important;
   border-radius: 1px;
   box-shadow: var(--highlight);
-  background: #030;
   background: linear-gradient(to bottom, #030 50%, #010 50%);
 }
 
@@ -2083,7 +2083,7 @@ img:hover {
 
 #pagecount {
   margin: -2px 6px 0 !important;
-  padding: 4px 10px;
+  padding: 5px 10px;
   display: inline-block;
   vertical-align: middle;
   color: #494 !important;
@@ -4750,16 +4750,6 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 .inactivity[style="width: 0px;"], .inactivity[style="width: 1px;"], .inactivity[style="width: 2px;"],
 .inactivity[style="width: 3px;"], .inactivity[style="width: 4px;"], .inactivity[style="width: 5px;"] {
   display: none;
-}
-
-.peerSeed {
-  content: "";
-  display: inline-block;
-  height: 16px;
-  width: 20px;
-  font-size: 0;
-  background: url(images/peerseed.png) no-repeat center center;
-  background-size: 14px auto;
 }
 
 .snarkTorrentRateDown .left, .snarkTorrentRateUp .left, .snarkTorrentUploaded .left {
