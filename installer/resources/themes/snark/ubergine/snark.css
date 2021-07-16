@@ -1981,7 +1981,6 @@ input[type=submit]:disabled:active, a.control:disabled:active {
   box-shadow: inset 0 0 0 1px #fff;
   background: linear-gradient(to bottom, #fef 50%, #b9b 50%);
   opacity: 1;
-  mix-blend-mode: normal;
   filter: sepia(100%) invert(100%) hue-rotate(58deg) brightness(140%);
   transition: ease all .1s;
 }
@@ -4651,7 +4650,7 @@ td.snarkTorrentStatus b {
   font-size: 95%;
   text-shadow: 0 1px 1px #101;
   border-radius: 2px;
-  background: #b4649b;
+  background: #ac5390;
 }
 
 .lang_fr td.snarkTorrentStatus b, .lang_hu td.snarkTorrentStatus b, .lang_tr td.snarkTorrentStatus b {
@@ -4666,7 +4665,7 @@ td.snarkTorrentStatus b::before {
   left: -10px;
   border-width: 5px;
   border-style: solid;
-  border-color: transparent #b4649b transparent transparent;
+  border-color: transparent #ac5390 transparent transparent;
   content: "";
 }
 
