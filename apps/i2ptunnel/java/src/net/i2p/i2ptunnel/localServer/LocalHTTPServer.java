@@ -164,7 +164,7 @@ public abstract class LocalHTTPServer {
                 out.write(type.getBytes("UTF-8"));
                 out.write("\r\nAccess-Control-Allow-Origin: *".getBytes("UTF-8"));
                 if (filename.contains(".css") || filename.contains(".js") || filename.endsWith(".jpg") || filename.endsWith(".png")
-                    || filename.endsWith(".ttf") || filename.endsWith(".svg"))
+                    || filename.endsWith(".ttf") || filename.endsWith(".woff2") || filename.endsWith(".svg"))
                     out.write("\r\nCache-Control: max-age=2628000, immutable\r\nConnection: close\r\nProxy-Connection: close\r\n\r\n".getBytes("UTF-8"));
                 else
                     out.write("\r\nCache-Control: no-cache, private\r\nConnection: close\r\nProxy-Connection: close\r\n\r\n".getBytes("UTF-8"));

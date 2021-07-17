@@ -24,6 +24,9 @@
 <meta name="viewport" content="width=device-width">
 <jsp:useBean class="net.i2p.router.web.CSSHelper" id="intl" scope="request" />
 <jsp:setProperty name="intl" property="contextId" value="<%=(String)session.getAttribute(\"i2p.contextId\")%>" />
+<link rel="preload" href="/themes/fonts/DroidSans/DroidSans-Bold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/themes/fonts/DroidSans/DroidSans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/themes/fonts/DroidSans/DroidSansMono.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/themes/fonts/DroidSans.css" as="style">
 <link rel="icon" href="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/favicon.svg">
 <%
@@ -50,7 +53,7 @@
    if (uri.contains("override.css"))
        response.setHeader("Cache-Control", "no-store");
    else if (uri.contains(".png") || uri.contains(".svg") || uri.contains(".jpg") || uri.contains(".ttf") ||
-            uri.contains("flags.jsp") || uri.contains(".js") || uri.contains(".css"))
+            uri.contains(".woff2") || uri.contains("flags.jsp") || uri.contains(".js") || uri.contains(".css"))
        response.setHeader("Cache-Control", "private, max-age=2628000, immutable");
    else
        response.setHeader("Cache-Control", "no-cache, private, max-age=2628000");
