@@ -3,26 +3,23 @@
 @font-face {
   font-family: "Droid Sans";
   font-weight: 400;
-  font-weight: 400;
   font-style: normal;
   font-display: swap;
-  src: local("Droid Sans Regular"), local("DroidSans"), url("/themes/fonts/DroidSans/DroidSans.ttf") format("truetype");
+  src: local("Droid Sans Regular"), local("DroidSans"), url(/themes/fonts/DroidSans/DroidSans.woff2) format("woff2");
 }
 
 @font-face {
   font-family: "Droid Sans";
   font-weight: 700;
-  font-weight: 700;
   font-style: normal;
   font-display: swap;
-  src: url("/themes/fonts/DroidSans/DroidSans-Bold.ttf") format("truetype"), local("Droid Sans Bold"), local("DroidSans-Bold");
+  src: url("/themes/fonts/DroidSans/DroidSans-Bold.woff2") format("woff2"), local("Droid Sans Bold"), local("DroidSans-Bold");
 }
 
 @font-face {
   font-family: "Droid Sans Mono";
   font-weight: 400;
-  font-weight: 400;
   font-style: normal;
   font-display: swap;
-  src: local("Droid Sans Mono"), local("DroidSans-Mono"), url("/themes/fonts/DroidSans/DroidSansMono.ttf") format("truetype");
+  src: local("Droid Sans Mono"), local("DroidSans-Mono"), url(/themes/fonts/DroidSans/DroidSansMono.woff2) format("woff2");
 }

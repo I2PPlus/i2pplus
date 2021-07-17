@@ -28,6 +28,24 @@ body {
   background-size: 32px;
 }
 
+body::before {
+  width: 0;
+  height: 4px;
+  display: inline-block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  box-shadow: 0 2px 2px rgba(0,0,0,.8);
+  background: linear-gradient(to bottom, rgba(255,255,255,.1) 50%, rgba(0,0,0,.3) 50%), linear-gradient(to right, #d30, #f60);
+  content: "";
+}
+
+@keyframes loader {
+  0 {width: 0}
+  99% {width: 100%}
+  100% {width: 0}
+}
+
 body, input, button, select, table {
   font-family: var(--bodyfont);
 }

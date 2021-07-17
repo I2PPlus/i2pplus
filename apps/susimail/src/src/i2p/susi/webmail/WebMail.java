@@ -438,19 +438,19 @@ public class WebMail extends HttpServlet
         buf.append(label).append("&nbsp;&nbsp;");
         // UP is reverse sort (descending). DOWN is normal sort (ascending).
         if (name.equals(currentName) && currentOrder == SortOrder.UP) {
-            buf.append("<img class=\"sort selected\" src=\"").append(imgPath).append("3up.png\" border=\"0\" alt=\"^\">\n");
+            buf.append("<img class=\"sort selected\" src=\"").append(imgPath).append("../../images/up.svg\" border=\"0\" alt=\"^\">\n");
         } else {
             buf.append("<a class=\"sort\" href=\"").append(myself).append("?page=").append(page).append("&amp;sort=-")
                            .append(name).append("&amp;folder=").append(folder).append("\">");
-            buf.append("<img class=\"sort\" src=\"").append(imgPath).append("3up.png\" border=\"0\" alt=\"^\">");
+            buf.append("<img class=\"sort\" src=\"").append(imgPath).append("../../images/up.svg\" border=\"0\" alt=\"^\">");
             buf.append("</a>\n");
         }
         if (name.equals(currentName) && currentOrder == SortOrder.DOWN) {
-            buf.append("<img class=\"sort selected\" src=\"").append(imgPath).append("3down.png\" border=\"0\" alt=\"v\">");
+            buf.append("<img class=\"sort selected\" src=\"").append(imgPath).append("../../images/down.svg\" border=\"0\" alt=\"v\">");
         } else {
             buf.append("<a class=\"sort\" href=\"").append(myself).append("?page=").append(page).append("&amp;sort=")
                            .append(name).append("&amp;folder=").append(folder).append("\">");
-            buf.append("<img class=\"sort\" src=\"").append(imgPath).append("3down.png\" border=\"0\" alt=\"v\">");
+            buf.append("<img class=\"sort\" src=\"").append(imgPath).append("../../images/down.svg\" border=\"0\" alt=\"v\">");
             buf.append("</a>");
         }
         return buf.toString();

@@ -34,6 +34,7 @@ import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;
 import net.i2p.router.crypto.ratchet.RatchetSessionTag;
 import net.i2p.router.networkdb.kademlia.MessageWrapper;
+import net.i2p.router.networkdb.kademlia.MessageWrapper.OneTimeSession;
 import net.i2p.router.peermanager.TunnelHistory;
 import net.i2p.router.tunnel.HopConfig;
 import net.i2p.router.tunnel.TunnelDispatcher;
@@ -966,6 +967,14 @@ class BuildHandler implements Runnable {
                        + "] after " + recvDelay + "ms with response [" + response
                        + "] from " + (from != null ? "[" + from.toBase64().substring(0,6) + "]" : "tunnel") + req);
 
+        int records = state.msg.getRecordCount();
+        int ourSlot = -1;
+        for (int j = 0; j < records; j++) {
+            if (state.msg.getRecord(j) == null) {
+                ourSlot = j;
+                break;
+            }
+        }
         EncryptedBuildRecord reply;
         if (isEC) {
             // TODO options
@@ -976,29 +985,14 @@ class BuildHandler implements Runnable {
                         _log.warn("Unsupported ShortTunnelBuildMessage");
                     return;
                 }
-                if (isOutEnd) {
-                    // reply will be sent in plaintext in a OTBRM, see below
-                    reply = null;
-                } else {
-                    reply = BuildResponseRecord.createShort(_context, response, req.getChaChaReplyKey(), req.getChaChaReplyAD(), props);
-                }
+                reply = BuildResponseRecord.createShort(_context, response, req.getChaChaReplyKey(), req.getChaChaReplyAD(), props, ourSlot);
             } else {
                 reply = BuildResponseRecord.create(_context, response, req.getChaChaReplyKey(), req.getChaChaReplyAD(), props);
             }
         } else {
             reply = BuildResponseRecord.create(_context, response, req.readReplyKey(), req.readReplyIV(), state.msg.getUniqueId());
         }
-        int records = state.msg.getRecordCount();
-        int ourSlot = -1;
-        for (int j = 0; j < records; j++) {
-            if (state.msg.getRecord(j) == null) {
-                ourSlot = j;
-                if (!(isOutEnd && state.msg.getType() == ShortTunnelBuildMessage.MESSAGE_TYPE))
-                    state.msg.setRecord(j, reply);
-                // else reply will be sent in plaintext
-                break;
-            }
-        }
+        state.msg.setRecord(ourSlot, reply);
 
         if (_log.shouldLog(Log.DEBUG))
             _log.debug("Read slot [" + ourSlot + "] containing reply [MsgID " + req.readReplyMessageId() + "]"
@@ -1035,8 +1029,9 @@ class BuildHandler implements Runnable {
             I2NPMessage outMessage;
             if (state.msg.getType() == ShortTunnelBuildMessage.MESSAGE_TYPE) {
                 // garlic encrypt
-                SessionKey sk = null; // TODO
-                RatchetSessionTag st = null; // TODO
+                OneTimeSession ots = req.readGarlicKeys();
+                SessionKey sk = ots.key;
+                RatchetSessionTag st = ots.rtag;
                 outMessage = MessageWrapper.wrap(_context, replyMsg, sk, st);
                 if (outMessage == null) {
                     if (_log.shouldWarn())

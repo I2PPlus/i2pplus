@@ -21,6 +21,13 @@ body {
   font: 9pt var(--bodyfont);
   color: #4f4f63;
   background: #a4a4cb url(/themes/console/light/images/tile2.png) center top / 32px;
+/*  background: repeating-linear-gradient(to bottom, #a4a4cb 2px, #9393ba 4px), #a4a4cb;
+  background-size: 4px 100%;*/
+}
+
+body.iframed {
+  margin: 6px 1px 0 !important;
+  background: transparent !important;
 }
 
 /* preload top navigation mouseovers */
@@ -39,11 +46,6 @@ body::before {
   var(--offline);
   background-size: 0;
   content: "";
-}
-
-body.iframed {
-  margin: 6px 1px 0 !important;
-  background: transparent !important;
 }
 
 /* accelerate rendering */
@@ -189,8 +191,9 @@ button::-moz-focus-inner, input::-moz-focus-inner {
   font-size: 9pt !important;
   border: 1px solid #afafcf;
   border-radius: 2px;
-  background: repeating-linear-gradient(to right, #f2f2ff 2px, #dfe0ff 4px);
-  background-size: 4px 100%;
+/*  background: repeating-linear-gradient(to right, #f2f2ff 2px, #dfe0ff 4px);
+  background-size: 4px 100%;*/
+  background: #dfe0ff;
 }
 
 .iframed .page {
@@ -1891,8 +1894,12 @@ img[src$="details.png"] {
   background: linear-gradient(to bottom, #fafaff, #efefff);
 }
 
+#snarkCommentSection {
+  padding-bottom: 1px;
+}
+
 .iframed #snarkFiles, .iframed #snarkCommentSection {
-  margin-top: 8px !important;
+  margin-top: -1px !important;
 }
 
 #snarkInfo ~ .mainsection table:last-child, .iframed #snarkInfo ~ .mainsection:last-child {
@@ -1921,7 +1928,7 @@ img[src$="details.png"] {
 }
 
 .addtorrentsection {
-  margin: 10px 0;
+  margin: -1px 0 10px;
   background: #fff;
   background: linear-gradient(to bottom, #fafaff, #e0e0ef);
 }
@@ -1931,7 +1938,6 @@ img[src$="details.png"] {
 }
 
 .iframed .addtorrentsection {
-  margin-top: -1px;
   background: linear-gradient(to bottom, #fafaff, #f8f8ff, #fafaff);
 }
 
@@ -1949,8 +1955,16 @@ img[src$="details.png"] {
   background: linear-gradient(to bottom, #fafaff, #f8f8ff, #fafaff);
 }
 
-.iframed .configsectionpanel#trackers {
+.configsectionpanel#trackers, .mainsection#snarkInfo {
   margin-top: -1px !important;
+}
+
+.mainsection#snarkInfo {
+  margin-top: 9px !important;
+}
+
+.iframed .mainsection#snarkInfo {
+  margin-top: -9px !important;
 }
 
 .iframed .configsection, .iframed #trackers, .iframed .mainsection#snarkInfo {
@@ -3707,7 +3721,7 @@ td.snarkTrackerDetails img {
   border-top: 1px solid #afafcf;
   border-bottom: 1px solid #afafcf;
   position: sticky;
-  top: 41px;
+  top: 43px;
   z-index: 999;
   margin: -1px 0 -2px;
 }
@@ -3765,8 +3779,9 @@ td.snarkTrackerDetails img {
 
 @media screen and (max-width: 1000px) {
 #torrentDisplay {
-  display: flex;
   margin-bottom: 0;
+  display: flex;
+  top: 39px;
 }
 
 #torrentDisplay label {
@@ -4503,4 +4518,15 @@ tfoot .snarkTorrentRateDown::after, tfoot .snarkTorrentRateUp::after {
     width: 400px !important;
     max-width: 400px !important;
   }
+}
+
+
+body:not(.iframed) .snarknavbar, body:not(.iframed) .page {
+  border: 1px solid rgba(168,168,192,.4) !important;
+  border-radius: 0 !important;
+  box-shadow: 0 0 0 1px rgba(96,96,128,.7) !important;
+}
+
+body:not(.iframed) #snarkCommentSection {
+  border-bottom: none;
 }

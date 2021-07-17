@@ -44,6 +44,7 @@ import net.i2p.util.SecureDirectory;
 import net.i2p.util.SecureFileOutputStream;
 import net.i2p.util.SystemVersion;
 
+
 /**
  * Write out keys to disk when we get them and periodically read ones we don't know
  * about into memory, with newly read routers are also added to the routing table.
@@ -299,6 +300,7 @@ public class PersistentDataStore extends TransientDataStore {
             _log.debug("Writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk");
         OutputStream fos = null;
         File dbFile = null;
+
         try {
             String filename = null;
 
@@ -559,6 +561,11 @@ public class PersistentDataStore extends TransientDataStore {
                         // Don't store but don't delete
                         if (_log.shouldLog(Log.WARN))
                             _log.warn("Skipping since NetDb copy is newer than " + _routerFile);
+                    } else if (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 || ri.getAddresses().isEmpty()) {
+                        // don't store unreachable peers & delete any existing ri files
+                        corrupt = true;
+                        if (_log.shouldLog(Log.INFO))
+                            _log.info("Not writing RouterInfo [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] to disk -> unreachable");
                     } else if (getContext().blocklist().isBlocklisted(ri)) {
                         corrupt = true;
                         if (_log.shouldLog(Log.WARN))

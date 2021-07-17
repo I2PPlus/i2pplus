@@ -5,7 +5,7 @@
 <meta http-equiv="refresh" content="5;url=/i2psnark/">
 <meta http-equiv="pragma" content="no-cache">
 <meta http-equiv="cache-control" content="no-cache">
-<title>I2PSnark</title>
+<title>I2PSnark | Loading&hellip;</title>
 <link rel="preload" href="/i2psnark/" as="document">
 <link rel="shortcut icon" href="/i2psnark/.resources/icons/favicon.svg">
 <style type="text/css">
@@ -13,18 +13,40 @@ html, body {
   min-height: 100%;
   font-weight: 600;
   font-size: 14pt;
-  color: #525;
-  font-family: Open Sans, Noto Sans, Ubuntu, Segoe UI, sans-serif;
+  color: #636;
 }
 html {
   background: repeating-linear-gradient(to bottom, rgba(16,0,16,.7) 2px, rgba(32,0,32,.5) 4px),
               url(/i2psnark/.resources/icons/favicon.svg) no-repeat center calc(50% - 40px) / 20%, #101;
+  animation: ease-in-out throb 2.5s alternate infinite;
+}
+@keyframes throb {
+  from {background-size: 100%, 20%}
+  to {background-size: 100%, 25%}
+}
+body::before {
+  width: 0;
+  height: 4px;
+  display: inline-block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  box-shadow: 0 2px 2px rgba(0,0,0,.8);
+  background: linear-gradient(to bottom, rgba(255,255,255,.1) 50%, rgba(0,0,0,.3) 50%), linear-gradient(to right, #d30, #f60);
+  content: "";
+  animation: linear loader 5s forwards;
+}
+@keyframes loader {
+  from {width: 0}
+  to {width: 100%}
 }
 a {
   text-decoration: none;
   outline: none;
-  font-weight: 900;
-  color: #737;
+  color: #848;
+}
+a:hover, a:focus {
+  color: #959;
 }
 #footer {
   padding: 20px;
@@ -39,6 +61,6 @@ a {
 </style>
 </head>
 <body>
-<div id ="footer">[ Redirecting to <a href="/i2psnark/">I2PSnark&hellip;</a> ]</div>
+<div id ="footer">[ Loading <a href="/i2psnark/">I2PSnark&hellip;</a> ]</div>
 </body>
 </html>

@@ -13,6 +13,7 @@ Content-Security-Policy: default-src 'none'; style-src 'self' 'unsafe-inline' ht
 <title>_("Outproxy Not Found")</title>
 <link rel="shortcut icon" href="http://proxy.i2p/themes/console/default/images/favicon.svg">
 <link href="http://proxy.i2p/themes/console/default/proxy.css" rel="stylesheet" type="text/css">
+<style type="text/css">body::before{animation:linear loader 60s forwards}</style>
 <meta http-equiv="refresh" content="60">
 </head>
 <body id="proxy_error">

@@ -29,7 +29,7 @@
         <Call name="setInitParameter">
           <!-- In Java we have a blacklist. This covers the most common cases. -->
           <Arg>mimeTypes</Arg>
-          <Arg>application/pdf,application/x-javascript,application/xhtml+xml,application/xml,image/svg+xml,text/css,text/html,text/plain</Arg>
+          <Arg>application/pdf,application/x-javascript,application/xhtml+xml,application/xml,image/svg+xml,text/css,text/html,text/plain,font/ttf,font/woff</Arg>
         </Call>
       </New>
     </Arg>
