@@ -65,7 +65,9 @@ public class WebAppStarter {
         //_log = ContextHelper.getContext(null).logManager().getLog(WebAppStarter.class); ;
         // see DefaultServlet javadocs
         String pfx = "org.eclipse.jetty.servlet.Default.";
-        INIT_PARAMS.put(pfx + "cacheControl", "no-cache, private, max-age=2628000");
+//        INIT_PARAMS.put(pfx + "cacheControl", "no-cache, private, max-age=2628000");
+        // this enables javascript to be cached as immutable
+        INIT_PARAMS.put(pfx + "cacheControl", "private, max-age=2628000, immutable");
         INIT_PARAMS.put(pfx + "dirAllowed", "false");
 
         boolean found = false;
