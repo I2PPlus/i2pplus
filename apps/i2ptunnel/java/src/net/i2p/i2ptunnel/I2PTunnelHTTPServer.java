@@ -880,6 +880,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                      (!_contentType.equals("image/png")) &&
                      (!_contentType.equals("image/tiff")) &&
                      (!_contentType.equals("image/webp")) &&
+                     (!_contentType.equals("font/woff2")) &&
                      (!_contentType.startsWith("video/")) &&
                      (!_contentType.equals("application/compress")) &&
                      (!_contentType.equals("application/bzip2")) &&
