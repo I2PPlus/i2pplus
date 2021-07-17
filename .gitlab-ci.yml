@@ -30,7 +30,7 @@ Java8:
     - ant tarball
 #    - ant updater200WithJettyAndGeoIP
 #    - ant updaterWithJetty
-    - ant updater
+    - ant updaterCompact
     - ant i2psnark
     - ant javadoc-zip
 
