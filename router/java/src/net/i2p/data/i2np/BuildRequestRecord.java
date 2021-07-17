@@ -792,7 +792,7 @@ public class BuildRequestRecord {
         buf.append("]")
            .append("\n* Time: ").append(new Date(readRequestTime()))
            .append(" -> Expires in: ").append(DataHelper.formatDuration(readExpiration()))
-           .append("\n* Target: [").append(readNextIdentity().toBase64().substring(0,6)).append("]");
+           .append("\n* Target: [").append(readNextIdentity().toBase64().substring(0,6)).append("]")
            .append("\n* Layer Key: ").append(readLayerKey())
            .append("\n* IV Key: ").append(readIVKey());
         if (_data.length != LENGTH_EC_SHORT) {
