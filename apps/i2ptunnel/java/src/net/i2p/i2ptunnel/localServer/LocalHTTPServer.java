@@ -147,6 +147,8 @@ public abstract class LocalHTTPServer {
                 String type;
                 if (filename.endsWith(".css"))
                     type = "text/css; charset=UTF-8";
+                else if (filename.endsWith(".js"))
+                    type = "text/javascript";
                 else if (filename.endsWith(".ico"))
                     type = "image/x-icon";
                 else if (filename.endsWith(".png"))
@@ -159,6 +161,18 @@ public abstract class LocalHTTPServer {
                     type = "image/webp";
                 else if (filename.endsWith(".svg"))
                     type = "image/svg+xml";
+                else if (filename.endsWith(".ttf"))
+                    type = "font/ttf";
+                else if (filename.endsWith(".woff"))
+                    type = "font/woff";
+                else if (filename.endsWith(".woff2"))
+                    type = "font/woff2";
+                else if (filename.endsWith(".pdf"))
+                    type = "application/pdf";
+                else if (filename.endsWith(".txt"))
+                    type = "text/plain";
+                else if (filename.endsWith(".xhtml"))
+                    type = "application/xhtml+xml";
                 else type = "text/html; charset=UTF-8";
                 out.write("HTTP/1.1 200 OK\r\nContent-Type: ".getBytes("UTF-8"));
                 out.write(type.getBytes("UTF-8"));
