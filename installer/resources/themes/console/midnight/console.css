@@ -658,18 +658,18 @@ input.download[value$="from File"]:active, button.download[value$="from File"]:a
 
 input.download[value^="Dump"], button.download[value^="Dump"] {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/dump-threads.png) no-repeat 8px center / 14px, var(--button) !important;
+  background: var(--bug) no-repeat 8px center / 14px, var(--button) !important;
 }
 
 input.download[value^="Dump"]:hover, button.download[value^="Dump"]:hover,
 input.download[value^="Dump"]:focus, button.download[value^="Dump"]:focus {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/dump-threads.png) no-repeat 8px center / 14px, var(--button_hover) !important;
+  background: var(--bug) no-repeat 8px center / 14px, var(--button_hover) !important;
 }
 
 input.download[value^="Dump"]:active, button.download[value^="Dump"]:active {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/dump-threads.png) no-repeat 8px center / 14px, var(--button_active) !important;
+  background: var(--bug) no-repeat 8px center / 14px, var(--button_active) !important;
 }
 
 input.go, button.go, input[value="GO"], button#run {
@@ -2290,14 +2290,6 @@ background-position: 0;
 /* end sidebar */
 
 /* console error messages */
-
-img[src="/themes/console/images/i2plogo.png"], img[src="/themes/console/images/i2plogo.png"]:hover,
-img[src="/themes/console/images/i2plogo.png"]:focus, a:active img[src="/themes/console/images/i2plogo.png"] {
-  margin-top: 6px !important;
-  margin-left: -1px !important;
-  width: 180px !important;
-  filter: sepia(100%) invert(100%) !important;
-}
 
 .sorry {
   margin: -1px 3px 10px 212px;

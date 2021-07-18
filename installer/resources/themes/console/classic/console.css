@@ -54,7 +54,7 @@ body {
   contain: layout;
 }
 
-.routersummary img[src$="i2plogo.png"], .routersummary h3, .routersummary h3 a, #sb_internnals, #sb_advanced, #sb_services,
+#sb_logo img, .routersummary h3, .routersummary h3 a, #sb_internnals, #sb_advanced, #sb_services,
 .confignav, *::before, *::after, div.app, .themechoice, .langselect, .langbox,
 .newsAuthor, #newsDisplay, #netdbcountrylist img, .viewfullentry, .sybil_routerinfo th img, .graphspanel, h1 {
   user-select: none;
@@ -227,10 +227,6 @@ i {
 
 /* console error messages */
 
-img[src="/themes/console/images/i2plogo.png"] {
-  box-shadow: none !important;
-}
-
 .sorry {
   margin: -1px 0 0 211px;
   padding: 20px 20px 20px 75px;
@@ -326,6 +322,12 @@ img[src="/themes/console/images/i2plogo.png"] {
   user-select: none;
 }
 
+#sb_logo a:active img {
+  transform: scale(.97) !important;
+  filter: none;
+  mix-blend-mode: luminosity;
+}
+
 #error500 .routersummary img[src$="i2plogo.png"] {
   margin-bottom: -3px;
 }
@@ -338,14 +340,13 @@ img[src="/themes/console/images/i2plogo.png"] {
   line-height: 1.8;
 }
 
-.routersummary a img:first-child {
+#sb_logo a img {
   border: none;
   opacity: .9;
   image-rendering: -webkit-optimize-contrast;
 }
 
-.routersummary a img:first-child:hover, .routersummary a img:first-child:active {
-  box-shadow: none;
+#sb_logo a:hover img, #sb_logo a:active img {
   opacity: 1;
 }
 
@@ -1833,12 +1834,12 @@ input.download[value$="from file"]:focus, button.download[value$="from file"]:fo
 
 input.download[value^="Dump"], button.download[value^="Dump"] {
   padding: 5px 8px 5px 23px;
-  background: url(/themes/console/images/buttons/dump-threads.png) no-repeat 7px center, var(--btn);
+  background: var(--bug) no-repeat 7px center / 14px, var(--btn);
 }
 
 input.download[value^="Dump"]:hover, button.download[value^="Dump"]:hover,
 input.download[value^="Dump"]:focus, button.download[value^="Dump"]:focus {
-  background: url(/themes/console/images/buttons/dump-threads.png) no-repeat 7px center, var(--btn_hover);
+  background: var(--bug) no-repeat 7px center / 14px, var(--btn_hover);
 }
 
 input.go, button.go, input[value="GO"], button#run {

@@ -225,14 +225,13 @@ pre {
   margin: 0 !important;
   width: 200px;
   height: auto;
-  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
   image-rendering: -webkit-optimize-contrast;
 }
 
-#sb_logo img:hover {
+#sb_logo a img:hover {
   opacity: 1;
   transition: ease filter .3s, ease opacity .3s;
-  filter: drop-shadow(0 0 1px #f60);
+  filter: drop-shadow(0 0 1px rgba(255,96,0,.6));
 }
 
 #error500 #sidebar img[src$="i2plogo.png"] {
@@ -251,15 +250,17 @@ pre {
   color: #d30 !important;
 }
 
-#sidebar a[href="/"]:focus img, #sidebar a[href="/console"]:focus img {
+#sb_logo a:focus img {
   filter: drop-shadow(0 0 1px #f60);
 }
 
-#sidebar a:active img[src$="i2plogo.png"] {
-  filter: drop-shadow(0 0 2px #d30);
+#sb_logo a:active img {
+  transform: scale(.98) !important;
+  filter: none;
+  mix-blend-mode: luminosity;
 }
 
-#sidebar a[href="/"], #sidebar a[href="/console"] {
+#sb_logo a img {
   outline: none !important;
 }
 
@@ -4929,12 +4930,12 @@ input.download[value$="from file"]:focus, button.download[value$="from file"]:fo
 
 input.download[value^="Dump"], button.download[value^="Dump"] {
   padding: 5px 9px 5px 24px;
-  background: url(/themes/console/images/buttons/dump-threads.png) no-repeat 8px center, var(--btn);
+  background: var(--bug) no-repeat 8px center / 14px, var(--btn);
 }
 
 input.download[value^="Dump"]:hover, button.download[value^="Dump"]:hover,
 input.download[value^="Dump"]:focus, button.download[value^="Dump"]:focus {
-  background: url(/themes/console/images/buttons/dump-threads.png) no-repeat 8px center, var(--btn_hover);
+  background: var(--bug) no-repeat 8px center / 14px, var(--btn_hover);
 }
 
 input.go, button.go, input[value="GO"], #embedurl input[type=submit], button#run {
@@ -11202,11 +11203,10 @@ h1 {
   font-size: 11pt !important;
 }
 
-#sidebar img[src$="i2plogo.png"] {
-  margin-top: -6px !important;
+#sb_logo img {
+  margin-top: -4px !important;
   margin-left: -2px !important;
   width: 240px !important;
-  transform: none !important;
 }
 
 #error500 #sidebar img[src$="i2plogo.png"] {

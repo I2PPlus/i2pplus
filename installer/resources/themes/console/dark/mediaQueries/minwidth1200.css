@@ -521,11 +521,6 @@
     margin-left: -76px !important;
   }
 
-  img[src="/themes/console/images/i2plogo.png"] {
-    margin-top: 3px !important;
-    width: 200px !important;
-  }
-
   .tunneldisplay .tunnel_peer {
     margin: 0 !important;
     min-width: 80px !important;
