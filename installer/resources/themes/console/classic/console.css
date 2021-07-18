@@ -227,10 +227,6 @@ i {
 
 /* console error messages */
 
-img[src="/themes/console/images/i2plogo.png"] {
-  box-shadow: none !important;
-}
-
 .sorry {
   margin: -1px 0 0 211px;
   padding: 20px 20px 20px 75px;
@@ -1838,12 +1834,12 @@ input.download[value$="from file"]:focus, button.download[value$="from file"]:fo
 
 input.download[value^="Dump"], button.download[value^="Dump"] {
   padding: 5px 8px 5px 23px;
-  background: url(/themes/console/images/buttons/dump-threads.png) no-repeat 7px center, var(--btn);
+  background: var(--bug) no-repeat 7px center / 14px, var(--btn);
 }
 
 input.download[value^="Dump"]:hover, button.download[value^="Dump"]:hover,
 input.download[value^="Dump"]:focus, button.download[value^="Dump"]:focus {
-  background: url(/themes/console/images/buttons/dump-threads.png) no-repeat 7px center, var(--btn_hover);
+  background: var(--bug) no-repeat 7px center / 14px, var(--btn_hover);
 }
 
 input.go, button.go, input[value="GO"], button#run {

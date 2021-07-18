@@ -2279,8 +2279,8 @@ background-position: 0;
   color: #a00;
   border: 1px solid #700;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #b00;
-  background: #000 url(/themes/console/images/question.png) center 20px no-repeat;
-  background: url(/themes/console/images/question.png) center 20px no-repeat, linear-gradient(to bottom, #100, #000, #100);
+  background: #000 url(/themes/console/images/info/question.png) center 20px no-repeat;
+  background: url(/themes/console/images/info/question.png) center 20px no-repeat, linear-gradient(to bottom, #100, #000, #100);
 }
 
 #nukemail.floating {

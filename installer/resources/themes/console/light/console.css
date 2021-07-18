@@ -4930,12 +4930,12 @@ input.download[value$="from file"]:focus, button.download[value$="from file"]:fo
 
 input.download[value^="Dump"], button.download[value^="Dump"] {
   padding: 5px 9px 5px 24px;
-  background: url(/themes/console/images/buttons/dump-threads.png) no-repeat 8px center, var(--btn);
+  background: var(--bug) no-repeat 8px center / 14px, var(--btn);
 }
 
 input.download[value^="Dump"]:hover, button.download[value^="Dump"]:hover,
 input.download[value^="Dump"]:focus, button.download[value^="Dump"]:focus {
-  background: url(/themes/console/images/buttons/dump-threads.png) no-repeat 8px center, var(--btn_hover);
+  background: var(--bug) no-repeat 8px center / 14px, var(--btn_hover);
 }
 
 input.go, button.go, input[value="GO"], #embedurl input[type=submit], button#run {
