@@ -419,15 +419,15 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
         buf.append(toString());
         for (int i = 0; i < _peers.length; i++) {
              if (i == 0)
-                 buf.append("\nGW   ");
+                 buf.append("\n* Gateway ");
              else if (i == _peers.length - 1)
-                 buf.append("\nEP   ");
+                 buf.append("\n* Endpoint ");
              else
-                 buf.append("\nHop ").append(i);
+                 buf.append("\n* Hop ").append(i);
              buf.append(": ").append(_config[i]);
         }
         if (_garlicReplyKeys != null) {
-            buf.append("\nGarlic reply key: ").append(_garlicReplyKeys.key).append(" tag: ").append(_garlicReplyKeys.rtag);
+            buf.append("\n* Garlic Reply Key: ").append(_garlicReplyKeys.key).append("\n* Tag: ").append(_garlicReplyKeys.rtag);
         }
         return buf.toString();
     }
