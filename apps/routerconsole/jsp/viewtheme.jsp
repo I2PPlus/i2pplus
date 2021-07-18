@@ -24,6 +24,10 @@ if (uri.endsWith(".css")) {
   response.setContentType("image/svg+xml; charset=utf-8");
 } else if (uri.endsWith(".ttf")) {
   response.setContentType("font/ttf");
+} else if (uri.endsWith(".woff")) {
+  response.setContentType("font/woff");
+} else if (uri.endsWith(".woff2")) {
+  response.setContentType("font/woff2");
 } else if (uri.endsWith(".html")) {
   // /javadoc/
   response.setContentType("text/html");

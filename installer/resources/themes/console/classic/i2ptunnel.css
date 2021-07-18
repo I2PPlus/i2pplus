@@ -239,12 +239,8 @@ select {
   border: 1px solid #aaafce;
   border-radius: 2px;
   box-shadow: 0 0 0 1px #fff inset, 0 0 1px 0 #ddd;
-  background: url(images/dropdown.png) right 8px center no-repeat #fff;
-  background: url(images/dropdown.png) right 8px center no-repeat, linear-gradient(to bottom, #fff, #f4f5ff);
-  background-size: 10px auto, 100% 100%;
+  background: url(images/dropdown.png) no-repeat right 8px center / 10px, linear-gradient(to bottom, #fff, #f4f5ff);
   cursor: pointer;
-  -moz-appearance: none;
-  -webkit-appearance: none;
   appearance: none;
 }
 
@@ -253,23 +249,17 @@ select:hover {
 }
 
 select:hover, select:active {
-  background: url(images/dropdown_hover.png) right 8px center no-repeat, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
-  background-size: 10px auto, 100% 100% !important;
+  background: url(images/dropdown_hover.png) no-repeat right 8px center / 10px, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
   outline: none !important;
 }
 
 select:focus {
-  background: url(images/dropdown_hover.png) right 8px center no-repeat, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
-  background-size: 10px auto, 100% 100% !important;
+  background: url(images/dropdown_hover.png) no-repeat right 8px center / 10px, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
   outline: none !important;
 }
 
 select option {
   background: #fff;
-}
-
-select::-ms-expand {
-  display: none;
 }
 
 select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active {
@@ -331,7 +321,7 @@ h2, h3 {
 /* title images */
 
 #messages h2 {
-  background: var(--logs) no-repeat 5px center / 20px, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
+  background: var(--log_icon) no-repeat 5px center / 20px, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
 }
 
 #globalTunnelControl h2 {

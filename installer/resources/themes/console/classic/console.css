@@ -175,7 +175,7 @@ i {
   border: none;
   border-bottom: 1px solid #fb7;
   word-spacing: .1em;
-  background: #ffe url(/themes/console/images/errortriangle.png) no-repeat 8px center / auto 60% !important;
+  background: #ffe var(--err) no-repeat 8px center / auto 60% !important;
 }
 
 .warning p {
@@ -240,7 +240,7 @@ img[src="/themes/console/images/i2plogo.png"] {
   font-weight: 700;
   border: 1px solid #aaafce;
   box-shadow: var(--highlight), inset 0 0 1px 1px #900;
-  background: #f2f2ff url(/themes/console/images/info/errortriangle.png) 20px 40% no-repeat;
+  background: #f2f2ff var(--err) no-repeat 20px 40% / 36px;
 }
 
 #error500 .sorry {
@@ -259,7 +259,7 @@ img[src="/themes/console/images/i2plogo.png"] {
 }
 
 #warning2 {
-  margin-top: -15px;
+  margin-top: -1px;
   padding: 0 15px 5px;
   min-width: 540px;
   font-weight: 400;
@@ -315,14 +315,14 @@ img[src="/themes/console/images/i2plogo.png"] {
 
 /* siderbar logo */
 
-.routersummary div[style="height: 36px;"] {
+#sb_logo {
   height: 32px !important;
+  margin-left: -2px;
 }
 
-.routersummary img[src$="i2plogo.png"] {
-  width: 190px;
+#sb_logo img {
+  width: 200px;
   height: auto;
-  box-shadow: 0 0 1px 1px rgba(180,180,180,.7);
   user-select: none;
 }
 
@@ -340,22 +340,17 @@ img[src="/themes/console/images/i2plogo.png"] {
 
 .routersummary a img:first-child {
   border: none;
-  opacity: .8;
+  opacity: .9;
   image-rendering: -webkit-optimize-contrast;
 }
 
 .routersummary a img:first-child:hover, .routersummary a img:first-child:active {
   box-shadow: none;
   opacity: 1;
-  filter: drop-shadow(0 0 1px var(--hover));
 }
 
 .routersummary a[href="/"], .routersummary a[href="/console"] {
   outline: none !important;
-}
-
-.routersummary a[href="/"]:focus img, .routersummary a[href="/console"]:focus img {
-  filter: drop-shadow(0 0 1px var(--hover)) saturate(200%);
 }
 
 /* end siderbar logo */
@@ -3356,7 +3351,7 @@ div.error {
   margin-left: -5px;
   padding: 10px 5px;
   color: #900;
-  background: url(/themes/console/images/info/errortriangle.png) no-repeat 20px center / 28px auto;
+  background: var(--err) no-repeat 20px center / 28px;
 }
 
 div.notice {
@@ -7660,16 +7655,15 @@ h2#debug_portmapper {
 
 #debug h3.debug_outboundsessions, #debug h3.debug_inboundsessions {
   padding: 6px 10px 6px 28px;
-  background-blend-mode: luminosity, normal;
 }
 
 #debug h3.debug_outboundsessions {
   margin-top: -6px !important;
-  background: url(/themes/console/images/outbound.png) 6px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
+  background: url(/themes/console/images/outbound.svg) no-repeat 6px center / 16px, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
 }
 
 #debug h3.debug_inboundsessions {
-  background: url(/themes/console/images/inbound.png) 6px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
+  background: url(/themes/console/images/inbound.svg) no-repeat 6px center / 16px, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
 }
 
 .debug_version {
@@ -8332,14 +8326,14 @@ h1 {
   width: 245px !important;
 }
 
-.routersummary div[style="height: 36px;"] {
+#sb_logo {
   height: 37px !important;
 }
 
-.routersummary img[src$="i2plogo.png"] {
+#sb_logo img {
   margin-top: -2px;
-  margin-left: 0;
-  width: 230px;
+  margin-left: -2px;
+  width: 240px;
   transform: none;
 }
 
@@ -12085,4 +12079,27 @@ div.app:hover img, .sitemaplink:hover img {
 
 .viewprofile, .configpeer, .familysearch {
   font-size: 0;
+}
+
+iframe {
+  height: 0;
+}
+
+#tunnelmgr, #torrents, #webmail, #dns {
+  position: relative;
+  overflow: hidden;
+}
+
+#tunnelmgr::before, #torrents::before, #webmail::before, #dns::before {
+  width: 0;
+  height: 10px;
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to bottom, rgba(255,255,255,.2) 50%, rgba(0,0,0,.4) 50%), linear-gradient(#03d, #06f);
+  opacity: .8;
+  content: "";
+  animation: ease-out reloader 20s forwards;
 }

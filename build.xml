@@ -48,6 +48,7 @@
         <echo message=" tarball                                      Create tar archive for clean install &#10140; ./i2p.tar.bz2" />
         <echo message=" updater                                      Build updater for existing installs &#10140; ./i2pupdate.zip" />
         <echo message=" signed-updater                               Signed Updater &#10140; ./i2pupdate.su3 (Java14+ compatible)" />
+        <echo message=" updaterCompact                               Updater without SAM, BOB, DesktopGUI, systray, country/continent lists" />
         <echo message=" updaterRouter                                Updater with i2p.jar and router.jar only" />
         <echo message=" updaterSmall                                 Updater with essentials (no SAM/I2PSnark/SusiMail/SusiDNS/history.txt)" />
         <echo message=" updaterWithGeoIP                             Updater + GeoIP files" />
@@ -1695,6 +1696,7 @@
     <target name="updater200WithJettyFixesAndJbigi" depends="prepjupdatefixes, prepjbigiupdate, pack200, zipit200" />
     <target name="updater200WithJbigi" depends="prepupdate, prepjbigiupdate, pack200, zipit200" />
     <target name="updater" depends="prepupdate, zipit" />
+    <target name="updaterCompact" depends="prepupdatecompact, zipit" />
     <target name="updaterWithMinifyCSS" depends="prepupdate, minifycss, zipit" />
     <target name="updaterWithLicenses" depends="prepupdate, preplicenses, zipit" />
     <target name="updaterRepack" depends="prepupdate, repack200, zipit" />
@@ -1805,19 +1807,13 @@
     </target>
 
     <target name="prepupdate" depends="build2, prepupdateSmall, prepConsoleDocUpdates, prepCertificates, prep-script-translation, truncatehistory">
-        <!-- supplied with installer, disabling for now (I2P+ 0.9.51+)
         <copy file="build/BOB.jar" todir="pkg-temp/lib/" />
-        -->
         <copy file="build/sam.jar" todir="pkg-temp/lib/" />
         <copy file="build/i2psnark.jar" todir="pkg-temp/lib" />
         <!-- include systray changes in 0.7.5 -->
-        <!-- supplied with installer, disabling for now (I2P+ 0.9.51+)
         <copy file="build/systray.jar" todir="pkg-temp/lib/" />
-        -->
         <!-- removed from updater in 0.9, added back in 0.9.26 -->
-        <!-- supplied with installer, disabling for now (I2P+ 0.9.51+)
         <copy file="build/desktopgui.jar" todir="pkg-temp/lib/" />
-        -->
         <copy file="build/susimail.war" todir="pkg-temp/webapps/" />
         <copy file="build/susidns.war" todir="pkg-temp/webapps/" />
         <copy file="build/imagegen.war" todir="pkg-temp/webapps/" />
@@ -1876,6 +1872,44 @@
         <copy file="installer/resources/public-suffix-list.txt" todir="pkg-temp/geoip/" />
         -->
     </target>
+
+    <target name="prepupdateEssential" depends="buildSmall, prepupdateRouter, prepjupdatefixes, prepthemeupdates">
+        <copy file="build/i2ptunnel.jar" todir="pkg-temp/lib/" />
+        <copy file="build/mstreaming.jar" todir="pkg-temp/lib/" />
+        <copy file="build/streaming.jar" todir="pkg-temp/lib/" />
+        <copy file="build/routerconsole.jar" todir="pkg-temp/lib/" />
+        <!-- Updated in 0.9.28 -->
+        <!-- name without version so we can overwrite if we upgrade  -->
+        <copy file="build/jrobin.jar" tofile="pkg-temp/lib/jrobin.jar" />
+        <copy file="build/i2ptunnel.war" todir="pkg-temp/webapps/" />
+        <copy file="build/routerconsole.war" todir="pkg-temp/webapps/" />
+        <copy file="build/addressbook.jar" todir="pkg-temp/lib/" />
+        <copy file="build/addressbook.war" todir="pkg-temp/webapps/" />
+        <!-- decapitalized the file in 0.7.8 -->
+        <!--
+        <copy file="installer/resources/countries.txt" todir="pkg-temp/geoip/" />
+        <copy file="installer/resources/continents.txt" todir="pkg-temp/geoip/" />
+        -->
+        <!--
+        <copy file="installer/resources/public-suffix-list.txt" todir="pkg-temp/geoip/" />
+        -->
+    </target>
+
+    <target name="prepupdatecompact" depends="build2, prepupdateEssential, prepConsoleDocUpdates, prepCertificates, prep-script-translation, truncatehistory">
+        <copy file="build/i2psnark.jar" todir="pkg-temp/lib" />
+        <copy file="build/susimail.war" todir="pkg-temp/webapps/" />
+        <copy file="build/susidns.war" todir="pkg-temp/webapps/" />
+        <copy file="build/imagegen.war" todir="pkg-temp/webapps/" />
+        <copy file="build/i2psnark.war" todir="pkg-temp/webapps/" />
+        <copy file="installer/resources/deletelist.txt" todir="pkg-temp/" />
+        <copy file="installer/resources/blocklist.txt" todir="pkg-temp/" />
+        <copy file="installer/resources/i2ping" todir="pkg-temp/" />
+        <copy file="installer/resources/eepget" todir="pkg-temp/" />
+        <copy file="installer/resources/eephead" todir="pkg-temp/" />
+        <copy file="installer/resources/graceful_update" todir="pkg-temp/" />
+        <copy file="installer/resources/fixperms2.bat" todir="pkg-temp/scripts/" />
+    </target>
+
 
     <target name="prepupdateRouter" depends="buildrouter, deletepkg-temp">
         <copy file="build/i2p.jar" todir="pkg-temp/lib/" />

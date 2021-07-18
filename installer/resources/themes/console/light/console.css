@@ -212,24 +212,24 @@ pre {
   background: #fafaff;
 }
 
-#sidebar div[style="height: 36px;"] {
-  margin: 0;
+#sb_logo {
+  margin: 0 0 0 -5px;
   height: 35px !important;
   padding: 0 0 1px;
   text-align: center;
 }
 
-#sidebar img[src$="i2plogo.png"] {
-  opacity: .7;
+#sb_logo img {
+  opacity: .9;
   transition: ease filter .3s, ease opacity .3s;
   margin: 0 !important;
-  width: 190px;
+  width: 200px;
   height: auto;
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
   image-rendering: -webkit-optimize-contrast;
 }
 
-#sidebar img[src$="i2plogo.png"]:hover {
+#sb_logo img:hover {
   opacity: 1;
   transition: ease filter .3s, ease opacity .3s;
   filter: drop-shadow(0 0 1px #f60);
@@ -1630,7 +1630,6 @@ to {
 
 #susidnsframe {
   margin: 0 0 -2px;
-  height: 100%;
   width: 100%;
   overflow: hidden;
 }
@@ -9531,11 +9530,15 @@ a[href^="configpeer?peer"]:hover::after {
 }
 
 #debug h3.debug_outboundsessions {
-  background: url(/themes/console/images/outbound.png) no-repeat 6px center, linear-gradient(to bottom, #fcfcff 50%, rgba(255, 255, 255, .6) 50%, rgba(240, 240, 255, .4)), linear-gradient(to right, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  background: url(/themes/console/images/outbound.svg) no-repeat 6px center / 16px,
+              linear-gradient(to bottom, #fcfcff 50%, rgba(255, 255, 255, .6) 50%, rgba(240, 240, 255, .4)),
+              linear-gradient(to right, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) !important;
 }
 
 #debug h3.debug_inboundsessions {
-  background: url(/themes/console/images/inbound.png) no-repeat 6px center, linear-gradient(to bottom, #fcfcff 50%, rgba(255, 255, 255, .6) 50%, rgba(240, 240, 255, .4)), linear-gradient(to right, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  background: url(/themes/console/images/inbound.svg) no-repeat 6px center / 16px,
+              linear-gradient(to bottom, #fcfcff 50%, rgba(255, 255, 255, .6) 50%, rgba(240, 240, 255, .4)),
+              linear-gradient(to right, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) !important;
 }
 
 .debug_version {
@@ -11200,9 +11203,9 @@ h1 {
 }
 
 #sidebar img[src$="i2plogo.png"] {
-  margin-top: -5px !important;
-  margin-left: -1px !important;
-  width: 230px !important;
+  margin-top: -6px !important;
+  margin-left: -2px !important;
+  width: 240px !important;
   transform: none !important;
 }
 
@@ -13226,4 +13229,27 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
 
 .netdbentry .netdb_header img[src="/flags.jsp?c=a0"] {
   margin-top: -6px;
+}
+
+iframe {
+  height: 0;
+}
+
+#tunnelmgr, #torrents, #webmail, #dns {
+  min-height: 3px;
+  position: relative;
+  overflow: hidden;
+}
+
+#tunnelmgr::before, #torrents::before, #webmail::before, #dns::before {
+  display: block;
+  height: 4px;
+  width: 0;
+  background: linear-gradient(rgba(0,0,0,0) 10%, #d30 10%, #f60 90%, rgba(0,0,0,0) 90%);
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  animation: ease-out reloader 20s forwards;
 }

@@ -52,6 +52,9 @@
             <Item>application/xhtml+xml</Item>
             <Item>application/xml</Item>
             <Item>application/x-bittorrent</Item>
+            <Item>font/ttf</Item>
+            <Item>font/woff</Item>
+            <Item>font/woff2</Item>
             <Item>image/svg+xml</Item>
             <Item>text/css</Item>
             <Item>text/html</Item>

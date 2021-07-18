@@ -14384,3 +14384,26 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
     padding: 2px 4px !important;
   }
 }
+
+iframe {
+  height: 0;
+}
+
+#tunnelmgr, #torrents, #webmail, #dns {
+  min-height: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+#tunnelmgr::before, #torrents::before, #webmail::before, #dns::before {
+  width: 0;
+  height: 5px;
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(#d30, #f60);
+  content: "";
+  animation: ease-out reloader 20s forwards;
+}
