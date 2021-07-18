@@ -1630,7 +1630,6 @@ to {
 
 #susidnsframe {
   margin: 0 0 -2px;
-  height: 100%;
   width: 100%;
   overflow: hidden;
 }
@@ -13226,4 +13225,27 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
 
 .netdbentry .netdb_header img[src="/flags.jsp?c=a0"] {
   margin-top: -6px;
+}
+
+iframe {
+  height: 0;
+}
+
+#tunnelmgr, #torrents, #webmail, #dns {
+  min-height: 3px;
+  position: relative;
+  overflow: hidden;
+}
+
+#tunnelmgr::before, #torrents::before, #webmail::before, #dns::before {
+  display: block;
+  height: 4px;
+  width: 0;
+  background: linear-gradient(rgba(0,0,0,0) 10%, #d30 10%, #f60 90%, rgba(0,0,0,0) 90%);
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  animation: ease-out reloader 20s forwards;
 }

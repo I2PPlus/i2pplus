@@ -6076,14 +6076,16 @@ iframe {
 }
 
 #tunnelmgr, #torrents, #webmail, #dns {
+  min-height: 4px;
   position: relative;
+  overflow: hidden;
 }
 
 #tunnelmgr::before, #torrents::before, #webmail::before, #dns::before {
   display: block;
-  height: 2px;
+  height: 5px;
   width: 0;
-  background: linear-gradient(#730, #d30);
+  background: linear-gradient(#d30, #f60);
   content: "";
   position: absolute;
   top: 0;
