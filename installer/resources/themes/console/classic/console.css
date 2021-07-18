@@ -315,14 +315,14 @@ img[src="/themes/console/images/i2plogo.png"] {
 
 /* siderbar logo */
 
-.routersummary div[style="height: 36px;"] {
+#sb_logo {
   height: 32px !important;
+  margin-left: -2px;
 }
 
-.routersummary img[src$="i2plogo.png"] {
-  width: 190px;
+#sb_logo img {
+  width: 200px;
   height: auto;
-  box-shadow: 0 0 1px 1px rgba(180,180,180,.7);
   user-select: none;
 }
 
@@ -340,22 +340,17 @@ img[src="/themes/console/images/i2plogo.png"] {
 
 .routersummary a img:first-child {
   border: none;
-  opacity: .8;
+  opacity: .9;
   image-rendering: -webkit-optimize-contrast;
 }
 
 .routersummary a img:first-child:hover, .routersummary a img:first-child:active {
   box-shadow: none;
   opacity: 1;
-  filter: drop-shadow(0 0 1px var(--hover));
 }
 
 .routersummary a[href="/"], .routersummary a[href="/console"] {
   outline: none !important;
-}
-
-.routersummary a[href="/"]:focus img, .routersummary a[href="/console"]:focus img {
-  filter: drop-shadow(0 0 1px var(--hover)) saturate(200%);
 }
 
 /* end siderbar logo */
@@ -8331,14 +8326,14 @@ h1 {
   width: 245px !important;
 }
 
-.routersummary div[style="height: 36px;"] {
+#sb_logo {
   height: 37px !important;
 }
 
-.routersummary img[src$="i2plogo.png"] {
+#sb_logo img {
   margin-top: -2px;
-  margin-left: 0;
-  width: 230px;
+  margin-left: -2px;
+  width: 240px;
   transform: none;
 }
 

@@ -212,24 +212,24 @@ pre {
   background: #fafaff;
 }
 
-#sidebar div[style="height: 36px;"] {
-  margin: 0;
+#sb_logo {
+  margin: 0 0 0 -5px;
   height: 35px !important;
   padding: 0 0 1px;
   text-align: center;
 }
 
-#sidebar img[src$="i2plogo.png"] {
-  opacity: .7;
+#sb_logo img {
+  opacity: .9;
   transition: ease filter .3s, ease opacity .3s;
   margin: 0 !important;
-  width: 190px;
+  width: 200px;
   height: auto;
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
   image-rendering: -webkit-optimize-contrast;
 }
 
-#sidebar img[src$="i2plogo.png"]:hover {
+#sb_logo img:hover {
   opacity: 1;
   transition: ease filter .3s, ease opacity .3s;
   filter: drop-shadow(0 0 1px #f60);
@@ -11203,9 +11203,9 @@ h1 {
 }
 
 #sidebar img[src$="i2plogo.png"] {
-  margin-top: -5px !important;
-  margin-left: -1px !important;
-  width: 230px !important;
+  margin-top: -6px !important;
+  margin-left: -2px !important;
+  width: 240px !important;
   transform: none !important;
 }
 
