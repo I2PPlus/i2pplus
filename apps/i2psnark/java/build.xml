@@ -305,8 +305,6 @@
               todir="build/standalone-resources/.resources/themes/snark/ubergine/images" />
         <copy file="../../../installer/resources/themes/console/dark/images/camotile2.png"
               todir="build/standalone-resources/.resources/themes/snark/dark/images" />
-        <copy file="../../../installer/resources/themes/console/images/info/errortriangle.png"
-              todir="build/standalone-resources/.resources/themes/snark/ubergine/images" />
         <copy file="../../../installer/resources/themes/console/classic/images/bg0.png"
               todir="build/standalone-resources/.resources/themes/snark/classic/images" />
 
