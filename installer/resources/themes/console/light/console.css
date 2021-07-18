@@ -13242,14 +13242,15 @@ iframe {
 }
 
 #tunnelmgr::before, #torrents::before, #webmail::before, #dns::before {
-  display: block;
-  height: 4px;
   width: 0;
-  background: linear-gradient(rgba(0,0,0,0) 10%, #d30 10%, #f60 90%, rgba(0,0,0,0) 90%);
-  content: "";
+  height: 4px;
+  display: block;
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
+  background: linear-gradient(rgba(0,0,0,0) 10%, #d30 10%, #f60 90%, rgba(0,0,0,0) 90%);
+  opacity: .7;
+  content: "";
   animation: ease-out reloader 20s forwards;
 }
