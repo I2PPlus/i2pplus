@@ -82,7 +82,7 @@ Note: Either --devel or --stable MUST be specified unless -u is specified
   --any          Use any and all methods to download i2pupdate.zip(may use clearnet and/or tor over outproxy)
   --i2p          Download from skank.i2p (default)
   --tor          Download from I2P+ .onion address
-  --clear        Download from i2pplus.com
+  --clear        Download from i2pplus.github.io/
   --git          Download from GitLab
   --insecure     Allows for insecure downloading when using a custom url
   --pid          Specify PID file name
@@ -593,13 +593,13 @@ get_url() {
      # I2P+ Stable release download URLs
     stable_url='i2p;http://skank.i2p/i2pupdate.zip
     tor;http://fhiqjkax7s6cs2shcozpnnq6v64txoovuczw62lpj4jfbiisrkzw5vid.onion/i2pupdate.zip
-    clear;https://i2pplus.com/i2pupdate.zip'
+    clear;https://i2pplus.github.io/i2pupdate.zip'
 
      # I2P+ Devel release download URLs
     devel_url='i2p;http://skank.i2p/dev/i2pupdate.zip
     tor;http://fhiqjkax7s6cs2shcozpnnq6v64txoovuczw62lpj4jfbiisrkzw5vid.onion/dev/i2pupdate.zip
     git;https://gitlab.com/i2pplus/I2P.Plus/-/jobs/artifacts/master/raw/i2pupdate.zip?job=Java8
-    clear;https://i2pplus.com/dev/i2pupdate.zip'
+    clear;https://i2pplus.github.io/dev/i2pupdate.zip'
      # loop through requests
     if [ "$1" = "stable" ]; then
         for a in $stable_url; do
