@@ -2048,8 +2048,7 @@ select {
 
 #bwHelp {
 	visibility: hidden;
-	background: #fff url(/themes/console/images/i2psnark.png) 10px center no-repeat;
-	background-size: 28px auto !important;
+	background: #fff url(/i2psnark/.resources/icons/favicon.svg) no-repeat 10px center / 28px;
 	text-align: center;
 	padding: 15px 15px 15px 55px;
 	border-radius: 3px;
