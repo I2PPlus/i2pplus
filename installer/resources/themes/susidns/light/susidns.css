@@ -322,7 +322,7 @@ form[action="subscriptions"] #content {
   border: 1px solid #8d8daa;
   border-radius: 2px;
   box-shadow: var(--highlight), 0 0 1px #ccc;
-  background: url(/themes/console/images/info/question.png) no-repeat 8px center,
+  background: url(/themes/console/images/question.png) no-repeat 8px center,
               linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
               linear-gradient(135deg, #fcfcff 5%, rgba(231, 231, 255, .8) 15%) !important;
   background-size: 20px, 100%, 100% !important;

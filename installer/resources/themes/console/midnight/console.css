@@ -1872,11 +1872,11 @@ p:empty + .sb_notice {
 }
 
 #sb_services a[href*="bote"] {
-  background: #000010 url(../light/images/mail_black.png) 5px center no-repeat;
+  background: #000010 url(/themes/console/images/bote.png) 5px center no-repeat;
 }
 
 #sb_services a[href*="bote"]:hover {
-  background: #1e0b28 url(../light/images/mail_black.png) 5px center no-repeat;
+  background: #1e0b28 url(/themes/console/images/bote.png) 5px center no-repeat;
 }
 
 #sb_services a[href="/orchid/"], #sb_services a[href*="/orchid/"] {
@@ -7951,7 +7951,7 @@ p.sybil_info, p.family, p.threatpoints, p.hashdist, p#sybil_totals, p.notfound {
 }
 
 p.threatpoints.hot {
-  background: var(--eye_static) no-repeat 8px center, var(--hot) right 4px center no-repeat,
+  background: var(--eye_static) no-repeat 8px center, var(--hot) no-repeat right 4px center,
               linear-gradient(to right, #000, #001 80%, #002);
   background-size: 16px, 20px, 100% !important;
   background-blend-mode: luminosity, normal;
@@ -8622,7 +8622,7 @@ h3#restartrouter + p.infohelp, #config_family .infohelp.needrestart {
 
 h3#systray + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/info/systray.png) no-repeat 12px center !important;
+  background: #000 url(/themes/console/images/systray.png) no-repeat 12px center !important;
   background-size: 28px !important;
 }
 
@@ -9237,7 +9237,7 @@ b.netdb_transport {
 }
 
 #ntcpconnections th:last-child::before {
-  content: url(/themes/console/images/info/backlogged.png) !important;
+  content: var(--err) !important;
 }
 
 #ntcpconnections td:last-child {
@@ -12469,7 +12469,7 @@ a:hover .sitemapLink {
 }
 
 #help_faq, #help_glossary {
-  background: url(/themes/console/images/info/question.png) 15px center no-repeat, var(--helpsection);
+  background: url(/themes/console/images/question.png) 15px center no-repeat, var(--helpsection);
 }
 
 #help_troubleshoot {
@@ -12529,7 +12529,7 @@ a:hover .sitemapLink {
 
 #newuserguide h2 {
   padding-left: 38px !important;
-  background: url(/themes/console/images/info/question.png) no-repeat 8px center, var(--title) !important;
+  background: url(/themes/console/images/question.png) no-repeat 8px center, var(--title) !important;
   background-size: 22px, 4px 100%, 100% !important;
 }
 
@@ -12707,7 +12707,7 @@ a:hover .sitemapLink {
 }
 
 #peers #ntcpconnections th:nth-last-child(3)::after {
-  background: url(/themes/console/images/info/queued.png) no-repeat center center;
+  background: var(--timer) no-repeat center center / 16px;
 }
 
 #peers #ntcpconnections th:nth-last-child(4) {
@@ -13381,7 +13381,7 @@ to {
 }
 
 #peers #ntcpconnections th:nth-last-child(3)::after {
-  background: url(/themes/console/images/info/queued.png) no-repeat center center;
+  background: var(--timer) no-repeat center center / 16px;
 }
 
 #peers #ntcpconnections th:nth-last-child(4) {

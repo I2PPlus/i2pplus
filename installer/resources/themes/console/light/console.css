@@ -1023,7 +1023,7 @@ to {
 }
 
 #sb_services a[href*="bote"]::before {
-  background-image: url(images/mail_black.png);
+  background-image: url(/themes/console/images/bote.png);
 }
 
 #sb_services a[href*="/tracker"]::before {
@@ -3953,7 +3953,7 @@ h3#shutdownrouter, h3#systray, h3#servicedebug {
 h3#systray + p.infohelp {
   padding: 20px 15px 20px 50px;
   box-shadow: var(--highlight);
-  background: url(/themes/console/images/info/systray.png) no-repeat 15px center / 28px, var(--div_infohelp);
+  background: url(/themes/console/images/systray.png) no-repeat 15px center / 28px, var(--div_infohelp);
 }
 
 h3#servicedebug + p.infohelp {
@@ -8893,7 +8893,7 @@ select[name="newlogclass"] {
   word-spacing: 0;
   letter-spacing: 0;
   text-transform: none;
-  background: url(/themes/console/images/info/question.png) no-repeat 10px center / 18px, var(--h2) !important;
+  background: url(/themes/console/images/question.png) no-repeat 10px center / 18px, var(--h2) !important;
   background-blend-mode: luminosity, normal, normal;
 }
 
@@ -10768,7 +10768,7 @@ h3#ntcpcon, h3#udpcon {
 }
 
 #ntcpconnections th:last-child::before {
-  content: url(/themes/console/images/info/backlogged.png) !important;
+  content: var(--err) !important;
 }
 
 .main#config_family input.download {
@@ -11999,11 +11999,11 @@ th[aria-sort] {
   display: inline-block;
   width: 16px;
   height: 16px;
-  background: var(--net_clockskew) no-repeat center center / 16px;
+  background: var(--err) no-repeat center center / 16px;
 }
 
 #peers #ntcpconnections th:nth-last-child(3)::after {
-  background: url(/themes/console/images/info/queued.png) no-repeat center center;
+  background: var(--timer) no-repeat center center;
 }
 
 #peers #ntcpconnections th:nth-last-child(4) {

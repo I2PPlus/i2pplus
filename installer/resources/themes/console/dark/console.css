@@ -7140,7 +7140,7 @@ h3#restartrouter + p.infohelp, #config_family .infohelp.needrestart {
 
 h3#systray + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/info/systray.png) no-repeat 12px center / 28px !important;
+  background: #000 url(/themes/console/images/systray.png) no-repeat 12px center / 28px !important;
 }
 
 h3#servicedebug + p.infohelp {
@@ -7160,7 +7160,7 @@ h3#browseronstart + p.infohelp, .infohelp#webbrowser {
 
 .infohelp#flags {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/info/flags.png) no-repeat 12px center / 28px !important;
+  background: #000 url(/themes/console/images/flags.png) no-repeat 12px center / 28px !important;
 }
 
 p#enablefullstats, p#gatherstats {

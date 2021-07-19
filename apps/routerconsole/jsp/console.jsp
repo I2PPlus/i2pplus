@@ -38,7 +38,7 @@
  <jsp:useBean class="net.i2p.router.web.ContentHelper" id="contenthelper" scope="request" />
  <div class="welcome">
   <div class="langbox" title="<%=intl._t("Configure Language")%>">
-  <a href="/configui#langheading"><img src="/themes/console/images/info/flags.png" alt=<%=intl._t("Configure Language")%>></a>
+  <a href="/configui#langheading"><img src="/themes/console/images/flags.png" alt=<%=intl._t("Configure Language")%>></a>
   </div>
   <a name="top"></a>
   <h2><%=intl._t("Welcome to I2P")%></h2>

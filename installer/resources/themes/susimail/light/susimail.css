@@ -1892,7 +1892,7 @@ td.mailListDelete {
   color: #900;
   border: 1px solid #700;
   box-shadow: inset 0 0 0 1px #ffe, inset 0 0 1px 3px #dda;
-  background: url(/themes/console/images/info/question.png) center 20px no-repeat, linear-gradient(to bottom, #ffe, #ffffe6);
+  background: url(/themes/console/images/question.png) center 20px no-repeat, linear-gradient(to bottom, #ffe, #ffffe6);
 }
 
 #nukemail.floating {
