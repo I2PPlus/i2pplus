@@ -7951,7 +7951,7 @@ p.sybil_info, p.family, p.threatpoints, p.hashdist, p#sybil_totals, p.notfound {
 }
 
 p.threatpoints.hot {
-  background: var(--eye_static) no-repeat 8px center, url(/themes/console/images/info/hot.png) right 4px center no-repeat,
+  background: var(--eye_static) no-repeat 8px center, var(--hot) right 4px center no-repeat,
               linear-gradient(to right, #000, #001 80%, #002);
   background-size: 16px, 20px, 100% !important;
   background-blend-mode: luminosity, normal;

@@ -6531,7 +6531,7 @@ p.threatpoints {
 }
 
 p.threatpoints.hot {
-  background: var(--eye_threat) no-repeat 8px center / 20px, url(/themes/console/images/info/hot.png) no-repeat right 2px center / 24px,
+  background: var(--eye_threat) no-repeat 8px center / 20px, var(--hot) no-repeat right 2px center / 24px,
               linear-gradient(to right, #000, #000800 80%, #001000);
 }
 
