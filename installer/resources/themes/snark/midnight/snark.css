@@ -3760,8 +3760,7 @@ input[name="nofilter_commentsName"] {
   font-weight: 700;
   border-radius: 3px;
   opacity: 0;
-  background: #003 url(/themes/console/images/i2psnark.png) 10px center no-repeat;
-  background-size: 28px 28px;
+  background: #003 url(/i2psnark/.resources/icons/favicon.svg) no-repeat 10px center / 28px;
   filter: drop-shadow(0 0 1px #000);
   will-change: transform;
 }
@@ -4584,7 +4583,7 @@ td.snarkTorrentStatus b, .lang_en td.snarkTorrentStatus b {
   border-color: #003;
   border-radius: 0;
   box-shadow: var(--highlight), 0 0 1px 0 rgba(0,0,0,.3);
-  background: #000024 url(images/button_forum.png) 10px center no-repeat;
+  background: #000024 url(images/button_forum.png) no-repeat 10px center;
   background-size: 16px auto;
 }
 

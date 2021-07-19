@@ -2589,8 +2589,7 @@ tr.mailbody td {
   vertical-align: middle;
   font-size: 0;
   border: none;
-  background: url(/themes/console/images/buttons/show.png) no-repeat center center;
-  background-size: 20px 20px !important;
+  background: var(--show) no-repeat center center / 20px;
   cursor: pointer;
   mix-blend-mode: luminosity;
 }
@@ -2600,9 +2599,9 @@ tr.mailbody td {
 }
 
 #toggle.hidepass {
-  background: url(/themes/console/images/buttons/hide.png) no-repeat center center;
+  background: var(--hide) no-repeat center center / 20px;
 }
 
 #toggle.showpass {
-  background: url(/themes/console/images/buttons/show.png) no-repeat center center;
+  background: var(--show) no-repeat center center / 20px;
 }

@@ -4838,20 +4838,20 @@ input.cancel:focus, button.cancel:focus {
 
 input.showconsole {
   padding: 5px 9px 5px 24px;
-  background: url(/themes/console/images/buttons/show.png) no-repeat 8px center, var(--btn);
+  background: var(--show) no-repeat 8px center / 14px, var(--btn);
 }
 
 input.showconsole:hover, input.showconsole:focus {
-  background: url(/themes/console/images/buttons/show.png) no-repeat 8px center, var(--btn_hover);
+  background: var(--show) no-repeat 8px center / 14px, var(--btn_hover);
 }
 
 input.hideconsole {
   padding: 5px 9px 5px 24px;
-  background: url(/themes/console/images/buttons/hide.png) no-repeat 8px center, var(--btn);
+  background: var(--hide) no-repeat 8px center / 14px, var(--btn);
 }
 
 input.hideconsole:hover, input.hideconsole:focus {
-  background: url(/themes/console/images/buttons/hide.png) no-repeat 8px center, var(--btn_hover);
+  background: var(--hide) no-repeat 8px center / 14px, var(--btn_hover);
 }
 
 input.check, button.check {

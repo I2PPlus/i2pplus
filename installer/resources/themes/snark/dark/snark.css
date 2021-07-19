@@ -4110,36 +4110,35 @@ input[name="nofilter_commentsName"] {
 /* tooltip */
 
 #bwHelp {
-  visibility: hidden;
-  background: #030 url(/themes/console/images/i2psnark.png) 10px center no-repeat;
-  background-size: 28px 28px;
-  text-align: center;
   padding: 15px 15px 15px 55px;
-  border-radius: 3px;
+  margin-left: -184px;
   width: 320px;
+  display: block;
   position: absolute;
-  z-index: 999;
   bottom: 125%;
   left: 0;
-  margin-left: -184px;
-  display: block;
+  z-index: 999;
+  visibility: hidden;
   white-space: normal;
+  text-align: center;
+  border-radius: 3px;
   font-size: 10pt;
   font-weight: 700;
-  filter: drop-shadow(0 0 1px #000);
+  background: #030 url(/i2psnark/.resources/icons/favicon.svg) no-repeat 10px center / 28px;
   opacity: 0;
+  filter: drop-shadow(0 0 1px #000);
   will-change: transform;
 }
 
 #bwhelp::after {
-  content: "";
+  margin-left: -10px;
   position: absolute;
   top: 100%;
   left: 50%;
-  margin-left: -10px;
   border-width: 10px;
   border-style: solid;
   border-color: #030 transparent transparent transparent;
+  content: "";
 }
 
 #bwHoverHelp:hover #bwHelp {

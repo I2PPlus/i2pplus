@@ -3219,36 +3219,35 @@ th a img {
 /* tooltip */
 
 #bwHelp {
-  visibility: hidden;
-  background: #aaf url(/themes/console/images/i2psnark.png) 10px center no-repeat;
-  background-size: 28px 28px !important;
-  text-align: center;
+  margin-left: -184px;
   padding: 15px 15px 15px 55px;
-  border-radius: 3px;
   width: 320px;
+  display: block;
   position: absolute;
-  z-index: 999;
   bottom: 125%;
   left: 0;
-  margin-left: -184px;
-  display: block;
+  z-index: 999;
+  visibility: hidden;
   white-space: normal;
+  text-align: center;
   font-size: 10pt;
   font-weight: 700;
-  filter: drop-shadow(0 0 1px #333);
+  border-radius: 3px;
+  background: #aaf url(/i2psnark/.resources/icons/favicon.svg) no-repeat 10px center / 28px;
   opacity: 0;
+  filter: drop-shadow(0 0 1px #333);
   will-change: transform;
 }
 
 #bwhelp::after {
-  content: "";
+  margin-left: -10px;
   position: absolute;
   top: 100%;
   left: 50%;
-  margin-left: -10px;
   border-width: 10px;
   border-style: solid;
   border-color: #aaf transparent transparent transparent;
+  content: "";
 }
 
 #bwHoverHelp:hover #bwHelp {
