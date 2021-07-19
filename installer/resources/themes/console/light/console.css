@@ -1023,7 +1023,7 @@ to {
 }
 
 #sb_services a[href*="bote"]::before {
-  background-image: url(images/mail_black.png);
+  background-image: url(/themes/console/images/bote.png);
 }
 
 #sb_services a[href*="/tracker"]::before {
@@ -3953,7 +3953,7 @@ h3#shutdownrouter, h3#systray, h3#servicedebug {
 h3#systray + p.infohelp {
   padding: 20px 15px 20px 50px;
   box-shadow: var(--highlight);
-  background: url(/themes/console/images/info/systray.png) no-repeat 15px center / 28px, var(--div_infohelp);
+  background: url(/themes/console/images/systray.png) no-repeat 15px center / 28px, var(--div_infohelp);
 }
 
 h3#servicedebug + p.infohelp {
@@ -4940,12 +4940,12 @@ input.download[value^="Dump"]:focus, button.download[value^="Dump"]:focus {
 
 input.go, button.go, input[value="GO"], #embedurl input[type=submit], button#run {
   padding: 5px 9px 5px 24px;
-  background: url(/themes/console/images/buttons/go.png) no-repeat 8px center, var(--btn);
+  background: var(--go) no-repeat 8px center / 14px, var(--btn);
 }
 
 input.go:hover, button.go:hover, input[value="GO"]:hover, input.go:focus, button.go:focus, input[value="GO"]:focus,
 #embedurl input[type=submit]:hover, #embedurl input[type=submit]:focus {
-  background: url(/themes/console/images/buttons/go.png) no-repeat 8px center, var(--btn_hover);
+  background: var(--go) no-repeat 8px center / 14px, var(--btn_hover);
 }
 
 input.go[value^="Create"], button.go[value^="Create"], #reseedcreatefile .go {
@@ -4960,12 +4960,12 @@ input.go[value^="Create"]:focus, button.go[value^="Create"]:focus {
 
 input.back {
   padding: 5px 9px 5px 24px;
-  background: url(/themes/console/images/buttons/back.png) no-repeat 8px center, var(--btn);
+  background: var(--back) no-repeat 8px center / 14px, var(--btn);
 }
 
 input.back:hover,
 input.back:focus {
-  background: url(/themes/console/images/buttons/back.png) no-repeat 8px center, var(--btn_hover);
+  background: var(--back) no-repeat 8px center / 14px, var(--btn_hover);
 }
 
 input.reload, button.reload {
@@ -7593,7 +7593,7 @@ p.threatpoints {
 }
 
 p.threatpoints.hot {
-  background: var(--eye_static) no-repeat 8px center / 20px, url(/themes/console/images/info/hot.png) no-repeat right 4px center / 24px,
+  background: var(--eye_static) no-repeat 8px center / 20px, var(--hot) no-repeat right 4px center / 24px,
               repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
 }
 
@@ -7921,7 +7921,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   border: 1px solid #bbd;
   border-radius: 2px;
   box-shadow: var(--highlight);
-  background: url(/themes/console/images/buttons/cryptokey.png) no-repeat 1px center / 14px, linear-gradient(to bottom, #fff, #eef);
+  background: var(--crypto) no-repeat 1px center / 14px, linear-gradient(to bottom, #fff, #eef);
 }
 
 .signingkey.encryption {
@@ -8893,7 +8893,7 @@ select[name="newlogclass"] {
   word-spacing: 0;
   letter-spacing: 0;
   text-transform: none;
-  background: url(/themes/console/images/info/question.png) no-repeat 10px center / 18px, var(--h2) !important;
+  background: url(/themes/console/images/question.png) no-repeat 10px center / 18px, var(--h2) !important;
   background-blend-mode: luminosity, normal, normal;
 }
 
@@ -10768,7 +10768,7 @@ h3#ntcpcon, h3#udpcon {
 }
 
 #ntcpconnections th:last-child::before {
-  content: url(/themes/console/images/info/backlogged.png) !important;
+  content: var(--err) !important;
 }
 
 .main#config_family input.download {
@@ -11999,11 +11999,11 @@ th[aria-sort] {
   display: inline-block;
   width: 16px;
   height: 16px;
-  background: var(--net_clockskew) no-repeat center center / 16px;
+  background: var(--err) no-repeat center center / 16px;
 }
 
 #peers #ntcpconnections th:nth-last-child(3)::after {
-  background: url(/themes/console/images/info/queued.png) no-repeat center center;
+  background: var(--timer) no-repeat center center;
 }
 
 #peers #ntcpconnections th:nth-last-child(4) {

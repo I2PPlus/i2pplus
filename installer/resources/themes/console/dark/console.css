@@ -6531,7 +6531,7 @@ p.threatpoints {
 }
 
 p.threatpoints.hot {
-  background: var(--eye_threat) no-repeat 8px center / 20px, url(/themes/console/images/info/hot.png) no-repeat right 2px center / 24px,
+  background: var(--eye_threat) no-repeat 8px center / 20px, var(--hot) no-repeat right 2px center / 24px,
               linear-gradient(to right, #000, #000800 80%, #001000);
 }
 
@@ -7140,7 +7140,7 @@ h3#restartrouter + p.infohelp, #config_family .infohelp.needrestart {
 
 h3#systray + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/info/systray.png) no-repeat 12px center / 28px !important;
+  background: #000 url(/themes/console/images/systray.png) no-repeat 12px center / 28px !important;
 }
 
 h3#servicedebug + p.infohelp {
@@ -7160,7 +7160,7 @@ h3#browseronstart + p.infohelp, .infohelp#webbrowser {
 
 .infohelp#flags {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/info/flags.png) no-repeat 12px center / 28px !important;
+  background: #000 url(/themes/console/images/flags.png) no-repeat 12px center / 28px !important;
 }
 
 p#enablefullstats, p#gatherstats {
@@ -10013,10 +10013,10 @@ input[type=file] {
 
 .signingkey {
   margin: 2px 0 2px 2px;
-  padding: 2px 4px 2px 18px;
+  padding: 2px 6px 2px 20px;
   display: inline-block;
   color: #ee9 !important;
-  background: url(/themes/console/images/buttons/cryptokey.png) no-repeat 3px center / 16px, var(--element);
+  background: var(--crypto) no-repeat 4px center / 14px, var(--element);
 }
 
 .signingkey.encryption {

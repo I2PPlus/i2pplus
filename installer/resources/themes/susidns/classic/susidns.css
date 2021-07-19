@@ -151,8 +151,8 @@ input:focus::placeholder {
 
 #content h3 {
   padding: 3px 10px 4px 30px !important;
-  background: #fafafa url(/themes/console/images/info/question.png) 4px center no-repeat;
-  background: url(/themes/console/images/info/question.png) 4px center no-repeat, linear-gradient(to right, #fafafa 28px, rgba(0,0,0,0) 28px);
+  background: #fafafa url(/themes/console/images/question.png) 4px center no-repeat;
+  background: url(/themes/console/images/question.png) 4px center no-repeat, linear-gradient(to right, #fafafa 28px, rgba(0,0,0,0) 28px);
   background-size: 20px 20px, 100% 100%;
   background-blend-mode: luminosity;
 }

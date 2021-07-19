@@ -1844,12 +1844,12 @@ input.download[value^="Dump"]:focus, button.download[value^="Dump"]:focus {
 
 input.go, button.go, input[value="GO"], button#run {
   padding: 5px 8px 5px 23px;
-  background: url(/themes/console/images/buttons/go.png) no-repeat 7px center, var(--btn);
+  background: var(--go) no-repeat 7px center / 14px, var(--btn);
 }
 
 input.go:hover, button.go:hover, input[value="GO"]:hover,
 input.go:focus, button.go:focus, input[value="GO"]:focus {
-  background: url(/themes/console/images/buttons/go.png) no-repeat 7px center, var(--btn_hover);
+  background: var(--go) no-repeat 7px center / 14px, var(--btn_hover);
 }
 
 input.go[value^="Create"], button.go[value^="Create"] {
@@ -1872,11 +1872,11 @@ input.go[value^="Create"]:focus, button.go[value^="Create"]:focus {
 }
 input.back {
   padding: 5px 8px 5px 23px;
-  background: url(/themes/console/images/buttons/back.png) no-repeat 7px center, var(--btn);
+  background: var(--back) no-repeat 7px center / 14px, var(--btn);
 }
 
 input.back:hover, input.back:focus {
-  background: url(/themes/console/images/buttons/back.png) no-repeat 7px center, var(--btn_hover);
+  background: var(--back) no-repeat 7px center / 14px, var(--btn_hover);
 }
 
 input.reload, button.reload {
@@ -6320,7 +6320,7 @@ p#fullhistory {
   letter-spacing: 0;
   text-transform: none;
   font-size: 10.5pt;
-  background: url(/themes/console/images/info/question.png) no-repeat 10px center / 18px, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
+  background: url(/themes/console/images/question.png) no-repeat 10px center / 18px, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
   background-blend-mode: luminosity, normal;
 }
 
@@ -6681,7 +6681,7 @@ h3#restartrouter + p.infohelp, #config_family .infohelp.needrestart {
 
 h3#systray + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fff url(/themes/console/images/info/systray.png) no-repeat 12px center / 28px;
+  background: #fff url(/themes/console/images/systray.png) no-repeat 12px center / 28px;
 }
 
 h3#servicedebug + p.infohelp {
@@ -7837,7 +7837,7 @@ h3.ptitle, h3.tabletitle, th.th_title, h3#udpcon, h3#ntcpcon {
 }
 
 #ntcpconnections th:last-child::before {
-  content: url(/themes/console/images/info/backlogged.png) !important;
+  content: var(--err) !important;
 }
 
 #consolepass input[name="name"], #externali2cp input[name="user"],
@@ -9461,7 +9461,7 @@ input[type="file"]:hover {
   display: inline-block;
   width: 16px;
   height: 16px;
-  background: url(/themes/console/images/info/cryptokey.png) left bottom no-repeat;
+  background: url(/themes/console/images/info/cryptokey.svg) left bottom no-repeat;
   transform: rotate(-90deg);
   mix-blend-mode: luminosity;
 }
@@ -10002,7 +10002,7 @@ a.keysearch {
   font-size: 90%;
   border: 1px solid #bbd;
   border-radius: 2px;
-  background: url(/themes/console/images/buttons/cryptokey.png) no-repeat 2px center / 12px, linear-gradient(to bottom, #fff, #fafbff);
+  background: var(--crypto) no-repeat 2px center / 12px, linear-gradient(to bottom, #fff, #fafbff);
 }
 
 .encryption a.keysearch {
@@ -11526,12 +11526,12 @@ div.app, .sitemapLink, .sitemapLabel {
     width: 16px;
     height: 16px;
     display: inline-block;
-    background: var(--net_clockskew) no-repeat center center / 16px;
+    background: var(--err) no-repeat center center / 16px;
     content: "";
 }
 
   #peers #ntcpconnections th:nth-last-child(3)::after {
-    background: url(/themes/console/images/info/queued.png) no-repeat center center;
+    background: var(--timer) no-repeat center center;
   }
 
   #peers #ntcpconnections th:nth-last-child(4) {

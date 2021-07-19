@@ -79,7 +79,7 @@
 
 <a href="/imagegen" target="_blank">
 <span class="sitemapLink extlink" title="<%=intl._t("Identification Image Generator")%>">
-<img src="/themes/console/images/info/imagegen.png">
+<img src="/themes/console/images/imagegen.png">
 <span class="sitemapLabel"><%=intl._t("Imagegen")%></span>
 </span>
 </a>

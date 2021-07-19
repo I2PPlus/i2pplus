@@ -83,7 +83,7 @@
 <%
     if (homehelper.shouldShowWelcome()) {
 %>
-<a href="/configui#langheading" id="chooselang" style="float: right" title="Configure display language"><img src="/themes/console/images/info/flags.png" height="16" width="16" alt="Language"></a>
+<a href="/configui#langheading" id="chooselang" style="float: right" title="Configure display language"><img src="/themes/console/images/flags.png" height="16" width="16" alt="Language"></a>
 <%
     } // shouldShowWelcome
 %>
