@@ -518,7 +518,7 @@ input.cancel[value^="Hide"], button.cancel[value^="Hide"],
 input.delete[value^="Do not view"], button.delete[value^="Do not view"],
 input.hideconsole {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/hide.png) no-repeat 8px center / 14px, var(--button) !important;
+  background: var(--hide) no-repeat 8px center / 14px, var(--button) !important;
 }
 
 input.cancel[value^="Hide"]:hover, button.cancel[value^="Hide"]:hover,
@@ -526,14 +526,14 @@ input.delete[value^="Do not view"]:hover, button.delete[value^="Do not view"]:ho
 input.cancel[value^="Hide"]:focus, button.cancel[value^="Hide"]:focus,
 input.delete[value^="Do not view"]:focus, button.delete[value^="Do not view"]:focus,
 input.hideconsole:hover, input.hideconsole:focus {
-  background: url(/themes/console/images/buttons/hide.png) no-repeat 8px center / 14px, var(--button_hover) !important;
+  background: var(--hide) no-repeat 8px center / 14px, var(--button_hover) !important;
 }
 
 input.cancel[value^="Hide"]:active, button.cancel[value^="Hide"]:active,
 input.delete[value^="Do not view"]:active, button.delete[value^="Do not view"]:active,
 input.hideconsole:active {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/hide.png) no-repeat 8px center / 14px, var(--button_active) !important;
+  background: var(--hide) no-repeat 8px center / 14px, var(--button_active) !important;
 }
 
 input.check, button.check {
@@ -674,7 +674,7 @@ input.download[value^="Dump"]:active, button.download[value^="Dump"]:active {
 
 input.go, button.go, input[value="GO"], button#run {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/go.png) no-repeat 8px center / 14px, var(--button) !important;
+  background: var(--go) no-repeat 8px center / 14px, var(--button) !important;
 }
 
 button#run {
@@ -683,12 +683,12 @@ button#run {
 
 input.go:hover, button.go:hover, input[value="GO"]:hover,
 input.go:focus, button.go:focus, input[value="GO"]:focus {
-  background: url(/themes/console/images/buttons/go.png) no-repeat 8px center / 14px, var(--button_hover) !important;
+  background: var(--go) no-repeat 8px center / 14px, var(--button_hover) !important;
 }
 
 input.go:active, button.go:active, input[value="GO"]:active {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/go.png) no-repeat 8px center / 14px, var(--button_active) !important;
+  background: var(--go) no-repeat 8px center / 14px, var(--button_active) !important;
 }
 
 input.go[value^="Create"], button.go[value^="Create"] {
@@ -708,11 +708,11 @@ input.go[value^="Create"]:active, button.go[value^="Create"]:active {
 
 input.back {
   padding: 5px 7px 5px 23px !important;
-  background: url(/themes/console/images/buttons/back.png) no-repeat 6px center / 14px, var(--button) !important;
+  background: var(--back) no-repeat 6px center / 14px, var(--button) !important;
 }
 
 input.back:hover, input.back:focus {
-  background: #652787 url(/themes/console/images/buttons/back.png) no-repeat 6px center / 14px !important;
+  background: #652787 var(--back) no-repeat 6px center / 14px !important;
 }
 
 input.reload, button.reload {

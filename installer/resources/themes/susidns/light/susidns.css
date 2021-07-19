@@ -1394,13 +1394,11 @@ input.delete:hover, input.delete:focus {
 input.export {
   margin-top: 5px;
   padding: 5px 7px 5px 22px;
-  background: url(/themes/console/images/buttons/go.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
-  background-size: 13px, 100%;
+  background: var(--go) no-repeat 6px center / 14px, linear-gradient(to bottom, #fff, #efefff);
 }
 
 input.export:hover, input.export:focus {
-  background: url(/themes/console/images/buttons/go.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
-  background-size: 14px, 100%;
+  background: var(--go) no-repeat 6px center / 14px, linear-gradient(to bottom, #eee, #fff);
 }
 
 input.download, input.update {
@@ -1462,13 +1460,11 @@ input.search[type=text]:focus {
 
 #visualid .fakebutton {
   padding: 6px 8px 6px 22px;
-  background: url(/themes/console/images/buttons/go.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
-  background-size: 14px, 100%;
+  background: var(--go) no-repeat 6px center / 14px, linear-gradient(to bottom, #fff, #efefff);
 }
 
 #visualid .fakebutton:hover, #visualid .fakebutton:focus {
-  background: url(/themes/console/images/buttons/go.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
-  background-size: 14px, 100%;
+  background: var(--go) no-repeat 6px center / 14px, linear-gradient(to bottom, #eee, #fff);
 }
 
 form[action="addressbook"] table {

@@ -4940,12 +4940,12 @@ input.download[value^="Dump"]:focus, button.download[value^="Dump"]:focus {
 
 input.go, button.go, input[value="GO"], #embedurl input[type=submit], button#run {
   padding: 5px 9px 5px 24px;
-  background: url(/themes/console/images/buttons/go.png) no-repeat 8px center, var(--btn);
+  background: var(--go) no-repeat 8px center / 14px, var(--btn);
 }
 
 input.go:hover, button.go:hover, input[value="GO"]:hover, input.go:focus, button.go:focus, input[value="GO"]:focus,
 #embedurl input[type=submit]:hover, #embedurl input[type=submit]:focus {
-  background: url(/themes/console/images/buttons/go.png) no-repeat 8px center, var(--btn_hover);
+  background: var(--go) no-repeat 8px center / 14px, var(--btn_hover);
 }
 
 input.go[value^="Create"], button.go[value^="Create"], #reseedcreatefile .go {
@@ -4960,12 +4960,12 @@ input.go[value^="Create"]:focus, button.go[value^="Create"]:focus {
 
 input.back {
   padding: 5px 9px 5px 24px;
-  background: url(/themes/console/images/buttons/back.png) no-repeat 8px center, var(--btn);
+  background: var(--back) no-repeat 8px center / 14px, var(--btn);
 }
 
 input.back:hover,
 input.back:focus {
-  background: url(/themes/console/images/buttons/back.png) no-repeat 8px center, var(--btn_hover);
+  background: var(--back) no-repeat 8px center / 14px, var(--btn_hover);
 }
 
 input.reload, button.reload {

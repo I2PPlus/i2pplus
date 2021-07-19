@@ -1844,12 +1844,12 @@ input.download[value^="Dump"]:focus, button.download[value^="Dump"]:focus {
 
 input.go, button.go, input[value="GO"], button#run {
   padding: 5px 8px 5px 23px;
-  background: url(/themes/console/images/buttons/go.png) no-repeat 7px center, var(--btn);
+  background: var(--go) no-repeat 7px center / 14px, var(--btn);
 }
 
 input.go:hover, button.go:hover, input[value="GO"]:hover,
 input.go:focus, button.go:focus, input[value="GO"]:focus {
-  background: url(/themes/console/images/buttons/go.png) no-repeat 7px center, var(--btn_hover);
+  background: var(--go) no-repeat 7px center / 14px, var(--btn_hover);
 }
 
 input.go[value^="Create"], button.go[value^="Create"] {
@@ -1872,11 +1872,11 @@ input.go[value^="Create"]:focus, button.go[value^="Create"]:focus {
 }
 input.back {
   padding: 5px 8px 5px 23px;
-  background: url(/themes/console/images/buttons/back.png) no-repeat 7px center, var(--btn);
+  background: var(--back) no-repeat 7px center / 14px, var(--btn);
 }
 
 input.back:hover, input.back:focus {
-  background: url(/themes/console/images/buttons/back.png) no-repeat 7px center, var(--btn_hover);
+  background: var(--back) no-repeat 7px center / 14px, var(--btn_hover);
 }
 
 input.reload, button.reload {
@@ -9461,7 +9461,7 @@ input[type="file"]:hover {
   display: inline-block;
   width: 16px;
   height: 16px;
-  background: url(/themes/console/images/info/cryptokey.png) left bottom no-repeat;
+  background: url(/themes/console/images/info/cryptokey.svg) left bottom no-repeat;
   transform: rotate(-90deg);
   mix-blend-mode: luminosity;
 }
