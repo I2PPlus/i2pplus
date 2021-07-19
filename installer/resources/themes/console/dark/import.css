@@ -2,4 +2,5 @@
 @import url(chromescroll.css);
 @import url(mediaQueries/minwidth1200.css) screen and (min-width: 1200px);
 @import url(mediaQueries/maxwidth1499.css) screen and (max-width: 1499px);
+@import url(../images/itooplus.css);
 @import url(wizard.css);
