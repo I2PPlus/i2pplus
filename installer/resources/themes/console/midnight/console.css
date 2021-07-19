@@ -2292,6 +2292,10 @@ background-position: 0;
 
 /* console error messages */
 
+#error500 #sidebar hr ~ a {
+  line-height: 2.5;
+}
+
 .sorry {
   margin: -1px 3px 10px 212px;
   padding: 35px 20px 35px 75px;
@@ -2317,7 +2321,7 @@ div.sorry hr {
 }
 
 #warning2 {
-  margin-top: -28px;
+  margin-top: -1px;
   margin-bottom: 5px;
   padding: 20px 30px 10px;
   min-width: 580px;
@@ -2326,9 +2330,11 @@ div.sorry hr {
 }
 
 #warning2 h3 {
-  margin: -21px -31px 10px;
+  margin: 29px -29px 10px;
   padding: 10px;
   border-width: 1px;
+  border-left: none;
+  border-right: none;
   box-shadow: inset 0 0 0 1px #320951;
 }
 
@@ -2341,6 +2347,12 @@ div.sorry hr {
   display: inline-block;
   min-width: 140px;
   text-align: right;
+}
+
+#stacktrace p:first-child {
+  padding: 10px 0 10px 44px;
+  font-weight: 700;
+  background: var(--err) no-repeat left center / 28px;
 }
 
 /* end error msgs */
@@ -9432,10 +9444,9 @@ input.download[value^="Dump"]:focus, button.download[value^="Dump"]:focus {
 }
 
 .routersummary img[src$="i2plogo.png"] {
-  margin-top: -4px;
-  margin-left: -6px;
+  margin: 0 0 -8px -8px !important;
+  width: 230px;
   transform: none;
-  width: 224px;
 }
 
 .routersummary table[id^="sb_"], #sb_localtunnels {
