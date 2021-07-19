@@ -1017,7 +1017,6 @@ to {
 
 #sb_services a[href$=":7658/"]::before, #sb_services a[href$=":7668/"]::before {
   background-image: var(--webserver);
-  background-image: url(/themes/console/images/bote.svg);
 }
 
 #sb_services a[href="/orchid/"]::before, #sb_services a[href*="/orchid/"]::before {
