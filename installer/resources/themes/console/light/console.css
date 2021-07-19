@@ -237,6 +237,7 @@ pre {
 
 #error500 #sidebar img[src$="i2plogo.png"] {
   margin-bottom: -3px !important;
+  width: 186px;
 }
 
 #sidebar a, #sidebar a:visited {
@@ -11212,6 +11213,8 @@ h1 {
 
 #error500 #sidebar img[src$="i2plogo.png"] {
   margin-top: -1px !important;
+  margin-left: -3px;
+  width: 232px;
 }
 
 #sb_internals a, #sb_advanced a, #sb_help a {
