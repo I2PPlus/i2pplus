@@ -1023,11 +1023,11 @@ to {
 }
 
 #sb_services a[href*="bote"]::before {
-  background-image: url(/themes/console/images/bote.png);
+  background-image: var(--bote);
 }
 
 #sb_services a[href*="/tracker"]::before {
-  background-image: url(/themes/console/images/zzzot.png);
+  background-image: var(--zzzot);
 }
 
 #sb_services a::before {

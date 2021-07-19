@@ -1872,11 +1872,11 @@ p:empty + .sb_notice {
 }
 
 #sb_services a[href*="bote"] {
-  background: #000010 url(/themes/console/images/bote.png) 5px center no-repeat;
+  background: #000010 var(--bote) 5px center no-repeat;
 }
 
 #sb_services a[href*="bote"]:hover {
-  background: #1e0b28 url(/themes/console/images/bote.png) 5px center no-repeat;
+  background: #1e0b28 var(--bote) 5px center no-repeat;
 }
 
 #sb_services a[href="/orchid/"], #sb_services a[href*="/orchid/"] {
@@ -1905,11 +1905,11 @@ p:empty + .sb_notice {
 
 
 #sb_services a[href*="/tracker"] {
-  background: #000010 url(/themes/console/images/zzzot.png) 5px center no-repeat;
+  background: #000010 var(--zzzot) 5px center no-repeat;
 }
 
 #sb_services a[href*="/tracker"]:hover {
-  background: #1e0b28 url(/themes/console/images/zzzot.png) 5px center no-repeat;
+  background: #1e0b28 var(--zzzot) 5px center no-repeat;
 }
 
 /* end custom sidebar links */
