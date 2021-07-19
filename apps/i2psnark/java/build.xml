@@ -287,12 +287,6 @@
         </replace>
         <replace dir="build/standalone-resources/.resources/themes/snark"
             summary="true"
-            token="url(/themes/console/images/i2psnark.png"
-            value="url(/i2psnark/.resources/themes/snark/ubergine/images/i2psnark.png" >
-            <include name="**/*.css" />
-        </replace>
-        <replace dir="build/standalone-resources/.resources/themes/snark"
-            summary="true"
             token="url(/themes/console/images/info/"
             value="url(/i2psnark/.resources/themes/snark/ubergine/images/" >
             <include name="**/*.css" />
@@ -300,8 +294,6 @@
 
         <!-- Rather than pulling in all the console theme images, let's just specify the ones we need -->
         <copy file="../../../installer/resources/themes/console/images/transparent.gif"
-              todir="build/standalone-resources/.resources/themes/snark/ubergine/images" />
-        <copy file="../../../installer/resources/themes/console/images/i2psnark.png"
               todir="build/standalone-resources/.resources/themes/snark/ubergine/images" />
         <copy file="../../../installer/resources/themes/console/dark/images/camotile2.png"
               todir="build/standalone-resources/.resources/themes/snark/dark/images" />
