@@ -10013,10 +10013,10 @@ input[type=file] {
 
 .signingkey {
   margin: 2px 0 2px 2px;
-  padding: 2px 4px 2px 18px;
+  padding: 2px 6px 2px 20px;
   display: inline-block;
   color: #ee9 !important;
-  background: url(/themes/console/images/buttons/cryptokey.png) no-repeat 3px center / 16px, var(--element);
+  background: var(--crypto) no-repeat 4px center / 14px, var(--element);
 }
 
 .signingkey.encryption {

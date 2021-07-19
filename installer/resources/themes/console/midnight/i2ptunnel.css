@@ -1758,7 +1758,7 @@ select[disabled], select[disabled]:hover, select[disabled]:focus, select[disable
 
 #sigType[disabled] {
   padding-left: 14px !important;
-  background: url(/themes/console/images/buttons/cryptokey.png) no-repeat left center !important;
+  background: var(--crypto) no-repeat left center / 16px !important;
 }
 
 #clientAuth th:nth-child(2), #clientAuth td:nth-child(2) {

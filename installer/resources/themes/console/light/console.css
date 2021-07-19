@@ -7921,7 +7921,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   border: 1px solid #bbd;
   border-radius: 2px;
   box-shadow: var(--highlight);
-  background: url(/themes/console/images/buttons/cryptokey.png) no-repeat 1px center / 14px, linear-gradient(to bottom, #fff, #eef);
+  background: var(--crypto) no-repeat 1px center / 14px, linear-gradient(to bottom, #fff, #eef);
 }
 
 .signingkey.encryption {

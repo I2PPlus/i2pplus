@@ -11523,7 +11523,7 @@ th .version {
   border: 1px solid #113;
   border-radius: 1px;
   box-shadow: var(--highlight);
-  background: url(/themes/console/images/buttons/cryptokey.png) 3px center no-repeat, var(--element);
+  background: var(--crypto) 3px center no-repeat, var(--element);
   background-size: 12px, 100%;
 }
 

@@ -10002,7 +10002,7 @@ a.keysearch {
   font-size: 90%;
   border: 1px solid #bbd;
   border-radius: 2px;
-  background: url(/themes/console/images/buttons/cryptokey.png) no-repeat 2px center / 12px, linear-gradient(to bottom, #fff, #fafbff);
+  background: var(--crypto) no-repeat 2px center / 12px, linear-gradient(to bottom, #fff, #fafbff);
 }
 
 .encryption a.keysearch {
