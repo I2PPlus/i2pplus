@@ -243,13 +243,13 @@ public class PeerHelper extends HelperBase {
            .append(_t("Remote peer, identified by truncated router hash")).append("</li>\n")
            .append("<li><b id=\"def.dir\">").append(_t("Dir"))
            .append(" (").append(_t("Direction")).append("):</b><br>")
-           .append("<span class=\"peer_arrow outbound\"><img alt=\"Outbound\" src=\"/themes/console/images/outbound.svg\"></span> ")
+           .append("<span class=\"peer_arrow outbound\"><img alt=\"Outbound\" src=\"/themes/console/images/svg/outbound.svg\"></span> ")
            .append(_t("Outbound connection")).append("<br>\n")
-           .append("<span class=\"peer_arrow outbound small\"><img src=\"/themes/console/images/inbound.svg\" alt=\"V\" height=\"8\" width=\"8\"></span> ")
+           .append("<span class=\"peer_arrow outbound small\"><img src=\"/themes/console/images/svg/inbound.svg\" alt=\"V\" height=\"8\" width=\"8\"></span> ")
            .append(_t("They offered to introduce us (help peers traverse our firewall)")).append("<br>\n")
-           .append("<span class=\"peer_arrow inbound\"><img alt=\"Inbound\" src=\"/themes/console/images/inbound.svg\"></span> ")
+           .append("<span class=\"peer_arrow inbound\"><img alt=\"Inbound\" src=\"/themes/console/images/svg/inbound.svg\"></span> ")
            .append(_t("Inbound connection")).append("<br>\n")
-           .append("<span class=\"peer_arrow inbound small\"><img src=\"/themes/console/images/outbound.svg\" alt=\"^\" height=\"8\" width=\"8\"></span> ")
+           .append("<span class=\"peer_arrow inbound small\"><img src=\"/themes/console/images/svg/outbound.svg\" alt=\"^\" height=\"8\" width=\"8\"></span> ")
            .append(_t("We offered to introduce them (help peers traverse their firewall)")).append("</li>\n")
            .append("<li><b id=\"def.idle\">").append(_t("Idle")).append(":</b> ")
            .append(_t("How long since a packet has been received / sent")).append("</li>")
@@ -349,9 +349,9 @@ public class PeerHelper extends HelperBase {
             //    buf.append(' ').append(_context.blocklist().toStr(ip));
             buf.append("</td><td class=\"cells direction\" align=\"center\">");
             if (con.isInbound())
-                buf.append("<span class=\"inbound\"><img src=\"/themes/console/images/inbound.svg\" alt=\"Inbound\" title=\"").append(_t("Inbound")).append("\"/></span>");
+                buf.append("<span class=\"inbound\"><img src=\"/themes/console/images/svg/inbound.svg\" alt=\"Inbound\" title=\"").append(_t("Inbound")).append("\"/></span>");
             else
-                buf.append("<span class=\"outbound\"><img src=\"/themes/console/images/outbound.svg\" alt=\"Outbound\" title=\"").append(_t("Outbound")).append("\"/></span>");
+                buf.append("<span class=\"outbound\"><img src=\"/themes/console/images/svg/outbound.svg\" alt=\"Outbound\" title=\"").append(_t("Outbound")).append("\"/></span>");
             buf.append("</td><td class=\"cells ipv6\" align=\"center\">");
             if (con.isIPv6())
                 buf.append("<span class=\"backlogged\">&#x2713;</span>");
@@ -587,14 +587,14 @@ public class PeerHelper extends HelperBase {
             //    buf.append(' ').append(_context.blocklist().toStr(ip));
             buf.append("</td><td class=\"cells direction\" nowrap align=\"left\">");
             if (peer.isInbound())
-                buf.append("<span class=\"inbound\"><img src=\"/themes/console/images/inbound.svg\" alt=\"Inbound\" title=\"").append(_t("Inbound"));
+                buf.append("<span class=\"inbound\"><img src=\"/themes/console/images/svg/inbound.svg\" alt=\"Inbound\" title=\"").append(_t("Inbound"));
             else
-                buf.append("<span class=\"outbound\"><img src=\"/themes/console/images/outbound.svg\" alt=\"Outbound\" title=\"").append(_t("Outbound"));
+                buf.append("<span class=\"outbound\"><img src=\"/themes/console/images/svg/outbound.svg\" alt=\"Outbound\" title=\"").append(_t("Outbound"));
             buf.append("\"></span>");
             if (peer.getWeRelayToThemAs() > 0)
-                buf.append("&nbsp;&nbsp;<span class=\"inbound small\"><img src=\"/themes/console/images/outbound.svg\" height=\"8\" width=\"8\" alt=\"^\" title=\"").append(_t("We offered to introduce them")).append("\">");
+                buf.append("&nbsp;&nbsp;<span class=\"inbound small\"><img src=\"/themes/console/images/svg/outbound.svg\" height=\"8\" width=\"8\" alt=\"^\" title=\"").append(_t("We offered to introduce them")).append("\">");
             if (peer.getTheyRelayToUsAs() > 0)
-                buf.append("&nbsp;&nbsp;<span class=\"outbound small\"><img src=\"/themes/console/images/inbound.svg\" height=\"8\" width=\"8\" alt=\"V\" title=\"").append(_t("They offered to introduce us")).append("\">");
+                buf.append("&nbsp;&nbsp;<span class=\"outbound small\"><img src=\"/themes/console/images/svg/inbound.svg\" height=\"8\" width=\"8\" alt=\"V\" title=\"").append(_t("They offered to introduce us")).append("\">");
             if (peer.getWeRelayToThemAs() > 0 || peer.getTheyRelayToUsAs() > 0)
                 buf.append("</span>");
             if (isAdvanced) {
