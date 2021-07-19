@@ -1731,7 +1731,7 @@ input.accept[value^="Show"], button.accept[value^="Show"],
 input.check[value^="View"], button.check[value^="View"],
 input.showconsole {
   padding: 5px 8px 5px 23px;
-  background: url(/themes/console/images/buttons/show.png) no-repeat 7px center, var(--btn);
+  background: var(--show) no-repeat 7px center / 14px, var(--btn);
 }
 
 input.accept[value^="Show"]:hover, button.accept[value^="Show"]:hover,
@@ -1739,14 +1739,14 @@ input.check[value^="View"]:hover, button.check[value^="View"]:hover,
 input.accept[value^="Show"]:focus, button.accept[value^="Show"]:focus,
 input.check[value^="View"]:focus, button.check[value^="View"]:focus,
 input.showconsole:hover, input.showconsole:focus {
-  background: url(/themes/console/images/buttons/show.png) no-repeat 7px center, var(--btn_hover);
+  background: var(--show) no-repeat 7px center / 14px, var(--btn_hover);
 }
 
 input.cancel[value^="Hide"], button.cancel[value^="Hide"],
 input.delete[value^="Do not view"], button.delete[value^="Do not view"],
 input.hideconsole {
   padding: 5px 8px 5px 23px;
-  background: url(/themes/console/images/buttons/hide.png) no-repeat 7px center, var(--btn);
+  background: var(--hide) no-repeat 7px center / 14px, var(--btn);
 }
 
 input.cancel[value^="Hide"]:hover, button.cancel[value^="Hide"]:hover,
@@ -1754,7 +1754,7 @@ input.delete[value^="Do not view"]:hover, button.delete[value^="Do not view"]:ho
 input.cancel[value^="Hide"]:focus, button.cancel[value^="Hide"]:focus,
 input.delete[value^="Do not view"]:focus, button.delete[value^="Do not view"]:focus,
 input.hideconsole:hover, input.hideconsole:focus {
-  background: url(/themes/console/images/buttons/hide.png) no-repeat 7px center, var(--btn_hover);
+  background: var(--hide) no-repeat 7px center / 14px, var(--btn_hover);
 }
 
 input.check, button.check {
