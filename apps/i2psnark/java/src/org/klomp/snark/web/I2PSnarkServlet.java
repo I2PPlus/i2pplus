@@ -5081,8 +5081,7 @@ public class I2PSnarkServlet extends BasicServlet {
             else
                 icon = "package";
         } else if (mime.equals("application/java-archive") || plc.endsWith(".deb") ||
-                   plc.endsWith(".rpm") || plc.endsWith(".snap") ||
-                   plc.endsWithIgnoreCase(".appimage"))
+                   plc.endsWith(".rpm") || plc.endsWith(".snap") || plc.endsWith(".appimage"))
             icon = "package";
         else if (plc.endsWith(".xpi2p"))
             icon = "plugin";
