@@ -173,7 +173,7 @@ public class PersistentDataStore extends TransientDataStore {
     /** How many files to write every 10 minutes. Doesn't make sense to limit it,
      *  they just back up in the queue hogging memory.
      */
-    private static final int WRITE_LIMIT = 4000;
+    private static final int WRITE_LIMIT = 5000;
 //    private static final long WRITE_DELAY = 10*60*1000;
     private static final long WRITE_DELAY = 2*60*1000;
 
@@ -561,11 +561,17 @@ public class PersistentDataStore extends TransientDataStore {
                         // Don't store but don't delete
                         if (_log.shouldLog(Log.WARN))
                             _log.warn("Skipping since NetDb copy is newer than " + _routerFile);
-                    } else if (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 || ri.getAddresses().isEmpty()) {
-                        // don't store unreachable peers & delete any existing ri files
+                    } else if (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
+                               ri.getAddresses().isEmpty() || ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
+                               ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0) {
+                        // don't store unreachable or K/L tier peers & delete any existing ri files
                         corrupt = true;
-                        if (_log.shouldLog(Log.INFO))
-                            _log.info("Not writing RouterInfo [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] to disk -> unreachable");
+                        if (_log.shouldLog(Log.INFO)) {
+                            if (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 || ri.getAddresses().isEmpty())
+                                _log.info("Not writing RouterInfo [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] to disk -> unreachable");
+                            else
+                                _log.info("Not writing RouterInfo [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] to disk -> K or L tier");
+                        }
                     } else if (getContext().blocklist().isBlocklisted(ri)) {
                         corrupt = true;
                         if (_log.shouldLog(Log.WARN))
