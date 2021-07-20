@@ -330,6 +330,7 @@ i {
 
 #error500 .routersummary img[src$="i2plogo.png"] {
   margin-bottom: -3px;
+  width: 186px;
 }
 
 #error500 .routersummary hr {
@@ -8339,8 +8340,8 @@ h1 {
 }
 
 #error500 .routersummary img[src$="i2plogo.png"] {
-  margin-top: -2px;
-  margin-bottom: -5px;
+  margin: -2px 0 -5px -2px;
+  width: 232px;
 }
 
 .routersummary table[id^="sb_"], .sb_newsheadings table {
