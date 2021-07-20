@@ -2234,10 +2234,10 @@ public class I2PSnarkServlet extends BasicServlet {
         else
             icon = "magnet";
         if (isValid) {
-            out.write(toImg(icon));
+            out.write(toSVG(icon));
             out.write("</a></span>");
         } else {
-            out.write(toImg(icon));
+            out.write(toSVG(icon));
         }
 
         // Torrent name column
@@ -3863,7 +3863,7 @@ public class I2PSnarkServlet extends BasicServlet {
                         buf.append("&amp;dn=").append(DataHelper.escapeHTML(baseName).replace(".torrent", "")
                            .replace("%20", " ").replace("%27", "\'").replace("%5B", "[").replace("%5D", "]"));
                     buf.append("\">")
-                       .append(toImg("magnet", ""))
+                       .append(toSVG("magnet", ""))
                        .append("</a>");
                 }
 
@@ -3871,7 +3871,7 @@ public class I2PSnarkServlet extends BasicServlet {
                    .append(baseName).append("\" title=\"").append(DataHelper.escapeHTML(baseName)
                    .replace("%20", " ").replace("%27", "\'").replace("%5B", "[").replace("%5D", "]"))
                    .append("\">")
-                   .append(toImg("torrent", ""))
+                   .append(toSVG("torrent", ""))
                    .append("</a>")
                    .append("</th></tr>\n");
                 buf.append("<tr id=\"torrentInfoStats\">");
@@ -4393,7 +4393,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 if (sortParam != null && !"0".equals(sortParam) && !"1".equals(sortParam))
                     buf.append("&amp;sort=").append(sortParam);
                 buf.append("\">");
-                buf.append(toImg("audio"));
+                buf.append(toSVG("audio"));
                 buf.append(' ').append(_t("Audio Playlist")).append("</a>");
             }
             buf.append("</td></tr>\n");
@@ -4506,7 +4506,7 @@ public class I2PSnarkServlet extends BasicServlet {
                        .append(ppath).append("\" data-lightbox data-lightbox-caption=\"")
                        .append(item.getName()).append("\" data-lightbox-group=\"allInDir\"></a>");
                 } else {
-                    buf.append(toImg(icon, _t("Open"))).append("</a>");
+                    buf.append(toSVG(icon, _t("Open"))).append("</a>");
                 }
                 if (isAudio)
                     buf.append("</audio>");
@@ -4518,7 +4518,7 @@ public class I2PSnarkServlet extends BasicServlet {
                                "\" type=\"text/javascript\"></script>\n");
                 }
             } else {
-                buf.append(toImg(icon));
+                buf.append(toSVG(icon));
             }
             buf.append("</td><td class=\"snarkFileName");
             if (!complete)
@@ -5080,8 +5080,9 @@ public class I2PSnarkServlet extends BasicServlet {
                 icon = "application";
             else
                 icon = "package";
-        } else if (mime.equals("application/java-archive") ||
-                 plc.endsWith(".deb"))
+        } else if (mime.equals("application/java-archive") || plc.endsWith(".deb") ||
+                   plc.endsWith(".rpm") || plc.endsWith(".snap") ||
+                   plc.endsWithIgnoreCase(".appimage"))
             icon = "package";
         else if (plc.endsWith(".xpi2p"))
             icon = "plugin";
@@ -5093,7 +5094,7 @@ public class I2PSnarkServlet extends BasicServlet {
             icon = "audio";
         else if (mime.startsWith("video/"))
             icon = "video";
-        else if (mime.startsWith("font/"))
+        else if (mime.startsWith("font/") || plc.endsWith(".ttf") || plc.endsWith(".woff") || plc.endsWith(".woff2"))
             icon = "font";
         else if (mime.equals("application/zip")) {
             if (plc.endsWith(".su3") || plc.endsWith(".su2"))
@@ -5106,8 +5107,10 @@ public class I2PSnarkServlet extends BasicServlet {
                  mime.equals("application/x-tar") || mime.equals("application/x-bzip2") ||
                  plc.endsWith(".txz"))
             icon = "compress";
-        else if (plc.endsWith(".exe"))
+        else if (plc.endsWith(".exe") || plc.endsWith(".bin"))
             icon = "application";
+        else if (plc.endsWith(".bat") || plc.endsWith(".dll"))
+            icon = "app_windows";
         else if (plc.endsWith(".iso") || plc.endsWith(".nrg"))
             icon = "cd";
         else if (mime.equals("application/x-bittorrent"))

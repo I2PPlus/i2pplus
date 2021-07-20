@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 64 64"
+   version="1.1"
+   id="svg11"
+   sodipodi:docname="torrent.svg"
+   inkscape:version="1.1-rc (1:1.1+rc+202105232055+f4db50c7c1)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs15" />
+  <sodipodi:namedview
+     id="namedview13"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="11.734375"
+     inkscape:cx="32"
+     inkscape:cy="32"
+     inkscape:window-width="1920"
+     inkscape:window-height="1007"
+     inkscape:window-x="0"
+     inkscape:window-y="47"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg11" />
+  <linearGradient
+     id="A"
+     gradientUnits="userSpaceOnUse"
+     x1="48"
+     x2="48"
+     y1="90"
+     y2="5.988">
+    <stop
+       offset="0"
+       stop-color="#e6e6e6"
+       id="stop2" />
+    <stop
+       offset="1"
+       stop-color="#f5f5f5"
+       id="stop4" />
+  </linearGradient>
+  <path
+     id="path1130"
+     style="fill:#44aa00;stroke:none;stroke-width:0.999997"
+     d="m 29.095109,5.1516833 c -14.304031,0 -26.0951081,12.4943397 -26.0951081,26.7934557 0,14.299117 11.5977581,27.314599 25.8955811,26.893219 H 60.999999 V 53.983182 H 28.895582 C 17.277533,53.981826 7.8572907,43.563188 7.8532216,31.945139 7.8572907,20.327089 17.47706,10.008216 29.095109,10.006859 Z m 0.921349,7.9537257 A 18.841346,18.841346 0 0 0 11.178686,31.945139 18.841346,18.841346 0 0 0 30.016458,50.784868 H 60.999999 V 46.074447 H 30.016458 c -7.804679,0 -14.129308,-6.324629 -14.129308,-14.129308 0,-7.804679 6.324629,-14.129308 14.129308,-14.129308 1.89486,0 3.694427,0.377461 5.346173,1.054367 l 1.793794,-4.366137 a 18.793676,18.793676 0 0 0 -7.139967,-1.398652 z m 1.498415,7.889173 v 0.002 c -6.598994,0.0019 -11.948195,4.349563 -11.948194,10.948553 0,6.598991 5.3492,10.94669 11.948194,10.9486 H 60.999999 V 38.414143 H 31.514873 c -4.125007,-0.0012 -7.469304,-2.343997 -7.470556,-6.469004 0.0012,-4.125008 3.345549,-6.467753 7.470556,-6.469005 2.061374,0 3.921089,0.845192 5.273794,2.196762 L 39.961551,24.4961 c -2.240522,-2.240525 -5.277516,-3.501518 -8.446678,-3.501518 z" />
+</svg>
