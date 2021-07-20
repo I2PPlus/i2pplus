@@ -5077,7 +5077,7 @@ public class I2PSnarkServlet extends BasicServlet {
             else if (plc.contains("i2pinstall"))
                 icon = "i2p";
             else if (plc.endsWith(".exe"))
-                icon = "application";
+                icon = "app";
             else
                 icon = "package";
         } else if (mime.equals("application/java-archive") || plc.endsWith(".deb") ||
@@ -5106,16 +5106,18 @@ public class I2PSnarkServlet extends BasicServlet {
                  mime.equals("application/x-tar") || mime.equals("application/x-bzip2") ||
                  plc.endsWith(".txz"))
             icon = "compress";
-        else if (plc.endsWith(".exe") || plc.endsWith(".bin"))
-            icon = "application";
-        else if (plc.endsWith(".bat") || plc.endsWith(".dll"))
-            icon = "app_windows";
+        else if (plc.endsWith(".bin"))
+            icon = "app";
+        else if (plc.endsWith(".exe") || plc.endsWith(".bat") || plc.endsWith(".dll"))
+            icon = "app_win";
         else if (plc.endsWith(".iso") || plc.endsWith(".nrg"))
             icon = "cd";
+        else if (plc.contains(".css.") || plc.endsWith(".css"))
+            icon = "css";
         else if (mime.equals("application/x-bittorrent"))
             icon = "magnet";
         else
-            icon = "unknown";
+            icon = "generic";
         return icon;
     }
 
