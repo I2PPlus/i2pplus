@@ -184,7 +184,7 @@ a:active, a:visited:active, th a:active, th a:visited:active, td a:active, td a:
 }
 
 .nav_main:link {
-  background: var(--b_snark) 11px center no-repeat, var(--nav);
+  background: var(--b_snark) no-repeat 11px center, var(--nav);
   background-size: 18px, 100%, 100% !important;
 }
 
@@ -201,7 +201,7 @@ a:active, a:visited:active, th a:active, th a:visited:active, td a:active, td a:
 }
 
 .nav_main:hover, .nav_main:focus {
-  background: var(--b_snark_hover) 11px center no-repeat, var(--nav_hover) !important;
+  background: var(--b_snark_hover) no-repeat 11px center, var(--nav_hover) !important;
   background-size: 18px, 100% !important;
 }
 
@@ -218,7 +218,7 @@ a:active, a:visited:active, th a:active, th a:visited:active, td a:active, td a:
 }
 
 .nav_main:active {
-  background: var(--b_snark_active) 11px center no-repeat, var(--nav_active) !important;
+  background: var(--b_snark_active) no-repeat 11px center, var(--nav_active) !important;
   background-size: 18px, 100% !important;
 }
 
@@ -1070,7 +1070,7 @@ img[src$="details.png"] {
   .snarkTorrentInfo .infohash {
     padding: 2px 0 2px 22px !important;
     max-width: 140px;
-    background: #fff5ef url(../light/images/hash.png) 6px center no-repeat;
+    background: #fff5ef url(../light/images/hash.png) no-repeat 6px center;
     background-size: 14px !important;
   }
 }
@@ -1548,7 +1548,7 @@ input[type=submit], .trackerconfig input[type=submit], input[name="savepri"], se
   border-top: none;
   border-radius: 2px 2px 0 0;
   box-shadow: var(--highlight);
-  background: var(--snark) 8px center no-repeat, radial-gradient(circle at left bottom, #f9f8f2, #f7f6ee 400px) !important;
+  background: var(--snark) no-repeat 8px center, radial-gradient(circle at left bottom, #f9f8f2, #f7f6ee 400px) !important;
   background-size: 18px, 100% !important;
   background-blend-mode: luminosity;
 }
@@ -1916,14 +1916,14 @@ select {
   border-radius: 2px;
   border: 1px solid #2f1500;
   box-shadow: inset 0 0 0 1px #f9f5f2, 0 0 1px 0 rgba(77, 69, 62, .3);
-  background: #efe6e0 var(--dropdown) right 7px center no-repeat !important;
+  background: #efe6e0 var(--dropdown) no-repeat right 7px center !important;
   background-size: 10px !important;
   appearance: none;
 }
 
 select:hover, select:focus {
   color: #5f1227 !important;
-  background: #fffcdf var(--dropdown_hover) right 7px center no-repeat !important;
+  background: #fffcdf var(--dropdown_hover) no-repeat right 7px center !important;
   background-size: 10px !important;
 }
 
@@ -2383,15 +2383,15 @@ hr.debug {
 }
 
 .priorityHigh {
-  background: url(/i2psnark/.resources/icons/clock_red.png) left 26px center no-repeat;
+  background: url(/i2psnark/.resources/icons/clock_red.png) no-repeat left 26px center;
 }
 
 .priorityNormal {
-  background: url(/i2psnark/.resources/icons/clock.png) left 26px center no-repeat;
+  background: url(/i2psnark/.resources/icons/clock.png) no-repeat left 26px center;
 }
 
 .prioritySkip {
-  background: url(/i2psnark/.resources/icons/block.png) left 26px center no-repeat;
+  background: url(/i2psnark/.resources/icons/block.png) no-repeat left 26px center;
 }
 
 /* configs */
@@ -2440,7 +2440,7 @@ td#bwHelp {
   padding-left: 28px !important;
   width: 90%;
   line-height: 100%;
-  background: url(images/details.svg) left 10px center no-repeat;
+  background: url(images/details.svg) no-repeat left 10px center;
   background-size: 14px;
 }
 
@@ -2508,19 +2508,19 @@ td#bwHelp a {
 
 .snarkCommentInfo th {
   padding-left: 28px !important;
-  background: var(--chat) 8px center no-repeat, var(--th);
+  background: var(--chat) no-repeat 8px center, var(--th);
   background-size: 16px, 100%;
 }
 
 #mediaContainer th {
   border-top: none;
   padding-left: 28px !important;
-  background: url(/i2psnark/.resources/icons/film.png) 8px center no-repeat, var(--th);
+  background: url(/i2psnark/.resources/icons/film.png) no-repeat 8px center, var(--th);
 }
 
 #mediaContainer th.audio {
   padding-left: 28px !important;
-  background: url(/i2psnark/.resources/icons/music.png) 8px center no-repeat, var(--th);
+  background: url(/i2psnark/.resources/icons/music.png) no-repeat 8px center, var(--th);
 }
 
 #mediaContainer td {
@@ -2635,7 +2635,7 @@ td#bwHelp a {
 
 .commentAuthorName {
   padding: 0 4px 0 24px;
-  background: var(--user) 4px center no-repeat;
+  background: var(--user) no-repeat 4px center;
   background-size: 16px;
 }
 
@@ -2647,7 +2647,7 @@ td .commentAuthorName {
   text-align: left;
   border-radius: 1px;
   box-shadow: 0 0 0 1px rgba(77, 69, 62, .7);
-  background: var(--user) 4px center no-repeat, linear-gradient(to bottom, #fff5ef, #fff4de);
+  background: var(--user) no-repeat 4px center, linear-gradient(to bottom, #fff5ef, #fff4de);
   background-size: 16px;
 }
 
@@ -2672,7 +2672,7 @@ td .commentAuthorName {
   border: 1px solid #6f533e;
   border-radius: 2px;
   box-shadow: 0 0 0 1px #fff inset;
-  background: var(--chat) 6px center no-repeat #fff6df;
+  background: var(--chat) no-repeat 6px center #fff6df;
   background-size: 16px;
   background-blend-mode: luminosity;
 }
@@ -2711,7 +2711,7 @@ td .commentAuthorName {
 .snarkComments .commentDelete {
   padding: 5px 6px 5px 24px !important;
   text-align: left;
-  background: var(--nuke) 6px center no-repeat;
+  background: var(--nuke) no-repeat 6px center;
   background-size: 16px;
 }
 
@@ -3405,7 +3405,7 @@ td .commentAuthorName {
   white-space: nowrap;
   box-shadow: 0 0 0 1px #cfc6c0;
   border-radius: 2px;
-  background: #fff5ef var(--b_tracker) left 3px center no-repeat;
+  background: #fff5ef var(--b_tracker) no-repeat left 3px center;
   background-size: 12px;
 }
 
@@ -3415,7 +3415,7 @@ td .commentAuthorName {
 
 .info_tracker:hover {
   box-shadow: var(--highlight), 0 0 0 1px #bfb6b0;
-  background: var(--b_tracker_hover) left 3px center no-repeat, linear-gradient(to bottom, #efefef 50%, #cfc7c2 50%);
+  background: var(--b_tracker_hover) no-repeat left 3px center, linear-gradient(to bottom, #efefef 50%, #cfc7c2 50%);
   background-size: 12px, 100%;
 }
 
@@ -3426,8 +3426,8 @@ td .commentAuthorName {
 .info_tracker:active {
   color: #fff;
   box-shadow: inset 0 0 0 1px #310, inset 3px 3px 3px #310, 0 0 0 1px #bfb6b0;
-  background: #f60 var(--b_tracker_active) left 3px center no-repeat;
-  background: var(--b_tracker_active) left 3px center no-repeat, var(--nav_active);
+  background: #f60 var(--b_tracker_active) no-repeat left 3px center;
+  background: var(--b_tracker_active) no-repeat left 3px center, var(--nav_active);
   background-size: 12px;
 }
 
@@ -3712,7 +3712,7 @@ input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilte
   border-radius: 3px;
   font-size: 10pt;
   font-weight: 700;
-  background: #ffe var(--snark) 10px center no-repeat;
+  background: #ffe var(--snark) no-repeat 10px center;
   background-size: 26px !important;
   background-blend-mode: luminosity;
   opacity: 0;

@@ -108,7 +108,7 @@ p.info, p.error {
   color: #c9ceff;
   border: 1px solid #27235c;
   border-radius: 2px;
-  background: var(--infohelp) 10px center no-repeat / 28px, linear-gradient(to right, #000000, #010015 65%, #020018 90%);
+  background: var(--infohelp) no-repeat 10px center / 28px, linear-gradient(to right, #000000, #010015 65%, #020018 90%);
 }
 
 p.error {

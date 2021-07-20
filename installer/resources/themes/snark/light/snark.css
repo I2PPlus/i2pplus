@@ -2423,19 +2423,19 @@ hr.debug {
   text-align: left;
   font-size: 0;
   color: transparent;
-  background-size: 18px 18px !important;
+  background-size: 18px !important;
 }
 
 .priorityHigh {
-  background: url(/i2psnark/.resources/icons/clock_red.png) left 24px center no-repeat;
+  background: url(/i2psnark/.resources/icons/clock_red.png) no-repeat left 24px center;
 }
 
 .priorityNormal {
-  background: url(/i2psnark/.resources/icons/clock.png) left 24px center no-repeat;
+  background: url(/i2psnark/.resources/icons/clock.png) no-repeat left 24px center;
 }
 
 .prioritySkip {
-  background: url(/i2psnark/.resources/icons/block.png) left 24px center no-repeat;
+  background: url(/i2psnark/.resources/icons/block.png) no-repeat left 24px center;
 }
 
 /* end priorities */
@@ -2454,10 +2454,9 @@ hr.debug {
 }
 
 #bwHoverHelp {
-  background: url(images/details.svg) 4px center no-repeat;
-  background-size: 14px;
   margin-right: 26px !important;
-  line-height: 100%;
+  line-height: 1;
+  background: url(images/details.svg) no-repeat 4px center / 14px;
 }
 
 #bwHoverHelp img[src$="details.svg"] {

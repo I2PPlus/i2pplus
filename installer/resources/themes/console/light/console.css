@@ -6125,12 +6125,12 @@ table#consolepass input[name="name"] {
 }
 
 #consolepass input[name="name"], #externali2cp input[name="user"], #reseedconfig input[name="username"], #reseedconfig input[name="susername"] {
-  background: #fbfbff var(--user) 5px center no-repeat;
+  background: #fbfbff var(--user) no-repeat 5px center;
 }
 
 #consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"], #reseedconfig input[type=password] {
   padding: 4px 5px 4px 26px !important;
-  background: #fbfbff var(--key) 5px center no-repeat !important;
+  background: #fbfbff var(--key) no-repeat 5px center !important;
   background-size: 16px !important;
   background-blend-mode: luminosity;
 }
@@ -9433,7 +9433,7 @@ a[href^="configpeer?peer"]:hover::after {
 }
 
 #debug h2 {
-  background: var(--bug) right 6px center no-repeat, var(--h2) !important;
+  background: var(--bug) no-repeat right 6px center, var(--h2) !important;
   background-size: 20px, 100%, 100% !important;
   background-blend-mode: luminosity, normal, normal;
 }
@@ -9580,13 +9580,13 @@ a[href^="configpeer?peer"]:hover::after {
 
 .subheading.routerfiles {
   padding-left: 10px !important;
-  background: url(images/favicon.svg) right 7px center no-repeat, linear-gradient(to right, #7e7fb9 5px, #fafaff 5px, #eef) !important;
+  background: url(images/favicon.svg) no-repeat right 7px center, linear-gradient(to right, #7e7fb9 5px, #fafaff 5px, #eef) !important;
   background-size: 16px, 100% !important;
 }
 
 .subheading.pluginfiles {
   padding-left: 10px !important;
-  background: var(--plugin) right 7px center no-repeat, linear-gradient(to right, #7e7fb9 5px, #fafaff 5px, #eef) !important;
+  background: var(--plugin) no-repeat right 7px center, linear-gradient(to right, #7e7fb9 5px, #fafaff 5px, #eef) !important;
   background-size: 16px, 100% !important;
 }
 
@@ -9604,14 +9604,14 @@ a[href^="configpeer?peer"]:hover::after {
 
 .subheading.routerfiles {
   padding-left: 5px !important;
-  background: url(images/favicon.svg) right 5px center no-repeat, linear-gradient(to right, #fafaff, #eef) !important;
+  background: url(images/favicon.svg) no-repeat right 5px center, linear-gradient(to right, #fafaff, #eef) !important;
   background-size: 16px, 100% !important;
   box-shadow: none !important;
 }
 
 .subheading.pluginfiles {
   padding-left: 5px !important;
-  background: var(--plugin) right 5px center no-repeat, linear-gradient(to right, #fafaff, #eef) !important;
+  background: var(--plugin) no-repeat right 5px center, linear-gradient(to right, #fafaff, #eef) !important;
   background-size: 16px, 100% !important;
   box-shadow: none !important;
 }
@@ -9757,7 +9757,7 @@ a[href^="configpeer?peer"]:hover::after {
 }
 
 #jardump tr:hover td:first-child {
-  background: var(--package) 5px center no-repeat #ffd;
+  background: var(--package) no-repeat 5px center #ffd;
   background-size: 16px;
 }
 
@@ -9946,8 +9946,7 @@ b.suboption {
 
 #bandwidthconfig td:first-child:not(.infohelp) {
   padding: 0 50px 0 5px;
-  background: url(/themes/console/images/svg/arrow_right.svg) right 14px center no-repeat;
-  background-size: 24px;
+  background: url(/themes/console/images/svg/arrow_right.svg) no-repeat right 14px center / 24px;
 }
 
 #bandwidthconfig .optionsingle {
@@ -13057,8 +13056,8 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
 }
 
 #profilelist .standard.integrated {
-  background: var(--standard) calc(50% - 10px) center no-repeat,
-              var(--integrated) calc(50% + 10px) center no-repeat;
+  background: var(--standard) no-repeat calc(50% - 10px) center,
+              var(--integrated) no-repeat calc(50% + 10px) center;
 }
 
 .profilegroup::before {

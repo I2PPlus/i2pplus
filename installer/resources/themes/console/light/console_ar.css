@@ -38,7 +38,7 @@ h2, h3 {
 }
 
 #debug h2 {
-  background: var(--bug) 6px center no-repeat,
+  background: var(--bug) no-repeat 6px center,
               linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
               linear-gradient(to left, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) !important;
   background-size: 20px, 100%, 100% !important;
@@ -67,59 +67,59 @@ h2, h3 {
 h1 {
   margin: 0 212px -15px 0;
   padding: 16px 20px 15px 10px;
-  background: url(images/netwrk.png) 8px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  background: url(images/netwrk.png) no-repeat 8px center, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1.home {
-  background: url(images/home.png) right 10px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  background: url(images/home.png) no-repeat right 10px center, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1.perf {
-  background: url(images/perf.png) right 10px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  background: url(images/perf.png) no-repeat right 10px center, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1.nfo {
-  background: url(images/info.png) right 10px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  background: url(images/info.png) no-repeat right 10px center, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1.hlp {
-  background: url(images/header_help.png) right 10px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  background: url(images/header_help.png) no-repeat right 10px center, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1.addbook {
-  background: url(images/addbook.png) right 10px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  background: url(images/addbook.png) no-repeat right 10px center, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1.snark {
-  background: url(images/app_snark.png) right 10px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  background: url(images/app_snark.png) no-repeat right 10px center, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1.mail {
-  background: url(images/app_mail.png) 8px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  background: url(images/app_mail.png) no-repeat 8px center, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1.conf {
-  background: url(images/cog.png) right 10px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  background: url(images/cog.png) no-repeat right 10px center, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1.adv {
-  background: url(images/advinfo.png) right 10px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  background: url(images/advinfo.png) no-repeat right 10px center, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1.err {
-  background: url(images/error.png) right 10px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  background: url(images/error.png) no-repeat right 10px center, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1.sched {
-  background: url(images/tasks.png) right 10px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  background: url(images/tasks.png) no-repeat right 10px center, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1.log {
-  background: var(--log_icon) right 10px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  background: var(--log_icon) no-repeat right 10px center, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1.webapp {
-  background: url(images/webapp.png) right 10px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  background: url(images/webapp.png) no-repeat right 10px center, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1[class] {
@@ -790,7 +790,7 @@ div.app:hover .appimg .extlink::after {
 
 div.news h3, #news h3, #newspage #news h3 {
   padding: 5px 30px 5px 10px;
-  background: var(--news) right 8px center no-repeat,
+  background: var(--news) no-repeat right 8px center,
               linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
               linear-gradient(to left, #fff 5%, rgba(231, 231, 255, .8) 15%) right center !important;
   background-size: 15px, 100%, 100% !important;
@@ -938,8 +938,7 @@ table.leaseset:last-child, .netdbentry:last-child, #profile_defs {
 
 #sybilnav li {
   padding: 3px 24px 3px 3px;
-  background: var(--eye) right 5px center no-repeat, linear-gradient(to right, #eef 30%, #fff);
-  background-size: 16px, 100%;
+  background: var(--eye) no-repeat right 5px center / 16px, linear-gradient(to right, #eef 30%, #fff);
 }
 
 .threatpoints + ul li {
@@ -1191,33 +1190,33 @@ b.suboption {
 }
 
 #config_reseed #reseedurl, #installPluginUrl {
-  background: #eaeaff var(--link) right 10px center no-repeat !important;
+  background: #eaeaff var(--link) no-repeat right 10px center !important;
   background-size: 28px 28px, 100%, 100% !important;
 }
 
 #config_reseed #reseedurl:hover, #installPluginUrl:hover {
-  background: #ffd var(--link) right 10px center no-repeat !important;
+  background: #ffd var(--link) no-repeat right 10px center !important;
   background-size: 28px 28px !important;
 }
 
 #config_reseed  #reseedzip, #installPluginFile {
-  background: #eaeaff var(--files) right 10px center no-repeat !important;
+  background: #eaeaff var(--files) no-repeat right 10px center !important;
   background-size: 28px 28px, 100%, 100% !important;
 }
 
 #config_reseed #reseedzip:hover, #installPluginFile:hover {
-  background: #ffd var(--files) right 10px center no-repeat !important;
+  background: #ffd var(--files) no-repeat right 10px center !important;
   background-size: 28px 28px !important;
 }
 
 #config_reseed #reseedcreatefile {
-  background: #eaeaff var(--package) right 10px center no-repeat !important;
+  background: #eaeaff var(--package) no-repeat right 10px center !important;
   background-size: 28px 28px, 100%, 100% !important;
   text-align: justify;
 }
 
 #config_reseed #reseedcreatefile:hover {
-  background: #ffd var(--package) right 10px center no-repeat !important;
+  background: #ffd var(--package) no-repeat right 10px center !important;
   background-size: 28px 28px !important;
 }
 
@@ -1258,7 +1257,7 @@ input[type="file"]:hover {
 
 #bandwidthconfig td:first-child:not(.infohelp) {
   padding: 0 5px 0 80px;
-  background: url(/themes/console/images/info/arrow_left.png) 30px center no-repeat !important;
+  background: url(/themes/console/images/info/arrow_left.png) no-repeat 30px center !important;
 }
 
 #joinfamily tr:nth-child(3) td:first-child,

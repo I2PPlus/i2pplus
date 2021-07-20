@@ -5111,7 +5111,7 @@ p#helptranslate {
   text-align: left !important;
   border-top: 1px solid #aaafce;
   border-bottom: 1px solid #aaafce;
-  background: url(images/favicon.svg) left 14px center no-repeat, #fff;
+  background: url(images/favicon.svg) no-repeat left 14px center, #fff;
   background-size: 28px;
 }
 
@@ -11266,7 +11266,7 @@ p#gatherstats {
 }
 
 #enablefullstats {
-  background: var(--stats) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff)
+  background: var(--stats) no-repeat 12px center, linear-gradient(135deg, #fafaff, #f8f8ff)
 }
 
 /* /tunnelpeercount */
@@ -11968,8 +11968,8 @@ div.app:hover img, .sitemaplink:hover img {
 }
 
 #profilelist .fast {
-  background: var(--fast) calc(50% - 10px) center no-repeat,
-              var(--highcap) calc(50% + 10px) center no-repeat;
+  background: var(--fast) no-repeat calc(50% - 10px) center,
+              var(--highcap) no-repeat calc(50% + 10px) center;
 }
 
 #profilelist .fast.integrated {
@@ -11983,8 +11983,8 @@ div.app:hover img, .sitemaplink:hover img {
 }
 
 #profilelist .highcap.integrated {
-  background: var(--highcap) calc(50% - 10px) center no-repeat,
-              var(--integrated) calc(50% + 10px) center no-repeat;
+  background: var(--highcap) no-repeat calc(50% - 10px) center,
+              var(--integrated) no-repeat calc(50% + 10px) center;
 }
 
 #profilelist .standard {
@@ -11992,8 +11992,8 @@ div.app:hover img, .sitemaplink:hover img {
 }
 
 #profilelist .standard.integrated {
-  background: var(--standard) calc(50% - 10px) center no-repeat,
-              var(--integrated) calc(50% + 10px) center no-repeat;
+  background: var(--standard) no-repeat calc(50% - 10px) center,
+              var(--integrated) no-repeat calc(50% + 10px) center;
 }
 
 .profilegroup::before {

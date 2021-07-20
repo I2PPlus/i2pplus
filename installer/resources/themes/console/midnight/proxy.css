@@ -209,18 +209,18 @@ button:active {
 
 button.go, button.accept {
   padding: 7px 9px 7px 25px !important;
-  background: var(--yes) 8px center no-repeat, var(--button) !important;
+  background: var(--yes) no-repeat 8px center, var(--button) !important;
   background-size: 12px, 100% !important;
 }
 
 button.go:hover, button.go:focus,
 button.accept:hover, button.accept:focus {
-  background: var(--yes) 8px center no-repeat, var(--button_hover) !important;
+  background: var(--yes) no-repeat 8px center, var(--button_hover) !important;
   background-size: 12px, 100% !important;
 }
 
 button.go:active, button.accept:active {
-  background: var(--yes) 8px center no-repeat, var(--button_active) !important;
+  background: var(--yes) no-repeat 8px center, var(--button_active) !important;
   background-size: 12px, 100% !important;
 }
 

@@ -223,15 +223,15 @@ td input[type="image"]::after {
 }
 
 .nav_main:link {
-  background: var(--snark) 9px center no-repeat, linear-gradient(to bottom, #181828 50%, #000 50%);
+  background: var(--snark) no-repeat 9px center, linear-gradient(to bottom, #181828 50%, #000 50%);
 }
 
 .nav_forum:link {
-  background: var(--forum) 9px center no-repeat, linear-gradient(to bottom, #181828 50%, #000 50%);
+  background: var(--forum) no-repeat 9px center, linear-gradient(to bottom, #181828 50%, #000 50%);
 }
 
 .nav_search:link {
-  background: var(--search) 9px center no-repeat, linear-gradient(to bottom, #181828 50%, #000 50%);
+  background: var(--search) no-repeat 9px center, linear-gradient(to bottom, #181828 50%, #000 50%);
 }
 
 .nav_main:link:hover, .nav_main:link:focus, .nav_main:link:active {
@@ -997,7 +997,7 @@ th .magnetlink img, th .torrentlink img {
   vertical-align: middle;
   color: #000;
   border-radius: 2px;
-  background: #bb0 url(../ubergine/images/hash.png) 4px center no-repeat;
+  background: #bb0 url(../ubergine/images/hash.png) no-repeat 4px center;
   background-size: 12px !important;
 }
 
@@ -1926,7 +1926,7 @@ select:hover, select:focus, select:active {
   color: #652787 !important;
   border: 1px solid #652787 !important;
   box-shadow: var(--highlight), inset 0 0 2px 1px #757;
-  background: var(--dropdown_hover) right 10px center no-repeat, linear-gradient(to bottom, #202 50%, #000 50%) !important;
+  background: var(--dropdown_hover) no-repeat right 10px center, linear-gradient(to bottom, #202 50%, #000 50%) !important;
   background-size: 10px auto, 100% !important;
 }
 
@@ -1936,7 +1936,7 @@ select[disabled], select[disabled]:hover {
   cursor: not-allowed;
   border: 1px solid #27235f !important;
   box-shadow: none !important;
-  background: #000 var(--dropdown) right 10px center no-repeat !important;
+  background: #000 var(--dropdown) no-repeat right 10px center !important;
   background-size: 10px auto !important;
 }
 
@@ -2757,11 +2757,10 @@ hr.debug {
 }
 
 td#bwHelp {
-  background: url(images/details.svg) left 12px center no-repeat;
-  background-size: 14px auto;
   padding-left: 30px !important;
   width: 90%;
-  line-height: 100%;
+  line-height: 1;
+  background: url(images/details.svg) no-repeat left 12px center / 14px;
 }
 
 td#bwHelp a {
@@ -2775,22 +2774,22 @@ td#bwHelp a {
 /* torrent priorities */
 
 .priority {
-  font-size: 8pt;
   width: 1%;
-  white-space: nowrap;
   vertical-align: middle;
+  white-space: nowrap;
+  font-size: 8pt;
 }
 
 .priority::after {
-  content: "";
-  display: inline-block;
   min-height: 30px;
+  display: inline-block;
   vertical-align: middle;
+  content: "";
 }
 
 .priority input[type=radio] {
-  text-align: left;
   margin: 3px;
+  text-align: left;
 }
 
 .priorityHigh, .priorityNormal, .prioritySkip {
@@ -2806,15 +2805,15 @@ td#bwHelp a {
 }
 
 .priorityHigh {
-  background: url(/i2psnark/.resources/icons/clock_red.png) left 28px center no-repeat;
+  background: url(/i2psnark/.resources/icons/clock_red.png) no-repeat left 28px center;
 }
 
 .priorityNormal {
-  background: url(/i2psnark/.resources/icons/clock.png) left 28px  center no-repeat;
+  background: url(/i2psnark/.resources/icons/clock.png) no-repeat left 28px center;
 }
 
 .prioritySkip {
-  background: url(/i2psnark/.resources/icons/block.png) left 28px center no-repeat;
+  background: url(/i2psnark/.resources/icons/block.png) no-repeat left 28px center;
 }
 
 #setPriority a.control img {
@@ -2897,12 +2896,12 @@ td#bwHelp a {
 }
 
 .snarkCommentInfo th {
-  background: url(images/comment.png) 8px center no-repeat, linear-gradient(to bottom, #121225, #00000d);
+  background: url(images/comment.png) no-repeat 8px center, linear-gradient(to bottom, #121225, #00000d);
   padding: 2px 5px 2px 30px !important;
 }
 
 #mediaContainer th {
-  background: url(/i2psnark/.resources/icons/film.png) 8px center no-repeat, linear-gradient(to bottom, #121225, #00000d);
+  background: url(/i2psnark/.resources/icons/film.png) no-repeat 8px center, linear-gradient(to bottom, #121225, #00000d);
   padding: 10px 5px 10px 30px !important;
 }
 
@@ -3474,7 +3473,7 @@ code, tt {
   color: #7171d1;
   border-radius: 1px;
   border: 1px solid #114;
-  background: #001 url(images/button_tracker.png) left 3px center no-repeat;
+  background: #001 url(images/button_tracker.png) no-repeat left 3px center;
   background-size: 14px auto;
 }
 
@@ -3496,7 +3495,7 @@ code, tt {
 
 .info_tracker:hover {
   border: 1px solid #652787;
-  background: url(images/button_tracker_hover.png) left 3px center no-repeat, linear-gradient(to bottom, #000 50%, #002 50%) !important;
+  background: url(images/button_tracker_hover.png) no-repeat left 3px center, linear-gradient(to bottom, #000 50%, #002 50%) !important;
   background-size: 14px auto, 100% !important;
 }
 
@@ -3507,7 +3506,7 @@ code, tt {
 .info_tracker:active {
   color: #fff !important;
   box-shadow: 0 0 0 1px #652787, inset 3px 3px 3px #1f002f;
-  background: #652787 url(images/button_tracker_active.png) left 3px center no-repeat !important;
+  background: #652787 url(images/button_tracker_active.png) no-repeat left 3px center !important;
   background-size: 14px auto !important;
 }
 

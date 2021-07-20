@@ -396,7 +396,7 @@ th:last-child, td:last-child {
 td.infohelp {
   padding: 10px 10px 10px 38px !important;
   text-align: justify;
-  background: url(/themes/console/images/svg/infohelp.svg) 10px center no-repeat;
+  background: url(/themes/console/images/svg/infohelp.svg) no-repeat 10px center;
   background-size: 22px 22px;
 }
 
@@ -724,13 +724,13 @@ textarea[name="accessList"]:focus {
 
 .multiOption#isServer {
   padding-left: 28px;
-  background: url(/themes/console/images/svg/server.svg) 4px center no-repeat;
+  background: url(/themes/console/images/svg/server.svg) no-repeat 4px center;
   background-size: 22px 22px;
 }
 
 .multiOption#isClient {
   padding-left: 28px;
-  background: url(/themes/console/images/svg/client.svg) 4px center no-repeat;
+  background: url(/themes/console/images/svg/client.svg) no-repeat 4px center;
   background-size: 22px 22px;
 }
 
