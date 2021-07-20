@@ -5058,18 +5058,16 @@ public class I2PSnarkServlet extends BasicServlet {
         String mime = getMimeType(path);
         if (mime == null)
             mime = "";
-        if (mime.equals("text/html"))
+        if (mime.equals("text/html") || plc.endsWith(".jsp"))
             icon = "html";
-        else if (mime.equals("text/plain") ||
-                 mime.equals("text/x-sfv") ||
-                 mime.equals("application/rtf") ||
-                 plc.endsWith(".md") || plc.endsWith(".js"))
+        else if (mime.equals("text/plain") || mime.equals("text/x-sfv") ||
+                 mime.equals("application/rtf") || plc.endsWith(".md") ||
+                 plc.endsWith(".ini") || plc.endsWith(".srt") || plc.endsWith(".nfo"))
             icon = "text";
         else if  (mime.equals("application/epub+zip") ||
                  mime.equals("application/x-mobipocket-ebook") ||
-                 plc.endsWith(".fb2") ||
-                 plc.endsWith(".azw3") ||
-                 plc.endsWith(".azw4"))
+                 plc.endsWith(".fb2") || plc.endsWith(".azw3") ||
+                 plc.endsWith(".azw4") || plc.endsWith(".prc"))
             icon = "ebook";
         else if (mime.equals("application/x-jar") || mime.equals("application/x-java-archive") ||
                mime.equals("application/java-archive") || plc.endsWith(".jar") || plc.endsWith(".exe")) {
@@ -5078,7 +5076,7 @@ public class I2PSnarkServlet extends BasicServlet {
             else if (plc.contains("i2pinstall"))
                 icon = "i2p";
             else if (plc.endsWith(".exe"))
-                icon = "app";
+                icon = "app_win";
             else
                 icon = "package";
         } else if (mime.equals("application/java-archive") || plc.endsWith(".deb") ||
@@ -5109,12 +5107,17 @@ public class I2PSnarkServlet extends BasicServlet {
             icon = "compress";
         else if (plc.endsWith(".bin"))
             icon = "app";
-        else if (plc.endsWith(".exe") || plc.endsWith(".bat") || plc.endsWith(".dll"))
+        else if (plc.endsWith(".bat") || plc.endsWith(".dll"))
             icon = "app_win";
         else if (plc.endsWith(".iso") || plc.endsWith(".nrg"))
             icon = "cd";
-        else if (plc.contains(".css.") || plc.endsWith(".css"))
-            icon = "css";
+        else if (plc.contains(".css.") || plc.endsWith(".css") || plc.endsWith(".js") ||
+                 plc.endsWith(".cgi") || plc.endsWith(".pl") || plc.endsWith(".py") ||
+                 plc.endsWith(".php") || plc.endsWith(".h") || plc.endsWith(".cpp") ||
+                 plc.endsWith(".json"))
+            icon = "code";
+        else if (plc.endsWith(".md5") || plc.contains("shasum"))
+            icon = "hash";
         else if (mime.equals("application/x-bittorrent"))
             icon = "magnet";
         else
