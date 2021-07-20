@@ -2688,7 +2688,7 @@ hr.debug {
   overflow: hidden;
   text-align: left;
   vertical-align: middle;
-  background-size: 18px 18px !important;
+  background-size: 18px !important;
 }
 
 .priorityHigh {
@@ -2696,7 +2696,7 @@ hr.debug {
 }
 
 .priorityNormal {
-  background: url(/i2psnark/.resources/icons/clock.png) left 26px  center no-repeat;
+  background: url(/i2psnark/.resources/icons/clock.png) no-repeat left 26px center;
 }
 
 .prioritySkip {
@@ -3083,7 +3083,7 @@ td .commentAuthorName {
 .commentDelete {
   padding: 8px 6px 8px 24px !important;
   text-align: left;
-  background: var(--nuke) 2px center no-repeat;
+  background: var(--nuke) no-repeat 2px center;
   background-size: 16px;
 }
 
@@ -3781,7 +3781,6 @@ input:checked + .toggleview:active .tab_label::after {
   text-overflow: ellipsis;
   color: #484;
   box-shadow: 0 0 0 1px #000;
-  background: #010 url(images/button_tracker.png) no-repeat left 2px center;
   background: url(images/button_tracker.png) no-repeat left 2px center, linear-gradient(to bottom, #020, #010);
   background-size: 14px auto;
   background-blend-mode: luminosity, normal;

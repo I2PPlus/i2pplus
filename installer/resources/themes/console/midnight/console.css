@@ -920,38 +920,32 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 
 .routersummary .reload, .routersummary .reload[value$="restart"] {
   padding: 6px 5px !important;
-  background: var(--restart) no-repeat center center, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
-  background-size: 14px, 100%, 100% !important;
+  background: var(--restart) no-repeat center center / 14px, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
 }
 
 .routersummary .reload:hover, .routersummary .reload:focus, .routersummary .reload[value$="restart"]:hover, .routersummary .reload[value$="restart"]:focus {
   padding: 6px 5px !important;
-  background: var(--shutdown_hover) 37% center no-repeat, var(--restart_hover) 63% center no-repeat, var(--button_hover) !important;
-  background-size: 14px, 14px, 100% !important;
+  background: var(--shutdown_hover) no-repeat 37% center / 14px, var(--restart_hover) no-repeat 63% center / 14px, var(--button_hover) !important;
 }
 
 .routersummary .reload:active, .routersummary .reload[value$="restart"]:active {
   padding: 6px 5px !important;
-  background: var(--shutdown) 37% center no-repeat, var(--restart) 63% center no-repeat, var(--button_active) !important;
-  background-size: 14px, 14px, 100% !important;
+  background: var(--shutdown) no-repeat 37% center / 14px, var(--restart) no-repeat 63% center / 14px, var(--button_active) !important;
 }
 
 .routersummary .stop {
   padding: 6px 5px !important;
-  background: var(--shutdown) no-repeat center center, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
-  background-size: 14px, 100%, 100% !important;
+  background: var(--shutdown) no-repeat center center / 14px, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
 }
 
 .routersummary .stop:hover, .routersummary .stop:focus {
   padding: 6px 5px !important;
-  background: var(--shutdown_hover) no-repeat center center, var(--button_hover) !important;
-  background-size: 14px, 100% !important;
+  background: var(--shutdown_hover) no-repeat center center / 14px, var(--button_hover) !important;
 }
 
 .routersummary .stop:active {
   padding: 6px 5px !important;
-  background: var(--shutdown) no-repeat center center, var(--button_active) !important;
-  background-size: 14px, 100% !important;
+  background: var(--shutdown) no-repeat center center / 14px, var(--button_active) !important;
 }
 
 /* Show text on context specific buttons (eg deferred shutdown) */
@@ -965,60 +959,51 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 }
 
 .routersummary .reload[value="restartImmediate"] {
-  background: var(--restart) center left 6px no-repeat, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)), linear-gradient(to right, rgba(0,0,16,.5), rgba(0,0,0,0) 30%), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
-  background-size: 12px auto, 100%, 100%, 100% !important;
+  background: var(--restart) no-repeat left 6px center / 12px, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)), linear-gradient(to right, rgba(0,0,16,.5), rgba(0,0,0,0) 30%), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
 }
 
 .routersummary .reload[value="restartImmediate"]:hover {
   padding: 6px 9px 6px 25px !important;
-  background: var(--restart_hover) center left 6px no-repeat, var(--button_hover) !important;
-  background-size: 12px auto !important;
+  background: var(--restart_hover) no-repeat left 6px center / 12px, var(--button_hover) !important;
 }
 
 .routersummary .reload[value="restartImmediate"]:focus, .routersummary .reload[value="restartImmediate"]:active {
   padding: 6px 9px 6px 25px !important;
-  background: #652787 var(--restart_hover) center left 6px no-repeat !important;
-  background-size: 12px auto !important;
+  background: #652787 var(--restart_hover) no-repeat left 6px center / 12px !important;
 }
 
 .routersummary .stop[value="shutdownImmediate"] {
-  background: var(--shutdown) center left 6px no-repeat, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)), linear-gradient(to right, rgba(0,0,16,.5), rgba(0,0,0,0) 30%), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
-  background-size: 12px auto, 100%, 100%, 100% !important;
+  background: var(--shutdown) no-repeat left 6px center / 12px, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)), linear-gradient(to right, rgba(0,0,16,.5), rgba(0,0,0,0) 30%), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
 }
 
 .routersummary .stop[value="shutdownImmediate"]:hover {
   padding: 6px 9px 6px 25px !important;
-  background: #000 var(--shutdown_hover) center left 6px no-repeat !important;
-  background-size: 12px auto !important;
+  background: #000 var(--shutdown_hover) no-repeat left 6px center / 12px !important;
 }
 
 .routersummary .stop[value="shutdownImmediate"]:focus, .routersummary .stop[value="shutdownImmediate"]:active {
   padding: 6px 9px 6px 25px !important;
-  background: var(--shutdown_hover) center left 6px no-repeat;
-  background-size: 12px auto !important;
+  background: var(--shutdown_hover) no-repeat left 6px center / 12px;
 }
 
 .routersummary .reload[value="Reseed"] {
-  background: var(--download) center left 6px no-repeat, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)), linear-gradient(to right, rgba(0,0,16,.5), rgba(0,0,0,0) 30%), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
+  background: var(--download) no-repeat left 6px center, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)), linear-gradient(to right, rgba(0,0,16,.5), rgba(0,0,0,0) 30%), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
   background-size: 14px auto, 100%, 100%, 100% !important;
 }
 
 .routersummary .reload[value="Reseed"]:hover {
   padding: 6px 9px 6px 25px !important;
-  background: #000 var(--download_hover) center left 6px no-repeat !important;
-  background-size: 14px auto !important;
+  background: #000 var(--download_hover) no-repeat left 6px center / 14px !important;
 }
 
 .routersummary .reload[value="Reseed"]:focus, .routersummary .reload[value="Reseed"]:active {
   padding: 6px 9px 6px 25px !important;
-  background: #652787 var(--download_hover) center left 6px no-repeat !important;
-  background-size: 14px auto !important;
+  background: #652787 var(--download_hover) no-repeat left 6px center / 14px !important;
 }
 
 .routersummary .download, .routersummary .download:hover, .routersummary .download:focus {
   min-width: 0 !important;
-  background: var(--download) no-repeat 7px center !important;
-  background-size: 15px, 100%;
+  background: var(--download) no-repeat 7px center / 15px !important;
 }
 
 .routersummary .download, .routersummary .download:hover, .routersummary .download:focus, .routersummary .download:active {
@@ -1028,13 +1013,11 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 }
 
 .routersummary .download:hover {
-  background: var(--download_hover) no-repeat 7px center, var(--button_hover) !important;
-  background-size: 15px, 100% !important;
+  background: var(--download_hover) no-repeat 7px center / 15px, var(--button_hover) !important;
 }
 
 .routersummary .download:active {
-  background: #652787 var(--download) no-repeat 7px center !important;
-  background-size: 15px, 100% !important;
+  background: #652787 var(--download) no-repeat 7px center / 15px !important;
 }
 
 /* end sidebar buttons */
@@ -1156,10 +1139,9 @@ div.logo hr {
   border-image-width: 5px;
   border-image-outset: 1px;
   box-shadow: inset 0 0 0 1px #44175f, inset 0 0 3px 3px #000, 0 0 0 2px #26235c;
-  background: #000 var(--itooplus) 20px center no-repeat;
-  background: var(--itooplus) 20px center no-repeat, repeating-linear-gradient(to bottom, #000, #002 2px);
+  background: var(--itooplus) no-repeat 20px center, repeating-linear-gradient(to bottom, #000 2px, #002 4px);
   background-position: 20px calc(50% + 16px), center center;
-  background-size: auto 110px, 100%;
+  background-size: auto 110px, 100% 4px;
 }
 
 .iframed .warning, #servletError .iframed #warning2 {
@@ -3509,8 +3491,7 @@ h2, h3, h4, .confignav {
   font-size: 11pt !important;
   border: none !important;
   border-bottom: var(--innerborder) !important;
-  background: var(--news) left 1px center no-repeat !important;
-  background-size: 16px !important;
+  background: var(--news) no-repeat left 1px center / 16px !important;
 }
 
 @media screen and (max-width: 1200px) {
@@ -4284,7 +4265,7 @@ p#helptranslate {
   text-align: left !important;
   border-top: var(--innerborder);
   border-bottom: var(--innerborder);
-  background: url(images/favicon.svg) left 14px center no-repeat, #000;
+  background: url(images/favicon.svg) no-repeat left 14px center, #000;
   background-size: 28px;
 }
 
@@ -6758,13 +6739,13 @@ table#jardump {
 }
 
 .subheading.routerfiles {
-  background: url(images/favicon.svg) right 5px center no-repeat, linear-gradient(to right, #000, #000010 40%) !important;
+  background: url(images/favicon.svg) no-repeat right 5px center, linear-gradient(to right, #000, #000010 40%) !important;
   background-size: 16px auto, 100% !important;
   background-blend-mode: luminosity, normal;
 }
 
 .subheading.pluginfiles {
-  background: var(--plugin) right 5px center no-repeat, linear-gradient(to right, #000, #000010 40%) !important;
+  background: var(--plugin) no-repeat right 5px center, linear-gradient(to right, #000, #000010 40%) !important;
   background-size: 16px, 100% !important;
   background-blend-mode: luminosity, normal;
 }
@@ -7029,7 +7010,7 @@ table#jardump {
 
 #debug h2 {
   padding: 10px !important;
-  background: var(--bug) right 5px center no-repeat,  var(--title) !important;
+  background: var(--bug) no-repeat right 5px center,  var(--title) !important;
   background-size: 24px, 4px 100%, 100% !important;
   background-blend-mode: luminosity, normal;
 }
@@ -11531,7 +11512,7 @@ th .version {
   border: 1px solid #113;
   border-radius: 1px;
   box-shadow: var(--highlight);
-  background: var(--crypto) 3px center no-repeat, var(--element);
+  background: var(--crypto) no-repeat 3px center, var(--element);
   background-size: 12px, 100%;
 }
 
@@ -12452,56 +12433,56 @@ a:hover .sitemapLink {
 }
 
 #help_configuration {
-  background: var(--configure) 15px center no-repeat, var(--helpsection);
+  background: var(--configure) no-repeat 15px center, var(--helpsection);
   background-size: 32px, 100% 4px;
 }
 
 #help_configadv {
-  background: var(--configure) 15px center no-repeat, var(--helpsection);
+  background: var(--configure) no-repeat 15px center, var(--helpsection);
   background-size: 32px, 100% 4px;
 }
 
 #help_filter {
-  background: var(--filter) 15px center no-repeat, var(--helpsection);
+  background: var(--filter) no-repeat 15px center, var(--helpsection);
   background-size: 32px, 100% 4px;
 }
 
 #help_ui {
-  background: var(--ui) 15px center no-repeat, var(--helpsection);
+  background: var(--ui) no-repeat 15px center, var(--helpsection);
   background-size: 32px, 100% 4px;
 }
 
 #help_reseed {
-  background: var(--reseed) 15px center no-repeat, var(--helpsection);
+  background: var(--reseed) no-repeat 15px center, var(--helpsection);
   background-size: 32px, 100% 4px;
 }
 
 #help_faq, #help_glossary {
-  background: url(/themes/console/images/question.png) 15px center no-repeat, var(--helpsection);
+  background: url(/themes/console/images/question.png) no-repeat 15px center, var(--helpsection);
 }
 
 #help_troubleshoot {
-  background: var(--wrench) 15px center no-repeat, var(--helpsection);
+  background: var(--wrench) no-repeat 15px center, var(--helpsection);
   background-size: 32px, 100% 4px;
 }
 
 #help_newusers {
-  background: url(images/favicon.svg) 15px center no-repeat, var(--helpsection);
+  background: url(images/favicon.svg) no-repeat 15px center, var(--helpsection);
   background-size: 32px, 100% 4px;
 }
 
 #help_legal {
-  background: var(--legal) 15px center no-repeat, var(--helpsection);
+  background: var(--legal) no-repeat 15px center, var(--helpsection);
   background-size: 32px, 100% 4px;
 }
 
 #help_changelog {
-  background: var(--log_icon) 15px center no-repeat, var(--helpsection);
+  background: var(--log_icon) no-repeat 15px center, var(--helpsection);
   background-size: 32px, 100% 4px;
 }
 
 #help_webhosting {
-  background: var(--webserver) 15px center no-repeat, var(--helpsection);
+  background: var(--webserver) no-repeat 15px center, var(--helpsection);
   background-size: 32px, 100% 4px;
 }
 
@@ -12607,20 +12588,17 @@ a:hover .sitemapLink {
 
 .sitelink {
   padding: 0 3px 0 17px;
-  background: var(--link) 2px center no-repeat;
-  background-size: 12px, 100% !important;
+  background: var(--link) no-repeat 2px center / 12px;
 }
 
 .chatlink {
   padding: 0 3px 0 17px;
-  background: var(--chat) 2px center no-repeat;
-  background-size: 12px, 100% !important;
+  background: var(--chat) no-repeat 2px center / 12px;
 }
 
 .sitelink.external {
   padding: 0 3px 0 19px;
-  background: var(--planet) 3px center no-repeat;
-  background-size: 12px, 100% !important;
+  background: var(--planet) no-repeat 3px center / 12px;
 }
 
 /* end link icons */
@@ -14146,23 +14124,20 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
   border-radius: 0;
   border-left-width: 4px;
   border-right-width: 4px;
-  background: var(--hardhat) no-repeat 4px center, linear-gradient(to bottom, #003, #001);
-  background-size: auto 14px, 100%;
+  background: var(--hardhat) no-repeat 4px center / 14px, linear-gradient(to bottom, #003, #001);
 }
 
 .lsdest.published {
   padding-left: 38px;
-  background: var(--hardhat) no-repeat 4px center,
-              var(--globe) 22px center no-repeat,
+  background: var(--hardhat) no-repeat 4px center / 14px,
+              var(--globe) no-repeat 22px center / 12px,
               linear-gradient(to bottom, #003, #001);
-  background-size: auto 14px, auto 12px, 100%;
 }
 
 .leaseset th:last-child a[href$="i2p/"] {
   padding-left: 22px;
   background: #020 var(--link) no-repeat 5px center;
-  background: var(--link) no-repeat 5px center, linear-gradient(to bottom, #003, #001);
-  background-size: 12px, 100%;
+  background: var(--link) no-repeat 5px center / 12px, linear-gradient(to bottom, #003, #001);
 }
 
 /* /profiles group icons */
@@ -14187,8 +14162,8 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 }
 
 #profilelist .fast {
-  background: var(--fast) calc(50% - 10px) center no-repeat,
-              var(--highcap) calc(50% + 10px) center no-repeat;
+  background: var(--fast) no-repeat calc(50% - 10px) center,
+              var(--highcap) no-repeat calc(50% + 10px) center;
 }
 
 #profilelist .fast.integrated {
@@ -14202,8 +14177,8 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 }
 
 #profilelist .highcap.integrated {
-  background: var(--highcap) calc(50% - 10px) center no-repeat,
-              var(--integrated) calc(50% + 10px) center no-repeat;
+  background: var(--highcap) no-repeat calc(50% - 10px) center,
+              var(--integrated) no-repeat calc(50% + 10px) center;
 }
 
 #profilelist .standard {
@@ -14211,8 +14186,8 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 }
 
 #profilelist .standard.integrated {
-  background: var(--standard) calc(50% - 10px) center no-repeat,
-              var(--integrated) calc(50% + 10px) center no-repeat;
+  background: var(--standard) no-repeat calc(50% - 10px) center,
+              var(--integrated) no-repeat calc(50% + 10px) center;
 }
 
 .profilegroup::before {

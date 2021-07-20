@@ -938,8 +938,7 @@ table.leaseset:last-child, .netdbentry:last-child, #profile_defs {
 
 #sybilnav li {
   padding: 3px 24px 3px 3px;
-  background: var(--eye) right 5px center no-repeat, linear-gradient(to right, #eef 30%, #fff);
-  background-size: 16px, 100%;
+  background: var(--eye) no-repeat right 5px center / 16px, linear-gradient(to right, #eef 30%, #fff);
 }
 
 .threatpoints + ul li {
@@ -1258,7 +1257,7 @@ input[type="file"]:hover {
 
 #bandwidthconfig td:first-child:not(.infohelp) {
   padding: 0 5px 0 80px;
-  background: url(/themes/console/images/info/arrow_left.png) 30px center no-repeat !important;
+  background: url(/themes/console/images/info/arrow_left.png) no-repeat 30px center !important;
 }
 
 #joinfamily tr:nth-child(3) td:first-child,

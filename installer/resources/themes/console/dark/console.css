@@ -201,8 +201,8 @@ pre {
   border-image-width: 5px;
   border-image-outset: 1px;
   box-shadow: inset 0 0 0 1px #700, inset 0 0 3px 3px #000, 0 0 0 2px #000;
-  background: #010 url(/themes/console/images/itoopie_sm.png) no-repeat 21px center;
-  background: url(/themes/console/images/itoopie_sm.png) no-repeat 21px center,
+  background: #010 var(--itooplus) no-repeat 21px center;
+  background: var(--itooplus) no-repeat 21px center,
               repeating-linear-gradient(to bottom, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 4px),
               var(--camotile);
   background-size: auto 110px, 100% 4px, 175px;
@@ -3382,7 +3382,7 @@ p#helptranslate {
   text-align: left !important;
   border-top: var(--border);
   border-bottom: var(--border);
-  background: #000 url(images/favicon.svg) left 14px center no-repeat;
+  background: #000 url(images/favicon.svg) no-repeat left 14px center;
   background-size: 28px !important;
 }
 
@@ -7160,7 +7160,7 @@ h3#browseronstart + p.infohelp, .infohelp#webbrowser {
 
 .infohelp#flags {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/flags.png) no-repeat 12px center / 28px !important;
+  background: #000 url(/themes/console/images/info/flags.png) no-repeat 12px center / 28px !important;
 }
 
 p#enablefullstats, p#gatherstats {
@@ -9224,34 +9224,28 @@ b.suboption {
 }
 
 #config_reseed #reseedurl {
-  background: #010 var(--link) 16px center no-repeat !important;
-  background-size: 28px, 100%, 100% !important;
+  background: #010 var(--link) no-repeat 16px center / 28px !important;
 }
 
 #config_reseed #reseedurl:hover {
-  background: #002500 var(--link) no-repeat 10px center !important;
-  background-size: 28px !important;
+  background: #002500 var(--link) no-repeat 10px center / 28px !important;
 }
 
 #config_reseed  #reseedzip {
-  background: #010 var(--files) 16px center no-repeat !important;
-  background-size: 28px, 100%, 100% !important;
+  background: #010 var(--files) no-repeat 16px center / 28px !important;
 }
 
 #config_reseed #reseedzip:hover {
-  background: #002500 var(--files) 16px center no-repeat !important;
-  background-size: 28px !important;
+  background: #002500 var(--files) no-repeat 16px center / 28px !important;
 }
 
 #config_reseed #reseedcreatefile {
-  background: #010 var(--package) 16px center no-repeat !important;
-  background-size: 28px, 100%, 100% !important;
   text-align: justify;
+  background: #010 var(--package) no-repeat 16px center / 28px !important;
 }
 
 #config_reseed #reseedcreatefile:hover {
-  background: #002500 var(--package) 16px center no-repeat !important;
-  background-size: 28px !important;
+  background: #002500 var(--package) no-repeat 16px center / 28px !important;
 }
 
 #reseedcreatefile p {
@@ -9259,7 +9253,7 @@ b.suboption {
   padding-top: 0;
   padding-bottom: 0;
   display: inline-block;
-  line-height: 130%;
+  line-height: 1.3;
 }
 
 #reseedurl input[type=text], #reseedzip input[type=file], #reseedcreatefile p {
@@ -11208,7 +11202,7 @@ h1[class], h1 {
 }
 
 .chatlink:hover {
-  background: var(--chat) 3px center no-repeat / 12px, linear-gradient(to bottom, #020 50%, #000 50%);
+  background: var(--chat) no-repeat 3px center / 12px, linear-gradient(to bottom, #020 50%, #000 50%);
 }
 
 .sitelink:active, .chatlink:active, .consolelink:active {
@@ -12665,8 +12659,8 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 }
 
 #profilelist .fast {
-  background: var(--fast) calc(50% - 10px) center no-repeat,
-              var(--highcap) calc(50% + 10px) center no-repeat;
+  background: var(--fast) no-repeat calc(50% - 10px) center,
+              var(--highcap) no-repeat calc(50% + 10px) center;
 }
 
 #profilelist .fast.integrated {
@@ -12680,8 +12674,8 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 }
 
 #profilelist .highcap.integrated {
-  background: var(--highcap) calc(50% - 10px) center no-repeat,
-              var(--integrated) calc(50% + 10px) center no-repeat;
+  background: var(--highcap) no-repeat calc(50% - 10px) center,
+              var(--integrated) no-repeat calc(50% + 10px) center;
 }
 
 #profilelist .standard {
@@ -12689,8 +12683,8 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 }
 
 #profilelist .standard.integrated {
-  background: var(--standard) calc(50% - 10px) center no-repeat,
-              var(--integrated) calc(50% + 10px) center no-repeat;
+  background: var(--standard) no-repeat calc(50% - 10px) center,
+              var(--integrated) no-repeat calc(50% + 10px) center;
 }
 
 #profilelist .fast, #profilelist .highcap, #profilelist .integrated, #profilelist .standard,

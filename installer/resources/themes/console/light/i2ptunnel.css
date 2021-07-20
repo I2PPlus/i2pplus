@@ -294,7 +294,7 @@ input[type=text][readonly] {
 }
 
 .clientKey[readonly] {
-  background: var(--key) 3px center no-repeat, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(220, 220, 255, .3) 3px, #fafaff 4px), #fafaff !important;
+  background: var(--key) no-repeat 3px center, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(220, 220, 255, .3) 3px, #fafaff 4px), #fafaff !important;
   background-size: 16px, 100%;
 }
 

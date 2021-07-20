@@ -2757,11 +2757,10 @@ hr.debug {
 }
 
 td#bwHelp {
-  background: url(images/details.svg) left 12px center no-repeat;
-  background-size: 14px auto;
   padding-left: 30px !important;
   width: 90%;
-  line-height: 100%;
+  line-height: 1;
+  background: url(images/details.svg) no-repeat left 12px center / 14px;
 }
 
 td#bwHelp a {
@@ -2775,22 +2774,22 @@ td#bwHelp a {
 /* torrent priorities */
 
 .priority {
-  font-size: 8pt;
   width: 1%;
-  white-space: nowrap;
   vertical-align: middle;
+  white-space: nowrap;
+  font-size: 8pt;
 }
 
 .priority::after {
-  content: "";
-  display: inline-block;
   min-height: 30px;
+  display: inline-block;
   vertical-align: middle;
+  content: "";
 }
 
 .priority input[type=radio] {
-  text-align: left;
   margin: 3px;
+  text-align: left;
 }
 
 .priorityHigh, .priorityNormal, .prioritySkip {
@@ -2810,7 +2809,7 @@ td#bwHelp a {
 }
 
 .priorityNormal {
-  background: url(/i2psnark/.resources/icons/clock.png) left 28px  center no-repeat;
+  background: url(/i2psnark/.resources/icons/clock.png) no-repeat left 28px center;
 }
 
 .prioritySkip {

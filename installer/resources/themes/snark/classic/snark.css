@@ -2347,7 +2347,7 @@ input#toggle_createtorrent:checked + label + hr + table {
 }
 
 .priorityNormal {
-  background: url(/i2psnark/.resources/icons/clock.png) left 32px  center no-repeat;
+  background: url(/i2psnark/.resources/icons/clock.png) no-repeat left 32px center;
 }
 
 .prioritySkip {
