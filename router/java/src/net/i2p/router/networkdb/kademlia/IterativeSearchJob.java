@@ -334,7 +334,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                 // querying old floodfills that don't know about those sig types.
                 // This is also more recent than the version that supports encrypted replies,
                 // so we won't request unencrypted replies anymore either.
-                if (!StoreJob.shouldStoreTo(ri) || (_isLease && !StoreJob.shouldStoreLS2To(ri))) {
+                if (!StoreJob.shouldStoreTo(ri)) {
                     failed(peer, false);
                     if (_log.shouldLog(Log.DEBUG))
                         _log.debug("[Job " + getJobId() + "] Not sending query to old Router [" + ri.toBase64().substring(0,6) + "]");
