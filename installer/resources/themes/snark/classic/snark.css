@@ -2343,7 +2343,7 @@ input#toggle_createtorrent:checked + label + hr + table {
 }
 
 .priorityHigh {
-  background: url(/i2psnark/.resources/icons/clock_red.png) left 32px center no-repeat;
+  background: url(/i2psnark/.resources/icons/clock_red.png) no-repeat left 32px center;
 }
 
 .priorityNormal {
@@ -2351,7 +2351,7 @@ input#toggle_createtorrent:checked + label + hr + table {
 }
 
 .prioritySkip {
-  background: url(/i2psnark/.resources/icons/block.png) left 32px center no-repeat;
+  background: url(/i2psnark/.resources/icons/block.png) no-repeat left 32px center;
 }
 
 /* end priorities */
@@ -2369,7 +2369,7 @@ input#toggle_createtorrent:checked + label + hr + table {
 }
 
 td#bwHelp {
-  background: url(images/details.svg) left 10px center no-repeat;
+  background: url(images/details.svg) no-repeat left 10px center;
   background-size: 14px auto;
   padding-left: 24px !important;
   width: 100%;
@@ -2425,11 +2425,11 @@ td#bwHelp a {
 }
 
 #mediaContainer th {
-  background: url(/i2psnark/.resources/icons/film.png) 8px center no-repeat, linear-gradient(to bottom, #fff, #eef) #fff;
+  background: url(/i2psnark/.resources/icons/film.png) no-repeat 8px center, linear-gradient(to bottom, #fff, #eef) #fff;
 }
 
 #mediaContainer th.audio {
-  background: url(/i2psnark/.resources/icons/music.png) 8px center no-repeat, linear-gradient(to bottom, #fff, #eef) #fff;
+  background: url(/i2psnark/.resources/icons/music.png) no-repeat 8px center, linear-gradient(to bottom, #fff, #eef) #fff;
 }
 
 .newTab {
@@ -2706,7 +2706,7 @@ body, th, td, table a, input, input[type=text], input.r, input[name="nofilter_da
 }
 
 td#bwHelp {
-  background: url(images/details.svg) left 10px center no-repeat;
+  background: url(images/details.svg) no-repeat left 10px center;
   background-size: 14px auto !important;
 }
 
@@ -3097,7 +3097,7 @@ th a img {
   color: #bbf;
   border-radius: 3px;
   box-shadow: 0 0 0 1px #ccf;
-  background: #f8f8ff url(images/button_tracker.png) left 3px center no-repeat;
+  background: #f8f8ff url(images/button_tracker.png) no-repeat left 3px center;
   background-size: 14px auto;
 }
 
@@ -3107,7 +3107,7 @@ th a img {
 
 .info_tracker:hover {
   box-shadow: 0 0 0 1px #aaf;
-  background: url(images/button_tracker_hover.png) left 3px center no-repeat, linear-gradient(to bottom, #fff 50%, #f2f2ff 50%) !important;
+  background: url(images/button_tracker_hover.png) no-repeat left 3px center, linear-gradient(to bottom, #fff 50%, #f2f2ff 50%) !important;
   background-size: 14px auto, 100% !important;
 }
 
@@ -3118,7 +3118,7 @@ th a img {
 .info_tracker:active {
   color: #fff !important;
   box-shadow: 0 0 0 1px #f60, inset 3px 3px 3px #420;
-  background: #f60 url(images/button_tracker_active.png) left 3px center no-repeat !important;
+  background: #f60 url(images/button_tracker_active.png) no-repeat left 3px center !important;
   background-size: 14px auto !important;
 }
 
@@ -4151,7 +4151,7 @@ hr.debug {
 .snarkTorrentInfo .infohash {
   padding: 1px 0 1px 22px;
   max-width: 140px;
-  background: #f8f8ff url(../light/images/hash.png) 6px center no-repeat;
+  background: #f8f8ff url(../light/images/hash.png) no-repeat 6px center;
   background-size: 14px 14px !important;
 }
 

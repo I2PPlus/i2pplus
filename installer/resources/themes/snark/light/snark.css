@@ -2454,7 +2454,7 @@ hr.debug {
 }
 
 #bwHoverHelp {
-  background: url(images/details.svg) 4px center no-repeat;
+  background: url(images/details.svg) no-repeat 4px center;
   background-size: 14px;
   margin-right: 26px !important;
   line-height: 100%;

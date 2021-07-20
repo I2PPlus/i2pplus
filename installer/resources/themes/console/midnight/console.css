@@ -411,18 +411,18 @@ input.accept:active, button.accept:active {
 
 input.cancel, button.cancel {
   padding: 5px 9px 5px 25px !important;
-  background: var(--no) 10px center no-repeat, var(--button) !important;
+  background: var(--no) no-repeat 10px center, var(--button) !important;
   background-size: 10px, 100% !important;
 }
 
 input.cancel:hover, button.cancel:hover,
 input.cancel:focus, button.cancel:focus {
-  background: var(--no) 10px center no-repeat, var(--button_hover) !important;
+  background: var(--no) no-repeat 10px center, var(--button_hover) !important;
   background-size: 10px, 100% !important;
 }
 
 input.cancel:active, button.cancel:active {
-  background: var(--no) 10px center no-repeat, var(--button_active) !important;
+  background: var(--no) no-repeat 10px center, var(--button_active) !important;
   background-size: 10px, 100% !important;
 }
 
@@ -1017,7 +1017,7 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 
 .routersummary .download, .routersummary .download:hover, .routersummary .download:focus {
   min-width: 0 !important;
-  background: var(--download) 7px center no-repeat !important;
+  background: var(--download) no-repeat 7px center !important;
   background-size: 15px, 100%;
 }
 
@@ -1028,12 +1028,12 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 }
 
 .routersummary .download:hover {
-  background: var(--download_hover) 7px center no-repeat, var(--button_hover) !important;
+  background: var(--download_hover) no-repeat 7px center, var(--button_hover) !important;
   background-size: 15px, 100% !important;
 }
 
 .routersummary .download:active {
-  background: #652787 var(--download) 7px center no-repeat !important;
+  background: #652787 var(--download) no-repeat 7px center !important;
   background-size: 15px, 100% !important;
 }
 
@@ -1838,12 +1838,12 @@ p:empty + .sb_notice {
   text-overflow: ellipsis;
   overflow: hidden;
   clear: both;
-  background: #000010 var(--plugin) 5px center no-repeat;
+  background: #000010 var(--plugin) no-repeat 5px center;
   background-size: 16px !important;
 }
 
 #sb_services a:hover {
-  background: #1e0b28 var(--plugin) 5px center no-repeat;
+  background: #1e0b28 var(--plugin) no-repeat 5px center;
   background-size: 16px;
 }
 
@@ -1857,60 +1857,60 @@ p:empty + .sb_notice {
 }
 
 #sb_services a[href*="dns"] {
-  background: #000010 var(--abook) 5px center no-repeat;
+  background: #000010 var(--abook) no-repeat 5px center;
 }
 
 #sb_services a[href*="dns"]:hover {
-  background: #1e0b28 var(--abook) 5px center no-repeat;
+  background: #1e0b28 var(--abook) no-repeat 5px center;
 }
 
 #sb_services a[href*="tunnel"] {
-  background: #000010 var(--tunnman) 5px center no-repeat;
+  background: #000010 var(--tunnman) no-repeat 5px center;
 }
 
 #sb_services a[href*="tunnel"]:hover {
-  background: #1e0b28 var(--tunnman) 5px center no-repeat;
+  background: #1e0b28 var(--tunnman) no-repeat 5px center;
 }
 
 #sb_services a[href*="bote"] {
-  background: #000010 var(--bote) 5px center no-repeat;
+  background: #000010 var(--bote) no-repeat 5px center;
 }
 
 #sb_services a[href*="bote"]:hover {
-  background: #1e0b28 var(--bote) 5px center no-repeat;
+  background: #1e0b28 var(--bote) no-repeat 5px center;
 }
 
 #sb_services a[href="/orchid/"], #sb_services a[href*="/orchid/"] {
-  background: #000010 var(--orchid) 5px center no-repeat;
+  background: #000010 var(--orchid) no-repeat 5px center;
 }
 
 #sb_services a[href="/orchid/"]:hover, #sb_services a[href*="/orchid/"]:hover {
-  background: #1e0b28 var(--orchid) 5px center no-repeat;
+  background: #1e0b28 var(--orchid) no-repeat 5px center;
 }
 
 #sb_services a[href*="torrents"] {
-  background: #000010 var(--snark) 5px center no-repeat;
+  background: #000010 var(--snark) no-repeat 5px center;
 }
 
 #sb_services a[href*="torrents"]:hover {
-  background: #1e0b28 var(--snark) 5px center no-repeat;
+  background: #1e0b28 var(--snark) no-repeat 5px center;
 }
 
 #sb_services a[href*="7658"], #sb_services a[href*="7668"] {
-  background: #000010 var(--webserver) 5px center no-repeat;
+  background: #000010 var(--webserver) no-repeat 5px center;
 }
 
 #sb_services a[href*="7658"]:hover, #sb_services a[href*="7668"]:hover {
-  background: #1e0b28 var(--webserver) 5px center no-repeat;
+  background: #1e0b28 var(--webserver) no-repeat 5px center;
 }
 
 
 #sb_services a[href*="/tracker"] {
-  background: #000010 var(--zzzot) 5px center no-repeat;
+  background: #000010 var(--zzzot) no-repeat 5px center;
 }
 
 #sb_services a[href*="/tracker"]:hover {
-  background: #1e0b28 var(--zzzot) 5px center no-repeat;
+  background: #1e0b28 var(--zzzot) no-repeat 5px center;
 }
 
 /* end custom sidebar links */
@@ -1948,12 +1948,12 @@ p:empty + .sb_notice {
   padding: 3px 8px 3px 20px !important;
   text-align: left;
   border-bottom: 2px solid #000 !important;
-  background: var(--newsbullet) 4px center no-repeat, linear-gradient(to right, #040418, #020210) !important;
+  background: var(--newsbullet) no-repeat 4px center, linear-gradient(to right, #040418, #020210) !important;
   background-size: 15px, 100% !important;
 }
 
 .sb_newsheadings td:hover {
-  background: var(--newsbullet_hover) 4px center no-repeat, linear-gradient(to right, #202, #101) !important;
+  background: var(--newsbullet_hover) no-repeat 4px center, linear-gradient(to right, #202, #101) !important;
   background-size: 15px, 100% !important;
 }
 
@@ -2527,7 +2527,7 @@ div.sorry hr {
   float: right;
   text-transform: none;
   font-size: 8pt !important;
-  background: var(--user) left 2px center no-repeat;
+  background: var(--user) no-repeat left 2px center;
   background-size: 12px;
   opacity: .7;
 }
@@ -3444,7 +3444,7 @@ h2, h2.welcome {
 }
 
 .welcome h2 {
-  background: url(images/favicon.svg) right 6px center no-repeat, var(--th) !important;
+  background: url(images/favicon.svg) no-repeat right 6px center, var(--th) !important;
   background-size: 24px, 4px 100%, 100% !important;
 }
 
@@ -3500,7 +3500,7 @@ h2, h3, h4, .confignav {
   letter-spacing: .08em;
   color: #c9ceff;
   padding: 6px 10px 6px 30px;
-  background: var(--news) left 8px center no-repeat, var(--title) !important;
+  background: var(--news) no-repeat left 8px center, var(--title) !important;
   background-size: 16px, 4px 100%, 100% !important;
 }
 
@@ -4564,25 +4564,25 @@ table#consolepass input[type=password] {
 
 #consolepass input[name="name"], #externali2cp input[name="user"] {
   padding: 5px 5px 5px 26px !important;
-  background: var(--user) 5px center no-repeat, linear-gradient(to bottom, #000, #000019);
+  background: var(--user) no-repeat 5px center, linear-gradient(to bottom, #000, #000019);
   background-size: 16px, 100% !important;
   background-blend-mode: luminosity;
 }
 
 #consolepass input[name="name"]:focus, #externali2cp input[name="user"]:focus {
-  background: #000 var(--user) 5px center no-repeat !important;
+  background: #000 var(--user) no-repeat 5px center !important;
   background-size: 16px !important;
   background-blend-mode: normal;
 }
 
 #consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"] {
   padding: 6px 8px 6px 26px !important;
-  background: var(--key) 5px center no-repeat, linear-gradient(to bottom, #000, #000019);
+  background: var(--key) no-repeat 5px center, linear-gradient(to bottom, #000, #000019);
   background-size: 16px, 100% !important;
   background-blend-mode: luminosity;
 }
 #consolepass input[name="nofilter_pw"]:focus, #externali2cp input[name="nofilter_pw"]:focus {
-  background: #000 var(--key) 5px center no-repeat !important;
+  background: #000 var(--key) no-repeat 5px center !important;
   background-size: 16px !important;
   background-blend-mode: normal;
 }
@@ -5525,7 +5525,7 @@ table#externali2cp {
   text-align: left;
   border: 1px solid #003;
   border-radius: 4px 15px 15px 4px;
-  background: var(--plugin) 5px center no-repeat, linear-gradient(to bottom, #002, #001);
+  background: var(--plugin) no-repeat 5px center, linear-gradient(to bottom, #002, #001);
   background-size: 16px, 100%;
   background-blend-mode: luminosity;
 }
@@ -7307,7 +7307,7 @@ h4.app, h4.app2 {
   word-spacing: .1em;
   letter-spacing: 2px;
   border: 1px solid #26235c;
-  background: url(images/favicon.svg) 10px center no-repeat, var(--title) !important;
+  background: url(images/favicon.svg) no-repeat 10px center, var(--title) !important;
   background-size: 16px, 4px 100%, 100% !important;
   background-blend-mode: luminosity;
 }
@@ -7317,7 +7317,7 @@ h4.app2 {
   position: relative;
   top: -4px;
   clear: left;
-  background: var(--globe) 10px center no-repeat, var(--title) !important;
+  background: var(--globe) no-repeat 10px center, var(--title) !important;
   background-size: 16px, 4px 100%, 100% !important;
 }
 
@@ -7414,7 +7414,7 @@ div.app:hover .appimg .extlink::after {
   border-top: none;
   border-right: none;
   opacity: .75;
-  background: url(images/newtab.png) 4px center no-repeat;
+  background: url(images/newtab.png) no-repeat 4px center;
   background-size: 12.5px 10px;
 }
 
@@ -8114,7 +8114,7 @@ p.infowarn, td.infowarn, p.infohelp, td.infohelp {
 p.infowarn, td.infowarn, #sybilanalysis {
   padding: 20px 15px 20px 50px !important;
   border: var(--innerborder);
-  background: var(--infowarn) 14px center no-repeat,
+  background: var(--infowarn) no-repeat 14px center,
               linear-gradient(to bottom, rgba(128,128,128,.05), rgba(0,0,0,.3)),
               repeating-linear-gradient(to bottom, #200 2px, #000 4px) !important;
   background-size: 28px, 100%, 100% 4px !important;
@@ -8333,7 +8333,7 @@ table#externali2cp th {
   word-spacing: 0;
   text-shadow: 0 1px 1px #000;
   box-shadow: var(--highlight), inset 0 0 2px 1px #f00;
-  background: var(--infowarn) 10px center no-repeat,
+  background: var(--infowarn) no-repeat 10px center,
               linear-gradient(to bottom, rgba(128,128,128,.05), rgba(0,0,0,.3)),
               repeating-linear-gradient(to bottom, #400 2px, #100 4px);
   background-size: 18px, 100%, 100% 4px;
@@ -10694,11 +10694,11 @@ h3#shutdownrouter {
 }
 
 #config_reseed #manualreseed .optionsingle td:last-child {
-  text-align: right !important;
-  width: 1%;
-  white-space: nowrap;
   padding-right: 12px !important;
   padding-left: 0 !important;
+  width: 1%;
+  white-space: nowrap;
+  text-align: right !important;
 }
 
 #reseedurl, #reseedzip, #reseedcreatefile {
@@ -10707,19 +10707,15 @@ h3#shutdownrouter {
 }
 
 #config_reseed #reseedurl {
-  background: #001 var(--link) 14px center no-repeat !important;
-  background: var(--link) 14px center no-repeat, var(--panel) !important;
-  background-size: 28px, 100% !important;
+  background: var(--link) no-repeat 14px center / 28px, var(--panel) !important;
 }
 
 #config_reseed  #reseedzip {
-  background: var(--files) 14px center no-repeat, var(--panel) !important;
-  background-size: 28px, 100% !important;
+  background: var(--files) no-repeat 14px center / 28px, var(--panel) !important;
 }
 
 #config_reseed #reseedcreatefile {
-  background: var(--createzip) 14px center no-repeat, var(--panel) !important;
-  background-size: 28px, 100% !important;
+  background: var(--createzip) no-repeat 14px center / 28px, var(--panel) !important;
   text-align: justify;
 }
 
@@ -11092,14 +11088,14 @@ input[type="file"]:hover {
 #newfamily .optionsingle {
   padding: 5px 5px 0 45px;
   box-shadow: var(--highlight), inset 0 0 2px 1px #191939 !important;
-  background: var(--tag) 10px center no-repeat, var(--panel) !important;
+  background: var(--tag) no-repeat 10px center, var(--panel) !important;
   background-size: 28px, 100%, 100% !important;
 }
 
 #joinfamily .optionsingle {
   padding: 5px 5px 0 45px;
   box-shadow: var(--highlight), inset 0 0 2px 1px #191939 !important;
-  background: var(--key) 10px center no-repeat, var(--panel) !important;
+  background: var(--key) no-repeat 10px center, var(--panel) !important;
   background-size: 28px, 100%, 100% !important;
 }
 
@@ -12252,7 +12248,7 @@ html, body {
   letter-spacing: .12em;
   font-size: 10.5pt;
   border: 1px solid #26235c;
-  background: url(images/favicon.svg) 5px center no-repeat, var(--title) !important;
+  background: url(images/favicon.svg) no-repeat 5px center, var(--title) !important;
   background-size: 18px, 4px 100% !important;
 }
 
@@ -12269,22 +12265,22 @@ html, body {
 }
 
 #sitemap h3:nth-of-type(2) {
-  background: var(--infobox) 5px center no-repeat, var(--title) !important;
+  background: var(--infobox) no-repeat 5px center, var(--title) !important;
   background-size: 18px, 4px 100% !important;
 }
 
 #sitemap h3:nth-of-type(3) {
-  background: var(--configure) 5px center no-repeat, var(--title) !important;
+  background: var(--configure) no-repeat 5px center, var(--title) !important;
   background-size: 18px, 4px 100% !important;
 }
 
 #sitemap h3:nth-of-type(4) {
-  background: var(--help) 5px center no-repeat, var(--title) !important;
+  background: var(--help) no-repeat 5px center, var(--title) !important;
   background-size: 18px, 4px 100% !important;
 }
 
 #sitemap h3:nth-of-type(5) {
-  background: var(--globe) 5px center no-repeat,var(--title) !important;
+  background: var(--globe) no-repeat 5px center,var(--title) !important;
   background-size: 18px, 4px 100% !important;
 }
 
@@ -12565,7 +12561,7 @@ a:hover .sitemapLink {
 
 #changelog h2 {
   padding-left: 38px !important;
-  background: var(--changelog) 10px center no-repeat, var(--title) !important;
+  background: var(--changelog) no-repeat 10px center, var(--title) !important;
   background-size: 22px, 4px 100%, 100% !important;
 }
 
@@ -12960,59 +12956,59 @@ p#gatherstats {
 /* h1 icons */
 
 h1 {
-  background: var(--netwrk) 10px center no-repeat, var(--th) !important;
+  background: var(--netwrk) no-repeat 10px center, var(--th) !important;
 }
 
 h1.home {
-  background: var(--home) 10px center no-repeat, var(--th) !important;
+  background: var(--home) no-repeat 10px center, var(--th) !important;
 }
 
 h1.perf {
-  background: var(--perf) 10px center no-repeat, var(--th) !important;
+  background: var(--perf) no-repeat 10px center, var(--th) !important;
 }
 
 h1.nfo, h1.newspage {
-  background: var(--info) 10px center no-repeat, var(--th) !important;
+  background: var(--info) no-repeat 10px center, var(--th) !important;
 }
 
 h1.hlp {
-  background: var(--header_help) 10px center no-repeat, var(--th) !important;
+  background: var(--header_help) no-repeat 10px center, var(--th) !important;
 }
 
 h1.addbook {
-  background: var(--addbook) 10px center no-repeat, var(--th) !important;
+  background: var(--addbook) no-repeat 10px center, var(--th) !important;
 }
 
 h1.snark {
-  background: var(--app_snark) 10px center no-repeat, var(--th) !important;
+  background: var(--app_snark) no-repeat 10px center, var(--th) !important;
 }
 
 h1.mail {
-  background: var(--app_mail) 10px center no-repeat, var(--th) !important;
+  background: var(--app_mail) no-repeat 10px center, var(--th) !important;
 }
 
 h1.conf {
-  background: var(--cog) 10px center no-repeat, var(--th) !important;
+  background: var(--cog) no-repeat 10px center, var(--th) !important;
 }
 
 h1.adv {
-  background: var(--info) 10px center no-repeat, var(--th) !important;
+  background: var(--info) no-repeat 10px center, var(--th) !important;
 }
 
 h1.err {
-  background: var(--error) 10px center no-repeat, var(--th) !important;
+  background: var(--error) no-repeat 10px center, var(--th) !important;
 }
 
 h1.sched {
-  background: var(--tasks) 10px center no-repeat, var(--th) !important;
+  background: var(--tasks) no-repeat 10px center, var(--th) !important;
 }
 
 h1.log {
-  background: var(--logs) 10px center no-repeat, var(--th) !important;
+  background: var(--logs) no-repeat 10px center, var(--th) !important;
 }
 
 h1.webapp {
-  background: var(--webapp) 10px center no-repeat, var(--th) !important;
+  background: var(--webapp) no-repeat 10px center, var(--th) !important;
 }
 
 h1[class], h1 {
@@ -14150,13 +14146,13 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
   border-radius: 0;
   border-left-width: 4px;
   border-right-width: 4px;
-  background: var(--hardhat) 4px center no-repeat, linear-gradient(to bottom, #003, #001);
+  background: var(--hardhat) no-repeat 4px center, linear-gradient(to bottom, #003, #001);
   background-size: auto 14px, 100%;
 }
 
 .lsdest.published {
   padding-left: 38px;
-  background: var(--hardhat) 4px center no-repeat,
+  background: var(--hardhat) no-repeat 4px center,
               var(--globe) 22px center no-repeat,
               linear-gradient(to bottom, #003, #001);
   background-size: auto 14px, auto 12px, 100%;
@@ -14164,8 +14160,8 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 
 .leaseset th:last-child a[href$="i2p/"] {
   padding-left: 22px;
-  background: #020 var(--link) 5px center no-repeat;
-  background: var(--link) 5px center no-repeat, linear-gradient(to bottom, #003, #001);
+  background: #020 var(--link) no-repeat 5px center;
+  background: var(--link) no-repeat 5px center, linear-gradient(to bottom, #003, #001);
   background-size: 12px, 100%;
 }
 

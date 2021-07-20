@@ -270,32 +270,32 @@ h2::first-letter {
 }
 
 #messages h2 {
-  background: var(--log_icon) 8px center no-repeat, var(--title) !important;
+  background: var(--log_icon) no-repeat 8px center, var(--title) !important;
   background-size: 16px, 4px 100%, 100% !important;
 }
 
 #globalTunnelControl h2 {
-  background: var(--mouse) 8px center no-repeat, var(--title) !important;
+  background: var(--mouse) no-repeat 8px center, var(--title) !important;
   background-size: 16px, 4px 100%, 100% !important;
 }
 
 #servers h2 {
-  background: var(--server) 8px center no-repeat, var(--title) !important;
+  background: var(--server) no-repeat 8px center, var(--title) !important;
   background-size: 16px, 4px 100%, 100% !important;
 }
 
 #clients h2 {
-  background: var(--client) 8px center no-repeat, var(--title) !important;
+  background: var(--client) no-repeat 8px center, var(--title) !important;
   background-size: 16px, 4px 100%, 100% !important;
 }
 
 #tunnelEditPage h2, #tunnelEditPage h3, #registration h2, #registration h3 {
-  background: var(--settings_inert) 8px center no-repeat, var(--title) !important;
+  background: var(--settings_inert) no-repeat 8px center, var(--title) !important;
   background-size: 16px, 4px 100%, 100% !important;
 }
 
 #wizardPanel h2, #ssl h2 {
-  background: var(--wizard) 8px center no-repeat, var(--title) !important;
+  background: var(--wizard) no-repeat 8px center, var(--title) !important;
   background-size: 16px, 4px 100%, 100% !important;
 }
 
@@ -359,7 +359,7 @@ td > b {
 
 td.infohelp {
   padding: 10px 10px 10px 38px !important;
-  background: var(--infohelp) 10px center no-repeat;
+  background: var(--infohelp) no-repeat 10px center;
   background-size: 20px;
 }
 
@@ -898,13 +898,13 @@ input:focus::placeholder, textarea:focus::placeholder, #filter input:focus::plac
 
 .multiOption#isServer {
   padding-left: 28px;
-  background: var(--server) 4px center no-repeat;
+  background: var(--server) no-repeat 4px center;
   background-size: 22px;
 }
 
 .multiOption#isClient {
   padding-left: 28px;
-  background: var(--client) 4px center no-repeat;
+  background: var(--client) no-repeat 4px center;
   background-size: 22px 22px;
 }
 

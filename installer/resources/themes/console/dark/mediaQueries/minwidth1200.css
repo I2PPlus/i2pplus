@@ -6,7 +6,7 @@
 
   #jobstats tr:nth-last-child(n+2) td:first-child {
     padding-left: 28px !important;
-    background: var(--yes) 8px center no-repeat;
+    background: var(--yes) no-repeat 8px center;
     background-size: 12px;
   }
 

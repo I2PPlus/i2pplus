@@ -1435,13 +1435,13 @@ td p.error {
   font-style: italic;
   border-radius: 2px 15px 15px 2px;
   box-shadow: inset 0 0 0 1px #bbd, inset 0 0 0 2px #fff, 0 0 0 1px #eee;
-  background: var(--attach) 7px center no-repeat, linear-gradient(to right, #f2f2ff 70%, #eef);
+  background: var(--attach) no-repeat 7px center, linear-gradient(to right, #f2f2ff 70%, #eef);
 }
 
 #attachedfile label:hover {
   color: #933;
   box-shadow: inset 0 0 0 1px #fff, inset 0 0 0 2px #955;
-  background: var(--attach_hover) 7px center no-repeat, linear-gradient(to right, #ffe 70%, #ffd);
+  background: var(--attach_hover) no-repeat 7px center, linear-gradient(to right, #ffe 70%, #ffd);
 }
 
 #attachedfile label:active {

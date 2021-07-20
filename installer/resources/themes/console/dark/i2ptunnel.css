@@ -256,22 +256,22 @@ h2 span {
 
 #messages h2 {
   margin-top: 12px;
-  background: var(--log_icon) left 8px center no-repeat, var(--h2) !important;
+  background: var(--log_icon) no-repeat left 8px center, var(--h2) !important;
   background-size: 20px auto, 4px 100%, 100% !important;
 }
 
 #globalTunnelControl h2 {
-  background: var(--mouse) left 8px center no-repeat, var(--h2) !important;
+  background: var(--mouse) no-repeat left 8px center, var(--h2) !important;
   background-size: 20px auto, 4px 100%, 100% !important;
 }
 
 #servers h2 {
-  background: var(--server) left 8px center no-repeat, var(--h2) !important;
+  background: var(--server) no-repeat left 8px center, var(--h2) !important;
   background-size: 20px auto, 4px 100%, 100% !important;
 }
 
 #clients h2 {
-  background: var(--client) left 8px center no-repeat, var(--h2) !important;
+  background: var(--client) no-repeat left 8px center, var(--h2) !important;
   background-size: 20px auto, 4px 100%, 100% !important;
 }
 
@@ -280,13 +280,13 @@ h2 span {
 }
 
 #tunnelEditPage h2, #tunnelEditPage h3, #registration h2, #registration h3 {
-  background: var(--settings_inert) left 8px center no-repeat, var(--h2) !important;
+  background: var(--settings_inert) no-repeat left 8px center, var(--h2) !important;
   background-size: 20px auto, 4px 100%, 100% !important;
   background-blend-mode: normal, normal, exclusion, normal;
 }
 
 #wizardPanel h2, #ssl h2 {
-  background: var(--wizard) left 8px center no-repeat, var(--h2) !important;
+  background: var(--wizard) no-repeat left 8px center, var(--h2) !important;
   background-size: 20px auto, 4px 100%, 100% !important;
   background-blend-mode: normal, normal, exclusion, normal;
 }
@@ -365,7 +365,7 @@ td > b {
 }
 
 td.infohelp {
-  background: var(--infohelp) 10px center no-repeat;
+  background: var(--infohelp) no-repeat 10px center;
   background-size: 20px 20px;
   padding: 15px 10px 15px 38px !important;
 }
@@ -475,12 +475,12 @@ td.infohelp {
   width: 100%;
   display: inline-block;
   font-weight: 700;
-  background: var(--settings) 4px center no-repeat;
+  background: var(--settings) no-repeat 4px center;
   background-size: 14px;
 }
 
 .tunnelName a:hover, .tunnelName a:focus {
-  background: var(--settings_hover) 4px center no-repeat;
+  background: var(--settings_hover) no-repeat 4px center;
   background-size: 14px;
 }
 
@@ -795,7 +795,7 @@ select {
   font-size: 8.5pt !important;
   color: #494;
   border-radius: 2px;
-  background: var(--dropdown) right 10px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--dropdown) no-repeat right 10px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
   background-size: 10px, 100% !important;
   cursor: pointer;
   -moz-appearance: none;
@@ -828,7 +828,7 @@ select:hover {
 }
 
 select:hover, select:focus, select:active {
-  background: #000 var(--dropdown_hover) right 10px center no-repeat !important;
+  background: #000 var(--dropdown_hover) no-repeat right 10px center !important;
   background-size: 10px auto !important;
 }
 
@@ -970,13 +970,13 @@ th .help:hover::after, th .help:focus::after {
 
 .multiOption#isServer {
   padding-left: 28px;
-  background: var(--server) 4px center no-repeat;
+  background: var(--server) no-repeat 4px center;
   background-size: 22px;
 }
 
 .multiOption#isClient {
   padding-left: 28px;
-  background: var(--client) 4px center no-repeat;
+  background: var(--client) no-repeat 4px center;
   background-size: 22px;
 }
 
@@ -1111,32 +1111,32 @@ input.tunnelName, input.tunnelDescription, #userAgents {
 }
 
 .username {
-  background: var(--user) 6px center no-repeat, var(--textinput) !important;
+  background: var(--user) no-repeat 6px center, var(--textinput) !important;
   background-size: 16px !important;
 }
 
 .password {
-  background: var(--key) 6px center no-repeat, var(--textinput) !important;
+  background: var(--key) no-repeat 6px center, var(--textinput) !important;
   background-size: 16px !important;
 }
 
 .filemanager {
-  background: var(--files) 6px center no-repeat, var(--textinput) !important;
+  background: var(--files) no-repeat 6px center, var(--textinput) !important;
   background-size: 16px, 100% !important;
 }
 
 .filemanager:focus {
-  background: #000 var(--files) 6px center no-repeat !important;
+  background: #000 var(--files) no-repeat 6px center !important;
   background-size: 16px !important;
 }
 
 .username:focus {
-  background: #000 var(--user) 6px center no-repeat !important;
+  background: #000 var(--user) no-repeat 6px center !important;
   background-size: 16px !important;
 }
 
 .password:focus {
-  background: #000 var(--key) 6px center no-repeat !important;
+  background: #000 var(--key) no-repeat 6px center !important;
   background-size: 16px !important;
 }
 

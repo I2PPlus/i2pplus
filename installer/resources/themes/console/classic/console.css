@@ -11266,7 +11266,7 @@ p#gatherstats {
 }
 
 #enablefullstats {
-  background: var(--stats) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff)
+  background: var(--stats) no-repeat 12px center, linear-gradient(135deg, #fafaff, #f8f8ff)
 }
 
 /* /tunnelpeercount */
