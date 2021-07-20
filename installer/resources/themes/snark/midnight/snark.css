@@ -997,8 +997,7 @@ th .magnetlink img, th .torrentlink img {
   vertical-align: middle;
   color: #000;
   border-radius: 2px;
-  background: #bb0 url(../ubergine/images/hash.png) no-repeat 4px center;
-  background-size: 12px !important;
+  background: #bb0 var(--hash) no-repeat 4px center / 12px;
 }
 
 @media screen and (min-width: 1500px) {
