@@ -319,13 +319,13 @@ i {
 #sb_logo img {
   width: 200px;
   height: auto;
+  mix-blend-mode: luminosity;
   user-select: none;
 }
 
 #sb_logo a:active img {
   transform: scale(.97) !important;
   filter: none;
-  mix-blend-mode: luminosity;
 }
 
 #error500 .routersummary img[src$="i2plogo.png"] {
@@ -349,6 +349,7 @@ i {
 
 #sb_logo a:hover img, #sb_logo a:active img {
   opacity: 1;
+  mix-blend-mode: normal;
 }
 
 .routersummary a[href="/"], .routersummary a[href="/console"] {

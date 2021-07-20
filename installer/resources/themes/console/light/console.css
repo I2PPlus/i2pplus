@@ -222,17 +222,19 @@ pre {
 
 #sb_logo img {
   opacity: .9;
-  transition: ease filter .3s, ease opacity .3s;
+  transition: ease opacity .15s;
   margin: 0 !important;
   width: 200px;
   height: auto;
   image-rendering: -webkit-optimize-contrast;
+  mix-blend-mode: luminosity;
 }
 
-#sb_logo a img:hover {
+#sb_logo a:hover img, #sb_logo a:focus {
   opacity: 1;
-  transition: ease filter .3s, ease opacity .3s;
-  filter: drop-shadow(0 0 1px rgba(255,96,0,.6));
+  transition: ease opacity .15s;
+  filter: none;
+  mix-blend-mode: normal;
 }
 
 #error500 #sidebar img[src$="i2plogo.png"] {
@@ -252,14 +254,9 @@ pre {
   color: #d30 !important;
 }
 
-#sb_logo a:focus img {
-  filter: drop-shadow(0 0 1px #f60);
-}
-
 #sb_logo a:active img {
   transform: scale(.98) !important;
   filter: none;
-  mix-blend-mode: luminosity;
 }
 
 #sb_logo a img {

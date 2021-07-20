@@ -217,12 +217,15 @@ abstract class StoreJob extends JobImpl {
                         _log.info("[Job " + getJobId() + "] Skipping router that doesn't support encrypted LS2/RedDSA [" + peer.toBase64().substring(0,6) + "]");
                     _state.addSkipped(peer);
                     skipped++;
+/*
+                // same as shouldStoreTo() now
                 } else if (isls2 &&
                            !shouldStoreLS2To((RouterInfo)ds)) {
                     if (_log.shouldLog(Log.INFO))
                         _log.info("[Job " + getJobId() + "] Skipping router that doesn't support LS2 " + peer);
                     _state.addSkipped(peer);
                     skipped++;
+*/
                 } else {
                     int peerTimeout = _facade.getPeerTimeout(peer);
 
@@ -645,7 +648,7 @@ abstract class StoreJob extends JobImpl {
     }
 
     /** @since 0.9.28 */
-    public static final String MIN_STORE_VERSION = "0.9.28";
+    public static final String MIN_STORE_VERSION = "0.9.38";
 
     /**
      * Is it new enough?
