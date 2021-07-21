@@ -5079,7 +5079,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 icon = "app_win";
             else
                 icon = "package";
-        } else if (mime.equals("application/java-archive") || plc.endsWith(".deb") || plc.endsWith(".rpm")
+        } else if (mime.equals("application/java-archive") || plc.endsWith(".deb") || plc.endsWith(".rpm") ||
                    plc.endsWith(".flatpak") || plc.endsWith(".snap") || plc.endsWith(".appimage"))
             icon = "package";
         else if (plc.endsWith(".xpi2p"))
@@ -5099,7 +5099,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 icon = "i2p";
             else
                 icon = "compress";
-        else if (mime.equals("application/x-rar-compressed"))
+        } else if (mime.equals("application/x-rar-compressed")) {
                 icon = "rar";
         } else if (mime.equals("application/x-gtar") || mime.equals("application/x-xz") ||
                  mime.equals("application/compress") || mime.equals("application/gzip") ||
