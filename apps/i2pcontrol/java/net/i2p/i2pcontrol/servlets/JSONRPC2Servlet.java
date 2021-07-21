@@ -151,7 +151,7 @@ public class JSONRPC2Servlet extends HttpServlet {
         out.println("<html>\n<head>\n");
         out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">");
         out.println("<title>I2PControl - I2P+</title>");
-        out.println("<link rel=\"icon\" href=\"/themes/console/dark/images/favicon.ico\">");
+        out.println("<link rel=\"icon\" href=\"/themes/console/midnight/images/favicon.svg\">");
         out.println("<link href=\"/themes/i2pcontrol/i2pcontrol.css\" rel=\"stylesheet\" type=\"text/css\">");
         out.println("</head>\n<body>");
         out.println("<h1>I2PControl RPC Service&nbsp;&nbsp;<a href=\"/configwebapps\" title=\"Control and configure service\">" +
@@ -206,11 +206,11 @@ public class JSONRPC2Servlet extends HttpServlet {
         out.println("<html>\n<head>");
         out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">");
         out.println("<title>I2PControl - I2P+</title>");
-        out.println("<link rel=\"icon\" href=\"/themes/console/dark/images/favicon.ico\">");
+        out.println("<link rel=\"icon\" href=\"/themes/console/midnight/images/favicon.svg\">");
         out.println("<link href=\"/themes/i2pcontrol/i2pcontrol.css\" rel=\"stylesheet\" type=\"text/css\">");
         out.println("</head>\n<body>");
         out.println("<h1>I2PControl RPC Service&nbsp;&nbsp;<a href=\"/configwebapps\" title=\"Control and configure service\">" +
-                    "<img src=\"/themes/console/images/info/configure.png\" height=\"16\" width=\"16\"></a></h1>");
+                    "<img src=\"/themes/console/images/svg/configure.svg\" height=\"16\" width=\"16\"></a></h1>");
         if (pw2 == null || pw3 == null) {
             out.println("<p>Please fill in both fields&hellip;</p>");
         } else {
