@@ -243,9 +243,7 @@ td input[type="image"]::after {
 
 #screenlog, #screenlog.expanded, #screenlog.collapsed {
   background: url(images/hat.png) right -4px bottom -10px no-repeat,
-              url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true") no-repeat, #ddf;
-  background: url(images/hat.png) right -4px bottom -10px no-repeat,
-              url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true") no-repeat,
+              url(/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true) no-repeat,
               linear-gradient(to bottom, rgba(239, 243, 255, .7), rgba(233, 239, 255, .7));
   background-size: auto 80px, calc(100% + 80px) calc(100% + 20px), 100%;
   background-position: right -4px bottom -10px, left bottom 1px, center center, center top !important;
@@ -2378,17 +2376,16 @@ input#toggle_createtorrent:checked + label + hr + table {
 }
 
 td#bwHelp {
-  background: url(images/details.svg) no-repeat left 10px center;
-  background-size: 14px auto;
   padding-left: 24px !important;
   width: 100%;
+  background: url(images/details.svg) no-repeat left 10px center / 14px;
 }
 
 td#bwHelp a {
+  margin-left: 3px;
   display: inline-block;
   white-space: nowrap;
-  margin-left: 3px;
-  line-height: 100%;
+  line-height: 1;
 }
 
 /* end configs */
@@ -2715,8 +2712,7 @@ body, th, td, table a, input, input[type=text], input.r, input[name="nofilter_da
 }
 
 td#bwHelp {
-  background: url(images/details.svg) no-repeat left 10px center;
-  background-size: 14px auto !important;
+  background: url(images/details.svg) no-repeat left 10px center / 14px;
 }
 
 .snarkTorrentAction input[type="image"], .snarkTorrents th:last-child input[type="image"] {
@@ -2746,7 +2742,7 @@ body {
 }
 
 .snarkNav:link, .snarkNav:hover, .snarkNav:focus {
-  background-size: 14px 14px, 100% !important;
+  background-size: 14px, 100% !important;
 }
 
 .nav_main {
@@ -4157,29 +4153,28 @@ hr.debug {
 }
 
 @media screen and (min-width: 1500px) {
-.snarkTorrentInfo .infohash {
-  padding: 1px 0 1px 22px;
-  max-width: 140px;
-  background: #f8f8ff url(../light/images/hash.png) no-repeat 6px center;
-  background-size: 14px 14px !important;
-}
+  .snarkTorrentInfo .infohash {
+    padding: 1px 0 1px 22px;
+    max-width: 140px;
+    background: #f8f8ff var(--hash) no-repeat 6px center / 14px;
+  }
 
-.magnetlink, .torrentlink {
-  margin: 0 2px;
-  vertical-align: middle;
-  border: 1px solid #ccf;
-  border-radius: 1px;
-  background: linear-gradient(to bottom, #fff 50%, rgba(255, 255, 255, .6) 50%, rgba(240, 240, 255, .4)) #e7e7ff;
-}
+  .magnetlink, .torrentlink {
+    margin: 0 2px;
+    vertical-align: middle;
+    border: 1px solid #ccf;
+    border-radius: 1px;
+    background: linear-gradient(to bottom, #fff 50%, rgba(255, 255, 255, .6) 50%, rgba(240, 240, 255, .4)) #e7e7ff;
+  }
 
-.magnetlink:hover, .magnetlink:focus, .torrentlink:hover, .torrentlink:focus {
-  border: 1px solid #f60;
-  background: linear-gradient(to bottom, #fcfaf7 50%, #ffe8bf 50%, #efd9b3);
-}
+  .magnetlink:hover, .magnetlink:focus, .torrentlink:hover, .torrentlink:focus {
+    border: 1px solid #f60;
+    background: linear-gradient(to bottom, #fcfaf7 50%, #ffe8bf 50%, #efd9b3);
+  }
 
-.magnetlink:active, .torrentlink:active {
-  box-shadow: inset 2px 2px 3px #7f3000;
-}
+  .magnetlink:active, .torrentlink:active {
+    box-shadow: inset 2px 2px 3px #7f3000;
+  }
 }
 
 .torrentlink {
