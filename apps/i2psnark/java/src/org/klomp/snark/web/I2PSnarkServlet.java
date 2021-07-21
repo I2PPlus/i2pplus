@@ -5076,7 +5076,7 @@ public class I2PSnarkServlet extends BasicServlet {
             else if (plc.contains("i2pinstall"))
                 icon = "i2p";
             else if (plc.endsWith(".exe"))
-                icon = "app_win";
+                icon = "windows";
             else
                 icon = "package";
         } else if (mime.equals("application/java-archive") || plc.endsWith(".deb") || plc.endsWith(".rpm") ||
