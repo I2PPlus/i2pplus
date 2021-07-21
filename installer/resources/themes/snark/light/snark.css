@@ -676,18 +676,19 @@ th.snarkGraphicStatus, th.snarkTorrentStatus {
 }
 
 .snarkTrackerDetails, .snarkTorrentDetails {
+  padding-left: 1px !important;
+  padding-right: 1px !important;
   width: 1% !important;
   white-space: nowrap;
   text-align: center !important;
   font-weight: 700;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
 }
 
 .snarkTrackerDetails img, .snarkTorrentDetails img, .snarkCommentDetails img, .snarkDirInfo tr:first-child td:first-child img {
   margin: 0;
   padding: 3px !important;
-  height: 16px;
+  height: 19px;
+  width: auto;
   border: 1px solid transparent !important;
   filter: none !important;
 }
@@ -705,7 +706,7 @@ th.snarkGraphicStatus, th.snarkTorrentStatus {
 
 .snarkTrackerDetails a:active img, .snarkTorrentDetails a:active img, .snarkDirInfo td:first-child a:active img {
   box-shadow: inset 2px 2px 2px #adadeb;
-  transform: scale(0.9);
+  transform: scale(.9);
 }
 
 .snarkTorrentName {
@@ -2835,12 +2836,12 @@ td.commentAuthor .commentAuthorName {
 }
 
 .snarkTrackerDetails img, .snarkTorrentDetails img {
-  max-height: 18px !important;
+  max-height: 20px !important;
   width: auto;
 }
 
 .snarkGraphicStatus img {
-  height: 18px !important;
+  height: 20px !important;
 }
 
 .snarkGraphicStatus, .snarkTorrentStatus {
@@ -2914,7 +2915,7 @@ code, .snarkTorrents tt {
 
 @media screen and (max-width: 1000px) {
 body, td, .snarkMessages li, .snarkMessages a, button, input, select, .snarkAddInfo, code, tt, th, a, a:link, .snarkAddInfo, .snarkFileStatus {
-  font-size: 8pt !important;
+  font-size: 8.5pt !important;
 }
 
 .snarkNav:link, .snarkNav:visited {
@@ -2937,7 +2938,8 @@ body, td, .snarkMessages li, .snarkMessages a, button, input, select, .snarkAddI
 }
 
 .snarkTorrents td:first-child img {
-  height: 17px;
+  height: 21px;
+  width: auto;
 }
 
 .snarkTorrentName, .snarkTorrentName a {
@@ -3693,7 +3695,7 @@ th img {
 td.snarkGraphicStatus img {
   margin-top: -2px;
   margin-bottom: -2px;
-  height: 20px;
+  height: 22px;
   display: inline-block;
 }
 

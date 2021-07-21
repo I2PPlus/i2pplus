@@ -5108,7 +5108,7 @@ th.snarkGraphicStatus {
 }
 
 td.snarkGraphicStatus img {
-  height: 22px;
+  height: 24px;
 }
 
 td.snarkTrackerDetails img {
@@ -5120,8 +5120,8 @@ td.snarkTrackerDetails img {
 td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
   margin-top: -2px;
   margin-bottom: -2px;
-  width: 24px !important;
-  height: 24px !important;
+  width: 22px !important;
+  height: 22px !important;
 }
 
 .snarkTorrentDetails img[src$="rateme.svg"] {
