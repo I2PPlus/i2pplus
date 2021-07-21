@@ -325,6 +325,10 @@ th img {
 	border-top: 1px solid #999;
 }
 
+.snarkTorrentNoneLoaded td {
+	border-bottom: 1px solid #999;
+}
+
 .peerinfo td {
 	background-color: #fffffd !important;
 }
