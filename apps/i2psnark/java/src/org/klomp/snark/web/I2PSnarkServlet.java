@@ -5079,15 +5079,15 @@ public class I2PSnarkServlet extends BasicServlet {
                 icon = "app_win";
             else
                 icon = "package";
-        } else if (mime.equals("application/java-archive") || plc.endsWith(".deb") ||
-                   plc.endsWith(".rpm") || plc.endsWith(".snap") || plc.endsWith(".appimage"))
+        } else if (mime.equals("application/java-archive") || plc.endsWith(".deb") || plc.endsWith(".rpm")
+                   plc.endsWith(".flatpak") || plc.endsWith(".snap") || plc.endsWith(".appimage"))
             icon = "package";
         else if (plc.endsWith(".xpi2p"))
             icon = "plugin";
         else if (mime.equals("application/pdf"))
             icon = "pdf";
         else if (mime.startsWith("image/"))
-            icon = "photo";
+            icon = "image";
         else if (mime.startsWith("audio/") || mime.equals("application/ogg"))
             icon = "audio";
         else if (mime.startsWith("video/"))
@@ -5099,16 +5099,19 @@ public class I2PSnarkServlet extends BasicServlet {
                 icon = "i2p";
             else
                 icon = "compress";
+        else if (mime.equals("application/x-rar-compressed"))
+                icon = "rar";
         } else if (mime.equals("application/x-gtar") || mime.equals("application/x-xz") ||
                  mime.equals("application/compress") || mime.equals("application/gzip") ||
-                 mime.equals("application/x-7z-compressed") || mime.equals("application/x-rar-compressed") ||
-                 mime.equals("application/x-tar") || mime.equals("application/x-bzip2") ||
-                 plc.endsWith(".txz"))
+                 mime.equals("application/x-7z-compressed") || mime.equals("application/x-tar") ||
+                 mime.equals("application/x-bzip2") || plc.endsWith(".txz"))
             icon = "compress";
         else if (plc.endsWith(".bin"))
             icon = "app";
         else if (plc.endsWith(".bat") || plc.endsWith(".dll"))
-            icon = "app_win";
+            icon = "windows";
+        else if (plc.endsWith(".dmg"))
+            icon = "apple";
         else if (plc.endsWith(".iso") || plc.endsWith(".nrg"))
             icon = "cd";
         else if (plc.contains(".css.") || plc.endsWith(".css") || plc.endsWith(".js") ||
