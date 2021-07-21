@@ -1442,7 +1442,7 @@
         <copy todir="pkg-temp/eepsite-jetty9.3" >
             <fileset dir="installer/resources/eepsite-jetty9.3" />
         </copy>
-        <copy file="installer/resources/themes/console/images/favicon.ico" tofile="pkg-temp/eepsite/docroot/favicon.ico" />
+        <copy file="installer/resources/themes/console/light/images/favicon.svg" tofile="pkg-temp/eepsite/docroot/favicon.svg" />
     </target>
 
     <target name="copyflags" depends="copyflags-unlesspkg" >
