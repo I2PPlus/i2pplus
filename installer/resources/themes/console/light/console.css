@@ -753,7 +753,7 @@ a:active #sb_bandwidthgraph {
 /* updates download bar */
 
 .sb_update {
-  margin-bottom: -12px !important;
+  margin-bottom: -9px !important;
 }
 
 .sb_update a {
