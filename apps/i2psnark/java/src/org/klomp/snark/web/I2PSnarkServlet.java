@@ -4393,7 +4393,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 if (sortParam != null && !"0".equals(sortParam) && !"1".equals(sortParam))
                     buf.append("&amp;sort=").append(sortParam);
                 buf.append("\">");
-                buf.append(toSVG("audio"));
+                buf.append(toSVG("playlist"));
                 buf.append(' ').append(_t("Audio Playlist")).append("</a>");
             }
             buf.append("</td></tr>\n");
