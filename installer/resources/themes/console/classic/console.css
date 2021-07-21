@@ -319,7 +319,7 @@ i {
 #sb_logo img {
   width: 200px;
   height: auto;
-  mix-blend-mode: luminosity;
+  filter: sepia(1) hue-rotate(190deg);
   user-select: none;
 }
 
@@ -349,7 +349,11 @@ i {
 
 #sb_logo a:hover img, #sb_logo a:active img {
   opacity: 1;
-  mix-blend-mode: normal;
+  filter: none;
+}
+
+#sb_logo a:hover img, #sb_logo a img {
+  transition: ease filter .08s;
 }
 
 .routersummary a[href="/"], .routersummary a[href="/console"] {
