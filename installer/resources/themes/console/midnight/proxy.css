@@ -63,7 +63,7 @@ body::before {
 }
 
 @keyframes loader {
-  0 {width: 0}
+  from {width: 0}
   99% {width: 100%}
   100% {width: 0}
 }

@@ -4159,7 +4159,7 @@ span.trackerName::before {
   white-space: nowrap;
   box-shadow: 0 0 0 1px #101, inset 0 0 0 1px rgba(96,32,96,.2);
   border-radius: 3px;
-  background: url(images/button_tracker.png) no-repeat left 3px center / 14px, linear-gradient(to bottom, rgba(24,0,24,.5) 50%, rgba(12,0,12,.5) 50%);
+  background: var(--tracker) no-repeat left 3px center / 14px, linear-gradient(to bottom, rgba(24,0,24,.5) 50%, rgba(12,0,12,.5) 50%);
 }
 
 .info_tracker, .info_tracker a, .info_tracker a:visited {
@@ -4180,7 +4180,7 @@ span.trackerName::before {
 
 .info_tracker:hover {
   box-shadow: 0 0 0 1px #202, inset 0 0 0 1px rgba(96,32,96,.3);
-  background: url(images/button_tracker_hover.png) no-repeat left 3px center / 14px, linear-gradient(to bottom, #313 50%, #101 50%);
+  background: var(--tracker_hover) no-repeat left 3px center / 14px, linear-gradient(to bottom, #313 50%, #101 50%);
 }
 
 .info_tracker:active, .info_tracker:active a {
@@ -4190,7 +4190,7 @@ span.trackerName::before {
 .info_tracker:active {
   color: #fff;
   box-shadow: 0 0 0 1px #313, inset 0 0 0 1px rgba(255,48,0,.5), inset 3px 3px 3px 2px #730;
-  background: #f60 url(images/button_tracker_active.png) no-repeat left 3px center / 14px;
+  background: #f60 var(--tracker_active) no-repeat left 3px center / 14px;
 }
 
 /* configs overhaul */
@@ -5108,7 +5108,7 @@ th.snarkGraphicStatus {
 }
 
 td.snarkGraphicStatus img {
-  height: 22px;
+  height: 24px;
 }
 
 td.snarkTrackerDetails img {
@@ -5120,8 +5120,8 @@ td.snarkTrackerDetails img {
 td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
   margin-top: -2px;
   margin-bottom: -2px;
-  width: 24px !important;
-  height: 24px !important;
+  width: 22px !important;
+  height: 22px !important;
 }
 
 .snarkTorrentDetails img[src$="rateme.svg"] {
