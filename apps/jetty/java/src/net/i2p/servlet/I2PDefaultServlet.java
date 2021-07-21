@@ -233,7 +233,7 @@ public class I2PDefaultServlet extends DefaultServlet
             buf.append(URIUtil.addPaths(base,"../"));
             buf.append("\">Parent Directory</a></td><td class=\"lastmodified\"></td><td class=\"size\"></td></tr>\n");
         }
-        
+
         String encodedBase = hrefEncodeURI(base);
 
         DateFormat dfmt = new SimpleDateFormat(FORMAT, Locale.UK);
@@ -262,7 +262,7 @@ public class I2PDefaultServlet extends DefaultServlet
                 continue;
             }
 
-            if (!(ls[i].startsWith(".") || ls[i].equals("jetty-dir.css") || ls[i].equals("favicon.ico") ||
+            if (!(ls[i].startsWith(".") || ls[i].equals("jetty-dir.css") || ls[i].equals("favicon.ico") || ls[i].equals("favicon.svg") ||
                   ls[i].equals("favicon.png") || ls[i].endsWith("~") || ls[i].endsWith("_") || ls[i].endsWith(".bak") ||
                   ls[i].endsWith(".backup") || ls[i].endsWith(".orig") || ls[i].endsWith(".old") || ls[i].endsWith("_files/"))) {
                 buf.append("<tr><td class=\"name\"><a href=\"");
@@ -318,7 +318,7 @@ public class I2PDefaultServlet extends DefaultServlet
             return _coll.compare(a, b);
         }
     }
-    
+
     /**
      * Copied unchanged from Resource.java
      *

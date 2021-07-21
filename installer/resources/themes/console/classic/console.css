@@ -3839,7 +3839,7 @@ h4.app, h4.app2 {
 h4.app {
   margin-top: -5px;
   padding-left: 32px;
-  background: url(images/favicon.ico) no-repeat 8px center, linear-gradient(to bottom, #fff 50%, #fafbff 50%);
+  background: url(images/favicon.svg) no-repeat 8px center, linear-gradient(to bottom, #fff 50%, #fafbff 50%);
   background-size: 16px, 100%;
   background-blend-mode: luminosity, normal;
 }
