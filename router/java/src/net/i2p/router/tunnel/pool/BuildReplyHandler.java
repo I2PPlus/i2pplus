@@ -130,7 +130,7 @@ class BuildReplyHandler {
                     log.debug(reply.getUniqueId() + ": Decrypting ChaCha record " + recordNum + "/" + hop + "/" + j + " with replyKey "
                               + Base64.encode(replyKey) + " : " + cfg);
                 // slot number, little endian
-                iv[0] = (byte) recordNum;
+                iv[4] = (byte) recordNum;
                 ChaCha20.encrypt(replyKey, iv, data, 0, data, 0, ShortEncryptedBuildRecord.LENGTH);
             }
         } else {
