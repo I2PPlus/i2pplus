@@ -174,7 +174,8 @@ public class EventLogHelper extends FormHandler {
             }
             if (_age == 0)
                 return ("<table id=\"eventlog\" data-sortable>\n<tr><td  class=\"infohelp\">") + _t("No \"{0}\" events found", xev) + ("</td></tr></table>\n");
-            return ("<table id=\"eventlog\">\n<tr><td class=\"infohelp\">") + _t("No \"{0}\" events found in previous {1}", xev, DataHelper.formatDuration2(_age)) + ("</td></tr></table>\n");
+            return ("<table id=\"eventlog\">\n<tr><td class=\"infohelp\">") +
+                    _t("No \"{0}\" events found in previous {1}", xev, DataHelper.formatDuration2(_age)) + ("</td></tr></table>\n");
         }
         StringBuilder buf = new StringBuilder(2048);
         buf.append("<table id=\"eventlog\"><thead><tr><th>");

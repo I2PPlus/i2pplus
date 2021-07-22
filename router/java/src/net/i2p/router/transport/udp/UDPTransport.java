@@ -3469,7 +3469,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
 //                          " from: ");
             if (old != Status.UNKNOWN && _context.router().getUptime() > 5*60*1000L) {
                 _context.router().eventLog().addEvent(EventLog.REACHABILITY,
-                   "from " + _t(old.toStatusString()) + " to " +  _t(status.toStatusString()));
+                _t(old.toStatusString()) + " ➜ " +  _t(status.toStatusString()));
             }
             // Always rebuild when the status changes, even if our address hasn't changed,
             // as rebuildExternalAddress() calls replaceAddress() which calls CSFI.notifyReplaceAddress()
