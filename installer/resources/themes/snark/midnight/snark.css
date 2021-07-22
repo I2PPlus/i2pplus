@@ -4714,7 +4714,7 @@ td.snarkTorrentPeerCount b a:not(:hover):not(:focus), td.snarkTorrentPeerCount b
   border-color: transparent #aaa transparent transparent;
 }
 
-.stopped.incomplete .snarkTorrentPeerCount b, .inactive.eroror .snarkTorrentPeerCount b {
+.stopped.incomplete .snarkTorrentPeerCount b, .inactive.neterror .snarkTorrentPeerCount b {
   background: #900 !important;
 }
 
