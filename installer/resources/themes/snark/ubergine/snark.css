@@ -714,7 +714,7 @@ th.snarkTorrentUploaded a img {
 
 .snarkTorrentAction input[type="image"] {
   margin: 2px 1px 0 !important;
-  padding: 4px !important;
+  padding: 5px !important;
   display: inline-block;
   max-height: 11px;
   vertical-align: middle;
@@ -900,10 +900,10 @@ td:first-child {
 }
 
 .snarkTrackerDetails img, .snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
+  margin: -2px 1px !important;
   padding: 3px !important;
-  margin: 0 1px !important;
-  width: 16px !important;
-  height: 16px !important;
+  width: 20px !important;
+  height: 20px !important;
   border: 1px solid transparent !important;
 }
 
@@ -4899,7 +4899,7 @@ td.snarkTorrentStatus b::before {
 @media screen and (min-width: 800px) {
 .snarkTorrentAction {
   padding-left: 4px !important;
-  padding-right: 3px !important;
+  padding-right: 5px !important;
 }
 
 .snarkTrackerDetails {
@@ -5087,9 +5087,8 @@ td.snarkTorrentStatus b::before {
 }
 
 td.snarkGraphicStatus img {
-  margin-top: -2px;
-  margin-bottom: -2px;
-  height: 20px;
+  margin: -2px 2px -2px 0;
+  height: 22px;
   width: auto;
   display: inline-block;
 }
@@ -5153,7 +5152,8 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
   }
 
   td.snarkGraphicStatus img {
-    height: 18px;
+    margin-left: -1px;
+    height: 20px;
   }
 }
 

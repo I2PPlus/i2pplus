@@ -1519,7 +1519,7 @@ public class NTCPTransport extends TransportImpl {
                           " from: ", new Exception("traceback"));
             if (old != Status.UNKNOWN && _context.router().getUptime() > 5*60*1000L) {
                 _context.router().eventLog().addEvent(EventLog.REACHABILITY,
-                   "from " + _t(old.toStatusString()) + " to " +  _t(status.toStatusString()));
+                _t(old.toStatusString()) + " ➜ " +  _t(status.toStatusString()));
             }
         }
         _context.router().rebuildRouterInfo();

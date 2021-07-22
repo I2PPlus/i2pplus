@@ -676,7 +676,7 @@ public class Router implements RouterClock.ClockShiftListener {
         }
         String last = _config.get("router.previousFullVersion");
         if (last != null) {
-            _eventLog.addEvent(EventLog.UPDATED, "from " + last + " to " + RouterVersion.FULL_VERSION);
+            _eventLog.addEvent(EventLog.UPDATED, last + " ➜ " + RouterVersion.FULL_VERSION);
             saveConfig("router.previousFullVersion", null);
         }
         _eventLog.addEvent(EventLog.STARTED, RouterVersion.FULL_VERSION);
@@ -919,7 +919,7 @@ public class Router implements RouterClock.ClockShiftListener {
         }
         if (_context.netDb().isInitialized()) {
             if (_log.shouldWarn())
-                _log.warn("NetDB ready, publishing RI");
+                _log.warn("NetDB ready, publishing our RouterInfo...");
             // any previous calls to netdb().publish() did not
             // actually publish, because netdb init was not complete
             Republish r = new Republish(_context);
@@ -1442,16 +1442,19 @@ public class Router implements RouterClock.ClockShiftListener {
         // help us shut down esp. after OOM
         int priority = (exitCode == EXIT_OOM) ? Thread.MAX_PRIORITY - 1 : Thread.NORM_PRIORITY + 2;
         Thread.currentThread().setPriority(priority);
+        String exitString = "";
         if (exitCode == 2)
-            _log.log(Log.CRIT, "Initiating graceful shutdown...");
+            exitString = "graceful shutdown";
         else if (exitCode == 3)
-            _log.log(Log.CRIT, "Initiating hard shutdown...");
+            exitString = "hard shutdown";
         else if (exitCode == 4)
-            _log.log(Log.CRIT, "Initiating hard restart...");
+            exitString = "hard restart";
         else if (exitCode == 5)
-            _log.log(Log.CRIT, "Initiating graceful restart...");
+            exitString = "graceful restart";
         else if (exitCode == 10)
-            _log.log(Log.CRIT, "Initiating forced restart (Out of Memory error)...");
+            exitString = "forced restart (Out of Memory error)";
+        if (exitCode >= 2)
+            _log.log(Log.CRIT, "Initiating " + exitString + "...");
         // So we can get all the way to the end
         // No, you can't do Thread.currentThread.setDaemon(false)
         if (_killVMOnEnd) {
@@ -1565,7 +1568,7 @@ public class Router implements RouterClock.ClockShiftListener {
         // logManager shut down in finalShutdown()
         _watchdog.shutdown();
         _watchdogThread.interrupt();
-        _eventLog.addEvent(EventLog.STOPPED, Integer.toString(exitCode));
+        _eventLog.addEvent(EventLog.STOPPED, exitString);
         finalShutdown(exitCode);
     }
 
