@@ -2338,9 +2338,9 @@ hr.debug {
 }
 
 .resourceError td:first-child {
-  text-align: right;
   width: 1%;
   min-width: 200px;
+  text-align: right;
 }
 
 #DoesNotExist {
@@ -2350,18 +2350,18 @@ hr.debug {
 /* end Resource Errors */
 
 .priority {
-  font-size: 8pt;
+  width: 2%;
+  white-space: nowrap;
   vertical-align: middle;
   text-align: center;
-  white-space: nowrap;
-  width: 2%;
+  font-size: 8pt;
 }
 
 .priority::after {
-  content: "";
-  display: inline-block;
   min-height: 30px;
+  display: inline-block;
   vertical-align: middle;
+  content: "";
 }
 
 .priority input[type=radio] {
@@ -2371,13 +2371,13 @@ hr.debug {
 
 .priorityHigh, .priorityNormal, .prioritySkip {
   padding: 0;
-  display: inline-block;
   width: 52px;
-  font-size: 0;
-  text-align: left;
-  vertical-align: middle;
-  color: transparent;
+  display: inline-block;
   overflow: hidden;
+  vertical-align: middle;
+  text-align: left;
+  font-size: 0;
+  color: transparent;
   background-size: 18px !important;
 }
 
