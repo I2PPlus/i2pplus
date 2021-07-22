@@ -1070,8 +1070,7 @@ img[src$="details.png"] {
   .snarkTorrentInfo .infohash {
     padding: 2px 0 2px 22px !important;
     max-width: 140px;
-    background: #fff5ef url(../light/images/hash.png) no-repeat 6px center;
-    background-size: 14px !important;
+    background: #fff5ef var(--hash) no-repeat 6px center / 14px;
   }
 }
 
@@ -2339,9 +2338,9 @@ hr.debug {
 }
 
 .resourceError td:first-child {
-  text-align: right;
   width: 1%;
   min-width: 200px;
+  text-align: right;
 }
 
 #DoesNotExist {
@@ -2351,18 +2350,18 @@ hr.debug {
 /* end Resource Errors */
 
 .priority {
-  font-size: 8pt;
+  width: 2%;
+  white-space: nowrap;
   vertical-align: middle;
   text-align: center;
-  white-space: nowrap;
-  width: 2%;
+  font-size: 8pt;
 }
 
 .priority::after {
-  content: "";
-  display: inline-block;
   min-height: 30px;
+  display: inline-block;
   vertical-align: middle;
+  content: "";
 }
 
 .priority input[type=radio] {
@@ -2372,13 +2371,13 @@ hr.debug {
 
 .priorityHigh, .priorityNormal, .prioritySkip {
   padding: 0;
-  display: inline-block;
   width: 52px;
-  font-size: 0;
-  text-align: left;
-  vertical-align: middle;
-  color: transparent;
+  display: inline-block;
   overflow: hidden;
+  vertical-align: middle;
+  text-align: left;
+  font-size: 0;
+  color: transparent;
   background-size: 18px !important;
 }
 
@@ -3128,16 +3127,17 @@ td .commentAuthorName {
   }
 
   td.snarkGraphicStatus img {
-    width: auto;
-    height: 22px !important;
+    width: auto !important;
+    height: 23px !important;
   }
 
   .snarkGraphicStatus::after {
-    min-height: 22px;
+    min-height: 23px;
+    width: 2px;
   }
 
   .snarkTorrentName a {
-    margin: -1px 0 1px 0;
+    margin: -1px 0 1px;
   }
 
   .snarkTorrentName:hover a, .snarkFileName:hover a {
@@ -3875,22 +3875,27 @@ input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilte
 }
 
 @media screen and (min-width: 1500px) {
-.trackerhome, .trackerannounce, .knowntracker a {
-  width: 400px !important;
-  max-width: 400px !important;
-}
+  .trackerhome, .trackerannounce, .knowntracker a {
+    width: 400px !important;
+    max-width: 400px !important;
+  }
 
-td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
-  width: 20px !important;
-  height: 20px !important;
-}
+  td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
+    width: 22px !important;
+    height: 22px !important;
+  }
 
-.snarkTorrentDetails img[src$="rateme.svg"] {
-  margin-top: -5px !important;
-  margin-right: -3px !important;
-  width: 12px !important;
-  height: 12px !important;
-}
+  td.snarkTorrentDetails img {
+    margin-top: -3px !important;
+    margin-bottom: -3px !important;
+  }
+
+  .snarkTorrentDetails img[src$="rateme.svg"] {
+    margin-top: -5px !important;
+    margin-right: -3px !important;
+    width: 12px !important;
+    height: 12px !important;
+  }
 }
 
 /* end tracker config */
