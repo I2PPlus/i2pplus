@@ -113,7 +113,7 @@ public class HomeHelper extends HelperBase {
         "git.idk.i2p" + S + _x("A public anonymous Git hosting site - supports pulling via Git and HTTP and pushing via SSH") + S + "http://git.idk.i2p/explore/projects" + S + I + "svg/gitlab.svg" + S +
         "inclib.i2p" + S + _x("The Radical Militant Library") + S + "http://inclib.i2p/" + S + I + "svg/books.svg" + S +
         "sharefile.i2p" + S + _x("Secure filesharing service") + S + "http://sharefile.i2p/" + S + I + "svg/cloud.svg" + S +
-        "skank.i2p" + S + _x("Home of I2P+") + S + "http://skank.i2p/" + S + I + "svg/package.svg" + S +
+        "skank.i2p" + S + _x("Home of I2P+") + S + "http://skank.i2p/" + S + I + "svg/plus.svg" + S +
         "tome.i2p" + S + _x("Collection of books &amp; other reading material") + S + "http://tome.i2p/" + S + I + "svg/books.svg" + S +
         //"dropbox.i2p" + S + _x("Private file storage") + S + "http://dropbox.i2p/" + S + I + "svg/cloud.svg" + S +
         //"xkcd.i2p" + S + _x("Mirror of the XKCD web comic") + S + "http://xkcd.i2p/" + S + I + "svg/books.svg" + S +
@@ -151,7 +151,7 @@ public class HomeHelper extends HelperBase {
         _x("I2P Forum") + S + _x("I2P-related community forums") + S + "http://i2pforum.i2p/" + S + I + "svg/forum.svg" + S +
         "nitter.i2p" + S + _x("Alternative front-end for Twitter") + S + "http://nitter.i2p/" + S + I + "svg/twitter.svg" + S +
         "query.i2p" + S + _x("The StackOverflow of I2P") + S + "http://query.i2p/" + S + I + "svg/forum.svg" + S +
-        "Weed Forums" + S + _x("Cannabis-specific discussion forum") + S + "http://weedforums.i2p/" + S + I + "svg/weed.svg" + S +
+        //"Weed Forums" + S + _x("Cannabis-specific discussion forum") + S + "http://weedforums.i2p/" + S + I + "svg/weed.svg" + S +
         "ramble.i2p" + S + _x("Cross-network micro-blogging &amp; forums &amp; wiki") + S + "http://ramble.i2p/" + S + I + "svg/ramble.svg" + S +
         //"NovaBBS" + S + _x("Eclectic selection of forums") + S + "http://novabbs.i2p/" + S + I + "svg/peers.svg" + S +
 //        _x("Visibility") + S + _x("Microblogging service") + S + "http://visibility.i2p/" + S + I + "info/eye.png" + S +
