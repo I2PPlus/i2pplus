@@ -12095,11 +12095,13 @@ iframe {
 #tunnelmgr, #torrents, #webmail, #dns {
   position: relative;
   overflow: hidden;
+  min-height: 4px;
+  min-height: 9px;
 }
 
 #tunnelmgr::before, #torrents::before, #webmail::before, #dns::before {
   width: 0;
-  height: 10px;
+  height: 9px;
   display: block;
   position: absolute;
   top: 0;
