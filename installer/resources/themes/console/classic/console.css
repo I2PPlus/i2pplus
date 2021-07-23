@@ -6448,7 +6448,7 @@ p#fullhistory {
   margin-top: -11px;
   padding: 10px 10px 10px 50px;
   border: 1px solid #aaafce;
-  background: #fff var(--logs) no-repeat 12px center / 28px;
+  background: #fff var(--log_icon) no-repeat 12px center / 28px;
 }
 
 .eventspanel select {
