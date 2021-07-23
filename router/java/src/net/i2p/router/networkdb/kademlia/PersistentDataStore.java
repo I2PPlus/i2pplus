@@ -614,7 +614,11 @@ public class PersistentDataStore extends TransientDataStore {
                 } finally {
                     if (fis != null) try { fis.close(); } catch (IOException ioe) {}
                 }
-                if (corrupt) _routerFile.delete();
+                if (corrupt) {
+                    _routerFile.delete();
+                    if (_log.shouldLog(Log.INFO))
+                        _log.info("Removing " + _routerFile.getName() + " from disk...");
+                }
         }
     }
 
