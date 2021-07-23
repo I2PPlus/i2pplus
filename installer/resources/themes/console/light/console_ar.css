@@ -1073,7 +1073,7 @@ pre#activetransports {
 }
 
 #faq h3 {
-  background: url(/themes/console/images/question.png) no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255, 255, 255, .6) 50%, rgba(240, 240, 240, .4)) repeat scroll 0 0%, rgba(0, 0, 0, 0) linear-gradient(to left, #fff 5%, rgba(231, 231, 255, .8) 15%) !important;
+  background: var(--question) no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255, 255, 255, .6) 50%, rgba(240, 240, 240, .4)) repeat scroll 0 0%, rgba(0, 0, 0, 0) linear-gradient(to left, #fff 5%, rgba(231, 231, 255, .8) 15%) !important;
   background-position: right 6px center, right center, right center !important;
   padding-right: 30px;
   background-size: 18px 18px, 100%, 100% !important;

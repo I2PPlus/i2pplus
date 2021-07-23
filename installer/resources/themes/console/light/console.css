@@ -3953,7 +3953,7 @@ h3#shutdownrouter, h3#systray, h3#servicedebug {
 h3#systray + p.infohelp {
   padding: 20px 15px 20px 50px;
   box-shadow: var(--highlight);
-  background: url(/themes/console/images/systray.png) no-repeat 15px center / 28px, var(--div_infohelp);
+  background: var(--systray) no-repeat 15px center / 28px, var(--div_infohelp);
 }
 
 h3#servicedebug + p.infohelp {
@@ -5725,7 +5725,7 @@ iframe.iframed {
 /* Fixes for when app is not started and console error loads inside iframe */
 
 body.iframed {
-  background: transparent url(/themes/console/images/transparent.gif) !important;
+  background: transparent !important;
 }
 
 .iframed .routersummaryouter {
@@ -8893,7 +8893,7 @@ select[name="newlogclass"] {
   word-spacing: 0;
   letter-spacing: 0;
   text-transform: none;
-  background: url(/themes/console/images/question.png) no-repeat 10px center / 18px, var(--h2) !important;
+  background: var(--question) no-repeat 10px center / 18px, var(--h2) !important;
   background-blend-mode: luminosity, normal, normal;
 }
 

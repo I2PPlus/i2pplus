@@ -5711,7 +5711,7 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
   letter-spacing: 0;
   text-transform: none;
   font-size: 10.5pt !important;
-  background: var(--question) 10px 55% no-repeat, var(--th) !important;
+  background: var(--question) no-repeat 10px 55%, var(--th) !important;
   background-size: 18px, 4px 100%, 100% !important;
   background-blend-mode: luminosity, normal;
 }
@@ -7638,7 +7638,7 @@ iframe.iframed {
 /* Fixes for when app is not started and console error loads inside iframe */
 
 body.iframed {
-  background: transparent url(/themes/console/images/transparent.gif) !important;
+  background: transparent !important;
 }
 
 .iframed .routersummaryouter {
@@ -8512,45 +8512,38 @@ p#enablefullstats {
 }
 
 table#bugreports td.infohelp {
-  background: #001 var(--bug) no-repeat 12px center !important;
   padding: 15px 15px 15px 50px;
-  background-size: 28px !important;
+  background: #001 var(--bug) no-repeat 12px center / 28px !important;
 }
 
 p#debugmode {
   padding: 15px 15px 15px 50px;
-  background: #001 var(--bug) no-repeat 12px center !important;
-  background-size: 28px !important;
+  background: #001 var(--bug) no-repeat 12px center / 28px !important;
 }
 
 p.sybilinfo {
-  padding: 15px 15px 15px 50px;
   margin-bottom: 10px;
-  background: #001 var(--sybil) no-repeat 12px center !important;
-  background-size: 28px !important;
+  padding: 15px 15px 15px 50px;
+  background: #001 var(--sybil) no-repeat 12px center / 28px !important;
 }
 
 p.sybilinfo.experimental {
-  background: #001 var(--experimental) no-repeat 12px center !important;
-  background-size: 28px !important;
+  background: #001 var(--experimental) no-repeat 12px center / 28px !important;
 }
 
 #bandwidthconfig tr:first-child .infohelp {
-  background: #001 var(--speed) no-repeat 12px center !important;
   padding: 15px 15px 15px 50px;
-  background-size: 28px !important;
+  background: #001 var(--speed) no-repeat 12px center / 28px !important;
 }
 
 #addkeyring td.infohelp {
   padding: 20px 15px 20px 50px !important;
-  background: #001 var(--keys) no-repeat 12px center !important;
-  background-size: 28px !important;
+  background: #001 var(--keys) no-repeat 12px center / 28px !important;
 }
 
 #oldhome td:first-child {
-  background: #001 var(--home) no-repeat 12px center !important;
   padding: 15px 15px 15px 50px;
-  background-size: 28px !important;
+  background: #001 var(--home) no-repeat 12px center / 28px !important;
 }
 
 #oldhome input[type=checkbox], #enablefullstats input[type=checkbox] {
@@ -8559,8 +8552,7 @@ p.sybilinfo.experimental {
 
 #floodfillconfig tr:first-child .infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--floodfill) no-repeat 12px center !important;
-  background-size: 28px !important;
+  background: #000 var(--floodfill) no-repeat 12px center / 28px !important;
 }
 
 #floodfillconfig tr:nth-child(2) td {
@@ -8573,105 +8565,88 @@ p.sybilinfo.experimental {
 
 p#clientconf.infohelp, p#webappconfig.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--editclient) no-repeat 12px center !important;
-  background-size: 28px !important;
+  background: #000 var(--editclient) no-repeat 12px center / 28px !important;
 }
 
 p#pluginconfigtext {
   padding: 15px 15px 15px 50px;
   vertical-align: middle;
-  background: #000 var(--pluginconfig) no-repeat 12px center !important;
-  background-size: 28px !important;
+  background: #000 var(--pluginconfig) no-repeat 12px center / 28px !important;
 }
 
 #plugininstall .infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--plugin) no-repeat 12px center !important;
-  background-size: 28px !important;
+  background: #000 var(--plugin) no-repeat 12px center / 28px !important;
 }
 
 #manualreseed tr:nth-last-child(2) td.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--package) no-repeat 12px center !important;
-  background-size: 28px !important;
+  background: #000 var(--package) no-repeat 12px center / 28px !important;
 }
 
 #config_peers tr:nth-child(3) td.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--ban) no-repeat 12px center !important;
-  background-size: 28px !important;
+  background: #000 var(--ban) no-repeat 12px center / 28px !important;
 }
 
 h3#shutdownrouter + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--power) no-repeat 12px center !important;
-  background-size: 28px !important;
+  background: #000 var(--power) no-repeat 12px center / 28px !important;
 }
 
 h3#restartrouter + p.infohelp, #config_family .infohelp.needrestart {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--reboot) no-repeat 12px center !important;
-  background-size: 28px !important;
+  background: #000 var(--reboot) no-repeat 12px center / 28px !important;
 }
 
 h3#systray + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/systray.png) no-repeat 12px center !important;
-  background-size: 28px !important;
+  background: #000 var(--systray) no-repeat 12px center / 28px !important;
 }
 
 h3#servicedebug + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--bug) no-repeat 12px center !important;
-  background-size: 28px !important;
+  background: #000 var(--bug) no-repeat 12px center / 28px !important;
 }
 
 h3#browseronstart + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--firefox) no-repeat 12px center !important;
-  background-size: 28px !important;
+  background: #000 var(--firefox) no-repeat 12px center / 28px !important;
 }
 
 .main#config_reseed p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--reseed) no-repeat 12px center !important;
-  background-size: 28px !important;
+  background: #000 var(--reseed) no-repeat 12px center / 28px !important;
 }
 
 p#enablefullstats, p#gatherstats {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--stats) no-repeat 12px center !important;
-  background-size: 28px !important;
+  background: #000 var(--stats) no-repeat 12px center / 28px !important;
 }
 
 #config_family .infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--family) no-repeat 12px center !important;
-  background-size: 28px !important;
+  background: #000 var(--family) no-repeat 12px center / 28px !important;
 }
 
 #config_family .infohelp.joinfamily {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--joinfamily) no-repeat 12px center !important;
-  background-size: 28px !important;
+  background: #000 var(--joinfamily) no-repeat 12px center / 28px !important;
 }
 
 #config_family .infohelp.newfamily {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--newfamily) no-repeat 12px center !important;
-  background-size: 28px !important;
+  background: #000 var(--newfamily) no-repeat 12px center / 28px !important;
 }
 
 #consolepass tr:first-child td {
   padding: 20px 15px 20px 50px !important;
-  background: #000 var(--useradd) no-repeat 12px center !important;
-  background-size: 28px !important;
+  background: #000 var(--useradd) no-repeat 12px center / 28px !important;
 }
 
 #events form[action="events"] {
   padding: 10px 10px 10px 50px;
-  background: #001 var(--log_icon) no-repeat 12px center;
-  background-size: 28px;
+  background: #001 var(--log_icon) no-repeat 12px center / 28px;
 }
 
 #events form[action="events"] > * {
@@ -8680,14 +8655,12 @@ p#enablefullstats, p#gatherstats {
 
 #plugininstall tr:nth-child(3) td:nth-last-child(2), #manualreseed tr:nth-child(3) td:nth-last-child(2) {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--link) no-repeat 12px center;
-  background-size: 28px;
+  background: #000 var(--link) no-repeat 12px center / 28px;
 }
 
 #manualreseed tr:nth-child(5) td:nth-last-child(2), #plugininstall tr:nth-child(5) td:nth-last-child(2) {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--files) no-repeat 12px center;
-  background-size: 28px;
+  background: #000 var(--files) no-repeat 12px center / 28px;
 }
 
 /* /tunnels */
@@ -12458,7 +12431,7 @@ a:hover .sitemapLink {
 }
 
 #help_faq, #help_glossary {
-  background: url(/themes/console/images/question.png) no-repeat 15px center, var(--helpsection);
+  background: var(--question) no-repeat 15px center, var(--helpsection);
 }
 
 #help_troubleshoot {
@@ -12518,7 +12491,7 @@ a:hover .sitemapLink {
 
 #newuserguide h2 {
   padding-left: 38px !important;
-  background: url(/themes/console/images/question.png) no-repeat 8px center, var(--title) !important;
+  background: var(--question) no-repeat 8px center, var(--title) !important;
   background-size: 22px, 4px 100%, 100% !important;
 }
 
