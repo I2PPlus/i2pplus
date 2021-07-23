@@ -7138,7 +7138,7 @@ h3#restartrouter + p.infohelp, #config_family .infohelp.needrestart {
 
 h3#systray + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/systray.png) no-repeat 12px center / 28px !important;
+  background: #000 var(--systray) no-repeat 12px center / 28px !important;
 }
 
 h3#servicedebug + p.infohelp {
@@ -12752,7 +12752,7 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 /* Fixes for when app is not started and console error loads inside iframe */
 
 body.iframed {
-  background: transparent url(/themes/console/images/transparent.gif) !important;
+  background: transparent !important;
 }
 
 .iframed .routersummaryouter {

@@ -65,7 +65,7 @@
   window.addEventListener("pageshow", progressx.hide());
 </script>
 </div>
-<style type="text/css">iframe{opacity:1} #dns::before{animation:ease fade 1s 2s forwards reverse, linear reloader 1s forwards}</style>
+<style type="text/css">iframe{opacity:1} #dns::before{animation:ease fade 1s 2s forwards reverse, linear reloader 2.5s forwards}</style>
 <%@include file="summaryajax.jsi" %>
 </body>
 </html>

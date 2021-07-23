@@ -346,7 +346,7 @@ h3 {
   letter-spacing: .12em;
   word-spacing: .1em;
   border: 1px solid #242;
-  background: url(/themes/console/images/question.png) no-repeat 8px center,
+  background: var(--question) no-repeat 8px center,
               linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
               repeating-linear-gradient(to right, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px),
               linear-gradient(to bottom, #004000, #000 75%);
