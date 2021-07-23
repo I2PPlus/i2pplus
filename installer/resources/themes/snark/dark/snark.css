@@ -582,14 +582,18 @@ td.snarkTorrentPeerCount:empty {
   padding: 1px !important;
 }
 
-.snarkTorrentDetails img:not([src$="rateme.svg"]) {
-  min-width: 18px;
-  min-height: 18px;
+.snarkTorrents .snarkTorrentDetails img:not([src$="rateme.svg"]) {
+  margin-top: -2px !important;
+  margin-bottom: -2px !important;
+  padding: 4px !important;
+  width: 19px;
+  height: 19px;
 }
 
 .snarkTrackerDetails img {
-  max-width: 16px;
-  max-height: 16px;
+  padding: 4px !important;
+  width: 16px;
+  height: 16px;
   opacity: .7;
 }
 
@@ -664,8 +668,7 @@ tr.active .snarkTorrentStatus {
 }
 
 .snarkTorrents img {
-  margin: 0 !important;
-  padding: 0 !important;
+  padding: 0;
 }
 
 .snarkTorrents tt {
@@ -1147,10 +1150,6 @@ tr:not(.peerinfo) .snarkTorrentUploaded:empty::after {
 
 .snarkTorrentUploaded {
   padding-right: 6px !important;
-}
-
-.snarkTorrents img {
-  padding: 4px !important;
 }
 
 .snarkTorrents th img {
@@ -4314,10 +4313,10 @@ input[name="nofilter_commentsName"] {
 }
 
 td.snarkGraphicStatus img {
-  margin-top: -2px;
-  margin-bottom: -2px;
+  margin-top: -3px;
+  margin-bottom: -3px;
   width: auto !important;
-  height: 20px;
+  height: 21px;
   display: inline-block;
 }
 
@@ -4857,16 +4856,19 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
   position: absolute;
   display: inline-block;
   z-index: 20;
-  top: -3px;
-  right: 1px;
+  top: -2px;
+  right: 3px;
   line-height: 0;
   font-size: 0;
 }
 
 .snarkCommented img {
   padding: 0 !important;
-  height: 9px !important;
   width: auto !important;
+  height: 11px !important;
+  position: absolute;
+  top: -2px;
+  right: -2px;
   filter: drop-shadow(0 0 1px #101) drop-shadow(0 0 2px rgba(128,128,0,.3));
 }
 
@@ -4916,17 +4918,15 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
   height: 22px !important;
 }
 
-td.snarkTrackerDetails img {
+.snarkTorrents td.snarkTrackerDetails img {
   padding: 5px !important;
   width: 19px !important;
   height: 19px !important;
-  max-width: 19px !important;
-  max-height: 19px !important;
 }
 
 .snarkTorrentDetails img[src$="rateme.svg"] {
-  margin-top: -3px !important;
-  margin-right: -3px !important;
+  margin-top: -1px !important;
+  margin-right: -1px !important;
   width: 12px !important;
   height: 12px !important;
 }
