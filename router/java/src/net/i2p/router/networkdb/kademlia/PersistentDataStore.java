@@ -43,6 +43,7 @@ import net.i2p.util.Log;
 import net.i2p.util.SecureDirectory;
 import net.i2p.util.SecureFileOutputStream;
 import net.i2p.util.SystemVersion;
+import net.i2p.util.VersionComparator;
 
 
 /**
@@ -544,6 +545,8 @@ public class PersistentDataStore extends TransientDataStore {
                     fis = new BufferedInputStream(fis);
                     RouterInfo ri = new RouterInfo();
                     ri.readBytes(fis, true);  // true = verify sig on read
+                    String v = ri.getVersion();
+                    String MIN_VERSION = "0.9.48";
                     if (ri.getNetworkId() != _networkID) {
                         corrupt = true;
                         if (_log.shouldLog(Log.ERROR))
@@ -572,6 +575,11 @@ public class PersistentDataStore extends TransientDataStore {
                             else
                                 _log.info("Not writing RouterInfo [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] to disk -> K or L tier");
                         }
+                    } else if (VersionComparator.comp(v, MIN_VERSION) < 0) {
+                        // don't store routerinfos for routers older than 0.9.48
+                        corrupt = true;
+                        if (_log.shouldLog(Log.INFO))
+                            _log.info("Not writing RouterInfo [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] to disk -> older than 0.9.48");
                     } else if (getContext().blocklist().isBlocklisted(ri)) {
                         corrupt = true;
                         if (_log.shouldLog(Log.WARN))
@@ -606,7 +614,11 @@ public class PersistentDataStore extends TransientDataStore {
                 } finally {
                     if (fis != null) try { fis.close(); } catch (IOException ioe) {}
                 }
-                if (corrupt) _routerFile.delete();
+                if (corrupt) {
+                    _routerFile.delete();
+                    if (_log.shouldLog(Log.INFO))
+                        _log.info("Removing " + _routerFile.getName() + " from disk...");
+                }
         }
     }
 
