@@ -535,7 +535,7 @@ abstract class StoreJob extends JobImpl {
             SendSuccessJob onReply = new SendSuccessJob(ctx, peer, outTunnel, sent.getMessageSize());
             FailedJob onFail = new FailedJob(ctx, peer, ctx.clock().now());
             StoreMessageSelector selector = new StoreMessageSelector(ctx, getJobId(), peer, token, expiration);
-    
+
             if (_log.shouldLog(Log.DEBUG)) {
                     _log.debug("[Job " + getJobId() + "] Sending encrypted store to [" + peer.getIdentity().getHash().toBase64().substring(0,6) +
                                "] through " + outTunnel + ": " + sent);
@@ -601,7 +601,7 @@ abstract class StoreJob extends JobImpl {
                 MessageWrapper.WrappedMessage wm = MessageWrapper.wrap(ctx, msg, null, peer);
                 if (wm == null) {
                     if (_log.shouldLog(Log.WARN))
-                        _log.warn("Fail garlic encrypting");
+                        _log.warn("Garlic encryption failure");
                     fail();
                     return;
                 }
@@ -648,7 +648,8 @@ abstract class StoreJob extends JobImpl {
     }
 
     /** @since 0.9.28 */
-    public static final String MIN_STORE_VERSION = "0.9.38";
+//    public static final String MIN_STORE_VERSION = "0.9.38";
+    public static final String MIN_STORE_VERSION = "0.9.48";
 
     /**
      * Is it new enough?
@@ -668,7 +669,8 @@ abstract class StoreJob extends JobImpl {
     }
 
     /** @since 0.9.38 */
-    public static final String MIN_STORE_LS2_VERSION = "0.9.38";
+//    public static final String MIN_STORE_LS2_VERSION = "0.9.38";
+    public static final String MIN_STORE_LS2_VERSION = "0.9.48";
 
     /**
      * Is it new enough?
@@ -683,7 +685,8 @@ abstract class StoreJob extends JobImpl {
      * Was supported in 38, but they're now sigtype 11 which wasn't added until 39
      * @since 0.9.39
      */
-    public static final String MIN_STORE_ENCLS2_VERSION = "0.9.39";
+//    public static final String MIN_STORE_ENCLS2_VERSION = "0.9.39";
+    public static final String MIN_STORE_ENCLS2_VERSION = "0.9.48";
 
     /**
      * Is it new enough?
