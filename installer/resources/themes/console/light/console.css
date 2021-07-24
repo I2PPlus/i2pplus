@@ -2706,7 +2706,7 @@ to {
   text-align: justify !important;
   font-weight: 700;
   border: none !important;
-  background: url(images/warning.png) no-repeat left center;
+  background: var(--err) no-repeat left center / 16px;
 }
 
 .messages li br + b {
@@ -2727,7 +2727,7 @@ to {
 .error li {
   display: list-item;
   list-style: none !important;
-  background: url(images/warn.png) no-repeat left center !important;
+  background: var(--err) no-repeat left center / 16px !important;
 }
 
 table {
@@ -3876,17 +3876,6 @@ p.infowarn {
               repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px), #fff !important;
 }
 
-#oldhome td:first-child {
-  padding: 10px 15px 10px 50px;
-  background: var(--home) no-repeat 15px center / 28px,
-              linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)),
-              repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px), #fff !important;
-}
-
-#oldhome input[type=checkbox], #enablefullstats input[type=checkbox] {
-  vertical-align: sub;
-}
-
 #floodfillconfig tr:first-child .infohelp {
   padding: 20px 15px 20px 50px;
   background: var(--floodfill) no-repeat 15px center / 28px, var(--div_infohelp);
@@ -4222,59 +4211,59 @@ h1 {
   border: 1px solid var(--border);
   border-radius: 2px 2px 0 0;
   box-shadow: inset 0 0 0 1px rgba(185,185,198,.65);
-  background: var(--netwrk) no-repeat 10px center / 38px, var(--h1) #fafaff;
+  background: var(--h1_network) no-repeat 10px center / 38px, var(--h1) #fafaff;
 }
 
 h1.home {
-  background-image: var(--home);
+  background-image: var(--h1_home);
 }
 
 h1.perf {
-  background-image: var(--perf);
+  background-image: var(--h1_perf);
 }
 
 h1.nfo, h1.newspage {
-  background-image: var(--info);
+  background-image: var(--h1_info);
 }
 
 h1.hlp {
-  background-image: var(--header_help);
+  background-image: var(--h1_help);
 }
 
 h1.addbook {
-  background-image: var(--addbook);
+  background-image: var(--h1_addbook);
 }
 
 h1.snark {
-  background-image: var(--app_snark);
+  background-image: var(--h1_snark);
 }
 
 h1.mail {
-  background-image: var(--app_mail);
+  background-image: var(--h1_mail);
 }
 
 h1.conf, #wizardpage h1 {
-  background-image: var(--cog);
+  background-image: var(--h1_config);
 }
 
 h1.adv {
-  background-image: var(--info);
+  background-image: var(--h1_info);
 }
 
 h1.err {
-  background-image: var(--error);
+  background-image: var(--h1_error);
 }
 
 h1.sched {
-  background-image: var(--tasks);
+  background-image: var(--h1_tasks);
 }
 
 h1.log {
-  background-image: var(--logs);
+  background-image: var(--h1_logs);
 }
 
 h1.webapp {
-  background-image: var(--webapp);
+  background-image: var(--h1_webapp);
 }
 
 h1[class], #wizardpage h1 {
@@ -8175,17 +8164,22 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   text-align: center;
 }
 
-.sortupactive, .sortdownactive {
-  opacity: 1;
-  box-shadow: inset 1px 1px 1px #ccc;
+.sortup {
+  background: var(--mv_up) no-repeat center center / 16px 14px, var(--btn);
 }
 
-.sortup {
-  background: url(images/sort_up.png) no-repeat center center, var(--btn);
+.sortdown {
+  background: var(--mv_down) no-repeat center center / 16px 14px, var(--btn);
 }
 
 .sortup:hover {
-  background: url(images/sort_up.png) no-repeat center center, var(--btn_hover);
+  background: var(--mv_up_hover) no-repeat center center, var(--btn_hover);
+  border: 1px solid #f60;
+  opacity: 1;
+}
+
+.sortdown:hover {
+  background: var(--mv_down_hover) no-repeat center center, var(--btn_hover);
   border: 1px solid #f60;
   opacity: 1;
 }
@@ -8198,22 +8192,17 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   background: rgba(255,102,0,.15);
 }
 
-.sortupactive {
-  background: url(images/sort_up.png) no-repeat center center, #fff;
-}
-
-.sortdown {
-  background: url(images/sort_down.png) no-repeat center center, var(--btn);
-}
-
-.sortdown:hover {
-  background: url(images/sort_down.png) no-repeat center center, var(--btn_hover);
-  border: 1px solid #f60;
+.sortupactive, .sortdownactive {
   opacity: 1;
+  box-shadow: inset 1px 1px 1px #ccc;
+}
+
+.sortupactive {
+  background: var(--mv_up_hover) no-repeat center center, #fff;
 }
 
 .sortdownactive {
-  background: url(images/sort_down.png) no-repeat center center, #fff;
+  background: var(--mv_down_hover) no-repeat center center, #fff;
 }
 
 /* end peer sort */
@@ -9212,7 +9201,7 @@ h3#displayevents {
   padding: 10px 10px 10px 50px;
   border: 1px solid var(--borderinner);
   box-shadow: var(--highlight);
-  background: #f2f2ff var(--log_icon) no-repeat 15px center;
+  background: #f2f2ff var(--logs) no-repeat 15px center;
   background-size: 28px;
 }
 
@@ -12867,11 +12856,11 @@ i {
   height: 16px;
   display: inline-block;
   vertical-align: middle;
-  background: url(images/in.png) no-repeat center center / 16px;
+  background: var(--in) no-repeat center center / 16px;
 }
 
 .outbound  {
-  background-image: url(images/out.png);
+  background-image: var(--out);
 }
 
 .inbound.small, .outbound.small {

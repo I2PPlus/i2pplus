@@ -313,7 +313,7 @@ public class PersistentDataStore extends TransientDataStore {
             dbFile = new File(_dbDir, filename);
             long dataPublishDate = getPublishDate(data);
             if (dbFile.lastModified() < dataPublishDate) {
-                // our filesystem is out of date, lets replace it
+                // our filesystem is out of date, let's replace it
                 fos = new SecureFileOutputStream(dbFile);
                 fos = new BufferedOutputStream(fos);
                 try {
@@ -549,6 +549,7 @@ public class PersistentDataStore extends TransientDataStore {
                     String MIN_VERSION = "0.9.48";
                     if (ri.getNetworkId() != _networkID) {
                         corrupt = true;
+                        _routerFile.delete();
                         if (_log.shouldLog(Log.ERROR))
                             _log.error("Router ["
                                        + ri.getIdentity().calculateHash().toBase64().substring(0,6)
@@ -557,6 +558,7 @@ public class PersistentDataStore extends TransientDataStore {
                         // prevent injection from reseeding
                         // this is checked in KNDF.validate() but catch it sooner and log as error.
                         corrupt = true;
+                        _routerFile.delete();
                         if (_log.shouldLog(Log.WARN))
                             _log.warn("RouterInfo [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] does not match [" +
                                       _key.toBase64().substring(0,6) + "] from " + _routerFile);
@@ -569,6 +571,8 @@ public class PersistentDataStore extends TransientDataStore {
                                ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0) {
                         // don't store unreachable or K/L tier peers & delete any existing ri files
                         corrupt = true;
+                        _facade.store(ri.getIdentity().getHash(), ri, false);
+                        _routerFile.delete();
                         if (_log.shouldLog(Log.INFO)) {
                             if (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 || ri.getAddresses().isEmpty())
                                 _log.info("Not writing RouterInfo [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] to disk -> unreachable");
@@ -578,10 +582,14 @@ public class PersistentDataStore extends TransientDataStore {
                     } else if (VersionComparator.comp(v, MIN_VERSION) < 0) {
                         // don't store routerinfos for routers older than 0.9.48
                         corrupt = true;
+                        _facade.store(ri.getIdentity().getHash(), ri, false);
+                        _routerFile.delete();
                         if (_log.shouldLog(Log.INFO))
                             _log.info("Not writing RouterInfo [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] to disk -> older than 0.9.48");
                     } else if (getContext().blocklist().isBlocklisted(ri)) {
                         corrupt = true;
+                        _facade.store(ri.getIdentity().getHash(), ri, false);
+                        _routerFile.delete();
                         if (_log.shouldLog(Log.WARN))
                             _log.warn(ri.getHash() + " is blocklisted");
                     } else {
@@ -593,24 +601,28 @@ public class PersistentDataStore extends TransientDataStore {
                             // so add it here.
                             getContext().profileManager().heardAbout(ri.getIdentity().getHash(), ri.getPublished());
                         } catch (IllegalArgumentException iae) {
+                            corrupt = true;
+                            _routerFile.delete();
                             if (_log.shouldLog(Log.INFO))
                                 _log.info("Rejected locally loaded RouterInfo [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "]\n* " + iae.getMessage());
-                            corrupt = true;
                         }
                     }
                 } catch (DataFormatException dfe) {
+                    corrupt = true;
+                    _routerFile.delete();
                     if (_log.shouldLog(Log.INFO))
                         _log.info("Error reading the RouterInfo from " + _routerFile.getName() + "\n* " + dfe.getMessage());
-                    corrupt = true;
                 } catch (IOException ioe) {
+                    corrupt = true;
+                    _routerFile.delete();
                     if (_log.shouldLog(Log.INFO))
                         _log.info("Unable to read the router reference in " + _routerFile.getName() + "\n* " + ioe.getMessage());
-                    corrupt = true;
                 } catch (RuntimeException e) {
                     // key certificate problems, etc., don't let one bad RI kill the whole thing
+                    corrupt = true;
+                    _routerFile.delete();
                     if (_log.shouldLog(Log.INFO))
                         _log.info("Unable to read the router reference in " + _routerFile.getName() + "\n* " + e.getMessage());
-                    corrupt = true;
                 } finally {
                     if (fis != null) try { fis.close(); } catch (IOException ioe) {}
                 }

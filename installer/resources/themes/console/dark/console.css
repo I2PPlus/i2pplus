@@ -7179,7 +7179,7 @@ p#enablefullstats, p#gatherstats {
 
 form[action="events"] {
   padding: 10px 10px 10px 50px;
-  background: #000 var(--log_icon) no-repeat 12px center;
+  background: #000 var(--logs) no-repeat 12px center;
   background-size: 28px;
 }
 
@@ -11075,63 +11075,63 @@ h1::first-letter {
 }
 
 h1 {
-  background: var(--netwrk) no-repeat 10px center, var(--h1) !important;
+  background: var(--h1_network) no-repeat 10px center, var(--h1) !important;
 }
 
 h1.home {
-  background: var(--home) no-repeat 10px center, var(--h1) !important;
+  background: var(--h1_home) no-repeat 10px center, var(--h1) !important;
 }
 
 h1.perf {
-  background: var(--perf) no-repeat 10px center, var(--h1) !important;
+  background: var(--h1_perf) no-repeat 10px center, var(--h1) !important;
 }
 
 h1.nfo {
-  background: var(--nfo) no-repeat 10px center, var(--h1) !important;
+  background: var(--h1_info) no-repeat 10px center, var(--h1) !important;
 }
 
 h1.hlp {
-  background: var(--header_help) no-repeat 10px center, var(--h1) !important;
+  background: var(--h1_help) no-repeat 10px center, var(--h1) !important;
 }
 
 h1.addbook {
-  background: var(--addbook) no-repeat 10px center, var(--h1) !important;
+  background: var(--h1_addbook) no-repeat 10px center, var(--h1) !important;
 }
 
 h1.snark {
-  background: var(--app_snark) no-repeat 10px center, var(--h1) !important;
+  background: var(--h1_snark) no-repeat 10px center, var(--h1) !important;
 }
 
 h1.mail {
-  background: var(--app_mail) no-repeat 10px center, var(--h1) !important;
+  background: var(--h1_mail) no-repeat 10px center, var(--h1) !important;
 }
 
 h1.conf {
-  background: var(--cog) no-repeat 10px center, var(--h1) !important;
+  background: var(--h1_config) no-repeat 10px center, var(--h1) !important;
 }
 
 h1.debug {
-  background: var(--debug) no-repeat 10px center, var(--h1) !important;
+  background: var(--h1_debug) no-repeat 10px center, var(--h1) !important;
 }
 
 h1.err {
-  background: var(--error) no-repeat 10px center, var(--h1) !important;
+  background: var(--h1_error) no-repeat 10px center, var(--h1) !important;
 }
 
 h1.sched {
-  background: var(--tasks) no-repeat 10px center, var(--h1) !important;
+  background: var(--h1_tasks) no-repeat 10px center, var(--h1) !important;
 }
 
 h1.log {
-  background: var(--logs) no-repeat 10px center, var(--h1) !important;
+  background: var(--h1_logs) no-repeat 10px center, var(--h1) !important;
 }
 
 h1.webapp {
-  background: var(--webapp) no-repeat 10px center, var(--h1) !important;
+  background: var(--h1_webapp) no-repeat 10px center, var(--h1) !important;
 }
 
 h1.newspage {
-  background: var(--h1news) no-repeat 10px center, var(--h1) !important;
+  background: var(--h1_news) no-repeat 10px center, var(--h1) !important;
 }
 
 h1[class], h1 {

@@ -123,7 +123,7 @@ public class NavHelper {
             } else if (name.equals("i2pbote")) {
                 buf.append("<img src=\"/themes/console/light/images/mail_black.png\"");
             } else {
-                buf.append("<img src=\"/themes/console/images/plugin.png\"");
+                buf.append("<img src=\"/themes/console/images/svg/plugin.svg\"");
             }
             buf.append(" height=\"16\" width=\"16\" alt=\"\" hidden>");
     }

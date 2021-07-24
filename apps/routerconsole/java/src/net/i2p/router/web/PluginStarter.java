@@ -439,7 +439,7 @@ public class PluginStarter implements Runnable {
                 NavHelper.setBinary(appName, decoded);
                 iconfile = "/Plugins/pluginicon?plugin=" + appName;
             } else {
-                iconfile = "/themes/console/images/plugin.png";
+                iconfile = "/themes/console/images/svg/plugin.svg";
             }
         }
 
@@ -475,7 +475,7 @@ public class PluginStarter implements Runnable {
                         String enabled = wprops.getProperty(RouterConsoleRunner.PREFIX + warName + ENABLED);
                         if (! "false".equals(enabled)) {
                             if (log.shouldLog(Log.INFO))
-                                log.info("Starting webapp: " + warName);
+                                log.info("Starting webapp: " + warName + "...");
                             String path = files[i].getCanonicalPath();
                             WebAppStarter.startWebApp(ctx, server, warName, path);
                             pluginWars.get(appName).add(warName);

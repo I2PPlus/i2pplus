@@ -321,7 +321,7 @@ h2, h3 {
 /* title images */
 
 #messages h2 {
-  background: var(--log_icon) no-repeat 5px center / 20px, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
+  background: var(--logs) no-repeat 5px center / 20px, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
 }
 
 #globalTunnelControl h2 {

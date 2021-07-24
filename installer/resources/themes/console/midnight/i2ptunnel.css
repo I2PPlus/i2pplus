@@ -270,7 +270,7 @@ h2::first-letter {
 }
 
 #messages h2 {
-  background: var(--log_icon) no-repeat 8px center, var(--title) !important;
+  background: var(--logs) no-repeat 8px center, var(--title) !important;
   background-size: 16px, 4px 100%, 100% !important;
 }
 
