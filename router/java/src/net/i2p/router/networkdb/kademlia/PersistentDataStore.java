@@ -549,19 +549,19 @@ public class PersistentDataStore extends TransientDataStore {
                     String MIN_VERSION = "0.9.48";
                     if (ri.getNetworkId() != _networkID) {
                         corrupt = true;
-                        _routerFile.delete();
                         if (_log.shouldLog(Log.ERROR))
                             _log.error("Router ["
                                        + ri.getIdentity().calculateHash().toBase64().substring(0,6)
                                        + "] is from a different network");
+                        _routerFile.delete();
                     } else if (!ri.getIdentity().calculateHash().equals(_key)) {
                         // prevent injection from reseeding
                         // this is checked in KNDF.validate() but catch it sooner and log as error.
                         corrupt = true;
-                        _routerFile.delete();
                         if (_log.shouldLog(Log.WARN))
                             _log.warn("RouterInfo [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] does not match [" +
                                       _key.toBase64().substring(0,6) + "] from " + _routerFile);
+                        _routerFile.delete();
                     } else if (ri.getPublished() <= _knownDate) {
                         // Don't store but don't delete
                         if (_log.shouldLog(Log.WARN))
@@ -571,27 +571,24 @@ public class PersistentDataStore extends TransientDataStore {
                                ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0) {
                         // don't store unreachable or K/L tier peers & delete any existing ri files
                         corrupt = true;
-                        _facade.store(ri.getIdentity().getHash(), ri, false);
-                        _routerFile.delete();
                         if (_log.shouldLog(Log.INFO)) {
                             if (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 || ri.getAddresses().isEmpty())
                                 _log.info("Not writing RouterInfo [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] to disk -> unreachable");
                             else
                                 _log.info("Not writing RouterInfo [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] to disk -> K or L tier");
+                        _routerFile.delete();
                         }
                     } else if (VersionComparator.comp(v, MIN_VERSION) < 0) {
                         // don't store routerinfos for routers older than 0.9.48
                         corrupt = true;
-                        _facade.store(ri.getIdentity().getHash(), ri, false);
-                        _routerFile.delete();
                         if (_log.shouldLog(Log.INFO))
                             _log.info("Not writing RouterInfo [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] to disk -> older than 0.9.48");
+                        _routerFile.delete();
                     } else if (getContext().blocklist().isBlocklisted(ri)) {
                         corrupt = true;
-                        _facade.store(ri.getIdentity().getHash(), ri, false);
-                        _routerFile.delete();
                         if (_log.shouldLog(Log.WARN))
                             _log.warn(ri.getHash() + " is blocklisted");
+                        _routerFile.delete();
                     } else {
                         try {
                             // persist = false so we don't write what we just read
