@@ -795,7 +795,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             _kb.remove(key);
             if (_log.shouldInfo())
 //                _log.info("Not searching for negative cached RouterInfo [" + key.toBase64().substring(0,6) + "]");
-                _log.info("Deleting RouterInfo [" + key.toBase64().substring(0,6) + "] - lookup failed");
+                _log.info("Deleting RouterInfo [" + key.toBase64().substring(0,6) + "] -> lookup failed");
                 _context.jobQueue().addJob(onFailedLookupJob);
         } else if (isNegativeCached(key)) {
             _ds.remove(key);
