@@ -4010,21 +4010,25 @@ h3[id="udpcon"] {
   height: 14px;
   vertical-align: middle;
   text-align: center;
-  filter: hue-rotate(60deg);
-}
-
-.sortupactive, .sortdownactive {
-  box-shadow: inset 2px 2px 1px #000;
-  opacity: 1;
 }
 
 .sortup {
-  background: url(images/sort_up.svg) no-repeat center center, linear-gradient(to bottom, #004, #000);
+  background: var(--mv_up) no-repeat center center / 16px 14px, linear-gradient(to bottom, #004, #000);
+}
+
+.sortdown {
+  background: var(--mv_down) no-repeat center center / 16px 14px, linear-gradient(to bottom, #004, #000);
 }
 
 .sortup:hover {
   border: 1px solid #652787;
-  background: url(images/sort_up.svg) no-repeat center center, linear-gradient(to bottom, #000, #004);
+  background: var(--mv_up_hover) no-repeat center center, linear-gradient(to bottom, #000, #004);
+  opacity: 1;
+}
+
+.sortdown:hover {
+  border: 1px solid #652787;
+  background: var(--mv_down_hover) no-repeat center center, linear-gradient(to bottom, #000, #004);
   opacity: 1;
 }
 
@@ -4037,23 +4041,18 @@ h3[id="udpcon"] {
   background: rgba(237, 207, 255, .2);
 }
 
-.sortupactive {
-  background: url(images/sort_up.png) no-repeat center center, #005;
-}
-
-.sortdown {
-  background: url(images/sort_down.svg) no-repeat center center, linear-gradient(to bottom, #004, #000);
-}
-
-.sortdown:hover {
-  border: 1px solid #652787;
-  background: url(images/sort_down.svg) no-repeat center center, linear-gradient(to bottom, #000, #004);
+.sortupactive, .sortdownactive {
+  border: 1px solid #005;
+  box-shadow: inset 2px 2px 1px #000;
   opacity: 1;
 }
 
+.sortupactive {
+  background: var(--mv_up_hover) no-repeat center center, #005;
+}
+
 .sortdownactive {
-  border: 1px solid #005;
-  background: url(images/sort_svg.png) no-repeat center center, #005;
+  background: var(--mv_down_hover) no-repeat center center, #005;
 }
 
 /* end peer sort */
