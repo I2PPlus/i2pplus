@@ -8540,15 +8540,6 @@ p.sybilinfo.experimental {
   background: #001 var(--keys) no-repeat 12px center / 28px !important;
 }
 
-#oldhome td:first-child {
-  padding: 15px 15px 15px 50px;
-  background: #001 var(--home) no-repeat 12px center / 28px !important;
-}
-
-#oldhome input[type=checkbox], #enablefullstats input[type=checkbox] {
-  vertical-align: sub;
-}
-
 #floodfillconfig tr:first-child .infohelp {
   padding: 15px 15px 15px 50px;
   background: #000 var(--floodfill) no-repeat 12px center / 28px !important;
@@ -8645,7 +8636,7 @@ p#enablefullstats, p#gatherstats {
 
 #events form[action="events"] {
   padding: 10px 10px 10px 50px;
-  background: #001 var(--log_icon) no-repeat 12px center / 28px;
+  background: #001 var(--logs) no-repeat 12px center / 28px;
 }
 
 #events form[action="events"] > * {
@@ -12449,7 +12440,7 @@ a:hover .sitemapLink {
 }
 
 #help_changelog {
-  background: var(--log_icon) no-repeat 15px center, var(--helpsection);
+  background: var(--logs) no-repeat 15px center, var(--helpsection);
   background-size: 32px, 100% 4px;
 }
 
@@ -12906,59 +12897,59 @@ p#gatherstats {
 /* h1 icons */
 
 h1 {
-  background: var(--netwrk) no-repeat 10px center, var(--th) !important;
+  background: var(--h1_network) no-repeat 10px center, var(--th) !important;
 }
 
 h1.home {
-  background: var(--home) no-repeat 10px center, var(--th) !important;
+  background: var(--h1_home) no-repeat 10px center, var(--th) !important;
 }
 
 h1.perf {
-  background: var(--perf) no-repeat 10px center, var(--th) !important;
+  background: var(--h1_perf) no-repeat 10px center, var(--th) !important;
 }
 
 h1.nfo, h1.newspage {
-  background: var(--info) no-repeat 10px center, var(--th) !important;
+  background: var(--h1_info) no-repeat 10px center, var(--th) !important;
 }
 
 h1.hlp {
-  background: var(--header_help) no-repeat 10px center, var(--th) !important;
+  background: var(--h1_help) no-repeat 10px center, var(--th) !important;
 }
 
 h1.addbook {
-  background: var(--addbook) no-repeat 10px center, var(--th) !important;
+  background: var(--h1_addbook) no-repeat 10px center, var(--th) !important;
 }
 
 h1.snark {
-  background: var(--app_snark) no-repeat 10px center, var(--th) !important;
+  background: var(--h1_snark) no-repeat 10px center, var(--th) !important;
 }
 
 h1.mail {
-  background: var(--app_mail) no-repeat 10px center, var(--th) !important;
+  background: var(--h1_mail) no-repeat 10px center, var(--th) !important;
 }
 
 h1.conf {
-  background: var(--cog) no-repeat 10px center, var(--th) !important;
+  background: var(--h1_config) no-repeat 10px center, var(--th) !important;
 }
 
 h1.adv {
-  background: var(--info) no-repeat 10px center, var(--th) !important;
+  background: var(--h1_info) no-repeat 10px center, var(--th) !important;
 }
 
 h1.err {
-  background: var(--error) no-repeat 10px center, var(--th) !important;
+  background: var(--h1_error) no-repeat 10px center, var(--th) !important;
 }
 
 h1.sched {
-  background: var(--tasks) no-repeat 10px center, var(--th) !important;
+  background: var(--h1_tasks) no-repeat 10px center, var(--th) !important;
 }
 
 h1.log {
-  background: var(--logs) no-repeat 10px center, var(--th) !important;
+  background: var(--h1_logs) no-repeat 10px center, var(--th) !important;
 }
 
 h1.webapp {
-  background: var(--webapp) no-repeat 10px center, var(--th) !important;
+  background: var(--h1_webapp) no-repeat 10px center, var(--th) !important;
 }
 
 h1[class], h1 {

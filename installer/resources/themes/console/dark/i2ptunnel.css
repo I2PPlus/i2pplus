@@ -256,7 +256,7 @@ h2 span {
 
 #messages h2 {
   margin-top: 12px;
-  background: var(--log_icon) no-repeat left 8px center, var(--h2) !important;
+  background: var(--logs) no-repeat left 8px center, var(--h2) !important;
   background-size: 20px auto, 4px 100%, 100% !important;
 }
 

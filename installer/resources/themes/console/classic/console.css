@@ -3392,59 +3392,59 @@ h1 {
 /* h1 icons */
 
 h1 {
-  background-image: var(--netwrk);
+  background-image: var(--h1_network);
 }
 
 h1.home {
-  background-image: var(--home);
+  background-image: var(--h1_home);
 }
 
 h1.perf {
-  background-image: var(--perf);
+  background-image: var(--h1_perf);
 }
 
 h1.nfo, h1.newspage {
-  background-image: var(--info);
+  background-image: var(--h1_info);
 }
 
 h1.hlp {
-  background-image: var(--header_help);
+  background-image: var(--h1_help);
 }
 
 h1.addbook {
-  background-image: var(--addbook);
+  background-image: var(--h1_addbook);
 }
 
 h1.snark {
-  background-image: var(--app_snark);
+  background-image: var(--h1_snark);
 }
 
 h1.mail {
-  background-image: var(--app_mail);
+  background-image: var(--h1_mail);
 }
 
 h1.conf, #wizardpage h1 {
-  background-image: var(--cog);
+  background-image: var(--h1_config);
 }
 
 h1.adv {
-  background-image: var(--info);
+  background-image: var(--h1_info);
 }
 
 h1.err {
-  background-image: var(--error);
+  background-image: var(--h1_error);
 }
 
 h1.sched {
-  background-image: var(--tasks);
+  background-image: var(--h1_tasks);
 }
 
 h1.log {
-  background-image: var(--logs);
+  background-image: var(--h1_logs);
 }
 
 h1.webapp {
-  background-image: var(--webapp);
+  background-image: var(--h1_webapp);
 }
 
 h1[class], h1 {
@@ -6428,7 +6428,7 @@ p#fullhistory {
   margin-top: -11px;
   padding: 10px 10px 10px 50px;
   border: 1px solid #aaafce;
-  background: #fff var(--log_icon) no-repeat 12px center / 28px;
+  background: #fff var(--logs) no-repeat 12px center / 28px;
 }
 
 .eventspanel select {
