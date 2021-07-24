@@ -1943,7 +1943,7 @@ select:hover, select:focus {
 
 select:hover, select:focus, select:active {
   box-shadow: var(--highlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
-  background: #000 var(--drodown_hover) no-repeat right 10px center !important;
+  background: #000 var(--dropdown_hover) no-repeat right 10px center !important;
   background-size: 10px auto, 100% 100% !important;
 }
 
