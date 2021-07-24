@@ -3776,8 +3776,12 @@ public class I2PSnarkServlet extends BasicServlet {
         if (parent)  // always true
             buf.append("<div class=\"page\" id=\"dirlist\">\n");
         // for stop/start/check
+/*
         final boolean er = isTopLevel && snark != null && _manager.util().ratingsEnabled();
         final boolean ec = isTopLevel && snark != null && _manager.util().commentsEnabled(); // global setting
+*/
+        final boolean er = snark != null && _manager.util().ratingsEnabled();
+        final boolean ec = snark != null && _manager.util().commentsEnabled(); // global setting
         final boolean esc = ec && _manager.getSavedCommentsEnabled(snark); // per-torrent setting
         final boolean includeForm = showStopStart || showPriority || er || ec;
         if (includeForm) {
@@ -4178,7 +4182,6 @@ public class I2PSnarkServlet extends BasicServlet {
             // shouldn't happen
             buf.append("<table class=\"resourceError\" id=\"NotFound\"><tr><th colspan=\"2\">")
                .append(_t("Resource Not found"))
-//               .append("</th></tr><tr><td><b>").append(_t("Resource")).append(":</b></td><td>").append(r.toString())
                .append("</th></tr><tr><td><b>").append(_t("Torrent")).append(":</b></td><td>").append(DataHelper.escapeHTML(torrentName))
                .append("</td></tr><tr><td><b>").append(_t("Base")).append(":</b></td><td>").append(base)
                .append("</td></tr>\n");
@@ -4247,8 +4250,6 @@ public class I2PSnarkServlet extends BasicServlet {
                 if (comments != null && !comments.isEmpty())
                     buf.append(" checked");
                 buf.append(">\n<label id=\"tab_comments\" class=\"toggleview\" for=\"toggle_comments\"><span class=\"tab_label\">");
-//                buf.append(toThemeImg("comment"));
-//                buf.append(' ');
                 buf.append(_t("Comments &amp; Ratings"));
                 buf.append("</span></label><hr>\n");
                 displayComments(snark, er, ec, esc, buf);
@@ -4618,8 +4619,6 @@ public class I2PSnarkServlet extends BasicServlet {
                 if (comments != null && !comments.isEmpty())
                     buf.append(" checked");
                 buf.append(">\n<label id=\"tab_comments\" class=\"toggleview\" for=\"toggle_comments\"><span class=\"tab_label\">");
-//                buf.append(toThemeImg("comment"));
-//                buf.append(' ');
                 buf.append(_t("Comments"));
             buf.append("</span></label><hr>\n");
             displayComments(snark, er, ec, esc, buf);
