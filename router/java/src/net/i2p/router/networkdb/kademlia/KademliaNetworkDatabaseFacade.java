@@ -772,6 +772,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (ri != null) {
             if (onFindJob != null)
                 _context.jobQueue().addJob(onFindJob);
+/*
             String v = ri.getVersion();
             String MIN_VERSION = "0.9.48";
             boolean uninteresting = ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
@@ -779,27 +780,29 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                                 ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0;
             if (uninteresting || VersionComparator.comp(v, MIN_VERSION) < 0) {
                 _ds.remove(key);
+                _kb.remove(key);
                 if (_log.shouldInfo())
                     _log.info("Deleting uninteresting RouterInfo [" + key.toBase64().substring(0,6) + "] from disk");
             }
+*/
         } else if (_context.banlist().isBanlistedForever(key)) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Not searching for blocklisted RouterInfo [" + key.toBase64().substring(0,6) + "]");
-//                _log.warn("Deleting blocklisted RouterInfo [" + key.toBase64().substring(0,6) + "]");
+//                _log.warn("Not searching for blocklisted RouterInfo [" + key.toBase64().substring(0,6) + "]");
+                _log.warn("Deleting blocklisted RouterInfo [" + key.toBase64().substring(0,6) + "]");
             if (onFailedLookupJob != null)
                 _context.jobQueue().addJob(onFailedLookupJob);
-//            _ds.remove(key);
-//            _kb.remove(key);
+            _ds.remove(key);
+            _kb.remove(key);
             if (_log.shouldInfo())
-                _log.info("Not searching for negative cached RouterInfo [" + key.toBase64().substring(0,6) + "]");
-//                _log.info("Deleting RouterInfo [" + key.toBase64().substring(0,6) + "] - lookup failed");
-//                _context.jobQueue().addJob(onFailedLookupJob);
+//                _log.info("Not searching for negative cached RouterInfo [" + key.toBase64().substring(0,6) + "]");
+                _log.info("Deleting RouterInfo [" + key.toBase64().substring(0,6) + "] - lookup failed");
+                _context.jobQueue().addJob(onFailedLookupJob);
         } else if (isNegativeCached(key)) {
-//            _ds.remove(key);
-//            _kb.remove(key);
+            _ds.remove(key);
+            _kb.remove(key);
             if (_log.shouldLog(Log.INFO))
-                _log.info("Not searching for negative cached RouterInfo [" + key.toBase64().substring(0,6) + "]");
-//                _log.info("Deleting RouterInfo [" + key.toBase64().substring(0,6) + "] - negative cached");
+//                _log.info("Not searching for negative cached RouterInfo [" + key.toBase64().substring(0,6) + "]");
+                _log.info("Deleting negative cached RouterInfo [" + key.toBase64().substring(0,6) + "]");
             if (onFailedLookupJob != null)
                 _context.jobQueue().addJob(onFailedLookupJob);
         } else {
