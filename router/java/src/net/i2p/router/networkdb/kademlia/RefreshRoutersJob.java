@@ -172,11 +172,11 @@ class RefreshRoutersJob extends JobImpl {
         if (refresh == null) {
             if (getContext().jobQueue().getMaxLag() > 150 || getContext().throttle().getMessageDelay() > 750)
                 randomDelay = randomDelay * (rand.nextInt(3) + 1);
-            else if (netDbCount < 3000)
+            else if (netDbCount < 2000)
                 randomDelay = randomDelay - (rand.nextInt(2000));
-            else if (netDbCount < 5000)
+            else if (netDbCount < 3000)
                 randomDelay = randomDelay - (rand.nextInt(1250) + rand.nextInt(1250));
-            else if (netDbCount < 7000)
+            else if (netDbCount < 5000)
                 randomDelay = randomDelay - (rand.nextInt(750) / (rand.nextInt(3) + 1));
             else
                 randomDelay = randomDelay - ((rand.nextInt(750) / (rand.nextInt(3) + 1)) * rand.nextInt(6) + 1);

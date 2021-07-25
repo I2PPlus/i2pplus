@@ -17,6 +17,8 @@
   --select_hover: linear-gradient(to bottom, #f60 50%, #f40 50%);
   --btn: linear-gradient(to bottom, #989, #878);
   --btn_hover: linear-gradient(to bottom, #767, #989);
+  --btnAction: linear-gradient(to bottom, #582858, #737 50%, #101 50%, #080008);
+  --btnAction_hover: linear-gradient(to bottom, #656, #858 50%, #212 50%, #080008, #000);
 }
 
 html, body {
@@ -712,50 +714,6 @@ th.snarkTorrentUploaded a img {
   text-align: center;
   width: 1%;
   white-space: nowrap;
-}
-
-.snarkTorrentAction input[type="image"] {
-  margin: 2px 1px 0 !important;
-  padding: 5px !important;
-  display: inline-block;
-  max-height: 11px;
-  vertical-align: middle;
-  border: 1px solid #000 !important;
-  border-radius: 2px !important;
-  box-shadow: inset 0 0 0 1px #414, inset 0 0 2px 0 #717;
-  background: linear-gradient(to bottom, #582858, #737 50%, #101 50%, #080008);
-  opacity: .8;
-  cursor: pointer;
-  will-change: transform;
-}
-
-.snarkTorrentAction input[type="image"]:hover, .snarkTorrentAction input[type="image"]:focus {
-  opacity: 1;
-  box-shadow: inset 0 0 0 1px rgba(255,102,0, .6);
-  background: linear-gradient(to bottom, #656, #858 50%, #212 50%, #080008, #000);
-  filter: none;
-  transition: ease box-shadow .1s;
-}
-
-.snarkTorrentAction input[type="image"]:active {
-  box-shadow: 0 0 0 1px #414, inset 0 0 0 1px rgba(255,102,0, .6), inset 4px 4px 4px rgba(0,0,0,.9);
-  transform: scale(0.9);
-  transition: ease transform .05s;
-}
-
-th.snarkTorrentAction input[type="image"] {
-  margin-top: 2px !important;
-}
-
-.iframed th.snarkTorrentAction input[type="image"] {
-  margin-bottom: 1px !important;
-}
-
-@supports not (-moz-appearance: none) {
-  th.snarkTorrentAction input[type="image"] {
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-  }
 }
 
 .snarkTorrents tfoot {
@@ -1879,7 +1837,7 @@ input.r {
   background: var(--tile);
 }
 
-input[type=image], thead img {
+thead img {
   margin: 0 2px;
   padding: 0 !important;
   max-height: 22px;
@@ -1888,12 +1846,6 @@ input[type=image], thead img {
   background: none;
   outline: none;
   opacity: .8;
-}
-
-input[type=image]:hover, input[type=image]:focus {
-  border: 1px solid #f60;
-  filter: drop-shadow(0 0 1px #f60);
-  opacity: 1;
 }
 
 a img {
@@ -3672,12 +3624,6 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
 
   .snarkTorrentUploaded {
     padding-left: 8px;
-  }
-
-  .snarkTorrentAction input[type=image] {
-    padding: 6px !important;
-    height: 12px !important;
-    max-height: 12px !important;
   }
 
   .snarkTorrentAction {
@@ -6243,3 +6189,118 @@ body:not(.iframed) .mainsection .snarkComments {
   background-position: 100%;
   animation: linear initializing 5s alternate infinite;
 }
+
+/* action buttons */
+
+.snarkTorrentAction input[type=submit] {
+  margin: 0 2px;
+  padding: 12px !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  float: none !important;
+  vertical-align: middle;
+  font-size: 0 !important;
+  border: 1px solid #000 !important;
+  border-radius: 2px !important;
+  box-shadow: inset 0 0 0 1px #414, inset 0 0 2px 0 #717;
+  background-position: center center !important;
+  opacity: .85;
+  cursor: pointer;
+  will-change: transform;
+}
+
+td.snarkTorrentAction input[type=submit] {
+  margin-top: 1px;
+}
+
+#actionStopAll, #actionStartAll {
+  padding: 11px 19px !important;
+}
+
+.actionStart {
+  background: var(--start) no-repeat center center / 14px, var(--btnAction) !important;
+}
+
+.actionStop {
+  background: var(--stop) no-repeat center center / 14px, var(--btnAction) !important;
+}
+
+.actionRemove {
+  background: var(--remove) no-repeat center center / 14px, var(--btnAction) !important;
+}
+
+.actionDelete {
+  background: var(--delete) no-repeat center center / 14px, var(--btnAction) !important;
+}
+
+#actionStartAll {
+  background: var(--startall) no-repeat center center / auto 14px, var(--btnAction) !important;
+}
+
+#actionStopAll {
+  background: var(--stopall) no-repeat center center / auto 14px, var(--btnAction) !important;
+}
+
+.snarkTorrentAction input:hover, .snarkTorrentAction input:focus {
+  border: 1px solid #f60;
+  box-shadow: inset 0 0 0 1px rgba(255,102,0, .6);
+  opacity: 1;
+  filter: drop-shadow(0 0 1px #f60);
+  transition: ease box-shadow .1s;
+  background-blend-mode: normal;
+}
+
+.actionStart:hover, .actionStart:focus {
+  background: var(--start) no-repeat center center / 14px, var(--btnAction_hover) !important;
+}
+
+.actionStop:hover, .actionStop:focus {
+  background: var(--stop) no-repeat center center / 14px, var(--btnAction_hover) !important;
+}
+
+.actionRemove:hover, .actionRemove:focus {
+  background: var(--remove) no-repeat center center / 14px, var(--btnAction_hover) !important;
+}
+
+.actionDelete:hover, .actionDelete:focus {
+  background: var(--delete) no-repeat center center / 14px, var(--btnAction_hover) !important;
+}
+
+#actionStartAll:hover, #actionStartAll:focus {
+  background: var(--startall) no-repeat center center / auto 14px, var(--btnAction_hover) !important;
+}
+
+#actionStopAll:hover, #actionStopAll:focus {
+  background: var(--stopall) no-repeat center center / auto 14px, var(--btnAction_hover) !important;
+}
+
+.snarkTorrentAction input:active {
+  box-shadow: 0 0 0 1px #414, inset 0 0 0 1px rgba(255,102,0, .6), inset 4px 4px 4px rgba(0,0,0,.9);
+  transform: scale(0.9);
+  transition: ease transform .05s;
+  filter: none !important;
+}
+
+@media screen and (max-width: 1199px) {
+  .snarkTorrentAction input[type=submit] {
+    padding: 10px !important;
+    background-size: 12px !important;
+  }
+
+  #actionStopAll, #actionStartAll {
+    padding: 10px 17px !important;
+  }
+}
+
+@media screen and (max-width: 1499px) {
+  .snarkTorrentAction input[type=submit] {
+    padding: 11px !important;
+    background-size: 13px !important;
+  }
+
+  #actionStopAll, #actionStartAll {
+    padding: 11px 18px !important;
+  }
+}
+
+/* end action buttons */
