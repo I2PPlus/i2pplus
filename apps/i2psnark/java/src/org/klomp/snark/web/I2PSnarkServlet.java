@@ -785,9 +785,8 @@ public class I2PSnarkServlet extends BasicServlet {
                     break;
                 }
             }
-        if (isDownloading) {
-            if (showSort) {
-//                sort = ("-8".equals(currentSort)) ? "8" : "-8";
+            if (isDownloading) {
+                if (showSort) {
                     out.write("<span class=\"sortIcon\">");
                     if (currentSort == null || "8".equals(currentSort)) {
                         sort = "-8";
@@ -801,62 +800,48 @@ public class I2PSnarkServlet extends BasicServlet {
                     }
                 out.write("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
                 out.write("\">");
-            }
-            // Translators: Please keep short or translate as " "
-            tx = _t("RX Rate");
-            out.write(toThemeImg("head_rxspeed", tx, showSort ? _t("Sort by {0}", _t("Down Rate")) : _t("Down Rate")));
-            if (showSort)
-                out.write("</a></span>");
-        }
-     }
-        out.write("<th class=\"snarkTorrentUploaded\" align=\"right\">");
-        boolean isRatSort = false;
-        // FIXME Method not working, icon permanently hidden
-//        if (!snarks.isEmpty()) {
-//            boolean hasUploaded = false;
-//            int end = Math.min(start + pageSize, snarks.size());
-//            for (int i = start; i < end; i++) {
-//                long uploaded = stats[1];
-//                if (uploaded > 0) {
-//                    hasUploaded = true;
-//                    break;
-//                }
-//            if (hasUploaded) {
-                // cycle through sort by uploaded or ratio
-                boolean nextRatSort = false;
-                if (showSort) {
-                    out.write("<span class=\"sortIcon\">");
-                    if ("-7".equals(currentSort)) {
-                        sort = "7";
-                        out.write("<span class=\"descending\"></span>");
-                    } else if ("7".equals(currentSort)) {
-                        sort = "-11";
-                        nextRatSort = true;
-                        out.write("<span class=\"ascending\"></span>");
-                    } else if ("-11".equals(currentSort)) {
-                        sort = "11";
-                        nextRatSort = true;
-                        isRatSort = true;
-                        out.write("<span class=\"descending\"></span>");
-                    } else if ("11".equals(currentSort)) {
-                        sort = "-7";
-                        isRatSort = true;
-                        out.write("<span class=\"ascending\"></span>");
-                    } else {
-                        sort = "-7";
-                    }
-                    out.write("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
-                    out.write("\">");
                 }
                 // Translators: Please keep short or translate as " "
-                tx = _t("TX");
-                out.write(toThemeImg("head_tx", tx, showSort ? _t("Sort by {0}", (nextRatSort ? _t("Upload ratio") : _t("Uploaded"))) : _t("Uploaded")));
+                tx = _t("RX Rate");
+                out.write(toThemeImg("head_rxspeed", tx, showSort ? _t("Sort by {0}", _t("Down Rate")) : _t("Down Rate")));
                 if (showSort)
                     out.write("</a></span>");
-//                }
-//            }
-            out.write("</th>\n");
-//        }
+            }
+        }
+        out.write("<th class=\"snarkTorrentUploaded\" align=\"right\">");
+        boolean isRatSort = false;
+        // cycle through sort by uploaded or ratio
+        boolean nextRatSort = false;
+        if (showSort) {
+            out.write("<span class=\"sortIcon\">");
+            if ("-7".equals(currentSort)) {
+                sort = "7";
+                out.write("<span class=\"descending\"></span>");
+            } else if ("7".equals(currentSort)) {
+                sort = "-11";
+                nextRatSort = true;
+                out.write("<span class=\"ascending\"></span>");
+            } else if ("-11".equals(currentSort)) {
+                sort = "11";
+                nextRatSort = true;
+                isRatSort = true;
+                out.write("<span class=\"descending\"></span>");
+            } else if ("11".equals(currentSort)) {
+                sort = "-7";
+                isRatSort = true;
+                out.write("<span class=\"ascending\"></span>");
+            } else {
+                sort = "-7";
+            }
+            out.write("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
+            out.write("\">");
+        }
+        // Translators: Please keep short or translate as " "
+        tx = _t("TX");
+        out.write(toThemeImg("head_tx", tx, showSort ? _t("Sort by {0}", (nextRatSort ? _t("Upload ratio") : _t("Uploaded"))) : _t("Uploaded")));
+        if (showSort)
+            out.write("</a></span>");
+        out.write("</th>\n");
         out.write("<th class=\"snarkTorrentRateUp\" align=\"right\">");
         // FIXME only show icon when total up rate > 0 or no choked peers
         if (_manager.util().connected() && !snarks.isEmpty()) {
@@ -868,9 +853,8 @@ public class I2PSnarkServlet extends BasicServlet {
                     break;
                 }
             }
-        if (isUploading) {
-            if (showSort) {
-//                sort = ("-9".equals(currentSort)) ? "9" : "-9";
+            if (isUploading) {
+                if (showSort) {
                     out.write("<span class=\"sortIcon\">");
                     if (currentSort == null || "9".equals(currentSort)) {
                         sort = "-9";
@@ -882,61 +866,34 @@ public class I2PSnarkServlet extends BasicServlet {
                     } else {
                         sort = "-9";
                     }
-                out.write("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
-                out.write("\">");
+                    out.write("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
+                    out.write("\">");
+                }
+                // Translators: Please keep short or translate as " "
+                tx = _t("TX Rate");
+                out.write(toThemeImg("head_txspeed", tx, showSort ? _t("Sort by {0}", _t("Up Rate")) : _t("Up Rate")));
+                if (showSort)
+                    out.write("</a></span>");
             }
-            // Translators: Please keep short or translate as " "
-            tx = _t("TX Rate");
-            out.write(toThemeImg("head_txspeed", tx, showSort ? _t("Sort by {0}", _t("Up Rate")) : _t("Up Rate")));
-        if (showSort)
-            out.write("</a></span>");
         }
-     }
         out.write("</th>\n");
         out.write("<th class=\"snarkTorrentAction\" align=\"center\">");
         if (_manager.isStopping()) {
             out.write("");
         } else if (_manager.util().connected()) {
-            if (isDegraded)
-                out.write("<a href=\"" + _contextPath + "/?action=StopAll&amp;nonce=" + _nonce + "\"><img title=\"");
-            else {
-                // http://www.onenaught.com/posts/382/firefox-4-change-input-type-image-only-submits-x-and-y-not-name
-                //out.write("<input type=\"image\" name=\"action\" value=\"StopAll\" title=\"");
-                out.write("<input type=\"image\" name=\"action_StopAll\" value=\"foo\" title=\"");
-            }
-            out.write(_t("Stop all torrents and the I2P tunnel"));
-            out.write("\" src=\"" + _imgPath + "stop_all.svg\" alt=\"");
-            out.write(_t("Stop All"));
-            out.write("\">");
-            if (isDegraded)
-                out.write("</a>");
+            out.write("<input type=\"submit\" id=\"actionStopAll\" name=\"action_StopAll.x\"" + "\" value=\"" +
+                      _t("Stop All") + "\" title=\"" + _t("Stop all torrents and the I2P tunnel") + "\">");
             for (Snark s : snarks) {
                 if (s.isStopped()) {
                     // show startall too
-                    if (isDegraded)
-                        out.write("<a href=\"" + _contextPath + "/?action=StartAll&amp;nonce=" + _nonce + "\"><img title=\"");
-                    else
-                        out.write("<input type=\"image\" name=\"action_StartAll\" value=\"foo\" title=\"");
-                    out.write(_t("Start all stopped torrents"));
-                    out.write("\" src=\"" + _imgPath + "start_all.svg\" alt=\"");
-                    out.write(_t("Start All"));
-                    out.write("\">");
-                    if (isDegraded)
-                        out.write("</a>");
+                    out.write("<input type=\"submit\" id=\"actionStartAll\" name=\"action_StartAll.x\"" + "\" value=\"" +
+                             _t("Start All") + "\" title=\"" + _t("Start all stopped torrents") + "\">");
                     break;
                 }
             }
         } else if ((!_manager.util().isConnecting()) && !snarks.isEmpty()) {
-            if (isDegraded)
-                out.write("<a href=\"" + _contextPath + "/?action=StartAll&amp;nonce=" + _nonce + "\"><img title=\"");
-            else
-                out.write("<input type=\"image\" name=\"action_StartAll\" value=\"foo\" title=\"");
-            out.write(_t("Start all torrents and the I2P tunnel"));
-            out.write("\" src=\"" + _imgPath + "start_all.svg\" alt=\"");
-            out.write(_t("Start All"));
-            out.write("\">");
-            if (isDegraded)
-                out.write("</a>");
+            out.write("<input type=\"submit\" id=\"startAll\" name=\"action_StartAll.x\"" + "\" value=\"" +
+                      _t("Start All") + "\" title=\"" + _t("Start all torrents and the I2P tunnel") + "\">");
         } else {
             out.write("");
         }
@@ -974,172 +931,170 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("\">\n<tr>\n<th id=\"snarkTorrentTotals\" align=\"left\" colspan=\"12\"></th></tr></tfoot>");
         } else /** if (snarks.size() > 1) */ {
 
-        // Add a pagenav to bottom of table if we have 50+ torrents per page
-        // TODO: disable on pages where torrents is < 50 e.g. last page
-        if (total > 0 && (start > 0 || total > pageSize) && pageSize >= 50 && total - start >= 20) {
-            out.write("<tr id=\"pagenavbottom\"><td colspan=\"12\"><div class=\"pagenavcontrols\">");
-            writePageNav(out, req, start, pageSize, total, noThinsp);
-            out.write("</div></td></tr>\n</tbody>\n");
-        }
-        out.write("<tfoot id=\"snarkFoot\">\n<tr class=\"volatile\">\n<th id=\"snarkTorrentTotals\" align=\"left\" colspan=\"6\">");
-        out.write("<span id=\"totals\"><span class=\"canhide\">");
-        out.write(_t("Totals"));
-        out.write(":&nbsp;</span>");
-        out.write(ngettext("1 torrent", "{0} torrents", total));
-        out.write(" &bullet; ");
-        out.write(DataHelper.formatSize2(stats[5]) + "B");
-        if (_manager.util().connected() && total > 0 && stats[4] > 0) {
-            out.write(" &bullet; ");
-            out.write(ngettext("1 connected peer", "{0} connected peers", (int) stats[4])
-                      .replace("connected peers", "peer connections"));
-        }
-
-        DHT dht = _manager.util().getDHT();
-        if (dht != null) {
-            int dhts = dht.size();
-            if (dhts > 0) {
-                out.write(" &bullet; <span>");
-                out.write(ngettext("1 DHT peer", "{0} DHT peers", dhts));
-                out.write("</span>");
+            // Add a pagenav to bottom of table if we have 50+ torrents per page
+            // TODO: disable on pages where torrents is < 50 e.g. last page
+            if (total > 0 && (start > 0 || total > pageSize) && pageSize >= 50 && total - start >= 20) {
+                out.write("<tr id=\"pagenavbottom\"><td colspan=\"12\"><div class=\"pagenavcontrols\">");
+                writePageNav(out, req, start, pageSize, total, noThinsp);
+                out.write("</div></td></tr>\n</tbody>\n");
             }
-        }
+            out.write("<tfoot id=\"snarkFoot\">\n<tr class=\"volatile\">\n<th id=\"snarkTorrentTotals\" align=\"left\" colspan=\"6\">");
+            out.write("<span id=\"totals\"><span class=\"canhide\">");
+            out.write(_t("Totals"));
+            out.write(":&nbsp;</span>");
+            out.write(ngettext("1 torrent", "{0} torrents", total));
+            out.write(" &bullet; ");
+            out.write(DataHelper.formatSize2(stats[5]) + "B");
+            if (_manager.util().connected() && total > 0 && stats[4] > 0) {
+                out.write(" &bullet; ");
+                out.write(ngettext("1 connected peer", "{0} connected peers", (int) stats[4])
+                   .replace("connected peers", "peer connections"));
+            }
 
-        String ibtunnels = _manager.util().getI2CPOptions().get("inbound.quantity");
-        String obtunnels = _manager.util().getI2CPOptions().get("outbound.quantity");
-        if (_manager.util().connected()) {
-            out.write("<span class=\"canhide\" title=\"");
-            out.write(_t("Configured maximum (actual usage may be less)"));
-            out.write("\"> &bullet; ");
-            out.write(_t("Tunnels"));
-            out.write(": ");
-            out.write(ibtunnels);
-            out.write(" in / ");
-            out.write(obtunnels);
-            out.write(" out</span>");
-        }
+            DHT dht = _manager.util().getDHT();
+            if (dht != null) {
+                int dhts = dht.size();
+                if (dhts > 0) {
+                    out.write(" &bullet; <span>");
+                    out.write(ngettext("1 DHT peer", "{0} DHT peers", dhts));
+                    out.write("</span>");
+                }
+            }
 
-        String IPString = _manager.util().getOurIPString();
-        if(!IPString.equals("unknown")) {
-            // Only truncate if it's an actual dest
-            out.write("&nbsp;<span id=\"ourDest\" title=\"");
-            out.write(_t("Our destination (identity) for this session"));
-            out.write("\">");
-            out.write(_t("Dest."));
-            out.write("<tt title=\"");
-            out.write(_t("Our destination (identity) for this session"));
-            out.write("\">");
-            out.write(IPString.substring(0, 4));
-            out.write("</tt></span>");
-        }
-        out.write("</span>");
-        out.write("</th>\n");
-        if (_manager.util().connected() && total > 0) {
-            out.write("<th class=\"snarkTorrentETA\" align=\"right\">");
-            // FIXME: add total ETA for all torrents here
-            // out.write("<th class=\"snarkTorrentETA\" align=\"right\" title=\"");
-            // out.write(_t("Estimated download time for all torrents") + "\">");
+            String ibtunnels = _manager.util().getI2CPOptions().get("inbound.quantity");
+            String obtunnels = _manager.util().getI2CPOptions().get("outbound.quantity");
+            if (_manager.util().connected()) {
+                out.write("<span class=\"canhide\" title=\"" + _t("Configured maximum (actual usage may be less)") +
+                          "\"> &bullet; " + _t("Tunnels") + ": ");
+                out.write(ibtunnels);
+                out.write(" in / ");
+                out.write(obtunnels);
+                out.write(" out</span>");
+            }
 
-            if (_manager.util().connected() && !snarks.isEmpty()) {
-                boolean hasPeers = false;
-                long remainingSeconds = 0;
-                long totalETA = 0;
+            String IPString = _manager.util().getOurIPString();
+            if (!IPString.equals("unknown")) {
+                // Only truncate if it's an actual dest
+                out.write("&nbsp;<span id=\"ourDest\" title=\"");
+                out.write(_t("Our destination (identity) for this session"));
+                out.write("\">");
+                out.write(_t("Dest."));
+                out.write("<tt title=\"");
+                out.write(_t("Our destination (identity) for this session"));
+                out.write("\">");
+                out.write(IPString.substring(0, 4));
+                out.write("</tt></span>");
+            }
+            out.write("</span>");
+            out.write("</th>\n");
+            if (_manager.util().connected() && total > 0) {
+                out.write("<th class=\"snarkTorrentETA\" align=\"right\">");
+                // FIXME: add total ETA for all torrents here
+                // out.write("<th class=\"snarkTorrentETA\" align=\"right\" title=\"");
+                // out.write(_t("Estimated download time for all torrents") + "\">");
+
+                if (_manager.util().connected() && !snarks.isEmpty()) {
+                    boolean hasPeers = false;
+                    long remainingSeconds = 0;
+                    long totalETA = 0;
+                    int end = Math.min(start + pageSize, snarks.size());
+                    for (int i = start; i < end; i++) {
+                        long needed = snarks.get(i).getNeededLength();
+                        if (needed > total)
+                            needed = total;
+                            if (stats[2] > 0 && needed > 0) {
+                                remainingSeconds = needed / stats[2];
+                            } else {
+                                remainingSeconds = 0;
+                            }
+                        totalETA+= remainingSeconds;
+                        hasPeers = true;
+                        if (hasPeers) {
+                            if (totalETA > 0) {
+                                out.write("<span title=\"");
+                                out.write(_t("Estimated download time for all torrents") + "\">");
+                                out.write(DataHelper.formatDuration2(Math.max(totalETA, 10) * 1000));
+                                out.write("</span>");
+                            }
+                        }
+                        break;
+                    }
+                }
+                out.write("</th>\n");
+                out.write("<th class=\"snarkTorrentDownloaded\" align=\"right\" title=\"");
+                out.write(_t("Data downloaded this session") + "\">");
+                if (stats[0] > 0) {
+                    out.write(formatSize(stats[0]).replaceAll("iB", ""));
+                }
+                out.write("</th>\n");
+                out.write("<th class=\"snarkTorrentRateDown\" title=\"");
+                out.write(_t("Total download speed") + "\">");
+                if (stats[2] > 0) {
+                    out.write(formatSize(stats[2]).replaceAll("iB", "") + "ps");
+                }
+                out.write("</th>\n");
+                out.write("<th class=\"snarkTorrentUploaded\" align=\"right\"  title=\"");
+                out.write(_t("Total data uploaded (for listed torrents)") + "\">");
+                if (stats[1] > 0) {
+                    out.write(formatSize(stats[1]).replaceAll("iB", ""));
+                }
+                out.write("</th>\n");
+                out.write("<th class=\"snarkTorrentRateUp\" align=\"right\" title=\"");
+                out.write(_t("Total upload speed") + "\">");
+                boolean isUploading = false;
                 int end = Math.min(start + pageSize, snarks.size());
                 for (int i = start; i < end; i++) {
-                    long needed = snarks.get(i).getNeededLength();
-                    if (needed > total)
-                        needed = total;
-                        if (stats[2] > 0 && needed > 0) {
-                            remainingSeconds = needed / stats[2];
-                        } else {
-                            remainingSeconds = 0;
-                        }
-                    totalETA+= remainingSeconds;
-                    hasPeers = true;
-                    if (hasPeers) {
-                        if (totalETA > 0) {
-                            out.write("<span title=\"");
-                            out.write(_t("Estimated download time for all torrents") + "\">");
-                            out.write(DataHelper.formatDuration2(Math.max(totalETA, 10) * 1000));
-                            out.write("</span>");
-                        }
+                    if ((snarks.get(i).getPeerCount() > 0) && (snarks.get(i).getUploadRate() > 0)) {
+                        isUploading = true;
+                        break;
                     }
-                    break;
                 }
-            }
-            out.write("</th>\n");
-            out.write("<th class=\"snarkTorrentDownloaded\" align=\"right\" title=\"");
-            out.write(_t("Data downloaded this session") + "\">");
-            if (stats[0] > 0) {
-                out.write(formatSize(stats[0]).replaceAll("iB", ""));
-            }
-            out.write("</th>\n");
-            out.write("<th class=\"snarkTorrentRateDown\" title=\"");
-            out.write(_t("Total download speed") + "\">");
-            if (stats[2] > 0) {
-                out.write(formatSize(stats[2]).replaceAll("iB", "") + "ps");
-            }
-            out.write("</th>\n");
-            out.write("<th class=\"snarkTorrentUploaded\" align=\"right\"  title=\"");
-            out.write(_t("Total data uploaded (for listed torrents)") + "\">");
-            if (stats[1] > 0) {
-                out.write(formatSize(stats[1]).replaceAll("iB", ""));
-            }
-            out.write("</th>\n");
-            out.write("<th class=\"snarkTorrentRateUp\" align=\"right\" title=\"");
-            out.write(_t("Total upload speed") + "\">");
-            boolean isUploading = false;
-            int end = Math.min(start + pageSize, snarks.size());
-            for (int i = start; i < end; i++) {
-                if ((snarks.get(i).getPeerCount() > 0) && (snarks.get(i).getUploadRate() > 0)) {
-                    isUploading = true;
-                    break;
+                if (stats[3] > 0 && isUploading) {
+                    out.write(formatSize(stats[3]).replaceAll("iB", "") + "ps");
                 }
-            }
-            if (stats[3] > 0 && isUploading) {
-                out.write(formatSize(stats[3]).replaceAll("iB", "") + "ps");
-            }
-            out.write("</th>\n");
-            out.write("<th class=\"snarkTorrentAction\">");
-            if (dht != null && (!"2".equals(peerParam))) {
-                out.write("<a id=\"debugMode\" href=\"?p=2\" title=\"");
-                out.write(_t("Enable Debug Mode") + "\">");
-                out.write(_t("Debug Mode") + "</a>");
-            } else if (dht != null) {
-                out.write("<a id=\"debugMode\" href=\"?p\" title=\"");
-                out.write(_t("Disable Debug Mode") + "\">");
-                out.write(_t("Normal Mode") + "</a>");
-            }
-            out.write("</th>");
-            } else {
-                out.write("<th colspan=\"6\"></th>");
-            }
-            out.write("\n</tr>\n");
-
-            if (showDebug) {
-                out.write("<tr id=\"dhtDebug\">\n");
-                out.write("<th colspan=\"12\">\n<span class=\"volatile\">");
-                if (dht != null) {
-                    out.write(dht.renderStatusHTML());
+                out.write("</th>\n");
+                out.write("<th class=\"snarkTorrentAction\">");
+                if (dht != null && (!"2".equals(peerParam))) {
+                    out.write("<a id=\"debugMode\" href=\"?p=2\" title=\"");
+                    out.write(_t("Enable Debug Mode") + "\">");
+                    out.write(_t("Debug Mode") + "</a>");
+                } else if (dht != null) {
+                    out.write("<a id=\"debugMode\" href=\"?p\" title=\"");
+                    out.write(_t("Disable Debug Mode") + "\">");
+                    out.write(_t("Normal Mode") + "</a>");
+                }
+                out.write("</th>");
                 } else {
-                    out.write("<b>");
-                    out.write(_t("No DHT Peers"));
-                    out.write("</b>");
+                    out.write("<th colspan=\"6\"></th>");
                 }
-                out.write("\n</span>\n</th>\n</tr>\n");
+                out.write("\n</tr>\n");
+
+                if (showDebug) {
+                    out.write("<tr id=\"dhtDebug\">\n");
+                    out.write("<th colspan=\"12\">\n<span class=\"volatile\">");
+                    if (dht != null) {
+                        out.write(dht.renderStatusHTML());
+                    } else {
+                        out.write("<b>");
+                        out.write(_t("No DHT Peers"));
+                        out.write("</b>");
+                    }
+                    out.write("\n</span>\n</th>\n</tr>\n");
+                }
+                out.write("</tfoot>\n");
             }
-            out.write("</tfoot>\n");
-        }
 
-        out.write("</table>\n");
-        if (isForm)
-            out.write("</form>\n");
+            out.write("</table>\n");
+            if (isForm)
+                out.write("</form>\n");
 
-        // load torrentDisplay script here to ensure table has loaded into dom
-        if (_contextName.equals(DEFAULT_NAME) && showStatusFilter) {
-            out.write("<script src=\"" + _contextPath + WARBASE + "js/torrentDisplay.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\" async></script>\n");
-            //out.write("<script src=\"/themes/torrentDisplay.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\" async></script>\n"); // debugging
-        }
-        return start == 0;
+            // load torrentDisplay script here to ensure table has loaded into dom
+            if (_contextName.equals(DEFAULT_NAME) && showStatusFilter) {
+                out.write("<script src=\"" + _contextPath + WARBASE + "js/torrentDisplay.js?" + CoreVersion.VERSION +
+                          "\" type=\"text/javascript\" async></script>\n");
+                //out.write("<script src=\"/themes/torrentDisplay.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\" async></script>\n"); // debugging
+            }
+            return start == 0;
     }
 
     /**
@@ -1325,6 +1280,9 @@ public class I2PSnarkServlet extends BasicServlet {
                 if (key.startsWith("action_") && key.endsWith(".x")) {
                     action = key.substring(0, key.length() - 2).substring(7);
                     break;
+                } else if (key.startsWith("action_")) {
+                    action = key.substring(0, key.length()).substring(7);
+                    break;
                 }
             }
             if (action == null) {
@@ -1478,9 +1436,11 @@ public class I2PSnarkServlet extends BasicServlet {
                                     throw new IOException("Unknown error - check logs");
                             }
                         } catch (IOException ioe) {
-                            _manager.addMessageNoEscape(_t("Torrent at {0} was not valid", DataHelper.escapeHTML(newURL)) + ": " + DataHelper.stripHTML(ioe.getMessage()));
+                            _manager.addMessageNoEscape(_t("Torrent at {0} was not valid", DataHelper.escapeHTML(newURL)) + ": " +
+                                                        DataHelper.stripHTML(ioe.getMessage()));
                         } catch (OutOfMemoryError oom) {
-                            _manager.addMessageNoEscape(_t("ERROR - Out of memory, cannot create torrent from {0}", DataHelper.escapeHTML(newURL)) + ": " + DataHelper.stripHTML(oom.getMessage()));
+                            _manager.addMessageNoEscape(_t("ERROR - Out of memory, cannot create torrent from {0}",
+                            DataHelper.escapeHTML(newURL)) + ": " + DataHelper.stripHTML(oom.getMessage()));
                         } finally {
                             try { if (in != null) in.close(); } catch (IOException ioe) {}
                         }
@@ -2026,50 +1986,28 @@ public class I2PSnarkServlet extends BasicServlet {
         if (snark.isChecking()) {
             (new DecimalFormat("0.00%")).format(snark.getCheckingProgress());
             statusString = toSVG("stalled", "", _t("Checking")) + "</td>" +
-//                           "<td class=\"snarkTorrentStatus\" colspan=\"2\"><b>" + _t("Checking") + "</b>" + ' ' +
-//                           (new DecimalFormat("0.00%")).format(snark.getCheckingProgress());
-                           "<td class=\"snarkTorrentStatus\" colspan=\"2\">" +
-                           "<div class=\"percentBarOuter filecheck\" style=\"max-width: 60px; height: 8px !important;\" title=\"" +
-                           _t("Checking file integrity") + "\">" + "<div class=\"percentBarInner\" style=\"height: 8px !important; width: " +
-                           (new DecimalFormat("0%")).format(snark.getCheckingProgress()) + "\">" +
-                           "<div class=\"percentBarText\"></div></div></div>";
-                           snarkStatus = "active starting";
+                                 "<td class=\"snarkTorrentStatus\" colspan=\"2\">" +
+                                 "<div class=\"percentBarOuter filecheck\" style=\"max-width: 60px; height: 8px !important;\" title=\"" +
+                                 _t("Checking file integrity") + "\">" + "<div class=\"percentBarInner\" style=\"height: 8px !important; width: " +
+                                 (new DecimalFormat("0%")).format(snark.getCheckingProgress()) + "\">" +
+                                 "<div class=\"percentBarText\"></div></div></div>";
+            snarkStatus = "active starting";
         } else if (snark.isAllocating()) {
             statusString = toSVG("stalled", "", _t("Allocating")) + "</td>" +
                            "<td class=\"snarkTorrentStatus\"><b>" + _t("Allocating") +
                            "</b></td><td class=\"snarkTorrentPeerCount\"><b>";
-                           snarkStatus = "active starting";
+            snarkStatus = "active starting";
         } else if (err != null && isRunning && curPeers == 0) {
-        //} else if (err != null && curPeers == 0) {
-            // Also don't show if seeding... but then we won't see the not-registered error
-            //       && remaining != 0 && needed != 0) {
-            // let's only show this if we have no peers, otherwise PEX and DHT should bail us out, user doesn't care
-            //if (isRunning && curPeers > 0 && !showPeers)
-            //    statusString = "<img alt=\"\" border=\"0\" src=\"" + _imgPath + "trackererror.png\" title=\"" + err + "\"></td>" +
-            //                   "<td class=\"snarkTorrentStatus " + rowClass + "\">" + _t("Tracker Error") +
-            //                   ": <a href=\"" + uri + "?p=" + Base64.encode(snark.getInfoHash()) + "\">" +
-            //                   curPeers + thinsp(noThinsp) +
-            //                   ngettext("1 peer", "{0} peers", knownPeers) + "</a>";
-            //else if (isRunning)
-            //if (isRunning) {
-                statusString = toSVG("error", "", err) + "</td>\n" +
-                               "<td class=\"snarkTorrentStatus\"><b>" + _t("Net Error") +
-                               "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b><span class=\"right\">" +
-                               curPeers + "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span>";
-                               snarkStatus = "inactive downloading incomplete neterror";
-            //} else {
-            //    if (err.length() > MAX_DISPLAYED_ERROR_LENGTH)
-            //        err = DataHelper.escapeHTML(err.substring(0, MAX_DISPLAYED_ERROR_LENGTH)) + "&hellip;";
-            //    else
-            //        err = DataHelper.escapeHTML(err);
-            //    statusString = toSVG("trackererror", "", err) + "</td>" +
-            //                   "<td class=\"snarkTorrentStatus\">" + _t("Tracker Error");
-            //}
+            statusString = toSVG("error", "", err) + "</td>\n" +
+                                 "<td class=\"snarkTorrentStatus\"><b>" + _t("Net Error") +
+                                 "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b><span class=\"right\">" +
+                                 curPeers + "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span>";
+            snarkStatus = "inactive downloading incomplete neterror";
         } else if (snark.isStarting()) {
             statusString = toSVG("stalled", "", _t("Starting")) + "</td>\n" +
                            "<td class=\"snarkTorrentStatus\"><b class=\"alwaysShow\">" + _t("Starting") +
                            "&hellip;</b></td>\n<td class=\"snarkTorrentPeerCount\"><b>";
-                           snarkStatus = "active starting";
+            snarkStatus = "active starting";
         } else if (remaining == 0 || needed == 0) {  // < 0 means no meta size yet
             // partial complete or seeding
             if (isRunning) {
@@ -2100,12 +2038,11 @@ public class I2PSnarkServlet extends BasicServlet {
                 }
                 if (curPeers > 0 && !showPeers) {
                     statusString = toSVG(img, "", tooltip) + "</td>\n" +
-                               "<td class=\"snarkTorrentStatus\"><b>" + txt +
-                               "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b>" +
-                               "<a href=\"" +
-                               uri + getQueryString(req, b64, null, null) + "\"><span class=\"right\">" +
-                               // Hide "peer/peers" text to reduce column-resize UI glitch and clutter (status icon has full text)
-                               curPeers + "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span></a>";
+                                         "<td class=\"snarkTorrentStatus\"><b>" + txt +
+                                         "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b>" +
+                                         "<a href=\"" +
+                                         uri + getQueryString(req, b64, null, null) + "\"><span class=\"right\">" +
+                                         curPeers + "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span></a>";
                     if (upBps > 0) {
                         snarkStatus = "active seeding complete";
                     } else {
@@ -2113,9 +2050,10 @@ public class I2PSnarkServlet extends BasicServlet {
                     }
                 } else if (curPeers > 0) {
                     statusString = toSVG(img, "", tooltip) + "</td>\n" +
-                               "<td class=\"snarkTorrentStatus\"><b>" + txt +
-                               "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b><a href=\"" + uri + "\" title=\"" + _t("Hide Peers") + "\">" +
-                               "<span class=\"right\">" + curPeers + "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span></a>";
+                                         "<td class=\"snarkTorrentStatus\"><b>" + txt +
+                                         "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b><a href=\"" + uri + "\" title=\"" +
+                                         _t("Hide Peers") + "\">" + "<span class=\"right\">" + curPeers + "</span>" + thinsp(noThinsp) +
+                                         "<span class=\"left\">" + knownPeers + "</span></a>";
                     if (upBps > 0) {
                         snarkStatus = "active seeding complete";
                     } else {
@@ -2134,56 +2072,55 @@ public class I2PSnarkServlet extends BasicServlet {
                 }
             } else {
                 statusString = toSVG("complete", "", _t("Complete")) + "</td>\n" +
-                               "<td class=\"snarkTorrentStatus\"><b class=\"alwaysShow\">" +
-                               _t("Complete") + "</b></td><td class=\"snarkTorrentPeerCount\"><b>‒";
-                               snarkStatus = "inactive complete stopped zero";
+                                     "<td class=\"snarkTorrentStatus\"><b class=\"alwaysShow\">" +
+                                     _t("Complete") + "</b></td><td class=\"snarkTorrentPeerCount\"><b>‒";
+                snarkStatus = "inactive complete stopped zero";
             }
         } else {
             if (isRunning && curPeers > 0 && downBps > 0 && !showPeers) {
                 statusString = toSVG("downloading", "", _t("OK") +
-                               " (" + _t("Downloading from {0} of {1} peers in swarm", curPeers, knownPeers) + ")") + "</td>\n" +
-                               "<td class=\"snarkTorrentStatus\"><b>" + _t("OK") +
-                               "</b></td><td class=\"snarkTorrentPeerCount\"><b><a href=\"" +
-                               uri + getQueryString(req, b64, null, null) + "\"><span class=\"right\">" +
-                               curPeers + "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span></a>";
-                               snarkStatus = "active downloading incomplete";
+                                     " (" + _t("Downloading from {0} of {1} peers in swarm", curPeers, knownPeers) + ")") + "</td>\n" +
+                                     "<td class=\"snarkTorrentStatus\"><b>" + _t("OK") +
+                                     "</b></td><td class=\"snarkTorrentPeerCount\"><b><a href=\"" +
+                                     uri + getQueryString(req, b64, null, null) + "\"><span class=\"right\">" +
+                                     curPeers + "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span></a>";
+                snarkStatus = "active downloading incomplete";
             } else if (isRunning && curPeers > 0 && downBps > 0) {
                 statusString = toSVG("downloading", "", _t("OK") + ", " + ngettext("Downloading from {0} peer", "Downloading from {0} peers", curPeers)) +
-                               "</td>\n<td class=\"snarkTorrentStatus\"><b>" + _t("OK") + "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b><a href=\"" +
-                               uri + "\" title=\"" + _t("Hide Peers") + "\"><span class=\"right\">" + curPeers + "</span>" + thinsp(noThinsp) +
-                               "<span class=\"left\">" + knownPeers + "</span></a>";
-                               snarkStatus = "active downloading incomplete";
+                                     "</td>\n<td class=\"snarkTorrentStatus\"><b>" + _t("OK") + "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b><a href=\"" +
+                                     uri + "\" title=\"" + _t("Hide Peers") + "\"><span class=\"right\">" + curPeers + "</span>" + thinsp(noThinsp) +
+                                     "<span class=\"left\">" + knownPeers + "</span></a>";
+                snarkStatus = "active downloading incomplete";
             } else if (isRunning && curPeers > 0 && !showPeers) {
-                statusString = toSVG("stalled", "", _t("Stalled") + " (" + ngettext("Connected to {0} peer", "Connected to {0} peers", curPeers) + ")") + "</td>\n" +
-                               "<td class=\"snarkTorrentStatus\"><b>" + _t("Stalled") +
-                               "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b><a href=\"" +
-                               uri + getQueryString(req, b64, null, null) + "\"><span class=\"right\">" +
-                               curPeers + "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span></a>";
-                               snarkStatus = "inactive downloading incomplete";
+                statusString = toSVG("stalled", "", _t("Stalled") + " (" + ngettext("Connected to {0} peer", "Connected to {0} peers", curPeers) + ")") +
+                                     "</td>\n<td class=\"snarkTorrentStatus\"><b>" + _t("Stalled") + "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b><a href=\"" +
+                                     uri + getQueryString(req, b64, null, null) + "\"><span class=\"right\">" +
+                                     curPeers + "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span></a>";
+                snarkStatus = "inactive downloading incomplete";
             } else if (isRunning && curPeers > 0) {
                 statusString = toSVG("stalled", "", _t("Stalled") +
-                               " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")") + "</td>\n" +
-                               "<td class=\"snarkTorrentStatus\"><b>" + _t("Stalled") +
-                               "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b><a href=\"" + uri + "\" title=\"" + _t("Hide Peers") +
-                               "\"><span class=\"right\">" + curPeers + "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span></a>";
-                               snarkStatus = "inactive downloading incomplete";
+                                     " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")") + "</td>\n" +
+                                     "<td class=\"snarkTorrentStatus\"><b>" + _t("Stalled") +
+                                     "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b><a href=\"" + uri + "\" title=\"" + _t("Hide Peers") +
+                                     "\"><span class=\"right\">" + curPeers + "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span></a>";
+                snarkStatus = "inactive downloading incomplete";
             } else if (isRunning && knownPeers > 0) {
                 statusString = toSVG("nopeers", "", _t("No Peers") +
-                               " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")") + "</td>\n" +
-                               "<td class=\"snarkTorrentStatus\"><b>" + _t("No Peers") +
-                               "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b><span class=\"right\">0</span>" +
-                               thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span>";
-                               snarkStatus = "inactive downloading incomplete nopeers";
+                                     " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")") + "</td>\n" +
+                                     "<td class=\"snarkTorrentStatus\"><b>" + _t("No Peers") +
+                                     "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b><span class=\"right\">0</span>" +
+                                     thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span>";
+                snarkStatus = "inactive downloading incomplete nopeers";
             } else if (isRunning) {
                 statusString = toSVG("nopeers", "", _t("No Peers")) + "</td>\n" +
-                               "<td class=\"snarkTorrentStatus\"><b class=\"alwaysShow\">" + _t("No Peers") +
-                               "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b>‒";
-                               snarkStatus = "inactive downloading incomplete nopeers zero";
+                                     "<td class=\"snarkTorrentStatus\"><b class=\"alwaysShow\">" + _t("No Peers") +
+                                     "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b>‒";
+                snarkStatus = "inactive downloading incomplete nopeers zero";
             } else {
                 statusString = toSVG("stopped", "", _t("Stopped")) + "</td>\n" +
-                               "<td class=\"snarkTorrentStatus\"><b class=\"alwaysShow\">" + _t("Stopped") +
-                               "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b>‒";
-                               snarkStatus = "inactive incomplete stopped zero";
+                                     "<td class=\"snarkTorrentStatus\"><b class=\"alwaysShow\">" + _t("Stopped") +
+                                     "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b>‒";
+                snarkStatus = "inactive incomplete stopped zero";
             }
         }
 
@@ -2215,8 +2152,7 @@ public class I2PSnarkServlet extends BasicServlet {
             // Link to local details page - note that trailing slash on a single-file torrent
             // gets us to the details page instead of the file.
             buf.append("<span class=\"snarkFiletype\"><a class=\"linkbutton\" href=\"").append(encodedBaseName)
-               .append("/\" title=\"").append(_t("Torrent details"))
-               .append("\">");
+               .append("/\" title=\"").append(_t("Torrent details")).append("\">");
             if (comments != null && !comments.isEmpty()) {
                 buf.append("<span class=\"snarkCommented\" title=\"").append(_t("Torrent has comments")).append("\">");
                 toSVG(buf, "rateme", "", "");
@@ -2292,7 +2228,7 @@ public class I2PSnarkServlet extends BasicServlet {
             }
         out.write("</td>\n");
         out.write("<td align=\"right\" class=\"snarkTorrentRateDown\">");
-//        if (isRunning && needed > 0 && (downBps > 0 || curPeers > 0)) // we may only be uploading to peers, so hide when downrate <= 0
+        // we may only be uploading to peers, so hide when downrate <= 0
         if (isRunning && needed > 0 && downBps > 0 && curPeers > 0) {
             out.write("<span class=\"right\">");
             out.write(formatSize(downBps).replaceAll("iB", "")
@@ -2313,17 +2249,6 @@ public class I2PSnarkServlet extends BasicServlet {
                 txPercent = (new DecimalFormat("0.00")).format(ratio * 100);
             if (showRatios) {
                 if (total > 0) {
-//                    double ratio = uploaded / ((double) total);
-//                    double txPercent = ratio * 100;
-//                    out.write((new DecimalFormat("0.000")).format(ratio));
-//                    if (ratio >= 0.1 || ratio == 0) {
-//                        String txPercent = (new DecimalFormat("0")).format(ratio * 100);
-//                        out.write((new DecimalFormat("0")).format(ratio * 100));
-//                    } else if (ratio <= 0.01)
-//                        out.write((new DecimalFormat("0.00")).format(ratio * 100));
-//                    else
-//                        out.write((new DecimalFormat("0.0")).format(ratio * 100));
-//                    out.write("&nbsp;x");
                     out.write(txPercent);
                     out.write("&nbsp;%");
                 } else {
@@ -2357,7 +2282,6 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         out.write("</td>\n");
         out.write("<td align=\"right\" class=\"snarkTorrentRateUp\">");
-//        if (isRunning && isValid && (upBps > 0 || curPeers > 0))
         if (isRunning && isValid && upBps > 0 && curPeers > 0) {
             out.write("<span class=\"right\">");
             out.write(formatSize(upBps).replaceAll("iB","")
@@ -2371,72 +2295,32 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write("<td align=\"center\" class=\"snarkTorrentAction\">");
         if (snark.isChecking()) {
             // show no buttons
+            out.write("<span class=\"isChecking\"></span>");
         } else if (isRunning) {
             // Stop Button
-            if (isDegraded)
-                out.write("<a href=\"" + _contextPath + "/?action=Stop_" + b64 + "&amp;nonce=" + _nonce +
-                          getQueryString(req, "", null, null).replace("?", "&amp;") + "\"><img title=\"");
-            else
-                out.write("<input type=\"image\" name=\"action_Stop_" + b64 + "\" value=\"foo\" title=\"");
-            out.write(_t("Stop the torrent"));
-            out.write("\" src=\"" + _imgPath + "stop.svg\" alt=\"");
-            out.write(_t("Stop"));
-            out.write("\">");
-            if (isDegraded)
-                out.write("</a>");
+            out.write("<input type=\"submit\" class=\"actionStop\" name=\"action_Stop_" + b64 + "\" value=\"" +
+                      _t("Stop") + "\" title=\"" + _t("Stop the torrent") + "\">");
+
         } else if (!snark.isStarting()) {
             if (!_manager.isStopping()) {
                 // Start Button
-                // This works in Opera but it's displayed a little differently, so use noThinsp here too so all 3 icons are consistent
-                if (noThinsp)
-                    out.write("<a href=\"" + _contextPath + "/?action=Start_" + b64 + "&amp;nonce=" + _nonce +
-                              getQueryString(req, "", null, null).replace("?", "&amp;") + "\"><img title=\"");
-                else
-                    out.write("<input type=\"image\" name=\"action_Start_" + b64 + "\" value=\"foo\" title=\"");
-                out.write(_t("Start the torrent"));
-                out.write("\" src=\"" + _imgPath + "start.svg\" alt=\"");
-                out.write(_t("Start"));
-                out.write("\">");
-                if (isDegraded)
-                    out.write("</a>");
+                out.write("<input type=\"submit\" class=\"actionStart\" name=\"action_Start_" + b64 + "\" value=\"" +
+                          _t("Start") + "\" title=\"" + _t("Start the torrent") + "\">");
+
             }
             if (isValid && canWrite) {
                 // Remove Button
-                // Doesn't work with Opera so use noThinsp instead of isDegraded
-                if (noThinsp)
-                    out.write("<a href=\"" + _contextPath + "/?action=Remove_" + b64 + "&amp;nonce=" + _nonce +
-                              getQueryString(req, "", null, null).replace("?", "&amp;") + "\"><img title=\"");
-                else
-                    out.write("<input class=\"delete1\" type=\"image\" name=\"action_Remove_" + b64 + "\" value=\"foo\" title=\"");
-                out.write(_t("Remove the torrent from the active list, deleting the .torrent file"));
-//                out.write("\" onclick=\"new customAlert(); if (!confirm('");
-                out.write("\" client=\"");
-                out.write(escapeJSString(snark.getName()));
-                out.write("\" src=\"" + _imgPath + "remove.svg\" alt=\"");
-                out.write(_t("Remove"));
-                out.write("\">");
-                if (isDegraded)
-                    out.write("</a>");
+                out.write("<input type=\"submit\" class=\"actionRemove\" name=\"action_Remove_" + b64 + "\" value=\"" +
+                          _t("Remove") + "\" title=\"" + _t("Remove the torrent from the active list, deleting the .torrent file") +
+                          "\" client=\"" + escapeJSString(snark.getName()) + "\">");
             }
 
             // We can delete magnets without write privs
             if (!isValid || canWrite) {
                 // Delete Button
-                // Doesnt work with Opera so use noThinsp instead of isDegraded
-                if (noThinsp)
-                    out.write("<a href=\"" + _contextPath + "/?action=Delete_" + b64 + "&amp;nonce=" + _nonce +
-                              getQueryString(req, "", null, null).replace("?", "&amp;") + "\"><img title=\"");
-                else
-                    out.write("<input class=\"delete2\" type=\"image\" name=\"action_Delete_" + b64 + "\" value=\"foo\" title=\"");
-                out.write(_t("Delete the .torrent file and the associated data files"));
-//                out.write("\" onclick=\"new customAlert(); if(!confirm('");
-                out.write("\" client=\"");
-                out.write(escapeJSString(snark.getName()));
-                out.write("\" src=\"" + _imgPath + "delete.svg\" alt=\"");
-                out.write(_t("Delete"));
-                out.write("\">");
-                if (isDegraded)
-                    out.write("</a>");
+                out.write("<input type=\"submit\" class=\"actionDelete\" name=\"action_Delete_" + b64 + "\" value=\"" +
+                          _t("Delete") + "\" title=\"" + _t("Delete the .torrent file and the associated data files") +
+                          "\" client=\"" + escapeJSString(snark.getName()) + "\">");
             }
         }
         out.write("</td>\n</tr>\n");
