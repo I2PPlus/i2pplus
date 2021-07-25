@@ -148,16 +148,16 @@ public class IterativeSearchJob extends FloodSearchJob {
     public IterativeSearchJob(RouterContext ctx, FloodfillNetworkDatabaseFacade facade, Hash key,
                               Job onFind, Job onFailed, int timeoutMs, boolean isLease, Hash fromLocalDest) {
         super(ctx, facade, key, onFind, onFailed, timeoutMs, isLease);
-        RouterInfo ri = ctx.netDb().lookupRouterInfoLocally(key);
-        String v = ri.getVersion();
+        RouterInfo ri = _facade.lookupRouterInfoLocally(getContext().routerHash());
         String MIN_VERSION = "0.9.48";
+        String v = ri.getVersion();
         boolean uninteresting = ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
                                 ri.getAddresses().isEmpty() || ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                 ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 || VersionComparator.comp(v, MIN_VERSION) < 0;
         // these override the settings in super
         if (isLease)
             _timeoutMs = Math.min(timeoutMs * 2, MAX_SEARCH_TIME * 2);
-        else if (uninteresting || VersionComparator.comp(v, MIN_VERSION) < 0)
+        else if (uninteresting)
             _timeoutMs = Math.min(timeoutMs / 2, MAX_SEARCH_TIME / 2);
         else
             _timeoutMs = Math.min(timeoutMs, MAX_SEARCH_TIME);
