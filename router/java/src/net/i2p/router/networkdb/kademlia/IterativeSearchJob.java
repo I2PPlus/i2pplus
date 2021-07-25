@@ -36,6 +36,10 @@ import net.i2p.util.NativeBigInteger;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
+import net.i2p.router.NetworkDatabaseFacade;
+import net.i2p.router.Router;
+import net.i2p.router.peermanager.PeerProfile;
+
 /**
  * A traditional Kademlia search that continues to search
  * when the initial lookup fails, by iteratively searching the
@@ -144,9 +148,17 @@ public class IterativeSearchJob extends FloodSearchJob {
     public IterativeSearchJob(RouterContext ctx, FloodfillNetworkDatabaseFacade facade, Hash key,
                               Job onFind, Job onFailed, int timeoutMs, boolean isLease, Hash fromLocalDest) {
         super(ctx, facade, key, onFind, onFailed, timeoutMs, isLease);
+        RouterInfo ri = ctx.netDb().lookupRouterInfoLocally(key);
+        String v = ri.getVersion();
+        String MIN_VERSION = "0.9.48";
+        boolean uninteresting = ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
+                                ri.getAddresses().isEmpty() || ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
+                                ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 || VersionComparator.comp(v, MIN_VERSION) < 0;
         // these override the settings in super
         if (isLease)
-            _timeoutMs = Math.min(timeoutMs*2, MAX_SEARCH_TIME*2);
+            _timeoutMs = Math.min(timeoutMs * 2, MAX_SEARCH_TIME * 2);
+        else if (uninteresting || VersionComparator.comp(v, MIN_VERSION) < 0)
+            _timeoutMs = Math.min(timeoutMs / 2, MAX_SEARCH_TIME / 2);
         else
             _timeoutMs = Math.min(timeoutMs, MAX_SEARCH_TIME);
         _expiration = _timeoutMs + ctx.clock().now();
@@ -159,6 +171,9 @@ public class IterativeSearchJob extends FloodSearchJob {
             totalSearchLimit *= 3;
         else if (known < 2000)
             totalSearchLimit *= 2;
+        else if (uninteresting) {
+            totalSearchLimit /= 2;
+        }
         _totalSearchLimit = ctx.getProperty("netdb.searchLimit", totalSearchLimit);
         _ipSet = new MaskedIPSet(2 * (_totalSearchLimit + EXTRA_PEERS));
         _singleSearchTime = ctx.getProperty("netdb.singleSearchTime", SINGLE_SEARCH_TIME);

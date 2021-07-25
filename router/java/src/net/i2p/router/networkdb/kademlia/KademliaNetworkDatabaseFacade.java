@@ -647,7 +647,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 _context.jobQueue().addJob(onFindJob);
         } else if (isNegativeCached(key)) {
             if (_log.shouldLog(Log.INFO))
-                _log.info("Not searching for negative cached LeaseSet [" + key.toBase64().substring(0,6) + "]");
+                _log.info("Not searching for negatively cached LeaseSet [" + key.toBase64().substring(0,6) + "]");
             if (onFailedLookupJob != null)
                 _context.jobQueue().addJob(onFailedLookupJob);
         } else {
@@ -738,7 +738,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             _context.jobQueue().addJob(onFinishedJob);
         } else if (isNegativeCached(key)) {
             if (_log.shouldInfo())
-                _log.info("Not searching for negative cached destination [" + key.toBase64().substring(0,6) + "]");
+                _log.info("Not searching for negatively cached destination [" + key.toBase64().substring(0,6) + "]");
             _context.jobQueue().addJob(onFinishedJob);
         } else {
             key = _blindCache.getHash(key);
@@ -777,8 +777,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             String MIN_VERSION = "0.9.48";
             boolean uninteresting = ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
                                 ri.getAddresses().isEmpty() || ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
-                                ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0;
-            if (uninteresting || VersionComparator.comp(v, MIN_VERSION) < 0) {
+                                ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 || VersionComparator.comp(v, MIN_VERSION) < 0;
+            if (uninteresting) {
                 _ds.remove(key);
 //                _kb.remove(key);
                 if (_log.shouldInfo())
@@ -794,15 +794,15 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             _ds.remove(key);
             _kb.remove(key);
             if (_log.shouldInfo())
-//                _log.info("Not searching for negative cached RouterInfo [" + key.toBase64().substring(0,6) + "]");
+//                _log.info("Not searching for negatively cached RouterInfo [" + key.toBase64().substring(0,6) + "]");
                 _log.info("Deleting RouterInfo [" + key.toBase64().substring(0,6) + "] -> lookup failed");
                 _context.jobQueue().addJob(onFailedLookupJob);
         } else if (isNegativeCached(key)) {
             _ds.remove(key);
             _kb.remove(key);
             if (_log.shouldLog(Log.INFO))
-//                _log.info("Not searching for negative cached RouterInfo [" + key.toBase64().substring(0,6) + "]");
-                _log.info("Deleting negative cached RouterInfo [" + key.toBase64().substring(0,6) + "]");
+//                _log.info("Not searching for negatively cached RouterInfo [" + key.toBase64().substring(0,6) + "]");
+                _log.info("Deleting negatively cached RouterInfo [" + key.toBase64().substring(0,6) + "]");
             if (onFailedLookupJob != null)
                 _context.jobQueue().addJob(onFailedLookupJob);
         } else {

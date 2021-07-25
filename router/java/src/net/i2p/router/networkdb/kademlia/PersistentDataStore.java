@@ -626,7 +626,7 @@ public class PersistentDataStore extends TransientDataStore {
                 if (corrupt) {
                     _routerFile.delete();
                     if (_log.shouldLog(Log.INFO))
-                        _log.info("Removing " + _routerFile.getName() + " from disk...");
+                        _log.info("Deleted " + _routerFile.getName() + " from disk...");
                 }
         }
     }
