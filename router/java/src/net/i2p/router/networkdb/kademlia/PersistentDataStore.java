@@ -608,25 +608,25 @@ public class PersistentDataStore extends TransientDataStore {
                     corrupt = true;
                     _routerFile.delete();
                     if (_log.shouldLog(Log.INFO))
-                        _log.info("Error reading the RouterInfo from " + _routerFile.getName() + "\n* " + dfe.getMessage());
+                        _log.info("Deleted " + _routerFile.getName() + " -> File is corrupt \n* " + dfe.getMessage());
                 } catch (IOException ioe) {
                     corrupt = true;
                     _routerFile.delete();
                     if (_log.shouldLog(Log.INFO))
-                        _log.info("Unable to read the router reference in " + _routerFile.getName() + "\n* " + ioe.getMessage());
+                        _log.info("Deleted " + _routerFile.getName() + " -> Unable to read router reference \n* " + ioe.getMessage());
                 } catch (RuntimeException e) {
                     // key certificate problems, etc., don't let one bad RI kill the whole thing
                     corrupt = true;
                     _routerFile.delete();
                     if (_log.shouldLog(Log.INFO))
-                        _log.info("Unable to read the router reference in " + _routerFile.getName() + "\n* " + e.getMessage());
+                        _log.info("Deleted " + _routerFile.getName() + " -> Unable to read router reference \n* " + e.getMessage());
                 } finally {
                     if (fis != null) try { fis.close(); } catch (IOException ioe) {}
                 }
                 if (corrupt) {
                     _routerFile.delete();
-                    if (_log.shouldLog(Log.INFO))
-                        _log.info("Deleted " + _routerFile.getName() + " from disk...");
+//                    if (_log.shouldLog(Log.DEBUG))
+//                        _log.debug("Confirming " + _routerFile.getName() + " is deleted from disk...");
                 }
         }
     }
