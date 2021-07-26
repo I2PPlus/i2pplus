@@ -54,6 +54,9 @@ import org.klomp.snark.comments.CommentSet;
 import org.klomp.snark.dht.DHT;
 import org.klomp.snark.dht.KRPC;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Manage multiple snarks
  */
@@ -452,9 +455,17 @@ public class SnarkManager implements CompleteListener, ClientApp {
      * @since 0.9.14.1
      */
     public void addMessageNoEscape(String message) {
-        _messages.addMessageNoEscape(message);
+        _messages.addMessageNoEscape("<span class=\"timestamp\">" + getTime() + "</span>&nbsp; " + message);
         if (_log.shouldLog(Log.INFO))
             _log.info(message);
+    }
+
+    public String getTime() {
+        SimpleDateFormat fmt = new SimpleDateFormat("dd/MM HH:mm:ss");
+        Long now = System.currentTimeMillis();
+        fmt.setTimeZone(SystemVersion.getSystemTimeZone(_context));
+        String date = fmt.format(new Date(now));
+        return date;
     }
 
     /** newest last */
@@ -464,7 +475,7 @@ public class SnarkManager implements CompleteListener, ClientApp {
 
     /** @since 0.9 */
     public void clearMessages() {
-            _messages.clear();
+        _messages.clear();
     }
 
     /**
@@ -472,7 +483,7 @@ public class SnarkManager implements CompleteListener, ClientApp {
      *  @since 0.9.33
      */
     public void clearMessages(int id) {
-            _messages.clearThrough(id);
+        _messages.clearThrough(id);
     }
 
     /**
