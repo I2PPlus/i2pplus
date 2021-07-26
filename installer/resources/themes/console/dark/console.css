@@ -923,6 +923,7 @@ h1 + .sorry, #console_404 .sorry {
 #warning2 h3 {
   margin: -11px -20px 0;
   padding: 10px;
+  text-align: left;
   border-width: 1px;
   border-radius: 0;
   border-left: none;
