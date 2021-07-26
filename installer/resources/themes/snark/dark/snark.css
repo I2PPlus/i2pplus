@@ -28,14 +28,25 @@ body {
   background-size: 100% 4px, 175px !important;
 }
 
-/* preload top navigation mouseovers */
+/* preload mouseovers */
+
+body::before {
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: var(--snark_hover), var(--forum_hover), var(--tracker_hover), var(--search_hover),
+              var(--snark_active), var(--forum_active), var(--tracker_active), var(--search_active);
+  opacity: 0;
+  content: "";
+}
 
 body.iframed {
   margin: 1px 0 !important;
   background: transparent !important;
 }
-
-/* preload top navigation mouseovers */
 
 body, input, select, .snarkCommentInfo textarea, textarea[name="i2cpOpts"] {
   font-family: var(--bodyfont);
@@ -265,12 +276,6 @@ body, input, select, .snarkCommentInfo textarea, textarea[name="i2cpOpts"] {
 
 .snarkMessages:focus {
   box-shadow: inset 0 0 0 1px #930;
-}
-
-/* MS Edge fix */
-_:-ms-lang(x), .snarkMessages {
-  background: url(/themes/snark/ubergine/images/hat.png) no-repeat scroll right bottom, linear-gradient(to bottom, #010, #000);
-  background-size: auto 95%;
 }
 
 .snarkMessages a:link, .snarkMessages a:visited {
@@ -980,15 +985,11 @@ tr.active .snarkTorrentStatus {
   background-size: 4px 100%, 100% 4px, 100%, 175px !important;
 }
 
-_:-ms-lang(x), #setPriority, #torrentInfoControl {
-  background: url(/themes/console/dark/images/camotile2.png) repeat scroll center bottom #001100 !important;
-}
-
 .snarkDirInfo thead img {
   margin-right: 2px !important;
+  padding: 3px 2px !important;
   max-width: none;
   max-height: none;
-  padding: 3px 2px !important;
 }
 
 .snarkDirInfo .headerpriority {
@@ -997,20 +998,19 @@ _:-ms-lang(x), #setPriority, #torrentInfoControl {
 }
 
 td.subHeaderPriority, td.priority {
-  min-width: 36px !important;
-  width: 0;
-  text-align: center !important;
   padding: 0 5px 0 0 !important;
+  width: 0;
+  min-width: 36px !important;
+  text-align: center !important;
 }
 
 td.subHeaderPriority {
-  background: #020;
+  padding: 0 1px !important;
+  font-size: 7.5pt;
   font-weight: 700;
   background: url(images/snarktopnav.png) repeat-x scroll center center #110011;
   background-image: linear-gradient(to bottom, #030 0%, #020 50%, #000 51%);
   text-align: center !important;
-  padding: 0 1px !important;
-  font-size: 7.5pt;
 }
 
 .headerpriority br {
@@ -1041,9 +1041,9 @@ th.headerdownloaded {
 }
 
 td {
-  color: #ee9 !important;
   vertical-align: middle;
   font-size: 9pt;
+  color: #ee9 !important;
 }
 
 #configs td:first-child, .addtorrentsection td:first-child, .newtorrentsection td:first-child,
@@ -1135,10 +1135,10 @@ tr:not(.peerinfo) .snarkTorrentUploaded:empty::after {
 }
 
 .snarkTorrentDownloaded {
-  color: #ee9 !important;
+  text-align: center;
   white-space: nowrap;
   font-weight: 700;
-  text-align: center;
+  color: #ee9 !important;
 }
 
 .snarkTorrentUploaded {
@@ -2128,10 +2128,6 @@ img:hover {
   border-bottom: 1px solid #131;
 }
 
-_:-ms-lang(x), #trackerselect tr:last-child {
-  border-bottom: 1px solid #131;
-}
-
 #trackerselect tr:first-child td {
   background: linear-gradient(to bottom, #010, #000);
   border-bottom: 1px solid #131;
@@ -2773,32 +2769,6 @@ td#bwHelp a {
 }
 
 /* end Resource Errors */
-
-/* MS Edge fix */
-
-_:-ms-lang(x), * {
-  filter: none !important;
-}
-
-_:-ms-lang(x), input[type=radio], input[type=checkbox] {
-  filter: invert(100%) sepia(100%) hue-rotate(70deg) saturate(200%) !important; /* colorize radios and checkboxes */
-}
-
-_:-ms-lang(x), input[type=checkbox]:hover, input[type=checkbox]:focus, input[type=radio]:hover, input[type=radio]:focus {
-  box-shadow: none !important;
-  filter: invert(100%) sepia(100%) hue-rotate(70deg) saturate(200%) drop-shadow(0 0 3px #f60) !important;
-}
-
-input[type=radio][disabled]:hover, input[type=radio][disabled]:focus {
-  filter: invert(100%) sepia(100%) hue-rotate(70deg) saturate(200%) !important;
-}
-
-_:-ms-lang(x), .snarkTorrents tr:last-child {
-  border-top: 1px solid #252 !important;
-  border-bottom: 1px solid #252 !important;
-}
-
-/* end Edge fix */
 
 /* Comments Section */
 
@@ -4045,9 +4015,6 @@ input[name="nofilter_commentsName"] {
 /* end language overrides */
 
 #configs {
-  -ms-user-select: none;
-  -moz-user-select: none;
-  -webkit-user-select: none;
   user-select: none;
 }
 
@@ -5163,27 +5130,33 @@ td.snarkTorrentAction input[type=submit] {
 }
 
 .actionStart {
-  background: var(--start) no-repeat center center / 14px, var(--btnAction) !important;
+  background: var(--start) no-repeat center center / 14px, var(--btnAction),
+              var(--start_hover) no-repeat center center / 14px !important;
 }
 
 .actionStop {
-  background: var(--stop) no-repeat center center / 14px, var(--btnAction) !important;
+  background: var(--stop) no-repeat center center / 14px, var(--btnAction),
+              var(--stop_hover) no-repeat center center / 14px !important;
 }
 
 .actionRemove {
-  background: var(--remove) no-repeat center center / 14px, var(--btnAction) !important;
+  background: var(--remove) no-repeat center center / 14px, var(--btnAction),
+              var(--remove_hover) no-repeat center center / 14px !important;
 }
 
 .actionDelete {
-  background: var(--delete) no-repeat center center / 14px, var(--btnAction) !important;
+  background: var(--delete) no-repeat center center / 14px, var(--btnAction),
+              var(--delete_hover) no-repeat center center / 14px !important;
 }
 
 #actionStartAll {
-  background: var(--startall) no-repeat center center / auto 14px, var(--btnAction) !important;
+  background: var(--startall) no-repeat center center / auto 14px, var(--btnAction),
+              var(--startall_hover) no-repeat center center / auto 14px !important;
 }
 
 #actionStopAll {
-  background: var(--stopall) no-repeat center center / auto 14px, var(--btnAction) !important;
+  background: var(--stopall) no-repeat center center / auto 14px, var(--btnAction),
+              var(--stopall_hover) no-repeat center center / auto 14px !important;
 }
 
 .snarkTorrentAction input:hover, .snarkTorrentAction input:focus {
@@ -5227,7 +5200,7 @@ td.snarkTorrentAction input[type=submit] {
 @media screen and (max-width: 1199px) {
   .snarkTorrentAction input[type=submit] {
     padding: 10px !important;
-    background-size: 12px !important;
+    background-size: 12px, 100%, 12px !important;
   }
 
   #actionStopAll, #actionStartAll {
@@ -5238,7 +5211,7 @@ td.snarkTorrentAction input[type=submit] {
 @media screen and (max-width: 1499px) {
   .snarkTorrentAction input[type=submit] {
     padding: 11px !important;
-    background-size: 13px !important;
+    background-size: 13px, 100%, 13px !important;
   }
 
   #actionStopAll, #actionStartAll {
