@@ -3320,10 +3320,10 @@ b.alwaysShow {
 }
 
 .configOption::after {
-  content: "";
-  display: inline-block;
   height: 40px;
+  display: inline-block;
   vertical-align: middle;
+  content: "";
 }
 
 input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilter_dataDir"] {
@@ -4266,14 +4266,13 @@ tfoot .snarkTorrentRateDown::after, tfoot .snarkTorrentRateUp::after {
   vertical-align: middle;
   border: 1px solid transparent;
   border-radius: 2px;
-  background: url(images/config.png) no-repeat center center;
+  background: var(--config) no-repeat center center / 16px;
   content: "";
 }
 
 #configs a[href^="/config"]:hover::after, #configs a[href^="/config"]:focus::after {
   border: 1px solid #f60 !important;
-  background: #ddf url(images/config.png) no-repeat center center;
-  background: url(images/config.png) no-repeat center center, linear-gradient(to bottom, #fff 50%, #ddf 50%);
+  background: var(--config) no-repeat center center / 16px, linear-gradient(to bottom, #fff 50%, #ddf 50%);
 }
 
 #configs a[href^="/config"]:active::after {
@@ -4498,7 +4497,7 @@ body:not(.iframed) #snarkCommentSection {
 
 .snarkTorrentAction input[type=submit] {
   margin: 0 2px !important;
-  padding: 12px !important;
+  padding: 11px !important;
   min-width: 0 !important;
   min-height: 0 !important;
   float: none !important;

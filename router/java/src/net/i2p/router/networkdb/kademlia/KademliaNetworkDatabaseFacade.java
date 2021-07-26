@@ -792,27 +792,27 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 _ds.remove(key);
 //                _kb.remove(key);
                 if (_log.shouldInfo())
-                    _log.info("Deleting uninteresting RouterInfo [" + key.toBase64().substring(0,6) + "] from disk");
+                    _log.info("Deleted uninteresting RouterInfo [" + key.toBase64().substring(0,6) + "] from disk");
             }
 
         } else if (_context.banlist().isBanlistedForever(key)) {
             if (_log.shouldLog(Log.WARN))
 //                _log.warn("Not searching for blocklisted RouterInfo [" + key.toBase64().substring(0,6) + "]");
-                _log.warn("Deleting blocklisted RouterInfo [" + key.toBase64().substring(0,6) + "]");
+                _log.warn("Deleted blocklisted RouterInfo [" + key.toBase64().substring(0,6) + "]");
             if (onFailedLookupJob != null)
                 _context.jobQueue().addJob(onFailedLookupJob);
             _ds.remove(key);
             _kb.remove(key);
             if (_log.shouldInfo())
 //                _log.info("Not searching for negatively cached RouterInfo [" + key.toBase64().substring(0,6) + "]");
-                _log.info("Deleting RouterInfo [" + key.toBase64().substring(0,6) + "] -> lookup failed");
+                _log.info("Deleted RouterInfo [" + key.toBase64().substring(0,6) + "] -> lookup failed");
                 _context.jobQueue().addJob(onFailedLookupJob);
         } else if (isNegativeCached(key)) {
             _ds.remove(key);
             _kb.remove(key);
             if (_log.shouldLog(Log.INFO))
 //                _log.info("Not searching for negatively cached RouterInfo [" + key.toBase64().substring(0,6) + "]");
-                _log.info("Deleting negatively cached RouterInfo [" + key.toBase64().substring(0,6) + "]");
+                _log.info("Deleted negatively cached RouterInfo [" + key.toBase64().substring(0,6) + "]");
             if (onFailedLookupJob != null)
                 _context.jobQueue().addJob(onFailedLookupJob);
         } else {

@@ -881,18 +881,18 @@ public class I2PSnarkServlet extends BasicServlet {
         if (_manager.isStopping()) {
             out.write("");
         } else if (_manager.util().connected()) {
-            out.write("<input type=\"submit\" id=\"actionStopAll\" name=\"action_StopAll.x\"" + "\" value=\"" +
+            out.write("<input type=\"submit\" id=\"actionStopAll\" name=\"action_StopAll\"" + "\" value=\"" +
                       _t("Stop All") + "\" title=\"" + _t("Stop all torrents and the I2P tunnel") + "\">");
             for (Snark s : snarks) {
                 if (s.isStopped()) {
                     // show startall too
-                    out.write("<input type=\"submit\" id=\"actionStartAll\" name=\"action_StartAll.x\"" + "\" value=\"" +
+                    out.write("<input type=\"submit\" id=\"actionStartAll\" name=\"action_StartAll\"" + "\" value=\"" +
                              _t("Start All") + "\" title=\"" + _t("Start all stopped torrents") + "\">");
                     break;
                 }
             }
         } else if ((!_manager.util().isConnecting()) && !snarks.isEmpty()) {
-            out.write("<input type=\"submit\" id=\"startAll\" name=\"action_StartAll.x\"" + "\" value=\"" +
+            out.write("<input type=\"submit\" id=\"actionStartAll\" name=\"action_StartAll\"" + "\" value=\"" +
                       _t("Start All") + "\" title=\"" + _t("Start all torrents and the I2P tunnel") + "\">");
         } else {
             out.write("");
@@ -1277,10 +1277,7 @@ public class I2PSnarkServlet extends BasicServlet {
             Map<String, String[]> params = req.getParameterMap();
             for (Object o : params.keySet()) {
                 String key = (String) o;
-                if (key.startsWith("action_") && key.endsWith(".x")) {
-                    action = key.substring(0, key.length() - 2).substring(7);
-                    break;
-                } else if (key.startsWith("action_")) {
+                if (key.startsWith("action_")) {
                     action = key.substring(0, key.length()).substring(7);
                     break;
                 }
