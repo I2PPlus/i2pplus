@@ -5138,7 +5138,7 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
 
 .snarkTorrentAction input[type=submit] {
   margin: 0 2px;
-  padding: 12px !important;
+  padding: 11px !important;
   min-width: 0 !important;
   min-height: 0 !important;
   float: none !important;
