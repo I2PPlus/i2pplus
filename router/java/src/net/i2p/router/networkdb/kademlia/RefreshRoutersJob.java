@@ -129,7 +129,7 @@ class RefreshRoutersJob extends JobImpl {
                 boolean uninteresting = ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
                                         ri.getAddresses().isEmpty() || ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                         ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 || VersionComparator.comp(v, MIN_VERSION) < 0;
-                int rapidScan = 30*60*1000;
+                int rapidScan = 45*60*1000;
                 if (uninteresting) {
                     routerAge = rapidScan;
                 } else if (freshness == null) {
