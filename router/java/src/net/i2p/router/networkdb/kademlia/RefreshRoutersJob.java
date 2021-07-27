@@ -17,8 +17,11 @@ import net.i2p.router.CommSystemFacade.Status;
 import net.i2p.router.Job;
 import net.i2p.router.NetworkDatabaseFacade;
 
+import net.i2p.router.NetworkDatabaseFacade;
 import net.i2p.router.networkdb.kademlia.KademliaNetworkDatabaseFacade;
-
+import net.i2p.router.Router;
+import net.i2p.router.RouterContext;
+import net.i2p.util.VersionComparator;
 
 
 /**
@@ -93,10 +96,10 @@ class RefreshRoutersJob extends JobImpl {
             }
             if (_routers.isEmpty()) {
                 _routers = null;
-                if (netDbCount > 4000) {
+                if (netDbCount > 3000) {
                     RESTART_DELAY_MS *= rand.nextInt(3) + 1;
                     requeue(RESTART_DELAY_MS);
-                } else if (netDbCount > 8000) {
+                } else if (netDbCount > 6000) {
                     RESTART_DELAY_MS *= rand.nextInt(12) + 1;
                 } else {
                     requeue(RESTART_DELAY_MS);
@@ -121,7 +124,15 @@ class RefreshRoutersJob extends JobImpl {
                 long older = getContext().clock().now() - ri.getPublished();
                 String freshness = getContext().getProperty("router.refreshSkipIfYounger");
                 int routerAge = 60*60*1000;
-                if (freshness == null) {
+                String v = ri.getVersion();
+                String MIN_VERSION = "0.9.48";
+                boolean uninteresting = ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
+                                        ri.getAddresses().isEmpty() || ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
+                                        ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 || VersionComparator.comp(v, MIN_VERSION) < 0;
+                int rapidScan = 30*60*1000;
+                if (uninteresting) {
+                    routerAge = rapidScan;
+                } else if (freshness == null) {
                     if (netDbCount > 2000)
                         routerAge = 2*60*60*1000;
                     if (netDbCount > 4000)
@@ -155,9 +166,13 @@ class RefreshRoutersJob extends JobImpl {
                     break;
                 } else {
                     if (_log.shouldLog(Log.DEBUG))
-                        if ((routerAge / 60 / 60 / 1000) <= 1) {
+                        if ((routerAge / 60 / 60 / 1000) <= 1 && freshness == null && !uninteresting) {
                             _log.debug("Skipping refresh of Router [" + h.toBase64().substring(0,6) + "] - less than an hour old" +
                         "\n* Published: " + new Date(ri.getPublished()));
+                    } else if (uninteresting && (routerAge / 60 / 60 / 1000) <= 1) {
+                        _log.debug("Skipping refresh of uninteresting Router [" + h.toBase64().substring(0,6) + "] - less than " + (rapidScan / 60 / 1000) + " minutes old" +
+                        "\n* Published: " + new Date(ri.getPublished()));
+
                     } else {
                         _log.debug("Skipping refresh of Router [" + h.toBase64().substring(0,6) + "] - less than " + (routerAge / 60 / 60 / 1000) + " hours old" +
                         "\n* Published: " + new Date(ri.getPublished()));
