@@ -364,14 +364,14 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (!_context.commSystem().isDummy()) {
             Job erj = new ExpireRoutersJob(_context, this);
             String expireRI = _context.getProperty("router.expireRouterInfo");
-
             String v = ri.getVersion();
             String MIN_VERSION = "0.9.48";
+            boolean isHidden = _context.router().isHidden() || _context.getBooleanProperty("router.hiddenMode");
             boolean uninteresting = ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
                                     ri.getAddresses().isEmpty() || ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                     ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 || VersionComparator.comp(v, MIN_VERSION) < 0;
-            if (uninteresting)
-                erj.getTiming().setStartAfter(_context.clock().now() + 70*60*1000);
+            if (uninteresting && !isHidden)
+                erj.getTiming().setStartAfter(_context.clock().now() + 90*60*1000);
             else if (expireRI != null)
                 erj.getTiming().setStartAfter(_context.clock().now() + (Integer.valueOf(expireRI)*60*60*1000) + 10*60*1000);
             else if (floodfillEnabled())
@@ -783,14 +783,15 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             if (onFindJob != null)
                 _context.jobQueue().addJob(onFindJob);
 
+            boolean isHidden = _context.router().isHidden() || _context.getBooleanProperty("router.hiddenMode");
             String v = ri.getVersion();
             String MIN_VERSION = "0.9.48";
             boolean uninteresting = ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
                                     ri.getAddresses().isEmpty() || ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                     ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 || VersionComparator.comp(v, MIN_VERSION) < 0;
-            if (uninteresting) {
+            if (uninteresting && !isHidden) {
                 _ds.remove(key);
-//                _kb.remove(key);
+                _kb.remove(key);
                 if (_log.shouldInfo())
                     _log.info("Deleted uninteresting RouterInfo [" + key.toBase64().substring(0,6) + "] from disk");
             }

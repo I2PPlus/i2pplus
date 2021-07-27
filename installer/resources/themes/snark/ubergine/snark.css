@@ -3133,7 +3133,7 @@ td .commentAuthorName {
   margin: 0 0 2px;
   padding: 0;
   font-size: 14pt;
-  color: #FF7200;
+  color: #ff7200;
   text-shadow: 0 0 1px #900;
   filter: drop-shadow(0 0 1px rgba(153, 51, 0, .6));
 }
@@ -4610,10 +4610,15 @@ td.snarkTorrentStatus b::before {
   border-color: transparent #252 transparent transparent;
 }
 
-.inactive.downloading .snarkTorrentStatus b, .active.starting .snarkTorrentStatus b {
+.inactive.downloading .snarkTorrentStatus b, .active.starting .snarkTorrentStatus b,
+.active.starting.processing .snarkTorrentStatus b {
   color: #101;
   text-shadow: 0 1px 1px #dd0;
   background: #fc0;
+}
+
+.active.starting.processing .snarkTorrentStatus b {
+  background: repeating-linear-gradient(135deg, #bb0, #bb0 8px, #550 9px, #550 17px) !important;
 }
 
 .inactive.downloading .snarkTorrentStatus b::before, .active.starting .snarkTorrentStatus b::before {
@@ -6035,7 +6040,6 @@ body:not(.iframed) .mainsection .snarkComments {
   }
 
   .active.seeding.complete .snarkTorrentPeerCount b {
-    background: #fff;
     background: repeating-linear-gradient(135deg, #937, #937 8px, #826 9px, #826 17px);
   }
 
@@ -6044,7 +6048,6 @@ body:not(.iframed) .mainsection .snarkComments {
   }
 
   .active.downloading .snarkTorrentPeerCount b {
-    background: #252;
     background: repeating-linear-gradient(135deg, #252, #252 8px, #141 9px, #141 17px);
   }
 
@@ -6052,7 +6055,8 @@ body:not(.iframed) .mainsection .snarkComments {
     border-color: transparent #252 transparent transparent;
   }
 
-  .inactive.downloading .snarkTorrentPeerCount b {
+  .inactive.downloading .snarkTorrentPeerCount b,
+  .active.starting.processing .snarkTorrentPeerCount b {
     color: #101;
     background: #bb0;
   }
@@ -6061,7 +6065,8 @@ body:not(.iframed) .mainsection .snarkComments {
     text-shadow: 0 1px 1px #222 !important;
   }
 
-  .inactive.downloading .snarkTorrentPeerCount b::before {
+  .inactive.downloading .snarkTorrentPeerCount b::before,
+  .active.starting.processing .snarkTorrentPeerCount b::before {
     border-color: transparent #bb0 transparent transparent;
   }
 

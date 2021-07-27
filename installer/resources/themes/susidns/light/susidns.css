@@ -337,6 +337,7 @@ form[action="subscriptions"] #content {
   margin-left: 15px;
   margin-right: 15px;
   line-height: 130%;
+  font-size: 110%;
 }
 
 #add, div#import {
@@ -1506,6 +1507,10 @@ form[action="addressbook"] table {
     font-size: 10pt !important;
   }
 
+  #content p {
+    font-size: 112% !important;
+  }
+
   code, tt, .destaddress, th {
     font-size: 9pt !important;
   }
@@ -1557,15 +1562,6 @@ form[action="addressbook"] table {
 }
 
 /* end responsive layout */
-
-/* Edge/IE tweaks */
-
-_:-ms-lang(x), * {
-  filter: none !important;
-  text-shadow: none !important;
-}
-
-/* end Edge/IE tweaks */
 
 #helpconfig ul {
   columns: 1;
