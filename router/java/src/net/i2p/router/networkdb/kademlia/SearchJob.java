@@ -112,7 +112,8 @@ class SearchJob extends JobImpl {
         _expiration = getContext().clock().now() + timeoutMs;
         getContext().statManager().addRateData("netDb.searchCount", 1);
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Search (" + getClass().getName() + ") for [" + key.toBase64().substring(0,6) + "]", new Exception("Search enqueued by"));
+//            _log.debug("Search (" + getClass().getName() + ") for [" + key.toBase64().substring(0,6) + "]", new Exception("Search enqueued by"));
+            _log.debug("Searching for (" + getClass().getName() + ") for [" + key.toBase64().substring(0,6) + "]"); // new Exception("Search enqueued by"));
     }
 
     public void runJob() {
