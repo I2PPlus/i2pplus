@@ -1982,18 +1982,18 @@ public class I2PSnarkServlet extends BasicServlet {
         String rowClass = (row % 2 == 0 ? "snarkTorrentEven" : "snarkTorrentOdd");
         if (snark.isChecking()) {
             (new DecimalFormat("0.00%")).format(snark.getCheckingProgress());
-            statusString = toSVG("stalled", "", _t("Checking")) + "</td>" +
+            statusString = toSVG("processing", "", _t("Checking")) + "</td>" +
                                  "<td class=\"snarkTorrentStatus\" colspan=\"2\">" +
                                  "<div class=\"percentBarOuter filecheck\" style=\"max-width: 60px; height: 8px !important;\" title=\"" +
                                  _t("Checking file integrity") + "\">" + "<div class=\"percentBarInner\" style=\"height: 8px !important; width: " +
                                  (new DecimalFormat("0%")).format(snark.getCheckingProgress()) + "\">" +
                                  "<div class=\"percentBarText\"></div></div></div>";
-            snarkStatus = "active starting";
+            snarkStatus = "active starting processing";
         } else if (snark.isAllocating()) {
-            statusString = toSVG("stalled", "", _t("Allocating")) + "</td>" +
+            statusString = toSVG("processing", "", _t("Allocating")) + "</td>" +
                            "<td class=\"snarkTorrentStatus\"><b>" + _t("Allocating") +
                            "</b></td><td class=\"snarkTorrentPeerCount\"><b>";
-            snarkStatus = "active starting";
+            snarkStatus = "active starting processing";
         } else if (err != null && isRunning && curPeers == 0) {
             statusString = toSVG("error", "", err) + "</td>\n" +
                                  "<td class=\"snarkTorrentStatus\"><b>" + _t("Net Error") +
