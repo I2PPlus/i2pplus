@@ -149,7 +149,7 @@ tt, textarea, code {
 }
 
 .snarkNav:link, .snarkNav:hover, .snarkNav:focus {
-  background-size: 15px auto, 100% 100% !important;
+  background-size: 15px, 100% !important;
   background-position: 7px center, center center, center center !important;
   background-repeat: no-repeat, repeat !important;
 }
@@ -201,7 +201,7 @@ tt, textarea, code {
   box-shadow: var(--highlight), inset 3px 3px 3px 3px #3f1a04 !important;
   color: #fff !important;
   text-shadow: none;
-  background-size: 14px auto !important;
+  background-size: 14px !important;
   background-repeat: no-repeat !important;
   filter: none;
   transition: ease box-shadow .05s;
@@ -1913,7 +1913,7 @@ select:hover, select:focus {
 select:hover, select:focus, select:active {
   box-shadow: var(--highlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
   background: #000 var(--dropdown_hover) no-repeat right 10px center !important;
-  background-size: 10px auto, 100% 100% !important;
+  background-size: 10px, 100% !important;
 }
 
 select[disabled], select[disabled]:hover {
@@ -1921,7 +1921,7 @@ select[disabled], select[disabled]:hover {
   border: none;
   box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
   background: var(--dropdown) no-repeat right 10px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000) !important;
-  background-size: 10px auto, 100% 100% !important;
+  background-size: 10px, 100% !important;
   opacity: .7;
   cursor: not-allowed;
 }
@@ -3208,7 +3208,7 @@ td .commentAuthorName {
 
   .snarkNav:link, .snarkNav:hover, .snarkNav:focus, .snarkNav:link:active {
     padding-left: 24px !important;
-    background-size: 16px auto, 100% 100% !important;
+    background-size: 16px, 100% !important;
 }
 
   .snarkNav:first-child {
@@ -3293,8 +3293,8 @@ td .commentAuthorName {
   }
 
   .snarkNav:link, .snarkNav:hover, .snarkNav:focus, .snarkNav:link:active {
-    background-size: 17px auto, 100% 100% !important;
     padding-left: 26px !important;
+    background-size: 17px, 100% !important;
   }
 
   td.snarkGraphicStatus img {
@@ -3317,9 +3317,9 @@ td .commentAuthorName {
   }
 
   .snarkTorrents thead th::before {
-    content: "";
-    display: inline-block;
     min-height: 18px;
+    display: inline-block;
+    content: "";
   }
 
   .snarkTorrents thead img {
