@@ -2612,7 +2612,8 @@ public class SnarkManager implements CompleteListener, ClientApp {
             if (delay == 0)
                 delay = 30000;
             if (delay > 30000 && autostart) {
-                int id = _messages.addMessageNoEscape(_t("Adding torrents in {0}" + ".", DataHelper.formatDuration2(delay)));
+                int id = _messages.addMessageNoEscape("<span class=\"timestamp\">" + getTime() + "</span>&nbsp; " +
+                                                      _t("Adding torrents in {0}" + "&hellip;", DataHelper.formatDuration2(delay)));
                 try { Thread.sleep(delay); } catch (InterruptedException ie) {}
                 // Remove that first message
                 _messages.clearThrough(id);
