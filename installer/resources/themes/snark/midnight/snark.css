@@ -19,18 +19,18 @@ html, body {
 }
 
 body {
+  margin: 4px 2px;
   font: 9pt var(--bodyfont);
   color: #c9ceff;
   background: #000;
-  margin: 4px 2px;
 }
 
 /* preload top navigation mouseovers */
 body {
   background: repeating-linear-gradient(to bottom, rgba(0,0,24,.75) 2px, rgba(0,0,0,.7) 4px),
               url(/themes/console/midnight/images/tile.png),
-              url(images/offline.svg) no-repeat,
-              url(images/dropdown_hover.svg) no-repeat center center, #000010 !important;
+              var(--offline),
+              url(images/dropdown_hover.svg), #000010 !important;
   background-size: 100% 4px, 171px 148px, 0, 0, 0 !important;
 }
 
@@ -2518,8 +2518,7 @@ code {
   width: 40px;
   height: 40px;
   display: inline-block;
-  background: url(images/offline.svg) no-repeat center center;
-  background-size: 40px 40px;
+  background: var(--offline) no-repeat center center / 40px;
   content: "";
   animation: linear spin 5s reverse infinite;
 }
