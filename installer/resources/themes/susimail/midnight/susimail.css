@@ -602,6 +602,7 @@ input[type="file"] {
 
 input[type="file"]:hover {
   color: #652787;
+  color: #bf2295;
 }
 
 input.new_upload {
@@ -649,6 +650,7 @@ input[type=submit]:focus, input.cancel:focus,
 #settings:hover, #settings:focus, .fakebutton:hover, .fakebutton:focus,
 #expand:hover, #expand:focus, #collapse:hover, #expand:focus {
   color: #652787 !important;
+  color: #bf2295 !important;
   border: 1px solid #652787;
   box-shadow: var(--highlight), inset 0 0 2px 1px #757;
   background: #000 !important;
@@ -1287,6 +1289,7 @@ input[type=file]::file-selector-button {
 
 input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
   color: #652787;
+  color: #bf2295;
   border: 1px solid #652787;
   box-shadow: var(--highlight), inset 0 0 2px 1px #757;
   background: var(--button_hover) !important;
@@ -1403,6 +1406,10 @@ input[type=submit]:active, input.cancel:active {
   border-radius: 0;
   box-shadow: none !important;
   filter: none;
+}
+
+.topbuttons .delete + .logout {
+  display: none;
 }
 
 /* responsive layout */
@@ -1626,6 +1633,7 @@ select option:hover, select option:focus, select option:checked {
 
 select:hover, select:focus, select:active {
   color: #652787;
+  color: #bf2295;
   text-shadow: 0 1px 1px #000;
   border: 1px solid #652787 !important;
   box-shadow: var(--highlight), inset 0 0 2px 1px #757;
