@@ -1405,6 +1405,10 @@ input[type=submit]:active, input.cancel:active {
   filter: none;
 }
 
+.topbuttons .delete + .logout {
+  display: none;
+}
+
 /* responsive layout */
 
 @media screen and (max-width: 700px) {
