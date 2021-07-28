@@ -4465,11 +4465,11 @@ tfoot .snarkTorrentRateDown::after, tfoot .snarkTorrentRateUp::after {
     border-color: transparent #bbb transparent transparent;
   }
 
-  .stopped.incomplete .snarkTorrentStatus b, .inactive.error .snarkTorrentStatus b {
+  .stopped.incomplete .snarkTorrentStatus b, .inactive.neterror .snarkTorrentStatus b {
     background: #b11 !important;
   }
 
-  .stopped.incomplete .snarkTorrentStatus b::before, .inactive.error .snarkTorrentStatus b::before {
+  .stopped.incomplete .snarkTorrentStatus b::before, .inactive.neterror .snarkTorrentStatus b::before {
     border-color: transparent #b11 transparent transparent !important;
   }
 

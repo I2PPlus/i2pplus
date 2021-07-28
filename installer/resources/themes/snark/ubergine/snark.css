@@ -4642,11 +4642,17 @@ td.snarkTorrentStatus b::before {
   border-color: transparent #aaa transparent transparent;
 }
 
-.stopped.incomplete .snarkTorrentStatus b, .inactive.error .snarkTorrentStatus b {
+.stopped.incomplete .snarkTorrentStatus b, .inactive.neterror .snarkTorrentStatus b {
   background: #900 !important;
+  color: #ddd !important;
+  text-shadow: 0 1px 1px #101;
 }
 
-.stopped.incomplete .snarkTorrentStatus b::before, .inactive.error .snarkTorrentStatus b::before {
+.inactive.neterror .snarkTorrentStatus b {
+  background: repeating-linear-gradient(135deg, #900, #900 8px, #500 9px, #500 17px) !important;
+}
+
+.stopped.incomplete .snarkTorrentStatus b::before, .inactive.neterror .snarkTorrentStatus b::before {
   border-color: transparent #900 transparent transparent !important;
 }
 
@@ -6090,7 +6096,7 @@ body:not(.iframed) .mainsection .snarkComments {
     background: #900 !important;
   }
 
-  .stopped.incomplete .snarkTorrentPeerCount b::before, .inactive.error .snarkTorrentPeerCount b::before {
+  .stopped.incomplete .snarkTorrentPeerCount b::before, .inactive.neterror .snarkTorrentPeerCount b::before {
     border-color: transparent #900 transparent transparent !important;
   }
 }
