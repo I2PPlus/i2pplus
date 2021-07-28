@@ -331,7 +331,6 @@ class BuildHandler implements Runnable {
         if (_log.shouldLog(Log.INFO))
             _log.info("[MsgID " + msg.getUniqueId() + "] Handling the reply after " + rtt + "ms, delayed " + delay + "ms waiting for config" + cfg);
 
-        // TODO OTBRM
         List<Integer> order = cfg.getReplyOrder();
         int statuses[] = _buildReplyHandler.decrypt(msg, cfg, order);
         if (statuses != null) {
@@ -638,11 +637,11 @@ class BuildHandler implements Runnable {
             _currentLookups.decrementAndGet();
             getContext().statManager().addRateData("tunnel.rejectTimeout", 1);
             getContext().statManager().addRateData("tunnel.buildLookupSuccess", 0);
-            if (_log.shouldLog(Log.WARN)) {
+            if (_log.shouldInfo()) {
                 Hash from = _state.fromHash;
                 if (from == null && _state.from != null)
                     from = _state.from.calculateHash();
-                _log.warn("Next hop lookup failure " + _req
+                _log.info("Next hop lookup failure " + _req
                           + "\n* From: " + from
                           + " [MsgID " + _state.msg.getUniqueId() + "]");
             }
@@ -1034,8 +1033,9 @@ class BuildHandler implements Runnable {
             }
             replyMsg.setUniqueId(req.readReplyMessageId());
             replyMsg.setMessageExpiration(expires);
+            boolean replyGwIsUs = _context.routerHash().equals(nextPeer);
             I2NPMessage outMessage;
-            if (state.msg.getType() == ShortTunnelBuildMessage.MESSAGE_TYPE) {
+            if (!replyGwIsUs && state.msg.getType() == ShortTunnelBuildMessage.MESSAGE_TYPE && !_context.getBooleanProperty("router.disableEncryptOTBRM")) {
                 // garlic encrypt
                 outMessage = MessageWrapper.wrap(_context, replyMsg, req.readGarlicKeys());
                 if (outMessage == null) {
@@ -1050,7 +1050,7 @@ class BuildHandler implements Runnable {
             m.setMessage(outMessage);
             m.setMessageExpiration(expires);
             m.setTunnelId(new TunnelId(nextId));
-            if (_context.routerHash().equals(nextPeer)) {
+            if (replyGwIsUs) {
                 // ok, we are the gateway, so inject it
                 if (_log.shouldLog(Log.DEBUG))
                     _log.debug("We are the reply gateway for " + nextId
@@ -1291,7 +1291,7 @@ class BuildHandler implements Runnable {
             //getContext().tunnelDispatcher().remove(_cfg);
             getContext().statManager().addRateData("tunnel.rejectTimeout2", 1);
             Log log = getContext().logManager().getLog(BuildHandler.class);
-            if (log.shouldLog(Log.WARN))
+            if (log.shouldInfo())
                 log.warn("Timeout (" + NEXT_HOP_LOOKUP_TIMEOUT/1000 + "s) contacting next hop" + _cfg);
         }
     }
