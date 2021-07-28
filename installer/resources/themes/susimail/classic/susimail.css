@@ -1212,6 +1212,10 @@ div#pagenav {
   padding: 0 5px 4px;
 }
 
+.iframed #viewmail .folders {
+  padding-top: 4px;
+}
+
 .folders > * {
   vertical-align: middle;
 }
