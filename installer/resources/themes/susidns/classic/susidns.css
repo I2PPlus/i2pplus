@@ -176,7 +176,7 @@ input:focus::placeholder {
 #sbs h3 a {
   margin-right: 5px;
   float: right;
-  font-size: 80%;
+  font-size: 80% !important;
 }
 
 #ovrvw #content {
@@ -815,11 +815,15 @@ textarea[name="config"], textarea[name="content"] {
 }
 
 .headline#subscriptions h3 {
-  background: url(/themes/susidns/images/subs_24.png) no-repeat 10px center, linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
+  background: var(--subscription) no-repeat 10px center / 22px, linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
 }
 
 .headline#configure h3 {
   background: var(--config) no-repeat 10px center / 22px, linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
+}
+
+.iframed .headline#subscriptions, .iframed .headline#configure {
+  margin-top: 11px;
 }
 
 .headline h4 {

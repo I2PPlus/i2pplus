@@ -1157,7 +1157,7 @@ input.export {
 }
 
 .headline#subscriptions h3 {
-  background: url(/themes/susidns/images/subs_24.png) no-repeat 10px center, var(--title) !important;
+  background: var(--subscription) no-repeat 10px center, var(--title) !important;
   background-size: 18px, 4px 100%, 100% !important;
 }
 

@@ -242,7 +242,7 @@ h3 {
 }
 
 .headline#subscriptions h3 {
-  background: #fcfcff url(/themes/susidns/images/subs_24.png) no-repeat 6px center / 22px;
+  background: #fcfcff var(--subscription) no-repeat 6px center / 18px;
 }
 
 #subscriptions a {

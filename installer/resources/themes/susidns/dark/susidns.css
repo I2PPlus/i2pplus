@@ -1123,11 +1123,11 @@ textarea:focus {
 }
 
 .headline#subscriptions h3 {
-  background: url(/themes/susidns/images/subs_24.png) 7px 40% no-repeat,
+  background: var(--subscription) 9px center no-repeat,
               linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
               repeating-linear-gradient(to right, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px),
               linear-gradient(to bottom, #004000, #000 75%);
-  background-size: 24px, 100%, 4px 100%, 100% !important;
+  background-size: 18px, 100%, 4px 100%, 100% !important;
 }
 
 .headline#configure h3 {
