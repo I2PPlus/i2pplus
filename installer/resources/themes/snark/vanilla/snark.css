@@ -4900,6 +4900,7 @@ td.snarkTorrentAction input[type=submit] {
 
 .snarkTorrentAction input:active {
   box-shadow: var(--highlight), inset 3px 3px 3px rgba(0,0,0,.6);
+  background-blend-mode: luminosity;
   filter: none !important;
 }
 
