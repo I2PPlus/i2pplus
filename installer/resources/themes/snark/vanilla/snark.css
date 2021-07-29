@@ -1845,31 +1845,29 @@ input.reload[name="recheck"]:active {
 input.starttorrent {
   margin: 6px;
   padding: 5px 8px 5px 21px !important;
-  background: url(images/start.svg) no-repeat 8px center, linear-gradient(to bottom, #f4f2f1, #ded9d5);
-  background-size: 10px, 100% !important;
+  background: var(--start) no-repeat 8px center / 10px, linear-gradient(to bottom, #f4f2f1, #ded9d5) !important;
 }
 
 input.starttorrent:hover, input.starttorrent:focus {
-  background: url(images/start.svg) no-repeat 8px center, linear-gradient(to bottom, #fff7ef 51%, #ffe6cc 52%);
+  background: var(--start_hover) no-repeat 8px center / 10px, linear-gradient(to bottom, #fff7ef 51%, #ffe6cc 52%) !important;
 }
 
 input.starttorrent:active {
-  background: url(images/start.svg) no-repeat 8px center, linear-gradient(to bottom, #e1d8d1, #fff2e6);
+  background: var(--start) no-repeat 8px center / 10px, linear-gradient(to bottom, #e1d8d1, #fff2e6) !important;
 }
 
 input.stoptorrent {
   margin: 4px 5px;
   padding: 5px 8px 5px 22px !important;
-  background: url(images/stop.svg) no-repeat 8px center, linear-gradient(to bottom, #f4f2f1, #ded9d5);
-  background-size: 10px, 100% !important;
+  background: var(--stop) no-repeat 8px center / 10px, linear-gradient(to bottom, #f4f2f1, #ded9d5) !important;
 }
 
 input.stoptorrent:hover, input.stoptorrent:focus {
-  background: url(images/stop.svg) no-repeat 8px center, linear-gradient(to bottom, #fff7ef 51%, #ffe6cc 52%);
+  background: var(--stop_hover) no-repeat 8px center / 10px, linear-gradient(to bottom, #fff7ef 51%, #ffe6cc 52%) !important;
 }
 
 input.stoptorrent:active {
-  background: url(images/stop.svg) no-repeat 8px center, linear-gradient(to bottom, #e1d8d1, #fff2e6);
+  background: var(--stop) no-repeat 8px center / 10px, linear-gradient(to bottom, #e1d8d1, #fff2e6) !important;
 }
 
 select {
