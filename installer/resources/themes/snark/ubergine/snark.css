@@ -50,12 +50,12 @@ body::before {
  content: "";
 }
 
-input[type="image"], th img, a img {
+th img, a img {
   font-size: 0 !important;
   overflow: hidden;
 }
 
-.toggleview, .snarkConfigTitle, .snarknavbar, img, input[type="image"], label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
+.toggleview, .snarkConfigTitle, .snarknavbar, img, input, label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
   user-select: none;
 }
 
@@ -530,8 +530,7 @@ tfoot td:first-child {
 
 /* mitigate header/column resize on refresh when multiple snark tabs open */
 
-th.snarkGraphicStatus::before, td.snarkGraphicStatus img::before,
-.snarkTorrents input[type="image"]::after, .snarkTorrents input[type="image"]::after {
+th.snarkGraphicStatus::before, td.snarkGraphicStatus img::before {
   display: inline-block;
   vertical-align: middle;
   content: "";
@@ -543,26 +542,6 @@ th.snarkGraphicStatus::before {
 
 td.snarkGraphicStatus img::before {
   width: 23px;
-}
-
-th input[type="image"]::after {
-  width: 24px;
-  height: 12px;
-}
-
-td input[type="image"]::after {
-  width: 13px;
-  height: 12px;
-}
-
-@media screen and (max-width: 1000px) {
-th input[type="image"]::after {
-  width: 18px;
-}
-
-td input[type="image"]::after {
-  width: 10px;
-}
 }
 
 /* end header/column resize mitigation */
@@ -3237,8 +3216,8 @@ td.snarkGraphicStatus img {
   white-space: normal;
 }
 
-.snarkTorrentName a:not(old) {
-  max-width: 300px !important;
+.snarkTorrentName a {
+  max-width: 250px !important;
 }
 
 .snarkTorrentDownloaded {
@@ -3313,16 +3292,12 @@ td.snarkTorrentStatus, td.snarkTorrentStatus a {
   margin-top: 3px !important;
 }
 
-.snarkTorrentName a:not(old) {
-  max-width: 380px !important;
+.snarkTorrentName a {
+  max-width: 320px !important;
   display: inline-block;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.snarkTorrentAction input[type="image"] {
-  max-height: 11px !important;
 }
 
 .canhide {
@@ -3528,10 +3503,6 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
   width: 10px !important;
   height: 10px !important;
 }
-
-.snarkTorrentAction input[type="image"] {
-  padding: 5px !important;
-}
 }
 
 @media screen and (min-width: 1500px) {
@@ -3618,7 +3589,7 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
     padding-right: 12px !important;
   }
 
-  .snarkTorrentName a:not(old) {
+  .snarkTorrentName a {
     max-width: none;
   }
 
@@ -3729,6 +3700,12 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
   }
 }
 
+@media screen and (max-width: 1000px) {
+  .snarkTorrentName a {
+    max-width: 280px !important;
+  }
+}
+
 /* mini-mode */
 
 @media screen and (max-width: 900px) {
@@ -3782,7 +3759,7 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
     width: 1% !important;
     text-align: right !important;
   }
-  .snarkTorrentName a:not(old) {
+  .snarkTorrentName a {
     max-width: 360px !important;
   }
   .snarkTorrents th img, .snarkTorrents th a img {
@@ -3856,9 +3833,6 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
   }
   th a img {
     max-height: 16px !important;
-  }
-  .snarkTorrentAction input[type="image"] {
-    max-height: 10px !important;
   }
   .addtorrentsection input[type=text], .newtorrentsection input[type=text] {
     width: 65% !important;
@@ -4649,7 +4623,7 @@ td.snarkTorrentStatus b::before {
 }
 
 .inactive.neterror .snarkTorrentStatus b {
-  background: repeating-linear-gradient(135deg, #900, #900 8px, #500 9px, #500 17px) !important;
+  background: repeating-linear-gradient(135deg, #900, #900 8px, #700 9px, #700 17px) !important;
 }
 
 .stopped.incomplete .snarkTorrentStatus b::before, .inactive.neterror .snarkTorrentStatus b::before {
@@ -5021,8 +4995,8 @@ td.snarkTorrentStatus b::before {
 }
 
 td.snarkGraphicStatus img {
-  margin: -2px 2px -2px 0;
-  height: 22px;
+  margin: -2px 3px -2px 1px;
+  height: 23px;
   width: auto;
   display: inline-block;
 }
@@ -5086,8 +5060,9 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
   }
 
   td.snarkGraphicStatus img {
-    margin-left: 1px;
-    height: 19px;
+    margin-left: 4px !important;
+    height: 22px;
+    width: auto;
   }
 }
 

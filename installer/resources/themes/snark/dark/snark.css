@@ -5037,8 +5037,12 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
     border-color: transparent #aaa transparent transparent;
   }
 
-  .stopped.incomplete .snarkTorrentStatus b, .neterror .snarkTorrentStatus b {
+  .stopped.incomplete .snarkTorrentStatus b {
     background: #900 !important;
+  }
+
+  .neterror .snarkTorrentStatus b {
+    background: repeating-linear-gradient(135deg, #900, #900 8px, #700 9px, #700 17px) !important;
   }
 
   .stopped.incomplete .snarkTorrentStatus b::before, .neterror .snarkTorrentStatus b::before {
