@@ -56,7 +56,7 @@ body::before {
 
 /* mitigate header/column resize on refresh when multiple snark tabs open */
 
-th img, td img, #closelog, #expand, #shrink, input[type="image"], .pagenavcontrols img {
+th img, td img, #closelog, #expand, #shrink, .pagenavcontrols img {
   font-size: 0 !important;
   line-height: 0 !important;
   overflow: hidden;
@@ -64,7 +64,6 @@ th img, td img, #closelog, #expand, #shrink, input[type="image"], .pagenavcontro
 
 .snarkTorrents th img::before, th.snarkGraphicStatus::before, td.snarkGraphicStatus img::before,
 #closelog img::after, #closelog img::after, #expand img::after, #shrink img::after,
-.snarkTorrents input[type="image"]::after, .snarkTorrents input[type="image"]::after,
 td.snarkTrackerDetails img::before, td.snarkTorrentDetails img::before {
   display: inline-block;
   vertical-align: middle !important;
@@ -132,17 +131,6 @@ td.snarkTrackerDetails img::before, td.snarkTorrentDetails img::before {
   width: 16px;
 }
 
-th input[type="image"]::after {
-  width: 24px;
-  height: 12px;
-}
-
-td input[type="image"]::after {
-  width: 12px;
-  height: 12px;
-  vertical-align: top;
-}
-
 #closelog img::after, #expand img::after, #shrink img::after {
   height: 11px;
 }
@@ -169,12 +157,12 @@ b {
   text-shadow: none;
 }
 
-.toggleview, .snarkConfigTitle, .snarknavbar, img, input[type="image"], label, th img, .newtorrentsection,
-#closeLog, #expand, #shrink, #pagenavbottom, #configs {
+.toggleview, .snarkConfigTitle, .snarknavbar, img, input[type=submit], input[type=radio], input[type=checkbox],
+label, th img, .newtorrentsection, #closeLog, #expand, #shrink, #pagenavbottom, #configs {
   user-select: none;
 }
 
-a:focus img, input[type="image"]:focus {
+a:focus img {
   filter: drop-shadow(0 0 1px #f60) !important;
 }
 
@@ -192,8 +180,6 @@ button::-moz-focus-inner, input::-moz-focus-inner {
   font-size: 9pt !important;
   border: 1px solid #afafcf;
   border-radius: 2px;
-/*  background: repeating-linear-gradient(to right, #f2f2ff 2px, #dfe0ff 4px);
-  background-size: 4px 100%;*/
   background: #dfe0ff;
 }
 
@@ -1616,7 +1602,7 @@ a.control:active img {
 
 /* end iframed button sync */
 
-input[type=image], thead img {
+thead img {
   padding: 0 !important;
   border-radius: 0 !important;
   border: none;

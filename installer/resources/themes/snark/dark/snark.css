@@ -75,7 +75,8 @@ tt, textarea, code {
   background-size: 4px 100% !important;
 }
 
-.toggleview, .snarkConfigTitle, .snarknavbar, img, input[type=image], label, th img, .newtorrentsection, #closeLog, #pagenav {
+.toggleview, .snarkConfigTitle, .snarknavbar, img, input[type=submit], input[type=radio], input[type=checkbox],
+label, th img, .newtorrentsection, #closeLog, #pagenav {
   user-select: none;
 }
 
@@ -1757,14 +1758,14 @@ input.disabled, input.disabled:hover, input.disabled:focus, input.disabled:activ
   box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2) !important;
 }
 
-input[type=image], thead img {
+thead img {
   margin: 0 2px;
   padding: 0 !important;
   border-radius: 0;
   border: 0 none transparent !important;
 }
 
-input[type=image]:hover, a img:hover, input[type=image]:focus, a:focus img {
+a img:hover, a:focus img {
   outline: none;
   filter: saturate(200%) drop-shadow(0 0 2px #f30) !important;
 }
@@ -1842,7 +1843,7 @@ thead img, thead img:hover {
   max-height: 20px !important;
 }
 
-input[type=image], th a:link img, th a:visited img {
+th a:link img, th a:visited img {
   opacity: 1;
 }
 
@@ -4225,14 +4226,14 @@ td.snarkGraphicStatus img {
 
 /* mitigate header/column resize on refresh when multiple snark tabs open */
 
-img, input[type=image] {
+img {
   display: inline-block;
   overflow: hidden;
   font-size: 0;
 }
 
 th.snarkGraphicStatus::before, td.snarkGraphicStatus img::before, #closelog img::after,
-.snarkTorrents input[type=image]::after, .snarkTorrents input[type=image]::after, .snarkTorrents th:nth-child(3) img::after {
+.snarkTorrents th:nth-child(3) img::after {
   content: "";
   display: inline-block;
   vertical-align: middle;
@@ -4251,29 +4252,11 @@ td.snarkGraphicStatus img::before {
   height: 20px;
 }
 
-th input[type=image]::after {
-  width: 22px;
-  height: 12px;
-}
-
-td input[type=image]::after {
-  width: 11px;
-  height: 15px;
-}
-
 #closelog img::after {
   height: 11px;
 }
 
 @media screen and (max-width: 1000px) {
-  th input[type=image]::after {
-    width: 18px;
-  }
-
-  td input[type=image]::after {
-    width: 10px;
-  }
-
   #closelog img::after {
     height: 8px;
   }

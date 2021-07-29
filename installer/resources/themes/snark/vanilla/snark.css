@@ -116,7 +116,8 @@ a:active, a:visited:active, th a:active, th a:visited:active, td a:active, td a:
   color: #f00 !important;
 }
 
-.toggleview, .snarkConfigTitle, .snarknavbar, img, input, label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
+.toggleview, .snarkConfigTitle, .snarknavbar, img, input[type=submit], input[type=radio], input[type=checkbox],
+label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
   user-select: none;
 }
 
