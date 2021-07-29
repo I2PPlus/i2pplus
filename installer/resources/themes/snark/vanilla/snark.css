@@ -4827,10 +4827,6 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
   will-change: transform;
 }
 
-td.snarkTorrentAction input[type=submit] {
-  margin-top: 1px;
-}
-
 #actionStopAll, #actionStartAll {
   padding: 11px 19px !important;
 }
