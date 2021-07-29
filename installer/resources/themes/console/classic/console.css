@@ -3451,6 +3451,10 @@ h1.debug {
   background-image: var(--h1_debug);
 }
 
+h1.newspage {
+  background-image: var(--h1_news);
+}
+
 h1[class], h1 {
   padding-left: 56px;
   background-size: 38px auto !important;
