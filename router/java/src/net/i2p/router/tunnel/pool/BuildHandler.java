@@ -329,7 +329,7 @@ class BuildHandler implements Runnable {
         long requestedOn = cfg.getExpiration() - 10*60*1000;
         long rtt = _context.clock().now() - requestedOn;
         if (_log.shouldLog(Log.INFO))
-            _log.info("[MsgID " + msg.getUniqueId() + "] Handling the reply after " + rtt + "ms, delayed " + delay + "ms waiting for config" + cfg);
+            _log.info("[MsgID " + msg.getUniqueId() + "] Handling the reply after " + rtt + "ms, delayed " + delay + "ms waiting for config -> " + cfg);
 
         List<Integer> order = cfg.getReplyOrder();
         int statuses[] = _buildReplyHandler.decrypt(msg, cfg, order);

@@ -201,7 +201,7 @@ class BuildExecutor implements Runnable {
             for (int i = 0; i < expired.size(); i++) {
                 PooledTunnelCreatorConfig cfg = expired.get(i);
                 if (_log.shouldLog(Log.INFO))
-                    _log.info("Timeout waiting for tunnel build reply" + cfg);
+                    _log.info("Timeout waiting for tunnel build reply -> " + cfg);
 
                 // Iterate through peers in the tunnel, get their bandwidth tiers,
                 // record for each that a peer of the given tier expired
