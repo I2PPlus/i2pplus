@@ -4623,7 +4623,7 @@ td.snarkTorrentStatus b::before {
 }
 
 .inactive.neterror .snarkTorrentStatus b {
-  background: repeating-linear-gradient(135deg, #900, #900 8px, #500 9px, #500 17px) !important;
+  background: repeating-linear-gradient(135deg, #900, #900 8px, #700 9px, #700 17px) !important;
 }
 
 .stopped.incomplete .snarkTorrentStatus b::before, .inactive.neterror .snarkTorrentStatus b::before {
