@@ -3447,6 +3447,10 @@ h1.webapp {
   background-image: var(--h1_webapp);
 }
 
+h1.debug {
+  background-image: var(--h1_debug);
+}
+
 h1[class], h1 {
   padding-left: 56px;
   background-size: 38px auto !important;

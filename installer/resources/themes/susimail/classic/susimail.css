@@ -114,9 +114,9 @@ tr.mailbody:nth-child(n+3) {
 }
 
 p.info {
-  padding: 15px 15px 15px 45px;
+  padding: 12px 12px 12px 44px;
   color: #337;
-  background: #ffe var(--infohelp) no-repeat 8px center / 28px;
+  background: #ffe var(--infohelp) no-repeat 14px center / 22px;
 }
 
 span.coloured {
