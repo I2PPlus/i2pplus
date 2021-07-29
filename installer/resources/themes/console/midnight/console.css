@@ -12952,6 +12952,10 @@ h1.webapp {
   background: var(--h1_webapp) no-repeat 10px center, var(--th) !important;
 }
 
+h1.debug {
+  background: var(--h1_debug) no-repeat 10px center, var(--th) !important;
+}
+
 h1[class], h1 {
   padding-left: 56px;
   background-size: 38px auto, 4px 100%, 100%, 100% !important;
