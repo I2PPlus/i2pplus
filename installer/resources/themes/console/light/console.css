@@ -4266,6 +4266,10 @@ h1.webapp {
   background-image: var(--h1_webapp);
 }
 
+h1.debug {
+  background-image: var(--h1_debug);
+}
+
 h1[class], #wizardpage h1 {
   background-size: 34px auto, 4px, 100%, 100%, 100% !important;
 }
