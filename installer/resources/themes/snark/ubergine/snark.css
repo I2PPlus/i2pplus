@@ -55,7 +55,8 @@ th img, a img {
   overflow: hidden;
 }
 
-.toggleview, .snarkConfigTitle, .snarknavbar, img, input, label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
+.toggleview, .snarkConfigTitle, .snarknavbar, img, input[type=submit], input[type=radio], input[type=checkbox],
+label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
   user-select: none;
 }
 
@@ -4152,9 +4153,6 @@ span.trackerName::before {
 /* end embed mode */
 
 #configs {
-  -ms-user-select: none;
-  -moz-user-select: none;
-  -webkit-user-select: none;
   user-select: none;
 }
 

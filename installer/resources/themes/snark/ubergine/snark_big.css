@@ -23,7 +23,7 @@
   background-size: 10px 10px;
 }
 
-.snarkTorrentAction input[type="image"], .snarkTorrents thead img {
+.snarkTorrents thead img {
   min-height: 13px !important;
 }
 
@@ -179,17 +179,17 @@ a.control, input[type=submit], input.accept, th {
 }
 
 @media screen and (max-width: 800px) {
-.snarkTorrentAction input[type="image"], .snarkTorrents thead img {
-  min-height: 10px !important;
-}
+  .snarkTorrents thead img {
+    min-height: 10px !important;
+  }
 }
 
 @media screen and (max-width: 1400px) {
-.iframed .snarkTorrents td.snarkTorrentName a {
-  max-width: 400px !important;
-  display: inline-block; !important;
-  white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-}
+  .iframed .snarkTorrents td.snarkTorrentName a {
+    max-width: 400px !important;
+    display: inline-block; !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
 }

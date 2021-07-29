@@ -17,14 +17,6 @@
   padding-top: 3px !important;
 }
 
-.snarkTorrentAction input[type="image"] {
-  font-size: 0 !important;
-}
-
-th.snarkTorrentAction input[type="image"] {
-  margin-bottom: -1px;
-}
-
 .snarkAddInfo {
   font-size: 10pt !important;
 }

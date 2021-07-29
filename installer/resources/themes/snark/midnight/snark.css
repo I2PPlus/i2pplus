@@ -48,7 +48,8 @@ a, button, input {
   -webkit-text-stroke: .5px rgba(0,0,0,.4);
 }
 
-.toggleview, .snarkConfigTitle, .snarknavbar, img, input[type="image"], label, th img, .newtorrentsection, #closeLog, #expand, #shrink {
+.toggleview, .snarkConfigTitle, .snarknavbar, img, input[type=submit], input[type=radio], input[type=checkbox],
+label, th img, .newtorrentsection, #closeLog, #expand, #shrink {
   user-select: none;
 }
 
@@ -67,7 +68,6 @@ td.snarkTrackerDetails a:hover img, td.snarkTrackerDetails a:focus img {
 }
 
 th.snarkGraphicStatus::before, td.snarkGraphicStatus img::before, #closelog img::after, #expand img::after, #shrink img::after,
-.snarkTorrents input[type="image"]::after, .snarkTorrents input[type="image"]::after,
 td.snarkTrackerDetails img::before, td.snarkTorrentDetails img::before {
   content: "";
   display: inline-block;
@@ -114,16 +114,6 @@ td.snarkTorrentPeerCount {
 
 td.snarkTrackerDetails img::before, td.snarkTorrentDetails img::before {
   width: 19px;
-}
-
-th input[type="image"]::after {
-  width: 24px;
-  height: 12px;
-}
-
-td input[type="image"]::after {
-  width: 14px;
-  height: 14px;
 }
 
 #closelog img::after {
@@ -1747,18 +1737,18 @@ a.controld {
   display: none;
 }
 
-input[type=image], thead img {
+thead img {
   margin: 0 1px;
   padding: 0 !important;
   opacity: 1;
   mix-blend-mode: luminosity;
 }
 
-input[type="image"], a img {
+a img {
   filter: drop-shadow(0 0 1px #000);
 }
 
-input[type="image"]:hover, a img:hover, input[type="image"]:focus, a img:focus {
+a img:hover, a img:focus {
   filter: saturate(200%) drop-shadow(0 0 2px #652787) !important;
 }
 
@@ -1772,7 +1762,7 @@ thead a::after:hover img, thead a::after:focus img {
   filter: saturate(200%) hue-rotate(80deg) drop-shadow(0 0 2px #652787) !important;
 }
 
-thead a:active img, .snarkTorrentAction input[type="image"]:active {
+thead a:active img {
   transform: scale(0.9);
 }
 
@@ -1826,12 +1816,12 @@ thead img, thead img:hover {
 }
 
 @media screen and (min-width: 1500px) {
-thead img, thead img:hover {
-  max-height: 22px !important;
-}
+  thead img, thead img:hover {
+    max-height: 22px !important;
+  }
 }
 
-input[type=image], th a:link img, th a:visited img {
+th a:link img, th a:visited img {
   opacity: 1;
 }
 
@@ -3270,21 +3260,6 @@ a, th, thead th, tfoot th, td, select, select option, .snarkAddInfo, .snarkFileN
 
 .iframed #pagenavcontrols {
   transform: translateX(46px) !important;
-}
-
-th.snarkTorrentAction input[type="image"], td.snarkTorrentAction input[type="image"] {
-  padding: 5px 6px !important;
-}
-
-th.snarkTorrentAction input[type="image"] {
-  margin-top: 1px;
-  height: 12px;
-  width: 24px;
-}
-
-td.snarkTorrentAction input[type="image"] {
-  height: 12px;
-  width: 12px;
 }
 
 .configsectionpanel .snarkConfigTitle, .snarkNav:link {
