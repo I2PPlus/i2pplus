@@ -4836,58 +4836,66 @@ td.snarkTorrentAction input[type=submit] {
 }
 
 .actionStart {
-  background: var(--start) no-repeat center center / 14px, var(--btnAction) !important;
+  background: var(--start) no-repeat center center / 14px, var(--btnAction),
+              var(--start_hover) no-repeat center center / 14px !important;
 }
 
 .actionStop {
-  background: var(--stop) no-repeat center center / 14px, var(--btnAction) !important;
+  background: var(--stop) no-repeat center center / 14px, var(--btnAction),
+              var(--stop_hover) no-repeat center center / 14px !important;
 }
 
 .actionRemove {
-  background: var(--remove) no-repeat center center / 14px, var(--btnAction) !important;
+  background: var(--remove) no-repeat center center / 14px, var(--btnAction),
+              var(--remove_hover) no-repeat center center / 14px !important;
 }
 
 .actionDelete {
-  background: var(--delete) no-repeat center center / 14px, var(--btnAction) !important;
+  background: var(--delete) no-repeat center center / 14px, var(--btnAction),
+              var(--delete_hover) no-repeat center center / 14px !important;
 }
 
 #actionStartAll {
-  background: var(--startall) no-repeat center center / auto 14px, var(--btnAction) !important;
+  background: var(--startall) no-repeat center center / auto 14px, var(--btnAction),
+              var(--startall_hover) no-repeat center center / auto 14px !important;
 }
 
 #actionStopAll {
-  background: var(--stopall) no-repeat center center / auto 14px, var(--btnAction) !important;
+  background: var(--stopall) no-repeat center center / auto 14px, var(--btnAction),
+              var(--stopall_hover) no-repeat center center / auto 14px !important;
 }
 
 .snarkTorrentAction input:hover, .snarkTorrentAction input:focus {
   border-color: #39332d;
   box-shadow: inset 0 0 0 1px rgba(223,0,103,.7);
   background: linear-gradient(to bottom, #ffeadf 51%, #cfb6a8 52%);
+  background-blend-mode: normal;
+  opacity: 1;
   transition: ease box-shadow .05s;
 }
 
 .actionStart:hover, .actionStart:focus {
-  background: var(--start) no-repeat center center / 14px, var(--btnAction_hover) !important;
+  background: var(--start_hover) no-repeat center center / 14px, var(--btnAction_hover) !important;
 }
 
 .actionStop:hover, .actionStop:focus {
-  background: var(--stop) no-repeat center center / 14px, var(--btnAction_hover) !important;
+  background: var(--stop_hover) no-repeat center center / 14px, var(--btnAction_hover) !important;
 }
 
 .actionRemove:hover, .actionRemove:focus {
-  background: var(--remove) no-repeat center center / 14px, var(--btnAction_hover) !important;
+  background: var(--remove_hover) no-repeat center center / 14px, var(--btnAction_hover) !important;
 }
 
 .actionDelete:hover, .actionDelete:focus {
-  background: var(--delete) no-repeat center center / 14px, var(--btnAction_hover) !important;
+  background: var(--delete_hover) no-repeat center center / 14px, var(--btnAction_hover) !important;
 }
 
 #actionStartAll:hover, #actionStartAll:focus {
-  background: var(--startall) no-repeat center center / auto 14px, var(--btnAction_hover) !important;
+  background: var(--startall_hover) no-repeat center center / auto 14px, var(--btnAction_hover) !important;
 }
 
 #actionStopAll:hover, #actionStopAll:focus {
-  background: var(--stopall) no-repeat center center / auto 14px, var(--btnAction_hover) !important;
+  background: var(--stopall_hover) no-repeat center center / auto 14px, var(--btnAction_hover) !important;
 }
 
 .snarkTorrentAction input:active {
@@ -4922,7 +4930,7 @@ td.snarkTorrentAction input[type=submit] {
 @media screen and (max-width: 1199px) {
   .snarkTorrentAction input[type=submit] {
     padding: 10px !important;
-    background-size: 12px !important;
+    background-size: 12px, 100%, 12px !important;
   }
 
   #actionStopAll, #actionStartAll {
@@ -4933,7 +4941,7 @@ td.snarkTorrentAction input[type=submit] {
 @media screen and (max-width: 1499px) {
   .snarkTorrentAction input[type=submit] {
     padding: 11px !important;
-    background-size: 13px !important;
+    background-size: 13px, 100%, 13px !important;
   }
 
   #actionStopAll, #actionStartAll {
