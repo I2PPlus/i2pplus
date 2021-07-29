@@ -4270,14 +4270,18 @@ h1.debug {
   background-image: var(--h1_debug);
 }
 
+h1.newspage {
+  background-image: var(--h1_news);
+}
+
 h1[class], #wizardpage h1 {
   background-size: 34px auto, 4px, 100%, 100%, 100% !important;
 }
 
 @media screen and (min-width: 1500px) {
-h1[class], #wizardpage h1 {
-  background-size: 38px auto, 4px, 100%, 100%, 100% !important;
-}
+  h1[class], #wizardpage h1 {
+    background-size: 38px auto, 4px, 100%, 100%, 100% !important;
+  }
 }
 
 h1::first-letter {
