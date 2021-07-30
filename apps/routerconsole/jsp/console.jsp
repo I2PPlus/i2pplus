@@ -24,7 +24,7 @@
 <div class="main" id="console">
  <jsp:useBean class="net.i2p.router.web.ContentHelper" id="contenthelper" scope="request" />
 <div class="welcome">
-<h2><%=intl._t("Welcome to I2P")></h2>
+<h2><%=intl._t("Welcome to I2P")%></h2>
 </div>
  <% java.io.File fpath = new java.io.File(net.i2p.I2PAppContext.getGlobalContext().getBaseDir(), "docs/readme.html"); %>
  <jsp:setProperty name="contenthelper" property="page" value="<%=fpath.getAbsolutePath()%>" />
