@@ -1028,19 +1028,19 @@ public class SummaryHelper extends HelperBase {
             if (dver == null)
                 dver = NewsHelper.unsignedVersionDownloaded();
         }
-        if (dver != null &&
-            !NewsHelper.isUpdateInProgress() &&
+        if (dver != null && !NewsHelper.isUpdateInProgress() &&
             !_context.router().gracefulShutdownInProgress()) {
             if (needSpace)
                 buf.append("<hr>");
             else
                 needSpace = true;
-            buf.append("<h4 class=\"sb_info sb_update\"><b>").append(_t("Update downloaded")).append("<br>");
-            buf.append("[").append(_t("{0}", DataHelper.escapeHTML(dver))).append("]<br>");
+            buf.append("<h4 class=\"sb_info sb_update\" title=\"");
             if (_context.hasWrapper())
                 buf.append(_t("Click Restart to install").replace("Click ", ""));
             else
                 buf.append(_t("Click Shutdown and restart to install").replace("Click ", ""));
+            buf.append("\"><b>").append(_t("Update downloaded")).append("<br>");
+            buf.append("[").append(_t("{0}", DataHelper.escapeHTML(dver))).append("]");
             buf.append("</b></h4>");
         }
         boolean avail = updateAvailable();
