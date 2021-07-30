@@ -148,7 +148,7 @@ class BuildMessageProcessor {
                     }
 
                     if (log.shouldLog(Log.DEBUG))
-                        log.debug("[MsgID " + msg.getUniqueId() + "] Matching record: " + rv);
+                        log.debug("[MsgID " + msg.getUniqueId() + "] Matching record found " + rv);
                     ourHop = i;
                     // TODO should we keep looking for a second match and fail if found?
                     break;
@@ -156,8 +156,8 @@ class BuildMessageProcessor {
                     // For ECIES routers, this is relatively common due to old routers that don't
                     // check enc type sending us ElG requests
                     if (log.shouldLog(Log.WARN))
-//                        log.warn(msg.getUniqueId() + ": Matching record decrypt failure " + privKey.getType(), dfe);
-                        log.warn("[MsgID " + msg.getUniqueId() + "] Matching record decrypt failure " + privKey.getType() +
+//                        log.warn(msg.getUniqueId() + ": Matching record decryption failure " + privKey.getType(), dfe);
+                        log.warn("[MsgID " + msg.getUniqueId() + "] Matching record decryption failure " + privKey.getType() +
                                  "\n* Data Format Exception: " + dfe.getMessage());
                     // on the microscopic chance that there's another router
                     // out there with the same first 16 bytes, go around again

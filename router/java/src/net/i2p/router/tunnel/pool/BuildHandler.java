@@ -329,7 +329,7 @@ class BuildHandler implements Runnable {
         long requestedOn = cfg.getExpiration() - 10*60*1000;
         long rtt = _context.clock().now() - requestedOn;
         if (_log.shouldLog(Log.INFO))
-            _log.info("[MsgID " + msg.getUniqueId() + "] Handling the reply after " + rtt + "ms, delayed " + delay + "ms waiting for config" + cfg);
+            _log.info("[MsgID " + msg.getUniqueId() + "] Handling the reply after " + rtt + "ms, delayed " + delay + "ms waiting for config -> " + cfg);
 
         List<Integer> order = cfg.getReplyOrder();
         int statuses[] = _buildReplyHandler.decrypt(msg, cfg, order);
@@ -549,7 +549,7 @@ class BuildHandler implements Runnable {
                 _currentLookups.decrementAndGet();
                 if (_log.shouldLog(Log.WARN))
                     _log.warn("Dropping next hop lookup (limit: " + limit + " / " + PERCENT_LOOKUP_LIMIT + "%) " +
-                    "\n* From: " + from + "[MsgID: " +  state.msg.getUniqueId() + "]" + req);
+                    "\n* From: " + from + " [MsgID: " +  state.msg.getUniqueId() + "]" + req);
                 _context.statManager().addRateData("tunnel.dropLookupThrottle", 1);
                 if (from != null)
                     _context.commSystem().mayDisconnect(from);
@@ -562,7 +562,7 @@ class BuildHandler implements Runnable {
             if (_log.shouldLog(Log.DEBUG))
                 _log.debug("Request handled after " + handleTime + "ms / " + decryptTime + "ms / " + lookupTime + "ms / " + timeSinceReceived + "ms" +
                            " and we know the next peer [" + nextPeer.toBase64().substring(0,6) + "]" +
-                           "\n* From: " + from + "[MsgID: " +  state.msg.getUniqueId() + "]" + req);
+                           "\n* From: " + from + " [MsgID: " +  state.msg.getUniqueId() + "]" + req);
             return handleTime;
         }
     }

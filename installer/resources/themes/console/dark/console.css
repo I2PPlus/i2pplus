@@ -8,7 +8,7 @@
 :root {
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
-  --h3: repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px);
+  --h3: repeating-linear-gradient(to right, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px);
   --h3_fade: linear-gradient(to bottom, #005000, #000 75%);
   --h3_blend: normal, normal, exclusion, exclusion;
   --h1: var(--h3), linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 46%, #050d05 48%, #020602 52%, #010301 54%, #000000 56%), var(--camotile) #000;
@@ -1840,10 +1840,6 @@ code {
   break-inside: avoid;
   page-break-inside: avoid;
   -webkit-column-break-inside: avoid;
-}
-
-.twocol li:first-child {
-  margin-top: -5px !important;
 }
 
 div[lang="pt"] .twocol, div[lang="es"] .twocol, div[lang="sv"] .twocol {
@@ -5646,6 +5642,8 @@ h3#bannedpeers {
   margin-bottom: 10px;
   text-align: right;
   font-size: 8pt;
+  opacity: 0;
+  pointer-events: none;
 }
 
 #routerinfo p {
@@ -5696,8 +5694,9 @@ h3#bannedpeers {
 }
 
 #console .welcome h2 {
-  background: url(images/favicon.svg) no-repeat right 6px center, var(--h3), linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3_fade) !important;
-  background-size: 24px, 100%, 100% !important;
+  background: url(images/favicon.svg) no-repeat right 6px center / 24px, var(--h3),
+              linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3_fade) !important;
+  background-size: 24px, 4px 100%, 100%, 100% !important;
   background-blend-mode: luminosity, normal, normal;
 }
 

@@ -11,7 +11,7 @@
 <html lang="<%=lang%>">
 <head>
 <%@include file="css.jsi" %>
-<%=intl.title("home")%>
+<%=intl.title("welcome")%>
 </head>
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
@@ -20,29 +20,12 @@
 %>
 <%@include file="summary.jsi" %>
 
-<h1 class="nfo"><%=intl._t("Router Console")%></h1>
-<div class="news" id="news">
-<%
-   if (newshelper.shouldShowNews()) {
-%>
- <jsp:getProperty name="newshelper" property="content" />
- <hr>
-<%
-   }  // shouldShowNews()
-%>
- <jsp:useBean class="net.i2p.router.web.ConfigUpdateHelper" id="updatehelper" scope="request" />
- <jsp:setProperty name="updatehelper" property="contextId" value="<%=i2pcontextId%>" />
- <jsp:getProperty name="updatehelper" property="newsStatus" /><br>
-</div>
+<h1 class="nfo" id="top"><%=intl._t("Welcome Guide")%></h1>
 <div class="main" id="console">
  <jsp:useBean class="net.i2p.router.web.ContentHelper" id="contenthelper" scope="request" />
- <div class="welcome">
-  <div class="langbox" title="<%=intl._t("Configure Language")%>">
-  <a href="/configui#langheading"><img src="/themes/console/images/flags.png" alt=<%=intl._t("Configure Language")%>></a>
-  </div>
-  <a name="top"></a>
-  <h2><%=intl._t("Welcome to I2P")%></h2>
- </div>
+<div class="welcome">
+<h2><%=intl._t("Welcome to I2P")%></h2>
+</div>
  <% java.io.File fpath = new java.io.File(net.i2p.I2PAppContext.getGlobalContext().getBaseDir(), "docs/readme.html"); %>
  <jsp:setProperty name="contenthelper" property="page" value="<%=fpath.getAbsolutePath()%>" />
  <jsp:setProperty name="contenthelper" property="maxLines" value="300" />

@@ -5286,9 +5286,9 @@ label.disabled, label.disabled:hover, label.disabled:active {
   margin-right: 10px;
 }
 
-select, select[disabled]:hover, select[disabled]:focus  {
+select, select[disabled]:hover, select[disabled]:focus {
   margin: 5px;
-  padding: 5px 24px 5px 5px !important;
+  padding: 6px 24px 6px 8px !important;
   min-width: 120px;
   text-align: left !important;
   font-size: 9pt;
@@ -12018,6 +12018,12 @@ th[aria-sort] {
 
 #peers img[src$="bound.svg"], #profiles img[src$="bound.svg"], #tunnels img[src$="bound.svg"] {
   opacity: 0;
+}
+
+#config_tunnels img[src$="bound.svg"] {
+  margin: -2px 0;
+  width: 18px;
+  height: auto;
 }
 
 /* link icons for new user guide */

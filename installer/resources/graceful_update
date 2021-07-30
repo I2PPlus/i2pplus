@@ -82,8 +82,7 @@ Note: Either --devel or --stable MUST be specified unless -u is specified
   --any          Use any and all methods to download i2pupdate.zip(may use clearnet and/or tor over outproxy)
   --i2p          Download from skank.i2p (default)
   --tor          Download from I2P+ .onion address
-  --clear        Download from i2pplus.github.io/
-  --git          Download from GitLab
+  --clear        Download from GitLab.com/I2P.Plus
   --insecure     Allows for insecure downloading when using a custom url
   --pid          Specify PID file name
   --cron         Uses downloader only if header dates differ
@@ -94,7 +93,7 @@ Quick start: ./graceful_update --stable, this will download most stable version 
 Notes:
 * please edit the file ./graceful_update for more advanced configurations.
 * -e, -c and -w can be used together.
-* --i2p, --tor, --clear, and --git can be used together
+* --i2p, --tor, and --clear can be used together
 * -p proxy setting will strip http(s) or add http(s) depending on the downloaders chosen
 '
 
@@ -197,13 +196,10 @@ for a in $@; do
             send_help
             ;;
         --clear) # allow clearnet
+            use_git="true"
+            insecure="true"
             use_clear="true"
             stable_files="$stable_files clear"
-            devel_files="$devel_files clear"
-            if [ "$2" ]; then shift; fi
-            ;;
-        --git) # git devel version
-            use_git="true"
             devel_files="$devel_files git"
             if [ "$2" ]; then shift; fi
             ;;
@@ -282,21 +278,6 @@ if [ "$use_eepget_request" ]; then
     downloader="$downloader eepget"
 elif [ "$use_curl" ] || [ "$use_wget" ]; then
     use_eepget=""
-fi
-
- # Set default location to download from to i2p
-if [ -z "$use_i2p" ] || [ -z "$use_tor" ] || [ -z "$use_clear" ] || [ -z "$use_git" ]; then
-    use_i2p_request="true"
-    use_i2p="true"
-fi
-if [ "$use_i2p_request" ]; then
-    use_i2p="true"
-    if [ -z "$any" ]; then
-        stable_files="$stable_files i2p"
-        devel_files="$devel_files i2p"
-    fi
-elif [ "$use_tor" ] || [ "$use_clear" ] || [ "$use_git" ]; then
-    use_i2p=""
 fi
 
 # PID Section
@@ -591,15 +572,10 @@ fi
  # get_url <release> <update location>
 get_url() {
      # I2P+ Stable release download URLs
-    stable_url='i2p;http://skank.i2p/i2pupdate.zip
-    tor;http://fhiqjkax7s6cs2shcozpnnq6v64txoovuczw62lpj4jfbiisrkzw5vid.onion/i2pupdate.zip
-    clear;https://i2pplus.github.io/i2pupdate.zip'
+    stable_url='i2p;http://skank.i2p/i2pupdate.zip tor;http://fhiqjkax7s6cs2shcozpnnq6v64txoovuczw62lpj4jfbiisrkzw5vid.onion/i2pupdate.zip clear;https://i2pplus.github.io/i2pupdate.zip'
 
      # I2P+ Devel release download URLs
-    devel_url='i2p;http://skank.i2p/dev/i2pupdate.zip
-    tor;http://fhiqjkax7s6cs2shcozpnnq6v64txoovuczw62lpj4jfbiisrkzw5vid.onion/dev/i2pupdate.zip
-    git;https://gitlab.com/i2pplus/I2P.Plus/-/jobs/artifacts/master/raw/i2pupdate.zip?job=Java8
-    clear;https://i2pplus.github.io/dev/i2pupdate.zip'
+    devel_url='i2p;http://skank.i2p/dev/i2pupdate.zip tor;http://fhiqjkax7s6cs2shcozpnnq6v64txoovuczw62lpj4jfbiisrkzw5vid.onion/dev/i2pupdate.zip git;https://gitlab.com/i2pplus/I2P.Plus/-/jobs/artifacts/master/raw/i2pupdate.zip?job=Java8'
      # loop through requests
     if [ "$1" = "stable" ]; then
         for a in $stable_url; do
@@ -607,6 +583,7 @@ get_url() {
             url="$(echo $a | cut -d';' -f2)"
             if [ "$2" = "$type" ]; then
                 echo "$url"
+                break
             fi
         done
     elif [ "$1" = "devel" ]; then
@@ -615,6 +592,7 @@ get_url() {
             url="$(echo $a | cut -d';' -f2)"
             if [ "$2" = "$type" ]; then
                 echo "$url"
+                break
             fi
         done
     fi
@@ -806,7 +784,7 @@ for b in $downloader; do
         else
             if [ "$url" ] && [ "$use_url" ]; then
                 search="$(echo $url | grep -iEo '\.onion\/|\.i2p\/')"
-                if [ "$search" ] && [ -z "$proxy" ]; then
+                if [[ ! -z "$search" ]] && [ -z "$proxy" ]; then
                     verbose "curl skipping download of $url with no proxy, found $search in url. DNS leak protection"
                     curl_failed="true"
                 else
