@@ -5659,6 +5659,8 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
 
 .snarkTorrents .infohash {
   margin-right: 2px !important;
+  padding-left: 15px;
+  background: var(--hash) no-repeat 2px center / 12px, linear-gradient(to bottom, #cc0, #aa0);
 }
 
 .snarkTorrentInfo .infohash {
@@ -5670,6 +5672,12 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
 }
 
 @media screen and (min-width: 1500px) {
+  .snarkTorrents .infohash {
+    padding-left: 16px;
+    max-width: 100px;
+    background-size: 13px, 100%;
+  }
+
   .snarkTorrentInfo .infohash {
     padding: 4px 4px 4px 20px;
     background: var(--hash) no-repeat 4px center / 14px, linear-gradient(to bottom, #dd0 50%, #cc0 50%);
