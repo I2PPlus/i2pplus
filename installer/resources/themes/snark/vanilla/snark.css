@@ -1007,7 +1007,7 @@ img[src$="details.png"] {
 }
 
 .snarkTorrents .infohash, .snarkTorrentInfo .infohash {
-  max-width: 80px;
+  max-width: 90px;
   display: inline-block;
   vertical-align: middle;
   white-space: nowrap;
@@ -1017,11 +1017,11 @@ img[src$="details.png"] {
 }
 
 .snarkTorrents .infohash {
-  padding: 0 0 0 3px;
+  padding: 1px 1px 1px 16px;
   font-weight: 700;
   color: #fff5ef;
   border-radius: 2px;
-  background: rgba(0,80,0,.8);
+  background: rgba(0,80,0,.8) var(--hash2) no-repeat 3px center / 12px;
 }
 
 .snarkTorrentInfo .infohash {
