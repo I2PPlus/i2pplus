@@ -6298,7 +6298,7 @@ td.snarkTorrentAction input[type=submit] {
 
 .snarkTorrentAction input:active {
   box-shadow: 0 0 0 1px #414, inset 0 0 0 1px rgba(255,102,0, .6), inset 0 0 0 2px rgba(0,0,0,.9), inset 4px 4px 4px rgba(0,0,0,.9);
-  background-blend-mode: luminosity;
+  background-blend-mode: luminosity, normal;
   transition: ease box-shadow .05s;
   filter: none !important;
 }
