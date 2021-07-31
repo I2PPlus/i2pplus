@@ -1021,7 +1021,7 @@ img[src$="details.png"] {
   font-weight: 700;
   color: #fff5ef;
   border-radius: 2px;
-  background: rgba(0,80,0,.8) var(--hash2) no-repeat 3px center / 12px;
+  background: rgba(0,80,0,.8) var(--hash2) no-repeat 3px center / 11px;
 }
 
 .snarkTorrentInfo .infohash {
@@ -1033,6 +1033,10 @@ img[src$="details.png"] {
 }
 
 @media screen and (min-width: 1500px) {
+  .snarkTorrents .infohash {
+    background-size: 12px;
+  }
+
   .snarkTorrentInfo .infohash {
     padding: 2px 0 2px 22px !important;
     max-width: 140px;
