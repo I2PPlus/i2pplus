@@ -7072,12 +7072,12 @@ table#jardump {
 }
 
 #debug h3.debug_outboundsessions {
-  background: url(images/out.png) no-repeat 6px center, var(--title) !important;
+  background: var(--out) no-repeat 6px center, var(--title) !important;
   background-size: 16px, 4px 100% !important;
 }
 
 #debug h3.debug_inboundsessions {
-  background: url(images/in.png) no-repeat 6px center, var(--title) !important;
+  background: var(--in) no-repeat 6px center, var(--title) !important;
   background-size: 16px, 4px 100% !important;
 }
 
@@ -13734,11 +13734,11 @@ to {
 }
 
 .inbound {
-  background: url(images/in.png) no-repeat center center;
+  background: var(--in) no-repeat center center;
 }
 
 .outbound {
-  background: url(images/out.png) no-repeat center center;
+  background: var(--out) no-repeat center center;
 }
 
 #tunnelconfig th {
@@ -13747,14 +13747,14 @@ to {
 
 #tunnelconfig th:nth-child(n+2) {
   padding-left: 18px !important;
-  background: #000 url(images/in.png);
+  background: #000 var(--in);
   background-repeat: no-repeat !important;
   background-position: 20px center !important;
   background-size: 14px !important;
 }
 
 #tunnelconfig th:not([colspan="3"]):last-child {
-  background: #000 url(images/out.png);
+  background: #000 var(--out);
 }
 
 .inbound.small, .outbound.small {

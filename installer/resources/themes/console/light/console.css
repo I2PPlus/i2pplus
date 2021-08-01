@@ -3227,14 +3227,6 @@ th {
   background: linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%) !important;
 }
 
-th img[src="/themes/console/images/outbound.png"] {
-  vertical-align: middle;
-}
-
-th img[src="/themes/console/images/outbound.png"] {
-  vertical-align: text-top;
-}
-
 .main[id^="config_"] th {
   font-size: 9.5pt;
 }
@@ -9538,13 +9530,13 @@ a[href^="configpeer?peer"]:hover::after {
 }
 
 #debug h3.debug_outboundsessions {
-  background: url(/themes/console/images/outbound.svg) no-repeat 6px center / 16px,
+  background: url(/themes/console/images/svg/outbound.svg) no-repeat 6px center / 18px,
               linear-gradient(to bottom, #fcfcff 50%, rgba(255, 255, 255, .6) 50%, rgba(240, 240, 255, .4)),
               linear-gradient(to right, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) !important;
 }
 
 #debug h3.debug_inboundsessions {
-  background: url(/themes/console/images/inbound.svg) no-repeat 6px center / 16px,
+  background: url(/themes/console/images/svg/inbound.svg) no-repeat 6px center / 18px,
               linear-gradient(to bottom, #fcfcff 50%, rgba(255, 255, 255, .6) 50%, rgba(240, 240, 255, .4)),
               linear-gradient(to right, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) !important;
 }

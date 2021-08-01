@@ -4087,12 +4087,12 @@ form > table {
 
 #tunnelconfig th:not([colspan="3"]):nth-child(n+2) {
   padding-left: 20px !important;
-  background: url(images/in.png) no-repeat 20px center / 14px, linear-gradient(to bottom, #002000, #000 75%);
+  background: var(--in) no-repeat 20px center / 14px, linear-gradient(to bottom, #002000, #000 75%);
 }
 
 #tunnelconfig th:not([colspan="3"]):last-child {
   padding-left: 17px !important;
-  background: url(images/out.png) no-repeat 20px center / 14px, linear-gradient(to bottom, #002000, #000 75%);
+  background: var(--out) no-repeat 20px center / 14px, linear-gradient(to bottom, #002000, #000 75%);
 }
 
 #tunnelconfig td:first-child {
@@ -6189,6 +6189,7 @@ span#distance {
 
 .main#certs {
   padding-top: 3px;
+  padding-bottom: 10px;
 }
 
 .main#certs h3 {

@@ -7654,11 +7654,11 @@ h2#debug_portmapper {
 
 #debug h3.debug_outboundsessions {
   margin-top: -6px !important;
-  background: url(/themes/console/images/outbound.svg) no-repeat 6px center / 16px, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
+  background: url(/themes/console/images/svg/outbound.svg) no-repeat 6px center / 18px, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
 }
 
 #debug h3.debug_inboundsessions {
-  background: url(/themes/console/images/inbound.svg) no-repeat 6px center / 16px, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
+  background: url(/themes/console/images/svg/inbound.svg) no-repeat 6px center / 18px, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
 }
 
 .debug_version {
@@ -11414,11 +11414,11 @@ p#gatherstats {
   height: 16px;
   display: inline-block;
   vertical-align: middle;
-  background: url(../light/images/in.png) no-repeat center center / 16px !important;
+  background: var(--in) no-repeat center center / 16px !important;
 }
 
 .outbound  {
-  background: url(../light/images/out.png) no-repeat center center / 16px !important;
+  background: var(--out) no-repeat center center / 16px !important;
 }
 
 .inbound.small, .outbound.small {
