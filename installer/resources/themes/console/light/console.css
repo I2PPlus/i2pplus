@@ -700,7 +700,7 @@ a:active #sb_bandwidthgraph {
   margin: -4px -5px -5px -3px;
   text-align: center;
   border: 1px solid #afafcf;
-  box-shadow: 0 0 1px rgba(200,200,200,.8), inset 0 0 0 1px rgba(255,255,255,.6), inset 0 0 0 2px rgba(200,200,255,.6), inset 0 3px 3px rgba(0,0,0,.2);
+  box-shadow: 0 0 1px rgba(200,200,200,.8), inset 0 0 0 1px rgba(255,255,255,.6), inset 0 0 0 2px rgba(200,200,255,.6), inset 0 3px 3px 1px rgba(0,0,16,.25);
   background: linear-gradient(to right, rgba(0,255,0,.05) 50%, rgba(255,255,0,.05) 75%, rgba(255,128,0,.05) 90%, rgba(255,0,0,.1)),
               repeating-linear-gradient(to right, rgba(180, 180, 255,.7) 1px, rgba(180, 180, 255, .7) 2px, rgba(221, 221, 255, .7) 2px, rgba(221, 221, 255, .7) 4px);
 }
@@ -718,7 +718,7 @@ a:active #sb_bandwidthgraph {
   border: none;
   border-right: 1px solid #afafcf;
   box-shadow: var(--highlight);
-  background: linear-gradient(to bottom, rgba(238, 238, 255, .6), rgba(255, 255, 255,.6) 50%, rgba(180, 180, 255, .7) 50%, rgba(140, 140, 255, .7));
+  background: linear-gradient(to bottom, rgba(255, 255, 255,.6), rgba(238, 238, 255, .6) 50%, rgba(180, 180, 255, .6) 50%, rgba(140, 140, 255, .6));
 }
 
 .percentBarInner[style="width: 100%;"] {
@@ -726,7 +726,6 @@ a:active #sb_bandwidthgraph {
 }
 
 #sb_memoryBar .percentBarInner {
-
   background: linear-gradient(to right, rgba(0,255,0,.05), rgba(255,255,0,.1) 160px, rgba(255,0,0,.1) 180px, rgba(255,0,0,.2)),
               linear-gradient(to bottom, rgba(255, 255, 255,.6), rgba(238, 238, 255, .6) 50%, rgba(180, 180, 255, .7) 50%, rgba(140, 140, 255, .7));
 }
@@ -764,17 +763,18 @@ a:active #sb_bandwidthgraph {
 
 .sb_update b {
   margin-top: -2px;
-  line-height: 120% !important;
-  letter-spacing: 0 !important;
-  word-spacing: 0 !important;
-  font-size: 8.5pt !important;
   display: inline-block;
+  line-height: 1.2 !important;
+  word-spacing: 0 !important;
+  letter-spacing: 0 !important;
+  vertical-align: middle;
+  font-size: 8.5pt !important;
 }
 
 @media screen and (min-width: 1500px) {
-.sb_update b {
-  font-size: 9pt !important;
-}
+  .sb_update b {
+    font-size: 9pt !important;
+  }
 }
 
 .sb_update br::before {
@@ -830,9 +830,9 @@ to {
   opacity: .8;
 }
 
-/*.sb_updatestatus + .percentBarOuter {
-  margin-bottom: 5px;
-}*/
+.sb_updatestatus + .percentBarOuter {
+  margin-bottom: -18px;
+}
 
 /* end updates download bar */
 /* end status bars */
@@ -4816,11 +4816,11 @@ input.add:focus, button.add:focus {
 
 #clientconfig button.add {
   padding: 5px 9px 5px 24px;
-  background: var(--edit) no-repeat 8px center / 14px, var(--btn) !important;
+  background: var(--edit) no-repeat center center / 14px, var(--btn) !important;
 }
 
 #clientconfig button.add:hover, #clientconfig button.add:focus, #clientconfig button.add:active {
-  background: var(--edit_hover) no-repeat 8px center / 14px, var(--btn_hover) !important;
+  background: var(--edit_hover) no-repeat center center / 14px, var(--btn_hover) !important;
 }
 
 input.cancel, button.cancel {
