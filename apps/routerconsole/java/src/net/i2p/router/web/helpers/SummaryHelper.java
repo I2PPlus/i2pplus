@@ -1017,6 +1017,7 @@ public class SummaryHelper extends HelperBase {
         StringBuilder buf = new StringBuilder(512);
         // display all the time so we display the final failure message, and plugin update messages too
         String status = NewsHelper.getUpdateStatus();
+        String source = _context.getProperty(ConfigUpdateHandler.PROP_ZIP_URL);
         boolean needSpace = false;
         if (status.length() > 0) {
             buf.append("<h4 class=\"sb_info sb_update\">").append(status).append("</h4>\n");
@@ -1039,7 +1040,10 @@ public class SummaryHelper extends HelperBase {
                 buf.append(_t("Click Restart to install").replace("Click ", ""));
             else
                 buf.append(_t("Click Shutdown and restart to install").replace("Click ", ""));
-            buf.append("\"><b>").append(_t("Update downloaded")).append("<br>");
+            buf.append("\"><b>");
+            if (source != null && source.contains("skank"))
+                buf.append("I2P+ ");
+            buf.append(_t("Update downloaded")).append("<br>");
             buf.append("[").append(_t("{0}", DataHelper.escapeHTML(dver))).append("]");
             buf.append("</b></h4>");
         }
@@ -1073,9 +1077,7 @@ public class SummaryHelper extends HelperBase {
             buf.append(unsignedConstraint).append("</b></h4>");
             unsignedAvail = false;
         }
-        if (devSU3Avail && devSU3Constraint != null &&
-            !NewsHelper.isUpdateInProgress() &&
-            !_context.router().gracefulShutdownInProgress()) {
+        if (devSU3Avail && devSU3Constraint != null && !NewsHelper.isUpdateInProgress() && !_context.router().gracefulShutdownInProgress()) {
             if (needSpace)
                 buf.append("<hr>");
             else
@@ -1121,7 +1123,6 @@ public class SummaryHelper extends HelperBase {
                        .append(_t("Download I2P Update"))
                        .append("</button><br>\n");
                 }
-                String source = _context.getProperty(ConfigUpdateHandler.PROP_ZIP_URL);
                 if (unsignedAvail) {
                     buf.append("<span id=\"updateAvailable\">");
                     if (source.contains("skank"))

@@ -12,9 +12,7 @@
 <%@include file="css.jsi" %>
 <%=intl.title("config plugins")%>
 <style type="text/css">input.default{width: 1px; height: 1px; visibility: hidden;}</style>
-<script nonce="<%=cspNonce%>" type="text/javascript">
-  var deleteMessage = "<%=intl._t("Are you sure you want to delete {0}?")%>";
-</script>
+<script nonce="<%=cspNonce%>" type="text/javascript">var deleteMessage = "<%=intl._t("Are you sure you want to delete {0}?")%>";</script>
 <script src="/js/configclients.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
 </head>
 <body>
@@ -31,7 +29,7 @@
 %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigClientsHandler" id="formhandler" scope="request" />
 <%@include file="formhandler.jsi" %>
- <div class="configure">
+<div class="configure">
 <h3 id="pluginmanage"><%=intl._t("Plugin Installation")%>&nbsp;
 <span class="h3navlinks">
 <a href="configclients" title="<%=intl._t("Client Configuration")%>">Clients</a>&nbsp;

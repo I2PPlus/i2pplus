@@ -700,7 +700,7 @@ a:active #sb_bandwidthgraph {
   margin: -4px -5px -5px -3px;
   text-align: center;
   border: 1px solid #afafcf;
-  box-shadow: 0 0 1px rgba(200,200,200,.8), inset 0 0 0 1px rgba(255,255,255,.6), inset 0 0 0 2px rgba(200,200,255,.6), inset 0 3px 3px rgba(0,0,0,.2);
+  box-shadow: 0 0 1px rgba(200,200,200,.8), inset 0 0 0 1px rgba(255,255,255,.6), inset 0 0 0 2px rgba(200,200,255,.6), inset 0 3px 3px 1px rgba(0,0,16,.25);
   background: linear-gradient(to right, rgba(0,255,0,.05) 50%, rgba(255,255,0,.05) 75%, rgba(255,128,0,.05) 90%, rgba(255,0,0,.1)),
               repeating-linear-gradient(to right, rgba(180, 180, 255,.7) 1px, rgba(180, 180, 255, .7) 2px, rgba(221, 221, 255, .7) 2px, rgba(221, 221, 255, .7) 4px);
 }
@@ -718,7 +718,7 @@ a:active #sb_bandwidthgraph {
   border: none;
   border-right: 1px solid #afafcf;
   box-shadow: var(--highlight);
-  background: linear-gradient(to bottom, rgba(238, 238, 255, .6), rgba(255, 255, 255,.6) 50%, rgba(180, 180, 255, .7) 50%, rgba(140, 140, 255, .7));
+  background: linear-gradient(to bottom, rgba(255, 255, 255,.8), rgba(238, 238, 255, .5) 50%, rgba(180, 180, 255, .6) 50%, rgba(140, 140, 255, .6));
 }
 
 .percentBarInner[style="width: 100%;"] {
@@ -726,7 +726,6 @@ a:active #sb_bandwidthgraph {
 }
 
 #sb_memoryBar .percentBarInner {
-
   background: linear-gradient(to right, rgba(0,255,0,.05), rgba(255,255,0,.1) 160px, rgba(255,0,0,.1) 180px, rgba(255,0,0,.2)),
               linear-gradient(to bottom, rgba(255, 255, 255,.6), rgba(238, 238, 255, .6) 50%, rgba(180, 180, 255, .7) 50%, rgba(140, 140, 255, .7));
 }
@@ -764,17 +763,18 @@ a:active #sb_bandwidthgraph {
 
 .sb_update b {
   margin-top: -2px;
-  line-height: 120% !important;
-  letter-spacing: 0 !important;
-  word-spacing: 0 !important;
-  font-size: 8.5pt !important;
   display: inline-block;
+  line-height: 1.2 !important;
+  word-spacing: 0 !important;
+  letter-spacing: 0 !important;
+  vertical-align: middle;
+  font-size: 8.5pt !important;
 }
 
 @media screen and (min-width: 1500px) {
-.sb_update b {
-  font-size: 9pt !important;
-}
+  .sb_update b {
+    font-size: 9pt !important;
+  }
 }
 
 .sb_update br::before {
@@ -830,9 +830,9 @@ to {
   opacity: .8;
 }
 
-/*.sb_updatestatus + .percentBarOuter {
-  margin-bottom: 5px;
-}*/
+.sb_updatestatus + .percentBarOuter {
+  margin-bottom: -18px;
+}
 
 /* end updates download bar */
 /* end status bars */
@@ -2776,9 +2776,19 @@ td.optionsave, .formaction, form[action="configpeer"] tr:last-child td, table#ad
   background-size: 28px, 100% !important;
 }
 
+@media screen and (max-width: 1000px) {
+  .infohelp, .infowarn {
+    text-align: left;
+  }
+}
+
 @media screen and (max-width: 1499px) {
   .infowarn, .infohelp, #pluginconfigtext {
     background-size: 24px, 100% !important;
+  }
+
+  .infohelp code, .infowarn code {
+    white-space: nowrap;
   }
 }
 
@@ -3299,18 +3309,19 @@ td {
 h4.app, h4.app2 {
   margin: 0 auto 3px;
   padding: 7px 10px 6px 32px;
-  border: 1px solid var(--borderinner);
-  font-size: 11pt;
-  text-transform: uppercase;
-  letter-spacing: .08em;
+  width: calc(100% - 44px);
+  display: inline-block;
+  overflow: hidden;
   word-spacing: .1em;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-size: 11pt;
+  color: var(--inklite);
+  border: 1px solid var(--borderinner);
+  border-radius: 2px;
+  box-shadow: var(--highlight), 0 0 1px rgba(220,220,220,.3);
   background: #eef;
   background: linear-gradient(to bottom, #fff 50%, #eef 50%);
-  box-shadow: var(--highlight), 0 0 1px rgba(220,220,220,.3);
-  display: inline-block;
-  width: calc(100% - 44px);
-  border-radius: 2px;
-  color: var(--inklite);
 }
 
 h4.app {
@@ -3345,7 +3356,7 @@ h4.app a, h4.app2 a {
 }
 
 #home h4 a::after {
-  margin: -2px 10px 2px -8px;
+  margin: -2px 10px 4px -8px;
   width: 16px;
   height: 18px;
   display: inline-block;
@@ -4816,11 +4827,11 @@ input.add:focus, button.add:focus {
 
 #clientconfig button.add {
   padding: 5px 9px 5px 24px;
-  background: var(--edit) no-repeat 8px center / 14px, var(--btn) !important;
+  background: var(--edit) no-repeat center center / 14px, var(--btn) !important;
 }
 
 #clientconfig button.add:hover, #clientconfig button.add:focus, #clientconfig button.add:active {
-  background: var(--edit_hover) no-repeat 8px center / 14px, var(--btn_hover) !important;
+  background: var(--edit_hover) no-repeat center center / 14px, var(--btn_hover) !important;
 }
 
 input.cancel, button.cancel {
@@ -4881,14 +4892,13 @@ input.delete:focus, button.delete:focus {
   background: var(--nuke) no-repeat 8px center, var(--btn_hover);
 }
 
-input.delete[value^="Ban"], button.delete[value^="Ban"] {
-  padding: 5px 9px 5px 24px;
-  background: var(--doban) no-repeat 8px center / 14px, var(--btn);
+input.delete[value^="Ban"] {
+  padding: 5px 9px 5px 23px;
+  background: var(--doban) no-repeat 8px center / 12px, var(--btn) !important;
 }
 
-input.delete[value^="Ban"]:hover, button.delete[value^="Ban"]:hover,
-input.delete[value^="Ban"]:focus, button.delete[value^="Ban"]:focus {
-  background: var(--doban) no-repeat 8px center / 14px, var(--btn_hover);
+input.delete[value^="Ban"]:hover, input.delete[value^="Ban"]:focus {
+  background: var(--doban) no-repeat 8px center / 12px, var(--btn_hover) !important;
 }
 
 input.download, button.download {

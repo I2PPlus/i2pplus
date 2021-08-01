@@ -19,6 +19,7 @@
   --btn_hover: linear-gradient(to bottom, #767, #989);
   --btnAction: linear-gradient(to bottom, #582858, #737 50%, #101 50%, #080008);
   --btnAction_hover: linear-gradient(to bottom, #656, #858 50%, #212 50%, #080008, #000);
+  --btnAction_active: linear-gradient(to bottom, #080008, #858);
 }
 
 html, body {
@@ -5659,6 +5660,8 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
 
 .snarkTorrents .infohash {
   margin-right: 2px !important;
+  padding-left: 15px;
+  background: var(--hash) no-repeat 2px center / 12px, linear-gradient(to bottom, #cc0, #aa0);
 }
 
 .snarkTorrentInfo .infohash {
@@ -5670,6 +5673,12 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
 }
 
 @media screen and (min-width: 1500px) {
+  .snarkTorrents .infohash {
+    padding-left: 16px;
+    max-width: 100px;
+    background-size: 13px, 100%;
+  }
+
   .snarkTorrentInfo .infohash {
     padding: 4px 4px 4px 20px;
     background: var(--hash) no-repeat 4px center / 14px, linear-gradient(to bottom, #dd0 50%, #cc0 50%);
@@ -6202,66 +6211,95 @@ td.snarkTorrentAction input[type=submit] {
 }
 
 .actionStart {
-  background: var(--start) no-repeat center center / 14px, var(--btnAction) !important;
+  background: var(--start) no-repeat center center / 14px, var(--btnAction),
+              var(--start_hover) no-repeat center center / 14px !important;
 }
 
 .actionStop {
-  background: var(--stop) no-repeat center center / 14px, var(--btnAction) !important;
+  background: var(--stop) no-repeat center center / 14px, var(--btnAction),
+              var(--stop_hover) no-repeat center center / 14px !important;
 }
 
 .actionRemove {
-  background: var(--remove) no-repeat center center / 14px, var(--btnAction) !important;
+  background: var(--remove) no-repeat center center / 14px, var(--btnAction),
+              var(--remove_hover) no-repeat center center / 14px !important;
 }
 
 .actionDelete {
-  background: var(--delete) no-repeat center center / 14px, var(--btnAction) !important;
+  background: var(--delete) no-repeat center center / 14px, var(--btnAction),
+              var(--delete_hover) no-repeat center center / 14px !important;
 }
 
 #actionStartAll {
-  background: var(--startall) no-repeat center center / auto 14px, var(--btnAction) !important;
+  background: var(--startall) no-repeat center center / auto 14px, var(--btnAction),
+              var(--startall_hover) no-repeat center center / auto 14px !important;
 }
 
 #actionStopAll {
-  background: var(--stopall) no-repeat center center / auto 14px, var(--btnAction) !important;
+  background: var(--stopall) no-repeat center center / auto 14px, var(--btnAction),
+              var(--stopall_hover) no-repeat center center / auto 14px !important;
 }
 
 .snarkTorrentAction input:hover, .snarkTorrentAction input:focus {
   border: 1px solid #f60;
   box-shadow: inset 0 0 0 1px rgba(255,102,0, .6);
   opacity: 1;
-  filter: drop-shadow(0 0 1px #f60);
-  transition: ease box-shadow .1s;
+  transition: ease box-shadow .05s;
   background-blend-mode: normal;
 }
 
 .actionStart:hover, .actionStart:focus {
-  background: var(--start) no-repeat center center / 14px, var(--btnAction_hover) !important;
+  background: var(--start_hover) no-repeat center center / 14px, var(--btnAction_hover) !important;
 }
 
 .actionStop:hover, .actionStop:focus {
-  background: var(--stop) no-repeat center center / 14px, var(--btnAction_hover) !important;
+  background: var(--stop_hover) no-repeat center center / 14px, var(--btnAction_hover) !important;
 }
 
 .actionRemove:hover, .actionRemove:focus {
-  background: var(--remove) no-repeat center center / 14px, var(--btnAction_hover) !important;
+  background: var(--remove_hover) no-repeat center center / 14px, var(--btnAction_hover) !important;
 }
 
 .actionDelete:hover, .actionDelete:focus {
-  background: var(--delete) no-repeat center center / 14px, var(--btnAction_hover) !important;
+  background: var(--delete_hover) no-repeat center center / 14px, var(--btnAction_hover) !important;
 }
 
 #actionStartAll:hover, #actionStartAll:focus {
-  background: var(--startall) no-repeat center center / auto 14px, var(--btnAction_hover) !important;
+  background: var(--startall_hover) no-repeat center center / auto 14px, var(--btnAction_hover) !important;
 }
 
 #actionStopAll:hover, #actionStopAll:focus {
-  background: var(--stopall) no-repeat center center / auto 14px, var(--btnAction_hover) !important;
+  background: var(--stopall_hover) no-repeat center center / auto 14px, var(--btnAction_hover) !important;
+}
+
+.actionStart:active {
+  background: var(--start_hover) no-repeat center center / 14px, var(--btnAction_active) !important;
+}
+
+.actionStop:active {
+  background: var(--stop_hover) no-repeat center center / 14px, var(--btnAction_active) !important;
+}
+
+.actionRemove:active {
+  background: var(--remove_hover) no-repeat center center / 14px, var(--btnAction_active) !important;
+}
+
+.actionDelete:active {
+  background: var(--delete_hover) no-repeat center center / 14px, var(--btnAction_active) !important;
+}
+
+#actionStartAll:active {
+  background: var(--startall_hover) no-repeat center center / auto 14px, var(--btnAction_active) !important;
+}
+
+#actionStopAll:active {
+  background: var(--stopall_hover) no-repeat center center / auto 14px, var(--btnAction_active) !important;
 }
 
 .snarkTorrentAction input:active {
-  box-shadow: 0 0 0 1px #414, inset 0 0 0 1px rgba(255,102,0, .6), inset 4px 4px 4px rgba(0,0,0,.9);
-  transform: scale(0.9);
-  transition: ease transform .05s;
+  box-shadow: 0 0 0 1px #414, inset 0 0 0 1px rgba(255,102,0, .6), inset 0 0 0 2px rgba(0,0,0,.9), inset 4px 4px 4px rgba(0,0,0,.9);
+  background-blend-mode: luminosity, normal;
+  transition: ease box-shadow .05s;
   filter: none !important;
 }
 
