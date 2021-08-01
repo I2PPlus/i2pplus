@@ -2776,9 +2776,19 @@ td.optionsave, .formaction, form[action="configpeer"] tr:last-child td, table#ad
   background-size: 28px, 100% !important;
 }
 
+@media screen and (max-width: 1000px) {
+  .infohelp, .infowarn {
+    text-align: left;
+  }
+}
+
 @media screen and (max-width: 1499px) {
   .infowarn, .infohelp, #pluginconfigtext {
     background-size: 24px, 100% !important;
+  }
+
+  .infohelp code, .infowarn code {
+    white-space: nowrap;
   }
 }
 
@@ -4882,14 +4892,13 @@ input.delete:focus, button.delete:focus {
   background: var(--nuke) no-repeat 8px center, var(--btn_hover);
 }
 
-input.delete[value^="Ban"], button.delete[value^="Ban"] {
-  padding: 5px 9px 5px 24px;
-  background: var(--doban) no-repeat 8px center / 14px, var(--btn);
+input.delete[value^="Ban"] {
+  padding: 5px 9px 5px 23px;
+  background: var(--doban) no-repeat 8px center / 12px, var(--btn) !important;
 }
 
-input.delete[value^="Ban"]:hover, button.delete[value^="Ban"]:hover,
-input.delete[value^="Ban"]:focus, button.delete[value^="Ban"]:focus {
-  background: var(--doban) no-repeat 8px center / 14px, var(--btn_hover);
+input.delete[value^="Ban"]:hover, input.delete[value^="Ban"]:focus {
+  background: var(--doban) no-repeat 8px center / 12px, var(--btn_hover) !important;
 }
 
 input.download, button.download {
