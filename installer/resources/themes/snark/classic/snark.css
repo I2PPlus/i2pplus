@@ -1238,16 +1238,13 @@ tr:nth-child(even) + .peerinfo:nth-child(odd) {
   display: inline-block;
   width: 84px;
   white-space: nowrap;
-  line-height: 1.25;
+  line-height: 1.2;
   font-weight: 400;
   text-align: center;
   color: #77a;
   text-shadow: 0 1px 1px #fff;
   border-radius: 1px;
-  box-shadow: inset 0 0 0 1px #bbf;
-  box-shadow: inset 0 0 0 1px rgba(200,200,255,.8), inset 0 0 0 2px #fff;
   box-shadow: inset 0 0 0 1px rgba(200,200,255,.8), inset 0 0 2px 1px #fff;
-  background: #ddf;
   background: linear-gradient(to bottom, #f8f8ff, #ddf);
 }
 
