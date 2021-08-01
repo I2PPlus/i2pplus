@@ -35,7 +35,6 @@
         return;
     } else {
 %>
-
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <%
     net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
@@ -162,4 +161,3 @@ var iframes = iFrameResize({log: false, interval: 0, heightCalculationMethod: is
 <%
   }
 %>
-

@@ -30,9 +30,7 @@
 <html lang="<%=lang%>">
 <head>
 <%@include file="css.jsi" %>
-
 <%=intl.title("addressbook")%>
-
 </head>
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
