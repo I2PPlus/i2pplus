@@ -2756,6 +2756,10 @@ input[name="i2cpOpts"], input[name="nofilter_dataDir"] {
 		background: #900 !important;
 	}
 
+	.inactive.neterror .snarkTorrentStatus b {
+		background: repeating-linear-gradient(135deg, #900, #900 8px, #700 9px, #700 17px) !important;
+	}
+
 	.stopped.incomplete .snarkTorrentStatus b::before, .neterror .snarkTorrentStatus b::before {
 		border-color: transparent #900 transparent transparent !important;
 	}
