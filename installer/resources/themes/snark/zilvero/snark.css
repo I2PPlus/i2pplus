@@ -630,6 +630,7 @@ tr:hover .percentBarText {
 }
 
 .snarkTorrents td.snarkTorrentName {
+	padding-left: 8px;
 	width: 99%;
 	font-weight: 700;
 	white-space: normal;
@@ -1942,7 +1943,7 @@ select {
 }
 
 .infohash {
-	padding: 0 3px;
+	padding: 0 3px 0 15px;
 	width: 100px;
 	display: inline-block;
 	white-space: nowrap;
@@ -1952,8 +1953,16 @@ select {
 	color: #393;
 	font-family: var(--monospaced) !important;
 	border-radius: 1px;
-	background: #fff;
+	background: #fff var(--hash) no-repeat left center / 12px;
 	user-select: all;
+}
+
+.snarkTorrents .infohash {
+	padding: 2px 4px 2px 18px;
+	display: inline-block;
+	border-radius: 1px;
+	box-shadow: 0 0 0 1px #7a7, inset 0 0 0 1px #fff;
+	background: var(--hash) no-repeat 4px center / 12px, linear-gradient(to bottom, #efe, #e6ffe6);
 }
 
 .knownTracker .optbox, #addtracker .optbox {
@@ -2745,6 +2754,10 @@ input[name="i2cpOpts"], input[name="nofilter_dataDir"] {
 
 	.stopped.incomplete .snarkTorrentStatus b, .neterror .snarkTorrentStatus b {
 		background: #900 !important;
+	}
+
+	.inactive.neterror .snarkTorrentStatus b {
+		background: repeating-linear-gradient(135deg, #900, #900 8px, #700 9px, #700 17px) !important;
 	}
 
 	.stopped.incomplete .snarkTorrentStatus b::before, .neterror .snarkTorrentStatus b::before {

@@ -1036,7 +1036,7 @@ public class SummaryHelper extends HelperBase {
             else
                 needSpace = true;
             buf.append("<h4 class=\"sb_info sb_update\" title=\"");
-            if (_context.hasWrapper())
+            if (_context.hasWrapper() || NewsHelper.isExternalRestartPending())
                 buf.append(_t("Click Restart to install").replace("Click ", ""));
             else
                 buf.append(_t("Click Shutdown and restart to install").replace("Click ", ""));

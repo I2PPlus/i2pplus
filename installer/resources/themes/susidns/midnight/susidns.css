@@ -4,6 +4,7 @@
 @import url(/themes/fonts/DroidSans.css);
 @import url(../images/images.css);
 @import url(images/images.css);
+@import url(/themes/console/midnight/images/tile.css);
 
 :root {
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
@@ -17,7 +18,7 @@
 body {
   font-family: var(--bodyfont);
   background-color: #000010;
-  background: repeating-linear-gradient(to bottom, rgba(0,0,24,.75) 3px, rgba(0,0,0,.9) 5px, rgba(0,0,0,.7) 6px), url(/themes/console/midnight/images/tile.png), #000010;
+  background: repeating-linear-gradient(to bottom, rgba(0,0,24,.75) 3px, rgba(0,0,0,.9) 5px, rgba(0,0,0,.7) 6px), var(--tile), #000010;
   color:#c9ceff;
   margin: 0 10px;
   font-size: 9.5pt;

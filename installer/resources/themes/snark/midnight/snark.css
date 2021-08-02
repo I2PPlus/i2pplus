@@ -3,6 +3,7 @@
 
 @import url(/themes/fonts/DroidSans.css);
 @import url(images/images.css);
+@import url(/themes/console/midnight/images/tile.css);
 
 :root {
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
@@ -29,9 +30,7 @@ body {
 /* preload top navigation mouseovers */
 body {
   background: repeating-linear-gradient(to bottom, rgba(0,0,24,.75) 2px, rgba(0,0,0,.7) 4px),
-              url(/themes/console/midnight/images/tile.png),
-              var(--offline),
-              url(images/dropdown_hover.svg), #000010 !important;
+              var(--tile), var(--offline), url(images/dropdown_hover.svg), #000010 !important;
   background-size: 100% 4px, 171px 148px, 0, 0, 0 !important;
 }
 
