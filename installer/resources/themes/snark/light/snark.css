@@ -1378,12 +1378,16 @@ body:not(.framed) .snarkTorrentInfo {
 }
 
 .snarkTorrents .infohash {
+  padding: 2px 4px 2px 18px;
   display: inline-block;
-  max-width: 80px;
+  max-width: 100px;
   white-space: nowrap;
   vertical-align: middle;
   overflow: hidden;
   text-overflow: ellipsis;
+  border-radius: 1px;
+  box-shadow: 0 0 0 1px #7a7, inset 0 0 0 1px #fff;
+  background: var(--hash) no-repeat 4px center / 12px, linear-gradient(to bottom, #efe, #e6ffe6);
 }
 
 .snarkTorrents .infohash, .snarkTorrentInfo .infohash {

@@ -762,8 +762,6 @@ tt, .bucket, #bucketSet code {
 
 .infohash {
   color: #090;
-  -moz-user-select: all;
-  -webkit-user-select: all;
   user-select: all;
 }
 
@@ -3996,6 +3994,15 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
   vertical-align: middle;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.snarkTorrents .infohash {
+  padding: 2px 4px 2px 18px;
+  display: inline-block;
+  max-width: 100px;
+  border-radius: 1px;
+  box-shadow: 0 0 0 1px #7a7, inset 0 0 0 1px #fff;
+  background: var(--hash) no-repeat 4px center / 12px, linear-gradient(to bottom, #efe, #e6ffe6);
 }
 
 .snarkTorrentInfo .infohash {
