@@ -2,9 +2,6 @@
 /* I2P Description: Light blue "classic" I2P theme; optimized for less capable browsers and system specifications. */
 /* Author: dr|z3d */
 
-@import url(/themes/console/images/images.css);
-@import url(images/images.css);
-
 :root {
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
   --monospaced: Droid Sans Mono, Andale Mono, DejaVu Sans Mono, Lucida Console, monospace;
