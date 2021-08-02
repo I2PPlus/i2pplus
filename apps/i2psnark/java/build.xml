@@ -291,6 +291,10 @@
               todir="build/standalone-resources/.resources/themes/snark/dark/images" />
         <copy file="../../../installer/resources/themes/console/classic/images/bg0.png"
               todir="build/standalone-resources/.resources/themes/snark/classic/images" />
+        <copy file="../../../installer/resources/themes/console/light/optbox.css"
+              todir="build/standalone-resources/.resources/themes/snark/light" />
+        <copy file="../../../installer/resources/themes/console/midnight/images/tile.css"
+              todir="build/standalone-resources/.resources/themes/midnight/light/images" />
 
         <mkdir dir="build/standalone-resources/.resources/js" />
         <copy file="../../routerconsole/jsp/js/ajax.js" todir="build/standalone-resources/.resources/js" />

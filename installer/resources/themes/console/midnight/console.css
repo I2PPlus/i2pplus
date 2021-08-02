@@ -9,6 +9,7 @@
 @import url(/themes/console/images/images.css);
 @import url(images/images.css);
 @import url(chromescroll.css);
+@import url(/themes/console/midnight/images/tile.css);
 @import url(../images/itooplus.css);
 
 :root {
@@ -39,7 +40,7 @@ html, body {
 html {
   background: repeating-linear-gradient(to right, rgba(0,16,0,.5) 2px, rgba(0,0,0,.3) 4px),
               repeating-linear-gradient(to bottom, rgba(0,0,32,.6) 2px, rgba(0,0,0,.3) 4px),
-              url(images/tile.png) #001;
+              var(--tile) #001;
   background-size: 4px 100%, 100% 4px, 171px 148px;
 }
 
@@ -5543,8 +5544,7 @@ div#volunteer {
   margin: -5px 0 10px !important;
   padding: 0 20px;
   border: var(--innerborder);
-  background: #000 url(images/scarface.jpg) bottom right no-repeat !important;
-  background-size: auto 60% !important;
+  background: #000;
 }
 
 #legal h2, #sidebarhelp h2, #volunteer h2, #reachabilityhelp h2, #configurationhelp h2, #themeoverride h2, #tunnman h2, #browserconfig h2,
@@ -6983,9 +6983,8 @@ table#jardump {
 
 .main#torrents, .main#tunnelmgr {
   padding: 0;
-  background: url(images/scarface.jpg) right bottom no-repeat, linear-gradient(to bottom, #000, #001) !important;
-  background-size: auto 120px, 100% 2px !important;
-  background-blend-mode: screen;
+  background: linear-gradient(to bottom, #000, #001) !important;
+  background-size: 100% 2px !important;
 }
 
 .main#torrents {

@@ -3,6 +3,7 @@
 
 @import url(/themes/fonts/DroidSans.css);
 @import url(../images/itooplus.css);
+@import url(images/tile.css);
 
 :root {
   --title: repeating-linear-gradient(to right, rgba(0,0,48,.4) 2px, #000 4px), linear-gradient(to bottom, #003, #002 50%, #001 50%, #000);
@@ -33,7 +34,7 @@ html {
 html {
   background: repeating-linear-gradient(to right, rgba(0,0,16,.7) 2px, rgba(0,0,0,.5) 4px),
               repeating-linear-gradient(to bottom, rgba(0,0,32,.7) 2px, rgba(0,0,0,.8) 4px),
-              url(images/tile.png) #001;
+              var(--tile) #001;
   background-size: 100% 4px, 4px 100%, 171px 148px;
 }
 
