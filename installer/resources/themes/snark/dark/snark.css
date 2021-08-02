@@ -4998,6 +4998,10 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
     background: #ff3;
   }
 
+  .active.starting .snarkTorrentStatus b, .active.starting.processing .snarkTorrentStatus b {
+    background: repeating-linear-gradient(135deg, #ff3, #ff3 8px, #550 9px, #550 17px) !important;
+  }
+
   .inactive.downloading .snarkTorrentStatus b::before, .active.starting .snarkTorrentStatus b::before {
     border-color: transparent #ff3 transparent transparent;
   }

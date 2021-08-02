@@ -4589,7 +4589,7 @@ td.snarkTorrentStatus b::before {
   background: #fc0;
 }
 
-.active.starting.processing .snarkTorrentStatus b {
+.active.starting .snarkTorrentStatus b, .active.starting.processing .snarkTorrentStatus b {
   background: repeating-linear-gradient(135deg, #bb0, #bb0 8px, #550 9px, #550 17px) !important;
 }
 

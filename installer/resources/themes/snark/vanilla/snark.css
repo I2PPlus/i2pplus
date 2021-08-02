@@ -4770,6 +4770,10 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
     background: #fc0;
   }
 
+  .active.starting .snarkTorrentStatus b, .active.starting.processing .snarkTorrentStatus b {
+    background: repeating-linear-gradient(135deg, #fc0, #fc0 8px, #550 9px, #550 17px) !important;
+  }
+
   .inactive.downloading .snarkTorrentStatus b::before, .active.starting .snarkTorrentStatus b::before {
     border-color: transparent #fc0 transparent transparent;
   }
