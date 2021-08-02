@@ -882,18 +882,18 @@ public class I2PSnarkServlet extends BasicServlet {
         if (_manager.isStopping()) {
             out.write("");
         } else if (_manager.util().connected()) {
-            out.write("<input type=\"submit\" id=\"actionStopAll\" name=\"action_StopAll\"" + "\" value=\"" +
+            out.write("<input type=\"submit\" id=\"actionStopAll\" name=\"action_StopAll\" value=\"" +
                       _t("Stop All") + "\" title=\"" + _t("Stop all torrents and the I2P tunnel") + "\">");
             for (Snark s : snarks) {
                 if (s.isStopped()) {
                     // show startall too
-                    out.write("<input type=\"submit\" id=\"actionStartAll\" name=\"action_StartAll\"" + "\" value=\"" +
+                    out.write("<input type=\"submit\" id=\"actionStartAll\" name=\"action_StartAll\" value=\"" +
                              _t("Start All") + "\" title=\"" + _t("Start all stopped torrents") + "\">");
                     break;
                 }
             }
         } else if ((!_manager.util().isConnecting()) && !snarks.isEmpty()) {
-            out.write("<input type=\"submit\" id=\"actionStartAll\" name=\"action_StartAll\"" + "\" value=\"" +
+            out.write("<input type=\"submit\" id=\"actionStartAll\" name=\"action_StartAll\" value=\"" +
                       _t("Start All") + "\" title=\"" + _t("Start all torrents and the I2P tunnel") + "\">");
         } else {
             out.write("");
