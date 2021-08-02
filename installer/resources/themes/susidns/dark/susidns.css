@@ -4,8 +4,6 @@
 @import url(/themes/fonts/DroidSans.css);
 @import url(/themes/console/dark/optbox.css);
 @import url(/themes/console/dark/chromescroll.css);
-@import url(/themes/console/images/images.css);
-@import url(/themes/console/dark/images/images.css);
 @import url(../images/images.css);
 @import url(images/images.css);
 
@@ -44,6 +42,9 @@ body {
   line-height: 120%;
   color: #ee9;
   background: #010;
+  background: repeating-linear-gradient(to right, rgba(0,16,0,.5) 2px, rgba(0,25,0,.5) 4px),
+              repeating-linear-gradient(to bottom, #000 2px, #020 4px), #010;
+  background-size: 4px 100%, 100% 4px;
 }
 
 body.iframed {
@@ -104,7 +105,7 @@ body.iframed {
   text-align: center;
   border: 1px solid #252;
   border-radius: 0 1px 2px 2px;
-  box-shadow: var(--highlight), 0 2px 2px 2px rgba(0,0,0,.7);
+  box-shadow: var(--highlight), 0 2px 2px 2px rgba(0,0,0,.4);
   background: repeating-linear-gradient(to right, rgba(0,0,0,.5) 2px, rgba(0,48,0,.3) 4px),
               linear-gradient(to bottom, #1a261a 0%, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 51%, #020602 52%, #010301 55%, #000000 57%),
               url(/themes/console/dark/images/camotile2.png) !important;
