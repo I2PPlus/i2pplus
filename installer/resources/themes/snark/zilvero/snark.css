@@ -3,7 +3,6 @@
 /* Copyright 2018 */
 
 @import url(/themes/fonts/DroidSans.css);
-@import url(images/images.css);
 
 :root {
 	--monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;

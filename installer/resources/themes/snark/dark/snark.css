@@ -3,7 +3,6 @@
 
 @import url(/themes/fonts/DroidSans.css);
 @import url(/themes/console/dark/chromescroll.css);
-@import url(images/images.css);
 
 :root {
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;

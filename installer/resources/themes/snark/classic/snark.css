@@ -2,7 +2,6 @@
 /* Author: dr|z3d */
 
 @import url(/themes/fonts/DroidSans.css);
-@import url(images/images.css);
 
 :root {
   --btnAction: linear-gradient(to bottom, #fff 50%, #ddf 50%);

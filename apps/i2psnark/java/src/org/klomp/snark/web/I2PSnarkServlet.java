@@ -368,6 +368,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         // selected theme inserted here
         out.write(HEADER_A + _themePath + HEADER_B + "\n");
+        out.write(HEADER_A + _themePath + HEADER_I + "\n"); // load css image assets
         out.write(HEADER_A + _themePath + HEADER_Z + "\n"); // optional override.css for version-persistent user edits
 
         // larger fonts for cjk translations
@@ -3504,6 +3505,7 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final String HEADER_B = "snark.css?" + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\" >";
     private static final String HEADER_C = "nocollapse.css?" + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\" >";
     private static final String HEADER_D = "snark_big.css?" + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\" >";
+    private static final String HEADER_I = "images/images.css?" + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\" >";
     private static final String HEADER_Z = "override.css\" rel=\"stylesheet\" type=\"text/css\" >";
     private static final String TABLE_HEADER = "<table border=\"0\" class=\"snarkTorrents\" id=\"snarkTorrents\" width=\"100%\" >\n" + "<thead id=\"snarkHead\">\n";
     private static final String FOOTER = "</div>\n</center>\n<span id=\"endOfPage\" data-iframe-height></span>\n" +
