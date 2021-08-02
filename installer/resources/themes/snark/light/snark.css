@@ -4,7 +4,6 @@
 /* Thanks to http://www.luxphile.com/2011/01/creative-commons-cat.html for the kitty image */
 
 @import url(/themes/fonts/DroidSans.css);
-@import url(images/images.css);
 @import url(/themes/console/light/optbox.css);
 @import url(sliders.css);
 
@@ -4431,6 +4430,10 @@ tfoot .snarkTorrentRateDown::after, tfoot .snarkTorrentRateUp::after {
     color: #27293f !important;
     text-shadow: 0 1px 1px rgba(255,255,255,.5);
     background: #dd5;
+  }
+
+  .active.starting .snarkTorrentStatus b, .active.starting.processing .snarkTorrentStatus b {
+    background: repeating-linear-gradient(135deg, #dd5, #dd5 8px, #550 9px, #550 17px) !important;
   }
 
   .inactive.downloading .snarkTorrentStatus b::before, .active.starting .snarkTorrentStatus b::before {

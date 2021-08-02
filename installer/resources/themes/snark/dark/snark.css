@@ -3,7 +3,6 @@
 
 @import url(/themes/fonts/DroidSans.css);
 @import url(/themes/console/dark/chromescroll.css);
-@import url(images/images.css);
 
 :root {
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
@@ -4997,6 +4996,10 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
     color: #111;
     text-shadow: 0 1px 1px #ff3;
     background: #ff3;
+  }
+
+  .active.starting .snarkTorrentStatus b, .active.starting.processing .snarkTorrentStatus b {
+    background: repeating-linear-gradient(135deg, #ff3, #ff3 8px, #550 9px, #550 17px) !important;
   }
 
   .inactive.downloading .snarkTorrentStatus b::before, .active.starting .snarkTorrentStatus b::before {
