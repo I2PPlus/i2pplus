@@ -2309,7 +2309,7 @@ div.sorry hr {
   padding: 20px 30px 10px;
   min-width: 580px;
   font-size: 10.5pt;
-  background: #000 url(images/earth.jpg) no-repeat scroll bottom right / auto 180px !important;
+  background: #000 var(--earth) no-repeat scroll bottom right / auto 180px !important;
 }
 
 #warning2 h3 {
@@ -2365,7 +2365,7 @@ div.sorry hr {
   font-size: 8pt;
   border: 1px solid #26235c;
   box-shadow: 0 1px 5px #000;
-  background: #000 url(images/earth.jpg) no-repeat scroll bottom right;
+  background: #000 var(--earth) no-repeat scroll bottom right;
   background-size: auto 200px;
 }
 
@@ -2376,8 +2376,8 @@ div.sorry hr {
   border-radius: 0 0 2px 2px;
   box-shadow: var(--highlight);
   box-shadow: var(--highlight), inset 0 0 2px 1px #191939, inset 0 0 5px 3px #001;
-  background: #000 url(images/earth.jpg) right -50px bottom -50px no-repeat;
-  background: url(images/earth.jpg) right -50px bottom -50px no-repeat, linear-gradient(135deg, #000010, #000);
+  background: #000 var(--earth) right -50px bottom -50px no-repeat;
+  background: var(--earth) right -50px bottom -50px no-repeat, linear-gradient(135deg, #000010, #000);
   background-size: 100px auto, 100%;
 }
 
@@ -2578,8 +2578,8 @@ div.sorry hr {
 
 .main#config_update .messages {
   box-shadow: var(--highlight) !important;
-  background: var(--infohelp) no-repeat 15px center, url(images/earth.jpg) bottom right no-repeat #000 !important;
-  background: var(--infohelp) no-repeat 15px center, url(images/earth.jpg) bottom right no-repeat, linear-gradient(135deg, #000020, #000) !important;
+  background: var(--infohelp) no-repeat 15px center, var(--earth) bottom right no-repeat #000 !important;
+  background: var(--infohelp) no-repeat 15px center, var(--earth) bottom right no-repeat, linear-gradient(135deg, #000020, #000) !important;
   background-size: 28px, 80px auto, 100% !important;
 }
 
