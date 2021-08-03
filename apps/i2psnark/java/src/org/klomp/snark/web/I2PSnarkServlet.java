@@ -309,7 +309,7 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean isStandalone = !_context.isRouterContext();
         out.write(DOCTYPE + "<html>\n" +
                   "<head>\n<link rel=\"preload\" href=\"/themes/fonts/DroidSans.css\" as=\"style\">\n" +
-                  "<link rel=\"preload\" href=\"" + _themePath + "images/images.css\" as=\"style\">\n" +
+                  "<link rel=\"preload\" href=\"" + _themePath + "images/images.css?" + CoreVersion.VERSION + "\" as=\"style\">\n" +
                   "<link rel=\"shortcut icon\" href=\"" + _contextPath + WARBASE + "icons/favicon.svg\">\n");
         if (!isStandalone)
             out.write("<link rel=\"preload\" href=\"/js/iframeResizer/iframeResizer.contentWindow.js?" + CoreVersion.VERSION + "\" as=\"script\">");
