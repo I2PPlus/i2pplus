@@ -58,8 +58,7 @@ abstract class StoreJob extends JobImpl {
     private final int _connectMask;
 
     private final static int PARALLELIZATION = 4; // how many sent at a time
-//    private final static int REDUNDANCY = 4; // we want the data sent to 6 peers
-    private final static int REDUNDANCY = 32;
+    private final static int REDUNDANCY = 4; // we want the data sent to 4 peers
     private final static int STORE_PRIORITY = OutNetMessage.PRIORITY_MY_NETDB_STORE;
 
     /**
@@ -111,8 +110,7 @@ abstract class StoreJob extends JobImpl {
         return getContext().clock().now() >= _expiration;
     }
 
-//    private static final int MAX_PEERS_SENT = 10;
-    private static final int MAX_PEERS_SENT = 32;
+    private static final int MAX_PEERS_SENT = 10;
 
     /**
      * send the key to the next batch of peers

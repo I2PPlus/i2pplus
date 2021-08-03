@@ -169,10 +169,14 @@ class RefreshRoutersJob extends JobImpl {
                         if ((routerAge / 60 / 60 / 1000) <= 1 && freshness == null && !uninteresting) {
                             _log.debug("Skipping refresh of Router [" + h.toBase64().substring(0,6) + "] - less than an hour old" +
                         "\n* Published: " + new Date(ri.getPublished()));
+/*
                     } else if (uninteresting && (routerAge / 60 / 60 / 1000) <= 1) {
                         _log.debug("Skipping refresh of uninteresting Router [" + h.toBase64().substring(0,6) + "] - less than " + (rapidScan / 60 / 1000) + " minutes old" +
                         "\n* Published: " + new Date(ri.getPublished()));
-
+*/
+                    } else if (uninteresting) {
+                        _log.debug("Skipping refresh of uninteresting Router [" + h.toBase64().substring(0,6) + "]");
+                        break;
                     } else {
                         _log.debug("Skipping refresh of Router [" + h.toBase64().substring(0,6) + "] - less than " + (routerAge / 60 / 60 / 1000) + " hours old" +
                         "\n* Published: " + new Date(ri.getPublished()));

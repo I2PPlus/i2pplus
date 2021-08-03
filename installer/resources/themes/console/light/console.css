@@ -2043,7 +2043,7 @@ h1, .confignav {
   color: var(--inklite) !important;
 }
 
-.configure {
+div.configure {
   margin-bottom: 0;
   min-width: 400px;
 }
@@ -2241,10 +2241,12 @@ h3#exploratory {
   border-left: none !important;
   box-shadow: none !important;
   background: none !important;
+  display: inline-block;
 }
 
 #tunnels h3 a[href^="/configtunnels#"]::after, #tunnels h3 a[href$="i2ptunnelmgr"]::after,
 #logs a.delete::after, #logs a.configure::after {
+  margin-top: 2px;
   margin-bottom: -1px;
   width: 16px;
   height: 16px;
@@ -2266,12 +2268,12 @@ h3#exploratory {
 }
 
 #logs a.configure::after {
-  padding-left: 18px;
-  padding-right: 10px;
+  padding-left: 23px;
+  padding-right: 6px;
 }
 
 #tunnels h3 a[href^="/configtunnels#"]:hover, #logs a.configure:hover::after {
-  background: var(-settings_hover) no-repeat center center / 16px;
+  background: var(--settings_hover) no-repeat center center / 16px;
 }
 
 #logs a.delete:hover::after {
@@ -2283,7 +2285,7 @@ h3#exploratory {
 }
 
 #logs a.delete::after {
-  width: 16px;
+  width: 19px;
   height: 16px;
   display: inline-block;
   background: var(--close) no-repeat center center / 14px;

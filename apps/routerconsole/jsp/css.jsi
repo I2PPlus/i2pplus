@@ -40,27 +40,16 @@
                       java.io.File.separatorChar + "console" + java.io.File.separatorChar + theme +
                       java.io.File.separatorChar;
    java.io.File themeOverride = new java.io.File(themeBase + "override.css");
-   java.io.File imports = new java.io.File(themeBase + "images" + java.io.File.separatorChar + "images.css");
-   java.io.File inlineImages = new java.io.File(themeBase + "import.css");
    boolean hasOverride = themeOverride.exists();
-   boolean hasImport = imports.exists();
-   boolean hasImages = inlineImages.exists();
 %>
-<link rel="preload" href="/themes/fonts/DroidSans/DroidSans-Bold.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/themes/fonts/DroidSans/DroidSans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/themes/fonts/DroidSans/DroidSansMono.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/themes/fonts/DroidSans/DroidSans-Bold.woff2" as="font" type="font/woff2">
+<link rel="preload" href="/themes/fonts/DroidSans/DroidSans.woff2" as="font" type="font/woff2">
+<link rel="preload" href="/themes/fonts/DroidSans/DroidSansMono.woff2" as="font" type="font/woff2">
 <link rel="preload" href="/themes/fonts/DroidSans.css" as="style">
 <link rel="preload" href="<%=themePath%>images/i2plogo.png" as="image">
 <link rel="preload" href="/themes/console/images/images.css?<%=net.i2p.CoreVersion.VERSION%>" as="style">
 <link rel="preload" href="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>" as="script">
-<script type="text/javascript" src=""></script>
-<%
-    if (hasImages) {
-%>
 <link rel="preload" href="<%=themePath%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" as="style">
-<%
-    }
-%>
 <link rel="icon" href="<%=themePath%>images/favicon.svg">
 <script nonce="<%=cspNonce%>" type="text/javascript">if (top.location != location) {top.location.href = location.href;}</script>
 <script src="/js/progressx.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
@@ -98,15 +87,9 @@
     }
 %>
 <link href="/themes/fonts/DroidSans.css" rel="stylesheet" type="text/css">
-<link href="/themes/console/images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
-<%
-    if (hasImages) {
-%>
-<link href="<%=themePath%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
-<%
-    }
-%>
 <link href="<%=themePath%>console.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css" title="<%=theme%>">
+<link href="/themes/console/images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
+<link href="<%=themePath%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
 <%
     if (intl.getLang().equals("zh")) {
        // make the fonts bigger for chinese
@@ -127,11 +110,6 @@
     if (hasOverride) {
 %>
 <link href="<%=themePath%>override.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
-<%
-    }
-    if (hasImport) {
-%>
-<link href="<%=themePath%>import.css" rel="stylesheet" type="text/css">
 <%
     }
 %>

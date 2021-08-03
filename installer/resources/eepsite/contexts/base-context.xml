@@ -22,7 +22,7 @@ to serve static html files and images.
   </Call>
   <Call name="setInitParameter">
     <Arg>org.eclipse.jetty.servlet.Default.stylesheet</Arg>
-    <Arg>./eepsite/.resources/jetty-dir.css</Arg>
+    <Arg>./eepsite/docroot/.resources/jetty-dir.css</Arg>
   </Call>
   <Call name="setMimeTypes">
     <Arg>
