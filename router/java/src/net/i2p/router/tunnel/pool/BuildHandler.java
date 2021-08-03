@@ -80,9 +80,9 @@ class BuildHandler implements Runnable {
 
     /** TODO these may be too high, review and adjust */
 //    private static final int MIN_QUEUE = 18;
-    private static final int MIN_QUEUE = 8;
+    private static final int MIN_QUEUE = 16;
 //    private static final int MAX_QUEUE = 192;
-    private static final int MAX_QUEUE = 128;
+    private static final int MAX_QUEUE = 512;
 //    private static final int MIN_QUEUE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 18 : 36;
 //    private static final int MAX_QUEUE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 192 : 384;
 
