@@ -936,6 +936,9 @@ p:empty + .sb_notice {
 }
 
 #nographs::after {
+  margin-top: 2px;
+  width: 36px;
+  height: 36px;
   background-size: 36px;
 }
 
