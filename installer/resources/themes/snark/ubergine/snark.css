@@ -2165,21 +2165,28 @@ input.reload[name="recheck"]:hover, input.reload[name="recheck"]:focus {
 
 input.starttorrent, input.starttorrent:active {
   padding: 4px 6px 4px 20px !important;
-  background: url(images/start.svg), var(--btn);
-  background-size: 10px, 100% !important;
+  background: var(--start_hover) no-repeat 6px center / 8px, var(--btn)
 }
 
 input.starttorrent:hover, input.starttorrent:focus {
-  background: url(images/start.svg), var(--btn_hover);
+  background: var(--start_hover) no-repeat 6px center / 8px, var(--btn_hover);
 }
 
 input.stoptorrent, input.stoptorrent:active {
-  background: url(images/stop.svg), var(--btn);
-  background-size: 10px, 100% !important;
+  background: var(--stop_hover) no-repeat 6px center / 8px, var(--btn);
 }
 
 input.stoptorrent:hover, input.stoptorrent:focus {
-  background: url(images/stop.svg), var(--btn_hover);
+  background: var(--stop_hover) no-repeat 6px center / 8px, var(--btn_hover);
+}
+
+input.starttorrent, input.stoptorrent {
+  background-size: 10px, 100% !important;
+  background-blend-mode: normal !important;
+}
+
+input.starttorrent:active, input.stoptorrent:active {
+  background-blend-mode: luminosity !important;
 }
 
 a.control:active, input[type=submit]:active, input[type="reset"]:active {
