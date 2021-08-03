@@ -2273,7 +2273,7 @@ h3#exploratory {
 }
 
 #tunnels h3 a[href^="/configtunnels#"]:hover, #logs a.configure:hover::after {
-  background: var(-settings_hover) no-repeat center center / 16px;
+  background: var(--settings_hover) no-repeat center center / 16px;
 }
 
 #logs a.delete:hover::after {
