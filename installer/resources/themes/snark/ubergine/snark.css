@@ -41,15 +41,6 @@ body.iframed {
   margin: 0 !important;
 }
 
-body::before {
- width: 0;
- height: 0;
- display: inline-block;
- background: var(--snark_hover), var(--tracker_hover), var(--forum_hover), var(--search_hover),
-             var(--snark_active), var(--tracker_active), var(--forum_active), var(--search_active);
- content: "";
-}
-
 th img, a img {
   font-size: 0 !important;
   overflow: hidden;
@@ -154,7 +145,8 @@ label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
   border: 1px solid #730;
   border-radius: 0;
   box-shadow: 0 0 1px #000, inset 0 0 0 1px rgba(16, 0, 16, .7), inset 0 0 2px 0 rgba(255,128,0,.5);
-  background: var(--tracker) no-repeat 11px center / 16px, var(--nav);
+  background: var(--tracker) no-repeat 11px center / 16px, var(--nav),
+              var(--tracker_hover) no-repeat 11px center / 16px, var(--tracker_active) no-repeat 11px center / 16px;
   transition: ease-in-out box-shadow .01s;
   will-change: transform;
 }
@@ -200,7 +192,8 @@ label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
 
 .snarkNav:link:first-child, .snarkNav:last-child[href="/i2psnark/"] {
   padding-left: 28px !important;
-  background: var(--snark) no-repeat 11px center / 18px, var(--nav);
+  background: var(--snark) no-repeat 11px center / 18px, var(--nav),
+              var(--snark_hover) no-repeat 11px center / 18px, var(--snark_active) no-repeat 11px center / 18px;
 }
 
 .snarkNav:last-child[href="/i2psnark/"] {
@@ -219,7 +212,8 @@ label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
 }
 
 .nav_forum:link {
-  background: var(--forum) no-repeat 11px center / 16px, var(--nav);
+  background: var(--forum) no-repeat 11px center / 16px, var(--nav),
+              var(--forum_hover) no-repeat 11px center / 16px,  var(--forum_active) no-repeat 11px center / 16px;
 }
 
 .nav_forum:link:hover, .nav_forum:link:focus {
@@ -233,7 +227,8 @@ label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
 }
 
 .nav_search:link {
-  background: var(--search) no-repeat 11px center / 16px, var(--nav);
+  background: var(--search) no-repeat 11px center / 16px, var(--nav),
+              var(--search_hover) no-repeat 11px center / 16px, var(--search_active) no-repeat 11px center / 16px;
 }
 
 .nav_search:link:hover, .nav_search:link:focus {
@@ -2170,21 +2165,28 @@ input.reload[name="recheck"]:hover, input.reload[name="recheck"]:focus {
 
 input.starttorrent, input.starttorrent:active {
   padding: 4px 6px 4px 20px !important;
-  background: url(images/start.svg), var(--btn);
-  background-size: 10px, 100% !important;
+  background: var(--start_hover) no-repeat 6px center / 8px, var(--btn)
 }
 
 input.starttorrent:hover, input.starttorrent:focus {
-  background: url(images/start.svg), var(--btn_hover);
+  background: var(--start_hover) no-repeat 6px center / 8px, var(--btn_hover);
 }
 
 input.stoptorrent, input.stoptorrent:active {
-  background: url(images/stop.svg), var(--btn);
-  background-size: 10px, 100% !important;
+  background: var(--stop_hover) no-repeat 6px center / 8px, var(--btn);
 }
 
 input.stoptorrent:hover, input.stoptorrent:focus {
-  background: url(images/stop.svg), var(--btn_hover);
+  background: var(--stop_hover) no-repeat 6px center / 8px, var(--btn_hover);
+}
+
+input.starttorrent, input.stoptorrent {
+  background-size: 10px, 100% !important;
+  background-blend-mode: normal !important;
+}
+
+input.starttorrent:active, input.stoptorrent:active {
+  background-blend-mode: luminosity !important;
 }
 
 a.control:active, input[type=submit]:active, input[type="reset"]:active {
