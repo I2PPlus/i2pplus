@@ -3633,14 +3633,15 @@ public class I2PSnarkServlet extends BasicServlet {
         // uncollapse panels
         boolean collapsePanels = _manager.util().collapsePanels();
         if (!collapsePanels) {
-            buf.append(HEADER_A + _themePath + HEADER_C);
+            buf.append(HEADER_A + _themePath + HEADER_C).append("\n");
         }
         // larger fonts for cjk translations
         String lang = (Translate.getLanguage(_manager.util().getContext()));
         if (lang.equals("zh") || lang.equals("ja") || lang.equals("ko")) {
             buf.append(HEADER_A).append(_themePath).append(HEADER_D);
         }
-        buf.append("\n").append(HEADER_A + _themePath + HEADER_Z); // optional override.css for version-persistent user edits
+        buf.append(HEADER_A + _themePath + HEADER_I).append("\n"); // images.css
+        buf.append(HEADER_A + _themePath + HEADER_Z).append("\n"); // optional override.css for version-persistent user edits
         // hide javascript-dependent buttons when js is unavailable
         buf.append("<noscript><style type=\"text/css\">.script{display:none}</style></noscript>\n")
            .append("<link rel=\"shortcut icon\" href=\"" + _contextPath + WARBASE + "icons/favicon.svg\">\n");
@@ -4026,18 +4027,18 @@ public class I2PSnarkServlet extends BasicServlet {
                     boolean isRunning = !snark.isStopped();
                     buf.append("<input type=\"submit\" value=\"");
                     if (isRunning)
-                        buf.append(_t("Stop")).append("\" name=\"stop\" class=\"stoptorrent\">\n");
+                        buf.append(_t("Stop")).append("\" name=\"stop\" class=\"stoptorrent\">");
                     else
-                        buf.append(_t("Start")).append("\" name=\"start\" class=\"starttorrent\">\n");
+                        buf.append(_t("Start")).append("\" name=\"start\" class=\"starttorrent\">");
                     buf.append("<input type=\"submit\" name=\"recheck\" value=\"").append(_t("Force Recheck"));
                     if (isRunning)
                         buf.append("\" class=\"disabled\" disabled=\"disabled\" title=\"")
                            .append(_t("Stop the torrent in order to check file integrity"))
-                           .append("\">\n");
+                           .append("\">");
                     else
                         buf.append("\" class=\"reload\" title=\"")
                            .append(_t("Check integrity of the downloaded files"))
-                           .append("\">\n");
+                           .append("\">");
                 }
 /**
 // TODO: fix feature so checkbox status is saved
