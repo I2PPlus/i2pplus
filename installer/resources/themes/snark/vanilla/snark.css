@@ -167,7 +167,7 @@ label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
   border: 1px solid #463e39;
   border-radius: 0;
   box-shadow: var(--highlight), inset 0 0 0 rgba(0,0,0,0), 0 0 0 1px rgba(77, 69, 62, .1);
-  background-size: 17px, 100%, 100% !important;
+  background-size: 17px, 100%, 100%, 17px, 17px !important;
   background-position: 12px center, center center, center center !important;
   background-repeat: no-repeat !important;
 }
@@ -187,20 +187,20 @@ label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
 }
 
 .nav_main:link {
-  background: var(--b_snark) no-repeat 11px center, var(--nav);
-  background-size: 18px, 100%, 100% !important;
+  background: var(--b_snark) no-repeat 11px center / 18px, var(--nav), var(--b_snark_hover) no-repeat 11px center / 18px,
+              var(--b_snark_active) no-repeat 11px center / 18px !important;
 }
 
 .nav_forum:link {
-  background: var(--b_forum), var(--nav);
+  background: var(--b_forum), var(--nav), var(--b_forum_hover), var(--b_forum_active);
 }
 
 .nav_tracker:link {
-  background: var(--b_tracker), var(--nav);
+  background: var(--b_tracker), var(--nav), var(--b_tracker_hover), var(--b_tracker_active);
 }
 
 .nav_search:link {
-  background: var(--b_search), var(--nav);
+  background: var(--b_search), var(--nav), var(--b_search_hover), var(--b_search_active);
 }
 
 .nav_main:hover, .nav_main:focus {
