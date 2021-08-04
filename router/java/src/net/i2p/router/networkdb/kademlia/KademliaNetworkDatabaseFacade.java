@@ -367,7 +367,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             String v = ri.getVersion();
             String MIN_VERSION = "0.9.48";
             boolean isHidden = _context.router().isHidden() || _context.getBooleanProperty("router.hiddenMode");
-            boolean uninteresting = ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
+            boolean uninteresting = (_context.router().getUptime() > 40*60*1000 && ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0) ||
                                     ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                     ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 || VersionComparator.comp(v, MIN_VERSION) < 0;
             if (uninteresting && !isHidden)
@@ -786,7 +786,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             boolean isHidden = _context.router().isHidden() || _context.getBooleanProperty("router.hiddenMode");
             String v = ri.getVersion();
             String MIN_VERSION = "0.9.48";
-            boolean uninteresting = ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
+            boolean uninteresting = (_context.router().getUptime() > 40*60*1000 && ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0) ||
                                     ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                     ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 || VersionComparator.comp(v, MIN_VERSION) < 0;
             if (uninteresting && !isHidden && _context.netDb().getKnownRouters() > 2000 && _context.router().getUptime() > 30*60*1000) {
