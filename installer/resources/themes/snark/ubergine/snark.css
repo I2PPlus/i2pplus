@@ -16,9 +16,15 @@
   --select_hover: linear-gradient(to bottom, #f60 50%, #f40 50%);
   --btn: linear-gradient(to bottom, #989, #878);
   --btn_hover: linear-gradient(to bottom, #767, #989);
+/*
   --btnAction: linear-gradient(to bottom, #582858, #737 50%, #101 50%, #080008);
   --btnAction_hover: linear-gradient(to bottom, #656, #858 50%, #212 50%, #080008, #000);
+  --btnAction_hover: linear-gradient(to bottom, #730, #b50 50%, #212 50%, #100, #000);
   --btnAction_active: linear-gradient(to bottom, #080008, #858);
+*/
+  --btnAction: linear-gradient(to bottom, #737, #582858 50%, #101 50%, #080008);
+  --btnAction_hover: linear-gradient(to bottom, #b50, #730 50%, #212 50%, #100, #000);
+  --btnAction_active: linear-gradient(to bottom, #100, #310);
 }
 
 html, body {
@@ -6299,7 +6305,7 @@ td.snarkTorrentAction input[type=submit] {
 
 .snarkTorrentAction input:active {
   box-shadow: 0 0 0 1px #414, inset 0 0 0 1px rgba(255,102,0, .6), inset 0 0 0 2px rgba(0,0,0,.9), inset 4px 4px 4px rgba(0,0,0,.9);
-  background-blend-mode: luminosity, normal;
+  background-blend-mode: overlay, normal;
   transition: ease box-shadow .05s;
   filter: none !important;
 }
