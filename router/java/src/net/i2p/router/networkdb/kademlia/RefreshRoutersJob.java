@@ -126,9 +126,12 @@ class RefreshRoutersJob extends JobImpl {
                 int routerAge = 60*60*1000;
                 String v = ri.getVersion();
                 String MIN_VERSION = "0.9.48";
-                boolean uninteresting = (getContext().router().getUptime() > 40*60*1000 && ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0) ||
+                boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
                                         ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
-                                        ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 || VersionComparator.comp(v, MIN_VERSION) < 0;
+                                        ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
+                                        VersionComparator.comp(v, MIN_VERSION) < 0) &&
+                                        getContext().netDb().getKnownRouters() > 2000 &&
+                                        getContext().router().getUptime() > 60*60*1000;
                 int rapidScan = 45*60*1000;
                 if (uninteresting) {
                     routerAge = rapidScan;
