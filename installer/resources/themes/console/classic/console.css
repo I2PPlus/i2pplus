@@ -3580,6 +3580,39 @@ h3#iptransport a:hover {
   filter: drop-shadow(0 0 1px var(--hover));
 }
 
+#config_logging h3 a::before, #webappconfiguration a::before,
+#i2pclientconfig a::before, #pluginmanage a::before {
+  width: 18px;
+  height: 13px;
+  display: inline-block;
+  vertical-align: middle;
+  background: var(--eye) no-repeat left center / 14px;
+  content: "";
+}
+
+#config_logging h3 a:hover::before, #config_logging h3 a:focus::before {
+  background: var(--eye_hover) no-repeat left center / 14px;
+}
+
+#webappconfiguration a::before, #i2pclientconfig a::before, #pluginmanage a::before {
+  margin-top: -1px;
+  width: 15px;
+  background: var(--settings) no-repeat left center / 12px;
+}
+
+#webappconfiguration a:hover::before, #webappconfiguration a:focus::before,
+#i2pclientconfig a:hover::before, #i2pclientconfig a:focus::before,
+#pluginmanage a:hover::before, #pluginmanage a:focus::before {
+  background: var(--settings_hover) no-repeat left center / 12px;
+}
+
+@media screen and (max-width: 1499px) {
+  #config_logging h3 a::before, #webappconfiguration a::before,
+  #i2pclientconfig a::before, #pluginmanage a::before {
+    margin-top: -2px;
+  }
+}
+
 h4 {
   margin: 5px 0;
   padding: 3px 5px;

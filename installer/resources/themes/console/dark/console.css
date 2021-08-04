@@ -6681,6 +6681,39 @@ h3#iptransport a:hover::after, h3#advancedconfig a:hover::after, #reseedsetup a:
   background: var(--helplink_hover) no-repeat center center / 16px;
 }
 
+#config_logging h3 a::before, #webappconfiguration a::before,
+#i2pclientconfig a::before, #pluginmanage a::before {
+  width: 18px;
+  height: 13px;
+  display: inline-block;
+  vertical-align: middle;
+  background: var(--eye) no-repeat left center / 14px;
+  content: "";
+}
+
+#config_logging h3 a:hover::before, #config_logging h3 a:focus::before {
+  background: var(--eye_hover) no-repeat left center / 14px;
+}
+
+#webappconfiguration a::before, #i2pclientconfig a::before, #pluginmanage a::before {
+  margin-top: -1px;
+  width: 15px;
+  background: var(--settings) no-repeat left center / 12px;
+}
+
+#webappconfiguration a:hover::before, #webappconfiguration a:focus::before,
+#i2pclientconfig a:hover::before, #i2pclientconfig a:focus::before,
+#pluginmanage a:hover::before, #pluginmanage a:focus::before {
+  background: var(--settings_hover) no-repeat left center / 12px;
+}
+
+@media screen and (max-width: 1499px) {
+  #config_logging h3 a::before, #webappconfiguration a::before,
+  #i2pclientconfig a::before, #pluginmanage a::before {
+    margin-top: -2px;
+  }
+}
+
 #logs h3 a {
   margin: -8px 0;
   padding: 8px 2px 8px 10px;

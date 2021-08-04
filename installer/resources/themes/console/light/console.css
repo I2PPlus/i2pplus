@@ -2101,7 +2101,8 @@ h3 a.script, th a.script {
 }
 
 #bwlimiter a, #i2pclientconfig a, #config_logging h3 a, #graphdisplay a,
-#version a, #logs h3 a, #tunnels h3 a:not(.lsview), #advancedconfig a, #iptransport a, #reseedsetup a, #graphinfo a, #config_service h3 a, .h3navlinks a {
+#version a, #logs h3 a, #tunnels h3 a:not(.lsview), #advancedconfig a,
+#iptransport a, #reseedsetup a, #graphinfo a, #config_service h3 a, .h3navlinks a {
   margin: -6px -5px;
   padding: 6px 10px;
   display: inline-block;
@@ -2112,6 +2113,39 @@ h3 a.script, th a.script {
   border-radius: 0;
   background: #ddf;
   background: linear-gradient(to bottom, #f8f8ff 60%, #dedeff);
+}
+
+#config_logging h3 a::before, #webappconfiguration a::before,
+#i2pclientconfig a::before, #pluginmanage a::before {
+  width: 18px;
+  height: 13px;
+  display: inline-block;
+  vertical-align: middle;
+  background: var(--eye) no-repeat left center / 14px;
+  content: "";
+}
+
+#config_logging h3 a:hover::before, #config_logging h3 a:focus::before {
+  background: var(--eye_hover) no-repeat left center / 14px;
+}
+
+#webappconfiguration a::before, #i2pclientconfig a::before, #pluginmanage a::before {
+  margin-top: -1px;
+  width: 15px;
+  background: var(--settings) no-repeat left center / 12px;
+}
+
+#webappconfiguration a:hover::before, #webappconfiguration a:focus::before,
+#i2pclientconfig a:hover::before, #i2pclientconfig a:focus::before,
+#pluginmanage a:hover::before, #pluginmanage a:focus::before {
+  background: var(--settings_hover) no-repeat left center / 12px;
+}
+
+@media screen and (max-width: 1499px) {
+  #config_logging h3 a::before, #webappconfiguration a::before,
+  #i2pclientconfig a::before, #pluginmanage a::before {
+    margin-top: -2px;
+  }
 }
 
 #bwlimiter a, #i2pclientconfig a, #config_logging h3 a, #graphdisplay a, #version a, #tunnels h3 a,
