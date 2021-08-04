@@ -1302,9 +1302,11 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             }
         }
 
+        Hash us = _context.routerHash();
+
         if (routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
             routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 &&
-            routerInfo.getPublished() < now - 60*60*1000l)
+            routerInfo.getPublished() < now - 60*60*1000l && !us.equals(routerInfo.getIdentity().getHash()))
                 return "RouterInfo [" + routerId + "] is K or L tier and was published over an hour ago";
 
         if (expireRI != null) {
