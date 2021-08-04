@@ -4958,11 +4958,12 @@ td.snarkTorrentStatus b::before {
   color: #3f1900 !important;
   cursor: default;
   background: linear-gradient(to bottom, #313, #202 50%, #101 50%);
+  pointer-events: none;
 }
 
 #torrentDisplay label:hover {
   color: #f60 !important;
-  background: linear-gradient(to bottom, #515, #313 50%, #000 50%);
+  background: var(--nav);
 }
 
 #torrentDisplay input {
