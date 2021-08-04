@@ -859,9 +859,16 @@ tr.active .snarkTorrentStatus {
 
 .snarkTorrents .infohash {
   margin-right: 3px;
-  padding: 0 3px;
+  padding: 1px 5px 1px 17px;
   color: #000;
-  background: #cc0;
+  background: #cc0 var(--hash2) no-repeat 3px center / 12px;
+}
+
+@media screen and (max-width: 1499px) {
+  .snarkTorrents .infohash {
+    padding-left: 15px;
+    background-size: 11px;
+  }
 }
 
 .snarkTorrents .infohash, .snarkTorrentInfo .infohash {
