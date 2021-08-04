@@ -7,11 +7,12 @@
 :root {
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
-  --nav_hover: linear-gradient(to bottom, #510, #520 50%, #000 51%);
-  --btnAction: linear-gradient(to bottom, #030 50%, #010 50%);
+  --nav_hover: linear-gradient(to bottom, #620, #510 50%, #000 50%);
+  --btnAction: linear-gradient(to bottom, #030, #020 50%, #010 50%);
   --btnAction_hover: var(--nav_hover);
   --highlight: inset 0 0 0 1px #000;
   --badge: linear-gradient(to bottom, #030, #010);
+  --tabIcon: linear-gradient(to bottom, #000 50%, #040 50%);
 }
 
 html {
@@ -3653,23 +3654,23 @@ input:checked + .toggleview:active .tab_label::after {
 }
 
 #tab_addtorrent .tab_label::after {
-  background: var(--add) no-repeat scroll center center / 16px, linear-gradient(to bottom, #000 50%, #040 50%);
+  background: var(--add) no-repeat scroll center center / 16px, var(--tabIcon);
 }
 
 #tab_newtorrent .tab_label::after {
-  background: var(--create) no-repeat scroll center center / 16px, linear-gradient(to bottom, #000 50%, #040 50%);
+  background: var(--create) no-repeat scroll center center / 16px, var(--tabIcon);
 }
 
 #tab_config .tab_label::after {
-  background: var(--config) no-repeat scroll center center / 16px, linear-gradient(to bottom, #000 50%, #040 50%);
+  background: var(--config) no-repeat scroll center center / 16px, var(--tabIcon);
 }
 
 #tab_files .tab_label::after {
-  background: var(--folder) no-repeat scroll center center / 16px, linear-gradient(to bottom, #000 50%, #040 50%);
+  background: var(--folder) no-repeat scroll center center / 16px, var(--tabIcon);
 }
 
 #tab_comments .tab_label::after {
-  background: var(--comment) no-repeat scroll center center / 16px, linear-gradient(to bottom, #000 50%, #040 50%);
+  background: var(--comment) no-repeat scroll center center / 16px, var(--tabIcon);
 }
 
 /* end miminal tabs */
@@ -4347,8 +4348,8 @@ td.snarkGraphicStatus img::before {
 }
 
 .iframed #torrentDisplay {
-  position: static !important;
   margin: -1px 0;
+  position: static !important;
 }
 
 #torrentDisplay input {
@@ -4369,7 +4370,7 @@ td.snarkGraphicStatus img::before {
   text-shadow: 0 1px 1px #000;
   border-right: 1px solid #252;
   box-shadow: var(--highlight);
-  background: linear-gradient(to bottom, #030 50%, #000 50%);
+  background: var(--btnAction);
 }
 
 #torrentDisplay label[for="all"] {
@@ -4378,7 +4379,7 @@ td.snarkGraphicStatus img::before {
 
 #torrentDisplay label:hover {
   color: #d50;
-  background: radial-gradient(at center bottom, rgba(255,96,0,.2), rgba(0,0,0,0) 80%), linear-gradient(to bottom, #410, #520 50%, #000 51%);
+  background: radial-gradient(at center bottom, rgba(255,96,0,.2), rgba(0,0,0,0) 80%), var(--btnAction_hover);
 }
 
 #torrentDisplay label:active, #torrentDisplay input:checked + label {
