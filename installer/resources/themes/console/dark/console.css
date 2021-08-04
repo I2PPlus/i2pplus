@@ -6683,16 +6683,16 @@ h3#iptransport a:hover::after, h3#advancedconfig a:hover::after, #reseedsetup a:
 
 #config_logging h3 a::before, #webappconfiguration a::before,
 #i2pclientconfig a::before, #pluginmanage a::before {
-  width: 18px;
-  height: 13px;
+  width: 19px;
+  height: 15px;
   display: inline-block;
   vertical-align: middle;
-  background: var(--eye) no-repeat left center / 14px;
+  background: var(--eye) no-repeat left center / 15px;
   content: "";
 }
 
 #config_logging h3 a:hover::before, #config_logging h3 a:focus::before {
-  background: var(--eye_hover) no-repeat left center / 14px;
+  background: var(--eye_hover) no-repeat left center / 15px;
 }
 
 #webappconfiguration a::before, #i2pclientconfig a::before, #pluginmanage a::before {
@@ -6707,10 +6707,15 @@ h3#iptransport a:hover::after, h3#advancedconfig a:hover::after, #reseedsetup a:
   background: var(--settings_hover) no-repeat left center / 12px;
 }
 
+#config_logging h3 a, #webappconfiguration a,
+#i2pclientconfig a, #pluginmanage a {
+  padding-top: 11px;
+  display: inline-block;
+}
+
 @media screen and (max-width: 1499px) {
-  #config_logging h3 a::before, #webappconfiguration a::before,
-  #i2pclientconfig a::before, #pluginmanage a::before {
-    margin-top: -2px;
+  #webappconfiguration a, #i2pclientconfig a, #pluginmanage a {
+    padding-top: 9px;
   }
 }
 
