@@ -118,10 +118,11 @@ public class ReseedChecker {
             if (count <= 1) {
                 _log.logAlways(Log.INFO, "Downloading peer router information for a new I2P installation");
                 return requestReseed();
-            } else if (_context.getEstimatedDowntime() > RESEED_MIN_DOWNTIME) {
+            } else if (_context.router().getUptime() > 5*60*1000 &&
+                       _context.getEstimatedDowntime() > RESEED_MIN_DOWNTIME) {
                 _log.logAlways(Log.WARN, "Router has been offline for a while - refreshing NetDb...");
                 return requestReseed();
-            } else if (_context.router().getUptime() > 10*60*1000) {
+            } else if (_context.router().getUptime() > 10*60*1000 && count < MINIMUM) {
                 _log.logAlways(Log.WARN, "Less than " + MINIMUM + " peers in our NetDb - reseeding...");
                 return requestReseed();
             } else {
