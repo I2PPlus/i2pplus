@@ -317,8 +317,10 @@ public class PersistentDataStore extends TransientDataStore {
             String MIN_VERSION = "0.9.48";
             boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
                                     ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
-                                    ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 || VersionComparator.comp(v, MIN_VERSION) < 0) &&
-                                    _context.netDb().getKnownRouters() > 2000 && _context.router().getUptime() > 30*60*1000;
+                                    ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
+                                    VersionComparator.comp(v, MIN_VERSION) < 0) &&
+                                    _context.netDb().getKnownRouters() > 2000 &&
+                                    _context.router().getUptime() > 60*60*1000;
 //            if (dbFile.lastModified() < dataPublishDate) {
             if (dbFile.lastModified() < dataPublishDate && !uninteresting) {
                 // our filesystem is out of date, let's replace it
