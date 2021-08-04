@@ -115,13 +115,18 @@ public class ReseedChecker {
                 return false;
             }
             _networkLogged = false;
-            if (count <= 1)
+            if (count <= 1) {
                 _log.logAlways(Log.INFO, "Downloading peer router information for a new I2P installation");
-            else if (_context.getEstimatedDowntime() > RESEED_MIN_DOWNTIME)
+                return requestReseed();
+            } else if (_context.getEstimatedDowntime() > RESEED_MIN_DOWNTIME) {
                 _log.logAlways(Log.WARN, "Router has been offline for a while - refreshing NetDb...");
-            else if (_context.router().getUptime() > 10*60*1000)
+                return requestReseed();
+            } else if (_context.router().getUptime() > 10*60*1000) {
                 _log.logAlways(Log.WARN, "Less than " + MINIMUM + " peers in our NetDb - reseeding...");
-            return requestReseed();
+                return requestReseed();
+            } else {
+                return false;
+            }
         } else {
             int x = count - 1;  // us
             // no ngettext, this is rare
