@@ -13,8 +13,8 @@
   --nav_active: linear-gradient(to bottom, #af9178, #dfb899);
   --th: linear-gradient(to bottom, #efefef, #cfc7c2);
   --panel: linear-gradient(to bottom, #dfd7d1, #cfc7c2);
-  --btnAction: linear-gradient(to bottom, #f4f2f1, #ded9d5);
-  --btnAction_hover: linear-gradient(to bottom, #ffeadf 51%, #cfb6a8 52%);
+  --btnAction: linear-gradient(to bottom, #f4f2f1, #e9e4e2 50%, #d2cbc6 50%, #bcb1a9);
+  --btnAction_hover: linear-gradient(to bottom, #ffeee6, #ffeadf 50%, #ffdecc 50%, #ae836b);
   --btnAction_active: linear-gradient(to bottom, #e1d8d1, #fff2e6);
 }
 
@@ -4838,6 +4838,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
   background-position: center center !important;
   opacity: .85;
   cursor: pointer;
+  transition: ease box-shadow .03s;
   will-change: transform;
 }
 
@@ -4877,11 +4878,11 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 
 .snarkTorrentAction input:hover, .snarkTorrentAction input:focus {
   border-color: #39332d;
-  box-shadow: inset 0 0 0 1px rgba(223,0,103,.7);
+  box-shadow: inset 0 0 0 1px rgba(223,0,103,.85), inset 0 0 0 2px #ffefe6;
   background: linear-gradient(to bottom, #ffeadf 51%, #cfb6a8 52%);
   background-blend-mode: normal;
   opacity: 1;
-  transition: ease box-shadow .05s;
+  transition: ease box-shadow .03s;
 }
 
 .actionStart:hover, .actionStart:focus {

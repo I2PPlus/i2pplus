@@ -446,7 +446,8 @@ public class SnarkManager implements CompleteListener, ClientApp {
      *  Escapes '&lt;' and '&gt;' before queueing
      */
     public void addMessage(String message) {
-        addMessageNoEscape(message.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;"));
+        addMessageNoEscape(message.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+                                  .replace("&amp;nbsp", "&nbsp;"));
     }
 
     /**
@@ -455,7 +456,7 @@ public class SnarkManager implements CompleteListener, ClientApp {
      * @since 0.9.14.1
      */
     public void addMessageNoEscape(String message) {
-        _messages.addMessageNoEscape("<span class=\"timestamp\">" + getTime() + "</span>&nbsp; " + message);
+        _messages.addMessageNoEscape(getTime() + "&nbsp; " + message);
         if (_log.shouldLog(Log.INFO))
             _log.info(message);
     }
@@ -2612,7 +2613,7 @@ public class SnarkManager implements CompleteListener, ClientApp {
             if (delay == 0)
                 delay = 30000;
             if (delay > 30000 && autostart) {
-                int id = _messages.addMessageNoEscape("<span class=\"timestamp\">" + getTime() + "</span>&nbsp; " +
+                int id = _messages.addMessageNoEscape(getTime() + "&nbsp; " +
                                                       _t("Adding torrents in {0}" + "&hellip;", DataHelper.formatDuration2(delay)));
                 try { Thread.sleep(delay); } catch (InterruptedException ie) {}
                 // Remove that first message

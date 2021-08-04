@@ -127,7 +127,7 @@ class RefreshRoutersJob extends JobImpl {
                 String v = ri.getVersion();
                 String MIN_VERSION = "0.9.48";
                 boolean uninteresting = ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
-                                        ri.getAddresses().isEmpty() || ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
+                                        ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                         ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 || VersionComparator.comp(v, MIN_VERSION) < 0;
                 int rapidScan = 45*60*1000;
                 if (uninteresting) {

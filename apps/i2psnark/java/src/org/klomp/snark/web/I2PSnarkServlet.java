@@ -2199,6 +2199,8 @@ public class I2PSnarkServlet extends BasicServlet {
         if (remaining == 0 || isMultiFile)
             out.write("</a>");
 
+        if (basename.contains("Magnet"))
+            out.write("</span>");
         out.write("</td>\n<td align=\"right\" class=\"snarkTorrentETA\">");
         if(isRunning && remainingSeconds > 0 && !snark.isChecking())
             out.write(DataHelper.formatDuration2(Math.max(remainingSeconds, 10) * 1000)); // (eta 6h)
