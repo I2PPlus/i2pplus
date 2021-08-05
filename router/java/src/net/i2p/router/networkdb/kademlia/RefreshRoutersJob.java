@@ -77,9 +77,9 @@ class RefreshRoutersJob extends JobImpl {
             _log.warn("Suspending Refresh Routers job - job lag is over 500ms");
             return;
         }
-        if (_facade.isInitialized() && netDbCount > 10000) {
+        if (_facade.isInitialized() && netDbCount > 8000) {
             if (_log.shouldLog(Log.INFO))
-                _log.info("Suspending Refresh Routers job - over 10,000 known peers in NetDb");
+                _log.info("Suspending Refresh Routers job - over 8,000 known peers in NetDb");
             return;
         }
         if (_facade.isInitialized()) {
@@ -96,10 +96,10 @@ class RefreshRoutersJob extends JobImpl {
             }
             if (_routers.isEmpty()) {
                 _routers = null;
-                if (netDbCount > 3000) {
+                if (netDbCount > 2000) {
                     RESTART_DELAY_MS *= rand.nextInt(3) + 1;
                     requeue(RESTART_DELAY_MS);
-                } else if (netDbCount > 6000) {
+                } else if (netDbCount > 5000) {
                     RESTART_DELAY_MS *= rand.nextInt(12) + 1;
                 } else {
                     requeue(RESTART_DELAY_MS);
