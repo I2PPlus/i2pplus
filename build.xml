@@ -1437,7 +1437,7 @@
             <fileset dir="installer/resources/eepsite/" excludes="**/.placeholder" />
         </copy>
         <copy todir="pkg-temp/eepsite/" >
-            <fileset dir="installer/resources/eepsite/docroot/.resources/" includes="*.html *.css" />
+            <fileset dir="installer/resources/eepsite/docroot/.resources/" includes="*.html *.css favicon.ico" />
         </copy>
         <copy todir="pkg-temp/eepsite-jetty9.3" >
             <fileset dir="installer/resources/eepsite-jetty9.3" />
