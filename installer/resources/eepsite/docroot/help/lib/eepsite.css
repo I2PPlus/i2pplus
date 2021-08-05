@@ -282,10 +282,6 @@ hr {
   background-size: 64px, 100% 4px, 100%;
 }
 
-.notify + hr {
-  display: none;
-}
-
 .notify + h3, ul + h3 {
   margin-top: 30px;
 }
