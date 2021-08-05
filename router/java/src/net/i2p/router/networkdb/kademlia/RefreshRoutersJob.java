@@ -179,7 +179,6 @@ class RefreshRoutersJob extends JobImpl {
 */
                     } else if (uninteresting) {
                         _log.debug("Skipping refresh of uninteresting Router [" + h.toBase64().substring(0,6) + "]");
-                        break;
                     } else {
                         _log.debug("Skipping refresh of Router [" + h.toBase64().substring(0,6) + "] - less than " + (routerAge / 60 / 60 / 1000) + " hours old" +
                         "\n* Published: " + new Date(ri.getPublished()));
@@ -194,11 +193,11 @@ class RefreshRoutersJob extends JobImpl {
         if (refresh == null) {
             if (getContext().jobQueue().getMaxLag() > 150 || getContext().throttle().getMessageDelay() > 750)
                 randomDelay = randomDelay * (rand.nextInt(3) + 1);
-            else if (netDbCount < 2000)
+            else if (netDbCount < 100)
                 randomDelay = randomDelay - (rand.nextInt(2000));
-            else if (netDbCount < 3000)
+            else if (netDbCount < 300)
                 randomDelay = randomDelay - (rand.nextInt(1250) + rand.nextInt(1250));
-            else if (netDbCount < 5000)
+            else if (netDbCount < 500)
                 randomDelay = randomDelay - (rand.nextInt(750) / (rand.nextInt(3) + 1));
             else
                 randomDelay = randomDelay - ((rand.nextInt(750) / (rand.nextInt(3) + 1)) * rand.nextInt(6) + 1);

@@ -33,7 +33,7 @@ class ExpireRoutersJob extends JobImpl {
 
     /** rerun fairly often, so the fails don't queue up too many netdb searches at once */
 //    private final static long RERUN_DELAY_MS = 5*60*1000;
-    private final static long RERUN_DELAY_MS = 60*1000;
+    private final static long RERUN_DELAY_MS = 90*1000;
 
     public ExpireRoutersJob(RouterContext ctx, KademliaNetworkDatabaseFacade facade) {
         super(ctx);
@@ -71,7 +71,8 @@ class ExpireRoutersJob extends JobImpl {
         Set<Hash> keys = _facade.getAllRouters();
         keys.remove(getContext().routerHash());
         // Don't expire if router is disconnected, lagged, or has high message delay
-        if (keys.size() < 150 || getContext().commSystem().getStatus() == Status.DISCONNECTED ||
+//        if (keys.size() < 150 || getContext().commSystem().getStatus() == Status.DISCONNECTED ||
+        if (keys.size() < 500 || getContext().commSystem().getStatus() == Status.DISCONNECTED ||
                                  (getContext().jobQueue().getMaxLag() > 150) ||
                                  (getContext().throttle().getMessageDelay() > 1000))
             return 0;
