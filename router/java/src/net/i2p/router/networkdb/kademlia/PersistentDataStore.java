@@ -297,7 +297,16 @@ public class PersistentDataStore extends TransientDataStore {
     }
 
     private void write(Hash key, DatabaseEntry data) {
-        if (_log.shouldLog(Log.DEBUG))
+            RouterInfo ri = new RouterInfo();
+            String v = ri.getVersion();
+            String MIN_VERSION = "0.9.48";
+            boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
+                                    ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
+                                    ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
+                                    VersionComparator.comp(v, MIN_VERSION) < 0) &&
+                                    _context.netDb().getKnownRouters() > 2000 &&
+                                    _context.router().getUptime() > 60*60*1000;
+        if (_log.shouldLog(Log.DEBUG) && !uninteresting)
             _log.debug("Writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk");
         OutputStream fos = null;
         File dbFile = null;
@@ -312,15 +321,6 @@ public class PersistentDataStore extends TransientDataStore {
 
             dbFile = new File(_dbDir, filename);
             long dataPublishDate = getPublishDate(data);
-            RouterInfo ri = new RouterInfo();
-            String v = ri.getVersion();
-            String MIN_VERSION = "0.9.48";
-            boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
-                                    ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
-                                    ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
-                                    VersionComparator.comp(v, MIN_VERSION) < 0) &&
-                                    _context.netDb().getKnownRouters() > 2000 &&
-                                    _context.router().getUptime() > 60*60*1000;
 //            if (dbFile.lastModified() < dataPublishDate) {
             if (dbFile.lastModified() < dataPublishDate && !uninteresting) {
                 // our filesystem is out of date, let's replace it
