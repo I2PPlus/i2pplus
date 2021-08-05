@@ -1445,9 +1445,9 @@
         <copy file="installer/resources/themes/console/light/images/favicon.svg" tofile="pkg-temp/eepsite/docroot/favicon.svg" />
     </target>
 
-    <target name="copyflags" depends="copyflags-unlesspkg" >
+    <target name="copyflags">
         <copy todir="pkg-temp/eepsite/docroot/help/lib/" >
-            <fileset dir="installer/resources/icons/flags16x11" includes="lang_ar.png" />
+            <fileset dir="apps/routerconsole/resources/icons/flags_svg" includes="az.svg cn.svg de.svg es.svg fr.svg hu.svg id.svg ir.svg it.svg jp.svg nl.svg pl.svg pt.svg ro.svg ru.svg se.svg tr.svg us.svg lang_ar.svg" />
         </copy>
     </target>
 
