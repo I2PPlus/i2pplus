@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-05 19:41+0000\n"
+"POT-Creation-Date: 2021-08-05 14:34+0000\n"
 "PO-Revision-Date: 2020-05-13 22:50+0000\n"
 "Last-Translator: zzzi2p\n"
 "Language-Team: Japanese (http://www.transifex.com/otf/I2P/language/ja/)\n"
@@ -111,14 +111,14 @@ msgstr[0] ""
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:251
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:241
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:254
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:955
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:963
 msgid "Add"
 msgstr "追加"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:251
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:261
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:241
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:939
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:947
 msgid "Replace"
 msgstr "置き換える"
 
@@ -195,8 +195,8 @@ msgstr "エントリを削除"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:334
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:344
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:705
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:883
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:713
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:891
 msgid "Delete Selected"
 msgstr "選択したものを削除"
 
@@ -226,7 +226,7 @@ msgstr "削除すると選択されたエントリなし。"
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:291
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:298
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:312
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:947
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:955
 msgid "Add Alternate"
 msgstr ""
 
@@ -387,7 +387,7 @@ msgid "Subscriptions reloaded."
 msgstr "購読が再読込されました。"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:194
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:973
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:981
 msgid "Import"
 msgstr "インポート"
 
@@ -395,166 +395,166 @@ msgstr "インポート"
 msgid "address book"
 msgstr "アドレスブック"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:239
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:247
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:198
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:200
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:189
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:191
 #: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:196
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:191
 msgid "Router"
 msgstr "ルーター"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:243
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:251
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:200
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:204
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:191
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:193
 #: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:198
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:193
 msgid "Master"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:247
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:255
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:202
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:208
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:193
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:195
 #: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:200
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:195
 msgid "Private"
 msgstr "秘密鍵"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:251
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:259
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:204
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:212
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:195
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:197
 #: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:202
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:197
 msgid "Published"
 msgstr "公開済み"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:253
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:261
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:206
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:214
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:197
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:199
 #: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:204
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:199
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:205 build/HowSVG.java:15
 msgid "Subscriptions"
 msgstr "購読"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:255
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:263
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:208
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:212
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:216
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:199
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:201
 #: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:206
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:201
 msgid "Configuration"
 msgstr "設定"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:257
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:265
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:210
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:218
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:201
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:203
 #: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:208
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:203
 msgid "Help"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:259
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:267
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:276
 msgid "Book"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:276
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:284
 msgid "No entries"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:320
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:330
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:328
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:338
 msgid "Export in hosts.txt format"
 msgstr "hosts.txt 形式でエクスポート"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:322
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:330
 #, fuzzy
 msgid "Export results in hosts.txt format"
 msgstr "hosts.txt 形式でエクスポート"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:332
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:340
 #, fuzzy
 msgid "Export book in hosts.txt format"
 msgstr "hosts.txt 形式でエクスポート"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:377
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:385
 msgid "Search"
 msgstr "検索"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:655
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:663
 msgid "other"
 msgstr "その他"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:667
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:675
 msgid "clear filter"
 msgstr "フィルターをクリア"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:711
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:719
 msgid "Info"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:713
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:929
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:721
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:937
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:270
 msgid "Hostname"
 msgstr "ホスト名"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:715
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:723
 msgid "Link (b32)"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:717
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:725
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:350
 msgid "Destination"
 msgstr "宛先"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:731
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:739
 msgid "Select hosts for deletion from addressbook"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:776
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:788
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:784
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:796
 msgid "More information on this entry"
 msgstr "このエントリに関する詳細"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:800
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:808
 msgid "Base 32 address"
 msgstr "Base 32 アドレス"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:806
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:814
 msgid "Helper link to share host address with option to add to addressbook"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:826
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:834
 msgid "Mark for deletion"
 msgstr "削除にマーク"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:881
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:937
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:971
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:889
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:945
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:979
 msgid "Cancel"
 msgstr "キャンセル"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:927
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:935
 msgid "Add new destination"
 msgstr "新しい宛先を追加"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:933
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:941
 msgid "B64 or B32"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:967
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:975
 msgid "Import from hosts.txt file"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:969
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:977
 #, fuzzy
 msgid "Select file"
 msgstr "フィルターをクリア"
@@ -766,20 +766,20 @@ msgstr ""
 msgid "Launch Image Generator"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:177
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:179
 msgid "Introduction"
 msgstr "紹介"
 
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:203
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:205
 msgid "What is the addressbook?"
 msgstr "アドレスブックとは？"
 
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:205
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:207
 msgid "The addressbook application is part of your I2P installation."
 msgstr ""
 "アドレスブックアプリケーションは、あなたの I2P のインストールの一部です。"
 
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:207
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:209
 msgid ""
 "It regularly updates your hosts.txt file from distributed sources or "
 "\"subscriptions\"."
@@ -787,7 +787,7 @@ msgstr ""
 "定期的に配布されているソース、あるいは「購読」から hosts.txt ファイルを更新し"
 "ます。"
 
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:209
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:211
 msgid ""
 "Subscribing to additional sites is easy, just add them to your <a href="
 "\"subscriptions\">subscriptions</a> file."
@@ -795,17 +795,17 @@ msgstr ""
 "追加サイトへの購読は簡単です、<a href=\"subscriptions\">購読</a>ファイルに追"
 "加するだけです。"
 
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:211
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:213
 msgid ""
 "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/"
 "naming.html\" target=\"_blank\">the overview</a>."
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:213
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:215
 msgid "How does the addressbook application work?"
 msgstr "アドレスブックアプリケーションはどのように動作するのか？"
 
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:215
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:217
 msgid ""
 "The addressbook application regularly polls your subscriptions and merges "
 "their content into your \"router\" address book."
@@ -813,7 +813,7 @@ msgstr ""
 "アドレスブックアプリケーションは定期的に購読を調査し、「ルーター」アドレス"
 "ブック内に内容をマージします。"
 
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:217
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:219
 msgid ""
 "Then it merges your \"master\" address book into the router address book as "
 "well."
@@ -821,7 +821,7 @@ msgstr ""
 "その後、あなたの「マスター」アドレスブックも同様にルーターアドレスブックに"
 "マージします。"
 
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:219
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:221
 msgid ""
 "If configured, the router address book is now written to the \"published\" "
 "address book, which will be publicly available if you are running an eepsite."
@@ -829,13 +829,13 @@ msgstr ""
 "設定している場合、ルーターアドレスブックは、 eepsite を運用している場合一般に"
 "公表される「公開」アドレスブックに書き込まれています。"
 
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:221
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:223
 msgid ""
 "The router also uses a private address book, which is not merged or "
 "published."
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:223
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:225
 msgid ""
 "Hosts in the private address book can be accessed by you but their addresses "
 "are never distributed to others."
@@ -843,7 +843,7 @@ msgstr ""
 "プライベートアドレスブックのホストは、あなたがアクセスすることはできますが、"
 "アドレスが他者に配布されることはありません。"
 
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:225
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:227
 msgid ""
 "The private address book can also be used for aliases of hosts in your other "
 "address books."
