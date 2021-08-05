@@ -145,41 +145,26 @@ There are plenty of other ways to tell people. Here are a few ideas:</p>
 <p>Note that some sites recommend pasting in that really long destination.
 You can if you want, but if you have successfully registered your hostname on a registration service, tested it using a jump service, and waited 24 hours for the address book update to propagate to others, that shouldn't be necessary.</p>
 
-<h2>Using an alternative webserver to host your site</h2>
+<h3>Using an alternative webserver</h3>
 
-<p>This site (and the I2P router console) is running on the <a href="https://en.wikipedia.org/wiki/Jetty_(web_server)" target="_blank">Jetty webserver</a>, but you may wish to use a different webserver to host your content.
-To maintain anonymity, be sure that your webserver is configured to only allow connections from localhost (127.0.0.1), and check the documentation to ensure your webserver isn't advertising details that may compromise your anonymity.</p>
+<p>To configure an alternative webserver for use on I2P, you can either use the existing webserver tunnel and <a href="http://127.0.0.1:7657/configclients">disable the default webserver</a> from running, or create a new HTTP Server tunnel in the <a href="http://127.0.0.1:7657/i2ptunnelmgr">Tunnel Manager</a>. Ensure that the webserver's <i>listening port</i> is also configured in the Tunnel Manager settings. For example, if your webserver is listening by default on address 127.0.0.1 port 80, you'd also need to ensure that the <i>Target port</i> in the Tunnel Manager settings page for the service is also configured to port 80.</p>
 
-<p>To configure your webserver for use on I2P, you may either use the existing webserver tunnel and <a href="http://127.0.0.1:7657/configclients">disable the default webserver</a> from running, or create a new HTTP Server tunnel in the <a href="http://127.0.0.1:7657/i2ptunnelmgr">Hidden Services Manager</a>.
-Ensure that the listening port configured for the webserver (7658 by default) is also configured in the Hidden Services settings.
-For example, if your webserver is listening by default on address 127.0.0.1 port 80, you'd need to also ensure that the Target port in the Hidden Service Manager settings page for the service is also configured to port 80.</p>
+<p>To preserve anonymity, make sure that the webserver is not publicly available outside of the I2P network, which is normally achieved by configuring the webserver to listen on localhost (127.0.0.1) rather than all interfaces (0.0.0.0).</p>
 
-<p>Beware that a poorly configured webserver or web appplication can leak potentially compromising information such as
-your real IP address or server details that may reduce your anonymity or assist a hacker.
-We recommend using the default server unless you feel comfortable doing server administration.
-Please ensure your web server is secure prior to placing it online.
-There are plenty of guides online, for example if you search for "nginx security hardening guide" you will find a number of guides that have good recommendations.</p>
+<p>Be aware that a poorly configured webserver or web appplication can leak information such as your real IP address or server details that may reduce your anonymity or assist a hacker. If using an alternative platform, be sure to secure it before putting it online. If in doubt, consult online guides about web server and web application hardening, for example:
 
-<p class="notify warn">There is one important issue with the Apache web server.
-The <code>mod_status</code> and <code>mod_info</code> Apache modules are enabled by default on some operating systems.
-These modules expose internal data which can lead to serious compromise of anonymity when used on an anonymous network.
-Removing the lines in the configuration file where these modules are loaded is the easiest way to prevent these issues.</p>
-
-<h2>Further Assistance</h2>
-
-<p>If you have any questions, the following places are available for support:</p>
-
-<ul>
-<li>Our IRC support channel:<br>
-<a href="irc://irc.freenode.net/i2p">#i2p on Freenode</a><br>
-Anonymously using your local <a href="irc://127.0.0.1:6668/i2p">I2P IRC tunnel</a>.</li>
-<li>The project forum <a href="http://i2pforum.i2p/" target="_blank">i2pforum.i2p</a>.</li>
-<li><a href="http://wiki.i2p-projekt.i2p/wiki/index.php/EepsiteHosting" target="_blank">I2P Wiki Eepsite Hosting guide</a></li>
+<ul id="guides">
+<li><a href="https://geekflare.com/apache-web-server-hardening-security/" target="_blank" class="sitelink external">Apache Web Server Security Guide</a></li>
+<li><a href="https://geekflare.com/nginx-webserver-security-hardening-guide/" target="_blank" class="sitelink external">Nginx Web Server Security Guide</a></li>
+<li><a href="https://www.wordfence.com/learn/how-to-harden-wordpress-sites/" target="_blank" class="sitelink external">How to Harden Your WordPress Site</a></li>
 </ul>
+
+<p class="notify warn"><b>Note:</b> On some Apache installations, the <a href="https://httpd.apache.org/docs/2.4/mod/mod_status.html" target="blank" class="sitelink external">mod_status</a> and <a href="https://httpd.apache.org/docs/2.4/mod/mod_info.html" target="blank" class="sitelink external">mod_info</a> modules are enabled by default. It is important to disable these, or otherwise protect access to the urls, to avoid compromising the anonymity and security of your server.</p>
+
 <hr>
+
 <div class="notify idea">This page, the project website and the router console need translations!
 Please help the project grow by <a href="http://i2p-projekt.i2p/getinvolved.html" target="_blank"> getting involved</a> or <a href="http://i2p-projekt.i2p/en/get-involved/guides/new-translators" target="_blank">translating</a>.</div>
-<hr>
 </div>
 </body>
 </html>
