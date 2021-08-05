@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-05 19:41+0000\n"
+"POT-Creation-Date: 2021-08-05 14:34+0000\n"
 "PO-Revision-Date: 2019-11-24 14:49+0000\n"
 "Last-Translator: ValdikSS <iam@valdikss.org.ru>\n"
 "Language-Team: Russian (Russia) (http://www.transifex.com/otf/I2P/language/"
@@ -48,9 +48,9 @@ msgstr "Предупреждение: Некорректный URI запрос�
 #: ../java/build/Proxy.java:173 ../java/build/Proxy.java:183
 #: ../java/build/Proxy.java:192 ../java/build/Proxy.java:202
 #: ../java/build/Proxy.java:211
-#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:305
-#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:371
-#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:401
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:323
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:388
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:418
 msgid "Router Console"
 msgstr "Консоль маршрутизатора I2P"
 
@@ -77,9 +77,9 @@ msgstr "Консоль маршрутизатора I2P"
 #: ../java/build/Proxy.java:175 ../java/build/Proxy.java:185
 #: ../java/build/Proxy.java:194 ../java/build/Proxy.java:204
 #: ../java/build/Proxy.java:213
-#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:307
-#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:374
-#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:404
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:325
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:391
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:421
 msgid "Addressbook"
 msgstr "Адресная книга"
 
@@ -93,9 +93,9 @@ msgstr "Адресная книга"
 #: ../java/build/Proxy.java:176 ../java/build/Proxy.java:186
 #: ../java/build/Proxy.java:195 ../java/build/Proxy.java:205
 #: ../java/build/Proxy.java:214
-#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:308
-#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:375
-#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:405
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:326
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:392
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:422
 msgid "Configuration"
 msgstr "Настройки"
 
@@ -109,9 +109,9 @@ msgstr "Настройки"
 #: ../java/build/Proxy.java:177 ../java/build/Proxy.java:187
 #: ../java/build/Proxy.java:196 ../java/build/Proxy.java:206
 #: ../java/build/Proxy.java:215
-#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:309
-#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:376
-#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:406
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:327
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:393
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:423
 msgid "Help"
 msgstr "Помощь"
 
@@ -587,7 +587,7 @@ msgid "Host"
 msgstr "Имя хоста"
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1468
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1528
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1526
 msgid "Base32"
 msgstr "Base32"
 
@@ -595,12 +595,12 @@ msgstr "Base32"
 msgid "Destination"
 msgstr "Адрес назначения"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1478
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1477
 #, java-format
 msgid "Continue to {0} without saving"
 msgstr "Продолжить переход к {0} без сохранения"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1479
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1478
 #, fuzzy
 msgid ""
 "You can browse to the site without saving it to the addressbook. The address "
@@ -609,16 +609,16 @@ msgstr ""
 "Вы можете перейти на сайт, не сохраняя его в адресной книге. Маршрутизатор "
 "I2P будет помнить этот адрес до перезапуска."
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1480
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1479
 msgid "Continue without saving"
 msgstr "Продолжить без сохранения"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1487
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1486
 #, java-format
 msgid "Save {0} to router address book and continue to website"
 msgstr "Сохранить {0} в адресную книгу маршрутизатора и перейти к сайту"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1488
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1487
 #, fuzzy
 msgid ""
 "This address will be saved to your Router addressbook where your "
@@ -627,7 +627,7 @@ msgstr ""
 "Этот адрес будет сохранен в адресную книгу вашего маршрутизатора, где "
 "хранятся адреса из подписок."
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1490
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1489
 #, fuzzy
 msgid ""
 "If you want to keep track of sites you have added manually, add to your "
@@ -637,18 +637,18 @@ msgstr ""
 "Приватную или Основную адресную книгу."
 
 #. FIXME wasn't escaped
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1493
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1566
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1492
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1564
 msgid "Save & continue"
 msgstr "Сохранить и продолжить"
 
 #. only blockfile supports multiple books
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1500
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1498
 #, fuzzy, java-format
 msgid "Save {0} to master addressbook and continue to website"
 msgstr "Сохранить {0} в основную адресную книгу и перейти к сайту"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1501
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1499
 #, fuzzy
 msgid ""
 "This address will be saved to your Master addressbook. Select this option "
@@ -659,12 +659,12 @@ msgstr ""
 "хотите хранить адреса отдельно от адресной книги маршрутизатора, и "
 "публиковать их."
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1505
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1503
 #, fuzzy, java-format
 msgid "Save {0} to private addressbook and continue to website"
 msgstr "Сохранить {0} в приватную адресную книгу и перейти к сайту"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1506
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1504
 #, fuzzy
 msgid ""
 "This address will be saved to your Private addressbook, ensuring it is never "
@@ -672,32 +672,32 @@ msgid ""
 msgstr ""
 "Этот адрес будет сохранен в Приватную адресную книгу, и не будет опубликован."
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1531
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1529
 msgid "Base32 address requires lookup password"
 msgstr "Адрес Base32 требует пароля для промежуточного запроса"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1533
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1531
 msgid "Base32 address requires encryption key"
 msgstr "Адрес Base32 требует ключ шифрования"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1535
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1533
 msgid "Base32 address requires encryption key and lookup password"
 msgstr ""
 "Адрес Base32 требует ключ шифрования и пароль для промежуточного запроса"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1537
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1535
 msgid "Base32 address decryption failure, check encryption key"
 msgstr "Сбой расшифровки Base32-адреса, проверьте ключ шифрования"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1548
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1546
 msgid "Generate"
 msgstr "Генерировать"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1549
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1547
 msgid "Encryption key"
 msgstr "Ключ шифрования"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1550
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1548
 msgid ""
 "You must either enter a PSK encryption key provided by the server operator, "
 "or generate a DH encryption key and send that to the server operator."
@@ -706,102 +706,102 @@ msgstr ""
 "сервера или самостоятельно сгенерировать сам DH-ключ шифрования и отправить "
 "его администратору сервера."
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1551
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1549
 msgid "Ask the server operator for help."
 msgstr "Попросить помощи у администратора сервера"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1552
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1550
 msgid "Enter PSK encryption key"
 msgstr "Введите PSK ключ шифрования"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1554
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1552
 msgid "Generate new DH encryption key"
 msgstr "Сгенерировать новый DH-ключ шифрования"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1560
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1558
 msgid "Lookup password"
 msgstr "Пароль для промежуточного запроса"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1561
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1559
 msgid "You must enter the password provided by the server operator."
 msgstr "Требуется ввести пароль, предоставленный администратором сервера"
 
-#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:212
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:230
 #, java-format
 msgid "Added via address helper from {0}"
 msgstr "Добавлено через address helper из {0}"
 
-#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:214
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:232
 msgid "Added via address helper"
 msgstr "Добавлен через address helper"
 
-#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:251
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:269
 msgid "Missing lookup password"
 msgstr "Пропущен пароль для промежуточного запроса"
 
-#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:265
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:283
 msgid "Missing private key"
 msgstr "Пропущен частный ключ"
 
-#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:270
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:288
 msgid "Invalid private key"
 msgstr "Неверный частный ключ"
 
-#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:303
-#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:313
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:321
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:331
 msgid "Your new encryption key"
 msgstr "Ваш новый ключ шифрования"
 
-#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:318
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:335
 msgid "Copy the key and send it to the server operator."
 msgstr "Скопируйте ключ и отправьте админу сервера"
 
-#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:320
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:337
 msgid "After you are granted permission, you may proceed to the website."
 msgstr "После получения разрешения вы можете зайти на сайт."
 
-#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:341
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:358
 msgid "Go back and fix the error"
 msgstr "Вернитесь и исправьте ошибку"
 
-#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:352
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:369
 msgid "router"
 msgstr "маршрутизатор"
 
-#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:354
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:371
 msgid "master"
 msgstr "основная"
 
-#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:356
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:373
 msgid "private"
 msgstr "приватная"
 
-#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:369
-#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:399
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:386
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:416
 #, java-format
 msgid "Redirecting to {0}"
 msgstr "Перенаправляем к {0}"
 
-#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:377
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:394
 msgid "Redirection in progress"
 msgstr ""
 
-#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:379
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:396
 #, java-format
 msgid "Saved {0} to the {1} addressbook, redirecting now."
 msgstr "{0} сохранён в {1}, перенаправляем."
 
-#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:380
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:397
 #, java-format
 msgid "Failed to save {0} to the {1} addressbook, redirecting now."
 msgstr "Не удалось сохранить {0} в {1} адресную книгу, перенаправляем."
 
-#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:382
-#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:410
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:399
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:427
 msgid "Click here if you are not redirected automatically."
 msgstr "Нажмите сюда если автоматическое перенаправление не сработало"
 
-#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:408
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:425
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
 msgstr "Для {0} аутентификация сохранена, перенаправляем дальше."

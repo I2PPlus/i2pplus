@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-05 19:41+0000\n"
+"POT-Creation-Date: 2021-08-05 14:35+0000\n"
 "PO-Revision-Date: 2019-06-19 16:24+0000\n"
 "Last-Translator: ANDRIAMALALA <luceidos22@gmail.com>\n"
 "Language-Team: Malagasy (http://www.transifex.com/otf/I2P/language/mg/)\n"
@@ -160,8 +160,8 @@ msgstr ""
 
 #: src/src/i2p/susi/webmail/WebMail.java:1052
 #: src/src/i2p/susi/webmail/WebMail.java:1293
-#: src/src/i2p/susi/webmail/WebMail.java:2742
-#: src/src/i2p/susi/webmail/WebMail.java:2925
+#: src/src/i2p/susi/webmail/WebMail.java:2744
+#: src/src/i2p/susi/webmail/WebMail.java:2927
 msgid "Unable to save mail."
 msgstr ""
 
@@ -185,7 +185,7 @@ msgid "end forwarded mail"
 msgstr "Fiafaran'ny fampanarahana ny mailaka"
 
 #: src/src/i2p/susi/webmail/WebMail.java:1299
-#: src/src/i2p/susi/webmail/WebMail.java:3650
+#: src/src/i2p/susi/webmail/WebMail.java:3653
 msgid "Could not fetch mail body."
 msgstr "Tsy voasintona ny vatan'ny mailaka."
 
@@ -211,7 +211,7 @@ msgstr ""
 #: src/src/i2p/susi/webmail/WebMail.java:1623
 #: src/src/i2p/susi/webmail/WebMail.java:1625
 #: src/src/i2p/susi/webmail/WebMail.java:2313
-#: src/src/i2p/susi/webmail/WebMail.java:3656
+#: src/src/i2p/susi/webmail/WebMail.java:3659
 msgid "Message not found."
 msgstr ""
 
@@ -241,26 +241,25 @@ msgid "Invalid pagesize number, resetting to default value."
 msgstr "Diso ny habe'ny pejy, averina amin'ny teo aloha."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2291
-#: src/src/i2p/susi/webmail/WebMail.java:3184
+#: src/src/i2p/susi/webmail/WebMail.java:3186
 msgid "Login"
 msgstr "Mihidira"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2293
-#: src/src/i2p/susi/webmail/WebMail.java:2429
-#: src/src/i2p/susi/webmail/WebMail.java:3201
+#: src/src/i2p/susi/webmail/WebMail.java:2431
+#: src/src/i2p/susi/webmail/WebMail.java:3203
 msgid "Loading messages, please wait..."
 msgstr ""
 
 #: src/src/i2p/susi/webmail/WebMail.java:2301
-#: src/src/i2p/susi/webmail/WebMail.java:3249
-#, java-format
-msgid "1 Message"
-msgid_plural "{0} Messages"
+#, fuzzy, java-format
+msgid "1 message"
+msgid_plural "{0} messages"
 msgstr[0] "1 Mailaka"
 msgstr[1] "{0} Mailaka"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2303
-#: src/src/i2p/susi/webmail/WebMail.java:3401
+#: src/src/i2p/susi/webmail/WebMail.java:3404
 msgid "No messages"
 msgstr ""
 
@@ -280,330 +279,337 @@ msgstr "Configuration"
 msgid "I2PMail"
 msgstr ""
 
-#: src/src/i2p/susi/webmail/WebMail.java:2413
+#: src/src/i2p/susi/webmail/WebMail.java:2415
 #, java-format
 msgid "{0} new message"
 msgid_plural "{0} new messages"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/src/i2p/susi/webmail/WebMail.java:2416
+#: src/src/i2p/susi/webmail/WebMail.java:2418
 msgid "No new messages"
 msgstr ""
 
-#: src/src/i2p/susi/webmail/WebMail.java:2431
+#: src/src/i2p/susi/webmail/WebMail.java:2433
 msgid "Checking for new messages on server"
 msgstr ""
 
-#: src/src/i2p/susi/webmail/WebMail.java:2433
+#: src/src/i2p/susi/webmail/WebMail.java:2435
 msgid "Refresh the page for updates"
-msgstr ""
-
-#: src/src/i2p/susi/webmail/WebMail.java:2468
-#, java-format
-msgid "{0} is an I2P-exclusive service provided by {1}."
 msgstr ""
 
 #: src/src/i2p/susi/webmail/WebMail.java:2470
 #, java-format
+msgid "{0} is an I2P-exclusive service provided by {1}."
+msgstr ""
+
+#: src/src/i2p/susi/webmail/WebMail.java:2472
+#, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr ""
 
-#: src/src/i2p/susi/webmail/WebMail.java:2650
-#: src/src/i2p/susi/webmail/WebMail.java:3317
-#: src/src/i2p/susi/webmail/WebMail.java:3607
+#: src/src/i2p/susi/webmail/WebMail.java:2652
+#: src/src/i2p/susi/webmail/WebMail.java:3320
+#: src/src/i2p/susi/webmail/WebMail.java:3610
 msgid "no subject"
 msgstr "tsy misy antony"
 
-#: src/src/i2p/susi/webmail/WebMail.java:2778
+#: src/src/i2p/susi/webmail/WebMail.java:2780
 msgid "Found no valid sender address."
 msgstr "Tsy misy adiresy ara-dalana."
 
-#: src/src/i2p/susi/webmail/WebMail.java:2784
+#: src/src/i2p/susi/webmail/WebMail.java:2786
 #, java-format
 msgid "Found no valid address in \\''{0}\\''."
 msgstr "Tsy misy adiresy ara-dalana eo amin''ny \\\"{0}\\\"."
 
-#: src/src/i2p/susi/webmail/WebMail.java:2798
+#: src/src/i2p/susi/webmail/WebMail.java:2800
 msgid "No recipients found."
 msgstr "Tsy misy handefasana hita."
 
-#: src/src/i2p/susi/webmail/WebMail.java:2812
+#: src/src/i2p/susi/webmail/WebMail.java:2814
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:302
 #, java-format
 msgid "Email is too large, max is {0}"
 msgstr ""
 
-#: src/src/i2p/susi/webmail/WebMail.java:2857
-#: src/src/i2p/susi/webmail/WebMail.java:2938
+#: src/src/i2p/susi/webmail/WebMail.java:2859
+#: src/src/i2p/susi/webmail/WebMail.java:2940
 msgid "Sending mail."
 msgstr ""
 
-#: src/src/i2p/susi/webmail/WebMail.java:2862
+#: src/src/i2p/susi/webmail/WebMail.java:2864
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:254
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:346
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:351
 msgid "Error sending mail"
 msgstr ""
 
-#: src/src/i2p/susi/webmail/WebMail.java:2896
+#: src/src/i2p/susi/webmail/WebMail.java:2898
 msgid "Mail sent."
 msgstr "Lasa  ny mailaka."
 
-#: src/src/i2p/susi/webmail/WebMail.java:2985
+#: src/src/i2p/susi/webmail/WebMail.java:2987
 msgid "Send"
 msgstr "Alefaso"
 
-#: src/src/i2p/susi/webmail/WebMail.java:2986
+#: src/src/i2p/susi/webmail/WebMail.java:2988
 msgid "Save as Draft"
 msgstr ""
 
-#: src/src/i2p/susi/webmail/WebMail.java:2987
-#: src/src/i2p/susi/webmail/WebMail.java:3426
-#: src/src/i2p/susi/webmail/WebMail.java:3516
-#: src/src/i2p/susi/webmail/WebMail.java:3708
+#: src/src/i2p/susi/webmail/WebMail.java:2989
+#: src/src/i2p/susi/webmail/WebMail.java:3429
+#: src/src/i2p/susi/webmail/WebMail.java:3519
+#: src/src/i2p/susi/webmail/WebMail.java:3711
 msgid "Cancel"
 msgstr "Ajanony"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3078
-#: src/src/i2p/susi/webmail/WebMail.java:3268
-#: src/src/i2p/susi/webmail/WebMail.java:3618
+#: src/src/i2p/susi/webmail/WebMail.java:3080
+#: src/src/i2p/susi/webmail/WebMail.java:3271
+#: src/src/i2p/susi/webmail/WebMail.java:3621
 msgid "From"
 msgstr "De"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3083
-#: src/src/i2p/susi/webmail/WebMail.java:3268
-#: src/src/i2p/susi/webmail/WebMail.java:3623
+#: src/src/i2p/susi/webmail/WebMail.java:3085
+#: src/src/i2p/susi/webmail/WebMail.java:3271
+#: src/src/i2p/susi/webmail/WebMail.java:3626
 msgid "To"
 msgstr "Hatramin'ny"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3087
-#: src/src/i2p/susi/webmail/WebMail.java:3629
+#: src/src/i2p/susi/webmail/WebMail.java:3089
+#: src/src/i2p/susi/webmail/WebMail.java:3632
 msgid "Cc"
 msgstr ""
 
-#: src/src/i2p/susi/webmail/WebMail.java:3091
+#: src/src/i2p/susi/webmail/WebMail.java:3093
 msgid "Bcc"
 msgstr ""
 
-#: src/src/i2p/susi/webmail/WebMail.java:3095
-#: src/src/i2p/susi/webmail/WebMail.java:3270
-#: src/src/i2p/susi/webmail/WebMail.java:3634
+#: src/src/i2p/susi/webmail/WebMail.java:3097
+#: src/src/i2p/susi/webmail/WebMail.java:3273
+#: src/src/i2p/susi/webmail/WebMail.java:3637
 msgid "Subject"
 msgstr "Antony"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3108
+#: src/src/i2p/susi/webmail/WebMail.java:3110
 msgid "Add Attachment"
 msgstr ""
 
 #. TODO: reset button label to "add attachment" when no attachments are visible (currently counts attachments added per session)
-#: src/src/i2p/susi/webmail/WebMail.java:3111
+#: src/src/i2p/susi/webmail/WebMail.java:3113
 #, fuzzy
 msgid "Add attachment"
 msgstr "Fichiers joints"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3118
+#: src/src/i2p/susi/webmail/WebMail.java:3120
 msgid "Attachments"
 msgstr "Fichiers joints"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3130
+#: src/src/i2p/susi/webmail/WebMail.java:3132
 msgid "Delete selected attachments"
 msgstr ""
 
-#: src/src/i2p/susi/webmail/WebMail.java:3147
+#: src/src/i2p/susi/webmail/WebMail.java:3149
 msgid "I2PMail Login"
 msgstr ""
 
-#: src/src/i2p/susi/webmail/WebMail.java:3151
+#: src/src/i2p/susi/webmail/WebMail.java:3153
 msgid "User"
 msgstr "Mpampiasa"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3152
+#: src/src/i2p/susi/webmail/WebMail.java:3154
 #, fuzzy
 msgid "Username"
 msgstr "Mpampiasa"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3156
-#: src/src/i2p/susi/webmail/WebMail.java:3157
+#: src/src/i2p/susi/webmail/WebMail.java:3158
+#: src/src/i2p/susi/webmail/WebMail.java:3159
 msgid "Password"
 msgstr "Teny miafina"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3159
+#: src/src/i2p/susi/webmail/WebMail.java:3161
 msgid "Toggle password visibility"
 msgstr ""
 
-#: src/src/i2p/susi/webmail/WebMail.java:3165
+#: src/src/i2p/susi/webmail/WebMail.java:3167
 msgid "Host"
 msgstr "Mpampiantrano"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3170
+#: src/src/i2p/susi/webmail/WebMail.java:3172
 msgid "POP3 Port"
 msgstr ""
 
-#: src/src/i2p/susi/webmail/WebMail.java:3175
+#: src/src/i2p/susi/webmail/WebMail.java:3177
 msgid "SMTP Port"
 msgstr ""
 
-#: src/src/i2p/susi/webmail/WebMail.java:3184
+#: src/src/i2p/susi/webmail/WebMail.java:3186
 msgid "Read Mail Offline"
 msgstr ""
 
-#: src/src/i2p/susi/webmail/WebMail.java:3185
-#: src/src/i2p/susi/webmail/WebMail.java:3430
+#: src/src/i2p/susi/webmail/WebMail.java:3187
+#: src/src/i2p/susi/webmail/WebMail.java:3433
 msgid "Settings"
 msgstr ""
 
-#: src/src/i2p/susi/webmail/WebMail.java:3190
+#: src/src/i2p/susi/webmail/WebMail.java:3192
 #, fuzzy
 msgid "Learn about I2PMail"
 msgstr "Fantaro ny momban'ny mailaka I2P"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3191
+#: src/src/i2p/susi/webmail/WebMail.java:3193
 msgid "Create Account"
 msgstr "Famoronana kaonty"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3216
-#: src/src/i2p/susi/webmail/WebMail.java:3540
+#: src/src/i2p/susi/webmail/WebMail.java:3218
+#: src/src/i2p/susi/webmail/WebMail.java:3543
 msgid "New"
 msgstr "Vaovao"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3229
+#: src/src/i2p/susi/webmail/WebMail.java:3231
 msgid "Check Mail"
 msgstr "Sintony ny mailaka"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3237
+#: src/src/i2p/susi/webmail/WebMail.java:3239
 msgid "Refresh Page"
 msgstr ""
 
-#: src/src/i2p/susi/webmail/WebMail.java:3242
-#: src/src/i2p/susi/webmail/WebMail.java:3552
-#: src/src/i2p/susi/webmail/WebMail.java:3711
+#: src/src/i2p/susi/webmail/WebMail.java:3252
+#, java-format
+msgid "1 Message"
+msgid_plural "{0} Messages"
+msgstr[0] "1 Mailaka"
+msgstr[1] "{0} Mailaka"
+
+#: src/src/i2p/susi/webmail/WebMail.java:3252
+#: src/src/i2p/susi/webmail/WebMail.java:3555
+#: src/src/i2p/susi/webmail/WebMail.java:3714
 msgid "Logout"
 msgstr "Mialà"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3267
-#: src/src/i2p/susi/webmail/WebMail.java:3614
+#: src/src/i2p/susi/webmail/WebMail.java:3270
+#: src/src/i2p/susi/webmail/WebMail.java:3617
 msgid "Date"
 msgstr "Daty"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3272
+#: src/src/i2p/susi/webmail/WebMail.java:3275
 msgid "Size"
 msgstr "Habe"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3273
+#: src/src/i2p/susi/webmail/WebMail.java:3276
 msgid "Mark for deletion"
 msgstr ""
 
-#: src/src/i2p/susi/webmail/WebMail.java:3370
+#: src/src/i2p/susi/webmail/WebMail.java:3373
 msgid "Message has an attachment"
 msgstr ""
 
-#: src/src/i2p/susi/webmail/WebMail.java:3380
+#: src/src/i2p/susi/webmail/WebMail.java:3383
 msgid "Message is new"
 msgstr ""
 
-#: src/src/i2p/susi/webmail/WebMail.java:3382
+#: src/src/i2p/susi/webmail/WebMail.java:3385
 msgid "Message is spam"
 msgstr ""
 
-#: src/src/i2p/susi/webmail/WebMail.java:3391
+#: src/src/i2p/susi/webmail/WebMail.java:3394
 #, fuzzy
 msgid "Message body not downloaded"
 msgstr "Diso ny laharan'ny mailaka."
 
 #. TODO ngettext
-#: src/src/i2p/susi/webmail/WebMail.java:3424
+#: src/src/i2p/susi/webmail/WebMail.java:3427
 msgid "Really delete the marked messages?"
 msgstr "Tena vonoina ve ny mailaka voafantina?"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3425
+#: src/src/i2p/susi/webmail/WebMail.java:3428
 msgid "Yes, really delete them!"
 msgstr "Eny, fafao tokoa!"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3431
+#: src/src/i2p/susi/webmail/WebMail.java:3434
 msgid "Delete Selected"
 msgstr ""
 
-#: src/src/i2p/susi/webmail/WebMail.java:3432
+#: src/src/i2p/susi/webmail/WebMail.java:3435
 msgid "Mark All"
 msgstr "Fidio daholo"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3433
+#: src/src/i2p/susi/webmail/WebMail.java:3436
 msgid "Clear All"
 msgstr ""
 
-#: src/src/i2p/susi/webmail/WebMail.java:3446
+#: src/src/i2p/susi/webmail/WebMail.java:3449
 msgid "Change to Folder"
 msgstr ""
 
-#: src/src/i2p/susi/webmail/WebMail.java:3454
+#: src/src/i2p/susi/webmail/WebMail.java:3457
 msgid "First"
 msgstr "Voalohany"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3455
-#: src/src/i2p/susi/webmail/WebMail.java:3564
+#: src/src/i2p/susi/webmail/WebMail.java:3458
+#: src/src/i2p/susi/webmail/WebMail.java:3567
 msgid "Previous"
 msgstr "Teo aloha"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3464
-#: src/src/i2p/susi/webmail/WebMail.java:3579
+#: src/src/i2p/susi/webmail/WebMail.java:3467
+#: src/src/i2p/susi/webmail/WebMail.java:3582
 msgid "Next"
 msgstr "Manaraka"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3465
+#: src/src/i2p/susi/webmail/WebMail.java:3468
 msgid "Last"
 msgstr "Farany"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3514
+#: src/src/i2p/susi/webmail/WebMail.java:3517
 msgid "Really delete this message?"
 msgstr "Tena voinoina tokoa ity mailaka ity ?"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3515
+#: src/src/i2p/susi/webmail/WebMail.java:3518
 msgid "Yes, really delete it!"
 msgstr "Eny, fafao tokoa!"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3543
+#: src/src/i2p/susi/webmail/WebMail.java:3546
 msgid "Reply"
 msgstr "Valio"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3544
+#: src/src/i2p/susi/webmail/WebMail.java:3547
 msgid "Reply All"
 msgstr "Valio daholo"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3545
+#: src/src/i2p/susi/webmail/WebMail.java:3548
 msgid "Forward"
 msgstr "Ampanarao"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3546
+#: src/src/i2p/susi/webmail/WebMail.java:3549
 msgid "Save As"
 msgstr ""
 
-#: src/src/i2p/susi/webmail/WebMail.java:3548
-#: src/src/i2p/susi/webmail/WebMail.java:3550
+#: src/src/i2p/susi/webmail/WebMail.java:3551
+#: src/src/i2p/susi/webmail/WebMail.java:3553
 msgid "Delete"
 msgstr "Vonoy"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3576
+#: src/src/i2p/susi/webmail/WebMail.java:3579
 msgid "Back to Folder"
 msgstr "Miverina any amin'y dosier"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3597
+#: src/src/i2p/susi/webmail/WebMail.java:3600
 msgid "Move to Folder"
 msgstr ""
 
-#: src/src/i2p/susi/webmail/WebMail.java:3695
+#: src/src/i2p/susi/webmail/WebMail.java:3698
 msgid "Folder Page Size"
 msgstr ""
 
-#: src/src/i2p/susi/webmail/WebMail.java:3696
+#: src/src/i2p/susi/webmail/WebMail.java:3699
 msgid "Set"
 msgstr "Fiomanana"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3698
+#: src/src/i2p/susi/webmail/WebMail.java:3701
 msgid "Advanced Configuration"
 msgstr ""
 
-#: src/src/i2p/susi/webmail/WebMail.java:3709
+#: src/src/i2p/susi/webmail/WebMail.java:3712
 msgid "Save Configuration"
 msgstr ""
 
