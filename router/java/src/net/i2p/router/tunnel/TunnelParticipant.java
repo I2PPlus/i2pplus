@@ -107,17 +107,15 @@ class TunnelParticipant {
                 ri = _context.netDb().lookupRouterInfoLocally(_config.getSendTo());
             if (ri != null) {
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("Send off to nextHop directly (" + _config.getSendTo()
-                              + " for message" + msg);
+                    _log.debug("Despatched " + msg + " directly to nextHop [" + _config.getSendTo().toBase64().substring(0,6) + "]");
                 send(_config, msg, ri);
                 // see comments below
                 //if (_config != null)
                 //    incrementThroughput(_config.getReceiveFrom());
             } else {
                 // It should be rare to forget the router info for the next peer
-                if (_log.shouldLog(Log.WARN))
-                    _log.warn("Lookup the nextHop (" + _config.getSendTo()
-                              + " for message" + msg);
+                if (_log.shouldLog(Log.INFO))
+                    _log.info("Looking up nextHop [" + _config.getSendTo().toBase64().substring(0,6) + "] for " + msg);
                 _context.netDb().lookupRouterInfo(_config.getSendTo(), new SendJob(_context, msg),
                                                   new TimeoutJob(_context, msg), MAX_LOOKUP_TIME);
             }
