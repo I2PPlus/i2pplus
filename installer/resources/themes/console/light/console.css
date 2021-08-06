@@ -11658,6 +11658,9 @@ h1.webapp {
 .sitemapLabel {
   padding: 4px 0;
   display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   border: none;
   border-top: 1px solid #999adf;
 }
