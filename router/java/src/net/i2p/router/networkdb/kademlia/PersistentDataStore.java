@@ -304,7 +304,7 @@ public class PersistentDataStore extends TransientDataStore {
                                     ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                     ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
                                     VersionComparator.comp(v, MIN_VERSION) < 0) &&
-                                    _context.netDb().getKnownRouters() > 2000 &&
+                                    _context.netDb().getKnownRouters() > 5000 &&
                                     _context.router().getUptime() > 60*60*1000;
         if (_log.shouldLog(Log.DEBUG) && !uninteresting)
             _log.debug("Writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk");

@@ -96,10 +96,10 @@ class RefreshRoutersJob extends JobImpl {
             }
             if (_routers.isEmpty()) {
                 _routers = null;
-                if (netDbCount > 2000) {
+                if (netDbCount > 1000) {
                     RESTART_DELAY_MS *= rand.nextInt(3) + 1;
                     requeue(RESTART_DELAY_MS);
-                } else if (netDbCount > 5000) {
+                } else if (netDbCount > 3000) {
                     RESTART_DELAY_MS *= rand.nextInt(12) + 1;
                 } else {
                     requeue(RESTART_DELAY_MS);
@@ -140,12 +140,6 @@ class RefreshRoutersJob extends JobImpl {
                         routerAge = 2*60*60*1000;
                     if (netDbCount > 4000)
                         routerAge = 4*60*60*1000;
-                    if (netDbCount > 6000)
-                        routerAge = 8*60*60*1000;
-                    if (netDbCount > 8000)
-                        routerAge = 16*60*60*1000;
-                    if (netDbCount > 9000)
-                        routerAge = 20*60*60*1000;
                 } else {
                     routerAge = Integer.valueOf(freshness)*60*60*1000;
                 }
