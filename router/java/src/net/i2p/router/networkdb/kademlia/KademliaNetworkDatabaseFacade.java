@@ -372,7 +372,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                                     ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
                                     VersionComparator.comp(v, MIN_VERSION) < 0) &&
                                     _context.router().getUptime() > 60*60*1000 &&
-                                    _context.netDb().getKnownRouters() > 5000;
+                                    _context.netDb().getKnownRouters() > 2000;
             if (uninteresting && !isHidden)
                 erj.getTiming().setStartAfter(_context.clock().now() + 90*60*1000);
             else if (expireRI != null)
@@ -794,7 +794,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                                      ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
                                      VersionComparator.comp(v, MIN_VERSION) < 0) &&
                                      _context.router().getUptime() > 60*60*1000 &&
-                                     _context.netDb().getKnownRouters() > 5000;
+                                     _context.netDb().getKnownRouters() > 2000;
             if (uninteresting && !isHidden) {
 //                _ds.remove(key);
                 _kb.remove(key);

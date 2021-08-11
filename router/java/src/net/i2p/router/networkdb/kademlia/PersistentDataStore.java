@@ -304,7 +304,7 @@ public class PersistentDataStore extends TransientDataStore {
                                     ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                     ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
                                     VersionComparator.comp(v, MIN_VERSION) < 0) &&
-                                    _context.netDb().getKnownRouters() > 5000 &&
+                                    _context.netDb().getKnownRouters() > 2000 &&
                                     _context.router().getUptime() > 60*60*1000;
         if (_log.shouldLog(Log.DEBUG) && !uninteresting)
             _log.debug("Writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk");
@@ -493,7 +493,8 @@ public class PersistentDataStore extends TransientDataStore {
                 }
             } else if (_lastReseed < _context.clock().now() - MIN_RESEED_INTERVAL) {
                 int count = Math.min(routerCount, size());
-                if (count < MIN_ROUTERS) {
+                int known = _context.netDb().getKnownRouters();
+                if (known < MIN_ROUTERS) {
                     if (_facade.reseedChecker().checkReseed(count))
                         _lastReseed = _context.clock().now();
                         // checkReseed will call wakeup() when done and we will run again
