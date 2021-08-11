@@ -273,6 +273,14 @@
             value="url(/i2psnark/.resources/themes/snark/light/images/" >
             <include name="**/*.css" />
         </replace>
+
+        <replace dir="build/standalone-resources/.resources/themes/snark"
+            summary="true"
+            token="url(/themes/console/light/"
+            value="url(/i2psnark/.resources/themes/snark/light/" >
+            <include name="**/*.css" />
+        </replace>
+
         <replace dir="build/standalone-resources/.resources/themes/snark"
             summary="true"
             token="url(/themes/console/light/images/"

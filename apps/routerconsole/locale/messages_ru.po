@@ -203,7 +203,7 @@ msgstr "Общее число узлов в нашей сетевой БД"
 
 #: ../../../router/java/src/net/i2p/router/tasks/CoalesceStatsEvent.java:41
 msgid "Peers active in the last minute"
-msgstr ""
+msgstr "Сверстники активны в последнюю минуту"
 
 #: ../../../router/java/src/net/i2p/router/tasks/CoalesceStatsEvent.java:42
 #, fuzzy
@@ -226,11 +226,11 @@ msgstr "хорошо интегрированные узлы"
 
 #: ../../../router/java/src/net/i2p/router/tasks/CoalesceStatsEvent.java:46
 msgid "Total peers in our banlist"
-msgstr ""
+msgstr "Всего запрещенных сверстников"
 
 #: ../../../router/java/src/net/i2p/router/tasks/CoalesceStatsEvent.java:47
 msgid "Peers without a published IP address"
-msgstr ""
+msgstr "Сверстники без опубликованного IP-адреса"
 
 #: ../../../router/java/src/net/i2p/router/tasks/CoalesceStatsEvent.java:48
 msgid "Size of tunnel acceptor backlog"
@@ -1768,7 +1768,7 @@ msgstr "Адрес обновления"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:388
 msgid "imagegen"
-msgstr ""
+msgstr "Генератор изображения"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:418
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:420
@@ -2399,7 +2399,7 @@ msgstr ""
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHelper.java:302
 #, java-format
 msgid "{0}B maximum data transfer per month"
-msgstr ""
+msgstr "{0}B максимальная передача данных в месяц"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigPeerHandler.java:21
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configpeer_jsp.java:591
@@ -3409,12 +3409,12 @@ msgstr ""
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:78
 #, fuzzy
 msgid "Advanced Config"
-msgstr "Дополнительные настройки "
+msgstr "Дополнительные настройки"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:78
 #, fuzzy
 msgid "Advanced router configuration"
-msgstr "Дополнительные настройки "
+msgstr "Дополнительные настройки"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:79
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:181
@@ -3451,11 +3451,11 @@ msgstr "Модули"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:97
 msgid "zzz's plugin repository"
-msgstr ""
+msgstr "Репозиторий плагина zzz"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:98
 msgid "Historical infrastructure data from the I2P network"
-msgstr ""
+msgstr "Исторические данные инфраструктуры из сети I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:99
 msgid "I2P home page"
@@ -3481,11 +3481,11 @@ msgstr ""
 #. software repositories + filesharing
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:104
 msgid "Transient server-encrypted filesharing and pastebin"
-msgstr ""
+msgstr "Временный текст и обмен файлами"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:105
 msgid "Huge collection of books &amp; magazines &amp; comics"
-msgstr ""
+msgstr "Огромная коллекция книг и журналов и комиксов"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:106
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:110
@@ -3539,7 +3539,7 @@ msgstr ""
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:120
 #, fuzzy
 msgid "List of active eepsites and uptime monitor"
-msgstr "Большая часть eepsites не работает?"
+msgstr "Монитор сайта"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:121
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:122
@@ -3572,7 +3572,7 @@ msgstr "Форум сообщества"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:128
 msgid "Alternative front-end for Twitter"
-msgstr ""
+msgstr "Альтернативный интерфейс для Twitter"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:129
 msgid "The StackOverflow of I2P"
@@ -3588,12 +3588,12 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:134
 msgid "Encrypted I2P Pastebin"
-msgstr ""
+msgstr "Зашифрованный текст акций"
 
 #. hosting + other services
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:134
 msgid "Pastebin"
-msgstr ""
+msgstr "Поделиться текстом"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:135
 msgid "Deep Web Radio"
@@ -3601,15 +3601,15 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:135
 msgid "Streaming radio service"
-msgstr ""
+msgstr "Потоковое радио обслуживание"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:136
 msgid "Alternative front-end to Youtube"
-msgstr ""
+msgstr "Альтернативный интернет-конец для YouTube"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:137
 msgid "Provider of privacy respecting web hosting and VPN services"
-msgstr ""
+msgstr "Частный веб-хостинг и VPN-услуги"
 
 #. search engines
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:140
@@ -3629,7 +3629,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:144
 msgid "Wiki relating to altered states of consciousness"
-msgstr ""
+msgstr "Вики относящиеся к измененным состояниям сознания"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:145
 #, fuzzy
@@ -3639,7 +3639,7 @@ msgstr "I2P Вики"
 #. news + blogs
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:148
 msgid "Router performance monitoring and Linux tips"
-msgstr ""
+msgstr "Мониторинг производительности маршрутизатора и подсказки Linux"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:149
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:578

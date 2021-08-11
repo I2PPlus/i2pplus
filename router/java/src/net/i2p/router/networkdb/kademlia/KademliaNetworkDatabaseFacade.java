@@ -136,7 +136,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  a reseed will be forced if necessary.
      */
 //    protected final static int MIN_REMAINING_ROUTERS = MIN_RESEED - 10;
-    protected final static int MIN_REMAINING_ROUTERS = MIN_RESEED - 50;
+    protected final static int MIN_REMAINING_ROUTERS = MIN_RESEED - 5;
 
     /**
      * Limits for accepting a dbStore of a router (unless we don't
@@ -178,7 +178,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /** Maximum number of peers to place in the queue to explore
      */
 //    static final int MAX_EXPLORE_QUEUE = 128;
-    static final int MAX_EXPLORE_QUEUE = 512;
+    static final int MAX_EXPLORE_QUEUE = 256;
     static final String PROP_EXPLORE_QUEUE = "router.exploreQueue";
 
     /**
@@ -189,7 +189,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private static final int BUCKET_SIZE = 48;
     static final String PROP_BUCKET_SIZE = "router.exploreBucketSize";
 //    private static final int KAD_B = 4;
-    private static final int KAD_B = 6;
+    private static final int KAD_B = 5;
     static final String PROP_KAD_B = "router.exploreKadB";
 
     private static final long[] RATES = { 60*1000, 60*60*1000 };
@@ -372,7 +372,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                                     ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
                                     VersionComparator.comp(v, MIN_VERSION) < 0) &&
                                     _context.router().getUptime() > 60*60*1000 &&
-                                    _context.netDb().getKnownRouters() > 2000;
+                                    _context.netDb().getKnownRouters() > 5000;
             if (uninteresting && !isHidden)
                 erj.getTiming().setStartAfter(_context.clock().now() + 90*60*1000);
             else if (expireRI != null)
@@ -794,12 +794,12 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                                      ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
                                      VersionComparator.comp(v, MIN_VERSION) < 0) &&
                                      _context.router().getUptime() > 60*60*1000 &&
-                                     _context.netDb().getKnownRouters() > 2000;
+                                     _context.netDb().getKnownRouters() > 5000;
             if (uninteresting && !isHidden) {
-                _ds.remove(key);
+//                _ds.remove(key);
                 _kb.remove(key);
                 if (_log.shouldInfo())
-                    _log.info("Deleted uninteresting RouterInfo [" + key.toBase64().substring(0,6) + "] from disk");
+                    _log.info("Deleted uninteresting RouterInfo [" + key.toBase64().substring(0,6) + "] from DHT");
             }
 
         } else if (_context.banlist().isBanlistedForever(key)) {

@@ -62,7 +62,7 @@ public class Reseeder {
     //private static final int MAX_TIME_PER_HOST = 7 * 60 * 1000;
     private static final int MAX_TIME_PER_HOST = 15 * 1000;
     //private static final long MAX_FILE_AGE = 30*24*60*60*1000L;
-    private static final long MAX_FILE_AGE = 40*24*60*60*1000L;
+    private static final long MAX_FILE_AGE = 3*24*60*60*1000L;
     /** Don't disable this! */
     private static final boolean ENABLE_SU3 = true;
     /** if false, use su3 only, and disable fallback reading directory index and individual dat files */
