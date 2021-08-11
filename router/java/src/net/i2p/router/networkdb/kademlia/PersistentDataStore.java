@@ -507,8 +507,9 @@ public class PersistentDataStore extends TransientDataStore {
             } else {
                 // second time through, reseed called wakeup()
                 if (!_setNetDbReady) {
-                    int count = Math.min(routerCount, size());
-                    if (count >= MIN_ROUTERS) {
+//                    int count = Math.min(routerCount, size());
+                    int known = _context.netDb().getKnownRouters();
+                    if (known >= MIN_ROUTERS) {
                         _setNetDbReady = true;
                         _context.router().setNetDbReady();
                     }
