@@ -370,7 +370,7 @@ public class PersistentDataStore extends TransientDataStore {
         private volatile boolean _setNetDbReady;
         private static final int MIN_ROUTERS = KademliaNetworkDatabaseFacade.MIN_RESEED;
 //        private static final long MIN_RESEED_INTERVAL = 90*60*1000;
-        private static final long MIN_RESEED_INTERVAL = 60*60*1000;
+        private static final long MIN_RESEED_INTERVAL = 2*60*60*1000;
 
         public ReadJob() {
             super(PersistentDataStore.this._context);

@@ -59,7 +59,7 @@ public class ReseedChecker {
      *  @return true if a reseed was started
      */
     public boolean checkReseed(int count) {
-        if (_context.router().getUptime() < 10*60*1000 && count < MINIMUM &&
+        if (_context.router().getUptime() < 30*60*1000 && count < MINIMUM &&
             !(_context.getEstimatedDowntime() > RESEED_MIN_DOWNTIME)) {
             return false;
         } else if (_alreadyRun) {
