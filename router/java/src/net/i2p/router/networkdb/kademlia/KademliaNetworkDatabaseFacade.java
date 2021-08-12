@@ -363,24 +363,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         // Don't run until after RefreshRoutersJob has run, and after validate() will return invalid for old routers.
         if (!_context.commSystem().isDummy()) {
             Job erj = new ExpireRoutersJob(_context, this);
-            String expireRI = _context.getProperty("router.expireRouterInfo");
-            String v = ri.getVersion();
-            String MIN_VERSION = "0.9.48";
-            boolean isHidden = _context.router().isHidden() || _context.getBooleanProperty("router.hiddenMode");
-            boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
-                                    ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
-                                    ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
-                                    VersionComparator.comp(v, MIN_VERSION) < 0) &&
-                                    _context.router().getUptime() > 60*60*1000 &&
-                                    _context.netDb().getKnownRouters() > 2000;
-            if (uninteresting && !isHidden)
-                erj.getTiming().setStartAfter(_context.clock().now() + 90*60*1000);
-            else if (expireRI != null)
-                erj.getTiming().setStartAfter(_context.clock().now() + (Integer.valueOf(expireRI)*60*60*1000) + 10*60*1000);
-            else if (floodfillEnabled())
-                erj.getTiming().setStartAfter(_context.clock().now() + ROUTER_INFO_EXPIRATION_FLOODFILL + 10*60*1000);
-            else
-                erj.getTiming().setStartAfter(_context.clock().now() + ROUTER_INFO_EXPIRATION + 10*60*1000);
+             erj.getTiming().setStartAfter(_context.clock().now() + 2*60*60*1000);
             _context.jobQueue().addJob(erj);
         }
 
