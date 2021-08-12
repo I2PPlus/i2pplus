@@ -80,7 +80,7 @@ class RefreshRoutersJob extends JobImpl {
         }
         if (_facade.isInitialized() && netDbCount > 5000) {
             if (_log.shouldLog(Log.INFO))
-                _log.info("Suspending Refresh Routers job - over 8,000 known peers in NetDb");
+                _log.info("Suspending Refresh Routers job - over 5,000 known peers in NetDb");
             return;
         }
         if (_facade.isInitialized()) {
