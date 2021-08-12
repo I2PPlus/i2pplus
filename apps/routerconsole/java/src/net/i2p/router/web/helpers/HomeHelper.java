@@ -52,6 +52,7 @@ public class HomeHelper extends HelperBase {
         _x("Router Logs") + S + _x("Health Report") + S + "/logs" + S + I + "svg/logs.svg" + S +
         _x("Sitemap") + S + _x("Router Sitemap") + S + "/sitemap" + S + I + "svg/sitemap.svg" + S +
         _x("Torrents") + S + _x("Built-in anonymous BitTorrent Client") + S + "/torrents" + S + I + "svg/snark.svg" + S +
+        _x("Tunnel Manager") + S + _x("Manage server and client tunnels") + S + "/i2ptunnelmgr" + S + I + "svg/tunnelmanager.svg" + S +
         _x("Web Server") + S + _x("Local web server for hosting your own content on I2P") + S + "http://127.0.0.1:7658/" + S + I + "svg/webserver.svg" + S +
         "";
 
@@ -70,7 +71,9 @@ public class HomeHelper extends HelperBase {
         _x("Router Logs") + S + _x("Health Report") + S + "/logs" + S + I + "svg/logs.svg" + S +
         _x("Sitemap") + S + _x("Router Sitemap") + S + "/sitemap" + S + I + "svg/sitemap.svg" + S +
         _x("Torrents") + S + _x("Built-in anonymous BitTorrent Client") + S + "/torrents" + S + I + "svg/snark.svg" + S +
+        _x("Tunnel Manager") + S + _x("Manage server and client tunnels") + S + "/i2ptunnelmgr" + S + I + "svg/tunnelmanager.svg" + S +
         _x("Web Server") + S + _x("Local web server for hosting your own content on I2P") + S + "http://127.0.0.1:7658/" + S + I + "svg/webserver.svg" + S +
+        _x("Wizard") + S + _x("Configuration and bandwidth tester") + S + "/wizard" + S + I + "svg/wizard.svg" + S +
         "";
 
     static final String ADVANCED_SERVICES =
@@ -85,6 +88,7 @@ public class HomeHelper extends HelperBase {
         _x("Router Logs") + S + _x("Health Report") + S + "/logs" + S + I + "svg/logs.svg" + S +
         _x("Sitemap") + S + _x("Router Sitemap") + S + "/sitemap" + S + I + "svg/sitemap.svg" + S +
         _x("Torrents") + S + _x("Built-in anonymous BitTorrent Client") + S + "/torrents" + S + I + "svg/snark.svg" + S +
+        _x("Tunnel Manager") + S + _x("Manage server and client tunnels") + S + "/i2ptunnelmgr" + S + I + "svg/tunnelmanager.svg" + S +
         _x("Web Server") + S + _x("Local web server for hosting your own content on I2P") + S + "http://127.0.0.1:7658/" + S + I + "svg/webserver.svg" + S +
         "";
 
@@ -105,7 +109,7 @@ public class HomeHelper extends HelperBase {
         "ebooks.i2p" + S + _x("Huge collection of books &amp; magazines &amp; comics") + S + "http://ebooks.i2p/" + S + I + "svg/books.svg" + S +
         "fs.i2p" + S + _x("Secure filesharing service") + S + "http://fs.i2p/" + S + I + "svg/cloud.svg" + S +
         "git.i2p" + S + _x("Community Git hosting") + S + "http://git.i2p/explore/repos" + S + I + "svg/git.svg" + S +
-        "git.idk.i2p" + S + _x("A public anonymous Git hosting site - supports pulling via Git and HTTP and pushing via SSH") + S + "http://git.idk.i2p/explore/projects" + S + I + "svg/gitlab.svg" + S +
+        "git.idk.i2p" + S + _x("Official I2P Git repository") + S + "http://git.idk.i2p/explore/projects" + S + I + "svg/gitlab.svg" + S +
         "inclib.i2p" + S + _x("The Radical Militant Library") + S + "http://inclib.i2p/" + S + I + "svg/books.svg" + S +
         "sharefile.i2p" + S + _x("Secure filesharing service") + S + "http://sharefile.i2p/" + S + I + "svg/cloud.svg" + S +
         "skank.i2p" + S + _x("Home of I2P+") + S + "http://skank.i2p/" + S + I + "svg/plus.svg" + S +
