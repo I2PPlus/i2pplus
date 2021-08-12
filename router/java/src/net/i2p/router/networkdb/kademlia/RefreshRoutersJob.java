@@ -65,7 +65,8 @@ class RefreshRoutersJob extends JobImpl {
 
     public void runJob() {
         Random rand = new Random();
-        int netDbCount = _facade.getAllRouters().size();
+//        int netDbCount = _facade.getAllRouters().size();
+        int netDbCount = getContext().netDb().getKnownRouters();
         if (getContext().commSystem().getStatus() == Status.DISCONNECTED) {
             if (_log.shouldLog(Log.WARN))
             _log.warn("Suspending Refresh Routers job - network disconnected");
@@ -77,7 +78,7 @@ class RefreshRoutersJob extends JobImpl {
             _log.warn("Suspending Refresh Routers job - job lag is over 500ms");
             return;
         }
-        if (_facade.isInitialized() && netDbCount > 8000) {
+        if (_facade.isInitialized() && netDbCount > 5000) {
             if (_log.shouldLog(Log.INFO))
                 _log.info("Suspending Refresh Routers job - over 8,000 known peers in NetDb");
             return;
@@ -188,7 +189,7 @@ class RefreshRoutersJob extends JobImpl {
             if (getContext().jobQueue().getMaxLag() > 150 || getContext().throttle().getMessageDelay() > 750)
                 randomDelay = randomDelay * (rand.nextInt(3) + 1);
             else if (netDbCount < 100 || getContext().router().getUptime() < 45*60*1000)
-                randomDelay = Math.max(randomDelay - rand.nextInt(2000), 500);
+                randomDelay = Math.max(randomDelay - rand.nextInt(3000), 500);
             else if (netDbCount < 300)
                 randomDelay = randomDelay - (rand.nextInt(1250) + rand.nextInt(1250));
             else if (netDbCount < 500)
