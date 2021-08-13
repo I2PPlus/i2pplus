@@ -78,9 +78,9 @@ class RefreshRoutersJob extends JobImpl {
             _log.warn("Suspending Refresh Routers job - job lag is over 500ms");
             return;
         }
-        if (_facade.isInitialized() && netDbCount > 6000 && getContext().router().getUptime() > 60*60*1000) {
+        if (_facade.isInitialized() && netDbCount > 7000 && getContext().router().getUptime() > 60*60*1000) {
             if (_log.shouldLog(Log.INFO))
-                _log.info("Suspending Refresh Routers job - over 6,000 known peers in NetDb");
+                _log.info("Suspending Refresh Routers job - over 7,000 known peers in NetDb");
             return;
         }
         if (_facade.isInitialized()) {
@@ -97,7 +97,9 @@ class RefreshRoutersJob extends JobImpl {
             }
             if (_routers.isEmpty()) {
                 _routers = null;
-                if (netDbCount > 1000) {
+                if (getContext().router().getUptime() < 60*60*1000)
+                    RESTART_DELAY_MS = 60*1000;
+                else if (netDbCount > 1000) {
                     RESTART_DELAY_MS *= rand.nextInt(3) + 1;
                     requeue(RESTART_DELAY_MS);
                 } else if (netDbCount > 3000) {
@@ -189,10 +191,10 @@ class RefreshRoutersJob extends JobImpl {
             if (getContext().jobQueue().getMaxLag() > 150 || getContext().throttle().getMessageDelay() > 750)
                 randomDelay = randomDelay * (rand.nextInt(3) + 1);
             else if (netDbCount < 100 || getContext().router().getUptime() < 45*60*1000)
-                randomDelay = Math.max(randomDelay - rand.nextInt(8000), 500);
-            else if (netDbCount < 300)
+                randomDelay = Math.max(Math.min(randomDelay - 7000, randomDelay - rand.nextInt(8000)), 100 + rand.nextInt(150));
+            else if (netDbCount < 1000)
                 randomDelay = randomDelay - (rand.nextInt(1250) + rand.nextInt(1250));
-            else if (netDbCount < 500)
+            else if (netDbCount < 2000)
                 randomDelay = randomDelay - (rand.nextInt(750) / (rand.nextInt(3) + 1));
             else
                 randomDelay = randomDelay - ((rand.nextInt(750) / (rand.nextInt(3) + 1)) * rand.nextInt(6) + 1);
