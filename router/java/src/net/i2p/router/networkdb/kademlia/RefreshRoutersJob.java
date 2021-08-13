@@ -193,7 +193,7 @@ class RefreshRoutersJob extends JobImpl {
             else if (netDbCount < 500 || getContext().router().getUptime() < 30*60*1000)
                 randomDelay = Math.max(Math.min(randomDelay - 6000, randomDelay - rand.nextInt(7000)), 300 + rand.nextInt(150));
             else if (netDbCount < 1000)
-                randomDelay = randomDelay - (rand.nextInt(1250) - rand.nextInt(1250));
+                randomDelay = Math.max(randomDelay - rand.nextInt(1250) - rand.nextInt(1250), 400 + rand.nextInt(150));
             else if (netDbCount < 2000)
                 randomDelay = randomDelay - (rand.nextInt(750) / (rand.nextInt(3) + 1));
             else
