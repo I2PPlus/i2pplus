@@ -26,26 +26,6 @@
 <%
     String version = net.i2p.CoreVersion.VERSION;
     String firstVersion = ctx.getProperty("router.firstVersion");
-    boolean oldHome = ctx.getBooleanProperty("routerconsole.oldHomePage");
-    if (oldHome || !version.equals(firstVersion)) {
-%>
-
-<div class="news" id="news">
-<%
-    if (newshelper.shouldShowNews()) {
-%>
- <jsp:getProperty name="newshelper" property="content" />
- <hr>
-<%
-    }  // shouldShowNews()
-%>
- <jsp:useBean class="net.i2p.router.web.ConfigUpdateHelper" id="updatehelper" scope="request" />
- <jsp:setProperty name="updatehelper" property="contextId" value="<%=i2pcontextId%>" />
- <jsp:getProperty name="updatehelper" property="newsStatus" /><br>
-</div>
-
-<%
-    } // only show news section if we're using /sitemap as homepage
 %>
 
 <div class="main" id="sitemap">
