@@ -98,15 +98,15 @@ class RefreshRoutersJob extends JobImpl {
             }
             if (_routers.isEmpty()) {
                 _routers = null;
-                if (getContext().router().getUptime() < 60*60*1000)
+                if (getContext().router().getUptime() < 60*60*1000) {
                     RESTART_DELAY_MS = 60*1000;
-                else if (netDbCount > 1000) {
-                    RESTART_DELAY_MS *= rand.nextInt(3) + 1;
-                    requeue(RESTART_DELAY_MS);
-                } else if (netDbCount > 3000) {
-                    RESTART_DELAY_MS *= rand.nextInt(12) + 1;
                 } else if (netDbCount > 7000 && getContext().router().getUptime() > 60*60*1000) {
                     RESTART_DELAY_MS *= 12;
+                } else if (netDbCount > 3000) {
+                    RESTART_DELAY_MS *= rand.nextInt(12) + 1;
+                } else if (netDbCount > 1000) {
+                    RESTART_DELAY_MS *= rand.nextInt(3) + 1;
+                    requeue(RESTART_DELAY_MS);
                 } else {
                     requeue(RESTART_DELAY_MS);
                 }
