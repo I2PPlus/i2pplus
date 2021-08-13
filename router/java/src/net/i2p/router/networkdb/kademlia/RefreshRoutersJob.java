@@ -78,9 +78,9 @@ class RefreshRoutersJob extends JobImpl {
             _log.warn("Suspending Refresh Routers job - job lag is over 500ms");
             return;
         }
-        if (_facade.isInitialized() && netDbCount > 5000) {
+        if (_facade.isInitialized() && netDbCount > 6000 && getContext().router().getUptime() > 60*60*1000) {
             if (_log.shouldLog(Log.INFO))
-                _log.info("Suspending Refresh Routers job - over 5,000 known peers in NetDb");
+                _log.info("Suspending Refresh Routers job - over 6,000 known peers in NetDb");
             return;
         }
         if (_facade.isInitialized()) {
