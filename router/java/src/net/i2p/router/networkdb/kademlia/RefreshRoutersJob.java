@@ -78,11 +78,12 @@ class RefreshRoutersJob extends JobImpl {
             _log.warn("Suspending Refresh Routers job - job lag is over 500ms");
             return;
         }
-        if (_facade.isInitialized() && netDbCount > 7000 && getContext().router().getUptime() > 60*60*1000) {
+/*        if (_facade.isInitialized() && netDbCount > 7000 && getContext().router().getUptime() > 60*60*1000) {
             if (_log.shouldLog(Log.INFO))
                 _log.info("Suspending Refresh Routers job - over 7,000 known peers in NetDb");
             return;
         }
+*/
         if (_facade.isInitialized()) {
             if (_routers == null || _routers.isEmpty()) {
                 // make a list of all routers, floodfill first
@@ -104,12 +105,18 @@ class RefreshRoutersJob extends JobImpl {
                     requeue(RESTART_DELAY_MS);
                 } else if (netDbCount > 3000) {
                     RESTART_DELAY_MS *= rand.nextInt(12) + 1;
+                } else if (netDbCount > 7000 && getContext().router().getUptime() > 60*60*1000) {
+                    RESTART_DELAY_MS *= 12;
                 } else {
                     requeue(RESTART_DELAY_MS);
                 }
-                if (_log.shouldLog(Log.INFO))
-                    _log.info("Finished refreshing NetDb routers; job will rerun in " + (RESTART_DELAY_MS / 1000) + "s");
+                if (_log.shouldLog(Log.INFO)) {
+                    if (netDbCount > 7000)
+                        _log.info("Finished refreshing NetDb; over 7000 known routers, job will rerun in " + (RESTART_DELAY_MS / 1000 / 60) + "m");
+                    else
+                        _log.info("Finished refreshing NetDb routers; job will rerun in " + (RESTART_DELAY_MS / 1000) + "s");
                 return;
+                }
             }
             long expire = getContext().clock().now() - EXPIRE;
             for (Iterator<Hash> iter = _routers.iterator(); iter.hasNext(); ) {
@@ -130,11 +137,11 @@ class RefreshRoutersJob extends JobImpl {
                 String v = ri.getVersion();
                 String MIN_VERSION = "0.9.48";
                 boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
-                                        ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
-                                        ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
-                                        VersionComparator.comp(v, MIN_VERSION) < 0) &&
-                                        getContext().netDb().getKnownRouters() > 2000 &&
-                                        getContext().router().getUptime() > 60*60*1000;
+                                         ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
+                                         ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
+                                         VersionComparator.comp(v, MIN_VERSION) < 0) &&
+                                         getContext().netDb().getKnownRouters() > 2000 &&
+                                         getContext().router().getUptime() > 60*60*1000;
                 int rapidScan = 45*60*1000;
                 if (uninteresting) {
                     routerAge = rapidScan;
@@ -152,10 +159,10 @@ class RefreshRoutersJob extends JobImpl {
                     if (_log.shouldLog(Log.INFO))
                         if (refreshTimeout == null)
                             _log.info("Refreshing Router [" + h.toBase64().substring(0,6) + "]" +
-                            "\n* Published: " + new Date(ri.getPublished()));
+                                      "\n* Published: " + new Date(ri.getPublished()));
                         else
                             _log.info("Refreshing Router [" + h.toBase64().substring(0,6) + "] - " + Integer.valueOf(refreshTimeout) + "s timeout" +
-                            "\n* Published: " + new Date(ri.getPublished()));
+                                      "\n* Published: " + new Date(ri.getPublished()));
 //                    _facade.search(h, null, null, 15*1000, false);
 //                    Job DropLookupFoundJob = new _facade.DropLookupFoundJob();
 //                    _facade.search(h, null, new DropLookupFoundJob(getContext(), h, ri) , 20*1000, false);
@@ -168,7 +175,7 @@ class RefreshRoutersJob extends JobImpl {
                     if (_log.shouldLog(Log.DEBUG))
                         if ((routerAge / 60 / 60 / 1000) <= 1 && freshness == null && !uninteresting) {
                             _log.debug("Skipping refresh of Router [" + h.toBase64().substring(0,6) + "] - less than an hour old" +
-                        "\n* Published: " + new Date(ri.getPublished()));
+                                       "\n* Published: " + new Date(ri.getPublished()));
 /*
                     } else if (uninteresting && (routerAge / 60 / 60 / 1000) <= 1) {
                         _log.debug("Skipping refresh of uninteresting Router [" + h.toBase64().substring(0,6) + "] - less than " + (rapidScan / 60 / 1000) + " minutes old" +
@@ -178,7 +185,7 @@ class RefreshRoutersJob extends JobImpl {
                         _log.debug("Skipping refresh of uninteresting Router [" + h.toBase64().substring(0,6) + "]");
                     } else {
                         _log.debug("Skipping refresh of Router [" + h.toBase64().substring(0,6) + "] - less than " + (routerAge / 60 / 60 / 1000) + " hours old" +
-                        "\n* Published: " + new Date(ri.getPublished()));
+                                   "\n* Published: " + new Date(ri.getPublished()));
                     }
                     break;
                 }
