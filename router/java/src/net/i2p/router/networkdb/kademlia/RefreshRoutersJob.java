@@ -139,10 +139,10 @@ class RefreshRoutersJob extends JobImpl {
                 if (uninteresting) {
                     routerAge = rapidScan;
                 } else if (freshness == null) {
-                    if (netDbCount > 2000)
-                        routerAge = 2*60*60*1000;
                     if (netDbCount > 4000)
-                        routerAge = 4*60*60*1000;
+                        routerAge = 2*60*60*1000;
+                    if (netDbCount > 6000)
+                        routerAge = 3*60*60*1000;
                 } else {
                     routerAge = Integer.valueOf(freshness)*60*60*1000;
                 }
