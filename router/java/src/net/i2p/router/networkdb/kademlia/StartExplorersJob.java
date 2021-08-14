@@ -56,7 +56,7 @@ class StartExplorersJob extends JobImpl {
     private static final int LOW_ROUTERS = 2000;
     /** explore slowly if we have more than this many routers */
 //    private static final int MAX_ROUTERS = 2 * LOW_ROUTERS;
-    private static final int MAX_ROUTERS = 4000;
+    private static final int MAX_ROUTERS = 5000;
 //    private static final int MIN_FFS = 50;
     private static final int MIN_FFS = 200;
     static final int LOW_FFS = 2 * MIN_FFS;
@@ -93,6 +93,10 @@ class StartExplorersJob extends JobImpl {
                         num *= 5;  // 3x was not sufficient to keep hidden routers from losing peers
                     if (getContext().router().getUptime() < STARTUP_TIME && count < MAX_ROUTERS)
                         num *= 2;
+                    if (count < MAX_ROUTERS)
+                        num += 1;
+                    if (getContext().router().isHidden() && count < MIN_ROUTERS)
+                        num += 2;
                     if (getContext().jobQueue().getMaxLag() > 250 || getContext().throttle().getMessageDelay() > 500)
                         num = 2;
                     if (getContext().jobQueue().getMaxLag() > 500 || getContext().throttle().getMessageDelay() > 1000)
@@ -194,11 +198,11 @@ class StartExplorersJob extends JobImpl {
             // If we don't know too many peers, or just started, explore aggressively
             // Also if hidden or K, as nobody will be connecting to us
             // Use DataStore.size() which includes leasesets because it's faster
-            else if (((uptime < STARTUP_TIME || netDbSize < MIN_ROUTERS || isHidden) ||
+            else if ((((uptime < STARTUP_TIME && netDbSize < MIN_ROUTERS) || isHidden) ||
                 (ri != null && ri.getCapabilities().contains("" + Router.CAPABILITY_BW12))))
                 return MIN_RERUN_DELAY_MS;
             else if (netDbSize > MAX_ROUTERS * 2)
-                return MAX_RERUN_DELAY_MS * 6; // 1 hour if over 8000 known peers
+                return MAX_RERUN_DELAY_MS * 6; // 1 hour if over 10,000 known peers
             else
                 return delay;
         } else {
