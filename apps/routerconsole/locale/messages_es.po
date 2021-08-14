@@ -10342,7 +10342,7 @@ msgstr "Ayuda del router y preguntas frecuentes"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:570
 msgid "Help Section"
-msgstr ""
+msgstr "Ayuda"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:572
 #, fuzzy
@@ -10356,7 +10356,7 @@ msgstr "Página principal"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:576
 msgid "View news relating to I2P"
-msgstr ""
+msgstr "Noticias"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:584
 msgid "View router workload and stats"
@@ -10513,11 +10513,11 @@ msgstr "Interfaz de Usuario"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:702
 msgid "Manage Router webapps"
-msgstr ""
+msgstr "Administrar aplicaciones web "
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:704
 msgid "Webapps"
-msgstr ""
+msgstr "Aplicaciones web"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:712
 msgid "Advanced configuration settings"
@@ -10532,7 +10532,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:728
 msgid "Licensing and copyright notices"
-msgstr ""
+msgstr "Licencias"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:730
 msgid "Legal"
@@ -10550,7 +10550,7 @@ msgstr "Una guía para resembrar el router"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:740
 msgid "What to do in the event I2P isn't working"
-msgstr ""
+msgstr "Qué hacer si no funciona"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:744
 #, fuzzy
@@ -10594,11 +10594,11 @@ msgstr "Administrador de Torrents"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelpeercount_jsp.java:286
 msgid "tunnel peer count"
-msgstr ""
+msgstr "Recuento de Túneles de Compañeros "
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelpeercount_jsp.java:450
 msgid "Tunnel Count by Peer"
-msgstr ""
+msgstr "Cuenta por Pares "
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_005fnorefresh_jsp.java:286
 msgid "tunnel summary"
@@ -10677,7 +10677,8 @@ msgid ""
 "end-to-end encrypted traffic for other routers, known as <i>participation</"
 "i>. Bandwidth participation improves the anonymity level of all users on the "
 "network and maximizes your download speed."
-msgstr ""
+msgstr "Cuanto más ancho de banda compartirá, "
+"más ayuda a la red y al rendimiento de su enrutador."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:512
 msgid ""
@@ -10685,6 +10686,8 @@ msgid ""
 "settings to match the values provided by your ISP. If you are unsure of your "
 "bandwidth, you can run a test to determine your download and upload speeds."
 msgstr ""
+"Haga coincidir su configuración de ancho de banda con "
+"la proporcionada por su ISP para obtener la mejor experiencia."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:514
 #, fuzzy
@@ -10695,29 +10698,29 @@ msgstr "Niveles de ancho de banda"
 msgid ""
 "I2P will now test your internet connection to identify the optimal speed "
 "settings."
-msgstr ""
+msgstr "Su ancho de banda ahora será probado para determinar su velocidad."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:518
 msgid "This is done using the third-party M-Lab service."
-msgstr ""
+msgstr "Esto es realizado por M-Lab."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:520
 msgid "Please review the M-Lab privacy policies linked below."
-msgstr ""
+msgstr "Por favor revise las políticas M-Lab vinculadas a continuación."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:522
 msgid ""
 "If you do not wish to run the M-Lab bandwidth test, you may skip it by "
 "clicking the button below."
-msgstr ""
+msgstr "Omitir la prueba al golpear el botón SKIP."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:524
 msgid "M-Lab Privacy Policy"
-msgstr ""
+msgstr "Política de privacidad de M-Lab"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:526
 msgid "M-Lab Name Server Privacy Policy"
-msgstr ""
+msgstr "Política de privacidad del servidor de nombres de M-Lab"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:533
 #, fuzzy
@@ -10728,7 +10731,7 @@ msgstr "Creación de túnel en curso"
 msgid ""
 "Javascript is disabled - wait 60 seconds for the bandwidth test to complete "
 "and then click Next"
-msgstr ""
+msgstr "JavaScript está deshabilitado .. Espere 60 segundos y luego haga clic en <<Siguiente>>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:555
 #, fuzzy
@@ -10737,12 +10740,12 @@ msgstr "Niveles de ancho de banda"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:561
 #, fuzzy
-msgid "Test running?"
+msgid "Test running"
 msgstr "Probando"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:578
-msgid "Test complete?"
-msgstr ""
+msgid "Test complete"
+msgstr "Prueba completa"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:591
 #, fuzzy
@@ -10765,7 +10768,7 @@ msgstr "Ancho de banda"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:616
 msgid "Share of Bandwidth for I2P"
-msgstr ""
+msgstr "Ancho de banda compartir para I2P"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:628
 #, fuzzy
@@ -10774,7 +10777,7 @@ msgstr "Configuración del ancho de banda de I2P"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:689
 msgid "Browser Setup"
-msgstr ""
+msgstr "Configuración del navegador web"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:696
 #, fuzzy
@@ -10810,7 +10813,7 @@ msgstr "Niveles de ancho de banda"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:742
 msgid "Next"
-msgstr ""
+msgstr "Siguiente"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:750
 #, fuzzy
