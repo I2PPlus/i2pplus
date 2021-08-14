@@ -10508,9 +10508,8 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:700
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:750
-#, fuzzy
 msgid "User Interface"
-msgstr "Interfaz I2CP"
+msgstr "Interfaz de Usuario"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:702
 msgid "Manage Router webapps"
@@ -10521,7 +10520,6 @@ msgid "Webapps"
 msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:712
-#, fuzzy
 msgid "Advanced configuration settings"
 msgstr "Configuración avanzada"
 
@@ -10542,7 +10540,7 @@ msgstr "Legal"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:732
 msgid "Information for new users"
-msgstr ""
+msgstr "Información para nuevos usuarios"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:736
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:752
@@ -10562,7 +10560,7 @@ msgstr "Una introducción sobre la barra lateral del router"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:746
 #, fuzzy
 msgid "Tunnel Filters"
-msgstr "Estado de los Túneles"
+msgstr "Filtros de Túnel"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:754
 #, fuzzy
@@ -10621,14 +10619,12 @@ msgid "Local Tunnels"
 msgstr "Túneles"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelsparticipating_jsp.java:286
-#, fuzzy
 msgid "participating tunnels"
-msgstr "Sin túneles participantes:<br>"
+msgstr "túneles participantes"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelsparticipating_jsp.java:450
-#, fuzzy
 msgid "Participating Tunnels"
-msgstr "Participando en"
+msgstr "Túneles Participantes"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:286
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:444
