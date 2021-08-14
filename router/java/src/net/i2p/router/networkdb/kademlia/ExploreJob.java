@@ -65,7 +65,8 @@ class ExploreJob extends SearchJob {
         // note that we're treating the last param (isLease) as *false* since we're just exploring.
         // if this collides with an actual leaseSet's key, neat, but that wouldn't imply we're actually
         // attempting to send that lease a message!
-        super(context, facade, key, null, null, MAX_EXPLORE_TIME, false, false);
+        super(context, facade, key, null, null, context.netDb().getKnownRouters() > 4000 && !SystemVersion.isSlow() ?
+                                                MAX_EXPLORE_TIME + 15*1000 : MAX_EXPLORE_TIME , false, false);
         _peerSelector = (FloodfillPeerSelector) (_facade.getPeerSelector());
         _isRealExplore = isRealExplore;
     }
