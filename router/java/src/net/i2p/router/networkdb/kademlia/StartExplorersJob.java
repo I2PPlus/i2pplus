@@ -91,7 +91,7 @@ class StartExplorersJob extends JobImpl {
                         num *= 8;  // at less than 3x MIN_RESEED, explore extremely aggressively
                     else if (count < LOW_ROUTERS)
                         num *= 5;  // 3x was not sufficient to keep hidden routers from losing peers
-                    if (getContext().router().getUptime() < STARTUP_TIME)
+                    if (getContext().router().getUptime() < STARTUP_TIME && count < MAX_ROUTERS)
                         num *= 2;
                     if (getContext().jobQueue().getMaxLag() > 250 || getContext().throttle().getMessageDelay() > 500)
                         num = 2;
