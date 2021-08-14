@@ -10311,6 +10311,9 @@ div.app.js:hover::before {
 .sitemapLink, .sitemapLabel {
   width: 140px;
   display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   text-align: center;
   border: 1px solid #aaafce;
   background: #fdfeff;
