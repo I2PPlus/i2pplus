@@ -83,7 +83,8 @@ class StartExplorersJob extends JobImpl {
                   // getContext().router().gracefulShutdownInProgress()
                   getContext().commSystem().getStatus() == Status.DISCONNECTED)) {
                 int num = MAX_PER_RUN;
-                int count = _facade.getDataStore().size();
+//                int count = _facade.getDataStore().size();
+                int count = getContext().netDb().getKnownRouters();
                 String exploreBuckets = getContext().getProperty("router.exploreBuckets");
                 if (exploreBuckets == null) {
                     if (count < MIN_ROUTERS)
