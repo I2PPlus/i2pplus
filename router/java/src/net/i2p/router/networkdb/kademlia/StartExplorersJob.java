@@ -179,7 +179,8 @@ class StartExplorersJob extends JobImpl {
         Boolean isFloodfill = _facade.floodfillEnabled();
         Boolean isHidden =  getContext().router().isHidden();
         RouterInfo ri = getContext().router().getRouterInfo();
-        int netDbSize = _facade.getDataStore().size();
+//        int netDbSize = _facade.getDataStore().size();
+        int netDbSize = getContext().netDb().getKnownRouters();
         long uptime = getContext().router().getUptime();
         long delay = getContext().clock().now() - _facade.getLastExploreNewDate();
         if (exploreDelay == null) {
@@ -188,7 +189,7 @@ class StartExplorersJob extends JobImpl {
             // we don't explore if floodfill
             else if (isFloodfill && (exploreWhenFloodfill == null ||
                      exploreWhenFloodfill == "false") && uptime > STARTUP_TIME ||
-                     _facade.getDataStore().size() > MAX_ROUTERS)
+                     netDbSize > MAX_ROUTERS)
                 return MAX_RERUN_DELAY_MS * 3; // every 1/2 hour
             // If we don't know too many peers, or just started, explore aggressively
             // Also if hidden or K, as nobody will be connecting to us
@@ -196,7 +197,7 @@ class StartExplorersJob extends JobImpl {
             else if (((uptime < STARTUP_TIME || netDbSize < MIN_ROUTERS || isHidden) ||
                 (ri != null && ri.getCapabilities().contains("" + Router.CAPABILITY_BW12))))
                 return MIN_RERUN_DELAY_MS;
-            else if (_facade.getDataStore().size() > MAX_ROUTERS * 2)
+            else if (netDbSize > MAX_ROUTERS * 2)
                 return MAX_RERUN_DELAY_MS * 6; // 1 hour if over 8000 known peers
             else
                 return delay;
