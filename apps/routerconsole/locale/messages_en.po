@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P routerconsole\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-05 14:42+0000\n"
+"POT-Creation-Date: 2021-08-14 02:54+0000\n"
 "PO-Revision-Date: 2010-06-15 14:09+0100\n"
 "Last-Translator: duck <duck@mail.i2p>\n"
 "Language-Team: duck <duck@mail.i2p>\n"
@@ -1165,7 +1165,7 @@ msgstr ""
 #. I2CP
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:42
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:32
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:644
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:620
 msgid "I2CP"
 msgstr ""
 
@@ -1328,7 +1328,7 @@ msgstr ""
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:435
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:249
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:389
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:499
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:475
 msgid "Identification Image Generator"
 msgstr ""
 
@@ -1606,30 +1606,33 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:245
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:54
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:72
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:87
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:73
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:90
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:306
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:520
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:496
 msgid "Torrents"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:247
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:55
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:74
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:91
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:323
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:574
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/i2ptunnelmgr_jsp.java:311
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/i2ptunnelmgr_jsp.java:469
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/i2ptunnelmgr_jsp.java:477
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:524
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:500
 msgid "Tunnel Manager"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:251
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:45
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:59
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:77
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:60
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:80
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:268
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/dns_jsp.java:469
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:497
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:473
 msgid "Addressbook"
 msgstr ""
 
@@ -1888,7 +1891,7 @@ msgid "Cancel"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:61
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:342
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:346
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1305
 msgid "Name"
 msgstr ""
@@ -1974,7 +1977,7 @@ msgstr ""
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:198
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:65
 #: ../java/strings/Strings.java:72
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:632
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:608
 msgid "Bandwidth"
 msgstr ""
 
@@ -1983,7 +1986,7 @@ msgid "Home Page"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:29
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:656
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:632
 msgid "Network"
 msgstr ""
 
@@ -2050,7 +2053,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/peers_jsp.java:418
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/profiles_jsp.java:424
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:419
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:692
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:668
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/stats_jsp.java:418
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/torrentmgr_jsp.java:421
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/torrents_jsp.java:445
@@ -2074,24 +2077,24 @@ msgstr ""
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:523
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1094
 #: ../java/strings/Strings.java:78
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:622
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:696
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:598
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:672
 msgid "Tunnels"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:31
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:636
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:612
 msgid "Clients"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:31
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:648
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:624
 msgid "Keyring"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:31
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configlogging_jsp.java:454
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:652
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:628
 msgid "Logging"
 msgstr ""
 
@@ -2101,8 +2104,8 @@ msgstr ""
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:831
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:920
 #: ../java/strings/Strings.java:74
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:602
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:660
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:578
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:636
 msgid "Peers"
 msgstr ""
 
@@ -2115,7 +2118,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:32
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configplugins_jsp.java:462
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:664
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:640
 msgid "Plugins"
 msgstr ""
 
@@ -2126,7 +2129,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:33
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:545
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:628
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:604
 msgid "Advanced"
 msgstr ""
 
@@ -2134,14 +2137,14 @@ msgstr ""
 #: ../java/src/net/i2p/router/web/helpers/HelpSectionHelper.java:31
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:217
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:454
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:668
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:738
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:644
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:714
 msgid "Reseeding"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:33
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configfamily_jsp.java:454
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:672
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:648
 msgid "Router Family"
 msgstr ""
 
@@ -2758,12 +2761,12 @@ msgid "Router console password is enabled."
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHelper.java:240
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:338
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:342
 msgid "Mark for deletion"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHelper.java:240
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:340
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:344
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1303
 msgid "Remove"
 msgstr ""
@@ -3085,428 +3088,440 @@ msgstr ""
 #: ../java/src/net/i2p/router/web/helpers/HelpSectionHelper.java:29
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:190
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/error500_jsp.java:310
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:624
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:718
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:600
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:694
 msgid "Configuration"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HelpSectionHelper.java:32
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:199
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help_jsp.java:458
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:722
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:698
 msgid "FAQ"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:45
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:59
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:77
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:60
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:80
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:270
 msgid "Manage your I2P hosts file here (I2P domain name resolution)"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:46
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:64
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:80
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:65
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:83
 msgid "Graph Router Performance"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:46
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:64
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:80
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:65
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:83
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:450
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:566
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:542
 msgid "Graphs"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:47
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:65
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:81
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:66
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:84
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:287
 msgid "Anonymous webmail client"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:47
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:65
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:81
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:66
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:84
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:278
 #: ../java/strings/Strings.java:16
 msgid "I2PMail"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:48
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:66
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:67
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:460
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/error500_jsp.java:312
 msgid "Help"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:48
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:66
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:67
 msgid "I2P Router Help"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:49
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:67
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:82
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:68
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:85
 msgid "Install and configure I2P plugins"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:49
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:67
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:82
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:68
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:85
 msgid "Manage Plugins"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:50
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:68
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:83
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:69
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:86
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdb_jsp.java:449
 msgid "Network Database"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:50
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:68
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:83
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:69
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:86
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:499
 msgid "Show list of all known I2P routers"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:51
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:69
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:84
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:70
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:87
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:624
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:684
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:610
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:586
 msgid "Router Info"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:51
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:69
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:84
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:70
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:87
 msgid "Summary of router properties"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:52
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:70
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:85
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:71
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:88
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:490
 msgid "Health Report"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:52
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:70
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:85
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:71
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:88
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:580
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:590
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:566
 msgid "Router Logs"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:53
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:71
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:86
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:72
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:89
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:448
 msgid "Router Sitemap"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:53
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:71
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:86
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:72
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:89
 msgid "Sitemap"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:54
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:72
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:87
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:73
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:90
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:315
 msgid "Built-in anonymous BitTorrent Client"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:55
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:73
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:88
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:74
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:91
+msgid "Manage server and client tunnels"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:56
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:75
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:92
 msgid "Local web server for hosting your own content on I2P"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:55
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:73
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:88
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:272
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:56
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:75
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:92
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:276
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:335
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:544
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:520
 msgid "Web Server"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:60
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:61
 msgid "Configure Bandwidth"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:60
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:61
 msgid "I2P Bandwidth Configuration"
 msgstr ""
 
 #. FIXME wasn't escaped
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:62
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:63
 msgid "Configure UI"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:62
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:63
 msgid "Select console theme & language & set optional console password"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:63
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:64
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:446
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:579
 msgid "Customize Sidebar"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:63
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:64
 msgid "Customize the sidebar by adding or removing or repositioning elements"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:78
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:76
+msgid "Configuration and bandwidth tester"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:76
+msgid "Wizard"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:81
 msgid "Advanced Config"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:78
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:81
 msgid "Advanced router configuration"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:79
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:82
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:181
 msgid "Changelog"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:79
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:82
 msgid "Recent changes"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:95
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:99
 msgid "Bug tracker"
 msgstr ""
 
 #. I2P specific
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:95
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:99
 msgid "I2P Bug Reports"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:96
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:720
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:100
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:696
 msgid "Frequently Asked Questions"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:96
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:100
 msgid "I2P FAQ"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:97
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:101
 msgid "I2P Plugins"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:97
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:101
 msgid "zzz's plugin repository"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:98
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:102
 msgid "Historical infrastructure data from the I2P network"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:99
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:103
 msgid "I2P home page"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:99
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:103
 msgid "Project Website"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:100
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:104
 msgid "I2P Network Statistics"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:101
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:105
 msgid "I2P+ API documentation"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:101
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:105
 msgid "Javadocs"
 msgstr ""
 
 #. software repositories + filesharing
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:104
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:108
 msgid "Transient server-encrypted filesharing and pastebin"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:105
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:109
 msgid "Huge collection of books &amp; magazines &amp; comics"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:106
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:110
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:114
 msgid "Secure filesharing service"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:107
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:111
 msgid "Community Git hosting"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:108
-msgid ""
-"A public anonymous Git hosting site - supports pulling via Git and HTTP and "
-"pushing via SSH"
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:112
+msgid "Official I2P Git repository"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:109
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:113
 msgid "The Radical Militant Library"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:111
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:115
 msgid "Home of I2P+"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:112
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:116
 msgid "Collection of books &amp; other reading material"
 msgstr ""
 
 #. torrent trackers
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:115
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:119
 msgid "Chudo"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:115
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:119
 msgid "No login Bittorrent tracker"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:116
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:120
 msgid "Bittorrent tracker"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:116
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:120
 msgid "Postman's Tracker"
 msgstr ""
 
 #. domain name registration + uptime trackers
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:119
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:120
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:123
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:124
 msgid "List of active eepsites and uptime monitor"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:121
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:122
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:125
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:126
 msgid "I2P Domain Name Registration"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:122
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:126
 msgid "zzz Domain Registry"
 msgstr ""
 
 #. forums + social
 #. _x("Dancing Elephants") + S + _x("Rocksolid forums for the darknets") + S + "http://def3.i2p/" + S + I + "svg/forum.svg" + S +
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:126
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:130
 msgid "Dev Forum"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:126
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:130
 msgid "Development forum"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:127
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:131
 msgid "I2P Forum"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:127
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:131
 msgid "I2P-related community forums"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:128
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:132
 msgid "Alternative front-end for Twitter"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:129
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:133
 msgid "The StackOverflow of I2P"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:130
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:134
 msgid "Cross-network micro-blogging &amp; forums &amp; wiki"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:131
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:135
 msgid "Zeronet I2P Gateway"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:134
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:138
 msgid "Encrypted I2P Pastebin"
 msgstr ""
 
 #. hosting + other services
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:134
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:138
 msgid "Pastebin"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:135
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:139
 msgid "Deep Web Radio"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:135
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:139
 msgid "Streaming radio service"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:136
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:140
 msgid "Alternative front-end to Youtube"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:137
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:141
 msgid "Provider of privacy respecting web hosting and VPN services"
 msgstr ""
 
 #. search engines
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:140
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:144
 msgid "I2P Web Search Engine"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:141
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:145
 msgid "I2P-based Metasearch Engine"
 msgstr ""
 
 #. wikis
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:144
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:148
 msgid "Psychonaut"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:144
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:148
 msgid "Wiki relating to altered states of consciousness"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:145
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:149
 msgid "I2P-related Wiki"
 msgstr ""
 
 #. news + blogs
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:148
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:152
 msgid "Router performance monitoring and Linux tips"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:149
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:578
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:153
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:554
 msgid "I2P News"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:149
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:153
 msgid "Planet I2P"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:207
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:211
 msgid "The HTTP proxy is not up"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:209
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:213
 #, java-format
 msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:344
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:348
 msgid "URL"
 msgstr ""
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:374
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:378
 msgid "Add"
 msgstr ""
 
@@ -3732,7 +3747,7 @@ msgstr ""
 
 #. 6
 #: ../java/src/net/i2p/router/web/helpers/NetDbHelper.java:50
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:618
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:594
 msgid "Sybil Analysis"
 msgstr ""
 
@@ -5095,7 +5110,7 @@ msgid "I2P Router Help &amp; FAQ"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:173
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:714
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:690
 msgid "Advanced Settings"
 msgstr ""
 
@@ -5116,7 +5131,7 @@ msgid "A shortened version of the official Frequently Asked Questions"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:208
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:734
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:710
 msgid "New Users"
 msgstr ""
 
@@ -5137,7 +5152,7 @@ msgid "Troubleshooting &amp; Further Assistance"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:238
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:748
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:724
 msgid "Information about the sidebar and network status messages"
 msgstr ""
 
@@ -5173,7 +5188,7 @@ msgid ""
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:363
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:493
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:469
 msgid "Services"
 msgstr ""
 
@@ -5190,12 +5205,12 @@ msgid "Certs"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:433
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:548
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:524
 msgid "Review active encryption certificates used in console"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:443
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:560
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:536
 msgid "View historical log of router events"
 msgstr ""
 
@@ -5229,7 +5244,7 @@ msgid "Logs"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:496
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:594
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:570
 msgid "NetDb"
 msgstr ""
 
@@ -5240,7 +5255,7 @@ msgid "Show all current peer connections"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:514
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:606
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:582
 msgid "Profiles"
 msgstr ""
 
@@ -5276,12 +5291,12 @@ msgid "View router debug information"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:574
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:582
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:558
 msgid "Jars"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:577
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:580
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:556
 msgid "Review extended info about installed .jar and .war files"
 msgstr ""
 
@@ -5290,12 +5305,12 @@ msgid "Lookup"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:586
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:596
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:572
 msgid "Network database search tool"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:595
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:612
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:588
 msgid "Textual router performance statistics"
 msgstr ""
 
@@ -5304,7 +5319,7 @@ msgid "Sybils"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:604
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:616
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:592
 msgid "Review possible sybils in network database"
 msgstr ""
 
@@ -5425,7 +5440,7 @@ msgid "The number of peers failing network tests"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1015
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:630
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:606
 msgid "Configure router bandwidth allocation"
 msgstr ""
 
@@ -6729,7 +6744,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/certs_jsp.java:286
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/certs_jsp.java:444
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:550
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:526
 msgid "Certificates"
 msgstr ""
 
@@ -7043,7 +7058,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confighome_jsp.java:588
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/home_jsp.java:445
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:762
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:738
 msgid "Sites of Interest"
 msgstr ""
 
@@ -7708,7 +7723,7 @@ msgid "config service"
 msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:455
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:676
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:652
 msgid "Router Service"
 msgstr ""
 
@@ -7745,7 +7760,7 @@ msgid "Launch I2P Router Console in web browser when I2P starts."
 msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:600
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:558
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:534
 msgid "Debugging"
 msgstr ""
 
@@ -7930,7 +7945,7 @@ msgid "config update"
 msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:446
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:684
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:660
 msgid "Router Updates"
 msgstr ""
 
@@ -8152,7 +8167,7 @@ msgid "events"
 msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/events_jsp.java:464
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:562
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:538
 msgid "Event Log"
 msgstr ""
 
@@ -8431,12 +8446,12 @@ msgid ""
 msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:443
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:726
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:702
 msgid "Glossary"
 msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:445
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:724
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:700
 msgid "I2P Terminology"
 msgstr ""
 
@@ -8912,7 +8927,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:443
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:445
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:742
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:718
 msgid "Troubleshooting"
 msgstr ""
 
@@ -9528,7 +9543,7 @@ msgid ""
 msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help_jsp.java:452
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:710
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:686
 msgid "Help &amp; Support"
 msgstr ""
 
@@ -9541,12 +9556,12 @@ msgid "home"
 msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/home_jsp.java:422
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:479
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:455
 msgid "Please enter a search query"
 msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/home_jsp.java:424
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:481
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:457
 msgid "Search"
 msgstr ""
 
@@ -9605,7 +9620,7 @@ msgid "Clear logs"
 msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:598
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:650
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:626
 msgid "Configure router logging options"
 msgstr ""
 
@@ -9658,248 +9673,248 @@ msgstr ""
 msgid "Peer Profiles"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:495
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:471
 msgid "Manage I2P addresses"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:501
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:477
 msgid "Imagegen"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:508
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:514
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:484
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:490
 msgid "Create and download torrents"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:522
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:498
 msgid "Manage client and server tunnels"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:528
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:534
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:504
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:510
 msgid "Webmail client"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:540
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:516
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/webmail_jsp.java:470
 msgid "Webmail"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:542
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:518
 msgid "Local webserver for hosting content on the I2P network"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:546
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:522
 msgid "Information &amp; Diagnostics"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:552
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:528
 msgid "Review recent updates to I2P"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:554
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:530
 msgid "Change Log"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:556
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:532
 msgid "View debugging information"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:564
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:540
 msgid "View router performance graphs"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:568
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:544
 msgid "Router help section"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:570
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:546
 msgid "Help Section"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:572
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:548
 msgid "Router homepage"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:574
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:550
 msgid "Home"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:576
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:552
 msgid "View news relating to I2P"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:584
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:560
 msgid "View router workload and stats"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:586
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:562
 msgid "Router Jobs"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:588
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:564
 msgid "View router logs"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:592
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:568
 msgid "View information and stats regarding all known peers"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:598
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:574
 msgid "NetDb Search"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:600
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:576
 msgid "View active peers"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:604
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:580
 msgid "View peer performance profiles"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:608
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:584
 msgid "View information about router and running environment"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:614
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:590
 msgid "Statistics"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:620
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:596
 msgid "View active tunnels"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:626
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:602
 msgid "Advanced Router Configuration"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:634
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:610
 msgid "Start or stop Router clients"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:638
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:614
 msgid "Customize homepage"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:640
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:616
 msgid "Homepage"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:642
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:618
 msgid "Configure I2P Client Control Interface"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:646
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:622
 msgid "View or edit router keyring for encrypted destinations"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:654
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:630
 msgid "Configure router networking options"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:658
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:634
 msgid "Manually edit peers and view banned peers and blocklist"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:662
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:638
 msgid "Install and manage router plugins"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:666
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:642
 msgid "Router reseeding and configuration"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:670
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:646
 msgid "Configure and manage Router family"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:674
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:650
 msgid "Manage Router service"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:678
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:654
 msgid "Configure stat collection for graphing"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:680
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:656
 msgid "Router Stats"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:682
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:658
 msgid "Configure router updates"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:686
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:662
 msgid "Configuration wizard for new users"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:688
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:664
 msgid "Setup Wizard"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:690
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:666
 msgid "Customize sidebar"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:694
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:670
 msgid "Configure tunnel options"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:698
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:674
 msgid "Configure router user interface and optional console password"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:700
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:750
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:676
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:726
 msgid "User Interface"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:702
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:678
 msgid "Manage Router webapps"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:704
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:680
 msgid "Webapps"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:712
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:688
 msgid "Advanced configuration settings"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:716
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:692
 msgid "Configuring I2P for optimal performance"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:728
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:704
 msgid "Licensing and copyright notices"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:730
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:706
 msgid "Legal"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:732
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:708
 msgid "Information for new users"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:736
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:752
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:712
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:728
 msgid "A guide to reseeding your I2P router"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:740
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:716
 msgid "What to do in the event I2P isn't working"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:744
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:720
 msgid "Introduction to tunnel filters"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:746
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:722
 msgid "Tunnel Filters"
 msgstr ""
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:754
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:730
 msgid "Web Hosting"
 msgstr ""
 

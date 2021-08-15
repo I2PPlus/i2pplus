@@ -50,6 +50,7 @@ class RefreshRoutersJob extends JobImpl {
     static final String PROP_RERUN_DELAY_MS = "router.refreshRouterDelay";
     static final String PROP_ROUTER_FRESHNESS = "router.refreshSkipIfYounger";
     static final String PROP_ROUTER_REFRESH_TIMEOUT = "router.refreshTimeout";
+    static final String PROP_ROUTER_REFRESH_UNINTERESTING = "router.refreshUninteresting";
 //    private final static long EXPIRE = 2*60*60*1000;
     private final static long EXPIRE = 31*24*60*60*1000;
     private final static long OLDER = 2*60*60*1000;
@@ -65,24 +66,10 @@ class RefreshRoutersJob extends JobImpl {
 
     public void runJob() {
         Random rand = new Random();
-        int netDbCount = _facade.getAllRouters().size();
-        if (getContext().commSystem().getStatus() == Status.DISCONNECTED) {
-            if (_log.shouldLog(Log.WARN))
-            _log.warn("Suspending Refresh Routers job - network disconnected");
-            return;
-        }
+//        int netDbCount = _facade.getAllRouters().size();
         long lag = getContext().jobQueue().getMaxLag();
-        if (lag > 500) {
-            if (_log.shouldLog(Log.WARN))
-            _log.warn("Suspending Refresh Routers job - job lag is over 500ms");
-            return;
-        }
-        if (_facade.isInitialized() && netDbCount > 8000) {
-            if (_log.shouldLog(Log.INFO))
-                _log.info("Suspending Refresh Routers job - over 8,000 known peers in NetDb");
-            return;
-        }
-        if (_facade.isInitialized()) {
+        int netDbCount = getContext().netDb().getKnownRouters();
+        if (_facade.isInitialized() && lag < 500 && getContext().commSystem().getStatus() != Status.DISCONNECTED && netDbCount < 8000) {
             if (_routers == null || _routers.isEmpty()) {
                 // make a list of all routers, floodfill first
                 _routers = _facade.getFloodfillPeers();
@@ -96,15 +83,21 @@ class RefreshRoutersJob extends JobImpl {
             }
             if (_routers.isEmpty()) {
                 _routers = null;
-                if (netDbCount > 1000) {
-                    RESTART_DELAY_MS *= rand.nextInt(3) + 1;
-                    requeue(RESTART_DELAY_MS);
+                if (getContext().router().getUptime() < 60*60*1000) {
+                    RESTART_DELAY_MS = 60*1000;
+                } else if (netDbCount > 8000 && getContext().router().getUptime() > 60*60*1000) {
+                    RESTART_DELAY_MS *= 12;
                 } else if (netDbCount > 3000) {
                     RESTART_DELAY_MS *= rand.nextInt(12) + 1;
+                } else if (netDbCount > 1000) {
+                    RESTART_DELAY_MS *= rand.nextInt(3) + 1;
+                    requeue(RESTART_DELAY_MS);
                 } else {
                     requeue(RESTART_DELAY_MS);
                 }
-                if (_log.shouldLog(Log.INFO))
+                if (netDbCount > 8000)
+                    _log.info("Finished refreshing NetDb; over 8000 known routers, job will rerun in " + (RESTART_DELAY_MS / 1000 / 60) + "m");
+                else
                     _log.info("Finished refreshing NetDb routers; job will rerun in " + (RESTART_DELAY_MS / 1000) + "s");
                 return;
             }
@@ -123,36 +116,38 @@ class RefreshRoutersJob extends JobImpl {
 //                long older = getContext().clock().now() - OLDER;
                 long older = getContext().clock().now() - ri.getPublished();
                 String freshness = getContext().getProperty("router.refreshSkipIfYounger");
+                String refreshTimeout = getContext().getProperty("router.refreshTimeout");
                 int routerAge = 60*60*1000;
                 String v = ri.getVersion();
                 String MIN_VERSION = "0.9.48";
                 boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
-                                        ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
-                                        ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
-                                        VersionComparator.comp(v, MIN_VERSION) < 0) &&
-                                        getContext().netDb().getKnownRouters() > 2000 &&
-                                        getContext().router().getUptime() > 60*60*1000;
+                                         ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
+                                         ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
+                                         VersionComparator.comp(v, MIN_VERSION) < 0) &&
+                                         getContext().netDb().getKnownRouters() > 2000 &&
+                                         getContext().router().getUptime() > 60*60*1000;
+                boolean refreshUninteresting = getContext().getBooleanProperty("router.refreshUninteresting");
+                Boolean isHidden =  getContext().router().isHidden();
                 int rapidScan = 45*60*1000;
                 if (uninteresting) {
                     routerAge = rapidScan;
                 } else if (freshness == null) {
-                    if (netDbCount > 2000)
-                        routerAge = 2*60*60*1000;
                     if (netDbCount > 4000)
-                        routerAge = 4*60*60*1000;
+                        routerAge = 2*60*60*1000;
+                    if (netDbCount > 6000)
+                        routerAge = 3*60*60*1000;
                 } else {
                     routerAge = Integer.valueOf(freshness)*60*60*1000;
                 }
 //                if (ri.getPublished() < older) {
-                String refreshTimeout = getContext().getProperty("router.refreshTimeout");
                 if (older > routerAge) {
                     if (_log.shouldLog(Log.INFO))
                         if (refreshTimeout == null)
                             _log.info("Refreshing Router [" + h.toBase64().substring(0,6) + "]" +
-                            "\n* Published: " + new Date(ri.getPublished()));
+                                      "\n* Published: " + new Date(ri.getPublished()));
                         else
                             _log.info("Refreshing Router [" + h.toBase64().substring(0,6) + "] - " + Integer.valueOf(refreshTimeout) + "s timeout" +
-                            "\n* Published: " + new Date(ri.getPublished()));
+                                      "\n* Published: " + new Date(ri.getPublished()));
 //                    _facade.search(h, null, null, 15*1000, false);
 //                    Job DropLookupFoundJob = new _facade.DropLookupFoundJob();
 //                    _facade.search(h, null, new DropLookupFoundJob(getContext(), h, ri) , 20*1000, false);
@@ -163,22 +158,28 @@ class RefreshRoutersJob extends JobImpl {
                     break;
                 } else {
                     if (_log.shouldLog(Log.DEBUG))
-                        if ((routerAge / 60 / 60 / 1000) <= 1 && freshness == null && !uninteresting) {
+                        if ((routerAge / 60 / 60 / 1000) <= 1 && freshness == null && !uninteresting && !refreshUninteresting) {
                             _log.debug("Skipping refresh of Router [" + h.toBase64().substring(0,6) + "] - less than an hour old" +
-                        "\n* Published: " + new Date(ri.getPublished()));
-/*
-                    } else if (uninteresting && (routerAge / 60 / 60 / 1000) <= 1) {
+                                       "\n* Published: " + new Date(ri.getPublished()));
+                    } else if (uninteresting && refreshUninteresting && (routerAge / 60 / 60 / 1000) <= 1) {
                         _log.debug("Skipping refresh of uninteresting Router [" + h.toBase64().substring(0,6) + "] - less than " + (rapidScan / 60 / 1000) + " minutes old" +
                         "\n* Published: " + new Date(ri.getPublished()));
-*/
-                    } else if (uninteresting) {
+                    } else if (uninteresting && !refreshUninteresting && !isHidden) {
                         _log.debug("Skipping refresh of uninteresting Router [" + h.toBase64().substring(0,6) + "]");
                     } else {
                         _log.debug("Skipping refresh of Router [" + h.toBase64().substring(0,6) + "] - less than " + (routerAge / 60 / 60 / 1000) + " hours old" +
-                        "\n* Published: " + new Date(ri.getPublished()));
+                                   "\n* Published: " + new Date(ri.getPublished()));
                     }
                     break;
                 }
+            }
+        } else {
+            if (netDbCount > 8000) {
+                _log.info("Over 8000 known routers, suspending Router Refresh job");
+            } else if (lag > 500) {
+                _log.info("Job lag over 500ms, suspending Router Refresh job");
+            } else if (getContext().commSystem().getStatus() == Status.DISCONNECTED) {
+                _log.info("Network disconnected, suspending Router Refresh job");
             }
         }
 
@@ -187,11 +188,11 @@ class RefreshRoutersJob extends JobImpl {
         if (refresh == null) {
             if (getContext().jobQueue().getMaxLag() > 150 || getContext().throttle().getMessageDelay() > 750)
                 randomDelay = randomDelay * (rand.nextInt(3) + 1);
-            else if (netDbCount < 100)
-                randomDelay = randomDelay - (rand.nextInt(2000));
-            else if (netDbCount < 300)
-                randomDelay = randomDelay - (rand.nextInt(1250) + rand.nextInt(1250));
-            else if (netDbCount < 500)
+            else if (netDbCount < 500 || getContext().router().getUptime() < 30*60*1000)
+                randomDelay = Math.max(Math.min(randomDelay - 6000, randomDelay - rand.nextInt(7000)), 300 + rand.nextInt(150));
+            else if (netDbCount < 1000)
+                randomDelay = Math.max(randomDelay - rand.nextInt(1250) - rand.nextInt(1250), 400 + rand.nextInt(150));
+            else if (netDbCount < 2000)
                 randomDelay = randomDelay - (rand.nextInt(750) / (rand.nextInt(3) + 1));
             else
                 randomDelay = randomDelay - ((rand.nextInt(750) / (rand.nextInt(3) + 1)) * rand.nextInt(6) + 1);

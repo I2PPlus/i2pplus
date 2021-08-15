@@ -35,7 +35,7 @@ public class ReseedChecker {
     private volatile boolean _alreadyRun;
 
     //public static final int MINIMUM = 50;
-    public static final int MINIMUM = 80; // minimum number of router infos before automatic reseed attempted
+    public static final int MINIMUM = 300; // minimum number of router infos before automatic reseed attempted
     //private static final long STATUS_CLEAN_TIME = 20*60*1000;
     private static final long STATUS_CLEAN_TIME = 3*60*1000; // sidebar notification persistence
     // if down this long, reseed at startup
@@ -58,22 +58,22 @@ public class ReseedChecker {
      *  @param count current number of known routers, includes us
      *  @return true if a reseed was started
      */
-    public boolean checkReseed(int count) {
-        if (_context.router().getUptime() < 30*60*1000 && count < MINIMUM &&
+    public boolean checkReseed(int known) {
+        if (_context.router().getUptime() < 30*60*1000 && known < MINIMUM &&
             !(_context.getEstimatedDowntime() > RESEED_MIN_DOWNTIME)) {
             return false;
         } else if (_alreadyRun) {
-            if (count >= MINIMUM)
+            if (known >= MINIMUM)
                 return false;
         } else {
             _alreadyRun = true;
-            if (count >= MINIMUM && _context.getEstimatedDowntime() < RESEED_MIN_DOWNTIME)
+            if (known >= MINIMUM && _context.getEstimatedDowntime() < RESEED_MIN_DOWNTIME)
                 return false;
         }
 
         if (_context.getBooleanProperty(Reseeder.PROP_DISABLE) ||
             _context.getBooleanProperty("i2p.vmCommSystem")) {
-            int x = count - 1;  // us
+            int x = known - 1;  // us
             // no ngettext, this is rare
             String s;
             if (x > 0)
@@ -88,7 +88,7 @@ public class ReseedChecker {
         }
 
         if (_context.router().gracefulShutdownInProgress()) {
-            int x = count - 1;
+            int x = known - 1;
             // no ngettext, this is rare
             String s;
             if (x > 0)
@@ -118,7 +118,7 @@ public class ReseedChecker {
                 return false;
             }
             _networkLogged = false;
-            if (count <= 1)
+            if (known <= 1)
                 _log.logAlways(Log.INFO, "Downloading peer router information for a new I2P installation...");
             else if (_context.router().getUptime() > 5*60*1000 && _context.getEstimatedDowntime() > RESEED_MIN_DOWNTIME)
                 _log.logAlways(Log.WARN, "Router has been offline for a while - refreshing NetDb...");
@@ -126,7 +126,7 @@ public class ReseedChecker {
                 _log.logAlways(Log.WARN, "Less than " + MINIMUM + " peers in our NetDb - reseeding...");
             return requestReseed();
         } else {
-            int x = count - 1;  // us
+            int x = known - 1;  // us
             // no ngettext, this is rare
             String s;
             if (x > 0)

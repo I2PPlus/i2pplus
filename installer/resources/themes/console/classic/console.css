@@ -10316,6 +10316,10 @@ div.app.js:hover::before {
   background: #fdfeff;
 }
 
+html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel{
+  width: 160px;
+}
+
 .sitemapLink {
   margin: 1px -8px 8px 14px;
 }
@@ -10323,6 +10327,9 @@ div.app.js:hover::before {
 .sitemapLabel {
   padding: 4px 0;
   display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: 9pt;
   border: none;
   border-top: 1px solid #aaafce;

@@ -78,7 +78,7 @@
 <tr><td>Defines the maximum number of parallel <a href="/jobs">jobs</a> that can be run. The default value is determined by the amount of memory allocated to the JVM via <code>wrapper.config</code>, and is set at 3 for less than 64MB, 4 for less than 256M, or 5 for more than 256MB. Note: A change to this setting requires a restart of the router.</td></tr>
 
 <tr><th>router.maxParticipatingTunnels={n}</th></tr>
-<tr><td>Determines the maximum number of participating tunnels the router can build. To disable participation completely, set to 0. [Automatically configured by default]</td></tr>
+<tr><td>Determines the maximum number of participating tunnels the router can build. To disable participation completely, set to 0. [10,000 or 5000 if running on Arm or Android by default]</td></tr>
 
 <tr><th>router.maxTunnelPercentage={n}</th></tr>
 <tr><td>Defines the maximum percentage of active local tunnels (client and exploratory) that a peer will be used for. [Default is 25%]</td></tr>
@@ -117,7 +117,7 @@
 <tr><td>This setting determines the maximum number of peer hashes to queue for exploration. In I2P the maximum is 128, and in I2P+ the default value is 512.</td></tr>
 
 <tr><th>router.exploreWhenFloodfill={true|false} <span class="plus">I2P+</span></th></tr>
-<tr><td>This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false]</td></tr>
+<tr><td>This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false, restart required]</td></tr>
 
 <tr><th>router.forceUnreachable={true|false}</th></tr>
 <tr><td>This setting, when set to true, prevents a router from directly communicating with other routers, forcing the use of introducers. [Default is false unlesss router is in hidden mode]</td></tr>
@@ -169,6 +169,9 @@
 
 <tr><th>router.refreshTimeout={n} <span class="plus">I2P+</span></th></tr>
 <tr><td>This setting (in seconds) allows you to manually configure the amount of time to wait before an attempt to refresh a router is determined to have failed. [The default is 20 seconds]</td></tr>
+
+<tr><th>router.refreshUninteresting={true|false} <span class="plus">I2P+</span></th></tr>
+<tr><td>This setting determines whether routers classified as uninteresting (K or L tier, unreachable or older than 0.9.48) are checked during the refresh router process. [Default is false]</td></tr>
 
 <tr><th>router.validateRoutersAfter={n} <span class="plus">I2P+</span></th></tr>
 <tr><td>This setting (in minutes) allows you to manually configure how long to wait after startup before RouterInfos in the NetDb are checked for validity, after which point only valid routers will be accepted for inclusion. When the validation occurs, expired RouterInfos and unresponsive peers only accessible via SSU will be removed from the NetDb. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0.9.29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted.</td></tr>

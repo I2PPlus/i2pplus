@@ -56,7 +56,7 @@ class StartExplorersJob extends JobImpl {
     private static final int LOW_ROUTERS = 2000;
     /** explore slowly if we have more than this many routers */
 //    private static final int MAX_ROUTERS = 2 * LOW_ROUTERS;
-    private static final int MAX_ROUTERS = 4000;
+    private static final int MAX_ROUTERS = 5000;
 //    private static final int MIN_FFS = 50;
     private static final int MIN_FFS = 200;
     static final int LOW_FFS = 2 * MIN_FFS;
@@ -83,15 +83,20 @@ class StartExplorersJob extends JobImpl {
                   // getContext().router().gracefulShutdownInProgress()
                   getContext().commSystem().getStatus() == Status.DISCONNECTED)) {
                 int num = MAX_PER_RUN;
-                int count = _facade.getDataStore().size();
+//                int count = _facade.getDataStore().size();
+                int count = getContext().netDb().getKnownRouters();
                 String exploreBuckets = getContext().getProperty("router.exploreBuckets");
                 if (exploreBuckets == null) {
                     if (count < MIN_ROUTERS)
                         num *= 8;  // at less than 3x MIN_RESEED, explore extremely aggressively
                     else if (count < LOW_ROUTERS)
                         num *= 5;  // 3x was not sufficient to keep hidden routers from losing peers
-                    if (getContext().router().getUptime() < STARTUP_TIME)
+                    if (getContext().router().getUptime() < STARTUP_TIME && count < MAX_ROUTERS)
                         num *= 2;
+                    if (count < MAX_ROUTERS)
+                        num += 1;
+                    if (getContext().router().isHidden() && count < MIN_ROUTERS)
+                        num += 2;
                     if (getContext().jobQueue().getMaxLag() > 250 || getContext().throttle().getMessageDelay() > 500)
                         num = 2;
                     if (getContext().jobQueue().getMaxLag() > 500 || getContext().throttle().getMessageDelay() > 1000)
@@ -178,7 +183,10 @@ class StartExplorersJob extends JobImpl {
         Boolean isFloodfill = _facade.floodfillEnabled();
         Boolean isHidden =  getContext().router().isHidden();
         RouterInfo ri = getContext().router().getRouterInfo();
-        int netDbSize = _facade.getDataStore().size();
+        Boolean isK = ri != null && ri.getCapabilities().contains("" + Router.CAPABILITY_BW12);
+
+//        int netDbSize = _facade.getDataStore().size();
+        int netDbSize = getContext().netDb().getKnownRouters();
         long uptime = getContext().router().getUptime();
         long delay = getContext().clock().now() - _facade.getLastExploreNewDate();
         if (exploreDelay == null) {
@@ -187,16 +195,15 @@ class StartExplorersJob extends JobImpl {
             // we don't explore if floodfill
             else if (isFloodfill && (exploreWhenFloodfill == null ||
                      exploreWhenFloodfill == "false") && uptime > STARTUP_TIME ||
-                     _facade.getDataStore().size() > MAX_ROUTERS)
-                return MAX_RERUN_DELAY_MS * 3; // every 1/2 hour
+                     netDbSize > MAX_ROUTERS)
+                return MAX_RERUN_DELAY_MS * 2; // every 20mins
             // If we don't know too many peers, or just started, explore aggressively
             // Also if hidden or K, as nobody will be connecting to us
             // Use DataStore.size() which includes leasesets because it's faster
-            else if (((uptime < STARTUP_TIME || netDbSize < MIN_ROUTERS || isHidden) ||
-                (ri != null && ri.getCapabilities().contains("" + Router.CAPABILITY_BW12))))
+            else if ((uptime < STARTUP_TIME && netDbSize < MIN_ROUTERS) || isHidden || isK)
                 return MIN_RERUN_DELAY_MS;
-            else if (_facade.getDataStore().size() > MAX_ROUTERS * 2)
-                return MAX_RERUN_DELAY_MS * 6; // 1 hour if over 8000 known peers
+            else if (netDbSize > MAX_ROUTERS * 2)
+                return MAX_RERUN_DELAY_MS * 4; // 40mins if over 10,000 known peers
             else
                 return delay;
         } else {
