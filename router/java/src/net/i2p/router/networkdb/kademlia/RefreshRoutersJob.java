@@ -50,6 +50,7 @@ class RefreshRoutersJob extends JobImpl {
     static final String PROP_RERUN_DELAY_MS = "router.refreshRouterDelay";
     static final String PROP_ROUTER_FRESHNESS = "router.refreshSkipIfYounger";
     static final String PROP_ROUTER_REFRESH_TIMEOUT = "router.refreshTimeout";
+    static final String PROP_ROUTER_REFRESH_UNINTERESTING = "router.refreshUninteresting";
 //    private final static long EXPIRE = 2*60*60*1000;
     private final static long EXPIRE = 31*24*60*60*1000;
     private final static long OLDER = 2*60*60*1000;
@@ -115,6 +116,7 @@ class RefreshRoutersJob extends JobImpl {
 //                long older = getContext().clock().now() - OLDER;
                 long older = getContext().clock().now() - ri.getPublished();
                 String freshness = getContext().getProperty("router.refreshSkipIfYounger");
+                String refreshTimeout = getContext().getProperty("router.refreshTimeout");
                 int routerAge = 60*60*1000;
                 String v = ri.getVersion();
                 String MIN_VERSION = "0.9.48";
@@ -124,6 +126,8 @@ class RefreshRoutersJob extends JobImpl {
                                          VersionComparator.comp(v, MIN_VERSION) < 0) &&
                                          getContext().netDb().getKnownRouters() > 2000 &&
                                          getContext().router().getUptime() > 60*60*1000;
+                boolean refreshUninteresting = getContext().getBooleanProperty("router.refreshUninteresting");
+                Boolean isHidden =  getContext().router().isHidden();
                 int rapidScan = 45*60*1000;
                 if (uninteresting) {
                     routerAge = rapidScan;
@@ -136,7 +140,6 @@ class RefreshRoutersJob extends JobImpl {
                     routerAge = Integer.valueOf(freshness)*60*60*1000;
                 }
 //                if (ri.getPublished() < older) {
-                String refreshTimeout = getContext().getProperty("router.refreshTimeout");
                 if (older > routerAge) {
                     if (_log.shouldLog(Log.INFO))
                         if (refreshTimeout == null)
@@ -155,15 +158,13 @@ class RefreshRoutersJob extends JobImpl {
                     break;
                 } else {
                     if (_log.shouldLog(Log.DEBUG))
-                        if ((routerAge / 60 / 60 / 1000) <= 1 && freshness == null && !uninteresting) {
+                        if ((routerAge / 60 / 60 / 1000) <= 1 && freshness == null && !uninteresting && !refreshUninteresting) {
                             _log.debug("Skipping refresh of Router [" + h.toBase64().substring(0,6) + "] - less than an hour old" +
                                        "\n* Published: " + new Date(ri.getPublished()));
-/*
-                    } else if (uninteresting && (routerAge / 60 / 60 / 1000) <= 1) {
+                    } else if (uninteresting && refreshUninteresting && (routerAge / 60 / 60 / 1000) <= 1) {
                         _log.debug("Skipping refresh of uninteresting Router [" + h.toBase64().substring(0,6) + "] - less than " + (rapidScan / 60 / 1000) + " minutes old" +
                         "\n* Published: " + new Date(ri.getPublished()));
-*/
-                    } else if (uninteresting) {
+                    } else if (uninteresting && !refreshUninteresting && !isHidden) {
                         _log.debug("Skipping refresh of uninteresting Router [" + h.toBase64().substring(0,6) + "]");
                     } else {
                         _log.debug("Skipping refresh of Router [" + h.toBase64().substring(0,6) + "] - less than " + (routerAge / 60 / 60 / 1000) + " hours old" +
