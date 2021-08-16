@@ -126,7 +126,7 @@ class RefreshRoutersJob extends JobImpl {
                                          VersionComparator.comp(v, MIN_VERSION) < 0) &&
                                          getContext().netDb().getKnownRouters() > 2000 &&
                                          getContext().router().getUptime() > 60*60*1000;
-                boolean refreshUninteresting = getContext().getBooleanProperty("router.refreshUninteresting");
+                boolean refreshUninteresting = getContext().getBooleanProperty(PROP_ROUTER_REFRESH_UNINTERESTING);
                 Boolean isHidden =  getContext().router().isHidden();
                 int rapidScan = 45*60*1000;
                 if (uninteresting) {
