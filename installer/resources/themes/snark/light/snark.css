@@ -4483,6 +4483,10 @@ tfoot .snarkTorrentRateDown::after, tfoot .snarkTorrentRateUp::after {
   }
 }
 
+.processing .snarkTorrentStatus {
+  text-align: left;
+}
+
 body:not(.iframed) .snarknavbar, body:not(.iframed) .page {
   border: 1px solid rgba(168,168,192,.4) !important;
   border-radius: 0 !important;
