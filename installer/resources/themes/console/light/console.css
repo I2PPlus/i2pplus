@@ -13282,7 +13282,7 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
 }
 
 .netdbentry .netdb_header img[src="/flags.jsp?c=a0"] {
-  margin-top: -6px;
+  margin-top: 0;
 }
 
 iframe {
