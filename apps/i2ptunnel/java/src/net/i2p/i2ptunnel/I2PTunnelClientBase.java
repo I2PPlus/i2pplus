@@ -798,7 +798,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                 mySockets.clear();
             }
             if (open) {
-                _log.error("Error listening for connections on " + addr + " port " + localPort, ex);
+                _log.error("Error listening for connections on " + addr + " port " + localPort + " (" + ex.getMessage() + ")");
                 l.log("Error listening for connections on " + addr + " port " + localPort + ": " + ex);
                 notifyEvent("openBaseClientResult", "error");
                 close(true);

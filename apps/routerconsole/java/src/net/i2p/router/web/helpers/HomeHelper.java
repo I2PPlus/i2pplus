@@ -122,7 +122,7 @@ public class HomeHelper extends HelperBase {
 // domain name registration + uptime trackers
         "Identiguy" + S + _x("List of active eepsites and uptime monitor") + S + "http://identiguy.i2p/" + S + I + "svg/servermonitor.svg" + S +
         "notbob.i2p" + S + _x("List of active eepsites and uptime monitor") + S + "http://notbob.i2p/" + S + I + "notbob.png" + S +
-        "reg.i2p" + S + _x("I2P Domain Name Registration") + S + "http://reg.i2p/" + S + I + "svg/registrar.svg" + S +
+        "reg.i2p" + S + _x("I2P Domain Name Registration") + S + "http://reg.i2p/" + S + I + "svg/reg.svg" + S +
         _x("zzz Domain Registry") + S + _x("I2P Domain Name Registration") + S + "http://stats.i2p/i2p/addkey.html" + S + I + "svg/registrar.svg" + S +
 
 // forums + social
@@ -132,6 +132,7 @@ public class HomeHelper extends HelperBase {
         "nitter.i2p" + S + _x("Alternative front-end for Twitter") + S + "http://nitter.i2p/" + S + I + "svg/twitter.svg" + S +
         "query.i2p" + S + _x("The StackOverflow of I2P") + S + "http://query.i2p/" + S + I + "svg/forum.svg" + S +
         "ramble.i2p" + S + _x("Cross-network micro-blogging &amp; forums &amp; wiki") + S + "http://ramble.i2p/" + S + I + "svg/ramble.svg" + S +
+        "teddit.i2p" + S + _x("Alternative privacy-focused front-end for Reddit") + S + "http://teddit.i2p/" + S + I + "svg/teddit.svg" + S +
         "zeronet.i2p" + S + _x("Zeronet I2P Gateway") + S + "http://zeronet.i2p/" + S + I + "svg/zeronet.svg" + S +
 
 // hosting + other services

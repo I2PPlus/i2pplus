@@ -35,7 +35,7 @@ public class ReseedChecker {
     private volatile boolean _alreadyRun;
 
     //public static final int MINIMUM = 50;
-    public static final int MINIMUM = 300; // minimum number of router infos before automatic reseed attempted
+    public static final int MINIMUM = 150; // minimum number of router infos before automatic reseed attempted
     //private static final long STATUS_CLEAN_TIME = 20*60*1000;
     private static final long STATUS_CLEAN_TIME = 3*60*1000; // sidebar notification persistence
     // if down this long, reseed at startup

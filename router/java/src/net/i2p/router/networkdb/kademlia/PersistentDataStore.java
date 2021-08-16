@@ -73,7 +73,7 @@ public class PersistentDataStore extends TransientDataStore {
     public PersistentDataStore(RouterContext ctx, String dbDir, KademliaNetworkDatabaseFacade facade) throws IOException {
         super(ctx);
         _networkID = ctx.router().getNetworkID();
-        _flat = ctx.getBooleanProperty(PROP_FLAT);
+        _flat = ctx.getBooleanPropertyDefaultTrue(PROP_FLAT);
         _dbDir = getDbDir(dbDir);
         _facade = facade;
         _readJob = new ReadJob();
@@ -732,7 +732,7 @@ public class PersistentDataStore extends TransientDataStore {
     public static File getRouterInfoFile(RouterContext ctx, Hash hash) {
         String b64 = hash.toBase64();
         File dir = new File(ctx.getRouterDir(), ctx.getProperty(KademliaNetworkDatabaseFacade.PROP_DB_DIR, KademliaNetworkDatabaseFacade.DEFAULT_DB_DIR));
-        if (ctx.getBooleanProperty(PROP_FLAT))
+        if (ctx.getBooleanPropertyDefaultTrue(PROP_FLAT))
             return new File(dir, ROUTERINFO_PREFIX + b64 + ROUTERINFO_SUFFIX);
         return new File(dir, DIR_PREFIX + b64.charAt(0) + File.separatorChar + ROUTERINFO_PREFIX + b64 + ROUTERINFO_SUFFIX);
     }
