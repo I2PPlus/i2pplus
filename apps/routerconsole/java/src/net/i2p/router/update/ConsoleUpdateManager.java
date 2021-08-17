@@ -196,10 +196,10 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             List<URI> updateSources = uuh.getUpdateSources();
             if (updateSources != null) {
                 VersionAvailable newVA;
-                if (SystemVersion.isJava7())
+                if (SystemVersion.isJava8())
                     newVA = new VersionAvailable(newVersion, "", HTTP, updateSources);
                 else
-                    newVA = new VersionAvailable(newVersion, "Requires Java 7");
+                    newVA = new VersionAvailable(newVersion, "Requires Java 8");
                 _available.put(new UpdateItem(ROUTER_UNSIGNED, ""), newVA);
             }
         }
@@ -213,10 +213,10 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                 List<URI> updateSources = dsuh.getUpdateSources();
                 if (updateSources != null) {
                     VersionAvailable newVA;
-                    if (SystemVersion.isJava7())
+                    if (SystemVersion.isJava8())
                         newVA = new VersionAvailable(newVersion, "", HTTP, updateSources);
                     else
-                        newVA = new VersionAvailable(newVersion, "Requires Java 7");
+                        newVA = new VersionAvailable(newVersion, "Requires Java 8");
                     _available.put(new UpdateItem(ROUTER_DEV_SU3, ""), newVA);
                 }
             } else {
@@ -786,7 +786,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         if (old != null && _log.shouldLog(Log.WARN))
             _log.warn("Duplicate registration " + upp);
     }
-    
+
     /**
      *  Called by the Updater, either after check() was called, or it found out on its own.
      *  Use this if there is only one UpdateMethod; otherwise use the Map method below.

@@ -53,28 +53,33 @@ class BuildMessageProcessor {
      */
     private DecayingBloomFilter selectFilter() {
         long maxMemory = SystemVersion.getMaxMemory();
+        boolean isSlow = SystemVersion.isSlow();
         int m;
-        if (SystemVersion.isAndroid() || SystemVersion.isARM() || SystemVersion.isSlow() || maxMemory < 96*1024*1024L) {
+        if ((isSlow && maxMemory < 256*1024*1024L) || maxMemory < 96*1024*1024L) {
             // 32 KB
             // appx 500 part. tunnels or 6K req/hr
             m = 17;
+        } else if (isSlow) {
+            m = 20;
+/*
         } else if (ctx.getProperty(RouterThrottleImpl.PROP_MAX_TUNNELS, RouterThrottleImpl.DEFAULT_MAX_TUNNELS) >
                    RouterThrottleImpl.DEFAULT_MAX_TUNNELS && maxMemory >= 2048*1024*1024L &&
                    SystemVersion.getCores() >= 6) {
-            m = 26;
             // 16 MB
             // appx 160K part. tunnels or 1.92M req/hr
+            m = 26;
         } else if (ctx.getProperty(RouterThrottleImpl.PROP_MAX_TUNNELS, RouterThrottleImpl.DEFAULT_MAX_TUNNELS) >
                    RouterThrottleImpl.DEFAULT_MAX_TUNNELS && maxMemory >= 1024*1024*1024L &&
                    SystemVersion.getCores() >= 4) {
-            m = 25;
             // 8 MB
             // appx 80K part. tunnels or 960K req/hr
+            m = 25;
+*/
         } else if (ctx.getProperty(RouterThrottleImpl.PROP_MAX_TUNNELS, RouterThrottleImpl.DEFAULT_MAX_TUNNELS) >
-                   RouterThrottleImpl.DEFAULT_MAX_TUNNELS && maxMemory >= 512*1024*1024L) {
-            m = 24;
+                   RouterThrottleImpl.DEFAULT_MAX_TUNNELS && maxMemory >= 512*1024*1024L && !SystemVersion.isSlow()) {
             // 4 MB
             // appx 40K part. tunnels or 480K req/hr
+            m = 24;
         } else if (ctx.getProperty(RouterThrottleImpl.PROP_MAX_TUNNELS, RouterThrottleImpl.DEFAULT_MAX_TUNNELS) >
                    RouterThrottleImpl.DEFAULT_MAX_TUNNELS && maxMemory >= 256*1024*1024L) {
             // 2 MB
