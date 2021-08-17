@@ -53,13 +53,13 @@ class BuildMessageProcessor {
      */
     private DecayingBloomFilter selectFilter() {
         long maxMemory = SystemVersion.getMaxMemory();
-        boolean isSlow = SystemVersion.isSlow()
+        boolean isSlow = SystemVersion.isSlow();
         int m;
         if ((isSlow && maxMemory < 256*1024*1024L) || maxMemory < 96*1024*1024L) {
             // 32 KB
             // appx 500 part. tunnels or 6K req/hr
             m = 17;
-        else if (isSlow) {
+        } else if (isSlow) {
             m = 20;
 /*
         } else if (ctx.getProperty(RouterThrottleImpl.PROP_MAX_TUNNELS, RouterThrottleImpl.DEFAULT_MAX_TUNNELS) >
