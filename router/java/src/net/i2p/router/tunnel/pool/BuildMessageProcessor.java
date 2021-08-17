@@ -59,9 +59,9 @@ class BuildMessageProcessor {
             // 32 KB
             // appx 500 part. tunnels or 6K req/hr
             m = 17;
+/*
         } else if (isSlow) {
             m = 20;
-/*
         } else if (ctx.getProperty(RouterThrottleImpl.PROP_MAX_TUNNELS, RouterThrottleImpl.DEFAULT_MAX_TUNNELS) >
                    RouterThrottleImpl.DEFAULT_MAX_TUNNELS && maxMemory >= 2048*1024*1024L &&
                    SystemVersion.getCores() >= 6) {
@@ -74,7 +74,6 @@ class BuildMessageProcessor {
             // 8 MB
             // appx 80K part. tunnels or 960K req/hr
             m = 25;
-*/
         } else if (ctx.getProperty(RouterThrottleImpl.PROP_MAX_TUNNELS, RouterThrottleImpl.DEFAULT_MAX_TUNNELS) >
                    RouterThrottleImpl.DEFAULT_MAX_TUNNELS && maxMemory >= 512*1024*1024L && !SystemVersion.isSlow()) {
             // 4 MB
@@ -82,6 +81,17 @@ class BuildMessageProcessor {
             m = 24;
         } else if (ctx.getProperty(RouterThrottleImpl.PROP_MAX_TUNNELS, RouterThrottleImpl.DEFAULT_MAX_TUNNELS) >
                    RouterThrottleImpl.DEFAULT_MAX_TUNNELS && maxMemory >= 256*1024*1024L) {
+            // 2 MB
+            // appx 20K part. tunnels or 240K req/hr
+            m = 23;
+*/
+
+
+        } else if (maxMemory >= 512*1024*1024L && !SystemVersion.isSlow()) {
+            // 4 MB
+            // appx 40K part. tunnels or 480K req/hr
+            m = 24;
+        } else if (maxMemory >= 256*1024*1024L) {
             // 2 MB
             // appx 20K part. tunnels or 240K req/hr
             m = 23;
