@@ -6084,20 +6084,25 @@ iframe {
 }
 
 #tunnelmgr::before, #torrents::before, #webmail::before, #dns::before {
-  display: block;
-  height: 5px;
   width: 0;
-  background: linear-gradient(#d30, #f60);
-  content: "";
+  height: 6px;
+  display: block;
   position: absolute;
   top: 0;
-  left: 0;
-  right: 0;
+  left: 1px;
+  right: 1px;
+  opacity: .9;
+  background: linear-gradient(to bottom, rgba(255,255,255,.1), rgba(0,0,0,.4)), linear-gradient(#d30, #f60);
+  box-shadow: inset 0 0 0 2px rgba(0,0,0,.7);
+  content: "";
   animation: ease-out reloader 20s forwards;
 }
 
-/* global overrides */
+#webmail::before {
+  top: -1px;
+}
 
+/* global overrides */
 h3[id*="job"] {
   margin: 12px 0 10px 0;
   padding: 8px;
