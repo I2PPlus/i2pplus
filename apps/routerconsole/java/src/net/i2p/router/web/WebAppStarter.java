@@ -69,6 +69,7 @@ public class WebAppStarter {
         // this enables javascript to be cached as immutable
         INIT_PARAMS.put(pfx + "cacheControl", "private, max-age=2628000, immutable");
         INIT_PARAMS.put(pfx + "dirAllowed", "false");
+        INIT_PARAMS.put(pfx + "etags", "true");
 
         boolean found = false;
         try {

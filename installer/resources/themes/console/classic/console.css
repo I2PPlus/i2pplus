@@ -4179,7 +4179,7 @@ h3#servicedebug a, h3#graphinfo a, h3#browseronstart a {
   height: 16px;
   float: right;
   display: inline-block;
-  background: var(--settings) no-repeat center center / 18px;
+  background: var(--settings2) no-repeat center center / 18px;
   content: "";
 }
 
@@ -4209,10 +4209,6 @@ h3#servicedebug a, h3#graphinfo a, h3#browseronstart a {
 
 #version a::after {
   content: none !important;
-}
-
-.main#tunnels h3 a[href^="/configtunnels#"]:hover, .main#tunnels h3 a[href$="i2ptunnelmgr"]:hover {
-  filter: drop-shadow(0 0 1px var(--hover));
 }
 
 h3 + .statusnotes {
@@ -12136,7 +12132,7 @@ iframe {
   left: 0;
   right: 0;
   background: linear-gradient(to bottom, rgba(255,255,255,.2) 50%, rgba(0,0,0,.4) 50%), linear-gradient(#03d, #06f);
-  opacity: .8;
+  opacity: .5;
   content: "";
   animation: ease-out reloader 20s forwards;
 }

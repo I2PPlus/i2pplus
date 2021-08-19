@@ -106,14 +106,11 @@ public class HomeHelper extends HelperBase {
 
 // software repositories + filesharing
         "cake.i2p" + S + _x("Transient server-encrypted filesharing and pastebin") + S + "http://cake.i2p/" + S + I + "svg/cake.svg" + S +
-        "ebooks.i2p" + S + _x("Huge collection of books &amp; magazines &amp; comics") + S + "http://ebooks.i2p/" + S + I + "svg/books.svg" + S +
         "fs.i2p" + S + _x("Secure filesharing service") + S + "http://fs.i2p/" + S + I + "svg/cloud.svg" + S +
         "git.i2p" + S + _x("Community Git hosting") + S + "http://git.i2p/explore/repos" + S + I + "svg/git.svg" + S +
         "git.idk.i2p" + S + _x("Official I2P Git repository") + S + "http://git.idk.i2p/explore/projects" + S + I + "svg/gitlab.svg" + S +
-        "inclib.i2p" + S + _x("The Radical Militant Library") + S + "http://inclib.i2p/" + S + I + "svg/books.svg" + S +
         "sharefile.i2p" + S + _x("Secure filesharing service") + S + "http://sharefile.i2p/" + S + I + "svg/cloud.svg" + S +
         "skank.i2p" + S + _x("Home of I2P+") + S + "http://skank.i2p/" + S + I + "svg/plus.svg" + S +
-        "tome.i2p" + S + _x("Collection of books &amp; other reading material") + S + "http://tome.i2p/" + S + I + "svg/books.svg" + S +
 
 // torrent trackers
         _x("Chudo") + S + _x("No login Bittorrent tracker") + S + "http://torrents.chudo.i2p/" + S + I + "svg/magnet.svg" + S +
@@ -137,17 +134,23 @@ public class HomeHelper extends HelperBase {
 
 // hosting + other services
         _x("Pastebin") + S + _x("Encrypted I2P Pastebin") + S + "http://paste.r4sas.i2p/" + S + I + "svg/paste.svg" + S +
-        _x("Deep Web Radio") + S + _x("Streaming radio service") + S + "http://deepwebradio.i2p/" + S + I + "svg/radio.svg" + S +
+        _x("radio.r4sas.i2p") + S + _x("Streaming radio service") + S + "http://radio.r4sas.i2p/" + S + I + "svg/radio.svg" + S +
            "tube.i2p" + S + _x("Alternative front-end to Youtube") + S + "http://tube.i2p/" + S + I + "svg/tv.svg" + S +
            "webhosting.i2p" + S + _x("Provider of privacy respecting web hosting and VPN services") + S + "http://webhosting.i2p/" + S + I + "svg/incog.svg" + S +
+        //_x("Deep Web Radio") + S + _x("Streaming radio service") + S + "http://deepwebradio.i2p/" + S + I + "svg/radio.svg" + S +
 
 // search engines
         "Legwork" + S +_x("I2P Web Search Engine") + S + "http://legwork.i2p/" + S + I + "svg/search.svg" + S +
         "Ransack" + S +_x("I2P-based Metasearch Engine") + S + "http://ransack.i2p/" + S + I + "svg/search.svg" + S +
 
-// wikis
-        _x("Psychonaut") + S + _x("Wiki relating to altered states of consciousness") + S + "http://psy.i2p/" + S + I + "svg/psy.svg" + S +
+// wikis & reference
+        "ebooks.i2p" + S + _x("Huge collection of books &amp; magazines &amp; comics") + S + "http://ebooks.i2p/" + S + I + "svg/books.svg" + S +
         "I2P Wiki" + S + _x("I2P-related Wiki") + S + "http://wiki.i2p-projekt.i2p/" + S + I + "svg/wiki.svg" + S +
+        "inclib.i2p" + S + _x("The Radical Militant Library") + S + "http://inclib.i2p/" + S + I + "svg/books.svg" + S +
+        "jalibrary.i2p" + S + _x("Books &amp; courses &amp art") + S + "http://jalibrary.i2p/" + S + I + "svg/books.svg" + S +
+        "nexus.i2p" + S + _x("Searchable science library") + S + "http://nexus.i2p/" + S + I + "svg/nexus.svg" + S +
+        _x("Psychonaut") + S + _x("Wiki relating to altered states of consciousness") + S + "http://psy.i2p/" + S + I + "svg/psy.svg" + S +
+        "tome.i2p" + S + _x("Collection of books &amp; other reading material") + S + "http://tome.i2p/" + S + I + "svg/books.svg" + S +
 
 // news + blogs
         "LinuxFarm" + S + _x("Router performance monitoring and Linux tips") + S + "http://linuxfarm.i2p/" + S + I + "svg/linuxfarm.svg" + S +

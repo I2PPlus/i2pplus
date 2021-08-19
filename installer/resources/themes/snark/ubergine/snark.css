@@ -4596,7 +4596,9 @@ td.snarkTorrentStatus b::before {
 }
 
 .active.starting .snarkTorrentStatus b, .active.starting.processing .snarkTorrentStatus b {
-  background: repeating-linear-gradient(135deg, #bb0, #bb0 8px, #550 9px, #550 17px) !important;
+  color: #101;
+  text-shadow: 0 1px 1px #dd0;
+  background: repeating-linear-gradient(135deg, #bb0, #bb0 8px, #990 9px, #990 17px) !important;
 }
 
 .inactive.downloading .snarkTorrentStatus b::before, .active.starting .snarkTorrentStatus b::before {

@@ -94,13 +94,13 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
         // The following are for TestJob
         long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l };
-        ctx.statManager().createRequiredRateStat("tunnel.testFailedTime", "Time taken for tunnel test failure (ms)", "Tunnels",
+        ctx.statManager().createRequiredRateStat("tunnel.testFailedTime", "Time for tunnel test failure (ms)", "Tunnels",
                                          RATES);
-        ctx.statManager().createRateStat("tunnel.testExploratoryFailedTime", "Time taken for failure of an exploratory tunnel (max of 60s for full timeout)", "Tunnels [Exploratory]",
+        ctx.statManager().createRateStat("tunnel.testExploratoryFailedTime", "Time for failure of an exploratory tunnel (max 60s for full timeout)", "Tunnels [Exploratory]",
                                          RATES);
-        ctx.statManager().createRateStat("tunnel.testFailedCompletelyTime", "Time taken for complete failure of a tunnel test (max of 60s for full timeout)", "Tunnels",
+        ctx.statManager().createRateStat("tunnel.testFailedCompletelyTime", "Time for complete failure of a tunnel test (max 60s for full timeout)", "Tunnels",
                                          RATES);
-        ctx.statManager().createRateStat("tunnel.testExploratoryFailedCompletelyTime", "Time taken for complete failure of an exploratory tunnel (max of 60s for full timeout)", "Tunnels [Exploratory]",
+        ctx.statManager().createRateStat("tunnel.testExploratoryFailedCompletelyTime", "Time for complete failure of an exploratory tunnel (max 60s for full timeout)", "Tunnels [Exploratory]",
                                          RATES);
         ctx.statManager().createRateStat("tunnel.testSuccessLength", "How long were the tunnels that passed the test", "Tunnels",
                                          RATES);
