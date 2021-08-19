@@ -4179,7 +4179,7 @@ h3#servicedebug a, h3#graphinfo a, h3#browseronstart a {
   height: 16px;
   float: right;
   display: inline-block;
-  background: var(--settings) no-repeat center center / 18px;
+  background: var(--settings2) no-repeat center center / 18px;
   content: "";
 }
 
@@ -4209,10 +4209,6 @@ h3#servicedebug a, h3#graphinfo a, h3#browseronstart a {
 
 #version a::after {
   content: none !important;
-}
-
-.main#tunnels h3 a[href^="/configtunnels#"]:hover, .main#tunnels h3 a[href$="i2ptunnelmgr"]:hover {
-  filter: drop-shadow(0 0 1px var(--hover));
 }
 
 h3 + .statusnotes {
