@@ -11049,6 +11049,8 @@ p#gatherstats {
 #graphs .statimage, #graphs .statimage:hover, #graphs a:hover .statimage, #graph_single .statimage, #graph_single .statimage:hover {
   margin: 0 !important;
   padding: 0 !important;
+  min-width: 180px;
+  min-height: 40px;
   max-width: calc(100% + 2px) !important;
   border: none !important;
   box-shadow: none !important;
