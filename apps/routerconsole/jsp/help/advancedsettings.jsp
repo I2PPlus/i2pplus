@@ -63,7 +63,7 @@
 <tr><td>Allocate number of processor threads for building tunnels. If your processor supports hyperthreading or simultaneous multithreading, you may multiply the number of processor cores by 2 to get the maximum number of threads to allocate, otherwise number of processor cores = maximum number of threads available. Note that you may wish to allocate less than the theoretical maximum to ensure you have headroom for other tasks.</td></tr>
 
 <tr><th>router.disableTunnelTesting={true|false}</th></tr>
-<tr><td>Periodically test tunnels to determine the average lag, and display the results in the Congestion sidepanel section. To enable, set this value to false. [Default is true]</td></tr>
+<tr><td>Periodically test tunnels to determine the average lag, and display the results in the Congestion sidepanel section. To enable, set this value to false. [Default is false]</td></tr>
 
 <tr><th>router.dynamicKeys={true|false}</th></tr>
 <tr><td>When set to true, the router will change its identity and UDP port every time the router restarts. [Default is false]</td></tr>
@@ -84,7 +84,7 @@
 <tr><td>Defines the maximum percentage of active local tunnels (client and exploratory) that a peer will be used for. [Default is 25%]</td></tr>
 
 <tr><th>router.networkDatabase.flat={true|false}</th></tr>
-<tr><td>When set to true, the router info files stored in your profile's netDB directory will not be split into 64 sub-directories.</td></tr>
+<tr><td>When set to true, the router info files stored in your profile's netDB directory will not be split into 64 sub-directories. [Default is true in I2P+, false in I2P]</td></tr>
 
 <tr><th>router.rebuildKeys={true|false}</th></tr>
 <tr><td>When set to true, the router will change its identity and UDP port when the router restarts and then delete the key from router.config to prevent further changes. [Default is false]</td></tr>
@@ -102,7 +102,7 @@
 <tr><td>When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption.</td></tr>
 
 <tr><th>router.expireRouterInfo={n} <span class="plus">I2P+</span></th></tr>
-<tr><td>This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 24 hours unless the router is a Floodfill, in which case the default is 8 hours]</td></tr>
+<tr><td>This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]</td></tr>
 
 <tr><th>router.exploreBredth={n} <span class="plus">I2P+</span></th></tr>
 <tr><td>This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!</td></tr>
@@ -132,7 +132,7 @@
 <tr><td>This setting determines the delay between peer test jobs, configured in milliseconds. [Default is 5000]</td></tr>
 
 <tr><th>router.peerTestTimeout={n} <span class="plus">I2P+</span></th></tr>
-<tr><td>To determine peer latency, this setting allocates the maximum time a peer test should take before being considered a failure, configured in milliseconds. In the event that the timeout is configured lower than the average successful test, the average successful test value will be used. [Default is 1250]</td></tr>
+<tr><td>To determine peer latency, this setting allocates the maximum time a peer test should take before being considered a failure, configured in milliseconds. In the event that the timeout is configured lower than the average successful test, the average successful test value will be used. [Default is 1000]</td></tr>
 
 <tr><th>router.publishPeerRankings={true|false}</th></tr>
 <tr><td>This setting determines whether stats about our router are sporadically published to the NetDb. [Default is false]</td></tr>
