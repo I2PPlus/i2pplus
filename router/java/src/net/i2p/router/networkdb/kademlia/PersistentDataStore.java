@@ -300,12 +300,13 @@ public class PersistentDataStore extends TransientDataStore {
             RouterInfo ri = new RouterInfo();
             String v = ri.getVersion();
             String MIN_VERSION = "0.9.48";
+            boolean isHidden =  getContext().router().isHidden();
             boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
                                     ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                     ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
                                     VersionComparator.comp(v, MIN_VERSION) < 0) &&
                                     _context.netDb().getKnownRouters() > 2000 &&
-                                    _context.router().getUptime() > 60*60*1000;
+                                    _context.router().getUptime() > 60*60*1000 && !isHidden;
         if (_log.shouldLog(Log.DEBUG) && !uninteresting)
             _log.debug("Writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk");
         OutputStream fos = null;
