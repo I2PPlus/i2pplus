@@ -93,7 +93,7 @@ The I2P Network Protocol (I2NP) manages the routing and mixing of messages betwe
 </p>
 
 <p><b>I2P+</b><br>
-A soft fork of the Java I2P software which retains full compatibility, providing an enhanced user interface and improvements to network performance. See <a href="http://skank.i2p/" class="sitelink" target="_blank" rel="noreferrer">http://skank.i2p/</a> or <a href="http://i2pplus.github.io" class="sitelink external" target="_blank" rel="noreferrer">for more information.
+A soft fork of the Java I2P software which retains full compatibility, providing an enhanced user interface and improvements to network performance. See <a href="http://skank.i2p/" class="sitelink" target="_blank" rel="noreferrer">http://skank.i2p/</a> or <a href="https://i2pplus.github.io" class="sitelink external" target="_blank" rel="noreferrer">https://i2pplus.github.io</a>for more information.
 </p>
 
 <p><b>I2PBote (plugin)</b><br>
