@@ -300,7 +300,7 @@ public class PersistentDataStore extends TransientDataStore {
             RouterInfo ri = new RouterInfo();
             String v = ri.getVersion();
             String MIN_VERSION = "0.9.48";
-            boolean isHidden =  getContext().router().isHidden();
+            boolean isHidden =  _context.router().isHidden();
             boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
                                     ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                     ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
