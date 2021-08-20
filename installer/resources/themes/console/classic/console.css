@@ -1193,6 +1193,7 @@ div[lang="pt"] li br {
 #console li {
   line-height: 140%;
   text-align: justify;
+  font-size: 105%;
 }
 
 .langbox {
@@ -1226,14 +1227,14 @@ div[lang="pt"] li br {
 }
 
 .links {
+  margin-top: 5px !important;
   padding-bottom: 0;
   text-align: justify;
-  margin-top: 5px !important;
 }
 
 .links li {
   margin-left: -15px !important;
-  margin-right: -15px !important;
+  margin-right: 10px !important;
   padding: 5px 10px 0 !important;
   list-style: none;
 }
