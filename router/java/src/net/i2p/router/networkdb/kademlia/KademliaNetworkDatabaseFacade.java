@@ -772,17 +772,21 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             boolean isHidden = _context.router().isHidden() || _context.getBooleanProperty("router.hiddenMode");
             String v = ri.getVersion();
             String MIN_VERSION = "0.9.48";
+            Hash us = _context.routerHash();
+            int netDbDiskCount = getAllRouters().size();
             boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
                                      ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                      ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
                                      VersionComparator.comp(v, MIN_VERSION) < 0) &&
-                                     _context.router().getUptime() > 60*60*1000 &&
-                                     _context.netDb().getKnownRouters() > 2000;
+                                     _context.router().getUptime() > 2*60*60*1000 &&
+                                     _context.netDb().getKnownRouters() > 2000 &&
+                                     netDbDiskCount > 500 &&
+                                     !us.equals(ri.getIdentity().getHash());
             if (uninteresting && !isHidden) {
-//                _ds.remove(key);
-                _kb.remove(key);
+                _ds.remove(key);
+//                _kb.remove(key);
                 if (_log.shouldInfo())
-                    _log.info("Deleted uninteresting RouterInfo [" + key.toBase64().substring(0,6) + "] from DHT");
+                    _log.info("Deleted uninteresting RouterInfo [" + key.toBase64().substring(0,6) + "] from disk");
             }
 
         } else if (_context.banlist().isBanlistedForever(key)) {
@@ -1250,9 +1254,12 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             adjustedExpiration = ROUTER_INFO_EXPIRATION_FLOODFILL;
         else
             // _kb.size() includes leasesets but that's ok
+/*
             adjustedExpiration = Math.min(ROUTER_INFO_EXPIRATION,
                                           ROUTER_INFO_EXPIRATION_MIN +
                                           ((ROUTER_INFO_EXPIRATION - ROUTER_INFO_EXPIRATION_MIN) * MIN_ROUTERS / (_kb.size() + 1)));
+*/
+        adjustedExpiration = ROUTER_INFO_EXPIRATION;
 
         if (upLongEnough && !routerInfo.isCurrent(adjustedExpiration)) {
             long age = _context.clock().now() - routerInfo.getPublished();
@@ -1295,8 +1302,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
         if (routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
             routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 &&
-            routerInfo.getPublished() < now - 60*60*1000l && !us.equals(routerInfo.getIdentity().getHash()))
-                return "RouterInfo [" + routerId + "] is K or L tier and was published over an hour ago";
+            routerInfo.getPublished() < now - 4*60*60*1000l && !us.equals(routerInfo.getIdentity().getHash()))
+                return "RouterInfo [" + routerId + "] is K or L tier and was published over 4 hours ago";
 
         if (expireRI != null) {
             if (upLongEnough && (routerInfo.getPublished() < now - Long.valueOf(expireRI)*60*60*1000l) ) {
