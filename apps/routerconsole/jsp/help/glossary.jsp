@@ -60,6 +60,10 @@ The unique cryptographic identity of the inbound endpoint of a tunnel providing 
 A command-line application supplied with I2P that is used to request URL resources, similar to <a href="https://www.gnu.org/software/wget/" class="sitelink external" target="_blank" rel="noreferrer">wget</a> or <a href="https://curl.haxx.se/" class="sitelink external" target="_blank" rel="noreferrer">curl</a>. Eepget is also used internally by the router, for example to reseed from remote hosts. By default, eepget uses the HTTP proxy on <code>127.0.0.1:4444</code>.
 </p>
 
+<p><b>Eephead</b><br>
+A command-line application supplied with I2P+ (Linux/MacOS) that is used to perform a <code>head</code> request on a specified http resource on the network, returning various response headers from the remote server. By default, eephead uses the HTTP proxy on <code>127.0.0.1:4444</code>.
+</p>
+
 <p><b>Eepsite</b><br>
 A website hosted on the I2P network. By default, a <a href="https://www.eclipse.org/jetty/about.html" class="sitelink external" target="_blank" rel="noreferrer">Jetty webserver</a> is configured and running on <a href="http://127.0.0.1:7658/" target="_blank" rel="noreferrer">http://127.0.0.1:7658/</a>.
 </p>
@@ -89,7 +93,7 @@ The I2P Network Protocol (I2NP) manages the routing and mixing of messages betwe
 </p>
 
 <p><b>I2P+</b><br>
-A soft fork of the Java I2P software which retains full compatibility, providing an enhanced user interface and improvements to network performance. See <a href="http://skank.i2p/" class="sitelink" target="_blank" rel="noreferrer">http://skank.i2p/</a> for more information.
+A soft fork of the Java I2P software which retains full compatibility, providing an enhanced user interface and improvements to network performance. See <a href="http://skank.i2p/" class="sitelink" target="_blank" rel="noreferrer">http://skank.i2p/</a> or <a href="http://i2pplus.github.io" class="sitelink external" target="_blank" rel="noreferrer">for more information.
 </p>
 
 <p><b>I2PBote (plugin)</b><br>
@@ -97,11 +101,11 @@ An I2P plugin that provides serverless, end-to-end encrypted e-mail within the I
 </p>
 
 <p><b>i2pd</b><br>
-An alternative implementation of an I2P router coded in C++. For more information, see <a href="https://i2pd.website/" class="sitelink external" target="_blank" rel="noreferrer">https://i2pd.website/</a>.
+An alternative implementation of an I2P router coded in C++. For more information, see <a href="https://i2pd.website/" class="sitelink external" target="_blank" rel="noreferrer">https://i2pd.website/</a> Source code is available on <a href="https://github.com/PurpleI2P/i2pd" class="sitelink external" target="_blank" rel="noreferrer">github</a>.
 </p>
 
 <p><b>I2PSnark</b><br>
-A fork of the <a href="http://www.klomp.org/snark/" class="sitelink external" target="_blank" rel="noreferrer">Snark BitTorrent client</a> refactored for use on the I2P network. Usually supplied as part of the default suite of applications with Java I2P, and also available as a standalone Java application.
+A fork of the <a href="http://www.klomp.org/snark/" class="sitelink external" target="_blank" rel="noreferrer">Snark BitTorrent client</a> refactored for use on the I2P network. Usually supplied as part of the default suite of applications with Java I2P, and also available as a <a href="http://skank.i2p/#download" class="sitelink" target="_blank" rel="noreferrer">standalone Java application</a>.
 </p>
 
 <p><b>Introducer</b><br>
@@ -125,7 +129,7 @@ A group of tunnel entry points (leases) for a <i>destination</i>. Note: A 0-hop 
 </p>
 
 <p><b>Monotone / mtn</b><br>
-The distributed version control system (DVCS) used to maintain I2P's source code. For more information, see the <a href="https://geti2p.net/en/get-involved/guides/monotone" class="sitelink external" target="_blank" rel="noreferrer">online guide</a>.
+The distributed version control system (DVCS) perviously used to maintain I2P's source code, now superseded by git.
 </p>
 
 <p><b>Multihoming</b><br>
