@@ -1028,15 +1028,15 @@ select:focus {
 }
 
 #dologin td {
-  padding: 3px;
+  padding: 5px 3px;
   font-weight: 700 !important;
   color: #41444d;
 }
 
 #dologin td:first-child {
   padding-left: 0;
-  white-space: nowrap;
   width: 120px !important;
+  white-space: nowrap;
 }
 
 #dologin td:last-child {
@@ -1045,7 +1045,7 @@ select:focus {
 }
 
 #dologin td[colspan="2"] {
-  padding: 3px 0;
+  padding: 4px 0 7px;
 }
 
 #dologin tr:last-child td {
@@ -1679,7 +1679,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
   font-size: 0;
   border: none;
   box-shadow: none;
-  background: var(--show) no-repeat center center / 20px;
+  background: var(--show) no-repeat center center / 20px !important;
   cursor: pointer;
   mix-blend-mode: luminosity;
 }
@@ -1689,9 +1689,9 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 }
 
 #toggle.hidepass {
-  background: var(--hide) no-repeat center center / 20px;
+  background: var(--hide) no-repeat center center / 20px !important;
 }
 
 #toggle.showpass {
-  background: var(--show) no-repeat center center / 20px;
+  background: var(--show) no-repeat center center / 20px !important;
 }
