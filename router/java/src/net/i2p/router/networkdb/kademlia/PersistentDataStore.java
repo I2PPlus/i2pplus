@@ -297,6 +297,7 @@ public class PersistentDataStore extends TransientDataStore {
     }
 
     private void write(Hash key, DatabaseEntry data) {
+            int netDbDiskCount = _facade.getAllRouters().size();
             RouterInfo ri = new RouterInfo();
             String v = ri.getVersion();
             String MIN_VERSION = "0.9.48";
@@ -306,7 +307,8 @@ public class PersistentDataStore extends TransientDataStore {
                                     ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
                                     VersionComparator.comp(v, MIN_VERSION) < 0) &&
                                     _context.netDb().getKnownRouters() > 2000 &&
-                                    _context.router().getUptime() > 60*60*1000 && !isHidden;
+                                    _context.router().getUptime() > 60*60*1000 && !isHidden &&
+                                    netDbDiskCount > 500;
         if (_log.shouldLog(Log.DEBUG) && !uninteresting)
             _log.debug("Writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk");
         OutputStream fos = null;
