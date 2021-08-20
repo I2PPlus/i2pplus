@@ -6402,7 +6402,6 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:532
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:534
-#, java-printf-format
 msgid "% of total"
 msgstr ""
 
