@@ -5813,7 +5813,7 @@ p:empty { /* empty paragraph nuke */
 }
 
 #netdb .netdb_leases img[src^="/flags"] {
-  margin: -1px 0 0 -5px !important;
+  margin: -2px 0 1px -5px !important;
 }
 
 #netdb .netdb_leases img.unknownflag, #peers img.unknownflag, #profiles img.unknownflag {
