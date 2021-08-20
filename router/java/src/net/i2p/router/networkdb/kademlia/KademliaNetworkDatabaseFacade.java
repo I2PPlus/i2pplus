@@ -1250,9 +1250,12 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             adjustedExpiration = ROUTER_INFO_EXPIRATION_FLOODFILL;
         else
             // _kb.size() includes leasesets but that's ok
+/*
             adjustedExpiration = Math.min(ROUTER_INFO_EXPIRATION,
                                           ROUTER_INFO_EXPIRATION_MIN +
                                           ((ROUTER_INFO_EXPIRATION - ROUTER_INFO_EXPIRATION_MIN) * MIN_ROUTERS / (_kb.size() + 1)));
+*/
+        adjustedExpiration = ROUTER_INFO_EXPIRATION;
 
         if (upLongEnough && !routerInfo.isCurrent(adjustedExpiration)) {
             long age = _context.clock().now() - routerInfo.getPublished();
