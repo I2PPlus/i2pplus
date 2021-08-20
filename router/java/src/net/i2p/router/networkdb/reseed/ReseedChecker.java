@@ -35,7 +35,7 @@ public class ReseedChecker {
     private volatile boolean _alreadyRun;
 
     //public static final int MINIMUM = 50;
-    public static final int MINIMUM = 150; // minimum number of router infos before automatic reseed attempted
+    public static final int MINIMUM = 40; // minimum number of router infos before automatic reseed attempted
     //private static final long STATUS_CLEAN_TIME = 20*60*1000;
     private static final long STATUS_CLEAN_TIME = 3*60*1000; // sidebar notification persistence
     // if down this long, reseed at startup
@@ -59,11 +59,14 @@ public class ReseedChecker {
      *  @return true if a reseed was started
      */
     public boolean checkReseed(int known) {
-        if (_context.router().getUptime() < 10*60*1000 && known > 1) {
+        boolean isHidden =  _context.router().isHidden();
+        if (_context.router().getUptime() < 10*60*1000 && known > 1 && !isHidden) {
             return false;
+/*
         } else if (_context.router().getUptime() < 30*60*1000 && known < MINIMUM &&
-                   !(_context.getEstimatedDowntime() > RESEED_MIN_DOWNTIME)) {
+                   !(_context.getEstimatedDowntime() > RESEED_MIN_DOWNTIME) && !isHidden) {
             return false;
+*/
         } else if (_alreadyRun) {
             if (known >= MINIMUM)
                 return false;

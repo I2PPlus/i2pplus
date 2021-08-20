@@ -62,6 +62,7 @@ public class I2PDefaultServlet extends DefaultServlet
     // shadows of private fields in super
     private ContextHandler _contextHandler;
     private boolean _dirAllowed = true;
+    private boolean _etags = true;
     private Resource _resourceBase;
     private Resource _stylesheet;
 
@@ -78,6 +79,7 @@ public class I2PDefaultServlet extends DefaultServlet
     {
         super.init();
         _dirAllowed=getInitBoolean("dirAllowed",_dirAllowed);
+        _etags=getInitBoolean("etags",_etags);
 
         String rb=getInitParameter("resourceBase");
         if (rb != null)
