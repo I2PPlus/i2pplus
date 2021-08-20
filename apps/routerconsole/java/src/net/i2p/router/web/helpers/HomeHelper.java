@@ -137,6 +137,7 @@ public class HomeHelper extends HelperBase {
         _x("Pastebin") + S + _x("Encrypted I2P Pastebin") + S + "http://paste.r4sas.i2p/" + S + I + "svg/paste.svg" + S +
         _x("radio.r4sas.i2p") + S + _x("Streaming radio service") + S + "http://radio.r4sas.i2p/" + S + I + "svg/radio.svg" + S +
            "tube.i2p" + S + _x("Alternative front-end to Youtube") + S + "http://tube.i2p/" + S + I + "svg/tv.svg" + S +
+           "speedtest" + S + _x("Outproxy bandwidth test") + S + "http://outproxy.purokishi.i2p/speedtest/" + S + I + "svg/speedometer.svg" + S +
            "webhosting.i2p" + S + _x("Provider of privacy respecting web hosting and VPN services") + S + "http://webhosting.i2p/" + S + I + "svg/incog.svg" + S +
         //_x("Deep Web Radio") + S + _x("Streaming radio service") + S + "http://deepwebradio.i2p/" + S + I + "svg/radio.svg" + S +
 
@@ -320,7 +321,7 @@ public class HomeHelper extends HelperBase {
             }
             buf.append("\n<div class=\"app");
             // tag sites that require javascript to function
-            if (url.contains("i2pmetrics") || url.contains("paste.r4sas") || url.contains("zeronet"))
+            if (url.contains("i2pmetrics") || url.contains("paste.r4sas") || url.contains("zeronet") || url.contains("speedtest"))
                 buf.append(" js");
             buf.append("\" style=\"display: inline-block; text-align: center;\">\n" +
                        "<div class=\"appimg\">" +
