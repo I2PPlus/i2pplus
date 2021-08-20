@@ -66,7 +66,7 @@ class RefreshRoutersJob extends JobImpl {
 
     public void runJob() {
         Random rand = new Random();
-//        int netDbCount = _facade.getAllRouters().size();
+        int netDbDiskCount = _facade.getAllRouters().size();
         long lag = getContext().jobQueue().getMaxLag();
         int netDbCount = getContext().netDb().getKnownRouters();
         if (_facade.isInitialized() && lag < 500 && getContext().commSystem().getStatus() != Status.DISCONNECTED && netDbCount < 8000) {
@@ -117,7 +117,7 @@ class RefreshRoutersJob extends JobImpl {
                 long older = getContext().clock().now() - ri.getPublished();
                 String freshness = getContext().getProperty("router.refreshSkipIfYounger");
                 String refreshTimeout = getContext().getProperty("router.refreshTimeout");
-                int routerAge = 60*60*1000;
+                int routerAge = 15*60*1000;
                 String v = ri.getVersion();
                 String MIN_VERSION = "0.9.48";
                 boolean isHidden =  getContext().router().isHidden();
@@ -126,7 +126,8 @@ class RefreshRoutersJob extends JobImpl {
                                          ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
                                          VersionComparator.comp(v, MIN_VERSION) < 0) &&
                                          getContext().netDb().getKnownRouters() > 2000 &&
-                                         getContext().router().getUptime() > 60*60*1000 && !isHidden;
+                                         getContext().router().getUptime() > 60*60*1000 && !isHidden &&
+                                         netDbDiskCount > 500;
                 boolean refreshUninteresting = getContext().getBooleanProperty(PROP_ROUTER_REFRESH_UNINTERESTING);
                 int rapidScan = 10*60*1000;
                 if (uninteresting) {
