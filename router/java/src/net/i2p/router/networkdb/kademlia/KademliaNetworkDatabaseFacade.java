@@ -777,8 +777,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                                      ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                      ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
                                      VersionComparator.comp(v, MIN_VERSION) < 0) &&
-                                     _context.router().getUptime() > 2*60*60*1000 &&
+                                     _context.router().getUptime() > 15*60*1000 &&
                                      _context.netDb().getKnownRouters() > 3000;
+
             if (uninteresting && !isHidden && !us.equals(ri.getIdentity().getHash())) {
                 _ds.remove(key);
 //                _kb.remove(key);

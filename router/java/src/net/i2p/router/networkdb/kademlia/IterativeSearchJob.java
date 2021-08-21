@@ -108,7 +108,8 @@ public class IterativeSearchJob extends FloodSearchJob {
     /**
      * The default single search time
      */
-    private static final long SINGLE_SEARCH_TIME = 3*1000;
+//    private static final long SINGLE_SEARCH_TIME = 3*1000;
+    private static final long SINGLE_SEARCH_TIME = 5*1000;
     /** the actual expire time for a search message */
     private static final long SINGLE_SEARCH_MSG_TIME = 20*1000;
     /**
@@ -166,7 +167,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                                     ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
                                     VersionComparator.comp(v, MIN_VERSION) < 0 &&
                                     ctx.netDb().getKnownRouters() > 3000 &&
-                                    ctx.router().getUptime() > 60*60*1000 && !isHidden;
+                                    ctx.router().getUptime() > 15*60*1000 && !isHidden;
             if (uninteresting) {
                 _timeoutMs = Math.min(timeoutMs / 2, MAX_SEARCH_TIME / 2);
                 totalSearchLimit -= 2;
