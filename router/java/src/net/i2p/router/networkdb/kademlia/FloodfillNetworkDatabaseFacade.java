@@ -566,7 +566,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     /** NTCP cons drop quickly but SSU takes a while, so it's prudent to keep this
      *  a little higher than 1 or 2. */
 //    protected final static int MIN_ACTIVE_PEERS = 5;
-    protected final static int MIN_ACTIVE_PEERS = 10;
+    protected final static int MIN_ACTIVE_PEERS = 20;
 
     /** @since 0.8.7 */
     private static final int MAX_DB_BEFORE_SKIPPING_SEARCH;
@@ -574,7 +574,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         long maxMemory = SystemVersion.getMaxMemory();
         // 250 for every 32 MB, min of 250, max of 1250
 //        MAX_DB_BEFORE_SKIPPING_SEARCH = (int) Math.max(250l, Math.min(1250l, maxMemory / ((32 * 1024 * 1024l) / 250)));
-        MAX_DB_BEFORE_SKIPPING_SEARCH = 12000;
+        MAX_DB_BEFORE_SKIPPING_SEARCH = 8000;
     }
 
     /**
