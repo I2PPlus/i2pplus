@@ -149,9 +149,8 @@ public class IterativeSearchJob extends FloodSearchJob {
                               Job onFind, Job onFailed, int timeoutMs, boolean isLease, Hash fromLocalDest) {
         super(ctx, facade, key, onFind, onFailed, timeoutMs, isLease);
         RouterInfo ri = _facade.lookupRouterInfoLocally(getContext().routerHash());
-        boolean isHidden =  ctx.router().isHidden();
+        boolean isHidden = ctx.router().isHidden();
         int known = ctx.netDb().getKnownRouters();
-        int netDbDiskCount = _facade.getAllRouters().size();
         int totalSearchLimit = (facade.floodfillEnabled() && ctx.router().getUptime() > 30*60*1000) ?
                                 TOTAL_SEARCH_LIMIT_WHEN_FF : TOTAL_SEARCH_LIMIT;
 
@@ -166,7 +165,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                                     ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                     ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
                                     VersionComparator.comp(v, MIN_VERSION) < 0 &&
-                                    ctx.netDb().getKnownRouters() > 2000 && netDbDiskCount > 1000 &&
+                                    ctx.netDb().getKnownRouters() > 3000 &&
                                     ctx.router().getUptime() > 60*60*1000 && !isHidden;
             if (uninteresting) {
                 _timeoutMs = Math.min(timeoutMs / 2, MAX_SEARCH_TIME / 2);
