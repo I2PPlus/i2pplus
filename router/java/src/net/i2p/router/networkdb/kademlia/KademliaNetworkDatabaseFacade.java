@@ -780,7 +780,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                                      VersionComparator.comp(v, MIN_VERSION) < 0) &&
                                      _context.router().getUptime() > 2*60*60*1000 &&
                                      _context.netDb().getKnownRouters() > 2000 &&
-                                     netDbDiskCount > 500 &&
+                                     netDbDiskCount > 1000 &&
                                      !us.equals(ri.getIdentity().getHash());
             if (uninteresting && !isHidden) {
                 _ds.remove(key);

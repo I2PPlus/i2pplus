@@ -127,7 +127,7 @@ class RefreshRoutersJob extends JobImpl {
                                          VersionComparator.comp(v, MIN_VERSION) < 0) &&
                                          getContext().netDb().getKnownRouters() > 2000 &&
                                          getContext().router().getUptime() > 60*60*1000 && !isHidden &&
-                                         netDbDiskCount > 500;
+                                         netDbDiskCount > 1000;
                 boolean refreshUninteresting = getContext().getBooleanProperty(PROP_ROUTER_REFRESH_UNINTERESTING);
                 int rapidScan = 10*60*1000;
                 if (uninteresting) {
@@ -153,9 +153,9 @@ class RefreshRoutersJob extends JobImpl {
 //                    Job DropLookupFoundJob = new _facade.DropLookupFoundJob();
 //                    _facade.search(h, null, new DropLookupFoundJob(getContext(), h, ri) , 20*1000, false);
                     if (refreshTimeout == null)
-                        _facade.search(h, null, null , 20*1000, false);
+                        _facade.search(h, null, null, 20*1000, false);
                     else
-                        _facade.search(h, null, null , Integer.valueOf(refreshTimeout)*1000, false);
+                        _facade.search(h, null, null, Integer.valueOf(refreshTimeout)*1000, false);
                     break;
                 } else {
                     if (_log.shouldLog(Log.DEBUG))
