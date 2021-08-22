@@ -323,7 +323,8 @@ public class PersistentDataStore extends TransientDataStore {
             dbFile = new File(_dbDir, filename);
             long dataPublishDate = getPublishDate(data);
 //            if (dbFile.lastModified() < dataPublishDate) {
-            if (dbFile.lastModified() < dataPublishDate && !uninteresting) {
+//            if (dbFile.lastModified() < dataPublishDate && !uninteresting) {
+            if (dbFile.lastModified() < dataPublishDate) {
                 // our filesystem is out of date, let's replace it
                 fos = new SecureFileOutputStream(dbFile);
                 fos = new BufferedOutputStream(fos);
@@ -338,15 +339,17 @@ public class PersistentDataStore extends TransientDataStore {
                     dbFile.delete();
                 }
             } else {
+/*
                 if (uninteresting) {
                     if (_log.shouldLog(Log.DEBUG))
                         _log.debug("Not writing uninteresting RouterInfo [" + key.toBase64().substring(0,6) + "] to disk");
                         dbFile.delete();
                 } else {
+*/
                     // we've already written the file, no need to waste our time
                     if (_log.shouldLog(Log.DEBUG))
                         _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk - Already up to date");
-                }
+//                }
             }
         } catch (IOException ioe) {
             _log.error("Error writing out the object", ioe);
