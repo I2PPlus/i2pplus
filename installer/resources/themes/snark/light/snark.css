@@ -4434,7 +4434,9 @@ tfoot .snarkTorrentRateDown::after, tfoot .snarkTorrentRateUp::after {
   }
 
   .active.starting .snarkTorrentStatus b, .active.starting.processing .snarkTorrentStatus b {
-    background: repeating-linear-gradient(135deg, #dd5, #dd5 8px, #550 9px, #550 17px) !important;
+    color: #27293f !important;
+    text-shadow: 0 1px 1px rgba(255,255,255,.5);
+    background: repeating-linear-gradient(135deg, #dd5, #dd5 8px, #993 9px, #993 17px) !important;
   }
 
   .inactive.downloading .snarkTorrentStatus b::before, .active.starting .snarkTorrentStatus b::before {
