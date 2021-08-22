@@ -773,16 +773,14 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             String v = ri.getVersion();
             String MIN_VERSION = "0.9.48";
             Hash us = _context.routerHash();
-            int netDbDiskCount = getAllRouters().size();
             boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
                                      ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                      ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
                                      VersionComparator.comp(v, MIN_VERSION) < 0) &&
-                                     _context.router().getUptime() > 2*60*60*1000 &&
-                                     _context.netDb().getKnownRouters() > 2000 &&
-                                     netDbDiskCount > 1000 &&
-                                     !us.equals(ri.getIdentity().getHash());
-            if (uninteresting && !isHidden) {
+                                     _context.router().getUptime() > 15*60*1000 &&
+                                     _context.netDb().getKnownRouters() > 3000;
+
+            if (uninteresting && !isHidden && !us.equals(ri.getIdentity().getHash())) {
                 _ds.remove(key);
 //                _kb.remove(key);
                 if (_log.shouldInfo())

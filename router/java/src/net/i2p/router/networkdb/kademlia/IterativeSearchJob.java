@@ -108,7 +108,8 @@ public class IterativeSearchJob extends FloodSearchJob {
     /**
      * The default single search time
      */
-    private static final long SINGLE_SEARCH_TIME = 3*1000;
+//    private static final long SINGLE_SEARCH_TIME = 3*1000;
+    private static final long SINGLE_SEARCH_TIME = 5*1000;
     /** the actual expire time for a search message */
     private static final long SINGLE_SEARCH_MSG_TIME = 20*1000;
     /**
@@ -149,6 +150,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                               Job onFind, Job onFailed, int timeoutMs, boolean isLease, Hash fromLocalDest) {
         super(ctx, facade, key, onFind, onFailed, timeoutMs, isLease);
         RouterInfo ri = _facade.lookupRouterInfoLocally(getContext().routerHash());
+        boolean isHidden = ctx.router().isHidden();
         int known = ctx.netDb().getKnownRouters();
         int totalSearchLimit = (facade.floodfillEnabled() && ctx.router().getUptime() > 30*60*1000) ?
                                 TOTAL_SEARCH_LIMIT_WHEN_FF : TOTAL_SEARCH_LIMIT;
@@ -162,8 +164,10 @@ public class IterativeSearchJob extends FloodSearchJob {
             String v = ri.getVersion();
             boolean uninteresting = ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
                                     ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
-                                    ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 || VersionComparator.comp(v, MIN_VERSION) < 0;
-
+                                    ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
+                                    VersionComparator.comp(v, MIN_VERSION) < 0 &&
+                                    ctx.netDb().getKnownRouters() > 3000 &&
+                                    ctx.router().getUptime() > 15*60*1000 && !isHidden;
             if (uninteresting) {
                 _timeoutMs = Math.min(timeoutMs / 2, MAX_SEARCH_TIME / 2);
                 totalSearchLimit -= 2;
@@ -179,7 +183,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         _totalSearchLimit = ctx.getProperty("netdb.searchLimit", totalSearchLimit);
         _ipSet = new MaskedIPSet(2 * (_totalSearchLimit + EXTRA_PEERS));
         _singleSearchTime = ctx.getProperty("netdb.singleSearchTime", SINGLE_SEARCH_TIME);
-        _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT);
+        _maxConcurrent = ctx.router().getUptime() > 30*60*1000 ? ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT) : 2;
         _unheardFrom = new HashSet<Hash>(CONCURRENT_SEARCHES);
         _failedPeers = new HashSet<Hash>(_totalSearchLimit);
         _skippedPeers = new HashSet<Hash>(4);

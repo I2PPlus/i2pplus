@@ -59,7 +59,7 @@ public class ReseedChecker {
      *  @return true if a reseed was started
      */
     public boolean checkReseed(int known) {
-        boolean isHidden =  _context.router().isHidden();
+        boolean isHidden = _context.router().isHidden();
         if (_context.router().getUptime() < 10*60*1000 && known > 1 && !isHidden) {
             return false;
 /*
