@@ -73,7 +73,8 @@ public class PersistentDataStore extends TransientDataStore {
     public PersistentDataStore(RouterContext ctx, String dbDir, KademliaNetworkDatabaseFacade facade) throws IOException {
         super(ctx);
         _networkID = ctx.router().getNetworkID();
-        _flat = ctx.getBooleanPropertyDefaultTrue(PROP_FLAT);
+        _flat = ctx.getBooleanProperty(PROP_FLAT);
+//        _flat = ctx.getBooleanPropertyDefaultTrue(PROP_FLAT);
         _dbDir = getDbDir(dbDir);
         _facade = facade;
         _readJob = new ReadJob();
@@ -298,10 +299,11 @@ public class PersistentDataStore extends TransientDataStore {
     }
 
     private void write(Hash key, DatabaseEntry data) {
-        RouterInfo ri = new RouterInfo();
+        RouterInfo ri = _context.netDb().lookupRouterInfoLocally(key);
         String v = ri.getVersion();
         String MIN_VERSION = "0.9.48";
         boolean isHidden = _context.router().isHidden();
+        boolean unreachable = ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
         boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
                                 ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                 ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
@@ -339,17 +341,17 @@ public class PersistentDataStore extends TransientDataStore {
                     dbFile.delete();
                 }
             } else {
-/*
-                if (uninteresting) {
+
+                if (unreachable) {
                     if (_log.shouldLog(Log.DEBUG))
-                        _log.debug("Not writing uninteresting RouterInfo [" + key.toBase64().substring(0,6) + "] to disk");
+                        _log.debug("Not writing unreachable RouterInfo [" + key.toBase64().substring(0,6) + "] to disk");
                         dbFile.delete();
                 } else {
-*/
+
                     // we've already written the file, no need to waste our time
                     if (_log.shouldLog(Log.DEBUG))
                         _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk - Already up to date");
-//                }
+                }
             }
         } catch (IOException ioe) {
             _log.error("Error writing out the object", ioe);

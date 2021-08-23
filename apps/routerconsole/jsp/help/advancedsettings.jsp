@@ -84,7 +84,7 @@
 <tr><td>Defines the maximum percentage of active local tunnels (client and exploratory) that a peer will be used for. [Default is 25%]</td></tr>
 
 <tr><th>router.networkDatabase.flat={true|false}</th></tr>
-<tr><td>When set to true, the router info files stored in your profile's netDB directory will not be split into 64 sub-directories. [Default is true in I2P+, false in I2P]</td></tr>
+<tr><td>When set to true, the router info files stored in your profile's netDB directory will not be split into 64 sub-directories. [Default is false]</td></tr>
 
 <tr><th>router.rebuildKeys={true|false}</th></tr>
 <tr><td>When set to true, the router will change its identity and UDP port when the router restarts and then delete the key from router.config to prevent further changes. [Default is false]</td></tr>
