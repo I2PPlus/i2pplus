@@ -301,7 +301,7 @@ public class PersistentDataStore extends TransientDataStore {
     private void write(Hash key, DatabaseEntry data) {
         RouterInfo ri = _context.netDb().lookupRouterInfoLocally(key);
         String v = ri.getVersion();
-        String MIN_VERSION = "0.9.49";
+        String MIN_VERSION = "0.9.50";
         boolean isHidden = _context.router().isHidden();
         boolean unreachable = ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
         boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;
@@ -573,7 +573,7 @@ public class PersistentDataStore extends TransientDataStore {
                     RouterInfo ri = new RouterInfo();
                     ri.readBytes(fis, true);  // true = verify sig on read
                     String v = ri.getVersion();
-                    String MIN_VERSION = "0.9.49";
+                    String MIN_VERSION = "0.9.50";
                     if (ri.getNetworkId() != _networkID) {
                         corrupt = true;
                         if (_log.shouldLog(Log.ERROR))

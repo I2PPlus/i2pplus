@@ -348,7 +348,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
                 // Uncomment if stricter than in shouldExclude() below
                 String v = peer.getVersion();
-                if (VersionComparator.comp(v, "0.9.49") < 0) {
+                if (VersionComparator.comp(v, "0.9.50") < 0) {
                     rv.add(h);
                     continue;
                 }

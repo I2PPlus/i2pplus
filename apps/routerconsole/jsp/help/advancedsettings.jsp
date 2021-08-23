@@ -171,7 +171,7 @@
 <tr><td>This setting (in seconds) allows you to manually configure the amount of time to wait before an attempt to refresh a router is determined to have failed. [The default is 20 seconds]</td></tr>
 
 <tr><th>router.refreshUninteresting={true|false} <span class="plus">I2P+</span></th></tr>
-<tr><td>This setting determines whether routers classified as uninteresting (K or L tier, unreachable or older than 0.9.48) are checked during the refresh router process after 1 hour of uptime. [Default is false]</td></tr>
+<tr><td>This setting determines whether routers classified as uninteresting (K or L tier, unreachable or older than 0.9.50) are checked during the refresh router process after 1 hour of uptime. [Default is false]</td></tr>
 
 <tr><th>router.validateRoutersAfter={n} <span class="plus">I2P+</span></th></tr>
 <tr><td>This setting (in minutes) allows you to manually configure how long to wait after startup before RouterInfos in the NetDb are checked for validity, after which point only valid routers will be accepted for inclusion. When the validation occurs, expired RouterInfos and unresponsive peers only accessible via SSU will be removed from the NetDb. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0.9.29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted.</td></tr>
