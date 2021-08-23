@@ -304,6 +304,7 @@ public class PersistentDataStore extends TransientDataStore {
         String MIN_VERSION = "0.9.48";
         boolean isHidden = _context.router().isHidden();
         boolean unreachable = ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
+        boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;
         boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
                                 ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                 ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
@@ -326,7 +327,7 @@ public class PersistentDataStore extends TransientDataStore {
             long dataPublishDate = getPublishDate(data);
 //            if (dbFile.lastModified() < dataPublishDate) {
 //            if (dbFile.lastModified() < dataPublishDate && !uninteresting) {
-            if (dbFile.lastModified() < dataPublishDate && !unreachable) {
+            if (dbFile.lastModified() < dataPublishDate && !unreachable && !isOld) {
                 // our filesystem is out of date, let's replace it
                 fos = new SecureFileOutputStream(dbFile);
                 fos = new BufferedOutputStream(fos);
@@ -341,13 +342,15 @@ public class PersistentDataStore extends TransientDataStore {
                     dbFile.delete();
                 }
             } else {
-
                 if (unreachable) {
                     if (_log.shouldLog(Log.DEBUG))
                         _log.debug("Not writing unreachable RouterInfo [" + key.toBase64().substring(0,6) + "] to disk");
                         dbFile.delete();
+                } else if (isOld) {
+                    if (_log.shouldLog(Log.DEBUG))
+                        _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk (router version is outdated)");
+                        dbFile.delete();
                 } else {
-
                     // we've already written the file, no need to waste our time
                     if (_log.shouldLog(Log.DEBUG))
                         _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk - Already up to date");
