@@ -11021,8 +11021,8 @@ p#gatherstats {
   text-align: center;
   border: 1px solid #aaafce;
   box-shadow: 0 0 1px 1px #e8e8f8;
-  background: #fff !important;
-  animation: ease grid-fade 1s forwards;
+  background: #fff;
+  animation: ease zoom .1s forwards;
 }
 
 .graphContainer#hidpi {
@@ -11050,22 +11050,19 @@ p#gatherstats {
 #graphs .statimage, #graphs .statimage:hover, #graphs a:hover .statimage, #graph_single .statimage, #graph_single .statimage:hover {
   margin: 0 !important;
   padding: 0 !important;
-  min-width: 180px;
-  min-height: 40px;
   max-width: calc(100% + 2px) !important;
   border: none !important;
   box-shadow: none !important;
 }
 
-@keyframes grid-fade {
-  from {
-    background: repeating-linear-gradient(to right, rgba(0,0,0,0), #efefef 1px, rgba(0,0,0,0) 1px, rgba(0,0,0,0) 10px),
-                repeating-linear-gradient(to bottom, #efefff, #efefff 1px, #f6f6ff 1px, #f6f6ff 10px);
-  }
-  to {
-    background: repeating-linear-gradient(to right, rgba(0,0,0,0), #f6f6ff 1px, rgba(0,0,0,0) 1px, rgba(0,0,0,0) 10px),
-                repeating-linear-gradient(to bottom, #f6f6ff, #f6f6ff 1px, #f6f6ff 1px, #f6f6ff 10px);
-  }
+#graphs .statimage {
+  min-width: 180px;
+  min-height: 40px;
+}
+
+@keyframes zoom {
+  from {transform: scale(.8)}
+  to {transform: scale(1)}
 }
 
 .graphContainer > * {
@@ -11081,9 +11078,9 @@ p#gatherstats {
 }
 
 @media screen and (min-width: 1500px) {
-#wizardpage .routersummary div[style="height: 36px;"] {
-  height: 45px !important;
-}
+  #wizardpage .routersummary div[style="height: 36px;"] {
+    height: 45px !important;
+  }
 }
 
 #wizardpage .yes, #wizardpage .no {
