@@ -519,7 +519,7 @@ abstract class StoreJob extends JobImpl {
                 sent = MessageWrapper.wrap(ctx, msg, peer);
                 if (sent == null) {
                     if (_log.shouldLog(Log.WARN))
-                        _log.warn("Fail garlic encrypting from: " + client);
+                        _log.warn("Failed garlic encrypting from client: [" + client.toBase64().substring(0,6) + "]");
                     fail();
                     return;
                 }
@@ -571,7 +571,7 @@ abstract class StoreJob extends JobImpl {
         TunnelInfo replyTunnel = ctx.tunnelManager().selectInboundExploratoryTunnel(to);
         if (replyTunnel == null) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("No inbound expl. tunnels for reply - delaying...");
+                _log.warn("No Inbound Exploratory tunnels for reply - delaying...");
             // continueSending() above did an addPending() so remove it here.
             // This means we will skip the peer next time, can't be helped for now
             // without modding StoreState
@@ -620,7 +620,7 @@ abstract class StoreJob extends JobImpl {
             ctx.tunnelDispatcher().dispatchOutbound(sent, outTunnel.getSendTunnelId(0), null, to);
         } else {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("No outbound expl. tunnels to send a dbStore out - delaying...");
+                _log.warn("No Outbound Exploratory tunnels to send a dbStore out - delaying...");
             // continueSending() above did an addPending() so remove it here.
             // This means we will skip the peer next time, can't be helped for now
             // without modding StoreState
@@ -646,8 +646,7 @@ abstract class StoreJob extends JobImpl {
     }
 
     /** @since 0.9.28 */
-//    public static final String MIN_STORE_VERSION = "0.9.38";
-    public static final String MIN_STORE_VERSION = "0.9.48";
+    public static final String MIN_STORE_VERSION = "0.9.38";
 
     /**
      * Is it new enough?
@@ -667,8 +666,7 @@ abstract class StoreJob extends JobImpl {
     }
 
     /** @since 0.9.38 */
-//    public static final String MIN_STORE_LS2_VERSION = "0.9.38";
-    public static final String MIN_STORE_LS2_VERSION = "0.9.48";
+    public static final String MIN_STORE_LS2_VERSION = "0.9.38";
 
     /**
      * Is it new enough?
@@ -683,8 +681,7 @@ abstract class StoreJob extends JobImpl {
      * Was supported in 38, but they're now sigtype 11 which wasn't added until 39
      * @since 0.9.39
      */
-//    public static final String MIN_STORE_ENCLS2_VERSION = "0.9.39";
-    public static final String MIN_STORE_ENCLS2_VERSION = "0.9.48";
+    public static final String MIN_STORE_ENCLS2_VERSION = "0.9.39";
 
     /**
      * Is it new enough?

@@ -348,7 +348,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
                 // Uncomment if stricter than in shouldExclude() below
                 String v = peer.getVersion();
-                if (VersionComparator.comp(v, "0.9.49") < 0) {
+                if (VersionComparator.comp(v, "0.9.50") < 0) {
                     rv.add(h);
                     continue;
                 }
@@ -581,7 +581,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         /**
          * not thread safe
          *
-         * @param h container for sort keys, not used as a Hash
+         * @param k container for sort keys, not used as a Hash
          */
         private HashComparator(SessionKey k) {
             byte[] b = k.getData();

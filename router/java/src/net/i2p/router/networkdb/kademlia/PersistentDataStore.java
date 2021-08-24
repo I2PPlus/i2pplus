@@ -73,7 +73,8 @@ public class PersistentDataStore extends TransientDataStore {
     public PersistentDataStore(RouterContext ctx, String dbDir, KademliaNetworkDatabaseFacade facade) throws IOException {
         super(ctx);
         _networkID = ctx.router().getNetworkID();
-        _flat = ctx.getBooleanPropertyDefaultTrue(PROP_FLAT);
+        _flat = ctx.getBooleanProperty(PROP_FLAT);
+//        _flat = ctx.getBooleanPropertyDefaultTrue(PROP_FLAT);
         _dbDir = getDbDir(dbDir);
         _facade = facade;
         _readJob = new ReadJob();
@@ -298,10 +299,12 @@ public class PersistentDataStore extends TransientDataStore {
     }
 
     private void write(Hash key, DatabaseEntry data) {
-        RouterInfo ri = new RouterInfo();
+        RouterInfo ri = _context.netDb().lookupRouterInfoLocally(key);
         String v = ri.getVersion();
-        String MIN_VERSION = "0.9.48";
+        String MIN_VERSION = "0.9.50";
         boolean isHidden = _context.router().isHidden();
+        boolean unreachable = ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
+        boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;
         boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
                                 ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                 ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
@@ -324,7 +327,7 @@ public class PersistentDataStore extends TransientDataStore {
             long dataPublishDate = getPublishDate(data);
 //            if (dbFile.lastModified() < dataPublishDate) {
 //            if (dbFile.lastModified() < dataPublishDate && !uninteresting) {
-            if (dbFile.lastModified() < dataPublishDate) {
+            if (dbFile.lastModified() < dataPublishDate && !unreachable && !isOld) {
                 // our filesystem is out of date, let's replace it
                 fos = new SecureFileOutputStream(dbFile);
                 fos = new BufferedOutputStream(fos);
@@ -339,17 +342,19 @@ public class PersistentDataStore extends TransientDataStore {
                     dbFile.delete();
                 }
             } else {
-/*
-                if (uninteresting) {
+                if (unreachable) {
                     if (_log.shouldLog(Log.DEBUG))
-                        _log.debug("Not writing uninteresting RouterInfo [" + key.toBase64().substring(0,6) + "] to disk");
+                        _log.debug("Not writing unreachable RouterInfo [" + key.toBase64().substring(0,6) + "] to disk");
+                        dbFile.delete();
+                } else if (isOld) {
+                    if (_log.shouldLog(Log.DEBUG))
+                        _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk (older than " + MIN_VERSION + ")");
                         dbFile.delete();
                 } else {
-*/
                     // we've already written the file, no need to waste our time
                     if (_log.shouldLog(Log.DEBUG))
-                        _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk - Already up to date");
-//                }
+                        _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk (already up to date)");
+                }
             }
         } catch (IOException ioe) {
             _log.error("Error writing out the object", ioe);
@@ -375,8 +380,7 @@ public class PersistentDataStore extends TransientDataStore {
         private volatile long _lastReseed;
         private volatile boolean _setNetDbReady;
         private static final int MIN_ROUTERS = KademliaNetworkDatabaseFacade.MIN_RESEED;
-//        private static final long MIN_RESEED_INTERVAL = 90*60*1000;
-        private static final long MIN_RESEED_INTERVAL = 2*60*60*1000;
+        private static final long MIN_RESEED_INTERVAL = 90*60*1000;
 
         public ReadJob() {
             super(PersistentDataStore.this._context);
@@ -569,7 +573,7 @@ public class PersistentDataStore extends TransientDataStore {
                     RouterInfo ri = new RouterInfo();
                     ri.readBytes(fis, true);  // true = verify sig on read
                     String v = ri.getVersion();
-                    String MIN_VERSION = "0.9.48";
+                    String MIN_VERSION = "0.9.50";
                     if (ri.getNetworkId() != _networkID) {
                         corrupt = true;
                         if (_log.shouldLog(Log.ERROR))
@@ -605,7 +609,7 @@ public class PersistentDataStore extends TransientDataStore {
                         // don't store routerinfos for routers older than 0.9.48
                         corrupt = true;
                         if (_log.shouldLog(Log.INFO))
-                            _log.info("Not writing RouterInfo [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] to disk -> older than 0.9.48");
+                            _log.info("Not writing RouterInfo [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] to disk -> older than " + MIN_VERSION);
                         _routerFile.delete();
                     } else if (getContext().blocklist().isBlocklisted(ri)) {
                         corrupt = true;
@@ -738,7 +742,8 @@ public class PersistentDataStore extends TransientDataStore {
     public static File getRouterInfoFile(RouterContext ctx, Hash hash) {
         String b64 = hash.toBase64();
         File dir = new File(ctx.getRouterDir(), ctx.getProperty(KademliaNetworkDatabaseFacade.PROP_DB_DIR, KademliaNetworkDatabaseFacade.DEFAULT_DB_DIR));
-        if (ctx.getBooleanPropertyDefaultTrue(PROP_FLAT))
+//        if (ctx.getBooleanPropertyDefaultTrue(PROP_FLAT))
+        if (ctx.getBooleanProperty(PROP_FLAT))
             return new File(dir, ROUTERINFO_PREFIX + b64 + ROUTERINFO_SUFFIX);
         return new File(dir, DIR_PREFIX + b64.charAt(0) + File.separatorChar + ROUTERINFO_PREFIX + b64 + ROUTERINFO_SUFFIX);
     }
