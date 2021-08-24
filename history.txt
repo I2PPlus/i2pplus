@@ -157,7 +157,7 @@ I2PSnark: Add timestamps to screenlog using local system time
  * Imagegen: Theme refresh
 
 2021-06-04 dr|z3d
- * Console: Tefresh sidebar logos
+ * Console: Refresh sidebar logos
 
 2021-06-01 zzz
  * i2psnark: Fix autostart for magnets
