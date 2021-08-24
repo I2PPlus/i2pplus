@@ -1,13 +1,31 @@
-2021-08-23 1.5.0+ released
+2021-08-24 1.5.0+ released
+
+2021-08-24 dr|z3d
+ * NetDb: Don't store older (<0.9.50) or unreachable RIs on disk
+
+2021-08-21 dr|z3d
+ * Router: During first 1/2h uptime, refresh routers more aggressively
 
 2021-08-20 zzz
  * Update GeoIP and translations
+
+2021-08-18 dr|z3d
+ * Console: Add generation of etags for javascript assets
+
+2021-08-17 dr|z3d
+* Router: Reduce default max tunnels -> isSlow 2K / 8K
 
 2021-08-13 zzz
  * Crypto: Fix corruption of EC and DSA private keys on Java 17
 
 2021-08-07 zzz
  * UPnP: Fix URL handling
+
+2021-08-03 dr|z3d
+ * Router: Add config router.buildHandlerMaxQueue for tunnel build queue
+
+2021-08-02 dr|z3d
+ * Console: Theme icon and flags optimization
 
 2021-08-02 zzz
  * Console: Show restart button if there's an update
@@ -19,6 +37,12 @@
 2021-07-28 zzz
  * Tunnels: Fixes for proposal 157
 
+2021-07-26 dr|z3d
+I2PSnark: Add timestamps to screenlog using local system time
+
+2021-07-24 dr|z3d
+ * I2PSnark: Show comments section in all directories, not just top level
+
 2021-07-23 zzz
  * Transport: Fix UPnP IPv6 NPE
 
@@ -28,17 +52,65 @@
 2021-07-20 zzz
  * NetDB: Increase min ff version to 0.9.38
 
+2021-07-20 dr|z3d
+ * I2PSnark: Update file icons to svg
+
 2021-07-18 zzz
  * Tunnels: Updates for proposal 157
+
+2021-07-17 dr|z3d
+ * Console/Webapps: Replace droid ttf fonts with woff2, preload and cache hard
+
+2021-07-16 dr|z3d
+ * I2PSnark: Add splash page to standalone version
+ * Proxy: Display pageload bar while waiting for auto-reload
+
+2021-07-13 dr|z3d
+ * I2PSnark: Migrate torrent status icons to in-war svgs
+
+2021-07-13 dr|z3d
+ * Router: require config to enable custom xi2p-location header
+  (i2p.tunnel.webserverLocationHeader={true/false})
+
+2021-07-12 dr|z3d
+ * Console: Fix links to LeaseSets on /tunnels
+
+2021-07-11 dr|z3d
+ * Router: Fix router.exploreWhenFloodfill=true
+
+2021-07-10 dr|z3d
+ * Router: Increase NTCP peer bandwidth update period to 1m (was 15s)
+
+2021-07-08 dr|z3d
+ * Router: Add configurable value for i2p.streaming.immediateAckDelay
+
+2021-07-07 dr|z3d
+ * Router: Query more floodfills if we're searching for a LeaseSet
 
 2021-07-07 zzz
  * Streaming: Reduce immediate ack delay
 
+2021-07-06 dr|z3d
+ * SusiMail: Theme updates
+
+2021-07-05 dr|z3d
+ * Router: Reduce ExploreJob run time if SystemVersion.isSlow()
+
 2021-07-02 zzz
  * UPnP: IPv6 address validation fix
 
+2021-06-26 dr|z3d
+ * Console: Migrate background images to inline css variables (classic)
+
+2021-06-25 dr|z3d
+ * Console: Remove sites of interest section from readmes
+
+2021-06-24 dr|z3d
+* Console: Show active peers min / hour in sidebar if advanced mode active
+
 2021-06-23 dr|z3d
  * Console: Move svg and 48x48 flags into routerconsole.war
+ * Router: Increase max threads for NTCP/SSU on high performance routers
 
 2021-06-22 zzz
  * Tests: Fix duplicate classes in i2ptest.jar
@@ -51,6 +123,12 @@
  * Console: Add Permissions-Policy header
  * SSU: Fix handling of bad peer test responses
  * Transport: Remove 4/6 caps config
+
+2021-06-17 dr|z3d
+ * Console: Refresh itooplus logo
+
+2021-06-17 dr|z3d
+ * I2PSnark: Renovate zilvero theme
 
 2021-06-16 zzz
  * Router: Increase key pool sizes for slow machines
@@ -75,21 +153,32 @@
    - Extend use of high cap peers in expl. tunnels at startup, after extended downtime
    - Switch from SHA256 to SipHash for peer ordering
 
-2021-06-01 dr|z3d
- * Proxy: split proxy-related css into own files
+2021-06-06 dr|z3d
+ * Imagegen: Theme refresh
+
+2021-06-04 dr|z3d
+ * Console: Tefresh sidebar logos
 
 2021-06-01 zzz
  * i2psnark: Fix autostart for magnets
  * Router: Fix JobQueue getLastJobBegin() and getLastJobEnd() (ticket #2809)
 
+2021-06-01 dr|z3d
+ * Proxy: Split proxy-related css into own files
+
+2021-05-29 dr|z3d
+ * I2PSnark: Renovate vanilla theme
+
+2021-05-25 dr|z3d
+ * Console: Use KB/s on participating tunnels page to fix sorting issue (#11)
+
 2021-05-23 zzz
  * UPnP: Fix IPv6 address check (ticket #2811)
 
-2021-05-21 zzz
- * Router: Increase rekey probability
- * RRD4J 3.8
-
 * 2021-05-22 0.9.50+ released
+
+2021-05-21 zzz
+ * RRD4J 3.8
 
 2021-05-21 dr|z3d
  * Router: Increase chance of rekey to ECIES to 1 in 2
