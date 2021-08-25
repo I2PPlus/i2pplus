@@ -300,22 +300,22 @@ public class PersistentDataStore extends TransientDataStore {
 
     private void write(Hash key, DatabaseEntry data) {
         RouterInfo ri = _context.netDb().lookupRouterInfoLocally(key);
-        String v = ri.getVersion();
-        String MIN_VERSION = "0.9.50";
         boolean isHidden = _context.router().isHidden();
-        boolean unreachable = ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
-        boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;
-        boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
-                                ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
-                                ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
-                                VersionComparator.comp(v, MIN_VERSION) < 0) &&
-                                _context.netDb().getKnownRouters() > 3000 &&
-                                _context.router().getUptime() > 15*60*1000
-                                && !isHidden;
         OutputStream fos = null;
         File dbFile = null;
 
         try {
+            String MIN_VERSION = "0.9.50";
+            String v = ri.getVersion();
+            boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;
+            boolean unreachable = ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
+            boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
+                                    ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
+                                    ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
+                                    VersionComparator.comp(v, MIN_VERSION) < 0) &&
+                                    _context.netDb().getKnownRouters() > 3000 &&
+                                    _context.router().getUptime() > 15*60*1000
+                                    && !isHidden;
             String filename = null;
 
             if (data.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO)
@@ -327,7 +327,7 @@ public class PersistentDataStore extends TransientDataStore {
             long dataPublishDate = getPublishDate(data);
 //            if (dbFile.lastModified() < dataPublishDate) {
 //            if (dbFile.lastModified() < dataPublishDate && !uninteresting) {
-            if (dbFile.lastModified() < dataPublishDate && !unreachable && !isOld) {
+            if (dbFile.lastModified() < dataPublishDate && ri != null && !unreachable && !isOld) {
                 // our filesystem is out of date, let's replace it
                 fos = new SecureFileOutputStream(dbFile);
                 fos = new BufferedOutputStream(fos);
@@ -335,25 +335,28 @@ public class PersistentDataStore extends TransientDataStore {
                     data.writeBytes(fos);
                     fos.close();
                     dbFile.setLastModified(dataPublishDate);
-                    if (_log.shouldLog(Log.DEBUG) && !uninteresting)
+                    if (_log.shouldLog(Log.DEBUG) && ri != null && !unreachable && !isOld)
                         _log.debug("Writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk");
                 } catch (DataFormatException dfe) {
                     _log.error("Error writing out malformed object as [" + key.toBase64().substring(0,6) + "]: " + data, dfe);
                     dbFile.delete();
                 }
             } else {
-                if (unreachable) {
-                    if (_log.shouldLog(Log.DEBUG))
-                        _log.debug("Not writing unreachable RouterInfo [" + key.toBase64().substring(0,6) + "] to disk");
+                if (ri != null) {
+                    if (unreachable) {
+                        if (_log.shouldLog(Log.DEBUG))
+                            _log.debug("Not writing unreachable RouterInfo [" + key.toBase64().substring(0,6) + "] to disk");
                         dbFile.delete();
-                } else if (isOld) {
-                    if (_log.shouldLog(Log.DEBUG))
-                        _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk (older than " + MIN_VERSION + ")");
+
+                    } else if (ri != null && isOld) {
+                        if (_log.shouldLog(Log.DEBUG))
+                            _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk (older than " + MIN_VERSION + ")");
                         dbFile.delete();
-                } else {
-                    // we've already written the file, no need to waste our time
-                    if (_log.shouldLog(Log.DEBUG))
-                        _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk (already up to date)");
+                    } else {
+                        // we've already written the file, no need to waste our time
+                        if (_log.shouldLog(Log.DEBUG))
+                            _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk (already up to date)");
+                    }
                 }
             }
         } catch (IOException ioe) {
