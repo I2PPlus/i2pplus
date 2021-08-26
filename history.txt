@@ -1,3 +1,8 @@
+2021-08-26 zzz
+ * Debian: Fix dh_installdocs build error
+ * Router: Increase rekey probability
+ * Tunnels: Enable sending short build messages
+
 2021-08-24 1.5.0+ released
 
 2021-08-24 dr|z3d
@@ -38,7 +43,7 @@
  * Tunnels: Fixes for proposal 157
 
 2021-07-26 dr|z3d
-I2PSnark: Add timestamps to screenlog using local system time
+ * I2PSnark: Add timestamps to screenlog using local system time
 
 2021-07-24 dr|z3d
  * I2PSnark: Show comments section in all directories, not just top level
@@ -106,7 +111,7 @@ I2PSnark: Add timestamps to screenlog using local system time
  * Console: Remove sites of interest section from readmes
 
 2021-06-24 dr|z3d
-* Console: Show active peers min / hour in sidebar if advanced mode active
+ * Console: Show active peers min / hour in sidebar if advanced mode active
 
 2021-06-23 dr|z3d
  * Console: Move svg and 48x48 flags into routerconsole.war

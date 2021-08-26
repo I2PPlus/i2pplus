@@ -114,9 +114,6 @@ class BuildHandler implements Runnable {
 
     private static final long[] RATES = { 60*1000, 60*60*1000l };
 
-    // TODO remove when finished
-    private static final boolean HANDLE_SHORT = true;
-
     public BuildHandler(RouterContext ctx, TunnelPoolManager manager, BuildExecutor exec) {
         _context = ctx;
         _log = ctx.logManager().getLog(getClass());
@@ -988,11 +985,6 @@ class BuildHandler implements Runnable {
             // TODO options
             Properties props = EmptyProperties.INSTANCE;
             if (state.msg.getType() == ShortTunnelBuildMessage.MESSAGE_TYPE) {
-                if (!HANDLE_SHORT) {
-                    if (_log.shouldWarn())
-                        _log.warn("Unsupported ShortTunnelBuildMessage");
-                    return;
-                }
                 reply = BuildResponseRecord.createShort(_context, response, req.getChaChaReplyKey(), req.getChaChaReplyAD(), props, ourSlot);
             } else {
                 reply = BuildResponseRecord.create(_context, response, req.getChaChaReplyKey(), req.getChaChaReplyAD(), props);

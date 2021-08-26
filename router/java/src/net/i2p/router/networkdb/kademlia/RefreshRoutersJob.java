@@ -174,11 +174,11 @@ class RefreshRoutersJob extends JobImpl {
             }
         } else {
             if (netDbCount > 8000) {
-                _log.info("Over 8000 known routers, suspending Router Refresh job");
+                _log.info("Over 8000 known routers, suspending Refresh Routers job");
             } else if (lag > 500) {
-                _log.info("Job lag over 500ms, suspending Router Refresh job");
+                _log.info("Job lag over 500ms, suspending Refresh Routers job");
             } else if (getContext().commSystem().getStatus() == Status.DISCONNECTED) {
-                _log.info("Network disconnected, suspending Router Refresh job");
+                _log.info("Network disconnected, suspending Refresh Routers job");
             }
         }
 
