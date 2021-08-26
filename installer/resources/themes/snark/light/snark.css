@@ -557,7 +557,13 @@ tfoot th {
 }
 
 .ParentDir a img {
+  margin-left: 0;
   border: 1px solid transparent;
+}
+
+.ParentDir a img, .snarkFileIcon img {
+  width: 18px;
+  height: 18px;
 }
 
 .priority {
