@@ -134,7 +134,11 @@ public class JobQueue {
     private final static long MIN_LAG_TO_DROP = 500;
 
     /** @deprecated unimplemented */
-    @Deprecated
+//    @Deprecated
+
+    /**
+     *  @since 0.9.52+
+     */
     private final static String PROP_MAX_WAITING_JOBS = "router.maxWaitingJobs";
 
     /**
@@ -299,11 +303,12 @@ public class JobQueue {
      *
      */
     private boolean shouldDrop(Job job, long numReady) {
-        if (_maxWaitingJobs <= 0) return false; // dont ever drop jobs
-        if (!_allowParallelOperation) return false; // dont drop during startup [duh]
-        if (numReady > _maxWaitingJobs) {
+        if (_maxWaitingJobs <= 0) return false; // don't ever drop jobs
+        if (!_allowParallelOperation) return false; // don't drop during startup [duh]
+//        if (numReady > _maxWaitingJobs) {
+        if (numReady > _context.getProperty(PROP_MAX_WAITING_JOBS, DEFAULT_MAX_WAITING_JOBS)) {
             Class<? extends Job> cls = job.getClass();
-            // lets not try to drop too many tunnel messages...
+            // let's not try to drop too many tunnel messages...
             //if (cls == HandleTunnelMessageJob.class)
             //    return true;
 
