@@ -306,7 +306,9 @@ public class PersistentDataStore extends TransientDataStore {
 
         try {
             String MIN_VERSION = "0.9.50";
-            String v = ri.getVersion();
+            String v = MIN_VERSION;
+            if (ri != null)
+                v = ri.getVersion();
             boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;
             boolean unreachable = ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
             boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
