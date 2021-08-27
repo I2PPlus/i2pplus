@@ -82,7 +82,9 @@ class PeerTestJob extends JobImpl {
     private long getPeerTestDelay() {
         long uptime = getContext().router().getUptime();
         int testDelay = getContext().getProperty(PROP_PEER_TEST_DELAY, DEFAULT_PEER_TEST_DELAY);
-        if (uptime >= 3*60*1000)
+        if (uptime > 3*60*60*1000)
+            return testDelay + 1000;
+        else if (uptime >= 3*60*1000)
             return testDelay;
         else
             return testDelay + (3*60*1000 - uptime);
@@ -101,9 +103,9 @@ class PeerTestJob extends JobImpl {
     /** number of peers to test each round */
     private int getTestConcurrency() {
         int cores = SystemVersion.getCores();
-        long memory = SystemVersion.getMaxMemory()*1024*1024;
+        long memory = SystemVersion.getMaxMemory();
         int testConcurrent = getContext().getProperty(PROP_PEER_TEST_CONCURRENCY, DEFAULT_PEER_TEST_CONCURRENCY);
-        if (cores >=4 && memory >= 512)
+        if (cores >=4 && memory >= 512*1024*1024)
             testConcurrent = getContext().getProperty(PROP_PEER_TEST_CONCURRENCY, 4);
         return testConcurrent;
     }
