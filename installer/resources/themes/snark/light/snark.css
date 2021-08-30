@@ -4475,9 +4475,13 @@ tfoot .snarkTorrentRateDown::after, tfoot .snarkTorrentRateUp::after {
     background: repeating-linear-gradient(135deg, #900, #900 8px, #700 9px, #700 17px) !important;
   }
 
-  .stopped.incomplete .snarkTorrentStatus b::before, .inactive.neterror .snarkTorrentStatus b::before {
+  .stopped.incomplete .snarkTorrentStatus b::before {
     border-color: transparent #b11 transparent transparent !important;
   }
+
+  .inactive.neterror .snarkTorrentStatus b::before {
+    border-color: transparent #900 transparent transparent !important;
+   }
 
   .snarkTorrentDownloaded, .snarkTorrentUploaded, .snarkTorrentRateDown, .snarkTorrentRateUp {
     min-width: 76px;
