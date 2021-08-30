@@ -4434,8 +4434,6 @@ tfoot .snarkTorrentRateDown::after, tfoot .snarkTorrentRateUp::after {
 
   .inactive.downloading .snarkTorrentStatus b, .snarkTorrents tr.inactive.downloading:hover .snarkTorrentStatus b,
   .active.starting .snarkTorrentStatus b, .snarkTorrents tr.active.starting:hover .snarkTorrentStatus b {
-    color: #27293f !important;
-    text-shadow: 0 1px 1px rgba(255,255,255,.5);
     background: #dd5;
   }
 
