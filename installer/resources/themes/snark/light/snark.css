@@ -2228,7 +2228,7 @@ input:checked + label + hr + table, input:checked + label + hr + table + table {
 #debugMode {
   padding: 8px;
   font-size: 0 !important;
-  background: url(images/debug.png) no-repeat center center;
+  background: var(--debug) no-repeat center center / 16px;
   opacity: 0;
 }
 
