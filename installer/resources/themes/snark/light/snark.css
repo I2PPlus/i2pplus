@@ -4103,33 +4103,24 @@ td.snarkTrackerDetails {
 }
 
 tfoot .snarkTorrentRateDown:not(:empty)::before, tfoot .snarkTorrentDownloaded:not(:empty)::before,
-tfoot .snarkTorrentRateUp:not(:empty)::before, tfoot .snarkTorrentUploaded:not(:empty)::before {
+tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:empty)::before {
+  margin-top: -4px;
   margin-right: 1px;
   display: inline-block;
-  vertical-align: text-top;
-  font-size: 80%;
+  vertical-align: middle;
+  line-height: 0;
+  font-size: 110%;
   font-style: normal;
-  text-shadow: 0 0 1px #fff;
 }
 
 tfoot .snarkTorrentRateDown:not(:empty)::before, tfoot .snarkTorrentDownloaded:not(:empty)::before {
-  margin-right: -3px;
-  display: inline-block;
-  height: 4px;
-  content: url(images/dropdown.png);
-  vertical-align: middle;
-  opacity: .7;
-  transform: translateY(-7px) scaleY(0.6);
+  content: "\27A4";
+  transform: rotate(90deg) scaleX(0.6);
 }
 
 tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:empty)::before {
-  margin-right: -4px;
-  display: inline-block;
-  height: 4px;
-  content: url(images/dropdown.png);
-  vertical-align: middle;
-  opacity: .7;
-  transform: scaleY(0.6) rotate(180deg) translateY(-1px);
+  content: "\27A4";
+  transform: rotate(-90deg) scaleX(0.6);
 }
 
 .snarkTorrentUploaded .left {
