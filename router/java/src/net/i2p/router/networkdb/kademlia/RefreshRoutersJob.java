@@ -132,9 +132,9 @@ class RefreshRoutersJob extends JobImpl {
                     routerAge = rapidScan;
                 } else if (freshness == null) {
                     if (netDbCount > 4000)
-                        routerAge = 2*60*60*1000;
-                    if (netDbCount > 6000)
                         routerAge = 3*60*60*1000;
+                    if (netDbCount > 6000)
+                        routerAge = 4*60*60*1000;
                 } else {
                     routerAge = Integer.valueOf(freshness)*60*60*1000;
                 }
@@ -184,7 +184,11 @@ class RefreshRoutersJob extends JobImpl {
 
         int randomDelay = (1500 * (rand.nextInt(3) + 1)) + rand.nextInt(1000) + rand.nextInt(1000) + (rand.nextInt(1000) * (rand.nextInt(3) + 1)); // max 9.5 seconds
         String refresh = getContext().getProperty("router.refreshRouterDelay");
-        if (refresh == null) {
+        if (netDbCount > 8000) {
+            randomDelay = 15*60*1000;
+            if (_log.shouldLog(Log.DEBUG))
+                _log.debug("Over 8000 known peers, queuing next RouterInfo check in 15 minutes");
+        } else if (refresh == null) {
             if (getContext().jobQueue().getMaxLag() > 150 || getContext().throttle().getMessageDelay() > 750)
                 randomDelay = randomDelay * (rand.nextInt(3) + 1);
             else if (netDbCount < 500 || getContext().router().getUptime() < 30*60*1000)

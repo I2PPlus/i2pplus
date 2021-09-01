@@ -3717,6 +3717,7 @@ public class I2PSnarkServlet extends BasicServlet {
             String icu812b32 = "h77hk3pr622mx5c6qmybvbtrdo5la7pxo6my4kzr47x2mlpnvm2a.b32.i2p";
             String chudob32 = "swhb5i7wcjcohmus3gbt3w6du6pmvl3isdvxvepuhdxxkfbzao6q.b32.i2p";
             String lyokob32 = "afuuortfaqejkesne272krqvmafn65mhls6nvcwv3t7l2ic2p4kq.b32.i2p";
+            String skankb32 = "by7luzwhx733fhc5ug2o75dcaunblq2ztlshzd7qvptaoa73nqua.b32.i2p";
             if (meta != null) {
                 announce = meta.getAnnounce();
                 if (announce == null)
@@ -3730,6 +3731,7 @@ public class I2PSnarkServlet extends BasicServlet {
                        .replaceAll(freedomb32, "torrfreedom.i2p")
                        .replaceAll(lodikonb32, "tracker.lodikon.i2p")
                        .replaceAll(otdgb32, "opentracker.dg2.i2p")
+                       .replaceAll(skankb32, "opentracker.skank.i2p")
                        .replaceAll(odiftb32, "opendiftracker.i2p")
                        .replaceAll(theblandb32, "tracker.thebland.i2p")
                        .replaceAll(icu812b32, "tracker.icu812.i2p")

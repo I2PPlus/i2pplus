@@ -28,7 +28,7 @@ import net.i2p.util.Log;
  *  Tunnel testing is disabled by default now, except for hidden mode,
  *  see TunnelPoolManager.buildComplete()
  */
-class TestJob extends JobImpl {
+public class TestJob extends JobImpl {
     private final Log _log;
     private final TunnelPool _pool;
     private final PooledTunnelCreatorConfig _cfg;
@@ -43,7 +43,7 @@ class TestJob extends JobImpl {
     private int _id;
 
     /** base to randomize the test delay on */
-    private static final int TEST_DELAY = 180*1000;
+    private static final int TEST_DELAY = 3*60*1000;
 
     public TestJob(RouterContext ctx, PooledTunnelCreatorConfig cfg, TunnelPool pool) {
         super(ctx);
@@ -66,7 +66,7 @@ class TestJob extends JobImpl {
             return;
         final RouterContext ctx = getContext();
         long lag = ctx.jobQueue().getMaxLag();
-        if (lag > 300) {
+        if (lag > 250) {
             if (_log.shouldLog(Log.WARN))
                 _log.warn("Deferred test due to job lag (" + lag + "ms) -> " + _cfg);
             ctx.statManager().addRateData("tunnel.testAborted", _cfg.getLength());

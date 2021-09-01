@@ -34,6 +34,8 @@ import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
+import net.i2p.router.tunnel.pool.TestJob;
+
 /**
  * Manage the pending jobs according to whatever algorithm is appropriate, giving
  * preference to earlier scheduled jobs.
@@ -131,10 +133,14 @@ public class JobQueue {
     private int _maxWaitingJobs = DEFAULT_MAX_WAITING_JOBS;
 //    private final static int DEFAULT_MAX_WAITING_JOBS = 25;
     private final static int DEFAULT_MAX_WAITING_JOBS = 30;
-    private final static long MIN_LAG_TO_DROP = 500;
+    private final static long MIN_LAG_TO_DROP = 250;
 
     /** @deprecated unimplemented */
-    @Deprecated
+//    @Deprecated
+
+    /**
+     *  @since 0.9.52+
+     */
     private final static String PROP_MAX_WAITING_JOBS = "router.maxWaitingJobs";
 
     /**
@@ -299,11 +305,12 @@ public class JobQueue {
      *
      */
     private boolean shouldDrop(Job job, long numReady) {
-        if (_maxWaitingJobs <= 0) return false; // dont ever drop jobs
-        if (!_allowParallelOperation) return false; // dont drop during startup [duh]
-        if (numReady > _maxWaitingJobs) {
+        if (_maxWaitingJobs <= 0) return false; // don't ever drop jobs
+        if (!_allowParallelOperation) return false; // don't drop during startup [duh]
+//        if (numReady > _maxWaitingJobs) {
+        if (numReady > _context.getProperty(PROP_MAX_WAITING_JOBS, DEFAULT_MAX_WAITING_JOBS)) {
             Class<? extends Job> cls = job.getClass();
-            // lets not try to drop too many tunnel messages...
+            // let's not try to drop too many tunnel messages...
             //if (cls == HandleTunnelMessageJob.class)
             //    return true;
 
@@ -318,21 +325,28 @@ public class JobQueue {
             //
             // Obviously we can only drop one-shot jobs, not those that requeue
             //
-            if (cls == HandleFloodfillDatabaseLookupMessageJob.class ||
-                cls == HandleGarlicMessageJob.class ||
-                cls == IterativeSearchJob.class) {
-                // this tail drops based on the lag at the tail, which
-                // makes no sense...
-                //JobTiming jt = job.getTiming();
-                //if (jt != null) {
-                //    long lag =  _context.clock().now() - jt.getStartAfter();
-                //    if (lag >= MIN_LAG_TO_DROP)
-                //        return true;
-                //}
-
-                // this tail drops based on the lag at the head
-                if (getMaxLag() >= MIN_LAG_TO_DROP)
-                    return true;
+            if (_context.getBooleanProperty("router.disableTunnelTesting") == false) {
+                if (cls == HandleFloodfillDatabaseLookupMessageJob.class ||
+                    cls == HandleGarlicMessageJob.class || cls == IterativeSearchJob.class ||
+                    cls == TestJob.class) {
+                    // this tail drops based on the lag at the tail, which
+                    // makes no sense...
+                    //JobTiming jt = job.getTiming();
+                    //if (jt != null) {
+                    //    long lag =  _context.clock().now() - jt.getStartAfter();
+                    //    if (lag >= MIN_LAG_TO_DROP)
+                    //        return true;
+                    //}
+                    // this tail drops based on the lag at the head
+                    if (getMaxLag() >= MIN_LAG_TO_DROP)
+                        return true;
+                }
+            } else {
+                    if (cls == HandleFloodfillDatabaseLookupMessageJob.class ||
+                        cls == HandleGarlicMessageJob.class || cls == IterativeSearchJob.class) {
+                        if (getMaxLag() >= MIN_LAG_TO_DROP)
+                            return true;
+                    }
             }
         }
         return false;

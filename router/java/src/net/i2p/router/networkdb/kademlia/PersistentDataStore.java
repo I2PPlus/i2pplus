@@ -306,18 +306,14 @@ public class PersistentDataStore extends TransientDataStore {
 
         try {
             String MIN_VERSION = "0.9.50";
-            String v = ri.getVersion();
+            String v = MIN_VERSION;
+            boolean unreachable = false;
+            if (ri != null) {
+                v = ri.getVersion();
+                unreachable = ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
+            }
             boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;
-            boolean unreachable = ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
-            boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
-                                    ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
-                                    ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
-                                    VersionComparator.comp(v, MIN_VERSION) < 0) &&
-                                    _context.netDb().getKnownRouters() > 3000 &&
-                                    _context.router().getUptime() > 15*60*1000
-                                    && !isHidden;
             String filename = null;
-
             if (data.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO)
                 filename = getRouterInfoName(key);
             else

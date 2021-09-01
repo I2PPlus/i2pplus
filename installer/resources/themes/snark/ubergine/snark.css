@@ -4605,6 +4605,10 @@ td.snarkTorrentStatus b::before {
   border-color: transparent #fc0 transparent transparent;
 }
 
+.active.starting.processing .snarkTorrentStatus b::before {
+  border-color: transparent #bb0 transparent transparent;
+}
+
 .stopped.complete .snarkTorrentStatus b {
   background: #28f;
 }
