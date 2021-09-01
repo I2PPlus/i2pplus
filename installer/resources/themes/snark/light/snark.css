@@ -1095,6 +1095,10 @@ tr:hover .percentBarComplete {
   vertical-align: middle;
 }
 
+.percentBarOuter.filecheck {
+  max-width: none !important;
+}
+
 .percentBarText {
   text-align: center;
   font-weight: 700 !important;
