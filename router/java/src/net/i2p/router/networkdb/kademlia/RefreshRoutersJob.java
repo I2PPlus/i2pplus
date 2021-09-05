@@ -117,6 +117,7 @@ class RefreshRoutersJob extends JobImpl {
                 String freshness = getContext().getProperty("router.refreshSkipIfYounger");
                 String refreshTimeout = getContext().getProperty("router.refreshTimeout");
                 int routerAge = 15*60*1000;
+                long uptime = getContext().router().getUptime();
                 String v = ri.getVersion();
                 String MIN_VERSION = "0.9.50";
                 boolean isHidden = getContext().router().isHidden();
@@ -125,16 +126,16 @@ class RefreshRoutersJob extends JobImpl {
                                          ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
                                          VersionComparator.comp(v, MIN_VERSION) < 0) &&
                                          getContext().netDb().getKnownRouters() > 3000 &&
-                                         getContext().router().getUptime() > 15*60*1000 && !isHidden;
+                                         uptime > 15*60*1000 && !isHidden;
                 boolean refreshUninteresting = getContext().getBooleanProperty(PROP_ROUTER_REFRESH_UNINTERESTING);
                 int rapidScan = 10*60*1000;
                 if (uninteresting) {
                     routerAge = rapidScan;
                 } else if (freshness == null) {
                     if (netDbCount > 4000)
-                        routerAge = 3*60*60*1000;
+                        routerAge = 6*60*60*1000;
                     if (netDbCount > 6000)
-                        routerAge = 4*60*60*1000;
+                        routerAge = 8*60*60*1000;
                 } else {
                     routerAge = Integer.valueOf(freshness)*60*60*1000;
                 }
@@ -150,8 +151,12 @@ class RefreshRoutersJob extends JobImpl {
 //                    _facade.search(h, null, null, 15*1000, false);
 //                    Job DropLookupFoundJob = new _facade.DropLookupFoundJob();
 //                    _facade.search(h, null, new DropLookupFoundJob(getContext(), h, ri) , 20*1000, false);
-                    if (refreshTimeout == null)
+                    if (refreshTimeout == null && uptime < 60*60*1000)
                         _facade.search(h, null, null, 20*1000, false);
+                    else if (refreshTimeout == null && uptime < 8*60*60*1000)
+                        _facade.search(h, null, null, 15*1000, false);
+                    else if (refreshTimeout == null && uptime > 8*60*60*1000)
+                        _facade.search(h, null, null, 10*1000, false);
                     else
                         _facade.search(h, null, null, Integer.valueOf(refreshTimeout)*1000, false);
                     break;
