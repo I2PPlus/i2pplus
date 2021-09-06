@@ -205,8 +205,13 @@ class NewsFetcher extends UpdateRunner {
     private static final String CLEARNET_SU2_KEY = "su2clearnet";
     private static final String CLEARNET_HTTP_SU3_KEY = "su3clearnet";
     private static final String CLEARNET_HTTPS_SU3_KEY = "su3ssl";
-    private static final String I2P_SUD_KEY = "sudi2p";
-    private static final String I2P_SU2_KEY = "su2i2p";
+    // unused
+    //private static final String I2P_SUD_KEY = "sudi2p";
+    //private static final String I2P_SU2_KEY = "su2i2p";
+    /**
+     *  @since 0.9.52
+     */
+    private static final String I2P_SU3_KEY = "su3i2p";
 
     /**
      *  Parse the installed (not the temp) news file for the latest version.
@@ -281,14 +286,14 @@ class NewsFetcher extends UpdateRunner {
                             Map<UpdateMethod, List<URI>> sourceMap = new HashMap<UpdateMethod, List<URI>>(4);
                             // Must do su3 first
                             //if (ConfigUpdateHandler.USE_SU3_UPDATE) {
-                                sourceMap.put(HTTP, _mgr.getUpdateURLs(ROUTER_SIGNED_SU3, "", HTTP));
+                                addMethod(HTTP, args.get(I2P_SU3_KEY), sourceMap);
                                 addMethod(TORRENT, args.get(SU3_KEY), sourceMap);
                                 addMethod(HTTP_CLEARNET, args.get(CLEARNET_HTTP_SU3_KEY), sourceMap);
                                 addMethod(HTTPS_CLEARNET, args.get(CLEARNET_HTTPS_SU3_KEY), sourceMap);
                                 // notify about all sources at once
                                 _mgr.notifyVersionAvailable(this, _currentURI, ROUTER_SIGNED_SU3,
                                                             "", sourceMap, ver, "");
-                                sourceMap.clear();
+                            //  sourceMap.clear();
                             //}
                             // now do sud/su2 - DISABLED
                             //sourceMap.put(HTTP, _mgr.getUpdateURLs(ROUTER_SIGNED, "", HTTP));
@@ -732,7 +737,7 @@ class NewsFetcher extends UpdateRunner {
             out = new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(to), "UTF-8"));
             out.write("<!--\n");
             // update metadata in old format
-            out.write("<i2p.release ");
+            out.write(VERSION_PREFIX);
             if (latestRelease.i2pVersion != null)
                 out.write(" version=\"" + latestRelease.i2pVersion + '"');
             if (latestRelease.minVersion != null)
@@ -741,18 +746,28 @@ class NewsFetcher extends UpdateRunner {
                 out.write(" minJavaVersion=\"" + latestRelease.minJavaVersion + '"');
             String su3Torrent = "";
             String su2Torrent = "";
+            List<String> i2pnet = null;
+            List<String> clearnet = null;
+            List<String> clearnetssl = null;
             for (NewsMetadata.Update update : latestRelease.updates) {
                 if (update.torrent != null) {
-                    if ("su3".equals(update.type))
+                    if ("su3".equals(update.type)) {
                         su3Torrent = update.torrent;
-                    else if ("su2".equals(update.type))
+                        i2pnet = update.i2pnet;
+                        clearnet = update.clearnet;
+                        clearnetssl = update.ssl;
+                    } else if ("su2".equals(update.type)) {
                         su2Torrent = update.torrent;
+                    }
                 }
             }
             if (!su2Torrent.isEmpty())
                 out.write(" su2Torrent=\"" + su2Torrent + '"');
             if (!su3Torrent.isEmpty())
                 out.write(" su3Torrent=\"" + su3Torrent + '"');
+            writeList(out, I2P_SU3_KEY, i2pnet);
+            writeList(out, CLEARNET_HTTPS_SU3_KEY, clearnetssl);
+            writeList(out, CLEARNET_HTTP_SU3_KEY, clearnet);
             out.write("/>\n");
             // su3 and feed metadata for debugging
             out.write("** News version:\t" + DataHelper.stripHTML(sudVersion) + '\n');
@@ -781,5 +796,27 @@ class NewsFetcher extends UpdateRunner {
                 out.close();
             } catch (IOException ioe) {}
         }
+    }
+
+    /**
+     *  Write out key="foo,bar,baz".
+     *  Values cannot contain ','
+     *
+     *  @param values if null or empty, does nothing
+     *  @since 0.9.52
+     */
+    private static void writeList(Writer out, String key, List<String> values) throws IOException {
+        if (values == null || values.isEmpty())
+            return;
+        out.write(' ');
+        out.write(key);
+        out.write("=\"");
+        int sz = values.size();
+        for (int i = 0; i < sz; i++) {
+            out.write(values.get(i));
+            if (i != sz - 1)
+                out.write(',');
+        }
+        out.write('"');
     }
 }

@@ -164,6 +164,11 @@ public class HomeHelper extends HelperBase {
         return _context.getProperty(Messages.PROP_LANG) == null;
     }
 
+    /* @since 0.9.52+ */
+    public boolean shouldShowBandwidthConfig() {
+        return _context.getProperty("i2np.bandwidth.outboundKBytesPerSecond") == null;
+    }
+
     public boolean shouldShowSearch() {
         return _context.getBooleanProperty(PROP_SEARCH);
     }
