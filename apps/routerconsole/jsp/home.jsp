@@ -83,9 +83,16 @@
 <%
     if (homehelper.shouldShowWelcome()) {
 %>
-<a href="/configui#langheading" id="chooselang" style="float: right" title="Configure display language"><img src="/themes/console/images/flags.png" height="16" width="16" alt="Language"></a>
+<a href="/configui#langheading" id="chooselang" style="float: right" title="Configure display language, theme and optional console password"><img src="/themes/console/images/flags.png" height="16" width="16" alt="Language"></a>
 <%
     } // shouldShowWelcome
+%>
+<%
+    if (homehelper.shouldShowBandwidthConfig()) {
+%>
+<a href="/config" id="configbanwidth" style="float: right" title="Configure router bandwidth"><img src="/themes/console/images/svg/speedometer.svg" height="16" width="16" alt="Bandwidth"></a>
+<%
+    } // shouldShowBandwidthConfig
 %>
 </h4>
 <jsp:getProperty name="homehelper" property="services" /><br>
