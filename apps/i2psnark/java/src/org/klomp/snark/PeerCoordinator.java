@@ -78,7 +78,7 @@ class PeerCoordinator implements PeerListener
 //  final static int MAX_UPLOADERS = 8;
   final static int MAX_UPLOADERS = 16;
 //  public static final long MAX_INACTIVE = 8*60*1000;
-  public static final long MAX_INACTIVE = 10*60*1000;
+  public static final long MAX_INACTIVE = 5*60*1000;
 //  public static final long MAX_SEED_INACTIVE = 2*60*1000;
   public static final long MAX_SEED_INACTIVE = 3*60*1000;
 
@@ -161,7 +161,7 @@ class PeerCoordinator implements PeerListener
   /** hostname to expire time, sync on this */
   private Map<String, Long> _webPeerBans;
   private static final long WEBPEER_BAN_TIME = 30*60*1000L;
-  
+
   /**
    *  @param metainfo null if in magnet mode
    *  @param storage null if in magnet mode
