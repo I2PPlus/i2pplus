@@ -95,7 +95,7 @@ class BuildHandler implements Runnable {
     private static final int MAX_LOOKUP_LIMIT = 100;
     /** limit lookups to this % of current participating tunnels */
 //    private static final int PERCENT_LOOKUP_LIMIT = 3;
-    private static final int PERCENT_LOOKUP_LIMIT = 10;
+    private static final int PERCENT_LOOKUP_LIMIT = 2;
 
     /**
      *  This must be high, as if we timeout the send we remove the tunnel from
