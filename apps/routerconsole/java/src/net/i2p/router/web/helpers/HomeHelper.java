@@ -126,7 +126,7 @@ public class HomeHelper extends HelperBase {
         //_x("Dancing Elephants") + S + _x("Rocksolid forums for the darknets") + S + "http://def3.i2p/" + S + I + "svg/forum.svg" + S +
         _x("Dev Forum") + S + _x("Development forum") + S + "http://zzz.i2p/" + S + I + "svg/forum.svg" + S +
         _x("I2P Forum") + S + _x("I2P-related community forums") + S + "http://i2pforum.i2p/" + S + I + "svg/forum.svg" + S +
-        "nitter.i2p" + S + _x("Alternative front-end for Twitter") + S + "http://nitter.i2p/" + S + I + "svg/twitter.svg" + S +
+        "nitter" + S + _x("Alternative front-end for Twitter") + S + "http://nitter.swurl.i2p/" + S + I + "svg/twitter.svg" + S +
         _x("novabbs.i2p") + S + _x("Rocksolid forums for the darknets") + S + "http://novabbs.i2p/" + S + I + "svg/forum.svg" + S +
         "query.i2p" + S + _x("The StackOverflow of I2P") + S + "http://query.i2p/" + S + I + "svg/forum.svg" + S +
         "ramble.i2p" + S + _x("Cross-network micro-blogging &amp; forums &amp; wiki") + S + "http://ramble.i2p/" + S + I + "svg/ramble.svg" + S +
