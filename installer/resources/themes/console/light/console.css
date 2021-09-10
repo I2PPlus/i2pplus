@@ -6469,10 +6469,27 @@ h3#udpcon {
 }
 
 .tunnel_id {
+  margin: 0 3px;
+  padding: 1px 4px 1px 6px;
+  min-width: 96px;
   display: inline-block;
-  min-width: 76px;
-  text-align: right;
   vertical-align: middle;
+  text-align: left;
+}
+
+@media screen and (min-width: 1200px) {
+  .tunnel_id:not(:empty) {
+    border: 1px solid #bbd;
+    background: var(--hardhat) no-repeat 5px center / 14px, linear-gradient(to bottom, #fff, #eef);
+  }
+
+  .tunnel_id:not(:empty)::before {
+    width: 16px;
+    height: 14px;
+    display: inline-block;
+    vertical-align: middle;
+    content: "";
+  }
 }
 
 .tunnel_id:empty + .tunnel_cap {

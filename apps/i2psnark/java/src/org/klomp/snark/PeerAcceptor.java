@@ -2,17 +2,17 @@
    Copyright (C) 2003 Mark J. Wielaard
 
    This file is part of Snark.
-   
+
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 2, or (at your option)
    any later version.
- 
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
- 
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software Foundation,
    Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
@@ -53,7 +53,7 @@ class PeerAcceptor
     this.coordinator = coordinator;
     this.coordinators = null;
   }
-  
+
   public PeerAcceptor(PeerCoordinatorSet coordinators)
   {
     this.coordinators = coordinators;
@@ -88,7 +88,7 @@ class PeerAcceptor
         try {
           peerInfoHash = readHash(in);
           if (_log.shouldLog(Log.INFO))
-              _log.info("infohash read from " + socket.getPeerDestination().calculateHash().toBase64() 
+              _log.info("Infohash read from " + socket.getPeerDestination().calculateHash().toBase64()
                         + ": " + Base64.encode(peerInfoHash));
         } catch (IOException ioe) {
             if (_log.shouldLog(Log.INFO))
@@ -109,34 +109,31 @@ class PeerAcceptor
             else
               socket.close();
         } else {
-          // its for another infohash, but we are only single torrent capable.  b0rk.
-            throw new IOException("Peer wants another torrent (" + Base64.encode(peerInfoHash) 
-                                  + ") while we only support (" + Base64.encode(coordinator.getInfoHash()) + ")");
+            // it's for another infohash, but we are only single torrent capable.  b0rk.
+            throw new IOException("Peer wants another torrent (" + Base64.encode(peerInfoHash)
+                                  + ") but we only support [" + Base64.encode(coordinator.getInfoHash()) + "]");
         }
     } else {
-        // multitorrent capable, so lets see what we can handle
+        // multitorrent capable, so let's see what we can handle
         PeerCoordinator cur = coordinators.get(peerInfoHash);
         if (cur != null) {
             if (DataHelper.eq(cur.getInfoHash(), peerInfoHash)) {
-                if (cur.needPeers())
-                  {
+                if (cur.needPeers()) {
                     Peer peer = new Peer(socket, in, out, cur.getID(),
                                          cur.getInfoHash(), cur.getMetaInfo());
                     cur.addPeer(peer);
                     return;
-                  }
-                else 
-                  {
+                } else {
                     if (_log.shouldLog(Log.DEBUG))
                       _log.debug("Rejecting new peer for " + cur.getName());
                     socket.close();
                     return;
-                  }
+                }
             }
         }
         // this is only reached if none of the coordinators match the infohash
-        throw new IOException("Peer wants another torrent (" + Base64.encode(peerInfoHash) 
-                              + ") while we don't support that hash");
+        throw new IOException("Peer wants another torrent [" + Base64.encode(peerInfoHash)
+                              + "] but we don't support that hash");
     }
   }
 
@@ -156,7 +153,7 @@ class PeerAcceptor
                                             8 + // blank, reserved
                                             20; // infohash
 
-  /** 
+  /**
    * Read ahead to the infohash, throwing an exception if there isn't enough data.
    * Also check the first 20 bytes for the correct protocol here and throw IOE if bad,
    * so we don't hang waiting for 48 bytes if it's not a bittorrent client.
@@ -176,7 +173,7 @@ class PeerAcceptor
     return buf;
   }
 
-    /** 
+    /**
      *  A unique exception so we can tell the ConnectionAcceptor about non-BT connections
      *  @since 0.9.1
      */

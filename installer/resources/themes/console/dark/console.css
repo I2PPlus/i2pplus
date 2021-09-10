@@ -14260,3 +14260,24 @@ body.iframed {
     margin-left: -1px !important;
   }
 }
+
+@media screen and (min-width: 1200px) {
+  .tunnel_id {
+    margin: 0 5px !important;
+    padding: 2px 4px 2px 6px;
+    min-width: 96px;
+    display: inline-block;
+    vertical-align: middle;
+    text-align: left;
+  }
+  .tunnel_id:not(:empty) {
+    background: var(--hardhat) no-repeat 5px center / 14px, var(--element);
+  }
+  .tunnel_id:not(:empty)::before {
+    width: 16px;
+    height: 14px;
+    display: inline-block;
+    vertical-align: middle;
+    content: "";
+  }
+}

@@ -304,8 +304,7 @@ public class I2PSnarkUtil {
             //if (opts.getProperty("i2p.streaming.connectDelay") == null)
             //    opts.setProperty("i2p.streaming.connectDelay", "500");
             if (opts.getProperty(I2PSocketOptions.PROP_CONNECT_TIMEOUT) == null)
-                opts.setProperty(I2PSocketOptions.PROP_CONNECT_TIMEOUT, "600000"); // 10 minutes
-//                opts.setProperty(I2PSocketOptions.PROP_CONNECT_TIMEOUT, "300000"); // 5 minutes
+                opts.setProperty(I2PSocketOptions.PROP_CONNECT_TIMEOUT, "300000"); // 5 minutes
             if (opts.getProperty("i2p.streaming.inactivityTimeout") == null)
 //                opts.setProperty("i2p.streaming.inactivityTimeout", "240000");
                 opts.setProperty("i2p.streaming.inactivityTimeout", "180000"); // 3 minute idle time before disconnect
@@ -327,7 +326,7 @@ public class I2PSnarkUtil {
                 opts.setProperty("i2p.streaming.maxTotalConnsPerMinute", "32"); // total incoming connections
             if (opts.getProperty("i2p.streaming.maxConnsPerHour") == null)
 //                opts.setProperty("i2p.streaming.maxConnsPerHour", "20");
-                opts.setProperty("i2p.streaming.maxConnsPerHour", "240");
+                opts.setProperty("i2p.streaming.maxConnsPerHour", "180");
             if (opts.getProperty("i2p.streaming.enforceProtocol") == null)
                 opts.setProperty("i2p.streaming.enforceProtocol", "true");
             if (opts.getProperty("i2p.streaming.disableRejectLogging") == null)
@@ -428,7 +427,7 @@ public class I2PSnarkUtil {
         } catch (I2PException ie) {
             _banlist.add(dest);
 //            _context.simpleTimer2().addEvent(new Unbanlist(dest), 10*60*1000);
-            _context.simpleTimer2().addEvent(new Unbanlist(dest), 3*60*1000);
+            _context.simpleTimer2().addEvent(new Unbanlist(dest), 15*60*1000);
             IOException ioe = new IOException("Unable to reach peer [" + peer + "]");
             ioe.initCause(ie);
             throw ioe;

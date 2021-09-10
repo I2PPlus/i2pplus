@@ -515,12 +515,12 @@ class TunnelRenderer {
 
         // count up the peers in the participating tunnels
         ObjectCounter<Hash> pc = new ObjectCounter();
-        float partCount = countParticipatingPerPeer(pc);
+        int partCount = countParticipatingPerPeer(pc);
 
         Set<Hash> peers = new HashSet(lc.objects());
         peers.addAll(pc.objects());
         List<Hash> peerList = new ArrayList(peers);
-        float peerCount = peerList.size();
+        int peerCount = peerList.size();
         Collections.sort(peerList, new CountryComparator(this._context.commSystem()));
 
         List<HopConfig> participating = _context.tunnelDispatcher().listParticipatingTunnels();
