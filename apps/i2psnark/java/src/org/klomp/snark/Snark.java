@@ -347,7 +347,7 @@ public class Snark
 
     id = generateID();
     if (_log.shouldLog(Log.INFO))
-        _log.info("Our peer id for this session is: " + PeerID.idencode(id));
+        _log.info("Our PeerID for this session is: " + PeerID.idencode(id));
 
 /*
  * Don't start a tunnel if the torrent isn't going to be started.
