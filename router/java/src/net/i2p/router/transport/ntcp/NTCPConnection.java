@@ -93,8 +93,8 @@ public class NTCPConnection implements Closeable {
     /**
      * pending unprepared OutNetMessage instances
      */
-    private final CoDelPriorityBlockingQueue<OutNetMessage> _outbound;
-//    private final PriBlockingQueue<OutNetMessage> _outbound;
+    //private final CoDelPriorityBlockingQueue<OutNetMessage> _outbound;
+    private final PriBlockingQueue<OutNetMessage> _outbound;
     /**
      *  current prepared OutNetMessages, or empty - synchronize to modify or read
      */
@@ -258,8 +258,7 @@ public class NTCPConnection implements Closeable {
         _bwInRequests = new ConcurrentHashSet<Request>(2);
         _bwOutRequests = new ConcurrentHashSet<Request>(8);
         //_outbound = new CoDelPriorityBlockingQueue(ctx, "NTCP-Connection", 32);
-//        _outbound = new PriBlockingQueue<OutNetMessage>(ctx, "NTCP-Connection", 32);
-        _outbound = new CoDelPriorityBlockingQueue<OutNetMessage>(ctx, "NTCP-Connection", 32);
+        _outbound = new PriBlockingQueue<OutNetMessage>(ctx, "NTCP-Connection", 32);
         _currentOutbound = new ArrayList<OutNetMessage>(1);
         _isInbound = isIn;
         _inboundListener = new InboundListener();

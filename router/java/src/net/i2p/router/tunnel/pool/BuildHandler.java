@@ -80,12 +80,12 @@ class BuildHandler implements Runnable {
 
     /** TODO these may be too high, review and adjust */
 //    private static final int MIN_QUEUE = 18;
-    private static final int MIN_QUEUE = 16;
 //    private static final int MAX_QUEUE = 192;
-    private static final int MAX_QUEUE = 256;
-    private static final String PROP_MAX_QUEUE = "router.buildHandlerMaxQueue";
 //    private static final int MIN_QUEUE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 18 : 36;
 //    private static final int MAX_QUEUE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 192 : 384;
+    private static final int MIN_QUEUE = 16;
+    private static final int MAX_QUEUE = 256;
+    private static final String PROP_MAX_QUEUE = "router.buildHandlerMaxQueue";
 
     private static final int NEXT_HOP_LOOKUP_TIMEOUT = 15*1000;
     private static final int PRIORITY = OutNetMessage.PRIORITY_BUILD_REPLY;
@@ -94,7 +94,8 @@ class BuildHandler implements Runnable {
     private static final int MIN_LOOKUP_LIMIT = 10;
     private static final int MAX_LOOKUP_LIMIT = 100;
     /** limit lookups to this % of current participating tunnels */
-    private static final int PERCENT_LOOKUP_LIMIT = 3;
+//    private static final int PERCENT_LOOKUP_LIMIT = 3;
+    private static final int PERCENT_LOOKUP_LIMIT = 10;
 
     /**
      *  This must be high, as if we timeout the send we remove the tunnel from
@@ -122,8 +123,8 @@ class BuildHandler implements Runnable {
         // Queue size = 12 * share BW / 48K
 //        int sz = Math.min(MAX_QUEUE, Math.max(MIN_QUEUE, TunnelDispatcher.getShareBandwidth(ctx) * MIN_QUEUE / 48));
         int sz = SystemVersion.isSlow() || SystemVersion.getCores() <= 4 ? ctx.getProperty(PROP_MAX_QUEUE, MAX_QUEUE / 2) : ctx.getProperty(PROP_MAX_QUEUE, MAX_QUEUE);
-        //_inboundBuildMessages = new CoDelBlockingQueue(ctx, "BuildHandler", sz);
-        _inboundBuildMessages = new LinkedBlockingQueue<BuildMessageState>(sz);
+        _inboundBuildMessages = new CoDelBlockingQueue(ctx, "BuildHandler", sz);
+        //_inboundBuildMessages = new LinkedBlockingQueue<BuildMessageState>(sz);
 
         _context.statManager().createRateStat("tunnel.reject.10", "How often we reject a tunnel probabalistically", "Tunnels [Participating]", RATES);
         _context.statManager().createRateStat("tunnel.reject.20", "How often we reject a tunnel (transient overload)", "Tunnels [Participating]", RATES);
