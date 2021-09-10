@@ -190,12 +190,13 @@ public class I2CPMessageReader {
                         _listener.readError(I2CPMessageReader.this, ime);
                         cancelRunner();
                     } catch (IOException ioe) {
-                        _log.warn("IO Error handling message \n* Error: " + ioe.getMessage());
-                        _listener.readError(I2CPMessageReader.this, ioe);
+                        if (_stayAlive) {
+                            _log.warn("IO Error handling message \n* Error: " + ioe.getMessage());
+                            _listener.readError(I2CPMessageReader.this, ioe);
                         } // else triggered by cancelRunner(), ignore SocketException
                         _listener.disconnected(I2CPMessageReader.this);
                         if (_stayAlive) {
-                        cancelRunner();
+                            cancelRunner();
                         }
                     } catch (OutOfMemoryError oom) {
                         // ooms seen here... maybe log and keep going?
