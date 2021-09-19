@@ -1305,7 +1305,7 @@ tr.bottombuttons:empty {
 }
 
 .notifications.msgerror, .notifications.msginfo {
-  animation: 2s hide-up 10s ease-out forwards;
+  animation: 2s hide-up 7s ease-out forwards;
 }
 
 @keyframes hide-up {
