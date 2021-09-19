@@ -198,7 +198,7 @@ public class DecayingHashSet extends DecayingBloomFilter {
         } finally { releaseWriteLock(); }
 
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Decaying the filter " + _name + " after inserting " + currentCount
+            _log.debug("Decaying the " + _name + " filter after inserting " + currentCount
                        + " elements and " + dups + " false positives");
         _context.statManager().addRateData("router.decayingHashSet." + _name + ".size",
                                            currentCount);
