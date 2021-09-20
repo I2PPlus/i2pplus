@@ -63,7 +63,10 @@
        intl.setNews(request.getParameter("news"));
    }
 %>
-<link href="<%=intl.getTheme(request.getHeader("User-Agent"))%>console.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
+<link href="/themes/fonts/DroidSans.css" rel="stylesheet" type="text/css">
+<link href="<%=themePath%>console.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css" title="<%=theme%>">
+<link href="/themes/console/images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
+<link href="<%=themePath%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
 <%
    if (intl.getLang().equals("zh")) {
        // make the fonts bigger for chinese
