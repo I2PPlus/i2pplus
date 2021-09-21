@@ -65,7 +65,8 @@ class EventPumper implements Runnable {
      *  The occasional larger message can use multiple buffers.
      */
 
-    private static final int BUF_SIZE = 8*1024;
+//    private static final int BUF_SIZE = 8*1024;
+    private static final int BUF_SIZE = 64*1024;
     private static final int MAX_CACHE_SIZE = 64;
 
     private static class BufferFactory implements TryCache.ObjectFactory<ByteBuffer> {
@@ -109,12 +110,14 @@ class EventPumper implements Runnable {
     private static final String PROP_NODELAY = "i2np.ntcp.nodelay";
 
     private static final int MIN_MINB = 4;
-    private static final int MAX_MINB = 12;
+//    private static final int MAX_MINB = 12;
+    private static final int MAX_MINB = 64;
     private static final int MIN_BUFS;
     static {
         long maxMemory = SystemVersion.getMaxMemory();
         boolean isSlow = SystemVersion.isSlow();
-        MIN_BUFS = (int) Math.max(MIN_MINB, Math.min(MAX_MINB, 1 + (maxMemory / (16*1024*1024))));
+//        MIN_BUFS = (int) Math.max(MIN_MINB, Math.min(MAX_MINB, 1 + (maxMemory / (16*1024*1024))));
+        MIN_BUFS = (int) Math.max(MIN_MINB, Math.min(MAX_MINB, 1 + (maxMemory / (8*1024*1024))));
     }
 
     private static final TryCache<ByteBuffer> _bufferCache = new TryCache<>(new BufferFactory(), MIN_BUFS);

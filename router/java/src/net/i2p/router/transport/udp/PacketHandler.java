@@ -90,32 +90,32 @@ class PacketHandler {
 
         //_context.statManager().createRateStat("udp.handleTime", "Time to handle a received packet after its been pulled off the queue", "Transport [UDP]", UDPTransport.RATES);
         //_context.statManager().createRateStat("udp.queueTime", "How long after a packet is received can we begin handling it", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.receivePacketSkew", "How long ago after the packet was sent did we receive it", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.droppedInvalidUnkown", "Age of packet we dropped due to invalidity (unkown type) was", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.droppedInvalidReestablish", "Age of packet we dropped due to invalidity (doesn't use existing key, not an establishment) was", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.droppedInvalidEstablish", "Age of packet we dropped due to invalidity (establishment, bad key) was", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.droppedInvalidEstablish.inbound", "Age of packet we dropped due to invalidity (even though we have an active inbound establishment with the peer) was", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.droppedInvalidEstablish.outbound", "Age of packet we dropped due to invalidity (even though we have an active outbound establishment with the peer) was", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.droppedInvalidEstablish.new", "Age of packet we dropped due to invalidity (even though we do not have any active establishment with the peer) was", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.droppedInvalidInboundEstablish", "Age of packet we dropped due to invalidity (inbound establishment, bad key) was", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.droppedInvalidSkew", "Skew of packet we dropped due to invalidity (valid except bad skew) was", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.destroyedInvalidSkew", "Destroyed session due to bad skew", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.receivePacketSkew", "How long after packet was sent did we receive it", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.droppedInvalidUnkown", "Age of dropped packet (unknown type)", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.droppedInvalidReestablish", "Age of dropped packet (no existing key, not establishment)", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.droppedInvalidEstablish", "Age of dropped packet (establishment, bad key)", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.droppedInvalidEstablish.inbound", "Age of dropped packet (invalid despite active inbound establishment)", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.droppedInvalidEstablish.outbound", "Age of dropped packet (invalid despite active outbound establishment)", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.droppedInvalidEstablish.new", "Age of dropped packet (invalid despite no active establishment) was", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.droppedInvalidInboundEstablish", "Age of dropped packet (inbound establishment, bad key) was", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.droppedInvalidSkew", "Skew of dropped packet (bad skew) was", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.destroyedInvalidSkew", "Session destroyed (bad skew)", "Transport [UDP]", UDPTransport.RATES);
         //_context.statManager().createRateStat("udp.packetDequeueTime", "Time for UDPReader to pull a packet off the inbound packet queue (when its slow)", "Transport [UDP]", UDPTransport.RATES);
         //_context.statManager().createRateStat("udp.packetVerifyTime", "Time for PacketHandler to verify a data packet after dequeueing (period is dequeue time)", "Transport [UDP]", UDPTransport.RATES);
         //_context.statManager().createRateStat("udp.packetVerifyTimeSlow", "Time for PacketHandler to verify a data packet after dequeueing when its slow (period is dequeue time)", "Transport [UDP]", UDPTransport.RATES);
         //_context.statManager().createRateStat("udp.packetValidateMultipleCount", "How many times we validate a packet, if done more than once (period = afterValidate-enqueue)", "Transport [UDP]", UDPTransport.RATES);
         //_context.statManager().createRateStat("udp.packetNoValidationLifetime", "How long packets that are never validated are around for", "Transport [UDP]", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.receivePacketSize.sessionRequest", "Size of given inbound packet type (period is the packet's lifetime)", "Transport [UDP]", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.receivePacketSize.sessionConfirmed", "Size of given inbound packet type (period is the packet's lifetime)", "Transport [UDP]", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.receivePacketSize.sessionCreated", "Size of given inbound packet type (period is the packet's lifetime)", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.receivePacketSize.dataKnown", "Size of given inbound packet type (period is the packet's lifetime)", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.receivePacketSize.dataKnownAck", "Size of given inbound packet type (period is the packet's lifetime)", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.receivePacketSize.dataUnknown", "Size of given inbound packet type (period is the packet's lifetime)", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.receivePacketSize.dataUnknownAck", "Size of given inbound packet type (period is the packet's lifetime)", "Transport [UDP]", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.receivePacketSize.test", "Size of given inbound packet type (period is the packet's lifetime)", "Transport [UDP]", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.receivePacketSize.relayRequest", "Size of given inbound packet type (period is the packet's lifetime)", "Transport [UDP]", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.receivePacketSize.relayIntro", "Size of given inbound packet type (period is the packet's lifetime)", "Transport [UDP]", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.receivePacketSize.relayResponse", "Size of given inbound packet type (period is the packet's lifetime)", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.receivePacketSize.sessionRequest", "Size of inbound packet type (period is packet lifetime)", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.receivePacketSize.sessionConfirmed", "Size of inbound packet type (period is packet lifetime)", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.receivePacketSize.sessionCreated", "Size of inbound packet type (period is packet lifetime)", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.receivePacketSize.dataKnown", "Size of inbound packet type (period is packet lifetime)", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.receivePacketSize.dataKnownAck", "Size of inbound packet type (period is packet lifetime)", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.receivePacketSize.dataUnknown", "Size of inbound packet type (period is packet lifetime)", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.receivePacketSize.dataUnknownAck", "Size of inbound packet type (period is packet lifetime)", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.receivePacketSize.test", "Size of inbound packet type (period is packet lifetime)", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.receivePacketSize.relayRequest", "Size of inbound packet type (period is packet lifetime)", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.receivePacketSize.relayIntro", "Size of inbound packet type (period is packet lifetime)", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.receivePacketSize.relayResponse", "Size of inbound packet type (period is packet lifetime)", "Transport [UDP]", UDPTransport.RATES);
     }
 
     public synchronized void startup() {

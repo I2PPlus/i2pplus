@@ -111,7 +111,8 @@ public final class ByteCache extends TryCache<ByteArray> {
     /** how often do we cleanup the cache */
     private static final int CLEANUP_FREQUENCY = 33*1000;
     /** if we haven't exceeded the cache size in 2 minutes, cut our cache in half */
-    private static final long EXPIRE_PERIOD = 2*60*1000;
+//    private static final long EXPIRE_PERIOD = 2*60*1000;
+    private static final long EXPIRE_PERIOD = 5*60*1000;
 
     /** @since 0.9.36 */
     private static class ByteArrayFactory implements TryCache.ObjectFactory<ByteArray> {

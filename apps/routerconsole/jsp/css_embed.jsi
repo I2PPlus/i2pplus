@@ -24,6 +24,10 @@
 <meta name="viewport" content="width=device-width">
 <jsp:useBean class="net.i2p.router.web.CSSHelper" id="intl" scope="request" />
 <jsp:setProperty name="intl" property="contextId" value="<%=(String)session.getAttribute(\"i2p.contextId\")%>" />
+<%
+   String UA = request.getHeader("User-Agent");
+   String themePath = intl.getTheme(UA);
+%>
 <link rel="preload" href="/themes/fonts/DroidSans/DroidSans-Bold.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/themes/fonts/DroidSans/DroidSans.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/themes/fonts/DroidSans/DroidSansMono.woff2" as="font" type="font/woff2" crossorigin>
@@ -63,7 +67,10 @@
        intl.setNews(request.getParameter("news"));
    }
 %>
-<link href="<%=intl.getTheme(request.getHeader("User-Agent"))%>console.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
+<link href="/themes/fonts/DroidSans.css" rel="stylesheet" type="text/css">
+<link href="<%=themePath%>console.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css" title="<%=theme%>">
+<link href="/themes/console/images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
+<link href="<%=themePath%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
 <%
    if (intl.getLang().equals("zh")) {
        // make the fonts bigger for chinese

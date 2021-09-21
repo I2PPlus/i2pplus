@@ -1624,8 +1624,9 @@ tr.bottombuttons:empty {
 /* notifications */
 
 .notifications {
-  margin: 0 15px;
+  margin: 0 30%;
   padding: 5px 10px 2px;
+  min-width: 400px;
   position: fixed;
   top: 0;
   left: 0;
@@ -1639,11 +1640,11 @@ tr.bottombuttons:empty {
   background: var(--no) right 6px top 6px no-repeat, linear-gradient(to right, #020, #002800, #020) #020;
   background-size: 14px, 100% !important;
   cursor: crosshair;
-  animation: 2s hide-up 10s ease-out forwards;
+  animation: 2s hide-up 7s ease-out forwards;
 }
 
 .iframed .notifications {
-  margin: -1px 3% 0;
+  margin: -1px 30% 0;
   padding: 10px 10px 5px;
   border: 1px solid #141;
   border-top: none;

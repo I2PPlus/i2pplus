@@ -315,7 +315,7 @@ public class DecayingBloomFilter {
             _currentDuplicates = 0;
         } finally { releaseWriteLock(); }
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Decaying the filter " + _name + " after inserting " + currentCount
+            _log.debug("Decaying the " + _name + " filter after inserting " + currentCount
                        + " elements and " + dups + " false positives with FPR = " + fpr);
         _context.statManager().addRateData("router.decayingBloomFilter." + _name + ".size",
                                            currentCount);
