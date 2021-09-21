@@ -76,7 +76,6 @@ class PumpedTunnelGateway extends TunnelGateway {
             _isInbound = false;
         } else {  // extended by ThrottledPTG for IB
             // Bounded non-priority queue for inbound
-//            _prequeue = new CoDelBlockingQueue<PendingGatewayMessage>(context, "IBGW", MAX_IB_QUEUE);
             _prequeue = new CoDelBlockingQueue<PendingGatewayMessage>(context, "IBGW", context.getProperty(PROP_MAX_IB_QUEUE, MAX_IB_QUEUE));
             _nextHop = receiver.getSendTo();
             _isInbound = true;
@@ -133,12 +132,6 @@ class PumpedTunnelGateway extends TunnelGateway {
                       " Inbound? " + _isInbound);
         if (backlogged)
             max = _isInbound ? 1 : 2;
-
-/*        if (backlogged)
-            max = _isInbound ? _context.getProperty(PROP_MAX_IB_MSGS_PER_PUMP, MAX_IB_MSGS_PER_PUMP) / 4 :
-                               _context.getProperty(PROP_MAX_OB_MSGS_PER_PUMP, MAX_OB_MSGS_PER_PUMP) / 4;
-*/
-
         else
             max = _isInbound ? _context.getProperty(PROP_MAX_IB_MSGS_PER_PUMP, MAX_IB_MSGS_PER_PUMP) :
                                _context.getProperty(PROP_MAX_OB_MSGS_PER_PUMP, MAX_OB_MSGS_PER_PUMP);
@@ -150,7 +143,7 @@ class PumpedTunnelGateway extends TunnelGateway {
         final boolean debug = _log.shouldDebug();
         long startAdd;
         if (debug)
-            startAdd = System.currentTimeMillis();
+            startAdd = _context.clock().now();
         else
             startAdd = 0;
         long beforeLock = startAdd;
@@ -163,12 +156,12 @@ class PumpedTunnelGateway extends TunnelGateway {
         synchronized (_queue) {
             _queue.addAll(queueBuf);
             if (debug) {
-                afterAdded = System.currentTimeMillis();
+                afterAdded = _context.clock().now();
                 _log.debug("Added before direct flush preprocessing for " + toString() + ":\n* " + _queue);
             }
             delayedFlush = _preprocessor.preprocessQueue(_queue, _sender, _receiver);
             if (debug)
-                afterPreprocess = System.currentTimeMillis();
+                afterPreprocess = _context.clock().now();
             if (delayedFlush)
                 delayAmount = _preprocessor.getDelayAmount();
             _lastFlush = _context.clock().now();
@@ -185,7 +178,7 @@ class PumpedTunnelGateway extends TunnelGateway {
             }
             remaining = _queue.size();
             if ((remaining > 0) && debug) {
-                afterExpire = System.currentTimeMillis();
+                afterExpire = _context.clock().now();
                 _log.debug("Remaining after preprocessing: " + _queue);
             }
         }
@@ -195,7 +188,7 @@ class PumpedTunnelGateway extends TunnelGateway {
         }
         //_context.statManager().addRateData("tunnel.lockedGatewayAdd", afterAdded-beforeLock, remaining);
         if (debug) {
-            long complete = System.currentTimeMillis();
+            long complete = _context.clock().now();
             _log.debug("Time to add " + queueBuf.size() + " messages to " + toString() + ":" + (complete-startAdd)
                        + "\n* Delayed? " + delayedFlush + "; Remaining: " + remaining
                        + "; Add: " + (afterAdded-beforeLock)
