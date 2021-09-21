@@ -66,8 +66,8 @@ class EventPumper implements Runnable {
      */
 
 //    private static final int BUF_SIZE = 8*1024;
-    private static final int BUF_SIZE = 64*1024;
-    private static final int MAX_CACHE_SIZE = 64;
+//    private static final int MAX_CACHE_SIZE = 64; // unused
+    private static final int BUF_SIZE = 256*1024;
 
     private static class BufferFactory implements TryCache.ObjectFactory<ByteBuffer> {
         public ByteBuffer newInstance() {
@@ -111,7 +111,8 @@ class EventPumper implements Runnable {
 
     private static final int MIN_MINB = 4;
 //    private static final int MAX_MINB = 12;
-    private static final int MAX_MINB = 64;
+    private static final int MAX_MINB = 256;
+    public static final String PROP_MAX_MINB = "i2np.ntcp.eventPumperMaxBuffers";
     private static final int MIN_BUFS;
     static {
         long maxMemory = SystemVersion.getMaxMemory();
