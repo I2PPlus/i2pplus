@@ -69,7 +69,7 @@ class OutboundMessageFragments {
         _transport = transport;
         // _throttle = throttle;
         _activePeers = new ConcurrentHashSet<PeerState>(256);
-        _builder = new PacketBuilder(ctx, transport);
+        _builder = transport.getBuilder();
         _alive = true;
         // _allowExcess = false;
 //        _context.statManager().createRequiredRateStat("udp.sendVolleyTime", "Time (ms) to send a full volley", "Transport [UDP]", UDPTransport.RATES);
