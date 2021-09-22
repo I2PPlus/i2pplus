@@ -645,7 +645,6 @@ input[type=submit]:hover, input.cancel:hover,
 input[type=submit]:focus, input.cancel:focus,
 #settings:hover, #settings:focus, .fakebutton:hover, .fakebutton:focus,
 #expand:hover, #expand:focus, #collapse:hover, #expand:focus {
-  color: #652787 !important;
   color: #bf2295 !important;
   border: 1px solid #652787;
   box-shadow: var(--highlight), inset 0 0 2px 1px #757;
@@ -692,7 +691,6 @@ input[name="user"], input[name="pass"] {
 input[name="user"]:focus, input[name="pass"]:focus, input[type=text]:focus, textarea:focus {
   color: #c9ceff;
   border: 1px solid #6466a5 !important;
-  box-shadow: 0 0 0 1px rgba(101, 39, 135, .5);
   box-shadow: 0 0 0 1px rgba(101, 39, 135, .5), 0 0 2px 2px #202;
 }
 
@@ -1062,7 +1060,7 @@ div#bottombuttons { /* config page button positioning */
 input[type=submit][class], input[type=reset][class],
 input[type=submit][class]:hover, input[type=reset][class]:hover,
 input[type=submit][class]:focus, input[type=reset][class]:focus,
-#settings, #settings:hover, #settings:focus,
+#settings, #settings:hover, #settings:focus, #pageRefresh, #pageRefresh:hover, #pageRefresh:focus,
 .pagenav input[type=submit], .pagenav input[type=submit]:hover, .pagenav input[type=submit]:focus,
 .pagenav input[type=submit]:disabled, .pagenav input[type=submit]:hover:disabled, .pagenav input[type=submit]:focus:disabled {
   background-size: 14px, 100% !important;
@@ -1382,7 +1380,7 @@ input.switchto {
 
 /* end illustrated buttons */
 
-input[type=submit]:active, input.cancel:active {
+input[type=submit]:active, input.cancel:active, #pageRefresh:active {
   color: #83529f !important;
   border: 1px solid #652787;
   box-shadow: inset 3px 3px 3px #000 !important;
@@ -1671,8 +1669,9 @@ select:hover, select:focus, select:active {
 /* notifications */
 
 .notifications {
-  margin: 0 -20px;
+  margin: 0 30%;
   padding: 5px 10px 2px;
+  min-width: 400px;
   position: fixed;
   top: -1px;
   left: 0;
@@ -1684,12 +1683,12 @@ select:hover, select:focus, select:active {
   background: #113 var(--no) no-repeat right 24px top 4px / 14px;
   background-blend-mode: luminosity;
   cursor: crosshair;
-  animation: 2s hide-up 10s ease-out forwards;
+  animation: 2s hide-up 7s ease-out forwards;
 }
 
 .iframed .notifications {
-  margin: 6px 3% 0;
-  padding: 10px 10px 5px;
+  margin: 6px 30% 0;
+  padding: 5px 10px 0;
   top: -6px;
   background: #113 var(--no) no-repeat right 6px top 5px / 14px;
 }
