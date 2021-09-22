@@ -10,12 +10,15 @@
 @import url(../images/itooplus.css);
 
 :root {
+  --ink: #c9ceff;
+  --hover: #652787;
   --title: repeating-linear-gradient(to right, rgba(0,0,48,.4) 2px, #000 4px), linear-gradient(to bottom, #003, #002 50%, #001 50%, #000);
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
   --button: linear-gradient(to bottom, #11101c 50%, #000010 50%);
   --button_hover: linear-gradient(to bottom, #202 50%, #000 50%);
   --button_active: linear-gradient(to bottom, #401856, #501f6c);
+  --formaction: linear-gradient(to bottom, #001, #030306);
   --innerborder: 1px solid rgba(38, 35, 92,.7);
   --tr: linear-gradient(to bottom, #001, #000);
   --th: repeating-linear-gradient(to right, rgba(0,0,64,.4) 2px, #000 4px), linear-gradient(to bottom, #000018, #000);
@@ -24,6 +27,7 @@
   --highlight: inset 0 0 0 1px #000;
   --element: linear-gradient(to bottom, #224, #000);
   --a: #7171d1;
+  --a_hover: #bf2295;
 }
 
 textarea {
@@ -46,9 +50,7 @@ body {
   padding: 0;
   text-align: center;
   font: 8.5pt/130% var(--bodyfont);
-  color: #c9ceff;
-  background: url(images/newtab.png);
-  background-size: 0;
+  color: var(--ink);
 }
 
 @supports (-moz-appearance: none) {
@@ -113,16 +115,16 @@ input {
 }
 
 input:hover, input:focus {
-  color: #83529f !important;
-  border: 1px solid #652787;
-  box-shadow: inset 0 1px 1px 0 #c9ceff;
+  color: var(--a_hover);
+  border: 1px solid var(--hover);
+  box-shadow: inset 0 1px 1px 0 var(--ink);
   background: #000;
   cursor: pointer;
 }
 
 input:active {
-  color: #c9ceff;
-  border: 1px solid #652787;
+  color: var(--ink);
+  border: 1px solid var(--hover);
   box-shadow: var(--highlight);
   background: #000;
 }
@@ -139,14 +141,14 @@ input[type=text], input[type=password], textarea {
 input[type=text], input[type=password] {
   margin: 5px 10px;
   padding: 6px 8px;
-  color: #c9ceff;
+  color: var(--ink);
   text-decoration: none;
   font: bold 9pt var(--bodyfont);
   border: var(--innerborder) !important;
 }
 
 input[type=text]:focus, input[type=password]:focus, textarea:focus {
-  color: #c9ceff !important;
+  color: var(--ink) !important;
   border: 1px solid #6466a5 !important;
   box-shadow: 0 0 0 1px rgba(101, 39, 135, .5), 0 0 2px 2px #202;
   background: #000;
@@ -166,7 +168,7 @@ textarea {
   min-width: 97%;
   text-align: left;
   font: 9pt var(--monospaced);
-  color: #c9ceff;
+  color: var(--ink);
   box-shadow: inset 1px 1px 1px 0 #000;
   resize: none;
   scrollbar-width: thin !important;
@@ -196,7 +198,7 @@ input[type="file"] {
   margin: 5px 10px;
   padding: 0;
   font-weight: 400;
-  color: #c9ceff;
+  color: var(--ink);
   border: none;
   box-shadow: none;
   background: none;
@@ -204,7 +206,7 @@ input[type="file"] {
 }
 
 input[type="file"]:hover, input[type="file"]:active {
-  color: #652787;
+  color: var(--hover);
 }
 
 input[name="refreshInterval"] {
@@ -233,7 +235,7 @@ input[class="check"] { /* nudge "check for updates" button into alignment on /co
 
 select {
   margin: 5px 10px;
-  padding: 4px 24px 4px 4px !important;
+  padding: 5px 24px 5px 6px !important;
   min-width: 110px;
   appearance: none;
   overflow: hidden;
@@ -246,12 +248,6 @@ select {
   background: var(--dropdown) center right 10px no-repeat, var(--button) !important;
   background-size: 10px auto, 100% !important;
   filter: none !important;
-}
-
-@supports not (-moz-appearance: none) {
-select {
-  padding: 5px 20px 5px 6px !important;
-}
 }
 
 #config_tunnels .cancel {
@@ -270,13 +266,13 @@ select option {
 }
 
 select option:hover, select option:focus, select option:checked {
-  box-shadow: inset 0 0 20px 20px #652787;
+  box-shadow: inset 0 0 20px 20px var(--hover);
 }
 
 select:hover, select:focus, select:active {
-  color: #652787;
+  color: var(--hover);
   text-shadow: 0 1px 1px #000;
-  border: 1px solid #652787 !important;
+  border: 1px solid var(--hover) !important;
   background: var(--dropdown_hover) center right 10px no-repeat, var(--button_hover) !important;
   background-size: 10px auto, 100% !important;
 }
@@ -289,10 +285,6 @@ select[disabled], select[disabled]:hover, select[disabled]:focus, select[disable
   background: var(--button) !important;
   opacity: .7;
   cursor: default;
-}
-
-select::-ms-expand {
-  display: none;
 }
 
 #config_tunnels select {
@@ -341,22 +333,22 @@ input[type=file]::file-selector-button {
 
 input[type=submit]:hover, input[type=reset]:hover, button:hover, button:focus,
 input[type=submit]:focus, input[type=reset]:focus, select:hover, select:focus {
-  color: #652787;
-  border: 1px solid #652787;
+  color: var(--a_hover);
+  border: 1px solid var(--hover);
   box-shadow: var(--highlight), inset 0 0 2px 1px #757;
   cursor: pointer;
 }
 
 input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
-  color: #652787;
-  border: 1px solid #652787;
+  color: var(--a_hover);
+  border: 1px solid var(--hover);
   box-shadow: var(--highlight), inset 0 0 2px 1px #757;
   background: var(--button_hover) !important;
   cursor: pointer;
 }
 
 input[type=file]:active::file-selector-button {
-  background: #652787 !important;
+  background: var(--hover) !important;
 }
 
 input[type=submit], input[type=reset], button {
@@ -365,16 +357,15 @@ input[type=submit], input[type=reset], button {
 }
 
 input[type=submit]:hover, input[type=reset]:hover, button:hover {
-  background-blend-mode: luminosity;
   background-size: 12px, 100%;
 }
 
 input[type=submit]:active, input[type=reset]:active, button:active {
   color: #83529f !important;
   text-shadow: 0 1px 1px #3c1751;
-  border: 1px solid #652787;
+  border: 1px solid var(--hover);
   box-shadow: var(--highlight), inset 3px 3px 3px #000;
-  background: #652787;
+  background: var(--hover);
   background-size: 12px, 100%;
   background-blend-mode: luminosity !important;
 }
@@ -382,9 +373,9 @@ input[type=submit]:active, input[type=reset]:active, button:active {
 input[type=file]:active::file-selector-button {
   color: #83529f !important;
   text-shadow: 0 1px 1px #3c1751;
-  border: 1px solid #652787;
+  border: 1px solid var(--hover);
   box-shadow: var(--highlight), inset 3px 3px 3px #000;
-  background: #652787;
+  background: var(--hover);
   background-size: 14px, 100%;
   background-blend-mode: luminosity !important;
 }
@@ -711,7 +702,7 @@ input.back {
 }
 
 input.back:hover, input.back:focus {
-  background: #652787 var(--back) no-repeat 6px center / 14px !important;
+  background: var(--hover) var(--back) no-repeat 6px center / 14px !important;
 }
 
 input.reload, button.reload {
@@ -967,7 +958,7 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 
 .routersummary .reload[value="restartImmediate"]:focus, .routersummary .reload[value="restartImmediate"]:active {
   padding: 6px 9px 6px 25px !important;
-  background: #652787 var(--restart_hover) no-repeat left 6px center / 12px !important;
+  background: var(--hover) var(--restart_hover) no-repeat left 6px center / 12px !important;
 }
 
 .routersummary .stop[value="shutdownImmediate"] {
@@ -996,7 +987,7 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 
 .routersummary .reload[value="Reseed"]:focus, .routersummary .reload[value="Reseed"]:active {
   padding: 6px 9px 6px 25px !important;
-  background: #652787 var(--download_hover) no-repeat left 6px center / 14px !important;
+  background: var(--hover) var(--download_hover) no-repeat left 6px center / 14px !important;
 }
 
 .routersummary .download, .routersummary .download:hover, .routersummary .download:focus {
@@ -1015,7 +1006,7 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 }
 
 .routersummary .download:active {
-  background: #652787 var(--download) no-repeat 7px center / 15px !important;
+  background: var(--hover) var(--download) no-repeat 7px center / 15px !important;
 }
 
 /* end sidebar buttons */
@@ -1030,7 +1021,7 @@ pre {
   overflow-x: auto;
   text-align: left;
   font: 8.5pt var(--monospaced);
-  color: #c9ceff;
+  color: var(--ink);
 }
 
 /* proxy/server errors */
@@ -1042,7 +1033,7 @@ pre {
   float: left;
   text-align: center;
   font-size: 9pt;
-  color: #c9ceff;
+  color: var(--ink);
   border: var(--innerborder);
   box-shadow: var(--highlight), 0 0 0 4px #225;
   background: #000;
@@ -1061,7 +1052,7 @@ pre {
 
 .logo a img:hover {
   opacity: 1;
-  filter: drop-shadow(0 0 3px #652787);
+  filter: drop-shadow(0 0 3px var(--hover));
 }
 
 div.logo hr {
@@ -1127,7 +1118,7 @@ div.logo hr {
   min-width: 300px;
   text-align: left;
   word-wrap: break-word;
-  color: #c9ceff;
+  color: var(--ink);
   text-align: justify;
   font-size: 10pt;
   text-shadow: 0 1px 1px #000;
@@ -1257,7 +1248,7 @@ div.logo hr {
   width: 184px;
   text-align: center;
   font-size: 8pt;
-  color: #c9ceff;
+  color: var(--ink);
   border: 1px solid #26235c;
 }
 
@@ -1375,7 +1366,7 @@ div.logo hr {
 }
 
 .routersummary h3:hover a {
-  color: #652787 !important;
+  color: var(--hover) !important;
 }
 
 .routersummary h3:active {
@@ -1598,7 +1589,7 @@ div.logo hr {
 
 #sb_services a:hover, #sb_internals a:hover, #sb_advanced a:hover, #sb_localtunnels tr:hover, .sb_newsheadings a:hover,
 #sb_localtunnels tr:hover a, #sb_help a:hover, .news a:hover, #console a:hover, #help a:hover {
-  color: #bf2295 !important;
+  color: var(--a_hover) !important;
   border-radius: 2px;
   background-color: #1e0b28;
 }
@@ -1615,13 +1606,13 @@ div.logo hr {
 
 #sb_peers a, #sb_peersadvanced a, #sb_tunnels a, #sb_general a, #sb_shortgeneral a, #sb_advancedgeneral a {
   padding: 0;
-  color: #c9ceff;
+  color: var(--ink);
 }
 
 #sb_peers a:hover, #sb_peers a:focus,
 #sb_peersadvanced a:hover, #sb_peersadvanced a:focus,
 #sb_tunnels a:hover, #sb_tunnels a:focus {
-  color: #bf2295;
+  color: var(--a_hover);
 }
 
 #sb_peersadvanced .separator td::after {
@@ -1753,7 +1744,7 @@ p:empty + .sb_notice {
 }
 
 .routersummary a:hover {
-  color: #bf2295;
+  color: var(--a_hover);
 }
 
 .routersummary hr:last-child {
@@ -1787,8 +1778,8 @@ p:empty + .sb_notice {
 }
 
 #sb_services a:hover {
-  background: #652787;
-  background: linear-gradient(to right, #652787, #501f6c);
+  background: var(--hover);
+  background: linear-gradient(to right, var(--hover), #501f6c);
   background-blend-mode: normal;
 }
 
@@ -2025,7 +2016,7 @@ p:empty + .sb_notice {
   margin: -6px -4px -2px;
   padding: 2px 0 4px;
   border-bottom: var(--innerborder);
-  color: #c9ceff;
+  color: var(--ink);
 }
 
 .sb_info .percentBarOuter {
@@ -2037,7 +2028,7 @@ p:empty + .sb_notice {
 
 .sb_info .percentBarText {
   padding-top: 2px;
-  color: #c9ceff;
+  color: var(--ink);
 }
 
 .sb_info .percentBarInner {
@@ -2064,7 +2055,7 @@ p:empty + .sb_notice {
 }
 
 .sb_netstatus a:hover, .sb_netstatus a:visited:hover {
-  color: #bf2295 !important;
+  color: var(--a_hover) !important;
 }
 
 .sb_netstatus {
@@ -2188,17 +2179,12 @@ p:empty + .sb_notice {
 
 /* tunnel build status */
 
-
 @keyframes progress {
-from {
-background-position: 200%
-}
-to {
-background-position: 0;
-}
+  from {background-position: 200%}
+  to {background-position: 0}
 }
 
-/*.tunnelBuildStatus, */#bandwidthTestRunning {
+#bandwidthTestRunning {
   margin: -4px 0;
   padding: 7px 3px !important;
   width: 100%;
@@ -2280,7 +2266,7 @@ background-position: 0;
   margin: -1px 3px 10px 212px;
   padding: 35px 20px 35px 75px;
   min-width: 545px;
-  color: #c9ceff;
+  color: var(--ink);
   font-size: 110%;
   text-align: justify;
   word-wrap: break-word;
@@ -2291,11 +2277,10 @@ background-position: 0;
 }
 
 div.sorry hr {
-  color: #c9ceff;
   color: transparent;
   background: none;
   height: 1px;
-  border-top: 1px solid #c9ceff;
+  border-top: 1px solid var(--ink);
   margin: 20px 0;
   opacity: .5;
 }
@@ -2348,7 +2333,7 @@ div.sorry hr {
   min-width: 620px;
   text-align: left;
   font-size: 9pt;
-  color: #c9ceff;
+  color: var(--ink);
   border: 1px solid #26235c;
   box-shadow: var(--highlight), inset 0 0 2px 1px #26235c;
 }
@@ -2417,7 +2402,7 @@ div.sorry hr {
 .news p, .newscontent p {
   margin-top: -5px;
   font-size: 9pt;
-  color: #c9ceff;
+  color: var(--ink);
   margin-bottom: 0;
 }
 
@@ -2439,7 +2424,7 @@ div.sorry hr {
 
 #newsStatus {
   float: left;
-  color: #c9ceff;
+  color: var(--ink);
 }
 
 #newsDisplay {
@@ -2479,12 +2464,12 @@ div.sorry hr {
   background: #002;
 }
 
-#newsDisplay a:hover, #newsDisplay a:focus, #graphopts a:hover, #graphopts a:focus, #routerinfo a:hover, #routerinfo a:focus, .graphstat:hover, .graphstat:focus {
-  color: #83529f !important;
+#newsDisplay a:hover, #newsDisplay a:focus, #graphopts a:hover, #graphopts a:focus,
+#routerinfo a:hover, #routerinfo a:focus, .graphstat:hover, .graphstat:focus {
+  color: var(--a_hover) !important;
   text-shadow: 0 1px 1px #000;
   border: 1px solid #000;
   box-shadow: 0 0 1px #000, inset 0 0 0 1px #303;
-  background: #202;
   background: var(--button_hover);
   transition: ease box-shadow .05s;
 }
@@ -2493,7 +2478,7 @@ div.sorry hr {
   color: #83529f !important;
   text-shadow: 0 1px 1px #3c1751;
   box-shadow: inset 0 0 0 1px #303, inset 3px 3px 3px #14071b !important;
-  background: #652787;
+  background: var(--hover);
 }
 
 .news #newsDisplay, .news #newsStatus {
@@ -2640,25 +2625,25 @@ div.confignav {
 }
 
 .tab:hover a {
-  color: #bf2295 !important;
+  color: var(--a_hover) !important;
   text-shadow: 0 1px 1px #000;
   background: none !important;
 }
 
 .tab:active {
   box-shadow: var(--highlight), inset 3px 3px 3px 1px #2d103f !important;
-  background: #652787 !important;
-  background: radial-gradient(at center bottom, rgba(200, 96, 200, .8) 0, rgba(0, 0, 0, 0) 90%), linear-gradient(to bottom, #501f6c, #652787) !important;
+  background: var(--hover) !important;
+  background: radial-gradient(at center bottom, rgba(200, 96, 200, .8) 0, rgba(0, 0, 0, 0) 90%), linear-gradient(to bottom, #501f6c, var(--hover)) !important;
 }
 
 .tab:active a, #help .tab:active a {
-  color: #c9ceff !important;
+  color: var(--ink) !important;
   background: none !important;
 }
 
 .tab2 {
   padding: 6px 14px;
-  color: #c9ceff;
+  color: var(--ink);
   text-shadow: 0 1px 1px #000;
   box-shadow: var(--highlight), inset 4px 4px 4px rgba(0,0,0,.5);
   background: radial-gradient(at center bottom, rgba(128, 0, 128, .4) 0, rgba(0, 0, 0, 0) 90%),
@@ -2916,7 +2901,7 @@ div.messages {
   margin: -4px 0 12px;
   font-weight: 700;
   font-size: 9.5pt;
-  color: #c9ceff !important;
+  color: var(--ink) !important;
   border: var(--innerborder);
   box-shadow: var(--highlight), inset 0 0 2px 1px #808 !important;
   background: #000 var(--infohelp) no-repeat 15px center;
@@ -2925,7 +2910,7 @@ div.messages {
 
 div.messages i {
   padding-left: 45px;
-  color: #c9ceff;
+  color: var(--ink);
 }
 
 div.messages span.error {
@@ -3175,7 +3160,7 @@ th {
   line-height: 110%;
   text-align: center;
   font-size: 9pt;
-  color: #c9ceff;
+  color: var(--ink);
   border-top: var(--innerborder);
   border-bottom: var(--innerborder);
   background: var(--th);
@@ -3212,7 +3197,7 @@ tr:nth-child(odd), #netdbversions tr:nth-child(odd), #netdbtransports tr:nth-chi
 
 td {
   padding: 4px 6px;
-  color: #c9ceff;
+  color: var(--ink);
   vertical-align: middle;
   border-top: var(--innerborder);
   border-right: var(--innerborder);
@@ -3271,7 +3256,7 @@ a:link tt, a:visited tt {
 }
 
 a:hover tt {
-  color: #bf2295;
+  color: var(--a_hover);
 }
 
 a:active tt {
@@ -3349,7 +3334,7 @@ a:visited {
 }
 
 a:hover, a:focus, .h3navlinks a:hover, .h3navlinks a:focus, a:hover .b32, a:focus .b32, .signingkey a:hover, .signingkey a:focus {
-  color: #bf2295;
+  color: var(--a_hover);
   text-decoration: none;
   font-weight: 700;
   word-wrap: break-word;
@@ -3389,7 +3374,7 @@ p img:first-child {
 
 p:empty { /* kills empty paragraphs that are likely erroneous eg. see top of /profiles?f=1, /profiles */
   display: none;
-  border: 1px dotted #652787; /* display in order to bug hunt */
+  border: 1px dotted var(--hover); /* display in order to bug hunt */
 }
 
 #config_logging p {
@@ -3399,7 +3384,7 @@ p:empty { /* kills empty paragraphs that are likely erroneous eg. see top of /pr
 
 h1 {
   text-align: left;
-  color: #c9ceff;
+  color: var(--ink);
   padding: 13px 15px 12px;
   margin: 0 3px 0 212px !important;
   font-size: 17pt;
@@ -3439,12 +3424,12 @@ span#newtab {
 }
 
 #newtab:hover {
-  filter: drop-shadow(0 0 3px #652787) !important;
+  filter: drop-shadow(0 0 3px var(--hover)) !important;
 }
 
 h2, h2.welcome {
   font-size: 12pt;
-  color: #c9ceff;
+  color: var(--ink);
   text-shadow: 0 0 2px #010011;
   letter-spacing: .05em;
   padding: 10px;
@@ -3466,11 +3451,11 @@ h2 a:visited {
 }
 
 h2 a:hover {
-  color: #652787;
+  color: var(--hover);
 }
 
 h2 a[name]:hover, h2 a[name]:active {
-  color: #c9ceff !important;
+  color: var(--ink) !important;
 }
 
 h3, h3.welcome, div.news h3 {
@@ -3511,7 +3496,7 @@ h2, h3, h4, .confignav {
   text-align: left !important;
   font-size: 9.5pt !important;
   letter-spacing: .08em;
-  color: #c9ceff;
+  color: var(--ink);
   padding: 6px 10px 6px 30px;
   background: var(--news) no-repeat left 8px center, var(--title) !important;
   background-size: 16px, 4px 100%, 100% !important;
@@ -3549,7 +3534,7 @@ h2, h3, h4, .confignav {
 .langbox {
   margin: 5px 4px 2px 5px;
   padding: 0;
-  color: #c9ceff;
+  color: var(--ink);
   font-size: 7pt;
   width: 400px;
   text-align: right;
@@ -3655,7 +3640,7 @@ fieldset {
 .statusnotes {
   font-style: italic;
   font-size: 9pt;
-  color: #c9ceff;
+  color: var(--ink);
   text-align: center;
   border: var(--innerborder) !important;
   margin: -3px 0 5px 0;
@@ -3864,7 +3849,7 @@ form[action="events"] {
 }
 
 .smallhead th a img:hover {
-  filter: drop-shadow(0 0 1px #652787);
+  filter: drop-shadow(0 0 1px var(--hover));
 }
 
 .mediumtags {
@@ -3912,7 +3897,7 @@ form[action="events"] {
 }
 
 h3[id$="con"] { /* peers h3 + tables */
-  background: #652787;
+  background: var(--hover);
   margin-bottom: -2px;
   border-radius: 0;
   padding: 8px 10px;
@@ -3972,11 +3957,11 @@ h3[id="udpcon"] {
 }
 
 #udpconnections tr:hover td, #ntcpconnections tr:hover td {
-  color: #c9ceff;
+  color: var(--ink);
 }
 
 #udpconnections tr.tablefooter td {
-  color: #c9ceff;
+  color: var(--ink);
 }
 
 #udpconnections tr.tablefooter:hover td {
@@ -4052,13 +4037,13 @@ h3[id="udpcon"] {
 }
 
 .sortup:hover {
-  border: 1px solid #652787;
+  border: 1px solid var(--hover);
   background: var(--mv_up_hover) no-repeat center center, linear-gradient(to bottom, #000, #004);
   opacity: 1;
 }
 
 .sortdown:hover {
-  border: 1px solid #652787;
+  border: 1px solid var(--hover);
   background: var(--mv_down_hover) no-repeat center center, linear-gradient(to bottom, #000, #004);
   opacity: 1;
 }
@@ -4102,7 +4087,7 @@ pre#activetransports {
 }
 
 a[name="chelp"]:hover, a[name="help"]:hover, a[name="chelp"]:active, a[name="help"]:active { /* hide /help anchorpoints */
-  color: #c9ceff !important;
+  color: var(--ink) !important;
   text-decoration: none;
   text-shadow: none;
 }
@@ -4197,26 +4182,26 @@ tr#addnew {
 }
 
 .themechoice:hover {
-  border: 1px solid #652787;
+  border: 1px solid var(--hover);
   background: #000;
 }
 
 .themechoice:hover .themelabel {
-  color: #652787;
-  border-top: 1px solid #652787 !important;
+  color: var(--hover);
+  border-top: 1px solid var(--hover) !important;
   background: #000 !important;
   background: linear-gradient(to bottom, #1e0b28 50%, #0a030d 50%) !important;
 }
 
 .themechoice:active .themelabel, .langselect:active .ui_lang {
-  color: #c9ceff !important;
-  border-top: 1px solid #652787 !important;
+  color: var(--ink) !important;
+  border-top: 1px solid var(--hover) !important;
   box-shadow: var(--highlight), inset 3px 3px 2px #1e0b28 !important;
-  background: #652787 !important;
+  background: var(--hover) !important;
 }
 
 .themechoice:hover img {
-  filter: drop-shadow(0 0 2px #652787);
+  filter: drop-shadow(0 0 2px var(--hover));
 }
 
 .themechoice img {
@@ -4244,12 +4229,12 @@ tr#addnew {
 }
 
 .themechoice .optbox:hover + img ~ .themelabel {
-  color: #652787;
+  color: var(--hover);
 }
 
 .themechoice .optbox:checked + img ~ .themelabel {
   font-weight: 700;
-  color: #c9ceff;
+  color: var(--ink);
   background: #040033 !important;
 }
 
@@ -4259,7 +4244,7 @@ tr#addnew {
 }
 
 .themechoice .optbox:focus + img ~ .themelabel {
-  color: #652787;
+  color: var(--hover);
   box-shadow: inset 0 0 10px 3px #000;
 }
 
@@ -4388,15 +4373,15 @@ td#themeselect {
 }
 
 .langselect input[name="lang"]:hover + img {
-  filter: drop-shadow(0 0 1px #652787);
+  filter: drop-shadow(0 0 1px var(--hover));
 }
 
 .langselect input[name="lang"]:hover + img + div.ui_lang {
-  color: #652787;
+  color: var(--hover);
 }
 
 .langselect input[name="lang"]:checked + img + div.ui_lang {
-  color: #c9ceff;
+  color: var(--ink);
   font-weight: 700;
   background: #040033 !important;
 }
@@ -4406,23 +4391,23 @@ td#themeselect {
 }
 
 .langselect input[name="lang"]:focus + img + div.ui_lang {
-  color: #652787 !important;
+  color: var(--hover) !important;
   box-shadow: inset 0 0 10px 3px #000 !important;
 }
 
 .langselect input[name="lang"]:active + img + div.ui_lang {
-  color: #c9ceff !important;
+  color: var(--ink) !important;
   box-shadow: var(--highlight), inset 3px 3px 2px #1e0b28 !important;
 }
 
 .langselect:hover, .langselect:active {
-  border: 1px solid #652787;
+  border: 1px solid var(--hover);
   background: #000;
 }
 
 .langselect:hover .ui_lang {
-  color: #652787;
-  border-top: 1px solid #652787;
+  color: var(--hover);
+  border-top: 1px solid var(--hover);
   background: #000;
   background: linear-gradient(to bottom, #1e0b28 50%, #0a030d 50%) !important;
 }
@@ -4455,7 +4440,7 @@ td#themeselect {
 .langselect input:hover + img {
   box-shadow: none !important;
   transition: none !important;
-  filter: drop-shadow(0 0 2px #652787);
+  filter: drop-shadow(0 0 2px var(--hover));
 }
 
 @supports not (-moz-appearance: none) {
@@ -4768,7 +4753,7 @@ table#reseedconfig input[type=text], table#reseedconfig input[type=password] {
 
 #banlist li a[href^="configpeer"]:active {
   box-shadow: var(--highlight), inset 3px 3px 3px 1px #2d103f !important;
-  background: linear-gradient(to bottom, #652787 50%, #501f6c 50%) !important;
+  background: linear-gradient(to bottom, var(--hover) 50%, #501f6c 50%) !important;
 }
 
 /* /confignet */
@@ -5169,7 +5154,7 @@ form > table {
 /* configtunnels */
 
 #tunnelconfig th a:hover {
-  color: #c9ceff !important;
+  color: var(--ink) !important;
 }
 
 #tunnelconfig td:first-child {
@@ -5283,7 +5268,7 @@ table#sidebarconf {
 }
 
 #sidebarconf button:active {
-  background: #652787;
+  background: var(--hover);
 }
 
 #sidebarconf button img {
@@ -5378,19 +5363,19 @@ table#sidebarconf {
 }
 
 .buttonTop:active {
-  background: #652787 var(--mv_top_active) no-repeat center center !important;
+  background: var(--hover) var(--mv_top_active) no-repeat center center !important;
 }
 
 .buttonUp:active {
-  background: #652787 var(--mv_up_active) no-repeat center center !important;
+  background: var(--hover) var(--mv_up_active) no-repeat center center !important;
 }
 
 .buttonDown:active {
-  background: #652787 var(--mv_down_active) no-repeat center center !important;
+  background: var(--hover) var(--mv_down_active) no-repeat center center !important;
 }
 
 .buttonBottom:active {
-  background: #652787 var(--mv_bottom_active) no-repeat center center !important;
+  background: var(--hover) var(--mv_bottom_active) no-repeat center center !important;
 }
 
 .buttonTop, .buttonBottom, .buttonUp, .buttonDown, .buttonTop,
@@ -6312,7 +6297,7 @@ table[id$="logs"] ul {
 /* Override error log colors */
 
 font[color="#006600"] { /* debug/notify */
-  color: #c9ceff;
+  color: var(--ink);
   opacity: .8;
 }
 
@@ -6329,7 +6314,7 @@ font[color="#cc0000"] { /* critical */
 }
 
 font[color="#000099"] { /* info */
-  color: #c9ceff;
+  color: var(--ink);
 }
 
 /* end log color overrides */
@@ -6410,7 +6395,7 @@ font[color="#000099"] { /* info */
 /* debug */
 
 #logs li font[color="#006600"]::before, .log_debug, .log_omitted {
-  background: #c9ceff;
+  background: var(--ink);
   opacity: .8;
 }
 
@@ -6433,13 +6418,13 @@ font[color="#000099"] { /* info */
 /* info */
 
 #logs li font[color="#000099"]::before, .log_info {
-  background: #c9ceff;
+  background: var(--ink);
 }
 
 /* /profiles */
 
 #profilelist tr:hover td, #floodfills tr:hover td {
-  color: #c9ceff;
+  color: var(--ink);
 }
 
 #profilelist th, #profilelist td {
@@ -7166,7 +7151,7 @@ table#jardump {
 
 .skm_key td:first-child b {
   font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", Verdana, Helvetica, sans-serif !important;
-  color: #c9ceff;
+  color: var(--ink);
 }
 
 .debug_targetinfo {
@@ -7374,20 +7359,20 @@ div.app {
 
 div.app:hover {
   opacity: 1;
-  border: 1px solid #652787;
+  border: 1px solid var(--hover);
   background: #000;
   box-shadow: none;
-  color: #652787 !important;
+  color: var(--hover) !important;
 }
 
 div.app:active .applabel {
-  background: #652787 !important;
+  background: var(--hover) !important;
   box-shadow: var(--highlight), inset 3px 3px 2px #1e0b28;
   transition: ease box-shadow .05s !important;
 }
 
 div.app:active .applabel a {
-  color: #c9ceff !important;
+  color: var(--ink) !important;
 }
 
 div.app a:link, div.app a:hover, div.app a:active {
@@ -7396,11 +7381,11 @@ div.app a:link, div.app a:hover, div.app a:active {
 }
 
 div.app a:focus {
-  color: #652787;
+  color: var(--hover);
 }
 
 div.app:hover a:link, div.app:hover a:visited {
-  color: #652787;
+  color: var(--hover);
 }
 
 div.app:last-child {
@@ -7433,7 +7418,7 @@ div.app.js:hover::before {
   position: absolute;
   top: -1px;
   left: -1px;
-  border: 1px solid #652787;
+  border: 1px solid var(--hover);
   content: "*js";
 }
 
@@ -7532,8 +7517,8 @@ div.app:active img {
 }
 
 .applabel:hover {
-  color: #652787;
-  border-top: 1px solid #652787;
+  color: var(--hover);
+  border-top: 1px solid var(--hover);
   background: #000;
 }
 
@@ -7548,10 +7533,10 @@ div.app:active img {
 }
 
 div.app:hover .applabel {
-  border-top: 1px solid #652787 !important;
+  border-top: 1px solid var(--hover) !important;
   background: #000;
   background: linear-gradient(to bottom, #1e0b28 50%, #0a030d 50%);
-  color: #652787;
+  color: var(--hover);
 }
 
 @media screen and (max-width: 1200px) {
@@ -7707,7 +7692,7 @@ h3[id*="job"] {
 }
 
 .netdbentry td b, .leaseset td b, #leasesetdebug td b, .sybil_routerinfo td b {
-  color: #c9ceff !important;
+  color: var(--ink) !important;
 }
 
 span#distance {
@@ -7885,9 +7870,9 @@ span#distance {
 }
 
 #sybilnav ul li:hover {
-  border: 1px solid #652787;
-  background: #652787;
-  background: linear-gradient(to right, #652787, #501f6c);
+  border: 1px solid var(--hover);
+  background: var(--hover);
+  background: linear-gradient(to right, var(--hover), #501f6c);
 }
 
 #sybilnav a {
@@ -7896,7 +7881,7 @@ span#distance {
 }
 
 #sybilnav ul li:hover a {
-  color: #652787;
+  color: var(--hover);
   color: #fff;
 }
 
@@ -8504,7 +8489,7 @@ table#configstats {
 }
 
 #configstats td b {
-  color: #c9ceff;
+  color: var(--ink);
 }
 
 #configstats input.optbox {
@@ -8766,7 +8751,7 @@ img + tt {
   padding: 2px 3px !important;
   min-width: 14px;
   display:inline-block;
-  color: #c9ceff;
+  color: var(--ink);
   text-align: center !important;
   text-shadow: 0 1px 1px #000;
   border: 1px solid rgba(0,0,64,.2);
@@ -9975,19 +9960,6 @@ h3#pluginfromfile, h3#updateplugins, h3#pluginmanage, h3#bannedpeers, h3.ptitle,
 /* end proxy errors */
 /* end responsive layout */
 
-/* IE/Edge tweaks */
-
-_:-ms-lang(x), .tunnels_client th:first-child::after {
-  letter-spacing: -.05em;
-  font-weight: 400;
-}
-
-_:-ms-lang(x), table + .statusnotes {
-  margin-top: -2px;
-}
-
-/* end IE/Edge tweaks */
-
 /* TO DO: Merge with main classes */
 
 .optionlist {
@@ -10049,9 +10021,9 @@ th.options, table#externali2cp th {
 }
 
 @media screen and (max-width: 1500px) {
-#pluginconfigtext input {
-  margin: -4px -6px 0 0;
-}
+  #pluginconfigtext input {
+    margin: -4px -6px 0 0;
+  }
 }
 
 #externaltcp .nowrap:first-child {
@@ -10083,9 +10055,9 @@ th.options, table#externali2cp th {
 }
 
 @media screen and (min-width: 1060px) {
-#graphs td:first-child {
-  padding: 5px 0;
-}
+  #graphs td:first-child {
+    padding: 5px 0;
+  }
 }
 
 #graphs .nowrap b {
@@ -10127,8 +10099,7 @@ b.suboption {
   border: var(--innerborder);
   border-bottom: none;
   box-shadow: var(--highlight);
-  background: #002;
-  background: linear-gradient(to right, rgba(0,0,16,.5), rgba(0,0,0,0) 30%), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
+  background: linear-gradient(to right, rgba(0,0,16,.5), rgba(0,0,0,0) 30%), linear-gradient(to bottom, #141221 50%, #001 50%);
 }
 
 #i2pupdates .suboption {
@@ -10199,7 +10170,7 @@ b.suboption {
 #i2pupdates .optionsingle, #homesites.formaction, #homeapps.formaction, #oldhome tr:last-child, #bandwidthconfig .optionsave,
 #clientsconfig.formaction, #addkeyring tr:last-child td, #loggingoptions tr:last-child td, #webappconfigactions.formaction, #configstats .optionsave {
   box-shadow: var(--highlight), inset 0 0 0 2px transparent, inset 0 0 2px 1px #191939, inset 0 0 5px 3px #002 !important;
-  background: linear-gradient(to bottom, #001, #030306) !important;
+  background: var(--formaction) !important;
 }
 
 #config_reseed .optionsingle.optiontextarea, #reseedssl, #config_reseed td.optionsave,
@@ -10208,14 +10179,14 @@ b.suboption {
 }
 
 #manualreseed #reseedurl, #manualreseed #reseedcreatefile, #manualreseed #reseedzip {
-  background: linear-gradient(to bottom, #001, #030306) !important;
+  background: var(--formaction) !important;
 }
 
 #config_reseed td.optionsave, #config_reseed #reseedconfig td.optionsave, #bandwidthconfig .optionsave, #i2pupdates .optionsave, #externali2cp .optionsave, #config_advanced .optionsave, #config_ui .formaction, #graphing.formaction, #pluginconfigactions,
 #tunnelconfigsave, #sidebardefaults, #refreshsidebar tr, #addkeyring tr:last-child td, #clientsconfig, #homeapps, #homesites, #loggingoptions .optionsave {
   padding: 12px 8px !important;
   box-shadow: var(--highlight), inset 0 0 0 2px transparent, inset 0 0 2px 1px #191939, inset 0 0 5px 3px #002 !important;
-  background: linear-gradient(to bottom, #001, #030306) !important;
+  background: var(--formaction) !important;
   opacity: 1 !important;
 }
 
@@ -10228,7 +10199,7 @@ b.suboption {
   margin: 0 -7px 0;
   border-top: var(--innerborder);
   box-shadow: var(--highlight), inset 0 0 0 2px transparent, inset 0 0 2px 1px #191939, inset 0 0 5px 3px #002 !important;
-  background: linear-gradient(to bottom, #001, #030306) !important;
+  background: var(--formaction) !important;
 }
 
 #oldhome tr:last-child td:last-child {
@@ -12275,7 +12246,7 @@ a .sitemapLink, a:visited .sitemapLink {
 }
 
 a:hover .sitemapLink {
-  color: #652787;
+  color: var(--hover);
 }
 
 .sitemapLink, .sitemapLabel, #sitemap div.app, #sitemap .applabel {
@@ -12311,7 +12282,7 @@ a:hover .sitemapLink {
 }
 
 .sitemapLink:hover, .sitemapLink:hover .sitemapLabel, #sitemap div.app:hover {
-  border-color: #652787;
+  border-color: var(--hover);
   background: #000;
 }
 
@@ -12873,11 +12844,11 @@ li.noevents::after {
 }
 
 #stats .tab:not(.tab2):hover {
-  color: #bf2295;
+  color: var(--a_hover);
 }
 
 #stats .tab:not(.tab2):active {
-  color: #c9ceff;
+  color: var(--ink);
 }
 
 #stats .tab, #stats .tab2 {
@@ -13275,7 +13246,7 @@ h1[class], h1 {
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 85% !important;
-  color: #c9ceff;
+  color: var(--ink);
   user-select: all;
 }
 
@@ -13478,13 +13449,13 @@ to {
 }
 
 .stattograph:hover, .optbox:checked + label > .stattograph:hover {
-  border-color: #652787;
-  background: #652787;
+  border-color: var(--hover);
+  background: var(--hover);
   color: #fff !important;
 }
 
 .optbox:checked + label > .stattograph:hover {
-  background: #652787 var(--yes) no-repeat 8px center;
+  background: var(--hover) var(--yes) no-repeat 8px center;
   background-size: 8px;
 }
 
@@ -13494,13 +13465,13 @@ to {
 }
 
 .stattograph:active, .optbox:checked + label > .stattograph:active {
-  background: #652787;
+  background: var(--hover);
   box-shadow: inset 4px 4px 4px rgba(0,0,0,.6) !important;
 }
 
 .optbox:checked + label > .stattograph:active {
   box-shadow: inset 4px 4px 4px rgba(0,0,0,.6) !important;
-  background: #652787 var(--yes) no-repeat 8px center;
+  background: var(--hover) var(--yes) no-repeat 8px center;
   background-size: 8px, 100%;
 }
 
@@ -14324,7 +14295,7 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 
 .viewprofile:hover, .familysearch:hover, .configpeer:hover,
 .viewprofile:focus, .familysearch:focus, .configpeer:focus {
-  border: 1px solid #bf2295;
+  border: 1px solid var(--a_hover);
 }
 
 #profilelist .version {
