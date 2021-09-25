@@ -42,9 +42,10 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
      * Sun's impl of BufferedOutputStream), but that is the streaming
      * api's job...
      */
-    static int MAX_PACKET_SIZE = 1024 * 4;
+//    static int MAX_PACKET_SIZE = 1024 * 4;
+    static int MAX_PACKET_SIZE = 8*1024;
 
-    static final int NETWORK_BUFFER_SIZE = MAX_PACKET_SIZE;
+    static final int NETWORK_BUFFER_SIZE = MAX_PACKET_SIZE*2;
 
     private final Socket s;
     private final I2PSocket i2ps;

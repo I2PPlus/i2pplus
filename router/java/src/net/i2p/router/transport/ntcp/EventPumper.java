@@ -46,7 +46,8 @@ class EventPumper implements Runnable {
     private final Log _log;
     private volatile boolean _alive;
     private Selector _selector;
-    private final Set<NTCPConnection> _wantsWrite = new ConcurrentHashSet<NTCPConnection>(32);
+//    private final Set<NTCPConnection> _wantsWrite = new ConcurrentHashSet<NTCPConnection>(32);
+    private final Set<NTCPConnection> _wantsWrite = new ConcurrentHashSet<NTCPConnection>(256);
     /**
      *  The following 3 are unbounded and lockless for performance in runDelayedEvents()
      */
@@ -67,7 +68,7 @@ class EventPumper implements Runnable {
 
 //    private static final int BUF_SIZE = 8*1024;
 //    private static final int MAX_CACHE_SIZE = 64; // unused
-    private static final int BUF_SIZE = 256*1024;
+    private static final int BUF_SIZE = 32*1024;
 
     private static class BufferFactory implements TryCache.ObjectFactory<ByteBuffer> {
         public ByteBuffer newInstance() {
@@ -109,9 +110,10 @@ class EventPumper implements Runnable {
     //private static final String PROP_DIRECT = "i2np.ntcp.useDirectBuffers";
     private static final String PROP_NODELAY = "i2np.ntcp.nodelay";
 
-    private static final int MIN_MINB = 4;
+//    private static final int MIN_MINB = 4;
+    private static final int MIN_MINB = 8;
 //    private static final int MAX_MINB = 12;
-    private static final int MAX_MINB = 256;
+    private static final int MAX_MINB = 32;
     public static final String PROP_MAX_MINB = "i2np.ntcp.eventPumperMaxBuffers";
     private static final int MIN_BUFS;
     static {

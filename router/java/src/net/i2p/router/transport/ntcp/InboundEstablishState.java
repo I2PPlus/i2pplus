@@ -72,8 +72,10 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
     private NTCP2Options _hisPadding;
 
     // same as I2PTunnelRunner
-    private static final int BUFFER_SIZE = 4*1024;
-    private static final int MAX_DATA_READ_BUFS = 32;
+//    private static final int BUFFER_SIZE = 4*1024;
+    private static final int BUFFER_SIZE = 8*1024;
+//    private static final int MAX_DATA_READ_BUFS = 32;
+    private static final int MAX_DATA_READ_BUFS = 64;
 //    private static final int BUFFER_SIZE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 4*1024 : 5*1024;
 //    private static final int MAX_DATA_READ_BUFS = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 32 : 36;
     private static final ByteCache _dataReadBufs = ByteCache.getInstance(MAX_DATA_READ_BUFS, BUFFER_SIZE);
@@ -601,7 +603,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 // process "extra" data
                 // This is very likely for inbound, as data should come right after message 3
                 if (_log.shouldInfo())
-                    _log.info("Extra data " + buf.remaining() + " on " + this);
+                    _log.info("Extra data (" + buf.remaining() + " bytes) on " + this);
                  _con.recvEncryptedI2NP(buf);
             }
         }
