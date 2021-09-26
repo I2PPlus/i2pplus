@@ -200,11 +200,15 @@ class ExploreJob extends SearchJob {
     /** max # of concurrent searches */
     @Override
     protected int getBredth() {
-        String exploreBredth = getContext().getProperty("router.exploreBredth");
-        if (exploreBredth == null) {
+        String exploreBredth = getContext().getProperty(PROP_EXPLORE_BREDTH);
+        if (exploreBredth == null && getContext().netDb().getKnownRouters() > 4000) {
             if (_log.shouldLog(Log.INFO))
                 _log.info("[Job " + getJobId() + "] Initiating Exploratory Search...");
             return EXPLORE_BREDTH;
+        } else if (exploreBredth == null) {
+            if (_log.shouldLog(Log.INFO))
+                _log.info("[Job " + getJobId() + "] Initiating Exploratory Search - max " + EXPLORE_BREDTH * 2 + " concurrent (less than 4000 known peers)");
+            return EXPLORE_BREDTH * 2;
         } else {
             if (_log.shouldLog(Log.INFO))
                 _log.info("[Job " + getJobId() + "] Initiating Exploratory Search - max " + exploreBredth + " concurrent");
