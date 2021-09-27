@@ -5,10 +5,18 @@
 :root {
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
   --monospaced: Droid Sans Mono, Andale Mono, DejaVu Sans Mono, Lucida Console, monospace;
+  --ink: #41444d;
+  --ink_h1: #2c354f;
+  --disabled: #757a8a;
   --hover: #f60;
   --btn: linear-gradient(to bottom, #fff, #f4f5ff);
   --btn_hover: linear-gradient(to bottom, #ddd, #fff);
   --highlight: inset 0 0 0 1px #fff;
+  --border: #aaafce;
+  --bg: #fff;
+  --bg2: #eff1ff;
+  --th: linear-gradient(to bottom, #fff, #fafbff);
+  --header: linear-gradient(to bottom, #fff 50%, #fafbff 50%);
 }
 
 html, body {
@@ -21,14 +29,12 @@ body {
   padding: 0;
   text-align: left;
   font: 9pt/130% var(--bodyfont);
-  color: #41444d;
+  color: var(--ink);
   background: #e2e2f3 url(images/bg0.png) no-repeat center center / 90px;
 }
 
 @supports (text-justify: auto) { /* Firefox 55+ */
-  body {
-    background-attachment: fixed !important;
-  }
+  body {background-attachment: fixed !important}
 }
 
 ::selection {
@@ -85,7 +91,7 @@ i {
   position: relative;
   text-align: center;
   border: 5px solid #bbf;
-  background: #eff1ff;
+  background: var(--bg2);
 }
 
 .logo img {
@@ -101,7 +107,7 @@ i {
   margin: 8px -5px 8px;
   height: 5px;
   color: #bbf;
-  border: 0 solid #bbf;
+  border: none;
   background: #bbf;
 }
 
@@ -130,13 +136,13 @@ i {
 .warning {
   margin: 25px 20px 0 260px;
   padding: 0 20px 40px;
-  border: 5px solid #fb7;
-  text-align: left;
-  color: inherit;
-  background: #ffd;
-  box-shadow: inset 0 0 0 2px var(--hover);
   min-width: 500px;
   position: relative;
+  text-align: left;
+  color: inherit;
+  border: 5px solid #fb7;
+  box-shadow: inset 0 0 0 2px var(--hover);
+  background: #ffd;
 }
 
 .warning a:link {
@@ -156,11 +162,11 @@ i {
 }
 
 .warning hr {
-  color: #fb7;
-  background: #fb7;
-  height: 1px;
-  border: 0 solid #fb7;
   margin: 5px 0;
+  height: 1px;
+  color: #fb7;
+  border: none;
+  background: #fb7;
 }
 
 .warning h3:first-child {
@@ -231,7 +237,7 @@ i {
   word-wrap: break-word;
   text-align: justify;
   font-weight: 700;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   box-shadow: var(--highlight), inset 0 0 1px 1px #900;
   background: #f2f2ff var(--err) no-repeat 20px 40% / 36px;
 }
@@ -243,7 +249,7 @@ i {
 .sorry hr {
   margin: 10px 0;
   height: 1px;
-  background: #aaafce;
+  background: var(--border);
   opacity: .5;
 }
 
@@ -256,7 +262,7 @@ i {
   padding: 0 15px 5px;
   min-width: 540px;
   font-weight: 400;
-  color: #41444d;
+  color: var(--ink);
   box-shadow: inset 0 0 0 1px #f99;
   background: linear-gradient(to bottom, rgba(255, 255, 255, .8), rgba(255, 255, 255, .2)) repeat scroll 0 0 / 100%,
               rgba(0, 0, 0, 0) url(images/bg0.png) repeat scroll 0 0 / 120px 120px;
@@ -265,7 +271,7 @@ i {
 #warning2 h3 {
   margin: -1px -16px 15px;
   padding: 8px 10px;
-  color: #41444d;
+  color: var(--ink);
   box-shadow: inset 0 0 0 1px #f99;
 }
 
@@ -302,8 +308,8 @@ i {
   text-align: center !important;
   font-size: 9pt;
   color: inherit;
-  border: 1px solid #aaafce;
-  background: #fff;
+  border: 1px solid var(--border);
+  background: var(--bg);
 }
 
 /* siderbar logo */
@@ -408,7 +414,7 @@ i {
   margin: 8px -1px 7px -1px;
   height: 0;
   color: #89f;
-  border-bottom: 1px solid #aaafce;
+  border-bottom: 1px solid var(--border);
   background: #89f;
 }
 
@@ -423,7 +429,7 @@ i {
   text-transform: uppercase;
   font-size: 9.5pt;
   border: none;
-  background: linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
+  background: var(--header) !important;
 }
 
 .routersummary h3:hover {
@@ -525,7 +531,7 @@ i {
 }
 
 #sb_peers a b, #sb_peersadvanced a b, #sb_tunnels a a, #sb_general a b, #sb_shortgeneral a b, #sb_advancedgeneral a b {
-  color: #41444d;
+  color: var(--ink);
 }
 
 #sb_peers a:hover b, #sb_peersadvanced a:hover b {
@@ -580,14 +586,6 @@ i {
   padding: 1px !important;
 }
 
-/*#sb_localtunnels tr:nth-child(odd) td {
-  background: rgba(220,220,255,.5);
-}
-
-#sb_localtunnels tr:nth-child(even) td {
-  background: rgba(230,230,255,.5);
-}*/
-
 #sb_localtunnels tr:hover td {
   background: #ffe !important;
   transition: ease background .3s;
@@ -604,9 +602,7 @@ i {
 }
 
 @media screen and (min-width: 1500px) {
-  #sb_localtunnels a {
-  max-width: 194px;
-  }
+  #sb_localtunnels a {max-width: 194px}
 }
 
 #sb_localtunnels td:first-child {
@@ -620,13 +616,11 @@ i {
 }
 
 #sb_tunnels a:not(:hover):not(:focus) {
-  color: #41444d !important;
+  color: var(--ink) !important;
 }
 
 @media screen and (min-width: 1600px) {
-#sb_localtunnels td:first-child {
-  width: 20px !important;
-}
+  #sb_localtunnels td:first-child {width: 20px !important}
 }
 
 #sb_localtunnels td:nth-child(2) {
@@ -672,7 +666,7 @@ i {
 }
 
 #sb_warning {
-  border-bottom: 1px solid #aaafce;
+  border-bottom: 1px solid var(--border);
 }
 
 #sb_warning + hr {
@@ -685,10 +679,10 @@ i {
   line-height: 110%;
   font-size: 8.5pt;
   font-weight: 700;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   border-radius: 2px;
   box-shadow: 0 0 1px #bbb, inset 0 0 0 1px #fbb;
-  background: #fff;
+  background: var(--bg);
 }
 
 #sb_notice.hide, #sb_notice.hide + hr, #sb_updatesection.hide, #sb_updatesection.hide + hr {
@@ -700,8 +694,8 @@ i {
 }
 
 .sb_notice a {
-  vertical-align: baseline;
   padding: 0;
+  vertical-align: baseline;
 }
 
 #sb_warning + .sb_notice {
@@ -748,7 +742,7 @@ p:empty + .sb_notice {
   margin: -6px 0 2px !important;
   width: 100%;
   table-layout: auto;
-  background: #fff;
+  background: var(--bg);
 }
 
 .sb_newsheadings td {
@@ -757,7 +751,7 @@ p:empty + .sb_notice {
   text-align: left;
   border-collapse: collapse;
   border: none;
-  border-bottom: 1px solid #aaafce !important;
+  border-bottom: 1px solid var(--border) !important;
 }
 
 .sb_newsheadings table tr:last-child td {
@@ -814,7 +808,7 @@ div.refresh {
   display: inline-block;
   vertical-align: text-bottom;
   text-shadow: 0 1px 1px #fff;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   box-shadow: var(--highlight), 0 0 1px rgba(96,96,96,.5);
 }
 
@@ -924,7 +918,7 @@ div.refresh {
 
 .tunnelBuildStatus.accepting::before {
   box-shadow: inset 0 0 0 2px #5b5;
-  background: #fff;
+  background: var(--bg);
 }
 
 .tunnelBuildStatus.active::before {
@@ -972,7 +966,7 @@ div.refresh {
   width: 202px !important;
   border-collapse: separate;
   border-spacing: 0;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   will-change: transform;
 }
 
@@ -1000,7 +994,7 @@ a:active #sb_bandwidthgraph {
   z-index: 10;
   display: inline-block;
   font-weight: 700;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   border-top: none;
   border-radius: 0 0 3px 3px;
   box-shadow: var(--highlight);
@@ -1037,7 +1031,7 @@ a:active #sb_bandwidthgraph {
   width: 196px;
   margin: -4px 0 -5px 3px;
   text-align: center;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   box-shadow: 0 0 1px rgba(200,200,200,.8), var(--highlight);
   background: #eef;
   background: repeating-linear-gradient(to right, rgba(210, 210, 255, .7) 1px, rgba(210, 210, 255, .7) 2px, rgba(230, 230, 255, .7) 2px, rgba(230, 230, 255, .7) 4px);
@@ -1062,7 +1056,7 @@ a:active #sb_bandwidthgraph {
   white-space: nowrap;
   text-align: center !important;
   font-weight: 700 !important;
-  color: #41444d;
+  color: var(--ink);
   text-shadow: 0 1px 1px rgba(255,255,255,.8);
   float: left;
   width: 100%;
@@ -1088,8 +1082,8 @@ a:active #sb_bandwidthgraph {
   padding: 3px 0 4px;
   display: block;
   font-style: italic;
-  color: #41444d;
-  border: 1px solid #aaafce;
+  color: var(--ink);
+  border: 1px solid var(--border);
   border-top: none;
   border-radius: 0 0 3px 3px;
   box-shadow: var(--highlight);
@@ -1205,7 +1199,7 @@ div[lang="pt"] li br {
   text-align: right;
   font-size: 7pt;
   color: #001;
-  border-left: 1px solid #aaafce;
+  border-left: 1px solid var(--border);
 }
 
 .langbox img {
@@ -1370,7 +1364,7 @@ select {
   vertical-align: middle;
   text-overflow: ellipsis;
   color: #333;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   border-radius: 2px;
   box-shadow: var(--highlight);
   background: var(--dropdown) no-repeat right 8px center / 10px, var(--btn);
@@ -1391,7 +1385,7 @@ select option {
 }
 
 select:hover, select:active {
-  color: #41444d;
+  color: var(--ink);
   background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover) !important;
   outline: none;
 }
@@ -1402,10 +1396,10 @@ select:focus {
 }
 
 select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active {
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   box-shadow: var(--highlight) !important;
   background: var(--btn) !important;
-  color: #757a8a !important;
+  color: var(--disabled) !important;
   cursor: default;
   opacity: .7;
 }
@@ -1482,12 +1476,12 @@ label:hover {
 
 label[for="0"] {
   cursor: default;
-  color: #41444d;
+  color: var(--ink);
 }
 
 .main#config_clients label[for="0"] {
   cursor: default;
-  color: #41444d;
+  color: var(--ink);
 }
 
 input[type="file"] {
@@ -1501,19 +1495,19 @@ input[type=text], input[type=password] {
   min-width: 120px;
   vertical-align: middle;
   color: #5e626e;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   border-radius: 2px;
   box-shadow: inset 1px 1px 1px #ddd;
   background-color: #fefefe;
 }
 
 input[type=text]:focus, input[type=password]:focus {
-  color: #41444d;
+  color: var(--ink);
   box-shadow: inset 0 0 0 1px rgba(255,96,0,.5);
 }
 
 input[type=text][readonly], input[type=text][readonly]:focus, input[type=text][disabled] {
-  color: #757a8a;
+  color: var(--disabled);
   box-shadow: inset 1px 1px 1px #ddd;
   background: #eff0ff;
 }
@@ -1531,13 +1525,13 @@ input[type=file]::file-selector-button {
 }
 
 button:hover, input[type=submit]:hover, input[type=reset]:hover {
-  color: #41444d;
+  color: var(--ink);
   background-color: #ddd;
   background: var(--btn_hover);
 }
 
 input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
-  color: #41444d;
+  color: var(--ink);
   background-color: #ddd;
   background: var(--btn_hover);
 }
@@ -1553,7 +1547,7 @@ input[type=file]:active::file-selector-button {
 input.search[type=text] {
   padding: 5px 5px 5px 28px;
   color: #333 !important;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   background: #fff var(--search) no-repeat 5px center / 14px;
 }
 
@@ -1613,7 +1607,7 @@ input[type=submit], input[type=reset], button {
   text-decoration: none;
   font: 9pt Droid Sans, Ubuntu, Noto Sans, Segoe UI, Lucida Grande, Verdana, Helvetica, sans-serif;
   color: #5e626e;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   border-radius: 2px;
   box-shadow: var(--highlight), 0 0 1px #ddd;
   background: var(--btn);
@@ -1626,7 +1620,7 @@ input[type=file]::file-selector-button {
   text-decoration: none;
   font: 9pt Droid Sans, Ubuntu, Noto Sans, Segoe UI, Lucida Grande, Verdana, Helvetica, sans-serif;
   color: #5e626e;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   border-radius: 2px;
   box-shadow: var(--highlight), 0 0 1px #ddd;
   background: var(--btn);
@@ -1647,8 +1641,8 @@ button:active a {
 }
 
 button:hover, input[type=submit]:hover, input[type=reset]:hover, button:focus, input[type=submit]:focus, input[type=reset]:focus {
-  color: #41444d;
-  border: 1px solid #aaafce;
+  color: var(--ink);
+  border: 1px solid var(--border);
   box-shadow: var(--highlight), 0 0 1px #89f;
   background: var(--btn_hover);
 }
@@ -2066,7 +2060,7 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 }
 
 .routersummary button.reload:hover, .routersummary button.reload:focus {
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   background: var(--shutdown_hover) no-repeat 37% center / 14px, var(--restart_hover) no-repeat 63% center / 14px, var(--btn_hover) !important;
 }
 
@@ -2080,7 +2074,7 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 }
 
 .routersummary .stop:hover, .routersummary .stop:focus {
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   background: var(--shutdown_hover) no-repeat center center / 14px, var(--btn_hover) !important;
 }
 
@@ -2138,10 +2132,10 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
   padding: 15px 15px 10px 15px;
   min-width: 580px;
   text-align: left;
-  color: #41444d;
-  border: 1px solid #aaafce;
+  color: var(--ink);
+  border: 1px solid var(--border);
   border-top: 0;
-  background: #fff;
+  background: var(--bg);
 }
 
 .main#dns, .main#webmail, .main#torrents, .main#tunnelmgr {
@@ -2191,7 +2185,7 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
   min-height: 96px;
   resize: none;
   color: #5e626e;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   border-radius: 2px;
   box-shadow: inset 1px 1px 1px #ddd;
   background: #fafbff;
@@ -2202,7 +2196,7 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 }
 
 .main textarea:focus {
-  color: #41444d;
+  color: var(--ink);
   box-shadow: inset 0 0 0 1px #89f;
   background: #fff;
   outline: none;
@@ -2279,9 +2273,9 @@ div.news {
   min-width: 586px;
   text-align: right;
   font-size: 8pt;
-  border: 1px solid #aaafce;
-  border-bottom: 1px solid #aaafce;
-  border-right: 1px solid #aaafce;
+  border: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  border-right: 1px solid var(--border);
   background: #fafaff;
   background: linear-gradient(to bottom, #fff, #fafaff);
 }
@@ -2295,8 +2289,8 @@ div.news li {
   text-transform: capitalize;
   font-size: 10pt;
   list-style: none;
-  color: #aaafce;
-  border-bottom: 2px dotted #aaafce;
+  color: var(--border);
+  border-bottom: 2px dotted var(--border);
 }
 
 #news h3 {
@@ -2308,7 +2302,7 @@ div.news li {
   font-size: 10pt !important;
   text-shadow: none !important;
   border: none !important;
-  border-bottom: 1px dotted #aaafce !important;
+  border-bottom: 1px dotted var(--border) !important;
   box-shadow: none;
 }
 
@@ -2413,11 +2407,11 @@ div.news hr:last-child {
 .confignav {
   margin: -16px -16px 5px -16px;
   padding: 5px 7px 6px;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   font-size: 9pt;
   text-align: center;
   font-weight: 700;
-  background: linear-gradient(to bottom, #fff, #fafbff);
+  background: var(--th);
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
@@ -2434,7 +2428,7 @@ div.news hr:last-child {
   min-width: 60px !important;
   position: relative;
   display: inline-block;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   background: #fff;
   box-sizing: border-box;
 }
@@ -2457,7 +2451,7 @@ div[id^="config"] .tab a {
 }
 
 .tab {
-  background: linear-gradient(to bottom, #fff 50%, #fafbff 50%);
+  background: var(--header);
   box-shadow: var(--highlight);
 }
 
@@ -2500,7 +2494,7 @@ div.configure hr {
 
 div.configure table {
   font-size: 9pt;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
 }
 
 table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
@@ -2542,7 +2536,7 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 
 #configstats td:first-child:empty + td > label, #configstats td:first-child:empty + td > label:hover { /* remove pointer from inert labels */
   cursor: default;
-  color: #41444d;
+  color: var(--ink);
 }
 
 #configstats td:first-child {
@@ -2550,13 +2544,13 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 }
 
 #configstats td:last-child { /* epiphany fix */
-  border-right: 1px solid #aaafce;
+  border-right: 1px solid var(--border);
 }
 
 .configtable td, #joinfamily td {
   padding: 5px 10px;
-  border-top: 1px solid #aaafce;
-  border-bottom: 1px solid #aaafce;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
 }
 
 .configtable.homelinkedit td, .configtable.homelinkedit tr,
@@ -2661,7 +2655,7 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 }
 
 #manualreseed th:last-child, #manualreseed td:last-child {
-  border-right: 1px solid #aaafce;
+  border-right: 1px solid var(--border);
 }
 }
 
@@ -2722,7 +2716,7 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 }
 
 tr.tablefooter:hover td, tr:hover .infohelp {
-  color: #41444d;
+  color: var(--ink);
 }
 
 /* peers - sort icons */
@@ -2746,7 +2740,7 @@ tr.tablefooter:hover td, tr:hover .infohelp {
 }
 
 #upnpscan {
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   margin: -11px 0 5px;
   padding: 0 10px 5px;
   background: #fff;
@@ -2789,13 +2783,13 @@ tr.tablefooter:hover td, tr:hover .infohelp {
 }
 
 .sortup:hover {
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   background: var(--mv_up_hover) no-repeat center center, var(--btn_hover);
   opacity: 1;
 }
 
 .sortdown:hover {
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   background: var(--mv_down_hover) no-repeat center center, var(--btn_hover);
   opacity: 1;
 }
@@ -2829,7 +2823,7 @@ tr.tablefooter:hover td, tr:hover .infohelp {
 }
 
 tr:hover th {
-  color: #41444d;
+  color: var(--ink);
 }
 
 #thresholds, #profile_defs {
@@ -2932,8 +2926,8 @@ tr:hover th {
 #banlist {
   margin: 15px 0 5px;
   padding: 5px 10px 5px 5px;
-  border: 1px solid #aaafce;
-  background: #eff1ff;
+  border: 1px solid var(--border);
+  background: var(--bg2);
   columns: auto 328px;
   column-gap: 10px;
 }
@@ -3039,7 +3033,7 @@ ul#banlist + h3.tabletitle {
 }
 
 #bannedips table tr:last-child {
-  border-bottom: 1px solid #aaafce;
+  border-bottom: 1px solid var(--border);
 }
 
 #permabanned, #banneduntilrestart {
@@ -3048,7 +3042,7 @@ ul#banlist + h3.tabletitle {
 }
 
 #permabanned td:first-child {
-  border-left: 1px solid #aaafce;
+  border-left: 1px solid var(--border);
   text-align: right;
   padding-right: 10px;
   width: 49%;
@@ -3065,14 +3059,14 @@ ul#banlist + h3.tabletitle {
 }
 
 #banneduntilrestart td {
-  border-right: 1px solid #aaafce;
+  border-right: 1px solid var(--border);
   text-align: center !important;
 }
 
 #ipv4, #ipv6, #permabanned tr:nth-child(2) {
-  background: linear-gradient(to bottom, #fff 50%, #fafbff 50%);
-  border-top: 1px solid #aaafce;
-  border-bottom: 1px solid #aaafce;
+  background: var(--header);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
 }
 
 /* end /configpeer banlist */
@@ -3104,7 +3098,7 @@ a[href^="configpeer?peer"]:hover {
 }
 
 pre#activetransports {
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   padding: 15px 15px 0;
   margin: -11px 0 0;
   width: 95%;
@@ -3159,7 +3153,7 @@ pre#activetransports {
   display: inline-block;
   text-align: left;
   border-radius: 2px 15px 15px 2px;
-  box-shadow: 0 0 0 1px #aaafce;
+  box-shadow: 0 0 0 1px var(--border);
   background: var(--plugin) no-repeat 3px center / 14px, linear-gradient(to bottom, #f8f8ff, #e2e2ff);
   background-blend-mode: luminosity;
 }
@@ -3247,12 +3241,12 @@ div.configure h2:first-child {
 }
 
  tr.tablefooter {
-  border-top: 1px solid #aaafce;
-  border-bottom: 1px solid #aaafce;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
 }
 
 .tablefooter td {
-  border-top: 1px solid #aaafce;
+  border-top: 1px solid var(--border);
 }
 
 #sidebarconf tr:hover, #eventlog tr:hover, .tunneldisplay tr:hover, #jobstats tr:hover, #schedjobs tr:hover, #jardump tr:hover {
@@ -3261,8 +3255,8 @@ div.configure h2:first-child {
 }
 
 #sidebarconf tr:last-child td, #sidebarconf tr:last-child:hover td {
-  border-top: 1px solid #aaafce;
-  background: #eff1ff;
+  border-top: 1px solid var(--border);
+  background: var(--bg2);
 }
 
 #sidebarconf select {
@@ -3301,7 +3295,7 @@ div.configure h2:first-child {
   text-align: center;
   font-weight: 700;
   font-size: 9pt;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   border-right: 0;
   background: #fff;
 }
@@ -3382,9 +3376,9 @@ h1 {
   text-transform: uppercase;
   font-size: 18pt;
   text-align: left;
-  color: #2c354f;
-  border: 1px solid #aaafce;
-  background-color: #fff;
+  color: var(--ink_h1);
+  border: 1px solid var(--border);
+  background-color: var(--bg);
 }
 
 /* h1 icons */
@@ -3480,7 +3474,7 @@ span#newtab {
 h2 {
   font-size: 14pt;
   padding: 10px;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   letter-spacing: .04em;
   text-transform: uppercase;
   background: #fff;
@@ -3489,7 +3483,7 @@ h2 {
 h3, h4#updateplugins {
   font-size: 11pt;
   padding: 6px 10px;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   margin-bottom: 10px;
   background: #fff;
 }
@@ -3563,7 +3557,7 @@ h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after,
   vertical-align: bottom;
   height: 22px !important;
   width: 22px;
-  border-left: 1px solid #aaafce;
+  border-left: 1px solid var(--border);
   background: url(/themes/console/images/svg/helplink.svg) no-repeat center center / 22px;
   content: "";
 }
@@ -3618,7 +3612,7 @@ h4 {
   margin: 5px 0;
   padding: 3px 5px;
   font-size: 9pt;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   background: linear-gradient(to right, #fff, #eff2ff);
 }
 
@@ -3684,7 +3678,7 @@ h2 {
 
 h2, h3, h4#updateplugins {
   box-shadow: var(--highlight);
-  background: linear-gradient(to bottom, #fff 50%, #fafbff 50%);
+  background: var(--header);
 }
 
 h4#updateplugins {
@@ -3692,7 +3686,7 @@ h4#updateplugins {
 }
 
 .routersummary h2, .routersummary h3 {
-  background: linear-gradient(to bottom, #fff 50%, #fafbff 50%);
+  background: var(--header);
 }
 
 table {
@@ -3700,7 +3694,7 @@ table {
   width: 100%;
   font-size: 9pt;
   border-collapse: collapse;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   background: #eff2ff;
 }
 
@@ -3721,9 +3715,9 @@ th {
   padding: 5px;
   font-size: 9pt;
   text-align: center;
-  border-bottom: 1px solid #aaafce;
-  border-top: 1px solid #aaafce;
-  background: linear-gradient(to bottom, #fff, #fafbff);
+  border-bottom: 1px solid var(--border);
+  border-top: 1px solid var(--border);
+  background: var(--th);
 }
 
 th.th_title {
@@ -3747,7 +3741,7 @@ td {
 td.optionsave {
   padding: 8px 5px !important;
   text-align: right;
-  border-top: 1px solid #aaafce;
+  border-top: 1px solid var(--border);
   background: #fff;
 }
 
@@ -3757,7 +3751,7 @@ td.optionsave[colspan="2"] {
 
 td.infohelp, p.infohelp, td.infowarn, p.infowarn, p#upnpstatus, p#gatherstats, p#debugmode, p.sybilinfo, p#pluginconfigtext {
   padding: 15px 15px 15px 55px !important;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   background: #fff var(--infohelp) no-repeat 15px center / 28px;
   white-space: normal !important;
   text-align: justify;
@@ -3866,18 +3860,17 @@ h4.app, h4.app2 {
   letter-spacing: .08em;
   text-transform: uppercase;
   font-size: 11pt;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   border-left: none;
   border-right: none;
   box-shadow: var(--highlight);
-  background: #fff;
-  background: linear-gradient(to bottom, #fff 50%, #fafbff 50%);
+  background: var(--header);
 }
 
 h4.app {
   margin-top: -5px;
   padding-left: 32px;
-  background: url(images/favicon.svg) no-repeat 8px center, linear-gradient(to bottom, #fff 50%, #fafbff 50%);
+  background: url(images/favicon.svg) no-repeat 8px center, var(--header);
   background-size: 16px, 100%;
   background-blend-mode: luminosity, normal;
 }
@@ -3886,7 +3879,7 @@ h4.app2 {
   margin-top: 5px !important;
   padding-left: 32px;
   clear: left;
-  background: var(--planet) no-repeat 8px center / 16px, linear-gradient(to bottom, #fff 50%, #fafbff 50%);
+  background: var(--planet) no-repeat 8px center / 16px, var(--header);
   background-blend-mode: luminosity, normal;
 }
 
@@ -3935,7 +3928,7 @@ div.app {
   float: left;
   text-align: center !important;
   border: none;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   background: #fdfeff;
 }
 
@@ -3967,16 +3960,14 @@ div.app:hover a, .app:hover .applabel a {
   text-overflow: ellipsis;
   text-align: center;
   text-transform: lowercase;
-  font-size: 9pt;
   font-size: 8pt;
-  border-top: 1px solid #aaafce;
+  border-top: 1px solid var(--border);
 }
 
 .applabel a {
   margin: 0;
   padding: 1px;
   display: inline-block;
-  width: 100%;
   width: calc(100% - 2px);
   white-space: nowrap;
   overflow: hidden;
@@ -3989,9 +3980,9 @@ div.app:hover a, .app:hover .applabel a {
 }
 
 .app:active .applabel {
-  background: var(--hover) !important;
   color: #fff !important;
   box-shadow: var(--highlight) !important;
+  background: var(--hover) !important;
 }
 
 .app:active .applabel a, .app:active .applabel a:visited {
@@ -4050,7 +4041,7 @@ table.search {
   margin-left: auto;
   margin-right: auto;
   width: auto;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   border-collapse: separate;
   border-radius: 0 0 2px 2px;
 }
@@ -4126,9 +4117,9 @@ textarea {
 hr {
   margin: 3px 0;
   height: 2px;
-  color: #aaafce;
+  color: var(--border);
   border: none;
-  background: #aaafce;
+  background: var(--border);
 }
 
 p.infohelp + hr, p.infohelp + p + hr, #tunnelconfig + hr { /*configservice */
@@ -4204,7 +4195,7 @@ h3#servicedebug a, h3#graphinfo a, h3#browseronstart a {
   height: 24px;
   display: inline-block;
   vertical-align: middle;
-  background: #aaafce;
+  background: var(--border);
   content: "";
 }
 
@@ -4219,11 +4210,11 @@ h3 + .statusnotes {
 .statusnotes {
   margin: -6px 0 7px 0;
   padding: 8px 0;
-  color: #41444d;
+  color: var(--ink);
   font-style: italic;
   font-size: 9pt;
   text-align: center;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   background: #fff;
 }
 
@@ -4285,8 +4276,8 @@ h2#jobrunners {
   margin-bottom: 5px !important;
   margin-top: -21px;
   padding: 15px 50px;
-  border: 1px solid #aaafce;
-  background: #eff1ff;
+  border: 1px solid var(--border);
+  background: var(--bg2);
   column-count: 2;
   column-width: 400px;
   column-gap: 100px;
@@ -4324,7 +4315,8 @@ h3#finishedjobs + ol li, h3#scheduledjobs + ol li, h3#activejobs + ol li, h3#rea
   list-style: none !important;
 }
 
-h3#activejobs + ol li::before, h3#scheduledjobs + ol li::before, h3#readyjobs + ol li::before, h3#finishedjobs + ol li::before, .jobcount::before {
+h3#activejobs + ol li::before, h3#scheduledjobs + ol li::before,
+h3#readyjobs + ol li::before, h3#finishedjobs + ol li::before, .jobcount::before {
   margin: 0 8px 0 -24px;
   width: 12px;
   height: 12px;
@@ -4426,7 +4418,7 @@ h3#totaljobstats {
 .homelinkedit th:first-child, #sidebarconf th:first-child, #consolepass th:first-child {
   width: 5%;
   font-size: 0 !important;
-  background: var(--nuke) no-repeat center center / 14px , linear-gradient(to bottom, #fff, #fafbff);
+  background: var(--nuke) no-repeat center center / 14px , var(--th);
 }
 
 .homelinkedit th:last-child, .homelinkedit th:nth-child(3) {
@@ -4438,7 +4430,7 @@ h3#totaljobstats {
 }
 
 .homelinkedit tr:last-child {
-  border-top: 1px solid #aaafce;
+  border-top: 1px solid var(--border);
 }
 
 #addnew td:first-child {
@@ -4446,7 +4438,7 @@ h3#totaljobstats {
 }
 
 tr#addnew:hover {
-  color: #41444d !important;
+  color: var(--ink) !important;
 }
 
 #loggingoptions tr:nth-last-child(n+3) input[type=text], #loggingoptions tr:nth-last-child(n+3) select {
@@ -4483,7 +4475,7 @@ p img:first-child {
 }
 
 p.infohelp, p.infohelp + p, p#enablefullstats {
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
 }
 
 p.infohelp + p.infowarn {
@@ -4498,7 +4490,7 @@ p#keyringhelp {
 p#pluginconfigtext {
   margin: -11px 0 -1px;
   padding: 10px;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
 }
 
 #config_logging p {
@@ -4511,7 +4503,7 @@ p#pluginconfigtext {
 }
 
 .configtable tr:last-child, #addkeyring tr:last-child, #loggingoptions tr:last-child {
-  border-top: 1px solid #aaafce;
+  border-top: 1px solid var(--border);
   background: #fff;
 }
 
@@ -4534,8 +4526,7 @@ p#enablefullstats {
   margin: 0;
   padding: 8px 5px;
   text-align: right;
-  background: #fff;
-  background: linear-gradient(to bottom, #fff, #fafbff);
+  background: var(--th);
 }
 
 .formaction, td.optionsave {
@@ -4543,7 +4534,7 @@ p#enablefullstats {
 }
 
 .configtable tr:last-child, #addkeyring tr:last-child, #loggingoptions tr:last-child {
-  border-top: 1px solid #aaafce;
+  border-top: 1px solid var(--border);
   background: #fff;
 }
 
@@ -4556,13 +4547,13 @@ p#enablefullstats {
 .formaction#tunnelconfigsave, .formaction#updateplugins, .formaction#submitconsolepass {
   margin-top: -13px;
   margin-bottom: -5px;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
 }
 
 .formaction#clientsconfig, .formaction#webappconfigactions, .formaction#sidebardefaults,
 .formaction#tunnelconfigsave, .formaction#submitconsolepass {
   margin-top: -6px;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
 }
 
 .formaction#tunnelconfigsave {
@@ -4577,7 +4568,7 @@ p#enablefullstats {
 .formaction#pluginconfigactions {
   margin-top: -1px;
   margin-bottom: -9px;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
 }
 
 .formaction#webappconfigactions, .formaction#clientsconfig {
@@ -4593,7 +4584,7 @@ p#enablefullstats {
 .formaction[id*="home"] {
   margin-top: -6px;
   padding: 5px;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
 }
 
 .formaction#homeapps {
@@ -4608,7 +4599,7 @@ p#enablefullstats {
 
 .formaction#themeui {
   margin: 8px -5px 0;
-  border-top: 1px solid #aaafce;
+  border-top: 1px solid var(--border);
 }
 
 .formaction#langui {
@@ -4620,7 +4611,7 @@ p#enablefullstats {
 }
 
 .tablefooter {
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
 }
 
 .tablefooter, .tablefooter td {
@@ -4633,11 +4624,11 @@ p#enablefullstats {
 }
 
 .tablefooter td:first-child {
-  border-left: 1px solid #aaafce;
+  border-left: 1px solid var(--border);
 }
 
 .tablefooter td:last-child {
-  border-right: 1px solid #aaafce;
+  border-right: 1px solid var(--border);
 }
 
 #config_stats .tablefooter td, #enablefull td {
@@ -4669,7 +4660,7 @@ p#enablefullstats {
 }
 
 #pluginconfig tr {
-  border-bottom: 1px solid #aaafce;
+  border-bottom: 1px solid var(--border);
 }
 
 #pluginconfig td:first-child {
@@ -4759,7 +4750,7 @@ h3#graphdisplay {
 }
 
 #graphs form[action="graphs"] {
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   padding: 5px 10px;
   margin: -11px 0 5px;
   background: #eef;
@@ -4846,6 +4837,10 @@ h3#graphdisplay {
   padding-right: 0;
 }
 
+#graph_single > .infohelp {
+  margin: 3px 20px 10px;
+}
+
 #graph_single .graphspanel {
   margin: 0 -1px -13px;
   padding: 3px 0 0 !important;
@@ -4861,7 +4856,7 @@ h3#graphdisplay {
   text-align: center;
   color: transparent;
   text-transform: capitalize;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   background: rgba(255,255,255,.8);
 }
 
@@ -4871,12 +4866,12 @@ h3#graphinfo {
 }
 
 #graphopts + p {
-  text-align: right;
-  background: #fff;
   margin: -1px -5px 0;
   padding: 10px;
-  border: 1px solid #aaafce;
   display: none;
+  text-align: right;
+  border: 1px solid var(--border);
+  background: #fff;
 }
 
 #graphopts a {
@@ -4884,11 +4879,9 @@ h3#graphinfo {
   padding: 1px 10px;
   display: inline-block;
   font-size: 90%;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   border-radius: 15px;
-  box-shadow: 0 0 0 1px #ddf;
   box-shadow: 0 0 0 1px rgba(220,220,255,.6);
-  background: #f8f8ff;
   background: rgba(248,248,255,.3);
 }
 
@@ -4899,7 +4892,6 @@ h3#graphinfo {
 #graphopts a:hover, #graphopts a:focus {
   border: 1px solid #7778bf;
   box-shadow: 0 0 0 1px rgba(220,220,255,.6), inset 0 0 0 1px #d8d4ff;
-  background: #e2e2ff;
   background: linear-gradient(to bottom, #fff 50%, #d8d4ff 50%);
 }
 
@@ -4981,9 +4973,7 @@ img[src^="/flags"], img.unknownflag {
 }
 
 @media screen and (min-width: 1500px) {
-  .routerid .flag img {
-    margin: 0 0 2px !important;
-  }
+  .routerid .flag img {margin: 0 0 2px !important}
 }
 
 #banlist .flag {
@@ -5024,10 +5014,9 @@ img[src^="/flags"], img.unknownflag {
   overflow: hidden;
   text-overflow: ellipsis;
   text-align: center;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   box-shadow: 0 0 1px #fff;
-  background: #fff;
-  background: linear-gradient(to bottom, #fff, #fafbff);
+  background: var(--th);
 }
 
 .themechoice:hover {
@@ -5089,7 +5078,6 @@ img[src^="/flags"], img.unknownflag {
 
 .themechoice .optbox:focus + img ~ div.themelabel {
   color: var(--hover) !important;
-  background: #fff;
   background: linear-gradient(to right, #eef, #fff, #eef);
 }
 
@@ -5110,7 +5098,7 @@ img[src^="/flags"], img.unknownflag {
   position: relative;
   top: 4px;
   clear: both;
-  border-top: 1px solid #aaafce;
+  border-top: 1px solid var(--border);
   background: rgba(230, 230, 255, .5);
 }
 
@@ -5129,10 +5117,9 @@ p#helptranslate {
   top: 4px;
   padding: 15px 10px 15px 50px !important;
   text-align: left !important;
-  border-top: 1px solid #aaafce;
-  border-bottom: 1px solid #aaafce;
-  background: url(images/favicon.svg) no-repeat left 14px center, #fff;
-  background-size: 28px;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: #fff url(images/favicon.svg) no-repeat left 14px center / 28px;
 }
 
 #themeoptions input {
@@ -5146,22 +5133,22 @@ p#helptranslate {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  border-top: 1px solid #aaafce;
-  background: linear-gradient(to bottom, #fff 50%, #fafbff 50%);
+  border-top: 1px solid var(--border);
+  background: var(--header);
 }
 
 #themesettings {
   margin: -1px 0;
   padding: 4px 5px 0;
   clear: both;
-  border: 1px solid #aaafce;
-  background: #eff1ff;
+  border: 1px solid var(--border);
+  background: var(--bg2);
 }
 
 #langsettings {
   padding: 4px 5px 0;
-  border: 1px solid #aaafce;
-  background: #eff1ff;
+  border: 1px solid var(--border);
+  background: var(--bg2);
 }
 
 #themesettings hr {
@@ -5179,10 +5166,9 @@ p#helptranslate {
   width: 115px;
   float: left;
   text-align: center;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   box-shadow: 0 0 1px #fff;
-  background: #fff;
-  background: linear-gradient(to bottom, #fff, #fafbff);
+  background: var(--th);
 }
 
 .langselect:hover {
@@ -5210,7 +5196,7 @@ p#helptranslate {
   height: auto !important;
   position: relative;
   z-index: 3;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   opacity: 1;
 }
 
@@ -5279,9 +5265,9 @@ p#helptranslate {
   text-transform: capitalize;
   font-size: 9pt;
   z-index: 2;
-  border-top: 1px solid #aaafce;
+  border-top: 1px solid var(--border);
   border-radius: 0 0 2px 2px;
-  background: linear-gradient(to bottom, #fff 50%, #fafbff 50%);
+  background: var(--header);
 }
 
 p#helptranslate {
@@ -5358,7 +5344,7 @@ p#helptranslate {
 
 #consolepass td#pw_adduser {
   padding: 5px 10px;
-  border-top: 1px solid #aaafce;
+  border-top: 1px solid var(--border);
 }
 
 td#pw_adduser input {
@@ -5557,8 +5543,8 @@ td#pw_adduser input {
   padding: 20px;
   text-align: center;
   font-weight: 700;
-  border: 1px solid #aaafce;
-  background: #eff1ff;
+  border: 1px solid var(--border);
+  background: var(--bg2);
 }
 
 .sybil_routerinfo {
@@ -5590,7 +5576,7 @@ td#pw_adduser input {
   margin: -1px;
   width: 24px;
   height: 24px;
-  border-left: 1px solid #aaafce;
+  border-left: 1px solid var(--border);
 }
 
 .main#netdb code, .main#netdb tt {
@@ -5602,14 +5588,14 @@ td#pw_adduser input {
 #sybilnav, #sybils_summary {
   margin-bottom: 10px;
   padding: 10px;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   background: #fff;
 }
 
 #sybilnav {
   margin: -16px -16px 15px;
   padding: 5px 5px 2px;
-  background: #eff1ff;
+  background: var(--bg2);
   columns: auto 280px;
   column-gap: 3px;
 }
@@ -5669,7 +5655,7 @@ td#pw_adduser input {
 }
 
 p.sybil_info, p.family, p.threatpoints, p.hashdist, p.notfound, p#sybil_totals {
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   padding: 5px 5px 5px 30px;
   margin: 3px 0;
   font-weight: 700;
@@ -5694,15 +5680,15 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 }
 
 #netdb .threatpoints + a[name] + ul {
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   padding: 5px 5px 0;
 }
 
 #netdb .threatpoints + ul {
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   padding: 6px 15px;
   margin: -4px 0 10px !important;
-  background: #eff1ff;
+  background: var(--bg2);
 }
 
 #netdb .threatpoints + ul li {
@@ -5765,7 +5751,7 @@ p:empty { /* empty paragraph nuke */
   text-align: left !important;
   background: #fff;
   padding: 10px;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
 }
 
 .subheading b {
@@ -5888,7 +5874,7 @@ p:empty { /* empty paragraph nuke */
 .main li .netdb_expiry {
   font-weight: 400;
   text-transform: lowercase;
-  color: #41444d !important;
+  color: var(--ink) !important;
   font-style: italic;
 }
 
@@ -5908,21 +5894,21 @@ img.unknownflag {
 /* /stats */
 
 form#statnav {
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   padding: 10px 10px 10px 15px;
 }
 
 h3.stats {
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   border-radius: 0;
 }
 
 .statlist {
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   padding: 0 10px 0 0;
   margin-left: 0 !important;
   margin-bottom: -27px !important;
-  background: #eff1ff;
+  background: var(--bg2);
 }
 
 .statlist:last-of-type {
@@ -5941,7 +5927,7 @@ h3.stats {
 }
 
 .statlist li b, .statlist b a:hover, h3.stats a:hover {
-  color: #41444d !important;
+  color: var(--ink) !important;
 }
 
 .statlist li::before {
@@ -5950,7 +5936,7 @@ h3.stats {
   font-size: 14pt;
   line-height: 60%;
   vertical-align: baseline;
-  color: #41444d;
+  color: var(--ink);
 }
 
 .statlist li {
@@ -6048,7 +6034,7 @@ h3.stats {
 }
 
 .main#stats form {
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   padding: 10px;
   margin: -13px 0 -11px;
 }
@@ -6062,7 +6048,7 @@ h3.stats {
 
 #netdboverview {
   margin: 15px 0 5px;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
 }
 
 #netdboverview table th, #netdboverview table td {
@@ -6080,8 +6066,8 @@ h3.stats {
 #netdboverview td {
   padding: 5px 5px 0;
   padding: 0 !important;
-  border-left: 1px solid #aaafce;
-  border-right: 1px solid #aaafce;
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
   background: rgba(255,255,255,.4) !important;
 }
 
@@ -6116,18 +6102,17 @@ h3.stats {
 }
 
 #netdbversions {
-/*  border-right: 1px solid #aaafce;*/
-  border-bottom: 1px solid #aaafce;
+  border-bottom: 1px solid var(--border);
 }
 
 #netdbtransports, #netdbversions, #netdbtiers {
-  border-bottom: 1px solid #aaafce;
+  border-bottom: 1px solid var(--border);
 }
 
 #netdbversions, #netdbcountrylist, #netdbtransports, #netdbtiers {
   border-left: none !important;
   border-right: none !important;
-  border-bottom: 1px solid #aaafce;
+  border-bottom: 1px solid var(--border);
 }
 
 #netdbcountrylist td:first-child, #netdbtransports td:first-child, #netdbtiers td:first-child, #netdbversions td:first-child {
@@ -6141,10 +6126,6 @@ h3.stats {
 #netdbtransports {
   position: relative;
 }
-
-/*#netdbversions td, #netdbtransports td, #netdbcountrylist td, #netdbtiers td {
-  padding: 5px !important;
-}*/
 
 #netdbtransports td:last-child, #netdbtiers td:last-child {
   width: 30%;
@@ -6180,11 +6161,11 @@ h3.stats {
 
 #volunteer, #sidebarhelp, #configurationhelp, #reachabilityhelp, #legal, #changelog, #browserconfig, #tunnman,
 #faq, #reseedhelp, #troubleshoot, #newuserguide, #filterlist, #webhosting, #themeoverride, #glossary {
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   padding: 10px 15px 5px;
   margin-bottom: 20px;
   margin-top: 15px !important;
-  background: #eff1ff;
+  background: var(--bg2);
   background: rgba(240,240,255,.5);
   box-shadow: var(--highlight);
 }
@@ -6311,7 +6292,7 @@ p#fullhistory {
   margin: -5px -1px -6px !important;
   background: #fff;
   background: linear-gradient(to right, #eff2ff 50%, #fff);
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   padding: 7px 10px 4px 5px !important;
 }
 
@@ -6341,7 +6322,7 @@ p#fullhistory {
   letter-spacing: 0;
   text-transform: none;
   font-size: 10.5pt;
-  background: var(--question) no-repeat 10px center / 18px, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
+  background: var(--question) no-repeat 10px center / 18px, var(--header) !important;
   background-blend-mode: luminosity, normal;
 }
 
@@ -6404,7 +6385,7 @@ p#fullhistory {
   padding: 5px 0 15px;
   columns: 2 auto;
   column-gap: 35px;
-  column-rule: 1px solid #aaafce;
+  column-rule: 1px solid var(--border);
 }
 
 #terms p {
@@ -6462,7 +6443,7 @@ p#fullhistory {
 .eventspanel form {
   margin-top: -11px;
   padding: 10px 10px 10px 50px;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   background: #fff var(--logs) no-repeat 12px center / 28px;
 }
 
@@ -6516,7 +6497,7 @@ p#fullhistory {
 #certs p:not(.infohelp) {
   margin: 3px 0;
   padding: 10px 5px;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   background: #fff;
 }
 
@@ -6532,7 +6513,7 @@ p#fullhistory {
 #certs textarea {
   margin: -6px 0 10px 0;
   width: 100%;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   border-radius: 0;
 }
 
@@ -6563,13 +6544,13 @@ p#fullhistory {
 #configinfo td {
   text-align: justify;
   padding: 5px 15px;
-  background: #eff1ff;
+  background: var(--bg2);
   background: rgba(230,230,255,.5);
 }
 
 #help #configinfo td.infowarn {
   padding: 10px 10px 10px 38px !important;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   background: #fffff5 var(--infowarn) no-repeat 10px center / 20px !important;
 }
 
@@ -6595,7 +6576,7 @@ p.sybilinfo.experimental {
 }
 
 p.infowarn, #sybilanalysis {
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   padding: 15px 15px 15px 50px;
   background: #fff var(--infowarn) no-repeat 10px center / 28px;
   line-height: 130%;
@@ -6807,8 +6788,8 @@ p#enablefullstats, p#gatherstats {
 #routerlogs li:hover, #criticallogs li:hover {
   position: relative;
   z-index: 10;
-  border-top: 1px solid #aaafce;
-  border-bottom: 1px solid #aaafce;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
   background: #ffd;
   opacity: 1;
   transition: ease all .15s;
@@ -6848,7 +6829,7 @@ p#enablefullstats, p#gatherstats {
 }
 
 .logtable tr:first-child {
-  border-bottom: 1px solid #aaafce;
+  border-bottom: 1px solid var(--border);
   padding: 5px 10px;
 }
 
@@ -6980,7 +6961,7 @@ font[color="#006600"] span {
 .embedlink {
   padding-left: 5px;
   float: right;
-  border-left: 1px solid #aaafce;
+  border-left: 1px solid var(--border);
 }
 
 /* end logs */
@@ -7027,7 +7008,7 @@ tt a, .cells tt {
   display: inline-block;
   box-shadow: inset 0 0 0 1px #aad, inset 0 0 0 2px #fff;
   background: #ddf;
-  background: linear-gradient(to bottom, #fff, #fafbff);
+  background: var(--th);
 }
 
 .tunnel_peer .routerid {
@@ -7058,7 +7039,7 @@ tt a, .cells tt {
 }
 
 #tunnel_defs tr:first-child td {
-  border-top: 1px solid #aaafce;
+  border-top: 1px solid var(--border);
 }
 
 @media screen and (max-width: 1100px) {
@@ -7128,7 +7109,7 @@ span.b32 {
   color: #070;
   border-radius: 2px;
   box-shadow: 0 0 0 1px #bbf, var(--highlight);
-  background: linear-gradient(to bottom, #fff, #fafbff);
+  background: var(--th);
   opacity: .8;
 }
 
@@ -7238,7 +7219,7 @@ span.b32 {
 }
 
 #ntcpconnections td:nth-last-child(2), #udpconnections td:last-child, #profiles td:last-child {
-  border-right: 1px solid #aaafce !important;
+  border-right: 1px solid var(--border) !important;
 }
 
 #profiles table td:last-child {
@@ -7366,7 +7347,7 @@ th code {
 /* sybils */
 
 .leaseset th:last-child, .leaseset td:last-child, .sybil_routerinfo th:last-child, .sybil_routerinfo td:last-child {
-  border-right: 1px solid #aaafce;
+  border-right: 1px solid var(--border);
 }
 
 .sybil_routerinfo table td:last-child {
@@ -7375,7 +7356,7 @@ th code {
 
 .sybilinfo_params {
   padding: 0;
-  border-bottom: 1px solid #aaafce;
+  border-bottom: 1px solid var(--border);
 }
 
 .sybilinfo_container {
@@ -7427,7 +7408,7 @@ th code {
 
 .sybil_addresses {
   padding: 0;
-  border-bottom: 1px solid #aaafce;
+  border-bottom: 1px solid var(--border);
 }
 
 .sybil_addresses table, .sybil_addresses td {
@@ -7495,12 +7476,12 @@ th code {
 }
 
 #debug tr {
-  border-bottom: 1px solid #aaafce;
+  border-bottom: 1px solid var(--border);
 }
 
 #debug td {
   padding: 2px 5px;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
 }
 
 #debug .expiry ul {
@@ -7526,7 +7507,7 @@ th code {
 
 .debug_container {
   background: #eef;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   padding: 10px 15px;
   margin-top: -16px;
 }
@@ -7558,7 +7539,7 @@ th code {
 
 #debug h2 {
   margin: 12px 0 0;
-  background: var(--bug) no-repeat right 6px center / 20px, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
+  background: var(--bug) no-repeat right 6px center / 20px, var(--header) !important;
   background-blend-mode: luminosity, normal, normal;
 }
 
@@ -7681,11 +7662,11 @@ h2#debug_portmapper {
 
 #debug h3.debug_outboundsessions {
   margin-top: -6px !important;
-  background: url(/themes/console/images/svg/outbound.svg) no-repeat 6px center / 18px, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
+  background: url(/themes/console/images/svg/outbound.svg) no-repeat 6px center / 18px, var(--header) !important;
 }
 
 #debug h3.debug_inboundsessions {
-  background: url(/themes/console/images/svg/inbound.svg) no-repeat 6px center / 18px, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
+  background: url(/themes/console/images/svg/inbound.svg) no-repeat 6px center / 18px, var(--header) !important;
 }
 
 .debug_version {
@@ -8684,7 +8665,7 @@ div.news {
 }
 
 .optionlist:hover, .optionsingle:hover, .optiontextarea:hover {
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   box-shadow: inset 0 0 0 1px #a79;
   transition: ease box-shadow .5s, ease background .2s .01s;
   background: #ffd !important;
@@ -8734,7 +8715,7 @@ b.suboption {
   border-bottom: none;
   box-shadow: var(--highlight);
   background: #fdfdff;
-  background: linear-gradient(to bottom, #fff 50%, #fafbff 50%);
+  background: var(--header);
 }
 
 #config_reseed .suboption label, #externali2cp .suboption label {
@@ -9137,7 +9118,7 @@ b.suboption {
 }
 
 #config_reseed .optionsingle:hover {
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   box-shadow: inset 0 0 0 1px #a79;
   transition: ease box-shadow .5s;
 }
@@ -9242,7 +9223,7 @@ b.suboption {
 
 #config_network .optionlist:hover, #config_i2cp .optionlist:hover, #reseedssl:hover,
 #manualreseed .optionsingle:hover, .optiontextarea:hover, #reseed_urlselection:hover {
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   box-shadow: inset 0 0 0 1px #a79 !important;
   transition: ease box-shadow .5s;
 }
@@ -9333,7 +9314,7 @@ b.suboption {
 }
 
 #i2pupdates .optionsave {
-  border-bottom: 1px solid #aaafce;
+  border-bottom: 1px solid var(--border);
 }
 
 @supports not (-moz-appearance: none) {
@@ -9344,7 +9325,7 @@ b.suboption {
 
 #manualreseed td {
   padding: 5px;
-  border-bottom: 1px solid #aaafce;
+  border-bottom: 1px solid var(--border);
 }
 
 /* reseed help ordered list */
@@ -9506,7 +9487,7 @@ input[type="file"]:hover {
   display: inline-block;
   box-shadow: inset 0 0 0 1px #aad, inset 0 0 0 2px #fff;
   background: #ddf;
-  background: linear-gradient(to bottom, #fff, #fafbff);
+  background: var(--th);
 }
 
 .routerid img {
@@ -9553,7 +9534,7 @@ input[type="file"]:hover {
   height: 1px;
   width: 1px;
   display: inline-block;
-  background: #aaafce;
+  background: var(--border);
 }
 
 #ntcpconnections td:nth-child(n+6) span,
@@ -9721,9 +9702,9 @@ th.queue {
   display:inline-block;
   text-align: center !important;
   text-shadow: 0 1px 1px #fff;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   background: #99b;
-  background: linear-gradient(to bottom, #fff, #fafbff);
+  background: var(--th);
 }
 
 #netdbtiers td a {
@@ -10023,16 +10004,16 @@ a.keysearch {
   font-size: 90%;
   border: 1px solid #bbd;
   border-radius: 2px;
-  background: var(--crypto) no-repeat 2px center / 12px, linear-gradient(to bottom, #fff, #fafbff);
+  background: var(--crypto) no-repeat 2px center / 12px, var(--th);
 }
 
 .encryption a.keysearch {
-  background: var(--lock) no-repeat 2px center / 12px, linear-gradient(to bottom, #fff, #fafbff);
+  background: var(--lock) no-repeat 2px center / 12px, var(--th);
 }
 
 .identicon {
   margin: -1px -1px -1px 8px;
-  border-left: 1px solid #aaafce;
+  border-left: 1px solid var(--border);
 }
 
 #view_profile h3 {
@@ -10043,7 +10024,7 @@ a.keysearch {
 @media screen and (max-width: 1000px) {
   #view_profile h3 {
     border: none;
-    border-bottom: 1px solid #aaafce;
+    border-bottom: 1px solid var(--border);
   }
 }
 
@@ -10054,7 +10035,7 @@ a.keysearch {
   width: auto;
   position: absolute;
   right: 54px;
-  border-right: 1px solid #aaafce;
+  border-right: 1px solid var(--border);
 }
 
 #view_profile span {
@@ -10097,7 +10078,7 @@ a.keysearch {
   display: inline-block;
   border: 1px solid #bbd;
   background: #ddf;
-  background: linear-gradient(to bottom, #fff, #fafbff);
+  background: var(--th);
 }
 
 .netdb_tunnel {
@@ -10108,10 +10089,6 @@ a.keysearch {
   text-align: left;
 }
 
-/* custom radios/checkboxes to enforce color scheme when OS widgets are non-standard  */
-/*@media screen and (-webkit-min-device-pixel-ratio: 0) and (min-resolution:.001dpcm) {*/
-@supports (background-blend-mode: luminosity) { /* exclude ms browsers */
-
 input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked,
 input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
   position: relative;
@@ -10119,7 +10096,7 @@ input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input
   height: 19px !important;
   vertical-align: middle !important;
   box-sizing: border-box;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   background: #f8f8ff;
   -moz-appearance: none;
   -webkit-appearance: inherit;
@@ -10128,7 +10105,7 @@ input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input
 }
 
 input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
-  border-radius: 2px;
+  border-radius: 1px;
   box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6);
 }
 
@@ -10192,7 +10169,6 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
   filter: none !important;
   box-shadow: none !important;
   opacity: .5;
-}
 }
 
 /* end custom radios/checkboxes */
@@ -10309,7 +10285,7 @@ div.app.js:hover::before {
   width: 140px;
   display: inline-block;
   text-align: center;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   background: #fdfeff;
 }
 
@@ -10329,13 +10305,11 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel{
   white-space: nowrap;
   font-size: 9pt;
   border: none;
-  border-top: 1px solid #aaafce;
+  border-top: 1px solid var(--border);
 }
 
 @media screen and (max-width: 1500px) {
-.sitemapLabel {
-  font-size: 8pt;
-}
+  .sitemapLabel {font-size: 8pt}
 }
 
 .sitemapLink img {
@@ -10365,7 +10339,7 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel{
 #sitemap div.app {
   margin: 1px 3px 8px;
   width: 140px !important;
-  border-color: #aaafce;
+  border-color: var(--border);
   background: #fafbff;
 }
 
@@ -10376,7 +10350,7 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel{
 
 #sitemap .applabel {
   width: 136px !important;
-  border-color: #aaafce;
+  border-color: var(--border);
   background: #fafbff;
 }
 
@@ -10418,7 +10392,7 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel{
   list-style: none;
   box-shadow: 0 0 0 1px #bbf, var(--highlight), inset 0 0 0 2px #ddf;
   background-blend-mode: luminosity;
-  background-size: 32px 32px !important;
+  background-size: 32px !important;
   break-inside: avoid;
   page-break-inside: avoid;
   -webkit-column-break-inside: avoid;
@@ -10448,112 +10422,112 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel{
 }
 
 #helptoc b {
-  font-size: 120%;
+  font-size: 120% !important;
   text-shadow: 0 1px 1px #fff;
 }
 
 #help_configuration {
-  background: var(--wrench) no-repeat 15px center / 32px, linear-gradient(135deg, #fff, #f8f8ff);
+  background: var(--wrench) no-repeat 15px center / 32px, var(--th);
 }
 
 #help_filter {
-  background: var(--filter) no-repeat 15px center / 32px, linear-gradient(135deg, #fff, #f8f8ff);
+  background: var(--filter) no-repeat 15px center / 32px, var(--th);
 }
 
 #help_configadv {
-  background: var(--configure) no-repeat 15px center / 32px, linear-gradient(135deg, #fff, #f8f8ff);
+  background: var(--configure) no-repeat 15px center / 32px, var(--th);
 }
 
 #help_ui {
-  background: var(--ui) no-repeat 15px center / 32px, linear-gradient(135deg, #fff, #f8f8ff);
+  background: var(--ui) no-repeat 15px center / 32px, var(--th);
 }
 
 #help_reseed {
-  background: var(--reseed) no-repeat 15px center / 32px, linear-gradient(135deg, #fff, #f8f8ff);
+  background: var(--reseed) no-repeat 15px center / 32px, var(--th);
 }
 
 #help_faq, #help_glossary {
-  background: var(--faq) no-repeat 15px center, linear-gradient(135deg, #fff, #f8f8ff);
+  background: var(--faq) no-repeat 15px center, var(--th);
 }
 
 #help_troubleshoot {
-  background: var(--wrench) no-repeat 15px center / 32px, linear-gradient(135deg, #fff, #f8f8ff);
+  background: var(--wrench) no-repeat 15px center / 32px, var(--th);
 }
 
 #help_legal {
-  background: var(--legal) no-repeat 15px center / 32px, linear-gradient(135deg, #fff, #f8f8ff);
+  background: var(--legal) no-repeat 15px center / 32px, var(--th);
 }
 
 #help_changelog {
-  background: var(--changelog) no-repeat 15px center / 32px, linear-gradient(135deg, #fff, #f8f8ff);
+  background: var(--changelog) no-repeat 15px center / 32px, var(--th);
 }
 
 #help_newusers {
-  background: url(images/favicon.svg) no-repeat 15px center, linear-gradient(135deg, #fff, #f8f8ff);
+  background: url(images/favicon.svg) no-repeat 15px center, var(--th);
 }
 
 #help_webhosting {
-  background: var(--webserver) no-repeat 15px center / 32px, linear-gradient(135deg, #fff, #f8f8ff);
+  background: var(--webserver) no-repeat 15px center / 32px, var(--th);
 }
 
 #configurationhelp h2, #advancedsettings h2, #filterlist h2 {
   padding-left: 38px;
-  background: var(--configure) no-repeat 8px center / 24px, linear-gradient(to bottom, #fff 50%, #fafbff 50%);
+  background: var(--configure) no-repeat 8px center / 24px, var(--header);
 }
 
 #sidebarhelp h2, #reachabilityhelp h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/svg/sidebar.svg) no-repeat 8px center / 24px, linear-gradient(to bottom, #fff 50%, #fafbff 50%);
+  background: url(/themes/console/images/svg/sidebar.svg) no-repeat 8px center / 24px, var(--header);
 }
 
 #reseedhelp h2 {
   padding-left: 38px;
-  background: var(--reseed) no-repeat 8px center / 24px, linear-gradient(to bottom, #fff 50%, #fafbff 50%);
+  background: var(--reseed) no-repeat 8px center / 24px, var(--header);
 }
 
 #faq h2, #glossary h2 {
   padding-left: 38px;
-  background: var(--faq) no-repeat 8px center / 24px, linear-gradient(to bottom, #fff 50%, #fafbff 50%);
+  background: var(--faq) no-repeat 8px center / 24px, var(--header);
 }
 
 #troubleshoot h2 {
   padding-left: 38px;
-  background: var(--wrench) no-repeat 8px center / 24px, linear-gradient(to bottom, #fff 50%, #fafbff 50%);
+  background: var(--wrench) no-repeat 8px center / 24px, var(--header);
 }
 
 #legal h2 {
   padding-left: 38px;
-  background: var(--legal) no-repeat 8px center / 24px, linear-gradient(to bottom, #fff 50%, #fafbff 50%);
+  background: var(--legal) no-repeat 8px center / 24px, var(--header);
 }
 
 #changelog h2 {
   padding-left: 38px;
-  background: var(--changelog) no-repeat 8px center / 24px, linear-gradient(to bottom, #fff 50%, #fafbff 50%);
+  background: var(--changelog) no-repeat 8px center / 24px, var(--header);
 }
 
 #newuserguide h2 {
   padding-left: 38px;
-  background: url(images/favicon.svg) no-repeat 8px center / 24px, linear-gradient(to bottom, #fff 50%, #fafbff 50%);
+  background: url(images/favicon.svg) no-repeat 8px center / 24px, var(--header);
 }
 
 #webhosting h2 {
   padding-left: 38px;
-  background: var(--webserver) no-repeat 8px center / 24px, linear-gradient(to bottom, #fff 50%, #fafbff 50%);
+  background: var(--webserver) no-repeat 8px center / 24px, var(--header);
 }
 
 #themeoverride h2 {
   padding-left: 38px;
-  background: var(--ui) no-repeat 8px center / 24px, linear-gradient(to bottom, #fff 50%, #fafbff 50%);
+  background: var(--ui) no-repeat 8px center / 24px, var(--header);
 }
 
 #browserconfig h2 {
   padding-left: 38px;
-  background: var(--firefox) no-repeat 8px center / 24px, linear-gradient(to bottom, #fff 50%, #fafbff 50%);
+  background: var(--firefox) no-repeat 8px center / 24px, var(--header);
 }
 
 #tunnman h2 {
   padding-left: 38px;
-  background: var(--hardhat) no-repeat 8px center / 24px, linear-gradient(to bottom, #fff 50%, #fafbff 50%);
+  background: var(--hardhat) no-repeat 8px center / 24px, var(--header);
 }
 
 /* end help toc */
@@ -10842,7 +10816,7 @@ p#gatherstats {
   font-weight: 700;
   letter-spacing: .1em;
   color: #535979;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   box-shadow: var(--highlight), 0 0 1px rgba(96,96,96,.5);
   background: linear-gradient(to right, #eef0ff, #fff, #eef0ff);
   user-select: none;
@@ -10905,7 +10879,7 @@ p#gatherstats {
 }
 
 #sybilTask tr:last-child {
-  border-top: 1px solid #aaafce;
+  border-top: 1px solid var(--border);
 }
 
 #sybilTask td {
@@ -11001,7 +10975,7 @@ p#gatherstats {
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 85% !important;
-  color: #41444d;
+  color: var(--ink);
   user-select: all;
 }
 
@@ -11019,7 +10993,7 @@ p#gatherstats {
   overflow: hidden;
   vertical-align: middle;
   text-align: center;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   box-shadow: 0 0 1px 1px #e8e8f8;
   background: #fff;
   animation: ease zoom .1s forwards;
@@ -11109,7 +11083,7 @@ p#gatherstats {
 }
 
 #wizard .optionsave {
-  border: 1px solid #aaafce !important;
+  border: 1px solid var(--border) !important;
   background: none;
 }
 
@@ -11120,8 +11094,8 @@ p#gatherstats {
 #wizard #bandwidth ~ p {
   margin-top: 0;
   margin-bottom: 0;
-  border-left: 1px solid #aaafce;
-  border-right: 1px solid #aaafce;
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
 }
 
 #wizard #bandwidth + h3 + p {
@@ -11652,7 +11626,7 @@ div.app, .sitemapLink, .sitemapLabel {
 }
 
 .tabletitle + table tr:first-child td {
-  border-top: 1px solid #aaafce;
+  border-top: 1px solid var(--border);
 }
 
 #config_tunnels select {
@@ -11688,7 +11662,7 @@ div.app, .sitemapLink, .sitemapLabel {
     width: calc(100% - 22px);
     min-width: 540px;
     display: inline-block;
-    border: 1px solid #aaafce;
+    border: 1px solid var(--border);
     box-shadow: var(--highlight), inset 0 0 2px 1px #ddf, 0 0 1px #ddf;
     background: rgba(248,248,255,.6);
   }
@@ -11823,7 +11797,7 @@ div.app:hover img, .sitemaplink:hover img {
 #sb_graphcontainer {
   margin: -5px 1px -6px 1px !important;
   overflow: hidden;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   box-shadow: var(--highlight);
   background: repeating-linear-gradient(to right, rgba(0, 0, 0, 0) 15px, rgba(120, 120, 255, .5) 16px, rgba(0, 0, 0, 0) 16px, rgba(0, 0, 0, 0) 30px), repeating-linear-gradient(to top, rgba(0, 0, 0, 0) 11px, rgba(120, 120, 255, .5) 12px, rgba(255, 255, 255, 0) 12px, rgba(255, 255, 255, 0) 24px) !important;
 }
