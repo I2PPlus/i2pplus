@@ -814,6 +814,10 @@ textarea[name="config"], textarea[name="content"] {
   background: var(--addressbook) no-repeat 10px center / 22px, linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
 }
 
+body:not(.iframed) #addressbook.headline h3 {
+  margin-top: -13px;
+}
+
 .headline#subscriptions h3 {
   background: var(--subscription) no-repeat 10px center / 22px, linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
 }
