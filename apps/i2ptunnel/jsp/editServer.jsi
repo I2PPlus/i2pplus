@@ -744,7 +744,7 @@
 </tr>
 <%
         boolean showSharedKey = curEncryptMode.equals("1") || curEncryptMode.equals("4") || curEncryptMode.equals("5");
-            if (showSharedKey) {
+        if (showSharedKey) {
 %>
 <tr>
 <%
@@ -785,14 +785,16 @@
             boolean dhClient = curEncryptMode.equals("8") || curEncryptMode.equals("9");
             if (pskClient || dhClient) {
                 // b64Name:b64Key
-                java.util.List<String> clientAuths = editBean.getClientAuths(curTunnel, dhClient);
-                if (!clientAuths.isEmpty()) {
-                    if (pskClient || dhClient || showLookupPassword) {
 %>
 <tr><th colspan="2"><%=intl._t("Client Manager")%></th></tr>
 <tr>
 <td colspan="2" id="clientAuthConfig">
 <table id="clientAuth">
+<%
+                java.util.List<String> clientAuths = editBean.getClientAuths(curTunnel, dhClient);
+                if (!clientAuths.isEmpty()) {
+                    if (pskClient || dhClient || showLookupPassword) {
+%>
 <tr><td><b><%=intl._t("Client Name")%></b></td><td><b><%=intl._t("Client Key")%></b></td><td><b><%=intl._t("Revoke")%></b></td></tr>
 <%
                         int i = 0;
@@ -819,18 +821,19 @@
 </tr>
 <%
                             i++;
-                            } // for
-                        } // isEmpty
+                        } // for
+                    } // pskClient || dhClient || showLookupPassword
+                } // isEmpty
 %>
 <tr>
 <td><b><%=intl._t("Client Name")%></b></td>
 <td>
 <%
-                        if (dhClient) {
+                if (dhClient) {
 %>
 <b><%=intl._t("Client Key")%></b>
 <%
-                        } // dhClient
+                } // dhClient
 %>
 </td>
 <td><b><%=intl._t("Add")%></b></td>
@@ -841,11 +844,11 @@
 </td>
 <td>
 <%
-                        if (dhClient) {
+                if (dhClient) {
 %>
-<input type="text" value="" size="44" maxlength="44" name="newClientKey" class="freetext clientKey readonly" />
+<input type="text" value="" size="44" maxlength="44" name="newClientKey" class="freetext clientKey" placeholder="Add key generated automatically by client"/>
 <%
-                        } // dhClient
+                } // dhClient
 %>
 </td>
 <td><input value="1" type="checkbox" name="addClient" class="optbox" /></td>
@@ -857,10 +860,10 @@
 <td class="buttons" colspan="2"><button id="controlSave" class="control" type="submit" name="action" value="Save changes"><%=intl._t("Save")%></button></td>
 </tr>
 <%
-                    } // pskClient || dhClient || showLookupPassword
-                } // pskClient || dhClient
-            } // allowBlinding
-        } // !isOffline
+//               } // pskClient || dhClient || showLookupPassword
+            } // pskClient || dhClient
+        } // allowBlinding
+    } // !isOffline
 %>
 <tr>
 <th><%=intl._t("Restricted Access List")%>&nbsp;
