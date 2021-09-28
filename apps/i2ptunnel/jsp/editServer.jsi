@@ -860,7 +860,6 @@
 <td class="buttons" colspan="2"><button id="controlSave" class="control" type="submit" name="action" value="Save changes"><%=intl._t("Save")%></button></td>
 </tr>
 <%
-//               } // pskClient || dhClient || showLookupPassword
             } // pskClient || dhClient
         } // allowBlinding
     } // !isOffline
