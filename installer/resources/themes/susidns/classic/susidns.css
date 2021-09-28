@@ -229,23 +229,22 @@ div.help {
 }
 
 p {
-  line-height: 140%;
   margin-left: 10px;
   margin-right: 10px;
-  font-size: 9pt;
+  line-height: 140%;
   text-align: justify;
+  font-size: 9pt;
 }
 
 h3 {
-  color: #41444d;
-  font-size: 11pt;
-  font-weight: 700;
-  border: 1px solid #aaafce;
   margin: -1px -11px 10px;
   padding: 5px 10px;
-  background: #fff;
-  background: linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
   text-transform: capitalize;
+  font-size: 11pt;
+  font-weight: 700;
+  color: #41444d;
+  border: 1px solid #aaafce;
+  background: linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
 }
 
 #help h3 {
