@@ -239,7 +239,7 @@ select {
   border: 1px solid #aaafce;
   border-radius: 2px;
   box-shadow: 0 0 0 1px #fff inset, 0 0 1px 0 #ddd;
-  background: url(images/dropdown.png) no-repeat right 8px center / 10px, linear-gradient(to bottom, #fff, #f4f5ff);
+  background: var(--dropdown) no-repeat right 8px center / 10px, linear-gradient(to bottom, #fff, #f4f5ff);
   cursor: pointer;
   appearance: none;
 }
@@ -249,12 +249,12 @@ select:hover {
 }
 
 select:hover, select:active {
-  background: url(images/dropdown_hover.png) no-repeat right 8px center / 10px, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
+  background: var(--dropdown_hover) no-repeat right 8px center / 10px, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
   outline: none !important;
 }
 
 select:focus {
-  background: url(images/dropdown_hover.png) no-repeat right 8px center / 10px, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
+  background: var(--dropdown_hover) no-repeat right 8px center / 10px, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
   outline: none !important;
 }
 
