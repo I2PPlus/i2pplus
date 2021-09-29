@@ -8,6 +8,7 @@
   --ink: #41444d;
   --ink_light: #5e626e;
   --ink_h1: #6c7293;
+  --a: #5c5c8a;
   --disabled: #757a8a;
   --hover: #f60;
   --btn: linear-gradient(to bottom, #fff, #f4f5ff);
@@ -1327,7 +1328,7 @@ a:link {
 }
 
 a:link, a:visited, #sitemapcontainer a:visited, #home .extlink:visited, .main .applabel a:visited {
-  color: #575779;
+  color: var(--a);
 }
 
 a:hover, a:visited:hover, a:focus, a:visited:focus, a:hover .b32 {
@@ -7301,7 +7302,7 @@ th code {
   vertical-align: text-bottom;
   text-transform: capitalize;
   font-weight: 700;
-  color: #335;
+  color: var(--ink_light);
 }
 
 .netdb_info {
@@ -7374,7 +7375,7 @@ th code {
 }
 
 .sybilinfo_container b {
-  color: #335;
+  color: var(--ink_light);
 }
 
 .sybil_routerinfo tr:last-child {
@@ -7384,9 +7385,9 @@ th code {
 .sybil_routerinfo p {
   margin: 0;
   padding: 1px 0;
+  -webkit-column-break-inside: avoid;
   break-inside: avoid;
   page-break-inside: avoid;
-  -webkit-column-break-inside: avoid;
 }
 
 .sybilinfo_familyname {
@@ -10650,7 +10651,7 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel{
 }
 
 #stats .tab:not(.tab2) {
-  color: #575779;
+  color: var(--a);
 }
 
 #stats .tab2, #stats .tab2:hover {

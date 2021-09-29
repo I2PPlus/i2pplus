@@ -11,7 +11,7 @@
   --monospaced: Droid Sans Mono, Andale Mono, DejaVu Sans Mono, Lucida Console, monospace;
   --ink: #41444d;
   --ink_light: #5e626e;
-  --a: #575779;
+  --a: #5c5c8a;
   --a_hover: #f60;
   --a_active: #f30;
   --btn: linear-gradient(to bottom, #fff, #f4f5ff);
@@ -454,12 +454,12 @@ td.infohelp {
 }
 
 .tunnelName a {
-  padding: 3px 3px 3px 18px !important;
-  background: var(--settings) no-repeat 2px center / 14px;
+  padding: 3px 3px 3px 17px !important;
+  background: var(--settings) no-repeat 2px center / 13px;
 }
 
 .tunnelName a:hover {
-  background: var(--settings_hover) no-repeat 2px center / 14px;
+  background: var(--settings_hover) no-repeat 2px center / 13px;
 }
 
 .tunnelName a {
