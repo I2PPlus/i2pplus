@@ -218,9 +218,11 @@ public class NTCPTransport extends TransportImpl {
         //_context.statManager().createRateStat("ntcp.write", "", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.writeError", "Number of NTCP write errors", "Transport [NTCP]", RATES);
         _endpoints = new HashSet<InetSocketAddress>(4);
-        _establishing = new ConcurrentHashSet<NTCPConnection>(16);
+//        _establishing = new ConcurrentHashSet<NTCPConnection>(16);
+        _establishing = new ConcurrentHashSet<NTCPConnection>(1024);
         _conLock = new Object();
-        _conByIdent = new ConcurrentHashMap<Hash, NTCPConnection>(64);
+//        _conByIdent = new ConcurrentHashMap<Hash, NTCPConnection>(64);
+        _conByIdent = new ConcurrentHashMap<Hash, NTCPConnection>(256);
         _replayFilter = new DecayingHashSet(ctx, 10*60*1000, 8, "NTCP-Hx^HI");
 
         _finisher = new NTCPSendFinisher(ctx, this);
@@ -1157,7 +1159,7 @@ public class NTCPTransport extends TransportImpl {
 
     /** add us to the establishment timeout process */
     void establishing(NTCPConnection con) {
-            _establishing.add(con);
+        _establishing.add(con);
     }
 
     /**

@@ -285,7 +285,7 @@
 <%
         if (currentSigType == 0 && ("".equals(ab64) || ab64 == null) && (!"".equals(b64) || b64 != null)) {
 %>
-<td <%=attitle%> >
+<td <%=attitle%>>
 <input type="text" class="freetext filemanager" size="30" id="altPrivKeyFile" name="altPrivKeyFile" title="<%=atitle%>" placeholder="<%=intl._t("Absolute path for new key (will be created)")%>" <%=adisabled%> value="<%=editBean.getAltPrivateKeyFile(curTunnel)%>" required />
 </td>
 <td></td>
@@ -296,7 +296,7 @@
 <td>
 <input type="text" size="30" id="altlocaldest" readonly="readonly" title="<%=intl._t("Read Only: Alternate Local Destination")%>" value="<%=ab64%>" wrap="off" class="freetext readonly resetScrollLeft" />
 </td>
-<td <%=attitle%> >
+<td <%=attitle%>>
 <input type="text" class="freetext filemanager" size="30" id="altPrivKeyFile" name="altPrivKeyFile" title="<%=atitle%>" <%=adisabled%> placeholder="<%=intl._t("Specify filename or full path for new key")%>" value="<%=editBean.getAltPrivateKeyFile(curTunnel)%>" required />
 </td>
 <%
@@ -380,35 +380,35 @@
     }
     if (!editBean.canChangeSigType(curTunnel) && (!"".equals(ab64) || ab64 != null)) {
 %>
-<option title="<%=intl._t("Legacy option, with alternate key configured")%>" value="0" <%=(currentSigType==0 ? " selected=\"selected\"" : disabled)%> >DSA-SHA1 & Ed25519-SHA-512</option>
+<option title="<%=intl._t("Legacy option, with alternate key configured")%>" value="0" <%=(currentSigType==0 ? " selected=\"selected\"" : disabled)%>>DSA-SHA1 & Ed25519-SHA-512</option>
 <%
     } else {
 %>
-<option title="<%=intl._t("Legacy option (deprecated), provided for backward compatibility")%>" value="0" <%=(currentSigType==0 ? " selected=\"selected\"" : disabled)%> >DSA-SHA1</option>
+<option title="<%=intl._t("Legacy option (deprecated), provided for backward compatibility")%>" value="0" <%=(currentSigType==0 ? " selected=\"selected\"" : disabled)%>>DSA-SHA1</option>
 <%
     }
     if (editBean.isSigTypeAvailable(1)) {
 %>
-<option value="1" <%=(currentSigType==1 ? " selected=\"selected\"" : disabled)%> >ECDSA-P256</option>
+<option value="1" <%=(currentSigType==1 ? " selected=\"selected\"" : disabled)%>>ECDSA-P256</option>
 <%  }
     if (editBean.isSigTypeAvailable(2)) {
 %>
-<option value="2" <%=(currentSigType==2 ? " selected=\"selected\"" : disabled)%> >ECDSA-P384</option>
+<option value="2" <%=(currentSigType==2 ? " selected=\"selected\"" : disabled)%>>ECDSA-P384</option>
 <%
     }
     if (editBean.isSigTypeAvailable(3)) {
 %>
-<option value="3" <%=(currentSigType==3 ? " selected=\"selected\"" : disabled)%> >ECDSA-P521</option>
+<option value="3" <%=(currentSigType==3 ? " selected=\"selected\"" : disabled)%>>ECDSA-P521</option>
 <%
     }
     if (editBean.isSigTypeAvailable(7)) {
 %>
-<option title="<%=intl._t("This is the default, recommended option")%>" value="7" <%=(currentSigType==7 ? " selected=\"selected\"" : disabled)%> >Ed25519-SHA-512</option>
+<option title="<%=intl._t("This is the default, recommended option")%>" value="7" <%=(currentSigType==7 ? " selected=\"selected\"" : disabled)%>>Ed25519-SHA-512</option>
 <%
     }
     if (editBean.isSigTypeAvailable(11)) {
 %>
-<option title="<%=intl._t("Recommended for blinded and encrypted destinations")%>" value="11" <%=(currentSigType==11 ? " selected=\"selected\"" : disabled)%> >Red25519-SHA-512</option>
+<option title="<%=intl._t("Recommended for blinded and encrypted destinations")%>" value="11" <%=(currentSigType==11 ? " selected=\"selected\"" : disabled)%>>Red25519-SHA-512</option>
 <%
     }   // isAvailable
 %>
@@ -684,7 +684,7 @@
 <%
             } // showLookupPassword
 %>
-                &nbsp;&nbsp;<a id="keyringManager" href="/configkeyring" target="_top"><%=intl._t("Keyring Manager")%></a>
+&nbsp;&nbsp;<a id="keyringManager" href="/configkeyring" target="_top"><%=intl._t("Keyring Manager")%></a>
 <%
         } // allowBlinding
 %>
@@ -693,38 +693,38 @@
 <tr>
 <td>
 <select id="encryptMode" name="encryptMode" class="selectbox" <%=ehdisabled%>>
-<option title="<%=intl._t("Allow all clients to connect to this service")%>" value="0" <%=(curEncryptMode.equals("0") ? " selected=\"selected\"" : cdisabled)%> >
+<option title="<%=intl._t("Allow all clients to connect to this service")%>" value="0" <%=(curEncryptMode.equals("0") ? " selected=\"selected\"" : cdisabled)%>>
 <%=intl._t("Disable")%></option>
 <%
         if (curEncryptMode.equals("10")) {
 %>
-<option title="<%=intl._t("Allow all clients to connect to this service")%>" value="10" <%=(curEncryptMode.equals("10") ? " selected=\"selected\"" : cdisabled)%> >
+<option title="<%=intl._t("Allow all clients to connect to this service")%>" value="10" <%=(curEncryptMode.equals("10") ? " selected=\"selected\"" : cdisabled)%>>
 <%=intl._t("Disable")%> (LS2)</option>
 <%
         } // mode = 10
 %>
-<option title="<%=intl._t("Send key to all users.")%>" value="1" <%=(curEncryptMode.equals("1") ? " selected=\"selected\"" : cdisabled)%> >
+<option title="<%=intl._t("Send key to all users.")%>" value="1" <%=(curEncryptMode.equals("1") ? " selected=\"selected\"" : cdisabled)%>>
 <%=intl._t("Encrypted")%> (AES)</option>
 <%      if (allowBlinding) {
 %>
-<option title="<%=intl._t("Prevents server discovery by floodfills")%>" value="2" <%=(curEncryptMode.equals("2") ? " selected=\"selected\"" : bdisabled)%> >
+<option title="<%=intl._t("Prevents server discovery by floodfills")%>" value="2" <%=(curEncryptMode.equals("2") ? " selected=\"selected\"" : bdisabled)%>>
 <%=intl._t("Blinded")%></option>
 <%
             if (true /* editBean.isAdvanced() */) {
 %>
-<option title="<%=intl._t("Send password to all users.")%>" value="3" <%=(curEncryptMode.equals("3") ? " selected=\"selected\"" : bdisabled)%> >
+<option title="<%=intl._t("Send password to all users.")%>" value="3" <%=(curEncryptMode.equals("3") ? " selected=\"selected\"" : bdisabled)%>>
 <%=intl._t("Blinded with lookup password")%></option>
-<option title="<%=intl._t("Send key to all users.")%>" value="4" <%=(curEncryptMode.equals("4") ? " selected=\"selected\"" : bdisabled)%> >
+<option title="<%=intl._t("Send key to all users.")%>" value="4" <%=(curEncryptMode.equals("4") ? " selected=\"selected\"" : bdisabled)%>>
 <%=intl._t("Encrypted")%> (PSK)</option>
-<option title="<%=intl._t("Send key and password to all users.")%>" value="5" <%=(curEncryptMode.equals("5") ? " selected=\"selected\"" : bdisabled)%> >
+<option title="<%=intl._t("Send key and password to all users.")%>" value="5" <%=(curEncryptMode.equals("5") ? " selected=\"selected\"" : bdisabled)%>>
 <%=intl._t("Encrypted with lookup password")%> (PSK)</option>
-<option title="<%=intl._t("Send individual key to each user.")%>" value="6" <%=(curEncryptMode.equals("6") ? " selected=\"selected\"" : bdisabled)%> >
+<option title="<%=intl._t("Send individual key to each user.")%>" value="6" <%=(curEncryptMode.equals("6") ? " selected=\"selected\"" : bdisabled)%>>
 <%=intl._t("Encrypted with per-user key")%> (PSK)</option>
-<option title="<%=intl._t("Send individual key to each user.") + ' '%> <%=intl._t("Send password to all users.")%>" value="7" <%=(curEncryptMode.equals("7") ? " selected=\"selected\"" : bdisabled)%> >
+<option title="<%=intl._t("Send individual key to each user.") + ' '%> <%=intl._t("Send password to all users.")%>" value="7" <%=(curEncryptMode.equals("7") ? " selected=\"selected\"" : bdisabled)%>>
 <%=intl._t("Encrypted with lookup password and per-user key")%> (PSK)</option>
-<option title="<%=intl._t("Enter key from each user.")%>" value="8" <%=(curEncryptMode.equals("8") ? " selected=\"selected\"" : bdisabled)%> >
+<option title="<%=intl._t("Enter key from each user.")%>" value="8" <%=(curEncryptMode.equals("8") ? " selected=\"selected\"" : bdisabled)%>>
 <%=intl._t("Encrypted with per-user key")%> (DH)</option>
-<option title="<%=intl._t("Enter key from each user.") + ' '%> <%=intl._t("Send password to all users.")%>" value="9" <%=(curEncryptMode.equals("9") ? " selected=\"selected\"" : bdisabled)%> >
+<option title="<%=intl._t("Enter key from each user.") + ' '%> <%=intl._t("Send password to all users.")%>" value="9" <%=(curEncryptMode.equals("9") ? " selected=\"selected\"" : bdisabled)%>>
 <%=intl._t("Encrypted with lookup password and per-user key")%> (DH)</option>
 <%
             } // isAdvanced()
@@ -744,7 +744,7 @@
 </tr>
 <%
         boolean showSharedKey = curEncryptMode.equals("1") || curEncryptMode.equals("4") || curEncryptMode.equals("5");
-            if (showSharedKey) {
+        if (showSharedKey) {
 %>
 <tr>
 <%
@@ -785,14 +785,16 @@
             boolean dhClient = curEncryptMode.equals("8") || curEncryptMode.equals("9");
             if (pskClient || dhClient) {
                 // b64Name:b64Key
-                java.util.List<String> clientAuths = editBean.getClientAuths(curTunnel, dhClient);
-                if (!clientAuths.isEmpty()) {
-                    if (pskClient || dhClient || showLookupPassword) {
 %>
 <tr><th colspan="2"><%=intl._t("Client Manager")%></th></tr>
 <tr>
 <td colspan="2" id="clientAuthConfig">
 <table id="clientAuth">
+<%
+                java.util.List<String> clientAuths = editBean.getClientAuths(curTunnel, dhClient);
+                if (!clientAuths.isEmpty()) {
+                    if (pskClient || dhClient || showLookupPassword) {
+%>
 <tr><td><b><%=intl._t("Client Name")%></b></td><td><b><%=intl._t("Client Key")%></b></td><td><b><%=intl._t("Revoke")%></b></td></tr>
 <%
                         int i = 0;
@@ -819,18 +821,19 @@
 </tr>
 <%
                             i++;
-                            } // for
-                        } // isEmpty
+                        } // for
+                    } // pskClient || dhClient || showLookupPassword
+                } // isEmpty
 %>
 <tr>
 <td><b><%=intl._t("Client Name")%></b></td>
 <td>
 <%
-                        if (dhClient) {
+                if (dhClient) {
 %>
 <b><%=intl._t("Client Key")%></b>
 <%
-                        } // dhClient
+                } // dhClient
 %>
 </td>
 <td><b><%=intl._t("Add")%></b></td>
@@ -841,11 +844,11 @@
 </td>
 <td>
 <%
-                        if (dhClient) {
+                if (dhClient) {
 %>
-<input type="text" value="" size="44" maxlength="44" name="newClientKey" class="freetext clientKey readonly" />
+<input type="text" value="" size="44" maxlength="44" name="newClientKey" class="freetext clientKey" placeholder="Add key generated automatically by client"/>
 <%
-                        } // dhClient
+                } // dhClient
 %>
 </td>
 <td><input value="1" type="checkbox" name="addClient" class="optbox" /></td>
@@ -857,10 +860,9 @@
 <td class="buttons" colspan="2"><button id="controlSave" class="control" type="submit" name="action" value="Save changes"><%=intl._t("Save")%></button></td>
 </tr>
 <%
-                    } // pskClient || dhClient || showLookupPassword
-                } // pskClient || dhClient
-            } // allowBlinding
-        } // !isOffline
+            } // pskClient || dhClient
+        } // allowBlinding
+    } // !isOffline
 %>
 <tr>
 <th><%=intl._t("Restricted Access List")%>&nbsp;

@@ -935,10 +935,6 @@ td {
   color: #292b2f !important;
 }
 
-.snarkTorrents tr:hover td.snarkTorrentStatus b {
-  color: #363b4f !important;
-}
-
 .percentBarOuter:hover .percentBarText, .percentBarOuter:active .percentBarText {
   opacity: 1;
 }
@@ -4389,7 +4385,7 @@ tfoot .snarkTorrentRateDown::after, tfoot .snarkTorrentRateUp::after {
     background: #b37bb3;
   }
 
-  td.snarkTorrentStatus b, .snarkTorrents tr:hover td.snarkTorrentStatus b {
+  td.snarkTorrentStatus b {
     color: #eef !important;
   }
 
@@ -4427,8 +4423,10 @@ tfoot .snarkTorrentRateDown::after, tfoot .snarkTorrentRateUp::after {
     border-color: transparent #484 transparent transparent;
   }
 
-  .inactive.downloading .snarkTorrentStatus b, .snarkTorrents tr.inactive.downloading:hover .snarkTorrentStatus b,
-  .active.starting .snarkTorrentStatus b, .snarkTorrents tr.active.starting:hover .snarkTorrentStatus b {
+  .inactive.downloading .snarkTorrentStatus b,
+  .active.starting .snarkTorrentStatus b {
+    color: #27293f !important;
+    text-shadow: 0 1px 1px rgba(255,255,255,.5);
     background: #dd5;
   }
 
@@ -4450,7 +4448,7 @@ tfoot .snarkTorrentRateDown::after, tfoot .snarkTorrentRateUp::after {
     border-color: transparent #59f transparent transparent;
   }
 
-  .nopeers.incomplete .snarkTorrentStatus b, .snarkTorrents tr.nopeers.incomplete:hover .snarkTorrentStatus b {
+  .nopeers.incomplete .snarkTorrentStatus b {
     color: #27293f !important;
     text-shadow: 0 1px 1px rgba(255,255,255,.5);
     background: #bbb;

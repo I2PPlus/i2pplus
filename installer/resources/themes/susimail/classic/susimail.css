@@ -47,7 +47,7 @@ h3#config {
   padding: 5px 10px;
   width: 300px;
   color: #35415f;
-  border: 1px solid #aaafce;
+  border: 1px solid #bec2da;
   border-radius: 0 0 2px 2px;
   background: linear-gradient(to bottom, #fff 0%, #fff 50%, #eff2ff 50%, #eff2ff 100%);
 }
@@ -94,7 +94,7 @@ p.error, p.info {
   text-align: left;
   font-weight: 700;
   color: #900;
-  border: 1px solid #aaafce;
+  border: 1px solid #bec2da;
   box-shadow: inset 0 0 0 1px #fff;
   background: #ffe var(--err) no-repeat 8px center / 28px;
 }
@@ -108,8 +108,8 @@ tr.mailbody p.error {
 }
 
 tr.mailbody:nth-child(n+3) {
-  border-top: 1px solid #aaafce;
-  border-bottom: 1px solid #aaafce;
+  border-top: 1px solid #bec2da;
+  border-bottom: 1px solid #bec2da;
   background: #fff;
 }
 
@@ -127,7 +127,7 @@ div.footer {
   margin: 0 -10px -10px;
   padding: 1px;
   display: none;
-  border-top: 1px solid #aaafce;
+  border-top: 1px solid #bec2da;
   background: rgba(255,255,255,.5);
 }
 
@@ -177,7 +177,7 @@ div.attached {
 }
 
 td#addattach {
-  border-bottom: 1px solid #aaafce;
+  border-bottom: 1px solid #bec2da;
 }
 
 td#attachedfile {
@@ -275,7 +275,7 @@ table.noborder {
 }
 
 table#mailbox {
-  border: 1px solid #aaafce;
+  border: 1px solid #bec2da;
   background: #eef;
 }
 
@@ -289,7 +289,7 @@ table#mailbox {
 }
 
 div#prefsave {
-  border-bottom: 1px solid #aaafce;
+  border-bottom: 1px solid #bec2da;
 }
 }
 
@@ -304,7 +304,7 @@ _:-ms-lang(x), table#mailbox {
 #mailbox th {
   padding: 6px;
   font-size: 70%;
-  border-bottom: 1px solid #aaafce;
+  border-bottom: 1px solid #bec2da;
   background: linear-gradient(to bottom, #fff 0%, #fff 50%, #eff2ff 50%, #eff2ff 100%) !important;
 }
 
@@ -377,7 +377,7 @@ td.mailListAttachment.isAttached {
 }
 
 #mailbox tr.bottombuttons td {
-  border-top: 1px solid #aaafce;
+  border-top: 1px solid #bec2da;
   background: #fff;
   padding-top: 3px;
   padding-bottom: 3px;
@@ -436,7 +436,7 @@ pre {
   text-align: center;
   color: #0c153d;
   font-size: 9pt !important;
-  border: 1px solid #aaafce;
+  border: 1px solid #bec2da;
   box-shadow: 0 0 0 1px #eee;
   background: linear-gradient(to bottom, rgba(255,255,255,.7),rgba(255,255,255,.2)), url(/themes/console/classic/images/bg2.png) #eef;
   background-size: 100% 100%, 120px 120px;
@@ -471,19 +471,19 @@ form {
 
 #viewmail {
   margin: -9px -10px;
-  border-top: 1px solid #aaafce;
+  border-top: 1px solid #bec2da;
   background: #eef;
 }
 
 .iframed #viewmail {
   margin: 1px 0 -10px;
   padding: 0;
-  border: 1px solid #aaafce;
+  border: 1px solid #bec2da;
 }
 
 table#message_full {
   margin-bottom: -23px;
-  border-top: 1px solid #aaafce;
+  border-top: 1px solid #bec2da;
 }
 
 .iframed #message_full {
@@ -491,7 +491,7 @@ table#message_full {
 }
 
 #message_full tr:last-child {
-  border-bottom: 1px solid #aaafce;
+  border-bottom: 1px solid #bec2da;
 }
 
 input[type=checkbox], input[type=radio] {
@@ -517,7 +517,7 @@ textarea {
 }
 
 input[type=text], input[type=password], textarea {
-  border: 1px solid #aaafce;
+  border: 1px solid #bec2da;
   box-shadow: inset 1px 1px 1px #ddd;
   padding: 4px 5px !important;
   border-radius: 2px;
@@ -551,7 +551,7 @@ button, input[type=submit], input[type="reset"], #settings, .fakebutton {
   padding: 5px;
   display: inline-block;
   color: #333;
-  border: 1px solid #aaafce;
+  border: 1px solid #bec2da;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #fff, 0 0 1px 0 #ddd;
   background-size: 14px 14px, 100% 100% !important;
@@ -568,7 +568,7 @@ button:hover, input[type=submit]:hover, input[type="reset"]:hover,
 button:focus, input[type=submit]:focus, input[type="reset"]:focus,
 #settings:hover, #settings:focus, .fakebutton:focus {
   color: #222;
-  border: 1px solid #aaafce;
+  border: 1px solid #bec2da;
   background: linear-gradient(to bottom, #ddd 0%, #fff 100%);
   filter: drop-shadow(0 0 1px #89f);
 }
@@ -907,7 +907,7 @@ select {
   font-size: 9pt;
   color: #333;
   border-radius: 2px;
-  border: 1px solid #aaafce;
+  border: 1px solid #bec2da;
   box-shadow: inset 0 0 0 1px #fff;
   box-shadow: 0 0 0 1px #fff inset, 0 0 1px 0 #ddd;
   background: var(--dropdown) no-repeat right 8px center / 10px, linear-gradient(to bottom, #fff, #f4f5ff);
@@ -960,7 +960,7 @@ select:focus {
 }
 
 #message_full tr:first-child {
-  border-bottom: 1px solid #aaafce;
+  border-bottom: 1px solid #bec2da;
 }
 
 #mailhead tr {
@@ -978,7 +978,7 @@ select:focus {
 /* login panel */
 
 #dologin {
-  border: 1px solid #aaafce;
+  border: 1px solid #bec2da;
   padding: 10px 0 0;
   width: 500px;
   margin: 55px auto 40px;
@@ -1060,7 +1060,7 @@ select:focus {
   font-size: 14pt;
   color: #35415f;
   word-spacing: .1em;
-  border-bottom: 1px solid #aaafce;
+  border-bottom: 1px solid #bec2da;
   box-shadow: inset 0 0 0 1px #fff;
   background: linear-gradient(to right, #fff 30%, #eff2ff);
 }
@@ -1068,7 +1068,7 @@ select:focus {
 #dologin hr {
   display: block !important;
   box-shadow: 0 0 0 1px rgba(255,255,255,.5);
-  background: #aaafce;
+  background: #bec2da;
 }
 
 #dologin tr:nth-child(6) hr {
@@ -1152,7 +1152,7 @@ hr {
 }
 
 div#pagenav {
-  border-top: 1px solid #aaafce;
+  border-top: 1px solid #bec2da;
   padding: 10px 5px 0;
   font-size: 9.5pt;
   border-radius: 0 0 4px 4px;
@@ -1164,13 +1164,13 @@ div#pagenav {
   padding: 6px 0 0;
   background: #fff !important;
   background: linear-gradient(to bottom, #fff 0%, #eef 100%) !important;
-  border: 1px solid #aaafce;
+  border: 1px solid #bec2da;
   border-bottom: none;
 }
 
 .topbuttons#pagesize {
   padding: 6px 0 4px;
-  border-bottom: 1px solid #aaafce;
+  border-bottom: 1px solid #bec2da;
 }
 
 .topbuttons #mailboxcontrols, .topbuttons .folders {
@@ -1189,7 +1189,7 @@ div#pagenav {
 .iframed .topbuttons, .iframed p.error, .iframed p.info {
   margin: -1px -11px;
   padding: 20px 42px 20px;
-  border: 1px solid #aaafce;
+  border: 1px solid #bec2da;
   border-left: none;
   border-right: none;
 }
@@ -1231,7 +1231,7 @@ div#pagenav {
 .topbuttons .pagenav {
   margin: 7px 0 -3px;
   width: 100%;
-  border-top: 1px solid #aaafce !important;
+  border-top: 1px solid #bec2da !important;
 }
 
 .topbuttons .pagenav td {
@@ -1258,7 +1258,7 @@ div#pagenav {
 #prefsave {
   margin: 10px -10px -21px;
   padding: 6px 0 5px;
-  border-top: 1px solid #aaafce;
+  border-top: 1px solid #bec2da;
   background: #fff;
 }
 
@@ -1277,7 +1277,7 @@ tr.bottombuttons table.pagenav {
 }
 
 #pagenavbottom td {
-  border-top: 1px solid #aaafce;
+  border-top: 1px solid #bec2da;
 }
 
 #pagenavbottom td table td {
@@ -1409,8 +1409,8 @@ img.sort {
 }
 
 .topbuttons .pagenavcontrols {
-  border-top: 1px solid #aaafce;
-  border-bottom: 1px solid #aaafce;
+  border-top: 1px solid #bec2da;
+  border-bottom: 1px solid #bec2da;
 }
 
 .iframed .topbuttons .pagenavcontrols {
@@ -1518,7 +1518,7 @@ input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input
   height: 19px !important;
   vertical-align: middle !important;
   box-sizing: border-box;
-  border: 1px solid #aaafce;
+  border: 1px solid #bec2da;
   background: #f8f8ff;
   -moz-appearance: none;
   -webkit-appearance: inherit;
@@ -1655,7 +1655,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 /* end confirm delete */
 
 .debugHeader:nth-child(n+3) td {
-  border-top: 1px solid #aaafce;
+  border-top: 1px solid #bec2da;
 }
 
 .debugHeader pre {
