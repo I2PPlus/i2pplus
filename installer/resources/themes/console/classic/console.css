@@ -6,14 +6,14 @@
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
   --monospaced: Droid Sans Mono, Andale Mono, DejaVu Sans Mono, Lucida Console, monospace;
   --ink: #41444d;
-  --ink_h1: #2c354f;
+  --ink_light: #5e626e;
   --ink_h1: #6c7293;
   --disabled: #757a8a;
   --hover: #f60;
   --btn: linear-gradient(to bottom, #fff, #f4f5ff);
   --btn_hover: linear-gradient(to bottom, #ddd, #fff);
   --highlight: inset 0 0 0 1px #fff;
-  --border: #aaafce;
+  --border: #bec2da;
   --bg: #fff;
   --bg2: #eff1ff;
   --th: linear-gradient(to bottom, #fff, #fafbff);
@@ -419,8 +419,10 @@ i {
   background: #89f;
 }
 
-.routersummary b {
+.routersummary b, .routersummary td:first-child a:not(hover):not(:active) b,
+.routersummary td:first-child a:not(hover):not(:active):visited b {
   text-transform: capitalize;
+  color: var(--ink_light) !important;
 }
 
 .routersummary h3 {
@@ -437,7 +439,8 @@ i {
   background: linear-gradient(to bottom, #fff 50%, #ffd 50%) !important;
 }
 
-.routersummary h3:hover a {
+.routersummary h3:hover a, #sidebar td:first-child a:hover b,
+#sidebar td:first-child a:visited:hover b {
   color: var(--hover) !important;
 }
 
@@ -3672,14 +3675,18 @@ p:empty {
   display: none;
 }
 
-h2 {
-  word-spacing: .1em;
-  letter-spacing: .08em;
+h2, h3, h4, th, b {
+  color: var(--ink_light);
 }
 
 h2, h3, h4#updateplugins {
   box-shadow: var(--highlight);
   background: var(--header);
+}
+
+h2 {
+  word-spacing: .1em;
+  letter-spacing: .08em;
 }
 
 h4#updateplugins {

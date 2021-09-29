@@ -9,6 +9,14 @@
 :root {
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
   --monospaced: Droid Sans Mono, Andale Mono, DejaVu Sans Mono, Lucida Console, monospace;
+  --ink: #41444d;
+  --ink_light: #5e626e;
+  --a: #575779;
+  --a_hover: #f60;
+  --a_active: #f30;
+  --btn: linear-gradient(to bottom, #fff, #f4f5ff);
+  --btn_hover: linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  --border: #bec2da;
 }
 
 html {
@@ -21,9 +29,9 @@ body {
   text-align: center;
   font-family: var(--bodyfont);
   font-size: 9pt;
-  color: #41444d;
+  color: var(--ink);
   background: #eef url(images/bg0.png) center center scroll;
-  background-size: 90px 90px;
+  background-size: 90px;
   image-rendering: -webkit-optimize-contrast;
 }
 
@@ -34,6 +42,10 @@ body.iframed {
 
 * {
   outline: none;
+}
+
+b {
+  color: var(--ink_light);
 }
 
 div {
@@ -107,14 +119,14 @@ hr {
   width: 150px;
   font: 9pt var(--monospaced);
   color: #5e626e;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   border-radius: 2px;
   box-shadow: inset 1px 1px 1px #ddd;
   background: #fff;
 }
 
 .freetext:focus {
-  color: #41444d;
+  color: var(--ink);
   box-shadow: inset 0 0 0 1px rgba(255,96,0,.5);
 }
 
@@ -144,24 +156,24 @@ hr {
   font-style: normal;
   font-weight: 400;
   color: #5e626e;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   border-radius: 2px;
   background: #eee;
-  background: linear-gradient(to bottom, #fff, #f4f5ff);
+  background: var(--btn);
   box-shadow: inset 0 0 0 1px #fff, 0 0 1px #ddd;
 }
 
 .control:hover, .control:focus, button:hover, button:focus {
   text-decoration: none;
-  color: #41444d !important;
-  border: 1px solid #aaafce;
+  color: var(--ink) !important;
+  border: 1px solid var(--border);
   box-shadow: inset 0 0 0 1px #fff !important;
   background: #ddd;
-  background: linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--btn_hover);
 }
 
 .control:active, button:active {
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 3px 1px #555 !important;
 }
 
@@ -177,7 +189,7 @@ hr {
   max-width: 1800px;
   overflow: hidden;
   text-align: left !important;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   border-radius: 2px;
   box-shadow: inset 0 0 1px #999;
   background: #fff;
@@ -229,32 +241,32 @@ hr {
 
 select {
   margin: 4px !important;
-  padding: 4px 20px 4px 5px;
+  padding: 5px 20px 5px 5px;
   min-width: 140px;
   overflow: hidden;
   text-overflow: ellipsis;
   font-family: var(--bodyfont);
   font-size: 9pt;
   color: #5e626e;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   border-radius: 2px;
   box-shadow: 0 0 0 1px #fff inset, 0 0 1px 0 #ddd;
-  background: var(--dropdown) no-repeat right 8px center / 10px, linear-gradient(to bottom, #fff, #f4f5ff);
+  background: var(--dropdown) no-repeat right 8px center / 10px, var(--btn);
   cursor: pointer;
   appearance: none;
 }
 
 select:hover {
-  color: #41444d;
+  color: var(--ink);
 }
 
 select:hover, select:active {
-  background: var(--dropdown_hover) no-repeat right 8px center / 10px, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
+  background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover) !important;
   outline: none !important;
 }
 
 select:focus {
-  background: var(--dropdown_hover) no-repeat right 8px center / 10px, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
+  background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover) !important;
   outline: none !important;
 }
 
@@ -281,18 +293,17 @@ a:link, a:visited {
   word-wrap: break-word;
   text-decoration: none;
   font-weight: 700;
-  color: #6b6b94;
-  color: #575779;
+  color: var(--a);
   outline: none;
 }
 
 a:hover, a:focus {
   text-decoration: none;
-  color: #f60;
+  color: var(--a_hover);
 }
 
 a:active {
-  color: #f30;
+  color: var(--a_active);
 }
 
 input[type="hidden"], input.default {
@@ -307,10 +318,9 @@ h2, h3 {
   letter-spacing: .08em;
   text-transform: uppercase;
   font-size: 11pt;
-  color: #41444d;
-  border: 1px solid #aaafce;
+  color: var(--ink_light);
+  border: 1px solid var(--border);
   box-shadow: inset 0 0 0 1px #fff;
-  background: #fff url(/themes/console/classic/images/tinytitle.png) repeat right center;
   background: linear-gradient(to bottom, #fff 50%, #fafbff 50%);
 }
 
@@ -358,7 +368,7 @@ h2, h3 {
   margin: 0;
   width: 100%;
   border-collapse: collapse;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   background: #fff url(images/bg2.png);
   background: linear-gradient(to bottom, rgba(255,255,255,.8), rgba(255,255,255,.5)), url(images/bg2.png);
 }
@@ -367,10 +377,9 @@ th {
   padding: 7px 5px;
   text-align: left;
   font-size: 10pt;
-  color: #41444d;
-  border-top: 1px solid #aaafce;
-  border-bottom: 1px solid #aaafce;
-  background: #fff url(/themes/console/classic/images/tinytitle.png) repeat-x center center;
+  color: var(--ink_light);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
   background: linear-gradient(to bottom, #fff, #fafbff);
 }
 
@@ -385,7 +394,7 @@ td {
 }
 
 th:last-child, td:last-child {
-  border-right: 1px solid #aaafce; /* fixes chrome rendering bug */
+  border-right: 1px solid var(--border); /* fixes chrome rendering bug */
 }
 
 #throttler th:last-child, #throttler td:last-child,
@@ -396,8 +405,7 @@ th:last-child, td:last-child {
 td.infohelp {
   padding: 10px 10px 10px 38px !important;
   text-align: justify;
-  background: url(/themes/console/images/svg/infohelp.svg) no-repeat 10px center;
-  background-size: 22px 22px;
+  background: var(--infohelp) no-repeat 10px center / 22px;
 }
 
 .tunnelConfig td {
@@ -414,7 +422,7 @@ td.infohelp {
 }
 
 .tunnelProperties {
-  border-top: 1px solid #aaafce;
+  border-top: 1px solid var(--border);
   background: #fcfcff !important;
 }
 
@@ -426,7 +434,7 @@ td.infohelp {
 .newTunnel {
   padding: 7px !important;
   text-align: right;
-  border-top: 1px solid #aaafce;
+  border-top: 1px solid var(--border);
   background: #fff;
 }
 
@@ -578,7 +586,7 @@ textarea {
   font-family: var(--monospaced);
   font-size: .9;
   color: #5e626e;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   border-radius: 2px;
   box-shadow: inset 1px 1px 1px #ddd;
   background: #fff;
@@ -589,7 +597,7 @@ textarea {
 textarea:focus {
   box-shadow: inset 0 0 0 1px #89f;
   box-shadow: inset 0 0 0 1px #89f, 0 0 1px rgba(136, 153, 255, .4);
-  color: #41444d;
+  color: var(--ink);
 }
 
 textarea#statusMessages {
@@ -625,7 +633,7 @@ a.control {
 .buttons, .newTunnel {
   padding: 7px 5px;
   text-align: right;
-  border-top: 1px solid #aaafce;
+  border-top: 1px solid var(--border);
   background: #fff;
   background: linear-gradient(to bottom, #fff, #fafbff);
 }
@@ -639,7 +647,7 @@ button.control, input[type=submit], input[type="reset"] {
 }
 
 .tunnelConfig tr:last-child td {
-  border-top: 1px solid #aaafce;
+  border-top: 1px solid var(--border);
 }
 
 .tunnelDestinationLabel {
@@ -1072,7 +1080,7 @@ td.tunnelDescription, .tunnelInfo + .tunnelInfo .tunnelDestination {
 }
 
 .tunnelProperties td:last-child {
-  border-right: 1px solid #aaafce;
+  border-right: 1px solid var(--border);
 }
 
 div[class^="status"] {
@@ -1183,7 +1191,7 @@ input[name="nofilter_blindedPassword"] {
   white-space: nowrap;
   word-break: break-all;
   font-family: var(--monospaced);
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   border-radius: 2px;
   box-shadow: inset 1px 1px 1px #ddd;
   background: #fff;
@@ -1197,7 +1205,7 @@ input[name="nofilter_blindedPassword"] {
   padding: 2px 4px;
   overflow: auto;
   text-overflow: clip;
-  box-shadow: 0 0 0 1px #fff, 0 0 0 2px #f60;
+  box-shadow: 0 0 0 1px #fff, 0 0 0 2px var(--a_hover);
   background: #ffd;
   outline: none;
 }
@@ -1249,56 +1257,54 @@ th .help::after {
 }
 
 @media screen and (max-width: 800px) {
-.displayText, .displayText:empty:hover, .displayText:empty:focus {
-  width: 260px;
-  font-size: 8pt;
-}
+  .displayText, .displayText:empty:hover, .displayText:empty:focus {
+    width: 260px;
+    font-size: 8pt;
+  }
 }
 
 @media screen and (max-width: 1200px) {
-#reachableBy {
-  min-width: 0;
-}
-th {
-  font-size: 9pt;
-}
+  #reachableBy {min-width: 0}
+  th {font-size: 9pt}
 }
 
 @media screen and (min-width: 1000px) {
-.displayText, .displayText:empty:hover, .displayText:empty:focus {
-  width: 386px;
-}
-
-#registration .displayText {
-  width: 600px;
-}
+  .displayText, .displayText:empty:hover, .displayText:empty:focus {width: 386px}
+  #registration .displayText {width: 600px}
 }
 
 @media screen and (min-width: 1500px) {
-.displayText, .displayText:empty:hover, .displayText:empty:focus {
-  width: 552px;
+  .displayText, .displayText:empty:hover, .displayText:empty:focus {width: 552px}
+  #registration .displayText {width: 800px}
+  th .help::after {
+    width: 20px;
+    height: 20px;
+    background-size: 20px;
+  }
 }
 
-#registration .displayText {
-  width: 800px;
+#notReady, #down {
+  margin: 35px auto 30px;
+  padding: 30px;
+  width: 400px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 11pt;
+  border: 1px solid #900;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px #000;
+  background: #002;
 }
 
-th .help::after {
-  width: 20px;
-  height: 20px;
-  background-size: 20px 20px;
-}
-}
+/* custom radios/checkboxes */
 
-/* custom radios/checkboxes to enforce color scheme when OS widgets are non-standard  */
-@supports (background-blend-mode: luminosity) { /* exclude ms browsers */
 input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked,
 input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
   width: 19px !important;
   height: 19px !important;
   position: relative;
   vertical-align: middle !important;
-  border: 1px solid #aaafce;
+  border: 1px solid var(--border);
   background: #f8f8ff;
   box-sizing: border-box;
   -moz-appearance: none;
@@ -1315,18 +1321,7 @@ input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disable
 input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
   border-radius: 50%;
 }
-#notReady, #down {
-  margin: 35px auto 30px;
-  padding: 30px;
-  width: 400px;
-  text-align: center;
-  font-weight: 700;
-  font-size: 11pt;
-  border: 1px solid #900;
-  border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #000;
-  background: #002;
-}
+
 input[type=checkbox]:checked::before, input[type=radio]:checked::before,
 input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
   position: absolute;
@@ -1370,7 +1365,7 @@ input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus,
   width: 19px !important;
   height: 19px !important;
   border: 1px solid #67f !important;
-  box-shadow: 0 0 2px #f60 !important;
+  box-shadow: 0 0 2px var(--a_hover) !important;
   background: #fff;
   filter: none !important;
 }
@@ -1380,7 +1375,6 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
   box-shadow: none !important;
   opacity: .5;
   filter: none !important;
-}
 }
 
 .optionsDisabled {
@@ -1416,9 +1410,9 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 }
 
 @media screen and (min-width: 1500px) {
-#toggleInfo {
-  margin: -2px -2px 0 0 !important;
-}
+  #toggleInfo {
+    margin: -2px -2px 0 0 !important;
+  }
 }
 
 #keyringManager {
@@ -1444,7 +1438,7 @@ input::placeholder {
   text-transform: lowercase;
   font-size: 100%;
   font-style: italic;
-  color: #41444d;
+  color: var(--ink);
   opacity: .4;
 }
 
@@ -1548,6 +1542,6 @@ textarea:focus::placeholder, input:focus::placeholder, #filter input:focus::plac
 }
 
 #filter input::placeholder {
-  color: #41444d;
+  color: var(--ink);
   opacity: .4;
 }

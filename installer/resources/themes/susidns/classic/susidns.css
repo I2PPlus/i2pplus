@@ -46,7 +46,7 @@ table {
 }
 
 table.book {
-  border: 1px solid #aaafce;
+  border: 1px solid #bec2da;
   margin: 10px 0 !important;
   border-collapse: collapse;
 }
@@ -57,11 +57,11 @@ table.book {
 }
 
 #host_details tr:first-child {
-  border-top: 1px solid #aaafce;
+  border-top: 1px solid #bec2da;
 }
 
 #host_details tr:last-child {
-  border-bottom: 1px solid #aaafce;
+  border-bottom: 1px solid #bec2da;
 }
 
 table.book td {
@@ -135,7 +135,7 @@ input:focus::placeholder {
   position: sticky;
   top: -1px;
   z-index: 999;
-  border: 1px solid #aaafce;
+  border: 1px solid #bec2da;
   background: linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
 }
 
@@ -158,7 +158,7 @@ input:focus::placeholder {
 .iframed #content h3 {
   border: none;
   margin: 0;
-  border-bottom: 1px dotted #aaafce;
+  border-bottom: 1px dotted #bec2da;
 }
 
 .iframed #content h3:first-child {
@@ -184,7 +184,7 @@ input:focus::placeholder {
 }
 
 div.page {
-  border: 1px solid #aaafce;
+  border: 1px solid #bec2da;
   background: #fff !important;
   margin: 0;
   padding: 0 10px;
@@ -200,7 +200,7 @@ div.page {
 }
 
 div.help {
-  border: 1px solid #aaafce;
+  border: 1px solid #bec2da;
   margin: 0 0 10px;
   background: #eef;
 }
@@ -243,7 +243,7 @@ h3 {
   font-size: 11pt;
   font-weight: 700;
   color: #41444d;
-  border: 1px solid #aaafce;
+  border: 1px solid #bec2da;
   background: linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
 }
 
@@ -254,7 +254,7 @@ h3 {
 h4 {
   margin: -11px -11px 10px;
   padding: 3px 10px;
-  border: 1px solid #aaafce;
+  border: 1px solid #bec2da;
   background: linear-gradient(to right, #fff, #eef);
 }
 
@@ -281,8 +281,8 @@ th {
   padding: 5px 10px;
   line-height: 12pt;
   font-size: 10pt;
-  border-bottom: 1px solid #aaafce;
-  border-top: 1px solid #aaafce;
+  border-bottom: 1px solid #bec2da;
+  border-top: 1px solid #bec2da;
   background: linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
 }
 
@@ -343,7 +343,7 @@ p.footer {
 }
 
 div#filter {
-  border: 1px solid #aaafce;
+  border: 1px solid #bec2da;
   padding: 6px 10px 5px;
   margin: 11px 0 -13px !important;
   word-spacing: .2em;
@@ -364,7 +364,7 @@ div#filter {
   text-transform: capitalize;
   font-size: 10pt;
   color: #575779;
-  border: 1px solid #aaafce;
+  border: 1px solid #bec2da;
   border-radius: 1px;
   box-shadow: inset 0 0 0 1px #fff;
   background: linear-gradient(to bottom, #fff, #eef);
@@ -415,7 +415,7 @@ div#filter {
   padding: 5px 5px 4px;
   min-width: 300px;
   white-space: nowrap;
-  border: 1px solid #aaafce;
+  border: 1px solid #bec2da;
   background: #fff;
 }
 
@@ -469,7 +469,7 @@ div#filter {
 }
 
 #visualid td[colspan="2"] {
-  border-top: 1px solid #aaafce;
+  border-top: 1px solid #bec2da;
   padding: 15px 0;
 }
 
@@ -493,7 +493,7 @@ img[src="/imagegen/id?s=256&c="], img[src="/imagegen/id?s=20&c="] {
   padding: 10px;
   max-width: 700px;
   height: auto;
-  border: 1px solid #aaafce;
+  border: 1px solid #bec2da;
   border-radius: 4px;
   font-size: 10pt;
   text-align: center;
@@ -535,7 +535,7 @@ _:-ms-lang(x), img.illustrate {
 #content + #buttons, #config + #buttons {
   margin: -21px -11px 0;
   padding: 10px;
-  border: 1px solid #aaafce;
+  border: 1px solid #bec2da;
 }
 
 #config + #buttons {
@@ -549,7 +549,7 @@ _:-ms-lang(x), img.illustrate {
 }
 
 p.buttons {
-  border: 1px solid #aaafce;
+  border: 1px solid #bec2da;
   padding: 10px;
   margin: 0 -11px -13px;
   background: #fff;
@@ -570,7 +570,7 @@ input[type=text], input[type=password], textarea {
   vertical-align: middle;
   font: 9pt/130% var(--bodyfont);
   color: #222;
-  border: 1px solid #aaafce;
+  border: 1px solid #bec2da;
   border-radius: 2px;
   box-shadow: inset 1px 1px 1px #ddd;
   background: #fff;
@@ -595,7 +595,7 @@ input[type=file]::file-selector-button {
   padding: 6px 10px;
   font: 9pt/130% var(--bodyfont);
   color: #222;
-  border: 1px solid #aaafce;
+  border: 1px solid #bec2da;
   border-radius: 2px;
   box-shadow: inset 1px 1px 1px #ddd;
   background: #fff;
@@ -603,7 +603,7 @@ input[type=file]::file-selector-button {
 
 input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
   color: #222;
-  border: 1px solid #aaafce;
+  border: 1px solid #bec2da;
   background: #fff;
   background: linear-gradient(to bottom, #ddd, #fff);
   filter: drop-shadow(0 0 1px #89f);
@@ -647,7 +647,7 @@ td.destinations textarea, td.destinations textarea:focus {
   padding: 5px 8px !important;
   color: #333 !important;
   border-radius: 2px;
-  border: 1px solid #aaafce;
+  border: 1px solid #bec2da;
   box-shadow: inset 0 0 0 1px #fff, 0 0 1px 0 #ddd;
   background: linear-gradient(to bottom, #fff, #eef);
 }
@@ -659,7 +659,7 @@ input.update {
 .fakebutton:hover, input[type=submit]:hover, input[type="reset"]:hover,
 .fakebutton:focus, input[type=submit]:focus, input[type="reset"]:focus {
   color: #222;
-  border: 1px solid #aaafce;
+  border: 1px solid #bec2da;
   background: linear-gradient(to bottom, #ddd, #fff);
   filter: drop-shadow(0 0 1px #89f);
 }
@@ -702,7 +702,7 @@ div#config, form[action="subscriptions"] div#content {
 textarea[name="config"], textarea[name="content"] {
   padding: 2px 5px;
   height: 200px !important;
-  border: 1px solid #aaafce;
+  border: 1px solid #bec2da;
   box-shadow: none;
 }
 
@@ -725,7 +725,7 @@ textarea[name="config"], textarea[name="content"] {
 }
 
 #navi a, #navi a:visited {
-  border: 1px solid #aaafce;
+  border: 1px solid #bec2da;
   border-radius: 2px;
   margin: 3px 0 !important;
   box-shadow: 0 0 1px 0 #ddd, inset 0 0 0 1px #fff;
@@ -775,7 +775,7 @@ textarea[name="config"], textarea[name="content"] {
 
 .iframed #navi a:hover, .iframed #navi a:focus {
   z-index: 1;
-  border-color: #aaafce;
+  border-color: #bec2da;
 }
 
 #navi a:active {
@@ -789,7 +789,7 @@ textarea[name="config"], textarea[name="content"] {
 
 #book + #buttons {
   margin: -12px 10px 23px;
-  border: 1px solid #aaafce;
+  border: 1px solid #bec2da;
   border-top: none;
   border-bottom: none;
 }
@@ -902,7 +902,7 @@ p.book {
 }
 
 .info img[src^="/imagegen"] {
-  border: 1px solid #aaafce;
+  border: 1px solid #bec2da;
   border-radius: 2px;
   background: #fff;
 }
@@ -927,11 +927,11 @@ p.book {
 }
 
 #host_list td:first-child {
-  border-left: 1px solid #aaafce;
+  border-left: 1px solid #bec2da;
 }
 
 #host_list td:last-child {
-  border-right: 1px solid #aaafce;
+  border-right: 1px solid #bec2da;
 }
 
 #host_list .info {
@@ -1131,7 +1131,7 @@ input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input
   height: 19px !important;
   vertical-align: middle !important;
   box-sizing: border-box;
-  border: 1px solid #aaafce;
+  border: 1px solid #bec2da;
   background: #f8f8ff;
   -moz-appearance: none;
   -webkit-appearance: inherit;
@@ -1262,7 +1262,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
   position: absolute;
   top: 0;
   right: 3px;
-  border-left: 1px solid #aaafce;
+  border-left: 1px solid #bec2da;
 }
 
 input#exporthosts {
@@ -1306,7 +1306,7 @@ input[disabled] {
   overflow: hidden;
   font-size: 0;
   text-align: center;
-  border: 1px solid #aaafce;
+  border: 1px solid #bec2da;
   border-radius: 4px;
   background: linear-gradient(to bottom, #fff 50%, #dde0f0 50%);
 }
@@ -1322,8 +1322,8 @@ input[disabled] {
   text-align: center;
   font-size: 11.5pt !important;
   color: #525660;
-  border-left: 1px solid #aaafce;
-  border-right: 1px solid #aaafce;
+  border-left: 1px solid #bec2da;
+  border-right: 1px solid #bec2da;
 }
 
 #prev a, #prev.inactive {
