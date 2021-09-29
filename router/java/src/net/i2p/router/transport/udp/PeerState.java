@@ -1103,7 +1103,7 @@ public class PeerState {
 
         if (!anyPending) {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug(_remotePeer + " nothing pending, cancelling timer");
+                _log.debug("[" + _remotePeer.toBase64().substring(0,6) + "] -> Nothing pending, cancelling timer...");
             _retransmitTimer = 0;
             exitFastRetransmit();
         } else {
@@ -1112,7 +1112,7 @@ public class PeerState {
             long oldTimer = _retransmitTimer - now;
             _retransmitTimer = now + getRTO();
             if (_log.shouldLog(Log.DEBUG))
-               _log.debug(_remotePeer + " ACK, timer: " + oldTimer + " -> " + (_retransmitTimer - now));
+               _log.debug("[" + _remotePeer.toBase64().substring(0,6) + "] ACK, timer: " + oldTimer + " -> " + (_retransmitTimer - now));
         }
         if (anyPending || anyQueued)
             _transport.getOMF().nudge();
@@ -1422,7 +1422,7 @@ public class PeerState {
         if (_dead) {
             dropOutbound();
             return 0;
-	}
+        }
 
         int rv = 0;
         List<OutboundMessageState> succeeded = null;
@@ -1491,7 +1491,7 @@ public class PeerState {
             }
             if (rv <= 0) {
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("[" + _remotePeer.toBase64().substring(0,6) + "] -> nothing pending, cancelling timer...");
+                    _log.debug("[" + _remotePeer.toBase64().substring(0,6) + "] -> Nothing pending, cancelling timer...");
                 synchronized(this) {
                     _retransmitTimer = 0;
                     exitFastRetransmit();
@@ -1862,15 +1862,15 @@ public class PeerState {
                 _context.statManager().addRateData("udp.sendConfirmVolley", numSends);
                 _transport.succeeded(state);
                 if (_log.shouldDebug())
-                    _log.debug("Received partial ack of " + state.getMessageId() + " by [" + _remotePeer.toBase32().substring(0,6)
-                          + "] \n* Status: Newly acked: " + ackedSize
+                    _log.debug("Received partial ACK of " + state.getMessageId() + " by [" + _remotePeer.toBase32().substring(0,6)
+                          + "] \n* Status: Newly ACKed: " + ackedSize
                           + " -> Now complete for: " + state);
             } else {
                 if (_log.shouldInfo())
-                    _log.info("Received partial ack of " + state.getMessageId() + " by [" + _remotePeer.toBase32().substring(0,6)
+                    _log.info("Received partial ACK of " + state.getMessageId() + " by [" + _remotePeer.toBase32().substring(0,6)
                           + "] \n* Status: Received after " + lifetime + "ms and " + numSends + " sends"
                           + " -> Complete? false"
-                          + " -> Newly acked: " + ackedSize
+                          + " -> Newly ACKed: " + ackedSize
                           + ' ' + bitfield
                           + " for: " + state);
             }
@@ -2107,7 +2107,7 @@ public class PeerState {
             super(_context.simpleTimer2());
             long delta = Math.min(_rtt/2, ACK_FREQUENCY);
             if (_log.shouldDebug())
-                _log.debug("Sending delayed ack in " + delta + ": " + PeerState.this);
+                _log.debug("Sending delayed ACK in " + delta + "ms: " + PeerState.this);
             schedule(delta);
         }
 
@@ -2121,7 +2121,7 @@ public class PeerState {
                 long wanted = _wantACKSendSince;
                 if (wanted <= 0) {
                     if (_log.shouldDebug())
-                        _log.debug("Already acked:" + PeerState.this);
+                        _log.debug("Already ACKed:" + PeerState.this);
                     return;
                 }
                 List<ACKBitfield> ackBitfields = retrieveACKBitfields(false);
@@ -2134,7 +2134,7 @@ public class PeerState {
 
                     if (_log.shouldDebug()) {
                         //_log.debug("Sending " + ackBitfields + " to " + PeerState.this);
-                        _log.debug("Sending " + ackBitfields.size() + " acks to " + PeerState.this);
+                        _log.debug("Sending " + ackBitfields.size() + " ACKs to " + PeerState.this);
                     }
                     // locking issues, we ignore the result, and acks are small,
                     // so don't even bother allocating
@@ -2152,7 +2152,7 @@ public class PeerState {
                     }
                 } else {
                     if (_log.shouldDebug())
-                        _log.debug("No more acks:" + PeerState.this);
+                        _log.debug("No more ACKs:" + PeerState.this);
                 }
            }
         }
