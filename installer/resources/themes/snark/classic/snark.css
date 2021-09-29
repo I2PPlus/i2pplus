@@ -9,6 +9,10 @@
   --btnAction_active: linear-gradient(to bottom, #bbf, #eef);
 }
 
+html, body {
+  scrollbar-color: #acafb9 #e2e2f3;
+}
+
 body {
   margin: 3px 4px;
   font: 9pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Verdana, Bitstream Vera Sans, DejaVu Sans, Lucida Grande, Helvetica, sans-serif;
