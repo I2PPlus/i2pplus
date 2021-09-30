@@ -5,6 +5,7 @@
 :root {
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
   --monospaced: Droid Sans Mono, Andale Mono, DejaVu Sans Mono, Lucida Console, monospace;
+  --bodybg: #e2e2f3;
   --ink: #41444d;
   --ink_light: #5e626e;
   --ink_h1: #6c7293;
@@ -13,6 +14,8 @@
   --hover: #f60;
   --btn: linear-gradient(to bottom, #fff, #f4f5ff);
   --btn_hover: linear-gradient(to bottom, #ddd, #fff);
+  --badge: linear-gradient(to bottom, #fff, #eef);
+  --badge_hover: linear-gradient(to bottom, #eef, #fff);
   --highlight: inset 0 0 0 1px #fff;
   --border: #bec2da;
   --bg: #fff;
@@ -23,7 +26,7 @@
 
 html, body {
   min-height: 100%;
-  scrollbar-color: #acafb9 #e2e2f3;
+  scrollbar-color: #acafb9 var(--bodybg);
 }
 
 body {
@@ -32,7 +35,7 @@ body {
   text-align: left;
   font: 9pt/130% var(--bodyfont);
   color: var(--ink);
-  background: #e2e2f3 url(images/bg0.png) no-repeat center center / 90px;
+  background: var(--bodybg) url(images/bg0.png) no-repeat center center / 90px;
 }
 
 @supports (text-justify: auto) { /* Firefox 55+ */
@@ -92,7 +95,7 @@ i {
   float: left;
   position: relative;
   text-align: center;
-  border: 5px solid #bbf;
+  border: 5px solid var(--border);
   background: var(--bg2);
 }
 
@@ -108,9 +111,9 @@ i {
 .logo hr {
   margin: 8px -5px 8px;
   height: 5px;
-  color: #bbf;
+  color: var(--border);
   border: none;
-  background: #bbf;
+  background: var(--border);
 }
 
 .logo a {
@@ -463,16 +466,14 @@ i {
   border: none !important;
   box-shadow: inset 0 0 2px 1px #f2f7fa;
   text-decoration: none !important;
-  background: #fafbff url(images/bg2.png);
   background: linear-gradient(to right, #eff2ff, #fff 50%, #eff2ff);
 }
 
 .routersummary h3 a {
-  width: 100%;
   width: calc(100% - 5px);
-  text-decoration: none;
-  white-space: normal;
   display: inline-block;
+  white-space: normal;
+  text-decoration: none;
 }
 
 .routersummary ul {
@@ -1051,7 +1052,7 @@ a:active #sb_bandwidthgraph {
   border: none;
   height: 14px;
   max-width: 100%;
-  background: #bbf;
+  background: var(--border);
   background: linear-gradient(to right, rgba(0,255,0,.1) 65px, rgba(255,255,0,.1) 110px, rgba(255,128,0,.1) 175px, rgba(255,0,0,.1)),
               linear-gradient(to bottom, rgba(255, 255, 255,.6), rgba(238, 238, 255, .6) 50%, rgba(180, 180, 255, .7) 50%, rgba(140, 140, 255, .7));
   box-shadow: inset 0 0 0 1px #ddf;
@@ -1167,7 +1168,7 @@ div[lang="es"] li {
 div[lang="es"] .twocol {
   background: #eff2ff;
   border-radius: 1px;
-  box-shadow: 0 0 0 1px #bbf;
+  box-shadow: 0 0 0 1px var(--border);
   padding: 5px 0 8px 48px;
   margin-top: 15px !important;
 }
@@ -2240,6 +2241,10 @@ div.welcome {
 .main#tunnelmgr {
   padding: 0 10px 9px;
   min-width: 550px;
+}
+
+.main#torrents {
+  margin-top: -1px;
 }
 
 .main.embedded {
@@ -3893,8 +3898,6 @@ h4.app2 {
 }
 
 h4.app img, h4.app2 img {
-  margin-top: 1px;
-  opacity: .5;
   display: none;
 }
 
@@ -3918,12 +3921,21 @@ h4.app a:focus::after, h4.app2 a:focus::after {
   opacity: 1;
 }
 
-#chooselang img {
-  margin-right: 10px;
+#chooselang::after, #configbanwidth::after {
+  content: none;
 }
 
-h4.app:hover img, h4.app2:hover img {
+#chooselang img, #configbanwidth img {
+  margin: 1px -5px 0 20px;
+  display: inline-block;
+  opacity: .8;
+}
+
+h4.app a:hover img, h4.app2 a:hover img,
+h4.app a:hover::after, h4.app2 a:hover::after {
+  margin-top: -1px;
   opacity: 1;
+  transform: scale(1.3);
 }
 
 div.ag2 {
@@ -5628,7 +5640,7 @@ td#pw_adduser input {
   border: 1px solid #ddf;
   border-bottom: 2px solid #ccf;
   background: #fff;
-  background: linear-gradient(to bottom, #fff, #eef);
+  background: var(--badge);
   border-radius: 2px 2px 0 0;
   box-sizing: border-box;
   -webkit-column-break-inside: avoid;
@@ -7117,7 +7129,7 @@ span.b32 {
   font-size: 80%;
   color: #070;
   border-radius: 2px;
-  box-shadow: 0 0 0 1px #bbf, var(--highlight);
+  box-shadow: 0 0 0 1px var(--border), var(--highlight);
   background: var(--th);
   opacity: .8;
 }
@@ -7599,8 +7611,8 @@ h2#debug_portmapper {
 .bucketCount {
   margin: -15px 0 8px;
   padding: 4px;
-  border: 1px solid #bbf;
-  border-left: 3px solid #bbf;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--border);
   border-radius: 0 2px 2px 0;
   background: linear-gradient(to right, rgba(255,255,255,.3), rgba(255,255,255,0)), linear-gradient(to bottom, #fff 50%, #eaeaff 50%);
 }
@@ -7617,7 +7629,7 @@ h2#debug_portmapper {
   white-space: nowrap !important;
   color: #152;
   font-size: 90%;
-  box-shadow: 0 0 0 1px #bbf, var(--highlight);
+  box-shadow: 0 0 0 1px var(--border), var(--highlight);
   border-radius: 2px;
   background: #f8f8ff;
   -moz-user-select: all;
@@ -7659,6 +7671,7 @@ h2#debug_portmapper {
 
 #portmapper td:first-child, #sockets td:first-child {
   font-weight: 700;
+  color: var(--ink_light);
 }
 
 #portmapper th:last-child, #portmapper td:last-child, #sockets td:last-child {
@@ -8796,8 +8809,8 @@ b.suboption {
   display: inline-block;
   padding: 5px 8px;
   background: #d0d0ff;
-  background: linear-gradient(to bottom, #fff, #bbf);
-  box-shadow: 0 0 0 1px #bbf, var(--highlight), 0 0 2px #99f;
+  background: linear-gradient(to bottom, #fff, var(--border));
+  box-shadow: 0 0 0 1px var(--border), var(--highlight), 0 0 2px #99f;
   white-space: nowrap;
   text-align: center;
   margin: 3px;
@@ -9906,7 +9919,7 @@ a[href^="/viewprofile"] img, .profiledump img {
   text-align: left;
   background: #eef;
   box-shadow: var(--highlight);
-  border: 1px solid #bbf;
+  border: 1px solid var(--border);
   opacity: .9;
 }
 
@@ -10399,7 +10412,7 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel{
   padding: 20px 10px 20px 60px !important;
   width: calc(100% - 70px);
   list-style: none;
-  box-shadow: 0 0 0 1px #bbf, var(--highlight), inset 0 0 0 2px #ddf;
+  box-shadow: 0 0 0 1px var(--border), var(--highlight), inset 0 0 0 2px #ddf;
   background-blend-mode: luminosity;
   background-size: 32px !important;
   break-inside: avoid;
@@ -10413,7 +10426,7 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel{
 }
 
 #helptoc li:hover {
-  box-shadow: 0 0 0 1px #bbf, var(--highlight), inset 0 0 0 2px rgba(146,48,0,.7);
+  box-shadow: 0 0 0 1px var(--border), var(--highlight), inset 0 0 0 2px rgba(146,48,0,.7);
   background-blend-mode: normal;
   transition: ease box-shadow .3s;
 }
@@ -11173,15 +11186,14 @@ p#gatherstats {
   text-align: left;
   border: 1px solid #99b;
   border-radius: 1px;
-  background: linear-gradient(to bottom, #fff, #eef);
+  background: var(--badge);
   will-change: transform;
   outline: none !important;
 }
 
 .stattograph:hover {
   box-shadow: 0 0 0 1px var(--hover);
-  background: #fff;
-  background: linear-gradient(to bottom, #eef, #fff);
+  background: var(--badge_hover);
 }
 
 .stattograph b {
@@ -11205,7 +11217,7 @@ p#gatherstats {
 .optbox:checked + label > .stattograph {
   padding-left: 18px;
   border-left-width: 3px;
-  background: var(--yes)  no-repeat 6px center / 8px, linear-gradient(to bottom, #eef, #fff);
+  background: var(--yes)  no-repeat 6px center / 8px, var(--badge_hover);
 }
 
 .optbox:checked + label > .stattograph:hover b {
@@ -11930,7 +11942,7 @@ div.app:hover img, .sitemaplink:hover img {
   display: inline-block;
   border: 1px solid #bbc;
   border-radius: 2px;
-  background: linear-gradient(to bottom, #fff, #eef);
+  background: var(--badge);
 }
 
 .lsdest, .leaseset a[href$="i2p/"], .leaseset a[href$="i2p"] {
@@ -11942,18 +11954,17 @@ div.app:hover img, .sitemaplink:hover img {
   border-radius: 0;
   border-left-width: 4px;
   border-right-width: 4px;
-  background: var(--hardhat) no-repeat 4px center / 14px, linear-gradient(to bottom, #fff, #eef);
+  background: var(--hardhat) no-repeat 4px center / 14px, var(--badge);
 }
 
 .lsdest.published {
   padding-left: 38px;
-  background: var(--hardhat) no-repeat 4px center / 14px, var(--globe) no-repeat 22px center / 12px,
-              linear-gradient(to bottom, #fff, #eef);
+  background: var(--hardhat) no-repeat 4px center / 14px, var(--globe) no-repeat 22px center / 12px, var(--badge);
 }
 
 .leaseset th:last-child a[href$="i2p/"] {
   padding-left: 22px;
-  background: var(--link) no-repeat 5px center / 12px, linear-gradient(to bottom, #fff, #eef);
+  background: var(--link) no-repeat 5px center / 12px, var(--badge);
 }
 
 /* /profiles group icons */

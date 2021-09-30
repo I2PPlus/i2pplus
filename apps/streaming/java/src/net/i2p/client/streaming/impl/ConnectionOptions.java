@@ -86,7 +86,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      * Do not change unless you know what you're doing
      */
     private static final float TCP_ALPHA = 1.0f/8;
-    private static final float TCP_BETA = 1.0f/4; 
+    private static final float TCP_BETA = 1.0f/4;
     private static final float TCP_KAPPA = 4;
 
     private static final String PROP_INITIAL_RTO = "i2p.streaming.initialRTO";
@@ -144,7 +144,8 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     /**
      *  Ref: RFC 5681 sec. 4.3, RFC 1122 sec. 4.2.3.3, ticket #2706
      */
-    private static final int DEFAULT_INITIAL_ACK_DELAY = 500;
+//    private static final int DEFAULT_INITIAL_ACK_DELAY = 500;
+    private static final int DEFAULT_INITIAL_ACK_DELAY = 200;
     static final int MIN_WINDOW_SIZE = 1;
     private static final boolean DEFAULT_ANSWER_PINGS = true;
     private static final int DEFAULT_INACTIVITY_TIMEOUT = 90*1000;
@@ -792,7 +793,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         _maxMessageSize = Math.max(bytes, MIN_MESSAGE_SIZE);
         _maxInitialMessageSize = Math.min(_maxMessageSize, DEFAULT_MAX_MESSAGE_SIZE);
     }
-    
+
     /**
      *  What is the largest message to send in the SYN from Alice to Bob?
      *  @return the max
