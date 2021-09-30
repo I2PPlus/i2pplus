@@ -3898,8 +3898,6 @@ h4.app2 {
 }
 
 h4.app img, h4.app2 img {
-  margin-top: 1px;
-  opacity: .5;
   display: none;
 }
 
@@ -3923,12 +3921,21 @@ h4.app a:focus::after, h4.app2 a:focus::after {
   opacity: 1;
 }
 
-#chooselang img {
-  margin-right: 10px;
+#chooselang::after, #configbanwidth::after {
+  content: none;
 }
 
-h4.app:hover img, h4.app2:hover img {
+#chooselang img, #configbanwidth img {
+  margin: 1px -5px 0 20px;
+  display: inline-block;
+  opacity: .8;
+}
+
+h4.app a:hover img, h4.app2 a:hover img,
+h4.app a:hover::after, h4.app2 a:hover::after {
+  margin-top: -1px;
   opacity: 1;
+  transform: scale(1.3);
 }
 
 div.ag2 {

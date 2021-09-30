@@ -3380,7 +3380,7 @@ h4.app a, h4.app2 a {
   font-size: 0;
 }
 
-#home h4 a {
+#home h4 a[href$="configapps"], #home h4 a[href$="configsites"] {
   margin: -7px -10px -10px 0;
   padding: 10px 0 4px;
   border-left: 1px solid var(--borderinner);
@@ -3411,8 +3411,38 @@ h4.app a, h4.app2 a {
   transition: ease transform .15s;
 }
 
+#chooselang::after, #configbanwidth::after {
+  content: none !important;
+}
+
+#chooselang img, #configbanwidth img {
+  margin: -9px -5px -8px 20px;
+  padding-top: 11px;
+  display: inline-block;
+  opacity: .8;
+}
+
+@media screen and (max-width: 1500px) {
+  #chooselang, #configbanwidth {
+    margin-top: 1px;
+    margin-bottom: 4px;
+  }
+  #chooselang img, #configbanwidth img {
+    margin: -9px -5px -12px 20px;
+  }
+}
+
+h4.app a:hover img, h4.app2 a:hover img,
+h4.app a:hover::after, h4.app2 a:hover::after {
+  opacity: 1 !important;
+}
+
 #chooselang img {
   margin-right: 10px;
+}
+
+#configbanwidth img {
+  margin-right: -10px;
 }
 
 #sitemap h3 img {
@@ -3420,15 +3450,14 @@ h4.app a, h4.app2 a {
 }
 
 @media screen and (max-width: 1499px) {
-h4.app img, h4.app2 img, #sitemap h3 img {
-  margin: -7px 0 -6px;
-  padding: 8px 0 6px 9px;
-}
-
-#sitemap h3 img {
-  margin-top: -8px;
-  padding-right: 6px;
-}
+  h4.app img, h4.app2 img, #sitemap h3 img {
+    margin: -7px 0 -6px;
+    padding: 8px 0 6px 9px;
+  }
+  #sitemap h3 img {
+    margin-top: -8px;
+    padding-right: 6px;
+  }
 }
 
 h4.app:hover img, h4.app2:hover img, #sitemap h3:hover img, #sitemap h3 img:hover {
