@@ -430,9 +430,9 @@
     }
 %>
 <td colspan="2">
-<span class="multiOption"><label><input value="0" type="radio" id="ElGamal-2048" name="encType" <%=(has0 ? " checked=\"checked\"" : edisabled)%> class="optbox" />&nbsp;ElGamal-2048</label></span>
+<span class="multiOption"><label><input value="0" type="radio" id="ElGamal-2048" name="encType" <%=((has0 && !has4) ? " checked=\"checked\"" : edisabled)%> class="optbox" />&nbsp;ElGamal-2048</label></span>
 <span class="multiOption">
-<label><input value="4" type="radio" id="ECIES-X25519" name="encType" <%=(has4 ? " checked=\"checked\"" : edisabled)%> class="optbox" />&nbsp;ECIES-X25519</label></span>
+<label><input value="4" type="radio" id="ECIES-X25519" name="encType" <%=((has4 && !has0) ? " checked=\"checked\"" : edisabled)%> class="optbox" />&nbsp;ECIES-X25519</label></span>
 <span class="multiOption">
 <label><input value="4,0" type="radio" id="ElG_ECIES" name="encType" <%=((has0 && has4) ? " checked=\"checked\"" : edisabled)%> class="optbox" />&nbsp;<%=intl._t("Both encryption types")%></label></span>
 </td>
