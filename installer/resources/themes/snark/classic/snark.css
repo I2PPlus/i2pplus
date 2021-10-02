@@ -4,6 +4,10 @@
 @import url(/themes/fonts/DroidSans.css);
 
 :root {
+  --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
+  --monospaced: Droid Sans Mono, Andale Mono, DejaVu Sans Mono, Lucida Console, monospace;
+  --ink: #41444d;
+  --ink_light: #5e626e;
   --btnAction: linear-gradient(to bottom, #fff 50%, #ddf 50%);
   --btnAction_hover: linear-gradient(to bottom, #fff 50%, #eef 50%);
   --btnAction_active: linear-gradient(to bottom, #bbf, #eef);
@@ -15,8 +19,8 @@ html, body {
 
 body {
   margin: 3px 4px;
-  font: 9pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Verdana, Bitstream Vera Sans, DejaVu Sans, Lucida Grande, Helvetica, sans-serif;
-  color: #2c354f;
+  font: 9pt var(--bodyfont);
+  color: var(--ink);
   background: #eef url(/themes/console/classic/images/bg0.png) repeat scroll center bottom;
   background-size: 120px;
 }
@@ -140,22 +144,23 @@ td.snarkGraphicStatus img {
 .iframed .snarknavbar {
   margin-top: -1px !important;
   padding: 8px 0;
+  border-top: none;
   border-radius: 0;
   position: static;
   background: linear-gradient(to bottom, #fff, #eff2ff 75%) !important;
 }
 
 .snarkNav:link, .snarkNav:visited {
-  display: inline-block;
-  line-height: 110%;
-  color: #444688;
-  font-size: 9pt;
-  font-weight: 700;
   margin: -1px -2px -1px -3px !important;
   padding: 5px 7px 5px 23px !important;
-  text-decoration: none !important;
+  display: inline-block;
+  line-height: 110%;
   letter-spacing: .1em;
-  text-transform: uppercase !important;
+  text-transform: uppercase;
+  font-size: 9pt;
+  font-weight: 700;
+  text-decoration: none !important;
+  color: #444688;
   border: 1px solid #bec2da;
   box-shadow: inset 0 0 0 1px #fff, 0 0 1px rgba(200,200,200,.5);
   opacity: .85;
@@ -496,13 +501,12 @@ td.snarkGraphicStatus img {
 }
 
 table {
-  width: 100%;
   margin: 0 0 10px 0;
   padding: 0;
+  width: 100%;
+  border: none;
   border-spacing: 0;
   border-collapse: collapse;
-  color: #323;
-  border: 0;
 }
 
 thead, tfoot {
@@ -515,13 +519,13 @@ thead {
 
 tfoot tr:first-child th {
   vertical-align: middle !important;
-  color: #3e4b6f !important;
+  color: var(--ink_light) !important;
 }
 
 th {
   font-size: 9pt;
   padding: 3px 2px;
-  color: #3e4b6f;
+  color: var(--ink_light);
   border-top: 1px solid #bec2da;
   border-bottom: 1px solid #bec2da;
   background: #fff;
@@ -637,7 +641,7 @@ td.snarkTrackerDetails {
 }
 
 tt, .bucket, #bucketSet code {
-  font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
+  font-family: var(--monospaced);
 }
 
 .snarkTorrents tt {
@@ -931,7 +935,7 @@ tt, .bucket, #bucketSet code {
 td {
   font-size: 9pt;
   padding: 2px;
-  color: #3e4b6f !important;
+  color: var(--ink_light) !important;
 }
 
 td:first-child {
@@ -1486,7 +1490,7 @@ a:active {
 }
 
 input {
-  font: bold 9pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Verdana, Bitstream Vera Sans, DejaVu Sans, Lucida Grande, Helvetica, sans-serif;
+  font: bold 9pt var(--bodyfont);
   margin: 2px 4px 2px 0;
   padding: 3px 4px !important;
   cursor: pointer;
@@ -1553,7 +1557,7 @@ input[type=submit], input[type="reset"], a.control {
 }
 
 input[type=submit]:hover, input[type="reset"]:hover, input[type=submit]:focus, input[type="reset"]:focus, a.control:hover, a.control:focus {
-  color: #41444d;
+  color: #var(--ink);
   background: linear-gradient(to bottom, #ddd, #fff);
   border: 1px solid #bec2da;
 }
@@ -1621,7 +1625,7 @@ input[type=text]:focus, textarea:focus, input.r:focus, textarea[name="i2cpOpts"]
 }
 
 input[type=text], input[type=password], input.r, input[name="nofilter_dataDir"], textarea[name="i2cpOpts"] {
-  font: 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", Verdana, "Bitstream Vera Sans", "DejaVu Sans", "Lucida Grande", Helvetica, sans-serif !important;
+  font: 9pt var(--bodyfont);
   min-width: 160px;
   margin: 2px 2px 2px 0;
   padding: 5px !important;
@@ -1635,7 +1639,7 @@ input[type=text], input[type=password], input.r, input[name="nofilter_dataDir"],
 }
 
 input[type=text]:focus, input[type=password]:focus, input.r:focus, input[name="nofilter_dataDir"]:focus, textarea[name="i2cpOpts"]:focus {
-  color: #41444d !important;
+  color: #var(--ink) !important;
   box-shadow: inset 0 0 0 1px rgba(255,96,0,.5);
   outline: none;
 }
@@ -1720,7 +1724,7 @@ select {
   vertical-align: middle;
   overflow: hidden;
   text-overflow: ellipsis;
-  font: 9pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Verdana, Bitstream Vera Sans, DejaVu Sans, Lucida Grande, Helvetica, sans-serif;
+  font: 9pt var(--bodyfont);
   color: #5e626e;
   border: 1px solid #bec2da;
   border-radius: 2px;
@@ -1738,7 +1742,7 @@ select option {
 }
 
 select:hover, select:active {
-  color: #41444d;
+  color: #var(--ink);
   background: var(--dropdown_hover) no-repeat scroll right 8px center / 10px, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
 }
 
@@ -1758,7 +1762,7 @@ select::-ms-expand {
 
 textarea {
   padding: 1px 4px 0;
-  font: 8pt "Droid Sans Mono", "Noto Sans Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
+  font: 8pt var(--monospaced);
   font-weight: 700;
   color: #006;
   border: 1px solid #bec2da;
@@ -2236,7 +2240,7 @@ img:hover {
 }
 
 code {
-  font: bold 8.5pt "Droid Sans Mono", "Noto Sans Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
+  font: bold 8.5pt var(--monospaced);
   padding: 0 2px;
   color: #050;
 }
@@ -2472,7 +2476,7 @@ td#bwHelp a {
 }
 
 .snarkCommentInfo textarea {
-  font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", Verdana, "Bitstream Vera Sans", "DejaVu Sans", "Lucida Grande", Helvetica, sans-serif !important;
+  font-family: var(--bodyfont);
   font-weight: 400;
   width: 100%;
   min-height: 64px;
@@ -3636,18 +3640,16 @@ td.snarkTorrentPeerCount, .nopeers td.snarkTorrentPeerCount {
   padding: 2px 8px;
   display: inline-block;
   min-width: 80px;
-  background: #fff;
-  background: linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
+  font-weight: 700;
+  font-size: 90%;
+  color: #559;
   border-left: 1px solid #bec2da;
   box-shadow: inset 0 0 0 1px #fff;
-  font-weight: 700;
-  color: #559;
+  background: linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
 }
 
 @media screen and (max-width: 900px) {
-  #torrentDisplay label {
-    min-width: 60px;
-  }
+  #torrentDisplay label {min-width: 60px}
 }
 
 #torrentDisplay label:last-child {
@@ -3974,7 +3976,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 
 .infohash {
   margin-right: 1px;
-  font-family: "Droid Sans Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
+  font-family: var(--monospaced);
   color: #070;
   -moz-user-select: all;
   -webkit-user-select: all;
@@ -4077,7 +4079,7 @@ hr.debug {
 }
 
 .infohash {
-  font-family: "Droid Sans Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
+  font-family: var(--monospaced);
   color: #070;
   user-select: all;
 }

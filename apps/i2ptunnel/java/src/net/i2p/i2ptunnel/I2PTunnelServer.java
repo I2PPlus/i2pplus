@@ -798,8 +798,8 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
 
             long afterHandle = getTunnel().getContext().clock().now();
             long timeToHandle = afterHandle - afterAccept;
-            if ( (timeToHandle > 1500) && (_log.shouldLog(Log.WARN)) )
-                _log.warn("Took a while (" + timeToHandle + "ms) to handle the request for " + remoteHost + ':' + remotePort +
+            if ( (timeToHandle > 1500) && (_log.shouldLog(Log.INFO)) )
+                _log.info("Took a while (" + timeToHandle + "ms) to handle the request for " + remoteHost + ':' + remotePort +
                           "\n* Socket create: " + (afterSocket-afterAccept) + "ms");
         } catch (SocketException ex) {
             try {
