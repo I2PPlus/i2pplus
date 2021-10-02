@@ -123,16 +123,16 @@ class InboundMessageState implements CDQEntry {
                 if (isLast) {
                     // don't allow _lastFragment to be set twice
                     if (_lastFragment >= 0) {
-                        if (_log.shouldLog(Log.ERROR))
-                            _log.error("Multiple last fragments for [MsgID " + _messageId + "] from " + _from);
+                        if (_log.shouldLog(Log.WARN))
+                            _log.warn("Multiple last fragments for [MsgID " + _messageId + "] from " + _from);
                         return false;
                     }
                     // TODO - check for non-last fragments after this one?
                     _lastFragment = fragmentNum;
                 } else if (_lastFragment >= 0 && fragmentNum >= _lastFragment) {
                     // don't allow non-last after last
-                    if (_log.shouldLog(Log.ERROR))
-                        _log.error("Non-last fragment " + fragmentNum + " when last is " + _lastFragment + " for [MsgID " + _messageId + "] from " + _from);
+                    if (_log.shouldLog(Log.WARN))
+                        _log.warn("Non-last fragment " + fragmentNum + " when last is " + _lastFragment + " for [MsgID " + _messageId + "] from " + _from);
                     return false;
                 }
                 if (_log.shouldLog(Log.DEBUG))
