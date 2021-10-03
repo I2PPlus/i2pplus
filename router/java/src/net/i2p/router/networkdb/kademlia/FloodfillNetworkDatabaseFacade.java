@@ -590,8 +590,9 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         String nofail = _context.getProperty("router.noFailGracePeriod");
         if (nofail != null)
             DONT_FAIL_PERIOD = Long.valueOf(nofail)*60*1000;
-        if (info.getNetworkId() == _networkID &&
-            (getKBucketSetSize() < MIN_REMAINING_ROUTERS ||
+            int knownRouters = getKBucketSetSize();
+            if (info.getNetworkId() == _networkID &&
+            (knownRouters < MIN_REMAINING_ROUTERS ||
              _context.router().getUptime() < DONT_FAIL_PERIOD ||
              _context.commSystem().countActivePeers() <= MIN_ACTIVE_PEERS) ||
              _context.commSystem().getStatus() == Status.DISCONNECTED) {
@@ -610,7 +611,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         if ((_floodfillEnabled && !forceExplore) ||
             _context.jobQueue().getMaxLag() > 1000 ||
             _context.banlist().isBanlistedForever(peer)) {
-//            getKBucketSetSize() > MAX_DB_BEFORE_SKIPPING_SEARCH) {
+//            knownRouters > MAX_DB_BEFORE_SKIPPING_SEARCH) {
             // don't try to overload ourselves (e.g. failing 3000 router refs at
             // once, and then firing off 3000 netDb lookup tasks)
             // Also don't queue a search if we have plenty of routerinfos
