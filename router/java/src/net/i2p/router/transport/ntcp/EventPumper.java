@@ -47,7 +47,7 @@ class EventPumper implements Runnable {
     private volatile boolean _alive;
     private Selector _selector;
 //    private final Set<NTCPConnection> _wantsWrite = new ConcurrentHashSet<NTCPConnection>(32);
-    private final Set<NTCPConnection> _wantsWrite = new ConcurrentHashSet<NTCPConnection>(4096);
+    private final Set<NTCPConnection> _wantsWrite = new ConcurrentHashSet<NTCPConnection>(128);
     /**
      *  The following 3 are unbounded and lockless for performance in runDelayedEvents()
      */
@@ -113,14 +113,14 @@ class EventPumper implements Runnable {
 //    private static final int MIN_MINB = 4;
     private static final int MIN_MINB = 8;
 //    private static final int MAX_MINB = 12;
-    private static final int MAX_MINB = 1024;
+    private static final int MAX_MINB = 128;
     public static final String PROP_MAX_MINB = "i2np.ntcp.eventPumperMaxBuffers";
     private static final int MIN_BUFS;
     static {
         long maxMemory = SystemVersion.getMaxMemory();
         boolean isSlow = SystemVersion.isSlow();
 //        MIN_BUFS = (int) Math.max(MIN_MINB, Math.min(MAX_MINB, 1 + (maxMemory / (16*1024*1024))));
-        MIN_BUFS = (int) Math.max(MIN_MINB, Math.min(MAX_MINB, 1 + (maxMemory / (8*1024*1024))));
+        MIN_BUFS = (int) Math.max(MIN_MINB, Math.max(MAX_MINB, 1 + (maxMemory / (8*1024*1024))));
     }
 
     private static final TryCache<ByteBuffer> _bufferCache = new TryCache<>(new BufferFactory(), MIN_BUFS);
