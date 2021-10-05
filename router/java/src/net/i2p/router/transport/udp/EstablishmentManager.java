@@ -17,6 +17,7 @@ import net.i2p.data.SessionKey;
 import net.i2p.data.i2np.DatabaseStoreMessage;
 import net.i2p.data.i2np.DeliveryStatusMessage;
 import net.i2p.data.i2np.I2NPMessage;
+import net.i2p.router.Banlist;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
@@ -254,10 +255,16 @@ class EstablishmentManager {
         }
         RouterIdentity toIdentity = toRouterInfo.getIdentity();
         Hash toHash = toIdentity.calculateHash();
-        if (toRouterInfo.getNetworkId() != _networkID) {
-            _context.banlist().banlistRouterForever(toHash, " <b>➜</b> " + "Not in our network: " + toRouterInfo.getNetworkId());
+        int id = toRouterInfo.getNetworkId();
+        if (id != _networkID) {
+            if (id == -1)
+                _context.banlist().banlistRouter(toHash, " <b>➜</b> No network specified", null, null, _context.clock().now() + Banlist.BANLIST_DURATION_NO_NETWORK);
+            else
+                _context.banlist().banlistRouterForever(toHash, " <b>➜</b> Not in our network: " + id);
+            if (_log.shouldWarn())
+                _log.warn("Not in our network: " + toRouterInfo, new Exception());
             _transport.markUnreachable(toHash);
-            _transport.failed(msg, "Remote peer is on the wrong network, cannot establish");
+            _transport.failed(msg, "Remote peer is on the wrong network, cannot establish connection");
             return;
         }
         UDPAddress addr = new UDPAddress(ra);

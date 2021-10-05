@@ -42,6 +42,7 @@ import net.i2p.data.router.RouterInfo;
 import net.i2p.kademlia.KBucketSet;
 import net.i2p.kademlia.RejectTrimmer;
 import net.i2p.kademlia.SelectionCollector;
+import net.i2p.router.Banlist;
 import net.i2p.router.Job;
 import net.i2p.router.NetworkDatabaseFacade;
 import net.i2p.router.Router;
@@ -1197,8 +1198,14 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 _log.warn("Invalid RouterInfo signature detected for [" + routerInfo.toBase64().substring(0,6) + "] - forged router structure!");
             return "Invalid RouterInfo signature";
         }
-        if (routerInfo.getNetworkId() != _networkID){
-            _context.banlist().banlistRouterForever(key, " <b>➜</b> " + "Not in our network: " + routerInfo.getNetworkId());
+        int id = routerInfo.getNetworkId();
+        if (id != _networkID) {
+            if (id == -1) {
+                // old i2pd bug, possibly at startup, don't ban forever
+                _context.banlist().banlistRouter(key, " <b>➜</b> No network specified", null, null, _context.clock().now() + Banlist.BANLIST_DURATION_NO_NETWORK);
+            } else {
+            _context.banlist().banlistRouterForever(key, " <b>➜</b> " + "Not in our network: " + id);
+            }
             if (_log.shouldLog(Log.WARN))
                 _log.warn("Bad Network detected for [" + routerInfo.toBase64().substring(0,6) + "]");
             return "Not in our network";
