@@ -5754,7 +5754,7 @@ msgstr "Numero totale di tunnel in uso"
 msgid ""
 "Concurrent tunnel builds (averaged over a minute) / single tunnel build time"
 msgstr ""
-"Costruzione di tunnel in parallelo (mediamente in un minuto) / tempo di " 
+"Costruzione di tunnel in parallelo (mediamente in un minuto) / tempo di "
 "costruzione del singolo tunnel"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1151
@@ -9253,7 +9253,7 @@ msgstr ""
 "Un router I2P generalmente necessita di essere inizializzato solo una volta, "
 "per entrare in rete. Ma, se il router sta girando per un lungo periodo "
 "senza connettività di rete è possibile che necessiti del reseed. "
-"Il reseed comporta il recupero di file multipli \"RouterInfo"\ "
+"Il reseed comporta il recupero di file multipli \"RouterInfo\" "
 "(incorporati in un file zip firmato) da almeno due URL predefiniti presi "
 "da un gruppo di server HTTPS di internet di volontari."
 
