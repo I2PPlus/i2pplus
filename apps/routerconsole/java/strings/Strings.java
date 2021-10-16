@@ -42,23 +42,18 @@ class Dummy {
         _t("I2PMail POP3 Server");
         _t("Postman's SMTP Mail Server (smtp.postman.i2p)");
         _t("Postman's POP3 Mail Server (pop3.postman.i2p)");
-//        _t("IRC proxy");
         _t("I2P IRC Network");
         _t("Proxy to connect to I2P's anonymized IRC chat network");
-//        _t("eepsite");
         _t("I2P webserver");
         _t("I2P Webserver");
         _t("I2P Web Server");
         _t("Personal I2P Webserver (eepsite)");
         _t("HTTP Proxy");
         // older names for pre-0.7.4 installs
-        _t("eepProxy");
-        _t("ircProxy");
         // hardcoded in i2psnark
         _t("I2PSnark");
         // hardcoded in iMule?
         _t("iMule");
-        _t("I2P Monotone DVCS");
         _t("Official I2P Source Repository");
 
         // standard themes for ConfigUIHelper
