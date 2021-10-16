@@ -145,7 +145,7 @@ public class NTCPConnection implements Closeable {
      */
     static final int BUFFER_SIZE = 16*1024;
 //    private static final int MAX_DATA_READ_BUFS = 16;
-    private static final int MAX_DATA_READ_BUFS = 64;
+    private static final int MAX_DATA_READ_BUFS = 256;
     private static final ByteCache _dataReadBufs = ByteCache.getInstance(MAX_DATA_READ_BUFS, BUFFER_SIZE);
     private static final int INFO_PRIORITY = OutNetMessage.PRIORITY_MY_NETDB_STORE_LOW;
     private static final String FIXED_RI_VERSION = "0.9.12";
@@ -258,11 +258,11 @@ public class NTCPConnection implements Closeable {
         _writeBufs = new ConcurrentLinkedQueue<ByteBuffer>();
 //        _bwInRequests = new ConcurrentHashSet<Request>(2);
 //        _bwOutRequests = new ConcurrentHashSet<Request>(8);
-        _bwInRequests = new ConcurrentHashSet<Request>(16);
-        _bwOutRequests = new ConcurrentHashSet<Request>(32);
+        _bwInRequests = new ConcurrentHashSet<Request>(8);
+        _bwOutRequests = new ConcurrentHashSet<Request>(16);
         //_outbound = new CoDelPriorityBlockingQueue(ctx, "NTCP-Connection", 32);
 //        _outbound = new PriBlockingQueue<OutNetMessage>(ctx, "NTCP-Connection", 32);
-        _outbound = new PriBlockingQueue<OutNetMessage>(ctx, "NTCP-Connection", 256);
+        _outbound = new PriBlockingQueue<OutNetMessage>(ctx, "NTCP-Connection", 128);
         _currentOutbound = new ArrayList<OutNetMessage>(1);
         _isInbound = isIn;
         _inboundListener = new InboundListener();
@@ -652,7 +652,7 @@ public class NTCPConnection implements Closeable {
         synchronized (_currentOutbound) {
             if (!_currentOutbound.isEmpty()) {
                 if (_log.shouldLog(Log.INFO))
-                    _log.info("Attempt for multiple outbound messages with " + _currentOutbound.size() +
+                    _log.info("Attempting to send multiple outbound messages with " + _currentOutbound.size() +
                               " already waiting and " + _outbound.size() + " queued");
                 return;
             }

@@ -1992,7 +1992,7 @@ public class Router implements RouterClock.ClockShiftListener {
      *  May take a while to run the first time, if it has to go through the event log.
      *  Once called, the result is cached.
      *
-     *  @since 0.0.47
+     *  @since 0.9.47
      */
     public long getEstimatedDowntime() {
         synchronized(_configFileLock) {
@@ -2014,7 +2014,7 @@ public class Router implements RouterClock.ClockShiftListener {
     /**
      *  Only for soft restart. Not for external use.
      *
-     *  @since 0.0.47
+     *  @since 0.9.47
      */
     public void setEstimatedDowntime(long downtime) {
         if (downtime <= 0)

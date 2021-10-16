@@ -33,10 +33,12 @@ class ParticipatingThrottler {
 
     /** portion of the tunnel lifetime */
     private static final int LIFETIME_PORTION = 3;
-    private static final int MIN_LIMIT = 18 / LIFETIME_PORTION;
-    private static final int MAX_LIMIT = 66 / LIFETIME_PORTION;
+//    private static final int MIN_LIMIT = 18 / LIFETIME_PORTION;
+//    private static final int MAX_LIMIT = 66 / LIFETIME_PORTION;
+    private static final int MIN_LIMIT = 180 / LIFETIME_PORTION;
+    private static final int MAX_LIMIT = 660 / LIFETIME_PORTION;
 //    private static final int PERCENT_LIMIT = 12 / LIFETIME_PORTION;
-    private static final int PERCENT_LIMIT = 24 / LIFETIME_PORTION;
+    private static final int PERCENT_LIMIT = 48 / LIFETIME_PORTION;
     private static final long CLEAN_TIME = 11*60*1000 / LIFETIME_PORTION;
 
     ParticipatingThrottler(RouterContext ctx) {
@@ -48,7 +50,8 @@ class ParticipatingThrottler {
     /** increments before checking */
     boolean shouldThrottle(Hash h) {
         int numTunnels = this.context.tunnelManager().getParticipatingCount();
-        int limit = Math.max(MIN_LIMIT, Math.min(MAX_LIMIT, numTunnels * PERCENT_LIMIT / 100));
+//        int limit = Math.max(MIN_LIMIT, Math.min(MAX_LIMIT, numTunnels * PERCENT_LIMIT / 100));
+        int limit = Math.max(MIN_LIMIT, Math.max(MAX_LIMIT, numTunnels * PERCENT_LIMIT / 100));
         return this.counter.increment(h) > limit;
     }
 
