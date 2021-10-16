@@ -1456,7 +1456,7 @@ public class NTCPConnection implements Closeable {
                         releaseReadBuf(_dataBuf);
                     if (_framelen > BUFFER_SIZE) {
                         if (_log.shouldInfo())
-                            _log.info("Allocating big ByteArray: " + _framelen + "bytes");
+                            _log.info("Allocating big ByteArray: " + _framelen + " bytes");
                         byte[] data = new byte[_framelen];
                         _dataBuf = new ByteArray(data);
                     } else {
