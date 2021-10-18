@@ -1633,6 +1633,7 @@ input[type=text], input[type=password], input.r, input[name="nofilter_dataDir"],
   border-radius: 2px;
   box-shadow: inset 1px 1px 1px #ddd;
   background: #f8f8ff;
+  user-select: auto;
 }
 
 input[type=text]:focus, input[type=password]:focus, input.r:focus, input[name="nofilter_dataDir"]:focus, textarea[name="i2cpOpts"]:focus {
