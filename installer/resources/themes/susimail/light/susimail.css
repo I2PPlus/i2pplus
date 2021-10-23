@@ -1191,13 +1191,14 @@ h3#config {
 }
 
 input.logout, input.logout:hover, input.logout:focus, input.logout:active {
-  padding: 6px 7px 6px 24px !important;
+  padding: 5px 7px 5px 24px;
   display: inline-block;
   float: none !important;
   line-height: normal;
 }
 
 #info input.logout, #info input.logout:hover, #info input.logout:focus, #info input.logout:active {
+  padding: 6px 7px 6px 24px;
   margin: -8px -8px -8px 8px !important;
   border: none !important;
   border-left: 1px solid #bbd !important;
