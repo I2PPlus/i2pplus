@@ -7,6 +7,10 @@
 @import url(../images/images.css);
 @import url(images/images.css);
 
+html {
+  scrollbar-color: #779 #a4a4cb;
+}
+
 body {
   margin: 5px;
   color: #4f4f63;
@@ -1086,6 +1090,7 @@ textarea[name="config_text"] {
   margin-bottom: 15px;
   resize: none;
   height: 310px;
+  scrollbar-color: #779 #fff;
 }
 
 h3#config {
@@ -1609,7 +1614,7 @@ _:-ms-lang(x), tr.list0:hover, tr.list1:hover {
 }
 
 #mailbox th.mailListFlagged {
-  background: url(../images/status.png) no-repeat center center, linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
+  background: linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
   background-blend-mode: luminosity, normal;
 }
 
@@ -1710,6 +1715,14 @@ tr:active td.mailListSubject a {
 td.mailListFlagged img {
   opacity: .7;
   transform: scale(-1,1) skew(10deg);
+}
+
+td.mailListFlagged.new {
+  background: var(--newmail) no-repeat center center / 16px;
+}
+
+td.mailListFlagged.new img {
+  display: none;
 }
 
 tr:hover .mailListFlagged img {
