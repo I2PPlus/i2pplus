@@ -1098,13 +1098,6 @@ p:empty + .sb_notice {
   background-size: 16px !important;
 }
 
-@supports not (-moz-appearance: none) {
-  .tunnelBuildStatus::before {
-    margin-top: 2px !important;
-    vertical-align: top !important;
-  }
-}
-
 .sb_netstatus.error::before {
   background: var(--net_error) no-repeat center center;
 }
@@ -1151,11 +1144,20 @@ p:empty + .sb_notice {
 
 .tunnelBuildStatus::before {
   margin: 3px 3px 0 0;
-  width: 9px;
-  height: 9px;
+  margin: -3px 0 -4px;
+  width: 16px;
+  height: 16px;
   display: inline-block;
   border-radius: 50%;
   content: "";
+  transform: scale(.7);
+}
+
+@supports not(-moz-appearance: none) {
+  .tunnelBuildStatus::before {
+    margin: -4px 0 0;
+    vertical-align: text-top;
+  }
 }
 
 .tunnelBuildStatus.accepting::before {
@@ -1164,8 +1166,7 @@ p:empty + .sb_notice {
 }
 
 .tunnelBuildStatus.active::before {
-  background: #5c5;
-  animation: linear participating 1s 2s alternate infinite;
+  background: var(--tunn_active) no-repeat center center / 15px;
 }
 
 .tunnelBuildStatus.starting {
@@ -1173,7 +1174,7 @@ p:empty + .sb_notice {
 }
 
 .tunnelBuildStatus.starting::before {
-  background: #bb0;
+  background: var(--tunn_starting) no-repeat center center / 15px;
 }
 
 .tunnelBuildStatus.rejecting {
@@ -1181,8 +1182,7 @@ p:empty + .sb_notice {
 }
 
 .tunnelBuildStatus.rejecting::before {
-  box-shadow: inset 0 0 0 2px #933;
-  background: linear-gradient(135deg, #fff 40%, #933 40%, #933 60%, #fff 60%);
+  background: var(--tunn_reject) no-repeat center center / 15px;
 }
 
 .tunnelBuildStatus.hidden {
@@ -1190,12 +1190,7 @@ p:empty + .sb_notice {
 }
 
 .tunnelBuildStatus.hidden::before {
-  background: #999;
-}
-
-@keyframes participating {
-  0%,49%,51%,100% {background: #5c5}
-  50% {background: #494}
+  background: var(--tunn_hidden) no-repeat center center / 15px;
 }
 
 /* sidebar news */
