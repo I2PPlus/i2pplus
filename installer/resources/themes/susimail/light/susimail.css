@@ -7,6 +7,13 @@
 @import url(../images/images.css);
 @import url(images/images.css);
 
+:root {
+  --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, Verdana, Helvetica, sans-serif;
+  --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
+  --btn: linear-gradient(to bottom, #fff, #eef);
+  --highlight: inset 0 0 0 1px #fff;
+}
+
 html {
   scrollbar-color: #779 #a4a4cb;
 }
@@ -14,7 +21,7 @@ html {
 body {
   margin: 5px;
   color: #4f4f63;
-  font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Bitstream Vera Sans, Segoe UI, Verdana, Lucida Grande, Helvetica, sans-serif;
+  font-family: var(--bodyfont);
   font-size: 9pt;
   background: #a4a4cb url(/themes/console/light/images/tile2.png);
 }
@@ -64,24 +71,24 @@ b, h3, .pagenav td, th {
 }
 
 li {
-  color: #4f4f63;
-  line-height: 12pt;
-  font-size: 8.5pt;
   margin-left: 5px;
   margin-right: 5px;
+  line-height: 12pt;
+  font-size: 8.5pt;
+  color: #4f4f63;
 }
 
 p {
-  color: #4f4f63;
   margin-left: 15px;
   margin-right: 15px;
   font-size: 8.5pt;
+  color: #4f4f63;
 }
 
 p.hl {
-  font-size: 12pt;
-  letter-spacing: 2pt;
   line-height: 18pt;
+  letter-spacing: 2pt;
+  font-size: 12pt;
   font-weight: 700;
 }
 
@@ -103,7 +110,7 @@ p.info {
 }
 
 tr.mailbody, #message_full tr:first-child {
-  box-shadow: inset 0 0 0 1px #fff;
+  box-shadow: var(--highlight);
   background: #fafaff;
 }
 
@@ -112,23 +119,23 @@ tr.mailbody, #message_full tr:first-child {
 }
 
 tr.mailbody td {
+  padding: 0;
+  width: 100%;
   word-break: normal;
   word-wrap: normal;
-  width: 100%;
-  padding: 0;
 }
 
 .mailbody p.info {
   margin: 10px 0;
+  padding: 20px 10px;
+  width: calc(100% - 40px);
   display: block;
+  font-weight: 700;
+  color: #900;
   border: 1px solid #575775;
   border-radius: 2px;
   box-shadow: inset 0 0 1px #f00;
-  padding: 20px 10px;
-  width: calc(100% - 40px);
   background: #ffe;
-  color: #900;
-  font-weight: 700;
   filter: drop-shadow(0 0 1px #999);
 }
 
@@ -148,9 +155,9 @@ div.footer {
   margin: -6px -1px -3px;
   border-top: none;
   border: 1px solid #8d8daa;
-  box-shadow: inset 0 0 0 1px #fff;
-  background: #eef;
-  background: linear-gradient(to right, rgba(232,232,255,.3) 15%, rgba(255,255,255,.8) 50%, rgba(232,232,255,.3) 85%), repeating-linear-gradient(to bottom, #fff 1px, #ddf 2px, #fff 3px);
+  box-shadow: var(--highlight);
+  background: linear-gradient(to right, rgba(232,232,255,.3) 15%, rgba(255,255,255,.8) 50%, rgba(232,232,255,.3) 85%),
+              repeating-linear-gradient(to bottom, #fff 1px, #ddf 2px, #fff 3px);
 }
 
 p.footer {
@@ -180,12 +187,12 @@ p.footer, p.footer b {
 }
 
 p.mailbody {
-  font: 9pt "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
-  text-align: left;
-  padding: 0 0 15px;
   margin-top: 0;
+  padding: 0 0 15px;
   line-height: 130%;
-  word-break: break-all; // required to ensure super long strings don't break the layout
+  text-align: left;
+  word-break: break-all; /* required to ensure super long strings don't break the layout*/
+  font: 9pt var(--monospaced);
 }
 
 a {
@@ -227,7 +234,7 @@ a:active, tr:hover td[onclick]:active a {
 }
 
 pre {
-  font: 9pt "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
+  font: 9pt var(--monospaced);
   margin-left: 10px;
   margin-right: 10px;
 }
@@ -279,14 +286,8 @@ form {
   border: 1px solid #8d8daa;
   border-radius: 2px 2px 0 0;
   box-shadow: 0 0 1px 1px rgba(220,220,255,.3);
-  background: #f4f4ff;
   background: linear-gradient(to bottom, #f8f8ff, #f2f2ff);
 }
-
-/*
-.iframed .header + form {
-  margin-bottom: 0;
-}*/
 
 .iframed form {
   margin-bottom: 8px !important;
@@ -345,7 +346,7 @@ form {
 
 /* buttons and inputs */
 
-button::-moz-focus-inner, input[type= ]::-moz-focus-inner, input[type=reset]::-moz-focus-inner  {
+button::-moz-focus-inner, input[type= ]::-moz-focus-inner, input[type=reset]::-moz-focus-inner {
   outline: none;
   border: none;
 }
@@ -359,47 +360,45 @@ label:hover {
 }
 
 #attachedfile input[type=checkbox]:hover, #attachedfile input[type=checkbox]:focus,
-.mailListDelete input[type=checkbox]:hover, .mailListDelete input[type=checkbox]:focus{
+.mailListDelete input[type=checkbox]:hover, .mailListDelete input[type=checkbox]:focus {
   filter: sepia(100%) hue-rotate(185deg) drop-shadow(0 0 2px #933);
 }
 
 input[type=text], input[type=password] {
   cursor: text;
-  font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Bitstream Vera Sans, Segoe UI, Verdana, Lucida Grande, Helvetica, sans-serif;
+  font-family: var(--bodyfont);
   font-size: 9pt;
 }
 
 input[type=submit], input[type=reset], #settings, .fakebutton {
   margin: 3px;
   padding: 4px 5px;
-  font: 9pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Bitstream Vera Sans, Segoe UI, Verdana, Lucida Grande, Helvetica, sans-serif;
+  font: 9pt var(--bodyfont);
   text-decoration: none;
   text-shadow: 0 1px 1px #fff;
   color: #4f4f63 !important;
   border: 1px solid #9ea8d1;
   border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #fff;
   box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
-  background: #eee;
   background: linear-gradient(to bottom, #fff, #efefff);
-  background-size: 14px auto, 100% 100% !important;
+  background-size: 14px, 100% !important;
+  cursor: pointer;
   opacity: 1;
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));;
-  cursor: pointer;
 }
 
 input[type=submit]:hover, input[type=reset]:hover, input[type=submit]:focus, input[type=reset]:focus,
 #settings:hover, #settings:focus, .fakebutton:hover, .fakebutton:focus {
   color: #222 !important;
   border: 1px solid #f60;
-  box-shadow: inset 0 0 0 1px #fff, inset 0 -8px 3px 8px rgba(255,96,0,.02), inset 0 0 10px rgba(255,96,0,.05), 0 0 1px rgba(255,96,0,.1), 0 7px 4px -4px rgba(0,0,0,.1);
-  transition: ease border .7s;
+  box-shadow: var(--highlight), inset 0 -8px 3px 8px rgba(255,96,0,.02), inset 0 0 10px rgba(255,96,0,.05), 0 0 1px rgba(255,96,0,.1), 0 7px 4px -4px rgba(0,0,0,.1);
   filter: drop-shadow(0 0 1px rgba(204, 204, 204, .8));
+  transition: ease border .7s;
 }
 
 input[type=submit]:active, input[type=reset]:active,
 #settings:active, .fakebutton:active {
-  box-shadow: inset 0 0 0 1px #fff, inset 2px 2px 2px #999;
+  box-shadow: var(--highlight), inset 2px 2px 2px #999;
   color: #555 !important;
   background-blend-mode: luminosity;
   border: 1px solid #f30;
@@ -741,7 +740,7 @@ input[disabled] {
   color: #54586f;
   border: 1px solid #bbc;
   border-radius: 2px;
-  background: linear-gradient(to bottom, #fff, #eef);
+  background: var(--btn);
 }
 
 .pagenav input[disabled] {
@@ -767,7 +766,7 @@ tr.bottombuttons .pagenav {
 }
 
 .pagenav input[disabled]:hover, .pagenav input[disabled]:active {
-  box-shadow: inset 0 0 0 1px #fff !important;
+  box-shadow: var(--highlight) !important;
 }
 
 .topbuttons div.pagenav {
@@ -875,7 +874,7 @@ a .sort:hover, a:focus .sort {
 }
 
 img.sort:active {
-  box-shadow: inset 0 0 0 1px #fff, inset 2px 2px 2px #999;
+  box-shadow: var(--highlight), inset 2px 2px 2px #999;
 }
 
 .sort.selected, .sort.selected:active {
@@ -919,7 +918,7 @@ input[type=text][disabled] {
 }
 
 textarea {
-  font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
+  font-family: var(--monospaced);
   font-size: 9pt;
 }
 
@@ -942,7 +941,7 @@ hr {
   width: 600px;
   border: 1px solid #77789f;
   border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #fff, inset 0 0 2px 1px #eef, 0 0 1px rgba(100, 100, 200, .5);
+  box-shadow: var(--highlight), inset 0 0 2px 1px #eef, 0 0 1px rgba(100, 100, 200, .5);
   background: linear-gradient(to bottom, #fafaff, rgba(232,232,255,.5)),
               linear-gradient(to bottom, rgba(255,255,255,.7) 5%, rgba(220,220,255,.9)),
               linear-gradient(to right, #fff, #efefff, #fff);
@@ -1102,7 +1101,7 @@ h3#config {
   letter-spacing: .08em;
   word-spacing: .1em;
   border-bottom: 1px solid #8d8daa;
-  box-shadow: inset 0 0 0 1px #fff;
+  box-shadow: var(--highlight);
   text-shadow: 0 1px 1px #fff;
   background: #fafaff;
   background: linear-gradient(to right, rgba(240,240,255,.1), rgba(252,252,252,.5), rgba(240,240,255,.1)), linear-gradient(to bottom, #fafaff 50%, #f2f2ff 50%);
@@ -1114,7 +1113,7 @@ h3#config {
   padding-bottom: 10px;
   border-top: 1px solid #8d8daa;
   background: #f6f6ff;
-  box-shadow: inset 0 0 0 1px #fff;
+  box-shadow: var(--highlight);
 }
 
 .iframed #prefsave {
@@ -1173,7 +1172,7 @@ h3#config {
   font-size: 9pt;
   font-weight: 700;
   border: 1px solid #8d8daa;
-  box-shadow: inset 0 0 0 1px #fff !important;
+  box-shadow: var(--highlight) !important;
   background: linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%) !important;
 }
 
@@ -1257,7 +1256,7 @@ input.logout, input.logout:hover, input.logout:focus, input.logout:active {
 }
 
 tr.bottombuttons, .topbuttons {
-  box-shadow: inset 0 0 0 1px #fff;
+  box-shadow: var(--highlight);
 }
 
 _:-ms-lang(x), tr.bottombuttons, .topbuttons {
@@ -1445,12 +1444,12 @@ td p.error {
 
 #attachedfile label:hover {
   color: #933;
-  box-shadow: inset 0 0 0 1px #fff, inset 0 0 0 2px #955;
+  box-shadow: var(--highlight), inset 0 0 0 2px #955;
   background: var(--attach_hover) no-repeat 7px center, linear-gradient(to right, #ffe 70%, #ffd);
 }
 
 #attachedfile label:active {
-  box-shadow: inset 0 0 0 1px #fff, inset 0 0 0 2px #b33, inset 4px 4px 3px #775;
+  box-shadow: var(--highlight), inset 0 0 0 2px #b33, inset 4px 4px 3px #775;
 }
 
 .attached {
@@ -1458,7 +1457,7 @@ td p.error {
   padding: 15px 35px 15px 35px;
   overflow: auto !important;
   text-align: left;
-  box-shadow: inset 0 0 0 1px #fff;
+  box-shadow: var(--highlight);
   background: var(--attach) no-repeat 10px center / 16px, rgba(220,220,255,.2);
 }
 
@@ -1535,18 +1534,18 @@ td[onclick] {
 tr.list0 {
   background: #eef;
   background: repeating-linear-gradient(45deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px), #fff;
-  background: linear-gradient(to bottom, #fff, #eef);
+  background: var(--btn);
 }
 
 tr.list1 {
   background: #f7f8ff;
   background: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fff 5px), #fff;
-  background: linear-gradient(to bottom, #fff, #eef);
+  background: var(--btn);
 }
 
 tr.list0:hover, tr.list1:hover {
   background-color: #ffd;
-  box-shadow: inset 0 0 0 1px #fff;
+  box-shadow: var(--highlight);
 }
 
 tr.list0:hover td, tr.list1:hover td {
@@ -1558,7 +1557,7 @@ _:-ms-lang(x), tr.list0:hover, tr.list1:hover {
 }
 
 .list0 td, .list1 td {
-  box-shadow: inset 0 0 0 1px #fff;
+  box-shadow: var(--highlight);
   background: rgba(240,240,255,.4);
 }
 
@@ -1770,10 +1769,10 @@ th.mailListDate {
   color: #5b5b71;
   border: 1px solid #bbc;
   border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #fff;
+  box-shadow: var(--highlight);
   opacity: .8;
   background: #f6f6ff;
-  background: linear-gradient(to bottom, #fff, #eef);
+  background: var(--btn);
 }
 
 tr:hover .listDate {
@@ -1802,7 +1801,7 @@ tr:hover .listDate {
 
 td.mailListSize {
   font-style: italic;
-  box-shadow: inset 0 0 0 1px #fff;
+  box-shadow: var(--highlight);
 }
 
 .mailListSize .unknown {
@@ -1820,7 +1819,7 @@ td.mailListSize {
   text-align: right;
   border: 1px solid #bbc;
   border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #fff;
+  box-shadow: var(--highlight);
   background: #f6f6ff;
   background: linear-gradient(to bottom, #f6f6ff, #e8e8ff);
 }
@@ -1891,7 +1890,7 @@ td.mailListDelete {
 /* confirm mail delete */
 
 #confirmdelete td {
-  box-shadow: inset 0 0 0 1px #fff !important;
+  box-shadow: var(--highlight) !important;
   background: repeating-linear-gradient(45deg, #900, #900 10px, #ee9 10px, #ee9 20px);
   background-size: 400%;
   animation: attention 360s linear infinite both;
@@ -2036,7 +2035,7 @@ select option {
 select:hover, select:active {
   cursor: pointer;
   color: #19191f;
-  box-shadow: inset 0 0 0 1px #fff;
+  box-shadow: var(--highlight);
   background: var(--dropdown_hover) no-repeat right 8px center / 10px, linear-gradient(to bottom, #eee, #fff) !important;
 }
 
@@ -2076,7 +2075,7 @@ select::-ms-expand {
   right: -1px;
   border: 1px solid #8d8daa;
   border-radius: 0 0 0 3px;
-  box-shadow: inset 0 0 0 1px #fff;
+  box-shadow: var(--highlight);
   background: linear-gradient(to bottom, rgba(255,255,255,.7) 50%, rgba(240,240,255,.4) 50%), repeating-linear-gradient(to bottom, #eef 1px, #eef 2px, #fff 3px);
 }
 
