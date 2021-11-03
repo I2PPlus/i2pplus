@@ -111,6 +111,7 @@ public class I2PAppContext {
     private final File _logDir;
     private final File _appDir;
     private volatile File _tmpDir;
+    private final File _libDir;
     private final Random _tmpDirRand = new Random();
     private final ClientAppManager _appManager;
     // split up big lock on this to avoid deadlocks
@@ -227,7 +228,8 @@ public class I2PAppContext {
     *
     *  Name	Property 	Method		Files
     *  -----	-------- 	-----		-----
-    *  Base	i2p.dir.base	getBaseDir()	lib/, webapps/, docs/, geoip/, licenses/, ...
+    *  Base	i2p.dir.base	getBaseDir()	webapps/, docs/, geoip/, licenses/, ...
+    *  Lib 	i2p.dir.lib 	getLibDir()	*.jar, libwrapper*.so
     *  Temp	i2p.dir.temp	getTempDir()	Temporary files
     *  Config	i2p.dir.config	getConfigDir()	*.config, hosts.txt, addressbook/, ...
     *
@@ -262,7 +264,7 @@ public class I2PAppContext {
     *  However this is provided for the router's use, and for backward compatibility should an app
     *  need to look there as well.
     *
-    *  All dirs except the base are created if they don't exist, but the creation will fail silently.
+    *  All dirs except the base and lib are created if they don't exist, but the creation will fail silently.
     *  @since 0.7.6
     */
 
@@ -317,12 +319,20 @@ public class I2PAppContext {
         } else {
             _appDir = _routerDir;
         }
+
+        s = getProperty("i2p.dir.lib");
+        if (s != null) {
+            _libDir = new File(s);
+        } else {
+            _libDir = new File(_baseDir, "lib");
+        }
         String isPortableStr = System.getProperty("i2p.dir.portableMode");
         boolean isPortable = Boolean.parseBoolean(isPortableStr);
         if (isPortable) {
             // In portable we like debug information :)
             //(new Exception("Initialized by")).printStackTrace();
             System.err.println("Base directory:   " + _baseDir.getAbsolutePath());
+            System.err.println("Lib directory:    " + _libDir.getAbsolutePath());
             System.err.println("Config directory: " + _configDir.getAbsolutePath());
             System.err.println("Router directory: " + _routerDir.getAbsolutePath());
             System.err.println("App directory:    " + _appDir.getAbsolutePath());
@@ -437,6 +447,16 @@ public class I2PAppContext {
             return _tmpDir;
         }
     }
+
+    /**
+     *  This is the library dir, which is usually $I2P/lib.
+     *  It contains all the jars (i.e. the classpath).
+     *  Most applications will not need this, and must treat this directory as read-only.
+     *
+     *  @return dir constant for the life of the context
+     *  @since 0.9.52
+     */
+    public File getLibDir() { return _libDir; }
 
     /** don't rely on deleteOnExit() */
     public void deleteTempDir() {

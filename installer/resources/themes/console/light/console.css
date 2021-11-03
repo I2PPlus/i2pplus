@@ -22,6 +22,7 @@
   --btn_hover: linear-gradient(to bottom, #eee, #fff);
   --border: #575775;
   --borderinner: #8d8daa;
+  --bevel: inset 0 0 0 1px #d0d0da;
 }
 
 html, body {
@@ -149,35 +150,13 @@ a:active, a:visited:active {
   user-select: none;
 }
 
-* {
+input, textarea, select {
   outline: none;
-  text-rendering: optimizeLegibility;
-  text-rendering: geometricPrecision;
 }
 
 img {
   border: none;
   font-size: 0;
-}
-
-img[src$="bound.png"] {
-  filter: hue-rotate(-40deg);
-}
-
-a img[src$="bound.png"] {
-  filter: hue-rotate(-40deg) drop-shadow(0 0 1px rgba(220,220,255,.7));
-}
-
-a:hover img[src$="bound.png"] {
-  filter: hue-rotate(-40deg) drop-shadow(0 0 1px #f60);
-}
-
-a img {
-  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
-}
-
-a:hover img {
-  filter: drop-shadow(0 0 1px #f60);
 }
 
 pre {
@@ -213,7 +192,7 @@ pre {
   clear: left; /* fixes a bug in Opera */
   border: 1px solid var(--border);
   border-radius: 2px;
-  box-shadow: inset 0 0 0 1px rgba(185,185,198,.65);
+  box-shadow: var(--bevel);
   background: #fafaff;
 }
 
@@ -705,9 +684,7 @@ a:active #sb_bandwidthgraph {
 }
 
 @media screen and (min-width: 1500px) {
-  .percentBarOuter {
-    width: 232px;
-  }
+  .percentBarOuter {width: 232px}
 }
 
 .percentBarInner {
@@ -853,9 +830,7 @@ to {
 }
 
 @media screen and (min-width:1500px) {
-.sb_notice {
-  font-size: 9pt;
-}
+  .sb_notice {font-size: 9pt}
 }
 
 #sb_notice.hide, #sb_notice.hide + hr, #sb_updatesection.hide, #sb_updatesection.hide + hr {
@@ -872,9 +847,7 @@ to {
 }
 
 @supports not (-moz-appearance: none) {
-#sb_warning + p:empty + form {
-  margin-top: 15px !important;
-}
+  #sb_warning + p:empty + form {margin-top: 15px !important}
 }
 
 .sb_notice, #sidebar #xhr hr + b {
@@ -897,9 +870,7 @@ p:empty + .sb_notice {
 }
 
 @supports not (-moz-appearance: none) {
-.sb_notice {
-  margin-bottom: -6px;
-}
+  .sb_notice {margin-bottom: -6px}
 }
 
 /* sidebar ajax router down */
@@ -912,7 +883,6 @@ p:empty + .sb_notice {
   font-size: 0;
   color: #770;
   box-shadow: inset 0 0 0 1px #800, inset 0 0 4px 2px #ffe, inset 0 0 5px 0 #ffd;
-  background: #fffff2;
   background: repeating-linear-gradient(135deg, #fffff2, #fffff2 10px, #ddddd2 10px, #ddddd2 20px);
   background-size: 300%;
   animation: down linear 10s reverse infinite;
@@ -942,9 +912,7 @@ p:empty + .sb_notice {
 }
 
 @keyframes down {
-from {
-  background-position: center center, 100%;
-}
+  from {background-position: center center, 100%}
 }
 
 @keyframes spin {
@@ -952,13 +920,8 @@ from {
 }
 
 @keyframes routerdown {
-from {
-  background: repeating-linear-gradient(135deg, #fffff2, #fffff2 10px, #ddddd2 10px, #ddddd2 20px);
-}
-
-to {
-  background: repeating-linear-gradient(135deg, #ddddd2, #ddddd2 10px, #fffff2 10px, #fffff2 20px);
-}
+  from {background: repeating-linear-gradient(135deg, #fffff2, #fffff2 10px, #ddddd2 10px, #ddddd2 20px)}
+  to {background: repeating-linear-gradient(135deg, #ddddd2, #ddddd2 10px, #fffff2 10px, #fffff2 20px)}
 }
 
 /* end sidebar routerdown */
@@ -1056,8 +1019,8 @@ to {
 
 #sidebar td {
   padding: 0 2px;
-  background-image: none !important;
   border: 0 !important;
+  background-image: none !important;
 }
 
 /* sidebar network status */
@@ -1067,11 +1030,11 @@ to {
   padding: 6px 3px;
   width: 100%;
   display: inline-block;
+  box-sizing: border-box;
   vertical-align: baseline;
   line-height: 120%;
   text-shadow: 0 1px 1px #fff;
   border: 1px solid #88f;
-  box-sizing: border-box;
   border-radius: 2px;
   box-shadow: var(--highlight), 0 0 1px rgba(96,96,96,.5);
 }
@@ -1135,16 +1098,8 @@ to {
   background-size: 16px !important;
 }
 
-@supports not (-moz-appearance: none) {
-  .tunnelBuildStatus::before {
-    margin-top: 2px !important;
-    vertical-align: top !important;
-  }
-}
-
 .sb_netstatus.error::before {
   background: var(--net_error) no-repeat center center;
-
 }
 
 .sb_netstatus.warn::before {
@@ -1184,18 +1139,25 @@ to {
 }
 
 @media screen and (max-width: 1499px) {
-  .tunnelBuildStatus {
-    font-size: 90%;
-  }
+  .tunnelBuildStatus {font-size: 90%}
 }
 
 .tunnelBuildStatus::before {
   margin: 3px 3px 0 0;
-  width: 9px;
-  height: 9px;
+  margin: -3px 0 -4px;
+  width: 16px;
+  height: 16px;
   display: inline-block;
   border-radius: 50%;
   content: "";
+  transform: scale(.7);
+}
+
+@supports not(-moz-appearance: none) {
+  .tunnelBuildStatus::before {
+    margin: -4px 0 0;
+    vertical-align: text-top;
+  }
 }
 
 .tunnelBuildStatus.accepting::before {
@@ -1204,8 +1166,7 @@ to {
 }
 
 .tunnelBuildStatus.active::before {
-  background: #5c5;
-  animation: linear participating 1s 2s alternate infinite;
+  background: var(--tunn_active) no-repeat center center / 15px;
 }
 
 .tunnelBuildStatus.starting {
@@ -1213,7 +1174,7 @@ to {
 }
 
 .tunnelBuildStatus.starting::before {
-  background: #bb0;
+  background: var(--tunn_starting) no-repeat center center / 15px;
 }
 
 .tunnelBuildStatus.rejecting {
@@ -1221,9 +1182,7 @@ to {
 }
 
 .tunnelBuildStatus.rejecting::before {
-  box-shadow: inset 0 0 0 2px #933;
-  background: #933;
-  background: linear-gradient(135deg, #fff 40%, #933 40%, #933 60%, #fff 60%);
+  background: var(--tunn_reject) no-repeat center center / 15px;
 }
 
 .tunnelBuildStatus.hidden {
@@ -1231,12 +1190,7 @@ to {
 }
 
 .tunnelBuildStatus.hidden::before {
-  background: #999;
-}
-
-@keyframes participating {
-  0%,49%,51%,100% {background: #5c5}
-  50% {background: #494}
+  background: var(--tunn_hidden) no-repeat center center / 15px;
 }
 
 /* sidebar news */
@@ -1253,8 +1207,8 @@ to {
 
 #sidebar .sb_newsheadings td a {
   padding: 2px 0 !important;
-  display: inline-block;
   width: 100%;
+  display: inline-block;
 }
 
 #sidebar .sb_newsheadings a {
@@ -1292,7 +1246,7 @@ to {
   color: #222;
   border: 1px solid var(--border);
   border-radius: 2px;
-  box-shadow: inset 0 0 0 1px rgba(185,185,198,.65);
+  box-shadow: var(--bevel);
   background: #f8f8ff;
 }
 
@@ -1571,7 +1525,7 @@ to {
   color: var(--ink);
   border: 1px solid var(--border);
   border-radius: 0 0 2px 2px;
-  box-shadow: inset 0 0 0 1px rgba(185,185,198,.65);
+  box-shadow: var(--bevel);
 }
 
 .main#home {
@@ -1583,7 +1537,7 @@ to {
 }
 
 .main#console {
-  box-shadow: inset 0 0 0 1px rgba(185,185,198,.65) !important;
+  box-shadow: var(--bevel) !important;
 }
 
 #warning2 {
@@ -1606,7 +1560,7 @@ to {
   color: #224;
   border: 1px solid var(--border);
   border-radius: 0 0 2px 2px;
-  box-shadow: inset 0 0 0 1px rgba(185,185,198,.65), inset 0 0 0 2px rgba(255,255,255,.2);
+  box-shadow: var(--bevel), inset 0 0 0 2px rgba(255,255,255,.2);
 }
 
 .main#torrents {
@@ -1969,7 +1923,7 @@ h1, .confignav {
   border: 1px solid var(--borderinner);
   border-left: none;
   border-right: none;
-  box-shadow: inset 0 0 0 1px rgba(185,185,198,.65);
+  box-shadow: var(--bevel);
   background: linear-gradient(to bottom, #fbfbff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221,221,255,.3) 3px, #fff 4px) #fafaff !important;
   backface-visibility: hidden;
   will-change: transform;
@@ -3280,6 +3234,7 @@ th {
 
 tr {
   vertical-align: middle !important;
+  contain: layout;
 }
 
 tr:nth-child(even), pre#activetransports, #debug .sentTags:hover td, #debug .expiry:hover td {
@@ -3642,7 +3597,7 @@ table.search {
   border-radius: 0 0 2px 2px;
   border: 1px solid #595a8f;
   border-top: 1px solid var(--border);
-  box-shadow: 0 1px 1px 1px rgba(220, 220, 255, .3), inset 0 0 0 1px rgba(185,185,198,.65);
+  box-shadow: 0 1px 1px 1px rgba(220, 220, 255, .3), var(--bevel);
   background: #fafaff !important;
   background: linear-gradient(to bottom, #fafaff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fff 4px) !important;
 }
@@ -4280,7 +4235,7 @@ h1 {
   text-shadow: 0 0 2px #fff;
   border: 1px solid var(--border);
   border-radius: 2px 2px 0 0;
-  box-shadow: inset 0 0 0 1px rgba(185,185,198,.65);
+  box-shadow: var(--bevel);
   background: var(--h1_network) no-repeat 10px center / 38px, var(--h1) #fafaff;
 }
 
