@@ -7455,14 +7455,18 @@ h4#sb_shutdownstatus span {
   color: #393;
 }
 
+@media screen and (max-width: 1499px) {
+  .tunnelBuildStatus {font-size: 90%}
+}
+
 .tunnelBuildStatus::before {
-  margin: 0 5px 0 0;
-  width: 9px;
-  height: 9px;
+  margin: -3px 0 0;
+  width: 16px;
+  height: 16px;
   display: inline-block;
-  vertical-align: middle;
   border-radius: 50%;
   content: "";
+  transform: scale(.7);
 }
 
 .tunnelBuildStatus.accepting::before {
@@ -7471,8 +7475,7 @@ h4#sb_shutdownstatus span {
 }
 
 .tunnelBuildStatus.active::before {
-  background: #5c5;
-  animation: linear participating 1s 2s alternate;
+  background: var(--tunn_active) no-repeat center center / 15px;
 }
 
 .tunnelBuildStatus.starting {
@@ -7480,7 +7483,7 @@ h4#sb_shutdownstatus span {
 }
 
 .tunnelBuildStatus.starting::before {
-  background: #bb0;
+  background: var(--tunn_starting) no-repeat center center / 15px;
 }
 
 .tunnelBuildStatus.rejecting {
@@ -7488,8 +7491,7 @@ h4#sb_shutdownstatus span {
 }
 
 .tunnelBuildStatus.rejecting::before {
-  background: #933;
-
+  background: var(--tunn_reject) no-repeat center center / 15px;
 }
 
 .tunnelBuildStatus.hidden {
@@ -7497,12 +7499,7 @@ h4#sb_shutdownstatus span {
 }
 
 .tunnelBuildStatus.hidden::before {
-  background: #999;
-}
-
-@keyframes participating {
-  0%,49%,51%,100% {background: #5c5}
-  50% {background: #373}
+  background: var(--tunn_hidden) no-repeat center center / 15px;
 }
 
 /* end tunnel build status */
@@ -13822,7 +13819,7 @@ body.iframed {
   }
 
   .sb_netstatus::before, .tunnelBuildStatus::before {
-    margin-top: -2px !important;
+    margin-top: -3px !important;
   }
 
   #peers .cells:nth-child(n+2) {

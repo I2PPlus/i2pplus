@@ -1143,7 +1143,6 @@ p:empty + .sb_notice {
 }
 
 .tunnelBuildStatus::before {
-  margin: 3px 3px 0 0;
   margin: -3px 0 -4px;
   width: 16px;
   height: 16px;
@@ -1151,13 +1150,6 @@ p:empty + .sb_notice {
   border-radius: 50%;
   content: "";
   transform: scale(.7);
-}
-
-@supports not(-moz-appearance: none) {
-  .tunnelBuildStatus::before {
-    margin: -4px 0 0;
-    vertical-align: text-top;
-  }
 }
 
 .tunnelBuildStatus.accepting::before {
