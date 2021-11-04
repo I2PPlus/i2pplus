@@ -3172,6 +3172,7 @@ th {
 tr {
   vertical-align: middle;
   box-shadow: var(--highlight), inset 0 0 2px 1px #00003a;
+  contain: layout;
 }
 
 tr:hover {

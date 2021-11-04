@@ -1626,6 +1626,7 @@ th {
 
 tr {
   vertical-align: middle;
+  contain: layout;
 }
 
 tr:nth-child(even) {
@@ -7455,12 +7456,8 @@ h4#sb_shutdownstatus span {
   color: #393;
 }
 
-@media screen and (max-width: 1499px) {
-  .tunnelBuildStatus {font-size: 90%}
-}
-
 .tunnelBuildStatus::before {
-  margin: -3px 0 0;
+  margin: -4px 0 0;
   width: 16px;
   height: 16px;
   display: inline-block;
@@ -7500,6 +7497,14 @@ h4#sb_shutdownstatus span {
 
 .tunnelBuildStatus.hidden::before {
   background: var(--tunn_hidden) no-repeat center center / 15px;
+}
+
+@media screen and (max-width: 1499px) {
+  .tunnelBuildStatus {font-size: 90%}
+  #sb_tunnelstatus .tunnelBuildStatus::before {
+    margin: -2px 0;
+    background-size: 12px;
+  }
 }
 
 /* end tunnel build status */
