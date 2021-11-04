@@ -7457,10 +7457,11 @@ h4#sb_shutdownstatus span {
 }
 
 .tunnelBuildStatus::before {
-  margin: -4px 0 0;
+  margin: 0;
   width: 16px;
   height: 16px;
   display: inline-block;
+  vertical-align: middle;
   border-radius: 50%;
   content: "";
   transform: scale(.7);
@@ -13824,7 +13825,7 @@ body.iframed {
   }
 
   .sb_netstatus::before, .tunnelBuildStatus::before {
-    margin-top: -3px !important;
+    margin-top: -1px !important;
   }
 
   #peers .cells:nth-child(n+2) {
