@@ -401,6 +401,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         String currentProxy = null;
         long requestId = __requestId.incrementAndGet();
         boolean shout = false;
+        boolean plus = false;
         I2PSocket i2ps = null;
         try {
             s.setSoTimeout(INITIAL_SO_TIMEOUT);
@@ -1065,6 +1066,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         // icecast/shoutcast, We need to leave the user-agent alone.
                         shout = true;
                     }
+                    String origHost = origRequestURI.getHost();
+                    if (origHost != null && origHost.startsWith("skank"))
+                        plus = true;
                 }
 
                 if (line.length() == 0) {
@@ -1096,7 +1100,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                     ua = UA_CLEARNET;
                             } else {
                                 ua = getTunnel().getClientOptions().getProperty(PROP_UA_I2P);
-                                if (ua != null)
+                                if (plus)
+                                    ua = "User-Agent: I2P+\r\n";
+                                else if (ua != null)
                                     ua = "User-Agent: " + ua + "\r\n";
                                 else
                                     ua = UA_I2P;

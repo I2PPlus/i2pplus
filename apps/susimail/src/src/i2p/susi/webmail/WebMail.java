@@ -2331,7 +2331,7 @@ public class WebMail extends HttpServlet
                     "<link rel=\"preload\" as=\"style\" href=\"" + sessionObject.themePath + "images/images.css?" + CoreVersion.VERSION + "\">\n" +
                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + sessionObject.themePath + "susimail.css?" + CoreVersion.VERSION + "\">\n" +
                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + sessionObject.themePath + "override.css?" + CoreVersion.VERSION + "\">\n" + 
-                    "<link rel=\"shortcut icon\" type=\"image/x-icon\" href=\"/themes/susimail/images/favicon.ico?v=" + CoreVersion.VERSION + "\">\n");
+                    "<link rel=\"shortcut icon\" type=\"image/x-icon\" href=\"" + sessionObject.themePath + "images/favicon.svg\">\n");
                 if (sessionObject.isMobile) {
                     out.println("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes\" />\n" +
                         "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + sessionObject.themePath + "mobile.css?" + CoreVersion.VERSION + "\" />");

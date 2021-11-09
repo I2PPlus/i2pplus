@@ -1138,26 +1138,15 @@ p:empty + .sb_notice {
   color: #393;
 }
 
-@media screen and (max-width: 1499px) {
-  .tunnelBuildStatus {font-size: 90%}
-}
-
 .tunnelBuildStatus::before {
-  margin: 3px 3px 0 0;
-  margin: -3px 0 -4px;
+  margin: -3px 0 -1px;
   width: 16px;
   height: 16px;
   display: inline-block;
+  vertical-align: middle;
   border-radius: 50%;
   content: "";
   transform: scale(.7);
-}
-
-@supports not(-moz-appearance: none) {
-  .tunnelBuildStatus::before {
-    margin: -4px 0 0;
-    vertical-align: text-top;
-  }
 }
 
 .tunnelBuildStatus.accepting::before {
@@ -1191,6 +1180,14 @@ p:empty + .sb_notice {
 
 .tunnelBuildStatus.hidden::before {
   background: var(--tunn_hidden) no-repeat center center / 15px;
+}
+
+@media screen and (max-width: 1499px) {
+  .tunnelBuildStatus {font-size: 90%}
+  #sb_tunnelstatus .tunnelBuildStatus::before {
+    margin: -1px 0 0;
+    background-size: 12px;
+  }
 }
 
 /* sidebar news */

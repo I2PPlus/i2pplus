@@ -2204,13 +2204,13 @@ p:empty + .sb_notice {
 }
 
 .tunnelBuildStatus::before {
-  margin: -2px 5px 0 0;
-  width: 9px;
-  height: 9px;
+  margin: 0 0 -1px;
+  width: 16px;
+  height: 16px;
   display: inline-block;
-  vertical-align: middle;
   border-radius: 50%;
   content: "";
+  transform: scale(.7);
 }
 
 .tunnelBuildStatus.accepting::before {
@@ -2219,8 +2219,7 @@ p:empty + .sb_notice {
 }
 
 .tunnelBuildStatus.active::before {
-  background: #5c5;
-  animation: linear participating 1s 2s alternate infinite;
+  background: var(--tunn_active) no-repeat center center / 15px;
 }
 
 .tunnelBuildStatus.starting {
@@ -2228,7 +2227,7 @@ p:empty + .sb_notice {
 }
 
 .tunnelBuildStatus.starting::before {
-  background: #bb0;
+  background: var(--tunn_starting) no-repeat center center / 15px;
 }
 
 .tunnelBuildStatus.rejecting {
@@ -2236,7 +2235,7 @@ p:empty + .sb_notice {
 }
 
 .tunnelBuildStatus.rejecting::before {
-  background: #933;
+  background: var(--tunn_reject) no-repeat center center / 15px;
 }
 
 .tunnelBuildStatus.hidden {
@@ -2244,12 +2243,15 @@ p:empty + .sb_notice {
 }
 
 .tunnelBuildStatus.hidden::before {
-  background: #999;
+  background: var(--tunn_hidden) no-repeat center center / 15px;
 }
 
-@keyframes participating {
-  0%,49%,51%,100% {background: #5c5}
-  50% {background: #373}
+@media screen and (max-width: 1499px) {
+  .tunnelBuildStatus {font-size: 90%}
+  #sb_tunnelstatus .tunnelBuildStatus::before {
+    margin: -2px 0;
+    background-size: 12px;
+  }
 }
 
 /* end tunnel build status */
@@ -3170,6 +3172,7 @@ th {
 tr {
   vertical-align: middle;
   box-shadow: var(--highlight), inset 0 0 2px 1px #00003a;
+  contain: layout;
 }
 
 tr:hover {
