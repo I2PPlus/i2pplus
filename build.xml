@@ -49,6 +49,7 @@
         <echo message=" updater                                      Build updater for existing installs &#10140; ./i2pupdate.zip" />
         <echo message=" signed-updater                               Signed Updater &#10140; ./i2pupdate.su3 (Java14+ compatible)" />
         <echo message=" updaterCompact                               Updater without SAM, BOB, DesktopGUI, systray, country/continent lists" />
+        <echo message=" updaterCompactWithGeoIP                      Updater + GeoIP without SAM, BOB, DesktopGUI, systray, country/continent lists" />
         <echo message=" updaterRouter                                Updater with i2p.jar and router.jar only" />
         <echo message=" updaterSmall                                 Updater with essentials (no SAM/I2PSnark/SusiMail/SusiDNS/history.txt)" />
         <echo message=" updaterWithGeoIP                             Updater + GeoIP files" />
@@ -1698,6 +1699,7 @@
     <target name="updater200WithJbigi" depends="prepupdate, prepjbigiupdate, pack200, zipit200" />
     <target name="updater" depends="prepupdate, zipit" />
     <target name="updaterCompact" depends="prepupdatecompact, zipit" />
+    <target name="updaterCompactWithGeoIP" depends="prepupdatecompact, prepgeoupdate, zipit" />
     <target name="updaterWithMinifyCSS" depends="prepupdate, minifycss, zipit" />
     <target name="updaterWithLicenses" depends="prepupdate, preplicenses, zipit" />
     <target name="updaterRepack" depends="prepupdate, repack200, zipit" />
