@@ -31,13 +31,13 @@
 
 <h2>Registering an I2P Domain</h2>
 
-<p>You may wish to register your website or service with an I2P Domain registrar such as <a href="http://stats.i2p/i2p/addkey.html" target="_blank" rel="noreferrer" class="sitelink">stats.i2p</a> or <a href="http://reg.i2p/" target="_blank" rel="noreferrer" class="sitelink">reg.i2p</a>. Some registration sites require the full B64 destination address, which you should copy in full from the <i>Local destination</i> section on the <a href="http://127.0.0.1:7657/i2ptunnel/edit?tunnel=3">Tunnel Manager Configuration page</a>.</p>
+<p>To obtain your own hostname, I2P domain registrars such as <a href="http://stats.i2p/i2p/addkey.html" target="_blank" rel="noreferrer" class="sitelink">stats.i2p</a> or <a href="http://reg.i2p/" target="_blank" rel="noreferrer" class="sitelink">reg.i2p</a> provide registration services that allow you to register and manage an .i2p hostname or sub-domain which will then be propagated across the network. Some registration sites will require the <i>B64 destination address</i> for the tunnel/service you wish to associate with a hostname, which you should copy from the <i>Local destination</i> section on the <a href="http://127.0.0.1:7657/i2ptunnel/edit?tunnel=3">Tunnel Manager Configuration page</a>.</p>
 
-<p>If a <i>Registration Authentication</i> string is requested, you can find it on the <a href="http://127.0.0.1:7657/i2ptunnel/register?tunnel=3">Registration Authentication page</a> linked from the <a href="http://127.0.0.1:7657/i2ptunnel/edit?tunnel=3">Tunnel Manager Configuration page</a>.</p>
+<p>If a <i>Registration Authentication</i> string is requested, you can find it on the <a href="http://127.0.0.1:7657/i2ptunnel/register?tunnel=3">Registration Authentication page</a> linked from the <a href="http://127.0.0.1:7657/i2ptunnel/edit?tunnel=3">Tunnel Manager Configuration page</a>. Registration authentication ensures only the owner is able to register or otherwise manage the hostname, and is required on stats.i2p and reg.i2p.</p>
 
 <p>If you are in a hurry and can't wait a few hours, you can tell people to use a "jump" address helper redirection service. This will usually work within a few minutes of your registering your hostname on the same site. Test it yourself first by entering <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>something</i>.i2p</code> into your browser. Once it is working, you can tell others to use it.</p>
 
-<p>Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href="http://127.0.0.1:7657/susidns/details?h=i2p-projekt.i2p&amp;book=router" target="_blank" rel="noreferrer">details for i2p-projekt.i2p</a>, and paste the link where it's required to share it with others.</p>
+<p>Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href="http://127.0.0.1:7657/susidns/details?h=skank.i2p&amp;book=router" target="_blank" rel="noreferrer">details for i2p-projekt.i2p</a>, and paste the link where it's required to share it with others.</p>
 
 <h3>Promoting your service</h3>
 
