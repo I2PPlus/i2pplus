@@ -39,15 +39,11 @@
 
 <p>Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href="http://127.0.0.1:7657/susidns/details?h=skank.i2p&amp;book=router" target="_blank" rel="noreferrer">details for i2p-projekt.i2p</a>, and paste the link where it's required to share it with others.</p>
 
-<h3>Promoting your service</h3>
+<h3>Backup your private key!</h3>
 
-<p>Services such as <a href="http://identiguy.i2p/" target="_blank" rel="noreferrer" class="sitelink">Identiguy's eepsite status list</a> and <a href="http://notbob.i2p/" target="_blank" rel="noreferrer" class="sitelink">notbob's site uptime monitor</a> may direct visitors to your site. To actively promote your site on the network, there are various options you could try, for example:</p>
+<p>When a new service tunnel is created, or a service is run for the first time (e.g. the default jetty webserver, plugins), a private encryption key is created which essentially controls the ownership of address. This is usually named <code>&hellip;privKey.dat</code>, or <code>eepPriv.dat</code>, though it's a good idea to change the name to indicate the service it belongs to and then respecify it in the Tunnel Manager server settings. This .dat file should be backed up safely; lose it and you will lose ownership and control of your hostname!</p>
 
-<ul>
-<li>Post an announcement on one of the I2P forums e.g. <a href="http://i2pforum.i2p/" target="_blank" rel="noreferrer" class="sitelink">I2P forum</a> or <a href="http://def3.i2p/" target="_blank" rel="noreferrer" class="sitelink">Dancing Elephants</a></li>
-<li>Publish it on the <a href="http://wiki.i2p-projekt.i2p/wiki/index.php/Eepsite/Services" target="_blank" rel="noreferrer" class="sitelink">I2P Wiki Eepsite Index</a></li>
-<li>Tell people about it on I2P's IRC network</li>
-</ul>
+<p>To migrate the key to a new router, or to setup multihoming (running the same service on multiple routers for redundancy and load-balancing), copy the backed up key to your .i2p directory and specify it in the new server tunnel, or replace the default key in the plugin folder (e.g. the zzzot plugin).</p>
 
 </div>
 </div>
