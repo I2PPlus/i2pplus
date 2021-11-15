@@ -22,6 +22,7 @@
   --bg2: #eff1ff;
   --th: linear-gradient(to bottom, #fff, #fafbff);
   --header: linear-gradient(to bottom, #fff 50%, #fafbff 50%);
+  --row_hover: #ffd;
 }
 
 html, body {
@@ -147,7 +148,7 @@ i {
   color: inherit;
   border: 5px solid #fb7;
   box-shadow: inset 0 0 0 2px var(--hover);
-  background: #ffd;
+  background: var(--row_hover);
 }
 
 .warning a:link {
@@ -183,7 +184,7 @@ i {
   border: none;
   border-bottom: 1px solid #fb7;
   word-spacing: .1em;
-  background: #ffe var(--err) no-repeat 8px center / auto 60% !important;
+  background: var(--row_hover) var(--err) no-repeat 8px center / auto 60% !important;
 }
 
 .warning p {
@@ -218,7 +219,7 @@ i {
 }
 
 .warning tr {
-  background: #ffe !important;
+  background: var(--row_hover) !important;
   border: 1px solid #fb7;
 }
 
@@ -440,7 +441,7 @@ i {
 }
 
 .routersummary h3:hover {
-  background: linear-gradient(to bottom, #fff 50%, #ffd 50%) !important;
+  background: linear-gradient(to bottom, #fff 50%, var(--row_hover) 50%) !important;
 }
 
 .routersummary h3:hover a, #sidebar td:first-child a:hover b,
@@ -592,11 +593,6 @@ i {
   padding: 1px !important;
 }
 
-#sb_localtunnels tr:hover td {
-  background: #ffe !important;
-  transition: ease background .3s;
-}
-
 #sb_localtunnels a {
   width: 100%;
   max-width: 164px;
@@ -645,7 +641,7 @@ i {
 }
 
 #sb_localtunnels td.tunnelServer, #sb_localtunnels tr:hover td.tunnelServer  {
-  background-image: var(--server) !important;
+  background: var(--server) !important;
 }
 
 #sb_localtunnels td.ping, #sb_localtunnels tr:hover td.ping {
@@ -662,6 +658,11 @@ i {
 
 #sb_localtunnels td.tunnelRebuilding, #sb_localtunnels tr:hover td.tunnelRebuilding {
   background-image: var(--local_down) !important;
+}
+
+#sb_localtunnels tr:hover {
+  background-color: var(--row_hover) !important;
+  transition: ease background .3s;
 }
 
 #sb_localtunnels img {
@@ -730,9 +731,7 @@ p:empty + .sb_notice {
 }
 
 @supports not (-moz-appearance: none) {
-#sb_warning + p:empty + form {
-  margin-top: 12px;
-}
+  #sb_warning + p:empty + form {margin-top: 12px}
 }
 
 /* sidebar news */
@@ -776,7 +775,7 @@ p:empty + .sb_notice {
 }
 
 .sb_newsheadings tr:hover td {
-  background-color: #ffd !important;
+  background-color: var(--row_hover) !important;
   background-blend-mode: normal;
   transition: ease background .2s;
 }
@@ -792,9 +791,9 @@ p:empty + .sb_notice {
 /* end sidebar news */
 
 div.refresh {
-  margin-top: 10px !important;
-  margin-bottom: 10px !important;
-  padding: 2px 0 !important;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 2px 0;
 }
 
 .routersummary p {
@@ -990,7 +989,7 @@ a:active #sb_bandwidthgraph {
   height: 38px;
   vertical-align: top;
   background: repeating-linear-gradient(to right, rgba(255,255,255,0) 10px, rgba(120,120,255,.4) 11px, rgba(255,255,255,0) 11px, rgba(255,255,255,0) 20px),
-              repeating-linear-gradient(to top, rgba(255,255,255,0) 10px, rgba(120,120,255,.4) 11px, rgba(255,255,255,0) 11px, rgba(255,255,255,0) 19px) !important;
+              repeating-linear-gradient(to top, rgba(255,255,255,0) 10px, rgba(120,120,255,.4) 11px, rgba(255,255,255,0) 11px, rgba(255,255,255,0) 19px);
   box-shadow: inset 0 0 0 1px #fdfdff, inset 0 0 1px 1px #77f;
 }
 
@@ -1016,18 +1015,18 @@ a:active #sb_bandwidthgraph {
 }
 
 #sb_graphcontainer {
-  margin: 0 2px -9px 1px !important;
+  margin: 0 2px -9px 1px;
   padding: 0 5px 0 0;
   height: 38px;
   background-color: #fff;
-  background-position: left 0 top -2px !important;
-  background-size: 200px 36px !important;
-  background-repeat: no-repeat !important;
+  background-position: left 0 top -2px;
+  background-size: 200px 36px;
+  background-repeat: no-repeat;
 }
 
 @media screen and (min-width: 1500px) {
-  #sb_bandwidthgraph {width: 223px !important}
-  #sb_graphcontainer {background-size: 244px 36px !important}
+  #sb_bandwidthgraph {width: 223px}
+  #sb_graphcontainer {background-size: 244px 36px}
 }
 /* end mini sidebar graph */
 
@@ -1104,13 +1103,8 @@ a:active #sb_bandwidthgraph {
 }
 
 @keyframes downloadbar {
-from {
-  background: repeating-linear-gradient(135deg, rgba(221, 221, 255, .7) 1px, rgba(221, 221, 255, .7) 6px, rgba(238, 238, 255,.7) 7px, rgba(238, 238, 255,.7) 11px);
-}
-
-to {
-  background: repeating-linear-gradient(135deg, rgba(238, 238, 255,.7) 1px, rgba(238, 238, 255, .7) 5px, rgba(221, 221, 255, .7) 6px, rgba(221, 221, 255, .7) 11px);
-}
+  from {background: repeating-linear-gradient(135deg, rgba(221, 221, 255, .7) 1px, rgba(221, 221, 255, .7) 6px, rgba(238, 238, 255,.7) 7px, rgba(238, 238, 255,.7) 11px)}
+  to {background: repeating-linear-gradient(135deg, rgba(238, 238, 255,.7) 1px, rgba(238, 238, 255, .7) 5px, rgba(221, 221, 255, .7) 6px, rgba(221, 221, 255, .7) 11px)}
 }
 
 .sb_info .percentBarOuter {
@@ -1151,31 +1145,17 @@ div[lang="ar"] h3, div[lang="ar"] li {
   text-align: right;
 }
 
-div[lang="de"] .twocol {
-  margin-left: 50px !important;
-  margin-top: -8px !important;
-}
-
-div[lang="sv"] .twocol {
-  margin-top: 2px !important;
-}
-
 div[lang="es"] li {
   list-style-type: none;
   margin-left: -10px;
 }
 
 div[lang="es"] .twocol {
-  background: #eff2ff;
-  border-radius: 1px;
+  margin: 15px 0 0;
+  padding: 6px 0 8px 48px;
+  border-radius: 8px;
   box-shadow: 0 0 0 1px var(--border);
-  padding: 5px 0 8px 48px;
-  margin-top: 15px !important;
-}
-
-div[lang="es"] .twocol:not(old) {
-  margin-left: 0 !important;
-  margin-right: 0 !important;
+  background: #eff2ff;
 }
 
 div[lang="pt"] li br {
@@ -1187,13 +1167,16 @@ div[lang="pt"] li br {
 }
 
 #console li:first-child {
-  padding-top: 10px;
+  padding-top: 5px !important;
+}
+
+#console li, #console p {
+  font-size: 105%;
 }
 
 #console li {
   line-height: 140%;
   text-align: justify;
-  font-size: 105%;
 }
 
 .langbox {
@@ -1381,9 +1364,7 @@ select {
 }
 
 @supports not (-moz-appearance: none) {
-select {
-  padding: 5px 20px 5px 8px !important;
-}
+  select {padding: 5px 20px 5px 8px !important}
 }
 
 select option {
@@ -1453,23 +1434,9 @@ input {
 }
 
 input[type=radio], input[type=checkbox] {
-  min-width: 16px !important;
-  min-height: 16px !important;
+  margin: 6px;
   vertical-align: sub;
   background: none;
-  margin: 6px;
-}
-
-input[type=radio]:hover, input[type=radio]:focus, input[type=checkbox]:hover, input[type=checkbox]:focus {
-  filter: drop-shadow(0 0 2px #89f);
-  box-shadow: inset 0 0 1px 2px #89f;
-  outline: none;
-}
-
-input[type=checkbox][disabled]:hover, input[type=radio][disabled]:hover,
-input[type=checkbox][disabled]:focus, input[type=radio][disabled]:focus {
-  box-shadow: none;
-  filter: none;
 }
 
 label {
@@ -1570,7 +1537,7 @@ input[type=submit], input[type=reset], button, .optbox {
 
 /* accessibility tweak - colors rather than focus rings where possible */
 
-.optbox:hover, .optbox:focus, input[type=checkbox]:hover, input[type=checkbox]:focus {
+.optbox:hover, .optbox:focus {
   border: 0;
   box-shadow: 0 0 0 1px #89f;
   outline: none;
@@ -1611,7 +1578,7 @@ input[type=submit], input[type=reset], button {
   margin: 3px 8px 3px 0;
   padding: 4px 5px;
   text-decoration: none;
-  font: 9pt Droid Sans, Ubuntu, Noto Sans, Segoe UI, Lucida Grande, Verdana, Helvetica, sans-serif;
+  font: 9pt var(--bodyfont);
   color: #5e626e;
   border: 1px solid var(--border);
   border-radius: 2px;
@@ -1624,7 +1591,7 @@ input[type=file]::file-selector-button {
   margin: 3px 8px 3px 0;
   padding: 4px 8px;
   text-decoration: none;
-  font: 9pt Droid Sans, Ubuntu, Noto Sans, Segoe UI, Lucida Grande, Verdana, Helvetica, sans-serif;
+  font: 9pt var(--bodyfont);
   color: #5e626e;
   border: 1px solid var(--border);
   border-radius: 2px;
@@ -1944,10 +1911,9 @@ button.search:focus {
 /* client config buttons aka project "X" */
 
 button.control {
-  padding: 12px !important;
-  text-indent: -99999px !important;
-  font-size: 0 !important;
-  background-size: 16px, 100% !important;
+  padding: 12px;
+  font-size: 0;
+  background-size: 16px, 100%;
 }
 
 button.accept.control {
@@ -2140,7 +2106,7 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
   text-align: left;
   color: var(--ink);
   border: 1px solid var(--border);
-  border-top: 0;
+  border-top: none;
   background: var(--bg);
 }
 
@@ -2713,7 +2679,7 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 
 #profilelist tr:hover, #floodfills tr:hover,  #ntcpconnections tr:hover, #udpconnections tr:hover,
 .homelinkedit tr:hover, #portmapper tr:hover {
-  background: #ffd;
+  background: var(--row_hover);
   color: #104e99;
 }
 
@@ -3257,7 +3223,7 @@ div.configure h2:first-child {
 
 #sidebarconf tr:hover, #eventlog tr:hover, .tunneldisplay tr:hover, #jobstats tr:hover, #schedjobs tr:hover, #jardump tr:hover {
   color: #104e99;
-  background: #ffd;
+  background: var(--row_hover);
 }
 
 #sidebarconf tr:last-child td, #sidebarconf tr:last-child:hover td {
@@ -4948,6 +4914,7 @@ img[src^="/flags"], img.unknownflag {
   width: 16px !important;
   height: 12px !important;
   vertical-align: middle;
+  font-size: 0;
   border: 1px solid #d8d8d8;
 }
 
@@ -4955,7 +4922,6 @@ img[src^="/flags"], img.unknownflag {
   margin-left: -6px;
   width: 20px !important;
   height: 15px !important;
-  font-size: 0;
 }
 
 #netdbcountrylist img[src^="/flags"], .netdb_header img[src^="/flags"] {
@@ -4966,7 +4932,6 @@ img[src^="/flags"], img.unknownflag {
 #tunnels img[src^="/flags"], #profiles img[src^="/flags"], #peers img[src^="/flags"], #netdb img[src^="/flags"] {
   margin-top: 0;
   margin-bottom: 0;
-  vertical-align: middle;
   border: 1px solid #ccc;
 }
 
@@ -4978,10 +4943,6 @@ img[src^="/flags"], img.unknownflag {
 
 .routerid, .routerid > *, .routerid ~ span {
   vertical-align: middle;
-}
-
-.routerid .flag, .routerid .flag a, .routerid .flag img {
-  line-height: 0 !important;
 }
 
 .routerid .flag img {
@@ -5036,14 +4997,16 @@ img[src^="/flags"], img.unknownflag {
   background: var(--th);
 }
 
-.themechoice:hover {
-  border: 1px solid var(--hover);
+.themechoice:hover, .themechoice:hover > img ~ .themelabel {
   background: #fff;
 }
 
+.themechoice:hover {
+  border: 1px solid var(--hover);
+}
+
 .themechoice:hover > img ~ .themelabel {
-  border-top: 1px solid var(--hover) !important;
-  background: #fff;
+  border-top: 1px solid var(--hover);
 }
 
 .themechoice:hover .optbox:not(:checked) + img {
@@ -5124,9 +5087,9 @@ img[src^="/flags"], img.unknownflag {
 }
 
 #themeoptions label {
-  white-space: nowrap;
-  margin: 4px 10px 4px 0 !important;
+  margin: 4px 10px 4px 0;
   display: inline-block;
+  white-space: nowrap;
 }
 
 p#helptranslate {
@@ -5227,18 +5190,18 @@ p#helptranslate {
 }
 
 .langselect:hover > input[name="lang"] + img + .ui_lang {
+  font-weight: 700;
   color: var(--hover);
   border-top: 1px solid var(--hover);
-  font-weight: 700;
   background: #fff !important;
 }
 
 .langselect input[name="lang"]:checked + img + .ui_lang {
-  background: #ddf !important;
-  color: #338;
-  font-weight: 700;
   margin: -32px -4px 0;
   z-index: 2;
+  font-weight: 700;
+  color: #338;
+  background: #ddf !important;
 }
 
 .langselect:active .ui_lang, .langselect:active > input[name="lang"] + img + .ui_lang {
@@ -5303,10 +5266,8 @@ p#helptranslate {
   width: 40px;
   height: 40px;
   border: none !important;
-  box-shadow: none;
   opacity: .9 !important;
   transform: none !important;
-  filter: drop-shadow(0 0 1px #77d);
 }
 
 .langselect input[name="lang"]:checked + img, .langselect input[name="lang"]:checked + #config_ui img[src="/flags.jsp?c=a1"] {
@@ -5315,10 +5276,8 @@ p#helptranslate {
   width: 32px !important;
   height: 32px !important;
   border: none !important;
-  box-shadow: none !important;
   opacity: 1 !important;
   transform: none !important;
-  animation: glow 20s 10s infinite;
 }
 
 .langselect input:hover + img {
@@ -5326,14 +5285,6 @@ p#helptranslate {
   border: none !important;
   transition: none !important;
   filter: drop-shadow(0 0 2px var(--hover));
-}
-
-@keyframes glow {
-  0% {filter: drop-shadow(0 0 1px rgba(256, 100, 0, .1))}
-  20% {filter: drop-shadow(0 0 1px var(--hover))}
-  50% {filter: drop-shadow(0 0 2px #930)}
-  80% {filter: drop-shadow(0 0 1px #d40)}
-  100% {filter: drop-shadow(0 0 1px rgba(256, 100, 0, .1))}
 }
 
 /* end large flags */
@@ -5429,21 +5380,20 @@ td#pw_adduser input {
 }
 
 .leaseset th:first-child code {
-  display: inline-block;
   width: 150px;
+  display: inline-block;
+  vertical-align: text-bottom;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  vertical-align: text-bottom;
   color: #fff !important;
   border-radius: 2px;
   background: #89b;
-
 }
 
 .netdbentry th:first-child, .netdbentry td:first-child {
-  white-space: nowrap;
   padding: 4px 6px !important;
+  white-space: nowrap;
   text-align: right;
 }
 
@@ -5618,9 +5568,7 @@ td#pw_adduser input {
 }
 
 @media screen and (max-width: 1200px) {
-#sybilnav {
-  margin: 5px -6px 8px !important;
-}
+  #sybilnav {margin: 5px -6px 8px !important}
 }
 
 #sybilnav ul {
@@ -5672,11 +5620,11 @@ td#pw_adduser input {
 }
 
 p.sybil_info, p.family, p.threatpoints, p.hashdist, p.notfound, p#sybil_totals {
-  border: 1px solid var(--border);
-  padding: 5px 5px 5px 30px;
   margin: 3px 0;
-  font-weight: 700;
+  padding: 5px 5px 5px 30px;
   text-align: left;
+  font-weight: 700;
+  border: 1px solid var(--border);
   background: var(--eye) no-repeat 8px center / 16px, linear-gradient(to right, #fff 40%, #dde1ff);
 }
 
@@ -5697,14 +5645,14 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 }
 
 #netdb .threatpoints + a[name] + ul {
-  border: 1px solid var(--border);
   padding: 5px 5px 0;
+  border: 1px solid var(--border);
 }
 
 #netdb .threatpoints + ul {
-  border: 1px solid var(--border);
-  padding: 6px 15px;
   margin: -4px 0 10px !important;
+  padding: 6px 15px;
+  border: 1px solid var(--border);
   background: var(--bg2);
 }
 
@@ -5733,8 +5681,8 @@ p:empty { /* empty paragraph nuke */
 }
 
 #netdblookup th {
-  font-size: 140% !important;
   text-align: left;
+  font-size: 140% !important;
 }
 
 #netdblookup th, #netdblookup td {
@@ -5765,10 +5713,10 @@ p:empty { /* empty paragraph nuke */
 }
 
 .subheading {
-  text-align: left !important;
-  background: #fff;
   padding: 10px;
+  text-align: left !important;
   border: 1px solid var(--border);
+  background: #fff;
 }
 
 .subheading b {
@@ -5825,14 +5773,14 @@ p:empty { /* empty paragraph nuke */
 }
 
 .netdb_leases, .netdb_leases li {
-  margin: -1px 0 0 !important;
   padding: 0 !important;
+  margin: -1px 0 0 !important;
 }
 
 .netdb_leases li {
   padding: 2px 0 3px !important;
-  line-height: 140%;
   vertical-align: middle;
+  line-height: 140%;
   list-style: none;
 }
 
@@ -5911,8 +5859,8 @@ img.unknownflag {
 /* /stats */
 
 form#statnav {
-  border: 1px solid var(--border);
   padding: 10px 10px 10px 15px;
+  border: 1px solid var(--border);
 }
 
 h3.stats {
@@ -5921,10 +5869,10 @@ h3.stats {
 }
 
 .statlist {
-  border: 1px solid var(--border);
-  padding: 0 10px 0 0;
   margin-left: 0 !important;
   margin-bottom: -27px !important;
+  padding: 0 10px 0 0;
+  border: 1px solid var(--border);
   background: var(--bg2);
 }
 
@@ -5933,10 +5881,10 @@ h3.stats {
 }
 
 .statlist a[name], .statlist b, .statlist li b, .statlist a[name]:hover {
-  text-decoration: none;
+  line-height: 1.2;
   letter-spacing: normal;
+  text-decoration: none;
   font-size: 9pt;
-  line-height: 120%;
 }
 
 .statlist ul + br {
@@ -5948,12 +5896,12 @@ h3.stats {
 }
 
 .statlist li::before {
-  content: "\2B26\00A0";
   margin-left: 5px;
-  font-size: 14pt;
-  line-height: 60%;
   vertical-align: baseline;
+  line-height: .6;
+  font-size: 14pt;
   color: var(--ink);
+  content: "\2B26\00A0";
 }
 
 .statlist li {
@@ -5966,29 +5914,29 @@ h3.stats {
   margin-left: 16px;
   margin-right: -20px;
   margin-top: 2px;
-  line-height: 150% !important;
-  list-style: none;
   padding: 2px 0 2px 5px;
+  line-height: 1.5 !important;
+  list-style: none;
   text-align: left;
 }
 
 .statlist li li:first-child {
   margin-top: 12px !important;
-  border-top: none;
   padding-top: 2px;
+  border-top: none;
 }
 
 .statlist li li::before {
-  content: "\279F\00A0";
-  vertical-align: baseline;
   margin-left: 3px;
+  vertical-align: baseline;
+  content: "\279F\00A0";
 }
 
 .main#stats a[href^="graph?"]::before {
-  content: "\279F\00A0";
+  margin-left: 4px;
   color: #6b6b94;
   font-size: 14pt;
-  margin-left: 4px;
+  content: "\279F\00A0";
 }
 
 .main#stats a[href^="graph?"]:hover::before {
@@ -6020,7 +5968,6 @@ h3.stats {
 
 .statlist li li:last-child::before {
   margin-left: 2px;
-  vertical-align: text-top;
   vertical-align: calc(20% - 3px);
   content: "\27A1\00A0";
 }
@@ -6051,9 +5998,9 @@ h3.stats {
 }
 
 .main#stats form {
-  border: 1px solid var(--border);
-  padding: 10px;
   margin: -13px 0 -11px;
+  padding: 10px;
+  border: 1px solid var(--border);
 }
 
 h3.stats {
@@ -6081,7 +6028,6 @@ h3.stats {
 }
 
 #netdboverview td {
-  padding: 5px 5px 0;
   padding: 0 !important;
   border-left: 1px solid var(--border);
   border-right: 1px solid var(--border);
@@ -6094,7 +6040,7 @@ h3.stats {
 }
 
 #netdboverview table tr:hover {
-  background: #ffd !important;
+  background: var(--row_hover) !important;
 }
 
 #netdboverview table th::before, #netdboverview table td::before {
@@ -6170,7 +6116,7 @@ h3.stats {
 }
 
 .sybil_distance tr:nth-child(n+2):hover {
-  background: #ffe;
+  background: var(--row_hover);
   font-weight: 700;
 }
 
@@ -6754,7 +6700,7 @@ p#enablefullstats, p#gatherstats {
 }
 
 #logs #enviro:hover tr, #logs #enviro:hover td {
-  background: #ffe;
+  background: var(--row_hover);
   border-top: 1px inset transparent;
   border-bottom: 1px inset transparent;
 }
@@ -6807,7 +6753,7 @@ p#enablefullstats, p#gatherstats {
   z-index: 10;
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
-  background: #ffd;
+  background: var(--row_hover);
   opacity: 1;
   transition: ease all .15s;
 }
@@ -8686,7 +8632,7 @@ div.news {
   border: 1px solid var(--border);
   box-shadow: inset 0 0 0 1px #a79;
   transition: ease box-shadow .5s, ease background .2s .01s;
-  background: #ffd !important;
+  background: var(--row_hover) !important;
 }
 
 #reseedconfig .optiontextarea:hover {
@@ -8709,7 +8655,7 @@ div.news {
 }
 
 #bandwidthconfig .optionsingle:hover, #reseedproxytype label:hover, #graphs .nowrap:hover {
-  background-color: #ffd !important;
+  background-color: var(--row_hover) !important;
 }
 
 th.options {
@@ -8916,7 +8862,7 @@ b.suboption {
 #netconfig label:hover, #externali2cp .optionlist label:hover, #externali2cp .optionlist .nowrap:hover,
 #updateHelper .optionlist .nowrap:hover, #updateProxyHostPort .optionlist .nowrap:hover, #i2pupdates .nowrap:hover,
 #reseedconfig .nowrap:hover, #reseed_urlselection label:hover, #config_reseed .optionsingle.optiontextarea:hover {
-  background: #ffd !important;
+  background: var(--row_hover) !important;
 }
 
 #netconfig label::before {
@@ -9286,7 +9232,7 @@ b.suboption {
 }
 
 #config_reseed #reseedcreatefile:hover, #config_reseed #reseedzip:hover, #config_reseed #reseedurl:hover {
-  background-color: #ffd !important;
+  background-color: var(--row_hover) !important;
 }
 
 #reseedcreatefile p {
@@ -9412,7 +9358,7 @@ b.suboption {
 }
 
 #installPluginUrl:hover td, #installPluginFile #file:hover td {
-  background-color: #ffd !important;
+  background-color: var(--row_hover) !important;
 }
 
 #installPluginUrl input[type=text], #installPluginFile input[type="file"] {
@@ -9442,7 +9388,7 @@ input[type="file"]:hover {
 }
 
 #newfamily .optionsingle:hover, #joinfamily .optionsingle:hover {
-  background-color: #ffd !important;
+  background-color: var(--row_hover) !important;
 }
 
 #installPluginFile td:last-child, #installPluginUrl td:last-child,
@@ -10941,7 +10887,7 @@ p#gatherstats {
 }
 
 #sybilTask .nowrap:hover {
-  background: #ffd;
+  background: var(--row_hover);
 }
 
 #sybilTask input[type=checkbox] {
@@ -11258,7 +11204,7 @@ p#gatherstats {
   position: absolute;
   top: -30px;
   left: 1px;
-  background: #ffe;
+  background: var(--row_hover);
   white-space: nowrap;
   z-index: 10;
   border-radius: 1px;
@@ -11375,7 +11321,7 @@ p#gatherstats {
 }
 
 #tunnelPeerCount tr:not(:last-child):hover {
-  background: #ffd;
+  background: var(--row_hover);
 }
 
 #tunnels .percentBarOuter, #tunnels .percentbarInner, #tunnels .percentBarText {
@@ -11897,6 +11843,12 @@ div.app:hover img, .sitemaplink:hover img {
   animation: linear spin 3s forwards infinite;
 }
 
+#nographs::after {
+  width: 36px;
+  height: 36px;
+  background-size: 32px;
+}
+
 @keyframes down {
   from {background-position: center center, 100%}
 }
@@ -11979,8 +11931,8 @@ div.app:hover img, .sitemaplink:hover img {
   width: 56px;
   height: 16px;
   display: inline-block;
-  font-size: 0 !important;
-  background-size: 16px !important;
+  font-size: 0;
+  background-size: 16px;
 }
 
 #profilelist .fast {
