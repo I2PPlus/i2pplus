@@ -646,11 +646,11 @@ i {
 }
 
 #sb_localtunnels td.tunnelServer, #sb_localtunnels tr:hover td.tunnelServer  {
-  background: var(--server) !important;
+  background: var(--server) no-repeat center center / 16px !important;
 }
 
 #sb_localtunnels td.ping, #sb_localtunnels tr:hover td.ping {
-  background-image: var(--ping) !important;
+  background-image: var(--ping) no-repeat center center / 16px !important;
 }
 
 #sb_localtunnels td:last-child, #sb_localtunnels tr:hover td:last-child {
