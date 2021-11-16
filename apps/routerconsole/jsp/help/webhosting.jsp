@@ -21,6 +21,7 @@
 <span class="tab"><a href="/help/faq">FAQ</a></span>
 <span class="tab"><a href="/help/newusers">New User Guide</a></span>
 <span class="tab2">Web Hosting</span>
+<span class="tab"><a href="/help/hostnameregistration">Hostname Registration</a></span>
 <span class="tab"><a href="/help/troubleshoot">Troubleshoot</a></span>
 <span class="tab"><a href="/help/glossary">Glossary</a></span>
 <span class="tab"><a href="/help/legal">Legal</a></span>
@@ -52,7 +53,7 @@
 
 <h3>Setting up &amp; announcing your website</h3>
 
-<p>Your webserver is running by default at <a href="http://127.0.0.1:7658/">http://127.0.0.1:7658/</a>, but is not accessible by others until you start the <i>I2P Webserver</i> tunnel. After starting the tunnel, your site will be difficult for other people to find. You could just tell people the destination or the Base32 address, but thankfully I2P has an address book to store domain names, and various services where you can register a new .i2p domain for free.</p>
+<p>Your webserver is running by default at <a href="http://127.0.0.1:7658/">http://127.0.0.1:7658/</a>, but is not accessible by others until you start the <i>I2P Webserver</i> tunnel. After starting the tunnel, your site will be difficult for other people to find. You could just tell people the destination or the Base32 address, but thankfully I2P has an address book to store domain names, and various services where you can <a href="/help/hostnameregistration">register a new .i2p domain</a> for free.</p>
 
 <ul>
 <li>Choose a name for your website (<i>something</i>.i2p), using lower-case. Enter the new name for your website on the <a href="http://127.0.0.1:7657/i2ptunnel/edit?tunnel=3">Tunnel Manager Configuration page</a> where it says <i>Website name</i>, replacing the default <i>mysite.i2p</i> placeholder. If you want your website to be available when I2P starts, check the <i>Auto Start</i> box and click <i>Save</i> at the bottom of the page.</li>
@@ -64,22 +65,20 @@
 
 <p>Before you tell the world about your new website, you should add some content. Go to the server's root directory <a href="#rootdir">listed above</a> and replace the <i>index.html</i> redirect page with your own content. If you need a template for a basic site, feel free to adapt <a href="pagetemplate.html">this page</a>. If you're returned to this page after editing the content, try clearing your browser's web cache.</p>
 
-<h3>Registering an I2P Domain</h3>
+<h3>Content Optimization</h3>
 
-<p>You may wish to register your website with an I2P Domain registrar such as <a href="http://stats.i2p/i2p/addkey.html" target="_blank" rel="noreferrer" class="sitelink">stats.i2p</a> or <a href="http://reg.i2p/" target="_blank" rel="noreferrer" class="sitelink">reg.i2p</a>. Some registration sites require the full B64 destination address, which you should copy in full from the <i>Local destination</i> section on the <a href="http://127.0.0.1:7657/i2ptunnel/edit?tunnel=3">Tunnel Manager Configuration page</a>.</p>
-
-<p>If a <i>Registration Authentication</i> string is requested, you can find it on the <a href="http://127.0.0.1:7657/i2ptunnel/register?tunnel=3">Registration Authentication page</a> linked from the <a href="http://127.0.0.1:7657/i2ptunnel/edit?tunnel=3">Tunnel Manager Configuration page</a>.</p>
-
-<p>If you are in a hurry and can't wait a few hours, you can tell people to use a "jump" address helper redirection service. This will usually work within a few minutes of your registering your hostname on the same site. Test it yourself first by entering <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>something</i>.i2p</code> into your browser. Once it is working, you can tell others to use it.</p>
-
-<p>Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href="http://127.0.0.1:7657/susidns/details?h=i2p-projekt.i2p&book=router" target="_blank" rel="noreferrer">details for i2p-projekt.i2p</a>, and paste the link where it's required to share it with others.</p>
-
-<p>Services such as <a href="http://identiguy.i2p/" target="_blank" rel="noreferrer" class="sitelink">Identiguy's eepsite status list</a> and <a href="http://notbob.i2p/" target="_blank" rel="noreferrer" class="sitelink">notbob's site uptime monitor</a> may direct visitors to your site. To actively promote your site on the network, there are various options you could try, for example:</p>
+<p>In order to provide the best experience for visitors to your site, there are various additional steps you may wish to consider once your site is up and running:</p>
 
 <ul>
-<li>Post an announcement on one of the I2P forums e.g. <a href="http://i2pforum.i2p/" target="_blank" rel="noreferrer" class="sitelink">I2P forum</a> or <a href="http://def3.i2p" target="_blank" rel="noreferrer" class="sitelink">Dancing Elephants</a></li>
-<li>Publish it on the <a href="http://wiki.i2p-projekt.i2p/wiki/index.php/Eepsite/Services" target="_blank" rel="noreferrer" class="sitelink">I2P Wiki Eepsite Index</a></li>
-<li>Tell people about it on I2P's IRC network</li>
+<li><b>Optimize your images</b><br>
+If you want your site to feel responsive, image compression is essential when hosting large images. Using a service like <a href="https://tinypng.com/" target="blank" class="sitelink external">tinypng.com</a> to compress your png and jpeg images will often result in much smaller files with minimal loss of quality. In some situations the webp format can best jpegs, generating smaller files with approximately the same or better visual fidelity, and has wide browser support. Also consider using svgs instead of bitmaps for icons and illustrations - they're often smaller than the equivalent bitmap file (run them through a service like <a href="https://vecta.io/nano" target="_blank" class="sitelink external">Nano</a> to remove unneeded cruft), scale without loss of quality, and can be gzipped by your webserver.</li>
+
+<li><b>Use separate files for multi-use assets</b><br>
+Wherever possible, assets that are used repeatedly on your site should be loaded from an external file and not inlined. If you're using the same CSS on several pages, create a separate css file and load that in the <code>&lt;head&gt;</code> section of your pages. This will make styling updates to your site easier to manage, and will also allow the file to be cached in the visitor's browser, resulting in less bandwidth demands on your webserver and faster page loads for your visitors.
+</li>
+
+<li><b>Consider using a backend cache</b><br>
+If you're running a dynamic site handling a large number of concurrent users, content caching can often improve the time taken to deliver pages. For content that rapidly changes, a <a href="https://blog.stackpath.com/glossary-micro-caching/" target="_blank" class="sitelink external">micro-caching strategy</a> may still yield some benefits. The <a href="https://www.nginx.com/" target="_blank" class="sitelink external">Nginx webserver</a> provides a competent caching sub-system, or for a more heavy-weight solution, have a look at <a href="https://varnish-cache.org/" target="_blank" class="sitelink external">Varnish</a>.</li>
 </ul>
 
 <h3>Using an alternative webserver</h3>

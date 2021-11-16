@@ -28,6 +28,7 @@
 <span class="tab"><a href="/help/faq">FAQ</a></span>
 <span class="tab"><a href="/help/newusers">New User Guide</a></span>
 <span class="tab"><a href="/help/webhosting">Web Hosting</a></span>
+<span class="tab"><a href="/help/hostnameregistration">Hostname Registration</a></span>
 <span class="tab"><a href="/help/troubleshoot">Troubleshoot</a></span>
 <span class="tab"><a href="/help/glossary">Glossary</a></span>
 <span class="tab"><a href="/help/legal">Legal</a></span>

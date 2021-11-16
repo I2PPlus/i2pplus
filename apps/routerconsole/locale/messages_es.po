@@ -8338,7 +8338,7 @@ msgstr "configuración de actualizaciones"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:446
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:684
 msgid "Router Updates"
-msgstr "Actualizaciones del router"
+msgstr "Actualizaciones"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:566
 msgid "I2P &amp; News Updates"
