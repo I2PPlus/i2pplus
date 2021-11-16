@@ -17,12 +17,15 @@
   --badge: linear-gradient(to bottom, #fff, #eef);
   --badge_hover: linear-gradient(to bottom, #eef, #fff);
   --highlight: inset 0 0 0 1px #fff;
+  --highlight_hover: inset 0 0 0 1px #a79;
   --border: #bec2da;
+  --soft_border: #ced1e3;
   --bg: #fff;
   --bg2: #eff1ff;
   --th: linear-gradient(to bottom, #fff, #fafbff);
   --header: linear-gradient(to bottom, #fff 50%, #fafbff 50%);
   --row_hover: #ffd;
+  --ls_target: 1px solid #5a5 !important;
 }
 
 html, body {
@@ -37,6 +40,7 @@ body {
   font: 9pt/130% var(--bodyfont);
   color: var(--ink);
   background: var(--bodybg) url(images/bg0.png) no-repeat center center / 90px;
+  scrollbar-color: #acafb9 var(--bg);
 }
 
 @supports (text-justify: auto) { /* Firefox 55+ */
@@ -59,7 +63,7 @@ body {
   outline: none;
 }
 
-.routersummary, .routersummaryouter, h1, .main, iframe {
+.routersummary, .routersummaryouter, h1, .main, iframe, tr {
   contain: layout;
 }
 
@@ -224,7 +228,7 @@ i {
 }
 
 .warning tr:last-child {
-  background: #fff !important;
+  background: var(--bg) !important;
   height: 80px;
   white-space: nowrap;
 }
@@ -553,7 +557,7 @@ i {
   margin: 3px 0 2px !important;
   color: transparent;
   background: transparent;
-  border-bottom: 1px dashed #ced1e3;
+  border-bottom: 1px dashed var(--soft_border);
 }
 
 #sb_localid {
@@ -1038,7 +1042,6 @@ a:active #sb_bandwidthgraph {
   text-align: center;
   border: 1px solid var(--border);
   box-shadow: 0 0 1px rgba(200,200,200,.8), var(--highlight);
-  background: #eef;
   background: repeating-linear-gradient(to right, rgba(210, 210, 255, .7) 1px, rgba(210, 210, 255, .7) 2px, rgba(230, 230, 255, .7) 2px, rgba(230, 230, 255, .7) 4px);
 }
 
@@ -1051,7 +1054,6 @@ a:active #sb_bandwidthgraph {
   border: none;
   height: 14px;
   max-width: 100%;
-  background: var(--border);
   background: linear-gradient(to right, rgba(0,255,0,.1) 65px, rgba(255,255,0,.1) 110px, rgba(255,128,0,.1) 175px, rgba(255,0,0,.1)),
               linear-gradient(to bottom, rgba(255, 255, 255,.6), rgba(238, 238, 255, .6) 50%, rgba(180, 180, 255, .7) 50%, rgba(140, 140, 255, .7));
   box-shadow: inset 0 0 0 1px #ddf;
@@ -1092,7 +1094,6 @@ a:active #sb_bandwidthgraph {
   border-top: none;
   border-radius: 0 0 3px 3px;
   box-shadow: var(--highlight);
-  background: #ccf;
   background: linear-gradient(to right, #eef, #eff2ff 30%, #eff2ff 60%, #eef);
   box-sizing: border-box;
 }
@@ -1368,16 +1369,11 @@ select {
 }
 
 select option {
-  background: #fff;
+  background: var(--bg);
 }
 
-select:hover, select:active {
+select:hover, select:active, select:focus {
   color: var(--ink);
-  background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover) !important;
-  outline: none;
-}
-
-select:focus {
   background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover) !important;
   outline: none;
 }
@@ -1392,9 +1388,8 @@ select[disabled], select[disabled]:hover, select[disabled]:focus, select[disable
 }
 
 select[name="newlogclass"] {
-  width: 80%;
-  width: calc(100% - 180px);
   margin-right: 0;
+  width: calc(100% - 180px);
 }
 
 select[name="newlogclass"] {
@@ -1402,8 +1397,8 @@ select[name="newlogclass"] {
 }
 
 .optbox {
-  vertical-align: middle;
   margin-right: 0;
+  vertical-align: middle;
 }
 
 #config_homepage .noicon {
@@ -1521,7 +1516,7 @@ input.search[type=text] {
   padding: 5px 5px 5px 28px;
   color: #333 !important;
   border: 1px solid var(--border);
-  background: #fff var(--search) no-repeat 5px center / 14px;
+  background: var(--bg) var(--search) no-repeat 5px center / 14px;
 }
 
 input[name="refreshInterval"] {
@@ -1539,7 +1534,6 @@ input[type=submit], input[type=reset], button, .optbox {
 
 .optbox:hover, .optbox:focus {
   border: 0;
-  box-shadow: 0 0 0 1px #89f;
   outline: none;
   filter: drop-shadow(0 0 2px #89f);
 }
@@ -2118,7 +2112,7 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
   padding: 3px 0;
   font-size: 10pt;
   border: none;
-  border-bottom: 1px solid #ced1e3;
+  border-bottom: 1px solid var(--soft_border);
   background: none;
 }
 
@@ -2163,16 +2157,11 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
   background: #fafbff;
 }
 
-.main textarea:not(:focus) {
-  scrollbar-color: #acafb9 transparent;
-}
-
 .main textarea:focus {
   color: var(--ink);
   box-shadow: inset 0 0 0 1px #89f;
-  background: #fff;
+  background: var(--bg);
   outline: none;
-  scrollbar-color: #acafb9 rgba(255,255,255,.3);
 }
 
 .main h2 {
@@ -2248,7 +2237,6 @@ div.news {
   border: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
   border-right: 1px solid var(--border);
-  background: #fafaff;
   background: linear-gradient(to bottom, #fff, #fafaff);
 }
 
@@ -2315,9 +2303,7 @@ div.news hr {
 }
 
 @supports not (-moz-appearance: none) {
-div.news hr {
-  height: 1px;
-}
+  div.news hr {height: 1px}
 }
 
 div.news hr:last-child {
@@ -2401,7 +2387,7 @@ div.news hr:last-child {
   position: relative;
   display: inline-block;
   border: 1px solid var(--border);
-  background: #fff;
+  background: var(--bg);
   box-sizing: border-box;
 }
 
@@ -2430,7 +2416,7 @@ div[id^="config"] .tab a {
 .tab:hover {
   z-index: 12;
   box-shadow: var(--highlight), inset 0 0 1px 1px var(--hover);
-  background: #fff;
+  background: var(--bg);
 }
 
 .tab:active {
@@ -2449,7 +2435,6 @@ div[id^="config"] .tab a {
   color: #565799;
   text-shadow: 0 1px 1px #fff;
   box-shadow: var(--highlight), inset 0 0 0 2px #bfc0ff, inset 3px 3px 3px #aaabcc;
-  background: #89f;
   background: linear-gradient(to bottom, #eaebff, #f2f3ff);
 }
 
@@ -2527,10 +2512,10 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 
 .configtable.homelinkedit td, .configtable.homelinkedit tr,
 .configtable#sidebarconf td, .configtable#sidebarconf tr {
-  border-top: 1px inset #ddf !important;
-  border-bottom: 1px inset #ddf !important;
   padding-top: 4px;
   padding-bottom: 4px;
+  border-top: 1px inset #ddf !important;
+  border-bottom: 1px inset #ddf !important;
 }
 
 #joinfamily, #exportfamily{
@@ -2544,7 +2529,7 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 
 #exportfamily tr:nth-child(2) td:first-child {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--joinfamily) no-repeat 12px center / 28px;
+  background: var(--bg) var(--joinfamily) no-repeat 12px center / 28px;
 }
 
 #leavefamily {
@@ -2554,11 +2539,11 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 
 #leavefamily tr:last-child td:first-child {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--leavefamily) no-repeat 12px center / 28px;
+  background: var(--bg) var(--leavefamily) no-repeat 12px center / 28px;
 }
 
 #peerdefs tr {
-  border-top: 1px solid #ced1e3;;
+  border-top: 1px solid var(--soft_border);;
 }
 
 #bandwidthconfig td:first-child {
@@ -2579,7 +2564,6 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 }
 
 #addkeyring input[type=text] {
-  width: 99%;
   width: calc(100% - 5px);
 }
 
@@ -2588,7 +2572,7 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 }
 
 #manualreseed tr:nth-child(odd) {
-  background: #fff;
+  background: var(--bg);
 }
 
 #manualreseed td:first-child {
@@ -2609,8 +2593,8 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 }
 
 #reseedconfig tr:nth-child(2) label {
-  white-space: nowrap;
   margin-right: 10px;
+  white-space: nowrap;
 }
 
 #reseedconfig td {
@@ -2618,21 +2602,12 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 }
 
 @supports not (-moz-appearance: none) {
-#reseedconfig .optbox[type=radio] {
-  margin: 4px 4px 4px 15px !important;
-}
-
-#reseedconfig .optbox[type=checkbox] {
-  vertical-align: sub !important;
-}
-
-#manualreseed th:last-child, #manualreseed td:last-child {
-  border-right: 1px solid var(--border);
-}
+  #reseedconfig .optbox[type=radio] {margin: 4px 4px 4px 15px !important}
+  #reseedconfig .optbox[type=checkbox] {vertical-align: sub !important}
+  #manualreseed th:last-child, #manualreseed td:last-child {border-right: 1px solid var(--border)}
 }
 
 #loggingoptions textarea {
-  width: 99%;
   width: calc(100% - 5px);
 }
 
@@ -2664,13 +2639,13 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 }
 
 #profilelist td[colspan="10"], #profilelist tr td[colspan="10"]:hover {
-  background: #ced1e3;
   padding: 1px !important;
+  background: var(--soft_border);
 }
 
 #profilelist td[colspan="10"]::after {
-  content: none !important;
   display: none !important;
+  content: none !important;
 }
 
 #profilelist td[colspan="10"] hr {
@@ -2679,12 +2654,12 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 
 #profilelist tr:hover, #floodfills tr:hover,  #ntcpconnections tr:hover, #udpconnections tr:hover,
 .homelinkedit tr:hover, #portmapper tr:hover {
-  background: var(--row_hover);
   color: #104e99;
+  background: var(--row_hover);
 }
 
 #thresholds tr:last-child:hover td {
-  background: #fff;
+  background: var(--bg);
 }
 
 tr.tablefooter:hover td, tr:hover .infohelp {
@@ -2694,13 +2669,13 @@ tr.tablefooter:hover td, tr:hover .infohelp {
 /* peers - sort icons */
 
 #udpconnections th {
-  vertical-align: top;
-  background: #fff;
   padding-top: 3px;
+  vertical-align: top;
+  background: var(--bg);
 }
 
 #ntcpconnections th {
-  background: #fff;
+  background: var(--bg);
 }
 
 #peers > #ntcpcon {
@@ -2715,20 +2690,20 @@ tr.tablefooter:hover td, tr:hover .infohelp {
   border: 1px solid var(--border);
   margin: -11px 0 5px;
   padding: 0 10px 5px;
-  background: #fff;
+  background: var(--bg);
 }
 
 .sortup, .sortdown, .sortupactive, .sortdownactive {
-  padding: 1px 0;
-  border: 1px solid #999;
-  border-radius: 2px;
   margin: 2px 1px 0;
-  vertical-align: middle;
-  text-align: center;
-  display: inline-block;
+  padding: 1px 0;
   width: 16px;
   height: 12px;
-  background-size: 10px auto, 100% !important;
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+  border: 1px solid #999;
+  border-radius: 2px;
+  background-size: 10px, 100% !important;
 }
 
 .sortup, .sortdown {
@@ -2804,8 +2779,8 @@ tr:hover th {
 }
 
 #thresholds p {
-  padding: 0 10px 0 5px;
   margin-top: 0 !important;
+  padding: 0 10px 0 5px;
 }
 
 #profile_defs td:first-child {
@@ -2819,12 +2794,12 @@ tr:hover th {
 }
 
 #thresholds th, #thresholds td {
-  text-align: center !important;
   width: auto !important;
+  text-align: center !important;
 }
 
 #thresholds tr:last-child td {
-  background: #fff;
+  background: var(--bg);
 }
 
 #profile_defs td:nth-child(2)::first-letter {
@@ -2859,14 +2834,14 @@ tr:hover th {
 }
 
 #capabilities_key b {
-  text-transform: none !important;
-  display: inline-block;
+  padding: 1px 2px;
   min-width: 16px;
-  background: #dfe4ff;
+  display: inline-block;
   text-align: center;
+  text-transform: none !important;
   text-shadow: 0 1px 1px #fff;
   border-radius: 2px;
-  padding: 1px 2px;
+  background: #dfe4ff;
 }
 
 #thresholds tr:hover td, #profile_defs tr:hover td {
@@ -2931,7 +2906,7 @@ ul#banlist + h3.tabletitle {
   display: table;
   line-height: 150%;
   list-style: none !important;
-  box-shadow: 0 0 0 1px #ced1e3, 0 0 1px 1px #ddd;
+  box-shadow: 0 0 0 1px var(--soft_border), 0 0 1px 1px #ddd;
   background: #f9f9ff;
   break-inside: avoid;
   page-break-inside: avoid;
@@ -2952,8 +2927,8 @@ ul#banlist + h3.tabletitle {
   top: 0;
   right: 0;
   line-height: 0;
-  border-left: 1px solid #ced1e3;
-  border-bottom: 1px solid #ced1e3;
+  border-left: 1px solid var(--soft_border);
+  border-bottom: 1px solid var(--soft_border);
   filter: none;
 }
 
@@ -3025,9 +3000,9 @@ ul#banlist + h3.tabletitle {
 }
 
 #permabanned td:last-child {
-  text-align: left;
   padding-left: 10px;
   width: 49%;
+  text-align: left;
 }
 
 #banneduntilrestart td {
@@ -3036,9 +3011,9 @@ ul#banlist + h3.tabletitle {
 }
 
 #ipv4, #ipv6, #permabanned tr:nth-child(2) {
-  background: var(--header);
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
+  background: var(--header);
 }
 
 /* end /configpeer banlist */
@@ -3075,7 +3050,7 @@ pre#activetransports {
   margin: -11px 0 0;
   width: 95%;
   width: calc(100% - 32px);
-  background: #fff;
+  background: var(--bg);
 }
 
 #view_profile pre {
@@ -3100,9 +3075,7 @@ pre#activetransports {
 }
 
 @media screen and (min-width: 1500px) {
-#pluginconfig {
-  margin: -15px 0 0 !important;
-}
+  #pluginconfig {margin: -15px 0 0 !important}
 }
 
 #pluginconfig table {
@@ -3111,7 +3084,7 @@ pre#activetransports {
 }
 
 #pluginconfig tr td {
-  background: #fff;
+  background: var(--bg);
 }
 
 #pluginconfig button, #webappconfig button, #clientconfig button {
@@ -3144,10 +3117,10 @@ pre#activetransports {
 }
 
 #i2pupdates textarea {
-  min-height: 76px !important;
-  height: 76px !important;
   margin: 6px 0 6px 10px !important;
   padding: 3px 5px;
+  height: 76px !important;
+  min-height: 76px !important;
 }
 
 #i2pupdates input.check, .optbox {
@@ -3189,27 +3162,27 @@ div.configure h2:first-child {
 }
 
 #sidebarconf th:nth-child(2), #sidebarconf td:nth-child(2) {
-  text-align: left;
   padding-left: 20px;
+  text-align: left;
 }
 
 #sidbarconf td:last-child[colspan="2"] {
-  text-align: center !important;
   padding: 2px;
+  text-align: center !important;
 }
 
 #sidebarconf tr, .homelinkedit tr, #clientconfig tr, #webappconfig tr,  #configstats tr, #tunnelconfig tr, #profiles tr,
 #floodfills tr, #netdboverview tr, .netdbentry tr, #leasesetdebug tr, #leasesetsummary tr, .leaseset tr, #tunnel_defs tr,
 .sybil_routerinfo tr, #enviro tr, #routerinformation tr, #schedjobs tr, #jobstats tr, #eventlog tr, .tunneldisplay tr,
 #udpconnections tr, #ntcpconnections tr, #tunnelPeerCount tr {
-  border-top: 1px solid #ced1e3;
+  border-top: 1px solid var(--soft_border);
 }
 
 #config_stats tr:not(.tablefooter) td:first-child::after {
-  content: "";
-  display: inline-block;
   min-height: 24px;
+  display: inline-block;
   vertical-align: middle;
+  content: "";
 }
 
  tr.tablefooter {
@@ -3252,13 +3225,13 @@ div.configure h2:first-child {
 }
 
 #sidebarconf tr:last-child td:last-child {
-  text-align: right;
   padding-right: 2px;
+  text-align: right;
 }
 
 .topshimten {
-  margin-top: 15px;
   margin-bottom: 15px;
+  margin-top: 15px;
 }
 
 .messages {
@@ -3269,14 +3242,14 @@ div.configure h2:first-child {
   font-size: 9pt;
   border: 1px solid var(--border);
   border-right: 0;
-  background: #fff;
+  background: var(--bg);
 }
 
 #config_update .messages {
   padding-left: 48px;
   text-align: left;
   font-weight: 400;
-  background: #fff url(/themes/console/images/svg/news.svg) no-repeat 10px center / 28px;
+  background: var(--bg) url(/themes/console/images/svg/news.svg) no-repeat 10px center / 28px;
 }
 
 #messages {
@@ -3449,7 +3422,7 @@ h2 {
   border: 1px solid var(--border);
   letter-spacing: .04em;
   text-transform: uppercase;
-  background: #fff;
+  background: var(--bg);
 }
 
 h3, h4#updateplugins {
@@ -3457,7 +3430,7 @@ h3, h4#updateplugins {
   padding: 6px 10px;
   border: 1px solid var(--border);
   margin-bottom: 10px;
-  background: #fff;
+  background: var(--bg);
 }
 
 h3.tabletitle {
@@ -3481,9 +3454,7 @@ h3#udpcon, h3#ntcpcon {
 }
 
 @media screen and (min-width: 1200px) {
-#peers .confignav + #udp, #peers .confignav + #ntcp {
-  margin-top: 15px !important;
-}
+  #peers .confignav + #udp, #peers .confignav + #ntcp {margin-top: 15px !important}
 }
 
 h3#i2pclientconfig {
@@ -3502,14 +3473,14 @@ h3#bwlimiter, h3#iptransport {
 
 h3#iptransport a, th#upnpconfig a, h3#bwlimiter a, #config_stats h3 a, #config_logging h3 a, h3#graphdisplay a, #logs h3 a, h3#advancedconfig a, .h3navlinks, #reseedsetup a {
   float: right;
-  font-size: 9pt;
   letter-spacing: normal;
+  font-size: 9pt;
 }
 
 .h3navlinks a {
-  text-transform: capitalize;
-  letter-spacing: normal;
   margin-left: 5px;
+  letter-spacing: normal;
+  text-transform: capitalize;
 }
 
 h3#iptransport a:not(old), h3#advancedconfig a:not(old), #reseedsetup a:not(old) {
@@ -3718,32 +3689,32 @@ td.optionsave {
   padding: 8px 5px !important;
   text-align: right;
   border-top: 1px solid var(--border);
-  background: #fff;
+  background: var(--bg);
 }
 
 td.optionsave[colspan="2"] {
-  background: #fff;
+  background: var(--bg);
 }
 
 td.infohelp, p.infohelp, td.infowarn, p.infowarn, p#upnpstatus, p#gatherstats, p#debugmode, p.sybilinfo, p#pluginconfigtext {
   padding: 15px 15px 15px 55px !important;
   border: 1px solid var(--border);
-  background: #fff var(--infohelp) no-repeat 15px center / 28px;
+  background: var(--bg) var(--infohelp) no-repeat 15px center / 28px;
   white-space: normal !important;
   text-align: justify;
 }
 
 #config_ui .infohelp {
-  background: #fff var(--ui) no-repeat 15px center / 28px;
+  background: var(--bg) var(--ui) no-repeat 15px center / 28px;
 }
 
 td.infowarn, p.infowarn {
-  background: #fff var(--infowarn) no-repeat 15px center / 28px !important;
+  background: var(--bg) var(--infowarn) no-repeat 15px center / 28px !important;
 }
 
 #refreshsidebar td:not(.optionsave) {
   padding: 15px 15px 15px 50px !important;
-  background: #fff var(--timer) no-repeat 12px center / 28px !important;
+  background: var(--bg) var(--timer) no-repeat 12px center / 28px !important;
 }
 
 .infowarn, .infohelp {
@@ -3815,7 +3786,7 @@ td.tabletextarea {
 }
 
 tr:nth-child(even), #pluginconfig table tr:nth-child(even) td, #profile_defs tr:nth-child(odd) {
-  background: #fff;
+  background: var(--bg);
 }
 
 tr:nth-child(odd), #pluginconfig table tr:nth-child(odd) td, .main#profiles ul#banlist,
@@ -3921,7 +3892,7 @@ div.app {
 
 div.app:hover {
   border: 1px solid var(--hover);
-  background: #fff;
+  background: var(--bg);
   cursor: pointer;
 }
 
@@ -3959,7 +3930,7 @@ div.app:hover a, .app:hover .applabel a {
 
 .app:hover .applabel {
   border-top: 1px solid var(--hover);
-  background: #fff;
+  background: var(--bg);
 }
 
 .app:active .applabel {
@@ -4198,7 +4169,7 @@ h3 + .statusnotes {
   font-size: 9pt;
   text-align: center;
   border: 1px solid var(--border);
-  background: #fff;
+  background: var(--bg);
 }
 
 .statusnotes + .statusnotes {
@@ -4264,7 +4235,7 @@ h2#jobrunners {
   column-count: 2;
   column-width: 400px;
   column-gap: 100px;
-  column-rule: 1px dotted #ced1e3;
+  column-rule: 1px dotted var(--soft_border);
 }
 
 .joblog ol:empty + h3 {
@@ -4279,7 +4250,7 @@ h2#jobrunners {
   margin-left: -15px;
   margin-bottom: 5px;
   min-width: 400px;
-  border-bottom: 1px dotted #ced1e3;
+  border-bottom: 1px dotted var(--soft_border);
   -webkit-column-break-inside: avoid;
   break-inside: avoid;
   page-break-inside: avoid;
@@ -4487,7 +4458,7 @@ p#pluginconfigtext {
 
 .configtable tr:last-child, #addkeyring tr:last-child, #loggingoptions tr:last-child {
   border-top: 1px solid var(--border);
-  background: #fff;
+  background: var(--bg);
 }
 
 #addkeyring tr:last-child td {
@@ -4502,7 +4473,7 @@ p#enablefullstats {
   padding: 5px 10px;
   line-height: 120%;
   text-align: left;
-  background: #fff;
+  background: var(--bg);
 }
 
 .formaction {
@@ -4518,7 +4489,7 @@ p#enablefullstats {
 
 .configtable tr:last-child, #addkeyring tr:last-child, #loggingoptions tr:last-child {
   border-top: 1px solid var(--border);
-  background: #fff;
+  background: var(--bg);
 }
 
 .formaction form, td form {
@@ -4603,7 +4574,7 @@ p#enablefullstats {
   white-space: nowrap;
   line-height: 150%;
   font-size: 9pt;
-  background: #fff;
+  background: var(--bg);
 }
 
 .tablefooter td:first-child {
@@ -4619,7 +4590,7 @@ p#enablefullstats {
 }
 
 #netconfig tr, #externali2cp tr {
-  background: #fff;
+  background: var(--bg);
 }
 
 #externali2cp label + br {
@@ -4687,14 +4658,14 @@ h3#graphdisplay {
   padding: 1px;
   max-width: 95%;
   max-width: calc(100% - 50px);
-  border: 1px solid #ced1e3;
-  background: #fff;
+  border: 1px solid var(--soft_border);
+  background: var(--bg);
 }
 
 .graphspanel a img {
   vertical-align: top;
-  border: 1px solid #ced1e3;
-  background: #fff;
+  border: 1px solid var(--soft_border);
+  background: var(--bg);
   opacity: .9;
 }
 
@@ -4854,7 +4825,7 @@ h3#graphinfo {
   display: none;
   text-align: right;
   border: 1px solid var(--border);
-  background: #fff;
+  background: var(--bg);
 }
 
 #graphopts a {
@@ -4978,8 +4949,8 @@ img[src^="/flags"], img.unknownflag {
 }
 
 .themechoice .optbox::after, .langselect .optbox::after {
-  display: none !important;
-  content: none !important;
+  display: none;
+  content: none;
 }
 
 .themechoice {
@@ -4998,7 +4969,7 @@ img[src^="/flags"], img.unknownflag {
 }
 
 .themechoice:hover, .themechoice:hover > img ~ .themelabel {
-  background: #fff;
+  background: var(--bg);
 }
 
 .themechoice:hover {
@@ -5017,18 +4988,18 @@ img[src^="/flags"], img.unknownflag {
   margin-top: 4px;
   margin-left: -32px;
   padding: 2px;
-  height: 80px !important;
-  width: 110px !important;
-  position: absolute !important;
+  height: 80px;
+  width: 110px;
+  position: absolute;
   z-index: 999;
-  opacity: 0; /* hide the radio icon so we can use thumbnail img instead */
+  opacity: 0;
 }
 
 .themechoice .optbox + img {
-  margin-left: 0;
   margin-top: 8px;
-  padding: 0 !important;
   margin-bottom: 31px;
+  margin-left: 0;
+  padding: 0;
 }
 
 .themechoice img {
@@ -5099,7 +5070,7 @@ p#helptranslate {
   text-align: left !important;
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
-  background: #fff url(images/favicon.svg) no-repeat left 14px center / 28px;
+  background: var(--bg) url(images/favicon.svg) no-repeat left 14px center / 28px;
 }
 
 #themeoptions input {
@@ -5153,7 +5124,7 @@ p#helptranslate {
 
 .langselect:hover {
   border: 1px solid var(--hover);
-  background: #fff;
+  background: var(--bg);
 }
 
 .langselect .optbox {
@@ -5193,7 +5164,7 @@ p#helptranslate {
   font-weight: 700;
   color: var(--hover);
   border-top: 1px solid var(--hover);
-  background: #fff !important;
+  background: var(--bg) !important;
 }
 
 .langselect input[name="lang"]:checked + img + .ui_lang {
@@ -5210,15 +5181,10 @@ p#helptranslate {
   box-shadow: var(--highlight);
 }
 
-.langselect:active input[name="lang"]:checked + img + .ui_lang {
-  color: var(--hover) !important;
-  box-shadow: none !important;
-  background: linear-gradient(to right, #eef, #fff, #eef) !important;
-}
-
+.langselect:active input[name="lang"]:checked + img + .ui_lang,
 .langselect input[name="lang"]:focus + img + .ui_lang {
   color: var(--hover) !important;
-  background: #fff !important;
+  box-shadow: none !important;
   background: linear-gradient(to right, #eef, #fff, #eef) !important;
 }
 
@@ -5297,7 +5263,7 @@ p#helptranslate {
 
 #consolepass tr:first-child td {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--useradd) no-repeat 12px center / 28px 28px;
+  background: var(--bg) var(--useradd) no-repeat 12px center / 28px 28px;
 }
 
 #consolepass td {
@@ -5456,7 +5422,7 @@ td#pw_adduser input {
   width: 200px;
   white-space: nowrap;
   text-align: right;
-  border-right: 1px solid #ced1e3;
+  border-right: 1px solid var(--soft_border);
 }
 
 #leasesetdebug td:nth-child(even) {
@@ -5556,7 +5522,7 @@ td#pw_adduser input {
   margin-bottom: 10px;
   padding: 10px;
   border: 1px solid var(--border);
-  background: #fff;
+  background: var(--bg);
 }
 
 #sybilnav {
@@ -5583,7 +5549,7 @@ td#pw_adduser input {
   list-style: none;
   border: 1px solid #ddf;
   border-bottom: 2px solid #ccf;
-  background: #fff;
+  background: var(--bg);
   background: var(--badge);
   border-radius: 2px 2px 0 0;
   box-sizing: border-box;
@@ -5716,7 +5682,7 @@ p:empty { /* empty paragraph nuke */
   padding: 10px;
   text-align: left !important;
   border: 1px solid var(--border);
-  background: #fff;
+  background: var(--bg);
 }
 
 .subheading b {
@@ -5950,7 +5916,7 @@ h3.stats {
 .statlist li li:last-child {
   padding-bottom: 5px;
   padding-left: 5px;
-  border-bottom: 1px solid #ced1e3;
+  border-bottom: 1px solid var(--soft_border);
 }
 
 .statlist li li.noevents {
@@ -5994,7 +5960,7 @@ h3.stats {
 }
 
 #gatherstats + form {
-  background: #fff;
+  background: var(--bg);
 }
 
 .main#stats form {
@@ -6035,8 +6001,8 @@ h3.stats {
 }
 
 #netdboverview table td:not(:first-child):not(:last-child) {
-  border-left: 1px solid #ced1e3;
-  border-right: 1px solid #ced1e3;
+  border-left: 1px solid var(--soft_border);
+  border-right: 1px solid var(--soft_border);
 }
 
 #netdboverview table tr:hover {
@@ -6073,17 +6039,17 @@ h3.stats {
 }
 
 #netdbversions, #netdbcountrylist, #netdbtransports, #netdbtiers {
-  border-left: none !important;
-  border-right: none !important;
+  border-left: none;
+  border-right: none;
   border-bottom: 1px solid var(--border);
 }
 
 #netdbcountrylist td:first-child, #netdbtransports td:first-child, #netdbtiers td:first-child, #netdbversions td:first-child {
-  border-left: none !important;
+  border-left: none;
 }
 
 #netdbcountrylist td:last-child, #netdbtransports td:last-child, #netdbtiers td:last-child, #netdbversions td:last-child {
-  border-right: none !important;
+  border-right: none;
 }
 
 #netdbtransports {
@@ -6124,11 +6090,10 @@ h3.stats {
 
 #volunteer, #sidebarhelp, #configurationhelp, #reachabilityhelp, #legal, #changelog, #browserconfig, #tunnman,
 #faq, #reseedhelp, #troubleshoot, #newuserguide, #filterlist, #webhosting, #themeoverride, #glossary {
-  border: 1px solid var(--border);
-  padding: 10px 15px 5px;
-  margin-bottom: 20px;
   margin-top: 15px !important;
-  background: var(--bg2);
+  margin-bottom: 20px;
+  padding: 10px 15px 5px;
+  border: 1px solid var(--border);
   background: rgba(240,240,255,.5);
   box-shadow: var(--highlight);
 }
@@ -6206,9 +6171,9 @@ ul#reachability {
 }
 
 #help li {
-  text-align: justify;
-  margin-left: 20px;
   margin-right: 0;
+  margin-left: 20px;
+  text-align: justify;
 }
 
 #help li, #help p, #help td {
@@ -6228,9 +6193,9 @@ ul#reachability {
 }
 
 #changelog {
+  margin-top: 14px;
+  margin-bottom: 11px !important;
   padding: 0;
-  margin-top: -5px !important;
-  margin-bottom: 10px !important;
 }
 
 #changelog h2 {
@@ -6253,7 +6218,7 @@ p#fullhistory {
   text-align: right;
   margin-bottom: -5px;
   margin: -5px -1px -6px !important;
-  background: #fff;
+  background: var(--bg);
   background: linear-gradient(to right, #eff2ff 50%, #fff);
   border: 1px solid var(--border);
   padding: 7px 10px 4px 5px !important;
@@ -6407,7 +6372,7 @@ p#fullhistory {
   margin-top: -11px;
   padding: 10px 10px 10px 50px;
   border: 1px solid var(--border);
-  background: #fff var(--logs) no-repeat 12px center / 28px;
+  background: var(--bg) var(--logs) no-repeat 12px center / 28px;
 }
 
 .eventspanel select {
@@ -6440,7 +6405,7 @@ p#fullhistory {
 #routerinfo td {
   padding: 8px 4px;
   width: 25%;
-  border-bottom: 1px solid #ced1e3 !important;
+  border-bottom: 1px solid var(--soft_border) !important;
 }
 
 #routerinfo td:first-child, #routerinfo td:nth-child(3) {
@@ -6450,7 +6415,7 @@ p#fullhistory {
 
 #routerinfo td:nth-child(2):not([colspan]) {
   white-space: nowrap;
-  border-right: 1px solid #ced1e3;
+  border-right: 1px solid var(--soft_border);
 }
 
 #certs .infohelp {
@@ -6461,7 +6426,7 @@ p#fullhistory {
   margin: 3px 0;
   padding: 10px 5px;
   border: 1px solid var(--border);
-  background: #fff;
+  background: var(--bg);
 }
 
 #certs h4 + p {
@@ -6521,33 +6486,33 @@ p#fullhistory {
 
 #bugreports td.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--bug) no-repeat 12px center / 28px !important;
+  background: var(--bg) var(--bug) no-repeat 12px center / 28px !important;
 }
 
 p#debugmode {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--bug) no-repeat 12px center / 28px;
+  background: var(--bg) var(--bug) no-repeat 12px center / 28px;
 }
 
 p.sybilinfo {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--sybil) no-repeat 12px center / 28px;
+  background: var(--bg) var(--sybil) no-repeat 12px center / 28px;
 }
 
 p.sybilinfo.experimental {
-  background: #fff var(--experimental) no-repeat 12px center / 28px;
+  background: var(--bg) var(--experimental) no-repeat 12px center / 28px;
 }
 
 p.infowarn, #sybilanalysis {
   border: 1px solid var(--border);
   padding: 15px 15px 15px 50px;
-  background: #fff var(--infowarn) no-repeat 10px center / 28px;
+  background: var(--bg) var(--infowarn) no-repeat 10px center / 28px;
   line-height: 130%;
 }
 
 #sybilanalysis {
   margin: 0 0 6px;
-  background: #fff var(--sybil) no-repeat 10px center / 28px;
+  background: var(--bg) var(--sybil) no-repeat 10px center / 28px;
 }
 
 #sybilanalysis form {
@@ -6570,17 +6535,17 @@ p.infowarn, #sybilanalysis {
 
 #bandwidthconfig tr:first-child .infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--speed) no-repeat 12px center / 28px;
+  background: var(--bg) var(--speed) no-repeat 12px center / 28px;
 }
 
 #addkeyring td.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--keys) no-repeat 12px center / 28px;
+  background: var(--bg) var(--keys) no-repeat 12px center / 28px;
 }
 
 #floodfillconfig tr:first-child .infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--floodfill) no-repeat 12px center / 28px;
+  background: var(--bg) var(--floodfill) no-repeat 12px center / 28px;
 }
 
 #floodfillconfig tr:nth-child(2) td {
@@ -6597,37 +6562,37 @@ p.infowarn, #sybilanalysis {
 
 p#clientconf.infohelp, p#webappconfigtext.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--editclient) no-repeat 12px center / 28px;
+  background: var(--bg) var(--editclient) no-repeat 12px center / 28px;
 }
 
 p#pluginconfigtext {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--pluginconfig) no-repeat 12px center / 28px;
+  background: var(--bg) var(--pluginconfig) no-repeat 12px center / 28px;
 }
 
 #plugininstall .infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--plugin) no-repeat 12px center / 28px;
+  background: var(--bg) var(--plugin) no-repeat 12px center / 28px;
 }
 
 #plugininstall tr:nth-child(3) td:nth-last-child(2), #manualreseed tr:nth-child(3) td:nth-last-child(2) {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--link) no-repeat 12px center / 28px;
+  background: var(--bg) var(--link) no-repeat 12px center / 28px;
 }
 
 #manualreseed tr:nth-child(5) td:nth-last-child(2), #plugininstall2 tr:nth-child(2) td:nth-last-child(2) {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--files) no-repeat 12px center / 28px;
+  background: var(--bg) var(--files) no-repeat 12px center / 28px;
 }
 
 #manualreseed tr:nth-last-child(2) td.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--package) no-repeat 12px center / 28px;
+  background: var(--bg) var(--package) no-repeat 12px center / 28px;
 }
 
 #config_peers tr:nth-child(3) td.infohelp, #bannedpeercount {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--ban) no-repeat 12px center / 28px;
+  background: var(--bg) var(--ban) no-repeat 12px center / 28px;
 }
 
 #config_peers tr:nth-child(3) td.infohelp {
@@ -6636,47 +6601,47 @@ p#pluginconfigtext {
 
 h3#shutdownrouter + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--power) no-repeat 12px center / 28px;
+  background: var(--bg) var(--power) no-repeat 12px center / 28px;
 }
 
 h3#restartrouter + p.infohelp, #config_family .infohelp.needrestart {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--reboot) no-repeat 12px center / 28px;
+  background: var(--bg) var(--reboot) no-repeat 12px center / 28px;
 }
 
 h3#systray + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--systray) no-repeat 12px center / 28px;
+  background: var(--bg) var(--systray) no-repeat 12px center / 28px;
 }
 
 h3#servicedebug + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--bug) no-repeat 12px center / 28px;
+  background: var(--bg) var(--bug) no-repeat 12px center / 28px;
 }
 
 h3#browseronstart + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--firefox) no-repeat 12px center / 28px;
+  background: var(--bg) var(--firefox) no-repeat 12px center / 28px;
 }
 
 .main#config_reseed p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--reseed) no-repeat 12px center / 28px;
+  background: var(--bg) var(--reseed) no-repeat 12px center / 28px;
 }
 
 p#enablefullstats, p#gatherstats {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--stats) no-repeat 12px center / 28px;
+  background: var(--bg) var(--stats) no-repeat 12px center / 28px;
 }
 
 #config_family .infohelp {
   margin-bottom: -1px !important;
   padding: 15px 15px 15px 50px;
-  background: #fff var(--family) no-repeat 12px center / 28px;
+  background: var(--bg) var(--family) no-repeat 12px center / 28px;
 }
 
 #certs .infohelp:first-of-type {
-  background: #fff var(--certs) no-repeat 12px center / 28px;
+  background: var(--bg) var(--certs) no-repeat 12px center / 28px;
 }
 
 /* end informational images */
@@ -6685,11 +6650,11 @@ p#enablefullstats, p#gatherstats {
 
 #consolepass input[name="name"], #externali2cp input[name="user"], #consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"] {
   padding: 4px 5px 4px 26px !important;
-  background: #fff var(--user) no-repeat 5px center / 16px;
+  background: var(--bg) var(--user) no-repeat 5px center / 16px;
 }
 
 #consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"] {
-  background: #fff var(--key) no-repeat 5px center / 16px;
+  background: var(--bg) var(--key) no-repeat 5px center / 16px;
 }
 
 /* logs */
@@ -6738,8 +6703,8 @@ p#enablefullstats, p#gatherstats {
   padding: 0 2px 4px 22px !important;
   width: 100% !important;
   width: calc(100% - 24px) !important;
-  border-top: 1px solid #ced1e3;
-  border-bottom: 1px solid #ced1e3;
+  border-top: 1px solid var(--soft_border);
+  border-bottom: 1px solid var(--soft_border);
   background: transparent;
   opacity: .85;
 }
@@ -6850,7 +6815,7 @@ p#enablefullstats, p#gatherstats {
   display: inline-block;
   vertical-align: calc(1px);
   border-radius: 50%;
-  background: #fff;
+  background: var(--bg);
 }
 
 #logs li font[color="#cc0000"]::before {
@@ -7669,7 +7634,7 @@ h2#debug_portmapper {
 }
 
 #jardump tr td, #config_logging tr {
-  border-top: 1px solid #ced1e3 !important;
+  border-top: 1px solid var(--soft_border) !important;
 }
 
 #jardump td {
@@ -7718,11 +7683,11 @@ h2#debug_portmapper {
 }
 
 .subheading.pluginfiles {
-  border-top: 1px solid #ced1e3;
+  border-top: 1px solid var(--soft_border);
 }
 
 #jardump td {
-  border-left: 1px solid #ced1e3 !important;
+  border-left: 1px solid var(--soft_border) !important;
   vertical-align: middle;
   text-align: center;
 }
@@ -7755,7 +7720,7 @@ h2#debug_portmapper {
 
 #jardump hr {
   margin: 2px 0 !important;
-  background: #ced1e3;
+  background: var(--soft_border);
 }
 
 .unsignedmod:empty {
@@ -7768,9 +7733,7 @@ h2#debug_portmapper {
 }
 
 @supports not (-moz-appearance: none) {
-  #jardump td:last-child {
-    word-break: break-all;
-  }
+  #jardump td:last-child {word-break: break-all}
 }
 
 /* end jardump */
@@ -8127,7 +8090,7 @@ h3#totaljobstats {
 
 table[id*="connections"] td, #floodfills td,  #profilelist td, #jobstats td, .main#tunnels td {
   padding: 3px;
-  border-right: 1px solid #ced1e3;
+  border-right: 1px solid var(--soft_border);
 }
 
 .main#netdb #netdboverview, #netdblookup {
@@ -8182,7 +8145,7 @@ table.sybil_routerinfo:last-child {
 
 .eventspanel form {
   padding: 10px !important;
-  background: #fff !important;
+  background: var(--bg) !important;
 }
 
 .eventspanel select {
@@ -8230,18 +8193,16 @@ table.sybil_routerinfo:last-child {
 }
 
 @media screen and (min-width: 1200px) {
-.cells tt, #profilelist tt {
-  margin-left: 2px !important;
-}
+  .cells tt, #profilelist tt {margin-left: 2px !important}
 }
 
 @media screen and (min-width: 1400px) {
 #help #changelog pre:not(old) {
+  margin-left: 0;
+  padding-left: 10px;
   columns: 560px auto;
   column-gap: 40px;
   column-rule: 1px dotted #abf;
-  margin-left: 0;
-  padding-left: 10px;
 }
 }
 
@@ -8332,8 +8293,8 @@ h1 {
 }
 
 .routersummary button[type=submit] {
-  min-width: 110px !important;
   margin: 2px 4px 1px;
+  min-width: 110px !important;
 }
 
 .percentBarOuter {
@@ -8349,13 +8310,13 @@ div.app img {
 }
 
 .applabel {
-  width: 156px !important;
   padding: 4px 2px 2px !important;
+  width: 156px !important;
 }
 
 .applabel a {
-  height: 16px !important;
   padding-top: 3px;
+  height: 16px !important;
 }
 
 .footnote {
@@ -8375,9 +8336,9 @@ h3, h3.ptitle, h3.tabletitle, th.th_title {
 }
 
 .newsAuthor {
+  padding-left: 14px;
   font-size: 9pt;
   background-size: 12px;
-  padding-left: 14px;
   background-position: left center;
 }
 
@@ -8403,8 +8364,8 @@ h3#systray, h3#servicedebug, h3#browseronstart {
 
 h4#updateplugins {
   margin-top: -16px !important;
-  font-size: 10pt;
   padding: 5px 10px;
+  font-size: 10pt;
 }
 
 h3#webappconfiguration {
@@ -8416,8 +8377,8 @@ h3#webappconfiguration {
 }
 
 button.control {
-  font-size: 0 !important;
   padding: 14px !important;
+  font-size: 0 !important;
 }
 
 #jardump td {
@@ -8558,9 +8519,7 @@ div.news {
 }
 
 @media screen and (min-width: 1060px) {
-#graphs td:first-child {
-  padding: 5px 0;
-}
+  #graphs td:first-child {padding: 5px 0}
 }
 
 #graphs td b {
@@ -8608,9 +8567,9 @@ div.news {
 
 .optionlist, .optionsingle, #reseedssl {
   padding: 1px 2px;
-  border: 1px solid #ced1e3 !important;
+  border: 1px solid var(--soft_border) !important;
   box-shadow: inset 0 0 0 2px #fff;
-  background: #fff !important;
+  background: var(--bg) !important;
   column-gap: 1px;
   transition: ease box-shadow .2s;
 }
@@ -8630,13 +8589,13 @@ div.news {
 
 .optionlist:hover, .optionsingle:hover, .optiontextarea:hover {
   border: 1px solid var(--border);
-  box-shadow: inset 0 0 0 1px #a79;
+  box-shadow: var(--highlight_hover);
   transition: ease box-shadow .5s, ease background .2s .01s;
   background: var(--row_hover) !important;
 }
 
 #reseedconfig .optiontextarea:hover {
-  box-shadow: inset 0 0 0 1px #a79 !important;
+  box-shadow: var(--highlight_hover) !important;
   transition: ease box-shadow .5s, ease background .2s .01s;
 }
 
@@ -8649,9 +8608,9 @@ div.news {
 
 #updatehelper .optionlist:hover, #updateProxyHostPort.optionlist:hover {
   vertical-align: middle;
-  background: #fff !important;
+  background: var(--bg) !important;
   transition: ease box-shadow .2s;
-  box-shadow: inset 0 0 0 1px #a79, inset 0 0 0 2px #fff !important;
+  box-shadow: var(--highlight_hover), inset 0 0 0 2px #fff !important;
 }
 
 #bandwidthconfig .optionsingle:hover, #reseedproxytype label:hover, #graphs .nowrap:hover {
@@ -8675,7 +8634,7 @@ b.suboption {
   display: inline-block;
   text-shadow: 0 1px 1px #fff;
   border-radius: 3px 3px 0 0;
-  border: 1px solid #ced1e3;
+  border: 1px solid var(--soft_border);
   border-bottom: none;
   box-shadow: var(--highlight);
   background: #fdfdff;
@@ -8791,7 +8750,7 @@ b.suboption {
   font-size: 11pt;
   margin: 2px -13px 0 -38px;
   padding: 4px 5px;
-  background: #fff;
+  background: var(--bg);
   background: linear-gradient(to right, #fff, #eef);
 }
 
@@ -9083,7 +9042,7 @@ b.suboption {
 
 #config_reseed .optionsingle:hover {
   border: 1px solid var(--border);
-  box-shadow: inset 0 0 0 1px #a79;
+  box-shadow: var(--highlight_hover);
   transition: ease box-shadow .5s;
 }
 
@@ -9122,7 +9081,7 @@ b.suboption {
 
 #reseed_urlselection.optionsingle, #reseedproxytype, #config_reseed .optionlist:hover,
 #graphs .optionlist:hover, #config_network .optionlist:hover, #config_i2cp .optionlist:hover {
-  background: #fff !important;
+  background: var(--bg) !important;
 }
 
 #reseedproxytype label {
@@ -9188,7 +9147,7 @@ b.suboption {
 #config_network .optionlist:hover, #config_i2cp .optionlist:hover, #reseedssl:hover,
 #manualreseed .optionsingle:hover, .optiontextarea:hover, #reseed_urlselection:hover {
   border: 1px solid var(--border);
-  box-shadow: inset 0 0 0 1px #a79 !important;
+  box-shadow: var(--highlight_hover) !important;
   transition: ease box-shadow .5s;
 }
 
@@ -9486,7 +9445,7 @@ input[type="file"]:hover {
 
 #ntcpconnections tr:nth-last-child(n+2) td, #udpconnections tr:nth-last-child(n+2) td, #profilelist td, #profile_defs td, #floodfills td,
 #tunnelPeerCount td {
-  border-right: 1px solid #ced1e3;
+  border-right: 1px solid var(--soft_border);
 }
 
 #ntcpconnections tr:nth-last-child(n+2) td::after, #udpconnections tr:nth-last-child(n+2) td::after,
@@ -9788,7 +9747,7 @@ th.queue {
   vertical-align: middle;
   border: 1px solid #bbd;
   border-radius: 2px;
-  background: #fff;
+  background: var(--bg);
 }
 
 a.viewfullentry, #profilelist td:last-child a, a[href^="/viewprofile"], .profiledump::after {
@@ -9801,20 +9760,20 @@ a.viewfullentry, #profilelist td:last-child a, a[href^="/viewprofile"], .profile
   width: 14px;
   display: inline-block;
   vertical-align: middle;
-  background: #fff var(--eye) no-repeat center center / 12px;
+  background: var(--bg) var(--eye) no-repeat center center / 12px;
   content: "";
 }
 
 #profilelist td:last-child .viewprofile:hover::after, .viewprofile:hover::after, .profiledump:hover::after {
-  background: #fff var(--eye_hover) no-repeat center center / 12px;
+  background: var(--bg) var(--eye_hover) no-repeat center center / 12px;
 }
 
 #profilelist td:last-child a[href^="/configpeer"]::after, a[href^="/configpeer?"]::after {
-  background: #fff var(--edit) no-repeat center center / 12px;
+  background: var(--bg) var(--edit) no-repeat center center / 12px;
 }
 
 #profilelist td:last-child a[href^="/configpeer"]:hover::after, a[href^="/configpeer?"]:hover::after {
-  background: #fff var(--edit_hover) no-repeat center center / 12px;
+  background: var(--bg) var(--edit_hover) no-repeat center center / 12px;
 }
 
 a.viewfullentry:hover {
@@ -10119,7 +10078,7 @@ input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::bef
 }
 
 input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus, input[type=radio]:focus {
-  background: #fff;
+  background: var(--bg);
   width: 19px !important;
   height: 19px !important;
   border: 1px solid #67f !important;
@@ -10321,14 +10280,14 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel{
 #sitemap div.app:hover, #sitemap div.app:hover .applabel,
 .sitemapLink:hover, .sitemapLink:hover .sitemapLabel {
   border-color: var(--hover);
-  background: #fff;
+  background: var(--bg);
 }
 
 /* end sitemap */
 
 /* help section */
 
-#help .confignav + div:last-of-type {
+#help .confignav + div:not(#changelog):last-of-type {
   margin: 20px 0 5px !important;
 }
 
@@ -10855,7 +10814,7 @@ p#gatherstats {
   text-align: left;
   border: none !important;
   box-shadow: none;
-  background: #fff !important;
+  background: var(--bg) !important;
   columns: 500px 3;
   column-gap: 2px;
 }
@@ -10959,7 +10918,7 @@ p#gatherstats {
   text-align: center;
   border: 1px solid var(--border);
   box-shadow: 0 0 1px 1px #e8e8f8;
-  background: #fff;
+  background: var(--bg);
   animation: ease zoom .1s forwards;
 }
 
@@ -11169,7 +11128,7 @@ p#gatherstats {
 .stattograph:hover, .optbox:checked + label > .stattograph:hover {
   color: #fff !important;
   border-color: var(--hover);
-  background: #fff;
+  background: var(--bg);
   box-shadow: none;
 }
 
@@ -11635,8 +11594,8 @@ div.app, .sitemapLink, .sitemapLabel {
     padding: 1px 8px 2px;
     width: calc(100% - 46px);
     display: inline-block;
-    border-top: 1px solid #ced1e3;
-    border-bottom: 1px solid #ced1e3;
+    border-top: 1px solid var(--soft_border);
+    border-bottom: 1px solid var(--soft_border);
   }
 
   a.graphstat {
@@ -11866,20 +11825,20 @@ div.app:hover img, .sitemaplink:hover img {
 /* highlight linked leaseset */
 
 .leaseset:target {
-  border: 1px solid #5a5 !important;
+  border: var(--ls_target);
 }
 
 .leaseset:target tr:first-child th, .leaseset:target td {
-  border-top: 1px solid #5a5 !important;
-  border-bottom: 1px solid #5a5 !important;
+  border-top: var(--ls_target);
+  border-bottom: var(--ls_target);
 }
 
 .leaseset:target th:first-child, .leaseset:target td:first-child {
-  border-left: 1px solid #5a5 !important;
+  border-left: var(--ls_target);
 }
 
 .leaseset:target th:last-child, .leaseset:target td:last-child {
-  border-right: 1px solid #5a5 !important;
+  border-right: var(--ls_target);
 }
 
 /* end highlight linked leaseset */
