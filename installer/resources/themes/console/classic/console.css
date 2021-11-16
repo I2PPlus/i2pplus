@@ -26,6 +26,7 @@
   --header: linear-gradient(to bottom, #fff 50%, #fafbff 50%);
   --row_hover: #ffd;
   --ls_target: 1px solid #5a5 !important;
+  --reload: linear-gradient(to right, #930, var(--hover));
 }
 
 html, body {
@@ -50,13 +51,13 @@ body {
 ::selection {
   text-shadow: none;
   background: #4a90d9;
-  color: white;
+  color: #fff;
 }
 
 ::-moz-selection {
   text-shadow: none;
   background: #4a90d9;
-  color: white;
+  color: #fff;
 }
 
 * {
@@ -275,7 +276,7 @@ i {
   color: var(--ink);
   box-shadow: inset 0 0 0 1px #f99;
   background: linear-gradient(to bottom, rgba(255, 255, 255, .8), rgba(255, 255, 255, .2)) repeat scroll 0 0 / 100%,
-              rgba(0, 0, 0, 0) url(images/bg0.png) repeat scroll 0 0 / 120px 120px;
+              rgba(0, 0, 0, 0) url(images/bg0.png) repeat scroll 0 0 / 120px;
 }
 
 #warning2 h3 {
@@ -313,7 +314,7 @@ i {
   margin: 0 0 5px;
   padding: 9px 1px 7px 1px;
   width: 204px;
-  line-height: 125%;
+  line-height: 1.25;
   word-wrap: break-word;
   text-align: center !important;
   font-size: 9pt;
@@ -325,8 +326,8 @@ i {
 /* siderbar logo */
 
 #sb_logo {
-  height: 32px !important;
   margin-left: -2px;
+  height: 32px !important;
 }
 
 #sb_logo img {
@@ -399,7 +400,7 @@ i {
   margin-bottom: 2px;
   width: 100%;
   display: inline-block;
-  line-height: 120%;
+  line-height: 1.2;
   font-size: 9pt;
 }
 
@@ -464,7 +465,7 @@ i {
 .routersummary h4 {
   margin: -7px -1px -7px -1px !important;
   padding: 8px 2px;
-  line-height: 108%;
+  line-height: 1.08;
   text-transform: capitalize;
   font-size: 8.5pt;
   color: #1f7096;
@@ -687,7 +688,7 @@ i {
 .sb_notice {
   margin: -5px 1px -6px;
   padding: 7px 5px;
-  line-height: 110%;
+  line-height: 1.1;
   font-size: 8.5pt;
   font-weight: 700;
   border: 1px solid var(--border);
@@ -756,7 +757,7 @@ p:empty + .sb_notice {
 
 .sb_newsheadings td {
   padding: 5px 3px;
-  line-height: 100%;
+  line-height: 1;
   text-align: left;
   border-collapse: collapse;
   border: none;
@@ -789,7 +790,7 @@ p:empty + .sb_notice {
   padding: 0;
   width: 100%;
   display: inline-block;
-  line-height: 110%;
+  line-height: 1.1;
 }
 
 /* end sidebar news */
@@ -1081,7 +1082,7 @@ a:active #sb_bandwidthgraph {
 /* updates download bar */
 
 .sb_update b {
-  line-height: 120%;
+  line-height: 1.2;
 }
 
 .sb_updatestatus {
@@ -1176,7 +1177,7 @@ div[lang="pt"] li br {
 }
 
 #console li {
-  line-height: 140%;
+  line-height: 1.4;
   text-align: justify;
 }
 
@@ -1250,7 +1251,7 @@ div[lang="ar"] .links li::before {
 
 .links b {
   font-size: 10pt;
-  line-height: 150%;
+  line-height: 1.5;
   letter-spacing: .02em;
 }
 
@@ -2181,7 +2182,7 @@ div.welcome {
 }
 
 .welcome + div .tidylist {
-  line-height: 150% !important;
+  line-height: 1.5 !important;
 }
 
 .main#dns, .main#webmail, .main#torrents {
@@ -2284,7 +2285,7 @@ div.news li {
 }
 
 .newsentry p {
-  line-height: 140% !important;
+  line-height: 1.4 !important;
 }
 
 div.news p {
@@ -2472,7 +2473,7 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 
 #config_peers .routerid {
   padding: 1px 3px;
-  line-height: 100%;
+  line-height: 1;
   border-radius: 2px;
 }
 
@@ -2560,7 +2561,7 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 }
 
 #addkeyring td:first-child:not(.infohelp) {
-  line-height: 115%;
+  line-height: 1.15;
 }
 
 #addkeyring input[type=text] {
@@ -2775,7 +2776,7 @@ tr:hover th {
 
 #thresholds, #profile_defs {
   margin-top: -1px;
-  line-height: 150%;
+  line-height: 1.5;
 }
 
 #thresholds p {
@@ -2790,7 +2791,7 @@ tr:hover th {
 
 #profile_defs td:last-child {
   white-space: normal;
-  line-height: 120%;
+  line-height: 1.2;
 }
 
 #thresholds th, #thresholds td {
@@ -2904,7 +2905,7 @@ ul#banlist + h3.tabletitle {
   width: calc(100% - 9px);
   position: relative;
   display: table;
-  line-height: 150%;
+  line-height: 1.5;
   list-style: none !important;
   box-shadow: 0 0 0 1px var(--soft_border), 0 0 1px 1px #ddd;
   background: #f9f9ff;
@@ -3061,7 +3062,7 @@ pre#activetransports {
 
 #view_profile h2 {
   text-transform: none;
-  line-height: 120%;
+  line-height: 1.2;
   margin-bottom: -1px !important;
   white-space: nowrap;
   overflow: hidden;
@@ -3315,7 +3316,7 @@ h1 {
   margin: 0 0 0 211px;
   padding: 18px 20px 16px;
   min-width: 530px;
-  line-height: 93%;
+  line-height: .93;
   word-spacing: .1em;
   letter-spacing: .08em;
   text-transform: uppercase;
@@ -3718,7 +3719,7 @@ td.infowarn, p.infowarn {
 }
 
 .infowarn, .infohelp {
-  line-height: 125%;
+  line-height: 1.25;
 }
 
 .infohelp#jsRequired {
@@ -3908,7 +3909,7 @@ div.app:hover a, .app:hover .applabel a {
   margin: 0;
   padding: 4px 2px;
   width: 136px;
-  line-height: 110%;
+  line-height: 1.1;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -3944,7 +3945,7 @@ div.app:hover a, .app:hover .applabel a {
 }
 
 div.app:active img {
-  transform: scale(0.9);
+  transform: scale(.9);
 }
 
 div.app:last-child {
@@ -4178,12 +4179,12 @@ h3 + .statusnotes {
 
 .joblog {
   margin: 10px 0;
-  line-height: 130% !important;
+  line-height: 1.3 !important;
 }
 
 .joblog li {
   word-wrap: break-word !important;
-  line-height: 105% !important;
+  line-height: 1.05 !important;
 }
 
 .joblog ul {
@@ -4207,7 +4208,7 @@ h3 + .statusnotes {
 }
 
 .joblog p {
-  line-height: 130%;
+  line-height: 1.3;
 }
 
 .joblog h3 {
@@ -4407,7 +4408,7 @@ tr#addnew:hover {
 #loggingoptions td:first-child {
   padding-right: 0;
   min-width: 120px;
-  line-height: 120%;
+  line-height: 1.2;
 }
 
 #loggingoptions tr:nth-last-child(3) td:first-child {
@@ -4471,7 +4472,7 @@ p#pluginconfigtext {
 
 p#enablefullstats {
   padding: 5px 10px;
-  line-height: 120%;
+  line-height: 1.2;
   text-align: left;
   background: var(--bg);
 }
@@ -4572,7 +4573,7 @@ p#enablefullstats {
   padding: 8px 5px;
   position: static;
   white-space: nowrap;
-  line-height: 150%;
+  line-height: 1.5;
   font-size: 9pt;
   background: var(--bg);
 }
@@ -5024,7 +5025,7 @@ img[src^="/flags"], img.unknownflag {
 }
 
 .themechoice .optbox:checked + img, .themechoice .optbox:checked + img {
-  transform: scale(0.9);
+  transform: scale(.9);
 }
 
 .themechoice .optbox:focus + img ~ div.themelabel {
@@ -5312,7 +5313,7 @@ td#pw_adduser input {
 }
 
 #netconfig {
-  line-height: 160%;
+  line-height: 1.6;
 }
 
 /* netdb */
@@ -5569,7 +5570,7 @@ td#pw_adduser input {
 #sybilnav li a {
   display: inline-block;
   vertical-align: middle;
-  line-height: 100%;
+  line-height: 1;
   width: calc(100% - 30px);
 }
 
@@ -5579,7 +5580,7 @@ td#pw_adduser input {
   height: 16px;
   display: inline-block;
   vertical-align: middle;
-  line-height: 50%;
+  line-height: .5;
   font-size: 16pt;
   background: var(--eye) no-repeat center center / 16px;
   content: "";
@@ -5625,7 +5626,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 #netdb .threatpoints + ul li {
   margin: 2px;
   padding: 0;
-  line-height: 150%;
+  line-height: 1.5;
 }
 
 #netdb .threatpoints + ul li:last-child {
@@ -5746,7 +5747,7 @@ p:empty { /* empty paragraph nuke */
 .netdb_leases li {
   padding: 2px 0 3px !important;
   vertical-align: middle;
-  line-height: 140%;
+  line-height: 1.4;
   list-style: none;
 }
 
@@ -5794,7 +5795,7 @@ p:empty { /* empty paragraph nuke */
 
 .netdb_leases .tunnel_id {
   min-width: 74px;
-  line-height: 150%;
+  line-height: 1.5;
   text-align: center;
 }
 
@@ -6177,7 +6178,7 @@ ul#reachability {
 }
 
 #help li, #help p, #help td {
-  line-height: 140%;
+  line-height: 1.4;
 }
 
 #portfaq tr {
@@ -6507,7 +6508,7 @@ p.infowarn, #sybilanalysis {
   border: 1px solid var(--border);
   padding: 15px 15px 15px 50px;
   background: var(--bg) var(--infowarn) no-repeat 10px center / 28px;
-  line-height: 130%;
+  line-height: 1.3;
 }
 
 #sybilanalysis {
@@ -6787,18 +6788,18 @@ p#enablefullstats, p#gatherstats {
 }
 
 #logs li {
-  list-style: none;
-  line-height: 130%;
-  text-align: left;
   width: 100%;
+  line-height: 1.3;
+  text-align: left;
+  list-style: none;
   box-shadow: var(--highlight), inset 0 0 1px 1px #edefff;
 }
 
 #logs li::after {
-  content: "";
-  display: block;
-  width: 100%;
   margin: 2px 0 -4px;
+  width: 100%;
+  display: block;
+  content: "";
 }
 
 #logs li:last-child::after {
@@ -6854,7 +6855,7 @@ p#enablefullstats, p#gatherstats {
   margin: 0 -2px;
   min-width: 50px;
   display: inline-block;
-  line-height: 110%;
+  line-height: 1.1;
   text-align: center;
   vertical-align: middle;
   border-radius: 2px;
@@ -7030,7 +7031,7 @@ span.b32 {
   margin-right: 5px;
   padding: 2px 4px;
   float: right;
-  line-height: 120%;
+  line-height: 1.2;
   letter-spacing: .1em;
   font-family: var(--monospaced);
   font-size: 80%;
@@ -7136,7 +7137,7 @@ span.b32 {
 
 #peerdefs {
   padding: 5px;
-  line-height: 140%;
+  line-height: 1.4;
 }
 
 .peer_arrow {
@@ -7194,7 +7195,7 @@ th code {
 }
 
 .netdb_addresses {
-  line-height: 150%;
+  line-height: 1.5;
 }
 
 .netdbentry th:first-child::after {
@@ -7364,7 +7365,7 @@ th code {
 .threatpoints + ul li {
   list-style: none;
   margin-left: -15px;
-  line-height: 120%;
+  line-height: 1.2;
   break-inside: avoid;
   page-break-inside: avoid;
   -webkit-column-break-inside: avoid;
@@ -7427,7 +7428,7 @@ th code {
 
 #debug li {
   list-style: none;
-  line-height: 150%;
+  line-height: 1.5;
   padding-bottom: 0;
   margin-left: -5px;
   margin-bottom: -2px;
@@ -7445,7 +7446,7 @@ th code {
 }
 
 .debug_container, #debug td {
-  line-height: 140%;
+  line-height: 1.4;
 }
 
 .main#debug h3 + table {
@@ -7875,7 +7876,7 @@ input[name="pluginURL"] {
 }
 
 img[src$="bound.png"] {
-  transform: scale(0.9);
+  transform: scale(.9);
 }
 
 .main#tunnels th, .main#profiles th {
@@ -8177,7 +8178,7 @@ table.sybil_routerinfo:last-child {
   font-size: 12pt;
   line-height: 0;
   vertical-align: middle;
-  letter-spacing: -0.3em;
+  letter-spacing: -.3em;
 }
 
 #help h3, #faq h3 {
@@ -8530,7 +8531,7 @@ div.news {
 }
 
 #graphs .nowrap {
-  line-height: 300%;
+  line-height: 3;
   display: inline-block;
 }
 
@@ -8809,7 +8810,7 @@ b.suboption {
   margin: 1px 0;
   padding: 2px 5px;
   background: #fafbff;
-  line-height: 100% !important;
+  line-height: 1 !important;
 }
 
 @media screen and (max-width: 1200px) {
@@ -9889,7 +9890,7 @@ a[href^="/viewprofile"] img, .profiledump img {
   margin: 0;
   padding: 0;
   columns: auto;
-  line-height: 120%;
+  line-height: 1.2;
 }
 
 #netdb li, #netdb li:first-child {
@@ -10048,42 +10049,41 @@ input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::bef
 }
 
 input[type=checkbox]:checked::before {
-  content: "";
+  width: 11px;
+  height: 11px;
   position: absolute;
   top: 3px;
   left: 3px;
-  width: 11px;
-  height: 11px;
-  line-height: 80%;
+  line-height: .8;
   border-radius: 1px;
   background: #67f;
+  content: "";
   transform: scale(1);
   transition: linear all .05s;
 }
 
 input[type=radio]:checked::before {
-  content: "";
-  border-radius: 50%;
-  left: 25%;
-  top: 25%;
   width: 9px;
   height: 9px;
+  left: 25%;
+  top: 25%;
+  border-radius: 50%;
   background: #67f;
+  content: "";
 }
 
 input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
-  transform: scale(0);
   color: transparent;
   background: transparent;
+  transform: scale(0);
 }
 
 input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus, input[type=radio]:focus {
-  background: var(--bg);
   width: 19px !important;
   height: 19px !important;
   border: 1px solid #67f !important;
   box-shadow: 0 0 2px var(--hover) !important;
-  filter: drop-shadow(0 0 3px #89f) !important;
+  background: var(--bg);
   filter: none !important;
 }
 
@@ -10246,7 +10246,7 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel{
 }
 
 .sitemapLink:active img {
-  transform: scale(0.8);
+  transform: scale(.8);
 }
 
 .sitemapLink:active .sitemapLabel {
@@ -10734,7 +10734,8 @@ p#gatherstats {
 
 #clock {
   margin: -5px 1px -6px;
-  padding: 8px 0 6px;
+  padding: 4px 0;
+  line-height: 1;
   font-size: 18pt;
   font-weight: 700;
   letter-spacing: .1em;
@@ -10858,7 +10859,7 @@ p#gatherstats {
 }
 
 .encDests td {
-  line-height: 120%;
+  line-height: 1.2;
 }
 
 .encDests tr:last-child td {
@@ -11381,7 +11382,7 @@ p#gatherstats {
   position: absolute;
   bottom: 0;
   left: 0;
-  background: linear-gradient(to right, #930, var(--hover));
+  background: var(--reload);
   opacity: .6;
   content: "";
   animation: ease-out reloader 1s forwards;
@@ -12032,8 +12033,8 @@ iframe {
   top: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(to bottom, rgba(255,255,255,.2) 50%, rgba(0,0,0,.4) 50%), linear-gradient(#03d, #06f);
-  opacity: .5;
+  background: linear-gradient(to bottom, rgba(255,255,255,.2) 50%, rgba(0,0,0,.2) 50%), var(--reload);
+  opacity: .7;
   content: "";
   animation: ease-out reloader 20s forwards;
 }
