@@ -21,7 +21,7 @@
   --border: #bec2da;
   --soft_border: #ced1e3;
   --border_warn: #fb7;
-  --bg: var(--bg);
+  --bg: #fff;
   --bg2: #eff1ff;
   --th: linear-gradient(to bottom, #fff, #fafbff);
   --header: linear-gradient(to bottom, #fff 50%, #fafbff 50%);
