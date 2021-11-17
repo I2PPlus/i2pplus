@@ -9,9 +9,10 @@
   --ink: #41444d;
   --ink_light: #5e626e;
   --ink_h1: #6c7293;
-  --a: #5c5c8a;
   --disabled: #757a8a;
+  --a: #5c5c8a;
   --hover: #f60;
+  --active: #f90;
   --btn: linear-gradient(to bottom, #fff, #f4f5ff);
   --btn_hover: linear-gradient(to bottom, #ddd, #fff);
   --badge: linear-gradient(to bottom, #fff, #eef);
@@ -26,6 +27,7 @@
   --bg: #fff;
   --bg2: #eff1ff;
   --th: linear-gradient(to bottom, #fff, #fafbff);
+  --subheading: linear-gradient(to right, #fff, #eef);
   --header: linear-gradient(to bottom, #fff 50%, #fafbff 50%);
   --row_hover: #ffd;
   --ls_target: 1px solid #5a5 !important;
@@ -52,12 +54,6 @@ body {
 }
 
 ::selection {
-  text-shadow: none;
-  background: #4a90d9;
-  color: var(--bg);
-}
-
-::-moz-selection {
   text-shadow: none;
   background: #4a90d9;
   color: var(--bg);
@@ -253,7 +249,7 @@ i {
   font-weight: 700;
   border: 1px solid var(--border);
   box-shadow: var(--highlight), inset 0 0 1px 1px #900;
-  background: #f2f2ff var(--err) no-repeat 20px 40% / 36px;
+  background: var(--bg) var(--err) no-repeat 20px 40% / 36px;
 }
 
 #error500 .sorry {
@@ -279,7 +275,7 @@ i {
   color: var(--ink);
   box-shadow: inset 0 0 0 1px #f99;
   background: linear-gradient(to bottom, rgba(255, 255, 255, .8), rgba(255, 255, 255, .2)) repeat scroll 0 0 / 100%,
-              rgba(0, 0, 0, 0) url(images/bg0.png) repeat scroll 0 0 / 120px;
+              url(images/bg0.png) repeat scroll 0 0 / 120px;
 }
 
 #warning2 h3 {
@@ -307,10 +303,8 @@ i {
   margin: 0;
   padding: 0;
   width: 193px;
-  position: absolute; /* so no interference with /home app icons */
-  float: left;
-  clear: left; /* fixes a bug in Opera */
-  border: 0;
+  position: absolute;
+  border: none;
 }
 
 .routersummary {
@@ -462,7 +456,7 @@ i {
 }
 
 .routersummary h3:active a {
-  color: #f90 !important;
+  color: var(--active);
 }
 
 .routersummary h4 {
@@ -489,29 +483,23 @@ i {
   text-align: left !important;
 }
 
+.routersummary table, .routersummary tr, .routersummary table, .routersummary td {
+  background: none;
+  border: none;
+}
+
 .routersummary table {
   margin: -5px 0 -5px 0;
   padding: 0;
   width: 204px !important;
   overflow: hidden;
   table-layout: fixed;
-  text-align: center !important;
+  text-align: center;
   font-size: 8pt;
-  border: 0;
-  background-image: none !important;
-  background-color: transparent !important;
-}
-
-.routersummary tr {
-  border: 0 !important;
-  background-image: none !important;
-  background-color: transparent !important;
 }
 
 .routersummary td {
   padding: 0 3px;
-  border: 0 !important;
-  background-image: none !important;
 }
 
 #sb_shortgeneral, #sb_advancedgeneral, #sb_bandwidth, #sb_peers, #sb_peersadvanced, #sb_tunnels, #sb_queue {
@@ -820,6 +808,7 @@ div.refresh {
   width: calc(100% - 12px);
   display: inline-block;
   vertical-align: text-bottom;
+  line-height: 1.5;
   text-shadow: 0 1px 1px var(--bg);
   border: 1px solid var(--border);
   box-shadow: var(--highlight), 0 0 1px rgba(96,96,96,.5);
@@ -1327,7 +1316,7 @@ a:hover, a:visited:hover, a:focus, a:visited:focus, a:hover .b32 {
 }
 
 a:active, a:visited:active, a:active .b32 {
-  color: #f93 !important;
+  color: var(--active) !important;
   text-decoration: none;
 }
 
@@ -1338,15 +1327,15 @@ a.script {
 
 pre {
   margin: 0 20px;
+  padding-top: 10px;
+  width: 95%;
   overflow: auto;
   font-size: 8.5pt;
-  width: 95%;
-  padding-top: 10px;
 }
 
 tt, code, .bucket {
   font: bold 8.5pt var(--monospaced) !important;
-  color: darkgreen;
+  color: #070;
 }
 
 /* buttons & inputs */
@@ -7174,8 +7163,6 @@ span.b32 {
 }
 
 th code {
-  -moz-user-select: all;
-  -webkit-user-select: all;
   user-select: all;
 }
 
@@ -7535,7 +7522,7 @@ h2#debug_portmapper {
 }
 
 .bucket {
-  margin: 1px;
+  margin: 2px;
   padding: 1px 4px;
   width: 7%;
   min-width: 80px;
@@ -7547,20 +7534,12 @@ h2#debug_portmapper {
   color: #152;
   font-size: 90%;
   box-shadow: 0 0 0 1px var(--border), var(--highlight);
-  border-radius: 2px;
   background: #f8f8ff;
-  -moz-user-select: all;
-  -webkit-user-select: all;
   user-select: all;
 }
 
 .bucket:hover {
   font-weight: 700;
-}
-
-.bucket::-moz-selection {
-  background: #070 !important;
-  color: var(--bg);
 }
 
 .bucket::selection {
@@ -7677,18 +7656,16 @@ h2#debug_portmapper {
 }
 
 .revision, .sha256, .unsignedmod {
-  -moz-user-select: all;
-  -webkit-user-select: all;
   user-select: all;
 }
 
 .subheading.routerfiles {
-  background: url(images/favicon.svg) no-repeat right 5px center / 16px, linear-gradient(to right, #fff, #eef) !important;
+  background: url(images/favicon.svg) no-repeat right 5px center / 16px, var(--subheading) !important;
   background-blend-mode: luminosity, normal;
 }
 
 .subheading.pluginfiles {
-  background: var(--plugin) no-repeat right 5px center / 16px, linear-gradient(to right, #fff, #eef) !important;
+  background: var(--plugin) no-repeat right 5px center / 16px, var(--subheading) !important;
   background-blend-mode: luminosity, normal;
 }
 
@@ -7723,8 +7700,6 @@ h2#debug_portmapper {
   display: inline-block;
   padding: 1px 2px;
   word-break: break-all;
-  -moz-user-select: all;
-  -webkit-user-select: all;
   user-select: all;
 }
 
@@ -8761,7 +8736,7 @@ b.suboption {
   margin: 2px -13px 0 -38px;
   padding: 4px 5px;
   background: var(--bg);
-  background: linear-gradient(to right, #fff, #eef);
+  background: var(--subheading);
 }
 
 @media screen and (max-width: 1000px) {
