@@ -8,11 +8,18 @@
 :root {
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
   --monospaced: Droid Sans Mono, Andale Mono, DejaVu Sans Mono, Lucida Console, monospace;
+  --bg: #fff;
+  --highlight: inset 0 0 0 1px #fff;
+  --btn: linear-gradient(to bottom, #fff, #eaeaff);
+  --btn_hover: linear-gradient(to bottom, #ddd, #fff);
+  --btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 #fff, inset 0 0 4px 2px #e4e4ff, 0 2px 1px rgba(220,220,255,.7);
+  --btn_shadow_hover: var(--highlight), 0 0 0 1px #fff, 0 0 0 2px rgba(255,96,0,.4);
 }
 
 html, body {
   min-height: 100%;
-  background: #fff;
+  background: var(--bg);
+  scrollbar-color: #acafb9 var(--bodybg);
 }
 
 body {
@@ -22,6 +29,7 @@ body {
   background: #eef;
   background: #eef url(/themes/console/classic/images/bg0.png);
   background-size: 120px 120px;
+  scrollbar-color: #acafb9 var(--bg);
 }
 
 body.iframed {
@@ -81,7 +89,7 @@ table.book th {
 }
 
 table.book tr:hover textarea {
-  background: #fff;
+  background: var(--bg);
 }
 
 table.book td:last-child {
@@ -100,7 +108,7 @@ td.destinations {
 }
 
 #add {
-  background: #fff;
+  background: var(--bg);
 }
 
 .iframed #add {
@@ -185,7 +193,7 @@ input:focus::placeholder {
 
 div.page {
   border: 1px solid #bec2da;
-  background: #fff !important;
+  background: var(--bg) !important;
   margin: 0;
   padding: 0 10px;
   color: #41444d;
@@ -303,7 +311,7 @@ li {
 }
 
 #host_list tr:nth-child(even), #host_details tr:nth-child(even) {
-  background: #fff;
+  background: var(--bg);
 }
 
 #host_list tr:hover {
@@ -347,7 +355,7 @@ div#filter {
   padding: 6px 10px 5px;
   margin: 11px 0 -13px !important;
   word-spacing: .2em;
-  background: #fff;
+  background: var(--bg);
   text-align: center;
   position: relative;
   z-index: 10;
@@ -366,8 +374,8 @@ div#filter {
   color: #5c5c8a;
   border: 1px solid #bec2da;
   border-radius: 1px;
-  box-shadow: inset 0 0 0 1px #fff;
-  background: linear-gradient(to bottom, #fff, #eef);
+  box-shadow: var(--highlight);
+  background: var(--btn);
 }
 
 #filter span a {
@@ -380,7 +388,7 @@ div#filter {
   text-decoration: none;
   color: #f60 !important;
   border: 1px solid #f60 !important;
-  background: #fff;
+  background: var(--bg);
 }
 
 #filter a:active {
@@ -416,7 +424,7 @@ div#filter {
   min-width: 300px;
   white-space: nowrap;
   border: 1px solid #bec2da;
-  background: #fff;
+  background: var(--bg);
 }
 
 #booksearch > * {
@@ -431,7 +439,7 @@ div#filter {
 #search input[type=text] {
   width: 200px;
   padding: 5px 5px 5px 25px;
-  background: #fff var(--search) no-repeat 5px center / 15px;
+  background: var(--bg) var(--search) no-repeat 5px center / 15px;
 }
 
 #messages:empty {
@@ -506,7 +514,7 @@ img[src="/imagegen/id?s=256&c="], img[src="/imagegen/id?s=20&c="] {
 
 .illustrate:hover {
   border: 1px solid #337;
-  background: #fff;
+  background: var(--bg);
   transition: ease all .2s;
 }
 
@@ -545,14 +553,14 @@ _:-ms-lang(x), img.illustrate {
 .iframed #content + #buttons, .iframed #config + #buttons {
   border-left: none;
   border-right: none;
-  background: #fff;
+  background: var(--bg);
 }
 
 p.buttons {
   border: 1px solid #bec2da;
   padding: 10px;
   margin: 0 -11px -13px;
-  background: #fff;
+  background: var(--bg);
 }
 
 .fakebutton, input, select {
@@ -573,7 +581,7 @@ input[type=text], input[type=password], textarea {
   border: 1px solid #bec2da;
   border-radius: 2px;
   box-shadow: inset 1px 1px 1px #ddd;
-  background: #fff;
+  background: var(--bg);
 }
 
 input[type=text]:focus, input[type=password]:focus, textarea:focus {
@@ -598,14 +606,13 @@ input[type=file]::file-selector-button {
   border: 1px solid #bec2da;
   border-radius: 2px;
   box-shadow: inset 1px 1px 1px #ddd;
-  background: #fff;
+  background: var(--btn);
 }
 
 input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
   color: #222;
   border: 1px solid #bec2da;
-  background: #fff;
-  background: linear-gradient(to bottom, #ddd, #fff);
+  background: var(--btn_hover);
   filter: drop-shadow(0 0 1px #89f);
   cursor: pointer;
 }
@@ -613,7 +620,7 @@ input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selec
 input[type=file]:active::file-selector-button {
   color: #333;
   border: 1px solid #bbb;
-  box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 3px #999;
+  box-shadow: var(--highlight), inset 3px 3px 3px #999;
 }
 
 textarea {
@@ -648,8 +655,8 @@ td.destinations textarea, td.destinations textarea:focus {
   color: #333 !important;
   border-radius: 2px;
   border: 1px solid #bec2da;
-  box-shadow: inset 0 0 0 1px #fff, 0 0 1px 0 #ddd;
-  background: linear-gradient(to bottom, #fff, #eef);
+  box-shadow: var(--btn_shadow);
+  background: var(--btn);
 }
 
 input.update {
@@ -660,14 +667,14 @@ input.update {
 .fakebutton:focus, input[type=submit]:focus, input[type="reset"]:focus {
   color: #222;
   border: 1px solid #bec2da;
-  background: linear-gradient(to bottom, #ddd, #fff);
-  filter: drop-shadow(0 0 1px #89f);
+  background: var(--btn_hover);
+  box-shadow: var(--btn_shadow_hover);
 }
 
 .fakebutton:active, input[type=submit]:active, input[type="reset"]:active {
   color: #333;
   border: 1px solid #bbb;
-  box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 3px #999;
+  box-shadow: var(--highlight), inset 3px 3px 3px #999;
 }
 
 .fakebutton {
@@ -728,7 +735,7 @@ textarea[name="config"], textarea[name="content"] {
   border: 1px solid #bec2da;
   border-radius: 2px;
   margin: 3px 0 !important;
-  box-shadow: 0 0 1px 0 #ddd, inset 0 0 0 1px #fff;
+  box-shadow: 0 0 1px 0 #ddd, var(--highlight);
   display: inline-block;
   outline: none;
   color: #5c5c8a;
@@ -759,7 +766,7 @@ textarea[name="config"], textarea[name="content"] {
 }
 
 #navi a.selected:not(.details), #navi a:active {
-  box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 3px #aaabcc !important;
+  box-shadow: var(--highlight), inset 3px 3px 3px #aaabcc !important;
   background: linear-gradient(to bottom, #e8e9ff, #fafbff) !important;
 }
 
@@ -904,7 +911,7 @@ p.book {
 .info img[src^="/imagegen"] {
   border: 1px solid #bec2da;
   border-radius: 2px;
-  background: #fff;
+  background: var(--bg);
 }
 
 .info img:hover, .info a:focus img {
@@ -1040,7 +1047,7 @@ p.book {
 }
 
 #host_list td:hover {
-  box-shadow: inset 0 0 0 1px #fff;
+  box-shadow: var(--highlight);
   background: #fec;
 }
 
@@ -1188,7 +1195,7 @@ input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::bef
 }
 
 input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus, input[type=radio]:focus {
-  background: #fff;
+  background: var(--bg);
   width: 19px !important;
   height: 19px !important;
   border: 1px solid #67f !important;
@@ -1273,7 +1280,7 @@ input#exporthosts {
   min-width: 0;
   display: inline-block;
   font-size: 0 !important;
-  background: var(--download) no-repeat center center / 16px, linear-gradient(to bottom, #fff, #eef);
+  background: var(--download) no-repeat center center / 16px, var(--btn);
 }
 
 #exporthosts:disabled {
@@ -1288,7 +1295,7 @@ input#exporthosts {
 #activefilter, .selected:not(.details) {
   font-weight: 700;
   color: #999;
-  box-shadow: inset 0 0 0 1px #fff, inset 2px 2px 2px #aaa !important;
+  box-shadow: var(--highlight), inset 2px 2px 2px #aaa !important;
 }
 
 .active {
@@ -1312,7 +1319,7 @@ input[disabled] {
 }
 
 #prev a, #next a, #current {
-  box-shadow: inset 0 0 0 1px #fff !important;
+  box-shadow: var(--highlight) !important;
 }
 
 #current {
