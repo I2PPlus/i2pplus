@@ -11,14 +11,14 @@
   --ink : #667;
   --bg: #fff;
   --highlight: inset 0 0 0 1px #fff;
-  --btn: linear-gradient(to bottom, #fff, #eaeaff);
+  --btn: linear-gradient(to bottom, #fff, #f0f0ff);
   --btn_hover: linear-gradient(to bottom, #ddd, #fff);
-  --btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 #fff, inset 0 0 4px 2px #e4e4ff, 0 2px 1px rgba(220,220,255,.7);
+  --btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 #fff, inset 0 0 4px 2px #f0f0ff, 0 2px 1px rgba(220,220,255,.7);
   --btn_shadow_hover: var(--highlight), 0 0 0 1px #fff, 0 0 0 2px rgba(255,96,0,.4);
-  --header: linear-gradient(to bottom, #fff 50%, #eef 50%);
+  --header: linear-gradient(to bottom, #fff 50%, #f2f2ff 50%);
   --border: #bec2da;
   --border_inner: #ced1e3;
-  --active: #f60;
+  --hover: #f60;
 }
 
 body {
@@ -210,7 +210,7 @@ a:visited {
 }
 
 a:hover, a:focus {
-  color: var(--active);
+  color: var(--hover);
   text-decoration: none;
   font-weight: 700;
   outline: none;
@@ -277,7 +277,7 @@ tr.list0:hover td, tr.list1:hover td {
 }
 
 tr.list0:hover a, tr.list1:hover a {
-  color: var(--active);
+  color: var(--hover);
 }
 
 tr.list0 a:link {
@@ -404,7 +404,7 @@ td.mailListAttachment.isAttached {
 
 #mailbox a img.sort:hover, .sort:focus {
   opacity: 1 !important;
-  filter: drop-shadow(0 0 1px var(--active));
+  filter: drop-shadow(0 0 1px var(--hover));
 }
 
 a.sort {
@@ -595,7 +595,7 @@ button:focus, input[type=submit]:focus, input[type="reset"]:focus,
 
 input[type=text]:focus, input[type=password]:focus, textarea:focus {
   color: #000;
-  box-shadow: 0 0 0 1px #fff, 0 0 0 2px var(--active);
+  box-shadow: 0 0 0 1px #fff, 0 0 0 2px var(--hover);
 }
 
 button:active, input[type=submit]:active, input[type="reset"]:active, #settings:active, .fakebutton:active {
@@ -1589,7 +1589,7 @@ input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus,
   width: 19px !important;
   height: 19px !important;
   border: 1px solid #67f !important;
-  box-shadow: 0 0 2px var(--active) !important;
+  box-shadow: 0 0 2px var(--hover) !important;
   filter: drop-shadow(0 0 3px #89f) !important;
   filter: none !important;
 }

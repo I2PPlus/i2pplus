@@ -15,10 +15,9 @@
   --a_hover: #f60;
   --a_active: #f30;
   --highlight: inset 0 0 0 1px #fff;
-  --btn: linear-gradient(to bottom, #fff, #eaeaff);
+  --btn: linear-gradient(to bottom, #fff, #f0f0ff);
   --btn_hover: linear-gradient(to bottom, #ddd, #fff);
-  --btn_hover: linear-gradient(to bottom, #ddd 0%, #fff 100%);
-  --btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 #fff, inset 0 0 4px 2px #e4e4ff, 0 2px 1px rgba(220,220,255,.7);
+  --btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 #fff, inset 0 0 4px 2px #f0f0ff, 0 2px 1px rgba(220,220,255,.7);
   --btn_shadow_hover: var(--highlight), 0 0 0 1px #fff, 0 0 0 2px rgba(255,96,0,.4);
   --border: #bec2da;
   --h2: linear-gradient(to bottom, #fff 50%, #fafbff 50%);

@@ -13,9 +13,9 @@
   --a: #5c5c8a;
   --hover: #f60;
   --active: #f90;
-  --btn: linear-gradient(to bottom, #fff, #eaeaff);
+  --btn: linear-gradient(to bottom, #fff, #f0f0ff);
   --btn_hover: linear-gradient(to bottom, #ddd, #fff);
-  --btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 #fff, inset 0 0 4px 2px #e4e4ff, 0 2px 1px rgba(220,220,255,.7);
+  --btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 #fff, inset 0 0 4px 2px #f0f0ff, 0 2px 1px rgba(220,220,255,.7);
   --btn_shadow_hover: var(--highlight), 0 0 0 1px #fff, 0 0 0 2px rgba(255,96,0,.4);
   --badge: linear-gradient(to bottom, #fff, #eef);
   --badge_hover: linear-gradient(to bottom, #eef, #fff);
@@ -31,13 +31,14 @@
   --bg3: #f2f2ff;
   --th: linear-gradient(to bottom, #fff, var(--bg3));
   --subheading: linear-gradient(to right, #fff, #eef);
-  --header: linear-gradient(to bottom, #fff 50%, var(--bg3) 50%);
+  --header: linear-gradient(to bottom, #fff 50%, #f2f2ff 50%);
   --row_hover: #ffd;
   --ls_target: 1px solid #5a5 !important;
   --reload: linear-gradient(to right, #930, var(--hover));
   --down: repeating-linear-gradient(135deg, #fffff2, #fffff2 10px, #ddddd2 10px, #ddddd2 20px);
   --down_shadow: inset 0 0 0 1px #800, inset 0 0 1px 3px #eeeee2, inset 0 0 0 4px #ccccc2;
   --flatbar: #99c;
+  --hr: #89f;
 }
 
 html, body {
@@ -427,9 +428,9 @@ i {
 .routersummary hr {
   margin: 8px -1px 7px -1px;
   height: 0;
-  color: #89f;
+  color: var(--hr);
   border-bottom: 1px solid var(--border);
-  background: #89f;
+  background: var(--hr);
 }
 
 .routersummary b, .routersummary td:first-child a:not(hover):not(:active) b,
@@ -489,7 +490,8 @@ i {
   text-align: left !important;
 }
 
-.routersummary table, .routersummary tr, .routersummary table, .routersummary td {
+#sidebar tr,
+.routersummary table, .routersummary td {
   background: none;
   border: none;
 }
@@ -1391,9 +1393,8 @@ select[name="newlogclass"] {
   margin-right: 0;
 }
 
-.optbox {
-  margin-right: 0;
-  vertical-align: middle;
+input:disabled:hover {
+  filter: none;
 }
 
 #config_homepage .noicon {
@@ -1421,12 +1422,6 @@ select[name="newlogclass"] {
 
 input {
   margin: 3px 5px 3px 0;
-}
-
-input[type=radio], input[type=checkbox] {
-  margin: 6px;
-  vertical-align: sub;
-  background: none;
 }
 
 label {
@@ -1521,24 +1516,10 @@ input[type=submit], input[type=reset], button, .optbox {
   cursor: pointer;
 }
 
-/* accessibility tweak - colors rather than focus rings where possible */
-
-.optbox:hover, .optbox:focus {
-  border: 0;
-  outline: none;
-  filter: drop-shadow(0 0 2px #89f);
-}
-
-.optbox:disabled:hover, input:disabled:hover {
-  filter: none;
-}
-
 button::-moz-focus-inner, input::-moz-focus-inner {
   outline: none;
   border: none;
 }
-
-/* end accessibility */
 
 /* confignet tidyup */
 
@@ -2241,7 +2222,7 @@ div.news {
   border: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
   border-right: 1px solid var(--border);
-  background: var(--th);
+  background: var(--bg);
 }
 
 /* convert the list entry to our title */
@@ -3616,7 +3597,7 @@ h2, h3, h4, th, b {
 
 h2, h3, h4#updateplugins {
   box-shadow: var(--highlight);
-  background: var(--header);
+  background: var(--bg);
 }
 
 h2 {
@@ -3645,9 +3626,9 @@ table hr {
   margin: -5px -5px -10px -5px !important;
   padding: 0;
   height: 1px;
-  color: #89f;
-  border: 0 solid #89f;
-  background: #89f;
+  color: var(--hr);
+  border: 0 solid var(--hr);
+  background: var(--hr);
 }
 
 table tt {
@@ -3802,13 +3783,12 @@ h4.app, h4.app2 {
   border-left: none;
   border-right: none;
   box-shadow: var(--highlight);
-  background: var(--header);
 }
 
 h4.app {
   margin-top: -5px;
   padding-left: 32px;
-  background: url(images/favicon.svg) no-repeat 8px center, var(--header);
+  background: url(images/favicon.svg) no-repeat 8px center, var(--bg);
   background-size: 16px, 100%;
   background-blend-mode: luminosity, normal;
 }
@@ -3817,7 +3797,7 @@ h4.app2 {
   margin-top: 5px !important;
   padding-left: 32px;
   clear: left;
-  background: var(--planet) no-repeat 8px center / 16px, var(--header);
+  background: var(--planet) no-repeat 8px center / 16px, var(--bg);
   background-blend-mode: luminosity, normal;
 }
 
@@ -3982,18 +3962,18 @@ div.search {
 }
 
 table.search {
-  background: var(--bg3);
   margin-left: auto;
   margin-right: auto;
   width: auto;
   border: 1px solid var(--border);
   border-collapse: separate;
   border-radius: 0 0 2px 2px;
+  background: var(--bg);
 }
 
 .search td {
   padding: 1px 0;
-  background: var(--bg3);
+  background: var(--bg);
 }
 
 .search td:nth-child(2) {
@@ -5066,7 +5046,6 @@ p#helptranslate {
 
 #themeoptions input {
   margin: 2px 8px 2px 6px;
-  vertical-align: sub;
 }
 
 .themelabel {
@@ -9977,12 +9956,14 @@ a.keysearch {
   text-align: left;
 }
 
+/* radios/checkboxes */
+
 input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked,
 input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
   position: relative;
-  width: 19px !important;
-  height: 19px !important;
-  vertical-align: middle !important;
+  width: 19px;
+  height: 19px;
+  vertical-align: middle;
   box-sizing: border-box;
   border: 1px solid var(--border);
   background: #f8f8ff;
@@ -10008,22 +9989,31 @@ input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::bef
   transform: scale(1);
 }
 
-.optbox:not(:checked) {
+.optbox:not(:checked):not(:hover) {
   box-shadow: inset 2px 2px 1px rgba(204, 204, 240, .6);
+}
+
+input[type=checkbox]:checked::before,
+input[type=radio]:checked::before {
+  line-height: .8;
+  background: #67f;
+  content: "";
+}
+
+input[type=checkbox]:checked:hover::before,
+input[type=radio]:checked:hover::before,
+input[type=checkbox]:checked:focus::before,
+input[type=radio]:checked:focus::before {
+  background: var(--hover);
 }
 
 input[type=checkbox]:checked::before {
   width: 11px;
   height: 11px;
-  position: absolute;
   top: 3px;
   left: 3px;
-  line-height: .8;
   border-radius: 1px;
-  background: #67f;
-  content: "";
   transform: scale(1);
-  transition: linear all .05s;
 }
 
 input[type=radio]:checked::before {
@@ -10032,8 +10022,6 @@ input[type=radio]:checked::before {
   left: 25%;
   top: 25%;
   border-radius: 50%;
-  background: #67f;
-  content: "";
 }
 
 input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
@@ -10043,22 +10031,17 @@ input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::bef
 }
 
 input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus, input[type=radio]:focus {
-  width: 19px !important;
-  height: 19px !important;
-  border: 1px solid #67f !important;
-  box-shadow: 0 0 2px var(--hover) !important;
+  border: 1px solid var(--active) !important;
   background: var(--bg);
-  filter: none !important;
 }
 
 input[type=checkbox][disabled], input[type=radio][disabled], input[type=checkbox][disabled]:hover, input[type=radio][disabled]:hover,
 input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, input[type=checkbox][disabled]:checked:hover, input[type=radio][disabled]:checked:hover {
-  filter: none !important;
-  box-shadow: none !important;
   opacity: .5;
+  pointer-events: none;
 }
 
-/* end custom radios/checkboxes */
+/* end radios/checkboxes */
 
 .config_experimental:not(old) {
   margin-left: 2px;
@@ -10536,7 +10519,6 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel{
   color: var(--bg);
   text-shadow: 0 1px 1px #225;
   box-shadow: inset 3px 3px 2px #337;
-  background: #89f;
   background: linear-gradient(to bottom, #5d66a2 50%, #4a5282 50%);
 }
 
