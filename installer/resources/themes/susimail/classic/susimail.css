@@ -14,6 +14,10 @@
   --btn_hover: linear-gradient(to bottom, #ddd, #fff);
   --btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 #fff, inset 0 0 4px 2px #e4e4ff, 0 2px 1px rgba(220,220,255,.7);
   --btn_shadow_hover: var(--highlight), 0 0 0 1px #fff, 0 0 0 2px rgba(255,96,0,.4);
+  --header: linear-gradient(to bottom, #fff 50%, #eef 50%);
+  --border: #bec2da;
+  --border_inner: #ced1e3;
+  --active: #f60;
 }
 
 body {
@@ -53,9 +57,9 @@ h3#config {
   padding: 5px 10px;
   width: 300px;
   color: #35415f;
-  border: 1px solid #bec2da;
+  border: 1px solid var(--border);
   border-radius: 0 0 2px 2px;
-  background: linear-gradient(to bottom, #fff 0%, #fff 50%, #eff2ff 50%, #eff2ff 100%);
+  background: var(--header);
 }
 
 .iframed h3#config {
@@ -66,18 +70,11 @@ textarea[name="config_text"] {
   resize: none;
 }
 
-li {
-  color: #0c153d;
-  font-size: 8.5pt;
-  margin-left: 5mm;
-  margin-right: 5mm;
-}
-
-p {
-  color: #0c153d;
-  margin-left: 5mm;
-  margin-right: 5mm;
+li, p {
+  margin-left: 15px;
+  margin-right: 15px;
   font-size: 9pt;
+  color: #0c153d;
 }
 
 p.hl {
@@ -96,13 +93,13 @@ p.error, p.info {
   margin: -1px -11px;
   padding: 15px 15px 15px 45px;
   display: block;
-  line-height: 120%;
+  line-height: 1.2;
   text-align: left;
   font-weight: 700;
   color: #900;
-  border: 1px solid #bec2da;
+  border: 1px solid var(--border);
   box-shadow: var(--highlight);
-  background: #ffe var(--err) no-repeat 8px center / 28px;
+  background: #ffd var(--err) no-repeat 8px center / 28px;
 }
 
 td p.info, td p.error {
@@ -114,15 +111,15 @@ tr.mailbody p.error {
 }
 
 tr.mailbody:nth-child(n+3) {
-  border-top: 1px solid #bec2da;
-  border-bottom: 1px solid #bec2da;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
   background: var(--bg);
 }
 
 p.info {
-  padding: 12px 12px 12px 44px;
+  padding: 12px 10px 11px 40px;
   color: #337;
-  background: #ffe var(--infohelp) no-repeat 14px center / 22px;
+  background: #eef var(--infohelp) no-repeat 14px center / 18px;
 }
 
 span.coloured {
@@ -133,7 +130,7 @@ div.footer {
   margin: 0 -10px -10px;
   padding: 1px;
   display: none;
-  border-top: 1px solid #bec2da;
+  border-top: 1px solid var(--border);
   background: rgba(255,255,255,.5);
 }
 
@@ -183,7 +180,7 @@ div.attached {
 }
 
 td#addattach {
-  border-bottom: 1px solid #bec2da;
+  border-bottom: 1px solid var(--border);
 }
 
 td#attachedfile {
@@ -212,7 +209,7 @@ a:visited {
 }
 
 a:hover, a:focus {
-  color: #f60;
+  color: var(--active);
   text-decoration: none;
   font-weight: 700;
   outline: none;
@@ -247,13 +244,13 @@ tr.list1 {
 }
 
 tr.list0, tr.list1 {
-  border-top: 1px solid #ced1e3 !important;
-  border-bottom: 1px solid #ced1e3 !important;
+  border-top: 1px solid var(--border_inner) !important;
+  border-bottom: 1px solid var(--border_inner) !important;
 }
 
 tr.list0:hover, tr.list1:hover {
-  border-top: 1px solid #ced1e3;;
-  border-bottom: 1px solid #ced1e3;;
+  border-top: 1px solid var(--border_inner);;
+  border-bottom: 1px solid var(--border_inner);;
   background: #ffd;
   cursor: pointer;
 }
@@ -263,7 +260,7 @@ tr.list0:hover td, tr.list1:hover td {
 }
 
 tr.list0:hover a, tr.list1:hover a {
-  color: #f60;
+  color: var(--active);
 }
 
 tr.list0 a:link {
@@ -281,7 +278,7 @@ table.noborder {
 }
 
 table#mailbox {
-  border: 1px solid #bec2da;
+  border: 1px solid var(--border);
   background: #eef;
 }
 
@@ -290,17 +287,8 @@ table#mailbox {
 }
 
 @supports not (-moz-appearance: none) {  /* webkit fixes */
-table#mailbox {
-  margin-top: 1px;
-}
-
-div#prefsave {
-  border-bottom: 1px solid #bec2da;
-}
-}
-
-_:-ms-lang(x), table#mailbox {
-  margin-top: 1px;
+  table#mailbox {margin-top: 1px}
+  div#prefsave {border-bottom: 1px solid var(--border)}
 }
 
 #mailbox th > * {
@@ -310,21 +298,21 @@ _:-ms-lang(x), table#mailbox {
 #mailbox th {
   padding: 6px;
   font-size: 70%;
-  border-bottom: 1px solid #bec2da;
-  background: linear-gradient(to bottom, #fff 0%, #fff 50%, #eff2ff 50%, #eff2ff 100%) !important;
+  border-bottom: 1px solid var(--border);
+  background: var(--header) !important;
 }
 
 #mailbox th.mailListDelete {
-  background: var(--nuke) no-repeat center center / 14px, linear-gradient(to bottom, #fff 0%, #fff 50%, #eff2ff 50%, #eff2ff 100%) !important;
+  background: var(--nuke) no-repeat center center / 14px, var(--header) !important;
 }
 
 #mailbox th.mailListFlagged{
-  background: url(../images/status.png) no-repeat center center, linear-gradient(to bottom, #fff 0%, #fff 50%, #eff2ff 50%, #eff2ff 100%) !important;
+  background: url(../images/status.png) no-repeat center center, var(--header) !important;
   background-blend-mode: luminosity;
 }
 
 #mailbox th.mailListAttachment {
-  background: var(--attach) no-repeat center center / 14px, linear-gradient(to bottom, #fff 0%, #fff 50%, #eff2ff 50%, #eff2ff 100%) !important;
+  background: var(--attach) no-repeat center center / 14px, var(--header) !important;
 }
 
 #mailbox td:nth-child(5) {
@@ -383,10 +371,10 @@ td.mailListAttachment.isAttached {
 }
 
 #mailbox tr.bottombuttons td {
-  border-top: 1px solid #bec2da;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-top: 1px solid var(--border);
   background: var(--bg);
-  padding-top: 3px;
-  padding-bottom: 3px;
 }
 
 #mailbox tr.bottombuttons td:first-child {
@@ -399,7 +387,7 @@ td.mailListAttachment.isAttached {
 
 #mailbox a img.sort:hover, .sort:focus {
   opacity: 1 !important;
-  filter: drop-shadow(0 0 1px #f60);
+  filter: drop-shadow(0 0 1px var(--active));
 }
 
 a.sort {
@@ -438,11 +426,11 @@ pre {
   margin: 0;
   padding: 0 10px 10px;
   min-width: 800px;
-  line-height: 160% !important;
+  line-height: 1.6 !important;
   text-align: center;
   color: #0c153d;
   font-size: 9pt !important;
-  border: 1px solid #bec2da;
+  border: 1px solid var(--border);
   box-shadow: 0 0 0 1px #eee;
   background: linear-gradient(to bottom, rgba(255,255,255,.7),rgba(255,255,255,.2)), url(/themes/console/classic/images/bg2.png) #eef;
   background-size: 100% 100%, 120px 120px;
@@ -468,7 +456,7 @@ th {
 }
 
 form {
-  line-height: 160%
+  line-height: 1.6;
 }
 
 .iframed form {
@@ -477,19 +465,19 @@ form {
 
 #viewmail {
   margin: -9px -10px;
-  border-top: 1px solid #bec2da;
+  border-top: 1px solid var(--border);
   background: #eef;
 }
 
 .iframed #viewmail {
   margin: 1px 0 -10px;
   padding: 0;
-  border: 1px solid #bec2da;
+  border: 1px solid var(--border);
 }
 
 table#message_full {
   margin-bottom: -23px;
-  border-top: 1px solid #bec2da;
+  border-top: 1px solid var(--border);
 }
 
 .iframed #message_full {
@@ -497,7 +485,7 @@ table#message_full {
 }
 
 #message_full tr:last-child {
-  border-bottom: 1px solid #bec2da;
+  border-bottom: 1px solid var(--border);
 }
 
 input[type=checkbox], input[type=radio] {
@@ -523,7 +511,7 @@ textarea {
 }
 
 input[type=text], input[type=password], textarea {
-  border: 1px solid #bec2da;
+  border: 1px solid var(--border);
   box-shadow: inset 1px 1px 1px #ddd;
   padding: 4px 5px !important;
   border-radius: 2px;
@@ -557,7 +545,7 @@ button, input[type=submit], input[type="reset"], #settings, .fakebutton {
   padding: 5px;
   display: inline-block;
   color: #333;
-  border: 1px solid #bec2da;
+  border: 1px solid var(--border);
   border-radius: 3px;
   box-shadow: var(--btn_shadow);
   background-size: 14px, 100% !important;
@@ -574,14 +562,14 @@ button:hover, input[type=submit]:hover, input[type="reset"]:hover,
 button:focus, input[type=submit]:focus, input[type="reset"]:focus,
 #settings:hover, #settings:focus, .fakebutton:focus {
   color: #222;
-  border: 1px solid #bec2da;
+  border: 1px solid var(--border);
   box-shadow: var(--btn_shadow_hover);
   background: var(--btn_hover);
 }
 
 input[type=text]:focus, input[type=password]:focus, textarea:focus {
   color: #000;
-  box-shadow: 0 0 0 1px #fff, 0 0 0 2px #f60;
+  box-shadow: 0 0 0 1px #fff, 0 0 0 2px var(--active);
 }
 
 button:active, input[type=submit]:active, input[type="reset"]:active, #settings:active, .fakebutton:active {
@@ -913,7 +901,7 @@ select {
   font-size: 9pt;
   color: #333;
   border-radius: 3px;
-  border: 1px solid #bec2da;
+  border: 1px solid var(--border);
   box-shadow: var(--btn_shadow);
   background: var(--dropdown) no-repeat right 8px center / 10px, var(--btn);
   appearance: none;
@@ -966,7 +954,7 @@ select:focus {
 }
 
 #message_full tr:first-child {
-  border-bottom: 1px solid #bec2da;
+  border-bottom: 1px solid var(--border);
 }
 
 #mailhead tr {
@@ -984,7 +972,7 @@ select:focus {
 /* login panel */
 
 #dologin {
-  border: 1px solid #bec2da;
+  border: 1px solid var(--border);
   padding: 10px 0 0;
   width: 500px;
   margin: 55px auto 40px;
@@ -1065,7 +1053,7 @@ select:focus {
   font-size: 14pt;
   color: #35415f;
   word-spacing: .1em;
-  border-bottom: 1px solid #bec2da;
+  border-bottom: 1px solid var(--border);
   box-shadow: var(--highlight);
   background: linear-gradient(to right, #fff 30%, #eff2ff);
 }
@@ -1073,7 +1061,7 @@ select:focus {
 #dologin hr {
   display: block !important;
   box-shadow: 0 0 0 1px rgba(255,255,255,.5);
-  background: #bec2da;
+  background: var(--border);
 }
 
 #dologin tr:nth-child(6) hr {
@@ -1157,7 +1145,7 @@ hr {
 }
 
 div#pagenav {
-  border-top: 1px solid #bec2da;
+  border-top: 1px solid var(--border);
   padding: 10px 5px 0;
   font-size: 9.5pt;
   border-radius: 0 0 4px 4px;
@@ -1169,13 +1157,13 @@ div#pagenav {
   padding: 6px 0 0;
   background: var(--bg) !important;
   background: linear-gradient(to bottom, #fff 0%, #eef 100%) !important;
-  border: 1px solid #bec2da;
+  border: 1px solid var(--border);
   border-bottom: none;
 }
 
 .topbuttons#pagesize {
   padding: 6px 0 4px;
-  border-bottom: 1px solid #bec2da;
+  border-bottom: 1px solid var(--border);
 }
 
 .topbuttons #mailboxcontrols, .topbuttons .folders {
@@ -1193,8 +1181,7 @@ div#pagenav {
 
 .iframed .topbuttons, .iframed p.error, .iframed p.info {
   margin: -1px -11px;
-  padding: 20px 42px 20px;
-  border: 1px solid #bec2da;
+  border: 1px solid var(--border);
   border-left: none;
   border-right: none;
 }
@@ -1236,7 +1223,7 @@ div#pagenav {
 .topbuttons .pagenav {
   margin: 7px 0 -3px;
   width: 100%;
-  border-top: 1px solid #bec2da !important;
+  border-top: 1px solid var(--border) !important;
 }
 
 .topbuttons .pagenav td {
@@ -1263,7 +1250,7 @@ div#pagenav {
 #prefsave {
   margin: 10px -10px -21px;
   padding: 6px 0 5px;
-  border-top: 1px solid #bec2da;
+  border-top: 1px solid var(--border);
   background: var(--bg);
 }
 
@@ -1282,7 +1269,7 @@ tr.bottombuttons table.pagenav {
 }
 
 #pagenavbottom td {
-  border-top: 1px solid #bec2da;
+  border-top: 1px solid var(--border);
 }
 
 #pagenavbottom td table td {
@@ -1343,14 +1330,6 @@ body, td, textarea, input, div, p.mailbody, p.error, #settings, select {
 
 /* end responsive layout */
 
-/* Edge/IE tweaks*/
-
-_:-ms-lang(x), * {
-  filter: none !important;
-}
-
-/* end Edge/IE tweaks */
-
 /* mail list date */
 
 .mailListDate {
@@ -1371,11 +1350,6 @@ _:-ms-lang(x), * {
   font-size: 80%;
   text-align: left;
   text-transform: lowercase;
-/*  border-bottom: 1px solid rgba(100,100,100,.3);*/
-}
-
-tr:hover .listclock {
-/*  border-bottom: 1px solid rgba(100,100,100,.5);*/
 }
 
 .listDate {
@@ -1414,8 +1388,8 @@ img.sort {
 }
 
 .topbuttons .pagenavcontrols {
-  border-top: 1px solid #bec2da;
-  border-bottom: 1px solid #bec2da;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
 }
 
 .iframed .topbuttons .pagenavcontrols {
@@ -1523,7 +1497,7 @@ input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input
   height: 19px !important;
   vertical-align: middle !important;
   box-sizing: border-box;
-  border: 1px solid #bec2da;
+  border: 1px solid var(--border);
   background: #f8f8ff;
   -moz-appearance: none;
   -webkit-appearance: inherit;
@@ -1558,7 +1532,7 @@ input[type=checkbox]:checked::before {
   left: 3px;
   width: 11px;
   height: 11px;
-  line-height: 80%;
+  line-height: .8;
   border-radius: 1px;
   background: #67f;
   transform: scale(1);
@@ -1584,7 +1558,7 @@ input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus,
   width: 19px !important;
   height: 19px !important;
   border: 1px solid #67f !important;
-  box-shadow: 0 0 2px #f60 !important;
+  box-shadow: 0 0 2px var(--active) !important;
   filter: drop-shadow(0 0 3px #89f) !important;
   filter: none !important;
 }
@@ -1660,21 +1634,19 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 /* end confirm delete */
 
 .debugHeader:nth-child(n+3) td {
-  border-top: 1px solid #bec2da;
+  border-top: 1px solid var(--border);
 }
 
 .debugHeader pre {
   margin: 4px 10px;
   white-space: pre-wrap;
-  line-height: 130%;
+  line-height: 1.3;
   font-size: 9.5pt;
   opacity: .9;
 }
 
 @media screen and (max-width: 1500px) {
-.debugHeader pre {
-  font-size: 8.5pt;
-}
+  .debugHeader pre {font-size: 8.5pt}
 }
 
 #toggle {
