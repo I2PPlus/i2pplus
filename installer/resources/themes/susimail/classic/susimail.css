@@ -8,6 +8,12 @@
 :root {
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
   --monospaced: Droid Sans Mono, Andale Mono, DejaVu Sans Mono, Lucida Console, monospace;
+  --bg: #fff;
+  --highlight: inset 0 0 0 1px #fff;
+  --btn: linear-gradient(to bottom, #fff, #eaeaff);
+  --btn_hover: linear-gradient(to bottom, #ddd, #fff);
+  --btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 #fff, inset 0 0 4px 2px #e4e4ff, 0 2px 1px rgba(220,220,255,.7);
+  --btn_shadow_hover: var(--highlight), 0 0 0 1px #fff, 0 0 0 2px rgba(255,96,0,.4);
 }
 
 body {
@@ -95,7 +101,7 @@ p.error, p.info {
   font-weight: 700;
   color: #900;
   border: 1px solid #bec2da;
-  box-shadow: inset 0 0 0 1px #fff;
+  box-shadow: var(--highlight);
   background: #ffe var(--err) no-repeat 8px center / 28px;
 }
 
@@ -110,7 +116,7 @@ tr.mailbody p.error {
 tr.mailbody:nth-child(n+3) {
   border-top: 1px solid #bec2da;
   border-bottom: 1px solid #bec2da;
-  background: #fff;
+  background: var(--bg);
 }
 
 p.info {
@@ -237,7 +243,7 @@ tr.list0 {
 }
 
 tr.list1 {
-  background: #fff;
+  background: var(--bg);
 }
 
 tr.list0, tr.list1 {
@@ -378,7 +384,7 @@ td.mailListAttachment.isAttached {
 
 #mailbox tr.bottombuttons td {
   border-top: 1px solid #bec2da;
-  background: #fff;
+  background: var(--bg);
   padding-top: 3px;
   padding-bottom: 3px;
 }
@@ -408,8 +414,8 @@ img.sort {
   display: inline-block;
   vertical-align: middle;
   border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #414960;
-  background: #fff;
+  box-shadow: var(--highlight) #414960;
+  background: var(--bg);
   opacity: .6;
 }
 
@@ -522,7 +528,7 @@ input[type=text], input[type=password], textarea {
   padding: 4px 5px !important;
   border-radius: 2px;
   color: #333;
-  background: #fff;
+  background: var(--bg);
 }
 
 input[type=submit], #settings {
@@ -552,10 +558,10 @@ button, input[type=submit], input[type="reset"], #settings, .fakebutton {
   display: inline-block;
   color: #333;
   border: 1px solid #bec2da;
-  border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #fff, 0 0 1px 0 #ddd;
-  background-size: 14px 14px, 100% 100% !important;
-  background: linear-gradient(to bottom, #fff, #eef);
+  border-radius: 3px;
+  box-shadow: var(--btn_shadow);
+  background-size: 14px, 100% !important;
+  background: var(--btn);
   outline: none !important;
   cursor: pointer;
 }
@@ -569,8 +575,8 @@ button:focus, input[type=submit]:focus, input[type="reset"]:focus,
 #settings:hover, #settings:focus, .fakebutton:focus {
   color: #222;
   border: 1px solid #bec2da;
-  background: linear-gradient(to bottom, #ddd 0%, #fff 100%);
-  filter: drop-shadow(0 0 1px #89f);
+  box-shadow: var(--btn_shadow_hover);
+  background: var(--btn_hover);
 }
 
 input[type=text]:focus, input[type=password]:focus, textarea:focus {
@@ -581,13 +587,13 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 button:active, input[type=submit]:active, input[type="reset"]:active, #settings:active, .fakebutton:active {
   color: #555;
   border: 1px solid #bbb;
-  box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 3px #999;
+  box-shadow: var(--highlight), inset 3px 3px 3px #999;
   background: #ddd;
 }
 
 input[disabled][type=submit], input[disabled][type=submit]:hover, input[disabled][type=submit]:active {
   border: 1px solid #bbb;
-  background: linear-gradient(to bottom, #fff, #eef);
+  background: var(--btn);
   opacity: .3;
   filter: none;
   pointer-events: none;
@@ -610,30 +616,30 @@ input[type=text], input[type=password] {
 
 input.cancel {
   padding: 5px 8px 5px 22px;
-  background: var(--no) no-repeat 7px center / 11px, linear-gradient(to bottom, #fff, #eef) !important;
+  background: var(--no) no-repeat 7px center / 11px, var(--btn) !important;
 }
 
 input.cancel:hover, input.cancel:focus {
-  background: var(--no) no-repeat 7px center / 11px, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
+  background: var(--no) no-repeat 7px center / 11px, var(--btn_hover) !important;
 }
 
 input.clearselection {
   padding: 5px 8px 5px 24px;
-  background: url(../images/none.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
+  background: url(../images/none.png) no-repeat 7px center, var(--btn);
 }
 
 input.clearselection:hover, input.clearselection:focus {
-  background: url(../images/none.png) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: url(../images/none.png) no-repeat 7px center, var(--btn_hover);
 }
 
 input.delete, input.delete_attachment, input.really_delete {
   padding: 5px 8px 5px 24px;
-  background: var(--delete) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
+  background: var(--delete) no-repeat 7px center, var(--btn);
 }
 
 input.delete:hover, input.delete_attachment:hover, input.really_delete:hover,
 input.delete:focus, input.delete_attachment:focus, input.really_delete:focus {
-  background: var(--delete_hover) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--delete_hover) no-repeat 7px center, var(--btn_hover);
 }
 
 .topbuttons input.delete {
@@ -642,47 +648,47 @@ input.delete:focus, input.delete_attachment:focus, input.really_delete:focus {
 
 input.download {
   padding: 5px 8px 5px 24px;
-  background: var(--download) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
+  background: var(--download) no-repeat 7px center, var(--btn);
 }
 
 input.download:hover, input.download:focus {
-  background: var(--download_hover) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--download_hover) no-repeat 7px center, var(--btn_hover);
 }
 
 input.offline {
   padding: 5px 8px 5px 24px;
-  background: var(--offline) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
+  background: var(--offline) no-repeat 7px center, var(--btn);
 }
 
 input.offline:hover, input.offline:focus {
-  background: var(--offline_hover) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--offline_hover) no-repeat 7px center, var(--btn_hover);
 }
 
 input.list, input.moveto, input.switchto {
   padding: 5px 8px 5px 24px;
-  background: var(--folder) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
+  background: var(--folder) no-repeat 7px center, var(--btn);
 }
 
 input.list:hover, input.list:focus, input.moveto:hover, input.switchto:hover, input.moveto:focus, input.switchto:focus {
-  background: var(--folder_hover) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--folder_hover) no-repeat 7px center, var(--btn_hover);
 }
 
 input.forward {
   padding: 5px 8px 5px 24px;
-  background: var(--forward) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
+  background: var(--forward) no-repeat 7px center, var(--btn);
 }
 
 input.forward:hover, input.forward:focus {
-  background: var(--forward_hover) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--forward_hover) no-repeat 7px center, var(--btn_hover);
 }
 
 input.login {
   padding: 5px 8px 5px 24px;
-  background: var(--login) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
+  background: var(--login) no-repeat 7px center, var(--btn);
 }
 
 input.login:hover, input.login:focus {
-  background: var(--login_hover) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--login_hover) no-repeat 7px center, var(--btn_hover);
 }
 
 input.logout, input.logout:hover, input.logout:focus, input.logout:active {
@@ -696,20 +702,20 @@ input.logout, input.logout:hover, input.logout:focus, input.logout:active {
 input.logout {
   margin: -8px -6px -8px 6px;
   padding: 6px 8px 6px 24px;
-  background: var(--logout) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
+  background: var(--logout) no-repeat 7px center, var(--btn);
 }
 
 input.logout:hover, input.logout:focus {
-  background: var(--logout_hover) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--logout_hover) no-repeat 7px center, var(--btn_hover);
 }
 
 input.logout:active {
-  box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 3px #999;
+  box-shadow: var(--highlight), inset 3px 3px 3px #999;
 }
 
 input.reload, input.refresh, .fakebutton {
   padding: 5px 8px 5px 24px;
-  background: var(--refresh) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
+  background: var(--refresh) no-repeat 7px center, var(--btn);
 }
 
 .fakebutton, .fakebutton:visited {
@@ -720,110 +726,110 @@ input.reload, input.refresh, .fakebutton {
 }
 
 input.reload:hover, input.refresh:hover, input.reload:focus, input.refresh:focus, .fakebutton:hover, .fakebutton.focus {
-  background: var(--refresh_hover) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--refresh_hover) no-repeat 7px center, var(--btn_hover);
 }
 
 input.invertselection {
   padding: 5px 8px 5px 24px;
-  background: url(../images/selection.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
+  background: url(../images/selection.png) no-repeat 7px center, var(--btn);
 }
 
 input.invertselection:hover, input.invertselection:focus {
-  background: url(../images/selection.png) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: url(../images/selection.png) no-repeat 7px center, var(--btn_hover);
 }
 
 input.show {
   padding: 5px 8px 5px 24px;
-  background: var(--yes) no-repeat 7px center / 12px, linear-gradient(to bottom, #fff, #eef);
+  background: var(--yes) no-repeat 7px center / 12px, var(--btn);
 }
 
 input.show:hover, input.show:focus {
   padding: 5px 8px 5px 24px;
-  background: var(--yes) no-repeat 7px center / 12px, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--yes) no-repeat 7px center / 12px, var(--btn_hover);
 }
 
 input.markall {
   padding: 5px 8px 5px 24px;
-  background: url(../images/all.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
+  background: url(../images/all.png) no-repeat 7px center, var(--btn);
 }
 
 input.markall:hover, input.markall:focus {
-  background: url(../images/all.png) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: url(../images/all.png) no-repeat 7px center, var(--btn_hover);
 }
 
 input.new {
   padding: 5px 8px 5px 24px;
-  background: var(--compose) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
+  background: var(--compose) no-repeat 7px center, var(--btn);
 }
 
 input.new:hover, input.new:focus {
-  background: var(--compose_hover) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--compose_hover) no-repeat 7px center, var(--btn_hover);
 }
 
 input.reply {
   padding: 5px 8px 5px 24px;
-  background: var(--reply) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
+  background: var(--reply) no-repeat 7px center, var(--btn);
 }
 
 input.reply:hover, input.reply:focus {
-  background: var(--reply_hover) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--reply_hover) no-repeat 7px center, var(--btn_hover);
 }
 
 input.replyall {
   padding: 5px 8px 5px 24px;
-  background: var(--replyall) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
+  background: var(--replyall) no-repeat 7px center, var(--btn);
 }
 
 input.replyall:hover, input.replyall:focus {
-  background: var(--replyall_hover) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--replyall_hover) no-repeat 7px center, var(--btn_hover);
 }
 
 input.setpagesize, input.save {
   padding: 5px 8px 5px 24px;
-  background: var(--yes) no-repeat 7px center / 12px, linear-gradient(to bottom, #fff, #eef);
+  background: var(--yes) no-repeat 7px center / 12px, var(--btn);
 }
 
 input.setpagesize:hover, input.save:hover, input.setpagesize:focus, input.save:focus {
   padding: 5px 8px 5px 24px;
-  background: var(--yes) no-repeat 7px center / 12px, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--yes) no-repeat 7px center / 12px, var(--btn_hover);
 }
 
 input.send {
   padding: 5px 8px 5px 24px;
-  background: var(--send) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
+  background: var(--send) no-repeat 7px center, var(--btn);
 }
 
 input.send:hover, input.send:focus {
-  background: var(--send_hover) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--send_hover) no-repeat 7px center, var(--btn_hover);
 }
 
 input.configure, #settings {
   padding: 5px 8px 5px 24px;
-  background: var(--configure) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
+  background: var(--configure) no-repeat 7px center, var(--btn);
 }
 
 input.configure:hover, input.configure:focus,
 #settings:hover, #settings:focus {
-  background: var(--configure_hover) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--configure_hover) no-repeat 7px center, var(--btn_hover);
 }
 
 input.saveas, input.saveasdraft {
   padding: 5px 8px 5px 24px;
-  background: var(--save) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
+  background: var(--save) no-repeat 7px center, var(--btn);
 }
 
 input.saveas:hover, input.saveas:focus, input.saveasdraft:hover, input.saveasdraft:focus {
-  background: var(--save_hover) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--save_hover) no-repeat 7px center, var(--btn_hover);
 }
 
 input.new_upload {
   padding: 5px 8px 5px 24px;
-  background: var(--attach) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
+  background: var(--attach) no-repeat 7px center, var(--btn);
 }
 
 input.new_upload:hover, input.new_upload:focus {
   padding: 5px 8px 5px 24px;
-  background: var(--attach_hover) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--attach_hover) no-repeat 7px center, var(--btn_hover);
 }
 
 input[disabled] {
@@ -837,12 +843,12 @@ input.firstpage[disabled]:hover, input[name="firstpage"][disabled]:hover,
 input.firstpage[disabled]:focus, input[name="firstpage"][disabled]:focus {
   padding: 3px 12px !important;
   text-indent: -99999px;
-  background: var(--first) no-repeat center center / 16px, linear-gradient(to bottom, #fff, #eef) !important;
+  background: var(--first) no-repeat center center / 16px, var(--btn) !important;
 }
 
 input.firstpage:hover, input[name="firstpage"]:hover,
 input.firstpage:focus, input[name="firstpage"]:focus {
-  background: var(--first_hover) no-repeat center center / 16px, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--first_hover) no-repeat center center / 16px, var(--btn_hover);
 }
 
 input.lastpage, input[name="lastpage"],
@@ -850,12 +856,12 @@ input.lastpage[disabled]:hover, input[name="lastpage"][disabled]:hover,
 input.lastpage[disabled]:focus, input[name="lastpage"][disabled]:focus {
   padding: 3px 12px !important;
   text-indent: -99999px;
-  background: var(--last) no-repeat center center / 16px, linear-gradient(to bottom, #fff, #eef) !important;
+  background: var(--last) no-repeat center center / 16px, var(--btn) !important;
 }
 
 input.lastpage:hover, input[name="lastpage"]:hover,
 input.lastpage:focus, input[name="lastpage"]:focus {
-  background: var(--last_hover) no-repeat center center / 16px, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--last_hover) no-repeat center center / 16px, var(--btn_hover);
 }
 
 input.prevpage, input.prev, input[name="prev"], input[name="prevpage"],
@@ -863,12 +869,12 @@ input.prevpage[disabled]:hover, input.prev[disabled]:hover, input[name="prev"][d
 input.prevpage[disabled]:focus, input.prev[disabled]:focus, input[name="prev"][disabled]:focus, input[name="prevpage"][disabled]:focus {
   padding: 3px 12px !important;
   text-indent: -99999px;
-  background: var(--previous) no-repeat center center / 16px, linear-gradient(to bottom, #fff, #eef) !important;
+  background: var(--previous) no-repeat center center / 16px, var(--btn) !important;
 }
 
 input.prevpage:hover, input.prev, input[name="prev"]:hover, input[name="prevpage"]:hover,
 input.prevpage:focus, input.prev, input[name="prev"]:focus, input[name="prevpage"]:focus {
-  background: var(--previous_hover) no-repeat center center / 16px, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--previous_hover) no-repeat center center / 16px, var(--btn_hover);
 }
 
 input.nextpage, input.next, input[name="nextpage"], input[name="next"],
@@ -876,12 +882,12 @@ input.nextpage[disabled]:hover, input.next[disabled]:hover, input[name="nextpage
 input.nextpage[disabled]:focus, input.next[disabled]:focus, input[name="nextpage"][disabled]:focus, input[name="next"][disabled]:focus {
   padding: 3px 12px !important;
   text-indent: -99999px;
-  background: var(--next) no-repeat center center / 16px, linear-gradient(to bottom, #fff, #eef) !important;
+  background: var(--next) no-repeat center center / 16px, var(--btn) !important;
 }
 
 input.nextpage:hover, input.next:hover, input[name="nextpage"]:hover,
 input.nextpage:focus, input.next:focus, input[name="nextpage"]:focus {
-  background: var(--next_hover) no-repeat center center / 16px, linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  background: var(--next_hover) no-repeat center center / 16px, var(--btn_hover);
 }
 
 input[disabled] {
@@ -891,7 +897,7 @@ input[disabled] {
 #pagenav input[disabled]:hover, #pagenav input[disabled]:active,
 #messagenav input[disabled]:hover, #messagenav input[disabled]:active {
   border: 1px solid #bbb;
-  box-shadow: inset 0 0 0 1px #fff;
+  box-shadow: var(--highlight);
   filter: none !important;
 }
 
@@ -906,11 +912,10 @@ select {
   text-overflow: ellipsis;
   font-size: 9pt;
   color: #333;
-  border-radius: 2px;
+  border-radius: 3px;
   border: 1px solid #bec2da;
-  box-shadow: inset 0 0 0 1px #fff;
-  box-shadow: 0 0 0 1px #fff inset, 0 0 1px 0 #ddd;
-  background: var(--dropdown) no-repeat right 8px center / 10px, linear-gradient(to bottom, #fff, #f4f5ff);
+  box-shadow: var(--btn_shadow);
+  background: var(--dropdown) no-repeat right 8px center / 10px, var(--btn);
   appearance: none;
   cursor: pointer;
 }
@@ -920,16 +925,17 @@ select {
 }
 
 select option {
-  background: #fff;
+  background: var(--bg);
 }
 
 select:hover, select:active {
-  background: var(--dropdown_hover) no-repeat right 8px center / 10px, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
+  box-shadow: var(--btn_shadow_hover);
+  background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover) !important;
 }
 
 select:focus {
   color: #000;
-  background: var(--dropdown_hover) no-repeat right 8px center / 10px,  linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
+  background: var(--dropdown_hover) no-repeat right 8px center / 10px,  var(--btn_hover) !important;
   outline: none !important;
 }
 
@@ -983,9 +989,8 @@ select:focus {
   width: 500px;
   margin: 55px auto 40px;
   box-shadow: 0 0 0 1px #fff;
-  background: #fefefe;
   background: linear-gradient(to bottom, rgba(240,240,255,.4), rgba(220,220,255,.5)) #fefefe;
-  box-shadow: inset 0 0 0 1px #fff, 0 0 1px #ccc;
+  box-shadow: var(--highlight), 0 0 1px #ccc;
   filter: opacity(0);
   animation: linear fade-in .15s .5s forwards;
 }
@@ -1006,12 +1011,12 @@ select:focus {
 
 #dologin input[name="user"] {
   padding: 4px 5px 4px 26px !important;
-  background: #fff var(--user) no-repeat 5px center / 16px;
+  background: var(--bg) var(--user) no-repeat 5px center / 16px;
 }
 
 #dologin input[name="pass"] {
   padding: 4px 5px 4px 26px !important;
-  background: #fff var(--key) no-repeat 5px center / 16px;
+  background: var(--bg) var(--key) no-repeat 5px center / 16px;
 }
 
 #dologin input[name="user"], #dologin input[name="pass"], #dologin input[name="host"] {
@@ -1061,7 +1066,7 @@ select:focus {
   color: #35415f;
   word-spacing: .1em;
   border-bottom: 1px solid #bec2da;
-  box-shadow: inset 0 0 0 1px #fff;
+  box-shadow: var(--highlight);
   background: linear-gradient(to right, #fff 30%, #eff2ff);
 }
 
@@ -1162,7 +1167,7 @@ div#pagenav {
 .topbuttons {
   margin: -1px -11px 10px;
   padding: 6px 0 0;
-  background: #fff !important;
+  background: var(--bg) !important;
   background: linear-gradient(to bottom, #fff 0%, #eef 100%) !important;
   border: 1px solid #bec2da;
   border-bottom: none;
@@ -1259,7 +1264,7 @@ div#pagenav {
   margin: 10px -10px -21px;
   padding: 6px 0 5px;
   border-top: 1px solid #bec2da;
-  background: #fff;
+  background: var(--bg);
 }
 
 .iframed #prefsave {
@@ -1444,7 +1449,7 @@ img.sort {
   color: #666;
   border: 1px solid #bbc;
   border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #fff;
+  box-shadow: var(--highlight);
   background: #f2f2f2;
 }
 
@@ -1575,7 +1580,7 @@ input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::bef
 }
 
 input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus, input[type=radio]:focus {
-  background: #fff;
+  background: var(--bg);
   width: 19px !important;
   height: 19px !important;
   border: 1px solid #67f !important;
@@ -1605,7 +1610,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 }
 
 #confirmdelete td {
-  box-shadow: inset 0 0 0 1px #fff !important;
+  box-shadow: var(--highlight) !important;
   background: #900;
   background: repeating-linear-gradient(45deg, #900, #900 10px, #ee9 10px, #ee9 20px) !important;
   background-size: 400%;
