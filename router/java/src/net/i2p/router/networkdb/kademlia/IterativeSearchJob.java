@@ -89,16 +89,17 @@ public class IterativeSearchJob extends FloodSearchJob {
     private static final int MAX_NON_FF = 4;
     /** Max number of peers to query */
 //    private static final int TOTAL_SEARCH_LIMIT = 5;
-    private static final int TOTAL_SEARCH_LIMIT = 4;
+    private static final int TOTAL_SEARCH_LIMIT = 3;
     /** Max number of peers to query if we are ff */
-    private static final int TOTAL_SEARCH_LIMIT_WHEN_FF = 3;
+//    private static final int TOTAL_SEARCH_LIMIT_WHEN_FF = 3;
+    private static final int TOTAL_SEARCH_LIMIT_WHEN_FF = 2;
     /** Extra peers to get from peer selector, as we may discard some before querying */
 //    private static final int EXTRA_PEERS = 1;
     private static final int EXTRA_PEERS = 2;
     private static final int IP_CLOSE_BYTES = 3;
     /** TOTAL_SEARCH_LIMIT * SINGLE_SEARCH_TIME, plus some extra */
 //    private static final int MAX_SEARCH_TIME = 30*1000;
-    private static final int MAX_SEARCH_TIME = 20*1000;
+    private static final int MAX_SEARCH_TIME = 15*1000;
     /**
      *  The time before we give up and start a new search - much shorter than the message's expire time
      *  Longer than the typ. response time of 1.0 - 1.5 sec, but short enough that we move
@@ -109,9 +110,9 @@ public class IterativeSearchJob extends FloodSearchJob {
      * The default single search time
      */
 //    private static final long SINGLE_SEARCH_TIME = 3*1000;
-    private static final long SINGLE_SEARCH_TIME = 5*1000;
+    private static final long SINGLE_SEARCH_TIME = 4*1000;
     /** the actual expire time for a search message */
-    private static final long SINGLE_SEARCH_MSG_TIME = 20*1000;
+    private static final long SINGLE_SEARCH_MSG_TIME = 10*1000;
     /**
      *  Use instead of CONCURRENT_SEARCHES in super() which is final.
      *  For now, we don't do concurrent, but we keep SINGLE_SEARCH_TIME very short,
