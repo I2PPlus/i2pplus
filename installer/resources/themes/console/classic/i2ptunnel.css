@@ -14,9 +14,14 @@
   --a: #5c5c8a;
   --a_hover: #f60;
   --a_active: #f30;
-  --btn: linear-gradient(to bottom, #fff, #f4f5ff);
+  --highlight: inset 0 0 0 1px #fff;
+  --btn: linear-gradient(to bottom, #fff, #eaeaff);
+  --btn_hover: linear-gradient(to bottom, #ddd, #fff);
   --btn_hover: linear-gradient(to bottom, #ddd 0%, #fff 100%);
+  --btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 #fff, inset 0 0 4px 2px #e4e4ff, 0 2px 1px rgba(220,220,255,.7);
+  --btn_shadow_hover: var(--highlight), 0 0 0 1px #fff, 0 0 0 2px rgba(255,96,0,.4);
   --border: #bec2da;
+  --h2: linear-gradient(to bottom, #fff 50%, #fafbff 50%);
 }
 
 html {
@@ -157,24 +162,21 @@ hr {
   font-weight: 400;
   color: #5e626e;
   border: 1px solid var(--border);
-  border-radius: 2px;
-  background: #eee;
+  border-radius: 3px;
   background: var(--btn);
-  box-shadow: inset 0 0 0 1px #fff, 0 0 1px #ddd;
 }
 
 .control:hover, .control:focus, button:hover, button:focus {
   text-decoration: none;
   color: var(--ink) !important;
   border: 1px solid var(--border);
-  box-shadow: inset 0 0 0 1px #fff !important;
-  background: #ddd;
+  box-shadow: var(--btn_shadow_hover);
   background: var(--btn_hover);
 }
 
 .control:active, button:active {
   border: 1px solid var(--border);
-  box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 3px 1px #555 !important;
+  box-shadow: var(--highlight), inset 3px 3px 3px 1px #555 !important;
 }
 
 .iframed .panel.iframed {
@@ -249,8 +251,8 @@ select {
   font-size: 9pt;
   color: #5e626e;
   border: 1px solid var(--border);
-  border-radius: 2px;
-  box-shadow: 0 0 0 1px #fff inset, 0 0 1px 0 #ddd;
+  border-radius: 3px;
+  box-shadow: var(--btn_shadow);
   background: var(--dropdown) no-repeat right 8px center / 10px, var(--btn);
   cursor: pointer;
   appearance: none;
@@ -261,6 +263,7 @@ select:hover {
 }
 
 select:hover, select:active {
+  box-shadow: var(--btn_shadow_hover);
   background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover) !important;
   outline: none !important;
 }
@@ -320,8 +323,8 @@ h2, h3 {
   font-size: 11pt;
   color: var(--ink_light);
   border: 1px solid var(--border);
-  box-shadow: inset 0 0 0 1px #fff;
-  background: linear-gradient(to bottom, #fff 50%, #fafbff 50%);
+  box-shadow: var(--highlight);
+  background: var(--h2);
 }
 
 .iframed h2, .iframed h3 {
@@ -331,27 +334,27 @@ h2, h3 {
 /* title images */
 
 #messages h2 {
-  background: var(--logs) no-repeat 5px center / 20px, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
+  background: var(--logs) no-repeat 5px center / 20px, var(--h2) !important;
 }
 
 #globalTunnelControl h2 {
-  background: var(--mouse) no-repeat 5px center / 20px, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
+  background: var(--mouse) no-repeat 5px center / 20px, var(--h2) !important;
 }
 
 #servers h2 {
-  background: var(--server) no-repeat 5px center / 20px, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
+  background: var(--server) no-repeat 5px center / 20px, var(--h2) !important;
 }
 
 #clients h2 {
-  background: var(--client) no-repeat 5px center / 20px, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
+  background: var(--client) no-repeat 5px center / 20px, var(--h2) !important;
 }
 
 #tunnelEditPage h2, #tunnelEditPage h3, #registration h2, #registration h3 {
-  background: var(--configure) no-repeat 5px center / 20px, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
+  background: var(--configure) no-repeat 5px center / 20px, var(--h2) !important;
 }
 
 #wizardPanel h2, #ssl h2 {
-  background: var(--wizard) no-repeat left 6px center / 20px, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
+  background: var(--wizard) no-repeat left 6px center / 20px, var(--h2) !important;
 }
 
 /* end title images */
@@ -578,7 +581,16 @@ button {
 button, input[type=submit], input[type="reset"], a.control {
   font-family: var(--bodyfont);
   font-size: 9pt;
+  box-shadow: var(--btn_shadow);
   cursor: pointer;
+}
+
+button.control, input[type=submit], input[type="reset"] {
+  padding: 5px 8px !important;
+}
+
+.buttons > * {
+  vertical-align: middle;
 }
 
 textarea {
@@ -634,16 +646,7 @@ a.control {
   padding: 7px 5px;
   text-align: right;
   border-top: 1px solid var(--border);
-  background: #fff;
-  background: linear-gradient(to bottom, #fff, #fafbff);
-}
-
-button.control, input[type=submit], input[type="reset"] {
-  padding: 5px 8px !important;
-}
-
-.buttons > * {
-  vertical-align: middle;
+  background: var(--btn);
 }
 
 .tunnelConfig tr:last-child td {
@@ -881,7 +884,7 @@ input[type="file"] {
   font-weight: 700;
   border: 1px solid #900;
   border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #fff, 0 0 1px 1px #bbb;
+  box-shadow: var(--highlight), 0 0 1px 1px #bbb;
   background: #ffd;
 }
 
@@ -1525,7 +1528,7 @@ input::placeholder {
   font-size: 11pt;
   border: 1px solid #900;
   border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #fff;
+  box-shadow: var(--highlight);
   background: #ffe;
 }
 
