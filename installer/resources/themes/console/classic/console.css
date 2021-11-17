@@ -19,21 +19,25 @@
   --btn_shadow_hover: var(--highlight), 0 0 0 1px #fff, 0 0 0 2px rgba(255,96,0,.4);
   --badge: linear-gradient(to bottom, #fff, #eef);
   --badge_hover: linear-gradient(to bottom, #eef, #fff);
-  --border_badge: 0 0 0 1px #aad;
+  --border_badge: 0 0 0 1px #bbd;
+  --border: #bec2da;
+  --border_soft: #ced1e3;
+  --border_warn: #fb7;
   --highlight: inset 0 0 0 1px var(--bg);
   --highlight_hover: inset 0 0 0 1px #a79;
   --highlight_active: inset 3px 3px 3px 1px #5f2400;
-  --border: #bec2da;
-  --soft_border: #ced1e3;
-  --border_warn: #fb7;
   --bg: #fff;
   --bg2: #eff1ff;
-  --th: linear-gradient(to bottom, #fff, #fafbff);
+  --bg3: #f2f2ff;
+  --th: linear-gradient(to bottom, #fff, var(--bg3));
   --subheading: linear-gradient(to right, #fff, #eef);
-  --header: linear-gradient(to bottom, #fff 50%, #fafbff 50%);
+  --header: linear-gradient(to bottom, #fff 50%, var(--bg3) 50%);
   --row_hover: #ffd;
   --ls_target: 1px solid #5a5 !important;
   --reload: linear-gradient(to right, #930, var(--hover));
+  --down: repeating-linear-gradient(135deg, #fffff2, #fffff2 10px, #ddddd2 10px, #ddddd2 20px);
+  --down_shadow: inset 0 0 0 1px #800, inset 0 0 1px 3px #eeeee2, inset 0 0 0 4px #ccccc2;
+  --flatbar: #99c;
 }
 
 html, body {
@@ -69,7 +73,7 @@ body {
   contain: layout;
 }
 
-#sb_logo img, .routersummary h3, .routersummary h3 a, #sb_internnals, #sb_advanced, #sb_services,
+#sb_logo img, .routersummary h3, .routersummary h3 a, #sb_internals, #sb_advanced, #sb_services,
 .confignav, *::before, *::after, div.app, .themechoice, .langselect, .langbox,
 .newsAuthor, #newsDisplay, #netdbcountrylist img, .viewfullentry, .sybil_routerinfo th img, .graphspanel, h1 {
   user-select: none;
@@ -551,7 +555,7 @@ i {
   margin: 3px 0 2px !important;
   color: transparent;
   background: transparent;
-  border-bottom: 1px dashed var(--soft_border);
+  border-bottom: 1px dashed var(--border_soft);
 }
 
 #sb_localid {
@@ -2100,7 +2104,7 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
   padding: 3px 0;
   font-size: 10pt;
   border: none;
-  border-bottom: 1px solid var(--soft_border);
+  border-bottom: 1px solid var(--border_soft);
   background: none;
 }
 
@@ -2142,14 +2146,18 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
   border: 1px solid var(--border);
   border-radius: 2px;
   box-shadow: inset 1px 1px 1px #ddd;
-  background: #fafbff;
+  background: var(--bg3);
 }
 
-.main textarea:focus {
+.main textarea:focus, .main .tabletextarea textarea:focus {
   color: var(--ink);
-  box-shadow: inset 0 0 0 1px #89f;
+  box-shadow: inset 0 0 0 1px var(--active) !important;
   background: var(--bg);
   outline: none;
+}
+
+.main .tabletextarea textarea:focus {
+  border-radius: 0 !important;
 }
 
 .main h2 {
@@ -2182,7 +2190,7 @@ div.welcome {
 
 .main#dns, .main#webmail, .main#torrents {
   padding: 0 !important;
-  min-width: 570px;
+  min-width: 606px;
 }
 
 .main#dns {
@@ -2539,7 +2547,7 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 }
 
 #peerdefs tr {
-  border-top: 1px solid var(--soft_border);;
+  border-top: 1px solid var(--border_soft);;
 }
 
 #bandwidthconfig td:first-child {
@@ -2636,7 +2644,7 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 
 #profilelist td[colspan="10"], #profilelist tr td[colspan="10"]:hover {
   padding: 1px !important;
-  background: var(--soft_border);
+  background: var(--border_soft);
 }
 
 #profilelist td[colspan="10"]::after {
@@ -2900,7 +2908,7 @@ ul#banlist + h3.tabletitle {
   display: table;
   line-height: 1.5;
   list-style: none;
-  box-shadow: 0 0 0 1px var(--soft_border), 0 0 1px 1px #ddd;
+  box-shadow: 0 0 0 1px var(--border_soft), 0 0 1px 1px #ddd;
   background: #f9f9ff;
   break-inside: avoid;
   page-break-inside: avoid;
@@ -2921,8 +2929,8 @@ ul#banlist + h3.tabletitle {
   top: 0;
   right: 0;
   line-height: 0;
-  border-left: 1px solid var(--soft_border);
-  border-bottom: 1px solid var(--soft_border);
+  border-left: 1px solid var(--border_soft);
+  border-bottom: 1px solid var(--border_soft);
   filter: none;
 }
 
@@ -2964,8 +2972,8 @@ ul#banlist + h3.tabletitle {
   width: 50%;
 }
 
-#bannedips table tr {
-  border-top: 1px solid #ddf;
+#bannedips table tr td {
+  border-top: 1px solid var(--border_soft);
 }
 
 #bannedips table td {
@@ -3018,7 +3026,6 @@ ul#banlist + h3.tabletitle {
 
 a[href^="configpeer?peer"] {
   font-size: 0;
-  filter: drop-shadow(0 0 1px #777);
 }
 
 a[href^="configpeer?peer"]::after {
@@ -3034,16 +3041,11 @@ a[href^="configpeer?peer"]:hover::after {
   background: var(--edit_hover) no-repeat 2px center / 11px;
 }
 
-a[href^="configpeer?peer"]:hover {
-  filter: drop-shadow(0 0 1px var(--hover));
-}
-
 pre#activetransports {
-  border: 1px solid var(--border);
-  padding: 15px 15px 0;
   margin: -11px 0 0;
-  width: 95%;
+  padding: 15px 15px 0;
   width: calc(100% - 32px);
+  border: 1px solid var(--border);
   background: var(--bg);
 }
 
@@ -3054,14 +3056,14 @@ pre#activetransports {
 }
 
 #view_profile h2 {
-  text-transform: none;
-  line-height: 1.2;
   margin-bottom: -1px !important;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  letter-spacing: 0;
+  line-height: 1.2;
   word-spacing: 0;
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 #pluginconfig {
@@ -3087,13 +3089,13 @@ pre#activetransports {
 
 #pluginconfig td:first-child label {
   margin-left: 6px;
-  padding: 2px 5px 2px 20px;
+  padding: 2px 5px 2px 21px;
   min-width: 100px;
   display: inline-block;
   text-align: left;
   border-radius: 2px 15px 15px 2px;
   box-shadow: 0 0 0 1px var(--border);
-  background: var(--plugin) no-repeat 3px center / 14px, linear-gradient(to bottom, #f8f8ff, #e2e2ff);
+  background: var(--plugin) no-repeat 4px center / 14px, var(--btn);
   background-blend-mode: luminosity;
 }
 
@@ -3169,7 +3171,7 @@ div.configure h2:first-child {
 #floodfills tr, #netdboverview tr, .netdbentry tr, #leasesetdebug tr, #leasesetsummary tr, .leaseset tr, #tunnel_defs tr,
 .sybil_routerinfo tr, #enviro tr, #routerinformation tr, #schedjobs tr, #jobstats tr, #eventlog tr, .tunneldisplay tr,
 #udpconnections tr, #ntcpconnections tr, #tunnelPeerCount tr {
-  border-top: 1px solid var(--soft_border);
+  border-top: 1px solid var(--border_soft);
 }
 
 #config_stats tr:not(.tablefooter) td:first-child::after {
@@ -3774,18 +3776,13 @@ td.tabletextarea {
   box-shadow: none !important;
 }
 
-.main .tabletextarea textarea:focus {
-  border-radius: 0 !important;
-  box-shadow: inset 0 0 0 1px #89f !important;
-}
-
 tr:nth-child(even), #pluginconfig table tr:nth-child(even) td, #profile_defs tr:nth-child(odd) {
   background: var(--bg);
 }
 
 tr:nth-child(odd), #pluginconfig table tr:nth-child(odd) td, .main#profiles ul#banlist,
 #profile_defs table tr:nth-child(odd), #profile_defs table tr:nth-child(even) {
-  background: #fafbff;
+  background: var(--bg3);
 }
 
 .configtable th {
@@ -3985,7 +3982,7 @@ div.search {
 }
 
 table.search {
-  background: #fafbff;
+  background: var(--bg3);
   margin-left: auto;
   margin-right: auto;
   width: auto;
@@ -3996,7 +3993,7 @@ table.search {
 
 .search td {
   padding: 1px 0;
-  background: #fafbff;
+  background: var(--bg3);
 }
 
 .search td:nth-child(2) {
@@ -4229,7 +4226,7 @@ h2#jobrunners {
   column-count: 2;
   column-width: 400px;
   column-gap: 100px;
-  column-rule: 1px dotted var(--soft_border);
+  column-rule: 1px dotted var(--border_soft);
 }
 
 .joblog ol:empty + h3 {
@@ -4244,7 +4241,7 @@ h2#jobrunners {
   margin-left: -15px;
   margin-bottom: 5px;
   min-width: 400px;
-  border-bottom: 1px dotted var(--soft_border);
+  border-bottom: 1px dotted var(--border_soft);
   -webkit-column-break-inside: avoid;
   break-inside: avoid;
   page-break-inside: avoid;
@@ -4652,13 +4649,13 @@ h3#graphdisplay {
   padding: 1px;
   max-width: 95%;
   max-width: calc(100% - 50px);
-  border: 1px solid var(--soft_border);
+  border: 1px solid var(--border_soft);
   background: var(--bg);
 }
 
 .graphspanel a img {
   vertical-align: top;
-  border: 1px solid var(--soft_border);
+  border: 1px solid var(--border_soft);
   background: var(--bg);
   opacity: .9;
 }
@@ -5416,7 +5413,7 @@ td#pw_adduser input {
   width: 200px;
   white-space: nowrap;
   text-align: right;
-  border-right: 1px solid var(--soft_border);
+  border-right: 1px solid var(--border_soft);
 }
 
 #leasesetdebug td:nth-child(even) {
@@ -5910,7 +5907,7 @@ h3.stats {
 .statlist li li:last-child {
   padding-bottom: 5px;
   padding-left: 5px;
-  border-bottom: 1px solid var(--soft_border);
+  border-bottom: 1px solid var(--border_soft);
 }
 
 .statlist li li.noevents {
@@ -5995,8 +5992,8 @@ h3.stats {
 }
 
 #netdboverview table td:not(:first-child):not(:last-child) {
-  border-left: 1px solid var(--soft_border);
-  border-right: 1px solid var(--soft_border);
+  border-left: 1px solid var(--border_soft);
+  border-right: 1px solid var(--border_soft);
 }
 
 #netdboverview table tr:hover {
@@ -6399,7 +6396,7 @@ p#fullhistory {
 #routerinfo td {
   padding: 8px 4px;
   width: 25%;
-  border-bottom: 1px solid var(--soft_border) !important;
+  border-bottom: 1px solid var(--border_soft) !important;
 }
 
 #routerinfo td:first-child, #routerinfo td:nth-child(3) {
@@ -6409,7 +6406,7 @@ p#fullhistory {
 
 #routerinfo td:nth-child(2):not([colspan]) {
   white-space: nowrap;
-  border-right: 1px solid var(--soft_border);
+  border-right: 1px solid var(--border_soft);
 }
 
 #certs .infohelp {
@@ -6697,8 +6694,8 @@ p#enablefullstats, p#gatherstats {
   padding: 0 2px 4px 22px !important;
   width: 100% !important;
   width: calc(100% - 24px) !important;
-  border-top: 1px solid var(--soft_border);
-  border-bottom: 1px solid var(--soft_border);
+  border-top: 1px solid var(--border_soft);
+  border-bottom: 1px solid var(--border_soft);
   background: transparent;
   opacity: .85;
 }
@@ -7618,7 +7615,7 @@ h2#debug_portmapper {
 }
 
 #jardump tr td, #config_logging tr {
-  border-top: 1px solid var(--soft_border) !important;
+  border-top: 1px solid var(--border_soft) !important;
 }
 
 #jardump td {
@@ -7665,11 +7662,11 @@ h2#debug_portmapper {
 }
 
 .subheading.pluginfiles {
-  border-top: 1px solid var(--soft_border);
+  border-top: 1px solid var(--border_soft);
 }
 
 #jardump td {
-  border-left: 1px solid var(--soft_border) !important;
+  border-left: 1px solid var(--border_soft) !important;
   vertical-align: middle;
   text-align: center;
 }
@@ -7700,7 +7697,7 @@ h2#debug_portmapper {
 
 #jardump hr {
   margin: 2px 0 !important;
-  background: var(--soft_border);
+  background: var(--border_soft);
 }
 
 .unsignedmod:empty {
@@ -8070,7 +8067,7 @@ h3#totaljobstats {
 
 table[id*="connections"] td, #floodfills td,  #profilelist td, #jobstats td, .main#tunnels td {
   padding: 3px;
-  border-right: 1px solid var(--soft_border);
+  border-right: 1px solid var(--border_soft);
 }
 
 .main#netdb #netdboverview, #netdblookup {
@@ -8547,7 +8544,7 @@ div.news {
 
 .optionlist, .optionsingle, #reseedssl {
   padding: 1px 2px;
-  border: 1px solid var(--soft_border) !important;
+  border: 1px solid var(--border_soft) !important;
   box-shadow: inset 0 0 0 2px var(--bg);
   background: var(--bg) !important;
   column-gap: 1px;
@@ -8614,7 +8611,7 @@ b.suboption {
   display: inline-block;
   text-shadow: 0 1px 1px var(--bg);
   border-radius: 3px 3px 0 0;
-  border: 1px solid var(--soft_border);
+  border: 1px solid var(--border_soft);
   border-bottom: none;
   box-shadow: var(--highlight);
   background: #fdfdff;
@@ -8663,19 +8660,19 @@ b.suboption {
 #bandwidthconfig .optionsingle {
   margin: 8px 0 8px 3px;
   padding: 0 15px 0 40px;
-  background: #fafbff !important;
+  background: var(--bg3) !important;
 }
 
 #bandwidthconfig .bw_out {
-  background: #fafbff url(/themes/console/images/svg/outbound.svg) 10px calc(50% + 14px) no-repeat !important;
+  background: var(--bg3) url(/themes/console/images/svg/outbound.svg) 10px calc(50% + 14px) no-repeat !important;
 }
 
 #bandwidthconfig .bw_in {
-  background: #fafbff url(/themes/console/images/svg/inbound.svg) 10px calc(50% + 14px) no-repeat !important;
+  background: var(--bg3) url(/themes/console/images/svg/inbound.svg) 10px calc(50% + 14px) no-repeat !important;
 }
 
 #bandwidthconfig .bw_share {
-  background: #fafbff var(--share) 10px calc(50% + 14px) no-repeat !important;
+  background: var(--bg3) var(--share) 10px calc(50% + 14px) no-repeat !important;
 }
 
 #bandwidthconfig .bw_out, #bandwidthconfig .bw_in, #bandwidthconfig .bw_share {
@@ -8736,7 +8733,7 @@ b.suboption {
 
 @media screen and (max-width: 1000px) {
 #bandwidthconfig .bw_out, #bandwidthconfig .bw_in, #bandwidthconfig .bw_share {
-  background: #fafbff !important;
+  background: var(--bg3) !important;
   padding-left: 5px;
   padding-right: 8px;
 }
@@ -8788,7 +8785,7 @@ b.suboption {
   display: inline-block;
   margin: 1px 0;
   padding: 2px 5px;
-  background: #fafbff;
+  background: var(--bg3);
   line-height: 1 !important;
 }
 
@@ -9017,7 +9014,7 @@ b.suboption {
 
 #config_reseed .optionsingle {
   margin: 0 !important;
-  background: #fafbff !important;
+  background: var(--bg3) !important;
 }
 
 #config_reseed .optionsingle:hover {
@@ -9069,7 +9066,7 @@ b.suboption {
   padding: 4px 5px;
   min-width: 100px !important;
   width: calc(100% - 10px);
-  background: #fafbff !important;
+  background: var(--bg3) !important;
 }
 
 #reseed_urlselection label::before, #reseedproxytype label::before {
@@ -9158,16 +9155,16 @@ b.suboption {
 }
 
 #config_reseed #reseedurl {
-  background: #fafbff var(--link) no-repeat 14px center / 28px !important;
+  background: var(--bg3) var(--link) no-repeat 14px center / 28px !important;
 }
 
 #config_reseed  #reseedzip {
-  background: #fafbff var(--files) no-repeat 14px center / 28px !important;
+  background: var(--bg3) var(--files) no-repeat 14px center / 28px !important;
 }
 
 #config_reseed #reseedcreatefile {
   text-align: justify;
-  background: #fafbff var(--package) no-repeat 14px center / 28px !important;
+  background: var(--bg3) var(--package) no-repeat 14px center / 28px !important;
 }
 
 #config_reseed #reseedcreatefile:hover, #config_reseed #reseedzip:hover, #config_reseed #reseedurl:hover {
@@ -9283,17 +9280,17 @@ b.suboption {
 }
 
 #installPluginUrl, #installPluginFile {
-  background: #fafbff !important;
+  background: var(--bg3) !important;
 }
 
 #installPluginUrl td:first-child {
   padding: 15px 15px 15px 50px;
-  background: #fafbff var(--link) no-repeat 12px center / 28px !important;
+  background: var(--bg3) var(--link) no-repeat 12px center / 28px !important;
 }
 
 #installPluginFile td:first-child {
   padding: 15px 15px 15px 50px;
-  background: #fafbff var(--files) no-repeat 12px center / 28px !important;
+  background: var(--bg3) var(--files) no-repeat 12px center / 28px !important;
 }
 
 #installPluginUrl:hover td, #installPluginFile #file:hover td {
@@ -9318,12 +9315,12 @@ input[type="file"]:hover {
 
 #newfamily .optionsingle {
   padding: 5px 5px 0 45px;
-  background: #fafbff var(--tag) no-repeat 10px center / 28px !important;
+  background: var(--bg3) var(--tag) no-repeat 10px center / 28px !important;
 }
 
 #joinfamily .optionsingle {
   padding: 5px 5px 0 45px;
-  background: #fafbff var(--key) no-repeat 10px center / 28px !important;
+  background: var(--bg3) var(--key) no-repeat 10px center / 28px !important;
 }
 
 #newfamily .optionsingle:hover, #joinfamily .optionsingle:hover {
@@ -9425,7 +9422,7 @@ input[type="file"]:hover {
 
 #ntcpconnections tr:nth-last-child(n+2) td, #udpconnections tr:nth-last-child(n+2) td, #profilelist td, #profile_defs td, #floodfills td,
 #tunnelPeerCount td {
-  border-right: 1px solid var(--soft_border);
+  border-right: 1px solid var(--border_soft);
 }
 
 #ntcpconnections tr:nth-last-child(n+2) td::after, #udpconnections tr:nth-last-child(n+2) td::after,
@@ -10230,7 +10227,7 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel{
   margin: 1px 3px 8px;
   width: 140px !important;
   border-color: var(--border);
-  background: #fafbff;
+  background: var(--bg3);
 }
 
 #sitemap div.app img {
@@ -10241,7 +10238,7 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel{
 #sitemap .applabel {
   width: 136px !important;
   border-color: var(--border);
-  background: #fafbff;
+  background: var(--bg3);
 }
 
 #sitemap div.app:hover, #sitemap div.app:hover .applabel,
@@ -11187,7 +11184,7 @@ p#gatherstats {
   width: 1% !important;
   min-width: 178px !important;
   white-space: nowrap;
-  background: linear-gradient(to bottom, #fff, #dfe1ec);
+  background: var(--th);
   box-sizing: border-box;
 }
 
@@ -11208,7 +11205,7 @@ p#gatherstats {
 }
 
 #tunnels .percentBarInner {
-  background: #99c;
+  background: var(--flatbar);
 }
 
 #tunnels .percentBarOuter:hover .percentBarInner {
@@ -11567,8 +11564,8 @@ div.app, .sitemapLink, .sitemapLabel {
     padding: 1px 8px 2px;
     width: calc(100% - 46px);
     display: inline-block;
-    border-top: 1px solid var(--soft_border);
-    border-bottom: 1px solid var(--soft_border);
+    border-top: 1px solid var(--border_soft);
+    border-bottom: 1px solid var(--border_soft);
   }
 
   a.graphstat {
@@ -11754,8 +11751,8 @@ div.app:hover img, .sitemaplink:hover img {
   line-height: 32px;
   font-size: 0;
   color: #770;
-  box-shadow: inset 0 0 0 1px #800, inset 0 0 1px 3px #eeeee2, inset 0 0 0 4px #ccccc2;
-  background: repeating-linear-gradient(135deg, #fffff2, #fffff2 10px, #ddddd2 10px, #ddddd2 20px);
+  box-shadow: var(--down_shadow);
+  background: var(--down);
   background-size: 300%;
   animation: down linear 10s reverse infinite;
 }
@@ -11793,7 +11790,7 @@ div.app:hover img, .sitemaplink:hover img {
 #sb_localtunnels td[colspan="3"] {
   line-height: 20px;
   font-size: 0 !important;
-  background: repeating-linear-gradient(135deg, #fffff2, #fffff2 10px, #ddddd2 10px, #ddddd2 20px) !important;
+  background: var(--down) !important;
 }
 
 /* highlight linked leaseset */
