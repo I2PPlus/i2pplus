@@ -13,6 +13,10 @@
   --btnAction_hover: linear-gradient(to bottom, #fff 50%, #eef 50%);
   --btnAction_active: linear-gradient(to bottom, #bbf, #eef);
   --highlight: inset 0 0 0 1px #fff;
+  --btn: linear-gradient(to bottom, #fff, #eaeaff);
+  --btn_hover: linear-gradient(to bottom, #ddd, #fff);
+  --btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 #fff, inset 0 0 4px 2px #e4e4ff, 0 2px 1px rgba(220,220,255,.7);
+  --btn_shadow_hover: var(--highlight), 0 0 0 1px #fff, 0 0 0 2px rgba(255,96,0,.4);
 }
 
 html, body {
@@ -1545,9 +1549,9 @@ input[type=submit], input[type="reset"], a.control {
   color: #5e626e;
   text-align: center;
   border: 1px solid #bec2da;
-  border-radius: 2px;
-  box-shadow: var(--highlight);
-  background: linear-gradient(to bottom, #fff, #eef);
+  border-radius: 3px;
+  box-shadow: var(--btn_shadow);
+  background: var(--btn);
   outline: none;
   filter: drop-shadow(0 0 1px rgba(221, 221, 221, .8));
   cursor: pointer !important;
@@ -1555,8 +1559,9 @@ input[type=submit], input[type="reset"], a.control {
 
 input[type=submit]:hover, input[type="reset"]:hover, input[type=submit]:focus, input[type="reset"]:focus, a.control:hover, a.control:focus {
   color: #var(--ink);
-  background: linear-gradient(to bottom, #ddd, #fff);
   border: 1px solid #bec2da;
+  box-shadow: var(--btn_shadow_hover);
+  background: var(--btn_hover);
 }
 
 input[type=submit]:focus, input[type="reset"]:focus, a.control:focus {
@@ -1725,9 +1730,9 @@ select {
   font: 9pt var(--bodyfont);
   color: #5e626e;
   border: 1px solid #bec2da;
-  border-radius: 2px;
-  box-shadow: var(--highlight);
-  background: var(--dropdown) no-repeat scroll right 8px center / 10px, linear-gradient(to bottom, #fff, #eef);
+  border-radius: 3px;
+  box-shadow: var(--btn_shadow);
+  background: var(--dropdown) no-repeat scroll right 8px center / 10px, var(--btn);
   outline: none;
   cursor: pointer;
   appearance: none;
@@ -1741,11 +1746,12 @@ select option {
 
 select:hover, select:active {
   color: #var(--ink);
-  background: var(--dropdown_hover) no-repeat scroll right 8px center / 10px, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
+  box-shadow: var(--btn_shadow_hover);
+  background: var(--dropdown_hover) no-repeat scroll right 8px center / 10px, var(--btn_hover) !important;
 }
 
 select:focus {
-  background: var(--dropdown_hover) no-repeat scroll right 8px center / 10px, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
+  background: var(--dropdown_hover) no-repeat scroll right 8px center / 10px, var(--btn_hover) !important;
 }
 
 select[disabled], select[disabled]:hover {
