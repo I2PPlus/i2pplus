@@ -14057,6 +14057,7 @@ body.iframed {
 
   #help .tab, #help .tab2 {
     margin-top: -1px !important;
+    font-size: 90%;
   }
 
   .newsAuthor {
