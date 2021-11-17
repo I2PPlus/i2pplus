@@ -9,11 +9,16 @@
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
   --monospaced: Droid Sans Mono, Andale Mono, DejaVu Sans Mono, Lucida Console, monospace;
   --bg: #fff;
+  --ink: #41444d;
+  --ink_light: #5e626e;
   --highlight: inset 0 0 0 1px #fff;
   --btn: linear-gradient(to bottom, #fff, #eaeaff);
   --btn_hover: linear-gradient(to bottom, #ddd, #fff);
   --btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 #fff, inset 0 0 4px 2px #e4e4ff, 0 2px 1px rgba(220,220,255,.7);
   --btn_shadow_hover: var(--highlight), 0 0 0 1px #fff, 0 0 0 2px rgba(255,96,0,.4);
+  --heading: linear-gradient(to bottom, #fff, #fafbff);
+  --border: #bec2da;
+  --active: #f60;
 }
 
 html, body {
@@ -24,7 +29,7 @@ html, body {
 
 body {
   min-width: 700px;
-  color: #41444d;
+  color: var(--ink);
   font: 9pt/130% var(--bodyfont);
   background: #eef;
   background: #eef url(/themes/console/classic/images/bg0.png);
@@ -54,7 +59,7 @@ table {
 }
 
 table.book {
-  border: 1px solid #bec2da;
+  border: 1px solid var(--border);
   margin: 10px 0 !important;
   border-collapse: collapse;
 }
@@ -65,11 +70,11 @@ table.book {
 }
 
 #host_details tr:first-child {
-  border-top: 1px solid #bec2da;
+  border-top: 1px solid var(--border);
 }
 
 #host_details tr:last-child {
-  border-bottom: 1px solid #bec2da;
+  border-bottom: 1px solid var(--border);
 }
 
 table.book td {
@@ -85,7 +90,7 @@ table.book th {
 }
 
 .book th:last-child {
-  background: var(--nuke) no-repeat center calc(50% + 1px) / 14px, linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
+  background: var(--nuke) no-repeat center calc(50% + 1px) / 14px, var(--heading);
 }
 
 table.book tr:hover textarea {
@@ -143,8 +148,8 @@ input:focus::placeholder {
   position: sticky;
   top: -1px;
   z-index: 999;
-  border: 1px solid #bec2da;
-  background: linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
+  border: 1px solid var(--border);
+  background: var(--heading);
 }
 
 .iframed #navi {
@@ -166,7 +171,7 @@ input:focus::placeholder {
 .iframed #content h3 {
   border: none;
   margin: 0;
-  border-bottom: 1px dotted #bec2da;
+  border-bottom: 1px dotted var(--border);
 }
 
 .iframed #content h3:first-child {
@@ -188,15 +193,15 @@ input:focus::placeholder {
 }
 
 #ovrvw #content {
-  margin-top: 15px;
+  margin-top: 25px;
 }
 
 div.page {
-  border: 1px solid #bec2da;
+  border: 1px solid var(--border);
   background: var(--bg) !important;
   margin: 0;
   padding: 0 10px;
-  color: #41444d;
+  color: var(--ink);
   font-size: 9pt !important;
   line-height: 160% !important;
 }
@@ -208,7 +213,7 @@ div.page {
 }
 
 div.help {
-  border: 1px solid #bec2da;
+  border: 1px solid var(--border);
   margin: 0 0 10px;
   background: #eef;
 }
@@ -250,9 +255,9 @@ h3 {
   text-transform: capitalize;
   font-size: 11pt;
   font-weight: 700;
-  color: #41444d;
-  border: 1px solid #bec2da;
-  background: linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
+  color: var(--ink_light);
+  border: 1px solid var(--border);
+  background: var(--heading);
 }
 
 #help h3 {
@@ -262,8 +267,8 @@ h3 {
 h4 {
   margin: -11px -11px 10px;
   padding: 3px 10px;
-  border: 1px solid #bec2da;
-  background: linear-gradient(to right, #fff, #eef);
+  border: 1px solid var(--border);
+  background: var(--heading);
 }
 
 a {
@@ -278,7 +283,7 @@ a:visited {
 
 a:hover, a:focus {
   text-decoration: none;
-  color: #f60;
+  color: var(--active);
 }
 
 a:active {
@@ -289,9 +294,9 @@ th {
   padding: 5px 10px;
   line-height: 12pt;
   font-size: 10pt;
-  border-bottom: 1px solid #bec2da;
-  border-top: 1px solid #bec2da;
-  background: linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
+  border-bottom: 1px solid var(--border);
+  border-top: 1px solid var(--border);
+  background: var(--heading);
 }
 
 td {
@@ -351,7 +356,7 @@ p.footer {
 }
 
 div#filter {
-  border: 1px solid #bec2da;
+  border: 1px solid var(--border);
   padding: 6px 10px 5px;
   margin: 11px 0 -13px !important;
   word-spacing: .2em;
@@ -372,7 +377,7 @@ div#filter {
   text-transform: capitalize;
   font-size: 10pt;
   color: #5c5c8a;
-  border: 1px solid #bec2da;
+  border: 1px solid var(--border);
   border-radius: 1px;
   box-shadow: var(--highlight);
   background: var(--btn);
@@ -386,8 +391,8 @@ div#filter {
 
 #filter a:hover, #filter a:focus {
   text-decoration: none;
-  color: #f60 !important;
-  border: 1px solid #f60 !important;
+  color: var(--active) !important;
+  border: 1px solid var(--active) !important;
   background: var(--bg);
 }
 
@@ -423,7 +428,7 @@ div#filter {
   padding: 5px 5px 4px;
   min-width: 300px;
   white-space: nowrap;
-  border: 1px solid #bec2da;
+  border: 1px solid var(--border);
   background: var(--bg);
 }
 
@@ -433,7 +438,7 @@ div#filter {
 
 .iframed #booksearch, .iframed #filter {
   background: #eff2ff;
-  background: linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
+  background: var(--heading);
 }
 
 #search input[type=text] {
@@ -477,7 +482,7 @@ div#filter {
 }
 
 #visualid td[colspan="2"] {
-  border-top: 1px solid #bec2da;
+  border-top: 1px solid var(--border);
   padding: 15px 0;
 }
 
@@ -501,7 +506,7 @@ img[src="/imagegen/id?s=256&c="], img[src="/imagegen/id?s=20&c="] {
   padding: 10px;
   max-width: 700px;
   height: auto;
-  border: 1px solid #bec2da;
+  border: 1px solid var(--border);
   border-radius: 4px;
   font-size: 10pt;
   text-align: center;
@@ -543,7 +548,7 @@ _:-ms-lang(x), img.illustrate {
 #content + #buttons, #config + #buttons {
   margin: -21px -11px 0;
   padding: 10px;
-  border: 1px solid #bec2da;
+  border: 1px solid var(--border);
 }
 
 #config + #buttons {
@@ -557,7 +562,7 @@ _:-ms-lang(x), img.illustrate {
 }
 
 p.buttons {
-  border: 1px solid #bec2da;
+  border: 1px solid var(--border);
   padding: 10px;
   margin: 0 -11px -13px;
   background: var(--bg);
@@ -578,7 +583,7 @@ input[type=text], input[type=password], textarea {
   vertical-align: middle;
   font: 9pt/130% var(--bodyfont);
   color: #222;
-  border: 1px solid #bec2da;
+  border: 1px solid var(--border);
   border-radius: 2px;
   box-shadow: inset 1px 1px 1px #ddd;
   background: var(--bg);
@@ -603,7 +608,7 @@ input[type=file]::file-selector-button {
   padding: 6px 10px;
   font: 9pt/130% var(--bodyfont);
   color: #222;
-  border: 1px solid #bec2da;
+  border: 1px solid var(--border);
   border-radius: 2px;
   box-shadow: inset 1px 1px 1px #ddd;
   background: var(--btn);
@@ -611,7 +616,7 @@ input[type=file]::file-selector-button {
 
 input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
   color: #222;
-  border: 1px solid #bec2da;
+  border: 1px solid var(--border);
   background: var(--btn_hover);
   filter: drop-shadow(0 0 1px #89f);
   cursor: pointer;
@@ -654,7 +659,7 @@ td.destinations textarea, td.destinations textarea:focus {
   padding: 5px 8px !important;
   color: #333 !important;
   border-radius: 2px;
-  border: 1px solid #bec2da;
+  border: 1px solid var(--border);
   box-shadow: var(--btn_shadow);
   background: var(--btn);
 }
@@ -666,7 +671,7 @@ input.update {
 .fakebutton:hover, input[type=submit]:hover, input[type="reset"]:hover,
 .fakebutton:focus, input[type=submit]:focus, input[type="reset"]:focus {
   color: #222;
-  border: 1px solid #bec2da;
+  border: 1px solid var(--border);
   background: var(--btn_hover);
   box-shadow: var(--btn_shadow_hover);
 }
@@ -709,7 +714,7 @@ div#config, form[action="subscriptions"] div#content {
 textarea[name="config"], textarea[name="content"] {
   padding: 2px 5px;
   height: 200px !important;
-  border: 1px solid #bec2da;
+  border: 1px solid var(--border);
   box-shadow: none;
 }
 
@@ -732,7 +737,7 @@ textarea[name="config"], textarea[name="content"] {
 }
 
 #navi a, #navi a:visited {
-  border: 1px solid #bec2da;
+  border: 1px solid var(--border);
   border-radius: 2px;
   margin: 3px 0 !important;
   box-shadow: 0 0 1px 0 #ddd, var(--highlight);
@@ -776,13 +781,13 @@ textarea[name="config"], textarea[name="content"] {
 
 #navi a:hover, #navi a:focus {
   z-index: 10;
-  color: #f60 !important;
-  border-color: 1px solid #f60;
+  color: var(--active) !important;
+  border-color: 1px solid var(--active);
 }
 
 .iframed #navi a:hover, .iframed #navi a:focus {
   z-index: 1;
-  border-color: #bec2da;
+  border-color: var(--border);
 }
 
 #navi a:active {
@@ -796,7 +801,7 @@ textarea[name="config"], textarea[name="content"] {
 
 #book + #buttons {
   margin: -12px 10px 23px;
-  border: 1px solid #bec2da;
+  border: 1px solid var(--border);
   border-top: none;
   border-bottom: none;
 }
@@ -817,7 +822,7 @@ textarea[name="config"], textarea[name="content"] {
   letter-spacing: .08em;
   text-transform: uppercase;
   font-size: 12pt;
-  background: var(--addressbook) no-repeat 10px center / 22px, linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
+  background: var(--addressbook) no-repeat 10px center / 22px, var(--heading);
 }
 
 body:not(.iframed) #addressbook.headline h3 {
@@ -825,11 +830,11 @@ body:not(.iframed) #addressbook.headline h3 {
 }
 
 .headline#subscriptions h3 {
-  background: var(--subscription) no-repeat 10px center / 22px, linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
+  background: var(--subscription) no-repeat 10px center / 22px, var(--heading);
 }
 
 .headline#configure h3 {
-  background: var(--config) no-repeat 10px center / 22px, linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
+  background: var(--config) no-repeat 10px center / 22px, var(--heading);
 }
 
 .iframed .headline#subscriptions, .iframed .headline#configure {
@@ -909,13 +914,13 @@ p.book {
 }
 
 .info img[src^="/imagegen"] {
-  border: 1px solid #bec2da;
+  border: 1px solid var(--border);
   border-radius: 2px;
   background: var(--bg);
 }
 
 .info img:hover, .info a:focus img {
-  filter: drop-shadow(0 0 1px #f60) !important;
+  filter: drop-shadow(0 0 1px var(--active)) !important;
 }
 
 .info a:active img, .info a:focus img {
@@ -934,11 +939,11 @@ p.book {
 }
 
 #host_list td:first-child {
-  border-left: 1px solid #bec2da;
+  border-left: 1px solid var(--border);
 }
 
 #host_list td:last-child {
-  border-right: 1px solid #bec2da;
+  border-right: 1px solid var(--border);
 }
 
 #host_list .info {
@@ -1138,7 +1143,7 @@ input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input
   height: 19px !important;
   vertical-align: middle !important;
   box-sizing: border-box;
-  border: 1px solid #bec2da;
+  border: 1px solid var(--border);
   background: #f8f8ff;
   -moz-appearance: none;
   -webkit-appearance: inherit;
@@ -1199,7 +1204,7 @@ input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus,
   width: 19px !important;
   height: 19px !important;
   border: 1px solid #67f !important;
-  box-shadow: 0 0 2px #f60 !important;
+  box-shadow: 0 0 2px var(--active) !important;
   filter: drop-shadow(0 0 3px #89f) !important;
   filter: none !important;
 }
@@ -1269,7 +1274,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
   position: absolute;
   top: 0;
   right: 3px;
-  border-left: 1px solid #bec2da;
+  border-left: 1px solid var(--border);
 }
 
 input#exporthosts {
@@ -1313,7 +1318,7 @@ input[disabled] {
   overflow: hidden;
   font-size: 0;
   text-align: center;
-  border: 1px solid #bec2da;
+  border: 1px solid var(--border);
   border-radius: 4px;
   background: linear-gradient(to bottom, #fff 50%, #dde0f0 50%);
 }
@@ -1329,8 +1334,8 @@ input[disabled] {
   text-align: center;
   font-size: 11.5pt !important;
   color: #525660;
-  border-left: 1px solid #bec2da;
-  border-right: 1px solid #bec2da;
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
 }
 
 #prev a, #prev.inactive {
@@ -1384,11 +1389,11 @@ input[disabled] {
 }
 
 #prev:not(.inactive):hover::after, #prev:not(.inactive) a:focus::after {
-  border-color: transparent #f60 transparent transparent;
+  border-color: transparent var(--active) transparent transparent;
 }
 
 #next:not(.inactive):hover::after, #next:not(.inactive) a:focus::after {
-  border-color: transparent transparent transparent #f60;
+  border-color: transparent transparent transparent var(--active);
 }
 
 #empty {
