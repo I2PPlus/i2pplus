@@ -9,20 +9,31 @@
   --ink: #41444d;
   --ink_light: #5e626e;
   --ink_h1: #6c7293;
-  --a: #5c5c8a;
   --disabled: #757a8a;
+  --a: #5c5c8a;
   --hover: #f60;
-  --btn: linear-gradient(to bottom, #fff, #f4f5ff);
+  --active: #f90;
+  --btn: linear-gradient(to bottom, #fff, #eaeaff);
   --btn_hover: linear-gradient(to bottom, #ddd, #fff);
+  --btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 #fff, inset 0 0 4px 2px #e4e4ff, 0 2px 1px rgba(220,220,255,.7);
+  --btn_shadow_hover: var(--highlight), 0 0 0 1px #fff, 0 0 0 2px rgba(255,96,0,.4);
   --badge: linear-gradient(to bottom, #fff, #eef);
   --badge_hover: linear-gradient(to bottom, #eef, #fff);
-  --highlight: inset 0 0 0 1px #fff;
+  --border_badge: 0 0 0 1px #aad;
+  --highlight: inset 0 0 0 1px var(--bg);
+  --highlight_hover: inset 0 0 0 1px #a79;
+  --highlight_active: inset 3px 3px 3px 1px #5f2400;
   --border: #bec2da;
+  --soft_border: #ced1e3;
+  --border_warn: #fb7;
   --bg: #fff;
   --bg2: #eff1ff;
   --th: linear-gradient(to bottom, #fff, #fafbff);
+  --subheading: linear-gradient(to right, #fff, #eef);
   --header: linear-gradient(to bottom, #fff 50%, #fafbff 50%);
   --row_hover: #ffd;
+  --ls_target: 1px solid #5a5 !important;
+  --reload: linear-gradient(to right, #930, var(--hover));
 }
 
 html, body {
@@ -37,6 +48,7 @@ body {
   font: 9pt/130% var(--bodyfont);
   color: var(--ink);
   background: var(--bodybg) url(images/bg0.png) no-repeat center center / 90px;
+  scrollbar-color: #acafb9 var(--bg);
 }
 
 @supports (text-justify: auto) { /* Firefox 55+ */
@@ -46,20 +58,14 @@ body {
 ::selection {
   text-shadow: none;
   background: #4a90d9;
-  color: white;
-}
-
-::-moz-selection {
-  text-shadow: none;
-  background: #4a90d9;
-  color: white;
+  color: var(--bg);
 }
 
 * {
   outline: none;
 }
 
-.routersummary, .routersummaryouter, h1, .main, iframe {
+.routersummary, .routersummaryouter, h1, .main, iframe, tr {
   contain: layout;
 }
 
@@ -146,7 +152,7 @@ i {
   position: relative;
   text-align: left;
   color: inherit;
-  border: 5px solid #fb7;
+  border: 5px solid var(--border_warn);
   box-shadow: inset 0 0 0 2px var(--hover);
   background: var(--row_hover);
 }
@@ -170,9 +176,9 @@ i {
 .warning hr {
   margin: 5px 0;
   height: 1px;
-  color: #fb7;
+  color: var(--border_warn);
   border: none;
-  background: #fb7;
+  background: var(--border_warn);
 }
 
 .warning h3:first-child {
@@ -182,7 +188,7 @@ i {
   letter-spacing: .08em;
   text-transform: uppercase;
   border: none;
-  border-bottom: 1px solid #fb7;
+  border-bottom: 1px solid var(--border_warn);
   word-spacing: .1em;
   background: var(--row_hover) var(--err) no-repeat 8px center / auto 60% !important;
 }
@@ -215,16 +221,16 @@ i {
 
 .warning table {
   margin-bottom: 15px;
-  border: 1px solid #fb7;
+  border: 1px solid var(--border_warn);
 }
 
 .warning tr {
   background: var(--row_hover) !important;
-  border: 1px solid #fb7;
+  border: 1px solid var(--border_warn);
 }
 
 .warning tr:last-child {
-  background: #fff !important;
+  background: var(--bg) !important;
   height: 80px;
   white-space: nowrap;
 }
@@ -245,7 +251,7 @@ i {
   font-weight: 700;
   border: 1px solid var(--border);
   box-shadow: var(--highlight), inset 0 0 1px 1px #900;
-  background: #f2f2ff var(--err) no-repeat 20px 40% / 36px;
+  background: var(--bg) var(--err) no-repeat 20px 40% / 36px;
 }
 
 #error500 .sorry {
@@ -271,7 +277,7 @@ i {
   color: var(--ink);
   box-shadow: inset 0 0 0 1px #f99;
   background: linear-gradient(to bottom, rgba(255, 255, 255, .8), rgba(255, 255, 255, .2)) repeat scroll 0 0 / 100%,
-              rgba(0, 0, 0, 0) url(images/bg0.png) repeat scroll 0 0 / 120px 120px;
+              url(images/bg0.png) repeat scroll 0 0 / 120px;
 }
 
 #warning2 h3 {
@@ -299,17 +305,15 @@ i {
   margin: 0;
   padding: 0;
   width: 193px;
-  position: absolute; /* so no interference with /home app icons */
-  float: left;
-  clear: left; /* fixes a bug in Opera */
-  border: 0;
+  position: absolute;
+  border: none;
 }
 
 .routersummary {
   margin: 0 0 5px;
   padding: 9px 1px 7px 1px;
   width: 204px;
-  line-height: 125%;
+  line-height: 1.25;
   word-wrap: break-word;
   text-align: center !important;
   font-size: 9pt;
@@ -321,8 +325,8 @@ i {
 /* siderbar logo */
 
 #sb_logo {
-  height: 32px !important;
   margin-left: -2px;
+  height: 32px !important;
 }
 
 #sb_logo img {
@@ -395,7 +399,7 @@ i {
   margin-bottom: 2px;
   width: 100%;
   display: inline-block;
-  line-height: 120%;
+  line-height: 1.2;
   font-size: 9pt;
 }
 
@@ -454,13 +458,13 @@ i {
 }
 
 .routersummary h3:active a {
-  color: #f90 !important;
+  color: var(--active) !important;
 }
 
 .routersummary h4 {
   margin: -7px -1px -7px -1px !important;
   padding: 8px 2px;
-  line-height: 108%;
+  line-height: 1.08;
   text-transform: capitalize;
   font-size: 8.5pt;
   color: #1f7096;
@@ -481,29 +485,23 @@ i {
   text-align: left !important;
 }
 
+.routersummary table, .routersummary tr, .routersummary table, .routersummary td {
+  background: none;
+  border: none;
+}
+
 .routersummary table {
   margin: -5px 0 -5px 0;
   padding: 0;
   width: 204px !important;
   overflow: hidden;
   table-layout: fixed;
-  text-align: center !important;
+  text-align: center;
   font-size: 8pt;
-  border: 0;
-  background-image: none !important;
-  background-color: transparent !important;
-}
-
-.routersummary tr {
-  border: 0 !important;
-  background-image: none !important;
-  background-color: transparent !important;
 }
 
 .routersummary td {
   padding: 0 3px;
-  border: 0 !important;
-  background-image: none !important;
 }
 
 #sb_shortgeneral, #sb_advancedgeneral, #sb_bandwidth, #sb_peers, #sb_peersadvanced, #sb_tunnels, #sb_queue {
@@ -553,7 +551,7 @@ i {
   margin: 3px 0 2px !important;
   color: transparent;
   background: transparent;
-  border-bottom: 1px dashed #ced1e3;
+  border-bottom: 1px dashed var(--soft_border);
 }
 
 #sb_localid {
@@ -641,11 +639,11 @@ i {
 }
 
 #sb_localtunnels td.tunnelServer, #sb_localtunnels tr:hover td.tunnelServer  {
-  background: var(--server) !important;
+  background: var(--server) no-repeat center center / 16px !important;
 }
 
 #sb_localtunnels td.ping, #sb_localtunnels tr:hover td.ping {
-  background-image: var(--ping) !important;
+  background-image: var(--ping) no-repeat center center / 16px !important;
 }
 
 #sb_localtunnels td:last-child, #sb_localtunnels tr:hover td:last-child {
@@ -683,7 +681,7 @@ i {
 .sb_notice {
   margin: -5px 1px -6px;
   padding: 7px 5px;
-  line-height: 110%;
+  line-height: 1.1;
   font-size: 8.5pt;
   font-weight: 700;
   border: 1px solid var(--border);
@@ -752,7 +750,7 @@ p:empty + .sb_notice {
 
 .sb_newsheadings td {
   padding: 5px 3px;
-  line-height: 100%;
+  line-height: 1;
   text-align: left;
   border-collapse: collapse;
   border: none;
@@ -785,7 +783,7 @@ p:empty + .sb_notice {
   padding: 0;
   width: 100%;
   display: inline-block;
-  line-height: 110%;
+  line-height: 1.1;
 }
 
 /* end sidebar news */
@@ -812,7 +810,8 @@ div.refresh {
   width: calc(100% - 12px);
   display: inline-block;
   vertical-align: text-bottom;
-  text-shadow: 0 1px 1px #fff;
+  line-height: 1.5;
+  text-shadow: 0 1px 1px var(--bg);
   border: 1px solid var(--border);
   box-shadow: var(--highlight), 0 0 1px rgba(96,96,96,.5);
 }
@@ -906,29 +905,22 @@ div.refresh {
 }
 
 .tunnelBuildStatus::before {
-  margin: 3px 3px 0 0;
-  width: 9px;
-  height: 9px;
+  margin: -3px 0 -1px;
+  width: 16px;
+  height: 16px;
   display: inline-block;
+  vertical-align: middle;
   border-radius: 50%;
   content: "";
-}
-
-@supports not (-moz-appearance: none) {
-  .tunnelBuildStatus::before {
-    margin-top: 1px !important;
-    vertical-align: top !important;
-  }
+  transform: scale(.7);
 }
 
 .tunnelBuildStatus.accepting::before {
-  box-shadow: inset 0 0 0 2px #5b5;
-  background: var(--bg);
+  background: var(--tunn_ready) no-repeat center center / 15px;
 }
 
 .tunnelBuildStatus.active::before {
-  background: #5c5;
-  animation: linear participating 1s 2s alternate infinite;
+  background: var(--tunn_active) no-repeat center center / 15px;
 }
 
 .tunnelBuildStatus.starting {
@@ -936,7 +928,7 @@ div.refresh {
 }
 
 .tunnelBuildStatus.starting::before {
-  background: #bb0;
+  background: var(--tunn_starting) no-repeat center center / 15px;
 }
 
 .tunnelBuildStatus.rejecting {
@@ -944,8 +936,7 @@ div.refresh {
 }
 
 .tunnelBuildStatus.rejecting::before {
-  box-shadow: inset 0 0 0 2px #933;
-  background: linear-gradient(135deg, #fff 40%, #933 40%, #933 60%, #fff 60%);
+  background: var(--tunn_reject) no-repeat center center / 15px;
 }
 
 .tunnelBuildStatus.hidden {
@@ -953,12 +944,15 @@ div.refresh {
 }
 
 .tunnelBuildStatus.hidden::before {
-  background: #999;
+  background: var(--tunn_hidden) no-repeat center center / 15px;
 }
 
-@keyframes participating {
-  0%,49%,51%,100% {background: #5c5}
-  50% {background: #494}
+@media screen and (max-width: 1499px) {
+  .tunnelBuildStatus {font-size: 90%}
+  #sb_tunnelstatus .tunnelBuildStatus::before {
+    margin: -1px 0 0;
+    background-size: 12px;
+  }
 }
 
 /* end tunnel build status */
@@ -1018,7 +1012,7 @@ a:active #sb_bandwidthgraph {
   margin: 0 2px -9px 1px;
   padding: 0 5px 0 0;
   height: 38px;
-  background-color: #fff;
+  background-color: var(--bg);
   background-position: left 0 top -2px;
   background-size: 200px 36px;
   background-repeat: no-repeat;
@@ -1038,7 +1032,6 @@ a:active #sb_bandwidthgraph {
   text-align: center;
   border: 1px solid var(--border);
   box-shadow: 0 0 1px rgba(200,200,200,.8), var(--highlight);
-  background: #eef;
   background: repeating-linear-gradient(to right, rgba(210, 210, 255, .7) 1px, rgba(210, 210, 255, .7) 2px, rgba(230, 230, 255, .7) 2px, rgba(230, 230, 255, .7) 4px);
 }
 
@@ -1051,7 +1044,6 @@ a:active #sb_bandwidthgraph {
   border: none;
   height: 14px;
   max-width: 100%;
-  background: var(--border);
   background: linear-gradient(to right, rgba(0,255,0,.1) 65px, rgba(255,255,0,.1) 110px, rgba(255,128,0,.1) 175px, rgba(255,0,0,.1)),
               linear-gradient(to bottom, rgba(255, 255, 255,.6), rgba(238, 238, 255, .6) 50%, rgba(180, 180, 255, .7) 50%, rgba(140, 140, 255, .7));
   box-shadow: inset 0 0 0 1px #ddf;
@@ -1079,7 +1071,7 @@ a:active #sb_bandwidthgraph {
 /* updates download bar */
 
 .sb_update b {
-  line-height: 120%;
+  line-height: 1.2;
 }
 
 .sb_updatestatus {
@@ -1092,7 +1084,6 @@ a:active #sb_bandwidthgraph {
   border-top: none;
   border-radius: 0 0 3px 3px;
   box-shadow: var(--highlight);
-  background: #ccf;
   background: linear-gradient(to right, #eef, #eff2ff 30%, #eff2ff 60%, #eef);
   box-sizing: border-box;
 }
@@ -1175,7 +1166,7 @@ div[lang="pt"] li br {
 }
 
 #console li {
-  line-height: 140%;
+  line-height: 1.4;
   text-align: justify;
 }
 
@@ -1249,7 +1240,7 @@ div[lang="ar"] .links li::before {
 
 .links b {
   font-size: 10pt;
-  line-height: 150%;
+  line-height: 1.5;
   letter-spacing: .02em;
 }
 
@@ -1322,7 +1313,7 @@ a:hover, a:visited:hover, a:focus, a:visited:focus, a:hover .b32 {
 }
 
 a:active, a:visited:active, a:active .b32 {
-  color: #f93 !important;
+  color: var(--active) !important;
   text-decoration: none;
 }
 
@@ -1333,15 +1324,15 @@ a.script {
 
 pre {
   margin: 0 20px;
+  padding-top: 10px;
+  width: 95%;
   overflow: auto;
   font-size: 8.5pt;
-  width: 95%;
-  padding-top: 10px;
 }
 
 tt, code, .bucket {
   font: bold 8.5pt var(--monospaced) !important;
-  color: darkgreen;
+  color: #070;
 }
 
 /* buttons & inputs */
@@ -1354,8 +1345,8 @@ select {
   text-overflow: ellipsis;
   color: #333;
   border: 1px solid var(--border);
-  border-radius: 2px;
-  box-shadow: var(--highlight);
+  border-radius: 3px;
+  box-shadow: var(--btn_shadow);
   background: var(--dropdown) no-repeat right 8px center / 10px, var(--btn);
   cursor: pointer;
   -moz-appearance: none;
@@ -1368,33 +1359,28 @@ select {
 }
 
 select option {
-  background: #fff;
+  background: var(--bg);
 }
 
-select:hover, select:active {
+select:hover, select:active, select:focus {
   color: var(--ink);
-  background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover) !important;
-  outline: none;
-}
-
-select:focus {
-  background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover) !important;
+  box-shadow: var(--btn_shadow_hover);
+  background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover);
   outline: none;
 }
 
 select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active {
   border: 1px solid var(--border);
-  box-shadow: var(--highlight) !important;
-  background: var(--btn) !important;
-  color: var(--disabled) !important;
+  box-shadow: var(--highlight);
+  background: var(--btn);
+  color: var(--disabled);
   cursor: default;
   opacity: .7;
 }
 
 select[name="newlogclass"] {
-  width: 80%;
-  width: calc(100% - 180px);
   margin-right: 0;
+  width: calc(100% - 180px);
 }
 
 select[name="newlogclass"] {
@@ -1402,8 +1388,8 @@ select[name="newlogclass"] {
 }
 
 .optbox {
-  vertical-align: middle;
   margin-right: 0;
+  vertical-align: middle;
 }
 
 #config_homepage .noicon {
@@ -1488,40 +1474,36 @@ input[type=text][readonly], input[type=text][readonly]:focus, input[type=text][d
 button, input, select {
   font: 9pt/130% var(--bodyfont);
   color: #5e626e;
-  background-color: #eee;
 }
 
 input[type=file]::file-selector-button {
   font: 9pt/130% var(--bodyfont);
   color: #5e626e;
-  background-color: #eee;
 }
 
 button:hover, input[type=submit]:hover, input[type=reset]:hover {
   color: var(--ink);
-  background-color: #ddd;
   background: var(--btn_hover);
 }
 
 input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
   color: var(--ink);
-  background-color: #ddd;
   background: var(--btn_hover);
 }
 
 button:active, input[type=submit]:active, input[type=reset]:active {
-  background-color: #fff;
+  background-color: var(--bg);
 }
 
 input[type=file]:active::file-selector-button {
-  background-color: #fff;
+  background-color: var(--bg);
 }
 
 input.search[type=text] {
   padding: 5px 5px 5px 28px;
   color: #333 !important;
   border: 1px solid var(--border);
-  background: #fff var(--search) no-repeat 5px center / 14px;
+  background: var(--bg) var(--search) no-repeat 5px center / 14px;
 }
 
 input[name="refreshInterval"] {
@@ -1539,7 +1521,6 @@ input[type=submit], input[type=reset], button, .optbox {
 
 .optbox:hover, .optbox:focus {
   border: 0;
-  box-shadow: 0 0 0 1px #89f;
   outline: none;
   filter: drop-shadow(0 0 2px #89f);
 }
@@ -1581,8 +1562,8 @@ input[type=submit], input[type=reset], button {
   font: 9pt var(--bodyfont);
   color: #5e626e;
   border: 1px solid var(--border);
-  border-radius: 2px;
-  box-shadow: var(--highlight), 0 0 1px #ddd;
+  border-radius: 3px;
+  box-shadow: var(--btn_shadow);
   background: var(--btn);
   background-size: 14px, 100% !important;
 }
@@ -1616,7 +1597,7 @@ button:active a {
 button:hover, input[type=submit]:hover, input[type=reset]:hover, button:focus, input[type=submit]:focus, input[type=reset]:focus {
   color: var(--ink);
   border: 1px solid var(--border);
-  box-shadow: var(--highlight), 0 0 1px #89f;
+  box-shadow: var(--btn_shadow_hover);
   background: var(--btn_hover);
 }
 
@@ -1630,78 +1611,78 @@ button:active, input[type=submit]:active, input[type=reset]:active {
 
 input.accept, button.accept {
   padding: 5px 8px 5px 22px;
-  background: var(--yes) no-repeat 7px center / 12px, var(--btn) !important;
+  background: var(--yes) no-repeat 8px center / 12px, var(--btn) !important;
 }
 
 input.accept:hover, button.accept:hover,
 input.accept:focus, button.accept:focus {
-  background: var(--yes) no-repeat 7px center, var(--btn_hover);
+  background: var(--yes) no-repeat 8px center / 12px, var(--btn_hover) !important;
 }
 
 input.accept[value^="Unban"] {
   padding: 5px 8px 5px 24px;
-  background: var(--unban) no-repeat 7px center / 14px, var(--btn) !important;
+  background: var(--unban) no-repeat 8px center / 14px, var(--btn) !important;
 }
 
 input.accept[value^="Unban"]:hover, input.accept[value^="Unban"]:focus, input.accept[value^="Unban"]:active {
-  background: var(--unban) no-repeat 7px center / 14px, var(--btn_hover) !important;
+  background: var(--unban) no-repeat 8px center / 14px, var(--btn_hover) !important;
 }
 
 input.accept[value^="Create"], button.accept[value^="Create"] {
   padding: 5px 8px 5px 25px;
-  background: var(--wizard) no-repeat 7px center / 16px, var(--btn) !important;
+  background: var(--wizard) no-repeat 8px center / 16px, var(--btn) !important;
 }
 
 input.accept[value^="Create"]:hover, button.accept[value^="Create"]:hover,
 input.accept[value^="Create"]:focus, button.accept[value^="Create"]:focus {
-  background: var(--wizard) no-repeat 7px center / 16px, var(--btn_hover) !important;
+  background: var(--wizard) no-repeat 8px center / 16px, var(--btn_hover) !important;
 }
 
 input.accept[value^="Filter"], button.accept[value^="Filter"] {
   padding: 5px 8px 5px 23px;
-  background: var(--filter) no-repeat 7px center / 18px, var(--btn);
+  background: var(--filter) no-repeat 8px center / 18px, var(--btn);
 }
 
 input.accept[value^="Filter"]:hover, button.accept[value^="Filter"]:hover,
 input.accept[value^="Filter"]:focus, button.accept[value^="Filter"]:focus {
-  background: var(--filter) no-repeat 7px center / 18px, var(--btn_hover);
+  background: var(--filter) no-repeat 8px center / 18px, var(--btn_hover);
 }
 
 input.add {
   padding: 5px 8px 5px 21px;
-  background: var(--add) no-repeat 7px center / 11px, var(--btn) !important;
+  background: var(--add) no-repeat 8px center / 11px, var(--btn) !important;
 }
 
 input.add:hover, input.add:focus, input.add:active {
-  background: var(--add) no-repeat 7px center / 11px, var(--btn_hover);
+  background: var(--add) no-repeat 8px center / 11px, var(--btn_hover) !important;
 }
 
 input.add[value^="Adjust"], button.add[value^="Adjust"] {
   padding: 5px 8px 5px 23px;
-  background: var(--edit) no-repeat 7px center / 14px, var(--btn);
+  background: var(--edit) no-repeat 8px center / 14px, var(--btn);
 }
 
 input.add[value^="Adjust"]:hover, button.add[value^="Adjust"]:hover,
 input.add[value^="Adjust"]:focus, button.add[value^="Adjust"]:focus {
-  background: var(--edit_hover) no-repeat 7px center / 14px, var(--btn_hover);
+  background: var(--edit_hover) no-repeat 8px center / 14px, var(--btn_hover);
 }
 
 input.cancel, button.cancel {
-  padding: 5px 8px 5px 20px;
-  background: var(--no) no-repeat 7px center, var(--btn);
+  padding: 5px 8px 5px 22px;
+  background: var(--no) no-repeat 8px center, var(--btn);
   background-size: 10px, 100% !important;
 }
 
 input.cancel:hover, button.cancel:hover,
 input.cancel:focus, button.cancel:focus {
-  background: var(--no) no-repeat 7px center, var(--btn_hover);
+  background: var(--no) no-repeat 8px center, var(--btn_hover);
 }
 
 input.accept[value^="Show"], button.accept[value^="Show"],
 input.check[value^="View"], button.check[value^="View"],
 input.showconsole {
   padding: 5px 8px 5px 23px;
-  background: var(--show) no-repeat 7px center / 14px, var(--btn);
+  background: var(--show) no-repeat 8px center / 14px, var(--btn);
 }
 
 input.accept[value^="Show"]:hover, button.accept[value^="Show"]:hover,
@@ -1709,14 +1690,14 @@ input.check[value^="View"]:hover, button.check[value^="View"]:hover,
 input.accept[value^="Show"]:focus, button.accept[value^="Show"]:focus,
 input.check[value^="View"]:focus, button.check[value^="View"]:focus,
 input.showconsole:hover, input.showconsole:focus {
-  background: var(--show) no-repeat 7px center / 14px, var(--btn_hover);
+  background: var(--show) no-repeat 8px center / 14px, var(--btn_hover);
 }
 
 input.cancel[value^="Hide"], button.cancel[value^="Hide"],
 input.delete[value^="Do not view"], button.delete[value^="Do not view"],
 input.hideconsole {
   padding: 5px 8px 5px 23px;
-  background: var(--hide) no-repeat 7px center / 14px, var(--btn);
+  background: var(--hide) no-repeat 8px center / 14px, var(--btn);
 }
 
 input.cancel[value^="Hide"]:hover, button.cancel[value^="Hide"]:hover,
@@ -1724,178 +1705,178 @@ input.delete[value^="Do not view"]:hover, button.delete[value^="Do not view"]:ho
 input.cancel[value^="Hide"]:focus, button.cancel[value^="Hide"]:focus,
 input.delete[value^="Do not view"]:focus, button.delete[value^="Do not view"]:focus,
 input.hideconsole:hover, input.hideconsole:focus {
-  background: var(--hide) no-repeat 7px center / 14px, var(--btn_hover);
+  background: var(--hide) no-repeat 8px center / 14px, var(--btn_hover);
 }
 
 input.check, button.check {
   padding: 5px 8px 5px 23px;
-  background: var(--yes) no-repeat 7px center, var(--btn);
+  background: var(--yes) no-repeat 8px center, var(--btn);
 }
 
 input.check:hover, button.check:hover,
 input.check:focus, button.check:focus,
 input.check:active, button.check:active {
-  background: var(--yes) no-repeat 7px center, var(--btn_hover);
+  background: var(--yes) no-repeat 8px center, var(--btn_hover);
 }
 
 input.check[value$="updates"], button.check[value$="updates"] {
   padding: 5px 8px 5px 23px;
-  background: var(--refresh) no-repeat 7px center / 14px, var(--btn);
+  background: var(--refresh) no-repeat 8px center / 14px, var(--btn);
 }
 
 input.check[value$="updates"]:hover, button.check[value$="updates"]:hover,
 input.check[value$="updates"]:focus, button.check[value$="updates"]:focus,
 input.check[value$="updates"]:active, button.check[value$="updates"]:active {
-  background: var(--refresh_hover) no-repeat 7px center / 14px, var(--btn_hover);
+  background: var(--refresh_hover) no-repeat 8px center / 14px, var(--btn_hover);
 }
 
 input.delete, button.delete {
   padding: 5px 8px 5px 23px;
-  background: var(--nuke) no-repeat 7px center, var(--btn);
+  background: var(--nuke) no-repeat 8px center, var(--btn);
 }
 
 input.delete:hover, button.delete:hover,
 input.delete:focus, button.delete:focus {
-  background: var(--nuke) no-repeat 7px center, var(--btn_hover);
+  background: var(--nuke) no-repeat 8px center, var(--btn_hover);
 }
 
 input.delete[value^="Ban"], button.delete[value^="Ban"] {
   padding: 5px 8px 5px 25px;
-  background: var(--ban) no-repeat 7px center / 14px, var(--btn);
+  background: var(--ban) no-repeat 8px center / 14px, var(--btn);
 }
 
 input.delete[value^="Ban"]:hover, button.delete[value^="Ban"]:hover,
 input.delete[value^="Ban"]:focus, button.delete[value^="Ban"]:focus {
-  background: var(--ban) no-repeat 7px center / 14px, var(--btn_hover);
+  background: var(--ban) no-repeat 8px center / 14px, var(--btn_hover);
 }
 
 input.download, button.download {
   padding: 5px 8px 5px 23px;
-  background: var(--download) no-repeat 7px center / 14px, var(--btn);
+  background: var(--download) no-repeat 8px center / 14px, var(--btn);
 }
 
 input.download:hover, button.download:hover,
 input.download:focus, button.download:focus,
 input.download:active, button.download:active {
-  background: var(--download_hover) no-repeat 7px center / 14px, var(--btn_hover);
+  background: var(--download_hover) no-repeat 8px center / 14px, var(--btn_hover);
 }
 
 input.download[value^="Join"], button.download[value^="Join"] {
   padding: 5px 8px 5px 25px;
-  background: var(--family) no-repeat 7px center / 14px, var(--btn);
+  background: var(--family) no-repeat 8px center / 14px, var(--btn);
 }
 
 input.download[value^="Join"]:hover, input.download[value^="Join"]:focus, input.download[value^="Join"]:active {
-  background: var(--family) no-repeat 7px center / 14px, var(--btn_hover);
+  background: var(--family) no-repeat 8px center / 14px, var(--btn_hover);
 }
 
 input.download[value$="from File"], button.download[value$="from File"],
 input.download[value$="from file"], button.download[value$="from file"] {
   padding: 5px 8px 5px 25px;
-  background: var(--files) no-repeat 7px center, var(--btn);
+  background: var(--files) no-repeat 8px center, var(--btn);
 }
 
 input.download[value$="from File"]:hover, button.download[value$="from File"]:hover,
 input.download[value$="from file"]:hover, button.download[value$="from file"]:hover,
 input.download[value$="from File"]:focus, button.download[value$="from File"]:focus,
 input.download[value$="from file"]:focus, button.download[value$="from file"]:focus {
-  background: var(--files) no-repeat 7px center, var(--btn_hover);
+  background: var(--files) no-repeat 8px center, var(--btn_hover);
 }
 
 input.download[value^="Dump"], button.download[value^="Dump"] {
   padding: 5px 8px 5px 23px;
-  background: var(--bug) no-repeat 7px center / 14px, var(--btn);
+  background: var(--bug) no-repeat 8px center / 14px, var(--btn);
 }
 
 input.download[value^="Dump"]:hover, button.download[value^="Dump"]:hover,
 input.download[value^="Dump"]:focus, button.download[value^="Dump"]:focus {
-  background: var(--bug) no-repeat 7px center / 14px, var(--btn_hover);
+  background: var(--bug) no-repeat 8px center / 14px, var(--btn_hover);
 }
 
 input.go, button.go, input[value="GO"], button#run {
   padding: 5px 8px 5px 23px;
-  background: var(--go) no-repeat 7px center / 14px, var(--btn);
+  background: var(--go) no-repeat 8px center / 14px, var(--btn);
 }
 
 input.go:hover, button.go:hover, input[value="GO"]:hover,
 input.go:focus, button.go:focus, input[value="GO"]:focus {
-  background: var(--go) no-repeat 7px center / 14px, var(--btn_hover);
+  background: var(--go) no-repeat 8px center / 14px, var(--btn_hover);
 }
 
 input.go[value^="Create"], button.go[value^="Create"] {
   padding: 5px 8px 5px 25px;
-  background: var(--package) no-repeat 7px center / 16px, var(--btn);
+  background: var(--package) no-repeat 8px center / 16px, var(--btn);
 }
 
 input.go[value^="Create"]:hover, button.go[value^="Create"]:hover,
 input.go[value^="Create"]:focus, button.go[value^="Create"]:focus {
-  background: var(--package) no-repeat 7px center / 16px, var(--btn_hover);
+  background: var(--package) no-repeat 8px center / 16px, var(--btn_hover);
 }
 
 #sybilanalysis input.go {
   padding: 5px 8px 5px 25px;
-  background: var(--eye) no-repeat 7px center / 16px, var(--btn);
+  background: var(--eye) no-repeat 8px center / 16px, var(--btn);
 }
 
 #sybilanalysis input.go:hover, #sybilanalysis input.go:focus {
-  background: var(--eye_hover) no-repeat 7px center / 16px, var(--btn_hover);
+  background: var(--eye_hover) no-repeat 8px center / 16px, var(--btn_hover);
 }
 input.back {
   padding: 5px 8px 5px 23px;
-  background: var(--back) no-repeat 7px center / 14px, var(--btn);
+  background: var(--back) no-repeat 8px center / 14px, var(--btn);
 }
 
 input.back:hover, input.back:focus {
-  background: var(--back) no-repeat 7px center / 14px, var(--btn_hover);
+  background: var(--back) no-repeat 8px center / 14px, var(--btn_hover);
 }
 
 input.reload, button.reload {
   padding: 5px 8px 5px 23px;
-  background: var(--reset) no-repeat 7px center / 14px, var(--btn);
+  background: var(--reset) no-repeat 8px center / 14px, var(--btn);
 }
 
 input.reload:hover, input.reload:focus, input.reload:active {
-  background: var(--reset_hover) no-repeat 7px center / 14px, var(--btn_hover);
+  background: var(--reset_hover) no-repeat 8px center / 14px, var(--btn_hover);
 }
 
 input.reload[value$="restart"], button.reload[value$="restart"] {
   padding: 5px 8px 5px 23px;
-  background: var(--restart) no-repeat 7px center / 12px, var(--btn) !important;
+  background: var(--restart) no-repeat 8px center / 12px, var(--btn) !important;
 }
 
 input.reload[value$="restart"]:hover, button.reload[value$="restart"]:hover,
 input.reload[value$="restart"]:focus, button.reload[value$="restart"]:focus {
-  background: var(--restart_hover) no-repeat 7px center / 12px, var(--btn_hover) !important;
+  background: var(--restart_hover) no-repeat 8px center / 12px, var(--btn_hover) !important;
 }
 
 input.reload[value^="Update"], button.reload[value^="Update"] {
   padding: 5px 8px 5px 23px;
-  background: var(--refresh) no-repeat 7px center / 14px, var(--btn);
+  background: var(--refresh) no-repeat 8px center / 14px, var(--btn);
 }
 
 input.reload[value^="Update"]:hover, button.reload[value^="Update"]:hover,
 input.reload[value^="Update"]:focus, button.reload[value^="Update"]:focus,
 input.reload[value^="Update"]:active, button.reload[value^="Update"]:active {
-  background: var(--refresh_hover) no-repeat 7px center / 14px, var(--btn_hover);
+  background: var(--refresh_hover) no-repeat 8px center / 14px, var(--btn_hover);
 }
 
 #dumpthreads input.reload {
   padding: 5px 8px 5px 25px;
-  background: var(--recycle) no-repeat 7px center / 15px, var(--btn) !important;
+  background: var(--recycle) no-repeat 8px center / 15px, var(--btn) !important;
 }
 
 #dumpthreads input.reload:hover, #dumpthreads input.reload:focus {
-  background: var(--recycle) no-repeat 7px center / 15px, var(--btn_hover) !important;
+  background: var(--recycle) no-repeat 8px center / 15px, var(--btn_hover) !important;
 }
 
 button.stop {
   padding: 5px 8px 5px 23px;
-  background: var(--shutdown) no-repeat 7px center, var(--btn);
+  background: var(--shutdown) no-repeat 8px center, var(--btn);
   background-size: 12px, 100% !important;
 }
 
 button.stop:hover, button.stop:focus, button.stop:active {
-  background: var(--shutdown_hover) no-repeat 7px center, var(--btn_hover);
+  background: var(--shutdown_hover) no-repeat 8px center, var(--btn_hover);
 }
 
 button.search {
@@ -2022,7 +2003,8 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
   min-width: 87px;
 }
 
-.routersummary .reload, .routersummary .stop {
+.routersummary .reload, .routersummary .stop, .routersummary .reload[value="restart"] {
+  padding: 6px 7px !important;
   min-width: 92px !important;
   text-indent: -99999px;
 }
@@ -2053,7 +2035,7 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 /* Show text on context specific buttons (eg deferred shutdown) */
 
 .routersummary .reload[value="restartImmediate"], .routersummary .stop[value="shutdownImmediate"], .routersummary .reload[value="Reseed"] {
-  padding: 5px 7px 5px 23px !important;
+  padding: 6px 7px 6px 23px !important;
   min-width: 0 !important;
   text-indent: 0;
   text-align: left;
@@ -2065,35 +2047,35 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 }
 
 .routersummary .reload[value="restartImmediate"] {
-  background: var(--restart) no-repeat 7px center / 12px, var(--btn) !important;
+  background: var(--restart) no-repeat 8px center / 12px, var(--btn) !important;
 }
 
 .routersummary .reload[value="restartImmediate"]:hover, .routersummary .reload[value="restartImmediate"]:focus, .routersummary .reload[value="restartImmediate"]:active {
-  background: var(--restart_hover) no-repeat 7px center / 12px, var(--btn_hover) !important;
+  background: var(--restart_hover) no-repeat 8px center / 12px, var(--btn_hover) !important;
 }
 
 .routersummary .stop[value="shutdownImmediate"] {
-  background: var(--shutdown) no-repeat 7px center / 12px, var(--btn) !important;
+  background: var(--shutdown) no-repeat 8px center / 12px, var(--btn) !important;
 }
 
 .routersummary .stop[value="shutdownImmediate"]:hover, .routersummary .stop[value="shutdownImmediate"]:focus, .routersummary .stop[value="shutdownImmediate"]:active {
-  background: var(--shutdown_hover) no-repeat 7px center / 12px, var(--btn_hover) !important;
+  background: var(--shutdown_hover) no-repeat 8px center / 12px, var(--btn_hover) !important;
 }
 
 .routersummary .reload[value="Reseed"] {
-  background: var(--download) no-repeat 7px center / 12px, var(--btn) !important;
+  background: var(--download) no-repeat 8px center / 12px, var(--btn) !important;
 }
 
 .routersummary .reload[value="Reseed"]:hover, .routersummary .reload[value="Reseed"]:focus, .routersummary .reload[value="Reseed"]:active {
-  background: var(--download) no-repeat 7px center / 12px, var(--btn_hover) !important;
+  background: var(--download) no-repeat 8px center / 12px, var(--btn_hover) !important;
 }
 
 .routersummary .download {
-  background: var(--download) no-repeat 7px center / 12px, var(--btn);
+  background: var(--download) no-repeat 8px center / 12px, var(--btn);
 }
 
 .routersummary .download:hover, .routersummary .download:focus, .routersummary .download:active {
-  background: var(--download) no-repeat 7px center / 12px, var(--btn_hover);
+  background: var(--download) no-repeat 8px center / 12px, var(--btn_hover);
 }
 
 /* end sidebar buttons */
@@ -2118,7 +2100,7 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
   padding: 3px 0;
   font-size: 10pt;
   border: none;
-  border-bottom: 1px solid #ced1e3;
+  border-bottom: 1px solid var(--soft_border);
   background: none;
 }
 
@@ -2163,20 +2145,23 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
   background: #fafbff;
 }
 
-.main textarea:not(:focus) {
-  scrollbar-color: #acafb9 transparent;
-}
-
 .main textarea:focus {
   color: var(--ink);
   box-shadow: inset 0 0 0 1px #89f;
-  background: #fff;
+  background: var(--bg);
   outline: none;
-  scrollbar-color: #acafb9 rgba(255,255,255,.3);
 }
 
 .main h2 {
   margin-bottom: 10px !important;
+}
+
+#home {
+  padding-bottom: 1px;
+}
+
+#sitemap {
+  padding-bottom: 6px;
 }
 
 .main#home .welcome h2 {
@@ -2192,7 +2177,7 @@ div.welcome {
 }
 
 .welcome + div .tidylist {
-  line-height: 150% !important;
+  line-height: 1.5 !important;
 }
 
 .main#dns, .main#webmail, .main#torrents {
@@ -2248,8 +2233,7 @@ div.news {
   border: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
   border-right: 1px solid var(--border);
-  background: #fafaff;
-  background: linear-gradient(to bottom, #fff, #fafaff);
+  background: var(--th);
 }
 
 /* convert the list entry to our title */
@@ -2296,7 +2280,7 @@ div.news li {
 }
 
 .newsentry p {
-  line-height: 140% !important;
+  line-height: 1.4 !important;
 }
 
 div.news p {
@@ -2315,9 +2299,7 @@ div.news hr {
 }
 
 @supports not (-moz-appearance: none) {
-div.news hr {
-  height: 1px;
-}
+  div.news hr {height: 1px}
 }
 
 div.news hr:last-child {
@@ -2401,7 +2383,7 @@ div.news hr:last-child {
   position: relative;
   display: inline-block;
   border: 1px solid var(--border);
-  background: #fff;
+  background: var(--bg);
   box-sizing: border-box;
 }
 
@@ -2430,11 +2412,11 @@ div[id^="config"] .tab a {
 .tab:hover {
   z-index: 12;
   box-shadow: var(--highlight), inset 0 0 1px 1px var(--hover);
-  background: #fff;
+  background: var(--bg);
 }
 
 .tab:active {
-  box-shadow: inset 0 0 0 1px #f90, inset 3px 3px 3px 1px #5f2400;
+  box-shadow: inset 0 0 0 1px #f90, var(--highlight_active);
   background: var(--hover);
 }
 
@@ -2447,9 +2429,8 @@ div[id^="config"] .tab a {
   z-index: 10;
   vertical-align: top;
   color: #565799;
-  text-shadow: 0 1px 1px #fff;
+  text-shadow: 0 1px 1px var(--bg);
   box-shadow: var(--highlight), inset 0 0 0 2px #bfc0ff, inset 3px 3px 3px #aaabcc;
-  background: #89f;
   background: linear-gradient(to bottom, #eaebff, #f2f3ff);
 }
 
@@ -2487,7 +2468,7 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 
 #config_peers .routerid {
   padding: 1px 3px;
-  line-height: 100%;
+  line-height: 1;
   border-radius: 2px;
 }
 
@@ -2527,10 +2508,10 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 
 .configtable.homelinkedit td, .configtable.homelinkedit tr,
 .configtable#sidebarconf td, .configtable#sidebarconf tr {
-  border-top: 1px inset #ddf !important;
-  border-bottom: 1px inset #ddf !important;
   padding-top: 4px;
   padding-bottom: 4px;
+  border-top: 1px inset #ddf !important;
+  border-bottom: 1px inset #ddf !important;
 }
 
 #joinfamily, #exportfamily{
@@ -2544,7 +2525,7 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 
 #exportfamily tr:nth-child(2) td:first-child {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--joinfamily) no-repeat 12px center / 28px;
+  background: var(--bg) var(--joinfamily) no-repeat 12px center / 28px;
 }
 
 #leavefamily {
@@ -2554,11 +2535,11 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 
 #leavefamily tr:last-child td:first-child {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--leavefamily) no-repeat 12px center / 28px;
+  background: var(--bg) var(--leavefamily) no-repeat 12px center / 28px;
 }
 
 #peerdefs tr {
-  border-top: 1px solid #ced1e3;;
+  border-top: 1px solid var(--soft_border);;
 }
 
 #bandwidthconfig td:first-child {
@@ -2575,11 +2556,10 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 }
 
 #addkeyring td:first-child:not(.infohelp) {
-  line-height: 115%;
+  line-height: 1.15;
 }
 
 #addkeyring input[type=text] {
-  width: 99%;
   width: calc(100% - 5px);
 }
 
@@ -2588,7 +2568,7 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 }
 
 #manualreseed tr:nth-child(odd) {
-  background: #fff;
+  background: var(--bg);
 }
 
 #manualreseed td:first-child {
@@ -2609,8 +2589,8 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 }
 
 #reseedconfig tr:nth-child(2) label {
-  white-space: nowrap;
   margin-right: 10px;
+  white-space: nowrap;
 }
 
 #reseedconfig td {
@@ -2618,21 +2598,12 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 }
 
 @supports not (-moz-appearance: none) {
-#reseedconfig .optbox[type=radio] {
-  margin: 4px 4px 4px 15px !important;
-}
-
-#reseedconfig .optbox[type=checkbox] {
-  vertical-align: sub !important;
-}
-
-#manualreseed th:last-child, #manualreseed td:last-child {
-  border-right: 1px solid var(--border);
-}
+  #reseedconfig .optbox[type=radio] {margin: 4px 4px 4px 15px !important}
+  #reseedconfig .optbox[type=checkbox] {vertical-align: sub !important}
+  #manualreseed th:last-child, #manualreseed td:last-child {border-right: 1px solid var(--border)}
 }
 
 #loggingoptions textarea {
-  width: 99%;
   width: calc(100% - 5px);
 }
 
@@ -2664,13 +2635,13 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 }
 
 #profilelist td[colspan="10"], #profilelist tr td[colspan="10"]:hover {
-  background: #ced1e3;
   padding: 1px !important;
+  background: var(--soft_border);
 }
 
 #profilelist td[colspan="10"]::after {
-  content: none !important;
   display: none !important;
+  content: none !important;
 }
 
 #profilelist td[colspan="10"] hr {
@@ -2679,12 +2650,12 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 
 #profilelist tr:hover, #floodfills tr:hover,  #ntcpconnections tr:hover, #udpconnections tr:hover,
 .homelinkedit tr:hover, #portmapper tr:hover {
-  background: var(--row_hover);
   color: #104e99;
+  background: var(--row_hover);
 }
 
 #thresholds tr:last-child:hover td {
-  background: #fff;
+  background: var(--bg);
 }
 
 tr.tablefooter:hover td, tr:hover .infohelp {
@@ -2694,13 +2665,13 @@ tr.tablefooter:hover td, tr:hover .infohelp {
 /* peers - sort icons */
 
 #udpconnections th {
-  vertical-align: top;
-  background: #fff;
   padding-top: 3px;
+  vertical-align: top;
+  background: var(--bg);
 }
 
 #ntcpconnections th {
-  background: #fff;
+  background: var(--bg);
 }
 
 #peers > #ntcpcon {
@@ -2715,20 +2686,20 @@ tr.tablefooter:hover td, tr:hover .infohelp {
   border: 1px solid var(--border);
   margin: -11px 0 5px;
   padding: 0 10px 5px;
-  background: #fff;
+  background: var(--bg);
 }
 
 .sortup, .sortdown, .sortupactive, .sortdownactive {
-  padding: 1px 0;
-  border: 1px solid #999;
-  border-radius: 2px;
   margin: 2px 1px 0;
-  vertical-align: middle;
-  text-align: center;
-  display: inline-block;
+  padding: 1px 0;
   width: 16px;
   height: 12px;
-  background-size: 10px auto, 100% !important;
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+  border: 1px solid #999;
+  border-radius: 2px;
+  background-size: 10px, 100% !important;
 }
 
 .sortup, .sortdown {
@@ -2780,11 +2751,11 @@ tr.tablefooter:hover td, tr:hover .infohelp {
 }
 
 .sortupactive {
-  background: var(--mv_up_hover) no-repeat center cente, #fff;
+  background: var(--mv_up_hover) no-repeat center cente, var(--bg);
 }
 
 .sortdownactive {
-  background: var(--mv_down_hover) no-repeat center center, #fff;
+  background: var(--mv_down_hover) no-repeat center center, var(--bg);
 }
 
 /* end peer sort */
@@ -2800,12 +2771,12 @@ tr:hover th {
 
 #thresholds, #profile_defs {
   margin-top: -1px;
-  line-height: 150%;
+  line-height: 1.5;
 }
 
 #thresholds p {
-  padding: 0 10px 0 5px;
   margin-top: 0 !important;
+  padding: 0 10px 0 5px;
 }
 
 #profile_defs td:first-child {
@@ -2815,16 +2786,16 @@ tr:hover th {
 
 #profile_defs td:last-child {
   white-space: normal;
-  line-height: 120%;
+  line-height: 1.2;
 }
 
 #thresholds th, #thresholds td {
-  text-align: center !important;
   width: auto !important;
+  text-align: center !important;
 }
 
 #thresholds tr:last-child td {
-  background: #fff;
+  background: var(--bg);
 }
 
 #profile_defs td:nth-child(2)::first-letter {
@@ -2854,19 +2825,17 @@ tr:hover th {
 
 #capabilities_key table td:nth-child(odd) {
   width: 1%;
-  max-width: 24px !important;
+  max-width: 24px;
   text-align: center;
 }
 
 #capabilities_key b {
-  text-transform: none !important;
-  display: inline-block;
-  min-width: 16px;
-  background: #dfe4ff;
-  text-align: center;
-  text-shadow: 0 1px 1px #fff;
-  border-radius: 2px;
   padding: 1px 2px;
+  min-width: 16px;
+  display: inline-block;
+  text-align: center;
+  text-shadow: 0 1px 1px var(--bg);
+  background: var(--badge);
 }
 
 #thresholds tr:hover td, #profile_defs tr:hover td {
@@ -2909,10 +2878,10 @@ tr:hover th {
 }
 
 @media screen and (max-width: 1200px) {
-#profiles #banlist {
-  margin-top: -6px !important;
-  margin-bottom: 0 !important;
-}
+  #profiles #banlist {
+    margin-top: -6px !important;
+    margin-bottom: 0 !important;
+  }
 }
 
 #config_peers #banlist {
@@ -2925,13 +2894,13 @@ ul#banlist + h3.tabletitle {
 
 #banlist li {
   margin-bottom: 5px;
-  padding: 5px 7px 5px !important;
+  padding: 5px 7px 5px;
   width: calc(100% - 9px);
   position: relative;
   display: table;
-  line-height: 150%;
-  list-style: none !important;
-  box-shadow: 0 0 0 1px #ced1e3, 0 0 1px 1px #ddd;
+  line-height: 1.5;
+  list-style: none;
+  box-shadow: 0 0 0 1px var(--soft_border), 0 0 1px 1px #ddd;
   background: #f9f9ff;
   break-inside: avoid;
   page-break-inside: avoid;
@@ -2952,8 +2921,8 @@ ul#banlist + h3.tabletitle {
   top: 0;
   right: 0;
   line-height: 0;
-  border-left: 1px solid #ced1e3;
-  border-bottom: 1px solid #ced1e3;
+  border-left: 1px solid var(--soft_border);
+  border-bottom: 1px solid var(--soft_border);
   filter: none;
 }
 
@@ -2963,7 +2932,7 @@ ul#banlist + h3.tabletitle {
 
 #banlist li a[href^="configpeer"]:active {
   background: var(--hover);
-  box-shadow: inset 3px 3px 3px 1px #5f2400;
+  box-shadow: var(--highlight_active);
 }
 
 #banlist li hr {
@@ -3025,9 +2994,9 @@ ul#banlist + h3.tabletitle {
 }
 
 #permabanned td:last-child {
-  text-align: left;
   padding-left: 10px;
   width: 49%;
+  text-align: left;
 }
 
 #banneduntilrestart td {
@@ -3036,9 +3005,9 @@ ul#banlist + h3.tabletitle {
 }
 
 #ipv4, #ipv6, #permabanned tr:nth-child(2) {
-  background: var(--header);
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
+  background: var(--header);
 }
 
 /* end /configpeer banlist */
@@ -3075,7 +3044,7 @@ pre#activetransports {
   margin: -11px 0 0;
   width: 95%;
   width: calc(100% - 32px);
-  background: #fff;
+  background: var(--bg);
 }
 
 #view_profile pre {
@@ -3086,7 +3055,7 @@ pre#activetransports {
 
 #view_profile h2 {
   text-transform: none;
-  line-height: 120%;
+  line-height: 1.2;
   margin-bottom: -1px !important;
   white-space: nowrap;
   overflow: hidden;
@@ -3100,9 +3069,7 @@ pre#activetransports {
 }
 
 @media screen and (min-width: 1500px) {
-#pluginconfig {
-  margin: -15px 0 0 !important;
-}
+  #pluginconfig {margin: -15px 0 0 !important}
 }
 
 #pluginconfig table {
@@ -3111,7 +3078,7 @@ pre#activetransports {
 }
 
 #pluginconfig tr td {
-  background: #fff;
+  background: var(--bg);
 }
 
 #pluginconfig button, #webappconfig button, #clientconfig button {
@@ -3144,10 +3111,10 @@ pre#activetransports {
 }
 
 #i2pupdates textarea {
-  min-height: 76px !important;
-  height: 76px !important;
   margin: 6px 0 6px 10px !important;
   padding: 3px 5px;
+  height: 76px !important;
+  min-height: 76px !important;
 }
 
 #i2pupdates input.check, .optbox {
@@ -3189,27 +3156,27 @@ div.configure h2:first-child {
 }
 
 #sidebarconf th:nth-child(2), #sidebarconf td:nth-child(2) {
-  text-align: left;
   padding-left: 20px;
+  text-align: left;
 }
 
 #sidbarconf td:last-child[colspan="2"] {
-  text-align: center !important;
   padding: 2px;
+  text-align: center !important;
 }
 
 #sidebarconf tr, .homelinkedit tr, #clientconfig tr, #webappconfig tr,  #configstats tr, #tunnelconfig tr, #profiles tr,
 #floodfills tr, #netdboverview tr, .netdbentry tr, #leasesetdebug tr, #leasesetsummary tr, .leaseset tr, #tunnel_defs tr,
 .sybil_routerinfo tr, #enviro tr, #routerinformation tr, #schedjobs tr, #jobstats tr, #eventlog tr, .tunneldisplay tr,
 #udpconnections tr, #ntcpconnections tr, #tunnelPeerCount tr {
-  border-top: 1px solid #ced1e3;
+  border-top: 1px solid var(--soft_border);
 }
 
 #config_stats tr:not(.tablefooter) td:first-child::after {
-  content: "";
-  display: inline-block;
   min-height: 24px;
+  display: inline-block;
   vertical-align: middle;
+  content: "";
 }
 
  tr.tablefooter {
@@ -3252,13 +3219,13 @@ div.configure h2:first-child {
 }
 
 #sidebarconf tr:last-child td:last-child {
-  text-align: right;
   padding-right: 2px;
+  text-align: right;
 }
 
 .topshimten {
-  margin-top: 15px;
   margin-bottom: 15px;
+  margin-top: 15px;
 }
 
 .messages {
@@ -3269,14 +3236,14 @@ div.configure h2:first-child {
   font-size: 9pt;
   border: 1px solid var(--border);
   border-right: 0;
-  background: #fff;
+  background: var(--bg);
 }
 
 #config_update .messages {
   padding-left: 48px;
   text-align: left;
   font-weight: 400;
-  background: #fff url(/themes/console/images/svg/news.svg) no-repeat 10px center / 28px;
+  background: var(--bg) url(/themes/console/images/svg/news.svg) no-repeat 10px center / 28px;
 }
 
 #messages {
@@ -3342,7 +3309,7 @@ h1 {
   margin: 0 0 0 211px;
   padding: 18px 20px 16px;
   min-width: 530px;
-  line-height: 93%;
+  line-height: .93;
   word-spacing: .1em;
   letter-spacing: .08em;
   text-transform: uppercase;
@@ -3449,7 +3416,7 @@ h2 {
   border: 1px solid var(--border);
   letter-spacing: .04em;
   text-transform: uppercase;
-  background: #fff;
+  background: var(--bg);
 }
 
 h3, h4#updateplugins {
@@ -3457,7 +3424,7 @@ h3, h4#updateplugins {
   padding: 6px 10px;
   border: 1px solid var(--border);
   margin-bottom: 10px;
-  background: #fff;
+  background: var(--bg);
 }
 
 h3.tabletitle {
@@ -3481,9 +3448,7 @@ h3#udpcon, h3#ntcpcon {
 }
 
 @media screen and (min-width: 1200px) {
-#peers .confignav + #udp, #peers .confignav + #ntcp {
-  margin-top: 15px !important;
-}
+  #peers .confignav + #udp, #peers .confignav + #ntcp {margin-top: 15px !important}
 }
 
 h3#i2pclientconfig {
@@ -3502,14 +3467,14 @@ h3#bwlimiter, h3#iptransport {
 
 h3#iptransport a, th#upnpconfig a, h3#bwlimiter a, #config_stats h3 a, #config_logging h3 a, h3#graphdisplay a, #logs h3 a, h3#advancedconfig a, .h3navlinks, #reseedsetup a {
   float: right;
-  font-size: 9pt;
   letter-spacing: normal;
+  font-size: 9pt;
 }
 
 .h3navlinks a {
-  text-transform: capitalize;
-  letter-spacing: normal;
   margin-left: 5px;
+  letter-spacing: normal;
+  text-transform: capitalize;
 }
 
 h3#iptransport a:not(old), h3#advancedconfig a:not(old), #reseedsetup a:not(old) {
@@ -3718,36 +3683,36 @@ td.optionsave {
   padding: 8px 5px !important;
   text-align: right;
   border-top: 1px solid var(--border);
-  background: #fff;
+  background: var(--bg);
 }
 
 td.optionsave[colspan="2"] {
-  background: #fff;
+  background: var(--bg);
 }
 
 td.infohelp, p.infohelp, td.infowarn, p.infowarn, p#upnpstatus, p#gatherstats, p#debugmode, p.sybilinfo, p#pluginconfigtext {
   padding: 15px 15px 15px 55px !important;
   border: 1px solid var(--border);
-  background: #fff var(--infohelp) no-repeat 15px center / 28px;
+  background: var(--bg) var(--infohelp) no-repeat 15px center / 28px;
   white-space: normal !important;
   text-align: justify;
 }
 
 #config_ui .infohelp {
-  background: #fff var(--ui) no-repeat 15px center / 28px;
+  background: var(--bg) var(--ui) no-repeat 15px center / 28px;
 }
 
 td.infowarn, p.infowarn {
-  background: #fff var(--infowarn) no-repeat 15px center / 28px !important;
+  background: var(--bg) var(--infowarn) no-repeat 15px center / 28px !important;
 }
 
 #refreshsidebar td:not(.optionsave) {
   padding: 15px 15px 15px 50px !important;
-  background: #fff var(--timer) no-repeat 12px center / 28px !important;
+  background: var(--bg) var(--timer) no-repeat 12px center / 28px !important;
 }
 
 .infowarn, .infohelp {
-  line-height: 125%;
+  line-height: 1.25;
 }
 
 .infohelp#jsRequired {
@@ -3815,7 +3780,7 @@ td.tabletextarea {
 }
 
 tr:nth-child(even), #pluginconfig table tr:nth-child(even) td, #profile_defs tr:nth-child(odd) {
-  background: #fff;
+  background: var(--bg);
 }
 
 tr:nth-child(odd), #pluginconfig table tr:nth-child(odd) td, .main#profiles ul#banlist,
@@ -3921,7 +3886,7 @@ div.app {
 
 div.app:hover {
   border: 1px solid var(--hover);
-  background: #fff;
+  background: var(--bg);
   cursor: pointer;
 }
 
@@ -3937,7 +3902,7 @@ div.app:hover a, .app:hover .applabel a {
   margin: 0;
   padding: 4px 2px;
   width: 136px;
-  line-height: 110%;
+  line-height: 1.1;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -3959,7 +3924,7 @@ div.app:hover a, .app:hover .applabel a {
 
 .app:hover .applabel {
   border-top: 1px solid var(--hover);
-  background: #fff;
+  background: var(--bg);
 }
 
 .app:active .applabel {
@@ -3973,7 +3938,7 @@ div.app:hover a, .app:hover .applabel a {
 }
 
 div.app:active img {
-  transform: scale(0.9);
+  transform: scale(.9);
 }
 
 div.app:last-child {
@@ -4154,7 +4119,7 @@ h3#servicedebug a, h3#graphinfo a, h3#browseronstart a {
   height: 16px;
   float: right;
   display: inline-block;
-  background: var(--settings2) no-repeat center center / 18px;
+  background: var(--settings2) no-repeat center center / 16px;
   content: "";
 }
 
@@ -4191,14 +4156,14 @@ h3 + .statusnotes {
 }
 
 .statusnotes {
-  margin: -6px 0 7px 0;
+  margin: -6px 0 7px;
   padding: 8px 0;
   color: var(--ink);
   font-style: italic;
   font-size: 9pt;
   text-align: center;
   border: 1px solid var(--border);
-  background: #fff;
+  background: var(--bg);
 }
 
 .statusnotes + .statusnotes {
@@ -4207,12 +4172,12 @@ h3 + .statusnotes {
 
 .joblog {
   margin: 10px 0;
-  line-height: 130% !important;
+  line-height: 1.3 !important;
 }
 
 .joblog li {
   word-wrap: break-word !important;
-  line-height: 105% !important;
+  line-height: 1.05 !important;
 }
 
 .joblog ul {
@@ -4236,7 +4201,7 @@ h3 + .statusnotes {
 }
 
 .joblog p {
-  line-height: 130%;
+  line-height: 1.3;
 }
 
 .joblog h3 {
@@ -4264,7 +4229,7 @@ h2#jobrunners {
   column-count: 2;
   column-width: 400px;
   column-gap: 100px;
-  column-rule: 1px dotted #ced1e3;
+  column-rule: 1px dotted var(--soft_border);
 }
 
 .joblog ol:empty + h3 {
@@ -4279,7 +4244,7 @@ h2#jobrunners {
   margin-left: -15px;
   margin-bottom: 5px;
   min-width: 400px;
-  border-bottom: 1px dotted #ced1e3;
+  border-bottom: 1px dotted var(--soft_border);
   -webkit-column-break-inside: avoid;
   break-inside: avoid;
   page-break-inside: avoid;
@@ -4436,7 +4401,7 @@ tr#addnew:hover {
 #loggingoptions td:first-child {
   padding-right: 0;
   min-width: 120px;
-  line-height: 120%;
+  line-height: 1.2;
 }
 
 #loggingoptions tr:nth-last-child(3) td:first-child {
@@ -4487,7 +4452,7 @@ p#pluginconfigtext {
 
 .configtable tr:last-child, #addkeyring tr:last-child, #loggingoptions tr:last-child {
   border-top: 1px solid var(--border);
-  background: #fff;
+  background: var(--bg);
 }
 
 #addkeyring tr:last-child td {
@@ -4500,9 +4465,9 @@ p#pluginconfigtext {
 
 p#enablefullstats {
   padding: 5px 10px;
-  line-height: 120%;
+  line-height: 1.2;
   text-align: left;
-  background: #fff;
+  background: var(--bg);
 }
 
 .formaction {
@@ -4518,7 +4483,7 @@ p#enablefullstats {
 
 .configtable tr:last-child, #addkeyring tr:last-child, #loggingoptions tr:last-child {
   border-top: 1px solid var(--border);
-  background: #fff;
+  background: var(--bg);
 }
 
 .formaction form, td form {
@@ -4601,9 +4566,9 @@ p#enablefullstats {
   padding: 8px 5px;
   position: static;
   white-space: nowrap;
-  line-height: 150%;
+  line-height: 1.5;
   font-size: 9pt;
-  background: #fff;
+  background: var(--bg);
 }
 
 .tablefooter td:first-child {
@@ -4619,7 +4584,7 @@ p#enablefullstats {
 }
 
 #netconfig tr, #externali2cp tr {
-  background: #fff;
+  background: var(--bg);
 }
 
 #externali2cp label + br {
@@ -4687,14 +4652,14 @@ h3#graphdisplay {
   padding: 1px;
   max-width: 95%;
   max-width: calc(100% - 50px);
-  border: 1px solid #ced1e3;
-  background: #fff;
+  border: 1px solid var(--soft_border);
+  background: var(--bg);
 }
 
 .graphspanel a img {
   vertical-align: top;
-  border: 1px solid #ced1e3;
-  background: #fff;
+  border: 1px solid var(--soft_border);
+  background: var(--bg);
   opacity: .9;
 }
 
@@ -4854,7 +4819,7 @@ h3#graphinfo {
   display: none;
   text-align: right;
   border: 1px solid var(--border);
-  background: #fff;
+  background: var(--bg);
 }
 
 #graphopts a {
@@ -4978,8 +4943,8 @@ img[src^="/flags"], img.unknownflag {
 }
 
 .themechoice .optbox::after, .langselect .optbox::after {
-  display: none !important;
-  content: none !important;
+  display: none;
+  content: none;
 }
 
 .themechoice {
@@ -4993,12 +4958,12 @@ img[src^="/flags"], img.unknownflag {
   text-overflow: ellipsis;
   text-align: center;
   border: 1px solid var(--border);
-  box-shadow: 0 0 1px #fff;
+  box-shadow: 0 0 1px var(--bg);
   background: var(--th);
 }
 
 .themechoice:hover, .themechoice:hover > img ~ .themelabel {
-  background: #fff;
+  background: var(--bg);
 }
 
 .themechoice:hover {
@@ -5017,18 +4982,18 @@ img[src^="/flags"], img.unknownflag {
   margin-top: 4px;
   margin-left: -32px;
   padding: 2px;
-  height: 80px !important;
-  width: 110px !important;
-  position: absolute !important;
+  height: 80px;
+  width: 110px;
+  position: absolute;
   z-index: 999;
-  opacity: 0; /* hide the radio icon so we can use thumbnail img instead */
+  opacity: 0;
 }
 
 .themechoice .optbox + img {
-  margin-left: 0;
   margin-top: 8px;
-  padding: 0 !important;
   margin-bottom: 31px;
+  margin-left: 0;
+  padding: 0;
 }
 
 .themechoice img {
@@ -5053,7 +5018,7 @@ img[src^="/flags"], img.unknownflag {
 }
 
 .themechoice .optbox:checked + img, .themechoice .optbox:checked + img {
-  transform: scale(0.9);
+  transform: scale(.9);
 }
 
 .themechoice .optbox:focus + img ~ div.themelabel {
@@ -5099,7 +5064,7 @@ p#helptranslate {
   text-align: left !important;
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
-  background: #fff url(images/favicon.svg) no-repeat left 14px center / 28px;
+  background: var(--bg) url(images/favicon.svg) no-repeat left 14px center / 28px;
 }
 
 #themeoptions input {
@@ -5147,13 +5112,13 @@ p#helptranslate {
   float: left;
   text-align: center;
   border: 1px solid var(--border);
-  box-shadow: 0 0 1px #fff;
+  box-shadow: 0 0 1px var(--bg);
   background: var(--th);
 }
 
 .langselect:hover {
   border: 1px solid var(--hover);
-  background: #fff;
+  background: var(--bg);
 }
 
 .langselect .optbox {
@@ -5193,7 +5158,7 @@ p#helptranslate {
   font-weight: 700;
   color: var(--hover);
   border-top: 1px solid var(--hover);
-  background: #fff !important;
+  background: var(--bg) !important;
 }
 
 .langselect input[name="lang"]:checked + img + .ui_lang {
@@ -5210,15 +5175,10 @@ p#helptranslate {
   box-shadow: var(--highlight);
 }
 
-.langselect:active input[name="lang"]:checked + img + .ui_lang {
-  color: var(--hover) !important;
-  box-shadow: none !important;
-  background: linear-gradient(to right, #eef, #fff, #eef) !important;
-}
-
+.langselect:active input[name="lang"]:checked + img + .ui_lang,
 .langselect input[name="lang"]:focus + img + .ui_lang {
   color: var(--hover) !important;
-  background: #fff !important;
+  box-shadow: none !important;
   background: linear-gradient(to right, #eef, #fff, #eef) !important;
 }
 
@@ -5297,7 +5257,7 @@ p#helptranslate {
 
 #consolepass tr:first-child td {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--useradd) no-repeat 12px center / 28px 28px;
+  background: var(--bg) var(--useradd) no-repeat 12px center / 28px 28px;
 }
 
 #consolepass td {
@@ -5346,7 +5306,7 @@ td#pw_adduser input {
 }
 
 #netconfig {
-  line-height: 160%;
+  line-height: 1.6;
 }
 
 /* netdb */
@@ -5456,7 +5416,7 @@ td#pw_adduser input {
   width: 200px;
   white-space: nowrap;
   text-align: right;
-  border-right: 1px solid #ced1e3;
+  border-right: 1px solid var(--soft_border);
 }
 
 #leasesetdebug td:nth-child(even) {
@@ -5556,7 +5516,7 @@ td#pw_adduser input {
   margin-bottom: 10px;
   padding: 10px;
   border: 1px solid var(--border);
-  background: #fff;
+  background: var(--bg);
 }
 
 #sybilnav {
@@ -5583,7 +5543,7 @@ td#pw_adduser input {
   list-style: none;
   border: 1px solid #ddf;
   border-bottom: 2px solid #ccf;
-  background: #fff;
+  background: var(--bg);
   background: var(--badge);
   border-radius: 2px 2px 0 0;
   box-sizing: border-box;
@@ -5603,7 +5563,7 @@ td#pw_adduser input {
 #sybilnav li a {
   display: inline-block;
   vertical-align: middle;
-  line-height: 100%;
+  line-height: 1;
   width: calc(100% - 30px);
 }
 
@@ -5613,7 +5573,7 @@ td#pw_adduser input {
   height: 16px;
   display: inline-block;
   vertical-align: middle;
-  line-height: 50%;
+  line-height: .5;
   font-size: 16pt;
   background: var(--eye) no-repeat center center / 16px;
   content: "";
@@ -5659,7 +5619,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 #netdb .threatpoints + ul li {
   margin: 2px;
   padding: 0;
-  line-height: 150%;
+  line-height: 1.5;
 }
 
 #netdb .threatpoints + ul li:last-child {
@@ -5716,7 +5676,7 @@ p:empty { /* empty paragraph nuke */
   padding: 10px;
   text-align: left !important;
   border: 1px solid var(--border);
-  background: #fff;
+  background: var(--bg);
 }
 
 .subheading b {
@@ -5780,7 +5740,7 @@ p:empty { /* empty paragraph nuke */
 .netdb_leases li {
   padding: 2px 0 3px !important;
   vertical-align: middle;
-  line-height: 140%;
+  line-height: 1.4;
   list-style: none;
 }
 
@@ -5828,7 +5788,7 @@ p:empty { /* empty paragraph nuke */
 
 .netdb_leases .tunnel_id {
   min-width: 74px;
-  line-height: 150%;
+  line-height: 1.5;
   text-align: center;
 }
 
@@ -5892,7 +5852,7 @@ h3.stats {
 }
 
 .statlist li b, .statlist b a:hover, h3.stats a:hover {
-  color: var(--ink) !important;
+  color: var(--ink_light);
 }
 
 .statlist li::before {
@@ -5950,7 +5910,7 @@ h3.stats {
 .statlist li li:last-child {
   padding-bottom: 5px;
   padding-left: 5px;
-  border-bottom: 1px solid #ced1e3;
+  border-bottom: 1px solid var(--soft_border);
 }
 
 .statlist li li.noevents {
@@ -5994,7 +5954,7 @@ h3.stats {
 }
 
 #gatherstats + form {
-  background: #fff;
+  background: var(--bg);
 }
 
 .main#stats form {
@@ -6035,8 +5995,8 @@ h3.stats {
 }
 
 #netdboverview table td:not(:first-child):not(:last-child) {
-  border-left: 1px solid #ced1e3;
-  border-right: 1px solid #ced1e3;
+  border-left: 1px solid var(--soft_border);
+  border-right: 1px solid var(--soft_border);
 }
 
 #netdboverview table tr:hover {
@@ -6073,17 +6033,17 @@ h3.stats {
 }
 
 #netdbversions, #netdbcountrylist, #netdbtransports, #netdbtiers {
-  border-left: none !important;
-  border-right: none !important;
+  border-left: none;
+  border-right: none;
   border-bottom: 1px solid var(--border);
 }
 
 #netdbcountrylist td:first-child, #netdbtransports td:first-child, #netdbtiers td:first-child, #netdbversions td:first-child {
-  border-left: none !important;
+  border-left: none;
 }
 
 #netdbcountrylist td:last-child, #netdbtransports td:last-child, #netdbtiers td:last-child, #netdbversions td:last-child {
-  border-right: none !important;
+  border-right: none;
 }
 
 #netdbtransports {
@@ -6124,11 +6084,10 @@ h3.stats {
 
 #volunteer, #sidebarhelp, #configurationhelp, #reachabilityhelp, #legal, #changelog, #browserconfig, #tunnman,
 #faq, #reseedhelp, #troubleshoot, #newuserguide, #filterlist, #webhosting, #themeoverride, #glossary {
-  border: 1px solid var(--border);
-  padding: 10px 15px 5px;
-  margin-bottom: 20px;
   margin-top: 15px !important;
-  background: var(--bg2);
+  margin-bottom: 20px;
+  padding: 10px 15px 5px;
+  border: 1px solid var(--border);
   background: rgba(240,240,255,.5);
   box-shadow: var(--highlight);
 }
@@ -6206,13 +6165,13 @@ ul#reachability {
 }
 
 #help li {
-  text-align: justify;
-  margin-left: 20px;
   margin-right: 0;
+  margin-left: 20px;
+  text-align: justify;
 }
 
 #help li, #help p, #help td {
-  line-height: 140%;
+  line-height: 1.4;
 }
 
 #portfaq tr {
@@ -6228,9 +6187,9 @@ ul#reachability {
 }
 
 #changelog {
+  margin-top: 14px;
+  margin-bottom: 11px !important;
   padding: 0;
-  margin-top: -5px !important;
-  margin-bottom: 10px !important;
 }
 
 #changelog h2 {
@@ -6253,7 +6212,7 @@ p#fullhistory {
   text-align: right;
   margin-bottom: -5px;
   margin: -5px -1px -6px !important;
-  background: #fff;
+  background: var(--bg);
   background: linear-gradient(to right, #eff2ff 50%, #fff);
   border: 1px solid var(--border);
   padding: 7px 10px 4px 5px !important;
@@ -6407,7 +6366,7 @@ p#fullhistory {
   margin-top: -11px;
   padding: 10px 10px 10px 50px;
   border: 1px solid var(--border);
-  background: #fff var(--logs) no-repeat 12px center / 28px;
+  background: var(--bg) var(--logs) no-repeat 12px center / 28px;
 }
 
 .eventspanel select {
@@ -6440,7 +6399,7 @@ p#fullhistory {
 #routerinfo td {
   padding: 8px 4px;
   width: 25%;
-  border-bottom: 1px solid #ced1e3 !important;
+  border-bottom: 1px solid var(--soft_border) !important;
 }
 
 #routerinfo td:first-child, #routerinfo td:nth-child(3) {
@@ -6450,7 +6409,7 @@ p#fullhistory {
 
 #routerinfo td:nth-child(2):not([colspan]) {
   white-space: nowrap;
-  border-right: 1px solid #ced1e3;
+  border-right: 1px solid var(--soft_border);
 }
 
 #certs .infohelp {
@@ -6461,7 +6420,7 @@ p#fullhistory {
   margin: 3px 0;
   padding: 10px 5px;
   border: 1px solid var(--border);
-  background: #fff;
+  background: var(--bg);
 }
 
 #certs h4 + p {
@@ -6521,33 +6480,33 @@ p#fullhistory {
 
 #bugreports td.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--bug) no-repeat 12px center / 28px !important;
+  background: var(--bg) var(--bug) no-repeat 12px center / 28px !important;
 }
 
 p#debugmode {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--bug) no-repeat 12px center / 28px;
+  background: var(--bg) var(--bug) no-repeat 12px center / 28px;
 }
 
 p.sybilinfo {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--sybil) no-repeat 12px center / 28px;
+  background: var(--bg) var(--sybil) no-repeat 12px center / 28px;
 }
 
 p.sybilinfo.experimental {
-  background: #fff var(--experimental) no-repeat 12px center / 28px;
+  background: var(--bg) var(--experimental) no-repeat 12px center / 28px;
 }
 
 p.infowarn, #sybilanalysis {
   border: 1px solid var(--border);
   padding: 15px 15px 15px 50px;
-  background: #fff var(--infowarn) no-repeat 10px center / 28px;
-  line-height: 130%;
+  background: var(--bg) var(--infowarn) no-repeat 10px center / 28px;
+  line-height: 1.3;
 }
 
 #sybilanalysis {
   margin: 0 0 6px;
-  background: #fff var(--sybil) no-repeat 10px center / 28px;
+  background: var(--bg) var(--sybil) no-repeat 10px center / 28px;
 }
 
 #sybilanalysis form {
@@ -6570,17 +6529,17 @@ p.infowarn, #sybilanalysis {
 
 #bandwidthconfig tr:first-child .infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--speed) no-repeat 12px center / 28px;
+  background: var(--bg) var(--speed) no-repeat 12px center / 28px;
 }
 
 #addkeyring td.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--keys) no-repeat 12px center / 28px;
+  background: var(--bg) var(--keys) no-repeat 12px center / 28px;
 }
 
 #floodfillconfig tr:first-child .infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--floodfill) no-repeat 12px center / 28px;
+  background: var(--bg) var(--floodfill) no-repeat 12px center / 28px;
 }
 
 #floodfillconfig tr:nth-child(2) td {
@@ -6597,37 +6556,37 @@ p.infowarn, #sybilanalysis {
 
 p#clientconf.infohelp, p#webappconfigtext.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--editclient) no-repeat 12px center / 28px;
+  background: var(--bg) var(--editclient) no-repeat 12px center / 28px;
 }
 
 p#pluginconfigtext {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--pluginconfig) no-repeat 12px center / 28px;
+  background: var(--bg) var(--pluginconfig) no-repeat 12px center / 28px;
 }
 
 #plugininstall .infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--plugin) no-repeat 12px center / 28px;
+  background: var(--bg) var(--plugin) no-repeat 12px center / 28px;
 }
 
 #plugininstall tr:nth-child(3) td:nth-last-child(2), #manualreseed tr:nth-child(3) td:nth-last-child(2) {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--link) no-repeat 12px center / 28px;
+  background: var(--bg) var(--link) no-repeat 12px center / 28px;
 }
 
 #manualreseed tr:nth-child(5) td:nth-last-child(2), #plugininstall2 tr:nth-child(2) td:nth-last-child(2) {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--files) no-repeat 12px center / 28px;
+  background: var(--bg) var(--files) no-repeat 12px center / 28px;
 }
 
 #manualreseed tr:nth-last-child(2) td.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--package) no-repeat 12px center / 28px;
+  background: var(--bg) var(--package) no-repeat 12px center / 28px;
 }
 
 #config_peers tr:nth-child(3) td.infohelp, #bannedpeercount {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--ban) no-repeat 12px center / 28px;
+  background: var(--bg) var(--ban) no-repeat 12px center / 28px;
 }
 
 #config_peers tr:nth-child(3) td.infohelp {
@@ -6636,47 +6595,47 @@ p#pluginconfigtext {
 
 h3#shutdownrouter + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--power) no-repeat 12px center / 28px;
+  background: var(--bg) var(--power) no-repeat 12px center / 28px;
 }
 
 h3#restartrouter + p.infohelp, #config_family .infohelp.needrestart {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--reboot) no-repeat 12px center / 28px;
+  background: var(--bg) var(--reboot) no-repeat 12px center / 28px;
 }
 
 h3#systray + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--systray) no-repeat 12px center / 28px;
+  background: var(--bg) var(--systray) no-repeat 12px center / 28px;
 }
 
 h3#servicedebug + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--bug) no-repeat 12px center / 28px;
+  background: var(--bg) var(--bug) no-repeat 12px center / 28px;
 }
 
 h3#browseronstart + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--firefox) no-repeat 12px center / 28px;
+  background: var(--bg) var(--firefox) no-repeat 12px center / 28px;
 }
 
 .main#config_reseed p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--reseed) no-repeat 12px center / 28px;
+  background: var(--bg) var(--reseed) no-repeat 12px center / 28px;
 }
 
 p#enablefullstats, p#gatherstats {
   padding: 15px 15px 15px 50px;
-  background: #fff var(--stats) no-repeat 12px center / 28px;
+  background: var(--bg) var(--stats) no-repeat 12px center / 28px;
 }
 
 #config_family .infohelp {
   margin-bottom: -1px !important;
   padding: 15px 15px 15px 50px;
-  background: #fff var(--family) no-repeat 12px center / 28px;
+  background: var(--bg) var(--family) no-repeat 12px center / 28px;
 }
 
 #certs .infohelp:first-of-type {
-  background: #fff var(--certs) no-repeat 12px center / 28px;
+  background: var(--bg) var(--certs) no-repeat 12px center / 28px;
 }
 
 /* end informational images */
@@ -6685,11 +6644,11 @@ p#enablefullstats, p#gatherstats {
 
 #consolepass input[name="name"], #externali2cp input[name="user"], #consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"] {
   padding: 4px 5px 4px 26px !important;
-  background: #fff var(--user) no-repeat 5px center / 16px;
+  background: var(--bg) var(--user) no-repeat 5px center / 16px;
 }
 
 #consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"] {
-  background: #fff var(--key) no-repeat 5px center / 16px;
+  background: var(--bg) var(--key) no-repeat 5px center / 16px;
 }
 
 /* logs */
@@ -6738,8 +6697,8 @@ p#enablefullstats, p#gatherstats {
   padding: 0 2px 4px 22px !important;
   width: 100% !important;
   width: calc(100% - 24px) !important;
-  border-top: 1px solid #ced1e3;
-  border-bottom: 1px solid #ced1e3;
+  border-top: 1px solid var(--soft_border);
+  border-bottom: 1px solid var(--soft_border);
   background: transparent;
   opacity: .85;
 }
@@ -6822,18 +6781,18 @@ p#enablefullstats, p#gatherstats {
 }
 
 #logs li {
-  list-style: none;
-  line-height: 130%;
-  text-align: left;
   width: 100%;
+  line-height: 1.3;
+  text-align: left;
+  list-style: none;
   box-shadow: var(--highlight), inset 0 0 1px 1px #edefff;
 }
 
 #logs li::after {
-  content: "";
-  display: block;
-  width: 100%;
   margin: 2px 0 -4px;
+  width: 100%;
+  display: block;
+  content: "";
 }
 
 #logs li:last-child::after {
@@ -6850,7 +6809,7 @@ p#enablefullstats, p#gatherstats {
   display: inline-block;
   vertical-align: calc(1px);
   border-radius: 50%;
-  background: #fff;
+  background: var(--bg);
 }
 
 #logs li font[color="#cc0000"]::before {
@@ -6889,7 +6848,7 @@ p#enablefullstats, p#gatherstats {
   margin: 0 -2px;
   min-width: 50px;
   display: inline-block;
-  line-height: 110%;
+  line-height: 1.1;
   text-align: center;
   vertical-align: middle;
   border-radius: 2px;
@@ -6897,27 +6856,27 @@ p#enablefullstats, p#gatherstats {
 }
 
 font[color="#cc0000"] span {
-  color: #fff;
+  color: var(--bg);
   background: #c00;
 }
 
 font[color="#ff3300"] span {
-  color: #fff;
+  color: var(--bg);
   background: #f30;
 }
 
 font[color="#bf00df"] span {
-  color: #fff;
+  color: var(--bg);
   background: #717;
 }
 
 font[color="#000099"] span {
-  color: #fff;
+  color: var(--bg);
   background: #339;
 }
 
 font[color="#006600"] span {
-  color: #fff;
+  color: var(--bg);
   background: #444;
 }
 
@@ -6969,7 +6928,7 @@ tt a, .cells tt {
 #tunnels .routerid, .tunnel_local {
   min-width: 64px;
   display: inline-block;
-  box-shadow: inset 0 0 0 1px #aad, inset 0 0 0 2px #fff;
+  box-shadow: inset var(--border_badge), inset 0 0 0 2px var(--bg);
   background: #ddf;
   background: var(--th);
 }
@@ -6981,6 +6940,7 @@ tt a, .cells tt {
 }
 
 .tunnel_local {
+  margin-top: 1px;
   padding: 4px 0;
   min-width: 71px;
   font-size: 8pt;
@@ -7042,35 +7002,34 @@ tt a, .cells tt {
 }
 
 @media screen and (min-width: 1500px) {
-.tunnel_cap {
-  margin-left: 10px;
-  padding: 0 1px;
-  min-width: 14px;
-}
+  .tunnel_cap {
+    margin-left: 10px;
+    padding: 0 1px;
+    min-width: 14px;
+  }
 
-.tunnel_id:empty {
-  margin-right: -10px;
-}
+  .tunnel_id:empty {
+    margin-right: -10px;
+  }
 
-#tunnels td:last-child .routerid {
-  margin-left: -10px;
-}
+  #tunnels td:last-child .routerid {
+    margin-left: -10px;
+  }
 
-#tunnels td:last-child .tunnel_peer:not(.tunnel_local) + .tunnel_cap {
-  margin-left: 2px !important;
-}
+  #tunnels td:last-child .tunnel_peer:not(.tunnel_local) + .tunnel_cap {
+    margin-left: 2px !important;
+  }
 }
 
 span.b32 {
   margin-right: 5px;
   padding: 2px 4px;
   float: right;
-  line-height: 120%;
+  line-height: 1.2;
   letter-spacing: .1em;
   font-family: var(--monospaced);
   font-size: 80%;
   color: #070;
-  border-radius: 2px;
   box-shadow: 0 0 0 1px var(--border), var(--highlight);
   background: var(--th);
   opacity: .8;
@@ -7171,7 +7130,7 @@ span.b32 {
 
 #peerdefs {
   padding: 5px;
-  line-height: 140%;
+  line-height: 1.4;
 }
 
 .peer_arrow {
@@ -7199,8 +7158,6 @@ span.b32 {
 }
 
 th code {
-  -moz-user-select: all;
-  -webkit-user-select: all;
   user-select: all;
 }
 
@@ -7229,7 +7186,7 @@ th code {
 }
 
 .netdb_addresses {
-  line-height: 150%;
+  line-height: 1.5;
 }
 
 .netdbentry th:first-child::after {
@@ -7399,7 +7356,7 @@ th code {
 .threatpoints + ul li {
   list-style: none;
   margin-left: -15px;
-  line-height: 120%;
+  line-height: 1.2;
   break-inside: avoid;
   page-break-inside: avoid;
   -webkit-column-break-inside: avoid;
@@ -7462,7 +7419,7 @@ th code {
 
 #debug li {
   list-style: none;
-  line-height: 150%;
+  line-height: 1.5;
   padding-bottom: 0;
   margin-left: -5px;
   margin-bottom: -2px;
@@ -7480,7 +7437,7 @@ th code {
 }
 
 .debug_container, #debug td {
-  line-height: 140%;
+  line-height: 1.4;
 }
 
 .main#debug h3 + table {
@@ -7560,7 +7517,7 @@ h2#debug_portmapper {
 }
 
 .bucket {
-  margin: 1px;
+  margin: 2px;
   padding: 1px 4px;
   width: 7%;
   min-width: 80px;
@@ -7572,10 +7529,7 @@ h2#debug_portmapper {
   color: #152;
   font-size: 90%;
   box-shadow: 0 0 0 1px var(--border), var(--highlight);
-  border-radius: 2px;
   background: #f8f8ff;
-  -moz-user-select: all;
-  -webkit-user-select: all;
   user-select: all;
 }
 
@@ -7583,14 +7537,9 @@ h2#debug_portmapper {
   font-weight: 700;
 }
 
-.bucket::-moz-selection {
-  background: #070 !important;
-  color: #fff;
-}
-
 .bucket::selection {
   background: #070 !important;
-  color: #fff;
+  color: var(--bg);
 }
 
 .bucket:empty {
@@ -7669,7 +7618,7 @@ h2#debug_portmapper {
 }
 
 #jardump tr td, #config_logging tr {
-  border-top: 1px solid #ced1e3 !important;
+  border-top: 1px solid var(--soft_border) !important;
 }
 
 #jardump td {
@@ -7702,27 +7651,25 @@ h2#debug_portmapper {
 }
 
 .revision, .sha256, .unsignedmod {
-  -moz-user-select: all;
-  -webkit-user-select: all;
   user-select: all;
 }
 
 .subheading.routerfiles {
-  background: url(images/favicon.svg) no-repeat right 5px center / 16px, linear-gradient(to right, #fff, #eef) !important;
+  background: url(images/favicon.svg) no-repeat right 5px center / 16px, var(--subheading) !important;
   background-blend-mode: luminosity, normal;
 }
 
 .subheading.pluginfiles {
-  background: var(--plugin) no-repeat right 5px center / 16px, linear-gradient(to right, #fff, #eef) !important;
+  background: var(--plugin) no-repeat right 5px center / 16px, var(--subheading) !important;
   background-blend-mode: luminosity, normal;
 }
 
 .subheading.pluginfiles {
-  border-top: 1px solid #ced1e3;
+  border-top: 1px solid var(--soft_border);
 }
 
 #jardump td {
-  border-left: 1px solid #ced1e3 !important;
+  border-left: 1px solid var(--soft_border) !important;
   vertical-align: middle;
   text-align: center;
 }
@@ -7748,14 +7695,12 @@ h2#debug_portmapper {
   display: inline-block;
   padding: 1px 2px;
   word-break: break-all;
-  -moz-user-select: all;
-  -webkit-user-select: all;
   user-select: all;
 }
 
 #jardump hr {
   margin: 2px 0 !important;
-  background: #ced1e3;
+  background: var(--soft_border);
 }
 
 .unsignedmod:empty {
@@ -7768,9 +7713,7 @@ h2#debug_portmapper {
 }
 
 @supports not (-moz-appearance: none) {
-  #jardump td:last-child {
-    word-break: break-all;
-  }
+  #jardump td:last-child {word-break: break-all}
 }
 
 /* end jardump */
@@ -7912,7 +7855,7 @@ input[name="pluginURL"] {
 }
 
 img[src$="bound.png"] {
-  transform: scale(0.9);
+  transform: scale(.9);
 }
 
 .main#tunnels th, .main#profiles th {
@@ -8127,7 +8070,7 @@ h3#totaljobstats {
 
 table[id*="connections"] td, #floodfills td,  #profilelist td, #jobstats td, .main#tunnels td {
   padding: 3px;
-  border-right: 1px solid #ced1e3;
+  border-right: 1px solid var(--soft_border);
 }
 
 .main#netdb #netdboverview, #netdblookup {
@@ -8182,7 +8125,7 @@ table.sybil_routerinfo:last-child {
 
 .eventspanel form {
   padding: 10px !important;
-  background: #fff !important;
+  background: var(--bg) !important;
 }
 
 .eventspanel select {
@@ -8214,7 +8157,7 @@ table.sybil_routerinfo:last-child {
   font-size: 12pt;
   line-height: 0;
   vertical-align: middle;
-  letter-spacing: -0.3em;
+  letter-spacing: -.3em;
 }
 
 #help h3, #faq h3 {
@@ -8230,18 +8173,16 @@ table.sybil_routerinfo:last-child {
 }
 
 @media screen and (min-width: 1200px) {
-.cells tt, #profilelist tt {
-  margin-left: 2px !important;
-}
+  .cells tt, #profilelist tt {margin-left: 2px !important}
 }
 
 @media screen and (min-width: 1400px) {
 #help #changelog pre:not(old) {
+  margin-left: 0;
+  padding-left: 10px;
   columns: 560px auto;
   column-gap: 40px;
   column-rule: 1px dotted #abf;
-  margin-left: 0;
-  padding-left: 10px;
 }
 }
 
@@ -8331,9 +8272,9 @@ h1 {
   max-width: 232px;
 }
 
-.routersummary button[type=submit] {
-  min-width: 110px !important;
+.routersummary button[type=submit], .routersummary .reload[value="restart"] {
   margin: 2px 4px 1px;
+  min-width: 110px !important;
 }
 
 .percentBarOuter {
@@ -8349,13 +8290,13 @@ div.app img {
 }
 
 .applabel {
-  width: 156px !important;
   padding: 4px 2px 2px !important;
+  width: 156px !important;
 }
 
 .applabel a {
-  height: 16px !important;
   padding-top: 3px;
+  height: 16px !important;
 }
 
 .footnote {
@@ -8375,9 +8316,9 @@ h3, h3.ptitle, h3.tabletitle, th.th_title {
 }
 
 .newsAuthor {
+  padding-left: 14px;
   font-size: 9pt;
   background-size: 12px;
-  padding-left: 14px;
   background-position: left center;
 }
 
@@ -8403,8 +8344,8 @@ h3#systray, h3#servicedebug, h3#browseronstart {
 
 h4#updateplugins {
   margin-top: -16px !important;
-  font-size: 10pt;
   padding: 5px 10px;
+  font-size: 10pt;
 }
 
 h3#webappconfiguration {
@@ -8416,8 +8357,8 @@ h3#webappconfiguration {
 }
 
 button.control {
-  font-size: 0 !important;
   padding: 14px !important;
+  font-size: 0 !important;
 }
 
 #jardump td {
@@ -8558,9 +8499,7 @@ div.news {
 }
 
 @media screen and (min-width: 1060px) {
-#graphs td:first-child {
-  padding: 5px 0;
-}
+  #graphs td:first-child {padding: 5px 0}
 }
 
 #graphs td b {
@@ -8571,7 +8510,7 @@ div.news {
 }
 
 #graphs .nowrap {
-  line-height: 300%;
+  line-height: 3;
   display: inline-block;
 }
 
@@ -8608,9 +8547,9 @@ div.news {
 
 .optionlist, .optionsingle, #reseedssl {
   padding: 1px 2px;
-  border: 1px solid #ced1e3 !important;
-  box-shadow: inset 0 0 0 2px #fff;
-  background: #fff !important;
+  border: 1px solid var(--soft_border) !important;
+  box-shadow: inset 0 0 0 2px var(--bg);
+  background: var(--bg) !important;
   column-gap: 1px;
   transition: ease box-shadow .2s;
 }
@@ -8630,13 +8569,13 @@ div.news {
 
 .optionlist:hover, .optionsingle:hover, .optiontextarea:hover {
   border: 1px solid var(--border);
-  box-shadow: inset 0 0 0 1px #a79;
+  box-shadow: var(--highlight_hover);
   transition: ease box-shadow .5s, ease background .2s .01s;
   background: var(--row_hover) !important;
 }
 
 #reseedconfig .optiontextarea:hover {
-  box-shadow: inset 0 0 0 1px #a79 !important;
+  box-shadow: var(--highlight_hover) !important;
   transition: ease box-shadow .5s, ease background .2s .01s;
 }
 
@@ -8649,9 +8588,9 @@ div.news {
 
 #updatehelper .optionlist:hover, #updateProxyHostPort.optionlist:hover {
   vertical-align: middle;
-  background: #fff !important;
+  background: var(--bg) !important;
   transition: ease box-shadow .2s;
-  box-shadow: inset 0 0 0 1px #a79, inset 0 0 0 2px #fff !important;
+  box-shadow: var(--highlight_hover), inset 0 0 0 2px #fff !important;
 }
 
 #bandwidthconfig .optionsingle:hover, #reseedproxytype label:hover, #graphs .nowrap:hover {
@@ -8673,9 +8612,9 @@ b.suboption {
   position: relative;
   z-index: 10;
   display: inline-block;
-  text-shadow: 0 1px 1px #fff;
+  text-shadow: 0 1px 1px var(--bg);
   border-radius: 3px 3px 0 0;
-  border: 1px solid #ced1e3;
+  border: 1px solid var(--soft_border);
   border-bottom: none;
   box-shadow: var(--highlight);
   background: #fdfdff;
@@ -8791,8 +8730,8 @@ b.suboption {
   font-size: 11pt;
   margin: 2px -13px 0 -38px;
   padding: 4px 5px;
-  background: #fff;
-  background: linear-gradient(to right, #fff, #eef);
+  background: var(--bg);
+  background: var(--subheading);
 }
 
 @media screen and (max-width: 1000px) {
@@ -8850,7 +8789,7 @@ b.suboption {
   margin: 1px 0;
   padding: 2px 5px;
   background: #fafbff;
-  line-height: 100% !important;
+  line-height: 1 !important;
 }
 
 @media screen and (max-width: 1200px) {
@@ -9083,7 +9022,7 @@ b.suboption {
 
 #config_reseed .optionsingle:hover {
   border: 1px solid var(--border);
-  box-shadow: inset 0 0 0 1px #a79;
+  box-shadow: var(--highlight_hover);
   transition: ease box-shadow .5s;
 }
 
@@ -9122,7 +9061,7 @@ b.suboption {
 
 #reseed_urlselection.optionsingle, #reseedproxytype, #config_reseed .optionlist:hover,
 #graphs .optionlist:hover, #config_network .optionlist:hover, #config_i2cp .optionlist:hover {
-  background: #fff !important;
+  background: var(--bg) !important;
 }
 
 #reseedproxytype label {
@@ -9188,7 +9127,7 @@ b.suboption {
 #config_network .optionlist:hover, #config_i2cp .optionlist:hover, #reseedssl:hover,
 #manualreseed .optionsingle:hover, .optiontextarea:hover, #reseed_urlselection:hover {
   border: 1px solid var(--border);
-  box-shadow: inset 0 0 0 1px #a79 !important;
+  box-shadow: var(--highlight_hover) !important;
   transition: ease box-shadow .5s;
 }
 
@@ -9449,7 +9388,7 @@ input[type="file"]:hover {
 
 .routerid {
   display: inline-block;
-  box-shadow: inset 0 0 0 1px #aad, inset 0 0 0 2px #fff;
+  box-shadow: inset var(--border_badge), inset 0 0 0 2px var(--bg);
   background: #ddf;
   background: var(--th);
 }
@@ -9486,7 +9425,7 @@ input[type="file"]:hover {
 
 #ntcpconnections tr:nth-last-child(n+2) td, #udpconnections tr:nth-last-child(n+2) td, #profilelist td, #profile_defs td, #floodfills td,
 #tunnelPeerCount td {
-  border-right: 1px solid #ced1e3;
+  border-right: 1px solid var(--soft_border);
 }
 
 #ntcpconnections tr:nth-last-child(n+2) td::after, #udpconnections tr:nth-last-child(n+2) td::after,
@@ -9660,15 +9599,13 @@ th.queue {
 }
 
 .tunnel_cap, .tier, #capabilities_key b, #netdbtiers td a {
-  margin: 1px 2px;
+  margin: 1px 2px 0;
   padding: 1px 2px;
   min-width: 14px;
   display:inline-block;
   text-align: center !important;
-  text-shadow: 0 1px 1px #fff;
-  border: 1px solid var(--border);
-  background: #99b;
-  background: var(--th);
+  text-shadow: 0 1px 1px var(--bg);
+  background: var(--badge);
 }
 
 #netdbtiers td a {
@@ -9681,28 +9618,21 @@ th.queue {
   display: inline-block;
   min-width: 12px;
   text-align: center;
-  border-radius: 2px;
 }
 
 .ff, .reachable, .unreachable, .hidden, .ssutesting, .ssuintro, .tier, .tunnel_cap, #capabilities_key b {
-  box-shadow: var(--highlight);
+  box-shadow: var(--border_badge), var(--highlight);
 }
 
 .ff {
-  border: 1px solid #99a;
-  background: #fdb;
   background: linear-gradient(to bottom, #fff, #fdb) !important;
 }
 
 .reachable {
-  border: 1px solid #99a;
-  background: #cfc;
   background: linear-gradient(to bottom, #fff, #cfc) !important;
 }
 
 .unreachable {
-  border: 1px solid #99a;
-  background: #fcc;
   background: linear-gradient(to bottom, #fff, #fcc) !important;
 }
 
@@ -9712,17 +9642,14 @@ th.queue {
 
 .hidden {
   color: #999 !important;
-  background: #dbecff;
   background: var(--btn) !important;
 }
 
 .ssutesting {
-  background: #ffb;
   background: linear-gradient(to bottom, #fff, #ffb) !important;
 }
 
 .ssuintro {
-  background: #fbf;
   background: linear-gradient(to bottom, #fff, #fbf) !important;
 }
 
@@ -9788,7 +9715,7 @@ th.queue {
   vertical-align: middle;
   border: 1px solid #bbd;
   border-radius: 2px;
-  background: #fff;
+  background: var(--bg);
 }
 
 a.viewfullentry, #profilelist td:last-child a, a[href^="/viewprofile"], .profiledump::after {
@@ -9801,20 +9728,20 @@ a.viewfullentry, #profilelist td:last-child a, a[href^="/viewprofile"], .profile
   width: 14px;
   display: inline-block;
   vertical-align: middle;
-  background: #fff var(--eye) no-repeat center center / 12px;
+  background: var(--bg) var(--eye) no-repeat center center / 12px;
   content: "";
 }
 
 #profilelist td:last-child .viewprofile:hover::after, .viewprofile:hover::after, .profiledump:hover::after {
-  background: #fff var(--eye_hover) no-repeat center center / 12px;
+  background: var(--bg) var(--eye_hover) no-repeat center center / 12px;
 }
 
 #profilelist td:last-child a[href^="/configpeer"]::after, a[href^="/configpeer?"]::after {
-  background: #fff var(--edit) no-repeat center center / 12px;
+  background: var(--bg) var(--edit) no-repeat center center / 12px;
 }
 
 #profilelist td:last-child a[href^="/configpeer"]:hover::after, a[href^="/configpeer?"]:hover::after {
-  background: #fff var(--edit_hover) no-repeat center center / 12px;
+  background: var(--bg) var(--edit_hover) no-repeat center center / 12px;
 }
 
 a.viewfullentry:hover {
@@ -9879,7 +9806,7 @@ a[href^="/viewprofile"] img, .profiledump img {
 }
 
 #floodfills .percentBarText {
-  color: #fff;
+  color: var(--bg);
   text-shadow: 0 1px 1px #000;
 }
 
@@ -9930,7 +9857,7 @@ a[href^="/viewprofile"] img, .profiledump img {
   margin: 0;
   padding: 0;
   columns: auto;
-  line-height: 120%;
+  line-height: 1.2;
 }
 
 #netdb li, #netdb li:first-child {
@@ -10089,42 +10016,41 @@ input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::bef
 }
 
 input[type=checkbox]:checked::before {
-  content: "";
+  width: 11px;
+  height: 11px;
   position: absolute;
   top: 3px;
   left: 3px;
-  width: 11px;
-  height: 11px;
-  line-height: 80%;
+  line-height: .8;
   border-radius: 1px;
   background: #67f;
+  content: "";
   transform: scale(1);
   transition: linear all .05s;
 }
 
 input[type=radio]:checked::before {
-  content: "";
-  border-radius: 50%;
-  left: 25%;
-  top: 25%;
   width: 9px;
   height: 9px;
+  left: 25%;
+  top: 25%;
+  border-radius: 50%;
   background: #67f;
+  content: "";
 }
 
 input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
-  transform: scale(0);
   color: transparent;
   background: transparent;
+  transform: scale(0);
 }
 
 input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus, input[type=radio]:focus {
-  background: #fff;
   width: 19px !important;
   height: 19px !important;
   border: 1px solid #67f !important;
   box-shadow: 0 0 2px var(--hover) !important;
-  filter: drop-shadow(0 0 3px #89f) !important;
+  background: var(--bg);
   filter: none !important;
 }
 
@@ -10287,11 +10213,11 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel{
 }
 
 .sitemapLink:active img {
-  transform: scale(0.8);
+  transform: scale(.8);
 }
 
 .sitemapLink:active .sitemapLabel {
-  color: #fff;
+  color: var(--bg);
   box-shadow: var(--highlight);
   background: var(--hover) !important;
 }
@@ -10321,14 +10247,14 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel{
 #sitemap div.app:hover, #sitemap div.app:hover .applabel,
 .sitemapLink:hover, .sitemapLink:hover .sitemapLabel {
   border-color: var(--hover);
-  background: #fff;
+  background: var(--bg);
 }
 
 /* end sitemap */
 
 /* help section */
 
-#help .confignav + div:last-of-type {
+#help .confignav + div:not(#changelog):last-of-type {
   margin: 20px 0 5px !important;
 }
 
@@ -10387,7 +10313,7 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel{
 
 #helptoc b {
   font-size: 120% !important;
-  text-shadow: 0 1px 1px #fff;
+  text-shadow: 0 1px 1px var(--bg);
 }
 
 #help_configuration {
@@ -10610,7 +10536,7 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel{
 }
 
 #stats .tab2, #stats .tab2:hover {
-  color: #fff;
+  color: var(--bg);
   text-shadow: 0 1px 1px #225;
   box-shadow: inset 3px 3px 2px #337;
   background: #89f;
@@ -10775,7 +10701,8 @@ p#gatherstats {
 
 #clock {
   margin: -5px 1px -6px;
-  padding: 8px 0 6px;
+  padding: 4px 0;
+  line-height: 1;
   font-size: 18pt;
   font-weight: 700;
   letter-spacing: .1em;
@@ -10855,7 +10782,7 @@ p#gatherstats {
   text-align: left;
   border: none !important;
   box-shadow: none;
-  background: #fff !important;
+  background: var(--bg) !important;
   columns: 500px 3;
   column-gap: 2px;
 }
@@ -10899,7 +10826,7 @@ p#gatherstats {
 }
 
 .encDests td {
-  line-height: 120%;
+  line-height: 1.2;
 }
 
 .encDests tr:last-child td {
@@ -10959,7 +10886,7 @@ p#gatherstats {
   text-align: center;
   border: 1px solid var(--border);
   box-shadow: 0 0 1px 1px #e8e8f8;
-  background: #fff;
+  background: var(--bg);
   animation: ease zoom .1s forwards;
 }
 
@@ -11169,7 +11096,7 @@ p#gatherstats {
 .stattograph:hover, .optbox:checked + label > .stattograph:hover {
   color: #fff !important;
   border-color: var(--hover);
-  background: #fff;
+  background: var(--bg);
   box-shadow: none;
 }
 
@@ -11422,7 +11349,7 @@ p#gatherstats {
   position: absolute;
   bottom: 0;
   left: 0;
-  background: linear-gradient(to right, #930, var(--hover));
+  background: var(--reload);
   opacity: .6;
   content: "";
   animation: ease-out reloader 1s forwards;
@@ -11626,8 +11553,13 @@ div.app, .sitemapLink, .sitemapLabel {
     min-width: 540px;
     display: inline-block;
     border: 1px solid var(--border);
-    box-shadow: var(--highlight), inset 0 0 2px 1px #ddf, 0 0 1px #ddf;
-    background: rgba(248,248,255,.6);
+    box-shadow: var(--highlight);
+    background: var(--th);
+  }
+
+  .statsName > b {
+    padding-left: 14px;
+    background: var(--stats) no-repeat left center / 10px;
   }
 
   .statsViewGraphs {
@@ -11635,8 +11567,8 @@ div.app, .sitemapLink, .sitemapLabel {
     padding: 1px 8px 2px;
     width: calc(100% - 46px);
     display: inline-block;
-    border-top: 1px solid #ced1e3;
-    border-bottom: 1px solid #ced1e3;
+    border-top: 1px solid var(--soft_border);
+    border-bottom: 1px solid var(--soft_border);
   }
 
   a.graphstat {
@@ -11654,11 +11586,12 @@ div.app, .sitemapLink, .sitemapLabel {
   }
 
   .statlist li b {
-    font-size: 110% !important;
+    line-height: 1.5;
+    font-size: 105% !important;
   }
 
   .statlist li i {
-    margin-left: 6px;
+    margin-left: 12px;
     opacity: .8;
   }
 
@@ -11766,9 +11699,9 @@ div.app:hover img, .sitemaplink:hover img {
 }
 
 @media screen and (max-width: 1200px) {
-#sb_graphcontainer {
-  background: repeating-linear-gradient(to right, rgba(0, 0, 0, 0) 12px, rgba(120, 120, 255, .5) 13px, rgba(0, 0, 0, 0) 13px, rgba(0, 0, 0, 0) 28px), repeating-linear-gradient(to top, rgba(0, 0, 0, 0) 11px, rgba(120, 120, 255, .5) 12px, rgba(255, 255, 255, 0) 12px, rgba(255, 255, 255, 0) 24px) !important;
-}
+  #sb_graphcontainer {
+    background: repeating-linear-gradient(to right, rgba(0, 0, 0, 0) 12px, rgba(120, 120, 255, .5) 13px, rgba(0, 0, 0, 0) 13px, rgba(0, 0, 0, 0) 28px), repeating-linear-gradient(to top, rgba(0, 0, 0, 0) 11px, rgba(120, 120, 255, .5) 12px, rgba(255, 255, 255, 0) 12px, rgba(255, 255, 255, 0) 24px) !important;
+  }
 }
 
 @keyframes update {
@@ -11866,20 +11799,20 @@ div.app:hover img, .sitemaplink:hover img {
 /* highlight linked leaseset */
 
 .leaseset:target {
-  border: 1px solid #5a5 !important;
+  border: var(--ls_target);
 }
 
 .leaseset:target tr:first-child th, .leaseset:target td {
-  border-top: 1px solid #5a5 !important;
-  border-bottom: 1px solid #5a5 !important;
+  border-top: var(--ls_target);
+  border-bottom: var(--ls_target);
 }
 
 .leaseset:target th:first-child, .leaseset:target td:first-child {
-  border-left: 1px solid #5a5 !important;
+  border-left: var(--ls_target);
 }
 
 .leaseset:target th:last-child, .leaseset:target td:last-child {
-  border-right: 1px solid #5a5 !important;
+  border-right: var(--ls_target);
 }
 
 /* end highlight linked leaseset */
@@ -12073,8 +12006,8 @@ iframe {
   top: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(to bottom, rgba(255,255,255,.2) 50%, rgba(0,0,0,.4) 50%), linear-gradient(#03d, #06f);
-  opacity: .5;
+  background: linear-gradient(to bottom, rgba(255,255,255,.2) 50%, rgba(0,0,0,.2) 50%), var(--reload);
+  opacity: .7;
   content: "";
   animation: ease-out reloader 20s forwards;
 }

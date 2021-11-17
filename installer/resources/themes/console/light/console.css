@@ -1150,8 +1150,7 @@ p:empty + .sb_notice {
 }
 
 .tunnelBuildStatus.accepting::before {
-  box-shadow: inset 0 0 0 2px #5b5;
-  background: #fff;
+  background: var(--tunn_ready) no-repeat center center / 15px;
 }
 
 .tunnelBuildStatus.active::before {

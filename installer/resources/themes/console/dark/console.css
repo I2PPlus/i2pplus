@@ -7468,8 +7468,7 @@ h4#sb_shutdownstatus span {
 }
 
 .tunnelBuildStatus.accepting::before {
-  box-shadow: inset 0 0 0 2px #5b5;
-  background: #fff;
+  background: var(--tunn_ready) no-repeat center center / 15px;
 }
 
 .tunnelBuildStatus.active::before {
@@ -14058,6 +14057,7 @@ body.iframed {
 
   #help .tab, #help .tab2 {
     margin-top: -1px !important;
+    font-size: 90%;
   }
 
   .newsAuthor {

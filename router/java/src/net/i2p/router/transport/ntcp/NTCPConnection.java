@@ -927,7 +927,7 @@ public class NTCPConnection implements Closeable {
             }
             _log.debug(buf.toString());
         }
-        _transport.getPumper().wantsWrite(this, enc);
+        wantsWrite(enc);
         toLong8LE(_sendSipIV, 0, sipIV);
     }
 
@@ -1000,6 +1000,37 @@ public class NTCPConnection implements Closeable {
     }
 
     /**
+     *  Call when there is data ready to write.
+     *  If we have bandwidth, calls write() which calls EventPumnper.wantsWrite(con).
+     *  If no bandwidth, calls queuedWrite().
+     *
+     *  @since moved from EventPumper in 0.9.52
+     */
+    void wantsWrite(byte data[]) {
+        wantsWrite(data, 0, data.length);
+    }
+
+    /**
+     *  Call when there is data ready to write.
+     *  If we have bandwidth, calls write() which calls EventPumnper.wantsWrite(con).
+     *  If no bandwidth, calls queuedWrite().
+     *
+     *  @since 0.9.35 off/len version, moved from EventPumper in 0.9.52
+     */
+    void wantsWrite(byte data[], int off, int len) {
+        ByteBuffer buf = ByteBuffer.wrap(data, off, len);
+        FIFOBandwidthLimiter.Request req = _context.bandwidthLimiter().requestOutbound(len, 0, "NTCP write");
+        if (req.getPendingRequested() > 0) {
+            if (_log.shouldInfo())
+                _log.info("Queued write on " + toString() + " for " + len);
+            _context.statManager().addRateData("ntcp.wantsQueuedWrite", 1);
+            queuedWrite(buf, req);
+        } else {
+            write(buf);
+        }
+    }
+    
+    /**
      * We have read the data in the buffer, but we can't process it locally yet,
      * because we're choked by the bandwidth limiter.  Cache the contents of
      * the buffer (not copy) and register ourselves to be notified when the
@@ -1012,7 +1043,7 @@ public class NTCPConnection implements Closeable {
     }
 
     /** ditto for writes */
-    void queuedWrite(ByteBuffer buf, FIFOBandwidthLimiter.Request req) {
+    private void queuedWrite(ByteBuffer buf, FIFOBandwidthLimiter.Request req) {
         req.attach(buf);
         req.setCompleteListener(_outboundListener);
         addOBRequest(req);
@@ -1042,7 +1073,7 @@ public class NTCPConnection implements Closeable {
      * The contents of the buffer have been encrypted / padded / etc and have
      * been fully allocated for the bandwidth limiter.
      */
-    void write(ByteBuffer buf) {
+    private void write(ByteBuffer buf) {
         _writeBufs.offer(buf);
         _transport.getPumper().wantsWrite(this);
     }
