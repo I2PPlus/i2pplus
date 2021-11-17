@@ -16,8 +16,10 @@
   --btn_hover: linear-gradient(to bottom, #ddd, #fff);
   --badge: linear-gradient(to bottom, #fff, #eef);
   --badge_hover: linear-gradient(to bottom, #eef, #fff);
+  --border_badge: 0 0 0 1px #aad;
   --highlight: inset 0 0 0 1px var(--bg);
   --highlight_hover: inset 0 0 0 1px #a79;
+  --highlight_active: inset 3px 3px 3px 1px #5f2400;
   --border: #bec2da;
   --soft_border: #ced1e3;
   --border_warn: #fb7;
@@ -2170,6 +2172,14 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
   margin-bottom: 10px !important;
 }
 
+#home {
+  padding-bottom: 1px;
+}
+
+#sitemap {
+  padding-bottom: 6px;
+}
+
 .main#home .welcome h2 {
   margin: -9px -10px -8px;
 }
@@ -2239,7 +2249,7 @@ div.news {
   border: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
   border-right: 1px solid var(--border);
-  background: linear-gradient(to bottom, #fff, #fafaff);
+  background: var(--th);
 }
 
 /* convert the list entry to our title */
@@ -2422,7 +2432,7 @@ div[id^="config"] .tab a {
 }
 
 .tab:active {
-  box-shadow: inset 0 0 0 1px #f90, inset 3px 3px 3px 1px #5f2400;
+  box-shadow: inset 0 0 0 1px #f90, var(--highlight_active);
   background: var(--hover);
 }
 
@@ -2831,7 +2841,7 @@ tr:hover th {
 
 #capabilities_key table td:nth-child(odd) {
   width: 1%;
-  max-width: 24px !important;
+  max-width: 24px;
   text-align: center;
 }
 
@@ -2840,10 +2850,8 @@ tr:hover th {
   min-width: 16px;
   display: inline-block;
   text-align: center;
-  text-transform: none !important;
   text-shadow: 0 1px 1px var(--bg);
-  border-radius: 2px;
-  background: #dfe4ff;
+  background: var(--badge);
 }
 
 #thresholds tr:hover td, #profile_defs tr:hover td {
@@ -2886,10 +2894,10 @@ tr:hover th {
 }
 
 @media screen and (max-width: 1200px) {
-#profiles #banlist {
-  margin-top: -6px !important;
-  margin-bottom: 0 !important;
-}
+  #profiles #banlist {
+    margin-top: -6px !important;
+    margin-bottom: 0 !important;
+  }
 }
 
 #config_peers #banlist {
@@ -2902,12 +2910,12 @@ ul#banlist + h3.tabletitle {
 
 #banlist li {
   margin-bottom: 5px;
-  padding: 5px 7px 5px !important;
+  padding: 5px 7px 5px;
   width: calc(100% - 9px);
   position: relative;
   display: table;
   line-height: 1.5;
-  list-style: none !important;
+  list-style: none;
   box-shadow: 0 0 0 1px var(--soft_border), 0 0 1px 1px #ddd;
   background: #f9f9ff;
   break-inside: avoid;
@@ -2940,7 +2948,7 @@ ul#banlist + h3.tabletitle {
 
 #banlist li a[href^="configpeer"]:active {
   background: var(--hover);
-  box-shadow: inset 3px 3px 3px 1px #5f2400;
+  box-shadow: var(--highlight_active);
 }
 
 #banlist li hr {
@@ -4127,7 +4135,7 @@ h3#servicedebug a, h3#graphinfo a, h3#browseronstart a {
   height: 16px;
   float: right;
   display: inline-block;
-  background: var(--settings2) no-repeat center center / 18px;
+  background: var(--settings2) no-repeat center center / 16px;
   content: "";
 }
 
@@ -4164,7 +4172,7 @@ h3 + .statusnotes {
 }
 
 .statusnotes {
-  margin: -6px 0 7px 0;
+  margin: -6px 0 7px;
   padding: 8px 0;
   color: var(--ink);
   font-style: italic;
@@ -5860,7 +5868,7 @@ h3.stats {
 }
 
 .statlist li b, .statlist b a:hover, h3.stats a:hover {
-  color: var(--ink) !important;
+  color: var(--ink_light);
 }
 
 .statlist li::before {
@@ -6936,7 +6944,7 @@ tt a, .cells tt {
 #tunnels .routerid, .tunnel_local {
   min-width: 64px;
   display: inline-block;
-  box-shadow: inset 0 0 0 1px #aad, inset 0 0 0 2px var(--bg);
+  box-shadow: inset var(--border_badge), inset 0 0 0 2px var(--bg);
   background: #ddf;
   background: var(--th);
 }
@@ -6948,6 +6956,7 @@ tt a, .cells tt {
 }
 
 .tunnel_local {
+  margin-top: 1px;
   padding: 4px 0;
   min-width: 71px;
   font-size: 8pt;
@@ -7009,23 +7018,23 @@ tt a, .cells tt {
 }
 
 @media screen and (min-width: 1500px) {
-.tunnel_cap {
-  margin-left: 10px;
-  padding: 0 1px;
-  min-width: 14px;
-}
+  .tunnel_cap {
+    margin-left: 10px;
+    padding: 0 1px;
+    min-width: 14px;
+  }
 
-.tunnel_id:empty {
-  margin-right: -10px;
-}
+  .tunnel_id:empty {
+    margin-right: -10px;
+  }
 
-#tunnels td:last-child .routerid {
-  margin-left: -10px;
-}
+  #tunnels td:last-child .routerid {
+    margin-left: -10px;
+  }
 
-#tunnels td:last-child .tunnel_peer:not(.tunnel_local) + .tunnel_cap {
-  margin-left: 2px !important;
-}
+  #tunnels td:last-child .tunnel_peer:not(.tunnel_local) + .tunnel_cap {
+    margin-left: 2px !important;
+  }
 }
 
 span.b32 {
@@ -7037,7 +7046,6 @@ span.b32 {
   font-family: var(--monospaced);
   font-size: 80%;
   color: #070;
-  border-radius: 2px;
   box-shadow: 0 0 0 1px var(--border), var(--highlight);
   background: var(--th);
   opacity: .8;
@@ -9410,7 +9418,7 @@ input[type="file"]:hover {
 
 .routerid {
   display: inline-block;
-  box-shadow: inset 0 0 0 1px #aad, inset 0 0 0 2px var(--bg);
+  box-shadow: inset var(--border_badge), inset 0 0 0 2px var(--bg);
   background: #ddf;
   background: var(--th);
 }
@@ -9621,15 +9629,13 @@ th.queue {
 }
 
 .tunnel_cap, .tier, #capabilities_key b, #netdbtiers td a {
-  margin: 1px 2px;
+  margin: 1px 2px 0;
   padding: 1px 2px;
   min-width: 14px;
   display:inline-block;
   text-align: center !important;
   text-shadow: 0 1px 1px var(--bg);
-  border: 1px solid var(--border);
-  background: #99b;
-  background: var(--th);
+  background: var(--badge);
 }
 
 #netdbtiers td a {
@@ -9642,28 +9648,21 @@ th.queue {
   display: inline-block;
   min-width: 12px;
   text-align: center;
-  border-radius: 2px;
 }
 
 .ff, .reachable, .unreachable, .hidden, .ssutesting, .ssuintro, .tier, .tunnel_cap, #capabilities_key b {
-  box-shadow: var(--highlight);
+  box-shadow: var(--border_badge), var(--highlight);
 }
 
 .ff {
-  border: 1px solid #99a;
-  background: #fdb;
   background: linear-gradient(to bottom, #fff, #fdb) !important;
 }
 
 .reachable {
-  border: 1px solid #99a;
-  background: #cfc;
   background: linear-gradient(to bottom, #fff, #cfc) !important;
 }
 
 .unreachable {
-  border: 1px solid #99a;
-  background: #fcc;
   background: linear-gradient(to bottom, #fff, #fcc) !important;
 }
 
@@ -9673,17 +9672,14 @@ th.queue {
 
 .hidden {
   color: #999 !important;
-  background: #dbecff;
   background: var(--btn) !important;
 }
 
 .ssutesting {
-  background: #ffb;
   background: linear-gradient(to bottom, #fff, #ffb) !important;
 }
 
 .ssuintro {
-  background: #fbf;
   background: linear-gradient(to bottom, #fff, #fbf) !important;
 }
 
@@ -11587,8 +11583,13 @@ div.app, .sitemapLink, .sitemapLabel {
     min-width: 540px;
     display: inline-block;
     border: 1px solid var(--border);
-    box-shadow: var(--highlight), inset 0 0 2px 1px #ddf, 0 0 1px #ddf;
-    background: rgba(248,248,255,.6);
+    box-shadow: var(--highlight);
+    background: var(--th);
+  }
+
+  .statsName > b {
+    padding-left: 14px;
+    background: var(--stats) no-repeat left center / 10px;
   }
 
   .statsViewGraphs {
@@ -11615,11 +11616,12 @@ div.app, .sitemapLink, .sitemapLabel {
   }
 
   .statlist li b {
-    font-size: 110% !important;
+    line-height: 1.5;
+    font-size: 105% !important;
   }
 
   .statlist li i {
-    margin-left: 6px;
+    margin-left: 12px;
     opacity: .8;
   }
 
