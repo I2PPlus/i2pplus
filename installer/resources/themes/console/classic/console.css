@@ -27,10 +27,10 @@
   --highlight_hover: inset 0 0 0 1px #a79;
   --highlight_active: inset 3px 3px 3px 1px #5f2400;
   --bg: #fff;
-  --bg2: #eff1ff;
-  --bg3: #f2f2ff;
+  --bg2: #f2f2ff;
+  --bg3: #eff1ff;
   --bg4: #ddf;
-  --th: linear-gradient(to bottom, #fff, var(--bg3));
+  --th: linear-gradient(to bottom, #fff, var(--bg2));
   --subheading: linear-gradient(to right, #fff, #eef);
   --header: linear-gradient(to bottom, var(--bg)50%, #f2f2ff 50%);
   --row_hover: #ffd;
@@ -1906,7 +1906,7 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
   border: 1px solid var(--border);
   border-radius: 2px;
   box-shadow: inset 1px 1px 1px #ddd;
-  background: var(--bg3);
+  background: var(--bg2);
 }
 
 .main textarea:focus, .main .tabletextarea textarea:focus {
@@ -2636,7 +2636,7 @@ tr:hover th {
   margin: 15px 0 5px;
   padding: 5px 10px 5px 5px;
   border: 1px solid var(--border);
-  background: var(--bg2);
+  background: var(--bg3);
   columns: auto 328px;
   column-gap: 10px;
 }
@@ -2957,7 +2957,7 @@ div.configure h2:first-child {
 
 #sidebarconf tr:last-child td, #sidebarconf tr:last-child:hover td {
   border-top: 1px solid var(--border);
-  background: var(--bg2);
+  background: var(--bg3);
 }
 
 #sidebarconf select {
@@ -3543,7 +3543,7 @@ tr:nth-child(even), #pluginconfig table tr:nth-child(even) td, #profile_defs tr:
 
 tr:nth-child(odd), #pluginconfig table tr:nth-child(odd) td, .main#profiles ul#banlist,
 #profile_defs table tr:nth-child(odd), #profile_defs table tr:nth-child(even) {
-  background: var(--bg3);
+  background: var(--bg2);
 }
 
 .configtable th {
@@ -3982,7 +3982,7 @@ h2#jobrunners {
   margin-top: -21px;
   padding: 15px 50px;
   border: 1px solid var(--border);
-  background: var(--bg2);
+  background: var(--bg3);
   column-count: 2;
   column-width: 400px;
   column-gap: 100px;
@@ -4741,9 +4741,6 @@ img[src^="/flags"], img.unknownflag {
   padding: 2px;
   height: 80px;
   width: 110px;
-  position: absolute;
-  z-index: 999;
-  opacity: 0;
 }
 
 .themechoice .optbox + img {
@@ -4801,7 +4798,7 @@ img[src^="/flags"], img.unknownflag {
   top: 4px;
   clear: both;
   border-top: 1px solid var(--border);
-  background: var(--bg2);
+  background: var(--bg3);
 }
 
 #themeoptions br {
@@ -4843,13 +4840,13 @@ p#helptranslate {
   padding: 4px 5px 0;
   clear: both;
   border: 1px solid var(--border);
-  background: var(--bg2);
+  background: var(--bg3);
 }
 
 #langsettings {
   padding: 4px 5px 0;
   border: 1px solid var(--border);
-  background: var(--bg2);
+  background: var(--bg3);
 }
 
 #themesettings hr {
@@ -4886,13 +4883,28 @@ p#helptranslate {
   position: relative;
 }
 
+/* less hacky configui options */
+.themechoice .optbox, .langselect .optbox, .themechoice .optbox:checked, .langselect .optbox:checked {
+  margin: 0;
+  position: absolute;
+  z-index: -999;
+}
+
+.themechoice, .langselect {
+  width: 120px;
+  float: left;
+  text-align: center;
+}
+
+.langselect img {
+  margin: 0 0 35px !important;
+}
+
 .langselect:hover > input + img {
   transform: scale(1.1);
 }
 
 .langselect img[src^="/flags"] {
-  margin-left: -72px;
-  margin-bottom: 42px;
   width: 40px !important;
   height: auto !important;
   position: relative;
@@ -4906,7 +4918,7 @@ p#helptranslate {
 }
 
 .langselect input[name="lang"]:checked + img {
-  transform: scale(1.1);
+  transform: scale(.8) !important;
   border: 1px solid #338;
 }
 
@@ -4918,7 +4930,6 @@ p#helptranslate {
 }
 
 .langselect input[name="lang"]:checked + img + .ui_lang {
-  margin: -32px -4px 0;
   z-index: 2;
   font-weight: 700;
   color: #338;
@@ -4951,6 +4962,30 @@ p#helptranslate {
   display: block;
 }
 
+/* large flags */
+
+.langselect img {
+  width: 40px;
+  height: 40px;
+  border: none !important;
+  opacity: .9 !important;
+  transform: none !important;
+}
+
+.langselect input[name="lang"]:checked + img, .langselect input[name="lang"]:checked + #config_ui img[src="/flags.jsp?c=a1"] {
+  border: none !important;
+  opacity: 1 !important;
+  transform: scale(.9);
+}
+
+.langselect input:hover + img, .langselect input:checked + img {
+  border: none !important;
+  transition: none !important;
+  filter: drop-shadow(0 0 1px var(--hover)) drop-shadow(0 0 2px var(--hover));
+}
+
+/* end large flags */
+
 .ui_lang {
   margin: -32px -4px 0;
   text-align: center;
@@ -4972,38 +5007,6 @@ p#helptranslate {
   clear: both;
   text-align: right;
 }
-
-/* large flags */
-
-.langselect img {
-  margin-top: 2px !important;
-  margin-bottom: 34px !important;
-  margin-left: -70px !important;
-  width: 40px;
-  height: 40px;
-  border: none !important;
-  opacity: .9 !important;
-  transform: none !important;
-}
-
-.langselect input[name="lang"]:checked + img, .langselect input[name="lang"]:checked + #config_ui img[src="/flags.jsp?c=a1"] {
-  margin-top: 6px !important;
-  margin-bottom: 38px !important;
-  width: 32px !important;
-  height: 32px !important;
-  border: none !important;
-  opacity: 1 !important;
-  transform: none !important;
-}
-
-.langselect input:hover + img {
-  box-shadow: none !important;
-  border: none !important;
-  transition: none !important;
-  filter: drop-shadow(0 0 2px var(--hover));
-}
-
-/* end large flags */
 
 /* configui password*/
 
@@ -5227,7 +5230,7 @@ td#pw_adduser input {
   text-align: center;
   font-weight: 700;
   border: 1px solid var(--border);
-  background: var(--bg2);
+  background: var(--bg3);
 }
 
 .sybil_routerinfo {
@@ -5278,7 +5281,7 @@ td#pw_adduser input {
 #sybilnav {
   margin: -16px -16px 15px;
   padding: 5px 5px 2px;
-  background: var(--bg2);
+  background: var(--bg3);
   columns: auto 280px;
   column-gap: 3px;
 }
@@ -5369,7 +5372,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   margin: -4px 0 10px !important;
   padding: 6px 15px;
   border: 1px solid var(--border);
-  background: var(--bg2);
+  background: var(--bg3);
 }
 
 #netdb .threatpoints + ul li {
@@ -5589,7 +5592,7 @@ h3.stats {
   margin-bottom: -27px !important;
   padding: 0 10px 0 0;
   border: 1px solid var(--border);
-  background: var(--bg2);
+  background: var(--bg3);
 }
 
 .statlist:last-of-type {
@@ -6222,7 +6225,7 @@ p#fullhistory {
 #configinfo td {
   text-align: justify;
   padding: 5px 15px;
-  background: var(--bg2);
+  background: var(--bg3);
   background: rgba(230,230,255,.5);
 }
 
@@ -8410,19 +8413,19 @@ b.suboption {
 #bandwidthconfig .optionsingle {
   margin: 8px 0 8px 3px;
   padding: 0 15px 0 40px;
-  background: var(--bg3) !important;
+  background: var(--bg2) !important;
 }
 
 #bandwidthconfig .bw_out {
-  background: var(--bg3) url(/themes/console/images/svg/outbound.svg) 10px calc(50% + 14px) no-repeat !important;
+  background: var(--bg2) url(/themes/console/images/svg/outbound.svg) 10px calc(50% + 14px) no-repeat !important;
 }
 
 #bandwidthconfig .bw_in {
-  background: var(--bg3) url(/themes/console/images/svg/inbound.svg) 10px calc(50% + 14px) no-repeat !important;
+  background: var(--bg2) url(/themes/console/images/svg/inbound.svg) 10px calc(50% + 14px) no-repeat !important;
 }
 
 #bandwidthconfig .bw_share {
-  background: var(--bg3) var(--share) 10px calc(50% + 14px) no-repeat !important;
+  background: var(--bg2) var(--share) 10px calc(50% + 14px) no-repeat !important;
 }
 
 #bandwidthconfig .bw_out, #bandwidthconfig .bw_in, #bandwidthconfig .bw_share {
@@ -8483,7 +8486,7 @@ b.suboption {
 
 @media screen and (max-width: 1000px) {
 #bandwidthconfig .bw_out, #bandwidthconfig .bw_in, #bandwidthconfig .bw_share {
-  background: var(--bg3) !important;
+  background: var(--bg2) !important;
   padding-left: 5px;
   padding-right: 8px;
 }
@@ -8535,7 +8538,7 @@ b.suboption {
   display: inline-block;
   margin: 1px 0;
   padding: 2px 5px;
-  background: var(--bg3);
+  background: var(--bg2);
   line-height: 1 !important;
 }
 
@@ -8764,7 +8767,7 @@ b.suboption {
 
 #config_reseed .optionsingle {
   margin: 0 !important;
-  background: var(--bg3) !important;
+  background: var(--bg2) !important;
 }
 
 #config_reseed .optionsingle:hover {
@@ -8816,7 +8819,7 @@ b.suboption {
   padding: 4px 5px;
   min-width: 100px !important;
   width: calc(100% - 10px);
-  background: var(--bg3) !important;
+  background: var(--bg2) !important;
 }
 
 #reseed_urlselection label::before, #reseedproxytype label::before {
@@ -8905,16 +8908,16 @@ b.suboption {
 }
 
 #config_reseed #reseedurl {
-  background: var(--bg3) var(--link) no-repeat 14px center / 28px !important;
+  background: var(--bg2) var(--link) no-repeat 14px center / 28px !important;
 }
 
 #config_reseed  #reseedzip {
-  background: var(--bg3) var(--files) no-repeat 14px center / 28px !important;
+  background: var(--bg2) var(--files) no-repeat 14px center / 28px !important;
 }
 
 #config_reseed #reseedcreatefile {
   text-align: justify;
-  background: var(--bg3) var(--package) no-repeat 14px center / 28px !important;
+  background: var(--bg2) var(--package) no-repeat 14px center / 28px !important;
 }
 
 #config_reseed #reseedcreatefile:hover, #config_reseed #reseedzip:hover, #config_reseed #reseedurl:hover {
@@ -9030,17 +9033,17 @@ b.suboption {
 }
 
 #installPluginUrl, #installPluginFile {
-  background: var(--bg3) !important;
+  background: var(--bg2) !important;
 }
 
 #installPluginUrl td:first-child {
   padding: 15px 15px 15px 50px;
-  background: var(--bg3) var(--link) no-repeat 12px center / 28px !important;
+  background: var(--bg2) var(--link) no-repeat 12px center / 28px !important;
 }
 
 #installPluginFile td:first-child {
   padding: 15px 15px 15px 50px;
-  background: var(--bg3) var(--files) no-repeat 12px center / 28px !important;
+  background: var(--bg2) var(--files) no-repeat 12px center / 28px !important;
 }
 
 #installPluginUrl:hover td, #installPluginFile #file:hover td {
@@ -9065,12 +9068,12 @@ input[type="file"]:hover {
 
 #newfamily .optionsingle {
   padding: 5px 5px 0 45px;
-  background: var(--bg3) var(--tag) no-repeat 10px center / 28px !important;
+  background: var(--bg2) var(--tag) no-repeat 10px center / 28px !important;
 }
 
 #joinfamily .optionsingle {
   padding: 5px 5px 0 45px;
-  background: var(--bg3) var(--key) no-repeat 10px center / 28px !important;
+  background: var(--bg2) var(--key) no-repeat 10px center / 28px !important;
 }
 
 #newfamily .optionsingle:hover, #joinfamily .optionsingle:hover {
@@ -9828,27 +9831,6 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
   content: "";
 }
 
-/* less hacky configui options */
-.themechoice .optbox, .langselect .optbox, .themechoice .optbox:checked, .langselect .optbox:checked {
-  margin: 0;
-  position: absolute;
-  z-index: -999;
-}
-
-.themechoice, .langselect {
-  width: 120px;
-  float: left;
-  text-align: center;
-}
-
-.langselect img {
-  margin: 0 0 35px !important;
-}
-
-.langselect input[name="lang"]:checked + img {
-  margin: 5px 0 38px !important;
-}
-
 div.app {
   position: relative;
 }
@@ -9981,7 +9963,7 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel{
   margin: 1px 3px 8px;
   width: 140px !important;
   border-color: var(--border);
-  background: var(--bg3);
+  background: var(--bg2);
 }
 
 #sitemap div.app img {
@@ -9992,7 +9974,7 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel{
 #sitemap .applabel {
   width: 136px !important;
   border-color: var(--border);
-  background: var(--bg3);
+  background: var(--bg2);
 }
 
 #sitemap div.app:hover, #sitemap div.app:hover .applabel,
