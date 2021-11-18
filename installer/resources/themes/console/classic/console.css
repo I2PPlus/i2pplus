@@ -134,6 +134,42 @@ i {
   user-select: none;
 }
 
+/* siderbar logo */
+
+#sb_logo {
+  margin-left: -2px;
+  height: 32px !important;
+}
+
+#sb_logo img {
+  width: 200px;
+  height: auto;
+  filter: sepia(1) hue-rotate(190deg);
+  user-select: none;
+}
+
+#sb_logo a:active img {
+  transform: scale(.97) !important;
+  filter: none;
+}
+
+#sb_logo a img {
+  border: none;
+  opacity: .9;
+  image-rendering: -webkit-optimize-contrast;
+}
+
+#sb_logo a:hover img, #sb_logo a:active img {
+  opacity: 1;
+  filter: none;
+}
+
+#sb_logo a:hover img, #sb_logo a img {
+  transition: ease filter .08s;
+}
+
+/* end sb logo */
+
 .routersummary h4 a {
   padding: 0;
   vertical-align: text-bottom;
@@ -7969,11 +8005,6 @@ h1 {
   transform: none;
 }
 
-#error500 .routersummary img[src$="i2plogo.png"] {
-  margin: -2px 0 -5px -2px;
-  width: 232px;
-}
-
 .routersummary table[id^="sb_"], .sb_newsheadings table {
   width: 245px !important;
   min-width: 245px !important;
@@ -8103,10 +8134,6 @@ div.news {
 
 .sorry {
   margin-left: 251px !important;
-}
-
-#error500 .sorry {
-  margin-left: 252px !important;
 }
 
 .joblog h3 {

@@ -1,22 +1,3 @@
-/* siderbar logo */
-
-#sb_logo {
-  margin-left: -2px;
-  height: 32px !important;
-}
-
-#sb_logo img {
-  width: 200px;
-  height: auto;
-  filter: sepia(1) hue-rotate(190deg);
-  user-select: none;
-}
-
-#sb_logo a:active img {
-  transform: scale(.97) !important;
-  filter: none;
-}
-
 #error500 .routersummary img[src$="i2plogo.png"] {
   margin-bottom: -3px;
   width: 186px;
@@ -29,23 +10,6 @@
 #error500 .routersummary hr ~ a {
   line-height: 1.8;
 }
-
-#sb_logo a img {
-  border: none;
-  opacity: .9;
-  image-rendering: -webkit-optimize-contrast;
-}
-
-#sb_logo a:hover img, #sb_logo a:active img {
-  opacity: 1;
-  filter: none;
-}
-
-#sb_logo a:hover img, #sb_logo a img {
-  transition: ease filter .08s;
-}
-
-/* end siderbar logo */
 
 .logo {
   margin: 0 0 0 20px;
@@ -252,8 +216,17 @@
 }
 
 @media screen and (min-width: 1500px) {
+  #error500 .routersummary img[src$="i2plogo.png"] {
+    margin: -2px 0 -5px -2px;
+    width: 232px;
+  }
+
   #servletError.iframed .logo {
     display: none;
+  }
+
+  #error500 .sorry {
+    margin-left: 252px !important;
   }
 
   #servletError #warning2.sorry, #servletError #warning.warning {
