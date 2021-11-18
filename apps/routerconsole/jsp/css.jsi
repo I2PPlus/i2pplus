@@ -80,7 +80,7 @@
              uri.contains(".woff2") || uri.contains(".woff2") || uri.contains("flags.jsp") || uri.contains(".js") || uri.contains(".css"))
         response.setHeader("Cache-Control", "private, max-age=2628000, immutable");
     else if (uri.endsWith("xhr1.jsp"))
-        response.setHeader("Cache-Control", "private, max-age=0, no-store");
+        response.setHeader("Cache-Control", "private, max-age=0, no-store, must-revalidate");
     else
         response.setHeader("Cache-Control", "no-cache, private, max-age=2628000");
     String conNonceParam = request.getParameter("consoleNonce");
@@ -116,3 +116,4 @@
 <%
     }
 %>
+<link href="<%=themePath%>errors.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">

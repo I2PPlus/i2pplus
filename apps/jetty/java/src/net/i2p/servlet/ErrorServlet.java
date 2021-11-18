@@ -71,9 +71,9 @@ public class ErrorServlet extends HttpServlet {
         super.init();
         _cssPath = getInitParameter("CSSPath");
         if (_cssPath == null) {
-            String dir = BASE_THEME_PATH +
-                         _context.getProperty(PROP_THEME_NAME, DEFAULT_THEME);
+            String dir = BASE_THEME_PATH + _context.getProperty(PROP_THEME_NAME, DEFAULT_THEME);
             _cssPath = dir + '/' + DEFAULT_CSS;
+            String errorCSS = dir + "/errors.css";
         }
         _webappName = getInitParameter("name");
         if (_webappName == null)
@@ -134,20 +134,22 @@ public class ErrorServlet extends HttpServlet {
         else
             out.print(_t("Error 500: Internal Error"));
         out.println("</title>\n");
-        out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">");
+        out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n");
         if (_icoPath != null)
-            out.println("\n<link rel=\"icon\" href=\"" + _icoPath + "\">");
-        out.println("\n<link href=\"" + _cssPath + '?' + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\">");
-        out.println("<script type=\"text/javascript\">if (window.location !== window.top.location) {window.top.location = window.location;}</script>"); // breakout of iframe
-        out.println("<script type=\"text/javascript\" src=\"/js/iframeResizer/iframeResizer.contentWindow.js\"></script>"); // or ensure embedded correctly elsewise
+            out.println("<link rel=\"icon\" href=\"" + _icoPath + "\">\n");
+        out.println("<link href=\"" + _cssPath + '?' + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\">\n");
+        if (errorCSS != null)
+            out.println("<link href=\"" + errorCSS + '?' + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\">\n");
+        out.println("<script type=\"text/javascript\">if (window.location !== window.top.location) {window.top.location = window.location;}</script>\n"); // breakout of iframe
+        out.println("<script type=\"text/javascript\" src=\"/js/iframeResizer/iframeResizer.contentWindow.js\"></script>\n"); // or ensure embedded correctly elsewise
         out.println("</head>\n<body id=\"servletError\">\n");
         out.println("<div class=\"logo\">");
         out.println("<a href=\"/\" title=\"" + _t("Router Console") +
                     "\"><img src=\"" + BASE_THEME_PATH + _context.getProperty(PROP_THEME_NAME, DEFAULT_THEME) + "/images/i2plogo.png\" alt=\"" +
                     _t("I2P Router Console").replace("I2P", "I2P+") + "\" border=\"0\"></a>\n<hr>\n");
         out.println("<a href=\"/config\">" + _t("Configuration") + "</a> <a href=\"/help\">" + _t("Help") + "</a>");
-        out.println("</div>");
-        out.println("<div class=\"warning\" id=\"warning\">");
+        out.println("</div>\n");
+        out.println("<div class=\"warning\" id=\"warning\">\n");
         out.println("<h3>" + _w(_webappName) + ": ");
         if (errorCode == 404)
             out.print(_t("Page Not Found").replace("Page", "Resource"));
