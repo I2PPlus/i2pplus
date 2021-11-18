@@ -17,6 +17,7 @@
   --btn_hover: linear-gradient(to bottom, #ddd, #fff);
   --btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 #fff, inset 0 0 4px 2px #f0f0ff, 0 1px 1px rgba(220,220,255,.5);
   --btn_shadow_hover: var(--highlight), 0 0 0 1px #fff, 0 0 0 2px rgba(255,96,0,.4);
+  --btn_shadow_active: var(--highlight), inset 3px 3px 3px 1px rgba(32,32,64,.3);
   --badge: linear-gradient(to bottom, #fff, #eef);
   --badge_hover: linear-gradient(to bottom, #eef, #fff);
   --border_badge: 0 0 0 1px #bbd;
@@ -1368,7 +1369,7 @@ button:hover, input[type=submit]:hover, input[type=reset]:hover, button:focus, i
 button:active, input[type=submit]:active, input[type=reset]:active {
   color: #555;
   border: 1px solid #999;
-  box-shadow: var(--highlight), inset 3px 3px 3px 1px #555;
+  box-shadow: var(--btn_shadow_active);
   background-color: #ddd;
   background-blend-mode: luminosity;
 }
@@ -1784,7 +1785,7 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 
 .routersummary .reload:active, .routersummary .stop:active, .routersummary .download:active {
   border: 1px solid #999 !important;
-  box-shadow: var(--highlight), inset 3px 3px 3px 1px #555;
+  box-shadow: var(--btn_shadow_active);
 }
 
 .routersummary .stop {
@@ -4579,7 +4580,20 @@ h3#graphinfo {
   background: var(--bg);
 }
 
-#graphopts a {
+#newsDisplay {
+  color: transparent;
+}
+
+.messages #newsdisplay {
+  margin: -4px 5px 0 0;
+  float: right !important;
+}
+
+#newsDisplay a:first-child {
+  margin-right: -5px;
+}
+
+#graphopts a, #newsDisplay a {
   margin: 3px -2px;
   padding: 1px 10px;
   display: inline-block;
@@ -4587,22 +4601,24 @@ h3#graphinfo {
   border: 1px solid var(--border);
   border-radius: 15px;
   box-shadow: 0 0 0 1px rgba(220,220,255,.6);
-  background: rgba(248,248,255,.3);
+  background: var(--bg);
 }
 
 #graphopts a:empty {
   display: none;
 }
 
-#graphopts a:hover, #graphopts a:focus {
+#graphopts a:hover, #graphopts a:focus, #newsDisplay a:hover, #newsDisplay a:focus {
+  color: #557 !important;
   border: 1px solid #7778bf;
-  box-shadow: 0 0 0 1px rgba(220,220,255,.6), inset 0 0 0 1px #d8d4ff;
-  background: linear-gradient(to bottom, var(--bg)50%, #d8d4ff 50%);
+  box-shadow: 0 0 0 1px rgba(220,220,255,.6), var(--highlight);
+  background: linear-gradient(to bottom, var(--bg)50%, var(--bg4) 50%);
 }
 
-#graphopts a:active {
-  box-shadow: inset 3px 3px 3px rgba(41,61,95,.8);
-  color: #557 !important;
+#graphopts a:active, #newsDisplay a:active {
+  color: var(--ink_light) !important;
+  box-shadow: var(--btn_shadow_active);
+  background: var(--btn_active);
 }
 
 /* end single view */
@@ -4719,6 +4735,16 @@ img[src^="/flags"], img.unknownflag {
   background: var(--th);
 }
 
+.themelabel {
+  margin: -25px -4px 0;
+  padding: 3px 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-top: 1px solid var(--border);
+  background: var(--header);
+}
+
 .themechoice:hover, .themechoice:hover > img ~ .themelabel {
   background: var(--bg);
 }
@@ -4729,6 +4755,11 @@ img[src^="/flags"], img.unknownflag {
 
 .themechoice:hover > img ~ .themelabel {
   border-top: 1px solid var(--hover);
+}
+
+.themechoice .optbox:hover + img ~ .themelabel {
+  color: var(--hover);
+  font-weight: 700;
 }
 
 .themechoice:hover .optbox:not(:checked) + img {
@@ -4754,33 +4785,30 @@ img[src^="/flags"], img.unknownflag {
   margin-bottom: 31px !important;
 }
 
-.themechoice .optbox:hover + img ~ div.themelabel {
-  color: var(--hover);
-  font-weight: 700;
-}
-
 .themechoice:active .themelabel {
   background: var(--hover) !important;
   color: var(--bg)!important;
   box-shadow: var(--highlight);
 }
 
-.themechoice .optbox:checked + img ~ div.themelabel {
-  background: var(--bg4);
+.themechoice .optbox:checked + img ~ .themelabel {
+  padding: 4px 2px 2px !important;
+  font-weight: 600;
   color: #338;
-  font-weight: 700;
+  box-shadow: var(--btn_shadow_active);
+  background: var(--bg3);
 }
 
 .themechoice .optbox:checked + img, .themechoice .optbox:checked + img {
   transform: scale(.9);
 }
 
-.themechoice .optbox:focus + img ~ div.themelabel {
+.themechoice .optbox:focus + img ~ .themelabel {
   color: var(--hover) !important;
   background: var(--label_focus);
 }
 
-.themechoice .optbox:active + img ~ div.themelabel {
+.themechoice .optbox:active + img ~ .themelabel {
   color: var(--bg)!important;
 }
 
@@ -4801,14 +4829,14 @@ img[src^="/flags"], img.unknownflag {
   background: var(--bg3);
 }
 
-#themeoptions br {
-  display: none;
-}
-
 #themeoptions label {
   margin: 4px 10px 4px 0;
   display: inline-block;
   white-space: nowrap;
+}
+
+#themeoptions br {
+  display: none;
 }
 
 p#helptranslate {
@@ -4823,16 +4851,6 @@ p#helptranslate {
 
 #themeoptions input {
   margin: 2px 8px 2px 6px;
-}
-
-.themelabel {
-  margin: -25px -4px 0;
-  padding: 3px 2px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  border-top: 1px solid var(--border);
-  background: var(--header);
 }
 
 #themesettings {
