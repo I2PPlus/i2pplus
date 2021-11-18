@@ -1610,8 +1610,7 @@ input.reload[value$="restart"], button.reload[value$="restart"] {
   background: var(--restart) no-repeat 8px center / 12px, var(--btn) !important;
 }
 
-input.reload[value$="restart"]:hover, button.reload[value$="restart"]:hover,
-input.reload[value$="restart"]:focus, button.reload[value$="restart"]:focus {
+input.reload[value$="restart"]:hover, input.reload[value$="restart"]:focus {
   background: var(--restart_hover) no-repeat 8px center / 12px, var(--btn_hover) !important;
 }
 
@@ -1620,9 +1619,7 @@ input.reload[value^="Update"], button.reload[value^="Update"] {
   background: var(--refresh) no-repeat 8px center / 14px, var(--btn);
 }
 
-input.reload[value^="Update"]:hover, button.reload[value^="Update"]:hover,
-input.reload[value^="Update"]:focus, button.reload[value^="Update"]:focus,
-input.reload[value^="Update"]:active, button.reload[value^="Update"]:active {
+input.reload[value^="Update"]:hover, input.reload[value^="Update"]:focus, input.reload[value^="Update"]:active {
   background: var(--refresh_hover) no-repeat 8px center / 14px, var(--btn_hover);
 }
 
@@ -1635,13 +1632,13 @@ input.reload[value^="Update"]:active, button.reload[value^="Update"]:active {
   background: var(--recycle) no-repeat 8px center / 15px, var(--btn_hover) !important;
 }
 
-button.stop {
+input.stop {
   padding: 5px 8px 5px 23px;
   background: var(--shutdown) no-repeat 8px center, var(--btn);
   background-size: 12px, 100% !important;
 }
 
-button.stop:hover, button.stop:focus, button.stop:active {
+input.stop:hover, button.stop:focus, input.stop:active {
   background: var(--shutdown_hover) no-repeat 8px center, var(--btn_hover);
 }
 
@@ -1650,8 +1647,7 @@ button.search {
   background: var(--search) no-repeat 7px 6px / 14px, var(--btn);
 }
 
-button.search:hover,
-button.search:focus {
+button.search:hover, button.search:focus {
   background: var(--search) no-repeat 7px 6px / 14px, var(--btn_hover);
 }
 
@@ -5322,12 +5318,11 @@ td#pw_adduser input {
 
 #sybilnav li, #sybilnav li:first-child {
   margin: 0 0 3px !important;
-  padding: 3px;
+  padding: 3px 0;
   width: calc(100% - 4px);
   list-style: none;
   border: 1px solid var(--bg4);
-  border-bottom: 2px solid #ccf;
-  background: var(--bg);
+  border-bottom: 2px solid var(--bg4);
   background: var(--badge);
   border-radius: 2px 2px 0 0;
   box-sizing: border-box;
@@ -5353,14 +5348,22 @@ td#pw_adduser input {
 
 #sybilnav li::before {
   padding: 0 5px;
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   display: inline-block;
   vertical-align: middle;
   line-height: .5;
   font-size: 16pt;
-  background: var(--eye) no-repeat center center / 16px;
+  background: var(--eye) no-repeat center center / 14px;
   content: "";
+}
+
+#sybilnav li:hover::before {
+  background: var(--eye_hover) no-repeat center center / 14px;
+}
+
+#sybilnav li:active {
+  box-shadow: var(--btn_shadow_active);
 }
 
 p.sybil_info, p.family, p.threatpoints, p.hashdist, p.notfound, p#sybil_totals {
@@ -5422,6 +5425,10 @@ p:empty { /* empty paragraph nuke */
 
 #netdblookup {
   margin-bottom: -8px;
+}
+
+#netdblookup tr:nth-child(n+2) {
+  border-top: 1px solid var(--border_soft);
 }
 
 #netdblookup th {
@@ -9653,7 +9660,6 @@ a[href^="/viewprofile"] img, .profiledump img {
 
 #netdb li, #netdb li:first-child {
   margin: 1px 0;
-  padding: 0 0 2px;
   display: inline-block;
   vertical-align: middle;
 }
