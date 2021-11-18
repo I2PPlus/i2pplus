@@ -4594,7 +4594,7 @@ h3#graphinfo {
   margin-right: -5px;
 }
 
-#graphopts a, #newsDisplay a {
+#graphopts a, #newsDisplay a, #routerinformation tr:nth-child(n+2) a:not(#revision) {
   margin: 3px -2px;
   padding: 1px 10px;
   display: inline-block;
@@ -4609,14 +4609,16 @@ h3#graphinfo {
   display: none;
 }
 
-#graphopts a:hover, #graphopts a:focus, #newsDisplay a:hover, #newsDisplay a:focus {
+#graphopts a:hover, #graphopts a:focus, #newsDisplay a:hover, #newsDisplay a:focus,
+#routerinformation tr:nth-child(n+2) a:not(#revision):hover, #routerinformation tr:nth-child(n+2) a:not(#revision):focus {
   color: #557 !important;
   border: 1px solid #7778bf;
   box-shadow: 0 0 0 1px rgba(220,220,255,.6), var(--highlight);
   background: linear-gradient(to bottom, var(--bg)50%, var(--bg4) 50%);
 }
 
-#graphopts a:active, #newsDisplay a:active {
+#graphopts a:active, #newsDisplay a:active,
+#routerinformation tr:nth-child(n+2) a:active {
   color: var(--ink_light) !important;
   box-shadow: var(--btn_shadow_active);
   background: var(--btn_active);
@@ -5763,6 +5765,8 @@ h3.stats {
 
 #netdboverview th {
   font-size: 10pt;
+  color: var(--ink_light);
+  pointer-events: none;
 }
 
 #netdboverview table th {
@@ -9914,12 +9918,17 @@ div.app.js:hover::before {
   white-space: nowrap;
 }
 
-#routerinformation tr:nth-child(n+2) a:not(#revision){
+#revision {
+  padding-left: 19px;
+  background: var(--gitlab) no-repeat left center / 16px;
+}
+
+#routerinformation tr:nth-child(n+2) a:not(#revision) {
   display: none;
 }
 
 #routerinformation table:hover tr:nth-child(n+2) a {
-  display: inline;
+  display: inline !important;
 }
 
 /* end /info */
