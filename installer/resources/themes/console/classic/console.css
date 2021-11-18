@@ -10,6 +10,7 @@
   --ink_light: #5e626e;
   --ink_h1: #6c7293;
   --disabled: #757a8a;
+  --selected: #559;
   --a: #5c5c8a;
   --hover: #f60;
   --active: #f90;
@@ -24,7 +25,7 @@
   --border: #bec2da;
   --border_soft: #ced1e3;
   --border_warn: #fb7;
-  --highlight: inset 0 0 0 1px var(--bg);
+  --highlight: inset 0 0 0 1px rgba(255,255,255,.8);
   --highlight_hover: inset 0 0 0 1px #a79;
   --highlight_active: inset 3px 3px 3px 1px #5f2400;
   --bg: #fff;
@@ -2190,7 +2191,7 @@ div[id^="config"] .tab a {
 }
 
 .tab:active a {
-  color: var(--bg)!important;
+  color: var(--bg) !important;
 }
 
 .tab2 {
@@ -2199,7 +2200,7 @@ div[id^="config"] .tab a {
   vertical-align: top;
   color: #565799;
   text-shadow: 0 1px 1px var(--bg);
-  box-shadow: var(--highlight), inset 0 0 0 2px #bfc0ff, inset 3px 3px 3px #aaabcc;
+  box-shadow: var(--btn_shadow_active);
   background: linear-gradient(to bottom, #eaebff, #f2f3ff);
 }
 
@@ -3686,13 +3687,13 @@ div.app:hover a, .app:hover .applabel a {
 }
 
 .app:active .applabel {
-  color: var(--bg)!important;
+  color: var(--bg) !important;
   box-shadow: var(--highlight) !important;
   background: var(--hover) !important;
 }
 
 .app:active .applabel a, .app:active .applabel a:visited {
-  color: var(--bg)!important;
+  color: var(--bg) !important;
 }
 
 div.app:active img {
@@ -4787,14 +4788,15 @@ img[src^="/flags"], img.unknownflag {
 
 .themechoice:active .themelabel {
   background: var(--hover) !important;
-  color: var(--bg)!important;
+  color: var(--bg) !important;
   box-shadow: var(--highlight);
 }
 
 .themechoice .optbox:checked + img ~ .themelabel {
   padding: 4px 2px 2px !important;
-  font-weight: 600;
-  color: #338;
+  font-size: 95% !important;
+  font-weight: 700;
+  color: var(--selected);
   box-shadow: var(--btn_shadow_active);
   background: var(--bg3);
 }
@@ -4809,7 +4811,7 @@ img[src^="/flags"], img.unknownflag {
 }
 
 .themechoice .optbox:active + img ~ .themelabel {
-  color: var(--bg)!important;
+  color: var(--bg) !important;
 }
 
 .themechoice:active .optbox:checked + img ~ .themelabel {
@@ -4893,12 +4895,12 @@ p#helptranslate {
 }
 
 .langselect .optbox {
+  margin: -4px 0 8px -54px;
   width: 122px;
   height: 66px;
-  margin: -4px 0 8px -54px;
-  opacity: 0;
-  z-index: 999;
   position: relative;
+  z-index: 999;
+  opacity: 0;
 }
 
 /* less hacky configui options */
@@ -4937,39 +4939,42 @@ p#helptranslate {
 
 .langselect input[name="lang"]:checked + img {
   transform: scale(.8) !important;
-  border: 1px solid #338;
 }
 
 .langselect:hover > input[name="lang"] + img + .ui_lang {
   font-weight: 700;
   color: var(--hover);
   border-top: 1px solid var(--hover);
-  background: var(--bg) !important;
-}
-
-.langselect input[name="lang"]:checked + img + .ui_lang {
-  z-index: 2;
-  font-weight: 700;
-  color: #338;
-  background: var(--bg4) !important;
+  background: var(--bg);
 }
 
 .langselect:active .ui_lang, .langselect:active > input[name="lang"] + img + .ui_lang {
-  background: var(--hover) !important;
-  color: var(--bg)!important;
+  background: var(--hover);
+  color: var(--bg) !important;
   box-shadow: var(--highlight);
 }
 
 .langselect:active input[name="lang"]:checked + img + .ui_lang,
 .langselect input[name="lang"]:focus + img + .ui_lang {
   color: var(--hover) !important;
-  box-shadow: none !important;
-  background: var(--label_focus) !important;
+  box-shadow: none;
+  background: var(--label_focus);
 }
 
 .langselect input[name="lang"]:active + img + .ui_lang {
-  color: var(--bg)!important;
-  background: var(--hover) !important;
+  color: var(--bg);
+  background: var(--hover);
+}
+
+.langselect input[name="lang"]:checked + img + .ui_lang,
+.langselect input[name="lang"]:focus:checked + img + .ui_lang {
+  padding: 4px 2px 2px !important;
+  z-index: 2;
+  font-size: 95% !important;
+  font-weight: 700;
+  color: var(--selected);
+  box-shadow: var(--btn_shadow_active);
+  background: var(--label_focus);
 }
 
 .langselect + br {
@@ -5123,7 +5128,7 @@ td#pw_adduser input {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: var(--bg)!important;
+  color: var(--bg) !important;
   border-radius: 2px;
   background: #89b;
 }
@@ -8331,7 +8336,7 @@ div.news {
  }
 
 .optiontextarea, #reseedconfig .optiontextarea {
-  box-shadow: inset 0 0 0 2px var(--bg)!important;
+  box-shadow: inset 0 0 0 2px var(--bg) !important;
   background: #f2f2ff !important;
 }
 
@@ -8358,7 +8363,7 @@ div.news {
   vertical-align: middle;
   background: var(--bg) !important;
   transition: ease box-shadow .2s;
-  box-shadow: var(--highlight_hover), inset 0 0 0 2px var(--bg)!important;
+  box-shadow: var(--highlight_hover), inset 0 0 0 2px var(--bg) !important;
 }
 
 #bandwidthconfig .optionsingle:hover, #reseedproxytype label:hover, #graphs .nowrap:hover {
@@ -8853,7 +8858,7 @@ b.suboption {
 #reseedproxysslhostport.optionlist, #reseedproxysslhostport.optionlist:hover {
   margin: 0 -1px !important;
   padding: 0;
-  border: 1px solid var(--bg)!important;
+  border: 1px solid var(--bg) !important;
   border-top: none !important;
   border-bottom: none !important;
   columns: 2 auto;
@@ -9145,6 +9150,20 @@ input[type="file"]:hover {
 
 #tunnelconfig th {
   text-align: left;
+}
+
+#tunnelconfig th[colspan="3"] > font {
+  color: #944;
+}
+
+#tunnelconfig th[colspan="3"] > font::before {
+  background: var(--infowarn) no-repeat left center / 16px;
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 16px;
+  vertical-align: middle;
+  opacity: .7;
 }
 
 #oldmsie {
@@ -10302,7 +10321,7 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel{
 }
 
 #stats .tab:not(.tab2):active {
-  color: var(--bg)!important;
+  color: var(--bg) !important;
   text-shadow: 0 1px 1px #5f2d0c;
   box-shadow: inset 3px 2px 2px #7f3000;
   background: var(--hover);
@@ -10772,6 +10791,7 @@ p#gatherstats {
 }
 
 #enablefull label {
+  margin-top: 6px;
   display: inline-block;
 }
 
@@ -10828,7 +10848,7 @@ p#gatherstats {
 }
 
 .stattograph:hover, .optbox:checked + label > .stattograph:hover {
-  color: var(--bg)!important;
+  color: var(--bg) !important;
   border-color: var(--hover);
   background: var(--bg);
   box-shadow: none;
@@ -10847,7 +10867,7 @@ p#gatherstats {
 }
 
 .optbox:checked + label > .stattograph:hover b {
-  color: var(--bg)!important;
+  color: var(--bg) !important;
 }
 
 .statdesc {
@@ -10890,7 +10910,7 @@ p#gatherstats {
 }
 
 #enablefullstats {
-  background: var(--stats) no-repeat 12px center, linear-gradient(135deg, #fafaff, #f8f8ff)
+  background: var(--stats) no-repeat 12px center / 32px, linear-gradient(135deg, #fafaff, #f8f8ff)
 }
 
 /* /tunnelpeercount */
