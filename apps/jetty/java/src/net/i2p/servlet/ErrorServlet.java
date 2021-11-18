@@ -73,7 +73,6 @@ public class ErrorServlet extends HttpServlet {
         if (_cssPath == null) {
             String dir = BASE_THEME_PATH + _context.getProperty(PROP_THEME_NAME, DEFAULT_THEME);
             _cssPath = dir + '/' + DEFAULT_CSS;
-            String errorCSS = dir + "/errors.css";
         }
         _webappName = getInitParameter("name");
         if (_webappName == null)
@@ -138,8 +137,8 @@ public class ErrorServlet extends HttpServlet {
         if (_icoPath != null)
             out.println("<link rel=\"icon\" href=\"" + _icoPath + "\">\n");
         out.println("<link href=\"" + _cssPath + '?' + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\">\n");
-        if (errorCSS != null)
-            out.println("<link href=\"" + errorCSS + '?' + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\">\n");
+        out.println("<link href=\"" + BASE_THEME_PATH + _context.getProperty(PROP_THEME_NAME, DEFAULT_THEME) + "/errors.css?" +
+                    CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\">\n");
         out.println("<script type=\"text/javascript\">if (window.location !== window.top.location) {window.top.location = window.location;}</script>\n"); // breakout of iframe
         out.println("<script type=\"text/javascript\" src=\"/js/iframeResizer/iframeResizer.contentWindow.js\"></script>\n"); // or ensure embedded correctly elsewise
         out.println("</head>\n<body id=\"servletError\">\n");
