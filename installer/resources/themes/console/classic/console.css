@@ -15,7 +15,7 @@
   --active: #f90;
   --btn: linear-gradient(to bottom, #fff, #f0f0ff);
   --btn_hover: linear-gradient(to bottom, #ddd, #fff);
-  --btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 #fff, inset 0 0 4px 2px #f0f0ff, 0 2px 1px rgba(220,220,255,.7);
+  --btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 #fff, inset 0 0 4px 2px #f0f0ff, 0 1px 1px rgba(220,220,255,.5);
   --btn_shadow_hover: var(--highlight), 0 0 0 1px #fff, 0 0 0 2px rgba(255,96,0,.4);
   --badge: linear-gradient(to bottom, #fff, #eef);
   --badge_hover: linear-gradient(to bottom, #eef, #fff);
@@ -759,13 +759,8 @@ div.refresh {
   will-change: transform;
 }
 
-#sb_bandwidthgraph:hover {
-  border: 1px solid var(--hover);
+#minigraph:hover {
   cursor: zoom-in;
-}
-
-a:active #sb_bandwidthgraph {
-  border: 1px solid #f30;
 }
 
 #sb_bandwidthgraph td {
@@ -787,14 +782,14 @@ a:active #sb_bandwidthgraph {
   border-top: none;
   border-radius: 0 0 3px 3px;
   box-shadow: var(--highlight);
-  background: var(--bg4);
-  background: linear-gradient(to right, var(--bg4), #efefff, var(--bg4));
+  background: var(--label_focus);
   opacity: 0;
   transition: ease opacity .3s;
+  pointer-events: none;
 }
 
 #sb_graphcontainer:hover #sb_graphstats {
-  opacity: 1;
+  opacity: .8;
   transition: ease opacity .3s;
 }
 
@@ -1233,7 +1228,7 @@ input[type="file"] {
 
 input[type=text], input[type=password] {
   margin: 3px 5px 3px 5px;
-  padding: 4px;
+  padding: 5px 7px;
   min-width: 120px;
   vertical-align: middle;
   color: #5e626e;
@@ -2859,7 +2854,7 @@ pre#activetransports {
   display: inline-block;
   text-align: left;
   border-radius: 2px 15px 15px 2px;
-  box-shadow: 0 0 0 1px var(--border);
+  box-shadow: 0 0 0 1px var(--border_soft);
   background: var(--plugin) no-repeat 4px center / 14px, var(--btn);
   background-blend-mode: luminosity;
 }
@@ -3434,8 +3429,9 @@ th.th_title {
 }
 
 .configtable th {
-  padding: 5px 10px;
+  padding: 6px 10px;
   line-height: normal;
+  pointer-events: none;
 }
 
 .smallhead th {
@@ -4805,7 +4801,7 @@ img[src^="/flags"], img.unknownflag {
   top: 4px;
   clear: both;
   border-top: 1px solid var(--border);
-  background: rgba(230, 230, 255, .5);
+  background: var(--bg2);
 }
 
 #themeoptions br {
@@ -8020,7 +8016,7 @@ h1 {
 }
 
 .routersummary h3 {
-  padding: 4.5px 0 !important;
+  padding: 4px 0 3px !important;
 }
 
 #sb_internals a, #sb_services a, #sb_advanced a, #sb_help a {
