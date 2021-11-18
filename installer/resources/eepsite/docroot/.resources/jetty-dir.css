@@ -36,6 +36,7 @@
 
 html {
 	min-height: 100%;
+	background: var(--bg);
 }
 
 #dirlist {
@@ -45,7 +46,7 @@ html {
 	font-family: Open Sans, Segoe UI, Noto Sans, Ubuntu, sans-serif;
 	font-size: 10.5pt;
 	color: var(--ink);
-	border-top: none;
+	border: none;
 	background: var(--bg);
 	box-shadow: 0 0 0 1px var(--bg), 0 0 0 5px var(--odd), 0 0 0 6px var(--even);
 }
@@ -91,8 +92,7 @@ h1::before {
 #dirlist table {
 	width: 100%;
 	border-collapse: collapse;
-	border-top: none;
-	border-bottom: none;
+	border: none !important;
 	background: var(--bg);
 }
 
@@ -120,7 +120,7 @@ h1::before {
 	border-bottom: 1px solid var(--hover);
 }
 
-#dirlist tr:last-child td {
+#dirlist tr:last-child, #dirlist tr:last-child td {
 	border-bottom: none !important;
 }
 
@@ -359,23 +359,20 @@ td.name a {
 }
 
 @media screen and (max-width: 1200px) {
-#dirlist {
-	margin: 0 !important;
-	font-size: 9.5pt !important;
-}
+	#dirlist {
+		margin: 0 !important;
+		font-size: 9.5pt !important;
+	}
 }
 
 @media screen and (min-width: 1200px) {
-#dirlist {
-	padding: 2px;
-	border: var(--border);
-}
-
-#dirlist h1 {
-	border-top: none;
-}
-
-#dirlist table, #dirlist tr:last-child td {
-	border-bottom: none;
-}
+	#dirlist {
+		padding: 2px;
+	}
+	#dirlist h1 {
+		border-top: none;
+	}
+	#dirlist table, #dirlist tr:last-child td {
+		border-bottom: none;
+	}
 }
