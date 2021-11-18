@@ -29,9 +29,10 @@
   --bg: #fff;
   --bg2: #eff1ff;
   --bg3: #f2f2ff;
+  --bg4: #ddf;
   --th: linear-gradient(to bottom, #fff, var(--bg3));
   --subheading: linear-gradient(to right, #fff, #eef);
-  --header: linear-gradient(to bottom, #fff 50%, #f2f2ff 50%);
+  --header: linear-gradient(to bottom, var(--bg)50%, #f2f2ff 50%);
   --row_hover: #ffd;
   --ls_target: 1px solid #5a5 !important;
   --reload: linear-gradient(to right, #930, var(--hover));
@@ -39,6 +40,8 @@
   --down_shadow: inset 0 0 0 1px #800, inset 0 0 1px 3px #eeeee2, inset 0 0 0 4px #ccccc2;
   --flatbar: #99c;
   --hr: #89f;
+  --select: #4a90d9;
+  --label_focus: linear-gradient(to right, #eef, #fff, #eef);
 }
 
 html, body {
@@ -62,7 +65,7 @@ body {
 
 ::selection {
   text-shadow: none;
-  background: #4a90d9;
+  background: var(--select);
   color: var(--bg);
 }
 
@@ -98,213 +101,11 @@ i {
   padding-right: 1px;
 }
 
-/* Sidepanel for proxy errors */
-
-.logo {
-  margin: 0 0 0 20px;
-  padding: 10px 5px 8px;
-  width: 200px;
-  float: left;
-  position: relative;
-  text-align: center;
-  border: 5px solid var(--border);
-  background: var(--bg2);
-}
-
-.logo img {
-  width: 182px;
-  mix-blend-mode: luminosity;
-}
-
-.logo img:hover {
-  mix-blend-mode: normal;
-}
-
-.logo hr {
-  margin: 8px -5px 8px;
-  height: 5px;
-  color: var(--border);
-  border: none;
-  background: var(--border);
-}
-
-.logo a {
-  padding: 4px 0;
-  width: 100%;
-  display: inline-block;
-}
-
-.logo a:nth-child(n+2):active {
-  color: var(--hover);
-  border-radius: 4px;
-  box-shadow: var(--highlight), inset 3px 3px 3px #999 !important;
-}
-
-.logo a:hover {
-  color: #900;
-}
-
-.logo a:hover img {
-  filter: drop-shadow(0 0 1px var(--hover));
-}
-
-/* HTTP Proxy warning Main box */
-
-.warning {
-  margin: 25px 20px 0 260px;
-  padding: 0 20px 40px;
-  min-width: 500px;
-  position: relative;
-  text-align: left;
-  color: inherit;
-  border: 5px solid var(--border_warn);
-  box-shadow: inset 0 0 0 2px var(--hover);
-  background: var(--row_hover);
-}
-
-.warning a:link {
-  color: var(--hover) !important;
-}
-
-.warning a:visited {
-  color: #f40 !important;
-}
-
-.warning a:hover, .warning a:focus, .warning a:visited:focus {
-  color: #d30 !important;
-}
-
-.warning a:active {
-  color: #900 !important;
-}
-
-.warning hr {
-  margin: 5px 0;
-  height: 1px;
-  color: var(--border_warn);
-  border: none;
-  background: var(--border_warn);
-}
-
-.warning h3:first-child {
-  margin: 2px -18px 10px -18px;
-  padding: 10px 10px 8px 36px;
-  font-size: 12pt;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  border: none;
-  border-bottom: 1px solid var(--border_warn);
-  word-spacing: .1em;
-  background: var(--row_hover) var(--err) no-repeat 8px center / auto 60% !important;
-}
-
-.warning p {
-  padding: 5px 0 0;
-}
-
-.warning > br + br {
-  display: none;
-}
-
-.warning textarea {
-  width: 100%;
-  resize: none;
-  white-space: pre-wrap;
-  word-break: break-all;
-  height: 100% !important;
-  font-size: 8pt;
-  border: none;
-}
-
-.warning .formaction {
-  background: none !important;
-}
-
-.warning button {
-  margin-right: 0;
-}
-
-.warning table {
-  margin-bottom: 15px;
-  border: 1px solid var(--border_warn);
-}
-
-.warning tr {
-  background: var(--row_hover) !important;
-  border: 1px solid var(--border_warn);
-}
-
-.warning tr:last-child {
-  background: var(--bg) !important;
-  height: 80px;
-  white-space: nowrap;
-}
-
-.warning table td:first-child {
-  font-weight: 700;
-  vertical-align: top;
-}
-
-/* console error messages */
-
-.sorry {
-  margin: -1px 0 0 211px;
-  padding: 20px 20px 20px 75px;
-  min-width: 475px;
-  word-wrap: break-word;
-  text-align: justify;
-  font-weight: 700;
-  border: 1px solid var(--border);
-  box-shadow: var(--highlight), inset 0 0 1px 1px #900;
-  background: var(--bg) var(--err) no-repeat 20px 40% / 36px;
-}
-
-#error500 .sorry {
-  box-shadow: inset 0 0 0 1px #f99;
-}
-
-.sorry hr {
-  margin: 10px 0;
-  height: 1px;
-  background: var(--border);
-  opacity: .5;
-}
-
-.sorry p {
-  padding: 0 !important;
-}
-
-#warning2 {
-  margin-top: -1px;
-  padding: 0 15px 5px;
-  min-width: 540px;
-  font-weight: 400;
-  color: var(--ink);
-  box-shadow: inset 0 0 0 1px #f99;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, .8), rgba(255, 255, 255, .2)) repeat scroll 0 0 / 100%,
-              url(images/bg0.png) repeat scroll 0 0 / 120px;
-}
-
-#warning2 h3 {
-  margin: -1px -16px 15px;
-  padding: 8px 10px;
-  color: var(--ink);
-  box-shadow: inset 0 0 0 1px #f99;
-}
-
-#warning2 b {
-  margin-right: 3px;
-  min-width: 140px;
-  display: inline-block;
-  text-align: right;
-}
-
-#warning2 p {
-  margin-left: 10px;
-  margin-right: 10px;
-}
-
 /* sidebar */
+
+.routersummary a[href="/"], .routersummary a[href="/console"] {
+  outline: none !important;
+}
 
 .routersummaryouter {
   margin: 0;
@@ -326,59 +127,6 @@ i {
   border: 1px solid var(--border);
   background: var(--bg);
 }
-
-/* siderbar logo */
-
-#sb_logo {
-  margin-left: -2px;
-  height: 32px !important;
-}
-
-#sb_logo img {
-  width: 200px;
-  height: auto;
-  filter: sepia(1) hue-rotate(190deg);
-  user-select: none;
-}
-
-#sb_logo a:active img {
-  transform: scale(.97) !important;
-  filter: none;
-}
-
-#error500 .routersummary img[src$="i2plogo.png"] {
-  margin-bottom: -3px;
-  width: 186px;
-}
-
-#error500 .routersummary hr {
-  margin-bottom: 8px;
-}
-
-#error500 .routersummary hr ~ a {
-  line-height: 1.8;
-}
-
-#sb_logo a img {
-  border: none;
-  opacity: .9;
-  image-rendering: -webkit-optimize-contrast;
-}
-
-#sb_logo a:hover img, #sb_logo a:active img {
-  opacity: 1;
-  filter: none;
-}
-
-#sb_logo a:hover img, #sb_logo a img {
-  transition: ease filter .08s;
-}
-
-.routersummary a[href="/"], .routersummary a[href="/console"] {
-  outline: none !important;
-}
-
-/* end siderbar logo */
 
 .routersummary a {
   padding: 2px;
@@ -413,7 +161,7 @@ i {
   width: calc(100% - 20px);
   height: 1px;
   display: inline-block;
-  background: #ddf;
+  background: var(--bg4);
   content: "";
 }
 
@@ -450,7 +198,7 @@ i {
 }
 
 .routersummary h3:hover {
-  background: linear-gradient(to bottom, #fff 50%, var(--row_hover) 50%) !important;
+  background: linear-gradient(to bottom, var(--bg)50%, var(--row_hover) 50%) !important;
 }
 
 .routersummary h3:hover a, #sidebar td:first-child a:hover b,
@@ -476,7 +224,7 @@ i {
   border: none !important;
   box-shadow: inset 0 0 2px 1px #f2f7fa;
   text-decoration: none !important;
-  background: linear-gradient(to right, #eff2ff, #fff 50%, #eff2ff);
+  background: linear-gradient(to right, #eff2ff, var(--bg)50%, #eff2ff);
 }
 
 .routersummary h3 a {
@@ -1003,8 +751,8 @@ a:active #sb_bandwidthgraph {
   border-top: none;
   border-radius: 0 0 3px 3px;
   box-shadow: var(--highlight);
-  background: #ddf;
-  background: linear-gradient(to right, #ddf, #efefff, #ddf);
+  background: var(--bg4);
+  background: linear-gradient(to right, var(--bg4), #efefff, var(--bg4));
   opacity: 0;
   transition: ease opacity .3s;
 }
@@ -1052,7 +800,7 @@ a:active #sb_bandwidthgraph {
   max-width: 100%;
   background: linear-gradient(to right, rgba(0,255,0,.1) 65px, rgba(255,255,0,.1) 110px, rgba(255,128,0,.1) 175px, rgba(255,0,0,.1)),
               linear-gradient(to bottom, rgba(255, 255, 255,.6), rgba(238, 238, 255, .6) 50%, rgba(180, 180, 255, .7) 50%, rgba(140, 140, 255, .7));
-  box-shadow: inset 0 0 0 1px #ddf;
+  box-shadow: inset 0 0 0 1px var(--bg4);
 }
 
 .percentBarText {
@@ -2410,7 +2158,7 @@ div[id^="config"] .tab a {
 }
 
 .tab:active a {
-  color: #fff !important;
+  color: var(--bg)!important;
 }
 
 .tab2 {
@@ -2499,8 +2247,8 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 .configtable#sidebarconf td, .configtable#sidebarconf tr {
   padding-top: 4px;
   padding-bottom: 4px;
-  border-top: 1px inset #ddf !important;
-  border-bottom: 1px inset #ddf !important;
+  border-top: 1px inset var(--bg4) !important;
+  border-bottom: 1px inset var(--bg4) !important;
 }
 
 #joinfamily, #exportfamily{
@@ -2927,7 +2675,7 @@ ul#banlist + h3.tabletitle {
 #banlist li hr {
   margin: 2px 30px 1px 0;
   height: 1px;
-  background: #ddf;
+  background: var(--bg4);
 }
 
 /* /configpeers banlist */
@@ -3905,13 +3653,13 @@ div.app:hover a, .app:hover .applabel a {
 }
 
 .app:active .applabel {
-  color: #fff !important;
+  color: var(--bg)!important;
   box-shadow: var(--highlight) !important;
   background: var(--hover) !important;
 }
 
 .app:active .applabel a, .app:active .applabel a:visited {
-  color: #fff !important;
+  color: var(--bg)!important;
 }
 
 div.app:active img {
@@ -4817,7 +4565,7 @@ h3#graphinfo {
 #graphopts a:hover, #graphopts a:focus {
   border: 1px solid #7778bf;
   box-shadow: 0 0 0 1px rgba(220,220,255,.6), inset 0 0 0 1px #d8d4ff;
-  background: linear-gradient(to bottom, #fff 50%, #d8d4ff 50%);
+  background: linear-gradient(to bottom, var(--bg)50%, #d8d4ff 50%);
 }
 
 #graphopts a:active {
@@ -4984,12 +4732,12 @@ img[src^="/flags"], img.unknownflag {
 
 .themechoice:active .themelabel {
   background: var(--hover) !important;
-  color: #fff !important;
+  color: var(--bg)!important;
   box-shadow: var(--highlight);
 }
 
 .themechoice .optbox:checked + img ~ div.themelabel {
-  background: #ddf;
+  background: var(--bg4);
   color: #338;
   font-weight: 700;
 }
@@ -5000,18 +4748,18 @@ img[src^="/flags"], img.unknownflag {
 
 .themechoice .optbox:focus + img ~ div.themelabel {
   color: var(--hover) !important;
-  background: linear-gradient(to right, #eef, #fff, #eef);
+  background: var(--label_focus);
 }
 
 .themechoice .optbox:active + img ~ div.themelabel {
-  color: #fff !important;
+  color: var(--bg)!important;
 }
 
 .themechoice:active .optbox:checked + img ~ .themelabel {
   font-weight: 700;
   color: var(--hover) !important;
   box-shadow: none !important;
-  background: linear-gradient(to right, #eef, #fff, #eef) !important;
+  background: var(--label_focus) !important;
 }
 
 #themeoptions {
@@ -5142,12 +4890,12 @@ p#helptranslate {
   z-index: 2;
   font-weight: 700;
   color: #338;
-  background: #ddf !important;
+  background: var(--bg4) !important;
 }
 
 .langselect:active .ui_lang, .langselect:active > input[name="lang"] + img + .ui_lang {
   background: var(--hover) !important;
-  color: #fff !important;
+  color: var(--bg)!important;
   box-shadow: var(--highlight);
 }
 
@@ -5155,11 +4903,11 @@ p#helptranslate {
 .langselect input[name="lang"]:focus + img + .ui_lang {
   color: var(--hover) !important;
   box-shadow: none !important;
-  background: linear-gradient(to right, #eef, #fff, #eef) !important;
+  background: var(--label_focus) !important;
 }
 
 .langselect input[name="lang"]:active + img + .ui_lang {
-  color: #fff !important;
+  color: var(--bg)!important;
   background: var(--hover) !important;
 }
 
@@ -5322,7 +5070,7 @@ td#pw_adduser input {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: #fff !important;
+  color: var(--bg)!important;
   border-radius: 2px;
   background: #89b;
 }
@@ -5517,7 +5265,7 @@ td#pw_adduser input {
   padding: 3px;
   width: calc(100% - 4px);
   list-style: none;
-  border: 1px solid #ddf;
+  border: 1px solid var(--bg4);
   border-bottom: 2px solid #ccf;
   background: var(--bg);
   background: var(--badge);
@@ -5561,7 +5309,7 @@ p.sybil_info, p.family, p.threatpoints, p.hashdist, p.notfound, p#sybil_totals {
   text-align: left;
   font-weight: 700;
   border: 1px solid var(--border);
-  background: var(--eye) no-repeat 8px center / 16px, linear-gradient(to right, #fff 40%, #dde1ff);
+  background: var(--eye) no-repeat 8px center / 16px, linear-gradient(to right, var(--bg)40%, #dde1ff);
 }
 
 p#sybil_totals {
@@ -5751,7 +5499,7 @@ p:empty { /* empty paragraph nuke */
   padding: 0 4px;
   display: inline-block;
   border-radius: 2px;
-  background: #ddf;
+  background: var(--bg4);
 }
 
 .netdb_leases .tunnel_peer {
@@ -6905,7 +6653,7 @@ tt a, .cells tt {
   min-width: 64px;
   display: inline-block;
   box-shadow: inset var(--border_badge), inset 0 0 0 2px var(--bg);
-  background: #ddf;
+  background: var(--bg4);
   background: var(--th);
 }
 
@@ -7489,7 +7237,7 @@ h2#debug_portmapper {
   border: 1px solid var(--border);
   border-left: 3px solid var(--border);
   border-radius: 0 2px 2px 0;
-  background: linear-gradient(to right, rgba(255,255,255,.3), rgba(255,255,255,0)), linear-gradient(to bottom, #fff 50%, #eaeaff 50%);
+  background: linear-gradient(to right, rgba(255,255,255,.3), rgba(255,255,255,0)), linear-gradient(to bottom, var(--bg)50%, #eaeaff 50%);
 }
 
 .bucket {
@@ -8459,7 +8207,7 @@ div.news {
   font-weight: 700;
   text-transform: uppercase;
   border-radius: 2px;
-  background: #ddf;
+  background: var(--bg4);
 }
 
 #wrapperlogs pre {
@@ -8539,7 +8287,7 @@ div.news {
  }
 
 .optiontextarea, #reseedconfig .optiontextarea {
-  box-shadow: inset 0 0 0 2px #fff !important;
+  box-shadow: inset 0 0 0 2px var(--bg)!important;
   background: #f2f2ff !important;
 }
 
@@ -8566,7 +8314,7 @@ div.news {
   vertical-align: middle;
   background: var(--bg) !important;
   transition: ease box-shadow .2s;
-  box-shadow: var(--highlight_hover), inset 0 0 0 2px #fff !important;
+  box-shadow: var(--highlight_hover), inset 0 0 0 2px var(--bg)!important;
 }
 
 #bandwidthconfig .optionsingle:hover, #reseedproxytype label:hover, #graphs .nowrap:hover {
@@ -8691,7 +8439,7 @@ b.suboption {
   white-space: nowrap;
   text-align: center;
   font-style: italic;
-  border-top: 1px solid #ddf;
+  border-top: 1px solid var(--bg4);
 }
 
 #config_bandwidth tr:nth-last-child(2) .infohelp b {
@@ -8751,7 +8499,7 @@ b.suboption {
 }
 
 #netconfig .optionlist, .service_container {
-  filter: drop-shadow(0 0 1px #ddf);
+  filter: drop-shadow(0 0 1px var(--bg4));
 }
 
 #reseedconfig th.options, #i2pupdates th.options {
@@ -9061,7 +8809,7 @@ b.suboption {
 #reseedproxysslhostport.optionlist, #reseedproxysslhostport.optionlist:hover {
   margin: 0 -1px !important;
   padding: 0;
-  border: 1px solid #fff !important;
+  border: 1px solid var(--bg)!important;
   border-top: none !important;
   border-bottom: none !important;
   columns: 2 auto;
@@ -9365,7 +9113,7 @@ input[type="file"]:hover {
 .routerid {
   display: inline-block;
   box-shadow: inset var(--border_badge), inset 0 0 0 2px var(--bg);
-  background: #ddf;
+  background: var(--bg4);
   background: var(--th);
 }
 
@@ -9449,7 +9197,7 @@ input[type="file"]:hover {
   padding: 4px 8px;
   background: #e828ff;
   background: rgba(250,250,255,.5);
-  box-shadow: var(--highlight), 0 0 1px #ddf;
+  box-shadow: var(--highlight), 0 0 1px var(--bg4);
   border: 1px solid #bbd;
   break-inside: avoid;
   page-break-inside: avoid;
@@ -9528,7 +9276,7 @@ th.queue {
 
 #peers td.direction i {
   display: inline-block;
-  border-top: 1px solid #ddf;
+  border-top: 1px solid var(--bg4);
   border-radius: 2px;
   width: 100%;
   margin: 3px -3px -4px;
@@ -9928,7 +9676,7 @@ a.keysearch {
 
 .netdb_transport {
   border-radius: 2px;
-  background: #ddf;
+  background: var(--bg4);
   padding: 1px 3px;
 }
 
@@ -9944,7 +9692,7 @@ a.keysearch {
   padding: 1px 5px;
   display: inline-block;
   border: 1px solid #bbd;
-  background: #ddf;
+  background: var(--bg4);
   background: var(--th);
 }
 
@@ -10260,7 +10008,7 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel{
   padding: 20px 10px 20px 60px !important;
   width: calc(100% - 70px);
   list-style: none;
-  box-shadow: 0 0 0 1px var(--border), var(--highlight), inset 0 0 0 2px #ddf;
+  box-shadow: 0 0 0 1px var(--border), var(--highlight), inset 0 0 0 2px var(--bg4);
   background-blend-mode: luminosity;
   background-size: 32px !important;
   break-inside: avoid;
@@ -10531,7 +10279,7 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel{
 }
 
 #stats .tab:not(.tab2):active {
-  color: #fff !important;
+  color: var(--bg)!important;
   text-shadow: 0 1px 1px #5f2d0c;
   box-shadow: inset 3px 2px 2px #7f3000;
   background: var(--hover);
@@ -10552,7 +10300,7 @@ p#gatherstats {
   margin: -7px 0 0 !important;
   padding: 0 !important;
   width: calc(100% - 2px);
-  box-shadow: var(--highlight), inset 0 0 2px 1px #ddf;
+  box-shadow: var(--highlight), inset 0 0 2px 1px var(--bg4);
 }
 
 /* end /stats */
@@ -10688,7 +10436,7 @@ p#gatherstats {
   color: #535979;
   border: 1px solid var(--border);
   box-shadow: var(--highlight), 0 0 1px rgba(96,96,96,.5);
-  background: linear-gradient(to right, #eef0ff, #fff, #eef0ff);
+  background: var(--label_focus);
   user-select: none;
 }
 
@@ -10994,22 +10742,6 @@ p#gatherstats {
   font-weight: 700;
 }
 
-#servletError.iframed .logo {
-  display: none;
-}
-
-#servletError #warning2.sorry, #servletError #warning.warning {
-   margin-right: 20px;
-}
-
-#servletError #warning.warning {
-  margin-bottom: 15px !important;
-}
-
-#servletError.iframed #warning.warning {
-  margin: 0 0 5px !important;
-}
-
 #configstats .graphableStat td {
   padding: 4px 6px;
   columns: auto;
@@ -11073,7 +10805,7 @@ p#gatherstats {
 }
 
 .stattograph:hover, .optbox:checked + label > .stattograph:hover {
-  color: #fff !important;
+  color: var(--bg)!important;
   border-color: var(--hover);
   background: var(--bg);
   box-shadow: none;
@@ -11092,7 +10824,7 @@ p#gatherstats {
 }
 
 .optbox:checked + label > .stattograph:hover b {
-  color: #fff !important;
+  color: var(--bg)!important;
 }
 
 .statdesc {
@@ -11143,7 +10875,7 @@ p#gatherstats {
 #tunnels #peercount {
   padding-left: 30px !important;
   background: var(--hardhat) no-repeat 8px 6px / 18px,
-              linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
+              linear-gradient(to bottom, var(--bg)50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
               linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
 }
 
