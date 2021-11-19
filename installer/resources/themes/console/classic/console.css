@@ -10284,8 +10284,7 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel{
 }
 
 .skm_key td, .debug_outboundtarget td {
-  background: #f6f6ff !important;
-  background: linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%) !important;
+  background: linear-gradient(to bottom, #fcfcff, #fafaff 51%, #f6f6ff 100%) !important;
 }
 
 .debug_outboundtarget td:last-child, .skm_key td:last-child {
@@ -10331,21 +10330,11 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel{
 #stats .tab, #stats .tab2 {
   margin: -1px -1px -1px 0 !important;
   padding: 6px 14px !important;
+  font-size: 90% !important;
 }
 
 #stats .tab:not(.tab2) {
   color: var(--a);
-}
-
-#stats .tab2, #stats .tab2:hover {
-  color: var(--bg);
-  text-shadow: 0 1px 1px #225;
-  box-shadow: inset 3px 3px 2px #337;
-  background: linear-gradient(to bottom, #5d66a2 50%, #4a5282 50%);
-}
-
-#stats .tab2:hover {
-  cursor: default;
 }
 
 #stats .tab:not(.tab2):hover {
@@ -10355,7 +10344,7 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel{
 #stats .tab:not(.tab2):active {
   color: var(--bg) !important;
   text-shadow: 0 1px 1px #5f2d0c;
-  box-shadow: inset 3px 2px 2px #7f3000;
+  box-shadow: var(--btn_shadow_active);
   background: var(--hover);
   transition: ease box-shadow .05s;
 }
