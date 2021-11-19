@@ -21,10 +21,11 @@
   --btn_shadow_active: var(--highlight), inset 3px 3px 3px 1px rgba(32,32,64,.3);
   --badge: linear-gradient(to bottom, #fff, #eef);
   --badge_hover: linear-gradient(to bottom, #eef, #fff);
-  --border_badge: 0 0 0 1px #bbd;
+  --box_border_badge: 0 0 0 1px #bbd;
   --border: #bfc3d9;
   --border_soft: #dfe1ec;
   --border_warn: #fb7;
+  --border_badge: #aad;
   --highlight: inset 0 0 0 1px rgba(255,255,255,.8);
   --highlight_hover: inset 0 0 0 1px #a79;
   --highlight_active: inset 3px 3px 3px 1px #5f2400;
@@ -4652,13 +4653,13 @@ img[src^="/flags"], img.unknownflag {
 #tunnels img[src^="/flags"], #profiles img[src^="/flags"], #peers img[src^="/flags"], #netdb img[src^="/flags"] {
   margin-top: 0;
   margin-bottom: 0;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border_soft);
 }
 
 .routerid .flag {
   margin: -2px 1px;
   padding: 2px 3px;
-  border-right: 1px solid #aad;
+  border-right: 1px solid var(--border_badge);
 }
 
 .routerid, .routerid > *, .routerid ~ span {
@@ -4727,12 +4728,31 @@ img[src^="/flags"], img.unknownflag {
   background: var(--header);
 }
 
-.themechoice:hover, .themechoice:hover > img ~ .themelabel {
-  background: var(--bg);
-}
-
 .themechoice:hover {
   border: 1px solid var(--hover);
+}
+
+.themechoice .optbox {
+  padding: 2px;
+  width: 110px;
+  height: 80px;
+}
+
+.themechoice .optbox + img {
+  margin: 8px 0 31px;
+  padding: 0;
+}
+
+.themechoice .optbox:checked + img {
+  transform: scale(.8);
+}
+
+.themechoice .optbox:checked + img, .themechoice:hover .optbox + img {
+  filter: drop-shadow(0 0 1px var(--hover)) drop-shadow(0 0 2px var(--hover));
+}
+
+.themechoice:hover, .themechoice:hover > img ~ .themelabel {
+  background: var(--bg);
 }
 
 .themechoice:hover > img ~ .themelabel {
@@ -4744,35 +4764,6 @@ img[src^="/flags"], img.unknownflag {
   font-weight: 700;
 }
 
-.themechoice:hover .optbox:not(:checked) + img {
-  filter: drop-shadow(0 0 1px var(--hover));
-}
-
-.themechoice .optbox {
-  margin-top: 4px;
-  margin-left: -32px;
-  padding: 2px;
-  height: 80px;
-  width: 110px;
-}
-
-.themechoice .optbox + img {
-  margin-top: 8px;
-  margin-bottom: 31px;
-  margin-left: 0;
-  padding: 0;
-}
-
-.themechoice img {
-  margin-bottom: 31px !important;
-}
-
-.themechoice:active .themelabel {
-  background: var(--hover) !important;
-  color: var(--bg) !important;
-  box-shadow: var(--highlight);
-}
-
 .themechoice .optbox:checked + img ~ .themelabel {
   padding: 4px 2px 2px !important;
   font-size: 95% !important;
@@ -4782,17 +4773,15 @@ img[src^="/flags"], img.unknownflag {
   background: var(--bg3);
 }
 
-.themechoice .optbox:checked + img, .themechoice .optbox:checked + img {
-  transform: scale(.9);
-}
-
 .themechoice .optbox:focus + img ~ .themelabel {
   color: var(--hover) !important;
   background: var(--label_focus);
 }
 
-.themechoice .optbox:active + img ~ .themelabel {
+.themechoice:active .themelabel, .themechoice .optbox:active + img ~ .themelabel {
   color: var(--bg) !important;
+  box-shadow: var(--highlight);
+  background: var(--hover) !important;
 }
 
 .themechoice:active .optbox:checked + img ~ .themelabel {
@@ -4876,19 +4865,15 @@ p#helptranslate {
 }
 
 .langselect .optbox {
-  margin: -4px 0 8px -54px;
   width: 122px;
   height: 66px;
-  position: relative;
-  z-index: 999;
-  opacity: 0;
 }
 
-/* less hacky configui options */
 .themechoice .optbox, .langselect .optbox, .themechoice .optbox:checked, .langselect .optbox:checked {
   margin: 0;
   position: absolute;
   z-index: -999;
+  opacity: 0;
 }
 
 .themechoice, .langselect {
@@ -4899,56 +4884,58 @@ p#helptranslate {
 
 .langselect img {
   margin: 0 0 35px !important;
-}
-
-.langselect:hover > input + img {
-  transform: scale(1.1);
-}
-
-.langselect img[src^="/flags"] {
   width: 40px !important;
   height: auto !important;
   position: relative;
   z-index: 3;
-  border: 1px solid var(--border);
-  opacity: 1;
+  border: none;
 }
 
 .langselect input, .themechoice input {
   cursor: pointer;
 }
 
-.langselect input[name="lang"]:checked + img {
-  transform: scale(.8) !important;
+.langselect input:hover + img, .langselect input:checked + img {
+  transition: none !important;
+  filter: drop-shadow(0 0 1px var(--hover)) drop-shadow(0 0 2px var(--hover));
 }
 
-.langselect:hover > input[name="lang"] + img + .ui_lang {
+.langselect .optbox:checked + img {
+  transform: scale(.8);
+}
+
+.themechoice:hover .optbox:not(:checked) + img,
+.langselect:hover .optbox:not(:checked) + img {
+  transform: scale(1.05);
+}
+
+.langselect:hover > .optbox + img + .ui_lang {
   font-weight: 700;
   color: var(--hover);
   border-top: 1px solid var(--hover);
   background: var(--bg);
 }
 
-.langselect:active .ui_lang, .langselect:active > input[name="lang"] + img + .ui_lang {
+.langselect:active .ui_lang, .langselect:active > .optbox + img + .ui_lang {
   background: var(--hover);
   color: var(--bg) !important;
   box-shadow: var(--highlight);
 }
 
-.langselect:active input[name="lang"]:checked + img + .ui_lang,
-.langselect input[name="lang"]:focus + img + .ui_lang {
+.langselect:active .optbox:checked + img + .ui_lang,
+.langselect .optbox:focus + img + .ui_lang {
   color: var(--hover) !important;
   box-shadow: none;
   background: var(--label_focus);
 }
 
-.langselect input[name="lang"]:active + img + .ui_lang {
+.langselect .optbox:active + img + .ui_lang {
   color: var(--bg);
   background: var(--hover);
 }
 
-.langselect input[name="lang"]:checked + img + .ui_lang,
-.langselect input[name="lang"]:focus:checked + img + .ui_lang {
+.langselect .optbox:checked + img + .ui_lang,
+.langselect .optbox:focus:checked + img + .ui_lang {
   padding: 4px 2px 2px !important;
   z-index: 2;
   font-size: 95% !important;
@@ -4965,30 +4952,6 @@ p#helptranslate {
 .langselect br {
   display: block;
 }
-
-/* large flags */
-
-.langselect img {
-  width: 40px;
-  height: 40px;
-  border: none !important;
-  opacity: .9 !important;
-  transform: none !important;
-}
-
-.langselect input[name="lang"]:checked + img, .langselect input[name="lang"]:checked + #config_ui img[src="/flags.jsp?c=a1"] {
-  border: none !important;
-  opacity: 1 !important;
-  transform: scale(.9);
-}
-
-.langselect input:hover + img, .langselect input:checked + img {
-  border: none !important;
-  transition: none !important;
-  filter: drop-shadow(0 0 1px var(--hover)) drop-shadow(0 0 2px var(--hover));
-}
-
-/* end large flags */
 
 .ui_lang {
   margin: -32px -4px 0;
@@ -5020,7 +4983,7 @@ p#helptranslate {
 
 #consolepass tr:first-child td {
   padding: 15px 15px 15px 50px;
-  background: var(--bg) var(--useradd) no-repeat 12px center / 28px 28px;
+  background: var(--bg) var(--useradd) no-repeat 12px center / 28px;
 }
 
 #consolepass td {
@@ -6705,7 +6668,7 @@ tt a, .cells tt {
 #tunnels .routerid, .tunnel_local {
   min-width: 64px;
   display: inline-block;
-  box-shadow: inset var(--border_badge), inset 0 0 0 2px var(--bg);
+  box-shadow: inset var(--box_border_badge), inset 0 0 0 2px var(--bg);
   background: var(--bg4);
   background: var(--th);
 }
@@ -9136,7 +9099,7 @@ input[type="file"]:hover {
 
 .routerid {
   display: inline-block;
-  box-shadow: inset var(--border_badge), inset 0 0 0 2px var(--bg);
+  box-shadow: inset var(--box_border_badge), inset 0 0 0 2px var(--bg);
   background: var(--bg4);
   background: var(--th);
 }
@@ -9369,7 +9332,7 @@ th.queue {
 }
 
 .ff, .reachable, .unreachable, .hidden, .ssutesting, .ssuintro, .tier, .tunnel_cap, #capabilities_key b {
-  box-shadow: var(--border_badge), var(--highlight);
+  box-shadow: var(--box_border_badge), var(--highlight);
 }
 
 .ff {
@@ -9720,7 +9683,7 @@ a.keysearch {
 #netdb_ram, .netdbentry .version, .netdb_transport {
   padding: 1px 5px;
   display: inline-block;
-  box-shadow: var(--border_badge);
+  box-shadow: var(--box_border_badge);
   background: var(--badge);
 }
 
