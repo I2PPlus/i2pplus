@@ -652,10 +652,6 @@ div.refresh {
   background-size: 16px !important;
 }
 
-@supports not (-moz-appearance: none) {
-  .tunnelBuildStatus, .tunnelBuildStatus::before {vertical-align: middle !important}
-}
-
 .sb_netstatus.error::before {
   background: var(--net_error) no-repeat center center;
 }
@@ -1049,21 +1045,10 @@ p + .twocol {
 }
 
 @supports not (-moz-appearance: none) {
-#console .twocol {
-  margin-left: -20px !important;
-}
-
-#console div[lang="de"] .twocol {
-  margin-left: 30px !important;
-}
-
-#console div[lang="es"] .twocol {
-  margin-left: 0 !important;
-}
-
-.twocol li {
-  margin-left: 20px;
-}
+  #console .twocol {margin-left: -20px !important}
+  #console div[lang="de"] .twocol {margin-left: 30px !important}
+  #console div[lang="es"] .twocol {margin-left: 0 !important}
+  .twocol li {margin-left: 20px}
 }
 
 .twocol li:first-child {
@@ -2064,10 +2049,6 @@ div.news hr {
   opacity: .7;
 }
 
-@supports not (-moz-appearance: none) {
-  div.news hr {height: 1px}
-}
-
 div.news hr:last-child {
   margin-bottom: 10px !important;
 }
@@ -2365,12 +2346,6 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 
 #reseedconfig td {
   width: 50%;
-}
-
-@supports not (-moz-appearance: none) {
-  #reseedconfig .optbox[type=radio] {margin: 4px 4px 4px 15px !important}
-  #reseedconfig .optbox[type=checkbox] {vertical-align: sub !important}
-  #manualreseed th:last-child, #manualreseed td:last-child {border-right: 1px solid var(--border)}
 }
 
 #loggingoptions textarea {
@@ -4612,7 +4587,7 @@ h3#graphinfo {
 #graphopts a:hover, #graphopts a:focus, #newsDisplay a:hover, #newsDisplay a:focus,
 #routerinformation tr:nth-child(n+2) a:not(#revision):hover, #routerinformation tr:nth-child(n+2) a:not(#revision):focus {
   color: #557 !important;
-  border: 1px solid #7778bf;
+  border: 1px solid var(--a);
   box-shadow: 0 0 0 1px rgba(220,220,255,.6), var(--highlight);
   background: linear-gradient(to bottom, var(--bg)50%, var(--bg4) 50%);
 }
@@ -7517,10 +7492,6 @@ h2#debug_portmapper {
   background: var(--package) no-repeat left 5px center / 14px;
 }
 
-@supports not (-moz-appearance: none) {
-  #jardump td:last-child {word-break: break-all}
-}
-
 /* end jardump */
 
 /* responsive layout */
@@ -8680,10 +8651,6 @@ b.suboption {
   padding-bottom: 6px;
 }
 
-#i2pupdates .optionsave {
-  border-bottom: 1px solid #7778bf;
-}
-
 #i2pupdates textarea {
   margin-left: 6px !important;
 }
@@ -8703,9 +8670,7 @@ b.suboption {
 }
 
 @media screen and (max-width: 1000px) {
-#updateHelper select {
-  max-width: 200px !important;
-}
+  #updateHelper select {max-width: 200px !important}
 }
 
 #updateProxyHostPort input {
@@ -8721,16 +8686,16 @@ b.suboption {
 }
 
 #updateHelper .optionlist, #updateProxyHostPort .optionlist {
+  margin: -1px 0;
   column-gap: 1px;
   columns:  500px 2;
-  margin: -1px 0;
 }
 
 #updateHelper b, #updateProxyHostPort b, #i2pupdates b {
+  margin-right: 9px;
   min-width: 190px !important;
   display: inline-block;
   text-align: right;
-  margin-right: 9px;
 }
 
 #i2pupdates .nowrap, #i2pupdates .nowrap b {
@@ -8739,16 +8704,16 @@ b.suboption {
 }
 
 #i2pupdates .optiontextarea .nowrap b {
-  height: 76px;
   margin-top: -48px;
   margin-bottom: -28px;
+  height: 76px;
   vertical-align: middle;
 }
 
 #i2pupdates textarea, #i2pupdates input[type=text] {
+  margin: 5px 5px 5px 10px !important;
   width: calc(100% - 216px) !important;
   min-width: 0 !important;
-  margin: 5px 5px 5px 10px !important;
 }
 
 #i2pupdates textarea {
@@ -8770,9 +8735,9 @@ b.suboption {
 }
 
 #reseedconfig .nowrap b, #externali2cp .nowrap b  {
-  display: inline-block;
-  min-width: 120px;
   margin: 0 3px 0 5px;
+  min-width: 120px;
+  display: inline-block;
   text-align: right;
 }
 
@@ -8792,16 +8757,6 @@ b.suboption {
 
 #reseedconfig .optbox[type=checkbox] {
   vertical-align: sub !important;
-}
-
-@supports not (-moz-appearance: none) {
-  #reseedconfig .optbox[type=radio] {
-    margin: 4px 4px 4px 15px !important;
-  }
-
-  #manualreseed th:last-child, #manualreseed td:last-child {
-    border-right: 1px solid #7778bf;
-  }
 }
 
 @media screen and (max-width: 1000px) {
@@ -8840,19 +8795,12 @@ b.suboption {
 }
 
 @media screen and (max-width: 1000px) {
-#reseedproxytype {
-  columns: 2 auto;
-}
-
-#reseedconfig .nowrap b {
-  min-width: 50px !important;
-}
+  #reseedproxytype {columns: 2 auto}
+  #reseedconfig .nowrap b {min-width: 50px !important}
 }
 
 @media screen and (max-width: 1000px) {
-#reseed_urlselection.optionsingle {
-  columns: 1 auto;
-}
+  #reseed_urlselection.optionsingle {columns: 1 auto}
 }
 
 #reseed_urlselection.optionsingle, #reseedproxytype, #config_reseed .optionlist:hover,
@@ -8901,9 +8849,9 @@ b.suboption {
 }
 
 #manualreseed .optionlist input[type=text], #manualreseed .optionlist input[type="file"] {
+  width: 50% !important;
   min-width: 0 !important;
   max-width: 50% !important;
-  width: 50% !important;
 }
 
 #manualreseed .optionsingle {
@@ -8911,13 +8859,8 @@ b.suboption {
 }
 
 @supports not (-moz-appearance: none) {
-#reseedproxysslhostport.optionlist {
-  columns: 1;
-}
-
-.optionsingle#reseedproxytype {
-  columns: 2;
-}
+  #reseedproxysslhostport.optionlist {columns: 1}
+  .optionsingle#reseedproxytype {columns: 2}
 }
 
 #config_network .optionlist:hover, #config_i2cp .optionlist:hover, #reseedssl:hover,
@@ -8981,9 +8924,7 @@ b.suboption {
 }
 
 @media screen and (max-width: 1200px) {
-#reseedurl input[type=text], #reseedzip input[type="file"], #reseedcreatefile p {
-  white-space: normal;
-}
+  #reseedurl input[type=text], #reseedzip input[type="file"], #reseedcreatefile p {white-space: normal}
 }
 
 #reseedconfig .reload {
@@ -9014,12 +8955,6 @@ b.suboption {
 
 #i2pupdates .optionsave {
   border-bottom: 1px solid var(--border);
-}
-
-@supports not (-moz-appearance: none) {
-#manualreseed th:last-child, #manualreseed td:last-child {
-  border-right: 1px solid #7778bf;
-}
 }
 
 #manualreseed td {
@@ -9053,7 +8988,6 @@ b.suboption {
 }
 
 /* end reseed help ordered list */
-
 
 #config_keyring h3 {
   margin-bottom: -2px;
