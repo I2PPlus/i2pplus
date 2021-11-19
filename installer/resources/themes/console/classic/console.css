@@ -3312,7 +3312,7 @@ table[id*="connections"] .tablefooter td:first-child {
 }
 
 h3[id*="heading"] {
-  margin-bottom: -1px;
+  margin: 18px 0 -1px;
 }
 
 h3#advancedclientconfig, h3#ffconf, h3#advancedconfig {
