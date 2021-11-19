@@ -58,7 +58,7 @@ body {
   text-align: left;
   font: 9pt/130% var(--bodyfont);
   color: var(--ink);
-  background: var(--bodybg) url(images/bg0.png) no-repeat center center / 90px;
+  background: var(--bodybg) url(images/bg0.png) center center / 90px;
   scrollbar-color: #acafb9 var(--bg);
 }
 
@@ -10729,16 +10729,11 @@ p#gatherstats {
   box-sizing: border-box;
   font-size: 90%;
   text-align: left;
-  border: 1px solid #99b;
+  border: 1px solid var(--border_badge);
   border-radius: 1px;
   background: var(--badge);
   will-change: transform;
   outline: none !important;
-}
-
-.stattograph:hover {
-  box-shadow: 0 0 0 1px var(--hover);
-  background: var(--badge_hover);
 }
 
 .stattograph b {
@@ -10749,6 +10744,7 @@ p#gatherstats {
   text-overflow: ellipsis;
   text-transform: capitalize;
   color: #5b5b71;
+  color: var(--ink_light);
 }
 
 .optbox:not(:checked) + label > .stattograph b {
@@ -10763,10 +10759,6 @@ p#gatherstats {
   padding-left: 18px;
   border-left-width: 3px;
   background: var(--yes)  no-repeat 6px center / 8px, var(--badge_hover);
-}
-
-.optbox:checked + label > .stattograph:hover b {
-  color: #5b5b71 !important;
 }
 
 .stattograph:hover, .optbox:checked + label > .stattograph:hover {
@@ -10820,7 +10812,7 @@ p#gatherstats {
 }
 
 #statconfig {
-  margin: 0 auto 10px !important;
+  margin: 0 auto 10px;
 }
 
 #config_stats .tabletitle {
@@ -10832,7 +10824,7 @@ p#gatherstats {
 }
 
 #enablefullstats {
-  background: var(--stats) no-repeat 12px center / 32px, linear-gradient(135deg, #fafaff, #f8f8ff)
+  background: var(--stats) no-repeat 12px center / 32px;
 }
 
 /* /tunnelpeercount */
