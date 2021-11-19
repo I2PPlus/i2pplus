@@ -15,12 +15,11 @@
   --a_hover: #f60;
   --a_active: #f30;
   --highlight: inset 0 0 0 1px #fff;
-  --btn: linear-gradient(to bottom, #fff, #eaeaff);
+  --btn: linear-gradient(to bottom, #fff, #f0f0ff);
   --btn_hover: linear-gradient(to bottom, #ddd, #fff);
-  --btn_hover: linear-gradient(to bottom, #ddd 0%, #fff 100%);
-  --btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 #fff, inset 0 0 4px 2px #e4e4ff, 0 2px 1px rgba(220,220,255,.7);
+  --btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 #fff, inset 0 0 4px 2px #f0f0ff, 0 1px 1px rgba(220,220,255,.5);
   --btn_shadow_hover: var(--highlight), 0 0 0 1px #fff, 0 0 0 2px rgba(255,96,0,.4);
-  --border: #bec2da;
+  --border: #bfc3d9;
   --h2: linear-gradient(to bottom, #fff 50%, #fafbff 50%);
 }
 
@@ -120,7 +119,7 @@ hr {
 }
 
 .freetext {
-  padding: 4px;
+  padding: 5px 7px;
   width: 150px;
   font: 9pt var(--monospaced);
   color: #5e626e;
@@ -393,7 +392,7 @@ tr {
 td {
   padding: 5px;
   vertical-align: middle;
-  border-top: 1px solid #ced1e3;
+  border-top: 1px solid #dfe1ec;
 }
 
 th:last-child, td:last-child {
@@ -830,13 +829,13 @@ input:focus::-moz-placeholder {
 }
 
 input.tunnelName, input.tunnelDescriptionText, #userAgents, #filterDefinition, #websiteName {
-  width: calc(100% - 20px) !important;
+  width: calc(100% - 26px) !important;
   min-width: 280px;
   text-overflow: ellipsis;
 }
 
 #filterDefinition {
-  width: calc(100% - 20px);
+  width: calc(100% - 26px);
 }
 
 input[type="file"] {
@@ -872,7 +871,7 @@ input[type="file"] {
 
 .proxyList {
   margin: 5px !important;
-  width: calc(100% - 20px) !important;
+  width: calc(100% - 26px) !important;
 }
 
 #notReady {
@@ -932,7 +931,7 @@ input[type="file"] {
 }
 
 #wizardTable td, #wizardPanel table td {
-  border-top: 1px solid #ced1e3 !important;
+  border-top: 1px solid #dfe1ec !important;
 }
 
 #wizardTunnelTypes tr:last-child {
@@ -1008,11 +1007,11 @@ input[type="file"] {
 
 textarea[name="accessList"], #hostField, #localDestination, .authentication {
   margin: 5px !important;
-  width: calc(100% - 15px) !important;
+  width: calc(100% - 21px) !important;
 }
 
 #customOptions, #userAgents, #leasesetKey, .clientName, .clientKey  {
-  width: calc(100% - 20px) !important;
+  width: calc(100% - 26px) !important;
 }
 
 .tunnelConfig td > b {
@@ -1031,7 +1030,7 @@ textarea[name="accessList"], #hostField, #localDestination, .authentication {
 }
 
 .tunnelInfo td:first-child {
-  border-right: 1px solid #ced1e3;
+  border-right: 1px solid #dfe1ec;
 }
 
 td.tunnelDescription, .tunnelInfo + .tunnelInfo .tunnelDestination {
@@ -1079,7 +1078,7 @@ td.tunnelDescription, .tunnelInfo + .tunnelInfo .tunnelDestination {
 }
 
 .tunnelProperties td {
-  border-right: 1px solid #ced1e3;
+  border-right: 1px solid #dfe1ec;
 }
 
 .tunnelProperties td:last-child {
@@ -1176,7 +1175,7 @@ input[type=text] + label {
 
 #privKeyFile, input[name="nofilter_blindedPassword"], #localDest, #altlocaldest, #altPrivKeyFile {
   width: 200px;
-  width: calc(100% - 20px);
+  width: calc(100% - 26px);
   min-width: 200px;
 }
 
@@ -1494,7 +1493,7 @@ input::placeholder {
 
 #tunnelOpts table td {
   padding: 5px;
-  border-bottom: 1px solid #ced1e3;
+  border-bottom: 1px solid #dfe1ec;
 }
 
 #tunnelOpts table tr:first-child td {

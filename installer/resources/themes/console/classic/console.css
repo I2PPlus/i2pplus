@@ -10,30 +10,40 @@
   --ink_light: #5e626e;
   --ink_h1: #6c7293;
   --disabled: #757a8a;
+  --selected: #559;
   --a: #5c5c8a;
   --hover: #f60;
   --active: #f90;
-  --btn: linear-gradient(to bottom, #fff, #eaeaff);
+  --btn: linear-gradient(to bottom, #fff, #f0f0ff);
   --btn_hover: linear-gradient(to bottom, #ddd, #fff);
-  --btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 #fff, inset 0 0 4px 2px #e4e4ff, 0 2px 1px rgba(220,220,255,.7);
+  --btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 #fff, inset 0 0 4px 2px #f0f0ff, 0 1px 1px rgba(220,220,255,.5);
   --btn_shadow_hover: var(--highlight), 0 0 0 1px #fff, 0 0 0 2px rgba(255,96,0,.4);
+  --btn_shadow_active: var(--highlight), inset 3px 3px 3px 1px rgba(32,32,64,.3);
   --badge: linear-gradient(to bottom, #fff, #eef);
   --badge_hover: linear-gradient(to bottom, #eef, #fff);
-  --border_badge: 0 0 0 1px #aad;
-  --highlight: inset 0 0 0 1px var(--bg);
+  --border_badge: 0 0 0 1px #bbd;
+  --border: #bfc3d9;
+  --border_soft: #dfe1ec;
+  --border_warn: #fb7;
+  --highlight: inset 0 0 0 1px rgba(255,255,255,.8);
   --highlight_hover: inset 0 0 0 1px #a79;
   --highlight_active: inset 3px 3px 3px 1px #5f2400;
-  --border: #bec2da;
-  --soft_border: #ced1e3;
-  --border_warn: #fb7;
   --bg: #fff;
-  --bg2: #eff1ff;
-  --th: linear-gradient(to bottom, #fff, #fafbff);
+  --bg2: #f2f2ff;
+  --bg3: #eff1ff;
+  --bg4: #ddf;
+  --th: linear-gradient(to bottom, #fff, var(--bg2));
   --subheading: linear-gradient(to right, #fff, #eef);
-  --header: linear-gradient(to bottom, #fff 50%, #fafbff 50%);
+  --header: linear-gradient(to bottom, var(--bg)50%, #f2f2ff 50%);
   --row_hover: #ffd;
   --ls_target: 1px solid #5a5 !important;
   --reload: linear-gradient(to right, #930, var(--hover));
+  --down: repeating-linear-gradient(135deg, #fffff2, #fffff2 10px, #ddddd2 10px, #ddddd2 20px);
+  --down_shadow: inset 0 0 0 1px #800, inset 0 0 1px 3px #eeeee2, inset 0 0 0 4px #ccccc2;
+  --flatbar: #99c;
+  --hr: #89f;
+  --select: #4a90d9;
+  --label_focus: linear-gradient(to right, #eef, #fff, #eef);
 }
 
 html, body {
@@ -57,7 +67,7 @@ body {
 
 ::selection {
   text-shadow: none;
-  background: #4a90d9;
+  background: var(--select);
   color: var(--bg);
 }
 
@@ -69,7 +79,7 @@ body {
   contain: layout;
 }
 
-#sb_logo img, .routersummary h3, .routersummary h3 a, #sb_internnals, #sb_advanced, #sb_services,
+#sb_logo img, .routersummary h3, .routersummary h3 a, #sb_internals, #sb_advanced, #sb_services,
 .confignav, *::before, *::after, div.app, .themechoice, .langselect, .langbox,
 .newsAuthor, #newsDisplay, #netdbcountrylist img, .viewfullentry, .sybil_routerinfo th img, .graphspanel, h1 {
   user-select: none;
@@ -93,213 +103,11 @@ i {
   padding-right: 1px;
 }
 
-/* Sidepanel for proxy errors */
-
-.logo {
-  margin: 0 0 0 20px;
-  padding: 10px 5px 8px;
-  width: 200px;
-  float: left;
-  position: relative;
-  text-align: center;
-  border: 5px solid var(--border);
-  background: var(--bg2);
-}
-
-.logo img {
-  width: 182px;
-  mix-blend-mode: luminosity;
-}
-
-.logo img:hover {
-  mix-blend-mode: normal;
-}
-
-.logo hr {
-  margin: 8px -5px 8px;
-  height: 5px;
-  color: var(--border);
-  border: none;
-  background: var(--border);
-}
-
-.logo a {
-  padding: 4px 0;
-  width: 100%;
-  display: inline-block;
-}
-
-.logo a:nth-child(n+2):active {
-  color: var(--hover);
-  border-radius: 4px;
-  box-shadow: var(--highlight), inset 3px 3px 3px #999 !important;
-}
-
-.logo a:hover {
-  color: #900;
-}
-
-.logo a:hover img {
-  filter: drop-shadow(0 0 1px var(--hover));
-}
-
-/* HTTP Proxy warning Main box */
-
-.warning {
-  margin: 25px 20px 0 260px;
-  padding: 0 20px 40px;
-  min-width: 500px;
-  position: relative;
-  text-align: left;
-  color: inherit;
-  border: 5px solid var(--border_warn);
-  box-shadow: inset 0 0 0 2px var(--hover);
-  background: var(--row_hover);
-}
-
-.warning a:link {
-  color: var(--hover) !important;
-}
-
-.warning a:visited {
-  color: #f40 !important;
-}
-
-.warning a:hover, .warning a:focus, .warning a:visited:focus {
-  color: #d30 !important;
-}
-
-.warning a:active {
-  color: #900 !important;
-}
-
-.warning hr {
-  margin: 5px 0;
-  height: 1px;
-  color: var(--border_warn);
-  border: none;
-  background: var(--border_warn);
-}
-
-.warning h3:first-child {
-  margin: 2px -18px 10px -18px;
-  padding: 10px 10px 8px 36px;
-  font-size: 12pt;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  border: none;
-  border-bottom: 1px solid var(--border_warn);
-  word-spacing: .1em;
-  background: var(--row_hover) var(--err) no-repeat 8px center / auto 60% !important;
-}
-
-.warning p {
-  padding: 5px 0 0;
-}
-
-.warning > br + br {
-  display: none;
-}
-
-.warning textarea {
-  width: 100%;
-  resize: none;
-  white-space: pre-wrap;
-  word-break: break-all;
-  height: 100% !important;
-  font-size: 8pt;
-  border: none;
-}
-
-.warning .formaction {
-  background: none !important;
-}
-
-.warning button {
-  margin-right: 0;
-}
-
-.warning table {
-  margin-bottom: 15px;
-  border: 1px solid var(--border_warn);
-}
-
-.warning tr {
-  background: var(--row_hover) !important;
-  border: 1px solid var(--border_warn);
-}
-
-.warning tr:last-child {
-  background: var(--bg) !important;
-  height: 80px;
-  white-space: nowrap;
-}
-
-.warning table td:first-child {
-  font-weight: 700;
-  vertical-align: top;
-}
-
-/* console error messages */
-
-.sorry {
-  margin: -1px 0 0 211px;
-  padding: 20px 20px 20px 75px;
-  min-width: 475px;
-  word-wrap: break-word;
-  text-align: justify;
-  font-weight: 700;
-  border: 1px solid var(--border);
-  box-shadow: var(--highlight), inset 0 0 1px 1px #900;
-  background: var(--bg) var(--err) no-repeat 20px 40% / 36px;
-}
-
-#error500 .sorry {
-  box-shadow: inset 0 0 0 1px #f99;
-}
-
-.sorry hr {
-  margin: 10px 0;
-  height: 1px;
-  background: var(--border);
-  opacity: .5;
-}
-
-.sorry p {
-  padding: 0 !important;
-}
-
-#warning2 {
-  margin-top: -1px;
-  padding: 0 15px 5px;
-  min-width: 540px;
-  font-weight: 400;
-  color: var(--ink);
-  box-shadow: inset 0 0 0 1px #f99;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, .8), rgba(255, 255, 255, .2)) repeat scroll 0 0 / 100%,
-              url(images/bg0.png) repeat scroll 0 0 / 120px;
-}
-
-#warning2 h3 {
-  margin: -1px -16px 15px;
-  padding: 8px 10px;
-  color: var(--ink);
-  box-shadow: inset 0 0 0 1px #f99;
-}
-
-#warning2 b {
-  margin-right: 3px;
-  min-width: 140px;
-  display: inline-block;
-  text-align: right;
-}
-
-#warning2 p {
-  margin-left: 10px;
-  margin-right: 10px;
-}
-
 /* sidebar */
+
+.routersummary a[href="/"], .routersummary a[href="/console"] {
+  outline: none !important;
+}
 
 .routersummaryouter {
   margin: 0;
@@ -322,6 +130,12 @@ i {
   background: var(--bg);
 }
 
+.routersummary a {
+  padding: 2px;
+  vertical-align: middle;
+  user-select: none;
+}
+
 /* siderbar logo */
 
 #sb_logo {
@@ -341,19 +155,6 @@ i {
   filter: none;
 }
 
-#error500 .routersummary img[src$="i2plogo.png"] {
-  margin-bottom: -3px;
-  width: 186px;
-}
-
-#error500 .routersummary hr {
-  margin-bottom: 8px;
-}
-
-#error500 .routersummary hr ~ a {
-  line-height: 1.8;
-}
-
 #sb_logo a img {
   border: none;
   opacity: .9;
@@ -369,17 +170,7 @@ i {
   transition: ease filter .08s;
 }
 
-.routersummary a[href="/"], .routersummary a[href="/console"] {
-  outline: none !important;
-}
-
-/* end siderbar logo */
-
-.routersummary a {
-  padding: 2px;
-  vertical-align: middle;
-  user-select: none;
-}
+/* end sb logo */
 
 .routersummary h4 a {
   padding: 0;
@@ -408,7 +199,7 @@ i {
   width: calc(100% - 20px);
   height: 1px;
   display: inline-block;
-  background: #ddf;
+  background: var(--bg4);
   content: "";
 }
 
@@ -423,9 +214,9 @@ i {
 .routersummary hr {
   margin: 8px -1px 7px -1px;
   height: 0;
-  color: #89f;
+  color: var(--hr);
   border-bottom: 1px solid var(--border);
-  background: #89f;
+  background: var(--hr);
 }
 
 .routersummary b, .routersummary td:first-child a:not(hover):not(:active) b,
@@ -445,7 +236,7 @@ i {
 }
 
 .routersummary h3:hover {
-  background: linear-gradient(to bottom, #fff 50%, var(--row_hover) 50%) !important;
+  background: linear-gradient(to bottom, var(--bg)50%, var(--row_hover) 50%) !important;
 }
 
 .routersummary h3:hover a, #sidebar td:first-child a:hover b,
@@ -454,7 +245,7 @@ i {
 }
 
 .routersummary h3:active {
-  box-shadow: inset 2px 2px 2px #777;
+  box-shadow: var(--btn_shadow_active);
 }
 
 .routersummary h3:active a {
@@ -471,7 +262,7 @@ i {
   border: none !important;
   box-shadow: inset 0 0 2px 1px #f2f7fa;
   text-decoration: none !important;
-  background: linear-gradient(to right, #eff2ff, #fff 50%, #eff2ff);
+  background: linear-gradient(to right, #eff2ff, var(--bg)50%, #eff2ff);
 }
 
 .routersummary h3 a {
@@ -485,7 +276,8 @@ i {
   text-align: left !important;
 }
 
-.routersummary table, .routersummary tr, .routersummary table, .routersummary td {
+#sidebar tr,
+.routersummary table, .routersummary td {
   background: none;
   border: none;
 }
@@ -551,7 +343,7 @@ i {
   margin: 3px 0 2px !important;
   color: transparent;
   background: transparent;
-  border-bottom: 1px dashed var(--soft_border);
+  border-bottom: 1px dashed var(--border_soft);
 }
 
 #sb_localid {
@@ -969,13 +761,8 @@ div.refresh {
   will-change: transform;
 }
 
-#sb_bandwidthgraph:hover {
-  border: 1px solid var(--hover);
+#minigraph:hover {
   cursor: zoom-in;
-}
-
-a:active #sb_bandwidthgraph {
-  border: 1px solid #f30;
 }
 
 #sb_bandwidthgraph td {
@@ -997,14 +784,14 @@ a:active #sb_bandwidthgraph {
   border-top: none;
   border-radius: 0 0 3px 3px;
   box-shadow: var(--highlight);
-  background: #ddf;
-  background: linear-gradient(to right, #ddf, #efefff, #ddf);
+  background: var(--label_focus);
   opacity: 0;
   transition: ease opacity .3s;
+  pointer-events: none;
 }
 
 #sb_graphcontainer:hover #sb_graphstats {
-  opacity: 1;
+  opacity: .8;
   transition: ease opacity .3s;
 }
 
@@ -1046,7 +833,7 @@ a:active #sb_bandwidthgraph {
   max-width: 100%;
   background: linear-gradient(to right, rgba(0,255,0,.1) 65px, rgba(255,255,0,.1) 110px, rgba(255,128,0,.1) 175px, rgba(255,0,0,.1)),
               linear-gradient(to bottom, rgba(255, 255, 255,.6), rgba(238, 238, 255, .6) 50%, rgba(180, 180, 255, .7) 50%, rgba(140, 140, 255, .7));
-  box-shadow: inset 0 0 0 1px #ddf;
+  box-shadow: inset 0 0 0 1px var(--bg4);
 }
 
 .percentBarText {
@@ -1387,9 +1174,8 @@ select[name="newlogclass"] {
   margin-right: 0;
 }
 
-.optbox {
-  margin-right: 0;
-  vertical-align: middle;
+input:disabled:hover {
+  filter: none;
 }
 
 #config_homepage .noicon {
@@ -1419,12 +1205,6 @@ input {
   margin: 3px 5px 3px 0;
 }
 
-input[type=radio], input[type=checkbox] {
-  margin: 6px;
-  vertical-align: sub;
-  background: none;
-}
-
 label {
   cursor: pointer;
 }
@@ -1450,7 +1230,7 @@ input[type="file"] {
 
 input[type=text], input[type=password] {
   margin: 3px 5px 3px 5px;
-  padding: 4px;
+  padding: 5px 7px;
   min-width: 120px;
   vertical-align: middle;
   color: #5e626e;
@@ -1517,24 +1297,10 @@ input[type=submit], input[type=reset], button, .optbox {
   cursor: pointer;
 }
 
-/* accessibility tweak - colors rather than focus rings where possible */
-
-.optbox:hover, .optbox:focus {
-  border: 0;
-  outline: none;
-  filter: drop-shadow(0 0 2px #89f);
-}
-
-.optbox:disabled:hover, input:disabled:hover {
-  filter: none;
-}
-
 button::-moz-focus-inner, input::-moz-focus-inner {
   outline: none;
   border: none;
 }
-
-/* end accessibility */
 
 /* confignet tidyup */
 
@@ -1604,7 +1370,7 @@ button:hover, input[type=submit]:hover, input[type=reset]:hover, button:focus, i
 button:active, input[type=submit]:active, input[type=reset]:active {
   color: #555;
   border: 1px solid #999;
-  box-shadow: var(--highlight), inset 3px 3px 3px 1px #555;
+  box-shadow: var(--btn_shadow_active);
   background-color: #ddd;
   background-blend-mode: luminosity;
 }
@@ -1844,8 +1610,7 @@ input.reload[value$="restart"], button.reload[value$="restart"] {
   background: var(--restart) no-repeat 8px center / 12px, var(--btn) !important;
 }
 
-input.reload[value$="restart"]:hover, button.reload[value$="restart"]:hover,
-input.reload[value$="restart"]:focus, button.reload[value$="restart"]:focus {
+input.reload[value$="restart"]:hover, input.reload[value$="restart"]:focus {
   background: var(--restart_hover) no-repeat 8px center / 12px, var(--btn_hover) !important;
 }
 
@@ -1854,9 +1619,7 @@ input.reload[value^="Update"], button.reload[value^="Update"] {
   background: var(--refresh) no-repeat 8px center / 14px, var(--btn);
 }
 
-input.reload[value^="Update"]:hover, button.reload[value^="Update"]:hover,
-input.reload[value^="Update"]:focus, button.reload[value^="Update"]:focus,
-input.reload[value^="Update"]:active, button.reload[value^="Update"]:active {
+input.reload[value^="Update"]:hover, input.reload[value^="Update"]:focus, input.reload[value^="Update"]:active {
   background: var(--refresh_hover) no-repeat 8px center / 14px, var(--btn_hover);
 }
 
@@ -1869,13 +1632,13 @@ input.reload[value^="Update"]:active, button.reload[value^="Update"]:active {
   background: var(--recycle) no-repeat 8px center / 15px, var(--btn_hover) !important;
 }
 
-button.stop {
+input.stop {
   padding: 5px 8px 5px 23px;
   background: var(--shutdown) no-repeat 8px center, var(--btn);
   background-size: 12px, 100% !important;
 }
 
-button.stop:hover, button.stop:focus, button.stop:active {
+input.stop:hover, button.stop:focus, input.stop:active {
   background: var(--shutdown_hover) no-repeat 8px center, var(--btn_hover);
 }
 
@@ -1884,8 +1647,7 @@ button.search {
   background: var(--search) no-repeat 7px 6px / 14px, var(--btn);
 }
 
-button.search:hover,
-button.search:focus {
+button.search:hover, button.search:focus {
   background: var(--search) no-repeat 7px 6px / 14px, var(--btn_hover);
 }
 
@@ -2020,7 +1782,7 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 
 .routersummary .reload:active, .routersummary .stop:active, .routersummary .download:active {
   border: 1px solid #999 !important;
-  box-shadow: var(--highlight), inset 3px 3px 3px 1px #555;
+  box-shadow: var(--btn_shadow_active);
 }
 
 .routersummary .stop {
@@ -2100,7 +1862,7 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
   padding: 3px 0;
   font-size: 10pt;
   border: none;
-  border-bottom: 1px solid var(--soft_border);
+  border-bottom: 1px solid var(--border_soft);
   background: none;
 }
 
@@ -2142,14 +1904,18 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
   border: 1px solid var(--border);
   border-radius: 2px;
   box-shadow: inset 1px 1px 1px #ddd;
-  background: #fafbff;
+  background: var(--bg2);
 }
 
-.main textarea:focus {
+.main textarea:focus, .main .tabletextarea textarea:focus {
   color: var(--ink);
-  box-shadow: inset 0 0 0 1px #89f;
+  box-shadow: inset 0 0 0 1px var(--active) !important;
   background: var(--bg);
   outline: none;
+}
+
+.main .tabletextarea textarea:focus {
+  border-radius: 0 !important;
 }
 
 .main h2 {
@@ -2182,7 +1948,7 @@ div.welcome {
 
 .main#dns, .main#webmail, .main#torrents {
   padding: 0 !important;
-  min-width: 570px;
+  min-width: 606px;
 }
 
 .main#dns {
@@ -2233,7 +1999,7 @@ div.news {
   border: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
   border-right: 1px solid var(--border);
-  background: var(--th);
+  background: var(--bg);
 }
 
 /* convert the list entry to our title */
@@ -2421,7 +2187,7 @@ div[id^="config"] .tab a {
 }
 
 .tab:active a {
-  color: #fff !important;
+  color: var(--bg) !important;
 }
 
 .tab2 {
@@ -2430,7 +2196,7 @@ div[id^="config"] .tab a {
   vertical-align: top;
   color: #565799;
   text-shadow: 0 1px 1px var(--bg);
-  box-shadow: var(--highlight), inset 0 0 0 2px #bfc0ff, inset 3px 3px 3px #aaabcc;
+  box-shadow: var(--btn_shadow_active);
   background: linear-gradient(to bottom, #eaebff, #f2f3ff);
 }
 
@@ -2452,6 +2218,10 @@ div.configure table {
 
 table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
   margin-bottom: -5px;
+}
+
+#floodfillconfig, #joinfamily {
+  margin-bottom: 0;
 }
 
 #config_homepage td {
@@ -2510,8 +2280,8 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 .configtable#sidebarconf td, .configtable#sidebarconf tr {
   padding-top: 4px;
   padding-bottom: 4px;
-  border-top: 1px inset #ddf !important;
-  border-bottom: 1px inset #ddf !important;
+  border-top: 1px inset var(--bg4) !important;
+  border-bottom: 1px inset var(--bg4) !important;
 }
 
 #joinfamily, #exportfamily{
@@ -2539,7 +2309,7 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 }
 
 #peerdefs tr {
-  border-top: 1px solid var(--soft_border);;
+  border-top: 1px solid var(--border_soft);;
 }
 
 #bandwidthconfig td:first-child {
@@ -2636,7 +2406,7 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 
 #profilelist td[colspan="10"], #profilelist tr td[colspan="10"]:hover {
   padding: 1px !important;
-  background: var(--soft_border);
+  background: var(--border_soft);
 }
 
 #profilelist td[colspan="10"]::after {
@@ -2868,7 +2638,7 @@ tr:hover th {
   margin: 15px 0 5px;
   padding: 5px 10px 5px 5px;
   border: 1px solid var(--border);
-  background: var(--bg2);
+  background: var(--bg3);
   columns: auto 328px;
   column-gap: 10px;
 }
@@ -2900,7 +2670,7 @@ ul#banlist + h3.tabletitle {
   display: table;
   line-height: 1.5;
   list-style: none;
-  box-shadow: 0 0 0 1px var(--soft_border), 0 0 1px 1px #ddd;
+  box-shadow: 0 0 0 1px var(--border_soft), 0 0 1px 1px #ddd;
   background: #f9f9ff;
   break-inside: avoid;
   page-break-inside: avoid;
@@ -2921,8 +2691,8 @@ ul#banlist + h3.tabletitle {
   top: 0;
   right: 0;
   line-height: 0;
-  border-left: 1px solid var(--soft_border);
-  border-bottom: 1px solid var(--soft_border);
+  border-left: 1px solid var(--border_soft);
+  border-bottom: 1px solid var(--border_soft);
   filter: none;
 }
 
@@ -2938,7 +2708,7 @@ ul#banlist + h3.tabletitle {
 #banlist li hr {
   margin: 2px 30px 1px 0;
   height: 1px;
-  background: #ddf;
+  background: var(--bg4);
 }
 
 /* /configpeers banlist */
@@ -2964,8 +2734,8 @@ ul#banlist + h3.tabletitle {
   width: 50%;
 }
 
-#bannedips table tr {
-  border-top: 1px solid #ddf;
+#bannedips table tr td {
+  border-top: 1px solid var(--border_soft);
 }
 
 #bannedips table td {
@@ -3018,7 +2788,6 @@ ul#banlist + h3.tabletitle {
 
 a[href^="configpeer?peer"] {
   font-size: 0;
-  filter: drop-shadow(0 0 1px #777);
 }
 
 a[href^="configpeer?peer"]::after {
@@ -3034,16 +2803,11 @@ a[href^="configpeer?peer"]:hover::after {
   background: var(--edit_hover) no-repeat 2px center / 11px;
 }
 
-a[href^="configpeer?peer"]:hover {
-  filter: drop-shadow(0 0 1px var(--hover));
-}
-
 pre#activetransports {
-  border: 1px solid var(--border);
-  padding: 15px 15px 0;
   margin: -11px 0 0;
-  width: 95%;
+  padding: 15px 15px 0;
   width: calc(100% - 32px);
+  border: 1px solid var(--border);
   background: var(--bg);
 }
 
@@ -3054,14 +2818,14 @@ pre#activetransports {
 }
 
 #view_profile h2 {
-  text-transform: none;
-  line-height: 1.2;
   margin-bottom: -1px !important;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  letter-spacing: 0;
+  line-height: 1.2;
   word-spacing: 0;
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 #pluginconfig {
@@ -3087,13 +2851,13 @@ pre#activetransports {
 
 #pluginconfig td:first-child label {
   margin-left: 6px;
-  padding: 2px 5px 2px 20px;
+  padding: 2px 5px 2px 21px;
   min-width: 100px;
   display: inline-block;
   text-align: left;
   border-radius: 2px 15px 15px 2px;
-  box-shadow: 0 0 0 1px var(--border);
-  background: var(--plugin) no-repeat 3px center / 14px, linear-gradient(to bottom, #f8f8ff, #e2e2ff);
+  box-shadow: 0 0 0 1px var(--border_soft);
+  background: var(--plugin) no-repeat 4px center / 14px, var(--btn);
   background-blend-mode: luminosity;
 }
 
@@ -3169,7 +2933,7 @@ div.configure h2:first-child {
 #floodfills tr, #netdboverview tr, .netdbentry tr, #leasesetdebug tr, #leasesetsummary tr, .leaseset tr, #tunnel_defs tr,
 .sybil_routerinfo tr, #enviro tr, #routerinformation tr, #schedjobs tr, #jobstats tr, #eventlog tr, .tunneldisplay tr,
 #udpconnections tr, #ntcpconnections tr, #tunnelPeerCount tr {
-  border-top: 1px solid var(--soft_border);
+  border-top: 1px solid var(--border_soft);
 }
 
 #config_stats tr:not(.tablefooter) td:first-child::after {
@@ -3195,7 +2959,7 @@ div.configure h2:first-child {
 
 #sidebarconf tr:last-child td, #sidebarconf tr:last-child:hover td {
   border-top: 1px solid var(--border);
-  background: var(--bg2);
+  background: var(--bg3);
 }
 
 #sidebarconf select {
@@ -3489,13 +3253,13 @@ h3#iptransport a:not(old), h3#advancedconfig a:not(old), #reseedsetup a:not(old)
 h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after,
 #browseronstart .h3navlinks a::after, #servicedebug .h3navlinks a::after {
   margin: -6px -10px -3px 0;
-  padding: 7px 0 1px 10px;
+  padding: 8px 0 2px 10px;
   display: inline-block;
   vertical-align: bottom;
-  height: 22px !important;
-  width: 22px;
+  height: 19px !important;
+  width: 19px;
   border-left: 1px solid var(--border);
-  background: url(/themes/console/images/svg/helplink.svg) no-repeat center center / 22px;
+  background: url(/themes/console/images/svg/helplink.svg) no-repeat center center / 19px;
   content: "";
 }
 
@@ -3614,7 +3378,7 @@ h2, h3, h4, th, b {
 
 h2, h3, h4#updateplugins {
   box-shadow: var(--highlight);
-  background: var(--header);
+  background: var(--bg);
 }
 
 h2 {
@@ -3643,9 +3407,9 @@ table hr {
   margin: -5px -5px -10px -5px !important;
   padding: 0;
   height: 1px;
-  color: #89f;
-  border: 0 solid #89f;
-  background: #89f;
+  color: var(--hr);
+  border: 0 solid var(--hr);
+  background: var(--hr);
 }
 
 table tt {
@@ -3667,8 +3431,9 @@ th.th_title {
 }
 
 .configtable th {
-  padding: 5px 10px;
+  padding: 6px 10px;
   line-height: normal;
+  pointer-events: none;
 }
 
 .smallhead th {
@@ -3774,18 +3539,13 @@ td.tabletextarea {
   box-shadow: none !important;
 }
 
-.main .tabletextarea textarea:focus {
-  border-radius: 0 !important;
-  box-shadow: inset 0 0 0 1px #89f !important;
-}
-
 tr:nth-child(even), #pluginconfig table tr:nth-child(even) td, #profile_defs tr:nth-child(odd) {
   background: var(--bg);
 }
 
 tr:nth-child(odd), #pluginconfig table tr:nth-child(odd) td, .main#profiles ul#banlist,
 #profile_defs table tr:nth-child(odd), #profile_defs table tr:nth-child(even) {
-  background: #fafbff;
+  background: var(--bg2);
 }
 
 .configtable th {
@@ -3805,13 +3565,12 @@ h4.app, h4.app2 {
   border-left: none;
   border-right: none;
   box-shadow: var(--highlight);
-  background: var(--header);
 }
 
 h4.app {
   margin-top: -5px;
   padding-left: 32px;
-  background: url(images/favicon.svg) no-repeat 8px center, var(--header);
+  background: url(images/favicon.svg) no-repeat 8px center, var(--bg);
   background-size: 16px, 100%;
   background-blend-mode: luminosity, normal;
 }
@@ -3820,7 +3579,7 @@ h4.app2 {
   margin-top: 5px !important;
   padding-left: 32px;
   clear: left;
-  background: var(--planet) no-repeat 8px center / 16px, var(--header);
+  background: var(--planet) no-repeat 8px center / 16px, var(--bg);
   background-blend-mode: luminosity, normal;
 }
 
@@ -3928,13 +3687,13 @@ div.app:hover a, .app:hover .applabel a {
 }
 
 .app:active .applabel {
-  color: #fff !important;
+  color: var(--bg) !important;
   box-shadow: var(--highlight) !important;
   background: var(--hover) !important;
 }
 
 .app:active .applabel a, .app:active .applabel a:visited {
-  color: #fff !important;
+  color: var(--bg) !important;
 }
 
 div.app:active img {
@@ -3985,18 +3744,18 @@ div.search {
 }
 
 table.search {
-  background: #fafbff;
   margin-left: auto;
   margin-right: auto;
   width: auto;
   border: 1px solid var(--border);
   border-collapse: separate;
   border-radius: 0 0 2px 2px;
+  background: var(--bg);
 }
 
 .search td {
   padding: 1px 0;
-  background: #fafbff;
+  background: var(--bg);
 }
 
 .search td:nth-child(2) {
@@ -4225,11 +3984,11 @@ h2#jobrunners {
   margin-top: -21px;
   padding: 15px 50px;
   border: 1px solid var(--border);
-  background: var(--bg2);
+  background: var(--bg3);
   column-count: 2;
   column-width: 400px;
   column-gap: 100px;
-  column-rule: 1px dotted var(--soft_border);
+  column-rule: 1px dotted var(--border_soft);
 }
 
 .joblog ol:empty + h3 {
@@ -4244,7 +4003,7 @@ h2#jobrunners {
   margin-left: -15px;
   margin-bottom: 5px;
   min-width: 400px;
-  border-bottom: 1px dotted var(--soft_border);
+  border-bottom: 1px dotted var(--border_soft);
   -webkit-column-break-inside: avoid;
   break-inside: avoid;
   page-break-inside: avoid;
@@ -4652,13 +4411,13 @@ h3#graphdisplay {
   padding: 1px;
   max-width: 95%;
   max-width: calc(100% - 50px);
-  border: 1px solid var(--soft_border);
+  border: 1px solid var(--border_soft);
   background: var(--bg);
 }
 
 .graphspanel a img {
   vertical-align: top;
-  border: 1px solid var(--soft_border);
+  border: 1px solid var(--border_soft);
   background: var(--bg);
   opacity: .9;
 }
@@ -4822,7 +4581,20 @@ h3#graphinfo {
   background: var(--bg);
 }
 
-#graphopts a {
+#newsDisplay {
+  color: transparent;
+}
+
+.messages #newsdisplay {
+  margin: -4px 5px 0 0;
+  float: right !important;
+}
+
+#newsDisplay a:first-child {
+  margin-right: -5px;
+}
+
+#graphopts a, #newsDisplay a, #routerinformation tr:nth-child(n+2) a:not(#revision) {
   margin: 3px -2px;
   padding: 1px 10px;
   display: inline-block;
@@ -4830,22 +4602,26 @@ h3#graphinfo {
   border: 1px solid var(--border);
   border-radius: 15px;
   box-shadow: 0 0 0 1px rgba(220,220,255,.6);
-  background: rgba(248,248,255,.3);
+  background: var(--bg);
 }
 
 #graphopts a:empty {
   display: none;
 }
 
-#graphopts a:hover, #graphopts a:focus {
+#graphopts a:hover, #graphopts a:focus, #newsDisplay a:hover, #newsDisplay a:focus,
+#routerinformation tr:nth-child(n+2) a:not(#revision):hover, #routerinformation tr:nth-child(n+2) a:not(#revision):focus {
+  color: #557 !important;
   border: 1px solid #7778bf;
-  box-shadow: 0 0 0 1px rgba(220,220,255,.6), inset 0 0 0 1px #d8d4ff;
-  background: linear-gradient(to bottom, #fff 50%, #d8d4ff 50%);
+  box-shadow: 0 0 0 1px rgba(220,220,255,.6), var(--highlight);
+  background: linear-gradient(to bottom, var(--bg)50%, var(--bg4) 50%);
 }
 
-#graphopts a:active {
-  box-shadow: inset 3px 3px 3px rgba(41,61,95,.8);
-  color: #557 !important;
+#graphopts a:active, #newsDisplay a:active,
+#routerinformation tr:nth-child(n+2) a:active {
+  color: var(--ink_light) !important;
+  box-shadow: var(--btn_shadow_active);
+  background: var(--btn_active);
 }
 
 /* end single view */
@@ -4962,6 +4738,16 @@ img[src^="/flags"], img.unknownflag {
   background: var(--th);
 }
 
+.themelabel {
+  margin: -25px -4px 0;
+  padding: 3px 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-top: 1px solid var(--border);
+  background: var(--header);
+}
+
 .themechoice:hover, .themechoice:hover > img ~ .themelabel {
   background: var(--bg);
 }
@@ -4974,6 +4760,11 @@ img[src^="/flags"], img.unknownflag {
   border-top: 1px solid var(--hover);
 }
 
+.themechoice .optbox:hover + img ~ .themelabel {
+  color: var(--hover);
+  font-weight: 700;
+}
+
 .themechoice:hover .optbox:not(:checked) + img {
   filter: drop-shadow(0 0 1px var(--hover));
 }
@@ -4984,9 +4775,6 @@ img[src^="/flags"], img.unknownflag {
   padding: 2px;
   height: 80px;
   width: 110px;
-  position: absolute;
-  z-index: 999;
-  opacity: 0;
 }
 
 .themechoice .optbox + img {
@@ -5000,41 +4788,39 @@ img[src^="/flags"], img.unknownflag {
   margin-bottom: 31px !important;
 }
 
-.themechoice .optbox:hover + img ~ div.themelabel {
-  color: var(--hover);
-  font-weight: 700;
-}
-
 .themechoice:active .themelabel {
   background: var(--hover) !important;
-  color: #fff !important;
+  color: var(--bg) !important;
   box-shadow: var(--highlight);
 }
 
-.themechoice .optbox:checked + img ~ div.themelabel {
-  background: #ddf;
-  color: #338;
+.themechoice .optbox:checked + img ~ .themelabel {
+  padding: 4px 2px 2px !important;
+  font-size: 95% !important;
   font-weight: 700;
+  color: var(--selected);
+  box-shadow: var(--btn_shadow_active);
+  background: var(--bg3);
 }
 
 .themechoice .optbox:checked + img, .themechoice .optbox:checked + img {
   transform: scale(.9);
 }
 
-.themechoice .optbox:focus + img ~ div.themelabel {
+.themechoice .optbox:focus + img ~ .themelabel {
   color: var(--hover) !important;
-  background: linear-gradient(to right, #eef, #fff, #eef);
+  background: var(--label_focus);
 }
 
-.themechoice .optbox:active + img ~ div.themelabel {
-  color: #fff !important;
+.themechoice .optbox:active + img ~ .themelabel {
+  color: var(--bg) !important;
 }
 
 .themechoice:active .optbox:checked + img ~ .themelabel {
   font-weight: 700;
   color: var(--hover) !important;
   box-shadow: none !important;
-  background: linear-gradient(to right, #eef, #fff, #eef) !important;
+  background: var(--label_focus) !important;
 }
 
 #themeoptions {
@@ -5044,17 +4830,17 @@ img[src^="/flags"], img.unknownflag {
   top: 4px;
   clear: both;
   border-top: 1px solid var(--border);
-  background: rgba(230, 230, 255, .5);
-}
-
-#themeoptions br {
-  display: none;
+  background: var(--bg3);
 }
 
 #themeoptions label {
   margin: 4px 10px 4px 0;
   display: inline-block;
   white-space: nowrap;
+}
+
+#themeoptions br {
+  display: none;
 }
 
 p#helptranslate {
@@ -5069,17 +4855,6 @@ p#helptranslate {
 
 #themeoptions input {
   margin: 2px 8px 2px 6px;
-  vertical-align: sub;
-}
-
-.themelabel {
-  margin: -25px -4px 0;
-  padding: 3px 2px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  border-top: 1px solid var(--border);
-  background: var(--header);
 }
 
 #themesettings {
@@ -5087,13 +4862,13 @@ p#helptranslate {
   padding: 4px 5px 0;
   clear: both;
   border: 1px solid var(--border);
-  background: var(--bg2);
+  background: var(--bg3);
 }
 
 #langsettings {
   padding: 4px 5px 0;
   border: 1px solid var(--border);
-  background: var(--bg2);
+  background: var(--bg3);
 }
 
 #themesettings hr {
@@ -5122,12 +4897,29 @@ p#helptranslate {
 }
 
 .langselect .optbox {
+  margin: -4px 0 8px -54px;
   width: 122px;
   height: 66px;
-  margin: -4px 0 8px -54px;
-  opacity: 0;
-  z-index: 999;
   position: relative;
+  z-index: 999;
+  opacity: 0;
+}
+
+/* less hacky configui options */
+.themechoice .optbox, .langselect .optbox, .themechoice .optbox:checked, .langselect .optbox:checked {
+  margin: 0;
+  position: absolute;
+  z-index: -999;
+}
+
+.themechoice, .langselect {
+  width: 120px;
+  float: left;
+  text-align: center;
+}
+
+.langselect img {
+  margin: 0 0 35px !important;
 }
 
 .langselect:hover > input + img {
@@ -5135,8 +4927,6 @@ p#helptranslate {
 }
 
 .langselect img[src^="/flags"] {
-  margin-left: -72px;
-  margin-bottom: 42px;
   width: 40px !important;
   height: auto !important;
   position: relative;
@@ -5150,41 +4940,43 @@ p#helptranslate {
 }
 
 .langselect input[name="lang"]:checked + img {
-  transform: scale(1.1);
-  border: 1px solid #338;
+  transform: scale(.8) !important;
 }
 
 .langselect:hover > input[name="lang"] + img + .ui_lang {
   font-weight: 700;
   color: var(--hover);
   border-top: 1px solid var(--hover);
-  background: var(--bg) !important;
-}
-
-.langselect input[name="lang"]:checked + img + .ui_lang {
-  margin: -32px -4px 0;
-  z-index: 2;
-  font-weight: 700;
-  color: #338;
-  background: #ddf !important;
+  background: var(--bg);
 }
 
 .langselect:active .ui_lang, .langselect:active > input[name="lang"] + img + .ui_lang {
-  background: var(--hover) !important;
-  color: #fff !important;
+  background: var(--hover);
+  color: var(--bg) !important;
   box-shadow: var(--highlight);
 }
 
 .langselect:active input[name="lang"]:checked + img + .ui_lang,
 .langselect input[name="lang"]:focus + img + .ui_lang {
   color: var(--hover) !important;
-  box-shadow: none !important;
-  background: linear-gradient(to right, #eef, #fff, #eef) !important;
+  box-shadow: none;
+  background: var(--label_focus);
 }
 
 .langselect input[name="lang"]:active + img + .ui_lang {
-  color: #fff !important;
-  background: var(--hover) !important;
+  color: var(--bg);
+  background: var(--hover);
+}
+
+.langselect input[name="lang"]:checked + img + .ui_lang,
+.langselect input[name="lang"]:focus:checked + img + .ui_lang {
+  padding: 4px 2px 2px !important;
+  z-index: 2;
+  font-size: 95% !important;
+  font-weight: 700;
+  color: var(--selected);
+  box-shadow: var(--btn_shadow_active);
+  background: var(--label_focus);
 }
 
 .langselect + br {
@@ -5194,6 +4986,30 @@ p#helptranslate {
 .langselect br {
   display: block;
 }
+
+/* large flags */
+
+.langselect img {
+  width: 40px;
+  height: 40px;
+  border: none !important;
+  opacity: .9 !important;
+  transform: none !important;
+}
+
+.langselect input[name="lang"]:checked + img, .langselect input[name="lang"]:checked + #config_ui img[src="/flags.jsp?c=a1"] {
+  border: none !important;
+  opacity: 1 !important;
+  transform: scale(.9);
+}
+
+.langselect input:hover + img, .langselect input:checked + img {
+  border: none !important;
+  transition: none !important;
+  filter: drop-shadow(0 0 1px var(--hover)) drop-shadow(0 0 2px var(--hover));
+}
+
+/* end large flags */
 
 .ui_lang {
   margin: -32px -4px 0;
@@ -5216,38 +5032,6 @@ p#helptranslate {
   clear: both;
   text-align: right;
 }
-
-/* large flags */
-
-.langselect img {
-  margin-top: 2px !important;
-  margin-bottom: 34px !important;
-  margin-left: -70px !important;
-  width: 40px;
-  height: 40px;
-  border: none !important;
-  opacity: .9 !important;
-  transform: none !important;
-}
-
-.langselect input[name="lang"]:checked + img, .langselect input[name="lang"]:checked + #config_ui img[src="/flags.jsp?c=a1"] {
-  margin-top: 6px !important;
-  margin-bottom: 38px !important;
-  width: 32px !important;
-  height: 32px !important;
-  border: none !important;
-  opacity: 1 !important;
-  transform: none !important;
-}
-
-.langselect input:hover + img {
-  box-shadow: none !important;
-  border: none !important;
-  transition: none !important;
-  filter: drop-shadow(0 0 2px var(--hover));
-}
-
-/* end large flags */
 
 /* configui password*/
 
@@ -5346,7 +5130,7 @@ td#pw_adduser input {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: #fff !important;
+  color: var(--bg) !important;
   border-radius: 2px;
   background: #89b;
 }
@@ -5416,7 +5200,7 @@ td#pw_adduser input {
   width: 200px;
   white-space: nowrap;
   text-align: right;
-  border-right: 1px solid var(--soft_border);
+  border-right: 1px solid var(--border_soft);
 }
 
 #leasesetdebug td:nth-child(even) {
@@ -5471,7 +5255,7 @@ td#pw_adduser input {
   text-align: center;
   font-weight: 700;
   border: 1px solid var(--border);
-  background: var(--bg2);
+  background: var(--bg3);
 }
 
 .sybil_routerinfo {
@@ -5522,7 +5306,7 @@ td#pw_adduser input {
 #sybilnav {
   margin: -16px -16px 15px;
   padding: 5px 5px 2px;
-  background: var(--bg2);
+  background: var(--bg3);
   columns: auto 280px;
   column-gap: 3px;
 }
@@ -5538,12 +5322,11 @@ td#pw_adduser input {
 
 #sybilnav li, #sybilnav li:first-child {
   margin: 0 0 3px !important;
-  padding: 3px;
+  padding: 3px 0;
   width: calc(100% - 4px);
   list-style: none;
-  border: 1px solid #ddf;
-  border-bottom: 2px solid #ccf;
-  background: var(--bg);
+  border: 1px solid var(--bg4);
+  border-bottom: 2px solid var(--bg4);
   background: var(--badge);
   border-radius: 2px 2px 0 0;
   box-sizing: border-box;
@@ -5569,14 +5352,22 @@ td#pw_adduser input {
 
 #sybilnav li::before {
   padding: 0 5px;
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   display: inline-block;
   vertical-align: middle;
   line-height: .5;
   font-size: 16pt;
-  background: var(--eye) no-repeat center center / 16px;
+  background: var(--eye) no-repeat center center / 14px;
   content: "";
+}
+
+#sybilnav li:hover::before {
+  background: var(--eye_hover) no-repeat center center / 14px;
+}
+
+#sybilnav li:active {
+  box-shadow: var(--btn_shadow_active);
 }
 
 p.sybil_info, p.family, p.threatpoints, p.hashdist, p.notfound, p#sybil_totals {
@@ -5585,7 +5376,7 @@ p.sybil_info, p.family, p.threatpoints, p.hashdist, p.notfound, p#sybil_totals {
   text-align: left;
   font-weight: 700;
   border: 1px solid var(--border);
-  background: var(--eye) no-repeat 8px center / 16px, linear-gradient(to right, #fff 40%, #dde1ff);
+  background: var(--eye) no-repeat 8px center / 16px, linear-gradient(to right, var(--bg)40%, var(--bg3));
 }
 
 p#sybil_totals {
@@ -5613,7 +5404,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   margin: -4px 0 10px !important;
   padding: 6px 15px;
   border: 1px solid var(--border);
-  background: var(--bg2);
+  background: var(--bg3);
 }
 
 #netdb .threatpoints + ul li {
@@ -5638,6 +5429,10 @@ p:empty { /* empty paragraph nuke */
 
 #netdblookup {
   margin-bottom: -8px;
+}
+
+#netdblookup tr:nth-child(n+2) {
+  border-top: 1px solid var(--border_soft);
 }
 
 #netdblookup th {
@@ -5775,7 +5570,7 @@ p:empty { /* empty paragraph nuke */
   padding: 0 4px;
   display: inline-block;
   border-radius: 2px;
-  background: #ddf;
+  background: var(--bg4);
 }
 
 .netdb_leases .tunnel_peer {
@@ -5833,7 +5628,7 @@ h3.stats {
   margin-bottom: -27px !important;
   padding: 0 10px 0 0;
   border: 1px solid var(--border);
-  background: var(--bg2);
+  background: var(--bg3);
 }
 
 .statlist:last-of-type {
@@ -5910,7 +5705,7 @@ h3.stats {
 .statlist li li:last-child {
   padding-bottom: 5px;
   padding-left: 5px;
-  border-bottom: 1px solid var(--soft_border);
+  border-bottom: 1px solid var(--border_soft);
 }
 
 .statlist li li.noevents {
@@ -5981,6 +5776,8 @@ h3.stats {
 
 #netdboverview th {
   font-size: 10pt;
+  color: var(--ink_light);
+  pointer-events: none;
 }
 
 #netdboverview table th {
@@ -5995,8 +5792,8 @@ h3.stats {
 }
 
 #netdboverview table td:not(:first-child):not(:last-child) {
-  border-left: 1px solid var(--soft_border);
-  border-right: 1px solid var(--soft_border);
+  border-left: 1px solid var(--border_soft);
+  border-right: 1px solid var(--border_soft);
 }
 
 #netdboverview table tr:hover {
@@ -6399,7 +6196,7 @@ p#fullhistory {
 #routerinfo td {
   padding: 8px 4px;
   width: 25%;
-  border-bottom: 1px solid var(--soft_border) !important;
+  border-bottom: 1px solid var(--border_soft) !important;
 }
 
 #routerinfo td:first-child, #routerinfo td:nth-child(3) {
@@ -6409,7 +6206,7 @@ p#fullhistory {
 
 #routerinfo td:nth-child(2):not([colspan]) {
   white-space: nowrap;
-  border-right: 1px solid var(--soft_border);
+  border-right: 1px solid var(--border_soft);
 }
 
 #certs .infohelp {
@@ -6466,7 +6263,7 @@ p#fullhistory {
 #configinfo td {
   text-align: justify;
   padding: 5px 15px;
-  background: var(--bg2);
+  background: var(--bg3);
   background: rgba(230,230,255,.5);
 }
 
@@ -6615,6 +6412,7 @@ h3#servicedebug + p.infohelp {
 
 h3#browseronstart + p.infohelp {
   padding: 15px 15px 15px 50px;
+  position: relative;
   background: var(--bg) var(--firefox) no-repeat 12px center / 28px;
 }
 
@@ -6697,8 +6495,8 @@ p#enablefullstats, p#gatherstats {
   padding: 0 2px 4px 22px !important;
   width: 100% !important;
   width: calc(100% - 24px) !important;
-  border-top: 1px solid var(--soft_border);
-  border-bottom: 1px solid var(--soft_border);
+  border-top: 1px solid var(--border_soft);
+  border-bottom: 1px solid var(--border_soft);
   background: transparent;
   opacity: .85;
 }
@@ -6929,7 +6727,7 @@ tt a, .cells tt {
   min-width: 64px;
   display: inline-block;
   box-shadow: inset var(--border_badge), inset 0 0 0 2px var(--bg);
-  background: #ddf;
+  background: var(--bg4);
   background: var(--th);
 }
 
@@ -7033,6 +6831,14 @@ span.b32 {
   box-shadow: 0 0 0 1px var(--border), var(--highlight);
   background: var(--th);
   opacity: .8;
+}
+
+span.b32:hover {
+ opacity: 1;
+}
+
+span.b32:active {
+  box-shadow: 0 0 0 1px var(--border), var(--btn_shadow_active);
 }
 
 #tunnels h3 a img {
@@ -7230,8 +7036,7 @@ th code {
 }
 
 .sybil_routerinfo b.netdb_transport {
-  margin-left: -13px;
-  margin-right: 0;
+  margin: 2px 0 2px -13px;
 }
 
 .sybil_routerinfo td:first-child, .netdbentry td:first-child {
@@ -7513,7 +7318,7 @@ h2#debug_portmapper {
   border: 1px solid var(--border);
   border-left: 3px solid var(--border);
   border-radius: 0 2px 2px 0;
-  background: linear-gradient(to right, rgba(255,255,255,.3), rgba(255,255,255,0)), linear-gradient(to bottom, #fff 50%, #eaeaff 50%);
+  background: linear-gradient(to right, rgba(255,255,255,.3), rgba(255,255,255,0)), linear-gradient(to bottom, var(--bg)50%, #eaeaff 50%);
 }
 
 .bucket {
@@ -7618,7 +7423,7 @@ h2#debug_portmapper {
 }
 
 #jardump tr td, #config_logging tr {
-  border-top: 1px solid var(--soft_border) !important;
+  border-top: 1px solid var(--border_soft) !important;
 }
 
 #jardump td {
@@ -7665,11 +7470,11 @@ h2#debug_portmapper {
 }
 
 .subheading.pluginfiles {
-  border-top: 1px solid var(--soft_border);
+  border-top: 1px solid var(--border_soft);
 }
 
 #jardump td {
-  border-left: 1px solid var(--soft_border) !important;
+  border-left: 1px solid var(--border_soft) !important;
   vertical-align: middle;
   text-align: center;
 }
@@ -7700,7 +7505,7 @@ h2#debug_portmapper {
 
 #jardump hr {
   margin: 2px 0 !important;
-  background: var(--soft_border);
+  background: var(--border_soft);
 }
 
 .unsignedmod:empty {
@@ -8070,7 +7875,7 @@ h3#totaljobstats {
 
 table[id*="connections"] td, #floodfills td,  #profilelist td, #jobstats td, .main#tunnels td {
   padding: 3px;
-  border-right: 1px solid var(--soft_border);
+  border-right: 1px solid var(--border_soft);
 }
 
 .main#netdb #netdboverview, #netdblookup {
@@ -8226,7 +8031,7 @@ tt a, .cells tt, #profilelist tt {
 }
 
 h1 {
-  padding: 19px 20px 18px 56px !important;
+  padding: 18px 20px 18px 56px !important;
   font-size: 19pt;
 }
 
@@ -8245,11 +8050,6 @@ h1 {
   transform: none;
 }
 
-#error500 .routersummary img[src$="i2plogo.png"] {
-  margin: -2px 0 -5px -2px;
-  width: 232px;
-}
-
 .routersummary table[id^="sb_"], .sb_newsheadings table {
   width: 245px !important;
   min-width: 245px !important;
@@ -8265,7 +8065,7 @@ h1 {
 }
 
 .routersummary h3 {
-  padding: 4.5px 0 !important;
+  padding: 4px 0 3px !important;
 }
 
 #sb_internals a, #sb_services a, #sb_advanced a, #sb_help a {
@@ -8381,10 +8181,6 @@ div.news {
   margin-left: 251px !important;
 }
 
-#error500 .sorry {
-  margin-left: 252px !important;
-}
-
 .joblog h3 {
   margin-top: 8px;
 }
@@ -8483,7 +8279,7 @@ div.news {
   font-weight: 700;
   text-transform: uppercase;
   border-radius: 2px;
-  background: #ddf;
+  background: var(--bg4);
 }
 
 #wrapperlogs pre {
@@ -8547,7 +8343,7 @@ div.news {
 
 .optionlist, .optionsingle, #reseedssl {
   padding: 1px 2px;
-  border: 1px solid var(--soft_border) !important;
+  border: 1px solid var(--border_soft) !important;
   box-shadow: inset 0 0 0 2px var(--bg);
   background: var(--bg) !important;
   column-gap: 1px;
@@ -8563,7 +8359,7 @@ div.news {
  }
 
 .optiontextarea, #reseedconfig .optiontextarea {
-  box-shadow: inset 0 0 0 2px #fff !important;
+  box-shadow: inset 0 0 0 2px var(--bg) !important;
   background: #f2f2ff !important;
 }
 
@@ -8590,7 +8386,7 @@ div.news {
   vertical-align: middle;
   background: var(--bg) !important;
   transition: ease box-shadow .2s;
-  box-shadow: var(--highlight_hover), inset 0 0 0 2px #fff !important;
+  box-shadow: var(--highlight_hover), inset 0 0 0 2px var(--bg) !important;
 }
 
 #bandwidthconfig .optionsingle:hover, #reseedproxytype label:hover, #graphs .nowrap:hover {
@@ -8614,7 +8410,7 @@ b.suboption {
   display: inline-block;
   text-shadow: 0 1px 1px var(--bg);
   border-radius: 3px 3px 0 0;
-  border: 1px solid var(--soft_border);
+  border: 1px solid var(--border_soft);
   border-bottom: none;
   box-shadow: var(--highlight);
   background: #fdfdff;
@@ -8663,19 +8459,19 @@ b.suboption {
 #bandwidthconfig .optionsingle {
   margin: 8px 0 8px 3px;
   padding: 0 15px 0 40px;
-  background: #fafbff !important;
+  background: var(--bg2) !important;
 }
 
 #bandwidthconfig .bw_out {
-  background: #fafbff url(/themes/console/images/svg/outbound.svg) 10px calc(50% + 14px) no-repeat !important;
+  background: var(--bg2) url(/themes/console/images/svg/outbound.svg) 10px calc(50% + 14px) no-repeat !important;
 }
 
 #bandwidthconfig .bw_in {
-  background: #fafbff url(/themes/console/images/svg/inbound.svg) 10px calc(50% + 14px) no-repeat !important;
+  background: var(--bg2) url(/themes/console/images/svg/inbound.svg) 10px calc(50% + 14px) no-repeat !important;
 }
 
 #bandwidthconfig .bw_share {
-  background: #fafbff var(--share) 10px calc(50% + 14px) no-repeat !important;
+  background: var(--bg2) var(--share) 10px calc(50% + 14px) no-repeat !important;
 }
 
 #bandwidthconfig .bw_out, #bandwidthconfig .bw_in, #bandwidthconfig .bw_share {
@@ -8715,7 +8511,7 @@ b.suboption {
   white-space: nowrap;
   text-align: center;
   font-style: italic;
-  border-top: 1px solid #ddf;
+  border-top: 1px solid var(--bg4);
 }
 
 #config_bandwidth tr:nth-last-child(2) .infohelp b {
@@ -8736,7 +8532,7 @@ b.suboption {
 
 @media screen and (max-width: 1000px) {
 #bandwidthconfig .bw_out, #bandwidthconfig .bw_in, #bandwidthconfig .bw_share {
-  background: #fafbff !important;
+  background: var(--bg2) !important;
   padding-left: 5px;
   padding-right: 8px;
 }
@@ -8775,7 +8571,7 @@ b.suboption {
 }
 
 #netconfig .optionlist, .service_container {
-  filter: drop-shadow(0 0 1px #ddf);
+  filter: drop-shadow(0 0 1px var(--bg4));
 }
 
 #reseedconfig th.options, #i2pupdates th.options {
@@ -8788,7 +8584,7 @@ b.suboption {
   display: inline-block;
   margin: 1px 0;
   padding: 2px 5px;
-  background: #fafbff;
+  background: var(--bg2);
   line-height: 1 !important;
 }
 
@@ -9017,7 +8813,7 @@ b.suboption {
 
 #config_reseed .optionsingle {
   margin: 0 !important;
-  background: #fafbff !important;
+  background: var(--bg2) !important;
 }
 
 #config_reseed .optionsingle:hover {
@@ -9069,7 +8865,7 @@ b.suboption {
   padding: 4px 5px;
   min-width: 100px !important;
   width: calc(100% - 10px);
-  background: #fafbff !important;
+  background: var(--bg2) !important;
 }
 
 #reseed_urlselection label::before, #reseedproxytype label::before {
@@ -9085,7 +8881,7 @@ b.suboption {
 #reseedproxysslhostport.optionlist, #reseedproxysslhostport.optionlist:hover {
   margin: 0 -1px !important;
   padding: 0;
-  border: 1px solid #fff !important;
+  border: 1px solid var(--bg) !important;
   border-top: none !important;
   border-bottom: none !important;
   columns: 2 auto;
@@ -9158,16 +8954,16 @@ b.suboption {
 }
 
 #config_reseed #reseedurl {
-  background: #fafbff var(--link) no-repeat 14px center / 28px !important;
+  background: var(--bg2) var(--link) no-repeat 14px center / 28px !important;
 }
 
 #config_reseed  #reseedzip {
-  background: #fafbff var(--files) no-repeat 14px center / 28px !important;
+  background: var(--bg2) var(--files) no-repeat 14px center / 28px !important;
 }
 
 #config_reseed #reseedcreatefile {
   text-align: justify;
-  background: #fafbff var(--package) no-repeat 14px center / 28px !important;
+  background: var(--bg2) var(--package) no-repeat 14px center / 28px !important;
 }
 
 #config_reseed #reseedcreatefile:hover, #config_reseed #reseedzip:hover, #config_reseed #reseedurl:hover {
@@ -9283,17 +9079,17 @@ b.suboption {
 }
 
 #installPluginUrl, #installPluginFile {
-  background: #fafbff !important;
+  background: var(--bg2) !important;
 }
 
 #installPluginUrl td:first-child {
   padding: 15px 15px 15px 50px;
-  background: #fafbff var(--link) no-repeat 12px center / 28px !important;
+  background: var(--bg2) var(--link) no-repeat 12px center / 28px !important;
 }
 
 #installPluginFile td:first-child {
   padding: 15px 15px 15px 50px;
-  background: #fafbff var(--files) no-repeat 12px center / 28px !important;
+  background: var(--bg2) var(--files) no-repeat 12px center / 28px !important;
 }
 
 #installPluginUrl:hover td, #installPluginFile #file:hover td {
@@ -9318,12 +9114,12 @@ input[type="file"]:hover {
 
 #newfamily .optionsingle {
   padding: 5px 5px 0 45px;
-  background: #fafbff var(--tag) no-repeat 10px center / 28px !important;
+  background: var(--bg2) var(--tag) no-repeat 10px center / 28px !important;
 }
 
 #joinfamily .optionsingle {
   padding: 5px 5px 0 45px;
-  background: #fafbff var(--key) no-repeat 10px center / 28px !important;
+  background: var(--bg2) var(--key) no-repeat 10px center / 28px !important;
 }
 
 #newfamily .optionsingle:hover, #joinfamily .optionsingle:hover {
@@ -9379,6 +9175,20 @@ input[type="file"]:hover {
   text-align: left;
 }
 
+#tunnelconfig th[colspan="3"] > font {
+  color: #944;
+}
+
+#tunnelconfig th[colspan="3"] > font::before {
+  background: var(--infowarn) no-repeat left center / 16px;
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 16px;
+  vertical-align: middle;
+  opacity: .7;
+}
+
 #oldmsie {
   margin: -6px -6px -1px;
   box-shadow: inset 0 0 1px #f00;
@@ -9389,7 +9199,7 @@ input[type="file"]:hover {
 .routerid {
   display: inline-block;
   box-shadow: inset var(--border_badge), inset 0 0 0 2px var(--bg);
-  background: #ddf;
+  background: var(--bg4);
   background: var(--th);
 }
 
@@ -9425,7 +9235,7 @@ input[type="file"]:hover {
 
 #ntcpconnections tr:nth-last-child(n+2) td, #udpconnections tr:nth-last-child(n+2) td, #profilelist td, #profile_defs td, #floodfills td,
 #tunnelPeerCount td {
-  border-right: 1px solid var(--soft_border);
+  border-right: 1px solid var(--border_soft);
 }
 
 #ntcpconnections tr:nth-last-child(n+2) td::after, #udpconnections tr:nth-last-child(n+2) td::after,
@@ -9473,7 +9283,7 @@ input[type="file"]:hover {
   padding: 4px 8px;
   background: #e828ff;
   background: rgba(250,250,255,.5);
-  box-shadow: var(--highlight), 0 0 1px #ddf;
+  box-shadow: var(--highlight), 0 0 1px var(--bg4);
   border: 1px solid #bbd;
   break-inside: avoid;
   page-break-inside: avoid;
@@ -9552,7 +9362,7 @@ th.queue {
 
 #peers td.direction i {
   display: inline-block;
-  border-top: 1px solid #ddf;
+  border-top: 1px solid var(--bg4);
   border-radius: 2px;
   width: 100%;
   margin: 3px -3px -4px;
@@ -9744,6 +9554,11 @@ a.viewfullentry, #profilelist td:last-child a, a[href^="/viewprofile"], .profile
   background: var(--bg) var(--edit_hover) no-repeat center center / 12px;
 }
 
+#profilelist td:last-child a:active::after, a[href^="/viewprofile"]:active::after,
+a[href^="/configpeer?"]:active::after, .profiledump:active::after {
+  box-shadow: var(--btn_shadow_active);
+}
+
 a.viewfullentry:hover {
   filter: drop-shadow(0 0 1px var(--hover));
 }
@@ -9862,7 +9677,6 @@ a[href^="/viewprofile"] img, .profiledump img {
 
 #netdb li, #netdb li:first-child {
   margin: 1px 0;
-  padding: 0 0 2px;
   display: inline-block;
   vertical-align: middle;
 }
@@ -9951,9 +9765,10 @@ a.keysearch {
 }
 
 .netdb_transport {
-  border-radius: 2px;
-  background: #ddf;
   padding: 1px 3px;
+  display: inline-block;
+  font-size: 90%;
+  background: var(--bg4);
 }
 
 .netdb_addresses .nowrap {
@@ -9967,9 +9782,8 @@ a.keysearch {
 #netdb_ram, .netdbentry .version, .netdb_transport {
   padding: 1px 5px;
   display: inline-block;
-  border: 1px solid #bbd;
-  background: #ddf;
-  background: var(--th);
+  box-shadow: var(--border_badge);
+  background: var(--badge);
 }
 
 .netdb_tunnel {
@@ -9980,12 +9794,14 @@ a.keysearch {
   text-align: left;
 }
 
+/* radios/checkboxes */
+
 input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked,
 input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
   position: relative;
-  width: 19px !important;
-  height: 19px !important;
-  vertical-align: middle !important;
+  width: 19px;
+  height: 19px;
+  vertical-align: middle;
   box-sizing: border-box;
   border: 1px solid var(--border);
   background: #f8f8ff;
@@ -10011,22 +9827,31 @@ input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::bef
   transform: scale(1);
 }
 
-.optbox:not(:checked) {
+.optbox:not(:checked):not(:hover) {
   box-shadow: inset 2px 2px 1px rgba(204, 204, 240, .6);
+}
+
+input[type=checkbox]:checked::before,
+input[type=radio]:checked::before {
+  line-height: .8;
+  background: #67f;
+  content: "";
+}
+
+input[type=checkbox]:checked:hover::before,
+input[type=radio]:checked:hover::before,
+input[type=checkbox]:checked:focus::before,
+input[type=radio]:checked:focus::before {
+  background: var(--hover);
 }
 
 input[type=checkbox]:checked::before {
   width: 11px;
   height: 11px;
-  position: absolute;
   top: 3px;
   left: 3px;
-  line-height: .8;
   border-radius: 1px;
-  background: #67f;
-  content: "";
   transform: scale(1);
-  transition: linear all .05s;
 }
 
 input[type=radio]:checked::before {
@@ -10035,8 +9860,6 @@ input[type=radio]:checked::before {
   left: 25%;
   top: 25%;
   border-radius: 50%;
-  background: #67f;
-  content: "";
 }
 
 input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
@@ -10046,22 +9869,17 @@ input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::bef
 }
 
 input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus, input[type=radio]:focus {
-  width: 19px !important;
-  height: 19px !important;
-  border: 1px solid #67f !important;
-  box-shadow: 0 0 2px var(--hover) !important;
+  border: 1px solid var(--active) !important;
   background: var(--bg);
-  filter: none !important;
 }
 
 input[type=checkbox][disabled], input[type=radio][disabled], input[type=checkbox][disabled]:hover, input[type=radio][disabled]:hover,
 input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, input[type=checkbox][disabled]:checked:hover, input[type=radio][disabled]:checked:hover {
-  filter: none !important;
-  box-shadow: none !important;
   opacity: .5;
+  pointer-events: none;
 }
 
-/* end custom radios/checkboxes */
+/* end radios/checkboxes */
 
 .config_experimental:not(old) {
   margin-left: 2px;
@@ -10075,27 +9893,6 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
   display: inline-block;
   background: var(--experimental) no-repeat right center / 16px;
   content: "";
-}
-
-/* less hacky configui options */
-.themechoice .optbox, .langselect .optbox, .themechoice .optbox:checked, .langselect .optbox:checked {
-  margin: 0;
-  position: absolute;
-  z-index: -999;
-}
-
-.themechoice, .langselect {
-  width: 120px;
-  float: left;
-  text-align: center;
-}
-
-.langselect img {
-  margin: 0 0 35px !important;
-}
-
-.langselect input[name="lang"]:checked + img {
-  margin: 5px 0 38px !important;
 }
 
 div.app {
@@ -10144,12 +9941,17 @@ div.app.js:hover::before {
   white-space: nowrap;
 }
 
-#routerinformation tr:nth-child(n+2) a:not(#revision){
+#revision {
+  padding-left: 19px;
+  background: var(--gitlab) no-repeat left center / 16px;
+}
+
+#routerinformation tr:nth-child(n+2) a:not(#revision) {
   display: none;
 }
 
 #routerinformation table:hover tr:nth-child(n+2) a {
-  display: inline;
+  display: inline !important;
 }
 
 /* end /info */
@@ -10230,7 +10032,7 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel{
   margin: 1px 3px 8px;
   width: 140px !important;
   border-color: var(--border);
-  background: #fafbff;
+  background: var(--bg2);
 }
 
 #sitemap div.app img {
@@ -10241,7 +10043,7 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel{
 #sitemap .applabel {
   width: 136px !important;
   border-color: var(--border);
-  background: #fafbff;
+  background: var(--bg2);
 }
 
 #sitemap div.app:hover, #sitemap div.app:hover .applabel,
@@ -10280,7 +10082,7 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel{
   padding: 20px 10px 20px 60px !important;
   width: calc(100% - 70px);
   list-style: none;
-  box-shadow: 0 0 0 1px var(--border), var(--highlight), inset 0 0 0 2px #ddf;
+  box-shadow: 0 0 0 1px var(--border), var(--highlight), inset 0 0 0 2px var(--bg4);
   background-blend-mode: luminosity;
   background-size: 32px !important;
   break-inside: avoid;
@@ -10482,8 +10284,7 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel{
 }
 
 .skm_key td, .debug_outboundtarget td {
-  background: #f6f6ff !important;
-  background: linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%) !important;
+  background: linear-gradient(to bottom, #fcfcff, #fafaff 51%, #f6f6ff 100%) !important;
 }
 
 .debug_outboundtarget td:last-child, .skm_key td:last-child {
@@ -10529,22 +10330,11 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel{
 #stats .tab, #stats .tab2 {
   margin: -1px -1px -1px 0 !important;
   padding: 6px 14px !important;
+  font-size: 90% !important;
 }
 
 #stats .tab:not(.tab2) {
   color: var(--a);
-}
-
-#stats .tab2, #stats .tab2:hover {
-  color: var(--bg);
-  text-shadow: 0 1px 1px #225;
-  box-shadow: inset 3px 3px 2px #337;
-  background: #89f;
-  background: linear-gradient(to bottom, #5d66a2 50%, #4a5282 50%);
-}
-
-#stats .tab2:hover {
-  cursor: default;
 }
 
 #stats .tab:not(.tab2):hover {
@@ -10552,9 +10342,9 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel{
 }
 
 #stats .tab:not(.tab2):active {
-  color: #fff !important;
+  color: var(--bg) !important;
   text-shadow: 0 1px 1px #5f2d0c;
-  box-shadow: inset 3px 2px 2px #7f3000;
+  box-shadow: var(--btn_shadow_active);
   background: var(--hover);
   transition: ease box-shadow .05s;
 }
@@ -10573,7 +10363,7 @@ p#gatherstats {
   margin: -7px 0 0 !important;
   padding: 0 !important;
   width: calc(100% - 2px);
-  box-shadow: var(--highlight), inset 0 0 2px 1px #ddf;
+  box-shadow: var(--highlight), inset 0 0 2px 1px var(--bg4);
 }
 
 /* end /stats */
@@ -10709,7 +10499,7 @@ p#gatherstats {
   color: #535979;
   border: 1px solid var(--border);
   box-shadow: var(--highlight), 0 0 1px rgba(96,96,96,.5);
-  background: linear-gradient(to right, #eef0ff, #fff, #eef0ff);
+  background: var(--label_focus);
   user-select: none;
 }
 
@@ -11015,22 +10805,6 @@ p#gatherstats {
   font-weight: 700;
 }
 
-#servletError.iframed .logo {
-  display: none;
-}
-
-#servletError #warning2.sorry, #servletError #warning.warning {
-   margin-right: 20px;
-}
-
-#servletError #warning.warning {
-  margin-bottom: 15px !important;
-}
-
-#servletError.iframed #warning.warning {
-  margin: 0 0 5px !important;
-}
-
 #configstats .graphableStat td {
   padding: 4px 6px;
   columns: auto;
@@ -11038,6 +10812,7 @@ p#gatherstats {
 }
 
 #enablefull label {
+  margin-top: 6px;
   display: inline-block;
 }
 
@@ -11094,7 +10869,7 @@ p#gatherstats {
 }
 
 .stattograph:hover, .optbox:checked + label > .stattograph:hover {
-  color: #fff !important;
+  color: var(--bg) !important;
   border-color: var(--hover);
   background: var(--bg);
   box-shadow: none;
@@ -11113,7 +10888,7 @@ p#gatherstats {
 }
 
 .optbox:checked + label > .stattograph:hover b {
-  color: #fff !important;
+  color: var(--bg) !important;
 }
 
 .statdesc {
@@ -11156,7 +10931,7 @@ p#gatherstats {
 }
 
 #enablefullstats {
-  background: var(--stats) no-repeat 12px center, linear-gradient(135deg, #fafaff, #f8f8ff)
+  background: var(--stats) no-repeat 12px center / 32px, linear-gradient(135deg, #fafaff, #f8f8ff)
 }
 
 /* /tunnelpeercount */
@@ -11164,7 +10939,7 @@ p#gatherstats {
 #tunnels #peercount {
   padding-left: 30px !important;
   background: var(--hardhat) no-repeat 8px 6px / 18px,
-              linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
+              linear-gradient(to bottom, var(--bg)50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
               linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
 }
 
@@ -11187,7 +10962,7 @@ p#gatherstats {
   width: 1% !important;
   min-width: 178px !important;
   white-space: nowrap;
-  background: linear-gradient(to bottom, #fff, #dfe1ec);
+  background: var(--th);
   box-sizing: border-box;
 }
 
@@ -11208,7 +10983,7 @@ p#gatherstats {
 }
 
 #tunnels .percentBarInner {
-  background: #99c;
+  background: var(--flatbar);
 }
 
 #tunnels .percentBarOuter:hover .percentBarInner {
@@ -11567,8 +11342,8 @@ div.app, .sitemapLink, .sitemapLabel {
     padding: 1px 8px 2px;
     width: calc(100% - 46px);
     display: inline-block;
-    border-top: 1px solid var(--soft_border);
-    border-bottom: 1px solid var(--soft_border);
+    border-top: 1px solid var(--border_soft);
+    border-bottom: 1px solid var(--border_soft);
   }
 
   a.graphstat {
@@ -11754,8 +11529,8 @@ div.app:hover img, .sitemaplink:hover img {
   line-height: 32px;
   font-size: 0;
   color: #770;
-  box-shadow: inset 0 0 0 1px #800, inset 0 0 1px 3px #eeeee2, inset 0 0 0 4px #ccccc2;
-  background: repeating-linear-gradient(135deg, #fffff2, #fffff2 10px, #ddddd2 10px, #ddddd2 20px);
+  box-shadow: var(--down_shadow);
+  background: var(--down);
   background-size: 300%;
   animation: down linear 10s reverse infinite;
 }
@@ -11793,7 +11568,7 @@ div.app:hover img, .sitemaplink:hover img {
 #sb_localtunnels td[colspan="3"] {
   line-height: 20px;
   font-size: 0 !important;
-  background: repeating-linear-gradient(135deg, #fffff2, #fffff2 10px, #ddddd2 10px, #ddddd2 20px) !important;
+  background: var(--down) !important;
 }
 
 /* highlight linked leaseset */

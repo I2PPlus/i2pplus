@@ -331,7 +331,7 @@ button[type=submit] {
   text-decoration: none;
   font: 9pt Droid Sans, Ubuntu, Noto Sans, Segoe UI, Lucida Grande, Verdana, Helvetica, sans-serif;
   color: #5e626e;
-  border: 1px solid #bec2da;
+  border: 1px solid #bfc3d9;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #fff, 0 0 1px #ddd;
   background: #eee;
@@ -341,7 +341,7 @@ button[type=submit] {
 
 button[type=submit]:hover, button[type=submit]:focus {
   color: #41444d;
-  border: 1px solid #bec2da;
+  border: 1px solid #bfc3d9;
   box-shadow: inset 0 0 0 1px #fff, 0 0 1px #89f;
   background: #ddd;
   background: linear-gradient(to bottom, #ddd, #fff);

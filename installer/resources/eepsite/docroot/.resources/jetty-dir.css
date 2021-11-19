@@ -1,21 +1,54 @@
 :root {
+	--bg: #080808;
+	--ink: #ddd;
+	--title: #fff;
+	--txtshadow: 1px 1px 1px #000;
+	--border: 1px solid #333;
+	--h1: linear-gradient(135deg, #111, #222);
 	--folder: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='b' x1='44.5' x2='44.5' y1='57.1' y2='12.9' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0' stop-color='%23e3d39c'/%3E%3Cstop offset='1' stop-color='%23f3ebca'/%3E%3C/linearGradient%3E%3Cpath id='a' d='M6.2 5h28.1c.3 0 .7.2.9.4l5.2 8.3h17.4c.7 0 1.3.6 1.3 1.4v42.5c0 .7-.6 1.3-1.3 1.3H6.2c-.7 0-1.2-.6-1.2-1.3V6.4C5 5.6 5.5 5 6.2 5z'/%3E%3C/defs%3E%3Cuse fill='none' stroke='%23000000aa' stroke-opacity='.7' stroke-width='3.9' xlink:href='%23a'/%3E%3Cuse fill='url(%23b)' xlink:href='%23a'/%3E%3Cpath fill='%23b19e7b' d='M7.7 13.7h29l-3.7-6H7.7z'/%3E%3C/svg%3E");
+	--a: #d10;
+	--hover: #e50;
+	--visited: #910;
+	--th: #111;
+	--odd: #222;
+	--even: #333;
+	--tr_hover: #555;
+}
+
+@media (prefers-color-scheme: light) {
+	:root {
+		--bg: #bba;
+		--ink: #555;
+		--title: #444;
+		--txtshadow: 1px 1px 1px #fff;
+		--border: 1px solid #ccb;
+		--h1: linear-gradient(135deg, #ffe, #ccb);
+		--folder: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='b' x1='44.5' x2='44.5' y1='57.1' y2='12.9' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0' stop-color='%23e3d39c'/%3E%3Cstop offset='1' stop-color='%23f3ebca'/%3E%3C/linearGradient%3E%3Cpath id='a' d='M6.2 5h28.1c.3 0 .7.2.9.4l5.2 8.3h17.4c.7 0 1.3.6 1.3 1.4v42.5c0 .7-.6 1.3-1.3 1.3H6.2c-.7 0-1.2-.6-1.2-1.3V6.4C5 5.6 5.5 5 6.2 5z'/%3E%3C/defs%3E%3Cuse fill='none' stroke='%23000000aa' stroke-opacity='.7' stroke-width='3.9' xlink:href='%23a'/%3E%3Cuse fill='url(%23b)' xlink:href='%23a'/%3E%3Cpath fill='%23b19e7b' d='M7.7 13.7h29l-3.7-6H7.7z'/%3E%3C/svg%3E");
+		--a: #d10;
+		--hover: #e50;
+		--visited: #910;
+		--th: #f8f8e8;
+		--odd: #eaeada;
+		--even: #f0f0e0;
+		--tr_hover: #ffd;
+	}
 }
 
 html {
 	min-height: 100%;
+	background: var(--bg);
 }
 
 #dirlist {
 	margin: 2.5% auto;
 	min-width: 500px;
 	max-width: 1200px;
-	font-family: Open Sans, Segoe UI, sans-serif;
+	font-family: Open Sans, Segoe UI, Noto Sans, Ubuntu, sans-serif;
 	font-size: 10.5pt;
-	color: #eee;
-	border: 1px solid #333;
-	border-top: none;
-	background: #080808;
+	color: var(--ink);
+	border: none;
+	background: var(--bg);
+	box-shadow: 0 0 0 1px var(--bg), 0 0 0 5px var(--odd), 0 0 0 6px var(--even);
 }
 
 #dirlist h1 {
@@ -23,13 +56,12 @@ html {
 	padding: 6px 6px 8px;
 	width: auto;
 	font-size: 12pt;
-	color: #fff;
-	text-shadow: 1px 1px 1px #000;
+	color: var(--title);
+	text-shadow: var(--txtshadow);
 	border: none;
-	border-top: 1px solid #333;
-	border-bottom: 1px solid #333;
-	background: #222;
-	background: linear-gradient(135deg, #111, #222);
+	border-top: var(--border);
+	border-bottom: var(--border);
+	background: var(--h1);
 }
 
 h1::before {
@@ -43,51 +75,53 @@ h1::before {
 }
 
 #dirlist a, #dirlist h1 a:visited, #dirlist th a:visited {
-	color: #d10;
+	color: var(--a);
 	text-decoration: none;
 	font-weight: bold;
 	outline: none;
 }
 
 #dirlist a:hover, #dirlist a:focus, #dirlist a:visited:hover, #dirlist a:visited:focus {
-	color: #e50;
+	color: var(--hover);
 }
 
 #dirlist td a:visited {
-	color: #910;
+	color: var(--visited);
 }
 
 #dirlist table {
 	width: 100%;
-	color: #ddd;
 	border-collapse: collapse;
-	border-top: none;
-	border-bottom: none;
-	background: #111;
+	border: none !important;
+	background: var(--bg);
 }
 
 #dirlist tr, #dirlist tr:first-child {
-	border-top: 1px solid #333;
-	border-bottom: 1px solid #333;
+	border-top: var(--border);
+	border-bottom: var(--border);
 }
 
 #dirlist tbody tr:nth-child(odd) {
-	background: #222;
+	background: var(--odd);
 }
 
 #dirlist tbody tr:nth-child(even) {
-	background: #333;
+	background: var(--even);
 }
 
 #dirlist tbody tr:hover {
-	background: #555;
+	background: var(--tr_hover);
 	transition: ease background .05s;
 }
 
 #dirlist tbody tr:first-child:hover td, #dirlist tbody tr:hover td {
-	color: #fff;
-	border-top: 1px solid #d30;
-	border-bottom: 1px solid #d30;
+	color: var(--title);
+	border-top: 1px solid var(--hover);
+	border-bottom: 1px solid var(--hover);
+}
+
+#dirlist tr:last-child, #dirlist tr:last-child td {
+	border-bottom: none !important;
 }
 
 .sort {
@@ -131,14 +165,9 @@ td, th {
 	font-size: 90%;
 	font-style: normal;
 	font-weight: bold;
-	color: #eee;
-	border-top: 1px solid #333;
-	border-bottom: 1px solid #333;
-	background: #111;
-}
-
-#dirlist th b {
-	background: #111;
+	border-top: var(--border);
+	border-bottom: var(--border);
+	background: var(--th);
 }
 
 .name {
@@ -330,23 +359,20 @@ td.name a {
 }
 
 @media screen and (max-width: 1200px) {
-#dirlist {
-	margin: 0 !important;
-	font-size: 9.5pt !important;
-}
+	#dirlist {
+		margin: 0 !important;
+		font-size: 9.5pt !important;
+	}
 }
 
 @media screen and (min-width: 1200px) {
-#dirlist {
-	padding: 2px;
-	border: 1px solid #333;
-}
-
-#dirlist h1 {
-	border-top: none;
-}
-
-#dirlist table, #dirlist tr:last-child td {
-	border-bottom: none;
-}
+	#dirlist {
+		padding: 2px;
+	}
+	#dirlist h1 {
+		border-top: none;
+	}
+	#dirlist table, #dirlist tr:last-child td {
+		border-bottom: none;
+	}
 }

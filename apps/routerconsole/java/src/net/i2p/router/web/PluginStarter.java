@@ -564,13 +564,23 @@ public class PluginStarter implements Runnable {
         if (log.shouldLog(Log.WARN))
             log.warn("Stopping plugin: " + appName);
 
-        // stop things in clients.config
-        File clientConfig = new File(pluginDir, "clients.config");
-        if (clientConfig.exists()) {
-            Properties props = new Properties();
-            DataHelper.loadProps(props, clientConfig);
-            List<ClientAppConfig> clients = ClientAppConfig.getClientApps(clientConfig);
-            runClientApps(ctx, pluginDir, clients, "stop");
+        ClientApp client = ctx.clientAppManager().getRegisteredApp(appName);
+        if (client != null) {
+            try{
+                client.shutdown(null);
+            }catch(Throwable t){
+                if (log.shouldLog(Log.ERROR))
+                    log.error("Error stopping client app: " + appName, t);
+            }
+        } else {
+            // stop things in clients.config
+            File clientConfig = new File(pluginDir, "clients.config");
+            if (clientConfig.exists()) {
+                Properties props = new Properties();
+                DataHelper.loadProps(props, clientConfig);
+                List<ClientAppConfig> clients = ClientAppConfig.getClientApps(clientConfig);
+                runClientApps(ctx, pluginDir, clients, "stop");
+            }
         }
 
         // stop console webapps in console/webapps
@@ -989,10 +999,24 @@ public class PluginStarter implements Runnable {
             }
         }
 
+        // load and check for ShellServices.
+        boolean isProcessRunning = false;
+        ClientApp client = ctx.clientAppManager().getRegisteredApp(pluginName);
+        if (client != null) {
+            if (log.shouldLog(Log.DEBUG))
+                log.debug("Checking state of client " + pluginName + client.getState());
+            if (client.getState() == ClientAppState.RUNNING) {
+                isProcessRunning = true;
+            }
+        } else {
+            if (log.shouldLog(Log.DEBUG))
+                log.debug("No client found for plugin " + pluginName);
+        }
+
         boolean isClientThreadRunning = isClientThreadRunning(pluginName, ctx);
         if (log.shouldLog(Log.DEBUG))
-            log.debug("[" + pluginName + "] - Threads running? " + isClientThreadRunning + "; WebApp running? " + isWarRunning + "; Jobs running? " + isJobRunning);
-        return isClientThreadRunning || isWarRunning || isJobRunning;
+            log.debug("[" + pluginName + "] - Threads running? " + isClientThreadRunning + "; WebApp running? " + isWarRunning + "; Jobs running? " + isJobRunning + "; process running? " + isProcessRunning);
+        return isClientThreadRunning || isWarRunning || isJobRunning || isProcessRunning;
         //
         //if (log.shouldLog(Log.DEBUG))
         //    log.debug("plugin name = <" + pluginName + ">; threads running? " + isClientThreadRunning(pluginName) + "; webapp running? " + WebAppStarter.isWebAppRunning(pluginName) + "; jobs running? " + isJobRunning);
