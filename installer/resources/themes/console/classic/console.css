@@ -9,6 +9,7 @@
   --ink: #41444d;
   --ink_light: #5e626e;
   --ink_h1: #6c7293;
+  --code: #070;
   --disabled: #757a8a;
   --selected: #559;
   --a: #5c5c8a;
@@ -19,8 +20,10 @@
   --btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 #fff, inset 0 0 4px 2px #f0f0ff, 0 1px 1px rgba(220,220,255,.5);
   --btn_shadow_hover: var(--highlight), 0 0 0 1px #fff, 0 0 0 2px rgba(255,96,0,.4);
   --btn_shadow_active: var(--highlight), inset 3px 3px 3px 1px rgba(32,32,64,.3);
-  --badge: linear-gradient(to bottom, #fff, #eef);
-  --badge_hover: linear-gradient(to bottom, #eef, #fff);
+  --shadow_inset: inset 2px 2px 4px rgba(204, 204, 240, .6);
+  --shadow_input: inset 1px 1px 1px #ddd;
+  --badge: linear-gradient(to bottom, #fff, var(--bg3));
+  --badge_hover: linear-gradient(to bottom, var(--bg3), #fff);
   --box_border_badge: 0 0 0 1px #bbd;
   --border: #bfc3d9;
   --border_soft: #dfe1ec;
@@ -31,11 +34,12 @@
   --highlight_active: inset 3px 3px 3px 1px #5f2400;
   --bg: #fff;
   --bg2: #f4f4ff;
-  --bg3: #eff1ff;
+  --bg3: #eef;
   --bg4: #ddf;
   --th: linear-gradient(to bottom, #fff, var(--bg2));
-  --subheading: linear-gradient(to right, #fff, #eef);
+  --subheading: linear-gradient(to right, var(--bg), var(--bg3));
   --header: linear-gradient(to bottom, var(--bg)50%, #f2f2ff 50%);
+  --header_shiny: linear-gradient(to right, rgba(255,255,255,.3), rgba(255,255,255,0)), linear-gradient(to bottom, var(--bg)50%, #eaeaff 50%);
   --row_hover: #ffd;
   --ls_target: 1px solid #5a5 !important;
   --reload: linear-gradient(to right, #930, var(--hover));
@@ -44,7 +48,7 @@
   --flatbar: #99c;
   --hr: #89f;
   --select: #4a90d9;
-  --label_focus: linear-gradient(to right, #eef, #fff, #eef);
+  --label_focus: linear-gradient(to right, var(--bg3), #fff, var(--bg3));
 }
 
 html, body {
@@ -868,7 +872,7 @@ div.refresh {
   border-top: none;
   border-radius: 0 0 3px 3px;
   box-shadow: var(--highlight);
-  background: linear-gradient(to right, #eef, #eff2ff 30%, #eff2ff 60%, #eef);
+  background: linear-gradient(to right, var(--bg3), #eff2ff 30%, #eff2ff 60%, var(--bg3));
   box-sizing: border-box;
 }
 
@@ -1105,7 +1109,7 @@ pre {
 
 tt, code, .bucket {
   font: bold 8.5pt var(--monospaced) !important;
-  color: #070;
+  color: var(--code);
 }
 
 /* buttons & inputs */
@@ -1222,19 +1226,22 @@ input[type=text], input[type=password] {
   color: #5e626e;
   border: 1px solid var(--border);
   border-radius: 2px;
-  box-shadow: inset 1px 1px 1px #ddd;
-  background-color: #fefefe;
+  box-shadow: var(--shadow_input);
+  background-color: var(--bg2);
 }
 
 input[type=text]:focus, input[type=password]:focus {
+  padding-left: 9px;
   color: var(--ink);
   box-shadow: inset 0 0 0 1px rgba(255,96,0,.5);
+  box-shadow: var(--btn_shadow_active);
+  background-color: var(--bg);
 }
 
 input[type=text][readonly], input[type=text][readonly]:focus, input[type=text][disabled] {
   color: var(--disabled);
-  box-shadow: inset 1px 1px 1px #ddd;
-  background: #eff0ff;
+  box-shadow: var(--shadow_input);
+  background: var(--bg3);
 }
 
 button, input, select {
@@ -1889,7 +1896,7 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
   color: #5e626e;
   border: 1px solid var(--border);
   border-radius: 2px;
-  box-shadow: inset 1px 1px 1px #ddd;
+  box-shadow: var(--shadow_input);
   background: var(--bg2);
 }
 
@@ -3376,7 +3383,6 @@ table {
   font-size: 9pt;
   border-collapse: collapse;
   border: 1px solid var(--border);
-  background: #eff2ff;
 }
 
 table hr {
@@ -3474,7 +3480,9 @@ td.infowarn, p.infowarn {
   content: "";
 }
 
-.confignav + .infohelp, .confignav + h3.tabletitle, .confignav + form > h3.tabletitle, .confignav + .configure > form > h3.ptitle {
+.confignav + .infohelp, .confignav + h3.tabletitle,
+.confignav + form > h3.tabletitle,
+.confignav + .configure > form > h3.ptitle {
   margin-top: 15px !important;
 }
 
@@ -3501,18 +3509,18 @@ td.tabletextarea {
 }
 
 .main .tabletextarea textarea {
-  margin: 0 !important;
+  margin: 0;
   padding: 5px;
-  width: 100% !important;
+  width: 100%;
   height: 600px;
   resize: none;
   overflow: auto;
   white-space: pre-wrap;
   word-break: break-all;
   font-size: 9pt;
-  border: none !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 tr:nth-child(even), #pluginconfig table tr:nth-child(even) td, #profile_defs tr:nth-child(odd) {
@@ -3521,7 +3529,11 @@ tr:nth-child(even), #pluginconfig table tr:nth-child(even) td, #profile_defs tr:
 
 tr:nth-child(odd), #pluginconfig table tr:nth-child(odd) td, .main#profiles ul#banlist,
 #profile_defs table tr:nth-child(odd), #profile_defs table tr:nth-child(even) {
-  background: var(--bg2);
+  background: var(--bg3);
+}
+
+#sidebarconf tr:last-child td {
+  background: var(--bg);
 }
 
 .configtable th {
@@ -4436,7 +4448,7 @@ h3#graphdisplay {
   border: 1px solid var(--border);
   padding: 5px 10px;
   margin: -11px 0 5px;
-  background: #eef;
+  background: var(--bg3);
 }
 
 #graphs form[action="graphs"], #graphs form[action="/updategraphs"] {
@@ -5361,6 +5373,12 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 
 .sybil_routerinfo + .threatpoints + ul + a[name] + table {
   margin-top: -11px;
+}
+
+.sybil_routerinfo b[style^="float: right"] {
+  margin: 4px;
+  font-size: 90%;
+  opacity: .8;
 }
 
 p:empty { /* empty paragraph nuke */
@@ -6769,7 +6787,7 @@ span.b32 {
   letter-spacing: .1em;
   font-family: var(--monospaced);
   font-size: 80%;
-  color: #070;
+  color: var(--code);
   box-shadow: 0 0 0 1px var(--border), var(--highlight);
   background: var(--th);
   opacity: .8;
@@ -7083,9 +7101,6 @@ th code {
 }
 
 .threatpoints + ul {
-  columns: auto 500px;
-  column-gap: 55px;
-  column-rule: 1px solid #cdf;
   padding-top: 3px;
   padding-bottom: 3px;
 }
@@ -7160,23 +7175,22 @@ th code {
 }
 
 #debug li:last-child {
-  padding-bottom: 0;
   margin-bottom: -9px;
+  padding-bottom: 0;
 }
 
 #debug li {
-  list-style: none;
-  line-height: 1.5;
-  padding-bottom: 0;
   margin-left: -5px;
   margin-bottom: -2px;
+  padding-bottom: 0;
+  list-style: none;
+  line-height: 1.5;
 }
 
 .debug_container {
-  background: #eef;
-  border: 1px solid var(--border);
-  padding: 10px 15px;
   margin-top: -16px;
+  padding: 10px 15px;
+  border: 1px solid var(--border);
 }
 
 .debug_container:empty, #debug ul:empty {
@@ -7207,7 +7221,7 @@ th code {
 #debug h2 {
   margin: 12px 0 0;
   background: var(--bug) no-repeat right 6px center / 20px, var(--header) !important;
-  background-blend-mode: luminosity, normal, normal;
+  background-blend-mode: luminosity, normal;
 }
 
 h2#debug_portmapper {
@@ -7231,11 +7245,11 @@ h2#debug_portmapper {
 }
 
 .debug_container.buckets {
-  word-break: break-all;
   margin-bottom: 5px;
   padding-bottom: 10px !important;
   max-height: 600px;
   overflow: auto;
+  word-break: break-all;
 }
 
 .debug_container.buckets .bucketsContainer:last-of-type ~ br {
@@ -7260,7 +7274,7 @@ h2#debug_portmapper {
   border: 1px solid var(--border);
   border-left: 3px solid var(--border);
   border-radius: 0 2px 2px 0;
-  background: linear-gradient(to right, rgba(255,255,255,.3), rgba(255,255,255,0)), linear-gradient(to bottom, var(--bg)50%, #eaeaff 50%);
+  background: var(--header_shiny);
 }
 
 .bucket {
@@ -7276,7 +7290,7 @@ h2#debug_portmapper {
   color: #152;
   font-size: 90%;
   box-shadow: 0 0 0 1px var(--border), var(--highlight);
-  background: #f8f8ff;
+  background: var(--bg);
   user-select: all;
 }
 
@@ -7285,7 +7299,7 @@ h2#debug_portmapper {
 }
 
 .bucket::selection {
-  background: #070 !important;
+  background: var(--code) !important;
   color: var(--bg);
 }
 
@@ -7330,7 +7344,7 @@ h2#debug_portmapper {
 }
 
 .debug_version {
-  color: #070;
+  color: var(--code);
 }
 
 /* end debug */
@@ -8351,7 +8365,6 @@ b.suboption {
   border: 1px solid var(--border_soft);
   border-bottom: none;
   box-shadow: var(--highlight);
-  background: #fdfdff;
   background: var(--header);
 }
 
@@ -8516,14 +8529,15 @@ b.suboption {
   padding-left: 3px !important;
 }
 
-#netconfig label, #externali2cp .optionlist label, #externali2cp .nowrap, #reseedconfig .nowrap, #updatehelper .nowrap, #updateProxyHostPort .nowrap, #i2pupdates .nowrap, #manualreseed .nowrap, #graphs .nowrap {
-  min-width: 480px;
-  width: calc(100% - 10px);
-  display: inline-block;
+#netconfig label, #externali2cp .optionlist label, #externali2cp .nowrap, #reseedconfig .nowrap,
+#updatehelper .nowrap, #updateProxyHostPort .nowrap, #i2pupdates .nowrap, #manualreseed .nowrap, #graphs .nowrap {
   margin: 1px 0;
   padding: 2px 5px;
-  background: var(--bg2);
+  width: calc(100% - 10px);
+  min-width: 480px;
+  display: inline-block;
   line-height: 1 !important;
+  background: var(--bg3);
 }
 
 @media screen and (max-width: 1200px) {
@@ -8780,7 +8794,7 @@ b.suboption {
   padding: 4px 5px;
   min-width: 100px !important;
   width: calc(100% - 10px);
-  background: var(--bg2) !important;
+  background: var(--bg3) !important;
 }
 
 #reseed_urlselection label::before, #reseedproxytype label::before {
@@ -9502,7 +9516,7 @@ a[href^="/viewprofile"] img, .profiledump img {
 
 #floodfills .percentBarOuter {
   text-align: left;
-  background: #eef;
+  background: var(--bg2);
   box-shadow: var(--highlight);
   border: 1px solid var(--border);
   opacity: .9;
@@ -9705,10 +9719,10 @@ input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input
   vertical-align: middle;
   box-sizing: border-box;
   border: 1px solid var(--border);
-  background: #f8f8ff;
+  background: var(--bg);
   -moz-appearance: none;
   -webkit-appearance: inherit;
-  filter: drop-shadow(0 0 1px #ccf);
+  filter: drop-shadow(0 0 1px var(--bg3));
   will-change: transform;
 }
 
@@ -9729,7 +9743,7 @@ input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::bef
 }
 
 .optbox:not(:checked):not(:hover) {
-  box-shadow: inset 2px 2px 1px rgba(204, 204, 240, .6);
+  box-shadow: var(--shadow_inset);
 }
 
 input[type=checkbox]:checked::before,
@@ -10494,7 +10508,7 @@ p#gatherstats {
   width: 100%;
   display: inline-block;
   vertical-align: middle;
-  background: #eaeaff;
+  background: var(--bg3);
 }
 
 #sybilTask .nowrap::before {
@@ -10520,9 +10534,9 @@ p#gatherstats {
   line-height: 1.2;
 }
 
-.encDests tr:last-child td {
+/*.encDests tr:last-child td {
   border-top: #ccf !important;
-}
+}*/
 
 .encDests th:first-child, .encDests td:first-child,
 .encDests th:nth-child(3), .encDests td:nth-child(3) {
@@ -10743,7 +10757,6 @@ p#gatherstats {
   overflow: hidden;
   text-overflow: ellipsis;
   text-transform: capitalize;
-  color: #5b5b71;
   color: var(--ink_light);
 }
 
@@ -10928,7 +10941,7 @@ p#gatherstats {
 }
 
 #tunnels .percentBarOuter {
-  background: #f2f2ff !important;
+  background: var(--bg2) !important;
   text-align: left;
 }
 
@@ -11627,9 +11640,9 @@ div.app:hover img, .sitemaplink:hover img {
 .newsentry.lazyshow {
   margin: 12px 0;
   padding: 8px 15px;
-  border: 1px solid var(--border_soft);
-  box-shadow: var(--highlight);
-  background: linear-gradient(to top, var(--bg2), var(--bg) 50px, var(--bg) calc(100% - 30px), var(--bg2));
+  border: 1px solid var(--border);
+  box-shadow: var(--highlight), inset 0 0 8px 3px var(--bg3);
+  background: var(--bg2);
   contain: layout;
   transition: ease opacity .15s;
 }
