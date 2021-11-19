@@ -29,7 +29,7 @@
   --highlight_hover: inset 0 0 0 1px #a79;
   --highlight_active: inset 3px 3px 3px 1px #5f2400;
   --bg: #fff;
-  --bg2: #f2f2ff;
+  --bg2: #f4f4ff;
   --bg3: #eff1ff;
   --bg4: #ddf;
   --th: linear-gradient(to bottom, #fff, var(--bg2));
@@ -4567,6 +4567,10 @@ h3#graphinfo {
 
 #newsDisplay a:first-child {
   margin-right: -5px;
+}
+
+.messages #newsDisplay a:first-child {
+  display: none;
 }
 
 #graphopts a, #newsDisplay a, #routerinformation tr:nth-child(n+2) a:not(#revision) {
@@ -11666,7 +11670,21 @@ div.app:hover img, .sitemaplink:hover img {
 }
 
 .newsentry.lazyshow {
+  margin: 12px 0;
+  padding: 8px 15px;
+  border: 1px solid var(--border_soft);
+  box-shadow: var(--highlight);
+  background: linear-gradient(to top, var(--bg2), var(--bg) 50px, var(--bg) calc(100% - 30px), var(--bg2));
+  contain: layout;
   transition: ease opacity .15s;
+}
+
+.newsentry.lazyshow:first-child {
+  margin-top: 0;
+}
+
+.newsentry.lazyshow:last-child{
+  margin-bottom: 5px;
 }
 
 .leasesets_container .lazy.lazyhide, .leasesets_container .lazy.lazyhide td,
