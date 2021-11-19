@@ -22,8 +22,8 @@
   --badge: linear-gradient(to bottom, #fff, #eef);
   --badge_hover: linear-gradient(to bottom, #eef, #fff);
   --border_badge: 0 0 0 1px #bbd;
-  --border: #bec2da;
-  --border_soft: #ced1e3;
+  --border: #bfc3d9;
+  --border_soft: #dfe1ec;
   --border_warn: #fb7;
   --highlight: inset 0 0 0 1px rgba(255,255,255,.8);
   --highlight_hover: inset 0 0 0 1px #a79;
