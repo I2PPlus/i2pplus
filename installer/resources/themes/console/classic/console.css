@@ -2178,7 +2178,7 @@ div[id^="config"] .tab a {
   color: #565799;
   text-shadow: 0 1px 1px var(--bg);
   box-shadow: var(--btn_shadow_active);
-  background: linear-gradient(to bottom, #eaebff, #f2f3ff);
+  background: linear-gradient(to bottom, var(--bg4), var(--bg2));
 }
 
 /* end topnav */
@@ -3611,7 +3611,7 @@ div.app {
   text-align: center !important;
   border: none;
   border: 1px solid var(--border);
-  background: #fdfeff;
+  background: var(--bg2);
 }
 
 #sitemap div.app {
@@ -9912,7 +9912,7 @@ div.app.js:hover::before {
   display: inline-block;
   text-align: center;
   border: 1px solid var(--border);
-  background: #fdfeff;
+  background: var(--bg2);
 }
 
 html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel{
