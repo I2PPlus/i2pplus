@@ -6,10 +6,11 @@
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
   --monospaced: Droid Sans Mono, Andale Mono, DejaVu Sans Mono, Lucida Console, monospace;
   --bodybg: #e2e2f3;
+  --bg_doc: var(--bodybg) url(images/bg0.png) center center / 90px;
   --ink: #41444d;
   --ink_light: #5e626e;
   --ink_h1: #6c7293;
-  --code: #070;
+  --code: #272;
   --disabled: #757a8a;
   --selected: #559;
   --a: #5c5c8a;
@@ -39,7 +40,7 @@
   --th: linear-gradient(to bottom, #fff, var(--bg2));
   --subheading: linear-gradient(to right, var(--bg), var(--bg3));
   --header: linear-gradient(to bottom, var(--bg)50%, #f2f2ff 50%);
-  --header_shiny: linear-gradient(to right, rgba(255,255,255,.3), rgba(255,255,255,0)), linear-gradient(to bottom, var(--bg)50%, #eaeaff 50%);
+  --header_shiny: linear-gradient(to right, rgba(255,255,255,.3), rgba(255,255,255,0)), linear-gradient(to bottom, var(--bg) 50%, #eaeaff 50%);
   --row_hover: #ffd;
   --ls_target: 1px solid #5a5 !important;
   --reload: linear-gradient(to right, #930, var(--hover));
@@ -48,7 +49,7 @@
   --flatbar: #99c;
   --hr: #89f;
   --select: #4a90d9;
-  --label_focus: linear-gradient(to right, var(--bg3), #fff, var(--bg3));
+  --label_focus: linear-gradient(to right, var(--bg3), var(--bg), var(--bg3));
 }
 
 html, body {
@@ -62,7 +63,7 @@ body {
   text-align: left;
   font: 9pt/130% var(--bodyfont);
   color: var(--ink);
-  background: var(--bodybg) url(images/bg0.png) center center / 90px;
+  background: var(--bg_doc);
   scrollbar-color: #acafb9 var(--bg);
 }
 
@@ -267,7 +268,7 @@ i {
   border: none !important;
   box-shadow: inset 0 0 2px 1px #f2f7fa;
   text-decoration: none !important;
-  background: linear-gradient(to right, #eff2ff, var(--bg)50%, #eff2ff);
+  background: var(--label_focus);
 }
 
 .routersummary h3 a {
@@ -484,7 +485,7 @@ i {
   border: 1px solid var(--border);
   border-radius: 2px;
   box-shadow: 0 0 1px #bbb, inset 0 0 0 1px #fbb;
-  background: var(--bg);
+  background: var(--label_focus);
 }
 
 #sb_notice.hide, #sb_notice.hide + hr, #sb_updatesection.hide, #sb_updatesection.hide + hr {
@@ -1223,7 +1224,7 @@ input[type=text], input[type=password] {
   padding: 5px 7px;
   min-width: 120px;
   vertical-align: middle;
-  color: #5e626e;
+  color: var(--ink_light);
   border: 1px solid var(--border);
   border-radius: 2px;
   box-shadow: var(--shadow_input);
@@ -1231,10 +1232,9 @@ input[type=text], input[type=password] {
 }
 
 input[type=text]:focus, input[type=password]:focus {
-  padding-left: 9px;
+  padding: 5px 5px 5px 9px;
   color: var(--ink);
-  box-shadow: inset 0 0 0 1px rgba(255,96,0,.5);
-  box-shadow: var(--btn_shadow_active);
+  box-shadow: var(--btn_shadow_hover), var(--btn_shadow_active);
   background-color: var(--bg);
 }
 
@@ -1246,12 +1246,12 @@ input[type=text][readonly], input[type=text][readonly]:focus, input[type=text][d
 
 button, input, select {
   font: 9pt/130% var(--bodyfont);
-  color: #5e626e;
+  color: var(--ink_light);
 }
 
 input[type=file]::file-selector-button {
   font: 9pt/130% var(--bodyfont);
-  color: #5e626e;
+  color: var(--ink_light);
 }
 
 button:hover, input[type=submit]:hover, input[type=reset]:hover {
@@ -1319,7 +1319,7 @@ input[type=submit], input[type=reset], button {
   padding: 4px 5px;
   text-decoration: none;
   font: 9pt var(--bodyfont);
-  color: #5e626e;
+  color: var(--ink_light);
   border: 1px solid var(--border);
   border-radius: 3px;
   box-shadow: var(--btn_shadow);
@@ -1332,7 +1332,7 @@ input[type=file]::file-selector-button {
   padding: 4px 8px;
   text-decoration: none;
   font: 9pt var(--bodyfont);
-  color: #5e626e;
+  color: var(--ink_light);
   border: 1px solid var(--border);
   border-radius: 2px;
   box-shadow: var(--highlight), 0 0 1px #ddd;
@@ -1893,7 +1893,7 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
   width: calc(100% - 5px);
   min-height: 96px;
   resize: none;
-  color: #5e626e;
+  color: var(--ink_light);
   border: 1px solid var(--border);
   border-radius: 2px;
   box-shadow: var(--shadow_input);
@@ -2318,10 +2318,6 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
   line-height: 1.15;
 }
 
-#addkeyring input[type=text] {
-  width: calc(100% - 5px);
-}
-
 #manualreseed {
   margin-bottom: 10px;
 }
@@ -2354,10 +2350,6 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 
 #reseedconfig td {
   width: 50%;
-}
-
-#loggingoptions textarea {
-  width: calc(100% - 5px);
 }
 
 #loggingoptions td:nth-child(2) {
@@ -6996,7 +6988,7 @@ th code {
 }
 
 .sybil_routerinfo b.netdb_transport {
-  margin: 2px 0 2px -13px;
+  margin: 2px 3px 2px -13px;
 }
 
 .sybil_routerinfo td:first-child, .netdbentry td:first-child {
@@ -8514,7 +8506,7 @@ b.suboption {
 /* /confignet */
 
 #netconfig tr, #i2pupdates tr, #config_reseed tr {
-  background: #f9faff !important;
+  background: var(--bg3) !important;
 }
 
 #netconfig tr:nth-last-child(3) .optionlist {
@@ -8900,7 +8892,8 @@ b.suboption {
   display: inline-block;
 }
 
-#reseedurl input[type=text], #reseedzip input[type="file"], #reseedcreatefile p {
+#addkeyring input[type=text], #reseedurl input[type=text],
+#reseedzip input[type="file"], #reseedcreatefile p {
   width: calc(100% - 5px);
 }
 
