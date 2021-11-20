@@ -823,6 +823,7 @@ div.refresh {
   text-align: center;
   border: 1px solid var(--border);
   box-shadow: 0 0 1px rgba(200,200,200,.8), var(--highlight);
+  box-shadow: var(--btn_shadow_active);
   background: repeating-linear-gradient(to right, rgba(210, 210, 255, .7) 1px, rgba(210, 210, 255, .7) 2px, rgba(230, 230, 255, .7) 2px, rgba(230, 230, 255, .7) 4px);
 }
 
