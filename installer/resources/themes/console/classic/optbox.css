@@ -1,0 +1,77 @@
+.optbox, .optbox:checked {
+  position: relative;
+  width: 19px;
+  height: 19px;
+  vertical-align: middle;
+  box-sizing: border-box;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  -moz-appearance: none;
+  -webkit-appearance: inherit;
+  will-change: transform;
+}
+
+input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
+  border-radius: 1px;
+  box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6);
+}
+
+input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
+  border-radius: 50%;
+}
+
+.optbox:checked::before, .optbox:not(:checked)::before {
+  position: absolute;
+  transition: linear all .05s;
+  transform: scale(1);
+}
+
+.optbox:not(:checked):not(:hover) {
+  box-shadow: var(--btn_shadow_active);
+}
+
+.optbox:checked::before {
+  line-height: .8;
+  background: #67f;
+  content: "";
+}
+
+.optbox:checked:hover::before,
+.optbox:checked:focus::before {
+  background: var(--hover);
+}
+
+input[type=checkbox]:checked::before {
+  width: 11px;
+  height: 11px;
+  top: 3px;
+  left: 3px;
+  border-radius: 1px;
+  transform: scale(1);
+}
+
+input[type=radio]:checked::before {
+  width: 9px;
+  height: 9px;
+  left: 25%;
+  top: 25%;
+  border-radius: 50%;
+}
+
+.optbox:not(:checked)::before {
+  color: transparent;
+  background: transparent;
+  transform: scale(0);
+}
+
+.optbox:not([disabled]):hover, .optbox:not([disabled]):focus {
+  border: 1px solid var(--active) !important;
+  background: var(--bg);
+}
+
+.optbox[disabled], .optbox:hover[disabled],
+.optbox:focus[disabled], .optbox:active[disabled], label:hover > .optbox[disabled] {
+  border: 1px solid var(--border) !important;
+  opacity: .5;
+  pointer-events: none;
+}

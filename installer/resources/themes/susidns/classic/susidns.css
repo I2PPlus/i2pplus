@@ -4,6 +4,7 @@
 @import url(/themes/fonts/DroidSans.css);
 @import url(../images/images.css);
 @import url(images/images.css);
+@import url(/themes/console/classic/optbox.css);
 
 :root {
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
@@ -16,9 +17,15 @@
   --btn_hover: linear-gradient(to bottom, #ddd, #fff);
   --btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 #fff, inset 0 0 4px 2px #f0f0ff, 0 1px 1px rgba(220,220,255,.5);
   --btn_shadow_hover: var(--highlight), 0 0 0 1px #fff, 0 0 0 2px rgba(255,96,0,.4);
+  --btn_shadow_active: var(--highlight), inset 3px 3px 3px 1px rgba(32,32,64,.3);
   --heading: linear-gradient(to bottom, #fff, #fafbff);
   --border: #bfc3d9;
-  --active: #f60;
+  --hover: #f60;
+  --active: #f30;
+  --border: #bfc3d9;
+  --h2: linear-gradient(to bottom, #fff 50%, #fafbff 50%);
+  --bg: #fff;
+  --bg3: #eef;
 }
 
 html, body {
@@ -283,7 +290,7 @@ a:visited {
 
 a:hover, a:focus {
   text-decoration: none;
-  color: var(--active);
+  color: var(--hover);
 }
 
 a:active {
@@ -391,8 +398,8 @@ div#filter {
 
 #filter a:hover, #filter a:focus {
   text-decoration: none;
-  color: var(--active) !important;
-  border: 1px solid var(--active) !important;
+  color: var(--hover) !important;
+  border: 1px solid var(--hover) !important;
   background: var(--bg);
 }
 
@@ -691,18 +698,6 @@ input.update {
   margin-bottom: -2px !important;
 }
 
-input[type=radio], input[type=checkbox] {
-  min-width: 16px;
-  min-height: 16px;
-  background: none;
-}
-
-input[type=radio]:hover, input[type=radio]:focus, input[type=checkbox]:hover, input[type=checkbox]:focus {
-  box-shadow: inset 0 0 1px 2px #89f;
-  filter: drop-shadow(0 0 3px #89f);
-  outline: none;
-}
-
 form[action="subscriptions"], form[action="config"] {
   margin: 10px 0;
 }
@@ -781,8 +776,8 @@ textarea[name="config"], textarea[name="content"] {
 
 #navi a:hover, #navi a:focus {
   z-index: 10;
-  color: var(--active) !important;
-  border-color: 1px solid var(--active);
+  color: var(--hover) !important;
+  border-color: 1px solid var(--hover);
 }
 
 .iframed #navi a:hover, .iframed #navi a:focus {
@@ -920,7 +915,7 @@ p.book {
 }
 
 .info img:hover, .info a:focus img {
-  filter: drop-shadow(0 0 1px var(--active)) !important;
+  filter: drop-shadow(0 0 1px var(--hover)) !important;
 }
 
 .info a:active img, .info a:focus img {
@@ -1126,99 +1121,6 @@ h3, h3 a {
 
 /* end responsive layout */
 
-/* Edge/IE tweaks */
-
-_:-ms-lang(x), * {
-  filter: none !important;
-}
-
-/* end Edge/IE tweaks */
-
-/* custom radios/checkboxes to enforce color scheme when OS widgets are non-standard  */
-@supports (background-blend-mode: luminosity) { /* exclude ms browsers */
-input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked,
-input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
-  position: relative;
-  width: 19px !important;
-  height: 19px !important;
-  vertical-align: middle !important;
-  box-sizing: border-box;
-  border: 1px solid var(--border);
-  background: #f8f8ff;
-  -moz-appearance: none;
-  -webkit-appearance: inherit;
-  filter: drop-shadow(0 0 1px #ccf);
-  will-change: transform;
-}
-
-input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
-  border-radius: 2px;
-  box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6);
-}
-
-input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
-  border-radius: 50%;
-}
-
-input[type=checkbox]:checked::before, input[type=radio]:checked::before,
-input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
-  position: absolute;
-  transition: linear all .05s;
-  transform: scale(1);
-}
-
-.optbox:not(:checked) {
-  box-shadow: inset 2px 2px 1px rgba(204, 204, 240, .6);
-}
-
-input[type=checkbox]:checked::before {
-  content: "";
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 11px;
-  height: 11px;
-  line-height: 80%;
-  border-radius: 1px;
-  background: #67f;
-  transform: scale(1);
-  transition: linear all .05s;
-}
-
-input[type=radio]:checked::before {
-  content: "";
-  border-radius: 50%;
-  left: 25%;
-  top: 25%;
-  width: 9px;
-  height: 9px;
-  background: #67f;
-}
-
-input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
-  transform: scale(0);
-}
-
-input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus, input[type=radio]:focus {
-  background: var(--bg);
-  width: 19px !important;
-  height: 19px !important;
-  border: 1px solid #67f !important;
-  box-shadow: 0 0 2px var(--active) !important;
-  filter: drop-shadow(0 0 3px #89f) !important;
-  filter: none !important;
-}
-
-input[type=checkbox][disabled], input[type=radio][disabled], input[type=checkbox][disabled]:hover, input[type=radio][disabled]:hover,
-input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, input[type=checkbox][disabled]:checked:hover, input[type=radio][disabled]:checked:hover {
-  filter: none !important;
-  box-shadow: none !important;
-  opacity: .5;
-}
-}
-
-/* end custom radios/checkboxes */
-
 #hostNotes td:first-child {
   padding-top: 8px !important;
   vertical-align: top;
@@ -1270,7 +1172,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 
 #export {
   padding-left: 2px;
-  height: 39px;
+  height: 40px;
   position: absolute;
   top: 0;
   right: 3px;
@@ -1355,13 +1257,13 @@ input[disabled] {
 }
 
 #prev.inactive, #next.inactive {
-  padding: 10px;
+  padding: 8px 14px 12px;
   border: none;
 }
 
 #prev a, #next a {
   margin: 0;
-  padding: 10px;
+  padding: 11px 14px;
   font-size: 0 !important;
 }
 
@@ -1389,11 +1291,11 @@ input[disabled] {
 }
 
 #prev:not(.inactive):hover::after, #prev:not(.inactive) a:focus::after {
-  border-color: transparent var(--active) transparent transparent;
+  border-color: transparent var(--hover) transparent transparent;
 }
 
 #next:not(.inactive):hover::after, #next:not(.inactive) a:focus::after {
-  border-color: transparent transparent transparent var(--active);
+  border-color: transparent transparent transparent var(--hover);
 }
 
 #empty {
@@ -1410,11 +1312,11 @@ input[disabled] {
 
 @media screen and (max-width: 1200px) {
   .iframed #prev a, .iframed #next a {
-    padding: 11px 10px !important;
+    padding: 10px 14px !important;
   }
 
   .iframed #prev::after, .iframed #next::after {
-    top: calc(50% - 4px);
+    top: calc(50% - 5px);
   }
 
   .headline h3 {
