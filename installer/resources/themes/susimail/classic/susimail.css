@@ -4,26 +4,33 @@
 @import url(/themes/fonts/DroidSans.css);
 @import url(../images/images.css);
 @import url(images/images.css);
+@import url(/themes/console/classic/optbox.css);
 
 :root {
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
   --monospaced: Droid Sans Mono, Andale Mono, DejaVu Sans Mono, Lucida Console, monospace;
-  --ink : #667;
+  --ink: #41444d;
+  --ink_light: #5e626e;
   --bg: #fff;
+  --bg2: #f4f4ff;
+  --bg3: #eef;
   --highlight: inset 0 0 0 1px #fff;
   --btn: linear-gradient(to bottom, #fff, #f0f0ff);
   --btn_hover: linear-gradient(to bottom, #ddd, #fff);
   --btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 #fff, inset 0 0 4px 2px #f0f0ff, 0 1px 1px rgba(220,220,255,.5);
   --btn_shadow_hover: var(--highlight), 0 0 0 1px #fff, 0 0 0 2px rgba(255,96,0,.4);
+  --btn_shadow_active: var(--highlight), inset 3px 3px 3px 1px rgba(32,32,64,.3);
   --header: linear-gradient(to bottom, #fff 50%, #f2f2ff 50%);
+  --hover: #f60;
+  --active: #f30;
   --border: #bfc3d9;
-  --border_inner: #dfe1ec;
+  --border_soft: #cfd2e2;
   --hover: #f60;
 }
 
 body {
   margin: 3px 4px;
-  color: #2c354f;
+  color: var(--ink);
   font-family: var(--bodyfont);
   font-size: 9pt;
   background: #eef url(/themes/console/classic/images/bg0.png);
@@ -253,7 +260,7 @@ td {
 }
 
 tr.list0 {
-  background: #f1f0ff;
+  background: var(--bg3);
 }
 
 tr.list1 {
@@ -261,13 +268,13 @@ tr.list1 {
 }
 
 tr.list0, tr.list1 {
-  border-top: 1px solid var(--border_inner) !important;
-  border-bottom: 1px solid var(--border_inner) !important;
+  border-top: 1px solid var(--border_soft) !important;
+  border-bottom: 1px solid var(--border_soft) !important;
 }
 
 tr.list0:hover, tr.list1:hover {
-  border-top: 1px solid var(--border_inner);;
-  border-bottom: 1px solid var(--border_inner);;
+  border-top: 1px solid var(--border_soft);;
+  border-bottom: 1px solid var(--border_soft);;
   background: #ffd;
   cursor: pointer;
 }
@@ -423,7 +430,7 @@ img.sort {
 
 img.sort.selected {
   border-radius: 1px;
-  box-shadow: 0 0 0 1px var(--border_inner), inset 0 0 0 1px rgba(255,255,255,.7), inset 2px 2px 2px rgba(0,0,0,.1);
+  box-shadow: 0 0 0 1px var(--border_soft), inset 0 0 0 1px rgba(255,255,255,.7), inset 2px 2px 2px rgba(0,0,0,.1);
   background: var(--btn_hover);
   opacity: 1;
 }
@@ -453,7 +460,6 @@ pre {
   min-width: 800px;
   line-height: 1.6 !important;
   text-align: center;
-  color: #0c153d;
   font-size: 9pt !important;
   border: 1px solid var(--border);
   box-shadow: 0 0 0 1px #eee;
@@ -472,7 +478,7 @@ pre {
 table {
   width: 100%;
   text-align: justify;
-  color: var(--ink);
+  color: var(--ink_light);
   border-collapse: collapse;
 }
 
@@ -514,18 +520,6 @@ table#message_full {
   border-bottom: 1px solid var(--border);
 }
 
-input[type=checkbox], input[type=radio] {
-  background: none;
-  min-width: 16px;
-  min-height: 16px;
-}
-
-input[type=radio]:hover, input[type=radio]:focus, input[type=checkbox]:hover, input[type=checkbox]:focus {
-  box-shadow: inset 0 0 1px 2px #89f;
-  outline: none;
-  filter: drop-shadow(0 0 3px #89f);
-}
-
 input { /* opera fix */
   font-family: var(--bodyfont);
   font-size: 9pt;
@@ -537,11 +531,11 @@ textarea {
 }
 
 input[type=text], input[type=password], textarea {
-  border: 1px solid var(--border);
-  box-shadow: inset 1px 1px 1px #ddd;
   padding: 4px 5px !important;
+  color: var(--ink_light);
+  border: 1px solid var(--border);
   border-radius: 2px;
-  color: #333;
+  box-shadow: inset 1px 1px 1px #ddd;
   background: var(--bg);
 }
 
@@ -551,9 +545,9 @@ input[type=submit], #settings {
 }
 
 input.new_upload, input.delete_attachment {
+  margin-right: 0;
   float: right;
   text-transform: capitalize;
-  margin-right: 0;
 }
 
 @-moz-document url-prefix(http://) {
@@ -570,7 +564,7 @@ button:focus, input[type=submit]:focus, input[type="reset"]:focus, .fakebutton:f
 button, input[type=submit], input[type="reset"], #settings, .fakebutton {
   padding: 5px;
   display: inline-block;
-  color: #333;
+  color: var(--ink_light);
   border: 1px solid var(--border);
   border-radius: 3px;
   box-shadow: var(--btn_shadow);
@@ -587,7 +581,7 @@ input[type="file"] {
 button:hover, input[type=submit]:hover, input[type="reset"]:hover,
 button:focus, input[type=submit]:focus, input[type="reset"]:focus,
 #settings:hover, #settings:focus, .fakebutton:focus {
-  color: #222;
+  color: var(--ink);
   border: 1px solid var(--border);
   box-shadow: var(--btn_shadow_hover);
   background: var(--btn_hover);
@@ -611,11 +605,6 @@ input[disabled][type=submit], input[disabled][type=submit]:hover, input[disabled
   opacity: .3;
   filter: none;
   pointer-events: none;
-}
-
-input.optbox {
-  vertical-align: middle;
-  background: none;
 }
 
 input, label {
@@ -930,7 +919,7 @@ select {
   vertical-align: middle;
   text-overflow: ellipsis;
   font-size: 9pt;
-  color: #333;
+  color: var(--ink_light);
   border-radius: 3px;
   border: 1px solid var(--border);
   box-shadow: var(--btn_shadow);
@@ -948,12 +937,13 @@ select option {
 }
 
 select:hover, select:active {
+  color: var(--ink);
   box-shadow: var(--btn_shadow_hover);
   background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover) !important;
 }
 
 select:focus {
-  color: #000;
+  color: var(--ink);
   background: var(--dropdown_hover) no-repeat right 8px center / 10px,  var(--btn_hover) !important;
   outline: none !important;
 }
@@ -1285,10 +1275,6 @@ div#pagenav {
   background: var(--bg);
 }
 
-.iframed #prefsave {
-  margin-bottom: -24px;
-}
-
 tr.bottombuttons table.pagenav {
   margin: 0;
   width: 100%;
@@ -1451,11 +1437,11 @@ img.sort {
   display: inline-block;
   vertical-align: middle;
   line-height: normal;
-  color: var(--ink);
+  color: var(--ink_light);
   border: 1px solid #bbc;
   border-radius: 2px;
   box-shadow: var(--highlight);
-  background: #f2f2f2;
+  background: var(--bg2);
 }
 
 .iframed #info {
@@ -1518,91 +1504,6 @@ tr:hover .listDate {
   text-align: left;
   opacity: .85;
 }
-
-/* custom radios/checkboxes to enforce color scheme when OS widgets are non-standard  */
-@supports (background-blend-mode: luminosity) { /* exclude ms browsers */
-input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked,
-input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
-  position: relative;
-  width: 19px !important;
-  height: 19px !important;
-  vertical-align: middle !important;
-  box-sizing: border-box;
-  border: 1px solid var(--border);
-  background: #f8f8ff;
-  -moz-appearance: none;
-  -webkit-appearance: inherit;
-  filter: drop-shadow(0 0 1px #ccf);
-  will-change: transform;
-}
-
-input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
-  border-radius: 2px;
-  box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6);
-}
-
-input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
-  border-radius: 50%;
-}
-
-input[type=checkbox]:checked::before, input[type=radio]:checked::before,
-input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
-  position: absolute;
-  transition: linear all .05s;
-  transform: scale(1);
-}
-
-.optbox:not(:checked) {
-  box-shadow: inset 2px 2px 1px rgba(204, 204, 240, .6);
-}
-
-input[type=checkbox]:checked::before {
-  content: "";
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 11px;
-  height: 11px;
-  line-height: .8;
-  border-radius: 1px;
-  background: #67f;
-  transform: scale(1);
-  transition: linear all .05s;
-}
-
-input[type=radio]:checked::before {
-  content: "";
-  border-radius: 50%;
-  left: 25%;
-  top: 25%;
-  width: 9px;
-  height: 9px;
-  background: #67f;
-}
-
-input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
-  transform: scale(0);
-}
-
-input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus, input[type=radio]:focus {
-  background: var(--bg);
-  width: 19px !important;
-  height: 19px !important;
-  border: 1px solid #67f !important;
-  box-shadow: 0 0 2px var(--hover) !important;
-  filter: drop-shadow(0 0 3px #89f) !important;
-  filter: none !important;
-}
-
-input[type=checkbox][disabled], input[type=radio][disabled], input[type=checkbox][disabled]:hover, input[type=radio][disabled]:hover,
-input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, input[type=checkbox][disabled]:checked:hover, input[type=radio][disabled]:checked:hover {
-  filter: none !important;
-  box-shadow: none !important;
-  opacity: .5;
-}
-}
-
-/* end custom radios/checkboxes */
 
 /* confirm mail delete */
 
