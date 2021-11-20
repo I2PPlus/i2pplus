@@ -3650,7 +3650,7 @@ div.app:hover a, .app:hover .applabel a {
 
 .applabel {
   margin: 0;
-  padding: 4px 2px;
+  padding: 3px 2px 5px;
   width: 136px;
   line-height: 1.1;
   white-space: nowrap;
@@ -8101,7 +8101,7 @@ div.app img {
 }
 
 .applabel {
-  padding: 4px 2px 2px !important;
+  padding: 2px 2px 4px !important;
   width: 156px !important;
 }
 

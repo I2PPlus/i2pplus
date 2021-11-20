@@ -1,5 +1,4 @@
-input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked,
-input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
+.optbox, .optbox:checked {
   position: relative;
   width: 19px;
   height: 19px;
@@ -9,7 +8,6 @@ input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input
   background: var(--bg);
   -moz-appearance: none;
   -webkit-appearance: inherit;
-  filter: drop-shadow(0 0 1px var(--bg3));
   will-change: transform;
 }
 
@@ -22,28 +20,24 @@ input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input
   border-radius: 50%;
 }
 
-input[type=checkbox]:checked::before, input[type=radio]:checked::before,
-input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
+.optbox:checked::before, .optbox:not(:checked)::before {
   position: absolute;
   transition: linear all .05s;
   transform: scale(1);
 }
 
 .optbox:not(:checked):not(:hover) {
-  box-shadow: var(--shadow_inset);
+  box-shadow: var(--btn_shadow_active);
 }
 
-input[type=checkbox]:checked::before,
-input[type=radio]:checked::before {
+.optbox:checked::before {
   line-height: .8;
   background: #67f;
   content: "";
 }
 
-input[type=checkbox]:checked:hover::before,
-input[type=radio]:checked:hover::before,
-input[type=checkbox]:checked:focus::before,
-input[type=radio]:checked:focus::before {
+.optbox:checked:hover::before,
+.optbox:checked:focus::before {
   background: var(--hover);
 }
 
@@ -64,20 +58,19 @@ input[type=radio]:checked::before {
   border-radius: 50%;
 }
 
-input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
+.optbox:not(:checked)::before {
   color: transparent;
   background: transparent;
   transform: scale(0);
 }
 
-input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus, input[type=radio]:focus {
+.optbox:not([disabled]):hover, .optbox:not([disabled]):focus {
   border: 1px solid var(--active) !important;
   background: var(--bg);
 }
 
-input[type=checkbox][disabled], input[type=radio][disabled], input[type=checkbox][disabled]:hover, input[type=radio][disabled]:hover,
-input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, input[type=checkbox][disabled]:checked:hover, input[type=radio][disabled]:checked:hover,
-label:hover > .optbox[disabled] {
+.optbox[disabled], .optbox:hover[disabled],
+.optbox:focus[disabled], .optbox:active[disabled], label:hover > .optbox[disabled] {
   border: 1px solid var(--border) !important;
   opacity: .5;
   pointer-events: none;
