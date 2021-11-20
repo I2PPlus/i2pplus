@@ -834,11 +834,12 @@ div.refresh {
 .percentBarInner {
   vertical-align: middle;
   border: none;
+  border-right: 1px solid var(--border_soft);
   height: 14px;
   max-width: 100%;
   background: linear-gradient(90deg, rgba(0,255,0,.1) 65px, rgba(255,255,0,.1) 110px, rgba(255,128,0,.1) 175px, rgba(255,0,0,.1)),
-              linear-gradient(180deg, rgba(255, 255, 255,.6), rgba(238, 238, 255, .6) 50%, rgba(180, 180, 255, .7) 50%, rgba(140, 140, 255, .7));
-  box-shadow: inset 0 0 0 1px var(--bg4);
+              linear-gradient(180deg, rgba(240, 240, 250,.85), rgba(255, 255, 255, .7) 50%, rgba(220, 220, 255, .7) 50%, rgba(140, 140, 220, .9));
+  box-shadow: var(--highlight);
 }
 
 .percentBarText {
