@@ -9,6 +9,7 @@
 :root {
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
   --monospaced: Droid Sans Mono, Andale Mono, DejaVu Sans Mono, Lucida Console, monospace;
+  --bodybg: #e2e2f3;
   --bg: #fff;
   --ink: #41444d;
   --ink_light: #5e626e;

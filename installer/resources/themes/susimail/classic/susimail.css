@@ -11,6 +11,7 @@
   --monospaced: Droid Sans Mono, Andale Mono, DejaVu Sans Mono, Lucida Console, monospace;
   --ink: #41444d;
   --ink_light: #5e626e;
+  --bodybg: #e2e2f3;
   --bg: #fff;
   --bg2: #f4f4ff;
   --bg3: #eef;
@@ -29,13 +30,17 @@
   --hover: #f60;
 }
 
+html {
+  scrollbar-color: #acafb9 var(--bodybg);
+}
+
 body {
   margin: 3px 4px;
   color: var(--ink);
   font-family: var(--bodyfont);
   font-size: 9pt;
-  background: var(--bg3) url(/themes/console/classic/images/bg0.png);
-  background-size: 120px;
+  background: var(--bg3) url(/themes/console/classic/images/bg0.png) left top / 120px;
+  scrollbar-color: #acafb9 var(--bg);
 }
 
 body.iframed {
