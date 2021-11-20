@@ -25,6 +25,7 @@
   --btnAction_hover: linear-gradient(to bottom, #fff 50%, #eef 50%);
   --btnAction_active: linear-gradient(to bottom, #bbf, #eef);
   --border: #bfc3d9;
+  --border_hard: #9fa5c6;
   --hover: #f60;
   --active: #f30;
 }
@@ -319,7 +320,7 @@ td.snarkGraphicStatus img {
 
 .snarkMessages a:hover,
 .snarkMessages a:focus {
-  color: #f60 !important;
+  color: var(--hover) !important;
 }
 
 #closeLog, #expand, #shrink {
@@ -466,7 +467,7 @@ td.snarkGraphicStatus img {
 .snarkTorrentDetails a:hover img[src^="/i2psnark/.resources/icons/"], .snarkTorrentDetails a:focus img[src^="/i2psnark/.resources/icons/"],
 .snarkCommentDetails a:hover img, .snarkCommentDetails a:focus img,
 .snarkDirInfo td:first-child a:hover img, .snarkDirInfo td:first-child a:focus img {
-  border: 1px solid #f60 !important;
+  border: 1px solid var(--hover) !important;
   border-radius: 2px;
   background: #ddf;
   background: linear-gradient(to bottom, #fff 50%, #ddf 50%);
@@ -1318,7 +1319,7 @@ tr:nth-child(even) + .peerinfo:nth-child(odd) {
 .snarkDirInfo td:first-child .thumb:hover, .snarkDirInfo td:first-child .thumb:focus {
   max-width: 96px;
   max-height: 64px;
-  border: 1px solid #f60 !important;
+  border: 1px solid var(--hover) !important;
   box-shadow: none !important;
   background: #fff !important;
   transition: ease all .2s .1s;
@@ -1335,7 +1336,7 @@ audio, video {
 }
 
 audio:hover, audio:focus, video:hover, video:focus {
-  border: 1px solid #f60;
+  border: 1px solid var(--hover);
 }
 
 video:fullscreen, video:fullscreen:hover, video:fullscreen:focus {
@@ -1372,11 +1373,11 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
 
 .snarkConfigTitle:hover, .toggleview:hover, input.toggle_input:focus + .toggleview {
   background: linear-gradient(to bottom, #eff2ff, #fff) !important;
-  color: #f60 !important;
+  color: var(--hover) !important;
 }
 
 input.toggle_input:focus + .toggleview img {
-  filter: drop-shadow(0 0 1px #f60);
+  filter: drop-shadow(0 0 1px var(--hover));
 }
 
 .snarkConfigTitle:active, .toggleview:active {
@@ -1435,7 +1436,7 @@ input.toggle_input:focus + .toggleview img {
 }
 
 .snarkConfigTitle a:hover, .snarkConfigTitle a:focus, .toggleview:hover, .toggleview:focus {
-  color: #f60 !important;
+  color: var(--hover) !important;
   text-shadow: none;
   transition: ease box-shadow .05s;
 }
@@ -1487,7 +1488,7 @@ a:link, a:visited {
 
 a:hover, a:focus {
   font-weight: 400;
-  color: #f60 !important;
+  color: var(--hover) !important;
   outline: none;
 }
 
@@ -1539,7 +1540,7 @@ thead a:active img {
 
 a img:hover, a img:focus {
   outline: none !important;
-  filter: drop-shadow(0 0 1px #f60) !important;
+  filter: drop-shadow(0 0 1px var(--hover)) !important;
 }
 
 input::-moz-focus-inner {
@@ -1671,9 +1672,9 @@ th a:link img, th a:visited img {
 }
 
 th a:focus, a:focus img {
-  color: #f60;
+  color: var(--hover);
   outline: none;
-  filter: drop-shadow(0 0 1px #f60);
+  filter: drop-shadow(0 0 1px var(--hover));
 }
 
 input[type=text], input.r {
@@ -1807,7 +1808,7 @@ img:hover {
 }
 
 .pagenavcontrols a img:hover, .pagenavcontrols a img:focus {
-  border: 1px solid #f60 !important;
+  border: 1px solid var(--hover) !important;
   background: linear-gradient(to bottom, #f8f8ff 50%, #cfcfff 50%);
   filter: none !important;
 }
@@ -2221,7 +2222,7 @@ img:hover {
 
 .configsection a:hover {
   text-decoration: none;
-  color: #f60;
+  color: var(--hover);
 }
 
 code {
@@ -2262,7 +2263,7 @@ input.toggle_input::before {
 
 .toggleview:hover {
   cursor: pointer;
-  color: #f60;
+  color: var(--hover);
 }
 
 input#toggle_addtorrent:not(checked) + label + hr + table,
@@ -2281,7 +2282,7 @@ input#toggle_createtorrent:checked + label + hr + table {
 }
 
 .toggleview img:hover, .toggleview:hover img, .snarkConfigTitle a:hover img, input:focus + .toggleview img {
-  filter: drop-shadow(0 0 1px #f60);
+  filter: drop-shadow(0 0 1px var(--hover));
   mix-blend-mode: normal !important;
 }
 
@@ -3052,7 +3053,7 @@ td.snarkTorrentDownloaded {
 }
 
 .info_tracker:hover, .info_tracker:hover a {
-  color: #f60;
+  color: var(--hover);
 }
 
 .info_tracker:hover {
@@ -3066,8 +3067,8 @@ td.snarkTorrentDownloaded {
 
 .info_tracker:active {
   color: #fff !important;
-  box-shadow: 0 0 0 1px #f60, inset 3px 3px 3px #420;
-  background: #f60 var(--tracker_active) no-repeat left 3px center / 14px !important;
+  box-shadow: 0 0 0 1px var(--hover), inset 3px 3px 3px #420;
+  background: var(--hover) var(--tracker_active) no-repeat left 3px center / 14px !important;
 }
 
 .info_tracker a {
@@ -3282,6 +3283,11 @@ td.snarkTorrentDownloaded {
   display: inline-block;
   height: 38px;
   vertical-align: middle;
+}
+
+.configOption .optbox, .configOption .optbox:not([disabled]):hover, .configOption .optbox:not([disabled]):focus {
+    border-color: var(--border_hard) !important;
+    box-shadow: var(--btn_shadow_hover);
 }
 
 input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilter_dataDir"] {
@@ -3638,7 +3644,7 @@ td.snarkTorrentPeerCount, .nopeers td.snarkTorrentPeerCount {
 }
 
 #torrentDisplay label:hover, #torrentDisplay label:focus {
-  color: #f60;
+  color: var(--hover);
   background: linear-gradient(to bottom, #eff2ff, #fff);
 }
 
@@ -4037,7 +4043,7 @@ hr.debug {
   }
 
   .magnetlink:hover, .magnetlink:focus, .torrentlink:hover, .torrentlink:focus {
-    border: 1px solid #f60;
+    border: 1px solid var(--hover);
     background: linear-gradient(to bottom, #fcfaf7 50%, #ffe8bf 50%, #efd9b3);
   }
 
@@ -4278,12 +4284,12 @@ td.snarkTorrentPeerCount {
 
 .sortIcon:hover .ascending {
   top: 2px !important;
-  border-color: transparent transparent #f60 transparent;
+  border-color: transparent transparent var(--hover) transparent;
 }
 
 .sortIcon:hover .descending {
   top: -2px !important;
-  border-color: #f60 transparent transparent transparent;
+  border-color: var(--hover) transparent transparent transparent;
 }
 
 #snarkTorrentSort .ascending, th#snarkTorrentSort .descending {
@@ -4357,7 +4363,7 @@ td.snarkTorrentAction input[type=submit] {
 }
 
 .snarkTorrentAction input:hover, .snarkTorrentAction input:focus {
-  border: 1px solid #f60;
+  border: 1px solid var(--hover);
   opacity: 1;
   filter: none;
 }
