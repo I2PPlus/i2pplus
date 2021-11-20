@@ -115,5 +115,9 @@
 <link href="<%=themePath%>override.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
 <%
     }
+    if (theme.equals("classic")) {
 %>
 <link href="<%=themePath%>errors.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
+<%
+    }
+%>
