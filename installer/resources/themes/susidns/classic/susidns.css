@@ -1270,7 +1270,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 
 #export {
   padding-left: 2px;
-  height: 39px;
+  height: 40px;
   position: absolute;
   top: 0;
   right: 3px;
@@ -1355,13 +1355,13 @@ input[disabled] {
 }
 
 #prev.inactive, #next.inactive {
-  padding: 10px;
+  padding: 8px 14px 12px;
   border: none;
 }
 
 #prev a, #next a {
   margin: 0;
-  padding: 10px;
+  padding: 11px 14px;
   font-size: 0 !important;
 }
 
@@ -1410,11 +1410,11 @@ input[disabled] {
 
 @media screen and (max-width: 1200px) {
   .iframed #prev a, .iframed #next a {
-    padding: 11px 10px !important;
+    padding: 10px 14px !important;
   }
 
   .iframed #prev::after, .iframed #next::after {
-    top: calc(50% - 4px);
+    top: calc(50% - 5px);
   }
 
   .headline h3 {
