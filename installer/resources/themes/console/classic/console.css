@@ -2,6 +2,8 @@
 /* I2P Description: Light blue "classic" I2P theme; optimized for less capable browsers and system specifications. */
 /* Author: dr|z3d */
 
+@import url(optbox.css);
+
 :root {
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
   --monospaced: Droid Sans Mono, Andale Mono, DejaVu Sans Mono, Lucida Console, monospace;
@@ -21,7 +23,7 @@
   --btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 #fff, inset 0 0 4px 2px #f0f0ff, 0 1px 1px rgba(220,220,255,.5);
   --btn_shadow_hover: var(--highlight), 0 0 0 1px #fff, 0 0 0 2px rgba(255,96,0,.4);
   --btn_shadow_active: var(--highlight), inset 3px 3px 3px 1px rgba(32,32,64,.3);
-  --shadow_inset: inset 2px 2px 4px rgba(204, 204, 240, .6);
+  --shadow_inset: inset 2px 2px 4px rgba(204,204,240,.6);
   --shadow_input: inset 1px 1px 1px #ddd;
   --badge: linear-gradient(to bottom, #fff, var(--bg3));
   --badge_hover: linear-gradient(to bottom, var(--bg3), #fff);
@@ -9762,93 +9764,6 @@ a.keysearch {
 #leasesetsummary tr:last-child td:last-child {
   text-align: left;
 }
-
-/* radios/checkboxes */
-
-input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked,
-input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
-  position: relative;
-  width: 19px;
-  height: 19px;
-  vertical-align: middle;
-  box-sizing: border-box;
-  border: 1px solid var(--border);
-  background: var(--bg);
-  -moz-appearance: none;
-  -webkit-appearance: inherit;
-  filter: drop-shadow(0 0 1px var(--bg3));
-  will-change: transform;
-}
-
-input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
-  border-radius: 1px;
-  box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6);
-}
-
-input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
-  border-radius: 50%;
-}
-
-input[type=checkbox]:checked::before, input[type=radio]:checked::before,
-input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
-  position: absolute;
-  transition: linear all .05s;
-  transform: scale(1);
-}
-
-.optbox:not(:checked):not(:hover) {
-  box-shadow: var(--shadow_inset);
-}
-
-input[type=checkbox]:checked::before,
-input[type=radio]:checked::before {
-  line-height: .8;
-  background: #67f;
-  content: "";
-}
-
-input[type=checkbox]:checked:hover::before,
-input[type=radio]:checked:hover::before,
-input[type=checkbox]:checked:focus::before,
-input[type=radio]:checked:focus::before {
-  background: var(--hover);
-}
-
-input[type=checkbox]:checked::before {
-  width: 11px;
-  height: 11px;
-  top: 3px;
-  left: 3px;
-  border-radius: 1px;
-  transform: scale(1);
-}
-
-input[type=radio]:checked::before {
-  width: 9px;
-  height: 9px;
-  left: 25%;
-  top: 25%;
-  border-radius: 50%;
-}
-
-input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
-  color: transparent;
-  background: transparent;
-  transform: scale(0);
-}
-
-input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus, input[type=radio]:focus {
-  border: 1px solid var(--active) !important;
-  background: var(--bg);
-}
-
-input[type=checkbox][disabled], input[type=radio][disabled], input[type=checkbox][disabled]:hover, input[type=radio][disabled]:hover,
-input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, input[type=checkbox][disabled]:checked:hover, input[type=radio][disabled]:checked:hover {
-  opacity: .5;
-  pointer-events: none;
-}
-
-/* end radios/checkboxes */
 
 .config_experimental:not(old) {
   margin-left: 2px;

@@ -5,6 +5,7 @@
 @import url(/themes/console/images/i2ptunnel.css);
 @import url(../images/images.css);
 @import url(images/i2ptunnel.css);
+@import url(optbox.css);
 
 :root {
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
@@ -12,15 +13,18 @@
   --ink: #41444d;
   --ink_light: #5e626e;
   --a: #5c5c8a;
-  --a_hover: #f60;
-  --a_active: #f30;
+  --hover: #f60;
+  --active: #f30;
   --highlight: inset 0 0 0 1px #fff;
+  --shadow_inset: inset 2px 2px 4px rgba(204,204,240,.6);
   --btn: linear-gradient(to bottom, #fff, #f0f0ff);
   --btn_hover: linear-gradient(to bottom, #ddd, #fff);
   --btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 #fff, inset 0 0 4px 2px #f0f0ff, 0 1px 1px rgba(220,220,255,.5);
   --btn_shadow_hover: var(--highlight), 0 0 0 1px #fff, 0 0 0 2px rgba(255,96,0,.4);
   --border: #bfc3d9;
   --h2: linear-gradient(to bottom, #fff 50%, #fafbff 50%);
+  --bg: #fff;
+  --bg3: #eef;
 }
 
 html {
@@ -301,11 +305,11 @@ a:link, a:visited {
 
 a:hover, a:focus {
   text-decoration: none;
-  color: var(--a_hover);
+  color: var(--hover);
 }
 
 a:active {
-  color: var(--a_active);
+  color: var(--active);
 }
 
 input[type="hidden"], input.default {
@@ -510,11 +514,11 @@ th.tunnelControl {
   text-align: center;
 }
 
-input[type=checkbox], input[type=radio] {
+/*input[type=checkbox], input[type=radio] {
   margin: 2px 2px 2px 0;
   min-width: 16px;
   min-height: 16px;
-  vertical-align: sub;
+  vertical-align: middle;
   background: none;
 }
 
@@ -527,6 +531,10 @@ input[type=radio]:hover, input[type=radio]:focus, input[type=checkbox]:hover, in
 input[type=radio][disabled]:hover, input[type=radio][disabled]:focus {
   box-shadow: none !important;
   filter: none !important;
+}*/
+
+.optbox {
+  margin: 2px 2px 2px 0;
 }
 
 .editDisabled input[type=radio], .editDisabled label {
@@ -670,10 +678,6 @@ input {
   vertical-align: middle;
 }
 
-.optbox {
-  vertical-align: middle;
-}
-
 #hostField, #leasesetKey, #userAgents {
   margin: 0 !important;
   width: 90% !important;
@@ -725,7 +729,7 @@ textarea[name="accessList"]:focus {
 }
 
 .multiOption input {
-  vertical-align: sub;
+  vertical-align: middle;
 }
 
 .multiOption#isServer, .multiOption#isClient {
@@ -734,14 +738,12 @@ textarea[name="accessList"]:focus {
 
 .multiOption#isServer {
   padding-left: 28px;
-  background: url(/themes/console/images/svg/server.svg) no-repeat 4px center;
-  background-size: 22px 22px;
+  background: url(/themes/console/images/svg/server.svg) no-repeat 4px center / 22px;
 }
 
 .multiOption#isClient {
   padding-left: 28px;
-  background: url(/themes/console/images/svg/client.svg) no-repeat 4px center;
-  background-size: 22px 22px;
+  background: url(/themes/console/images/svg/client.svg) no-repeat 4px center / 22px;
 }
 
 #wizardPanel input[type=checkbox], #wizardPanel input[type=radio] {
@@ -1207,7 +1209,7 @@ input[name="nofilter_blindedPassword"] {
   padding: 2px 4px;
   overflow: auto;
   text-overflow: clip;
-  box-shadow: 0 0 0 1px #fff, 0 0 0 2px var(--a_hover);
+  box-shadow: 0 0 0 1px #fff, 0 0 0 2px var(--hover);
   background: #ffd;
   outline: none;
 }
@@ -1297,97 +1299,6 @@ th .help::after {
   box-shadow: inset 0 0 0 1px #000;
   background: #002;
 }
-
-/* custom radios/checkboxes */
-
-input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked,
-input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
-  width: 19px !important;
-  height: 19px !important;
-  position: relative;
-  vertical-align: middle !important;
-  border: 1px solid var(--border);
-  background: #f8f8ff;
-  box-sizing: border-box;
-  -moz-appearance: none;
-  -webkit-appearance: inherit;
-  filter: drop-shadow(0 0 1px #ccf);
-  will-change: transform;
-}
-
-input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
-  border-radius: 2px;
-  box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6);
-}
-
-input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
-  border-radius: 50%;
-}
-
-input[type=checkbox]:checked::before, input[type=radio]:checked::before,
-input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
-  position: absolute;
-  transform: scale(1);
-  transition: linear all .05s;
-}
-
-.optbox:not(:checked) {
-  box-shadow: inset 2px 2px 1px rgba(204, 204, 240, .6);
-}
-
-input[type=checkbox]:checked::before {
-  width: 11px;
-  height: 11px;
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  line-height: 80%;
-  border-radius: 1px;
-  background: #67f;
-  content: "";
-  transform: scale(1);
-  transition: linear all .05s;
-}
-
-input[type=radio]:checked::before {
-  width: 9px;
-  height: 9px;
-  left: 25%;
-  top: 25%;
-  border-radius: 50%;
-  background: #67f;
-  content: "";
-}
-
-input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
-  transform: scale(0);
-}
-
-input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus, input[type=radio]:focus {
-  width: 19px !important;
-  height: 19px !important;
-  border: 1px solid #67f !important;
-  box-shadow: 0 0 2px var(--a_hover) !important;
-  background: #fff;
-  filter: none !important;
-}
-
-input[type=checkbox][disabled], input[type=radio][disabled], input[type=checkbox][disabled]:hover, input[type=radio][disabled]:hover,
-input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, input[type=checkbox][disabled]:checked:hover, input[type=radio][disabled]:checked:hover {
-  box-shadow: none !important;
-  opacity: .5;
-  filter: none !important;
-}
-
-.optionsDisabled {
-  cursor: not-allowed;
-}
-
-.optionsDisabled .optbox, .optionsDisabled label {
-  pointer-events: none !important;
-}
-
-/* end custom radios/checkboxes */
 
 .tunnelInfo {
   display: none;
