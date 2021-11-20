@@ -36,7 +36,7 @@
   --bg: #fff;
   --bg2: #f4f4ff;
   --bg3: #eef;
-  --bg4: #ddf;
+  --bg4: #e8e8ff;
   --th: linear-gradient(to bottom, #fff, var(--bg2));
   --subheading: linear-gradient(to right, var(--bg), var(--bg3));
   --header: linear-gradient(to bottom, var(--bg)50%, #f2f2ff 50%);
@@ -3717,43 +3717,101 @@ div.appgroup {
   width: auto;
 }
 
-div.search {
+/* home search */
+
+#searchbar {
   margin: -24px 10px 0 10px;
-  padding: 8px 8px 0 8px;
+  padding: 8px 0 2px;
   width: auto;
+  white-space: nowrap;
+  text-align: center;
 }
 
-table.search {
-  margin-left: auto;
-  margin-right: auto;
+#searchbar span {
+  background: #f00;
+  display: inline-block;
+  position: relative;
+  background: var(--button);
+}
+
+#searchbar table {
+  margin: 0 auto;
   width: auto;
-  border: 1px solid var(--border);
+  border-radius: 0 0 3px 3px;
   border-collapse: separate;
-  border-radius: 0 0 2px 2px;
+}
+
+#searchbar td {
+  padding: 3px 2px;
   background: var(--bg);
 }
 
-.search td {
-  padding: 1px 0;
+#searchbar button, #searchbar select {
+  margin: 0 !important;
+}
+
+#searchbar button:hover, #searchbar select:hover,
+#searchbar button:focus, #searchbar select:focus {
+  box-shadow: var(--highlight);
+}
+
+#searchbar select {
+  margin: 3px 0 3px 4px;
+  width: 164px;
+  position: absolute;
+  left: 4px;
+  top: 3px;
+  border-radius: 3px 0 0 3px;
+}
+
+#searchbar input {
+  margin: 3px 4px 3px 168px;
+  padding-left: 10px;
+  padding-right: 44px;
+  min-width: 240px;
+  border-radius: 0 3px 3px 0;
+  border-left: none;
   background: var(--bg);
 }
 
-.search td:nth-child(2) {
-  text-align: center !important;
+#searchbar input:focus {
+  box-shadow: var(--btn_shadow_active);
 }
 
-.search button.search {
-  margin: 0;
+#searchbar button {
+  padding: 0 3px 0 0;
+  position: absolute;
+  right: 5px;
+  top: 4px;
+  font-size: 0 !important;
+  height: 27px;
+  width: 36px;
+  border: none;
+  border-left: 1px solid var(--border) !important;
+  border-radius: 0 3px 3px 0;
+  background-position: center center;
 }
 
-input.search::placeholder {
+@media screen and (max-width: 1200px) {
+  #searchbar button {
+    height: 26px;
+  }
+}
+
+#searchbar button:active {
+  box-shadow: var(--btn_shadow_active);
+}
+
+#searchbar input::placeholder {
   opacity: 0;
 }
 
-input.search:hover::placeholder {
+#searchbar input:hover::placeholder {
   font-style: italic;
   opacity: .6;
 }
+
+/* end search */
 
 div.app img {
   padding: 10px 46px 9px;
@@ -7553,10 +7611,6 @@ input[name="pluginFile"] {
 
 .tab a {
   padding: 2px 10px;
-}
-
-input.search[type=text] {
-  width: 200px;
 }
 
 input[name="pluginURL"] {

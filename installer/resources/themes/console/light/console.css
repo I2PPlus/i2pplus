@@ -21,7 +21,7 @@
   --btn: linear-gradient(to bottom, #fff, #efefff);
   --btn_hover: linear-gradient(to bottom, #eee, #fff);
   --border: #575775;
-  --borderinner: #8d8daa;
+  --borderinner: #9898b3;
   --bevel: inset 0 0 0 1px #d0d0da;
 }
 
@@ -3574,95 +3574,128 @@ div.app img {
   white-space: nowrap;
 }
 
-/* optional homepage search */
+/* home search */
 
-div.search {
-  margin: 10px 10px 0 0;
-  padding: 8px 8px 0;
+#searchbar {
+  margin: -24px 10px -16px;
+  padding: 8px 0 2px;
   width: auto;
-}
-
-table.search {
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: -19px;
-  padding: 4px 6px;
-  width: 70%;
-  border-collapse: separate;
-  border-spacing: 0;
-  border-radius: 0 0 2px 2px;
-  border: 1px solid #595a8f;
-  border-top: 1px solid var(--border);
-  box-shadow: 0 1px 1px 1px rgba(220, 220, 255, .3), var(--bevel);
-  background: #fafaff !important;
-  background: linear-gradient(to bottom, #fafaff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fff 4px) !important;
-}
-
-.search tr {
-  background: none !important;
-}
-
-.search td {
-  border: none;
-  padding: 0 5px;
   white-space: nowrap;
+  text-align: center;
 }
 
-.search td > * {
-  vertical-align: middle;
+#searchbar span {
+  display: inline-block;
+  position: relative;
+  background: none;
 }
 
-.search td:first-child {
-  padding-right: 2px;
-  padding-left: 0;
+#searchbar table {
+  margin: 15px auto 0;
+  width: auto;
+  border-radius: 0 0 2px 2px;
+  border-collapse: separate;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  box-shadow: var(--bevel);
+  filter: opacity(0);
+  animation: ease fade .3s 1s forwards;
 }
 
-.search td:nth-child(2) {
-  text-align: center !important;
-  padding-right: 0;
-  padding-left: 6px;
-  width: 60px;
+#searchbar td {
+  padding: 3px 2px;
+  border: none;
+  box-shadow: none;
+  background: none;
 }
 
-.search td:nth-child(3) {
-  padding-left: 0;
-  padding-right: 8px;
+#searchbar button, #searchbar select {
+  margin: 0 !important;
+  box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset;
 }
 
-table.search select {
-  min-width: 80px;
-  width: 100%;
-  text-overflow: ellipsis;
+#searchbar button:hover, #searchbar select:hover,
+#searchbar button:focus, #searchbar select:focus {
+  box-shadow: var(--highlight);
 }
 
-button.search {
-  padding: 5px 9px 5px 26px;
-  background: var(--search) no-repeat 8px center, var(--btn);
+#searchbar select {
+  margin: 3px 0 3px 4px;
+  width: 164px;
+  position: absolute;
+  left: 4px;
+  top: 4px;
+  border-radius: 2px 0 0 2px;
+}
+
+@media screen and (min-width: 1500px) {
+  #searchbar select {
+    padding-top: 5px !important;
+  }
+}
+
+#searchbar input {
+  margin: 4px 4px 3px 168px;
+  padding-left: 10px;
+  padding-right: 44px;
+  min-width: 240px;
+  border-radius: 0 2px 2px 0;
+  border-left: none !important;
+  background: var(--txtinput);
+}
+
+#searchbar select:hover, #searchbar select:focus,
+#searchbar input:hover, #searchbar input:focus {
+  border-color: #97a2ce !important;
+  filter: none;
+}
+
+#searchbar button {
+  padding: 0 3px 0 0;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-size: 0 !important;
+  height: 28px;
+  width: 36px;
+  min-width: 0;
+  border: none;
+  border-left: 1px solid #97a2ce !important;
+  border-radius: 0 3px 3px 0;
+  background: var(--search) no-repeat center center / 14px, var(--btn) !important;
   background-blend-mode: luminosity;
 }
 
-button.search:hover, button.search:focus, button.search:active {
-  background: var(--search) no-repeat 8px center / 14px, var(--btn_hover) !important;
+#searchbar button:hover, #searchbar button:focus {
   background-blend-mode: normal;
 }
 
-input.search[type=text] {
-  margin-top: 0;
-  margin-bottom: 0;
-  padding: 5px 5px 5px 28px;
-  width: 100%;
-  min-width: 40px !important;
-  line-height: 140%;
-  box-sizing: border-box;
-  background: #fbfbff var(--search) no-repeat 8px center / 15px !important;
+#searchbar button:active {
   background-blend-mode: luminosity;
+  background-size: 12px !important;
 }
 
-input.search[type=text]:focus {
-  padding: 5px 5px 5px 28px;
-  background: #fff var(--search) no-repeat 8px center / 15px !important;
-  background-blend-mode: normal;
+@media screen and (max-width: 1200px) {
+  #searchbar button {
+    height: 27px;
+  }
 }
+
+#searchbar button:active {
+  box-shadow: var(--btn_shadow_active);
+}
+
+#searchbar input::placeholder {
+  opacity: 0;
+}
+
+#searchbar input:hover::placeholder {
+  font-style: italic;
+  opacity: .6;
+}
+
+/* end search */
+
 
 /* end optional homepage search */
 /* end home page */

@@ -17,7 +17,8 @@
   --h1: var(--h3), linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 46%, #050d05 48%, #020602 52%, #010301 54%, #000000 56%), var(--camotile) #000;
   --highlight: inset 0 0 0 1px #000;
   --element: linear-gradient(to bottom, #020, #010);
-  --button: linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  --btn: linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  --btn_shadow_active: var(--highlight), inset 3px 3px 3px 2px #310;
   --txtinput: linear-gradient(to bottom, #001800, #001000);
   --vstripe: repeating-linear-gradient(to bottom, rgba(0,0,0,.9) 2px, rgba(0,16,0,.9) 4px);
   --helpbox: linear-gradient(135deg, #000d00, #000900);
@@ -2085,7 +2086,7 @@ button.control {
 }
 
 button.accept.control {
-  background: var(--start) no-repeat center center, var(--button);
+  background: var(--start) no-repeat center center, var(--btn);
 }
 
 button.accept.control:hover, button.accept.control:focus {
@@ -2097,7 +2098,7 @@ button.accept.control:active {
 }
 
 button.stop.control {
-  background: var(--stop) no-repeat center center, var(--button);
+  background: var(--stop) no-repeat center center, var(--btn);
 }
 
 button.stop.control:hover, button.stop.control:focus {
@@ -2109,7 +2110,7 @@ button.stop.control:active {
 }
 
 button.add.control {
-  background: var(--edit) no-repeat center center / 16px, var(--button);
+  background: var(--edit) no-repeat center center / 16px, var(--btn);
 }
 
 button.add.control:hover, button.add.control:focus {
@@ -2121,7 +2122,7 @@ button.add.control:active {
 }
 
 button.delete.control {
-  background: var(--nuke) no-repeat center center / 14px, var(--button);
+  background: var(--nuke) no-repeat center center / 14px, var(--btn);
 }
 
 button.delete.control:hover, button.delete.control:focus {
@@ -2133,7 +2134,7 @@ button.delete.control:active {
 }
 
 button.check.control {
-  background: var(--refresh) no-repeat center center / 14px, var(--button);
+  background: var(--refresh) no-repeat center center / 14px, var(--btn);
 }
 
 button.check.control:hover, button.check.control:focus {
@@ -2145,7 +2146,7 @@ button.check.control:active {
 }
 
 button.download.control {
-  background: var(--download) no-repeat center center / 14px, var(--button);
+  background: var(--download) no-repeat center center / 14px, var(--btn);
 }
 
 button.download.control:hover, button.download.control:focus {
@@ -2276,17 +2277,17 @@ input[type=submit]:hover, input[type=reset]:hover, input[type=submit]:focus, inp
 
 input[type=submit]:active, input[type=reset]:active {
   text-shadow: 0 1px 1px #000;
-  box-shadow: var(--highlight), inset 3px 3px 3px 2px #310 !important;
+  box-shadow: var(--btn_shadow_active) !important;
 }
 
 button:active {
   text-shadow: 0 1px 1px #000;
-  box-shadow: var(--highlight), inset 3px 3px 3px 2px #310 !important;
+  box-shadow: var(--btn_shadow_active) !important;
 }
 
 input[type=file]:active::file-selector-button {
   text-shadow: 0 1px 1px #000;
-  box-shadow: var(--highlight), inset 3px 3px 3px 2px #310 !important;
+  box-shadow: var(--btn_shadow_active) !important;
 }
 
 input:active {
@@ -2300,7 +2301,7 @@ input[type=text], input[type=password] {
   padding: 6px 8px;
   text-decoration: none;
   color: #ee9;
-  border: 1px solid #184818 !important;
+  border: 1px solid #151 !important;
   border-radius: 1px;
   box-shadow: var(--highlight), inset 4px 4px 4px #000, 0 0 0 1px #000;
   background: #010;
@@ -2390,7 +2391,7 @@ select {
   color: #494;
   font-size: 9.5pt;
   border-radius: 2px;
-  background: var(--dropdown) no-repeat right 10px center, var(--button) !important;
+  background: var(--dropdown) no-repeat right 10px center, var(--btn) !important;
   background-size: 10px, 100% !important;
   -moz-appearance: none;
   -webkit-appearance: none;
@@ -2445,7 +2446,7 @@ select:hover, select:focus, select:active {
   color: #494;
   border: 1px solid #000;
   box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
-  background: var(--button) !important;
+  background: var(--btn) !important;
   opacity: .7;
   cursor: default;
 }
@@ -2527,7 +2528,7 @@ input[type=submit], input[type=reset], select, button {
   border: 1px solid #000;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
-  background: var(--button);
+  background: var(--btn);
 }
 
 input[type=file]::file-selector-button {
@@ -2536,7 +2537,7 @@ input[type=file]::file-selector-button {
   border: 1px solid #000;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
-  background: var(--button);
+  background: var(--btn);
 }
 
 input[type=submit], input[type=reset], button {
@@ -4289,19 +4290,19 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 }
 
 .buttonTop {
-  background: var(--mv_top) no-repeat center center, var(--button);
+  background: var(--mv_top) no-repeat center center, var(--btn);
 }
 
 .buttonUp {
-  background: var(--mv_up) no-repeat center center, var(--button);
+  background: var(--mv_up) no-repeat center center, var(--btn);
 }
 
 .buttonDown {
-  background: var(--mv_down) no-repeat center center, var(--button);
+  background: var(--mv_down) no-repeat center center, var(--btn);
 }
 
 .buttonBottom {
-  background: var(--mv_bottom) no-repeat center center, var(--button);
+  background: var(--mv_bottom) no-repeat center center, var(--btn);
 }
 
 .buttonTop:hover, .buttonTop:focus {
@@ -5886,74 +5887,137 @@ div.appgroup {
   width: auto;
 }
 
-div.search {
-  margin: 0;
-  padding: 8px 0 0 0;
+/* home search */
+
+#searchbar {
+  margin: -24px 10px -16px;
+  padding: 8px 0 2px;
   width: auto;
-}
-
-form[action="/search.jsp"] {
-  margin: 0;
-}
-
-table.search {
-  margin-top: -9px;
-  margin-left: auto;
-  margin-right: auto;
-  width: 80%;
-  background: none;
-}
-
-.search tr {
-  box-shadow: var(--highlight);
-  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.7) 1px, rgba(0,16,0,.4) 2px, rgba(0,16,0,.4) 3px), linear-gradient(to bottom, #010, #000400) !important;
-}
-
-.search td {
-  padding: 4px 0 4px 4px;
-  vertical-align: middle;
+  white-space: nowrap;
   text-align: center;
 }
 
-.search td > * {
-  vertical-align: middle;
+#searchbar span {
+  display: inline-block;
+  position: relative;
+  background: none;
 }
 
-.search td:nth-child(2) {
-  padding: 4px 6px 4px 12px;
-  width: 50px;
-  border-right: 1px inset #020;
+#searchbar table {
+  margin: 15px auto 0;
+  width: auto;
+  border-radius: 0 0 3px 3px;
+  border-collapse: separate;
+  border: 1px solid #151;
+  background: #000;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 0 2px rgba(0,64,0,.5);
+  filter: opacity(0);
+  animation: ease fade .3s 1s forwards;
 }
 
-.search td:last-child {
-  padding: 4px 0;
-  width: 1%;
-  white-space: nowrap;
-  text-align: left !important;
+#searchbar td {
+  padding: 3px 2px;
+  border: none;
+  box-shadow: none;
+  background: none;
 }
 
-input.search {
-  margin: 0 0 0 6px;
-  padding: 6px 6px 6px 26px;
-  width: 100%;
-  vertical-align: middle;
-  border-radius: 1px;
-  box-shadow: var(--highlight), inset 4px 4px 4px #000, 0 0 0 1px #000;
-  background: #010 var(--search) no-repeat 6px center;
-  background: var(--search) no-repeat 6px center, var(--txtinput);
-  background-size: 16px, 100% !important;
+#searchbar button, #searchbar select {
+  box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000 !important;
+}
+
+#searchbar input {
+  box-shadow: var(--highlight), inset 4px 4px 4px #000;
+}
+
+#searchbar button, #searchbar select {
+  margin: 0 !important;
+}
+
+#searchbar button:hover, #searchbar select:hover,
+#searchbar button:focus, #searchbar select:focus {
+  box-shadow: var(--highlight);
+}
+
+#searchbar select {
+  margin: 3px 0 3px 4px;
+  width: 164px;
+  position: absolute;
+  left: 4px;
+  top: 3px;
+  border-radius: 2px 0 0 2px;
+}
+
+#searchbar select:hover, #searchbar select:focus {
+  border: 1px solid transparent;
+}
+
+@media screen and (min-width: 1500px) {
+  #searchbar select {
+    padding-bottom: 7px !important;
+  }
+}
+
+#searchbar input {
+  margin: 4px 4px 3px 167px;
+  padding-left: 10px;
+  padding-right: 44px;
+  min-width: 240px;
+  border-radius: 0;
+  border-left: none !important;
+  background: var(--txtinput);
+}
+
+#searchbar input:focus {
+  border-color: #151 !important;
+  filter: none;
+}
+
+#searchbar button {
+  padding: 0 3px 0 0;
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  font-size: 0 !important;
+  height: 31px;
+  width: 36px;
+  min-width: 0;
+  border: none;
+  border-right: 1px solid var(--border) !important;
+  border-radius: 0 2px 2px 0;
+  background: var(--search) no-repeat center center / 16px, var(--btn);
   background-blend-mode: luminosity;
 }
 
-input.search:focus {
-  background: #000 var(--search) no-repeat 6px center !important;
-  background-size: 16px, 100% !important;
+#searchbar button:hover, #searchbar button:focus {
   background-blend-mode: normal;
 }
 
-button.search {
-  white-space: nowrap;
+#searchbar button:active {
+  background-blend-mode: luminosity;
+  background-size: 14px;
 }
+
+@media screen and (max-width: 1200px) {
+  #searchbar button {
+    height: 26px;
+  }
+}
+
+#searchbar button:active {
+  box-shadow: var(--btn_shadow_active);
+}
+
+#searchbar input::placeholder {
+  opacity: 0;
+}
+
+#searchbar input:hover::placeholder {
+  font-style: italic;
+  opacity: .6;
+}
+
+/* end search */
 
 .appimg {
   height: 32px;
@@ -13715,10 +13779,6 @@ body.iframed {
   }
 
   select {
-    padding: 8px 24px 8px 8px !important;
-  }
-
-  .search select {
     padding: 8px 24px 8px 8px !important;
   }
 
