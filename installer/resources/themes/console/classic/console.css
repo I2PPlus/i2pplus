@@ -2106,6 +2106,12 @@ div.news hr:last-child {
   margin: 6px 0 -2px 3px;
 }
 
+@media screen and (max-width: 1499px) {
+  .newsentry + hr + #newsStatus + #newsDisplay {
+    margin: 1px 3px -1px;
+  }
+}
+
 .messages #newsStatus, .messages #newsDisplay {
   float: none;
 }
