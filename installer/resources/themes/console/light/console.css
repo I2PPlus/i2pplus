@@ -1548,10 +1548,12 @@ p:empty + .sb_notice {
 
 .news#news {
   margin: -12px 0 5px 214px;
-  padding: 5px 15px 12px;
+  padding: 5px 15px 10px;
   min-width: 546px;
+  line-height: 1.4;
+  position: relative;
+  z-index: 10;
   text-align: right !important;
-  line-height: 140%;
   font-size: 8pt;
   color: #224;
   border: 1px solid var(--border);
@@ -1800,8 +1802,7 @@ td.tabletextarea {
 }
 
 .newsentry + hr + #newsStatus, .newsentry + hr + #newsStatus + #newsDisplay {
-  margin-top: -2px;
-  margin-bottom: 3px;
+  margin: -3px 0 -2px;
 }
 
 hr + #newsStatus, hr + #newsStatus + #newsDisplay {
@@ -1809,7 +1810,6 @@ hr + #newsStatus, hr + #newsStatus + #newsDisplay {
 }
 
 #news #newsStatus {
-  margin-bottom: 6px !important;
   float: left;
   text-align: justify;
 }
@@ -3584,6 +3584,14 @@ div.app img {
   text-align: center;
 }
 
+#news.news + .main > #homepanel > #searchbar {
+    margin-top: -19px;
+}
+
+#searchbar form {
+  margin: 0 0 10px;
+}
+
 #searchbar span {
   display: inline-block;
   position: relative;
@@ -3671,13 +3679,14 @@ div.app img {
 }
 
 #searchbar button:active {
-  background-blend-mode: luminosity;
+  box-shadow: var(--highlight), inset 2px 2px 2px #555 !important;
   background-size: 12px !important;
+  background-blend-mode: luminosity;
 }
 
 @media screen and (max-width: 1200px) {
   #searchbar button {
-    height: 27px;
+    height: 26.5px;
   }
 }
 

@@ -2097,10 +2097,13 @@ div.news hr:last-child {
   font-weight: 700;
 }
 
-#news #newsDisplay, #news #newsStatus {
-  margin-top: 3px !important;
-  margin-bottom: 3px !important;
+.newsentry + hr + #newsStatus, .newsentry + hr + #newsStatus + #newsDisplay {
+  margin: 3px 3px -2px;
   display: inline-block;
+}
+
+.newsentry + hr + #newsStatus {
+  margin: 6px 0 -2px 3px;
 }
 
 .messages #newsStatus, .messages #newsDisplay {
@@ -4639,8 +4642,9 @@ h3#graphinfo {
 
 #graphopts a, #newsDisplay a, #routerinformation tr:nth-child(n+2) a:not(#revision) {
   margin: 3px -2px;
-  padding: 1px 10px;
+  padding: 1px 10px 2px;
   display: inline-block;
+  line-height: 1.4;
   font-size: 90%;
   border: 1px solid var(--border);
   border-radius: 15px;
@@ -8119,10 +8123,6 @@ h3, h3.ptitle, h3.tabletitle, th.th_title {
   font-size: 9pt;
   background-size: 12px;
   background-position: left center;
-}
-
-#news #newsDisplay, #news #newsStatus {
-  margin-bottom: 0 !important;
 }
 
 #console h3 {
