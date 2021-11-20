@@ -18,7 +18,7 @@
   --a: #5c5c8a;
   --hover: #f60;
   --active: #f90;
-  --btn: linear-gradient(to bottom, #fff, #f0f0ff);
+  --btn: linear-gradient(to bottom, var(--bg) 50%, var(--bg2), var(--bg3));
   --btn_hover: linear-gradient(to bottom, #ddd, #fff);
   --btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 #fff, inset 0 0 4px 2px #f0f0ff, 0 1px 1px rgba(220,220,255,.5);
   --btn_shadow_hover: var(--highlight), 0 0 0 1px #fff, 0 0 0 2px rgba(255,96,0,.4);
@@ -36,12 +36,13 @@
   --highlight_hover: inset 0 0 0 1px #a79;
   --highlight_active: inset 3px 3px 3px 1px #5f2400;
   --bg: #fff;
-  --bg2: #f4f4ff;
-  --bg3: #eef;
+  --bg2: #f8f8ff;
+  --bg3: #f0f0ff;
   --bg4: #e8e8ff;
   --th: linear-gradient(to bottom, #fff, var(--bg2));
   --subheading: linear-gradient(to right, var(--bg), var(--bg3));
-  --header: linear-gradient(to bottom, var(--bg)50%, #f2f2ff 50%);
+  --header: linear-gradient(to bottom, var(--bg) 50%, var(--bg2) 50%);
+  --header_hover: linear-gradient(to bottom, var(--bg)50%, var(--row_hover) 50%);
   --header_shiny: linear-gradient(to right, rgba(255,255,255,.3), rgba(255,255,255,0)), linear-gradient(to bottom, var(--bg) 50%, #eaeaff 50%);
   --row_hover: #ffd;
   --ls_target: 1px solid #5a5 !important;
@@ -244,7 +245,7 @@ i {
 }
 
 .routersummary h3:hover {
-  background: linear-gradient(to bottom, var(--bg)50%, var(--row_hover) 50%) !important;
+  background: var(--header_hover) !important;
 }
 
 .routersummary h3:hover a, #sidebar td:first-child a:hover b,
@@ -621,7 +622,7 @@ div.refresh {
   background: repeating-linear-gradient(135deg, rgba(220,255,220,.3) 2px, rgba(255,255,220,.3) 3px, rgba(220,255,220,.3) 5px);
 }
 
-.routersummary .error {
+.routersummary .error, .tunnelBuildStatus.rejecting {
   color: #900;
   box-shadow: inset 0 0 0 1px rgba(255,0,0,.3), 0 0 1px rgba(96,96,96,.5);
   background: rgba(255,110,110,.1);
@@ -633,15 +634,15 @@ div.refresh {
   box-shadow: inset 0 0 0 1px #ff0, 0 0 1px rgba(96,96,96,.5);
 }
 
-.routersummary .testing {
+.routersummary .testing, .tunnelBuildStatus.starting {
   background: rgba(255,220,110,.1);
 }
 
-.routersummary .hidden, .routersummary .vmcomm {
+.routersummary .hidden, .routersummary .vmcomm, .tunnelBuildStatus.hidden {
   background: rgba(220,220,220,.4);
 }
 
-.routersummary .running {
+.routersummary .running, .tunnelBuildStatus.active {
   color: #393;
   box-shadow: var(--highlight), inset 0 0 0 2px rgba(96,255,96,.2);
   background: rgba(220,255,220,.2);
@@ -1273,13 +1274,6 @@ button:active, input[type=submit]:active, input[type=reset]:active {
 
 input[type=file]:active::file-selector-button {
   background-color: var(--bg);
-}
-
-input.search[type=text] {
-  padding: 5px 5px 5px 28px;
-  color: #333 !important;
-  border: 1px solid var(--border);
-  background: var(--bg) var(--search) no-repeat 5px center / 14px;
 }
 
 input[name="refreshInterval"] {
@@ -2179,7 +2173,7 @@ div[id^="config"] .tab a {
 .tab:hover {
   z-index: 12;
   box-shadow: var(--highlight), inset 0 0 1px 1px var(--hover);
-  background: var(--bg);
+  background: var(--header_hover);
 }
 
 .tab:active {
@@ -2320,6 +2314,12 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 
 #advconf {
   margin-bottom: -7px !important;
+}
+
+#advconf .infohelp {
+  padding-left: 36px !important;
+  background-size: 22px;
+  background-position: 8px center;
 }
 
 #addkeyring {
@@ -3523,8 +3523,10 @@ td.tabletextarea {
   word-break: break-all;
   font-size: 9pt;
   border: none;
+  border-top: 1px solid var(--border);
   border-radius: 0;
   box-shadow: none;
+  background: var(--bg);
 }
 
 tr:nth-child(even), #pluginconfig table tr:nth-child(even) td, #profile_defs tr:nth-child(odd) {
@@ -3628,7 +3630,7 @@ div.app {
   text-align: center !important;
   border: none;
   border: 1px solid var(--border);
-  background: var(--bg2);
+  background: var(--bg);
 }
 
 #sitemap div.app {
@@ -3637,7 +3639,6 @@ div.app {
 
 div.app:hover {
   border: 1px solid var(--hover);
-  background: var(--bg);
   cursor: pointer;
 }
 
@@ -3783,7 +3784,7 @@ div.appgroup {
   min-width: 240px;
   border-radius: 0 3px 3px 0;
   border-left: none;
-  background: var(--bg);
+  box-shadow: var(--highlight);
 }
 
 #searchbar input:focus {
@@ -5926,8 +5927,7 @@ h3.stats {
 }
 
 #advancedsettings {
-  margin-top: -5px;
-  margin-bottom: 20px;
+  margin-top: -4px;
 }
 
 #volunteer {
@@ -9387,11 +9387,24 @@ th.queue {
   display:inline-block;
   text-align: center !important;
   text-shadow: 0 1px 1px var(--bg);
+  box-shadow: var(--highlight), 0 0 0 1px var(--border_soft);
   background: var(--badge);
 }
 
 #netdbtiers td a {
   margin-right: 6px;
+}
+
+#netdbtiers td a:hover {
+  box-shadow: var(--highlight), 0 0 0 1px var(--hover);
+}
+
+#netdbtiers td a:active {
+  box-shadow: var(--btn_shadow_active), 0 0 0 1px var(--hover);
+}
+
+#netdbtiers td a:hover b {
+  color: var(--hover);
 }
 
 .version, .tier, .reachable, .unreachable, .ff {
@@ -9863,7 +9876,7 @@ div.app.js:hover::before {
   display: inline-block;
   text-align: center;
   border: 1px solid var(--border);
-  background: var(--bg2);
+  background: var(--bg);
 }
 
 html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel{
@@ -9934,7 +9947,6 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel{
 #sitemap div.app:hover, #sitemap div.app:hover .applabel,
 .sitemapLink:hover, .sitemapLink:hover .sitemapLabel {
   border-color: var(--hover);
-  background: var(--bg);
 }
 
 /* end sitemap */
