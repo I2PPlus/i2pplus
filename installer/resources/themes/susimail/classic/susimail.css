@@ -25,6 +25,7 @@
   --active: #f30;
   --border: #bfc3d9;
   --border_soft: #cfd2e2;
+  --border_badge: #bbc;
   --hover: #f60;
 }
 
@@ -33,7 +34,7 @@ body {
   color: var(--ink);
   font-family: var(--bodyfont);
   font-size: 9pt;
-  background: #eef url(/themes/console/classic/images/bg0.png);
+  background: var(--bg3) url(/themes/console/classic/images/bg0.png);
   background-size: 120px;
 }
 
@@ -53,7 +54,7 @@ button::-moz-focus-inner, input::-moz-focus-inner {
 }
 
 b, th, .mailListSender a {
-  color: #414960 !important	;
+  color: var(--ink_light) !important;
 }
 
 div.header {
@@ -64,7 +65,7 @@ h3#config {
   margin: -11px auto 10px;
   padding: 5px 10px;
   width: 300px;
-  color: #35415f;
+  color: var(--ink_light);
   border: 1px solid var(--border);
   border-radius: 0 0 2px 2px;
   background: var(--header);
@@ -127,7 +128,7 @@ tr.mailbody:nth-child(n+3) {
 p.info {
   padding: 12px 10px 11px 40px;
   color: #337;
-  background: #eef var(--infohelp) no-repeat 14px center / 18px;
+  background: var(--bg3) var(--infohelp) no-repeat 14px center / 18px;
 }
 
 span.coloured {
@@ -303,7 +304,7 @@ table.noborder {
 
 table#mailbox {
   border: 1px solid var(--border);
-  background: #eef;
+  background: var(--bg3);
 }
 
 table#mailbox {
@@ -463,7 +464,7 @@ pre {
   font-size: 9pt !important;
   border: 1px solid var(--border);
   box-shadow: 0 0 0 1px #eee;
-  background: linear-gradient(to bottom, rgba(255,255,255,.7),rgba(255,255,255,.2)), url(/themes/console/classic/images/bg2.png) #eef;
+  background: linear-gradient(to bottom, rgba(255,255,255,.7),rgba(255,255,255,.2)), url(/themes/console/classic/images/bg2.png) var(--bg3);
   background-size: 100% 100%, 120px 120px;
 }
 
@@ -498,7 +499,7 @@ form {
 #viewmail {
   margin: -9px -10px;
   border-top: 1px solid var(--border);
-  background: #eef;
+  background: var(--bg3);
 }
 
 .iframed #viewmail {
@@ -595,7 +596,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 button:active, input[type=submit]:active, input[type="reset"]:active, #settings:active, .fakebutton:active {
   color: #555;
   border: 1px solid #bbb;
-  box-shadow: var(--highlight), inset 3px 3px 3px #999;
+  box-shadow: var(--btn_shadow_active);
   background: #ddd;
 }
 
@@ -697,7 +698,7 @@ input.login:hover, input.login:focus {
 #info input.logout, #info input.logout:hover,
 #info input.logout:focus, #info input.logout:active {
   border: none;
-  border-left: 1px solid #bbc;
+  border-left: 1px solid var(--border_badge);
   border-radius: 0;
   box-shadow: none;
   filter: none;
@@ -718,7 +719,7 @@ input.logout:hover, input.logout:focus {
 }
 
 input.logout:active {
-  box-shadow: var(--highlight), inset 3px 3px 3px #999;
+  box-shadow: var(--btn_shadow_active);
 }
 
 input.reload, input.refresh, .fakebutton {
@@ -1072,7 +1073,7 @@ select:focus {
   letter-spacing: .08em;
   text-align: left;
   font-size: 14pt;
-  color: #35415f;
+  color: var(--ink_light);
   word-spacing: .1em;
   border-bottom: 1px solid var(--border);
   box-shadow: var(--highlight);
@@ -1177,7 +1178,7 @@ div#pagenav {
   margin: -1px -11px 10px;
   padding: 6px 0 0;
   background: var(--bg) !important;
-  background: linear-gradient(to bottom, #fff 0%, #eef 100%) !important;
+  background: linear-gradient(to bottom, #fff 0%, var(--bg3) 100%) !important;
   border: 1px solid var(--border);
   border-bottom: none;
 }
@@ -1438,7 +1439,7 @@ img.sort {
   vertical-align: middle;
   line-height: normal;
   color: var(--ink_light);
-  border: 1px solid #bbc;
+  border: 1px solid var(--border_badge);
   border-radius: 2px;
   box-shadow: var(--highlight);
   background: var(--bg2);
@@ -1459,7 +1460,7 @@ img.sort {
   height: 30px;
   display: inline-block;
   vertical-align: middle;
-  background: #bbc;
+  background: var(--border_badge);
   content: "";
 }
 
@@ -1502,7 +1503,7 @@ tr:hover .listDate {
 .listTime {
   min-width: 40px;
   text-align: left;
-  opacity: .85;
+  color: var(--ink);
 }
 
 /* confirm mail delete */
