@@ -15,7 +15,7 @@ input:not(checked) + label + hr + table, input:not(checked) + label + hr + table
 
 label.toggleview, label.toggleview:hover, label.toggleview:active, .toggle_input:focus + label.toggleview {
   background: #000 url(/themes/console/dark/images/header.png) repeat-x scroll center center !important;
-  background: linear-gradient(to bottom, #1a261a, #000 75%) !important;
+  background: linear-gradient(180deg,#1a261a, #000 75%) !important;
   box-shadow: inset 0 0 0 1px #000, 0 1px 1px #000 !important;
   mix-blend-mode: normal !important;
   cursor: default !important;
@@ -27,7 +27,7 @@ label.toggleview, label.toggleview:hover, label.toggleview:active, .toggle_input
   border: 2px solid #000 !important;
   box-shadow: none !important;
   background: #000;
-  background: linear-gradient(to bottom, #000 50%, #040 50%) !important;
+  background: linear-gradient(180deg,#000 50%, #040 50%) !important;
   transform: none !important;
   filter: drop-shadow(0 0 1px #000) !important;
 }

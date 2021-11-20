@@ -16,12 +16,12 @@
   --bg2: #f4f4ff;
   --bg3: #eef;
   --highlight: inset 0 0 0 1px #fff;
-  --btn: linear-gradient(to bottom, #fff, #f0f0ff);
-  --btn_hover: linear-gradient(to bottom, #ddd, #fff);
+  --btn: linear-gradient(180deg, var(--bg) 50%, var(--bg2), var(--bg3));
+  --btn_hover: linear-gradient(180deg,#ddd, #fff);
   --btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 #fff, inset 0 0 4px 2px #f0f0ff, 0 1px 1px rgba(220,220,255,.5);
   --btn_shadow_hover: var(--highlight), 0 0 0 1px #fff, 0 0 0 2px rgba(255,96,0,.4);
   --btn_shadow_active: var(--highlight), inset 3px 3px 3px 1px rgba(32,32,64,.3);
-  --header: linear-gradient(to bottom, #fff 50%, #f2f2ff 50%);
+  --header: linear-gradient(180deg,#fff 50%, #f2f2ff 50%);
   --hover: #f60;
   --active: #f30;
   --border: #bfc3d9;
@@ -469,7 +469,7 @@ pre {
   font-size: 9pt !important;
   border: 1px solid var(--border);
   box-shadow: 0 0 0 1px #eee;
-  background: linear-gradient(to bottom, rgba(255,255,255,.7),rgba(255,255,255,.2)), url(/themes/console/classic/images/bg2.png) var(--bg3);
+  background: linear-gradient(180deg,rgba(255,255,255,.7),rgba(255,255,255,.2)), url(/themes/console/classic/images/bg2.png) var(--bg3);
   background-size: 100% 100%, 120px 120px;
 }
 
@@ -1004,7 +1004,7 @@ select:focus {
   width: 500px;
   margin: 55px auto 40px;
   box-shadow: 0 0 0 1px #fff;
-  background: linear-gradient(to bottom, rgba(240,240,255,.4), rgba(220,220,255,.5)) #fefefe;
+  background: linear-gradient(180deg,rgba(240,240,255,.4), rgba(220,220,255,.5)) #fefefe;
   box-shadow: var(--highlight), 0 0 1px #ccc;
   filter: opacity(0);
   animation: linear fade-in .15s .5s forwards;
@@ -1082,7 +1082,7 @@ select:focus {
   word-spacing: .1em;
   border-bottom: 1px solid var(--border);
   box-shadow: var(--highlight);
-  background: linear-gradient(to right, #fff 30%, #eff2ff);
+  background: linear-gradient(90deg, #fff 30%, #eff2ff);
 }
 
 #dologin hr {
@@ -1111,7 +1111,7 @@ select:focus {
   border: 1px solid rgba(119, 120, 159, .3);
   border-radius: 25px;
   box-shadow: 0 0 1px rgba(255,255,255,0);
-  background: linear-gradient(to right, #f2f2ff, #f6f6ff, #f2f2ff);
+  background: linear-gradient(90deg, #f2f2ff, #f6f6ff, #f2f2ff);
   transition: ease all .1s;
 }
 
@@ -1119,7 +1119,7 @@ select:focus {
   border: 1px solid #77789f;
   border: 1px solid rgba(119, 120, 159, .5);
   background: #f2f2ff;
-  background: linear-gradient(to bottom, #fafaff 50%, #e8e8ff 50%) #f2f2ff;
+  background: linear-gradient(180deg,#fafaff 50%, #e8e8ff 50%) #f2f2ff;
   box-shadow: 0 0 1px #ccf;
   transition: ease all .1s;
 }
@@ -1127,7 +1127,7 @@ select:focus {
 #dologin tr:last-child a:active {
   border: 1px solid rgba(119, 120, 159, .3);
   background: #e2e2ff;
-  background: linear-gradient(to bottom, #eaeaff 50%, #d9d9ff 50%);
+  background: linear-gradient(180deg,#eaeaff 50%, #d9d9ff 50%);
   box-shadow: inset 3px 3px 3px #779;
   transition: ease all .1s;
   color: rgba(65, 70, 95, .8) !important;
@@ -1183,7 +1183,7 @@ div#pagenav {
   margin: -1px -11px 10px;
   padding: 6px 0 0;
   background: var(--bg) !important;
-  background: linear-gradient(to bottom, #fff 0%, var(--bg3) 100%) !important;
+  background: linear-gradient(180deg,#fff 0%, var(--bg3) 100%) !important;
   border: 1px solid var(--border);
   border-bottom: none;
 }
@@ -1538,7 +1538,7 @@ tr:hover .listDate {
   color: #900;
   border: 1px solid #700;
   box-shadow: inset 0 0 1px 1px #dda, 0 0 0 1px #fff, 0 0 2px 2px rgba(0,0,0,.3);
-  background: var(--question) no-repeat center 20px / 32px, linear-gradient(to bottom, #ffe, #ffffe6);
+  background: var(--question) no-repeat center 20px / 32px, linear-gradient(180deg,#ffe, #ffffe6);
   animation: fade-in linear 0.5s;
 }
 

@@ -30,7 +30,7 @@ h1, h2 ,h3, h4 {
 }
 
 h2, h3 {
-  background: linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to left, #fff 5%, rgba(231, 231, 255, .8) 15%) !important;
+  background: linear-gradient(180deg,#fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to left, #fff 5%, rgba(231, 231, 255, .8) 15%) !important;
 }
 
 .welcome h2 {
@@ -39,7 +39,7 @@ h2, h3 {
 
 #debug h2 {
   background: var(--bug) no-repeat 6px center,
-              linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
+              linear-gradient(180deg,#fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
               linear-gradient(to left, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) !important;
   background-size: 20px, 100%, 100% !important;
 }
@@ -67,59 +67,59 @@ h2, h3 {
 h1 {
   margin: 0 212px -15px 0;
   padding: 16px 20px 15px 10px;
-  background: var(--h1_network) no-repeat 8px center, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  background: var(--h1_network) no-repeat 8px center, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(180deg,#fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1.home {
-  background: var(--h1_home) no-repeat right 10px center, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  background: var(--h1_home) no-repeat right 10px center, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(180deg,#fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1.perf {
-  background: var(--h1_perf) no-repeat right 10px center, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  background: var(--h1_perf) no-repeat right 10px center, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(180deg,#fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1.nfo {
-  background: var(--h1_info) no-repeat right 10px center, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  background: var(--h1_info) no-repeat right 10px center, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(180deg,#fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1.hlp {
-  background: var(--h1_help) no-repeat right 10px center, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  background: var(--h1_help) no-repeat right 10px center, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(180deg,#fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1.addbook {
-  background: var(--h1_addbook) no-repeat right 10px center, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  background: var(--h1_addbook) no-repeat right 10px center, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(180deg,#fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1.snark {
-  background: var(--h1_snark) no-repeat right 10px center, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  background: var(--h1_snark) no-repeat right 10px center, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(180deg,#fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1.mail {
-  background: var(--h1_mail) no-repeat 8px center, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  background: var(--h1_mail) no-repeat 8px center, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(180deg,#fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1.conf {
-  background: var(--h1_config) no-repeat right 10px center, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  background: var(--h1_config) no-repeat right 10px center, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(180deg,#fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1.adv {
-  background: var(--h1_info) no-repeat right 10px center, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  background: var(--h1_info) no-repeat right 10px center, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(180deg,#fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1.err {
-  background: var(--h1_error) no-repeat right 10px center, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  background: var(--h1_error) no-repeat right 10px center, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(180deg,#fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1.sched {
-  background: var(--h1_tasks) no-repeat right 10px center, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  background: var(--h1_tasks) no-repeat right 10px center, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(180deg,#fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1.log {
-  background: var(--h1_logs) no-repeat right 10px center, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  background: var(--h1_logs) no-repeat right 10px center, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(180deg,#fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1.webapp {
-  background: var(--h1_webapp) no-repeat right 10px center, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  background: var(--h1_webapp) no-repeat right 10px center, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(180deg,#fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1[class] {
@@ -299,7 +299,7 @@ div.wideload {
 
 .percentBarOuter {
   margin: -4px -3px -4px -5px;
-  background: linear-gradient(to left, rgba(0,255,0,.05) 50%, rgba(255,255,0,.05) 75%, rgba(255,128,0,.05) 90%, rgba(255,0,0,.1)), repeating-linear-gradient(to right, rgba(180, 180, 255,.7) 1px, rgba(180, 180, 255, .7) 2px, rgba(221, 221, 255, .7) 2px, rgba(221, 221, 255, .7) 4px);
+  background: linear-gradient(to left, rgba(0,255,0,.05) 50%, rgba(255,255,0,.05) 75%, rgba(255,128,0,.05) 90%, rgba(255,0,0,.1)), repeating-linear-gradient(90deg, rgba(180, 180, 255,.7) 1px, rgba(180, 180, 255, .7) 2px, rgba(221, 221, 255, .7) 2px, rgba(221, 221, 255, .7) 4px);
 }
 
 .sb_info .percentBarOuter {
@@ -757,14 +757,14 @@ table.search {
 h4.app {
   margin-top: 15px;
   background: url(images/favicon.svg) no-repeat 10px center / 16px,
-              linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
+              linear-gradient(180deg,#fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
               linear-gradient(to left, #fff 5%, rgba(231, 231, 255, .8) 15%) right center !important;
 }
 
 h4.app2 {
   clear: left;
   margin-top: 10px !important;
-  background: var(--planet) no-repeat 10px center / 16px, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
+  background: var(--planet) no-repeat 10px center / 16px, linear-gradient(180deg,#fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
               linear-gradient(to left, #fff 5%, rgba(231, 231, 255, .8) 15%) right center !important;
 }
 
@@ -791,7 +791,7 @@ div.app:hover .appimg .extlink::after {
 div.news h3, #news h3, #newspage #news h3 {
   padding: 5px 30px 5px 10px;
   background: var(--news) no-repeat right 8px center,
-              linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
+              linear-gradient(180deg,#fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
               linear-gradient(to left, #fff 5%, rgba(231, 231, 255, .8) 15%) right center !important;
   background-size: 15px, 100%, 100% !important;
 }
@@ -938,7 +938,7 @@ table.leaseset:last-child, .netdbentry:last-child, #profile_defs {
 
 #sybilnav li {
   padding: 3px 24px 3px 3px;
-  background: var(--eye) no-repeat right 5px center / 16px, linear-gradient(to right, #eef 30%, #fff);
+  background: var(--eye) no-repeat right 5px center / 16px, linear-gradient(90deg, #eef 30%, #fff);
 }
 
 .threatpoints + ul li {
@@ -1073,7 +1073,7 @@ pre#activetransports {
 }
 
 #faq h3 {
-  background: var(--question) no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255, 255, 255, .6) 50%, rgba(240, 240, 240, .4)) repeat scroll 0 0%, rgba(0, 0, 0, 0) linear-gradient(to left, #fff 5%, rgba(231, 231, 255, .8) 15%) !important;
+  background: var(--question) no-repeat, linear-gradient(180deg,#fff 50%, rgba(255, 255, 255, .6) 50%, rgba(240, 240, 240, .4)) repeat scroll 0 0%, rgba(0, 0, 0, 0) linear-gradient(to left, #fff 5%, rgba(231, 231, 255, .8) 15%) !important;
   background-position: right 6px center, right center, right center !important;
   padding-right: 30px;
   background-size: 18px 18px, 100%, 100% !important;

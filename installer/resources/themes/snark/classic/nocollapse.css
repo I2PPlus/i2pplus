@@ -19,7 +19,7 @@ input:not(checked) + label + hr + table, input:not(checked) + label + hr + table
 .toggleview, .toggleview:hover, .toggleview:active, input:active + .toggleview, input:focus + .toggleview,
 input:checked + .toggleview, input:not(:checked) + .toggleview {
   box-shadow: inset 0 0 0 1px #fff !important;
-  background: linear-gradient(to bottom, #eef, #fff) !important;
+  background: linear-gradient(180deg,#eef, #fff) !important;
   cursor: default !important;
   font-size: 0 !important;
 }

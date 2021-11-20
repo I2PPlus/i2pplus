@@ -8,20 +8,20 @@
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, Bitstream Vera Sans, Verdana, sans-serif;
   --tab: linear-gradient(to top, #ffeadf, #cfb6a8);
   --highlight: inset 0 0 0 1px #ffefe6;
-  --nav: linear-gradient(to bottom, #fff7ef 47%, rgba(207, 193, 181, .6) 50%), repeating-linear-gradient(45deg, #75604e 1px, #a09286 1px, #bfafa2 2px);
-  --nav_hover: linear-gradient(to bottom, #ffeadf 47%, #cfb6a8 50%);
-  --nav_active: linear-gradient(to bottom, #af9178, #dfb899);
-  --th: linear-gradient(to bottom, #efefef, #cfc7c2);
-  --panel: linear-gradient(to bottom, #dfd7d1, #cfc7c2);
-  --btnAction: linear-gradient(to bottom, #f4f2f1, #e9e4e2 50%, #d2cbc6 50%, #bcb1a9);
-  --btnAction_hover: linear-gradient(to bottom, #ffeee6, #ffeadf 50%, #ffdecc 50%, #ae836b);
-  --btnAction_active: linear-gradient(to bottom, #e1d8d1, #fff2e6);
+  --nav: linear-gradient(180deg,#fff7ef 47%, rgba(207, 193, 181, .6) 50%), repeating-linear-gradient(45deg, #75604e 1px, #a09286 1px, #bfafa2 2px);
+  --nav_hover: linear-gradient(180deg,#ffeadf 47%, #cfb6a8 50%);
+  --nav_active: linear-gradient(180deg,#af9178, #dfb899);
+  --th: linear-gradient(180deg,#efefef, #cfc7c2);
+  --panel: linear-gradient(180deg,#dfd7d1, #cfc7c2);
+  --btnAction: linear-gradient(180deg,#f4f2f1, #e9e4e2 50%, #d2cbc6 50%, #bcb1a9);
+  --btnAction_hover: linear-gradient(180deg,#ffeee6, #ffeadf 50%, #ffdecc 50%, #ae836b);
+  --btnAction_active: linear-gradient(180deg,#e1d8d1, #fff2e6);
 }
 
 html {
   min-height: 100%;
   border-right: 1px solid #463e39;
-  background: repeating-linear-gradient(to bottom, #6f5b4c 1px, #a9927e 1px, #bfa388 4px), #cab39b;
+  background: repeating-linear-gradient(180deg,#6f5b4c 1px, #a9927e 1px, #bfa388 4px), #cab39b;
   background-size: 100% 4px;
   scrollbar-color: #a38a75 #cab39b;
 }
@@ -82,7 +82,7 @@ input[type=submit], input[type="reset"], button, a:link, input[type=checkbox], i
   border-radius: 2px;
   border: 1px solid #463e39;
   box-shadow: inset 0 0 3px 0 #c6b39f, 0 0 1px 0 rgba(77,61,51,.3);
-  background: repeating-linear-gradient(to bottom, #efebdd 1px, #ecebdd 2px, #ebe5d5 4px);
+  background: repeating-linear-gradient(180deg,#efebdd 1px, #ecebdd 2px, #ebe5d5 4px);
   background-size: 100% 4px;
 }
 
@@ -136,7 +136,7 @@ label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
   border: 1px solid #463e39;
   border-radius: 0 0 2px 2px;
   box-shadow: var(--highlight), 0 0 0 1px rgba(111,96,90,.3);
-  background: linear-gradient(to bottom, #efefef 50%, #cfc7c2 53%);
+  background: linear-gradient(180deg,#efefef 50%, #cfc7c2 53%);
   text-align: center;
   transition: ease width .5s .5s;
 }
@@ -292,9 +292,9 @@ label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
   color: #cfc7c2;
   border: 1px solid #523d2e;
   box-shadow: 0 0 0 2px #efe6e0, 0 0 0 3px #3f3833;
-  background: repeating-linear-gradient(to bottom, rgba(77,69,62,.5) 2px, rgba(111,96,90,.3) 4px),
+  background: repeating-linear-gradient(180deg,rgba(77,69,62,.5) 2px, rgba(111,96,90,.3) 4px),
               url(images/whippy.png) no-repeat scroll right 5px bottom -7px / auto 105%,
-              linear-gradient(to bottom, #5f554d, #3f3833);
+              linear-gradient(180deg,#5f554d, #3f3833);
   background-size: 100% 4px, auto 105%, 100% !important;
   scrollbar-color: #a38a75 rgba(63,56,51,.7);
 }
@@ -304,10 +304,10 @@ label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
 }
 
 .snarkMessages, #screenlog.collapsed, #screenlog.xpanded {
-  background: repeating-linear-gradient(to bottom, rgba(77,69,62,.5) 2px, rgba(111,96,90,.3) 4px),
+  background: repeating-linear-gradient(180deg,rgba(77,69,62,.5) 2px, rgba(111,96,90,.3) 4px),
               url(images/whippy.png) no-repeat scroll,
               url(/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true) no-repeat,
-              linear-gradient(to bottom, #5f554d, #3f3833);
+              linear-gradient(180deg,#5f554d, #3f3833);
   background-size: 100%, 60px auto, calc(100% - 80px) 100%, 100% !important;
   background-position: center center, right -4px bottom -10px, left bottom, center center !important;
   background-blend-mode: darken, lighten, luminosity, normal, normal;
@@ -494,7 +494,7 @@ tfoot tr:first-child th {
 }
 
 .snarkTorrentDir tr:nth-child(2) {
-  background: linear-gradient(to right, #efe6e0, #dfd6d1 70%);
+  background: linear-gradient(90deg, #efe6e0, #dfd6d1 70%);
 }
 
 /* main torrents listing */
@@ -635,7 +635,7 @@ tr:hover .snarkTrackerDetails img {
 .snarkDirInfo td:first-child a:focus img:not(.thumb) {
   border: 1px solid #f60 !important;
   border-radius: 2px;
-  background: linear-gradient(to bottom, #ffeadf 50%, #cfb6a8 50%);
+  background: linear-gradient(180deg,#ffeadf 50%, #cfb6a8 50%);
   opacity: 1;
   filter: none !important;
   transition: none !important;
@@ -762,7 +762,7 @@ tr:not(.peerinfo) .snarkTorrentUploaded:empty::after {
 .filtered td, #filterResults td {
   border-top: none !important;
   border-bottom: 1px solid rgba(111,83,62,.6) !important;
-  background: linear-gradient(to bottom, #f5f2f0, #eae4e1) !important;
+  background: linear-gradient(180deg,#f5f2f0, #eae4e1) !important;
 }
 
 #filterResults td {
@@ -775,7 +775,7 @@ tr:not(.peerinfo) .snarkTorrentUploaded:empty::after {
 
 .snarkTorrents tbody tr:hover, .snarkDirInfo tbody tr:hover {
   background: #f9efcf !important;
-  background: linear-gradient(to right, rgba(119, 0, 0, .7) 2px, #f9efcf 2px) !important;
+  background: linear-gradient(90deg, rgba(119, 0, 0, .7) 2px, #f9efcf 2px) !important;
 }
 
 td:hover .percentBarText {
@@ -789,11 +789,11 @@ td:hover .percentBarText {
 }
 
 .snarkTorrentEven + .snarkTorrentEven:nth-child(even), .snarkTorrentOdd + .snarkTorrentOdd:nth-child(even) {
-  background: linear-gradient(to right, #998e88 3px, #e8dfda 3px);
+  background: linear-gradient(90deg, #998e88 3px, #e8dfda 3px);
 }
 
 .snarkTorrentEven + .snarkTorrentEven:nth-child(odd), .snarkTorrentOdd + .snarkTorrentOdd:nth-child(odd) {
-  background: linear-gradient(to right, #72665f 3px, #e0d9d5 3px);
+  background: linear-gradient(90deg, #72665f 3px, #e0d9d5 3px);
 }
 
 @supports not (-moz-appearance: none) { /* chrome fix - gradient otherwise applied to each td */
@@ -1149,7 +1149,7 @@ thead img.disable, img.disable:hover {
 
 .snarkTorrentName a:hover, .snarkFileName a:hover {
   border-radius: 0 15px 15px 0;
-  background: linear-gradient(to right, rgba(0,0,0,0), rgba(155,108,46,.2) 40%) !important;
+  background: linear-gradient(90deg, rgba(0,0,0,0), rgba(155,108,46,.2) 40%) !important;
 }
 
 .snarkTorrentName a:active, .snarkFileName a:active {
@@ -1228,20 +1228,20 @@ thead img.disable, img.disable:hover {
   border-right: 1px solid #998;
   border-radius: 1px;
   box-shadow: var(--highlight);
-  background: linear-gradient(to bottom, rgba(255,247,239, .8) 50%, rgba(207,193,181,.9) 50%, rgba(207,193,181,1));
+  background: linear-gradient(180deg,rgba(255,247,239, .8) 50%, rgba(207,193,181,.9) 50%, rgba(207,193,181,1));
 }
 
 .snarkTorrentDownloaded .percentBarInner {
-  background: linear-gradient(to right, rgba(255,64,0,.3) 20px, rgba(255,255,0,.3) 50px, rgba(0,255,0,.3)), linear-gradient(to bottom, rgba(255,255,255,.1), rgba(0,0,0,.1)), rgba(255,255,255,.5);
+  background: linear-gradient(90deg, rgba(255,64,0,.3) 20px, rgba(255,255,0,.3) 50px, rgba(0,255,0,.3)), linear-gradient(180deg,rgba(255,255,255,.1), rgba(0,0,0,.1)), rgba(255,255,255,.5);
 }
 
 .snarkDirInfo .percentBarInner {
-  background: linear-gradient(to bottom, rgba(255,247,239,.75) 50%, rgba(207,193,181,.8) 50%, rgba(207,193,181,.9)), linear-gradient(to right, rgba(255,100,0,.5) 30px, rgba(255,255,0,.5) 60px, rgba(0, 255, 0, .5));
+  background: linear-gradient(180deg,rgba(255,247,239,.75) 50%, rgba(207,193,181,.8) 50%, rgba(207,193,181,.9)), linear-gradient(90deg, rgba(255,100,0,.5) 30px, rgba(255,255,0,.5) 60px, rgba(0, 255, 0, .5));
 }
 
 .peerinfo .percentBarInner {
   height: 14px;
-  background: linear-gradient(to bottom, rgba(255,255,255,.1), rgba(0,0,0,.1)), rgba(255,255,255,.5) !important;
+  background: linear-gradient(180deg,rgba(255,255,255,.1), rgba(0,0,0,.1)), rgba(255,255,255,.5) !important;
 }
 
 .percentBarText, .percentBarOuter {
@@ -1291,7 +1291,7 @@ thead img.disable, img.disable:hover {
   text-align: center;
   border-radius: 20px;
   box-shadow: inset 0 0 0 1px #b5a79b, inset 0 2px 2px 2px rgba(239,231,224,.3), inset 0 -2px 2px 2px rgba(236,200,172,.3);
-  background: linear-gradient(to bottom, #fffbef, #dfd7d1);
+  background: linear-gradient(180deg,#fffbef, #dfd7d1);
 }
 
 @media screen and (min-width: 1500px) {
@@ -1303,7 +1303,7 @@ thead img.disable, img.disable:hover {
 .active .percentBarComplete {
   color: #ad681f;
   box-shadow: inset 0 0 0 1px #b5a79b, inset 0 2px 2px 2px rgba(239,231,224,.6), inset 0 -2px 2px 2px rgba(236,200,172,.6);
-  background: radial-gradient(at center bottom, rgba(220,180,0,.1) 10%, rgba(0, 0, 0, 0) 70%), linear-gradient(to bottom, #fffbef, #f0d6c2);
+  background: radial-gradient(at center bottom, rgba(220,180,0,.1) 10%, rgba(0, 0, 0, 0) 70%), linear-gradient(180deg,#fffbef, #f0d6c2);
 }
 
 /* end download bars */
@@ -1490,11 +1490,11 @@ input[type=submit], .trackerconfig input[type=submit], input[name="savepri"], se
   border: 1px solid #111;
   border-top: none;
   box-shadow: 0 0 2px rgba(77, 69, 62, .3), var(--highlight);
-  background: linear-gradient(to right, rgba(0,0,0,0), rgba(255, 255, 255, .2) 20%, rgba(255, 255, 255, .2) 80%, rgba(0,0,0,0)),  linear-gradient(to bottom, #fff7ef 50%, rgba(207, 193, 181, .6) 50%), repeating-linear-gradient(135deg, #75604e 1px, #a09286 1px, #bfafa2 2px);
+  background: linear-gradient(90deg, rgba(0,0,0,0), rgba(255, 255, 255, .2) 20%, rgba(255, 255, 255, .2) 80%, rgba(0,0,0,0)),  linear-gradient(180deg,#fff7ef 50%, rgba(207, 193, 181, .6) 50%), repeating-linear-gradient(135deg, #75604e 1px, #a09286 1px, #bfafa2 2px);
 }
 
 #tab_config:hover, .toggleview:hover, input.toggle_input:focus + .toggleview {
-  background: linear-gradient(to bottom, #ffeadf 50%, #cfb6a8 50%);
+  background: linear-gradient(180deg,#ffeadf 50%, #cfb6a8 50%);
 }
 
 #tab_config {
@@ -1591,7 +1591,7 @@ input[type=submit], .trackerconfig input[type=submit], input[name="savepri"], se
 
 #tab_config:active, .toggleview:active {
   box-shadow: 0 0 2px #4d453e, inset 0 0 0 1px #f0e9e4, inset 2px 2px 3px 1px #59513b;
-  background: linear-gradient(to bottom, #e5d2c8, #baa397);
+  background: linear-gradient(180deg,#e5d2c8, #baa397);
 }
 
 #tab_config a:active::after, .toggleview:active::after {
@@ -1635,7 +1635,7 @@ a.control, a.controld {
   color: #4d2200;
   border: 1px solid #4f3927;
   border-radius: 2px;
-  background: linear-gradient(to bottom, #f4f2f1, #ded9d5);
+  background: linear-gradient(180deg,#f4f2f1, #ded9d5);
   background-size: 100% !important;
 }
 
@@ -1646,7 +1646,7 @@ a.controld {
 
 a.control:hover, a.control:focus {
   color: #930 !important;
-  background: linear-gradient(to bottom, #fff7ef 51%, #ffe6cc 52%);
+  background: linear-gradient(180deg,#fff7ef 51%, #ffe6cc 52%);
   filter: drop-shadow(0px 0 1px #f60);
 }
 
@@ -1755,122 +1755,122 @@ a.controld img, a.controld:hover img, a.controld:focus img, a.controld:active im
 
 input.accept, input.disabled[name="savepri"] {
   padding: 5px 6px 5px 24px !important;
-  background: var(--confirm) no-repeat 6px center, linear-gradient(to bottom, #f4f2f1, #ded9d5);
+  background: var(--confirm) no-repeat 6px center, linear-gradient(180deg,#f4f2f1, #ded9d5);
 }
 
 input.accept:hover, input.accept:focus {
-  background: var(--confirm) no-repeat 6px center, linear-gradient(to bottom, #fff7ef 51%, #ffe6cc 52%);
+  background: var(--confirm) no-repeat 6px center, linear-gradient(180deg,#fff7ef 51%, #ffe6cc 52%);
 }
 
 input.accept:active {
-  background: var(--confirm) no-repeat 6px center, linear-gradient(to bottom, #e1d8d1, #fff2e6);
+  background: var(--confirm) no-repeat 6px center, linear-gradient(180deg,#e1d8d1, #fff2e6);
 }
 
 input.add {
   padding: 5px 6px 5px 24px !important;
-  background: var(--add) no-repeat 6px center, linear-gradient(to bottom, #f4f2f1, #ded9d5);
+  background: var(--add) no-repeat 6px center, linear-gradient(180deg,#f4f2f1, #ded9d5);
 }
 
 input.add:hover, input.add:focus {
-  background: var(--add) no-repeat 6px center, linear-gradient(to bottom, #fff7ef 51%, #ffe6cc 52%);
+  background: var(--add) no-repeat 6px center, linear-gradient(180deg,#fff7ef 51%, #ffe6cc 52%);
 }
 
 input.add:active {
-  background: var(--add) no-repeat 6px center, linear-gradient(to bottom, #e1d8d1, #fff2e6);
+  background: var(--add) no-repeat 6px center, linear-gradient(180deg,#e1d8d1, #fff2e6);
 }
 
 input.cancel {
   padding: 5px 6px 5px 24px !important;
-  background: url(images/cancel.png) no-repeat 6px center, linear-gradient(to bottom, #f4f2f1, #ded9d5);
+  background: url(images/cancel.png) no-repeat 6px center, linear-gradient(180deg,#f4f2f1, #ded9d5);
 }
 
 input.cancel:hover, input.cancel:focus {
-  background: url(images/cancel.png) no-repeat 6px center, linear-gradient(to bottom, #fff7ef 51%, #ffe6cc 52%);
+  background: url(images/cancel.png) no-repeat 6px center, linear-gradient(180deg,#fff7ef 51%, #ffe6cc 52%);
 }
 
 input.cancel:active {
-  background: url(images/cancel.png) no-repeat 6px center, linear-gradient(to bottom, #e1d8d1, #fff2e6);
+  background: url(images/cancel.png) no-repeat 6px center, linear-gradient(180deg,#e1d8d1, #fff2e6);
 }
 
 input.create {
   padding: 5px 6px 5px 24px !important;
-  background: var(--wizard) no-repeat 6px center, linear-gradient(to bottom, #f4f2f1, #ded9d5);
+  background: var(--wizard) no-repeat 6px center, linear-gradient(180deg,#f4f2f1, #ded9d5);
 }
 
 input.create:hover, input.create:focus {
-  background: var(--wizard) no-repeat 6px center, linear-gradient(to bottom, #fff7ef 51%, #ffe6cc 52%);
+  background: var(--wizard) no-repeat 6px center, linear-gradient(180deg,#fff7ef 51%, #ffe6cc 52%);
 }
 
 input.create:active {
-  background: var(--wizard) no-repeat 6px center, linear-gradient(to bottom, #e1d8d1, #fff2e6);
+  background: var(--wizard) no-repeat 6px center, linear-gradient(180deg,#e1d8d1, #fff2e6);
 }
 
 input.delete {
   padding: 5px 6px 5px 24px !important;
-  background: var(--nuke) no-repeat 6px center, linear-gradient(to bottom, #f4f2f1, #ded9d5);
+  background: var(--nuke) no-repeat 6px center, linear-gradient(180deg,#f4f2f1, #ded9d5);
 }
 
 input.delete:hover, input.delete:focus {
-  background: var(--nuke) no-repeat 6px center, linear-gradient(to bottom, #fff7ef 51%, #ffe6cc 52%);
+  background: var(--nuke) no-repeat 6px center, linear-gradient(180deg,#fff7ef 51%, #ffe6cc 52%);
 }
 
 input.delete:active {
-  background: var(--nuke) no-repeat 6px center, linear-gradient(to bottom, #e1d8d1, #fff2e6);
+  background: var(--nuke) no-repeat 6px center, linear-gradient(180deg,#e1d8d1, #fff2e6);
 }
 
 input.reload {
   padding: 5px 6px 5px 24px !important;
-  background: var(--restore) no-repeat 6px center, linear-gradient(to bottom, #f4f2f1, #ded9d5);
+  background: var(--restore) no-repeat 6px center, linear-gradient(180deg,#f4f2f1, #ded9d5);
 }
 
 input.reload:hover, input.reload:focus {
-  background: var(--restore) no-repeat 6px center, linear-gradient(to bottom, #fff7ef 51%, #ffe6cc 52%);
+  background: var(--restore) no-repeat 6px center, linear-gradient(180deg,#fff7ef 51%, #ffe6cc 52%);
 }
 
 input.reload:active {
-  background: var(--restore) no-repeat 6px center, linear-gradient(to bottom, #e1d8d1, #fff2e6);
+  background: var(--restore) no-repeat 6px center, linear-gradient(180deg,#e1d8d1, #fff2e6);
 }
 
 input.reload[name="recheck"], input.disabled[name="recheck"] {
   margin: 6px 2px;
   padding: 5px 8px 5px 25px !important;
-  background: var(--refresh) no-repeat 8px center, linear-gradient(to bottom, #f4f2f1, #ded9d5);
+  background: var(--refresh) no-repeat 8px center, linear-gradient(180deg,#f4f2f1, #ded9d5);
 }
 
 input.reload[name="recheck"]:hover, input.reload[name="recheck"]:focus {
-  background: var(--refresh) no-repeat 8px center, linear-gradient(to bottom, #fff7ef 51%, #ffe6cc 52%);
+  background: var(--refresh) no-repeat 8px center, linear-gradient(180deg,#fff7ef 51%, #ffe6cc 52%);
 }
 
 input.reload[name="recheck"]:active {
-  background: var(--refresh) no-repeat 8px center, linear-gradient(to bottom, #e1d8d1, #fff2e6);
+  background: var(--refresh) no-repeat 8px center, linear-gradient(180deg,#e1d8d1, #fff2e6);
 }
 
 input.starttorrent {
   margin: 6px;
   padding: 5px 8px 5px 21px !important;
-  background: var(--start) no-repeat 8px center / 10px, linear-gradient(to bottom, #f4f2f1, #ded9d5) !important;
+  background: var(--start) no-repeat 8px center / 10px, linear-gradient(180deg,#f4f2f1, #ded9d5) !important;
 }
 
 input.starttorrent:hover, input.starttorrent:focus {
-  background: var(--start_hover) no-repeat 8px center / 10px, linear-gradient(to bottom, #fff7ef 51%, #ffe6cc 52%) !important;
+  background: var(--start_hover) no-repeat 8px center / 10px, linear-gradient(180deg,#fff7ef 51%, #ffe6cc 52%) !important;
 }
 
 input.starttorrent:active {
-  background: var(--start) no-repeat 8px center / 10px, linear-gradient(to bottom, #e1d8d1, #fff2e6) !important;
+  background: var(--start) no-repeat 8px center / 10px, linear-gradient(180deg,#e1d8d1, #fff2e6) !important;
 }
 
 input.stoptorrent {
   margin: 4px 5px;
   padding: 5px 8px 5px 22px !important;
-  background: var(--stop) no-repeat 8px center / 10px, linear-gradient(to bottom, #f4f2f1, #ded9d5) !important;
+  background: var(--stop) no-repeat 8px center / 10px, linear-gradient(180deg,#f4f2f1, #ded9d5) !important;
 }
 
 input.stoptorrent:hover, input.stoptorrent:focus {
-  background: var(--stop_hover) no-repeat 8px center / 10px, linear-gradient(to bottom, #fff7ef 51%, #ffe6cc 52%) !important;
+  background: var(--stop_hover) no-repeat 8px center / 10px, linear-gradient(180deg,#fff7ef 51%, #ffe6cc 52%) !important;
 }
 
 input.stoptorrent:active {
-  background: var(--stop) no-repeat 8px center / 10px, linear-gradient(to bottom, #e1d8d1, #fff2e6) !important;
+  background: var(--stop) no-repeat 8px center / 10px, linear-gradient(180deg,#e1d8d1, #fff2e6) !important;
 }
 
 select {
@@ -2097,7 +2097,7 @@ code, tt {
 }
 
 .trackerconfig th {
-  background: linear-gradient(to bottom, #efefef 51%, #cfc7c2 52%);
+  background: linear-gradient(180deg,#efefef 51%, #cfc7c2 52%);
 }
 
 .trackerconfig th:first-child, .trackerconfig td:first-child {
@@ -2109,7 +2109,7 @@ code, tt {
 .trackerconfig th:first-child {
   border-radius: 2px 0 0 0;
   border-left: 1px solid #6f533e;
-  background: var(--nuke) center right 8px no-repeat, linear-gradient(to bottom, #efefef 51%, #cfc7c2 52%);
+  background: var(--nuke) center right 8px no-repeat, linear-gradient(180deg,#efefef 51%, #cfc7c2 52%);
   background-size: 14px, 100%;
 }
 
@@ -2613,7 +2613,7 @@ td .commentAuthorName {
   text-align: left;
   border-radius: 1px;
   box-shadow: 0 0 0 1px rgba(77, 69, 62, .7);
-  background: var(--user) no-repeat 4px center, linear-gradient(to bottom, #fff5ef, #fff4de);
+  background: var(--user) no-repeat 4px center, linear-gradient(180deg,#fff5ef, #fff4de);
   background-size: 16px;
 }
 
@@ -2808,11 +2808,11 @@ td .commentAuthorName {
   }
 
   .snarkTorrentDownloaded .percentBarInner {
-    background: linear-gradient(to right, rgba(255,64,0,.3) 15px, rgba(255,255,0,.3) 30px, rgba(0,255,0,.3)), linear-gradient(to bottom, rgba(255,255,255,.1), rgba(0,0,0,.1)), rgba(255,255,255,.5);
+    background: linear-gradient(90deg, rgba(255,64,0,.3) 15px, rgba(255,255,0,.3) 30px, rgba(0,255,0,.3)), linear-gradient(180deg,rgba(255,255,255,.1), rgba(0,0,0,.1)), rgba(255,255,255,.5);
   }
 
   .snarkDirInfo .percentBarInner {
-    background: linear-gradient(to bottom, rgba(255, 247, 239, .75), rgba(255, 247, 239, .75) 50%, rgba(207, 193, 181, .8) 50%, rgba(207, 193, 181, .9)), linear-gradient(to right, rgba(255, 100, 0, .5) 23px, rgba(255, 255, 0, .5) 47px, rgba(0, 255, 0, .5));
+    background: linear-gradient(180deg,rgba(255, 247, 239, .75), rgba(255, 247, 239, .75) 50%, rgba(207, 193, 181, .8) 50%, rgba(207, 193, 181, .9)), linear-gradient(90deg, rgba(255, 100, 0, .5) 23px, rgba(255, 255, 0, .5) 47px, rgba(0, 255, 0, .5));
   }
 
   .snarkDirInfo .percentBarText, .snarkDirInfo .percentBarOuter, .peerinfo .percentBarOuter, .peerinfo .percentBarText {
@@ -3363,7 +3363,7 @@ td .commentAuthorName {
 
 .info_tracker:hover {
   box-shadow: var(--highlight), 0 0 0 1px #bfb6b0;
-  background: var(--b_tracker_hover) no-repeat left 3px center, linear-gradient(to bottom, #efefef 50%, #cfc7c2 50%);
+  background: var(--b_tracker_hover) no-repeat left 3px center, linear-gradient(180deg,#efefef 50%, #cfc7c2 50%);
   background-size: 12px, 100%;
 }
 
@@ -3420,7 +3420,7 @@ td .commentAuthorName {
   padding: 4px 8px;
   border: 1px solid #6f533e;
   border-radius: 2px !important;
-  background: linear-gradient(to bottom, #efefef 51%, #cfc7c2 52%);
+  background: linear-gradient(180deg,#efefef 51%, #cfc7c2 52%);
   font-size: 9pt !important;
   filter: drop-shadow(0 0 1px #aaa);
 }
@@ -3941,7 +3941,7 @@ input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilte
 
 #torrentDisplay input:checked + .filterbutton {
   text-shadow: 0 1px 1px #ebe5e0;
-  background: linear-gradient(to bottom, rgba(207, 193, 181, .6), #d7cbc1),
+  background: linear-gradient(180deg,rgba(207, 193, 181, .6), #d7cbc1),
               repeating-linear-gradient(45deg, #75604e 1px, #a09286 1px, #bfafa2 2px) !important;
   transition: ease background .15s;
   pointer-events: none;
@@ -4116,12 +4116,12 @@ td.snarkTorrentDetails {
   border: 1px solid #541;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #fff;
-  background: linear-gradient(to bottom, #fff7ef 50%, #cfc1b5 50%) !important;
+  background: linear-gradient(180deg,#fff7ef 50%, #cfc1b5 50%) !important;
   filter: sepia(100%) hue-rotate(340deg) drop-shadow(0 0 1px #999);
 }
 
 .pagenavcontrols a img:hover, .pagenavcontrols a:focus img {
-  background: linear-gradient(to bottom, #fff 50%, #292421 50%);
+  background: linear-gradient(180deg,#fff 50%, #292421 50%);
   filter: sepia(100%) hue-rotate(340deg) drop-shadow(0 0 1px #999);
 }
 
@@ -4164,7 +4164,7 @@ td.snarkTorrentDetails {
   letter-spacing: .2em;
   border-radius: 3px;
   box-shadow: 0 0 0 1px #afa9a4;
-  background: linear-gradient(to bottom, #fffbef, #c8c1bc);
+  background: linear-gradient(180deg,#fffbef, #c8c1bc);
   font-weight: 700;
 }
 
@@ -4297,9 +4297,9 @@ img {
   max-width: 400px;
   display: inline-block;
   background: #900;
-  background: repeating-linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,0) 10px, rgba(255,255,255,.6) 10px, rgba(255,255,255,.6) 11px, rgba(0,0,0,0) 11px),
-              linear-gradient(to bottom, rgba(255,255,255,.3) 50%, rgba(0,0,0,.3) 50%),
-              linear-gradient(to right, #aa0 40px, #d30 100px, #900);
+  background: repeating-linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,0) 10px, rgba(255,255,255,.6) 10px, rgba(255,255,255,.6) 11px, rgba(0,0,0,0) 11px),
+              linear-gradient(180deg,rgba(255,255,255,.3) 50%, rgba(0,0,0,.3) 50%),
+              linear-gradient(90deg, #aa0 40px, #d30 100px, #900);
   border-radius: 3px;
   box-shadow: inset 0 0 0 1px rgba(160,152,146,.8);
 }
@@ -4558,7 +4558,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
   border-radius: 1px;
   position: relative;
   box-shadow: 0 0 0 1px #6f645d, inset 0 0 0 1px #f9f5f2, inset 3px 3px 3px rgba(0,0,0,.2);
-  background: linear-gradient(to bottom, #dcc9bc, #efe6e0);
+  background: linear-gradient(180deg,#dcc9bc, #efe6e0);
   background: #efe6e0;
   outline: none;
   transition: ease-in left .15s;
@@ -4567,15 +4567,15 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 
 .configOption input[type=checkbox]:checked, #commentsToggle input[type=checkbox]:checked {
   box-shadow: 0 0 0 1px #6f645d, inset 0 0 0 1px #dfd, inset 3px 3px 3px rgba(0,16,0,.4);
-  background: linear-gradient(to bottom, #393, #4a4);
+  background: linear-gradient(180deg,#393, #4a4);
 }
 
 .configOption input[type=checkbox]:not(:checked):active, #commentsToggle input[type=checkbox]:not(:checked):active {
-  background: linear-gradient(to bottom, #393, #4a4);
+  background: linear-gradient(180deg,#393, #4a4);
 }
 
 .configOption input[type=checkbox]:checked:active, #commentsToggle input[type=checkbox]:checked:active {
-  background: linear-gradient(to bottom, #cf0f00, #f00);
+  background: linear-gradient(180deg,#cf0f00, #f00);
 }
 
 .configOption input[type=checkbox]:hover, .configOption input[type=checkbox]:focus,
@@ -4881,7 +4881,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 .snarkTorrentAction input:hover, .snarkTorrentAction input:focus {
   border-color: #39332d;
   box-shadow: inset 0 0 0 1px rgba(223,0,103,.85), inset 0 0 0 2px #ffefe6;
-  background: linear-gradient(to bottom, #ffeadf 51%, #cfb6a8 52%);
+  background: linear-gradient(180deg,#ffeadf 51%, #cfb6a8 52%);
   background-blend-mode: normal;
   opacity: 1;
   transition: ease box-shadow .03s;

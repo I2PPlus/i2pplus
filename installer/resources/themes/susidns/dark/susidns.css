@@ -11,7 +11,7 @@
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
   --highlight: inset 0 0 0 1px #000;
-  --nav: linear-gradient(to bottom, #002900, #000400);
+  --nav: linear-gradient(180deg,#002900, #000400);
 }
 
 body, html {
@@ -42,8 +42,8 @@ body {
   line-height: 120%;
   color: #ee9;
   background: #010;
-  background: repeating-linear-gradient(to right, rgba(0,16,0,.5) 2px, rgba(0,25,0,.5) 4px),
-              repeating-linear-gradient(to bottom, #000 2px, #020 4px), #010;
+  background: repeating-linear-gradient(90deg, rgba(0,16,0,.5) 2px, rgba(0,25,0,.5) 4px),
+              repeating-linear-gradient(180deg,#000 2px, #020 4px), #010;
   background-size: 4px 100%, 100% 4px;
 }
 
@@ -106,8 +106,8 @@ body.iframed {
   border: 1px solid #252;
   border-radius: 0 1px 2px 2px;
   box-shadow: var(--highlight), 0 2px 2px 2px rgba(0,0,0,.4);
-  background: repeating-linear-gradient(to right, rgba(0,0,0,.5) 2px, rgba(0,48,0,.3) 4px),
-              linear-gradient(to bottom, #1a261a 0%, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 51%, #020602 52%, #010301 55%, #000000 57%),
+  background: repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,48,0,.3) 4px),
+              linear-gradient(180deg,#1a261a 0%, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 51%, #020602 52%, #010301 55%, #000000 57%),
               url(/themes/console/dark/images/camotile2.png) !important;
   background-size: 4px 100%, 100%, 175px !important;
   background-blend-mode: normal, exclusion, normal !important;
@@ -275,7 +275,7 @@ hr {
   text-transform: capitalize;
   font-size: 105%;
   box-shadow: 0 0 0 1px #030, 0 0 2px 1px rgba(0,0,0,.8), var(--highlight);
-  background: linear-gradient(to bottom, #020 0%, #000 100%);
+  background: linear-gradient(180deg,#020 0%, #000 100%);
 }
 
 #filter a:hover {
@@ -348,9 +348,9 @@ h3 {
   word-spacing: .1em;
   border: 1px solid #242;
   background: var(--question) no-repeat 8px center,
-              linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
-              repeating-linear-gradient(to right, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px),
-              linear-gradient(to bottom, #004000, #000 75%);
+              linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%),
+              repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px),
+              linear-gradient(180deg,#004000, #000 75%);
   background-size: 18px, 100%, 4px 100%, 100%;
 }
 
@@ -434,7 +434,7 @@ h4 {
   font-size: 9pt;
   border: 1px solid #242;
   box-shadow: var(--highlight), inset 0 0 2px 1px #030 !important;
-  background: var(--files) no-repeat 9px center / 16px, linear-gradient(to right, #000, #000800) !important;
+  background: var(--files) no-repeat 9px center / 16px, linear-gradient(90deg, #000, #000800) !important;
   display: none; /* largely useless information */
 }
 
@@ -553,12 +553,12 @@ li {
 
 #host_list tr:nth-child(odd), #host_details tr:nth-child(odd) {
   background-color: rgba(0,12,0,.5);
-  background: linear-gradient(to bottom, #001400, #000600);
+  background: linear-gradient(180deg,#001400, #000600);
 }
 
 #host_list tr:nth-child(even), #host_details tr:nth-child(even) {
   background-color: rgba(0,24,0,.5);
-  background: linear-gradient(to bottom, #001400, #000600);
+  background: linear-gradient(180deg,#001400, #000600);
 }
 
 .help {
@@ -586,7 +586,7 @@ li {
 
 #helpsubs {
   padding: 15px 0 10px 40px;
-  background: var(--infohelp) no-repeat 15px center, repeating-linear-gradient(to right, #000 2px, #010 4px) !important;
+  background: var(--infohelp) no-repeat 15px center, repeating-linear-gradient(90deg, #000 2px, #010 4px) !important;
   background-size: 32px, 4px 100% !important;
 }
 
@@ -598,7 +598,7 @@ li {
 
 #helpconfig {
   background: #000;
-  background: repeating-linear-gradient(to right, #000 2px, #010 4px);
+  background: repeating-linear-gradient(90deg, #000 2px, #010 4px);
   background-size: 4px 100%;
 }
 
@@ -704,7 +704,7 @@ div#content + div#buttons {
   height: 1px;
   display: block;
   background: #131;
-  background: linear-gradient(to right, rgba(0,0,0,0) 15%, #131, rgba(0,0,0,0) 85%);
+  background: linear-gradient(90deg, rgba(0,0,0,0) 15%, #131, rgba(0,0,0,0) 85%);
   content: "";
   filter: drop-shadow(0 1px 1px #000);
 }
@@ -822,9 +822,9 @@ div#empty {
 }
 
 #book tr.head {
-  background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
-              repeating-linear-gradient(to right, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px),
-              linear-gradient(to bottom, #002000, #000 75%) !important;
+  background: linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%),
+              repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px),
+              linear-gradient(180deg,#002000, #000 75%) !important;
   background-size: 100%, 4px 100%, 100% !important;
 }
 
@@ -960,7 +960,7 @@ input[type=submit], input[type=reset], .fakebutton {
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
   background: #000;
-  background: linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
   cursor: pointer;
 }
 
@@ -977,7 +977,7 @@ input[type=file]::file-selector-button {
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
   background: #000;
-  background: linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
   cursor: pointer;
 }
 
@@ -1041,7 +1041,7 @@ input[type=text], textarea {
   color: #bb7;
   box-shadow: var(--highlight), inset 4px 4px 4px #000, 0 0 0 1px #000;
   background: #000;
-  background: linear-gradient(to bottom, #001800, #001000) !important;
+  background: linear-gradient(180deg,#001800, #001000) !important;
 }
 
 textarea, #subslog pre {
@@ -1089,7 +1089,7 @@ textarea:focus {
 #booksearch input[name=search] {
   padding: 6px 8px 6px 32px !important;
   min-width: 280px !important;
-  background: var(--search) no-repeat 9px center, linear-gradient(to bottom, #001800, #001000) !important;
+  background: var(--search) no-repeat 9px center, linear-gradient(180deg,#001800, #001000) !important;
   background-size: 14px, 100% !important;
 }
 
@@ -1113,9 +1113,9 @@ textarea:focus {
   text-transform: uppercase;
   font-size: 11.5pt;
   background: var(--addressbook) no-repeat 9px center,
-              linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
-              repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px),
-              linear-gradient(to bottom, #004000, #000 75%);
+              linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%),
+              repeating-linear-gradient(90deg, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px),
+              linear-gradient(180deg,#004000, #000 75%);
   background-size: 20px, 100%, 4px 100%, 100%;
 }
 
@@ -1125,17 +1125,17 @@ textarea:focus {
 
 .headline#subscriptions h3 {
   background: var(--subscription) 9px center no-repeat,
-              linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
-              repeating-linear-gradient(to right, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px),
-              linear-gradient(to bottom, #004000, #000 75%);
+              linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%),
+              repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px),
+              linear-gradient(180deg,#004000, #000 75%);
   background-size: 18px, 100%, 4px 100%, 100% !important;
 }
 
 .headline#configure h3 {
   background: var(--config) no-repeat 9px center,
-              linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
-              repeating-linear-gradient(to right, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px),
-              linear-gradient(to bottom, #004000, #000 75%);
+              linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%),
+              repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px),
+              linear-gradient(180deg,#004000, #000 75%);
   background-size: 20px, 100%, 4px 100%, 100% !important;
 }
 
@@ -1398,7 +1398,7 @@ _:-ms-lang(x), * {
 
 p#filtered {
   box-shadow: var(--highlight), inset 0 0 2px 1px #030 !important;
-  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.8), rgba(0,16,0,.6) 1px, rgba(0,16,0,.6) 2px), url(/themes/console/dark/images/camotile2.png) !important;
+  background: repeating-linear-gradient(180deg,rgba(0,0,0,.8), rgba(0,16,0,.6) 1px, rgba(0,16,0,.6) 2px), url(/themes/console/dark/images/camotile2.png) !important;
 }
 
 #visualid table {
@@ -1411,7 +1411,7 @@ p#filtered {
   border-bottom: 1px solid #242;
   box-shadow: none !important;
   background: #010;
-  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.8), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), url(/themes/console/dark/images/camotile2.png) !important;
+  background: repeating-linear-gradient(180deg,rgba(0,0,0,.8), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), url(/themes/console/dark/images/camotile2.png) !important;
 }
 
 #visualid tr:last-child td {
@@ -1421,14 +1421,14 @@ p#filtered {
 
 form[action="addressbook"] > p.buttons, #filter, #search, #visualid tr:last-child td, #buttons, #add p.buttons {
   box-shadow: var(--highlight), inset 0 0 2px 1px #030 !important;
-  background: repeating-linear-gradient(to right, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px),
-              linear-gradient(to bottom, #020, #000 75%) !important;
+  background: repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px),
+              linear-gradient(180deg,#020, #000 75%) !important;
   background-size: 4px 100%, 100% !important;
 }
 
 #add, #import {
   box-shadow: var(--highlight), inset 0 0 2px 1px #030 !important;
-  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.8), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), url(/themes/console/dark/images/camotile2.png) !important;
+  background: repeating-linear-gradient(180deg,rgba(0,0,0,.8), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), url(/themes/console/dark/images/camotile2.png) !important;
 }
 
 #add p.buttons {
@@ -1469,7 +1469,7 @@ input#exporthosts {
   min-width: 0 !important;
   display: inline-block;
   font-size: 0 !important;
-  background: var(--download) no-repeat center center / 16px, linear-gradient(to bottom, #010, #000) !important;
+  background: var(--download) no-repeat center center / 16px, linear-gradient(180deg,#010, #000) !important;
 }
 
 input#exporthosts:hover {
@@ -1526,7 +1526,7 @@ input#exporthosts:hover {
   font-size: 0;
   text-align: center;
   border: 1px solid #252;
-  background: linear-gradient(to bottom, #020 50%, #000 50%);
+  background: linear-gradient(180deg,#020 50%, #000 50%);
 }
 
 #prev a, #next a, #current {
@@ -1603,7 +1603,7 @@ input#exporthosts:hover {
 @media screen and (max-width: 710px) {
   #navi a {
     padding: 2px 8px !important;
-    background: linear-gradient(to bottom, #020 0%, #020 50%, #000 50%, #000 100%) !important;
+    background: linear-gradient(180deg,#020 0%, #020 50%, #000 50%, #000 100%) !important;
   }
 
   #navi a.abook:hover, #navi a#overview:hover, #navi a#subs:hover, #navi a#configlink:hover,
@@ -1704,7 +1704,7 @@ input#exporthosts:hover {
   }
 
   div#filter {
-    background: linear-gradient(to right, #000, #001000 10%, #001000 90%, #000);
+    background: linear-gradient(90deg, #000, #001000 10%, #001000 90%, #000);
   }
 
   form[action="addressbook"] > p.buttons {

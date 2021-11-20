@@ -11,8 +11,8 @@
   --highlight: inset 0 0 0 1px #000;
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
-  --button: linear-gradient(to bottom, #11101c 50%, #000010 50%);
-  --button_hover: linear-gradient(to bottom, #202 50%, #000 50%);
+  --button: linear-gradient(180deg,#11101c 50%, #000010 50%);
+  --button_hover: linear-gradient(180deg,#202 50%, #000 50%);
 }
 
 html, body {
@@ -24,7 +24,7 @@ body {
   font-family: var(--bodyfont);
   font-size: 9pt;
   color: #c9ceff;
-  background: repeating-linear-gradient(to bottom, rgba(0,0,24,.75) 3px, rgba(0,0,0,.9) 5px, rgba(0,0,0,.7) 6px),
+  background: repeating-linear-gradient(180deg,rgba(0,0,24,.75) 3px, rgba(0,0,0,.9) 5px, rgba(0,0,0,.7) 6px),
   var(--tile),
   var(--compose_hover),
   var(--login_hover),
@@ -104,7 +104,7 @@ p.info, p.error {
   color: #c9ceff;
   border: 1px solid #27235c;
   border-radius: 2px;
-  background: var(--infohelp) no-repeat 10px center / 28px, linear-gradient(to right, #000000, #010015 65%, #020018 90%);
+  background: var(--infohelp) no-repeat 10px center / 28px, linear-gradient(90deg, #000000, #010015 65%, #020018 90%);
 }
 
 p.error {
@@ -213,7 +213,7 @@ td[colspan="7"] hr {
 }
 
 th.mailListDelete {
-  background: var(--nuke) no-repeat center center / 14px, linear-gradient(to bottom, #080818, #001) !important;
+  background: var(--nuke) no-repeat center center / 14px, linear-gradient(180deg,#080818, #001) !important;
   font-size: 0;
   padding: 0;
 }
@@ -223,7 +223,7 @@ th.mailListDelete {
 }
 
 th.mailListFlagged {
-  background: url(../images/status.png) no-repeat center center, linear-gradient(to bottom, #080818, #001) !important;
+  background: url(../images/status.png) no-repeat center center, linear-gradient(180deg,#080818, #001) !important;
   font-size: 0;
   padding: 0;
   background-blend-mode: luminosity, normal;
@@ -232,7 +232,7 @@ th.mailListFlagged {
 th.mailListAttachment {
   padding: 0;
   font-size: 0;
-  background: var(--attach) no-repeat center center / 14px, linear-gradient(to bottom, #080818, #001) !important;
+  background: var(--attach) no-repeat center center / 14px, linear-gradient(180deg,#080818, #001) !important;
 }
 
 td.mailListAttachment, td.mailListFlagged {
@@ -375,12 +375,12 @@ td {
 
 .list0 {
   background-color: #080818;
-  background: linear-gradient(to bottom, #080818, #010010);
+  background: linear-gradient(180deg,#080818, #010010);
 }
 
 .list1 {
   background-color: #010010;
-  background: linear-gradient(to bottom, #080818, #010010);
+  background: linear-gradient(180deg,#080818, #010010);
 }
 
 /* mailbox display finessing */
@@ -497,7 +497,7 @@ th {
   font-size: 9pt;
   font-weight: 700;
   background: #001;
-  background: linear-gradient(to bottom, #080818, #001) !important;
+  background: linear-gradient(180deg,#080818, #001) !important;
   padding: 7px;
   border-bottom: 1px solid #27235c;
   border-top: 1px solid #27235c;
@@ -739,7 +739,7 @@ input.delete {
   padding: 0 0 10px;
   box-shadow: 0 0 2px 1px #000, var(--highlight), inset 0 0 0 2px #000026;
   background: #000010;
-  background: url(images/hatter_med.png) right bottom no-repeat, repeating-linear-gradient(to bottom, rgba(0,0,0,.9), rgba(0,0,32,.5) 2px, rgba(0,0,0,.5) 3px), linear-gradient(to bottom, #000016, #000006);
+  background: url(images/hatter_med.png) right bottom no-repeat, repeating-linear-gradient(180deg,rgba(0,0,0,.9), rgba(0,0,32,.5) 2px, rgba(0,0,0,.5) 3px), linear-gradient(180deg,#000016, #000006);
   background-size: 27% auto, 100%, 100%;
   filter: opacity(0);
   animation: linear fade-in .15s .6s forwards;
@@ -767,7 +767,7 @@ input.delete {
   text-shadow: 0 1px 1px #000;
   border: 1px solid #211e51;
   box-shadow: var(--highlight);
-  background: var(--login_header) no-repeat 12px center / 23px, linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
+  background: var(--login_header) no-repeat 12px center / 23px, linear-gradient(180deg,#080818 50%, #000008 50%) !important;
 }
 
 #dologin table {
@@ -835,7 +835,7 @@ input.delete {
   color: #bf2295;
   box-shadow: 0 0 1px #000, var(--highlight);
   background: #030;
-  background: linear-gradient(to bottom, #003 50%, #000 50%) #000;
+  background: linear-gradient(180deg,#003 50%, #000 50%) #000;
   transition: ease all .2s;
 }
 
@@ -861,7 +861,7 @@ h3#config {
   word-spacing: .1em;
   background: #020017;
   border-radius: 0 0 2px 2px;
-  background: linear-gradient(to right, rgba(0,0,16,0), rgba(16,0,16,0), rgba(0,0,16,0)), linear-gradient(to bottom, #191729 50%, #001 50%) !important;
+  background: linear-gradient(90deg, rgba(0,0,16,0), rgba(16,0,16,0), rgba(0,0,16,0)), linear-gradient(180deg,#191729 50%, #001 50%) !important;
 }
 
 #mailheader {
@@ -1047,7 +1047,7 @@ div#bottombuttons { /* config page button positioning */
 .pagecount {
   padding: 3px 8px;
   box-shadow: 0 0 0 1px #000;
-  background: linear-gradient(to bottom, #113, #112);
+  background: linear-gradient(180deg,#113, #112);
 }
 /* end pagenav */
 
@@ -1462,7 +1462,7 @@ input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input
   border: 1px solid #363181 !important;
   box-shadow: var(--highlight), inset 3px 3px 3px 1px #000;
   background: #001;
-  background: linear-gradient(to bottom, #030306, #112);
+  background: linear-gradient(180deg,#030306, #112);
   box-sizing: border-box;
   -moz-appearance: none;
   -webkit-appearance: inherit;
@@ -1587,7 +1587,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
   border-radius: 3px;
   box-shadow: var(--highlight);
   background: #113;
-  background: linear-gradient(to bottom, #113, #080818);
+  background: linear-gradient(180deg,#113, #080818);
 }
 
 #infoUser {
@@ -1781,7 +1781,7 @@ div:not(#pagesize).topbuttons, .iframed div:not(#pagesize).topbuttons {
   color: #cc3;
   border-bottom: 1px solid #27235c;
   box-shadow: var(--highlight), inset 0 0 2px 1px #991;
-  background: repeating-linear-gradient(to bottom, #000 2px, #003 4px);
+  background: repeating-linear-gradient(180deg,#000 2px, #003 4px);
   background-size: 100% 4px;
 }
 

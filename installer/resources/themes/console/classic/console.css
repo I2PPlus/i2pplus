@@ -18,15 +18,15 @@
   --a: #5c5c8a;
   --hover: #f60;
   --active: #f90;
-  --btn: linear-gradient(to bottom, var(--bg) 50%, var(--bg2), var(--bg3));
-  --btn_hover: linear-gradient(to bottom, #ddd, #fff);
+  --btn: linear-gradient(180deg, var(--bg) 50%, var(--bg2), var(--bg3));
+  --btn_hover: linear-gradient(180deg, #ddd, #fff);
   --btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 #fff, inset 0 0 4px 2px #f0f0ff, 0 1px 1px rgba(220,220,255,.5);
   --btn_shadow_hover: var(--highlight), 0 0 0 1px #fff, 0 0 0 2px rgba(255,96,0,.4);
   --btn_shadow_active: var(--highlight), inset 3px 3px 3px 1px rgba(32,32,64,.3);
   --shadow_inset: inset 2px 2px 4px rgba(204,204,240,.6);
   --shadow_input: inset 1px 1px 1px #ddd;
-  --badge: linear-gradient(to bottom, #fff, var(--bg3));
-  --badge_hover: linear-gradient(to bottom, var(--bg3), #fff);
+  --badge: linear-gradient(180deg, #fff, var(--bg3));
+  --badge_hover: linear-gradient(180deg, var(--bg3), #fff);
   --box_border_badge: 0 0 0 1px #bbd;
   --border: #bfc3d9;
   --border_soft: #cfd2e2;
@@ -39,20 +39,20 @@
   --bg2: #f8f8ff;
   --bg3: #f0f0ff;
   --bg4: #e8e8ff;
-  --th: linear-gradient(to bottom, #fff, var(--bg2));
-  --subheading: linear-gradient(to right, var(--bg), var(--bg3));
-  --header: linear-gradient(to bottom, var(--bg) 50%, var(--bg2) 50%);
-  --header_hover: linear-gradient(to bottom, var(--bg)50%, var(--row_hover) 50%);
-  --header_shiny: linear-gradient(to right, rgba(255,255,255,.3), rgba(255,255,255,0)), linear-gradient(to bottom, var(--bg) 50%, #eaeaff 50%);
+  --th: linear-gradient(180deg, #fff, var(--bg2));
+  --subheading: linear-gradient(90deg, var(--bg), var(--bg3));
+  --header: linear-gradient(180deg, var(--bg) 50%, var(--bg2) 50%);
+  --header_hover: linear-gradient(180deg, var(--bg) 50%, var(--row_hover) 50%);
+  --header_shiney: linear-gradient(90deg, rgba(255,255,255,.3), rgba(0,0,0,0)), linear-gradient(180deg, var(--bg) 50%, var(--bg4) 50%);
   --row_hover: #ffd;
   --ls_target: 1px solid #5a5 !important;
-  --reload: linear-gradient(to right, #930, var(--hover));
+  --reload: linear-gradient(90deg, #930, var(--hover));
   --down: repeating-linear-gradient(135deg, #fffff2, #fffff2 10px, #ddddd2 10px, #ddddd2 20px);
   --down_shadow: inset 0 0 0 1px #800, inset 0 0 1px 3px #eeeee2, inset 0 0 0 4px #ccccc2;
   --flatbar: #99c;
   --hr: #89f;
   --select: #4a90d9;
-  --label_focus: linear-gradient(to right, var(--bg3), var(--bg), var(--bg3));
+  --label_focus: linear-gradient(90deg, var(--bg3), var(--bg), var(--bg3));
 }
 
 html, body {
@@ -774,8 +774,8 @@ div.refresh {
   padding: 0 1px;
   height: 38px;
   vertical-align: top;
-  background: repeating-linear-gradient(to right, rgba(255,255,255,0) 10px, rgba(120,120,255,.4) 11px, rgba(255,255,255,0) 11px, rgba(255,255,255,0) 20px),
-              repeating-linear-gradient(to top, rgba(255,255,255,0) 10px, rgba(120,120,255,.4) 11px, rgba(255,255,255,0) 11px, rgba(255,255,255,0) 19px);
+  background: repeating-linear-gradient(90deg, rgba(0,0,0,0) 10px, rgba(120,120,255,.4) 11px, rgba(0,0,0,0) 11px, rgba(0,0,0,0) 20px),
+              repeating-linear-gradient(to top, rgba(0,0,0,0) 10px, rgba(120,120,255,.4) 11px, rgba(0,0,0,0) 11px, rgba(0,0,0,0) 19px);
   box-shadow: inset 0 0 0 1px #fdfdff, inset 0 0 1px 1px #77f;
 }
 
@@ -825,7 +825,7 @@ div.refresh {
   border: 1px solid var(--border);
   box-shadow: 0 0 1px rgba(200,200,200,.8), var(--highlight);
   box-shadow: var(--btn_shadow_active);
-  background: repeating-linear-gradient(to right, rgba(210, 210, 255, .7) 1px, rgba(210, 210, 255, .7) 2px, rgba(230, 230, 255, .7) 2px, rgba(230, 230, 255, .7) 4px);
+  background: repeating-linear-gradient(90deg, rgba(210, 210, 255, .7) 1px, rgba(210, 210, 255, .7) 2px, rgba(230, 230, 255, .7) 2px, rgba(230, 230, 255, .7) 4px);
 }
 
 @media screen and (min-width: 1500px) {
@@ -837,8 +837,8 @@ div.refresh {
   border: none;
   height: 14px;
   max-width: 100%;
-  background: linear-gradient(to right, rgba(0,255,0,.1) 65px, rgba(255,255,0,.1) 110px, rgba(255,128,0,.1) 175px, rgba(255,0,0,.1)),
-              linear-gradient(to bottom, rgba(255, 255, 255,.6), rgba(238, 238, 255, .6) 50%, rgba(180, 180, 255, .7) 50%, rgba(140, 140, 255, .7));
+  background: linear-gradient(90deg, rgba(0,255,0,.1) 65px, rgba(255,255,0,.1) 110px, rgba(255,128,0,.1) 175px, rgba(255,0,0,.1)),
+              linear-gradient(180deg, rgba(255, 255, 255,.6), rgba(238, 238, 255, .6) 50%, rgba(180, 180, 255, .7) 50%, rgba(140, 140, 255, .7));
   box-shadow: inset 0 0 0 1px var(--bg4);
 }
 
@@ -877,7 +877,7 @@ div.refresh {
   border-top: none;
   border-radius: 0 0 3px 3px;
   box-shadow: var(--highlight);
-  background: linear-gradient(to right, var(--bg3), #eff2ff 30%, #eff2ff 60%, var(--bg3));
+  background: linear-gradient(90deg, var(--bg3), #eff2ff 30%, #eff2ff 60%, var(--bg3));
   box-sizing: border-box;
 }
 
@@ -897,7 +897,7 @@ div.refresh {
 
 .sb_info .percentBarInner {
   height: 16px;
-  background: linear-gradient(to bottom, rgba(255, 255, 255,.6) 0%, rgba(238, 238, 255, .6) 50%, rgba(180, 180, 255, .7) 50%, rgba(140, 140, 255, .7) 100%);
+  background: linear-gradient(180deg, rgba(255, 255, 255,.6) 0%, rgba(238, 238, 255, .6) 50%, rgba(180, 180, 255, .7) 50%, rgba(140, 140, 255, .7) 100%);
 
 }
 
@@ -1942,7 +1942,7 @@ div.welcome {
 }
 
 .main#dns {
-  background: linear-gradient(to bottom, rgba(255,255,255,.8), rgba(255,255,255,.8)), url(images/bg0.png) !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.8), rgba(255,255,255,.8)), url(images/bg0.png) !important;
 }
 
 .main#tunnelmgr {
@@ -2192,7 +2192,7 @@ div[id^="config"] .tab a {
   color: #565799;
   text-shadow: 0 1px 1px var(--bg);
   box-shadow: var(--btn_shadow_active);
-  background: linear-gradient(to bottom, var(--bg4), var(--bg2));
+  background: linear-gradient(180deg, var(--bg4), var(--bg2));
 }
 
 /* end topnav */
@@ -3162,19 +3162,19 @@ span#newtab {
 }
 
 h2 {
-  font-size: 14pt;
   padding: 10px;
-  border: 1px solid var(--border);
+  font-size: 14pt;
   letter-spacing: .04em;
   text-transform: uppercase;
+  border: 1px solid var(--border);
   background: var(--bg);
 }
 
 h3, h4#updateplugins {
-  font-size: 11pt;
-  padding: 6px 10px;
-  border: 1px solid var(--border);
   margin-bottom: 10px;
+  padding: 6px 10px;
+  font-size: 11pt;
+  border: 1px solid var(--border);
   background: var(--bg);
 }
 
@@ -3301,7 +3301,7 @@ h4 {
   padding: 3px 5px;
   font-size: 9pt;
   border: 1px solid var(--border);
-  background: linear-gradient(to right, #fff, #eff2ff);
+  background: linear-gradient(90deg, #fff, #eff2ff);
 }
 
 p#clientconf {
@@ -4671,7 +4671,7 @@ h3#graphinfo {
   color: #557 !important;
   border: 1px solid var(--a);
   box-shadow: 0 0 0 1px rgba(220,220,255,.6), var(--highlight);
-  background: linear-gradient(to bottom, var(--bg)50%, var(--bg4) 50%);
+  background: linear-gradient(180deg, var(--bg)50%, var(--bg4) 50%);
 }
 
 #graphopts a:active, #newsDisplay a:active,
@@ -5395,7 +5395,7 @@ p.sybil_info, p.family, p.threatpoints, p.hashdist, p.notfound, p#sybil_totals {
   text-align: left;
   font-weight: 700;
   border: 1px solid var(--border);
-  background: var(--eye) no-repeat 8px center / 16px, linear-gradient(to right, var(--bg)40%, var(--bg3));
+  background: var(--eye) no-repeat 8px center / 16px, linear-gradient(90deg, var(--bg)40%, var(--bg3));
 }
 
 p#sybil_totals {
@@ -5933,7 +5933,7 @@ h3.stats {
 #volunteer {
   margin-top: 20px !important;
   padding-bottom: 0 !important;
-  background: linear-gradient(to bottom, rgba(230,230,255,.5), rgba(230,230,255,.5)), url(/themes/snark/ubergine/images/hat.png) no-repeat right bottom / auto 75% !important;
+  background: linear-gradient(180deg, rgba(230,230,255,.5), rgba(230,230,255,.5)), url(/themes/snark/ubergine/images/hat.png) no-repeat right bottom / auto 75% !important;
 }
 
 #volunteer ul li, #volunteer ul li:first-child {
@@ -6034,7 +6034,7 @@ p#fullhistory {
   margin-bottom: -5px;
   margin: -5px -1px -6px !important;
   background: var(--bg);
-  background: linear-gradient(to right, #eff2ff 50%, #fff);
+  background: linear-gradient(90deg, #eff2ff 50%, #fff);
   border: 1px solid var(--border);
   padding: 7px 10px 4px 5px !important;
 }
@@ -7338,7 +7338,7 @@ h2#debug_portmapper {
   border: 1px solid var(--border);
   border-left: 3px solid var(--border);
   border-radius: 0 2px 2px 0;
-  background: var(--header_shiny);
+  background: var(--header_shiney);
 }
 
 .bucket {
@@ -8493,7 +8493,7 @@ b.suboption {
   display: inline-block;
   padding: 5px 8px;
   background: #d0d0ff;
-  background: linear-gradient(to bottom, #fff, var(--border));
+  background: linear-gradient(180deg, #fff, var(--border));
   box-shadow: 0 0 0 1px var(--border), var(--highlight), 0 0 2px #99f;
   white-space: nowrap;
   text-align: center;
@@ -9420,15 +9420,15 @@ th.queue {
 }
 
 .ff {
-  background: linear-gradient(to bottom, #fff, #fdb) !important;
+  background: linear-gradient(180deg, #fff, #fdb) !important;
 }
 
 .reachable {
-  background: linear-gradient(to bottom, #fff, #cfc) !important;
+  background: linear-gradient(180deg, #fff, #cfc) !important;
 }
 
 .unreachable {
-  background: linear-gradient(to bottom, #fff, #fcc) !important;
+  background: linear-gradient(180deg, #fff, #fcc) !important;
 }
 
 #netdb_ourinfo .unreachable {
@@ -9441,11 +9441,11 @@ th.queue {
 }
 
 .ssutesting {
-  background: linear-gradient(to bottom, #fff, #ffb) !important;
+  background: linear-gradient(180deg, #fff, #ffb) !important;
 }
 
 .ssuintro {
-  background: linear-gradient(to bottom, #fff, #fbf) !important;
+  background: linear-gradient(180deg, #fff, #fbf) !important;
 }
 
 #profiles .routerid, #peers .routerid {
@@ -9596,13 +9596,13 @@ a[href^="/viewprofile"] img, .profiledump img {
   display: inline-block;
   width: inherit;
   background: #900;
-  background: linear-gradient(to bottom, rgba(255,255,255,.1) 50%, rgba(0,0,0,.1) 50%), linear-gradient(to right, #900 25px, #a00 40px, #b00 50px);
+  background: linear-gradient(180deg, rgba(255,255,255,.1) 50%, rgba(0,0,0,.1) 50%), linear-gradient(90deg, #900 25px, #a00 40px, #b00 50px);
 }
 
 #floodfills .percentBarInner[style="width:0%"] {
   width: 100% !important;
   background: #090;
-  background: linear-gradient(to bottom, rgba(255,255,255,.1) 50%, rgba(0,0,0,.1) 50%), linear-gradient(to right, #090, #0b0);
+  background: linear-gradient(180deg, rgba(255,255,255,.1) 50%, rgba(0,0,0,.1) 50%), linear-gradient(90deg, #090, #0b0);
 }
 
 #floodfills .percentBarText {
@@ -9742,7 +9742,7 @@ a.keysearch {
   padding: 20px;
   width: calc(100% - 40px);
   line-height: 20px;
-  background: repeating-linear-gradient(to bottom, #7878ff33, #d2d2ff66 1px, #d2d2ff66 19px, #7878ff33 19px, #f0f0ff66 20px, #f0f0ff66 40px);
+  background: repeating-linear-gradient(180deg, #7878ff33, #d2d2ff66 1px, #d2d2ff66 19px, #7878ff33 19px, #f0f0ff66 20px, #f0f0ff66 40px);
 }
 
 #sybil_ourinfo .unreachable {
@@ -10181,7 +10181,7 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel{
 }
 
 .skm_key td, .debug_outboundtarget td {
-  background: linear-gradient(to bottom, #fcfcff, #fafaff 51%, #f6f6ff 100%) !important;
+  background: linear-gradient(180deg, #fcfcff, #fafaff 51%, #f6f6ff 100%) !important;
 }
 
 .debug_outboundtarget td:last-child, .skm_key td:last-child {
@@ -10827,8 +10827,8 @@ p#gatherstats {
 #tunnels #peercount {
   padding-left: 30px !important;
   background: var(--hardhat) no-repeat 8px 6px / 18px,
-              linear-gradient(to bottom, var(--bg)50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
-              linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+              linear-gradient(180deg, var(--bg)50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
+              linear-gradient(90deg, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
 }
 
 #tunnels #tunnelPeerCount .cells {
@@ -11164,7 +11164,7 @@ div.app, .sitemapLink, .sitemapLabel {
 
 #events tr:hover td:first-child {
   border-left: 1px solid #393;
-  background: linear-gradient(to right, #393 2px, rgba(0,0,0,.02) 2px);
+  background: linear-gradient(90deg, #393 2px, rgba(0,0,0,.02) 2px);
 }
 
 #events tr:hover td:last-child {
@@ -11358,12 +11358,12 @@ div.app:hover img, .sitemaplink:hover img {
   overflow: hidden;
   border: 1px solid var(--border);
   box-shadow: var(--highlight);
-  background: repeating-linear-gradient(to right, rgba(0, 0, 0, 0) 15px, rgba(120, 120, 255, .5) 16px, rgba(0, 0, 0, 0) 16px, rgba(0, 0, 0, 0) 30px), repeating-linear-gradient(to top, rgba(0, 0, 0, 0) 11px, rgba(120, 120, 255, .5) 12px, rgba(255, 255, 255, 0) 12px, rgba(255, 255, 255, 0) 24px) !important;
+  background: repeating-linear-gradient(90deg, rgba(0, 0, 0, 0) 15px, rgba(120, 120, 255, .5) 16px, rgba(0, 0, 0, 0) 16px, rgba(0, 0, 0, 0) 30px), repeating-linear-gradient(to top, rgba(0, 0, 0, 0) 11px, rgba(120, 120, 255, .5) 12px, rgba(255, 255, 255, 0) 12px, rgba(255, 255, 255, 0) 24px) !important;
 }
 
 @media screen and (max-width: 1200px) {
   #sb_graphcontainer {
-    background: repeating-linear-gradient(to right, rgba(0, 0, 0, 0) 12px, rgba(120, 120, 255, .5) 13px, rgba(0, 0, 0, 0) 13px, rgba(0, 0, 0, 0) 28px), repeating-linear-gradient(to top, rgba(0, 0, 0, 0) 11px, rgba(120, 120, 255, .5) 12px, rgba(255, 255, 255, 0) 12px, rgba(255, 255, 255, 0) 24px) !important;
+    background: repeating-linear-gradient(90deg, rgba(0, 0, 0, 0) 12px, rgba(120, 120, 255, .5) 13px, rgba(0, 0, 0, 0) 13px, rgba(0, 0, 0, 0) 28px), repeating-linear-gradient(to top, rgba(0, 0, 0, 0) 11px, rgba(120, 120, 255, .5) 12px, rgba(255, 255, 255, 0) 12px, rgba(255, 255, 255, 0) 24px) !important;
   }
 }
 
@@ -11683,7 +11683,7 @@ iframe {
   top: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(to bottom, rgba(255,255,255,.2) 50%, rgba(0,0,0,.2) 50%), var(--reload);
+  background: linear-gradient(180deg, rgba(255,255,255,.2) 50%, rgba(0,0,0,.2) 50%), var(--reload);
   opacity: .7;
   content: "";
   animation: ease-out reloader 20s forwards;

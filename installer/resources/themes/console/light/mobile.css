@@ -157,7 +157,7 @@ table[id^="sb_"] tr:nth-child(odd) td {
 }
 
 #sb_memoryBar .percentBarInner {
-  background: linear-gradient(to bottom, rgba(255, 255, 255,.6), rgba(238, 238, 255, .6) 50%, rgba(180, 180, 255, .7) 50%, rgba(140, 140, 255, .7));
+  background: linear-gradient(180deg,rgba(255, 255, 255,.6), rgba(238, 238, 255, .6) 50%, rgba(180, 180, 255, .7) 50%, rgba(140, 140, 255, .7));
 }
 
 h1 {

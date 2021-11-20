@@ -12,7 +12,7 @@
 html {
   min-height: 100%;
   background: #000;
-  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.9) 2px, rgba(0,16,0,.9) 4px), var(--camo) #010;
+  background: repeating-linear-gradient(180deg,rgba(0,0,0,.9) 2px, rgba(0,16,0,.9) 4px), var(--camo) #010;
   background-size: 100%, 2048px;
   scrollbar-color: rgba(8,48,8,.8) #000800;
 }
@@ -35,7 +35,7 @@ body {
   font-size: 9pt;
   color: #ee9;
 /*  background: #010 url(/themes/console/dark/images/camotile2.png);
-  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.9) 2px, rgba(0,8,0,.5) 4px), var(--camo) #010;*/
+  background: repeating-linear-gradient(180deg,rgba(0,0,0,.9) 2px, rgba(0,8,0,.5) 4px), var(--camo) #010;*/
   background-size: 100%, 1024px;
   min-width: 920px;
 }
@@ -189,7 +189,7 @@ div.footer {
   margin: 0 -1px -1px;
   border: 1px solid #141;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #040, inset 0 0 0 3px #000 !important;
-  background: linear-gradient(to right, #000800 15%, #000 50%, #000800 85%);
+  background: linear-gradient(90deg, #000800 15%, #000 50%, #000800 85%);
 }
 
 p.footer {
@@ -351,7 +351,7 @@ form {
 
 #message_full tr:first-child {
   background: #020;
-  background: repeating-linear-gradient(to bottom, #010 1px, #010 2px, #000 3px);
+  background: repeating-linear-gradient(180deg,#010 1px, #010 2px, #000 3px);
 }
 
 #message_full tr:first-child td {
@@ -427,7 +427,7 @@ input[type=submit], input[type=reset], #settings, .topbuttons .fakebutton {
   border: 1px solid #000;
   border-radius: 2px;
   background: #000;
-  background: linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
   background-size: 12px, 100% !important;
 }
 
@@ -437,12 +437,12 @@ input[type=submit], input[type=reset], #settings, .topbuttons .fakebutton {
 
 input.cancel, #nukemail input.clearselection {
   padding: 7px 10px 7px 24px;
-  background: var(--no) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--no) no-repeat 8px center, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
   background-size: 12px, 100% !important;
 }
 
 input.cancel:hover, #nukemail input.clearselection:hover {
-  background: var(--no_hover) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background: var(--no_hover) no-repeat 8px center, linear-gradient(180deg,#000, #010);
   background-size: 12px, 100% !important;
 }
 
@@ -453,12 +453,12 @@ input.cancel:active, #nukemail input.clearselection:active {
 
 input.clearselection {
   padding: 7px 10px 7px 26px;
-  background: url(/themes/susimail/images/none.png) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: url(/themes/susimail/images/none.png) no-repeat 8px center, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
 }
 
 input.clearselection:hover {
   background: #010 url(/themes/susimail/images/none.png) no-repeat 8px center;
-  background: url(/themes/susimail/images/none.png) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background: url(/themes/susimail/images/none.png) no-repeat 8px center, linear-gradient(180deg,#000, #010);
 }
 
 input.clearselection:active {
@@ -467,12 +467,12 @@ input.clearselection:active {
 
 input.delete, input.delete_attachment, input.really_delete {
   padding: 7px 10px 7px 26px;
-  background: var(--delete) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--delete) no-repeat 8px center, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
   background-size: 16px, 100% !important;
 }
 
 input.delete:hover, input.delete_attachment:hover, input.really_delete:hover {
-  background: var(--delete_hover) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background: var(--delete_hover) no-repeat 8px center, linear-gradient(180deg,#000, #010);
   background-size: 16px, 100% !important;
 }
 
@@ -483,25 +483,25 @@ input.delete:active, input.delete_attachment:active, input.really_delete:active 
 
 input.download {
   padding: 7px 10px 7px 26px;
-  background: var(--download) no-repeat 8px center / 14px, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--download) no-repeat 8px center / 14px, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
 }
 
 input.download:hover {
-  background: var(--download) no-repeat 8px center / 14px, linear-gradient(to bottom, #000, #010);
+  background: var(--download) no-repeat 8px center / 14px, linear-gradient(180deg,#000, #010);
 }
 
 input.download:active {
-  background: var(--download) no-repeat 8px center / 14px, linear-gradient(to bottom, #000, #010);
+  background: var(--download) no-repeat 8px center / 14px, linear-gradient(180deg,#000, #010);
 }
 
 input.offline {
   padding: 7px 10px 7px 26px;
-  background: var(--offline) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--offline) no-repeat 8px center, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
   background-size: 14px, 100% !important;
 }
 
 input.offline:hover {
-  background: var(--offline_hover) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background: var(--offline_hover) no-repeat 8px center, linear-gradient(180deg,#000, #010);
   background-size: 14px, 100% !important;
 }
 
@@ -512,11 +512,11 @@ input.offline:active {
 
 input.list, input.moveto, #pagenav input.switchto {
   padding: 7px 10px 7px 26px;
-  background: var(--folder) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--folder) no-repeat 8px center, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
 }
 
 input.list:hover, input.moveto:hover, #pagenav input.switchto:hover {
-  background: var(--folder_hover) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background: var(--folder_hover) no-repeat 8px center, linear-gradient(180deg,#000, #010);
 }
 
 input.list:active, input.moveto:active, #pagenav input.switchto:active {
@@ -525,12 +525,12 @@ input.list:active, input.moveto:active, #pagenav input.switchto:active {
 
 input.forward {
   padding: 7px 10px 7px 26px;
-  background: var(--forward) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--forward) no-repeat 8px center, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
   background-size: 14px, 100% !important;
 }
 
 input.forward:hover {
-  background: var(--forward_hover) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background: var(--forward_hover) no-repeat 8px center, linear-gradient(180deg,#000, #010);
   background-size: 14px, 100% !important;
 }
 
@@ -541,12 +541,12 @@ input.forward:active {
 
 input.login {
   padding: 7px 10px 7px 26px;
-  background: var(--login) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--login) no-repeat 8px center, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
   background-size: 15px, 100% !important;
 }
 
 input.login:hover {
-  background: var(--login_hover) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background: var(--login_hover) no-repeat 8px center, linear-gradient(180deg,#000, #010);
   background-size: 15px, 100% !important;
 }
 
@@ -561,14 +561,14 @@ input.login:active {
 
 input.logout {
   padding: 7px 10px 7px 26px;
-  background: var(--logout) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
-  background: var(--logout) no-repeat 8px center, linear-gradient(to bottom, #020, #010);
+  background: var(--logout) no-repeat 8px center, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
+  background: var(--logout) no-repeat 8px center, linear-gradient(180deg,#020, #010);
   background-size: 15px, 100% !important;
 }
 
 input.logout:hover {
-  background: var(--logout_hover) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
-  background: var(--logout_hover) no-repeat 8px center, linear-gradient(to bottom, #020, #010);
+  background: var(--logout_hover) no-repeat 8px center, linear-gradient(180deg,#000, #010);
+  background: var(--logout_hover) no-repeat 8px center, linear-gradient(180deg,#020, #010);
   background-size: 15px, 100% !important;
 }
 
@@ -590,7 +590,7 @@ input.logout, input.logout:hover, input.logout:focus, input.logout:active {
 
 input.reload, input.refresh, input[name="refresh"][disabled], .topbuttons .fakebutton {
   padding: 7px 10px 7px 26px;
-  background: var(--refresh) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000) !important;
+  background: var(--refresh) no-repeat 8px center, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000) !important;
   background-size: 13px, 100% !important;
 }
 
@@ -604,7 +604,7 @@ input[name="refresh"][disabled] {
 }
 
 input.reload:hover, input.refresh:hover, .fakebutton:hover {
-  background: var(--refresh_hover) no-repeat 8px center, linear-gradient(to bottom, #000, #010) !important;
+  background: var(--refresh_hover) no-repeat 8px center, linear-gradient(180deg,#000, #010) !important;
   background-size: 13px, 100% !important;
 }
 
@@ -614,12 +614,12 @@ input.reload:active, input.refresh:active, .fakebutton:active {
 }
 
 input.invertselection {
-  background: url(/themes/susimail/images/selection.png) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: url(/themes/susimail/images/selection.png) no-repeat 8px center, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
   padding: 7px 10px 7px 26px;
 }
 
 input.invertselection:hover {
-  background: url(/themes/susimail/images/selection.png) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background: url(/themes/susimail/images/selection.png) no-repeat 8px center, linear-gradient(180deg,#000, #010);
 }
 
 input.invertselection:active {
@@ -628,11 +628,11 @@ input.invertselection:active {
 
 input.show {
   padding: 7px 10px 7px 26px;
-  background: -var(--yes) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: -var(--yes) no-repeat 8px center, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
 }
 
 input.show:hover {
-  background: var(--yes_hover) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background: var(--yes_hover) no-repeat 8px center, linear-gradient(180deg,#000, #010);
 }
 
 input.show:active {
@@ -642,11 +642,11 @@ input.show:active {
 
 input.markall {
   padding: 7px 10px 7px 26px;
-  background: url(/themes/susimail/images/all.png) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: url(/themes/susimail/images/all.png) no-repeat 8px center, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
 }
 
 input.markall:hover {
-  background: url(/themes/susimail/images/all.png) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background: url(/themes/susimail/images/all.png) no-repeat 8px center, linear-gradient(180deg,#000, #010);
 }
 
 input.markall:active {
@@ -655,12 +655,12 @@ input.markall:active {
 
 input.new {
   padding: 7px 10px 7px 26px;
-  background: var(--compose) no-repeat 8px center / 14px, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--compose) no-repeat 8px center / 14px, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
   background-size: 14px, 100% !important;
 }
 
 input.new:hover {
-  background: var(--compose_hover) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background: var(--compose_hover) no-repeat 8px center, linear-gradient(180deg,#000, #010);
   background-size: 14px, 100% !important;
 }
 
@@ -671,12 +671,12 @@ input.new:active {
 
 input.reply {
   padding: 7px 10px 7px 26px;
-  background: var(--reply) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--reply) no-repeat 8px center, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
   background-size: 14px, 100% !important;
 }
 
 input.reply:hover {
-  background: var(--reply_hover) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background: var(--reply_hover) no-repeat 8px center, linear-gradient(180deg,#000, #010);
   background-size: 14px, 100% !important;
 }
 
@@ -687,12 +687,12 @@ input.reply:active {
 
 input.replyall {
   padding: 7px 10px 7px 26px;
-  background: var(--replyall) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--replyall) no-repeat 8px center, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
   background-size: 14px, 100% !important;
 }
 
 input.replyall:hover {
-  background: var(--replyall_hover) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background: var(--replyall_hover) no-repeat 8px center, linear-gradient(180deg,#000, #010);
   background-size: 14px, 100% !important;
 }
 
@@ -707,12 +707,12 @@ input.markall {
 
 input.setpagesize, input.save {
   padding: 7px 10px 7px 26px;
-  background: var(--yes) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--yes) no-repeat 8px center, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
 }
 
 input.setpagesize:hover, input.setpagesize:focus, input.save:hover, input.save:focus {
   padding: 7px 10px 7px 26px;
-  background: var(--yes_hover) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background: var(--yes_hover) no-repeat 8px center, linear-gradient(180deg,#000, #010);
 }
 
 input.setpagesize:active, input.save:active {
@@ -726,12 +726,12 @@ input.setpagesize {
 
 input.send {
   padding: 7px 10px 7px 26px;
-  background: var(--send) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background: var(--send) no-repeat 8px center, linear-gradient(180deg,#000, #010);
   background-size: 16px, 100% !important;
 }
 
 input.send:hover {
-  background: var(--send_hover) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background: var(--send_hover) no-repeat 8px center, linear-gradient(180deg,#000, #010);
   background-size: 16px, 100% !important;
 }
 
@@ -746,12 +746,12 @@ input.send + input.cancel {
 
 input.configure, #settings {
   padding: 7px 10px 7px 26px;
-  background: var(--configure) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--configure) no-repeat 8px center, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
   background-size: 14px, 100% !important;
 }
 
 input.configure:hover, #settings:hover {
-  background: var(--configure_hover) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background: var(--configure_hover) no-repeat 8px center, linear-gradient(180deg,#000, #010);
   background-size: 14px, 100% !important;
 }
 
@@ -762,12 +762,12 @@ input.configure:active, #settings:active {
 
 input.saveas, input.saveasdraft {
   padding: 7px 10px 7px 27px;
-  background: var(--save) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--save) no-repeat 8px center, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
   background-size: 15px, 100% !important;
 }
 
 input.saveas:hover, input.saveasdraft:hover {
-  background: var(--save_hover) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background: var(--save_hover) no-repeat 8px center, linear-gradient(180deg,#000, #010);
 }
 
 input.saveas:active, input.saveasdraft:active {
@@ -776,11 +776,11 @@ input.saveas:active, input.saveasdraft:active {
 
 input.new_upload {
   padding: 7px 10px 7px 26px;
-  background: var(--attached) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--attached) no-repeat 8px center, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
 }
 
 input.new_upload:hover {
-  background: var(--attach_hover) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background: var(--attach_hover) no-repeat 8px center, linear-gradient(180deg,#000, #010);
 }
 
 input.new_upload:active {
@@ -794,12 +794,12 @@ input.new_upload {
 
 input.switchto, input.moveto {
   padding: 7px 10px 7px 26px;
-  background: var(--folder) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--folder) no-repeat 8px center, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
   background-size: 14px, 100% !important;
 }
 
 input.switchto:hover, input.moveto:hover {
-  background: var(--folder_hover) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background: var(--folder_hover) no-repeat 8px center, linear-gradient(180deg,#000, #010);
   background-size: 14px, 100% !important;
 }
 
@@ -868,7 +868,7 @@ select {
   border: 1px solid #000;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #151, inset 0 0 2px 1px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
-  background: var(--dropdown) no-repeat right 10px center / 10px, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--dropdown) no-repeat right 10px center / 10px, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
   appearance: none;
 }
 
@@ -883,7 +883,7 @@ select option {
 select:hover, select:active, select:focus {
   cursor: pointer;
   color: #f60;
-  background: var(--dropdown_hover) no-repeat right 10px center / 10px, linear-gradient(to bottom, #000, #010) !important;
+  background: var(--dropdown_hover) no-repeat right 10px center / 10px, linear-gradient(180deg,#000, #010) !important;
 }
 
 select::-moz-focus-inner {
@@ -918,44 +918,44 @@ input.firstpage, input[name="firstpage"],
 input.firstpage[disabled]:hover, input[name="firstpage"][disabled]:hover {
   padding: 4px 10px;
   text-indent: -99999px;
-  background: var(--first) no-repeat center center, linear-gradient(to bottom, #020, #000);
+  background: var(--first) no-repeat center center, linear-gradient(180deg,#020, #000);
 }
 
 input.firstpage:hover, input[name="firstpage"]:hover {
-  background: var(--first_hover) no-repeat center center, linear-gradient(to bottom, #000, #010);
+  background: var(--first_hover) no-repeat center center, linear-gradient(180deg,#000, #010);
 }
 
 input.lastpage, input[name="lastpage"],
 input.lastpage[disabled]:hover, input[name="lastpage"][disabled]:hover {
   padding: 4px 10px;
-  background: var(--last) no-repeat center center, linear-gradient(to bottom, #020, #000);
+  background: var(--last) no-repeat center center, linear-gradient(180deg,#020, #000);
   text-indent: -99999px;
 }
 
 input.lastpage:hover, input[name="lastpage"]:hover {
-  background: var(--last_hover) no-repeat center center, linear-gradient(to bottom, #000, #010);
+  background: var(--last_hover) no-repeat center center, linear-gradient(180deg,#000, #010);
 }
 
 input.prevpage, input.prev, input[name="prev"], input[name="prevpage"],
 input.prevpage[disabled]:hover, input.prev[disabled]:hover, input[name="prev"][disabled]:hover, input[name="prevpage"][disabled]:hover {
   padding: 4px 10px;
   text-indent: -99999px;
-  background: var(--previous) no-repeat center center, linear-gradient(to bottom, #020, #000);
+  background: var(--previous) no-repeat center center, linear-gradient(180deg,#020, #000);
 }
 
 input[name="prev"]:hover, input[name="prevpage"]:hover {
-  background: var(--previous_hover.svg) no-repeat center center, linear-gradient(to bottom, #000, #010);
+  background: var(--previous_hover.svg) no-repeat center center, linear-gradient(180deg,#000, #010);
 }
 
 input.nextpage, input.next, input[name="nextpage"], input[name="next"],
 input.nextpage[disabled]:hover, input.next[disabled]:hover, input[name="nextpage"][disabled]:hover, input[name="next"][disabled]:hover {
   padding: 4px 10px;
   text-indent: -99999px;
-  background: var(--next) no-repeat center center, linear-gradient(to bottom, #020, #000);
+  background: var(--next) no-repeat center center, linear-gradient(180deg,#020, #000);
 }
 
 input.nextpage:hover, input.next:hover, input[name="nextpage"]:hover {
-  background: var(--next_hover) no-repeat center center, linear-gradient(to bottom, #000, #010);
+  background: var(--next_hover) no-repeat center center, linear-gradient(180deg,#000, #010);
 }
 
 @supports (position: sticky) {
@@ -1004,7 +1004,7 @@ input.nextpage:hover, input.next:hover, input[name="nextpage"]:hover {
   border: 1px solid #151;
   border-radius: 2px;
   background: #020;
-  background: linear-gradient(to bottom, #020, #010);
+  background: linear-gradient(180deg,#020, #010);
 }
 
 .pagenav input[disabled] {
@@ -1198,13 +1198,13 @@ img.sort {
   vertical-align: middle;
   border: 1px solid #151;
   border-radius: 1px;
-  background: linear-gradient(to bottom, #020, #010);
+  background: linear-gradient(180deg,#020, #010);
 }
 
 a .sort:hover, a:focus .sort {
   opacity: 1 !important;
   border: 1px solid #f60;
-  background: linear-gradient(to bottom, #000, #010);
+  background: linear-gradient(180deg,#000, #010);
 }
 
 img.sort:active {
@@ -1283,7 +1283,7 @@ hr {
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #040, inset 0 0 0 3px #000, 0 0 0 1px #000, 0 0 3px 3px rgba(0,0,0,.8);
   background: #010;
-  background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,.3)), repeating-linear-gradient(to bottom, rgba(0,0,0,.9), rgba(0,32,0,.3) 1px, rgba(0,32,0,.4) 2px), url(images/hatter_med.png) right bottom no-repeat #000;
+  background: linear-gradient(180deg,rgba(0,0,0,0), rgba(0,0,0,.3)), repeating-linear-gradient(180deg,rgba(0,0,0,.9), rgba(0,32,0,.3) 1px, rgba(0,32,0,.4) 2px), url(images/hatter_med.png) right bottom no-repeat #000;
   background-size: 100% 100%, 100% 100%, auto 40%;
   margin: 52px auto 42px;
   filter: opacity(0);
@@ -1338,7 +1338,7 @@ hr {
   border-bottom: 1px solid #141;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #040, inset 0 0 0 3px #000;;
   background: #010;
-  background: linear-gradient(to bottom, #010, #000);
+  background: linear-gradient(180deg,#010, #000);
 }
 
 .iframed #dologin h1 {
@@ -1373,7 +1373,7 @@ hr {
 
 #dologin hr {
   margin: 0 0 4px;
-  background: linear-gradient(to right, rgba(0,0,0,0), rgba(0,64,0,.8) 45%, rgba(0,64,0,.8) 55%, rgba(0,0,0,0));
+  background: linear-gradient(90deg, rgba(0,0,0,0), rgba(0,64,0,.8) 45%, rgba(0,64,0,.8) 55%, rgba(0,0,0,0));
 }
 
 #dologin hr:first-of-type {
@@ -1409,7 +1409,7 @@ hr {
 #dologin tr:last-child a:hover {
   box-shadow: 0 0 0 1px #020;
   background: #000;
-  background: linear-gradient(to bottom, #010 50%, #000 50%) #000;
+  background: linear-gradient(180deg,#010 50%, #000 50%) #000;
   transition: ease all .1s;
 }
 
@@ -1443,14 +1443,14 @@ textarea[name="config_text"] {
   color: #bb7;
   border: 1px solid #141;
   box-shadow: 0 0 2px 2px rgba(0,0,0,.5);
-  background: repeating-linear-gradient(to bottom, #000800, #000800 20px, #000 20px, #000 40px);
+  background: repeating-linear-gradient(180deg,#000800, #000800 20px, #000 20px, #000 40px);
 }
 
 textarea[name="config_text"]:focus {
   color: #ee9;
   border: 1px solid #141;
   box-shadow: inset 0 0 0 1px #000, 0 0 0 1px rgba(255,96,0,.15);
-  background: repeating-linear-gradient(to bottom, #010, #010 20px, #000800 20px, #000800 40px);
+  background: repeating-linear-gradient(180deg,#010, #010 20px, #000800 20px, #000800 40px);
 }
 
 h3#config {
@@ -1465,7 +1465,7 @@ h3#config {
   box-shadow: inset 0 0 0 1px #000;
   text-shadow: 0 1px 1px #000;
   background: #010;
-  background: linear-gradient(to right, rgba(0,64,0,.1), rgba(0,80,0,.2), rgba(0,64,0,.1)), linear-gradient(to bottom, #010 50%, #000 50%);
+  background: linear-gradient(90deg, rgba(0,64,0,.1), rgba(0,80,0,.2), rgba(0,64,0,.1)), linear-gradient(180deg,#010 50%, #000 50%);
 }
 
 #prefsave {
@@ -1500,7 +1500,7 @@ h3#config {
   border-radius: 2px;
   box-shadow: 0 0 1px 0 #000;
   background: #010;
-  background: linear-gradient(to bottom, #020, #010);
+  background: linear-gradient(180deg,#020, #010);
 }
 
 #infoUser {
@@ -1530,7 +1530,7 @@ h3#config {
   font-weight: 700;
   border: 1px solid #141;
   box-shadow: inset 0 0 0 1px #000 !important;
-  background: linear-gradient(to bottom, #010 50%, #000 50%), repeating-linear-gradient(to bottom, #020 1px, #020 2px, #000 3px) !important;
+  background: linear-gradient(180deg,#010 50%, #000 50%), repeating-linear-gradient(180deg,#020 1px, #020 2px, #000 3px) !important;
 }
 
 .iframed .topbuttons {
@@ -1609,7 +1609,7 @@ _:-ms-lang(x), tr.bottombuttons, .topbuttons {
 }
 
 tr.bottombuttons:last-child {
-  background: linear-gradient(to bottom, #010 50%, #000) !important;
+  background: linear-gradient(180deg,#010 50%, #000) !important;
 }
 
 tr.bottombuttons:empty {
@@ -1637,7 +1637,7 @@ tr.bottombuttons:empty {
   border: 1px solid #000;
   border-top: none;
   box-shadow: 0 2px 2px 1px rgba(0,0,0,.5), inset 0 0 0 1px #040;
-  background: var(--no) right 6px top 6px no-repeat, linear-gradient(to right, #020, #002800, #020) #020;
+  background: var(--no) right 6px top 6px no-repeat, linear-gradient(90deg, #020, #002800, #020) #020;
   background-size: 14px, 100% !important;
   cursor: crosshair;
   animation: 2s hide-up 7s ease-out forwards;
@@ -1697,8 +1697,8 @@ td p.error {
   padding: 4px 8px 12px;
   border-radius: 0 0 2px 2px;
   background: #010;
-  background: repeating-linear-gradient(to bottom, #000800 1px, #000800 2px, #000 3px);
-  background: repeating-linear-gradient(to right, rgba(0,32,0,.4), rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px), repeating-linear-gradient(to bottom, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,64,0,.4) 3px), url(/themes/console/dark/images/camotile2.png);
+  background: repeating-linear-gradient(180deg,#000800 1px, #000800 2px, #000 3px);
+  background: repeating-linear-gradient(90deg, rgba(0,32,0,.4), rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px), repeating-linear-gradient(180deg,rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,64,0,.4) 3px), url(/themes/console/dark/images/camotile2.png);
 }
 
 .iframed #composemail {
@@ -1775,14 +1775,14 @@ td p.error {
   font-style: italic;
   border-radius: 2px 15px 15px 2px;
   box-shadow: inset 0 0 0 1px #020, inset 0 0 0 2px #010, 0 0 0 1px #000;
-  background: var(--attach_active) no-repeat 9px center, linear-gradient(to right, #010 70%, #020);
+  background: var(--attach_active) no-repeat 9px center, linear-gradient(90deg, #010 70%, #020);
   background-size: 14px, 100%;
 }
 
 #attachedfile label:hover {
   color: #930;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 0 2px #930;
-  background: var(--attach_hover) no-repeat 9px center, linear-gradient(to right, #020 70%, #010);
+  background: var(--attach_hover) no-repeat 9px center, linear-gradient(90deg, #020 70%, #010);
   background-size: 14px, 100%;
 }
 
@@ -1796,7 +1796,7 @@ td p.error {
   overflow: auto !important;
   text-align: left;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #030;
-  background: var(--attached) no-repeat 10px center, repeating-linear-gradient(to bottom, #010, #000 2px);
+  background: var(--attached) no-repeat 10px center, repeating-linear-gradient(180deg,#010, #000 2px);
   background-size: 16px 100%;
 }
 
@@ -1888,12 +1888,12 @@ td[onclick] {
 
 tr.list0 {
   background: #001000;
-  background: linear-gradient(to bottom, #001400, #000600);
+  background: linear-gradient(180deg,#001400, #000600);
 }
 
 tr.list1 {
   background: #001a00;
-  background: linear-gradient(to bottom, #001400, #000600);
+  background: linear-gradient(180deg,#001400, #000600);
 }
 
 tr.list0:hover, tr.list1:hover {
@@ -1949,21 +1949,21 @@ _:-ms-lang(x), tr.list0:hover, tr.list1:hover {
   color: #ee9;
   border-bottom: 1px solid #141;
   background: #010;
-  background: linear-gradient(to bottom, #010 50%, #000 50%);
+  background: linear-gradient(180deg,#010 50%, #000 50%);
 }
 
 #mailbox th:last-child {
   padding: 6px 0 !important;
-  background: var(--nuke) no-repeat center center / 14px, linear-gradient(to bottom, #010 50%, #000 50%);
+  background: var(--nuke) no-repeat center center / 14px, linear-gradient(180deg,#010 50%, #000 50%);
 }
 
 #mailbox th.mailListFlagged {
-  background: url(/themes/susimail/images/status.png) no-repeat center center, linear-gradient(to bottom, #010 50%, #000 50%);
+  background: url(/themes/susimail/images/status.png) no-repeat center center, linear-gradient(180deg,#010 50%, #000 50%);
   background-blend-mode: luminosity, normal;
 }
 
 #mailbox th.MailListAttachment {
-  background: var(--attach) no-repeat center center, linear-gradient(to bottom, #010 50%, #000 50%) !important;
+  background: var(--attach) no-repeat center center, linear-gradient(180deg,#010 50%, #000 50%) !important;
   background-size: 14px, 100% !important;
 }
 
@@ -2015,7 +2015,7 @@ tr:hover td.mailListSubject a {
   width: calc(100% - 2px);
   border-radius: 2px 15px 15px 2px;
   background: #ffc;
-  background: linear-gradient(to right, rgba(0,0,0,0), rgba(0,64,0,.9) 20%);
+  background: linear-gradient(90deg, rgba(0,0,0,0), rgba(0,64,0,.9) 20%);
 }
 
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
@@ -2123,7 +2123,7 @@ th.mailListDate {
   border-radius: 2px;
   box-shadow: 0 0 0 1px #000;
   opacity: .8;
-  background: linear-gradient(to bottom, #020, #010);
+  background: linear-gradient(180deg,#020, #010);
 }
 
 tr:hover .listDate {
@@ -2173,7 +2173,7 @@ td.mailListSize {
   border-radius: 2px;
   box-shadow: 0 0 0 1px #000;
   background: #010;
-  background: linear-gradient(to bottom, #020, #010);
+  background: linear-gradient(180deg,#020, #010);
 }
 
 tr:hover .listSize {
@@ -2280,7 +2280,7 @@ background-position: 0;
   color: #a00;
   border: 1px solid #700;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #b00;
-  background: var(--question) no-repeat center 20px / 32px, linear-gradient(to bottom, #100, #000, #100);
+  background: var(--question) no-repeat center 20px / 32px, linear-gradient(180deg,#100, #000, #100);
 }
 
 #nukemail.floating {
@@ -2325,7 +2325,7 @@ background-position: 0;
   display: block;
   width: 100%;
   height: 1px;
-  background: linear-gradient(to right, #000, #500, #000);
+  background: linear-gradient(90deg, #000, #500, #000);
 }
 
 /* end confirm delete */
@@ -2337,7 +2337,7 @@ background-position: 0;
   font-size: 10pt;
   text-align: center;
   background: #ddf;
-  background: repeating-linear-gradient(to bottom, #001, #000 2px, #001 3px);
+  background: repeating-linear-gradient(180deg,#001, #000 2px, #001 3px);
   margin: 0 !important;
   border: none !important;
 }
@@ -2359,11 +2359,11 @@ background-position: 0;
 
 @keyframes loading {
 0% {
-  background: linear-gradient(to bottom, rgba(255,255,255,.2) 50%, rgba(0,0,0,.3) 50%), repeating-linear-gradient(45deg, #020 1px, #020 20px, #000 20px, #000 40px);
+  background: linear-gradient(180deg,rgba(255,255,255,.2) 50%, rgba(0,0,0,.3) 50%), repeating-linear-gradient(45deg, #020 1px, #020 20px, #000 20px, #000 40px);
 }
 
 100% {
-  background: linear-gradient(to bottom, rgba(255,255,255,.2) 50%, rgba(0,0,0,.3) 50%),repeating-linear-gradient(45deg, #000 1px, #000 20px, #020 20px, #020 40px);;
+  background: linear-gradient(180deg,rgba(255,255,255,.2) 50%, rgba(0,0,0,.3) 50%),repeating-linear-gradient(45deg, #000 1px, #000 20px, #020 20px, #020 40px);;
 }
 }
 
@@ -2493,7 +2493,7 @@ td {
   border: 1px solid #141;
   box-shadow: inset 0 0 0 1px #000;
   border-radius: 0 0 0 3px;
-  background: linear-gradient(to bottom, #010 50%, #000 50%);
+  background: linear-gradient(180deg,#010 50%, #000 50%);
 }
 
 #folderName {
