@@ -5985,7 +5985,7 @@ div.appgroup {
   border: none;
   border-right: 1px solid var(--border) !important;
   border-radius: 0 2px 2px 0;
-  background: var(--search) no-repeat center center / 16px, var(--btn);
+  background: var(--search) no-repeat center center / 14px, var(--btn);
   background-blend-mode: luminosity;
 }
 
@@ -5995,7 +5995,7 @@ div.appgroup {
 
 #searchbar button:active {
   background-blend-mode: luminosity;
-  background-size: 14px;
+  background-size: 12px;
 }
 
 @media screen and (max-width: 1200px) {

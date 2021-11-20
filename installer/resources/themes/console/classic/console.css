@@ -3800,6 +3800,7 @@ div.appgroup {
 
 #searchbar button:active {
   box-shadow: var(--btn_shadow_active);
+  background-size: 12px !important;
 }
 
 #searchbar input::placeholder {
