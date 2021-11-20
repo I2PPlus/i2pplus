@@ -23,8 +23,7 @@
   --btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 #fff, inset 0 0 4px 2px #f0f0ff, 0 1px 1px rgba(220,220,255,.5);
   --btn_shadow_hover: var(--highlight), 0 0 0 1px #fff, 0 0 0 2px rgba(255,96,0,.4);
   --btn_shadow_active: var(--highlight), inset 3px 3px 3px 1px rgba(32,32,64,.3);
-  --shadow_inset: inset 2px 2px 4px rgba(204,204,240,.6);
-  --shadow_input: inset 1px 1px 1px #ddd;
+  --shadow_input: inset 1px 1px 1px rgba(0,0,0,.2);
   --badge: linear-gradient(180deg, #fff, var(--bg3));
   --badge_hover: linear-gradient(180deg, var(--bg3), #fff);
   --box_border_badge: 0 0 0 1px #bbd;
@@ -3784,7 +3783,7 @@ div.appgroup {
   min-width: 240px;
   border-radius: 0 3px 3px 0;
   border-left: none;
-  box-shadow: var(--highlight);
+  box-shadow: var(--shadow_input);
 }
 
 #searchbar input:focus {

@@ -20,6 +20,8 @@
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
   --btn: linear-gradient(180deg,#fff, #efefff);
   --btn_hover: linear-gradient(180deg,#eee, #fff);
+  --btn_shadow_active: var(--highlight), inset 3px 3px 3px 1px rgba(0,0,64,.3);
+  --input_shadow: inset 1px 1px 1px rgba(0,0,48,.2);
   --border: #575775;
   --borderinner: #9898b3;
   --bevel: inset 0 0 0 1px #d0d0da;
@@ -1645,6 +1647,7 @@ hr:last-child {
   resize: none;
   color: var(--ink);
   box-shadow: var(--highlight), inset 3px 3px 3px rgba(0,0,48,.2);
+  box-shadow: var(--input_shadow);
 }
 
 td.tabletextarea {
@@ -5277,7 +5280,7 @@ button.download.control:hover, button.download.control:focus {
 
 input[type=text], input[type=password] {
   padding: 5px 8px;
-  box-shadow: var(--highlight), inset 3px 3px 3px rgba(0,0,48,.2);
+  box-shadow: var(--input_shadow);
   background: #fbfbff;
 }
 
@@ -5297,7 +5300,8 @@ input[name="refreshInterval"] {
 
 input[type=text]:focus, input[type=password]:focus {
   background: #fff;
-  box-shadow: none;
+  box-shadow: var(--highlight), inset 3px 3px 3px rgba(0,0,48,.2);
+  box-shadow: var(--btn_shadow_active);
   filter: drop-shadow(0 0 1px #89f);
   color: #19191f;
   border: 1px solid #676c7f;
@@ -5431,7 +5435,7 @@ textarea {
 textarea:focus {
   color: #19191f !important;
   border: 1px solid #676c7f;
-  box-shadow: none;
+  box-shadow: var(--btn_shadow_active);
   background: #fff;
   filter: drop-shadow(0 0 1px #89f);
 }
