@@ -27,7 +27,7 @@
   --badge_hover: linear-gradient(to bottom, var(--bg3), #fff);
   --box_border_badge: 0 0 0 1px #bbd;
   --border: #bfc3d9;
-  --border_soft: #dfe1ec;
+  --border_soft: #cfd2e2;
   --border_warn: #fb7;
   --border_badge: #aad;
   --highlight: inset 0 0 0 1px rgba(255,255,255,.8);
@@ -8560,8 +8560,8 @@ b.suboption {
 
 /* /confignet */
 
-#netconfig tr, #i2pupdates tr, #config_reseed tr {
-  background: var(--bg3) !important;
+#netconfig tr, #config_reseed tr, #i2pupdates tr {
+  background: var(--bg) !important;
 }
 
 #netconfig tr:nth-last-child(3) .optionlist {
