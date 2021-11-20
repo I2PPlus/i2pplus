@@ -163,7 +163,7 @@
 </td>
 </tr>
 <tr>
-<td class="infohelp">To update with unsigned I2P+ release builds: <code>http://skank.i2p/i2pupdate.zip</code> or for the latest unsigned development builds: <code>http://skank.i2p/dev/i2pupdate.zip</code></td>
+<td class="infohelp"><%=intl._t("To update with unsigned I2P+ release builds: <code>http://skank.i2p/i2pupdate.zip</code> or for the latest unsigned development builds: <code>http://skank.i2p/dev/i2pupdate.zip</code>")%></td>
 </tr>
 <tr>
 <td>

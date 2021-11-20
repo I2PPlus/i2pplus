@@ -64,16 +64,10 @@
 <jsp:useBean class="net.i2p.router.web.helpers.SearchHelper" id="searchhelper" scope="request" />
 <jsp:setProperty name="searchhelper" property="contextId" value="<%=i2pcontextId%>" />
 <div id="homepanel">
-<div class="search" id="homesearch">
+<div id="searchbar">
 <form action="/search.jsp" target="_blank" rel="noreferrer" method="POST">
-<table class="search">
-<tr>
-<td align="right"><input size="40" type="text" class="search" name="query" required placeholder="<%=intl._t("Please enter a search query")%>" /></td>
-<td align="left"><button type="submit" value="search" class="search"><%=intl._t("Search")%></button></td>
-<td align="left">
-<jsp:getProperty name="searchhelper" property="selector" />
-</td>
-</tr>
+<table>
+<tr><td><span><jsp:getProperty name="searchhelper" property="selector" /><input size="40" type="text" class="search" name="query" required placeholder="<%=intl._t("Please enter a search query")%>" /><button type="submit" value="search" class="search"><%=intl._t("Search")%></button></span></td></tr>
 </table>
 </form>
 </div>
