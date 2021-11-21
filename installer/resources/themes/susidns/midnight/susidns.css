@@ -9,16 +9,16 @@
 :root {
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
-  --title: repeating-linear-gradient(to right, rgba(0,0,48,.4) 2px, #000 4px), linear-gradient(to bottom, #003, #002 50%, #001 50%, #000);
+  --title: repeating-linear-gradient(90deg, rgba(0,0,48,.4) 2px, #000 4px), linear-gradient(180deg,#003, #002 50%, #001 50%, #000);
   --highlight: inset 0 0 0 1px #000;
-  --nav: linear-gradient(to bottom, #181828 50%, #000 50%);
-  --nav_hover: linear-gradient(to bottom, #3c1751 50%, #0a030d 50%);
+  --nav: linear-gradient(180deg,#181828 50%, #000 50%);
+  --nav_hover: linear-gradient(180deg,#3c1751 50%, #0a030d 50%);
 }
 
 body {
   font-family: var(--bodyfont);
   background-color: #000010;
-  background: repeating-linear-gradient(to bottom, rgba(0,0,24,.75) 3px, rgba(0,0,0,.9) 5px, rgba(0,0,0,.7) 6px), var(--tile), #000010;
+  background: repeating-linear-gradient(180deg,rgba(0,0,24,.75) 3px, rgba(0,0,0,.9) 5px, rgba(0,0,0,.7) 6px), var(--tile), #000010;
   color:#c9ceff;
   margin: 0 10px;
   font-size: 9.5pt;
@@ -245,7 +245,7 @@ td.search > * {
 #search input[type=text] {
   margin-left: 5px;
   padding: 6px 6px 6px 30px !important;
-  background: var(--search) no-repeat 8px center / 14px, linear-gradient(to bottom, #000 0%, #000019 100%) !important;
+  background: var(--search) no-repeat 8px center / 14px, linear-gradient(180deg,#000 0%, #000019 100%) !important;
   background-blend-mode: luminosity;
 }
 
@@ -450,7 +450,7 @@ h4 {
   border: 1px solid #26235c;
   padding: 8px 10px;
   margin-bottom: 30px !important;
-  background: linear-gradient(to right, #000, #001);
+  background: linear-gradient(90deg, #000, #001);
 }
 
 div#messages > p.messages {
@@ -551,12 +551,12 @@ li {
 
 #host_list tr:nth-child(odd), #host_details tr:nth-child(odd) {
   background-color: #010011;
-  background: linear-gradient(to bottom, #080818, #010010);
+  background: linear-gradient(180deg,#080818, #010010);
 }
 
 #host_list tr:nth-child(even), #host_details tr:nth-child(even) {
   background-color: #000;
-  background: linear-gradient(to bottom, #080818, #010010);
+  background: linear-gradient(180deg,#080818, #010010);
 }
 
 p.messages {
@@ -634,7 +634,7 @@ p.footer {
 #buttons {
   text-align: right;
   background: #001;
-  background: linear-gradient(to right, #001, #000) !important;
+  background: linear-gradient(90deg, #001, #000) !important;
 }
 
 p.buttons, .buttons {
@@ -792,13 +792,13 @@ div#book, #emptybook {
 #book table th {
   font-size: 8.5pt;
   border-bottom: 1px solid #26235c;
-  background: linear-gradient(to bottom, #080818, #000008 75%) !important;
+  background: linear-gradient(180deg,#080818, #000008 75%) !important;
 }
 
 #book th:last-child {
   padding: 0 !important;
   font-size: 0;
-  background: var(--nuke) no-repeat center center / 14px, linear-gradient(to bottom, #080818, #000008 75%) !important;
+  background: var(--nuke) no-repeat center center / 14px, linear-gradient(180deg,#080818, #000008 75%) !important;
 }
 
 #book td {
@@ -948,7 +948,7 @@ div#add {
   padding: 0;
   font-size: 9pt !important;
   color: #c9ceff;
-  background: linear-gradient(to bottom, rgba(0,0,16,.2), transparent);
+  background: linear-gradient(180deg,rgba(0,0,16,.2), transparent);
 }
 
 .iframed .page {
@@ -987,7 +987,7 @@ input[type=submit], input[type=reset], .fakebutton, .fakebutton:visited {
   border: 1px solid #27235c;
   border-radius: 1px;
   box-shadow: var(--highlight), inset 0 0 2px 0 #559;
-  background: linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
+  background: linear-gradient(180deg,#11101c 50%, #000010 50%) !important;
 }
 
 input[type=file]::file-selector-button {
@@ -999,7 +999,7 @@ input[type=file]::file-selector-button {
   border: 1px solid #27235c;
   border-radius: 2px;
   box-shadow: var(--highlight), inset 0 0 2px 0 #559;
-  background: linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
+  background: linear-gradient(180deg,#11101c 50%, #000010 50%) !important;
 }
 
 input.update {
@@ -1012,7 +1012,7 @@ input[type=submit]:focus, input[type=reset]:focus,
   color: #652787;
   border: 1px solid #652787;
   box-shadow: var(--highlight), inset 0 0 2px 1px #757;
-  background: linear-gradient(to bottom, #202 50%, #000 50%) !important;
+  background: linear-gradient(180deg,#202 50%, #000 50%) !important;
 }
 
 input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
@@ -1021,7 +1021,7 @@ input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selec
   border-radius: 1px;
   box-shadow: var(--highlight), inset 0 0 2px 1px #757;
   background: #000 !important;
-  background: linear-gradient(to bottom, #202 50%, #000 50%) !important;
+  background: linear-gradient(180deg,#202 50%, #000 50%) !important;
 }
 
 input[type=submit]:active, input[type=reset]:active, .fakebutton:active {
@@ -1030,7 +1030,7 @@ input[type=submit]:active, input[type=reset]:active, .fakebutton:active {
   border: 1px solid #652787;
   box-shadow: var(--highlight), inset 3px 3px 3px #000 !important;
   background: #652787 !important;
-  background:  linear-gradient(to bottom, #401856, #501f6c) !important;
+  background:  linear-gradient(180deg,#401856, #501f6c) !important;
 }
 
 input[type=file]:active::file-selector-button {
@@ -1039,7 +1039,7 @@ input[type=file]:active::file-selector-button {
   border: 1px solid #652787;
   box-shadow: var(--highlight), inset 3px 3px 3px #000 !important;
   background: #652787 !important;
-  background:  linear-gradient(to bottom, #401856, #501f6c) !important;
+  background:  linear-gradient(180deg,#401856, #501f6c) !important;
 }
 
 textarea, #subslog pre {
@@ -1067,7 +1067,7 @@ textarea, #subslog pre {
 
 input[type=text], textarea {
   box-shadow: inset 0 0 3px 3px #000;
-  background: linear-gradient(to bottom, #000 0%, #000019 100%) !important;
+  background: linear-gradient(180deg,#000 0%, #000019 100%) !important;
 }
 
 input[type=text]:focus, textarea:focus {
@@ -1527,7 +1527,7 @@ input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input
   border: 1px solid #363181 !important;
   box-shadow: var(--highlight), inset 3px 3px 3px 1px #000;
   background: #001;
-  background: linear-gradient(to bottom, #030306, #112);
+  background: linear-gradient(180deg,#030306, #112);
   -moz-appearance: none;
   -webkit-appearance: inherit;
   filter: drop-shadow(0 0 1px #000);
@@ -1668,7 +1668,7 @@ input#exporthosts {
   min-width: 0 !important;
   display: inline-block;
   font-size: 0 !important;
-  background: var(--download) no-repeat center center / 16px, linear-gradient(to bottom, #010, #000) !important;
+  background: var(--download) no-repeat center center / 16px, linear-gradient(180deg,#010, #000) !important;
 }
 
 #exporthosts:disabled {
@@ -1680,7 +1680,7 @@ input#exporthosts:hover, #addressbook input#exporthosts:focus {
   border: 1px solid #652787;
   box-shadow: var(--highlight), inset 0 0 1px 1px #757;
   background: #000 !important;
-  background: var(--download) no-repeat center center / 16px, linear-gradient(to bottom, #202 50%, #000 50%) !important;
+  background: var(--download) no-repeat center center / 16px, linear-gradient(180deg,#202 50%, #000 50%) !important;
   background-blend-mode: luminosity;
 }
 
@@ -1688,7 +1688,7 @@ input#exporthosts:active {
   text-shadow: 0 1px 1px #3C1751;
   box-shadow: var(--highlight), inset 3px 3px 3px #000 !important;
   background: #652787 !important;
-  background: var(--download) no-repeat center center / 16px, linear-gradient(to bottom, #401856, #501f6c) !important;
+  background: var(--download) no-repeat center center / 16px, linear-gradient(180deg,#401856, #501f6c) !important;
 }
 
 #activefilter, .selected {
@@ -1793,7 +1793,7 @@ input#exporthosts:active {
 #empty {
   margin: 20px 0 30px;
   height: 1px;
-  background: linear-gradient(to right, rgba(0,0,0,0), #26235c, rgba(0,0,0,0));
+  background: linear-gradient(90deg, rgba(0,0,0,0), #26235c, rgba(0,0,0,0));
 }
 
 .iframed #published {

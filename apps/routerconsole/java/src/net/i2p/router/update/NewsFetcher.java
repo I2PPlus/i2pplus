@@ -652,8 +652,10 @@ class NewsFetcher extends UpdateRunner {
                     continue;
                 }
                 Hash h = Hash.create(b);
-                if (!ban.isBanlistedForever(h))
+                if (!ban.isBanlistedForever(h)) {
                     ban.banlistRouterForever(h, reason);
+                    _context.commSystem().forceDisconnect(h);
+                }
             } else {
                 byte[] ip = Addresses.getIP(s);
                 if (ip == null) {
@@ -717,8 +719,7 @@ class NewsFetcher extends UpdateRunner {
             f.setLastModified(ble.updated);
             String upd = Long.toString(ble.updated);
             _context.router().saveConfig(PROP_BLOCKLIST_TIME, upd);
-            _mgr.notifyVersionAvailable(this, _currentURI, BLOCKLIST, Blocklist.ID_FEED, HTTP,
-                                        null, upd, "");
+            _mgr.notifyInstalled(BLOCKLIST, Blocklist.ID_FEED, upd);
         }
         if (_log.shouldWarn())
             _log.warn("Processed " + ble.entries.size() + " blocks and " + ble.removes.size() + " unblocks from news feed");

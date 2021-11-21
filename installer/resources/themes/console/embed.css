@@ -39,7 +39,7 @@ pre {
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #fff;
   background: url(/themes/console/light/images/dropdown.png) no-repeat right center #fff;
-  background: url(/themes/console/light/images/dropdown.png) no-repeat right center, linear-gradient(to bottom, #fff, #efefff);
+  background: url(/themes/console/light/images/dropdown.png) no-repeat right center, linear-gradient(180deg,#fff, #efefff);
   background-blend-mode: hard-light, normal;
   filter: drop-shadow(0 0 1px #ccf);
   -moz-appearance: none;
@@ -58,7 +58,7 @@ pre {
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #fff, inset 0 0 0 1px #fff;
   background: #eee;
-  background: linear-gradient(to bottom, #fff, #efefff);
+  background: linear-gradient(180deg,#fff, #efefff);
   background-size: 14px auto, 100% 100% !important;
   opacity: 1;
   filter: drop-shadow(0 0 1px #ccf);
@@ -67,7 +67,7 @@ pre {
 .light button:hover, .light input[type=submit]:hover, .light input[type="reset"]:hover, button:focus, .light input[type=submit]:focus, .light input[type="reset"]:focus {
   color: #19191f;
   border: 1px solid #f60;
-  background: linear-gradient(to bottom, #eee, #fff);
+  background: linear-gradient(180deg,#eee, #fff);
   filter: saturate(100%) drop-shadow(0 0 1px rgba(204, 204, 204, .8));
   transition: ease border .7s;
 }
@@ -88,7 +88,7 @@ pre {
   padding: 20px;
   line-height: 20px;
   color: #333339 !important;
-  background: repeating-linear-gradient(to bottom, #7878ff33, #d2d2ff66 1px, #d2d2ff66 19px, #7878ff33 19px, #f0f0ff66 20px, #f0f0ff66 40px);
+  background: repeating-linear-gradient(180deg,#7878ff33, #d2d2ff66 1px, #d2d2ff66 19px, #7878ff33 19px, #f0f0ff66 20px, #f0f0ff66 40px);
 }
 
 .rawtext.light pre, .rawtext.classic pre {
@@ -103,7 +103,7 @@ pre {
   margin: -20px 0;
   padding: 40px 20px !important;
   line-height: 20px;
-  background: repeating-linear-gradient(to bottom, #010, #010 20px, #001800 20px, #001800 40px);
+  background: repeating-linear-gradient(180deg,#010, #010 20px, #001800 20px, #001800 40px);
   width: calc(100% - 44px);
   text-shadow: 0 1px 1px #000;
   border-left: 5px solid #030;
@@ -154,7 +154,7 @@ pre {
   line-height: 20px;
   white-space: pre-wrap;
   color: #c9ceff !important;
-  background: repeating-linear-gradient(to bottom, #000, #001 1px, #001 19px, #000 19px, #002 20px, #002 40px);
+  background: repeating-linear-gradient(180deg,#000, #001 1px, #001 19px, #000 19px, #002 20px, #002 40px);
 }
 
 /* bwscheduler */
@@ -173,7 +173,7 @@ html.bwscheduler, body.bwscheduler {
   padding: 20px 0 !important;
   text-align: center !important;
   background: #111 !important;
-  background: linear-gradient(to bottom, #111, #000);
+  background: linear-gradient(180deg,#111, #000);
   background: none !important;
   text-align: center;
   vertical-align: top;
@@ -208,7 +208,7 @@ html.bwscheduler, body.bwscheduler {
 .plate div:not(.round-button):not(.weekday_container):not(.conatiner_header):not(.outer):not(.inner):not(.bwaction) {
   border-radius: 0 !important;
   border-width: 1px !important;
-  background: linear-gradient(to bottom, #222, #111);
+  background: linear-gradient(180deg,#222, #111);
 }
 
 .plate .round-button + div, .plate h1 {
@@ -252,7 +252,7 @@ html.bwscheduler, body.bwscheduler {
   padding: 4px 0;
   height: auto !important;
   vertical-align: middle;
-  background: linear-gradient(to bottom, #222 50%, #111 50%) !important;
+  background: linear-gradient(180deg,#222 50%, #111 50%) !important;
 }
 
 .conatiner_header b {
@@ -322,13 +322,13 @@ html.bwscheduler, body.bwscheduler {
   border: 1px solid #8d8daa !important;
   box-shadow: inset 0 0 0 1px #fff, 0 0 1px 1px rgba(220,220,255,.4);
   background: #e0e0ff !important;
-  background: linear-gradient(to bottom, #e8e8ff, #d8d8ff) !important;
+  background: linear-gradient(180deg,#e8e8ff, #d8d8ff) !important;
 }
 
 .bwscheduler.light .conatiner_header {
   color: #54586f !important;
   text-shadow: 0 1px 1px #fff,0 -1px 1px #e2e2ff, 0 2px 1px #ddf;
-  background: #e7e7ff linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)) !important;
+  background: #e7e7ff linear-gradient(180deg,#fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)) !important;
 }
 
 .bwscheduler.light .outer {
@@ -347,7 +347,7 @@ html.bwscheduler, body.bwscheduler {
   border: 1px solid #8d8daa !important;
   box-shadow: inset 0 0 0 1px #fff, 0 0 1px 1px rgba(220,220,255,.4);
   background: #f2f2ff !important;
-  background: linear-gradient(to bottom, #f2f2ff, #e8e8ff) !important;
+  background: linear-gradient(180deg,#f2f2ff, #e8e8ff) !important;
   color: #26262f !important;
   padding: 10px 10px 8px !important;
 }
@@ -424,7 +424,7 @@ html.bwscheduler, body.bwscheduler {
 
 .bwscheduler.midnight .conatiner_header {
   color: #c9ceff !important;
-  background: linear-gradient(to bottom, #191729 50%, #001 50%) !important;
+  background: linear-gradient(180deg,#191729 50%, #001 50%) !important;
 }
 
 .bwscheduler.midnight .plate::after {

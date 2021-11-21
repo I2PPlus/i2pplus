@@ -8,11 +8,11 @@
 :root {
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   --monospaced: Droid Sans Mono, Noto Mono, Lucida Console, DejaVu Sans Mono, monospace;
-  --h2: repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #001800, #000 75%);
-  --heading: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px);
+  --h2: repeating-linear-gradient(90deg, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(180deg,#001800, #000 75%);
+  --heading: linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px);
   --border: 1px solid #242;
   --lowlight: inset 0 0 0 1px #000;
-  --textinput: linear-gradient(to bottom, #001800, #001000);
+  --textinput: linear-gradient(180deg,#001800, #001000);
 }
 
 html {
@@ -28,7 +28,7 @@ body {
   font-size: 9pt;
   color: #ee9;
   background: #000;
-  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.9) 2px, rgba(0,8,0,.5) 4px), url(images/camotile2.png) top left scroll #010;
+  background: repeating-linear-gradient(180deg,rgba(0,0,0,.9) 2px, rgba(0,8,0,.5) 4px), url(images/camotile2.png) top left scroll #010;
   background-size: 100% 4px, 175px;
 }
 
@@ -242,7 +242,7 @@ h2, h3 {
   color: #ee9;
   border: var(--border);
   box-shadow: var(--lowlight), inset 0 0 1px 1px #030;
-  background: var(--heading), linear-gradient(to bottom, #004000, #000 75%), url(/themes/console/dark/images/camotile2.png) top left !important;
+  background: var(--heading), linear-gradient(180deg,#004000, #000 75%), url(/themes/console/dark/images/camotile2.png) top left !important;
 }
 
 h2 span {
@@ -313,7 +313,7 @@ h3 {
 #serverTunnels tr:first-child, #clientTunnels tr:first-child {
   padding: 7px 5px;
   background: #000;
-  background: var(--heading), linear-gradient(to bottom, #002000, #000 75%);
+  background: var(--heading), linear-gradient(180deg,#002000, #000 75%);
   background-size: 100%, 4px 100%, 100%;
 }
 
@@ -332,7 +332,7 @@ th {
   border-top: var(--border);
   border-bottom: var(--border);
   background: #000;
-  background: linear-gradient(to bottom, #001400, #000 75%);
+  background: linear-gradient(180deg,#001400, #000 75%);
 }
 
 th {
@@ -564,7 +564,7 @@ textarea#statusMessages, textarea#statusMessages:active, textarea#statusMessages
   border-radius: 0;
   box-shadow: inset 0 0 3px 3px #000 !important;
   background: #000;
-  background: linear-gradient(to bottom, #000 0%, #010 100%) !important;
+  background: linear-gradient(180deg,#000 0%, #010 100%) !important;
 }
 
 _:-ms-lang(x), textarea#statusMessages, textarea#statusMessages:active, textarea#statusMessages:focus {
@@ -690,7 +690,7 @@ input[type=text]:focus, input[type=password]:focus {
 
 input[readonly="readonly"]:focus {
   filter: none;
-  background: linear-gradient(to bottom, #000 0%, #010 100%) !important;
+  background: linear-gradient(180deg,#000 0%, #010 100%) !important;
 }
 
 a.control, input.control {
@@ -781,7 +781,7 @@ button, input[type=submit], input[type=reset], a.control, select {
   border: 1px solid #000;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2) !important;
-  background: linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
 }
 
 select {
@@ -792,7 +792,7 @@ select {
   font-size: 8.5pt !important;
   color: #494;
   border-radius: 2px;
-  background: var(--dropdown) no-repeat right 10px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--dropdown) no-repeat right 10px center, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
   background-size: 10px, 100% !important;
   cursor: pointer;
   -moz-appearance: none;
@@ -838,8 +838,8 @@ select::-ms-expand {
   text-align: right !important;
   background: #000;
   background: linear-gradient(-135deg, #000, rgba(0,0,0,0) 40%),
-              repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px),
-              linear-gradient(to bottom, #020, #000 75%);
+              repeating-linear-gradient(90deg, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px),
+              linear-gradient(180deg,#020, #000 75%);
   background-size: 100%, 4px 100%, 100%;
 }
 
@@ -1035,7 +1035,7 @@ td.blankColumn {
 
 table {
   background: #000 url(images/camotile2.png);
-  background: linear-gradient(to bottom, rgba(0,0,0,.5),rgba(0,0,0,.7)), url(images/camotile2.png);
+  background: linear-gradient(180deg,rgba(0,0,0,.5),rgba(0,0,0,.7)), url(images/camotile2.png);
 }
 
 #tunnelMessages {
@@ -1162,7 +1162,7 @@ input.tunnelName, input.tunnelDescription, #userAgents {
   font-weight: 700;
   box-shadow: var(--lowlight), inset 0 0 4px 4px rgba(0,0,0,.4), 0 0 0 1px #000, 0 0 0 2px #020, 0 0 0 6px #030, 0 0 0 8px #040;
   background: #020;
-  background: repeating-linear-gradient(to bottom, #020 2px, #010 4px);
+  background: repeating-linear-gradient(180deg,#020 2px, #010 4px);
 }
 
 #down {
@@ -1327,7 +1327,7 @@ textarea[name="accessList"] {
 }
 
 .tunnelInfo {
-  background: linear-gradient(to right, #000 50%, #010) !important;
+  background: linear-gradient(90deg, #000 50%, #010) !important;
   box-shadow: none !important;
 }
 
@@ -1425,7 +1425,7 @@ input[type=text] + label {
   word-break: break-all;
   font-family: var(--monospaced);
   border: 1px solid #252;
-  background: linear-gradient(to bottom, #000 0%, #010 100%);
+  background: linear-gradient(180deg,#000 0%, #010 100%);
   border-radius: 2px;
   box-shadow: var(--lowlight);
   user-select: all;

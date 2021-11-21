@@ -407,7 +407,7 @@ public class I2PSnarkServlet extends BasicServlet {
             sortedTrackers = _manager.getSortedTrackers();
 //            if (_context.isRouterContext() && _manager.hasModifiedTrackers()) {
 //            if (_context.isRouterContext()) {
-                out.write("<a href=\"http://i2pforum.i2p/viewforum.php/?f=12\" class=\"snarkNav nav_forum\" target=\"_blank\">");
+                out.write("<a href=\"http://discuss.i2p/\" class=\"snarkNav nav_forum\" target=\"_blank\">");
                 out.write(_t("Forum"));
                 out.write("</a>\n");
 /*
@@ -2245,21 +2245,27 @@ public class I2PSnarkServlet extends BasicServlet {
             if (total <= 0)
                 ratio = 0;
             String txPercent = (new DecimalFormat("0")).format(ratio * 100);
+            String txPercentBar = txPercent + "%";
+            if (ratio > 1)
+                txPercentBar = "100%";
             if (ratio <= 0.01 && ratio > 0)
                 txPercent = (new DecimalFormat("0.00")).format(ratio * 100);
             if (showRatios) {
                 if (total > 0) {
+                    out.write("<span class=\"uploaded\"><span class=\"txBarText\">");
                     out.write(txPercent);
-                    out.write("&nbsp;%");
+                    out.write("&#8239;%");
+                    out.write("</span><span class=\"txBarInner\" style=\"width: calc(" + txPercentBar + " - 2px)\"></span>");
+                    out.write("</span>");
                 } else {
                     out.write("‒");
                 }
             } else if (uploaded > 0) {
-                out.write("<span class=\"right\" title=\"");
+                out.write("<span class=\"uploaded\" title=\"");
                 out.write(_t("Upload ratio").replace("Upload", "Share"));
                 out.write(": ");
                 out.write(txPercent);
-                out.write("%");
+                out.write("&#8239;%");
                 SimpleDateFormat fmt = new SimpleDateFormat("HH:mm, EEE dd MMM yyyy");
                 fmt.setTimeZone(SystemVersion.getSystemTimeZone(_context));
                 Storage storage = snark.getStorage();
@@ -2271,13 +2277,14 @@ public class I2PSnarkServlet extends BasicServlet {
                     out.write(": ");
                     out.write(date);
                 }
-                out.write("\">");
+                out.write("\"><span class=\"right\"><span class=\"txBarText\"><span class=\"right\">");
                 out.write(formatSize(uploaded).replaceAll("iB","")
                                               .replace("B", "</span><span class=\"left\">B</span>")
                                               .replace("K", "</span><span class=\"left\">K</span>")
                                               .replace("M", "</span><span class=\"left\">M</span>")
                                               .replace("G", "</span><span class=\"left\">G</span>")
                                               .replace("T", "</span><span class=\"left\">T</span>"));
+                out.write("</span><span class=\"txBarInner\" style=\"width: calc(" + txPercentBar + " - 2px)\"></span>");
             }
         }
         out.write("</td>\n");

@@ -7,14 +7,14 @@
 :root {
 	--monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
 	--bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, Bitstream Vera Sans, Verdana, sans-serif;
-	--button: linear-gradient(to bottom, #fff 50%, #efefef 50%);
-	--button_hover: linear-gradient(to bottom, #fff 50%, #f3f2f1 50%);
-	--button_active: linear-gradient(to bottom, #f3f2f1, #fff);
+	--button: linear-gradient(180deg,#fff 50%, #efefef 50%);
+	--button_hover: linear-gradient(180deg,#fff 50%, #f3f2f1 50%);
+	--button_active: linear-gradient(180deg,#f3f2f1, #fff);
 }
 
 html {
 	border-right: 1px solid #999;
-	background: var(--noise), repeating-linear-gradient(to bottom, #ddd 2px, #bbb 4px) #bbb;
+	background: var(--noise), repeating-linear-gradient(180deg,#ddd 2px, #bbb 4px) #bbb;
 	background-size: 248px, 100% 4px !important;
 	scrollbar-color: #999 #eee;
 }
@@ -340,7 +340,7 @@ th img {
 }
 
 .snarkTorrentOdd, .snarkTorrentEven {
-	background: linear-gradient(to bottom, #fafafa, #f0f0f0);
+	background: linear-gradient(180deg,#fafafa, #f0f0f0);
 }
 
 .snarkTorrentInfo td {
@@ -371,7 +371,7 @@ th img {
 	font-weight: 700;
 	font-style: italic;
 	box-shadow: inset 0 0 0 1px #fff;
-	background: linear-gradient(to bottom, #fff, #f7f7f7);
+	background: linear-gradient(180deg,#fff, #f7f7f7);
 }
 
 .snarkTorrents thead th, .snarkTorrents tfoot th, tr:hover .snarkTorrents thead th, tr:hover .snarkTorrents tfoot th {
@@ -498,7 +498,7 @@ td.snarkTorrentPeerCount:empty::after {
 	vertical-align: middle;
 	box-shadow: 0 0 0 1px #999;
 	background: #900;
-	background: repeating-linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,0) 15px, rgba(128,128,128,.5) 15px, rgba(128,128,128,.5) 16px, rgba(0,0,0,0) 16px), linear-gradient(to bottom, rgba(255,255,255,.3) 50%, rgba(0,0,0,.3) 50%), linear-gradient(to right, #bb0 50px, #900);
+	background: repeating-linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,0) 15px, rgba(128,128,128,.5) 15px, rgba(128,128,128,.5) 16px, rgba(0,0,0,0) 16px), linear-gradient(180deg,rgba(255,255,255,.3) 50%, rgba(0,0,0,.3) 50%), linear-gradient(90deg, #bb0 50px, #900);
 }
 
 .inactivity[style="width: 0px;"], .inactivity[style="width: 1px;"], .inactivity[style="width: 2px;"],
@@ -614,7 +614,7 @@ tr:hover .snarkFileStatus .percentBarText {
 }
 
 .active.seeding .percentBarComplete {
-	background: linear-gradient(to right, rgba(0,0,0,0) 49%, #999, rgba(0,0,0,0) 51%) #aaa;
+	background: linear-gradient(90deg, rgba(0,0,0,0) 49%, #999, rgba(0,0,0,0) 51%) #aaa;
 	background-size: 200% 200%, 100% 100%;
 	animation: progress 5s linear infinite reverse;
 }
@@ -760,7 +760,7 @@ td.snarkGraphicStatus img {
 	text-align: left;
 	box-shadow: inset 0 0 0 1px #fff;
 	background: #f2f2f2;
-	background: url(../ubergine/images/hat.png) right -4px bottom -10px no-repeat, linear-gradient(to bottom, #fff, #eee) !important;
+	background: url(../ubergine/images/hat.png) right -4px bottom -10px no-repeat, linear-gradient(180deg,#fff, #eee) !important;
 	background-size: auto 80px, 100% 100% !important;
 }
 
@@ -1198,7 +1198,7 @@ tt {
 .snarkConfig, .snarknavbar, .snarkMessages, #torrentDisplay, .pagenavcontrols {
 	box-shadow: inset 0 0 0 1px #fff;
 	background: #eee;
-	background: var(--noise), linear-gradient(to bottom, #fafafa, #eee);
+	background: var(--noise), linear-gradient(180deg,#fafafa, #eee);
 	background-size: 248px, 100%;
 }
 
@@ -1426,7 +1426,7 @@ td.snarkTorrentRateDown, td.snarkTorrentRateUp, td.snarkTorrentRateDown span, td
 
 .snarkTorrentName a:hover, .snarkFileName a:hover {
 	border-radius: 0 15px 15px 0;
-	background: linear-gradient(to right, rgba(0,0,0,0), rgba(155,108,46,.2) 40%) !important;
+	background: linear-gradient(90deg, rgba(0,0,0,0), rgba(155,108,46,.2) 40%) !important;
 }
 
 .snarkTorrentName a:active, .snarkFileName a:active {
@@ -1710,12 +1710,12 @@ thead a img:hover {
 	margin: -1px 15px -25px;
 	padding: 5px;
 	border-radius: 0 0 2px 2px;
-	background: linear-gradient(to bottom, #eee, #ddd);
+	background: linear-gradient(180deg,#eee, #ddd);
 }
 
 .bucketCount {
 	padding: 5px 0;
-	background: linear-gradient(to bottom, #efefef 50%, #ddd 53%);
+	background: linear-gradient(180deg,#efefef 50%, #ddd 53%);
 	border-radius: 2px 2px 0 0;
 }
 
@@ -1961,7 +1961,7 @@ select {
 	display: inline-block;
 	border-radius: 1px;
 	box-shadow: 0 0 0 1px #7a7, inset 0 0 0 1px #fff;
-	background: var(--hash) no-repeat 4px center / 12px, linear-gradient(to bottom, #efe, #e6ffe6);
+	background: var(--hash) no-repeat 4px center / 12px, linear-gradient(180deg,#efe, #e6ffe6);
 }
 
 .knownTracker .optbox, #addtracker .optbox {
@@ -2326,7 +2326,7 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
 	color: #555 !important;
 	text-shadow: 0 1px 1px #fff;
 	box-shadow: inset 0 0 0 1px #fff, inset 2px 2px 2px #999 !important;
-	background: linear-gradient(to bottom, #ddd, #fff) !important;
+	background: linear-gradient(180deg,#ddd, #fff) !important;
 	cursor: default;
 }
 
@@ -2574,7 +2574,7 @@ td.snarkGraphicStatus img {
 	display: inline-block;
 	border-radius: 3px 1px 1px 3px;
 	background: #ddd;
-	background: linear-gradient(to right, #ddd, rgba(0,0,0,0) 95%);
+	background: linear-gradient(90deg, #ddd, rgba(0,0,0,0) 95%);
 }
 
 .configOption b::after {

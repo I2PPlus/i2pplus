@@ -10,10 +10,10 @@
 :root {
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, Verdana, Helvetica, sans-serif;
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
-  --badge: linear-gradient(to bottom, #fff, #eef);
+  --badge: linear-gradient(180deg,#fff, #eef);
   --badgeborder: 1px solid #bbc;
-  --btn: linear-gradient(to bottom, #fff, #efefff);
-  --btn_hover: linear-gradient(to bottom, #eee, #fff);
+  --btn: linear-gradient(180deg,#fff, #efefff);
+  --btn_hover: linear-gradient(180deg,#eee, #fff);
   --highlight: inset 0 0 0 1px #fff;
   --ink: #4f4f63;
 }
@@ -164,8 +164,8 @@ div.footer {
   border-top: none;
   border: 1px solid #8d8daa;
   box-shadow: var(--highlight);
-  background: linear-gradient(to right, rgba(232,232,255,.3) 15%, rgba(255,255,255,.8) 50%, rgba(232,232,255,.3) 85%),
-              repeating-linear-gradient(to bottom, #fff 1px, #ddf 2px, #fff 3px);
+  background: linear-gradient(90deg, rgba(232,232,255,.3) 15%, rgba(255,255,255,.8) 50%, rgba(232,232,255,.3) 85%),
+              repeating-linear-gradient(180deg,#fff 1px, #ddf 2px, #fff 3px);
 }
 
 p.footer {
@@ -294,7 +294,7 @@ form {
   border: 1px solid #8d8daa;
   border-radius: 2px 2px 0 0;
   box-shadow: 0 0 1px 1px rgba(220,220,255,.3);
-  background: linear-gradient(to bottom, #f8f8ff, #f2f2ff);
+  background: linear-gradient(180deg,#f8f8ff, #f2f2ff);
 }
 
 .iframed form {
@@ -718,7 +718,7 @@ input[disabled] {
 #pagenavbottom td {
   text-align: center !important;
   padding: 2px;
-  background: linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)),
+  background: linear-gradient(180deg,#fafaff 50%, rgba(220,220,255,.3)),
               repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px), #fff !important;
 }
 
@@ -950,9 +950,9 @@ hr {
   border: 1px solid #77789f;
   border-radius: 2px;
   box-shadow: var(--highlight), inset 0 0 2px 1px #eef, 0 0 1px rgba(100, 100, 200, .5);
-  background: linear-gradient(to bottom, #fafaff, rgba(232,232,255,.5)),
-              linear-gradient(to bottom, rgba(255,255,255,.7) 5%, rgba(220,220,255,.9)),
-              linear-gradient(to right, #fff, #efefff, #fff);
+  background: linear-gradient(180deg,#fafaff, rgba(232,232,255,.5)),
+              linear-gradient(180deg,rgba(255,255,255,.7) 5%, rgba(220,220,255,.9)),
+              linear-gradient(90deg, #fff, #efefff, #fff);
   background-size: 100%, auto 2px, 100%;
   filter: opacity(0);
   animation: linear fade-in .15s .6s forwards;
@@ -989,7 +989,7 @@ hr {
 
 #dologin h1 {
   background: #fafaff;
-  background: linear-gradient(to bottom, #fff 50%, #f2f2ff 50%);
+  background: linear-gradient(180deg,#fff 50%, #f2f2ff 50%);
   border-bottom: 1px solid #77789f;
   color: #4c526f;
   text-transform: uppercase;
@@ -1034,7 +1034,7 @@ hr {
 
 #dologin hr {
   margin: 16px 0 4px;
-  background: linear-gradient(to right, rgba(119, 120, 159, 0), #1d1f4f, rgba(119, 120, 159, 0));
+  background: linear-gradient(90deg, rgba(119, 120, 159, 0), #1d1f4f, rgba(119, 120, 159, 0));
 }
 
 #dologin tr:last-child hr {
@@ -1054,7 +1054,7 @@ hr {
   border: 1px solid rgba(119, 120, 159, .3);
   border-radius: 25px;
   box-shadow: 0 0 1px rgba(255,255,255,0);
-  background: linear-gradient(to right, rgba(252,252,255,.3), #f6f6ff, rgba(252,252,255,.3));
+  background: linear-gradient(90deg, rgba(252,252,255,.3), #f6f6ff, rgba(252,252,255,.3));
   transition: ease all .1s;
 }
 
@@ -1063,7 +1063,7 @@ hr {
   border: 1px solid rgba(119, 120, 159, .5);
   background: #f2f2ff;
   box-shadow: 0 0 1px #ccf;
-  background: linear-gradient(to bottom, #fafaff 50%, #e8e8ff 50%) #f2f2ff;
+  background: linear-gradient(180deg,#fafaff 50%, #e8e8ff 50%) #f2f2ff;
   transition: ease all .1s;
 }
 
@@ -1073,7 +1073,7 @@ hr {
   color: rgba(65, 70, 95, .8) !important;
   color: #99a5df !important;
   background: #e2e2ff;
-  background: linear-gradient(to bottom, #eaeaff 50%, #d9d9ff 50%);
+  background: linear-gradient(180deg,#eaeaff 50%, #d9d9ff 50%);
   transition: ease all .1s;
 }
 
@@ -1112,7 +1112,7 @@ h3#config {
   box-shadow: var(--highlight);
   text-shadow: 0 1px 1px #fff;
   background: #fafaff;
-  background: linear-gradient(to right, rgba(240,240,255,.1), rgba(252,252,252,.5), rgba(240,240,255,.1)), linear-gradient(to bottom, #fafaff 50%, #f2f2ff 50%);
+  background: linear-gradient(90deg, rgba(240,240,255,.1), rgba(252,252,252,.5), rgba(240,240,255,.1)), linear-gradient(180deg,#fafaff 50%, #f2f2ff 50%);
 }
 
 #prefsave {
@@ -1181,7 +1181,7 @@ h3#config {
   font-weight: 700;
   border: 1px solid #8d8daa;
   box-shadow: var(--highlight) !important;
-  background: linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%) !important;
+  background: linear-gradient(180deg,#fcfcff 51%, #fafaff 51%, #f6f6ff 100%) !important;
 }
 
 .topbuttons, .topbuttons > *, .topbuttons select, .topbuttons input {
@@ -1272,7 +1272,7 @@ _:-ms-lang(x), tr.bottombuttons, .topbuttons {
 }
 
 tr.bottombuttons:last-child {
-  background: linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px), #fff !important;
+  background: linear-gradient(180deg,#fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px), #fff !important;
 }
 
 tr.bottombuttons:empty {
@@ -1372,7 +1372,7 @@ td p.error {
   padding: 4px 8px 12px;
   border-radius: 0 0 2px 2px;
   background: #efefff;
-  background: linear-gradient(to right, #efefff, #fff, #efefff);
+  background: linear-gradient(90deg, #efefff, #fff, #efefff);
 }
 
 .iframed #composemail {
@@ -1447,13 +1447,13 @@ td p.error {
   font-style: italic;
   border-radius: 2px 15px 15px 2px;
   box-shadow: inset 0 0 0 1px #bbd, inset 0 0 0 2px #fff, 0 0 0 1px #eee;
-  background: var(--attach) no-repeat 7px center, linear-gradient(to right, #f2f2ff 70%, #eef);
+  background: var(--attach) no-repeat 7px center, linear-gradient(90deg, #f2f2ff 70%, #eef);
 }
 
 #attachedfile label:hover {
   color: #933;
   box-shadow: var(--highlight), inset 0 0 0 2px #955;
-  background: var(--attach_hover) no-repeat 7px center, linear-gradient(to right, #ffe 70%, #ffd);
+  background: var(--attach_hover) no-repeat 7px center, linear-gradient(90deg, #ffe 70%, #ffd);
 }
 
 #attachedfile label:active {
@@ -1612,21 +1612,21 @@ _:-ms-lang(x), tr.list0:hover, tr.list1:hover {
   color: #54586f;
   border-bottom: 1px solid #8d8daa;
   background: #f6f6ff;
-  background: linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
+  background: linear-gradient(180deg,#fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
 }
 
 #mailbox th:last-child {
   padding: 6px 0 !important;
-  background: var(--nuke) no-repeat center center / 14px, linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
+  background: var(--nuke) no-repeat center center / 14px, linear-gradient(180deg,#fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
 }
 
 #mailbox th.mailListFlagged {
-  background: linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
+  background: linear-gradient(180deg,#fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
   background-blend-mode: luminosity, normal;
 }
 
 #mailbox th.mailListAttachment, #mailbox td.mailListAttachment.isAttached {
-  background: var(--attach) no-repeat center center / 14px, linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
+  background: var(--attach) no-repeat center center / 14px, linear-gradient(180deg,#fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
 }
 
 #mailbox tr:hover td.mailListAttachment.isAttached {
@@ -1686,7 +1686,7 @@ td.mailListSubject a {
 tr:hover td.mailListSubject a {
   width: calc(100% - 2px);
   border-radius: 2px 15px 15px 2px;
-  background: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,208,.9) 20%);
+  background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,208,.9) 20%);
 }
 
 @supports not (-moz-appearance: none) {
@@ -1829,7 +1829,7 @@ td.mailListSize {
   border-radius: 2px;
   box-shadow: var(--highlight);
   background: #f6f6ff;
-  background: linear-gradient(to bottom, #f6f6ff, #e8e8ff);
+  background: linear-gradient(180deg,#f6f6ff, #e8e8ff);
 }
 
 tr:hover .listSize {
@@ -1912,7 +1912,7 @@ td.mailListDelete {
   color: #900;
   border: 1px solid #700;
   box-shadow: inset 0 0 0 1px #ffe, inset 0 0 1px 3px #dda;
-  background: var(--question) no-repeat center 20px / 32px, linear-gradient(to bottom, #ffe, #ffffe6);
+  background: var(--question) no-repeat center 20px / 32px, linear-gradient(180deg,#ffe, #ffffe6);
 }
 
 #nukemail.floating {
@@ -1977,7 +1977,7 @@ background-position: 0;
   font-size: 10pt;
   text-align: center;
   background: #ddf;
-  background: repeating-linear-gradient(to bottom, #ddf, #eef 2px, #ddf 3px);
+  background: repeating-linear-gradient(180deg,#ddf, #eef 2px, #ddf 3px);
   margin: 0 !important;
   border: none !important;
 }
@@ -2000,12 +2000,12 @@ background-position: 0;
 @keyframes loading {
 0% {
   text-shadow: 0 0 1px #001, 0 0 5px #003;
-  background: linear-gradient(to bottom, rgba(255,255,255,.2) 50%, rgba(100,100,128,.3) 50%), repeating-linear-gradient(45deg, #77a 1px, #77a 20px, #449 20px, #449 40px);
+  background: linear-gradient(180deg,rgba(255,255,255,.2) 50%, rgba(100,100,128,.3) 50%), repeating-linear-gradient(45deg, #77a 1px, #77a 20px, #449 20px, #449 40px);
 }
 
 100% {
   text-shadow: 0 0 1px #001, 0 0 5px #505;
-  background: linear-gradient(to bottom, rgba(255,255,255,.2) 50%, rgba(100,100,128,.3) 50%), repeating-linear-gradient(45deg, #449 1px, #449 20px, #77a 20px, #77a 40px);
+  background: linear-gradient(180deg,rgba(255,255,255,.2) 50%, rgba(100,100,128,.3) 50%), repeating-linear-gradient(45deg, #449 1px, #449 20px, #77a 20px, #77a 40px);
 }
 }
 
@@ -2085,7 +2085,7 @@ select::-ms-expand {
   border: 1px solid #8d8daa;
   border-radius: 0 0 0 3px;
   box-shadow: var(--highlight);
-  background: linear-gradient(to bottom, rgba(255,255,255,.7) 50%, rgba(240,240,255,.4) 50%), repeating-linear-gradient(to bottom, #eef 1px, #eef 2px, #fff 3px);
+  background: linear-gradient(180deg,rgba(255,255,255,.7) 50%, rgba(240,240,255,.4) 50%), repeating-linear-gradient(180deg,#eef 1px, #eef 2px, #fff 3px);
 }
 
 input.switchto, input.moveto {

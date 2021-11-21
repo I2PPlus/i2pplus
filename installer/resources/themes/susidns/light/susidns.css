@@ -12,7 +12,7 @@
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, Verdana, Helvetica, sans-serif;
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
   --highlight: inset 0 0 0 1px #fff;
-  --nav: linear-gradient(to bottom, #fff 50%, #eef 50%, #ebebff);
+  --nav: linear-gradient(180deg,#fff 50%, #eef 50%, #ebebff);
 }
 
 body {
@@ -65,12 +65,12 @@ b, td.search {
   border: 1px solid #8d8daa;
   box-shadow: var(--highlight);
   background: #eef url(/themes/susidns/images/logo.png) no-repeat center center;
-  background: url(/themes/susidns/images/logo.png) no-repeat center center, linear-gradient(to bottom, #fff, #eef);
+  background: url(/themes/susidns/images/logo.png) no-repeat center center, linear-gradient(180deg,#fff, #eef);
   background-size: auto 50px, 100%;
 }
 
 #logo:not(old) {
-  background: linear-gradient(to bottom, #fff, #eef);
+  background: linear-gradient(180deg,#fff, #eef);
 }
 
 #logo::before {
@@ -132,7 +132,7 @@ code, tt, .destaddress {
   border: 1px solid #8d8daa;
   border-radius: 2px 2px 0 0;
   box-shadow: var(--highlight);
-  background: linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
+  background: linear-gradient(180deg,#fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
 }
 
 .iframed #navi {
@@ -311,7 +311,7 @@ form[action="subscriptions"] #content {
 #content + #buttons {
   margin: -1px 0 10px;
   border: 1px solid #8d8daa;
-  background: linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)),
+  background: linear-gradient(180deg,#fafaff 50%, rgba(220,220,255,.3)),
               repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px), #fff !important;
 }
 
@@ -323,7 +323,7 @@ form[action="subscriptions"] #content {
   border-radius: 2px;
   box-shadow: var(--highlight), 0 0 1px #ccc;
   background: var(--question) no-repeat 8px center,
-              linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
+              linear-gradient(180deg,#fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
               linear-gradient(135deg, #fcfcff 5%, rgba(231, 231, 255, .8) 15%) !important;
   background-size: 20px, 100%, 100% !important;
   background-blend-mode: luminosity, normal, normal;
@@ -396,7 +396,7 @@ input:focus::placeholder {
 div#add p.buttons, div#import p.buttons {
   margin: 0 -16px -6px;
   border: 1px solid #8d8daa;
-  background: linear-gradient(to bottom, #fff 50%, rgba(220,220,255,.3)),
+  background: linear-gradient(180deg,#fff 50%, rgba(220,220,255,.3)),
               repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px), #fff !important;
 }
 
@@ -426,7 +426,7 @@ div.help h3, #add h3, #import h3 {
   margin: -1px -16px 0 !important;
   padding: 5px 10px;
   border: 1px solid #8d8daa;
-  background: linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(135deg, #fcfcff 5%, rgba(231, 231, 255, .8) 15%);
+  background: linear-gradient(180deg,#fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(135deg, #fcfcff 5%, rgba(231, 231, 255, .8) 15%);
 }
 
 p#help {
@@ -520,11 +520,11 @@ li {
 }
 
 #host_list tr:nth-child(odd), #host_details tr:nth-child(odd) {
-  background: linear-gradient(to bottom, #fff, #eef);
+  background: linear-gradient(180deg,#fff, #eef);
 }
 
 #host_list tr:nth-child(even), #host_details tr:nth-child(even) {
-  background: linear-gradient(to bottom, #fff, #eef);
+  background: linear-gradient(180deg,#fff, #eef);
 }
 
 _:-ms-lang(x), #host_list td, #host_list tr:hover td, #host_details td, #host_details tr:hover td {
@@ -597,7 +597,7 @@ p.messages {
   margin: -1px 0 -5px;
   border: 1px solid #8d8daa;
   box-shadow: var(--highlight);
-  background: linear-gradient(to right, #eef, #fafaff, #eef);
+  background: linear-gradient(90deg, #eef, #fafaff, #eef);
 }
 
 .iframed #footer {
@@ -635,7 +635,7 @@ p.footer {
 
 .iframed .illustrate {
   margin-bottom: 30px;
-  background: linear-gradient(to bottom, #fafaff 70%, rgba(220,220,255,.1)),
+  background: linear-gradient(180deg,#fafaff 70%, rgba(220,220,255,.1)),
               repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .6) 3px, #fff 4px) #fff;
 }
 
@@ -744,7 +744,7 @@ textarea[name="config"], textarea[name="content"], #subslog pre {
   white-space: pre-wrap;
   box-shadow: inset 0 0 0 1px #fafaff;
   background: url(/themes/snark/ubergine/images/hat.png) right 10px bottom -8px no-repeat,
-              linear-gradient(to right, #7e7fb9, #ccf 1px, #ccf 6px, #fafaff 6px) !important;
+              linear-gradient(90deg, #7e7fb9, #ccf 1px, #ccf 6px, #fafaff 6px) !important;
   background-size: auto 160px, 100%;
 }
 
@@ -763,7 +763,7 @@ textarea[name="destination"] {
 #config + #buttons {
   margin: -2px 0 10px;
   border: 1px solid #8d8daa;
-  background: linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)),
+  background: linear-gradient(180deg,#fafaff 50%, rgba(220,220,255,.3)),
               repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px), #fff !important;
 }
 
@@ -841,7 +841,7 @@ form {
 
 th {
   font-size: 70% !important;
-  background: linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
+  background: linear-gradient(180deg,#fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
 }
 
 table {
@@ -854,7 +854,7 @@ table.book {
 
 #host_list th.checkbox  {
   width: 16px;
-  background: var(--nuke) no-repeat center center / 14px, linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
+  background: var(--nuke) no-repeat center center / 14px, linear-gradient(180deg,#fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
 }
 
 .book th {
@@ -1039,7 +1039,7 @@ td.destinations textarea {
 #hostNotes td:last-child {
   padding: 0 0 1px !important;
   font-family: var(--bodyfont);
-  background: linear-gradient(to bottom, #fafaff 90px, rgba(220,220,255,.3)),
+  background: linear-gradient(180deg,#fafaff 90px, rgba(220,220,255,.3)),
               repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
@@ -1106,7 +1106,7 @@ td.destinations textarea {
   padding: 8px 10px 6px;
   border-bottom: 1px solid #8d8daa;
   box-shadow: var(--highlight);
-  background: linear-gradient(to bottom, #fcfcff 50%, #eef 50%);
+  background: linear-gradient(180deg,#fcfcff 50%, #eef 50%);
 }
 
 #idAddress {
@@ -1139,7 +1139,7 @@ td.destinations textarea {
   text-align: right;
   border-top: 1px solid #8d8daa;
   background: #fff;
-  background: linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)),
+  background: linear-gradient(180deg,#fafaff 50%, rgba(220,220,255,.3)),
               repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
@@ -1249,7 +1249,7 @@ p.book {
   padding: 5px;
   text-align: right;
   background: #fafaff;
-  background: linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #fafaff !important;
+  background: linear-gradient(180deg,#fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #fafaff !important;
 }
 
 p.buttons {
@@ -1294,7 +1294,7 @@ input[type=submit], input[type=reset], .fakebutton {
   border: 1px solid #97a2ce;
   border-radius: 2px;
   box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
-  background: linear-gradient(to bottom, #fff, #efefff);
+  background: linear-gradient(180deg,#fff, #efefff);
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
   cursor: pointer;
 }
@@ -1316,7 +1316,7 @@ input[type=submit]:hover, input[type=reset]:hover, input[type=submit]:focus, inp
   color: #111;
   border: 1px solid #f60;
   box-shadow: var(--highlight), inset 0 -8px 3px 8px rgba(255,96,0,.02), inset 0 0 10px rgba(255,96,0,.05), 0 0 1px rgba(255,96,0,.1), 0 7px 4px -4px rgba(0,0,0,.1);
-  background: linear-gradient(to bottom, #eee, #fff);
+  background: linear-gradient(180deg,#eee, #fff);
   filter: drop-shadow(0 0 1px rgba(204, 204, 204, .8));
   transition: ease border .7s;
 }
@@ -1338,7 +1338,7 @@ input[type=file]::file-selector-button {
   border: 1px solid #97a2ce;
   border-radius: 2px;
   box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
-  background: linear-gradient(to bottom, #fff, #efefff);
+  background: linear-gradient(180deg,#fff, #efefff);
   background-size: 14px auto, 100% !important;
   opacity: 1;
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
@@ -1349,63 +1349,63 @@ input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selec
   color: #19191f;
   border: 1px solid #f60;
   box-shadow: var(--highlight), inset 0 -8px 3px 8px rgba(255,96,0,.02), inset 0 0 10px rgba(255,96,0,.05), 0 0 1px rgba(255,96,0,.1), 0 7px 4px -4px rgba(0,0,0,.1);
-  background: linear-gradient(to bottom, #eee, #fff);
+  background: linear-gradient(180deg,#eee, #fff);
   filter: saturate(100%) drop-shadow(0 0 1px rgba(204, 204, 204, .8));
   transition: ease border .7s;
 }
 
 input.accept {
   padding: 5px 7px 5px 22px;
-  background: var(--yes) no-repeat 6px center / 13px, linear-gradient(to bottom, #fff, #efefff);
+  background: var(--yes) no-repeat 6px center / 13px, linear-gradient(180deg,#fff, #efefff);
 }
 
 input.accept:hover, input.accept:focus {
-  background: var(--yes) no-repeat 6px center / 13px, linear-gradient(to bottom, #eee, #fff);
+  background: var(--yes) no-repeat 6px center / 13px, linear-gradient(180deg,#eee, #fff);
 }
 
 input.add {
   padding: 5px 7px 5px 20px;
-  background: var(--add) no-repeat 6px center / 11px, linear-gradient(to bottom, #fff, #efefff);
+  background: var(--add) no-repeat 6px center / 11px, linear-gradient(180deg,#fff, #efefff);
 }
 
 input.add:hover, input.add:focus {
-  background: var(--add) no-repeat 6px center / 11px, linear-gradient(to bottom, #eee, #fff);
+  background: var(--add) no-repeat 6px center / 11px, linear-gradient(180deg,#eee, #fff);
 }
 
 input.cancel {
   padding: 5px 7px 5px 19px;
-  background: var(--no) no-repeat 6px center / 10px, linear-gradient(to bottom, #fff, #efefff);
+  background: var(--no) no-repeat 6px center / 10px, linear-gradient(180deg,#fff, #efefff);
 }
 
 input.cancel:hover, input.cancel:focus {
-  background: var(--no) no-repeat 6px center / 10px, linear-gradient(to bottom, #eee, #fff);
+  background: var(--no) no-repeat 6px center / 10px, linear-gradient(180deg,#eee, #fff);
 }
 
 input.delete {
   padding: 5px 7px 5px 23px;
-  background: var(--nuke) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
+  background: var(--nuke) no-repeat 6px center, linear-gradient(180deg,#fff, #efefff);
   background-size: 13px, 100%;
 }
 
 input.delete:hover, input.delete:focus {
-  background: var(--nuke) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
+  background: var(--nuke) no-repeat 6px center, linear-gradient(180deg,#eee, #fff);
   background-size: 13px, 100%;
 }
 
 input.export {
   margin-top: 5px;
   padding: 5px 7px 5px 22px;
-  background: var(--go) no-repeat 6px center / 14px, linear-gradient(to bottom, #fff, #efefff);
+  background: var(--go) no-repeat 6px center / 14px, linear-gradient(180deg,#fff, #efefff);
 }
 
 input.export:hover, input.export:focus {
-  background: var(--go) no-repeat 6px center / 14px, linear-gradient(to bottom, #eee, #fff);
+  background: var(--go) no-repeat 6px center / 14px, linear-gradient(180deg,#eee, #fff);
 }
 
 input.download, input.update {
   margin-top: 5px;
   padding: 5px 7px 5px 21px;
-  background: var(--download) no-repeat 6px center / 13px, linear-gradient(to bottom, #fff, #efefff);
+  background: var(--download) no-repeat 6px center / 13px, linear-gradient(180deg,#fff, #efefff);
 }
 
 input.update {
@@ -1414,16 +1414,16 @@ input.update {
 
 input.download:hover, input.download:focus,
 input.update:hover, input.update:focus {
-  background: var(--download) no-repeat 6px center / 13px, linear-gradient(to bottom, #eee, #fff);
+  background: var(--download) no-repeat 6px center / 13px, linear-gradient(180deg,#eee, #fff);
 }
 
 input.reload {
   padding: 5px 7px 5px 22px;
-  background: var(--refresh) no-repeat 6px center / 14px, linear-gradient(to bottom, #fff, #efefff);
+  background: var(--refresh) no-repeat 6px center / 14px, linear-gradient(180deg,#fff, #efefff);
 }
 
 input.reload:hover, input.reload:focus {
-  background: var(--refresh_hover) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
+  background: var(--refresh_hover) no-repeat 6px center, linear-gradient(180deg,#eee, #fff);
   background-size: 14px, 100%;
 }
 
@@ -1432,7 +1432,7 @@ input.search[type=submit] {
   width: 44px;
   color: transparent;
   text-shadow: none;
-  background: var(--search) no-repeat center center / 14px, linear-gradient(to bottom, #fff, #efefff);
+  background: var(--search) no-repeat center center / 14px, linear-gradient(180deg,#fff, #efefff);
   background-blend-mode: luminosity;
 }
 
@@ -1443,7 +1443,7 @@ input.search[type=submit] {
 }
 
 input.search[type=submit]:hover, input.search[type=submit]:focus {
-  background: var(--search) no-repeat center center / 14px, linear-gradient(to bottom, #eee, #fff);
+  background: var(--search) no-repeat center center / 14px, linear-gradient(180deg,#eee, #fff);
   background-blend-mode: normal;
 }
 
@@ -1461,11 +1461,11 @@ input.search[type=text]:focus {
 
 #visualid .fakebutton {
   padding: 6px 8px 6px 22px;
-  background: var(--go) no-repeat 6px center / 14px, linear-gradient(to bottom, #fff, #efefff);
+  background: var(--go) no-repeat 6px center / 14px, linear-gradient(180deg,#fff, #efefff);
 }
 
 #visualid .fakebutton:hover, #visualid .fakebutton:focus {
-  background: var(--go) no-repeat 6px center / 14px, linear-gradient(to bottom, #eee, #fff);
+  background: var(--go) no-repeat 6px center / 14px, linear-gradient(180deg,#eee, #fff);
 }
 
 form[action="addressbook"] table {
@@ -1608,7 +1608,7 @@ input#exporthosts {
   min-width: 0;
   display: inline-block;
   font-size: 0 !important;
-  background: var(--download) no-repeat center center / 16px, linear-gradient(to bottom, #fff, #eef);
+  background: var(--download) no-repeat center center / 16px, linear-gradient(180deg,#fff, #eef);
 }
 
 #exporthosts:disabled {
@@ -1635,7 +1635,7 @@ input#exporthosts {
   text-align: center;
   border: 1px solid #8d8daa;
   border-radius: 2px;
-  background: linear-gradient(to bottom, #fff 50%, #eef 50%);
+  background: linear-gradient(180deg,#fff 50%, #eef 50%);
 }
 
 #current {

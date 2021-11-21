@@ -49,7 +49,7 @@ div.routersummary img[src$="i2plogo.png"] {
 }
 
 #sb_memoryBar .percentBarInner {
-  background: linear-gradient(to right, #0000001a, #80800033), linear-gradient(to bottom, #1c943a99 0%, #092f1099 50%, #0d270799 50%, #091b0599 50%, #09150399 100%);
+  background: linear-gradient(90deg, #0000001a, #80800033), linear-gradient(180deg,#1c943a99 0%, #092f1099 50%, #0d270799 50%, #091b0599 50%, #09150399 100%);
 }
 
 @media screen and (min-width: 1500px) {

@@ -291,18 +291,8 @@ public class ConfigClientsHelper extends HelperBase {
                     continue;
                 StringBuilder desc = new StringBuilder(256);
                 desc.append("\n<table border=\"0\">\n")
-                    .append("<tr><td><b>").append(_t("Version")).append("</b></td><td>").append(stripHTML(appProps, "version"))
-                    .append("</td></tr>\n<tr><td><b>")
-                    .append(_t("Signed by")).append("</b></td><td>");
-                String s = stripHTML(appProps, "signer");
-                if (s != null) {
-                    if (s.indexOf('@') > 0)
-                        desc.append("<a href=\"mailto:").append(s).append("\">").append(s).append("</a>");
-                    else
-                        desc.append(s);
-                    desc.append("</td></tr>\n");
-                }
-                s = stripHTML(appProps, "date");
+                    .append("<tr><td><b>").append(_t("Version")).append("</b></td><td>").append(stripHTML(appProps, "version"));
+                String s = stripHTML(appProps, "date");
                 if (s != null) {
                     long ms = 0;
                     try {
@@ -310,10 +300,18 @@ public class ConfigClientsHelper extends HelperBase {
                     } catch (NumberFormatException nfe) {}
                     if (ms > 0) {
                         String date = DataHelper.formatTime(ms);
-                        desc.append("<tr><td><b>")
-                            .append(_t("Date")).append("</b></td><td>").append(date);
+                        desc.append(" (").append(date).append(")");
                     }
                 }
+                desc.append("</td></tr>\n");
+                s = stripHTML(appProps, "description_" + Messages.getLanguage(_context));
+                if (s == null)
+                    s = stripHTML(appProps, "description");
+                if (s != null) {
+                    desc.append("<tr><td><b>")
+                        .append(_t("Description")).append("</b></td><td>").append(s);
+                }
+                desc.append("</td></tr>\n");
                 s = stripHTML(appProps, "author");
                 if (s != null) {
                     String[] authors = DataHelper.split(s, "[,; \r\n\t]");
@@ -327,32 +325,33 @@ public class ConfigClientsHelper extends HelperBase {
                         desc.append(s);
                     desc.append("</td></tr>\n");
                 }
-                s = stripHTML(appProps, "description_" + Messages.getLanguage(_context));
-                if (s == null)
-                    s = stripHTML(appProps, "description");
+                desc.append("<tr><td><b>").append(_t("Signed by")).append("</b></td><td>");
+                s = stripHTML(appProps, "signer");
                 if (s != null) {
-                    desc.append("<tr><td><b>")
-                        .append(_t("Description")).append("</b></td><td>").append(s);
+                    if (s.indexOf('@') > 0)
+                        desc.append("<a href=\"mailto:").append(s).append("\">").append(s).append("</a>");
+                    else
+                        desc.append(s);
+                    desc.append("</td></tr>\n");
                 }
-                s = stripHTML(appProps, "license");
-                if (s != null) {
-                    desc.append("<tr><td><b>")
-                        .append(_t("License")).append("</b></td><td>").append(s);
-                }
-                s = stripHTML(appProps, "websiteURL");
-                if (s != null) {
-                    desc.append("<tr><td><b>")
-                        .append(_t("Website")).append("</b></td><td><a href=\"")
-                        .append(s).append("\" target=\"_blank\">").append(s).append("</a>");
-                }
-                desc.append("</td></tr>\n");
                 String updateURL = stripHTML(appProps, "updateURL.su3");
                 if (updateURL == null)
                     updateURL = stripHTML(appProps, "updateURL");
                 if (updateURL != null) {
                     desc.append("<tr><td><b>")
                         .append(_t("Update link")).append("</b></td><td><a href=\"")
-                        .append(updateURL).append("\">").append(updateURL).append("</a>");
+                        .append(updateURL).append("\">").append(updateURL).append("</a></td></tr>\n");
+                }
+                s = stripHTML(appProps, "websiteURL");
+                if (s != null) {
+                    desc.append("<tr><td><b>")
+                        .append(_t("Website")).append("</b></td><td><a href=\"")
+                        .append(s).append("\" target=\"_blank\">").append(s).append("</a></td></tr>\n");
+                }
+                s = stripHTML(appProps, "license");
+                if (s != null) {
+                    desc.append("<tr><td><b>")
+                        .append(_t("License")).append("</b></td><td>").append(s).append("</td></tr>\n");
                 }
                 desc.append("\n</table>\n");
                 boolean isRunning = PluginStarter.isPluginRunning(app, _context);

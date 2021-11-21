@@ -10,7 +10,7 @@
 :root {
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
-  --title: repeating-linear-gradient(to right, rgba(0,0,48,.4) 2px, #000 4px), linear-gradient(to bottom, #003, #002 50%, #001 50%, #000);
+  --title: repeating-linear-gradient(90deg, rgba(0,0,48,.4) 2px, #000 4px), linear-gradient(180deg,#003, #002 50%, #001 50%, #000);
   --highlight: inset 0 0 0 1px #000;
 }
 
@@ -22,7 +22,7 @@ body {
   font-size: 9pt;
   color: #c9ceff;
   background: #000010;
-  background: repeating-linear-gradient(to bottom, rgba(0,0,24,.75) 3px, rgba(0,0,0,.9) 5px, rgba(0,0,0,.7) 6px), var(--tile), #000010;
+  background: repeating-linear-gradient(180deg,rgba(0,0,24,.75) 3px, rgba(0,0,0,.9) 5px, rgba(0,0,0,.7) 6px), var(--tile), #000010;
 }
 
 body.iframed {
@@ -425,12 +425,12 @@ _:-ms-lang(x), .tunnelProperties {
   border: 1px solid rgba(38,35,92,.3);
   border-radius: 3px;
   box-shadow: var(--highlight);
-  background: var(--settings) no-repeat 6px center / 14px, linear-gradient(to bottom, rgba(16,16,48,.3), rgba(0,0,16,.3));
+  background: var(--settings) no-repeat 6px center / 14px, linear-gradient(180deg,rgba(16,16,48,.3), rgba(0,0,16,.3));
 }
 
 .tunnelName a:hover, .tunnelName a:focus {
   border: 1px solid #26235c;
-  background: var(--settings_hover) no-repeat 6px center / 14px, linear-gradient(to bottom, #113, #001);
+  background: var(--settings_hover) no-repeat 6px center / 14px, linear-gradient(180deg,#113, #001);
   background-size: 14px, 100% !important;
 }
 
@@ -510,7 +510,7 @@ textarea#statusMessages, textarea#statusMessages:active, textarea#statusMessages
   border: none !important;
   border-radius: 0;
   box-shadow: var(--highlight) !important;
-  background: linear-gradient(to bottom, #000 0%, #000019 100%) !important;
+  background: linear-gradient(180deg,#000 0%, #000019 100%) !important;
 }
 
 .freetext {
@@ -621,7 +621,7 @@ input[type=text], input[type=password], textarea, textarea[readonly="readonly"]:
   border: 1px solid #2b2668;
   box-shadow: inset 0 0 3px 3px #000;
   background: #000;
-  background: linear-gradient(to bottom, #000 0%, #000019 100%);
+  background: linear-gradient(180deg,#000 0%, #000019 100%);
   filter: none;
 }
 
@@ -636,7 +636,7 @@ input[type=text]:focus, input[type=password]:focus {
 input[readonly="readonly"]:focus {
   box-shadow: none;
   filter: none;
-  background: linear-gradient(to bottom, #000 0%, #010 100%) !important;
+  background: linear-gradient(180deg,#000 0%, #010 100%) !important;
 }
 
 a.control, input.control {
@@ -657,7 +657,7 @@ a.control, input.control {
   font-style: normal;
   color: #7171d1 !important;
   border: 1px solid #26225c;
-  background: linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
+  background: linear-gradient(180deg,#11101c 50%, #000010 50%) !important;
 }
 
 .control:hover, .control:focus, button:hover, button:focus {
@@ -665,7 +665,7 @@ a.control, input.control {
   color: #652787 !important;
   border: 1px solid #652787 !important;
   box-shadow: var(--highlight), inset 0 0 1px 1px #757;
-  background: linear-gradient(to bottom, #202 50%, #000 50%) !important;
+  background: linear-gradient(180deg,#202 50%, #000 50%) !important;
 }
 
 .control:active, button:active {
@@ -698,7 +698,7 @@ select {
   font-weight: 700;
   color: #7171d1;
   border: 1px solid #26225c;
-  background: var(--dropdown) center right 10px no-repeat, linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
+  background: var(--dropdown) center right 10px no-repeat, linear-gradient(180deg,#11101c 50%, #000010 50%) !important;
   background-size: 10px auto, 100% 100% !important;
   filter: none;
   cursor: pointer;
@@ -709,7 +709,7 @@ select:hover, select:focus, select:active {
   text-shadow: 0 1px 1px #000;
   border: 1px solid #652787 !important;
   box-shadow: var(--highlight), inset 0 0 1px 1px #757;
-  background: var(--dropdown_hover) center right 10px no-repeat, linear-gradient(to bottom, #202 50%, #000 50%) !important;
+  background: var(--dropdown_hover) center right 10px no-repeat, linear-gradient(180deg,#202 50%, #000 50%) !important;
   background-size: 10px auto, 100% 100% !important;
 }
 
@@ -741,7 +741,7 @@ button, input[type=submit], input[type="reset"], a.control {
   border-top: 1px solid #26235c !important;
   box-shadow: var(--highlight), inset 0 0 2px 1px #191939, inset 0 0 5px 3px #002;
   background: #000;
-  background: linear-gradient(to bottom, #001, #000);
+  background: linear-gradient(180deg,#001, #000);
 }
 
 .tunnelDestinationLabel {
@@ -989,7 +989,7 @@ input.tunnelName, input.tunnelDescriptionText, #userAgents, .tunnelDescription, 
 
 .username {
   padding-left: 26px;
-  background: var(--user) no-repeat 6px center, linear-gradient(to bottom, #001, #000) !important;
+  background: var(--user) no-repeat 6px center, linear-gradient(180deg,#001, #000) !important;
   background-size: 14px, 100% !important;
   background-blend-mode: luminosity;
 }
@@ -1003,7 +1003,7 @@ input.tunnelName, input.tunnelDescriptionText, #userAgents, .tunnelDescription, 
 
 .password {
   padding-left: 26px;
-  background: var(--key) no-repeat 6px center, linear-gradient(to bottom, #001, #000) !important;
+  background: var(--key) no-repeat 6px center, linear-gradient(180deg,#001, #000) !important;
   background-size: 14px, 100% !important;
   background-blend-mode: luminosity;
 }
@@ -1031,7 +1031,7 @@ input.tunnelName, input.tunnelDescriptionText, #userAgents, .tunnelDescription, 
   border: 1px solid #005;
   box-shadow: var(--highlight), inset 0 0 4px 4px rgba(0,0,0,.4), 0 0 0 1px #000, 0 0 0 2px #001, 0 0 0 6px #002, 0 0 0 8px #003;
   background: #002;
-  background: repeating-linear-gradient(to bottom, #002 2px, #001 4px);
+  background: repeating-linear-gradient(180deg,#002 2px, #001 4px);
 }
 
 #down {
@@ -1379,7 +1379,7 @@ input[type=text] + label {
   user-select: all;
   border: 1px solid #302b74;
   background: #000;
-  background: linear-gradient(to bottom, #000 0%, #000019 100%);
+  background: linear-gradient(180deg,#000 0%, #000019 100%);
   color: #7171d1;
   box-shadow: var(--highlight);
 }
@@ -1578,7 +1578,7 @@ input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input
   border: 1px solid #363181 !important;
   box-shadow: var(--highlight), inset 3px 3px 3px 1px #000;
   background: #001;
-  background: linear-gradient(to bottom, #030306, #112);
+  background: linear-gradient(180deg,#030306, #112);
   box-sizing: border-box;
   -moz-appearance: none;
   -webkit-appearance: inherit;

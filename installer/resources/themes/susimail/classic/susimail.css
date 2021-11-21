@@ -4,30 +4,43 @@
 @import url(/themes/fonts/DroidSans.css);
 @import url(../images/images.css);
 @import url(images/images.css);
+@import url(/themes/console/classic/optbox.css);
 
 :root {
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
   --monospaced: Droid Sans Mono, Andale Mono, DejaVu Sans Mono, Lucida Console, monospace;
-  --ink : #667;
+  --ink: #41444d;
+  --ink_light: #5e626e;
+  --bodybg: #e2e2f3;
   --bg: #fff;
+  --bg2: #f4f4ff;
+  --bg3: #eef;
   --highlight: inset 0 0 0 1px #fff;
-  --btn: linear-gradient(to bottom, #fff, #f0f0ff);
-  --btn_hover: linear-gradient(to bottom, #ddd, #fff);
+  --btn: linear-gradient(180deg, var(--bg) 50%, var(--bg2), var(--bg3));
+  --btn_hover: linear-gradient(180deg,#ddd, #fff);
   --btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 #fff, inset 0 0 4px 2px #f0f0ff, 0 1px 1px rgba(220,220,255,.5);
   --btn_shadow_hover: var(--highlight), 0 0 0 1px #fff, 0 0 0 2px rgba(255,96,0,.4);
-  --header: linear-gradient(to bottom, #fff 50%, #f2f2ff 50%);
-  --border: #bfc3d9;
-  --border_inner: #dfe1ec;
+  --btn_shadow_active: var(--highlight), inset 3px 3px 3px 1px rgba(32,32,64,.3);
+  --header: linear-gradient(180deg,#fff 50%, #f2f2ff 50%);
   --hover: #f60;
+  --active: #f30;
+  --border: #bfc3d9;
+  --border_soft: #cfd2e2;
+  --border_badge: #bbc;
+  --hover: #f60;
+}
+
+html {
+  scrollbar-color: #acafb9 var(--bodybg);
 }
 
 body {
   margin: 3px 4px;
-  color: #2c354f;
+  color: var(--ink);
   font-family: var(--bodyfont);
   font-size: 9pt;
-  background: #eef url(/themes/console/classic/images/bg0.png);
-  background-size: 120px;
+  background: var(--bg3) url(/themes/console/classic/images/bg0.png) left top / 120px;
+  scrollbar-color: #acafb9 var(--bg);
 }
 
 body.iframed {
@@ -46,7 +59,7 @@ button::-moz-focus-inner, input::-moz-focus-inner {
 }
 
 b, th, .mailListSender a {
-  color: #414960 !important	;
+  color: var(--ink_light) !important;
 }
 
 div.header {
@@ -57,7 +70,7 @@ h3#config {
   margin: -11px auto 10px;
   padding: 5px 10px;
   width: 300px;
-  color: #35415f;
+  color: var(--ink_light);
   border: 1px solid var(--border);
   border-radius: 0 0 2px 2px;
   background: var(--header);
@@ -120,7 +133,7 @@ tr.mailbody:nth-child(n+3) {
 p.info {
   padding: 12px 10px 11px 40px;
   color: #337;
-  background: #eef var(--infohelp) no-repeat 14px center / 18px;
+  background: var(--bg3) var(--infohelp) no-repeat 14px center / 18px;
 }
 
 span.coloured {
@@ -253,7 +266,7 @@ td {
 }
 
 tr.list0 {
-  background: #f1f0ff;
+  background: var(--bg3);
 }
 
 tr.list1 {
@@ -261,13 +274,13 @@ tr.list1 {
 }
 
 tr.list0, tr.list1 {
-  border-top: 1px solid var(--border_inner) !important;
-  border-bottom: 1px solid var(--border_inner) !important;
+  border-top: 1px solid var(--border_soft) !important;
+  border-bottom: 1px solid var(--border_soft) !important;
 }
 
 tr.list0:hover, tr.list1:hover {
-  border-top: 1px solid var(--border_inner);;
-  border-bottom: 1px solid var(--border_inner);;
+  border-top: 1px solid var(--border_soft);;
+  border-bottom: 1px solid var(--border_soft);;
   background: #ffd;
   cursor: pointer;
 }
@@ -296,7 +309,7 @@ table.noborder {
 
 table#mailbox {
   border: 1px solid var(--border);
-  background: #eef;
+  background: var(--bg3);
 }
 
 table#mailbox {
@@ -423,7 +436,7 @@ img.sort {
 
 img.sort.selected {
   border-radius: 1px;
-  box-shadow: 0 0 0 1px var(--border_inner), inset 0 0 0 1px rgba(255,255,255,.7), inset 2px 2px 2px rgba(0,0,0,.1);
+  box-shadow: 0 0 0 1px var(--border_soft), inset 0 0 0 1px rgba(255,255,255,.7), inset 2px 2px 2px rgba(0,0,0,.1);
   background: var(--btn_hover);
   opacity: 1;
 }
@@ -453,11 +466,10 @@ pre {
   min-width: 800px;
   line-height: 1.6 !important;
   text-align: center;
-  color: #0c153d;
   font-size: 9pt !important;
   border: 1px solid var(--border);
   box-shadow: 0 0 0 1px #eee;
-  background: linear-gradient(to bottom, rgba(255,255,255,.7),rgba(255,255,255,.2)), url(/themes/console/classic/images/bg2.png) #eef;
+  background: linear-gradient(180deg,rgba(255,255,255,.7),rgba(255,255,255,.2)), url(/themes/console/classic/images/bg2.png) var(--bg3);
   background-size: 100% 100%, 120px 120px;
 }
 
@@ -472,7 +484,7 @@ pre {
 table {
   width: 100%;
   text-align: justify;
-  color: var(--ink);
+  color: var(--ink_light);
   border-collapse: collapse;
 }
 
@@ -492,7 +504,7 @@ form {
 #viewmail {
   margin: -9px -10px;
   border-top: 1px solid var(--border);
-  background: #eef;
+  background: var(--bg3);
 }
 
 .iframed #viewmail {
@@ -514,18 +526,6 @@ table#message_full {
   border-bottom: 1px solid var(--border);
 }
 
-input[type=checkbox], input[type=radio] {
-  background: none;
-  min-width: 16px;
-  min-height: 16px;
-}
-
-input[type=radio]:hover, input[type=radio]:focus, input[type=checkbox]:hover, input[type=checkbox]:focus {
-  box-shadow: inset 0 0 1px 2px #89f;
-  outline: none;
-  filter: drop-shadow(0 0 3px #89f);
-}
-
 input { /* opera fix */
   font-family: var(--bodyfont);
   font-size: 9pt;
@@ -537,11 +537,11 @@ textarea {
 }
 
 input[type=text], input[type=password], textarea {
-  border: 1px solid var(--border);
-  box-shadow: inset 1px 1px 1px #ddd;
   padding: 4px 5px !important;
+  color: var(--ink_light);
+  border: 1px solid var(--border);
   border-radius: 2px;
-  color: #333;
+  box-shadow: inset 1px 1px 1px #ddd;
   background: var(--bg);
 }
 
@@ -551,9 +551,9 @@ input[type=submit], #settings {
 }
 
 input.new_upload, input.delete_attachment {
+  margin-right: 0;
   float: right;
   text-transform: capitalize;
-  margin-right: 0;
 }
 
 @-moz-document url-prefix(http://) {
@@ -570,7 +570,7 @@ button:focus, input[type=submit]:focus, input[type="reset"]:focus, .fakebutton:f
 button, input[type=submit], input[type="reset"], #settings, .fakebutton {
   padding: 5px;
   display: inline-block;
-  color: #333;
+  color: var(--ink_light);
   border: 1px solid var(--border);
   border-radius: 3px;
   box-shadow: var(--btn_shadow);
@@ -587,7 +587,7 @@ input[type="file"] {
 button:hover, input[type=submit]:hover, input[type="reset"]:hover,
 button:focus, input[type=submit]:focus, input[type="reset"]:focus,
 #settings:hover, #settings:focus, .fakebutton:focus {
-  color: #222;
+  color: var(--ink);
   border: 1px solid var(--border);
   box-shadow: var(--btn_shadow_hover);
   background: var(--btn_hover);
@@ -601,7 +601,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 button:active, input[type=submit]:active, input[type="reset"]:active, #settings:active, .fakebutton:active {
   color: #555;
   border: 1px solid #bbb;
-  box-shadow: var(--highlight), inset 3px 3px 3px #999;
+  box-shadow: var(--btn_shadow_active);
   background: #ddd;
 }
 
@@ -611,11 +611,6 @@ input[disabled][type=submit], input[disabled][type=submit]:hover, input[disabled
   opacity: .3;
   filter: none;
   pointer-events: none;
-}
-
-input.optbox {
-  vertical-align: middle;
-  background: none;
 }
 
 input, label {
@@ -708,7 +703,7 @@ input.login:hover, input.login:focus {
 #info input.logout, #info input.logout:hover,
 #info input.logout:focus, #info input.logout:active {
   border: none;
-  border-left: 1px solid #bbc;
+  border-left: 1px solid var(--border_badge);
   border-radius: 0;
   box-shadow: none;
   filter: none;
@@ -729,7 +724,7 @@ input.logout:hover, input.logout:focus {
 }
 
 input.logout:active {
-  box-shadow: var(--highlight), inset 3px 3px 3px #999;
+  box-shadow: var(--btn_shadow_active);
 }
 
 input.reload, input.refresh, .fakebutton {
@@ -930,7 +925,7 @@ select {
   vertical-align: middle;
   text-overflow: ellipsis;
   font-size: 9pt;
-  color: #333;
+  color: var(--ink_light);
   border-radius: 3px;
   border: 1px solid var(--border);
   box-shadow: var(--btn_shadow);
@@ -948,12 +943,13 @@ select option {
 }
 
 select:hover, select:active {
+  color: var(--ink);
   box-shadow: var(--btn_shadow_hover);
   background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover) !important;
 }
 
 select:focus {
-  color: #000;
+  color: var(--ink);
   background: var(--dropdown_hover) no-repeat right 8px center / 10px,  var(--btn_hover) !important;
   outline: none !important;
 }
@@ -1008,7 +1004,7 @@ select:focus {
   width: 500px;
   margin: 55px auto 40px;
   box-shadow: 0 0 0 1px #fff;
-  background: linear-gradient(to bottom, rgba(240,240,255,.4), rgba(220,220,255,.5)) #fefefe;
+  background: linear-gradient(180deg,rgba(240,240,255,.4), rgba(220,220,255,.5)) #fefefe;
   box-shadow: var(--highlight), 0 0 1px #ccc;
   filter: opacity(0);
   animation: linear fade-in .15s .5s forwards;
@@ -1082,11 +1078,11 @@ select:focus {
   letter-spacing: .08em;
   text-align: left;
   font-size: 14pt;
-  color: #35415f;
+  color: var(--ink_light);
   word-spacing: .1em;
   border-bottom: 1px solid var(--border);
   box-shadow: var(--highlight);
-  background: linear-gradient(to right, #fff 30%, #eff2ff);
+  background: linear-gradient(90deg, #fff 30%, #eff2ff);
 }
 
 #dologin hr {
@@ -1115,7 +1111,7 @@ select:focus {
   border: 1px solid rgba(119, 120, 159, .3);
   border-radius: 25px;
   box-shadow: 0 0 1px rgba(255,255,255,0);
-  background: linear-gradient(to right, #f2f2ff, #f6f6ff, #f2f2ff);
+  background: linear-gradient(90deg, #f2f2ff, #f6f6ff, #f2f2ff);
   transition: ease all .1s;
 }
 
@@ -1123,7 +1119,7 @@ select:focus {
   border: 1px solid #77789f;
   border: 1px solid rgba(119, 120, 159, .5);
   background: #f2f2ff;
-  background: linear-gradient(to bottom, #fafaff 50%, #e8e8ff 50%) #f2f2ff;
+  background: linear-gradient(180deg,#fafaff 50%, #e8e8ff 50%) #f2f2ff;
   box-shadow: 0 0 1px #ccf;
   transition: ease all .1s;
 }
@@ -1131,7 +1127,7 @@ select:focus {
 #dologin tr:last-child a:active {
   border: 1px solid rgba(119, 120, 159, .3);
   background: #e2e2ff;
-  background: linear-gradient(to bottom, #eaeaff 50%, #d9d9ff 50%);
+  background: linear-gradient(180deg,#eaeaff 50%, #d9d9ff 50%);
   box-shadow: inset 3px 3px 3px #779;
   transition: ease all .1s;
   color: rgba(65, 70, 95, .8) !important;
@@ -1187,7 +1183,7 @@ div#pagenav {
   margin: -1px -11px 10px;
   padding: 6px 0 0;
   background: var(--bg) !important;
-  background: linear-gradient(to bottom, #fff 0%, #eef 100%) !important;
+  background: linear-gradient(180deg,#fff 0%, var(--bg3) 100%) !important;
   border: 1px solid var(--border);
   border-bottom: none;
 }
@@ -1283,10 +1279,6 @@ div#pagenav {
   padding: 6px 0 5px;
   border-top: 1px solid var(--border);
   background: var(--bg);
-}
-
-.iframed #prefsave {
-  margin-bottom: -24px;
 }
 
 tr.bottombuttons table.pagenav {
@@ -1451,11 +1443,11 @@ img.sort {
   display: inline-block;
   vertical-align: middle;
   line-height: normal;
-  color: var(--ink);
-  border: 1px solid #bbc;
+  color: var(--ink_light);
+  border: 1px solid var(--border_badge);
   border-radius: 2px;
   box-shadow: var(--highlight);
-  background: #f2f2f2;
+  background: var(--bg2);
 }
 
 .iframed #info {
@@ -1473,7 +1465,7 @@ img.sort {
   height: 30px;
   display: inline-block;
   vertical-align: middle;
-  background: #bbc;
+  background: var(--border_badge);
   content: "";
 }
 
@@ -1516,93 +1508,8 @@ tr:hover .listDate {
 .listTime {
   min-width: 40px;
   text-align: left;
-  opacity: .85;
+  color: var(--ink);
 }
-
-/* custom radios/checkboxes to enforce color scheme when OS widgets are non-standard  */
-@supports (background-blend-mode: luminosity) { /* exclude ms browsers */
-input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked,
-input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
-  position: relative;
-  width: 19px !important;
-  height: 19px !important;
-  vertical-align: middle !important;
-  box-sizing: border-box;
-  border: 1px solid var(--border);
-  background: #f8f8ff;
-  -moz-appearance: none;
-  -webkit-appearance: inherit;
-  filter: drop-shadow(0 0 1px #ccf);
-  will-change: transform;
-}
-
-input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
-  border-radius: 2px;
-  box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6);
-}
-
-input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
-  border-radius: 50%;
-}
-
-input[type=checkbox]:checked::before, input[type=radio]:checked::before,
-input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
-  position: absolute;
-  transition: linear all .05s;
-  transform: scale(1);
-}
-
-.optbox:not(:checked) {
-  box-shadow: inset 2px 2px 1px rgba(204, 204, 240, .6);
-}
-
-input[type=checkbox]:checked::before {
-  content: "";
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 11px;
-  height: 11px;
-  line-height: .8;
-  border-radius: 1px;
-  background: #67f;
-  transform: scale(1);
-  transition: linear all .05s;
-}
-
-input[type=radio]:checked::before {
-  content: "";
-  border-radius: 50%;
-  left: 25%;
-  top: 25%;
-  width: 9px;
-  height: 9px;
-  background: #67f;
-}
-
-input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
-  transform: scale(0);
-}
-
-input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus, input[type=radio]:focus {
-  background: var(--bg);
-  width: 19px !important;
-  height: 19px !important;
-  border: 1px solid #67f !important;
-  box-shadow: 0 0 2px var(--hover) !important;
-  filter: drop-shadow(0 0 3px #89f) !important;
-  filter: none !important;
-}
-
-input[type=checkbox][disabled], input[type=radio][disabled], input[type=checkbox][disabled]:hover, input[type=radio][disabled]:hover,
-input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, input[type=checkbox][disabled]:checked:hover, input[type=radio][disabled]:checked:hover {
-  filter: none !important;
-  box-shadow: none !important;
-  opacity: .5;
-}
-}
-
-/* end custom radios/checkboxes */
 
 /* confirm mail delete */
 
@@ -1631,7 +1538,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
   color: #900;
   border: 1px solid #700;
   box-shadow: inset 0 0 1px 1px #dda, 0 0 0 1px #fff, 0 0 2px 2px rgba(0,0,0,.3);
-  background: var(--question) no-repeat center 20px / 32px, linear-gradient(to bottom, #ffe, #ffffe6);
+  background: var(--question) no-repeat center 20px / 32px, linear-gradient(180deg,#ffe, #ffffe6);
   animation: fade-in linear 0.5s;
 }
 

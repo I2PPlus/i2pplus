@@ -65,7 +65,7 @@ input[type=radio]:checked::before {
 }
 
 .optbox:not([disabled]):hover, .optbox:not([disabled]):focus {
-  border: 1px solid var(--active) !important;
+  border: 1px solid var(--hover) !important;
   background: var(--bg);
 }
 

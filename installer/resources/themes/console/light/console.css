@@ -7,19 +7,21 @@
 
 :root {
   --bg: url("data:image/svg+xml,%3Csvg height='4' viewBox='0 0 4 4' width='4' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m1 3h1v1h-1zm2-2h1v1h-1z' fill='%23e2e2ff' fill-opacity='.5'/%3E%3C/svg%3E");
-  --h1: var(--bg), linear-gradient(135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px);
-  --h2: linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fcfcff 5%, rgba(231, 231, 255, .8) 25%);
-  --h3: linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4));
+  --h1: var(--bg), linear-gradient(135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(180deg,#fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px);
+  --h2: linear-gradient(180deg,#fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(90deg, #fcfcff 5%, rgba(231, 231, 255, .8) 25%);
+  --h3: linear-gradient(180deg,#fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4));
   --p: linear-gradient(135deg, #fafaff, #f8f8ff);
-  --div_infohelp: repeating-linear-gradient(to bottom, rgba(255,255,255,.4) 2px, rgba(232,232,255,.7) 4px), var(--p);
+  --div_infohelp: repeating-linear-gradient(180deg,rgba(255,255,255,.4) 2px, rgba(232,232,255,.7) 4px), var(--p);
   --highlight: inset 0 0 0 1px #fff;
   --a: #4d5f80;
   --ink: #4f4f63;
   --inklite: #5b5b71;
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, Verdana, Helvetica, sans-serif;
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
-  --btn: linear-gradient(to bottom, #fff, #efefff);
-  --btn_hover: linear-gradient(to bottom, #eee, #fff);
+  --btn: linear-gradient(180deg,#fff, #efefff);
+  --btn_hover: linear-gradient(180deg,#eee, #fff);
+  --btn_shadow_active: var(--highlight), inset 3px 3px 3px 1px rgba(0,0,64,.3);
+  --input_shadow: inset 1px 1px 1px rgba(0,0,48,.2);
   --border: #575775;
   --borderinner: #9898b3;
   --bevel: inset 0 0 0 1px #d0d0da;
@@ -301,7 +303,7 @@ pre {
 }
 
 #sidebar h3:hover {
-  background: #fff linear-gradient(to bottom, #fff 50%, rgba(255, 232, 191, .6) 50%, rgba(239, 217, 179, .4) 100%) !important;
+  background: #fff linear-gradient(180deg,#fff 50%, rgba(255, 232, 191, .6) 50%, rgba(239, 217, 179, .4) 100%) !important;
 }
 
 #sidebar h3:active {
@@ -344,7 +346,7 @@ pre {
   border: none;
   border-radius: 0;
   box-shadow: inset 0 0 0 1px #eef;
-  background: linear-gradient(to right, #ddf, #eef 10%, #fff 50%, #eef 90%, #ddf);
+  background: linear-gradient(90deg, #ddf, #eef 10%, #fff 50%, #eef 90%, #ddf);
 }
 
 #sidebar h4::after {
@@ -604,7 +606,7 @@ a:active #sb_bandwidthgraph {
   border: 1px solid #f60;
   border-top: none;
   box-shadow: inset 0 0 0 1px rgba(255,255,255,.9);
-  background: linear-gradient(to bottom, rgba(255,255,255,.7) 50%, rgba(220,220,255,.7) 50%);
+  background: linear-gradient(180deg,rgba(255,255,255,.7) 50%, rgba(220,220,255,.7) 50%);
   opacity: 0;
   transition: ease opacity .1s .2s;
   pointer-events: none;
@@ -623,7 +625,7 @@ a:active #sb_bandwidthgraph {
   box-shadow: inset 0 0 0 2px #fff, inset 0 0 1px 1px #adadeb;
   border: 1px solid #afafcf;
   box-shadow: 0 0 1px #e0e0eb, var(--highlight);
-  background: linear-gradient(to bottom, rgba(255,255,255,.3), rgba(32,32,64,.05)),
+  background: linear-gradient(180deg,rgba(255,255,255,.3), rgba(32,32,64,.05)),
               repeating-linear-gradient(to left, rgba(255,255,255,.0) 18px, rgba(120,120,255,.4) 18px, rgba(255,255,255,.0) 19px, rgba(255,255,255,.0) 36px),
               repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(0,0,0,0) 14px, rgba(120,120,255,.4) 14px, rgba(0,0,0,0) 15px) !important;
 }
@@ -679,8 +681,8 @@ a:active #sb_bandwidthgraph {
   text-align: center;
   border: 1px solid #afafcf;
   box-shadow: 0 0 1px rgba(200,200,200,.8), inset 0 0 0 1px rgba(255,255,255,.6), inset 0 0 0 2px rgba(200,200,255,.6), inset 0 3px 3px 1px rgba(0,0,16,.25);
-  background: linear-gradient(to right, rgba(0,255,0,.05) 50%, rgba(255,255,0,.05) 75%, rgba(255,128,0,.05) 90%, rgba(255,0,0,.1)),
-              repeating-linear-gradient(to right, rgba(180, 180, 255,.7) 1px, rgba(180, 180, 255, .7) 2px, rgba(221, 221, 255, .7) 2px, rgba(221, 221, 255, .7) 4px);
+  background: linear-gradient(90deg, rgba(0,255,0,.05) 50%, rgba(255,255,0,.05) 75%, rgba(255,128,0,.05) 90%, rgba(255,0,0,.1)),
+              repeating-linear-gradient(90deg, rgba(180, 180, 255,.7) 1px, rgba(180, 180, 255, .7) 2px, rgba(221, 221, 255, .7) 2px, rgba(221, 221, 255, .7) 4px);
 }
 
 @media screen and (min-width: 1500px) {
@@ -694,7 +696,7 @@ a:active #sb_bandwidthgraph {
   border: none;
   border-right: 1px solid #afafcf;
   box-shadow: var(--highlight);
-  background: linear-gradient(to bottom, rgba(255, 255, 255,.8), rgba(238, 238, 255, .5) 50%, rgba(180, 180, 255, .6) 50%, rgba(140, 140, 255, .6));
+  background: linear-gradient(180deg,rgba(255, 255, 255,.8), rgba(238, 238, 255, .5) 50%, rgba(180, 180, 255, .6) 50%, rgba(140, 140, 255, .6));
 }
 
 .percentBarInner[style="width: 100%;"] {
@@ -702,8 +704,8 @@ a:active #sb_bandwidthgraph {
 }
 
 #sb_memoryBar .percentBarInner {
-  background: linear-gradient(to right, rgba(0,255,0,.05), rgba(255,255,0,.1) 160px, rgba(255,0,0,.1) 180px, rgba(255,0,0,.2)),
-              linear-gradient(to bottom, rgba(255, 255, 255,.6), rgba(238, 238, 255, .6) 50%, rgba(180, 180, 255, .7) 50%, rgba(140, 140, 255, .7));
+  background: linear-gradient(90deg, rgba(0,255,0,.05), rgba(255,255,0,.1) 160px, rgba(255,0,0,.1) 180px, rgba(255,0,0,.2)),
+              linear-gradient(180deg,rgba(255, 255, 255,.6), rgba(238, 238, 255, .6) 50%, rgba(180, 180, 255, .7) 50%, rgba(140, 140, 255, .7));
 }
 
 .percentBarText {
@@ -769,7 +771,7 @@ a:active #sb_bandwidthgraph {
   border-radius: 0 0 3px 3px;
   box-shadow: var(--highlight);
   background: #e0e0eb;
-  background: linear-gradient(to right, #ddf, #efefff 30%, #efefff 60%, #ddf);
+  background: linear-gradient(90deg, #ddf, #efefff 30%, #efefff 60%, #ddf);
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
@@ -1294,7 +1296,7 @@ p:empty + .sb_notice {
 }
 
 .warning:not(old) {
-  background: var(--itooplus) no-repeat 10px center / 70px auto, linear-gradient(to bottom, rgba(248,248,255,.8), rgba(240,240,255,.8)) #f8f8ff;
+  background: var(--itooplus) no-repeat 10px center / 70px auto, linear-gradient(180deg,rgba(248,248,255,.8), rgba(240,240,255,.8)) #f8f8ff;
   background-position: 21px calc(50% + 16px);
 }
 
@@ -1415,7 +1417,7 @@ p:empty + .sb_notice {
   margin: 10px 0 !important;
   height: 1px;
   color: #558;
-  background: linear-gradient(to right, #558, #77a);
+  background: linear-gradient(90deg, #558, #77a);
 }
 
 #warning2 {
@@ -1425,7 +1427,7 @@ p:empty + .sb_notice {
   min-width: 536px;
   font-weight: 400;
   color: var(--ink);
-  background: linear-gradient(to bottom, rgba(252, 252, 255, .8), rgba(252, 252, 255, .5)) #fafaff;
+  background: linear-gradient(180deg,rgba(252, 252, 255, .8), rgba(252, 252, 255, .5)) #fafaff;
 }
 
 #servletError #warning {
@@ -1537,7 +1539,7 @@ p:empty + .sb_notice {
 }
 
 #warning2 {
-  background: linear-gradient(to bottom, rgba(248,248,255,.5), rgba(240,240,255,.5)),
+  background: linear-gradient(180deg,rgba(248,248,255,.5), rgba(240,240,255,.5)),
               url(/themes/snark/ubergine/images/hat.png) no-repeat right bottom / auto 160px,
               repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #f8f8ff !important;
 }
@@ -1645,6 +1647,7 @@ hr:last-child {
   resize: none;
   color: var(--ink);
   box-shadow: var(--highlight), inset 3px 3px 3px rgba(0,0,48,.2);
+  box-shadow: var(--input_shadow);
 }
 
 td.tabletextarea {
@@ -1714,7 +1717,7 @@ td.tabletextarea {
   border-radius: 0 0 2px 2px;
   box-shadow: var(--highlight);
   background: #eef !important;
-  background: linear-gradient(to bottom, rgba(250,250,255,.3), rgba(236,236,255,.6)), repeating-linear-gradient(135deg, rgba(255,255,255,.3) 2px, rgba(240, 240, 255, .3) 3px, rgba(236,236,255,.3) 4px) !important;
+  background: linear-gradient(180deg,rgba(250,250,255,.3), rgba(236,236,255,.6)), repeating-linear-gradient(135deg, rgba(255,255,255,.3) 2px, rgba(240, 240, 255, .3) 3px, rgba(236,236,255,.3) 4px) !important;
 }
 
 .newscontent p {
@@ -1770,7 +1773,7 @@ td.tabletextarea {
 #routerinformation tr:nth-child(n+2) a:not(#revision):hover, #routerinformation tr:nth-child(n+2) a:focus {
   border: 1px solid var(--borderinner);
   background: #e2e2ff;
-  background: linear-gradient(to bottom, #f8f8ff 50%, #e2e2ff 50%);
+  background: linear-gradient(180deg,#f8f8ff 50%, #e2e2ff 50%);
 }
 
 #newsdisplay a:focus, #graphopts a:focus, #graphopts a:visited:focus, #routerinformation tr:nth-child(n+2) a:focus, .graphstat:focus {
@@ -1871,7 +1874,7 @@ hr + #newsStatus, hr + #newsStatus + #newsDisplay {
   font-size: 10pt !important;
   border: 1px solid var(--borderinner);
   border-radius: 2px 2px 0 0;
-  background: var(--news) no-repeat 6px center / 16px, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8)) 15% !important;
+  background: var(--news) no-repeat 6px center / 16px, var(--h3), linear-gradient(90deg, #fafaff 5%, rgba(231, 231, 255, .8)) 15% !important;
   filter: none;
 }
 
@@ -1920,7 +1923,7 @@ h1, .confignav {
   border-left: none;
   border-right: none;
   box-shadow: var(--bevel);
-  background: linear-gradient(to bottom, #fbfbff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221,221,255,.3) 3px, #fff 4px) #fafaff !important;
+  background: linear-gradient(180deg,#fbfbff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221,221,255,.3) 3px, #fff 4px) #fafaff !important;
   backface-visibility: hidden;
   will-change: transform;
 }
@@ -1947,19 +1950,19 @@ h1, .confignav {
 
 .tab {
   box-shadow: var(--highlight);
-  background: linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,240,.4)) #e7e7ff;
+  background: linear-gradient(180deg,#fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,240,.4)) #e7e7ff;
 }
 
 .tab:hover {
   position: relative;
   z-index: 30;
   box-shadow: inset 0 0 0 1px rgba(255,96,0,.7);
-  background: #fff linear-gradient(to bottom, #fff 50%, rgba(255, 232, 191, .6) 50%, rgba(239, 217, 179, .4) 100%);
+  background: #fff linear-gradient(180deg,#fff 50%, rgba(255, 232, 191, .6) 50%, rgba(239, 217, 179, .4) 100%);
 }
 
 .tab:active {
   box-shadow: inset 0 0 0 1px rgba(255,96,0,.4), inset 4px 4px 2px rgba(0,0,0,.4);
-  background: linear-gradient(to bottom, #e50, #f60);
+  background: linear-gradient(180deg,#e50, #f60);
 }
 
 .tab:active a, .tab a:active {
@@ -1976,8 +1979,8 @@ h1, .confignav {
   box-shadow: inset 3px 3px 3px rgba(0, 0, 16, .7);
   background: #6288cb;
   background: radial-gradient(at center bottom, rgba(128, 128, 172, .6) 0, rgba(0, 0, 0, 0) 50%),
-              linear-gradient(to bottom, rgba(31, 43, 63, .7), rgba(31, 43, 63, .5)),
-              linear-gradient( to right, #6288cb, #7fadff, #6288cb);
+              linear-gradient(180deg,rgba(31, 43, 63, .7), rgba(31, 43, 63, .5)),
+              linear-gradient( 90deg, #6288cb, #7fadff, #6288cb);
 }
 
 @media screen and (max-width: 1200px) {
@@ -2047,7 +2050,7 @@ h3 a.script, th a.script {
 #config_stats h3 {
   padding: 6px 5px 6px 10px;
   box-shadow: none !important;
-  background: linear-gradient(to bottom, #fafaff 50%, rgba(252, 252, 255, .8) 50%, #e2e2ff 100%) #fafaff !important;
+  background: linear-gradient(180deg,#fafaff 50%, rgba(252, 252, 255, .8) 50%, #e2e2ff 100%) #fafaff !important;
 }
 
 #bwlimiter a, #i2pclientconfig a, #config_logging h3 a, #graphdisplay a,
@@ -2062,7 +2065,7 @@ h3 a.script, th a.script {
   border-left: 1px solid var(--borderinner);
   border-radius: 0;
   background: #ddf;
-  background: linear-gradient(to bottom, #f8f8ff 60%, #dedeff);
+  background: linear-gradient(180deg,#f8f8ff 60%, #dedeff);
 }
 
 #config_logging h3 a::before, #webappconfiguration a::before,
@@ -2103,7 +2106,7 @@ h3 a.script, th a.script {
   margin: -7px -5px !important;
   padding: 9px 14px;
   box-shadow: var(--highlight);
-  background: linear-gradient(to bottom, #fff 48%, #efefff 48%);
+  background: linear-gradient(180deg,#fff 48%, #efefff 48%);
 }
 
 #tunnels .tab, #tunnels .tab2 {
@@ -2136,7 +2139,7 @@ h3 a.script, th a.script {
 
 #bwlimiter a:hover, #i2pclientconfig a:hover, #config_logging h3 a:hover, #graphdisplay a:hover, #version a:hover, #logs h3 a:hover,
 #tunnels h3 a:not(.lsview):hover, #advancedconfig a:hover, #iptransport a:hover, #reseedsetup a:hover, #config_service h3 a:hover, .h3navlinks a:hover {
-  background: #fff linear-gradient(to bottom, #fff 48%, rgba(255, 232, 191, .6) 48%, rgba(239, 217, 179, .4)) !important;
+  background: #fff linear-gradient(180deg,#fff 48%, rgba(255, 232, 191, .6) 48%, rgba(239, 217, 179, .4)) !important;
   filter: none !important;
 }
 
@@ -2651,7 +2654,7 @@ to {
   border: 1px solid var(--borderinner);
   border-radius: 2px;
   background: #eef;
-  background: url(/themes/snark/ubergine/images/hat.png) no-repeat bottom right / auto 100%, linear-gradient(to right, #fafaff, #eef);
+  background: url(/themes/snark/ubergine/images/hat.png) no-repeat bottom right / auto 100%, linear-gradient(90deg, #fafaff, #eef);
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
@@ -2745,7 +2748,7 @@ td.optionsave {
 }
 
 td.optionsave, .formaction, form[action="configpeer"] tr:last-child td, table#addkeyring tr:last-child td {
-  background: linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)),
+  background: linear-gradient(180deg,#fafaff 50%, rgba(220,220,255,.3)),
               repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) !important;
 }
 
@@ -2799,7 +2802,7 @@ td.infowarn, #help tr:hover td.infowarn {
 #manualpeercontrol tr:nth-child(3) td.infohelp {
   padding: 20px 15px 20px 50px !important;
   background: var(--ban) no-repeat 15px center / 28px,
-              linear-gradient(to bottom, #fafaff 50%, rgba(220, 220, 255, .3)), rgba(0, 0, 0, 0),
+              linear-gradient(180deg,#fafaff 50%, rgba(220, 220, 255, .3)), rgba(0, 0, 0, 0),
               repeating-linear-gradient(135deg, rgba(255, 255, 255, .5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) !important;
 }
 
@@ -3075,7 +3078,7 @@ table#wrapperlogs {
 /* i2p version & environment */
 
 #enviro tr, .configtable tr, #pluginconfig table tr, #graphs tr, #netdb tr, #routerinformation tr {
-  background: linear-gradient(to bottom, rgba(248,248,255,.6) 50%, rgba(248,248,255,.2)) !important;
+  background: linear-gradient(180deg,rgba(248,248,255,.6) 50%, rgba(248,248,255,.2)) !important;
   box-shadow: var(--highlight);
 }
 
@@ -3086,7 +3089,7 @@ table#wrapperlogs {
 
 #sidebarconf tr:nth-child(odd), .homelinkedit tr:nth-child(odd), #clientconfig tr:nth-child(odd), #netdb tr:nth-child(even),
 #webappconfig tr:nth-child(odd), #configstats tr:nth-child(odd), #pluginconfig table tr:nth-child(even), #routerinformation tr:nth-child(odd) {
-  background: linear-gradient(to bottom, rgba(240,240,255,.6) 50%, rgba(240,240,255,.4)) !important;
+  background: linear-gradient(180deg,rgba(240,240,255,.6) 50%, rgba(240,240,255,.4)) !important;
 }
 
 #bandwidthconfig tr {
@@ -3213,7 +3216,7 @@ th {
   border-top: 1px solid var(--borderinner) !important;
   vertical-align: middle;
   background: #f6f6ff !important;
-  background: linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%) !important;
+  background: linear-gradient(180deg,#fcfcff 51%, #fafaff 51%, #f6f6ff 100%) !important;
 }
 
 .main[id^="config_"] th {
@@ -3236,13 +3239,13 @@ tr {
 tr:nth-child(even), pre#activetransports, #debug .sentTags:hover td, #debug .expiry:hover td {
   background: #efefff;
   background: repeating-linear-gradient(135deg, rgba(252,252,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px) #fafaff;
-  background: linear-gradient(to bottom, #fff, #eef);
+  background: linear-gradient(180deg,#fff, #eef);
 }
 
 tr:nth-child(odd) {
   background: #f7f8ff;
   background: repeating-linear-gradient(45deg, rgba(255,255,255,.5) 2px, rgba(200, 200, 255, .3) 3px, #fafaff 5px), #fafaff;
-  background: linear-gradient(to bottom, #fff, #eef);
+  background: linear-gradient(180deg,#fff, #eef);
 }
 
 td {
@@ -3303,18 +3306,18 @@ h4.app, h4.app2 {
   border-radius: 2px;
   box-shadow: var(--highlight), 0 0 1px rgba(220,220,220,.3);
   background: #eef;
-  background: linear-gradient(to bottom, #fff 50%, #eef 50%);
+  background: linear-gradient(180deg,#fff 50%, #eef 50%);
 }
 
 h4.app {
   margin-top: 15px;
-  background: url(images/favicon.svg) no-repeat 10px center / 16px, var(--h3), linear-gradient(to right, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) #f8f8ff !important;
+  background: url(images/favicon.svg) no-repeat 10px center / 16px, var(--h3), linear-gradient(90deg, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) #f8f8ff !important;
 }
 
 h4.app2 {
   clear: left;
   margin-top: 10px !important;
-  background: var(--globe) no-repeat 10px center / 16px, var(--h3), linear-gradient(to right, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) #f8f8ff !important;
+  background: var(--globe) no-repeat 10px center / 16px, var(--h3), linear-gradient(90deg, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) #f8f8ff !important;
 }
 
 h4.app img, h4.app2 img, #sitemap h3 img {
@@ -3456,7 +3459,7 @@ div.app:hover img.app, .app:hover img {
 
 div.app:hover .applabel, .sitemapLink:hover .sitemapLabel {
   border-color: #f60;
-  background: linear-gradient(to bottom, #fff 50%, #ffe8bf 50%, #efd9b3) !important;
+  background: linear-gradient(180deg,#fff 50%, #ffe8bf 50%, #efd9b3) !important;
   box-shadow: var(--highlight);
 }
 
@@ -3551,7 +3554,7 @@ div.app img {
 
 .applabel {
   background: #fcfcff !important;
-  background: linear-gradient(to bottom, #fff 50%, #eef 50%) !important;
+  background: linear-gradient(180deg,#fff 50%, #eef 50%) !important;
   background: #f8f8ff !important;
   font-size: 8pt;
   margin: 0;
@@ -3935,7 +3938,7 @@ p.infowarn {
 #leavefamily tr:last-child td:first-child {
   padding: 20px 15px 20px 50px;
   background: var(--leavefamily) no-repeat 15px center / 28px,
-              linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)),
+              linear-gradient(180deg,#fafaff 50%, rgba(220,220,255,.3)),
               repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px), #fff !important;
 }
 
@@ -4447,7 +4450,7 @@ h3.ptitle, h3#bannedpeers {
 }
 
 h2, h3 {
-  background: var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  background: var(--h3), linear-gradient(90deg, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
 }
 
 /* /configpeers */
@@ -4468,7 +4471,7 @@ h2, h3 {
 
 #permabanned tr:nth-child(2) td, #ipv4 td, #ipv6 td {
   border-bottom: 1px solid var(--borderinner);
-  background: linear-gradient(to bottom, #fff 50%, rgba(238, 238, 255, .2) 50%, #eef 100%) #fff !important;
+  background: linear-gradient(180deg,#fff 50%, rgba(238, 238, 255, .2) 50%, #eef 100%) #fff !important;
 }
 
 #ipv6 td {
@@ -4540,7 +4543,7 @@ h4 {
   border: 1px solid var(--borderinner);
   border-radius: 2px;
   box-shadow: var(--highlight);
-  background: linear-gradient(to right, #fff, #eef);
+  background: linear-gradient(90deg, #fff, #eef);
 }
 
 #certs h3 {
@@ -5277,7 +5280,7 @@ button.download.control:hover, button.download.control:focus {
 
 input[type=text], input[type=password] {
   padding: 5px 8px;
-  box-shadow: var(--highlight), inset 3px 3px 3px rgba(0,0,48,.2);
+  box-shadow: var(--input_shadow);
   background: #fbfbff;
 }
 
@@ -5297,7 +5300,8 @@ input[name="refreshInterval"] {
 
 input[type=text]:focus, input[type=password]:focus {
   background: #fff;
-  box-shadow: none;
+  box-shadow: var(--highlight), inset 3px 3px 3px rgba(0,0,48,.2);
+  box-shadow: var(--btn_shadow_active);
   filter: drop-shadow(0 0 1px #89f);
   color: #19191f;
   border: 1px solid #676c7f;
@@ -5318,7 +5322,7 @@ input[type="file"] {
 
 input[type="file"]:hover {
   border-radius: 0 15px 15px 0;
-  background: linear-gradient(to right, rgba(255,255,255,0), #dda);
+  background: linear-gradient(90deg, rgba(255,255,255,0), #dda);
   background-size: 100% !important;
   filter: none;
 }
@@ -5431,7 +5435,7 @@ textarea {
 textarea:focus {
   color: #19191f !important;
   border: 1px solid #676c7f;
-  box-shadow: none;
+  box-shadow: var(--btn_shadow_active);
   background: #fff;
   filter: drop-shadow(0 0 1px #89f);
 }
@@ -5462,7 +5466,7 @@ textarea:focus {
   border: 1px solid var(--borderinner) !important;
   border-top: 0 !important;
   box-shadow: var(--highlight);
-  background: linear-gradient(to right, #efefff, #fafaff, #efefff) #fff;
+  background: linear-gradient(90deg, #efefff, #fafaff, #efefff) #fff;
 }
 
 .statusnotes + .statusnotes {
@@ -5549,7 +5553,7 @@ h3 + .statusnotes {
 
 h3#finishedjobs + ol li, h3#scheduledjobs + ol li, h3#activejobs + ol li, h3#readyjobs + ol li {
   list-style: none !important;
-  background: linear-gradient(to bottom, #fff, #eef);
+  background: linear-gradient(180deg,#fff, #eef);
 }
 
 h3#activejobs + ol li::before, h3#scheduledjobs + ol li::before, h3#readyjobs + ol li::before, h3#finishedjobs + ol li::before {
@@ -5858,7 +5862,7 @@ body.iframed {
 .themechoice:hover > img ~ .themelabel {
   color: #f60;
   border-top: 1px solid #f60 !important;
-  background: linear-gradient(to bottom, #fff 50%, #ffe8bf 50%, #efd9b3) !important;
+  background: linear-gradient(180deg,#fff 50%, #ffe8bf 50%, #efd9b3) !important;
 }
 
 .themechoice:active > img ~ .themelabel {
@@ -5963,7 +5967,7 @@ p#helptranslate {
 .themechoice .optbox:focus + img ~ .themelabel {
   color: #f60 !important;
   box-shadow: var(--highlight);
-  background: linear-gradient(to right, #eef, #fff, #eef) !important;
+  background: linear-gradient(90deg, #eef, #fff, #eef) !important;
 }
 
 .themechoice .optbox:active + img ~ .themelabel {
@@ -5975,7 +5979,7 @@ p#helptranslate {
 .themechoice .optbox:checked:active + img ~ .themelabel {
   color: #f60 !important;
   box-shadow: var(--highlight) !important;
-  background: linear-gradient(to right, #eef, #fff, #eef) !important;
+  background: linear-gradient(90deg, #eef, #fff, #eef) !important;
 }
 
 #themesettings, #langsettings {
@@ -6049,7 +6053,7 @@ p#helptranslate {
 .langselect:hover > input[name="lang"] + img + .ui_lang {
   color: #f60;
   border-top: 1px solid #f60;
-  background: linear-gradient(to bottom, #fff 50%, #ffe8bf 50%, #efd9b3 100%) !important;
+  background: linear-gradient(180deg,#fff 50%, #ffe8bf 50%, #efd9b3 100%) !important;
 }
 
 .langselect:active > input[name="lang"] + img + .ui_lang {
@@ -6068,7 +6072,7 @@ p#helptranslate {
 .langselect input[name="lang"]:focus + img + .ui_lang {
   color: #f60 !important;
   box-shadow: var(--highlight);
-  background: linear-gradient(to right, #eef, #fff, #eef) !important;
+  background: linear-gradient(90deg, #eef, #fff, #eef) !important;
 }
 
 .langselect input[name="lang"]:active + img + .ui_lang {
@@ -6080,7 +6084,7 @@ p#helptranslate {
 .langselect input[name="lang"]:checked:active + img + .ui_lang {
   color: #f60 !important;
   box-shadow: var(--highlight);
-  background: linear-gradient(to right, #eef, #fff, #eef) !important;
+  background: linear-gradient(90deg, #eef, #fff, #eef) !important;
 }
 
 .langselect + br {
@@ -6215,12 +6219,12 @@ table#addkeyring tr:last-child td {
 
 #refreshsidebar tr:first-child td {
   padding-left: 50px;
-  background: var(--timer) no-repeat 15px center / 28px, linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)),
+  background: var(--timer) no-repeat 15px center / 28px, linear-gradient(180deg,#fafaff 50%, rgba(220,220,255,.3)),
               repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px), #fff !important;
 }
 
 #refreshsidebar tr:first-child td:last-child {
-  background: linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)),
+  background: linear-gradient(180deg,#fafaff 50%, rgba(220,220,255,.3)),
               repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px), #fff !important;
 }
 
@@ -6403,32 +6407,32 @@ h3#udpcon {
 
 #tunnels h3.server {
   padding-left: 32px;
-  background: var(--server) no-repeat 7px center / 18px, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  background: var(--server) no-repeat 7px center / 18px, var(--h3), linear-gradient(90deg, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
 }
 
 #tunnels h3.client {
   padding-left: 32px;
-  background: var(--client) no-repeat 7px center / 18px, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  background: var(--client) no-repeat 7px center / 18px, var(--h3), linear-gradient(90deg, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
 }
 
 #tunnels h3.ping {
   padding-left: 32px;
-  background: var(--ping) no-repeat 8px center / 18px, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  background: var(--ping) no-repeat 8px center / 18px, var(--h3), linear-gradient(90deg, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
 }
 
 #tunnels h3#participating {
   padding-left: 32px;
-  background: var(--share) no-repeat 8px center / 18px, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  background: var(--share) no-repeat 8px center / 18px, var(--h3), linear-gradient(90deg, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
 }
 
 #tunnels h3#exploratory {
   padding-left: 32px;
-  background: var(--globe) no-repeat 8px center / 18px, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  background: var(--globe) no-repeat 8px center / 18px, var(--h3), linear-gradient(90deg, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
 }
 
 #tunnels h3:last-of-type {
   padding-left: 32px;
-  background: var(--speed) no-repeat 8px center / 18px, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  background: var(--speed) no-repeat 8px center / 18px, var(--h3), linear-gradient(90deg, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
 }
 
 #tunnels h3 + h3 {
@@ -6450,7 +6454,7 @@ h3#udpcon {
   text-shadow: 0 0 1px #fff, 0 0 2px #ddf;
   border-radius: 1px;
   box-shadow: 0 0 0 1px #bbd, var(--highlight);
-  background: linear-gradient(to bottom, #fff, #e2e2ff);
+  background: linear-gradient(180deg,#fff, #e2e2ff);
 }
 
 #tunnels a:hover .b32, #tunnels a:focus .b32 {
@@ -6502,7 +6506,7 @@ h3#udpcon {
 @media screen and (min-width: 1200px) {
   .tunnel_id:not(:empty) {
     border: 1px solid #bbd;
-    background: var(--hardhat) no-repeat 5px center / 14px, linear-gradient(to bottom, #fff, #eef);
+    background: var(--hardhat) no-repeat 5px center / 14px, linear-gradient(180deg,#fff, #eef);
   }
 
   .tunnel_id:not(:empty)::before {
@@ -6587,7 +6591,7 @@ h3#udpcon {
 
 #tunnels .routerid, .tunnel_local, #profiles .routerid, .leaseset .routerid, #peers .routerid {
   border: 1px solid #bbd;
-  background: linear-gradient(to bottom, #fff, #eef);
+  background: linear-gradient(180deg,#fff, #eef);
 }
 
 /* end tunnels */
@@ -6628,7 +6632,7 @@ p:empty { /* empty paragraph nuke */
   border: 1px solid var(--borderinner);
   box-shadow: 0 0 1px #e0e0eb;
   border-radius: 2px;
-  background: linear-gradient(to right, #f2f2ff, #f8f8ff, #f2f2ff);
+  background: linear-gradient(90deg, #f2f2ff, #f8f8ff, #f2f2ff);
 }
 
 #notinitialized, .netdbnotfound {
@@ -6684,7 +6688,7 @@ p:empty { /* empty paragraph nuke */
   text-transform: none;
   font-size: 9pt;
   background: #f6f6ff;
-  background: linear-gradient(to bottom, #fcfcff 50%, rgba(255, 255, 255, .6) 50%, rgba(240, 240, 255, .4)) !important;
+  background: linear-gradient(180deg,#fcfcff 50%, rgba(255, 255, 255, .6) 50%, rgba(240, 240, 255, .4)) !important;
 }
 
 #netdboverview table td {
@@ -6762,7 +6766,7 @@ p:empty { /* empty paragraph nuke */
     padding: 5px 10px;
     box-shadow: var(--highlight) !important;
     background: rgba(240,240,255,.4);
-    background: linear-gradient(to bottom, #fff, #eef);
+    background: linear-gradient(180deg,#fff, #eef);
   }
 
   #netdboverview #netdbversions td:first-child, #netdboverview #netdbtransports td:first-child, #netdboverview #netdbcountrylist td:first-child,
@@ -7008,7 +7012,7 @@ b.netdb_transport {
   border: 1px solid #bbc;
   border-radius: 2px;
   box-shadow: var(--highlight), 0 0 0 1px #eef;
-  background: linear-gradient(to bottom, #fff, #eef);
+  background: linear-gradient(180deg,#fff, #eef);
 }
 
 #netdb .netdbentry th code, #netdb .leaseset th code {
@@ -7124,7 +7128,7 @@ b.netdb_transport {
   border-radius: 2px 0 0 2px;
   box-shadow: var(--highlight);
   background: #fff;
-  background: linear-gradient(to bottom, #fff, #eef);
+  background: linear-gradient(180deg,#fff, #eef);
 }
 
 .netdb_ouraddresses:empty {
@@ -7155,7 +7159,7 @@ b.netdb_transport {
   line-height: 0;
   border: 1px solid #bbc;
   border-radius: 2px;
-  background: linear-gradient(to bottom, #fff, #eef);
+  background: linear-gradient(180deg,#fff, #eef);
 }
 
 #tunnels .configpeer img, #profiles .configpeer img, #peers .configpeer img {
@@ -7308,7 +7312,7 @@ b.netdb_transport {
 
 .leaseset td {
   line-height: 150%;
-  background: linear-gradient(to bottom, #fff, #eef);
+  background: linear-gradient(180deg,#fff, #eef);
   border-top: 1px solid var(--borderinner);
   border-bottom: 1px solid var(--borderinner);
 }
@@ -7395,7 +7399,7 @@ b.netdb_transport {
   border-radius: 2px;
   background: #e2e2ff;
   background: rgba(204, 204, 255, .4);
-  background: linear-gradient(to bottom, #fff, #eef);
+  background: linear-gradient(180deg,#fff, #eef);
 }
 
 .netdb_leases .tunnel_id {
@@ -7481,7 +7485,7 @@ h3.sybils {
   list-style: none;
   border-radius: 2px;
   box-shadow: 0 0 0 1px rgba(200,200,255,.8), var(--highlight);
-  background: var(--eye) no-repeat 6px center / 16px, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,240,.4)) #e7e7ff;
+  background: var(--eye) no-repeat 6px center / 16px, linear-gradient(180deg,#fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,240,.4)) #e7e7ff;
 }
 
 #sybilnav li:hover {
@@ -7935,7 +7939,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   border-radius: 2px;
   box-shadow: var(--highlight);
   background: #eef;
-  background: linear-gradient(to bottom, #fff, #eef);
+  background: linear-gradient(180deg,#fff, #eef);
 }
 
 #netdbtiers a {
@@ -7994,11 +7998,11 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   border: 1px solid #bbd;
   border-radius: 2px;
   box-shadow: var(--highlight);
-  background: var(--crypto) no-repeat 1px center / 14px, linear-gradient(to bottom, #fff, #eef);
+  background: var(--crypto) no-repeat 1px center / 14px, linear-gradient(180deg,#fff, #eef);
 }
 
 .signingkey.encryption {
-  background: var(--lock) no-repeat 1px center / 14px, linear-gradient(to bottom, #fff, #eef);
+  background: var(--lock) no-repeat 1px center / 14px, linear-gradient(180deg,#fff, #eef);
 }
 
 #netdb_ram {
@@ -8009,7 +8013,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   box-shadow: var(--highlight);
   border: 1px solid #bbd;
   border-radius: 2px;
-  background: linear-gradient(to bottom, #fff, #eef);
+  background: linear-gradient(180deg,#fff, #eef);
 }
 
 .leaseset .routerid {
@@ -8086,7 +8090,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   border: 1px solid var(--borderinner);
   border-radius: 2px;
   box-shadow: var(--highlight), inset 0 0 1px 1px #ddf;
-  background: linear-gradient(to bottom, rgba(255,255,255,.2), rgba(228,228,255,.2)), repeating-linear-gradient(135deg, rgba(252,252,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fff 4px) #fafaff;
+  background: linear-gradient(180deg,rgba(255,255,255,.2), rgba(228,228,255,.2)), repeating-linear-gradient(135deg, rgba(252,252,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fff 4px) #fafaff;
   -webkit-break-inside: avoid;
   break-inside: avoid;
   page-break-inside: avoid;
@@ -8168,7 +8172,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 
 #banlist li hr {
   margin: 4px 4px 3px 0 !important;
-  background: linear-gradient(to right, #7e7fb9 70%, rgba(0,0,0,0) 95%);
+  background: linear-gradient(90deg, #7e7fb9 70%, rgba(0,0,0,0) 95%);
   opacity: .75;
 }
 
@@ -8363,7 +8367,7 @@ table#schedjobs {
   border: 1px solid #bbc;
   border-radius: 2px;
   box-shadow: var(--highlight);
-  background: linear-gradient(to bottom, #fff, #dbecff);
+  background: linear-gradient(180deg,#fff, #dbecff);
 }
 
 #netdb a:hover span, #profiles a:hover span, .version:hover a, #capabilities_key table b:hover {
@@ -8387,28 +8391,28 @@ table#schedjobs {
 }
 
 #profilelist .reachable, #floodfills .reachable, #capabilities_key .reachable, .netdbentry .reachable, .sybil_routerinfo .reachable {
-  background: linear-gradient(to bottom, #fff, #e2ffe2);
+  background: linear-gradient(180deg,#fff, #e2ffe2);
 }
 
 #profilelist .unreachable, #floodfills .unreachable, #capabilities_key .unreachable, .netdbentry .unreachable  {
-  background: linear-gradient(to bottom, #fff, #faa);
+  background: linear-gradient(180deg,#fff, #faa);
 }
 
 #profilelist .ff, #floodfills .ff, #capabilities_key .ff, .netdbentry .ff, .sybil_routerinfo .ff {
-  background: linear-gradient(to bottom, #fff, #ffe2ad);
+  background: linear-gradient(180deg,#fff, #ffe2ad);
 }
 
 #profilelist .hidden, #floodfills .hidden, #capabilities_key .hidden, .netdbentry .hidden {
   color: #999 !important;
-  background: linear-gradient(to bottom, #fff, #ddd);
+  background: linear-gradient(180deg,#fff, #ddd);
 }
 
 #profilelist .ssutesting, #floodfills .ssutesting, #capabilities_key .ssutesting, .netdbentry .ssutesting {
-  background: linear-gradient(to bottom, #fff, #ffb);
+  background: linear-gradient(180deg,#fff, #ffb);
 }
 
 #profilelist .ssuintro, #floodfills .ssuintro, #capabilities_key .ssuintro, .netdbentry .ssuintro {
-  background: linear-gradient(to bottom, #fff, #fbf);
+  background: linear-gradient(180deg,#fff, #fbf);
 }
 
 #profilelist th, #profilelist td, #floodfills th, #floodfills td{
@@ -8489,12 +8493,12 @@ table#schedjobs {
 #floodfills .percentBarInner, #tunnels .percentBarInner {
   display: inline-block;
   width: inherit;
-  background: linear-gradient(to bottom, rgba(255,255,255,.1) 50%, rgba(0,0,0,.1) 50%), linear-gradient(to right, #900 25px, #a00 40px, #b00 50px);
+  background: linear-gradient(180deg,rgba(255,255,255,.1) 50%, rgba(0,0,0,.1) 50%), linear-gradient(90deg, #900 25px, #a00 40px, #b00 50px);
 }
 
 #floodfills .percentBarInner[style="width:0%"] {
   width: 100% !important;
-  background: linear-gradient(to bottom, rgba(255,255,255,.1) 50%, rgba(0,0,0,.1) 50%), linear-gradient(to right, #090, #0b0);
+  background: linear-gradient(180deg,rgba(255,255,255,.1) 50%, rgba(0,0,0,.1) 50%), linear-gradient(90deg, #090, #0b0);
 }
 
 #floodfills .percentBarText {
@@ -8735,7 +8739,7 @@ table#schedjobs {
   box-sizing: border-box;
   text-shadow: 0 1px 1px #fff;
   border-left: 5px solid #aad;
-  background: repeating-linear-gradient(to bottom, rgba(120,120,255,.2), rgba(210,210,255,.4) 1px, rgba(210,210,255,.4) 19px, rgba(120,120,255,.2) 19px, rgba(240,240,255,.4) 20px, rgba(240,240,255,.4) 40px);
+  background: repeating-linear-gradient(180deg,rgba(120,120,255,.2), rgba(210,210,255,.4) 1px, rgba(210,210,255,.4) 19px, rgba(120,120,255,.2) 19px, rgba(240,240,255,.4) 20px, rgba(240,240,255,.4) 40px);
 }
 
 #view_profile td span {
@@ -8748,7 +8752,7 @@ table#schedjobs {
   border: 1px solid var(--borderinner);
   border-radius: 4px 0 0 0;
   box-shadow: var(--highlight);
-  background: linear-gradient(to bottom, #fff 50%, #e2e2ff 50%);
+  background: linear-gradient(180deg,#fff 50%, #e2e2ff 50%);
   user-select: none;
 }
 
@@ -8837,7 +8841,7 @@ select[name="newlogclass"] {
 }
 
 #help div, .logtable tr:nth-child(n+2) td, .main#console, .debug_container {
-  background: linear-gradient(to bottom, rgba(248,248,255,.5), rgba(250,250,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #fafaff !important;
+  background: linear-gradient(180deg,rgba(248,248,255,.5), rgba(250,250,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #fafaff !important;
   margin-bottom: 13px;
   box-shadow: var(--highlight);
 }
@@ -8851,7 +8855,7 @@ select[name="newlogclass"] {
 }
 
 #help #volunteer, #wrapperlogs pre {
-  background: linear-gradient(to bottom, #fafaff, rgba(248,248,255,.3)),
+  background: linear-gradient(180deg,#fafaff, rgba(248,248,255,.3)),
               url(/themes/snark/ubergine/images/hat.png) no-repeat right -3px bottom -3px / auto 80%,
               repeating-linear-gradient(135deg, rgba(252,252,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fafaff 5px) #fafaff !important;
   box-shadow: var(--highlight);
@@ -9139,7 +9143,7 @@ select[name="newlogclass"] {
   width: 5%;
   text-align: center;
   font-size: 0 !important;
-  background: var(--nuke) no-repeat center center / 16px, linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%) !important;
+  background: var(--nuke) no-repeat center center / 16px, linear-gradient(180deg,#fcfcff 51%, #fafaff 51%, #f6f6ff 100%) !important;
 }
 
 .homelinkedit tr:nth-last-child(n+2) td:nth-child(2) {
@@ -9262,7 +9266,7 @@ h4#updateplugins {
   color: var(--inklite);
   border: 1px solid var(--borderinner);
   background: #fcfcff !important;
-  background: linear-gradient(to bottom, #fff 50%, rgba(238, 238, 255, .2) 50%, #eef 100%) #fff !important;
+  background: linear-gradient(180deg,#fff 50%, rgba(238, 238, 255, .2) 50%, #eef 100%) #fff !important;
 }
 
 table#permabanned, table#i2pupdates {
@@ -9394,7 +9398,7 @@ a[href^="configpeer?peer"]:hover::after {
   margin-top: -16px;
   border: 1px solid var(--borderinner);
   box-shadow: var(--highlight);
-  background: linear-gradient(to bottom, #fafaff, rgba(250,250,255,.3)),
+  background: linear-gradient(180deg,#fafaff, rgba(250,250,255,.3)),
               repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #efefff !important;
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
@@ -9418,7 +9422,7 @@ a[href^="configpeer?peer"]:hover::after {
 
 .skm_key td, .debug_outboundtarget td {
   background: #f6f6ff !important;
-  background: linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%) !important;
+  background: linear-gradient(180deg,#fcfcff 51%, #fafaff 51%, #f6f6ff 100%) !important;
 }
 
 .debug_outboundtarget td:last-child, .skm_key td:last-child {
@@ -9449,7 +9453,7 @@ a[href^="configpeer?peer"]:hover::after {
   border: 1px solid #ccccf0;
   border-left: 3px solid #ccccf0;
   border-radius: 0 2px 2px 0;
-  background: linear-gradient(to right, rgba(255,255,255,.3), rgba(255,255,255,0)), linear-gradient(to bottom, #fff 50%, #eaeaff 50%);
+  background: linear-gradient(90deg, rgba(255,255,255,.3), rgba(255,255,255,0)), linear-gradient(180deg,#fff 50%, #eaeaff 50%);
 }
 
 .bucket {
@@ -9605,14 +9609,14 @@ a[href^="configpeer?peer"]:hover::after {
 
 #debug h3.debug_outboundsessions {
   background: url(/themes/console/images/svg/outbound.svg) no-repeat 6px center / 18px,
-              linear-gradient(to bottom, #fcfcff 50%, rgba(255, 255, 255, .6) 50%, rgba(240, 240, 255, .4)),
-              linear-gradient(to right, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) !important;
+              linear-gradient(180deg,#fcfcff 50%, rgba(255, 255, 255, .6) 50%, rgba(240, 240, 255, .4)),
+              linear-gradient(90deg, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) !important;
 }
 
 #debug h3.debug_inboundsessions {
   background: url(/themes/console/images/svg/inbound.svg) no-repeat 6px center / 18px,
-              linear-gradient(to bottom, #fcfcff 50%, rgba(255, 255, 255, .6) 50%, rgba(240, 240, 255, .4)),
-              linear-gradient(to right, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) !important;
+              linear-gradient(180deg,#fcfcff 50%, rgba(255, 255, 255, .6) 50%, rgba(240, 240, 255, .4)),
+              linear-gradient(90deg, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) !important;
 }
 
 .debug_version {
@@ -9651,13 +9655,13 @@ a[href^="configpeer?peer"]:hover::after {
 
 .subheading.routerfiles {
   padding-left: 10px !important;
-  background: url(images/favicon.svg) no-repeat right 7px center, linear-gradient(to right, #7e7fb9 5px, #fafaff 5px, #eef) !important;
+  background: url(images/favicon.svg) no-repeat right 7px center, linear-gradient(90deg, #7e7fb9 5px, #fafaff 5px, #eef) !important;
   background-size: 16px, 100% !important;
 }
 
 .subheading.pluginfiles {
   padding-left: 10px !important;
-  background: var(--plugin) no-repeat right 7px center, linear-gradient(to right, #7e7fb9 5px, #fafaff 5px, #eef) !important;
+  background: var(--plugin) no-repeat right 7px center, linear-gradient(90deg, #7e7fb9 5px, #fafaff 5px, #eef) !important;
   background-size: 16px, 100% !important;
 }
 
@@ -9675,14 +9679,14 @@ a[href^="configpeer?peer"]:hover::after {
 
 .subheading.routerfiles {
   padding-left: 5px !important;
-  background: url(images/favicon.svg) no-repeat right 5px center, linear-gradient(to right, #fafaff, #eef) !important;
+  background: url(images/favicon.svg) no-repeat right 5px center, linear-gradient(90deg, #fafaff, #eef) !important;
   background-size: 16px, 100% !important;
   box-shadow: none !important;
 }
 
 .subheading.pluginfiles {
   padding-left: 5px !important;
-  background: var(--plugin) no-repeat right 5px center, linear-gradient(to right, #fafaff, #eef) !important;
+  background: var(--plugin) no-repeat right 5px center, linear-gradient(90deg, #fafaff, #eef) !important;
   background-size: 16px, 100% !important;
   box-shadow: none !important;
 }
@@ -9961,7 +9965,7 @@ b.suboption {
   border-bottom: none;
   box-shadow: var(--highlight);
   background: #fdfdff;
-  background: linear-gradient(to bottom, #fff 50%, #eef 50%);
+  background: linear-gradient(180deg,#fff 50%, #eef 50%);
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
@@ -10060,7 +10064,7 @@ b.suboption {
   font-size: 11pt;
   color: var(--inklite);
   background: #fff;
-  background: linear-gradient(to right, #fff, #eef);
+  background: linear-gradient(90deg, #fff, #eef);
 }
 
 .net_bw, .net_bwrate, .net_datausage {
@@ -10074,7 +10078,7 @@ b.suboption {
   padding: 5px 8px;
   box-shadow: 0 0 0 1px rgba(185,185,198,.65), var(--highlight), 0 0 2px #adadeb;
   background: #d0d0ff;
-  background: linear-gradient(to bottom, #fff, #ccccf0);
+  background: linear-gradient(180deg,#fff, #ccccf0);
 }
 
 .net_bwrate {
@@ -10697,7 +10701,7 @@ b.suboption {
 #manualreseed tr:last-child td.infohelp {
   padding: 20px 15px 20px 50px;
   background: var(--package) no-repeat 15px center / 28px,
-              linear-gradient(to bottom, #fafaff 50%, rgba(220, 220, 255, .3)), rgba(0, 0, 0, 0),
+              linear-gradient(180deg,#fafaff 50%, rgba(220, 220, 255, .3)), rgba(0, 0, 0, 0),
               repeating-linear-gradient(135deg, rgba(255, 255, 255, .5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px);
 }
 
@@ -10750,7 +10754,7 @@ form[action="configplugins"] input.reload {
   font-weight: 700;
   border-radius: 15px;
   box-shadow: 0 0 0 1px #cfcfff;
-  background: linear-gradient(to bottom, #f2f2ff, #e2e2ff);
+  background: linear-gradient(180deg,#f2f2ff, #e2e2ff);
 }
 
 #pluginconfig td:first-child label::before {
@@ -12170,7 +12174,7 @@ th[aria-sort] {
   text-shadow: 0 1px 1px #113;
   box-shadow: inset 2px 2px 2px rgba(31, 43, 63, .7);
   background: #6288cb;
-  background: linear-gradient(to bottom, rgba(31, 43, 63, .7), rgba(31, 43, 63,.2) 50%, rgba(31, 43, 63, 0) 50%, rgba(31, 43, 63, .4) 50%, rgba(31, 43, 63, .5)), linear-gradient( to right, #6288cb, #7fadff, #6288cb);
+  background: linear-gradient(180deg,rgba(31, 43, 63, .7), rgba(31, 43, 63,.2) 50%, rgba(31, 43, 63, 0) 50%, rgba(31, 43, 63, .4) 50%, rgba(31, 43, 63, .5)), linear-gradient( 90deg, #6288cb, #7fadff, #6288cb);
 }
 
 #stats .tab2:hover {
@@ -12591,12 +12595,12 @@ i {
 
 @keyframes grid-fade {
   from {
-    background: repeating-linear-gradient(to right, rgba(0,0,0,0), #efefef 1px, rgba(0,0,0,0) 1px, rgba(0,0,0,0) 10px),
-                repeating-linear-gradient(to bottom, #efefff, #efefff 1px, #f6f6ff 1px, #f6f6ff 10px);
+    background: repeating-linear-gradient(90deg, rgba(0,0,0,0), #efefef 1px, rgba(0,0,0,0) 1px, rgba(0,0,0,0) 10px),
+                repeating-linear-gradient(180deg,#efefff, #efefff 1px, #f6f6ff 1px, #f6f6ff 10px);
   }
   to {
-    background: repeating-linear-gradient(to right, rgba(0,0,0,0), #f6f6ff 1px, rgba(0,0,0,0) 1px, rgba(0,0,0,0) 10px),
-                repeating-linear-gradient(to bottom, #f6f6ff, #f6f6ff 1px, #f6f6ff 1px, #f6f6ff 10px);
+    background: repeating-linear-gradient(90deg, rgba(0,0,0,0), #f6f6ff 1px, rgba(0,0,0,0) 1px, rgba(0,0,0,0) 10px),
+                repeating-linear-gradient(180deg,#f6f6ff, #f6f6ff 1px, #f6f6ff 1px, #f6f6ff 10px);
   }
 }
 
@@ -12704,14 +12708,14 @@ i {
   border: 1px solid #99b;
   border-left-width: 3px;
   border-radius: 1px;
-  background: linear-gradient(to bottom, #fff, #eef);
+  background: linear-gradient(180deg,#fff, #eef);
   outline: none !important;
   will-change: transform;
 }
 
 .stattograph:hover {
   box-shadow: 0 0 0 1px #f60;
-  background: linear-gradient(to bottom, #eef, #fff);
+  background: linear-gradient(180deg,#eef, #fff);
 }
 
 .stattograph b {
@@ -12736,7 +12740,7 @@ i {
   padding-left: 18px;
   border-left-width: 3px;
   box-shadow: inset 0 0 0 1px #eef, inset 3px 3px 3px rgba(0,0,32,.2);
-  background: var(--yes) no-repeat 8px center / 8px, linear-gradient(to bottom, #eef, #fff);
+  background: var(--yes) no-repeat 8px center / 8px, linear-gradient(180deg,#eef, #fff);
 }
 
 .optbox:checked + label > .stattograph:hover b {
@@ -12818,7 +12822,7 @@ i {
 #tunnels #peercount {
   padding-left: 30px !important;
   background: var(--hardhat) no-repeat 7px 6px / 18px, var(--h3),
-              linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+              linear-gradient(90deg, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
 }
 
 #peercount a img, #participating a img {
@@ -12979,7 +12983,7 @@ i {
   position: absolute;
   bottom: 0;
   left: 0;
-  background: linear-gradient(to right, #d30, #f60);
+  background: linear-gradient(90deg, #d30, #f60);
   content: "";
   animation: ease-out reloader 1s forwards;
   opacity: .7;
@@ -13060,7 +13064,7 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
   display: inline-block;
   border: 1px solid #bbc;
   border-radius: 2px;
-  background: linear-gradient(to bottom, #fff, #eef);
+  background: linear-gradient(180deg,#fff, #eef);
 }
 
 .lsdest {
@@ -13068,18 +13072,18 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
   border-radius: 0;
   border-left-width: 4px;
   border-right-width: 4px;
-  background: var(--hardhat) no-repeat 4px center / 14px, linear-gradient(to bottom, #fff, #eef);
+  background: var(--hardhat) no-repeat 4px center / 14px, linear-gradient(180deg,#fff, #eef);
 }
 
 .lsdest.published {
   padding-left: 38px;
   background: var(--hardhat) no-repeat 4px center / 14px, var(--globe) no-repeat 21px center / 14px,
-              linear-gradient(to bottom, #fff, #eef);
+              linear-gradient(180deg,#fff, #eef);
 }
 
 .leaseset th:last-child a[href$="i2p/"] {
   padding-left: 22px;
-  background: var(--link) no-repeat 5px center / 12px, linear-gradient(to bottom, #fff, #eef);
+  background: var(--link) no-repeat 5px center / 12px, linear-gradient(180deg,#fff, #eef);
 }
 
 /* /profiles group icons */

@@ -12,7 +12,7 @@ input.toggle_input:checked + label + hr + table, input.toggle_input + label + hr
 .toggleview:hover, .toggleview:active, .addtorrentsection:hover .toggleview, .newtorrentsection:hover .toggleview {
 	color: #777 !important;
 	cursor: default !important;
-	background: linear-gradient(to bottom, #fff 50%, #efefef 50%) !important;
+	background: linear-gradient(180deg,#fff 50%, #efefef 50%) !important;
 }
 
 .addtorrentsection:hover, .newtorrentsection:hover, .addtorrentsection:hover .toggleview, .newtorrentsection:hover .toggleview {
