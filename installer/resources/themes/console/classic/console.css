@@ -3568,20 +3568,32 @@ h4.app, h4.app2 {
   box-shadow: var(--highlight);
 }
 
+h4.app, h4.app2, #sitemap h3 {
+  padding-left: 32px;
+  background: url(images/favicon.svg) no-repeat 8px center / 18px, var(--bg);
+/*  background-blend-mode: luminosity, normal;*/
+}
+
 h4.app {
   margin-top: -5px;
-  padding-left: 32px;
-  background: url(images/favicon.svg) no-repeat 8px center, var(--bg);
-  background-size: 16px, 100%;
-  background-blend-mode: luminosity, normal;
 }
 
 h4.app2 {
   margin-top: 5px !important;
-  padding-left: 32px;
   clear: left;
-  background: var(--planet) no-repeat 8px center / 16px, var(--bg);
-  background-blend-mode: luminosity, normal;
+  background: var(--planet) no-repeat 8px center / 18px, var(--bg);
+}
+
+#sitemap h3:nth-of-type(2) {
+  background: url(/themes/console/images/svg/info.svg) no-repeat 8px center / 18px, var(--bg);
+}
+
+#sitemap h3:nth-of-type(3) {
+  background: var(--configure) no-repeat 8px center / 18px, var(--bg);
+}
+
+#sitemap h3:nth-of-type(4) {
+  background: var(--help) no-repeat 8px center / 18px, var(--bg);
 }
 
 h4.app img, h4.app2 img {
@@ -3598,7 +3610,7 @@ h4.app a::after, h4.app2 a::after {
   height: 16px;
   display: inline-block;
   vertical-align: middle;
-  background: var(--configure) no-repeat center center / 16px;
+  background: var(--settings) no-repeat center center / 16px;
   content: "";
   opacity: .8;
 }
