@@ -42,6 +42,7 @@
   --subheading: linear-gradient(90deg, var(--bg), var(--bg3));
   --header: linear-gradient(180deg, var(--bg) 50%, var(--bg2) 50%);
   --header_hover: linear-gradient(180deg, var(--bg) 50%, var(--row_hover) 50%);
+  --header_active: linear-gradient(180deg, #ffd, #ffe);
   --header_shiney: linear-gradient(90deg, rgba(255,255,255,.3), rgba(0,0,0,0)), linear-gradient(180deg, var(--bg) 50%, var(--bg4) 50%);
   --row_hover: #ffd;
   --ls_target: 1px solid #5a5 !important;
@@ -240,11 +241,11 @@ i {
   text-transform: uppercase;
   font-size: 9.5pt;
   border: none;
-  background: var(--header) !important;
+  background: var(--header);
 }
 
 .routersummary h3:hover {
-  background: var(--header_hover) !important;
+  background: var(--header_hover);
 }
 
 .routersummary h3:hover a, #sidebar td:first-child a:hover b,
@@ -254,10 +255,12 @@ i {
 
 .routersummary h3:active {
   box-shadow: var(--btn_shadow_active);
+  background: var(--header_active);
 }
 
 .routersummary h3:active a {
   color: var(--active) !important;
+  transform: scale(.95) translateY(2px);
 }
 
 .routersummary h4 {
@@ -3535,7 +3538,7 @@ tr:nth-child(even), #pluginconfig table tr:nth-child(even) td, #profile_defs tr:
 
 tr:nth-child(odd), #pluginconfig table tr:nth-child(odd) td, .main#profiles ul#banlist,
 #profile_defs table tr:nth-child(odd), #profile_defs table tr:nth-child(even) {
-  background: var(--bg3);
+  background: var(--bg2);
 }
 
 #sidebarconf tr:last-child td {
