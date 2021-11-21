@@ -10,24 +10,27 @@
   --monospaced: Droid Sans Mono, Andale Mono, DejaVu Sans Mono, Lucida Console, monospace;
   --ink: #41444d;
   --ink_light: #5e626e;
-  --nav: linear-gradient(180deg,#fff 50%, #eff2ff 50%);
+  --navbar: linear-gradient(180deg,var(--bg),var(--bg2));
+  --nav: linear-gradient(180deg,var(--bg) 50%,var(--bg2) 50%);
   --bodybg: #e2e2f3;
   --bg: #fff;
   --bg2: #f4f4ff;
   --bg3: #eef;
-  --highlight: inset 0 0 0 1px #fff;
+  --highlight: inset 0 0 0 1px rgba(255,255,255,.8);
+  --row_hover: #ffffe8;
+  --btn_hover: linear-gradient(180deg,#ddd,#fff);
+  --btn_hover2: linear-gradient(180deg,var(--bg) 50%,#ffe4db 50%,#ffc6b3);
+  --btn_active: linear-gradient(180deg,#f60,#f90);
   --btn: linear-gradient(180deg, var(--bg) 50%, var(--bg2), var(--bg3));
-  --btn_hover: linear-gradient(180deg,#ddd, #fff);
   --btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 #fff, inset 0 0 4px 2px #f0f0ff, 0 1px 1px rgba(220,220,255,.5);
   --btn_shadow_hover: var(--highlight), 0 0 0 1px #fff, 0 0 0 2px rgba(255,96,0,.4);
   --btn_shadow_active: var(--highlight), inset 3px 3px 3px 1px rgba(32,32,64,.3);
-  --btnAction: linear-gradient(180deg,#fff 50%, #ddf 50%);
-  --btnAction_hover: linear-gradient(180deg,#fff 50%, #eef 50%);
-  --btnAction_active: linear-gradient(180deg,#bbf, #eef);
   --border: #bfc3d9;
   --border_hard: #9fa5c6;
   --hover: #f60;
   --active: #f30;
+  --header_hover: linear-gradient(180deg, var(--bg) 50%, var(--row_hover) 50%);
+  --header_active: linear-gradient(180deg, var(--row_hover), #ffe);
 }
 
 html, body {
@@ -58,6 +61,10 @@ body.iframed {
 
 * {
   outline: none;
+}
+
+#torrentDisplay label, #addTracker, #addTracker + tr {
+  user-select: none;
 }
 
 /* mitigate header/column resize on refresh when multiple snark tabs open */
@@ -145,7 +152,7 @@ td.snarkGraphicStatus img {
   box-shadow: 0 0 1px #fff, var(--highlight);
   border: 1px solid #bfc3d9;
   border-radius: 3px 3px 0 0;
-  background: linear-gradient(180deg,#fff, #eff2ff) !important;
+  background: var(--navbar) !important;
 }
 
 @supports not (-moz-appearance: none) {
@@ -211,43 +218,43 @@ td.snarkGraphicStatus img {
 }
 
 .nav_main:hover, .nav_main:focus {
-  background: var(--snark_hover) no-repeat 7px center, linear-gradient(180deg,#eff2ff, #fff) !important;
+  background: var(--snark_hover) no-repeat 7px center, var(--btn_hover2) !important;
 }
 
 .nav_forum:hover, .nav_forum:focus {
-  background: var(--forum_hover) no-repeat 7px center, linear-gradient(180deg,#eff2ff, #fff) !important;
+  background: var(--forum_hover) no-repeat 7px center, var(--btn_hover2) !important;
 }
 
 .nav_tracker:hover, .nav_tracker:focus {
-  background: var(--tracker_hover) no-repeat 7px center, linear-gradient(180deg,#eff2ff, #fff) !important;
+  background: var(--tracker_hover) no-repeat 7px center, var(--btn_hover2) !important;
 }
 
 .nav_search:hover, .nav_search:focus {
-  background: var(--search_hover) no-repeat 7px center, linear-gradient(180deg,#eff2ff, #fff) !important;
+  background: var(--search_hover) no-repeat 7px center, var(--btn_hover2) !important;
 }
 
 .snarkNav:active {
   text-decoration: none !important;
   color: #fff !important;
   text-shadow: none;
-  box-shadow: inset 4px 4px 3px #824b1b, 0 0 0 0 rgba(0,0,0,0) !important;
+  box-shadow: var(--btn_shadow_active) !important;
   transition: linear box-shadow .05s;
 }
 
 .nav_main:active {
-  background: #f50 var(--snark_active) no-repeat 7px center !important;
+  background: var(--snark_active) no-repeat 7px center, var(--btn_active) !important;
 }
 
 .nav_forum:active {
-  background: #f50 var(--forum_active) no-repeat 7px center !important;
+  background: var(--forum_active) no-repeat 7px center, var(--btn_active) !important;
 }
 
 .nav_tracker:active {
-  background: #f50 var(--tracker_active) no-repeat 7px center !important;
+  background: var(--tracker_active) no-repeat 7px center, var(--btn_active) !important;
 }
 
 .nav_search:active {
-  background: #f50 var(--search_active) no-repeat 7px center !important;
+  background: var(--search_active) no-repeat 7px center, var(--btn_active) !important;
 }
 
 .snarkNav:link, .snarkNav:hover, .snarkNav:focus {
@@ -1094,11 +1101,11 @@ tr:not(.peerinfo) .snarkTorrentUploaded:empty::after {
 }
 
 .snarkTorrents tr:hover td, .snarkDirInfo tr:hover, #trackerselect tr:nth-child(n+2):hover td, .peerinfo:hover, .peerinfo:hover td {
-  background: #ffd !important;
+  background: var(--row_hover) !important;
 }
 
 .peerinfo:hover td:first-child {
-  background: #ffd var(--peer) no-repeat center center  / 18px !important;
+  background: var(--row_hover) var(--peer) no-repeat center center  / 18px !important;
 }
 
 tr:hover .percentBarText {
@@ -1370,7 +1377,7 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
 }
 
 .snarkConfigTitle:hover, .toggleview:hover, input.toggle_input:focus + .toggleview {
-  background: linear-gradient(180deg,#eff2ff, #fff) !important;
+  background: var(--btn_hover2) !important;
   color: var(--hover) !important;
 }
 
@@ -1380,6 +1387,12 @@ input.toggle_input:focus + .toggleview img {
 
 .snarkConfigTitle:active, .toggleview:active {
   box-shadow: var(--highlight), inset 3px 3px 3px #99a, 0 0 0 0 #fff;
+}
+
+.snarkConfigTitle:active .tab_label, .toggleview:active .tab_label,
+.snarkConfigTitle .tab_label:active, .toggleview .tab_label:active {
+  display: inline-block;
+  transform: scale(.9) translateY(1px);
 }
 
 .snarkConfigTitle, .toggleview, .configsectionpanel .snarkConfigTitle:hover {
@@ -1401,7 +1414,7 @@ input.toggle_input:focus + .toggleview img {
 }
 
 .configsectionpanel .snarkConfigTitle, .configsectionpanel .snarkConfigTitle:hover, .configsectionpanel .snarkConfigTitle:active {
-  background: linear-gradient(180deg,#eff2ff, #fff) !important;
+  background: var(--navbar) !important;
 }
 
 .snarkConfigTitle a {
@@ -1558,7 +1571,6 @@ input[type=submit], input[type="reset"], a.control {
   box-shadow: var(--btn_shadow);
   background: var(--btn);
   outline: none;
-  filter: drop-shadow(0 0 1px rgba(221, 221, 221, .8));
   cursor: pointer !important;
 }
 
@@ -1569,13 +1581,9 @@ input[type=submit]:hover, input[type="reset"]:hover, input[type=submit]:focus, i
   background: var(--btn_hover);
 }
 
-input[type=submit]:focus, input[type="reset"]:focus, a.control:focus {
-  filter: drop-shadow(0 0 2px #89f);
-}
-
 input[type=submit]:active, input[type="reset"]:active, a.control:active {
   border: 1px solid #999;
-  box-shadow: var(--highlight), inset 3px 3px 3px #555;
+  box-shadow: var(--btn_shadow_active), var(--btn_shadow_hover);
   background: #ddd;
 }
 
@@ -3425,8 +3433,8 @@ input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilte
 /* tracker config */
 
 .knowntracker:hover td {
-  background: #ffd;
-  background: linear-gradient(180deg,#ffe, #ffd) !important;
+  background: var(--row_hover);
+  background: linear-gradient(180deg,#ffe,var(--row_hover)) !important;
 }
 
 .knowntracker a {
@@ -3643,17 +3651,19 @@ td.snarkTorrentPeerCount, .nopeers td.snarkTorrentPeerCount {
 
 #torrentDisplay label:hover, #torrentDisplay label:focus {
   color: var(--hover);
-  background: linear-gradient(180deg,#eff2ff, #fff);
+  background: var(--btn_hover2);
 }
 
 #torrentDisplay label:active {
-  box-shadow: var(--highlight), inset 2px 2px 2px #779;
+  color: #fff;
+  box-shadow: var(--btn_shadow_active);
+  background: var(--btn_active);
 }
 
 #torrentdisplay input:checked + label, #torrentdisplay input:checked + label:hover, #torrentdisplay input:checked + label:focus {
   color: #66a;
   box-shadow: var(--highlight), inset 2px 2px 2px #779;
-  background: linear-gradient(180deg,#eff2ff, #fff);
+  background: var(--btn_hover2);
   cursor: default;
 }
 
@@ -4331,69 +4341,94 @@ td.snarkTorrentAction input[type=submit] {
 }
 
 .actionStart {
-  background: var(--start) no-repeat center center / 14px, var(--btnAction),
+  background: var(--start) no-repeat center center / 14px, var(--btn),
               var(--start_hover) no-repeat center center / 14px !important;
 }
 
 .actionStop {
-  background: var(--stop) no-repeat center center / 14px, var(--btnAction),
+  background: var(--stop) no-repeat center center / 14px, var(--btn),
               var(--stop_hover) no-repeat center center / 14px !important;
 }
 
 .actionRemove {
-  background: var(--remove) no-repeat center center / 14px, var(--btnAction),
+  background: var(--remove) no-repeat center center / 14px, var(--btn),
               var(--remove_hover) no-repeat center center / 14px !important;
 }
 
 .actionDelete {
-  background: var(--delete) no-repeat center center / 14px, var(--btnAction),
+  background: var(--delete) no-repeat center center / 14px, var(--btn),
               var(--delete_hover) no-repeat center center / 14px !important;
 }
 
 #actionStartAll {
-  background: var(--startall) no-repeat center center / auto 14px, var(--btnAction),
+  background: var(--startall) no-repeat center center / auto 14px, var(--btn),
               var(--startall_hover) no-repeat center center / auto 14px !important;
 }
 
 #actionStopAll {
-  background: var(--stopall) no-repeat center center / auto 14px, var(--btnAction),
+  background: var(--stopall) no-repeat center center / auto 14px, var(--btn),
               var(--stopall_hover) no-repeat center center / auto 14px !important;
 }
 
 .snarkTorrentAction input:hover, .snarkTorrentAction input:focus {
   border: 1px solid var(--hover);
+  box-shadow: var(--highlight);
   opacity: 1;
   filter: none;
 }
 
 .actionStart:hover, .actionStart:focus {
-  background: var(--start_hover) no-repeat center center / 14px, var(--btnAction_hover) !important;
+  background: var(--start_hover) no-repeat center center / 14px, var(--btn_hover2) !important;
 }
 
 .actionStop:hover, .actionStop:focus {
-  background: var(--stop_hover) no-repeat center center / 14px, var(--btnAction_hover) !important;
+  background: var(--stop_hover) no-repeat center center / 14px, var(--btn_hover2) !important;
 }
 
 .actionRemove:hover, .actionRemove:focus {
-  background: var(--remove_hover) no-repeat center center / 14px, var(--btnAction_hover) !important;
+  background: var(--remove_hover) no-repeat center center / 14px, var(--btn_hover2) !important;
 }
 
 .actionDelete:hover, .actionDelete:focus {
-  background: var(--delete_hover) no-repeat center center / 14px, var(--btnAction_hover) !important;
+  background: var(--delete_hover) no-repeat center center / 14px, var(--btn_hover2) !important;
 }
 
 #actionStartAll:hover, #actionStartAll:focus {
-  background: var(--startall_hover) no-repeat center center / auto 14px, var(--btnAction_hover) !important;
+  background: var(--startall_hover) no-repeat center center / auto 14px, var(--btn_hover2) !important;
 }
 
 #actionStopAll:hover, #actionStopAll:focus {
-  background: var(--stopall_hover) no-repeat center center / auto 14px, var(--btnAction_hover) !important;
+  background: var(--stopall_hover) no-repeat center center / auto 14px, var(--btn_hover2) !important;
 }
 
 .snarkTorrentAction input:active {
-  box-shadow: var(--highlight), inset 3px 3px 3px rgba(0,0,0,.4);
-  background-blend-mode: luminosity, normal;
-  filter: none;
+  box-shadow: var(--btn_shadow_active);
+/*  background-blend-mode: luminosity, normal;
+  filter: none;*/
+}
+
+.actionStart:active {
+  background: var(--start_active) no-repeat center center / 14px, var(--btn_active) !important;
+}
+
+.actionStop:active {
+  background: var(--stop_active) no-repeat center center / 14px, var(--btn_active) !important;
+}
+
+.actionRemove:active {
+  background: var(--remove_active) no-repeat center center / 14px, var(--btn_active) !important;
+}
+
+.actionDelete:active {
+  background: var(--delete_active) no-repeat center center / 14px, var(--btn_active) !important;
+}
+
+#actionStartAll:active {
+  background: var(--startall_active) no-repeat center center / auto 14px, var(--btn_active) !important;
+}
+
+#actionStopAll:active {
+  background: var(--stopall_active) no-repeat center center / auto 14px, var(--btn_active) !important;
 }
 
 @media screen and (max-width: 1199px) {
