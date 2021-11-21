@@ -15,16 +15,18 @@
   --a: #5c5c8a;
   --hover: #f60;
   --active: #f30;
-  --highlight: inset 0 0 0 1px #fff;
+  --highlight: inset 0 0 0 1px rgba(255,255,255,.8);
   --shadow_inset: inset 2px 2px 4px rgba(204,204,240,.6);
   --btn: linear-gradient(180deg, var(--bg) 50%, var(--bg2), var(--bg3));
-  --btn_hover: linear-gradient(180deg,#ddd, #fff);
+  --btn_hover: linear-gradient(180deg,#ddd,#fff);
   --btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 #fff, inset 0 0 4px 2px #f0f0ff, 0 1px 1px rgba(220,220,255,.5);
   --btn_shadow_hover: var(--highlight), 0 0 0 1px #fff, 0 0 0 2px rgba(255,96,0,.4);
   --border: #bfc3d9;
-  --h2: linear-gradient(180deg,#fff 50%, #fafbff 50%);
+  --h2: linear-gradient(180deg,#fff 50%,#fafbff 50%);
   --bg: #fff;
-  --bg3: #eef;
+  --bg2: #f8f8ff;
+  --bg3: #f0f0ff;
+  --bg4: #e8e8ff;
 }
 
 html {
@@ -441,7 +443,6 @@ td.infohelp {
   padding: 7px !important;
   text-align: right;
   border-top: 1px solid var(--border);
-  background: #fff;
 }
 
 .newTunnel select, .newTunnel input, .newTunnel .control {
