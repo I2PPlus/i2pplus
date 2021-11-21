@@ -407,7 +407,7 @@ public class I2PSnarkServlet extends BasicServlet {
             sortedTrackers = _manager.getSortedTrackers();
 //            if (_context.isRouterContext() && _manager.hasModifiedTrackers()) {
 //            if (_context.isRouterContext()) {
-                out.write("<a href=\"http://i2pforum.i2p/viewforum.php/?f=12\" class=\"snarkNav nav_forum\" target=\"_blank\">");
+                out.write("<a href=\"http://discuss.i2p/\" class=\"snarkNav nav_forum\" target=\"_blank\">");
                 out.write(_t("Forum"));
                 out.write("</a>\n");
 /*
