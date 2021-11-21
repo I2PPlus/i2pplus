@@ -613,7 +613,7 @@ div.refresh {
   width: calc(100% - 12px);
   display: inline-block;
   vertical-align: text-bottom;
-  line-height: 1.5;
+  line-height: 1.2;
   text-shadow: 0 1px 1px var(--bg);
   border: 1px solid var(--border);
   box-shadow: var(--highlight), 0 0 1px rgba(96,96,96,.5);
@@ -841,8 +841,12 @@ div.refresh {
   height: 14px;
   max-width: 100%;
   background: linear-gradient(90deg, rgba(0,255,0,.1) 65px, rgba(255,255,0,.1) 110px, rgba(255,128,0,.1) 175px, rgba(255,0,0,.1)),
-              linear-gradient(180deg, rgba(240, 240, 250,.85), rgba(255, 255, 255, .7) 50%, rgba(220, 220, 255, .7) 50%, rgba(140, 140, 220, .9));
+              linear-gradient(180deg, rgba(255, 255, 255, .9), rgba(240, 240, 250,.7) 50%, rgba(220, 220, 255, .7) 50%, rgba(140, 140, 220, .9));
   box-shadow: var(--highlight);
+}
+
+.percentBarInner[style="width: 100%;"] {
+   border-right none;
 }
 
 .percentBarText {
@@ -3744,10 +3748,10 @@ div.appgroup {
 }
 
 #searchbar span {
-  background: #f00;
+  margin: 2px 3px;
   display: inline-block;
   position: relative;
-  background: var(--button);
+  overflow: hidden;
 }
 
 #searchbar table {
@@ -3763,7 +3767,7 @@ div.appgroup {
 }
 
 #searchbar button, #searchbar select {
-  margin: 0 !important;
+  margin: 0;
 }
 
 #searchbar button:hover, #searchbar select:hover,
@@ -3772,16 +3776,15 @@ div.appgroup {
 }
 
 #searchbar select {
-  margin: 3px 0 3px 4px;
   width: 164px;
   position: absolute;
-  left: 4px;
-  top: 3px;
+  left: 0;
+  top: 0;
   border-radius: 3px 0 0 3px;
 }
 
 #searchbar input {
-  margin: 3px 4px 3px 168px;
+  margin: 0 0 0 164px;
   padding-left: 10px;
   padding-right: 44px;
   min-width: 240px;
@@ -3797,8 +3800,8 @@ div.appgroup {
 #searchbar button {
   padding: 0 3px 0 0;
   position: absolute;
-  right: 5px;
-  top: 4px;
+  right: 1px;
+  top: 1px;
   font-size: 0 !important;
   height: 28px;
   width: 36px;
@@ -3810,7 +3813,7 @@ div.appgroup {
 
 @media screen and (max-width: 1200px) {
   #searchbar button {
-    height: 26px;
+    height: 25px;
   }
 }
 
