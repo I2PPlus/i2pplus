@@ -16,6 +16,7 @@
   --bg: #fff;
   --bg2: #f4f4ff;
   --bg3: #eef;
+  --bg4: #ddf;
   --highlight: inset 0 0 0 1px rgba(255,255,255,.8);
   --row_hover: #ffffe8;
   --btn_hover: linear-gradient(180deg,#ddd,#fff);
@@ -31,6 +32,7 @@
   --active: #f30;
   --header_hover: linear-gradient(180deg, var(--bg) 50%, var(--row_hover) 50%);
   --header_active: linear-gradient(180deg, var(--row_hover), #ffe);
+  --badge: linear-gradient(180deg,var(--bg),var(--bg4));
 }
 
 html, body {
@@ -1210,7 +1212,7 @@ tr:nth-child(even) + .peerinfo:nth-child(odd) {
   filter: saturate(0.5);
 }
 
-.percentBarInner {
+.percentBarInner, .txBarInner {
   height: 14px;
   border: none;
   border-right: 1px solid #bfc3d9;
@@ -1225,6 +1227,10 @@ tr:nth-child(even) + .peerinfo:nth-child(odd) {
 
 .snarkDirInfo .percentBarInner {
   background: linear-gradient(90deg, rgba(255,255,0,.1) 40px, rgba(0,255,0,.1)), linear-gradient(180deg,#fff, #eef 50%, #bbf 50%, #99f);
+}
+
+.txBarInner {
+  background: linear-gradient(180deg,rgba(255,255,255,.3), rgba(176,255,176,.3));
 }
 
 .percentBarText, .percentBarOuter {
@@ -1255,7 +1261,7 @@ tr:nth-child(even) + .peerinfo:nth-child(odd) {
   transition: ease opacity .1s;
 }
 
-.snarkTorrents .percentBarComplete {
+.snarkTorrents .percentBarComplete, .uploaded {
   padding: 3px 0;
   display: inline-block;
   width: 84px;
@@ -1267,7 +1273,29 @@ tr:nth-child(even) + .peerinfo:nth-child(odd) {
   text-shadow: 0 1px 1px #fff;
   border-radius: 1px;
   box-shadow: inset 0 0 0 1px rgba(200,200,255,.8), inset 0 0 2px 1px #fff;
-  background: linear-gradient(180deg,#f8f8ff, #ddf);
+  background: var(--badge);
+}
+
+.uploaded {
+  position: relative;
+  overflow: hidden;
+}
+
+.txBarInner {
+  display: inline-block;
+  float: left;
+  position: absolute;
+  left: 1px;
+  top: 1px;
+  right: 1px;
+  bottom: 1px;
+  height: calc(100% - 2px);
+  z-index: 1;
+}
+
+.txBarText {
+  position: relative;
+  z-index: 2;
 }
 
 /* end download bars */
@@ -1392,7 +1420,9 @@ input.toggle_input:focus + .toggleview img {
 .snarkConfigTitle:active .tab_label, .toggleview:active .tab_label,
 .snarkConfigTitle .tab_label:active, .toggleview .tab_label:active {
   display: inline-block;
-  transform: scale(.9) translateY(1px);
+  color: #cc7a00;
+  text-shadow: 0 0 1px #fff;
+  transform: scale(.95) translateY(1px);
 }
 
 .snarkConfigTitle, .toggleview, .configsectionpanel .snarkConfigTitle:hover {
@@ -3741,26 +3771,26 @@ td.snarkTorrentPeerCount {
 
 .snarkTorrentOdd:not(.peerinfo) .snarkTorrentDownloaded .percentBarText,
 .snarkTorrentEven:not(.peerinfo) .snarkTorrentDownloaded .percentBarText {
+  min-width: 140px !important;
   padding: 3px;
   position: relative;
   top: -18px;
   left: -32px;
-  min-width: 140px !important;
-  background: #fff;
   border-radius: 2px;
+  background: #fff;
   filter: drop-shadow(0 0 1px #77f);
 }
 
 .snarkTorrentOdd:not(.peerinfo) .snarkTorrentDownloaded .percentBarText::after,
 .snarkTorrentEven:not(.peerinfo) .snarkTorrentDownloaded .percentBarText::after {
-  content: "";
+  margin-left: -7px;
   position: absolute;
   top: 90%;
   left: 50%;
-  margin-left: -7px;
   border-width: 7px;
   border-style: solid;
   border-color: #fff transparent transparent transparent;
+  content: "";
 }
 
 @media screen and (max-width: 1000px) {
@@ -3789,6 +3819,8 @@ td.snarkTorrentPeerCount {
 
 .snarkTorrentDownloaded .percentBarText, .snarkTorrentDownloaded .percentBarOuter {
   width: 84px !important;
+  position: relative;
+  z-index: 5;
 }
 
 .snarkDirInfo .percentBarText, .snarkDirInfo .percentBarOuter, .peerinfo .percentBarText, .peerinfo .percentBarOuter {
