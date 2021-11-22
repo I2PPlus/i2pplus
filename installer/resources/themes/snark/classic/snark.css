@@ -75,6 +75,10 @@ span.nowrap {
   display: inline-block;
 }
 
+tr, .navbar, .mainsection, .lowersection {
+  contain: layout;
+}
+
 #torrentDisplay label, #addTracker, #addTracker + tr {
   user-select: none;
 }
@@ -86,8 +90,8 @@ span.nowrap {
 .page {
   margin: 5px 0 0 0;
   padding: 9px;
-  min-width: 900px !important;
-  line-height: 160% !important;
+  min-width: 900px;
+  line-height: 1.6;
   text-align: center;
   border: var(--border);
   border-radius: 0 0 3px 3px;
@@ -107,35 +111,33 @@ span.nowrap {
 /* top nav */
 
 .snarknavbar {
-  margin: 0 0 -6px !important;
+  margin: 0 0 -6px;
   padding: 8px 0;
   min-width: 906px;
   position: sticky;
   top: -1px;
   z-index: 999;
-  letter-spacing: 0 !important;
   text-align: center;
-  text-transform: uppercase !important;
+  text-transform: uppercase;
   font-size: 11.5pt;
   font-weight: 700;
-  color: #000;
   box-shadow: var(--highlight);
   border: var(--border);
   border-radius: 3px 3px 0 0;
-  background: var(--navbar) !important;
+  background: var(--navbar);
 }
 
 @supports not (-moz-appearance: none) {
-  .snarknavbar {padding-top: 9px !important}
+  .snarknavbar {padding-top: 9px}
 }
 
 .iframed .snarknavbar {
-  margin-top: -1px !important;
+  margin-top: -1px;
   padding: 8px 0;
   border-top: none;
   border-radius: 0;
   position: static;
-  background: linear-gradient(180deg,var(--bg), #eff2ff 75%) !important;
+  background: linear-gradient(180deg,var(--bg), #eff2ff 75%);
 }
 
 .snarkNav {
@@ -143,8 +145,8 @@ span.nowrap {
 }
 
 .snarkNav:link, .snarkNav:visited {
-  margin: -1px -2px -1px -3px !important;
-  padding: 5px 7px 5px 23px !important;
+  margin: -1px -2px -1px -3px;
+  padding: 5px 7px 5px 23px;
   display: inline-block;
   line-height: 110%;
   letter-spacing: .1em;
@@ -1241,10 +1243,6 @@ tr:nth-child(even) + .peerinfo:nth-child(odd) {
   background: linear-gradient(90deg, rgba(255,255,0,.1) 40px, rgba(0,255,0,.1)), linear-gradient(180deg,var(--bg), var(--bg3) 50%,#bbf 50%,#99f);
 }
 
-.txBarInner {
-  background: linear-gradient(180deg,rgba(255,255,255,.3), rgba(176,255,176,.3));
-}
-
 .percentBarText, .percentBarOuter {
   width: 110px;
   text-align: center;
@@ -1284,7 +1282,7 @@ tr:nth-child(even) + .peerinfo:nth-child(odd) {
   color: #77a;
   text-shadow: 0 1px 1px var(--bg);
   border-radius: 1px;
-  box-shadow: inset 0 0 0 1px rgba(200,200,255,.8), inset 0 0 2px 1px var(--bg);
+  box-shadow: inset 0 0 0 1px #d3d3ff, inset 0 0 2px 1px var(--bg);
   background: var(--badge);
 }
 
@@ -1294,15 +1292,21 @@ tr:nth-child(even) + .peerinfo:nth-child(odd) {
 }
 
 .txBarInner {
+}
+
+.txBarInner {
+  height: calc(100% - 2px);
   display: inline-block;
   float: left;
   position: absolute;
   left: 1px;
   top: 1px;
-  right: 1px;
-  bottom: 1px;
-  height: calc(100% - 2px);
+  background: linear-gradient(180deg,#fefeff,#daecee);
   z-index: 1;
+}
+
+tr:hover .txBarInner {
+  background: linear-gradient(180deg,#efe,#dfd);
 }
 
 .txBarText {
@@ -1334,12 +1338,12 @@ tr:nth-child(even) + .peerinfo:nth-child(odd) {
 }
 
 .idle::after, .choked::after {
-  content: "";
-  display: inline-block;
   width: 8px;
   height: 8px;
+  display: inline-block;
   border-radius: 50%;
   background: #373;
+  content: "";
 }
 
 .choked::after {
@@ -1433,7 +1437,7 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
 }
 
 .snarkConfigTitle, .toggleview, .configsectionpanel .snarkConfigTitle:hover {
-  margin: 0 0 -4px !important;
+  margin: 0 0 -4px;
   padding: 4px 1px 3px;
   min-width: 260px;
   vertical-align: middle;
@@ -1446,12 +1450,12 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
   border-top: none;
   border-radius: 0 0 4px 4px;
   box-shadow: var(--title_shadow);
-  background: var(--nav) !important;
+  background: var(--nav);
   transition: ease box-shadow .05s;
 }
 
 .configsectionpanel .snarkConfigTitle, .configsectionpanel .snarkConfigTitle:hover, .configsectionpanel .snarkConfigTitle:active {
-  background: var(--navbar) !important;
+  background: var(--navbar);
 }
 
 .snarkConfigTitle a {
@@ -1461,12 +1465,6 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
 
 .iframed .snarkConfigTitle a {
   padding-bottom: 0;
-}
-
-@supports not (-moz-appearance: none) {
-.snarkConfigTitle, .toggleview, .configsectionpanel .snarkConfigTitle:hover {
-  font-size: 14pt;
-}
 }
 
 .configsectionpanel .snarkConfigTitle, .configsectionpanel .snarkConfigTitle:hover {
@@ -1557,15 +1555,15 @@ input {
   background: var(--bg);
 }
 
-input:disabled {
+input[disabled] {
   cursor: not-allowed;
   opacity: .5 !important;
 }
 
-input:disabled[type=submit]:hover, input.disabled[type="reset"]:hover, input:disabled[type=submit]:focus, input.disabled[type="reset"]:focus {
+input[disabled][type=submit]:hover, input[disabled][type=submit]:focus {
   border: 1px solid #999 !important;
   background: linear-gradient(180deg,var(--bg), var(--bg3));
-  cursor: not-allowed !important;
+  cursor: not-allowed;
   box-shadow: var(--highlight);
   color: #111;
 }
@@ -1662,8 +1660,8 @@ a.control img {
 }
 
 .script {
-  display: inline-block;
   margin: 5px 0 2px;
+  display: inline-block;
 }
 
 input.r {
@@ -1677,17 +1675,17 @@ input[type=text]:focus, textarea:focus, input.r:focus, textarea[name="i2cpOpts"]
 }
 
 input[type=text], input[type=password], input.r, input[name="nofilter_dataDir"], textarea[name="i2cpOpts"] {
-  font: 9pt var(--bodyfont);
-  min-width: 160px;
   margin: 2px 2px 2px 0;
   padding: 5px !important;
-  cursor: text;
+  min-width: 160px;
   vertical-align: middle;
+  font: 9pt var(--bodyfont);
   color: #5e626e;
   border: var(--border);
   border-radius: 2px;
   box-shadow: inset 1px 1px 1px #ddd;
   background: #f8f8ff;
+  cursor: text;
   user-select: auto;
 }
 
@@ -1827,9 +1825,9 @@ img:hover {
 #pagenavtop.pagenavcontrols {
   margin: -27px 0 0;
   padding: 6px 0 0;
+  display: block;
   position: relative;
   top: 27px;
-  display: block;
 }
 
 .pagenavcontrols img {
@@ -1884,13 +1882,13 @@ img:hover {
   color: #9499b8 !important;
   border-radius: 1px;
   box-shadow: 0 0 0 1px #bfc3d9;
-  background: linear-gradient(180deg,var(--bg), var(--bg3));
+  background: linear-gradient(180deg,var(--bg),var(--bg3));
 }
 
 .pagenavcontrols:hover #pagecount {
   color: #339 !important;
   box-shadow: 0 0 0 1px #99f, var(--highlight);
-  background: linear-gradient(180deg,var(--bg), #ddf);
+  background: linear-gradient(180deg,var(--bg),#ddf);
 }
 
 #pagenavbottom td {
@@ -1945,7 +1943,7 @@ img:hover {
   padding: 5px 10px;
   font-weight: 700 !important;
   border-bottom: var(--border);
-  background: linear-gradient(180deg,var(--bg), var(--bg3));
+  background: linear-gradient(180deg,var(--bg),var(--bg3));
 }
 
 #trackerselect td {
@@ -1978,7 +1976,7 @@ img:hover {
 }
 
 .trackerconfig th:first-child {
-  background: var(--nuke) no-repeat scroll center center / 14px, linear-gradient(180deg,var(--bg), var(--bg3));
+  background: var(--nuke) no-repeat scroll center center / 14px, linear-gradient(180deg,var(--bg),var(--bg3));
 }
 
 .trackerconfig th:last-child, .trackerconfig td:last-child {
@@ -2060,7 +2058,7 @@ img:hover {
 }
 
 .snarkConfig table tr:first-child {
-  border-top: var(--border);;
+  border-top: var(--border);
 }
 
 .trackerconfig th:nth-child(n+4),
@@ -2117,23 +2115,13 @@ img:hover {
 }
 
 @keyframes slide-in {
-0% {
-  transform: translateY(-40px);
-}
-
-100% {
-  transform: translateY(0);
-}
+  0% {transform: translateY(-40px)}
+  100% {transform: translateY(0)}
 }
 
 @keyframes fade-in {
-0% {
-  filter: opacity(0);
-}
-
-100% {
-  filter: opacity(1);
-}
+  0% {filter: opacity(0)}
+  100% {filter: opacity(1)}
 }
 
 .addtorrentsection table, .newtorrentsection table:not(#trackerselect) {
@@ -2178,15 +2166,6 @@ img:hover {
 
 .mainsection + .mainsection {
   margin: -1px 0;
-}
-
-@media screen and (max-width: 1200px) {
-  #snarkInfo {
-    margin-bottom: -9px;
-  }
-  #snarkCommentSection {
-    margin-bottom: 0;
-  }
 }
 
 .newtorrentsection {
@@ -2628,6 +2607,14 @@ td.commentAuthor .commentAuthorName {
 }
 
 @media screen and (max-width: 1200px) {
+  #snarkInfo {
+    margin-bottom: -9px;
+  }
+
+  #snarkCommentSection {
+    margin-bottom: 0;
+  }
+
   .trackerconfig th {
     padding-top: 5px;
     padding-bottom: 5px;

@@ -2277,7 +2277,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     out.write(": ");
                     out.write(date);
                 }
-                out.write("\"><span class=\"right\"><span class=\"txBarText\">");
+                out.write("\"><span class=\"txBarText\"><span class=\"right\">");
                 out.write(formatSize(uploaded).replaceAll("iB","")
                                               .replace("B", "</span><span class=\"left\">B</span>")
                                               .replace("K", "</span><span class=\"left\">K</span>")
