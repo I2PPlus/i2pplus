@@ -2277,14 +2277,14 @@ public class I2PSnarkServlet extends BasicServlet {
                     out.write(": ");
                     out.write(date);
                 }
-                out.write("\"><span class=\"right\"><span class=\"txBarText\"><span class=\"right\">");
+                out.write("\"><span class=\"right\"><span class=\"txBarText\">");
                 out.write(formatSize(uploaded).replaceAll("iB","")
                                               .replace("B", "</span><span class=\"left\">B</span>")
                                               .replace("K", "</span><span class=\"left\">K</span>")
                                               .replace("M", "</span><span class=\"left\">M</span>")
                                               .replace("G", "</span><span class=\"left\">G</span>")
                                               .replace("T", "</span><span class=\"left\">T</span>"));
-                out.write("</span><span class=\"txBarInner\" style=\"width: calc(" + txPercentBar + " - 2px)\"></span>");
+                out.write("</span><span class=\"txBarInner\" style=\"width: calc(" + txPercentBar + " - 2px)\"></span></span>");
             }
         }
         out.write("</td>\n");
