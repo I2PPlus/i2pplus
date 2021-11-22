@@ -639,6 +639,7 @@ pre {
 .sb_notice {
   margin: -5px -8px -7px;
   padding: 8px;
+  line-height: 1.1;
   font-weight: 700;
   box-shadow: var(--highlight), inset 0 0 2px 1px #040, 0 0 0 1px #030;
   background: #010;
