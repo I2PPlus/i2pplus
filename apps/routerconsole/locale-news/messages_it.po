@@ -35,7 +35,7 @@ msgstr "Benvenuto su I2P!"
 #, fuzzy, java-format
 msgid "Please {0}have patience{1} as I2P+ boots up and finds peers."
 msgstr ""
-"Per favore, abbi un po'' di {0}pazienza{1} mentre I2P si avvia e si mette in "
+"Per favore, abbi un po' di {0}pazienza{1} mentre I2P+ si avvia e si mette in "
 "contatto con altri nodi della rete."
 
 #, java-format
