@@ -3247,13 +3247,13 @@ msgstr "Minden ismert I2P router listájának megjelenítése"
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:684
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:610
 msgid "Router Info"
-msgstr ""
+msgstr "Router Információ"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:51
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:69
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:84
 msgid "Summary of router properties"
-msgstr ""
+msgstr "A router tulajdonságainak összefoglalása"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:52
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:70
@@ -3282,7 +3282,7 @@ msgstr "Router Hash"
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:71
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:86
 msgid "Sitemap"
-msgstr ""
+msgstr "Webhelytérkép"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:54
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:72
@@ -3295,7 +3295,7 @@ msgstr "Beépített anoním BitTorrent Kliens"
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:73
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:88
 msgid "Local web server for hosting your own content on I2P"
-msgstr ""
+msgstr "Személyes webszerver"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:55
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:73
@@ -3304,7 +3304,7 @@ msgstr ""
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:335
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:544
 msgid "Web Server"
-msgstr ""
+msgstr "Webszerver"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:60
 msgid "Configure Bandwidth"
@@ -3322,17 +3322,17 @@ msgstr "Beállít"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:62
 msgid "Select console theme & language & set optional console password"
-msgstr ""
+msgstr "Válassza ki a konzol téma és nyelvet és állítsa be az opcionális konzol jelszót"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:63
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:446
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:579
 msgid "Customize Sidebar"
-msgstr ""
+msgstr "Módosítsa az oldalsávot"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:63
 msgid "Customize the sidebar by adding or removing or repositioning elements"
-msgstr ""
+msgstr "Az oldalsáv módosítása az elemek pozíciójának hozzáadásával vagy megváltoztatásával"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:78
 #, fuzzy
@@ -3370,7 +3370,7 @@ msgstr "Gyakran Ismételt Kérdések"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:96
 msgid "I2P FAQ"
-msgstr ""
+msgstr "I2P Gyakran Feltett Kérdések"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:97
 #, fuzzy
@@ -3395,7 +3395,7 @@ msgstr "Projekt weboldala"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:100
 msgid "I2P Network Statistics"
-msgstr ""
+msgstr "I2P Hálózati Statisztikák"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:101
 #, fuzzy
@@ -3409,11 +3409,11 @@ msgstr ""
 #. software repositories + filesharing
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:104
 msgid "Transient server-encrypted filesharing and pastebin"
-msgstr ""
+msgstr "Átmeneti szerver-titkosított fájlmegosztás és pasztabin"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:105
 msgid "Huge collection of books &amp; magazines &amp; comics"
-msgstr ""
+msgstr "Könyvek és magazinok és képregények nagy gyűjteménye"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:106
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:110
@@ -3423,7 +3423,7 @@ msgstr "szolgáltatás bállítása"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:107
 msgid "Community Git hosting"
-msgstr ""
+msgstr "Közösségi Git Hosting"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:108
 msgid ""
@@ -3490,7 +3490,7 @@ msgstr "Fejlesztési fórum"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:127
 msgid "I2P Forum"
-msgstr ""
+msgstr "I2P Fórum"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:127
 #, fuzzy
@@ -3613,7 +3613,7 @@ msgstr "IPv4 címek"
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:185
 #, fuzzy
 msgid "UDP Port"
-msgstr "UDP port:"
+msgstr "UDP Port"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:187
 msgid "Floodfill Role"
@@ -3693,7 +3693,7 @@ msgstr "elindult"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help_005fru_jsp.java:607
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help_jsp.java:619
 msgid "Clock Skew"
-msgstr ""
+msgstr "Óra Hiba"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:224
 msgid "Router Transport Addresses"
@@ -3706,11 +3706,11 @@ msgstr "A következő csak kimenő csatlakozásokhoz használva: {0}"
 
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:57
 msgid "Job runners"
-msgstr ""
+msgstr "Munkahelyi futók"
 
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:65
 msgid "Active jobs"
-msgstr ""
+msgstr "Aktív Munkák"
 
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:70
 #, java-format
@@ -3719,7 +3719,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:77
 msgid "Just finished jobs"
-msgstr ""
+msgstr "A Közelmúltban Befejezett Munkahelyek"
 
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:82
 #, java-format
@@ -3737,7 +3737,7 @@ msgstr "Frissítés"
 
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:111
 msgid "Scheduled jobs"
-msgstr ""
+msgstr "Tervezett munkahelyek"
 
 #. translators: {0} is a job name, {1} is a time, e.g. 6 min
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:128
@@ -3751,11 +3751,11 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:174
 msgid "Total Job Statistics"
-msgstr ""
+msgstr "Összes Munkahelyi Statisztika"
 
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:177
 msgid "Job"
-msgstr ""
+msgstr "Munka"
 
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:178
 msgid "Runs"
@@ -3839,7 +3839,8 @@ msgstr ""
 msgid ""
 "Never reveal your router identity to anyone, as it is uniquely linked to "
 "your IP address in the network database."
-msgstr ""
+msgstr "Soha ne tegye fel az útválasztó identitását, mivel felhasználható "
+"a helyének azonosításához."
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:143
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:391
@@ -3848,27 +3849,27 @@ msgstr "nem található a hálózati adatbázisban"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:145
 msgid "No results"
-msgstr ""
+msgstr "Nincs találat"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:191
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:398
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:772
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:828
 msgid "Previous Page"
-msgstr ""
+msgstr "Előző Oldal"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:193
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:401
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:775
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:831
 msgid "Page"
-msgstr ""
+msgstr "Oldal"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:405
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:779
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:834
 msgid "Next Page"
-msgstr ""
+msgstr "Következő Oldal"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:494
 msgid "No Leasesets currently active."
