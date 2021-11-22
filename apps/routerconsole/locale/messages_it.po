@@ -41,6 +41,7 @@ msgstr ""
 
 #: ../../../router/java/src/net/i2p/router/Blocklist.java:271
 #, java-format
+#, xgettext:no-java-format
 msgid "Banned by router hash: {0}"
 msgstr "Bannato dall'hash del router: {0}"
 
@@ -340,6 +341,7 @@ msgstr "UPnP non ha trovato nessun dispositivo compatibile con UPnP sulla tua LA
 
 #: ../../../router/java/src/net/i2p/router/transport/UPnP.java:1208
 #, java-format
+#, xgettext:no-java-format
 msgid "The current external IP address reported by UPnP is {0}"
 msgstr "L'indirizzo IP esterno corrente riportato da UPnP è {0}"
 
@@ -596,6 +598,7 @@ msgstr "La versione del plugin scaricato {0} è meno recente di quella già inst
 
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:478
 #, java-format
+#, xgettext:no-java-format
 msgid "Plugin update requires installed plugin version {0} or higher"
 msgstr ""
 "L'aggiornamento del plugin richiede che la versione del plugin installato sia {0} o "
@@ -603,6 +606,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:485
 #, java-format
+#, xgettext:no-java-format
 msgid "Plugin update requires installed plugin version {0} or lower"
 msgstr ""
 "L'aggiornamento del plugin richiede che la versione del plugin installato sia {0} o "
@@ -643,6 +647,7 @@ msgstr "Il plugin è solo per aggiornamenti, ma il plugin non è installato"
 
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:566
 #, java-format
+#, xgettext:no-java-format
 msgid "Failed to install plugin in {0}"
 msgstr "Non è riuscita l'installazione del plugin in {0}"
 
@@ -1450,6 +1455,7 @@ msgstr "Plugin {0} lanciato"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:654
 #, java-format
+#, xgettext:no-java-format
 msgid "Error starting plugin {0}"
 msgstr "Errore durante l'avvio del plugin {0}"
 
