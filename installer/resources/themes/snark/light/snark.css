@@ -1012,14 +1012,38 @@ th.snarkFileSize {
   margin-top: 2px;
 }
 
-.percentBarOuter {
+.percentBarOuter, .uploaded {
   margin: 0 auto;
   border: 1px solid #afafcf;
   box-shadow: var(--highlight), inset 0 3px 3px rgba(0,0,0,.2);
-  background: #eef;
   background: repeating-linear-gradient(135deg, rgba(238, 238, 255,.7) 1px, rgba(238, 238, 255, .7) 5px, rgba(221, 221, 255, .7) 6px, rgba(221, 221, 255, .7) 11px);
   background-size: 200% 200% !important;
   background-position: center center;
+}
+
+.uploaded {
+  padding: 3px 2px 1px;
+  min-width: 68px;
+  display: inline-block;
+  position: relative;
+  border-left-width: 5px;
+  background: linear-gradient(180deg,#eef, #fff);
+}
+
+.txBarInner {
+  height: calc(100% - 2px);
+  display: inline-block;
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  box-shadow: inset 0 3px 3px rgba(0,0,0,.2);
+  background: linear-gradient(90deg,#bdf,#def);
+  opacity: .7;
+}
+
+.txBarText {
+  position: relative;
+  z-index: 5;
 }
 
 .snarkTorrentOdd.active .percentBarOuter, .snarkTorrentEven.active .percentBarOuter {
@@ -2827,6 +2851,10 @@ td.commentAuthor .commentAuthorName {
   min-width: 0;
 }
 
+.uploaded {
+  display: none;
+}
+
 .snarkTorrents thead img {
   max-height: 18px !important;
   width: auto;
@@ -2835,10 +2863,6 @@ td.commentAuthor .commentAuthorName {
 .snarkGraphicStatus {
   max-width: 24px !important;
 }
-
-/*.snarkTorrentAction {
-  width: auto !important;
-}*/
 
 #totals {
   margin-left: 2px;
