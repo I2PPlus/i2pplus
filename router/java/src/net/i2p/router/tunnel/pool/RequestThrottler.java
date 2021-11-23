@@ -39,6 +39,7 @@ class RequestThrottler {
         int limit = Math.max(MIN_LIMIT, Math.min(MAX_LIMIT, numTunnels * PERCENT_LIMIT / 100));
         int count = counter.increment(h);
         boolean rv = count > limit;
+/*
         if (rv && count == 2 * limit) {
             context.banlist().banlistRouter(h, "Excess tunnel requests", null, null, context.clock().now() + 30*60*1000);
             // drop after any accepted tunnels have expired
@@ -46,6 +47,7 @@ class RequestThrottler {
             if (_log.shouldWarn())
                 _log.warn("Banning router for excess tunnel requests, limit: " + limit + " count: " + count + ' ' + h.toBase64());
         }
+*/
         return rv;
     }
 
@@ -58,6 +60,7 @@ class RequestThrottler {
     /**
      *  @since 0.9.52
      */
+/*
     private class Disconnector implements SimpleTimer.TimedEvent {
         private final Hash h;
         public Disconnector(Hash h) { this.h = h; }
@@ -65,4 +68,5 @@ class RequestThrottler {
             context.commSystem().forceDisconnect(h);
         }
     }
+*/
 }
