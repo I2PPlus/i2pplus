@@ -61,11 +61,11 @@ class ParticipatingThrottler {
         Result rv;
         if (count > limit) {
             if (count > limit * 3 / 2) {
-                //context.banlist().banlistRouter(h, "Excess participating tunnels", null, null, context.clock().now() + 30*60*1000);
+                context.banlist().banlistRouter(h, "Excessive participating tunnels", null, null, context.clock().now() + 60*60*1000);
                 // drop after any accepted tunnels have expired
-                //context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
-                //if (_log.shouldWarn())
-                //    _log.warn("Banning router for excess part. tunnels, limit: " + limit + " count: " + count + ' ' + h.toBase64());
+                context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
+                if (_log.shouldWarn())
+                    _log.warn("Temp banning router [" + h.toBase64().substring(0,6) + "] for excessive part. tunnel requests (Limit: " + limit + " Requests: " + count + ")");
                 rv = Result.DROP;
             } else {
                 rv = Result.REJECT;
@@ -85,7 +85,7 @@ class ParticipatingThrottler {
     /**
      *  @since 0.9.52
      */
-/*
+
     private class Disconnector implements SimpleTimer.TimedEvent {
         private final Hash h;
         public Disconnector(Hash h) { this.h = h; }
@@ -93,5 +93,5 @@ class ParticipatingThrottler {
             context.commSystem().forceDisconnect(h);
         }
     }
-*/
+
 }
