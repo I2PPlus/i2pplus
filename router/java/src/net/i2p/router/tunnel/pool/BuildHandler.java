@@ -899,14 +899,14 @@ class BuildHandler implements Runnable {
             ParticipatingThrottler.Result result = _throttler.shouldThrottle(nextPeer);
             if (result == ParticipatingThrottler.Result.DROP) {
                 if (_log.shouldWarn())
-                    _log.warn("Dropping tunnel request (hop throttle), next hop -> [" + nextPeer.substring(0,6) + "] " + req);
+                    _log.warn("Dropping tunnel request (hop throttle), next hop -> [" + nextPeer.toBase64().substring(0,6) + "] " + req);
                 _context.statManager().addRateData("tunnel.rejectHopThrottle", 1);
                 _context.commSystem().mayDisconnect(from);
                  return;
             }
             if (result == ParticipatingThrottler.Result.REJECT) {
                 if (_log.shouldWarn())
-                    _log.warn("Rejecting tunnel request (hop throttle), next hop -> [" + nextPeer.substring(0,6) + "] " + req);
+                    _log.warn("Rejecting tunnel request (hop throttle), next hop -> [" + nextPeer.toBase64().substring(0,6) + "] " + req);
                 _context.statManager().addRateData("tunnel.rejectHopThrottle", 1);
                 response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
             }
