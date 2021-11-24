@@ -300,15 +300,17 @@ class EventPumper implements Runnable {
                                     continue;
                                 }
 
+                                synchronized(con.getWriteLock()) {
                                 if ( (!con.isWriteBufEmpty()) &&
                                      ((key.interestOps() & SelectionKey.OP_WRITE) == 0) ) {
                                     // the data queued to be sent has already passed through
                                     // the bw limiter and really just wants to get shoved
                                     // out the door asap.
                                     if (_log.shouldLog(Log.INFO))
-                                        _log.info("Failsafe write for: " + con);
-                                    key.interestOps(SelectionKey.OP_WRITE | key.interestOps());
+                                        _log.info("Failsafe write for " + con);
+                                        setInterest(key, SelectionKey.OP_WRITE);
                                     failsafeWrites++;
+                                    }
                                 }
 
                                 final long expire;
@@ -426,7 +428,7 @@ class EventPumper implements Runnable {
                     processAccept(key);
                 }
                 if (connect) {
-                    key.interestOps(key.interestOps() & ~SelectionKey.OP_CONNECT);
+                    clearInterest(key, SelectionKey.OP_CONNECT);
                     processConnect(key);
                 }
                 if (read) {
@@ -661,7 +663,7 @@ class EventPumper implements Runnable {
                 FIFOBandwidthLimiter.Request req = _context.bandwidthLimiter().requestInbound(read, "NTCP read"); //con, buf);
                 if (req.getPendingRequested() > 0) {
                     // rare since we generally don't throttle inbound
-                    key.interestOps(key.interestOps() & ~SelectionKey.OP_READ);
+                    clearInterest(key, SelectionKey.OP_READ);
                     _context.statManager().addRateData("ntcp.queuedRecv", read);
                     con.queuedRecv(buf, req);
                     break;
@@ -691,10 +693,9 @@ class EventPumper implements Runnable {
             if (buf != null)
                 releaseBuf(buf);
             if (con.isInbound() && con.getMessagesReceived() <= 0) {
-                InetAddress addr = chan.socket().getInetAddress();
+                byte[] ip = con.getRemoteIP();
                 int count;
-                if (addr != null) {
-                    byte[] ip = addr.getAddress();
+                if (ip != null) {
                     ByteArray ba = new ByteArray(ip);
                     count = _blockedIPs.increment(ba);
                     if (_log.shouldLog(Log.WARN))
@@ -728,7 +729,7 @@ class EventPumper implements Runnable {
             if (buf != null)
                 releaseBuf(buf);
             // ???
-            key.interestOps(key.interestOps() & ~SelectionKey.OP_READ);
+            clearInterest(key, SelectionKey.OP_READ);
             if (_log.shouldLog(Log.WARN))
                 _log.warn("Error reading on: " + con, nyce);
         }
@@ -741,50 +742,74 @@ class EventPumper implements Runnable {
      */
     private void processWrite(SelectionKey key) {
         final NTCPConnection con = (NTCPConnection)key.attachment();
+        processWrite(con, key);
+    }
+
+    /**
+     *  Asynchronous write all buffers to the channel.
+     *  This method will disable the interest if no more writes remain.
+     *  If this returns false, caller MUST call wantsWrite(con)
+     *
+     *  @param key non-null
+     *  @return true if all buffers were completely written, false if buffers remain
+     *  @since 0.9.53
+     */
+    public boolean processWrite(final NTCPConnection con, final SelectionKey key) {
+        boolean rv = false;
         final SocketChannel chan = con.getChannel();
         try {
-            while (true) {
-                ByteBuffer buf = con.getNextWriteBuf();
-                if (buf != null) {
-                    if (buf.remaining() <= 0) {
-                        con.removeWriteBuf(buf);
-                        continue;
-                    }
-                    int written = chan.write(buf);
-                    //totalWritten += written;
-                    if (written == 0) {
-                        if ( (buf.remaining() > 0) || (!con.isWriteBufEmpty()) ) {
+            synchronized(con.getWriteLock()) {
+                while (true) {
+                    ByteBuffer buf = con.getNextWriteBuf();
+                    if (buf != null) {
+                        if (buf.remaining() <= 0) {
+                            con.removeWriteBuf(buf);
+                            continue;
+                        }
+                        int written = chan.write(buf);
+                        //totalWritten += written;
+                        if (written == 0) {
+                            if ( (buf.remaining() > 0) || (!con.isWriteBufEmpty()) ) {
+                                // stay interested
+                                //key.interestOps(key.interestOps() | SelectionKey.OP_WRITE);
+                            } else {
+                                rv = true;
+                            }
+                            break;
+                        } else if (buf.remaining() > 0) {
                             // stay interested
                             //key.interestOps(key.interestOps() | SelectionKey.OP_WRITE);
+                            break;
                         } else {
-                            key.interestOps(key.interestOps() & ~SelectionKey.OP_WRITE);
+                            con.removeWriteBuf(buf);
+                            //if (buffer time is too much, add OP_WRITE to the interest ops and break?)
+                            // LOOP
+                        }
+                    } else {
+                        // Nothing more to write
+                        if (key.isValid()) {
+                            rv = true;
                         }
                         break;
-                    } else if (buf.remaining() > 0) {
-                        // stay interested
-                        //key.interestOps(key.interestOps() | SelectionKey.OP_WRITE);
-                        continue;
-                    } else {
-                        con.removeWriteBuf(buf);
-                        //if (buffer time is too much, add OP_WRITe to the interest ops and break?)
-                        // LOOP
                     }
-                } else {
-                    // Nothing more to write
-                    if (key.isValid())
-                        key.interestOps(key.interestOps() & ~SelectionKey.OP_WRITE);
-                    break;
                 }
+                if (rv)
+                    clearInterest(key, SelectionKey.OP_WRITE);
+                else
+                    setInterest(key, SelectionKey.OP_WRITE);
             }
         } catch (CancelledKeyException cke) {
             if (_log.shouldLog(Log.WARN)) _log.warn("Error writing on: " + con, cke);
             _context.statManager().addRateData("ntcp.writeError", 1);
             con.close();
+            rv = true;
         } catch (IOException ioe) {
             if (_log.shouldLog(Log.WARN)) _log.warn("Error writing on: " + con, ioe);
             _context.statManager().addRateData("ntcp.writeError", 1);
             con.close();
+            rv = true;
         }
+        return rv;
     }
 
     /**
@@ -797,7 +822,7 @@ class EventPumper implements Runnable {
         while ((con = _wantsRead.poll()) != null) {
             SelectionKey key = con.getKey();
             try {
-                key.interestOps(key.interestOps() | SelectionKey.OP_READ);
+                setInterest(key, SelectionKey.OP_READ);
             } catch (CancelledKeyException cke) {
                 // ignore, we remove/etc elsewhere
                 if (_log.shouldLog(Log.WARN))
@@ -833,7 +858,7 @@ class EventPumper implements Runnable {
                 if (key == null)
                     continue;
                 try {
-                    key.interestOps(key.interestOps() | SelectionKey.OP_WRITE);
+                    setInterest(key, SelectionKey.OP_WRITE);
                 } catch (CancelledKeyException cke) {
                    if (_log.shouldLog(Log.WARN))
 //                       _log.warn("Run Delayed Events: Cancelled Key Exception [2]", cke);
@@ -866,7 +891,7 @@ class EventPumper implements Runnable {
                 con.setKey(key);
                 RouterAddress naddr = con.getRemoteAddress();
                 try {
-                    // no DNS lookups, do not use host names
+                    // no DNS lookups, do not use hostnames
                     int port = naddr.getPort();
                     byte[] ip = naddr.getIP();
                     if (port <= 0 || ip == null)
@@ -875,7 +900,7 @@ class EventPumper implements Runnable {
                     boolean connected = schan.connect(saddr);
                     if (connected) {
                         // Never happens, we use nonblocking
-                        key.interestOps(SelectionKey.OP_READ);
+                        setInterest(key, SelectionKey.OP_READ);
                         processConnect(key);
                     }
                 } catch (IOException ioe) {
@@ -912,4 +937,26 @@ class EventPumper implements Runnable {
     }
 
     public long getIdleTimeout() { return _expireIdleWriteTime; }
+
+    /**
+     *  @since 0.9.53
+     */
+    public static void setInterest(SelectionKey key, int op) throws CancelledKeyException {
+        synchronized(key) {
+            int old = key.interestOps();
+            if ((old & op) == 0)
+                key.interestOps(old | op);
+        }
+    }
+
+    /**
+     *  @since 0.9.53
+     */
+    public static void clearInterest(SelectionKey key, int op) throws CancelledKeyException {
+        synchronized(key) {
+            int old = key.interestOps();
+            if ((old & op) != 0)
+                key.interestOps(old & ~op);
+        }
+    }
 }
