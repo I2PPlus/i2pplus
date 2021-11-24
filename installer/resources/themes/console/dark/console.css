@@ -5953,6 +5953,12 @@ div.appgroup {
   border-radius: 2px 0 0 2px;
 }
 
+@supports not (-moz-appearance: none) {
+  #searchbar select {
+    padding-left: 12px !important;
+  }
+}
+
 #searchbar select:hover, #searchbar select:focus, #searchbar select:active {
   border: none !important;
   outline: none;
