@@ -3577,6 +3577,16 @@ th #nameRequired, th .commentAuthorName {
   border-bottom: var(--border_main);
 }
 
+#snarkCommentSection, #snarkFiles {
+ border: none;
+ border-top: var(--border_main);
+ border-bottom: var(--border_main);
+}
+
+#snarkDirInfo tr:last-child, #newrating {
+  border-bottom: none;
+}
+
 #snarkInfo + .mainsection {
     margin-top: 8px 0 !important;
 }
