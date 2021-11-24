@@ -6796,6 +6796,7 @@ h3#iptransport a:hover::after, h3#advancedconfig a:hover::after, #reseedsetup a:
 #i2pclientconfig a, #pluginmanage a {
   padding-top: 11px;
   display: inline-block;
+  vertical-align: middle;
 }
 
 @media screen and (max-width: 1499px) {
