@@ -23,7 +23,7 @@
   --btn: linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
   --btn_shadow_active: var(--highlight), inset 3px 3px 3px 2px #310;
   --btn_hover_radial: radial-gradient(at center bottom, rgba(96, 48, 0, .4) 0, rgba(0, 0, 0, 0) 80%), #000;
-  --input_txt: linear-gradient(180deg,#001800, #001000);
+  --input_txt: linear-gradient(180deg,#001800,#001000);
   --vstripe: repeating-linear-gradient(180deg,rgba(0,0,0,.9) 2px, rgba(0,16,0,.9) 4px);
   --helpbox: linear-gradient(135deg, #000d00, #000900);
   --border: 1px solid #242;
