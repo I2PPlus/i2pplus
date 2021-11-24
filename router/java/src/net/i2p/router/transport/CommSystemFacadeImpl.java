@@ -647,7 +647,12 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             buf.append("<span class=\"routerid\"><span class=\"flag\">")
                .append("<img class=\"unknownflag\" height=\"12\" width=\"16\" alt=\"??\"" +
                        " src=\"/flags.jsp?c=a0\" title=\"").append(_t("unknown"))
-               .append("\"></span><tt>????</tt></span> ");
+               .append("\"></span><tt>");
+           if (h != null)
+               buf.append(h);
+           else
+               buf.append("????");
+           buf.append("</tt></span> ");
         }
         return buf.toString();
     }
