@@ -39,6 +39,8 @@
   --header_active: linear-gradient(180deg, var(--row_hover),#ffe);
   --badge: linear-gradient(180deg,var(--bg),var(--bg4));
   --title_shadow: var(--highlight), inset 0 0 0 0 var(--bg), 0 1px 1px var(--bg4);
+  --section: linear-gradient(180deg,var(--bg2), var(--bg3));
+  --th: linear-gradient(180deg,var(--bg), var(--bg3));
 }
 
 html, body {
@@ -569,7 +571,7 @@ th {
   border-top: var(--border_main);
   border-bottom: var(--border_main);
   background: var(--bg);
-  background: linear-gradient(180deg,var(--bg), var(--bg3));
+  background: var(--th);
 }
 
 th:first-child {
@@ -757,7 +759,7 @@ tt, .bucket, #bucketSet code {
   padding: 7px 3px 7px 8px !important;
   text-align: left !important;
   border-top: var(--border_main);;
-  background: linear-gradient(180deg,var(--bg), var(--bg3));
+  background: var(--th);
 }
 
 #torrentOrderControl {
@@ -776,12 +778,10 @@ tt, .bucket, #bucketSet code {
 }
 
 .snarkTorrentInfo tr:nth-child(even) {
-  color: #0c153d;
   background: var(--bg3);
 }
 
 .snarkTorrentInfo tr:nth-child(odd) {
-  color: #0c153d;
   background: var(--bg);
 }
 
@@ -893,7 +893,7 @@ tt, .bucket, #bucketSet code {
   margin: 5px;
 }
 
-.SnarkDirInfo img {
+.SnarkDirInfo img:not(.thumb) {
   margin: -2px 0;
   width: 20px;
   height: 20px;
@@ -936,7 +936,7 @@ tt, .bucket, #bucketSet code {
   display: none;
   cursor: not-allowed !important;
   border: 1px solid #999;
-  background: linear-gradient(180deg,var(--bg), var(--bg3));
+  background: var(--th);
 }
 
 .snarkFileStatus {
@@ -1030,7 +1030,6 @@ td:first-child {
 }
 
 .snarkTorrentNoneLoaded td {
-  color: #0c153d !important;
   text-align: center !important;
   font-weight: 700;
   box-shadow: var(--highlight);
@@ -1130,14 +1129,6 @@ tr:hover .percentBarText {
   background: var(--bg);
 }
 
-.snarkTorrentInfo tr:nth-child(even) {
-  color: #0c153d;
-}
-
-.snarkTorrentInfo tr:nth-child(odd) {
-  color: #0c153d;
-}
-
 tr:nth-child(odd) + .peerinfo:nth-child(even) {
   border-bottom: var(--border_soft);
   background: var(--bg3);
@@ -1191,7 +1182,6 @@ tr:nth-child(even) + .peerinfo:nth-child(odd) {
   width: 1%;
   white-space: nowrap;
   font-weight: 400;
-  color: #0c153d !important;
 }
 
 .snarkFileStatus {
@@ -1353,6 +1343,8 @@ tr:hover .txBarInner {
 
 .snarkDirInfo td:first-child .thumb {
   padding: 2px !important;
+  max-width: 96px !important;
+  max-height: 64px !important;
   border: var(--border_main);;
   border-radius: 0 !important;
   will-change: transform;
@@ -1367,8 +1359,6 @@ tr:hover .txBarInner {
 }
 
 .snarkDirInfo td:first-child .thumb:hover, .snarkDirInfo td:first-child .thumb:focus {
-  max-width: 96px;
-  max-height: 64px;
   border: 1px solid var(--hover) !important;
   box-shadow: none !important;
   background: var(--bg) !important;
@@ -1557,16 +1547,15 @@ input {
 }
 
 input[disabled] {
-  cursor: not-allowed;
   opacity: .5 !important;
+  pointer-events: none;
 }
 
 input[disabled][type=submit]:hover, input[disabled][type=submit]:focus {
   border: 1px solid #999 !important;
-  background: linear-gradient(180deg,var(--bg), var(--bg3));
-  cursor: not-allowed;
+  background: var(--th);
   box-shadow: var(--highlight);
-  color: #111;
+  color: #555;
 }
 
 a.controld {
@@ -1685,7 +1674,7 @@ input[type=text], input[type=password], input.r, input[name="nofilter_dataDir"],
   border: var(--border_main);
   border-radius: 2px;
   box-shadow: inset 1px 1px 1px #ddd;
-  background: #f8f8ff;
+  background: var(--bg2);
   cursor: text;
   user-select: auto;
 }
@@ -1779,7 +1768,7 @@ select:focus {
 }
 
 select[disabled], select[disabled]:hover {
-  background: linear-gradient(180deg,var(--bg), var(--bg3)) !important;
+  background: var(--th) !important;
   opacity: .7;
   cursor: not-allowed;
 }
@@ -1791,7 +1780,7 @@ textarea {
   color: #006;
   border: var(--border_main);
   border-radius: 2px;
-  background: #f8f8ff;
+  background: var(--bg2);
 }
 
 textarea:focus {
@@ -1847,7 +1836,7 @@ img:hover {
 
 .pagenavcontrols a img:hover, .pagenavcontrols a img:focus {
   border: 1px solid var(--hover) !important;
-  background: linear-gradient(180deg,#f8f8ff 50%,#cfcfff 50%);
+  background: linear-gradient(180deg,var(--bg2) 50%,#cfcfff 50%);
   filter: none !important;
 }
 
@@ -2145,7 +2134,6 @@ img:hover {
 .mainsection, .newtorrentsection, .addtorrentsection, .configsection, .configsectionpanel {
   word-wrap: break-word;
   text-align: center;
-  color: #0c153d;
   border: var(--border_main);
   background: var(--bg);
 }
@@ -2175,21 +2163,21 @@ img:hover {
   margin: 0 0 9px 0;
   padding: 0 10px;
   background: var(--bg3);
-  background: linear-gradient(180deg,#f8f8ff, var(--bg3));
+  background: var(--section);
 }
 
 .addtorrentsection {
   margin: 9px 0;
   padding: 0 10px;
   background: var(--bg3);
-  background: linear-gradient(180deg,#f8f8ff, var(--bg3));
+  background: var(--section);
 }
 
 .configsection {
   margin: 0;
   padding: 0 10px 12px 10px;
   background: var(--bg3);
-  background: linear-gradient(180deg,#f8f8ff, var(--bg3));
+  background: var(--section);
 }
 
 .configsectionpanel {
@@ -2210,10 +2198,6 @@ img:hover {
 
 .addtorrentsection table, .newtorrentsection table {
   margin-top: -5px;
-}
-
-.newtorrentsection form, .configsection form, .addtorrentsection form {
-  color: #0c153d !important;
 }
 
 code {
@@ -2245,8 +2229,8 @@ input.trackerannounce {
 
 input.toggle_input { /* hide checkbox and use label as faux panel heading */
   position: absolute !important;
-  opacity: 0;
   z-index: -1;
+  opacity: 0;
 }
 
 input.toggle_input::before {
@@ -2353,7 +2337,7 @@ td#bwHelp a {
 
 .snarkCommentInfo, .snarkComments, #mediaContainer {
   margin: 10px 0 0 !important;
-  border: 1px solid #bbf;
+  border: var(--border_main);
   border-left: none;
   border-right: none;
   background: var(--bg3);
@@ -2372,16 +2356,16 @@ td#bwHelp a {
 }
 
 .snarkCommentInfo th, #mediaContainer th {
-  background: var(--comment) no-repeat scroll 8px center / 16px; linear-gradient(180deg,var(--bg), var(--bg3)) var(--bg);
   padding-left: 30px !important;
+  background: var(--comment) no-repeat scroll 8px center / 16px, var(--th);
 }
 
 #mediaContainer th {
-  background: url(/i2psnark/.resources/icons/film.png) no-repeat 8px center, linear-gradient(180deg,var(--bg), var(--bg3)) var(--bg);
+  background: url(/i2psnark/.resources/icons/film.png) no-repeat 8px center, var(--th);
 }
 
 #mediaContainer th.audio {
-  background: url(/i2psnark/.resources/icons/music.png) no-repeat 8px center, linear-gradient(180deg,var(--bg), var(--bg3)) var(--bg);
+  background: url(/i2psnark/.resources/icons/music.png) no-repeat 8px center, var(--th);
 }
 
 .newTab {
@@ -2404,7 +2388,7 @@ td#bwHelp a {
 }
 
 .snarkCommentInfo tr:nth-child(odd), .snarkComments tr:nth-child(even) {
-  border-top: 1px solid #bbf;
+  border-top: var(--border_main);
   background: rgba(220, 220, 255, .5);
 }
 
@@ -2523,10 +2507,10 @@ td.commentAuthor .commentAuthorName {
   padding: 8px 10px 8px 26px;
   line-height: 120%;
   text-align: left;
-  border: 1px solid #bbf;
+  border: var(--border_main);
   border-radius: 3px;
-  box-shadow: var(--highlight), 0 0 1px 0 rgba(0,0,0,.3);
-  background: var(--bg3) var(--comment) no-repeat scroll 6px center / 16px;
+  box-shadow: var(--highlight);
+  background: var(--comment) no-repeat scroll 6px center / 16px, linear-gradient(180deg,var(--bg),var(--bg2));
   background-blend-mode: luminosity;
 }
 
@@ -2609,7 +2593,7 @@ td.commentAuthor .commentAuthorName {
   color: #bbf;
   border-radius: 1px;
   box-shadow: 0 0 0 1px #ccf;
-  background: #f8f8ff var(--tracker) no-repeat left 3px center / 14px;
+  background: var(--bg2) var(--tracker) no-repeat left 3px center / 14px;
 }
 
 .info_tracker:hover, .info_tracker:hover a {
@@ -3008,7 +2992,7 @@ input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilte
 
 #addtracker td {
   border-top: var(--border_main);
-  background: linear-gradient(180deg,#f8f8ff, #e7e8ff);
+  background: linear-gradient(180deg,var(--bg2), #e7e8ff);
 }
 
 .trackerconfig input.delete, .trackerconfig input.reload {
@@ -3079,7 +3063,7 @@ td.snarkTorrentPeerCount, .nopeers td.snarkTorrentPeerCount {
   position: sticky;
   top: 42px;
   z-index: 500;
-  background: linear-gradient(180deg,var(--bg), var(--bg3));
+  background: var(--th);
   border-bottom: var(--border_main);
 }
 
@@ -3146,7 +3130,7 @@ td.snarkTorrentPeerCount, .nopeers td.snarkTorrentPeerCount {
   text-align: center;
   border-top: var(--border_main);
   background: var(--bg3);
-  background: linear-gradient(180deg,var(--bg), var(--bg3)) !important;
+  background: var(--th) !important;
 }
 
 .pagenavcontrols {
