@@ -3049,12 +3049,12 @@ td.snarkTorrentPeerCount, .nopeers td.snarkTorrentPeerCount {
 
 .snarkGraphicStatus img {
   width: auto;
-  height: 20px;
+  height: 22px;
 }
 
 .snarkTrackerDetails img {
-  height: 16px;
-  width: 16px;
+  height: 18px;
+  width: 18px;
 }
 
 #torrentDisplay {
@@ -3802,6 +3802,15 @@ td.snarkTorrentPeerCount {
 
   .snarkTorrents thead img, .snarkDirInfo th img {
     max-height: 20px !important;
+  }
+  .snarkGraphicStatus img {
+    width: auto;
+    height: 20px;
+  }
+
+  .snarkTrackerDetails img {
+    height: 16px;
+    width: 16px;
   }
 }
 
