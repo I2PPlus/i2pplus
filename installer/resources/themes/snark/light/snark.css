@@ -16,6 +16,8 @@
   --panel_iframed: linear-gradient(180deg,#fafaff, #f8f8ff, #fafaff);
   --btnAction: linear-gradient(180deg,#fff 50%, #ddf 50%);
   --btnAction_hover: linear-gradient(180deg,#fff 50%, #eef 50%);
+  --th: linear-gradient(180deg,#fcfcff, #fafaff 51%, #f6f6ff 100%);
+  --badge: linear-gradient(180deg,#fff,#ddf);
 }
 
 body {
@@ -522,7 +524,7 @@ th {
   color: #5b5b71;
   border-top: 1px solid #afafcf;
   border-bottom: 1px solid #afafcf;
-  background: linear-gradient(180deg,#fcfcff, #fafaff 51%, #f6f6ff 100%);
+  background: var(--th);
 }
 
 th:first-child {
@@ -2680,7 +2682,7 @@ td.commentAuthor .commentAuthorName {
   text-overflow: ellipsis;
   text-align: left;
   box-shadow: 0 0 0 1px #bbd;
-  background: var(--user) no-repeat scroll 4px center / 14px, linear-gradient(180deg,#fff, #ddf);
+  background: var(--user) no-repeat scroll 4px center / 14px, var(--badge);
 }
 
 @media screen and (max-width: 1000px) {
@@ -3860,63 +3862,59 @@ td.snarkTrackerDetails {
 
 /* pagenav */
 
-.pagenavcontrols {
-  padding: 0;
-  font-size: 9pt;
-  font-weight: 700;
-  color: #272e3f;
-}
-
 .pagenavcontrols, .pagenavcontrols::before, #pagecount {
   display: inline-block;
   vertical-align: middle;
 }
 
 .pagenavcontrols {
-  margin-top: -2px;
+  margin: -2px auto 0;
   padding: 7px 5px 3px;
   position: absolute;
-  left: 0;
-  right: 0;
+  left: 40%;
+  right: 40%;
   z-index: 500;
   line-height: 120%;
+  font-size: 9pt;
+  font-weight: 700;
+  color: #272e3f;
 }
 
 @media screen and (max-width: 1000px) {
-.pagenavcontrols {
-  margin: 0;
-  padding: 2px !important;
-  position: static;
-}
-}
+  .pagenavcontrols {
+    margin: 0;
+    padding: 2px !important;
+    position: static;
+    width: 100%;
+    background: var(--th);
+  }
 
-/*#torrentDisplay + form > input + #pagenavtop {
-  margin-top: -2px;
-}*/
+  #pagenavtop.pagenavcontrols {
+    border-bottom: 1px solid #afafcf;
+  }
+}
 
 @supports not (-moz-appearance: none) {
-.iframed #pagenavtop {
-  margin: -1px 0 -33px;
-}
+  .iframed #pagenavtop {margin: -1px 0 -33px}
 }
 
 .pagenavcontrols::before {
-  content: "";
   height: 26px;
+  content: "";
 }
 
 .pagenavcontrols img, .pagenavcontrols img:hover, #pagenavbottom a:focus img {
-  border: 1px solid #89f;
-  border-radius: 2px;
   padding: 3px !important;
+  width: 12px !important;
+  height: 12px !important;
+  border: 1px solid #97a2ce;
+  border-radius: 2px;
+  background: linear-gradient(180deg,#fff 50%, #ddf 50%);
   opacity: .8;
   filter: drop-shadow(0 0 1px #bbb);
-  width: 12px;
-  background: linear-gradient(180deg,#fff 50%, #ddf 50%);
 }
 
 .pagenavcontrols img:hover, #pagenavbottom a:focus img {
-  background: linear-gradient(180deg,#fff 50%, #eef 50%);
   opacity: 1;
   filter: drop-shadow(0 0 1px #f60);
 }
@@ -3957,7 +3955,6 @@ td.snarkTrackerDetails {
   padding: 0 !important;
   vertical-align: middle;
   border-top: 1px solid #afafcf !important;
-  background: #eef;
   background: linear-gradient(180deg,#fafaff 50%, rgb(240, 240, 255)) #fafaff;
 }
 
@@ -3980,8 +3977,7 @@ td.snarkTrackerDetails {
   border: 1px solid #bbc;
   border-radius: 2px;
   box-shadow: var(--highlight);
-  background: #ddf;
-  background: linear-gradient(180deg,#fff, #ddf);
+  background: var(--badge);
 }
 
 .peerclient, .peerinfo tt, .clientid {
@@ -4013,7 +4009,6 @@ td.snarkTrackerDetails {
   text-overflow: ellipsis;
   font-size: 90%;
   text-align: center;
-  background: #eef;
   background: linear-gradient(180deg,#eef, #ddf);
 }
 
@@ -4036,8 +4031,7 @@ td.snarkTrackerDetails {
   border: 1px solid #bbc;
   border-radius: 2px;
   box-shadow: var(--highlight);
-  background: #eef;
-  background: linear-gradient(180deg,#fff, #ddf);
+  background: var(--badge);
   opacity: .85;
   line-height: 140%;
 }
