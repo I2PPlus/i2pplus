@@ -22,7 +22,7 @@
   --btn_hover: linear-gradient(180deg,#eee, #fff);
   --btn_shadow_active: var(--highlight), inset 3px 3px 3px 1px rgba(0,0,64,.3);
   --input_shadow: inset 1px 1px 1px rgba(0,0,48,.2);
-  --border: #575775;
+  --border: #6c6c93;
   --borderinner: #9898b3;
   --bevel: inset 0 0 0 1px #d0d0da;
 }
