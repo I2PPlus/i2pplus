@@ -1118,6 +1118,10 @@ tr:hover .percentBarText {
   opacity: 1 !important;
 }
 
+tr:not(.peerInfo):hover .percentBarText {
+  filter: drop-shadow(0 0 1px #777);
+}
+
 .snarkTorrentEven {
   background: var(--bg3);
 }
