@@ -20,11 +20,16 @@
   --badge: linear-gradient(180deg,#fff,#ddf);
 }
 
+html {
+  scrollbar-color: #779 #a4a4cb;
+}
+
 body {
   margin: 3px;
   font: 9pt var(--bodyfont);
   color: #4f4f63;
   background: #a4a4cb url(/themes/console/light/images/tile2.png) center top / 32px;
+  scrollbar-color: #779 rgba(255,255,255,.5);
 }
 
 body.iframed {
@@ -3878,6 +3883,10 @@ td.snarkTrackerDetails {
   font-size: 9pt;
   font-weight: 700;
   color: #272e3f;
+}
+
+#pagenavtop.pagenavcontrols {
+  margin-top: 0;
 }
 
 @media screen and (max-width: 1000px) {
