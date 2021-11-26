@@ -25,6 +25,7 @@
   --ink_lighter: #71718e;
   --ink_dark: #393947;
   --hover: #f60;
+  --section: linear-gradient(180deg,#fafaff,#efefff);
 }
 
 html {
@@ -378,7 +379,7 @@ button::-moz-focus-inner, input::-moz-focus-inner {
   font-size: 8.5pt;
   text-align: left;
   overflow: hidden;
-  color: rgba(51, 51, 153, .7);
+  color: #6e6eb7;
   border-top: var(--border_soft);
   border-bottom: var(--border_soft);
   border-spacing: 0;
@@ -1874,6 +1875,11 @@ img[src$="details.png"] {
   margin-top: -11px;
 }
 
+.iframed #mainsection > #screenlog + #torrentlist,
+.iframed #mainsection > #screenlog + script + #torrentlist {
+  margin-top: 0;
+}
+
 .page > .mainsection {
   margin-top: 10px;
 }
@@ -1888,7 +1894,7 @@ img[src$="details.png"] {
 }
 
 #snarkFiles, #snarkCommentSection {
-  background: linear-gradient(180deg,#fafaff, #efefff);
+  background: var(--section);
 }
 
 #snarkCommentSection {
@@ -1916,7 +1922,7 @@ img[src$="details.png"] {
   text-align: center;
   border: var(--border_soft);
   box-shadow: var(--highlight);
-  background: linear-gradient(180deg,#fafaff, #efefff) !important;
+  background: var(--section) !important;
 }
 
 .newtorrentsection {
@@ -3774,11 +3780,11 @@ td.snarkTrackerDetails img {
   min-width: 60px;
 }
 
-#torrentDisplay label:first-child {
+#torrentDisplay label:first-of-type {
   border-left: none;
 }
 
-#torrentDisplay label:last-child {
+#torrentDisplay label:last-of-type {
   border-right: none;
 }
 }
