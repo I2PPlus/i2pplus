@@ -1870,6 +1870,10 @@ img[src$="details.png"] {
   text-align: center;
 }
 
+.iframed #mainsection > #torrentlist {
+  margin-top: -11px;
+}
+
 .page > .mainsection {
   margin-top: 10px;
 }
