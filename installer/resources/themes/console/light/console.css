@@ -3098,8 +3098,6 @@ table#wrapperlogs {
 }
 
 #logs #enviro {
-  -moz-user-select: all;
-  -webkit-user-select: all;
   user-select: all;
   cursor: text;
 }
@@ -3650,7 +3648,8 @@ div.app img {
   padding-left: 10px;
   padding-right: 44px;
   min-width: 240px;
-  border-radius: 0 2px 2px 0;
+  border-radius: 0 3px 3px 0;
+  border: 1px solid #97a2ce;
   border-left: none !important;
   background: var(--txtinput);
 }
@@ -3706,10 +3705,24 @@ div.app img {
   opacity: .6;
 }
 
+@media screen and (-webkit-min-device-pixel-ratio: 1.1) {
+  #searchbar {
+    margin-bottom: -14px;
+    padding: 8px 3px 2px;
+  }
+  #searchbar span {
+    padding-bottom: 1px;
+  }
+  #searchbar input, #searchbar select {
+    height: 30px;
+  }
+  #searchbar button {
+    height: 29px;
+    border-bottom: 1px solid #97a2ce !important;
+  }
+}
+
 /* end search */
-
-
-/* end optional homepage search */
 /* end home page */
 
 tt, code {
@@ -3720,8 +3733,6 @@ tt, code {
 
 #config_clients tt {
   font-size: 9pt;
-  -moz-user-select: all;
-  -webkit-user-select: all;
   user-select: all;
 }
 
@@ -6831,8 +6842,6 @@ p:empty { /* empty paragraph nuke */
 }
 
 th code {
-  -moz-user-select: all;
-  -webkit-user-select: all;
   user-select: all;
 }
 
@@ -7068,8 +7077,6 @@ b.netdb_transport {
 .netdb_info.host, .netdb_info.port {
   font-size: 90%;
   color: #040;
-  -moz-user-select: all;
-  -webkit-user-select: all;
   user-select: all;
 }
 
@@ -9471,8 +9478,6 @@ a[href^="configpeer?peer"]:hover::after {
   box-shadow: 0 0 0 1px rgba(185,185,198,.65), var(--highlight);
   border-radius: 2px;
   background: #f8f8ff;
-  -moz-user-select: all;
-  -webkit-user-select: all;
   user-select: all;
 }
 
@@ -9727,8 +9732,6 @@ a[href^="configpeer?peer"]:hover::after {
 }
 
 .revision, .sha256, .unsignedmod {
-  -moz-user-select: all;
-  -webkit-user-select: all;
   user-select: all;
 }
 
@@ -12527,8 +12530,6 @@ i {
   text-overflow: ellipsis;
   font-size: 85% !important;
   color: var(--ink);
-  -moz-user-select: all;
-  -webkit-user-select: all;
   user-select: all;
 }
 
