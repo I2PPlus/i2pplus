@@ -15,7 +15,7 @@
   --highlight: inset 0 0 0 1px #fff;
   --a: #4d5f80;
   --ink: #4f4f63;
-  --inklite: #5b5b71;
+  --ink_light: #5b5b71;
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, Verdana, Helvetica, sans-serif;
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
   --btn: linear-gradient(180deg,#fff, #efefff);
@@ -88,7 +88,7 @@ body {
 /* end optimize */
 
 b, #routerinformation td:first-child {
-  color: var(--inklite);
+  color: var(--ink_light);
 }
 
 .hide, .hideme {
@@ -717,7 +717,7 @@ a:active #sb_bandwidthgraph {
   white-space: nowrap;
   text-align: center !important;
   font-weight: 700 !important;
-  color: var(--inklite);
+  color: var(--ink_light);
   text-shadow: 0 1px 1px rgba(255,255,255,.8);
   opacity: 0;
   transition: ease opacity .2s;
@@ -1410,7 +1410,7 @@ p:empty + .sb_notice {
 }
 
 .sorry {
-  color: var(--inklite);
+  color: var(--ink_light);
 }
 
 .sorry hr, .sorry hr:last-child {
@@ -1747,7 +1747,7 @@ td.tabletextarea {
 
 #newsStatus, #newsDisplay {
   display: inline-block;
-  color: var(--inklite);
+  color: var(--ink_light);
 }
 
 #newsStatus, .news #newsDisplay {
@@ -1996,7 +1996,7 @@ h1, .confignav {
 /* end topnav */
 
 .th_title a, .th_title a:hover {
-  color: var(--inklite) !important;
+  color: var(--ink_light) !important;
 }
 
 div.configure {
@@ -2687,7 +2687,7 @@ to {
 }
 
 #messages li {
-  color: var(--inklite);
+  color: var(--ink_light);
 }
 
 .messages li, .messages li:first-child, .error li:first-child, .error li {
@@ -3206,7 +3206,7 @@ table hr {
 
 th {
   padding: 6px 5px;
-  color: var(--inklite);
+  color: var(--ink_light);
   text-align: left;
   font-size: 9pt;
   line-height: 110%;
@@ -3299,7 +3299,7 @@ h4.app, h4.app2 {
   letter-spacing: .08em;
   text-transform: uppercase;
   font-size: 11pt;
-  color: var(--inklite);
+  color: var(--ink_light);
   border: 1px solid var(--borderinner);
   border-radius: 2px;
   box-shadow: var(--highlight), 0 0 1px rgba(220,220,220,.3);
@@ -3756,7 +3756,7 @@ tt::selection, .sybil_routerinfo th code::selection {
 }
 
 .statlist b a:hover {
-  color: var(--inklite) !important;
+  color: var(--ink_light) !important;
 }
 
 ol {
@@ -4390,7 +4390,7 @@ h2 {
   word-wrap: break-word;
   text-transform: uppercase !important;
   font-size: 13pt;
-  color: var(--inklite);
+  color: var(--ink_light);
   border: 1px solid var(--borderinner);
   border-radius: 2px;
   box-shadow: var(--highlight), 0 0 1px rgba(220,220,220,.3);
@@ -4433,7 +4433,7 @@ h3, #routerinformation h2 {
   text-transform: uppercase;
   letter-spacing: .08em;
   font-size: 11pt;
-  color: var(--inklite);
+  color: var(--ink_light);
   border: 1px solid var(--borderinner);
   border-left: 5px solid var(--borderinner);
   box-shadow: var(--highlight), 0 0 1px rgba(220,220,220,.3);
@@ -4550,7 +4550,7 @@ h4 {
   letter-spacing: .08em;
   font-size: 10pt;
   text-transform: uppercase;
-  color: var(--inklite);
+  color: var(--ink_light);
   border: 1px solid var(--borderinner);
   border-radius: 2px;
   box-shadow: var(--highlight);
@@ -4760,7 +4760,7 @@ input, input:visited, button, button:visited {
   padding: 5px;
   line-height: 140%;
   font-size: 9pt;
-  color: var(--inklite);
+  color: var(--ink_light);
   text-decoration: none;
   text-shadow: 0 1px 1px #fff;
   border: 1px solid #97a2ce;
@@ -4788,7 +4788,7 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 
 button a, button a:visited {
   font-weight: 400 !important;
-  color: var(--inklite);
+  color: var(--ink_light);
 }
 
 button:hover, input[type=submit]:hover, input[type=reset]:hover, button:focus, input[type=submit]:focus, input[type=reset]:focus {
@@ -4806,7 +4806,7 @@ input[type=file]::file-selector-button {
   line-height: 140%;
   font-family: var(--bodyfont);
   font-size: 9pt;
-  color: var(--inklite);
+  color: var(--ink_light);
   text-decoration: none;
   text-shadow: 0 1px 1px #fff;
   border: 1px solid #97a2ce;
@@ -5370,7 +5370,7 @@ select, select[disabled]:hover, select[disabled]:focus {
   min-width: 120px;
   text-align: left !important;
   font-size: 9pt;
-  color: var(--inklite);
+  color: var(--ink_light);
   border: 1px solid #97a2ce;
   border-radius: 2px;
   box-shadow: var(--highlight);
@@ -5573,7 +5573,7 @@ h3#activejobs + ol li::before, h3#scheduledjobs + ol li::before, h3#readyjobs + 
   width: 18px;
   height: 12px;
   font-weight: 700;
-  color: var(--inklite);
+  color: var(--ink_light);
   background-size: 12px;
   content: "";
 }
@@ -6639,7 +6639,7 @@ p:empty { /* empty paragraph nuke */
   padding: 10px 20px;
   font-weight: 700;
   text-align: center;
-  color: var(--inklite);
+  color: var(--ink_light);
   border: 1px solid var(--borderinner);
   box-shadow: 0 0 1px #e0e0eb;
   border-radius: 2px;
@@ -6890,7 +6890,7 @@ b.netdb_transport {
 .netdb_name {
   text-transform: capitalize;
   font-weight: 700;
-  color: var(--inklite);
+  color: var(--ink_light);
 }
 
 .netdb_info {
@@ -7662,7 +7662,7 @@ p.sybil_info, p.family, p.threatpoints, p.hashdist, p#sybil_totals, p.notfound {
   border: 1px solid var(--borderinner);
   box-shadow: var(--highlight);
   font-weight: 700;
-  color: var(--inklite);
+  color: var(--ink_light);
   text-align: left;
   background: var(--eye) no-repeat 8px center / 16px, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
 }
@@ -7880,7 +7880,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   white-space: nowrap;
   text-align: right;
   font-weight: 700;
-  color: var(--inklite);
+  color: var(--ink_light);
 }
 
 #netdblookup td:nth-child(even) {
@@ -8312,7 +8312,7 @@ table#schedjobs {
 
 #schedjobs td:first-child {
   font-weight: 700;
-  color: var(--inklite);
+  color: var(--ink_light);
 }
 
 #jobstats th:nth-child(n+2) {
@@ -8325,7 +8325,7 @@ table#schedjobs {
 
 #jobstats tr:last-child td {
   padding: 5px;
-  color: var(--inklite);
+  color: var(--ink_light);
 }
 
 #peerdefs, #profile_defs, #thresholds, #configinfo, .infohelp, .infowarn {
@@ -8382,7 +8382,7 @@ table#schedjobs {
 }
 
 #tunnel_defs b {
-  color: var(--inklite) !important;
+  color: var(--ink_light) !important;
 }
 
 #floodfills .tier, #floodfills .ff, #floodfills .ssuintro, #floodfills .unreachable, #floodfills .reachable, #floodfills .hidden {
@@ -9270,7 +9270,7 @@ h4#updateplugins {
   letter-spacing: 0;
   text-transform: none;
   font-size: 10pt;
-  color: var(--inklite);
+  color: var(--ink_light);
   border: 1px solid var(--borderinner);
   background: #fcfcff !important;
   background: linear-gradient(180deg,#fff 50%, rgba(238, 238, 255, .2) 50%, #eef 100%) #fff !important;
@@ -9355,7 +9355,7 @@ a[href^="configpeer?peer"]:hover::after {
 
 #debug td:first-child, #debug th:first-child {
   padding-left: 10px;
-  color: var(--inklite);
+  color: var(--ink_light);
 }
 
 #debug td:last-child {
@@ -9848,7 +9848,7 @@ a[href^="configpeer?peer"]:hover::after {
   padding-left: 7px;
   width: 5%;
   white-space: nowrap;
-  color: var(--inklite);
+  color: var(--ink_light);
   text-align: right;
   font-style: italic;
   font-weight: 700;
@@ -10065,7 +10065,7 @@ b.suboption {
   text-align: left;
   font-weight: 700;
   font-size: 11pt;
-  color: var(--inklite);
+  color: var(--ink_light);
   background: #fff;
   background: linear-gradient(90deg, #fff, #eef);
 }
@@ -10089,7 +10089,7 @@ b.suboption {
   width: 100%;
   font-weight: 700;
   font-size: 125%;
-  color: var(--inklite);
+  color: var(--ink_light);
 }
 
 .net_datausage {
@@ -12223,7 +12223,7 @@ p#gatherstats {
 
 .statvalue {
   padding: 0 2px 0 0;
-  color: var(--inklite);
+  color: var(--ink_light);
   font-weight: 700;
   font-style: italic;
 }
@@ -12390,7 +12390,7 @@ i {
   font-size: 17pt;
   font-weight: 700;
   letter-spacing: .1em;
-  color: var(--inklite);
+  color: var(--ink_light);
   opacity: .9;
 }
 
@@ -12726,7 +12726,7 @@ i {
   overflow: hidden;
   text-overflow: ellipsis;
   text-transform: capitalize;
-  color: var(--inklite);
+  color: var(--ink_light);
 }
 
 .optbox:not(:checked) + label > .stattograph b {
@@ -12745,7 +12745,7 @@ i {
 }
 
 .optbox:checked + label > .stattograph:hover b {
-  color: var(--inklite) !important;
+  color: var(--ink_light) !important;
 }
 
 .stattograph:hover, .optbox:checked + label > .stattograph:hover {
