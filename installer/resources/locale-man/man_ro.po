@@ -274,10 +274,10 @@ msgstr "Raportarea erorilor"
 #. type: Plain text
 #: man/eepget.1:99 man/i2prouter.1:59 man/i2prouter-nowrapper.1:29
 msgid ""
-"Please enter a ticket on E<.UR https://trac.i2p2.de/> the I2P trac page "
+"Please enter a ticket on E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> the I2P Bug Tracker "
 "E<.UE .>"
 msgstr ""
-"Vă rugăm să introduceți un bilet pe E<.UR https://trac.i2p2.de/> pagina I2P "
+"Vă rugăm să introduceți un bilet pe E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> pagina I2P "
 "trac E<.UE.>"
 
 #. type: SH

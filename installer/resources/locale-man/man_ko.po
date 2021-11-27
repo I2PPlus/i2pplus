@@ -251,9 +251,9 @@ msgstr "REPORTING BUGS"
 #. type: Plain text
 #: man/eepget.1:99 man/i2prouter.1:59 man/i2prouter-nowrapper.1:29
 msgid ""
-"Please enter a ticket on E<.UR https://trac.i2p2.de/> the I2P trac page "
+"Please enter a ticket on E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> the I2P Bug Tracker "
 "E<.UE .>"
-msgstr "E<.UR https://trac.i2p2.de/> I2P trac 페이지 E<.UE .>에 티켓을 남겨 주세요"
+msgstr "E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> I2P trac 페이지 E<.UE .>에 티켓을 남겨 주세요"
 
 #. type: SH
 #: man/eepget.1:100 man/i2prouter.1:60 man/i2prouter-nowrapper.1:30
