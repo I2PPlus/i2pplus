@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the routerconsole package.
 # To contribute translations, see https://www.transifex.com/otf/I2P/dashboard/
 # zzz <zzz@mail.i2p>, 2017.
-# 
+#
 # Translators:
 # Verdulo :-) <tomek@disroot.org>, 2017
 msgid ""
@@ -266,10 +266,10 @@ msgstr "ZGŁASZANIE BŁĘDÓW"
 #. type: Plain text
 #: man/eepget.1:99 man/i2prouter.1:59 man/i2prouter-nowrapper.1:29
 msgid ""
-"Please enter a ticket on E<.UR https://trac.i2p2.de/> the I2P trac page "
+"Please enter a ticket on E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> the I2P Bug Tracker "
 "E<.UE .>"
 msgstr ""
-"Prosimy zgłosić błąd na E<.UR https://trac.i2p2.de/> stronie I2P trac E<.UE "
+"Prosimy zgłosić błąd na E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> stronie I2P Bug Tracker E<.UE "
 ".>"
 
 #. type: SH
