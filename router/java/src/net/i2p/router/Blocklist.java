@@ -267,10 +267,11 @@ public class Blocklist {
             for (Hash peer : _peerBlocklist.keySet()) {
                 String reason;
                 String comment = _peerBlocklist.get(peer);
+                String peerhash = peer.toBase64().substring(0,4);
                 if (comment != null)
-                    reason = _x("Banned by router hash: {0}");
+                    reason = " <b>➜</b> " + _x("Hash: {0}");
                 else
-                    reason = _x("Banned by router hash");
+                    reason = " <b>➜</b> " + _x("Banned by Router Hash");
                 _context.banlist().banlistRouterForever(peer, reason, comment);
             }
             _peerBlocklist.clear();

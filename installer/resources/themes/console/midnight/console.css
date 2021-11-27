@@ -3411,12 +3411,6 @@ h1, h2, h3 {
   box-shadow: var(--highlight);
 }
 
-/*
-.th_title {
-  background: linear-gradient(180deg,#141221 50%, #001 50%) !important;
-}
-*/
-
 span#newtab {
   margin-top: 2px;
   float: right;
@@ -7599,11 +7593,13 @@ div.app img {
   width: auto;
   white-space: nowrap;
   text-align: center;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #00003a;
 }
 
 #searchbar span {
   display: inline-block;
   position: relative;
+  overflow: hidden;
   background: none;
 }
 
@@ -7616,6 +7612,10 @@ div.app img {
   box-shadow: var(--highlight), inset 0 0 2px 1px #26235c;
   opacity: 0;
   animation: ease fade .3s 1s forwards;
+}
+
+#searchbar tr {
+  box-shadow: none;
 }
 
 #searchbar td {
@@ -7697,6 +7697,23 @@ div.app img {
   }
   #searchbar button {
     height: 27px;
+  }
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 1.1) {
+  #searchbar {
+    margin-bottom: -14px;
+    padding: 8px 3px 2px;
+  }
+  #searchbar span {
+    padding-bottom: 1px;
+  }
+  #searchbar input, #searchbar select {
+    height: 30px;
+  }
+  #searchbar button {
+    height: 29px;
+    border-bottom: 1px solid #26235c !important;
   }
 }
 

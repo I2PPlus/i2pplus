@@ -2937,8 +2937,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         out.write("<span class=\"configOption\"><b>");
         out.write(_t("Refresh time"));
-        out.write("</b> \n<select name=\"refreshDelay\""
-                  + " title=\"");
+        out.write("</b> \n<select name=\"refreshDelay\" title=\"");
         out.write(_t("How frequently torrent status is updated on the main page"));
         out.write("\">");
         int delay = _manager.getRefreshDelaySeconds();
