@@ -1053,7 +1053,7 @@ public class NTCPConnection implements Closeable {
             write(buf);
         }
     }
-    
+
     /**
      * We have read the data in the buffer, but we can't process it locally yet,
      * because we're choked by the bandwidth limiter.  Cache the contents of
@@ -1741,7 +1741,6 @@ public class NTCPConnection implements Closeable {
                           " good frames, to read: " + toRead + " on " + this); //, new Exception("I did it"));
             _curReadState = new NTCP2FailState(toRead, validFramesRcvd);
             _curReadState.receive(buf);
-            }
         } else {
             if (_log.shouldWarn())
                 _log.warn("Immediate close, AEAD failure after " + validFramesRcvd +
