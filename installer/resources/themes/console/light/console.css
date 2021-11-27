@@ -23,7 +23,7 @@
   --btn_shadow_active: var(--highlight), inset 3px 3px 3px 1px rgba(0,0,64,.3);
   --input_shadow: inset 1px 1px 1px rgba(0,0,48,.2);
   --border: #6c6c93;
-  --borderinner: #9898b3;
+  --border_inner: #9898b3;
   --bevel: inset 0 0 0 1px #d0d0da;
 }
 
@@ -50,7 +50,7 @@ body {
 }
 
 .main {
-  scrollbar-color: var(--borderinner) rgba(255,255,255,.4);
+  scrollbar-color: var(--border_inner) rgba(255,255,255,.4);
 }
 
 .main textarea {
@@ -1634,7 +1634,7 @@ p:empty + .sb_notice {
   color: #7e7fb9;
   background: #7e7fb9;
   height: 1px;
-  border: 0 solid var(--borderinner);
+  border: 0 solid var(--border_inner);
   margin: 10px 0;
 }
 
@@ -1713,7 +1713,7 @@ td.tabletextarea {
 .newscontent {
   margin: 0 0 14px;
   padding: 10px 15px;
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
   border-radius: 0 0 2px 2px;
   box-shadow: var(--highlight);
   background: #eef !important;
@@ -1771,7 +1771,7 @@ td.tabletextarea {
 #graphopts a:hover, #graphopts a:visited:hover, #graphopts a:focus, #graphopts a:visited:focus,
 #fullhistory a:hover, #fullhistory a:focus, #fullhistory a:visited:hover, #fullhistory a:visited:focus,
 #routerinformation tr:nth-child(n+2) a:not(#revision):hover, #routerinformation tr:nth-child(n+2) a:focus {
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
   background: #e2e2ff;
   background: linear-gradient(180deg,#f8f8ff 50%, #e2e2ff 50%);
 }
@@ -1784,7 +1784,7 @@ td.tabletextarea {
 #routerinformation tr:nth-child(n+2) a:active {
   box-shadow: inset 3px 3px 3px rgba(41,61,95,.8);
   color: #559 !important;
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
 }
 
 #routerinformation #revision:active {
@@ -1872,7 +1872,7 @@ hr + #newsStatus, hr + #newsStatus + #newsDisplay {
   text-transform: uppercase !important;
   text-align: left;
   font-size: 10pt !important;
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
   border-radius: 2px 2px 0 0;
   background: var(--news) no-repeat 6px center / 16px, var(--h3), linear-gradient(90deg, #fafaff 5%, rgba(231, 231, 255, .8)) 15% !important;
   filter: none;
@@ -1919,7 +1919,7 @@ h1, .confignav {
   font-size: 9pt;
   font-weight: 700;
   color: var(--ink);
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
   border-left: none;
   border-right: none;
   box-shadow: var(--bevel);
@@ -1934,7 +1934,7 @@ h1, .confignav {
   display: inline-block;
   min-width: 60px !important;
   box-sizing: border-box;
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
   background: #fff;
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
@@ -2007,7 +2007,7 @@ div.configure {
 .configure h3, .graphspanel h3 {
   margin: 15px 0;
   text-align: left;
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
   border-left-width: 5px;
   border-radius: 0 2px 2px 0;
 }
@@ -2062,7 +2062,7 @@ h3 a.script, th a.script {
   vertical-align: top;
   text-transform: capitalize;
   border: none;
-  border-left: 1px solid var(--borderinner);
+  border-left: 1px solid var(--border_inner);
   border-radius: 0;
   background: #ddf;
   background: linear-gradient(180deg,#f8f8ff 60%, #dedeff);
@@ -2115,7 +2115,7 @@ h3 a.script, th a.script {
 
 #tunnels h3 a:not(.lsview) {
   margin: -7px -5px -7px 0 !important;
-  border-bottom: 1px solid var(--borderinner);
+  border-bottom: 1px solid var(--border_inner);
 }
 
 #tunnels h3 a:nth-child(n+2) {
@@ -2193,7 +2193,7 @@ a[href="/help/faq#alternative_browser"]:hover::after, a[href="/help/faq#alternat
 }
 
 h3#transports, h3#upnp {
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
 }
 
 pre#activetransports {
@@ -2202,7 +2202,7 @@ pre#activetransports {
   display: inline-block;
   width: calc(100% - 12px);
   font-size: 9pt;
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
   box-shadow: var(--highlight), inset 0 0 2px 1px #ddf;
   background: #fafaff;
 }
@@ -2214,7 +2214,7 @@ pre#activetransports b {
 #upnpscan {
   margin: -16px 0 5px;
   padding: 5px 10px;
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
   background: repeating-linear-gradient(135deg, rgba(255, 255, 255, .5) 2px, rgba(240, 240, 255, .3) 3px, #fff 5px);
 }
 
@@ -2284,7 +2284,7 @@ h3#exploratory {
 
 h3#passwordheading {
   margin-bottom: -2px;
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
   border-radius: 0;
   filter: none;
 }
@@ -2292,7 +2292,7 @@ h3#passwordheading {
 h3#langheading, h3#themeheading, h3#pluginmanage, h3#pconfig, h3#webappconfiguration, h3#advancedclientconfig, h3#i2pclientconfig, #config_stats h3, #config_keyring h3 {
   position: relative;
   z-index: 100;
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
   border-radius: 0;
   box-shadow: var(--highlight);
   filter: none;
@@ -2313,7 +2313,7 @@ p#clientconf.infohelp + .wideload {
 p#enablefullstats {
   margin-bottom: 13px;
   padding: 10px;
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
 }
 
 #configstats th {
@@ -2542,7 +2542,7 @@ h3#graphdisplay {
 }
 
 .main#graphs form {
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
   padding: 10px;
   margin: -16px 0 5px;
 }
@@ -2651,7 +2651,7 @@ to {
   font-weight: 700;
   line-height: 130%;
   box-shadow: var(--highlight);
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
   border-radius: 2px;
   background: #eef;
   background: url(/themes/snark/ubergine/images/hat.png) no-repeat bottom right / auto 100%, linear-gradient(90deg, #fafaff, #eef);
@@ -2726,7 +2726,7 @@ table {
   margin: 1px 0 5px;
   width: 100%;
   font-size: 9pt;
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
   border-collapse: collapse;
   background: #fafaff;
 }
@@ -2743,7 +2743,7 @@ table {
 td.optionsave {
   padding: 5px !important;
   text-align: right;
-  border-top: 1px solid var(--borderinner) !important;
+  border-top: 1px solid var(--border_inner) !important;
   background: #fafaff;
 }
 
@@ -2761,7 +2761,7 @@ td.optionsave, .formaction, form[action="configpeer"] tr:last-child td, table#ad
 }
 
 .configtable tr:last-child td {
-  border-top: 1px solid var(--borderinner) !important;
+  border-top: 1px solid var(--border_inner) !important;
 }
 
 .infowarn, .infohelp, #pluginconfigtext {
@@ -2787,8 +2787,8 @@ td.optionsave, .formaction, form[action="configpeer"] tr:last-child td, table#ad
 td.infohelp, #help tr:hover td.infohelp, #eventlog tr:hover .infohelp, td.infowarn, #help tr:hover td.infowarn {
   padding: 20px 15px 20px 50px !important;
   text-align: justify;
-  border-top: 1px solid var(--borderinner) !important;
-  border-bottom: 1px solid var(--borderinner) !important;
+  border-top: 1px solid var(--border_inner) !important;
+  border-bottom: 1px solid var(--border_inner) !important;
 }
 
 td.infohelp, #help tr:hover td.infohelp, #eventlog tr:hover .infohelp {
@@ -2861,7 +2861,7 @@ table#wrapperlogs {
   float: right;
   display: inline-block;
   vertical-align: middle;
-  border-left: 1px solid var(--borderinner);
+  border-left: 1px solid var(--border_inner);
   box-shadow: var(--highlight);
 }
 
@@ -3181,7 +3181,7 @@ table[id$="logs"] td:empty {
 }
 
 table[id$="logs"] tr:first-child {
-  border-bottom: 1px solid var(--borderinner);
+  border-bottom: 1px solid var(--border_inner);
 }
 
 table[id$="logs"] ul li:last-child {
@@ -3210,8 +3210,8 @@ th {
   text-align: left;
   font-size: 9pt;
   line-height: 110%;
-  border-bottom: 1px solid var(--borderinner) !important;
-  border-top: 1px solid var(--borderinner) !important;
+  border-bottom: 1px solid var(--border_inner) !important;
+  border-top: 1px solid var(--border_inner) !important;
   vertical-align: middle;
   background: #f6f6ff !important;
   background: linear-gradient(180deg,#fcfcff 51%, #fafaff 51%, #f6f6ff 100%) !important;
@@ -3300,7 +3300,7 @@ h4.app, h4.app2 {
   text-transform: uppercase;
   font-size: 11pt;
   color: var(--ink_light);
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
   border-radius: 2px;
   box-shadow: var(--highlight), 0 0 1px rgba(220,220,220,.3);
   background: #eef;
@@ -3322,7 +3322,7 @@ h4.app img, h4.app2 img, #sitemap h3 img {
   margin: -8px 0;
   padding: 9px 0 7px 10px;
   display: none;
-  border-left: 1px solid var(--borderinner);
+  border-left: 1px solid var(--border_inner);
   opacity: .8;
   filter: none !important;
   transition: ease all 1s;
@@ -3335,7 +3335,7 @@ h4.app a, h4.app2 a {
 #home h4 a[href$="configapps"], #home h4 a[href$="configsites"] {
   margin: -7px -10px -10px 0;
   padding: 10px 0 4px;
-  border-left: 1px solid var(--borderinner);
+  border-left: 1px solid var(--border_inner);
 }
 
 #home h4 a::after {
@@ -3432,7 +3432,7 @@ div.app {
   float: left;
   min-width: 140px;
   text-align: center !important;
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
   border: 1px solid #999adf;
   box-shadow: var(--highlight), inset 0 0 2px 1px #eef, 0 0 1px #ddf;
   background: #f8f8ff;
@@ -3557,7 +3557,7 @@ div.app img {
   font-size: 8pt;
   margin: 0;
   padding: 4px 6px;
-  border-top: 1px solid var(--borderinner);
+  border-top: 1px solid var(--border_inner);
   border-top: 1px solid #999adf;
   box-shadow: var(--highlight), inset 0 0 2px 1px #eef;
   text-align: center;
@@ -3835,7 +3835,7 @@ p {
 p.infohelp, p.sybilinfo, p#debugmode, p#upnpstatus, p#pluginconfigtext, p#gatherstats {
   padding: 20px 15px 20px 50px;
   line-height: 130%;
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
   box-shadow: var(--highlight), inset 0 0 0 2px #bbc;
   background: var(--infohelp) no-repeat 15px center / 28px, var(--div_infohelp);
   background-size: 28px, 100% 4px, 100%;
@@ -3924,7 +3924,7 @@ p.sybilinfo.experimental {
 p.infowarn {
   padding: 20px 15px 20px 50px;
   line-height: 130%;
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
   background: var(--infowarn) no-repeat 15px center / 28px, var(--div_infohelp);
 }
 
@@ -4081,14 +4081,14 @@ p#enablefullstats, p#gatherstats {
 }
 
 p#gatherstats + form, ul.statlist {
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
   padding: 10px;
   background: #fafaff;
   background: var(--p);
 }
 
 ul.statlist {
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
   padding: 0 10px 10px;
   display: inline-block;
   width: calc(100% - 22px);
@@ -4391,7 +4391,7 @@ h2 {
   text-transform: uppercase !important;
   font-size: 13pt;
   color: var(--ink_light);
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
   border-radius: 2px;
   box-shadow: var(--highlight), 0 0 1px rgba(220,220,220,.3);
 }
@@ -4434,8 +4434,8 @@ h3, #routerinformation h2 {
   letter-spacing: .08em;
   font-size: 11pt;
   color: var(--ink_light);
-  border: 1px solid var(--borderinner);
-  border-left: 5px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
+  border-left: 5px solid var(--border_inner);
   box-shadow: var(--highlight), 0 0 1px rgba(220,220,220,.3);
 }
 
@@ -4447,7 +4447,7 @@ h3.tabletitle, h3.ptitle, #config_advanced h3.tabletitle, h3#bannedpeers, #route
   margin-bottom: -2px;
   text-align: left;
   border-radius: 0;
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
   box-shadow: var(--highlight);
 }
 
@@ -4481,18 +4481,18 @@ h2, h3 {
 }
 
 #permabanned tr:nth-child(2) td, #ipv4 td, #ipv6 td {
-  border-bottom: 1px solid var(--borderinner);
+  border-bottom: 1px solid var(--border_inner);
   background: linear-gradient(180deg,#fff 50%, rgba(238, 238, 255, .2) 50%, #eef 100%) #fff !important;
 }
 
 #ipv6 td {
-  border-top: 1px solid var(--borderinner);
+  border-top: 1px solid var(--border_inner);
 }
 
 #bannedips table {
   margin: -1px 0 !important;
   border: none;
-  border-bottom: 1px solid var(--borderinner);
+  border-bottom: 1px solid var(--border_inner);
 }
 
 #bannedips table th, #bannedips table td {
@@ -4511,7 +4511,7 @@ h2, h3 {
   padding-right: 10px;
   width: 49%;
   text-align: right;
-  border-left: 1px solid var(--borderinner);
+  border-left: 1px solid var(--border_inner);
 }
 
 #permabanned td:nth-child(2) {
@@ -4526,7 +4526,7 @@ h2, h3 {
 
 #banneduntilrestart td {
   text-align: right !important;
-  border-right: 1px solid var(--borderinner);
+  border-right: 1px solid var(--border_inner);
 }
 
 #banneduntilrestart td:last-child {
@@ -4551,7 +4551,7 @@ h4 {
   font-size: 10pt;
   text-transform: uppercase;
   color: var(--ink_light);
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
   border-radius: 2px;
   box-shadow: var(--highlight);
   background: linear-gradient(90deg, #fff, #eef);
@@ -4572,7 +4572,7 @@ h4 {
 
 #certs h3 + p, #certs h4 + p:not(.infohelp) {
   padding: 15px;
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
 }
 
 #certs h3 + p {
@@ -4607,7 +4607,7 @@ h4 {
 
 #certs h4 + textarea {
   margin: -11px 0 !important;
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
   box-shadow: none;
 }
 
@@ -5474,7 +5474,7 @@ textarea:focus {
   text-align: center;
   font-style: normal;
   font-size: 9pt;
-  border: 1px solid var(--borderinner) !important;
+  border: 1px solid var(--border_inner) !important;
   border-top: 0 !important;
   box-shadow: var(--highlight);
   background: linear-gradient(90deg, #efefff, #fafaff, #efefff) #fff;
@@ -5482,7 +5482,7 @@ textarea:focus {
 
 .statusnotes + .statusnotes {
   margin-top: -6px;
-  border-top: 1px solid var(--borderinner) !important;
+  border-top: 1px solid var(--border_inner) !important;
 }
 
 h3 + .statusnotes {
@@ -5529,7 +5529,7 @@ h3 + .statusnotes {
 #jobs ol {
   margin-top: 1px;
   padding: 4px 2px 2px;
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
   box-shadow: var(--highlight);
   background: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fff 5px), #fff;
   columns: 440px auto;
@@ -5756,8 +5756,8 @@ h3#scheduledjobs + ol li::before {
   padding: 8px 2px;
   line-height: 110%;
   font-size: 9pt;
-  border-top: 1px solid var(--borderinner);
-  border-bottom: 1px solid var(--borderinner) !important;
+  border-top: 1px solid var(--border_inner);
+  border-bottom: 1px solid var(--border_inner) !important;
   background: #f8f8ff;
 }
 
@@ -5765,7 +5765,7 @@ h3#scheduledjobs + ol li::before {
   margin-top: -15px;
   padding: 5px;
   text-align: right;
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
   background: #fafaff;
 }
 
@@ -5818,7 +5818,7 @@ body.iframed {
 #themeui.formaction, #langui.formaction {
   margin: 5px -5px 0;
   border: none;
-  border-top: 1px solid var(--borderinner);
+  border-top: 1px solid var(--border_inner);
   background: none;
 }
 
@@ -5924,7 +5924,7 @@ body.iframed {
   position: relative;
   top: 4px;
   clear: both;
-  border-top: 1px solid var(--borderinner);
+  border-top: 1px solid var(--border_inner);
   background: repeating-linear-gradient(45deg, rgba(252,252,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fafaff 5px), #fafaff;
 }
 
@@ -5943,7 +5943,7 @@ p#helptranslate {
   position: relative;
   top: 4px;
   text-align: left !important;
-  border-top: 1px solid var(--borderinner);
+  border-top: 1px solid var(--border_inner);
   background: url(images/favicon.svg)  no-repeat left 14px center / 28px, var(--div_infohelp);
 }
 
@@ -5996,7 +5996,7 @@ p#helptranslate {
 #themesettings, #langsettings {
   margin: -16px 0 0;
   padding: 4px 5px 0;
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
   background: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(248,248,255,.3) 3px, #fafaff 4px);
 }
 
@@ -6153,7 +6153,7 @@ p#helptranslate {
   text-overflow: ellipsis;
   font-size: 9pt;
   text-transform: capitalize;
-  border-top: 1px solid var(--borderinner);
+  border-top: 1px solid var(--border_inner);
   border-top: 1px solid #999adf;
   border-radius: 0 0 2px 2px;
   box-shadow: var(--highlight);
@@ -6182,7 +6182,7 @@ table#consolepass input {
 
 table#consolepass td#pw_adduser {
   padding: 5px 10px;
-  border-top: 1px solid var(--borderinner);
+  border-top: 1px solid var(--border_inner);
 }
 
 td#pw_adduser input {
@@ -6225,7 +6225,7 @@ table#consolepass input[name="name"] {
 
 table#addkeyring tr:last-child td {
   padding: 5px;
-  border-top: 1px solid var(--borderinner);
+  border-top: 1px solid var(--border_inner);
 }
 
 #refreshsidebar tr:first-child td {
@@ -6623,7 +6623,7 @@ p:empty { /* empty paragraph nuke */
 .subheading {
   padding: 10px;
   text-align: left !important;
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
   background: #fafaff;
 }
 
@@ -6640,7 +6640,7 @@ p:empty { /* empty paragraph nuke */
   font-weight: 700;
   text-align: center;
   color: var(--ink_light);
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
   box-shadow: 0 0 1px #e0e0eb;
   border-radius: 2px;
   background: linear-gradient(90deg, #f2f2ff, #f8f8ff, #f2f2ff);
@@ -6689,7 +6689,7 @@ p:empty { /* empty paragraph nuke */
 #netdboverview table {
   margin: -1px 0;
   border: none;
-  border-bottom: 1px solid var(--borderinner);
+  border-bottom: 1px solid var(--border_inner);
 }
 
 #netdboverview table th {
@@ -6788,7 +6788,7 @@ p:empty { /* empty paragraph nuke */
 }
 
 #netdbtiers td:first-child {
-  border-left: 1px solid var(--borderinner);
+  border-left: 1px solid var(--border_inner);
 }
 
 @supports not (-moz-appearance: none) {
@@ -6797,7 +6797,7 @@ p:empty { /* empty paragraph nuke */
   }
 
   #netdbtiers th:first-child {
-    border-left: 1px solid var(--borderinner);
+    border-left: 1px solid var(--border_inner);
   }
 }
 
@@ -7241,15 +7241,15 @@ b.netdb_transport {
 }
 
 #leasesetdebug td {
-  border-top: 1px solid var(--borderinner) !important;
-  border-bottom: 1px solid var(--borderinner) !important;
+  border-top: 1px solid var(--border_inner) !important;
+  border-bottom: 1px solid var(--border_inner) !important;
 }
 
 #leasesetdebug td:nth-child(odd) {
   width: 200px;
   text-align: right;
   border-right: 1px solid #e0e0eb;
-  border-right: 1px solid var(--borderinner);
+  border-right: 1px solid var(--border_inner);
 }
 
 #leasesetdebug td:nth-child(even) {
@@ -7320,8 +7320,8 @@ b.netdb_transport {
 .leaseset td {
   line-height: 150%;
   background: linear-gradient(180deg,#fff, #eef);
-  border-top: 1px solid var(--borderinner);
-  border-bottom: 1px solid var(--borderinner);
+  border-top: 1px solid var(--border_inner);
+  border-bottom: 1px solid var(--border_inner);
 }
 
 .leaseset td a[href$=".i2p"] {
@@ -7459,7 +7459,7 @@ img.unknownflag {
 
 #sybilnav, #sybils_summary {
   margin-bottom: 10px;
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
   box-shadow: var(--highlight);
   background: repeating-linear-gradient(135deg, rgba(248,238,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
 }
@@ -7542,7 +7542,7 @@ h3.sybils {
 
 #netdb .sybilinfo_container:empty + hr, #netdb .sybilinfo_container + hr {
   height: 0 !important;
-  border-bottom: 1px solid var(--borderinner) !important;
+  border-bottom: 1px solid var(--border_inner) !important;
   opacity: 1 !important;
   margin: 0 !important;
 }
@@ -7578,11 +7578,11 @@ h3.sybils {
 }
 
 #netdb .sybil_routerinfo tr:first-child, #netdb .sybil_routerinfo th {
-  border-bottom: 1px solid var(--borderinner) !important;
+  border-bottom: 1px solid var(--border_inner) !important;
 }
 
 #netdb .sybil_routerinfo tr:nth-child(2), #netdb .sybil_routerinfo tr:nth-child(2) td {
-  border-top: 1px solid var(--borderinner) !important;
+  border-top: 1px solid var(--border_inner) !important;
 }
 
 .sybil_routerinfo th {
@@ -7659,7 +7659,7 @@ h3.sybils {
 p.sybil_info, p.family, p.threatpoints, p.hashdist, p#sybil_totals, p.notfound {
   margin: 3px 0;
   padding: 7px 5px 7px 30px;
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
   box-shadow: var(--highlight);
   font-weight: 700;
   color: var(--ink_light);
@@ -7709,7 +7709,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   padding: 0 10px;
   width: calc(100% - 22px);
   display: inline-block;
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
   box-shadow: var(--highlight);
   background: repeating-linear-gradient(45deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fafaff 5px), #fafaff;
 }
@@ -7725,13 +7725,13 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 
 @supports not (-moz-appearance: none) {
   .leaseset th:last-child, .leaseset td:last-child, .sybil_routerinfo th:last-child {
-    border-right: 1px solid var(--borderinner) !important;
+    border-right: 1px solid var(--border_inner) !important;
   }
 }
 
 .sybilinfo_params {
   padding: 0;
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
 }
 
 .sybilinfo_familyname {
@@ -7745,7 +7745,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 
 #netdb .sybil_addresses {
   padding: 0;
-  border-bottom: 1px solid var(--borderinner);
+  border-bottom: 1px solid var(--border_inner);
   line-height: 120%;
 }
 
@@ -7756,8 +7756,8 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 .sybil_addresses table {
   width: 100%;
   margin: 0;
-  border-top: 1px solid var(--borderinner) !important;
-  border-bottom: 1px solid var(--borderinner) !important;
+  border-top: 1px solid var(--border_inner) !important;
+  border-bottom: 1px solid var(--border_inner) !important;
 }
 
 .sybil_addresses td:first-child {
@@ -7829,7 +7829,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   width: 28px;
   height: 28px;
   vertical-align: middle;
-  border-left: 1px solid var(--borderinner);
+  border-left: 1px solid var(--border_inner);
   image-rendering: -webkit-optimize-contrast;
 }
 
@@ -8069,7 +8069,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 #banlist {
   padding: 2px 5px 3px 0;
   display: block;
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
   border-radius: 2px;
   background: #fafaff;
   text-align: center;
@@ -8094,7 +8094,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   line-height: 120%;
   list-style: none;
   font-size: 95%;
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
   border-radius: 2px;
   box-shadow: var(--highlight), inset 0 0 1px 1px #ddf;
   background: linear-gradient(180deg,rgba(255,255,255,.2), rgba(228,228,255,.2)), repeating-linear-gradient(135deg, rgba(252,252,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fff 4px) #fafaff;
@@ -8127,8 +8127,8 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   top: 0;
   right: 0;
   line-height: 0;
-  border-left: 1px solid var(--borderinner);
-  border-bottom: 1px solid var(--borderinner);
+  border-left: 1px solid var(--border_inner);
+  border-bottom: 1px solid var(--border_inner);
   border-radius: 0 0 0 2px;
   box-shadow: var(--highlight), inset 0 0 1px 1px #ddf;
   background: #fff;
@@ -8436,7 +8436,7 @@ table#schedjobs {
 }
 
 #floodfills th {
-  border-right: 1px solid var(--borderinner);
+  border-right: 1px solid var(--border_inner);
   box-shadow: var(--highlight), inset 0 0 1px 1px #ddf;
 }
 
@@ -8636,7 +8636,7 @@ table#schedjobs {
 
 #thresholds td {
   padding: 6px;
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
 }
 
 #capabilities_key td {
@@ -8756,7 +8756,7 @@ table#schedjobs {
   right: 0;
   display: inline-block;
   font-size: 90%;
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
   border-radius: 4px 0 0 0;
   box-shadow: var(--highlight);
   background: linear-gradient(180deg,#fff 50%, #e2e2ff 50%);
@@ -8794,7 +8794,7 @@ select[name="newlogclass"] {
 
 #volunteer, #sidebarhelp, #configurationhelp, #reachabilityhelp, #advancedsettings, #themeoverride, #tunnman,
 #legal, #changelog, #faq, #reseedhelp, #troubleshoot, #newuserguide, #filterlist, #webhosting, #browserconfig, #glossary {
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
   border-radius: 2px;
   margin-bottom: 10px;
   padding: 0 10px 5px;
@@ -9033,7 +9033,7 @@ select[name="newlogclass"] {
   text-align: right;
   margin: 0 0 0 -10px;
   padding: 7px 5px;
-  border-top: 1px solid var(--borderinner);
+  border-top: 1px solid var(--border_inner);
 }
 
 #fullhistory a {
@@ -9067,7 +9067,7 @@ select[name="newlogclass"] {
   padding: 5px 0 0;
   columns: 2 auto;
   column-gap: 35px;
-  column-rule: 1px solid var(--borderinner);
+  column-rule: 1px solid var(--border_inner);
 }
 
 #terms p {
@@ -9271,7 +9271,7 @@ h4#updateplugins {
   text-transform: none;
   font-size: 10pt;
   color: var(--ink_light);
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
   background: #fcfcff !important;
   background: linear-gradient(180deg,#fff 50%, rgba(238, 238, 255, .2) 50%, #eef 100%) #fff !important;
 }
@@ -9294,7 +9294,7 @@ h3#displayevents {
 .main form[action="events"] {
   margin: -16px 0 -2px;
   padding: 10px 10px 10px 50px;
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
   box-shadow: var(--highlight);
   background: #f2f2ff var(--logs) no-repeat 15px center;
   background-size: 28px;
@@ -9403,7 +9403,7 @@ a[href^="configpeer?peer"]:hover::after {
 .debug_container {
   padding: 10px 15px;
   margin-top: -16px;
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
   box-shadow: var(--highlight);
   background: linear-gradient(180deg,#fafaff, rgba(250,250,255,.3)),
               repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #efefff !important;
@@ -9672,7 +9672,7 @@ a[href^="configpeer?peer"]:hover::after {
 
 @supports not (-moz-appearance: none) {
 #jardump table {
-  border: 1px solid var(--borderinner) !important;
+  border: 1px solid var(--border_inner) !important;
   border-bottom: none !important;
   border-top: none !important;
 }
@@ -9867,7 +9867,7 @@ a[href^="configpeer?peer"]:hover::after {
 
 @supports not (-moz-appearance: none) {
 #jardump table {
-  border: 1px solid var(--borderinner) !important;
+  border: 1px solid var(--border_inner) !important;
   border-bottom: none !important;
   border-top: none !important;
   width: calc(100% - 1px) !important;
@@ -9907,7 +9907,7 @@ a[href^="configpeer?peer"]:hover::after {
 
 .optionlist, .optionsingle, #reseedssl {
   padding: 1px 2px;
-  border: 1px solid var(--borderinner) !important;
+  border: 1px solid var(--border_inner) !important;
   box-shadow: inset 0 0 0 2px #fff;
   background: #fff !important;
   column-gap: 2px;
@@ -9964,7 +9964,7 @@ b.suboption {
   display: inline-block;
   text-shadow: 0 1px 1px #fff;
   border-radius: 3px 3px 0 0;
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
   border-bottom: none;
   box-shadow: var(--highlight);
   background: #fdfdff;
@@ -10355,7 +10355,7 @@ b.suboption {
 }
 
 #i2pupdates .optionsave {
-  border-bottom: 1px solid var(--borderinner);
+  border-bottom: 1px solid var(--border_inner);
 }
 
 #i2pupdates textarea {
@@ -10489,7 +10489,7 @@ b.suboption {
   }
 
   #manualreseed th:last-child, #manualreseed td:last-child {
-    border-right: 1px solid var(--borderinner);
+    border-right: 1px solid var(--border_inner);
   }
 }
 
@@ -10776,7 +10776,7 @@ form[action="configplugins"] input.reload {
 }
 
 #pluginconfig table {
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
 }
 
 @media screen and (min-width: 1500px) {
@@ -11467,12 +11467,12 @@ td.optionsave, .formaction, table#addkeyring tr:last-child td {
 }
 
 #help td:first-child, #tunnels td:first-child, #peers #ntcpconnections td:first-child {
-  border-left: 1px solid var(--borderinner) !important;
+  border-left: 1px solid var(--border_inner) !important;
 }
 
 .main .tunneldisplay tr:last-child td, .main #tunnelpeercount tr:nth-last-child(2) td,
 .main #udpconnections tr:nth-last-child(2) td, .main #ntcpconnections tr:nth-last-child(2) td {
-  border-bottom: 1px solid var(--borderinner) !important;
+  border-bottom: 1px solid var(--border_inner) !important;
 }
 
 /* /events */
@@ -11934,7 +11934,7 @@ h1.webapp {
 #sybilanalysis {
   margin: 14px 0 6px !important;
   padding: 10px 10px 8px 50px !important;
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
   background: var(--sybil) no-repeat 15px center, var(--div_infohelp);
 }
 
@@ -11984,8 +11984,8 @@ div.app a, div.app a:visited, #sitemap a:link, #sitemap a:visited, .warning a {
 #wizardpage #bandwidth ~ p {
   margin: -20px 0;
   padding: 15px;
-  border-left: 1px solid var(--borderinner);
-  border-right: 1px solid var(--borderinner);
+  border-left: 1px solid var(--border_inner);
+  border-right: 1px solid var(--border_inner);
 }
 
 #wizardpage #bandwidth ~ p a {
@@ -12554,7 +12554,7 @@ i {
   overflow: hidden;
   vertical-align: middle;
   text-align: center;
-  border: 1px solid var(--borderinner);
+  border: 1px solid var(--border_inner);
   box-shadow: var(--highlight), 0 0 1px 1px #ddf;
   animation: ease grid-fade 1s forwards;
   background: #fff !important;

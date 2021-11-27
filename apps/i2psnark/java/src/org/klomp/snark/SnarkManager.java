@@ -2748,7 +2748,8 @@ public class SnarkManager implements CompleteListener, ClientApp {
      * @since 0.9
      */
     public void fatal(Snark snark, String error) {
-        addMessage(_t("Error on torrent {0}", snark.getName()) + ": " + error);
+//        addMessage(_t("Error on torrent {0}", snark.getName()) + ": " + error);
+        addMessage(error);
     }
 
     /**
