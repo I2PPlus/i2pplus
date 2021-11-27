@@ -4235,15 +4235,19 @@ tr:not(.peerinfo) .snarkTorrentDownloaded .percentBarText::after {
 }
 
 .uploaded {
-  padding: 2px 0;
+  padding: 3px 0 1px;
   min-width: 68px;
   display: inline-block;
   color: #a7acff;
   text-shadow: 0 1px 1px #000, 0 0 2px #337;
-  border: 1px solid #181838;
+  border: 1px solid #181858;
   border-left-width: 5px;
-  box-shadow: var(--highlight), 0 0 0 1px #000;
-  background: linear-gradient(180deg,#080828,#000);
+  box-shadow: var(--highlight), 0 0 0 1px #000, inset 3px 3px 3px rgba(0,0,0,.8);
+  background: repeating-linear-gradient(90deg,#000,#000 10%,#080848 10%,#080848 20%);
+}
+
+tr:hover .uploaded {
+  border-color: #181878;
 }
 
 .txBarInner {
@@ -4253,7 +4257,7 @@ tr:not(.peerinfo) .snarkTorrentDownloaded .percentBarText::after {
   top: 1px;
   left: 1px;
   z-index: 1;
-  background: linear-gradient(0deg,#141,#161);
+  background: rgba(255,64,255,.25);
   box-shadow: inset 3px 3px 3px rgba(0,0,0,.8);
   border: none;
 }
