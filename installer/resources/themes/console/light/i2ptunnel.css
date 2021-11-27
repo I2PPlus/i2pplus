@@ -13,6 +13,8 @@
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
   --highlight: inset 0 0 0 1px #fff;
   --h2: linear-gradient(180deg,#fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(135deg, #fcfcff 15%, rgba(231, 231, 255, .8) 35%);
+  --border: #6c6c93;
+  --border_inner: #9898b3;
 }
 
 html {
@@ -511,7 +513,7 @@ h2, h3 {
   letter-spacing: .12em;
   word-spacing: .1em;
   color: #5b5b71;
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--border_inner);
   border-radius: 2px 2px 0 0;
   box-shadow: inset 0 0 0 1px #fff;
   background: #fcfcff;
@@ -574,7 +576,7 @@ h2.error {
   margin: 0;
   width: 100%;
   border-collapse: collapse;
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--border_inner);
   background: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fff 5px) #fff;
 }
 
@@ -589,8 +591,8 @@ th {
   text-align: left;
   font-size: 9.5pt;
   color: #5b5b71;
-  border-bottom: 1px solid #8d8daa;
-  border-top: 1px solid #8d8daa;
+  border-bottom: 1px solid var(--border_inner);
+  border-top: 1px solid var(--border_inner);
   background: linear-gradient(180deg,#fcfcff 51%, #fafaff 51%, #f6f6ff 100%) !important;
 }
 
@@ -631,16 +633,16 @@ td {
 td.infohelp {
   padding: 10px 10px 10px 34px !important;
   box-shadow: inset 0 0 0 1px #fff, inset 0 0 1px 1px #ddf;
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--border_inner);
   background: var(--infohelp) no-repeat 8px center / 20px;
 }
 
 .tunnelconfig tr, .tunnelConfig th:first-child, .tunnelConfig td:first-child {
-  border-left: 1px solid #8d8daa !important;
+  border-left: 1px solid var(--border_inner) !important;
 }
 
 .tunnelconfig tr, .tunnelConfig th:last-child, .tunnelConfig td:last-child {
-  border-right: 1px solid #8d8daa !important;
+  border-right: 1px solid var(--border_inner) !important;
 }
 
 .tunnelConfig td {
@@ -674,7 +676,7 @@ td.infohelp {
 .newTunnel {
   padding: 7px !important;
   text-align: right;
-  border-top: 2px solid #8d8daa !important;
+  border-top: 2px solid var(--border_inner) !important;
   background: #fff;
 }
 
@@ -744,7 +746,7 @@ th.tunnelControl {
 .buttons, .newTunnel {
   padding: 7px 5px;
   text-align: right;
-  border-top: 1px solid #8d8daa !important;
+  border-top: 1px solid var(--border_inner) !important;
   box-shadow: inset 0 0 0 1px #fff;
   background: #fff;
   background: linear-gradient(180deg,#fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) !important;
@@ -1152,11 +1154,11 @@ textarea[name="accessList"], #hostField, #localDestination, .authentication {
 }
 
 .tunnelProperties + tr td {
-  border-top: 1px solid #8d8daa !important;
+  border-top: 1px solid var(--border_inner) !important;
 }
 
 .tunnelProperties + tr + tr td {
-  border-bottom: 1px solid #8d8daa !important;
+  border-bottom: 1px solid var(--border_inner) !important;
 }
 
 .tunnelInfo + .tunnelInfo td {
