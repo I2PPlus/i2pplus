@@ -1293,7 +1293,7 @@ tr:hover .percentBarOuter, tr:hover .peerinfo .percentBarOuter {
   border: 1px solid #424;
   border-left-width: 5px;
   box-shadow: var(--highlight), inset 3px 3px 3px rgba(0,0,0,.8);
-  background: repeating-linear-gradient(90deg,#000,#000 10%,#404 10%,#404 20%);
+  background: repeating-linear-gradient(90deg,#000,#000 10%,#303 10%,#303 20%);
 }
 
 tr:hover .uploaded {
@@ -1310,6 +1310,11 @@ tr:hover .uploaded {
   background: rgba(192,0,96,.4);
   box-shadow: inset 3px 3px 3px rgba(0,0,0,.8);
   border: none;
+}
+
+.txBarInner[style="width: calc(100% - 2px)"] {
+  box-shadow: 0 0 0 1px #000, inset 0 2px 2px 3px rgba(255,255,255,.1);
+  background: linear-gradient(180deg, rgba(220,220,220,.05), rgba(255,255,255,.1), rgba(0,0,0,.3), rgba(0,0,0,.5)), linear-gradient(0deg, rgba(192,0,96,.4), rgba(208,0,112,.4));
 }
 
 .txBarInner::after {
