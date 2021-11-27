@@ -147,8 +147,7 @@ button {
 }
 
 button, input[type=submit], input[type="reset"], a.control, .freetext, textarea, .displayText {
-  font-family: var(--bodyfont);
-  font-size: 9pt;
+  font: 9pt var(--bodyfont);
 }
 
 textarea {
@@ -164,7 +163,7 @@ textarea {
 textarea[name="accessList"] {
   padding: 4px 8px;
   height: 32px !important;
-  line-height: 110%;
+  line-height: 1.1;
   will-change: transform;
 }
 
@@ -173,9 +172,9 @@ textarea[name="accessList"]:focus {
 }
 
 textarea:focus, textarea[name="accessList"]:focus {
-  background: #fff;
   color: #19191f;
   border: 1px solid #676c7f;
+  background: #fff;
 }
 
 textarea[name="accessList"]:focus {
@@ -184,11 +183,9 @@ textarea[name="accessList"]:focus {
 
 textarea#statusMessages {
   padding: 2px 4px 2px 6px;
-  width: 99%;
   width: calc(100% - 11px);
+  font: 8.5pt var(--monospaced);
   color: #070;
-  font-family: var(--monospaced);
-  font-size: 8.5pt;
   border: none;
   border-radius: 0;
   box-shadow: none;
@@ -373,7 +370,7 @@ a.control {
   padding: 0 10px 10px;
   width: calc(100% - 14px);
   max-width: 2000px;
-  min-width: 580px;
+  min-width: 650px;
   overflow: hidden;
   text-align: left !important;
   border: 1px solid #575775;
@@ -444,45 +441,6 @@ a.control {
 .iframed .panel#ssl {
   padding-bottom: 4px !important;
 }
-}
-
-select {
-  margin: 4px !important;
-  padding: 5px 24px 5px 5px !important;
-  min-width: 140px;
-  background: #fff;
-  background: var(--dropdown) no-repeat right 8px center, linear-gradient(180deg,#fff, #efefff);
-  background-size: 10px, 100% !important;
-  color: var(--ink);
-  font-family: var(--bodyfont);
-  font-size: 9pt;
-  border: 1px solid #97a2ce;
-  border-radius: 2px;
-  box-shadow: var(--highlight);
-  box-shadow: var(--btn_shadow);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  appearance: none;
-  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
-}
-
-select:hover {
-  color: #19191f;
-}
-
-select:hover, select:active, select:focus {
-  border: 1px solid #535979;
-  box-shadow: var(--highlight);
-  background: var(--dropdown_hover) no-repeat right 8px center, linear-gradient(180deg,#eee, #fff) !important;
-  background-size: 10px, 100% !important;
-}
-
-select:focus {
-  box-shadow: 0 0 1px #89f;
-}
-
-select::-ms-expand {
-  display: none;
 }
 
 a:link, a:visited {
@@ -580,12 +538,6 @@ h2.error {
   border-collapse: collapse;
   border: 1px solid var(--border_inner);
   background: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fff 5px) #fff;
-}
-
-@media screen and (max-width: 1500px) {
-.panel table:last-of-type {
-  margin-bottom: 1px;
-}
 }
 
 th {
@@ -903,6 +855,56 @@ table#statusMessages textarea, table#statusMessages textarea:active {
   display: none;
 }
 
+select {
+  margin: 4px !important;
+  padding: 5px 24px 5px 5px !important;
+  min-width: 140px;
+  background: #fff;
+  background: var(--dropdown) no-repeat right 8px center, linear-gradient(180deg,#fff, #efefff);
+  background-size: 10px, 100% !important;
+  color: var(--ink);
+  font: 9pt var(--bodyfont);
+  border: 1px solid #97a2ce;
+  border-radius: 2px;
+  box-shadow: var(--highlight);
+  box-shadow: var(--btn_shadow);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  appearance: none;
+  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
+}
+
+select:hover {
+  color: #19191f;
+}
+
+select:hover, select:active, select:focus {
+  border: 1px solid #535979;
+  box-shadow: var(--highlight);
+  background: var(--dropdown_hover) no-repeat right 8px center, linear-gradient(180deg,#eee, #fff) !important;
+  background-size: 10px, 100% !important;
+}
+
+select:focus {
+  box-shadow: 0 0 1px #89f;
+}
+
+select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active, #sigtype[disabled] {
+  margin: 0 !important;
+  padding: 2px 0 2px 3px !important;
+  font-weight: 400 !important;
+  color: var(--ink) !important;
+  border: none !important;
+  box-shadow: none !important;
+  background: none !important;
+  cursor: default;
+}
+
+#sigType[disabled] {
+  padding-left: 14px !important;
+  background: var(--crypto) no-repeat left center / 16px !important;
+}
+
 input::-moz-placeholder {
   color: #f00;
   opacity: 1;
@@ -1179,14 +1181,6 @@ textarea[name="accessList"], #hostField, #localDestination, .authentication {
   text-overflow: ellipsis;
 }
 
-@media screen and (max-width: 900px) {
-  .tunnelInfo .selectAll {max-width: 110px}
-}
-
-@media screen and (min-width: 1500px) {
-  .tunnelInfo .selectAll {max-width: none}
-}
-
 #oldDestFile {
   margin-left: 5px;
 }
@@ -1196,82 +1190,7 @@ textarea[name="accessList"], #hostField, #localDestination, .authentication {
 }
 /* end more space */
 
-/* responsive layout */
-
-@media screen and (max-width: 800px) {
-  th {font-size: 9pt}
-
-  .statusNotRunning, .statusRunning, .statusStarting, .statusStandby {background-size: auto 14px}
-
-  .port, .quantity, .period {width: 60px}
-
-  #clientHost, .host {
-    width: 140px;
-    min-width: 140px;
-  }
-
-  .multiOption {margin-right: 3px}
-
-  .control, .control:link, .control:visited {min-width: 60px !important}
-}
-
-@media screen and (min-width: 1000px) {
-  #messages h2, #globalTunnelControl h2, #servers h2, #clients h2, #tunnelEditPage h2, #tunnelEditPage h3, #registration h2, #registration h3, #wizardPanel h2 {
-    background-position: 7px 58%, center center, center center !important;
-  }
-}
-
-@media screen and (min-width: 1200px) {
-  h2, h3 {
-    padding: 10px 10px 8px 30px;
-    font-size: 12pt;
-  }
-
-  #messages h2, #globalTunnelControl h2, #servers h2, #clients h2, #tunnelEditPage h2, #tunnelEditPage h3, #registration h2, #registration h3, #wizardPanel h2 {
-    padding-left: 33px !important;
-    background-size: 20px, 100%, 100% !important;
-  }
-
-  th {
-    padding-top: 7px;
-    padding-bottom: 7px;
-  }
-}
-
-@media screen and (min-width: 1500px) {
-  body, select, .control, input, .freetext, textarea, .displayText {font-size: 10pt !important}
-
-  h2, h3 {font-size: 12.5pt}
-
-  th {font-size: 10.5pt}
-
-  th .help::after {
-    width: 20px;
-    height: 20px;
-    background-size: 20px;
-  }
-
-  textarea#statusMessages {font-size: 9pt}
-
-  .statusNotRunning, .statusRunning, .statusStarting, .statusStandby {background-size: auto 18px}
-
-  #localDestination {height: 34px !important}
-}
-
-/* end responsive layout */
-
 /* TO DO: merge with main classes */
-
-.panel {
-  min-width: 650px;
-}
-
-@supports not (-moz-appearance: none) { /* fixes chrome/blinkoverflow issue */
-select {
-  white-space: normal;
-  padding: 6px 16px 6px 6px !important;
-}
-}
 
 label {
   vertical-align: middle;
@@ -1315,9 +1234,9 @@ input[name="nofilter_blindedPassword"] {
 }
 
 .displayText:empty::before {
-  content: "";
-  display: inline-block;
   min-height: 11px;
+  display: inline-block;
+  content: "";
 }
 
 .displayText:hover, .displayText:focus {
@@ -1349,25 +1268,6 @@ input[name="nofilter_blindedPassword"] {
   margin-bottom: 5px;
 }
 
-@media screen and (max-width: 800px) {
-  .displayText, .displayText:empty:hover, .displayText:empty:focus {
-    width: 260px;
-    font-size: 8pt;
-  }
-}
-
-@media screen and (min-width: 1000px) {
-  .displayText, .displayText:empty:hover, .displayText:empty:focus {width: 386px}
-
-  #registration .displayText {width: 600px}
-}
-
-@media screen and (min-width: 1500px) {
-  .displayText, .displayText:empty:hover, .displayText:empty:focus {width: 552px}
-
-  #registration .displayText {width: 800px}
-}
-
 .optbox, .optbox::before {
   will-change: transform;
 }
@@ -1379,24 +1279,6 @@ input[name="nofilter_blindedPassword"] {
 .optionsDisabled .optbox, .optionsDisabled label {
   pointer-events: none !important;
 }
-
-/* end custom radios/checkboxes */
-
-/* chrome/blink overrides */
-
-@supports not (-moz-appearance: none) {
-  textarea, input[type=text], .displayText, *[readonly] {filter: none !important}
-
-  table {background: #f0f0ff !important}
-
-  tr {box-shadow: none !important}
-
-  #throttler tr:nth-child(even) {background: #f0f0ff !important}
-
-  #throttler tr:nth-child(odd), .tunnelConfig tr, #wizardPanel tr, #registration tr {background: #f8f8ff !important}
-}
-
-/* end chrome overrides */
 
 #tunnelListPage th:nth-child(n+2), .tunnelProperties td:nth-child(n+2) {
   text-align: center;
@@ -1446,9 +1328,9 @@ input[name="nofilter_blindedPassword"] {
 }
 
 .configerror code {
-  color: #050;
-  font-weight: 700;
   margin-left: 4px;
+  font-weight: 700;
+  color: #050;
 }
 
 .tunnelInfo {
@@ -1473,12 +1355,6 @@ input[name="nofilter_blindedPassword"] {
 
 #toggleInfo:hover img, #toggleInfo:focus img {
   mix-blend-mode: normal;
-}
-
-@media screen and (min-width: 1500px) {
-#toggleInfo {
-  margin: -1px -2px 0 0 !important;
-}
 }
 
 .base32 {
@@ -1510,38 +1386,6 @@ input[name="nofilter_blindedPassword"] {
 
 .nowrap, .nowrap > * {
   vertical-align: middle;
-}
-
-@media screen and (max-width: 1100px) {
-  .nowrap {
-    margin-right: 0 !important;
-  }
-
-  .nowrap .port, .nowrap .quantity, .nowrap .period {
-    margin-right: 2px !important;
-    width: 24px !important;
-  }
-
-  .nowrap .multiOption {
-    margin-right: 2px !important;
-    margin-left: 0 !important;
-  }
-}
-
-select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active, #sigtype[disabled] {
-  margin: 0 !important;
-  padding: 2px 0 2px 3px !important;
-  font-weight: 400 !important;
-  color: var(--ink) !important;
-  border: none !important;
-  box-shadow: none !important;
-  background: none !important;
-  cursor: default;
-}
-
-#sigType[disabled] {
-  padding-left: 14px !important;
-  background: var(--crypto) no-repeat left center / 16px !important;
 }
 
 #clientAuth {
@@ -1587,12 +1431,6 @@ select[disabled], select[disabled]:hover, select[disabled]:focus, select[disable
   margin-bottom: 3px;
 }
 
-@media screen and (max-width: 1500px) {
-#regDisabled {
-  margin-bottom: 4px;
-}
-}
-
 /* server tunnel options */
 
 #tunnelOpts td {
@@ -1606,7 +1444,7 @@ select[disabled], select[disabled]:hover, select[disabled]:focus, select[disable
 
 #tunnelOpts table td {
   padding: 5px;
-  border-bottom: 1px solid #ddf;
+  border-bottom: var(--border_softer);
 }
 
 #tunnelOpts table tr:first-child td {
@@ -1643,3 +1481,103 @@ textarea::placeholder, input::placeholder {
 textarea:focus::placeholder, input:focus::placeholder, #filter input:focus::placeholder {
   opacity: 0;
 }
+
+/* responsive layout */
+
+@media screen and (max-width: 1500px) {
+  .panel table:last-of-type {margin-bottom: 1px}
+  #regDisabled {margin-bottom: 4px}
+}
+
+@media screen and (max-width: 1100px) {
+  .nowrap {
+    margin-right: 0 !important;
+  }
+  .nowrap .port, .nowrap .quantity, .nowrap .period {
+    margin-right: 2px !important;
+    width: 24px !important;
+  }
+  .nowrap .multiOption {
+    margin-right: 2px !important;
+    margin-left: 0 !important;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .tunnelInfo .selectAll {max-width: 110px}
+}
+
+@media screen and (max-width: 800px) {
+  th {font-size: 9pt}
+  .statusNotRunning, .statusRunning, .statusStarting, .statusStandby {background-size: auto 14px}
+  .port, .quantity, .period {width: 60px}
+  #clientHost, .host {
+    width: 140px;
+    min-width: 140px;
+  }
+  .multiOption {margin-right: 3px}
+  .control, .control:link, .control:visited {min-width: 60px !important}
+  .displayText, .displayText:empty:hover, .displayText:empty:focus {
+    width: 260px;
+    font-size: 8pt;
+  }
+}
+
+@media screen and (min-width: 1000px) {
+  #messages h2, #globalTunnelControl h2, #servers h2, #clients h2, #tunnelEditPage h2, #tunnelEditPage h3, #registration h2, #registration h3, #wizardPanel h2 {
+    background-position: 7px 58%, center center, center center !important;
+  }
+  .displayText, .displayText:empty:hover, .displayText:empty:focus {width: 386px}
+  #registration .displayText {width: 600px}
+}
+
+@media screen and (min-width: 1200px) {
+  h2, h3 {
+    padding: 10px 10px 8px 30px;
+    font-size: 12pt;
+  }
+  #messages h2, #globalTunnelControl h2, #servers h2, #clients h2, #tunnelEditPage h2, #tunnelEditPage h3, #registration h2, #registration h3, #wizardPanel h2 {
+    padding-left: 33px !important;
+    background-size: 20px, 100%, 100% !important;
+  }
+  th {
+    padding-top: 7px;
+    padding-bottom: 7px;
+  }
+}
+
+@media screen and (min-width: 1500px) {
+  body, select, .control, input, .freetext, textarea, .displayText {font-size: 10pt !important}
+  h2, h3 {font-size: 12.5pt}
+  th {font-size: 10.5pt}
+  th .help::after {
+    width: 20px;
+    height: 20px;
+    background-size: 20px;
+  }
+  .tunnelInfo .selectAll {max-width: none}
+  textarea#statusMessages {font-size: 9pt}
+  .statusNotRunning, .statusRunning, .statusStarting, .statusStandby {background-size: auto 18px}
+  #localDestination {height: 34px !important}
+  .displayText, .displayText:empty:hover, .displayText:empty:focus {width: 552px}
+  #registration .displayText {width: 800px}
+  #toggleInfo {margin: -1px -2px 0 0 !important}
+}
+
+/* end responsive layout */
+
+/* chrome/blink overrides */
+
+@supports not (-moz-appearance: none) {
+  select {
+    padding: 6px 16px 6px 6px !important;
+    white-space: normal;
+  }
+  textarea, input[type=text], .displayText, *[readonly] {filter: none !important}
+  table {background: #f0f0ff !important}
+  tr {box-shadow: none !important}
+  #throttler tr:nth-child(even) {background: #f0f0ff !important}
+  #throttler tr:nth-child(odd), .tunnelConfig tr, #wizardPanel tr, #registration tr {background: #f8f8ff !important}
+}
+
+/* end chrome overrides */
