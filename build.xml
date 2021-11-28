@@ -1705,6 +1705,7 @@
     <target name="updater" depends="prepupdate, zipit" />
     <target name="updaterCompact" depends="prepupdatecompact, zipit" />
     <target name="updaterCompactWithGeoIP" depends="prepupdatecompact, prepgeoupdate, zipit" />
+    <target name="updaterCompactWithJettyAndGeoIP" depends="prepupdatecompact, prepgeoupdate, prepjupdate, zipit" />
     <target name="updaterWithMinifyCSS" depends="prepupdate, minifycss, zipit" />
     <target name="updaterWithLicenses" depends="prepupdate, preplicenses, zipit" />
     <target name="updaterRepack" depends="prepupdate, repack200, zipit" />
