@@ -104,22 +104,22 @@ label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
   text-align: center;
   border: var(--border_hard);
   border-radius: 0 0 4px 4px;
-  box-shadow: inset 0 0 0 1px #3f173f, inset 0 0 0 2px #101, inset 0 0 3px 1px #212;
-  background: linear-gradient(180deg,#522852, #4a2449 11%, #321831 33%, #281428 50%, #1c0e1c 51%, #101 54%);
-  filter: drop-shadow(0 1px 4px #101);
+  box-shadow: inset 0 0 0 1px #3f173f, inset 0 0 0 2px #101, inset 0 0 3px 1px #212, 0 0 0 1px #000;
+  background: linear-gradient(180deg,#535,#202 55%,#101,#080008);
+  filter: drop-shadow(0 2px 4px #101);
   transition: ease-in-out width .5s .5s;
   will-change: transform;
 }
 
 .iframed .snarknavbar {
   margin-top: 3px;
-  margin-bottom: -8px;
+  margin-bottom: -9px;
   padding-bottom: 12px;
   width: auto;
   position: relative;
   border-radius: 0;
-  box-shadow: inset 0 0 0 1px rgba(255,239,253,.2);
-  background: linear-gradient(180deg,#522852, #4a2449 11%, #321831 33%, #281428 49%, #1c0e1c 50%, #101 54%);
+  box-shadow: inset 0 0 0 1px rgba(255,239,253,.25), inset 0 0 2px 1px rgba(255,239,253,.15);
+  background: linear-gradient(180deg,#522852,#281428 50%,#1c0e1c 54%,#080008);
   filter: none;
 }
 
@@ -1297,7 +1297,17 @@ tr:hover .percentBarOuter, tr:hover .peerinfo .percentBarOuter {
   border: 1px solid #424;
   border-left-width: 5px;
   box-shadow: var(--highlight), inset 3px 3px 3px rgba(0,0,0,.8);
-  background: repeating-linear-gradient(90deg,#000,#000 10%,#303 10%,#303 20%);
+  background: repeating-linear-gradient(90deg,#000,#000 5%,#303 5%,#303 10%);
+  background-size: 200%;
+}
+
+@keyframes uploading {
+  from {background-position: left center}
+  to {background-position: right center}
+}
+
+.active.seeding .uploaded {
+  animation: linear uploading 5s reverse infinite;
 }
 
 tr:hover .uploaded {
@@ -3585,7 +3595,7 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
   }
 
   .iframed .snarknavbar {
-    padding: 12px 10px 11px;
+    padding: 12px 10px 10px;
   }
 
   .snarknavbar img {
