@@ -509,7 +509,7 @@ tfoot td:first-child {
 /* main torrents listing */
 
 .snarkTorrents {
-  margin: 1px 0;
+  margin: 1px 0 0;
   width: calc(100% - 2px);
   width: 100%;
   border-collapse: separate;
@@ -2396,6 +2396,10 @@ img:hover {
   color: #001;
 }
 
+#mainsection {
+  padding-bottom: 9px;
+}
+
 @supports not (-moz-appearance: none) {
   .section, .mainsection {padding-top: 9px}
 }
@@ -3212,6 +3216,14 @@ td .commentAuthorName {
 
 .mainsection, .addtorrentsection, .newtorrentsection, .configsection, .configsectionpanel {
   margin-bottom: 6px !important;
+}
+
+#mainsection {
+  padding-bottom: 5px !important;
+}
+
+.iframed #mainsection {
+  padding-bottom: 6px !important;
 }
 
 .snarkMessages {
@@ -5835,13 +5847,14 @@ td.snarkTorrentPeerCount:empty {
 
 .mainsection#snarkFiles table, .mainsection#snarkInfo table, .mainsection#snarkCommentSection table, .mainsection#media table,
 .resourceError, .resourceError#NotFound {
-  margin-top: 0 !important;
+  margin: 0 !important;
   border: 1px solid #414 !important;
   filter: none !important;
 }
 
 .resourceError, .resourceError#NotFound {
-   border: 1px solid rgb(17, 0, 17) !important;
+  margin-bottom: 9px !important;
+  border: 1px solid rgb(17, 0, 17) !important;
 }
 
 .mainsection#snarkFiles table, .mainsection#snarkInfo table, .mainsection#snarkCommentSection table, .mainsection#media table,
