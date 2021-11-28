@@ -33,8 +33,8 @@ body {
   font-size: 9pt;
   color: #ddd;
   background: repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(48,0,48,.5) 4px),
-              repeating-linear-gradient(180deg,#080008 2px, #212 4px), var(--offline) no-repeat, #130313 !important;
-  background-size: 4px 100%, 100% 4px, 0 !important;
+              repeating-linear-gradient(180deg,#080008 2px, #212 4px), var(--offline) no-repeat, #130313;
+  background-size: 4px 100%, 100% 4px, 0;
 }
 
 body.iframed {
@@ -71,16 +71,16 @@ label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
 }
 
 @media screen and (min-width: 1048px) {
-  .iframed .page {margin-bottom: 0 !important}
+  .iframed .page {margin-bottom: 0}
 }
 
 ::-moz-selection {
-  background: rgba(96,0,96,.8) !important;
+  background: rgba(96,0,96,.8);
   color: white;
 }
 
 ::selection {
-  background: rgba(96,0,96,.8) !important;
+  background: rgba(96,0,96,.8);
   color: white;
 }
 
@@ -92,7 +92,7 @@ label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
 /* topnav */
 
 .snarknavbar {
-  margin: -11px 0 10px 0 !important;
+  margin: -11px 0 10px 0;
   padding: 7px 10px 5px;
   min-width: 600px;
   width: 80%;
@@ -110,11 +110,11 @@ label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
 }
 
 .iframed .snarknavbar {
-  margin-top: 3px !important;
-  margin-bottom: -8px !important;
+  margin-top: 3px;
+  margin-bottom: -8px;
   padding-bottom: 12px;
-  width: auto !important;
-  position: relative !important;
+  width: auto;
+  position: relative;
   border-radius: 0;
   box-shadow: inset 0 0 0 1px rgba(255,239,253,.2);
   background: linear-gradient(180deg,#522852, #4a2449 11%, #321831 33%, #281428 49%, #1c0e1c 50%, #101 54%);
@@ -130,7 +130,7 @@ label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
 
 .snarkNav {
   margin: -1px -4px 0 0;
-  padding: 4px 12px 4px 29px !important;
+  padding: 4px 12px 4px 29px;
   display: inline-block;
   line-height: 130%;
   font-family: var(--bodyfont);
@@ -138,8 +138,8 @@ label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
   font-weight: 700;
   color: #f70;
   letter-spacing: .11em;
-  text-decoration: none !important;
-  text-transform: uppercase !important;
+  text-decoration: none;
+  text-transform: uppercase;
   text-shadow: 0 0 1px #000;
   outline: none;
   border: 1px solid #730;
@@ -152,17 +152,17 @@ label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
 }
 
 .iframed .snarkNav {
-  padding: 3px 12px 3px 29px !important;
+  padding: 3px 12px 3px 29px;
 }
 
 @supports not (-moz-appearance: none) {
   .iframed .snarkNav:link, .iframed .snarkNav:visited {
-    padding-bottom: 3px !important;
+    padding-bottom: 3px;
   }
 }
 
 .iframed .snarkNav:first-child, .iframed .snarkNav:last-child {
-  border-radius: 0 !important;
+  border-radius: 0;
 }
 
 .snarkNav:hover, .snarkNav:hover {
@@ -320,7 +320,7 @@ label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
   margin-left: -18px;
   padding-left: 10px;
   padding-right: 10px;
-  line-height: 128%;
+  line-height: 1.28;
 }
 
 .snarkMessages li::before {
@@ -396,12 +396,12 @@ label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
 
 table {
   margin: 0 0 10px 0;
-  border: 0;
   padding: 0;
+  width: 100%;
+  color: #323;
+  border: none;
   border-spacing: 0;
   border-collapse: collapse;
-  color: #323;
-  width: 100%;
 }
 
 thead, tfoot {
@@ -409,9 +409,9 @@ thead, tfoot {
 }
 
 thead th, .snarkTorrentInfo th {
-  background: linear-gradient(180deg,#202, #101);
   border-top: 1px solid #101 !important;
   border-bottom: 1px solid #101 !important;
+  background: linear-gradient(180deg,#202, #101);
 }
 
 .snarkTorrents thead {
@@ -420,11 +420,11 @@ thead th, .snarkTorrentInfo th {
 
 th {
   padding: 4px 2px 4px 4px;
+  letter-spacing: 0;
   font-size: 8pt;
+  color: #ddd;
   border-top: 1px solid #101;
   border-bottom: 1px solid #101;
-  color: #ddd;
-  letter-spacing: 0;
 }
 
 th .infohash {
@@ -433,13 +433,13 @@ th .infohash {
 }
 
 th:first-child {
-  text-align: left !important;
   padding-left: 2px;
+  text-align: left !important;
 }
 
 tfoot td:first-child {
-  text-align: left !important;
   padding-left: 0;
+  text-align: left !important;
 }
 
 .headerstatus {
@@ -1154,15 +1154,15 @@ tr:hover .percentBarText {
   margin-right: 8px !important;
 }
 
-.SnarkTorrentInfo, .snarkDirInfo, #mediaContainer {
+.snarkTorrentInfo, .snarkDirInfo, #mediaContainer {
   margin: 0 !important;
   border: 1px solid #101;
   background: #270027;
-  filter: drop-shadow(0 0 1px rgba(16, 8, 16, .7)) !important;
+  filter: drop-shadow(0 0 1px rgba(16, 8, 16, .7));
 }
 
-.SnarkTorrentInfo {
-  margin-top: 1px !important;
+.snarkTorrentInfo {
+  margin: 1px 0 !important;
 }
 
 .snarkDirInfo {
@@ -1717,10 +1717,6 @@ th.priority br, .snarkTorrents thead th br {
 .mainsection .toggleview {
   margin-top: -10px !important;
   display: inline-block;
-}
-
-.iframed .snarkDirInfo {
-  margin-bottom: 4px !important;
 }
 
 .iframed .configsection .snarkConfigTitle, .iframed .toggleview {
@@ -4959,7 +4955,7 @@ td.snarkTorrentStatus b::before {
 }
 
 #torrentlist.filterbarActive {
-  border: 1px solid rgba(119, 102, 119, .65);
+  border: 1px solid rgba(119, 102, 119, .7);
   border-radius: 4px;
   box-shadow: 0 0 0 1px rgba(0,0,0,.5), 0 0 1px 1px rgba(0,0,0,.25);
 }
@@ -5856,7 +5852,7 @@ td.snarkTorrentPeerCount:empty {
 .iframed .mainsection#snarkFiles table, .iframed .mainsection#snarkInfo table, .iframed .mainsection#snarkCommentSection table, .iframed .mainsection#media table,
 .iframed .mainsection table, .iframed .resourceError, .iframed .resourceError#NotFound {
   padding: 1px !important;
-  box-shadow: 0 0 0 1px rgba(180,152,180,.35), 0 0 2px 1px rgba(16, 8, 16, .9) !important;
+  box-shadow: 0 0 0 1px rgba(180,152,180,.7), 0 0 0 2px rgba(16, 8, 16, .9) !important;
   filter: none !important;
 }
 
@@ -6146,7 +6142,6 @@ body:not(.iframed) .mainsection .snarkComments {
 @media screen and (min-width: 900px) and (max-width: 1499px) {
   td.snarkTorrentPeerCount b a:not(:hover):not(:focus), td.snarkTorrentPeerCount b a:not(:hover):not(:focus):visited {
     color: #d0d;
-    text-shadow: 0 1px 1px #000;
     text-shadow: 0 0 1px #000, 0 0 1px #fff, 0 1px 1px #404, 0 0 1px #000 !important;
   }
 
@@ -6175,7 +6170,6 @@ body:not(.iframed) .mainsection .snarkComments {
   display: block;
   width: 0;
   height: 1px;
-  background: rgba(255,96,0,.4);
   background: #930;
   position: absolute;
   top: -2px;
@@ -6254,7 +6248,7 @@ body:not(.iframed) .mainsection .snarkComments {
   vertical-align: middle;
   font-size: 0 !important;
   border: 1px solid #000 !important;
-  border-radius: 2px !important;
+  border-radius: 2px;
   box-shadow: inset 0 0 0 1px #414, inset 0 0 2px 0 #717;
   background-position: center center !important;
   opacity: .85;
