@@ -1286,9 +1286,10 @@ tr:hover .percentBarOuter, tr:hover .peerinfo .percentBarOuter {
 }
 
 .uploaded {
-  padding: 2px 0;
+  padding: 1px 0;
   min-width: 68px;
   display: inline-block;
+  line-height: 1.2;
   text-shadow: 0 1px 1px #000, 0 0 2px #337;
   border: 1px solid #424;
   border-left-width: 5px;

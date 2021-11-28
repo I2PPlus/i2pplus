@@ -1050,6 +1050,11 @@ th.snarkFileSize {
   background: linear-gradient(90deg, rgba(80,255,160,.2), rgba(96,255,192,.2));
 }
 
+.txBarInner[style="width: calc(100% - 2px)"] {
+  box-shadow: 0 0 0 1px #fff, inset 0 2px 2px 3px rgba(255,255,255,.3);
+  background: linear-gradient(180deg, rgba(255,255,255,.3), rgba(220,220,255,.1) 50%, rgba(0,0,16,.05) 50%, rgba(0,0,64,.1)), linear-gradient(90deg, rgba(80,255,160,.2), rgba(96,255,192,.2));
+}
+
 .txBarText {
   position: relative;
   z-index: 5;
