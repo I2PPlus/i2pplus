@@ -1297,7 +1297,17 @@ tr:hover .percentBarOuter, tr:hover .peerinfo .percentBarOuter {
   border: 1px solid #424;
   border-left-width: 5px;
   box-shadow: var(--highlight), inset 3px 3px 3px rgba(0,0,0,.8);
-  background: repeating-linear-gradient(90deg,#000,#000 10%,#303 10%,#303 20%);
+  background: repeating-linear-gradient(90deg,#000,#000 5%,#303 5%,#303 10%);
+  background-size: 200%;
+}
+
+@keyframes uploading {
+  from {background-position: left center}
+  to {background-position: right center}
+}
+
+.active.seeding .uploaded {
+  animation: linear uploading 5s reverse infinite;
 }
 
 tr:hover .uploaded {
