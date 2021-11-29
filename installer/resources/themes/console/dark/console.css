@@ -14147,7 +14147,7 @@ body.iframed {
   #help .confignav {
     padding: 0 !important;
     position: sticky;
-    top: 0;
+    top: -2px;
     z-index: 999;
     will-change: transform;
   }
