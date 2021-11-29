@@ -833,8 +833,8 @@ select::-ms-expand {
   text-align: right !important;
   background: #000;
   background: linear-gradient(-135deg, #000, rgba(0,0,0,0) 40%),
-              repeating-linear-gradient(90deg, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px),
-              linear-gradient(180deg,#020, #000 75%);
+    repeating-linear-gradient(90deg, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px),
+    linear-gradient(180deg,#020, #000 75%);
   background-size: 100%, 4px 100%, 100%;
 }
 
