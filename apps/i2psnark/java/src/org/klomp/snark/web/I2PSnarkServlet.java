@@ -545,6 +545,7 @@ public class I2PSnarkServlet extends BasicServlet {
             for (int i = msgs.size()-1; i >= 0; i--) {
                 String msg = msgs.get(i).message
                              .replace("Adding Magnet ", "Magnet added: " + "<span class=\"infohash\">")
+                             .replace("Starting torrent: Magnet", "Starting torrent: <span class=\"infohash\">")
                              .replaceFirst(" \\(", "</span> (");
                 if (msg.contains(_t("Warning - No I2P")))
                     msg = msg.replace("</span>", "");

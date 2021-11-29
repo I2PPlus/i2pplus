@@ -1804,7 +1804,7 @@ public class SnarkManager implements CompleteListener, ClientApp {
         }
 
         // Were we running last time?
-        String link = linkify(torrent);
+        String link = linkify(torrent).replace(" ", "%20");
         if (!dontAutoStart && shouldAutoStart() && running) {
             if (!_util.connected()) {
 //                addMessage(_t("Connecting to I2P").replace("I2P", "I2P+") + "...");
@@ -2733,7 +2733,8 @@ public class SnarkManager implements CompleteListener, ClientApp {
                 _magnets.remove(snark.getName());
                 removeMagnetStatus(snark.getInfoHash());
                 //addMessage(_t("Metainfo received for {0}", snark.getName()));
-                addMessageNoEscape(_t("Starting torrent: {0}", linkify(snark)).replace("Magnet ", ""));
+                //addMessageNoEscape(_t("Starting torrent: {0}", linkify(snark)).replace("Magnet ", ""));
+                addMessageNoEscape(_t("Starting torrent: {0}", linkify(snark)));
                 return name;
             } catch (IOException ioe) {
                 addMessage(_t("Failed to copy torrent file to {0}", name));
@@ -2782,7 +2783,7 @@ public class SnarkManager implements CompleteListener, ClientApp {
             return DataHelper.escapeHTML(snark.getBaseName());
         StringBuilder buf = new StringBuilder(256);
         String base = DataHelper.escapeHTML(storage.getBaseName());
-        String enc = base.replace("[", "%5B").replace("]", "%5D").replace("|", "%7C");
+        String enc = base.replace("[", "%5B").replace("]", "%5D").replace("|", "%7C").replace(" ", "%20");
         buf.append("<a href=\"").append(_contextPath).append('/').append(enc);
         if (meta.getFiles() != null || !storage.complete())
             buf.append('/');

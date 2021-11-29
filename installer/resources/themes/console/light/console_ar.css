@@ -39,8 +39,8 @@ h2, h3 {
 
 #debug h2 {
   background: var(--bug) no-repeat 6px center,
-              linear-gradient(180deg,#fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
-              linear-gradient(to left, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) !important;
+    linear-gradient(180deg,#fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
+    linear-gradient(to left, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) !important;
   background-size: 20px, 100%, 100% !important;
 }
 
@@ -757,15 +757,15 @@ table.search {
 h4.app {
   margin-top: 15px;
   background: url(images/favicon.svg) no-repeat 10px center / 16px,
-              linear-gradient(180deg,#fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
-              linear-gradient(to left, #fff 5%, rgba(231, 231, 255, .8) 15%) right center !important;
+    linear-gradient(180deg,#fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
+    linear-gradient(to left, #fff 5%, rgba(231, 231, 255, .8) 15%) right center !important;
 }
 
 h4.app2 {
   clear: left;
   margin-top: 10px !important;
   background: var(--planet) no-repeat 10px center / 16px, linear-gradient(180deg,#fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
-              linear-gradient(to left, #fff 5%, rgba(231, 231, 255, .8) 15%) right center !important;
+    linear-gradient(to left, #fff 5%, rgba(231, 231, 255, .8) 15%) right center !important;
 }
 
 h4.app, h4.app2, #news h3, .news h3 {
@@ -791,8 +791,8 @@ div.app:hover .appimg .extlink::after {
 div.news h3, #news h3, #newspage #news h3 {
   padding: 5px 30px 5px 10px;
   background: var(--news) no-repeat right 8px center,
-              linear-gradient(180deg,#fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
-              linear-gradient(to left, #fff 5%, rgba(231, 231, 255, .8) 15%) right center !important;
+    linear-gradient(180deg,#fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
+    linear-gradient(to left, #fff 5%, rgba(231, 231, 255, .8) 15%) right center !important;
   background-size: 15px, 100%, 100% !important;
 }
 

@@ -43,7 +43,7 @@ body {
   color: #ee9;
   background: #010;
   background: repeating-linear-gradient(90deg, rgba(0,16,0,.5) 2px, rgba(0,25,0,.5) 4px),
-              repeating-linear-gradient(180deg,#000 2px, #020 4px), #010;
+    repeating-linear-gradient(180deg,#000 2px, #020 4px), #010;
   background-size: 4px 100%, 100% 4px;
 }
 
@@ -107,8 +107,8 @@ body.iframed {
   border-radius: 0 1px 2px 2px;
   box-shadow: var(--highlight), 0 2px 2px 2px rgba(0,0,0,.4);
   background: repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,48,0,.3) 4px),
-              linear-gradient(180deg,#1a261a 0%, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 51%, #020602 52%, #010301 55%, #000000 57%),
-              url(/themes/console/dark/images/camotile2.png) !important;
+    linear-gradient(180deg,#1a261a 0%, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 51%, #020602 52%, #010301 55%, #000000 57%),
+    url(/themes/console/dark/images/camotile2.png) !important;
   background-size: 4px 100%, 100%, 175px !important;
   background-blend-mode: normal, exclusion, normal !important;
 }
@@ -348,9 +348,9 @@ h3 {
   word-spacing: .1em;
   border: 1px solid #242;
   background: var(--question) no-repeat 8px center,
-              linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%),
-              repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px),
-              linear-gradient(180deg,#004000, #000 75%);
+    linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%),
+    repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px),
+    linear-gradient(180deg,#004000, #000 75%);
   background-size: 18px, 100%, 4px 100%, 100%;
 }
 
@@ -823,8 +823,8 @@ div#empty {
 
 #book tr.head {
   background: linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%),
-              repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px),
-              linear-gradient(180deg,#002000, #000 75%) !important;
+    repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px),
+    linear-gradient(180deg,#002000, #000 75%) !important;
   background-size: 100%, 4px 100%, 100% !important;
 }
 
@@ -1113,9 +1113,9 @@ textarea:focus {
   text-transform: uppercase;
   font-size: 11.5pt;
   background: var(--addressbook) no-repeat 9px center,
-              linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%),
-              repeating-linear-gradient(90deg, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px),
-              linear-gradient(180deg,#004000, #000 75%);
+    linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%),
+    repeating-linear-gradient(90deg, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px),
+    linear-gradient(180deg,#004000, #000 75%);
   background-size: 20px, 100%, 4px 100%, 100%;
 }
 
@@ -1125,17 +1125,17 @@ textarea:focus {
 
 .headline#subscriptions h3 {
   background: var(--subscription) 9px center no-repeat,
-              linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%),
-              repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px),
-              linear-gradient(180deg,#004000, #000 75%);
+    linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%),
+    repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px),
+    linear-gradient(180deg,#004000, #000 75%);
   background-size: 18px, 100%, 4px 100%, 100% !important;
 }
 
 .headline#configure h3 {
   background: var(--config) no-repeat 9px center,
-              linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%),
-              repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px),
-              linear-gradient(180deg,#004000, #000 75%);
+    linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%),
+    repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px),
+    linear-gradient(180deg,#004000, #000 75%);
   background-size: 20px, 100%, 4px 100%, 100% !important;
 }
 
@@ -1422,7 +1422,7 @@ p#filtered {
 form[action="addressbook"] > p.buttons, #filter, #search, #visualid tr:last-child td, #buttons, #add p.buttons {
   box-shadow: var(--highlight), inset 0 0 2px 1px #030 !important;
   background: repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px),
-              linear-gradient(180deg,#020, #000 75%) !important;
+    linear-gradient(180deg,#020, #000 75%) !important;
   background-size: 4px 100%, 100% !important;
 }
 
