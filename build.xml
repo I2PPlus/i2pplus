@@ -24,6 +24,7 @@
     <target name="all" >
         <echo message="Useful targets:" />
         <echo message=" bench                                        Build benchmarks" />
+        <echo message=" bump                                         Increment build (minor version) by 1" />
         <echo message=" buildDesktopGui                              Build a standalone DesktopGUI &#10140; ./build/desktopgui.jar" />
         <echo message=" buildI2PControl                              Build I2PControl .war component &#10140; ./build/jsonrpc.war" />
         <echo message=" buildI2PSnark                                Build I2PSnark .jar &amp; .war components &#10140; ./build/i2psnark.(jar|war)" />
