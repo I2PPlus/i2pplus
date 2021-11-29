@@ -19,6 +19,9 @@
   --btnAction: linear-gradient(180deg,#737, #582858 50%, #101 50%, #080008);
   --btnAction_hover: linear-gradient(180deg,#b50, #730 50%, #212 50%, #100, #000);
   --btnAction_active: linear-gradient(180deg,#100, #310);
+  --ink_btn: #1c081e;
+  --ink_btn: #260b28;
+  --ink_btn: #2f1d30;
   --border_hard: 1px solid #101;
   --border_inner: 1px solid #313;
 }
@@ -1869,7 +1872,7 @@ input {
 }
 
 input[type=submit], input[type=reset], a.control {
-  text-shadow: 0 1px 1px rgba(255,240,240,.3) !important;
+  box-shadow: 0 0 1px 1px rgba(48,16,48,.7), inset 0 0 2px 2px rgba(192,160,192,.3);
 }
 
 input[type=submit]:hover, input[type=reset]:hover, a.control:hover, input[disabled] {
@@ -2100,9 +2103,8 @@ a.control, a.controld, a.control:active {
   display: inline-block;
   white-space: nowrap;
   vertical-align: middle;
-  color: #1c081e;
+  color: var(--ink_btn);
   font-weight: 700;
-  text-shadow: 0 0 #410;
   border: 1px inset #bbb;
   border-radius: 2px;
   box-shadow: 0 0 1px 1px rgba(48,16,48,.7);
@@ -2147,9 +2149,8 @@ input[type=submit]::-moz-focus-inner, input[type="reset"]::-moz-focus-inner {
 
 input[type=submit], input[type="reset"] {
   padding: 4px 6px 4px 22px !important;
-  color: #1c081e;
+  color: var(--ink_btn);
   border: 1px inset #bbb;
-  box-shadow: 0 0 1px 1px rgba(48,16,48,.7);
   background: var(--btn);
   background-size: 14px, 100% !important;
   background-position: 6px center, center center !important;
