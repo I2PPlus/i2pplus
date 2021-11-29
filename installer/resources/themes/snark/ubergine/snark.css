@@ -34,8 +34,7 @@ html, body {
 /* preload top navigation mouseovers */
 
 body {
-  font-family: var(--bodyfont);
-  font-size: 9pt;
+  font: 9pt var(--bodyfont);
   color: #ddd;
   background: repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(48,0,48,.5) 4px),
     repeating-linear-gradient(180deg,#080008 2px, #212 4px), var(--offline) no-repeat, #130313;
@@ -133,15 +132,13 @@ label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
   margin: -1px -4px 0 0;
   padding: 4px 12px 4px 29px;
   display: inline-block;
-  line-height: 130%;
-  font-family: var(--bodyfont);
-  font-size: 10.5pt;
-  font-weight: 700;
+  font: 10.5pt/1.3 700 var(--bodyfont);
   color: #f70;
   letter-spacing: .11em;
   text-decoration: none;
   text-transform: uppercase;
-  text-shadow: 0 0 1px #000;
+  text-shadow: 1px 0 1px rgba(0,0,0,.6), -1px 0 1px rgba(255,240,255,.2);
+  -webkit-text-stroke: .5px rgba(0,0,0,.3);
   outline: none;
   border: 1px solid #730;
   border-radius: 0;
@@ -354,7 +351,7 @@ label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
   background: #202;
   background: rgba(34,0,34,.8);
   mix-blend-mode: luminosity;
-  filter: sepia(100%) hue-rotate(210deg) !important;
+  filter: sepia(100%) hue-rotate(210deg);
 }
 
 #expand img, #shrink img {
@@ -372,8 +369,8 @@ label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
 #closelog:hover img, #expand:hover img, #shrink:hover img {
   box-shadow: inset 0 0 0 1px rgba(128,96,128,.3);
   background: #000;
-  mix-blend-mode: normal !important;
-  filter: none !important;
+  mix-blend-mode: normal;
+  filter: none;
 }
 
 #closelog:active img, #expand:active img, #shrink:active img {
@@ -387,11 +384,11 @@ label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
 }
 
 .logshim {
-  margin-top: -10px !important;
+  margin-top: -10px;
 }
 
 .iframed .logshim {
-  margin-top: -2px !important;
+  margin-top: -2px;
 }
 
 /* end screenlogger */
@@ -410,16 +407,6 @@ thead, tfoot {
   background: #101;
 }
 
-thead th, .snarkTorrentInfo th {
-  border-top: var(--border_hard) !important;
-  border-bottom: var(--border_hard) !important;
-  background: linear-gradient(180deg,#202, #101);
-}
-
-.snarkTorrents thead {
-  filter: drop-shadow(0 1px 1px #101);
-}
-
 th {
   padding: 4px 2px 4px 4px;
   letter-spacing: 0;
@@ -427,6 +414,14 @@ th {
   color: #ddd;
   border-top: var(--border_hard);
   border-bottom: var(--border_hard);
+}
+
+thead th, .snarkTorrentInfo th {
+  background: linear-gradient(180deg,#202, #101);
+}
+
+.snarkTorrents thead {
+  filter: drop-shadow(0 1px 1px #101);
 }
 
 th .infohash {
@@ -449,11 +444,10 @@ tfoot td:first-child {
 }
 
 .mainsection .ParentDir {
-  background: #101;
-  background: linear-gradient(180deg,#101, #170017);
+  padding: 0 3px !important;
   border: var(--border_hard) !important;
   text-align: left !important;
-  padding: 0 3px !important;
+  background: linear-gradient(180deg,#101, #170017);
 }
 
 .ParentDir.playlist {
@@ -465,7 +459,6 @@ tfoot td:first-child {
 }
 
 .mainsection .ParentDir:hover, .mainsection .snarkDirInfo tbody tr:first-child:hover td {
-  background: #414;
   background: linear-gradient(180deg,#58165e, #4a0d56) !important;
 }
 
@@ -564,7 +557,7 @@ td.snarkGraphicStatus img::before {
   border-top: none !important;
   border-bottom: 1px solid #414 !important;
   box-shadow: inset 0 0 0 1px #101;
-  background: linear-gradient(180deg,#303, #202);
+  background: linear-gradient(180deg,#303,#202);
 }
 
 .snarkTorrents thead th  {
@@ -584,9 +577,7 @@ td.snarkGraphicStatus img::before {
 }
 
 @supports not (-moz-appearance: none) {
-.snarkTorrents thead th:nth-child(2) img {
-  margin-bottom: 0 !important;
-}
+.snarkTorrents thead th:nth-child(2) img {margin-bottom: 0 !important}
 }
 
 .snarkGraphicStatus, .snarkTorrentStatus {
@@ -608,7 +599,7 @@ th.snarkGraphicStatus a img {
 
 .snarkTorrentStatus {
   padding: 2px 2px 2px 0 !important;
-  line-height: 110%;
+  line-height: 1.1;
   text-align: center !important;
   font-weight: 400 !important;
 }
@@ -635,13 +626,13 @@ th.snarkTorrentStatus {
 
 .snarkTorrentName {
   padding: 2px 1px 2px 3px;
-  line-height: 110%;
+  line-height: 1.1;
 }
 
 .snarkTorrentRateUp, .snarkTorrentRateDown, .snarkTorrentDownloaded, .snarkTorrentUploaded,
 .snarkFileSize, .snarkTorrentStatus, .snarkFileName {
   padding: 0 3px;
-  line-height: 100%;
+  line-height: 1;
   font-size: 8pt;
   font-weight: 700;
 }
@@ -722,9 +713,8 @@ th.snarkTorrentUploaded a img {
 }
 
 .snarkTorrents tt {
-  font-family: var(--monospaced);
+  font: 8.5pt var(--monospaced);
   font-weight: 700;
-  font-size: 8.5pt !important;
   color: #cc0;
   margin-right: 2px;
   letter-spacing: .1em;
@@ -953,7 +943,7 @@ tr[id] + .peerinfo td {
 
 .peerinfo td[colspan="4"], .debuginfo td[colspan="10"] {
   padding-left: 0 !important;
-  line-height: 120% !important;
+  line-height: 1.2 !important;
 }
 
 .peerinfo tt {
@@ -982,17 +972,17 @@ tr:hover .percentBarText {
 
 .snarkFileName {
   padding: 4px 2px !important;
-  text-align: left !important;
   vertical-align: middle;
-  line-height: 120%;
+  line-height: 1.2;
+  text-align: left !important;
 }
 
 .snarkFileSize {
   padding: 4px 8px 4px 2px;
-  font-weight: 700;
-  color: #b6b !important;
   width: 1%;
   white-space: nowrap;
+  font-weight: 700;
+  color: #b6b !important;
 }
 
 .snarkFileStatus {
@@ -1409,7 +1399,7 @@ tr.active:hover .percentBarInner, tr.active:hover .peerinfo .percentBarInner {
   padding: 3px 0;
   min-width: 84px;
   display: inline-block;
-  line-height: 120%;
+  line-height: 1.2;
   vertical-align: middle;
   text-align: center;
   text-shadow: 0 1px 1px #000;
@@ -1553,7 +1543,7 @@ form {
 }
 
 p {
-  line-height: 150%;
+  line-height: 1.5;
 }
 
 hr {
@@ -1906,7 +1896,6 @@ input[type=submit]:disabled:active, a.control:disabled:active {
   border: 1px solid #dad !important;
   border-radius: 2px;
   box-shadow: inset 0 0 1px 1px #fff;
-  background: #fdf;
   background: linear-gradient(180deg,#fdf 50%, #dbd 50%);
   opacity: 1;
 }
@@ -2296,13 +2285,12 @@ textarea {
 
 img {
   margin: 0 3px 1px 3px;
-  line-height: 100%;
+  line-height: 1;
   vertical-align: middle;
   border: none;
 }
 
 img:hover {
-  line-height: 100%;
   border: none;
 }
 
@@ -2382,8 +2370,7 @@ img:hover {
 
 .configsectionpanel, .configsectionpanel td, .snarkNewTorrent, .snarkNewTorrent td,
 select, input, input.r, input[name="nofilter_dataDir"], textarea[name="i2cpOpts"], a.control {
-  font-family: var(--bodyfont);
-  font-size: 9pt !important;
+  font: 9pt var(--bodyfont);
 }
 
 .iframed .mainsection, .iframed .newtorrentsection, .iframed .addtorrentsection,
@@ -2462,9 +2449,7 @@ select, input, input.r, input[name="nofilter_dataDir"], textarea[name="i2cpOpts"
 code {
   padding: 0 2px;
   color: #b8b;
-  font-family: var(--monospaced);
-  font-size: 8.5pt;
-  font-weight: 700;
+  font: 8.5pt 700 var(--monospaced);
 }
 
 .routerdown {
@@ -2610,8 +2595,8 @@ input#toggle_files:checked + label + hr, input#toggle_comments:checked + label +
 }
 
 .debuginfo {
-  line-height: 110%;
-  word-spacing: -0.19em;
+  line-height: 1.1;
+  word-spacing: -.19em;
   background: #081808;
 }
 
@@ -2808,18 +2793,17 @@ hr.debug {
 }
 
 #bwHelp {
-  background: url(images/details.svg) no-repeat left 8px center;
-  background-size: 14px auto;
   padding-left: 26px !important;
   width: 90%;
-  line-height: 100%;
+  line-height: 1;
+  background: url(images/details.svg) no-repeat left 8px center / 14px auto;
 }
 
 #bwHelp a {
-  display: inline-block;
-  white-space: nowrap;
   margin-left: 4px;
-  line-height: 150%;
+  display: inline-block;
+  line-height: 1.5;
+  white-space: nowrap;
   font-style: normal;
 }
 
@@ -2907,24 +2891,20 @@ hr.debug {
 
 .snarkCommentInfo th > * {
   vertical-align: middle;
-  line-height: 120%;
+  line-height: 1.2;
 }
 
 .snarkCommentInfo tr:nth-child(even), .snarkComments tr:nth-child(odd) {
-  background: #351933;
   border-bottom: var(--border_hard);
+  background: #351933;
 }
 
 .snarkCommentInfo tr:nth-child(odd), .snarkComments tr:nth-child(even) {
-  background: #270027;
   border-bottom: var(--border_hard);
+  background: #270027;
 }
 
-.snarkCommentInfo th {
-  padding: 8px 5px;
-}
-
-.snarkCommentInfo td, .snarkComments td {
+.snarkCommentInfo th, .snarkCommentInfo td, .snarkComments td {
   padding: 8px 5px;
 }
 
@@ -2937,23 +2917,23 @@ hr.debug {
 }
 
 .snarkCommentInfo td:first-child::after, .snarkComments td:first-child::after {
-  content: "";
-  display: inline-block;
   min-height: 32px;
+  display: inline-block;
   vertical-align: middle;
+  content: "";
 }
 
 .snarkCommentInfo input.accept {
-  float: right;
   margin-right: 5px !important;
+  float: right;
 }
 
 .snarkCommentInfo textarea, .snarkCommentInfo textarea:focus {
-  font-family: var(--bodyfont);
   width: 100%;
   min-height: 64px;
   height: 64px;
   resize: vertical;
+  font-family: var(--bodyfont);
 }
 
 .commentRating, .commentAuthor {
@@ -3134,11 +3114,10 @@ td .commentAuthorName {
 
 .noscriptWarning {
   margin-right: 7px !important;
-  font-family: var(--bodyfont);
-  font-size: 9pt;
-  mix-blend-mode: luminosity;
   position: relative;
   z-index: 1;
+  font: 9pt var(--bodyfont);
+  mix-blend-mode: luminosity;
 }
 
 .noscriptWarning::before {
@@ -3251,7 +3230,7 @@ span.trackerName {
   border: 1px solid rgba(34,0,34,.7);
   box-shadow: inset 0 0 0 1px #414;
   background: #303;
-  background: linear-gradient(180deg,#303, #202);
+  background: linear-gradient(180deg,#303,#202);
 }
 
 span.trackerName::before {
@@ -3446,7 +3425,7 @@ span.trackerName::before {
   margin-right: 5px;
   padding: 4px 8px;
   display: inline-block;
-  line-height: 160%;
+  line-height: 1.6;
   vertical-align: middle;
   color: #ff7;
   font-weight: 700;
@@ -4136,8 +4115,8 @@ th.snarkTorrentPeerCount img {
 
 .peerclient, .peerinfo tt, .clientid {
   display: inline-block;
-  line-height: 120% !important;
   vertical-align: middle;
+  line-height: 1.2 !important;
 }
 
 .peerinfo tt {
@@ -4263,16 +4242,16 @@ input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::bef
 }
 
 input[type=checkbox]:checked::before, input[type=checkbox]:not(:checked)::before {
-  content: "";
-  top: 4px;
-  left: 4px;
   width: 10px;
   height: 10px;
-  line-height: 80%;
+  top: 4px;
+  left: 4px;
+  line-height: .8;
   font-size: 15pt;
   border-radius: 1px;
   box-shadow: inset 0 0 0 1px rgba(192,48,0,.5), 0 0 0 1px #000;
   background: #f60;
+  content: "";
 }
 
 input[type=checkbox]:checked::before {
@@ -4280,14 +4259,14 @@ input[type=checkbox]:checked::before {
 }
 
 input[type=radio]:checked::before {
-  content: "";
-  border-radius: 50%;
-  top: 25%;
-  left: 23%;
   width: 9px;
   height: 9px;
-  background: #f60;
+  top: 25%;
+  left: 23%;
+  border-radius: 50%;
   box-shadow: 0 0 0 1px #730, 0 0 0 2px #101, inset 1px 1px 3px #f90;
+  background: #f60;
+  content: "";
 }
 
 .iframed input[type=radio]:checked::before {
@@ -4454,11 +4433,8 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
   margin-top: -3px;
   display: inline-block;
   vertical-align: middle;
-  line-height: 0;
-  font-size: 80%;
-  font-weight: 400;
   text-shadow: 0 0 1px #101;
-  font-family: var(--bodyfont);
+  font-family: 80%/0 400 var(--bodyfont);
 }
 
 .snarkTorrentUploaded .left {
@@ -4503,7 +4479,7 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
 .snarkTorrentInfo td {
   padding-top: 5px !important;
   padding-bottom: 5px !important;
-  line-height: 180%;
+  line-height: 1.8;
   border-top: 1px solid rgba(32,8,32,.7);
   border-bottom: 1px solid rgba(32,8,32,.9);
 }
@@ -4565,7 +4541,7 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
 
 #metacomment {
   padding: 0 !important;
-  line-height: 140%;
+  line-height: 1.4;
   text-align: justify !important;
 }
 
@@ -5595,7 +5571,7 @@ td.snarkTorrentAction input[type=submit] {
     margin-top: -5px;
   }
   .percentBarComplete {
-    line-height: 140%;
+    line-height: 1.4;
   }
   #setPriority input[type=submit] {padding-bottom: 6px !important}
   .script .control {font-size: 8.5pt !important}
@@ -5674,7 +5650,7 @@ td.snarkTorrentAction input[type=submit] {
   }
   .peerinfo tt {
     margin: 0 8px 0 0 !important;
-    line-height: 120% !important;
+    line-height: 1.2 !important;
   }
 }
 
@@ -5879,15 +5855,15 @@ td.snarkTorrentAction input[type=submit] {
     padding-right: 3px !important;
   }
   .snarkTorrents tt {
+    margin: 1px 3px !important;
+    padding: 2px 3px;
+    letter-spacing: .1em;
     font-size: 10pt;
     color: #cc0;
-    background: #505;
-    padding: 2px 3px;
     border-radius: 2px;
     box-shadow: 0 0 1px #303;
-    letter-spacing: .1em;
+    background: #505;
     opacity: .9;
-    margin: 1px 3px !important;
   }
   .priority {
     padding: 4px 10px;
@@ -5920,7 +5896,7 @@ td.snarkTorrentAction input[type=submit] {
   }
   .debuginfo td {
     font-size: 9pt !important;
-    line-height: 120%;
+    line-height: 1.2;
   }
   #pagenavbottom img {
     width: 16px !important;
