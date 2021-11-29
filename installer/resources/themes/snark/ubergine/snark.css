@@ -1289,10 +1289,10 @@ tr:hover .percentBarOuter, tr:hover .peerinfo .percentBarOuter {
 }
 
 .uploaded {
-  padding: 1px 0;
+  padding: 2px 0 0;
   min-width: 68px;
   display: inline-block;
-  line-height: 1.2;
+  line-height: 1.25;
   text-shadow: 0 1px 1px #000, 0 0 2px #337;
   border: 1px solid #424;
   border-left-width: 5px;
@@ -1307,7 +1307,9 @@ tr:hover .percentBarOuter, tr:hover .peerinfo .percentBarOuter {
 }
 
 .active.seeding .uploaded {
-  animation: linear uploading 5s reverse infinite;
+  background: repeating-linear-gradient(90deg,#000,#000 5%,#808 5%,#808 10%);
+  background-size: 200%;
+/*  animation: linear uploading 1.5s 3.5s reverse infinite;*/
 }
 
 tr:hover .uploaded {
@@ -1326,9 +1328,18 @@ tr:hover .uploaded {
   border: none;
 }
 
+.active.seeding .txBarInner {
+  background: rgba(192,0,128,.4);
+}
+
 .txBarInner[style="width: calc(100% - 2px)"] {
   box-shadow: 0 0 0 1px #000, inset 0 2px 2px 3px rgba(255,255,255,.1);
   background: linear-gradient(180deg, rgba(220,220,220,.05), rgba(255,255,255,.1), rgba(0,0,0,.3), rgba(0,0,0,.5)), linear-gradient(0deg, rgba(192,0,96,.4), rgba(208,0,112,.4));
+}
+
+.active.seeding .txBarInner[style="width: calc(100% - 2px)"] {
+  box-shadow: 0 0 0 1px #000, inset 0 2px 2px 3px rgba(255,255,255,.1);
+  background: linear-gradient(180deg, rgba(220,220,220,.05), rgba(255,255,255,.1), rgba(0,0,0,.3), rgba(0,0,0,.5)), linear-gradient(0deg, rgba(208,0,128,.4), rgba(224,0,128,.4));
 }
 
 .txBarInner::after {
@@ -1430,7 +1441,7 @@ tr.active:hover .percentBarInner, tr.active:hover .peerinfo .percentBarInner {
   vertical-align: middle;
   text-align: center;
   text-shadow: 0 1px 1px #000;
-  box-shadow: inset 0 0 0 1px rgba(16,0,16,.85), inset 0 1px 2px rgba(128,96,128,.7), inset 0 -1px 3px rgba(0,0,0,.75);
+  box-shadow: inset 0 0 0 1px rgba(16,0,16,.85), inset 0 1px 2px rgba(128,96,128,.7), inset 0 -1px 3px rgba(0,0,0,.75), inset 0 0 2px 1px rgba(92,0,92,.7);
   border-radius: 15px;
   background: radial-gradient(at center bottom, rgba(64, 16, 64, .5) 10%, rgba(16, 0, 16, .1) 80%, rgba(0,0,0,0) 70%),
     linear-gradient(180deg,rgba(51,17,51,.9), rgba(17,0,17,.9));
