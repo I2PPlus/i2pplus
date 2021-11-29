@@ -254,7 +254,16 @@
         <copy todir="build/standalone-resources/.resources/themes/snark" >
             <fileset dir="../../../installer/resources/themes/snark/" />
         </copy>
-
+        <mkdir dir="build/standalone-resources/.resources/fonts" />
+        <copy todir="build/standalone-resources/.resources/fonts" >
+            <fileset dir="../../../installer/resources/themes/fonts/" />
+        </copy>
+        <replace dir="build/standalone-resources/.resources/fonts"
+            summary="true"
+            token="url(/themes/fonts/"
+            value="url(/i2psnark/.resources/fonts/" >
+            <include name="DroidSans.css" />
+        </replace>
         <replace dir="build/standalone-resources/.resources/themes/snark"
             summary="true"
             token="url(/themes/console/classic/images/"
@@ -273,14 +282,12 @@
             value="url(/i2psnark/.resources/themes/snark/light/images/" >
             <include name="**/*.css" />
         </replace>
-
         <replace dir="build/standalone-resources/.resources/themes/snark"
             summary="true"
             token="url(/themes/console/light/"
             value="url(/i2psnark/.resources/themes/snark/light/" >
             <include name="**/*.css" />
         </replace>
-
         <replace dir="build/standalone-resources/.resources/themes/snark"
             summary="true"
             token="url(/themes/console/light/images/"
@@ -295,6 +302,8 @@
         </replace>
 
         <!-- Rather than pulling in all the console theme images, let's just specify the ones we need -->
+        <copy file="../../../installer/resources/themes/fonts/DroidSans.css"
+              todir="build/standalone-resources/.resources/fonts" />
         <copy file="../../../installer/resources/themes/console/dark/images/camotile2.png"
               todir="build/standalone-resources/.resources/themes/snark/dark/images" />
         <copy file="../../../installer/resources/themes/console/classic/images/bg0.png"
@@ -304,7 +313,7 @@
         <copy file="../../../installer/resources/themes/console/classic/optbox.css"
               todir="build/standalone-resources/.resources/themes/snark/classic" />
         <copy file="../../../installer/resources/themes/console/midnight/images/tile.css"
-              todir="build/standalone-resources/.resources/themes/midnight/light/images" />
+              todir="build/standalone-resources/.resources/themes/midnight/images" />
 
         <mkdir dir="build/standalone-resources/.resources/js" />
         <copy file="../../routerconsole/jsp/js/ajax.js" todir="build/standalone-resources/.resources/js" />

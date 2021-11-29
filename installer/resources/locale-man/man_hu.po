@@ -270,10 +270,10 @@ msgstr "HIBAJELENTÉS"
 #. type: Plain text
 #: man/eepget.1:99 man/i2prouter.1:59 man/i2prouter-nowrapper.1:29
 msgid ""
-"Please enter a ticket on E<.UR https://trac.i2p2.de/> the I2P trac page "
+"Please enter a ticket on E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> the I2P Bug Tracker "
 "E<.UE .>"
 msgstr ""
-"Kérünk, adj le jelentést itt: E<.UR https://trac.i2p2.de/> az I2P trac "
+"Kérünk, adj le jelentést itt: E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> az I2P trac "
 "oldalon E<.UE .>"
 
 #. type: SH

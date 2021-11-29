@@ -274,10 +274,10 @@ msgstr "SIGNALER DES BOGUES"
 #. type: Plain text
 #: man/eepget.1:99 man/i2prouter.1:59 man/i2prouter-nowrapper.1:29
 msgid ""
-"Please enter a ticket on E<.UR https://trac.i2p2.de/> the I2P trac page "
+"Please enter a ticket on E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> the I2P Bug Tracker "
 "E<.UE .>"
 msgstr ""
-"Veuillez créer un billet sur E<.UR https://trac.i2p2.de/> la page Trac d’I2P"
+"Veuillez créer un billet sur E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> la page Trac d’I2P"
 " E<.UE .>"
 
 #. type: SH
