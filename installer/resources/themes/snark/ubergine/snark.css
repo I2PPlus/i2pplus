@@ -4623,24 +4623,6 @@ td.snarkTorrentPeerCount:empty {
   text-align: center;
 }
 
-/* override js dialogs */
-
-.customalert {
-   border: 1px solid #535 !important;
-   box-shadow: 0 0 3px 1px rgba(0,0,0,.6), var(--highlight) !important;
-   background: #000 !important;
-   background: linear-gradient(to top, #212, #000) !important;
-}
-
-.customalert .header {
-   border-bottom: 1px solid #535 !important;
-   box-shadow: var(--highlight) !important;
-   background: #002 !important;
-   background: linear-gradient(180deg,#202, #000) !important;
-}
-
-/* end override js dialogs */
-
 .snarkFilename a {
   display: inline-block;
   word-break: break-all;
