@@ -769,7 +769,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
             boolean isHidden = _context.router().isHidden() || _context.getBooleanProperty("router.hiddenMode");
             String v = ri.getVersion();
-            String MIN_VERSION = "0.9.49";
+            String MIN_VERSION = "0.9.50";
             Hash us = _context.routerHash();
             boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
                                      ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
@@ -1332,12 +1332,12 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         String minVersionAllowed = _context.getProperty("router.minVersionAllowed");
         if (minVersionAllowed != null) {
             if (VersionComparator.comp(v, minVersionAllowed) < 0) {
-                _context.banlist().banlistRouterForever(routerInfo.getIdentity().getHash(), " <b>➜</b> " + "Router <code>" + routerId + "</code> too old (" + v + ")");
+                _context.banlist().banlistRouterForever(routerInfo.getIdentity().getHash(), " <b>➜</b> " + "Router too old (" + v + ")");
                 return "Router [" + routerId + "] is too old (" + v + ") - banned until restart";
             }
         } else {
             if (VersionComparator.comp(v, minRouterVersion) < 0) {
-                _context.banlist().banlistRouterForever(routerInfo.getIdentity().getHash(), " <b>➜</b> " + "Router <code>" + routerId + "</code> too old (" + v + ")");
+                _context.banlist().banlistRouterForever(routerInfo.getIdentity().getHash(), " <b>➜</b> " + "Router too old (" + v + ")");
                 return "Router [" + routerId + "] is too old (" + v + ") - banned until restart";
             }
         }
