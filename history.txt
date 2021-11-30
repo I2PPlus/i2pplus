@@ -1,10 +1,10 @@
-2021-11-30 I2P+ 1.6.1 released
+2021-11-30 I2P+ 1.6.1+ released
 
 2021-11-29 zzz
  * Tunnels: Fix NPE in BuildHandler
 
-2021-11-29 dr|z3d
- * Router: Increase min version for peer tests and local tunnels to 0.9.50
+2021-11-30 dr|z3d
+ * Router: Increase min version for peer tests and local tunnels to 0.9.51
 
 2021-11-24 dr|z3d
  * Console:
