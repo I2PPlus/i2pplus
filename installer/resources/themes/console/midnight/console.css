@@ -40,8 +40,7 @@ html, body {
 
 html {
   background: repeating-linear-gradient(90deg, rgba(0,16,0,.5) 2px, rgba(0,0,0,.3) 4px),
-              repeating-linear-gradient(180deg,rgba(0,0,32,.6) 2px, rgba(0,0,0,.3) 4px),
-              var(--tile) #001;
+    repeating-linear-gradient(180deg,rgba(0,0,32,.6) 2px, rgba(0,0,0,.3) 4px), var(--tile) #001;
   background-size: 4px 100%, 100% 4px, 171px 148px;
 }
 
@@ -1071,24 +1070,24 @@ div.logo hr {
   .logo hr ~ a {
     border: 1px solid #225;
     background: radial-gradient(at center bottom, rgba(128, 0, 128, .15), rgba(64, 0, 64, .08) 30%, rgba(0, 0, 0, 0) 90%),
-                linear-gradient(90deg, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)),
-                linear-gradient(90deg, rgba(0,0,16,.1), rgba(0,0,0,0), rgba(0,0,16,.1)),
-                linear-gradient(180deg,#0a0a1a 50%, #040414 50%) !important;
+      linear-gradient(90deg, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)),
+      linear-gradient(90deg, rgba(0,0,16,.1), rgba(0,0,0,0), rgba(0,0,16,.1)),
+      linear-gradient(180deg,#0a0a1a 50%, #040414 50%) !important;
   }
 
   .logo hr ~ a:hover {
     z-index: 10;
     box-shadow: var(--highlight);
     background: radial-gradient(at center bottom, rgba(96, 32, 96, .6) 0, rgba(0, 0, 0, 0) 80%),
-                linear-gradient(90deg, rgba(64,0,64,.03), rgba(96,0,96,.1), rgba(64,0,64,.03)),
-                linear-gradient(180deg,#1d1a2d 50%, #000 50%) !important;
+      linear-gradient(90deg, rgba(64,0,64,.03), rgba(96,0,96,.1), rgba(64,0,64,.03)),
+      linear-gradient(180deg,#1d1a2d 50%, #000 50%) !important;
 }
 
   .logo hr ~ a:active {
     box-shadow: var(--highlight), inset 0 0 1px 1px #737, inset 0 0 0 3px #101, inset 5px 5px 5px 2px #000;
     background: radial-gradient(at center bottom, rgba(160,48,160,.2), rgba(0, 0, 0, 0) 35%),
-                linear-gradient(90deg, rgba(64,0,64,.1), rgba(64,0,64,.2), rgba(64,0,64,.1)),
-                linear-gradient(180deg,#080820, #1d1a2d) !important;
+      linear-gradient(90deg, rgba(64,0,64,.1), rgba(64,0,64,.2), rgba(64,0,64,.1)),
+      linear-gradient(180deg,#080820, #1d1a2d) !important;
   }
 
 @media screen and (max-width: 800px) {
@@ -1217,13 +1216,13 @@ div.logo hr {
 
 .main {
   background: repeating-linear-gradient(90deg, rgba(0,0,0,.4) 2px, rgba(4,4,32,.5) 4px),
-              repeating-linear-gradient(180deg,rgba(0,0,0,.6) 2px, rgba(4,4,32,.5) 4px);
+    repeating-linear-gradient(180deg,rgba(0,0,0,.6) 2px, rgba(4,4,32,.5) 4px);
   background-size: 4px 100%, 100% 4px !important;
 }
 
 .routersummary {
   background: repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(4,4,32,.5) 4px),
-              repeating-linear-gradient(180deg,rgba(0,0,0,.5) 2px, rgba(4,4,32,.5) 4px);
+    repeating-linear-gradient(180deg,rgba(0,0,0,.5) 2px, rgba(4,4,32,.5) 4px);
   background-size: 4px 100%, 100% 4px !important;
 }
 
@@ -1333,9 +1332,9 @@ div.logo hr {
   border: 0;
   border-radius: 0;
   background: radial-gradient(at center bottom, rgba(128, 0, 128, .15), rgba(64, 0, 64, .08) 30%, rgba(0, 0, 0, 0) 90%),
-              linear-gradient(90deg, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)),
-              linear-gradient(90deg, rgba(0,0,16,.1), rgba(0,0,0,0), rgba(0,0,16,.1)),
-              linear-gradient(180deg,#0a0a1a 50%, #040414 50%) !important;
+    linear-gradient(90deg, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)),
+    linear-gradient(90deg, rgba(0,0,16,.1), rgba(0,0,0,0), rgba(0,0,16,.1)),
+    linear-gradient(180deg,#0a0a1a 50%, #040414 50%) !important;
 }
 
 .routersummary h3::before {
@@ -1361,8 +1360,8 @@ div.logo hr {
   box-shadow: var(--highlight), inset 0 0 1px 1px #a5a;
   background: linear-gradient(180deg,#001020 50%, #000 50%) !important;
   background: radial-gradient(at center bottom, rgba(96, 32, 96, .6) 0, rgba(0, 0, 0, 0) 80%),
-              linear-gradient(90deg, rgba(64,0,64,.03), rgba(96,0,96,.1), rgba(64,0,64,.03)),
-              linear-gradient(180deg,#1d1a2d 50%, #000 50%) !important;
+    linear-gradient(90deg, rgba(64,0,64,.03), rgba(96,0,96,.1), rgba(64,0,64,.03)),
+    linear-gradient(180deg,#1d1a2d 50%, #000 50%) !important;
 }
 
 .routersummary h3:hover a {
@@ -1372,8 +1371,8 @@ div.logo hr {
 .routersummary h3:active {
   box-shadow: var(--highlight), inset 0 0 1px 1px #737, inset 4px 4px 4px #000;
   background: radial-gradient(at center bottom, rgba(160,48,160,.2), rgba(0, 0, 0, 0) 35%),
-              linear-gradient(90deg, rgba(64,0,64,.1), rgba(64,0,64,.2), rgba(64,0,64,.1)),
-              linear-gradient(180deg,#080820, #1d1a2d) !important;
+    linear-gradient(90deg, rgba(64,0,64,.1), rgba(64,0,64,.2), rgba(64,0,64,.1)),
+    linear-gradient(180deg,#080820, #1d1a2d) !important;
 }
 
 .routersummary h3 a, .routersummary h3 a:visited {
@@ -1981,17 +1980,17 @@ p:empty + .sb_notice {
   box-shadow: var(--highlight), inset 0 -2px 4px rgba(0,0,0,.6);
   background: #227;
   background: linear-gradient(90deg, rgba(0,0,0,0) 100px, rgba(255,0,255,.1) 160px, rgba(0,0,255,.15)),
-              linear-gradient(180deg, #33a, #226 50%, #003 50%, #000);
+    linear-gradient(180deg, #33a, #226 50%, #003 50%, #000);
 }
 
 #sb_memoryBar .percentBarInner {
   background: linear-gradient(90deg, rgba(0,0,0,0) 100px, rgba(255,0,255,.1) 160px, rgba(255,0,0,.15)),
-              linear-gradient(180deg,rgba(100,100,220,.5), rgba(70,70,120,.5) 50%, rgba(0,0,50,.5) 50%, rgba(0,0,0,.5));
+    linear-gradient(180deg,rgba(100,100,220,.5), rgba(70,70,120,.5) 50%, rgba(0,0,50,.5) 50%, rgba(0,0,0,.5));
 }
 
 #sb_memoryBar.percentBarOuter {
   background: linear-gradient(90deg, rgba(0,0,0,0), rgba(255,0,255,.05), rgba(255,0,0,.12)),
-              repeating-linear-gradient(90deg, #000 1px, #000 2px, #003 2px, #003 4px) !important;
+    repeating-linear-gradient(90deg, #000 1px, #000 2px, #003 2px, #003 4px) !important;
 }
 
 .percentBarText {
@@ -2648,8 +2647,8 @@ div.confignav {
   text-shadow: 0 1px 1px #000;
   box-shadow: var(--highlight), inset 4px 4px 4px rgba(0,0,0,.5);
   background: radial-gradient(at center bottom, rgba(128, 0, 128, .4) 0, rgba(0, 0, 0, 0) 90%),
-              linear-gradient(90deg, rgba(96,0,96,.2), rgba(96,0,96,.2)),
-              linear-gradient(180deg,#000, #1a1b2f);
+    linear-gradient(90deg, rgba(96,0,96,.2), rgba(96,0,96,.2)),
+    linear-gradient(180deg,#000, #1a1b2f);
 }
 
 @supports not (-moz-appearance: none) {
@@ -8066,7 +8065,7 @@ p.sybil_info, p.family, p.threatpoints, p.hashdist, p#sybil_totals, p.notfound {
 
 p.threatpoints.hot {
   background: var(--eye_static) no-repeat 8px center, var(--hot) no-repeat right 4px center,
-              linear-gradient(90deg, #000, #001 80%, #002);
+    linear-gradient(90deg, #000, #001 80%, #002);
   background-size: 16px, 20px, 100% !important;
   background-blend-mode: luminosity, normal;
 }
@@ -8183,7 +8182,7 @@ textarea#advancedsettings {
 
 textarea#advancedsettings:not(:focus) {
   background: repeating-linear-gradient(90deg, rgba(0,0,0,.1) 2px, rgba(0,0,32,.1) 4px),
-              linear-gradient(180deg,rgba(0,0,0,.4), rgba(0,0,16,.4));
+    linear-gradient(180deg,rgba(0,0,0,.4), rgba(0,0,16,.4));
   background-size: 4px 100%, 100%;
 }
 
@@ -8216,8 +8215,8 @@ p.infowarn, td.infowarn, #sybilanalysis {
   padding: 20px 15px 20px 50px !important;
   border: var(--innerborder);
   background: var(--infowarn) no-repeat 14px center,
-              linear-gradient(180deg,rgba(128,128,128,.05), rgba(0,0,0,.3)),
-              repeating-linear-gradient(180deg,#200 2px, #000 4px) !important;
+    linear-gradient(180deg,rgba(128,128,128,.05), rgba(0,0,0,.3)),
+    repeating-linear-gradient(180deg,#200 2px, #000 4px) !important;
   background-size: 28px, 100%, 100% 4px !important;
 }
 
@@ -8435,8 +8434,8 @@ table#externali2cp th {
   text-shadow: 0 1px 1px #000;
   box-shadow: var(--highlight), inset 0 0 2px 1px #f00;
   background: var(--infowarn) no-repeat 10px center,
-              linear-gradient(180deg,rgba(128,128,128,.05), rgba(0,0,0,.3)),
-              repeating-linear-gradient(180deg,#400 2px, #100 4px);
+    linear-gradient(180deg,rgba(128,128,128,.05), rgba(0,0,0,.3)),
+    repeating-linear-gradient(180deg,#400 2px, #100 4px);
   background-size: 18px, 100%, 100% 4px;
 }
 
@@ -13405,12 +13404,12 @@ h1[class], h1 {
 from {
   background: #001000;
   background: repeating-linear-gradient(90deg, rgba(0,0,0,0), #003 1px, rgba(0,0,0,0) 1px, rgba(0,0,0,0) 10px),
-              repeating-linear-gradient(180deg,#000, #003 1px, #000 1px, #000 10px);
+    repeating-linear-gradient(180deg,#000, #003 1px, #000 1px, #000 10px);
 }
 to {
   background: #000;
   background: repeating-linear-gradient(90deg, rgba(0,0,0,0), #000 1px, rgba(0,0,0,0) 1px, rgba(0,0,0,0) 10px),
-              repeating-linear-gradient(180deg,#000, #000 1px, #000 1px, #000 10px);
+    repeating-linear-gradient(180deg,#000, #000 1px, #000 1px, #000 10px);
 }
 }
 
@@ -13917,7 +13916,7 @@ h1 {
   box-shadow: var(--highlight), inset 0 0 2px 1px #808 !important;
   background: #000;
   background: var(--infohelp) no-repeat 15px center,
-              var(--close) right 6px top 6px no-repeat, #000 !important;
+    var(--close) right 6px top 6px no-repeat, #000 !important;
   background-size: 28px, 14px !important;
   filter: drop-shadow(0 2px 2px rgba(0,0,0,.5));
   animation: 2s hide-up 8s ease-out forwards;
@@ -14038,7 +14037,7 @@ a:active #sb_graphstats {
   overflow: hidden;
   box-shadow: inset 0 0 0 1px #26235c, inset 0 0 0 2px #000, inset 0 0 3px 1px #004;
   background: repeating-linear-gradient(90deg, rgba(0,0,0,0) 14px, rgba(112,107,199,.7) 15px, rgba(0,0,0,0) 15px, rgba(0,0,0,0) 30px),
-              repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(112,107,199,.3), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 14px) !important;
+    repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(112,107,199,.3), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 14px) !important;
 }
 
 #minigraph {
@@ -14208,8 +14207,8 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 .lsdest.published {
   padding-left: 38px;
   background: var(--hardhat) no-repeat 4px center / 14px,
-              var(--globe) no-repeat 22px center / 12px,
-              linear-gradient(180deg,#003, #001);
+    var(--globe) no-repeat 22px center / 12px,
+    linear-gradient(180deg,#003, #001);
 }
 
 .leaseset th:last-child a[href$="i2p/"] {
@@ -14241,13 +14240,13 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 
 #profilelist .fast {
   background: var(--fast) no-repeat calc(50% - 10px) center,
-              var(--highcap) no-repeat calc(50% + 10px) center;
+    var(--highcap) no-repeat calc(50% + 10px) center;
 }
 
 #profilelist .fast.integrated {
   background: var(--fast) no-repeat left center,
-              var(--highcap) no-repeat center center,
-              var(--integrated) no-repeat right center !important;
+    var(--highcap) no-repeat center center,
+    var(--integrated) no-repeat right center !important;
 }
 
 #profilelist .highcap {
@@ -14256,7 +14255,7 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 
 #profilelist .highcap.integrated {
   background: var(--highcap) no-repeat calc(50% - 10px) center,
-              var(--integrated) no-repeat calc(50% + 10px) center;
+    var(--integrated) no-repeat calc(50% + 10px) center;
 }
 
 #profilelist .standard {
@@ -14265,7 +14264,7 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 
 #profilelist .standard.integrated {
   background: var(--standard) no-repeat calc(50% - 10px) center,
-              var(--integrated) no-repeat calc(50% + 10px) center;
+    var(--integrated) no-repeat calc(50% + 10px) center;
 }
 
 .profilegroup::before {

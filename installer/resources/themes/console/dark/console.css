@@ -330,7 +330,7 @@ pre {
   border-radius: 3px;
   box-shadow: 0 1px 5px #000;
   background: repeating-linear-gradient(90deg, rgba(0,0,0,.4) 2px, rgba(0,16,0,.3) 4px),
-              repeating-linear-gradient(180deg,rgba(0,0,0,.8) 2px, rgba(0,16,0,.8) 4px), var(--camo) #000;
+    repeating-linear-gradient(180deg,rgba(0,0,0,.8) 2px, rgba(0,16,0,.8) 4px), var(--camo) #000;
   background-size: 4px 100%, 100% 4px, 1800px;
 }
 
@@ -346,14 +346,14 @@ pre {
   border-radius: 3px 3px 0 0;
   box-shadow: var(--highlight), inset 0 0 0 2px rgba(32,80,32,.3);
   background: linear-gradient(180deg,rgba(0,64,0,.3), rgba(0,24,0,.3)),
-              repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px) !important;
+    repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px) !important;
   background-size: 100%, 100% 4px !important;
 }
 
 #sb_logo:hover {
   box-shadow: var(--highlight), inset 0 0 0 2px rgba(255,96,0,.6);
   background: linear-gradient(180deg,rgba(0,64,0,.6), rgba(0,24,0,.6)),
-              repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px) !important;
+    repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px) !important;
   background-size: 100%, 100% 4px !important;
   transition: ease background .15s;
 }
@@ -361,7 +361,7 @@ pre {
 #sb_logo:active {
   box-shadow: var(--highlight), inset 0 0 0 2px rgba(255,144,0,.5), inset 6px 6px 6px rgba(0,0,0,.7);
   background: linear-gradient(180deg,rgba(0,32,0,.3), rgba(0,48,0,.3)),
-              repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px) !important;
+    repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px) !important;
 }
 
 .routersummary img[src$="i2plogo.png"] {
@@ -411,7 +411,7 @@ pre {
   border-radius: 0;
   box-shadow: var(--highlight), inset 0 0 1px 1px #191;
   background: radial-gradient(at center bottom, rgba(16, 72, 16, .4) 0, rgba(0, 0, 0, 0) 50%),
-              linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade);
+    linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade);
 }
 
 .routersummary h3::after {
@@ -798,7 +798,7 @@ div.refresh {
   box-shadow: 0 0 1px 1px rgba(0,0,0,.8), var(--highlight), inset 0 3px 3px rgba(0,0,0,.7);
   background: #000;
   background: linear-gradient(90deg, rgba(0,128,0,0) 40%, rgba(255,96,0,.06), rgba(255,0,0,.08)),
-              repeating-linear-gradient(90deg, #000 1px, #000 2px, #010 2px, #010 4px);
+    repeating-linear-gradient(90deg, #000 1px, #000 2px, #010 2px, #010 4px);
   opacity: 1;
 }
 
@@ -818,7 +818,7 @@ div.refresh {
 
 #sb_memoryBar .percentBarInner {
   background: linear-gradient(90deg, rgba(0,0,0,.05), rgba(128,128,0,.15) 160px, rgba(196,0,0,.15) 180px, rgba(196,0,0,.2)),
-              linear-gradient(180deg,rgba(28, 148, 58, .6), rgba(9, 47, 16, .6) 50%, rgba(9, 27, 5, .6) 50%, rgba(9, 21, 3, .6), rgba(0,0,0,.3));
+    linear-gradient(180deg,rgba(28, 148, 58, .6), rgba(9, 47, 16, .6) 50%, rgba(9, 27, 5, .6) 50%, rgba(9, 21, 3, .6), rgba(0,0,0,.3));
 }
 
 .percentBarText {
@@ -890,7 +890,7 @@ h1 + .sorry, #console_404 .sorry {
   border-radius: 0 0 4px 4px;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 0 2px #600, inset 0 0 0 3px #000;
   background: var(--err) no-repeat 15px 45%, linear-gradient(180deg,rgba(255,255,255,.05), rgba(0,0,0,.4)),
-              repeating-linear-gradient(180deg,rgba(0,0,0,.4) 2px, rgba(0,48,0,.7) 4px) !important;
+    repeating-linear-gradient(180deg,rgba(0,0,0,.4) 2px, rgba(0,48,0,.7) 4px) !important;
   background-size: 44px, 100%, 100% 4px !important;
 }
 
@@ -994,7 +994,7 @@ h1 + .sorry, #console_404 .sorry {
   font-size: 9pt;
   border-radius: 0 0 3px 3px;
   background: repeating-linear-gradient(90deg, rgba(0,0,0,.3) 2px, rgba(0,24,0,.6) 4px),
-              repeating-linear-gradient(180deg,rgba(0,0,0,.3) 2px, rgba(0,24,0,.2) 4px) !important;
+    repeating-linear-gradient(180deg,rgba(0,0,0,.3) 2px, rgba(0,24,0,.2) 4px) !important;
   background-size: 4px 100%, 100% 4px !important;
 }
 
@@ -1073,8 +1073,8 @@ div.news {
   text-align: right;
   box-shadow: 0 1px 5px #000;
   background: linear-gradient(180deg,rgba(0,0,0,.3), rgba(0,0,0,.5)),
-              var(--radar) no-repeat right bottom,
-              repeating-linear-gradient(180deg,rgba(0,0,0,.8) 2px, rgba(0,16,0,.8) 4px), var(--camo), #000 !important;
+    var(--radar) no-repeat right bottom,
+    repeating-linear-gradient(180deg,rgba(0,0,0,.8) 2px, rgba(0,16,0,.8) 4px), var(--camo), #000 !important;
   background-size: 100%, auto, 2048px !important;
   background-blend-mode: normal, lighten, normal;
 }
@@ -1278,7 +1278,8 @@ div.widescroll { /* only scroll content, not entire page eg /peers */
 }
 
 .tab:hover, #sidebar h3:hover {
-  background: radial-gradient(at center bottom, rgba(128, 0, 0, .5) 0, rgba(0, 0, 0, 0) 130%), linear-gradient(180deg,#730,#410 50%,#180800 50%,#000) !important;
+  background: radial-gradient(at center bottom, rgba(128, 0, 0, .5) 0, rgba(0, 0, 0, 0) 130%),
+    linear-gradient(180deg,#730,#410 50%,#180800 50%,#000) !important;
   box-shadow: var(--highlight), inset 0 0 0 2px rgba(128,48,0,.6);
 }
 
@@ -1320,7 +1321,7 @@ div.messages {
   font-size: 9.5pt;
   box-shadow: var(--highlight), inset 0 0 2px 0 #393 !important;
   background: var(--infohelp) no-repeat 12px center, repeating-linear-gradient(180deg,rgba(0,0,0,.6) 2px, rgba(0,32,0,.3) 4px),
-              var(--hat) right 2px bottom -2px no-repeat, var(--msg);
+    var(--hat) right 2px bottom -2px no-repeat, var(--msg);
   background-size: 28px, 100% 4px, auto 93%, 100%;
 }
 
@@ -1334,16 +1335,16 @@ div.messages {
   animation: 2s hide-up 8s ease-out forwards;
   box-shadow: inset 0 0 1px 0 #f00, 0 0 2px 2px #000 !important;
   background: var(--infohelp) no-repeat 12px center, var(--close) right 7px top 6px no-repeat,
-              repeating-linear-gradient(180deg,rgba(0,0,0,.6) 2px, rgba(0,32,0,.3) 4px),
-              var(--hat) right 2px bottom -2px no-repeat, var(--msg);
+    repeating-linear-gradient(180deg,rgba(0,0,0,.6) 2px, rgba(0,32,0,.3) 4px),
+    var(--hat) right 2px bottom -2px no-repeat, var(--msg);
   background-size: 28px, 14px, 100% 4px, auto 93%, 100%;
   background-blend-mode: normal, luminosity, normal, normal, normal;
 }
 
 .main:not(#config_update) div.messages:hover, #config_update #messages:hover {
   background: var(--infohelp) no-repeat 12px center, var(--close_hover) right 7px top 6px no-repeat,
-              repeating-linear-gradient(180deg,rgba(0,0,0,.6) 2px, rgba(0,32,0,.3) 4px),
-              var(--hat) right 2px bottom -2px no-repeat, var(--msg);
+    repeating-linear-gradient(180deg,rgba(0,0,0,.6) 2px, rgba(0,32,0,.3) 4px),
+    var(--hat) right 2px bottom -2px no-repeat, var(--msg);
   background-size: 28px, 14px, 100% 4px, auto 93%, 100%;
   background-blend-mode: normal, normal, normal, normal, normal;
   cursor: crosshair;
@@ -4073,8 +4074,8 @@ form > table {
   word-spacing: 0;
   text-shadow: 0 1px 1px #000;
   background: var(--infowarn) no-repeat 10px center,
-              linear-gradient(180deg,rgba(128,128,128,.05), rgba(0,0,0,.3)),
-              repeating-linear-gradient(180deg,#300 2px, #100 4px);
+    linear-gradient(180deg,rgba(128,128,128,.05), rgba(0,0,0,.3)),
+    repeating-linear-gradient(180deg,#300 2px, #100 4px);
   background-size: 18px, 100%, 100% 4px;
 }
 
@@ -4442,8 +4443,8 @@ h3#servicedebug a, h3#graphinfo a {
   padding: 6px 6px 4px 35px !important;
   letter-spacing: .1em;
   background: var(--share) no-repeat 10px center,
-              linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%),
-              var(--h3), var(--h3_fade) !important;
+    linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%),
+    var(--h3), var(--h3_fade) !important;
   background-size: 18px, 100%, 4px 100%, 100% !important;
 }
 
@@ -5697,7 +5698,7 @@ h3#bannedpeers {
 
 #console .welcome h2 {
   background: url(images/favicon.svg) no-repeat right 6px center / 24px, var(--h3),
-              linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), var(--h3_fade) !important;
+    linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), var(--h3_fade) !important;
   background-size: 24px, 4px 100%, 100%, 100% !important;
   background-blend-mode: luminosity, normal, normal;
 }
@@ -6620,7 +6621,7 @@ p.threatpoints {
 
 p.threatpoints.hot {
   background: var(--eye_threat) no-repeat 8px center / 20px, var(--hot) no-repeat right 2px center / 24px,
-              linear-gradient(90deg, #000, #000800 80%, #001000);
+    linear-gradient(90deg, #000, #000800 80%, #001000);
 }
 
 p.family {
@@ -8098,9 +8099,9 @@ th code {
   padding: 8px 10px;
   font-size: 11.5pt;
   background: var(--bug) no-repeat right 6px center,
-              linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%),
-              repeating-linear-gradient(90deg, rgba(0,16,0,.5) 2px, rgba(0,16,0,.4) 4px),
-              var(--h3_fade) !important;
+    linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%),
+    repeating-linear-gradient(90deg, rgba(0,16,0,.5) 2px, rgba(0,16,0,.4) 4px),
+    var(--h3_fade) !important;
   background-size: 18px, 100%, 4px 100%, 100% !important;
 
 }
@@ -8183,13 +8184,13 @@ th code {
 #debug h3.debug_outboundsessions {
   margin-top: -2px !important;
   background: var(--out) no-repeat 8px center, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%),
-              repeating-linear-gradient(90deg, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.4) 3px), var(--h3_fade) !important;
+    repeating-linear-gradient(90deg, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.4) 3px), var(--h3_fade) !important;
 }
 
 #debug h3.debug_inboundsessions {
   background: var(--in) no-repeat 8px center, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%),
-              repeating-linear-gradient(90deg, rgba(0,0,0,.5) 1px,
-              rgba(0,16,0,.5) 2px, rgba(0,16,0,.4) 3px), var(--h3_fade) !important;
+    repeating-linear-gradient(90deg, rgba(0,0,0,.5) 1px,
+    rgba(0,16,0,.5) 2px, rgba(0,16,0,.4) 3px), var(--h3_fade) !important;
 }
 
 #debug h3.debug_outboundsessions, #debug h3.debug_inboundsessions {
@@ -10846,7 +10847,7 @@ table[id$="logs"] ul {
   box-shadow: inset 0 0 0 1px rgba(192,192,0,.4), inset 0 0 0 2px #000;
   border-color: rgba(192,192,0,.4);
   background: repeating-linear-gradient(90deg, rgba(0,0,0,.3) 2px, rgba(96,96,0,.3) 4px),
-              repeating-linear-gradient(180deg,#002800 2px, #010 4px);
+    repeating-linear-gradient(180deg,#002800 2px, #010 4px);
   background-size: 4px 100%, 100% 4px;
 }
 
@@ -12262,7 +12263,7 @@ i {
   from {
     background: #001000;
     background: repeating-linear-gradient(90deg, rgba(0,0,0,0), #020 1px, rgba(0,0,0,0) 1px, rgba(0,0,0,0) 10px),
-                repeating-linear-gradient(180deg,#000, #020 1px, #000 1px, #000 10px);
+      repeating-linear-gradient(180deg,#000, #020 1px, #000 1px, #000 10px);
   }
   to {
     background: repeating-linear-gradient(#000 2px, #000 4px);
@@ -12432,8 +12433,8 @@ h3 + table {
 #tunnels #peercount {
   margin-bottom: -3px !important;
   background: var(--hardhat) no-repeat 8px center,
-              linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), var(--h3),
-              var(--h3_fade) !important;
+    linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), var(--h3),
+    var(--h3_fade) !important;
   background-size: 20px, 100%, 4px 100%, 100% !important;
 }
 
@@ -12782,13 +12783,13 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 
 #profilelist .fast {
   background: var(--fast) no-repeat calc(50% - 10px) center,
-              var(--highcap) no-repeat calc(50% + 10px) center;
+    var(--highcap) no-repeat calc(50% + 10px) center;
 }
 
 #profilelist .fast.integrated {
   background: var(--fast) no-repeat left center,
-              var(--highcap) no-repeat center center,
-              var(--integrated) no-repeat right center !important;
+    var(--highcap) no-repeat center center,
+    var(--integrated) no-repeat right center !important;
 }
 
 #profilelist .highcap {
@@ -12797,7 +12798,7 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 
 #profilelist .highcap.integrated {
   background: var(--highcap) no-repeat calc(50% - 10px) center,
-              var(--integrated) no-repeat calc(50% + 10px) center;
+    var(--integrated) no-repeat calc(50% + 10px) center;
 }
 
 #profilelist .standard {
@@ -12806,7 +12807,7 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 
 #profilelist .standard.integrated {
   background: var(--standard) no-repeat calc(50% - 10px) center,
-              var(--integrated) no-repeat calc(50% + 10px) center;
+    var(--integrated) no-repeat calc(50% + 10px) center;
 }
 
 #profilelist .fast, #profilelist .highcap, #profilelist .integrated, #profilelist .standard,

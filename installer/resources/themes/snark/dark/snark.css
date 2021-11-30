@@ -26,7 +26,7 @@ body {
   color: #ee9;
   font-size: 9pt;
   background: repeating-linear-gradient(180deg,rgba(0,0,0,.9) 2px, rgba(0,8,0,.5) 4px),
-              url(/themes/console/dark/images/camotile2.png) fixed top left, #000800;
+    url(/themes/console/dark/images/camotile2.png) fixed top left, #000800;
   background-size: 100% 4px, 175px !important;
 }
 
@@ -40,7 +40,7 @@ body::before {
   bottom: 0;
   right: 0;
   background: var(--snark_hover), var(--forum_hover), var(--tracker_hover), var(--search_hover),
-              var(--snark_active), var(--forum_active), var(--tracker_active), var(--search_active);
+    var(--snark_active), var(--forum_active), var(--tracker_active), var(--search_active);
   opacity: 0;
   content: "";
 }
@@ -110,7 +110,7 @@ label, th img, .newtorrentsection, #closeLog, #pagenav {
   border: 1px solid #252;
   box-shadow: var(--highlight), inset 0 0 1px 1px #050;
   background: repeating-linear-gradient(90deg, rgba(0,0,0,.4) 2px, rgba(0,32,0,.7) 4px),
-              linear-gradient(180deg,rgba(0,16,0,.8), #000), var(--camo) repeat;
+    linear-gradient(180deg,rgba(0,16,0,.8), #000), var(--camo) repeat;
   background-size: 4px 100%, 100%, 2048px;
   will-change: transform;
 }
@@ -262,11 +262,11 @@ label, th img, .newtorrentsection, #closeLog, #pagenav {
 
 #screenlog, #screenlog.expanded, #screenlog.collapsed {
   background: repeating-linear-gradient(180deg,rgba(0,16,0,.7) 2px, rgba(0,32,0,.6) 4px),
-              url(images/hat.png) no-repeat scroll right bottom,
-              linear-gradient(180deg,#001000, #000),
-              url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true") no-repeat,
-              repeating-linear-gradient(180deg,rgba(0,0,0,.9) 2px, rgba(0,16,0,.6) 4px),
-              #001000 !important;
+    url(images/hat.png) no-repeat scroll right bottom,
+    linear-gradient(180deg,#001000, #000),
+    url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true") no-repeat,
+    repeating-linear-gradient(180deg,rgba(0,0,0,.9) 2px, rgba(0,16,0,.6) 4px),
+    #001000 !important;
   background-size: 100% 4px, 80px auto, 100%, calc(100% - 80px) calc(100% - 4px), 100% 4px !important;
   background-position: center center, right bottom, center center, left bottom !important;
   background-blend-mode: darken, lighten, screen, luminosity, normal, normal;
@@ -985,8 +985,8 @@ tr.active .snarkTorrentStatus {
   border-top: 1px solid #252 !important;
   border-bottom: 1px solid #252 !important;
   background: repeating-linear-gradient(90deg, #0080001a 2px, #0010004d 4px),
-              repeating-linear-gradient(180deg,#000c00 2px, #00100080 4px),
-              linear-gradient(180deg,#00100066, #00000080), url(/themes/console/dark/images/camotile2.png) top left repeat !important;
+    repeating-linear-gradient(180deg,#000c00 2px, #00100080 4px),
+    linear-gradient(180deg,#00100066, #00000080), url(/themes/console/dark/images/camotile2.png) top left repeat !important;
   background-size: 4px 100%, 100% 4px, 100%, 175px !important;
 }
 
@@ -1324,7 +1324,7 @@ td.snarkFileStatus {
 
 .peerinfo.active .percentBarOuter {
   background: repeating-linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,0) 7px, rgba(0,32,0,.6) 7px, rgba(0,32,0,.6) 8px, rgba(0,0,0,0) 8px),
-              linear-gradient(90deg, #000400, #010);
+    linear-gradient(90deg, #000400, #010);
 }
 
 .active.downloading .percentBarOuter, .peerinfo.active .percentBarOuter, .snarkDirInfo .volatile .percentBarOuter {
@@ -1334,7 +1334,7 @@ td.snarkFileStatus {
 
 .active.downloading:not(.peerinfo) .percentBarOuter {
   background: repeating-linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,0) 7px, rgba(0,16,0,.6) 7px, rgba(0,16,0,.6) 8px, rgba(0,0,0,0) 8px),
-              linear-gradient(to left, rgba(0,255,0,.2), rgba(255,255,0,.2), rgba(255,0,0,.2)) #010;
+    linear-gradient(to left, rgba(0,255,0,.2), rgba(255,255,0,.2), rgba(255,0,0,.2)) #010;
 }
 
 .percentBarInner, .uploaded {
@@ -1389,7 +1389,7 @@ td.snarkFileStatus {
 .active.downloading .percentBarInner {
   border-right: 1px solid #030;
   background: linear-gradient(180deg,rgba(148, 148, 148, .4) 0%, rgba(47, 47, 47, .2) 50%, rgba(39, 39, 39, .2) 50%, rgba(27, 27, 27, .4) 50%, rgba(21, 21, 21, .2) 100%) center center,
-              repeating-linear-gradient(135deg, rgba(0,16,0,.8) 1px, rgba(0,16,0,.8) 5px, rgba(0,64,0,.8) 6px, rgba(0,64,0,.8) 11px) left center;
+    repeating-linear-gradient(135deg, rgba(0,16,0,.8) 1px, rgba(0,16,0,.8) 5px, rgba(0,64,0,.8) 6px, rgba(0,64,0,.8) 11px) left center;
   background-size: 200% 200%;
   animation: progress .7s 3s linear forwards infinite;
   animation: progress 1s 3s linear forwards;
@@ -1473,7 +1473,7 @@ td.snarkFileStatus {
 .active.seeding .percentBarComplete {
   box-shadow: inset 0 0 0 1px rgba(0,0,0,.7), inset 0 0 0 2px rgba(16,64,16,.5);
   background: radial-gradient(at center bottom, rgba(16, 72, 16, .4) 0, rgba(0, 0, 0, 0) 40%),
-              linear-gradient(180deg,#030, #000400);
+    linear-gradient(180deg,#030, #000400);
   animation: ease-in seeding .5s forwards;
 }
 
@@ -1481,7 +1481,7 @@ td.snarkFileStatus {
   from {
     box-shadow: inset 0 0 0 1px rgba(0,0,0,.7), inset 0 0 2px 2px rgba(64,72,0,.7);
     background: radial-gradient(at center bottom, rgba(64, 72, 0, .7) 0, rgba(0, 0, 0, 0) 50%),
-                linear-gradient(180deg,#030, #000200);
+      linear-gradient(180deg,#030, #000200);
   }
 }
 
@@ -2458,9 +2458,9 @@ img:hover {
 .newtorrentsection, .addtorrentsection, .configsection, .configsectionpanel, #snarkFiles, #snarkCommentSection {
   background: #000;
   background: repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px),
-              repeating-linear-gradient(180deg,rgba(0,0,0,.8) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px),
-              linear-gradient(180deg,rgba(0,16,0,.4), rgba(0,0,0,.5)),
-              url(/themes/console/dark/images/camotile2.png);
+    repeating-linear-gradient(180deg,rgba(0,0,0,.8) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px),
+    linear-gradient(180deg,rgba(0,16,0,.4), rgba(0,0,0,.5)),
+    url(/themes/console/dark/images/camotile2.png);
   background-size: 4px 100%, 100%, 100%, 175px;
 }
 
@@ -2530,8 +2530,8 @@ code {
   text-shadow: 0 0 1px #000;
   border-bottom: 1px solid #252;
   background: repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px),
-              repeating-linear-gradient(180deg,rgba(0,0,0,.8) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px),
-              url(/themes/console/dark/images/camotile2.png) repeat top left;
+    repeating-linear-gradient(180deg,rgba(0,0,0,.8) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px),
+    url(/themes/console/dark/images/camotile2.png) repeat top left;
 }
 
 @media screen and (min-width: 1500px) {
@@ -2915,11 +2915,11 @@ td#bwHelp a {
 
 #newRating, #mediaContainer td, #commentDeleteAction td {
   box-shadow: var(--highlight), inset 0 -1px 0 1px #000,
-              inset 0 0 2px 1px #040, inset 0 -1px 2px 1px #040,
-              inset 0 0 0 3px #000800, inset 0 -1px 0 3px #000800;
+    inset 0 0 2px 1px #040, inset 0 -1px 2px 1px #040,
+    inset 0 0 0 3px #000800, inset 0 -1px 0 3px #000800;
   background: repeating-linear-gradient(90deg, #0080001a 2px, #0010004d 4px),
-              repeating-linear-gradient(180deg,#000c00 2px, #00100080 4px),
-              linear-gradient(180deg,#00100066, #00000080), url(/themes/console/dark/images/camotile2.png) top left repeat !important;
+    repeating-linear-gradient(180deg,#000c00 2px, #00100080 4px),
+    linear-gradient(180deg,#00100066, #00000080), url(/themes/console/dark/images/camotile2.png) top left repeat !important;
   background-size: 4px 100%, 100% 4px, 100%, 175px !important;
 }
 
@@ -4386,8 +4386,8 @@ td.snarkGraphicStatus img::before {
   border-right: none;
   box-shadow: var(--highlight);;
   background: linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%),
-              repeating-linear-gradient(90deg, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px),
-              linear-gradient(180deg,#004000, #000 75%) !important;
+    repeating-linear-gradient(90deg, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px),
+    linear-gradient(180deg,#004000, #000 75%) !important;
   background-size: 100%, 4px 100%, 100% !important;
 }
 
@@ -5126,32 +5126,32 @@ td.snarkTorrentAction input[type=submit] {
 
 .actionStart {
   background: var(--start) no-repeat center center / 14px, var(--btnAction),
-              var(--start_hover) no-repeat center center / 14px !important;
+    var(--start_hover) no-repeat center center / 14px !important;
 }
 
 .actionStop {
   background: var(--stop) no-repeat center center / 14px, var(--btnAction),
-              var(--stop_hover) no-repeat center center / 14px !important;
+    var(--stop_hover) no-repeat center center / 14px !important;
 }
 
 .actionRemove {
   background: var(--remove) no-repeat center center / 14px, var(--btnAction),
-              var(--remove_hover) no-repeat center center / 14px !important;
+    var(--remove_hover) no-repeat center center / 14px !important;
 }
 
 .actionDelete {
   background: var(--delete) no-repeat center center / 14px, var(--btnAction),
-              var(--delete_hover) no-repeat center center / 14px !important;
+    var(--delete_hover) no-repeat center center / 14px !important;
 }
 
 #actionStartAll {
   background: var(--startall) no-repeat center center / auto 14px, var(--btnAction),
-              var(--startall_hover) no-repeat center center / auto 14px !important;
+    var(--startall_hover) no-repeat center center / auto 14px !important;
 }
 
 #actionStopAll {
   background: var(--stopall) no-repeat center center / auto 14px, var(--btnAction),
-              var(--stopall_hover) no-repeat center center / auto 14px !important;
+    var(--stopall_hover) no-repeat center center / auto 14px !important;
 }
 
 .snarkTorrentAction input:hover, .snarkTorrentAction input:focus {

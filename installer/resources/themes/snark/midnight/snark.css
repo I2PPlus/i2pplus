@@ -29,7 +29,7 @@ body {
 /* preload top navigation mouseovers */
 body {
   background: repeating-linear-gradient(180deg,rgba(0,0,24,.75) 2px, rgba(0,0,0,.7) 4px),
-              var(--tile), var(--offline), url(images/dropdown_hover.svg), #000010 !important;
+    var(--tile), var(--offline), url(images/dropdown_hover.svg), #000010 !important;
   background-size: 100% 4px, 171px 148px, 0, 0, 0 !important;
 }
 
@@ -313,9 +313,9 @@ td.snarkTrackerDetails img::before, td.snarkTorrentDetails img::before {
 
 #screenlog, #screenlog.expanded, #screenlog.collapsed {
   background: repeating-linear-gradient(180deg,rgba(0,0,16,.7) 2px, rgba(0,0,48,.5) 4px),
-              url(images/hat.png) no-repeat scroll right top,
-              url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true") no-repeat,
-              linear-gradient(180deg,#001, #000008);
+    url(images/hat.png) no-repeat scroll right top,
+    url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true") no-repeat,
+    linear-gradient(180deg,#001, #000008);
   background-size: 100% 4px, 80px auto, calc(100% - 80px) calc(100% - 8px), 100% !important;
   background-position: right -4px bottom -10px, center center, left bottom, center top !important;
   background-blend-mode: overlay, normal, normal, normal;
@@ -1461,7 +1461,7 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
   box-shadow: var(--highlight), inset 0 0 1px 1px #224;
   background: #003;
   background: linear-gradient(90deg, rgba(0,0,16,.7), rgba(0,0,0,.1), rgba(0,0,16,.7)),
-              linear-gradient(180deg,#181828 50%, #000 50%);
+    linear-gradient(180deg,#181828 50%, #000 50%);
 }
 
 .configsection .snarkConfigTitle, .toggleview {
@@ -1472,7 +1472,7 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
   box-shadow: inset 0 0 0 1px #101;
   background: #002 !important;
   background: linear-gradient(90deg, rgba(0,0,16,.05), rgba(96,0,96,.15), rgba(0,0,16,.05)),
-              linear-gradient(180deg,#1d1a2d 50%, #000 50%) !important;
+    linear-gradient(180deg,#1d1a2d 50%, #000 50%) !important;
 }
 
 .snarkConfigTitle:active, .toggleview:active {
@@ -4186,7 +4186,7 @@ tr:not(.peerinfo) .snarkTorrentDownloaded .percentBarText::after {
 .inactivity {
   background: #900;
   background: repeating-linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,0) 15px, rgba(0,0,0,.6) 15px, rgba(0,0,0,.6) 16px, rgba(0,0,0,0) 16px),
-              linear-gradient(180deg,rgba(255,255,255,.3) 50%, rgba(0,0,0,.3) 50%), linear-gradient(90deg, #440 40px, #730 100px, #900);
+    linear-gradient(180deg,rgba(255,255,255,.3) 50%, rgba(0,0,0,.3) 50%), linear-gradient(90deg, #440 40px, #730 100px, #900);
   display: inline-block;
   min-width: 5px;
   height: 4px;
@@ -4754,32 +4754,32 @@ td.snarkTorrentAction input[type=submit] {
 
 .actionStart {
   background: var(--start) no-repeat center center / 14px, var(--btnAction),
-              var(--start_hover) no-repeat center center / 14px !important;
+    var(--start_hover) no-repeat center center / 14px !important;
 }
 
 .actionStop {
   background: var(--stop) no-repeat center center / 14px, var(--btnAction),
-              var(--stop_hover) no-repeat center center / 14px !important;
+    var(--stop_hover) no-repeat center center / 14px !important;
 }
 
 .actionRemove {
   background: var(--remove) no-repeat center center / 14px, var(--btnAction),
-              var(--remove_hover) no-repeat center center / 14px !important;
+    var(--remove_hover) no-repeat center center / 14px !important;
 }
 
 .actionDelete {
   background: var(--delete) no-repeat center center / 14px, var(--btnAction),
-              var(--delete_hover) no-repeat center center / 14px !important;
+    var(--delete_hover) no-repeat center center / 14px !important;
 }
 
 #actionStartAll {
   background: var(--startall) no-repeat center center / auto 14px, var(--btnAction),
-              var(--startall_hover) no-repeat center center / auto 14px !important;
+    var(--startall_hover) no-repeat center center / auto 14px !important;
 }
 
 #actionStopAll {
   background: var(--stopall) no-repeat center center / auto 14px, var(--btnAction),
-              var(--stopall_hover) no-repeat center center / auto 14px !important;
+    var(--stopall_hover) no-repeat center center / auto 14px !important;
 }
 
 .snarkTorrentAction input:hover, .snarkTorrentAction input:focus {

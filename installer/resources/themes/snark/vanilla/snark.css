@@ -188,7 +188,7 @@ label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
 
 .nav_main:link {
   background: var(--b_snark) no-repeat 11px center / 18px, var(--nav), var(--b_snark_hover) no-repeat 11px center / 18px,
-              var(--b_snark_active) no-repeat 11px center / 18px !important;
+    var(--b_snark_active) no-repeat 11px center / 18px !important;
 }
 
 .nav_forum:link {
@@ -293,8 +293,8 @@ label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
   border: 1px solid #523d2e;
   box-shadow: 0 0 0 2px #efe6e0, 0 0 0 3px #3f3833;
   background: repeating-linear-gradient(180deg,rgba(77,69,62,.5) 2px, rgba(111,96,90,.3) 4px),
-              url(images/whippy.png) no-repeat scroll right 5px bottom -7px / auto 105%,
-              linear-gradient(180deg,#5f554d, #3f3833);
+    url(images/whippy.png) no-repeat scroll right 5px bottom -7px / auto 105%,
+    linear-gradient(180deg,#5f554d, #3f3833);
   background-size: 100% 4px, auto 105%, 100% !important;
   scrollbar-color: #a38a75 rgba(63,56,51,.7);
 }
@@ -305,9 +305,9 @@ label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
 
 .snarkMessages, #screenlog.collapsed, #screenlog.xpanded {
   background: repeating-linear-gradient(180deg,rgba(77,69,62,.5) 2px, rgba(111,96,90,.3) 4px),
-              url(images/whippy.png) no-repeat scroll,
-              url(/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true) no-repeat,
-              linear-gradient(180deg,#5f554d, #3f3833);
+    url(images/whippy.png) no-repeat scroll,
+    url(/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true) no-repeat,
+    linear-gradient(180deg,#5f554d, #3f3833);
   background-size: 100%, 60px auto, calc(100% - 80px) 100%, 100% !important;
   background-position: center center, right -4px bottom -10px, left bottom, center center !important;
   background-blend-mode: darken, lighten, luminosity, normal, normal;
@@ -3969,7 +3969,7 @@ input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilte
 #torrentDisplay input:checked + .filterbutton {
   text-shadow: 0 1px 1px #ebe5e0;
   background: linear-gradient(180deg,rgba(207, 193, 181, .6), #d7cbc1),
-              repeating-linear-gradient(45deg, #75604e 1px, #a09286 1px, #bfafa2 2px) !important;
+    repeating-linear-gradient(45deg, #75604e 1px, #a09286 1px, #bfafa2 2px) !important;
   transition: ease background .15s;
   pointer-events: none;
 }
@@ -4325,8 +4325,8 @@ img {
   display: inline-block;
   background: #900;
   background: repeating-linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,0) 10px, rgba(255,255,255,.6) 10px, rgba(255,255,255,.6) 11px, rgba(0,0,0,0) 11px),
-              linear-gradient(180deg,rgba(255,255,255,.3) 50%, rgba(0,0,0,.3) 50%),
-              linear-gradient(90deg, #aa0 40px, #d30 100px, #900);
+    linear-gradient(180deg,rgba(255,255,255,.3) 50%, rgba(0,0,0,.3) 50%),
+    linear-gradient(90deg, #aa0 40px, #d30 100px, #900);
   border-radius: 3px;
   box-shadow: inset 0 0 0 1px rgba(160,152,146,.8);
 }
@@ -4877,32 +4877,32 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 
 .actionStart {
   background: var(--start) no-repeat center center / 14px, var(--btnAction),
-              var(--start_hover) no-repeat center center / 14px !important;
+    var(--start_hover) no-repeat center center / 14px !important;
 }
 
 .actionStop {
   background: var(--stop) no-repeat center center / 14px, var(--btnAction),
-              var(--stop_hover) no-repeat center center / 14px !important;
+    var(--stop_hover) no-repeat center center / 14px !important;
 }
 
 .actionRemove {
   background: var(--remove) no-repeat center center / 14px, var(--btnAction),
-              var(--remove_hover) no-repeat center center / 14px !important;
+    var(--remove_hover) no-repeat center center / 14px !important;
 }
 
 .actionDelete {
   background: var(--delete) no-repeat center center / 14px, var(--btnAction),
-              var(--delete_hover) no-repeat center center / 14px !important;
+    var(--delete_hover) no-repeat center center / 14px !important;
 }
 
 #actionStartAll {
   background: var(--startall) no-repeat center center / auto 14px, var(--btnAction),
-              var(--startall_hover) no-repeat center center / auto 14px !important;
+    var(--startall_hover) no-repeat center center / auto 14px !important;
 }
 
 #actionStopAll {
   background: var(--stopall) no-repeat center center / auto 14px, var(--btnAction),
-              var(--stopall_hover) no-repeat center center / auto 14px !important;
+    var(--stopall_hover) no-repeat center center / auto 14px !important;
 }
 
 .snarkTorrentAction input:hover, .snarkTorrentAction input:focus {
