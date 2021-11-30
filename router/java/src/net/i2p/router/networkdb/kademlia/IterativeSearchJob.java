@@ -161,7 +161,8 @@ public class IterativeSearchJob extends FloodSearchJob {
             _timeoutMs = Math.min(timeoutMs * 2, MAX_SEARCH_TIME * 2);
             totalSearchLimit *= 3;
         } else if (ri != null) {
-            String MIN_VERSION = "0.9.50";
+
+            String MIN_VERSION = "0.9.51";
             String v = ri.getVersion();
             boolean uninteresting = ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
                                     ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
