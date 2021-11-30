@@ -163,7 +163,7 @@ label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
   border-radius: 0;
 }
 
-.snarkNav:hover, .snarkNav:hover {
+.snarkNav:hover, .snarkNav:focus {
   color: #d2baff !important;
   border: 1px solid #820b64;
   box-shadow: 0 0 1px #000, inset 0 0 0 1px rgba(16, 0, 16, .9), inset 0 0 2px 0 #515;
