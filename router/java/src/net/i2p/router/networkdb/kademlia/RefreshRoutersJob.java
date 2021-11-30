@@ -119,7 +119,7 @@ class RefreshRoutersJob extends JobImpl {
                 int routerAge = 15*60*1000;
                 long uptime = getContext().router().getUptime();
                 String v = ri.getVersion();
-                String MIN_VERSION = "0.9.50";
+                String MIN_VERSION = "0.9.51";
                 boolean isHidden = getContext().router().isHidden();
                 boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
                                          ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
