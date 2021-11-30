@@ -1410,9 +1410,7 @@ tr.active:hover .percentBarInner, tr.active:hover .peerinfo .percentBarInner {
 }
 
 @supports not (-moz-appearance: none) {
-  .percentBarComplete {
-    padding: 3px 0 1px;
-  }
+  .percentBarComplete {padding: 3px 0 1px}
 }
 
 .active .percentBarComplete {
@@ -1421,13 +1419,13 @@ tr.active:hover .percentBarInner, tr.active:hover .peerinfo .percentBarInner {
 
 tr:hover .percentBarComplete {
   color: #8d7cc1;
-  box-shadow: inset 0 0 0 1px rgba(16,0,16,.95), inset 0 1px 2px rgba(192,96,192,.7), inset 0 -1px 3px rgba(48,0,48,.75);
+  box-shadow: inset 0 0 0 1px rgba(16,0,16,.95), inset 0 1px 3px rgba(192,96,192,.7), inset 0 -1px 3px rgba(48,0,48,.75);
   background: radial-gradient(at center bottom, rgba(80,40,80,.6) 10%, rgba(64,16,64,.15) 60%, rgba(0,0,0,0) 70%),
     linear-gradient(180deg,rgba(72,32,72,.9), rgba(16,0,16,.9));
 }
 
 @keyframes seeding {
-  from {box-shadow: inset 0 0 0 1px rgba(16,0,16,.9), inset 0 1px 3px rgba(220,80,0,.3), inset 0 -1px 4px rgba(128,48,0,.3)}
+  from {box-shadow: inset 0 0 0 1px rgba(16,0,16,.9), inset 0 1px 3px rgba(255,96,0,.4), inset 0 -1px 4px rgba(128,48,0,.4)}
 }
 
 .peerinfo .snarkTorrentDownloaded {
@@ -1436,9 +1434,9 @@ tr:hover .percentBarComplete {
 
 .active.seeding .percentBarComplete {
   color: #86b;
-  box-shadow: inset 0 0 0 1px rgba(16,0,16,.9), inset 0 1px 2px rgba(148,80,148,.5), inset 0 -1px 3px rgba(64,0,64,.75);
+  box-shadow: inset 0 0 0 1px rgba(16,0,16,.9), inset 0 1px 3px rgba(192,160,192,.1), inset 0 -1px 3px rgba(64,0,64,.75), inset 0 -1px 5px 5px rgba(32,0,32,.1);
   background: radial-gradient(at center bottom, rgba(96, 32, 64, .5) 10%, rgba(16, 0, 16, .1) 80%, rgba(0,0,0,0) 70%),
-    linear-gradient(180deg,rgba(72,16,48,.9), rgba(16,0,16,.9));
+    linear-gradient(180deg,rgba(72,16,48,.9),rgba(16,0,16,.9));
 }
 
 .active.seeding:hover .percentBarComplete {
