@@ -1,7 +1,45 @@
+2021-11-30 I2P+ 1.6.1 released
+
+2021-11-29 zzz
+ * Tunnels: Fix NPE in BuildHandler
+
+2021-11-29 dr|z3d
+ * Router: Increase min version for peer tests and local tunnels to 0.9.50
+
+2021-11-24 dr|z3d
+ * Console:
+   - Display truncated hash for banned peers in list
+   - Enhance presentation of /home and /sitemap search bar
+
+2021-11-21 dr|z3d
+ * Console: Condense information presentation in /configplugins info tables
+ * I2PSnark: Display share ratio bar on uploaded column stats
+
+2021-11-18 dr|z3d
+ * Eepsite: Add alt light colorscheme to default jetty-dir.css
+
+2021-11-17 dr|z3d
+ * Router: Less aggressive search for routers and leasesets
+
+2021-11-12 dr|z3d
+ * Console: Add new content optimization section in webhosting help;
+   move .i2p domain registration help to separate page
+
+2021-11-10 dr|z3d
+ * I2PTunnel/DNSOverHTTPS: Update UserAgent to latest TorBrowser
+
+2021-11-07 dr|z3d
+ * Reseed: Add new hosts banana.incognet.io & coconut.incognet.io
+
+2021-11-07 dr|z3d
+ * SusiMail: Add theme-based favicons for non-embedded pages
+
+2021-11-04 dr|z3d
+ * I2PTunnel: Add custom UA for skank.i2p to mitigate abuse
+
 2021-11-23 zzz
  * Tunnels:
    - Drop request if hop throttle exceeded by 50%
-   - Revert banning peer in throttles
 
 2021-11-21 zzz
  * Console: Drop peer when manually banned
@@ -25,6 +63,12 @@
 2021-10-20 zzz
  * SSU: Send Peer Test from Bob to Alice in-session
 
+2021-10-18 dr|z3d
+ * I2PSnark: Default to ECIES leaseset encryption if unset
+
+2021-10-14 dr|z3d
+ * Console: Italian translation updates courtesy of senpaiNikolai
+
 2021-10-13 zzz
  * Util: Recognize newer Intel processors
 
@@ -36,6 +80,11 @@
 
 2021-10-05 zzz
  * NetDB: Reduce ban time for routers without netId
+
+2021-10-05 dr|z3d
+ * Router:
+   - Increase max buildhandler queue
+   - Relax participating tunnel throttler
 
 2021-10-03 zzz
  * Console: Add theme selection to wizard
@@ -49,22 +98,62 @@
 2021-09-27 zzz
  * Router: Rekey all Android/ARM routers
 
+2021-09-26 dr|z3d
+ * Streaming: Reduce default initial ack delay (was 500ms, now 200)
+
+2021-09-26 dr|z3d
+ * Router: Double explore job concurrency if < 4K known peers in NetDb
+
 2021-09-25 zzz
  * Tunnels:
    - Implement Bloom filter for short TBM
    - Reduce TBM Bloom filter size and interval for EC routers
 
+2021-09-25 dr|z3d
+ * Router: Increase various ntcp/i2ptunnel buffers and caches
+
 2021-09-22 zzz
  * UDP: Replace ACKSender thread with per-PeerState ack timers
+
+2021-09-21 dr|z3d
+* Router: Increase max buffers in NTCP EventPumper
+
+2021-09-17 dr|z3d
+ * Router: Reduce replenish frequency in FIFOBandwidthRefiller to 50ms (was 1000)
+
+2021-09-12 dr|z3d
+ Router: Reduce requeue delay in TunnelGatewayPumper (was 50ms, now 40ms)
 
 2021-09-10 zzz
  * I2CP: Don't call listener.readError() after external client disconnect
 
+2021-09-10 dr|z3d
+ * I2PSnark: Increase banlist duration to 15m for misbehaving peers
+
+2021-09-06 dr|z3d
+ * Console:
+   - Add header link to bandwidth configuration on /home if unset
+   - Add leading hardhat icon to tunnel ids on /tunnels
+
 2021-09-05 zzz
  * Update: Get backup URLs from news feed
 
+2021-09-05 dr|z3d
+ * Router: Reduce router refresh search timeout after extended uptime
+
 2021-08-28 zzz
  * Console: Catch error checking systray availability (gitlab issue #331)
+
+2021-08-28 dr|z3d
+ * Console: Add SameSite=Strict and HttpOnly headers to cookies
+
+2021-08-28 dr|z3d
+ * I2PSnark: Add opentracker.skank to list of default opentrackers
+
+2021-08-27 dr|z3d
+ * Router:
+   - Reinstate deprecated router.maxWaitingJobs config
+   - Increase delay between RefreshRouterJob runs if > known peers 8000
 
 2021-08-26 zzz
  * Debian: Fix dh_installdocs build error
