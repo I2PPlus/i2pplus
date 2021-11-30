@@ -62,7 +62,7 @@
 <tr><td colspan="3" class="infohelp">These are the local I2P port mappings, listening only to local connections by default, except where noted. Unless you require access from other machines, they should only be accessible from localhost.</td></tr>
 <tr><th>Port</th><th>Function</th><th>Notes</th></tr>
 <tr><td>1900</td><td>UPnP SSDP UDP multicast listener</td><td>Cannot be changed. Binds to all interfaces. Can be disabled on the <a href="/confignet">Network Configuration page</a>.</td></tr>
-<tr><td>2827</td><td>BOB bridge</td><td>A higher level socket API for clients. Can be enabled/disabled on the <a href="/configclients">Client Configuration page</a>. Can be changed in the <code>bob.config</code> file. [Disabled by default]</td></tr>
+<tr><td>2827</td><td>BOB bridge</td><td>A higher level socket API for clients. Can be enabled/disabled on the <a href="/configclients">Client Configuration page</a>. Can be changed in the <code>bob.config</code> file. [Deprecated]</td></tr>
 <tr><td>4444</td><td>HTTP proxy</td><td>Can be disabled or changed in the <a href="/i2ptunnelmgr">Tunnel Manager</a>. Can also be configured to bind to a specific interface or all interfaces.</td></tr>
 <tr><td>4445</td><td>HTTPS proxy</td><td>Can be disabled or changed in the <a href="/i2ptunnelmgr">Tunnel Manager</a>. Can also be configured to bind to a specific interface or all interfaces.</td></tr>
 <tr><td>6668</td><td>IRC proxy</td><td>Can be disabled or changed in the <a href="/i2ptunnelmgr">Tunnel Manager</a>. Can also be configured to bind to a specific interface or all interfaces.</td></tr>

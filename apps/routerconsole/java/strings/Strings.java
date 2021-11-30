@@ -27,7 +27,6 @@ class Dummy {
         _t("I2P webserver (eepsite)");
         _t("I2P Web Server (eepsite)");
         _t("Browser launch at startup");
-        _t("BOB application bridge");
         _t("I2P Router Console");
         _t("I2P+ Router Console");
         _t("Open Router Console in web browser at startup");
