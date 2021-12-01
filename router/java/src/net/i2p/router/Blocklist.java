@@ -1026,7 +1026,16 @@ public class Blocklist {
     private void banlist(Hash peer, byte[] ip) {
         // Temporary reason, until the job finishes
         String reason = " <b>➜</b> " + _x("IP banned by blocklist.txt");
-        _context.banlist().banlistRouterForever(peer, reason, Addresses.toString(ip));
+        String sip = Addresses.toString(ip);
+        if ("127.0.0.1".equals(sip) || "0:0:0:0:0:0:0:1".equals(sip) ||
+            sip.startsWith("192.168.") || sip.startsWith("10.0.") ||
+            sip.startsWith("172.16.42")) {
+            // i2pd bug, possibly at startup, don't ban forever
+            _context.banlist().banlistRouter(peer, reason, sip, null,
+                                             _context.clock().now() + Banlist.BANLIST_DURATION_LOCALHOST);
+            return;
+        }
+        _context.banlist().banlistRouterForever(peer, reason, sip);
         if (!_context.getBooleanPropertyDefaultTrue(PROP_BLOCKLIST_DETAIL))
             return;
         boolean shouldRunJob;
