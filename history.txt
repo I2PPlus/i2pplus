@@ -86,14 +86,8 @@
    - Increase max buildhandler queue
    - Relax participating tunnel throttler
 
-2021-10-03 zzz
- * Console: Add theme selection to wizard
-
 2021-10-01 zzz
  * i2ptunnel: Fix enc type configuration logic
-
-2021-09-30 zzz
- * Console: Add js to /configui to preview themes
 
 2021-09-27 zzz
  * Router: Rekey all Android/ARM routers
