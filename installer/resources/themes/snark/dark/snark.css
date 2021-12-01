@@ -1368,6 +1368,14 @@ td.snarkFileStatus {
   background: linear-gradient(0deg, rgba(80,192,0,.25), rgba(48,154,0,.3));
 }
 
+.txBarInner[style="width: calc(100% - 2px)"] {
+  box-shadow: 0 0 0 1px #000, inset 0 3px 5px 2px rgba(255,255,255,.1);
+}
+
+.active.seeding .txBarInner {
+  background: linear-gradient(0deg, rgba(192,192,0,.25), rgba(96,170,0,.3));
+}
+
 .txBarText {
   position: relative;
   z-index: 5;
