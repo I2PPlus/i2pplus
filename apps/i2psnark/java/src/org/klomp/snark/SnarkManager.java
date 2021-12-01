@@ -1804,7 +1804,7 @@ public class SnarkManager implements CompleteListener, ClientApp {
         }
 
         // Were we running last time?
-        String link = linkify(torrent).replace(" ", "%20");
+        String link = linkify(torrent).replace(" ", "%20").replace("a%20href", "a href");
         if (!dontAutoStart && shouldAutoStart() && running) {
             if (!_util.connected()) {
 //                addMessage(_t("Connecting to I2P").replace("I2P", "I2P+") + "...");
