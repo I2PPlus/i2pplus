@@ -2780,14 +2780,16 @@ public class SnarkManager implements CompleteListener, ClientApp {
         MetaInfo meta = snark.getMetaInfo();
         Storage storage = snark.getStorage();
         if (meta == null || storage == null)
-            return DataHelper.escapeHTML(snark.getBaseName());
+            return DataHelper.escapeHTML(snark.getBaseName().replace("%20", " "));
         StringBuilder buf = new StringBuilder(256);
         String base = DataHelper.escapeHTML(storage.getBaseName());
-        String enc = base.replace("[", "%5B").replace("]", "%5D").replace("|", "%7C").replace(" ", "%20");
+        String enc = base.replace("[", "%5B").replace("]", "%5D").replace("|", "%7C").replace(" ", "%20")
+                         .replace("è", "&egrave;").replace("é", "&eacute;").replace("à", "&agrave;");
         buf.append("<a href=\"").append(_contextPath).append('/').append(enc);
         if (meta.getFiles() != null || !storage.complete())
             buf.append('/');
-        buf.append("\">").append(base).append("</a>");
+        buf.append("\">").append(base.replace("%20", " ").replace("&egrave;", "è").replace("&eacute;", "é")
+                         .replace("&agrave;", "à")).append("</a>");
         return buf.toString();
     }
 
