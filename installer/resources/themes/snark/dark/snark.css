@@ -4379,7 +4379,7 @@ td.snarkTorrentAction input[type=submit] {
 
 @media screen and (max-width: 1180px) {
   #torrentDisplay label {font-size: 8.5pt !important}
-  .snarkConfigPanel .snarkConfigtitle {font-size: 11pt !important}
+  .configsectionpanel .snarkConfigtitle {font-size: 11pt !important}
   .dirInfoComplete {display: none}
   #configs td:first-child::after {min-height: 24px}
   td#bwHelp a {margin-left: 2px}
@@ -4687,7 +4687,7 @@ td.snarkTorrentAction input[type=submit] {
   th.snarkTorrentUploaded a img {
     display: inline-block;
   }
-  .snarkConfigPanel .snarkConfigtitle {
+  .configsectionpanel .snarkConfigtitle {
     font-size: 12pt !important;
   }
   .snarkTorrentStatus {
