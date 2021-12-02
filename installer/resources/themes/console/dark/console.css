@@ -10297,10 +10297,10 @@ input[type=file] {
 
 #view_profile h3 {
   margin-bottom: 13px;
-  border-width: 1px;
-  border-radius: 0;
   position: relative;
   vertical-align: middle;
+  border-width: 1px;
+  border-radius: 0;
 }
 
 #view_profile h3 a {
@@ -10309,17 +10309,17 @@ input[type=file] {
   text-transform: none;
 }
 
-#view_profile .profiledump, #view_profile .configpeer {
+#view_profile .profiledump, #view_profile .configpeer, #view_profile h3 a.viewprofile {
   font-size: 0;
 }
 
-#view_profile .profiledump img, #view_profile .configpeer img {
-  margin: -2px 25px 0 0 !important;
+#view_profile .configpeer, #view_profile .viewprofile {
+  margin: -2px 27px -2px 0 !important;
+  display: inline-block;
   vertical-align: middle;
-  font-size: 0;
 }
 
-#view_profile .profiledump img {
+#view_profile .viewprofile {
   margin-right: 6px !important;
 }
 

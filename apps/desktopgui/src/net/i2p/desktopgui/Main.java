@@ -5,6 +5,7 @@ package net.i2p.desktopgui;
  */
 
 import java.awt.Image;
+import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.io.File;
 import java.lang.reflect.Method;
@@ -16,6 +17,7 @@ import net.i2p.I2PAppContext;
 import net.i2p.app.ClientAppManager;
 import net.i2p.app.ClientAppState;
 import static net.i2p.app.ClientAppState.*;
+import net.i2p.app.NotificationService;
 import net.i2p.desktopgui.router.RouterManager;
 import net.i2p.router.RouterContext;
 import net.i2p.router.app.RouterApp;
@@ -27,7 +29,7 @@ import net.i2p.util.I2PProperties.I2PPropertyCallback;
 /**
  * The main class of the application.
  */
-public class Main implements RouterApp {
+public class Main implements RouterApp, NotificationService {
 
     // non-null
     private final I2PAppContext _appContext;
@@ -95,6 +97,11 @@ public class Main implements RouterApp {
     }
     
     public static void main(String[] args) {
+        // early check so we can bail out when started via CLI
+        if (!SystemTray.isSupported()) {
+            System.err.println("SystemTray not supported");
+            return;
+        }
         Main main = new Main();
         main.beginStartup(args);
     }
@@ -196,6 +203,46 @@ public class Main implements RouterApp {
         Thread t = new Thread(r, "DesktopGUI spinner");
         t.setDaemon(false);
         t.start();
+    }
+
+    /////// NotificationService methods
+
+    /**
+     *  Send a notification to the user.
+     *
+     *  @param source unsupported
+     *  @param category unsupported
+     *  @param priority unsupported
+     *  @param title for the popup, translated
+     *  @param message translated
+     *  @param path unsupported
+     *  @return 0, or -1 on failure
+     */
+    public int notify(String source, String category, int priority, String title, String message, String path) {
+        TrayManager tm = _trayManager;
+        if (tm == null)
+            return -1;
+        return tm.displayMessage(priority, title, message, path);
+    }
+
+    /**
+     *  Cancel a notification if possible.
+     *  Unsupported.
+     *
+     *  @return false always
+     */
+    public boolean cancel(int id) {
+        return false;
+    }
+
+    /**
+     *  Update the text of a notification if possible.
+     *  Unsupported.
+     *
+     *  @return false always
+     */
+    public boolean update(int id, String title, String message, String path) {
+        return false;
     }
 
     /////// ClientApp methods

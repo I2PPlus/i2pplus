@@ -861,7 +861,7 @@ public class SybilRenderer {
             buf.append("<tr id=\"sybil_ourinfo\"><th><a name=\"our-info\" ></a><b>" + _t("Our info") + ":</b> <code>").append(hash)
                .append("</code>");
         } else {
-            buf.append("<tr><th><b>" + _t("Router") + ":</b> <code>").append(hash).append("</code>");
+            buf.append("<tr><th><b>" + _t("Router") + ":</b> <a href=\"netdb?r=").append(hash, 0, 6).append("\"><code>").append(hash).append("</code></a>");
         }
         buf.append("</th><th>");
 //        Hash h = info.getHash();

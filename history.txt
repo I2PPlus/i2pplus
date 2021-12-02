@@ -1,10 +1,10 @@
-2021-11-30 I2P+ 1.6.1 released
+2021-11-30 I2P+ 1.6.1+ released
 
 2021-11-29 zzz
  * Tunnels: Fix NPE in BuildHandler
 
-2021-11-29 dr|z3d
- * Router: Increase min version for peer tests and local tunnels to 0.9.50
+2021-11-30 dr|z3d
+ * Router: Increase min version for peer tests and local tunnels to 0.9.51
 
 2021-11-24 dr|z3d
  * Console:
@@ -86,14 +86,8 @@
    - Increase max buildhandler queue
    - Relax participating tunnel throttler
 
-2021-10-03 zzz
- * Console: Add theme selection to wizard
-
 2021-10-01 zzz
  * i2ptunnel: Fix enc type configuration logic
-
-2021-09-30 zzz
- * Console: Add js to /configui to preview themes
 
 2021-09-27 zzz
  * Router: Rekey all Android/ARM routers
