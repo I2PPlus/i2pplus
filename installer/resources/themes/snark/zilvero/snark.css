@@ -549,10 +549,14 @@ td.snarkTorrentPeerCount:empty {
 }
 
 .percentBarInner {
-	background: #70a97e;
+	background: #7b9d84;
 }
 
-tr:not(.peerinfo):hover .percentBarInner {
+.active.downloading .percentBarInner {
+	background: repeating-linear-gradient(135deg,#70a97e, #70a97e 10px, #47d16a 10px, #47d16a 20px);
+}
+
+tr.active.downloading:not(.peerinfo):hover .percentBarInner {
 	background: #47d16a;
 }
 
@@ -683,7 +687,7 @@ tr:hover .percentBarComplete {
 
 tr:hover .percentBarText {
 	opacity: 1;
-	line-height: 120%;
+	line-height: 1.2;
 }
 
 .snarkTorrents td.snarkTorrentName {
@@ -838,7 +842,7 @@ td.snarkGraphicStatus img {
 }
 
 .snarkMessages li, .snarkMessages li a {
-	line-height: 125%;
+	line-height: 1.25;
 }
 
 .control, input[type=submit], input[type=reset] {
@@ -1018,11 +1022,11 @@ input[type=checkbox]:checked::before, input[type=checkbox]:not(:checked)::before
 	left: 4px;
 	width: 9px;
 	height: 9px;
-	line-height: 80%;
+	overflow: hidden;
+	line-height: .8;
 	font-size: 15pt;
 	border-radius: 1px;
 	background: #777;
-	overflow: hidden;
 }
 
 input[type=checkbox]:checked:focus::before {
@@ -2172,7 +2176,7 @@ tr:not(.peerinfo) .snarkTorrentUploaded:empty::after {
 }
 
 .peerclient, .peerclient tt, .clientid {
-	line-height: 160% !important;
+	line-height: 1.6 !important;
 	vertical-align: middle;
 }
 
@@ -2260,12 +2264,11 @@ tr:not(.peerinfo) .snarkTorrentUploaded:empty::after {
 	padding: 2px 8px;
 	display: inline-block;
 	min-width: 80px;
-	line-height: 160%;
+	line-height: 1.6;
 	font-weight: 700;
 	color: #777;
 	border-left: var(--border);
 	box-shadow: var(--highlight);
-	background: #fff;
 	background: var(--button);
 }
 
@@ -2359,7 +2362,7 @@ tr:not(.peerinfo) .snarkTorrentUploaded:empty::after {
 
 #metainfo {
 	padding: 4px 8px 4px 4px;
-	line-height: 150%;
+	line-height: 1.5;
 	white-space: nowrap;
 	border: 1px solid #aaa;
 	box-shadow: var(--highlight);
@@ -2371,10 +2374,10 @@ tr:not(.peerinfo) .snarkTorrentUploaded:empty::after {
 }
 
 #completion:hover #metainfo {
+	display: inline-block !important;
 	position: absolute;
 	top: 24px;
 	left: -120px;
-	display: inline-block !important;
 }
 
 #metacomment .commentWrapper {
