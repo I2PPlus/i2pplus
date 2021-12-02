@@ -126,20 +126,6 @@ a:hover, a:focus, .snarkConfigTitle a:hover, .toggleview:hover, .trackerName a:v
 	background: var(--button_hover);
 }
 
-input[type=submit], a.control, select {
-	font-size: 105%;
-	text-shadow: 0 1px 1px #fff;
-}
-
-input[type=submit]:hover, a.control:hover {
-	border: 1px solid #b32;
-	background: var(--button_hover);
-}
-
-input[type=submit]:active, a.control:active {
-	background: var(--button_active);
-}
-
 a.snarkNav, #tab_config a:not(:hover):not(:focus):not(:active), #tab_config a:not(:hover):not(:focus):not(:active):visited, .toggleview, a.control, a.control:visited {
 	color: #777 !important;
 }
@@ -537,6 +523,18 @@ td.snarkTorrentPeerCount:empty {
 	background: #bfb8b3;
 }
 
+.percentBarInner {
+	background: #70a97e;
+}
+
+tr:hover .percentBarInner {
+	background: #47d16a;
+}
+
+.peerinfo .percentBarInner {
+	background: #e8dab0;
+}
+
 .uploaded {
 	padding: 1px 2px 2px;
 	min-width: 68px;
@@ -576,6 +574,10 @@ td.snarkTorrentPeerCount:empty {
 
 .peerinfo .percentBarInner {
 	height: 15px !important;
+}
+
+tr:hover .peerinfo .percentBarInner {
+	background: #d1b666;
 }
 
 tr:hover .percentBarText {
@@ -628,24 +630,24 @@ tr:hover .snarkFileStatus .percentBarText, .txBarText {
 
 .percentBarComplete {
 	width: 84px;
+	padding: 1px 0;
 	color: #fff;
 	text-align: center;
 	font-weight: 700;
 	text-shadow: 0 1px 1px #333;
 	border: 1px solid #777;
-	box-shadow: inset 0 0 0 1px #fff;
-	box-shadow: inset 0 0 0 1px rgba(255,255,255,.5);
-	background: #aaa;
+	box-shadow: inset 0 0 0 1px #ddd;
+	background: #708ca9;
+}
+
+tr:hover .percentBarComplete {
+	background: #538ac6;
 }
 
 .active.seeding .percentBarComplete {
 	background: linear-gradient(90deg, rgba(0,0,0,0) 49%, #999, rgba(0,0,0,0) 51%) #aaa;
 	background-size: 200% 200%, 100% 100%;
 	animation: progress 5s linear infinite reverse;
-}
-
-tr:hover .percentBarInner {
-	background: #d1b666;
 }
 
 tr:hover .percentBarText {
@@ -812,18 +814,28 @@ td.snarkGraphicStatus img {
 
 .control, input[type=submit], input[type=reset] {
 	margin: 1px 2px;
-	padding: 4px 5px;
+	padding: 6px 10px;
 	display: inline-block;
 	white-space: nowrap;
+	font-size: 105%;
 	color: #555;
+	text-shadow: 0 1px 1px #fff;
 	box-shadow: inset 0 0 0 1px #fff;
 	border: 1px solid #999;
-	border-radius: 1px;
+	border-radius: 3px;
 	background: #fff;
 }
 
+input[type=submit]:hover, a.control:hover {
+	border: 1px solid #b32;
+	background: var(--button_hover);
+}
+
+input[type=submit]:active, a.control:active {
+	background: var(--button_active);
+}
+
 input[type=submit], input[type=reset] {
-	padding: 5px 8px;
 	min-width: 90px;
 }
 
@@ -887,16 +899,9 @@ select {
 	color: #555;
 	font: bold 9pt var(--bodyfont);
 	border: 1px solid #999;
-	border-radius: 1px;
-	background: var(--dropdown) no-repeat right 6px center, var(--button) !important;
-	background-size: 10px, 100% !important;
+	border-radius: 3px;
+	background: var(--dropdown) no-repeat right 6px center / 10px, var(--button) !important;
 	appearance: none;
-}
-
-@supports (-moz-user-select: all) {
-	select {
-		padding: 5px 16px 5px 3px !important;
-	}
 }
 
 select:hover, select:focus {
@@ -1094,9 +1099,9 @@ tt {
 }
 
 .knownTracker + .spacer td, #addtracker + .spacer td {
-	border-bottom: 1px solid #999;
 	padding: 4px 0;
 	font-size: 0 !important;
+	border-bottom: 1px solid #999;
 }
 
 #addtracker + .spacer + tr td {
@@ -1110,7 +1115,6 @@ tt {
 #addtracker td {
 	padding-top: 10px !important;
 	padding-bottom: 8px !important;
-	border-bottom: 1px solid #999;
 	border-top: 1px solid #999;
 	background: #fff;
 }
@@ -2039,6 +2043,10 @@ select {
 	padding-right: 5px !important;
 }
 
+.snarkTorrentAction input {
+	border-radius: 2px;
+}
+
 #configs a[href^="/config"] {
 	font-size: 0;
 }
@@ -2086,6 +2094,13 @@ select {
 
 #bwHoverHelp img {
 	margin-right: 5px;
+	width: 16px;
+	height: 16px;
+	filter: saturate(0) opacity(.5);
+}
+
+#bwHoverHelp:hover img {
+	filter: none;
 }
 
 #bwHoverHelp:hover #bwHelp, #bwHoverHelp:active #bwHelp {
@@ -2099,11 +2114,6 @@ select {
 #bwHoverHelp {
 	position: relative;
 	display: inline-block;
-}
-
-#bwHoverHelp img {
-	width: 16px;
-	height: 16px;
 }
 
 #bwHoverHelp:hover + #bwHelp {
@@ -2598,7 +2608,6 @@ td.snarkGraphicStatus img {
 	min-width: 200px;
 	display: inline-block;
 	border-radius: 3px 1px 1px 3px;
-	background: #ddd;
 	background: linear-gradient(90deg, #ddd, rgba(0,0,0,0) 95%);
 }
 
@@ -2620,14 +2629,14 @@ td.snarkGraphicStatus img {
 }
 
 #configs td:first-child {
-	text-align: left;
 	padding-right: 10px;
+	text-align: left;
 }
 
 #configs .suboption {
-	padding: 6px 10px;
+	padding: 5px 10px;
 	text-align: left;
-	font-size: 11pt;
+	font-size: 90%;
 	border: 1px solid #999;
 }
 
