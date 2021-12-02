@@ -649,13 +649,13 @@ tr:hover .percentBarComplete {
 }
 
 .active.seeding .percentBarComplete {
-	background: linear-gradient(90deg, rgba(0,0,0,0) 49%, #999, rgba(0,0,0,0) 51%) #7e70a9;
+	background: linear-gradient(90deg, rgba(0,0,0,0) 49%, #b39, rgba(0,0,0,0) 51%) #7e70a9;
 	background-size: 200% 200%, 100% 100%;
 	animation: progress 5s linear infinite reverse;
 }
 
 .active.seeding:hover .percentBarComplete {
-	background: linear-gradient(90deg, rgba(0,0,0,0) 49%, #999, rgba(0,0,0,0) 51%) #7259c0;
+	background: linear-gradient(90deg, rgba(0,0,0,0) 49%, #d5a, rgba(0,0,0,0) 51%) #7259c0;
 	background-size: 200% 200%, 100% 100%;
 	animation: progress 5s linear infinite reverse;
 }
