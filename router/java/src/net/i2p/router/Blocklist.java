@@ -1025,14 +1025,14 @@ public class Blocklist {
      */
     private void banlist(Hash peer, byte[] ip) {
         // Temporary reason, until the job finishes
-        String reason = " <b>➜</b> " + _x("IP banned by blocklist.txt");
         String sip = Addresses.toString(ip);
-        if ("127.0.0.1".equals(sip) || "0:0:0:0:0:0:0:1".equals(sip) ||
-            sip.startsWith("192.168.") || sip.startsWith("10.0.") ||
-            sip.startsWith("172.16.42")) {
+        String reason = " <b>➜</b> " + _x("IP banned by blocklist.txt") + " (" + sip + ")";
+        if (sip != null && sip.startsWith("127.") || "0:0:0:0:0:0:0:1".equals(sip) ||
+            sip.startsWith("192.168.") || sip.startsWith("10.") ||
+            (ip != null && ip.length == 4 && (ip[0] * 0xff) == 172 && ip[1] >= 16 && ip[1] <= 31)) {
             // i2pd bug, possibly at startup, don't ban forever
             _context.banlist().banlistRouter(peer, reason, sip, null,
-                                             _context.clock().now() + Banlist.BANLIST_DURATION_LOCALHOST);
+                                             _context.clock().now() + Banlist.BANLIST_DURATION_PRIVATE);
             return;
         }
         _context.banlist().banlistRouterForever(peer, reason, sip);
