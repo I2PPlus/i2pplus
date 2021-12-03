@@ -4531,19 +4531,22 @@ public class I2PSnarkServlet extends BasicServlet {
         int delay = _manager.getRefreshDelaySeconds();
         if (delay > 0) {
             buf.append("<script nonce=\"" + cspNonce + "\" type=\"module\">\n" +
-                        "import {refreshTorrents} from \""  + _contextPath + WARBASE + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n" +
-                        "var ajaxDelay = " + (delay * 1000) + ";\n" +
-                        "var visibility = document.visibilityState;\n" +
-                        "var cycle;\n" +
-                        "if (visibility = \"visible\") {\n" +
-                        "function timer() {\n" +
-                        "var cycle = setInterval(function() {\n" +
-                        "requestAnimationFrame(refreshTorrents);\n" +
-                        "}, ajaxDelay);\n" +
-                        "}\n" +
-                        "timer();\n" +
-                        "}\n" +
-                        "</script>\n");
+                       "import {refreshTorrents} from \"" + _contextPath + WARBASE + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n" +
+                       "var ajaxDelay = " + (delay * 1000) + ";\n" +
+                       "var visibility = document.visibilityState;\n" +
+                       "var cycle;\n" +
+                       "if (visibility = \"visible\") {\n" +
+                       "function timer() {\n" +
+                       "var cycle = setInterval(function() {\n" +
+                       "requestAnimationFrame(refreshTorrents);\n");
+            if (enableLightbox)
+                buf.append("import {Lightbox} from \"" + _contextPath + WARBASE + "js/lightbox.js?" + CoreVersion.VERSION + "\";\n" +
+                           "var lightbox = new Lightbox();\nlightbox.load();\n");
+            buf.append("}, ajaxDelay);\n" +
+                       "}\n" +
+                       "timer();\n" +
+                       "}\n" +
+                       "</script>\n");
         }
         buf.append(FOOTER);
         return buf.toString();
