@@ -958,7 +958,7 @@ div[lang="pt"] li br {
 }
 
 #console li:first-child {
-  padding-top: 5px !important;
+  padding-top: 15px;
 }
 
 #console li, #console p {
@@ -1878,12 +1878,7 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
   margin-right: 20px;
 }
 
-.main li:first-child {
-  padding-top: 15px;
-}
-
 .links li b:first-of-type {
-  font-size: 110% !important;
   color: #1f7096 !important;
 }
 
@@ -9680,6 +9675,7 @@ a[href^="/viewprofile"] img, .profiledump img {
 
 #netdb li, #netdb li:first-child {
   margin: 1px 0;
+  padding: 0;
   display: inline-block;
   vertical-align: middle;
 }
