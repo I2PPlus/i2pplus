@@ -3,6 +3,7 @@ package org.klomp.snark.web;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
@@ -24,6 +25,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -37,8 +39,10 @@ import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.servlet.util.ServletUtil;
+import net.i2p.util.FileUtil;
 import net.i2p.util.Log;
 import net.i2p.util.SecureFile;
+import net.i2p.util.SecureFileOutputStream;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
 import net.i2p.util.UIMessages;
@@ -5272,6 +5276,274 @@ public class I2PSnarkServlet extends BasicServlet {
     private void saveCommentsSetting(Snark snark, Map<String, String[]> postParams) {
         boolean yes = postParams.get("enableComments") != null;
         _manager.setSavedCommentsEnabled(snark, yes);
+    }
+
+    /**
+     * @param snark non-null
+     * @since 0.9.53
+     */
+    private void displayTorrentEdit(Snark snark, String base, StringBuilder buf) {
+        MetaInfo meta = snark.getMetaInfo();
+        if (meta == null)
+            return;
+        buf.append("<div id=\"snarkCommentSection\"><table class=\"snarkTorrentInfo\">\n<tr><th colspan=\"5\">")
+           .append(_t("Edit Torrent"))
+           .append("</th></tr>");
+        boolean isRunning = !snark.isStopped();
+        if (isRunning) {
+            // shouldn't happen
+            buf.append("<tr><td colspan=\"5\">")
+               .append(_t("Torrent must be stopped"))
+               .append("</td></tr></table></div></form>");
+            return;
+        }
+        String announce = meta.getAnnounce();
+        if (announce == null)
+            announce = snark.getTrackerURL();
+        if (announce != null) {
+            // strip non-i2p trackers
+            if (!isI2PTracker(announce))
+                announce = null;
+        }
+        List<List<String>> alist = meta.getAnnounceList();
+        Set<String> annlist = new TreeSet<String>();
+        if (alist != null && !alist.isEmpty()) {
+            // strip non-i2p trackers
+            for (List<String> alist2 : alist) {
+                for (String s : alist2) {
+                    if (isI2PTracker(s))
+                        annlist.add(s);
+                }
+            }
+        }
+        if (announce != null)
+            annlist.add(announce);
+        if (!annlist.isEmpty()) {
+            buf.append("<tr><td colspan=\"3\"></td><td>").append("Primary").append("</td><td>")
+               .append("Delete").append("</td></tr>");
+            for (String s : annlist) {
+                int hc = s.hashCode();
+                buf.append("<tr><td>");
+                toThemeImg(buf, "details");
+                buf.append("</td><td><b>")
+                   .append(_t("Tracker")).append("</b></td><td>");
+                s = DataHelper.stripHTML(s);
+                buf.append("<span class=\"info_tracker\">");
+                buf.append(getShortTrackerLink(s, snark.getInfoHash()));
+                buf.append("</span> ");
+                //buf.append(s);
+                buf.append("</td><td>");
+                buf.append("<input type=\"radio\" class=\"optbox\" name=\"primary\" ");
+                if (s.equals(announce))
+                    buf.append("checked=\"checked\" ");
+                buf.append("value=\"").append(hc);
+                buf.append("\"></td><td>");
+                buf.append("<input type=\"checkbox\" class=\"optbox\" name=\"trdelete.")
+                   .append(hc).append("\" title=\"").append(_t("Mark for deletion")).append("\">");
+                buf.append("</td></tr>\n");
+            }
+        }
+
+        List<Tracker> newTrackers = _manager.getSortedTrackers();
+        for (Iterator<Tracker> iter = newTrackers.iterator(); iter.hasNext(); ) {
+            Tracker t = iter.next();
+            String announceURL = t.announceURL.replace("&#61;", "=");
+            if (announceURL.equals(announce) || annlist.contains(announceURL))
+                iter.remove();
+        }
+        if (!newTrackers.isEmpty()) {
+            buf.append("<tr><td colspan=\"3\"></td><td>").append("Primary").append("</td><td>")
+               .append("Add").append("</td></tr>");
+            for (Tracker t : newTrackers) {
+                String name = t.name;
+                int hc = t.announceURL.hashCode();
+                String announceURL = t.announceURL.replace("&#61;", "=");
+                buf.append("<tr><td>");
+                toThemeImg(buf, "details");
+                buf.append("</td><td><b>")
+                   .append(_t("Add Tracker")).append("</b></td><td>");
+                buf.append(name);
+                buf.append("</td><td><input type=\"radio\" class=\"optbox\" name=\"primary\" value=\"");
+                buf.append(hc);
+                buf.append("\"></td><td>");
+                buf.append("<input type=\"checkbox\" class=\"optbox\" id=\"").append(name).append("\" name=\"tradd.")
+                   .append(hc).append("\" title=\"").append(_t("Add tracker")).append("\"> ")
+                   .append("</td><td></td></tr>\n");
+            }
+        }
+
+        String com = meta.getComment();
+        if (com == null) {
+            com = "";
+        } else if (com.length() > 0) {
+            com = DataHelper.escapeHTML(com);
+        }
+        buf.append("<tr><td>");
+        toThemeImg(buf, "details");
+        buf.append("</td><td><b>")
+           .append(_t("Comment")).append("</b></td>");
+        buf.append("<td colspan=\"2\" id=\"addCommentText\"><textarea name=\"nofilter_newTorrentComment\" cols=\"88\" rows=\"4\">")
+           .append(com).append("</textarea></td><td></td>");
+        buf.append("</tr>\n");
+
+        String cb = meta.getCreatedBy();
+        if (cb == null) {
+            cb = "";
+        } else if (cb.length() > 0) {
+            cb = DataHelper.escapeHTML(cb);
+        }
+        buf.append("<tr><td>");
+        toThemeImg(buf, "details");
+        buf.append("</td><td><b>")
+           .append(_t("Created By")).append("</b></td>");
+        buf.append("<td id=\"editTorrentCreatedBy\"><input type=\"text\" name=\"nofilter_newTorrentCreatedBy\" cols=\"44\" rows=\"1\" value=\"")
+           .append(cb).append("\"></td></tr>");
+
+        buf.append("<tr id=\"torrentInfoControl\"><td colspan=\"5\">");
+        buf.append("<input type=\"submit\" name=\"editTorrent\" value=\"");
+        buf.append(_t("Save Changes"));
+        buf.append("\" class=\"accept\"></td></tr>\n");
+        buf.append("</table></div>");
+    }
+
+    /**
+     *  @since 0.9.53
+     */
+    private void saveTorrentEdit(Snark snark, Map<String, String[]> postParams) {
+        if (!snark.isStopped()) {
+            // shouldn't happen
+            _manager.addMessage(_t("Torrent must be stopped"));
+            return;
+        }
+        List<Integer> toAdd = new ArrayList<Integer>();
+        List<Integer> toDel = new ArrayList<Integer>();
+        Integer primary = null;
+        String newComment = "";
+        String newCreatedBy = "";
+        for (Map.Entry<String, String[]> entry : postParams.entrySet()) {
+            String key = entry.getKey();
+            String val = entry.getValue()[0];   // jetty arrays
+            if (key.startsWith("tradd.")) {
+                try {
+                    toAdd.add(Integer.parseInt(key.substring(6)));
+                } catch (NumberFormatException nfe) {}
+            } else if (key.startsWith("trdelete.")) {
+                try {
+                    toDel.add(Integer.parseInt(key.substring(9)));
+                } catch (NumberFormatException nfe) {}
+            } else if (key.equals("primary")) {
+                try {
+                    primary = Integer.parseInt(val);
+                } catch (NumberFormatException nfe) {}
+            } else if (key.equals("nofilter_newTorrentComment")) {
+                newComment = val.trim();
+            } else if (key.equals("nofilter_newTorrentCreatedBy")) {
+                newCreatedBy = val.trim();
+            }
+        }
+        MetaInfo meta = snark.getMetaInfo();
+        if (meta == null) {
+            // shouldn't happen
+            _manager.addMessage("Can't edit magnet");
+            return;
+        }
+        String oldPrimary = meta.getAnnounce();
+        String oldComment = meta.getComment();
+        if (oldComment == null)
+            oldComment = "";
+        String oldCreatedBy = meta.getCreatedBy();
+        if (oldCreatedBy == null)
+            oldCreatedBy = "";
+        if (toAdd.isEmpty() && toDel.isEmpty() &&
+            (primary == null || primary.equals(oldPrimary)) &&
+            oldComment.equals(newComment) &&
+            oldCreatedBy.equals(newCreatedBy)) {
+            _manager.addMessage("No changes to torrent, not saved");
+            return;
+        }
+        List<List<String>> alist = meta.getAnnounceList();
+        Set<String> annlist = new TreeSet<String>();
+        if (alist != null && !alist.isEmpty()) {
+            // strip non-i2p trackers
+            for (List<String> alist2 : alist) {
+                for (String s : alist2) {
+                    if (isI2PTracker(s))
+                        annlist.add(s);
+                }
+            }
+        }
+        if (oldPrimary != null)
+            annlist.add(oldPrimary);
+        List<Tracker> newTrackers = _manager.getSortedTrackers();
+        for (Integer i : toDel) {
+            int hc = i.intValue();
+            for (Iterator<String> iter = annlist.iterator(); iter.hasNext(); ) {
+                String s = iter.next();
+                if (s.hashCode() == hc)
+                    iter.remove();
+            }
+        }
+        for (Integer i : toAdd) {
+            int hc = i.intValue();
+            for (Tracker t : newTrackers) {
+                if (t.announceURL.hashCode() == hc) {
+                    annlist.add(t.announceURL);
+                    break;
+                }
+            }
+        }
+        String thePrimary = oldPrimary;
+        if (primary != null) {
+            int hc = primary.intValue();
+            for (String s : annlist) {
+                if (s.hashCode() == hc) {
+                    thePrimary = s;
+                    break;
+                }
+            }
+        }
+        List<List<String>> newAnnList;
+        if (annlist.isEmpty()) {
+            newAnnList = null;
+            thePrimary = null;
+        } else {
+            List<String> aalist = new ArrayList<String>(annlist);
+            newAnnList = Collections.singletonList(aalist);
+            if (!aalist.contains(thePrimary))
+                thePrimary = aalist.get(0);
+        }
+        if (newComment.equals(""))
+            newComment = null;
+        if (newCreatedBy.equals(""))
+            newCreatedBy = null;
+        MetaInfo newMeta = new MetaInfo(thePrimary, meta.getName(), null, meta.getFiles(), meta.getLengths(),
+                                        meta.getPieceLength(0), meta.getPieceHashes(), meta.getTotalLength(), meta.isPrivate(),
+                                        newAnnList, newCreatedBy, meta.getWebSeedURLs(), newComment);
+        if (!DataHelper.eq(meta.getInfoHash(), newMeta.getInfoHash())) {
+            // shouldn't happen
+            _manager.addMessage("Torrent edit failed, infohash mismatch");
+            return;
+        }
+        File f = new File(_manager.util().getTempDir(), "edit-" + _manager.util().getContext().random().nextLong() + ".torrent");
+        OutputStream out = null;
+        try {
+            out = new SecureFileOutputStream(f);
+            out.write(newMeta.getTorrentData());
+            out.close();
+            boolean ok = FileUtil.rename(f, new File(snark.getName()));
+            if (!ok) {
+                _manager.addMessage("Save edit changes failed");
+                return;
+            }
+        } catch (IOException ioe) {
+            try { if (out != null) out.close(); } catch (IOException ioe2) {}
+            _manager.addMessage("Save edit changes failed: " + ioe);
+            return;
+        } finally {
+            f.delete();
+        }
+        snark.replaceMetaInfo(newMeta);
+        _manager.addMessage("Torrent changes saved");
     }
 
     /** @since 0.9.32 */

@@ -83,7 +83,7 @@ public class MetaInfo
    *  @param url_list may be null
    *  @param comment may be null
    */
-  MetaInfo(String announce, String name, String name_utf8, List<List<String>> files, List<Long> lengths,
+  public MetaInfo(String announce, String name, String name_utf8, List<List<String>> files, List<Long> lengths,
            int piece_length, byte[] piece_hashes, long length, boolean privateTorrent,
            List<List<String>> announce_list, String created_by, List<String> url_list, String comment)
   {
@@ -445,7 +445,7 @@ public class MetaInfo
   /**
    * Returns the piece hashes. Only used by storage so package local.
    */
-  byte[] getPieceHashes()
+  public byte[] getPieceHashes()
   {
     return piece_hashes;
   }
