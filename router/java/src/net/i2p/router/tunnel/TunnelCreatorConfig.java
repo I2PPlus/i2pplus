@@ -222,7 +222,22 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
         return _failures.incrementAndGet() <= MAX_CONSECUTIVE_TEST_FAILURES;
     }
 
+    /**
+     * The tunnel failed completely, so definitely stop using it
+     *
+     * @since 0.9.53
+     */
+    public void tunnelFailedCompletely() {
+        _failures.addAndGet(MAX_CONSECUTIVE_TEST_FAILURES + 1);
+    }
+
+    /**
+     * Has the tunnel failed completely?
+     *
+     * @since 0.9.53
+     */
     public boolean getTunnelFailed() { return _failures.get() > MAX_CONSECUTIVE_TEST_FAILURES; }
+
     public int getTunnelFailures() { return _failures.get(); }
 
     public void testSuccessful(int ms) {

@@ -344,6 +344,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     public boolean isValidTunnel(Hash client, TunnelInfo tunnel) {
+        if (tunnel.getTunnelFailed())
+            return false;
         if (tunnel.getExpiration() < _context.clock().now())
             return false;
         TunnelPool pool;
