@@ -3598,8 +3598,10 @@ public class I2PSnarkServlet extends BasicServlet {
                         _manager.startTorrent(snark);
                     } else if (postParams.get("recheck") != null) {
                         _manager.recheckTorrent(snark);
+/*
                     } else if (postParams.get("editTorrent") != null) {
                         saveTorrentEdit(snark, postParams);
+*/
                     } else if (postParams.get("setInOrderEnabled") != null) {
                         _manager.saveTorrentStatus(snark);
                         _manager.addMessage("Sequential piece or file order not saved - feature currently broken.");
@@ -4089,8 +4091,9 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("</table>\n");
         buf.append("</div>\n");
 
+/*
         displayTorrentEdit(snark, base, buf);
-
+*/
         if (snark != null && !r.exists()) {
             // fixup TODO
             buf.append("<table class=\"resourceError\" id=\"DoesNotExist\">\n<tr><th colspan=\"2\">")
