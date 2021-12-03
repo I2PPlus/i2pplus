@@ -443,7 +443,10 @@ public class MetaInfo
   }
 
   /**
-   * Returns the piece hashes. Only used by storage so package local.
+   *  Returns the piece hashes.
+   *
+   *  @return not a copy, do not modify
+   *  @since public since 0.9.53, was package private
    */
   public byte[] getPieceHashes()
   {
