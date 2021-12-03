@@ -7,9 +7,9 @@
 :root {
 	--monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
 	--bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, Bitstream Vera Sans, Verdana, sans-serif;
-	--button: linear-gradient(180deg,#fff 50%, #efefef 50%);
-	--button_hover: linear-gradient(180deg,#fff 50%, #f3f2f1 50%);
-	--button_active: linear-gradient(180deg,#f3f2f1, #fff);
+	--btn: linear-gradient(180deg,#fff 50%, #f4f4f4 50%);
+	--btn_hover: linear-gradient(180deg,#fff 50%, #f0f0f0 50%);
+	--btn_active: linear-gradient(180deg,#f2f2f2, #f8f8f8);
 	--highlight: inset 0 0 0 1px #fff;
 	--border: 1px solid #999;
 	--border_hard: 1px solid #777;
@@ -101,13 +101,13 @@ table table {
 
 a:link, .toggleview, a:visited {
 	text-decoration: none;
-	color: #b23 !important;
+	color: #b23;
 	font-weight: 700;
 }
 
 a:hover, a:focus, .snarkConfigTitle a:hover, .toggleview:hover, .trackerName a:visited:hover, .trackerName a:visited:focus {
 	text-decoration: none;
-	color: var(--a) !important;
+	color: var(--a);
 }
 
 .snarkMessages a:focus, .snarkTorrentName a:focus, .knownTracker a:focus, th.suboption a:focus {
@@ -124,11 +124,11 @@ a:hover, a:focus, .snarkConfigTitle a:hover, .toggleview:hover, .trackerName a:v
 .snarkNav, .toggleview, .snarkConfigTitle, .suboption, input[type=submit], a.control {
 	font-weight: 700;
 	box-shadow: var(--highlight);
-	background: var(--button);
+	background: var(--btn);
 }
 
 .toggleview:hover, .configsection .snarkConfigTitle:hover {
-	background: var(--button_hover);
+	background: var(--btn_hover);
 }
 
 a.snarkNav, #tab_config a:not(:hover):not(:focus):not(:active), #tab_config a:not(:hover):not(:focus):not(:active):visited, .toggleview, a.control, a.control:visited {
@@ -167,51 +167,51 @@ a.snarkNav, a.snarkNav:hover, a.snarkNav:focus, a.snarkNav:active {
 }
 
 .nav_main:link, .nav_main:hover, .nav_main:focus, .nav_main:active {
-	background: var(--b_snark), var(--button);
+	background: var(--b_snark), var(--btn);
 }
 
 .nav_forum:link {
-	background: var(--b_forum), var(--button);
+	background: var(--b_forum), var(--btn);
 }
 
 .nav_tracker:link {
-	background: var(--b_tracker), var(--button);
+	background: var(--b_tracker), var(--btn);
 }
 
 .nav_search:link {
-	background: var(--b_search), var(--button);
+	background: var(--b_search), var(--btn);
 }
 
 .nav_main:hover, .nav_main:focus {
-	background: var(--b_snark_hover), var(--button_hover) !important;
+	background: var(--b_snark_hover), var(--btn_hover) !important;
 }
 
 .nav_forum:hover, .nav_forum:focus {
-	background: var(--b_forum_hover), var(--button_hover) !important;
+	background: var(--b_forum_hover), var(--btn_hover) !important;
 }
 
 .nav_tracker:hover, .nav_tracker:focus {
-	background: var(--b_tracker_hover), var(--button_hover) !important;
+	background: var(--b_tracker_hover), var(--btn_hover) !important;
 }
 
 .nav_search:hover, .nav_search:focus {
-	background: var(--b_search_hover), var(--button_hover) !important;
+	background: var(--b_search_hover), var(--btn_hover) !important;
 }
 
 .nav_main:active {
-	background: var(--b_snark_active), var(--button_active) !important;
+	background: var(--b_snark_active), var(--btn_active) !important;
 }
 
 .nav_forum:active {
-	background: var(--b_forum_active), var(--button_active) !important;
+	background: var(--b_forum_active), var(--btn_active) !important;
 }
 
 .nav_tracker:active {
-	background: var(--b_tracker_active), var(--button_active) !important;
+	background: var(--b_tracker_active), var(--btn_active) !important;
 }
 
 .nav_search:active {
-	background: var(--b_search_active), var(--button_active) !important;
+	background: var(--b_search_active), var(--btn_active) !important;
 }
 
 a.control, a.control:visited {
@@ -505,7 +505,7 @@ td.snarkTorrentPeerCount:empty::after {
 	padding-right: 0 !important;
 }
 
-td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
+td.snarkTorrentDetails img:not([src$="rateme.svg"]), .snarkDirInfo td:first-child img:not(.thumb) {
 	width: 20px !important;
 	height: 20px !important;
 }
@@ -565,7 +565,7 @@ tr.active.downloading:not(.peerinfo):hover .percentBarInner {
 }
 
 .uploaded {
-	padding: 1px 2px 2px;
+	padding: 0 2px 2px;
 	min-width: 68px;
 	display: inline-block;
 	position: relative;
@@ -861,11 +861,11 @@ td.snarkGraphicStatus img {
 
 input[type=submit]:hover, a.control:hover {
 	border: 1px solid #b32;
-	background: var(--button_hover);
+	background: var(--btn_hover);
 }
 
 input[type=submit]:active, a.control:active {
-	background: var(--button_active);
+	background: var(--btn_active);
 }
 
 input[type=submit], input[type=reset] {
@@ -933,7 +933,7 @@ select {
 	font: bold 9pt var(--bodyfont);
 	border: var(--border);
 	border-radius: 3px;
-	background: var(--dropdown) no-repeat right 6px center / 10px, var(--button) !important;
+	background: var(--dropdown) no-repeat right 6px center / 10px, var(--btn) !important;
 	appearance: none;
 }
 
@@ -1348,7 +1348,7 @@ hr {
 }
 
 .thumb {
-	max-height: 16px;
+	max-width: 80px;
 }
 
 audio, video {
@@ -2269,7 +2269,7 @@ tr:not(.peerinfo) .snarkTorrentUploaded:empty::after {
 	color: #777;
 	border-left: var(--border);
 	box-shadow: var(--highlight);
-	background: var(--button);
+	background: var(--btn);
 }
 
 #torrentDisplay label:last-child {
