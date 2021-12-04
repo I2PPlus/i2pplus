@@ -309,8 +309,10 @@ td {
 	background: #930;
 }
 
-.snarkTorrentOdd, .snarkTorrentInfo tr:nth-child(odd), #trackerselect tr:nth-child(2n+2), .knownTracker:nth-child(odd),
-#mediaContainer th, .snarkCommentInfo tr:first-child {
+.snarkTorrentOdd, .snarkTorrentInfo tr:nth-child(odd),
+#trackerselect tr:nth-child(2n+2), .knownTracker:nth-child(odd),
+#mediaContainer th, .snarkCommentInfo tr:first-child,
+#snarkTorrentEdit tr:nth-child(even) {
 	background: #fafafa;
 }
 
@@ -713,6 +715,10 @@ td.snarkGraphicStatus img {
 	background: #fff;
 }
 
+.snarkDirInfo tr:last-child td {
+	padding-bottom: 7px;
+}
+
 .ParentDir {
 	background: #fafafa;
 }
@@ -1076,6 +1082,12 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 	height: 19px !important;
 	opacity: .5;
 }
+
+.optbox[disabled], .optbox[disabled]:hover,
+.optbox[disabled]:focus, .optbox[disabled]:active {
+	opacity: .5 !important;
+	pointer-events: none !important;
+}
 }
 
 /* end custom radios/checkboxes */
@@ -1233,6 +1245,10 @@ tt {
 
 .snarkConfig .snarkConfigTitle {
 	color: #777;
+}
+
+#tab_torrentedit {
+	margin: -1px -1px -8px;
 }
 
 .page form + form {
@@ -1794,6 +1810,12 @@ thead a img:hover {
 
 textarea {
 	background: #eee;
+	width: 100%;
+	height: 40px;
+	min-height: 40px;
+	resize: vertical;
+	box-shadow: inset 2px 2px 2px #ddd !important;
+	border: var(--border);
 }
 
 textarea:focus {
@@ -2176,13 +2198,13 @@ tr:not(.peerinfo) .snarkTorrentUploaded:empty::after {
 }
 
 .peerclient, .peerclient tt, .clientid {
-	line-height: 1.6 !important;
+	line-height: 1.4 !important;
 	vertical-align: middle;
 }
 
 .peerclient {
 	padding-right: 0;
-	width: 110px;
+	width: 112px;
 }
 
 .peerclient tt {
@@ -2323,7 +2345,12 @@ tr:not(.peerinfo) .snarkTorrentUploaded:empty::after {
 /* end comment indicator */
 
 #snarkInfo ~ .mainsection {
-	margin: -1px 0;
+	margin: -1px 0 -6px;
+	border: var(--border);
+}
+
+#snarkTorrentEditSection {
+	margin: -1px 0 0 !important;
 	border: var(--border);
 }
 
@@ -2336,12 +2363,63 @@ tr:not(.peerinfo) .snarkTorrentUploaded:empty::after {
 	margin-bottom: 0 !important;
 }
 
+#snarkInfo ~ #snarkTorrentEditSection input:checked + .toggleview + hr + table {
+	margin-top: 1px;
+}
+
+#snarkTorrentEdit {
+	width: 100%;
+}
+
+#snarkTorrentEdit tr:first-child td {
+	padding-top: 12px;
+}
+
+#snarkTorrentEdit th, #snarkTorrentEdit td {
+	text-align: center;
+	width: 25%;
+}
+
+#snarkTorrentEdit th:first-child, #snarkTorrentEdit td:first-child:not(#addCommentText) {
+	padding-left: 20px;
+	width: 20%;
+	text-align: left;
+}
+
+#snarkTorrentEdit th:nth-child(2), #snarkTorrentEdit td:nth-child(2) {
+	width: 30%;
+	text-align: left;
+}
+
+#snarkTorrentEdit tfoot td {
+	padding-bottom: 12px;
+	text-align: center !important;
+	border-top: var(--border);
+	background: var(--th);
+}
+
+#stopfirst {
+	font-weight: 700;
+	display: inline-block;
+}
+
+#stopfirst::before {
+	width: 14px;
+	height: 12px;
+	display: inline-block;
+	vertical-align: middle;
+	background: url(images/details.svg) no-repeat left center / 12px;
+	content: "";
+	filter: saturate(0);
+}
+
 #snarkInfo ~ #snarkCommentSection input:not(:checked) + .toggleview {
 	margin-bottom: -7px !important;
 }
 
 #snarkCommentSection {
 	margin-top: -2px !important;
+	margin-bottom: 1px !important;
 }
 
 #snarkCommentSection table:last-child {
