@@ -4089,9 +4089,8 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("</table>\n");
         buf.append("</div>\n");
 
-/*
         displayTorrentEdit(snark, base, buf);
-*/
+
         if (snark != null && !r.exists()) {
             // fixup TODO
             buf.append("<table class=\"resourceError\" id=\"DoesNotExist\">\n<tr><th colspan=\"2\">")
@@ -5434,11 +5433,11 @@ public class I2PSnarkServlet extends BasicServlet {
             String val = entry.getValue()[0];   // jetty arrays
             if (key.startsWith("addTracker-")) {
                 try {
-                    toAdd.add(Integer.parseInt(key.substring(6)));
+                    toAdd.add(Integer.parseInt(key.substring(11)));
                 } catch (NumberFormatException nfe) {}
             } else if (key.startsWith("removeTracker-")) {
                 try {
-                    toDel.add(Integer.parseInt(key.substring(9)));
+                    toDel.add(Integer.parseInt(key.substring(14)));
                 } catch (NumberFormatException nfe) {}
             } else if (key.equals("primary")) {
                 try {
