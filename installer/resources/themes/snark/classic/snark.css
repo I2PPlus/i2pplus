@@ -3593,11 +3593,7 @@ th #nameRequired, th .commentAuthorName {
   border-bottom: none;
 }
 
-#snarkInfo + .mainsection {
-  margin-top: 8px 0 !important;
-}
-
-#snarkFiles, .iframed #snarkFiles {
+#snarkFiles, .iframed #snarkFiles, #snarkInfo + .mainsection {
   margin-top: 8px !important;
 }
 
@@ -3613,7 +3609,7 @@ th #nameRequired, th .commentAuthorName {
   margin-bottom: -6px !important;
 }
 
-#snarkInfo + .mainsection table tr:last-child, #snarkInfo + .mainsection table tr:last-child td {
+#snarkInfo + .mainsection table tr:last-child, #snarkInfo + .mainsection table tr:last-child td:not(#addCommentText) {
   border-bottom: none !important;
 }
 
@@ -3784,6 +3780,41 @@ td.snarkTorrentPeerCount {
 #actionStopAll:active {
   background: var(--stopall_active) no-repeat center center / auto 14px, var(--btn_active) !important;
 }
+
+/* torrent edit */
+
+#snarkTorrentEdit th, #snarkTorrentEdit td {
+  padding: 8px 20px;
+  width: 25%;
+  text-align: center;
+}
+
+#snarkTorrentEdit th:first-child:not([colspan]), #snarkTorrentEdit td:first-child {
+  width: 20%;
+  text-align: right !important;
+}
+
+#snarkTorrentEdit th:nth-child(2), #snarkTorrentEdit td:nth-child(2) {
+  width: 30%;
+  text-align: left;
+}
+
+#addCommentText {
+  padding: 18px 20px !important;
+  text-align: center;
+  border-bottom: var(--border_main) !important;
+}
+
+#snarkTorrentEdit textarea {
+  width: 100%;
+  resize: vertical;
+}
+
+#snarkTorrentEdit tr:last-child input {
+  margin-right: 0;
+}
+
+/* end torrent edit */
 
 /* responsive layout */
 
