@@ -500,7 +500,7 @@ tfoot tr:first-child th {
 
 /* main torrents listing */
 
-.snarkTorrents {
+.snarkTorrents, #snarkTorrentEdit {
   margin: 0;
   border: 1px solid #6f533e;
   border-collapse: separate;
@@ -743,15 +743,15 @@ tr:not(.peerinfo) .snarkTorrentUploaded:empty::after {
 
 /* end main torrents listing */
 
-.snarkTorrentEven {
+.snarkTorrentEven, #snarkTorrentEdit tr:nth-child(odd) {
   background: #dfd6d1;
 }
 
-.snarkTorrentOdd {
+.snarkTorrentOdd, #snarkTorrentEdit tr:nth-child(even) {
   background: #efe6e0;
 }
 
-.snarkTorrentOdd td, .snarkTorrentEven td, .ParentDir, .peerinfo td {
+.snarkTorrentOdd td, .snarkTorrentEven td, .ParentDir, .peerinfo td, #snarkTorrentEdit td {
   border-top: 1px solid #fff5ef !important;
   border-bottom: 1px solid rgba(111,83,62,.6) !important;
 }
@@ -1503,11 +1503,11 @@ input[type=submit], .trackerconfig input[type=submit], input[name="savepri"], se
 
 /* panel titles */
 
-#tab_config, .toggleview {
+#config, .toggleview {
   will-change: transform;
 }
 
-.toggleview, #tab_config {
+.toggleview, #config {
   margin: 0 0 -3px !important;
   padding: 4px 1px 2px;
   min-width: 280px;
@@ -1521,11 +1521,11 @@ input[type=submit], .trackerconfig input[type=submit], input[name="savepri"], se
   background: linear-gradient(90deg, rgba(0,0,0,0), rgba(255, 255, 255, .2) 20%, rgba(255, 255, 255, .2) 80%, rgba(0,0,0,0)),  linear-gradient(180deg,#fff7ef 50%, rgba(207, 193, 181, .6) 50%), repeating-linear-gradient(135deg, #75604e 1px, #a09286 1px, #bfafa2 2px);
 }
 
-#tab_config:hover, .toggleview:hover, input.toggle_input:focus + .toggleview {
+#config:hover, .toggleview:hover, input.toggle_input:focus + .toggleview {
   background: linear-gradient(180deg,#ffeadf 50%, #cfb6a8 50%);
 }
 
-#tab_config {
+#config {
   padding-top: 3px !important;
 }
 
@@ -1565,15 +1565,15 @@ input[type=submit], .trackerconfig input[type=submit], input[name="savepri"], se
 }
 
 .toggleview:hover::after, .toggleview:focus::after,
-#tab_config a:hover::after, #tab_config a:focus::after {
+#config a:hover::after, #config a:focus::after {
   mix-blend-mode: normal;
 }
 
-.toggleview, #tab_config {
+.toggleview, #config {
   font-size: 0 !important;
 }
 
-.toggleview::after, #tab_config a::after {
+.toggleview::after, #config a::after {
   margin: -1px 0 1px;
   padding: 2px;
   width: 18px;
@@ -1593,7 +1593,7 @@ input[type=submit], .trackerconfig input[type=submit], input[name="savepri"], se
   mix-blend-mode: normal;
 }
 
-#tab_newtorrent::after {
+#newtorrent::after {
   box-shadow: inset 0 0 0 2px #ffeadf;
   background: var(--wizard) no-repeat center center, var(--tab);
   background-size: 18px, 100%;
@@ -1611,18 +1611,24 @@ input[type=submit], .trackerconfig input[type=submit], input[name="savepri"], se
   background-size: 14px, 100%;
 }
 
-#tab_config a::after {
+.toggleview[for="toggle_torrentedit"]::after {
+  box-shadow: none;
+  background: var(--edit) no-repeat center center, var(--tab);
+  background-size: 14px, 100%;
+}
+
+#config a::after {
   box-shadow: inset 0 0 0 2px #ffeadf;
   background: var(--configure) no-repeat center center, var(--tab);
   background-size: 16px, 100%;
 }
 
-#tab_config:active, .toggleview:active {
+#config:active, .toggleview:active {
   box-shadow: 0 0 2px #4d453e, inset 0 0 0 1px #f0e9e4, inset 2px 2px 3px 1px #59513b;
   background: linear-gradient(180deg,#e5d2c8, #baa397);
 }
 
-#tab_config a:active::after, .toggleview:active::after {
+#config a:active::after, .toggleview:active::after {
   transform: rotate(90deg);
   transition: ease transform .15s;
 }
@@ -4997,12 +5003,21 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 
 #snarkTorrentEdit {
   margin: 10px 0 0;
+  border-top: none;
 }
 
 #snarkTorrentEdit th, #snarkTorrentEdit td {
   padding: 8px 20px;
   width: 25%;
   text-align: center;
+}
+
+#snarkTorrentEdit th, #snarkTorrentEdit tfoot td {
+  background: var(--th);
+}
+
+#snarkTorrentEdit th[colspan="4"] {
+  border-top: none;
 }
 
 #snarkTorrentEdit th:first-child:not([colspan]), #snarkTorrentEdit td:first-child:not([colspan]) {
@@ -5015,10 +5030,10 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
   text-align: left;
 }
 
-#addCommentText {
+#snarkTorrentEdit #addCommentText {
   padding: 18px 20px !important;
   text-align: center;
-  border-bottom: var(--border) !important;
+  border-bottom: none !important;
 }
 
 #snarkTorrentEdit textarea {
@@ -5031,10 +5046,13 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 #snarkTorrentEdit tfoot td {
   padding: 12px 20px !important;
   text-align: center !important;
+  border-top: var(--border) !important;
+  border-bottom: none !important;
 }
 
-#snarkTorrentEdit tr:last-child input {
-  margin-right: 0;
+#snarkTorrentEdit tfoot input {
+  margin-right: -4px;
+  float: right;
 }
 
 /* end torrent edit */
