@@ -2376,8 +2376,8 @@ img:hover {
   border-bottom: none;
 }
 
-.newtorrentsection, .addtorrentsection, .configsection, .configsectionpanel, #snarkFiles, #snarkCommentSection {
-  background: #000;
+.newtorrentsection, .addtorrentsection, .configsection, .configsectionpanel,
+#snarkFiles, #snarkCommentSection, #snarkTorrentEditSection {
   background: repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px),
     repeating-linear-gradient(180deg,rgba(0,0,0,.8) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px),
     linear-gradient(180deg,rgba(0,16,0,.4), rgba(0,0,0,.5)),
@@ -3096,6 +3096,10 @@ input:checked + .toggleview:active .tab_label::after {
 
 #tab_comments .tab_label::after {
   background: var(--comment) no-repeat scroll center center / 16px, var(--tabIcon);
+}
+
+#tab_torrentedit .tab_label::after {
+  background: var(--edit) no-repeat scroll center center / 16px, var(--tabIcon);
 }
 
 /* end miminal tabs */
@@ -4300,6 +4304,49 @@ td.snarkTorrentAction input[type=submit] {
 }
 
 /* end action buttons */
+
+/* torrent edit */
+
+#snarkTorrentEditSection hr {
+  margin-bottom: 0;
+}
+
+#snarkTorrentEdit {
+  margin: 10px 0 0;
+}
+
+#snarkTorrentEdit th, #snarkTorrentEdit td {
+  padding: 8px 20px;
+  width: 25%;
+  text-align: center;
+}
+
+#snarkTorrentEdit th:first-child:not([colspan]), #snarkTorrentEdit td:first-child {
+  width: 20%;
+  text-align: right !important;
+}
+
+#snarkTorrentEdit th:nth-child(2), #snarkTorrentEdit td:nth-child(2) {
+  width: 30%;
+  text-align: left;
+}
+
+#addCommentText {
+  padding: 18px 20px !important;
+  text-align: center;
+  border-bottom: var(--border) !important;
+}
+
+#snarkTorrentEdit textarea {
+  width: 100%;
+  resize: vertical;
+}
+
+#snarkTorrentEdit tr:last-child input {
+  margin-right: 0;
+}
+
+/* end torrent edit */
 
 /* responsive layout */
 
