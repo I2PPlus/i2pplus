@@ -4124,13 +4124,13 @@ public class I2PSnarkServlet extends BasicServlet {
                        .append("<table id=\"mediaContainer\">\n<tr>");
                     // HTML5
                     if (isAudio) {
-                        buf.append("<th class=\"audio\">").append(_t("Audio file: ")).append(DataHelper.escapeHTML(torrentName));
+                        buf.append("<th class=\"audio\">").append(_t("Audio file: ")).append(DataHelper.escapeHTML(torrentName))
                            .append("<a href=\"").append(path).append("\" title=\"Open in new tab\" target=\"_blank\">")
                            .append(newTab)
                            .append("</a>").append("</th></tr>\n<tr><td>")
                            .append("<audio controls>");
                     } else {
-                        buf.append("<th id=\"videoTitle\" class=\"video\">").append(_t("Video file: ")).append(DataHelper.escapeHTML(torrentName));
+                        buf.append("<th id=\"videoTitle\" class=\"video\">").append(_t("Video file: ")).append(DataHelper.escapeHTML(torrentName))
                            .append("<a href=\"").append(path).append("\" title=\"Open in new tab\" target=\"_blank\">")
                            .append(newTab)
                            .append("</a>").append("</th></tr>\n<tr><td>")
@@ -4141,7 +4141,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     if (isAudio) {
                         buf.append("</audio>");
                     } else {
-                        buf.append("</video>");
+                        buf.append("</video>")
                            .append("<script src=\"").append(_contextPath).append(WARBASE + "js/getMetadata.js?" + CoreVersion.VERSION +
                                    "\" type=\"text/javascript\"></script>\n");
                     }
@@ -5336,10 +5336,10 @@ public class I2PSnarkServlet extends BasicServlet {
                 buf.append("<tr><td>");
                 s = DataHelper.stripHTML(s);
                 buf.append("<span class=\"info_tracker\">")
-                   .append(getShortTrackerLink(s, snark.getInfoHash()));
-                   .append("</span> ");
-                //buf.append(s);
-                buf.append("</td><td>").append(announce).append("</td><td>")
+                   .append(getShortTrackerLink(s, snark.getInfoHash()))
+                   .append("</span> ")
+                   //.append(s);
+                   .append("</td><td>").append(announce).append("</td><td>")
                    .append("<input type=\"radio\" class=\"optbox\" name=\"primary\" ");
                 if (s.equals(announce))
                     buf.append("checked=\"checked\" ");
