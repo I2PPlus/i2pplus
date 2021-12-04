@@ -567,7 +567,6 @@ tr.active.downloading:not(.peerinfo):hover .percentBarInner {
 }
 
 .uploaded {
-	padding: 0 2px 2px;
 	min-width: 68px;
 	display: inline-block;
 	position: relative;
@@ -2926,7 +2925,9 @@ input[name="i2cpOpts"], input[name="nofilter_dataDir"] {
 	#actionStopAll, #actionStartAll {
 		padding: 11px 18px !important;
 	}
-	.uploaded {
-		padding-bottom: 3px;
+	@supports (-moz-appearance: none) {
+		.uploaded {
+			padding-bottom: 3px;
+		}
 	}
 }
