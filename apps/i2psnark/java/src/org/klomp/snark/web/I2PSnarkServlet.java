@@ -3598,10 +3598,8 @@ public class I2PSnarkServlet extends BasicServlet {
                         _manager.startTorrent(snark);
                     } else if (postParams.get("recheck") != null) {
                         _manager.recheckTorrent(snark);
-/*
                     } else if (postParams.get("editTorrent") != null) {
                         saveTorrentEdit(snark, postParams);
-*/
                     } else if (postParams.get("setInOrderEnabled") != null) {
                         _manager.saveTorrentStatus(snark);
                         _manager.addMessage("Sequential piece or file order not saved - feature currently broken.");
@@ -4025,7 +4023,7 @@ public class I2PSnarkServlet extends BasicServlet {
                         com = com.substring(0, 4000) + "&hellip;";
                     buf.append("<tr><td id=\"metacomment\" colspan=\"3\">");
                     buf.append("<div class=\"commentWrapper\">")
-                       .append(DataHelper.stripHTML(com))
+                       .append(DataHelper.stripHTML(com).replace("\r\n", "<br>").replace("\n", "<br>"))
                        .append("</div></td></tr>\n");
                 }
             }
@@ -5295,17 +5293,10 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("<div id=\"snarkTorrentEditSection\" class=\"mainsection\">\n" +
                    "<input hidden class=\"toggle_input\" id=\"toggle_torrentedit\" type=\"checkbox\">" +
                    "<label id=\"tab_torrentedit\" class=\"toggleview\" for=\"toggle_torrentedit\"><span class=\"tab_label\">");
-        buf.append(_t("Edit Torrent Metainfo"))
+        buf.append(_t("Edit Torrent"))
            .append("</span></label><hr>\n")
            .append("<table id=\"snarkTorrentEdit\">\n");
         boolean isRunning = !snark.isStopped();
-        if (isRunning) {
-            // shouldn't happen
-            buf.append("<tr><td colspan=\"5\">")
-               .append(_t("Torrent must be stopped"))
-               .append("</td></tr>\n</table>\n</div>\n");
-            return;
-        }
         String announce = meta.getAnnounce();
         if (announce == null)
             announce = snark.getTrackerURL();
@@ -5328,9 +5319,10 @@ public class I2PSnarkServlet extends BasicServlet {
         if (announce != null)
             annlist.add(announce);
         if (!annlist.isEmpty()) {
-            buf.append("<tr><th>").append(_t("Tracker")).append("</th><th>").append(_t("Announce URL"))
+            buf.append("<tr><th>").append(_t("Active Trackers")).append("</th><th>").append(_t("Announce URL"))
                .append("</th><th>").append(_t("Primary")).append("</th><th>")
-               .append("Delete").append("</th></tr>\n");
+               .append(_t("Delete"))
+               .append("</th></tr>\n");
             for (String s : annlist) {
                 int hc = s.hashCode();
                 buf.append("<tr><td>");
@@ -5338,16 +5330,19 @@ public class I2PSnarkServlet extends BasicServlet {
                 buf.append("<span class=\"info_tracker\">")
                    .append(getShortTrackerLink(s, snark.getInfoHash()))
                    .append("</span> ")
-                   //.append(s);
-                   .append("</td><td>").append(announce).append("</td><td>")
+                   .append("</td><td>").append(s).append("</td><td>")
                    .append("<input type=\"radio\" class=\"optbox\" name=\"primary\" ");
                 if (s.equals(announce))
                     buf.append("checked=\"checked\" ");
-                buf.append("value=\"").append(hc)
-                   .append("\"></td><td>")
+                buf.append("value=\"").append(hc).append("\"");
+                if (isRunning)
+                    buf.append(" disabled=\"disabled\"");
+                buf.append("></td><td>")
                    .append("<input type=\"checkbox\" class=\"optbox\" name=\"removeTracker-")
-                   .append(hc).append("\" title=\"").append(_t("Mark for deletion")).append("\">")
-                   .append("</td></tr>\n");
+                   .append(hc).append("\" title=\"").append(_t("Mark for deletion")).append("\"");
+                if (isRunning)
+                    buf.append(" disabled=\"disabled\"");
+                buf.append("></td></tr>\n");
             }
         }
 
@@ -5370,11 +5365,15 @@ public class I2PSnarkServlet extends BasicServlet {
                    .append(name)
                    .append("</span></td><td>").append(announceURL).append("</td><td>")
                    .append("<input type=\"radio\" class=\"optbox\" name=\"primary\" value=\"")
-                   .append(hc)
-                   .append("\"></td><td>")
+                   .append(hc).append("\"");
+                if (isRunning)
+                    buf.append(" disabled=\"disabled\"");
+                buf.append("></td><td>")
                    .append("<input type=\"checkbox\" class=\"optbox\" id=\"").append(name).append("\" name=\"addTracker-")
-                   .append(hc).append("\" title=\"").append(_t("Add tracker")).append("\"> ")
-                   .append("</td></tr>\n");
+                   .append(hc).append("\" title=\"").append(_t("Add tracker")).append("\"");
+                if (isRunning)
+                    buf.append(" disabled=\"disabled\"");
+                buf.append("></td></tr>\n");
             }
         }
 
@@ -5382,7 +5381,7 @@ public class I2PSnarkServlet extends BasicServlet {
         if (com == null) {
             com = "";
         } else if (com.length() > 0) {
-            com = DataHelper.escapeHTML(com);
+            com = DataHelper.escapeHTML(com).replace("\r\n", "<br>").replace("\n", "<br>");
         }
         buf.append("<tr><th colspan=\"4\">").append(_t("Torrent Comment")).append("</th></tr>\n");
         buf.append("<tr><td colspan=\"4\" id=\"addCommentText\"><textarea name=\"nofilter_newTorrentComment\" cols=\"88\" rows=\"4\">")
@@ -5402,11 +5401,18 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("<td id=\"editTorrentCreatedBy\"><input type=\"text\" name=\"nofilter_newTorrentCreatedBy\" cols=\"44\" rows=\"1\" value=\"")
            .append(cb).append("\"></td></tr>");
 */
-        buf.append("<tfoot><tr id=\"torrentInfoControl\"><td colspan=\"4\">");
-        buf.append("<input type=\"submit\" name=\"editTorrent\" value=\"");
-        buf.append(_t("Save Changes"));
-        buf.append("\" class=\"accept\"></td></tr></tfoot>\n");
-        buf.append("</table>\n</div>\n");
+        if (isRunning) {
+            buf.append("<tfoot><tr><td colspan=\"4\"><span id=\"stopfirst\">")
+               .append(_t("Torrent must be stopped in order to edit"))
+               .append("</span></td></tr></tfoot>\n</table>\n</div>\n");
+            return;
+        } else {
+            buf.append("<tfoot><tr><td colspan=\"4\">")
+               .append("<input type=\"submit\" name=\"editTorrent\" value=\"")
+               .append(_t("Save Changes"))
+               .append("\" class=\"accept\"></td></tr></tfoot>\n")
+               .append("</table>\n</div>\n");
+        }
     }
 
     /**
