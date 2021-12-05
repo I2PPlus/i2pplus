@@ -2178,6 +2178,13 @@ select {
 	min-width: 12px;
 }
 
+.snarkTorrentETA, .snarkTorrentRateDown, .snarkTorrentRateUp {
+	padding-left: 10px !important;
+	padding-right: 10px !important;
+	min-width: 80px;
+	text-align: center;
+}
+
 .snarkTorrentRateDown .left, .snarkTorrentRateUp .left, .snarkTorrentUploaded .left,
 .snarkTorrentRateDown .right, .snarkTorrentRateUp .right, .snarkTorrentUploaded .right {
 	min-width: 22px;
