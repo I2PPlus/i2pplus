@@ -11,10 +11,13 @@
   --li: #8589ad;
   --title: repeating-linear-gradient(90deg, rgba(0,0,48,.4) 2px, #000 4px), linear-gradient(180deg,#003, #002 50%, #001 50%, #000);
   --highlight: inset 0 0 0 1px #000;
+  --btn: linear-gradient(180deg,#11101c 50%,#000010 50%);
+  --btn_hover: linear-gradient(180deg,#202 50%,#000 50%);
   --btnAction: linear-gradient(180deg,#181d4f 50%, #001 50%);
   --btnAction_hover: var(--nav_hover);
   --btnAction_active: linear-gradient(180deg,#3c1751, #652787);
   --btn_shadow_active: var(--highlight), inset 4px 4px 4px rgba(0,0,0,.7);
+  --badge: linear-gradient(180deg,#080818 50%,#000 50%);
   --border: 1px solid #26235c;
   --border_inner: 1px solid #113;
   --border_btn: 1px solid #26225c;
@@ -23,6 +26,9 @@
   --active: #fc1c66;
   --nav: linear-gradient(180deg,#181828 50%, #000 50%);
   --nav_hover: linear-gradient(180deg,#652787 50%, #3C1751 50%);
+  --tab: linear-gradient(90deg, rgba(0,0,16,.7), rgba(0,0,0,.1), rgba(0,0,16,.7)), var(--nav);
+  --tab_hover: linear-gradient(90deg, rgba(0,0,16,.05), rgba(96,0,96,.15), rgba(0,0,16,.05)), linear-gradient(180deg,#1d1a2d 50%, #000 50%);
+  --tab_active: linear-gradient(90deg, rgba(0,0,32,.1), rgba(64,0,64,.2), rgba(0,0,32,.1)), linear-gradient(180deg,#080008, #0a000a);
 }
 
 html, body {
@@ -1458,14 +1464,12 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
   letter-spacing: .15em;
   font-size: 10pt;
   font-weight: 700;
-  text-align: center !important;
+  text-align: center;
   text-shadow: 0 0 1px #000;
   border: var(--border);
   border-radius: 0 0 2px 2px;
   box-shadow: var(--highlight), inset 0 0 1px 1px #224;
-  background: #003;
-  background: linear-gradient(90deg, rgba(0,0,16,.7), rgba(0,0,0,.1), rgba(0,0,16,.7)),
-    var(--nav);
+  background: var(--tab);
 }
 
 .configsection .snarkConfigTitle, .toggleview {
@@ -1474,21 +1478,19 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
 
 .snarkConfigTitle:hover, .toggleview:hover, input.toggle_input:focus + .toggleview {
   box-shadow: inset 0 0 0 1px #101;
-  background: #002 !important;
-  background: linear-gradient(90deg, rgba(0,0,16,.05), rgba(96,0,96,.15), rgba(0,0,16,.05)),
-    linear-gradient(180deg,#1d1a2d 50%, #000 50%) !important;
+  background: var(--tab_hover);
 }
 
 .snarkConfigTitle:active, .toggleview:active {
   box-shadow: var(--highlight), inset 0 0 0 1px #000, inset 3px 3px 3px 3px #000;
-  background: linear-gradient(90deg, rgba(0,0,32,.1), rgba(64,0,64,.2), rgba(0,0,32,.1)), linear-gradient(180deg,#080008, #0a000a) !important;
+  background: var(--tab_active);
   transition: ease all .01s;
 }
 
 .configsectionpanel .snarkConfigTitle {
-  box-shadow: var(--highlight) !important;
-  background: var(--title) !important;
-  background-size: 4px 100%, 100% !important;
+  box-shadow: var(--highlight);
+  background: var(--title);
+  background-size: 4px 100%, 100%;
   pointer-events: none;
 }
 
@@ -1696,7 +1698,7 @@ input:disabled[type=submit], input:disabled:hover[type=submit], input:disabled:a
   border: var(--border_btn);
   border-radius: 1px;
   box-shadow: var(--highlight), inset 0 0 2px 0 #559;
-  background: linear-gradient(180deg,#11101c 50%, #000010 50%);
+  background: var(--btn);
 }
 
 input[type=submit], input[type="reset"] {
@@ -1725,14 +1727,14 @@ input[type=submit]:hover, input[type=submit]:focus, input[type="reset"]:hover, i
   color: #652787 !important;
   border: 1px solid #652787 !important;
   box-shadow: var(--highlight), inset 0 0 2px 1px #757;
-  background: linear-gradient(180deg,#202 50%, #000 50%);
+  background: var(--btn_hover);
 }
 
 input[type=submit]:active, input[type="reset"]:active, a.control:active {
   color: #83529F !important;
   text-shadow: 0 1px 1px #3c1751;
   border: 1px solid #652787;
-  box-shadow: var(--highlight), inset 3px 3px 3px #000;
+  box-shadow: var(--btn_shadow_active);
   background: #652787;
 }
 
@@ -1876,7 +1878,7 @@ select {
   border-right-color: #171539;
   border-radius: 1px;
   box-shadow: var(--highlight), inset 0 0 1px 0 #446;
-  background: var(--dropdown) center right 10px no-repeat, linear-gradient(180deg,#11101c 50%, #000010 50%) !important;
+  background: var(--dropdown) center right 10px no-repeat, var(--btn) !important;
   background-size: 10px auto, 100% !important;
   -moz-appearance: none;
   -webkit-appearance: none;
@@ -1886,7 +1888,7 @@ select:hover, select:focus, select:active {
   color: #652787 !important;
   border: 1px solid #652787 !important;
   box-shadow: var(--highlight), inset 0 0 2px 1px #757;
-  background: var(--dropdown_hover) no-repeat right 10px center, linear-gradient(180deg,#202 50%, #000 50%) !important;
+  background: var(--dropdown_hover) no-repeat right 10px center, var(--btn_hover) !important;
   background-size: 10px auto, 100% !important;
 }
 
@@ -1925,8 +1927,8 @@ textarea:focus {
 
 img {
   margin: 0 3px 1px 3px;
-  line-height: 100%;
   vertical-align: middle;
+  line-height: 1;
   border: none;
 }
 
@@ -1999,7 +2001,7 @@ a:hover img, a:focus img {
 
 .pagenavcontrols a {
   display: inline !important;
-  background: linear-gradient(180deg,#080818 50%, #000 50%);
+  background: var(--badge);
 }
 
 #pagenav {
@@ -3897,7 +3899,7 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
   color: #89f;
   border-right: 1px solid #171c3f;
   box-shadow: var(--highlight);
-  background: linear-gradient(180deg,#080818 50%, #000 50%);
+  background: var(--badge);
 }
 
 @media screen and (max-width: 900px) {
@@ -3909,14 +3911,14 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
 
 #torrentDisplay label:hover {
   color: #743c93;
-  background: linear-gradient(180deg,#080818 50%, #000 50%);
+  background: var(--badge);
 }
 
 #torrentDisplay label:active, #torrentDisplay input:checked + label {
-  box-shadow: var(--highlight), inset 3px 3px 3px #000;
-  background: #113;
-  color: #349;
   text-shadow: 0 1px 1px #000;
+  color: #349;
+  box-shadow: var(--btn_shadow_active);
+  background: #113;
 }
 
 #torrentDisplay label[for="all"] {
@@ -3952,8 +3954,6 @@ td.snarkTrackerDetails img {
   height: 16px;
 }
 
-/* custom radios/checkboxes to enforce color scheme when OS widgets are non-standard  */
-@supports (background-blend-mode: luminosity) { /* exclude ms browsers */
 input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked,
 input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
   position: relative;
@@ -3963,7 +3963,6 @@ input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input
   vertical-align: middle !important;
   border: 1px solid #363181 !important;
   box-shadow: var(--highlight), inset 3px 3px 3px 1px #000;
-  background: #001;
   background: linear-gradient(180deg,#030306, #112);
   box-sizing: border-box;
   -moz-appearance: none;
@@ -3991,7 +3990,6 @@ input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::bef
 input[type=checkbox]:checked::before, input[type=checkbox]:not(:checked)::before,
 input[type=radio]:checked::before, input[type=radio][disabled]:checked:hover::before {
   box-shadow: 0 0 0 1px #000, inset 0 0 0 1px var(--a);
-  background: #655fb9;
   background: linear-gradient(135deg, #655fb9, #544eb1);
   content: "";
 }
@@ -4026,9 +4024,9 @@ input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::bef
 }
 
 input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus, input[type=radio]:focus {
-  background: #000;
   border: 1px solid #6466a5 !important;
   box-shadow: 0 0 0 1px rgba(101, 39, 135, .5), 0 0 2px 2px #202 !important;
+  background: #000;
   filter: drop-shadow(0 0 1px #202) !important;
 }
 
@@ -4043,7 +4041,6 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 
 .optbox:active::before, .optbox:not(:checked)::before {
   background: #7771c1 !important;
-}
 }
 
 /* alternative download bar popup bar text just for our downloads in .snarkTorrents */
@@ -4164,8 +4161,7 @@ tr:not(.peerinfo) .snarkTorrentDownloaded .percentBarText::after {
   line-height: 130% !important;
   text-align: center;
   border-radius: 0 2px 2px 0;
-  background: #001;
-  background: linear-gradient(180deg,#002, #000);
+  background: linear-gradient(180deg,#002,#000);
 }
 
 .clientversion {
@@ -4253,9 +4249,13 @@ tr:hover .uploaded {
   top: 1px;
   left: 1px;
   z-index: 1;
-  background: rgba(255,64,255,.25);
+  background: rgba(192,48,192,.25);
   box-shadow: inset 3px 3px 3px rgba(0,0,0,.8);
   border: none;
+}
+
+.active .txBarInner {
+  background: rgba(255,64,255,.25);
 }
 
 .txBarText {
@@ -4341,8 +4341,7 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
   width: 32px;
   height: 19px;
   padding: 2px;
-  background: #000 url(/i2psnark/.resources/icons/tick.png) no-repeat center center;
-  background: url(/i2psnark/.resources/icons/tick.png) no-repeat center center, linear-gradient(180deg,#11101c 50%, #000010 50%) !important;
+  background: url(/i2psnark/.resources/icons/tick.png) no-repeat center center, var(--btn) !important;
   background-size: 16px !important;
 }
 
@@ -4384,37 +4383,30 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
   text-align: center;
   text-shadow: 0 1px 1px #000;
   border-radius: 3px;
-  background: #229;
   background: linear-gradient(180deg,#33a, #229);
 }
 
 .lang_en .active.downloading .snarkTorrentStatus b {
-  background: #292;
   background: linear-gradient(180deg,#292, #171);
 }
 
 .lang_en .inactive .snarkTorrentStatus b {
-  background: #555;
   background: linear-gradient(180deg,#555, #444);
 }
 
 .lang_en .inactive.downloading .snarkTorrentStatus b {
-  background: #bb0;
   background: linear-gradient(180deg,#bb0, #990);
 }
 
 .lang_en .inactive.incomplete .snarkTorrentStatus b {
-  background: #500;
   background: linear-gradient(180deg,#500, #300);
 }
 
 .lang_en .seeding .snarkTorrentStatus b {
-  background: #a30;
   background: linear-gradient(180deg,#d60, #930);
 }
 
 .lang_en .inactive.complete:not(.seeding) .snarkTorrentStatus b {
-  background: #500;
   background: linear-gradient(180deg,#557, #446);
 }
 
@@ -4451,24 +4443,6 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
 }
 
 /* end comment indicator */
-
-/* override js dialogs */
-
-.customalert {
-  border: var(--border) !important;
-  box-shadow: 0 0 3px 1px rgba(0,0,0,.6), var(--highlight) !important;
-  background: #000 !important;
-  background: linear-gradient(to top, #001, #000) !important;
-}
-
-.customalert .header {
-  border-bottom: var(--border) !important;
-  box-shadow: var(--highlight) !important;
-  background: #002 !important;
-  background: linear-gradient(180deg,#002, #000) !important;
-}
-
-/* end override js dialogs */
 
 #snarkInfo ~ .mainsection {
   margin-top: -2px !important;
@@ -4542,8 +4516,7 @@ td.snarkTorrentStatus b, .lang_en td.snarkTorrentStatus b {
   border-color: #003;
   border-radius: 0;
   box-shadow: var(--highlight), 0 0 1px 0 rgba(0,0,0,.3);
-  background: #000024 url(images/button_forum.png) no-repeat 10px center;
-  background-size: 16px auto;
+  background: #000024 var(--forum) no-repeat 10px center / 16px auto;
 }
 
 /* table sort indicators */
@@ -4587,11 +4560,9 @@ td.snarkTorrentStatus b, .lang_en td.snarkTorrentStatus b {
   right: -11px !important;
 }
 
-@supports (animation: ease all .1s) {
 .ascending, .descending {
   filter: opacity(0);
   animation: ease fade-in .2s .6s forwards;
-}
 }
 
 /* end table sort indicators */
@@ -4632,7 +4603,6 @@ td.snarkTorrentPeerCount b a:not(:hover):not(:focus), td.snarkTorrentPeerCount b
 }
 
 .active.seeding.complete .snarkTorrentPeerCount b {
-  background: #937;
   background: repeating-linear-gradient(135deg, #937, #937 8px, #826 9px, #826 17px);
 }
 
@@ -4641,7 +4611,6 @@ td.snarkTorrentPeerCount b a:not(:hover):not(:focus), td.snarkTorrentPeerCount b
 }
 
 .active.downloading .snarkTorrentPeerCount b {
-  background: #252;
   background: repeating-linear-gradient(135deg, #252, #252 8px, #141 9px, #141 17px);
 }
 
@@ -4844,7 +4813,6 @@ td.snarkTorrentAction input[type=submit] {
     padding: 10px !important;
     background-size: 12px !important;
   }
-
   #actionStopAll, #actionStartAll {
     padding: 10px 17px !important;
   }
@@ -4855,7 +4823,6 @@ td.snarkTorrentAction input[type=submit] {
     padding: 11px !important;
     background-size: 13px !important;
   }
-
   #actionStopAll, #actionStartAll {
     padding: 11px 18px !important;
   }
