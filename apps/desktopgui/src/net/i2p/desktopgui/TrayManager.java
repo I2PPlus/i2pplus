@@ -43,11 +43,13 @@ abstract class TrayManager {
     protected SystemTray tray;
     ///Our tray icon, or null if unsupported
     protected TrayIcon trayIcon;
+    protected volatile boolean _showNotifications;
 
     private static final String PNG_DIR = "/desktopgui/resources/images/";
     private static final String MAC_ICON = "itoopie_black_24.png";
     private static final String WIN_ICON = "itoopie_white_24.png";
     private static final String LIN_ICON = "logo.png";
+    protected static final String PROP_NOTIFICATIONS = "desktopgui.showNotifications";
 
     /**
      * Instantiate tray manager.
@@ -64,6 +66,7 @@ abstract class TrayManager {
     public synchronized void startManager() throws AWTException {
         if (!SystemTray.isSupported())
             throw new AWTException("SystemTray not supported");
+        _showNotifications = _appContext.getBooleanPropertyDefaultTrue(PROP_NOTIFICATIONS);
         tray = SystemTray.getSystemTray();
         // Windows typically has tooltips; Linux (at least Ubuntu) doesn't
         String tooltip = SystemVersion.isWindows() ? _t("I2P: Right-click for menu") : null;
@@ -219,6 +222,8 @@ abstract class TrayManager {
      *  @return 0, or -1 on failure
      */
     public int displayMessage(int priority, String title, String message, String path) {
+        if (!_showNotifications)
+            return -1;
         final TrayIcon ti = trayIcon;
         if (ti == null)
             return -1;
