@@ -2001,10 +2001,6 @@ input[type=text]:active, input[type=text]:focus, input.r:focus, input[name="nofi
   transition: ease box-shadow .05s;
 }
 
-input[type=text]:disabled:hover, input[type=text]:disabled:focus, input[type=text]:disabled:active {
-
-}
-
 input[type=radio] {
   margin: 0 3px 0 8px;
   padding: 2px;
@@ -2351,6 +2347,10 @@ img:hover {
   background-blend-mode: normal;
 }
 
+.iframed #snarkTorrentEditSection, .iframed #snarkCommentSection {
+  margin: -1px 0 0;
+}
+
 #snarkTorrentEditSection hr {
   margin-bottom: 0;
 }
@@ -2402,7 +2402,7 @@ select, input, input.r, input[name="nofilter_dataDir"], textarea[name="i2cpOpts"
   margin-top: -11px;
 }
 
-.iframed .mainsection#snarkFiles, .iframed .mainsection#snarkTorrentEditSection {
+.iframed .mainsection#snarkFiles {
   margin-top: -1px;
 }
 
@@ -2415,14 +2415,14 @@ select, input, input.r, input[name="nofilter_dataDir"], textarea[name="i2cpOpts"
 }
 
 .iframed .mainsection#snarkCommentSection {
-  margin-bottom: 6px !important;
+  margin-bottom: 1px !important;
 }
 #snarkCommentSection > input:not(:checked) + .toggleview {
   margin-bottom: -1px !important;
 }
-}
 
-.iframed .mainsection#snarkCommentSection {
+.iframed .mainsection#snarkCommentSection,
+.iframed #snarkTorrentEditSection {
   margin-bottom: 0;
 }
 
@@ -4533,7 +4533,7 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
   text-align: center;
 }
 
-#snarkTorrentEdit tr:first-child th:first-child, #snarkTorrentEdit td:first-child {
+#snarkTorrentEdit th:first-child, #snarkTorrentEdit td:first-child {
   width: 20%;
   text-align: right;
 }

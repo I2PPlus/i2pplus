@@ -1507,7 +1507,7 @@ input[type=submit], .trackerconfig input[type=submit], input[name="savepri"], se
   will-change: transform;
 }
 
-.toggleview, #config {
+.toggleview, #tab_config {
   margin: 0 0 -3px !important;
   padding: 4px 1px 2px;
   min-width: 280px;
@@ -1521,11 +1521,11 @@ input[type=submit], .trackerconfig input[type=submit], input[name="savepri"], se
   background: linear-gradient(90deg, rgba(0,0,0,0), rgba(255, 255, 255, .2) 20%, rgba(255, 255, 255, .2) 80%, rgba(0,0,0,0)),  linear-gradient(180deg,#fff7ef 50%, rgba(207, 193, 181, .6) 50%), repeating-linear-gradient(135deg, #75604e 1px, #a09286 1px, #bfafa2 2px);
 }
 
-#config:hover, .toggleview:hover, input.toggle_input:focus + .toggleview {
+#tab_config:hover, .toggleview:hover, input.toggle_input:focus + .toggleview {
   background: linear-gradient(180deg,#ffeadf 50%, #cfb6a8 50%);
 }
 
-#config {
+#tab_config {
   padding-top: 3px !important;
 }
 
@@ -1565,15 +1565,15 @@ input[type=submit], .trackerconfig input[type=submit], input[name="savepri"], se
 }
 
 .toggleview:hover::after, .toggleview:focus::after,
-#config a:hover::after, #config a:focus::after {
+#tab_config a:hover::after, #tab_config a:focus::after {
   mix-blend-mode: normal;
 }
 
-.toggleview, #config {
+.toggleview, #tab_config {
   font-size: 0 !important;
 }
 
-.toggleview::after, #config a::after {
+.toggleview::after, #tab_config a::after {
   margin: -1px 0 1px;
   padding: 2px;
   width: 18px;
@@ -1593,7 +1593,7 @@ input[type=submit], .trackerconfig input[type=submit], input[name="savepri"], se
   mix-blend-mode: normal;
 }
 
-#newtorrent::after {
+#tab_newtorrent::after {
   box-shadow: inset 0 0 0 2px #ffeadf;
   background: var(--wizard) no-repeat center center, var(--tab);
   background-size: 18px, 100%;
@@ -1617,18 +1617,18 @@ input[type=submit], .trackerconfig input[type=submit], input[name="savepri"], se
   background-size: 14px, 100%;
 }
 
-#config a::after {
+#tab_config a::after {
   box-shadow: inset 0 0 0 2px #ffeadf;
   background: var(--configure) no-repeat center center, var(--tab);
   background-size: 16px, 100%;
 }
 
-#config:active, .toggleview:active {
+#tab_config:active, .toggleview:active {
   box-shadow: 0 0 2px #4d453e, inset 0 0 0 1px #f0e9e4, inset 2px 2px 3px 1px #59513b;
   background: linear-gradient(180deg,#e5d2c8, #baa397);
 }
 
-#config a:active::after, .toggleview:active::after {
+#tab_config a:active::after, .toggleview:active::after {
   transform: rotate(90deg);
   transition: ease transform .15s;
 }
