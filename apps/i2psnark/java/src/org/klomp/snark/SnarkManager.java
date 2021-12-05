@@ -460,7 +460,7 @@ public class SnarkManager implements CompleteListener, ClientApp {
      * @since 0.9.14.1
      */
     public void addMessageNoEscape(String message) {
-        _messages.addMessageNoEscape(getTime() + "&nbsp; " + message);
+        _messages.addMessageNoEscape(getTime() + "&nbsp; " + message.replace("%20", " "));
         if (_log.shouldLog(Log.INFO))
             _log.info(message);
     }
@@ -2683,7 +2683,7 @@ public class SnarkManager implements CompleteListener, ClientApp {
             if (cmgr != null) {
                 NotificationService ns = (NotificationService) cmgr.getRegisteredApp("desktopgui");
                 if (ns != null) {
-                    ns.notify("I2PSnark", null, Log.INFO, _t("I2PSnark"), 
+                    ns.notify("I2PSnark", null, Log.INFO, _t("I2PSnark"),
                               _t("Download finished: {0}", snark.getName()),
                               "/i2psnark/" + linkify(snark));
                 }
