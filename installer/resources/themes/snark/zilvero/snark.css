@@ -7,15 +7,17 @@
 :root {
 	--monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
 	--bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, Bitstream Vera Sans, Verdana, sans-serif;
+	--ink: #555;
 	--btn: linear-gradient(180deg,#fff 50%, #f4f4f4 50%);
 	--btn_hover: linear-gradient(180deg,#fff 50%, #f0f0f0 50%);
 	--btn_active: linear-gradient(180deg,#f2f2f2, #f8f8f8);
+	--btn_shadow_active: var(--highlight), inset 3px 3px 3px rgba(0,0,0,.4);
 	--highlight: inset 0 0 0 1px #fff;
 	--border: 1px solid #999;
 	--border_hard: 1px solid #777;
-	--shadow_inset: inset 0 0 0 1px #eee, inset 0 3px 3px rgba(0,0,0,.3);
 	--a: #d23;
 	--tr: linear-gradient(180deg,#fcfcfc,#ededed);
+	--td_dl: linear-gradient(270deg, #3d3 3px, rgba(0,0,0,0) 3px);
 }
 
 html {
@@ -33,7 +35,7 @@ body {
 	margin: 0 !important;
 	padding: 5px 5px 0;
 	min-width: 800px;
-	color: #555;
+	color: var(--ink);
 	background: var(--b_snark_hover), var(--b_snark_active), var(--b_tracker_hover), var(--b_tracker_active), var(--b_forum_hover), var(--b_forum_active);
 	background-size: 0;
 }
@@ -53,17 +55,12 @@ body, td, th, span, table a, input[type=submit], input[type=text], textarea {
 	outline: none;
 }
 
-*::-moz-selection {
-	color: #fff;
-	background: #b23 !important;
-}
-
 *::selection {
 	color: #fff;
 	background: #b23 !important;
 }
 
-.snarknavbar, img, a img, #configs, .toggleview, .snarkConfigTitle {
+.snarknavbar, img, a img, #configs, .toggleview, .snarkConfigTitle, label {
 	user-select: none;
 }
 
@@ -131,7 +128,8 @@ a:hover, a:focus, .snarkConfigTitle a:hover, .toggleview:hover, .trackerName a:v
 	background: var(--btn_hover);
 }
 
-a.snarkNav, #tab_config a:not(:hover):not(:focus):not(:active), #tab_config a:not(:hover):not(:focus):not(:active):visited, .toggleview, a.control, a.control:visited {
+a.snarkNav, #tab_config a:not(:hover):not(:focus):not(:active),
+#tab_config a:not(:hover):not(:focus):not(:active):visited, .toggleview, a.control, a.control:visited {
 	color: #777 !important;
 }
 
@@ -139,7 +137,8 @@ a.snarkNav:hover, .snarkConfigTitle a:hover {
 	color: var(--a) !important;
 }
 
-a.snarkNav:active, .snarkConfigTitle a, .snarkConfigTitle a:active, .toggleview:active, #torrentDisplay label:active {
+a.snarkNav:active, .snarkConfigTitle a, .snarkConfigTitle a:active,
+.toggleview:active, #torrentDisplay label:active {
 	color: #bbb !important;
 }
 
@@ -238,7 +237,7 @@ input[type=submit]:hover, a.control:hover {
 
 input[type=submit]:active, a.control:active, .snarkNav:active, #torrentDisplay label:active {
 	color: #bbb !important;
-	box-shadow: var(--highlight), inset 2px 2px 2px #999 !important;
+	box-shadow: var(--btn_shadow_active) !important;
 }
 
 tr {
@@ -329,7 +328,7 @@ td {
 	background-color: #fffffd !important;
 }
 
-.peerinfo:hover td {
+.peerinfo:hover td, #snarkTorrentEdit tr:hover td {
 	background-color: #bfb8b3 !important;
 }
 
@@ -456,7 +455,7 @@ td.snarkTorrentPeerCount:empty::after {
 	display: inline-block;
 	width: 8px;
 	height: 8px;
-	background: #555;
+	background: var(--ink);
 }
 
 .peerinfo td {
@@ -540,7 +539,7 @@ td.snarkTorrentPeerCount:empty {
 
 .percentBarOuter {
 	border: var(--border_hard);
-	box-shadow: var(--shadow_inset);
+	box-shadow: var(--btn_shadow_active);
 	background: #aaa;
 }
 
@@ -573,7 +572,7 @@ tr.active.downloading:not(.peerinfo):hover .percentBarInner {
 	position: relative;
 	border: var(--border_hard);
 	border-left-width: 5px;
-	box-shadow: var(--shadow_inset);
+	box-shadow: var(--btn_shadow_active);
 }
 
 .txBarInner {
@@ -855,7 +854,7 @@ td.snarkGraphicStatus img {
 	display: inline-block;
 	white-space: nowrap;
 	font-size: 105%;
-	color: #555;
+	color: var(--ink);
 	text-shadow: 0 1px 1px #fff;
 	box-shadow: var(--highlight);
 	border: var(--border);
@@ -909,7 +908,7 @@ input[type=radio], input[type=checkbox] {
 input[type=submit], a.control {
 	margin: 2px 4px;
 	float: right;
-	color: #555;
+	color: var(--ink);
 	font-weight: 700;
 }
 
@@ -933,7 +932,7 @@ input[type=text]:focus {
 select {
 	margin: 2px 4px 2px 0;
 	padding: 6px 16px 6px 6px !important;
-	color: #555;
+	color: var(--ink);
 	font: bold 9pt var(--bodyfont);
 	border: var(--border);
 	border-radius: 3px;
@@ -971,40 +970,30 @@ select:disabled {
 	display: inline-block;
 }
 
-/* custom radios/checkboxes to enforce color scheme when OS widgets are non-standard */
-@supports (background-blend-mode: luminosity) { /* exclude ms browsers */
-input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
+.optbox, .optbox:checked, .optbox:checked[disabled], .optbox:checked[disabled]:checked {
 	width: 19px !important;
 	height: 19px !important;
 	position: relative;
 	vertical-align: middle !important;
+	box-sizing: border-box;
 	border: var(--border) !important;
-	border-radius: 1px;
 	box-shadow: inset 0 0 2px 1px #f2f2f2;
 	background: #fff;
-	background-size: 96px 96px;
-	box-sizing: border-box;
 	-moz-appearance: none;
 	-webkit-appearance: inherit;
+	appearance: none;
+}
+
+input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
+	border-radius: 1px;
+}
+
+input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
+	border-radius: 50%;
 }
 
 #torrentOrderControl input[type=checkbox], #torrentOrderControl input[type=checkbox]:checked, #torrentOrderControl input[type=checkbox][disabled], #torrentOrderControl input[type=checkbox][disabled]:checked {
 	border: 1px solid #bbb !important;
-}
-
-input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
-	position: relative;
-	width: 19px !important;
-	height: 19px !important;
-	box-sizing: border-box;
-	vertical-align: middle !important;
-	box-shadow: inset 0 0 2px 1px #f2f2f2;
-	border: var(--border) !important;
-	border-radius: 50%;
-	background: #fff;
-	background-size: 96px 96px;
-	-moz-appearance: none;
-	-webkit-appearance: none;
 }
 
 input[type=radio][disabled], input[type=radio][disabled]:checked {
@@ -1086,9 +1075,6 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 	opacity: .5 !important;
 	pointer-events: none !important;
 }
-}
-
-/* end custom radios/checkboxes */
 
 code, tt {
 	font-weight: 700;
@@ -1659,7 +1645,7 @@ thead a img:hover {
 
 .pagenavcontrols span:not(#pagecount):active {
 	border: var(--border_hard);
-	box-shadow: inset 2px 2px 2px #999;
+	box-shadow: var(--btn_shadow_active);
 	background-color: #fff !important;
 	background-blend-mode: luminosity !important;
 }
@@ -2331,9 +2317,9 @@ tr:not(.peerinfo) .snarkTorrentUploaded:empty::after {
 }
 
 #torrentDisplay input:checked + label, #torrentDisplay input:checked + label:active {
-	color: #555 !important;
+	color: var(--ink) !important;
 	text-shadow: 0 1px 1px #fff;
-	box-shadow: var(--highlight), inset 2px 2px 2px #999 !important;
+	box-shadow: var(--btn_shadow_active) !important;
 	background: linear-gradient(180deg,#ddd,#fff) !important;
 	cursor: default;
 }
@@ -2553,24 +2539,24 @@ td.snarkGraphicStatus img {
 }
 
 .active .snarkTorrentAction, .active:hover .snarkTorrentAction {
-	background: linear-gradient(to left, #cb4dcb 3px, rgba(0,0,0,0) 3px);
+	background: linear-gradient(270deg, #cb4dcb 3px, rgba(0,0,0,0) 3px);
 	animation: ease-in-out active .5s 3s forwards;
 }
 
 @keyframes active {
-	from {background: linear-gradient(to left, #f3c 3px, rgba(0,0,0,0) 3px)}
-	to {background: linear-gradient(to left, #cb4dcb 3px, rgba(0,0,0,0) 3px)}
+	from {background: linear-gradient(270deg, #f3c 3px, rgba(0,0,0,0) 3px)}
+	to {background: linear-gradient(270deg, #cb4dcb 3px, rgba(0,0,0,0) 3px)}
 }
 
 .active.downloading .snarkTorrentAction, .active.downloading:hover .snarkTorrentAction,
 .active.RX .snarkTorrentAction, .active.RX:hover .snarkTorrentAction {
-	background: linear-gradient(to left, #3d3 3px, rgba(0,0,0,0) 3px);
+	background: var(--td_dl);
 	animation: ease-in-out downloading .5s 3s forwards;
 }
 
 @keyframes downloading {
-	from {background: linear-gradient(to left, #3d3 3px, rgba(0,0,0,0) 3px)}
-	to {background: linear-gradient(to left, #7f7 3px, rgba(0,0,0,0) 3px)}
+	from {background: var(--td_dl)}
+	to {background: linear-gradient(270deg, #7f7 3px, rgba(0,0,0,0) 3px)}
 }
 
 .addtorrentsection input[type=submit], .newtorrentsection input[type=submit] {
