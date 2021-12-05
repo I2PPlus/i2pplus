@@ -1803,6 +1803,13 @@ thead a img:hover {
 	white-space: nowrap;
 }
 
+#snarkTorrentEdit .info_tracker, #snarkTorrentEdit .info_tracker a {
+	font-weight: 400;
+	color: var(--ink);
+	background: none;
+	pointer-events: none;
+}
+
 .snarkFileIcon {
 	width: 1%;
 }
@@ -1835,6 +1842,11 @@ textarea[name="nofilter_newComment"] {
 textarea[name="nofilter_newComment"]:focus {
 	min-height: 64px;
 	box-shadow: inset 0 0 0 1px #b32 !important;
+}
+
+#snarkTorrentEdit textarea {
+	height: 80px;
+	min-height: 80px;
 }
 
 .toggleview img {
