@@ -2586,7 +2586,7 @@ input#toggle_files:not(checked) + label + hr {
 
 input#toggle_files:checked + label + hr, input#toggle_comments:checked + label + hr {
   margin-bottom: 7px;
-}#sn
+}
 
 /* end toggle panels */
 
