@@ -824,7 +824,7 @@ th.snarkTorrentStatus img:hover {
 }
 
 @keyframes active {
-  from {background: linear-gradient(to left, rgba(0,0,0,0) 1px, #f5f 2px, rgba(0,0,0,0) 2px)}
+  from {background: linear-gradient(to left, rgba(0,0,0,0) 1px, #f5f 3px, rgba(0,0,0,0) 3px)}
 }
 
 .peerinfo td:nth-child(4) {
@@ -4288,6 +4288,14 @@ td.snarkTorrentAction input[type=submit] {
 /* end action buttons */
 
 /* torrent edit */
+
+#snarkTorrentEditSection {
+  margin-bottom: 1px;
+}
+
+#snarkTorrentEditSection hr {
+  margin-top: 5px;
+}
 
 #snarkTorrentEdit {
   margin: 10px 0 0;
