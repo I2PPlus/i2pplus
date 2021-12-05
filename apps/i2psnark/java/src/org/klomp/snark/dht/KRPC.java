@@ -688,16 +688,16 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         long uptime = Math.max(1000, _context.clock().now() - _started);
         StringBuilder buf = new StringBuilder(256);
         buf.append("<div id=\"debugStats\">" +
-                   "<b>TX:</b> ").append(_txPkts.get()).append(" pkts / ")
+                   "<b>TX:</b> ").append(_txPkts.get()).append(" packets / ")
            .append(DataHelper.formatSize2(_txBytes.get())).append("B / ")
-           .append(DataHelper.formatSize2Decimal(_txBytes.get() * 1000 / uptime)).append("Bps &nbsp;" +
-                   "<b>RX:</b> ").append(_rxPkts.get()).append(" pkts / ")
+           .append(DataHelper.formatSize2Decimal(_txBytes.get() * 1000 / uptime)).append("Bps &nbsp;&bullet;&nbsp; " +
+                   "<b>RX:</b> ").append(_rxPkts.get()).append(" packets / ")
            .append(DataHelper.formatSize2(_rxBytes.get())).append("B / ")
            .append(DataHelper.formatSize2Decimal(_rxBytes.get() * 1000 / uptime)).append("Bps<br>" +
-                   "<b>DHT Peers:</b> ").append( _knownNodes.size()).append(" &nbsp;" +
-                   "<b>Blacklisted:</b> ").append(_blacklist.size()).append(" &nbsp;" +
-                   "<b>Sent tokens:</b> ").append(_outgoingTokens.size()).append(" &nbsp;" +
-                   "<b>Rcvd tokens:</b> ").append(_incomingTokens.size()).append(" &nbsp;" +
+                   "<b>DHT Peers:</b> ").append( _knownNodes.size()).append(" &nbsp;&bullet;&nbsp; " +
+                   "<b>Blacklisted:</b> ").append(_blacklist.size()).append(" &nbsp;&bullet;&nbsp; " +
+                   "<b>Sent tokens:</b> ").append(_outgoingTokens.size()).append(" &nbsp;&bullet;&nbsp; " +
+                   "<b>Received tokens:</b> ").append(_incomingTokens.size()).append(" &nbsp;&bullet;&nbsp; " +
                    "<b>Pending queries:</b> ").append(_sentQueries.size()).append("</div>");
         _tracker.renderStatusHTML(buf);
 //        _knownNodes.renderStatusHTML(buf);
