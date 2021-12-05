@@ -762,11 +762,11 @@ tr.active .snarkTorrentStatus {
   background: url(/themes/console/dark/images/camotile2.png) repeat scroll center bottom #001100;
 }
 
-.snarkTorrentInfo tr:nth-child(even) {
+.snarkTorrentInfo tr:nth-child(even), #snarkTorrentEdit tr:nth-child(even) {
   background: #001000;
 }
 
-.snarkTorrentInfo tr:nth-child(odd) {
+.snarkTorrentInfo tr:nth-child(odd), #snarkTorrentEdit tr:nth-child(odd) {
   background: #001a00;
 }
 

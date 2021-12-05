@@ -2379,11 +2379,13 @@ td#bwHelp a {
   max-width: calc(100% - 20px);
 }
 
-.snarkCommentInfo tr:nth-child(even), .snarkComments tr:nth-child(odd) {
+.snarkCommentInfo tr:nth-child(even), .snarkComments tr:nth-child(odd),
+#snarkTorrentEdit tr:nth-child(odd) {
   background: rgba(240, 240, 255, .5) var(--bg);
 }
 
-.snarkCommentInfo tr:nth-child(odd), .snarkComments tr:nth-child(even) {
+.snarkCommentInfo tr:nth-child(odd), .snarkComments tr:nth-child(even),
+#snarkTorrentEdit tr:nth-child(even) {
   border-top: var(--border_main);
   background: rgba(220, 220, 255, .5);
 }
@@ -3783,6 +3785,10 @@ td.snarkTorrentPeerCount {
 
 /* torrent edit */
 
+.iframed #snarkTorrentEditSection {
+  margin-top: 5px !important;
+}
+
 #snarkTorrentEdit th, #snarkTorrentEdit td {
   padding: 8px 20px;
   width: 25%;
@@ -3808,6 +3814,10 @@ td.snarkTorrentPeerCount {
 #snarkTorrentEdit textarea {
   width: 100%;
   resize: vertical;
+}
+
+#snarkTorrentEdit tr {
+  border: var(--border_main);
 }
 
 #snarkTorrentEdit tr:last-child input {
