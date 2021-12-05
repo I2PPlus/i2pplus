@@ -1322,6 +1322,12 @@ to {
   background: radial-gradient(at center bottom, rgba(32, 32, 80, .55) 10%, rgba(16, 16, 64, .1) 60%, rgba(0, 0, 0, 0) 70%), linear-gradient(180deg,#113, #000008);
 }
 
+.active .percentBarComplete {
+  box-shadow: var(--highlight), inset 0 1px 1px 1px #404, inset 0 -1px 1px 1px #202;
+  background: radial-gradient(at center bottom, rgba(64, 0, 64, .55) 10%, rgba(16, 0, 16, .1) 60%, rgba(0, 0, 0, 0) 70%), linear-gradient(180deg,#202, #080008);
+  animation: ease seeding 1.5s forwards;
+}
+
 @media screen and (max-width: 1500px) {
   .percentBarComplete {
     padding: 3px 0;
@@ -1336,6 +1342,15 @@ tr:hover .percentBarComplete {
   text-shadow: 0 1px 1px #000, 0 0 2px #337;
   box-shadow: var(--highlight), inset 0 1px 1px 1px #336, inset 0 -1px 1px 1px #003;
   background: radial-gradient(at center bottom, rgba(48, 48, 96, .65) 10%, rgba(32, 32, 80, .1) 60%, rgba(0, 0, 0, 0) 70%), linear-gradient(180deg,#114, #001);
+}
+
+.active:hover .percentBarComplete {
+  box-shadow: var(--highlight), inset 0 1px 1px 1px #404, inset 0 -1px 1px 1px #202;
+  background: radial-gradient(at center bottom, rgba(80, 0, 80, .55) 10%, rgba(32, 0, 32, .1) 60%, rgba(0, 0, 0, 0) 70%), linear-gradient(180deg,#303, #101);
+}
+
+@keyframes seeding {
+  from {box-shadow: var(--highlight), inset 0 1px 3px 1px #505, inset 0 -1px 1px 1px #202}
 }
 
 /* end download bars */
