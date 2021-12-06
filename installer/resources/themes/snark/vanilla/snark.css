@@ -1250,13 +1250,26 @@ thead img.disable, img.disable:hover {
   top: 1px;
   left: 1px;
   box-shadow: inset 0 3px 3px rgba(0,0,0,.3);
-  background: rgba(255,144,0,.15);
+  background: rgba(255,160,64,.35);
+}
+
+.active .txBarInner {
+  background: rgba(255,64,220,.35);
+}
+
+.txBarInner[style="width: calc(100% - 2px)"] {
+  box-shadow: 0 0 0 1px #efefef, inset 0 2px 2px 3px rgba(255,255,255,.2), inset 0 0 2px 2px rgba(255,255,255,.2), inset 0 -1px 2px 1px rgba(0,0,0,.1);
+  background: linear-gradient(180deg,rgba(255,224,96,.35) 50%,rgba(255,144,48,.35));
+}
+
+.active .txBarInner[style="width: calc(100% - 2px)"] {
+  background: linear-gradient(180deg,rgba(255,96,224,.35) 50%,rgba(255,32,192,.35));
 }
 
 .txBarText {
   position: relative;
   z-index: 5;
-  text-shadow: 0 1px 1px #f7f1ed;
+  text-shadow: 0 1px 1px #ffe6ff;
 }
 
 .snarkTorrentDownloaded .percentBarInner {
@@ -2042,7 +2055,7 @@ a:hover img, a:focus img {
 }
 
 .configsection {
-  padding: 0 10px 13px 10px;
+  padding: 0 10px 13px;
 }
 
 #mainsection + form .configsectionpanel {
