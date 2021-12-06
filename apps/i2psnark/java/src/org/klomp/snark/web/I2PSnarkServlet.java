@@ -5383,8 +5383,10 @@ public class I2PSnarkServlet extends BasicServlet {
             com = DataHelper.escapeHTML(com).replace("\r\n", "<br>").replace("\n", "<br>");
         }
         buf.append("<tr><th colspan=\"4\">").append(_t("Torrent Comment")).append("</th></tr>\n");
-        buf.append("<tr><td colspan=\"4\" id=\"addCommentText\"><textarea name=\"nofilter_newTorrentComment\" cols=\"88\" rows=\"4\">")
-           .append(com).append("</textarea></td>").append("</tr>\n");
+        buf.append("<tr><td colspan=\"4\" id=\"addCommentText\"><textarea name=\"nofilter_newTorrentComment\" cols=\"88\" rows=\"4\"");
+        if (isRunning)
+            buf.append(" readonly");
+        buf.append(">").append(com).append("</textarea></td>").append("</tr>\n");
 
 /*
         String cb = meta.getCreatedBy();

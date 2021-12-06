@@ -2284,11 +2284,6 @@ textarea {
   transition: ease box-shadow .15s;
 }
 
-#snarkTorrentEdit textarea {
-  margin: 0;
-  width: 100%;
-}
-
 /* end buttons & inputs */
 
 img {
@@ -2417,6 +2412,11 @@ select, input, input.r, input[name="nofilter_dataDir"], textarea[name="i2cpOpts"
 .iframed .mainsection#snarkCommentSection {
   margin-bottom: 1px !important;
 }
+
+.iframed #snarkTorrentEditSection + #snarkCommentSection {
+  margin-top: -1px;
+}
+
 #snarkCommentSection > input:not(:checked) + .toggleview {
   margin-bottom: -1px !important;
 }
@@ -3299,11 +3299,12 @@ span.trackerName::before {
   display: inline-block;
 }
 
-.info_tracker:hover, .info_tracker:hover a {
+.info_tracker:hover, .info_tracker:hover a,
+#snarkTorrentEdit .info_tracker, #snarkTorrentEdit .info_tracker a {
   color: #d2baff;
 }
 
-.info_tracker:hover {
+.info_tracker:hover, #snarkTorrentEdit .info_tracker {
   box-shadow: 0 0 0 1px #202, inset 0 0 0 1px rgba(96,32,96,.3);
   background: var(--tracker_hover) no-repeat left 3px center / 14px, linear-gradient(180deg,#313 50%, #101 50%);
 }
@@ -4520,12 +4521,18 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
 }
 
 #snarkTorrentEdit th {
+  padding: 10px 20px;
   border-top: var(--border_inner);
   border-bottom: var(--border_inner);
 }
 
 #addCommentText {
   padding: 8px 9px !important;
+}
+
+#snarkTorrentEdit textarea {
+  margin: 0;
+  width: 100%;
 }
 
 #snarkTorrentEdit th, #snarkTorrentEdit td {
@@ -4548,10 +4555,35 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
   text-align: left;
 }
 
+#snarkTorrentEdit th:nth-child(4), #snarkTorrentEdit td:nth-child(4) {
+  padding-right: 10%;
+}
+
 #snarkTorrentEdit tfoot td {
+  padding: 12px 10px !important;
   text-align: center !important;
   font-weight: 700;
   font-style: italic;
+  box-shadow: inset 0 0 0 1px #313;
+  background: #130013;
+}
+
+#snarkTorrentEdit tfoot input {
+  float: right;
+}
+
+#snarkTorrentEdit .info_tracker {
+  padding-left: 22px;
+  min-width: 80px;
+  text-align: left;
+  border-radius: 0;
+  background: var(--tracker_hover) no-repeat left 6px center / 14px, linear-gradient(180deg,#313,#101);
+}
+
+#snarkTorrentEdit .info_tracker, #snarkTorrentEdit .info_tracker a {
+  font-weight: 700;
+  box-shadow: 0 0 0 1px #101, inset 0 0 0 1px rgba(96,32,96,.2);
+  pointer-events: none;
 }
 
 .snarkTorrentInfo tr:nth-child(n+2) td:nth-child(2) > * {
