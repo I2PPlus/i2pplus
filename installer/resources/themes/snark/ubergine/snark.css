@@ -1288,13 +1288,13 @@ tr:hover .uploaded {
   top: 1px;
   left: 1px;
   z-index: 1;
-  background: rgba(192,0,96,.4);
+  background: rgba(192,0,96,.6);
   box-shadow: inset 3px 3px 3px rgba(0,0,0,.8);
   border: none;
 }
 
 .active.seeding .txBarInner {
-  background: rgba(192,0,128,.4);
+  background: rgba(208,32,128,.8);
 }
 
 .txBarInner[style="width: calc(100% - 2px)"] {
@@ -1303,8 +1303,7 @@ tr:hover .uploaded {
 }
 
 .active.seeding .txBarInner[style="width: calc(100% - 2px)"] {
-  box-shadow: 0 0 0 1px #000, inset 0 2px 2px 3px rgba(255,255,255,.1);
-  background: linear-gradient(180deg, rgba(220,220,220,.05), rgba(255,255,255,.1), rgba(0,0,0,.3), rgba(0,0,0,.5)), linear-gradient(0deg, rgba(208,0,128,.4), rgba(224,0,128,.4));
+  background: linear-gradient(180deg, rgba(220,220,220,.05), rgba(255,255,255,.1), rgba(0,0,0,.3), rgba(0,0,0,.5)), linear-gradient(0deg, rgba(220,32,128,.4), rgba(255,96,160,.4));
 }
 
 .txBarInner::after {
