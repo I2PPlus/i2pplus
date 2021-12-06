@@ -90,7 +90,7 @@ class PacketHandler {
 
         //_context.statManager().createRateStat("udp.handleTime", "Time to handle a received packet after its been pulled off the queue", "Transport [UDP]", UDPTransport.RATES);
         //_context.statManager().createRateStat("udp.queueTime", "How long after a packet is received can we begin handling it", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.receivePacketSkew", "How long after packet was sent did we receive it", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.receivePacketSkew", "How long after packet sent did we receive it", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.droppedInvalidUnkown", "Age of dropped packet (unknown type)", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.droppedInvalidReestablish", "Age of dropped packet (no existing key, not establishment)", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.droppedInvalidEstablish", "Age of dropped packet (establishment, bad key)", "Transport [UDP]", UDPTransport.RATES);
