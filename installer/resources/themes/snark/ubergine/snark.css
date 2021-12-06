@@ -2400,6 +2400,14 @@ select, input, input.r, input[name="nofilter_dataDir"], textarea[name="i2cpOpts"
   margin-top: -1px;
 }
 
+.iframed .mainsection#snarkFiles hr {
+  margin-top: -1px;
+}
+
+.iframed .mainsection#snarkFiles .snarkDirInfo {
+  margin-top: 13px !important;
+}
+
 .iframed .mainsection .toggleview {
   margin-top: -10px !important;
 }
