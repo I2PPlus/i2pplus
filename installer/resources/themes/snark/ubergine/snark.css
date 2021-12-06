@@ -1272,7 +1272,7 @@ tr:hover .percentBarOuter, tr:hover .peerinfo .percentBarOuter {
 }
 
 .active.seeding .uploaded {
-  background: repeating-linear-gradient(90deg,#000,#000 5%,#808 5%,#808 10%);
+  background: repeating-linear-gradient(90deg,#000,#000 5%,#d30 5%,#d30 10%);
   background-size: 200%;
 /*  animation: linear uploading 1.5s 3.5s reverse infinite;*/
 }
