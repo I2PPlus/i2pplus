@@ -564,13 +564,11 @@ input.login:active {
 input.logout {
   padding: 7px 10px 7px 26px;
   background: var(--logout) no-repeat 8px center, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
-  background: var(--logout) no-repeat 8px center, linear-gradient(180deg,#020, #010);
   background-size: 15px, 100% !important;
 }
 
 input.logout:hover {
   background: var(--logout_hover) no-repeat 8px center, linear-gradient(180deg,#000, #010);
-  background: var(--logout_hover) no-repeat 8px center, linear-gradient(180deg,#020, #010);
   background-size: 15px, 100% !important;
 }
 
@@ -579,15 +577,17 @@ input.logout:active {
   background-size: 15px !important;
 }
 
-input.logout, input.logout:hover, input.logout:focus, input.logout:active {
+#info input.logout, #info input.logout:hover,
+#info input.logout:focus, #info input.logout:active {
   margin: -8px -8px -8px 8px !important;
+  float: none !important;
+  line-height: normal;
   border: none !important;
   border-left: 1px solid #131 !important;
   border-radius: 0;
   box-shadow: none !important;
+  background: var(--logout) no-repeat 8px center, linear-gradient(180deg,#020, #010);
   filter: none;
-  float: none !important;
-  line-height: normal;
 }
 
 input.reload, input.refresh, input[name="refresh"][disabled], .topbuttons .fakebutton {
@@ -891,6 +891,10 @@ select:hover, select:active, select:focus {
 select::-moz-focus-inner {
   outline: none !important;
   border: none !important;
+}
+
+input:active, .fakebutton:active {
+  text-shadow: none;
 }
 
 /* end buttons and inputs */
