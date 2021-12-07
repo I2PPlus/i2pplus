@@ -4537,18 +4537,14 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
   text-align: center;
 }
 
-#snarkTorrentEdit th:not(#add):not(#remove) {
-  background: none !important;
-}
-
 #snarkTorrentEdit #remove {
   font-size: 0 !important;
-  background: var(--nuke) no-repeat calc(25% + 8px) center / 16px;
+  background: var(--nuke) no-repeat calc(25% + 6px) center / 16px, var(--th);
 }
 
 #snarkTorrentEdit #add {
   font-size: 0 !important;
-  background: var(--add) no-repeat calc(25% + 7px) center / 16px;
+  background: var(--add) no-repeat calc(25% + 5px) center / 16px, var(--th);
 }
 
 #snarkTorrentEdit th:first-child, #snarkTorrentEdit td:first-child {
