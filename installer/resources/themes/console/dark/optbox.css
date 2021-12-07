@@ -3,9 +3,10 @@
   width: 20px;
   height: 20px;
   min-width: 0 !important;
-  outline: none;
+  display: inline-block;
   vertical-align: middle;
   box-sizing: border-box;
+  outline: none;
   border: var(--border);
   box-shadow: 0 0 0 1px #000, var(--highlight), inset 3px 3px 3px 1px #000;
   background: linear-gradient(180deg,#020,#001800);
@@ -24,16 +25,8 @@
 
 .optbox:hover, .optbox:focus {
   border: 1px solid #5a5 !important;
-  box-shadow: 0 0 1px 1px rgba(0,0,0,.9), 0 0 0 2px rgba(255,96,0,.7), inset 0 0 0 1px #101;
+  box-shadow: 0 0 1px 1px rgba(0,0,0,.9), 0 0 0 2px rgba(255,96,0,.8), inset 0 0 0 1px #020;
   background: #000;
-}
-
-.optbox[disabled] {
-  box-shadow: none;
-  background: #000;
-  opacity: .8;
-  filter: none;
-  pointer-events: none;
 }
 
 .optbox::before {
@@ -53,10 +46,12 @@
 
 .optbox[type=checkbox]::before {
   border-radius: 1px;
+  box-shadow: inset 0 0 2px 1px #6b6, 0 0 1px 1px #000;
 }
 
 .optbox[type=radio]:checked::before {
   border-radius: 50%;
+  background: radial-gradient(at center top, #5a5 55%, #131 90%);
 }
 
 .optbox:not(:checked)::before {
@@ -64,7 +59,14 @@
   transition: linear transform .05s;
 }
 
-.optbox[disabled]::before {
+.optbox[disabled] {
   box-shadow: none;
-  background: #383;
+  background: #000;
+  opacity: .8;
+  pointer-events: none;
+}
+
+.optbox[type][disabled]::before {
+  box-shadow: none;
+  background: #373;
 }
