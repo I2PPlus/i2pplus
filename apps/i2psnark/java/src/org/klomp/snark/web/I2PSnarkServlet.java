@@ -5349,8 +5349,12 @@ public class I2PSnarkServlet extends BasicServlet {
                 iter.remove();
         }
         if (!newTrackers.isEmpty()) {
-            buf.append("<tr><th>").append(_t("Add Tracker")).append("</th><th>").append(_t("Announce URL"))
-               .append("</th><th>").append("Primary").append("</th><th id=\"add\">").append("Add").append("</th></tr>\n");
+            buf.append("<tr><th>").append(_t("Add Tracker")).append("</th><th>");
+            if (announce == null)
+                buf.append(_t("Announce URL")).append("</th><th>").append(_t("Primary"));
+            else
+                buf.append("</th><th>");
+            buf.append("</th><th id=\"add\">").append("Add").append("</th></tr>\n");
             for (Tracker t : newTrackers) {
                 String name = t.name;
                 int hc = t.announceURL.hashCode();
