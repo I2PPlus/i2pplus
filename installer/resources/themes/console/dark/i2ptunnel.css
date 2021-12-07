@@ -956,10 +956,6 @@ th .help:hover::after, th .help:focus::after {
   display: inline-block;
 }
 
-.multiOption input {
-  vertical-align: sub;
-}
-
 .multiOption#isServer {
   padding-left: 28px;
   background: var(--server) no-repeat 4px center;
