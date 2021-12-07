@@ -4494,13 +4494,6 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
   border-bottom: var(--border_inner);
 }
 
-#snarkTorrentEdit th:first-child::after {
-  content: "";
-  display: inline-block;
-  width: 10px;
-  vertical-align: middle;
-}
-
 #snarkTorrentEdit td:nth-child(n+2) {
   border-left: var(--border_hard);
 }
@@ -4552,6 +4545,10 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
 
 #snarkTorrentEdit .header th {
   background: var(--th);
+}
+
+#snarkTorrentEdit .header th:first-child[colspan="4"] {
+  padding-left: 10px;
 }
 
 body:not(.iframed) #snarkTorrentEdit .header:first-of-type th:first-child {
@@ -5258,6 +5255,16 @@ td.snarkTorrentAction input[type=submit] {
   }
   .stopped.incomplete .snarkTorrentPeerCount b::before, .inactive.neterror .snarkTorrentPeerCount b::before {
     border-color: transparent #900 transparent transparent !important;
+  }
+  .iframed #snarkTorrentEditSection + #snarkCommentSection,
+  .iframed #snarkTorrentEditSection {
+    margin-top: -7px;
+  }
+  .iframed #snarkTorrentEditSection + #snarkCommentSection {
+   margin-bottom: 6px;
+  }
+  .iframed #snarkTorrentEditSection hr {
+    margin-bottom: 6px;
   }
 }
 

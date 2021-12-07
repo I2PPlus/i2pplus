@@ -5380,7 +5380,7 @@ public class I2PSnarkServlet extends BasicServlet {
         } else if (com.length() > 0) {
             com = DataHelper.escapeHTML(com).replace("\r\n", "<br>").replace("\n", "<br>");
         }
-        buf.append("<tr><th colspan=\"4\">").append(_t("Torrent Comment")).append("</th></tr>\n");
+        buf.append("<tr class=\"header\"><th colspan=\"4\">").append(_t("Torrent Comment")).append("</th></tr>\n");
         buf.append("<tr><td colspan=\"4\" id=\"addCommentText\"><textarea name=\"nofilter_newTorrentComment\" cols=\"88\" rows=\"4\"");
         if (isRunning)
             buf.append(" readonly");
