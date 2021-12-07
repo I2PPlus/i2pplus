@@ -3819,102 +3819,81 @@ td.snarkTorrentPeerCount {
 
 /* custom radio/checkboxes */
 
-input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked,
-input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
+.optbox {
   position: relative;
-  width: 20px !important;
-  height: 20px !important;
+  width: 20px;
+  height: 20px;
   outline: none;
-  vertical-align: middle !important;
+  vertical-align: middle;
   box-sizing: border-box;
-  border: var(--border) !important;
-  background: linear-gradient(180deg,#020, #001800);
+  border: var(--border);
+  background: linear-gradient(180deg,#020,#001800);
   -moz-appearance: none;
   -webkit-appearance: inherit;
   filter: drop-shadow(0 0 2px #000);
   will-change: transform;
 }
 
-input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
+.optbox[type=checkbox] {
   border-radius: 1px;
   box-shadow: var(--highlight), inset 3px 3px 3px 1px #000;
 }
 
-input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
+.optbox[type=radio] {
   border-radius: 50%;
   box-shadow: var(--highlight), inset 3px 3px 3px 1px #000;
-}
-
-input[type=checkbox]:checked::before, input[type=radio]:checked::before,
-input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
-  position: absolute;
-  transition: linear transform .05s;
-  transform: scale(1);
 }
 
 .optbox:not(:checked) {
   box-shadow: var(--highlight), inset 3px 3px 3px 1px #000;
 }
 
-.optbox:active {
-  background: #000 !important;
+.optbox:hover, .optbox:focus {
+  border: 1px solid #5a5 !important;
+  box-shadow: 0 0 1px 1px rgba(0,0,0,.9), 0 0 0 2px #f60, inset 0 0 0 1px #101;
+  background: #000;
+  filter: drop-shadow(0 0 1px #f60);
 }
 
-input[type=checkbox]:checked::before, input[type=checkbox]:not(:checked)::before {
+.optbox[disabled] {
+  box-shadow: none;
+  background: #000;
+  opacity: .8;
+  filter: none;
+  pointer-events: none;
+}
+
+.optbox::before {
   width: 10px;
   height: 10px;
+  position: absolute;
   top: 4px;
   left: 4px;
+  display: inline-block;
   line-height: .8;
-  color: #5a5;
+  box-shadow: inset 0 0 0 1px #6b6, 0 0 0 1px #000;
+  background: linear-gradient(135deg, #5a5, #383);
+  transform: scale(1);
+  transition: linear transform .05s;
+  content: "";
+}
+
+.optbox[type=checkbox]::before {
   border-radius: 1px;
-  box-shadow: inset 0 0 0 1px #6b6, 0 0 0 1px #000;
-  background: linear-gradient(135deg, #5a5, #383);
-  content: "";
 }
 
-input[type=radio]:checked::before {
-  width: 10px;
-  height: 10px;
-  left: 4px;
-  top: 4px;
+.optbox[type=radio]:checked::before {
   border-radius: 50%;
-  box-shadow: inset 0 0 0 1px #6b6, 0 0 0 1px #000;
-  background: linear-gradient(135deg, #5a5, #383);
-  content: "";
 }
 
-input[type=checkbox]:checked:hover::before {
-  color: #6b6;
-}
-
-input[type=radio]:checked:hover::before {
-  background: #6b6;
-}
-
-input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
-  color: transparent;
-  background: transparent;
+.optbox:not(:checked)::before {
   transform: scale(0);
   transition: linear transform .05s;
 }
 
-input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus, input[type=radio]:focus {
-  width: 20px !important;
-  height: 20px !important;
-  border: 1px solid #5a5 !important;
-  box-shadow: 0 0 2px #f60 !important;
-  background: #000;
-  filter: drop-shadow(0 0 1px #f60) !important;
-}
-
-input[type=checkbox][disabled], input[type=radio][disabled], input[type=checkbox][disabled]:hover, input[type=radio][disabled]:hover,
-input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, input[type=checkbox][disabled]:checked:hover, input[type=radio][disabled]:checked:hover {
-  border: var(--border) !important;
-  box-shadow: none !important;
-  background: #000;
-  opacity: .5 !important;
-  filter: none !important;
+.optbox[disabled]::before {
+  box-shadow: none;
+  background: #383;
 }
 
 /* end custom radios/checkboxes */
