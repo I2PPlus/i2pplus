@@ -4528,6 +4528,8 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
 #snarkTorrentEdit textarea {
   margin: 0;
   width: 100%;
+  height: 80px;
+  min-height: 80px;
 }
 
 #snarkTorrentEdit th, #snarkTorrentEdit td {
