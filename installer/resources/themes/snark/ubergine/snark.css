@@ -4527,12 +4527,12 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
 
 #snarkTorrentEdit #remove {
   font-size: 0 !important;
-  background: var(--nuke) no-repeat calc(25% + 7px) center / 18px, var(--th);
+  background: var(--nuke) no-repeat center center / 18px, var(--th);
 }
 
 #snarkTorrentEdit #add {
   font-size: 0 !important;
-  background: var(--add) no-repeat calc(25% + 6px) center / 18px, var(--th);
+  background: var(--add) no-repeat center center / 18px, var(--th);
 }
 
 #snarkTorrentEdit th:first-child, #snarkTorrentEdit td:first-child {
@@ -4544,10 +4544,6 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
 #snarkTorrentEdit td:nth-child(2) {
   width: 40%;
   text-align: left;
-}
-
-#snarkTorrentEdit th:nth-child(4), #snarkTorrentEdit td:nth-child(4) {
-  padding-right: 10%;
 }
 
 #snarkTorrentEdit tfoot, #snarkTorrentEdit tfoot tr {
@@ -6178,6 +6174,15 @@ td.snarkTorrentAction input[type=submit] {
   #torrentDisplay label {
     padding: 4px 16px;
     min-width: 110px;
+  }
+  #snarkTorrentEdit th:nth-child(4), #snarkTorrentEdit td:nth-child(4) {
+    padding-right: 10%;
+  }
+  #snarkTorrentEdit #remove {
+    background-position: calc(25% + 7px) center;
+  }
+  #snarkTorrentEdit #add {
+    background-position: calc(25% + 6px) center;
   }
 }
 
