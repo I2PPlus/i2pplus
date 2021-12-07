@@ -1991,7 +1991,7 @@ input[name="nofilter_commentsName"]:focus::placeholder {
   opacity: 0;
 }
 
-input[type=text]:active, input[type=text]:focus, input.r:focus, input[name="nofilter_dataDir"]:focus, textarea:focus {
+input[type=text]:active, input[type=text]:focus, input.r:focus, input[name="nofilter_dataDir"]:focus, textarea:focus:not([readonly]) {
   outline: none;
   color: #fff;
   box-shadow: inset 0 0 0 1px #ffffcf, inset 3px 3px 3px rgba(0,0,0,.5);
@@ -4227,8 +4227,8 @@ th.snarkTorrentPeerCount img {
 }
 
 input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
-  width: 20px;
-  height: 20px;
+  width: 21px;
+  height: 21px;
   position: relative;
   vertical-align: middle;
   border: var(--border_hard);
@@ -4246,8 +4246,8 @@ input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disable
 
 input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
   position: relative;
-  width: 20px;
-  height: 20px;
+  width: 21px;
+  height: 21px;
   box-sizing: border-box;
   vertical-align: middle;
   box-shadow: inset 1px 1px 1px rgba(92, 0, 92, .6), inset -1px -1px 1px #101, inset 3px 3px 2px rgba(0,0,0,.8);
@@ -4258,8 +4258,7 @@ input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input
   appearance: none;
 }
 
-input[type=checkbox]:checked::before, input[type=radio]:checked::before,
-input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
+.optbox::before {
   position: absolute;
   font-size: 0;
   transition: linear all .05s;
@@ -4270,8 +4269,8 @@ input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::bef
 input[type=checkbox]:checked::before, input[type=checkbox]:not(:checked)::before {
   width: 10px;
   height: 10px;
-  top: 4px;
-  left: 4px;
+  top: 5px;
+  left: 5px;
   line-height: .8;
   border-radius: 1px;
   box-shadow: inset 0 0 0 1px rgba(192,48,0,.5), 0 0 0 1px #000;
@@ -4284,8 +4283,8 @@ input[type=checkbox]:checked::before {
 }
 
 input[type=radio]:checked::before {
-  width: 9px;
-  height: 9px;
+  width: 10px;
+  height: 10px;
   top: 5px;
   left: 5px;
   border-radius: 50%;
@@ -4294,42 +4293,24 @@ input[type=radio]:checked::before {
   content: "";
 }
 
-.iframed input[type=radio]:checked::before {
-  top: 24%;
-}
-
-input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
+.optbox:not(:checked)::before {
   transform: scale(0);
 }
 
 .optbox:hover, .optbox:focus {
-  width: 20px;
-  height: 20px;
   box-shadow: 0 0 0 2px rgba(255,96,0,.8), inset 0 0 0 1px #101;
   background: #101;
 }
 
-input[type=radio][disabled]:hover, input[type=radio][disabled]:checked:hover {
-  border: var(--border_hard);
-  box-shadow: none;
-}
-
-input[type=checkbox][disabled], input[type=radio][disabled], input[type=checkbox][disabled]:hover, input[type=radio][disabled]:hover,
-input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, input[type=checkbox][disabled]:checked:hover, input[type=radio][disabled]:checked:hover {
-  box-shadow: none;
-  opacity: .5;
-}
-
 .optbox[disabled] {
+  box-shadow: none !important;
+  background: #000;
+  opacity: .7;
   pointer-events: none;
 }
 
-#trackerselect input[type=radio], #trackerselect input[type=checkbox] {
+#trackerselect .optbox {
   border: 1px solid #414 !important;
-}
-
-.iframed #trackerselect tr:last-child input[type=radio]:checked::before {
-  top: 24%;
 }
 
 /* option sliders */
@@ -4506,6 +4487,7 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
 
 #snarkTorrentEdit {
   margin: 7px 0 0;
+  background: none;
 }
 
 .snarkTorrentInfo td, #snarkTorrentEdit td {
@@ -4522,24 +4504,21 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
   border-bottom: var(--border_hard);
 }
 
-#snarkTorrentEdit td:nth-child(n+2) {
-  border-left: var(--border_hard);
-}
-
 #snarkTorrentEdit th {
   padding: 10px 20px;
   border-top: var(--border_inner);
   border-bottom: var(--border_inner);
 }
 
-#snarkTorrentEdit #remove {
-  font-size: 0 !important;
-  background: var(--nuke) no-repeat calc(25% + 8px) center / 16px, var(--th);
+#snarkTorrentEdit th:first-child::after {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  vertical-align: middle;
 }
 
-#snarkTorrentEdit #add {
-  font-size: 0 !important;
-  background: var(--add) no-repeat calc(25% + 7px) center / 16px, var(--th);
+#snarkTorrentEdit td:nth-child(n+2) {
+  border-left: var(--border_hard);
 }
 
 #addCommentText {
@@ -4556,13 +4535,23 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
   text-align: center;
 }
 
+#snarkTorrentEdit th:not(#add):not(#remove) {
+  background: none !important;
+}
+
+#snarkTorrentEdit #remove {
+  font-size: 0 !important;
+  background: var(--nuke) no-repeat calc(25% + 8px) center / 16px;
+}
+
+#snarkTorrentEdit #add {
+  font-size: 0 !important;
+  background: var(--add) no-repeat calc(25% + 7px) center / 16px;
+}
+
 #snarkTorrentEdit th:first-child, #snarkTorrentEdit td:first-child {
   width: 20%;
   text-align: right;
-}
-
-#snarkTorrentEdit tr:first-child, #snarkTorrentEdit tr:first-child th:first-child {
-  border-radius: 4px 0 0 0 !important;
 }
 
 #snarkTorrentEdit th:nth-child(2), #snarkTorrentEdit th[colspan="4"],
@@ -4584,6 +4573,25 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
   background: #130013;
 }
 
+body:not(.iframed) #snarkTorrentEdit :not(tfoot) tr:first-child {
+  border-radius: 5px 5px 0 0 !important;
+  background: var(--th);
+}
+
+body:not(.iframed) #snarkTorrentEdit :not(tfoot) tr:first-child td:first-child {
+  border-radius: 5px 0 0 0 !important;
+}
+
+body:not(.iframed) #snarkTorrentEdit :not(tfoot) tr:first-child td:last-child {
+  border-radius: 0 5px 0 0 !important;
+}
+
+body:not(.iframed) #snarkTorrentEdit tfoot,
+body:not(.iframed) #snarkTorrentEdit tfoot tr {
+  background: none;
+  border-radius: 5px 5px 0 0 !important;
+}
+
 #snarkTorrentEdit tfoot input {
   float: right;
 }
@@ -4594,8 +4602,7 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
   text-align: left;
   font-size: 95%;
   border-radius: 0;
-  box-shadow: 0 0 0 1px #101, inset 0 0 0 1px rgba(96,32,96,.2);
-  box-shadow: 0 0 0 1px #202, inset 0 0 0 1px rgba(96,32,96,.3);
+  box-shadow: 0 0 0 1px #000, inset 0 0 0 1px #303;
   background: var(--tracker_hover) no-repeat left 6px center / 14px, linear-gradient(180deg,#313,#101);
 }
 
