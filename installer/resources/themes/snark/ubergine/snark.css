@@ -4296,10 +4296,6 @@ input[type=radio]:checked::before {
   pointer-events: none;
 }
 
-#trackerselect .optbox {
-  border: 1px solid #414 !important;
-}
-
 /* option sliders */
 
 .configOption input[type=checkbox], #commentsToggle input[type=checkbox] {
