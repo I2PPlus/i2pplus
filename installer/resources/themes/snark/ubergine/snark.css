@@ -4226,9 +4226,10 @@ th.snarkTorrentPeerCount img {
   animation: ease-out active .5s forwards;
 }
 
-input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
-  width: 21px;
-  height: 21px;
+.optbox, .optbox:checked, .optbox:not(:checked),
+.optbox[disabled], .optbox:not(:checked)[disabled] {
+  width: 22px;
+  height: 22px;
   position: relative;
   vertical-align: middle;
   border: var(--border_hard);
@@ -4240,61 +4241,47 @@ input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disable
   appearance: none;
 }
 
-#torrentOrderControl input[type=checkbox], #torrentOrderControl input[type=checkbox]:checked, #torrentOrderControl input[type=checkbox][disabled], #torrentOrderControl input[type=checkbox][disabled]:checked {
+#torrentOrderControl input[type=checkbox], #torrentOrderControl input[type=checkbox]:checked,
+#torrentOrderControl input[type=checkbox][disabled], #torrentOrderControl input[type=checkbox][disabled]:checked {
   border: var(--border_inner);
 }
 
-input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
-  position: relative;
-  width: 21px;
-  height: 21px;
-  box-sizing: border-box;
-  vertical-align: middle;
-  box-shadow: inset 1px 1px 1px rgba(92, 0, 92, .6), inset -1px -1px 1px #101, inset 3px 3px 2px rgba(0,0,0,.8);
-  border: var(--border_hard);
+.optbox[type=radio], .optbox[type=radio]:checked, .optbox[type=radio][disabled], .optbox[type=radio][disabled]:checked {
   border-radius: 50%;
-  background: var(--tile) #212;
-  background-size: 96px;
-  appearance: none;
 }
 
 .optbox::before {
+  width: 50%;
+  height: 50%;
   position: absolute;
+  top: 25%;
+  left: 25%;
+  line-height: .8;
   font-size: 0;
-  transition: linear all .05s;
+  border-radius: 1px;
+  box-shadow: 0 0 0 1px #730, 0 0 0 2px #101, inset 1px 1px 3px #f90;
+  transition: linear all .1s;
   transform: scale(1);
   will-change: transform;
 }
 
-input[type=checkbox]:checked::before, input[type=checkbox]:not(:checked)::before {
-  width: 10px;
-  height: 10px;
-  top: 5px;
-  left: 5px;
-  line-height: .8;
-  border-radius: 1px;
-  box-shadow: inset 0 0 0 1px rgba(192,48,0,.5), 0 0 0 1px #000;
-  background: #f60;
-  content: "";
-}
-
-input[type=checkbox]:checked::before {
+.optbox:checked::before {
   overflow: hidden;
-}
-
-input[type=radio]:checked::before {
-  width: 10px;
-  height: 10px;
-  top: 5px;
-  left: 5px;
-  border-radius: 50%;
-  box-shadow: 0 0 0 1px #730, 0 0 0 2px #101, inset 1px 1px 3px #f90;
   background: #f60;
   content: "";
+}
+
+.optbox[disabled]::before {
+  box-shadow: none;
+  opacity: .7;
 }
 
 .optbox:not(:checked)::before {
   transform: scale(0);
+}
+
+input[type=radio]:checked::before {
+  border-radius: 50%;
 }
 
 .optbox:hover, .optbox:focus {
@@ -4539,12 +4526,12 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
 
 #snarkTorrentEdit #remove {
   font-size: 0 !important;
-  background: var(--nuke) no-repeat calc(25% + 6px) center / 16px, var(--th);
+  background: var(--nuke) no-repeat calc(25% + 7px) center / 18px, var(--th);
 }
 
 #snarkTorrentEdit #add {
   font-size: 0 !important;
-  background: var(--add) no-repeat calc(25% + 5px) center / 16px, var(--th);
+  background: var(--add) no-repeat calc(25% + 6px) center / 18px, var(--th);
 }
 
 #snarkTorrentEdit th:first-child, #snarkTorrentEdit td:first-child {
