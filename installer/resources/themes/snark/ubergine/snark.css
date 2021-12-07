@@ -3282,7 +3282,7 @@ span.trackerName::before {
 
 .info_tracker {
   margin: 2px;
-  padding: 1px 6px 1px 18px;
+  padding: 1px 8px 1px 18px;
   display: inline-block;
   max-width: 130px;
   vertical-align: middle;
@@ -3306,17 +3306,18 @@ span.trackerName::before {
   display: inline-block;
 }
 
-.info_tracker:hover, .info_tracker:hover a,
-#snarkTorrentEdit .info_tracker, #snarkTorrentEdit .info_tracker a {
-}
-
 .info_tracker:hover {
   box-shadow: 0 0 0 1px #202, inset 0 0 0 1px rgba(96,32,96,.3);
   background: var(--tracker_hover) no-repeat left 3px center / 14px, linear-gradient(180deg,#313 50%, #101 50%);
 }
 
+.info_tracker:hover a, .info_tracker a:hover {
+  color: #d2baff;
+}
+
 .info_tracker:active, .info_tracker:active a {
   color: #fff;
+  text-shadow: none !important;
 }
 
 .info_tracker:active {
