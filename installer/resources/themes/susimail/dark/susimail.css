@@ -9,6 +9,12 @@
 @import url(../images/images.css);
 @import url(images/images.css);
 
+:root {
+  --border: 1px solid #252;
+  --border_soft: 1px solid #131;
+  --highlight: inset 0 0 0 1px #000;
+}
+
 html {
   min-height: 100%;
   background: #000;
@@ -32,16 +38,12 @@ pre, textarea, p.mailbody {
 
 body {
   margin: 5px;
+  min-width: 920px;
   font-size: 9pt;
   color: #ee9;
-/*  background: #010 url(/themes/console/dark/images/camotile2.png);
-  background: repeating-linear-gradient(180deg,rgba(0,0,0,.9) 2px, rgba(0,8,0,.5) 4px), var(--camo) #010;*/
-  background-size: 100%, 1024px;
-  min-width: 920px;
 }
 
 body.iframed {
-  background: transparent !important;
   margin: -1px -1px -5px;
 }
 
