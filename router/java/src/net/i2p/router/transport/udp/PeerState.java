@@ -222,7 +222,7 @@ public class PeerState {
     private static final int MIN_CONCURRENT_MSGS = 8;
     /** @since 0.9.42 */
 //    private static final int INIT_CONCURRENT_MSGS = 20;
-    private static final int INIT_CONCURRENT_MSGS = 32;
+    private static final int INIT_CONCURRENT_MSGS = 64;
     /** how many concurrent outbound messages do we allow OutboundMessageFragments to send
         This counts full messages, NOT fragments (UDP packets)
      */
@@ -369,10 +369,11 @@ public class PeerState {
         else
             _rttDeviation = _rtt;
 
-        _inboundMessages = new HashMap<Long, InboundMessageState>(8);
+//        _inboundMessages = new HashMap<Long, InboundMessageState>(8);
+        _inboundMessages = new HashMap<Long, InboundMessageState>(32);
         _outboundMessages = new CachedIteratorCollection<OutboundMessageState>();
         //_outboundQueue = new CoDelPriorityBlockingQueue(ctx, "UDP-PeerState", 32);
-        _outboundQueue = new PriBlockingQueue<OutboundMessageState>(ctx, "UDP-PeerState", 32);
+        _outboundQueue = new PriBlockingQueue<OutboundMessageState>(ctx, "UDP-PeerState", 64);
         _ackedMessages = new AckedMessages();
         // all createRateStat() moved to EstablishmentManager
         _remoteIP = remoteIP;

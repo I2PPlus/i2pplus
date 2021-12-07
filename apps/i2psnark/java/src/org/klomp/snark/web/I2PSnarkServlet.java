@@ -5318,17 +5318,13 @@ public class I2PSnarkServlet extends BasicServlet {
         if (announce != null)
             annlist.add(announce);
         if (!annlist.isEmpty()) {
-            buf.append("<tr><th>").append(_t("Active Trackers")).append("</th><th>").append(_t("Announce URL"))
-               .append("</th><th>").append(_t("Primary")).append("</th><th>")
-               .append(_t("Delete"))
-               .append("</th></tr>\n");
+            buf.append("<tr><th>").append(_t("Active Trackers")).append("</th><th>").append(_t("Announce URL")).append("</th><th>")
+               .append(_t("Primary")).append("</th><th id=\"remove\">").append(_t("Delete")).append("</th></tr>\n");
             for (String s : annlist) {
                 int hc = s.hashCode();
                 buf.append("<tr><td>");
                 s = DataHelper.stripHTML(s);
-                buf.append("<span class=\"info_tracker\">")
-                   .append(getShortTrackerLink(s, snark.getInfoHash()))
-                   .append("</span> ")
+                buf.append("<span class=\"info_tracker\">").append(getShortTrackerLink(s, snark.getInfoHash())).append("</span>")
                    .append("</td><td>").append(s).append("</td><td>")
                    .append("<input type=\"radio\" class=\"optbox\" name=\"primary\" ");
                 if (s.equals(announce))
@@ -5353,16 +5349,18 @@ public class I2PSnarkServlet extends BasicServlet {
                 iter.remove();
         }
         if (!newTrackers.isEmpty()) {
-            buf.append("<tr><th>").append(_t("Add Tracker")).append("</th><th>").append(_t("Announce URL"))
-               .append("</th><th>").append("Primary").append("</th><th>")
-               .append("Add").append("</th></tr>\n");
+            buf.append("<tr><th>").append(_t("Add Tracker")).append("</th><th>");
+            if (announce == null)
+                buf.append(_t("Announce URL")).append("</th><th>").append(_t("Primary"));
+            else
+                buf.append("</th><th>");
+            buf.append("</th><th id=\"add\">").append("Add").append("</th></tr>\n");
             for (Tracker t : newTrackers) {
                 String name = t.name;
                 int hc = t.announceURL.hashCode();
                 String announceURL = t.announceURL.replace("&#61;", "=");
-                buf.append("<tr><td><span class=\"info_tracker\">")
-                   .append(name)
-                   .append("</span></td><td>").append(announceURL).append("</td><td>")
+                buf.append("<tr><td><span class=\"info_tracker\">").append(name).append("</span></td><td>")
+                   .append(announceURL).append("</td><td>")
                    .append("<input type=\"radio\" class=\"optbox\" name=\"primary\" value=\"")
                    .append(hc).append("\"");
                 if (isRunning)
