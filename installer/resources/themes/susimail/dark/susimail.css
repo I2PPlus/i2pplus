@@ -2502,6 +2502,7 @@ tr.mailbody td {
 
 @media screen and (min-width: 1500px) {
   body, td, textarea, input, div, p.mailbody, th, a, select {font-size: 10pt !important}
+  a[class^="link"] {font-size: 95% !important}
   #mailbox th {font-size: 70% !important}
   td {padding: 3px 5px}
   p.mailbody + p.info {
