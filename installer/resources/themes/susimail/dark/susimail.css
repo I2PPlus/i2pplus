@@ -17,6 +17,9 @@
   --border_soft: 1px solid #131;
   --highlight: inset 0 0 0 1px #000;
   --btn: linear-gradient(180deg,#001000,#000 5%,#000 95%,#001000);
+  --btn_hover: linear-gradient(180deg,#000,#010);
+  --btn_shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
+  --btn_shadow_hover: var(--highlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
   --btn_shadow_active: var(--highlight), inset 3px 3px 3px 2px rgba(0,0,0,.6);
   --border: 1px solid #141;
   --badge: linear-gradient(180deg,#020,#010);
@@ -411,8 +414,7 @@ input[type=submit], input[type=reset], #settings, .topbuttons .fakebutton {
   text-shadow: 0 1px 1px #000;
   opacity: 1;
   cursor: pointer;
-  box-shadow: var(--highlight);
-  box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
+  box-shadow: var(--btn_shadow);
   border: 1px solid #000;
   border-radius: 2px;
   background: var(--btn);
@@ -430,7 +432,7 @@ input.cancel, #nukemail input.clearselection {
 }
 
 input.cancel:hover, #nukemail input.clearselection:hover {
-  background: var(--no_hover) no-repeat 8px center, linear-gradient(180deg,#000, #010);
+  background: var(--no_hover) no-repeat 8px center, var(--btn_hover);
   background-size: 12px, 100% !important;
 }
 
@@ -446,7 +448,7 @@ input.clearselection {
 
 input.clearselection:hover {
   background: #010 url(/themes/susimail/images/none.png) no-repeat 8px center;
-  background: url(/themes/susimail/images/none.png) no-repeat 8px center, linear-gradient(180deg,#000, #010);
+  background: url(/themes/susimail/images/none.png) no-repeat 8px center, var(--btn_hover);
 }
 
 input.clearselection:active {
@@ -460,7 +462,7 @@ input.delete, input.delete_attachment, input.really_delete {
 }
 
 input.delete:hover, input.delete_attachment:hover, input.really_delete:hover {
-  background: var(--delete_hover) no-repeat 8px center, linear-gradient(180deg,#000, #010);
+  background: var(--delete_hover) no-repeat 8px center, var(--btn_hover);
   background-size: 16px, 100% !important;
 }
 
@@ -475,11 +477,11 @@ input.download {
 }
 
 input.download:hover {
-  background: var(--download) no-repeat 8px center / 14px, linear-gradient(180deg,#000, #010);
+  background: var(--download) no-repeat 8px center / 14px, var(--btn_hover);
 }
 
 input.download:active {
-  background: var(--download) no-repeat 8px center / 14px, linear-gradient(180deg,#000, #010);
+  background: var(--download) no-repeat 8px center / 14px, var(--btn_hover);
 }
 
 input.offline {
@@ -489,7 +491,7 @@ input.offline {
 }
 
 input.offline:hover {
-  background: var(--offline_hover) no-repeat 8px center, linear-gradient(180deg,#000, #010);
+  background: var(--offline_hover) no-repeat 8px center, var(--btn_hover);
   background-size: 14px, 100% !important;
 }
 
@@ -504,7 +506,7 @@ input.list, input.moveto, #pagenav input.switchto {
 }
 
 input.list:hover, input.moveto:hover, #pagenav input.switchto:hover {
-  background: var(--folder_hover) no-repeat 8px center, linear-gradient(180deg,#000, #010);
+  background: var(--folder_hover) no-repeat 8px center, var(--btn_hover);
 }
 
 input.list:active, input.moveto:active, #pagenav input.switchto:active {
@@ -518,29 +520,25 @@ input.forward {
 }
 
 input.forward:hover {
-  background: var(--forward_hover) no-repeat 8px center, linear-gradient(180deg,#000, #010);
+  background: var(--forward_hover) no-repeat 8px center / 14px, var(--btn_hover) !important;
   background-size: 14px, 100% !important;
 }
 
 input.forward:active {
-  background: #f60 var(--forward_active) no-repeat 8px center;
-  background-size: 14px !important;
+  background: #f60 var(--forward_active) no-repeat 8px center / 14px !important;
 }
 
 input.login {
   padding: 7px 10px 7px 26px;
-  background: var(--login) no-repeat 8px center, var(--btn);
-  background-size: 15px, 100% !important;
+  background: var(--login) no-repeat 8px center / 15px, var(--btn) !important;
 }
 
 input.login:hover {
-  background: var(--login_hover) no-repeat 8px center, linear-gradient(180deg,#000, #010);
-  background-size: 15px, 100% !important;
+  background: var(--login_hover) no-repeat 8px center / 15px , var(--btn_hover) !important;
 }
 
 input.login:active {
-  background: #f60 var(--login_active) no-repeat 8px center;
-  background-size: 14px !important;
+  background: #f60 var(--login_active) no-repeat 8px center / 15px !important;
 }
 
 #info {
@@ -549,18 +547,15 @@ input.login:active {
 
 input.logout {
   padding: 7px 10px 7px 26px;
-  background: var(--logout) no-repeat 8px center, var(--btn);
-  background-size: 15px, 100% !important;
+  background: var(--logout) no-repeat 8px center / 15px, var(--btn) !important;
 }
 
 input.logout:hover {
-  background: var(--logout_hover) no-repeat 8px center, linear-gradient(180deg,#000, #010);
-  background-size: 15px, 100% !important;
+  background: var(--logout_hover) no-repeat 8px center / 15px, var(--btn_hover) !important;
 }
 
 input.logout:active {
-  background: #f60 var(--logout_active) no-repeat 8px center;
-  background-size: 15px !important;
+  background: #f60 var(--logout_active) no-repeat 8px center / 15px !important;
 }
 
 #info input.logout, #info input.logout:hover,
@@ -587,8 +582,7 @@ input.logout:active {
 
 input.reload, input.refresh, input[name="refresh"][disabled], .topbuttons .fakebutton {
   padding: 7px 10px 7px 26px;
-  background: var(--refresh) no-repeat 8px center, var(--btn) !important;
-  background-size: 13px, 100% !important;
+  background: var(--refresh) no-repeat 8px center / 13px, var(--btn) !important;
 }
 
 .topbuttons .fakebutton {
@@ -601,22 +595,20 @@ input[name="refresh"][disabled] {
 }
 
 input.reload:hover, input.refresh:hover, .fakebutton:hover {
-  background: var(--refresh_hover) no-repeat 8px center, linear-gradient(180deg,#000, #010) !important;
-  background-size: 13px, 100% !important;
+  background: var(--refresh_hover) no-repeat 8px center / 13px, var(--btn_hover) !important;
 }
 
 input.reload:active, input.refresh:active, .fakebutton:active {
-  background: #f60 var(--refresh_active) no-repeat 8px center !important;
-  background-size: 13px !important;
+  background: #f60 var(--refresh_active) no-repeat 8px center / 13px !important;
 }
 
 input.invertselection {
-  background: url(/themes/susimail/images/selection.png) no-repeat 8px center, var(--btn);
   padding: 7px 10px 7px 26px;
+  background: url(/themes/susimail/images/selection.png) no-repeat 8px center, var(--btn);
 }
 
 input.invertselection:hover {
-  background: url(/themes/susimail/images/selection.png) no-repeat 8px center, linear-gradient(180deg,#000, #010);
+  background: url(/themes/susimail/images/selection.png) no-repeat 8px center, var(--btn_hover);
 }
 
 input.invertselection:active {
@@ -629,7 +621,7 @@ input.show {
 }
 
 input.show:hover {
-  background: var(--yes_hover) no-repeat 8px center, linear-gradient(180deg,#000, #010);
+  background: var(--yes_hover) no-repeat 8px center, var(--btn_hover);
 }
 
 input.show:active {
@@ -643,7 +635,7 @@ input.markall {
 }
 
 input.markall:hover {
-  background: url(/themes/susimail/images/all.png) no-repeat 8px center, linear-gradient(180deg,#000, #010);
+  background: url(/themes/susimail/images/all.png) no-repeat 8px center, var(--btn_hover);
 }
 
 input.markall:active {
@@ -657,7 +649,7 @@ input.new {
 }
 
 input.new:hover {
-  background: var(--compose_hover) no-repeat 8px center, linear-gradient(180deg,#000, #010);
+  background: var(--compose_hover) no-repeat 8px center, var(--btn_hover);
   background-size: 14px, 100% !important;
 }
 
@@ -673,7 +665,7 @@ input.reply {
 }
 
 input.reply:hover {
-  background: var(--reply_hover) no-repeat 8px center, linear-gradient(180deg,#000, #010);
+  background: var(--reply_hover) no-repeat 8px center, var(--btn_hover);
   background-size: 14px, 100% !important;
 }
 
@@ -689,7 +681,7 @@ input.replyall {
 }
 
 input.replyall:hover {
-  background: var(--replyall_hover) no-repeat 8px center, linear-gradient(180deg,#000, #010);
+  background: var(--replyall_hover) no-repeat 8px center, var(--btn_hover);
   background-size: 14px, 100% !important;
 }
 
@@ -709,7 +701,7 @@ input.setpagesize, input.save {
 
 input.setpagesize:hover, input.setpagesize:focus, input.save:hover, input.save:focus {
   padding: 7px 10px 7px 26px;
-  background: var(--yes_hover) no-repeat 8px center, linear-gradient(180deg,#000, #010);
+  background: var(--yes_hover) no-repeat 8px center, var(--btn_hover);
 }
 
 input.setpagesize:active, input.save:active {
@@ -723,12 +715,12 @@ input.setpagesize {
 
 input.send {
   padding: 7px 10px 7px 26px;
-  background: var(--send) no-repeat 8px center, linear-gradient(180deg,#000, #010);
+  background: var(--send) no-repeat 8px center, var(--btn_hover);
   background-size: 16px, 100% !important;
 }
 
 input.send:hover {
-  background: var(--send_hover) no-repeat 8px center, linear-gradient(180deg,#000, #010);
+  background: var(--send_hover) no-repeat 8px center, var(--btn_hover);
   background-size: 16px, 100% !important;
 }
 
@@ -748,7 +740,7 @@ input.configure, #settings {
 }
 
 input.configure:hover, #settings:hover {
-  background: var(--configure_hover) no-repeat 8px center, linear-gradient(180deg,#000, #010);
+  background: var(--configure_hover) no-repeat 8px center, var(--btn_hover);
   background-size: 14px, 100% !important;
 }
 
@@ -764,7 +756,7 @@ input.saveas, input.saveasdraft {
 }
 
 input.saveas:hover, input.saveasdraft:hover {
-  background: var(--save_hover) no-repeat 8px center, linear-gradient(180deg,#000, #010);
+  background: var(--save_hover) no-repeat 8px center, var(--btn_hover);
 }
 
 input.saveas:active, input.saveasdraft:active {
@@ -777,7 +769,7 @@ input.new_upload {
 }
 
 input.new_upload:hover {
-  background: var(--attach_hover) no-repeat 8px center, linear-gradient(180deg,#000, #010);
+  background: var(--attach_hover) no-repeat 8px center, var(--btn_hover);
 }
 
 input.new_upload:active {
@@ -796,7 +788,7 @@ input.switchto, input.moveto {
 }
 
 input.switchto:hover, input.moveto:hover {
-  background: var(--folder_hover) no-repeat 8px center, linear-gradient(180deg,#000, #010);
+  background: var(--folder_hover) no-repeat 8px center, var(--btn_hover);
   background-size: 14px, 100% !important;
 }
 
@@ -809,7 +801,7 @@ input[type=submit]:hover, input[type=reset]:hover, input[type=submit]:focus, inp
 select:hover, select:focus, select:active, #settings:hover, #settings:focus {
   color: #f60;
   border: 1px solid #f60;
-  box-shadow: var(--highlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
+  box-shadow: var(--btn_shadow_hover);
 }
 
 input[type=submit]:active, input[type=reset]:active, #settings:active {
@@ -837,24 +829,23 @@ input[type=file]::file-selector-button {
   color: #494;
   border: 1px solid #000;
   border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
+  box-shadow: var(--btn_shadow);
   background: #000;
 }
 
 input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
   color: #f60;
   border: 1px solid #f60;
-  box-shadow: var(--highlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
-  background: #000;
+  box-shadow: var(--btn_shadow_hover);
   background: radial-gradient(at center bottom, rgba(96, 48, 0, .4) 0, rgba(0, 0, 0, 0) 80%), #000;
   cursor: pointer;
 }
 
 input[type=file]:active::file-selector-button {
-  border: 1px solid #f60;
-  background-color: #f60 !important;
   color: var(--ink) !important;
-  box-shadow: var(--highlight), inset 3px 3px 3px 2px #310 !important;
+  border: 1px solid #f60;
+  box-shadow: var(--btn_shadow_active) !important;
+  background-color: #f60 !important;
 }
 
 select {
@@ -864,7 +855,7 @@ select {
   color: #494;
   border: 1px solid #000;
   border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #151, inset 0 0 2px 1px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
+  box-shadow: var(--btn_shadow);
   background: var(--dropdown) no-repeat right 10px center / 10px, var(--btn);
   appearance: none;
 }
@@ -880,7 +871,7 @@ select option {
 select:hover, select:active, select:focus {
   cursor: pointer;
   color: #f60;
-  background: var(--dropdown_hover) no-repeat right 10px center / 10px, linear-gradient(180deg,#000, #010) !important;
+  background: var(--dropdown_hover) no-repeat right 10px center / 10px, var(--btn_hover) !important;
 }
 
 select::-moz-focus-inner {
@@ -923,7 +914,7 @@ input.firstpage[disabled]:hover, input[name="firstpage"][disabled]:hover {
 }
 
 input.firstpage:hover, input[name="firstpage"]:hover {
-  background: var(--first_hover) no-repeat center center, linear-gradient(180deg,#000, #010);
+  background: var(--first_hover) no-repeat center center, var(--btn_hover);
 }
 
 input.lastpage, input[name="lastpage"],
@@ -934,7 +925,7 @@ input.lastpage[disabled]:hover, input[name="lastpage"][disabled]:hover {
 }
 
 input.lastpage:hover, input[name="lastpage"]:hover {
-  background: var(--last_hover) no-repeat center center, linear-gradient(180deg,#000, #010);
+  background: var(--last_hover) no-repeat center center, var(--btn_hover);
 }
 
 input.prevpage, input.prev, input[name="prev"], input[name="prevpage"],
@@ -945,7 +936,7 @@ input.prevpage[disabled]:hover, input.prev[disabled]:hover, input[name="prev"][d
 }
 
 input[name="prev"]:hover, input[name="prevpage"]:hover {
-  background: var(--previous_hover.svg) no-repeat center center, linear-gradient(180deg,#000, #010);
+  background: var(--previous_hover.svg) no-repeat center center, var(--btn_hover);
 }
 
 input.nextpage, input.next, input[name="nextpage"], input[name="next"],
@@ -956,7 +947,7 @@ input.nextpage[disabled]:hover, input.next[disabled]:hover, input[name="nextpage
 }
 
 input.nextpage:hover, input.next:hover, input[name="nextpage"]:hover {
-  background: var(--next_hover) no-repeat center center, linear-gradient(180deg,#000, #010);
+  background: var(--next_hover) no-repeat center center, var(--btn_hover);
 }
 
 @supports (position: sticky) {
@@ -1178,7 +1169,7 @@ img.sort {
 a .sort:hover, a:focus .sort {
   opacity: 1 !important;
   border: 1px solid #f60;
-  background: linear-gradient(180deg,#000, #010);
+  background: var(--btn_hover);
 }
 
 img.sort:active {
@@ -2356,7 +2347,7 @@ tr.mailbody td {
   min-width: 110px;
   vertical-align: middle;
   text-align: center;
-  box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
+  box-shadow: var(--btn_shadow);
   border: 1px solid #000;
   border-radius: 2px;
   background: #000;
@@ -2368,7 +2359,7 @@ tr.mailbody td {
 
 #toggleHeaders:hover {
   border: 1px solid #f60;
-  box-shadow: var(--highlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000 !important;
+  box-shadow: var(--btn_shadow_hover) !important;
 }
 
 #toggleHeaders:hover a {
@@ -2376,7 +2367,7 @@ tr.mailbody td {
 }
 
 #toggleHeaders:active {
-  box-shadow: var(--highlight), inset 3px 3px 3px 2px #310 !important;
+  box-shadow: var(--btn_shadow_active) !important;
   background: #f60 !important;
 }
 
