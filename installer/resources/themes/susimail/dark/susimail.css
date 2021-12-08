@@ -17,7 +17,7 @@
   --border_soft: 1px solid #131;
   --highlight: inset 0 0 0 1px #000;
   --btn: linear-gradient(180deg,#001000,#000 5%,#000 95%,#001000);
-  --btn_shadow_active: var(--highlight), inset 3px 3px 3px 2px rgba(0,0,0,.8);
+  --btn_shadow_active: var(--highlight), inset 3px 3px 3px 2px rgba(0,0,0,.6);
   --border: 1px solid #141;
   --badge: linear-gradient(180deg,#020,#010);
   --th: linear-gradient(180deg,#010,#000);
@@ -584,9 +584,18 @@ input.logout:active {
   border: none !important;
   border-left: 1px solid #131 !important;
   border-radius: 0;
-  box-shadow: none !important;
-  background: var(--logout) no-repeat 8px center, var(--badge);
+  box-shadow: none;
+  background: var(--logout) no-repeat 8px center / 14px, var(--badge) !important;
   filter: none;
+}
+
+#info input.logout:hover {
+  background: var(--logout_hover) no-repeat 8px center / 14px, var(--badge) !important;
+}
+
+#info input.logout:active {
+  background: #f60 var(--logout_active) no-repeat 8px center / 14px !important;
+  box-shadow: var(--btn_shadow_active);
 }
 
 input.reload, input.refresh, input[name="refresh"][disabled], .topbuttons .fakebutton {
@@ -820,7 +829,7 @@ input[type=submit]:active, input[type=reset]:active, #settings:active {
   border: 1px solid #f60;
   background-color: #f60 !important;
   color: var(--ink) !important;
-  box-shadow: var(--highlight), inset 3px 3px 3px 2px rgba(0,0,0,.6);
+  box-shadow: var(--btn_shadow_active);
 }
 
 input[disabled], input[disabled]:hover, input[disabled]:focus {
