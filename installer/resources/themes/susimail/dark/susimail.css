@@ -10,14 +10,16 @@
 @import url(images/images.css);
 
 :root {
+  --bodyfont: var(--bodyfont);
+  --monospaced: Droid Sans Mono, Noto Mono, Lucida Console, DejaVu Sans Mono, monospace;
   --border: 1px solid #252;
   --border_soft: 1px solid #131;
   --highlight: inset 0 0 0 1px #000;
+  --btn_shadow_active: var(--highlight), inset 3px 3px 3px 2px rgba(0,0,0,.8);
 }
 
 html {
   min-height: 100%;
-  background: #000;
   background: repeating-linear-gradient(180deg,rgba(0,0,0,.9) 2px, rgba(0,16,0,.9) 4px), var(--camo) #010;
   background-size: 100%, 2048px;
   scrollbar-color: rgba(8,48,8,.8) #000800;
@@ -29,11 +31,11 @@ html:hover {
 }
 
 body, input[type=submit], input[type=reset], input[type=text], input[type=password], select, #settings {
-  font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Bitstream Vera Sans, Segoe UI, Verdana, Lucida Grande, Helvetica, sans-serif;
+  font-family: var(--bodyfont);
 }
 
 pre, textarea, p.mailbody {
-  font-family: Droid Sans Mono, Noto Mono, Lucida Console, DejaVu Sans Mono, monospace;
+  font-family: var(--monospaced);
 }
 
 body {
@@ -140,7 +142,7 @@ tr.mailbody, #message_full tr:first-child {
 }
 
 #message_full tr:first-child {
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #030;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #030;
 }
 
 #mailhead tr {
@@ -152,7 +154,7 @@ tr.mailbody td {
   width: 100%;
   word-break: normal;
   word-wrap: normal;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #030;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #030;
 }
 
 .mailbody p.info {
@@ -164,7 +166,7 @@ tr.mailbody td {
   color: #900;
   border: 1px solid #000;
   border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #d00;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #d00;
   background: #000
 }
 
@@ -190,7 +192,7 @@ div.footer {
   border-top: none;
   margin: 0 -1px -1px;
   border: 1px solid #141;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #040, inset 0 0 0 3px #000 !important;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000 !important;
   background: linear-gradient(90deg, #000800 15%, #000 50%, #000800 85%);
 }
 
@@ -287,7 +289,7 @@ pre {
   text-align: center;
   font-size: 8.5pt !important;
   color: #ee9;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
   border: 1px solid #141;
   border-radius: 1px;
   background-color: #010;
@@ -424,7 +426,7 @@ input[type=submit], input[type=reset], #settings, .topbuttons .fakebutton {
   text-shadow: 0 1px 1px #000;
   opacity: 1;
   cursor: pointer;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
   box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
   border: 1px solid #000;
   border-radius: 2px;
@@ -814,14 +816,14 @@ input[type=submit]:hover, input[type=reset]:hover, input[type=submit]:focus, inp
 select:hover, select:focus, select:active, #settings:hover, #settings:focus {
   color: #f60;
   border: 1px solid #f60;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
+  box-shadow: var(--highlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
 }
 
 input[type=submit]:active, input[type=reset]:active, #settings:active {
   border: 1px solid #f60;
   background-color: #f60 !important;
   color: #ee9 !important;
-  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 2px rgba(0,0,0,.6);
+  box-shadow: var(--highlight), inset 3px 3px 3px 2px rgba(0,0,0,.6);
 }
 
 input[disabled], input[disabled]:hover, input[disabled]:focus {
@@ -836,7 +838,7 @@ input[type=file]::file-selector-button {
   padding: 4px 2px !important;
   min-width: 75px;
   vertical-align: middle;
-  font: bold 9pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
+  font: bold 9pt var(--bodyfont);
   text-align: center;
   text-decoration: none;
   color: #494;
@@ -849,7 +851,7 @@ input[type=file]::file-selector-button {
 input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
   color: #f60;
   border: 1px solid #f60;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
+  box-shadow: var(--highlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
   background: #000;
   background: radial-gradient(at center bottom, rgba(96, 48, 0, .4) 0, rgba(0, 0, 0, 0) 80%), #000;
   cursor: pointer;
@@ -859,7 +861,7 @@ input[type=file]:active::file-selector-button {
   border: 1px solid #f60;
   background-color: #f60 !important;
   color: #ee9 !important;
-  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 2px #310 !important;
+  box-shadow: var(--highlight), inset 3px 3px 3px 2px #310 !important;
 }
 
 select {
@@ -1037,7 +1039,7 @@ tr.bottombuttons .pagenav {
 
 .pagenav input[disabled], .pagenav input[disabled]:hover, .pagenav input[disabled]:active {
   border: none;
-  box-shadow: inset 0 0 0 1px #000 !important;
+  box-shadow: var(--highlight) !important;
 }
 
 .topbuttons #messagenav {
@@ -1214,7 +1216,7 @@ a .sort:hover, a:focus .sort {
 }
 
 img.sort:active {
-  box-shadow: inset 0 0 0 1px #000, inset 2px 2px 2px #000;
+  box-shadow: var(--highlight), inset 2px 2px 2px #000;
 }
 
 .sort.selected, .sort.selected:active {
@@ -1287,7 +1289,7 @@ hr {
   width: 600px;
   border: 1px solid #151;
   border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #040, inset 0 0 0 3px #000, 0 0 0 1px #000, 0 0 3px 3px rgba(0,0,0,.8);
+  box-shadow: var(--highlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000, 0 0 0 1px #000, 0 0 3px 3px rgba(0,0,0,.8);
   background: #010;
   background: linear-gradient(180deg,rgba(0,0,0,0), rgba(0,0,0,.3)), repeating-linear-gradient(180deg,rgba(0,0,0,.9), rgba(0,32,0,.3) 1px, rgba(0,32,0,.4) 2px), url(images/hatter_med.png) right bottom no-repeat #000;
   background-size: 100% 100%, 100% 100%, auto 40%;
@@ -1342,7 +1344,7 @@ hr {
   text-transform: uppercase;
   color: #ee9;
   border-bottom: 1px solid #141;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #040, inset 0 0 0 3px #000;;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000;;
   background: #010;
   background: linear-gradient(180deg,#010, #000);
 }
@@ -1455,7 +1457,7 @@ textarea[name="config_text"] {
 textarea[name="config_text"]:focus {
   color: #ee9;
   border: 1px solid #141;
-  box-shadow: inset 0 0 0 1px #000, 0 0 0 1px rgba(255,96,0,.15);
+  box-shadow: var(--highlight), 0 0 0 1px rgba(255,96,0,.15);
   background: repeating-linear-gradient(180deg,#010, #010 20px, #000800 20px, #000800 40px);
 }
 
@@ -1468,7 +1470,7 @@ h3#config {
   letter-spacing: .08em;
   word-spacing: .1em;
   border-bottom: 1px solid #141;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
   text-shadow: 0 1px 1px #000;
   background: #010;
   background: linear-gradient(90deg, rgba(0,64,0,.1), rgba(0,80,0,.2), rgba(0,64,0,.1)), linear-gradient(180deg,#010 50%, #000 50%);
@@ -1480,7 +1482,7 @@ h3#config {
   padding-bottom: 10px;
   border-top: 1px solid #141;
   background: #010;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
 }
 
 .iframed #prefsave {
@@ -1535,7 +1537,7 @@ h3#config {
   font-size: 9pt;
   font-weight: 700;
   border: 1px solid #141;
-  box-shadow: inset 0 0 0 1px #000 !important;
+  box-shadow: var(--highlight) !important;
   background: linear-gradient(180deg,#010 50%, #000 50%), repeating-linear-gradient(180deg,#020 1px, #020 2px, #000 3px) !important;
 }
 
@@ -1607,7 +1609,7 @@ h3#config {
 }
 
 tr.bottombuttons, .topbuttons {
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
 }
 
 _:-ms-lang(x), tr.bottombuttons, .topbuttons {
@@ -1787,7 +1789,7 @@ td p.error {
 
 #attachedfile label:hover {
   color: #930;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 0 2px #930;
+  box-shadow: var(--highlight), inset 0 0 0 2px #930;
   background: var(--attach_hover) no-repeat 9px center, linear-gradient(90deg, #020 70%, #010);
   background-size: 14px, 100%;
 }
@@ -1801,7 +1803,7 @@ td p.error {
   padding: 15px 35px 15px 30px;
   overflow: auto !important;
   text-align: left;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #030;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #030;
   background: var(--attached) no-repeat 10px center, repeating-linear-gradient(180deg,#010, #000 2px);
   background-size: 16px 100%;
 }
@@ -1904,7 +1906,7 @@ tr.list1 {
 
 tr.list0:hover, tr.list1:hover {
   background-color: #030;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
 }
 
 _:-ms-lang(x), tr.list0:hover, tr.list1:hover {
@@ -1912,7 +1914,7 @@ _:-ms-lang(x), tr.list0:hover, tr.list1:hover {
 }
 
 .list0 td, .list1 td {
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
 }
 
 .list0:hover td, .list1:hover td {
@@ -2160,7 +2162,7 @@ tr:hover .listDate {
 
 td.mailListSize {
   font-style: italic;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
 }
 
 .mailListSize .unknown {
@@ -2258,7 +2260,7 @@ td.mailListFlagged, td.mailListSender, td.mailListAttachment, td.mailListSubject
 /* confirm mail delete */
 
 #confirmdelete td {
-  box-shadow: inset 0 0 0 1px #000 !important;
+  box-shadow: var(--highlight) !important;
   background: #900;
   background: repeating-linear-gradient(45deg, #900, #900 10px, #000 10px, #000 20px);
   background-size: 400%;
@@ -2285,7 +2287,7 @@ background-position: 0;
   font-style: italic;
   color: #a00;
   border: 1px solid #700;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #b00;
+  box-shadow: var(--highlight), inset 0 0 1px 1px #b00;
   background: var(--question) no-repeat center 20px / 32px, linear-gradient(180deg,#100, #000, #100);
 }
 
@@ -2297,7 +2299,7 @@ background-position: 0;
   top: 250px;
   left: 0;
   right: 0;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #700, 0 0 0 1px #000, 0 0 3px 3px rgba(0,0,0,.7), 0 0 1000px 1000px rgba(8,0,0,.7);
+  box-shadow: var(--highlight), inset 0 0 2px 1px #700, 0 0 0 1px #000, 0 0 3px 3px rgba(0,0,0,.7), 0 0 1000px 1000px rgba(8,0,0,.7);
   animation: fade-in linear .5s;
 }
 
@@ -2357,7 +2359,7 @@ background-position: 0;
   letter-spacing: 2px;
   text-shadow: 0 0 1px #001, 0 0 5px #003;
   border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 0 2px #001, inset 0 0 2px 3px #002, 0 0 1px #001;
+  box-shadow: var(--highlight), inset 0 0 0 2px #001, inset 0 0 2px 3px #002, 0 0 1px #001;
   background: #010;
   background: repeating-linear-gradient(45deg, #020 1px, #020 20px, #000 20px, #000 40px);
   animation: loading 1s linear infinite forwards alternate;
@@ -2497,7 +2499,7 @@ td {
   right: -1px;
   padding: 4px 6px 4px 4px;
   border: 1px solid #141;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
   border-radius: 0 0 0 3px;
   background: linear-gradient(180deg,#010 50%, #000 50%);
 }
@@ -2527,7 +2529,7 @@ tr.mailbody td {
 }
 
 .debugHeader td {
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #030;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #030;
   background: rgba(0,0,0,.4);
 }
 
@@ -2569,7 +2571,7 @@ tr.mailbody td {
 
 #toggleHeaders:hover {
   border: 1px solid #f60;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000 !important;
+  box-shadow: var(--highlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000 !important;
 }
 
 #toggleHeaders:hover a {
@@ -2577,7 +2579,7 @@ tr.mailbody td {
 }
 
 #toggleHeaders:active {
-  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 2px #310 !important;
+  box-shadow: var(--highlight), inset 3px 3px 3px 2px #310 !important;
   background: #f60 !important;
 }
 

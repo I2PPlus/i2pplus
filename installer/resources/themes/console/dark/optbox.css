@@ -29,6 +29,14 @@
   background: #000;
 }
 
+.optbox:active {
+  background: linear-gradient(0deg,#f60,#d40);
+}
+
+.optbox:not(:checked):active {
+  box-shadow: var(--btn_shadow_active);
+}
+
 .optbox::before {
   width: 10px;
   height: 10px;

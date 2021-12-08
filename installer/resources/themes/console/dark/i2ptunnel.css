@@ -13,6 +13,7 @@
   --border: 1px solid #242;
   --highlight: inset 0 0 0 1px #000;
   --input_txt: linear-gradient(180deg,#001800,#001000);
+  --btn_shadow_active: var(--highlight), inset 3px 3px 3px 2px rgba(0,0,0,.8);
 }
 
 html {
