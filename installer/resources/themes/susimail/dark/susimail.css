@@ -12,10 +12,15 @@
 :root {
   --bodyfont: var(--bodyfont);
   --monospaced: Droid Sans Mono, Noto Mono, Lucida Console, DejaVu Sans Mono, monospace;
+  --ink: #ee9;
   --border: 1px solid #252;
   --border_soft: 1px solid #131;
   --highlight: inset 0 0 0 1px #000;
+  --btn: linear-gradient(180deg,#001000,#000 5%,#000 95%,#001000);
   --btn_shadow_active: var(--highlight), inset 3px 3px 3px 2px rgba(0,0,0,.8);
+  --border: 1px solid #141;
+  --badge: linear-gradient(180deg,#020,#010);
+  --th: linear-gradient(180deg,#010,#000);
 }
 
 html {
@@ -42,7 +47,7 @@ body {
   margin: 5px;
   min-width: 920px;
   font-size: 9pt;
-  color: #ee9;
+  color: var(--ink);
 }
 
 body.iframed {
@@ -82,42 +87,36 @@ textarea:hover {
 }
 
 ::selection {
-  background: #27377f !important;
   color: white;
   text-shadow: none;
-}
-
-::-moz-selection {
   background: #27377f !important;
-  color: white;
-  text-shadow: none;
 }
 
 b, h3, .pagenav td, th {
-  color: #ee9;
+  color: var(--ink);
   text-shadow: 0 1px 1px #000;
 }
 
 li {
-  color: #ee9;
-  line-height: 12pt;
-  font-size: 8.5pt;
   margin-left: 5px;
   margin-right: 5px;
+  line-height: 12pt;
+  font-size: 8.5pt;
+  color: var(--ink);
 }
 
 p {
-  color: #ee9;
   margin-left: 15px;
   margin-right: 15px;
   font-size: 8.5pt;
+  color: var(--ink);
 }
 
 p.hl {
-  font-size: 12pt;
-  letter-spacing: 2pt;
   line-height: 18pt;
+  font-size: 12pt;
   font-weight: 700;
+  letter-spacing: 2pt;
 }
 
 p.text {
@@ -191,7 +190,7 @@ div.header, .iframed .header {
 div.footer {
   border-top: none;
   margin: 0 -1px -1px;
-  border: 1px solid #141;
+  border: var(--border);
   box-shadow: var(--highlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000 !important;
   background: linear-gradient(90deg, #000800 15%, #000 50%, #000800 85%);
 }
@@ -285,12 +284,12 @@ pre {
   margin: 0;
   padding: 10px 10px 0;
   min-width: 600px;
-  line-height: 160% !important;
+  line-height: 1.6 !important;
   text-align: center;
   font-size: 8.5pt !important;
-  color: #ee9;
+  color: var(--ink);
   box-shadow: var(--highlight);
-  border: 1px solid #141;
+  border: var(--border);
   border-radius: 1px;
   background-color: #010;
   background-color: rgba(0,32,0,.1);
@@ -319,12 +318,12 @@ th {
 }
 
 form {
-  line-height: 160%;
+  line-height: 1.6;
   border-top: none;
 }
 
 .header + form {
-  border: 1px solid #141;
+  border: var(--border);
   box-shadow: 0 0 1px 1px #000;
 }
 
@@ -335,8 +334,8 @@ form {
 }
 
 .iframed .header + form {
-  padding-bottom: 17px;
   margin-bottom: -10px !important;
+  padding-bottom: 17px;
 }
 
 /* message view */
@@ -354,12 +353,11 @@ form {
 }
 
 #message_full tr:first-child {
-  background: #020;
   background: repeating-linear-gradient(180deg,#010 1px, #010 2px, #000 3px);
 }
 
 #message_full tr:first-child td {
-  border-bottom: 1px solid #141;
+  border-bottom: var(--border);
   background: none !important;
 }
 
@@ -386,7 +384,7 @@ form {
   min-width: 60px;
   white-space: nowrap;
   font-weight: 700;
-  color: #ee9;
+  color: var(--ink);
 }
 
 /* end message view */
@@ -430,8 +428,7 @@ input[type=submit], input[type=reset], #settings, .topbuttons .fakebutton {
   box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
   border: 1px solid #000;
   border-radius: 2px;
-  background: #000;
-  background: linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
+  background: var(--btn);
   background-size: 12px, 100% !important;
 }
 
@@ -441,7 +438,7 @@ input[type=submit], input[type=reset], #settings, .topbuttons .fakebutton {
 
 input.cancel, #nukemail input.clearselection {
   padding: 7px 10px 7px 24px;
-  background: var(--no) no-repeat 8px center, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
+  background: var(--no) no-repeat 8px center, var(--btn);
   background-size: 12px, 100% !important;
 }
 
@@ -457,7 +454,7 @@ input.cancel:active, #nukemail input.clearselection:active {
 
 input.clearselection {
   padding: 7px 10px 7px 26px;
-  background: url(/themes/susimail/images/none.png) no-repeat 8px center, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
+  background: url(/themes/susimail/images/none.png) no-repeat 8px center, var(--btn);
 }
 
 input.clearselection:hover {
@@ -471,7 +468,7 @@ input.clearselection:active {
 
 input.delete, input.delete_attachment, input.really_delete {
   padding: 7px 10px 7px 26px;
-  background: var(--delete) no-repeat 8px center, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
+  background: var(--delete) no-repeat 8px center, var(--btn);
   background-size: 16px, 100% !important;
 }
 
@@ -487,7 +484,7 @@ input.delete:active, input.delete_attachment:active, input.really_delete:active 
 
 input.download {
   padding: 7px 10px 7px 26px;
-  background: var(--download) no-repeat 8px center / 14px, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
+  background: var(--download) no-repeat 8px center / 14px, var(--btn);
 }
 
 input.download:hover {
@@ -500,7 +497,7 @@ input.download:active {
 
 input.offline {
   padding: 7px 10px 7px 26px;
-  background: var(--offline) no-repeat 8px center, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
+  background: var(--offline) no-repeat 8px center, var(--btn);
   background-size: 14px, 100% !important;
 }
 
@@ -516,7 +513,7 @@ input.offline:active {
 
 input.list, input.moveto, #pagenav input.switchto {
   padding: 7px 10px 7px 26px;
-  background: var(--folder) no-repeat 8px center, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
+  background: var(--folder) no-repeat 8px center, var(--btn);
 }
 
 input.list:hover, input.moveto:hover, #pagenav input.switchto:hover {
@@ -529,7 +526,7 @@ input.list:active, input.moveto:active, #pagenav input.switchto:active {
 
 input.forward {
   padding: 7px 10px 7px 26px;
-  background: var(--forward) no-repeat 8px center, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
+  background: var(--forward) no-repeat 8px center, var(--btn);
   background-size: 14px, 100% !important;
 }
 
@@ -545,7 +542,7 @@ input.forward:active {
 
 input.login {
   padding: 7px 10px 7px 26px;
-  background: var(--login) no-repeat 8px center, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
+  background: var(--login) no-repeat 8px center, var(--btn);
   background-size: 15px, 100% !important;
 }
 
@@ -565,7 +562,7 @@ input.login:active {
 
 input.logout {
   padding: 7px 10px 7px 26px;
-  background: var(--logout) no-repeat 8px center, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
+  background: var(--logout) no-repeat 8px center, var(--btn);
   background-size: 15px, 100% !important;
 }
 
@@ -588,13 +585,13 @@ input.logout:active {
   border-left: 1px solid #131 !important;
   border-radius: 0;
   box-shadow: none !important;
-  background: var(--logout) no-repeat 8px center, linear-gradient(180deg,#020, #010);
+  background: var(--logout) no-repeat 8px center, var(--badge);
   filter: none;
 }
 
 input.reload, input.refresh, input[name="refresh"][disabled], .topbuttons .fakebutton {
   padding: 7px 10px 7px 26px;
-  background: var(--refresh) no-repeat 8px center, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000) !important;
+  background: var(--refresh) no-repeat 8px center, var(--btn) !important;
   background-size: 13px, 100% !important;
 }
 
@@ -618,7 +615,7 @@ input.reload:active, input.refresh:active, .fakebutton:active {
 }
 
 input.invertselection {
-  background: url(/themes/susimail/images/selection.png) no-repeat 8px center, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
+  background: url(/themes/susimail/images/selection.png) no-repeat 8px center, var(--btn);
   padding: 7px 10px 7px 26px;
 }
 
@@ -632,7 +629,7 @@ input.invertselection:active {
 
 input.show {
   padding: 7px 10px 7px 26px;
-  background: -var(--yes) no-repeat 8px center, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
+  background: -var(--yes) no-repeat 8px center, var(--btn);
 }
 
 input.show:hover {
@@ -646,7 +643,7 @@ input.show:active {
 
 input.markall {
   padding: 7px 10px 7px 26px;
-  background: url(/themes/susimail/images/all.png) no-repeat 8px center, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
+  background: url(/themes/susimail/images/all.png) no-repeat 8px center, var(--btn);
 }
 
 input.markall:hover {
@@ -659,7 +656,7 @@ input.markall:active {
 
 input.new {
   padding: 7px 10px 7px 26px;
-  background: var(--compose) no-repeat 8px center / 14px, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
+  background: var(--compose) no-repeat 8px center / 14px, var(--btn);
   background-size: 14px, 100% !important;
 }
 
@@ -675,7 +672,7 @@ input.new:active {
 
 input.reply {
   padding: 7px 10px 7px 26px;
-  background: var(--reply) no-repeat 8px center, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
+  background: var(--reply) no-repeat 8px center, var(--btn);
   background-size: 14px, 100% !important;
 }
 
@@ -691,7 +688,7 @@ input.reply:active {
 
 input.replyall {
   padding: 7px 10px 7px 26px;
-  background: var(--replyall) no-repeat 8px center, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
+  background: var(--replyall) no-repeat 8px center, var(--btn);
   background-size: 14px, 100% !important;
 }
 
@@ -711,7 +708,7 @@ input.markall {
 
 input.setpagesize, input.save {
   padding: 7px 10px 7px 26px;
-  background: var(--yes) no-repeat 8px center, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
+  background: var(--yes) no-repeat 8px center, var(--btn);
 }
 
 input.setpagesize:hover, input.setpagesize:focus, input.save:hover, input.save:focus {
@@ -750,7 +747,7 @@ input.send + input.cancel {
 
 input.configure, #settings {
   padding: 7px 10px 7px 26px;
-  background: var(--configure) no-repeat 8px center, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
+  background: var(--configure) no-repeat 8px center, var(--btn);
   background-size: 14px, 100% !important;
 }
 
@@ -766,7 +763,7 @@ input.configure:active, #settings:active {
 
 input.saveas, input.saveasdraft {
   padding: 7px 10px 7px 27px;
-  background: var(--save) no-repeat 8px center, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
+  background: var(--save) no-repeat 8px center, var(--btn);
   background-size: 15px, 100% !important;
 }
 
@@ -780,7 +777,7 @@ input.saveas:active, input.saveasdraft:active {
 
 input.new_upload {
   padding: 7px 10px 7px 26px;
-  background: var(--attached) no-repeat 8px center, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
+  background: var(--attached) no-repeat 8px center, var(--btn);
 }
 
 input.new_upload:hover {
@@ -798,7 +795,7 @@ input.new_upload {
 
 input.switchto, input.moveto {
   padding: 7px 10px 7px 26px;
-  background: var(--folder) no-repeat 8px center, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
+  background: var(--folder) no-repeat 8px center, var(--btn);
   background-size: 14px, 100% !important;
 }
 
@@ -822,7 +819,7 @@ select:hover, select:focus, select:active, #settings:hover, #settings:focus {
 input[type=submit]:active, input[type=reset]:active, #settings:active {
   border: 1px solid #f60;
   background-color: #f60 !important;
-  color: #ee9 !important;
+  color: var(--ink) !important;
   box-shadow: var(--highlight), inset 3px 3px 3px 2px rgba(0,0,0,.6);
 }
 
@@ -860,7 +857,7 @@ input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selec
 input[type=file]:active::file-selector-button {
   border: 1px solid #f60;
   background-color: #f60 !important;
-  color: #ee9 !important;
+  color: var(--ink) !important;
   box-shadow: var(--highlight), inset 3px 3px 3px 2px #310 !important;
 }
 
@@ -872,7 +869,7 @@ select {
   border: 1px solid #000;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #151, inset 0 0 2px 1px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
-  background: var(--dropdown) no-repeat right 10px center / 10px, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
+  background: var(--dropdown) no-repeat right 10px center / 10px, var(--btn);
   appearance: none;
 }
 
@@ -973,7 +970,7 @@ input.nextpage:hover, input.next:hover, input[name="nextpage"]:hover {
 }
 
 #pagenavbottom, #mailbox #pagenavbottom td {
-  border-top: 1px solid #141;
+  border-top: var(--border);
   box-shadow: none !important;
   position: relative;
   z-index: 100;
@@ -1008,11 +1005,11 @@ input.nextpage:hover, input.next:hover, input[name="nextpage"]:hover {
   width: 70px;
   display: inline-block;
   text-align: center !important;
-  color: #ee9;
+  color: var(--ink);
   border: 1px solid #151;
   border-radius: 2px;
   background: #020;
-  background: linear-gradient(180deg,#020, #010);
+  background: var(--badge);
 }
 
 .pagenav input[disabled] {
@@ -1206,7 +1203,7 @@ img.sort {
   vertical-align: middle;
   border: 1px solid #151;
   border-radius: 1px;
-  background: linear-gradient(180deg,#020, #010);
+  background: var(--badge);
 }
 
 a .sort:hover, a:focus .sort {
@@ -1236,8 +1233,8 @@ input[type="file"] {
 
 input[type=text], input[type=password], textarea {
   padding: 5px !important;
-  color: #ee9;
-  border: 1px solid #141;
+  color: var(--ink);
+  border: var(--border);
   border-radius: 1px;
   box-shadow: inset 2px 2px 1px #000;
   background: #010;
@@ -1245,11 +1242,11 @@ input[type=text], input[type=password], textarea {
 
 input[name="new_from"] {
   box-shadow: none;
-  color: #ee9 !important;
+  color: var(--ink) !important;
 }
 
 input[type=text]:focus, input[type=password]:focus, textarea:focus {
-  color: #ee9;
+  color: var(--ink);
   border: 1px solid #373;
   box-shadow: 0 0 1px #000, 0 0 1px 1px rgba(255,96,0,.5);
   background: #000;
@@ -1322,7 +1319,7 @@ hr {
 #dologin td {
   padding: 3px;
   font-weight: 700;
-  color: #ee9;
+  color: var(--ink);
 }
 
 #dologin td:first-child {
@@ -1342,8 +1339,8 @@ hr {
   font-size: 14pt;
   text-align: left;
   text-transform: uppercase;
-  color: #ee9;
-  border-bottom: 1px solid #141;
+  color: var(--ink);
+  border-bottom: var(--border);
   box-shadow: var(--highlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000;;
   background: #010;
   background: linear-gradient(180deg,#010, #000);
@@ -1417,7 +1414,7 @@ hr {
 #dologin tr:last-child a:hover {
   box-shadow: 0 0 0 1px #020;
   background: #000;
-  background: linear-gradient(180deg,#010 50%, #000 50%) #000;
+  background: var(--th) #000;
   transition: ease all .1s;
 }
 
@@ -1449,14 +1446,14 @@ textarea[name="config_text"] {
   height: 370px;
   line-height: 20px;
   color: #bb7;
-  border: 1px solid #141;
+  border: var(--border);
   box-shadow: 0 0 2px 2px rgba(0,0,0,.5);
   background: repeating-linear-gradient(180deg,#000800, #000800 20px, #000 20px, #000 40px);
 }
 
 textarea[name="config_text"]:focus {
-  color: #ee9;
-  border: 1px solid #141;
+  color: var(--ink);
+  border: var(--border);
   box-shadow: var(--highlight), 0 0 0 1px rgba(255,96,0,.15);
   background: repeating-linear-gradient(180deg,#010, #010 20px, #000800 20px, #000800 40px);
 }
@@ -1469,18 +1466,18 @@ h3#config {
   font-size: 11pt;
   letter-spacing: .08em;
   word-spacing: .1em;
-  border-bottom: 1px solid #141;
+  border-bottom: var(--border);
   box-shadow: var(--highlight);
   text-shadow: 0 1px 1px #000;
   background: #010;
-  background: linear-gradient(90deg, rgba(0,64,0,.1), rgba(0,80,0,.2), rgba(0,64,0,.1)), linear-gradient(180deg,#010 50%, #000 50%);
+  background: linear-gradient(90deg, rgba(0,64,0,.1), rgba(0,80,0,.2), rgba(0,64,0,.1)), var(--th);
 }
 
 #prefsave {
   margin-top: 4px;
   padding-top: 10px;
   padding-bottom: 10px;
-  border-top: 1px solid #141;
+  border-top: var(--border);
   background: #010;
   box-shadow: var(--highlight);
 }
@@ -1502,13 +1499,13 @@ h3#config {
   float: right;
   line-height: 150%;
   text-transform: lowercase;
-  color: #ee9;
+  color: var(--ink);
   font-weight: 400;
   border: 1px solid #131;
   border-radius: 2px;
   box-shadow: 0 0 1px 0 #000;
   background: #010;
-  background: linear-gradient(180deg,#020, #010);
+  background: var(--badge);
 }
 
 #infoUser {
@@ -1516,7 +1513,7 @@ h3#config {
   padding: 3px 8px 4px 20px;
   display: inline-block;
   text-align: center;
-  color: #ee9;
+  color: var(--ink);
   font-weight: 700;
   border-right: 1px solid #131;
   background: var(--user) no-repeat 2px center / 15px;
@@ -1525,9 +1522,6 @@ h3#config {
 .topbuttons {
   margin: -1px -1px 0;
   padding: 5px 5px 4px;
-  position: sticky;
-  top: -1px;
-  z-index: 1000;
   width: calc(100% - 10px);
   min-width: 800px;
   display: inline-block;
@@ -1536,9 +1530,15 @@ h3#config {
   text-align: center;
   font-size: 9pt;
   font-weight: 700;
-  border: 1px solid #141;
+  border: var(--border);
   box-shadow: var(--highlight) !important;
-  background: linear-gradient(180deg,#010 50%, #000 50%), repeating-linear-gradient(180deg,#020 1px, #020 2px, #000 3px) !important;
+  background: var(--th);
+}
+
+body:not(.iframed) .topbuttons {
+  position: sticky;
+  top: -1px;
+  z-index: 1000;
 }
 
 .iframed .topbuttons {
@@ -1612,12 +1612,8 @@ tr.bottombuttons, .topbuttons {
   box-shadow: var(--highlight);
 }
 
-_:-ms-lang(x), tr.bottombuttons, .topbuttons {
-  box-shadow: none !important;
-}
-
 tr.bottombuttons:last-child {
-  background: linear-gradient(180deg,#010 50%, #000) !important;
+  background: var(--th) !important;
 }
 
 tr.bottombuttons:empty {
@@ -1633,8 +1629,8 @@ tr.bottombuttons:empty {
 
 .notifications {
   margin: 0 30%;
-  padding: 5px 10px 2px;
-  min-width: 400px;
+  padding: 0 10px 2px;
+  min-width: 360px;
   position: fixed;
   top: 0;
   left: 0;
@@ -1645,16 +1641,14 @@ tr.bottombuttons:empty {
   border: 1px solid #000;
   border-top: none;
   box-shadow: 0 2px 2px 1px rgba(0,0,0,.5), inset 0 0 0 1px #040;
-  background: var(--no) right 6px top 6px no-repeat, linear-gradient(90deg, #020, #002800, #020) #020;
-  background-size: 14px, 100% !important;
+  background: #020 var(--no) no-repeat right 6px top 6px / 14px;
   cursor: crosshair;
   animation: 2s hide-up 7s ease-out forwards;
 }
 
 .iframed .notifications {
   margin: -1px 30% 0;
-  padding: 10px 10px 5px;
-  border: 1px solid #141;
+  border: var(--border);
   border-top: none;
   border-radius: 0 0 2px 2px;
   box-shadow: 0 2px 2px 1px rgba(0,0,0,.5), inset 0 0 0 1px #010;
@@ -1666,12 +1660,12 @@ tr.bottombuttons:empty {
 }
 
 .notifications:hover {
-  background-image: var(--no_hover);
+  background: #020 var(--no_hover) no-repeat right 6px top 6px / 14px;
 }
 
 .notifications p.info, .notifications p.info b {
   font-size: 10pt !important;
-  color: #ee9;
+  color: var(--ink);
   text-shadow: none !important;
 }
 
@@ -1739,12 +1733,12 @@ td p.error {
 
 #newmail td:first-child {
   font-weight: 700;
-  color: #ee9;
+  color: var(--ink);
   padding-right: 3px;
 }
 
 #newmail label:hover {
-  color: #ee9;
+  color: var(--ink);
 }
 
 /* end compose mail */
@@ -1752,7 +1746,7 @@ td p.error {
 
 /* attachments */
 #addattachment td {
-  border-top: 1px solid #141;
+  border-top: var(--border);
   padding-top: 7px;
 }
 
@@ -1885,7 +1879,7 @@ tr.pagenavcontrols:hover .pagenavcontrols td, .topbuttons td, .topbuttons:hover 
 }
 
 td {
-  color: #ee9;
+  color: var(--ink);
   font-size:9pt;
   padding: 1px 3px;
 }
@@ -1918,7 +1912,7 @@ _:-ms-lang(x), tr.list0:hover, tr.list1:hover {
 }
 
 .list0:hover td, .list1:hover td {
-  color: #ee9;
+  color: var(--ink);
 }
 
 #mailbox {
@@ -1939,7 +1933,7 @@ _:-ms-lang(x), tr.list0:hover, tr.list1:hover {
   display: none;
 }
 
-#mailbox tr:nth-child(2) {
+body:not(.iframed) #mailbox tr:nth-child(2) {
   position: sticky;
   top: 42px;
   z-index: 500;
@@ -1954,29 +1948,28 @@ _:-ms-lang(x), tr.list0:hover, tr.list1:hover {
 #mailbox th {
   padding: 6px 5px;
   white-space: nowrap;
-  color: #ee9;
-  border-bottom: 1px solid #141;
-  background: #010;
-  background: linear-gradient(180deg,#010 50%, #000 50%);
+  color: var(--ink);
+  border-bottom: var(--border);
+  background: var(--th);
 }
 
 #mailbox th:last-child {
   padding: 6px 0 !important;
-  background: var(--nuke) no-repeat center center / 14px, linear-gradient(180deg,#010 50%, #000 50%);
+  background: var(--nuke) no-repeat center center / 14px, var(--th);
 }
 
 #mailbox th.mailListFlagged {
-  background: url(/themes/susimail/images/status.png) no-repeat center center, linear-gradient(180deg,#010 50%, #000 50%);
+  background: url(/themes/susimail/images/status.png) no-repeat center center, var(--th);
   background-blend-mode: luminosity, normal;
 }
 
 #mailbox th.MailListAttachment {
-  background: var(--attach) no-repeat center center, linear-gradient(180deg,#010 50%, #000 50%) !important;
+  background: var(--attach) no-repeat center center, var(--th) !important;
   background-size: 14px, 100% !important;
 }
 
 #mailbox td {
-  color: #ee9 !important;
+  color: var(--ink) !important;
 }
 
 #mailbox tr td {
@@ -1989,7 +1982,7 @@ _:-ms-lang(x), tr.list0:hover, tr.list1:hover {
 
 td.mailListSender a, td.mailListSender a:hover {
   font-weight: 400;
-  color: #ee9 !important;
+  color: var(--ink) !important;
   line-height: 120%;
 }
 
@@ -2005,7 +1998,7 @@ td.mailListSender, tr:hover td.mailListSender {
 }
 
 #mailbox tr:hover .mailListSender a {
-  color: #ee9 !important;
+  color: var(--ink) !important;
 }
 
 .mailListSubject {
@@ -2039,7 +2032,7 @@ tr:active td.mailListSubject a {
 
 #mailbox .bottombuttons td {
   padding: 4px 4px 5px;
-  border-top: 1px solid #141;
+  border-top: var(--border);
 }
 
 .iframed #mailbox .bottombuttons td {
@@ -2127,11 +2120,11 @@ th.mailListDate {
   min-width: 64px;
   text-align: right;
   font-weight: 700;
-  color: #ee9;
+  color: var(--ink);
   border-radius: 2px;
   box-shadow: 0 0 0 1px #000;
   opacity: .8;
-  background: linear-gradient(180deg,#020, #010);
+  background: var(--badge);
 }
 
 tr:hover .listDate {
@@ -2181,12 +2174,12 @@ td.mailListSize {
   border-radius: 2px;
   box-shadow: 0 0 0 1px #000;
   background: #010;
-  background: linear-gradient(180deg,#020, #010);
+  background: var(--badge);
 }
 
 tr:hover .listSize {
   border: 1px solid #262;
-  color: #ee9;
+  color: var(--ink);
 }
 
 .listSizeUnit {
@@ -2194,7 +2187,7 @@ tr:hover .listSize {
   padding: 2px 1px;
   display: inline-block;
   min-width: 14px;
-  color: #ee9;
+  color: var(--ink);
   text-align: center;
   font-size: 90% !important;
   font-style: normal;
@@ -2355,7 +2348,7 @@ background-position: 0;
   display: inline-block;
   width: 40%;
   min-width: 400px;
-  color: #ee9;
+  color: var(--ink);
   letter-spacing: 2px;
   text-shadow: 0 0 1px #001, 0 0 5px #003;
   border-radius: 2px;
@@ -2498,15 +2491,15 @@ td {
   top: -1px;
   right: -1px;
   padding: 4px 6px 4px 4px;
-  border: 1px solid #141;
+  border: var(--border);
   box-shadow: var(--highlight);
   border-radius: 0 0 0 3px;
-  background: linear-gradient(180deg,#010 50%, #000 50%);
+  background: var(--th);
 }
 
 #folderName {
   font-weight: 700;
-  color: #ee9;
+  color: var(--ink);
   text-transform: capitalize;
 }
 
@@ -2584,7 +2577,7 @@ tr.mailbody td {
 }
 
 #toggleHeaders:active a {
-  color: #ee9 !important;
+  color: var(--ink) !important;
 }
 
 #mailhead td {
