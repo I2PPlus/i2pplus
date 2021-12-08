@@ -2,6 +2,7 @@
 /* Author: dr|z3d */
 
 @import url(/themes/fonts/DroidSans.css);
+@import url(/themes/console/dark/optbox.css);
 @import url(/themes/console/dark/chromescroll.css);
 
 :root {
@@ -12,6 +13,7 @@
   --btnAction_hover: var(--nav_hover);
   --btn_shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
   --btn_shadow_hover: var(--highlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
+  --btn_shadow_active: var(--highlight), inset 3px 3px 3px 2px rgba(0,0,0,.8);
   --highlight: inset 0 0 0 1px #000;
   --badge: linear-gradient(180deg,#030,#010);
   --tabIcon: linear-gradient(180deg,#000 50%, #040 50%);
@@ -3816,108 +3818,6 @@ td.snarkTorrentPeerCount {
 }
 
 /* end peer + client */
-
-/* custom radio/checkboxes */
-
-input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked,
-input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
-  position: relative;
-  width: 20px !important;
-  height: 20px !important;
-  outline: none;
-  vertical-align: middle !important;
-  box-sizing: border-box;
-  border: var(--border) !important;
-  background: linear-gradient(180deg,#020, #001800);
-  -moz-appearance: none;
-  -webkit-appearance: inherit;
-  filter: drop-shadow(0 0 2px #000);
-  will-change: transform;
-}
-
-input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
-  border-radius: 1px;
-  box-shadow: var(--highlight), inset 3px 3px 3px 1px #000;
-}
-
-input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
-  border-radius: 50%;
-  box-shadow: var(--highlight), inset 3px 3px 3px 1px #000;
-}
-
-input[type=checkbox]:checked::before, input[type=radio]:checked::before,
-input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
-  position: absolute;
-  transition: linear transform .05s;
-  transform: scale(1);
-}
-
-.optbox:not(:checked) {
-  box-shadow: var(--highlight), inset 3px 3px 3px 1px #000;
-}
-
-.optbox:active {
-  background: #000 !important;
-}
-
-input[type=checkbox]:checked::before, input[type=checkbox]:not(:checked)::before {
-  width: 10px;
-  height: 10px;
-  top: 4px;
-  left: 4px;
-  line-height: .8;
-  color: #5a5;
-  border-radius: 1px;
-  box-shadow: inset 0 0 0 1px #6b6, 0 0 0 1px #000;
-  background: linear-gradient(135deg, #5a5, #383);
-  content: "";
-}
-
-input[type=radio]:checked::before {
-  width: 10px;
-  height: 10px;
-  left: 4px;
-  top: 4px;
-  border-radius: 50%;
-  box-shadow: inset 0 0 0 1px #6b6, 0 0 0 1px #000;
-  background: linear-gradient(135deg, #5a5, #383);
-  content: "";
-}
-
-input[type=checkbox]:checked:hover::before {
-  color: #6b6;
-}
-
-input[type=radio]:checked:hover::before {
-  background: #6b6;
-}
-
-input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
-  color: transparent;
-  background: transparent;
-  transform: scale(0);
-  transition: linear transform .05s;
-}
-
-input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus, input[type=radio]:focus {
-  width: 20px !important;
-  height: 20px !important;
-  border: 1px solid #5a5 !important;
-  box-shadow: 0 0 2px #f60 !important;
-  background: #000;
-  filter: drop-shadow(0 0 1px #f60) !important;
-}
-
-input[type=checkbox][disabled], input[type=radio][disabled], input[type=checkbox][disabled]:hover, input[type=radio][disabled]:hover,
-input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, input[type=checkbox][disabled]:checked:hover, input[type=radio][disabled]:checked:hover {
-  border: var(--border) !important;
-  box-shadow: none !important;
-  background: #000;
-  opacity: .5 !important;
-  filter: none !important;
-}
-
-/* end custom radios/checkboxes */
 
 .inactivity {
   margin-left: 15px;

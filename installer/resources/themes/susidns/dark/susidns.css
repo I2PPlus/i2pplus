@@ -12,6 +12,9 @@
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
   --highlight: inset 0 0 0 1px #000;
   --nav: linear-gradient(180deg,#002900, #000400);
+  --border: 1px solid #252;
+  --border_soft: 1px solid #131;
+  --btn_shadow_active: var(--highlight), inset 3px 3px 3px 2px rgba(0,0,0,.8);
 }
 
 body, html {

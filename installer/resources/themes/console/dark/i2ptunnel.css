@@ -11,8 +11,9 @@
   --h2: repeating-linear-gradient(90deg, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(180deg,#001800, #000 75%);
   --heading: linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px);
   --border: 1px solid #242;
-  --lowlight: inset 0 0 0 1px #000;
+  --highlight: inset 0 0 0 1px #000;
   --input_txt: linear-gradient(180deg,#001800,#001000);
+  --btn_shadow_active: var(--highlight), inset 3px 3px 3px 2px rgba(0,0,0,.8);
 }
 
 html {
@@ -241,7 +242,7 @@ h2, h3 {
   font-size: 11pt;
   color: #ee9;
   border: var(--border);
-  box-shadow: var(--lowlight), inset 0 0 1px 1px #030;
+  box-shadow: var(--highlight), inset 0 0 1px 1px #030;
   background: var(--heading), linear-gradient(180deg,#004000, #000 75%), url(/themes/console/dark/images/camotile2.png) top left !important;
 }
 
@@ -547,7 +548,7 @@ textarea:focus {
   background: var(--input_txt);
   filter: drop-shadow(0 0 1px #880);
   transition: ease filter .3s 0s;
-  box-shadow: var(--lowlight), inset 4px 4px 4px #000, 0 0 0 1px #000;
+  box-shadow: var(--highlight), inset 4px 4px 4px #000, 0 0 0 1px #000;
   outline: none;
 }
 
@@ -682,7 +683,7 @@ textarea[readonly="readonly"]:focus {
 
 input[type=text]:focus, input[type=password]:focus {
   color: #ee9;
-  box-shadow: var(--lowlight), inset 4px 4px 4px #000, 0 0 0 1px #000;
+  box-shadow: var(--highlight), inset 4px 4px 4px #000, 0 0 0 1px #000;
   background: var(--input_txt);
   filter: drop-shadow(0 0 1px #880);
   transition: ease filter .3s 0s;
@@ -722,7 +723,7 @@ a.control, input.control {
   text-align: center;
   text-decoration: none;
   border-radius: 2px;
-  box-shadow: var(--lowlight);
+  box-shadow: var(--highlight);
   box-sizing: border-box;
 }
 
@@ -739,7 +740,7 @@ a.control, input.control {
   text-decoration: none;
   color: #f60 !important;
   border: 1px solid #f60 !important;
-  box-shadow: var(--lowlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000 !important;
+  box-shadow: var(--highlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000 !important;
   background: #000;
 }
 
@@ -750,7 +751,7 @@ a.control, input.control {
 .control:active {
   text-decoration: none;
   color: #ee9 !important;
-  box-shadow: var(--lowlight), inset 3px 3px 3px 2px #310 !important;
+  box-shadow: var(--highlight), inset 3px 3px 3px 2px #310 !important;
   background: #f60 !important;
 }
 
@@ -816,7 +817,7 @@ select:focus, select:hover {
 }
 
 select:hover {
-  box-shadow: var(--lowlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
+  box-shadow: var(--highlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
 }
 
 select:hover, select:focus, select:active {
@@ -954,10 +955,6 @@ th .help:hover::after, th .help:focus::after {
 .multiOption {
   margin: 5px 10px 5px 0;
   display: inline-block;
-}
-
-.multiOption input {
-  vertical-align: sub;
 }
 
 .multiOption#isServer {
@@ -1099,7 +1096,7 @@ input.tunnelName, input.tunnelDescription, #userAgents {
 .username, .password, .filemanager {
   padding-left: 28px !important;
   width: 200px;
-  box-shadow: var(--lowlight), inset 4px 4px 4px #000, 0 0 0 1px #000;
+  box-shadow: var(--highlight), inset 4px 4px 4px #000, 0 0 0 1px #000;
 }
 
 .username {
@@ -1150,7 +1147,7 @@ input.tunnelName, input.tunnelDescription, #userAgents {
   text-align: center;
   font-size: 11pt;
   font-weight: 700;
-  box-shadow: var(--lowlight), inset 0 0 4px 4px rgba(0,0,0,.4), 0 0 0 1px #000, 0 0 0 2px #020, 0 0 0 6px #030, 0 0 0 8px #040;
+  box-shadow: var(--highlight), inset 0 0 4px 4px rgba(0,0,0,.4), 0 0 0 1px #000, 0 0 0 2px #020, 0 0 0 6px #030, 0 0 0 8px #040;
   background: #020;
   background: repeating-linear-gradient(180deg,#020 2px, #010 4px);
 }
@@ -1417,7 +1414,7 @@ input[type=text] + label {
   border: 1px solid #252;
   background: linear-gradient(180deg,#000 0%, #010 100%);
   border-radius: 2px;
-  box-shadow: var(--lowlight);
+  box-shadow: var(--highlight);
   user-select: all;
 }
 
@@ -1434,7 +1431,7 @@ input[type=text] + label {
 
 .displayText:empty, .displayText:empty:hover, .displayText:empty:focus {
   background: #000;
-  box-shadow: var(--lowlight);
+  box-shadow: var(--highlight);
   color: #885;
   opacity: .8;
 }
@@ -1473,11 +1470,11 @@ input[type=text] + label {
 }
 
 tr {
-  box-shadow: var(--lowlight), inset 0 -1px 0 1px #000, inset -1px 0 0 1px #000, inset 0 0 1px 1px #030, inset 0 -1px 1px 1px #030, inset -1px 0 1px 1px #030;
+  box-shadow: var(--highlight), inset 0 -1px 0 1px #000, inset -1px 0 0 1px #000, inset 0 0 1px 1px #030, inset 0 -1px 1px 1px #030, inset -1px 0 1px 1px #030;
 }
 
 tr.configerror {
-  box-shadow: var(--lowlight), inset 0 -1px 0 1px #000, inset -1px 0 0 1px #000, inset 0 0 2px 1px #900, inset 0 -1px 2px 1px #900, inset -1px 0 2px 1px #900;
+  box-shadow: var(--highlight), inset 0 -1px 0 1px #000, inset -1px 0 0 1px #000, inset 0 0 2px 1px #900, inset 0 -1px 2px 1px #900, inset -1px 0 2px 1px #900;
 }
 
 .configerror td {
@@ -1494,7 +1491,7 @@ tr.configerror {
 }
 
 .buttons, .newTunnel {
-  box-shadow: var(--lowlight), inset 0 0 2px 1px #030 !important;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #030 !important;
 }
 
 #ssl tr:nth-child(n+3) th:last-child, #ssl tr:nth-child(n+3) td:last-child {

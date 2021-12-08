@@ -222,7 +222,7 @@ public class PeerState {
     private static final int MIN_CONCURRENT_MSGS = 8;
     /** @since 0.9.42 */
 //    private static final int INIT_CONCURRENT_MSGS = 20;
-    private static final int INIT_CONCURRENT_MSGS = 64;
+    private static final int INIT_CONCURRENT_MSGS = 128;
     /** how many concurrent outbound messages do we allow OutboundMessageFragments to send
         This counts full messages, NOT fragments (UDP packets)
      */

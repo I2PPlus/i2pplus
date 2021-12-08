@@ -5318,7 +5318,7 @@ public class I2PSnarkServlet extends BasicServlet {
         if (announce != null)
             annlist.add(announce);
         if (!annlist.isEmpty()) {
-            buf.append("<tr><th>").append(_t("Active Trackers")).append("</th><th>").append(_t("Announce URL")).append("</th><th>")
+            buf.append("<tr class=\"header\"><th>").append(_t("Active Trackers")).append("</th><th>").append(_t("Announce URL")).append("</th><th>")
                .append(_t("Primary")).append("</th><th id=\"remove\">").append(_t("Delete")).append("</th></tr>\n");
             for (String s : annlist) {
                 int hc = s.hashCode();
@@ -5349,7 +5349,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 iter.remove();
         }
         if (!newTrackers.isEmpty()) {
-            buf.append("<tr><th>").append(_t("Add Tracker")).append("</th><th>");
+            buf.append("<tr class=\"header\"><th>").append(_t("Add Tracker")).append("</th><th>");
             if (announce == null)
                 buf.append(_t("Announce URL")).append("</th><th>").append(_t("Primary"));
             else
@@ -5380,7 +5380,7 @@ public class I2PSnarkServlet extends BasicServlet {
         } else if (com.length() > 0) {
             com = DataHelper.escapeHTML(com).replace("\r\n", "<br>").replace("\n", "<br>");
         }
-        buf.append("<tr><th colspan=\"4\">").append(_t("Torrent Comment")).append("</th></tr>\n");
+        buf.append("<tr class=\"header\"><th colspan=\"4\">").append(_t("Torrent Comment")).append("</th></tr>\n");
         buf.append("<tr><td colspan=\"4\" id=\"addCommentText\"><textarea name=\"nofilter_newTorrentComment\" cols=\"88\" rows=\"4\"");
         if (isRunning)
             buf.append(" readonly");

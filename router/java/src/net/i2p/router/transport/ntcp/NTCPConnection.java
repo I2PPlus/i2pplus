@@ -163,7 +163,8 @@ public class NTCPConnection implements Closeable {
     private static final int PADDING_MAX = 64;
     private static final int SIP_IV_LENGTH = 8;
     private static final int NTCP2_FAIL_READ = 1024;
-    private static final long NTCP2_FAIL_TIMEOUT = 10*1000;
+//    private static final long NTCP2_FAIL_TIMEOUT = 10*1000;
+    private static final long NTCP2_FAIL_TIMEOUT = 15*1000;
     private static final long NTCP2_TERMINATION_CLOSE_DELAY = 50;
     // don't make combined messages too big, to minimize latency
     // Tunnel data msgs are 1024 + 4 + 9 + 3 = 1040, allow 5
@@ -1042,7 +1043,7 @@ public class NTCPConnection implements Closeable {
             write(buf);
         }
     }
-    
+
     /**
      * We have read the data in the buffer, but we can't process it locally yet,
      * because we're choked by the bandwidth limiter.  Cache the contents of
