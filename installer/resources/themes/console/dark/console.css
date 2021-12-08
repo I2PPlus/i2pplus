@@ -21,7 +21,7 @@
   --highlight: inset 0 0 0 1px #000;
   --element: linear-gradient(180deg,#020, #010);
   --btn: linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
-  --btn_shadow_active: var(--highlight), inset 3px 3px 3px 2px #310;
+  --btn_shadow_active: var(--highlight), inset 3px 3px 3px 2px rgba(0,0,0,.8);
   --btn_hover_radial: radial-gradient(at center bottom, rgba(96, 48, 0, .4) 0, rgba(0, 0, 0, 0) 80%), #000;
   --input_txt: linear-gradient(180deg,#001000,#001800);
   --vstripe: repeating-linear-gradient(180deg,rgba(0,0,0,.9) 2px, rgba(0,16,0,.9) 4px);
@@ -1696,17 +1696,17 @@ td img {
 }
 
 .sortupactive, .sortdownactive {
+  box-shadow: inset 0 0 0 1px #000, inset 2px 2px 2px rgba(0,0,0,.5);
   opacity: 1;
-  box-shadow: inset 1px 1px 1px #000;
 }
 
 .sortup {
-  background: var(--sortup) no-repeat center center, linear-gradient(180deg,#040,#000);
+  background: var(--mv_up) no-repeat center center, var(--btn);
 }
 
 .sortup:hover {
   border: 1px solid var(--hover);
-  background: var(--sortup) no-repeat center center, linear-gradient(180deg,#000,#040);
+  background: #000 var(--mv_up_hover) no-repeat center center;
 }
 
 .sortup a:focus, .sortdown a:focus {
@@ -1714,26 +1714,23 @@ td img {
   width: 16px;
   height: 14px;
   display: inline-block;
-  border-radius: 1px;
-  background: rgba(255,255,0,.2);
 }
 
 .sortupactive {
-  background: var(--sortup) no-repeat center center, #050;
+  background: #f60 var(--mv_up_active) no-repeat center center;
 }
 
 .sortdown {
-  background: var(--sortdown) no-repeat center center, linear-gradient(180deg,#040,#000);
+  background: var(--mv_down) no-repeat center center, var(--btn);
 }
 
 .sortdown:hover {
   border: 1px solid var(--hover);
-  background: var(--sortdown) no-repeat center center, linear-gradient(180deg,#000,#040);
+  background: #000 var(--mv_down_hover) no-repeat center center;
 }
 
 .sortdownactive {
-  border: 1px solid #050;
-  background: var(--sortdown) no-repeat center center, #050;
+  background: #f60 var(--mv_down_active) no-repeat center center;
 }
 
 /* end peer sort */
