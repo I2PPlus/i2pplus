@@ -2071,24 +2071,11 @@ tr:active td.mailListSubject a {
 }
 
 td.mailListFlagged img {
-  opacity: .7;
-  transform: scale(-1,1) skew(10deg);
+  display: none;
 }
 
-td.mailListFlagged.new img {
-  opacity: 0;
-}
-
-td.mailListFlagged img::after {
-  width: 16px;
-  height: 16px;
-  display: inline-block;
-  background: url(/themes/susimail/images/new.svg) no-repeat center center / 14px;
-  content: "";
-}
-
-tr:hover .mailListFlagged img {
-  opacity: 1;
+td.mailListFlagged.new {
+  background: var(--newmail) no-repeat center center / 14px;
 }
 
 td.mailListAttached {
