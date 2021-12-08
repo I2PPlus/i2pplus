@@ -173,12 +173,6 @@ p.mailbody + p.info {
   margin-top: -48px;
 }
 
-@media screen and (min-width: 1500px) {
-p.mailbody + p.info {
-  margin-top: -53px;
-}
-}
-
 span.coloured {
   color: #327bbf;
 }
@@ -205,13 +199,6 @@ p.footer {
 
 p.footer, p.footer a {
   font-size: 8pt !important;
-}
-
-@media screen and (min-width: 1500px) {
-p.footer, p.footer a {
-  line-height: 12pt;
-  font-size: 9pt !important;
-}
 }
 
 p.footer, p.footer b {
@@ -1109,33 +1096,6 @@ tr.bottombuttons .pagenav {
   border-left: 1px solid #242;
 }
 
-@media screen and (max-width: 1300px) {
-  .pagenavcontainer {
-    padding: 0;
-    top: 10px;
-    right: 3px !important;
-    border: none;
-  }
-
-/*  #info {
-    display: none !important;
-  }*/
-}
-
-@media screen and (max-width: 900px) {
-  .pagenavcontainer {
-    position: fixed;
-    top: 8px;
-    right: 5px;
-  }
-}
-
-@media screen and (min-width: 1500px) {
-  #messagenav {
-    top: 9px !important;
-  }
-}
-
 #messagenav {
   right: 6px !important;
 }
@@ -1302,14 +1262,6 @@ hr {
   margin: 52px auto 42px;
   filter: opacity(0);
   animation: linear fade-in .15s 1.35s forwards;
-}
-
-@media screen and (max-width: 1000px) {
-#dologin {
-  width: 60% !important;
-  min-width: 480px !important;
-  display: inline-block;
-}
 }
 
 .iframed #dologin {
@@ -1957,6 +1909,7 @@ body:not(.iframed) #mailbox tr:nth-child(2) {
 #mailbox th {
   padding: 6px 5px;
   white-space: nowrap;
+  font-size: 70%;
   color: var(--ink);
   border-bottom: var(--border);
   background: var(--th);
@@ -1973,8 +1926,7 @@ body:not(.iframed) #mailbox tr:nth-child(2) {
 }
 
 #mailbox th.MailListAttachment {
-  background: var(--attach) no-repeat center center, var(--th) !important;
-  background-size: 14px, 100% !important;
+  background: var(--attach) no-repeat center center / 14px , var(--th) !important;
 }
 
 #mailbox td {
@@ -1996,10 +1948,10 @@ td.mailListSender a, td.mailListSender a:hover {
 }
 
 td.mailListSender, tr:hover td.mailListSender {
-  white-space: nowrap;
   padding-right: 6px !important;
   padding-left: 22px !important;
   width: 1%;
+  white-space: nowrap;
   background-image: var(--user) !important;
   background-position: 6px center !important;
   background-repeat: no-repeat !important;
@@ -2024,15 +1976,7 @@ td.mailListSubject a {
 tr:hover td.mailListSubject a {
   width: calc(100% - 2px);
   border-radius: 2px 15px 15px 2px;
-  background: #ffc;
   background: linear-gradient(90deg, rgba(0,0,0,0), rgba(0,64,0,.9) 20%);
-}
-
-@media screen and (-webkit-min-device-pixel-ratio: 0) {
-td.mailListSubject a {
-  margin: -1px 0 !important;
-  padding: 5px 0 !important;
-}
 }
 
 tr:active td.mailListSubject a {
@@ -2060,13 +2004,9 @@ tr:active td.mailListSubject a {
   display: none;
 }
 
-#mailbox th {
-  font-size: 8pt;
-}
-
 .mailListFlagged {
-  min-width: 26px !important;
   padding: 3px 0 !important;
+  min-width: 26px !important;
   text-align: center;
 }
 
@@ -2119,8 +2059,8 @@ th.mailListDate {
   color: var(--ink);
   border-radius: 2px;
   box-shadow: 0 0 0 1px #000;
-  opacity: .8;
   background: var(--badge);
+  opacity: .8;
 }
 
 tr:hover .listDate {
@@ -2155,21 +2095,20 @@ td.mailListSize {
 }
 
 .mailListSize .unknown {
+  padding: 2px 0;
   display: inline-block;
   width: 100%;
-  text-align: center;
   letter-spacing: .1em;
-  padding: 2px 0;
+  text-align: center;
 }
 
 .listSize {
-  display: inline-block;
   min-width: 56px;
+  display: inline-block;
   vertical-align: middle;
   text-align: right;
   border-radius: 2px;
   box-shadow: 0 0 0 1px #000;
-  background: #010;
   background: var(--badge);
 }
 
@@ -2193,12 +2132,6 @@ tr:hover .listSize {
   background: #010;
 }
 
-@media screen and (-webkit-min-device-pixel-ratio: 0) {
-.listSize, .listSizeUnit {
-  font-size: 95%;
-}
-}
-
 .mailListAttachment {
   min-width: 16px;
 }
@@ -2208,13 +2141,11 @@ td.mailListAttachment img {
 }
 
 .mailListAttachment.isAttached {
-  background: var(--attach) no-repeat center center;
-  background-size: 14px;
+  background: var(--attach) no-repeat center center / 14px;
 }
 
 tr:hover .mailListAttachment.isAttached {
-  background: var(--attach_hover) no-repeat center center;
-  background-size: 14px;
+  background: var(--attach_hover) no-repeat center center / 14px;
 }
 
 .mailListSubject {
@@ -2222,9 +2153,9 @@ tr:hover .mailListAttachment.isAttached {
 }
 
 .mailListDelete, .mailListDate, .mailListSize, .mailListFlagged, .mailListAttachment {
+  padding: 3px 6px;
   width: 1%;
   white-space: nowrap;
-  padding: 3px 6px;
 }
 
 .mailListDelete {
@@ -2250,7 +2181,6 @@ td.mailListFlagged, td.mailListSender, td.mailListAttachment, td.mailListSubject
 
 #confirmdelete td {
   box-shadow: var(--highlight) !important;
-  background: #900;
   background: repeating-linear-gradient(45deg, #900, #900 10px, #000 10px, #000 20px);
   background-size: 400%;
   animation: attention 240s linear infinite both;
@@ -2261,12 +2191,8 @@ td.mailListFlagged, td.mailListSender, td.mailListAttachment, td.mailListSubject
 }
 
 @keyframes attention {
-from {
-background-position: 200%
-}
-to {
-background-position: 0;
-}
+  from {background-position: 200%}
+  to {background-position: 0}
 }
 
 #nukemail {
@@ -2310,19 +2236,18 @@ background-position: 0;
 #nukemail span {
   margin: 30px auto 18px;
   padding-bottom: 20px;
-  display: inline-block;
   width: 100%;
+  display: inline-block;
   font-size: 120%;
-/*  border-bottom: 1px solid #500;*/
 }
 
 #nukemail span::after {
   margin: 25px 0 -18px;
-  content: "";
-  display: block;
   width: 100%;
   height: 1px;
+  display: block;
   background: linear-gradient(90deg, #000, #500, #000);
+  content: "";
 }
 
 /* end confirm delete */
@@ -2330,145 +2255,34 @@ background-position: 0;
 /* loading mail */
 
 #loading {
-  padding: 50px 15px;
-  font-size: 10pt;
-  text-align: center;
-  background: #ddf;
-  background: repeating-linear-gradient(180deg,#001, #000 2px, #001 3px);
   margin: 0 !important;
+  padding: 50px 15px;
+  text-align: center;
+  font-size: 10pt;
   border: none !important;
+  background: repeating-linear-gradient(180deg,#001, #000 2px, #001 3px);
 }
 
 #loading b {
   padding: 6px 0;
-  display: inline-block;
   width: 40%;
   min-width: 400px;
-  color: var(--ink);
+  display: inline-block;
   letter-spacing: 2px;
+  color: var(--ink);
   text-shadow: 0 0 1px #001, 0 0 5px #003;
   border-radius: 2px;
   box-shadow: var(--highlight), inset 0 0 0 2px #001, inset 0 0 2px 3px #002, 0 0 1px #001;
-  background: #010;
   background: repeating-linear-gradient(45deg, #020 1px, #020 20px, #000 20px, #000 40px);
   animation: loading 1s linear infinite forwards alternate;
 }
 
 @keyframes loading {
-0% {
-  background: linear-gradient(180deg,rgba(255,255,255,.2) 50%, rgba(0,0,0,.3) 50%), repeating-linear-gradient(45deg, #020 1px, #020 20px, #000 20px, #000 40px);
-}
-
-100% {
-  background: linear-gradient(180deg,rgba(255,255,255,.2) 50%, rgba(0,0,0,.3) 50%),repeating-linear-gradient(45deg, #000 1px, #000 20px, #020 20px, #020 40px);;
-}
+  0% {background: linear-gradient(180deg,rgba(255,255,255,.2) 50%, rgba(0,0,0,.3) 50%), repeating-linear-gradient(45deg, #020 1px, #020 20px, #000 20px, #000 40px)}
+  100% {background: linear-gradient(180deg,rgba(255,255,255,.2) 50%, rgba(0,0,0,.3) 50%),repeating-linear-gradient(45deg, #000 1px, #000 20px, #020 20px, #020 40px)}
 }
 
 /* end loading mail */
-
-/* responsive layout */
-
-@media screen and (max-width: 1000px) {
-body {
-  margin: 3px;
-}
-
-body, td, a, button, input, p.mailbody {
-  font-size: 8.5pt !important;
-}
-
-th.mailListDate {
-  white-space: nowrap;
-  text-align: center !important;
-}
-
-td.mailListDate {
-  white-space: normal !important;
-  width: 1%;
-  line-height: 100%;
-  text-align: center;
-}
-
-.listDate {
-  padding-bottom: 1px !important;
-  text-align: center !important;
-  font-weight: 700;
-  border: none !important;
-  border-bottom: 1px solid rgba(0,64,0,.4) !important;
-  opacity: .85;
-  box-shadow: none !important;
-  background: none !important;
-}
-
-.listDate span {
-  min-width: 0 !important;
-}
-
-.listTime {
-  text-align: center !important;
-  font-size: 95%;
-}
-
-.switchto, #serverRefresh, .logout {
-  width: 20px;
-  font-size: 0 !important;
-  line-height: 14px;
-  background-position: center center !important;
-}
-
-#info {
-/*  display: none !important;*/
-  float: none !important;
-  margin: 4px 4px 0 -380px !important;
-}
-
-.topbuttons input[type="submit"], .topbuttons input[type="reset"], .topbuttons .fakebutton, .topbuttons select {
-  margin: 2px !important;
-  vertical-align: middle !important;
-}
-
-.topbuttons select {
-  margin-left: -2px !important;
-}
-
-.folders {
-  border: none;
-  margin: 0 0 0 -2px !important;
-}
-}
-
-@media screen and (max-width: 900px) {
-  #infoUser {
-    display: none !important;
-  }
-
-  #info {
-    margin-left: -486px !important;
-    padding: 3px 0 3px 8px !important;
-  }
-}
-
-@media screen and (min-width: 1300px) {
-.iframed body, .iframed td, .iframed textarea, .iframed input, .iframed div, .iframed p.mailbody, .iframed th, .iframed a {
-  font-size: 10pt !important;
-}
-
-.iframed td {
-  padding: 3px 5px;
-}
-}
-
-@media screen and (min-width: 1500px) {
-body, td, textarea, input, div, p.mailbody, th, a, select {
-  font-size: 10pt !important;
-}
-
-td {
-  padding: 3px 5px;
-}
-}
-
-/* end responsive layout */
 
 .folders {
   display: inline-block;
@@ -2537,12 +2351,6 @@ tr.mailbody td {
   opacity: .9;
 }
 
-@media screen and (max-width: 1500px) {
-.debugHeader pre {
-  font-size: 8.5pt;
-}
-}
-
 #toggleHeaders {
   padding: 4px;
   min-width: 110px;
@@ -2601,4 +2409,116 @@ tr.mailbody td {
 
 #toggle.showpass {
   background: var(--show) no-repeat center center / 20px;
+}
+
+/* responsive layout */
+
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  td.mailListSubject a {
+    margin: -1px 0 !important;
+    padding: 5px 0 !important;
+  }
+  .listSize, .listSizeUnit {
+    font-size: 95%;
+  }
+}
+
+@media screen and (max-width: 1500px) {
+  .debugHeader pre {font-size: 8.5pt}
+}
+
+@media screen and (max-width: 1300px) {
+  .pagenavcontainer {
+    padding: 0;
+    top: 10px;
+    right: 3px !important;
+    border: none;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  #dologin {
+    width: 60% !important;
+    min-width: 480px !important;
+    display: inline-block;
+  }
+  body {margin: 3px}
+  body, td, a, button, input, p.mailbody {font-size: 8.5pt !important}
+  th.mailListDate {
+    white-space: nowrap;
+    text-align: center !important;
+  }
+  td.mailListDate {
+    width: 1%;
+    line-height: 100%;
+    white-space: normal !important;
+    text-align: center;
+  }
+  .listDate {
+    padding-bottom: 1px !important;
+    text-align: center !important;
+    font-weight: 700;
+    border: none !important;
+    border-bottom: 1px solid rgba(0,64,0,.4) !important;
+    box-shadow: none !important;
+    opacity: .85;
+    background: none !important;
+  }
+  .listDate span {min-width: 0 !important}
+  .listTime {
+    text-align: center !important;
+    font-size: 95%;
+  }
+  .switchto, #serverRefresh, .logout {
+    width: 20px;
+    line-height: 14px;
+    font-size: 0 !important;
+    background-position: center center !important;
+  }
+  #info {
+    margin: 4px 4px 0 -380px !important;
+    float: none !important;
+  }
+  .topbuttons input[type="submit"], .topbuttons input[type="reset"], .topbuttons .fakebutton, .topbuttons select {
+    margin: 2px !important;
+    vertical-align: middle !important;
+  }
+  .topbuttons select {margin-left: -2px !important}
+  .folders {
+    margin: 0 0 0 -2px !important;
+    border: none;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .pagenavcontainer {
+    position: fixed;
+    top: 8px;
+    right: 5px;
+  }
+  #infoUser {display: none !important}
+  #info {
+    margin-left: -486px !important;
+    padding: 3px 0 3px 8px !important;
+  }
+}
+
+@media screen and (min-width: 1300px) {
+  .iframed body, .iframed td, .iframed textarea, .iframed input,
+  .iframed div, .iframed p.mailbody, .iframed th, .iframed a {font-size: 10pt !important}
+  .iframed td {padding: 3px 5px}
+}
+
+@media screen and (min-width: 1500px) {
+  body, td, textarea, input, div, p.mailbody, th, a, select {font-size: 10pt !important}
+  #mailbox th {font-size: 70% !important}
+  td {padding: 3px 5px}
+  p.mailbody + p.info {
+    margin-top: -53px;
+  }
+  p.footer, p.footer a {
+    line-height: 12pt;
+    font-size: 9pt !important;
+  }
+  #messagenav {top: 9px !important}
 }
