@@ -24,6 +24,7 @@
   --border: 1px solid #141;
   --badge: linear-gradient(180deg,#020,#010);
   --th: linear-gradient(180deg,#010,#000);
+  --txt_shadow: 0 1px 1px #000;
 }
 
 html {
@@ -97,7 +98,7 @@ textarea:hover {
 
 b, h3, .pagenav td, th {
   color: var(--ink);
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--txt_shadow);
 }
 
 li {
@@ -281,8 +282,7 @@ pre {
   box-shadow: var(--highlight);
   border: var(--border);
   border-radius: 1px;
-  background-color: #010;
-  background-color: rgba(0,32,0,.1);
+  background-color: rgba(0,80,0,.3);
 }
 
 .iframed .page {
@@ -291,6 +291,7 @@ pre {
   min-width: 620px;
   border: none;
   border-radius: 0;
+  background-color: rgba(0,16,0,.3);
 }
 
 table {
@@ -411,34 +412,27 @@ input[type=submit], input[type=reset], #settings, .topbuttons .fakebutton {
   font-size: 8.5pt;
   font-weight: 700;
   text-decoration: none;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--txt_shadow);
   opacity: 1;
   cursor: pointer;
   box-shadow: var(--btn_shadow);
   border: 1px solid #000;
   border-radius: 2px;
   background: var(--btn);
-  background-size: 12px, 100% !important;
-}
-
-.topbuttons input.logout {
-  background-size: 16px, 100% !important;
+  background-size: 12px, 100%;
 }
 
 input.cancel, #nukemail input.clearselection {
   padding: 7px 10px 7px 24px;
-  background: var(--no) no-repeat 8px center, var(--btn);
-  background-size: 12px, 100% !important;
+  background: var(--no) no-repeat 8px center / 12px, var(--btn);
 }
 
 input.cancel:hover, #nukemail input.clearselection:hover {
-  background: var(--no_hover) no-repeat 8px center, var(--btn_hover);
-  background-size: 12px, 100% !important;
+  background: var(--no_hover) no-repeat 8px center / 12px, var(--btn_hover);
 }
 
 input.cancel:active, #nukemail input.clearselection:active {
-  background: #f60 var(--no_active) no-repeat 8px center;
-  background-size: 12px !important;
+  background: #f60 var(--no_active) no-repeat 8px center / 12px;
 }
 
 input.clearselection {
@@ -530,15 +524,15 @@ input.forward:active {
 
 input.login {
   padding: 7px 10px 7px 26px;
-  background: var(--login) no-repeat 8px center / 15px, var(--btn) !important;
+  background: var(--login) no-repeat 8px center / 14px, var(--btn) !important;
 }
 
 input.login:hover {
-  background: var(--login_hover) no-repeat 8px center / 15px , var(--btn_hover) !important;
+  background: var(--login_hover) no-repeat 8px center / 14px , var(--btn_hover) !important;
 }
 
 input.login:active {
-  background: #f60 var(--login_active) no-repeat 8px center / 15px !important;
+  background: #f60 var(--login_active) no-repeat 8px center / 14px !important;
 }
 
 #info {
@@ -547,42 +541,42 @@ input.login:active {
 
 input.logout {
   padding: 7px 10px 7px 26px;
-  background: var(--logout) no-repeat 8px center / 15px, var(--btn) !important;
+  background: var(--logout) no-repeat 8px center / 14px, var(--btn);
 }
 
 input.logout:hover {
-  background: var(--logout_hover) no-repeat 8px center / 15px, var(--btn_hover) !important;
+  background: var(--logout_hover) no-repeat 8px center / 14px, var(--btn_hover);
 }
 
 input.logout:active {
-  background: #f60 var(--logout_active) no-repeat 8px center / 15px !important;
+  background: #f60 var(--logout_active) no-repeat 8px center / 14px;
 }
 
 #info input.logout, #info input.logout:hover,
 #info input.logout:focus, #info input.logout:active {
-  margin: -8px -8px -8px 8px !important;
-  float: none !important;
+  margin: -8px -8px -8px 8px;
+  float: none;
   line-height: normal;
-  border: none !important;
-  border-left: 1px solid #131 !important;
+  border: none;
+  border-left: 1px solid #131;
   border-radius: 0;
   box-shadow: none;
-  background: var(--logout) no-repeat 8px center / 14px, var(--badge) !important;
+  background: var(--logout) no-repeat 8px center / 14px, var(--badge);
   filter: none;
 }
 
 #info input.logout:hover {
-  background: var(--logout_hover) no-repeat 8px center / 14px, var(--badge) !important;
+  background: var(--logout_hover) no-repeat 8px center / 14px, var(--badge);
 }
 
 #info input.logout:active {
-  background: #f60 var(--logout_active) no-repeat 8px center / 14px !important;
   box-shadow: var(--btn_shadow_active);
+  background: #f60 var(--logout_active) no-repeat 8px center / 14px;
 }
 
 input.reload, input.refresh, input[name="refresh"][disabled], .topbuttons .fakebutton {
   padding: 7px 10px 7px 26px;
-  background: var(--refresh) no-repeat 8px center / 13px, var(--btn) !important;
+  background: var(--refresh) no-repeat 8px center / 13px, var(--btn);
 }
 
 .topbuttons .fakebutton {
@@ -595,11 +589,11 @@ input[name="refresh"][disabled] {
 }
 
 input.reload:hover, input.refresh:hover, .fakebutton:hover {
-  background: var(--refresh_hover) no-repeat 8px center / 13px, var(--btn_hover) !important;
+  background: var(--refresh_hover) no-repeat 8px center / 13px, var(--btn_hover);
 }
 
 input.reload:active, input.refresh:active, .fakebutton:active {
-  background: #f60 var(--refresh_active) no-repeat 8px center / 13px !important;
+  background: #f60 var(--refresh_active) no-repeat 8px center / 13px;
 }
 
 input.invertselection {
@@ -625,8 +619,7 @@ input.show:hover {
 }
 
 input.show:active {
-  background: #f60 var(--yes_active) no-repeat 8px center;
-  background-size: 12px !important;
+  background: #f60 var(--yes_active) no-repeat 8px center / 12px;
 }
 
 input.markall {
@@ -645,12 +638,10 @@ input.markall:active {
 input.new {
   padding: 7px 10px 7px 26px;
   background: var(--compose) no-repeat 8px center / 14px, var(--btn);
-  background-size: 14px, 100% !important;
 }
 
 input.new:hover {
-  background: var(--compose_hover) no-repeat 8px center, var(--btn_hover);
-  background-size: 14px, 100% !important;
+  background: var(--compose_hover) no-repeat 8px center / 14px, var(--btn_hover);
 }
 
 input.new:active {
@@ -906,48 +897,60 @@ input:active, .fakebutton:active {
   float: right;
 }
 
-input.firstpage, input[name="firstpage"],
-input.firstpage[disabled]:hover, input[name="firstpage"][disabled]:hover {
+input.firstpage {
   padding: 4px 10px;
   text-indent: -99999px;
-  background: var(--first) no-repeat center center, linear-gradient(180deg,#020, #000);
+  background: var(--first) no-repeat center center / 14px, var(--btn);
 }
 
-input.firstpage:hover, input[name="firstpage"]:hover {
-  background: var(--first_hover) no-repeat center center, var(--btn_hover);
+input.firstpage:hover {
+  background: var(--first_hover) no-repeat center center / 14px, var(--btn_hover);
 }
 
-input.lastpage, input[name="lastpage"],
-input.lastpage[disabled]:hover, input[name="lastpage"][disabled]:hover {
+input.firstpage:active {
+  background: #f60 var(--first_active) no-repeat center center / 14px;
+}
+
+input.lastpage {
   padding: 4px 10px;
-  background: var(--last) no-repeat center center, linear-gradient(180deg,#020, #000);
+  background: var(--last) no-repeat center center / 14px, var(--btn);
   text-indent: -99999px;
 }
 
-input.lastpage:hover, input[name="lastpage"]:hover {
-  background: var(--last_hover) no-repeat center center, var(--btn_hover);
+input.lastpage:hover {
+  background: var(--last_hover) no-repeat center center / 14px, var(--btn_hover);
 }
 
-input.prevpage, input.prev, input[name="prev"], input[name="prevpage"],
-input.prevpage[disabled]:hover, input.prev[disabled]:hover, input[name="prev"][disabled]:hover, input[name="prevpage"][disabled]:hover {
+input.lastpage:active {
+  background: #f60 var(--last_active) no-repeat center center / 14px;
+}
+
+input.prevpage, input.prev {
   padding: 4px 10px;
   text-indent: -99999px;
-  background: var(--previous) no-repeat center center, linear-gradient(180deg,#020, #000);
+  background: var(--previous) no-repeat center center / 14px, var(--btn);
 }
 
-input[name="prev"]:hover, input[name="prevpage"]:hover {
-  background: var(--previous_hover.svg) no-repeat center center, var(--btn_hover);
+input.prev:hover, input.prevpage:hover {
+  background: var(--previous_hover) no-repeat center center / 14px, var(--btn_hover);
 }
 
-input.nextpage, input.next, input[name="nextpage"], input[name="next"],
-input.nextpage[disabled]:hover, input.next[disabled]:hover, input[name="nextpage"][disabled]:hover, input[name="next"][disabled]:hover {
+input.prev:active, input.prevpage:active {
+  background: #f60 var(--previous_active) no-repeat center center / 14px;
+}
+
+input.nextpage, input.next {
   padding: 4px 10px;
   text-indent: -99999px;
-  background: var(--next) no-repeat center center, linear-gradient(180deg,#020, #000);
+  background: var(--next) no-repeat center center / 14px, var(--btn);
 }
 
-input.nextpage:hover, input.next:hover, input[name="nextpage"]:hover {
-  background: var(--next_hover) no-repeat center center, var(--btn_hover);
+input.nextpage:hover, input.next:hover {
+  background: var(--next_hover) no-repeat center center / 14px, var(--btn_hover);
+}
+
+input.nextpage:active, input.next:active {
+  background: #f60 var(--next_active) no-repeat center center / 14px;
 }
 
 @supports (position: sticky) {
@@ -1009,8 +1012,8 @@ tr.bottombuttons .pagenav {
 }
 
 .pagenav input {
-  float: none;
   margin: 2px 1px !important;
+  float: none;
 }
 
 .pagenav input[name="prevpage"] {
@@ -1355,7 +1358,7 @@ hr {
   min-width: 120px;
   display: inline-block;
   color: #494;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--txt_shadow);
   border-radius: 25px;
   box-shadow: 0 0 0 1px #000;
   background: #020;
@@ -1420,7 +1423,7 @@ h3#config {
   word-spacing: .1em;
   border-bottom: var(--border);
   box-shadow: var(--highlight);
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--txt_shadow);
   background: #010;
   background: linear-gradient(90deg, rgba(0,64,0,.1), rgba(0,80,0,.2), rgba(0,64,0,.1)), var(--th);
 }
@@ -1547,9 +1550,10 @@ body:not(.iframed) .topbuttons {
 }
 
 .topbuttons input.list {
-  background-position: center center;
-  text-indent: -99999px;
   padding: 5px 10px;
+  text-indent: -99999px;
+  background-position: center center;
+  background-size: 14px;
 }
 
 .topbuttons input[type=text] {
@@ -1589,7 +1593,7 @@ tr.bottombuttons:empty {
   right: 0;
   z-index: 9999;
   text-align: center;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--txt_shadow);
   border: 1px solid #000;
   border-top: none;
   box-shadow: 0 2px 2px 1px rgba(0,0,0,.5), inset 0 0 0 1px #040;
@@ -1625,7 +1629,7 @@ tr.bottombuttons:empty {
   letter-spacing: .07em;
   word-spacing: .2em;
   font-weight: 700;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--txt_shadow);
   animation: fade-in 1s linear;
 }
 
@@ -1887,14 +1891,12 @@ _:-ms-lang(x), tr.list0:hover, tr.list1:hover {
 
 body:not(.iframed) #mailbox tr:nth-child(2) {
   position: sticky;
-  top: 42px;
+  top: 49px;
   z-index: 500;
 }
 
 @supports not (-moz-appearance: none) {
-#mailbox tr:nth-child(2) {
-  position: static;
-}
+  #mailbox tr:nth-child(2) {position: static}
 }
 
 #mailbox th {
@@ -2118,7 +2120,7 @@ tr:hover .listSize {
   font-size: 90% !important;
   font-style: normal;
   font-weight: 700;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--txt_shadow);
   border-radius: 0 1px 1px 0;
   background: #010;
 }
@@ -2338,7 +2340,7 @@ tr.mailbody td {
   line-height: 130%;
   font-size: 9.5pt;
   color: #bb0;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--txt_shadow);
   opacity: .9;
 }
 
@@ -2416,6 +2418,7 @@ tr.mailbody td {
 
 @media screen and (max-width: 1500px) {
   .debugHeader pre {font-size: 8.5pt}
+  body:not(.iframed) #mailbox tr:nth-child(2) {top: 47px}
 }
 
 @media screen and (max-width: 1300px) {
