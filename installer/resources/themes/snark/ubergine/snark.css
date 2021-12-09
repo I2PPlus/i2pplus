@@ -5505,6 +5505,7 @@ td.snarkTorrentAction input[type=submit] {
   .snarkTorrentName a {max-width: 280px !important}
   .snarkTrackerDetails img{height: 17px !important}
   td.snarkGraphicStatus img{margin-left: 4px !important}
+  .snarkTorrentInfo td {padding: 6px 5px !important}
 }
 
 @media screen and (max-width: 950px) {
@@ -5898,7 +5899,7 @@ td.snarkTorrentAction input[type=submit] {
 
 @media screen and (min-width: 1500px) {
   .torrentlink, .magnetlink {margin: -2px 3px -2px 4px !important}
-  .snarkTorrentInfo th:first-child img, #torrentinfostats img {
+  .snarkTorrentInfo th:first-child img, .snarkTorrentInfo td img, #torrentinfostats img {
     margin: -3px 5px 0 !important;
     max-height: 18px !important;
   }
