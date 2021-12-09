@@ -21,6 +21,7 @@
   --active: #f90;
   --highlight: inset 0 0 0 1px #000;
   --option_highlight: inset 0 0 0 1px #002500;
+  --highlight_badge: inset 0 0 0 1px #010, 0 0 0 1px #000;
   --element: linear-gradient(180deg,#020, #010);
   --btn: linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
   --btn_shadow_active: var(--highlight), inset 3px 3px 3px 2px rgba(0,0,0,.8);
@@ -30,6 +31,7 @@
   --helpbox: linear-gradient(135deg, #000d00, #000900);
   --border: 1px solid #242;
   --softborder: 1px solid #131;
+  --dotted: 1px dotted #131;
   --navbar: linear-gradient(180deg,#1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%);
   --download_bar: repeating-linear-gradient(135deg, #000 1px, #000 5px, #010 6px, #010 11px);
   --msg: linear-gradient(180deg,#010,#000400);
@@ -380,8 +382,8 @@ pre {
 }
 
 .routersummary img[src$="i2plogo.png"]:active {
-  transform: scale(.97);
   filter: sepia(1) hue-rotate(45deg) saturate(2) opacity(.65) drop-shadow(0 0 1px rgba(156,32,0,.3));
+  transform: scale(.97);
   transition: none;
 }
 
@@ -544,8 +546,8 @@ pre {
   height: 16px;
   vertical-align: middle;
   font-size: 0;
-  mix-blend-mode: overlay;
   opacity: 0;
+  mix-blend-mode: overlay;
 }
 
 #sb_localtunnels img::after {
@@ -712,9 +714,9 @@ div.refresh {
 
 .routersummary td {
   padding: 0 2px 0 2px;
-  background-image: none !important;
-  border: 0 !important;
   word-spacing: -0.1em;
+  border: 0 !important;
+  background-image: none !important;
 }
 
 .routersummary td:first-child {
@@ -777,8 +779,8 @@ div.refresh {
   border-top: none;
   border-radius: 0 0 2px 2px;
   background: #000;
-  transition: ease opacity .3s;
   opacity: 0;
+  transition: ease opacity .3s;
   pointer-events: none;
 }
 
@@ -796,7 +798,6 @@ div.refresh {
   width: 205px;
   border: var(--softborder);
   box-shadow: 0 0 1px 1px rgba(0,0,0,.8), var(--highlight), inset 0 3px 3px rgba(0,0,0,.7);
-  background: #000;
   background: linear-gradient(90deg, rgba(0,128,0,0) 40%, rgba(255,96,0,.06), rgba(255,0,0,.08)),
     repeating-linear-gradient(90deg, #000 1px, #000 2px, #010 2px, #010 4px);
   opacity: 1;
@@ -812,7 +813,6 @@ div.refresh {
   max-width: 100%;
   border-right: var(--softborder);
   box-shadow: var(--highlight);
-  background: #0e5f00;
   background: linear-gradient(180deg,rgba(28, 148, 58, .6), rgba(9, 47, 16, .6) 50%, rgba(9, 27, 5, .6) 50%, rgba(9, 21, 3, .6));
 }
 
@@ -866,12 +866,8 @@ div.refresh {
 }
 
 @keyframes downloadbar {
-  from {
-    background: var(--download_bar);
-  }
-  to {
-    background: repeating-linear-gradient(135deg, #010 1px, #010 6px, #000 7px, #000 11px);
-  }
+  from {background: var(--download_bar)}
+  to {background: repeating-linear-gradient(135deg, #010 1px, #010 6px, #000 7px, #000 11px)}
 }
 
 /* end status bar */
@@ -1027,19 +1023,16 @@ h1 + .sorry, #console_404 .sorry {
 }
 
 @supports not (-moz-appearance: none) {
-.main#config_summarybar, .main#config_summarybar div.messages,
-.main#config_homepage, .main#config_homepage div.messages {
-  position: static !important;
-}
-
-.main#config_summarybar div.messages,
-.main#config_homepage div.messages {
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  width: auto !important;
-  top: initial !important;
-  animation: none !important;
-}
+  .main#config_summarybar, .main#config_summarybar div.messages,
+  .main#config_homepage, .main#config_homepage div.messages {position: static !important}
+  .main#config_summarybar div.messages,
+  .main#config_homepage div.messages {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: auto !important;
+    top: initial !important;
+    animation: none !important;
+  }
 }
 
 /* end main */
@@ -1111,7 +1104,7 @@ div.news li {
   color: var(--a);
   font-size: 9.5pt;
   font-weight: 700;
-  border-bottom: 1px dotted #252;
+  border-bottom: var(--dotted);
 }
 
 div.news h4 {
@@ -1119,7 +1112,7 @@ div.news h4 {
   padding: 0;
   text-transform: capitalize;
   font-size: 10pt;
-  border-bottom: 1px dotted #252;
+  border-bottom: var(--dotted);
   opacity: 1;
 }
 
@@ -5474,7 +5467,7 @@ h3#bannedpeers {
   padding: 8px 5px;
   columns: 328px auto;
   column-gap: 8px;
-  column-rule: 1px dotted #131;
+  column-rule: var(--dotted);
   border: var(--border);
   background: none;
 }
@@ -7603,7 +7596,7 @@ h4#sb_shutdownstatus span {
 }
 
 .tunnel_cap, .tier, .reachable, .ff {
-  box-shadow: inset 0 0 0 1px #010, 0 0 0 1px #000 !important;
+  box-shadow: var(--highlight_badge) !important;
 }
 
 #tunnels .tunnel_cap {
@@ -11534,10 +11527,16 @@ h3#scheduledjobs {
   vertical-align: middle !important;
 }
 
+#homepage .main h4 {
+  contain: paint;
+}
+
 #homepage .main h4 a {
-  margin: -9px 0;
-  padding: 11px 4px 10px;
+  margin: -9px 0 -10px;
+  padding: 14px 4px 12px;
   border-left: var(--border);
+  position: absolute;
+  right: 8px;
 }
 
 #homepage h4.app a {
@@ -11545,7 +11544,7 @@ h3#scheduledjobs {
 }
 
 #homepage h4.app2 a {
-  padding: 9px 4px 9px;
+  padding: 10px 4px 14px;
 }
 
 @supports not (-moz-appearance: none) {
@@ -13562,7 +13561,7 @@ body.iframed {
     font-size: 9.5pt !important;
     columns: 510px auto;
     column-gap: 30px;
-    column-rule: 1px dotted #131;
+    column-rule: var(--dotted);
   }
   #help .confignav, #debug .confignav {
     position: sticky;
@@ -14078,7 +14077,7 @@ body.iframed {
     vertical-align: middle;
     text-align: left;
     border: 1px solid #030;
-    box-shadow: inset 0 0 0 1px #010, 0 0 0 1px #000;
+    box-shadow: var(--highlight_badge);
     background: var(--element);
   }
   .tunnel_id:not(:empty) {
