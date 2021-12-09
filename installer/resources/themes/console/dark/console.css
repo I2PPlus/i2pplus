@@ -13972,9 +13972,12 @@ body.iframed {
     height: 42px;
   }
   #minigraph {
-    margin-top: -20px !important;
+    margin-top: -17px !important;
     width: 250px !important;
     height: 38px !important;
+  }
+  #homepage #minigraph {
+    margin-top: -18px !important;
   }
   #minigraphcontainer {
     margin-top: -40px !important;
