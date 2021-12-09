@@ -875,10 +875,10 @@ td:first-child {
 .snarkTrackerDetails a:active img, .snarkTorrentDetails a:active img:not([src$="rateme.svg"]),
 .snarkDirInfo td:not(.parentdir):first-child a:active img {
   border: 1px solid #212 !important;
-  box-shadow: inset 3px 3px 2px 1px #202;
+  border-radius: 0;
+  box-shadow: var(--highlight), inset 3px 3px 2px 1px #202;
   background: #414;
-  mix-blend-mode: overlay;
-  transform: scale(0.9) !important;
+  transform: scale(.8) !important;
   transition: none !important;
   filter: none !important;
 }
