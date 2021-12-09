@@ -1174,12 +1174,12 @@ tr:hover .percentBarText {
   padding-top: 4px;
 }
 
-tr:hover .snarkTorrentName a:hover, tr:hover .snarkFileName a:hover {
+tr:hover .snarkTorrentName a:hover, tr:hover .snarkFileName a:hover, tr:active .ParentDir a {
   border-radius: 2px 15px 15px 2px;
   background: linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,.2) 70%);
 }
 
-tr:hover .snarkTorrentName a:active, tr:hover .snarkFileName a:active, tr:hover .ParentDir a:active {
+tr:hover .snarkTorrentName a:active, tr:hover .snarkFileName a:active {
   padding-left: 5px;
   box-shadow: inset 3px 3px 3px #101;
   background: #303;
