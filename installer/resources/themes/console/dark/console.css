@@ -11548,6 +11548,22 @@ h3#scheduledjobs {
   padding: 9px 4px 9px;
 }
 
+@supports not (-moz-appearance: none) {
+  #homepage h4.app, #homepage h4.app2 {
+    padding-top: 4px !important;
+    padding-bottom: 7px !important;
+  }
+  h4.app a::after, h4.app2 a::after {
+    margin-top: 0 !important;
+    padding-top: 8px !important;
+  }
+  h4.app2 a::after {
+    margin-bottom: -7px !important;
+    padding-top: 4px !important;
+    padding-bottom: 10px !important;
+  }
+}
+
 #tunnels h3#exploratory a, #tunnels h3.server a, #tunnels h3.client a {
   margin: -8px 0 -8px 0 !important;
   padding: 7px 4px 14px 10px !important;
