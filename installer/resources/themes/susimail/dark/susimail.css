@@ -15,6 +15,7 @@
   --ink: #ee9;
   --border: 1px solid #252;
   --border_soft: 1px solid #131;
+  --border_hover: 1px solid #f60;
   --highlight: inset 0 0 0 1px #000;
   --btn: linear-gradient(180deg,#001000,#000 5%,#000 95%,#001000);
   --btn_hover: linear-gradient(180deg,#000,#010);
@@ -23,7 +24,9 @@
   --btn_shadow_active: var(--highlight), inset 3px 3px 3px 2px rgba(0,0,0,.6);
   --border: 1px solid #141;
   --badge: linear-gradient(180deg,#020,#010);
+  --tr: linear-gradient(180deg,#001400,#000600);
   --th: linear-gradient(180deg,#010,#000);
+  --txt_shadow: 0 1px 1px #000;
 }
 
 html {
@@ -97,7 +100,7 @@ textarea:hover {
 
 b, h3, .pagenav td, th {
   color: var(--ink);
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--txt_shadow);
 }
 
 li {
@@ -185,8 +188,8 @@ div.header, .iframed .header {
 }
 
 div.footer {
-  border-top: none;
   margin: 0 -1px -1px;
+  border-top: none;
   border: var(--border);
   box-shadow: var(--highlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000 !important;
   background: linear-gradient(90deg, #000800 15%, #000 50%, #000800 85%);
@@ -221,7 +224,7 @@ p.mailbody {
   margin-top: 0;
   padding: 0 0 15px;
   word-break: break-all; /* required to ensure super long strings don't break the layout */
-  line-height: 130%;
+  line-height: 1.3;
   text-align: left;
   font-size: 9pt;
 }
@@ -281,8 +284,7 @@ pre {
   box-shadow: var(--highlight);
   border: var(--border);
   border-radius: 1px;
-  background-color: #010;
-  background-color: rgba(0,32,0,.1);
+  background-color: rgba(0,80,0,.3);
 }
 
 .iframed .page {
@@ -291,6 +293,7 @@ pre {
   min-width: 620px;
   border: none;
   border-radius: 0;
+  background-color: rgba(0,16,0,.3);
 }
 
 table {
@@ -315,17 +318,19 @@ form {
 .header + form {
   border: var(--border);
   box-shadow: 0 0 1px 1px #000;
+  background: rgba(0,0,0,.5);
 }
 
 .iframed form {
   margin-bottom: 8px !important;
-  border: none !important;
+  border: none;
   box-shadow: none;
 }
 
 .iframed .header + form {
   margin-bottom: -10px !important;
   padding-bottom: 17px;
+  background: none;
 }
 
 /* message view */
@@ -411,38 +416,31 @@ input[type=submit], input[type=reset], #settings, .topbuttons .fakebutton {
   font-size: 8.5pt;
   font-weight: 700;
   text-decoration: none;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--txt_shadow);
   opacity: 1;
   cursor: pointer;
   box-shadow: var(--btn_shadow);
   border: 1px solid #000;
   border-radius: 2px;
   background: var(--btn);
-  background-size: 12px, 100% !important;
-}
-
-.topbuttons input.logout {
-  background-size: 16px, 100% !important;
+  background-size: 12px, 100%;
 }
 
 input.cancel, #nukemail input.clearselection {
-  padding: 7px 10px 7px 24px;
-  background: var(--no) no-repeat 8px center, var(--btn);
-  background-size: 12px, 100% !important;
+  padding: 7px 14px 7px 27px;
+  background: var(--no) no-repeat 10px center / 12px, var(--btn);
 }
 
 input.cancel:hover, #nukemail input.clearselection:hover {
-  background: var(--no_hover) no-repeat 8px center, var(--btn_hover);
-  background-size: 12px, 100% !important;
+  background: var(--no_hover) no-repeat 10px center / 12px, var(--btn_hover);
 }
 
 input.cancel:active, #nukemail input.clearselection:active {
-  background: #f60 var(--no_active) no-repeat 8px center;
-  background-size: 12px !important;
+  background: #f60 var(--no_active) no-repeat 10px center / 12px;
 }
 
 input.clearselection {
-  padding: 7px 10px 7px 26px;
+  padding: 7px 11px 7px 28px;
   background: url(/themes/susimail/images/none.png) no-repeat 8px center, var(--btn);
 }
 
@@ -456,7 +454,7 @@ input.clearselection:active {
 }
 
 input.delete, input.delete_attachment, input.really_delete {
-  padding: 7px 10px 7px 26px;
+  padding: 7px 11px 7px 28px;
   background: var(--delete) no-repeat 8px center, var(--btn);
   background-size: 16px, 100% !important;
 }
@@ -472,20 +470,20 @@ input.delete:active, input.delete_attachment:active, input.really_delete:active 
 }
 
 input.download {
-  padding: 7px 10px 7px 26px;
-  background: var(--download) no-repeat 8px center / 14px, var(--btn);
+  padding: 7px 11px 7px 28px;
+  background: var(--download) no-repeat 10px center / 14px, var(--btn);
 }
 
 input.download:hover {
-  background: var(--download) no-repeat 8px center / 14px, var(--btn_hover);
+  background: var(--download) no-repeat 10px center / 14px, var(--btn_hover);
 }
 
 input.download:active {
-  background: var(--download) no-repeat 8px center / 14px, var(--btn_hover);
+  background: var(--download) no-repeat 10px center / 14px, var(--btn_hover);
 }
 
 input.offline {
-  padding: 7px 10px 7px 26px;
+  padding: 7px 11px 7px 28px;
   background: var(--offline) no-repeat 8px center, var(--btn);
   background-size: 14px, 100% !important;
 }
@@ -501,7 +499,7 @@ input.offline:active {
 }
 
 input.list, input.moveto, #pagenav input.switchto {
-  padding: 7px 10px 7px 26px;
+  padding: 7px 11px 7px 28px;
   background: var(--folder) no-repeat 8px center, var(--btn);
 }
 
@@ -514,31 +512,31 @@ input.list:active, input.moveto:active, #pagenav input.switchto:active {
 }
 
 input.forward {
-  padding: 7px 10px 7px 26px;
+  padding: 7px 11px 7px 28px;
   background: var(--forward) no-repeat 8px center, var(--btn);
   background-size: 14px, 100% !important;
 }
 
 input.forward:hover {
-  background: var(--forward_hover) no-repeat 8px center / 14px, var(--btn_hover) !important;
+  background: var(--forward_hover) no-repeat 10px center / 14px, var(--btn_hover) !important;
   background-size: 14px, 100% !important;
 }
 
 input.forward:active {
-  background: #f60 var(--forward_active) no-repeat 8px center / 14px !important;
+  background: #f60 var(--forward_active) no-repeat 10px center / 14px !important;
 }
 
 input.login {
-  padding: 7px 10px 7px 26px;
-  background: var(--login) no-repeat 8px center / 15px, var(--btn) !important;
+  padding: 7px 11px 7px 28px;
+  background: var(--login) no-repeat 10px center / 14px, var(--btn) !important;
 }
 
 input.login:hover {
-  background: var(--login_hover) no-repeat 8px center / 15px , var(--btn_hover) !important;
+  background: var(--login_hover) no-repeat 10px center / 14px , var(--btn_hover) !important;
 }
 
 input.login:active {
-  background: #f60 var(--login_active) no-repeat 8px center / 15px !important;
+  background: #f60 var(--login_active) no-repeat 10px center / 14px !important;
 }
 
 #info {
@@ -546,43 +544,44 @@ input.login:active {
 }
 
 input.logout {
-  padding: 7px 10px 7px 26px;
-  background: var(--logout) no-repeat 8px center / 15px, var(--btn) !important;
+  padding: 7px 14px 7px 28px;
+  background: var(--logout) no-repeat 10px center / 14px, var(--btn);
 }
 
 input.logout:hover {
-  background: var(--logout_hover) no-repeat 8px center / 15px, var(--btn_hover) !important;
+  background: var(--logout_hover) no-repeat 10px center / 14px, var(--btn_hover);
 }
 
 input.logout:active {
-  background: #f60 var(--logout_active) no-repeat 8px center / 15px !important;
+  background: #f60 var(--logout_active) no-repeat 10px center / 14px;
 }
 
 #info input.logout, #info input.logout:hover,
 #info input.logout:focus, #info input.logout:active {
-  margin: -8px -8px -8px 8px !important;
-  float: none !important;
+  margin: -8px -8px -8px 8px;
+  padding-right: 10px;
+  float: none;
   line-height: normal;
-  border: none !important;
-  border-left: 1px solid #131 !important;
+  border: none;
+  border-left: 1px solid #131;
   border-radius: 0;
   box-shadow: none;
-  background: var(--logout) no-repeat 8px center / 14px, var(--badge) !important;
+  background: var(--logout) no-repeat 10px center / 14px, var(--badge);
   filter: none;
 }
 
 #info input.logout:hover {
-  background: var(--logout_hover) no-repeat 8px center / 14px, var(--badge) !important;
+  background: var(--logout_hover) no-repeat 10px center / 14px, var(--badge);
 }
 
 #info input.logout:active {
-  background: #f60 var(--logout_active) no-repeat 8px center / 14px !important;
   box-shadow: var(--btn_shadow_active);
+  background: #f60 var(--logout_active) no-repeat 10px center / 14px;
 }
 
 input.reload, input.refresh, input[name="refresh"][disabled], .topbuttons .fakebutton {
-  padding: 7px 10px 7px 26px;
-  background: var(--refresh) no-repeat 8px center / 13px, var(--btn) !important;
+  padding: 7px 11px 7px 28px;
+  background: var(--refresh) no-repeat 10px center / 13px, var(--btn);
 }
 
 .topbuttons .fakebutton {
@@ -595,15 +594,15 @@ input[name="refresh"][disabled] {
 }
 
 input.reload:hover, input.refresh:hover, .fakebutton:hover {
-  background: var(--refresh_hover) no-repeat 8px center / 13px, var(--btn_hover) !important;
+  background: var(--refresh_hover) no-repeat 10px center / 13px, var(--btn_hover);
 }
 
 input.reload:active, input.refresh:active, .fakebutton:active {
-  background: #f60 var(--refresh_active) no-repeat 8px center / 13px !important;
+  background: #f60 var(--refresh_active) no-repeat 10px center / 13px;
 }
 
 input.invertselection {
-  padding: 7px 10px 7px 26px;
+  padding: 7px 11px 7px 28px;
   background: url(/themes/susimail/images/selection.png) no-repeat 8px center, var(--btn);
 }
 
@@ -616,7 +615,7 @@ input.invertselection:active {
 }
 
 input.show {
-  padding: 7px 10px 7px 26px;
+  padding: 7px 11px 7px 28px;
   background: -var(--yes) no-repeat 8px center, var(--btn);
 }
 
@@ -625,12 +624,11 @@ input.show:hover {
 }
 
 input.show:active {
-  background: #f60 var(--yes_active) no-repeat 8px center;
-  background-size: 12px !important;
+  background: #f60 var(--yes_active) no-repeat 10px center / 12px;
 }
 
 input.markall {
-  padding: 7px 10px 7px 26px;
+  padding: 7px 11px 7px 28px;
   background: url(/themes/susimail/images/all.png) no-repeat 8px center, var(--btn);
 }
 
@@ -643,14 +641,12 @@ input.markall:active {
 }
 
 input.new {
-  padding: 7px 10px 7px 26px;
-  background: var(--compose) no-repeat 8px center / 14px, var(--btn);
-  background-size: 14px, 100% !important;
+  padding: 7px 11px 7px 28px;
+  background: var(--compose) no-repeat 10px center / 14px, var(--btn);
 }
 
 input.new:hover {
-  background: var(--compose_hover) no-repeat 8px center, var(--btn_hover);
-  background-size: 14px, 100% !important;
+  background: var(--compose_hover) no-repeat 10px center / 14px, var(--btn_hover);
 }
 
 input.new:active {
@@ -659,35 +655,29 @@ input.new:active {
 }
 
 input.reply {
-  padding: 7px 10px 7px 26px;
-  background: var(--reply) no-repeat 8px center, var(--btn);
-  background-size: 14px, 100% !important;
+  padding: 7px 11px 7px 28px;
+  background: var(--reply) no-repeat 8px center 14px, var(--btn);
 }
 
 input.reply:hover {
-  background: var(--reply_hover) no-repeat 8px center, var(--btn_hover);
-  background-size: 14px, 100% !important;
+  background: var(--reply_hover) no-repeat 8px center / 14px, var(--btn_hover);
 }
 
 input.reply:active {
-  background: #f60 var(--reply_active) no-repeat 8px center;
-  background-size: 14px, 100% !important;
+  background: #f60 var(--reply_active) no-repeat 8px center / 14px;
 }
 
 input.replyall {
-  padding: 7px 10px 7px 26px;
-  background: var(--replyall) no-repeat 8px center, var(--btn);
-  background-size: 14px, 100% !important;
+  padding: 7px 11px 7px 28px;
+  background: var(--replyall) no-repeat 10px center / 14px, var(--btn);
 }
 
 input.replyall:hover {
-  background: var(--replyall_hover) no-repeat 8px center, var(--btn_hover);
-  background-size: 14px, 100% !important;
+  background: var(--replyall_hover) no-repeat 10px center / 14px, var(--btn_hover);
 }
 
 input.replyall:active {
-  background: #f60 var(--replyall_active) no-repeat 8px center;
-  background-size: 14px !important;
+  background: #f60 var(--replyall_active) no-repeat 10px center / 14px;
 }
 
 input.markall {
@@ -695,38 +685,29 @@ input.markall {
 }
 
 input.setpagesize, input.save {
-  padding: 7px 10px 7px 26px;
-  background: var(--yes) no-repeat 8px center, var(--btn);
+  padding: 7px 13px 7px 28px;
+  background: var(--yes) no-repeat 10px center / 12px, var(--btn);
 }
 
 input.setpagesize:hover, input.setpagesize:focus, input.save:hover, input.save:focus {
-  padding: 7px 10px 7px 26px;
-  background: var(--yes_hover) no-repeat 8px center, var(--btn_hover);
+  background: var(--yes_hover) no-repeat 10px center / 12px, var(--btn_hover);
 }
 
 input.setpagesize:active, input.save:active {
-  background: #f60 var(--yes_active) no-repeat 8px center !important;
-  background-size: 12px !important;
-}
-
-input.setpagesize {
-  padding-right: 9px !important;
+  background: #f60 var(--yes_active) no-repeat 10px center / 12px !important;
 }
 
 input.send {
-  padding: 7px 10px 7px 26px;
-  background: var(--send) no-repeat 8px center, var(--btn_hover);
-  background-size: 16px, 100% !important;
+  padding: 7px 11px 7px 28px;
+  background: var(--send) no-repeat 10px center / 16px, var(--btn_hover);
 }
 
 input.send:hover {
-  background: var(--send_hover) no-repeat 8px center, var(--btn_hover);
-  background-size: 16px, 100% !important;
+  background: var(--send_hover) no-repeat 10px center / 16px, var(--btn_hover);
 }
 
 input.send:active {
-  background: #f60 var(--send_active) no-repeat 8px center;
-  background-size: 16px !important;
+  background: #f60 var(--send_active) no-repeat 10px center / 16px;
 }
 
 input.send + input.cancel {
@@ -734,46 +715,42 @@ input.send + input.cancel {
 }
 
 input.configure, #settings {
-  padding: 7px 10px 7px 26px;
-  background: var(--configure) no-repeat 8px center, var(--btn);
-  background-size: 14px, 100% !important;
+  padding: 7px 11px 7px 28px;
+  background: var(--configure) no-repeat 10px center / 14px, var(--btn);
 }
 
 input.configure:hover, #settings:hover {
-  background: var(--configure_hover) no-repeat 8px center, var(--btn_hover);
-  background-size: 14px, 100% !important;
+  background: var(--configure_hover) no-repeat 10px center / 14px, var(--btn_hover);
 }
 
 input.configure:active, #settings:active {
-  background: #f60 var(--configure_active) no-repeat 8px center;
-  background-size: 14px !important;
+  background: #f60 var(--configure_active) no-repeat 10px center / 14px;
 }
 
 input.saveas, input.saveasdraft {
   padding: 7px 10px 7px 27px;
-  background: var(--save) no-repeat 8px center, var(--btn);
-  background-size: 15px, 100% !important;
+  background: var(--save) no-repeat 10px center / 15px, var(--btn);
 }
 
 input.saveas:hover, input.saveasdraft:hover {
-  background: var(--save_hover) no-repeat 8px center, var(--btn_hover);
+  background: var(--save_hover) no-repeat 10px center / 15px, var(--btn_hover);
 }
 
 input.saveas:active, input.saveasdraft:active {
-  background: #f60 var(--save_active) no-repeat 8px center;
+  background: #f60 var(--save_active) no-repeat 10px center / 15px;
 }
 
 input.new_upload {
-  padding: 7px 10px 7px 26px;
-  background: var(--attached) no-repeat 8px center, var(--btn);
+  padding: 7px 11px 7px 28px;
+  background: var(--attach) no-repeat 10px center / 15px, var(--btn);
 }
 
 input.new_upload:hover {
-  background: var(--attach_hover) no-repeat 8px center, var(--btn_hover);
+  background: var(--attach_hover) no-repeat 10px center / 15px, var(--btn_hover);
 }
 
 input.new_upload:active {
-  background: #f60 var(--attach_active) no-repeat 8px center;
+  background: #f60 var(--attach_active) no-repeat 10px center / 15px;
 }
 
 input.new_upload {
@@ -782,39 +759,36 @@ input.new_upload {
 }
 
 input.switchto, input.moveto {
-  padding: 7px 10px 7px 26px;
-  background: var(--folder) no-repeat 8px center, var(--btn);
-  background-size: 14px, 100% !important;
+  padding: 7px 11px 7px 28px;
+  background: var(--folder) no-repeat 10px center / 14px, var(--btn);
 }
 
 input.switchto:hover, input.moveto:hover {
-  background: var(--folder_hover) no-repeat 8px center, var(--btn_hover);
-  background-size: 14px, 100% !important;
+  background: var(--folder_hover) no-repeat 10px center / 14px, var(--btn_hover);
 }
 
 input.switchto:active, input.moveto:active {
-  background: #f60 var(--folder_active) no-repeat 8px center;
-  background-size: 14px;
+  background: #f60 var(--folder_active) no-repeat 10px center / 14px;
 }
 
 input[type=submit]:hover, input[type=reset]:hover, input[type=submit]:focus, input[type=reset]:focus,
 select:hover, select:focus, select:active, #settings:hover, #settings:focus {
   color: #f60;
-  border: 1px solid #f60;
+  border: var(--border_hover);
   box-shadow: var(--btn_shadow_hover);
 }
 
 input[type=submit]:active, input[type=reset]:active, #settings:active {
-  border: 1px solid #f60;
-  background-color: #f60 !important;
   color: var(--ink) !important;
+  border: var(--border_hover);
   box-shadow: var(--btn_shadow_active);
+  background-color: #f60 !important;
 }
 
 input[disabled], input[disabled]:hover, input[disabled]:focus {
-  opacity: .4;
-  cursor: default;
   border: 1px solid transparent;
+  cursor: default;
+  opacity: .4;
   pointer-events: none;
 }
 
@@ -823,9 +797,9 @@ input[type=file]::file-selector-button {
   padding: 4px 2px !important;
   min-width: 75px;
   vertical-align: middle;
-  font: bold 9pt var(--bodyfont);
   text-align: center;
   text-decoration: none;
+  font: bold 9pt var(--bodyfont);
   color: #494;
   border: 1px solid #000;
   border-radius: 2px;
@@ -835,7 +809,7 @@ input[type=file]::file-selector-button {
 
 input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
   color: #f60;
-  border: 1px solid #f60;
+  border: var(--border_hover);
   box-shadow: var(--btn_shadow_hover);
   background: radial-gradient(at center bottom, rgba(96, 48, 0, .4) 0, rgba(0, 0, 0, 0) 80%), #000;
   cursor: pointer;
@@ -843,7 +817,7 @@ input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selec
 
 input[type=file]:active::file-selector-button {
   color: var(--ink) !important;
-  border: 1px solid #f60;
+  border: var(--border_hover);
   box-shadow: var(--btn_shadow_active) !important;
   background-color: #f60 !important;
 }
@@ -906,66 +880,76 @@ input:active, .fakebutton:active {
   float: right;
 }
 
-input.firstpage, input[name="firstpage"],
-input.firstpage[disabled]:hover, input[name="firstpage"][disabled]:hover {
+input.firstpage {
   padding: 4px 10px;
   text-indent: -99999px;
-  background: var(--first) no-repeat center center, linear-gradient(180deg,#020, #000);
+  background: var(--first) no-repeat center center / 14px, var(--btn);
 }
 
-input.firstpage:hover, input[name="firstpage"]:hover {
-  background: var(--first_hover) no-repeat center center, var(--btn_hover);
+input.firstpage:hover {
+  background: var(--first_hover) no-repeat center center / 14px, var(--btn_hover);
 }
 
-input.lastpage, input[name="lastpage"],
-input.lastpage[disabled]:hover, input[name="lastpage"][disabled]:hover {
+input.firstpage:active {
+  background: #f60 var(--first_active) no-repeat center center / 14px;
+}
+
+input.lastpage {
   padding: 4px 10px;
-  background: var(--last) no-repeat center center, linear-gradient(180deg,#020, #000);
+  background: var(--last) no-repeat center center / 14px, var(--btn);
   text-indent: -99999px;
 }
 
-input.lastpage:hover, input[name="lastpage"]:hover {
-  background: var(--last_hover) no-repeat center center, var(--btn_hover);
+input.lastpage:hover {
+  background: var(--last_hover) no-repeat center center / 14px, var(--btn_hover);
 }
 
-input.prevpage, input.prev, input[name="prev"], input[name="prevpage"],
-input.prevpage[disabled]:hover, input.prev[disabled]:hover, input[name="prev"][disabled]:hover, input[name="prevpage"][disabled]:hover {
+input.lastpage:active {
+  background: #f60 var(--last_active) no-repeat center center / 14px;
+}
+
+input.prevpage, input.prev {
   padding: 4px 10px;
   text-indent: -99999px;
-  background: var(--previous) no-repeat center center, linear-gradient(180deg,#020, #000);
+  background: var(--previous) no-repeat center center / 14px, var(--btn);
 }
 
-input[name="prev"]:hover, input[name="prevpage"]:hover {
-  background: var(--previous_hover.svg) no-repeat center center, var(--btn_hover);
+input.prev:hover, input.prevpage:hover {
+  background: var(--previous_hover) no-repeat center center / 14px, var(--btn_hover);
 }
 
-input.nextpage, input.next, input[name="nextpage"], input[name="next"],
-input.nextpage[disabled]:hover, input.next[disabled]:hover, input[name="nextpage"][disabled]:hover, input[name="next"][disabled]:hover {
+input.prev:active, input.prevpage:active {
+  background: #f60 var(--previous_active) no-repeat center center / 14px;
+}
+
+input.nextpage, input.next {
   padding: 4px 10px;
   text-indent: -99999px;
-  background: var(--next) no-repeat center center, linear-gradient(180deg,#020, #000);
+  background: var(--next) no-repeat center center / 14px, var(--btn);
 }
 
-input.nextpage:hover, input.next:hover, input[name="nextpage"]:hover {
-  background: var(--next_hover) no-repeat center center, var(--btn_hover);
+input.nextpage:hover, input.next:hover {
+  background: var(--next_hover) no-repeat center center / 14px, var(--btn_hover);
+}
+
+input.nextpage:active, input.next:active {
+  background: #f60 var(--next_active) no-repeat center center / 14px;
 }
 
 @supports (position: sticky) {
-  #pagenavbottom {
-    display: none;
-  }
+  #pagenavbottom {display: none}
 }
 
 #pagenavbottom, #mailbox #pagenavbottom td {
-  border-top: var(--border);
-  box-shadow: none !important;
   position: relative;
   z-index: 100;
+  border-top: var(--border);
+  box-shadow: none !important;
 }
 
 #pagenavbottom td {
-  text-align: center !important;
   padding: 2px;
+  text-align: center !important;
   background: #010 !important;
 }
 
@@ -974,7 +958,7 @@ input.nextpage:hover, input.next:hover, input[name="nextpage"]:hover {
 }
 
 .pagenavcontrols {
-  line-height: 100%;
+  line-height: 1;
 }
 
 .pagenavcontrols td, .bottombuttons td {
@@ -987,15 +971,14 @@ input.nextpage:hover, input.next:hover, input[name="nextpage"]:hover {
 }
 
 .pagecount {
-  padding: 4px 0;
   margin: 0 !important;
+  padding: 4px 0;
   width: 70px;
   display: inline-block;
   text-align: center !important;
   color: var(--ink);
   border: 1px solid #151;
   border-radius: 2px;
-  background: #020;
   background: var(--badge);
 }
 
@@ -1009,8 +992,8 @@ tr.bottombuttons .pagenav {
 }
 
 .pagenav input {
-  float: none;
   margin: 2px 1px !important;
+  float: none;
 }
 
 .pagenav input[name="prevpage"] {
@@ -1073,8 +1056,6 @@ tr.bottombuttons .pagenav {
   right: 5px !important;
 }
 
-/* imported from light */
-
 .pagenavcontainer, #messagenav {
   float: right;
   position: absolute;
@@ -1091,8 +1072,6 @@ tr.bottombuttons .pagenav {
   right: 6px !important;
 }
 
-/* end import */
-
 #messagenav > * {
   vertical-align: middle;
 }
@@ -1100,31 +1079,30 @@ tr.bottombuttons .pagenav {
 .pagenav {
   margin: -2px auto -3px !important;
   padding: 2px;
-  max-width: 170px;
   width: auto !important;
-/*  display: inline-block;*/
+  max-width: 170px;
   white-space: nowrap;
   border-collapse: separate;
   border-spacing: 0;
 }
 
 .pagenav td {
-  white-space: nowrap;
-  font-size: 10pt;
-  font-weight: 700;
   padding: 1px 2px;
+  white-space: nowrap;
   text-align: center;
+  font-weight: 700;
+  font-size: 10pt;
   font-style: italic;
 }
 
 .pagenav td:first-child {
-  text-align: right;
   width: 49%;
+  text-align: right;
 }
 
 .pagenav td:last-child {
-  text-align: left;
   width: 49%;
+  text-align: left;
 }
 
 .pagenav td:nth-child(2) {
@@ -1168,7 +1146,7 @@ img.sort {
 
 a .sort:hover, a:focus .sort {
   opacity: 1 !important;
-  border: 1px solid #f60;
+  border: var(--border_hover);
   background: var(--btn_hover);
 }
 
@@ -1228,29 +1206,26 @@ textarea {
 }
 
 hr {
-  color: #252;
-  background: #252;
+  margin: 5px;
+  width: 100%;
   height: 1px;
   border: none;
-  width: 100%;
-  margin: 5px;
-  text-align: center;
+  background: #252;
   opacity: .5;
 }
 
 /* login */
 
 #dologin {
-  margin: 40px auto 40px;
+  margin: 52px auto 42px;
   padding: 10px 10px 1px;
   width: 600px;
   border: 1px solid #151;
   border-radius: 2px;
   box-shadow: var(--highlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000, 0 0 0 1px #000, 0 0 3px 3px rgba(0,0,0,.8);
-  background: #010;
-  background: linear-gradient(180deg,rgba(0,0,0,0), rgba(0,0,0,.3)), repeating-linear-gradient(180deg,rgba(0,0,0,.9), rgba(0,32,0,.3) 1px, rgba(0,32,0,.4) 2px), url(images/hatter_med.png) right bottom no-repeat #000;
-  background-size: 100% 100%, 100% 100%, auto 40%;
-  margin: 52px auto 42px;
+  background: linear-gradient(180deg,rgba(0,0,0,0), rgba(0,0,0,.3)),
+    repeating-linear-gradient(180deg,rgba(0,0,0,.9), rgba(0,32,0,.3) 1px, rgba(0,32,0,.4) 2px),
+    url(images/hatter_med.png) no-repeat right bottom / auto 40%, #000;
   filter: opacity(0);
   animation: linear fade-in .15s 1.35s forwards;
 }
@@ -1275,8 +1250,8 @@ hr {
 }
 
 #dologin td:first-child {
-  white-space: nowrap;
   width: 25% !important;
+  white-space: nowrap;
 }
 
 #dologin td:last-child {
@@ -1288,14 +1263,13 @@ hr {
   padding: 15px 10px 12px 15px;
   letter-spacing: .1em;
   word-spacing: .1em;
-  font-size: 14pt;
-  text-align: left;
   text-transform: uppercase;
+  text-align: left;
+  font-size: 14pt;
   color: var(--ink);
   border-bottom: var(--border);
   box-shadow: var(--highlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000;;
-  background: #010;
-  background: linear-gradient(180deg,#010, #000);
+  background: var(--th);
 }
 
 .iframed #dologin h1 {
@@ -1303,7 +1277,7 @@ hr {
 }
 
 #dologin input[type=text], input[name="pagesize"] {
-  text-align: left !important;
+  text-align: left;
 }
 
 #dologin input[name="user"], #dologin input[name="pass"] {
@@ -1312,15 +1286,15 @@ hr {
 }
 
 #dologin input[name="user"] {
-  background: #010 var(--user) no-repeat 5px 6px / 16px !important;
+  background: #010 var(--user) no-repeat 5px 6px / 16px;
 }
 
 #dologin input[name="pass"] {
-  background: #010 var(--key) no-repeat 5px 5px / 16px !important;
+  background: #010 var(--key) no-repeat 5px 5px / 16px;
 }
 
 #dologin input[name="user"]:focus, #dologin input[name="pass"]:focus {
-  background-color: #000 !important;
+  background-color: #000;
   background-blend-mode: normal;
 }
 
@@ -1355,25 +1329,23 @@ hr {
   min-width: 120px;
   display: inline-block;
   color: #494;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--txt_shadow);
   border-radius: 25px;
-  box-shadow: 0 0 0 1px #000;
-  background: #020;
-  background: radial-gradient(at center bottom, #020, rgba(0,16,0,.3)), #000 40%;
-  transition: ease all .1s;
+  box-shadow: 0 0 0 1px #010;
+  background: radial-gradient(at center bottom, #010, rgba(0,16,0,.3), #000 40%);
+  transition: ease all .05s;
 }
 
 #dologin tr:last-child a:hover {
   box-shadow: 0 0 0 1px #020;
-  background: #000;
-  background: var(--th) #000;
+  background: var(--th);
   transition: ease all .1s;
 }
 
 #dologin tr:last-child a:active {
   color: #f90 !important;
   box-shadow: 0 0 1px #020, inset 3px 3px 3px #000;
-  transition: ease all .1s;
+  transition: ease all .05s;
 }
 
 #dologin tr:last-child td {
@@ -1420,9 +1392,8 @@ h3#config {
   word-spacing: .1em;
   border-bottom: var(--border);
   box-shadow: var(--highlight);
-  text-shadow: 0 1px 1px #000;
-  background: #010;
-  background: linear-gradient(90deg, rgba(0,64,0,.1), rgba(0,80,0,.2), rgba(0,64,0,.1)), var(--th);
+  text-shadow: var(--txt_shadow);
+  background: var(--th);
 }
 
 #prefsave {
@@ -1430,8 +1401,8 @@ h3#config {
   padding-top: 10px;
   padding-bottom: 10px;
   border-top: var(--border);
-  background: #010;
   box-shadow: var(--highlight);
+  background: #010;
 }
 
 .iframed #prefsave {
@@ -1449,14 +1420,13 @@ h3#config {
   padding: 0 8px 0 3px;
   display: inline-block;
   float: right;
-  line-height: 150%;
+  line-height: 1.5;
   text-transform: lowercase;
-  color: var(--ink);
   font-weight: 400;
+  color: var(--ink);
   border: 1px solid #131;
   border-radius: 2px;
   box-shadow: 0 0 1px 0 #000;
-  background: #010;
   background: var(--badge);
 }
 
@@ -1465,8 +1435,8 @@ h3#config {
   padding: 3px 8px 4px 20px;
   display: inline-block;
   text-align: center;
-  color: var(--ink);
   font-weight: 700;
+  color: var(--ink);
   border-right: 1px solid #131;
   background: var(--user) no-repeat 2px center / 15px;
 }
@@ -1547,9 +1517,10 @@ body:not(.iframed) .topbuttons {
 }
 
 .topbuttons input.list {
-  background-position: center center;
-  text-indent: -99999px;
   padding: 5px 10px;
+  text-indent: -99999px;
+  background-position: center center;
+  background-size: 14px;
 }
 
 .topbuttons input[type=text] {
@@ -1589,7 +1560,8 @@ tr.bottombuttons:empty {
   right: 0;
   z-index: 9999;
   text-align: center;
-  text-shadow: 0 1px 1px #000;
+  font-size: 90%;
+  text-shadow: var(--txt_shadow);
   border: 1px solid #000;
   border-top: none;
   box-shadow: 0 2px 2px 1px rgba(0,0,0,.5), inset 0 0 0 1px #040;
@@ -1606,6 +1578,10 @@ tr.bottombuttons:empty {
   box-shadow: 0 2px 2px 1px rgba(0,0,0,.5), inset 0 0 0 1px #010;
 }
 
+.notifications.msgerror {
+  margin: 0 20%;
+}
+
 @keyframes hide-up {
   from {margin-top: 0}
   to {margin-top: -300px}
@@ -1617,15 +1593,15 @@ tr.bottombuttons:empty {
 
 .notifications p.info, .notifications p.info b {
   font-size: 10pt !important;
-  color: var(--ink);
   text-shadow: none !important;
+  color: var(--ink);
 }
 
 .notifications p {
   letter-spacing: .07em;
   word-spacing: .2em;
   font-weight: 700;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--txt_shadow);
   animation: fade-in 1s linear;
 }
 
@@ -1635,7 +1611,7 @@ tr.bottombuttons:empty {
 }
 
 p.error {
-  font-size: 10pt !important;
+  font-size: 9.5pt !important;
 }
 
 td p.error {
@@ -1651,13 +1627,14 @@ td p.error {
   padding: 4px 8px 12px;
   border-radius: 0 0 2px 2px;
   background: #010;
-  background: repeating-linear-gradient(180deg,#000800 1px, #000800 2px, #000 3px);
-  background: repeating-linear-gradient(90deg, rgba(0,32,0,.4), rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px), repeating-linear-gradient(180deg,rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,64,0,.4) 3px), url(/themes/console/dark/images/camotile2.png);
+  background: repeating-linear-gradient(90deg, rgba(0,32,0,.4), rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px),
+    repeating-linear-gradient(180deg,rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,64,0,.4) 3px),
+    url(/themes/console/dark/images/camotile2.png);
 }
 
 .iframed #composemail {
-  border-bottom: none;
   margin-bottom: -7px;
+  border-bottom: none;
 }
 
 #composemail hr {
@@ -1684,9 +1661,9 @@ td p.error {
 }
 
 #newmail td:first-child {
+  padding-right: 3px;
   font-weight: 700;
   color: var(--ink);
-  padding-right: 3px;
 }
 
 #newmail label:hover {
@@ -1694,7 +1671,6 @@ td p.error {
 }
 
 /* end compose mail */
-
 
 /* attachments */
 #addattachment td {
@@ -1722,22 +1698,20 @@ td p.error {
   max-width: 600px;
   display: inline-block;
   white-space: nowrap;
-  line-height: 140%;
+  line-height: 1.4;
   vertical-align: middle;
   overflow: hidden;
   text-overflow: ellipsis;
   font-style: italic;
   border-radius: 2px 15px 15px 2px;
   box-shadow: inset 0 0 0 1px #020, inset 0 0 0 2px #010, 0 0 0 1px #000;
-  background: var(--attach_active) no-repeat 9px center, linear-gradient(90deg, #010 70%, #020);
-  background-size: 14px, 100%;
+  background: var(--attach_active) no-repeat 9px center / 14px, linear-gradient(90deg, #010 70%, #020);
 }
 
 #attachedfile label:hover {
   color: #930;
   box-shadow: var(--highlight), inset 0 0 0 2px #930;
-  background: var(--attach_hover) no-repeat 9px center, linear-gradient(90deg, #020 70%, #010);
-  background-size: 14px, 100%;
+  background: var(--attach_hover) no-repeat 9px center / 14px, linear-gradient(90deg, #020 70%, #010);
 }
 
 #attachedfile label:active {
@@ -1750,8 +1724,7 @@ td p.error {
   overflow: auto !important;
   text-align: left;
   box-shadow: var(--highlight), inset 0 0 2px 1px #030;
-  background: var(--attached) no-repeat 10px center, repeating-linear-gradient(180deg,#010, #000 2px);
-  background-size: 16px 100%;
+  background: var(--attached) no-repeat 10px center / 16px, repeating-linear-gradient(180deg,#010, #000 2px);
 }
 
 .attached img {
@@ -1767,18 +1740,18 @@ td p.error {
 }
 
 #deleteattached::before, #addattachment td:last-child::after {
-  content: "";
-  display: block;
-  height: 1px;
-  background: #252;
   margin: 1px 0 2px;
+  height: 1px;
+  display: block;
+  background: #252;
+  content: "";
 }
 
 #addattachment td:first-child::after {
-  content: "";
-  display: block;
-  height: 7px;
   width: 100%;
+  height: 7px;
+  display: block;
+  content: "";
 }
 
 #addattachment td:last-child::after {
@@ -1794,34 +1767,25 @@ td p.error {
 }
 
 #imageInfo {
-  display: block;
-  width: 100%;
   margin-top: 16px;
   padding-top: 10px;
+  width: 100%;
+  display: block;
+  text-align: left;
   font-weight: 700;
   border-top: 1px dotted #242;
-  text-align: left;
 }
 
 #imageInfo::before {
-  content: "";
-  display: inline-block;
   width: 20px;
   height: 16px;
+  display: inline-block;
   vertical-align: text-bottom;
   background: var(--package) no-repeat left center / 16px;
+  content: "";
 }
 
 /* end attachments */
-
-/* Edge/IE tweaks */
-
-_:-ms-lang(x), * {
-  filter: none !important;
-  text-shadow: none !important;
-}
-
-/* end Edge/IE tweaks */
 
 /* mail list */
 
@@ -1840,23 +1804,13 @@ td[onclick] {
   cursor: pointer;
 }
 
-tr.list0 {
-  background: #001000;
-  background: linear-gradient(180deg,#001400, #000600);
-}
-
-tr.list1 {
-  background: #001a00;
-  background: linear-gradient(180deg,#001400, #000600);
+tr.list0, tr.list1 {
+  background: var(--tr);
 }
 
 tr.list0:hover, tr.list1:hover {
   background-color: #030;
   box-shadow: var(--highlight);
-}
-
-_:-ms-lang(x), tr.list0:hover, tr.list1:hover {
-  box-shadow: none !important;
 }
 
 .list0 td, .list1 td {
@@ -1887,14 +1841,12 @@ _:-ms-lang(x), tr.list0:hover, tr.list1:hover {
 
 body:not(.iframed) #mailbox tr:nth-child(2) {
   position: sticky;
-  top: 42px;
+  top: 49px;
   z-index: 500;
 }
 
 @supports not (-moz-appearance: none) {
-#mailbox tr:nth-child(2) {
-  position: static;
-}
+  #mailbox tr:nth-child(2) {position: static}
 }
 
 #mailbox th {
@@ -1935,7 +1887,7 @@ body:not(.iframed) #mailbox tr:nth-child(2) {
 td.mailListSender a, td.mailListSender a:hover {
   font-weight: 400;
   color: var(--ink) !important;
-  line-height: 120%;
+  line-height: 1.2;
 }
 
 td.mailListSender, tr:hover td.mailListSender {
@@ -1946,7 +1898,7 @@ td.mailListSender, tr:hover td.mailListSender {
   background-image: var(--user) !important;
   background-position: 6px center !important;
   background-repeat: no-repeat !important;
-  background-size: 12px 12px;
+  background-size: 12px;
 }
 
 #mailbox tr:hover .mailListSender a {
@@ -2069,7 +2021,6 @@ tr:hover .listDate {
 
 .listTime {
   margin-right: 2px;
-  min-width: 60px;
   min-width: 42px;
   opacity: .85;
 }
@@ -2087,8 +2038,8 @@ td.mailListSize {
 
 .mailListSize .unknown {
   padding: 2px 0;
-  display: inline-block;
   width: 100%;
+  display: inline-block;
   letter-spacing: .1em;
   text-align: center;
 }
@@ -2118,7 +2069,7 @@ tr:hover .listSize {
   font-size: 90% !important;
   font-style: normal;
   font-weight: 700;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--txt_shadow);
   border-radius: 0 1px 1px 0;
   background: #010;
 }
@@ -2163,7 +2114,7 @@ td.mailListFlagged, td.mailListSender, td.mailListAttachment, td.mailListSubject
 
 .list0 > *, .list1 > * {
   vertical-align: middle;
-  line-height: 100%;
+  line-height: 1;
 }
 
 /* end mail list */
@@ -2194,7 +2145,7 @@ td.mailListFlagged, td.mailListSender, td.mailListAttachment, td.mailListSubject
   color: #a00;
   border: 1px solid #700;
   box-shadow: var(--highlight), inset 0 0 1px 1px #b00;
-  background: var(--question) no-repeat center 20px / 32px, linear-gradient(180deg,#100, #000, #100);
+  background: var(--question) no-repeat center 20px / 32px, linear-gradient(180deg,#100,#000,#100);
 }
 
 #nukemail.floating {
@@ -2237,7 +2188,7 @@ td.mailListFlagged, td.mailListSender, td.mailListAttachment, td.mailListSubject
   width: 100%;
   height: 1px;
   display: block;
-  background: linear-gradient(90deg, #000, #500, #000);
+  background: linear-gradient(90deg,#000,#500,#000);
   content: "";
 }
 
@@ -2251,7 +2202,7 @@ td.mailListFlagged, td.mailListSender, td.mailListAttachment, td.mailListSubject
   text-align: center;
   font-size: 10pt;
   border: none !important;
-  background: repeating-linear-gradient(180deg,#001, #000 2px, #001 3px);
+  background: repeating-linear-gradient(180deg,#001,#000 2px,#001 3px);
 }
 
 #loading b {
@@ -2260,8 +2211,8 @@ td.mailListFlagged, td.mailListSender, td.mailListAttachment, td.mailListSubject
   min-width: 400px;
   display: inline-block;
   letter-spacing: 2px;
-  color: var(--ink);
   text-shadow: 0 0 1px #001, 0 0 5px #003;
+  color: var(--ink);
   border-radius: 2px;
   box-shadow: var(--highlight), inset 0 0 0 2px #001, inset 0 0 2px 3px #002, 0 0 1px #001;
   background: repeating-linear-gradient(45deg, #020 1px, #020 20px, #000 20px, #000 40px);
@@ -2333,12 +2284,12 @@ tr.mailbody td {
 
 .debugHeader pre {
   margin: 5px 3px 6px 10px;
+  line-height: 1.3;
   white-space: pre-wrap;
   word-break: break-all;
-  line-height: 130%;
   font-size: 9.5pt;
   color: #bb0;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--txt_shadow);
   opacity: .9;
 }
 
@@ -2358,7 +2309,7 @@ tr.mailbody td {
 }
 
 #toggleHeaders:hover {
-  border: 1px solid #f60;
+  border: var(--border_hover);
   box-shadow: var(--btn_shadow_hover) !important;
 }
 
@@ -2416,6 +2367,7 @@ tr.mailbody td {
 
 @media screen and (max-width: 1500px) {
   .debugHeader pre {font-size: 8.5pt}
+  body:not(.iframed) #mailbox tr:nth-child(2) {top: 47px}
 }
 
 @media screen and (max-width: 1300px) {
@@ -2441,7 +2393,7 @@ tr.mailbody td {
   }
   td.mailListDate {
     width: 1%;
-    line-height: 100%;
+    line-height: 1;
     white-space: normal !important;
     text-align: center;
   }
@@ -2503,6 +2455,7 @@ tr.mailbody td {
 @media screen and (min-width: 1500px) {
   body, td, textarea, input, div, p.mailbody, th, a, select {font-size: 10pt !important}
   a[class^="link"] {font-size: 95% !important}
+  #dologin tr:last-child a {font-size: 90% !important}
   #mailbox th {font-size: 70% !important}
   td {padding: 3px 5px}
   p.mailbody + p.info {

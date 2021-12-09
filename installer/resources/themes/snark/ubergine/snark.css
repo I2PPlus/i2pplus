@@ -2036,7 +2036,7 @@ input.default {
 }
 
 input.disabled, input.disabled:hover, input.disabled:active, a.control.disabled:hover, a.control.disabled:active {
-  color: #444 !important;
+  color: #6e5e6e !important;
   font-weight: 400;
   border: 1px inset #bbb !important;
   cursor: not-allowed;
@@ -2059,7 +2059,7 @@ a.control, a.controld, a.control:active {
 }
 
 a.controld {
-  color: #444;
+  color: #6e5e6e;
   font-weight: 400;
 }
 

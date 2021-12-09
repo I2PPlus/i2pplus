@@ -1,3 +1,7 @@
+:root {
+  --on: #6b6, 0 0 0 1px rgba(0,0,0,.7), 0 0 1px 0 rgba(0,0,0,.5);
+}
+
 .optbox {
   position: relative;
   width: 20px;
@@ -12,7 +16,7 @@
   background: linear-gradient(180deg,#020,#001800);
   -moz-appearance: none;
   -webkit-appearance: inherit;
-  will-change: transform;
+  appearance: none;
 }
 
 .optbox[type=checkbox] {
@@ -40,26 +44,27 @@
 .optbox::before {
   width: 10px;
   height: 10px;
+  display: inline-block;
   position: absolute;
   top: 4px;
   left: 4px;
-  display: inline-block;
   line-height: .8;
-  box-shadow: inset 0 0 2px 2px #6b6, 0 0 1px 1px #000;
+  box-shadow: inset 0 0 2px 2px var(--on);
   background: linear-gradient(135deg, #5a5, #383);
+  content: "";
   transform: scale(1);
   transition: linear transform .05s;
-  content: "";
+  will-change: transform;
 }
 
 .optbox[type=checkbox]::before {
   border-radius: 1px;
-  box-shadow: inset 0 0 2px 1px #6b6, 0 0 1px 1px #000;
+  box-shadow: inset 0 0 1px 1px var(--on);
 }
 
 .optbox[type=radio]:checked::before {
   border-radius: 50%;
-  background: radial-gradient(at center top, #5a5 55%, #131 90%);
+  background: radial-gradient(circle at center, #5a5 70%, #383);
 }
 
 .optbox:not(:checked)::before {
