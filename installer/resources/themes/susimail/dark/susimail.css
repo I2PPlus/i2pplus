@@ -316,6 +316,7 @@ form {
 .header + form {
   border: var(--border);
   box-shadow: 0 0 1px 1px #000;
+  background: rgba(0,0,0,.5);
 }
 
 .iframed form {
@@ -327,6 +328,7 @@ form {
 .iframed .header + form {
   margin-bottom: -10px !important;
   padding-bottom: 17px;
+  background: none;
 }
 
 /* message view */
@@ -423,20 +425,20 @@ input[type=submit], input[type=reset], #settings, .topbuttons .fakebutton {
 }
 
 input.cancel, #nukemail input.clearselection {
-  padding: 7px 10px 7px 24px;
-  background: var(--no) no-repeat 8px center / 12px, var(--btn);
+  padding: 7px 11px 7px 27px;
+  background: var(--no) no-repeat 10px center / 12px, var(--btn);
 }
 
 input.cancel:hover, #nukemail input.clearselection:hover {
-  background: var(--no_hover) no-repeat 8px center / 12px, var(--btn_hover);
+  background: var(--no_hover) no-repeat 10px center / 12px, var(--btn_hover);
 }
 
 input.cancel:active, #nukemail input.clearselection:active {
-  background: #f60 var(--no_active) no-repeat 8px center / 12px;
+  background: #f60 var(--no_active) no-repeat 10px center / 12px;
 }
 
 input.clearselection {
-  padding: 7px 10px 7px 26px;
+  padding: 7px 11px 7px 28px;
   background: url(/themes/susimail/images/none.png) no-repeat 8px center, var(--btn);
 }
 
@@ -450,7 +452,7 @@ input.clearselection:active {
 }
 
 input.delete, input.delete_attachment, input.really_delete {
-  padding: 7px 10px 7px 26px;
+  padding: 7px 11px 7px 28px;
   background: var(--delete) no-repeat 8px center, var(--btn);
   background-size: 16px, 100% !important;
 }
@@ -466,20 +468,20 @@ input.delete:active, input.delete_attachment:active, input.really_delete:active 
 }
 
 input.download {
-  padding: 7px 10px 7px 26px;
-  background: var(--download) no-repeat 8px center / 14px, var(--btn);
+  padding: 7px 11px 7px 28px;
+  background: var(--download) no-repeat 10px center / 14px, var(--btn);
 }
 
 input.download:hover {
-  background: var(--download) no-repeat 8px center / 14px, var(--btn_hover);
+  background: var(--download) no-repeat 10px center / 14px, var(--btn_hover);
 }
 
 input.download:active {
-  background: var(--download) no-repeat 8px center / 14px, var(--btn_hover);
+  background: var(--download) no-repeat 10px center / 14px, var(--btn_hover);
 }
 
 input.offline {
-  padding: 7px 10px 7px 26px;
+  padding: 7px 11px 7px 28px;
   background: var(--offline) no-repeat 8px center, var(--btn);
   background-size: 14px, 100% !important;
 }
@@ -495,7 +497,7 @@ input.offline:active {
 }
 
 input.list, input.moveto, #pagenav input.switchto {
-  padding: 7px 10px 7px 26px;
+  padding: 7px 11px 7px 28px;
   background: var(--folder) no-repeat 8px center, var(--btn);
 }
 
@@ -508,31 +510,31 @@ input.list:active, input.moveto:active, #pagenav input.switchto:active {
 }
 
 input.forward {
-  padding: 7px 10px 7px 26px;
+  padding: 7px 11px 7px 28px;
   background: var(--forward) no-repeat 8px center, var(--btn);
   background-size: 14px, 100% !important;
 }
 
 input.forward:hover {
-  background: var(--forward_hover) no-repeat 8px center / 14px, var(--btn_hover) !important;
+  background: var(--forward_hover) no-repeat 10px center / 14px, var(--btn_hover) !important;
   background-size: 14px, 100% !important;
 }
 
 input.forward:active {
-  background: #f60 var(--forward_active) no-repeat 8px center / 14px !important;
+  background: #f60 var(--forward_active) no-repeat 10px center / 14px !important;
 }
 
 input.login {
-  padding: 7px 10px 7px 26px;
-  background: var(--login) no-repeat 8px center / 14px, var(--btn) !important;
+  padding: 7px 11px 7px 28px;
+  background: var(--login) no-repeat 10px center / 14px, var(--btn) !important;
 }
 
 input.login:hover {
-  background: var(--login_hover) no-repeat 8px center / 14px , var(--btn_hover) !important;
+  background: var(--login_hover) no-repeat 10px center / 14px , var(--btn_hover) !important;
 }
 
 input.login:active {
-  background: #f60 var(--login_active) no-repeat 8px center / 14px !important;
+  background: #f60 var(--login_active) no-repeat 10px center / 14px !important;
 }
 
 #info {
@@ -540,16 +542,16 @@ input.login:active {
 }
 
 input.logout {
-  padding: 7px 10px 7px 26px;
-  background: var(--logout) no-repeat 8px center / 14px, var(--btn);
+  padding: 7px 11px 7px 28px;
+  background: var(--logout) no-repeat 10px center / 14px, var(--btn);
 }
 
 input.logout:hover {
-  background: var(--logout_hover) no-repeat 8px center / 14px, var(--btn_hover);
+  background: var(--logout_hover) no-repeat 10px center / 14px, var(--btn_hover);
 }
 
 input.logout:active {
-  background: #f60 var(--logout_active) no-repeat 8px center / 14px;
+  background: #f60 var(--logout_active) no-repeat 10px center / 14px;
 }
 
 #info input.logout, #info input.logout:hover,
@@ -561,22 +563,22 @@ input.logout:active {
   border-left: 1px solid #131;
   border-radius: 0;
   box-shadow: none;
-  background: var(--logout) no-repeat 8px center / 14px, var(--badge);
+  background: var(--logout) no-repeat 10px center / 14px, var(--badge);
   filter: none;
 }
 
 #info input.logout:hover {
-  background: var(--logout_hover) no-repeat 8px center / 14px, var(--badge);
+  background: var(--logout_hover) no-repeat 10px center / 14px, var(--badge);
 }
 
 #info input.logout:active {
   box-shadow: var(--btn_shadow_active);
-  background: #f60 var(--logout_active) no-repeat 8px center / 14px;
+  background: #f60 var(--logout_active) no-repeat 10px center / 14px;
 }
 
 input.reload, input.refresh, input[name="refresh"][disabled], .topbuttons .fakebutton {
-  padding: 7px 10px 7px 26px;
-  background: var(--refresh) no-repeat 8px center / 13px, var(--btn);
+  padding: 7px 11px 7px 28px;
+  background: var(--refresh) no-repeat 10px center / 13px, var(--btn);
 }
 
 .topbuttons .fakebutton {
@@ -589,15 +591,15 @@ input[name="refresh"][disabled] {
 }
 
 input.reload:hover, input.refresh:hover, .fakebutton:hover {
-  background: var(--refresh_hover) no-repeat 8px center / 13px, var(--btn_hover);
+  background: var(--refresh_hover) no-repeat 10px center / 13px, var(--btn_hover);
 }
 
 input.reload:active, input.refresh:active, .fakebutton:active {
-  background: #f60 var(--refresh_active) no-repeat 8px center / 13px;
+  background: #f60 var(--refresh_active) no-repeat 10px center / 13px;
 }
 
 input.invertselection {
-  padding: 7px 10px 7px 26px;
+  padding: 7px 11px 7px 28px;
   background: url(/themes/susimail/images/selection.png) no-repeat 8px center, var(--btn);
 }
 
@@ -610,7 +612,7 @@ input.invertselection:active {
 }
 
 input.show {
-  padding: 7px 10px 7px 26px;
+  padding: 7px 11px 7px 28px;
   background: -var(--yes) no-repeat 8px center, var(--btn);
 }
 
@@ -619,11 +621,11 @@ input.show:hover {
 }
 
 input.show:active {
-  background: #f60 var(--yes_active) no-repeat 8px center / 12px;
+  background: #f60 var(--yes_active) no-repeat 10px center / 12px;
 }
 
 input.markall {
-  padding: 7px 10px 7px 26px;
+  padding: 7px 11px 7px 28px;
   background: url(/themes/susimail/images/all.png) no-repeat 8px center, var(--btn);
 }
 
@@ -636,12 +638,12 @@ input.markall:active {
 }
 
 input.new {
-  padding: 7px 10px 7px 26px;
-  background: var(--compose) no-repeat 8px center / 14px, var(--btn);
+  padding: 7px 11px 7px 28px;
+  background: var(--compose) no-repeat 10px center / 14px, var(--btn);
 }
 
 input.new:hover {
-  background: var(--compose_hover) no-repeat 8px center / 14px, var(--btn_hover);
+  background: var(--compose_hover) no-repeat 10px center / 14px, var(--btn_hover);
 }
 
 input.new:active {
@@ -650,7 +652,7 @@ input.new:active {
 }
 
 input.reply {
-  padding: 7px 10px 7px 26px;
+  padding: 7px 11px 7px 28px;
   background: var(--reply) no-repeat 8px center, var(--btn);
   background-size: 14px, 100% !important;
 }
@@ -666,19 +668,16 @@ input.reply:active {
 }
 
 input.replyall {
-  padding: 7px 10px 7px 26px;
-  background: var(--replyall) no-repeat 8px center, var(--btn);
-  background-size: 14px, 100% !important;
+  padding: 7px 11px 7px 28px;
+  background: var(--replyall) no-repeat 10px center / 14px, var(--btn);
 }
 
 input.replyall:hover {
-  background: var(--replyall_hover) no-repeat 8px center, var(--btn_hover);
-  background-size: 14px, 100% !important;
+  background: var(--replyall_hover) no-repeat 10px center / 14px, var(--btn_hover);
 }
 
 input.replyall:active {
-  background: #f60 var(--replyall_active) no-repeat 8px center;
-  background-size: 14px !important;
+  background: #f60 var(--replyall_active) no-repeat 10px center / 14px;
 }
 
 input.markall {
@@ -686,38 +685,29 @@ input.markall {
 }
 
 input.setpagesize, input.save {
-  padding: 7px 10px 7px 26px;
-  background: var(--yes) no-repeat 8px center, var(--btn);
+  padding: 7px 13px 7px 28px;
+  background: var(--yes) no-repeat 10px center / 12px, var(--btn);
 }
 
 input.setpagesize:hover, input.setpagesize:focus, input.save:hover, input.save:focus {
-  padding: 7px 10px 7px 26px;
-  background: var(--yes_hover) no-repeat 8px center, var(--btn_hover);
+  background: var(--yes_hover) no-repeat 10px center / 12px, var(--btn_hover);
 }
 
 input.setpagesize:active, input.save:active {
-  background: #f60 var(--yes_active) no-repeat 8px center !important;
-  background-size: 12px !important;
-}
-
-input.setpagesize {
-  padding-right: 9px !important;
+  background: #f60 var(--yes_active) no-repeat 10px center / 12px !important;
 }
 
 input.send {
-  padding: 7px 10px 7px 26px;
-  background: var(--send) no-repeat 8px center, var(--btn_hover);
-  background-size: 16px, 100% !important;
+  padding: 7px 11px 7px 28px;
+  background: var(--send) no-repeat 10px center / 16px, var(--btn_hover);
 }
 
 input.send:hover {
-  background: var(--send_hover) no-repeat 8px center, var(--btn_hover);
-  background-size: 16px, 100% !important;
+  background: var(--send_hover) no-repeat 10px center / 16px, var(--btn_hover);
 }
 
 input.send:active {
-  background: #f60 var(--send_active) no-repeat 8px center;
-  background-size: 16px !important;
+  background: #f60 var(--send_active) no-repeat 10px center / 16px;
 }
 
 input.send + input.cancel {
@@ -725,46 +715,42 @@ input.send + input.cancel {
 }
 
 input.configure, #settings {
-  padding: 7px 10px 7px 26px;
-  background: var(--configure) no-repeat 8px center, var(--btn);
-  background-size: 14px, 100% !important;
+  padding: 7px 11px 7px 28px;
+  background: var(--configure) no-repeat 10px center / 14px, var(--btn);
 }
 
 input.configure:hover, #settings:hover {
-  background: var(--configure_hover) no-repeat 8px center, var(--btn_hover);
-  background-size: 14px, 100% !important;
+  background: var(--configure_hover) no-repeat 10px center / 14px, var(--btn_hover);
 }
 
 input.configure:active, #settings:active {
-  background: #f60 var(--configure_active) no-repeat 8px center;
-  background-size: 14px !important;
+  background: #f60 var(--configure_active) no-repeat 10px center / 14px;
 }
 
 input.saveas, input.saveasdraft {
   padding: 7px 10px 7px 27px;
-  background: var(--save) no-repeat 8px center, var(--btn);
-  background-size: 15px, 100% !important;
+  background: var(--save) no-repeat 10px center / 15px, var(--btn);
 }
 
 input.saveas:hover, input.saveasdraft:hover {
-  background: var(--save_hover) no-repeat 8px center, var(--btn_hover);
+  background: var(--save_hover) no-repeat 10px center / 15px, var(--btn_hover);
 }
 
 input.saveas:active, input.saveasdraft:active {
-  background: #f60 var(--save_active) no-repeat 8px center;
+  background: #f60 var(--save_active) no-repeat 10px center / 15px;
 }
 
 input.new_upload {
-  padding: 7px 10px 7px 26px;
-  background: var(--attached) no-repeat 8px center, var(--btn);
+  padding: 7px 11px 7px 28px;
+  background: var(--attach) no-repeat 10px center / 15px, var(--btn);
 }
 
 input.new_upload:hover {
-  background: var(--attach_hover) no-repeat 8px center, var(--btn_hover);
+  background: var(--attach_hover) no-repeat 10px center / 15px, var(--btn_hover);
 }
 
 input.new_upload:active {
-  background: #f60 var(--attach_active) no-repeat 8px center;
+  background: #f60 var(--attach_active) no-repeat 10px center / 15px;
 }
 
 input.new_upload {
@@ -773,19 +759,16 @@ input.new_upload {
 }
 
 input.switchto, input.moveto {
-  padding: 7px 10px 7px 26px;
-  background: var(--folder) no-repeat 8px center, var(--btn);
-  background-size: 14px, 100% !important;
+  padding: 7px 11px 7px 28px;
+  background: var(--folder) no-repeat 10px center / 14px, var(--btn);
 }
 
 input.switchto:hover, input.moveto:hover {
-  background: var(--folder_hover) no-repeat 8px center, var(--btn_hover);
-  background-size: 14px, 100% !important;
+  background: var(--folder_hover) no-repeat 10px center / 14px, var(--btn_hover);
 }
 
 input.switchto:active, input.moveto:active {
-  background: #f60 var(--folder_active) no-repeat 8px center;
-  background-size: 14px;
+  background: #f60 var(--folder_active) no-repeat 10px center / 14px;
 }
 
 input[type=submit]:hover, input[type=reset]:hover, input[type=submit]:focus, input[type=reset]:focus,
@@ -960,15 +943,15 @@ input.nextpage:active, input.next:active {
 }
 
 #pagenavbottom, #mailbox #pagenavbottom td {
-  border-top: var(--border);
-  box-shadow: none !important;
   position: relative;
   z-index: 100;
+  border-top: var(--border);
+  box-shadow: none !important;
 }
 
 #pagenavbottom td {
-  text-align: center !important;
   padding: 2px;
+  text-align: center !important;
   background: #010 !important;
 }
 
@@ -1244,16 +1227,15 @@ hr {
 /* login */
 
 #dologin {
-  margin: 40px auto 40px;
+  margin: 52px auto 42px;
   padding: 10px 10px 1px;
   width: 600px;
   border: 1px solid #151;
   border-radius: 2px;
   box-shadow: var(--highlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000, 0 0 0 1px #000, 0 0 3px 3px rgba(0,0,0,.8);
-  background: #010;
-  background: linear-gradient(180deg,rgba(0,0,0,0), rgba(0,0,0,.3)), repeating-linear-gradient(180deg,rgba(0,0,0,.9), rgba(0,32,0,.3) 1px, rgba(0,32,0,.4) 2px), url(images/hatter_med.png) right bottom no-repeat #000;
-  background-size: 100% 100%, 100% 100%, auto 40%;
-  margin: 52px auto 42px;
+  background: linear-gradient(180deg,rgba(0,0,0,0), rgba(0,0,0,.3)),
+    repeating-linear-gradient(180deg,rgba(0,0,0,.9), rgba(0,32,0,.3) 1px, rgba(0,32,0,.4) 2px),
+    url(images/hatter_med.png) no-repeat right bottom / auto 40%, #000;
   filter: opacity(0);
   animation: linear fade-in .15s 1.35s forwards;
 }
@@ -1593,6 +1575,7 @@ tr.bottombuttons:empty {
   right: 0;
   z-index: 9999;
   text-align: center;
+  font-size: 90%;
   text-shadow: var(--txt_shadow);
   border: 1px solid #000;
   border-top: none;
@@ -1608,6 +1591,10 @@ tr.bottombuttons:empty {
   border-top: none;
   border-radius: 0 0 2px 2px;
   box-shadow: 0 2px 2px 1px rgba(0,0,0,.5), inset 0 0 0 1px #010;
+}
+
+.notifications.msgerror {
+  margin: 0 20%;
 }
 
 @keyframes hide-up {
@@ -1639,7 +1626,7 @@ tr.bottombuttons:empty {
 }
 
 p.error {
-  font-size: 10pt !important;
+  font-size: 9.5pt !important;
 }
 
 td p.error {
