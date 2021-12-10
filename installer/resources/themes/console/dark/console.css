@@ -4540,11 +4540,6 @@ h3#servicedebug a, h3#graphinfo a {
   border-left: var(--border);
 }
 
-h4.app a, h4.app2 a {
-  word-spacing: 0;
-  letter-spacing: 0;
-}
-
 .main#tunnels h3 a[href^="/configtunnels#"]::after, .main#tunnels h3 a[href$="/i2ptunnelmgr"]::after,
 #logs a.configure::after, #logs a.delete::after, h4.app a::after, h4.app2 a::after {
   width: 16px;
@@ -5765,6 +5760,11 @@ h4.app2 {
   contain: paint;
 }
 
+h4.app a, h4.app2 a {
+  word-spacing: 0;
+  letter-spacing: 0;
+}
+
 #homepage .main h4 a {
   margin: -9px 0 -10px;
   padding: 14px 4px 12px;
@@ -5781,7 +5781,7 @@ h4.app2 {
 
 @supports not (-moz-appearance: none) {
   #homepage h4.app, #homepage h4.app2 {
-    padding-top: 4px !important;
+    padding-top: 7px !important;
     padding-bottom: 7px !important;
   }
   h4.app a::after, h4.app2 a::after {
@@ -5790,8 +5790,11 @@ h4.app2 {
   }
   h4.app2 a::after {
     margin-bottom: -7px !important;
-    padding-top: 4px !important;
+    padding-top: 0 !important;
     padding-bottom: 10px !important;
+  }
+  h4.app, h4.app2 {
+    line-height: 1.3;
   }
 }
 
