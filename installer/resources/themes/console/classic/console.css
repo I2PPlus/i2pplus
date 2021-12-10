@@ -823,6 +823,7 @@ div.refresh {
 .percentBarOuter, #bandwidthTestRunning {
   width: 196px;
   margin: -4px 0 -5px 3px;
+  position: relative;
   text-align: center;
   border: 1px solid var(--border);
   box-shadow: 0 0 1px rgba(200,200,200,.8), var(--highlight);
@@ -905,7 +906,6 @@ div.refresh {
 .sb_info .percentBarInner {
   height: 16px;
   background: linear-gradient(180deg, rgba(255, 255, 255,.6) 0%, rgba(238, 238, 255, .6) 50%, rgba(180, 180, 255, .7) 50%, rgba(140, 140, 255, .7) 100%);
-
 }
 
 .sb_info .percentBarText {
@@ -913,6 +913,38 @@ div.refresh {
   mix-blend-mode: multiply;
   color: #33f;
 }
+
+#sb_memoryBar .percentBarText {
+  padding: 1px 0 4px;
+  width: 70%;
+  float: none;
+  position: absolute;
+  top: -20px;
+  left: 15%;
+  right: 15%;
+  vertical-align: middle;
+  font-size: 110%;
+  border-radius: 1px;
+  background: #eef;
+  filter: drop-shadow(0 0 1px #ddf) drop-shadow(0 0 1px #779);
+}
+
+@media screen and (min-width: 1500px) {
+  #sb_memoryBar .percentBarText {padding: 1px 0 2px}
+}
+
+#sb_memoryBar .percentBarText::after {
+  width: 0;
+  height: 0;
+  position: absolute;
+  left: calc(50% - 5px);
+  bottom: -15px;
+  border-style: solid;
+  border-width: 8px;
+  border-color: #eef transparent transparent transparent;
+  content: "";
+}
+
 /* end updates download bar */
 /* end status bars */
 
