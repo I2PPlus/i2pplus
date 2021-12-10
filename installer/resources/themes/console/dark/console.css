@@ -5734,6 +5734,20 @@ h3#bannedpeers {
   margin: 0 -8px;
 }
 
+h4.app, h4.app2 {
+  margin: 11px -6px -9px;
+  padding: 9px 8px 7px 35px;
+  line-height: 1;
+  overflow: hidden;
+  letter-spacing: .15em;
+  word-spacing: 0;
+  font-size: 10.5pt;
+  font-variant: small-caps;
+  text-transform: uppercase;
+  text-align: left;
+  border-radius: 0;
+}
+
 h4.app {
   background: url(images/favicon.svg) no-repeat 8px center, var(--h1) !important;
   background-size: 18px, 4px 100%, 100%, 175px !important;
@@ -5741,9 +5755,44 @@ h4.app {
 }
 
 h4.app2 {
+  clear: left;
   background: var(--globe) no-repeat 8px center, var(--h1) !important;
   background-size: 18px, 4px 100%, 100%, 175px !important;
   background-blend-mode: var(--h3_blend) !important;
+}
+
+#homepage .main h4 {
+  contain: paint;
+}
+
+#homepage .main h4 a {
+  margin: -9px 0 -10px;
+  padding: 14px 4px 12px;
+  border-left: var(--border);
+}
+
+#homepage h4.app a {
+  margin: -13px 0 -12px;
+}
+
+#homepage h4.app2 a {
+  margin: -14px 0 -10px;
+}
+
+@supports not (-moz-appearance: none) {
+  #homepage h4.app, #homepage h4.app2 {
+    padding-top: 4px !important;
+    padding-bottom: 7px !important;
+  }
+  h4.app a::after, h4.app2 a::after {
+    margin-top: 0 !important;
+    padding-top: 8px !important;
+  }
+  h4.app2 a::after {
+    margin-bottom: -7px !important;
+    padding-top: 4px !important;
+    padding-bottom: 10px !important;
+  }
 }
 
 h4.app::first-letter, h4.app2::first-letter {
@@ -5784,23 +5833,6 @@ h4.app img:hover, h4.app2 img:hover {
 
 h4.app img:active, h4.app2 img:active {
   transform: rotateZ(90deg);
-}
-
-h4.app, h4.app2 {
-  margin: 11px -6px -9px;
-  padding: 9px 8px 7px 35px;
-  overflow: hidden;
-  letter-spacing: .15em;
-  word-spacing: 0;
-  font-size: 10.5pt;
-  font-variant: small-caps;
-  text-transform: uppercase;
-  text-align: left;
-  border-radius: 0;
-}
-
-h4.app2 {
-  clear: left;
 }
 
 .ag2 {
@@ -11553,40 +11585,6 @@ h3#scheduledjobs {
   vertical-align: middle !important;
 }
 
-#homepage .main h4 {
-  contain: paint;
-}
-
-#homepage .main h4 a {
-  margin: -9px 0 -10px;
-  padding: 14px 4px 12px;
-  border-left: var(--border);
-}
-
-#homepage h4.app a {
-  margin-bottom: -12px;
-}
-
-#homepage h4.app2 a {
-  padding: 10px 4px 14px;
-}
-
-@supports not (-moz-appearance: none) {
-  #homepage h4.app, #homepage h4.app2 {
-    padding-top: 4px !important;
-    padding-bottom: 7px !important;
-  }
-  h4.app a::after, h4.app2 a::after {
-    margin-top: 0 !important;
-    padding-top: 8px !important;
-  }
-  h4.app2 a::after {
-    margin-bottom: -7px !important;
-    padding-top: 4px !important;
-    padding-bottom: 10px !important;
-  }
-}
-
 #tunnels h3#exploratory a, #tunnels h3.server a, #tunnels h3.client a {
   margin: -8px 0 -8px 0 !important;
   padding: 7px 4px 14px 10px !important;
@@ -11656,6 +11654,7 @@ h2#jobrunners {
   margin-left: -7px;
   margin-right: -7px;
   padding-left: 35px;
+  line-height: 1.2;
   letter-spacing: .12em;
   font-size: 10.5pt;
   background: url(images/favicon.svg) no-repeat 9px center, var(--h1) !important;
@@ -12057,8 +12056,9 @@ i {
 
 #clock {
   margin: -7px -10px -9px;
-  padding: 8px 0 6px;
+  padding: 8px 0;
   position: relative;
+  line-height: 1;
   letter-spacing: .1em;
   font-size: 18pt;
   font-weight: 700;
@@ -13894,7 +13894,7 @@ body.iframed {
     width: 55px;
   }
   h1[class], h1, h1.conf.adv {
-    padding: 14px 15px 13px 62px;
+    padding: 13px 15px 13px 62px;
     font-size: 20pt !important;
     background-size: 40px, 4px 100%, 100%, 164px !important;
     background-position: 12px center;
