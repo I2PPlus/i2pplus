@@ -116,7 +116,7 @@ public class Reseeder {
         //
         // https url:port, ending with "/"                    certificates/reseed/                 certificates/ssl/                 notes
         // ----------------------------------                 ---------------------------------    ------------------------------    --------------------------
-        "https://reseed.diva.exchange/"             + ',' +   // reseed_at_diva.exchange.crt       // CA
+        "https://reseed.diva.exchange/"             + ',' +   // reseed_at_diva.exchange.crt       CA
         "https://reseed.i2pgit.org/"                + ',' +   // hankhill19580_at_gmail.com.crt    CA                                Java 8+
         "https://i2p.novg.net/"                     + ',' +   // igor_at_novg.net.crt              CA                                Java 8+
         "https://i2pseed.creativecowpat.net:8443/"  + ',' +   // creativecowpat_at_mail.i2p.crt    i2pseed.creativecowpat.net.crt    Java 7+
@@ -124,13 +124,7 @@ public class Reseeder {
         "https://reseed.memcpy.io/"                 + ',' +   // hottuna_at_mail.i2p.crt           CA                                SNI required
         "https://banana.incognet.io/"               + ',' +   // rambler_at_mail.i2p.crt           CA
         "https://coconut.incognet.io/"              + ',' +   // rambler_at_mail.i2p.crt           CA
-        "https://reseed.i2p-projekt.de/";                     // echelon_at_mail.i2p.crt           echelon.reseed2017.crt            Java 8+
-
-//        "https://i2p.mooo.com/netDb/"               + ',' +   // bugme_at_mail.i2p.crt             i2p.mooo.com.crt
-//        "https://netdb.i2p2.no/"                    + ',' +   // meeh_at_mail.i2p.crt              CA                                SNI required
-//        "https://reseed.i2p2.no/"                   + ',' +   // meeh_at_mail.i2p.crt              CA                                SNI required
-//        "https://reseed2.i2p2.no/";                           // meeh_at_mail.i2p.crt              CA                                SNI required
-//        "https://download.xxlspeed.com/"            + ',' +   // backup_at_mail.i2p.crt            CA                                Java 8+
+        "https://reseed2.i2p.net/";                           // echelon3_at_mail.i2p.crt          CA
 
     private static final String SU3_FILENAME = "i2pseeds.su3";
 
