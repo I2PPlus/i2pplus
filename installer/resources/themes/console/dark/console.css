@@ -825,12 +825,16 @@ div.refresh {
 
 .percentBarText {
   width: 100%;
-  font-weight: 700;
-  text-align: center;
   vertical-align: middle;
   float: left;
+  text-align: center;
+  font-weight: 700;
   opacity: 0;
   transition: ease opacity .2s;
+}
+
+#sb_memoryBar .percentBarText {
+  line-height: 19px;
 }
 
 /* update bar */
