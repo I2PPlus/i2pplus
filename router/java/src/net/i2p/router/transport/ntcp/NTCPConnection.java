@@ -1571,15 +1571,19 @@ public class NTCPConnection implements Closeable {
                 _blockCount += blocks;
             } catch (IOException ioe) {
                 if (_log.shouldWarn())
-                    _log.warn("Fail payload " + NTCPConnection.this, ioe);
+//                    _log.warn("Payload delivery failure " + NTCPConnection.this + ioe.getMessage());
+                    _log.warn("Payload delivery failure \n* " + ioe.getMessage());
             } catch (DataFormatException dfe) {
                 if (_log.shouldWarn())
-                    _log.warn("Fail payload " + NTCPConnection.this, dfe);
+//                    _log.warn("Payload delivery failure " + NTCPConnection.this + dfe.getMessage());
+                    _log.warn("Payload delivery failure \n* " + dfe.getMessage());
             } catch (I2NPMessageException ime) {
                 if (_log.shouldDebug())
-                    _log.warn("Error parsing I2NP message on " + NTCPConnection.this, ime);
+//                    _log.warn("Error parsing I2NP message on " + NTCPConnection.this + ime.getMessage());
+                    _log.warn("Error parsing I2NP message \n* " + ime.getMessage());
                 else if (_log.shouldWarn())
-                    _log.warn("Error parsing I2NP message on " + NTCPConnection.this + "\n* I2NP Message Exception: " + ime.getMessage());
+//                    _log.warn("Error parsing I2NP message on " + NTCPConnection.this + "\n* I2NP Message Exception: " + ime.getMessage());
+                    _log.warn("Error parsing I2NP message \n* " + ime.getMessage());
                 _context.statManager().addRateData("ntcp.corruptI2NPIME", 1);
             }
             _received = -2;
