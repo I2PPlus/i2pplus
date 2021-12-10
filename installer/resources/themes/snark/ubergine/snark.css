@@ -875,10 +875,10 @@ td:first-child {
 .snarkTrackerDetails a:active img, .snarkTorrentDetails a:active img:not([src$="rateme.svg"]),
 .snarkDirInfo td:not(.parentdir):first-child a:active img {
   border: 1px solid #212 !important;
-  box-shadow: inset 3px 3px 2px 1px #202;
+  border-radius: 0;
+  box-shadow: var(--highlight), inset 3px 3px 2px 1px #202;
   background: #414;
-  mix-blend-mode: overlay;
-  transform: scale(0.9) !important;
+  transform: scale(.8) !important;
   transition: none !important;
   filter: none !important;
 }
@@ -1174,12 +1174,12 @@ tr:hover .percentBarText {
   padding-top: 4px;
 }
 
-tr:hover .snarkTorrentName a:hover, tr:hover .snarkFileName a:hover {
+tr:hover .snarkTorrentName a:hover, tr:hover .snarkFileName a:hover, tr:active .ParentDir a {
   border-radius: 2px 15px 15px 2px;
   background: linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,.2) 70%);
 }
 
-tr:hover .snarkTorrentName a:active, tr:hover .snarkFileName a:active, tr:hover .ParentDir a:active {
+tr:hover .snarkTorrentName a:active, tr:hover .snarkFileName a:active {
   padding-left: 5px;
   box-shadow: inset 3px 3px 3px #101;
   background: #303;
@@ -5505,6 +5505,7 @@ td.snarkTorrentAction input[type=submit] {
   .snarkTorrentName a {max-width: 280px !important}
   .snarkTrackerDetails img{height: 17px !important}
   td.snarkGraphicStatus img{margin-left: 4px !important}
+  .snarkTorrentInfo td {padding: 6px 5px !important}
 }
 
 @media screen and (max-width: 950px) {
@@ -5898,7 +5899,7 @@ td.snarkTorrentAction input[type=submit] {
 
 @media screen and (min-width: 1500px) {
   .torrentlink, .magnetlink {margin: -2px 3px -2px 4px !important}
-  .snarkTorrentInfo th:first-child img, #torrentinfostats img {
+  .snarkTorrentInfo th:first-child img, .snarkTorrentInfo td img, #torrentinfostats img {
     margin: -3px 5px 0 !important;
     max-height: 18px !important;
   }
