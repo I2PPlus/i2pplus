@@ -164,18 +164,16 @@ img {
 }
 
 #netdb #netdbcountrylist img {
-  margin-right: 10px !important;
-  padding: 0 !important;
+  margin-right: 10px;
+  padding: 0;
   width: 24px !important;
   height: 18px !important;
-  border: 1px solid #141;
-  border-radius: 1px;
+  box-shadow: 0 0 0 1px #000, 0 0 0 2px #020;
   background: #000;
 }
 
 #netdb #netdbcountrylist a:hover img {
-  border: 1px solid #000;
-  box-shadow: 0 0 0 1px rgba(255,96,0,.8);
+  box-shadow: 0 0 0 1px #000, 0 0 0 2px #f60;
   transform: scale(1.1);
 }
 
