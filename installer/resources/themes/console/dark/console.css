@@ -7512,7 +7512,7 @@ h4#sb_shutdownstatus span {
 }
 
 .sb_netstatus.clockskew::before {
-  background: var(--net_vm) no-repeat center center;
+  background: var(--net_clockskew) no-repeat center center;
 }
 
 /* end network status */
