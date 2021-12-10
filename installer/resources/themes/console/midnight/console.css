@@ -1956,6 +1956,7 @@ p:empty + .sb_notice {
 .percentBarOuter {
   margin: -3px 0 -6px -6px;
   width: 194px;
+  position: relative;
   border: var(--innerborder);
   box-shadow: var(--highlight), inset 0 2px 2px 2px rgba(0,0,0,.45);
   background: #000;
@@ -1964,9 +1965,7 @@ p:empty + .sb_notice {
 }
 
 @media screen and (min-width: 1500px) {
-.percentBarOuter {
-  width: 210px;
-}
+  .percentBarOuter {width: 210px}
 }
 
 .percentBarOuter:hover .percentBarText {
@@ -2004,10 +2003,42 @@ p:empty + .sb_notice {
 }
 
 @supports not (-moz-appearance: none) {
-.percentBarText {
-  padding-top: 1px;
+.percentBarText {padding-top: 1px}
 }
+
+#sb_memoryBar .percentBarText {
+  padding: 2px 0 0;
+  width: 70%;
+  line-height: 22px;
+  float: none;
+  position: absolute;
+  top: -23px;
+  left: 15%;
+  right: 15%;
+  z-index: 999;
+  font-size: 110%;
+  border-radius: 2px;
+  background: #115;
+  filter: drop-shadow(0 0 1px #337) drop-shadow(0 0 1px #000);
 }
+
+#sb_memorybar .percentBarOuter:hover .percentBarText,
+#sb_memorybar .percentBarOuter:active .percentBarText {
+  opacity: 1;
+}
+
+#sb_memoryBar .percentBarText::after {
+  width: 0;
+  height: 0;
+  position: absolute;
+  left: calc(50% - 5px);
+  bottom: -15px;
+  border-style: solid;
+  border-width: 8px;
+  border-color: #115 transparent transparent transparent;
+  content: "";
+}
+
 /* update bar */
 
 .sb_updatestatus {

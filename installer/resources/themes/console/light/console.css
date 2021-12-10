@@ -781,13 +781,8 @@ a:active #sb_bandwidthgraph {
 }
 
 @keyframes downloadbar {
-from {
-  background: repeating-linear-gradient(135deg, rgba(221, 221, 255, .7) 1px, rgba(221, 221, 255, .7) 6px, rgba(238, 238, 255,.7) 7px, rgba(238, 238, 255,.7) 11px);
-}
-
-to {
-  background: repeating-linear-gradient(135deg, rgba(238, 238, 255,.7) 1px, rgba(238, 238, 255, .7) 5px, rgba(221, 221, 255, .7) 6px, rgba(221, 221, 255, .7) 11px);
-}
+  from {background: repeating-linear-gradient(135deg, rgba(221, 221, 255, .7) 1px, rgba(221, 221, 255, .7) 6px, rgba(238, 238, 255,.7) 7px, rgba(238, 238, 255,.7) 11px)}
+  to {background: repeating-linear-gradient(135deg, rgba(238, 238, 255,.7) 1px, rgba(238, 238, 255, .7) 5px, rgba(221, 221, 255, .7) 6px, rgba(221, 221, 255, .7) 11px)}
 }
 
 .sb_info .percentBarOuter {
@@ -810,6 +805,41 @@ to {
 
 .sb_updatestatus + .percentBarOuter {
   margin-bottom: -18px;
+}
+
+.percentBarOuter {
+  position: relative;
+}
+
+#sb_memoryBar .percentBarText {
+  padding: 0;
+  width: 70%;
+  float: none;
+  position: absolute;
+  top: -18px;
+  left: 15%;
+  right: 15%;
+  vertical-align: middle;
+  font-size: 110%;
+  border-radius: 1px;
+  background: #eef;
+  filter: drop-shadow(0 0 1px #eef) drop-shadow(0 0 1px #000);
+}
+
+@media screen and (min-width: 1500px) {
+  #sb_memoryBar .percentBarText {padding: 0 0 2px}
+}
+
+#sb_memoryBar .percentBarText::after {
+  width: 0;
+  height: 0;
+  position: absolute;
+  left: calc(50% - 5px);
+  bottom: -13px;
+  border-style: solid;
+  border-width: 8px;
+  border-color: #eef transparent transparent transparent;
+  content: "";
 }
 
 /* end updates download bar */
