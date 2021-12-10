@@ -833,20 +833,20 @@ div.refresh {
 }
 
 #sb_memoryBar .percentBarText {
-  width: 60%;
+  width: 70%;
   line-height: 22px;
   float: none;
   position: absolute;
   top: -23px;
-  left: 20%;
-  right: 20%;
+  left: 15%;
+  right: 15%;
   font-size: 110%;
   border-radius: 3px;
   background: #010;
   filter: drop-shadow(0 0 1px #252) drop-shadow(0 0 1px #000);
 }
 
-.percentBarText::after {
+#sb_memoryBar .percentBarText::after {
   width: 0;
   height: 0;
   position: absolute;
