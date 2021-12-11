@@ -3477,9 +3477,12 @@ public class I2PSnarkServlet extends BasicServlet {
         // browsers seem to work without doing this but let's be strict
         String link = urlEncode(s);
         String display;
-        if (s.length() <= max)
-            display = DataHelper.escapeHTML(link);
-        else
+        if (s.length() <= max) {
+            if (link.startsWith("https"))
+                display = DataHelper.escapeHTML(link);
+            else
+                display = DataHelper.escapeHTML(link.replace("http://", ""));
+        } else
             display = DataHelper.escapeHTML(s.substring(0, max)) + "&hellip;";
         buf.append("<a href=\"").append(link).append("\" target=\"_blank\">").append(display).append("</a>");
         return buf.toString();

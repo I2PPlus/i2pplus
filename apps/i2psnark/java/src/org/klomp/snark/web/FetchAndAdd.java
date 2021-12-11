@@ -91,7 +91,7 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
      *  Set off by startTorrent()
      */
     public void run() {
-        _mgr.addMessageNoEscape(_t("Fetching {0}", urlify(_url)).replace("Fetching", "Requesting"));
+        _mgr.addMessageNoEscape(_t("Requesting torrent file from: {0}", urlify(_url)));
         File file = get();
         if (!_isRunning)  // stopped?
             return;
@@ -101,7 +101,7 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
             _mgr.deleteMagnet(this);
             add(file);
         } else {
-            _mgr.addMessageNoEscape(_t("Torrent was not retrieved from {0}", urlify(_url)) +
+            _mgr.addMessageNoEscape(_t("Failed to retrieve torrent file from: {0}", urlify(_url)) +
                             ((_failCause != null) ? (": " + DataHelper.stripHTML(_failCause)) : ""));
         }
         if (file != null)
@@ -128,7 +128,7 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
         out.deleteOnExit();
 
         if (!_mgr.util().connected()) {
-            _mgr.addMessage(_t("Opening the I2P tunnel"));
+            _mgr.addMessage(_t("Opening the I2P tunnel") + "...");
             if (!_mgr.util().connect())
                 return null;
         }
