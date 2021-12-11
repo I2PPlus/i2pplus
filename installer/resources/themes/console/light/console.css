@@ -3393,11 +3393,11 @@ h4.app a, h4.app2 a {
   transition: ease transform .15s;
 }
 
-#chooselang::after, #configbanwidth::after {
+#chooselang::after, #configbandwidth::after {
   content: none !important;
 }
 
-#chooselang img, #configbanwidth img {
+#chooselang img, #configbandwidth img {
   margin: -9px -5px -8px 20px;
   padding-top: 11px;
   display: inline-block;
@@ -3405,11 +3405,11 @@ h4.app a, h4.app2 a {
 }
 
 @media screen and (max-width: 1500px) {
-  #chooselang, #configbanwidth {
+  #chooselang, #configbandwidth {
     margin-top: 1px;
     margin-bottom: 4px;
   }
-  #chooselang img, #configbanwidth img {
+  #chooselang img, #configbandwidth img {
     margin: -9px -5px -12px 20px;
   }
 }
@@ -3423,7 +3423,7 @@ h4.app a:hover::after, h4.app2 a:hover::after {
   margin-right: 10px;
 }
 
-#configbanwidth img {
+#configbandwidth img {
   margin-right: -10px;
 }
 

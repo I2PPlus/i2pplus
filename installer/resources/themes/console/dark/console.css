@@ -5808,17 +5808,17 @@ h4.app img, h4.app2 img {
   opacity: .5;
 }
 
-#chooselang img, #configbanwidth img {
+#chooselang img, #configbandwidth img {
   margin: -1px 10px 0;
   display: inline-block;
 }
 
-#chooselang:hover img, #configbanwidth:hover img {
+#chooselang:hover img, #configbandwidth:hover img {
   transform: scale(1.3);
   filter: none !important;
 }
 
-#chooselang::after, #configbanwidth::after {
+#chooselang::after, #configbandwidth::after {
   content: none;
 }
 

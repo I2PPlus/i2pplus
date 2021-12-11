@@ -3647,11 +3647,11 @@ h4.app a:focus::after, h4.app2 a:focus::after {
   opacity: 1;
 }
 
-#chooselang::after, #configbanwidth::after {
+#chooselang::after, #configbandwidth::after {
   content: none;
 }
 
-#chooselang img, #configbanwidth img {
+#chooselang img, #configbandwidth img {
   margin: 1px -5px 0 20px;
   display: inline-block;
   opacity: .8;
