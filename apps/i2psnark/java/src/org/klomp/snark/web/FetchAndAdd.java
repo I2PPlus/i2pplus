@@ -62,7 +62,7 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
     private EepGet _eepGet;
 
 //    private static final int RETRIES = 3;
-    private static final int RETRIES = 10;
+    private static final int RETRIES = 20;
 
     /**
      *   Caller should call _mgr.addDownloader(this), which
@@ -120,7 +120,7 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
             out = SecureFile.createTempFile("torrentFile", null, _mgr.util().getTempDir());
         } catch (IOException ioe) {
             _log.error("temp file error", ioe);
-            _mgr.addMessage("Temp file error: " + ioe.getMessage());
+            _mgr.addMessage("Problem writing file to temp directory: " + ioe.getMessage());
             if (out != null)
                 out.delete();
             return null;
@@ -139,12 +139,12 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
         _eepGet.addStatusListener(this);
         _eepGet.addHeader("User-Agent", I2PSnarkUtil.EEPGET_USER_AGENT);
         if (_eepGet.fetch()) {
-            if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Transfer successful [" + _url + "]: size=" + out.length());
+            if (_log.shouldLog(Log.INFO))
+                _log.info("Transfer successful [" + _url + "] (Size:" + out.length() + " bytes)");
             return out;
         } else {
-            if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Transfer failed [" + _url + ']');
+            if (_log.shouldLog(Log.INFO))
+                _log.info("Transfer failed [" + _url + ']');
             out.delete();
             return null;
         }
