@@ -1170,6 +1170,14 @@ tr:hover .percentBarText {
   display: inline-block;
 }
 
+tr a {
+  -webkit-text-stroke: 1px rgba(0,0,0,.3);
+}
+
+tr:hover a, tr a:hover {
+  -webkit-text-stroke: none;
+}
+
 .snarkTorrentName a {
   padding-top: 4px;
 }
@@ -3980,6 +3988,7 @@ input[name="nofilter_commentsName"] {
   font-weight: 700;
   color: #969;
   text-shadow: 0 0 1px #000;
+  -webkit-text-stroke: 1px rgba(45,30,45,.3);
   border: var(--border_inner);
   border-right: none;
   border-radius: 0;
@@ -4025,6 +4034,11 @@ input[name="nofilter_commentsName"] {
   box-shadow: var(--highlight), inset 2px 2px 2px 2px #101;
   background: radial-gradient(at center bottom, rgba(255, 32, 160, .25), rgba(128, 64, 128, .15) 80%, rgba(0,0,0,0)),
     linear-gradient(180deg,#180818, #280828) !important;
+}
+
+#torrentDisplay label:active {
+  text-shadow: none;
+  -webkit-text-stroke: none;
 }
 
 .pagenavcontrols {
