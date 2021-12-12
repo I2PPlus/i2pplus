@@ -1272,7 +1272,7 @@ tr:hover .percentBarOuter, tr:hover .peerinfo .percentBarOuter {
 }
 
 .active.seeding .uploaded {
-  background: repeating-linear-gradient(90deg,#000,#000 5%,#d30 5%,#d30 10%);
+  background: repeating-linear-gradient(90deg,#000,#000 5%,#707 5%,#707 10%);
   background-size: 200%;
 /*  animation: linear uploading 1.5s 3.5s reverse infinite;*/
 }
@@ -1295,6 +1295,7 @@ tr:hover .uploaded {
 
 .active.seeding .txBarInner {
   background: rgba(208,32,128,.8);
+  background: linear-gradient(180deg, rgba(192,64,0,.8), rgba(240,80,0,.8));
 }
 
 .txBarInner[style="width: calc(100% - 2px)"] {
