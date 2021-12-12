@@ -1170,11 +1170,11 @@ tr:hover .percentBarText {
   display: inline-block;
 }
 
-tr a {
+tr a, td.snarkTorrentPeerCount {
   -webkit-text-stroke: 1px rgba(0,0,0,.3);
 }
 
-tr:hover a, tr a:hover {
+tr:hover a, tr a:hover, tr:hover td.snarkTorrentPeerCount {
   -webkit-text-stroke: none;
 }
 
@@ -5165,6 +5165,7 @@ td.snarkTorrentAction input[type=submit] {
     text-align: center !important;
     font-size: 95%;
     text-shadow: 0 1px 1px #000 !important;
+    -webkit-text-stroke: none !important;
     border-radius: 2px;
     background: #535;
     filter: drop-shadow(0 0 1px #000);
