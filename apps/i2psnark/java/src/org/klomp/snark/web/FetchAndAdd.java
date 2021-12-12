@@ -91,7 +91,7 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
      *  Set off by startTorrent()
      */
     public void run() {
-        _mgr.addMessageNoEscape(_t("Requesting torrent file from: {0}", urlify(_url)));
+        _mgr.addMessageNoEscape(_t("Requesting torrent file: {0}", urlify(_url)));
         File file = get();
         if (!_isRunning)  // stopped?
             return;
@@ -101,7 +101,7 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
             _mgr.deleteMagnet(this);
             add(file);
         } else {
-            _mgr.addMessageNoEscape(_t("Failed to retrieve torrent file from: {0}", urlify(_url)) +
+            _mgr.addMessageNoEscape(_t("Failed to retrieve torrent file: {0}", urlify(_url)) +
                             ((_failCause != null) ? (": " + DataHelper.stripHTML(_failCause)) : ""));
         }
         if (file != null)
@@ -119,7 +119,7 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
         try {
             out = SecureFile.createTempFile("torrentFile", null, _mgr.util().getTempDir());
         } catch (IOException ioe) {
-            _log.error("temp file error", ioe);
+            _log.error("Temporary storage error", ioe);
             _mgr.addMessage("Problem writing file to temp directory: " + ioe.getMessage());
             if (out != null)
                 out.delete();
