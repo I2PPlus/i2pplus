@@ -62,7 +62,7 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
     private EepGet _eepGet;
 
 //    private static final int RETRIES = 3;
-    private static final int RETRIES = 10;
+    private static final int RETRIES = 20;
 
     /**
      *   Caller should call _mgr.addDownloader(this), which
@@ -91,7 +91,7 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
      *  Set off by startTorrent()
      */
     public void run() {
-        _mgr.addMessageNoEscape(_t("Fetching {0}", urlify(_url)).replace("Fetching", "Requesting"));
+        _mgr.addMessageNoEscape(_t("Requesting torrent file: {0}", urlify(_url)));
         File file = get();
         if (!_isRunning)  // stopped?
             return;
@@ -101,7 +101,7 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
             _mgr.deleteMagnet(this);
             add(file);
         } else {
-            _mgr.addMessageNoEscape(_t("Torrent was not retrieved from {0}", urlify(_url)) +
+            _mgr.addMessageNoEscape(_t("Failed to retrieve torrent file: {0}", urlify(_url)) +
                             ((_failCause != null) ? (": " + DataHelper.stripHTML(_failCause)) : ""));
         }
         if (file != null)
@@ -119,8 +119,8 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
         try {
             out = SecureFile.createTempFile("torrentFile", null, _mgr.util().getTempDir());
         } catch (IOException ioe) {
-            _log.error("temp file error", ioe);
-            _mgr.addMessage("Temp file error: " + ioe.getMessage());
+            _log.error("Temporary storage error", ioe);
+            _mgr.addMessage("Problem writing file to temp directory: " + ioe.getMessage());
             if (out != null)
                 out.delete();
             return null;
@@ -128,7 +128,7 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
         out.deleteOnExit();
 
         if (!_mgr.util().connected()) {
-            _mgr.addMessage(_t("Opening the I2P tunnel"));
+            _mgr.addMessage(_t("Opening the I2P tunnel") + "...");
             if (!_mgr.util().connect())
                 return null;
         }
@@ -139,12 +139,12 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
         _eepGet.addStatusListener(this);
         _eepGet.addHeader("User-Agent", I2PSnarkUtil.EEPGET_USER_AGENT);
         if (_eepGet.fetch()) {
-            if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Transfer successful [" + _url + "]: size=" + out.length());
+            if (_log.shouldLog(Log.INFO))
+                _log.info("Transfer successful [" + _url + "] (Size:" + out.length() + " bytes)");
             return out;
         } else {
-            if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Transfer failed [" + _url + ']');
+            if (_log.shouldLog(Log.INFO))
+                _log.info("Transfer failed [" + _url + ']');
             out.delete();
             return null;
         }

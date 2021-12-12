@@ -4591,18 +4591,6 @@ h3#servicedebug a, h3#graphinfo a {
   transform: scale(.85);
 }
 
-h4.app a::after, h4.app2 a::after {
-  margin-left: 9px;
-}
-
-h4.app a::after {
-  margin-top: -1px;
-}
-
-h4.app2 a::after {
-  margin-top: 1px;
-}
-
 /* end /tunnels */
 
 /* configclients */
@@ -5729,6 +5717,18 @@ h3#bannedpeers {
   margin: 0 -8px;
 }
 
+h4.app a::after, h4.app2 a::after {
+  margin-left: 9px;
+}
+
+h4.app a::after {
+  margin-top: -1px;
+}
+
+h4.app2 a::after {
+  margin-top: 1px;
+}
+
 h4.app, h4.app2 {
   margin: 11px -6px -9px;
   padding: 9px 8px 7px 35px;
@@ -5796,6 +5796,24 @@ h4.app a, h4.app2 a {
   h4.app, h4.app2 {
     line-height: 1.3;
   }
+  @media screen and (-webkit-min-device-pixel-ratio: 1.2) {
+    #homepage h4::before {
+      margin-top: -15px;
+      margin-bottom: 4px;
+      height: 10px;
+      display: block;
+      vertical-align: top;
+      content: "";
+    }
+    #homepage h4 {
+      padding-top: 7px !important;
+      padding-bottom: 4px !important;
+    }
+    #homepage h4 a::after {
+      margin-bottom: -10px !important;
+      margin-top: -3px !important;
+    }
+  }
 }
 
 h4.app::first-letter, h4.app2::first-letter {
@@ -5808,17 +5826,17 @@ h4.app img, h4.app2 img {
   opacity: .5;
 }
 
-#chooselang img, #configbanwidth img {
+#chooselang img, #configbandwidth img {
   margin: -1px 10px 0;
   display: inline-block;
 }
 
-#chooselang:hover img, #configbanwidth:hover img {
+#chooselang:hover img, #configbandwidth:hover img {
   transform: scale(1.3);
   filter: none !important;
 }
 
-#chooselang::after, #configbanwidth::after {
+#chooselang::after, #configbandwidth::after {
   content: none;
 }
 
@@ -7023,6 +7041,10 @@ p#webappconfigtext {
   margin-top: -1px;
 }
 
+#pluginconfig th {
+  font-size: 8.5pt;
+}
+
 #peers p.infohelp {
   margin-bottom: 11px;
 }
@@ -7220,8 +7242,7 @@ h4.embeddedtitle#updateplugins {
 }
 
 #configstats input.optbox {
-  margin: 0;
-  padding: 0;
+  display: none !important;
 }
 
 #configstats .tablefooter td {
@@ -14028,6 +14049,30 @@ body.iframed {
     height: 39px !important;
     background-size: 250px 40px !important;
   }
+  .tunnel_id {
+    margin: 0 5px !important;
+    padding: 2px 4px 2px 6px;
+    min-width: 96px;
+    display: inline-block;
+    vertical-align: middle;
+    text-align: left;
+    border: 1px solid #030;
+    box-shadow: var(--highlight_badge);
+    background: var(--element);
+  }
+  .tunnel_id:not(:empty) {
+    background: var(--hardhat) no-repeat 5px center / 14px, var(--element);
+  }
+  .tunnel_id:not(:empty)::before {
+    width: 16px;
+    height: 14px;
+    display: inline-block;
+    vertical-align: middle;
+    content: "";
+  }
+  #pluginconfig th {
+    font-size: 9pt !important;
+  }
 }
 
 @media screen and (min-width: 1634px) {
@@ -14092,29 +14137,5 @@ body.iframed {
   }
   div[id^="config_"] .tab:first-child {
     margin-left: -1px !important;
-  }
-}
-
-@media screen and (min-width: 1500px) {
-  .tunnel_id {
-    margin: 0 5px !important;
-    padding: 2px 4px 2px 6px;
-    min-width: 96px;
-    display: inline-block;
-    vertical-align: middle;
-    text-align: left;
-    border: 1px solid #030;
-    box-shadow: var(--highlight_badge);
-    background: var(--element);
-  }
-  .tunnel_id:not(:empty) {
-    background: var(--hardhat) no-repeat 5px center / 14px, var(--element);
-  }
-  .tunnel_id:not(:empty)::before {
-    width: 16px;
-    height: 14px;
-    display: inline-block;
-    vertical-align: middle;
-    content: "";
   }
 }

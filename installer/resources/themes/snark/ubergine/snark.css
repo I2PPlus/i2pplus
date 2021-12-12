@@ -1170,6 +1170,14 @@ tr:hover .percentBarText {
   display: inline-block;
 }
 
+tr a, td.snarkTorrentPeerCount {
+  -webkit-text-stroke: 1px rgba(0,0,0,.3);
+}
+
+tr:hover a, tr a:hover, tr:hover td.snarkTorrentPeerCount {
+  -webkit-text-stroke: none;
+}
+
 .snarkTorrentName a {
   padding-top: 4px;
 }
@@ -1268,13 +1276,13 @@ tr:hover .percentBarOuter, tr:hover .peerinfo .percentBarOuter {
 
 @keyframes uploading {
   from {background-position: left center}
-  to {background-position: right center}
+  to {background-position: 20% center}
 }
 
 .active.seeding .uploaded {
-  background: repeating-linear-gradient(90deg,#000,#000 5%,#d30 5%,#d30 10%);
+  background: repeating-linear-gradient(90deg,#000,#000 5%,#707 5%,#707 10%);
   background-size: 200%;
-/*  animation: linear uploading 1.5s 3.5s reverse infinite;*/
+  animation: linear uploading .5s 4.5s reverse infinite;
 }
 
 tr:hover .uploaded {
@@ -1295,15 +1303,16 @@ tr:hover .uploaded {
 
 .active.seeding .txBarInner {
   background: rgba(208,32,128,.8);
+  background: linear-gradient(180deg, rgba(192,64,0,.8), rgba(240,80,0,.8));
 }
 
 .txBarInner[style="width: calc(100% - 2px)"] {
   box-shadow: 0 0 0 1px #000, inset 0 2px 2px 3px rgba(255,255,255,.1);
-  background: linear-gradient(180deg, rgba(220,220,220,.05), rgba(255,255,255,.1), rgba(0,0,0,.3), rgba(0,0,0,.5)), linear-gradient(0deg, rgba(192,0,96,.4), rgba(208,0,112,.4));
+  background: linear-gradient(180deg, rgba(220,220,220,.05), rgba(255,255,255,.1), rgba(0,0,0,.3), rgba(0,0,0,.5)), linear-gradient(0deg, rgba(128,0,128,.4), rgba(160,0,160,.4));
 }
 
 .active.seeding .txBarInner[style="width: calc(100% - 2px)"] {
-  background: linear-gradient(180deg, rgba(220,220,220,.05), rgba(255,255,255,.1), rgba(0,0,0,.3), rgba(0,0,0,.5)), linear-gradient(0deg, rgba(220,32,128,.4), rgba(255,96,160,.4));
+  background: linear-gradient(180deg, rgba(220,220,220,.05), rgba(255,255,255,.1), rgba(0,0,0,.3), rgba(0,0,0,.5)), linear-gradient(0deg, rgba(220,16,128,.4), rgba(255,32,160,.4));
 }
 
 .txBarInner::after {
@@ -3979,6 +3988,7 @@ input[name="nofilter_commentsName"] {
   font-weight: 700;
   color: #969;
   text-shadow: 0 0 1px #000;
+  -webkit-text-stroke: 1px rgba(45,30,45,.3);
   border: var(--border_inner);
   border-right: none;
   border-radius: 0;
@@ -4024,6 +4034,11 @@ input[name="nofilter_commentsName"] {
   box-shadow: var(--highlight), inset 2px 2px 2px 2px #101;
   background: radial-gradient(at center bottom, rgba(255, 32, 160, .25), rgba(128, 64, 128, .15) 80%, rgba(0,0,0,0)),
     linear-gradient(180deg,#180818, #280828) !important;
+}
+
+#torrentDisplay label:active {
+  text-shadow: none;
+  -webkit-text-stroke: none;
 }
 
 .pagenavcontrols {
@@ -5150,6 +5165,7 @@ td.snarkTorrentAction input[type=submit] {
     text-align: center !important;
     font-size: 95%;
     text-shadow: 0 1px 1px #000 !important;
+    -webkit-text-stroke: none !important;
     border-radius: 2px;
     background: #535;
     filter: drop-shadow(0 0 1px #000);
@@ -6214,4 +6230,8 @@ td.snarkTorrentAction input[type=submit] {
   }
 }
 
-/* end responsive layout */
+@media screen and (-webkit-min-device-pixel-ratio: 1.2) {
+  .configsection .snarkConfigTitle, .toggleview {
+    padding-top: 4px !important;
+  }
+}
