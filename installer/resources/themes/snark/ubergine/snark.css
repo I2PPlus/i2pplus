@@ -1268,13 +1268,13 @@ tr:hover .percentBarOuter, tr:hover .peerinfo .percentBarOuter {
 
 @keyframes uploading {
   from {background-position: left center}
-  to {background-position: right center}
+  to {background-position: 20% center}
 }
 
 .active.seeding .uploaded {
   background: repeating-linear-gradient(90deg,#000,#000 5%,#707 5%,#707 10%);
   background-size: 200%;
-/*  animation: linear uploading 1.5s 3.5s reverse infinite;*/
+  animation: linear uploading .5s 4.5s reverse infinite;
 }
 
 tr:hover .uploaded {
