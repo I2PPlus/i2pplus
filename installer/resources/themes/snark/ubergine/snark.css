@@ -6230,4 +6230,8 @@ td.snarkTorrentAction input[type=submit] {
   }
 }
 
-/* end responsive layout */
+@media screen and (-webkit-min-device-pixel-ratio: 1.2) {
+  .configsection .snarkConfigTitle, .toggleview {
+    padding-top: 4px !important;
+  }
+}
