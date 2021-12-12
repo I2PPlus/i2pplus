@@ -1300,11 +1300,11 @@ tr:hover .uploaded {
 
 .txBarInner[style="width: calc(100% - 2px)"] {
   box-shadow: 0 0 0 1px #000, inset 0 2px 2px 3px rgba(255,255,255,.1);
-  background: linear-gradient(180deg, rgba(220,220,220,.05), rgba(255,255,255,.1), rgba(0,0,0,.3), rgba(0,0,0,.5)), linear-gradient(0deg, rgba(192,0,96,.4), rgba(208,0,112,.4));
+  background: linear-gradient(180deg, rgba(220,220,220,.05), rgba(255,255,255,.1), rgba(0,0,0,.3), rgba(0,0,0,.5)), linear-gradient(0deg, rgba(128,0,128,.4), rgba(160,0,160,.4));
 }
 
 .active.seeding .txBarInner[style="width: calc(100% - 2px)"] {
-  background: linear-gradient(180deg, rgba(220,220,220,.05), rgba(255,255,255,.1), rgba(0,0,0,.3), rgba(0,0,0,.5)), linear-gradient(0deg, rgba(220,32,128,.4), rgba(255,96,160,.4));
+  background: linear-gradient(180deg, rgba(220,220,220,.05), rgba(255,255,255,.1), rgba(0,0,0,.3), rgba(0,0,0,.5)), linear-gradient(0deg, rgba(220,16,128,.4), rgba(255,32,160,.4));
 }
 
 .txBarInner::after {
