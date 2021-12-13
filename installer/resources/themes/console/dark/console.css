@@ -403,16 +403,9 @@ pre {
   background: #252;
 }
 
-td b, a:not(:hover):not(:focus):not(:active) {
-  -webkit-text-stroke: 1px rgba(0,0,0,.35);
-}
-
-a span {
-  -webkit-text-stroke: none;
-}
-
-td b {
+#sidebar td b, .infohelp b {
   color: #ffa;
+  -webkit-text-stroke: 1px rgba(0,0,0,.33);
 }
 
 #sidebar h3 {
