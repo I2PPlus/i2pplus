@@ -403,8 +403,7 @@ pre {
   background: #252;
 }
 
-#sidebar td, .infohelp b {
-  color: #ffa;
+#sidebar td b, .infohelp b {
   -webkit-text-stroke: 1px rgba(0,0,0,.33);
 }
 
@@ -7500,7 +7499,6 @@ h4#sb_shutdownstatus span {
   width: 100%;
   display: inline-block;
   vertical-align: middle;
-  color: #dd8;
   text-shadow: 0 1px 1px #000;
   box-shadow: var(--highlight), inset 0 0 2px 1px #040;
   box-sizing: border-box;
@@ -7539,7 +7537,6 @@ h4#sb_shutdownstatus span {
 }
 
 .routersummary .running, .tunnelBuildStatus.active {
-  color: #dd8;
   box-shadow: var(--highlight), inset 0 0 2px 1px #060;
   background: rgba(64,255,64,.02);
 }
@@ -7611,7 +7608,7 @@ h4#sb_shutdownstatus span {
 /* tunnel build status */
 
 .tunnelBuildStatus {
-  color: #393;
+  color: #58ce3a;
 }
 
 .tunnelBuildStatus::before {
