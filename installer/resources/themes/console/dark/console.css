@@ -403,9 +403,13 @@ pre {
   background: #252;
 }
 
-#sidebar td b, .infohelp b {
+#sidebar td, .infohelp b {
   color: #ffa;
   -webkit-text-stroke: 1px rgba(0,0,0,.33);
+}
+
+#sidebar td a {
+  -webkit-text-stroke: 0;
 }
 
 #sidebar h3 {
