@@ -403,6 +403,18 @@ pre {
   background: #252;
 }
 
+td b, a:not(:hover):not(:focus):not(:active) {
+  -webkit-text-stroke: 1px rgba(0,0,0,.35);
+}
+
+a span {
+  -webkit-text-stroke: none;
+}
+
+td b {
+  color: #ffa;
+}
+
 #sidebar h3 {
   margin: -7px -10px -8px -10px;
   padding: 5px 0 !important;
