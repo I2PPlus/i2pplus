@@ -6783,7 +6783,6 @@ h3, th {
 }
 
 .h3navlinks {
-  margin-top: -2px;
   white-space: nowrap;
 }
 
@@ -6836,15 +6835,15 @@ h3#iptransport a, h3#advancedconfig a, #reseedsetup a {
 h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after {
   margin: 0 2px 0 0;
   padding: 0;
-  width: 16px;
-  height: 16px;
+  width: 19px;
+  height: 19px;
   float: right;
-  background-size: 16px !important;
+  background-size: 19px;
   content: "";
 }
 
 h3#iptransport a:hover::after, h3#advancedconfig a:hover::after, #reseedsetup a:hover::after {
-  background: var(--helplink_hover) var(--center) / 16px;
+  background: var(--helplink_hover) var(--center) / 18px;
 }
 
 #config_logging h3 a::before, #webappconfiguration a::before,
@@ -13738,17 +13737,17 @@ body.iframed {
     height: 30px;
     background-size: 16px;
   }
-    h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after {
+  h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after {
     margin: 0 0 -2px -4px;
     width: 20px;
     height: 20px;
     background-size: 20px !important;
   }
-    h3#iptransport a:hover::after, h3#advancedconfig a:hover::after, #reseedsetup a:hover::after {
+  h3#iptransport a:hover::after, h3#advancedconfig a:hover::after, #reseedsetup a:hover::after {
     background-size: 20px !important;
   }
-    h3#advancedconfig a::after {
-    margin: -1px -6px -2px -5px;
+  h3#advancedconfig a::after {
+    margin: -2px -6px -2px -5px;
   }
   .h3navlinks a {
     padding: 10px 10px 10px 17px;
@@ -13759,10 +13758,10 @@ body.iframed {
   .h3navlinks a:last-child {
     margin-right: -2px;
   }
-    h3#advancedconfig a {
+  h3#advancedconfig a {
     padding-right: 10px;
   }
-    h3#i2pclientconfig {
+  h3#i2pclientconfig {
     margin-bottom: -15px !important;
   }
   .sb_netstatus, .tunnelBuildStatus {
