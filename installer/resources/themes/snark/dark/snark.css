@@ -914,6 +914,10 @@ tr.active .snarkTorrentStatus {
   display: inline-block;
 }
 
+tr:not(:hover) .snarkTorrentName a, tr:not(:hover) .snarkFileName a {
+  -webkit-text-stroke: 2px rgba(0,0,0,.3);
+}
+
 .snarkTorrents .snarkTorrentName {
   padding-left: 2px;
 }
