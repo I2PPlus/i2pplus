@@ -219,10 +219,11 @@ public class PeerState {
     private volatile boolean _dead;
 
     /** The minimum number of outstanding messages (NOT fragments/packets) */
-    private static final int MIN_CONCURRENT_MSGS = 8;
+//    private static final int MIN_CONCURRENT_MSGS = 8;
+    private static final int MIN_CONCURRENT_MSGS = 4;
     /** @since 0.9.42 */
 //    private static final int INIT_CONCURRENT_MSGS = 20;
-    private static final int INIT_CONCURRENT_MSGS = 128;
+    private static final int INIT_CONCURRENT_MSGS = 64;
     /** how many concurrent outbound messages do we allow OutboundMessageFragments to send
         This counts full messages, NOT fragments (UDP packets)
      */
@@ -234,7 +235,8 @@ public class PeerState {
     /** Last time it was made an introducer **/
     private long _lastIntroducerTime;
 
-    private static final int MAX_SEND_WINDOW_BYTES = 1024*1024;
+//    private static final int MAX_SEND_WINDOW_BYTES = 1024*1024;
+    private static final int MAX_SEND_WINDOW_BYTES = 4*1024*1024;
 
     /**
      *  Was 32 before 0.9.2, but since the streaming lib goes up to 128,
@@ -370,7 +372,7 @@ public class PeerState {
             _rttDeviation = _rtt;
 
 //        _inboundMessages = new HashMap<Long, InboundMessageState>(8);
-        _inboundMessages = new HashMap<Long, InboundMessageState>(32);
+        _inboundMessages = new HashMap<Long, InboundMessageState>(16);
         _outboundMessages = new CachedIteratorCollection<OutboundMessageState>();
         //_outboundQueue = new CoDelPriorityBlockingQueue(ctx, "UDP-PeerState", 32);
         _outboundQueue = new PriBlockingQueue<OutboundMessageState>(ctx, "UDP-PeerState", 64);
@@ -809,11 +811,12 @@ public class PeerState {
         _rto = Math.min(MAX_RTO, Math.max(MIN_RTO, _rto << 1 ));
         _retransmitTimer = now + _rto;
         if (_log.shouldInfo())
-            _log.info(_remotePeer + " Congestion, RTO: " + oldRto + " -> " + _rto + " timer: " + oldTimer + " -> " + _rto +
-                                    " window: " + congestionAt + " -> " + _sendWindowBytes +
-                                    " SST: " + oldsst + " -> " + _slowStartThreshold +
-                                    " FastReTX? " + _fastRetransmit +
-                                    " BWE: " + DataHelper.formatSize2Decimal((long) (bwe * 1000), false) + "bps");
+            _log.info("[" + _remotePeer.toBase64().substring(0,6) + "] Estimated bandwidth: " +
+                      DataHelper.formatSize2Decimal((long) (bwe * 1000), false) + "bps \n* " +
+                      "Congestion, RTO: " + oldRto + " -> " + _rto + " Timer: " + oldTimer + " -> " + _rto +
+                      " Window: " + congestionAt + " -> " + _sendWindowBytes +
+                      " SST: " + oldsst + " -> " + _slowStartThreshold +
+                      " FastReTX? " + _fastRetransmit);
     }
 
     /**
@@ -1863,12 +1866,12 @@ public class PeerState {
                 _context.statManager().addRateData("udp.sendConfirmVolley", numSends);
                 _transport.succeeded(state);
                 if (_log.shouldDebug())
-                    _log.debug("Received partial ACK of " + state.getMessageId() + " by [" + _remotePeer.toBase32().substring(0,6)
+                    _log.debug("Received partial ACK of [MsgId " + state.getMessageId() + "] from [" + _remotePeer.toBase32().substring(0,6)
                           + "] \n* Status: Newly ACKed: " + ackedSize
                           + " -> Now complete for: " + state);
             } else {
                 if (_log.shouldInfo())
-                    _log.info("Received partial ACK of " + state.getMessageId() + " by [" + _remotePeer.toBase32().substring(0,6)
+                    _log.info("Received partial ACK of [MsgId " + state.getMessageId() + "] from [" + _remotePeer.toBase32().substring(0,6)
                           + "] \n* Status: Received after " + lifetime + "ms and " + numSends + " sends"
                           + " -> Complete? false"
                           + " -> Newly ACKed: " + ackedSize
