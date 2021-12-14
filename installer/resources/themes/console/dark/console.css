@@ -1998,6 +1998,7 @@ h1, h2, h3:not([id*="help"]), h4.app, h4.app2 {
 
 h2, h3, h4 {
   box-shadow: var(--highlight);
+  contain: paint;
 }
 
 h1, h4.app, h4.app2, #news h3 {
@@ -6896,7 +6897,7 @@ h3#iptransport a:hover::after, h3#advancedconfig a:hover::after, #reseedsetup a:
 
 #logs h3 a {
   margin: -8px 0;
-  padding: 8px 2px 8px 10px;
+  padding: 10px 2px 9px 10px;
   border-left: var(--border);
 }
 
