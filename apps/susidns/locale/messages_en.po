@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P susidns\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-18 00:03+0000\n"
+"POT-Creation-Date: 2021-12-14 18:51+0000\n"
 "PO-Revision-Date: 2010-06-15 14:09+0100\n"
 "Last-Translator: duck <duck@mail.i2p>\n"
 "Language-Team: duck <duck@mail.i2p>\n"
@@ -110,14 +110,14 @@ msgstr[1] ""
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:251
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:241
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:254
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:957
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:963
 msgid "Add"
 msgstr ""
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:251
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:261
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:241
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:941
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:947
 msgid "Replace"
 msgstr ""
 
@@ -192,8 +192,8 @@ msgstr ""
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:334
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:344
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:707
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:885
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:713
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:891
 msgid "Delete Selected"
 msgstr ""
 
@@ -224,7 +224,7 @@ msgstr ""
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:291
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:298
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:312
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:949
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:955
 msgid "Add Alternate"
 msgstr ""
 
@@ -380,16 +380,16 @@ msgstr ""
 msgid "Subscriptions reloaded."
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:188
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:975
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:194
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:981
 msgid "Import"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:200
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:206
 msgid "address book"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:241
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:247
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:198
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:200
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:191
@@ -398,7 +398,7 @@ msgstr ""
 msgid "Router"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:245
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:251
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:200
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:204
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:193
@@ -407,7 +407,7 @@ msgstr ""
 msgid "Master"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:249
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:255
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:202
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:208
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:195
@@ -416,7 +416,7 @@ msgstr ""
 msgid "Private"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:253
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:259
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:204
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:212
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:197
@@ -425,7 +425,7 @@ msgstr ""
 msgid "Published"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:255
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:261
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:206
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:214
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:199
@@ -435,7 +435,7 @@ msgstr ""
 msgid "Subscriptions"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:257
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:263
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:208
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:212
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:216
@@ -445,7 +445,7 @@ msgstr ""
 msgid "Configuration"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:259
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:265
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:210
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:218
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:203
@@ -454,99 +454,99 @@ msgstr ""
 msgid "Help"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:261
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:267
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:276
 msgid "Book"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:278
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:284
 msgid "No entries"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:322
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:332
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:328
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:338
 msgid "Export in hosts.txt format"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:324
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:330
 msgid "Export results in hosts.txt format"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:334
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:340
 msgid "Export book in hosts.txt format"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:379
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:385
 msgid "Search"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:657
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:663
 msgid "other"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:669
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:675
 msgid "clear filter"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:713
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:719
 msgid "Info"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:715
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:931
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:721
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:937
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:270
 msgid "Hostname"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:717
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:723
 msgid "Link (b32)"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:719
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:725
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:350
 msgid "Destination"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:733
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:739
 msgid "Select hosts for deletion from addressbook"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:778
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:790
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:784
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:796
 msgid "More information on this entry"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:802
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:808
 msgid "Base 32 address"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:808
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:814
 msgid "Helper link to share host address with option to add to addressbook"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:828
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:834
 msgid "Mark for deletion"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:883
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:939
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:973
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:889
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:945
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:979
 msgid "Cancel"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:929
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:935
 msgid "Add new destination"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:935
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:941
 msgid "B64 or B32"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:969
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:975
 msgid "Import from hosts.txt file"
 msgstr ""
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:971
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:977
 msgid "Select file"
 msgstr ""
 
