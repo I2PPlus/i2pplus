@@ -6801,6 +6801,24 @@ h3, th {
   white-space: nowrap;
 }
 
+#routerinformation .h3navlinks {
+  margin-top: 1px;
+}
+
+#routerinformation .h3navlinks a::before {
+  margin: 0 3px 0 -2px;
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  vertical-align: middle;
+  background: var(--eye) no-repeat left center / 14px;
+  content: "";
+}
+
+#routerinformation .h3navlinks a:hover::before {
+  background: var(--eye_hover) no-repeat left center / 14px;
+}
+
 th .h3navlinks, #config_stats .h3navlinks, #config_webapps .h3navlinks {
   margin-top: 0;
 }
@@ -6874,12 +6892,6 @@ h3#iptransport a:hover::after, h3#advancedconfig a:hover::after, #reseedsetup a:
   padding-top: 11px;
   display: inline-block;
   vertical-align: middle;
-}
-
-@media screen and (max-width: 1499px) {
-  #webappconfiguration a, #i2pclientconfig a, #pluginmanage a {
-    padding-top: 9px;
-  }
 }
 
 #logs h3 a {
@@ -7652,14 +7664,6 @@ h4#sb_shutdownstatus span {
 
 .tunnelBuildStatus.hidden::before {
   background: var(--tunn_hidden) var(--center) / 15px;
-}
-
-@media screen and (max-width: 1499px) {
-  .tunnelBuildStatus {font-size: 90%}
-  #sb_tunnelstatus .tunnelBuildStatus::before {
-    margin: -2px 0;
-    background-size: 12px;
-  }
 }
 
 /* end tunnel build status */
@@ -13129,9 +13133,23 @@ body.iframed {
   #tunnels .tunnel_local + .tunnel_cap {
     margin-left: 2px;
   }
-}
-
-@media screen and (max-width: 1480px) {
+  #routerinformation .h3navlinks {
+    margin: 1px -2px -1px -2px;
+  }
+  #routerinformation h3 span a {
+    padding: 12px 3px 12px 12px;
+  }
+  #routerinformation .h3navlinks a::before {
+    margin-left: 0;
+  }
+  #webappconfiguration a, #i2pclientconfig a, #pluginmanage a {
+    padding-top: 9px;
+  }
+  .tunnelBuildStatus {font-size: 90%}
+  #sb_tunnelstatus .tunnelBuildStatus::before {
+    margin: -2px 0;
+    background-size: 12px;
+  }
   #view_profile .identicon {
     top: 0;
     right: 0;
