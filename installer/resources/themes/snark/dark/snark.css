@@ -1304,6 +1304,17 @@ td.snarkFileStatus {
   background: repeating-linear-gradient(90deg,#000, #000 10%,#020 10%,#020 20%);
 }
 
+.active.seeding .uploaded {
+  background: repeating-linear-gradient(90deg,#000,#000 5%,#141 5%,#141 10%);
+  background-size: 200%;
+  animation: linear uploading .5s 4.5s reverse infinite;
+}
+
+@keyframes uploading {
+  from {background-position: left center}
+  to {background-position: 20% center}
+}
+
 .txBarInner {
   height: calc(100% - 2px);
   display: inline-block;
