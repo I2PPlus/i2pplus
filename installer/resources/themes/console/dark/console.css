@@ -24,7 +24,9 @@
   --highlight_badge: inset 0 0 0 1px #010, 0 0 0 1px #000;
   --element: linear-gradient(180deg,#020, #010);
   --btn: linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
-  --btn_shadow_active: var(--highlight), inset 3px 3px 3px 2px rgba(0,0,0,.8);
+  --btn_shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
+  --btn_shadow_hover: var(--highlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
+  --btn_shadow_active: var(--highlight), inset 3px 3px 3px 2px rgba(0,0,0,.8), 0 0 0 1px #000;
   --btn_hover_radial: radial-gradient(at center bottom, rgba(96, 48, 0, .4) 0, rgba(0, 0, 0, 0) 80%), #000;
   --input_txt: linear-gradient(180deg,#001000,#001800);
   --vstripe: repeating-linear-gradient(180deg,rgba(0,0,0,.9) 2px, rgba(0,16,0,.9) 4px);
@@ -919,7 +921,7 @@ h1 + .sorry, #console_404 .sorry {
   font-size: 10pt;
   border: var(--border);
   border-radius: 0 0 4px 4px;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 0 2px #600, inset 0 0 0 3px #000;
+  box-shadow: var(--highlight), inset 0 0 0 2px #600, inset 0 0 0 3px #000;
   background: var(--err) no-repeat 15px 45%, linear-gradient(180deg,rgba(255,255,255,.05), rgba(0,0,0,.4)),
     repeating-linear-gradient(180deg,rgba(0,0,0,.4) 2px, rgba(0,48,0,.7) 4px) !important;
   background-size: 44px, 100%, 100% 4px !important;
@@ -1724,7 +1726,7 @@ td img {
 }
 
 .sortupactive, .sortdownactive {
-  box-shadow: inset 0 0 0 1px #000, inset 2px 2px 2px rgba(0,0,0,.5);
+  box-shadow: var(--highlight), inset 2px 2px 2px rgba(0,0,0,.5);
   opacity: 1;
 }
 
@@ -2057,7 +2059,7 @@ input[type=file]::file-selector-button {
 button:hover, button:focus {
   color: var(--hover);
   border: 1px solid var(--hover);
-  box-shadow: var(--highlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
+  box-shadow: var(--btn_shadow_hover);
   background: #000;
   background: var(--btn_hover_radial);
   cursor: pointer;
@@ -2066,7 +2068,7 @@ button:hover, button:focus {
 input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
   color: var(--hover);
   border: 1px solid var(--hover);
-  box-shadow: var(--highlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
+  box-shadow: var(--btn_shadow_hover);
   background: #000;
   background: var(--btn_hover_radial);
   cursor: pointer;
@@ -2290,7 +2292,7 @@ input:hover, input:focus {
 }
 
 input[type=submit]:hover, input[type=reset]:hover, input[type=submit]:focus, input[type=reset]:focus {
-  box-shadow: var(--highlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000 !important;
+  box-shadow: var(--btn_shadow_hover) !important;
   background: var(--btn_hover_radial);
 }
 
@@ -2441,7 +2443,7 @@ select option:hover, select option:checked {
 select:focus, select:hover {
   color: var(--hover);
   border: 1px solid var(--hover);
-  box-shadow: var(--highlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
+  box-shadow: var(--btn_shadow_hover);
 }
 
 select:hover, select:focus, select:active {
@@ -2463,7 +2465,7 @@ select:hover, select:focus, select:active {
   text-align: center;
   color: var(--a);
   border: 1px solid #000;
-  box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
+  box-shadow: var(--btn_shadow);
   background: var(--btn) !important;
   opacity: .7;
   cursor: default;
@@ -2479,9 +2481,8 @@ textarea {
   color: var(--ink);
   border-radius: 2px;
   border: 1px solid #184818;
-  box-shadow: inset 0 0 3px 3px #000;
+  box-shadow: var(--highlight);
   text-align: left;
-  background: #000;
   background: linear-gradient(180deg,#000, #010) !important;
 }
 
@@ -2492,7 +2493,7 @@ textarea[cols="70"], textarea[name="levels"] {
 input[type=text]:focus, input[type=password]:focus, textarea:focus {
   color: var(--ink) !important;
   border: 1px solid #373 !important;
-  box-shadow: var(--highlight), inset 4px 4px 4px #000, 0 0 0 1px #000;
+  box-shadow: var(--btn_shadow_active);
   background: var(--input_txt) !important;
   outline: none;
   filter: drop-shadow(0 0 1px var(--hover));
@@ -2536,8 +2537,8 @@ textarea#advancedsettings:focus {
 }
 
 textarea[readonly]:focus {
-  box-shadow: inset 0 0 3px 3px #000;
   font-weight: 400;
+  box-shadow: var(--highlight);
 }
 
 input[type=submit], input[type=reset], select, button {
@@ -2545,7 +2546,7 @@ input[type=submit], input[type=reset], select, button {
   font-size: 8.5pt;
   border: 1px solid #000;
   border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
+  box-shadow: var(--btn_shadow);
   background: var(--btn);
 }
 
@@ -2554,7 +2555,7 @@ input[type=file]::file-selector-button {
   font-size: 8.5pt;
   border: 1px solid #000;
   border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
+  box-shadow: var(--btn_shadow);
   background: var(--btn);
 }
 
@@ -2601,7 +2602,6 @@ input[type=file]::file-selector-button {
 
 .joblog ol li {
   padding-bottom: 5px !important;
-  width: 90%;
   width: calc(100% - 45px);
   min-width: 360px;
   display: inline-block;
@@ -2707,7 +2707,6 @@ h3#scheduledjobs + ol li::before, #scheduledjobs + ol li::before {
 #jobs .jobqueue {
   margin-bottom: 5px !important;
   margin-top: -11px !important;
-  width: 97%;
   width: calc(100% - 14px);
   display: block;
   border: var(--border);
@@ -2801,7 +2800,6 @@ h3#totaljobstats {
   width: calc(100% - 8px);
   list-style: none !important;
   box-shadow: var(--highlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000;
-  background: #000400;
   background: linear-gradient(180deg,#000b00, #000600);
 }
 
@@ -3097,7 +3095,6 @@ h3[id$="con"] { /* peers h3 + tables */
   font-size: 10pt;
   word-spacing: .1em;
   letter-spacing: .08em;
-  background: #000;
   background: linear-gradient(90deg, #000, #001000 70%, #001300 90%);
   border: var(--border);
 }
@@ -3176,8 +3173,8 @@ h3[id="udpcon"] {
 }
 
 #profilelist a[href^="viewprofile"] {
-  display: inline-block;
   margin-bottom: 2px;
+  display: inline-block;
 }
 
 #profilelist .bytes {
@@ -3189,11 +3186,11 @@ h3[id="udpcon"] {
 }
 
 pre#activetransports {
-  border: var(--border) !important;
-  padding: 15px 5px 5px 15px;
   margin: 0 20px 0 0;
-  background: #000;
+  padding: 15px 5px 5px 15px;
   width: calc(100% - 42px) !important;
+  border: var(--border) !important;
+  background: #000;
 }
 
 a[name="chelp"]:hover, a[name="help"]:hover, a[name="chelp"]:active, a[name="help"]:active { /* hide /help anchorpoints */
@@ -3221,9 +3218,9 @@ a[name="chelp"]:hover, a[name="help"]:hover, a[name="chelp"]:active, a[name="hel
 }
 
 .homelinkedit th:nth-child(3), .homelinkedit th:last-child {/* /confighome */
+  padding-left: 5px;
   text-align: left !important;
   text-transform: none !important;
-  padding-left: 5px;
 }
 
 .homelinkedit input[type=text] {
@@ -3239,8 +3236,7 @@ a[name="chelp"]:hover, a[name="help"]:hover, a[name="chelp"]:active, a[name="hel
 }
 
 .homelinkedit td.noicon {
-  background: var(--search) var(--center);
-  background-size: 22px;
+  background: var(--search) var(--center) / 18px;
 }
 
 #config_homepage input.delete {
@@ -3252,10 +3248,10 @@ a[name="chelp"]:hover, a[name="help"]:hover, a[name="chelp"]:active, a[name="hel
 }
 
 .formaction#homeapps, .formaction#homesites, .formaction#tunnelconfigsave, .formaction#homesearch, .formaction#sidebardefaults {
-  border: var(--border);
-  padding: 5px;
-  background: #000;
   margin-top: -2px;
+  padding: 5px;
+  border: var(--border);
+  background: #000;
 }
 
 .formaction#themeui {
@@ -3283,7 +3279,6 @@ tr#addnew, tr#addnew:hover {
   float: left;
   text-align: center;
   border: var(--border);
-  background: #000;
   background: radial-gradient(circle at center -90px, rgba(0,96,0,.9), #000 60%), linear-gradient(180deg,#010, #000 80%);
 }
 
@@ -3337,10 +3332,10 @@ tr#addnew, tr#addnew:hover {
 }
 
 .themechoice .optbox:checked + img ~ .themelabel {
-  background: #030 !important;
-  color: var(--ink);
   font-weight: 700;
+  color: var(--ink);
   box-shadow: var(--highlight), inset 0 0 2px 1px #050 !important;
+  background: #030 !important;
 }
 
 .themechoice .optbox:focus + img ~ .themelabel {
@@ -3350,18 +3345,16 @@ tr#addnew, tr#addnew:hover {
 
 .themechoice .optbox:active:not(:checked) + img ~ .themelabel {
   color: var(--ink) !important;
-  box-shadow: var(--highlight) !important;
   box-shadow: var(--highlight), inset 3px 3px 3px 1px #5f2400 !important;
 }
 
 .themechoice .optbox {
+  margin-left: -38px;
   min-width: 124px !important;
   min-height: 80px !important;
-  outline: 1px !important; /* placement guide */
-  opacity: 0; /* hide the radio icon so we can use thumbnail img instead */
-  margin-left: -38px;
-  z-index: 999;
   position: absolute !important;
+  z-index: 999;
+  opacity: 0; /* hide the radio icon so we can use thumbnail img instead */
 }
 
 .themechoice img {
@@ -3388,9 +3381,9 @@ tr#addnew, tr#addnew:hover {
 }
 
 #themeoptions label {
-  white-space: nowrap;
   margin: 4px 10px 4px 0 !important;
   display: inline-block;
+  white-space: nowrap;
 }
 
 p#helptranslate {
@@ -3423,7 +3416,6 @@ p#helptranslate {
   line-height: 1.5;
   color: #bb7;
   border-top: var(--border) !important;
-  background: #001000;
   background: linear-gradient(180deg,#001000, #001900 50%, #000 51%, #000);
 }
 
@@ -3435,7 +3427,6 @@ h3#themeheading, h3#langheading, h3#passwordheading {
   font-size: 10.5pt;
   border-radius: 0;
   border: var(--border);
-  background: #000;
   background: linear-gradient(90deg, #000, #001000 70%, #001300 90%);
 }
 
@@ -3452,10 +3443,10 @@ h3#themeheading, h3#langheading, h3#passwordheading {
 }
 
 td#themeselect {
+  margin: -1px 0;
+  padding: 8px 7px 0;
   clear: both;
   border: var(--border);
-  padding: 8px 7px 0;
-  margin: -1px 0;
 }
 
 .langselect:hover {
@@ -3478,7 +3469,6 @@ td#themeselect {
   z-index: 999;
   vertical-align: text-bottom;
   text-align: center;
-  outline: 1px dotted !important;
   opacity: 0;
 }
 
@@ -3501,8 +3491,8 @@ td#themeselect {
 
 .langselect input:hover + img {
   box-shadow: 0 0 2px 1px var(--hover);
-  transition: ease all .05s;
   opacity: 1;
+  transition: ease all .05s;
 }
 
 .langselect input:hover + img + div.ui_lang {
@@ -3512,7 +3502,6 @@ td#themeselect {
 
 .langselect input:active:not(:checked) + img + div.ui_lang {
   color: var(--ink) !important;
-  box-shadow: var(--highlight) !important;
   box-shadow: var(--highlight), inset 3px 3px 3px 1px #5f2400 !important;
 }
 
@@ -3556,12 +3545,12 @@ td#themeselect {
 /* large flags */
 
 .langselect img {
-  width: 40px;
-  height: 40px;
-  border: none !important;
   margin-top: -6px !important;
   margin-left: -82px;
+  width: 40px;
+  height: 40px;
   position: absolute;
+  border: none !important;
   box-shadow: none;
   opacity: .6;
   filter: drop-shadow(0 0 1px #000);
@@ -3585,15 +3574,15 @@ td#themeselect {
 }
 
 @supports not (-moz-appearance: none) {
-.langselect img {
-  margin-top: -31px !important;
-  margin-top: -6px !important;
-}
-
-.langselect input[name="lang"]:checked + img, .langselect input[name="lang"]:checked + #config_ui img[src="/flags.jsp?c=a1"] {
-  margin-top: -27px !important;
-  margin-top: -2px !important;
-}
+  .langselect img {
+    margin-top: -31px !important;
+    margin-top: -6px !important;
+  }
+  .langselect input[name="lang"]:checked + img,
+  .langselect input[name="lang"]:checked + #config_ui img[src="/flags.jsp?c=a1"] {
+    margin-top: -27px !important;
+    margin-top: -2px !important;
+  }
 }
 
 /* end large flags */
@@ -3713,8 +3702,8 @@ form[action="/createreseed"] > h3 {
   word-spacing: .1em;
   letter-spacing: .08em;
   font-size: 10.5pt;
-  border-radius: 0;
   border: var(--border);
+  border-radius: 0;
   background: linear-gradient(90deg, #000, #001000 70%, #001300 90%);
 }
 
@@ -3730,8 +3719,7 @@ form[action="/createreseed"] > h3 {
 
 #exportfamily tr:nth-child(2) td:first-child {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--joinfamily) no-repeat 12px center;
-  background-size: 28px;
+  background: #000 var(--joinfamily) no-repeat 12px center / 28px;
 }
 
 #leavefamily {
@@ -3740,8 +3728,7 @@ form[action="/createreseed"] > h3 {
 
 #leavefamily tr:last-child td:first-child {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--leavefamily) no-repeat 12px center;
-  background-size: 28px;
+  background: #000 var(--leavefamily) no-repeat 12px center / 28px;
 }
 
 /* configreseed */
@@ -4214,8 +4201,7 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 
 #refreshsidebar td {
   padding-left: 45px;
-  background: #000 var(--timer) no-repeat 12px center;
-  background-size: 32px;
+  background: #000 var(--timer) no-repeat 12px center / 32px;
 }
 
 #refreshsidebar td:last-child {
@@ -4291,20 +4277,19 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 #sidebarconf th:nth-child(1), .homelinkedit th:first-child, #consolepass th:first-child {
   text-align: center;
   font-size: 0 !important;
-  background: var(--nuke) var(--center), linear-gradient(180deg,#002000, #000 75%) !important;
-  background-size: 16px, 100% !important;
+  background: var(--nuke) var(--center) / 16px, linear-gradient(180deg,#002000, #000 75%) !important;
 }
 
 .buttonTop img, .buttonBottom img, .buttonUp img, .buttonDown img {
-  opacity: 0;
-  height: 0;
   width: 0;
+  height: 0;
+  opacity: 0;
 }
 
 .buttonTop, .buttonBottom, .buttonUp, .buttonDown {
-  box-sizing: border-box;
-  height: 26px;
   width: 26px;
+  height: 26px;
+  box-sizing: border-box;
 }
 
 .buttonTop {
@@ -4388,8 +4373,8 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
   width: 18px;
   height: 18px;
   display: inline-block;
-  background-size: 18px;
   vertical-align: middle;
+  background-size: 18px;
   content: "";
 }
 
@@ -5876,8 +5861,8 @@ div.app {
   min-width: 70px;
   float: left;
   text-align: center !important;
+  background: #000;
   opacity: .9;
-  background: radial-gradient(circle at center -90px, rgba(0,96,0,.9), #000 60%), linear-gradient(180deg,#000800, #000);
 }
 
 div.app, .extlink::after, input, button {
@@ -5996,7 +5981,7 @@ div.appgroup {
   border-collapse: separate;
   border: 1px solid #151;
   background: #000;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 0 2px rgba(0,64,0,.5);
+  box-shadow: var(--highlight), inset 0 0 0 2px rgba(0,64,0,.5);
   filter: opacity(0);
   animation: ease fade .3s 1s forwards;
 }
