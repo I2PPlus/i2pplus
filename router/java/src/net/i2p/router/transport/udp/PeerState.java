@@ -343,7 +343,8 @@ public class PeerState {
         _lastReceiveTime = now;
         _currentACKs = new ConcurrentHashSet<Long>();
         _currentACKsResend = new LinkedBlockingQueue<ResendACK>();
-        _slowStartThreshold = MAX_SEND_WINDOW_BYTES/2;
+//        _slowStartThreshold = MAX_SEND_WINDOW_BYTES/2;
+        _slowStartThreshold = MAX_SEND_WINDOW_BYTES/8;
         _receivePeriodBegin = now;
         _remotePort = remotePort;
         if (remoteIP.length == 4) {
@@ -372,10 +373,10 @@ public class PeerState {
             _rttDeviation = _rtt;
 
 //        _inboundMessages = new HashMap<Long, InboundMessageState>(8);
-        _inboundMessages = new HashMap<Long, InboundMessageState>(16);
+        _inboundMessages = new HashMap<Long, InboundMessageState>(32);
         _outboundMessages = new CachedIteratorCollection<OutboundMessageState>();
         //_outboundQueue = new CoDelPriorityBlockingQueue(ctx, "UDP-PeerState", 32);
-        _outboundQueue = new PriBlockingQueue<OutboundMessageState>(ctx, "UDP-PeerState", 64);
+        _outboundQueue = new CoDelPriorityBlockingQueue<OutboundMessageState>(ctx, "UDP-PeerState", 64);
         _ackedMessages = new AckedMessages();
         // all createRateStat() moved to EstablishmentManager
         _remoteIP = remoteIP;
