@@ -368,7 +368,7 @@ public class OutNetMessage implements CDPQEntry {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(256);
-        buf.append("\n* Contents: OutNetMessage ");
+        buf.append("\n* Contents: OutNetMessage").append(" [Priority: ").append(_priority).append("] ");
         if (_message == null) {
             buf.append("*no message*");
         } else {
@@ -380,8 +380,8 @@ public class OutNetMessage implements CDPQEntry {
             buf.append("\n* Delivery failure on transports ").append(_failedTransports);
         if (_target == null)
             buf.append(" (null target)");
-        else
-            buf.append("\n* Target: [").append(_target.getIdentity().getHash().toBase64().substring(0,6) + "]");
+//        else
+//            buf.append("\n* Target: [").append(_target.getIdentity().getHash().toBase64().substring(0,6) + "]");
         if (_onReply != null)
             buf.append(" with onReply ").append(_onReply);
         if (_onSend != null)
@@ -390,7 +390,6 @@ public class OutNetMessage implements CDPQEntry {
             buf.append("; with onFailedReply ").append(_onFailedReply);
         if (_onFailedSend != null)
             buf.append("; with onFailedSend ").append(_onFailedSend);
-        buf.append("; Priority: ").append(_priority);
         buf.append("\n* Expires: ").append(new Date(_expiration));
         if (_timestamps != null && _timestampOrder != null)
             renderTimestamps(buf);

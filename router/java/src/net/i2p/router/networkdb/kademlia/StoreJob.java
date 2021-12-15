@@ -183,7 +183,7 @@ abstract class StoreJob extends JobImpl {
                 fail();
             } else {
                 if (_log.shouldLog(Log.INFO))
-                    _log.info("[Job " + getJobId() + "] No more peers left but some are pending, so keep waiting");
+                    _log.info("[Job " + getJobId() + "] No more peers left but some are pending, waiting...");
                 return;
             }
         } else {
