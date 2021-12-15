@@ -1479,7 +1479,7 @@ public class PeerState {
                     // it can not have an OutNetMessage if the source is the
                     // final after establishment message
                     if (_log.shouldLog(Log.WARN))
-                        _log.warn("Unable to send a direct message: " + state + " to: " + this);
+                        _log.warn("Unable to send direct message " + state + "\n* Target: " + this);
                 }
             }
             if (failedSize > 0) {
