@@ -39,6 +39,8 @@
   --download_bar: repeating-linear-gradient(135deg, #000 1px, #000 5px, #010 6px, #010 11px);
   --msg: linear-gradient(180deg,#010,#000400);
   --center: no-repeat center center;
+  --textshadow: 0 1px 1px rgba(0,0,0,.8);
+  --outline: 0 0 0 1px #000;
 }
 
 html, body {
@@ -170,12 +172,12 @@ img {
   padding: 0;
   width: 24px !important;
   height: 18px !important;
-  box-shadow: 0 0 0 1px #000, 0 0 0 2px #020;
+  box-shadow: var(--outline), 0 0 0 2px #020;
   background: #000;
 }
 
 #netdb #netdbcountrylist a:hover img {
-  box-shadow: 0 0 0 1px #000, 0 0 0 2px #f60;
+  box-shadow: var(--outline), 0 0 0 2px #f60;
   transform: scale(1.1);
 }
 
@@ -191,7 +193,7 @@ img {
   height: auto !important;
   vertical-align: middle !important;
   border: 1px solid #030;
-  box-shadow: 0 0 0 1px #000;
+  box-shadow: var(--outline);
 }
 
 pre {
@@ -406,7 +408,8 @@ pre {
 }
 
 #sidebar td b, .infohelp b {
-  -webkit-text-stroke: 1px rgba(0,0,0,.33);
+  color: #ffffa8;
+  -webkit-text-stroke: 2px rgba(16,16,0,.3);
 }
 
 #sidebar td a {
@@ -441,7 +444,7 @@ pre {
 
 #sidebar h3:hover a {
   color: var(--hover);
-  text-shadow: 0 1px 1px rgba(0,0,0,.8);
+  var(--textshadow);
 }
 
 #sidebar h3:active {
@@ -1291,7 +1294,7 @@ div.widescroll { /* only scroll content, not entire page eg /peers */
 
 .tab2 {
   padding: 5px 12px !important;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   box-shadow: var(--highlight), inset 3px 3px 3px #010;
   background: radial-gradient(at center bottom, rgba(0, 128, 0, .6) 0, rgba(0, 0, 0, 0) 80%), linear-gradient(180deg,#030, #003800);
 }
@@ -1299,7 +1302,7 @@ div.widescroll { /* only scroll content, not entire page eg /peers */
 .tab a {
   padding: 4px 14px !important;
   display: inline-block;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
 }
 
 .tab {
@@ -2004,7 +2007,7 @@ h2, h3, h4 {
 }
 
 h1, h4.app, h4.app2, #news h3 {
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   box-shadow: var(--highlight);
   background: var(--h1) !important;
   background-size: 4px 100%, 100%, 175px !important;
@@ -2197,7 +2200,7 @@ button.download.control:active {
   line-height: 1.2;
   color: #dd3;
   font-size: 9pt;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   opacity: .9;
 }
 
@@ -2297,17 +2300,17 @@ input[type=submit]:hover, input[type=reset]:hover, input[type=submit]:focus, inp
 }
 
 input[type=submit]:active, input[type=reset]:active {
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   box-shadow: var(--btn_shadow_active) !important;
 }
 
 button:active {
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   box-shadow: var(--btn_shadow_active) !important;
 }
 
 input[type=file]:active::file-selector-button {
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   box-shadow: var(--btn_shadow_active) !important;
 }
 
@@ -2324,7 +2327,7 @@ input[type=text], input[type=password] {
   color: var(--ink);
   border: 1px solid #151 !important;
   border-radius: 1px;
-  box-shadow: 0 0 0 1px #000;
+  box-shadow: var(--outline);
   background: #000800;
   cursor: text;
   filter: none;
@@ -4084,7 +4087,7 @@ form > table {
   text-transform: none;
   letter-spacing: 0;
   word-spacing: 0;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   background: var(--infowarn) no-repeat 10px center,
     linear-gradient(180deg,rgba(128,128,128,.05), rgba(0,0,0,.3)),
     repeating-linear-gradient(180deg,#300 2px, #100 4px);
@@ -5172,7 +5175,7 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
   position: relative;
   vertical-align: middle;
   text-align: center;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   background: #020;
   border-radius: 2px 0 0 2px;
   filter: drop-shadow(0 0 1px #000);
@@ -5202,7 +5205,7 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
   display: inline-block;
   border: 1px solid #030;
   border-radius: 2px;
-  box-shadow: 0 0 0 1px #000;
+  box-shadow: var(--outline);
   background: #020;
 }
 
@@ -5235,7 +5238,7 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
   display: inline-block;
   border: 1px solid #030;
   border-radius: 2px !important;
-  box-shadow: 0 0 0 1px #000;
+  box-shadow: var(--outline);
   background: #020;
 }
 
@@ -5399,7 +5402,7 @@ a[href^="configpeer?peer"]:active::after {
   display: inline-block;
   text-align: center;
   text-transform: none !important;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   border-radius: 2px;
   background: #002000;
 }
@@ -5489,7 +5492,7 @@ h3#bannedpeers {
   display: inline-block;
   position: relative;
   list-style: none !important;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   border: 1px solid #121;
   box-shadow: 0 0 2px 2px rgba(0,0,0,.8), var(--highlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000;
   background: linear-gradient(180deg,#000b00, #000600);
@@ -5509,7 +5512,7 @@ h3#bannedpeers {
 
 #banlist li tt {
   line-height: 1.4 !important;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
 }
 
 #banlist li .routerid img {
@@ -6176,7 +6179,7 @@ div.app:hover .applabel, .sitemapLink:hover .sitemapLabel,
   overflow: hidden;
   text-overflow: ellipsis;
   text-transform: capitalize;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
 }
 
 .app2 + .appgroup .applabel a {
@@ -6442,7 +6445,7 @@ span#distance {
   display: inline-block;
   border: 1px solid #020;
   border-radius: 2px;
-  box-shadow: 0 0 0 1px #000;
+  box-shadow: var(--outline);
   background: var(--element);
 }
 
@@ -6608,7 +6611,7 @@ span#distance {
 #sybilnav a {
   width: 100%;
   display: inline-block;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
 }
 
 #sybilnav ul li:hover a {
@@ -7496,7 +7499,7 @@ h4#sb_shutdownstatus span {
   width: 100%;
   display: inline-block;
   vertical-align: middle;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   box-shadow: var(--highlight), inset 0 0 2px 1px #040;
   box-sizing: border-box;
 }
@@ -7605,7 +7608,7 @@ h4#sb_shutdownstatus span {
 /* tunnel build status */
 
 .tunnelBuildStatus {
-  color: #58ce3a;
+  color: #ee9;
 }
 
 .tunnelBuildStatus::before {
@@ -7619,8 +7622,16 @@ h4#sb_shutdownstatus span {
   transform: scale(.7);
 }
 
+.tunnelBuildStatus.accepting {
+  color: #507750;
+}
+
 .tunnelBuildStatus.accepting::before {
   background: var(--tunn_ready) var(--center) / 15px;
+}
+
+.tunnelBuildStatus.active {
+  color: #58ce3a;
 }
 
 .tunnelBuildStatus.active::before {
@@ -7665,10 +7676,10 @@ h4#sb_shutdownstatus span {
   display: inline-block;
   min-width: 20px;
   color: #bb7;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   text-align: center !important;
   border: 1px solid #030;
-  box-shadow: 0 0 0 1px #000;
+  box-shadow: var(--outline);
   background: var(--element);
 }
 
@@ -7720,7 +7731,7 @@ h4#sb_shutdownstatus span {
   display: inline-block;
   line-height: 1.2;
   color: #bb7;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   text-align: center !important;
 }
 
@@ -7753,7 +7764,7 @@ h4#sb_shutdownstatus span {
   font-size: 8pt;
   text-transform: lowercase;
   text-align: center;
-  box-shadow: 0 0 0 1px #000;
+  box-shadow: var(--outline);
   background: var(--element);
 }
 
@@ -8673,7 +8684,7 @@ th.options, #externali2cp th {
   min-width: 64px;
   overflow: hidden;
   text-align: center;
-  box-shadow: 0 0 0 1px #000 !important;
+  box-shadow: var(--outline) !important;
   background: #020;
   background: var(--element);
 }
@@ -8753,7 +8764,7 @@ th.options, #externali2cp th {
 }
 
 .tunneldisplay .routerid, .tunnel_cap {
-  box-shadow: 0 0 0 1px #000;
+  box-shadow: var(--outline);
 }
 
 .tunnel_cap:empty {
@@ -8875,7 +8886,7 @@ b.suboption {
   padding: 5px 8px 6px 10px;
   display: inline-block;
   white-space: nowrap;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   border: var(--border_soft);
   border-bottom: none;
   box-shadow: var(--highlight);
@@ -9695,7 +9706,7 @@ input[type=file] {
   letter-spacing: .1em;
   text-align: center;
   font-size: 10pt;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   background: #020;
   background: linear-gradient(90deg, #010, #000, #010);
   box-shadow: var(--highlight);
@@ -9926,7 +9937,7 @@ input[type=file] {
   color: #bb0;
   text-shadow: none;
   border-radius: 2px;
-  box-shadow: 0 0 0 1px #000;
+  box-shadow: var(--outline);
   background: var(--element);
 }
 
@@ -10062,7 +10073,7 @@ input[type=file] {
   line-height: 0;
   vertical-align: middle;
   border: 1px solid #030;
-  box-shadow: 0 0 0 1px #000;
+  box-shadow: var(--outline);
   background: var(--element);
 }
 
@@ -10136,7 +10147,7 @@ input[type=file] {
   display: inline-block;
   text-align: center !important;
   font-weight: 700;
-  box-shadow: 0 0 0 1px #000;
+  box-shadow: var(--outline);
   background: var(--element) !important;
 }
 
@@ -10183,7 +10194,7 @@ input[type=file] {
   font-size: 90%;
   border: 1px solid #020;
   border-radius: 2px;
-  box-shadow: 0 0 0 1px #000;
+  box-shadow: var(--outline);
 }
 
 .signingkey {
@@ -10285,7 +10296,7 @@ input[type=file] {
 
 #floodfills .percentBarText {
   color: #fff;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
 }
 
 #floodfills td:empty, #tunnels .cells:empty {
@@ -10402,7 +10413,7 @@ input[type=file] {
   width: calc(100% - 45px);
   line-height: 20px;
   letter-spacing: .05em;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   border-left: 5px solid #030;
   background: repeating-linear-gradient(180deg,rgba(0,8,0,.6) 0, rgba(0,8,0,.6) 20px, rgba(0,20,0,.6) 20px, rgba(0,20,0,.6) 40px);
   background-size: 100% 40px;
@@ -10585,7 +10596,7 @@ input[type=text]:focus::placeholder, #homesearch input.search:focus::placeholder
   display: inline-block;
   font-size: 0;
   color: #a00;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   box-shadow: 0 0 1px 0 #030, var(--highlight), inset 0 0 1px 3px #131, inset 0 0 0 4px #000, inset 0 0 7px 3px #010;
   background: repeating-linear-gradient(135deg, #131, #131 10px, #300 11px, #000 12px, #000 19px, #300 19px, #000 20px);
   background-position: right center;
@@ -10732,7 +10743,7 @@ a:hover .tier, a:focus .tier {
 }
 
 .routersummary td {
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
 }
 .warntext {
   color: #b00;
@@ -10891,7 +10902,7 @@ table[id$="logs"] ul {
 }
 
 #logs li:hover {
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   box-shadow: inset 0 0 0 1px rgba(192,192,0,.4), inset 0 0 0 2px #000;
   border-color: rgba(192,192,0,.4);
   background: repeating-linear-gradient(90deg, rgba(0,0,0,.3) 2px, rgba(96,96,0,.3) 4px),
@@ -11340,7 +11351,7 @@ h1[class], h1 {
   padding: 0 3px 0 18px;
   white-space: nowrap;
   border-radius: 1px;
-  box-shadow: 0 0 0 1px #000;
+  box-shadow: var(--outline);
 }
 
 .sitelink {
@@ -11423,7 +11434,7 @@ h1[class], h1 {
 
 #helptoc b {
   font-size: 120%;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
 }
 
 #help_configuration {
@@ -11738,7 +11749,7 @@ h2#jobrunners {
 
 .sitemapLink, #sitemap div.app {
   margin: 2px 2px 6px;
-  box-shadow: 0 0 0 1px #000, var(--highlight), inset 0 0 1px 1px #242;
+  box-shadow: var(--outline), var(--highlight), inset 0 0 1px 1px #242;
   background: radial-gradient(circle at center -90px, rgba(0,96,0,.9), #000 60%), linear-gradient(180deg,#000800, #000);
 }
 
@@ -11768,7 +11779,7 @@ h2#jobrunners {
   box-sizing: border-box;
   text-overflow: ellipsis;
   font-size: 90%;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   border: none;
   border-top: var(--border);
   box-shadow: var(--highlight), inset 0 0 1px 1px #242;
@@ -11874,7 +11885,15 @@ th[aria-sort] {
 }
 
 #sybilnav ul li#runNew::before {
-  background: var(--start) no-repeat 1px calc(50% - 2px) / 14px;
+  background: var(--start) no-repeat 1px calc(50% - 1px) / 12px;
+}
+
+#sybilnav ul li#runNew:hover::before {
+  background: var(--start_hover) no-repeat 1px calc(50% - 1px) / 12px;
+}
+
+#sybilnav ul li#runNew:active::before {
+  background: var(--start_active) no-repeat 1px calc(50% - 1px) / 12px;
 }
 
 #sybilnav ul li#configurePeriodic::before {
@@ -11927,7 +11946,7 @@ th[aria-sort] {
 }
 
 #stats .tab2 {
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   box-shadow: var(--highlight), inset 3px 3px 2px #010;
   background: linear-gradient(180deg,#030, #003800) !important;
 }
@@ -12354,7 +12373,7 @@ h3 + table {
 
 .optbox:checked + label > .stattograph b {
   color: var(--ink);
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
 }
 
 .stattograph:hover b, .stattograph:focus b {
@@ -12930,7 +12949,7 @@ body.iframed {
   display: inline-block;
   line-height: 0;
   border: 1px solid #030;
-  box-shadow: 0 0 0 1px #000;
+  box-shadow: var(--outline);
   background: var(--element);
 }
 
