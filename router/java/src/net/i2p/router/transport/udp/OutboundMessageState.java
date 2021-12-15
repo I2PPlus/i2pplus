@@ -509,11 +509,11 @@ class OutboundMessageState implements CDPQEntry {
         buf.append("\n* Outbound Message: [").append(_i2npMessage.getUniqueId());
         buf.append("] Seq: ").append(_seqNum);
         buf.append("; Type: ").append(_i2npMessage.getType());
-        buf.append("; Size: ").append(_messageBuf.length);
+        buf.append("; Size: ").append(_messageBuf.length).append(" bytes");
         if (_numFragments > 1)
             buf.append("; Fragments: ").append(_numFragments);
         buf.append("; Volleys: ").append(_maxSends);
-        buf.append("; Lifetime: ").append(getLifetime());
+        buf.append("; Lifetime: ").append(getLifetime()).append("ms");
         if (!isComplete()) {
             if (_nacks.get() > 0)
                 buf.append("; NACKs: ").append(_nacks);
