@@ -22,7 +22,7 @@
   --highlight: inset 0 0 0 1px #000;
   --option_highlight: inset 0 0 0 1px #002500;
   --highlight_badge: inset 0 0 0 1px #010, 0 0 0 1px #000;
-  --element: linear-gradient(180deg,#020, #010);
+  --badge: linear-gradient(180deg,#020, #010);
   --btn: linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
   --btn_shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
   --btn_shadow_hover: var(--highlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
@@ -1662,6 +1662,10 @@ td {
   padding: 4px 6px;
   vertical-align: middle;
   border-top: 1px inset #131;
+}
+
+.main th, .main td {
+  contain: paint;
 }
 
 td img {
@@ -5207,7 +5211,9 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
 }
 
 .netdb_leases .tunnel_id {
-  min-width: 76px;
+  margin: 0 2px 0 -1px;
+  min-width: 92px;
+  line-height: 1.22;
   text-align: center;
 }
 
@@ -5216,8 +5222,8 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
 }
 
 .netdb_leases .routerid, .netdb_leases .tunnel_id {
-  line-height: 1.36;
   vertical-align: middle;
+  border-radius: 2px;
 }
 
 .netdb_leases .routerid {
@@ -5225,10 +5231,9 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
   padding-top: 1px;
   padding-bottom: 1px;
   display: inline-block;
+  line-height: 1.36;
   border: 1px solid #030;
-  border-radius: 2px !important;
   box-shadow: var(--outline);
-  background: #020;
 }
 
 .netdb_leases .tunnel_peer tt, .netdb_leases .tunnel_peer tt {
@@ -6434,7 +6439,7 @@ span#distance {
   border: 1px solid #020;
   border-radius: 2px;
   box-shadow: var(--outline);
-  background: var(--element);
+  background: var(--badge);
 }
 
 .lsdest {
@@ -6442,17 +6447,17 @@ span#distance {
   border-radius: 0;
   border-left-width: 4px;
   border-right-width: 4px;
-  background: var(--hardhat) no-repeat 4px center / 14px, var(--element);
+  background: var(--hardhat) no-repeat 4px center / 14px, var(--badge);
 }
 
 .lsdest.published {
   padding-left: 38px;
-  background: var(--hardhat) no-repeat 4px center / 14px, var(--globe) no-repeat 22px center / 12px, var(--element);
+  background: var(--hardhat) no-repeat 4px center / 14px, var(--globe) no-repeat 22px center / 12px, var(--badge);
 }
 
 .leaseset th:last-child a[href$="i2p/"] {
   padding-left: 22px;
-  background: var(--link) no-repeat 5px center / 12px, var(--element);
+  background: var(--link) no-repeat 5px center / 12px, var(--badge);
 }
 
 .addtobook {
@@ -7668,7 +7673,7 @@ h4#sb_shutdownstatus span {
   text-align: center !important;
   border: 1px solid #030;
   box-shadow: var(--outline);
-  background: var(--element);
+  background: var(--badge);
 }
 
 .tunnel_cap, .tier, .reachable, .ff {
@@ -7753,7 +7758,7 @@ h4#sb_shutdownstatus span {
   text-transform: lowercase;
   text-align: center;
   box-shadow: var(--outline);
-  background: var(--element);
+  background: var(--badge);
 }
 
 .tunnel_peer:empty {
@@ -8672,9 +8677,8 @@ th.options, #externali2cp th {
   min-width: 64px;
   overflow: hidden;
   text-align: center;
-  box-shadow: var(--outline) !important;
-  background: #020;
-  background: var(--element);
+  box-shadow: var(--outline);
+  background: var(--badge);
 }
 
 .routerid, .tunnel_local, #tunnels .tunnel_cap, .version, #netdbtiers a {
@@ -9926,7 +9930,7 @@ input[type=file] {
   text-shadow: none;
   border-radius: 2px;
   box-shadow: var(--outline);
-  background: var(--element);
+  background: var(--badge);
 }
 
 #netdb .netdbentry th code, #netdb .sybil_routerinfo th code, .leaseset th code {
@@ -10062,7 +10066,7 @@ input[type=file] {
   vertical-align: middle;
   border: 1px solid #030;
   box-shadow: var(--outline);
-  background: var(--element);
+  background: var(--badge);
 }
 
 #tunnelPeerCount .configpeer img  {
@@ -10136,7 +10140,7 @@ input[type=file] {
   text-align: center !important;
   font-weight: 700;
   box-shadow: var(--outline);
-  background: var(--element) !important;
+  background: var(--badge) !important;
 }
 
 #netdbtiers a {
@@ -10190,12 +10194,12 @@ input[type=file] {
   padding: 2px 6px 2px 20px;
   display: inline-block;
   color: var(--ink) !important;
-  background: var(--crypto) no-repeat 4px center / 14px, var(--element);
+  background: var(--crypto) no-repeat 4px center / 14px, var(--badge);
 }
 
 .signingkey.encryption {
   padding-left: 20px;
-  background: var(--lock) no-repeat 5px center / 12px, var(--element);
+  background: var(--lock) no-repeat 5px center / 12px, var(--badge);
 }
 
 .leaseset th:last-child, .leasesets_container .leaseset tr:nth-child(2) {
@@ -10207,7 +10211,7 @@ input[type=file] {
   padding: 1px 3px;
   display: inline-block;
   line-height: 1.6;
-  background: var(--element);
+  background: var(--badge);
 }
 
 /* end netdb */
@@ -12938,7 +12942,7 @@ body.iframed {
   line-height: 0;
   border: 1px solid #030;
   box-shadow: var(--outline);
-  background: var(--element);
+  background: var(--badge);
 }
 
 #profilelist .viewprofile, #profilelist .configpeer {
@@ -12953,19 +12957,19 @@ body.iframed {
 }
 
 .viewprofile {
-  background: var(--eye) var(--center) / 12px, var(--element);
+  background: var(--eye) var(--center) / 12px, var(--badge);
 }
 
 .configpeer {
-  background: var(--edit) var(--center) / 12px, var(--element);
+  background: var(--edit) var(--center) / 12px, var(--badge);
 }
 
 .familysearch {
-  background: var(--family) var(--center) / 12px, var(--element);
+  background: var(--family) var(--center) / 12px, var(--badge);
 }
 
 .viewprofile:hover, .viewprofile:focus {
-  background: var(--eye_hover) var(--center) / 12px, var(--element);
+  background: var(--eye_hover) var(--center) / 12px, var(--badge);
 }
 
 .viewedit br {
@@ -12981,7 +12985,7 @@ body.iframed {
 }
 
 .viewedit .configpeer:hover, .viewedit .configpeer:focus {
-  background: var(--edit_hover) var(--center) / 12px, var(--element);
+  background: var(--edit_hover) var(--center) / 12px, var(--badge);
 }
 
 .viewprofile:hover, .familysearch:hover, .configpeer:hover {
@@ -14069,7 +14073,7 @@ body.iframed {
     background-size: 250px 40px !important;
   }
   .tunnel_id {
-    margin: 0 5px !important;
+    margin: 0 5px;
     padding: 2px 4px 2px 6px;
     min-width: 96px;
     display: inline-block;
@@ -14077,10 +14081,10 @@ body.iframed {
     text-align: left;
     border: 1px solid #030;
     box-shadow: var(--highlight_badge);
-    background: var(--element);
+    background: var(--badge);
   }
   .tunnel_id:not(:empty) {
-    background: var(--hardhat) no-repeat 5px center / 14px, var(--element);
+    background: var(--hardhat) no-repeat 5px center / 14px, var(--badge);
   }
   .tunnel_id:not(:empty)::before {
     width: 16px;
