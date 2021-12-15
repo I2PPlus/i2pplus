@@ -6000,7 +6000,7 @@ div.appgroup {
 
 #searchbar select {
   padding: 8px 24px 8px 8px !important;
-  width: 164px;
+  width: 200px;
   position: absolute;
   top: -1px;
   left: -1px;
@@ -6057,7 +6057,7 @@ div.appgroup {
 }
 
 #searchbar input {
-  margin: 2px 0 1px 162px !important;
+  margin: 2px 0 1px 198px !important;
   padding-left: 10px;
   padding-right: 42px;
   min-width: 240px;
@@ -13145,6 +13145,9 @@ body.iframed {
   #view_profile .identicon {
     top: 0;
     right: 0;
+  }
+  h3#advancedconfig a {
+    padding-top: 9px;
   }
 }
 
