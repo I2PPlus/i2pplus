@@ -1296,7 +1296,7 @@ public class Snark
           else
               baseFile = new SecureFile(rootDataDir, base);
           if (baseFile.exists())
-              throw new IOException("Data location already exists: " + baseFile);
+              throw new IOException("\n* Data location already exists: " + baseFile);
           // The following two may throw IOE...
           storage = new Storage(_util, baseFile, metainfo, this, false);
           storage.check();
