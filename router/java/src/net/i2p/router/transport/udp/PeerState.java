@@ -220,10 +220,10 @@ public class PeerState {
 
     /** The minimum number of outstanding messages (NOT fragments/packets) */
 //    private static final int MIN_CONCURRENT_MSGS = 8;
-    private static final int MIN_CONCURRENT_MSGS = 4;
+    private static final int MIN_CONCURRENT_MSGS = 2;
     /** @since 0.9.42 */
 //    private static final int INIT_CONCURRENT_MSGS = 20;
-    private static final int INIT_CONCURRENT_MSGS = 64;
+    private static final int INIT_CONCURRENT_MSGS = 32;
     /** how many concurrent outbound messages do we allow OutboundMessageFragments to send
         This counts full messages, NOT fragments (UDP packets)
      */
@@ -236,7 +236,7 @@ public class PeerState {
     private long _lastIntroducerTime;
 
 //    private static final int MAX_SEND_WINDOW_BYTES = 1024*1024;
-    private static final int MAX_SEND_WINDOW_BYTES = 4*1024*1024;
+    private static final int MAX_SEND_WINDOW_BYTES = 8*1024*1024;
 
     /**
      *  Was 32 before 0.9.2, but since the streaming lib goes up to 128,
@@ -314,7 +314,8 @@ public class PeerState {
     /**
      *  The max number of acks we save to send as duplicates
      */
-    private static final int MAX_RESEND_ACKS = 32;
+//    private static final int MAX_RESEND_ACKS = 32;
+    private static final int MAX_RESEND_ACKS = 48;
     /**
      *  The max number of duplicate acks sent in each ack-only messge.
      *  Doesn't really matter, we have plenty of room...
@@ -344,7 +345,7 @@ public class PeerState {
         _currentACKs = new ConcurrentHashSet<Long>();
         _currentACKsResend = new LinkedBlockingQueue<ResendACK>();
 //        _slowStartThreshold = MAX_SEND_WINDOW_BYTES/2;
-        _slowStartThreshold = MAX_SEND_WINDOW_BYTES/8;
+        _slowStartThreshold = MAX_SEND_WINDOW_BYTES/16;
         _receivePeriodBegin = now;
         _remotePort = remotePort;
         if (remoteIP.length == 4) {
@@ -375,8 +376,8 @@ public class PeerState {
 //        _inboundMessages = new HashMap<Long, InboundMessageState>(8);
         _inboundMessages = new HashMap<Long, InboundMessageState>(32);
         _outboundMessages = new CachedIteratorCollection<OutboundMessageState>();
-        //_outboundQueue = new CoDelPriorityBlockingQueue(ctx, "UDP-PeerState", 32);
-        _outboundQueue = new CoDelPriorityBlockingQueue<OutboundMessageState>(ctx, "UDP-PeerState", 64);
+//        _outboundQueue = new CoDelPriorityBlockingQueue(ctx, "UDP-PeerState", 32);
+        _outboundQueue = new CoDelPriorityBlockingQueue(ctx, "UDP-PeerState", 64);
         _ackedMessages = new AckedMessages();
         // all createRateStat() moved to EstablishmentManager
         _remoteIP = remoteIP;
