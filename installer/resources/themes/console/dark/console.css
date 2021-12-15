@@ -104,13 +104,6 @@ body {
   background: rgba(0,187,0,.8) !important;
 }
 
-::-moz-selection {
-  color: #000;
-  text-shadow: none;
-  background: #0b0 !important;
-  background: rgba(0,187,0,.8) !important;
-}
-
 .routersummary, .routersummaryouter, h1 {
   contain: layout;
 }
@@ -158,8 +151,8 @@ a:active {
 }
 
 img {
-  border: none;
   font-size: 0;
+  border: none;
 }
 
 #tunnels img[src^="/flags.jsp?"], #profiles img[src^="/flags.jsp?"], #peers img[src^="/flags.jsp?"] {
@@ -440,19 +433,15 @@ pre {
   width: 100%;
   display: inline-block;
   vertical-align: middle;
+  text-shadow: var(--textshadow);
 }
 
 #sidebar h3:hover a {
   color: var(--hover);
-  var(--textshadow);
 }
 
 #sidebar h3:active {
   transition: ease box-shadow .01s;
-}
-
-#sidebar h3:active a {
-  text-shadow: 0 0 1px #000;
 }
 
 .routersummary h4 {
@@ -6254,7 +6243,6 @@ h3[id*="job"] {
   padding: 8px;
   letter-spacing: .08em;
   text-transform: uppercase;
-  text-shadow: 0 0 2px #010;
   border: var(--border);
   border-radius: 0;
 }
@@ -12101,7 +12089,7 @@ i {
   font-size: 18pt;
   font-weight: 700;
   color: #ffa;
-  text-shadow: 0 0 1px #000;
+  text-shadow: var(--textshadow);
   box-shadow: var(--highlight), inset 0 0 1px 1px #050;
   background: repeating-linear-gradient(180deg,rgba(255,255,255,.05) 2px, rgba(0,16,0,.2) 4px), linear-gradient(90deg, #010, #000, #010);
   -webkit-text-stroke: 1px rgba(220,220,128,.5);
