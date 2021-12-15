@@ -508,26 +508,26 @@ class OutboundMessageState implements CDPQEntry {
         StringBuilder buf = new StringBuilder(256);
         buf.append("\n* Outbound Message: [").append(_i2npMessage.getUniqueId());
         buf.append("] Seq: ").append(_seqNum);
-        buf.append(" Type: ").append(_i2npMessage.getType());
-        buf.append(" Size: ").append(_messageBuf.length);
+        buf.append("; Type: ").append(_i2npMessage.getType());
+        buf.append("; Size: ").append(_messageBuf.length);
         if (_numFragments > 1)
-            buf.append(" Fragments: ").append(_numFragments);
-        buf.append(" Volleys: ").append(_maxSends);
-        buf.append(" Lifetime: ").append(getLifetime());
+            buf.append("; Fragments: ").append(_numFragments);
+        buf.append("; Volleys: ").append(_maxSends);
+        buf.append("; Lifetime: ").append(getLifetime());
         if (!isComplete()) {
             if (_nacks.get() > 0)
-                buf.append(" NACKs: ").append(_nacks);
+                buf.append("; NACKs: ").append(_nacks);
             if (_fragmentSends != null) {
                 buf.append("\n* UnACKed fragments: ");
                 for (int i = 0; i < _numFragments; i++) {
                     if (needsSending(i))
                         buf.append(i).append(' ');
                 }
-                buf.append("Sizes: ");
+                buf.append("; Sizes: ");
                 for (int i = 0; i < _numFragments; i++) {
                     buf.append(fragmentSize(i)).append(' ');
                 }
-                buf.append("Fragments sent: ");
+                buf.append("; Fragments sent: ");
                 for (int i = 0; i < _numFragments; i++) {
                     buf.append(_fragmentSends[i]).append(' ');
                 }
