@@ -532,7 +532,7 @@ class OutboundMessageState implements CDPQEntry {
                     buf.append(_fragmentSends[i]).append(' ');
                 }
             } else {
-                buf.append(" unACKed");
+                buf.append(" (unACKed)");
             }
         }
         //buf.append(" to: ").append(_peer.toString());
