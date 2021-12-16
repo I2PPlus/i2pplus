@@ -1664,10 +1664,6 @@ td {
   border-top: 1px inset #131;
 }
 
-.main th, .main td {
-  contain: paint;
-}
-
 td img {
   padding: 0 1px 0 2px;
 }
@@ -5578,6 +5574,10 @@ h3#bannedpeers {
 #permabanned, #banneduntilrestart {
   margin-top: -1px !important;
   border: none;
+}
+
+#banneduntilrestart {
+  border-left: 1px solid var(--border);
 }
 
 #permabanned td:first-child {
@@ -9955,6 +9955,10 @@ input[type=file] {
   width: auto;
 }
 
+.leaseset td {
+  contain: paint;
+}
+
 #netdb .netdbentry th code:hover, #netdb .netdbentry th code:active, .leaseset th code:hover,
 #netdb .sybil_routerinfo th code:hover, #netdb .sybil_routerinfo th code:active {
   width: auto !important;
@@ -11074,10 +11078,6 @@ a[href^="/netdb"]:hover span {
 
 #enviro td, #routerinformation td, .tunneldisplay td, #profilelist td:not([colspan]), #floodfills td {
   box-shadow: var(--highlight), inset 0 0 2px 0 #040 !important;
-}
-
-#criticallogs tr:first-child td, #routerlogs tr:first-child td, #wrapperlogs tr:first-child td {
-  background: #000;
 }
 
 #events tr {
