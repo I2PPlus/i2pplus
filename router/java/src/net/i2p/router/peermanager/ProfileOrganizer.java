@@ -1559,7 +1559,7 @@ public class ProfileOrganizer {
             if (ok) {
                 ok = mask <= 0 || notRestricted(peer, ipSet, mask);
                 if ((!ok) && _log.shouldLog(Log.WARN))
-                    _log.warn("IP restriction prevents [" + peer.toBase64().substring(0,6) + "] from joining " + matches);
+                    _log.warn("IP address restriction prevents [" + peer.toBase64().substring(0,6) + "] from joining " + matches);
             }
             if (ok)
                 matches.add(peer);
