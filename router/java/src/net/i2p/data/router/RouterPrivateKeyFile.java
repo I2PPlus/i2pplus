@@ -44,7 +44,7 @@ public class RouterPrivateKeyFile extends PrivateKeyFile {
             privKey.readBytes(in);
             SigType type = ri.getSigningPublicKey().getType();
             if (type == null)
-                throw new DataFormatException("Unknown sig type");
+                throw new DataFormatException("Unknown signature type");
             signingPrivKey = new SigningPrivateKey(type);
             signingPrivKey.readBytes(in);
 

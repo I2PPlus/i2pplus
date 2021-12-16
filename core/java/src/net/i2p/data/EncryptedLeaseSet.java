@@ -292,7 +292,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
         int stype = (int) DataHelper.readLong(in, 2);
         SigType type = SigType.getByCode(stype);
         if (type == null)
-            throw new DataFormatException("unknown key type " + stype);
+            throw new DataFormatException("Unknown key type " + stype);
         _signingKey = new SigningPublicKey(type);
         _signingKey.readBytes(in);
         _published = DataHelper.readLong(in, 4) * 1000;
@@ -327,7 +327,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
         int itype = (int) DataHelper.readLong(in, 2);
         SigType type = SigType.getByCode(itype);
         if (type == null)
-            throw new DataFormatException("Unknown sig type " + itype);
+            throw new DataFormatException("Unknown signature type " + itype);
         _transientSigningPublicKey = new SigningPublicKey(type);
         _transientSigningPublicKey.readBytes(in);
         SigType stype = _signingKey.getType();

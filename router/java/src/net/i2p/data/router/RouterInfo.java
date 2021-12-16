@@ -554,7 +554,7 @@ public class RouterInfo extends DatabaseEntry {
         // Even if not verifying, we have to construct a Signature object
         // below, which will fail for null type.
         if (type == null)
-            throw new DataFormatException("unknown sig type");
+            throw new DataFormatException("Unknown signature type");
         if (verifySig) {
             if (type != SigType.EdDSA_SHA512_Ed25519) {
                 // This won't work for EdDSA

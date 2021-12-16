@@ -739,7 +739,7 @@ class Packet {
                 }
                 if (type == null) {
                     if (siglen < Signature.SIGNATURE_BYTES)
-                        throw new IllegalArgumentException("unknown sig type len=" + siglen);
+                        throw new IllegalArgumentException("Unknown signature type (Size: " + siglen + " bytes)");
                     // Hope it's the default type with some unknown options following;
                     // if not the sig will fail later
                     type = SigType.DSA_SHA1;
