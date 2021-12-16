@@ -22,11 +22,11 @@ import net.i2p.data.SigningPrivateKey;
  *  @since 0.9.16
  */
 public class RouterPrivateKeyFile extends PrivateKeyFile {
-    
+
     public RouterPrivateKeyFile(File file) {
         super(file);
     }
-    
+
     /**
      *  Read it in from the file.
      *  Also sets the local privKey and signingPrivKey.
@@ -39,7 +39,7 @@ public class RouterPrivateKeyFile extends PrivateKeyFile {
             ri.readBytes(in);
             EncType etype = ri.getPublicKey().getType();
             if (etype == null)
-                throw new DataFormatException("Unknown enc type");
+                throw new DataFormatException("Unknown encryption type");
             privKey = new PrivateKey(etype);
             privKey.readBytes(in);
             SigType type = ri.getSigningPublicKey().getType();
