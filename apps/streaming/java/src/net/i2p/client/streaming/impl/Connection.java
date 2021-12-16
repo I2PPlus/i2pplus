@@ -1385,8 +1385,8 @@ class Connection {
         else
             buf.append("Unknown");
         buf.append("\n* Up: ").append(DataHelper.formatDuration(_context.clock().now() - _createdOn));
-        buf.append("; Wsize: ").append(_options.getWindowSize());
-        buf.append("; Cwin: ").append(_congestionWindowEnd - _highestAckedThrough);
+        buf.append("; Window size: ").append(_options.getWindowSize());
+        buf.append("; Congestion window: ").append(_congestionWindowEnd - _highestAckedThrough);
         buf.append("; RTT: ").append(_options.getRTT());
         buf.append("; RTO: ").append(_options.getRTO());
         // not synchronized to avoid some kooky races
@@ -1410,7 +1410,7 @@ class Connection {
         }
 
         buf.append("\n* Sent: ").append(1 + _lastSendId.get());
-        buf.append("; Rcvd: ").append(1 + _inputStream.getHighestBlockId() - missing);
+        buf.append("; Received: ").append(1 + _inputStream.getHighestBlockId() - missing);
         buf.append("; ACKThru: ").append(_highestAckedThrough);
         buf.append("; SSThresh: ").append(_ssthresh);
         buf.append("; MinRTT: ").append(_options.getMinRTT());
