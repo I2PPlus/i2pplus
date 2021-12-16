@@ -253,7 +253,7 @@ class PeerManager {
                 // when we get close to the limit. So let's stick with connected peers here.
                 // Todo: what's the point of the PeerTestJob anyway?
                 //_organizer.selectNotFailingPeers(criteria.getMinimumRequired(), exclude, peers);
-                _organizer.selectActiveNotFailingPeers(criteria.getMinimumRequired(), exclude, peers);
+                _organizer.selectActiveNotFailingPeers(criteria.getMinimumRequired(), exclude, peers, 0, null);
                 break;
 /****
             case PeerSelectionCriteria.PURPOSE_TUNNEL:

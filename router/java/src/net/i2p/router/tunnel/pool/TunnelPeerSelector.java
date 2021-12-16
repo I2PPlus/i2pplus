@@ -169,7 +169,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             Set<Hash> exclude = getExclude(settings.isInbound(), settings.isExploratory());
             exclude.addAll(rv);
             Set<Hash> matches = new HashSet<Hash>(more);
-            ctx.profileOrganizer().selectFastPeers(more, exclude, matches, 0);
+            // don't bother with IP restrictions here
+            ctx.profileOrganizer().selectFastPeers(more, exclude, matches);
             rv.addAll(matches);
             Collections.shuffle(rv, ctx.random());
         }
