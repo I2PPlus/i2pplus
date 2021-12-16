@@ -441,7 +441,7 @@ class PacketHandler {
                                 long now = _context.clock().now();
                                 buf.append(ps.getRemoteHostId().toString())
                                    .append("\n* Last sent: ").append(now - ps.getLastSendTime())
-                                   .append("; Last rcvd: ").append(now - ps.getLastReceiveTime());
+                                   .append("; Last received: ").append(now - ps.getLastReceiveTime());
                             }
                             if (ps.getRemotePort() == newPort) {
                                 foundSamePort = true;

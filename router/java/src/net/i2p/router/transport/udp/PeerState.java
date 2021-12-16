@@ -1353,7 +1353,7 @@ public class PeerState {
             return;
         }
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Adding [MsgId " + state.getMessageId() + "] to [" + _remotePeer.toBase64().substring(0,6) + "]");
+            _log.debug("Adding [MsgID " + state.getMessageId() + "] to [" + _remotePeer.toBase64().substring(0,6) + "]");
         int rv = 0;
         // will never fail for CDPQ
         boolean fail;
@@ -1868,12 +1868,12 @@ public class PeerState {
                 _context.statManager().addRateData("udp.sendConfirmVolley", numSends);
                 _transport.succeeded(state);
                 if (_log.shouldDebug())
-                    _log.debug("Received partial ACK of [MsgId " + state.getMessageId() + "] from [" + _remotePeer.toBase32().substring(0,6)
+                    _log.debug("Received partial ACK of [MsgID " + state.getMessageId() + "] from [" + _remotePeer.toBase32().substring(0,6)
                           + "] \n* Status: Newly ACKed: " + ackedSize
                           + " -> Now complete for: " + state);
             } else {
                 if (_log.shouldInfo())
-                    _log.info("Received partial ACK of [MsgId " + state.getMessageId() + "] from [" + _remotePeer.toBase32().substring(0,6)
+                    _log.info("Received partial ACK of [MsgID " + state.getMessageId() + "] from [" + _remotePeer.toBase32().substring(0,6)
                           + "] \n* Status: Received after " + lifetime + "ms and " + numSends + " sends"
                           + " -> Complete? false"
                           + " -> Newly ACKed: " + ackedSize
