@@ -452,7 +452,7 @@ class SAMv3Handler extends SAMv1Handler
                 allProps.putAll(i2cpProps);
                 allProps.putAll(props);
 
-                if (style.equals("MASTER")) {
+                if (style.equals("MASTER") || style.equals("PRIMARY")) {
                     // We must put these here, as SessionRecord.getProps() makes a copy,
                     // and the socket manager is instantiated in the
                     // SAMStreamSession constructor.
@@ -490,7 +490,7 @@ class SAMv3Handler extends SAMv1Handler
                     streamSession = v3;
                     this.session = v3;
                     v3.start();
-                } else if (style.equals("MASTER")) {
+                } else if (style.equals("MASTER") || style.equals("PRIMARY")) {
                     SAMv3DatagramServer dgs = bridge.getV3DatagramServer(props);
                     MasterSession v3 = new MasterSession(nick, dgs, this, allProps);
                     streamSession = v3;
