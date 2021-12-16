@@ -891,7 +891,7 @@ div.refresh {
 }
 
 .sb_update {
-  padding: 7px 5px !important;
+  padding: 7px 5px 5px !important;
 }
 
 @keyframes downloadbar {
@@ -13671,7 +13671,7 @@ body.iframed {
     margin-top: -1px;
   }
   .sb_info.sb_update {
-    padding: 7px 5px 9px !important;
+    padding: 7px 5px 6px !important;
   }
   .percentBarouter {
     width: 251px !important;
