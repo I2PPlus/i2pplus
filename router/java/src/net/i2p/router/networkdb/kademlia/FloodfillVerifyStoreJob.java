@@ -144,7 +144,6 @@ class FloodfillVerifyStoreJob extends JobImpl {
         RouterInfo peer = _facade.lookupRouterInfoLocally(_target);
         if (peer == null) {
              if (_log.shouldLog(Log.WARN))
-//                 _log.warn("Failed to find target RouterInfo [" + peer.toBase64().substring(0,6) + "]"); // NPE?!
                  _log.warn("Failed to find target RouterInfo for Floodfill");
             _facade.verifyFinished(_key);
             return;
@@ -186,7 +185,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
                     sess = MessageWrapper.generateSession(ctx, _client, VERIFY_TIMEOUT, !supportsRatchet);
                     if (sess == null) {
                          if (_log.shouldLog(Log.WARN))
-                             _log.warn("No SKM to reply to");
+                             _log.warn("No SessionKeyManager to reply to");
                         _facade.verifyFinished(_key);
                         return;
                     }
@@ -219,7 +218,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
             _wrappedMessage = MessageWrapper.wrap(ctx, lookup, fromKey, peer);
             if (_wrappedMessage == null) {
                  if (_log.shouldLog(Log.WARN))
-                    _log.warn("Fail Garlic encrypting");
+                    _log.warn("Garlic encryption failure");
                 _facade.verifyFinished(_key);
                 return;
             }
@@ -230,7 +229,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
             sent = MessageWrapper.wrap(ctx, lookup, peer);
             if (sent == null) {
                  if (_log.shouldLog(Log.WARN))
-                    _log.warn("Fail Garlic encrypting");
+                    _log.warn("Garlic encryption failure");
                 _facade.verifyFinished(_key);
                 return;
             }
