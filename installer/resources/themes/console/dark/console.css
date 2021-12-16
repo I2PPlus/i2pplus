@@ -5523,7 +5523,7 @@ h3#bannedpeers {
   display: none;
 }
 
-#banlist li a[href^="configpeer"] {
+#banlist li a[href^="configpeer"]:last-of-type {
   padding: 2px 2px 1px 0;
   position: absolute;
   top: 0;
