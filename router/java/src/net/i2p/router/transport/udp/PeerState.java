@@ -306,9 +306,11 @@ public class PeerState {
     private static final int MIN_RTO = 1000;
     private static final int INIT_RTO = 1000;
     private static final int INIT_RTT = 0;
-    private static final int MAX_RTO = 60*1000;
+//    private static final int MAX_RTO = 60*1000;
+    private static final int MAX_RTO = 30*1000;
     /** how frequently do we want to send ACKs to a peer? */
-    private static final int ACK_FREQUENCY = 150;
+//    private static final int ACK_FREQUENCY = 150;
+    private static final int ACK_FREQUENCY = 100;
     private static final int CLOCK_SKEW_FUDGE = (ACK_FREQUENCY * 2) / 3;
 
     /**
@@ -325,7 +327,8 @@ public class PeerState {
     /** for small MTU */
     private static final int MAX_RESEND_ACKS_SMALL = MAX_RESEND_ACKS * 2 / 5;
 
-    private static final long RESEND_ACK_TIMEOUT = 60*1000;
+//    private static final long RESEND_ACK_TIMEOUT = 60*1000;
+    private static final long RESEND_ACK_TIMEOUT = 30*1000;
 
     /** if this many acks arrive out of order, fast rtx */
     private static final int FAST_RTX_ACKS = 3;
@@ -374,10 +377,10 @@ public class PeerState {
             _rttDeviation = _rtt;
 
 //        _inboundMessages = new HashMap<Long, InboundMessageState>(8);
-        _inboundMessages = new HashMap<Long, InboundMessageState>(32);
+        _inboundMessages = new HashMap<Long, InboundMessageState>(16);
         _outboundMessages = new CachedIteratorCollection<OutboundMessageState>();
-//        _outboundQueue = new CoDelPriorityBlockingQueue(ctx, "UDP-PeerState", 32);
-        _outboundQueue = new CoDelPriorityBlockingQueue(ctx, "UDP-PeerState", 64);
+        //_outboundQueue = new CoDelPriorityBlockingQueue(ctx, "UDP-PeerState", 32);
+        _outboundQueue = new PriBlockingQueue<OutboundMessageState>(ctx, "UDP-PeerState", 48);
         _ackedMessages = new AckedMessages();
         // all createRateStat() moved to EstablishmentManager
         _remoteIP = remoteIP;
