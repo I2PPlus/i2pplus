@@ -545,7 +545,7 @@ class BuildHandler implements Runnable {
                 if (current <= 0)
                     _currentLookups.set(1);
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("Request  handled; looking up next peer [" + nextPeer.toBase64().substring(0,6)
+                    _log.debug("Request handled; looking up next peer [" + nextPeer.toBase64().substring(0,6)
                                + "] \n* From: " + from + " [MsgID: " +  state.msg.getUniqueId() + "]\n* Lookups: " + current + " / " + limit + req);
                 _context.netDb().lookupRouterInfo(nextPeer, new HandleReq(_context, state, req, nextPeer),
                                               new TimeoutReq(_context, state, req, nextPeer), NEXT_HOP_LOOKUP_TIMEOUT);

@@ -51,7 +51,7 @@ public class I2PSocketEepGet extends EepGet {
     private final I2PSocketManager _socketManager;
     /** this replaces _proxy in the superclass. Sadly, I2PSocket does not extend Socket. */
     private I2PSocket _socket;
-    
+
     /** from ConnectionOptions */
     private static final String PROP_CONNECT_DELAY = "i2p.streaming.connectDelay";
     private static final String CONNECT_DELAY = "500";
@@ -67,7 +67,7 @@ public class I2PSocketEepGet extends EepGet {
         super(ctx, false, null, -1, numRetries, minSize, maxSize, outputFile, outputStream, url, true, null, null);
         _socketManager = mgr;
     }
-   
+
     /**
      *  We have to override this to close _socket, since we can't use _proxy in super as the I2PSocket.
      */
@@ -75,8 +75,8 @@ public class I2PSocketEepGet extends EepGet {
     public boolean fetch(long fetchHeaderTimeout, long totalTimeout, long inactivityTimeout) {
         boolean rv = super.fetch(fetchHeaderTimeout, totalTimeout, inactivityTimeout);
         if (_socket != null) {
-            try { 
-                _socket.close(); 
+            try {
+                _socket.close();
                 _socket = null;
             } catch (IOException ioe) {}
         }
@@ -100,7 +100,7 @@ public class I2PSocketEepGet extends EepGet {
      *  Look up the address, get a socket from the I2PSocketManager supplied in the constructor,
      *  and send the request.
      *
-     *  @param timeout ignored 
+     *  @param timeout ignored
      */
     @Override
     protected void sendRequest(SocketTimeout timeout) throws IOException {
@@ -170,12 +170,14 @@ public class I2PSocketEepGet extends EepGet {
                                 byte[] b = Base32.decode(host.substring(0, 52));
                                 if (b != null) {
                                     Hash h = Hash.create(b);
-                                    dest = sess.lookupDest(h, 20*1000);
+//                                    dest = sess.lookupDest(h, 20*1000);
+                                    dest = sess.lookupDest(h, 30*1000);
                                 } else {
                                     dest = null;
                                 }
                             } else {
-                                dest = sess.lookupDest(host, 20*1000);
+//                                dest = sess.lookupDest(host, 20*1000);
+                                dest = sess.lookupDest(host, 30*1000);
                             }
                         } catch (I2PSessionException ise) {
                             dest = null;
@@ -213,11 +215,11 @@ public class I2PSocketEepGet extends EepGet {
 
         _proxyIn = _socket.getInputStream();
         _proxyOut = _socket.getOutputStream();
-        
+
         // SocketTimeout doesn't take an I2PSocket, but no matter, because we
         // always close our socket in fetch() above.
         //timeout.setSocket(_socket);
-        
+
         String req = getRequest();
         _proxyOut.write(DataHelper.getUTF8(req));
         _proxyOut.flush();
@@ -282,7 +284,7 @@ public class I2PSocketEepGet extends EepGet {
      * This is just for testing.
      * Real command line apps should use EepGet.main(),
      * which has more options, and you don't have to wait for tunnels to be built.
-     */ 
+     */
 /****
     public static void main(String args[]) {
         int numRetries = 0;
@@ -308,7 +310,7 @@ public class I2PSocketEepGet extends EepGet {
             usage();
             return;
         }
-        
+
         if (url == null) {
             usage();
             return;
@@ -332,7 +334,7 @@ public class I2PSocketEepGet extends EepGet {
         get.fetch(inactivityTimeout, -1, inactivityTimeout);
         mgr.destroySocketManager();
     }
-    
+
     private static void usage() {
         System.err.println("I2PSocketEepGet [-n #retries] [-t timeout] url");
     }
