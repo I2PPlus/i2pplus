@@ -8116,14 +8116,19 @@ th code {
 .threatpoints + ul li {
   list-style: none;
   margin-left: 3px;
-  line-height: 1;
+  line-height: 1.2;
   -webkit-column-break-inside: avoid !important;
   break-inside: avoid !important;
   page-break-inside: avoid !important;
 }
 
 .threatpoints + ul li a {
+  max-width: 200px;
+  display: inline-block;
+  vertical-align: text-bottom;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* end sybils */
