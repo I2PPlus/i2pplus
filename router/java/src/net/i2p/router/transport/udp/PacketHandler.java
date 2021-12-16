@@ -441,8 +441,8 @@ class PacketHandler {
                                 long now = _context.clock().now();
                                 long lastSent = now - ps.getLastSendTime();
                                 long lastRcvd = now - ps.getLastReceiveTime();
-                                String tx = "never";
-                                String rx = "never";
+                                String tx = "now";
+                                String rx = "now";
                                 if (lastSent > 0)
                                     tx = lastSent + "ms ago";
                                 if (lastRcvd > 0)

@@ -40,7 +40,7 @@ public final class KeyPairGenerator extends KeyPairGeneratorSpi {
      */
     public void initialize(int strength, SecureRandom random) {
         if (strength != DEFAULT_STRENGTH)
-            throw new InvalidParameterException("unknown key type.");
+            throw new InvalidParameterException("Unknown key type.");
         elgParams = I2P_ELGAMAL_2048_SPEC;
         try {
             initialize(elgParams, random);

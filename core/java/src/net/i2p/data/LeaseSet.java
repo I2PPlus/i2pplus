@@ -376,7 +376,7 @@ public class LeaseSet extends DatabaseEntry {
         // Even if not verifying, we have to construct a Signature object
         // below, which will fail for null type.
         if (type == null)
-            throw new DataFormatException("unknown sig type");
+            throw new DataFormatException("Unknown signature type");
         _signingKey = new SigningPublicKey(type);
         // EOF will be thrown in signature read below
         _signingKey.readBytes(in);

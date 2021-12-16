@@ -40,7 +40,7 @@ import net.i2p.util.SecureFileOutputStream;
 /**
  *  Succesor to the ".sud" format used in TrustedUpdate.
  *  Format specified in http://www.i2p2.de/updates
- * 
+ *
  *  @since 0.9.8
  */
 public class SU3File {
@@ -275,7 +275,7 @@ public class SU3File {
         _sigType = SigType.getByCode(sigTypeCode);
         // In verifyAndMigrate it reads this far then rewinds, but we don't need to here
         if (_sigType == null)
-            throw new IOException("unknown sig type: " + sigTypeCode);
+            throw new IOException("Unknown signature type: " + sigTypeCode);
         _signatureLength = (int) DataHelper.readLong(in, 2);
         if (_signatureLength != _sigType.getSigLen())
             throw new IOException("bad sig length");
@@ -299,7 +299,7 @@ public class SU3File {
         int cType = in.read();
         _contentType = BY_CODE.get(Integer.valueOf(cType));
         if (_contentType == null)
-            throw new IOException("unknown content type " + cType);
+            throw new IOException("Unknown content type " + cType);
         skip(in, 12);
 
         byte[] data = new byte[_versionLength];
@@ -348,7 +348,7 @@ public class SU3File {
                         }
                     }
                     if (_signerPubkey == null)
-                        throw new IOException("unknown signer: " + _signer + " for content type: " + _contentType.getName());
+                        throw new IOException("Unknown signer: " + _signer + " for content type: " + _contentType.getName());
                 }
             }
         }
@@ -404,12 +404,12 @@ public class SU3File {
             skip(in, 1);
             int foo = in.read();
             if (foo != FILE_VERSION)
-                throw new IOException("bad file version");
+                throw new IOException("Bad file version");
             skip(in, 1);
             int sigTypeCode = in.read();
             _sigType = SigType.getByCode(sigTypeCode);
             if (_sigType == null)
-                throw new IOException("unknown sig type: " + sigTypeCode);
+                throw new IOException("Unknown signature type: " + sigTypeCode);
             // end duplicate code
             // rewind
             in.reset();
@@ -422,7 +422,7 @@ public class SU3File {
                 skip(in, getContentOffset());
             if (_verifySignature) {
                 if (_signerPubkey == null)
-                    throw new IOException("unknown signer: " + _signer + " for content type: " + _contentType.getName());
+                    throw new IOException("Unknown signer: " + _signer + " for content type: " + _contentType.getName());
             }
             if (migrateTo != null)  // else verify only
                 out = new SecureFileOutputStream(migrateTo);
@@ -564,7 +564,7 @@ public class SU3File {
      * Parses command line arguments when this class is used from the command
      * line.
      * Exits 1 on failure so this can be used in scripts.
-     * 
+     *
      * @param args Command line parameters.
      */
     public static void main(String[] args) {

@@ -50,7 +50,7 @@ public class KeyPairGenerator extends KeyPairGeneratorSpi {
     public void initialize(int keysize, SecureRandom random) {
         AlgorithmParameterSpec edParams = edParameters.get(Integer.valueOf(keysize));
         if (edParams == null)
-            throw new InvalidParameterException("unknown key type.");
+            throw new InvalidParameterException("Unknown key type.");
         try {
             initialize(edParams, random);
         } catch (InvalidAlgorithmParameterException e) {
@@ -94,7 +94,7 @@ public class KeyPairGenerator extends KeyPairGeneratorSpi {
     protected EdDSANamedCurveSpec createNamedCurveSpec(String curveName) throws InvalidAlgorithmParameterException {
         EdDSANamedCurveSpec spec = EdDSANamedCurveTable.getByName(curveName);
         if (spec == null) {
-            throw new InvalidAlgorithmParameterException("unknown curve name: " + curveName);
+            throw new InvalidAlgorithmParameterException("Unknown curve name: " + curveName);
         }
         return spec;
     }

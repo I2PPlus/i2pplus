@@ -197,7 +197,7 @@ class DefinitionParser {
         if ("record".equals(s))
             return Rule.RECORDER;
 
-        throw new InvalidDefinitionException("unknown rule "+s);
+        throw new InvalidDefinitionException("Unknown rule "+s);
     }
 
     private static File parseFileName(String s, String[] split) throws InvalidDefinitionException {

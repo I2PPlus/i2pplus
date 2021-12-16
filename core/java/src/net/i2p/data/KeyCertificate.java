@@ -232,7 +232,7 @@ public class KeyCertificate extends Certificate {
             return null;
         SigType type = getSigType();
         if (type == null)
-            throw new UnsupportedOperationException("unknown sig type");
+            throw new UnsupportedOperationException("Unknown signature type");
         int extra = Math.max(0, type.getPubkeyLen() - 128);
         if (_payload.length == HEADER_LENGTH + extra)
             return getExtraKeyData();
