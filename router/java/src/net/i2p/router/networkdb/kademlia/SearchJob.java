@@ -58,16 +58,17 @@ class SearchJob extends JobImpl {
     private int _floodfillSearchesOutstanding;
 
 //    private static final int SEARCH_BREDTH = 3;
-    private static int SEARCH_BREDTH = 8;
+    private static int SEARCH_BREDTH = 10;
     /** Only send the 10 closest "don't tell me about" refs */
 //    static final int MAX_CLOSEST = 10;
-    static final int MAX_CLOSEST = 16;
+    static final int MAX_CLOSEST = 12;
 
     /**
      * How long will we give each peer to reply to our search?
      *
      */
-    private static final int PER_PEER_TIMEOUT = 5*1000;
+//    private static final int PER_PEER_TIMEOUT = 5*1000;
+    private static final int PER_PEER_TIMEOUT = 4*1000;
 
     /**
      * give ourselves 30 seconds to send out the value found to the closest
@@ -163,9 +164,9 @@ class SearchJob extends JobImpl {
 
     /** timeout */
 //    static final int PER_FLOODFILL_PEER_TIMEOUT = 10*1000;
-    static final int PER_FLOODFILL_PEER_TIMEOUT = 8*1000;
+    static final int PER_FLOODFILL_PEER_TIMEOUT = 5*1000;
 //    static final long MIN_TIMEOUT = 2500;
-    static final long MIN_TIMEOUT = 2500;
+    static final long MIN_TIMEOUT = 3000;
 
     protected int getPerPeerTimeoutMs(Hash peer) {
         int timeout = 0;
@@ -338,7 +339,7 @@ class SearchJob extends JobImpl {
                             if (onlyFloodfill)
                                 continue;
                         }
-                        if (ri.isHidden()) {// || // allow querying banlisted, since its indirect
+                        if (ri.isHidden()) {// || // allow querying banlisted, since it's indirect
                             //getContext().banlist().isBanlisted(peer)) {
                             // dont bother
                         } else {
@@ -537,7 +538,7 @@ class SearchJob extends JobImpl {
      * @return a DatabaseLookupMessage
      */
     protected I2NPMessage buildMessage(TunnelId replyTunnelId, Hash replyGateway, long expiration, RouterInfo peer) {
-        throw new UnsupportedOperationException("see ExploreJob");
+        throw new UnsupportedOperationException("See ExploreJob");
 /*******
         DatabaseLookupMessage msg = new DatabaseLookupMessage(getContext(), true);
         msg.setSearchKey(_state.getTarget());
@@ -662,7 +663,7 @@ class SearchJob extends JobImpl {
      *
      */
 //    private static final int MAX_LEASE_RESEND = 10;
-    private static final int MAX_LEASE_RESEND = 16;
+    private static final int MAX_LEASE_RESEND = 32;
 
     /**
      * Should we republish a routerInfo received?  Probably not worthwhile, since
