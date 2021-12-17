@@ -5109,8 +5109,9 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
 }
 
 .sybil_distance th {
-  text-align: left;
   padding: 5px;
+  text-align: left;
+  font-size: 90%;
 }
 
 .sybil_distance th:last-child, .sybil_distance td:last-child {
@@ -13828,7 +13829,7 @@ body.iframed {
     vertical-align: middle;
   }
   .routersummary td, .routersummary a, .routersummary button, .routersummary h4, .routersummary h4 a,
-  #floodfill th, #jardump td, .smallhead th, .leaseset a[href$=".i2p"], .leaseset th code, .footnote, .topness {
+  #floodfill th, #jardump td, .smallhead th, .sybil_distance th, .leaseset a[href$=".i2p"], .leaseset th code, .footnote, .topness {
     font-size: 9pt !important;
   }
   #newsDisplay a, pre, #logs li, #updateAvailable, code, tt {
