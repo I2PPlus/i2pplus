@@ -2207,19 +2207,17 @@ public class PeerState {
             buf.append("\n* Last attempted send: ").append(new Date(_lastSendTime));
         if (_lastACKSend != 0)
             buf.append("\n* Last ACK sent: ").append(new Date(_lastACKSend));
-        buf.append("\n* Lifetime: ").append(now-_keyEstablishedTime).append("ms");
-        buf.append("; Cwin: ").append(_sendWindowBytes).append(" bytes");
-        buf.append("; ACwin: ").append(_sendWindowBytesRemaining).append(" bytes");
-        buf.append(" SST: ").append(_slowStartThreshold);
-        buf.append(" FastReTX? ").append(_fastRetransmit);
-        buf.append("; Consecutive fails: ").append(_consecutiveFailedSends);
-        buf.append("\n* Msgs rcvd: ").append(_messagesReceived);
-        buf.append("; Msgs sent: ").append(_messagesSent);
-        buf.append("; Inbound Msgs: ").append(_inboundMessages.size());
-        buf.append("; Outbound Msgs: ").append(_outboundMessages.size());
-        buf.append("; Outbound Queue: ").append(_outboundQueue.size());
-        buf.append("\n* Packets received (OK/Dup): ").append(_packetsReceived).append('/').append(_packetsReceivedDuplicate);
-        buf.append("; Packets sent (OK/Dup): ").append(_packetsTransmitted).append('/').append(_packetsRetransmitted);
+        buf.append("\n* Lifetime: ").append(now-_keyEstablishedTime).append("ms")
+           .append("; Congestion window: ").append(_sendWindowBytes).append(" bytes")
+           .append("; Active window: ").append(_sendWindowBytesRemaining).append(" bytes")
+           .append(" SST: ").append(_slowStartThreshold)
+           .append(" FastReTX? ").append(_fastRetransmit)
+           .append("; Consecutive fails: ").append(_consecutiveFailedSends)
+           .append("\n* Messages (received/sent): ").append(_messagesReceived).append("/").append(_messagesSent)
+           .append("; Messages (in/out): ").append(_inboundMessages.size()).append("/").append(_outboundMessages.size())
+           .append("; Outbound queue: ").append(_outboundQueue.size())
+           .append("\n* Packets received (OK/Duplicate): ").append(_packetsReceived).append('/').append(_packetsReceivedDuplicate)
+           .append("; Packets sent (OK/Duplicate): ").append(_packetsTransmitted).append('/').append(_packetsRetransmitted);
         return buf.toString();
     }
 }
