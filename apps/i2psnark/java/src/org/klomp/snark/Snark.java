@@ -1318,7 +1318,7 @@ public class Snark
           }
           // TODO we're still in an inconsistent state, won't work if restarted
           // (PeerState "disconnecting seed that connects to seeds"
-          fatal("Could not create file for " + getBaseInfo() + ' ' + ioe.getMessage());
+          fatal("Could not create file for " + getBaseInfo().replace("Magnet", "info hash:") + ' ' + ioe.getMessage());
       }
   }
 
