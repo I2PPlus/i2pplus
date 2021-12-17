@@ -518,19 +518,20 @@ class OutboundMessageState implements CDPQEntry {
             if (_nacks.get() > 0)
                 buf.append("; NACKs: ").append(_nacks);
             if (_fragmentSends != null) {
-                buf.append("\n* UnACKed fragments: ");
+                buf.append("\n* UnACKed fragments: [ ");
                 for (int i = 0; i < _numFragments; i++) {
                     if (needsSending(i))
-                        buf.append(i).append(",");
+                        buf.append(i).append(' ');
                 }
-                buf.append("; Sizes (bytes): ");
+                buf.append("]; Sizes (bytes): [ ");
                 for (int i = 0; i < _numFragments; i++) {
-                    buf.append(fragmentSize(i)).append(",");
+                    buf.append(fragmentSize(i)).append(' ');
                 }
-                buf.append("; Fragments sent: ");
+                buf.append("]; Fragments sent: [ ");
                 for (int i = 0; i < _numFragments; i++) {
-                    buf.append(_fragmentSends[i]).append(",");
+                    buf.append(_fragmentSends[i]).append(' ');
                 }
+                buf.append("]");
             } else {
                 buf.append(" (UnACKed)");
             }

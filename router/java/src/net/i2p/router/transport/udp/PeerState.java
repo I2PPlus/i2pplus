@@ -820,7 +820,7 @@ public class PeerState {
                       "Congestion, RTO: " + oldRto + " -> " + _rto + " Timer: " + oldTimer + " -> " + _rto +
                       " Window: " + congestionAt + " -> " + _sendWindowBytes +
                       " SST: " + oldsst + " -> " + _slowStartThreshold +
-                      "; FastReTX? " + _fastRetransmit);
+                      "; FastRetransmit? " + _fastRetransmit);
     }
 
     /**
@@ -2211,9 +2211,9 @@ public class PeerState {
            .append("; Congestion window: ").append(_sendWindowBytes).append(" bytes")
            .append("; Active window: ").append(_sendWindowBytesRemaining).append(" bytes")
            .append("; SST: ").append(_slowStartThreshold)
-           .append("; FastReTX? ").append(_fastRetransmit)
-           .append("; Consecutive fails: ").append(_consecutiveFailedSends)
-           .append("\n* Messages (received/sent): ").append(_messagesReceived).append("/").append(_messagesSent)
+           .append("; FastRetransmit? ").append(_fastRetransmit)
+           .append("\n* Consecutive fails: ").append(_consecutiveFailedSends)
+           .append("; Messages (received/sent): ").append(_messagesReceived).append("/").append(_messagesSent)
            .append("; Messages (in/out): ").append(_inboundMessages.size()).append("/").append(_outboundMessages.size())
            .append("; Outbound queue: ").append(_outboundQueue.size())
            .append("\n* Packets received (OK/Duplicate): ").append(_packetsReceived).append('/').append(_packetsReceivedDuplicate)
