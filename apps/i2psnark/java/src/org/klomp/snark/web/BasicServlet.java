@@ -560,7 +560,7 @@ class BasicServlet extends HttpServlet
         }
 
         @Override
-        public String toString() { return "Jar resource \"" + _path + '"'; }
+        public String toString() { return "Jar resource: " + _path; }
     }
 
 
