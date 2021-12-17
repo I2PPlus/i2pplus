@@ -821,7 +821,7 @@ public class PeerState {
                       "Congestion, RTO: " + oldRto + " -> " + _rto + " Timer: " + oldTimer + " -> " + _rto +
                       " Window: " + congestionAt + " -> " + _sendWindowBytes +
                       " SST: " + oldsst + " -> " + _slowStartThreshold +
-                      " FastReTX? " + _fastRetransmit);
+                      "; FastReTX? " + _fastRetransmit);
     }
 
     /**
@@ -2210,8 +2210,8 @@ public class PeerState {
         buf.append("\n* Lifetime: ").append(now-_keyEstablishedTime).append("ms")
            .append("; Congestion window: ").append(_sendWindowBytes).append(" bytes")
            .append("; Active window: ").append(_sendWindowBytesRemaining).append(" bytes")
-           .append(" SST: ").append(_slowStartThreshold)
-           .append(" FastReTX? ").append(_fastRetransmit)
+           .append("; SST: ").append(_slowStartThreshold)
+           .append("; FastReTX? ").append(_fastRetransmit)
            .append("; Consecutive fails: ").append(_consecutiveFailedSends)
            .append("\n* Messages (received/sent): ").append(_messagesReceived).append("/").append(_messagesSent)
            .append("; Messages (in/out): ").append(_inboundMessages.size()).append("/").append(_outboundMessages.size())

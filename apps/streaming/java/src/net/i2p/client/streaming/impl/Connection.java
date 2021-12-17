@@ -1390,7 +1390,7 @@ class Connection {
         buf.append("; RTT: ").append(_options.getRTT());
         buf.append("; RTO: ").append(_options.getRTO());
         // not synchronized to avoid some kooky races
-        buf.append("; unACKed out: ").append(_outboundPackets.size()).append("; ");
+        buf.append("; UnACKed out: ").append(_outboundPackets.size()).append("; ");
         /*
         buf.append(" unacked outbound: ");
         synchronized (_outboundPackets) {
@@ -1401,7 +1401,7 @@ class Connection {
             buf.append("] ");
         }
          */
-        buf.append("unACKed in: ").append(getUnackedPacketsReceived());
+        buf.append("UnACKed in: ").append(getUnackedPacketsReceived());
         int missing = 0;
         long nacks[] = _inputStream.getNacks();
         if (nacks != null) {

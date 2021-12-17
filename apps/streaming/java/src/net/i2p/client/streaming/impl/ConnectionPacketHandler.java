@@ -513,7 +513,7 @@ class ConnectionPacketHandler {
             if (_log.shouldLog(Log.DEBUG))
                 _log.debug("No change to [window " + con.getOptions().getWindowSize() +
                            "]\n* HighestAckedThrough: " + lowest + "; congestionWindowEnd: " + con.getCongestionWindowEnd() +
-                           "; ACKed: " + acked + "; unACKed: " + con.getUnackedPacketsSent());
+                           "; ACKed: " + acked + "; UnACKed: " + con.getUnackedPacketsSent());
         }
 
         con.windowAdjusted();
