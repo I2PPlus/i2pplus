@@ -220,7 +220,7 @@ public class PeerState {
 
     /** The minimum number of outstanding messages (NOT fragments/packets) */
 //    private static final int MIN_CONCURRENT_MSGS = 8;
-    private static final int MIN_CONCURRENT_MSGS = 2;
+    private static final int MIN_CONCURRENT_MSGS = 4;
     /** @since 0.9.42 */
 //    private static final int INIT_CONCURRENT_MSGS = 20;
     private static final int INIT_CONCURRENT_MSGS = 32;
@@ -236,7 +236,7 @@ public class PeerState {
     private long _lastIntroducerTime;
 
 //    private static final int MAX_SEND_WINDOW_BYTES = 1024*1024;
-    private static final int MAX_SEND_WINDOW_BYTES = 8*1024*1024;
+    private static final int MAX_SEND_WINDOW_BYTES = 2*1024*1024;
 
     /**
      *  Was 32 before 0.9.2, but since the streaming lib goes up to 128,
@@ -307,17 +307,16 @@ public class PeerState {
     private static final int INIT_RTO = 1000;
     private static final int INIT_RTT = 0;
 //    private static final int MAX_RTO = 60*1000;
-    private static final int MAX_RTO = 30*1000;
+    private static final int MAX_RTO = 45*1000;
     /** how frequently do we want to send ACKs to a peer? */
-//    private static final int ACK_FREQUENCY = 150;
-    private static final int ACK_FREQUENCY = 100;
+    private static final int ACK_FREQUENCY = 150;
     private static final int CLOCK_SKEW_FUDGE = (ACK_FREQUENCY * 2) / 3;
 
     /**
      *  The max number of acks we save to send as duplicates
      */
 //    private static final int MAX_RESEND_ACKS = 32;
-    private static final int MAX_RESEND_ACKS = 48;
+    private static final int MAX_RESEND_ACKS = 36;
     /**
      *  The max number of duplicate acks sent in each ack-only messge.
      *  Doesn't really matter, we have plenty of room...
@@ -328,7 +327,7 @@ public class PeerState {
     private static final int MAX_RESEND_ACKS_SMALL = MAX_RESEND_ACKS * 2 / 5;
 
 //    private static final long RESEND_ACK_TIMEOUT = 60*1000;
-    private static final long RESEND_ACK_TIMEOUT = 30*1000;
+    private static final long RESEND_ACK_TIMEOUT = 45*1000;
 
     /** if this many acks arrive out of order, fast rtx */
     private static final int FAST_RTX_ACKS = 3;
@@ -348,7 +347,7 @@ public class PeerState {
         _currentACKs = new ConcurrentHashSet<Long>();
         _currentACKsResend = new LinkedBlockingQueue<ResendACK>();
 //        _slowStartThreshold = MAX_SEND_WINDOW_BYTES/2;
-        _slowStartThreshold = MAX_SEND_WINDOW_BYTES/16;
+        _slowStartThreshold = MAX_SEND_WINDOW_BYTES/4;
         _receivePeriodBegin = now;
         _remotePort = remotePort;
         if (remoteIP.length == 4) {
@@ -380,7 +379,7 @@ public class PeerState {
         _inboundMessages = new HashMap<Long, InboundMessageState>(16);
         _outboundMessages = new CachedIteratorCollection<OutboundMessageState>();
         //_outboundQueue = new CoDelPriorityBlockingQueue(ctx, "UDP-PeerState", 32);
-        _outboundQueue = new PriBlockingQueue<OutboundMessageState>(ctx, "UDP-PeerState", 48);
+        _outboundQueue = new PriBlockingQueue<OutboundMessageState>(ctx, "UDP-PeerState", 36);
         _ackedMessages = new AckedMessages();
         // all createRateStat() moved to EstablishmentManager
         _remoteIP = remoteIP;
@@ -1136,7 +1135,8 @@ public class PeerState {
         }
         _bwEstimator.addSample(bytesACKed);
         if (numSends >= 2 && _log.shouldDebug())
-            _log.debug("[" + _remotePeer.toBase64().substring(0,6) + "] ACKed after numSends=" + numSends + " with lifetime=" + lifetime + " and size=" + bytesACKed);
+            _log.debug("[" + _remotePeer.toBase64().substring(0,6) + "] ACKed after numSends=" + numSends +
+                       " with lifetime=" + lifetime + " and size=" + bytesACKed);
     }
 
     /** This is the value specified in RFC 2988 */
