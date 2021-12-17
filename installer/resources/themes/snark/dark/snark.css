@@ -1342,9 +1342,9 @@ td.snarkFileStatus {
 
 .active.downloading .percentBarInner {
   border-right: 1px solid #030;
-  background: linear-gradient(180deg,rgba(148, 148, 148, .4), rgba(47, 47, 47, .2) 50%, rgba(39, 39, 39, .2) 50%, rgba(27, 27, 27, .4) 50%, rgba(21, 21, 21, .2) 100%) center center,
-    repeating-linear-gradient(135deg, rgba(0,16,0,.8) 1px, rgba(0,16,0,.8) 5px, rgba(0,64,0,.8) 6px, rgba(0,64,0,.8) 11px) left center;
-  background-size: 200%;
+  background: linear-gradient(180deg,rgba(148, 148, 148, .4), rgba(47, 47, 47, .2) 50%, rgba(27, 27, 27, .4) 50%, rgba(17, 17, 17, .3) 100%) center center,
+    repeating-linear-gradient(135deg, rgba(255,128,0,.3), rgba(0,16,0,.8) 1px, rgba(0,16,0,.8) 4px, rgba(255,128,0,.3) 5px, rgba(0,64,0,.8) 5px, rgba(0,64,0,.8) 10px) left center;
+  background-size: 400%;
   animation: progress 1s 3s linear forwards;
 }
 
@@ -1369,7 +1369,7 @@ td.snarkFileStatus {
 
 @keyframes progress {
   0,100% {background-position: center center, left center}
-  50% {background-position: center center, right center}
+  50% {background-position: center center, -20px center}
 }
 
 @keyframes downloading {
@@ -1399,7 +1399,6 @@ td.snarkFileStatus {
   .percentBarText {
     padding: 0;
   }
-
   .iframed .percentBarText, .iframed .percentBarText:hover, .iframed .percentBarText:focus {
     transition: none;
   }
