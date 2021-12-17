@@ -13797,7 +13797,11 @@ body.iframed {
     margin-bottom: -1px;
   }
   .tunnel_local {
-    font-size: 9pt !important;
+    font-size: 9pt;
+  }
+  .tunneldisplay .tunnel_peer.tunnel_local {
+    margin: 0 0 0 -1px !important;
+    min-width: 77px !important;
   }
   .tunnel_cap {
     padding: 2px 2px 1px !important;
@@ -13806,8 +13810,22 @@ body.iframed {
   .tunnel_id {
     min-width: 82px;
   }
-  .tunnel_local {
-    font-size: 8.5pt;
+  .tunneldisplay .tunnel_peer {
+    margin: 0 !important;
+    min-width: 80px !important;
+  }
+  .tunneldisplay .tunnel_peer + b.tunnel_cap {
+    margin: 0 -1px !important;
+  }
+  .tunneldisplay .tunnel_peer.tunnel_local + b.tunnel_cap {
+    margin-left: 1px !important;
+  }
+  #tunnels img[src^="/flags.jsp?"], #profiles img[src^="/flags.jsp?"], #peers img[src^="/flags.jsp?"] {
+    margin: -2px -2px 0 !important;
+    width: auto !important;
+    height: 14px !important;
+    display: inline-block;
+    vertical-align: middle;
   }
   .routersummary td, .routersummary a, .routersummary button, .routersummary h4, .routersummary h4 a,
   #floodfill th, #jardump td, .smallhead th, .leaseset a[href$=".i2p"], .leaseset th code, .footnote, .topness {
@@ -13995,20 +14013,6 @@ body.iframed {
   }
   .langselect input[name="lang"]:checked + img {
     margin-left: -76px !important;
-  }
-  .tunneldisplay .tunnel_peer {
-    margin: 0 !important;
-    min-width: 80px !important;
-  }
-  .tunneldisplay .tunnel_peer.tunnel_local {
-    margin: 0 0 0 -1px !important;
-    min-width: 78px !important;
-  }
-  .tunneldisplay .tunnel_peer + b.tunnel_cap {
-    margin: 0 -1px !important;
-  }
-  .tunneldisplay .tunnel_peer.tunnel_local + b.tunnel_cap {
-    margin-left: 1px !important;
   }
   #netconfig label::before, #externali2cp td label::before, #externali2cp .nowrap::before, #reseedconfig .nowrap::before {
     min-height: 50px !important;
