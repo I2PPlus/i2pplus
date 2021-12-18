@@ -778,7 +778,7 @@ select:hover, select:focus, select:active, #settings:hover, #settings:focus {
   box-shadow: var(--btn_shadow_hover);
 }
 
-input[type=submit]:active, input[type=reset]:active, #settings:active {
+input[type=submit]:active, input[type=reset]:active, #settings:active, .fakebutton:active {
   color: var(--ink) !important;
   border: var(--border_hover);
   box-shadow: var(--btn_shadow_active);
