@@ -312,7 +312,7 @@ class InboundMessageState implements CDQEntry {
             buf.append("Outbound Partial ACK of [");
             buf.append(_bitfieldMessageId);
             buf.append("] Highest: ").append(_highestReceived);
-            buf.append(" with ").append(_ackCount).append(" ACKs for: [");
+            buf.append(" with ").append(_ackCount).append(" ACKs for fragments [");
             for (int i = 0; i <= _highestReceived; i++) {
                 if (received(i))
                     buf.append(i).append(' ');
