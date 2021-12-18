@@ -366,12 +366,12 @@ public class SimpleTimer2 {
                 if (scheduled && oldTimeout <= 5) {
                     // don't reschedule to avoid race
                     if (_log.shouldWarn())
-                        _log.warn("Not rescheduling to " + timeoutMs + ", about to execute " + truncClass + " in " + oldTimeout);
+                        _log.warn("Not rescheduling to " + timeoutMs + "ms, about to execute " + truncClass + " in " + oldTimeout + "ms");
                     return;
                 }
                 if (scheduled && (now + timeoutMs) < _nextRun) {
                     if (_log.shouldLog(Log.INFO))
-                        _log.info("Rescheduling: " + truncClass + " timeout = " + timeoutMs + " old timeout was " + oldTimeout + " state: " + _state);
+                        _log.info("Rescheduling: " + truncClass + " (timeout: " + timeoutMs + "ms); old timeout was " + oldTimeout + "ms; State: " + _state);
                     cancel();
                 }
                 schedule(timeoutMs);
