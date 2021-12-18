@@ -199,8 +199,8 @@ class BuildMessageProcessor {
                     // check enc type sending us ElG requests
                     if (log.shouldLog(Log.WARN))
 //                        log.warn(msg.getUniqueId() + ": Matching record decryption failure " + privKey.getType(), dfe);
-                        log.warn("[MsgID " + msg.getUniqueId() + "] Matching " + privKey.getType() + " record decryption failure (" +
-                                 dfe.getMessage() + ")");
+                        log.warn("[MsgID " + msg.getUniqueId() + "] Matching " + privKey.getType() + " record decryption failure \n* " +
+                                 dfe.getMessage();
                     // on the microscopic chance that there's another router
                     // out there with the same first 16 bytes, go around again
                     continue;
