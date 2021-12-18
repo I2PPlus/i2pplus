@@ -871,7 +871,7 @@ public class PeerState {
                         iter.remove();
                         if (_log.shouldDebug())
                             _log.debug("Expired ACK [" + rack.id + "] sent " + (cutoff + RESEND_ACK_TIMEOUT - rack.time) +
-                                      "ms ago, now " + _currentACKsResend.size()  + " resend ACKs");
+                                      "ms ago -> now " + _currentACKsResend.size()  + " resend ACKs");
                     }
                 }
                 if (i > 1)
@@ -1479,7 +1479,7 @@ public class PeerState {
                     msg.timestamp("Expired in the active pool");
                     _transport.failed(state);
                     if (_log.shouldInfo())
-                        _log.info("Message expired: " + state + " to: " + this);
+                        _log.info("Message expired " + state + "\n* Target: " + this);
                 } else {
                     // it can not have an OutNetMessage if the source is the
                     // final after establishment message

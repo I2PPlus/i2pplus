@@ -776,7 +776,7 @@ public class BuildRequestRecord {
         buf.append("\n* ");
         buf.append(_isEC ? "ECIES" : "ElGamal");
         if (_data.length == LENGTH_EC_SHORT)
-            buf.append("Short ");
+            buf.append(" Short");
         buf.append(" BuildRequestRecord: [");
         boolean isIBGW = readIsInboundGateway();
         boolean isOBEP = readIsOutboundEndpoint();
