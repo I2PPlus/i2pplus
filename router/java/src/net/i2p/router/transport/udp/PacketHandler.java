@@ -377,7 +377,7 @@ class PacketHandler {
                             receivePacket(reader, packet, est, false);
                         } else {
                             if (_log.shouldLog(Log.WARN))
-                                _log.warn("Failed validation with existing connection, and validation as reestablish failed too; dropping " + packet);
+                                _log.warn("Failed validation with existing connection, and validation as reestablish failed too; dropping... " + packet);
                             _context.statManager().addRateData("udp.droppedInvalidReestablish", packet.getLifetime());
                         }
                         return;

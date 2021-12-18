@@ -441,7 +441,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
             }
             if (newDate > _published) {
                 if (_log.shouldInfo())
-                    _log.info(getJobId() + ": Verify failed, but new store already happened for: " + _key);
+                    _log.info("[Job " + getJobId() + "] Verify failed, but new store already happened for [" + _key.toString().substring(0,6) + "]");
                 return;
             }
             Set<Hash> toSkip = new HashSet<Hash>(2);
@@ -449,7 +449,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
                 toSkip.add(_sentTo);
             toSkip.add(_target);
             if (_log.shouldWarn())
-                _log.warn("[Job " + getJobId() + "] Verify failed, starting new store for: " + _key);
+                _log.warn("[Job " + getJobId() + "] Verify failed, starting new store for [" + _key.toString().substring(0,6) + "]");
             _facade.sendStore(_key, ds, null, null, FloodfillNetworkDatabaseFacade.PUBLISH_TIMEOUT, toSkip);
         }
     }

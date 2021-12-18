@@ -508,7 +508,8 @@ class BuildHandler implements Runnable {
         long decryptTime = System.currentTimeMillis() - beforeDecrypt;
         _context.statManager().addRateData("tunnel.decryptRequestTime", decryptTime);
         if (decryptTime > 500 && _log.shouldLog(Log.WARN))
-            _log.warn("Timeout decrypting request: " + decryptTime + " for message: " + state.msg.getUniqueId() + " received " + (timeSinceReceived+decryptTime) + "ms ago");
+            _log.warn("Timeout decrypting request: " + decryptTime + " for message: " + state.msg.getUniqueId() +
+                      " received " + (timeSinceReceived+decryptTime) + "ms ago");
         if (req == null) {
             // no records matched, or the decryption failed.  bah
             if (_log.shouldLog(Log.WARN)) {
@@ -524,7 +525,7 @@ class BuildHandler implements Runnable {
         Hash nextPeer = req.readNextIdentity();
         if (_context.banlist().isBanlisted(nextPeer)) {
             if (_log.shouldWarn())
-                _log.warn("Dropping request, next peer is banned: " + nextPeer);
+                _log.warn("Dropping tunnel build request, next peer [" + nextPeer.toBase64().substring(0,6) + "] is banned");
             if (from != null)
                 _context.commSystem().mayDisconnect(from);
             return -1;
