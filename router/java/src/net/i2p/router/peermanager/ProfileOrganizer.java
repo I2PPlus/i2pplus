@@ -519,6 +519,8 @@ public class ProfileOrganizer {
      * @param matches set to store the return value in
      * @param mask 0-4 Number of bytes to match to determine if peers in the same IP range should
      *             not be in the same tunnel. 0 = disable check; 1 = /8; 2 = /16; 3 = /24; 4 = exact IP match
+     * @param ipSet in/out param, use for multiple calls, may be null only if mask is 0
+     * @since 0.9.53 added ipSet param
      *
      */
     public void selectFastPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, int mask, MaskedIPSet ipSet) {
@@ -585,10 +587,10 @@ public class ProfileOrganizer {
      *    5: return only from group 1
      *    6: return only from group 2
      *    7: return only from group 3
+     *</pre>
      * @param mask 0-4
      * @param ipSet in/out param, use for multiple calls, may be null only if mask is 0
      * @since 0.9.53 added mask and ipSet params
-     *</pre>
      */
     public void selectFastPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, SessionKey randomKey,
                                 Slice subTierMode, int mask, MaskedIPSet ipSet) {
@@ -650,7 +652,7 @@ public class ProfileOrganizer {
                 _log.debug("Need " + howMany + " High Capacity peers for tunnel build; " + matches.size() + " found - selecting remainder from well integrated peers");
             selectWellIntegratedPeers(howMany, exclude, matches, mask, ipSet);
         } else {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug(howMany + " High Capacity peers selected for tunnel build");
         }
         return;
@@ -671,6 +673,7 @@ public class ProfileOrganizer {
      *
      * @param mask 0-4 Number of bytes to match to determine if peers in the same IP range should
      *             not be in the same tunnel. 0 = disable check; 1 = /8; 2 = /16; 3 = /24; 4 = exact IP match
+     * @since 0.9.53 added ipSet param
      * @deprecated unused
      */
     @Deprecated
@@ -724,7 +727,8 @@ public class ProfileOrganizer {
      * @param ipSet ignored, should call locked_selectPeers, to be fixed
      * @since 0.9.53 added ipSet param
      */
-    public void selectNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, boolean onlyNotFailing, int mask, MaskedIPSet ipSet) {
+    public void selectNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, boolean onlyNotFailing,
+                                      int mask, MaskedIPSet ipSet) {
         if (matches.size() < howMany)
             selectAllNotFailingPeers(howMany, exclude, matches, onlyNotFailing, mask);
         return;
@@ -796,7 +800,7 @@ public class ProfileOrganizer {
                 _log.debug("Need " + howMany + " Not Failing peers for tunnel build; " + matches.size() + " found - selecting remainder from most reliable Failing peers");
             selectNotFailingPeers(howMany, exclude, matches, mask, ipSet);
         } else {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug(howMany + " Not Failing peers selected for tunnel build");
         }
     }
@@ -1477,7 +1481,8 @@ public class ProfileOrganizer {
      * @param ipSet may be null only if mask is 0
      * @since 0.9.53 added ipSet param
      */
-        private void locked_selectPeers(Map<Hash, PeerProfile> peers, int howMany, Set<Hash> toExclude, Set<Hash> matches, int mask, MaskedIPSet ipSet) {
+        private void locked_selectPeers(Map<Hash, PeerProfile> peers, int howMany, Set<Hash> toExclude, Set<Hash> matches,
+                                        int mask, MaskedIPSet ipSet) {
         List<Hash> all = new ArrayList<Hash>(peers.keySet());
         // use RandomIterator to avoid shuffling the whole thing
         for (Iterator<Hash> iter = new RandomIterator<Hash>(all); (matches.size() < howMany) && iter.hasNext(); ) {
@@ -1491,7 +1496,7 @@ public class ProfileOrganizer {
             boolean ok = isSelectable(peer);
             if (ok) {
                 ok = mask <= 0 || notRestricted(peer, ipSet, mask);
-                if ((!ok) && _log.shouldLog(Log.WARN))
+                if ((!ok) && _log.shouldWarn())
                     _log.warn("IP address restriction prevents [" + peer.toBase64().substring(0,6) + "] from joining " + matches);
             }
             if (ok)
@@ -1558,7 +1563,7 @@ public class ProfileOrganizer {
             boolean ok = isSelectable(peer);
             if (ok) {
                 ok = mask <= 0 || notRestricted(peer, ipSet, mask);
-                if ((!ok) && _log.shouldLog(Log.WARN))
+                if ((!ok) && _log.shouldWarn())
                     _log.warn("IP address restriction prevents [" + peer.toBase64().substring(0,6) + "] from joining " + matches);
             }
             if (ok)
