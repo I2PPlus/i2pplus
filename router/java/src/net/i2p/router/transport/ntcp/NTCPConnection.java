@@ -208,7 +208,7 @@ public class NTCPConnection implements Closeable {
                                                                      DELAY_DEFAULT, DELAY_DEFAULT);
     private static final int MIN_PADDING_RANGE = 16;
     private static final int MAX_PADDING_RANGE = 128;
-    private NTCP2Options _paddingConfig;
+    private NTCP2Options _paddingConfig = OUR_PADDING;
     private int _version;
     private CipherState _sender;
     private long _sendSipk1, _sendSipk2;
@@ -1358,7 +1358,6 @@ public class NTCPConnection implements Closeable {
     synchronized void finishOutboundEstablishment(CipherState sender, CipherState receiver,
                                                   byte[] sip_ab, byte[] sip_ba, long clockSkew) {
         finishEstablishment(sender, receiver, sip_ab, sip_ba, clockSkew);
-        _paddingConfig = OUR_PADDING;
         _transport.markReachable(getRemotePeer().calculateHash(), false);
         if (!_outbound.isEmpty())
             _transport.getWriter().wantsWrite(this, "outbound established");
@@ -1390,8 +1389,6 @@ public class NTCPConnection implements Closeable {
                           "\n* His padding options: " + hisPadding +
                           "\n* Our padding options: " + OUR_PADDING +
                           "\n* Merged config:       " + _paddingConfig);
-        } else {
-            _paddingConfig = OUR_PADDING;
         }
         NTCPConnection toClose = _transport.inboundEstablished(this);
         if (toClose != null && toClose != this) {
