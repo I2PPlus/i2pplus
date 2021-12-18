@@ -219,10 +219,11 @@ public class PeerState {
     private volatile boolean _dead;
 
     /** The minimum number of outstanding messages (NOT fragments/packets) */
-    private static final int MIN_CONCURRENT_MSGS = 8;
+//    private static final int MIN_CONCURRENT_MSGS = 8;
+    private static final int MIN_CONCURRENT_MSGS = 4;
     /** @since 0.9.42 */
 //    private static final int INIT_CONCURRENT_MSGS = 20;
-    private static final int INIT_CONCURRENT_MSGS = 128;
+    private static final int INIT_CONCURRENT_MSGS = 32;
     /** how many concurrent outbound messages do we allow OutboundMessageFragments to send
         This counts full messages, NOT fragments (UDP packets)
      */
@@ -234,7 +235,8 @@ public class PeerState {
     /** Last time it was made an introducer **/
     private long _lastIntroducerTime;
 
-    private static final int MAX_SEND_WINDOW_BYTES = 1024*1024;
+//    private static final int MAX_SEND_WINDOW_BYTES = 1024*1024;
+    private static final int MAX_SEND_WINDOW_BYTES = 2*1024*1024;
 
     /**
      *  Was 32 before 0.9.2, but since the streaming lib goes up to 128,
@@ -304,7 +306,8 @@ public class PeerState {
     private static final int MIN_RTO = 1000;
     private static final int INIT_RTO = 1000;
     private static final int INIT_RTT = 0;
-    private static final int MAX_RTO = 60*1000;
+//    private static final int MAX_RTO = 60*1000;
+    private static final int MAX_RTO = 45*1000;
     /** how frequently do we want to send ACKs to a peer? */
     private static final int ACK_FREQUENCY = 150;
     private static final int CLOCK_SKEW_FUDGE = (ACK_FREQUENCY * 2) / 3;
@@ -312,7 +315,8 @@ public class PeerState {
     /**
      *  The max number of acks we save to send as duplicates
      */
-    private static final int MAX_RESEND_ACKS = 32;
+//    private static final int MAX_RESEND_ACKS = 32;
+    private static final int MAX_RESEND_ACKS = 36;
     /**
      *  The max number of duplicate acks sent in each ack-only messge.
      *  Doesn't really matter, we have plenty of room...
@@ -322,7 +326,8 @@ public class PeerState {
     /** for small MTU */
     private static final int MAX_RESEND_ACKS_SMALL = MAX_RESEND_ACKS * 2 / 5;
 
-    private static final long RESEND_ACK_TIMEOUT = 60*1000;
+//    private static final long RESEND_ACK_TIMEOUT = 60*1000;
+    private static final long RESEND_ACK_TIMEOUT = 45*1000;
 
     /** if this many acks arrive out of order, fast rtx */
     private static final int FAST_RTX_ACKS = 3;
@@ -341,7 +346,8 @@ public class PeerState {
         _lastReceiveTime = now;
         _currentACKs = new ConcurrentHashSet<Long>();
         _currentACKsResend = new LinkedBlockingQueue<ResendACK>();
-        _slowStartThreshold = MAX_SEND_WINDOW_BYTES/2;
+//        _slowStartThreshold = MAX_SEND_WINDOW_BYTES/2;
+        _slowStartThreshold = MAX_SEND_WINDOW_BYTES/4;
         _receivePeriodBegin = now;
         _remotePort = remotePort;
         if (remoteIP.length == 4) {
@@ -370,10 +376,10 @@ public class PeerState {
             _rttDeviation = _rtt;
 
 //        _inboundMessages = new HashMap<Long, InboundMessageState>(8);
-        _inboundMessages = new HashMap<Long, InboundMessageState>(32);
+        _inboundMessages = new HashMap<Long, InboundMessageState>(16);
         _outboundMessages = new CachedIteratorCollection<OutboundMessageState>();
         //_outboundQueue = new CoDelPriorityBlockingQueue(ctx, "UDP-PeerState", 32);
-        _outboundQueue = new PriBlockingQueue<OutboundMessageState>(ctx, "UDP-PeerState", 64);
+        _outboundQueue = new PriBlockingQueue<OutboundMessageState>(ctx, "UDP-PeerState", 36);
         _ackedMessages = new AckedMessages();
         // all createRateStat() moved to EstablishmentManager
         _remoteIP = remoteIP;
@@ -809,11 +815,12 @@ public class PeerState {
         _rto = Math.min(MAX_RTO, Math.max(MIN_RTO, _rto << 1 ));
         _retransmitTimer = now + _rto;
         if (_log.shouldInfo())
-            _log.info(_remotePeer + " Congestion, RTO: " + oldRto + " -> " + _rto + " timer: " + oldTimer + " -> " + _rto +
-                                    " window: " + congestionAt + " -> " + _sendWindowBytes +
-                                    " SST: " + oldsst + " -> " + _slowStartThreshold +
-                                    " FastReTX? " + _fastRetransmit +
-                                    " BWE: " + DataHelper.formatSize2Decimal((long) (bwe * 1000), false) + "bps");
+            _log.info("[" + _remotePeer.toBase64().substring(0,6) + "] Estimated bandwidth: " +
+                      DataHelper.formatSize2Decimal((long) (bwe * 1000), false) + "bps \n* " +
+                      "Congestion, RTO: " + oldRto + " -> " + _rto + " Timer: " + oldTimer + " -> " + _rto +
+                      " Window: " + congestionAt + " -> " + _sendWindowBytes +
+                      " SST: " + oldsst + " -> " + _slowStartThreshold +
+                      "; FastRetransmit? " + _fastRetransmit);
     }
 
     /**
@@ -1128,7 +1135,8 @@ public class PeerState {
         }
         _bwEstimator.addSample(bytesACKed);
         if (numSends >= 2 && _log.shouldDebug())
-            _log.debug("[" + _remotePeer.toBase64().substring(0,6) + "] ACKed after numSends=" + numSends + " with lifetime=" + lifetime + " and size=" + bytesACKed);
+            _log.debug("[" + _remotePeer.toBase64().substring(0,6) + "] ACKed after numSends=" + numSends +
+                       " with lifetime=" + lifetime + " and size=" + bytesACKed);
     }
 
     /** This is the value specified in RFC 2988 */
@@ -1348,7 +1356,7 @@ public class PeerState {
             return;
         }
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Adding [MsgId " + state.getMessageId() + "] to [" + _remotePeer.toBase64().substring(0,6) + "]");
+            _log.debug("Adding [MsgID " + state.getMessageId() + "] to [" + _remotePeer.toBase64().substring(0,6) + "]");
         int rv = 0;
         // will never fail for CDPQ
         boolean fail;
@@ -1475,7 +1483,7 @@ public class PeerState {
                     // it can not have an OutNetMessage if the source is the
                     // final after establishment message
                     if (_log.shouldLog(Log.WARN))
-                        _log.warn("Unable to send a direct message: " + state + " to: " + this);
+                        _log.warn("Unable to send direct message " + state + "\n* Target: " + this);
                 }
             }
             if (failedSize > 0) {
@@ -1863,12 +1871,12 @@ public class PeerState {
                 _context.statManager().addRateData("udp.sendConfirmVolley", numSends);
                 _transport.succeeded(state);
                 if (_log.shouldDebug())
-                    _log.debug("Received partial ACK of " + state.getMessageId() + " by [" + _remotePeer.toBase32().substring(0,6)
+                    _log.debug("Received partial ACK of [MsgID " + state.getMessageId() + "] from [" + _remotePeer.toBase32().substring(0,6)
                           + "] \n* Status: Newly ACKed: " + ackedSize
                           + " -> Now complete for: " + state);
             } else {
                 if (_log.shouldInfo())
-                    _log.info("Received partial ACK of " + state.getMessageId() + " by [" + _remotePeer.toBase32().substring(0,6)
+                    _log.info("Received partial ACK of [MsgID " + state.getMessageId() + "] from [" + _remotePeer.toBase32().substring(0,6)
                           + "] \n* Status: Received after " + lifetime + "ms and " + numSends + " sends"
                           + " -> Complete? false"
                           + " -> Newly ACKed: " + ackedSize
@@ -2199,19 +2207,17 @@ public class PeerState {
             buf.append("\n* Last attempted send: ").append(new Date(_lastSendTime));
         if (_lastACKSend != 0)
             buf.append("\n* Last ACK sent: ").append(new Date(_lastACKSend));
-        buf.append("\n* Lifetime: ").append(now-_keyEstablishedTime).append("ms");
-        buf.append("; Cwin: ").append(_sendWindowBytes).append(" bytes");
-        buf.append("; ACwin: ").append(_sendWindowBytesRemaining).append(" bytes");
-        buf.append(" SST: ").append(_slowStartThreshold);
-        buf.append(" FastReTX? ").append(_fastRetransmit);
-        buf.append("; Consecutive fails: ").append(_consecutiveFailedSends);
-        buf.append("\n* Msgs rcvd: ").append(_messagesReceived);
-        buf.append("; Msgs sent: ").append(_messagesSent);
-        buf.append("; Inbound Msgs: ").append(_inboundMessages.size());
-        buf.append("; Outbound Msgs: ").append(_outboundMessages.size());
-        buf.append("; Outbound Queue: ").append(_outboundQueue.size());
-        buf.append("\n* Packets received (OK/Dup): ").append(_packetsReceived).append('/').append(_packetsReceivedDuplicate);
-        buf.append("; Packets sent (OK/Dup): ").append(_packetsTransmitted).append('/').append(_packetsRetransmitted);
+        buf.append("\n* Lifetime: ").append(now-_keyEstablishedTime).append("ms")
+           .append("; Congestion window: ").append(_sendWindowBytes).append(" bytes")
+           .append("; Active window: ").append(_sendWindowBytesRemaining).append(" bytes")
+           .append("; SST: ").append(_slowStartThreshold)
+           .append("; FastRetransmit? ").append(_fastRetransmit)
+           .append("\n* Consecutive fails: ").append(_consecutiveFailedSends)
+           .append("; Messages (received/sent): ").append(_messagesReceived).append("/").append(_messagesSent)
+           .append("; Messages (in/out): ").append(_inboundMessages.size()).append("/").append(_outboundMessages.size())
+           .append("; Outbound queue: ").append(_outboundQueue.size())
+           .append("\n* Packets received (OK/Duplicate): ").append(_packetsReceived).append('/').append(_packetsReceivedDuplicate)
+           .append("; Packets sent (OK/Duplicate): ").append(_packetsTransmitted).append('/').append(_packetsRetransmitted);
         return buf.toString();
     }
 }

@@ -83,7 +83,7 @@ public class TunnelPoolSettings {
     // private static final int        DEFAULT_OB_EXPL_LENGTH_VARIANCE = isSlow ? 0 : 1;
 
     public static final boolean     DEFAULT_ALLOW_ZERO_HOP = false;
-    public static final int         DEFAULT_IP_RESTRICTION = 2;    // class B (/16)
+    public static final int         DEFAULT_IP_RESTRICTION = 1;    // class A (/8)
     private static final int        MIN_PRIORITY = -25;
     private static final int        MAX_PRIORITY = 25;
     private static final int        EXPLORATORY_PRIORITY = 30;

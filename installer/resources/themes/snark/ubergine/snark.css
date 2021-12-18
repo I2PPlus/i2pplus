@@ -1175,7 +1175,7 @@ tr a, td.snarkTorrentPeerCount {
 }
 
 tr:hover a, tr a:hover, tr:hover td.snarkTorrentPeerCount {
-  -webkit-text-stroke: none;
+  -webkit-text-stroke: 0;
 }
 
 .snarkTorrentName a {
@@ -4038,7 +4038,7 @@ input[name="nofilter_commentsName"] {
 
 #torrentDisplay label:active {
   text-shadow: none;
-  -webkit-text-stroke: none;
+  -webkit-text-stroke: 0;
 }
 
 .pagenavcontrols {
@@ -5165,7 +5165,7 @@ td.snarkTorrentAction input[type=submit] {
     text-align: center !important;
     font-size: 95%;
     text-shadow: 0 1px 1px #000 !important;
-    -webkit-text-stroke: none !important;
+    -webkit-text-stroke: 0 !important;
     border-radius: 2px;
     background: #535;
     filter: drop-shadow(0 0 1px #000);

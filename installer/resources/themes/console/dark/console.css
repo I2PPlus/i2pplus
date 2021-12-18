@@ -22,9 +22,11 @@
   --highlight: inset 0 0 0 1px #000;
   --option_highlight: inset 0 0 0 1px #002500;
   --highlight_badge: inset 0 0 0 1px #010, 0 0 0 1px #000;
-  --element: linear-gradient(180deg,#020, #010);
+  --badge: linear-gradient(180deg,#020, #010);
   --btn: linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
-  --btn_shadow_active: var(--highlight), inset 3px 3px 3px 2px rgba(0,0,0,.8);
+  --btn_shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
+  --btn_shadow_hover: var(--highlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
+  --btn_shadow_active: var(--highlight), inset 3px 3px 3px 2px rgba(0,0,0,.8), 0 0 0 1px #000;
   --btn_hover_radial: radial-gradient(at center bottom, rgba(96, 48, 0, .4) 0, rgba(0, 0, 0, 0) 80%), #000;
   --input_txt: linear-gradient(180deg,#001000,#001800);
   --vstripe: repeating-linear-gradient(180deg,rgba(0,0,0,.9) 2px, rgba(0,16,0,.9) 4px);
@@ -37,6 +39,8 @@
   --download_bar: repeating-linear-gradient(135deg, #000 1px, #000 5px, #010 6px, #010 11px);
   --msg: linear-gradient(180deg,#010,#000400);
   --center: no-repeat center center;
+  --textshadow: 0 1px 1px rgba(0,0,0,.8);
+  --outline: 0 0 0 1px #000;
 }
 
 html, body {
@@ -100,13 +104,6 @@ body {
   background: rgba(0,187,0,.8) !important;
 }
 
-::-moz-selection {
-  color: #000;
-  text-shadow: none;
-  background: #0b0 !important;
-  background: rgba(0,187,0,.8) !important;
-}
-
 .routersummary, .routersummaryouter, h1 {
   contain: layout;
 }
@@ -154,8 +151,8 @@ a:active {
 }
 
 img {
-  border: none;
   font-size: 0;
+  border: none;
 }
 
 #tunnels img[src^="/flags.jsp?"], #profiles img[src^="/flags.jsp?"], #peers img[src^="/flags.jsp?"] {
@@ -168,12 +165,12 @@ img {
   padding: 0;
   width: 24px !important;
   height: 18px !important;
-  box-shadow: 0 0 0 1px #000, 0 0 0 2px #020;
+  box-shadow: var(--outline), 0 0 0 2px #020;
   background: #000;
 }
 
 #netdb #netdbcountrylist a:hover img {
-  box-shadow: 0 0 0 1px #000, 0 0 0 2px #f60;
+  box-shadow: var(--outline), 0 0 0 2px #f60;
   transform: scale(1.1);
 }
 
@@ -189,7 +186,7 @@ img {
   height: auto !important;
   vertical-align: middle !important;
   border: 1px solid #030;
-  box-shadow: 0 0 0 1px #000;
+  box-shadow: var(--outline);
 }
 
 pre {
@@ -403,6 +400,15 @@ pre {
   background: #252;
 }
 
+#sidebar td b, .infohelp b {
+  color: #ffffa8;
+  -webkit-text-stroke: 2px rgba(16,16,0,.3);
+}
+
+#sidebar td a {
+  -webkit-text-stroke: 0;
+}
+
 #sidebar h3 {
   margin: -7px -10px -8px -10px;
   padding: 5px 0 !important;
@@ -427,19 +433,15 @@ pre {
   width: 100%;
   display: inline-block;
   vertical-align: middle;
+  text-shadow: var(--textshadow);
 }
 
 #sidebar h3:hover a {
   color: var(--hover);
-  text-shadow: 0 1px 1px rgba(0,0,0,.8);
 }
 
 #sidebar h3:active {
   transition: ease box-shadow .01s;
-}
-
-#sidebar h3:active a {
-  text-shadow: 0 0 1px #000;
 }
 
 .routersummary h4 {
@@ -889,7 +891,7 @@ div.refresh {
 }
 
 .sb_update {
-  padding: 7px 5px !important;
+  padding: 7px 5px 5px !important;
 }
 
 @keyframes downloadbar {
@@ -911,7 +913,7 @@ h1 + .sorry, #console_404 .sorry {
   font-size: 10pt;
   border: var(--border);
   border-radius: 0 0 4px 4px;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 0 2px #600, inset 0 0 0 3px #000;
+  box-shadow: var(--highlight), inset 0 0 0 2px #600, inset 0 0 0 3px #000;
   background: var(--err) no-repeat 15px 45%, linear-gradient(180deg,rgba(255,255,255,.05), rgba(0,0,0,.4)),
     repeating-linear-gradient(180deg,rgba(0,0,0,.4) 2px, rgba(0,48,0,.7) 4px) !important;
   background-size: 44px, 100%, 100% 4px !important;
@@ -1281,7 +1283,7 @@ div.widescroll { /* only scroll content, not entire page eg /peers */
 
 .tab2 {
   padding: 5px 12px !important;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   box-shadow: var(--highlight), inset 3px 3px 3px #010;
   background: radial-gradient(at center bottom, rgba(0, 128, 0, .6) 0, rgba(0, 0, 0, 0) 80%), linear-gradient(180deg,#030, #003800);
 }
@@ -1289,7 +1291,7 @@ div.widescroll { /* only scroll content, not entire page eg /peers */
 .tab a {
   padding: 4px 14px !important;
   display: inline-block;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
 }
 
 .tab {
@@ -1716,7 +1718,7 @@ td img {
 }
 
 .sortupactive, .sortdownactive {
-  box-shadow: inset 0 0 0 1px #000, inset 2px 2px 2px rgba(0,0,0,.5);
+  box-shadow: var(--highlight), inset 2px 2px 2px rgba(0,0,0,.5);
   opacity: 1;
 }
 
@@ -1990,10 +1992,11 @@ h1, h2, h3:not([id*="help"]), h4.app, h4.app2 {
 
 h2, h3, h4 {
   box-shadow: var(--highlight);
+  contain: paint;
 }
 
 h1, h4.app, h4.app2, #news h3 {
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   box-shadow: var(--highlight);
   background: var(--h1) !important;
   background-size: 4px 100%, 100%, 175px !important;
@@ -2048,7 +2051,7 @@ input[type=file]::file-selector-button {
 button:hover, button:focus {
   color: var(--hover);
   border: 1px solid var(--hover);
-  box-shadow: var(--highlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
+  box-shadow: var(--btn_shadow_hover);
   background: #000;
   background: var(--btn_hover_radial);
   cursor: pointer;
@@ -2057,7 +2060,7 @@ button:hover, button:focus {
 input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
   color: var(--hover);
   border: 1px solid var(--hover);
-  box-shadow: var(--highlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
+  box-shadow: var(--btn_shadow_hover);
   background: #000;
   background: var(--btn_hover_radial);
   cursor: pointer;
@@ -2186,7 +2189,7 @@ button.download.control:active {
   line-height: 1.2;
   color: #dd3;
   font-size: 9pt;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   opacity: .9;
 }
 
@@ -2281,22 +2284,22 @@ input:hover, input:focus {
 }
 
 input[type=submit]:hover, input[type=reset]:hover, input[type=submit]:focus, input[type=reset]:focus {
-  box-shadow: var(--highlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000 !important;
+  box-shadow: var(--btn_shadow_hover) !important;
   background: var(--btn_hover_radial);
 }
 
 input[type=submit]:active, input[type=reset]:active {
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   box-shadow: var(--btn_shadow_active) !important;
 }
 
 button:active {
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   box-shadow: var(--btn_shadow_active) !important;
 }
 
 input[type=file]:active::file-selector-button {
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   box-shadow: var(--btn_shadow_active) !important;
 }
 
@@ -2313,7 +2316,7 @@ input[type=text], input[type=password] {
   color: var(--ink);
   border: 1px solid #151 !important;
   border-radius: 1px;
-  box-shadow: 0 0 0 1px #000;
+  box-shadow: var(--outline);
   background: #000800;
   cursor: text;
   filter: none;
@@ -2432,7 +2435,7 @@ select option:hover, select option:checked {
 select:focus, select:hover {
   color: var(--hover);
   border: 1px solid var(--hover);
-  box-shadow: var(--highlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
+  box-shadow: var(--btn_shadow_hover);
 }
 
 select:hover, select:focus, select:active {
@@ -2454,7 +2457,7 @@ select:hover, select:focus, select:active {
   text-align: center;
   color: var(--a);
   border: 1px solid #000;
-  box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
+  box-shadow: var(--btn_shadow);
   background: var(--btn) !important;
   opacity: .7;
   cursor: default;
@@ -2470,9 +2473,8 @@ textarea {
   color: var(--ink);
   border-radius: 2px;
   border: 1px solid #184818;
-  box-shadow: inset 0 0 3px 3px #000;
+  box-shadow: var(--highlight);
   text-align: left;
-  background: #000;
   background: linear-gradient(180deg,#000, #010) !important;
 }
 
@@ -2483,7 +2485,7 @@ textarea[cols="70"], textarea[name="levels"] {
 input[type=text]:focus, input[type=password]:focus, textarea:focus {
   color: var(--ink) !important;
   border: 1px solid #373 !important;
-  box-shadow: var(--highlight), inset 4px 4px 4px #000, 0 0 0 1px #000;
+  box-shadow: var(--btn_shadow_active);
   background: var(--input_txt) !important;
   outline: none;
   filter: drop-shadow(0 0 1px var(--hover));
@@ -2527,8 +2529,8 @@ textarea#advancedsettings:focus {
 }
 
 textarea[readonly]:focus {
-  box-shadow: inset 0 0 3px 3px #000;
   font-weight: 400;
+  box-shadow: var(--highlight);
 }
 
 input[type=submit], input[type=reset], select, button {
@@ -2536,7 +2538,7 @@ input[type=submit], input[type=reset], select, button {
   font-size: 8.5pt;
   border: 1px solid #000;
   border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
+  box-shadow: var(--btn_shadow);
   background: var(--btn);
 }
 
@@ -2545,7 +2547,7 @@ input[type=file]::file-selector-button {
   font-size: 8.5pt;
   border: 1px solid #000;
   border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
+  box-shadow: var(--btn_shadow);
   background: var(--btn);
 }
 
@@ -2592,7 +2594,6 @@ input[type=file]::file-selector-button {
 
 .joblog ol li {
   padding-bottom: 5px !important;
-  width: 90%;
   width: calc(100% - 45px);
   min-width: 360px;
   display: inline-block;
@@ -2698,7 +2699,6 @@ h3#scheduledjobs + ol li::before, #scheduledjobs + ol li::before {
 #jobs .jobqueue {
   margin-bottom: 5px !important;
   margin-top: -11px !important;
-  width: 97%;
   width: calc(100% - 14px);
   display: block;
   border: var(--border);
@@ -2792,7 +2792,6 @@ h3#totaljobstats {
   width: calc(100% - 8px);
   list-style: none !important;
   box-shadow: var(--highlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000;
-  background: #000400;
   background: linear-gradient(180deg,#000b00, #000600);
 }
 
@@ -3088,7 +3087,6 @@ h3[id$="con"] { /* peers h3 + tables */
   font-size: 10pt;
   word-spacing: .1em;
   letter-spacing: .08em;
-  background: #000;
   background: linear-gradient(90deg, #000, #001000 70%, #001300 90%);
   border: var(--border);
 }
@@ -3167,8 +3165,8 @@ h3[id="udpcon"] {
 }
 
 #profilelist a[href^="viewprofile"] {
-  display: inline-block;
   margin-bottom: 2px;
+  display: inline-block;
 }
 
 #profilelist .bytes {
@@ -3180,11 +3178,11 @@ h3[id="udpcon"] {
 }
 
 pre#activetransports {
-  border: var(--border) !important;
-  padding: 15px 5px 5px 15px;
   margin: 0 20px 0 0;
-  background: #000;
+  padding: 15px 5px 5px 15px;
   width: calc(100% - 42px) !important;
+  border: var(--border) !important;
+  background: #000;
 }
 
 a[name="chelp"]:hover, a[name="help"]:hover, a[name="chelp"]:active, a[name="help"]:active { /* hide /help anchorpoints */
@@ -3212,9 +3210,9 @@ a[name="chelp"]:hover, a[name="help"]:hover, a[name="chelp"]:active, a[name="hel
 }
 
 .homelinkedit th:nth-child(3), .homelinkedit th:last-child {/* /confighome */
+  padding-left: 5px;
   text-align: left !important;
   text-transform: none !important;
-  padding-left: 5px;
 }
 
 .homelinkedit input[type=text] {
@@ -3230,8 +3228,7 @@ a[name="chelp"]:hover, a[name="help"]:hover, a[name="chelp"]:active, a[name="hel
 }
 
 .homelinkedit td.noicon {
-  background: var(--search) var(--center);
-  background-size: 22px;
+  background: var(--search) var(--center) / 18px;
 }
 
 #config_homepage input.delete {
@@ -3243,10 +3240,10 @@ a[name="chelp"]:hover, a[name="help"]:hover, a[name="chelp"]:active, a[name="hel
 }
 
 .formaction#homeapps, .formaction#homesites, .formaction#tunnelconfigsave, .formaction#homesearch, .formaction#sidebardefaults {
-  border: var(--border);
-  padding: 5px;
-  background: #000;
   margin-top: -2px;
+  padding: 5px;
+  border: var(--border);
+  background: #000;
 }
 
 .formaction#themeui {
@@ -3274,7 +3271,6 @@ tr#addnew, tr#addnew:hover {
   float: left;
   text-align: center;
   border: var(--border);
-  background: #000;
   background: radial-gradient(circle at center -90px, rgba(0,96,0,.9), #000 60%), linear-gradient(180deg,#010, #000 80%);
 }
 
@@ -3328,10 +3324,10 @@ tr#addnew, tr#addnew:hover {
 }
 
 .themechoice .optbox:checked + img ~ .themelabel {
-  background: #030 !important;
-  color: var(--ink);
   font-weight: 700;
+  color: var(--ink);
   box-shadow: var(--highlight), inset 0 0 2px 1px #050 !important;
+  background: #030 !important;
 }
 
 .themechoice .optbox:focus + img ~ .themelabel {
@@ -3341,18 +3337,16 @@ tr#addnew, tr#addnew:hover {
 
 .themechoice .optbox:active:not(:checked) + img ~ .themelabel {
   color: var(--ink) !important;
-  box-shadow: var(--highlight) !important;
   box-shadow: var(--highlight), inset 3px 3px 3px 1px #5f2400 !important;
 }
 
 .themechoice .optbox {
+  margin-left: -38px;
   min-width: 124px !important;
   min-height: 80px !important;
-  outline: 1px !important; /* placement guide */
-  opacity: 0; /* hide the radio icon so we can use thumbnail img instead */
-  margin-left: -38px;
-  z-index: 999;
   position: absolute !important;
+  z-index: 999;
+  opacity: 0; /* hide the radio icon so we can use thumbnail img instead */
 }
 
 .themechoice img {
@@ -3379,9 +3373,9 @@ tr#addnew, tr#addnew:hover {
 }
 
 #themeoptions label {
-  white-space: nowrap;
   margin: 4px 10px 4px 0 !important;
   display: inline-block;
+  white-space: nowrap;
 }
 
 p#helptranslate {
@@ -3414,7 +3408,6 @@ p#helptranslate {
   line-height: 1.5;
   color: #bb7;
   border-top: var(--border) !important;
-  background: #001000;
   background: linear-gradient(180deg,#001000, #001900 50%, #000 51%, #000);
 }
 
@@ -3426,7 +3419,6 @@ h3#themeheading, h3#langheading, h3#passwordheading {
   font-size: 10.5pt;
   border-radius: 0;
   border: var(--border);
-  background: #000;
   background: linear-gradient(90deg, #000, #001000 70%, #001300 90%);
 }
 
@@ -3443,10 +3435,10 @@ h3#themeheading, h3#langheading, h3#passwordheading {
 }
 
 td#themeselect {
+  margin: -1px 0;
+  padding: 8px 7px 0;
   clear: both;
   border: var(--border);
-  padding: 8px 7px 0;
-  margin: -1px 0;
 }
 
 .langselect:hover {
@@ -3469,7 +3461,6 @@ td#themeselect {
   z-index: 999;
   vertical-align: text-bottom;
   text-align: center;
-  outline: 1px dotted !important;
   opacity: 0;
 }
 
@@ -3492,8 +3483,8 @@ td#themeselect {
 
 .langselect input:hover + img {
   box-shadow: 0 0 2px 1px var(--hover);
-  transition: ease all .05s;
   opacity: 1;
+  transition: ease all .05s;
 }
 
 .langselect input:hover + img + div.ui_lang {
@@ -3503,7 +3494,6 @@ td#themeselect {
 
 .langselect input:active:not(:checked) + img + div.ui_lang {
   color: var(--ink) !important;
-  box-shadow: var(--highlight) !important;
   box-shadow: var(--highlight), inset 3px 3px 3px 1px #5f2400 !important;
 }
 
@@ -3547,12 +3537,12 @@ td#themeselect {
 /* large flags */
 
 .langselect img {
-  width: 40px;
-  height: 40px;
-  border: none !important;
   margin-top: -6px !important;
   margin-left: -82px;
+  width: 40px;
+  height: 40px;
   position: absolute;
+  border: none !important;
   box-shadow: none;
   opacity: .6;
   filter: drop-shadow(0 0 1px #000);
@@ -3576,15 +3566,15 @@ td#themeselect {
 }
 
 @supports not (-moz-appearance: none) {
-.langselect img {
-  margin-top: -31px !important;
-  margin-top: -6px !important;
-}
-
-.langselect input[name="lang"]:checked + img, .langselect input[name="lang"]:checked + #config_ui img[src="/flags.jsp?c=a1"] {
-  margin-top: -27px !important;
-  margin-top: -2px !important;
-}
+  .langselect img {
+    margin-top: -31px !important;
+    margin-top: -6px !important;
+  }
+  .langselect input[name="lang"]:checked + img,
+  .langselect input[name="lang"]:checked + #config_ui img[src="/flags.jsp?c=a1"] {
+    margin-top: -27px !important;
+    margin-top: -2px !important;
+  }
 }
 
 /* end large flags */
@@ -3704,8 +3694,8 @@ form[action="/createreseed"] > h3 {
   word-spacing: .1em;
   letter-spacing: .08em;
   font-size: 10.5pt;
-  border-radius: 0;
   border: var(--border);
+  border-radius: 0;
   background: linear-gradient(90deg, #000, #001000 70%, #001300 90%);
 }
 
@@ -3721,8 +3711,7 @@ form[action="/createreseed"] > h3 {
 
 #exportfamily tr:nth-child(2) td:first-child {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--joinfamily) no-repeat 12px center;
-  background-size: 28px;
+  background: #000 var(--joinfamily) no-repeat 12px center / 28px;
 }
 
 #leavefamily {
@@ -3731,8 +3720,7 @@ form[action="/createreseed"] > h3 {
 
 #leavefamily tr:last-child td:first-child {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--leavefamily) no-repeat 12px center;
-  background-size: 28px;
+  background: #000 var(--leavefamily) no-repeat 12px center / 28px;
 }
 
 /* configreseed */
@@ -4088,7 +4076,7 @@ form > table {
   text-transform: none;
   letter-spacing: 0;
   word-spacing: 0;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   background: var(--infowarn) no-repeat 10px center,
     linear-gradient(180deg,rgba(128,128,128,.05), rgba(0,0,0,.3)),
     repeating-linear-gradient(180deg,#300 2px, #100 4px);
@@ -4205,8 +4193,7 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 
 #refreshsidebar td {
   padding-left: 45px;
-  background: #000 var(--timer) no-repeat 12px center;
-  background-size: 32px;
+  background: #000 var(--timer) no-repeat 12px center / 32px;
 }
 
 #refreshsidebar td:last-child {
@@ -4282,20 +4269,19 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 #sidebarconf th:nth-child(1), .homelinkedit th:first-child, #consolepass th:first-child {
   text-align: center;
   font-size: 0 !important;
-  background: var(--nuke) var(--center), linear-gradient(180deg,#002000, #000 75%) !important;
-  background-size: 16px, 100% !important;
+  background: var(--nuke) var(--center) / 16px, linear-gradient(180deg,#002000, #000 75%) !important;
 }
 
 .buttonTop img, .buttonBottom img, .buttonUp img, .buttonDown img {
-  opacity: 0;
-  height: 0;
   width: 0;
+  height: 0;
+  opacity: 0;
 }
 
 .buttonTop, .buttonBottom, .buttonUp, .buttonDown {
-  box-sizing: border-box;
-  height: 26px;
   width: 26px;
+  height: 26px;
+  box-sizing: border-box;
 }
 
 .buttonTop {
@@ -4379,8 +4365,8 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
   width: 18px;
   height: 18px;
   display: inline-block;
-  background-size: 18px;
   vertical-align: middle;
+  background-size: 18px;
   content: "";
 }
 
@@ -5123,8 +5109,9 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
 }
 
 .sybil_distance th {
-  text-align: left;
   padding: 5px;
+  text-align: left;
+  font-size: 90%;
 }
 
 .sybil_distance th:last-child, .sybil_distance td:last-child {
@@ -5178,7 +5165,7 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
   position: relative;
   vertical-align: middle;
   text-align: center;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   background: #020;
   border-radius: 2px 0 0 2px;
   filter: drop-shadow(0 0 1px #000);
@@ -5208,7 +5195,7 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
   display: inline-block;
   border: 1px solid #030;
   border-radius: 2px;
-  box-shadow: 0 0 0 1px #000;
+  box-shadow: var(--outline);
   background: #020;
 }
 
@@ -5221,7 +5208,9 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
 }
 
 .netdb_leases .tunnel_id {
-  min-width: 76px;
+  margin: 0 2px 0 -1px;
+  min-width: 92px;
+  line-height: 1.22;
   text-align: center;
 }
 
@@ -5230,8 +5219,8 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
 }
 
 .netdb_leases .routerid, .netdb_leases .tunnel_id {
-  line-height: 1.36;
   vertical-align: middle;
+  border-radius: 2px;
 }
 
 .netdb_leases .routerid {
@@ -5239,10 +5228,9 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
   padding-top: 1px;
   padding-bottom: 1px;
   display: inline-block;
+  line-height: 1.36;
   border: 1px solid #030;
-  border-radius: 2px !important;
-  box-shadow: 0 0 0 1px #000;
-  background: #020;
+  box-shadow: var(--outline);
 }
 
 .netdb_leases .tunnel_peer tt, .netdb_leases .tunnel_peer tt {
@@ -5405,7 +5393,7 @@ a[href^="configpeer?peer"]:active::after {
   display: inline-block;
   text-align: center;
   text-transform: none !important;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   border-radius: 2px;
   background: #002000;
 }
@@ -5495,7 +5483,7 @@ h3#bannedpeers {
   display: inline-block;
   position: relative;
   list-style: none !important;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   border: 1px solid #121;
   box-shadow: 0 0 2px 2px rgba(0,0,0,.8), var(--highlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000;
   background: linear-gradient(180deg,#000b00, #000600);
@@ -5515,7 +5503,7 @@ h3#bannedpeers {
 
 #banlist li tt {
   line-height: 1.4 !important;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
 }
 
 #banlist li .routerid img {
@@ -5536,7 +5524,7 @@ h3#bannedpeers {
   display: none;
 }
 
-#banlist li a[href^="configpeer"] {
+#banlist li a[href^="configpeer"]:last-of-type {
   padding: 2px 2px 1px 0;
   position: absolute;
   top: 0;
@@ -5587,6 +5575,10 @@ h3#bannedpeers {
 #permabanned, #banneduntilrestart {
   margin-top: -1px !important;
   border: none;
+}
+
+#banneduntilrestart {
+  border-left: 1px solid var(--border);
 }
 
 #permabanned td:first-child {
@@ -5867,8 +5859,8 @@ div.app {
   min-width: 70px;
   float: left;
   text-align: center !important;
+  background: #000;
   opacity: .9;
-  background: radial-gradient(circle at center -90px, rgba(0,96,0,.9), #000 60%), linear-gradient(180deg,#000800, #000);
 }
 
 div.app, .extlink::after, input, button {
@@ -5987,7 +5979,7 @@ div.appgroup {
   border-collapse: separate;
   border: 1px solid #151;
   background: #000;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 0 2px rgba(0,64,0,.5);
+  box-shadow: var(--highlight), inset 0 0 0 2px rgba(0,64,0,.5);
   filter: opacity(0);
   animation: ease fade .3s 1s forwards;
 }
@@ -6014,7 +6006,7 @@ div.appgroup {
 
 #searchbar select {
   padding: 8px 24px 8px 8px !important;
-  width: 164px;
+  width: 200px;
   position: absolute;
   top: -1px;
   left: -1px;
@@ -6071,7 +6063,7 @@ div.appgroup {
 }
 
 #searchbar input {
-  margin: 2px 0 1px 162px !important;
+  margin: 2px 0 1px 198px !important;
   padding-left: 10px;
   padding-right: 42px;
   min-width: 240px;
@@ -6182,7 +6174,7 @@ div.app:hover .applabel, .sitemapLink:hover .sitemapLabel,
   overflow: hidden;
   text-overflow: ellipsis;
   text-transform: capitalize;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
 }
 
 .app2 + .appgroup .applabel a {
@@ -6257,7 +6249,6 @@ h3[id*="job"] {
   padding: 8px;
   letter-spacing: .08em;
   text-transform: uppercase;
-  text-shadow: 0 0 2px #010;
   border: var(--border);
   border-radius: 0;
 }
@@ -6448,8 +6439,8 @@ span#distance {
   display: inline-block;
   border: 1px solid #020;
   border-radius: 2px;
-  box-shadow: 0 0 0 1px #000;
-  background: var(--element);
+  box-shadow: var(--outline);
+  background: var(--badge);
 }
 
 .lsdest {
@@ -6457,17 +6448,17 @@ span#distance {
   border-radius: 0;
   border-left-width: 4px;
   border-right-width: 4px;
-  background: var(--hardhat) no-repeat 4px center / 14px, var(--element);
+  background: var(--hardhat) no-repeat 4px center / 14px, var(--badge);
 }
 
 .lsdest.published {
   padding-left: 38px;
-  background: var(--hardhat) no-repeat 4px center / 14px, var(--globe) no-repeat 22px center / 12px, var(--element);
+  background: var(--hardhat) no-repeat 4px center / 14px, var(--globe) no-repeat 22px center / 12px, var(--badge);
 }
 
 .leaseset th:last-child a[href$="i2p/"] {
   padding-left: 22px;
-  background: var(--link) no-repeat 5px center / 12px, var(--element);
+  background: var(--link) no-repeat 5px center / 12px, var(--badge);
 }
 
 .addtobook {
@@ -6614,7 +6605,7 @@ span#distance {
 #sybilnav a {
   width: 100%;
   display: inline-block;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
 }
 
 #sybilnav ul li:hover a {
@@ -6789,8 +6780,25 @@ h3, th {
 }
 
 .h3navlinks {
-  margin-top: -2px;
   white-space: nowrap;
+}
+
+#routerinformation .h3navlinks {
+  margin-top: 1px;
+}
+
+#routerinformation .h3navlinks a::before {
+  margin: 0 3px 0 -2px;
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  vertical-align: middle;
+  background: var(--eye) no-repeat left center / 14px;
+  content: "";
+}
+
+#routerinformation .h3navlinks a:hover::before {
+  background: var(--eye_hover) no-repeat left center / 14px;
 }
 
 th .h3navlinks, #config_stats .h3navlinks, #config_webapps .h3navlinks {
@@ -6824,15 +6832,15 @@ h3#iptransport a, h3#advancedconfig a, #reseedsetup a {
 h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after {
   margin: 0 2px 0 0;
   padding: 0;
-  width: 16px;
-  height: 16px;
+  width: 19px;
+  height: 19px;
   float: right;
-  background-size: 16px !important;
+  background-size: 19px;
   content: "";
 }
 
 h3#iptransport a:hover::after, h3#advancedconfig a:hover::after, #reseedsetup a:hover::after {
-  background: var(--helplink_hover) var(--center) / 16px;
+  background: var(--helplink_hover) var(--center) / 18px;
 }
 
 #config_logging h3 a::before, #webappconfiguration a::before,
@@ -6868,15 +6876,9 @@ h3#iptransport a:hover::after, h3#advancedconfig a:hover::after, #reseedsetup a:
   vertical-align: middle;
 }
 
-@media screen and (max-width: 1499px) {
-  #webappconfiguration a, #i2pclientconfig a, #pluginmanage a {
-    padding-top: 9px;
-  }
-}
-
 #logs h3 a {
   margin: -8px 0;
-  padding: 8px 2px 8px 10px;
+  padding: 10px 2px 9px 10px;
   border-left: var(--border);
 }
 
@@ -7491,8 +7493,7 @@ h4#sb_shutdownstatus span {
   width: 100%;
   display: inline-block;
   vertical-align: middle;
-  color: #dd8;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   box-shadow: var(--highlight), inset 0 0 2px 1px #040;
   box-sizing: border-box;
 }
@@ -7530,7 +7531,6 @@ h4#sb_shutdownstatus span {
 }
 
 .routersummary .running, .tunnelBuildStatus.active {
-  color: #dd8;
   box-shadow: var(--highlight), inset 0 0 2px 1px #060;
   background: rgba(64,255,64,.02);
 }
@@ -7602,7 +7602,7 @@ h4#sb_shutdownstatus span {
 /* tunnel build status */
 
 .tunnelBuildStatus {
-  color: #393;
+  color: #ee9;
 }
 
 .tunnelBuildStatus::before {
@@ -7616,8 +7616,16 @@ h4#sb_shutdownstatus span {
   transform: scale(.7);
 }
 
+.tunnelBuildStatus.accepting {
+  color: #507750;
+}
+
 .tunnelBuildStatus.accepting::before {
   background: var(--tunn_ready) var(--center) / 15px;
+}
+
+.tunnelBuildStatus.active {
+  color: #58ce3a;
 }
 
 .tunnelBuildStatus.active::before {
@@ -7648,14 +7656,6 @@ h4#sb_shutdownstatus span {
   background: var(--tunn_hidden) var(--center) / 15px;
 }
 
-@media screen and (max-width: 1499px) {
-  .tunnelBuildStatus {font-size: 90%}
-  #sb_tunnelstatus .tunnelBuildStatus::before {
-    margin: -2px 0;
-    background-size: 12px;
-  }
-}
-
 /* end tunnel build status */
 
 /* /tunnels */
@@ -7670,11 +7670,11 @@ h4#sb_shutdownstatus span {
   display: inline-block;
   min-width: 20px;
   color: #bb7;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   text-align: center !important;
   border: 1px solid #030;
-  box-shadow: 0 0 0 1px #000;
-  background: var(--element);
+  box-shadow: var(--outline);
+  background: var(--badge);
 }
 
 .tunnel_cap, .tier, .reachable, .ff {
@@ -7725,7 +7725,7 @@ h4#sb_shutdownstatus span {
   display: inline-block;
   line-height: 1.2;
   color: #bb7;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   text-align: center !important;
 }
 
@@ -7758,8 +7758,8 @@ h4#sb_shutdownstatus span {
   font-size: 8pt;
   text-transform: lowercase;
   text-align: center;
-  box-shadow: 0 0 0 1px #000;
-  background: var(--element);
+  box-shadow: var(--outline);
+  background: var(--badge);
 }
 
 .tunnel_peer:empty {
@@ -8117,14 +8117,19 @@ th code {
 .threatpoints + ul li {
   list-style: none;
   margin-left: 3px;
-  line-height: 1;
+  line-height: 1.2;
   -webkit-column-break-inside: avoid !important;
   break-inside: avoid !important;
   page-break-inside: avoid !important;
 }
 
 .threatpoints + ul li a {
+  max-width: 200px;
+  display: inline-block;
+  vertical-align: text-bottom;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* end sybils */
@@ -8678,9 +8683,8 @@ th.options, #externali2cp th {
   min-width: 64px;
   overflow: hidden;
   text-align: center;
-  box-shadow: 0 0 0 1px #000 !important;
-  background: #020;
-  background: var(--element);
+  box-shadow: var(--outline);
+  background: var(--badge);
 }
 
 .routerid, .tunnel_local, #tunnels .tunnel_cap, .version, #netdbtiers a {
@@ -8758,7 +8762,7 @@ th.options, #externali2cp th {
 }
 
 .tunneldisplay .routerid, .tunnel_cap {
-  box-shadow: 0 0 0 1px #000;
+  box-shadow: var(--outline);
 }
 
 .tunnel_cap:empty {
@@ -8880,7 +8884,7 @@ b.suboption {
   padding: 5px 8px 6px 10px;
   display: inline-block;
   white-space: nowrap;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   border: var(--border_soft);
   border-bottom: none;
   box-shadow: var(--highlight);
@@ -9700,7 +9704,7 @@ input[type=file] {
   letter-spacing: .1em;
   text-align: center;
   font-size: 10pt;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   background: #020;
   background: linear-gradient(90deg, #010, #000, #010);
   box-shadow: var(--highlight);
@@ -9931,8 +9935,8 @@ input[type=file] {
   color: #bb0;
   text-shadow: none;
   border-radius: 2px;
-  box-shadow: 0 0 0 1px #000;
-  background: var(--element);
+  box-shadow: var(--outline);
+  background: var(--badge);
 }
 
 #netdb .netdbentry th code, #netdb .sybil_routerinfo th code, .leaseset th code {
@@ -9955,6 +9959,10 @@ input[type=file] {
 .leaseset th:last-child code {
   margin: 0 0 0 4px !important;
   width: auto;
+}
+
+.leaseset td {
+  contain: paint;
 }
 
 #netdb .netdbentry th code:hover, #netdb .netdbentry th code:active, .leaseset th code:hover,
@@ -10067,8 +10075,8 @@ input[type=file] {
   line-height: 0;
   vertical-align: middle;
   border: 1px solid #030;
-  box-shadow: 0 0 0 1px #000;
-  background: var(--element);
+  box-shadow: var(--outline);
+  background: var(--badge);
 }
 
 #tunnelPeerCount .configpeer img  {
@@ -10141,8 +10149,8 @@ input[type=file] {
   display: inline-block;
   text-align: center !important;
   font-weight: 700;
-  box-shadow: 0 0 0 1px #000;
-  background: var(--element) !important;
+  box-shadow: var(--outline);
+  background: var(--badge) !important;
 }
 
 #netdbtiers a {
@@ -10188,7 +10196,7 @@ input[type=file] {
   font-size: 90%;
   border: 1px solid #020;
   border-radius: 2px;
-  box-shadow: 0 0 0 1px #000;
+  box-shadow: var(--outline);
 }
 
 .signingkey {
@@ -10196,12 +10204,12 @@ input[type=file] {
   padding: 2px 6px 2px 20px;
   display: inline-block;
   color: var(--ink) !important;
-  background: var(--crypto) no-repeat 4px center / 14px, var(--element);
+  background: var(--crypto) no-repeat 4px center / 14px, var(--badge);
 }
 
 .signingkey.encryption {
   padding-left: 20px;
-  background: var(--lock) no-repeat 5px center / 12px, var(--element);
+  background: var(--lock) no-repeat 5px center / 12px, var(--badge);
 }
 
 .leaseset th:last-child, .leasesets_container .leaseset tr:nth-child(2) {
@@ -10213,7 +10221,7 @@ input[type=file] {
   padding: 1px 3px;
   display: inline-block;
   line-height: 1.6;
-  background: var(--element);
+  background: var(--badge);
 }
 
 /* end netdb */
@@ -10290,7 +10298,7 @@ input[type=file] {
 
 #floodfills .percentBarText {
   color: #fff;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
 }
 
 #floodfills td:empty, #tunnels .cells:empty {
@@ -10407,7 +10415,7 @@ input[type=file] {
   width: calc(100% - 45px);
   line-height: 20px;
   letter-spacing: .05em;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   border-left: 5px solid #030;
   background: repeating-linear-gradient(180deg,rgba(0,8,0,.6) 0, rgba(0,8,0,.6) 20px, rgba(0,20,0,.6) 20px, rgba(0,20,0,.6) 40px);
   background-size: 100% 40px;
@@ -10590,7 +10598,7 @@ input[type=text]:focus::placeholder, #homesearch input.search:focus::placeholder
   display: inline-block;
   font-size: 0;
   color: #a00;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   box-shadow: 0 0 1px 0 #030, var(--highlight), inset 0 0 1px 3px #131, inset 0 0 0 4px #000, inset 0 0 7px 3px #010;
   background: repeating-linear-gradient(135deg, #131, #131 10px, #300 11px, #000 12px, #000 19px, #300 19px, #000 20px);
   background-position: right center;
@@ -10737,7 +10745,7 @@ a:hover .tier, a:focus .tier {
 }
 
 .routersummary td {
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
 }
 .warntext {
   color: #b00;
@@ -10896,7 +10904,7 @@ table[id$="logs"] ul {
 }
 
 #logs li:hover {
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   box-shadow: inset 0 0 0 1px rgba(192,192,0,.4), inset 0 0 0 2px #000;
   border-color: rgba(192,192,0,.4);
   background: repeating-linear-gradient(90deg, rgba(0,0,0,.3) 2px, rgba(96,96,0,.3) 4px),
@@ -11076,10 +11084,6 @@ a[href^="/netdb"]:hover span {
 
 #enviro td, #routerinformation td, .tunneldisplay td, #profilelist td:not([colspan]), #floodfills td {
   box-shadow: var(--highlight), inset 0 0 2px 0 #040 !important;
-}
-
-#criticallogs tr:first-child td, #routerlogs tr:first-child td, #wrapperlogs tr:first-child td {
-  background: #000;
 }
 
 #events tr {
@@ -11345,7 +11349,7 @@ h1[class], h1 {
   padding: 0 3px 0 18px;
   white-space: nowrap;
   border-radius: 1px;
-  box-shadow: 0 0 0 1px #000;
+  box-shadow: var(--outline);
 }
 
 .sitelink {
@@ -11428,7 +11432,7 @@ h1[class], h1 {
 
 #helptoc b {
   font-size: 120%;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
 }
 
 #help_configuration {
@@ -11743,7 +11747,7 @@ h2#jobrunners {
 
 .sitemapLink, #sitemap div.app {
   margin: 2px 2px 6px;
-  box-shadow: 0 0 0 1px #000, var(--highlight), inset 0 0 1px 1px #242;
+  box-shadow: var(--outline), var(--highlight), inset 0 0 1px 1px #242;
   background: radial-gradient(circle at center -90px, rgba(0,96,0,.9), #000 60%), linear-gradient(180deg,#000800, #000);
 }
 
@@ -11773,7 +11777,7 @@ h2#jobrunners {
   box-sizing: border-box;
   text-overflow: ellipsis;
   font-size: 90%;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   border: none;
   border-top: var(--border);
   box-shadow: var(--highlight), inset 0 0 1px 1px #242;
@@ -11879,7 +11883,15 @@ th[aria-sort] {
 }
 
 #sybilnav ul li#runNew::before {
-  background: var(--start) no-repeat 1px calc(50% - 2px) / 14px;
+  background: var(--start) no-repeat 1px calc(50% - 1px) / 12px;
+}
+
+#sybilnav ul li#runNew:hover::before {
+  background: var(--start_hover) no-repeat 1px calc(50% - 1px) / 12px;
+}
+
+#sybilnav ul li#runNew:active::before {
+  background: var(--start_active) no-repeat 1px calc(50% - 1px) / 12px;
 }
 
 #sybilnav ul li#configurePeriodic::before {
@@ -11932,7 +11944,7 @@ th[aria-sort] {
 }
 
 #stats .tab2 {
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   box-shadow: var(--highlight), inset 3px 3px 2px #010;
   background: linear-gradient(180deg,#030, #003800) !important;
 }
@@ -12087,7 +12099,7 @@ i {
   font-size: 18pt;
   font-weight: 700;
   color: #ffa;
-  text-shadow: 0 0 1px #000;
+  text-shadow: var(--textshadow);
   box-shadow: var(--highlight), inset 0 0 1px 1px #050;
   background: repeating-linear-gradient(180deg,rgba(255,255,255,.05) 2px, rgba(0,16,0,.2) 4px), linear-gradient(90deg, #010, #000, #010);
   -webkit-text-stroke: 1px rgba(220,220,128,.5);
@@ -12359,7 +12371,7 @@ h3 + table {
 
 .optbox:checked + label > .stattograph b {
   color: var(--ink);
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
 }
 
 .stattograph:hover b, .stattograph:focus b {
@@ -12935,8 +12947,8 @@ body.iframed {
   display: inline-block;
   line-height: 0;
   border: 1px solid #030;
-  box-shadow: 0 0 0 1px #000;
-  background: var(--element);
+  box-shadow: var(--outline);
+  background: var(--badge);
 }
 
 #profilelist .viewprofile, #profilelist .configpeer {
@@ -12951,19 +12963,19 @@ body.iframed {
 }
 
 .viewprofile {
-  background: var(--eye) var(--center) / 12px, var(--element);
+  background: var(--eye) var(--center) / 12px, var(--badge);
 }
 
 .configpeer {
-  background: var(--edit) var(--center) / 12px, var(--element);
+  background: var(--edit) var(--center) / 12px, var(--badge);
 }
 
 .familysearch {
-  background: var(--family) var(--center) / 12px, var(--element);
+  background: var(--family) var(--center) / 12px, var(--badge);
 }
 
 .viewprofile:hover, .viewprofile:focus {
-  background: var(--eye_hover) var(--center) / 12px, var(--element);
+  background: var(--eye_hover) var(--center) / 12px, var(--badge);
 }
 
 .viewedit br {
@@ -12979,7 +12991,7 @@ body.iframed {
 }
 
 .viewedit .configpeer:hover, .viewedit .configpeer:focus {
-  background: var(--edit_hover) var(--center) / 12px, var(--element);
+  background: var(--edit_hover) var(--center) / 12px, var(--badge);
 }
 
 .viewprofile:hover, .familysearch:hover, .configpeer:hover {
@@ -13123,12 +13135,29 @@ body.iframed {
   #tunnels .tunnel_local + .tunnel_cap {
     margin-left: 2px;
   }
-}
-
-@media screen and (max-width: 1480px) {
+  #routerinformation .h3navlinks {
+    margin: 1px -2px -1px -2px;
+  }
+  #routerinformation h3 span a {
+    padding: 12px 3px 12px 12px;
+  }
+  #routerinformation .h3navlinks a::before {
+    margin-left: 0;
+  }
+  #webappconfiguration a, #i2pclientconfig a, #pluginmanage a {
+    padding-top: 9px;
+  }
+  .tunnelBuildStatus {font-size: 90%}
+  #sb_tunnelstatus .tunnelBuildStatus::before {
+    margin: -2px 0;
+    background-size: 12px;
+  }
   #view_profile .identicon {
     top: 0;
     right: 0;
+  }
+  h3#advancedconfig a {
+    padding-top: 9px;
   }
 }
 
@@ -13643,7 +13672,7 @@ body.iframed {
     margin-top: -1px;
   }
   .sb_info.sb_update {
-    padding: 7px 5px 9px !important;
+    padding: 7px 5px 6px !important;
   }
   .percentBarouter {
     width: 251px !important;
@@ -13728,17 +13757,17 @@ body.iframed {
     height: 30px;
     background-size: 16px;
   }
-    h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after {
+  h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after {
     margin: 0 0 -2px -4px;
     width: 20px;
     height: 20px;
     background-size: 20px !important;
   }
-    h3#iptransport a:hover::after, h3#advancedconfig a:hover::after, #reseedsetup a:hover::after {
+  h3#iptransport a:hover::after, h3#advancedconfig a:hover::after, #reseedsetup a:hover::after {
     background-size: 20px !important;
   }
-    h3#advancedconfig a::after {
-    margin: -1px -6px -2px -5px;
+  h3#advancedconfig a::after {
+    margin: -2px -6px -2px -5px;
   }
   .h3navlinks a {
     padding: 10px 10px 10px 17px;
@@ -13749,10 +13778,10 @@ body.iframed {
   .h3navlinks a:last-child {
     margin-right: -2px;
   }
-    h3#advancedconfig a {
+  h3#advancedconfig a {
     padding-right: 10px;
   }
-    h3#i2pclientconfig {
+  h3#i2pclientconfig {
     margin-bottom: -15px !important;
   }
   .sb_netstatus, .tunnelBuildStatus {
@@ -13769,7 +13798,11 @@ body.iframed {
     margin-bottom: -1px;
   }
   .tunnel_local {
-    font-size: 9pt !important;
+    font-size: 9pt;
+  }
+  .tunneldisplay .tunnel_peer.tunnel_local {
+    margin: 0 0 0 -1px !important;
+    min-width: 77px !important;
   }
   .tunnel_cap {
     padding: 2px 2px 1px !important;
@@ -13778,11 +13811,25 @@ body.iframed {
   .tunnel_id {
     min-width: 82px;
   }
-  .tunnel_local {
-    font-size: 8.5pt;
+  .tunneldisplay .tunnel_peer {
+    margin: 0 !important;
+    min-width: 80px !important;
+  }
+  .tunneldisplay .tunnel_peer + b.tunnel_cap {
+    margin: 0 -1px !important;
+  }
+  .tunneldisplay .tunnel_peer.tunnel_local + b.tunnel_cap {
+    margin-left: 1px !important;
+  }
+  #tunnels img[src^="/flags.jsp?"], #profiles img[src^="/flags.jsp?"], #peers img[src^="/flags.jsp?"] {
+    margin: -2px -2px 0 !important;
+    width: auto !important;
+    height: 14px !important;
+    display: inline-block;
+    vertical-align: middle;
   }
   .routersummary td, .routersummary a, .routersummary button, .routersummary h4, .routersummary h4 a,
-  #floodfill th, #jardump td, .smallhead th, .leaseset a[href$=".i2p"], .leaseset th code, .footnote, .topness {
+  #floodfill th, #jardump td, .smallhead th, .sybil_distance th, .leaseset a[href$=".i2p"], .leaseset th code, .footnote, .topness {
     font-size: 9pt !important;
   }
   #newsDisplay a, pre, #logs li, #updateAvailable, code, tt {
@@ -13968,20 +14015,6 @@ body.iframed {
   .langselect input[name="lang"]:checked + img {
     margin-left: -76px !important;
   }
-  .tunneldisplay .tunnel_peer {
-    margin: 0 !important;
-    min-width: 80px !important;
-  }
-  .tunneldisplay .tunnel_peer.tunnel_local {
-    margin: 0 0 0 -1px !important;
-    min-width: 78px !important;
-  }
-  .tunneldisplay .tunnel_peer + b.tunnel_cap {
-    margin: 0 -1px !important;
-  }
-  .tunneldisplay .tunnel_peer.tunnel_local + b.tunnel_cap {
-    margin-left: 1px !important;
-  }
   #netconfig label::before, #externali2cp td label::before, #externali2cp .nowrap::before, #reseedconfig .nowrap::before {
     min-height: 50px !important;
   }
@@ -14050,7 +14083,7 @@ body.iframed {
     background-size: 250px 40px !important;
   }
   .tunnel_id {
-    margin: 0 5px !important;
+    margin: 0 5px;
     padding: 2px 4px 2px 6px;
     min-width: 96px;
     display: inline-block;
@@ -14058,10 +14091,10 @@ body.iframed {
     text-align: left;
     border: 1px solid #030;
     box-shadow: var(--highlight_badge);
-    background: var(--element);
+    background: var(--badge);
   }
   .tunnel_id:not(:empty) {
-    background: var(--hardhat) no-repeat 5px center / 14px, var(--element);
+    background: var(--hardhat) no-repeat 5px center / 14px, var(--badge);
   }
   .tunnel_id:not(:empty)::before {
     width: 16px;

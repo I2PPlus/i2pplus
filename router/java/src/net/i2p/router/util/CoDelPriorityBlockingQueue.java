@@ -317,7 +317,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
                       entry.getSeqNum() + "\n* Time since first drop: " +
                       DataHelper.formatDuration(_context.clock().now() - _first_above_time) +
                       "\n* Time since next drop: " + DataHelper.formatDuration(_context.clock().now() - _drop_next) +
-                      "\n* Messages dropped: " + (_count+1) + "(" + size() + " remaining in queue)" + entry);
+                      "\n* Messages dropped: " + (_count+1) + " (" + size() + " remaining in queue)" + entry);
         entry.drop();
     }
 

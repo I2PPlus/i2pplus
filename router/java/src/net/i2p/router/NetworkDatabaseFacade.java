@@ -126,7 +126,7 @@ public abstract class NetworkDatabaseFacade implements Service {
             return store(key, (RouterInfo) entry);
         if (entry.getType() == DatabaseEntry.KEY_TYPE_LEASESET)
             return store(key, (LeaseSet) entry);
-        throw new IllegalArgumentException("unknown type");
+        throw new IllegalArgumentException("Unknown type");
     }
 
     /**

@@ -547,7 +547,7 @@ class IntroductionManager {
         if (!isValid(aliceIP, alicePort, true)) {
             // not necessarily invalid ip/port, could be blocklisted
             if (_log.shouldWarn())
-                _log.warn("Rejecting relay req from " + alice + " for " + Addresses.toString(aliceIP, alicePort));
+                _log.warn("Rejecting relay request from " + alice + " for " + Addresses.toString(aliceIP, alicePort));
             _context.statManager().addRateData("udp.relayBadIP", 1);
             return;
         }
@@ -559,7 +559,7 @@ class IntroductionManager {
             rrReader.readIP(ip, 0);
             if (ipSize == aliceIP.length && !Arrays.equals(aliceIP, ip)) {
                 if (_log.shouldWarn())
-                    _log.warn("Bad relay req from " + alice + " for " + Addresses.toString(ip, port));
+                    _log.warn("Bad relay request from " + alice + " for " + Addresses.toString(ip, port));
                 _context.statManager().addRateData("udp.relayBadIP", 1);
                 return;
             }
@@ -573,7 +573,7 @@ class IntroductionManager {
                 alicePort = port;
             } else if (port != alicePort) {
                 if (_log.shouldWarn())
-                    _log.warn("Bad relay req from " + alice + " for " + Addresses.toString(aliceIP, port));
+                    _log.warn("Bad relay request from " + alice + " for " + Addresses.toString(aliceIP, port));
                 _context.statManager().addRateData("udp.relayBadIP", 1);
             }
             return;

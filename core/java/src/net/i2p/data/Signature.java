@@ -46,7 +46,7 @@ public class Signature extends SimpleDataStructure {
     public Signature(SigType type) {
         super();
         if (type == null)
-            throw new IllegalArgumentException("unknown type");
+            throw new IllegalArgumentException("Unknown type");
         _type = type;
     }
 
@@ -63,7 +63,7 @@ public class Signature extends SimpleDataStructure {
     public Signature(SigType type, byte data[]) {
         super();
         if (type == null)
-            throw new IllegalArgumentException("unknown type");
+            throw new IllegalArgumentException("Unknown type");
         _type = type;
         setData(data);
     }

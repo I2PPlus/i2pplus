@@ -992,7 +992,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
                         }
                         if (_log.shouldLog(Log.WARN))
                             _log.warn(_consecutiveFailures + " consecutive failed TagSet deliveries to [" + _currentKey.toBase64().substring(0,6) + "]"
-                                      + "\n* Reverting to full ElG and un-ACKing " + unacked + " unACKed tag sets, with "
+                                      + "\n* Reverting to full ElG and un-ACKing " + unacked + " UnACKed tag sets, with "
                                       + acked + " remaining ACKed TagSets");
                     }
                 }

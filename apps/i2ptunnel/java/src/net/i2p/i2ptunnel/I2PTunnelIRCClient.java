@@ -279,7 +279,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
         synchronized(this) {
             if (_DCCServer == null) {
                 if (_log.shouldLog(Log.INFO))
-                    _log.info("[IRC Client] Starting DCC Server");
+                    _log.info("[IRC Client] Starting DCC Server...");
                 _DCCServer = new I2PTunnelDCCServer(sockMgr, l, I2PTunnelIRCClient.this, getTunnel());
                 // TODO add some prudent tunnel options (or is it too late?)
                 _DCCServer.startRunning();
@@ -297,7 +297,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
         synchronized(this) {
             if (_DCCClientManager == null) {
                 if (_log.shouldLog(Log.INFO))
-                    _log.info("[IRC Client] Starting DCC Client");
+                    _log.info("[IRC Client] Starting DCC Client...");
                 _DCCClientManager = new DCCClientManager(sockMgr, l, I2PTunnelIRCClient.this, getTunnel());
             }
             tracker = _DCCClientManager;

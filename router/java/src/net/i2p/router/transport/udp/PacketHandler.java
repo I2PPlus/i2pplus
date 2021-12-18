@@ -431,7 +431,7 @@ class PacketHandler {
                     List<PeerState> peers = _transport.getPeerStatesByIP(remoteHost);
                     if (!peers.isEmpty()) {
                         StringBuilder buf = new StringBuilder(256);
-                        buf.append("Established peers with IP address: ");
+                        buf.append("Established peer connection with: ");
                         boolean foundSamePort = false;
                         PeerState state = null;
                         int newPort = remoteHost.getPort();
@@ -439,9 +439,16 @@ class PacketHandler {
                             boolean valid = false;
                             if (_log.shouldLog(Log.WARN)) {
                                 long now = _context.clock().now();
+                                long lastSent = now - ps.getLastSendTime();
+                                long lastRcvd = now - ps.getLastReceiveTime();
+                                String tx = "now";
+                                String rx = "now";
+                                if (lastSent > 0)
+                                    tx = lastSent + "ms ago";
+                                if (lastRcvd > 0)
+                                    rx = lastSent + "ms ago";
                                 buf.append(ps.getRemoteHostId().toString())
-                                   .append("\n* Last sent: ").append(now - ps.getLastSendTime())
-                                   .append("; Last rcvd: ").append(now - ps.getLastReceiveTime());
+                                   .append("\n* Last message sent: ").append(tx).append("; Last message received: ").append(rx);
                             }
                             if (ps.getRemotePort() == newPort) {
                                 foundSamePort = true;

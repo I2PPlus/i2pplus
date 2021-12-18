@@ -914,6 +914,10 @@ tr.active .snarkTorrentStatus {
   display: inline-block;
 }
 
+tr:not(:hover) .snarkTorrentName a, tr:not(:hover) .snarkFileName a {
+  -webkit-text-stroke: 2px rgba(0,0,0,.3);
+}
+
 .snarkTorrents .snarkTorrentName {
   padding-left: 2px;
 }
@@ -1255,9 +1259,9 @@ td.snarkFileStatus {
   margin: 1px auto;
   border: 1px solid #020;
   border-radius: 1px;
-  box-shadow: 0 0 1px 1px rgba(0,0,0,.8), var(--highlight), inset 0 2px 2px 2px rgba(0,0,0,.7);
-  background: repeating-linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,0) 7px, rgba(0,32,0,.6) 7px, rgba(0,32,0,.6) 8px, rgba(0,0,0,0) 8px) #010;
-  background-size: 400% 400%;
+  box-shadow: 0 0 0 1px rgba(0,0,0,.8), var(--highlight), inset 0 2px 2px 2px rgba(0,0,0,.5);
+  background: repeating-linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,0) 7px, rgba(0,48,0,.6) 7px, rgba(0,48,0,.6) 8px, rgba(0,0,0,0) 8px) #010;
+  background-size: 400%;
   opacity: 1;
 }
 
@@ -1285,7 +1289,7 @@ td.snarkFileStatus {
   border-right: 1px solid #020;
   border-radius: 1px;
   box-shadow: var(--highlight);
-  background: linear-gradient(180deg,rgba(148, 148, 148, .2), rgba(47, 47, 47, .2) 50%, rgba(39, 39, 39, .2) 50%, rgba(27, 27, 27, .2) 50%, rgba(21, 21, 21, .2) 100%), #010;
+  background: linear-gradient(180deg,rgba(148, 148, 148, .2), rgba(47, 47, 47, .2) 70%, rgba(27, 27, 27, .2), rgba(17, 17, 17, .4) 100%), rgba(0,64,0,.4);
 }
 
 .uploaded {
@@ -1298,6 +1302,17 @@ td.snarkFileStatus {
   border-left-width: 5px;
   box-shadow: var(--highlight), inset 0 3px 3px rgba(0,0,0,.6);
   background: repeating-linear-gradient(90deg,#000, #000 10%,#020 10%,#020 20%);
+}
+
+.active.seeding .uploaded {
+  background: repeating-linear-gradient(90deg,#000,#000 5%,#141 5%,#141 10%);
+  background-size: 200%;
+  animation: linear uploading .5s 4.5s reverse infinite;
+}
+
+@keyframes uploading {
+  from {background-position: left center}
+  to {background-position: 20% center}
 }
 
 .txBarInner {
@@ -1327,9 +1342,9 @@ td.snarkFileStatus {
 
 .active.downloading .percentBarInner {
   border-right: 1px solid #030;
-  background: linear-gradient(180deg,rgba(148, 148, 148, .4), rgba(47, 47, 47, .2) 50%, rgba(39, 39, 39, .2) 50%, rgba(27, 27, 27, .4) 50%, rgba(21, 21, 21, .2) 100%) center center,
-    repeating-linear-gradient(135deg, rgba(0,16,0,.8) 1px, rgba(0,16,0,.8) 5px, rgba(0,64,0,.8) 6px, rgba(0,64,0,.8) 11px) left center;
-  background-size: 200%;
+  background: linear-gradient(180deg,rgba(148, 148, 148, .4), rgba(47, 47, 47, .2) 50%, rgba(27, 27, 27, .4) 50%, rgba(17, 17, 17, .3) 100%) center center,
+    repeating-linear-gradient(135deg, rgba(255,128,0,.3), rgba(0,16,0,.8) 1px, rgba(0,16,0,.8) 4px, rgba(255,128,0,.3) 5px, rgba(0,64,0,.3) 5px, rgba(0,64,0,.3) 10px) left center;
+  background-size: 400%;
   animation: progress 1s 3s linear forwards;
 }
 
@@ -1354,7 +1369,7 @@ td.snarkFileStatus {
 
 @keyframes progress {
   0,100% {background-position: center center, left center}
-  50% {background-position: center center, right center}
+  50% {background-position: center center, -20px center}
 }
 
 @keyframes downloading {
@@ -1384,7 +1399,6 @@ td.snarkFileStatus {
   .percentBarText {
     padding: 0;
   }
-
   .iframed .percentBarText, .iframed .percentBarText:hover, .iframed .percentBarText:focus {
     transition: none;
   }

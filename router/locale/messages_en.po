@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P routerconsole\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-18 00:03+0000\n"
+"POT-Creation-Date: 2021-12-14 18:50+0000\n"
 "PO-Revision-Date: 2010-06-15 14:09+0100\n"
 "Last-Translator: duck <duck@mail.i2p>\n"
 "Language-Team: duck <duck@mail.i2p>\n"
@@ -106,14 +106,14 @@ msgid "Declining all tunnel requests:<br>"
 msgstr ""
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:151
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:795
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:800
 msgid "Hidden Mode"
 msgstr ""
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:198
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:216
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:833
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:864
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:838
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:869
 msgid "Declining tunnel requests:<br>"
 msgstr ""
 
@@ -178,36 +178,36 @@ msgstr ""
 msgid "Declining tunnel requests"
 msgstr ""
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:284
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:285
 msgid "Dropping tunnel requests: Too slow"
 msgstr ""
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:293
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:294
 msgid "Dropping tunnel requests: High job lag"
 msgstr ""
 
 #. don't even bother, since we are so overloaded locally
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:491
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:494
 msgid "Dropping tunnel requests: Overloaded"
 msgstr ""
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:795
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:800
 msgid "Declining requests:"
 msgstr ""
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:833
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:838
 msgid "Request overload"
 msgstr ""
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:864
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:869
 msgid "Connection limit reached"
 msgstr ""
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1108
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1141
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1129
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1162
 msgid "Dropping tunnel requests: High load"
 msgstr ""
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1224
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1245
 msgid "Dropping tunnel requests: Queue time"
 msgstr ""

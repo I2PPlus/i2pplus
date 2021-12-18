@@ -33,12 +33,14 @@
   background: #000;
 }
 
-.optbox:active {
+.optbox:not(:checked):active {
   background: linear-gradient(0deg,#f60,#d40);
+  box-shadow: var(--btn_shadow_active);
 }
 
-.optbox:not(:checked):active {
-  box-shadow: var(--btn_shadow_active);
+.optbox:checked:active {
+  box-shadow: 0 0 1px 1px rgba(0,0,0,.9), 0 0 0 2px rgba(255,0,0,.8), inset 0 0 0 1px #020;
+  background: linear-gradient(0deg,#900,#f00) !important;
 }
 
 .optbox::before {
@@ -52,6 +54,7 @@
   box-shadow: inset 0 0 2px 2px var(--on);
   background: linear-gradient(135deg, #5a5, #383);
   content: "";
+  opacity: 1;
   transform: scale(1);
   transition: linear transform .05s;
   will-change: transform;
@@ -68,8 +71,9 @@
 }
 
 .optbox:not(:checked)::before {
-  transform: scale(0);
-  transition: linear transform .05s;
+  opacity: 0;
+  transform: scale(.3);
+  transition: ease transform .01s;
 }
 
 .optbox[disabled] {

@@ -110,7 +110,7 @@ public class CreateLeaseSet2Message extends CreateLeaseSetMessage {
                 // and is needed by the session tag manager.
                 SigType stype = _leaseSet.getSignature().getType();
                 if (stype == null)
-                    throw new I2CPMessageException("Unsupported sig type");
+                    throw new I2CPMessageException("Unsupported signature type");
                 if (type == DatabaseEntry.KEY_TYPE_LS2 ||
                     type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {
                     LeaseSet2 ls2 = (LeaseSet2) _leaseSet;
@@ -130,16 +130,16 @@ public class CreateLeaseSet2Message extends CreateLeaseSetMessage {
                             if (etype == null)
                                 throw new I2CPMessageException("Unsupported encryption type: " + encType);
                             if (encType != etype.getCode())
-                                throw new I2CPMessageException("Enc type mismatch");
+                                throw new I2CPMessageException("Encryption type mismatch");
                             if (encLen != etype.getPrivkeyLen())
-                                throw new I2CPMessageException("Enc type bad length");
+                                throw new I2CPMessageException("Encryption type bad length");
                         } else {
                             // encrypted LS2
                             etype = EncType.getByCode(encType);
                             if (etype == null)
                                 throw new I2CPMessageException("Unsupported encryption type: " + encType);
                             if (encLen != etype.getPrivkeyLen())
-                                throw new I2CPMessageException("Enc type bad length");
+                                throw new I2CPMessageException("Encryption type bad length");
                         }
                         PrivateKey priv = new PrivateKey(etype);
                         priv.readBytes(in);

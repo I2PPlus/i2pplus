@@ -505,7 +505,7 @@ public class ProfileOrganizer {
      *
      */
     public void selectFastPeers(int howMany, Set<Hash> exclude, Set<Hash> matches) {
-        selectFastPeers(howMany, exclude, matches, 0);
+        selectFastPeers(howMany, exclude, matches, 0, null);
     }
 
     /**
@@ -521,10 +521,10 @@ public class ProfileOrganizer {
      *             not be in the same tunnel. 0 = disable check; 1 = /8; 2 = /16; 3 = /24; 4 = exact IP match
      *
      */
-    public void selectFastPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, int mask) {
+    public void selectFastPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, int mask, MaskedIPSet ipSet) {
         getReadLock();
         try {
-            locked_selectPeers(_fastPeers, howMany, exclude, matches, mask);
+            locked_selectPeers(_fastPeers, howMany, exclude, matches, mask, ipSet);
         } finally { releaseReadLock(); }
         if (matches.size() < howMany) {
             if (_log.shouldLog(Log.DEBUG))
@@ -532,7 +532,7 @@ public class ProfileOrganizer {
                 _log.debug("Need " + howMany + " Fast peers for tunnel build; " + matches.size() + " found - selecting remainder from High Capacity tier");
                 else
                 _log.debug("Need " + howMany + " Fast peer for tunnel build; " + matches.size() + " found - selecting remainder from High Capacity tier");
-            selectHighCapacityPeers(howMany, exclude, matches, mask);
+            selectHighCapacityPeers(howMany, exclude, matches, mask, ipSet);
         } else {
             if (_log.shouldLog(Log.DEBUG))
                 if (howMany != 1)
@@ -585,9 +585,13 @@ public class ProfileOrganizer {
      *    5: return only from group 1
      *    6: return only from group 2
      *    7: return only from group 3
+     * @param mask 0-4
+     * @param ipSet in/out param, use for multiple calls, may be null only if mask is 0
+     * @since 0.9.53 added mask and ipSet params
      *</pre>
      */
-    public void selectFastPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, SessionKey randomKey, Slice subTierMode) {
+    public void selectFastPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, SessionKey randomKey,
+                                Slice subTierMode, int mask, MaskedIPSet ipSet) {
         getReadLock();
         try {
             if (subTierMode != Slice.SLICE_ALL) {
@@ -596,14 +600,14 @@ public class ProfileOrganizer {
                     subTierMode = Slice.SLICE_ALL;
             }
             if (subTierMode != Slice.SLICE_ALL)
-                locked_selectPeers(_fastPeers, howMany, exclude, matches, randomKey, subTierMode);
+                locked_selectPeers(_fastPeers, howMany, exclude, matches, randomKey, subTierMode, mask, ipSet);
             else
-                locked_selectPeers(_fastPeers, howMany, exclude, matches, 2);
+                locked_selectPeers(_fastPeers, howMany, exclude, matches, mask, ipSet);
         } finally { releaseReadLock(); }
         if (matches.size() < howMany) {
             if (_log.shouldLog(Log.DEBUG))
                 _log.debug("Need " + howMany + " Fast peers for tunnel build; " + matches.size() + " found - selecting remainder from High Capacity peers");
-            selectHighCapacityPeers(howMany, exclude, matches, 2);
+            selectHighCapacityPeers(howMany, exclude, matches, mask, ipSet);
         } else {
             if (_log.shouldLog(Log.DEBUG))
                 _log.debug(howMany + " Fast peers selected for tunnel build");
@@ -616,14 +620,16 @@ public class ProfileOrganizer {
      *
      */
     public void selectHighCapacityPeers(int howMany, Set<Hash> exclude, Set<Hash> matches) {
-        selectHighCapacityPeers(howMany, exclude, matches, 0);
+        selectHighCapacityPeers(howMany, exclude, matches, 0, null);
     }
 
     /**
      * @param mask 0-4 Number of bytes to match to determine if peers in the same IP range should
      *             not be in the same tunnel. 0 = disable check; 1 = /8; 2 = /16; 3 = /24; 4 = exact IP match
+     * @param ipSet in/out param, use for multiple calls, may be null only if mask is 0
+     * @since 0.9.53 added ipSet param
      */
-    public void selectHighCapacityPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, int mask) {
+    public void selectHighCapacityPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, int mask, MaskedIPSet ipSet) {
         getReadLock();
         try {
             // we only use selectHighCapacityPeers when we are selecting for PURPOSE_TEST
@@ -635,14 +641,14 @@ public class ProfileOrganizer {
             else
                 exclude.addAll(_fastPeers.keySet());
              */
-            locked_selectPeers(_highCapacityPeers, howMany, exclude, matches, mask);
+            locked_selectPeers(_highCapacityPeers, howMany, exclude, matches, mask, ipSet);
         } finally { releaseReadLock(); }
         if (matches.size() < howMany) {
             if (_log.shouldLog(Log.DEBUG))
 //                _log.debug("Need " + howMany + " High Capacity peers for tunnel build; " + matches.size() + " found - selecting remainder from Not Failing peers");
 //            selectActiveNotFailingPeers2(howMany, exclude, matches, mask);
-                _log.debug("Need " + howMany + " High Capacity peers for tunnel build; " + matches.size() + " found - selecting remainder from Fast peers");
-            selectWellIntegratedPeers(howMany, exclude, matches, mask);
+                _log.debug("Need " + howMany + " High Capacity peers for tunnel build; " + matches.size() + " found - selecting remainder from well integrated peers");
+            selectWellIntegratedPeers(howMany, exclude, matches, mask, ipSet);
         } else {
             if (_log.shouldLog(Log.DEBUG))
                 _log.debug(howMany + " High Capacity peers selected for tunnel build");
@@ -657,7 +663,7 @@ public class ProfileOrganizer {
      */
     @Deprecated
     public void selectWellIntegratedPeers(int howMany, Set<Hash> exclude, Set<Hash> matches) {
-        selectWellIntegratedPeers(howMany, exclude, matches, 0);
+        selectWellIntegratedPeers(howMany, exclude, matches, 0, null);
     }
 
     /**
@@ -668,20 +674,19 @@ public class ProfileOrganizer {
      * @deprecated unused
      */
     @Deprecated
-    public void selectWellIntegratedPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, int mask) {
+    public void selectWellIntegratedPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, int mask, MaskedIPSet ipSet) {
         getReadLock();
         try {
-            locked_selectPeers(_wellIntegratedPeers, howMany, exclude, matches, mask);
+            locked_selectPeers(_wellIntegratedPeers, howMany, exclude, matches, mask, ipSet);
         } finally { releaseReadLock(); }
         if (matches.size() < howMany) {
             if (_log.shouldLog(Log.DEBUG))
                 _log.debug("Need " + howMany + " Integrated peers for tunnel build; " + matches.size() + " found - selecting remainder from Not Failing peers");
-            selectNotFailingPeers(howMany, exclude, matches, mask);
+            selectNotFailingPeers(howMany, exclude, matches, mask, ipSet);
         } else {
             if (_log.shouldLog(Log.DEBUG))
                 _log.debug(howMany + " Integrated peers selected for tunnel build");
         }
-
         return;
     }
 
@@ -691,18 +696,20 @@ public class ProfileOrganizer {
      *
      */
     public void selectNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches) {
-        selectNotFailingPeers(howMany, exclude, matches, false, 0);
+        selectNotFailingPeers(howMany, exclude, matches, false, 0, null);
     }
 
     /**
      * @param mask ignored, should call locked_selectPeers, to be fixed
+     * @param ipSet ignored, should call locked_selectPeers, to be fixed
+     * @since 0.9.53 added ipSet param
      */
-    public void selectNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, int mask) {
-        selectNotFailingPeers(howMany, exclude, matches, false, mask);
+    public void selectNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, int mask, MaskedIPSet ipSet) {
+        selectNotFailingPeers(howMany, exclude, matches, false, mask, ipSet);
     }
 
     public void selectNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, boolean onlyNotFailing) {
-        selectNotFailingPeers(howMany, exclude, matches, onlyNotFailing, 0);
+        selectNotFailingPeers(howMany, exclude, matches, onlyNotFailing, 0, null);
     }
 
     /**
@@ -714,8 +721,10 @@ public class ProfileOrganizer {
      * @param matches set to store the matches in
      * @param onlyNotFailing if true, don't include any high capacity peers
      * @param mask ignored, should call locked_selectPeers, to be fixed
+     * @param ipSet ignored, should call locked_selectPeers, to be fixed
+     * @since 0.9.53 added ipSet param
      */
-    public void selectNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, boolean onlyNotFailing, int mask) {
+    public void selectNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, boolean onlyNotFailing, int mask, MaskedIPSet ipSet) {
         if (matches.size() < howMany)
             selectAllNotFailingPeers(howMany, exclude, matches, onlyNotFailing, mask);
         return;
@@ -733,9 +742,13 @@ public class ProfileOrganizer {
      * be used when there is a good number of connected peers.
      *
      * @param exclude non-null, WARNING - side effect, all not-connected peers are added
-     * No mask parameter, to be fixed
+     * @param mask 0-4 Number of bytes to match to determine if peers in the same IP range should
+     *             not be in the same tunnel. 0 = disable check; 1 = /8; 2 = /16; 3 = /24; 4 = exact IP match
+     * @param ipSet ignored, should call locked_selectPeers, to be fixed
+     * @param ipSet may be null only if mask is 0
+     * @since 0.9.53
      */
-    public void selectActiveNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches) {
+    public void selectActiveNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, int mask, MaskedIPSet ipSet) {
         if (matches.size() < howMany) {
             Set<Hash> connected = _context.commSystem().getEstablished();
             getReadLock();
@@ -744,7 +757,7 @@ public class ProfileOrganizer {
                     if (!connected.contains(peer))
                         exclude.add(peer);
                 }
-                locked_selectPeers(_notFailingPeers, howMany, exclude, matches, 0);
+                locked_selectPeers(_notFailingPeers, howMany, exclude, matches, mask, ipSet);
             } finally { releaseReadLock(); }
         }
     }
@@ -761,8 +774,10 @@ public class ProfileOrganizer {
      *
      * @param mask 0-4 Number of bytes to match to determine if peers in the same IP range should
      *             not be in the same tunnel. 0 = disable check; 1 = /8; 2 = /16; 3 = /24; 4 = exact IP match
+     * @param ipSet in/out param, use for multiple calls, may be null only if mask is 0
+     * @since 0.9.53 added ipSet param
      */
-    private void selectActiveNotFailingPeers2(int howMany, Set<Hash> exclude, Set<Hash> matches, int mask) {
+    private void selectActiveNotFailingPeers2(int howMany, Set<Hash> exclude, Set<Hash> matches, int mask, MaskedIPSet ipSet) {
         if (matches.size() < howMany) {
             Set<Hash> connected = _context.commSystem().getEstablished();
             Map<Hash, PeerProfile> activePeers = new HashMap<Hash, PeerProfile>(connected.size());
@@ -773,13 +788,13 @@ public class ProfileOrganizer {
                     if (prof != null)
                         activePeers.put(peer, prof);
                 }
-                locked_selectPeers(activePeers, howMany, exclude, matches, mask);
+                locked_selectPeers(activePeers, howMany, exclude, matches, mask, ipSet);
             } finally { releaseReadLock(); }
         }
         if (matches.size() < howMany) {
             if (_log.shouldLog(Log.DEBUG))
                 _log.debug("Need " + howMany + " Not Failing peers for tunnel build; " + matches.size() + " found - selecting remainder from most reliable Failing peers");
-            selectNotFailingPeers(howMany, exclude, matches, mask);
+            selectNotFailingPeers(howMany, exclude, matches, mask, ipSet);
         } else {
             if (_log.shouldLog(Log.DEBUG))
                 _log.debug(howMany + " Not Failing peers selected for tunnel build");
@@ -796,7 +811,6 @@ public class ProfileOrganizer {
 
     /**
      * @param mask ignored, should call locked_selectPeers, to be fixed
-     *
      */
     private void selectAllNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, boolean onlyNotFailing, int mask) {
         if (matches.size() < howMany) {
@@ -1451,19 +1465,20 @@ public class ProfileOrganizer {
      *
      */
     private void locked_selectPeers(Map<Hash, PeerProfile> peers, int howMany, Set<Hash> toExclude, Set<Hash> matches) {
-        locked_selectPeers(peers, howMany, toExclude, matches, 0);
+        locked_selectPeers(peers, howMany, toExclude, matches, 0, null);
     }
 
     /**
-      *
-      * As of 0.9.24, checks for a netdb family match as well, unless mask == 0.
-      *
+     *
+     * As of 0.9.24, checks for a netdb family match as well, unless mask == 0.
+     *
      * @param mask 0-4 Number of bytes to match to determine if peers in the same IP range should
      *             not be in the same tunnel. 0 = disable check; 1 = /8; 2 = /16; 3 = /24; 4 = exact IP match
+     * @param ipSet may be null only if mask is 0
+     * @since 0.9.53 added ipSet param
      */
-    private void locked_selectPeers(Map<Hash, PeerProfile> peers, int howMany, Set<Hash> toExclude, Set<Hash> matches, int mask) {
+        private void locked_selectPeers(Map<Hash, PeerProfile> peers, int howMany, Set<Hash> toExclude, Set<Hash> matches, int mask, MaskedIPSet ipSet) {
         List<Hash> all = new ArrayList<Hash>(peers.keySet());
-        MaskedIPSet IPSet = new MaskedIPSet(16);
         // use RandomIterator to avoid shuffling the whole thing
         for (Iterator<Hash> iter = new RandomIterator<Hash>(all); (matches.size() < howMany) && iter.hasNext(); ) {
             Hash peer = iter.next();
@@ -1475,7 +1490,7 @@ public class ProfileOrganizer {
                 continue;
             boolean ok = isSelectable(peer);
             if (ok) {
-                ok = mask <= 0 || notRestricted(peer, IPSet, mask);
+                ok = mask <= 0 || notRestricted(peer, ipSet, mask);
                 if ((!ok) && _log.shouldLog(Log.WARN))
                     _log.warn("IP address restriction prevents [" + peer.toBase64().substring(0,6) + "] from joining " + matches);
             }
@@ -1514,9 +1529,13 @@ public class ProfileOrganizer {
      *    6: return only from group 2
      *    7: return only from group 3
      *</pre>
+     * @param mask is 1-4 (number of bytes to match)
+     * @param IPMatches all IPs so far, modified by this routine
+     * @since 0.9.53 added mask/ipSet params
      */
     private void locked_selectPeers(Map<Hash, PeerProfile> peers, int howMany, Set<Hash> toExclude,
-                                    Set<Hash> matches, SessionKey randomKey, Slice subTierMode) {
+                                    Set<Hash> matches, SessionKey randomKey, Slice subTierMode,
+                                    int mask, MaskedIPSet ipSet) {
         List<Hash> all = new ArrayList<Hash>(peers.keySet());
         byte[] rk = randomKey.getData();
         // we use the first half of the random key here,
@@ -1537,6 +1556,11 @@ public class ProfileOrganizer {
             if ((subTier & subTierMode.mask) != subTierMode.val)
                 continue;
             boolean ok = isSelectable(peer);
+            if (ok) {
+                ok = mask <= 0 || notRestricted(peer, ipSet, mask);
+                if ((!ok) && _log.shouldLog(Log.WARN))
+                    _log.warn("IP address restriction prevents [" + peer.toBase64().substring(0,6) + "] from joining " + matches);
+            }
             if (ok)
                 matches.add(peer);
             else

@@ -61,7 +61,7 @@ class StartExplorersJob extends JobImpl {
     private static final int MIN_FFS = 200;
     static final int LOW_FFS = 2 * MIN_FFS;
     private static final long MAX_LAG = 150;
-    private static final long MAX_MSG_DELAY = 750;
+    private static final long MAX_MSG_DELAY = 650;
     static final String PROP_EXPLORE_DELAY = "router.explorePeersDelay";
     static final String PROP_EXPLORE_BUCKETS = "router.exploreBuckets";
     static final String PROP_FORCE_EXPLORE = "router.exploreWhenFloodfill";

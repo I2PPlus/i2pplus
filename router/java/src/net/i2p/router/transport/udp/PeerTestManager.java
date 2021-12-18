@@ -390,7 +390,7 @@ class PeerTestManager {
                  ( (charlieSession.getLastACKSend() > recentBegin) ||
                    (charlieSession.getLastSendTime() > recentBegin) ) ) {
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("Bob chose a Charlie we already have a session to, cancelling the test and rerunning \n* Bob: "
+                    _log.warn("Bob chose a Charlie we already have a session to, cancelling the test and rerunning... \n* Bob: "
                               + _currentTest + ", Charlie: " + from);
                 // why are we doing this instead of calling testComplete() ?
                 _currentTestComplete = true;

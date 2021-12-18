@@ -1836,12 +1836,12 @@ public class NTCPConnection implements Closeable {
         }
         return "[NTCP" + _version + "] Connection [ID " + _connID + "]\n* " +
                (_isInbound ? ("From: " + fromIP + ":" + _chan.socket().getPort() + ' ')
-                           : ("To: " + _remAddr.getHost() + ":" + _remAddr.getPort() + ' ')) + "[" +
-               (_remotePeer == null ? "unknown" : _remotePeer.calculateHash().toBase64().substring(0,6)) + "]" +
+                           : ("Target: " + _remAddr.getHost() + ":" + _remAddr.getPort() + ' ')) + "[" +
+               (_remotePeer == null ? "Unknown" : _remotePeer.calculateHash().toBase64().substring(0,6)) + "]" +
                (isEstablished() ? "" : " (not established)") +
                "\n* Created: " + DataHelper.formatDuration(getTimeSinceCreated()) + " ago;" +
-               " Last send: " + DataHelper.formatDuration(getTimeSinceSend()) + " ago;" +
-               " Last recv: " + DataHelper.formatDuration(getTimeSinceReceive()) + " ago" +
+               " Last message sent: " + DataHelper.formatDuration(getTimeSinceSend()) + " ago;" +
+               " Last message received: " + DataHelper.formatDuration(getTimeSinceReceive()) + " ago" +
                "\n* Messages sent: " + _messagesWritten + ";" +
                " Messages received: " + _messagesRead + " ";
     }
