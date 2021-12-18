@@ -309,8 +309,7 @@ public class PeerState {
 //    private static final int MAX_RTO = 60*1000;
     private static final int MAX_RTO = 30*1000;
     /** how frequently do we want to send ACKs to a peer? */
-//    private static final int ACK_FREQUENCY = 150;
-    private static final int ACK_FREQUENCY = 300;
+    private static final int ACK_FREQUENCY = 150;
     private static final int CLOCK_SKEW_FUDGE = (ACK_FREQUENCY * 2) / 3;
 
     /**
