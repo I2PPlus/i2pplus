@@ -798,6 +798,7 @@ class EventPumper implements Runnable {
                 else
                     setInterest(key, SelectionKey.OP_WRITE);
             }
+        // catch and close outside the write lock to avoid deadlocks in NTCPCon.locked_close()
         } catch (CancelledKeyException cke) {
             if (_log.shouldLog(Log.WARN)) _log.warn("Error writing on: " + con, cke);
             _context.statManager().addRateData("ntcp.writeError", 1);
@@ -939,6 +940,9 @@ class EventPumper implements Runnable {
     public long getIdleTimeout() { return _expireIdleWriteTime; }
 
     /**
+     *  Warning - caller should catch unchecked CancelledKeyException
+     *
+     *  @throws CancelledKeyException which is unchecked
      *  @since 0.9.53
      */
     public static void setInterest(SelectionKey key, int op) throws CancelledKeyException {
@@ -950,6 +954,9 @@ class EventPumper implements Runnable {
     }
 
     /**
+     *  Warning - caller should catch unchecked CancelledKeyException
+     *
+     *  @throws CancelledKeyException which is unchecked
      *  @since 0.9.53
      */
     public static void clearInterest(SelectionKey key, int op) throws CancelledKeyException {
