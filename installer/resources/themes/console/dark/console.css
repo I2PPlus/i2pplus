@@ -6638,6 +6638,13 @@ span#distance {
   padding: 1px 1px 1px 6px !important;
 }
 
+.sybil_routerinfo th b[style="float: right;"] {
+  margin-right: 6px;
+  font-size: 85%;
+  font-weight: 400;
+  font-style: italic;
+}
+
 .sybil_routerinfo th:first-child {
   white-space: nowrap;
   text-align: left;
@@ -10062,6 +10069,8 @@ input[type=file] {
 }
 
 .netdb_header > * {
+  display: inline-block;
+  vertical-align: middle;
   line-height: 0;
   font-size: 0;
 }
@@ -13012,11 +13021,11 @@ body.iframed {
 }
 
 .netdb_header img[src^="/flags"] {
-  margin: -7px 0 0 4px;
+  margin: 0 0 0 4px;
 }
 
 .netdb_header img[src="/flags.jsp?c=a0"] {
-  margin-top: -6px;
+  margin-top: -5px;
 }
 
 .netdbentry .tunnel_cap, .netdbentry .tier, .netdbentry .ff, .netdbentry .reachable, .netdbentry .unreachable, .netdbentry .version,
