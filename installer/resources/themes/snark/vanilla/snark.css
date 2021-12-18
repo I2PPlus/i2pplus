@@ -288,8 +288,9 @@ label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
   display: inline-block;
   overflow: hidden;
   text-align: left;
-  font: bold 8.5pt var(--monospaced) !important;
-  color: #cfc7c2;
+  font: bold 8.5pt var(--bodyfont);
+  -webkit-text-stroke: 2px rgba(78,69,63,.35);
+  color: #f8f1ed;
   border: 1px solid #523d2e;
   box-shadow: 0 0 0 2px #efe6e0, 0 0 0 3px #3f3833;
   background: repeating-linear-gradient(180deg,rgba(77,69,62,.5) 2px, rgba(111,96,90,.3) 4px),
