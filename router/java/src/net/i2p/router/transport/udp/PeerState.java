@@ -817,9 +817,9 @@ public class PeerState {
         if (_log.shouldInfo())
             _log.info("[" + _remotePeer.toBase64().substring(0,6) + "] Estimated bandwidth: " +
                       DataHelper.formatSize2Decimal((long) (bwe * 1000), false) + "bps \n* " +
-                      "Congestion, RTO: " + oldRto + " -> " + _rto + " Timer: " + oldTimer + " -> " + _rto +
-                      " Window: " + congestionAt + " -> " + _sendWindowBytes +
-                      " SST: " + oldsst + " -> " + _slowStartThreshold +
+                      "Congestion, RTO: " + oldRto + "ms -> " + _rto + "ms; Timer: " + oldTimer + "ms -> " + _rto +
+                      "ms; Window: " + congestionAt + " bytes -> " + _sendWindowBytes +
+                      " bytes; SST: " + oldsst + " -> " + _slowStartThreshold +
                       "; FastRetransmit? " + _fastRetransmit);
     }
 
