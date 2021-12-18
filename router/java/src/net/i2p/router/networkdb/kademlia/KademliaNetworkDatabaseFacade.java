@@ -1597,13 +1597,13 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /** smallest allowed period */
-    private static final int MIN_PER_PEER_TIMEOUT = 2*1000;
+    private static final int MIN_PER_PEER_TIMEOUT = 3*1000;
     /**
      *  We want FNDF.PUBLISH_TIMEOUT and RepublishLeaseSetJob.REPUBLISH_LEASESET_TIMEOUT
      *  to be greater than MAX_PER_PEER_TIMEOUT * TIMEOUT_MULTIPLIER by a factor of at least
      *  3 or 4, to allow at least that many peers to be attempted for a store.
      */
-    private static final int MAX_PER_PEER_TIMEOUT = 7*1000;
+    private static final int MAX_PER_PEER_TIMEOUT = 5*1000;
     private static final int TIMEOUT_MULTIPLIER = 3;
 
     /** todo: does this need more tuning? */
