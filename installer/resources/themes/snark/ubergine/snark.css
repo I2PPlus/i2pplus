@@ -1696,7 +1696,7 @@ th.priority br, .snarkTorrents thead th br {
   box-shadow: inset 0 0 1px #545 !important;
   background: linear-gradient(180deg,#434, #212 51%, #150015 51%, #000) !important;
   filter: drop-shadow(0 1px 1px rgba(17,0,17,.6));
-  transition: ease-in-out box-shadow .15s;
+  transition: linear box-shadow .1s;
 }
 
 .mainsection .toggleview {
@@ -1724,8 +1724,8 @@ th.priority br, .snarkTorrents thead th br {
 }
 
 .configsection .snarkConfigTitle:active, .toggleview:active {
-  box-shadow: inset 0 0 1px #7f2f7f, inset 4px 4px 3px 2px #101 !important;
-  background: linear-gradient(180deg,#545, #212 51%, #101 51%, #000) !important;
+  box-shadow: inset 0 0 1px #7f2f7f, inset 4px 4px 3px 3px #101 !important;
+  background: linear-gradient(0deg,#212,#101) !important;
   transition: ease box-shadow .05s;
 }
 
@@ -1751,7 +1751,7 @@ th.priority br, .snarkTorrents thead th br {
   height: 18px;
   display: inline-block;
   vertical-align: middle;
-  border: 2px solid #080008;
+  border: 2px solid #101;
   border-radius: 50%;
   box-shadow: none !important;
   content: "";
@@ -1763,19 +1763,19 @@ th.priority br, .snarkTorrents thead th br {
 }
 
 .toggleview:hover .tab_label::after, #tab_config:hover .tab_label::after {
-  border: 2px solid #101;
-  box-shadow: 0 0 1px 1px rgba(255,128,0,.2) !important;
-  filter: drop-shadow(0 0 1px #000) drop-shadow(0 0 2px #730) !important;
+  box-shadow: 0 0 2px 1px rgba(255,128,0,.2) !important;
+  filter: drop-shadow(0 0 1px #000) drop-shadow(0 0 2px #730) drop-shadow(0 0 2px rgba(128,64,0,.6)) !important;
   mix-blend-mode: normal !important;
 }
 
 .toggleview:active .tab_label::after, #tab_config:active .tab_label::after {
-  transform: rotate(90deg);
+  transform: scale(.9) rotate(90deg);
+  filter: drop-shadow(0 0 1px #000) drop-shadow(0 0 2px #730) !important;
   transition: ease transform .01s;
 }
 
 input:checked + .toggleview:active .tab_label::after {
-  transform: rotate(-90deg);
+  transform: scale(.9) rotate(-90deg);
   transition: linear transform .01s;
 }
 
@@ -5359,7 +5359,7 @@ td.snarkTorrentAction input[type=submit] {
     font-size: 11pt !important;
   }
   .configsection .snarkConfigTitle, .toggleview {
-    padding: 7px 5px 2px !important;
+    padding: 3px 5px !important;
   }
   .dirInfoComplete {
     display: none;
