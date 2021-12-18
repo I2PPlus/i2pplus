@@ -1772,13 +1772,6 @@ input[type=text]:focus, input[type=text]:focus, input.r:focus, textarea:focus, i
   transition: ease box-shadow .3s;
 }
 
-input[type=radio] {
-  padding: 2px;
-  margin: 0 4px;
-  vertical-align: bottom;
-  background: none;
-}
-
 input.default {
   width: 1px;
   height: 1px;
@@ -4494,115 +4487,80 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
 
 /* end comment indicator */
 
-input[type=checkbox], input[type=checkbox]:checked,
-input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
-  width: 19px;
-  height: 19px;
-  position: relative;
-  vertical-align: middle;
-  border: 1px solid #512f15;
-  border-radius: 2px;
-  box-shadow: inset 0 0 2px 1px #f2f2f2;
-  background: #faf1eb;
-  background-size: 96px 96px;
-  box-sizing: border-box;
-  appearance: none;
-}
-
 #torrentOrderControl input[type=checkbox], #torrentOrderControl input[type=checkbox]:checked,
 #torrentOrderControl input[type=checkbox][disabled], #torrentOrderControl input[type=checkbox][disabled]:checked {
   border: 1px solid #bbb !important;
 }
 
-input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
+.optbox {
+  margin: 4px;
   width: 19px;
   height: 19px;
   position: relative;
   box-sizing: border-box;
-  vertical-align: middle !important;
+  border: 1px solid #512f15;
   box-shadow: inset 0 0 2px 1px #f2f2f2;
-  border: 1px solid #512f15 !important;
-  border-radius: 50%;
   background: #faf1eb;
-  background-size: 96px 96px;
   appearance: none;
 }
 
-input[type=radio][disabled], input[type=radio][disabled]:checked {
-  background: #bbb;
+.optbox[type=radio] {
+  border-radius: 50%;
 }
 
-input[type=checkbox]:checked::before, input[type=radio]:checked::before,
-input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
+.optbox:hover, .optbox:focus {
+  width: 19px;
+  height: 19px;
+  border: 1px solid #b32;
+  box-shadow: none;
+  background: #fff;
+}
+
+.optbox[disabled], .knownTracker .optbox {
+  opacity: .5;
+  pointer-events: none;
+}
+
+.optbox::before {
+  width: 9px;
+  height: 9px;
   position: absolute;
+  top: 4px;
+  left: 4px;
   font-size: 0;
+  background: #512f15;
+  content: "";
   transition: linear all .05s;
   will-change: transform;
 }
 
-input[type=checkbox]:checked::before, input[type=checkbox]:not(:checked)::before {
-  content: "";
-  top: 4px;
-  left: 4px;
-  width: 9px;
-  height: 9px;
-  line-height: 80%;
-  font-size: 15pt;
+.optbox[type=checkbox]::before {
   border-radius: 1px;
-  background: #512f15;
-  overflow: hidden;
 }
 
-input[type=checkbox]:checked:focus::before {
-  background: #b32;
-}
-
-input[type=radio]:checked::before {
-  width: 9px;
-  height: 9px;
-  top: 4px;
-  left: 4px;
+.optbox[type=radio]::before {
   border-radius: 50%;
-  background: #512f15;
-  content: "";
 }
 
-input[type=radio]:checked:hover::before, input[type=radio]:checked:focus::before,
-input[type=checkbox]:checked:hover::before, input[type=checkbox]:checked:focus::before {
+.optbox:checked:hover::before, .optbox:checked:focus::before {
   background: #b32;
 }
 
-input[type=checkbox]:not(:checked), input[type=radio]:not(:checked) {
-  box-shadow: inset 2px 2px 2px #bbb;
+.optbox:not(:checked):not(:hover):not(:focus) {
+  box-shadow: inset 2px 2px 2px #b2a499;
 }
 
-input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
+.optbox:not(:checked)::before {
   transform: scale(0);
-}
-
-input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus, input[type=radio]:focus {
-  background: #fff;
-  width: 19px;
-  height: 19px;
-  box-shadow: none;
-  border: 1px solid #b32;
-}
-
-input[type=checkbox][disabled], input[type=radio][disabled], input[type=checkbox][disabled]:hover, input[type=radio][disabled]:hover,
-input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, input[type=checkbox][disabled]:checked:hover, input[type=radio][disabled]:checked:hover {
-  display: inline-block;
-  width: 19px;
-  height: 19px;
-  opacity: .5;
 }
 
 /* option sliders */
 
-.configOption input[type=checkbox], #commentsToggle input[type=checkbox] {
+.configOption .optbox[type=checkbox], #commentsToggle .optbox[type=checkbox] {
   margin-left: 5px;
   width: 40px;
   height: 21px;
-  border: none;
+  border: none !important;
   border-radius: 1px;
   position: relative;
   box-shadow: 0 0 0 1px #6f645d, inset 0 0 0 1px #f9f5f2, inset 3px 3px 3px rgba(0,0,0,.2);
