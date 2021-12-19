@@ -26,6 +26,7 @@
   --border_inner: 1px solid #313;
   --th: linear-gradient(180deg,#202,#101);
   --panel: linear-gradient(180deg,#545,#434);
+  --shadow_inset: inset 3px 3px 3px rgba(0,0,0,.6);
 }
 
 html, body {
@@ -1228,7 +1229,7 @@ tr:hover .ParentDir a:active {
   border: 1px solid #414;
   border-bottom: 1px solid #212;
   border-right: 1px solid #212;
-  box-shadow: 0 0 0 1px rgba(0,0,0,.7), inset 0 0 0 1px #080008, inset 3px 3px 3px rgba(0,0,0,.6);
+  box-shadow: 0 0 0 1px rgba(0,0,0,.7), inset 0 0 0 1px #080008, var(--shadow_inset);
   background: repeating-linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,0) 7px, rgba(64,0,64,.6) 7px, rgba(64,0,64,.6) 8px, rgba(0,0,0,0) 8px) #101;
 }
 
@@ -1251,7 +1252,7 @@ tr:hover .percentBarOuter, tr:hover .peerinfo .percentBarOuter {
 .uploaded, .txBarInner {
   position: relative;
   overflow: hidden;
-  box-shadow: 0 0 0 1px rgba(0,0,0,.8), inset 3px 3px 3px rgba(0,0,0,.8);
+  box-shadow: 0 0 0 1px rgba(0,0,0,.8), var(--shadow_inset);
 }
 
 .uploaded {
@@ -1262,7 +1263,7 @@ tr:hover .percentBarOuter, tr:hover .peerinfo .percentBarOuter {
   text-shadow: 0 1px 1px #000, 0 0 2px #337;
   border: 1px solid #424;
   border-left-width: 5px;
-  box-shadow: var(--highlight), inset 3px 3px 3px rgba(0,0,0,.8);
+  box-shadow: var(--highlight), var(--shadow_inset);
   background: repeating-linear-gradient(90deg,#000,#000 5%,#303 5%,#303 10%);
   background-size: 200%;
 }
@@ -1290,7 +1291,7 @@ tr:hover .uploaded {
   left: 1px;
   z-index: 1;
   background: rgba(192,0,96,.6);
-  box-shadow: inset 3px 3px 3px rgba(0,0,0,.8);
+  box-shadow: var(--shadow_inset);
   border: none;
 }
 
@@ -1341,7 +1342,7 @@ tr.active:hover .percentBarInner, tr.active:hover .peerinfo .percentBarInner {
 }
 
 .active .percentBarOuter {
-  box-shadow: 0 0 0 1px rgba(0,0,0,.7), inset 0 0 0 1px rgba(16,0,16,.75), inset 3px 3px 3px rgba(0,0,0,.6);
+  box-shadow: 0 0 0 1px rgba(0,0,0,.7), inset 0 0 0 1px rgba(16,0,16,.75), var(--shadow_inset);
   background: repeating-linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,0) 7px, rgba(0,0,0,.2) 7px, rgba(0,0,0,.2) 8px, rgba(0,0,0,0) 8px),
     linear-gradient(to left, rgba(0, 255, 0, .3), rgba(255, 255, 0, .3), rgba(255, 0, 0, .3));
   background-size: 100%, 400% 100%, 100%
@@ -1349,7 +1350,7 @@ tr.active:hover .percentBarInner, tr.active:hover .peerinfo .percentBarInner {
 }
 
 .active.peerinfo .percentBarOuter {
-  box-shadow: 0 0 0 1px rgba(0,0,0,.5), inset 0 0 0 1px rgba(16,0,16,.5), inset 3px 3px 3px rgba(0,0,0,.6);
+  box-shadow: 0 0 0 1px rgba(0,0,0,.5), inset 0 0 0 1px rgba(16,0,16,.5), var(--shadow_inset);
   background: repeating-linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,0) 7px, rgba(0,0,0,.2) 7px, rgba(0,0,0,.2) 8px, rgba(0,0,0,0) 8px),
     linear-gradient(90deg, #202,#303,#404);
 }
@@ -1996,7 +1997,7 @@ input[name="nofilter_commentsName"]:focus::placeholder {
 input[type=text]:active, input[type=text]:focus, input.r:focus, input[name="nofilter_dataDir"]:focus, textarea:focus:not([readonly]) {
   outline: none;
   color: #fff;
-  box-shadow: inset 0 0 0 1px #ffffcf, inset 3px 3px 3px rgba(0,0,0,.5);
+  box-shadow: inset 0 0 0 1px #ffffcf, var(--shadow_inset);
   background: linear-gradient(180deg,#d60, #c50);
   transition: ease box-shadow .05s;
 }
@@ -3166,12 +3167,16 @@ td .commentAuthorName {
 }
 
 #trackerselect {
-  border: var(--border_hard);
+  margin: 8px 0 4px 4px;
+  width: calc(80% - 1px) !important;
   border-collapse: separate;
   border-spacing: 0;
-  width: 80% !important;
-  margin: 8px 0 4px 4px;
-  box-shadow: 0 0 1px 1px rgba(16, 8, 16, .3);
+  border: 1px solid rgba(119, 102, 119, .5);
+  box-shadow: 0 0 0 1px rgba(0,0,0,.5), 0 0 1px 1px #323;
+}
+
+body:not(.iframed) #trackerselect {
+  border-radius: 4px;
 }
 
 #trackerselect td {
@@ -3192,7 +3197,6 @@ td .commentAuthorName {
 }
 
 #trackerselect tr:nth-child(n+2) td {
-  border-right: var(--border_hard);
   border-right: 1px solid rgba(16,0,16,.5);
 }
 
@@ -3222,19 +3226,19 @@ td .commentAuthorName {
   background: linear-gradient(180deg,#58165e, #4a0d56) !important;
 }
 
-#trackerselect tr:first-child td:first-child {
+body:not(.iframed) #trackerselect tr:first-child td:first-child {
   border-radius: 3px 0 0 0;
 }
 
-#trackerselect tr:first-child td:last-child {
+body:not(.iframed)  #trackerselect tr:first-child td:last-child {
   border-radius: 0 3px 0 0;
 }
 
-#trackerselect tr:last-child td:first-child {
+body:not(.iframed)  #trackerselect tr:last-child td:first-child {
   border-radius: 0 0 0 3px;
 }
 
-#trackerselect tr:last-child td:last-child {
+body:not(.iframed) #trackerselect tr:last-child td:last-child {
   border-radius: 0 0 3px 0;
 }
 
@@ -3271,10 +3275,18 @@ span.trackerName::before {
   content: "";
 }
 
+#trackerselect tr:hover span.trackerName::before, span.trackerName:hover::before {
+  background: var(--tracker_hover) no-repeat left center / 16px;
+}
+
 .trackerName a {
   width: 100%;
   display: inline-block;
   vertical-align: middle;
+}
+
+#trackerselect tr:hover span.trackerName a, span.trackerName a:hover {
+  color: #d2baff;
 }
 
 /* end create torrent -> trackers table */
@@ -3480,17 +3492,17 @@ span.trackerName::before {
 
 .configOption {
   padding: 0 4px;
+  width: calc(100% - 20px);
   display: inline-block;
   vertical-align: middle;
   white-space: nowrap;
-  width: calc(100% - 20px);
 }
 
 .configOption::after {
-  content: "";
-  display: inline-block;
   height: 36px;
+  display: inline-block;
   vertical-align: middle;
+  content: "";
 }
 
 input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilter_dataDir"] {
@@ -3509,19 +3521,12 @@ input[name="nofilter_commentsName"] {
 }
 
 .numeric {
-  min-width: 0 !important;
   width: 60px !important;
+  min-width: 0 !important;
 }
 
 .numeric:focus {
   text-align: center
-}
-
-@supports not (-moz-appearance: none) {
-#configs .optbox {
-  min-width: 20px !important;
-  min-height: 20px !important;
-}
 }
 
 /* language overrides */
@@ -4438,7 +4443,7 @@ input[type=radio]:checked::before {
   border: none;
   border-radius: 0;
   position: relative;
-  box-shadow: inset 0 0 0 1px #280028, inset 0 0 0 2px #101, inset 3px 3px 3px rgba(0,0,0,.7), 0 0 0 1px #101;
+  box-shadow: inset 0 0 0 1px #280028, inset 0 0 0 2px #101, var(--shadow_inset), 0 0 0 1px #101;
   background: var(--tile) #212;
   background-size: 96px;
   outline: none;
@@ -4456,12 +4461,12 @@ input[type=radio]:checked::before {
 
 .configOption input[type=checkbox]:not(:checked):active, #commentsToggle input[type=checkbox]:not(:checked):active {
   background: linear-gradient(180deg,#393, #4a4);
-  box-shadow: 0 0 0 #101, inset 0 0 0 1px #f60, inset 3px 3px 3px rgba(0,0,0,.7);
+  box-shadow: 0 0 0 #101, inset 0 0 0 1px #f60, var(--shadow_inset);
 }
 
 .configOption input[type=checkbox]:checked:active, #commentsToggle input[type=checkbox]:checked:active {
   background: linear-gradient(180deg,#cf0f00, #f00);
-  box-shadow: 0 0 0 #101, inset 0 0 0 1px #f60, inset 3px 3px 3px rgba(0,0,0,.7);
+  box-shadow: 0 0 0 #101, inset 0 0 0 1px #f60, var(--shadow_inset);
 }
 
 .configOption input[type=checkbox]::before,
