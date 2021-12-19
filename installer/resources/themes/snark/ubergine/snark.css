@@ -600,7 +600,7 @@ th.snarkGraphicStatus a img {
 }
 
 .snarkTorrentStatus {
-  padding: 2px 2px 2px 0 !important;
+  padding: 2px 0 2px 0 !important;
   line-height: 1.1;
   text-align: center !important;
   font-weight: 400 !important;
@@ -608,10 +608,6 @@ th.snarkGraphicStatus a img {
 
 th.snarkTorrentStatus {
   text-align: center !important;
-}
-
-.snarkTorrentStatus b {
-  margin-right: 3px !important;
 }
 
 .snarkTrackerDetails, .SnarkTorrentDetails {
@@ -4062,25 +4058,161 @@ td.snarkTorrentPeerCount {
   font-weight: 700;
 }
 
-.nopeers.zero td.snarkTorrentPeerCount, .stopped.zero td.snarkTorrentPeerCount {
-  text-align: center;
+td.snarkTorrentPeerCount {
+  padding-right: 3px !important;
 }
 
-.snarkTorrentPeerCount .left, .snarkTorrentPeerCount .right {
-  min-width: 12px;
+td.snarkTorrentPeerCount b {
+  padding: 4px 3px;
+  min-width: 91px;
   display: inline-block;
+  position: relative;
+  line-height: 1;
+  text-align: center !important;
+  font-size: 95%;
+  text-shadow: 0 1px 1px #000 !important;
+  -webkit-text-stroke: 0 !important;
+  border-radius: 2px;
+  background: #ac5390;
+  filter: drop-shadow(0 0 1px #000);
 }
 
-.snarkTorrentPeerCount .left {
-  margin-right: 5px;
-  padding-left: 2px;
-  text-align: left;
+td.snarkTorrentPeerCount b .left, td.snarkTorrentPeerCount b .right {
+  margin: 0 1px;
+  padding: 2px 3px 1px;
+  min-width: 31px !important;
+  display: inline-block;
+  text-align: center;
+  color: #fdf;
+  border-radius: 1px;
+  box-shadow: 0 0 0 1px rgba(16,0,16,.5), inset 2px 2px 2px rgba(0,0,0,.3);
+  background: linear-gradient(180deg,rgba(32,0,32,.3), rgba(16,0,16,.3));
 }
 
-.snarkTorrentPeerCount .right {
-  padding-right: 2px;
-  text-align: right;
+.nopeers td.snarkTorrentPeerCount b .left, .nopeers td.snarkTorrentPeerCount b .right {
+  color: #101;
+  text-shadow: 0 1px 1px #aaa !important;
 }
+
+td.snarkTorrentPeerCount b a:hover .left, td.snarkTorrentPeerCount b a:hover .right {
+  min-width: 27px !important;
+  color: #f60 !important;
+  background: linear-gradient(180deg,rgba(220,80,0,.3), rgba(255,96,0,.3));
+}
+
+td.snarkTorrentPeerCount b .right {
+  margin-left: 0 !important;
+}
+
+td.snarkTorrentPeerCount b .left {
+  margin-right: 0 !important;
+}
+
+td.snarkTorrentPeerCount b a:hover .right {
+  margin-left: -9px !important;
+}
+
+td.snarkTorrentPeerCount b::before {
+  width: 0;
+  height: 0;
+  position: absolute;
+  top: calc(50% - 5px);
+  left: -10px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent #ac5390 transparent transparent;
+  content: "";
+}
+
+td.snarkTorrentPeerCount b a {
+  color: #fff !important;
+}
+
+td.snarkTorrentPeerCount b a:hover, td.snarkTorrentPeerCount b a:focus {
+  color: #f60 !important;
+}
+
+td.snarkTorrentPeerCount b a:hover::after {
+  width: 0;
+  height: 0;
+  position: absolute;
+  right: 5px;
+  bottom: calc(50% - 2px);
+  border-color: transparent transparent #fff transparent;
+  border-style: solid;
+  border-width: 3px;
+  content: "";
+}
+
+td.snarkTorrentPeerCount b a[href*="?p="]:hover::after {
+  top: calc(50% - 2px);
+  border-color: #fff transparent transparent transparent;
+}
+
+td.snarkTorrentPeerCount b:hover a:hover::after, td.snarkTorrentPeerCount b:hover a:focus::after {
+  border-color: transparent transparent #f60 transparent;
+}
+
+td.snarkTorrentPeerCount b:hover a[href*="?p="]:hover::after, td.snarkTorrentPeerCount b:hover a[href*="?p="]:focus::after {
+  border-color: #f60 transparent transparent transparent;
+}
+
+.active.seeding.complete .snarkTorrentPeerCount b {
+  background: repeating-linear-gradient(135deg, #937, #937 8px, #826 9px, #826 17px);
+}
+
+.active.seeding.complete .snarkTorrentPeerCount b::before {
+  border-color: transparent #937 transparent transparent;
+}
+
+.active.downloading .snarkTorrentPeerCount b {
+  background: repeating-linear-gradient(135deg, #252, #252 8px, #141 9px, #141 17px);
+}
+
+.active.downloading .snarkTorrentPeerCount b::before {
+  border-color: transparent #252 transparent transparent;
+}
+
+.inactive.downloading .snarkTorrentPeerCount b,
+.active.starting.processing .snarkTorrentPeerCount b {
+  color: #101;
+  background: #bb0;
+}
+
+.inactive.downloading .snarkTorrentPeerCount b, .snarkTorrentPeerCount b .right, .snarkTorrentPeerCount b .left {
+  text-shadow: 0 1px 1px #222 !important;
+}
+
+.inactive.downloading .snarkTorrentPeerCount b::before,
+.active.starting.processing .snarkTorrentPeerCount b::before {
+  border-color: transparent #bb0 transparent transparent;
+}
+
+.stopped.complete .snarkTorrentPeerCount b {
+  background: #28f;
+}
+
+.stopped.complete .snarkTorrentPeerCount b::before {
+  border-color: transparent #28f transparent transparent;
+}
+
+.nopeers.incomplete .snarkTorrentPeerCount b {
+  background: #aaa;
+}
+
+.nopeers.incomplete .snarkTorrentPeerCount b::before {
+  border-color: transparent #aaa transparent transparent;
+}
+
+.stopped.incomplete .snarkTorrentPeerCount b, .inactive.neterror .snarkTorrentPeerCount b {
+  background: #900 !important;
+}
+
+.stopped.incomplete .snarkTorrentPeerCount b::before, .inactive.neterror .snarkTorrentPeerCount b::before {
+  border-color: transparent #900 transparent transparent !important;
+}
+
+
 
 .active .snarkTorrentStatus {
   font-style: italic;
@@ -5150,128 +5282,6 @@ td.snarkTorrentAction input[type=submit] {
   #actionStopAll, #actionStartAll {
     padding: 11px 18px !important;
   }
-  td.snarkTorrentPeerCount {
-    padding-right: 3px !important;
-  }
-  td.snarkTorrentPeerCount b {
-    padding: 4px 3px;
-    min-width: 91px;
-    display: inline-block;
-    position: relative;
-    line-height: 1;
-    text-align: center !important;
-    font-size: 95%;
-    text-shadow: 0 1px 1px #000 !important;
-    -webkit-text-stroke: 0 !important;
-    border-radius: 2px;
-    background: #535;
-    filter: drop-shadow(0 0 1px #000);
-  }
-  td.snarkTorrentPeerCount b .left, td.snarkTorrentPeerCount b .right {
-    margin: 0 1px;
-    padding: 2px 3px 1px;
-    min-width: 31px !important;
-    display: inline-block;
-    text-align: center;
-    color: #aaa;
-    border-radius: 1px;
-    box-shadow: 0 0 0 1px rgba(16,0,16,.5), inset 2px 2px 2px rgba(0,0,0,.3);
-    background: linear-gradient(180deg,rgba(32,0,32,.3), rgba(16,0,16,.3));
-  }
-  td.snarkTorrentPeerCount b a:hover .left, td.snarkTorrentPeerCount b a:hover .right {
-    min-width: 27px !important;
-    color: #f60 !important;
-    background: linear-gradient(180deg,rgba(220,80,0,.3), rgba(255,96,0,.3));
-  }
-  td.snarkTorrentPeerCount b .right {
-    margin-left: 0 !important;
-  }
-  td.snarkTorrentPeerCount b .left {
-    margin-right: 0 !important;
-  }
-  td.snarkTorrentPeerCount b a:hover .right {
-    margin-left: -9px !important;
-  }
-  td.snarkTorrentPeerCount b::before {
-    width: 0;
-    height: 0;
-    position: absolute;
-    top: calc(50% - 5px);
-    left: -10px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: transparent #535 transparent transparent;
-    content: "";
-  }
-  td.snarkTorrentPeerCount b a {
-    color: #fff !important;
-  }
-  td.snarkTorrentPeerCount b a:hover, td.snarkTorrentPeerCount b a:focus {
-    color: #f60 !important;
-  }
-  td.snarkTorrentPeerCount b a:hover::after {
-    width: 0;
-    height: 0;
-    position: absolute;
-    right: 5px;
-    bottom: calc(50% - 2px);
-    border-color: transparent transparent #fff transparent;
-    border-style: solid;
-    border-width: 3px;
-    content: "";
-  }
-  td.snarkTorrentPeerCount b a[href*="?p="]:hover::after {
-    top: calc(50% - 2px);
-    border-color: #fff transparent transparent transparent;
-  }
-  td.snarkTorrentPeerCount b:hover a:hover::after, td.snarkTorrentPeerCount b:hover a:focus::after {
-    border-color: transparent transparent #f60 transparent;
-  }
-  td.snarkTorrentPeerCount b:hover a[href*="?p="]:hover::after, td.snarkTorrentPeerCount b:hover a[href*="?p="]:focus::after {
-    border-color: #f60 transparent transparent transparent;
-  }
-  .active.seeding.complete .snarkTorrentPeerCount b {
-    background: repeating-linear-gradient(135deg, #937, #937 8px, #826 9px, #826 17px);
-  }
-  .active.seeding.complete .snarkTorrentPeerCount b::before {
-    border-color: transparent #937 transparent transparent;
-  }
-  .active.downloading .snarkTorrentPeerCount b {
-    background: repeating-linear-gradient(135deg, #252, #252 8px, #141 9px, #141 17px);
-  }
-  .active.downloading .snarkTorrentPeerCount b::before {
-    border-color: transparent #252 transparent transparent;
-  }
-  .inactive.downloading .snarkTorrentPeerCount b,
-  .active.starting.processing .snarkTorrentPeerCount b {
-    color: #101;
-    background: #bb0;
-  }
-  .inactive.downloading .snarkTorrentPeerCount b, .snarkTorrentPeerCount b .right, .snarkTorrentPeerCount b .left {
-    text-shadow: 0 1px 1px #222 !important;
-  }
-  .inactive.downloading .snarkTorrentPeerCount b::before,
-  .active.starting.processing .snarkTorrentPeerCount b::before {
-    border-color: transparent #bb0 transparent transparent;
-  }
-  .stopped.complete .snarkTorrentPeerCount b {
-    background: #28f;
-  }
-  .stopped.complete .snarkTorrentPeerCount b::before {
-    border-color: transparent #28f transparent transparent;
-  }
-  .nopeers.incomplete .snarkTorrentPeerCount b {
-    background: #aaa;
-  }
-  .nopeers.incomplete .snarkTorrentPeerCount b::before {
-    border-color: transparent #aaa transparent transparent;
-  }
-  .stopped.incomplete .snarkTorrentPeerCount b, .inactive.neterror .snarkTorrentPeerCount b {
-    background: #900 !important;
-  }
-  .stopped.incomplete .snarkTorrentPeerCount b::before, .inactive.neterror .snarkTorrentPeerCount b::before {
-    border-color: transparent #900 transparent transparent !important;
-  }
   .iframed #snarkTorrentEditSection + #snarkCommentSection,
   .iframed #snarkTorrentEditSection {
     margin-top: -7px;
@@ -5587,7 +5597,7 @@ td.snarkTorrentAction input[type=submit] {
   td.snarkGraphicStatus img {margin-left: 1px !important}
   th.snarkTorrentPeerCount img {display: none}
   td.snarkTorrentPeerCount a, td.snarkTorrentPeerCount a:hover, td.snarkTorrentPeerCount a:active, .snarkTorrentPeerCount span {
-    color: #ddd;
+    color: #fdf;
   }
   .snarkTorrentStatus b.alwaysShow {
     display: none;
