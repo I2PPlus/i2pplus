@@ -1251,7 +1251,7 @@ thead img.disable, img.disable:hover {
 .active.seeding .uploaded {
   background: repeating-linear-gradient(90deg,#d8b8a6,#d8b8a6 5%,#f7d0ba 5%,#f7d0ba 10%);
   background-size: 200%;
-  animation: linear uploading .5s 4.5s reverse infinite;
+  animation: animation: uploading .5s linear 4s 1 reverse;
 }
 
 .txBarInner {
