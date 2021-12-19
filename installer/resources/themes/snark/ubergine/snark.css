@@ -350,7 +350,6 @@ label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
   opacity: .8;
   border: var(--border_hard) !important;
   border-radius: 0 0 0 3px;
-  background: #202;
   background: rgba(34,0,34,.8);
   mix-blend-mode: luminosity;
   filter: sepia(100%) hue-rotate(210deg);
@@ -683,7 +682,6 @@ th.snarkTorrentUploaded a img {
 }
 
 .snarkTorrents tfoot {
-  background: #101;
   background: linear-gradient(180deg,#180018, #080008);
 }
 
@@ -885,7 +883,6 @@ td:first-child {
 }
 
 .snarkTorrentOdd, .snarkTorrentEven {
-  background: #270027;
   background: linear-gradient(180deg,#260d26, #1f001f);
 }
 
@@ -1278,7 +1275,7 @@ tr:hover .percentBarOuter, tr:hover .peerinfo .percentBarOuter {
 .active.seeding .uploaded {
   background: repeating-linear-gradient(90deg,#000,#000 5%,#707 5%,#707 10%);
   background-size: 200%;
-  animation: linear uploading .5s 4.5s reverse infinite;
+  animation: uploading .5s linear 4s 1 reverse;
 }
 
 tr:hover .uploaded {
@@ -1298,7 +1295,6 @@ tr:hover .uploaded {
 }
 
 .active.seeding .txBarInner {
-  background: rgba(208,32,128,.8);
   background: linear-gradient(180deg, rgba(192,64,0,.8), rgba(240,80,0,.8));
 }
 
@@ -1954,22 +1950,20 @@ input[type=submit]:disabled:active, a.control:disabled:active {
 }
 
 #pagecount {
-  background: #313;
-  background: linear-gradient(180deg,#313, #212);
-  padding: 5px 10px 4px;
   margin: 0 6px !important;
+  padding: 5px 10px 4px;
   display: inline-block;
   vertical-align: middle;
-  border-radius: 3px;
   letter-spacing: .2em;
-  box-shadow: inset 0 0 0 1px #101;
-  text-shadow: 0 1px 1px #000;
   color: #a8a;
+  text-shadow: 0 1px 1px #000;
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 1px #101;
+  background: linear-gradient(180deg,#313, #212);
 }
 
 .pagenavcontrols:hover #pagecount {
   color: #dbd;
-  background: #414;
   background: linear-gradient(180deg,#414, #313);
 }
 
@@ -1986,9 +1980,8 @@ input[type=text], input.r, input[name="nofilter_dataDir"] {
 
 input[type=text]:disabled {
   color: rgba(192,160,192,.5) !important;
-  box-shadow: inset 1px 1px 2px 1px #101 !important;
-  background: var(--tile) #212 !important;
-  background-size: 96px !important;
+  box-shadow: inset 1px 1px 2px 1px #101;
+  background: #212 var(--tile) left top / 96px;
   cursor: not-allowed;
 }
 
@@ -2004,9 +1997,12 @@ input[type=text]:active, input[type=text]:focus, input.r:focus, input[name="nofi
   outline: none;
   color: #fff;
   box-shadow: inset 0 0 0 1px #ffffcf, inset 3px 3px 3px rgba(0,0,0,.5);
-  background: #d60;
   background: linear-gradient(180deg,#d60, #c50);
   transition: ease box-shadow .05s;
+}
+
+input[type=text]:focus, input.r:focus {
+  padding-right: 3px !important;
 }
 
 input[type=radio] {
@@ -2061,15 +2057,14 @@ a.control, a.controld, a.control:active {
   border: 1px inset #bbb;
   border-radius: 2px;
   box-shadow: 0 0 1px 1px rgba(48,16,48,.7);
-  background: #989;
   background: var(--btn);
   background-size: 100% !important;
   filter: drop-shadow(0 0 1px #313) !important;
 }
 
 a.controld {
-  color: #6e5e6e;
   font-weight: 400;
+  color: #6e5e6e;
 }
 
 a.control img {
@@ -3189,12 +3184,11 @@ td .commentAuthorName {
 }
 
 #trackerselect tr:first-child td {
-  background: #000;
-  background: linear-gradient(180deg,#313, #000);
   padding-top: 8px !important;
   padding-bottom: 8px !important;
-  border-bottom: var(--border_inner);
   font-weight: 700 !important;
+  border-bottom: var(--border_inner);
+  background: linear-gradient(180deg,#313, #000);
 }
 
 #trackerselect tr:nth-child(n+2) td {
@@ -3257,7 +3251,6 @@ span.trackerName {
   text-align: left;
   border: var(--border_hard);
   border-radius: 3px;
-  background: #202;
   background: var(--th);
 }
 
@@ -3266,19 +3259,16 @@ span.trackerName {
   border: 1px solid #202;
   border: 1px solid rgba(34,0,34,.7);
   box-shadow: inset 0 0 0 1px #414;
-  background: #303;
   background: linear-gradient(180deg,#303,#202);
 }
 
 span.trackerName::before {
-  content: "";
-  display: inline-block;
   width: 20px;
   height: 20px;
-  background: url(images/button_tracker_hover.png) no-repeat left center;
-  background-size: 16px auto;
+  display: inline-block;
   vertical-align: middle;
-  opacity: .3;
+  background: var(--tracker) no-repeat left center / 16px;
+  content: "";
 }
 
 .trackerName a {
@@ -3344,14 +3334,14 @@ span.trackerName::before {
   padding: 6px 9px 6px 10px;
   vertical-align: baseline;
   float: right;
-  color: #757;
-  font-size: 8.5pt;
   text-transform: none;
+  -webkit-text-stroke: 0;
+  font-size: 8.5pt;
+  color: #757;
   border-left: 1px solid #434;
   border-radius: 0 3px 0 0;
   box-shadow: inset 0 0 0 1px #101;
   opacity: .9;
-  background: #212;
   background: rgba(17,0,17,.3);
   transition: ease opacity .15s;
   will-change: transform;
@@ -3445,7 +3435,6 @@ span.trackerName::before {
   text-align: right;
   border-radius: 15px 5px 5px 15px;
   box-shadow: 0 0 0 1px rgba(17,0,17,.7);
-  background: #212;
   background: linear-gradient(180deg,rgba(32,16,32,.2), rgba(16,0,16,.7));
   opacity: .9;
   transition: ease width .2s;
@@ -3480,13 +3469,11 @@ span.trackerName::before {
   border: 1px solid #212;
   border-radius: 0 0 5px 5px;
   box-shadow: inset 0 0 0 1px #434;
-  background: #2d1d2d;
   background: rgba(48,30,48,.8);
   transition: ease-in-out .5s box-shadow;
 }
 
 .optionlist:hover {
-  box-shadow: inset 0 0 0 1px #730;
   box-shadow: inset 0 0 0 1px #646;
   transition: ease-in-out .5s box-shadow;
 }
@@ -3661,7 +3648,6 @@ input[name="nofilter_commentsName"] {
 }
 
 .trackerconfig tr:nth-child(n+2):hover {
-  background: #58165e;
   background: linear-gradient(180deg,#58165e, #4a0d56);
 }
 
@@ -3745,12 +3731,10 @@ input[name="nofilter_commentsName"] {
 }
 
 .trackerconfig tr:nth-child(2n+3) {
-  background: #313;
   background: rgba(16,0,16,.3);
 }
 
 .trackerconfig tr:nth-child(2n+4) {
-  background: #212;
   background: rgba(16,0,16,.5);
 }
 
@@ -4533,7 +4517,6 @@ input[type=radio]:checked::before {
   display: inline-block;
   border-radius: 3px;
   box-shadow: 0 0 0 1px #200;
-  background: #900;
   background: repeating-linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,0) 15px, rgba(0,0,0,.5) 15px, rgba(0,0,0,.5) 16px, rgba(0,0,0,0) 16px),
     linear-gradient(180deg,rgba(255,255,255,.3) 50%, rgba(0,0,0,.3) 50%),
     linear-gradient(90deg, #770 50px, #900);
@@ -4790,7 +4773,6 @@ body:not(.iframed) #snarkTorrentEdit tfoot td {
   display: inline-block;
   border-radius: 3px;
   box-shadow:  0 0 0 1px #101, inset 0 0 0 1px #414;
-  background: #313;
   background: linear-gradient(180deg,#313, #202);
 }
 
@@ -4841,7 +4823,6 @@ body:not(.iframed) #snarkTorrentEdit tfoot td {
   color: #101;
   border-radius: 2px;
   box-shadow: 0 0 0 1px #101, inset 0 0 0 1px #dd0;
-  background: #cc0;
   background: linear-gradient(180deg,#cc0, #aa0);
 }
 
