@@ -5501,13 +5501,18 @@ h3#bannedpeers {
   background: none;
 }
 
-#banlist li tt {
-  line-height: 1.4 !important;
+#banlist li tt, #banlist li tt a {
+  line-height: 1.3 !important;
   text-shadow: var(--textshadow);
+  vertical-align: middle;
+}
+
+#banlist li tt a {
+  margin-left: -4px;
 }
 
 #banlist li .routerid img {
-  margin: 0 2px 0 0;
+  margin: 0 2px 0 0 !important;
 }
 
 #banlist li:last-child {
