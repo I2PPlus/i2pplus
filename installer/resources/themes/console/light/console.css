@@ -12477,9 +12477,7 @@ i {
 }
 
 @media screen and (min-width: 1500px) {
-#sybilTask th {
-  font-size: 12pt !important;
-}
+  #sybilTask th {font-size: 12pt !important}
 }
 
 #sybilTask td:first-child {
@@ -13367,6 +13365,32 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
 
 .netdbentry .netdb_header img[src="/flags.jsp?c=a0"] {
   margin-top: 0;
+}
+
+@media screen and (min-width: 1500px) {
+  .routerid {
+    vertical-align: middle;
+    contain: paint;
+  }
+  .routerid .flag {
+    margin-top: -1px;
+    margin-bottom: -2px;
+    width: 19px;
+    height: 17px;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  .routerid .flag img {
+    margin: 0 0 0 -1px !important;
+    width: 19px !important;
+    height: 14px !important;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  #peers .flag img, #profiles .flag img {
+    margin: 1px -2px 1px -2px !important;
+    height: 15px !important;
+  }
 }
 
 iframe {

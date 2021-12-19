@@ -402,7 +402,7 @@ pre {
 
 #sidebar td b, .infohelp b {
   color: #ffffa8;
-  -webkit-text-stroke: 2px rgba(16,16,0,.3);
+  -webkit-text-stroke: 1px rgba(0,0,0,.4);
 }
 
 #sidebar td a {
