@@ -56,6 +56,8 @@ class ConnectionManager {
     private final Map<Long, Object> _recentlyClosed;
     private static final Object DUMMY = new Object();
 
+     private static final long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l };
+
     /** cache of the property to detect changes */
     private static volatile String _currentBlacklist = "";
     private static final Set<Hash> _globalBlacklist = new ConcurrentHashSet<Hash>();
@@ -120,23 +122,23 @@ class ConnectionManager {
         _soTimeout = -1;
 
         // Stats for this class
-        _context.statManager().createRateStat("stream.con.lifetimeMessagesSent", "Number of messages we send on a stream", "Stream", new long[] { 60*1000, 60*60*1000, 24*60*60*1000 });
-        _context.statManager().createRateStat("stream.con.lifetimeMessagesReceived", "Number of messages we receive on a stream", "Stream", new long[] { 60*1000, 60*60*1000, 24*60*60*1000 });
-        _context.statManager().createRateStat("stream.con.lifetimeBytesSent", "How many bytes we send on a stream", "Stream", new long[] { 60*1000, 60*60*1000, 24*60*60*1000 });
-        _context.statManager().createRateStat("stream.con.lifetimeBytesReceived", "How many bytes we receive on a stream", "Stream", new long[] { 60*1000, 60*60*1000, 24*60*60*1000 });
-        _context.statManager().createRateStat("stream.con.lifetimeDupMessagesSent", "Number of duplicate messages we send on a stream", "Stream", new long[] { 60*1000, 60*60*1000, 24*60*60*1000 });
-        _context.statManager().createRateStat("stream.con.lifetimeDupMessagesReceived", "Number of duplicate messages we receive on a stream", "Stream", new long[] { 60*1000, 60*60*1000, 24*60*60*1000 });
-        _context.statManager().createRateStat("stream.con.lifetimeRTT", "Final RTT when a stream closes", "Stream", new long[] { 60*1000, 60*60*1000, 24*60*60*1000 });
-        _context.statManager().createRateStat("stream.con.lifetimeSendWindowSize", "Final send window size when a stream closes", "Stream", new long[] { 60*1000, 60*60*1000, 24*60*60*1000 });
-        _context.statManager().createRateStat("stream.receiveActive", "Number of active streams when a new one is received (period being not yet dropped)", "Stream", new long[] { 60*1000, 60*60*1000, 24*60*60*1000 });
+        _context.statManager().createRateStat("stream.con.lifetimeMessagesSent", "Number of messages we send on a stream", "Stream", RATES);
+        _context.statManager().createRateStat("stream.con.lifetimeMessagesReceived", "Number of messages we receive on a stream", "Stream", RATES);
+        _context.statManager().createRateStat("stream.con.lifetimeBytesSent", "How many bytes we send on a stream", "Stream", RATES);
+        _context.statManager().createRateStat("stream.con.lifetimeBytesReceived", "How many bytes we receive on a stream", "Stream", RATES);
+        _context.statManager().createRateStat("stream.con.lifetimeDupMessagesSent", "Number of duplicate messages we send on a stream", "Stream", RATES);
+        _context.statManager().createRateStat("stream.con.lifetimeDupMessagesReceived", "Number of duplicate messages we receive on a stream", "Stream", RATES);
+        _context.statManager().createRateStat("stream.con.lifetimeRTT", "Final RTT when a stream closes", "Stream", RATES);
+        _context.statManager().createRateStat("stream.con.lifetimeSendWindowSize", "Final send window size when a stream closes", "Stream", RATES);
+        _context.statManager().createRateStat("stream.receiveActive", "Number of active streams when a new one is received (period being not yet dropped)", "Stream", RATES);
         // Stats for Connection
-        _context.statManager().createRateStat("stream.con.windowSizeAtCongestion", "Size of our send window when we send a dup", "Stream", new long[] { 60*1000, 60*60*1000 });
-        _context.statManager().createRateStat("stream.chokeSizeBegin", "Number of outstanding messages when we started to choke", "Stream", new long[] { 60*1000, 60*60*1000 });
-        _context.statManager().createRateStat("stream.chokeSizeEnd", "Number of outstanding messages when we stopped being choked", "Stream", new long[] { 60*1000, 60*60*1000 });
+        _context.statManager().createRateStat("stream.con.windowSizeAtCongestion", "Size of our send window when we send a dup", "Stream", RATES);
+        _context.statManager().createRateStat("stream.chokeSizeBegin", "Number of outstanding messages when we started to choke", "Stream", RATES);
+        _context.statManager().createRateStat("stream.chokeSizeEnd", "Number of outstanding messages when we stopped being choked", "Stream", RATES);
         _context.statManager().createRateStat("stream.fastRetransmit", "How long a packet has been around for if it has been resent per the fast retransmit timer", "Stream", new long[] { 10*60*1000 });
         // Stats for PacketQueue
-        _context.statManager().createRateStat("stream.con.sendMessageSize", "Size of a message sent on a connection", "Stream", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
-        _context.statManager().createRateStat("stream.con.sendDuplicateSize", "Size of a message resent on a connection", "Stream", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
+        _context.statManager().createRateStat("stream.con.sendMessageSize", "Size of a message sent on a connection", "Stream", RATES);
+        _context.statManager().createRateStat("stream.con.sendDuplicateSize", "Size of a message resent on a connection", "Stream", RATES);
     }
 
     Connection getConnectionByInboundId(long id) {
@@ -202,7 +204,7 @@ class ConnectionManager {
     public synchronized void updateOptions() {
             if ((_defaultOptions.getMaxConnsPerMinute() > 0 || _defaultOptions.getMaxTotalConnsPerMinute() > 0) &&
                 _minuteThrottler == null) {
-               _context.statManager().createRateStat("stream.con.throttledMinute", "Dropped for conn limit", "Stream", new long[] { 5*60*1000 });
+               _context.statManager().createRateStat("stream.con.throttledMinute", "Dropped for conn limit", "Stream", RATES);
                _minuteThrottler = new ConnThrottler(_defaultOptions.getMaxConnsPerMinute(), _defaultOptions.getMaxTotalConnsPerMinute(),
                                                     60*1000, _timer);
             } else if (_minuteThrottler != null) {
@@ -210,7 +212,7 @@ class ConnectionManager {
             }
             if ((_defaultOptions.getMaxConnsPerHour() > 0 || _defaultOptions.getMaxTotalConnsPerHour() > 0) &&
                 _hourThrottler == null) {
-               _context.statManager().createRateStat("stream.con.throttledHour", "Dropped for conn limit", "Stream", new long[] { 5*60*1000 });
+               _context.statManager().createRateStat("stream.con.throttledHour", "Dropped for conn limit", "Stream", RATES);
                _hourThrottler = new ConnThrottler(_defaultOptions.getMaxConnsPerHour(), _defaultOptions.getMaxTotalConnsPerHour(),
                                                   60*60*1000, _timer);
             } else if (_hourThrottler != null) {
@@ -218,7 +220,7 @@ class ConnectionManager {
             }
             if ((_defaultOptions.getMaxConnsPerDay() > 0 || _defaultOptions.getMaxTotalConnsPerDay() > 0) &&
                 _dayThrottler == null) {
-               _context.statManager().createRateStat("stream.con.throttledDay", "Dropped for conn limit", "Stream", new long[] { 5*60*1000 });
+               _context.statManager().createRateStat("stream.con.throttledDay", "Dropped for conn limit", "Stream", RATES);
                _dayThrottler = new ConnThrottler(_defaultOptions.getMaxConnsPerDay(), _defaultOptions.getMaxTotalConnsPerDay(),
                                                  24*60*60*1000, _timer);
             } else if (_dayThrottler != null) {
