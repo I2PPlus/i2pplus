@@ -128,7 +128,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
     /**
      * Pick a random inbound tunnel from the given destination's pool.
-     * Warning - selectOutboundTunnel(Hash, Hash) is preferred.
+     * Warning - selectInboundTunnel(Hash, Hash) is preferred.
      *
      * @param destination if null, returns inbound exploratory tunnel
      * @return null if none
@@ -344,6 +344,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     public boolean isValidTunnel(Hash client, TunnelInfo tunnel) {
+        if (tunnel.getTunnelFailed())
+            return false;
         if (tunnel.getExpiration() < _context.clock().now())
             return false;
         TunnelPool pool;

@@ -88,7 +88,7 @@ public class ShellService implements ClientApp {
 
         File pluginDir = new File(_context.getConfigDir(), PLUGIN_DIR + '/' + this.getName());
         _pb.directory(pluginDir);
-        changeState(ClientAppState.INITIALIZED, "ShellService: "+getName()+" set up and initialized");
+        changeState(ClientAppState.INITIALIZED, "ShellService: " + getName() + " set up and initialized");
     }
 
     private String scriptArgs(String[] procArgs) {
@@ -104,8 +104,8 @@ public class ShellService implements ClientApp {
             String cmd = procArgs[0];
             _log.debug("cmd: " + cmd);
         }
-        String script = "start \""+getName()+"\" "+scriptArgs(procArgs)+System.lineSeparator() +
-                        "tasklist /V /FI \"WindowTitle eq "+getName()+"*\""+System.lineSeparator();
+        String script = "start \"" + getName() + "\" "+scriptArgs(procArgs) + System.lineSeparator() +
+                        "tasklist /V /FI \"WindowTitle eq " + getName() + "*\"" + System.lineSeparator();
         return script;
     }
 
@@ -119,26 +119,26 @@ public class ShellService implements ClientApp {
                 file.setExecutable(true);
             }
         }
-        String Script = "nohup "+scriptArgs(procArgs)+" 1>/dev/null 2>/dev/null & echo $!"+System.lineSeparator();
+        String Script = "nohup " + scriptArgs(procArgs) + " 1>/dev/null 2>/dev/null & echo $!" + System.lineSeparator();
         return Script;
     }
 
     private void deleteScript() {
         File dir = _context.getTempDir();
         if (SystemVersion.isWindows()) {
-            File bat = new File(dir, "shellservice-"+getName()+".bat");
+            File bat = new File(dir, "shellservice-" + getName() +".bat");
             bat.delete();
         } else {
-            File sh = new File(dir, "shellservice-"+getName()+".sh");
+            File sh = new File(dir, "shellservice-" + getName() + ".sh");
             sh.delete();
         }
     }
 
     private String writeScript(File dir, String extension, String[] procArgs){
-        File script = new File(dir, "shellservice-"+getName()+extension);
+        File script = new File(dir, "shellservice-" + getName() + extension);
         script.delete();
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Writing Batch Script " + script.toString());
+            _log.debug("Writing batch script " + script.toString());
         FileWriter scriptWriter = null;
         try {
             script.createNewFile();
@@ -147,12 +147,12 @@ public class ShellService implements ClientApp {
                 scriptWriter.write(batchScript(procArgs));
             else if (extension.equals(".sh"))
                 scriptWriter.write(shellScript(procArgs));
-            changeState(ClientAppState.INITIALIZED, "ShellService: "+getName()+" initialized");
+            changeState(ClientAppState.INITIALIZED, "ShellService: " + getName() + " initialized");
         } catch (IOException ioe) {
             if (_log.shouldLog(Log.ERROR))
                 _log.error("Error writing wrapper script shellservice-" + getName() + extension, ioe);
             script.delete();
-            changeState(ClientAppState.START_FAILED, "ShellService: "+getName()+" failed to start, error writing script.", ioe);
+            changeState(ClientAppState.START_FAILED, "ShellService: " + getName() + " failed to start, error writing script.", ioe);
         } finally {
             try {
                 if (scriptWriter != null)
@@ -160,7 +160,7 @@ public class ShellService implements ClientApp {
             } catch (IOException ioe) {
                 if (_log.shouldLog(Log.ERROR)){
                     _log.error("Error writing wrapper script shellservice-" + getName() + extension, ioe);
-                    changeState(ClientAppState.START_FAILED, "ShellService: "+getName()+" failed to start, error closing script writer", ioe);
+                    changeState(ClientAppState.START_FAILED, "ShellService: " + getName() + " failed to start, error closing script writer", ioe);
                 }
             }
         }
@@ -197,7 +197,7 @@ public class ShellService implements ClientApp {
         } catch (Exception ex) {
             if (_log.shouldLog(Log.DEBUG))
                 _log.debug("Error checking if process is running", ex);
-            changeState(ClientAppState.CRASHED, "ShellService: "+getName()+" status unknowable", ex);
+            changeState(ClientAppState.CRASHED, "ShellService: " + getName() + " status unknowable", ex);
         }
         return false;
     }
@@ -210,7 +210,7 @@ public class ShellService implements ClientApp {
         } catch (Exception ex) {
             if (_log.shouldLog(Log.DEBUG))
                 _log.debug("Error checking if process is running", ex);
-            changeState(ClientAppState.CRASHED, "ShellService: "+getName()+" status unknowable", ex);
+            changeState(ClientAppState.CRASHED, "ShellService: " + getName() + " -> cannot determine state", ex);
         }
         return false;
     }
@@ -227,7 +227,7 @@ public class ShellService implements ClientApp {
 
     private long getPidOfProcess() {
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Finding the PID of: " + getName());
+            _log.debug("Finding PID of " + getName() + "...");
         if (isProcessIdRunning(getPID())) {
             if (_log.shouldLog(Log.DEBUG))
                 _log.debug("Read PID in from " + getPID());
@@ -242,7 +242,7 @@ public class ShellService implements ClientApp {
                 if (_log.shouldLog(Log.WARN)) {
                     _log.warn("Process is null, something is wrong");
                 }
-                changeState(ClientAppState.CRASHED, "ShellService: "+getName()+" should be runnning but the process is null.");
+                changeState(ClientAppState.CRASHED, "ShellService: " + getName() + " should be runnning but the process is null");
                 return -1;
             }
             bis = new BufferedInputStream(_p.getInputStream());
@@ -253,14 +253,14 @@ public class ShellService implements ClientApp {
                 buf.write((byte) result);
             }
             String pidString = buf.toString("UTF-8").replaceAll("[\\r\\n\\t ]", "");
-            long pid = _pid;
+            long pid = Long.parseLong(pidString);
             if (_log.shouldLog(Log.DEBUG))
                 _log.debug("Found " + getName() + "process with PID: " + pid);
             return pid;
         } catch (IOException ioe) {
             if (_log.shouldLog(Log.ERROR))
-                _log.error("Error getting PID of application started by shellservice-" + getName() , ioe);
-            changeState(ClientAppState.CRASHED, "ShellService: "+getName()+" PID could not be discovered", ioe);
+                _log.error("Error getting PID of application started by shellservice-" + getName(), ioe);
+            changeState(ClientAppState.CRASHED, "ShellService: " + getName() + " PID could not be discovered", ioe);
         } finally {
             if (bis != null) {
                 try {
@@ -331,10 +331,10 @@ public class ShellService implements ClientApp {
     public synchronized void startup() throws Throwable {
         if (getName().equals("unnamedClient")){
             if (_log.shouldLog(Log.WARN))
-                _log.warn("ShellService has no name, not starting");
+                _log.warn("ShellService has no name, not starting...");
             return;
         }
-        changeState(ClientAppState.STARTING, "ShellService: "+getName()+" starting");
+        changeState(ClientAppState.STARTING, "ShellService: " + getName() + " starting...");
         boolean start = checkIsStopped();
         if (start) {
             _p = _pb.start();
@@ -346,14 +346,14 @@ public class ShellService implements ClientApp {
             this._pid = pid;
             deleteScript();
         }
-        changeState(ClientAppState.RUNNING, "ShellService: "+getName()+" started");
+        changeState(ClientAppState.RUNNING, "ShellService: " + getName() + " started");
         Boolean reg = _cmgr.register(this);
         if (reg){
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("ShellService: "+getName()+" registered with the router");
+                _log.debug("ShellService: " + getName() + " registered with the router");
         } else {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("ShellService: "+getName()+" failed to register with the router");
+                _log.warn("ShellService: " + getName() + " failed to register with the router");
             _cmgr.unregister(this);
             _cmgr.register(this);
         }
@@ -361,7 +361,7 @@ public class ShellService implements ClientApp {
     }
 
     /**
-     *  Determine if the PID found in "shellservice"+getName()+".pid" is
+     *  Determine if the PID found in "shellservice" + getName() + ".pid" is
      *  running or not. Result is the answer to the question "Should I attempt
      *  to start the process" so returns false when PID corresponds to a running
      *  process and true if it does not.
@@ -373,7 +373,7 @@ public class ShellService implements ClientApp {
      */
     public boolean checkIsStopped() {
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Checking process status " + getName());
+            _log.debug("Checking process status of " + getName());
         return !isProcessIdRunning(getPID());
     }
 
@@ -388,29 +388,29 @@ public class ShellService implements ClientApp {
         String pid = getPID();
         if (getName().equals("unnamedClient")){
             if (_log.shouldLog(Log.WARN))
-                _log.warn("ShellService has no name, not shutting down");
+                _log.warn("ShellService has no name, cannot shut down");
             return;
         }
-        changeState(ClientAppState.STOPPING, "ShellService: "+getName()+" stopping");
+        changeState(ClientAppState.STOPPING, "ShellService: " + getName() + " stopping...");
         if (_p != null) {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Stopping " + getName() + "process started with ShellService, PID: " + pid);
+                _log.debug("Stopping " + getName() + "process started with ShellService, PID: " + pid + "...");
             _p.destroy();
         }
         ShellCommand _shellCommand = new ShellCommand();
         if (SystemVersion.isWindows()) {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Stopping " + getName() + "process with PID: " + pid + "on Windows");
+                _log.debug("Stopping " + getName() + "process with PID: " + pid + " [Windows]");
             String cmd[] = {"cmd", "/c", "taskkill /F /T /PID " + pid};
             _shellCommand.executeSilentAndWaitTimed(cmd, 240);
         } else {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Stopping " + getName() + "process with PID: " + pid + "on Unix");
+                _log.debug("Stopping " + getName() + "process with PID: " + pid + " [Unix]");
             String cmd[] = {"kill", pid};
             _shellCommand.executeSilentAndWaitTimed(cmd, 240);
         }
         deleteScript();
-        changeState(ClientAppState.STOPPED, "ShellService: "+getName()+" stopped");
+        changeState(ClientAppState.STOPPED, "ShellService: " + getName() + " stopped");
         _cmgr.unregister(this);
     }
 
@@ -424,7 +424,7 @@ public class ShellService implements ClientApp {
     public ClientAppState getState() {
         String pid = getPID();
         if (!isProcessIdRunning(pid)) {
-            changeState(ClientAppState.STOPPED, "ShellService: "+getName()+" stopped");
+            changeState(ClientAppState.STOPPED, "ShellService: " + getName() + " stopped");
             _cmgr.unregister(this);
         }
         return _state;

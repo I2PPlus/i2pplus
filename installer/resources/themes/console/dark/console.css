@@ -11,6 +11,7 @@
 :root {
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
+  --ink: #ee9;
   --h3: repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px);
   --h3_fade: linear-gradient(180deg,#005000, #000 75%);
   --h3_blend: normal, normal, exclusion, exclusion;
@@ -19,18 +20,27 @@
   --hover: #f60;
   --active: #f90;
   --highlight: inset 0 0 0 1px #000;
-  --element: linear-gradient(180deg,#020, #010);
+  --option_highlight: inset 0 0 0 1px #002500;
+  --highlight_badge: inset 0 0 0 1px #010, 0 0 0 1px #000;
+  --badge: linear-gradient(180deg,#020, #010);
   --btn: linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
-  --btn_shadow_active: var(--highlight), inset 3px 3px 3px 2px #310;
+  --btn_shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
+  --btn_shadow_hover: var(--highlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
+  --btn_shadow_active: var(--highlight), inset 3px 3px 3px 2px rgba(0,0,0,.8), 0 0 0 1px #000;
   --btn_hover_radial: radial-gradient(at center bottom, rgba(96, 48, 0, .4) 0, rgba(0, 0, 0, 0) 80%), #000;
   --input_txt: linear-gradient(180deg,#001000,#001800);
   --vstripe: repeating-linear-gradient(180deg,rgba(0,0,0,.9) 2px, rgba(0,16,0,.9) 4px);
   --helpbox: linear-gradient(135deg, #000d00, #000900);
   --border: 1px solid #242;
-  --softborder: 1px solid #131;
+  --border_hard: 1px solid #252;
+  --border_soft: 1px solid #131;
+  --dotted: 1px dotted #131;
   --navbar: linear-gradient(180deg,#1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%);
   --download_bar: repeating-linear-gradient(135deg, #000 1px, #000 5px, #010 6px, #010 11px);
   --msg: linear-gradient(180deg,#010,#000400);
+  --center: no-repeat center center;
+  --textshadow: 0 1px 1px rgba(0,0,0,.8);
+  --outline: 0 0 0 1px #000;
 }
 
 html, body {
@@ -63,14 +73,12 @@ body {
   margin: 5px 0 0 0;
   padding: 0;
   text-align: center;
-  color: #ee9;
-  font: 8.5pt/130% var(--bodyfont);
+  color: var(--ink);
+  font: 8.5pt/1.3 var(--bodyfont);
 }
 
 @supports (text-justify: auto) { /* Firefox 55+ */
-  html, body {
-    background-attachment: fixed !important;
-  }
+  html, body {background-attachment: fixed !important}
 }
 
 :-moz-broken { /* hides broken images (e.g. missing graphs) in Firefox */
@@ -93,13 +101,6 @@ body {
 ::selection {
   color: #000;
   text-shadow: none;
-  background: rgba(0,187,0,.8) !important;
-}
-
-::-moz-selection {
-  color: #000;
-  text-shadow: none;
-  background: #0b0 !important;
   background: rgba(0,187,0,.8) !important;
 }
 
@@ -150,8 +151,8 @@ a:active {
 }
 
 img {
-  border: none;
   font-size: 0;
+  border: none;
 }
 
 #tunnels img[src^="/flags.jsp?"], #profiles img[src^="/flags.jsp?"], #peers img[src^="/flags.jsp?"] {
@@ -160,18 +161,16 @@ img {
 }
 
 #netdb #netdbcountrylist img {
-  margin-right: 10px !important;
-  padding: 0 !important;
+  margin-right: 10px;
+  padding: 0;
   width: 24px !important;
   height: 18px !important;
-  border: 1px solid #141;
-  border-radius: 1px;
+  box-shadow: var(--outline), 0 0 0 2px #020;
   background: #000;
 }
 
 #netdb #netdbcountrylist a:hover img {
-  border: 1px solid #000;
-  box-shadow: 0 0 0 1px rgba(255,96,0,.8);
+  box-shadow: var(--outline), 0 0 0 2px #f60;
   transform: scale(1.1);
 }
 
@@ -187,7 +186,7 @@ img {
   height: auto !important;
   vertical-align: middle !important;
   border: 1px solid #030;
-  box-shadow: 0 0 0 1px #000;
+  box-shadow: var(--outline);
 }
 
 pre {
@@ -380,8 +379,8 @@ pre {
 }
 
 .routersummary img[src$="i2plogo.png"]:active {
-  transform: scale(.97);
   filter: sepia(1) hue-rotate(45deg) saturate(2) opacity(.65) drop-shadow(0 0 1px rgba(156,32,0,.3));
+  transform: scale(.97);
   transition: none;
 }
 
@@ -399,6 +398,15 @@ pre {
   height: 1px;
   color: var(--a);
   background: #252;
+}
+
+#sidebar td b, .infohelp b {
+  color: #ffffa8;
+  -webkit-text-stroke: 1px rgba(0,0,0,.4);
+}
+
+#sidebar td a {
+  -webkit-text-stroke: 0;
 }
 
 #sidebar h3 {
@@ -425,19 +433,15 @@ pre {
   width: 100%;
   display: inline-block;
   vertical-align: middle;
+  text-shadow: var(--textshadow);
 }
 
 #sidebar h3:hover a {
   color: var(--hover);
-  text-shadow: 0 1px 1px rgba(0,0,0,.8);
 }
 
 #sidebar h3:active {
   transition: ease box-shadow .01s;
-}
-
-#sidebar h3:active a {
-  text-shadow: 0 0 1px #000;
 }
 
 .routersummary h4 {
@@ -544,8 +548,8 @@ pre {
   height: 16px;
   vertical-align: middle;
   font-size: 0;
-  mix-blend-mode: overlay;
   opacity: 0;
+  mix-blend-mode: overlay;
 }
 
 #sb_localtunnels img::after {
@@ -557,7 +561,7 @@ pre {
 }
 
 #sb_localtunnels td:first-child {
-  background: var(--client) no-repeat center center / 16px !important;
+  background: var(--client) var(--center) / 16px !important;
 }
 
 #sb_localtunnels tr:last-child td:first-child {
@@ -622,7 +626,7 @@ pre {
 }
 
 #sb_peers a, #sb_peersadvanced a, #sb_tunnels a, #sb_general a, #sb_shortgeneral a, #sb_advancedgeneral a {
-  color: #ee9;
+  color: var(--ink);
 }
 
 #sb_peersadvanced .separator td::after {
@@ -712,9 +716,9 @@ div.refresh {
 
 .routersummary td {
   padding: 0 2px 0 2px;
-  background-image: none !important;
-  border: 0 !important;
   word-spacing: -0.1em;
+  border: 0 !important;
+  background-image: none !important;
 }
 
 .routersummary td:first-child {
@@ -750,7 +754,7 @@ div.refresh {
 .sb_newsheadings td {
   padding: 4px 5px 4px 23px;
   text-align: left;
-  border-bottom: var(--softborder) !important;
+  border-bottom: var(--border_soft) !important;
   background: var(--newsbullet) no-repeat 4px center / 14px !important;
 }
 
@@ -773,12 +777,12 @@ div.refresh {
   font-weight: 700;
   color: #050;
   text-shadow: none;
-  border: var(--softborder);
+  border: var(--border_soft);
   border-top: none;
   border-radius: 0 0 2px 2px;
   background: #000;
-  transition: ease opacity .3s;
   opacity: 0;
+  transition: ease opacity .3s;
   pointer-events: none;
 }
 
@@ -794,10 +798,10 @@ div.refresh {
 .percentBarouter {
   margin: -3px 0 -5px -7px;
   width: 205px;
-  border: var(--softborder);
-  box-shadow: 0 0 1px 1px rgba(0,0,0,.8), var(--highlight), inset 0 3px 3px rgba(0,0,0,.7);
-  background: #000;
-  background: linear-gradient(90deg, rgba(0,128,0,0) 40%, rgba(255,96,0,.06), rgba(255,0,0,.08)),
+  position: relative;
+  border: var(--border_soft);
+  box-shadow: var(--highlight), inset 0 3px 3px rgba(0,0,0,.8);
+  background: linear-gradient(90deg, rgba(0,128,0,.05) 45%, rgba(255,96,0,.1), rgba(255,0,0,.1)),
     repeating-linear-gradient(90deg, #000 1px, #000 2px, #010 2px, #010 4px);
   opacity: 1;
 }
@@ -810,10 +814,9 @@ div.refresh {
 .percentBarInner {
   height: 14px;
   max-width: 100%;
-  border-right: var(--softborder);
+  border-right: var(--border_soft);
   box-shadow: var(--highlight);
-  background: #0e5f00;
-  background: linear-gradient(180deg,rgba(28, 148, 58, .6), rgba(9, 47, 16, .6) 50%, rgba(9, 27, 5, .6) 50%, rgba(9, 21, 3, .6));
+  background: linear-gradient(180deg,rgba(28, 148, 58, .6), rgba(9, 47, 16, .6) 50%, rgba(9, 27, 5, .6) 50%, rgba(9, 21, 3, .7));
 }
 
 #sb_memoryBar .percentBarInner {
@@ -823,18 +826,44 @@ div.refresh {
 
 .percentBarText {
   width: 100%;
-  font-weight: 700;
-  text-align: center;
   vertical-align: middle;
   float: left;
+  text-align: center;
+  font-weight: 700;
   opacity: 0;
   transition: ease opacity .2s;
+}
+
+#sb_memoryBar .percentBarText {
+  width: 70%;
+  line-height: 22px;
+  float: none;
+  position: absolute;
+  top: -23px;
+  left: 15%;
+  right: 15%;
+  font-size: 110%;
+  border-radius: 3px;
+  background: #010;
+  filter: drop-shadow(0 0 1px #252) drop-shadow(0 0 1px #000);
+}
+
+#sb_memoryBar .percentBarText::after {
+  width: 0;
+  height: 0;
+  position: absolute;
+  left: calc(50% - 5px);
+  bottom: -14px;
+  border-style: solid;
+  border-width: 8px;
+  border-color: #010 transparent transparent transparent;
+  content: "";
 }
 
 /* update bar */
 
 .sb_update b {
-  color: #ee9;
+  color: var(--ink);
 }
 
 .sb_updatestatus {
@@ -862,16 +891,12 @@ div.refresh {
 }
 
 .sb_update {
-  padding: 7px 5px !important;
+  padding: 7px 5px 5px !important;
 }
 
 @keyframes downloadbar {
-  from {
-    background: var(--download_bar);
-  }
-  to {
-    background: repeating-linear-gradient(135deg, #010 1px, #010 6px, #000 7px, #000 11px);
-  }
+  from {background: var(--download_bar)}
+  to {background: repeating-linear-gradient(135deg, #010 1px, #010 6px, #000 7px, #000 11px)}
 }
 
 /* end status bar */
@@ -888,7 +913,7 @@ h1 + .sorry, #console_404 .sorry {
   font-size: 10pt;
   border: var(--border);
   border-radius: 0 0 4px 4px;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 0 2px #600, inset 0 0 0 3px #000;
+  box-shadow: var(--highlight), inset 0 0 0 2px #600, inset 0 0 0 3px #000;
   background: var(--err) no-repeat 15px 45%, linear-gradient(180deg,rgba(255,255,255,.05), rgba(0,0,0,.4)),
     repeating-linear-gradient(180deg,rgba(0,0,0,.4) 2px, rgba(0,48,0,.7) 4px) !important;
   background-size: 44px, 100%, 100% 4px !important;
@@ -914,7 +939,7 @@ h1 + .sorry, #console_404 .sorry {
 }
 
 #error500 #warning2 {
-  border: 1px solid #252;
+  border: var(--border_hard);
   background: repeating-linear-gradient(180deg,rgba(0,0,0,.7) 2px, rgba(0,32,0,.7) 4px) top left !important;
   background-size: 100% 4px !important;
 }
@@ -967,16 +992,16 @@ h1 + .sorry, #console_404 .sorry {
 .sorry hr {
   margin: 10px 0;
   height: 1px;
-  color: #ee9;
-  border-top: 1px solid #ee9;
-  background: #ee9;
+  color: var(--ink);
+  border-top: 1px solid var(--ink);
+  background: var(--ink);
   opacity: .7;
 }
 
 /* main section */
 
 .routersummary, .main, h1, div.news, .confignav, .tab, .tab2, table.search, div.app, .sitemapLink, .sitemapLabel {
-  border: 1px solid #252;
+  border: var(--border_hard);
 }
 
 .main, .news, h1, .sorry {
@@ -1027,19 +1052,16 @@ h1 + .sorry, #console_404 .sorry {
 }
 
 @supports not (-moz-appearance: none) {
-.main#config_summarybar, .main#config_summarybar div.messages,
-.main#config_homepage, .main#config_homepage div.messages {
-  position: static !important;
-}
-
-.main#config_summarybar div.messages,
-.main#config_homepage div.messages {
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  width: auto !important;
-  top: initial !important;
-  animation: none !important;
-}
+  .main#config_summarybar, .main#config_summarybar div.messages,
+  .main#config_homepage, .main#config_homepage div.messages {position: static !important}
+  .main#config_summarybar div.messages,
+  .main#config_homepage div.messages {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: auto !important;
+    top: initial !important;
+    animation: none !important;
+  }
 }
 
 /* end main */
@@ -1111,7 +1133,7 @@ div.news li {
   color: var(--a);
   font-size: 9.5pt;
   font-weight: 700;
-  border-bottom: 1px dotted #252;
+  border-bottom: var(--dotted);
 }
 
 div.news h4 {
@@ -1119,7 +1141,7 @@ div.news h4 {
   padding: 0;
   text-transform: capitalize;
   font-size: 10pt;
-  border-bottom: 1px dotted #252;
+  border-bottom: var(--dotted);
   opacity: 1;
 }
 
@@ -1261,7 +1283,7 @@ div.widescroll { /* only scroll content, not entire page eg /peers */
 
 .tab2 {
   padding: 5px 12px !important;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   box-shadow: var(--highlight), inset 3px 3px 3px #010;
   background: radial-gradient(at center bottom, rgba(0, 128, 0, .6) 0, rgba(0, 0, 0, 0) 80%), linear-gradient(180deg,#030, #003800);
 }
@@ -1269,7 +1291,7 @@ div.widescroll { /* only scroll content, not entire page eg /peers */
 .tab a {
   padding: 4px 14px !important;
   display: inline-block;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
 }
 
 .tab {
@@ -1302,7 +1324,7 @@ div.widescroll { /* only scroll content, not entire page eg /peers */
 }
 
 .tab:active a, #sidebar h3:active a {
-  color: #ee9 !important;
+  color: var(--ink) !important;
 }
 
 /* end topnav */
@@ -1373,7 +1395,7 @@ div.messages li {
 }
 
 #messages, .error, .notice {
-  color: #ee9;
+  color: var(--ink);
 }
 
 div.widepanel h3 {
@@ -1566,7 +1588,7 @@ form[action="updategraphs"] {
 }
 
 #graphs td.infohelp {
-  border: var(--softborder);
+  border: var(--border_soft);
   border-right: none;
   border-left: none;
   background-size: 20px !important;
@@ -1696,17 +1718,17 @@ td img {
 }
 
 .sortupactive, .sortdownactive {
+  box-shadow: var(--highlight), inset 2px 2px 2px rgba(0,0,0,.5);
   opacity: 1;
-  box-shadow: inset 1px 1px 1px #000;
 }
 
 .sortup {
-  background: var(--sortup) no-repeat center center, linear-gradient(180deg,#040,#000);
+  background: var(--mv_up) var(--center), var(--btn);
 }
 
 .sortup:hover {
   border: 1px solid var(--hover);
-  background: var(--sortup) no-repeat center center, linear-gradient(180deg,#000,#040);
+  background: #000 var(--mv_up_hover) var(--center);
 }
 
 .sortup a:focus, .sortdown a:focus {
@@ -1714,26 +1736,23 @@ td img {
   width: 16px;
   height: 14px;
   display: inline-block;
-  border-radius: 1px;
-  background: rgba(255,255,0,.2);
 }
 
 .sortupactive {
-  background: var(--sortup) no-repeat center center, #050;
+  background: #f60 var(--mv_up_active) var(--center);
 }
 
 .sortdown {
-  background: var(--sortdown) no-repeat center center, linear-gradient(180deg,#040,#000);
+  background: var(--mv_down) var(--center), var(--btn);
 }
 
 .sortdown:hover {
   border: 1px solid var(--hover);
-  background: var(--sortdown) no-repeat center center, linear-gradient(180deg,#000,#040);
+  background: #000 var(--mv_down_hover) var(--center);
 }
 
 .sortdownactive {
-  border: 1px solid #050;
-  background: var(--sortdown) no-repeat center center, #050;
+  background: #f60 var(--mv_down_active) var(--center);
 }
 
 /* end peer sort */
@@ -1759,7 +1778,6 @@ a:hover tt {
 a:active tt {
   color: var(--active);
 }
-
 
 .main ul {
    list-style: square;
@@ -1919,11 +1937,11 @@ p:empty {
 }
 
 #newtab {
-  background: var(--newtab) no-repeat center center;
+  background: var(--newtab) var(--center);
 }
 
 #newtab:hover {
-  background: var(--newtab_hover) no-repeat center center;
+  background: var(--newtab_hover) var(--center);
 }
 
 h2, h2.welcome {
@@ -1955,7 +1973,7 @@ h3, h3.welcome {
   text-transform: uppercase;
   text-shadow: 0 0 2px #010;
   border: var(--border);
-  border-left: 5px solid #252;
+  border-left-width: 5px;
 }
 
 h4 {
@@ -1974,10 +1992,11 @@ h1, h2, h3:not([id*="help"]), h4.app, h4.app2 {
 
 h2, h3, h4 {
   box-shadow: var(--highlight);
+  contain: paint;
 }
 
 h1, h4.app, h4.app2, #news h3 {
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   box-shadow: var(--highlight);
   background: var(--h1) !important;
   background-size: 4px 100%, 100%, 175px !important;
@@ -2032,7 +2051,7 @@ input[type=file]::file-selector-button {
 button:hover, button:focus {
   color: var(--hover);
   border: 1px solid var(--hover);
-  box-shadow: var(--highlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
+  box-shadow: var(--btn_shadow_hover);
   background: #000;
   background: var(--btn_hover_radial);
   cursor: pointer;
@@ -2041,14 +2060,14 @@ button:hover, button:focus {
 input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
   color: var(--hover);
   border: 1px solid var(--hover);
-  box-shadow: var(--highlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
+  box-shadow: var(--btn_shadow_hover);
   background: #000;
   background: var(--btn_hover_radial);
   cursor: pointer;
 }
 
 input[type=file]:active::file-selector-button {
-  color: #ee9;
+  color: var(--ink);
   border: 1px solid var(--hover);
   box-shadow: var(--highlight);
   background: var(--hover);
@@ -2059,11 +2078,11 @@ button:hover a {
 }
 
 button:active a {
-  color: #ee9;
+  color: var(--ink);
 }
 
 button:active {
-  color: #ee9;
+  color: var(--ink);
   border: 1px solid var(--hover);
   box-shadow: var(--highlight);
   background: var(--hover);
@@ -2080,75 +2099,75 @@ button.control {
 }
 
 button.accept.control {
-  background: var(--start) no-repeat center center, var(--btn);
+  background: var(--start) var(--center), var(--btn);
 }
 
 button.accept.control:hover, button.accept.control:focus {
-  background: #000 var(--start_hover) no-repeat center center;
+  background: #000 var(--start_hover) var(--center);
 }
 
 button.accept.control:active {
-  background: var(--hover) var(--start_active) no-repeat center center;
+  background: var(--hover) var(--start_active) var(--center);
 }
 
 button.stop.control {
-  background: var(--stop) no-repeat center center, var(--btn);
+  background: var(--stop) var(--center), var(--btn);
 }
 
 button.stop.control:hover, button.stop.control:focus {
-  background: #000 var(--stop_hover) no-repeat center center;
+  background: #000 var(--stop_hover) var(--center);
 }
 
 button.stop.control:active {
-  background: var(--hover) var(--stop_active) no-repeat center center;
+  background: var(--hover) var(--stop_active) var(--center);
 }
 
 button.add.control {
-  background: var(--edit) no-repeat center center / 16px, var(--btn);
+  background: var(--edit) var(--center) / 16px, var(--btn);
 }
 
 button.add.control:hover, button.add.control:focus {
-  background: #000 var(--edit_hover) no-repeat center center / 16px;
+  background: #000 var(--edit_hover) var(--center) / 16px;
 }
 
 button.add.control:active {
-  background: var(--hover) var(--edit_active) no-repeat center center / 16px;
+  background: var(--hover) var(--edit_active) var(--center) / 16px;
 }
 
 button.delete.control {
-  background: var(--nuke) no-repeat center center / 14px, var(--btn);
+  background: var(--nuke) var(--center) / 14px, var(--btn);
 }
 
 button.delete.control:hover, button.delete.control:focus {
-  background: #000 var(--nuke) no-repeat center center / 14px;
+  background: #000 var(--nuke) var(--center) / 14px;
 }
 
 button.delete.control:active {
-  background: var(--hover) var(--nuke) no-repeat center center / 14px;
+  background: var(--hover) var(--nuke) var(--center) / 14px;
 }
 
 button.check.control {
-  background: var(--refresh) no-repeat center center / 14px, var(--btn);
+  background: var(--refresh) var(--center) / 14px, var(--btn);
 }
 
 button.check.control:hover, button.check.control:focus {
-  background: #000 var(--refresh_hover) no-repeat center center / 14px;
+  background: #000 var(--refresh_hover) var(--center) / 14px;
 }
 
 button.check.control:active {
-  background: var(--hover) var(--refresh_active) no-repeat center center / 14px;
+  background: var(--hover) var(--refresh_active) var(--center) / 14px;
 }
 
 button.download.control {
-  background: var(--download) no-repeat center center / 14px, var(--btn);
+  background: var(--download) var(--center) / 14px, var(--btn);
 }
 
 button.download.control:hover, button.download.control:focus {
-  background: #000 var(--download_hover) no-repeat center center / 14px;
+  background: #000 var(--download_hover) var(--center) / 14px;
 }
 
 button.download.control:active {
-  background: var(--hover) var(--download_active) no-repeat center center / 14px;
+  background: var(--hover) var(--download_active) var(--center) / 14px;
 }
 
 /* end project "X" */
@@ -2170,7 +2189,7 @@ button.download.control:active {
   line-height: 1.2;
   color: #dd3;
   font-size: 9pt;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   opacity: .9;
 }
 
@@ -2190,7 +2209,7 @@ button.download.control:active {
 .underline {
   margin: 0 0 10px 0;
   padding: 5px 0 5px 0;
-  border-bottom: 1px solid #ee9;
+  border-bottom: 1px solid var(--ink);
 }
 
 .langbox {
@@ -2265,27 +2284,27 @@ input:hover, input:focus {
 }
 
 input[type=submit]:hover, input[type=reset]:hover, input[type=submit]:focus, input[type=reset]:focus {
-  box-shadow: var(--highlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000 !important;
+  box-shadow: var(--btn_shadow_hover) !important;
   background: var(--btn_hover_radial);
 }
 
 input[type=submit]:active, input[type=reset]:active {
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   box-shadow: var(--btn_shadow_active) !important;
 }
 
 button:active {
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   box-shadow: var(--btn_shadow_active) !important;
 }
 
 input[type=file]:active::file-selector-button {
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   box-shadow: var(--btn_shadow_active) !important;
 }
 
 input:active {
-  color: #ee9 !important;
+  color: var(--ink) !important;
   border: 1px solid var(--hover) !important;
   background: var(--hover) !important;
 }
@@ -2294,10 +2313,10 @@ input[type=text], input[type=password] {
   margin: 5px 10px;
   padding: 6px 8px;
   text-decoration: none;
-  color: #ee9;
+  color: var(--ink);
   border: 1px solid #151 !important;
   border-radius: 1px;
-  box-shadow: 0 0 0 1px #000;
+  box-shadow: var(--outline);
   background: #000800;
   cursor: text;
   filter: none;
@@ -2329,7 +2348,7 @@ input[type=file] {
   margin: 5px 8px;
   padding: 0 !important;
   font-weight: 400;
-  color: #ee9;
+  color: var(--ink);
   box-shadow: none;
   border: none !important;
   background: #000;
@@ -2416,7 +2435,7 @@ select option:hover, select option:checked {
 select:focus, select:hover {
   color: var(--hover);
   border: 1px solid var(--hover);
-  box-shadow: var(--highlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
+  box-shadow: var(--btn_shadow_hover);
 }
 
 select:hover, select:focus, select:active {
@@ -2438,7 +2457,7 @@ select:hover, select:focus, select:active {
   text-align: center;
   color: var(--a);
   border: 1px solid #000;
-  box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
+  box-shadow: var(--btn_shadow);
   background: var(--btn) !important;
   opacity: .7;
   cursor: default;
@@ -2451,12 +2470,11 @@ textarea {
   min-width: 97%;
   min-height: 100px;
   font: 8.5pt var(--monospaced);
-  color: #ee9;
+  color: var(--ink);
   border-radius: 2px;
   border: 1px solid #184818;
-  box-shadow: inset 0 0 3px 3px #000;
+  box-shadow: var(--highlight);
   text-align: left;
-  background: #000;
   background: linear-gradient(180deg,#000, #010) !important;
 }
 
@@ -2465,9 +2483,9 @@ textarea[cols="70"], textarea[name="levels"] {
 }
 
 input[type=text]:focus, input[type=password]:focus, textarea:focus {
-  color: #ee9 !important;
+  color: var(--ink) !important;
   border: 1px solid #373 !important;
-  box-shadow: var(--highlight), inset 4px 4px 4px #000, 0 0 0 1px #000;
+  box-shadow: var(--btn_shadow_active);
   background: var(--input_txt) !important;
   outline: none;
   filter: drop-shadow(0 0 1px var(--hover));
@@ -2511,8 +2529,8 @@ textarea#advancedsettings:focus {
 }
 
 textarea[readonly]:focus {
-  box-shadow: inset 0 0 3px 3px #000;
   font-weight: 400;
+  box-shadow: var(--highlight);
 }
 
 input[type=submit], input[type=reset], select, button {
@@ -2520,7 +2538,7 @@ input[type=submit], input[type=reset], select, button {
   font-size: 8.5pt;
   border: 1px solid #000;
   border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
+  box-shadow: var(--btn_shadow);
   background: var(--btn);
 }
 
@@ -2529,7 +2547,7 @@ input[type=file]::file-selector-button {
   font-size: 8.5pt;
   border: 1px solid #000;
   border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
+  box-shadow: var(--btn_shadow);
   background: var(--btn);
 }
 
@@ -2576,7 +2594,6 @@ input[type=file]::file-selector-button {
 
 .joblog ol li {
   padding-bottom: 5px !important;
-  width: 90%;
   width: calc(100% - 45px);
   min-width: 360px;
   display: inline-block;
@@ -2623,16 +2640,16 @@ h3#finishedjobs + ol li::before, #schedjobs li::before {
   height: 16px;
   display: inline-block;
   vertical-align: text-top;
-  background: var(--clock) no-repeat center center / 16px;
+  background: var(--clock) var(--center) / 16px;
   content: "";
 }
 
 h3#activejobs + ol li::before {
-  background: var(--start) no-repeat center center;
+  background: var(--start) var(--center);
 }
 
 h3#finishedjobs + ol li::before {
-  background: var(--yes) no-repeat center center / 12px;
+  background: var(--yes) var(--center) / 12px;
 }
 
 h3#readyjobs + ol li::before {
@@ -2682,7 +2699,6 @@ h3#scheduledjobs + ol li::before, #scheduledjobs + ol li::before {
 #jobs .jobqueue {
   margin-bottom: 5px !important;
   margin-top: -11px !important;
-  width: 97%;
   width: calc(100% - 14px);
   display: block;
   border: var(--border);
@@ -2776,7 +2792,6 @@ h3#totaljobstats {
   width: calc(100% - 8px);
   list-style: none !important;
   box-shadow: var(--highlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000;
-  background: #000400;
   background: linear-gradient(180deg,#000b00, #000600);
 }
 
@@ -2928,7 +2943,7 @@ li.noevents {
 }
 
 .main#stats h3 a:hover {
-  color: #ee9 !important;
+  color: var(--ink) !important;
 }
 
 .statlist li.statsName:first-child {
@@ -3072,7 +3087,6 @@ h3[id$="con"] { /* peers h3 + tables */
   font-size: 10pt;
   word-spacing: .1em;
   letter-spacing: .08em;
-  background: #000;
   background: linear-gradient(90deg, #000, #001000 70%, #001300 90%);
   border: var(--border);
 }
@@ -3115,13 +3129,13 @@ h3[id="udpcon"] {
 }
 
 #udpconnections tr:hover td, #ntcpconnections tr:hover td, .tunneldisplay tr:hover td {
-  color: #ee9;
+  color: var(--ink);
 }
 
 #udpconnections .tablefooter td, #ntcpconnections .tablefooter td {
   padding-top: 7px !important;
   padding-bottom: 7px !important;
-  color: #ee9;
+  color: var(--ink);
   text-align: center;
 }
 
@@ -3151,8 +3165,8 @@ h3[id="udpcon"] {
 }
 
 #profilelist a[href^="viewprofile"] {
-  display: inline-block;
   margin-bottom: 2px;
+  display: inline-block;
 }
 
 #profilelist .bytes {
@@ -3164,15 +3178,15 @@ h3[id="udpcon"] {
 }
 
 pre#activetransports {
-  border: var(--border) !important;
-  padding: 15px 5px 5px 15px;
   margin: 0 20px 0 0;
-  background: #000;
+  padding: 15px 5px 5px 15px;
   width: calc(100% - 42px) !important;
+  border: var(--border) !important;
+  background: #000;
 }
 
 a[name="chelp"]:hover, a[name="help"]:hover, a[name="chelp"]:active, a[name="help"]:active { /* hide /help anchorpoints */
-  color: #ee9 !important;
+  color: var(--ink) !important;
   text-decoration: none;
   text-shadow: none;
 }
@@ -3196,9 +3210,9 @@ a[name="chelp"]:hover, a[name="help"]:hover, a[name="chelp"]:active, a[name="hel
 }
 
 .homelinkedit th:nth-child(3), .homelinkedit th:last-child {/* /confighome */
+  padding-left: 5px;
   text-align: left !important;
   text-transform: none !important;
-  padding-left: 5px;
 }
 
 .homelinkedit input[type=text] {
@@ -3214,8 +3228,7 @@ a[name="chelp"]:hover, a[name="help"]:hover, a[name="chelp"]:active, a[name="hel
 }
 
 .homelinkedit td.noicon {
-  background: var(--search) no-repeat center center;
-  background-size: 22px;
+  background: var(--search) var(--center) / 18px;
 }
 
 #config_homepage input.delete {
@@ -3227,10 +3240,10 @@ a[name="chelp"]:hover, a[name="help"]:hover, a[name="chelp"]:active, a[name="hel
 }
 
 .formaction#homeapps, .formaction#homesites, .formaction#tunnelconfigsave, .formaction#homesearch, .formaction#sidebardefaults {
-  border: var(--border);
-  padding: 5px;
-  background: #000;
   margin-top: -2px;
+  padding: 5px;
+  border: var(--border);
+  background: #000;
 }
 
 .formaction#themeui {
@@ -3258,7 +3271,6 @@ tr#addnew, tr#addnew:hover {
   float: left;
   text-align: center;
   border: var(--border);
-  background: #000;
   background: radial-gradient(circle at center -90px, rgba(0,96,0,.9), #000 60%), linear-gradient(180deg,#010, #000 80%);
 }
 
@@ -3298,7 +3310,7 @@ tr#addnew, tr#addnew:hover {
 }
 
 .themechoice:active .themelabel {
-  color: #ee9 !important;
+  color: var(--ink) !important;
   box-shadow: var(--highlight) !important;
   background: var(--hover) !important;
 }
@@ -3312,10 +3324,10 @@ tr#addnew, tr#addnew:hover {
 }
 
 .themechoice .optbox:checked + img ~ .themelabel {
-  background: #030 !important;
-  color: #ee9;
   font-weight: 700;
+  color: var(--ink);
   box-shadow: var(--highlight), inset 0 0 2px 1px #050 !important;
+  background: #030 !important;
 }
 
 .themechoice .optbox:focus + img ~ .themelabel {
@@ -3324,19 +3336,17 @@ tr#addnew, tr#addnew:hover {
 }
 
 .themechoice .optbox:active:not(:checked) + img ~ .themelabel {
-  color: #ee9 !important;
-  box-shadow: var(--highlight) !important;
+  color: var(--ink) !important;
   box-shadow: var(--highlight), inset 3px 3px 3px 1px #5f2400 !important;
 }
 
 .themechoice .optbox {
+  margin-left: -38px;
   min-width: 124px !important;
   min-height: 80px !important;
-  outline: 1px !important; /* placement guide */
-  opacity: 0; /* hide the radio icon so we can use thumbnail img instead */
-  margin-left: -38px;
-  z-index: 999;
   position: absolute !important;
+  z-index: 999;
+  opacity: 0; /* hide the radio icon so we can use thumbnail img instead */
 }
 
 .themechoice img {
@@ -3363,9 +3373,9 @@ tr#addnew, tr#addnew:hover {
 }
 
 #themeoptions label {
-  white-space: nowrap;
   margin: 4px 10px 4px 0 !important;
   display: inline-block;
+  white-space: nowrap;
 }
 
 p#helptranslate {
@@ -3398,7 +3408,6 @@ p#helptranslate {
   line-height: 1.5;
   color: #bb7;
   border-top: var(--border) !important;
-  background: #001000;
   background: linear-gradient(180deg,#001000, #001900 50%, #000 51%, #000);
 }
 
@@ -3410,7 +3419,6 @@ h3#themeheading, h3#langheading, h3#passwordheading {
   font-size: 10.5pt;
   border-radius: 0;
   border: var(--border);
-  background: #000;
   background: linear-gradient(90deg, #000, #001000 70%, #001300 90%);
 }
 
@@ -3427,10 +3435,10 @@ h3#themeheading, h3#langheading, h3#passwordheading {
 }
 
 td#themeselect {
+  margin: -1px 0;
+  padding: 8px 7px 0;
   clear: both;
   border: var(--border);
-  padding: 8px 7px 0;
-  margin: -1px 0;
 }
 
 .langselect:hover {
@@ -3453,7 +3461,6 @@ td#themeselect {
   z-index: 999;
   vertical-align: text-bottom;
   text-align: center;
-  outline: 1px dotted !important;
   opacity: 0;
 }
 
@@ -3476,8 +3483,8 @@ td#themeselect {
 
 .langselect input:hover + img {
   box-shadow: 0 0 2px 1px var(--hover);
-  transition: ease all .05s;
   opacity: 1;
+  transition: ease all .05s;
 }
 
 .langselect input:hover + img + div.ui_lang {
@@ -3486,8 +3493,7 @@ td#themeselect {
 }
 
 .langselect input:active:not(:checked) + img + div.ui_lang {
-  color: #ee9 !important;
-  box-shadow: var(--highlight) !important;
+  color: var(--ink) !important;
   box-shadow: var(--highlight), inset 3px 3px 3px 1px #5f2400 !important;
 }
 
@@ -3499,7 +3505,7 @@ td#themeselect {
 
 .langselect:active .ui_lang {
   background: var(--hover) !important;
-  color: #ee9 !important;
+  color: var(--ink) !important;
   box-shadow: var(--highlight);
 }
 
@@ -3513,7 +3519,7 @@ td#themeselect {
 }
 
 .langselect input[name="lang"]:checked + img + div.ui_lang {
-  color: #ee9;
+  color: var(--ink);
   font-weight: 700;
   box-shadow: var(--highlight), inset 0 0 2px 1px #050 !important;
   background: #030 !important;
@@ -3531,12 +3537,12 @@ td#themeselect {
 /* large flags */
 
 .langselect img {
-  width: 40px;
-  height: 40px;
-  border: none !important;
   margin-top: -6px !important;
   margin-left: -82px;
+  width: 40px;
+  height: 40px;
   position: absolute;
+  border: none !important;
   box-shadow: none;
   opacity: .6;
   filter: drop-shadow(0 0 1px #000);
@@ -3560,15 +3566,15 @@ td#themeselect {
 }
 
 @supports not (-moz-appearance: none) {
-.langselect img {
-  margin-top: -31px !important;
-  margin-top: -6px !important;
-}
-
-.langselect input[name="lang"]:checked + img, .langselect input[name="lang"]:checked + #config_ui img[src="/flags.jsp?c=a1"] {
-  margin-top: -27px !important;
-  margin-top: -2px !important;
-}
+  .langselect img {
+    margin-top: -31px !important;
+    margin-top: -6px !important;
+  }
+  .langselect input[name="lang"]:checked + img,
+  .langselect input[name="lang"]:checked + #config_ui img[src="/flags.jsp?c=a1"] {
+    margin-top: -27px !important;
+    margin-top: -2px !important;
+  }
 }
 
 /* end large flags */
@@ -3688,8 +3694,8 @@ form[action="/createreseed"] > h3 {
   word-spacing: .1em;
   letter-spacing: .08em;
   font-size: 10.5pt;
-  border-radius: 0;
   border: var(--border);
+  border-radius: 0;
   background: linear-gradient(90deg, #000, #001000 70%, #001300 90%);
 }
 
@@ -3705,8 +3711,7 @@ form[action="/createreseed"] > h3 {
 
 #exportfamily tr:nth-child(2) td:first-child {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--joinfamily) no-repeat 12px center;
-  background-size: 28px;
+  background: #000 var(--joinfamily) no-repeat 12px center / 28px;
 }
 
 #leavefamily {
@@ -3715,8 +3720,7 @@ form[action="/createreseed"] > h3 {
 
 #leavefamily tr:last-child td:first-child {
   padding: 15px 15px 15px 50px;
-  background: #000 var(--leavefamily) no-repeat 12px center;
-  background-size: 28px;
+  background: #000 var(--leavefamily) no-repeat 12px center / 28px;
 }
 
 /* configreseed */
@@ -4060,7 +4064,7 @@ form > table {
 /* configtunnels */
 
 #tunnelconfig th a:hover {
-  color: #ee9 !important;
+  color: var(--ink) !important;
 }
 
 #tunnelconfig th:not(.th_title) {
@@ -4072,7 +4076,7 @@ form > table {
   text-transform: none;
   letter-spacing: 0;
   word-spacing: 0;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   background: var(--infowarn) no-repeat 10px center,
     linear-gradient(180deg,rgba(128,128,128,.05), rgba(0,0,0,.3)),
     repeating-linear-gradient(180deg,#300 2px, #100 4px);
@@ -4189,8 +4193,7 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 
 #refreshsidebar td {
   padding-left: 45px;
-  background: #000 var(--timer) no-repeat 12px center;
-  background-size: 32px;
+  background: #000 var(--timer) no-repeat 12px center / 32px;
 }
 
 #refreshsidebar td:last-child {
@@ -4266,68 +4269,67 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 #sidebarconf th:nth-child(1), .homelinkedit th:first-child, #consolepass th:first-child {
   text-align: center;
   font-size: 0 !important;
-  background: var(--nuke) no-repeat center center, linear-gradient(180deg,#002000, #000 75%) !important;
-  background-size: 16px, 100% !important;
+  background: var(--nuke) var(--center) / 16px, linear-gradient(180deg,#002000, #000 75%) !important;
 }
 
 .buttonTop img, .buttonBottom img, .buttonUp img, .buttonDown img {
-  opacity: 0;
-  height: 0;
   width: 0;
+  height: 0;
+  opacity: 0;
 }
 
 .buttonTop, .buttonBottom, .buttonUp, .buttonDown {
-  box-sizing: border-box;
-  height: 26px;
   width: 26px;
+  height: 26px;
+  box-sizing: border-box;
 }
 
 .buttonTop {
-  background: var(--mv_top) no-repeat center center, var(--btn);
+  background: var(--mv_top) var(--center), var(--btn);
 }
 
 .buttonUp {
-  background: var(--mv_up) no-repeat center center, var(--btn);
+  background: var(--mv_up) var(--center), var(--btn);
 }
 
 .buttonDown {
-  background: var(--mv_down) no-repeat center center, var(--btn);
+  background: var(--mv_down) var(--center), var(--btn);
 }
 
 .buttonBottom {
-  background: var(--mv_bottom) no-repeat center center, var(--btn);
+  background: var(--mv_bottom) var(--center), var(--btn);
 }
 
 .buttonTop:hover, .buttonTop:focus {
-  background: #000 var(--mv_top_hover) no-repeat center center;
+  background: #000 var(--mv_top_hover) var(--center);
 }
 
 .buttonUp:hover, .buttonUp:focus {
-  background: #000 var(--mv_up_hover) no-repeat center center;
+  background: #000 var(--mv_up_hover) var(--center);
 }
 
 .buttonDown:hover, .buttonDown:focus {
-  background: #000 var(--mv_down_hover) no-repeat center center;
+  background: #000 var(--mv_down_hover) var(--center);
 }
 
 .buttonBottom:hover, .buttonBottom:focus {
-  background: #000 var(--mv_bottom_hover) no-repeat center center;
+  background: #000 var(--mv_bottom_hover) var(--center);
 }
 
 .buttonTop:active {
-  background: var(--hover) var(--mv_top_active) no-repeat center center;
+  background: var(--hover) var(--mv_top_active) var(--center);
 }
 
 .buttonUp:active {
-  background: var(--hover) var(--mv_up_active) no-repeat center center;
+  background: var(--hover) var(--mv_up_active) var(--center);
 }
 
 .buttonDown:active {
-  background: var(--hover) var(--mv_down_active) no-repeat center center;
+  background: var(--hover) var(--mv_down_active) var(--center);
 }
 
 .buttonBottom:active {
-  background: var(--hover) var(--mv_bottom_active) no-repeat center center;
+  background: var(--hover) var(--mv_bottom_active) var(--center);
 }
 
 .buttonTop, .buttonBottom, .buttonUp, .buttonDown {
@@ -4351,11 +4353,11 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 }
 
 #config_service a[href$="#alternative_browser"]::after, h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after {
-  background: var(--helplink) no-repeat center center;
+  background: var(--helplink) var(--center);
 }
 
 #config_service a[href$="#alternative_browser"]:hover::after, h3#iptransport a:hover::after, h3#advancedconfig a:hover::after, #reseedsetup a:hover::after {
-  background: var(--helplink_hover) no-repeat center center;
+  background: var(--helplink_hover) var(--center);
 }
 
 #config_service a[href$="#alternative_browser"]::after {
@@ -4363,8 +4365,8 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
   width: 18px;
   height: 18px;
   display: inline-block;
-  background-size: 18px;
   vertical-align: middle;
+  background-size: 18px;
   content: "";
 }
 
@@ -4524,17 +4526,12 @@ h3#servicedebug a, h3#graphinfo a {
   border-left: var(--border);
 }
 
-h4.app a, h4.app2 a {
-  word-spacing: 0;
-  letter-spacing: 0;
-}
-
 .main#tunnels h3 a[href^="/configtunnels#"]::after, .main#tunnels h3 a[href$="/i2ptunnelmgr"]::after,
 #logs a.configure::after, #logs a.delete::after, h4.app a::after, h4.app2 a::after {
   width: 16px;
   height: 16px;
   float: right;
-  background: var(--settings) no-repeat center center;
+  background: var(--settings) var(--center);
   background-size: 16px !important;
   content: "";
 }
@@ -4543,7 +4540,7 @@ h4.app a, h4.app2 a {
 .main#tunnels h3 a[href$="/i2ptunnelmgr"]:hover::after, .main#tunnels h3 a[href$="/i2ptunnelmgr"]:focus::after,
  #logs a.configure:hover::after, #logs a.configure:focus::after,
  h4.app a:hover::after, h4.app a:focus::after, h4.app2 a:hover::after, h4.app2 a:focus::after {
-  background: var(--settings_hover) no-repeat center center;
+  background: var(--settings_hover) var(--center);
 }
 
 .main#tunnels h3 a[href^="/configtunnels#"]:active::after, .main#tunnels h3 a[href$="/i2ptunnelmgr"]:active::after,
@@ -4562,12 +4559,12 @@ h4.app a, h4.app2 a {
 }
 
 #logs a.delete::after {
-  background: var(--close) no-repeat center center;
+  background: var(--close) var(--center);
   background-size: 14px !important;
 }
 
 #logs a.delete:hover::after {
-  background: var(--close_hover) no-repeat center center;
+  background: var(--close_hover) var(--center);
 }
 
 #logs a.configure:active::after {
@@ -4578,18 +4575,6 @@ h4.app a, h4.app2 a {
 #logs a.delete:active::after {
   opacity: .7;
   transform: scale(.85);
-}
-
-h4.app a::after, h4.app2 a::after {
-  margin-left: 9px;
-}
-
-h4.app a::after {
-  margin-top: -1px;
-}
-
-h4.app2 a::after {
-  margin-top: 1px;
 }
 
 /* end /tunnels */
@@ -4699,7 +4684,7 @@ h4.app2 a::after {
   color: #dd0;
   background: #000 !important;
   border: none;
-  border-bottom: var(--softborder) !important;
+  border-bottom: var(--border_soft) !important;
 }
 
 #configinfo td {
@@ -4710,7 +4695,7 @@ h4.app2 a::after {
 }
 
 .main#help h2 a:hover {
-  color: #ee9 !important;
+  color: var(--ink) !important;
 }
 
 #sidebarhelp h3, #faq h3, #reseedhelp h3 {
@@ -4929,8 +4914,8 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 }
 
 #netdboverview td:nth-child(2) {
-  border-left: var(--softborder);
-  border-right: var(--softborder);
+  border-left: var(--border_soft);
+  border-right: var(--border_soft);
 }
 
 #netdboverview table th, #netdboverview table td {
@@ -4938,7 +4923,7 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 }
 
 #netdbversions, #netdbtransports, #netdbcountrylist, #netdbtiers {
-  border: var(--softborder) !important;
+  border: var(--border_soft) !important;
   border-right: none !important;
   border-left: none !important;
   margin-bottom: 0;
@@ -4966,7 +4951,7 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 #netdboverview #netdbtransports th {
   padding-top: 5px !important;
   padding-bottom: 5px !important;
-  border-top: var(--softborder) !important;
+  border-top: var(--border_soft) !important;
 }
 
 #netdboverview #netdbtiers tr:last-child td {
@@ -5124,8 +5109,9 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
 }
 
 .sybil_distance th {
-  text-align: left;
   padding: 5px;
+  text-align: left;
+  font-size: 90%;
 }
 
 .sybil_distance th:last-child, .sybil_distance td:last-child {
@@ -5179,7 +5165,7 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
   position: relative;
   vertical-align: middle;
   text-align: center;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   background: #020;
   border-radius: 2px 0 0 2px;
   filter: drop-shadow(0 0 1px #000);
@@ -5209,7 +5195,7 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
   display: inline-block;
   border: 1px solid #030;
   border-radius: 2px;
-  box-shadow: 0 0 0 1px #000;
+  box-shadow: var(--outline);
   background: #020;
 }
 
@@ -5222,7 +5208,9 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
 }
 
 .netdb_leases .tunnel_id {
-  min-width: 76px;
+  margin: 0 2px 0 -1px;
+  min-width: 92px;
+  line-height: 1.22;
   text-align: center;
 }
 
@@ -5231,8 +5219,8 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
 }
 
 .netdb_leases .routerid, .netdb_leases .tunnel_id {
-  line-height: 1.36;
   vertical-align: middle;
+  border-radius: 2px;
 }
 
 .netdb_leases .routerid {
@@ -5240,10 +5228,9 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
   padding-top: 1px;
   padding-bottom: 1px;
   display: inline-block;
+  line-height: 1.36;
   border: 1px solid #030;
-  border-radius: 2px !important;
-  box-shadow: 0 0 0 1px #000;
-  background: #020;
+  box-shadow: var(--outline);
 }
 
 .netdb_leases .tunnel_peer tt, .netdb_leases .tunnel_peer tt {
@@ -5284,7 +5271,7 @@ img.unknownflag {
 }
 
 #profilelist tr:hover td, #floodfills tr:hover td {
-  color: #ee9;
+  color: var(--ink);
 }
 
 #profilelist th, #profilelist td {
@@ -5346,18 +5333,18 @@ a[href^="configpeer?peer"]::after {
   display: inline-block;
   vertical-align: middle;
   text-align: center;
-  background: var(--edit) no-repeat center center;
+  background: var(--edit) var(--center);
   background-size: 14px;
   content: "";
 }
 
 a[href^="configpeer?peer"]:hover::after {
-  background: var(--edit_hover) no-repeat center center;
+  background: var(--edit_hover) var(--center);
   background-size: 14px;
 }
 
 a[href^="configpeer?peer"]:active::after {
-  background: var(--edit_active) no-repeat center center;
+  background: var(--edit_active) var(--center);
   background-size: 14px;
 }
 
@@ -5406,7 +5393,7 @@ a[href^="configpeer?peer"]:active::after {
   display: inline-block;
   text-align: center;
   text-transform: none !important;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   border-radius: 2px;
   background: #002000;
 }
@@ -5478,7 +5465,7 @@ h3#bannedpeers {
   padding: 8px 5px;
   columns: 328px auto;
   column-gap: 8px;
-  column-rule: 1px dotted #131;
+  column-rule: var(--dotted);
   border: var(--border);
   background: none;
 }
@@ -5496,7 +5483,7 @@ h3#bannedpeers {
   display: inline-block;
   position: relative;
   list-style: none !important;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   border: 1px solid #121;
   box-shadow: 0 0 2px 2px rgba(0,0,0,.8), var(--highlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000;
   background: linear-gradient(180deg,#000b00, #000600);
@@ -5514,13 +5501,19 @@ h3#bannedpeers {
   background: none;
 }
 
-#banlist li tt {
-  line-height: 1.4 !important;
-  text-shadow: 0 1px 1px #000;
+#banlist li tt, #banlist li tt a {
+  line-height: 1.3 !important;
+  text-shadow: var(--textshadow);
+  vertical-align: middle;
+  user-select: all;
+}
+
+#banlist li tt a {
+  margin-left: -4px;
 }
 
 #banlist li .routerid img {
-  margin: 0 2px 0 0;
+  margin: 0 2px 0 0 !important;
 }
 
 #banlist li:last-child {
@@ -5537,7 +5530,7 @@ h3#bannedpeers {
   display: none;
 }
 
-#banlist li a[href^="configpeer"] {
+#banlist li a[href^="configpeer"]:last-of-type {
   padding: 2px 2px 1px 0;
   position: absolute;
   top: 0;
@@ -5590,6 +5583,10 @@ h3#bannedpeers {
   border: none;
 }
 
+#banneduntilrestart {
+  border-left: 1px solid var(--border);
+}
+
 #permabanned td:first-child {
   padding-right: 10px;
   width: 49%;
@@ -5630,8 +5627,7 @@ h3#bannedpeers {
 .footnote hr {
   margin: 10px 0 5px 0 !important;
   height: 1px;
-  color: var(--a);
-  border: 0 solid #252;
+  border: none;
   background: #252;
 }
 
@@ -5719,6 +5715,32 @@ h3#bannedpeers {
   margin: 0 -8px;
 }
 
+h4.app a::after, h4.app2 a::after {
+  margin-left: 9px;
+}
+
+h4.app a::after {
+  margin-top: -1px;
+}
+
+h4.app2 a::after {
+  margin-top: 1px;
+}
+
+h4.app, h4.app2 {
+  margin: 11px -6px -9px;
+  padding: 9px 8px 7px 35px;
+  line-height: 1;
+  overflow: hidden;
+  letter-spacing: .15em;
+  word-spacing: 0;
+  font-size: 10.5pt;
+  font-variant: small-caps;
+  text-transform: uppercase;
+  text-align: left;
+  border-radius: 0;
+}
+
 h4.app {
   background: url(images/favicon.svg) no-repeat 8px center, var(--h1) !important;
   background-size: 18px, 4px 100%, 100%, 175px !important;
@@ -5726,9 +5748,70 @@ h4.app {
 }
 
 h4.app2 {
+  clear: left;
   background: var(--globe) no-repeat 8px center, var(--h1) !important;
   background-size: 18px, 4px 100%, 100%, 175px !important;
   background-blend-mode: var(--h3_blend) !important;
+}
+
+#homepage .main h4 {
+  contain: paint;
+}
+
+h4.app a, h4.app2 a {
+  word-spacing: 0;
+  letter-spacing: 0;
+}
+
+#homepage .main h4 a {
+  margin: -9px 0 -10px;
+  padding: 14px 4px 12px;
+  border-left: var(--border);
+}
+
+#homepage h4.app a {
+  margin: -13px 0 -12px;
+}
+
+#homepage h4.app2 a {
+  margin: -14px 0 -10px;
+}
+
+@supports not (-moz-appearance: none) {
+  #homepage h4.app, #homepage h4.app2 {
+    padding-top: 7px !important;
+    padding-bottom: 7px !important;
+  }
+  h4.app a::after, h4.app2 a::after {
+    margin-top: 0 !important;
+    padding-top: 8px !important;
+  }
+  h4.app2 a::after {
+    margin-bottom: -7px !important;
+    padding-top: 0 !important;
+    padding-bottom: 10px !important;
+  }
+  h4.app, h4.app2 {
+    line-height: 1.3;
+  }
+  @media screen and (-webkit-min-device-pixel-ratio: 1.2) {
+    #homepage h4::before {
+      margin-top: -15px;
+      margin-bottom: 4px;
+      height: 10px;
+      display: block;
+      vertical-align: top;
+      content: "";
+    }
+    #homepage h4 {
+      padding-top: 7px !important;
+      padding-bottom: 4px !important;
+    }
+    #homepage h4 a::after {
+      margin-bottom: -10px !important;
+      margin-top: -3px !important;
+    }
+  }
 }
 
 h4.app::first-letter, h4.app2::first-letter {
@@ -5741,17 +5824,17 @@ h4.app img, h4.app2 img {
   opacity: .5;
 }
 
-#chooselang img, #configbanwidth img {
+#chooselang img, #configbandwidth img {
   margin: -1px 10px 0;
   display: inline-block;
 }
 
-#chooselang:hover img, #configbanwidth:hover img {
+#chooselang:hover img, #configbandwidth:hover img {
   transform: scale(1.3);
   filter: none !important;
 }
 
-#chooselang::after, #configbanwidth::after {
+#chooselang::after, #configbandwidth::after {
   content: none;
 }
 
@@ -5771,23 +5854,6 @@ h4.app img:active, h4.app2 img:active {
   transform: rotateZ(90deg);
 }
 
-h4.app, h4.app2 {
-  margin: 11px -6px -9px;
-  padding: 9px 8px 7px 35px;
-  overflow: hidden;
-  letter-spacing: .15em;
-  word-spacing: 0;
-  font-size: 10.5pt;
-  font-variant: small-caps;
-  text-transform: uppercase;
-  text-align: left;
-  border-radius: 0;
-}
-
-h4.app2 {
-  clear: left;
-}
-
 .ag2 {
   margin: 0 0 10px;
   padding: 0 3px;
@@ -5799,8 +5865,8 @@ div.app {
   min-width: 70px;
   float: left;
   text-align: center !important;
+  background: #000;
   opacity: .9;
-  background: radial-gradient(circle at center -90px, rgba(0,96,0,.9), #000 60%), linear-gradient(180deg,#000800, #000);
 }
 
 div.app, .extlink::after, input, button {
@@ -5853,13 +5919,13 @@ div.app:hover {
 }
 
 div.app:active .applabel, .sitemapLink:active .sitemapLabel {
-  color: #ee9 !important;
+  color: var(--ink) !important;
   box-shadow: var(--highlight), inset 3px 3px 3px 1px #5f2400 !important;
   background: var(--hover) !important;
 }
 
 div.app:active .applabel a {
-  color: #ee9 !important;
+  color: var(--ink) !important;
 }
 
 div.app a:link, div.app a:hover, div.app a:active {
@@ -5919,7 +5985,7 @@ div.appgroup {
   border-collapse: separate;
   border: 1px solid #151;
   background: #000;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 0 2px rgba(0,64,0,.5);
+  box-shadow: var(--highlight), inset 0 0 0 2px rgba(0,64,0,.5);
   filter: opacity(0);
   animation: ease fade .3s 1s forwards;
 }
@@ -5946,7 +6012,7 @@ div.appgroup {
 
 #searchbar select {
   padding: 8px 24px 8px 8px !important;
-  width: 164px;
+  width: 200px;
   position: absolute;
   top: -1px;
   left: -1px;
@@ -5977,7 +6043,7 @@ div.appgroup {
   border: none;
   border-right: 1px solid var(--border) !important;
   border-radius: 0 2px 2px 0;
-  background: var(--search) no-repeat center center / 14px, var(--btn);
+  background: var(--search) var(--center) / 14px, var(--btn);
   background-blend-mode: luminosity;
 }
 
@@ -6003,7 +6069,7 @@ div.appgroup {
 }
 
 #searchbar input {
-  margin: 2px 0 1px 162px !important;
+  margin: 2px 0 1px 198px !important;
   padding-left: 10px;
   padding-right: 42px;
   min-width: 240px;
@@ -6097,7 +6163,7 @@ div.app:hover .applabel, .sitemapLink:hover .sitemapLabel,
   font-size: 8.5pt;
   color: var(--a);
   border: none;
-  border-top: 1px solid #252;
+  border-top: var(--border_hard);
   border-radius: 0 0 2px 2px;
 }
 
@@ -6114,7 +6180,7 @@ div.app:hover .applabel, .sitemapLink:hover .sitemapLabel,
   overflow: hidden;
   text-overflow: ellipsis;
   text-transform: capitalize;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
 }
 
 .app2 + .appgroup .applabel a {
@@ -6189,7 +6255,6 @@ h3[id*="job"] {
   padding: 8px;
   letter-spacing: .08em;
   text-transform: uppercase;
-  text-shadow: 0 0 2px #010;
   border: var(--border);
   border-radius: 0;
 }
@@ -6225,7 +6290,7 @@ span#distance {
 
 .netdbentry td:first-child {
   padding-right: 8px !important;
-  border-right: var(--softborder);
+  border-right: var(--border_soft);
 }
 
 .netdbentry td:nth-child(2) {
@@ -6238,6 +6303,34 @@ span#distance {
 
 .netdbentry tr:last-child code {
   color: #bb7;
+}
+
+.gwhois, .banlisted {
+  vertical-align: middle;
+  font-size: 0;
+}
+
+.gwhois a::before {
+  margin-left: -2px;
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  vertical-align: middle;
+  background: var(--search) no-repeat left center / 11px;
+  opacity: .7;
+  content: "";
+}
+
+.gwhois:hover a::before, .gwhois a:focus::before {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+.banlisted {
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  background: var(--ban);
 }
 
 .netdbentry, .leaseset {
@@ -6269,7 +6362,7 @@ span#distance {
 }
 
 .netdbentry td b, .leaseset td b, #leasesetdebug td b, .sybil_routerinfo td b {
-  color: #ee9 !important;
+  color: var(--ink) !important;
 }
 
 #leasesetsummary tr:last-child td:last-child {
@@ -6380,8 +6473,8 @@ span#distance {
   display: inline-block;
   border: 1px solid #020;
   border-radius: 2px;
-  box-shadow: 0 0 0 1px #000;
-  background: var(--element);
+  box-shadow: var(--outline);
+  background: var(--badge);
 }
 
 .lsdest {
@@ -6389,17 +6482,17 @@ span#distance {
   border-radius: 0;
   border-left-width: 4px;
   border-right-width: 4px;
-  background: var(--hardhat) no-repeat 4px center / 14px, var(--element);
+  background: var(--hardhat) no-repeat 4px center / 14px, var(--badge);
 }
 
 .lsdest.published {
   padding-left: 38px;
-  background: var(--hardhat) no-repeat 4px center / 14px, var(--globe) no-repeat 22px center / 12px, var(--element);
+  background: var(--hardhat) no-repeat 4px center / 14px, var(--globe) no-repeat 22px center / 12px, var(--badge);
 }
 
 .leaseset th:last-child a[href$="i2p/"] {
   padding-left: 22px;
-  background: var(--link) no-repeat 5px center / 12px, var(--element);
+  background: var(--link) no-repeat 5px center / 12px, var(--badge);
 }
 
 .addtobook {
@@ -6418,7 +6511,7 @@ span#distance {
   display: inline-block;
   vertical-align: middle;
   border-left: var(--border);
-  background: var(--ahelp) no-repeat center center / 14px;
+  background: var(--ahelp) var(--center) / 14px;
   content: "";
 }
 
@@ -6540,13 +6633,13 @@ span#distance {
 }
 
 #sybilnav ul li:active a {
-  color: #ee9 !important;
+  color: var(--ink) !important;
 }
 
 #sybilnav a {
   width: 100%;
   display: inline-block;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
 }
 
 #sybilnav ul li:hover a {
@@ -6577,6 +6670,13 @@ span#distance {
 
 .sybil_routerinfo th {
   padding: 1px 1px 1px 6px !important;
+}
+
+.sybil_routerinfo th b[style="float: right;"] {
+  margin-right: 6px;
+  font-size: 85%;
+  font-weight: 400;
+  font-style: italic;
 }
 
 .sybil_routerinfo th:first-child {
@@ -6721,8 +6821,25 @@ h3, th {
 }
 
 .h3navlinks {
-  margin-top: -2px;
   white-space: nowrap;
+}
+
+#routerinformation .h3navlinks {
+  margin-top: 1px;
+}
+
+#routerinformation .h3navlinks a::before {
+  margin: 0 3px 0 -2px;
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  vertical-align: middle;
+  background: var(--eye) no-repeat left center / 14px;
+  content: "";
+}
+
+#routerinformation .h3navlinks a:hover::before {
+  background: var(--eye_hover) no-repeat left center / 14px;
 }
 
 th .h3navlinks, #config_stats .h3navlinks, #config_webapps .h3navlinks {
@@ -6756,15 +6873,15 @@ h3#iptransport a, h3#advancedconfig a, #reseedsetup a {
 h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after {
   margin: 0 2px 0 0;
   padding: 0;
-  width: 16px;
-  height: 16px;
+  width: 19px;
+  height: 19px;
   float: right;
-  background-size: 16px !important;
+  background-size: 19px;
   content: "";
 }
 
 h3#iptransport a:hover::after, h3#advancedconfig a:hover::after, #reseedsetup a:hover::after {
-  background: var(--helplink_hover) no-repeat center center / 16px;
+  background: var(--helplink_hover) var(--center) / 18px;
 }
 
 #config_logging h3 a::before, #webappconfiguration a::before,
@@ -6800,15 +6917,9 @@ h3#iptransport a:hover::after, h3#advancedconfig a:hover::after, #reseedsetup a:
   vertical-align: middle;
 }
 
-@media screen and (max-width: 1499px) {
-  #webappconfiguration a, #i2pclientconfig a, #pluginmanage a {
-    padding-top: 9px;
-  }
-}
-
 #logs h3 a {
   margin: -8px 0;
-  padding: 8px 2px 8px 10px;
+  padding: 10px 2px 9px 10px;
   border-left: var(--border);
 }
 
@@ -6971,6 +7082,10 @@ p#webappconfigtext {
 
 #pluginconfig, #i2pupdates, .homelinkedit, #peerdefs {
   margin-top: -1px;
+}
+
+#pluginconfig th {
+  font-size: 8.5pt;
 }
 
 #peers p.infohelp {
@@ -7166,12 +7281,11 @@ h4.embeddedtitle#updateplugins {
 }
 
 #configstats td b {
-  color: #ee9;
+  color: var(--ink);
 }
 
 #configstats input.optbox {
-  margin: 0;
-  padding: 0;
+  display: none !important;
 }
 
 #configstats .tablefooter td {
@@ -7420,8 +7534,7 @@ h4#sb_shutdownstatus span {
   width: 100%;
   display: inline-block;
   vertical-align: middle;
-  color: #dd8;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   box-shadow: var(--highlight), inset 0 0 2px 1px #040;
   box-sizing: border-box;
 }
@@ -7459,7 +7572,6 @@ h4#sb_shutdownstatus span {
 }
 
 .routersummary .running, .tunnelBuildStatus.active {
-  color: #dd8;
   box-shadow: var(--highlight), inset 0 0 2px 1px #060;
   background: rgba(64,255,64,.02);
 }
@@ -7495,35 +7607,35 @@ h4#sb_shutdownstatus span {
 }
 
 .sb_netstatus.error::before {
-  background: var(--net_error) no-repeat center center;
+  background: var(--net_error) var(--center);
 }
 
 .sb_netstatus.warn::before {
-  background: var(--net_warning) no-repeat center center;
+  background: var(--net_warning) var(--center);
 }
 
 .sb_netstatus.testing::before {
-  background: var(--net_starting) no-repeat center center;
+  background: var(--net_starting) var(--center);
 }
 
 .sb_netstatus.hidden::before {
-  background: var(--net_hidden) no-repeat center center;
+  background: var(--net_hidden) var(--center);
 }
 
 .sb_netstatus.running::before {
-  background: var(--net_ok) no-repeat center center;
+  background: var(--net_ok) var(--center);
 }
 
 .sb_netstatus.firewalled::before {
-  background: var(--net_firewalled) no-repeat center center;
+  background: var(--net_firewalled) var(--center);
 }
 
 .sb_netstatus.vmcomm::before {
-  background: var(--net_vm) no-repeat center center;
+  background: var(--net_vm) var(--center);
 }
 
 .sb_netstatus.clockskew::before {
-  background: var(--net_vm) no-repeat center center;
+  background: var(--net_clockskew) var(--center);
 }
 
 /* end network status */
@@ -7531,7 +7643,7 @@ h4#sb_shutdownstatus span {
 /* tunnel build status */
 
 .tunnelBuildStatus {
-  color: #393;
+  color: #ee9;
 }
 
 .tunnelBuildStatus::before {
@@ -7545,12 +7657,20 @@ h4#sb_shutdownstatus span {
   transform: scale(.7);
 }
 
+.tunnelBuildStatus.accepting {
+  color: #507750;
+}
+
 .tunnelBuildStatus.accepting::before {
-  background: var(--tunn_ready) no-repeat center center / 15px;
+  background: var(--tunn_ready) var(--center) / 15px;
+}
+
+.tunnelBuildStatus.active {
+  color: #58ce3a;
 }
 
 .tunnelBuildStatus.active::before {
-  background: var(--tunn_active) no-repeat center center / 15px;
+  background: var(--tunn_active) var(--center) / 15px;
 }
 
 .tunnelBuildStatus.starting {
@@ -7558,7 +7678,7 @@ h4#sb_shutdownstatus span {
 }
 
 .tunnelBuildStatus.starting::before {
-  background: var(--tunn_starting) no-repeat center center / 15px;
+  background: var(--tunn_starting) var(--center) / 15px;
 }
 
 .tunnelBuildStatus.rejecting {
@@ -7566,7 +7686,7 @@ h4#sb_shutdownstatus span {
 }
 
 .tunnelBuildStatus.rejecting::before {
-  background: var(--tunn_reject) no-repeat center center / 15px;
+  background: var(--tunn_reject) var(--center) / 15px;
 }
 
 .tunnelBuildStatus.hidden {
@@ -7574,15 +7694,7 @@ h4#sb_shutdownstatus span {
 }
 
 .tunnelBuildStatus.hidden::before {
-  background: var(--tunn_hidden) no-repeat center center / 15px;
-}
-
-@media screen and (max-width: 1499px) {
-  .tunnelBuildStatus {font-size: 90%}
-  #sb_tunnelstatus .tunnelBuildStatus::before {
-    margin: -2px 0;
-    background-size: 12px;
-  }
+  background: var(--tunn_hidden) var(--center) / 15px;
 }
 
 /* end tunnel build status */
@@ -7599,15 +7711,15 @@ h4#sb_shutdownstatus span {
   display: inline-block;
   min-width: 20px;
   color: #bb7;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   text-align: center !important;
   border: 1px solid #030;
-  box-shadow: 0 0 0 1px #000;
-  background: var(--element);
+  box-shadow: var(--outline);
+  background: var(--badge);
 }
 
 .tunnel_cap, .tier, .reachable, .ff {
-  box-shadow: inset 0 0 0 1px #010, 0 0 0 1px #000 !important;
+  box-shadow: var(--highlight_badge) !important;
 }
 
 #tunnels .tunnel_cap {
@@ -7654,7 +7766,7 @@ h4#sb_shutdownstatus span {
   display: inline-block;
   line-height: 1.2;
   color: #bb7;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   text-align: center !important;
 }
 
@@ -7687,8 +7799,8 @@ h4#sb_shutdownstatus span {
   font-size: 8pt;
   text-transform: lowercase;
   text-align: center;
-  box-shadow: 0 0 0 1px #000;
-  background: var(--element);
+  box-shadow: var(--outline);
+  background: var(--badge);
 }
 
 .tunnel_peer:empty {
@@ -7707,7 +7819,7 @@ h4#sb_shutdownstatus span {
 
 #profile_defs td:first-child {
   padding: 3px 10px;
-  border-right: var(--softborder);
+  border-right: var(--border_soft);
 }
 
 #profile_defs td:nth-child(2)::first-letter {
@@ -7732,7 +7844,7 @@ h4#sb_shutdownstatus span {
 }
 
 #capabilities_key td:nth-child(2), #capabilities_key td:nth-child(3) {
-  border-right: var(--softborder);
+  border-right: var(--border_soft);
 }
 
 #capabilities_key td:last-child {
@@ -7897,7 +8009,7 @@ th code {
   width: 48px;
   display: inline-block;
   text-align: center;
-  color: #ee9 !important;
+  color: var(--ink) !important;
 }
 
 #netdb .sybil_addresses .netdb_transport {
@@ -7911,7 +8023,7 @@ th code {
 .netdb_name {
   text-transform: capitalize;
   font-weight: 700;
-  color: #ee9;
+  color: var(--ink);
 }
 
 .netdb_info {
@@ -8046,14 +8158,19 @@ th code {
 .threatpoints + ul li {
   list-style: none;
   margin-left: 3px;
-  line-height: 1;
+  line-height: 1.2;
   -webkit-column-break-inside: avoid !important;
   break-inside: avoid !important;
   page-break-inside: avoid !important;
 }
 
 .threatpoints + ul li a {
+  max-width: 200px;
+  display: inline-block;
+  vertical-align: text-bottom;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* end sybils */
@@ -8167,7 +8284,7 @@ th code {
 
 #debug ul, .debug_targetinfo {
   columns: 400px 2;
-  column-rule: var(--softborder);
+  column-rule: var(--border_soft);
   column-gap: 30px;
 }
 
@@ -8239,7 +8356,7 @@ th code {
 .bucketsContainer, .bucketCount {
   margin: 0;
   text-align: center;
-  border: var(--softborder);
+  border: var(--border_soft);
   box-shadow: var(--highlight);
 }
 
@@ -8383,7 +8500,7 @@ th code {
 
 #jardump tr:hover td {
   background: #001800;
-  color: #ee9;
+  color: var(--ink);
   border: 1px solid #151;
   border-left: 1px solid transparent;
   border-right: 1px solid transparent;
@@ -8607,9 +8724,8 @@ th.options, #externali2cp th {
   min-width: 64px;
   overflow: hidden;
   text-align: center;
-  box-shadow: 0 0 0 1px #000 !important;
-  background: #020;
-  background: var(--element);
+  box-shadow: var(--outline);
+  background: var(--badge);
 }
 
 .routerid, .tunnel_local, #tunnels .tunnel_cap, .version, #netdbtiers a {
@@ -8687,7 +8803,7 @@ th.options, #externali2cp th {
 }
 
 .tunneldisplay .routerid, .tunnel_cap {
-  box-shadow: 0 0 0 1px #000;
+  box-shadow: var(--outline);
 }
 
 .tunnel_cap:empty {
@@ -8753,7 +8869,7 @@ th.options, #externali2cp th {
 
 .optionlist, .optionsingle, #reseedssl {
   padding: 1px 2px;
-  border: var(--softborder) !important;
+  border: var(--border_soft) !important;
   box-shadow: inset 0 0 0 2px #000;
   column-gap: 1px;
   transition: ease box-shadow .2s;
@@ -8765,14 +8881,14 @@ th.options, #externali2cp th {
 }
 
 .optionlist:hover, .optionsingle:hover, .optiontextarea:hover {
-  border: var(--softborder);
-  box-shadow: inset 0 0 0 1px #002500 !important;
+  border: var(--border_soft);
+  box-shadow: var(--option_highlight) !important;
   transition: ease box-shadow .5s, ease background .2s .01s;
   background: #002500 !important;
 }
 
 #reseedconfig .optiontextarea:hover {
-  box-shadow: inset 0 0 0 1px #002500 !important;
+  box-shadow: var(--option_highlight) !important;
   transition: ease box-shadow .5s, ease background .2s .01s;
 }
 
@@ -8788,7 +8904,7 @@ th.options, #externali2cp th {
   vertical-align: middle;
   background: #000 !important;
   transition: ease box-shadow .2s;
-  box-shadow: inset 0 0 0 1px #002500;
+  box-shadow: var(--option_highlight);
 }
 
 #bandwidthconfig .optionsingle:hover, #reseedproxytype label:hover, #graphs .nowrap:hover {
@@ -8809,8 +8925,8 @@ b.suboption {
   padding: 5px 8px 6px 10px;
   display: inline-block;
   white-space: nowrap;
-  text-shadow: 0 1px 1px #000;
-  border: var(--softborder);
+  text-shadow: var(--textshadow);
+  border: var(--border_soft);
   border-bottom: none;
   box-shadow: var(--highlight);
   background: linear-gradient(180deg,#010 50%, #000 50%);
@@ -8917,11 +9033,11 @@ b.suboption {
 }
 
 #bandwidthconfig tr:nth-child(2) .net_bwrate::before {
-  background: url(/themes/console/images/svg/inbound.svg) no-repeat center center;
+  background: url(/themes/console/images/svg/inbound.svg) var(--center);
 }
 
 #bandwidthconfig tr:nth-child(3) .net_bwrate::before, #bandwidthconfig tr:nth-child(4) .net_bwrate::before {
-  background: url(/themes/console/images/svg/outbound.svg) no-repeat center center;
+  background: url(/themes/console/images/svg/outbound.svg) var(--center);
 }
 
 .net_bwrate::before, #bandwidthconfig tr:nth-child(4) .net_bwrate::before {
@@ -9211,7 +9327,7 @@ b.suboption {
 
 #config_reseed .optionsingle:hover {
   border: var(--border);
-  box-shadow: inset 0 0 0 1px #002500;
+  box-shadow: var(--option_highlight);
   transition: ease box-shadow .5s;
 }
 
@@ -9291,19 +9407,14 @@ b.suboption {
 }
 
 @supports not (-moz-appearance: none) {
-#reseedproxysslhostport.optionlist {
-  columns: 1;
-}
-
-.optionsingle#reseedproxytype {
-  columns: 2;
-}
+  #reseedproxysslhostport.optionlist {columns: 1}
+  .optionsingle#reseedproxytype {columns: 2}
 }
 
 #config_network .optionlist:hover, #config_i2cp .optionlist:hover, #reseedssl:hover,
 #manualreseed .optionsingle:hover, .optiontextarea:hover, #reseed_urlselection:hover {
   border: var(--border);
-  box-shadow: inset 0 0 0 1px #002500 !important;
+  box-shadow: var(--option_highlight) !important;
   transition: ease box-shadow .5s;
 }
 
@@ -9573,15 +9684,13 @@ input[type=file] {
 #pluginconfig td:first-child label {
   margin-left: 6px;
   padding: 3px 5px 3px 24px;
-  display: inline-block;
   min-width: 100px;
+  display: inline-block;
   text-align: left;
   font-weight: 700;
   border-radius: 2px 15px 15px 2px;
   box-shadow: 0 0 0 1px #010, 0 0 0 2px rgba(0,0,0,.7);
-  background: #020 var(--plugin) no-repeat 5px center;
-  background: var(--plugin) no-repeat 5px center, linear-gradient(180deg,#020, #000);
-  background-size: 14px, 100%;
+  background: var(--plugin) no-repeat 5px center / 14px, linear-gradient(180deg,#020, #000);
   background-blend-mode: luminosity;
 }
 
@@ -9619,7 +9728,6 @@ input[type=file] {
   font-style: italic;
   border: 1px solid #700;
   box-shadow: var(--highlight), inset 0 0 3px 1px #040, inset 0 0 0 4px #000;
-  background: #010;
   background: repeating-linear-gradient(135deg, #010 1px, #010 5px, #030 5px, #030 10px);
   animation: downloadbar .6s infinite;
 }
@@ -9637,7 +9745,7 @@ input[type=file] {
   letter-spacing: .1em;
   text-align: center;
   font-size: 10pt;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   background: #020;
   background: linear-gradient(90deg, #010, #000, #010);
   box-shadow: var(--highlight);
@@ -9709,12 +9817,12 @@ input[type=file] {
   padding: 4px 8px;
   width: calc(100% - 24px);
   display: inline-block;
-  border: var(--softborder);
+  border: var(--border_soft);
   box-shadow: var(--highlight), inset 0 0 2px 1px #020;
   background: #000800;
+  -webkit-column-break-inside: avoid;
   break-inside: avoid;
   page-break-inside: avoid;
-  -webkit-column-break-inside: avoid;
 }
 
 .peer_arrow {
@@ -9821,7 +9929,7 @@ input[type=file] {
   margin-right: 2px;
   margin-left: 0 !important;
   text-align: left;
-  color: #ee9 !important;
+  color: var(--ink) !important;
 }
 
 .netdbStats hr, .sybil_routerinfo hr {
@@ -9868,8 +9976,8 @@ input[type=file] {
   color: #bb0;
   text-shadow: none;
   border-radius: 2px;
-  box-shadow: 0 0 0 1px #000;
-  background: var(--element);
+  box-shadow: var(--outline);
+  background: var(--badge);
 }
 
 #netdb .netdbentry th code, #netdb .sybil_routerinfo th code, .leaseset th code {
@@ -9892,6 +10000,10 @@ input[type=file] {
 .leaseset th:last-child code {
   margin: 0 0 0 4px !important;
   width: auto;
+}
+
+.leaseset td {
+  contain: paint;
 }
 
 #netdb .netdbentry th code:hover, #netdb .netdbentry th code:active, .leaseset th code:hover,
@@ -9985,12 +10097,14 @@ input[type=file] {
 }
 
 .sybil_routerinfo .netdbheader {
+  margin-right: 0;
   padding: 3px;
   text-align: right;
-  margin-right: 0;
 }
 
 .netdb_header > * {
+  display: inline-block;
+  vertical-align: middle;
   line-height: 0;
   font-size: 0;
 }
@@ -10004,8 +10118,8 @@ input[type=file] {
   line-height: 0;
   vertical-align: middle;
   border: 1px solid #030;
-  box-shadow: 0 0 0 1px #000;
-  background: var(--element);
+  box-shadow: var(--outline);
+  background: var(--badge);
 }
 
 #tunnelPeerCount .configpeer img  {
@@ -10078,9 +10192,8 @@ input[type=file] {
   display: inline-block;
   text-align: center !important;
   font-weight: 700;
-  box-shadow: 0 0 0 1px #000;
-  background: #020;
-  background: var(--element) !important;
+  box-shadow: var(--outline);
+  background: var(--badge) !important;
 }
 
 #netdbtiers a {
@@ -10126,20 +10239,20 @@ input[type=file] {
   font-size: 90%;
   border: 1px solid #020;
   border-radius: 2px;
-  box-shadow: 0 0 0 1px #000;
+  box-shadow: var(--outline);
 }
 
 .signingkey {
   margin: 2px 0 2px 2px;
   padding: 2px 6px 2px 20px;
   display: inline-block;
-  color: #ee9 !important;
-  background: var(--crypto) no-repeat 4px center / 14px, var(--element);
+  color: var(--ink) !important;
+  background: var(--crypto) no-repeat 4px center / 14px, var(--badge);
 }
 
 .signingkey.encryption {
   padding-left: 20px;
-  background: var(--lock) no-repeat 5px center / 12px, var(--element);
+  background: var(--lock) no-repeat 5px center / 12px, var(--badge);
 }
 
 .leaseset th:last-child, .leasesets_container .leaseset tr:nth-child(2) {
@@ -10151,7 +10264,7 @@ input[type=file] {
   padding: 1px 3px;
   display: inline-block;
   line-height: 1.6;
-  background: var(--element);
+  background: var(--badge);
 }
 
 /* end netdb */
@@ -10183,14 +10296,14 @@ input[type=file] {
 }
 
 #profilelist th:nth-child(5), #profilelist td:nth-child(5) {
-  text-align: center;
   width: 40%;
+  text-align: center;
 }
 
 #floodfills td:nth-child(2) {
-  white-space: nowrap;
   padding-left: 3px;
   padding-right: 3px;
+  white-space: nowrap;
 }
 
 #floodfills td:nth-last-child(2) {
@@ -10203,34 +10316,32 @@ input[type=file] {
 }
 
 #floodfills .percentBarOuter, #floodfills .percentBarText {
-  display: inline-block;
-  width: 50px !important;
   margin: 0 2px;
+  width: 50px !important;
+  display: inline-block;
 }
 
 #floodfills .percentBarOuter {
   text-align: left;
   background: #000;
-  border: var(--softborder);
+  border: var(--border_soft);
   opacity: .9;
 }
 
 #floodfills .percentBarInner {
-  display: inline-block;
   width: inherit;
-  background: #900;
-  background: linear-gradient(180deg,rgba(255,255,255,.1) 50%, rgba(0,0,0,.1) 50%), linear-gradient(90deg, #700 25px, #800 40px, #900 50px);
+  display: inline-block;
+  background: linear-gradient(180deg,#700 50%, #500 50%);
 }
 
 #floodfills .percentBarInner[style="width:0%"] {
   width: 100% !important;
-  background: #090;
-  background: linear-gradient(180deg,rgba(255,255,255,.1) 50%, rgba(0,0,0,.1) 50%), linear-gradient(90deg, #070, #080);
+  background: linear-gradient(180deg,#373 50%, #151 50%);
 }
 
 #floodfills .percentBarText {
   color: #fff;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
 }
 
 #floodfills td:empty, #tunnels .cells:empty {
@@ -10239,10 +10350,10 @@ input[type=file] {
 }
 
 #floodfills td:empty::before, #ntcpconnections td:empty::before, #udpconnections td:empty::before, #profilelist td:empty::before, #tunnels .cells:empty::after {
-  content: "\2013";
-  display: inline-block;
   width: 100%;
+  display: inline-block;
   text-align: center;
+  content: "\2013";
   opacity: .8;
 }
 
@@ -10254,9 +10365,9 @@ input[type=file] {
 
 #floodfills td:nth-child(3) span, #profilelist td:nth-last-child(3) span, #profilelist td:nth-last-child(4) span,
 #profilelist td:nth-last-child(5) span, #profilelist td:nth-last-child(6) span, #profilelist td:nth-last-child(2) span {
+  min-width: 20px;
   display: inline-block;
   text-align: right;
-  min-width: 20px;
 }
 
 #profilelist td:nth-last-child(5) span {
@@ -10264,13 +10375,13 @@ input[type=file] {
 }
 
 #profilelist td:nth-child(2), #profilelist td:nth-child(7), #floodfills td:last-child {
-  white-space: nowrap;
   width: 1%;
+  white-space: nowrap;
 }
 
 #profilelist td:nth-child(2) i {
-  display: inline-block;
   width: 100%;
+  display: inline-block;
   text-align: center;
 }
 
@@ -10284,23 +10395,23 @@ input[type=file] {
 }
 
 #peerprofiles.widescroll {
-  position: relative;
-  padding-top: 112px;
   margin-top: -10px;
+  padding-top: 112px;
+  position: relative;
 }
 
 #peer_thresholds {
+  width: 100%;
   position: absolute;
   top: 0;
-  width: 100%;
 }
 
 #view_profile h3 {
   margin-bottom: 13px;
-  border-width: 1px;
-  border-radius: 0;
   position: relative;
   vertical-align: middle;
+  border-width: 1px;
+  border-radius: 0;
 }
 
 #view_profile h3 a {
@@ -10309,17 +10420,17 @@ input[type=file] {
   text-transform: none;
 }
 
-#view_profile .profiledump, #view_profile .configpeer {
+#view_profile .profiledump, #view_profile .configpeer, #view_profile h3 a.viewprofile {
   font-size: 0;
 }
 
-#view_profile .profiledump img, #view_profile .configpeer img {
-  margin: -2px 25px 0 0 !important;
+#view_profile .configpeer, #view_profile .viewprofile {
+  margin: -2px 27px -2px 0 !important;
+  display: inline-block;
   vertical-align: middle;
-  font-size: 0;
 }
 
-#view_profile .profiledump img {
+#view_profile .viewprofile {
   margin-right: 6px !important;
 }
 
@@ -10347,7 +10458,7 @@ input[type=file] {
   width: calc(100% - 45px);
   line-height: 20px;
   letter-spacing: .05em;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   border-left: 5px solid #030;
   background: repeating-linear-gradient(180deg,rgba(0,8,0,.6) 0, rgba(0,8,0,.6) 20px, rgba(0,20,0,.6) 20px, rgba(0,20,0,.6) 40px);
   background-size: 100% 40px;
@@ -10431,26 +10542,23 @@ div.app:hover .extlink::after, .sitemapLink.extlink:hover::after {
 
 /* error */
 #events .crashed, #events .network, #events .oom, #events .critical, #events .installf {
-   background: rgba(96,0,0,.5) !important;
-   background: linear-gradient(90deg, #900, #900 4px, rgba(128,0,0,.2) 4px) !important;
+   background: linear-gradient(90deg, #900, #900 4px, rgba(128,0,0,.2) 4px);
 }
 
 /* warning */
-#events .watchdog, #events .reseed, #events .clockshi, #events .aborteds, #events .reachabi, #events .rekeyed, #events .changedp, #events .changeip {
-   background: rgba(64,0,64,.3) !important;
-   background: linear-gradient(90deg, #606, #606 4px, rgba(96,0,96,.2) 4px) !important;
+#events .watchdog, #events .reseed, #events .clockshi, #events .aborteds, #events .reachabi,
+#events .rekeyed, #events .changedp, #events .changeip {
+   background: linear-gradient(90deg, #606, #606 4px, rgba(96,0,96,.2) 4px);
 }
 
 /* info */
 #events .softrest, #events .updated, #events .enabledf, #events .disabled, #events .installe, .becamefl {
-   background: rgba(96,96,0,.3) !important;
-   background: linear-gradient(90deg, #770, #770 4px, rgba(64,64,0,.2) 4px) !important;
+   background: linear-gradient(90deg, #770, #770 4px, rgba(64,64,0,.2) 4px);
 }
 
 /* notice */
 #events .started, #events .stopped {
-   background: rgba(64,64,64,.3) !important;
-   background: linear-gradient(90deg, #030, #030 4px, rgba(0,0,0,0) 4px) !important;
+   background: linear-gradient(90deg, #030, #030 4px, rgba(0,0,0,0) 4px);
 }
 
 /* end /events */
@@ -10481,7 +10589,6 @@ div.app:hover .extlink::after, .sitemapLink.extlink:hover::after {
   color: #aa0;
   text-transform: none;
   box-shadow: 0 0 1px 1px #010;
-  background: #020;
   background: rgba(0,48,0,.5);
 }
 
@@ -10534,7 +10641,7 @@ input[type=text]:focus::placeholder, #homesearch input.search:focus::placeholder
   display: inline-block;
   font-size: 0;
   color: #a00;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   box-shadow: 0 0 1px 0 #030, var(--highlight), inset 0 0 1px 3px #131, inset 0 0 0 4px #000, inset 0 0 7px 3px #010;
   background: repeating-linear-gradient(135deg, #131, #131 10px, #300 11px, #000 12px, #000 19px, #300 19px, #000 20px);
   background-position: right center;
@@ -10552,8 +10659,7 @@ input[type=text]:focus::placeholder, #homesearch input.search:focus::placeholder
   height: 26px;
   vertical-align: middle;
   display: inline-block;
-  background: var(--update) no-repeat center center;
-  background-size: 26px;
+  background: var(--update) var(--center) / 26px;
   content: "";
   transform: rotate(0);
   animation: linear spin 3s forwards infinite;
@@ -10636,7 +10742,6 @@ a:hover .tier, a:focus .tier {
 }
 
 .routersummary table, .routersummary form {
-  background: rgba(0,16,0,.1) !important;
   background: repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.1) 2px, rgba(0,16,0,.1) 3px) !important;
 }
 
@@ -10683,7 +10788,7 @@ a:hover .tier, a:focus .tier {
 }
 
 .routersummary td {
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
 }
 .warntext {
   color: #b00;
@@ -10790,9 +10895,9 @@ table[id$="logs"] ul {
 }
 
 #wrapperlogs {
+  margin-bottom: 10px;
   width: 100%;
   table-layout: fixed;
-  margin-bottom: 10px;
 }
 
 #wrapperlogs tr:last-child td {
@@ -10802,7 +10907,6 @@ table[id$="logs"] ul {
 #wrapperlogs pre {
   margin-bottom: 0 !important;
   padding: 0 0 0 5px !important;
-  width: 99%;
   width: calc(100% - 5px);
   max-height: 600px;
   white-space: pre-wrap;
@@ -10815,12 +10919,12 @@ table[id$="logs"] ul {
 }
 
 #logs li {
+  width: 100%;
   list-style: none;
-  font: bold 8.5pt var(--monospaced);
+  word-break: break-all;
   line-height: 1.4;
   text-align: left;
-  width: 100%;
-  word-break: break-all;
+  font: bold 8.5pt var(--monospaced);
   border-top: 1px solid #001800;
   border-right: 1px solid #001800;
   border-bottom: 1px solid #000;
@@ -10843,7 +10947,7 @@ table[id$="logs"] ul {
 }
 
 #logs li:hover {
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   box-shadow: inset 0 0 0 1px rgba(192,192,0,.4), inset 0 0 0 2px #000;
   border-color: rgba(192,192,0,.4);
   background: repeating-linear-gradient(90deg, rgba(0,0,0,.3) 2px, rgba(96,96,0,.3) 4px),
@@ -10983,7 +11087,7 @@ font[color="#000099"], #servicelogs {
 }
 
 h3#servicelogs {
-  color: #ee9 !important;
+  color: var(--ink) !important;
 }
 
 #logs .nologs {
@@ -11025,10 +11129,6 @@ a[href^="/netdb"]:hover span {
   box-shadow: var(--highlight), inset 0 0 2px 0 #040 !important;
 }
 
-#criticallogs tr:first-child td, #routerlogs tr:first-child td, #wrapperlogs tr:first-child td {
-  background: #000;
-}
-
 #events tr {
   box-shadow: inset 0 0 0 1px rgba(0,0,0,.3), inset 0 0 2px 0 rgba(96,96,96,.5) !important;
 }
@@ -11039,7 +11139,7 @@ a[href^="/netdb"]:hover span {
 }
 
 #floodfills td:not(:last-child) {
-  border-right: var(--softborder);
+  border-right: var(--border_soft);
 }
 
 #floodfills td:nth-child(2), #floodfills td:nth-child(n+4) {
@@ -11120,8 +11220,8 @@ a[href^="/netdb"]:hover span {
 }
 
 #plugininstall table tr, #plugininstall2 table tr {
-  background: linear-gradient(180deg,#001800, #010) !important;
   box-shadow: none !important;
+  background: linear-gradient(180deg,#001800, #010) !important;
 }
 
 #plugininstall table tr:hover, #plugininstall2 table tr:hover {
@@ -11142,13 +11242,13 @@ a[href^="/netdb"]:hover span {
 }
 
 #routerinformation td:first-child {
-  border-right: var(--softborder);
+  border-right: var(--border_soft);
 }
 
 .skm_dest, #skm_dest {
-  font-size: 80%;
   letter-spacing: 0;
   text-transform: none;
+  font-size: 80%;
 }
 
 #debug .skm_key td:first-child, .debug_pubkey, .debug_sesskey {
@@ -11158,16 +11258,16 @@ a[href^="/netdb"]:hover span {
 }
 
 #debug .skm_key td:first-child b {
-  color: #ee9;
+  color: var(--ink);
 }
 
 .debug_pubkey {
   max-width: 300px;
   display: inline-block;
-  white-space: nowrap;
+  vertical-align: bottom;
   overflow: hidden;
   text-overflow: ellipsis;
-  vertical-align: bottom;
+  white-space: nowrap;
 }
 
 .debug_outboundtarget td:last-child, .skm_key td:last-child {
@@ -11176,7 +11276,6 @@ a[href^="/netdb"]:hover span {
 }
 
 .skm_key td, .debug_outboundtarget td {
-  background: #000 !important;
   background: linear-gradient(180deg,#002000, #000) !important;
 }
 
@@ -11195,8 +11294,8 @@ a[href^="/netdb"]:hover span {
 /* h1 icons */
 
 h1::first-letter {
-  font-size: 110%;
   margin-right: 1px;
+  font-size: 110%;
 }
 
 h1 {
@@ -11293,7 +11392,7 @@ h1[class], h1 {
   padding: 0 3px 0 18px;
   white-space: nowrap;
   border-radius: 1px;
-  box-shadow: 0 0 0 1px #000;
+  box-shadow: var(--outline);
 }
 
 .sitelink {
@@ -11376,7 +11475,7 @@ h1[class], h1 {
 
 #helptoc b {
   font-size: 120%;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
 }
 
 #help_configuration {
@@ -11528,20 +11627,20 @@ h3#scheduledjobs {
 }
 
 .ibgw::after, .obep::after, .ptcp::after {
-  content: "";
-  display: inline-block;
   width: 26px;
   height: 26px;
-  background: var(--ibgw) no-repeat center center;
+  display: inline-block;
+  background: var(--ibgw) var(--center);
   background-size: 26px !important;
+  content: "";
 }
 
 .obep::after {
-  background: var(--obep) no-repeat center center;
+  background: var(--obep) var(--center);
 }
 
 .ptcp::after {
-  background: var(--ptcp) no-repeat center center;
+  background: var(--ptcp) var(--center);
 }
 
 #tunnels .cells:first-child {
@@ -11555,20 +11654,6 @@ h3#scheduledjobs {
   max-width: 112px !important;
   min-width: 112px !important;
   vertical-align: middle !important;
-}
-
-#homepage .main h4 a {
-  margin: -9px 0;
-  padding: 11px 4px 10px;
-  border-left: var(--border);
-}
-
-#homepage h4.app a {
-  margin-bottom: -12px;
-}
-
-#homepage h4.app2 a {
-  padding: 9px 4px 9px;
 }
 
 #tunnels h3#exploratory a, #tunnels h3.server a, #tunnels h3.client a {
@@ -11591,7 +11676,6 @@ h2, h2.welcome, h3, h3.welcome, #themeoptions {
 
 .news hr {
   color: #242;
-  background: #242;
   background: repeating-linear-gradient(90deg, #242 2px, #000 4px);
   background-size: 4px 100%;
 }
@@ -11634,13 +11718,14 @@ h2#jobrunners {
 }
 
 #sitemap h3, h4.app, h4.app2 {
-  border: 1px solid #252 !important;
+  border: var(--border_hard) !important;
 }
 
 #sitemap h3 {
   margin-left: -7px;
   margin-right: -7px;
   padding-left: 35px;
+  line-height: 1.2;
   letter-spacing: .12em;
   font-size: 10.5pt;
   background: url(images/favicon.svg) no-repeat 9px center, var(--h1) !important;
@@ -11705,7 +11790,7 @@ h2#jobrunners {
 
 .sitemapLink, #sitemap div.app {
   margin: 2px 2px 6px;
-  box-shadow: 0 0 0 1px #000, var(--highlight), inset 0 0 1px 1px #242;
+  box-shadow: var(--outline), var(--highlight), inset 0 0 1px 1px #242;
   background: radial-gradient(circle at center -90px, rgba(0,96,0,.9), #000 60%), linear-gradient(180deg,#000800, #000);
 }
 
@@ -11735,7 +11820,7 @@ h2#jobrunners {
   box-sizing: border-box;
   text-overflow: ellipsis;
   font-size: 90%;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   border: none;
   border-top: var(--border);
   box-shadow: var(--highlight), inset 0 0 1px 1px #242;
@@ -11807,11 +11892,11 @@ th[aria-sort] {
 }
 
 #sybilnav::after {
-  display: block;
   width: 100%;
   height: 10px;
-  content: "";
+  display: block;
   vertical-align: bottom;
+  content: "";
 }
 
 #sybil_totals, p.notfound {
@@ -11828,35 +11913,36 @@ th[aria-sort] {
   width: 18px;
   height: 16px;
   display: inline-block;
-  background: var(--eye) left center;
-  background-repeat: no-repeat !important;
-  background-size: 16px !important;
+  background: var(--eye) no-repeat left center / 16px;
   content: "";
 }
 
 #sybilnav ul li:hover::before {
-  background: var(--eye_hover) left center;
-  background-size: 16px !important;
+  background: var(--eye_hover) no-repeat left center / 16px;
 }
 
 #sybilnav ul li:active::before {
-  background: var(--eye_active) left center;
-  background-size: 16px !important;
+  background: var(--eye_active) no-repeat left center / 16px;
 }
 
 #sybilnav ul li#runNew::before {
-  background: var(--start) 1px calc(50% - 2px);
-  background-size: 14px !important;
+  background: var(--start) no-repeat 1px calc(50% - 1px) / 12px;
+}
+
+#sybilnav ul li#runNew:hover::before {
+  background: var(--start_hover) no-repeat 1px calc(50% - 1px) / 12px;
+}
+
+#sybilnav ul li#runNew:active::before {
+  background: var(--start_active) no-repeat 1px calc(50% - 1px) / 12px;
 }
 
 #sybilnav ul li#configurePeriodic::before {
-  background: var(--settings);
-  background-size: 14px !important;
+  background: var(--settings) no-repeat left center / 14px;
 }
 
 #sybilnav ul li#configurePeriodic:hover::before {
-  background: var(--settings_hover);
-  background-size: 14px !important;
+  background: var(--settings_hover) no-repeat left center / 14px;
 }
 
 #sybilnav ul li#configurePeriodic:active::before {
@@ -11901,9 +11987,8 @@ th[aria-sort] {
 }
 
 #stats .tab2 {
-  text-shadow: 0 1px 1px #000;
+  text-shadow: var(--textshadow);
   box-shadow: var(--highlight), inset 3px 3px 2px #010;
-  background: #030;
   background: linear-gradient(180deg,#030, #003800) !important;
 }
 
@@ -11912,7 +11997,7 @@ th[aria-sort] {
 }
 
 #stats .tab:not(.tab2):active {
-  color: #ee9;
+  color: var(--ink);
 }
 
 p#gatherstats {
@@ -11930,17 +12015,17 @@ p#gatherstats {
 }
 
 #stats ul.statlist {
-  border: none;
-  background: none;
   margin: 0 !important;
   padding: 0 !important;
+  border: none;
+  background: none;
 }
 
 .statvalue {
   padding: 0 2px 0 0;
-  color: #ee9;
   font-weight: 700;
   font-style: italic;
+  color: var(--ink);
 }
 
 .statsLongName {
@@ -11949,7 +12034,7 @@ p#gatherstats {
   padding-bottom: 8px;
   display: block;
   width: calc(100% - 27px);
-  border-bottom: var(--softborder);
+  border-bottom: var(--border_soft);
 }
 
 .statsViewGraphs {
@@ -12050,13 +12135,14 @@ i {
 
 #clock {
   margin: -7px -10px -9px;
-  padding: 8px 0 6px;
+  padding: 8px 0;
   position: relative;
+  line-height: 1;
   letter-spacing: .1em;
   font-size: 18pt;
   font-weight: 700;
   color: #ffa;
-  text-shadow: 0 0 1px #000;
+  text-shadow: var(--textshadow);
   box-shadow: var(--highlight), inset 0 0 1px 1px #050;
   background: repeating-linear-gradient(180deg,rgba(255,255,255,.05) 2px, rgba(0,16,0,.2) 4px), linear-gradient(90deg, #010, #000, #010);
   -webkit-text-stroke: 1px rgba(220,220,128,.5);
@@ -12204,7 +12290,7 @@ i {
   white-space: pre-wrap;
   word-break: break-all;
   font-size: 80% !important;
-  color: #ee9;
+  color: var(--ink);
   border-radius: 3px;
   border: none;
   user-select: all;
@@ -12327,17 +12413,17 @@ h3 + table {
 }
 
 .optbox:checked + label > .stattograph b {
-  color: #ee9;
-  text-shadow: 0 1px 1px #000;
+  color: var(--ink);
+  text-shadow: var(--textshadow);
 }
 
 .stattograph:hover b, .stattograph:focus b {
-  color: #ee9 !important;
+  color: var(--ink) !important;
 }
 
 .optbox:checked + label > .stattograph {
   padding-left: 22px;
-  border: var(--softborder);
+  border: var(--border_soft);
   border-left-width: 3px;
   box-shadow: var(--highlight), inset 4px 4px 4px rgba(0,0,0,.6) !important;
   background: var(--yes) no-repeat 8px center, linear-gradient(180deg,#010, #020);
@@ -12356,7 +12442,7 @@ h3 + table {
 }
 
 .optbox:checked + label > .stattograph:hover b {
-  color: #ee9 !important;
+  color: var(--ink) !important;
   text-shadow: none;
 }
 
@@ -12370,7 +12456,7 @@ h3 + table {
 }
 
 .stattograph:active b, .optbox:checked + label > .stattograph:active b {
-  color: #ee9 !important;
+  color: var(--ink) !important;
 }
 
 .statdesc {
@@ -12460,13 +12546,13 @@ h3 + table {
   height: 18px;
   display: inline-block;
   vertical-align: middle;
-  background: var(--refresh) no-repeat center center / 18px !important;
+  background: var(--refresh) var(--center) / 18px !important;
   content: "";
 }
 
 #tunnels #participating a:hover::after, #tunnels #participating a:focus::after,
 #tunnels #peercount a:hover::after, #tunnels #peercount a:focus::after {
-  background: var(--refresh_hover) no-repeat center center;
+  background: var(--refresh_hover) var(--center);
 }
 
 #tunnels #participating a:active::after, #tunnels #peercount a:active::after {
@@ -12480,10 +12566,10 @@ h3 + table {
 }
 
 #tunnels #tunnelPeerCount .cells {
-  white-space: nowrap;
   width: auto !important;
   max-width: inherit !important;
   min-width: 0 !important;
+  white-space: nowrap;
 }
 
 #tunnels .percentBarInner {
@@ -12520,7 +12606,7 @@ h3 + table {
 
 #tunnelPeerCount tr:not(.tablefooter) td {
   padding: 3px !important;
-  border: var(--softborder);
+  border: var(--border_soft);
 }
 
 #tunnelPeerCount tr:nth-last-child(2) td {
@@ -12592,7 +12678,7 @@ h3 + table {
   height: 14px;
   display: inline-block;
   vertical-align: middle;
-  background: var(--in) no-repeat center center / 14px !important;
+  background: var(--in) var(--center) / 14px !important;
 }
 
 .inbound.small, .outbound.small {
@@ -12611,7 +12697,7 @@ h3 + table {
 }
 
 .outbound {
-  background: var(--out) no-repeat center center / 14px !important;
+  background: var(--out) var(--center) / 14px !important;
 }
 
 #peerdefs li {
@@ -12665,11 +12751,12 @@ h3 + table {
   margin: -5px -7px -7px !important;
   padding: 0 1px 1px;
   height: 41px;
-  box-shadow: inset 0 0 0 1px #131, inset 0 0 0 2px #000, inset 0 0 3px 1px #040;
-  background: repeating-linear-gradient(90deg, rgba(0,0,0,0) 14px, rgba(64,160,64,.3) 15px, rgba(0,0,0,0) 15px, rgba(0,0,0,0) 30px), repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(48,152,48,.2), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 14px) !important;
-  overflow: hidden;
   position: relative;
   z-index: 10;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px #131, inset 0 0 0 2px #000, inset 0 0 3px 1px #040;
+  background: repeating-linear-gradient(90deg, rgba(0,0,0,0) 14px, rgba(64,160,64,.3) 15px, rgba(0,0,0,0) 15px, rgba(0,0,0,0) 30px),
+    repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(48,152,48,.2), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 14px) !important;
 }
 
 #sb_graphstats {
@@ -12788,12 +12875,12 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 
 #profilelist .fast.integrated {
   background: var(--fast) no-repeat left center,
-    var(--highcap) no-repeat center center,
+    var(--highcap) var(--center),
     var(--integrated) no-repeat right center !important;
 }
 
 #profilelist .highcap {
-  background: var(--highcap) no-repeat center center;
+  background: var(--highcap) var(--center);
 }
 
 #profilelist .highcap.integrated {
@@ -12802,7 +12889,7 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 }
 
 #profilelist .standard {
-  background: var(--standard) no-repeat center center;
+  background: var(--standard) var(--center);
 }
 
 #profilelist .standard.integrated {
@@ -12903,8 +12990,8 @@ body.iframed {
   display: inline-block;
   line-height: 0;
   border: 1px solid #030;
-  box-shadow: 0 0 0 1px #000;
-  background: var(--element);
+  box-shadow: var(--outline);
+  background: var(--badge);
 }
 
 #profilelist .viewprofile, #profilelist .configpeer {
@@ -12919,19 +13006,19 @@ body.iframed {
 }
 
 .viewprofile {
-  background: var(--eye) no-repeat center center / 12px, var(--element);
+  background: var(--eye) var(--center) / 12px, var(--badge);
 }
 
 .configpeer {
-  background: var(--edit) no-repeat center center / 12px, var(--element);
+  background: var(--edit) var(--center) / 12px, var(--badge);
 }
 
 .familysearch {
-  background: var(--family) no-repeat center center / 12px, var(--element);
+  background: var(--family) var(--center) / 12px, var(--badge);
 }
 
 .viewprofile:hover, .viewprofile:focus {
-  background: var(--eye_hover) no-repeat center center / 12px, var(--element);
+  background: var(--eye_hover) var(--center) / 12px, var(--badge);
 }
 
 .viewedit br {
@@ -12947,7 +13034,7 @@ body.iframed {
 }
 
 .viewedit .configpeer:hover, .viewedit .configpeer:focus {
-  background: var(--edit_hover) no-repeat center center / 12px, var(--element);
+  background: var(--edit_hover) var(--center) / 12px, var(--badge);
 }
 
 .viewprofile:hover, .familysearch:hover, .configpeer:hover {
@@ -12968,11 +13055,11 @@ body.iframed {
 }
 
 .netdb_header img[src^="/flags"] {
-  margin: -7px 0 0 4px;
+  margin: 0 0 0 4px;
 }
 
 .netdb_header img[src="/flags.jsp?c=a0"] {
-  margin-top: -6px;
+  margin-top: -5px;
 }
 
 .netdbentry .tunnel_cap, .netdbentry .tier, .netdbentry .ff, .netdbentry .reachable, .netdbentry .unreachable, .netdbentry .version,
@@ -12985,70 +13072,28 @@ body.iframed {
 /* responsive layout */
 
 @media screen and (max-width: 1599px) {
-  #reseedproxytype {
-    columns: 250px 3;
-  }
-
-  #reseed_urlselection.optionsingle {
-    columns: 1 auto;
-  }
+  #reseedproxytype {columns: 250px 3}
+  #reseed_urlselection.optionsingle {columns: 1 auto}
 }
 
 @media screen and (max-width: 1499px) {
-  h3[id*="jobs"]:first-of-type {
-    margin-top: 21px !important;
-  }
-
-  #pluginconfig {
-    margin-top: -13px !important;
-  }
-
-  h4.app a::after {
-    margin-top: -3px;
-  }
-
-  h4.app2 a::after {
-    margin-top: -1px;
-  }
-
-  #sitemapcontainer {
-    padding: 0;
-  }
-
-  #netdboverview th[colspan="3"] {
-    font-size: 11pt !important;
-  }
-
-  #profilelist th {
-    white-space: normal;
-  }
-
-  #profiles #banlist {
-    padding: 5px 9px !important;
-  }
-
+  h3[id*="jobs"]:first-of-type {margin-top: 21px !important}
+  #pluginconfig {margin-top: -13px !important}
+  h4.app a::after {margin-top: -3px}
+  h4.app2 a::after {margin-top: -1px}
+  #sitemapcontainer {padding: 0}
+  #netdboverview th[colspan="3"] {font-size: 11pt !important}
+  #profilelist th {white-space: normal}
+  #profiles #banlist {padding: 5px 9px !important}
   div.app img, .sitemapLink img {
     height: 24px;
     max-height: 24px;
     max-width: 24px;
   }
-
-  .appimg {
-    padding: 2px 0 0;
-  }
-
-  .applabel {
-    width: 116px !important;
-  }
-
-  .applabel a {
-    max-width: 112px;
-  }
-
-  #profiles #bannedpeercount {
-    margin: 15px 8px 0;
-  }
-
+  .appimg {padding: 2px 0 0}
+  .applabel {width: 116px !important}
+  .applabel a {max-width: 112px}
+  #profiles #bannedpeercount {margin: 15px 8px 0}
   #sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after,
   #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {
     min-height: 12px;
@@ -13057,44 +13102,34 @@ body.iframed {
   #banlist + h3 {
     margin-bottom: -2px !important;
   }
-
   div.app img {
     padding: 10px 40px 40px;
   }
-
   .applabel {
     margin-top: 8px;
   }
-
   .main#help h3, #faq h3 {
     font-size: 10.5pt !important;
   }
-
   #pluginconfigtext input {
    margin: -5px -6px 0 0;
   }
-
   .netdbStats li {
     margin: 1px 5px !important;
   }
-
   .longstat.fam {
     margin: 2px 5px -5px !important;
   }
-
   .netdb_header img[src="/flags.jsp?c=a0"] {
     margin-bottom: -4px !important;
   }
-
   #sb_internals {
     border-spacing: 0;
   }
-
   #sb_internals td {
     padding-top: 2px;
     padding-bottom: 2px;
   }
-
   h1[class], h1, h1.conf.adv {
     padding: 13px 15px 12px 50px;
     min-width: 620px;
@@ -13102,64 +13137,70 @@ body.iframed {
     background-size: 32px, 4px 100%, 100%, 164px !important;
     background-position: 10px center;
   }
-
   .sitemapLink, .sitemapLabel, #sitemap div.app, #sitemap .applabel {
     width: 160px !important;
     min-width: 160px !important;
   }
-
   .en .sitemapLink, .en .sitemapLabel, .en #sitemap div.app, .en #sitemap .applabel, .en #sitemap .app table {
     width: 120px !important;
     min-width: 120px !important;
   }
-
   #sitemap div.app img {
     padding-left: 62px !important;
     padding-right: 62px !important
   }
-
   .en #sitemap div.app img {
     padding-left: 35px !important;
     padding-right: 35px !important
   }
-
   #clock {
     padding-top: 9px;
     font-size: 16pt;
   }
-
   .netdbentry .tunnel_cap, .netdbentry .tier, .netdbentry .ff, .netdbentry .reachable, .netdbentry .unreachable, .netdbentry .version,
   .sybil_routerinfo .tunnel_cap, .sybil_routerinfo .tier, .sybil_routerinfo .ff, .sybil_routerinfo .reachable, .sybil_routerinfo .unreachable, .sybil_routerinfo .version {
     padding: 2px 4px !important;
   }
-
   #tunnels .tunnel_cap {
     height: 15px;
     line-height: 15px;
   }
-
   #tunnels .routerid tt {
     height: 18px;
     line-height: 18px;
   }
-
   .tunnel_local {
     line-height: 14px;
   }
-
   #tunnels .routerid + .tunnel_cap {
     margin-left: -2px;
   }
-
   #tunnels .tunnel_local + .tunnel_cap {
     margin-left: 2px;
   }
-}
-
-@media screen and (max-width: 1480px) {
+  #routerinformation .h3navlinks {
+    margin: 1px -2px -1px -2px;
+  }
+  #routerinformation h3 span a {
+    padding: 12px 3px 12px 12px;
+  }
+  #routerinformation .h3navlinks a::before {
+    margin-left: 0;
+  }
+  #webappconfiguration a, #i2pclientconfig a, #pluginmanage a {
+    padding-top: 9px;
+  }
+  .tunnelBuildStatus {font-size: 90%}
+  #sb_tunnelstatus .tunnelBuildStatus::before {
+    margin: -2px 0;
+    background-size: 12px;
+  }
   #view_profile .identicon {
     top: 0;
     right: 0;
+  }
+  h3#advancedconfig a {
+    padding-top: 9px;
   }
 }
 
@@ -13181,12 +13222,10 @@ body.iframed {
     overflow: hidden;
     text-overflow: ellipsis
   }
-
   .revision:hover, .sha256:hover {
     overflow: auto;
     text-overflow: clip;
   }
-
   #peers .cells, #peers .cells[class] {
     min-width: 0 !important
   }
@@ -13202,55 +13241,44 @@ body.iframed {
   #peers .confignav, #tunnels .confignav {
     margin: -6px -6px 5px;
   }
-
   #tunnels .tab, #tunnels .tab2 {
     margin-top: 5px !important;
   }
-
   #peers th, #peers .tablefooter td {
     font-size: 85%;
   }
-
   #peers #ntcpconnections th:nth-last-child(2), #peers #ntcpconnections th:nth-last-child(3) {
     font-size: 0 !important;
   }
-
   #peers #ntcpconnections th:nth-last-child(2)::after, #peers #ntcpconnections th:nth-last-child(3)::after {
     width: 16px;
     height: 16px;
     display: inline-block;
-    background: var(--err) no-repeat center center;
+    background: var(--err) var(--center);
     background-size: 16px;
     content: "";
   }
-
   #peers #ntcpconnections th:nth-last-child(3)::after {
-    background: var(--timer) no-repeat center center;
+    background: var(--timer) var(--center);
   }
-
   #peers #ntcpconnections th:nth-last-child(4) {
     padding-left: 0;
     padding-right: 0;
     max-width: 22px;
     overflow: hidden;
   }
-
   #peers .ipv6, #peers .rto, #peers .mtu, #peers .sst, #peers .cwnd, #peers .rtt {
     display: none;
   }
-
   .main#peers h3#udpcon {
     margin-top: -5px !important;
   }
-
   .main#peers #ntcpcon + .widescroll, .main#peers #udpcon + .widescroll {
     margin-bottom: -5px;
   }
-
   .main#peers .confignav + h3#udpcon {
     margin-top: 0 !important;
   }
-
   .main#profiles, .main#peers {
     padding: 5px 5px 0;
   }
@@ -13269,36 +13297,28 @@ body.iframed {
   p#profiles_overview {
     margin: 5px 0 -5px;
   }
-
   #peer_thresholds {
     top: 10px !important;
   }
-
   #profiles #thresholds + h3 {
     margin-top: -5px !important;
   }
-
   #profilelist {
     margin-top: -5px;
   }
-
   #profilelist th, #profilelist td:nth-child(4), #profilelist td:nth-child(5) {
     font-size: 85%;
   }
-
   #profilelist td:last-child img {
     margin: 4px !important;
   }
-
   #profilelist td:nth-child(2), #profilelist td:nth-child(3) {
     padding-left: 3px;
     padding-right: 3px;
   }
-
   #profilelist td:nth-child(5) {
     white-space: normal;
   }
-
   #profiles #ff {
     margin: -18px -6px -9px;
   }
@@ -13308,7 +13328,6 @@ body.iframed {
   .main#peers .widescroll td.cells {
     font-size: 8pt !important;
   }
-
   .main#help h3, #faq h3 {
     font-size: 10pt !important;
   }
@@ -13318,150 +13337,118 @@ body.iframed {
   .tab, .tab2 {
     min-width: 48px !important;
   }
-
   .tab a {
     padding: 4px 9px !important;
   }
-
   #participatingtunnels .statusnotes:last-of-type {
     margin-bottom: 6px;
   }
-
   #tunnels .tunneldisplay .cells {
     padding-left: 2px;
     padding-right: 2px;
   }
-
   #tunnels .tunneldisplay .cells .tunnel_id {
     display: none;
   }
-
   #tunnels .tunneldisplay .cells .tunnel_peer.tunnel_local {
     padding: 4px !important;
   }
-
   #tunnels_part td {
     white-space: nowrap !important;
   }
-
   #tunnel_defs {
     margin-bottom: 5px;
   }
-
   #tunnels .tunnel_cap {
     margin: 0;
     padding: 3px 2px 2px;
     line-height: 1.2;
   }
-
   .tunnel_local {
     width: 64px;
     line-height: 1.08;
     box-sizing: border-box;
   }
-
   #tunnels .routerid, .tunnel_local {
     margin-right: 0 !important;
   }
-
   #peers .idle, #peers .inout {
     min-width: 104px;
   }
   #peers .skew {
     display: none;
   }
-
   .tab, .tab2 {
     padding: 1px 0;
     min-width: 50px !important;
   }
-
   .tab2 {
     padding: 3px 12px;
   }
-
   .tab a {
     padding: 2px 14px;
   }
-
   #plugininstall input[type=text] {
     min-width: 200px !important;
   }
-
   #i2pupdates td:first-child {
     white-space: normal;
     width: 30%;
   }
-
   td.optionsave {
     white-space: normal;
   }
-
   .main#tunnels {
     padding: 0 5px;
     min-width: 640px;
   }
-
   .main#tunnels h3 {
     margin-top: 6px;
   }
-
   #tunnels #participating a::after, #tunnels #peercount a::after {
     width: 16px;
     height: 16px;
     background-size: 16px !important;
   }
-
   .statusnotes:last-child {
     margin-bottom: 6px;;
   }
-
   #portfaq td:nth-child(2) {
     white-space: normal;
   }
-
   #faq h3 {
     font-size: 10pt !important;
   }
-
   #udpconnections .cells {
     border: 1px inset #131;
   }
-
   #netconfig label, #externali2cp td label, #externali2cp .optionlist .nowrap, #reseedconfig .nowrap {
     width: calc(100% - 10px);
   }
-
   #tunnels .cells:first-child {
     width: 1% !important;
     max-width: 48px !important;
     min-width: 48px !important;
   }
-
   #tunnels .cells:nth-child(2), #tunnels .cells:nth-child(3), .tunnels_participating td:nth-child(4) {
     width: 1% !important;
     min-width: 72px !important;
   }
-
   #floodfills th:nth-child(8), #floodfills td:nth-child(8),
   #floodfills th:nth-child(13), #floodfills td:nth-child(13),
   #floodfills th:nth-child(14), #floodfills td:nth-child(14) {
     display: none;
   }
-
   #tunnels #peercount img {
     margin: -2px -4px;
   }
-
   #tunnelPeerCount {
     margin-bottom: 4px;
   }
-
   #tunnels .percentBarOuter, #tunnels .percentBarText {
     margin: 0 2px;
     width: 70px;
   }
-
   #profilelist .fast, #profilelist .highcap, #profilelist .integrated, #profilelist .standard,
   #profilelist .fast.integrated, #profilelist .highcap.integrated, #profilelist .standard.integrated {
     width: 50px;
@@ -13490,7 +13477,6 @@ body.iframed {
     overflow: hidden;
     text-overflow: ellipsis;
   }
-
   h4 span[style="float: right;"] .unbold {
     max-width: 300px;
   }
@@ -13502,29 +13488,23 @@ body.iframed {
     min-width: 0 !important;
     text-align: center !important;
   }
-
   .tunnel_local {
     margin-left: 2px;
     padding: 4px;
     min-width: 76px !important;
   }
-
   .tunnel_peer:empty {
     vertical-align: middle;
   }
-
   .tunnel_peer:empty::before {
     margin: 1px 6px 1px 2px;
   }
-
   #floodfills, #profiles ul#banlist, #profile_defs {
     margin-bottom: 5px !important;
   }
-
   #floodfills td {
     font-size: 8pt;
   }
-
   #graphs td:first-child {
     padding: 5px 0;
   }
@@ -13541,7 +13521,6 @@ body.iframed {
     box-shadow: none !important;
     background: none !important;
   }
-
   #tunnels .tunneldisplay .cells span.inbound, #tunnels .tunneldisplay .cells span.outbound {
     margin: 1px !important;
     padding: 0 !important;
@@ -13549,86 +13528,69 @@ body.iframed {
     vertical-align: middle;
     line-height: 1.2 !important;
   }
-
   span.inbound, span.outbound {
     background-size: 12px !important;
   }
-
   #tunnels .tunneldisplay .cells .tunnel_cap {
     min-width: 14px;
     text-align: center;
   }
-
   #tunnels .tunneldisplay .cells .routerid, #tunnels .tunneldisplay .cells .tunnel_peer.tunnel_local {
     width: 74px;
     box-sizing: border-box !important;
   }
-
   #netdblookup input[type=text] {
     min-width: 0 !important;
   }
-
   #netdblookup td:nth-child(even) {
     width: auto;
   }
-
   table:not(:first-of-type).netdbentry th:first-child, table:not(:first-of-type).netdbentry td:first-child {
     padding: 0 !important;
     font-size: 0;
   }
-
   table:not(:first-of-type).netdbentry tr:nth-child(2) td:nth-child(2)::before {
     display: inline;
     font-weight: 700;
     content: "Published: ";
   }
-
   table:not(:first-of-type).netdbentry th:first-child, table:not(:first-of-type).netdbentry td:first-child, #netdb table:not(:first-of-type).netdbentry td:first-child b {
     width: 0;
     min-width: 0 !important;
     max-width: 0 !important;
   }
-
   #jardump th:nth-child(3), #jardump th:nth-child(4), #jardump th:nth-child(5), #jardump th:nth-child(6),
   #jardump td:nth-child(3), #jardump td:nth-child(4), #jardump td:nth-child(5), #jardump td:nth-child(6) {
     display: none;
   }
-
   #bandwidthconfig .bw_out, #bandwidthconfig .bw_in, #bandwidthconfig .bw_share {
     padding-left: 5px;
     padding-right: 8px;
     background: #002500 !important;
   }
-
   #bandwidthconfig td:not(.infohelp):first-child {
     padding-right: 0;
     background: none;
   }
-
   #bandwidthconfig .infohelp {
     padding-right: 10px !important;
   }
-
   .net_datausage {
     padding: 4px 0;
     min-width: 260px;
     white-space: normal;
   }
-
   .bw_title {
     margin: 2px -6px -2px -3px;
     font-size: 10pt;
   }
-
   #updateHelper select {
     max-width: 200px !important;
   }
-
   #reseedconfig tr:nth-child(3) td label {
     padding: 5px 4px 5px 0 !important;
     width: calc(100% - 4px) !important;
   }
-
   .encDests code {
     max-width: 140px;
   }
@@ -13638,24 +13600,19 @@ body.iframed {
   #ntcpconnections th:last-child:not(old) {
     font-size: 0;
   }
-
   #ntcpconnections th:last-child::before {
     content: var(--err) !important;
   }
-
   #ntcpconnections td:last-child {
     width: 24px !important;
     white-space: nowrap;
   }
-
   th {
     font-size: 8pt;
   }
-
   .tunneldisplay .cells {
     padding: 4px 2px !important;
   }
-
   .langbox {
     line-height: 15px;
   }
@@ -13666,30 +13623,25 @@ body.iframed {
     margin-bottom: -1px;
     padding: 5px 12px 6px !important;
   }
-
   #jobstats tr:nth-last-child(n+2) td:first-child {
     padding-left: 28px !important;
     background: var(--yes) no-repeat 8px center;
     background-size: 12px;
   }
-
   #terms {
     padding: 5px 0 15px;
     columns: 2 auto;
     column-gap: 35px;
     column-rule: 1px solid #020;
   }
-
   #terms p {
     break-inside: avoid;
     page-break-inside: avoid;
     -webkit-column-break-inside: avoid;
   }
-
   #terms p:first-child {
     margin-top: 0;
   }
-
   .ls_crypto {
     display: inline-block;
     columns: 340px 4;
@@ -13721,7 +13673,6 @@ body.iframed {
     padding: 10px 5px;
     border: none;
   }
-
   .main#help #changelog pre:not(old) {
     margin-left: 0;
     padding-left: 10px;
@@ -13730,18 +13681,15 @@ body.iframed {
     font-size: 9.5pt !important;
     columns: 510px auto;
     column-gap: 30px;
-    column-rule: 1px dotted #131;
+    column-rule: var(--dotted);
   }
-
   #help .confignav, #debug .confignav {
     position: sticky;
     top: 0;
   }
-
   .statsName {
     border: 1px solid #131;
   }
-
   #stats .joblog {
     margin-bottom: -10px !important;
   }
@@ -13751,128 +13699,99 @@ body.iframed {
   input[type=submit], input[type=reset], select, button, .sb_notice {
     font-size: 9pt;
   }
-
   .sb_newsheadings {
     width: 200px !important;
   }
-
   .sb_newsheadings table {
     width: 254px !important;
   }
-
   #sb_memoryBar .percentBarText {
     margin-top: -2px;
   }
-
   .sb_info.sb_update .percentBarOuter {
     margin-bottom: -5px !important;
   }
-
   .sb_info .percentBarText {
     margin-top: -1px;
   }
-
   .sb_info.sb_update {
-    padding: 7px 5px 9px !important;
+    padding: 7px 5px 6px !important;
   }
-
   .percentBarouter {
     width: 251px !important;
   }
-
   #stacktrace p:first-of-type::first-line {
     font-size: 110%;
     font-weight: 700;
     font-variant: super;
     text-decoration: underline;
   }
-
   .warning h3 {
     font-size: 11.5pt;
   }
-
   #warning2.sorry {
     margin: -17px 5px 18px 272px !important;
   }
-
   #error500 #warning2.sorry {
     margin-top: -1px !important;
   }
-
   #warning2 p {
     font-size: 10pt;
   }
-
   #graphdisplay {
     margin-top: 5px !important;
   }
-
   span#newtab {
     margin-top: 4px;
   }
-
   h4.app, h4.app2 {
     padding: 9px 10px 8px 35px !important;
     font-size: 12pt !important;
   }
-
   select {
     padding: 8px 24px 8px 8px !important;
   }
-
   input[type=text], input[type=password] {
     padding: 7px 9px;
   }
-
   #consolepass input[name="nofilter_pw"], #consolepass input[name="name"], #externali2cp input[name="nofilter_pw"],
   #consolepass input[name="nofilter_pw"]:focus, #consolepass input[name="name"]:focus, #externali2cp input[name="nofilter_pw"]:focus {
     padding: 7px 9px 7px 25px !important;
     background-position: 6px center !important;
   }
-
   input[type=submit], input[type=reset], button {
     padding: 8px 12px !important;
   }
-
   input[type=file]::file-selector-button {
     padding: 8px 12px !important;
   }
-
   #loggingoptions input[type=text], #loggingoptions select {
     min-width: 240px !important;
   }
-
   .log_debug, .log_info, .log_warn, .log_error, .log_crit, .log_omitted {
     margin-bottom: -3px;
     min-width: 40px;
     max-width: 40px;
   }
-
   #servicelogs pre, #logs li {
     font-size: 9pt !important;
   }
-
   #banlist li, #banlist li:first-child {
     min-height: 52px !important;
   }
-
   input.search, input.search:focus {
     padding: 6px 8px 6px 28px;
   }
-
   .search td {
     padding: 6px 6px 6px 5px !important;
   }
-
   .search td:nth-child(2) {
     padding: 5px 8px 5px 8px !important;
   }
-
   .search td:last-child {
     padding-left: 0 !important;
     padding-right: 0 !important;
   }
-
   .addtobook a::after {
     margin: -8px -6px -8px 0;
     padding-left: 0;
@@ -13881,270 +13800,229 @@ body.iframed {
     height: 30px;
     background-size: 16px;
   }
-
-    h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after {
+  h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after {
     margin: 0 0 -2px -4px;
     width: 20px;
     height: 20px;
     background-size: 20px !important;
   }
-
-    h3#iptransport a:hover::after, h3#advancedconfig a:hover::after, #reseedsetup a:hover::after {
+  h3#iptransport a:hover::after, h3#advancedconfig a:hover::after, #reseedsetup a:hover::after {
     background-size: 20px !important;
   }
-
-    h3#advancedconfig a::after {
-    margin: -1px -6px -2px -5px;
+  h3#advancedconfig a::after {
+    margin: -2px -6px -2px -5px;
   }
-
   .h3navlinks a {
     padding: 10px 10px 10px 17px;
   }
-
   .h3navlinks a:first-child, #config_service .h3navlinks a:last-child {
     margin-right: 0;
   }
-
   .h3navlinks a:last-child {
     margin-right: -2px;
   }
-
-    h3#advancedconfig a {
+  h3#advancedconfig a {
     padding-right: 10px;
   }
-
-    h3#i2pclientconfig {
+  h3#i2pclientconfig {
     margin-bottom: -15px !important;
   }
-
   .sb_netstatus, .tunnelBuildStatus {
     padding: 9px 3px !important;
   }
-
   .sb_netstatus::before, .tunnelBuildStatus::before {
     margin-top: -1px !important;
   }
-
   #peers .cells:nth-child(n+2) {
     padding-left: 15px;
     padding-right: 15px;
   }
-
   .tunnel_peer img, .routerid img {
     margin-bottom: -1px;
   }
-
   .tunnel_local {
-    font-size: 9pt !important;
+    font-size: 9pt;
   }
-
+  .tunneldisplay .tunnel_peer.tunnel_local {
+    margin: 0 0 0 -1px !important;
+    min-width: 77px !important;
+  }
   .tunnel_cap {
     padding: 2px 2px 1px !important;
     min-width: 18px;
   }
-
   .tunnel_id {
     min-width: 82px;
   }
-
-  .tunnel_local {
-    font-size: 8.5pt;
+  .tunneldisplay .tunnel_peer {
+    margin: 0 !important;
+    min-width: 80px !important;
   }
-
+  .tunneldisplay .tunnel_peer + b.tunnel_cap {
+    margin: 0 -1px !important;
+  }
+  .tunneldisplay .tunnel_peer.tunnel_local + b.tunnel_cap {
+    margin-left: 1px !important;
+  }
+  #tunnels img[src^="/flags.jsp?"], #profiles img[src^="/flags.jsp?"], #peers img[src^="/flags.jsp?"] {
+    margin: -2px -2px 0 !important;
+    width: auto !important;
+    height: 14px !important;
+    display: inline-block;
+    vertical-align: middle;
+  }
   .routersummary td, .routersummary a, .routersummary button, .routersummary h4, .routersummary h4 a,
-  #floodfill th, #jardump td, .smallhead th, .leaseset a[href$=".i2p"], .leaseset th code, .footnote, .topness {
+  #floodfill th, #jardump td, .smallhead th, .sybil_distance th, .leaseset a[href$=".i2p"], .leaseset th code, .footnote, .topness {
     font-size: 9pt !important;
   }
-
   #newsDisplay a, pre, #logs li, #updateAvailable, code, tt {
     font-size: 9.5pt !important;
   }
-
   body, .main, .main td, .news p, #news p, textarea, .main textarea, code, tt, #changelog pre, th code,
   ul.statlist a[name], ul.statlist b, ul.statlist li b, ul.statlist a[name]:hover, .confignav, th, #configinfo th,
   .main button, .main input, select, textarea, div.news, .routersummary button {
     font-size: 10pt !important;
   }
-
   input[type=file]::file-selector-button {
     font-size: 10pt !important;
   }
-
   #news .newsentry p, .subheading b, .main[id^="config_"] th, h4#updateplugins {
     font-size: 10.5pt !important;
   }
-
   #sidebarconf th:nth-child(1), .homelinkedit th:first-child, #consolepass th:first-child {
     font-size: 0 !important;
   }
-
   h3, .routersummary h3 a, th.th_title, #leasesetdebug th, #leasesetsummary th, .netdbentry th,
   #help, #help li, #help p, #help code, #help td, #help th {
     font-size: 11pt !important;
   }
-
   #help h3, #sybilTask th {
     font-size: 12pt !important;
   }
-
   #help h2 {
     font-size: 14pt !important;
   }
-
   .cells tt, #profilelist tt, #floodfills tt {
     margin-left: 2px !important;
     margin-right: 2px !important;
     letter-spacing: .07em;
     font-size: 9pt !important;
   }
-
   button.control {
     font-size: 0 !important;
   }
-
   .main, .news, h1, .sorry {
     margin-left: 272px !important;
   }
-
   .routersummary {
     width: 240px !important;
   }
-
   .routersummary table[id^="sb_"] {
     width: 256px !important;
   }
-
   #sb_localtunnels a {
     max-width: 200px;
   }
-
   .sb_update {
     padding-bottom: 3px !important;
   }
-
   .routersummary button.download {
     width: 248px;
   }
-
   .sb_info .percentBarOuter {
     margin-bottom: -16px !important;
   }
-
   .appimg {
     padding: 5px 0 8px;
     height: 35px;
   }
-
   div.app img {
     margin-top: -8px !important;
     padding: 10px 53px 38px !important;
   }
-
   .applabel {
     padding: 4px 2px !important;
     width: 140px !important;
   }
-
   .applabel a {
     max-width: 130px;
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: 9pt !important;
   }
-
   .leaseset th {
     font-size: 9.5pt !important;
     line-height: 1 !important;
   }
-
   #floodfills th:first-child, #floodfills td:first-child {
     padding-right: 3px !important;
     width: 58px;
   }
-
   select {
     padding: 6px 16px 6px 2px;
     min-height: 28px;
   }
-
   h4#updateplugins {
     margin-top: -15px !important;
   }
-
   .joblog h3 {
     margin-top: 7px !important;
     padding-top: 7px !important;
   }
-
   #certs.main p + p:empty + h4 {
     margin-top: -15px !important;
   }
-
   .routersummary button.reload, .routersummary button.stop {
     min-width: 120px;
   }
-
   p#fullhistory {
     margin-top: -13px;
     text-align: right;
   }
-
   .routersummary div[style="height: 36px;"] {
     height: 44px !important;
   }
-
   .routersummary img[src$="i2plogo.png"] {
     margin-top: -3px;
     margin-left: -4px;
     width: 248px !important;
     transform: none;
   }
-
   #error500 .routersummary img[src$="i2plogo.png"] {
     margin-bottom: -5px;
   }
-
   .routersummary h3::after {
     min-height: 20px;
   }
-
   #sb_services a:link, #sb_internals a:link, #sb_advanced a:link, #sb_help a:link {
     max-width: 216px !important;
   }
-
   #banlist + h3.tabletitle {
     margin-bottom: -2px !important;
   }
-
   #permabanned {
     margin-top: -3px;
   }
-
   #udpconnections td[class="cells"]:first-child, #ntcpconnections td[class="cells"]:first-child {
     padding-right: 8px;
     width: 55px;
   }
-
   h1[class], h1, h1.conf.adv {
-    padding: 14px 15px 13px 62px;
+    padding: 13px 15px 13px 62px;
     font-size: 20pt !important;
     background-size: 40px, 4px 100%, 100%, 164px !important;
     background-position: 12px center;
   }
-
   .main#jobs h2 {
     margin-bottom: 3px !important;
   }
-
   .langbox {
     margin: 4px 4px 2px 5px;
     line-height: 17px !important;
   }
-
   .langbox img {
     margin-bottom: -1px;
   }
-
   #help .confignav {
     padding: 0 !important;
     position: sticky;
@@ -14152,135 +14030,94 @@ body.iframed {
     z-index: 999;
     will-change: transform;
   }
-
   #help .tab, #help .tab2 {
     margin-top: -1px !important;
     font-size: 90%;
   }
-
   .newsAuthor {
     font-size: 9pt;
     background-size: 13px;
     padding-left: 18px;
   }
-
   #reseedconfig input[type=text], #reseedconfig input[type=password] {
     width: 250px;
   }
-
   .themechoice, .langselect {
     width: 140px;
   }
-
   .themechoice .optbox {
     min-width: 144px !important;
     margin-left: -48px !important;
   }
-
   .langselect .optbox {
     min-width: 144px !important;
   }
-
   .langselect img {
     margin-left: -80px !important;
   }
-
   .langselect input[name="lang"]:checked + img {
     margin-left: -76px !important;
   }
-
-  .tunneldisplay .tunnel_peer {
-    margin: 0 !important;
-    min-width: 80px !important;
-  }
-
-  .tunneldisplay .tunnel_peer.tunnel_local {
-    margin: 0 0 0 -1px !important;
-    min-width: 78px !important;
-  }
-
-  .tunneldisplay .tunnel_peer + b.tunnel_cap {
-    margin: 0 -1px !important;
-  }
-
-  .tunneldisplay .tunnel_peer.tunnel_local + b.tunnel_cap {
-    margin-left: 1px !important;
-  }
-
   #netconfig label::before, #externali2cp td label::before, #externali2cp .nowrap::before, #reseedconfig .nowrap::before {
     min-height: 50px !important;
   }
-
   #manualreseed input[type=submit] {
     min-width: 140px;
   }
-
   #pluginInstall2 {
     margin-top: -14px;
   }
-
   h3#pconfig {
     margin-bottom: -15px !important;
   }
-
   #pluginconfigtext + form > input {
     margin-top: 3px !important;
   }
-
   #peerprofiles.widescroll {
     margin-top: -12px;
     padding-top: 116px;
   }
-
   h4.app a::after, h4.app2 a::after {
     margin-left: 11px;
   }
-
   #tunnels h3 a::after {
     margin: -8px -8px -8px 0;
     padding: 9px 8px 9px 16px;
   }
-
   #tunnels h3#exploratory a, #tunnels h3.server a, #tunnels h3.client a {
     margin: -8px 0 -8px 0 !important;
     padding: 7px 2px 14px 0 !important;
   }
-
   #tunnels #participating a::after, #tunnels #peercount a::after {
     margin: -8px 0 -13px -12px !important;
     padding: 9px 6px 9px 0 !important;
   }
-
   #sitemap h3 {
     font-size: 12pt !important;
   }
-
   .tab, .tab2 {
     line-height: 20px !important;
   }
-
   #debug .confignav, #netdb .confignav {
     padding: 0 !important;
   }
-
   #debug .tab, #debug .tab2, #netdb .tab, #netdb .tab2 {
     margin-top: -1px !important;
   }
-
   #tunnels .tab, #tunnels .tab2 {
     line-height: 1.3 !important;
   }
-
   #sb_graphcontainer {
     height: 42px;
   }
-
   #minigraph {
-    margin-top: -20px !important;
+    margin-top: -17px !important;
     width: 250px !important;
     height: 38px !important;
   }
-
+  #homepage #minigraph {
+    margin-top: -18px !important;
+  }
   #minigraphcontainer {
     margin-top: -40px !important;
     margin-left: 1px !important;
@@ -14288,13 +14125,36 @@ body.iframed {
     height: 39px !important;
     background-size: 250px 40px !important;
   }
+  .tunnel_id {
+    margin: 0 5px;
+    padding: 2px 4px 2px 6px;
+    min-width: 96px;
+    display: inline-block;
+    vertical-align: middle;
+    text-align: left;
+    border: 1px solid #030;
+    box-shadow: var(--highlight_badge);
+    background: var(--badge);
+  }
+  .tunnel_id:not(:empty) {
+    background: var(--hardhat) no-repeat 5px center / 14px, var(--badge);
+  }
+  .tunnel_id:not(:empty)::before {
+    width: 16px;
+    height: 14px;
+    display: inline-block;
+    vertical-align: middle;
+    content: "";
+  }
+  #pluginconfig th {
+    font-size: 9pt !important;
+  }
 }
 
 @media screen and (min-width: 1634px) {
   .leasesets_container {
     margin-bottom: 8px;
   }
-
   th code {
     font-size: 9pt !important;
   }
@@ -14308,14 +14168,12 @@ body.iframed {
     justify-content: center;
     border-left: none;
     border-right: none;
-}
-
+  }
   #help .tab, #help .tab2 {
     margin-left: 0 !important;
     margin-right: 0 !important;
     flex-grow: 1;
   }
-
   .ag2 div.app:last-of-type {
     margin-bottom: 9px;
   }
@@ -14330,7 +14188,6 @@ body.iframed {
     align-content: space-evenly;
     justify-content: center;
   }
-
   div[id^="config_"] .tab, div[id^="config_"] .tab2 {
     margin: 0 -1px -1px 0 !important;
     min-width: 70px !important;
@@ -14339,52 +14196,22 @@ body.iframed {
     flex-basis: content;
     flex-grow: .06;
   }
-
   div[id^="config_"] .tab2:first-child {
     border-left: none;
   }
-
   div[id^="config_"] .tab2 {
     padding: 5px 6px;
   }
-
   div[id^="config_"] .tab a {
     padding: 4px 6px;
   }
-
   div[id^="config_"] .confignav {
     padding: 0 !important;
   }
-
   div[id^="config_"] .tab, div[id^="config_"] .tab2 {
     margin-top: -1px !important;
   }
-
   div[id^="config_"] .tab:first-child {
     margin-left: -1px !important;
-  }
-}
-
-@media screen and (min-width: 1500px) {
-  .tunnel_id {
-    margin: 0 5px !important;
-    padding: 2px 4px 2px 6px;
-    min-width: 96px;
-    display: inline-block;
-    vertical-align: middle;
-    text-align: left;
-    border: 1px solid #030;
-    box-shadow: inset 0 0 0 1px #010, 0 0 0 1px #000;
-    background: var(--element);
-  }
-  .tunnel_id:not(:empty) {
-    background: var(--hardhat) no-repeat 5px center / 14px, var(--element);
-  }
-  .tunnel_id:not(:empty)::before {
-    width: 16px;
-    height: 14px;
-    display: inline-block;
-    vertical-align: middle;
-    content: "";
   }
 }

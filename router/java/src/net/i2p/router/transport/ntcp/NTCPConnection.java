@@ -166,7 +166,8 @@ public class NTCPConnection implements Closeable {
     private static final int PADDING_MAX = 64;
     private static final int SIP_IV_LENGTH = 8;
     private static final int NTCP2_FAIL_READ = 1024;
-    private static final long NTCP2_FAIL_TIMEOUT = 10*1000;
+//    private static final long NTCP2_FAIL_TIMEOUT = 10*1000;
+    private static final long NTCP2_FAIL_TIMEOUT = 15*1000;
     private static final long NTCP2_TERMINATION_CLOSE_DELAY = 50;
     // don't make combined messages too big, to minimize latency
     // Tunnel data msgs are 1024 + 4 + 9 + 3 = 1040, allow 5
@@ -1612,15 +1613,19 @@ public class NTCPConnection implements Closeable {
                 _blockCount += blocks;
             } catch (IOException ioe) {
                 if (_log.shouldWarn())
-                    _log.warn("Fail payload " + NTCPConnection.this, ioe);
+//                    _log.warn("Payload delivery failure " + NTCPConnection.this + ioe.getMessage());
+                    _log.warn("Payload delivery failure \n* " + ioe.getMessage());
             } catch (DataFormatException dfe) {
                 if (_log.shouldWarn())
-                    _log.warn("Fail payload " + NTCPConnection.this, dfe);
+//                    _log.warn("Payload delivery failure " + NTCPConnection.this + dfe.getMessage());
+                    _log.warn("Payload delivery failure \n* " + dfe.getMessage());
             } catch (I2NPMessageException ime) {
                 if (_log.shouldDebug())
-                    _log.warn("Error parsing I2NP message on " + NTCPConnection.this, ime);
+//                    _log.warn("Error parsing I2NP message on " + NTCPConnection.this + ime.getMessage());
+                    _log.warn("Error parsing I2NP message \n* " + ime.getMessage());
                 else if (_log.shouldWarn())
-                    _log.warn("Error parsing I2NP message on " + NTCPConnection.this + "\n* I2NP Message Exception: " + ime.getMessage());
+//                    _log.warn("Error parsing I2NP message on " + NTCPConnection.this + "\n* I2NP Message Exception: " + ime.getMessage());
+                    _log.warn("Error parsing I2NP message \n* " + ime.getMessage());
                 _context.statManager().addRateData("ntcp.corruptI2NPIME", 1);
             }
             _received = -2;
@@ -1873,12 +1878,12 @@ public class NTCPConnection implements Closeable {
         }
         return "[NTCP" + _version + "] Connection [ID " + _connID + "]\n* " +
                (_isInbound ? ("From: " + fromIP + ":" + _chan.socket().getPort() + ' ')
-                           : ("To: " + _remAddr.getHost() + ":" + _remAddr.getPort() + ' ')) + "[" +
-               (_remotePeer == null ? "unknown" : _remotePeer.calculateHash().toBase64().substring(0,6)) + "]" +
+                           : ("Target: " + _remAddr.getHost() + ":" + _remAddr.getPort() + ' ')) + "[" +
+               (_remotePeer == null ? "Unknown" : _remotePeer.calculateHash().toBase64().substring(0,6)) + "]" +
                (isEstablished() ? "" : " (not established)") +
                "\n* Created: " + DataHelper.formatDuration(getTimeSinceCreated()) + " ago;" +
-               " Last send: " + DataHelper.formatDuration(getTimeSinceSend()) + " ago;" +
-               " Last recv: " + DataHelper.formatDuration(getTimeSinceReceive()) + " ago" +
+               " Last message sent: " + DataHelper.formatDuration(getTimeSinceSend()) + " ago;" +
+               " Last message received: " + DataHelper.formatDuration(getTimeSinceReceive()) + " ago" +
                "\n* Messages sent: " + _messagesWritten + ";" +
                " Messages received: " + _messagesRead + " ";
     }

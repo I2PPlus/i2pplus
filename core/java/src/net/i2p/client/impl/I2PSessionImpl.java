@@ -597,7 +597,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
             int itype = (int) DataHelper.readLong(destKeyStream, 2);
             SigType type = SigType.getByCode(itype);
             if (type == null)
-                throw new DataFormatException("Unsupported transient sig type: " + itype);
+                throw new DataFormatException("Unsupported transient signature type: " + itype);
             _transientSigningPublicKey = new SigningPublicKey(type);
             _transientSigningPublicKey.readBytes(destKeyStream);
             _offlineSignature = new Signature(dtype);

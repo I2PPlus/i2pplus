@@ -309,15 +309,15 @@ class InboundMessageState implements CDQEntry {
         @Override
         public String toString() {
             StringBuilder buf = new StringBuilder(64);
-            buf.append("Outbound Partial ACK of ");
+            buf.append("Outbound Partial ACK of [");
             buf.append(_bitfieldMessageId);
-            buf.append(" highest: ").append(_highestReceived);
-            buf.append(" with ").append(_ackCount).append(" ACKs for: [");
+            buf.append("] Highest: ").append(_highestReceived);
+            buf.append(" with ").append(_ackCount).append(" ACKs for fragments [");
             for (int i = 0; i <= _highestReceived; i++) {
                 if (received(i))
                     buf.append(i).append(' ');
             }
-            buf.append("] / ").append(_highestReceived + 1);
+            buf.append(" / ").append(_highestReceived + 1).append("]");
             return buf.toString();
         }
     }

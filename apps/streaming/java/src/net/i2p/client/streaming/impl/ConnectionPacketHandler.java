@@ -134,7 +134,7 @@ class ConnectionPacketHandler {
                 // requested choke
                 choke = true;
                 if (_log.shouldWarn())
-                    _log.warn("Received a choke on connection " + con + ": " + packet);
+                    _log.warn("Received a choke on " + con + ": " + packet);
                 //con.getOptions().setRTT(con.getOptions().getRTT() + 10*1000);
             }
             // Only call this if the flag is set
@@ -144,13 +144,13 @@ class ConnectionPacketHandler {
         if (!con.getInputStream().canAccept(seqNum, packet.getPayloadSize())) {
             if (con.getInputStream().isLocallyClosed()) {
                 if (_log.shouldWarn())
-                    _log.warn("More data received after local close on connection " + con +
+                    _log.warn("More data received after local close on " + con +
                               "- sending reset and dropping " + packet);
                 // the following will send a RESET
                 con.disconnect(false);
             } else {
                 if (_log.shouldWarn())
-                    _log.warn("Inbound buffer exceeded on connection " + con +
+                    _log.warn("Inbound buffer exceeded on " + con +
                               "- choking and dropping " + packet);
                 // this will call ackImmediately()
                 con.setChoking(true);
@@ -513,7 +513,7 @@ class ConnectionPacketHandler {
             if (_log.shouldLog(Log.DEBUG))
                 _log.debug("No change to [window " + con.getOptions().getWindowSize() +
                            "]\n* HighestAckedThrough: " + lowest + "; congestionWindowEnd: " + con.getCongestionWindowEnd() +
-                           "; ACKed: " + acked + "; unACKed: " + con.getUnackedPacketsSent());
+                           "; ACKed: " + acked + "; UnACKed: " + con.getUnackedPacketsSent());
         }
 
         con.windowAdjusted();

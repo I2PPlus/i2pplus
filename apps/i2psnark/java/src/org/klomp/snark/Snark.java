@@ -1296,7 +1296,7 @@ public class Snark
           else
               baseFile = new SecureFile(rootDataDir, base);
           if (baseFile.exists())
-              throw new IOException("Data location already exists: " + baseFile);
+              throw new IOException("\n* Data location already exists: " + baseFile);
           // The following two may throw IOE...
           storage = new Storage(_util, baseFile, metainfo, this, false);
           storage.check();
@@ -1318,10 +1318,19 @@ public class Snark
           }
           // TODO we're still in an inconsistent state, won't work if restarted
           // (PeerState "disconnecting seed that connects to seeds"
-          fatal("Could not create file for " + getBaseInfo() + ' ' + ioe.getMessage());
+          fatal("Could not create file for " + getBaseInfo().replace("Magnet", "info hash:") + ' ' + ioe.getMessage());
       }
   }
 
+  /**
+   * Call after editing torrent.
+   * Caller must ensure infohash, files, etc. did not change.
+   *
+   * @since 0.9.53
+   */
+  public void replaceMetaInfo(MetaInfo metainfo) {
+      meta = metainfo;
+  }
 
   ///////////// Begin StorageListener methods
 

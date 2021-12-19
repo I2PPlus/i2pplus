@@ -781,13 +781,8 @@ a:active #sb_bandwidthgraph {
 }
 
 @keyframes downloadbar {
-from {
-  background: repeating-linear-gradient(135deg, rgba(221, 221, 255, .7) 1px, rgba(221, 221, 255, .7) 6px, rgba(238, 238, 255,.7) 7px, rgba(238, 238, 255,.7) 11px);
-}
-
-to {
-  background: repeating-linear-gradient(135deg, rgba(238, 238, 255,.7) 1px, rgba(238, 238, 255, .7) 5px, rgba(221, 221, 255, .7) 6px, rgba(221, 221, 255, .7) 11px);
-}
+  from {background: repeating-linear-gradient(135deg, rgba(221, 221, 255, .7) 1px, rgba(221, 221, 255, .7) 6px, rgba(238, 238, 255,.7) 7px, rgba(238, 238, 255,.7) 11px)}
+  to {background: repeating-linear-gradient(135deg, rgba(238, 238, 255,.7) 1px, rgba(238, 238, 255, .7) 5px, rgba(221, 221, 255, .7) 6px, rgba(221, 221, 255, .7) 11px)}
 }
 
 .sb_info .percentBarOuter {
@@ -810,6 +805,41 @@ to {
 
 .sb_updatestatus + .percentBarOuter {
   margin-bottom: -18px;
+}
+
+.percentBarOuter {
+  position: relative;
+}
+
+#sb_memoryBar .percentBarText {
+  padding: 0;
+  width: 70%;
+  float: none;
+  position: absolute;
+  top: -18px;
+  left: 15%;
+  right: 15%;
+  vertical-align: middle;
+  font-size: 110%;
+  border-radius: 1px;
+  background: #eef;
+  filter: drop-shadow(0 0 1px #eef) drop-shadow(0 0 1px #000);
+}
+
+@media screen and (min-width: 1500px) {
+  #sb_memoryBar .percentBarText {padding: 0 0 2px}
+}
+
+#sb_memoryBar .percentBarText::after {
+  width: 0;
+  height: 0;
+  position: absolute;
+  left: calc(50% - 5px);
+  bottom: -13px;
+  border-style: solid;
+  border-width: 8px;
+  border-color: #eef transparent transparent transparent;
+  content: "";
 }
 
 /* end updates download bar */
@@ -3363,11 +3393,11 @@ h4.app a, h4.app2 a {
   transition: ease transform .15s;
 }
 
-#chooselang::after, #configbanwidth::after {
+#chooselang::after, #configbandwidth::after {
   content: none !important;
 }
 
-#chooselang img, #configbanwidth img {
+#chooselang img, #configbandwidth img {
   margin: -9px -5px -8px 20px;
   padding-top: 11px;
   display: inline-block;
@@ -3375,11 +3405,11 @@ h4.app a, h4.app2 a {
 }
 
 @media screen and (max-width: 1500px) {
-  #chooselang, #configbanwidth {
+  #chooselang, #configbandwidth {
     margin-top: 1px;
     margin-bottom: 4px;
   }
-  #chooselang img, #configbanwidth img {
+  #chooselang img, #configbandwidth img {
     margin: -9px -5px -12px 20px;
   }
 }
@@ -3393,7 +3423,7 @@ h4.app a:hover::after, h4.app2 a:hover::after {
   margin-right: 10px;
 }
 
-#configbanwidth img {
+#configbandwidth img {
   margin-right: -10px;
 }
 
@@ -6830,6 +6860,34 @@ p:empty { /* empty paragraph nuke */
   min-width: 80px;
   white-space: nowrap;
   text-align: right;
+}
+
+.gwhois, .banlisted {
+  vertical-align: middle;
+  font-size: 0;
+}
+
+.gwhois a::before {
+  margin-left: -2px;
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  vertical-align: middle;
+  background: var(--search) no-repeat left center / 11px;
+  opacity: .7;
+  content: "";
+}
+
+.gwhois:hover a::before, .gwhois a:focus::before {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+.banlisted {
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  background: var(--ban);
 }
 
 .netdbentry img {
@@ -12419,9 +12477,7 @@ i {
 }
 
 @media screen and (min-width: 1500px) {
-#sybilTask th {
-  font-size: 12pt !important;
-}
+  #sybilTask th {font-size: 12pt !important}
 }
 
 #sybilTask td:first-child {
@@ -13309,6 +13365,32 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
 
 .netdbentry .netdb_header img[src="/flags.jsp?c=a0"] {
   margin-top: 0;
+}
+
+@media screen and (min-width: 1500px) {
+  .routerid {
+    vertical-align: middle;
+    contain: paint;
+  }
+  .routerid .flag {
+    margin-top: -1px;
+    margin-bottom: -2px;
+    width: 19px;
+    height: 17px;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  .routerid .flag img {
+    margin: 0 0 0 -1px !important;
+    width: 19px !important;
+    height: 14px !important;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  #peers .flag img, #profiles .flag img {
+    margin: 1px -2px 1px -2px !important;
+    height: 15px !important;
+  }
 }
 
 iframe {

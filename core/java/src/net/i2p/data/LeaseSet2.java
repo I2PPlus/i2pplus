@@ -534,7 +534,7 @@ public class LeaseSet2 extends LeaseSet {
         int itype = (int) DataHelper.readLong(in, 2);
         SigType type = SigType.getByCode(itype);
         if (type == null)
-            throw new DataFormatException("Unknown sig type " + itype);
+            throw new DataFormatException("Unknown signature type " + itype);
         _transientSigningPublicKey = new SigningPublicKey(type);
         _transientSigningPublicKey.readBytes(in);
         SigType stype = _destination.getSigningPublicKey().getType();

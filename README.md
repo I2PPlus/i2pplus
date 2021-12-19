@@ -71,7 +71,7 @@ For more information how to run I2P in Docker, see [Docker.md](Docker.md)
 
 Need help? See the IRC channel #saltR on the I2P IRC network
 
-Bug reports: https://trac.i2p2.de/report/1 or https://gitlab.com/i2p.plus/I2P.Plus/issues
+Bug reports: https://i2pgit.org/i2p-hackers/i2p.i2p/-/issues or https://gitlab.com/i2p.plus/I2P.Plus/issues
 
 ## Licenses
 

@@ -81,7 +81,7 @@ public final class I2PDatagramDissector {
             rxDest = Destination.create(dgStream);
             SigType type = rxDest.getSigningPublicKey().getType();
             if (type == null)
-                throw new DataFormatException("unsupported sig type");
+                throw new DataFormatException("Unsupported signature type");
             rxSign = new Signature(type);
             // read signature
             rxSign.readBytes(dgStream);
@@ -231,7 +231,7 @@ public final class I2PDatagramDissector {
         SigningPublicKey spk = rxDest.getSigningPublicKey();
         SigType type = spk.getType();
         if (type == null)
-            throw new I2PInvalidDatagramException("unsupported sig type");
+            throw new I2PInvalidDatagramException("Unsupported signature type");
         if (type == SigType.DSA_SHA1) {
             if (!this.dsaEng.verifySignature(rxSign, rxHash, spk))
                 throw new I2PInvalidDatagramException("Incorrect I2P repliable datagram signature");

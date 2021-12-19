@@ -227,12 +227,12 @@ class BasicServlet extends HttpServlet
                 response.sendError(404);
             } else {
                 if (passConditionalHeaders(request, response, content)) {
-                    if (_log.shouldLog(Log.INFO))
-                        _log.info("Sending: " + content);
+                    if (_log.shouldLog(Log.DEBUG))
+                        _log.debug("Sending: " + content);
                     sendData(request, response, content);
                 } else {
-                    if (_log.shouldLog(Log.INFO))
-                        _log.info("Not modified: " + content);
+                    if (_log.shouldLog(Log.DEBUG))
+                        _log.debug("Not modified: " + content);
                 }
             }
         }
@@ -560,7 +560,7 @@ class BasicServlet extends HttpServlet
         }
 
         @Override
-        public String toString() { return "Jar resource \"" + _path + '"'; }
+        public String toString() { return "Jar resource: " + _path; }
     }
 
 

@@ -195,9 +195,9 @@ public class TestJob extends JobImpl {
             noteSuccess(timeToFail, _replyTunnel);
         }
         if (_pool.getSettings().isExploratory())
-            getContext().statManager().addRateData("tunnel.testExploratoryFailedTime", timeToFail, timeToFail);
+            getContext().statManager().addRateData("tunnel.testExploratoryFailedTime", timeToFail);
         else
-            getContext().statManager().addRateData("tunnel.testFailedTime", timeToFail, timeToFail);
+            getContext().statManager().addRateData("tunnel.testFailedTime", timeToFail);
         if (_log.shouldLog(Log.WARN))
             _log.warn("Tunnel test [" + _id + "] failed in " + timeToFail + "ms -> " + _cfg);
         boolean keepGoing = _cfg.tunnelFailed();
@@ -208,9 +208,9 @@ public class TestJob extends JobImpl {
             scheduleRetest(true);
         } else {
             if (_pool.getSettings().isExploratory())
-                getContext().statManager().addRateData("tunnel.testExploratoryFailedCompletelyTime", timeToFail, timeToFail);
+                getContext().statManager().addRateData("tunnel.testExploratoryFailedCompletelyTime", timeToFail);
             else
-                getContext().statManager().addRateData("tunnel.testFailedCompletelyTime", timeToFail, timeToFail);
+                getContext().statManager().addRateData("tunnel.testFailedCompletelyTime", timeToFail);
         }
     }
 
@@ -337,8 +337,8 @@ public class TestJob extends JobImpl {
         public String getName() { return "Timeout Tunnel Test"; }
 
         public void runJob() {
-            if (_log.shouldLog(Log.WARN))
-                _log.warn("Tunnel test [" + _id + "] timed out -> Found? " + _found);
+            //if (_log.shouldLog(Log.WARN))
+            //    _log.warn("Tunnel test [" + _id + "] timed out -> Found? " + _found);
             if (!_found) {
                 // don't clog up the SKM with old one-tag tagsets
                 SessionKeyManager skm;

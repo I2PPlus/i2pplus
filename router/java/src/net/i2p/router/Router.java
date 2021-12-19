@@ -108,6 +108,7 @@ public class Router implements RouterClock.ClockShiftListener {
     private UPnPScannerCallback _upnpScannerCallback;
     private long _downtime = -1;
 
+    private static final String BUNDLE_NAME = "net.i2p.router.web.messages";
     public final static String PROP_CONFIG_FILE = "router.configLocation";
 
     /** let clocks be off by 1 minute */
@@ -1962,9 +1963,12 @@ public class Router implements RouterClock.ClockShiftListener {
             }
             if (downtime > LIVELINESS_DELAY) {
                 System.err.println("WARN: Old router was not shut down gracefully; deleting " + f);
-                if (lastWritten > 0)
-                    _eventLog.addEvent(EventLog.CRASHED, (downtime / 60000) + " minutes ago");
                 f.delete();
+                if (lastWritten > 0)
+                    _eventLog.addEvent(EventLog.CRASHED,
+                                       Translate.getString("{0} ago",
+                                       DataHelper.formatDuration2(downtime), _context, BUNDLE_NAME));
+//                    _eventLog.addEvent(EventLog.CRASHED, (downtime / 60000) + " minutes ago");
             } else {
                 return false;
             }
@@ -2157,5 +2161,13 @@ public class Router implements RouterClock.ClockShiftListener {
         if (rs != null)
             recv = (int)rs.getRate(5*60*1000).getAverageValue();
         return Math.max(send, recv);
+    }
+
+    /**
+     *  Translate with console bundle
+     *  @since 0.9.53
+     */
+    private final String _t(String s) {
+        return Translate.getString(s, _context, BUNDLE_NAME);
     }
 }

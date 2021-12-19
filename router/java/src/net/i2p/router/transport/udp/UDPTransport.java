@@ -3041,7 +3041,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         buf.append(" Sends: ").append(sends);
         buf.append(" Pushes: ").append(pushCount);
         buf.append(" Expired? ").append(expired);
-        buf.append(" unACKed: ").append(msg.getUnackedSize());
+        buf.append(" UnACKed: ").append(msg.getUnackedSize());
         if ( (p != null) && (!successful) ) {
             buf.append(" Consec_failed: ").append(p.getConsecutiveFailedSends());
             long timeSinceSend = _context.clock().now() - p.getLastSendFullyTime();

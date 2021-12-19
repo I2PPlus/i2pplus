@@ -705,6 +705,6 @@ class OutboundEstablishState {
     /** @since 0.8.9 */
     @Override
     public String toString() {
-        return "\n* Peer: [" + _remoteHostId + "] State: " + _currentState;
+        return "[" + _remoteHostId.toString().substring(0,6) + "] -> State: " + _currentState;
     }
 }

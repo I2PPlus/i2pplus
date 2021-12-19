@@ -954,7 +954,7 @@ class EstablishmentManager {
         List<UDPPacket> requests = _builder.buildRelayRequest(_transport, this, state, _transport.getIntroKey());
         if (requests.isEmpty()) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("No valid introducers! " + state);
+                _log.warn("No valid introducers for " + state);
             processExpired(state);
             return;
         }

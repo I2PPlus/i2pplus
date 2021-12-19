@@ -282,7 +282,7 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
             int bt = (int) DataHelper.readLong(in, 2);
             _blindType = SigType.getByCode(bt);
             if (_blindType == null)
-                throw new I2CPMessageException("unsupported sig type " + bt);
+                throw new I2CPMessageException("Unsupported signature type " + bt);
             _expiration = DataHelper.readLong(in, 4) * 1000;
             if (_endpointType == TYPE_HASH) {
                 _hash = Hash.create(in);
@@ -296,7 +296,7 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
                 int st = (int) DataHelper.readLong(in, 2);
                 SigType sigt = SigType.getByCode(st);
                 if (sigt == null)
-                    throw new I2CPMessageException("unsupported sig type " + st);
+                    throw new I2CPMessageException("Unsupported signature type " + st);
                 int len = sigt.getPubkeyLen();
                 byte[] key = new byte[len];
                 DataHelper.read(in, key);

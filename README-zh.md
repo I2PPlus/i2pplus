@@ -64,7 +64,7 @@ API：http://docs.i2p-projekt.de/javadoc/
 
 需要帮忙？请参阅I2P IRC网络上的IRC频道#saltR
 
-错误报告：https://trac.i2p2.de/report/1或https://gitlab.com/i2p.plus/I2P.Plus/issues
+错误报告：https://i2pgit.org/i2p-hackers/i2p.i2p/-/issues或https://gitlab.com/i2p.plus/I2P.Plus/issues
 
 ## 许可证
 

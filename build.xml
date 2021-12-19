@@ -64,7 +64,8 @@
         <echo message=" justBOB                                      Build a standalone BOB-one.jar &#10140; ./BOB-one.jar" />
         <echo message=" pkg                                          Run &apos;distclean&apos; then package everything up (updater, installer)" />
         <echo message=" pkg-portable-win32                           Build a minimal, portable install for Win32 &#10140; ./portable-win32.zip" />
-        <echo message=" poupdate                                     Update the .po files for translators" />
+        <echo message=" poupdate-source                              Update the .po files for translators (requires jsp files to be compiled first)
+" />
         <echo message=" slackpkg                                     Build Slackware package in ./Slackware/i2p" />
         <echo message=" tarball                                      Create tar archive for clean install &#10140; ./i2p.tar.bz2" />
         <echo message=" updater                                      Build updater for existing installs &#10140; ./i2pupdate.zip" />

@@ -90,7 +90,7 @@ class PacketHandler {
 
         //_context.statManager().createRateStat("udp.handleTime", "Time to handle a received packet after its been pulled off the queue", "Transport [UDP]", UDPTransport.RATES);
         //_context.statManager().createRateStat("udp.queueTime", "How long after a packet is received can we begin handling it", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.receivePacketSkew", "How long after packet was sent did we receive it", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.receivePacketSkew", "How long after packet sent did we receive it", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.droppedInvalidUnkown", "Age of dropped packet (unknown type)", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.droppedInvalidReestablish", "Age of dropped packet (no existing key, not establishment)", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.droppedInvalidEstablish", "Age of dropped packet (establishment, bad key)", "Transport [UDP]", UDPTransport.RATES);
@@ -377,7 +377,7 @@ class PacketHandler {
                             receivePacket(reader, packet, est, false);
                         } else {
                             if (_log.shouldLog(Log.WARN))
-                                _log.warn("Failed validation with existing connection, and validation as reestablish failed too; dropping " + packet);
+                                _log.warn("Failed validation with existing connection, and validation as reestablish failed too; dropping... " + packet);
                             _context.statManager().addRateData("udp.droppedInvalidReestablish", packet.getLifetime());
                         }
                         return;
@@ -431,7 +431,7 @@ class PacketHandler {
                     List<PeerState> peers = _transport.getPeerStatesByIP(remoteHost);
                     if (!peers.isEmpty()) {
                         StringBuilder buf = new StringBuilder(256);
-                        buf.append("Established peers with IP address: ");
+                        buf.append("Established peer connection with: ");
                         boolean foundSamePort = false;
                         PeerState state = null;
                         int newPort = remoteHost.getPort();
@@ -439,9 +439,16 @@ class PacketHandler {
                             boolean valid = false;
                             if (_log.shouldLog(Log.WARN)) {
                                 long now = _context.clock().now();
+                                long lastSent = now - ps.getLastSendTime();
+                                long lastRcvd = now - ps.getLastReceiveTime();
+                                String tx = "now";
+                                String rx = "now";
+                                if (lastSent > 0)
+                                    tx = lastSent + "ms ago";
+                                if (lastRcvd > 0)
+                                    rx = lastSent + "ms ago";
                                 buf.append(ps.getRemoteHostId().toString())
-                                   .append("\n* Last sent: ").append(now - ps.getLastSendTime())
-                                   .append("; Last rcvd: ").append(now - ps.getLastReceiveTime());
+                                   .append("\n* Last message sent: ").append(tx).append("; Last message received: ").append(rx);
                             }
                             if (ps.getRemotePort() == newPort) {
                                 foundSamePort = true;

@@ -251,7 +251,7 @@ class PeerConnectionIn implements Runnable
       }
     catch (RuntimeException t)
       {
-        _log.error("Error communicating with [" + peer + "]", t);
+        _log.error("Error communicating with [" + peer + "] \n* " + t.getMessage());
       }
     finally
       {

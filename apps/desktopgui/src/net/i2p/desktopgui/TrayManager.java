@@ -8,21 +8,27 @@ import java.awt.PopupMenu;
 import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.TrayIcon;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.net.URL;
 
 import javax.swing.JFrame;
 import javax.swing.JPopupMenu;
+import javax.swing.SwingWorker;
 import javax.swing.event.MenuKeyEvent;
 import javax.swing.event.MenuKeyListener;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
 import net.i2p.I2PAppContext;
+import net.i2p.apps.systray.UrlLauncher;
 import net.i2p.desktopgui.i18n.DesktopguiTranslator;
+import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
 /**
@@ -37,11 +43,13 @@ abstract class TrayManager {
     protected SystemTray tray;
     ///Our tray icon, or null if unsupported
     protected TrayIcon trayIcon;
+    protected volatile boolean _showNotifications;
 
     private static final String PNG_DIR = "/desktopgui/resources/images/";
     private static final String MAC_ICON = "itoopie_black_24.png";
     private static final String WIN_ICON = "itoopie_white_24.png";
     private static final String LIN_ICON = "logo.png";
+    protected static final String PROP_NOTIFICATIONS = "desktopgui.showNotifications";
 
     /**
      * Instantiate tray manager.
@@ -58,6 +66,7 @@ abstract class TrayManager {
     public synchronized void startManager() throws AWTException {
         if (!SystemTray.isSupported())
             throw new AWTException("SystemTray not supported");
+        _showNotifications = _appContext.getBooleanPropertyDefaultTrue(PROP_NOTIFICATIONS);
         tray = SystemTray.getSystemTray();
         // Windows typically has tooltips; Linux (at least Ubuntu) doesn't
         String tooltip = SystemVersion.isWindows() ? _t("I2P: Right-click for menu") : null;
@@ -204,6 +213,74 @@ abstract class TrayManager {
         return image;
     }
     
+    /**
+     *  Send a notification to the user.
+     *
+     *  @param title for the popup, translated
+     *  @param message translated
+     *  @param path unsupported
+     *  @return 0, or -1 on failure
+     */
+    public int displayMessage(int priority, String title, String message, String path) {
+        if (!_showNotifications)
+            return -1;
+        final TrayIcon ti = trayIcon;
+        if (ti == null)
+            return -1;
+        TrayIcon.MessageType type;
+        if (priority <= Log.DEBUG)
+            type = TrayIcon.MessageType.NONE;
+        else if (priority <= Log.INFO)
+            type = TrayIcon.MessageType.INFO;
+        else if (priority <= Log.WARN)
+            type = TrayIcon.MessageType.WARNING;
+        else
+            type = TrayIcon.MessageType.ERROR;
+        ti.displayMessage(title, message, type);
+/*
+ * There's apparently no way to bind a particular message to an action
+   that comes back. We can't keep a queue because we don't get
+   an action back when the message is removed via timeout or user x-out.
+   On OSX, new messages dismiss previous ones.
+   On LXDE (and Gnome?), new messages go under previous ones. Timeout is only 10 seconds.
+   Message timeout is platform-dependent.
+   So the order of events is unknowable.
+   This only works if there is only one message ever.
+
+        if (path != null && path.length() > 0) {
+            if (path.charAt(0) == '/');
+                path = path.substring(1);
+            final String url = _appContext.portMapper().getConsoleURL() + path;
+            ti.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent arg0) {
+                    ti.removeActionListener(this);
+                    new SwingWorker<Object, Object>() {
+                        @Override
+                        protected Object doInBackground() throws Exception {
+                            System.out.println("DIB " + arg0);
+                            UrlLauncher launcher = new UrlLauncher(_appContext, null, null);
+                            try {
+                                launcher.openUrl(url);
+                                System.out.println("DIB success " + url);
+                            } catch (IOException e1) {
+                                System.out.println("DIB fail " + url);
+                            }
+                            return null;
+                        }
+
+                        @Override
+                        protected void done() {
+                            System.out.println("done " + arg0);
+                        }
+                    }.execute();
+                }
+            });
+        }
+*/
+        return 0;
+    }
+
     protected String _t(String s) {
         return DesktopguiTranslator._t(_appContext, s);
     }

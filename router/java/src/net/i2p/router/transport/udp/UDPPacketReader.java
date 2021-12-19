@@ -649,16 +649,16 @@ class UDPPacketReader {
         @Override
         public String toString() {
             StringBuilder buf = new StringBuilder(64);
-            buf.append("\n* Inbound Partial ACK of ");
+            buf.append("\n* Inbound Partial ACK of [");
             buf.append(getMessageId());
-            buf.append(" highest: ").append(highestReceived());
-            buf.append(" with ACKs for: [");
+            buf.append("] Highest: ").append(highestReceived());
+            buf.append(" with ACKs for fragments [");
             int numFrags = fragmentCount();
             for (int i = 0; i < numFrags; i++) {
                 if (received(i))
                     buf.append(i).append(' ');
             }
-            buf.append("] / ").append(numFrags);
+            buf.append(" / ").append(numFrags).append("]");
             return buf.toString();
         }
     }

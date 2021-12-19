@@ -11,6 +11,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.TunnelManagerFacade;
 import net.i2p.router.TunnelPoolSettings;
+import net.i2p.router.util.MaskedIPSet;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
@@ -70,6 +71,8 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         boolean hiddenInbound = hidden && isInbound;
         boolean hiddenOutbound = hidden && !isInbound;
         boolean lowOutbound = nonzero && !isInbound && !ctx.commSystem().haveHighOutboundCapacity();
+        int ipRestriction =  (ctx.getBooleanProperty("i2np.allowLocal") || length <= 1) ? 0 : settings.getIPRestriction();
+        MaskedIPSet ipSet = ipRestriction > 0 ? new MaskedIPSet(16) : null;
 
 
         // closest-hop restrictions
@@ -99,21 +102,21 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
                     log.info("Selecting all Non-Failing peers: Closest " + (isInbound ? "Inbound" : "Outbound") + ", excluding " + closestExclude.size());
                 // SANFP adds all not-connected to exclude, so make a copy
                 Set<Hash> SANFPExclude = new HashSet<Hash>(closestExclude);
-                ctx.profileOrganizer().selectActiveNotFailingPeers(1, SANFPExclude, closest);
+                ctx.profileOrganizer().selectActiveNotFailingPeers(1, SANFPExclude, closest, ipRestriction, ipSet);
                 if (closest.isEmpty()) {
                     // ANFP does not fall back to non-connected
                     if (log.shouldLog(Log.INFO))
                         log.info("Selecting Fast peers: Closest " + (isInbound ? "Inbound" : "Outbound") + ", excluding " + closestExclude.size());
-                    ctx.profileOrganizer().selectFastPeers(1, closestExclude, closest);
+                    ctx.profileOrganizer().selectFastPeers(1, closestExclude, closest, ipRestriction, ipSet);
                 }
             } else if (exploreHighCap) {
                 if (log.shouldLog(Log.INFO))
                     log.info("Selecting High Capacity peers: Closest " + (isInbound ? "Inbound" : "Outbound") + ", excluding " + closestExclude.size());
-                ctx.profileOrganizer().selectHighCapacityPeers(1, closestExclude, closest);
+                ctx.profileOrganizer().selectHighCapacityPeers(1, closestExclude, closest, ipRestriction, ipSet);
             } else {
                 if (log.shouldLog(Log.INFO))
                     log.info("Selecting Non-Failing peers: Closest " + (isInbound ? "Inbound" : "Outbound") + ", excluding " + closestExclude.size());
-                ctx.profileOrganizer().selectNotFailingPeers(1, closestExclude, closest, false);
+                ctx.profileOrganizer().selectNotFailingPeers(1, closestExclude, closest, false, ipRestriction, ipSet);
             }
             if (!closest.isEmpty()) {
                 closestHop = closest.iterator().next();
@@ -155,12 +158,12 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
                     log.info("Selecting all Non-Failing peers, excluding " + exclude.size() + " furthest Outbound");
                 // ANFP adds all not-connected to exclude, so make a copy
                 Set<Hash> SANFPExclude = new HashSet<Hash>(exclude);
-                ctx.profileOrganizer().selectActiveNotFailingPeers(1, SANFPExclude, furthest);
+                ctx.profileOrganizer().selectActiveNotFailingPeers(1, SANFPExclude, furthest, ipRestriction, ipSet);
                 if (furthest.isEmpty()) {
                     // ANFP does not fall back to non-connected
                     if (log.shouldLog(Log.INFO))
                         log.info("Selecting Fast peers, excluding " + exclude.size() + " furthest Outbound");
-                    ctx.profileOrganizer().selectFastPeers(1, exclude, furthest);
+                    ctx.profileOrganizer().selectFastPeers(1, exclude, furthest, ipRestriction, ipSet);
                 }
                 if (!furthest.isEmpty()) {
                     furthestHop = furthest.iterator().next();
@@ -179,13 +182,10 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         HashSet<Hash> matches = new HashSet<Hash>(length);
 
         if (length > 0) {
-            //
-            // We don't honor IP Restriction here, to be fixed
-            //
             if (exploreHighCap) {
                 if (log.shouldLog(Log.INFO))
                     log.info("Selecting " + length + " High Capacity peers for " + (isInbound ? " Inbound" : " Outbound") + " Exploratory tunnel, excluding " + exclude.size());
-                ctx.profileOrganizer().selectHighCapacityPeers(length, exclude, matches);
+                ctx.profileOrganizer().selectHighCapacityPeers(length, exclude, matches, ipRestriction, ipSet);
             } else {
                 // As of 0.9.23, we include a max of 2 not failing peers,
                 // to improve build success on 3-hop tunnels.
@@ -194,7 +194,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
                     ctx.profileOrganizer().selectHighCapacityPeers(length - 2, exclude, matches);
                 if (log.shouldLog(Log.INFO))
                     log.info("Selecting " + length + " Non-Failing peers for " + (isInbound ? " Inbound" : " Outbound") + " Exploratory tunnel, excluding " + exclude.size());
-                ctx.profileOrganizer().selectNotFailingPeers(length, exclude, matches, false);
+                ctx.profileOrganizer().selectNotFailingPeers(length, exclude, matches, false, ipRestriction, ipSet);
             }
             matches.remove(ctx.routerHash());
         }
@@ -232,9 +232,10 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         return rv;
     }
 
-    private static final int MIN_NONFAILING_PCT = 15;
+//    private static final int MIN_NONFAILING_PCT = 15;
+    private static final int MIN_NONFAILING_PCT = 30;
 //    private static final int MIN_ACTIVE_PEERS_STARTUP = 6;
-    private static final int MIN_ACTIVE_PEERS_STARTUP = 8;
+    private static final int MIN_ACTIVE_PEERS_STARTUP = 10;
 //    private static final int MIN_ACTIVE_PEERS = 12;
     private static final int MIN_ACTIVE_PEERS = 20;
 

@@ -30,6 +30,7 @@ import net.i2p.router.networkdb.kademlia.MessageWrapper;
 import net.i2p.router.networkdb.kademlia.MessageWrapper.OneTimeSession;
 import net.i2p.router.tunnel.HopConfig;
 import net.i2p.router.tunnel.TunnelCreatorConfig;
+import static net.i2p.router.tunnel.pool.BuildExecutor.Result.*;
 import net.i2p.util.Log;
 import net.i2p.util.VersionComparator;
 
@@ -77,6 +78,8 @@ abstract class BuildRequestor {
 
     /** some randomization is added on to this */
     private static final int BUILD_MSG_TIMEOUT = 60*1000;
+
+    private static final int MAX_CONSECUTIVE_CLIENT_BUILD_FAILS = 6;
 
     /**
      *  "paired tunnels" means using a client's own inbound tunnel to receive the
@@ -161,18 +164,27 @@ abstract class BuildRequestor {
             }
         } else {
             // building a client tunnel
-            Hash from = settings.getDestination();
-            if (isInbound) {
-                pairedTunnel = mgr.selectOutboundTunnel(from, farEnd);
-            } else {
-                pairedTunnel = mgr.selectInboundTunnel(from, farEnd);
-                if (pairedTunnel != null) {
-                    replySKM = ctx.clientManager().getClientSessionKeyManager(from);
-                    if (replySKM == null && cfg.getGarlicReplyKeys() != null) {
-                        // no client SKM, fall back to expl.
-                        pairedTunnel = null;
+            int fails = pool.getConsecutiveBuildTimeouts();
+            if (fails < MAX_CONSECUTIVE_CLIENT_BUILD_FAILS) {
+                Hash from = settings.getDestination();
+                if (isInbound) {
+                    pairedTunnel = mgr.selectOutboundTunnel(from, farEnd);
+                } else {
+                    pairedTunnel = mgr.selectInboundTunnel(from, farEnd);
+                    if (pairedTunnel != null) {
+                        replySKM = ctx.clientManager().getClientSessionKeyManager(from);
+                        if (replySKM == null && cfg.getGarlicReplyKeys() != null) {
+                            // no client SKM, fall back to expl.
+                            pairedTunnel = null;
+                        }
                     }
                 }
+            } else {
+                // Force using an expl. tunnel as the paired tunnel
+                // This prevents us from being stuck for 10 minutes if the client pool
+                // has exactly one tunnel in the other direction and it's bad
+                if (log.shouldWarn())
+                    log.warn(fails + " consecutive build timeouts for " + cfg + ", using exploratory tunnel");
             }
             if (pairedTunnel == null) {
                 if (isInbound) {
@@ -210,7 +222,7 @@ abstract class BuildRequestor {
         if (pairedTunnel == null) {
             if (log.shouldLog(Log.WARN))
                 log.warn("Tunnel build failed; couldn't find a paired tunnel " + cfg);
-            exec.buildComplete(cfg);
+            exec.buildComplete(cfg, OTHER_FAILURE);
             // Not even an exploratory tunnel? We are in big trouble.
             // Let's not spin through here too fast.
             // But don't let a client tunnel waiting for exploratories slow things down too much,
@@ -226,7 +238,7 @@ abstract class BuildRequestor {
         if (msg == null) {
             if (log.shouldLog(Log.WARN))
                 log.warn("Tunnel build failed; couldn't create the tunnel build message " + cfg);
-            exec.buildComplete(cfg);
+            exec.buildComplete(cfg, OTHER_FAILURE);
             return false;
         }
 
@@ -279,7 +291,7 @@ abstract class BuildRequestor {
             if (peer == null) {
                 if (log.shouldLog(Log.WARN))
                     log.warn("Couldn't find the next hop to send Outbound request to " + cfg);
-                exec.buildComplete(cfg);
+                exec.buildComplete(cfg, OTHER_FAILURE);
                 return false;
             }
             OutNetMessage outMsg = new OutNetMessage(ctx, msg, ctx.clock().now() + FIRST_HOP_TIMEOUT, PRIORITY, peer);
@@ -493,15 +505,12 @@ abstract class BuildRequestor {
         if (log.shouldLog(Log.DEBUG))
             log.debug("Build zero hop tunnel " + cfg);
 
-        exec.buildComplete(cfg);
+        boolean ok;
         if (cfg.isInbound())
-            ctx.tunnelDispatcher().joinInbound(cfg);
+            ok = ctx.tunnelDispatcher().joinInbound(cfg);
         else
-            ctx.tunnelDispatcher().joinOutbound(cfg);
-        cfg.getTunnelPool().addTunnel(cfg);
-        exec.buildSuccessful(cfg);
-        ExpireJob expireJob = new ExpireJob(ctx, cfg);
-        ctx.jobQueue().addJob(expireJob);
+            ok = ctx.tunnelDispatcher().joinOutbound(cfg);
+        exec.buildComplete(cfg, ok ? SUCCESS : DUP_ID);
         // can it get much easier?
     }
 
@@ -524,7 +533,7 @@ abstract class BuildRequestor {
         }
         public String getName() { return "Timeout OB Tunnel Build First Hop"; }
         public void runJob() {
-            _exec.buildComplete(_cfg);
+            _exec.buildComplete(_cfg, OTHER_FAILURE);
             getContext().profileManager().tunnelTimedOut(_cfg.getPeer(1));
             getContext().statManager().addRateData("tunnel.buildFailFirstHop", 1, 0);
             // static, no _log

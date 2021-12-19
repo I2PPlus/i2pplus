@@ -29,6 +29,7 @@ import net.i2p.I2PAppContext;
 import net.i2p.app.ClientApp;
 import net.i2p.app.ClientAppManager;
 import net.i2p.app.ClientAppState;
+import net.i2p.app.NotificationService;
 import net.i2p.client.I2PClient;
 import net.i2p.crypto.SHA1Hash;
 import net.i2p.crypto.SigType;
@@ -459,7 +460,7 @@ public class SnarkManager implements CompleteListener, ClientApp {
      * @since 0.9.14.1
      */
     public void addMessageNoEscape(String message) {
-        _messages.addMessageNoEscape(getTime() + "&nbsp; " + message);
+        _messages.addMessageNoEscape(getTime() + "&nbsp; " + message.replace("%20", " "));
         if (_log.shouldLog(Log.INFO))
             _log.info(message);
     }
@@ -1804,7 +1805,7 @@ public class SnarkManager implements CompleteListener, ClientApp {
         }
 
         // Were we running last time?
-        String link = linkify(torrent).replace(" ", "%20");
+        String link = linkify(torrent).replace(" ", "%20").replace("a%20href", "a href");
         if (!dontAutoStart && shouldAutoStart() && running) {
             if (!_util.connected()) {
 //                addMessage(_t("Connecting to I2P").replace("I2P", "I2P+") + "...");
@@ -2676,8 +2677,18 @@ public class SnarkManager implements CompleteListener, ClientApp {
         Storage storage = snark.getStorage();
         if (meta == null || storage == null)
             return;
-        if (snark.getDownloaded() > 0)
+        if (snark.getDownloaded() > 0) {
             addMessageNoEscape(_t("Download finished: {0}", linkify(snark)));
+            ClientAppManager cmgr = _context.clientAppManager();
+            if (cmgr != null) {
+                NotificationService ns = (NotificationService) cmgr.getRegisteredApp("desktopgui");
+                if (ns != null) {
+                    ns.notify("I2PSnark", null, Log.INFO, _t("I2PSnark"),
+                              _t("Download finished: {0}", snark.getName()),
+                              "/i2psnark/" + linkify(snark));
+                }
+            }
+        }
         updateStatus(snark);
     }
 
@@ -2780,14 +2791,16 @@ public class SnarkManager implements CompleteListener, ClientApp {
         MetaInfo meta = snark.getMetaInfo();
         Storage storage = snark.getStorage();
         if (meta == null || storage == null)
-            return DataHelper.escapeHTML(snark.getBaseName());
+            return DataHelper.escapeHTML(snark.getBaseName().replace("%20", " "));
         StringBuilder buf = new StringBuilder(256);
         String base = DataHelper.escapeHTML(storage.getBaseName());
-        String enc = base.replace("[", "%5B").replace("]", "%5D").replace("|", "%7C").replace(" ", "%20");
+        String enc = base.replace("[", "%5B").replace("]", "%5D").replace("|", "%7C").replace(" ", "%20")
+                         .replace("è", "&egrave;").replace("é", "&eacute;").replace("à", "&agrave;");
         buf.append("<a href=\"").append(_contextPath).append('/').append(enc);
         if (meta.getFiles() != null || !storage.complete())
             buf.append('/');
-        buf.append("\">").append(base).append("</a>");
+        buf.append("\">").append(base.replace("%20", " ").replace("&egrave;", "è").replace("&eacute;", "é")
+                         .replace("&agrave;", "à")).append("</a>");
         return buf.toString();
     }
 

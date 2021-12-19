@@ -507,32 +507,33 @@ class OutboundMessageState implements CDPQEntry {
     public String toString() {
         StringBuilder buf = new StringBuilder(256);
         buf.append("\n* Outbound Message: [").append(_i2npMessage.getUniqueId());
-        buf.append("] seq ").append(_seqNum);
-        buf.append(" type ").append(_i2npMessage.getType());
-        buf.append(" size ").append(_messageBuf.length);
+        buf.append("] Seq: ").append(_seqNum);
+        buf.append("; Type: ").append(_i2npMessage.getType());
+        buf.append("; Size: ").append(_messageBuf.length).append(" bytes");
         if (_numFragments > 1)
-            buf.append(" fragments: ").append(_numFragments);
-        buf.append(" volleys: ").append(_maxSends);
-        buf.append(" lifetime: ").append(getLifetime());
+            buf.append("; Fragments: ").append(_numFragments);
+        buf.append("; Volleys: ").append(_maxSends);
+        buf.append("; Lifetime: ").append(getLifetime()).append("ms");
         if (!isComplete()) {
             if (_nacks.get() > 0)
-                buf.append(" NACKs: ").append(_nacks);
+                buf.append("; NACKs: ").append(_nacks);
             if (_fragmentSends != null) {
-                buf.append("\n* UnACKed fragments: ");
+                buf.append("\n* UnACKed fragments: [ ");
                 for (int i = 0; i < _numFragments; i++) {
                     if (needsSending(i))
                         buf.append(i).append(' ');
                 }
-                buf.append("sizes: ");
+                buf.append("]; Sizes (bytes): [ ");
                 for (int i = 0; i < _numFragments; i++) {
                     buf.append(fragmentSize(i)).append(' ');
                 }
-                buf.append("send counts: ");
+                buf.append("]; Fragments sent: [ ");
                 for (int i = 0; i < _numFragments; i++) {
                     buf.append(_fragmentSends[i]).append(' ');
                 }
+                buf.append("]");
             } else {
-                buf.append(" unACKed");
+                buf.append(" (UnACKed)");
             }
         }
         //buf.append(" to: ").append(_peer.toString());

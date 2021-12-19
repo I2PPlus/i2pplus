@@ -35,6 +35,7 @@ import net.i2p.router.networkdb.kademlia.MessageWrapper;
 import net.i2p.router.peermanager.TunnelHistory;
 import net.i2p.router.tunnel.HopConfig;
 import net.i2p.router.tunnel.TunnelDispatcher;
+import static net.i2p.router.tunnel.pool.BuildExecutor.Result.*;
 import net.i2p.router.util.CDQEntry;
 import net.i2p.router.util.CoDelBlockingQueue;
 import net.i2p.stat.Rate;
@@ -296,7 +297,7 @@ class BuildHandler implements Runnable {
                 return;
             }
 
-            handleRequest(state);
+            handleRequest(state, now);
 
         //int remaining = _inboundBuildMessages.size();
         //if (remaining > 0)
@@ -347,7 +348,7 @@ class BuildHandler implements Runnable {
                 if (record < 0) {
                     _log.error("Bad status index " + i);
                     // don't leak
-                    _exec.buildComplete(cfg);
+                    _exec.buildComplete(cfg, BAD_RESPONSE);
                     return;
                 }
 
@@ -405,15 +406,12 @@ class BuildHandler implements Runnable {
                     // This will happen very rarely. We check for dups when
                     // creating the config, but we don't track IDs for builds in progress.
                     _context.statManager().addRateData("tunnel.ownDupID", 1);
-                    _exec.buildComplete(cfg);
+                    _exec.buildComplete(cfg, DUP_ID);
                     if (_log.shouldLog(Log.WARN))
                         _log.warn("Duplicate ID for our own tunnel " + cfg);
                     return;
                 }
-                cfg.getTunnelPool().addTunnel(cfg); // self.self.self.foo!
-                // call buildComplete() after addTunnel() so we don't try another build.
-                _exec.buildComplete(cfg);
-                _exec.buildSuccessful(cfg);
+                _exec.buildComplete(cfg, SUCCESS);
 
                 if (cfg.getTunnelPool().getSettings().isExploratory()) {
                     // Notify router that exploratory tunnels are ready
@@ -447,15 +445,13 @@ class BuildHandler implements Runnable {
                     }
                 }
 
-                ExpireJob expireJob = new ExpireJob(_context, cfg);
-                _context.jobQueue().addJob(expireJob);
                 if (cfg.getDestination() == null)
                     _context.statManager().addRateData("tunnel.buildExploratorySuccess", rtt);
                 else
                     _context.statManager().addRateData("tunnel.buildClientSuccess", rtt);
             } else {
                 // someone is no fun
-                _exec.buildComplete(cfg);
+                _exec.buildComplete(cfg, REJECT);
                 if (cfg.getDestination() == null)
                     _context.statManager().addRateData("tunnel.buildExploratoryReject", rtt);
                 else
@@ -466,7 +462,7 @@ class BuildHandler implements Runnable {
                 _log.warn("[MsgID " + msg.getUniqueId() + "] Tunnel reply could not be decrypted for tunnel " + cfg);
             _context.statManager().addRateData("tunnel.corruptBuildReply", 1);
             // don't leak
-            _exec.buildComplete(cfg);
+            _exec.buildComplete(cfg, BAD_RESPONSE);
             // TODO blame everybody
         }
     }
@@ -477,8 +473,8 @@ class BuildHandler implements Runnable {
      *
      *  @return handle time or -1 if it wasn't completely handled
      */
-    private long handleRequest(BuildMessageState state) {
-        long timeSinceReceived = _context.clock().now()-state.recvTime;
+    private long handleRequest(BuildMessageState state, long now) {
+        long timeSinceReceived = now - state.recvTime;
         //if (_log.shouldLog(Log.DEBUG))
         //    _log.debug(state.msg.getUniqueId() + ": handling request after " + timeSinceReceived);
 
@@ -512,7 +508,8 @@ class BuildHandler implements Runnable {
         long decryptTime = System.currentTimeMillis() - beforeDecrypt;
         _context.statManager().addRateData("tunnel.decryptRequestTime", decryptTime);
         if (decryptTime > 500 && _log.shouldLog(Log.WARN))
-            _log.warn("Timeout decrypting request: " + decryptTime + " for message: " + state.msg.getUniqueId() + " received " + (timeSinceReceived+decryptTime) + "ms ago");
+            _log.warn("Timeout decrypting request: " + decryptTime + " for message: " + state.msg.getUniqueId() +
+                      " received " + (timeSinceReceived+decryptTime) + "ms ago");
         if (req == null) {
             // no records matched, or the decryption failed.  bah
             if (_log.shouldLog(Log.WARN)) {
@@ -528,7 +525,7 @@ class BuildHandler implements Runnable {
         Hash nextPeer = req.readNextIdentity();
         if (_context.banlist().isBanlisted(nextPeer)) {
             if (_log.shouldWarn())
-                _log.warn("Dropping request, next peer is banned: " + nextPeer);
+                _log.warn("Dropping tunnel build request, next peer [" + nextPeer.toBase64().substring(0,6) + "] is banned");
             if (from != null)
                 _context.commSystem().mayDisconnect(from);
             return -1;
@@ -549,7 +546,7 @@ class BuildHandler implements Runnable {
                 if (current <= 0)
                     _currentLookups.set(1);
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("Request  handled; looking up next peer [" + nextPeer.toBase64().substring(0,6)
+                    _log.debug("Request handled; looking up next peer [" + nextPeer.toBase64().substring(0,6)
                                + "] \n* From: " + from + " [MsgID: " +  state.msg.getUniqueId() + "]\n* Lookups: " + current + " / " + limit + req);
                 _context.netDb().lookupRouterInfo(nextPeer, new HandleReq(_context, state, req, nextPeer),
                                               new TimeoutReq(_context, state, req, nextPeer), NEXT_HOP_LOOKUP_TIMEOUT);

@@ -796,10 +796,14 @@ public class EepGet {
             _listeners.get(i).transferFailed(_url, _bytesTransferred, _bytesRemaining, _currentAttempt);
         int truncate = _url.indexOf("&");
         if (_log.shouldLog(Log.WARN))
-            if (_url.contains("&") && _url.contains("info_hash"))
-                _log.warn("Eepget error: All attempts failed for [" + _url.substring(0, truncate) + "...]");
-            else
+            if (_url.contains("&") && _url.contains("info_hash")) {
+                if (_url.startsWith("https"))
+                    _log.warn("Eepget error: All attempts failed for [" + _url.substring(0, truncate) + "...]");
+                else
+                    _log.warn("Eepget error: All attempts failed for [" + _url.substring(7, truncate) + "...]");
+            } else {
                 _log.warn("Eepget error: All attempts failed for [" + _url + "]");
+            }
         return false;
     }
 
