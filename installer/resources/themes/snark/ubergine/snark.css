@@ -4136,7 +4136,7 @@ th.snarkTorrentPeerCount img {
   position: relative;
   border: var(--border_hard);
   border-radius: 4px;
-  box-shadow: 0 0 1px #212;
+/*  box-shadow: 0 0 1px #212;*/
   background: #515;
 }
 
@@ -4168,8 +4168,6 @@ th.snarkTorrentPeerCount img {
   margin-right: 0 !important;
   padding: 2px 5px;
   border-radius: 4px 0 0 4px;
-  box-shadow: none;
-  background: #515;
 }
 
 .clientid {
@@ -4185,7 +4183,6 @@ th.snarkTorrentPeerCount img {
   text-align: center;
   font-size: 90%;
   border-radius: 0 3px 3px 0;
-  background: #414;
   background: linear-gradient(180deg,#414, #313);
 }
 
@@ -5158,7 +5155,7 @@ td.snarkTorrentAction input[type=submit] {
   }
   td.snarkTorrentPeerCount b {
     padding: 4px 3px;
-    min-width: 89px;
+    min-width: 91px;
     display: inline-block;
     position: relative;
     line-height: 1;
@@ -5173,7 +5170,7 @@ td.snarkTorrentAction input[type=submit] {
   td.snarkTorrentPeerCount b .left, td.snarkTorrentPeerCount b .right {
     margin: 0 1px;
     padding: 2px 3px 1px;
-    min-width: 32px !important;
+    min-width: 31px !important;
     display: inline-block;
     text-align: center;
     color: #aaa;
@@ -5188,6 +5185,9 @@ td.snarkTorrentAction input[type=submit] {
   }
   td.snarkTorrentPeerCount b .right {
     margin-left: 0 !important;
+  }
+  td.snarkTorrentPeerCount b .left {
+    margin-right: 0 !important;
   }
   td.snarkTorrentPeerCount b a:hover .right {
     margin-left: -9px !important;
@@ -5793,7 +5793,6 @@ td.snarkTorrentAction input[type=submit] {
     text-align: center;
   }
   .peerinfo tt {
-    margin: 0 8px 0 0 !important;
     line-height: 1.2 !important;
   }
 }
@@ -6001,12 +6000,6 @@ td.snarkTorrentAction input[type=submit] {
   .snarkTorrents tt {
     margin: 1px 3px !important;
     padding: 2px 3px;
-    letter-spacing: .1em;
-    font-size: 10pt;
-    color: #cc0;
-    border-radius: 2px;
-    box-shadow: 0 0 1px #303;
-    background: #505;
     opacity: .9;
   }
   .priority {
