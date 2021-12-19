@@ -6862,6 +6862,34 @@ p:empty { /* empty paragraph nuke */
   text-align: right;
 }
 
+.gwhois, .banlisted {
+  vertical-align: middle;
+  font-size: 0;
+}
+
+.gwhois a::before {
+  margin-left: -2px;
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  vertical-align: middle;
+  background: var(--search) no-repeat left center / 11px;
+  opacity: .7;
+  content: "";
+}
+
+.gwhois:hover a::before, .gwhois a:focus::before {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+.banlisted {
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  background: var(--ban);
+}
+
 .netdbentry img {
   margin: 1px 0 0;
 }
