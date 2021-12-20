@@ -1453,6 +1453,7 @@ form[action="addressbook"] > p.buttons, #filter, #search, #visualid tr:last-chil
 
 #addressbook.headline h3 {
   padding-right: 44px;
+  contain: paint;
 }
 
 #addressbook.headline {
@@ -1460,7 +1461,7 @@ form[action="addressbook"] > p.buttons, #filter, #search, #visualid tr:last-chil
 }
 
 input#exporthosts {
-  margin-bottom: -2px;
+  margin: 7px 6px 0 4px;
   padding: 0 !important;
   width: 28px;
   height: 28px;
@@ -1485,17 +1486,13 @@ input#exporthosts:active {
 
 #export {
   padding-left: 3px;
-  height: 39px;
+  height: 44px;
   position: absolute;
   top: 2px;
+  top: 0;
   right: 1px;
   border-left: var(--border_inner);
-}
-
-@media screen and (min-width: 1500px) {
-  #export {
-    top: 0;
-  }
+  contain: paint;
 }
 
 #activefilter, .selected {
@@ -1522,7 +1519,7 @@ input#exporthosts:active {
 }
 
 #paginate {
-  margin: -4px 2px 0 0;
+  margin: -2px 7px -1px 0;
   position: relative;
   overflow: hidden;
   font-size: 0;
@@ -1637,7 +1634,7 @@ input#exporthosts:active {
     font-size: 9.5pt;
   }
   #paginate {
-    margin-top: -3px;
+    margin: -2px 6px -2px 2px;
   }
   #prev, #next, #current {
     font-size: 10pt;
@@ -1655,6 +1652,14 @@ input#exporthosts:active {
     padding: 2px 10px;
     display: inline-block;
     font-size: 10pt;
+  }
+  input#exporthosts {
+    margin-top: 6px;
+  }
+  .names a[href$=".i2p/"] {
+    max-width: 260px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 

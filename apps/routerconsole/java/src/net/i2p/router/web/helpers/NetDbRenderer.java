@@ -1002,6 +1002,10 @@ class NetDbRenderer {
         } else {
             buf.append("<b>" + _t("Router") + ":</b></th><th><code>").append(hash).append("</code></th><th>");
         }
+        Hash h = info.getHash();
+        if (_context.banlist().isBanlisted(h)) {
+            buf.append("<a class=\"banlisted\" href=\"/profiles?f=3\" title=\"").append(_t("Router is banlisted")).append("\">Banned</a> ");
+        }
         String tooltip = "\" title=\"" + _t("Show all routers with this capability in the NetDb") + "\"><span";
         String caps = DataHelper.stripHTML(info.getCapabilities())
             .replace("XO", "X")
@@ -1151,7 +1155,13 @@ class NetDbRenderer {
                             }
                             buf.append("\">").append(DataHelper.stripHTML(val)).append("</a>");
                         }
-                        buf.append("</span></span> ");
+                        buf.append("</span>");
+                        if (!DataHelper.stripHTML(val).equals("::") && !DataHelper.stripHTML(val).equals("127.0.0.1")) {
+                            buf.append(" <span class=\"gwhois\" title=\"").append(_t("Lookup via gwhois.org"))
+                               .append("\"><a href=\"https://gwhois.org/").append(DataHelper.stripHTML(val))
+                               .append("\" target=\"_blank\">gwhois</a></span>");
+                        }
+                        buf.append("</span> ");
                     } else if (name.contains("port")) {
                         buf.append("<span class=\"nowrap\"><span class=\"netdb_name\">")
                            .append(_t(DataHelper.stripHTML(name)))

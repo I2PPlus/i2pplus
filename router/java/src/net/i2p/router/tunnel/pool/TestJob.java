@@ -337,8 +337,8 @@ public class TestJob extends JobImpl {
         public String getName() { return "Timeout Tunnel Test"; }
 
         public void runJob() {
-            if (_log.shouldLog(Log.WARN))
-                _log.warn("Tunnel test [" + _id + "] timed out -> Found? " + _found);
+            //if (_log.shouldLog(Log.WARN))
+            //    _log.warn("Tunnel test [" + _id + "] timed out -> Found? " + _found);
             if (!_found) {
                 // don't clog up the SKM with old one-tag tagsets
                 SessionKeyManager skm;

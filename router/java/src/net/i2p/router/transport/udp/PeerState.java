@@ -307,7 +307,7 @@ public class PeerState {
     private static final int INIT_RTO = 1000;
     private static final int INIT_RTT = 0;
 //    private static final int MAX_RTO = 60*1000;
-    private static final int MAX_RTO = 45*1000;
+    private static final int MAX_RTO = 30*1000;
     /** how frequently do we want to send ACKs to a peer? */
     private static final int ACK_FREQUENCY = 150;
     private static final int CLOCK_SKEW_FUDGE = (ACK_FREQUENCY * 2) / 3;
@@ -327,7 +327,7 @@ public class PeerState {
     private static final int MAX_RESEND_ACKS_SMALL = MAX_RESEND_ACKS * 2 / 5;
 
 //    private static final long RESEND_ACK_TIMEOUT = 60*1000;
-    private static final long RESEND_ACK_TIMEOUT = 45*1000;
+    private static final long RESEND_ACK_TIMEOUT = 30*1000;
 
     /** if this many acks arrive out of order, fast rtx */
     private static final int FAST_RTX_ACKS = 3;
@@ -817,9 +817,9 @@ public class PeerState {
         if (_log.shouldInfo())
             _log.info("[" + _remotePeer.toBase64().substring(0,6) + "] Estimated bandwidth: " +
                       DataHelper.formatSize2Decimal((long) (bwe * 1000), false) + "bps \n* " +
-                      "Congestion, RTO: " + oldRto + " -> " + _rto + " Timer: " + oldTimer + " -> " + _rto +
-                      " Window: " + congestionAt + " -> " + _sendWindowBytes +
-                      " SST: " + oldsst + " -> " + _slowStartThreshold +
+                      "Congestion, RTO: " + oldRto + "ms -> " + _rto + "ms; Timer: " + oldTimer + "ms -> " + _rto +
+                      "ms; Window: " + congestionAt + " bytes -> " + _sendWindowBytes +
+                      " bytes; SST: " + oldsst + " -> " + _slowStartThreshold +
                       "; FastRetransmit? " + _fastRetransmit);
     }
 
@@ -870,7 +870,7 @@ public class PeerState {
                         iter.remove();
                         if (_log.shouldDebug())
                             _log.debug("Expired ACK [" + rack.id + "] sent " + (cutoff + RESEND_ACK_TIMEOUT - rack.time) +
-                                      "ms ago, now " + _currentACKsResend.size()  + " resend ACKs");
+                                      "ms ago -> now " + _currentACKsResend.size()  + " resend ACKs");
                     }
                 }
                 if (i > 1)
@@ -1478,7 +1478,7 @@ public class PeerState {
                     msg.timestamp("Expired in the active pool");
                     _transport.failed(state);
                     if (_log.shouldInfo())
-                        _log.info("Message expired: " + state + " to: " + this);
+                        _log.info("Message expired " + state + "\n* Target: " + this);
                 } else {
                     // it can not have an OutNetMessage if the source is the
                     // final after establishment message

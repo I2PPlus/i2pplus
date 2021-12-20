@@ -864,11 +864,10 @@ public class SybilRenderer {
             buf.append("<tr><th><b>" + _t("Router") + ":</b> <a href=\"netdb?r=").append(hash, 0, 6).append("\"><code>").append(hash).append("</code></a>");
         }
         buf.append("</th><th>");
-//        Hash h = info.getHash();
-//        if (_context.banlist().isBanlisted(h)) {
-//            buf.append("<a href=\"/profiles?f=3\" title=\"").append(_t("Router is banlisted"))
-//               .append("<img src=\"/themes/console/images/info/blocked.png\" width=\"16\" height=\"16\"></a>");
-//        }
+        Hash h = info.getHash();
+        if (_context.banlist().isBanlisted(h)) {
+            buf.append("<a class=\"banlisted\" href=\"/profiles?f=3\" title=\"").append(_t("Router is banlisted")).append("\">Banned</a> ");
+        }
         String tooltip = "\" title=\"" + _t("Show all routers with this capability in the NetDb") + "\"><span";
         String caps = DataHelper.stripHTML(info.getCapabilities())
            .replace("XO", "X")
@@ -929,26 +928,18 @@ public class SybilRenderer {
            distance = biLog2(dist);
            buf.append("<p><b>").append(_t("Hash Distance")).append(":</b> ").append(fmt.format(distance)).append("</p>\n");
         }
-        // added to header so no need here
-        //buf.append("<p><b>").append(_t("Version")).append(":</b> ").append(DataHelper.stripHTML(info.getVersion())).append("</p>\n");
-        //buf.append("<p><b>Caps:</b> ").append(DataHelper.stripHTML(info.getCapabilities())).append("</p>\n");
         String kr = info.getOption("netdb.knownRouters");
         if (kr != null) {
             buf.append("<p><b>").append(_t("Routers")).append(":</b> ").append(DataHelper.stripHTML(kr)).append("</p>\n");
-//        } else {
-//            buf.append("<p class=\"sybil_filler\"><b>").append(_t("Routers")).append(":</b> ").append(_t("n/a")).append("</p>\n");
         }
         String kls = info.getOption("netdb.knownLeaseSets");
         if (kls != null) {
             buf.append("<p class=\"sybilinfo_leasesets\"><b>").append(_t("LeaseSets")).append(":</b> ").append(DataHelper.stripHTML(kls)).append("</p>\n");
-//        } else {
-//            buf.append("<p class=\"sybilinfo_leasesets filler\"><b>").append(_t("LeaseSets")).append(":</b> ").append(_t("n/a")).append("</p>\n");
         }
         String fam = info.getOption("family");
         if (fam != null) {
             buf.append("<p><b>").append(_t("Family")).append(":</b> <span class=\"sybilinfo_familyname\">").append(DataHelper.escapeHTML(fam)).append("</span></p>\n");
         }
-//        buf.append("</div>\n<hr>\n<div class=\"sybilinfo_container\">\n");
         long now = _context.clock().now();
         if (!isUs) {
             PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(info.getHash());
@@ -980,29 +971,21 @@ public class SybilRenderer {
                     if (heard > 0) {
                         long age = Math.max(now - heard, 1);
                         buf.append("<p><b>").append(_t("Last lookup successful")).append(":</b> ").append(_t("{0} ago", DataHelper.formatDuration2(age))).append("</p>\n");
-                    //} else {
-                    //    buf.append("<p class=\"sybil_filler\"><b>").append(_t("Last lookup successful")).append(":</b> ").append(_t("n/a")).append("</p>\n");
                     }
                     heard = dbh.getLastLookupFailed();
                     if (heard > 0) {
                         long age = Math.max(now - heard, 1);
                         buf.append("<p><b>").append(_t("Last lookup failed")).append(":</b> ").append(_t("{0} ago", DataHelper.formatDuration2(age))).append("</p>\n");
-                    //} else {
-                    //    buf.append("<p class=\"sybil_filler\"><b>").append(_t("Last lookup failed")).append(":</b> ").append(_t("n/a")).append("</p>\n");
                     }
                     heard = dbh.getLastStoreSuccessful();
                     if (heard > 0) {
                         long age = Math.max(now - heard, 1);
                         buf.append("<p><b>").append(_t("Last store successful")).append(":</b> ").append(_t("{0} ago", DataHelper.formatDuration2(age))).append("</p>\n");
-                    //} else {
-                    //    buf.append("<p class=\"sybil_filler\"><b>").append(_t("Last store successful")).append(":</b> ").append(_t("n/a")).append("</p>\n");
                     }
                     heard = dbh.getLastStoreFailed();
                     if (heard > 0) {
                         long age = Math.max(now - heard, 1);
                         buf.append("<p><b>").append(_t("Last store failed")).append(":</b> ").append(_t("{0} ago", DataHelper.formatDuration2(age))).append("</p>\n");
-                    //} else {
-                    //    buf.append("<p class=\"sybil_filler\"><b>").append(_t("Last store failed")).append(":</b> ").append(_t("n/a")).append("</p>\n");
                     }
                 }
                 // any other profile stuff?

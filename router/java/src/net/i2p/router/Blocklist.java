@@ -1026,7 +1026,7 @@ public class Blocklist {
     private void banlist(Hash peer, byte[] ip) {
         // Temporary reason, until the job finishes
         String sip = Addresses.toString(ip);
-        String reason = " <b>➜</b> " + _x("IP banned by blocklist.txt") + " (" + sip + ")";
+        String reason = " <b>➜</b> " + _x("Blocklist IP ban") + " (" + sip + ")";
         if (sip != null && sip.startsWith("127.") || "0:0:0:0:0:0:0:1".equals(sip) ||
             sip.startsWith("192.168.") || sip.startsWith("10.") ||
             (ip != null && ip.length == 4 && (ip[0] * 0xff) == 172 && ip[1] >= 16 && ip[1] <= 31)) {
@@ -1120,7 +1120,7 @@ public class Blocklist {
                     }
                     if (match(ipint, toEntry(e.ip1, e.ip2))) {
                         try { br.close(); } catch (IOException ioe) {}
-                        String reason = " <b>➜</b> " + _x("IP banned by blocklist.txt");
+                        String reason = " <b>➜</b> " + _x("Blocklist IP ban");
                         // only one translate parameter for now
                         //for (int i = 0; i < 4; i++) {
                         //    reason = reason + (ip[i] & 0xff);
@@ -1129,7 +1129,7 @@ public class Blocklist {
                         //}
                         //reason = reason + " banned by " + BLOCKLIST_FILE_DEFAULT + " entry \"" + buf + "\"";
                         if (_log.shouldLog(Log.WARN))
-                            _log.warn("Banlisting " + peer + " (blocklist.txt)");
+                            _log.warn("Banlisting " + peer + " (Source: blocklist.txt)");
                         _context.banlist().banlistRouterForever(peer, reason, buf.toString());
                         return;
                     }

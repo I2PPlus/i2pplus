@@ -368,6 +368,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     public static boolean shouldExclude(RouterContext ctx, RouterInfo peer) {
         return shouldExclude(peer, getExcludeCaps(ctx));
     }
+
     /**
      *  @return non-null, possibly empty
      */

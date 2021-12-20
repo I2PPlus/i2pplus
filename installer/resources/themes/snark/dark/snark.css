@@ -1307,7 +1307,7 @@ td.snarkFileStatus {
 .active.seeding .uploaded {
   background: repeating-linear-gradient(90deg,#000,#000 5%,#141 5%,#141 10%);
   background-size: 200%;
-  animation: linear uploading .5s 4.5s reverse infinite;
+  animation: uploading .5s linear 4s 1 reverse;
 }
 
 @keyframes uploading {

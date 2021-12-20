@@ -656,7 +656,7 @@ input.new:active {
 
 input.reply {
   padding: 7px 11px 7px 28px;
-  background: var(--reply) no-repeat 8px center 14px, var(--btn);
+  background: var(--reply) no-repeat 8px center / 14px, var(--btn);
 }
 
 input.reply:hover {

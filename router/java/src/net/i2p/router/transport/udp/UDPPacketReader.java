@@ -652,7 +652,7 @@ class UDPPacketReader {
             buf.append("\n* Inbound Partial ACK of [");
             buf.append(getMessageId());
             buf.append("] Highest: ").append(highestReceived());
-            buf.append(" with ACKs for: [");
+            buf.append(" with ACKs for fragments [");
             int numFrags = fragmentCount();
             for (int i = 0; i < numFrags; i++) {
                 if (received(i))
