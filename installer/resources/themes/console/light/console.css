@@ -13396,6 +13396,11 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
     display: inline-block;
     vertical-align: middle;
   }
+  #tunnelPeerCount .routerid .flag img {
+    margin: 2px -2px 0 0 !important;
+    height: 15px !important;
+    border: none !important;
+  }
   #peers .flag img, #profiles .flag img {
     margin: 1px -2px 1px -2px !important;
     height: 15px !important;
