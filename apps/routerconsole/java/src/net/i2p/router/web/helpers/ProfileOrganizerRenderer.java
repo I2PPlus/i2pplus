@@ -225,10 +225,10 @@ class ProfileOrganizerRenderer {
                     if (speed > 1025) {
                         speed = speed / 1024;
                         buf.append("kilobytes\">");
-                        buf.append(speed).append("&#8239;K");
+                        buf.append(speed).append("&#8239;K/s");
                     } else {
                         buf.append("bytes\">");
-                        buf.append(speed).append("&#8239;B");
+                        buf.append(speed).append("&#8239;B/s");
                     }
                     if (bonus != 0 && bonus != 9999999) {
                         if (bonus > 0)
