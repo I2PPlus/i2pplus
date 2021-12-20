@@ -3894,6 +3894,7 @@ p.sybilinfo, p#debugmode, #config_family p.infohelp, p#profiles_overview, p#gath
 
 p#profiles_overview {
   margin-bottom: 13px;
+  background-image: url(../images/svg/profile.svg);
 }
 
 #profiles_overview + .widescroll {
