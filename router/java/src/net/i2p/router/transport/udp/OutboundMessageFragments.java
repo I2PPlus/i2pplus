@@ -90,7 +90,7 @@ class OutboundMessageFragments {
         _context.statManager().createRateStat("udp.sendPiggybackPartial", "Partial ACKs piggybacked on a data packet (time = message lifetime)", "Transport [UDP]", UDPTransport.RATES);
 //        _context.statManager().createRequiredRateStat("udp.packetsRetransmitted", "Lifetime (ms) of packets during retransmission", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.packetsRetransmitted", "Lifetime (ms) of packets during retransmission", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.peerPacketsRetransmitted", "Resent packets (lifetime) when a burst of packets is resent (period = packets transmitted, lifetime)", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.peerPacketsRetransmitted", "Resent packets during packet burst (period = packets transmitted, lifetime)", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.blockedRetransmissions", "Packets sent to peer retransmission blocked", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.sendCycleTime", "Time to cycle through all active messages", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.sendCycleTimeSlow", "Time to cycle through all active messages when slow", "Transport [UDP]", UDPTransport.RATES);
