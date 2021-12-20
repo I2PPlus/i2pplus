@@ -8144,27 +8144,23 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 
 #banlist li {
   margin: 3px 0 2px 5px !important;
-  padding: 6px 3px 2px 5px;
-  min-width: calc(100% - 15px);
+  padding: 3px 3px 3px 5px;
+  min-width: calc(100% - 13px);
   min-height: 34px;
   display: inline-block;
   position: relative;
   line-height: 120%;
   list-style: none;
   font-size: 95%;
-  border: 1px solid var(--border_inner);
-  border-radius: 2px;
-  box-shadow: var(--highlight), inset 0 0 1px 1px #ddf;
-  background: linear-gradient(180deg,rgba(255,255,255,.2), rgba(228,228,255,.2)), repeating-linear-gradient(135deg, rgba(252,252,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fff 4px) #fafaff;
+  box-shadow: 0 0 0 1px #9898b3, var(--highlight), inset 0 0 8px 3px rgba(232,232,255,.6);
+  background: linear-gradient(180deg,rgba(232,232,255,.5), rgba(228,228,255,.5)) #f8f8ff;
   -webkit-break-inside: avoid;
   break-inside: avoid;
   page-break-inside: avoid;
 }
 
 @media screen and (max-width: 1499px) {
-#banlist li {
-  padding-bottom: 0 !important;
-}
+  #banlist li {padding-bottom: 0 !important}
 }
 
 #config_peers #banlist li {
@@ -8188,7 +8184,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   border-left: 1px solid var(--border_inner);
   border-bottom: 1px solid var(--border_inner);
   border-radius: 0 0 0 2px;
-  box-shadow: var(--highlight), inset 0 0 1px 1px #ddf;
+  box-shadow: var(--highlight), inset 0 0 1px 1px #ffe;
   background: #fff;
   filter: none;
 }
@@ -8236,7 +8232,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 }
 
 #banlist li hr {
-  margin: 4px 4px 3px 0 !important;
+  margin: 3px 4px 3px 0 !important;
   background: linear-gradient(90deg, #7e7fb9 70%, rgba(0,0,0,0) 95%);
   opacity: .75;
 }
@@ -12722,12 +12718,12 @@ i {
   display: inline-block;
 }
 
-#profiles #banlist .routerid {
-  vertical-align: text-top;
+#profiles #banlist .flag img {
+  margin: 0 -4px 0 0 !important;
 }
 
-#profiles #banlist .flag img {
-  margin: 0 -4px 0 0;
+#banlist tt a {
+  margin-left: -3px;
 }
 
 #configstats .graphableStat td {
