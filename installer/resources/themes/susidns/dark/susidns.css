@@ -1263,6 +1263,12 @@ p.book {
   vertical-align: middle;
 }
 
+.names a[href$=".i2p/"] {
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 #host_list td:hover {
   box-shadow: inset 0 0 0 1px #930 !important;
   background: #000 !important;

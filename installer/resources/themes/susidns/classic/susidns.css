@@ -950,9 +950,13 @@ p.book {
   white-space: nowrap;
   padding-left: 5px;
 }
+
 #host_list .names a {
   width: 100%;
+  max-width: 260px;
   display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 #host_list td.checkbox {

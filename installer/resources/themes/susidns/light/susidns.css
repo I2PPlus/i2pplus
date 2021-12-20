@@ -914,6 +914,12 @@ tr:hover .destaddress {
   display: inline-block;
 }
 
+.names a[href$=".i2p/"] {
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 #host_list .checkbox {
   width: 1%;
   white-space: nowrap;
