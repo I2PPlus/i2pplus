@@ -3750,12 +3750,12 @@ public class I2PSnarkServlet extends BasicServlet {
                        .replaceAll(freedomb32, "torrfreedom.i2p")
                        .replaceAll(icu812b32, "tracker.icu812.i2p")
                        .replaceAll(lodikonb32, "tracker.lodikon.i2p")
-                       .replaceAll(lyokob32, "lyoko.i2p");
+                       .replaceAll(lyokob32, "lyoko.i2p")
                        .replaceAll(odiftb32, "opendiftracker.i2p")
                        .replaceAll(omitrackb32, "omitracker.i2p")
                        .replaceAll(otdgb32, "opentracker.dg2.i2p")
                        .replaceAll(skankb32, "opentracker.skank.i2p")
-                       .replaceAll(theblandb32, "tracker.thebland.i2p")
+                       .replaceAll(theblandb32, "tracker.thebland.i2p");
                 }
 
                 if (meta != null || !meta.isPrivate()) {
