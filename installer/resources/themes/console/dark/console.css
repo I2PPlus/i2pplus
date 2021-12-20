@@ -7485,6 +7485,7 @@ form[action="events"] {
 
 #profiles_overview {
   margin-bottom: 9px;
+  background-image: url(../images/svg/profile.svg) !important;
 }
 
 #capabilities_key a b, #capabilities_key span {
@@ -9463,7 +9464,7 @@ b.suboption {
 }
 
 #config_reseed #reseedurl:hover {
-  background: #002500 var(--link) no-repeat 10px center / 28px !important;
+  background: #002500 var(--link) no-repeat 16px center / 28px !important;
 }
 
 #config_reseed  #reseedzip {
