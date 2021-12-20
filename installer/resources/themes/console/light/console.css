@@ -7555,13 +7555,12 @@ h3.sybils {
 
 #sybilnav li:hover {
   box-shadow: 0 0 0 1px rgba(255,96,0,.5), var(--highlight);
-  background: #fff var(--eye_hover) no-repeat 6px center;
+  background: #fff var(--eye_hover) no-repeat 6px center / 16px;
 }
 
 #sybilnav li:active {
   box-shadow: 0 0 0 1px rgba(255,96,0,.5), var(--highlight), inset 3px 3px 3px #ccc;
-  background: #fff var(--eye_active) no-repeat 6px center;
-
+  background: #fff var(--eye_active) no-repeat 6px center / 16px;
 }
 
 #sybilnav li:hover a {
@@ -7659,6 +7658,10 @@ h3.sybils {
 .sybil_routerinfo th:first-child {
   white-space: nowrap;
   text-align: left;
+}
+
+.sybil_routerinfo th:last-child, .sybil_routerinfo th:last-child > * {
+  vertical-align: middle;
 }
 
 .sybil_routerinfo th:last-child {
@@ -7812,23 +7815,21 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 }
 
 .sybil_addresses table {
-  width: 100%;
   margin: 0;
+  width: 100%;
   border-top: 1px solid var(--border_inner) !important;
   border-bottom: 1px solid var(--border_inner) !important;
 }
 
 .sybil_addresses td:first-child {
+  padding-right: 9px;
   max-width: 155px;
   font-weight: 700;
-  padding-right: 9px;
 }
 
 .threatpoints + ul {
   padding-top: 4px;
   padding-bottom: 6px;
-/*  columns: 400px 4;
-  column-gap: 10px;*/
 }
 
 .threatpoints + ul li:first-child {
@@ -7845,18 +7846,18 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   display: inline-block;
   line-height: 120%;
   list-style: none;
+  -webkit-column-break-inside: avoid;
   break-inside: avoid;
   page-break-inside: avoid;
-  -webkit-column-break-inside: avoid;
 }
 
 .threatpoints + ul li a {
+  margin-left: 2px;
+  padding: 0 2px;
   white-space: nowrap;
   font-size: 8pt !important;
-  background: #eef;
-  margin-left: 2px;
   border-radius: 1px;
-  padding: 0 2px;
+  background: #eef;
 }
 
 .sybil_routerinfo + .threatpoints + ul + a[name] + table {
@@ -7907,7 +7908,8 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 }
 
 .threatpoints + ul + a[name] + .sybil_routerinfo th img {
-  margin-top: 1px;
+  margin-top: -1px !important;
+  margin-bottom: -1px !important;
 }
 
 .sybil_routerinfo hr {
@@ -7915,13 +7917,24 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 }
 
 .sybil_routerinfo .netdbheader {
+  margin-right: 0;
   padding: 3px;
   text-align: right;
-  margin-right: 0;
 }
 
 .sybil_routerinfo .netdb_header img[src^="/flags"] {
   margin: 0 5px 0 3px !important;
+}
+
+#netdb .sybil_routerinfo th code {
+  margin-top: 5px !important;
+  margin-bottom: 5px !important;
+}
+
+.sybil_routerinfo th:last-child b[style="float: right;"] {
+  margin-top: 2px;
+  font-size: 90%;
+  font-style: italic;
 }
 
 /* end sybils */
