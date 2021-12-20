@@ -4,6 +4,7 @@
 @import url(/themes/fonts/DroidSans.css);
 @import url(/themes/console/dark/optbox.css);
 @import url(/themes/console/dark/chromescroll.css);
+@import url(sliders.css);
 
 :root {
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
@@ -4482,6 +4483,17 @@ td.snarkTorrentPeerCount b:hover a[href*="?p="]:hover::after, td.snarkTorrentPee
   .torrentlink, .magnetlink {
     padding: 7px 5px 3px 3px !important;
   }
+  .snarkTorrents .snarkTorrentStatus, .snarkTorrents .snarkTrackerDetails {
+    padding: 0 !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    font-size: 0 !important;
+  }
+  .snarkTrackerDetails img {display: none}
+  .snarkTorrentOdd:not(.peerinfo) .snarkTorrentDownloaded .percentBarText,
+  .snarkTorrentEven:not(.peerinfo) .snarkTorrentDownloaded .percentBarText {
+    top: -16px;
+  }
 }
 
 @media screen and (max-width: 1199px) {
@@ -4524,17 +4536,6 @@ td.snarkTorrentPeerCount b:hover a[href*="?p="]:hover::after, td.snarkTorrentPee
 @media screen and (max-width: 1000px) {
   #closelog img::after {height: 8px}
   .canhide {display: none}
-  .snarkTorrents .snarkTorrentStatus, .snarkTorrents .snarkTrackerDetails {
-    padding: 0 !important;
-    width: 0 !important;
-    min-width: 0 !important;
-    font-size: 0 !important;
-  }
-  .snarkTrackerDetails img {display: none}
-  .snarkTorrentOdd:not(.peerinfo) .snarkTorrentDownloaded .percentBarText,
-  .snarkTorrentEven:not(.peerinfo) .snarkTorrentDownloaded .percentBarText {
-    top: -16px;
-  }
   #torrentDisplay {display: flex}
   #torrentDisplay label {
     min-width: 0;
@@ -4542,15 +4543,6 @@ td.snarkTorrentPeerCount b:hover a[href*="?p="]:hover::after, td.snarkTorrentPee
   }
   #torrentDisplay label:first-child, #torrentDisplay label[for="all"] {border-left: none !important}
   #torrentDisplay label:last-child {border-right: none !important}
-}
-
-@media screen and (max-width: 840px) {
-  .snarkNav.nav_main:not(:last-child), .snarkNav.nav_forum {
-    white-space: nowrap;
-    padding-left: 8px !important;
-    text-indent: -99999px;
-    width: 13px;
-  }
 }
 
 @media screen and (max-width: 950px) {
@@ -4565,6 +4557,15 @@ td.snarkTorrentPeerCount b:hover a[href*="?p="]:hover::after, td.snarkTorrentPee
     width: 16px;
     height: 16px;
     background-size: 14px, 100% !important;
+  }
+}
+
+@media screen and (max-width: 840px) {
+  .snarkNav.nav_main:not(:last-child), .snarkNav.nav_forum {
+    white-space: nowrap;
+    padding-left: 8px !important;
+    text-indent: -99999px;
+    width: 13px;
   }
 }
 
