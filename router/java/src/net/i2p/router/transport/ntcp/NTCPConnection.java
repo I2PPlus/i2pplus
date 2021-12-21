@@ -157,6 +157,7 @@ public class NTCPConnection implements Closeable {
 //    private static final int MAX_DATA_READ_BUFS = 16;
     private static final int MAX_DATA_READ_BUFS = 256;
     private static final ByteCache _dataReadBufs = ByteCache.getInstance(MAX_DATA_READ_BUFS, BUFFER_SIZE);
+
     private static final int INFO_PRIORITY = OutNetMessage.PRIORITY_MY_NETDB_STORE_LOW;
     private static final String FIXED_RI_VERSION = "0.9.12";
     private static final AtomicLong __connID = new AtomicLong();
@@ -1249,7 +1250,8 @@ public class NTCPConnection implements Closeable {
             }
         }
     }
-
+    }
+        
     /**
      * Connection must be established!
      *
@@ -1270,7 +1272,6 @@ public class NTCPConnection implements Closeable {
         if (_curReadState == null)
             throw new IllegalStateException("not established");
         _curReadState.receive(buf);
-        }
     }
 
     /**

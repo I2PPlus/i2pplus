@@ -209,6 +209,7 @@ class EventPumper implements Runnable {
         while (_alive && _selector.isOpen()) {
             try {
                 loopCount++;
+
                 try {
                     int count = _selector.select(SELECTOR_LOOP_DELAY);
                     if (count > 0) {
@@ -310,7 +311,6 @@ class EventPumper implements Runnable {
                                         _log.info("Failsafe write for " + con);
                                         setInterest(key, SelectionKey.OP_WRITE);
                                     failsafeWrites++;
-                                    }
                                 }
 
                                 final long expire;
