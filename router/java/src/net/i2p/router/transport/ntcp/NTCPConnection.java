@@ -1250,8 +1250,7 @@ public class NTCPConnection implements Closeable {
             }
         }
     }
-    }
-        
+
     /**
      * Connection must be established!
      *
@@ -1272,6 +1271,7 @@ public class NTCPConnection implements Closeable {
         if (_curReadState == null)
             throw new IllegalStateException("not established");
         _curReadState.receive(buf);
+        }
     }
 
     /**
