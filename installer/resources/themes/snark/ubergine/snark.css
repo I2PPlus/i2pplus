@@ -1273,7 +1273,7 @@ tr:hover .percentBarOuter, tr:hover .peerinfo .percentBarOuter {
   to {background-position: 20% center}
 }
 
-.active.seeding .uploaded {
+.active .uploaded {
   background: repeating-linear-gradient(90deg,#000,#000 5%,#707 5%,#707 10%);
   background-size: 200%;
   animation: uploading .5s linear 4s 1 reverse;
@@ -1290,12 +1290,12 @@ tr:hover .uploaded {
   top: 1px;
   left: 1px;
   z-index: 1;
-  background: rgba(192,0,96,.6);
+  background: rgba(144,0,144,.6);
   box-shadow: var(--shadow_inset);
   border: none;
 }
 
-.active.seeding .txBarInner {
+.active .txBarInner {
   background: linear-gradient(180deg, rgba(192,64,0,.8), rgba(240,80,0,.8));
 }
 
@@ -1357,6 +1357,21 @@ tr.active:hover .percentBarInner, tr.active:hover .peerinfo .percentBarInner {
 
 .peerinfo .percentBarText {
   color: #c19e91;
+}
+
+.peerSeed img {
+  opacity: .7;
+  transform: scale(1);
+}
+
+.active .peerSeed img {
+  opacity: 1;
+  animation: scale .15s ease 3s 1 forwards;
+}
+
+@keyframes scale {
+  0,100% {transform: scale(1)}
+  50% {transform: scale(1.2)}
 }
 
 .percentBarText, .percentBarOuter {
