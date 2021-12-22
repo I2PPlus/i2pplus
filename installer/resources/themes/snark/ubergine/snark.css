@@ -4205,8 +4205,6 @@ td.snarkTorrentPeerCount b:hover a[href*="?p="]:hover::after, td.snarkTorrentPee
   border-color: transparent #900 transparent transparent !important;
 }
 
-
-
 .active .snarkTorrentStatus {
   font-style: italic;
 }
