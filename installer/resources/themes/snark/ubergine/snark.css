@@ -4092,7 +4092,7 @@ td.snarkTorrentPeerCount b .left, td.snarkTorrentPeerCount b .right {
   min-width: 31px !important;
   display: inline-block;
   text-align: center;
-  color: #fdf;
+  color: #eee;
   border-radius: 1px;
   box-shadow: 0 0 0 1px rgba(16,0,16,.5), inset 2px 2px 2px rgba(0,0,0,.3);
   background: linear-gradient(180deg,rgba(32,0,32,.3), rgba(16,0,16,.3));
@@ -4185,7 +4185,7 @@ td.snarkTorrentPeerCount b:hover a[href*="?p="]:hover::after, td.snarkTorrentPee
 .inactive.downloading .snarkTorrentPeerCount b,
 .active.starting.processing .snarkTorrentPeerCount b {
   color: #101;
-  background: #bb0;
+  background: #fc0;
 }
 
 .inactive.downloading .snarkTorrentPeerCount b, .snarkTorrentPeerCount b .right, .snarkTorrentPeerCount b .left {
@@ -4194,7 +4194,7 @@ td.snarkTorrentPeerCount b:hover a[href*="?p="]:hover::after, td.snarkTorrentPee
 
 .inactive.downloading .snarkTorrentPeerCount b::before,
 .active.starting.processing .snarkTorrentPeerCount b::before {
-  border-color: transparent #bb0 transparent transparent;
+  border-color: transparent #fc0 transparent transparent;
 }
 
 .stopped.complete .snarkTorrentPeerCount b {
@@ -4568,6 +4568,22 @@ input[type=radio]:checked::before {
 
 .snarkTorrentRateDown, .snarkTorrentRateUp, .snarkTorrentUploaded {
   text-align: center !important;
+}
+
+.peerinfo .snarkTorrentRateDown .left, .peerinfo .snarkTorrentRateDown .right,
+.peerinfo .snarkTorrentRateUp .left, .peerinfo .snarkTorrentRateUp .right {
+  opacity: .5;
+  text-shadow: 0 0 1px #000;
+}
+
+.peerinfo .snarkTorrentRateDown.ten .left, .peerinfo .snarkTorrentRateDown.ten .right,
+.peerinfo .snarkTorrentRateUp.ten .left, .peerinfo .snarkTorrentRateUp.ten .right {
+  opacity: .75;
+}
+
+.snarkTorrentRateDown.hundred .left, .snarkTorrentRateDown.hundred .right,
+.snarkTorrentRateUp.hundred .left, .snarkTorrentRateUp.hundred .right {
+  opacity: 1;
 }
 
 tfoot .snarkTorrentRateDown:not(:empty)::before, tfoot .snarkTorrentDownloaded:not(:empty)::before,
