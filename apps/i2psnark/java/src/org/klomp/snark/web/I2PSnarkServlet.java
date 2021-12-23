@@ -1036,7 +1036,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 out.write("<th class=\"snarkTorrentRateDown\" title=\"");
                 out.write(_t("Total download speed") + "\">");
                 if (stats[2] > 0) {
-                    out.write(formatSize(stats[2]).replaceAll("iB", "") + "ps");
+                    out.write(formatSize(stats[2]).replaceAll("iB", "") + "/s");
                 }
                 out.write("</th>\n");
                 out.write("<th class=\"snarkTorrentUploaded\" align=\"right\"  title=\"");
@@ -1056,7 +1056,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     }
                 }
                 if (stats[3] > 0 && isUploading) {
-                    out.write(formatSize(stats[3]).replaceAll("iB", "") + "ps");
+                    out.write(formatSize(stats[3]).replaceAll("iB", "") + "/s");
                 }
                 out.write("</th>\n");
                 out.write("<th class=\"snarkTorrentAction\">");
@@ -2232,7 +2232,12 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("</div>");
             }
         out.write("</td>\n");
-        out.write("<td align=\"right\" class=\"snarkTorrentRateDown\">");
+        out.write("<td align=\"right\" class=\"snarkTorrentRateDown");
+        if (downBps >= 102400)
+            out.write(" hundred");
+        else if (downBps >= 10240)
+            out.write(" ten");
+        out.write("\">");
         // we may only be uploading to peers, so hide when downrate <= 0
         if (isRunning && needed > 0 && downBps > 0 && curPeers > 0) {
             out.write("<span class=\"right\">");
@@ -2241,7 +2246,7 @@ public class I2PSnarkServlet extends BasicServlet {
                                          .replace("K", "</span><span class=\"left\">K")
                                          .replace("M", "</span><span class=\"left\">M")
                                          .replace("G", "</span><span class=\"left\">G")
-                                         + "ps</span>");
+                                         + "/s</span>");
         }
         out.write("</td>\n");
         out.write("<td align=\"right\" class=\"snarkTorrentUploaded\">");
@@ -2293,7 +2298,12 @@ public class I2PSnarkServlet extends BasicServlet {
             }
         }
         out.write("</td>\n");
-        out.write("<td align=\"right\" class=\"snarkTorrentRateUp\">");
+        out.write("<td align=\"right\" class=\"snarkTorrentRateUp");
+        if (upBps >= 102400)
+            out.write(" hundred");
+        else if (upBps >= 10240)
+            out.write(" ten");
+        out.write("\">");
         if (isRunning && isValid && upBps > 0 && curPeers > 0) {
             out.write("<span class=\"right\">");
             out.write(formatSize(upBps).replaceAll("iB","")
@@ -2301,7 +2311,7 @@ public class I2PSnarkServlet extends BasicServlet {
                                         .replace("K", "</span><span class=\"left\">K")
                                         .replace("M", "</span><span class=\"left\">M")
                                         .replace("G", "</span><span class=\"left\">G")
-                                        + "ps</span>");
+                                        + "/s</span>");
         }
         out.write("</td>\n");
         out.write("<td align=\"center\" class=\"snarkTorrentAction\">");
@@ -2425,7 +2435,12 @@ public class I2PSnarkServlet extends BasicServlet {
                     //out.write("??");
                 }
                 out.write("</td>\n");
-                out.write("<td align=\"right\" class=\"snarkTorrentRateDown\">");
+                out.write("<td align=\"right\" class=\"snarkTorrentRateDown");
+                if (peer.getDownloadRate() >= 102400)
+                    out.write(" hundred");
+                else if (peer.getDownloadRate() >= 10240)
+                    out.write(" ten");
+                out.write("\">");
                 if (needed > 0) {
                     if (peer.isInteresting() && !peer.isChoked() && peer.getDownloadRate() > 0) {
                         out.write("<span class=\"unchoked\"><span class=\"right\">");
@@ -2434,7 +2449,7 @@ public class I2PSnarkServlet extends BasicServlet {
                                                                      .replace("K", "</span><span class=\"left\">K")
                                                                      .replace("M", "</span><span class=\"left\">M")
                                                                      .replace("G", "</span><span class=\"left\">G")
-                                                                     + "ps</span></span>");
+                                                                     + "/s</span></span>");
                     } else if (peer.isInteresting() && !peer.isChoked()) {
                         out.write("<span class=\"unchoked idle\"></span>");
                     } else {
@@ -2450,7 +2465,7 @@ public class I2PSnarkServlet extends BasicServlet {
                                                                      .replace("K", "</span><span class=\"left\">K")
                                                                      .replace("M", "</span><span class=\"left\">M")
                                                                      .replace("G", "</span><span class=\"left\">G")
-                                                                     + "ps</span></span>");
+                                                                     + "/s</span></span>");
                     }
                 } else if (!isValid) {
                     //if (peer supports metadata extension) {
@@ -2460,14 +2475,19 @@ public class I2PSnarkServlet extends BasicServlet {
                                                                      .replace("K", "</span><span class=\"left\">K")
                                                                      .replace("M", "</span><span class=\"left\">M")
                                                                      .replace("G", "</span><span class=\"left\">G")
-                                                                     + "ps</span></span>");
+                                                                     + "/s</span></span>");
                     //} else {
                     //}
                 }
                 out.write("</td>\n");
                 out.write("<td class=\"snarkTorrentUploaded\">");
                 out.write("</td>\n");
-                out.write("<td align=\"right\" class=\"snarkTorrentRateUp\">");
+                out.write("<td align=\"right\" class=\"snarkTorrentRateUp");
+                if (peer.getUploadRate() >= 102400)
+                    out.write(" hundred");
+                else if (peer.getUploadRate() >= 10240)
+                    out.write(" ten");
+                out.write("\">");
                 if (isValid && pct < 100.0) {
                     if (peer.isInterested() && !peer.isChoking() && peer.getUploadRate() > 0) {
                         out.write("<span class=\"unchoked\"><span class=\"right\">");
@@ -2476,7 +2496,7 @@ public class I2PSnarkServlet extends BasicServlet {
                                                                    .replace("K", "</span><span class=\"left\">K")
                                                                    .replace("M", "</span><span class=\"left\">M")
                                                                    .replace("G", "</span><span class=\"left\">G")
-                                                                   + "ps</span></span>");
+                                                                   + "/s</span></span>");
                     } else if (peer.isInterested() && !peer.isChoking()) {
                         out.write("<span class=\"unchoked idle\" title=\"");
                         out.write(_t("Peer is interested but currently idle"));
@@ -2494,7 +2514,7 @@ public class I2PSnarkServlet extends BasicServlet {
                                                                    .replace("K", "</span><span class=\"left\">K")
                                                                    .replace("M", "</span><span class=\"left\">M")
                                                                    .replace("G", "</span><span class=\"left\">G")
-                                                                   + "ps</span></span>");
+                                                                   + "/s</span></span>");
                     }
                 }
                 out.write("</td>\n");
