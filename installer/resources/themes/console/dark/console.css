@@ -6902,6 +6902,34 @@ h3#iptransport a:hover::after, h3#advancedconfig a:hover::after, #reseedsetup a:
   background: var(--settings) no-repeat left center / 12px;
 }
 
+#config_bandwidth .h3navlinks {
+  margin: -10px 0 -11px;
+  padding: 11px 0 10px;
+  display: inline-block;
+  border-left: var(--border);
+}
+
+#config_bandwidth .h3navlinks a {
+  margin-bottom: -10px;
+  padding-top: 11px;
+  width: 24px;
+  color: transparent !important;
+  background: var(--settings) no-repeat center center / 24px;
+  background: url(../images/svg/networkconfig.svg) no-repeat calc(100% - 8px) center / 22px;
+  text-shadow: none;
+  border: none;
+  contain: paint;
+}
+
+#config_bandwidth .h3navlinks a:hover {
+  filter: drop-shadow(0 0 1px #f60) drop-shadow(0 0 2px #f60);
+}
+
+#config_bandwidth .h3navlinks a:active {
+  filter: none;
+  transform: scale(.9);
+}
+
 #webappconfiguration a:hover::before, #webappconfiguration a:focus::before,
 #i2pclientconfig a:hover::before, #i2pclientconfig a:focus::before,
 #pluginmanage a:hover::before, #pluginmanage a:focus::before {
