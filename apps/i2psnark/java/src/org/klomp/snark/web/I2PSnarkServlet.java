@@ -2233,9 +2233,9 @@ public class I2PSnarkServlet extends BasicServlet {
             }
         out.write("</td>\n");
         out.write("<td align=\"right\" class=\"snarkTorrentRateDown");
-        if (downBps >= 102400)
+        if (downBps >= 100000)
             out.write(" hundred");
-        else if (downBps >= 10240)
+        else if (downBps >= 10000)
             out.write(" ten");
         out.write("\">");
         // we may only be uploading to peers, so hide when downrate <= 0
@@ -2299,9 +2299,9 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         out.write("</td>\n");
         out.write("<td align=\"right\" class=\"snarkTorrentRateUp");
-        if (upBps >= 102400)
+        if (upBps >= 100000)
             out.write(" hundred");
-        else if (upBps >= 10240)
+        else if (upBps >= 10000)
             out.write(" ten");
         out.write("\">");
         if (isRunning && isValid && upBps > 0 && curPeers > 0) {
@@ -2436,9 +2436,9 @@ public class I2PSnarkServlet extends BasicServlet {
                 }
                 out.write("</td>\n");
                 out.write("<td align=\"right\" class=\"snarkTorrentRateDown");
-                if (peer.getDownloadRate() >= 102400)
+                if (peer.getDownloadRate() >= 100000)
                     out.write(" hundred");
-                else if (peer.getDownloadRate() >= 10240)
+                else if (peer.getDownloadRate() >= 10000)
                     out.write(" ten");
                 out.write("\">");
                 if (needed > 0) {
@@ -2483,9 +2483,9 @@ public class I2PSnarkServlet extends BasicServlet {
                 out.write("<td class=\"snarkTorrentUploaded\">");
                 out.write("</td>\n");
                 out.write("<td align=\"right\" class=\"snarkTorrentRateUp");
-                if (peer.getUploadRate() >= 102400)
+                if (peer.getUploadRate() >= 100000)
                     out.write(" hundred");
-                else if (peer.getUploadRate() >= 10240)
+                else if (peer.getUploadRate() >= 10000)
                     out.write(" ten");
                 out.write("\">");
                 if (isValid && pct < 100.0) {
