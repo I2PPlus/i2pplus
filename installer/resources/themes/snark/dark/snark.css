@@ -5021,3 +5021,18 @@ td.snarkTorrentPeerCount b:hover a[href*="?p="]:hover::after, td.snarkTorrentPee
     margin-top: -11px !important;
   }
 }
+
+/* hide torrent status tags */
+.snarkTorrentStatus, th.snarkTorrentStatus:empty  {
+  padding: 0 !important;
+  width: 0 !important;
+  max-width: 0 !important;
+  min-width: 0 !important;
+  overflow: hidden;
+  font-size: 0 !important;
+  color: transparent !important;
+}
+#snarkTorrents .snarkTorrentStatus b {
+  display: none !important;
+  min-width: 0 !important;
+}
