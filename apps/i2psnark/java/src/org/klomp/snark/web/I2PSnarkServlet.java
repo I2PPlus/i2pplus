@@ -653,7 +653,7 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write(toThemeImg("status", tx, showSort ? _t("Sort by {0}", tx) : tx));
         if (showSort)
             out.write("</a></span>");
-        out.write("</th>\n<th class=\"snarkTorrentStatus\">");
+//        out.write("</th>\n<th class=\"snarkTorrentStatus\">");
         out.write("</th>\n<th class=\"snarkTorrentPeerCount\">");
         if (_manager.util().connected() && !snarks.isEmpty()) {
             boolean hasPeers = false;
@@ -934,7 +934,7 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("<tfoot id=\"snarkFoot");
             if (_manager.util().isConnecting() || !_manager.util().connected())
                 out.write("\" class=\"initializing");
-            out.write("\">\n<tr>\n<th id=\"snarkTorrentTotals\" align=\"left\" colspan=\"12\"></th></tr></tfoot>");
+            out.write("\">\n<tr>\n<th id=\"snarkTorrentTotals\" align=\"left\" colspan=\"11\"></th></tr></tfoot>");
         } else /** if (snarks.size() > 1) */ {
 
             // Add a pagenav to bottom of table if we have 50+ torrents per page
@@ -944,7 +944,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 writePageNav(out, req, start, pageSize, total, noThinsp);
                 out.write("</div></td></tr>\n</tbody>\n");
             }
-            out.write("<tfoot id=\"snarkFoot\">\n<tr class=\"volatile\">\n<th id=\"snarkTorrentTotals\" align=\"left\" colspan=\"6\">");
+            out.write("<tfoot id=\"snarkFoot\">\n<tr class=\"volatile\">\n<th id=\"snarkTorrentTotals\" align=\"left\" colspan=\"5\">");
             out.write("<span id=\"totals\"><span class=\"canhide\">");
             out.write(_t("Totals"));
             out.write(":&nbsp;</span>");
@@ -1989,27 +1989,31 @@ public class I2PSnarkServlet extends BasicServlet {
         if (snark.isChecking()) {
             (new DecimalFormat("0.00%")).format(snark.getCheckingProgress());
             statusString = toSVG("processing", "", _t("Checking")) + "</td>" +
+                                 "<td class=\"snarkTorrentPeerCount\"><b><span class=\"right\">" +
+                                 curPeers + "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span>";
+/*
                                  "<td class=\"snarkTorrentStatus\" colspan=\"2\">" +
                                  "<div class=\"percentBarOuter filecheck\" style=\"max-width: 60px; height: 8px !important;\" title=\"" +
                                  _t("Checking file integrity") + "\">" + "<div class=\"percentBarInner\" style=\"height: 8px !important; width: " +
                                  (new DecimalFormat("0%")).format(snark.getCheckingProgress()) + "\">" +
                                  "<div class=\"percentBarText\"></div></div></div>";
+*/
             snarkStatus = "active starting processing";
         } else if (snark.isAllocating()) {
             statusString = toSVG("processing", "", _t("Allocating")) + "</td>" +
-                           "<td class=\"snarkTorrentStatus\"><b>" + _t("Allocating") +
-                           "</b></td><td class=\"snarkTorrentPeerCount\"><b>";
+//                           "<td class=\"snarkTorrentStatus\"><b>" + _t("Allocating") + "</b></td>\n" +
+                           "<td class=\"snarkTorrentPeerCount\"><b>";
             snarkStatus = "active starting processing";
         } else if (err != null && isRunning && curPeers == 0) {
             statusString = toSVG("error", "", err) + "</td>\n" +
-                                 "<td class=\"snarkTorrentStatus\"><b>" + _t("Net Error") +
-                                 "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b><span class=\"right\">" +
+//                                 "<td class=\"snarkTorrentStatus\"><b>" + _t("Net Error") + "</b></td>\n" +
+                                 "<td class=\"snarkTorrentPeerCount\"><b><span class=\"right\">" +
                                  curPeers + "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span>";
             snarkStatus = "inactive downloading incomplete neterror";
         } else if (snark.isStarting()) {
             statusString = toSVG("stalled", "", _t("Starting")) + "</td>\n" +
-                           "<td class=\"snarkTorrentStatus\"><b class=\"alwaysShow\">" + _t("Starting") +
-                           "&hellip;</b></td>\n<td class=\"snarkTorrentPeerCount\"><b>";
+//                           "<td class=\"snarkTorrentStatus\"><b class=\"alwaysShow\">" + _t("Starting") + "&hellip;</b></td>\n" + "
+                           "<td class=\"snarkTorrentPeerCount\"><b>";
             snarkStatus = "active starting";
         } else if (remaining == 0 || needed == 0) {  // < 0 means no meta size yet
             // partial complete or seeding
@@ -2041,8 +2045,8 @@ public class I2PSnarkServlet extends BasicServlet {
                 }
                 if (curPeers > 0 && !showPeers) {
                     statusString = toSVG(img, "", tooltip) + "</td>\n" +
-                                         "<td class=\"snarkTorrentStatus\"><b>" + txt +
-                                         "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b>" +
+//                                         "<td class=\"snarkTorrentStatus\"><b>" + txt + "</b></td>\n" + "
+                                         "<td class=\"snarkTorrentPeerCount\"><b>" +
                                          "<a href=\"" +
                                          uri + getQueryString(req, b64, null, null) + "\"><span class=\"right\">" +
                                          curPeers + "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span></a>";
@@ -2053,8 +2057,8 @@ public class I2PSnarkServlet extends BasicServlet {
                     }
                 } else if (curPeers > 0) {
                     statusString = toSVG(img, "", tooltip) + "</td>\n" +
-                                         "<td class=\"snarkTorrentStatus\"><b>" + txt +
-                                         "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b><a href=\"" + uri + "\" title=\"" +
+//                                         "<td class=\"snarkTorrentStatus\"><b>" + txt + "</b></td>\n" +
+                                         "<td class=\"snarkTorrentPeerCount\"><b><a href=\"" + uri + "\" title=\"" +
                                          _t("Hide Peers") + "\">" + "<span class=\"right\">" + curPeers + "</span>" + thinsp(noThinsp) +
                                          "<span class=\"left\">" + knownPeers + "</span></a>";
                     if (upBps > 0) {
@@ -2064,8 +2068,8 @@ public class I2PSnarkServlet extends BasicServlet {
                     }
                 } else {
                     statusString = toSVG(img, "", tooltip) + "</td>\n" +
-                               "<td class=\"snarkTorrentStatus\"><b>" + txt +
-                               "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b><span class=\"right\">" + curPeers +
+//                               "<td class=\"snarkTorrentStatus\"><b>" + txt + "</b></td>\n" +
+                               "<td class=\"snarkTorrentPeerCount\"><b><span class=\"right\">" + curPeers +
                                "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span>";
                     if (upBps > 0 || curPeers > 0) {
                         snarkStatus = "active seeding complete";
@@ -2075,54 +2079,56 @@ public class I2PSnarkServlet extends BasicServlet {
                 }
             } else {
                 statusString = toSVG("complete", "", _t("Complete")) + "</td>\n" +
-                                     "<td class=\"snarkTorrentStatus\"><b class=\"alwaysShow\">" +
-                                     _t("Complete") + "</b></td><td class=\"snarkTorrentPeerCount\"><b>‒";
+//                                     "<td class=\"snarkTorrentStatus\"><b class=\"alwaysShow\">" + _t("Complete") + "</b></td>\n" +
+                                     "<td class=\"snarkTorrentPeerCount\"><b>‒";
                 snarkStatus = "inactive complete stopped zero";
             }
         } else {
             if (isRunning && curPeers > 0 && downBps > 0 && !showPeers) {
                 statusString = toSVG("downloading", "", _t("OK") +
                                      " (" + _t("Downloading from {0} of {1} peers in swarm", curPeers, knownPeers) + ")") + "</td>\n" +
-                                     "<td class=\"snarkTorrentStatus\"><b>" + _t("OK") +
-                                     "</b></td><td class=\"snarkTorrentPeerCount\"><b><a href=\"" +
+//                                     "<td class=\"snarkTorrentStatus\"><b>" + _t("OK") + "</b></td>\n" +
+                                     "<td class=\"snarkTorrentPeerCount\"><b><a href=\"" +
                                      uri + getQueryString(req, b64, null, null) + "\"><span class=\"right\">" +
                                      curPeers + "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span></a>";
                 snarkStatus = "active downloading incomplete";
             } else if (isRunning && curPeers > 0 && downBps > 0) {
-                statusString = toSVG("downloading", "", _t("OK") + ", " + ngettext("Downloading from {0} peer", "Downloading from {0} peers", curPeers)) +
-                                     "</td>\n<td class=\"snarkTorrentStatus\"><b>" + _t("OK") + "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b><a href=\"" +
+                statusString = toSVG("downloading", "", _t("OK") + ", " + ngettext("Downloading from {0} peer", "Downloading from {0} peers", curPeers)) + "</td>\n" +
+//                                     "<td class=\"snarkTorrentStatus\"><b>" + _t("OK") + "</b></td>\n" +
+                                     "<td class=\"snarkTorrentPeerCount\"><b><a href=\"" +
                                      uri + "\" title=\"" + _t("Hide Peers") + "\"><span class=\"right\">" + curPeers + "</span>" + thinsp(noThinsp) +
                                      "<span class=\"left\">" + knownPeers + "</span></a>";
                 snarkStatus = "active downloading incomplete";
             } else if (isRunning && curPeers > 0 && !showPeers) {
-                statusString = toSVG("stalled", "", _t("Stalled") + " (" + ngettext("Connected to {0} peer", "Connected to {0} peers", curPeers) + ")") +
-                                     "</td>\n<td class=\"snarkTorrentStatus\"><b>" + _t("Stalled") + "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b><a href=\"" +
+                statusString = toSVG("stalled", "", _t("Stalled") + " (" + ngettext("Connected to {0} peer", "Connected to {0} peers", curPeers) + ")") + "</td>\n" +
+//                                     "<td class=\"snarkTorrentStatus\"><b>" + _t("Stalled") + "</b></td>\n" +
+                                     "<td class=\"snarkTorrentPeerCount\"><b><a href=\"" +
                                      uri + getQueryString(req, b64, null, null) + "\"><span class=\"right\">" +
                                      curPeers + "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span></a>";
                 snarkStatus = "inactive downloading incomplete";
             } else if (isRunning && curPeers > 0) {
                 statusString = toSVG("stalled", "", _t("Stalled") +
                                      " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")") + "</td>\n" +
-                                     "<td class=\"snarkTorrentStatus\"><b>" + _t("Stalled") +
-                                     "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b><a href=\"" + uri + "\" title=\"" + _t("Hide Peers") +
+//                                     "<td class=\"snarkTorrentStatus\"><b>" + _t("Stalled") + "</b></td>\n" +
+                                     "<td class=\"snarkTorrentPeerCount\"><b><a href=\"" + uri + "\" title=\"" + _t("Hide Peers") +
                                      "\"><span class=\"right\">" + curPeers + "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span></a>";
                 snarkStatus = "inactive downloading incomplete";
             } else if (isRunning && knownPeers > 0) {
                 statusString = toSVG("nopeers", "", _t("No Peers") +
                                      " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")") + "</td>\n" +
-                                     "<td class=\"snarkTorrentStatus\"><b>" + _t("No Peers") +
-                                     "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b><span class=\"right\">0</span>" +
+//                                     "<td class=\"snarkTorrentStatus\"><b>" + _t("No Peers") + "</b></td>\n" +
+                                     "<td class=\"snarkTorrentPeerCount\"><b><span class=\"right\">0</span>" +
                                      thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span>";
                 snarkStatus = "inactive downloading incomplete nopeers";
             } else if (isRunning) {
                 statusString = toSVG("nopeers", "", _t("No Peers")) + "</td>\n" +
-                                     "<td class=\"snarkTorrentStatus\"><b class=\"alwaysShow\">" + _t("No Peers") +
-                                     "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b>‒";
+//                                     "<td class=\"snarkTorrentStatus\"><b class=\"alwaysShow\">" + _t("No Peers") + "</b></td>\n" +
+                                     "<td class=\"snarkTorrentPeerCount\"><b>‒";
                 snarkStatus = "inactive downloading incomplete nopeers zero";
             } else {
                 statusString = toSVG("stopped", "", _t("Stopped")) + "</td>\n" +
-                                     "<td class=\"snarkTorrentStatus\"><b class=\"alwaysShow\">" + _t("Stopped") +
-                                     "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b>‒";
+//                                     "<td class=\"snarkTorrentStatus\"><b class=\"alwaysShow\">" + _t("Stopped") + "</b></td>\n" +
+                                     "<td class=\"snarkTorrentPeerCount\"><b>‒";
                 snarkStatus = "inactive incomplete stopped zero";
             }
         }
