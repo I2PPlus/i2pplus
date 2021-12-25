@@ -1357,6 +1357,38 @@ td.snarkFileStatus {
   background: repeating-linear-gradient(135deg, rgba(0,16,0,.8) 1px, rgba(0,16,0,.8) 5px, rgba(0,64,0,.8) 6px, rgba(0,64,0,.8) 11px);
 }
 
+.peerSeed img {
+  font-size: 0;
+  opacity: .7;
+  transform: scale(1);
+}
+
+.active .peerSeed img {
+  opacity: 1;
+  animation: scale .2s linear 3s 2 forwards;
+}
+
+@keyframes scale {
+  0,100% {transform: scale(1)}
+  50% {transform: scale(1.3)}
+}
+
+.peerinfo .snarkTorrentRateDown .left, .peerinfo .snarkTorrentRateDown .right,
+.peerinfo .snarkTorrentRateUp .left, .peerinfo .snarkTorrentRateUp .right {
+  opacity: .5;
+  text-shadow: 0 0 1px #000;
+}
+
+.peerinfo .snarkTorrentRateDown.ten .left, .peerinfo .snarkTorrentRateDown.ten .right,
+.peerinfo .snarkTorrentRateUp.ten .left, .peerinfo .snarkTorrentRateUp.ten .right {
+  opacity: .75;
+}
+
+.snarkTorrentRateDown.hundred .left, .snarkTorrentRateDown.hundred .right,
+.snarkTorrentRateUp.hundred .left, .snarkTorrentRateUp.hundred .right {
+  opacity: 1;
+}
+
 .percentBarText, .percentBarOuter {
   width: 110px;
   display: inline-block;
@@ -5020,19 +5052,4 @@ td.snarkTorrentPeerCount b:hover a[href*="?p="]:hover::after, td.snarkTorrentPee
   .iframed #snarkInfo + #snarkFiles {
     margin-top: -11px !important;
   }
-}
-
-/* hide torrent status tags */
-.snarkTorrentStatus, th.snarkTorrentStatus:empty  {
-  padding: 0 !important;
-  width: 0 !important;
-  max-width: 0 !important;
-  min-width: 0 !important;
-  overflow: hidden;
-  font-size: 0 !important;
-  color: transparent !important;
-}
-#snarkTorrents .snarkTorrentStatus b {
-  display: none !important;
-  min-width: 0 !important;
 }
