@@ -2372,7 +2372,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     continue;
                 out.write("<tr class=\"peerinfo " + snarkStatus + " volatile\">\n<td class=\"snarkGraphicStatus\" title=\"");
                 out.write(_t("Peer attached to swarm"));
-                out.write("\"></td><td class=\"peerdata\" colspan=\"5\">");
+                out.write("\"></td><td class=\"peerdata\" colspan=\"4\">");
                 PeerID pid = peer.getPeerID();
                 String ch = pid != null ? pid.toString() : "????";
                 if (ch.startsWith("WebSeed@")) {
