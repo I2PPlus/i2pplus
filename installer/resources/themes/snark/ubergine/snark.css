@@ -1177,6 +1177,14 @@ tr:hover a, tr a:hover, tr:hover td.snarkTorrentPeerCount {
   padding-top: 4px;
 }
 
+.magnetLabel {
+  display: inline-block;
+  vertical-align: middle;
+  font-style: italic;
+  color: #aaa;
+  -webkit-text-stroke: 1px rgba(160,160,160,.3);
+}
+
 tr:hover .snarkTorrentName a:hover, tr:hover .snarkFileName a:hover, tr:active .ParentDir a {
   border-radius: 2px 15px 15px 2px;
   background: linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,.2) 70%);
@@ -4303,7 +4311,7 @@ th.snarkTorrentPeerCount img {
 
 .clientid {
   margin-left: -3px;
-  padding: 3px 4px;
+  padding: 4px;
   max-width: 50px;
   min-width: 50px;
   display: inline-block;
@@ -4313,6 +4321,9 @@ th.snarkTorrentPeerCount img {
   white-space: nowrap;
   text-align: center;
   font-size: 80%;
+  color: rgba(240,240,240,.8);
+  text-shadow: 0 1px 1px #101;
+  -webkit-text-stroke: 1px rgba(192,192,192,.3);
   border-radius: 0 3px 3px 0;
   background: var(--badge);
 }
@@ -6011,6 +6022,12 @@ td.snarkTorrentAction input[type=submit] {
   }
   .snarkTorrentName a {
     max-width: none;
+  }
+  .magnetLabel {
+    padding: 2px 6px;
+    border-radius: 3px;
+    box-shadow: var(--highlight);
+    background: #303;
   }
   .snarkTorrentUploaded {
     padding-left: 8px;
