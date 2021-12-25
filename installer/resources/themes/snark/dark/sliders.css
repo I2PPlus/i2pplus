@@ -13,12 +13,16 @@
   appearance: none;
 }
 
+.configOption input[type=checkbox]:not(:checked), #commentsToggle input[type=checkbox]:not(:checked) {
+  background: linear-gradient(180deg,#600,#800) !important;
+}
+
 .configOption input[type=checkbox]:not(:checked):active, #commentsToggle input[type=checkbox]:not(:checked):active {
   background: linear-gradient(180deg,#060,#080) !important;
 }
 
 .configOption input[type=checkbox]:checked:active, #commentsToggle input[type=checkbox]:checked:active {
-  background: linear-gradient(180deg,#600,#800) !important;
+  background: linear-gradient(180deg,#800,#a00) !important;
 }
 
 .configOption input[type=checkbox]:hover, .configOption input[type=checkbox]:focus,
