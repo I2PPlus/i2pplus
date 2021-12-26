@@ -1034,11 +1034,12 @@ th.snarkFileSize {
   position: relative;
   z-index: 5;
   font-weight: 700;
-  text-shadow: 0 1px 1px #fff;
+  color: var(--ink_lighter);
+  text-shadow: 0 1px 1px rgba(255,255,255,.8);
 }
 
 tr:hover .txBarText {
-  color: var(--ink_dark);
+  color: var(--ink_light);
 }
 
 .snarkTorrentOdd.active .percentBarOuter, .snarkTorrentEven.active .percentBarOuter {
@@ -1074,14 +1075,14 @@ tr:hover .txBarText {
   display: inline-block;
   max-width: 84px;
   width: 84px;
-  line-height: 1.2;
-  color: #808099;
+  line-height: 1.3;
+  color: var(--ink_lighter);
   text-align: center;
   font-weight: 700;
   border-radius: 15px;
   border: 1px solid #ccd;
-  box-shadow: inset 0 0 0 1px #e8e8ff;
-  background: linear-gradient(180deg,#f8f8ff,#e8e8ff);
+  box-shadow: var(--highlight), inset 0 0 1px 2px #e6e6ff;
+  background: radial-gradient(at center bottom, #ddf, rgba(0,0,0,0) 70%), linear-gradient(180deg,#f8f8ff,#ddf);
 }
 
 @supports not (-moz-appearance: none) {
@@ -1098,10 +1099,11 @@ tr:hover .txBarText {
 }
 
 tr:hover .percentBarComplete {
-  color: var(--ink);
+  color: var(--ink_light);
   border: 1px solid #bbc;
   box-shadow: inset 0 0 0 1px #f8f8ff;
-  background: linear-gradient(180deg,#fff,#e2e2ff);
+  box-shadow: var(--highlight), inset 0 0 2px 2px #f2f2ff;
+  background: radial-gradient(at center bottom, #fff, rgba(0,0,0,0) 70%), linear-gradient(180deg,#fff,#dadaff);
 }
 
 .percentBarText, .percentBarOuter {
