@@ -110,7 +110,7 @@ class SummaryRenderer {
     private static final String PROP_FONT_LEGEND = "routerconsole.graphFont.legend";
     private static final String PROP_FONT_TITLE = "routerconsole.graphFont.title";
     private static final int SIZE_MONO = 10;
-    private static final int SIZE_LEGEND = 10;
+    private static final int SIZE_LEGEND = 11;
     private static final int SIZE_TITLE = 12;
     private static final long[] RATES = new long[] { 60*1000, 60*60*1000 };
     // dotted line
@@ -317,7 +317,8 @@ class SummaryRenderer {
 
 
             String ssmall = _context.getProperty(PROP_FONT_MONO, DEFAULT_FONT_NAME);
-            String slegend = _context.getProperty(PROP_FONT_LEGEND, DEFAULT_LEGEND_FONT_NAME);
+//            String slegend = _context.getProperty(PROP_FONT_LEGEND, DEFAULT_LEGEND_FONT_NAME);
+            String slegend = _context.getProperty(PROP_FONT_TITLE, DEFAULT_TITLE_FONT_NAME);
             String stitle = _context.getProperty(PROP_FONT_TITLE, DEFAULT_TITLE_FONT_NAME);
             Font small = new Font(ssmall, Font.PLAIN, smallSize);
             Font legnd = new Font(slegend, Font.PLAIN, legendSize);
@@ -467,15 +468,15 @@ class SummaryRenderer {
                 }
             }
             if (!hideLegend) {
-                Variable var = new Variable.AVERAGE();
-                def.datasource("avg", plotName, var);
-                def.gprint("avg", _t("Avg") + ": %.2f%s");
-                var = new Variable.MAX();
+                Variable var = new Variable.MAX();
                 def.datasource("max", plotName, var);
-                def.gprint("max", "  " + _t("Max") + ": %.2f%S");
+                def.gprint("max", " " + _t("Max") + ": %.2f%S");
                 var = new Variable.MIN();
                 def.datasource("min", plotName, var);
                 def.gprint("min", "  " + _t("Min") + ": %.2f%S");
+                var = new Variable.AVERAGE();
+                def.datasource("avg", plotName, var);
+                def.gprint("avg", _t("Avg") + ": %.2f%s");
                 var = new Variable.LAST();
                 def.datasource("last", plotName, var);
                 def.gprint("last", "  " + _t("Now") + ": %.2f%S\\l");
@@ -508,15 +509,15 @@ class SummaryRenderer {
                 else
                     def.line(plotName2, LINE_COLOR, descr2 + "\\l", linewidth);
                 if (!hideLegend) {
-                    Variable var = new Variable.AVERAGE();
-                    def.datasource("avg2", plotName2, var);
-                    def.gprint("avg2", _t("Avg") + ": %.2f%s");
-                    var = new Variable.MAX();
+                    Variable var = new Variable.MAX();
                     def.datasource("max2", plotName2, var);
-                    def.gprint("max2", "  " + _t("Max") + ": %.2f%S");
+                    def.gprint("max2", " " + _t("Max") + ": %.2f%S");
                     var = new Variable.MIN();
                     def.datasource("min2", plotName, var);
                     def.gprint("min2", "  " + _t("Min") + ": %.2f%S");
+                    var = new Variable.AVERAGE();
+                    def.datasource("avg2", plotName2, var);
+                    def.gprint("avg2", _t("Avg") + ": %.2f%s");
                     var = new Variable.LAST();
                     def.datasource("last2", plotName2, var);
                     def.gprint("last2", "  " + _t("Now") + ": %.2f%S\\l");
