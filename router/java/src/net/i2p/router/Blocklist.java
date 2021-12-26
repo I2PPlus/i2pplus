@@ -1107,6 +1107,7 @@ public class Blocklist {
         for (Iterator<byte[]> iter = ips.iterator(); iter.hasNext(); ) {
             byte ip[] = iter.next();
             int ipint = toInt(ip);
+            String sip = Addresses.toString(ip);
             BufferedReader br = null;
             try {
                 br = new BufferedReader(new InputStreamReader(
@@ -1120,7 +1121,7 @@ public class Blocklist {
                     }
                     if (match(ipint, toEntry(e.ip1, e.ip2))) {
                         try { br.close(); } catch (IOException ioe) {}
-                        String reason = " <b>➜</b> " + _x("Blocklist IP ban");
+                        String reason = " <b>➜</b> " + _x("Blocklist IP ban") + " (" + sip + ")";
                         // only one translate parameter for now
                         //for (int i = 0; i < 4; i++) {
                         //    reason = reason + (ip[i] & 0xff);
