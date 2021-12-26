@@ -37,7 +37,8 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
     private static final int FLAGS_FINAL_TAGS = Packet.FLAG_CLOSE |
                                               Packet.FLAG_RESET |
                                               Packet.FLAG_ECHO;
-    private static final int INITIAL_TAGS_TO_SEND = 32;
+//    private static final int INITIAL_TAGS_TO_SEND = 32;
+    private static final int INITIAL_TAGS_TO_SEND = 40;
     private static final int MIN_TAG_THRESHOLD = 20;
     private static final int TAG_WINDOW_FACTOR = 5;
     private static final int FINAL_TAGS_TO_SEND = 4;

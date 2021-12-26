@@ -209,6 +209,7 @@ class EventPumper implements Runnable {
         while (_alive && _selector.isOpen()) {
             try {
                 loopCount++;
+
                 try {
                     int count = _selector.select(SELECTOR_LOOP_DELAY);
                     if (count > 0) {
@@ -301,15 +302,15 @@ class EventPumper implements Runnable {
                                 }
 
                                 synchronized(con.getWriteLock()) {
-                                if ( (!con.isWriteBufEmpty()) &&
-                                     ((key.interestOps() & SelectionKey.OP_WRITE) == 0) ) {
-                                    // the data queued to be sent has already passed through
-                                    // the bw limiter and really just wants to get shoved
-                                    // out the door asap.
-                                    if (_log.shouldLog(Log.INFO))
-                                        _log.info("Failsafe write for " + con);
+                                    if ((!con.isWriteBufEmpty()) &&
+                                        ((key.interestOps() & SelectionKey.OP_WRITE) == 0)) {
+                                        // the data queued to be sent has already passed through
+                                        // the bw limiter and really just wants to get shoved
+                                        // out the door asap.
+                                        if (_log.shouldLog(Log.INFO))
+                                            _log.info("Failsafe write for " + con);
                                         setInterest(key, SelectionKey.OP_WRITE);
-                                    failsafeWrites++;
+                                        failsafeWrites++;
                                     }
                                 }
 
