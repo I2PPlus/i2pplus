@@ -469,13 +469,16 @@ class SummaryRenderer {
             if (!hideLegend) {
                 Variable var = new Variable.AVERAGE();
                 def.datasource("avg", plotName, var);
-                def.gprint("avg", "   " + _t("Avg") + ": %.2f%s");
+                def.gprint("avg", _t("Avg") + ": %.2f%s");
                 var = new Variable.MAX();
                 def.datasource("max", plotName, var);
-                def.gprint("max", ' ' + _t("Max") + ": %.2f%S");
+                def.gprint("max", "  " + _t("Max") + ": %.2f%S");
+                var = new Variable.MIN();
+                def.datasource("min", plotName, var);
+                def.gprint("min", "  " + _t("Min") + ": %.2f%S");
                 var = new Variable.LAST();
                 def.datasource("last", plotName, var);
-                def.gprint("last", ' ' + _t("Now") + ": %.2f%S\\l");
+                def.gprint("last", "  " + _t("Now") + ": %.2f%S\\l");
             }
             String plotName2 = null;
             if (lsnr2 != null) {
@@ -507,13 +510,16 @@ class SummaryRenderer {
                 if (!hideLegend) {
                     Variable var = new Variable.AVERAGE();
                     def.datasource("avg2", plotName2, var);
-                    def.gprint("avg2", "   " + _t("Avg") + ": %.2f%s");
+                    def.gprint("avg2", _t("Avg") + ": %.2f%s");
                     var = new Variable.MAX();
                     def.datasource("max2", plotName2, var);
-                    def.gprint("max2", ' ' + _t("Max") + ": %.2f%S");
+                    def.gprint("max2", "  " + _t("Max") + ": %.2f%S");
+                    var = new Variable.MIN();
+                    def.datasource("min2", plotName, var);
+                    def.gprint("min2", "  " + _t("Min") + ": %.2f%S");
                     var = new Variable.LAST();
                     def.datasource("last2", plotName2, var);
-                    def.gprint("last2", ' ' + _t("Now") + ": %.2f%S\\l");
+                    def.gprint("last2", "  " + _t("Now") + ": %.2f%S\\l");
                 }
             }
             SimpleDateFormat sdf = new SimpleDateFormat("dd MMM HH:mm");
