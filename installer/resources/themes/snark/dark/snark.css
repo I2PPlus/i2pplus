@@ -996,7 +996,6 @@ th.headerdownloaded {
 td {
   vertical-align: middle;
   font-size: 9pt;
-  color: #ee9 !important;
 }
 
 #configs td:first-child, .addtorrentsection td:first-child, .newtorrentsection td:first-child,
@@ -1080,7 +1079,6 @@ tr:not(.peerinfo) .snarkTorrentUploaded:empty::after {
   text-align: center;
   white-space: nowrap;
   font-weight: 700;
-  color: #ee9 !important;
 }
 
 .snarkTorrentUploaded {
@@ -1122,10 +1120,6 @@ tr.peerinfo:hover .percentBarText {
 
 .snarkTorrentOdd, .snarkTorrentEven {
   background: var(--tr) !important;
-}
-
-.snarkTorrents tr:hover td, .snarkDirInfo tr:hover td {
-  color: #ee9 !important;
 }
 
 .snarkDirInfo tr:hover .snarkFileStatus img {
@@ -1232,7 +1226,6 @@ td.snarkFileStatus {
 .snarkTorrents .snarkTorrentNoneLoaded td, .snarkTorrents .snarkTorrentNoneLoaded:hover td {
   padding: 10px !important;
   text-align: center !important;
-  color: #ee9 !important;
   background: transparent !important;
 }
 
@@ -1750,7 +1743,7 @@ input[type=submit]:active, a.control:active {
   color: #ee9 !important;
   text-shadow: none !important;
   border: 1px solid #f60;
-  box-shadow: var(--highlight), inset 3px 3px 3px 2px #310;
+  box-shadow: var(--btn_shadow_active);
   background: #f60;
 }
 
@@ -1804,20 +1797,20 @@ input[type=text]:hover, input.r:hover {
 }
 
 input[type=text]:focus, textarea:focus, input.r:focus, textarea[name="i2cpOpts"]:focus, input[name="nofilter_dataDir"]:focus,  textarea[name="nofilter_newComment"]:focus {
-  background: #000;
   color: #ee9;
   border: 1px solid #373;
   box-shadow: inset 0 0 3px 3px #000, 0 0 0 1px rgba(255,96,0,.3);
+  background: #000;
   transition: ease box-shadow .1s;
 }
 
 textarea[name="i2cpOpts"], input[name="nofilter_dataDir"] {
-  cursor: text;
   margin: 3px 0;
-  height: 24px;
   padding: 3px;
+  height: 24px;
   resize: none;
   overflow: hidden;
+  cursor: text;
 }
 
 input[name="nofilter_dataDir"] {
@@ -2126,17 +2119,16 @@ img:hover {
 
 #trackerselect tr:first-child td {
   font-weight: 700;
-  color: #ee9 !important;
 }
 
 #trackerselect td {
   padding: 5px;
   text-align: center;
-  color: #bb7 !important;
+  color: #bb7;
 }
 
 #trackerselect tr:nth-child(n+2):hover td {
-  color: #ee9 !important;
+  color: #ee9;
   background: #030;
 }
 
@@ -2420,10 +2412,6 @@ img:hover {
   margin-top: 9px;
 }
 
-.newtorrentsection form, .configsection form, .addtorrentsection form {
-  color: #ee9 !important;
-}
-
 .configsection table {
   color: #ffb;
 }
@@ -2458,7 +2446,6 @@ code {
 .routerdown {
   padding: 15px;
   font-size: 120%;
-  color: #ee9;
   text-shadow: 0 0 1px #000;
   border-bottom: var(--border);
   background: repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px),
