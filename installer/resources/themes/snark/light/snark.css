@@ -42,8 +42,8 @@ body {
 }
 
 body.iframed {
-  margin: 6px 1px 0 !important;
-  background: transparent !important;
+  margin: 6px 1px 0;
+  background: none;
 }
 
 /* preload top navigation mouseovers */
@@ -69,41 +69,15 @@ body::before {
   will-change: transform;
 }
 
-/* mitigate header/column resize on refresh when multiple snark tabs open */
-
 th img, td img, #closelog, #expand, #shrink, .pagenavcontrols img {
-  font-size: 0 !important;
   line-height: 0 !important;
+  font-size: 0 !important;
   overflow: hidden;
-}
-
-.snarkTorrents th img::before, th.snarkGraphicStatus::before, td.snarkGraphicStatus img::before,
-#closelog img::after, #closelog img::after, #expand img::after, #shrink img::after,
-td.snarkTrackerDetails img::before, td.snarkTorrentDetails img::before {
-  display: inline-block;
-  vertical-align: middle !important;
-  content: "";
-}
-
-th.snarkGraphicStatus::before {
-  min-height: 28px;
-}
-
-.snarkTorrents th img::before {
-  min-width: 28px;
 }
 
 .snarkTorrents img {
   display: inline-block;
   vertical-align: middle;
-}
-
-th.snarkGraphicStatus img::before {
-  width: 24px !important;
-}
-
-td.snarkGraphicStatus img::before {
-  width: 23px !important;
 }
 
 th.snarkTorrentPeerCount {
@@ -142,28 +116,12 @@ td.snarkTorrentPeerCount {
   text-align: right;
 }
 
-td.snarkTrackerDetails img::before, td.snarkTorrentDetails img::before {
-  width: 16px;
-}
-
-#closelog img::after, #expand img::after, #shrink img::after {
-  height: 11px;
-}
-
-/* end header/column resize mitigation */
-
 b {
   color: var(--ink_light);
 }
 
 * {
   outline: none !important;
-}
-
-::-moz-selection {
-  background: #27377f !important;
-  color: #fff;
-  text-shadow: none;
 }
 
 ::selection {
@@ -1166,6 +1124,22 @@ tr:hover .percentBarComplete {
   text-shadow: 0 1px 1px rgba(255,255,255,.8);
   opacity: 0;
   transition: ease opacity .1s;
+}
+
+.peerSeed img {
+  font-size: 0;
+  opacity: .7;
+  transform: scale(1);
+}
+
+.active .peerSeed img {
+  opacity: 1;
+  animation: scale .2s linear 3s 2 forwards;
+}
+
+@keyframes scale {
+  0,100% {transform: scale(1)}
+  50% {transform: scale(1.3)}
 }
 
 /* alternative download bar popup bar text just for our downloads in .snarkTorrents */
