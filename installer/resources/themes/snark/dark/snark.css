@@ -10,6 +10,7 @@
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
   --nav_hover: linear-gradient(180deg,#730,#620 50%,#410 50%,#000);
+ --btn: linear-gradient(180deg,#001000,#000 5%,#000 95%,#001000);
   --btnAction: linear-gradient(180deg,#030,#020 50%,#010 50%);
   --btnAction_hover: var(--nav_hover);
   --btn_shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
@@ -262,7 +263,6 @@ label, th img, .newtorrentsection, #closeLog, #pagenav {
   color: #69f;
   box-shadow: var(--highlight), inset 0 0 0 2px #020;
   border-bottom: var(--border);
-  contain: paint;
 }
 
 #screenlog, #screenlog.expanded, #screenlog.collapsed {
@@ -338,7 +338,7 @@ label, th img, .newtorrentsection, #closeLog, #pagenav {
 }
 
 #closelog img, #expand img, #shrink img {
-  margin: -6px -5px 4px 5px;
+  margin: -5px -5px 4px 5px;
   padding: 4px;
   width: 11px;
   border: var(--border);
@@ -1710,7 +1710,7 @@ input[type=submit], input.disabled:hover, a.control {
   box-shadow: var(--btn_shadow);
   border: 1px solid #000;
   border-radius: 2px;
-  background: linear-gradient(180deg,#001000,#000 5%,#000 95%,#001000);
+  background: var(--btn);
   filter: none;
 }
 
@@ -1856,7 +1856,7 @@ select {
   box-shadow: var(--btn_shadow);
   border: 1px solid #000;
   border-radius: 2px;
-  background: var(--dropdown) no-repeat right 10px center, linear-gradient(180deg,#001000,#000 5%,#000 95%,#001000) !important;
+  background: var(--dropdown) no-repeat right 10px center, var(--btn) !important;
   background-size: 10px, 100% !important;
   cursor: pointer;
   -moz-appearance: none;
@@ -1893,7 +1893,7 @@ select[disabled], select[disabled]:hover {
   color: #494 !important;
   border: none;
   box-shadow: var(--btn_shadow);
-  background: var(--dropdown) no-repeat right 10px center, linear-gradient(180deg,#001000,#000 5%,#000 95%,#001000) !important;
+  background: var(--dropdown) no-repeat right 10px center, var(--btn) !important;
   background-size: 10px, 100% !important;
   opacity: .7;
   cursor: not-allowed;
@@ -3938,10 +3938,10 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
 }
 
 #completion:hover #metainfo {
+  display: inline-block !important;
   position: absolute;
   top: 28px;
   left: -120px;
-  display: inline-block !important;
 }
 
 #completion #metainfo img {
