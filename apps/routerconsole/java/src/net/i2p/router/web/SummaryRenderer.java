@@ -476,7 +476,7 @@ class SummaryRenderer {
                 def.gprint("min", "  " + _t("Min") + ": %.2f%S");
                 var = new Variable.AVERAGE();
                 def.datasource("avg", plotName, var);
-                def.gprint("avg", _t("Avg") + ": %.2f%s");
+                def.gprint("avg", "  " + _t("Avg") + ": %.2f%s");
                 var = new Variable.LAST();
                 def.datasource("last", plotName, var);
                 def.gprint("last", "  " + _t("Now") + ": %.2f%S\\l");
@@ -517,7 +517,7 @@ class SummaryRenderer {
                     def.gprint("min2", "  " + _t("Min") + ": %.2f%S");
                     var = new Variable.AVERAGE();
                     def.datasource("avg2", plotName2, var);
-                    def.gprint("avg2", _t("Avg") + ": %.2f%s");
+                    def.gprint("avg2", "  " + _t("Avg") + ": %.2f%s");
                     var = new Variable.LAST();
                     def.datasource("last2", plotName2, var);
                     def.gprint("last2", "  " + _t("Now") + ": %.2f%S\\l");
@@ -539,7 +539,7 @@ class SummaryRenderer {
                                 legend = _t("Restart") + ' ' + sdf.format(new Date(started)) + " - " + event.getValue() + "\\l";
                                 def.vrule(started / 1000, RESTART_BAR_COLOR_DARK, legend, 1.0f);
                             } else {
-                                legend = _t("Restart") + ' ' + sdf.format(new Date(started)) + " [" + event.getValue() + "]\\l";
+                                legend = _t("Restart") + ' ' + sdf.format(new Date(started)) + "  [" + event.getValue() + "]\\l";
                                 def.vrule(started / 1000, RESTART_BAR_COLOR_DARK, legend, 1.0f);
                             }
                         } else {
@@ -548,7 +548,7 @@ class SummaryRenderer {
                                 legend = _t("Restart") + ' ' + sdf.format(new Date(started)) + " - " + event.getValue() + "\\l";
                                 def.vrule(started / 1000, RESTART_BAR_COLOR, legend, 2.0f);
                             } else {
-                                legend = _t("Restart") + ' ' + sdf.format(new Date(started)) + " [" + event.getValue() + "]\\l";
+                                legend = _t("Restart") + ' ' + sdf.format(new Date(started)) + "  [" + event.getValue() + "]\\l";
                                 def.vrule(started / 1000, RESTART_BAR_COLOR, legend, 2.0f);
                             }
                         }
