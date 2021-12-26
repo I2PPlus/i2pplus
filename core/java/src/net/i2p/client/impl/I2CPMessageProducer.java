@@ -287,7 +287,7 @@ class I2CPMessageProducer {
      *  imposed by the router for the leaseset, tags, encryption,
      *  and fixed-size tunnel messages.
      *
-     *  @param expires if > 0, an expiration date
+     *  @param expires if $gt; 0, an expiration date
      *  @return true if we should send the message, false to drop it
      */
     private boolean updateBps(int len, long expires) {

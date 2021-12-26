@@ -46,7 +46,7 @@ public class I2PSource implements Source {
 
     /**
      *  @param port I2CP port or I2PSession.PORT_ANY
-     *  @param portocol REPLIABLE, RAW, or BOTH
+     *  @param protocol REPLIABLE, RAW, or BOTH
      *  @since 0.9.53
      */
     public I2PSource(I2PSession sess, Protocol protocol, int port) {
@@ -56,7 +56,7 @@ public class I2PSource implements Source {
         diss = (protocol != Protocol.RAW) ? new I2PDatagramDissector() : null;
         log = I2PAppContext.getGlobalContext().logManager().getLog(getClass());
     }
-    
+
     public void setSink(Sink sink) {
         this.sink = sink;
     }
@@ -69,7 +69,7 @@ public class I2PSource implements Source {
         if (protocol != Protocol.REPLIABLE)
             sess.addMuxedSessionListener(l, I2PSession.PROTO_DATAGRAM_RAW, port);
     }
-    
+
     protected class Listener implements I2PSessionMuxedListener {
 
         public void messageAvailable(I2PSession sess, int id, long size) {
@@ -113,6 +113,6 @@ public class I2PSource implements Source {
         public void errorOccurred(I2PSession arg0, String arg1, Throwable arg2) {
             log.error(arg1, arg2);
         }
-        
+
     }
 }

@@ -452,12 +452,12 @@ public class I2PSnarkUtil {
     public File get(String url, boolean rewrite) { return get(url, rewrite, 0); }
 
     /**
-     * @param retries if > 0, set timeout to a few seconds
+     * @param retries if &gt; 0, set timeout to a few seconds
      */
     public File get(String url, int retries) { return get(url, true, retries); }
 
     /**
-     * @param retries if > 0, set timeout to a few seconds
+     * @param retries if &gt; 0, set timeout to a few seconds
      */
     public File get(String url, boolean rewrite, int retries) {
         if (_log.shouldLog(Log.DEBUG))
