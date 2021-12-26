@@ -5,7 +5,7 @@
 /* Java Port Copyright (c) 1998 by Aaron M. Renn (arenn@urbanophile.com)
 /*
 /* This program is free software; you can redistribute it and/or modify
-/* it under the terms of the GNU Library General Public License as published 
+/* it under the terms of the GNU Library General Public License as published
 /* by  the Free Software Foundation; either version 2 of the License or
 /* (at your option) any later version.
 /*
@@ -15,8 +15,8 @@
 /* GNU Library General Public License for more details.
 /*
 /* You should have received a copy of the GNU Library General Public License
-/* along with this program; see the file COPYING.LIB.  If not, write to 
-/* the Free Software Foundation Inc., 59 Temple Place - Suite 330, 
+/* along with this program; see the file COPYING.LIB.  If not, write to
+/* the Free Software Foundation Inc., 59 Temple Place - Suite 330,
 /* Boston, MA  02111-1307 USA
 /**************************************************************************/
 
@@ -54,7 +54,7 @@ import java.text.MessageFormat;
   * invalid option encountered is stored in the instance variable optopt
   * which can be retrieved using the getOptopt() method.  To suppress
   * the printing of error messages for this or any other error, set
-  * the value of the opterr instance variable to false using the 
+  * the value of the opterr instance variable to false using the
   * setOpterr() method.
   * <p>
   * Between calls to getopt(), the instance variable optind is used to
@@ -64,7 +64,7 @@ import java.text.MessageFormat;
   * method.
   * <p>
   * Note that this object expects command line options to be passed in the
-  * traditional Unix manner.  That is, proceeded by a '-' character. 
+  * traditional Unix manner.  That is, proceeded by a '-' character.
   * Multiple options can follow the '-'.  For example "-abc" is equivalent
   * to "-a -b -c".  If an option takes a required argument, the value
   * of the argument can immediately follow the option character or be
@@ -79,13 +79,12 @@ import java.text.MessageFormat;
   * of "foo".
   * <p>
   * The user can stop getopt() from scanning any further into a command line
-  * by using the special argument "--" by itself.  For example: 
+  * by using the special argument "--" by itself.  For example:
   * "-a -- -d" would return an option character of 'a', then return -1
   * The "--" is discarded and "-d" is pointed to by optind as the first
   * non-option argv element.
   * <p>
   * Here is a basic example of using Getopt:
-  * <p>
   * <pre>
   * Getopt g = new Getopt("testprog", argv, "ab:c::d");
   * //
@@ -103,7 +102,7 @@ import java.text.MessageFormat;
   *          case 'b':
   *          case 'c':
   *            arg = g.getOptarg();
-  *            System.out.print("You picked " + (char)c + 
+  *            System.out.print("You picked " + (char)c +
   *                             " with an argument of " +
   *                             ((arg != null) ? arg : "null") + "\n");
   *            break;
@@ -144,15 +143,15 @@ import java.text.MessageFormat;
   * method permutes the argument to make it appear to the caller that all
   * options were at the beginning of the command line, and all non-options
   * were at the end.  For example, calling getopt() with command line args
-  * of "-a foo bar -d" returns options 'a' and 'd', then sets optind to 
+  * of "-a foo bar -d" returns options 'a' and 'd', then sets optind to
   * point to "foo".  The program would read the last two argv elements as
-  * "foo" and "bar", just as if the user had typed "-a -d foo bar". 
-  * <p> 
+  * "foo" and "bar", just as if the user had typed "-a -d foo bar".
+  * <p>
   * The user can force getopt() to stop scanning the command line with
   * the special argument "--" by itself.  Any elements occuring before the
   * "--" are scanned and permuted as normal.  Any elements after the "--"
-  * are returned as is as non-option argv elements.  For example, 
-  * "foo -a -- bar -d" would return  option 'a' then -1.  optind would point 
+  * are returned as is as non-option argv elements.  For example,
+  * "foo -a -- bar -d" would return  option 'a' then -1.  optind would point
   * to "foo", "bar" and "-d" as the non-option argv elements.  The "--"
   * is discarded by getopt().
   * <p>
@@ -174,13 +173,13 @@ import java.text.MessageFormat;
   * then point to "bar" as the first non-option argv element.  The "--"
   * is discarded.
   * <p>
-  * The POSIX/traditional behavior is enabled by either setting the 
+  * The POSIX/traditional behavior is enabled by either setting the
   * property "gnu.posixly_correct" or by putting a '+' sign as the first
-  * character of the option string.  The difference between the two 
+  * character of the option string.  The difference between the two
   * methods is that setting the gnu.posixly_correct property also forces
   * certain error messages to be displayed in POSIX format.  To enable
   * the "return in order" functionality, put a '-' as the first character
-  * of the option string.  Note that after determining the proper 
+  * of the option string.  Note that after determining the proper
   * behavior, Getopt strips this leading '+' or '-', meaning that a ':'
   * placed as the second character after one of those two will still cause
   * getopt() to return a ':' instead of a '?' if a required option
@@ -190,9 +189,9 @@ import java.text.MessageFormat;
   * supports long options.  These are preceeded by a "--" sequence and
   * can be as long as desired.  Long options provide a more user-friendly
   * way of entering command line options.  For example, in addition to a
-  * "-h" for help, a program could support also "--help".  
+  * "-h" for help, a program could support also "--help".
   * <p>
-  * Like short options, long options can also take a required or non-required 
+  * Like short options, long options can also take a required or non-required
   * argument.  Required arguments can either be specified by placing an
   * equals sign after the option name, then the argument, or by putting the
   * argument in the next argv element.  For example: "--outputdir=foo" and
@@ -204,14 +203,14 @@ import java.text.MessageFormat;
   * "foo" while "--outputdir foo" would represent the option outputdir
   * with no argument and a first non-option argv element of "foo".
   * <p>
-  * Long options can also be specified using a special POSIX argument 
-  * format (one that I highly discourage).  This form of entry is 
+  * Long options can also be specified using a special POSIX argument
+  * format (one that I highly discourage).  This form of entry is
   * enabled by placing a "W;" (yes, 'W' then a semi-colon) in the valid
   * option string.  This causes getopt to treat the name following the
   * "-W" as the name of the long option.  For example, "-W outputdir=foo"
   * would be equivalent to "--outputdir=foo".  The name can immediately
   * follow the "-W" like so: "-Woutputdir=foo".  Option arguments are
-  * handled identically to normal long options.  If a string follows the 
+  * handled identically to normal long options.  If a string follows the
   * "-W" that does not represent a valid long option, then getopt() returns
   * 'W' and the caller must decide what to do.  Otherwise getopt() returns
   * a long option value as described below.
@@ -220,9 +219,9 @@ import java.text.MessageFormat;
   * in full.  So it is permissible to abbreviate the option name to as
   * few characters as required to uniquely identify it.  If the name can
   * represent multiple long options, then an error message is printed and
-  * getopt() returns a '?'.  
+  * getopt() returns a '?'.
   * <p>
-  * If an invalid option is specified or a required option argument is 
+  * If an invalid option is specified or a required option argument is
   * missing, getopt() prints an error and returns a '?' or ':' exactly
   * as for short options.  Note that when an invalid long option is
   * encountered, the optopt variable is set to integer 0 and so cannot
@@ -241,7 +240,7 @@ import java.text.MessageFormat;
   * getopt() method will throw a NullPointerException.
   * <p>
   * When getopt() is called and a long option is encountered, one of two
-  * things can be returned.  If the flag field in the LongOpt object 
+  * things can be returned.  If the flag field in the LongOpt object
   * representing the long option is non-null, then the integer value field
   * is stored there and an integer 0 is returned to the caller.  The val
   * field can then be retrieved from the flag field.  Note that since the
@@ -249,28 +248,27 @@ import java.text.MessageFormat;
   * must be performed in order to get the actual int value stored there.
   * If the flag field in the LongOpt object is null, then the value field
   * of the LongOpt is returned.  This can be the character of a short option.
-  * This allows an app to have both a long and short option sequence 
+  * This allows an app to have both a long and short option sequence
   * (say, "-h" and "--help") that do the exact same thing.
   * <p>
-  * With long options, there is an alternative method of determining 
+  * With long options, there is an alternative method of determining
   * which option was selected.  The method getLongind() will return the
   * the index in the long option array (NOT argv) of the long option found.
   * So if multiple long options are configured to return the same value,
-  * the application can use getLongind() to distinguish between them. 
+  * the application can use getLongind() to distinguish between them.
   * <p>
   * Here is an expanded Getopt example using long options and various
   * techniques described above:
-  * <p>
   * <pre>
   * int c;
   * String arg;
   * LongOpt[] longopts = new LongOpt[3];
-  * // 
+  * //
   * StringBuffer sb = new StringBuffer();
   * longopts[0] = new LongOpt("help", LongOpt.NO_ARGUMENT, null, 'h');
-  * longopts[1] = new LongOpt("outputdir", LongOpt.REQUIRED_ARGUMENT, sb, 'o'); 
+  * longopts[1] = new LongOpt("outputdir", LongOpt.REQUIRED_ARGUMENT, sb, 'o');
   * longopts[2] = new LongOpt("maximum", LongOpt.OPTIONAL_ARGUMENT, null, 2);
-  * // 
+  * //
   * Getopt g = new Getopt("testprog", argv, "-:bc::d:hW;", longopts);
   * g.setOpterr(false); // We'll do our own error handling
   * //
@@ -296,7 +294,7 @@ import java.text.MessageFormat;
   *          System.out.println("I know this, but pretend I didn't");
   *          System.out.println("We picked option " +
   *                             longopts[g.getLongind()].getName() +
-  *                           " with value " + 
+  *                           " with value " +
   *                           ((arg != null) ? arg : "null"));
   *          break;
   *          //
@@ -307,7 +305,7 @@ import java.text.MessageFormat;
   *        case 'c':
   *        case 'd':
   *          arg = g.getOptarg();
-  *          System.out.println("You picked option '" + (char)c + 
+  *          System.out.println("You picked option '" + (char)c +
   *                             "' with argument " +
   *                             ((arg != null) ? arg : "null"));
   *          break;
@@ -327,7 +325,7 @@ import java.text.MessageFormat;
   *          break;
   *          //
   *        case '?':
-  *          System.out.println("The option '" + (char)g.getOptopt() + 
+  *          System.out.println("The option '" + (char)g.getOptopt() +
   *                           "' is not valid");
   *          break;
   *          //
@@ -350,9 +348,9 @@ import java.text.MessageFormat;
   * the name given to this option - long_only - is very counter-intuitive.
   * It does not cause only long options to be parsed but instead enables
   * the behavior described above.
-  * <p> 
-  * Note that the functionality and variable names used are driven from 
-  * the C lib version as this object is a port of the C code, not a 
+  * <p>
+  * Note that the functionality and variable names used are driven from
+  * the C lib version as this object is a port of the C code, not a
   * new implementation.  This should aid in porting existing C/C++ code,
   * as well as helping programmers familiar with the glibc version to
   * adapt to the Java version even if it seems very non-Java at times.
@@ -382,11 +380,11 @@ public class Getopt extends Object
  * Class Variables
  */
 
-/** 
+/**
   * Describe how to deal with options that follow non-option ARGV-elements.
   *
   * If the caller did not specify anything,
-  * the default is REQUIRE_ORDER if the property 
+  * the default is REQUIRE_ORDER if the property
   * gnu.posixly_correct is defined, PERMUTE otherwise.
   *
   * The special argument `--' forces an end of option-scanning regardless
@@ -425,7 +423,7 @@ protected static final int RETURN_IN_ORDER = 3;
 /*
  * Instance Variables
  */
- 
+
 /**
   * For communication from `getopt' to the caller.
   * When `getopt' finds an option that takes an argument,
@@ -446,29 +444,29 @@ protected String optarg;
   *  non-option elements that the caller should itself scan.
   *
   *  Otherwise, `optind' communicates from one call to the next
-  *  how much of ARGV has been scanned so far.  
+  *  how much of ARGV has been scanned so far.
   */
 protected int optind = 0;
 
-/** 
+/**
   * Callers store false here to inhibit the error message
-  * for unrecognized options.  
+  * for unrecognized options.
   */
 protected boolean opterr = true;
 
-/** 
+/**
   * When an unrecognized option is encountered, getopt will return a '?'
   * and store the value of the invalid option here.
   */
 protected int optopt = '?';
 
-/** 
+/**
   * The next char to be scanned in the option-element
   * in which the last option character we returned was found.
   * This allows us to pick up the scan where we left off.
   *
   * If this is zero, or a null string, it means resume the scan
-  * by advancing to the next ARGV-element.  
+  * by advancing to the next ARGV-element.
   */
 protected String nextchar;
 
@@ -478,7 +476,7 @@ protected String nextchar;
 protected String optstring;
 
 /**
-  * This is an array of LongOpt objects which describ the valid long 
+  * This is an array of LongOpt objects which describ the valid long
   * options.
   */
 protected LongOpt[] long_options;
@@ -574,7 +572,7 @@ Getopt(String progname, String[] argv, String optstring)
   * @param long_options An array of LongOpt objects that describes the valid long args for this program
   */
 public
-Getopt(String progname, String[] argv, String optstring, 
+Getopt(String progname, String[] argv, String optstring,
        LongOpt[] long_options)
 {
   this(progname, argv, optstring, long_options, false);
@@ -585,7 +583,7 @@ Getopt(String progname, String[] argv, String optstring,
 /**
   * Construct a Getopt instance with given input data that is capable of
   * parsing long options and short options.  Contrary to what you might
-  * think, the flag 'long_only' does not determine whether or not we 
+  * think, the flag 'long_only' does not determine whether or not we
   * scan for only long arguments.  Instead, a value of true here allows
   * long arguments to start with a '-' instead of '--' unless there is a
   * conflict with a short option name.
@@ -597,7 +595,7 @@ Getopt(String progname, String[] argv, String optstring,
   * @param long_only true if long options that do not conflict with short options can start with a '-' as well as '--'
   */
 public
-Getopt(String progname, String[] argv, String optstring, 
+Getopt(String progname, String[] argv, String optstring,
        LongOpt[] long_options, boolean long_only)
 {
   if (optstring.length() == 0)
@@ -646,7 +644,7 @@ Getopt(String progname, String[] argv, String optstring,
 }
 
 /**************************************************************************/
- 
+
 /*
  * Instance Methods
  */
@@ -679,7 +677,7 @@ setOptstring(String optstring)
   * non-option elements that the caller should itself scan.
   *
   * Otherwise, `optind' communicates from one call to the next
-  * how much of ARGV has been scanned so far.  
+  * how much of ARGV has been scanned so far.
   */
 public int
 getOptind()
@@ -692,7 +690,7 @@ getOptind()
 /**
   * This method allows the optind index to be set manually.  Normally this
   * is not necessary (and incorrect usage of this method can lead to serious
-  * lossage), but optind is a public symbol in GNU getopt, so this method 
+  * lossage), but optind is a public symbol in GNU getopt, so this method
   * was added to allow it to be modified by the caller if desired.
   *
   * @param optind The new value of optind
@@ -722,7 +720,7 @@ setArgv(String[] argv)
 
 /**************************************************************************/
 
-/** 
+/**
   * For communication from `getopt' to the caller.
   * When `getopt' finds an option that takes an argument,
   * the argument value is returned here.
@@ -741,7 +739,7 @@ getOptarg()
 /**
   * Normally Getopt will print a message to the standard error when an
   * invalid option is encountered.  This can be suppressed (or re-enabled)
-  * by calling this method.  There is no get method for this variable 
+  * by calling this method.  There is no get method for this variable
   * because if you can't remember the state you set this to, why should I?
   */
 public void
@@ -796,18 +794,18 @@ exchange(String[] argv)
     {
       if (top - middle > middle - bottom)
         {
-          // Bottom segment is the short one. 
+          // Bottom segment is the short one.
           int len = middle - bottom;
           int i;
 
-          // Swap it with the top part of the top segment. 
+          // Swap it with the top part of the top segment.
           for (i = 0; i < len; i++)
             {
               tem = argv[bottom + i];
               argv[bottom + i] = argv[top - (middle - bottom) + i];
               argv[top - (middle - bottom) + i] = tem;
             }
-          // Exclude the moved bottom segment from further swapping. 
+          // Exclude the moved bottom segment from further swapping.
           top -= len;
         }
       else
@@ -816,19 +814,19 @@ exchange(String[] argv)
           int len = top - middle;
           int i;
 
-          // Swap it with the bottom part of the bottom segment. 
+          // Swap it with the bottom part of the bottom segment.
           for (i = 0; i < len; i++)
             {
               tem = argv[bottom + i];
               argv[bottom + i] = argv[middle + i];
               argv[middle + i] = tem;
             }
-          // Exclude the moved top segment from further swapping. 
+          // Exclude the moved top segment from further swapping.
           bottom += len;
         }
     }
 
-  // Update records for the slots the non-options now occupy. 
+  // Update records for the slots the non-options now occupy.
 
   first_nonopt += (optind - last_nonopt);
   last_nonopt = optind;
@@ -852,7 +850,7 @@ checkLongOption()
   int nameend;
   boolean ambig;
   boolean exact;
-  
+
   longopt_handled = true;
   ambig = false;
   exact = false;
@@ -861,7 +859,7 @@ checkLongOption()
   nameend = nextchar.indexOf("=");
   if (nameend == -1)
     nameend = nextchar.length();
-  
+
   // Test all lnog options for either exact match or abbreviated matches
   for (int i = 0; i < long_options.length; i++)
     {
@@ -888,7 +886,7 @@ checkLongOption()
             }
         }
     } // for
-  
+
   // Print out an error if the option specified was ambiguous
   if (ambig && !exact)
     {
@@ -896,21 +894,21 @@ checkLongOption()
         {
           Object[] msgArgs = { progname, argv[optind] };
           System.err.println(MessageFormat.format(
-                             _messages.getString("getopt.ambigious"), 
+                             _messages.getString("getopt.ambigious"),
                              msgArgs));
         }
 
        nextchar = "";
        optopt = 0;
        ++optind;
- 
+
        return('?');
     }
- 
+
   if (pfound != null)
     {
       ++optind;
- 
+
       if (nameend != nextchar.length())
         {
           if (pfound.has_arg != LongOpt.NO_ARGUMENT)
@@ -929,7 +927,7 @@ checkLongOption()
                     {
                       Object[] msgArgs = { progname, pfound.name };
                       System.err.println(MessageFormat.format(
-                                  _messages.getString("getopt.arguments1"), 
+                                  _messages.getString("getopt.arguments1"),
                                   msgArgs));
                     }
                   // +option or -option
@@ -939,14 +937,14 @@ checkLongOption()
                                Character.toString(argv[optind-1].charAt(0)),
                                pfound.name };
                       System.err.println(MessageFormat.format(
-                               _messages.getString("getopt.arguments2"), 
+                               _messages.getString("getopt.arguments2"),
                                msgArgs));
                     }
                  }
-   
+
               nextchar = "";
               optopt = pfound.val;
-   
+
               return('?');
             }
         } // if (nameend)
@@ -963,10 +961,10 @@ checkLongOption()
                 {
                   Object[] msgArgs = { progname, argv[optind-1] };
                   System.err.println(MessageFormat.format(
-                                     _messages.getString("getopt.requires"), 
+                                     _messages.getString("getopt.requires"),
                                      msgArgs));
                 }
-   
+
               nextchar = "";
               optopt = pfound.val;
               if (optstring.charAt(0) == ':')
@@ -975,20 +973,20 @@ checkLongOption()
                 return('?');
             }
         } // else if (pfound)
-   
+
       nextchar = "";
 
       if (pfound.flag != null)
         {
           pfound.flag.setLength(0);
           pfound.flag.append(pfound.val);
-   
+
           return(0);
         }
 
       return(pfound.val);
    } // if (pfound != null)
-  
+
   longopt_handled = false;
 
   return(0);
@@ -1043,7 +1041,7 @@ getopt()
             {
               optind++;
             }
-          
+
           last_nonopt = optind;
         }
 
@@ -1079,7 +1077,7 @@ getopt()
 
       // If we have come to a non-option and did not permute it,
       // either stop the scan or describe it to the caller and pass it by.
-      if (argv[optind].equals("") || (argv[optind].charAt(0) != '-') || 
+      if (argv[optind].equals("") || (argv[optind].charAt(0) != '-') ||
           argv[optind].equals("-"))
         {
           if (ordering == REQUIRE_ORDER)
@@ -1088,7 +1086,7 @@ getopt()
             optarg = argv[optind++];
             return(1);
         }
-      
+
       // We have found another option-ARGV-element.
       // Skip the initial punctuation.
       if (argv[optind].startsWith("--"))
@@ -1112,14 +1110,14 @@ getopt()
 
      This distinction seems to be the most useful approach.  */
   if ((long_options != null) && (argv[optind].startsWith("--")
-      || (long_only && ((argv[optind].length()  > 2) || 
+      || (long_only && ((argv[optind].length()  > 2) ||
       (optstring.indexOf(argv[optind].charAt(1)) == -1)))))
     {
        int c = checkLongOption();
 
        if (longopt_handled)
          return(c);
-         
+
       // Can't find it as a long option.  If this is not getopt_long_only,
       // or the option starts with '--' or is not a valid short
       // option, then it's an error.
@@ -1133,16 +1131,16 @@ getopt()
                 {
                   Object[] msgArgs = { progname, nextchar };
                   System.err.println(MessageFormat.format(
-                                   _messages.getString("getopt.unrecognized"), 
+                                   _messages.getString("getopt.unrecognized"),
                                    msgArgs));
                 }
               else
                 {
                   Object[] msgArgs = { progname,
-                                 Character.toString(argv[optind].charAt(0)), 
+                                 Character.toString(argv[optind].charAt(0)),
                                  nextchar };
                   System.err.println(MessageFormat.format(
-                                 _messages.getString("getopt.unrecognized2"), 
+                                 _messages.getString("getopt.unrecognized2"),
                                  msgArgs));
                 }
             }
@@ -1150,7 +1148,7 @@ getopt()
           nextchar = "";
           ++optind;
           optopt = 0;
-    
+
           return('?');
         }
     } // if (longopts)
@@ -1161,7 +1159,7 @@ getopt()
     nextchar = nextchar.substring(1);
   else
     nextchar = "";
-  
+
   String temp = null;
   if (optstring.indexOf(c) != -1)
     temp = optstring.substring(optstring.indexOf(c));
@@ -1207,7 +1205,7 @@ getopt()
         {
           if (opterr)
             {
-              // 1003.2 specifies the format of this message. 
+              // 1003.2 specifies the format of this message.
               Object[] msgArgs = { progname,
                                    Character.toString((char)c) };
               System.err.println(MessageFormat.format(
@@ -1223,7 +1221,7 @@ getopt()
       else
         {
           // We already incremented `optind' once;
-          // increment it again when taking next ARGV-elt as argument. 
+          // increment it again when taking next ARGV-elt as argument.
           nextchar = argv[optind];
           optarg  = argv[optind];
         }
@@ -1277,7 +1275,7 @@ getopt()
                 }
 
               optopt = c;
- 
+
               if (optstring.charAt(0) == ':')
                 return(':');
               else
@@ -1307,7 +1305,7 @@ getopt()
                         }
 
                       optopt = c;
- 
+
                       if (optstring.charAt(0) == ':')
                         return(':');
                       else
