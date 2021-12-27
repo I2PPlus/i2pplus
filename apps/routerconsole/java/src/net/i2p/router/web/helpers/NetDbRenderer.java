@@ -196,6 +196,7 @@ class NetDbRenderer {
             boolean notFound = true;
             Set<RouterInfo> routers = _context.netDb().getRouters();
             int ipMode = 0;
+            String ipArg = ip;  // save for error message
             if (ip != null) {
                 if (ip.endsWith("/24")) {
                     ipMode = 1;
