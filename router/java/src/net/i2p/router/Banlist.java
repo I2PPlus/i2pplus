@@ -53,8 +53,12 @@ public class Banlist {
     public final static long BANLIST_DURATION_MAX = 30*60*1000;
     public final static long BANLIST_DURATION_PARTIAL = 10*60*1000;
     public final static long BANLIST_DURATION_FOREVER = 181l*24*60*60*1000; // will get rounded down to 180d on console
-    public final static long BANLIST_DURATION_NO_NETWORK = 2*60*60*1000;
-    public final static long BANLIST_DURATION_PRIVATE = 60*60*1000;
+    /**
+     *  Buggy i2pd fork
+     *  @since 0.9.52
+     */
+    public final static long BANLIST_DURATION_NO_NETWORK = 30*24*60*60*1000L;
+    public final static long BANLIST_DURATION_PRIVATE = 2*60*60*1000;
     private final static long BANLIST_CLEANER_START_DELAY = BANLIST_DURATION_PARTIAL;
 
     public Banlist(RouterContext context) {
