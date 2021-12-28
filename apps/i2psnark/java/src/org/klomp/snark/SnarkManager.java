@@ -59,6 +59,8 @@ import org.klomp.snark.dht.KRPC;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import net.i2p.CoreVersion;
+
 /**
  * Manage multiple snarks
  */
@@ -385,7 +387,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             _stopping = false;
         }
     }
-    
+
     /*
      *  Called by the webapp at Jetty shutdown.
      *  Stops all torrents. Does not close the tunnel, so the announces have a chance.
@@ -2732,6 +2734,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                         doMagnets = false;
                     } catch (RuntimeException e) {
                         _log.error("Error in the DirectoryMonitor", e);
+                    }
+                    if (!_context.isRouterContext()) {
+                        addMessage(_t("I2P+ I2PSnark standalone version {0} started", CoreVersion.VERSION));
                     }
                     if (routerOK && !_snarks.isEmpty())
                         addMessage(_t("Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers.", _util.getMaxUpBW(), _util.getMaxUploaders()));
