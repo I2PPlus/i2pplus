@@ -613,7 +613,6 @@ th.snarkGraphicStatus {
 }
 
 .snarkTrackerDetails, .snarkTorrentDetails {
-  padding-left: 1px !important;
   padding-right: 1px !important;
   width: 1% !important;
   white-space: nowrap;
@@ -621,7 +620,13 @@ th.snarkGraphicStatus {
   font-weight: 700;
 }
 
+.snarkTrackerDetails {
+  padding-left: 8px !important;
+  padding-right: 0 !important;
+}
+
 .snarkTorrentDetails {
+  padding-left: 0 !important;
   text-align: right !important;
 }
 
@@ -3301,7 +3306,8 @@ td.snarkTrackerDetails img {
   background-color: transparent !important;
 }
 
-.snarktTorrentPeerCount, .snarkTorrentPeers, .snarkTorrents td:nth-child(3), .peerdata, .peerinfo td:nth-child(2),
+.snarktTorrentPeerCount, .snarkTorrentPeers,
+.peerdata, .peerinfo td:nth-child(2),
 .debuginfo td:nth-child(2) {
   white-space: nowrap;
   padding-left: 0 !important;
@@ -3991,6 +3997,12 @@ td.snarkTorrentAction input[type=submit] {
   }
   .snarkMessages li {
     opacity: 1 !important;
+  }
+  .snarkTrackerDetails {
+    padding-right: 8px !important;
+  }
+  .snarkTorrentName a {
+    max-width: 300px;
   }
 }
 
