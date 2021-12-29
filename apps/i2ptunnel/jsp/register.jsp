@@ -303,8 +303,8 @@
                String oldname = wrequest.getParameter("oldname");
                if (oldname == null) oldname = "";
 %>
-<tr><td><b><%=intl._t("Old hostname")%>:</b><input type="text" size="30" maxlength="50" name="oldname" id="oldName" value="<%=oldname%>" class="freetext" placeholder="old hostname or higher level domain for sub-domain registration" /></td></tr>
-<tr><td><b><%=intl._t("Private Key File for old Destination")%>:</b><input type="file" name="olddestfile" id="oldDestFile" value="" /></td></tr>
+<tr><td><b><%=intl._t("Old / parent hostname ")%>:</b><input type="text" size="30" maxlength="50" name="oldname" id="oldName" value="<%=oldname%>" class="freetext" placeholder="old hostname or parent domain for sub-domain registration" /></td></tr>
+<tr><td><b><%=intl._t("Private key file for old destination / sub-domain parent")%>:</b><input type="file" name="olddestfile" id="oldDestFile" value="" /></td></tr>
 <tr><td class="buttons">
 <input type="hidden" value="true" name="removeConfirm" />
 <a class="control" href="list"><%=intl._t("Cancel")%></a>
