@@ -64,7 +64,7 @@
 %>
 <tr><th><%=intl._t("Hostname")%></th>
 <%
-    else {
+    } else {
 %>
 <tr><th><%=intl._t("Name")%></th>
 <%
