@@ -396,7 +396,7 @@ abstract class StoreJob extends JobImpl {
         StoreMessageSelector selector = new StoreMessageSelector(getContext(), getJobId(), peer, msg.getReplyToken(), expiration);
 
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("[Job " + getJobId() + "] Sending store directly to [" + to.getHash().toBase64().substring(0,6) + "]");
+            _log.debug("[Job " + getJobId() + "] Sending store directly to [" + to.toBase64().substring(0,6) + "]");
         OutNetMessage m = new OutNetMessage(getContext(), msg, expiration, STORE_PRIORITY, peer);
         m.setOnFailedReplyJob(onFail);
         m.setOnFailedSendJob(onFail);
@@ -628,7 +628,7 @@ abstract class StoreJob extends JobImpl {
             return (int) (rhs.getEndTime() - lhs.getEndTime());
         }
     }
-    
+
     /**
      * Send a leaseset store message out an exploratory tunnel,
      * with the reply to come back through a exploratory tunnel.
@@ -693,7 +693,7 @@ abstract class StoreJob extends JobImpl {
             StoreMessageSelector selector = new StoreMessageSelector(ctx, getJobId(), peer, msg.getReplyToken(), expiration);
 
             if (_log.shouldLog(Log.DEBUG)) {
-                _log.debug(getJobId() + ": sending encrypted store to [" + to.getHash().toBase64().substring(0,6) + "] through " + outTunnel + ": " + sent);
+                _log.debug(getJobId() + ": sending encrypted store to [" + to.toBase64().substring(0,6) + "] through " + outTunnel + ": " + sent);
             }
             ctx.messageRegistry().registerPending(selector, onReply, onFail);
             ctx.tunnelDispatcher().dispatchOutbound(sent, outTunnel.getSendTunnelId(0), null, to);

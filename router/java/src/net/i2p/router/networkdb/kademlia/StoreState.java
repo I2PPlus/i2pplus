@@ -64,9 +64,9 @@ class StoreState {
      *
      *  @since 0.9.53 replaces getPending()
      */
-    public int getPendingCount() { 
+    public int getPendingCount() {
         synchronized (_pendingPeers) {
-            return _pendingPeers.size(); 
+            return _pendingPeers.size();
         }
     }
 
@@ -88,9 +88,9 @@ class StoreState {
      *
      *  @since 0.9.53
      */
-    public int getAttemptedCount() { 
+    public int getAttemptedCount() {
         synchronized (_attemptedPeers) {
-            return _attempted; 
+            return _attempted;
         }
     }
 
@@ -100,7 +100,7 @@ class StoreState {
      *
      *  @since 0.9.53 formerly returned a copy of the Set
      */
-    public Hash getSuccessful() { 
+    public Hash getSuccessful() {
         synchronized (_successfulPeers) {
             if (_successfulPeers.isEmpty())
                 return null;
@@ -210,15 +210,6 @@ class StoreState {
                 }
             }
         }
-        if (_failedPeers.size() > 0) {
-            buf.append("\n* Failed: ");
-            synchronized (_failedPeers) {
-                buf.append(_failedPeers.size()).append(' ');
-                for (Hash peer : _failedPeers) {
-                    buf.append("[").append(peer.toBase64().substring(0,6)).append("] ");
-                }
-            }
-        }
         if (_successfulPeers.size() > 0) {
             buf.append("\n* Successful: ");
             synchronized (_successfulPeers) {
@@ -227,7 +218,7 @@ class StoreState {
                     buf.append(peer.toBase64()).append(" ");
                 }
             }
-        return buf.toString();
         }
+        return buf.toString();
     }
 }
