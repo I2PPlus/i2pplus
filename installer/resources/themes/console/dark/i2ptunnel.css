@@ -8,12 +8,15 @@
 :root {
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   --monospaced: Droid Sans Mono, Noto Mono, Lucida Console, DejaVu Sans Mono, monospace;
+  --hover: #f60;
   --h2: repeating-linear-gradient(90deg, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(180deg,#001800, #000 75%);
   --heading: linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px);
   --border: 1px solid #242;
   --highlight: inset 0 0 0 1px #000;
   --input_txt: linear-gradient(180deg,#001800,#001000);
-  --btn_shadow_active: var(--highlight), inset 3px 3px 3px 2px rgba(0,0,0,.8);
+  --btn_shadow_hover: var(--highlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
+  --btn_shadow_active: var(--highlight), inset 3px 3px 3px 2px rgba(0,0,0,.8), 0 0 0 1px #000;
+  --btn_hover_radial: radial-gradient(at center bottom, rgba(96, 48, 0, .4) 0, rgba(0, 0, 0, 0) 80%), #000;
 }
 
 html {
@@ -635,6 +638,44 @@ input[type="file"] {
   border: none;
 }
 
+input[type=file]::file-selector-button {
+  margin: 2px 10px 2px 3px;
+  padding: 4px 2px !important;
+  min-width: 75px;
+  vertical-align: middle;
+  font: bold 9pt var(--bodyfont);
+  text-align: center;
+  text-decoration: none;
+  color: #494;
+  border: 1px solid #252;
+  border-radius: 1px;
+  background: #000;
+  filter: drop-shadow(0 0 1px #000);
+}
+
+button:hover, button:focus {
+  color: var(--hover);
+  border: 1px solid var(--hover);
+  box-shadow: var(--btn_shadow_hover);
+  background: var(--btn_hover_radial);
+  cursor: pointer;
+}
+
+input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
+  color: var(--hover);
+  border: 1px solid var(--hover);
+  box-shadow: var(--btn_shadow_hover);
+  background: var(--btn_hover_radial);
+  cursor: pointer;
+}
+
+input[type=file]:active::file-selector-button {
+  color: var(--ink);
+  border: 1px solid var(--hover);
+  box-shadow: var(--btn_shadow_active);
+  background: var(--hover);
+}
+
 .editDisabled input[type=radio], .editDisabled label {
   cursor: not-allowed !important;
 }
@@ -880,6 +921,15 @@ input {
 #oldName {
   width: 30%;
   min-width: 280px;
+}
+
+#oldName::placeholder {
+  color: #ee9 !important;
+  opacity: .5;
+}
+
+#oldName:focus::placeholder {
+  opacity: 0;
 }
 
 select#profile, select#connectionProfile {
@@ -1412,9 +1462,9 @@ input[type=text] + label {
   word-break: break-all;
   font-family: var(--monospaced);
   border: 1px solid #252;
-  background: linear-gradient(180deg,#000 0%, #010 100%);
-  border-radius: 2px;
+  border-radius: 1px;
   box-shadow: var(--highlight);
+  background: linear-gradient(180deg,#000 0%, #010 100%);
   user-select: all;
 }
 
@@ -1430,9 +1480,9 @@ input[type=text] + label {
 }
 
 .displayText:empty, .displayText:empty:hover, .displayText:empty:focus {
-  background: #000;
-  box-shadow: var(--highlight);
   color: #885;
+  box-shadow: var(--highlight);
+  background: #000;
   opacity: .8;
 }
 
@@ -1692,6 +1742,13 @@ body#tunnelRegistration:not(.iframed) .panel,
 body#tunnelWizardPage:not(.iframed) .panel {
   margin-top: 24px !important;
   margin-bottom: 24px !important;
+}
+
+#tunnelRegistration .displayText, #tunnelRegistration .displayText:hover {
+  margin: 3px 0 !important;
+  padding: 5px 8px;
+  height: auto;
+  overflow: hidden !important;
 }
 
 body#tunnelSSL:not(.iframed) {
