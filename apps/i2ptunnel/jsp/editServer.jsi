@@ -59,7 +59,18 @@
 %>
 <input type="submit" class="default" name="action" value="Save changes" />
 <table id="serverTunnelEdit" class="tunnelConfig">
-<tr><th><%=intl._t("Name")%></th><th><%=intl._t("Auto Start Tunnel")%></th></tr>
+<%
+    if (("server".equals(tunnelType) || ("ircserver".equals(tunnelType)) {
+%>
+<tr><th><%=intl._t("Hostname")%></th>
+<%
+    else {
+%>
+<tr><th><%=intl._t("Name")%></th>
+<%
+    }
+%>
+<th><%=intl._t("Auto Start Tunnel")%></th></tr>
 <tr>
 <td>
 <input type="text" size="30" maxlength="50" name="name" title="<%=intl._t("Name of tunnel to be displayed on Tunnel Manager home page and the router console sidebar")%>" value="<%=editBean.getTunnelName(curTunnel)%>" class="freetext tunnelName" />
