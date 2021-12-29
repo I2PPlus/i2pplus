@@ -1416,9 +1416,32 @@ body:not(.framed) .snarkTorrentInfo {
 }
 
 .magnetLabel {
-   display: inline-block;
-   vertical-align: middle;
-   font-style: italic;
+  display: inline-block;
+  vertical-align: middle;
+  font-style: italic;
+  position: relative;
+}
+
+@media screen and (min-width: 1500px) {
+  .magnetLabel {
+    margin: 0;
+    padding: 2px 6px;
+    line-height: 1;
+    border-radius: 1px;
+    box-shadow: 0 0 0 1px #bbc, inset 0 0 0 1px #fff;
+    background: linear-gradient(180deg,#f2f2ff, #eef);
+  }
+  .magnetLabel::before {
+    margin-left: -10px;
+    position: absolute;
+    top: calc(50% - 6px);
+    left: -3px;
+    border-width: 6px;
+    border-style: solid;
+    border-color: transparent #bbc transparent transparent;
+    content: "";
+    display: inline-block;
+  }
 }
 
 .snarkDirInfo thead img {
@@ -4296,6 +4319,8 @@ td.snarkTorrentAction input[type=submit] {
     box-shadow: 0 0 0 1px rgba(32,32,32,.4), inset 2px 2px 2px rgba(0,0,0,.2);
     background: linear-gradient(180deg,rgba(128,128,180,.2), rgba(192,192,220,.2));
   }
+  .nopeers td.snarkTorrentPeerCount b {
+  }
   .nopeers td.snarkTorrentPeerCount b .left, .nopeers td.snarkTorrentPeerCount b .right {
     color: #333;
     text-shadow: 0 1px 1px #aaa !important;
@@ -4390,6 +4415,7 @@ td.snarkTorrentAction input[type=submit] {
     border-color: transparent #aaa transparent transparent;
   }
   .stopped.incomplete .snarkTorrentPeerCount b, .inactive.neterror .snarkTorrentPeerCount b {
+    color: #eee;
     background: #900 !important;
   }
   .stopped.incomplete .snarkTorrentPeerCount b::before, .inactive.neterror .snarkTorrentPeerCount b::before {
