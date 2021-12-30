@@ -95,7 +95,6 @@ th.snarkTorrentPeerCount img {
 }
 
 td.snarkTorrentPeerCount {
-  padding-right: 8px !important;
   width: 1%;
   white-space: nowrap;
   text-align: center;
@@ -4068,8 +4067,8 @@ td.snarkTorrentAction input[type=submit] {
   .pagenavcontrols {
     margin: 0;
     padding: 2px;
-    position: static;
     width: 100%;
+    position: static;
     background: var(--th);
   }
   .iframed .pagenavcontrols {
@@ -4088,9 +4087,12 @@ td.snarkTorrentAction input[type=submit] {
   td.commentAuthor .commentAuthorName {
     width: 100px;
   }
-  .snarkTorrents td:first-child img {
+  td.snarkGraphicStatus img {
     width: auto;
     height: 21px;
+  }
+  td.snarkTrackerDetails img {
+    display: none !important;
   }
   .snarkTorrentName, .snarkTorrentName a {
     font-weight: 700;
@@ -4123,6 +4125,9 @@ td.snarkTorrentAction input[type=submit] {
   .newTab {
     margin: 1px 4px 0;
   }
+  .snarkTorrents .infohash {
+    max-width: 60px;
+  }
   .magnetLabel {
     max-width: 200px;
     white-space: nowrap;
@@ -4144,19 +4149,18 @@ td.snarkTorrentAction input[type=submit] {
   .pagenavcontrols, .iframed .pagenavcontrols {
     padding: 3px 5px !important;
   }
-  .snarkTorrentUploaded, .snarkTorrentRateUp,
-  .snarkTorrents tfoot th:nth-child(3),
-  .snarkTorrents tfoot th:nth-child(5) {
+  .snarkTorrentUploaded, .snarkTorrentRateUp, td.snarkTrackerDetails {
     padding: 0 !important;
     max-width: 0 !important;
     overflow: hidden;
     white-space: nowrap;
     font-size: 0 !important;
   }
-  .snarkTorrents th.snarkTorrentUploaded img, .snarkTorrents th.snarkTorrentRateUp img {
-    display: none;
+  .snarkTorrents th.snarkTorrentUploaded img,
+  .snarkTorrents th.snarkTorrentRateUp img {
+    display: none !important;
   }
-  .snarkTrackerDetails img, .snarkTorrentDetails img {
+  .snarkTorrentDetails img {
     width: auto;
     max-height: 20px !important;
   }
@@ -4288,7 +4292,7 @@ td.snarkTorrentAction input[type=submit] {
   }
   td.snarkTorrentPeerCount {
     padding-left: 0;
-    padding-right: 3px !important;
+    padding-right: 3px;
     width: 1%;
     white-space: nowrap;
     font-weight: 700;
