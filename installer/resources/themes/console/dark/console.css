@@ -6308,10 +6308,14 @@ span#distance {
   font-size: 0;
 }
 
-.gwhois a::before {
-  margin-left: -2px;
+.whois {
+  vertical-align: baseline;
+}
+
+.gwhois a::before, .whois::after {
+  margin: 0 2px;
   width: 12px;
-  height: 12px;
+  height: 13px;
   display: inline-block;
   vertical-align: middle;
   background: var(--search) no-repeat left center / 11px;
@@ -6319,7 +6323,12 @@ span#distance {
   content: "";
 }
 
-.gwhois:hover a::before, .gwhois a:focus::before {
+.whois::after {
+  background-position: center top;
+}
+
+.gwhois:hover a::before, .gwhois a:focus::before,
+.whois:hover::after, .whois:focus::after {
   opacity: 1;
   transform: scale(1.2);
 }
