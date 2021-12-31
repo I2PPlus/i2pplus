@@ -3759,6 +3759,7 @@ public class I2PSnarkServlet extends BasicServlet {
             String omitrackb32 = "a5ruhsktpdhfk5w46i6yf6oqovgdlyzty7ku6t5yrrpf4qedznjq.b32.i2p";
             String otdgb32 = "w7tpbzncbcocrqtwwm3nezhnnsw4ozadvi2hmvzdhrqzfxfum7wa.b32.i2p";
             String postmanb32_new = "6a4kxkg5wp33p25qqhgwl6sj4yh4xuf5b3p3qldwgclebchm3eea.b32.i2p";
+            String r4sasb32 = "punzipidirfqspstvzpj6gb4tkuykqp6quurj6e23bgxcxhdoe7q.b32.i2p";
             String skankb32 = "by7luzwhx733fhc5ug2o75dcaunblq2ztlshzd7qvptaoa73nqua.b32.i2p";
             String theblandb32 = "s5ikrdyjwbcgxmqetxb3nyheizftms7euacuub2hic7defkh3xhq.b32.i2p";
 
@@ -3780,6 +3781,7 @@ public class I2PSnarkServlet extends BasicServlet {
                        .replaceAll(odiftb32, "opendiftracker.i2p")
                        .replaceAll(omitrackb32, "omitracker.i2p")
                        .replaceAll(otdgb32, "opentracker.dg2.i2p")
+                       .replaceAll(r4sasb32, "opentracker.r4sas.i2p")
                        .replaceAll(skankb32, "opentracker.skank.i2p")
                        .replaceAll(theblandb32, "tracker.thebland.i2p");
                 }

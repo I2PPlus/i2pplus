@@ -202,6 +202,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 //       ,"Lodikon", "http://tracker.lodikon.i2p/announce=http://tracker.lodikon.i2p/"
        ,"Lyoko", "http://lyoko.i2p/a=http://lyoko.i2p/tracker"
        ,"OmiTracker", "http://omitracker.i2p/announce.php=http://omitracker.i2p/"
+       ,"R4SAS", "http://opentracker.r4sas.i2p/a=http://opentracker.r4sas.i2p/stats"
        ,"Skank", "http://opentracker.skank.i2p/a=http://opentracker.skank.i2p/tracker"
 //       ,"Freedom", "http://torrfreedom.i2p/announce.php=http://torrfreedom.i2p/"
 //       ,"PTT", "http://5m3pd32zx43xk3uz6hvrdksj6tlg7abnjsc3j5kkd2yzctet4nmq.b32.i2p/announce=http://ptt.i2p/index_eng.html"
@@ -225,6 +226,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         "http://lyoko.i2p/a," +
         "http://omitracker.i2p/announce.php," +
         "http://opentracker.dg2.i2p/a," +
+        "http://opentracker.r4sas.i2p/a," +
         "http://opentracker.skank.i2p/a," +
 //        "http://tracker.lodikon.i2p/announce," +
         "http://tracker.chudo.i2p/a";
@@ -244,6 +246,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         "lyoko.i2p", "afuuortfaqejkesne272krqvmafn65mhls6nvcwv3t7l2ic2p4kq.b32.i2p",
         "omitracker.i2p", "a5ruhsktpdhfk5w46i6yf6oqovgdlyzty7ku6t5yrrpf4qedznjq.b32.i2p",
         "opentracker.dg2.i2p", "w7tpbzncbcocrqtwwm3nezhnnsw4ozadvi2hmvzdhrqzfxfum7wa.b32.i2p",
+        "opentracker.r4sas.i2p", "punzipidirfqspstvzpj6gb4tkuykqp6quurj6e23bgxcxhdoe7q.b32.i2p",
         "opentracker.skank.i2p", "by7luzwhx733fhc5ug2o75dcaunblq2ztlshzd7qvptaoa73nqua.b32.i2p",
         "tracker.chudo.i2p", "swhb5i7wcjcohmus3gbt3w6du6pmvl3isdvxvepuhdxxkfbzao6q.b32.i2p",
 //        "tracker.lodikon.i2p", "q2a7tqlyddbyhxhtuia4bmtqpohpp266wsnrkm6cgoahdqrjo3ra.b32.i2p",
