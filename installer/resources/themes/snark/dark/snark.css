@@ -3554,10 +3554,6 @@ td.snarkGraphicStatus img {
   content: "";
 }
 
-/*.tooltipped:hover {
-  filter: drop-shadow(0 0 1px rgba(0,0,0,.4));
-}*/
-
 .tooltipped:hover::before, .tooltipped:active::before {
   margin-left: -10px;
   top: calc(50% - 6px);

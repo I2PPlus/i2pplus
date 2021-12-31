@@ -4060,6 +4060,42 @@ td.snarkGraphicStatus img {
   display: inline-block;
 }
 
+.tooltipped {
+  display: inline-block;
+  position: relative;
+  z-index: 999;
+  content: "";
+}
+
+.tooltipped:hover::before, .tooltipped:active::before {
+  margin-left: -10px;
+  top: calc(50% - 6px);
+  left: 30px;
+  border-width: 6px;
+  border-style: solid;
+  border-color: transparent #000 transparent transparent;
+  content: "";
+  animation: fade-in .1s ease 3s reverse both;
+}
+
+.tooltipped:hover::after, .tooltipped:active::after {
+  padding: 3px 6px;
+  top: -3px;
+  left: 32px;
+  border: 1px solid #000;
+  border-radius: 3px;
+  box-shadow: var(--highlight);
+  background: #000;
+  content: attr(data-tooltip);
+  animation: fade-in .1s ease 3s reverse both;
+}
+
+.tooltipped:hover::before, .tooltipped:active::before,
+.tooltipped:hover::after, .tooltipped:active::after {
+  position: absolute;
+  display: inline-block;
+}
+
 td.snarkTorrentPeerCount {
   padding-left: 0;
   width: 1%;
