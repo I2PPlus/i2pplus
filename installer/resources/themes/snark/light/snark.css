@@ -15,8 +15,8 @@
   --nav: linear-gradient(180deg,#fff 50%,#eef 51%,#eef 100%);
   --nav_hover: linear-gradient(180deg,#fcfaf7 50%,#ffe8bf 50%,#efd9b3 100%);
   --panel_iframed: linear-gradient(180deg,#fafaff,#f8f8ff,#fafaff);
-  --btnAction: linear-gradient(180deg,#fff 50%,#ddf 50%);
-  --btnAction_hover: linear-gradient(180deg,#fff 50%,#eef 50%);
+  --btnAction: linear-gradient(180deg,#fff 50%,#eef 50%);
+  --btnAction_hover: linear-gradient(180deg,#fff 50%,#ddf 50%);
   --th: linear-gradient(180deg,#fcfcff,#fafaff 50%,#f4f4ff 100%);
   --badge: linear-gradient(180deg,#fff,#ddf);
   --border_soft: 1px solid #afafcf;
@@ -1039,16 +1039,16 @@ tr:hover .txBarText {
 
 .percentBarComplete {
   margin-bottom: -1px;
-  padding: 2px 0 0;
-  display: inline-block;
-  max-width: 84px;
+  padding: 3px 0;
   width: 84px;
-  line-height: 1.3;
-  color: var(--ink_lighter);
+  max-width: 84px;
+  display: inline-block;
+  line-height: 1;
   text-align: center;
   font-weight: 700;
-  border-radius: 15px;
+  color: var(--ink_lighter);
   border: 1px solid #ccd;
+  border-radius: 15px;
   box-shadow: var(--highlight), inset 0 0 1px 2px #e6e6ff;
   background: radial-gradient(at center bottom, #ddf, rgba(0,0,0,0) 70%), linear-gradient(180deg,#f8f8ff,#ddf);
 }
@@ -3822,40 +3822,6 @@ td.snarkTorrentAction input[type=submit] {
   margin-top: 1px;
 }
 
-#actionStopAll, #actionStartAll {
-  padding: 11px 19px !important;
-}
-
-.actionStart {
-  background: var(--start) no-repeat center center / 14px, var(--btnAction),
-    var(--start_hover) no-repeat center center / 14px !important;
-}
-
-.actionStop {
-  background: var(--stop) no-repeat center center / 14px, var(--btnAction),
-    var(--stop_hover) no-repeat center center / 14px !important;
-}
-
-.actionRemove {
-  background: var(--remove) no-repeat center center / 14px, var(--btnAction),
-    var(--remove_hover) no-repeat center center / 14px !important;
-}
-
-.actionDelete {
-  background: var(--delete) no-repeat center center / 14px, var(--btnAction),
-    var(--delete_hover) no-repeat center center / 14px !important;
-}
-
-#actionStartAll {
-  background: var(--startall) no-repeat center center / auto 14px, var(--btnAction),
-    var(--startall_hover) no-repeat center center / auto 14px !important;
-}
-
-#actionStopAll {
-  background: var(--stopall) no-repeat center center / auto 14px, var(--btnAction),
-    var(--stopall_hover) no-repeat center center / auto 14px !important;
-}
-
 .snarkTorrentAction input:hover, .snarkTorrentAction input:focus {
   border: 1px solid var(--hover);
   opacity: 1;
@@ -3887,6 +3853,40 @@ td.snarkTorrentAction input[type=submit] {
 
 .snarkTorrentAction input:active {
   box-shadow: var(--highlight), inset 2px 2px 3px #557;
+}
+
+#actionStopAll, #actionStartAll {
+  padding: 11px 19px !important;
+}
+
+.actionStart, .actionStart:active {
+  background: var(--start) no-repeat center center / 14px, var(--btnAction),
+    var(--start_hover) no-repeat center center / 14px !important;
+}
+
+.actionStop, .actionStop:active {
+  background: var(--stop) no-repeat center center / 14px, var(--btnAction),
+    var(--stop_hover) no-repeat center center / 14px !important;
+}
+
+.actionRemove, .actionRemove:active {
+  background: var(--remove) no-repeat center center / 14px, var(--btnAction),
+    var(--remove_hover) no-repeat center center / 14px !important;
+}
+
+.actionDelete, .actionDelete:active {
+  background: var(--delete) no-repeat center center / 14px, var(--btnAction),
+    var(--delete_hover) no-repeat center center / 14px !important;
+}
+
+#actionStartAll, #actionStartAll:active {
+  background: var(--startall) no-repeat center center / auto 14px, var(--btnAction),
+    var(--startall_hover) no-repeat center center / auto 14px !important;
+}
+
+#actionStopAll, #actionStopAll:active {
+  background: var(--stopall) no-repeat center center / auto 14px, var(--btnAction),
+    var(--stopall_hover) no-repeat center center / auto 14px !important;
 }
 
 /* end action buttons */
@@ -4501,9 +4501,6 @@ td.snarkTorrentAction input[type=submit] {
   .trackerhome, .trackerannounce, .knowntracker a {
     width: 400px !important;
     max-width: 400px !important;
-  }
-  .percentBarComplete {
-    padding: 2px 0 .5px;
   }
   .snarkTorrentInfo th:first-child img, #torrentinfostats img, #trackers img {
     margin: -2px 5px 0 !important;
