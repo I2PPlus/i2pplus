@@ -620,6 +620,10 @@ tfoot tr:first-child th {
   display: inline-block;
 }
 
+th.snarkTorrentPeerCount {
+  text-align: center;
+}
+
 .snarkTorrentName {
   padding-left: 5px !important;
   line-height: 1.1;
@@ -1348,13 +1352,18 @@ thead img.disable, img.disable:hover {
 }
 
 .percentBarText {
+  z-index: 999;
   white-space: nowrap;
   vertical-align: middle;
   text-align: center;
   font-weight: 700;
-  color: #919;
+  color: #395;
   opacity: 0;
   transition: ease opacity .15s;
+}
+
+.inactive .percentBarText {
+  color: #777;
 }
 
 .snarkTorrentDownloaded .percentBarText {
@@ -4053,10 +4062,6 @@ input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilte
 .snarkTorrentPeerCount .right {
   padding-right: 2px;
   text-align: right;
-}
-
-th.snarkTorrentPeerCount {
-  text-align: left !important;
 }
 
 th.snarkTorrentPeerCount img {
