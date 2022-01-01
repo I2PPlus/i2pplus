@@ -706,6 +706,10 @@ tr:hover .snarkTrackerDetails img {
   color: #5c4e3d;
 }
 
+.snarkTorrentRateDown {
+  color: #395;
+}
+
 .snarkTorrentUploaded {
   color: #67594c;
 }
@@ -1407,7 +1411,7 @@ thead img.disable, img.disable:hover {
 }
 
 .unchoked {
-  color: #008000 !important;
+  color: #395 !important;
 }
 
 .choked, .unchoked {
@@ -1428,7 +1432,7 @@ thead img.disable, img.disable:hover {
   height: 8px;
   display: inline-block;
   border-radius: 50%;
-  background: #373;
+  background: #395;
   content: "";
 }
 
