@@ -1244,6 +1244,10 @@ thead img.disable, img.disable:hover {
   opacity: 1;
 }
 
+.inactive .percentBarOuter {
+  background: linear-gradient(180deg,#efdfd1,#fff7ef);
+}
+
 .peerinfo .percentBarOuter, .peerinfo .percentBarText {
   width: 84px;
 }
@@ -1315,11 +1319,18 @@ thead img.disable, img.disable:hover {
 }
 
 .snarkTorrentDownloaded .percentBarInner {
-  background: linear-gradient(90deg, rgba(255,64,0,.3) 20px, rgba(255,255,0,.3) 50px, rgba(0,255,0,.3)), linear-gradient(180deg,rgba(255,255,255,.1), rgba(0,0,0,.1)), rgba(255,255,255,.5);
+  background: linear-gradient(90deg, rgba(255,64,0,.3) 20px, rgba(255,255,0,.3) 50px, rgba(0,255,0,.3)),
+    linear-gradient(180deg,rgba(255,255,255,.1), rgba(0,0,0,.1)), rgba(255,255,255,.5);
+}
+
+.inactive .snarkTorrentDownloaded .percentBarInner {
+  background: linear-gradient(90deg, rgba(128,32,0,.2) 20px, rgba(128,128,0,.2) 50px, rgba(0,128,0,.2)),
+    linear-gradient(180deg,rgba(255,255,255,.1), rgba(0,0,0,.1)), rgba(255,255,255,.5);
 }
 
 .snarkDirInfo .percentBarInner {
-  background: linear-gradient(180deg,rgba(255,247,239,.75) 50%, rgba(207,193,181,.8) 50%, rgba(207,193,181,.9)), linear-gradient(90deg, rgba(255,100,0,.5) 30px, rgba(255,255,0,.5) 60px, rgba(0, 255, 0, .5));
+  background: linear-gradient(180deg,rgba(255,247,239,.75) 50%, rgba(207,193,181,.8) 50%, rgba(207,193,181,.9)),
+    linear-gradient(90deg, rgba(255,100,0,.5) 30px, rgba(255,255,0,.5) 60px, rgba(0,255,0,.5));
 }
 
 .peerinfo .percentBarInner {
