@@ -18,9 +18,7 @@
   --btn_hover: linear-gradient(180deg,#767, #989);
   --btnAction: linear-gradient(180deg,#737, #582858 50%, #101 50%, #080008);
   --btnAction_hover: linear-gradient(180deg,#b50, #730 50%, #212 50%, #100, #000);
-  --btnAction_active: linear-gradient(180deg,#100, #310);
-  --ink_btn: #1c081e;
-  --ink_btn: #260b28;
+  --btnAction_active: linear-gradient(180deg,#212, #414);
   --ink_btn: #2f1d30;
   --border_hard: 1px solid #101;
   --border_inner: 1px solid #313;
@@ -5290,16 +5288,16 @@ td.snarkTorrentAction input[type=submit] {
 }
 
 #actionStartAll:active {
-  background: var(--startall_hover) no-repeat center center / auto 14px, var(--btnAction_active) !important;
+  background: var(--startall_hover) no-repeat center center / auto 12px, var(--btnAction_active) !important;
 }
 
 #actionStopAll:active {
-  background: var(--stopall_hover) no-repeat center center / auto 14px, var(--btnAction_active) !important;
+  background: var(--stopall_hover) no-repeat center center / auto 12px, var(--btnAction_active) !important;
 }
 
 .snarkTorrentAction input:active {
   box-shadow: 0 0 0 1px #414, inset 0 0 0 1px rgba(255,102,0, .6), inset 0 0 0 2px rgba(0,0,0,.9), inset 4px 4px 4px rgba(0,0,0,.9);
-  background-blend-mode: overlay, normal;
+  background-size: auto 12px, 100% !important;
   transition: ease box-shadow .05s;
   filter: none !important;
 }
@@ -5335,7 +5333,10 @@ td.snarkTorrentAction input[type=submit] {
   }
   .snarkTorrentAction input[type=submit] {
     padding: 11px !important;
-    background-size: 13px !important;
+    background-size: 13px, 100% !important;
+  }
+  .snarkTorrentAction input[type=submit]:active {
+    background-size: 11px, 100% !important;
   }
   #actionStopAll, #actionStartAll {
     padding: 11px 18px !important;
@@ -5371,12 +5372,21 @@ td.snarkTorrentAction input[type=submit] {
 
 @media screen and (max-width: 1199px) {
   td.snarkTorrentPeerCount:empty::after {display: none}
-  .snarkTorrentAction input[type=submit] {
+  .snarkTorrentAction input[type=submit],
+  #actionStopAll, #actionStartAll,
+  #actionStopAll:hover, #actionStartAll:hover,
+  #actionStopAll:focus, #actionStartAll:focus {
     padding: 10px !important;
-    background-size: 12px !important;
+    background-size: auto 12px, 100% !important;
   }
-  #actionStopAll, #actionStartAll {
+  #actionStopAll, #actionStartAll,
+  #actionStopAll:hover, #actionStartAll:hover,
+  #actionStopAll:focus, #actionStartAll:focus {
     padding: 10px 17px !important;
+  }
+  .snarkTorrentAction input[type=submit]:active,
+  #actionStopAll:active, #actionStartAll:active {
+    background-size: auto 10px, 100% !important;
   }
   .lang_de .knowntracker a, .lang_de .trackerhome, .lang_de .trackerannounce, .lang_de .trackerconfig input[type=text],
   .lang_ru .knowntracker a, .lang_ru .trackerhome, .lang_ru .trackerannounce, .lang_ru .trackerconfig input[type=text] {
