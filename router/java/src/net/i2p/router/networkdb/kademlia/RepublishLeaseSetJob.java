@@ -36,7 +36,6 @@ class RepublishLeaseSetJob extends JobImpl {
         _log = ctx.logManager().getLog(RepublishLeaseSetJob.class);
         _facade = facade;
         _dest = destHash;
-        //getTiming().setStartAfter(ctx.clock().now()+REPUBLISH_LEASESET_DELAY);
     }
 
     public String getName() { return "Republish Local LeaseSet"; }
@@ -53,21 +52,16 @@ class RepublishLeaseSetJob extends JobImpl {
                         if (_log.shouldLog(Log.WARN))
                             _log.warn("Not publishing a stale LOCAL LeaseSet [" + _dest.toBase32().substring(0,6) + "]", new Exception("Publish expired LOCAL lease?"));
                     } else {
-                        if (_log.shouldLog(Log.INFO))
-                            _log.info("Publishing " + ls);
+                        if (_log.shouldInfo())
+                            _log.info(getJobId() + ": Publishing LS for " + _dest.toBase32());
                         getContext().statManager().addRateData("netDb.republishLeaseSetCount", 1);
-                        _facade.sendStore(_dest, ls, null, new OnRepublishFailure(getContext(), this), REPUBLISH_LEASESET_TIMEOUT, null);
+                        _facade.sendStore(_dest, ls, null, new OnRepublishFailure(ls), REPUBLISH_LEASESET_TIMEOUT, null);
                         _lastPublished = getContext().clock().now();
-                        //getContext().jobQueue().addJob(new StoreJob(getContext(), _facade, _dest, ls, new OnSuccess(getContext()), new OnFailure(getContext()), REPUBLISH_LEASESET_TIMEOUT));
                     }
                 } else {
                     if (_log.shouldLog(Log.WARN))
                         _log.warn("Client [" + _dest.toBase32().substring(0,6) + "] is local, but no valid LeaseSet found; being rebuilt?");
                 }
-                //if (false) { // floodfill doesnt require republishing
-                //    long republishDelay = getContext().random().nextLong(2*REPUBLISH_LEASESET_DELAY);
-                //    requeue(republishDelay);
-                //}
                 return;
             } else {
                 if (_log.shouldLog(Log.INFO))
@@ -83,7 +77,7 @@ class RepublishLeaseSetJob extends JobImpl {
     }
 
     void requeueRepublish() {
-        if (_log.shouldLog(Log.WARN))
+        if (_log.shouldWarn())
             _log.warn("Failed to publish LeaseSet for [" + _dest.toBase32().substring(0,6) + "]");
         getContext().jobQueue().removeJob(this);
         requeue(RETRY_DELAY + getContext().random().nextInt(RETRY_DELAY));
@@ -97,13 +91,25 @@ class RepublishLeaseSetJob extends JobImpl {
     }
 
     /** requeue */
-    private static class OnRepublishFailure extends JobImpl {
-        private final RepublishLeaseSetJob _job;
-        public OnRepublishFailure(RouterContext ctx, RepublishLeaseSetJob job) {
-            super(ctx);
-            _job = job;
+    private class OnRepublishFailure extends JobImpl {
+        private final LeaseSet _ls;
+
+        public OnRepublishFailure(LeaseSet ls) { 
+            super(RepublishLeaseSetJob.this.getContext()); 
+            _ls = ls;
         }
+
         public String getName() { return "Timeout LeaseSet Publication"; }
-        public void runJob() {  _job.requeueRepublish(); }
+
+        public void runJob() {
+            // Don't requeue if there's a newer LS, KNDF will have already done that
+            LeaseSet ls = _facade.lookupLeaseSetLocally(_ls.getHash());
+            if (ls != null && ls.getEarliestLeaseDate() == _ls.getEarliestLeaseDate()) {
+                requeueRepublish();
+            } else {
+                if (_log.shouldWarn())
+                    _log.warn("[Job " + getJobId() + "] Publication of LeasetSet for  [" + _ls.getDestination().toBase32().substring(0,6) + "] failed, but not requeueing, there is a newer LeseSet");
+            }
+        }
     }
 }

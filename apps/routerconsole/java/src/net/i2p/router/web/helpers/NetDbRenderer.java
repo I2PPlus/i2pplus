@@ -196,6 +196,7 @@ class NetDbRenderer {
             boolean notFound = true;
             Set<RouterInfo> routers = _context.netDb().getRouters();
             int ipMode = 0;
+            String ipArg = ip;  // save for error message
             if (ip != null) {
                 if (ip.endsWith("/24")) {
                     ipMode = 1;
@@ -214,6 +215,9 @@ class NetDbRenderer {
                     }
                 }
             }
+            String familyArg = family;  // save for error message
+            if (family != null)
+                family = family.toLowerCase(Locale.US);
             int toSkip = pageSize * page;
             int skipped = 0;
             int written = 0;
@@ -224,7 +228,6 @@ class NetDbRenderer {
                 if ((routerPrefix != null && key.toBase64().startsWith(routerPrefix)) ||
                     (version != null && version.equals(ri.getVersion())) ||
                     (country != null && country.equals(_context.commSystem().getCountry(key))) ||
-                    (family != null && family.equals(ri.getOption("family"))) ||
                     // 'O' will catch PO and XO also
                     (caps != null && hasCap(ri, caps)) ||
                     (tr != null && ri.getTargetAddress(tr) != null) ||
@@ -242,6 +245,22 @@ class NetDbRenderer {
                     if (sybil != null)
                         sybils.add(key);
                     notFound = false;
+                } else if (family != null) {
+                    String rifam = ri.getOption("family");
+                    if (rifam != null && rifam.toLowerCase(Locale.US).contains(family)) {
+                        if (skipped < toSkip) {
+                            skipped++;
+                            continue;
+                        }
+                        if (written++ >= pageSize) {
+                            morePages = true;
+                            break outerloop;
+                        }
+                        renderRouterInfo(buf, ri, false, true);
+                        if (sybil != null)
+                            sybils.add(key);
+                        notFound = false;
+                    }
                 } else if (ip != null) {
                     for (RouterAddress ra : ri.getAddresses()) {
                         if (ipMode == 0) {
@@ -386,7 +405,7 @@ class NetDbRenderer {
                     buf.append(version);
                 else if (country != null)
                     buf.append(country);
-                else if (family != null)
+                else if (familyArg != null)
                     buf.append(_t("Family")).append(' ').append(family);
                 buf.append(' ').append(_t("not found in network database"));
                 buf.append("</div>");

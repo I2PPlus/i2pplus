@@ -6112,6 +6112,12 @@ div.app img {
 
 div.app img, .sitemapLink img {
   filter: sepia(100%) hue-rotate(70deg) grayscale(.3);
+  animation: zoom .05s ease .75s both;
+}
+
+@keyframes zoom {
+  from {transform: scale(0)}
+  to {scale: scale(1)}
 }
 
 div.app:hover img, .sitemapLink:hover img, a:focus .app img, a:focus .sitemaplink img {
@@ -6308,10 +6314,14 @@ span#distance {
   font-size: 0;
 }
 
-.gwhois a::before {
-  margin-left: -2px;
+.whois {
+  vertical-align: baseline;
+}
+
+.gwhois a::before, .whois::after {
+  margin: 0 2px;
   width: 12px;
-  height: 12px;
+  height: 13px;
   display: inline-block;
   vertical-align: middle;
   background: var(--search) no-repeat left center / 11px;
@@ -6319,7 +6329,12 @@ span#distance {
   content: "";
 }
 
-.gwhois:hover a::before, .gwhois a:focus::before {
+.whois::after {
+  background-position: center top;
+}
+
+.gwhois:hover a::before, .gwhois a:focus::before,
+.whois:hover::after, .whois:focus::after {
   opacity: 1;
   transform: scale(1.2);
 }

@@ -700,6 +700,47 @@ td.snarkGraphicStatus img {
 	height: 22px;
 }
 
+.tooltipped {
+	display: inline-block;
+	position: relative;
+	z-index: 999;
+	content: "";
+}
+
+.tooltipped:hover {
+	filter: drop-shadow(0 0 1px rgba(0,0,0,.2));
+}
+
+.tooltipped:hover::before, .tooltipped:active::before {
+	margin-left: -10px;
+	top: calc(50% - 6px);
+	left: 30px;
+	border-width: 6px;
+	border-style: solid;
+	border-color: transparent #cca transparent transparent;
+	content: "";
+	animation: fade-in .1s ease 3s reverse both;
+}
+
+.tooltipped:hover::after, .tooltipped:active::after {
+	padding: 3px 6px;
+	top: 0;
+	left: 32px;
+	font-weight: 600;
+	border: 1px solid #cca;
+	border-radius: 2px;
+	box-shadow: var(--highlight);
+	background: linear-gradient(180deg,#fff,#ffd);
+	content: attr(data-tooltip);
+	animation: fade-in .1s ease 3s reverse both;
+}
+
+.tooltipped:hover::before, .tooltipped:active::before,
+.tooltipped:hover::after, .tooltipped:active::after {
+	position: absolute;
+	display: inline-block;
+}
+
 .snarkDirInfo, .snarkTorrentInfo, .snarkComments, .snarkCommentInfo, #mediaContainer {
 	width: 100%;
 }

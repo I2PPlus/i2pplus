@@ -330,7 +330,7 @@ td.snarkTrackerDetails img::before, td.snarkTorrentDetails img::before {
 #screenlog, #screenlog.expanded, #screenlog.collapsed {
   background: repeating-linear-gradient(180deg,rgba(0,0,16,.7) 2px, rgba(0,0,48,.5) 4px),
     url(images/hat.png) no-repeat scroll right top,
-    url(/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true) no-repeat,
+    url(/viewstat.jsp?stat=[I2PSnark]+InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true) no-repeat,
     linear-gradient(180deg,#001, #000008);
   background-size: 100% 4px, 80px auto, calc(100% - 80px) calc(100% - 8px), 100% !important;
   background-position: right -4px bottom -10px, center center, left bottom, center top !important;
@@ -3678,6 +3678,42 @@ tr:not(.peerinfo) .snarkTorrentDownloaded .percentBarText::after {
 .magnetLabel, .snarkTorrents .infohash {
   vertical-align: text-bottom;
   line-height: 120%;
+}
+
+.tooltipped {
+  display: inline-block;
+  position: relative;
+  z-index: 999;
+  content: "";
+}
+
+.tooltipped:hover::before, .tooltipped:active::before {
+  margin-left: -10px;
+  top: calc(50% - 6px);
+  left: 30px;
+  border-width: 6px;
+  border-style: solid;
+  border-color: transparent #000 transparent transparent;
+  content: "";
+  animation: fade-in .1s ease 3s reverse both;
+}
+
+.tooltipped:hover::after, .tooltipped:active::after {
+  padding: 3px 6px;
+  top: 3px;
+  left: 32px;
+  border: 1px solid #000;
+  border-radius: 3px;
+  box-shadow: var(--highlight);
+  background: #000;
+  content: attr(data-tooltip);
+  animation: fade-in .1s ease 3s reverse both;
+}
+
+.tooltipped:hover::before, .tooltipped:active::before,
+.tooltipped:hover::after, .tooltipped:active::after {
+  position: absolute;
+  display: inline-block;
 }
 
 .snarkMessages .infohash:hover {

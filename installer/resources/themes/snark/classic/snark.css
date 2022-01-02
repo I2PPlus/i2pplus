@@ -256,7 +256,7 @@ tr, .navbar, .mainsection, .lowersection {
 
 #screenlog, #screenlog.expanded, #screenlog.collapsed {
   background: url(images/hat.png) right -4px bottom -10px no-repeat,
-    url(/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true) no-repeat,
+    url(/viewstat.jsp?stat=[I2PSnark]+InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true) no-repeat,
     linear-gradient(180deg,rgba(240, 240, 255, .7), rgba(232, 232, 255, .7));
   background-size: auto 80px, calc(100% + 80px) calc(100% + 20px), 100%;
   background-position: right -4px bottom -10px, left bottom 1px, center center, center top !important;
@@ -992,6 +992,47 @@ td:first-child {
 
 .snarkTorrentName a:active, .snarkFileName a:active {
   box-shadow: inset 3px 3px 3px 3px rgba(120,120,0,.2);
+}
+
+.tooltipped {
+  display: inline-block;
+  position: relative;
+  z-index: 999;
+  content: "";
+}
+
+.tooltipped:hover {
+  filter: drop-shadow(0 0 1px rgba(0,0,0,.4));
+}
+
+.tooltipped:hover::before, .tooltipped:active::before {
+  margin-left: -10px;
+  top: calc(50% - 6px);
+  left: 30px;
+  border-width: 6px;
+  border-style: solid;
+  border-color: transparent #bbc transparent transparent;
+  content: "";
+  animation: fade-in .1s ease 3s reverse both;
+}
+
+.tooltipped:hover::after, .tooltipped:active::after {
+  padding: 3px 6px;
+  top: 0;
+  left: 32px;
+  font-weight: 600;
+  border: 1px solid #bbc;
+  border-radius: 2px;
+  box-shadow: var(--highlight);
+  background: linear-gradient(180deg,#fff,#eef);
+  content: attr(data-tooltip);
+  animation: fade-in .1s ease 3s reverse both;
+}
+
+.tooltipped:hover::before, .tooltipped:active::before,
+.tooltipped:hover::after, .tooltipped:active::after {
+  position: absolute;
+  display: inline-block;
 }
 
 .magnetLabel {
