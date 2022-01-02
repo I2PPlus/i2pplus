@@ -6112,12 +6112,13 @@ div.app img {
 
 div.app img, .sitemapLink img {
   filter: sepia(100%) hue-rotate(70deg) grayscale(.3);
-  animation: zoom .05s ease .75s both;
+  animation: zoom .1s linear .9s both;
+  will-change: transform;
 }
 
 @keyframes zoom {
-  from {transform: scale(0)}
-  to {scale: scale(1)}
+  from {border-radius: 50%; transform: scale(0)}
+  to {border-radius: 0; scale: scale(1)}
 }
 
 div.app:hover img, .sitemapLink:hover img, a:focus .app img, a:focus .sitemaplink img {
