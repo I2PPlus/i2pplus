@@ -307,7 +307,7 @@ label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
 .snarkMessages, #screenlog.collapsed, #screenlog.xpanded {
   background: repeating-linear-gradient(180deg,rgba(77,69,62,.5) 2px, rgba(111,96,90,.3) 4px),
     url(images/whippy.png) no-repeat scroll,
-    url(/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true) no-repeat,
+    url(/viewstat.jsp?stat=[I2PSnark]+InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true) no-repeat,
     linear-gradient(180deg,#5f554d, #3f3833);
   background-size: 100%, 60px auto, calc(100% - 80px) 100%, 100% !important;
   background-position: center center, right -4px bottom -10px, left bottom, center center !important;
@@ -1260,7 +1260,7 @@ thead img.disable, img.disable:hover {
 .active.seeding .uploaded {
   background: repeating-linear-gradient(90deg,#d8b8a6,#d8b8a6 5%,#f7d0ba 5%,#f7d0ba 10%);
   background-size: 200%;
-  animation: animation: uploading .5s linear 4s 1 reverse;
+  animation: uploading .5s linear 4s 1 reverse;
 }
 
 .txBarInner {
@@ -4648,9 +4648,9 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
     box-shadow: 0 0 0 1px rgba(32,32,32,.4), inset 2px 2px 2px rgba(0,0,0,.2);
     background: linear-gradient(180deg,rgba(128,128,180,.2), rgba(192,192,220,.2));
   }
-  .nopeers td.snarkTorrentPeerCount b {
-  }
-  .nopeers td.snarkTorrentPeerCount b .left, .nopeers td.snarkTorrentPeerCount b .right {
+  .nopeers td.snarkTorrentPeerCount b,
+  .nopeers td.snarkTorrentPeerCount b .left,
+  .nopeers td.snarkTorrentPeerCount b .right {
     color: #333;
     text-shadow: 0 1px 1px #aaa !important;
   }
@@ -4737,7 +4737,7 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
     border-color: transparent #28f transparent transparent;
   }
   .nopeers.incomplete .snarkTorrentPeerCount b {
-    text-shadow: 0 1px 1px #999 !important;
+    text-shadow: 0 1px 1px #aaa !important;
     background: #aaa;
   }
   .nopeers.incomplete .snarkTorrentPeerCount b::before {
