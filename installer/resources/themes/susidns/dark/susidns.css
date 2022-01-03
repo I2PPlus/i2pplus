@@ -19,6 +19,7 @@
   --btn_shadow_active: var(--highlight), inset 3px 3px 3px 2px rgba(0,0,0,.8);
   --th: linear-gradient(180deg,#010,#000);
   --help: repeating-linear-gradient(90deg,#000 2px,#010 4px);
+  --txt_focus: linear-gradient(180deg,#001800,#001000);
 }
 
 body, html {
@@ -1025,21 +1026,15 @@ input[type=submit]:last-of-type, input[type=reset]:last-of-type {
   margin-right: 5px;
 }
 
+input[type=text], textarea {
+  color: #bb7;
+  background: #000;
+}
+
 input[type=text] {
   padding: 7px !important;
   font-size: 110%;
   border: 1px solid #184818;
-}
-
-input[type=text]:focus {
-  border: 1px solid #373;
-}
-
-input[type=text], textarea {
-  color: #bb7;
-  box-shadow: var(--highlight), inset 4px 4px 4px #000, 0 0 0 1px #000;
-  background: #000;
-  background: linear-gradient(180deg,#001800, #001000) !important;
 }
 
 textarea, #subslog pre {
@@ -1053,13 +1048,13 @@ textarea, #subslog pre {
   color: #bb7;
   border: var(--border_inner);
   border-radius: 2px;
-  box-shadow: var(--highlight), inset 4px 4px 4px #000;
+  box-shadow: var(--highlight);
 }
 
 #subslog pre {
   padding: 8px 12px;
-  height: calc(100% - 105px);
   width: calc(100% - 26px);
+  height: calc(100% - 105px);
   white-space: pre-wrap;
   border-radius: 0 0 2px 2px;
 }
@@ -1072,28 +1067,34 @@ textarea[cols="70"] {
 input[type=text]:focus, #add textarea:focus {
   color: var(--ink);
   outline: none;
-  background: #000 !important;
   filter: drop-shadow(0 0 1px #880);
   transition: ease filter .3s;
   outline: none;
 }
 
+input[type=text]:focus {
+  border: 1px solid #373;
+  box-shadow: var(--btn_shadow_active), 0 0 0 1px #000;
+  background: var(--txt_focus);
+}
+
 textarea:focus {
   box-shadow: inset 0 0 1px #880;
-  background: #000 !important;
+  box-shadow: var(--btn_shadow_active);
+  background: #010;
   filter: none;
+  outline: none;
 }
 
 #booksearch input[name=search] {
   padding: 6px 8px 6px 32px !important;
   min-width: 280px !important;
-  background: var(--search) no-repeat 9px center, linear-gradient(180deg,#001800, #001000) !important;
-  background-size: 14px, 100% !important;
+  background: #000 var(--search) no-repeat 9px center / 14px;
+  background-size: 14px !important;
 }
 
 #booksearch input[name=search]:focus {
-  background: #000 var(--search) no-repeat 9px center !important;
-  background-size: 14px !important;
+  background: var(--search) no-repeat 9px center / 14px, var(--txt_focus);
   outline: none;
 }
 
