@@ -1330,16 +1330,11 @@ p.book {
 
 td.destinations {
   max-width: 50px !important;
-  padding 1px 0 !important;
+  padding: 1px 8px !important;
 }
 
 #host_list tr:hover td.destinations {
   color: #bb0;
-}
-
-/* MS Edge fix */
-_:-ms-lang(x), * {
-  filter: none !important;
 }
 
 /* host notes */
@@ -1444,7 +1439,6 @@ form[action="addressbook"] > p.buttons, #filter, #search, #visualid tr:last-chil
 
 #paginate, #filtered, #results {
   margin-right: 4px;
-  display: inline-block;
   float: right;
   word-spacing: 0;
   letter-spacing: 0;

@@ -1585,7 +1585,6 @@ form[action="addressbook"] table {
 
 #paginate, #filtered, #results {
   margin-right: 4px;
-  display: inline-block;
   float: right;
   word-spacing: 0;
   letter-spacing: 0;
