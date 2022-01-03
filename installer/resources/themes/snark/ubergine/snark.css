@@ -1378,7 +1378,7 @@ tr.active:hover .percentBarInner, tr.active:hover .peerinfo .percentBarInner {
 }
 
 @keyframes scale {
-  0,100% {transform: scale(1)}
+  0%,100% {transform: scale(1)}
   50% {transform: scale(1.3)}
 }
 

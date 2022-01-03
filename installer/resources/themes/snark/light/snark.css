@@ -1095,7 +1095,7 @@ tr:hover .percentBarComplete {
 }
 
 @keyframes scale {
-  0,100% {transform: scale(1)}
+  0%,100% {transform: scale(1)}
   50% {transform: scale(1.3)}
 }
 
@@ -4332,8 +4332,6 @@ td.snarkTorrentAction input[type=submit] {
     border-radius: 1px;
     box-shadow: 0 0 0 1px rgba(32,32,32,.4), inset 2px 2px 2px rgba(0,0,0,.2);
     background: linear-gradient(180deg,rgba(128,128,180,.2), rgba(192,192,220,.2));
-  }
-  .nopeers td.snarkTorrentPeerCount b {
   }
   .nopeers td.snarkTorrentPeerCount b .left, .nopeers td.snarkTorrentPeerCount b .right {
     color: #333;

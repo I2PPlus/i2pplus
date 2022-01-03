@@ -1325,11 +1325,7 @@ tr:nth-child(even) + .peerinfo:nth-child(odd) {
 }
 
 .txBarInner {
-}
-
-.txBarInner {
   height: calc(100% - 2px);
-  display: inline-block;
   float: left;
   position: absolute;
   left: 1px;
@@ -1646,7 +1642,7 @@ input[type=submit], input[type="reset"], a.control {
 }
 
 input[type=submit]:hover, input[type="reset"]:hover, input[type=submit]:focus, input[type="reset"]:focus, a.control:hover, a.control:focus {
-  color: #var(--ink);
+  color: var(--ink);
   border: var(--border_main);
   box-shadow: var(--btn_shadow_hover);
   background: var(--btn_hover);
@@ -1804,7 +1800,7 @@ select option {
 }
 
 select:hover, select:active {
-  color: #var(--ink);
+  color: var(--ink);
   box-shadow: var(--btn_shadow_hover);
   background: var(--dropdown_hover) no-repeat scroll right 8px center / 10px, var(--btn_hover) !important;
 }
