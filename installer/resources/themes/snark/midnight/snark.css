@@ -3683,7 +3683,7 @@ tr:not(.peerinfo) .snarkTorrentDownloaded .percentBarText::after {
 .tooltipped {
   display: inline-block;
   position: relative;
-  z-index: 999;
+  z-index: 99;
   content: "";
 }
 
