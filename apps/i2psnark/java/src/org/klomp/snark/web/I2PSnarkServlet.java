@@ -5039,13 +5039,14 @@ public class I2PSnarkServlet extends BasicServlet {
             else
                 icon = "compress";
         } else if (mime.equals("application/x-rar-compressed")) {
-                icon = "rar";
-        } else if (mime.equals("application/x-gtar") || mime.equals("application/x-xz") ||
-                 mime.equals("application/compress") || mime.equals("application/gzip") ||
-                 mime.equals("application/x-7z-compressed") || mime.equals("application/x-tar") ||
-                 mime.equals("application/x-bzip2") || plc.endsWith(".txz"))
+            icon = "rar";
+        } else if (mime.equals("application/x-gtar") || mime.equals("application/x-tar") || plc.endsWith(".txz")) {
+            icon = "tar";
+        } else if (mime.equals("application/x-xz") || mime.equals("application/compress") ||
+                   mime.equals("application/gzip") || mime.equals("application/x-7z-compressed") ||
+                   mime.equals("application/x-bzip2")) {
             icon = "compress";
-        else if (plc.endsWith(".bin"))
+        } else if (plc.endsWith(".bin"))
             icon = "app";
         else if (plc.endsWith(".bat") || plc.endsWith(".dll"))
             icon = "windows";

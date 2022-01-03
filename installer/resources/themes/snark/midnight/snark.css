@@ -319,7 +319,7 @@ td.snarkTrackerDetails img::before, td.snarkTorrentDetails img::before {
   height: 56px;
   overflow: hidden;
   text-align: left;
-  font: normal 8.5pt var(--monospaced)
+  font: normal 8.5pt var(--monospaced);
   color: #778;
   border-spacing: 0;
   border-bottom: var(--border);
@@ -672,7 +672,7 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
   transform: scale(0.9);
 }
 
-.snarkTorrentDetails a:active img:[src$="rateme.svg"] {
+.snarkTorrentDetails a:active img[src$="rateme.svg"] {
   transform: scale(0.9) !important;
 }
 
@@ -1886,7 +1886,7 @@ select option:hover, select option:checked {
 }
 
 textarea {
-  font: 8pt var(--monospaced)
+  font: 8pt var(--monospaced);
   font-weight: 700;
   padding: 1px 4px 0;
   color: #4e47bf;

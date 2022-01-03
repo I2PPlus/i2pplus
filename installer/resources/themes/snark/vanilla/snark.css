@@ -664,8 +664,8 @@ tr:hover .snarkTrackerDetails img {
 }
 
 .snarkTrackerDetails a:hover img, .snarkTrackerDetails a:focus img,
-.snarkTorrentDetails a:hover img[src^="/i2psnark/.resources/icons/"],
-.snarkTorrentDetails a:focus img[src^="/i2psnark/.resources/icons/"],
+.snarkTorrentDetails a:hover img[src^="/i2psnark/.resources/icons/"]:not([src$="rateme.svg"]),
+.snarkTorrentDetails a:focus img[src^="/i2psnark/.resources/icons/"]:not([src$="rateme.svg"]),
 .snarkCommentDetails a:hover img, .snarkCommentDetails a:focus img,
 .snarkDirInfo td:first-child a:hover img:not(.thumb),
 .snarkDirInfo td:first-child a:focus img:not(.thumb) {
@@ -1374,6 +1374,22 @@ thead img.disable, img.disable:hover {
 }
 
 /* end download bars */
+
+.peerSeed img {
+  font-size: 0;
+  opacity: .7;
+  transform: scale(1);
+}
+
+.active .peerSeed img {
+  opacity: 1;
+  animation: scale .2s linear 3s 2 forwards;
+}
+
+@keyframes scale {
+  0%,100% {transform: scale(1)}
+  50% {transform: scale(1.3)}
+}
 
 .choked {
   color: #a00000 !important;
@@ -4071,27 +4087,27 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
 }
 
 .actionStart:active {
-  background: var(--start) no-repeat center center / 14px, var(--btnAction_active) !important;
+  background: var(--start) no-repeat center center / 12px, var(--btnAction_active) !important;
 }
 
 .actionStop:active {
-  background: var(--stop) no-repeat center center / 14px, var(--btnAction_active) !important;
+  background: var(--stop) no-repeat center center / 12px, var(--btnAction_active) !important;
 }
 
 .actionRemove:active {
-  background: var(--remove) no-repeat center center / 14px, var(--btnAction_active) !important;
+  background: var(--remove) no-repeat center center / 12px, var(--btnAction_active) !important;
 }
 
 .actionDelete:active {
-  background: var(--delete) no-repeat center center / 14px, var(--btnAction_active) !important;
+  background: var(--delete) no-repeat center center / 12px, var(--btnAction_active) !important;
 }
 
 #actionStartAll:active {
-  background: var(--startall) no-repeat center center / auto 14px, var(--btnAction_active) !important;
+  background: var(--startall) no-repeat center center / auto 12px, var(--btnAction_active) !important;
 }
 
 #actionStopAll:active {
-  background: var(--stopall) no-repeat center center / auto 14px, var(--btnAction_active) !important;
+  background: var(--stopall) no-repeat center center / auto 12px, var(--btnAction_active) !important;
 }
 
 /* end action buttons */
@@ -4182,6 +4198,9 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
   .snarkTorrentAction input[type=submit] {
     padding: 11px !important;
     background-size: 13px, 100%, 13px !important;
+  }
+  .snarkTorrentAction input[type=submit]:active {
+    background-size: 11px, 100% !important;
   }
   #actionStopAll, #actionStartAll {
     padding: 11px 18px !important;
@@ -4773,7 +4792,6 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
     font-size: 11.5pt;
     background-size: 17px auto, 100%, 100% !important;
   }
-
   .nav_main:link, .nav_forum:link {
     padding-left: 27px !important;
   }
@@ -4840,22 +4858,18 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
   .dirInfoComplete {
     margin-right: 4px;
   }
-
   .mainsection .snarkTorrentInfo td {
     padding-top: 4px !important;
     padding-bottom: 4px !important;
   }
-
   .snarkDirInfo td:nth-child(n+2) {
     padding-left: 10px;
     padding-right: 10px;
   }
-
   tr#torrentInfoStats td {
     padding-top: 5px !important;
     padding-bottom: 5px !important;
   }
-
   .debugConnection {
     margin: 0 4px;
     padding: 2px 3px;
