@@ -746,13 +746,11 @@ input.delete {
 }
 
 @media screen and (max-width: 1200px) {
-#dologin {
-  width: 500px;
-}
+  #dologin {width: 500px}
 }
 
 @keyframes fade-in {
-  0,80% {filter: opacity(0)}
+  0%,80% {filter: opacity(0)}
   100% {filter: opacity(1)}
 }
 
@@ -950,9 +948,6 @@ div#emptymailbox {
   margin-bottom: 10px;
 }
 
-.topbuttons .pagenav {
-}
-
 .bottombuttons .pagenav {
   margin-top: -2px;
 }
@@ -966,8 +961,8 @@ div#bottombuttons { /* config page button positioning */
   border: 1px solid #3e3d4b !important;
   box-shadow: none !important;
   background: #652787 !important;
-  cursor: default;
   opacity: .5;
+  cursor: default;
 }
 
 .pagenavcontrols input[type=submit] {

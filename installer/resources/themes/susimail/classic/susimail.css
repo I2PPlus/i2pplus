@@ -1015,7 +1015,7 @@ select:focus {
 }
 
 @keyframes fade-in {
-  0,80% {filter: opacity(0)}
+  0%,80% {filter: opacity(0)}
   100% {filter: opacity(1)}
 }
 

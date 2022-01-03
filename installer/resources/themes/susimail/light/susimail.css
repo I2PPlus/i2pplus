@@ -965,7 +965,7 @@ hr {
 }
 
 @keyframes fade-in {
-  0,80% {filter: opacity(0)}
+  0%,80% {filter: opacity(0)}
   100% {filter: opacity(1)}
 }
 
@@ -1133,20 +1133,18 @@ h3#config {
 /* top buttons */
 
 #info {
-  float: right;
   margin: 4px 180px -4px 0;
   padding-left: 3px;
   padding-right: 8px;
-  display: inline-block;
-  overflow: hidden;
+  float: right;
   line-height: 150%;
+  overflow: hidden;
   text-transform: lowercase;
-  color: #5b5b71;
   font-weight: 400;
+  color: #5b5b71;
   border: 1px solid #bbd;
   border-radius: 2px;
   box-shadow: 0 0 1px 0 rgba(220,220,255,.3);
-  background: #f6f6ff;
   background: var(--btn);
 }
 
@@ -1162,7 +1160,6 @@ h3#config {
   color: #54586f;
   font-weight: 700;
   border-right: 1px solid #bbd;
-  background: #99b;
   background: var(--btn);
 }
 
@@ -2064,7 +2061,6 @@ select::-ms-expand {
 
 .folders {
   margin: -3px 0 0 0;
-  display: inline-block;
   float: left;
 }
 
