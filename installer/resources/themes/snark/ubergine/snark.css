@@ -1352,7 +1352,7 @@ tr.active:hover .percentBarInner, tr.active:hover .peerinfo .percentBarInner {
   box-shadow: 0 0 0 1px rgba(0,0,0,.7), inset 0 0 0 1px rgba(16,0,16,.75), var(--shadow_inset);
   background: repeating-linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,0) 7px, rgba(0,0,0,.2) 7px, rgba(0,0,0,.2) 8px, rgba(0,0,0,0) 8px),
     linear-gradient(to left, rgba(0, 255, 0, .3), rgba(255, 255, 0, .3), rgba(255, 0, 0, .3));
-  background-size: 100%, 400% 100%, 100%
+  background-size: 100%, 400% 100%, 100%;
   opacity: 1;
 }
 

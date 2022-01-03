@@ -134,11 +134,12 @@ label, th img, .newtorrentsection, #closeLog, #pagenav {
   position: relative;
   line-height: 1.2;
   letter-spacing: .1em;
-  color: #3f3;
+  text-transform: uppercase;
   font-size: 10pt;
   font-weight: 700;
-  text-transform: uppercase;
   text-shadow: 0 0 1px #000;
+  -webkit-text-stroke: 1px rgba(0,0,0,.3);
+  color: #3f3;
   border: 1px solid #4a4;
   border-radius: 0;
   box-shadow: var(--highlight), inset 0 0 1px 1px #0f0;
@@ -207,8 +208,9 @@ label, th img, .newtorrentsection, #closeLog, #pagenav {
 
 .snarkNav:link:active, .snarkNav:active {
   box-shadow: var(--highlight), inset 3px 3px 3px 3px #3f1a04 !important;
-  color: #fff !important;
   text-shadow: none;
+  -webkit-text-stroke: 0;
+  color: #fff !important;
   background-size: 14px !important;
   background-repeat: no-repeat !important;
   filter: none;
