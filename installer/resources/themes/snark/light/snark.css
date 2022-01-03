@@ -3189,7 +3189,7 @@ input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilte
 }
 
 .toggleview:active .tab_label::after, #tab_config:active .tab_label::after {
-  transform: rotate(90deg);
+  transform: rotate(90deg) scale(.9);
   transition: ease transform .15s;
 }
 
@@ -3892,10 +3892,6 @@ td.snarkTorrentAction input[type=submit] {
   background: var(--stopall_hover) no-repeat center center / auto 14px, var(--btnAction_hover) !important;
 }
 
-.snarkTorrentAction input:active {
-  box-shadow: var(--highlight), inset 2px 2px 3px #557;
-}
-
 #actionStopAll, #actionStartAll {
   padding: 11px 19px !important;
 }
@@ -3928,6 +3924,11 @@ td.snarkTorrentAction input[type=submit] {
 #actionStopAll, #actionStopAll:active {
   background: var(--stopall) no-repeat center center / auto 14px, var(--btnAction),
     var(--stopall_hover) no-repeat center center / auto 14px !important;
+}
+
+.snarkTorrentAction input:active, #actionStartAll:active, #actionStopAll:active {
+  box-shadow: var(--highlight), inset 2px 2px 3px #557;
+  background-size: auto 12px, 100% !important;
 }
 
 /* end action buttons */
@@ -4003,7 +4004,10 @@ td.snarkTorrentAction input[type=submit] {
   }
   .snarkTorrentAction input[type=submit] {
     padding: 11px !important;
-    background-size: 13px !important;
+    background-size: 13px, 100% !important;
+  }
+  .snarkTorrentAction input:active {
+    background-size: auto 11px, 100% !important;
   }
   #actionStopAll, #actionStartAll {
     padding: 11px 18px !important;
@@ -4016,10 +4020,13 @@ td.snarkTorrentAction input[type=submit] {
 @media screen and (max-width: 1200px) {
   .snarkTorrentAction input[type=submit] {
     padding: 10px !important;
-    background-size: 12px !important;
+    background-size: auto 12px, 100% !important;
   }
   #actionStopAll, #actionStartAll {
     padding: 10px 17px !important;
+  }
+  .snarkTorrentAction input:active {
+    background-size: auto 10px, 100% !important;
   }
   .dirInfoComplete {
     display: none;
