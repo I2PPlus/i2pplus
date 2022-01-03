@@ -847,7 +847,7 @@ div.refresh {
 }
 
 .percentBarInner[style="width: 100%;"] {
-   border-right none;
+   border-right: none;
 }
 
 .percentBarText {
@@ -3974,7 +3974,6 @@ h3#servicedebug a, h3#graphinfo a, h3#browseronstart a {
   width: 16px;
   height: 16px;
   float: right;
-  display: inline-block;
   background: var(--settings2) no-repeat center center / 16px;
   content: "";
 }
