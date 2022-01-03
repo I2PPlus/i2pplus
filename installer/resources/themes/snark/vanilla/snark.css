@@ -582,7 +582,7 @@ tfoot tr:first-child th {
 .tooltipped {
   display: inline-block;
   position: relative;
-  z-index: 999;
+  z-index: 99;
   content: "";
 }
 

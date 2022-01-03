@@ -155,7 +155,7 @@ public class JSONRPC2Servlet extends HttpServlet {
         out.println("<link href=\"/themes/i2pcontrol/i2pcontrol.css\" rel=\"stylesheet\" type=\"text/css\">");
         out.println("</head>\n<body>");
         out.println("<h1>I2PControl RPC Service&nbsp;&nbsp;<a href=\"/configwebapps\" title=\"Control and configure service\">" +
-                    "<img src=\"/themes/console/images/info/configure.png\" height=\"16\" width=\"16\"></a></h1>");
+                    "<img src=\"/themes/console/images/svg/configure.svg\" height=\"16\" width=\"16\"></a></h1>");
         out.println("<p><b>Version:</b> " + I2PControlVersion.VERSION + "<br>");
         out.println("<b>Status:</b> Running</p>");
        if ("/password".equals(httpServletRequest.getServletPath())) {

@@ -7,8 +7,11 @@
 
 :root {
   --bg: url("data:image/svg+xml,%3Csvg height='4' viewBox='0 0 4 4' width='4' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m1 3h1v1h-1zm2-2h1v1h-1z' fill='%23e2e2ff' fill-opacity='.5'/%3E%3C/svg%3E");
-  --h1: var(--bg), linear-gradient(135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(180deg,#fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px);
-  --h2: linear-gradient(180deg,#fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(90deg, #fcfcff 5%, rgba(231, 231, 255, .8) 25%);
+  --h1: var(--bg), linear-gradient(135deg, #fcfcff, rgba(252,252,255,0) 600px),
+    linear-gradient(180deg,#fcfcff 50%, rgba(248,248,255,.6) 50%),
+    repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px);
+  --h2: linear-gradient(180deg,#fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
+    linear-gradient(90deg, #fcfcff 5%, rgba(231, 231, 255, .8) 25%);
   --h3: linear-gradient(180deg,#fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4));
   --p: linear-gradient(135deg, #fafaff, #f8f8ff);
   --div_infohelp: repeating-linear-gradient(180deg,rgba(255,255,255,.4) 2px, rgba(232,232,255,.7) 4px), var(--p);
@@ -2270,7 +2273,6 @@ h3#exploratory {
   margin-bottom: -1px;
   width: 16px;
   height: 16px;
-  display: inline-block;
   float: right;
   background: var(--settings) no-repeat center center / 16px;
   content: "";
@@ -2889,7 +2891,6 @@ table#wrapperlogs {
   margin: -5px -5px -5px 0;
   padding: 5px;
   float: right;
-  display: inline-block;
   vertical-align: middle;
   border-left: 1px solid var(--border_inner);
   box-shadow: var(--highlight);

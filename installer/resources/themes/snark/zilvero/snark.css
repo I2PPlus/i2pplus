@@ -703,7 +703,7 @@ td.snarkGraphicStatus img {
 .tooltipped {
 	display: inline-block;
 	position: relative;
-	z-index: 999;
+	z-index: 99;
 	content: "";
 }
 
@@ -1536,14 +1536,6 @@ td.snarkTrackerDetails a:active {
 	font-weight: 700;
 	border-radius: 1px;
 	background: #ddd;
-}
-
-.snarkTorrentStatus b {
-	display: none;
-}
-
-.snarkTorrentStatus .alwaysShow {
-	display: inline-block;
 }
 
 thead img {
@@ -2709,7 +2701,7 @@ input[name="i2cpOpts"], input[name="nofilter_dataDir"] {
 	width: calc(100% - 220px);
 }
 
-.snarkTorrents td:empty, .snarkTorrents th:empty, .snarkTorrentStatus {
+.snarkTorrents td:empty, .snarkTorrents th:empty {
 	padding: 3px !important;
 	width: 0 !important;
 	min-width: 0;
@@ -2762,15 +2754,16 @@ input[name="i2cpOpts"], input[name="nofilter_dataDir"] {
 	background-blend-mode: normal;
 }
 
+.snarkTorrentAction input:active, #actionStartAll:active, #actionStopAll:active {
+	background-size: auto 12px !important;
+}
+
 @media screen and (max-width: 1499px) {
 	th img {
 		max-height: 20px !important;
 	}
 	td.snarkGraphicStatus {
 		background-size: 24px auto !important;
-	}
-	.snarkTorrentStatus b, .snarkTorrentStatus b.alwaysShow	{
-		display: none !important;
 	}
 }
 
@@ -2867,92 +2860,14 @@ input[name="i2cpOpts"], input[name="nofilter_dataDir"] {
 		width: 12px !important;
 		height: 12px !important;
 	}
-	td.snarkTorrentStatus {
-		text-align: left !important;
-	}
-	td.snarkTorrentStatus b {
-		padding: 3px 5px 5px;
-		min-width: 99px;
-		display: inline-block;
-		text-align: center;
-		position: relative;
-		line-height: 1;
-		font-size: 9.5pt !important;
-		color: #eee;
-		text-shadow: 0 1px 1px #111;
-		border-radius: 2px;
-		background: #a970a9;
-	}
-	.lang_fr td.snarkTorrentStatus b, .lang_hu td.snarkTorrentStatus b, .lang_tr td.snarkTorrentStatus b {
-		min-width: 130px;
-	}
-	td.snarkTorrentStatus b::before {
-		width: 0;
-		height: 0;
-		position: absolute;
-		top: calc(50% - 5px);
-		left: -10px;
-		border-width: 5px;
-		border-style: solid;
-		border-color: transparent #a970a9 transparent transparent;
-		content: "";
-	}
-	.active.seeding.complete .snarkTorrentStatus b {
-		background: #937;
-		background: repeating-linear-gradient(135deg, #937, #937 8px, #826 9px, #826 17px);
-	}
-	.active.seeding.complete .snarkTorrentStatus b::before {
-		border-color: transparent #937 transparent transparent;
-	}
-	.active.downloading .snarkTorrentStatus b {
-		background: #373;
-		background: repeating-linear-gradient(135deg, #595, #595 8px, #373 9px, #373 17px);
-	}
-	.active.downloading .snarkTorrentStatus b::before {
-		border-color: transparent #595 transparent transparent;
-	}
-	.inactive.downloading .snarkTorrentStatus b, .active.starting .snarkTorrentStatus b {
-		color: #111;
-		text-shadow: 0 1px 1px #ff3;
-		background: #ff3;
-	}
-	.inactive.downloading .snarkTorrentStatus b::before, .active.starting .snarkTorrentStatus b::before {
-		border-color: transparent #ff3 transparent transparent;
-	}
-	.stopped.complete .snarkTorrentStatus b {
-		background: #28f;
-	}
-	.stopped.complete .snarkTorrentStatus b::before {
-		border-color: transparent #28f transparent transparent;
-	}
-	.nopeers.incomplete .snarkTorrentStatus b {
-		text-shadow: 0 1px 1px #bbb;
-		background: #aaa;
-	}
-	.nopeers.incomplete .snarkTorrentStatus b::before {
-		border-color: transparent #aaa transparent transparent;
-	}
-	.stopped.incomplete .snarkTorrentStatus b, .neterror .snarkTorrentStatus b {
-		background: #900 !important;
-	}
-	.inactive.neterror .snarkTorrentStatus b {
-		background: repeating-linear-gradient(135deg, #900, #900 8px, #700 9px, #700 17px) !important;
-	}
-	.stopped.incomplete .snarkTorrentStatus b::before, .neterror .snarkTorrentStatus b::before {
-		border-color: transparent #900 transparent transparent !important;
-	}
 	.snarkTorrentDownloaded, .snarkTorrentUploaded, .snarkTorrentRateDown, .snarkTorrentRateUp {
 		min-width: 76px;
-	}
-	.neterror .snarkTorrentStatus b {
-		color: #eee !important;
-		text-shadow: 0 1px 1px #111 !important;
 	}
 	.trackerhome, .trackerannounce, .knowntracker a {
 		width: 400px !important;
 		max-width: 400px !important;
 	}
-	.snarkTorrents td:empty, .snarkTorrents th:empty, .snarkTorrentStatus {
+	.snarkTorrents td:empty, .snarkTorrents th:empty {
 		padding: 5px !important;
 		width: 0 !important;
 		min-width: 0;

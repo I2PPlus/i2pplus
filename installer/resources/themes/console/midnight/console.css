@@ -2519,7 +2519,6 @@ div.sorry hr {
 
 .newsAuthor {
   padding: 0 0 0 18px;
-  display: inline-block;
   float: right;
   text-transform: none;
   font-size: 8pt !important;
@@ -12979,7 +12978,7 @@ li.noevents::after {
   height: 0;
   position: absolute;
   top: -99999px;
-  left: -99999px
+  left: -99999px;
   opacity: 0;
 }
 
