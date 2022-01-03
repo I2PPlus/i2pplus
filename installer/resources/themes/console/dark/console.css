@@ -2167,6 +2167,10 @@ button.download.control:active {
   background: var(--hover) var(--download_active) var(--center) / 14px;
 }
 
+button.control:active {
+  background-size: 12px !important;
+}
+
 /* end project "X" */
 
 .routersummary button.reload, .routersummary button.stop, .routersummary button.cancel {
