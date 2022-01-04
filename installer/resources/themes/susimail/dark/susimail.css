@@ -1418,7 +1418,6 @@ h3#config {
 #info {
   margin: 4px 140px 0 4px;
   padding: 0 8px 0 3px;
-  display: inline-block;
   float: right;
   line-height: 1.5;
   text-transform: lowercase;

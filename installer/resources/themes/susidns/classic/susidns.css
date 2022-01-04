@@ -719,9 +719,6 @@ textarea[name="config"], textarea[name="content"] {
 /* topnav */
 
 #navi {
-}
-
-#navi {
   padding: 3px !important;
   display: flex;
   text-align: center !important;
@@ -1149,7 +1146,6 @@ h3, h3 a {
 
 #paginate, #filtered, #results {
   margin-right: 4px;
-  display: inline-block;
   float: right;
   word-spacing: 0;
   letter-spacing: 0;
