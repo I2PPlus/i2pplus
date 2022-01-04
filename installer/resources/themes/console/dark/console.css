@@ -2177,11 +2177,6 @@ button:active {
   background: var(--download_hover) no-repeat center left 6px / 14px, var(--btn_hover_radial);
 }
 
-#sidebar .download:hover, #sidebar .download:focus, #sidebar .download:active {
-  padding: 5px 7px 5px 22px !important;
-  background: var(--download_hover) no-repeat 6px center / 14px, var(--btn_hover_radial);
-}
-
 /* end sidebar buttons */
 
 /* client config buttons aka project "X" */
