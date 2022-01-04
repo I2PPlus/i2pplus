@@ -2029,6 +2029,15 @@ select {
 	background: var(--hash) no-repeat 4px center / 12px, linear-gradient(180deg,#efe, #e6ffe6);
 }
 
+.magnetLabel {
+	display: inline-block;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	vertical-align: middle;
+	line-height: 1.1;
+}
+
 .knownTracker .optbox, #addtracker .optbox {
 	vertical-align: middle;
 	margin-top: 1px;
@@ -2764,6 +2773,15 @@ input[name="i2cpOpts"], input[name="nofilter_dataDir"] {
 	}
 	td.snarkGraphicStatus {
 		background-size: 24px auto !important;
+	}
+}
+
+@media screen and (max-width: 1200px) {
+	.snarkTorrents .infohash {
+		width: 64px;
+	}
+	.magnetLabel {
+		max-width: 250px;
 	}
 }
 
