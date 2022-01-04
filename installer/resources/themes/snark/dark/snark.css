@@ -3030,7 +3030,7 @@ td .commentAuthorName {
 input:checked + .toggleview:active .tab_label::after {
   box-shadow: 0 0 0 2px rgb(153,51,0,.7);
   filter: drop-shadow(0 0 1px #930);
-  transform: rotate(-90deg);
+  transform: rotate(-90deg) scale(.9);
   transition: linear transform .01s;
 }
 

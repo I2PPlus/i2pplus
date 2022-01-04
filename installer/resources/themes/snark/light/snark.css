@@ -3194,7 +3194,7 @@ input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilte
 }
 
 input:checked + .toggleview:active .tab_label::after {
-  transform: rotate(-90deg);
+  transform: rotate(-90deg) scale(.9);
   transition: linear transform .15s;
 }
 
