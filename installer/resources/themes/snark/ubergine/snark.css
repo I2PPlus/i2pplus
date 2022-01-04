@@ -4093,7 +4093,7 @@ td.peerCount {
 
 td.peerCount b {
   padding: 4px 3px;
-  min-width: 91px;
+  min-width: 102px;
   display: inline-block;
   position: relative;
   line-height: 1;
@@ -4109,7 +4109,7 @@ td.peerCount b {
 td.peerCount b .left, td.peerCount b .right {
   margin: 0 1px;
   padding: 2px 3px 1px;
-  min-width: 31px !important;
+  min-width: 36px !important;
   display: inline-block;
   text-align: center;
   color: #eee;
@@ -4124,7 +4124,7 @@ td.peerCount b .left, td.peerCount b .right {
 }
 
 td.peerCount b a:hover .left, td.peerCount b a:hover .right {
-  min-width: 27px !important;
+  min-width: 30px !important;
   color: #f60 !important;
   background: linear-gradient(180deg,rgba(220,80,0,.3), rgba(255,96,0,.3));
 }
