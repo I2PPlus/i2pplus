@@ -1985,7 +1985,7 @@ public class I2PSnarkServlet extends BasicServlet {
         String statusString;
         // add status to table rows so we can selectively show/hide snarks and style based on status
         String snarkStatus;
-        String rowClass = (row % 2 == 0 ? "snarkTorrentEven" : "rowOdd");
+        String rowClass = (row % 2 == 0 ? "rowEven" : "rowOdd");
         if (snark.isChecking()) {
             (new DecimalFormat("0.00%")).format(snark.getCheckingProgress());
             statusString = toSVGWithDataTooltip("processing", "", _t("Checking")) + "</td>" +
@@ -4391,7 +4391,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 }
             }
 
-            String rowClass = (rowEven ? "snarkTorrentEven" : "rowOdd");
+            String rowClass = (rowEven ? "rowEven" : "rowOdd");
             String completed = (complete ? "completed" : "incomplete");
             rowEven = !rowEven;
             buf.append("<tr class=\"").append(rowClass).append(' ').append(completed).append("\">");

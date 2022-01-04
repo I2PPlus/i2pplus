@@ -1,4 +1,4 @@
-.rowOdd, .snarkTorrentEven, .peerinfo, .debuginfo {
+.rowOdd, .rowEven, .peerinfo, .debuginfo {
     display: table-row;
 }
 
