@@ -13213,10 +13213,17 @@ body.iframed {
 @media screen and (max-width: 1499px) {
   #sidebar .reload, #sidebar .stop, #sidebar .stop:hover, #sidebar .stop:focus,
   #sidebar .reload[value="restartImmediate"] {
-    background-size: 14px, 100% !important;
+    background-size: 12px, 100% !important;
+  }
+  #sidebar .reload[value="restartImmediate"],
+  #sidebar .reload[value="restartImmediate"]:hover,
+  #sidebar .reload[value="restartImmediate"]:focus {
+    margin-bottom: -6px;
+    background-size: 10px, 100% !important;
+    background-position: 9px center !important;
   }
   #sidebar .reload:hover, #sidebar .reload:focus {
-    background-size: 14px, 14px, 100% !important;
+    background-size: 12px, 12px, 100% !important;
   }
   h3[id*="jobs"]:first-of-type {margin-top: 21px !important}
   #pluginconfig {margin-top: -13px !important}
