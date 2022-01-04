@@ -511,7 +511,9 @@ th.RateDown, th.RateUp, th.SnarkTorrentAction {
 }
 
 .peerCount {
-  padding-right: 5px;
+  padding-left: 0;
+  padding-right: 0;
+  width: 1%;
   white-space: nowrap;
 }
 
@@ -520,10 +522,8 @@ th.peerCount a img {
 }
 
 td.peerCount {
-  padding-left: 0;
-  width: 1%;
-  white-space: nowrap;
   text-align: left;
+  font-weight: 700 !important;
 }
 
 .nopeers.zero td.peerCount, .stopped.zero td.peerCount {
@@ -3695,10 +3695,6 @@ td.graphicStatus img {
   background: radial-gradient(at center bottom, rgba(16,72,16,.3), rgba(0,0,0,0) 50%), linear-gradient(180deg,#000a00,#020);
 }
 
-td.peerCount {
-  font-weight: 700 !important;
-}
-
 .RateUp, .torrentUploaded {
   font-style: italic;
 }
@@ -4275,7 +4271,7 @@ td.torrentAction input[type=submit] {
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .snarkTorrents .trackerDetails {
+  .trackerDetails {
     padding: 0 !important;
     width: 0 !important;
     min-width: 0 !important;
@@ -4404,7 +4400,7 @@ td.torrentAction input[type=submit] {
     text-overflow: ellipsis;
   }
   .snarkTorrents th img, .snarkTorrents th img, .snarkTorrents th a:hover img {max-height: 18px !important}
-  .snarkTorrents th.peerCount img {display: none}
+  th.peerCount img {display: none}
   th#torrentSort {text-align: center}
   .torrentUploaded, .RateUp, .peerinfo,
   .debuginfo, .alwaysShow {display: none !important}
@@ -4489,9 +4485,6 @@ td.torrentAction input[type=submit] {
   .torrentAction {
     padding-left: 4px !important;
     padding-right: 3px !important;
-  }
-  .trackerDetails {
-    padding-left: 4px !important;
   }
   .torrentName {
     padding-right: 3px;
@@ -4589,15 +4582,6 @@ td.torrentAction input[type=submit] {
   .trackerconfig input.trackername {
     max-width: 180px !important;
     width: 180px !important;
-  }
-  td.peerCount {
-    padding-left: 0;
-    width: 1%;
-    white-space: nowrap;
-    font-weight: 700;
-  }
-  td.peerCount {
-    padding-right: 3px !important;
   }
   td.peerCount b {
     padding: 4px 3px;
@@ -4838,7 +4822,6 @@ td.torrentAction input[type=submit] {
     max-width: 400px !important;
   }
   .routerdown {margin-bottom: 10px}
-  td.peerCount {padding-right: 10px !important}
   .peerCount .left {margin-left: 2px}
   .peerCount .right {margin-right: 2px}
   .torrentInfo th:first-child img, #torrentinfostats img, #trackers img {
