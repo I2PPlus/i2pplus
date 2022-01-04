@@ -1026,7 +1026,8 @@ public class Blocklist {
     private void banlist(Hash peer, byte[] ip) {
         // Temporary reason, until the job finishes
         String sip = Addresses.toString(ip);
-        String reason = " <b>➜</b> " + _x("Blocklist IP ban") + " (<a class=whois href=https://gwhois.org/" + sip + " target=_blank>" + sip + "</a>)";
+        String reason = " <b>➜</b> " + _x("Blocklist") + ": <a title=\"Lookup on gwhois.org\" class=whois href=https://gwhois.org/" +
+                         sip + " target=_blank>" + sip + "</a>";
         if (sip != null && sip.startsWith("127.") || "0:0:0:0:0:0:0:1".equals(sip) ||
             sip.startsWith("192.168.") || sip.startsWith("10.") ||
             (ip != null && ip.length == 4 && (ip[0] * 0xff) == 172 && ip[1] >= 16 && ip[1] <= 31)) {
@@ -1121,7 +1122,8 @@ public class Blocklist {
                     }
                     if (match(ipint, toEntry(e.ip1, e.ip2))) {
                         try { br.close(); } catch (IOException ioe) {}
-                        String reason = " <b>➜</b> " + _x("Blocklist IP ban") + " (<a class=whois href=https://gwhois.org/" + sip + " target=_blank>" + sip + "</a>)";
+                        String reason = " <b>➜</b> " + _x("Blocklist") + ": <a title=\"Lookup on gwhois.org\" class=whois href=https://gwhois.org/" +
+                                         sip + " target=_blank>" + sip + "</a>";
                         // only one translate parameter for now
                         //for (int i = 0; i < 4; i++) {
                         //    reason = reason + (ip[i] & 0xff);
