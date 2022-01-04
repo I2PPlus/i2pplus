@@ -2149,6 +2149,7 @@ button:active {
 
 #sidebar .reload[value="restartImmediate"]:hover, #sidebar .reload[value="restartImmediate"]:focus {
   background: var(--restart_hover) no-repeat 8px center / 12px, var(--btn_hover_radial) !important;
+  color: #f00;
 }
 
 #sidebar .stop[value="shutdownImmediate"] {
@@ -2164,6 +2165,7 @@ button:active {
 }
 
 #sidebar .reload[value="restartImmediate"]:active {
+  color: #ee9;
   background: #f60 var(--restart_active) no-repeat 8px center / 12px !important;
 }
 
