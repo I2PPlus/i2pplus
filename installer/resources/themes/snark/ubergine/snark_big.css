@@ -46,12 +46,6 @@ input[type], select, select option, td, td a, .snarkMessages li, .snarkMessages 
   font-size: 10.5pt !important;
 }
 
-td.snarkTorrentStatus b {
-  line-height: 1 !important;
-  font-size: 9.5pt !important;
-  font-style: normal !important;
-}
-
 th.snarkTorrentDownloaded, th.snarkTorrentUploaded, th.snarkTorrentRateDown, th.snarkTorrentRateUp,
 td.snarkTorrentDownloaded, td.snarkTorrentUploaded, td.snarkTorrentRateDown, td.snarkTorrentRateUp, .snarkTorrentName a:link {
   font-size: 10pt !important;

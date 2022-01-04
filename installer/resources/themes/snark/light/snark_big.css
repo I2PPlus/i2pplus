@@ -25,7 +25,7 @@
 }
 
 input[type], select, select option, td, td a, .snarkMessages li, .snarkMessages li a, textarea, input.r, input[name="nofilter_dataDir"],
-.configsectionpanel, .configsectionpanel td, .snarkNewTorrent, .snarkNewTorrent td, #configs td, .trackerconfig td, td.snarkTorrentStatus {
+.configsectionpanel, .configsectionpanel td, .snarkNewTorrent, .snarkNewTorrent td, #configs td, .trackerconfig td {
   font-size: 10.5pt !important;
 }
 
