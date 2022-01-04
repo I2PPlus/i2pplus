@@ -1193,7 +1193,6 @@ tr:hover .percentBarText {
   margin: 3px auto;
   border: 1px solid #225;
   box-shadow: 0 0 1px 1px rgba(0,0,0,.8), var(--highlight), inset 2px 2px 2px rgba(0,0,0,.9);
-  background: #000;
   background: repeating-linear-gradient(135deg, #001 1px, #001 5px, #112 6px, #113 11px);
 }
 
@@ -1204,12 +1203,8 @@ tr:hover .percentBarText {
 }
 
 @keyframes progress {
-from {
-  background: repeating-linear-gradient(135deg, #001 1px, #001 5px, #112 6px, #113 11px);
-}
-to {
-  background: repeating-linear-gradient(135deg, #112 1px, #113 5px, #001 6px, #001 11px);
-}
+  from {background: repeating-linear-gradient(135deg, #001 1px, #001 5px, #112 6px, #113 11px)}
+  to {background: repeating-linear-gradient(135deg, #112 1px, #113 5px, #001 6px, #001 11px)}
 }
 
 .peerinfo .percentBarOuter {
@@ -1228,15 +1223,18 @@ to {
 }
 
 .torrentDownloaded .percentBarInner {
-  background: linear-gradient(90deg, rgba(0,0,0,0), rgba(255,255,0,.05) 70px, rgba(0,255,0,.1)), linear-gradient(180deg,rgba(100,100,220,.5), rgba(70,70,120,.5) 50%, rgba(0,0,50,.5) 50%, rgba(0,0,0,.5));
+  background: linear-gradient(90deg, rgba(0,0,0,0), rgba(255,255,0,.05) 70px, rgba(0,255,0,.1)),
+    linear-gradient(180deg,rgba(100,100,220,.5), rgba(70,70,120,.5) 50%, rgba(0,0,50,.5) 50%, rgba(0,0,0,.5));
 }
 
 .active:not(.peerinfo) .torrentDownloaded .percentBarInner {
-  background: linear-gradient(90deg, rgba(0,0,0,0), rgba(255,255,0,.05) 70px, rgba(0,255,0,.1)), linear-gradient(180deg,rgba(250,250,248,.5), rgba(140,140,135,.5) 50%, rgba(50,50,0,.5) 50%, rgba(20,20,0,.5));
+  background: linear-gradient(90deg, rgba(0,0,0,0), rgba(255,255,0,.05) 70px, rgba(0,255,0,.1)),
+    linear-gradient(180deg,rgba(250,250,248,.5), rgba(140,140,135,.5) 50%, rgba(50,50,0,.5) 50%, rgba(20,20,0,.5));
 }
 
 .dirInfo .percentBarInner {
-  background: linear-gradient(90deg, rgba(0,0,0,0), rgba(255,255,0,.05) 55px, rgba(0,255,0,.1)), linear-gradient(180deg,rgba(100,100,220,.5), rgba(70,70,120,.5) 50%, rgba(0,0,50,.5) 50%, rgba(0,0,0,.5));
+  background: linear-gradient(90deg, rgba(0,0,0,0), rgba(255,255,0,.05) 55px, rgba(0,255,0,.1)),
+    linear-gradient(180deg,rgba(100,100,220,.5), rgba(70,70,120,.5) 50%, rgba(0,0,50,.5) 50%, rgba(0,0,0,.5));
 }
 
 .dirInfo .percentBarInner[style="width: 0%;"] .percentBarText {
