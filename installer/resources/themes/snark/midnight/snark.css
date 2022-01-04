@@ -64,7 +64,7 @@ a, button, input {
   -webkit-text-stroke: .5px rgba(0,0,0,.4);
 }
 
-.toggleview, .snarkConfigTitle, .snarknavbar, img, input[type=submit], input[type=radio], input[type=checkbox],
+.toggleview, .configTitle, .snarknavbar, img, input[type=submit], input[type=radio], input[type=checkbox],
 label, th img, .newtorrentsection, #closeLog, #expand, #shrink {
   user-select: none;
 }
@@ -98,11 +98,11 @@ td.graphicStatus img::before {
   width: 23px;
 }
 
-th.snarkTorrentPeerCount a img {
+th.peerCount a img {
   margin-left: -5px !important;
 }
 
-td.snarkTorrentPeerCount {
+td.peerCount {
   padding-left: 0 !important;
   padding-right: 5px !important;
   width: 1%;
@@ -111,19 +111,19 @@ td.snarkTorrentPeerCount {
   font-weight: 700;
 }
 
-.snarkTorrentPeerCount .right, .snarkTorrentPeerCount .left {
+.peerCount .right, .peerCount .left {
   display: inline-block;
   min-width: 24px;
 }
 
-.snarkTorrentPeerCount .left {
+.peerCount .left {
   margin-left: 1px;
   margin-right: 4px;
   text-align: left;
   opacity: .8;
 }
 
-.snarkTorrentPeerCount .right {
+.peerCount .right {
   margin-right: 2px;
   text-align: right;
 }
@@ -707,14 +707,14 @@ td.torrentDetails img, .dirInfo td:first-child img:not(.thumb) {
   box-shadow: inset 3px 3px 3px 3px rgba(0,0,0,.3);
 }
 
-.snarkTorrentNoneLoaded td {
+.noneLoaded td {
   text-align: center !important;
   font-weight: 700;
   border-bottom: var(--border);
   background: #001;
 }
 
-.snarkTorrentNoneLoaded i {
+.noneLoaded i {
   padding: 10px;
   display: inline-block;
 }
@@ -1144,26 +1144,26 @@ tr:hover .percentBarText {
   opacity: .9;
 }
 
-.snarkTorrentEven {
+.rowEven {
   background: #080811;
   background: linear-gradient(180deg,#080818, #010010) !important;
 }
 
-.snarkTorrentOdd, .snarkTorrentOdd td, .SnarkTorrentEven, .SnarkTorrentEven td, .peerinfo td, .knownTracker td {
+.rowOdd, .rowOdd td, .SnarkTorrentEven, .SnarkTorrentEven td, .peerinfo td, .knownTracker td {
   border-top: var(--border_inner) !important;
 }
 
-.snarkTorrentOdd, .knownTracker, #trackerselect tr:nth-child(n+2) td {
+.rowOdd, .knownTracker, #trackerselect tr:nth-child(n+2) td {
   background: #040408 !important;
   background: linear-gradient(180deg,#080818, #010010) !important;
 }
 
-.snarkTorrentOdd td, .snarkTorrentEven td {
+.rowOdd td, .rowEven td {
   color: #ccd1ff !important;
   border-top: none !important;
 }
 
-.snarkTorrents .snarkTorrentEven:first-of-type td {
+.snarkTorrents .rowEven:first-of-type td {
   border-top: none !important
 }
 
@@ -1414,7 +1414,7 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
 
 /* section headings */
 
-.snarkConfigTitle, .toggleview {
+.configTitle, .toggleview {
   margin: -1px 0 -5px 0;
   padding: 4px 1px;
   min-width: 300px;
@@ -1430,37 +1430,37 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
   background: var(--tab);
 }
 
-.configsection .snarkConfigTitle, .toggleview {
+.configsection .configTitle, .toggleview {
   font-size: 0 !important;
 }
 
-.snarkConfigTitle:hover, .toggleview:hover, input.toggle_input:focus + .toggleview {
+.configTitle:hover, .toggleview:hover, input.toggle_input:focus + .toggleview {
   box-shadow: inset 0 0 0 1px #101;
   background: var(--tab_hover);
 }
 
-.snarkConfigTitle:active, .toggleview:active {
+.configTitle:active, .toggleview:active {
   box-shadow: var(--highlight), inset 0 0 0 1px #000, inset 3px 3px 3px 3px #000;
   background: var(--tab_active);
   transition: ease all .01s;
 }
 
-.configsectionpanel .snarkConfigTitle {
+.configsectionpanel .configTitle {
   box-shadow: var(--highlight);
   background: var(--title);
   background-size: 4px 100%, 100%;
   pointer-events: none;
 }
 
-.snarkConfigTitle {
+.configTitle {
   margin-bottom: -7px;
 }
 
-.configsectionpanel .snarkConfigTitle {
+.configsectionpanel .configTitle {
   padding-bottom: 4px;
 }
 
-.configsectionpanel .snarkConfigTitle {
+.configsectionpanel .configTitle {
   margin: -1px -1px -17px;
   padding: 8px !important;
   display: block;
@@ -1470,13 +1470,13 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
   font-size: 11pt !important;
 }
 
-.iframed .configsectionpanel .snarkConfigTitle {
+.iframed .configsectionpanel .configTitle {
   margin: -1px 0 -17px !important;
   border-left: none !important;
   border-right: none !important;
 }
 
-.snarkConfigTitle a {
+.configTitle a {
   display: inline-block;
   width: 100%;
 }
@@ -1562,16 +1562,16 @@ input:checked + .toggleview:active .tab_label::after {
 
 /* miminal tabs */
 
-.toggleview, .configsection .snarkConfigTitle {
+.toggleview, .configsection .configTitle {
   min-width: 300px;
   text-align: center;
 }
 
-.toggleview, .configsection .snarkConfigTitle a {
+.toggleview, .configsection .configTitle a {
   font-size: 0 !important;
 }
 
-.snarkConfig .snarkConfigTitle a {
+.snarkConfig .configTitle a {
   display: inline-block;
   width: 100%;
 }
@@ -2351,12 +2351,12 @@ a:hover img, a:focus img {
 }
 
 .newtorrentsection:hover .toggleview:not(:active), .addtorrentsection:hover .toggleview:not(:active),
-.configsection:hover .snarkConfigTitle:not(:active) {
+.configsection:hover .configTitle:not(:active) {
   box-shadow: inset 0 0 0 1px #313 !important;
 }
 
 .newtorrentsection:hover .toggleview:active, .addtorrentsection:hover .toggleview:active,
-.configsection:hover .snarkConfigTitle:active {
+.configsection:hover .configTitle:active {
   box-shadow: inset 0 0 0 1px #313, inset 3px 3px 3px 3px #000 !important;
 }
 
@@ -2475,7 +2475,7 @@ input.toggle_input {
   width: 0 !important;
 }
 
-.toggleview:hover, input.toggle_input:focus + .toggleview, .snarkConfigTitle a:focus {
+.toggleview:hover, input.toggle_input:focus + .toggleview, .configTitle a:focus {
   cursor: pointer;
 }
 
@@ -2489,7 +2489,7 @@ input:checked + label + hr + table + table {
   display: table;
 }
 
-.snarkTorrentEven td, .snarkTorrentOdd td {
+.rowEven td, .rowOdd td {
   border-top: var(--border_inner) !important;
 }
 
@@ -3524,8 +3524,8 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 
 /* alternative download bar popup bar text just for our downloads in .snarkTorrents */
 
-.snarkTorrentOdd:not(.peerinfo) .torrentDownloaded .percentBarText,
-.snarkTorrentEven:not(.peerinfo) .torrentDownloaded .percentBarText {
+.rowOdd:not(.peerinfo) .torrentDownloaded .percentBarText,
+.rowEven:not(.peerinfo) .torrentDownloaded .percentBarText {
   padding: 3px;
   min-width: 140px !important;
   display: inline-block;
@@ -3538,10 +3538,10 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
   filter: drop-shadow(0 0 1px var(--a)) drop-shadow(0 0 1px #000) drop-shadow(0 0 1px #113);
 }
 
-.snarkTorrentOdd:not(.peerinfo) .torrentDownloaded .percentBarInner,
-.snarkTorrentEven:not(.peerinfo) .torrentDownloaded .percentBarInner,
-.snarkTorrentOdd:not(.peerinfo) .torrentDownloaded .percentBarOuter,
-.snarkTorrentEven:not(.peerinfo) .torrentDownloaded .percentBarOuter {
+.rowOdd:not(.peerinfo) .torrentDownloaded .percentBarInner,
+.rowEven:not(.peerinfo) .torrentDownloaded .percentBarInner,
+.rowOdd:not(.peerinfo) .torrentDownloaded .percentBarOuter,
+.rowEven:not(.peerinfo) .torrentDownloaded .percentBarOuter {
   max-height: 16px !important;
   max-width: 84px !important;
 }
@@ -4006,7 +4006,7 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {
 
 /* end table sort indicators */
 
-td.snarkTorrentPeerCount b {
+td.peerCount b {
   padding: 4px 3px;
   min-width: 80px;
   display: inline-block;
@@ -4019,7 +4019,7 @@ td.snarkTorrentPeerCount b {
   background: #535;
 }
 
-td.snarkTorrentPeerCount b::before {
+td.peerCount b::before {
   width: 0;
   height: 0;
   position: absolute;
@@ -4031,67 +4031,67 @@ td.snarkTorrentPeerCount b::before {
   content: "";
 }
 
-td.snarkTorrentPeerCount b a:not(:hover):not(:focus), td.snarkTorrentPeerCount b a:not(:hover):not(:focus):visited {
+td.peerCount b a:not(:hover):not(:focus), td.peerCount b a:not(:hover):not(:focus):visited {
   color: #d0d;
   text-shadow: 0 1px 1px #000;
 }
 
-.inactive.downloading td.snarkTorrentPeerCount b a:not(:hover):not(:focus), .inactive.downloading td.snarkTorrentPeerCount b a:not(:hover):not(:focus):visited {
+.inactive.downloading td.peerCount b a:not(:hover):not(:focus), .inactive.downloading td.peerCount b a:not(:hover):not(:focus):visited {
   color: #900;
   text-shadow: 0 1px 1px #990 !important;
 }
 
-.active.seeding.complete .snarkTorrentPeerCount b {
+.active.seeding.complete .peerCount b {
   background: repeating-linear-gradient(135deg, #937, #937 8px, #826 9px, #826 17px);
 }
 
-.active.seeding.complete .snarkTorrentPeerCount b::before {
+.active.seeding.complete .peerCount b::before {
   border-color: transparent #937 transparent transparent;
 }
 
-.active.downloading .snarkTorrentPeerCount b {
+.active.downloading .peerCount b {
   background: repeating-linear-gradient(135deg, #252, #252 8px, #141 9px, #141 17px);
 }
 
-.active.downloading .snarkTorrentPeerCount b::before {
+.active.downloading .peerCount b::before {
   border-color: transparent #252 transparent transparent;
 }
 
-.inactive.downloading .snarkTorrentPeerCount b {
+.inactive.downloading .peerCount b {
   color: #101;
   background: #bb0;
 }
 
-.inactive.downloading .snarkTorrentPeerCount b::before {
+.inactive.downloading .peerCount b::before {
   border-color: transparent #bb0 transparent transparent;
 }
 
-.stopped.complete .snarkTorrentPeerCount b {
+.stopped.complete .peerCount b {
   background: #28f;
 }
 
-.stopped.complete .snarkTorrentPeerCount b::before {
+.stopped.complete .peerCount b::before {
   border-color: transparent #28f transparent transparent;
 }
 
-.nopeers.incomplete .snarkTorrentPeerCount b {
+.nopeers.incomplete .peerCount b {
   text-shadow: 0 1px 1px #bbb;
   background: #aaa;
 }
 
-.nopeers.incomplete .snarkTorrentPeerCount b::before {
+.nopeers.incomplete .peerCount b::before {
   border-color: transparent #aaa transparent transparent;
 }
 
-.stopped.incomplete .snarkTorrentPeerCount b, .inactive.neterror .snarkTorrentPeerCount b {
+.stopped.incomplete .peerCount b, .inactive.neterror .peerCount b {
   background: #900 !important;
 }
 
-.stopped.incomplete .snarkTorrentPeerCount b::before, .inactive.neterror .snarkTorrentPeerCount b::before {
+.stopped.incomplete .peerCount b::before, .inactive.neterror .peerCount b::before {
   border-color: transparent #900 transparent transparent !important;
 }
 
-td.snarkTorrentPeerCount b .left, td.snarkTorrentPeerCount b .right {
+td.peerCount b .left, td.peerCount b .right {
   margin: 0 1px;
   padding: 2px 3px 1px;
   min-width: 26px;
@@ -4103,29 +4103,29 @@ td.snarkTorrentPeerCount b .left, td.snarkTorrentPeerCount b .right {
   opacity: 1 !important;
 }
 
-td.snarkTorrentPeerCount b a:hover .left, td.snarkTorrentPeerCount b a:hover .right {
+td.peerCount b a:hover .left, td.peerCount b a:hover .right {
   box-shadow: rgba(255,96,0,.5), inset 2px 2px 2px rgba(0,0,0,.3);
   background: linear-gradient(180deg,rgba(32,16,32,.9), rgba(64,16,64,.9));
 }
 
-td.snarkTorrentPeerCount b:not(:empty) {
+td.peerCount b:not(:empty) {
   color: #aaa !important;
 }
 
-.nopeers td.snarkTorrentPeerCount b {
+.nopeers td.peerCount b {
   content: "‒";
   color: #000 !important;
 }
 
-td.snarkTorrentPeerCount b a {
+td.peerCount b a {
   color: #fff !important;
 }
 
-td.snarkTorrentPeerCount b a:hover, td.snarkTorrentPeerCount b a:focus {
+td.peerCount b a:hover, td.peerCount b a:focus {
   color: var(--hover) !important;
 }
 
-td.snarkTorrentPeerCount b a:active {
+td.peerCount b a:active {
   color: var(--active) !important;
 }
  /* end peer count */
@@ -4312,7 +4312,7 @@ td.torrentAction input[type=submit] {
     margin-right: 0;
   }
   .configsection {margin-bottom: -13px}
-  .configsectionpanel .snarkConfigTitle {margin-top: -1px}
+  .configsectionpanel .configTitle {margin-top: -1px}
   #snarkCommentSection {margin: 23px -1px 0 !important}
   #mediaContainer {margin-bottom: -13px !important}
   .snarkTorrents, .addtorrentsection {margin-top: 0 !important}
@@ -4344,7 +4344,7 @@ td.torrentAction input[type=submit] {
   .dirInfo .percentBarText {line-height: 140% !important}
   .percentBarText, .percentBarOuter {width: 100px}
   .iframed .dirInfo .percentBarText {line-height: 130% !important}
-  .configsectionpanel .snarkConfigTitle {font-size: 10.5pt !important}
+  .configsectionpanel .configTitle {font-size: 10.5pt !important}
   .knownTracker a, #trackerselect a {
     display: inline-block;
     overflow: hidden;
@@ -4362,8 +4362,8 @@ td.torrentAction input[type=submit] {
 }
 
 @media screen and (max-width: 1000px) {
-  .snarkTorrentOdd:not(.peerinfo) .torrentDownloaded .percentBarText,
-  .snarkTorrentEven:not(.peerinfo) .torrentDownloaded .percentBarText {
+  .rowOdd:not(.peerinfo) .torrentDownloaded .percentBarText,
+  .rowEven:not(.peerinfo) .torrentDownloaded .percentBarText {
     min-width: 120px !important;
     top: -22px;
     left: -22px;
@@ -4451,8 +4451,8 @@ td.torrentAction input[type=submit] {
   .snarkNav {font-size: 10.5pt !important}
   #pagenavcontrols {transform: translateX(52px) !important}
   .iframed #pagenavcontrols {transform: translateX(46px) !important}
-  .configsectionpanel .snarkConfigTitle, .snarkNav:link {font-size: 11pt !important}
-  .toggleview, .configsection .snarkConfigTitle {min-width: 340px !important}
+  .configsectionpanel .configTitle, .snarkNav:link {font-size: 11pt !important}
+  .toggleview, .configsection .configTitle {min-width: 340px !important}
   .percentDownloaded {pointer-events: none} /* hide tooltip */
   #closelog img, #expand img, #shrink img {
     margin-top: -2px;
@@ -4496,10 +4496,10 @@ td.torrentAction input[type=submit] {
   .snarkNav:link:first-child {padding-left: 28px !important}
   #pagenavcontrols {transform: translateX(70px) !important}
   .iframed #pagenavcontrols {transform: translateX(66px) !important}
-  .configsectionpanel .snarkConfigTitle {font-size: 12.5pt !important}
+  .configsectionpanel .configTitle {font-size: 12.5pt !important}
   .toggleview {padding-bottom: 5px !important}
-  .snarkConfigTitle, .toggleview {min-width: 340px !important}
-  .snarkConfigTitle a {margin-bottom: 0 !important}
+  .configTitle, .toggleview {min-width: 340px !important}
+  .configTitle a {margin-bottom: 0 !important}
   .snarkMessages {height: 54px}
   .torrentDownloaded {
     white-space: nowrap;

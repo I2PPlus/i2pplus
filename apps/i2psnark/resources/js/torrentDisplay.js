@@ -13,7 +13,7 @@ function initFilterBar() {
   var btnIncomplete = document.getElementById("incomplete");
   var btnStopped = document.getElementById("stopped");
 
-  var allOdd = document.querySelectorAll(".snarkTorrentOdd");
+  var allOdd = document.querySelectorAll(".rowOdd");
   var allEven = document.querySelectorAll(".snarkTorrentEven");
   var active = document.querySelectorAll(".active:not(.peerinfo)");
   var inactive = document.querySelectorAll(".inactive:not(.peerinfo)");

@@ -54,7 +54,7 @@ a.control, input[type=submit], input.accept, th, #trackerselect tr:first-child t
   font-size: 12pt !important;
 }
 
-.configsectionpanel .snarkConfigTitle, .configsectionpanel .snarkConfigTitle:hover, .configsectionpanel .snarkConfigTitle:active {
+.configsectionpanel .configTitle, .configsectionpanel .configTitle:hover, .configsectionpanel .configTitle:active {
   padding-top: 4px;
   padding-bottom: 2px;
   font-size: 14pt !important;
@@ -62,7 +62,7 @@ a.control, input[type=submit], input.accept, th, #trackerselect tr:first-child t
   font-variant: normal !important;
 }
 
-.configsectionpanel .snarkConfigTitle img {
+.configsectionpanel .configTitle img {
   margin-top: -2px !important;
   display: inline-block;
   height: 24px;

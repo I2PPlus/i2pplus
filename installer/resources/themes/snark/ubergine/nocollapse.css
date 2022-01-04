@@ -50,7 +50,7 @@ input:not(:checked) + .toggleview > img, #snarkCommentSection input:not(:checked
 }
 
 .addtorrentsection:hover table, .newtorrentsection:hover table:not(#trackerselect),
-.configsection .snarkConfigTitle, .toggleview {
+.configsection .configTitle, .toggleview {
   will-change: auto !important;
 }
 
