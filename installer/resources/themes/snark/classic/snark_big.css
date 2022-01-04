@@ -23,13 +23,13 @@ input[type], select, select option, td, td a, .snarkMessages li, .snarkMessages 
   font-size: 10.5pt !important;
 }
 
-th.snarkTorrentDownloaded, th.snarkTorrentUploaded, th.snarkTorrentRateDown, th.snarkTorrentRateUp,
-td.snarkTorrentDownloaded, td.snarkTorrentUploaded, td.snarkTorrentRateDown, td.snarkTorrentRateUp, .snarkTorrentName a:link,
+th.torrentDownloaded, th.torrentUploaded, th.RateDown, th.RateUp,
+td.torrentDownloaded, td.torrentUploaded, td.RateDown, td.RateUp, .torrentName a:link,
 th#pagenav {
   font-size: 10pt !important;
 }
 
-.snarkTorrentDownloaded, th.snarkTorrentUploaded, .snarkTorrentRateDown, th.snarkTorrentRateUp, .percentBarComplete {
+.torrentDownloaded, th.torrentUploaded, .RateDown, th.RateUp, .percentBarComplete {
   font-weight: 700 !important;
 }
 
@@ -70,7 +70,7 @@ a.control, input[type=submit], input.accept, th, #trackerselect tr:first-child t
   mix-blend-mode: hard-light;
 }
 
-.snarkTorrentInfo th, .snarkDirInfo th, #totals, .snarkCommentInfo th, #configs th {
+.torrentInfo th, .dirInfo th, #totals, .snarkCommentInfo th, #configs th {
   font-size: 11pt !important;
 }
 
@@ -124,7 +124,7 @@ a.control, input[type=submit], input.accept, th, #trackerselect tr:first-child t
 }
 
 @media screen and (max-width: 1400px) {
-.iframed .snarkTorrents td.snarkTorrentName a {
+.iframed .snarkTorrents td.torrentName a {
   max-width: 400px !important;
   display: inline-block; !important;
   white-space: nowrap !important;
