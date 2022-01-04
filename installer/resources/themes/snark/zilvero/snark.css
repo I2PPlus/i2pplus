@@ -2030,12 +2030,15 @@ select {
 }
 
 .magnetLabel {
+	margin-left: 3px;
+	padding-left: 14px;
 	display: inline-block;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	vertical-align: middle;
 	line-height: 1.1;
+	background: var(--tag) no-repeat left center / 12px;
 }
 
 .knownTracker .optbox, #addtracker .optbox {
@@ -2781,7 +2784,9 @@ input[name="i2cpOpts"], input[name="nofilter_dataDir"] {
 		width: 64px;
 	}
 	.magnetLabel {
+		padding-left: 12px;
 		max-width: 250px;
+		background-size: 11px;
 	}
 }
 
