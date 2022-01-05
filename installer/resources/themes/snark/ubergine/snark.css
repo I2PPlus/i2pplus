@@ -5326,6 +5326,21 @@ td.torrentAction input[type=submit] {
   .iframed #snarkTorrentEditSection hr {
     margin-bottom: 6px;
   }
+  td.peerCount b {
+    min-width: 98px;
+  }
+  td.peerCount b .left, td.peerCount b .right {
+    min-width: 35px !important;
+  }
+  .snarkTorrents .infohash {
+    width: 60px;
+  }
+  .magnetLabel {
+    max-width: 260px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
 
 @media screen and (min-width: 900px) and (max-width: 1499px) {
@@ -5585,9 +5600,6 @@ td.torrentAction input[type=submit] {
     top: -16px;
     left: -26px;
   }
-}
-
-@media screen and (max-width: 960px) {
   input.trackerhome {width: 200px !important}
   input.trackerannounce {width: 220px !important}
 }
@@ -5641,7 +5653,7 @@ td.torrentAction input[type=submit] {
     text-align: right !important;
   }
   .torrentName a {
-    max-width: 360px !important;
+    max-width: 300px !important;
   }
   .snarkTorrents th img, .snarkTorrents th a img {
     max-height: 18px !important;
