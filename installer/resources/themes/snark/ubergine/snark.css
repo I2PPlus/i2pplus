@@ -5151,7 +5151,7 @@ body:not(.iframed) .mainsection .snarkComments {
   from {background-position: 200% 100%}
 }
 
-#snarkFoot tr:not(#dhtDebug) th[colspan="12"] {
+#snarkFoot tr:not(#dhtDebug) th[colspan="11"] {
   padding: 0 1px 4px;
   background: linear-gradient(180deg,#101 1px, rgba(0,0,0,0) 1px), linear-gradient(90deg, #940, rgba(0,0,0,0) 3%, rgba(0,0,0,0) 97%, #940);
   background-size: 200% 100%;
