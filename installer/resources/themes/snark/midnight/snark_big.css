@@ -32,16 +32,16 @@
 
 input[type], select, #configs select, select option, #configs select option, td, td a,
 .snarkMessages li, .snarkMessages li a, textarea, input.r, input[name="nofilter_dataDir"],
-.configsectionpanel, .configsectionpanel td, #configs td, .trackerconfig td, td.snarkTorrentStatus {
+.configsectionpanel, .configsectionpanel td, #configs td, .trackerconfig td {
   font-size: 10.5pt !important;
 }
 
-th.snarkTorrentDownloaded, th.snarkTorrentUploaded, th.snarkTorrentRateDown, th.snarkTorrentRateUp,
-td.snarkTorrentDownloaded, td.snarkTorrentUploaded, td.snarkTorrentRateDown, td.snarkTorrentRateUp, .snarkTorrentName a:link {
+th.torrentDownloaded, th.torrentUploaded, th.RateDown, th.RateUp,
+td.torrentDownloaded, td.torrentUploaded, td.RateDown, td.RateUp, .torrentName a:link {
   font-size: 10pt !important;
 }
 
-th.snarkTorrentDownloaded, th.snarkTorrentUploaded, th.snarkTorrentRateDown, th.snarkTorrentRateUp {
+th.torrentDownloaded, th.torrentUploaded, th.RateDown, th.RateUp {
   font-weight: 700 !important;
 }
 
@@ -85,14 +85,14 @@ select, a.control, input[type=submit], input.accept, th, #trackerselect tr:first
   font-size: 12pt !important;
 }
 
-.configsectionpanel .snarkConfigTitle, .configsectionpanel .snarkConfigTitle:hover, .configsectionpanel .snarkConfigTitle:active {
+.configsectionpanel .configTitle, .configsectionpanel .configTitle:hover, .configsectionpanel .configTitle:active {
   padding-top: 8px;
   font-size: 14pt !important;
   text-transform: uppercase !important;
   font-variant: normal !important;
 }
 
-.configsectionpanel .snarkConfigTitle img {
+.configsectionpanel .configTitle img {
   margin-top: -2px !important;
   display: inline-block;
   height: 24px;
@@ -100,11 +100,11 @@ select, a.control, input[type=submit], input.accept, th, #trackerselect tr:first
   mix-blend-mode: hard-light;
 }
 
-.snarkTorrentInfo th, .snarkDirInfo th, #totals, .snarkCommentInfo th, #configs th {
+.torrentInfo th, .dirInfo th, #totals, .snarkCommentInfo th, #configs th {
   font-size: 11pt !important;
 }
 
-.snarkTorrentName a, .snarkDirInfo .snarkFileName a {
+.torrentName a, .dirInfo .snarkFileName a {
   font-weight: 400 !important;
   padding-top: 2px;
   padding-bottom: 2px;
@@ -114,7 +114,7 @@ select, a.control, input[type=submit], input.accept, th, #trackerselect tr:first
   font-size: 8.5pt !important;
 }
 
-.snarkDirInfo .percentbartext {
+.dirInfo .percentbartext {
   line-height: 12px !important;
 }
 
@@ -169,7 +169,7 @@ select, a.control, input[type=submit], input.accept, th, #trackerselect tr:first
 }
 
 @media screen and (max-width: 1400px) {
-.iframed .snarkTorrents td.snarkTorrentName a {
+.iframed .snarkTorrents td.torrentName a {
   max-width: 400px !important;
   display: inline-block; !important;
   white-space: nowrap !important;

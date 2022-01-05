@@ -5,7 +5,7 @@ input:not(checked) + label + hr + table, input:not(checked) + label + hr + table
   display: table !important;
 }
 
-.snarkConfigTitle {
+.configTitle {
   border-radius: 0 0 3px 3px !important;
 }
 
@@ -35,7 +35,7 @@ div[class] input:checked + .toggleview, div[class] input:not(:checked) + .toggle
   background: linear-gradient(180deg,#fff, #eef) !important;
 }
 
-.configsection .snarkConfigTitle a {
+.configsection .configTitle a {
   padding: 1px 0 !important;
   margin: 0 auto !important;
   text-align: center !important;

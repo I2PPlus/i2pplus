@@ -631,7 +631,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         String currentSort = req.getParameter("sort");
         boolean showSort = total > 1;
-        out.write("<tr>\n<th class=\"snarkGraphicStatus\">");
+        out.write("<tr>\n<th class=\"graphicStatus\">");
         // show incomplete torrents at top on first click
         String sort = "-2";
         if (showSort) {
@@ -654,7 +654,7 @@ public class I2PSnarkServlet extends BasicServlet {
         if (showSort)
             out.write("</a></span>");
 //        out.write("</th>\n<th class=\"snarkTorrentStatus\">");
-        out.write("</th>\n<th class=\"snarkTorrentPeerCount\">");
+        out.write("</th>\n<th class=\"peerCount\">");
         if (_manager.util().connected() && !snarks.isEmpty()) {
             boolean hasPeers = false;
             int end = Math.min(start + pageSize, snarks.size());
@@ -682,7 +682,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 out.write("</a>\n");
             }
         }
-        out.write("</th>\n<th id=\"snarkTorrentSort\" colspan=\"2\" align=\"left\">");
+        out.write("</th>\n<th id=\"torrentSort\" colspan=\"2\" align=\"left\">");
         // cycle through sort by name or type
         boolean isTypeSort = false;
         if (showSort) {
@@ -712,7 +712,7 @@ public class I2PSnarkServlet extends BasicServlet {
             if (showSort)
                 out.write("</a></span>");
         }
-        out.write("</th>\n<th class=\"snarkTorrentName\"></th>\n<th class=\"snarkTorrentETA\" align=\"right\">");
+        out.write("</th>\n<th class=\"torrentName\"></th>\n<th class=\"torrentETA\" align=\"right\">");
         // FIXME: only show icon when actively downloading, not uploading
         if (_manager.util().connected() && !snarks.isEmpty()) {
             boolean isDownloading = false;
@@ -746,7 +746,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     out.write("</a></span>");
             }
          }
-        out.write("</th>\n<th class=\"snarkTorrentDownloaded\" align=\"right\">");
+        out.write("</th>\n<th class=\"torrentDownloaded\" align=\"right\">");
         // cycle through sort by size or downloaded
         boolean isDlSort = false;
         if (!snarks.isEmpty()) {
@@ -780,7 +780,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 out.write("</a></span>");
         }
         out.write("</th>\n");
-        out.write("<th class=\"snarkTorrentRateDown\" align=\"right\">");
+        out.write("<th class=\"RateDown\" align=\"right\">");
         // FIXME only show icon when total down rate > 0
         if (_manager.util().connected() && !snarks.isEmpty()) {
             boolean isDownloading = false;
@@ -814,7 +814,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     out.write("</a></span>");
             }
         }
-        out.write("<th class=\"snarkTorrentUploaded\" align=\"right\">");
+        out.write("<th class=\"torrentUploaded\" align=\"right\">");
         boolean isRatSort = false;
         // cycle through sort by uploaded or ratio
         boolean nextRatSort = false;
@@ -848,7 +848,7 @@ public class I2PSnarkServlet extends BasicServlet {
         if (showSort)
             out.write("</a></span>");
         out.write("</th>\n");
-        out.write("<th class=\"snarkTorrentRateUp\" align=\"right\">");
+        out.write("<th class=\"RateUp\" align=\"right\">");
         // FIXME only show icon when total up rate > 0 or no choked peers
         if (_manager.util().connected() && !snarks.isEmpty()) {
             boolean isUploading = false;
@@ -883,7 +883,7 @@ public class I2PSnarkServlet extends BasicServlet {
             }
         }
         out.write("</th>\n");
-        out.write("<th class=\"snarkTorrentAction\" align=\"center\">");
+        out.write("<th class=\"torrentAction\" align=\"center\">");
         if (_manager.isStopping()) {
             out.write("");
         } else if (_manager.util().connected()) {
@@ -915,7 +915,7 @@ public class I2PSnarkServlet extends BasicServlet {
         }
 
         if (total == 0) {
-            out.write("<tr id=\"noload\" class=\"snarkTorrentNoneLoaded\"><td colspan=\"11\"><i>");
+            out.write("<tr id=\"noload\" class=\"noneLoaded\"><td colspan=\"11\"><i>");
             synchronized(this) {
                 File dd = _resourceBase;
                 if (!dd.exists() && !dd.mkdirs()) {
@@ -994,9 +994,9 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("</span>");
             out.write("</th>\n");
             if (_manager.util().connected() && total > 0) {
-                out.write("<th class=\"snarkTorrentETA\" align=\"right\">");
+                out.write("<th class=\"torrentETA\" align=\"right\">");
                 // FIXME: add total ETA for all torrents here
-                // out.write("<th class=\"snarkTorrentETA\" align=\"right\" title=\"");
+                // out.write("<th class=\"torrentETA\" align=\"right\" title=\"");
                 // out.write(_t("Estimated download time for all torrents") + "\">");
 
                 if (_manager.util().connected() && !snarks.isEmpty()) {
@@ -1027,25 +1027,25 @@ public class I2PSnarkServlet extends BasicServlet {
                     }
                 }
                 out.write("</th>\n");
-                out.write("<th class=\"snarkTorrentDownloaded\" align=\"right\" title=\"");
+                out.write("<th class=\"torrentDownloaded\" align=\"right\" title=\"");
                 out.write(_t("Data downloaded this session") + "\">");
                 if (stats[0] > 0) {
                     out.write(formatSize(stats[0]).replaceAll("iB", ""));
                 }
                 out.write("</th>\n");
-                out.write("<th class=\"snarkTorrentRateDown\" title=\"");
+                out.write("<th class=\"RateDown\" title=\"");
                 out.write(_t("Total download speed") + "\">");
                 if (stats[2] > 0) {
                     out.write(formatSize(stats[2]).replaceAll("iB", "") + "/s");
                 }
                 out.write("</th>\n");
-                out.write("<th class=\"snarkTorrentUploaded\" align=\"right\"  title=\"");
+                out.write("<th class=\"torrentUploaded\" align=\"right\"  title=\"");
                 out.write(_t("Total data uploaded (for listed torrents)") + "\">");
                 if (stats[1] > 0) {
                     out.write(formatSize(stats[1]).replaceAll("iB", ""));
                 }
                 out.write("</th>\n");
-                out.write("<th class=\"snarkTorrentRateUp\" align=\"right\" title=\"");
+                out.write("<th class=\"RateUp\" align=\"right\" title=\"");
                 out.write(_t("Total upload speed") + "\">");
                 boolean isUploading = false;
                 int end = Math.min(start + pageSize, snarks.size());
@@ -1059,7 +1059,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     out.write(formatSize(stats[3]).replaceAll("iB", "") + "/s");
                 }
                 out.write("</th>\n");
-                out.write("<th class=\"snarkTorrentAction\">");
+                out.write("<th class=\"torrentAction\">");
                 if (dht != null && (!"2".equals(peerParam))) {
                     out.write("<a id=\"debugMode\" href=\"?p=2\" title=\"");
                     out.write(_t("Enable Debug Mode") + "\">");
@@ -1985,11 +1985,11 @@ public class I2PSnarkServlet extends BasicServlet {
         String statusString;
         // add status to table rows so we can selectively show/hide snarks and style based on status
         String snarkStatus;
-        String rowClass = (row % 2 == 0 ? "snarkTorrentEven" : "snarkTorrentOdd");
+        String rowClass = (row % 2 == 0 ? "rowEven" : "rowOdd");
         if (snark.isChecking()) {
             (new DecimalFormat("0.00%")).format(snark.getCheckingProgress());
             statusString = toSVGWithDataTooltip("processing", "", _t("Checking")) + "</td>" +
-                                 "<td class=\"snarkTorrentPeerCount\"><b><span class=\"right\">" +
+                                 "<td class=\"peerCount\"><b><span class=\"right\">" +
                                  curPeers + "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span>";
 /*
                                  "<td class=\"snarkTorrentStatus\" colspan=\"2\">" +
@@ -2002,18 +2002,18 @@ public class I2PSnarkServlet extends BasicServlet {
         } else if (snark.isAllocating()) {
             statusString = toSVGWithDataTooltip("processing", "", _t("Allocating")) + "</td>" +
 //                           "<td class=\"snarkTorrentStatus\"><b>" + _t("Allocating") + "</b></td>\n" +
-                           "<td class=\"snarkTorrentPeerCount\"><b>";
+                           "<td class=\"peerCount\"><b>";
             snarkStatus = "active starting processing";
         } else if (err != null && isRunning && curPeers == 0) {
             statusString = toSVGWithDataTooltip("error", "", err) + "</td>\n" +
 //                                 "<td class=\"snarkTorrentStatus\"><b>" + _t("Net Error") + "</b></td>\n" +
-                                 "<td class=\"snarkTorrentPeerCount\"><b><span class=\"right\">" +
+                                 "<td class=\"peerCount\"><b><span class=\"right\">" +
                                  curPeers + "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span>";
             snarkStatus = "inactive downloading incomplete neterror";
         } else if (snark.isStarting()) {
             statusString = toSVGWithDataTooltip("stalled", "", _t("Starting")) + "</td>\n" +
 //                           "<td class=\"snarkTorrentStatus\"><b class=\"alwaysShow\">" + _t("Starting") + "&hellip;</b></td>\n" + "
-                           "<td class=\"snarkTorrentPeerCount\"><b>";
+                           "<td class=\"peerCount\"><b>";
             snarkStatus = "active starting";
         } else if (remaining == 0 || needed == 0) {  // < 0 means no meta size yet
             // partial complete or seeding
@@ -2046,7 +2046,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 if (curPeers > 0 && !showPeers) {
                     statusString = toSVGWithDataTooltip(img, "", tooltip) + "</td>\n" +
 //                                         "<td class=\"snarkTorrentStatus\"><b>" + txt + "</b></td>\n" + "
-                                         "<td class=\"snarkTorrentPeerCount\"><b>" +
+                                         "<td class=\"peerCount\"><b>" +
                                          "<a href=\"" +
                                          uri + getQueryString(req, b64, null, null) + "\"><span class=\"right\">" +
                                          curPeers + "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span></a>";
@@ -2058,7 +2058,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 } else if (curPeers > 0) {
                     statusString = toSVGWithDataTooltip(img, "", tooltip) + "</td>\n" +
 //                                         "<td class=\"snarkTorrentStatus\"><b>" + txt + "</b></td>\n" +
-                                         "<td class=\"snarkTorrentPeerCount\"><b><a href=\"" + uri + "\" title=\"" +
+                                         "<td class=\"peerCount\"><b><a href=\"" + uri + "\" title=\"" +
                                          _t("Hide Peers") + "\">" + "<span class=\"right\">" + curPeers + "</span>" + thinsp(noThinsp) +
                                          "<span class=\"left\">" + knownPeers + "</span></a>";
                     if (upBps > 0) {
@@ -2069,7 +2069,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 } else {
                     statusString = toSVGWithDataTooltip(img, "", tooltip) + "</td>\n" +
 //                               "<td class=\"snarkTorrentStatus\"><b>" + txt + "</b></td>\n" +
-                               "<td class=\"snarkTorrentPeerCount\"><b><span class=\"right\">" + curPeers +
+                               "<td class=\"peerCount\"><b><span class=\"right\">" + curPeers +
                                "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span>";
                     if (upBps > 0 || curPeers > 0) {
                         snarkStatus = "active seeding complete";
@@ -2080,7 +2080,7 @@ public class I2PSnarkServlet extends BasicServlet {
             } else {
                 statusString = toSVGWithDataTooltip("complete", "", _t("Complete")) + "</td>\n" +
 //                                     "<td class=\"snarkTorrentStatus\"><b class=\"alwaysShow\">" + _t("Complete") + "</b></td>\n" +
-                                     "<td class=\"snarkTorrentPeerCount\"><b>‒";
+                                     "<td class=\"peerCount\"><b>‒";
                 snarkStatus = "inactive complete stopped zero";
             }
         } else {
@@ -2088,21 +2088,21 @@ public class I2PSnarkServlet extends BasicServlet {
                 statusString = toSVGWithDataTooltip("downloading", "", _t("OK") +
                                      " (" + _t("Downloading from {0} of {1} peers in swarm", curPeers, knownPeers) + ")") + "</td>\n" +
 //                                     "<td class=\"snarkTorrentStatus\"><b>" + _t("OK") + "</b></td>\n" +
-                                     "<td class=\"snarkTorrentPeerCount\"><b><a href=\"" +
+                                     "<td class=\"peerCount\"><b><a href=\"" +
                                      uri + getQueryString(req, b64, null, null) + "\"><span class=\"right\">" +
                                      curPeers + "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span></a>";
                 snarkStatus = "active downloading incomplete";
             } else if (isRunning && curPeers > 0 && downBps > 0) {
                 statusString = toSVGWithDataTooltip("downloading", "", _t("OK") + ", " + ngettext("Downloading from {0} peer", "Downloading from {0} peers", curPeers)) + "</td>\n" +
 //                                     "<td class=\"snarkTorrentStatus\"><b>" + _t("OK") + "</b></td>\n" +
-                                     "<td class=\"snarkTorrentPeerCount\"><b><a href=\"" +
+                                     "<td class=\"peerCount\"><b><a href=\"" +
                                      uri + "\" title=\"" + _t("Hide Peers") + "\"><span class=\"right\">" + curPeers + "</span>" + thinsp(noThinsp) +
                                      "<span class=\"left\">" + knownPeers + "</span></a>";
                 snarkStatus = "active downloading incomplete";
             } else if (isRunning && curPeers > 0 && !showPeers) {
                 statusString = toSVGWithDataTooltip("stalled", "", _t("Stalled") + " (" + ngettext("Connected to {0} peer", "Connected to {0} peers", curPeers) + ")") + "</td>\n" +
 //                                     "<td class=\"snarkTorrentStatus\"><b>" + _t("Stalled") + "</b></td>\n" +
-                                     "<td class=\"snarkTorrentPeerCount\"><b><a href=\"" +
+                                     "<td class=\"peerCount\"><b><a href=\"" +
                                      uri + getQueryString(req, b64, null, null) + "\"><span class=\"right\">" +
                                      curPeers + "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span></a>";
                 snarkStatus = "inactive downloading incomplete";
@@ -2110,36 +2110,36 @@ public class I2PSnarkServlet extends BasicServlet {
                 statusString = toSVGWithDataTooltip("stalled", "", _t("Stalled") +
                                      " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")") + "</td>\n" +
 //                                     "<td class=\"snarkTorrentStatus\"><b>" + _t("Stalled") + "</b></td>\n" +
-                                     "<td class=\"snarkTorrentPeerCount\"><b><a href=\"" + uri + "\" title=\"" + _t("Hide Peers") +
+                                     "<td class=\"peerCount\"><b><a href=\"" + uri + "\" title=\"" + _t("Hide Peers") +
                                      "\"><span class=\"right\">" + curPeers + "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span></a>";
                 snarkStatus = "inactive downloading incomplete";
             } else if (isRunning && knownPeers > 0) {
                 statusString = toSVGWithDataTooltip("nopeers", "", _t("No Peers") +
                                      " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")") + "</td>\n" +
 //                                     "<td class=\"snarkTorrentStatus\"><b>" + _t("No Peers") + "</b></td>\n" +
-                                     "<td class=\"snarkTorrentPeerCount\"><b><span class=\"right\">0</span>" +
+                                     "<td class=\"peerCount\"><b><span class=\"right\">0</span>" +
                                      thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span>";
                 snarkStatus = "inactive downloading incomplete nopeers";
             } else if (isRunning) {
                 statusString = toSVGWithDataTooltip("nopeers", "", _t("No Peers")) + "</td>\n" +
 //                                     "<td class=\"snarkTorrentStatus\"><b class=\"alwaysShow\">" + _t("No Peers") + "</b></td>\n" +
-                                     "<td class=\"snarkTorrentPeerCount\"><b>‒";
+                                     "<td class=\"peerCount\"><b>‒";
                 snarkStatus = "inactive downloading incomplete nopeers zero";
             } else {
                 statusString = toSVGWithDataTooltip("stopped", "", _t("Stopped")) + "</td>\n" +
 //                                     "<td class=\"snarkTorrentStatus\"><b class=\"alwaysShow\">" + _t("Stopped") + "</b></td>\n" +
-                                     "<td class=\"snarkTorrentPeerCount\"><b>‒";
+                                     "<td class=\"peerCount\"><b>‒";
                 snarkStatus = "inactive incomplete stopped zero";
             }
         }
 
         String rowStatus = (rowClass + ' ' + snarkStatus);
         out.write("<tr class=\"" + rowStatus + " volatile\">\n" +
-                  "<td class=\"snarkGraphicStatus\" align=\"center\">");
+                  "<td class=\"graphicStatus\" align=\"center\">");
         out.write(statusString);
 
         // (i) icon column
-        out.write("</b></td>\n<td class=\"snarkTrackerDetails\">");
+        out.write("</b></td>\n<td class=\"trackerDetails\">");
         if (isValid) {
             String announce = meta.getAnnounce();
             if (announce == null)
@@ -2154,7 +2154,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         String encodedBaseName = encodePath(fullBasename);
         // File type icon column
-        out.write("</td>\n<td class=\"snarkTorrentDetails\">");
+        out.write("</td>\n<td class=\"torrentDetails\">");
         if (isValid) {
             StringBuilder buf = new StringBuilder(128);
             CommentSet comments = snark.getComments();
@@ -2186,7 +2186,7 @@ public class I2PSnarkServlet extends BasicServlet {
         }
 
         // Torrent name column
-        out.write("</td>\n<td class=\"snarkTorrentName\">");
+        out.write("</td>\n<td class=\"torrentName\">");
         if (remaining == 0 || isMultiFile) {
             StringBuilder buf = new StringBuilder(128);
             buf.append("<a href=\"").append(encodedBaseName);
@@ -2213,11 +2213,11 @@ public class I2PSnarkServlet extends BasicServlet {
 
 //        if (basename.contains("Magnet"))
 //            out.write("</span>");
-        out.write("</td>\n<td align=\"right\" class=\"snarkTorrentETA\">");
+        out.write("</td>\n<td align=\"right\" class=\"torrentETA\">");
         if (isRunning && remainingSeconds > 0 && !snark.isChecking())
             out.write(DataHelper.formatDuration2(Math.max(remainingSeconds, 10) * 1000)); // (eta 6h)
         out.write("</td>\n");
-        out.write("<td align=\"right\" class=\"snarkTorrentDownloaded\">");
+        out.write("<td align=\"right\" class=\"torrentDownloaded\">");
         if (remaining > 0) {
             long percent = 100 * (total - remaining) / total;
             out.write("<div class=\"percentBarOuter\">");
@@ -2239,7 +2239,7 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("</div>");
             }
         out.write("</td>\n");
-        out.write("<td align=\"right\" class=\"snarkTorrentRateDown");
+        out.write("<td align=\"right\" class=\"RateDown");
         if (downBps >= 100000)
             out.write(" hundred");
         else if (downBps >= 10000)
@@ -2256,7 +2256,7 @@ public class I2PSnarkServlet extends BasicServlet {
                                          + "/s</span>");
         }
         out.write("</td>\n");
-        out.write("<td align=\"right\" class=\"snarkTorrentUploaded\">");
+        out.write("<td align=\"right\" class=\"torrentUploaded\">");
         if (isValid) {
             double ratio = uploaded / ((double) total);
             if (total <= 0)
@@ -2305,7 +2305,7 @@ public class I2PSnarkServlet extends BasicServlet {
             }
         }
         out.write("</td>\n");
-        out.write("<td align=\"right\" class=\"snarkTorrentRateUp");
+        out.write("<td align=\"right\" class=\"RateUp");
         if (upBps >= 100000)
             out.write(" hundred");
         else if (upBps >= 10000)
@@ -2321,7 +2321,7 @@ public class I2PSnarkServlet extends BasicServlet {
                                         + "/s</span>");
         }
         out.write("</td>\n");
-        out.write("<td align=\"center\" class=\"snarkTorrentAction\">");
+        out.write("<td align=\"center\" class=\"torrentAction\">");
         if (snark.isChecking()) {
             // show no buttons
             out.write("<span class=\"isChecking\"></span>");
@@ -2371,7 +2371,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 }
                 if (!peer.isConnected())
                     continue;
-                out.write("<tr class=\"peerinfo " + snarkStatus + " volatile\">\n<td class=\"snarkGraphicStatus\" title=\"");
+                out.write("<tr class=\"peerinfo " + snarkStatus + " volatile\">\n<td class=\"graphicStatus\" title=\"");
                 out.write(_t("Peer attached to swarm"));
                 out.write("\"></td><td class=\"peerdata\" colspan=\"4\">");
                 PeerID pid = peer.getPeerID();
@@ -2419,9 +2419,9 @@ public class I2PSnarkServlet extends BasicServlet {
                     }
                 }
                 out.write("</td>\n");
-                out.write("<td class=\"snarkTorrentETA\">");
+                out.write("<td class=\"torrentETA\">");
                 out.write("</td>\n");
-                out.write("<td align=\"right\" class=\"snarkTorrentDownloaded\">");
+                out.write("<td align=\"right\" class=\"torrentDownloaded\">");
                 float pct;
                 if (isValid) {
                     pct = (float) (100.0 * peer.completed() / meta.getPieces());
@@ -2442,7 +2442,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     //out.write("??");
                 }
                 out.write("</td>\n");
-                out.write("<td align=\"right\" class=\"snarkTorrentRateDown");
+                out.write("<td align=\"right\" class=\"RateDown");
                 if (peer.getDownloadRate() >= 100000)
                     out.write(" hundred");
                 else if (peer.getDownloadRate() >= 10000)
@@ -2487,9 +2487,9 @@ public class I2PSnarkServlet extends BasicServlet {
                     //}
                 }
                 out.write("</td>\n");
-                out.write("<td class=\"snarkTorrentUploaded\">");
+                out.write("<td class=\"torrentUploaded\">");
                 out.write("</td>\n");
-                out.write("<td align=\"right\" class=\"snarkTorrentRateUp");
+                out.write("<td align=\"right\" class=\"RateUp");
                 if (peer.getUploadRate() >= 100000)
                     out.write(" hundred");
                 else if (peer.getUploadRate() >= 10000)
@@ -2525,10 +2525,10 @@ public class I2PSnarkServlet extends BasicServlet {
                     }
                 }
                 out.write("</td>\n");
-                out.write("<td class=\"snarkTorrentAction\">");
+                out.write("<td class=\"torrentAction\">");
                 out.write("</td>\n</tr>\n");
                 if (showDebug)
-                    out.write("<tr class=\"debuginfo volatile " + rowClass + "\">\n<td class=\"snarkGraphicStatus\"></td>" +
+                    out.write("<tr class=\"debuginfo volatile " + rowClass + "\">\n<td class=\"graphicStatus\"></td>" +
                               "<td colspan=\"12\">" + peer.getSocket()
                               .replaceAll("Connection", "<b>Connection</b>").replaceAll(";", " &bullet;").replaceAll("\\* ", "")
                               .replaceAll("from", "<span class=\"from\">⇦</span>").replaceAll("to", "<span class=\"to\">⇨</span>") +
@@ -2916,7 +2916,7 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write("<form action=\"" + _contextPath + "/configure#top\" method=\"POST\">\n" +
                   "<div class=\"configsectionpanel lang_" + lang + "\"><div class=\"snarkConfig\">\n");
         writeHiddenInputs(out, req, "Save");
-        out.write("<span class=\"snarkConfigTitle\">");
+        out.write("<span class=\"configTitle\">");
 //        out.write(toThemeImg("config"));
 //        out.write(' ');
         out.write(_t("Configuration"));
@@ -3305,7 +3305,7 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("<form action=\"" + _contextPath + "/configure#top\" method=\"POST\">\n" +
                    "<div class=\"configsectionpanel\" id=\"trackers\"><div class=\"snarkConfig\">\n");
         writeHiddenInputs(buf, req, "Save2");
-        buf.append("<span class=\"snarkConfigTitle\">");
+        buf.append("<span class=\"configTitle\">");
 //        toThemeImg(buf, "config");
 //        buf.append(' ');
         buf.append(_t("Trackers"));
@@ -3395,7 +3395,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
     private void writeConfigLink(PrintWriter out) throws IOException {
         out.write("\n<div class=\"configsection\">\n<span class=\"snarkConfig\">" +
-                  "<span id=\"tab_config\" class=\"snarkConfigTitle\"><a href=\"configure\"><span class=\"tab_label\">");
+                  "<span id=\"tab_config\" class=\"configTitle\"><a href=\"configure\"><span class=\"tab_label\">");
 //        out.write(toThemeImg("config"));
 //        out.write(' ');
         out.write(_t("Configuration"));
@@ -3729,7 +3729,7 @@ public class I2PSnarkServlet extends BasicServlet {
             String baseName = encodePath((new File(fullPath)).getName());
             MetaInfo meta = snark.getMetaInfo();
             buf.append("<div class=\"mainsection\" id=\"snarkInfo\">");
-            buf.append("<table class=\"snarkTorrentInfo\" id=\"snarkTorrentInfo\">\n");
+            buf.append("<table class=\"torrentInfo\" id=\"torrentInfo\">\n");
             buf.append("<tr><th colspan=\"2\">");
             toThemeImg(buf, "torrent");
             buf.append("<b>")
@@ -4241,7 +4241,7 @@ public class I2PSnarkServlet extends BasicServlet {
 //        buf.append(' ');
         buf.append(_t("Files"));
         buf.append("</span></label><hr>\n");
-        buf.append("<table class=\"snarkDirInfo\">\n<thead>\n" +
+        buf.append("<table class=\"dirInfo\">\n<thead>\n" +
                    "<tr>\n" +
                    "<th colspan=2>");
         String tx = _t("Directory");
@@ -4284,7 +4284,7 @@ public class I2PSnarkServlet extends BasicServlet {
                    showSort ? _t("Sort by {0}", tx) : tx);
         if (showSort)
             buf.append("</a>");
-        buf.append("</th>\n<th class=\"snarkFileStatus\">");
+        buf.append("</th>\n<th class=\"fileStatus\">");
         boolean showRemainingSort = showSort && showPriority;
         if (showRemainingSort) {
             sort = ("10".equals(sortParam)) ? "-10" : "10";
@@ -4309,7 +4309,7 @@ public class I2PSnarkServlet extends BasicServlet {
             if (showSort)
                 buf.append("</a>");
         }
-        buf.append("</th>\n</tr>\n</thead>\n<tbody id=\"snarkDirInfo\">");
+        buf.append("</th>\n</tr>\n</thead>\n<tbody id=\"dirInfo\">");
         if (!isTopLevel || hasCompleteAudio(fileList, storage, remainingArray)) { // don't show row if top level or no playlist
             buf.append("<tr><td colspan=\"" + (showPriority ? '3' : '2') + "\" class=\"ParentDir\">");
             if (!isTopLevel) { // don't show parent dir link if top level
@@ -4391,7 +4391,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 }
             }
 
-            String rowClass = (rowEven ? "snarkTorrentEven" : "snarkTorrentOdd");
+            String rowClass = (rowEven ? "rowEven" : "rowOdd");
             String completed = (complete ? "completed" : "incomplete");
             rowEven = !rowEven;
             buf.append("<tr class=\"").append(rowClass).append(' ').append(completed).append("\">");
@@ -4408,7 +4408,7 @@ public class I2PSnarkServlet extends BasicServlet {
             boolean isAudio = isAudio(mime);
             boolean isVideo = !isAudio && isVideo(mime);
             int videoCount = 0;
-            buf.append("<td class=\"snarkFileIcon");
+            buf.append("<td class=\"fileIcon");
             if (!complete)
                 buf.append(" volatile");
             buf.append("\">");
@@ -4491,7 +4491,7 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("</td><td align=right class=\"snarkFileSize\">");
             if (!fai.isDirectory)
                 buf.append(formatSize(length));
-            buf.append("</td><td class=\"snarkFileStatus volatile\">");
+            buf.append("</td><td class=\"fileStatus volatile\">");
             //buf.append(dfmt.format(new Date(item.lastModified())));
             buf.append(status);
             buf.append("</td>");

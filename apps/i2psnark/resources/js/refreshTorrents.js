@@ -31,7 +31,7 @@ function refreshTorrents(timestamp) {
 
         var info = document.getElementById("torrentInfoStats");
         var control = document.getElementById("torrentInfoControl");
-        var files = document.getElementById("snarkDirInfo");
+        var files = document.getElementById("dirInfo");
         var remaining = document.getElementById("sortRemaining");
         var complete = document.getElementsByClassName("completed");
         var incomplete = document.getElementsByClassName("incomplete");

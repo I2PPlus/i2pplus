@@ -1,4 +1,4 @@
-.snarkTorrentOdd, .snarkTorrentEven,  .peerinfo, .debuginfo {
+.rowOdd, .rowEven,  .peerinfo, .debuginfo {
     display: none;
 }
 
@@ -21,11 +21,11 @@
     background: radial-gradient(at center bottom, rgba(255, 32, 160, .25), rgba(128, 64, 128, .15) 50%, rgba(0, 0, 0, 0)), linear-gradient(to bottom, #180818, #280828) !important;
 }
 
-.vanilla .snarkTorrentOdd, .vanilla .snarkTorrentEven, .vanilla .peerinfo {
+.vanilla .rowOdd, .vanilla .rowEven, .vanilla .peerinfo {
     background: #dfd6d1 !important;
 }
 
-.zilvero .snarkTorrentOdd, .zilvero .snarkTorrentEven, .zilvero .peerinfo {
+.zilvero .rowOdd, .zilvero .rowEven, .zilvero .peerinfo {
     background: #f0f0f0 !important;
 }
 
@@ -34,7 +34,7 @@
     box-shadow: inset 0 0 0 1px #fff, inset 2px 2px 2px #999 !important;
 }
 
-.midnight .snarkTorrentOdd, .midnight .snarkTorrentEven, .midnight .peerinfo {
+.midnight .rowOdd, .midnight .rowEven, .midnight .peerinfo {
     background: linear-gradient(to bottom, #040408, #030306) !important;
 }
 
@@ -45,7 +45,7 @@
     background: #113 !important;
 }
 
-.light .snarkTorrentOdd, .light .snarkTorrentEven, .light .peerinfo {
+.light .rowOdd, .light .rowEven, .light .peerinfo {
     background: linear-gradient(to bottom, #fff, #eaeaff) !important;
 }
 
@@ -56,7 +56,7 @@
     background: linear-gradient(to bottom, #f2f2ff, #f6f6ff) !important;
 }
 
-.dark .snarkTorrentOdd, .dark .snarkTorrentEven, .dark .peerinfo {
+.dark .rowOdd, .dark .rowEven, .dark .peerinfo {
     background: linear-gradient(to bottom, #001400, #000600) !important;
 }
 
@@ -67,7 +67,7 @@
     background: radial-gradient(at center bottom, rgba(16,72,16,.3), rgba(0,0,0,0) 50%), linear-gradient(to bottom, #000a00, #020);
 }
 
-.classic .snarkTorrentOdd, .classic .snarkTorrentEven, .classic .peerinfo {
+.classic .rowOdd, .classic .rowEven, .classic .peerinfo {
     background: #e7e8ff !important;
 }
 
