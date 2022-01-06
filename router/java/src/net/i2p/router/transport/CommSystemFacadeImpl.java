@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 
@@ -88,6 +89,12 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             _manager.restart();
     }
 
+    /**
+     * @since 0.9.53
+     */
+    @Override
+    public synchronized boolean isRunning() { return _wasStarted; }
+    
     /**
      *  How many peers are we currently connected to, that we have
      *  sent a message to or received a message from in the last minute.
@@ -600,6 +607,17 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         return n;
     }
 
+    /**
+     * Get the country code map
+     *
+     * @return Map of two-letter lower case code to untranslated country name, unmodifiable
+     * @since 0.9.53
+     */
+    public Map<String, String> getCountries() {
+        if (_geoIP == null)
+            return Collections.emptyMap();
+        return _geoIP.getCountries();
+    }
 
     /** Provide a consistent "look" for displaying router IDs in the console */
     @Override
