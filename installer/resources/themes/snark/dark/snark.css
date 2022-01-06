@@ -514,6 +514,7 @@ th.RateDown, th.RateUp, th.SnarkTorrentAction {
   padding-left: 0;
   padding-right: 0;
   width: 1%;
+  min-width: 50px;
   white-space: nowrap;
 }
 
