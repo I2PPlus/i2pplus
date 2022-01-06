@@ -72,7 +72,7 @@ public class PublishLocalRouterInfoJob extends JobImpl {
         if (!getContext().commSystem().isRunning()) {
             // Avoid deadlock in the transports through here via FNDF.publish() at startup
             if (_log.shouldWarn())
-                _log.warn("PLRIJ before comm system started");
+                _log.warn("Attempted to publish local RouterInfo before comm system started, retrying...");
             requeue(100);
             return;
         }
