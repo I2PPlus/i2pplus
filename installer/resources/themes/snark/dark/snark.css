@@ -514,6 +514,7 @@ th.RateDown, th.RateUp, th.SnarkTorrentAction {
   padding-left: 0;
   padding-right: 0;
   width: 1%;
+  min-width: 50px;
   white-space: nowrap;
 }
 
@@ -1122,7 +1123,7 @@ tr.peerinfo:hover .percentBarText {
   mix-blend-mode: normal;
 }
 
-.rowOdd td, .SnarkTorrentEven td {
+.rowOdd td, .rowEven td {
   border-bottom: 1px solid #000;
 }
 
@@ -1771,8 +1772,8 @@ input[type=text], input.r, textarea[name="i2cpOpts"], input[name="nofilter_dataD
   padding: 6px 7px !important;
   color: #bb7;
   border: 1px solid #184818;
-  box-shadow: var(--highlight), inset 4px 4px 4px #000, var(--outline);
-  background: linear-gradient(180deg,#001800,#001000);
+  box-shadow: inset 0 0 3px 3px #000), var(--outline);
+  background: #000;
   outline: none;
   transition: ease box-shadow .1s;
 }
@@ -1784,8 +1785,8 @@ input[type=text]:hover, input.r:hover {
 input[type=text]:focus, textarea:focus, input.r:focus, textarea[name="i2cpOpts"]:focus, input[name="nofilter_dataDir"]:focus,  textarea[name="nofilter_newComment"]:focus {
   color: var(--ink);
   border: 1px solid #373;
-  box-shadow: inset 0 0 3px 3px #000, 0 0 0 1px rgba(255,96,0,.3);
-  background: #000;
+  box-shadow: var(--highlight), inset 4px 4px 4px #000, 0 0 0 1px rgba(255,96,0,.3);
+  background: linear-gradient(180deg,#001800,#001000);
   transition: ease box-shadow .1s;
 }
 

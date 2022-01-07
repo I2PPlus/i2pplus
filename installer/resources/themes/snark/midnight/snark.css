@@ -1149,7 +1149,7 @@ tr:hover .percentBarText {
   background: linear-gradient(180deg,#080818, #010010) !important;
 }
 
-.rowOdd, .rowOdd td, .SnarkTorrentEven, .SnarkTorrentEven td, .peerinfo td, .knownTracker td {
+.rowOdd, .rowOdd td, .rowEven, .rowEven td, .peerinfo td, .knownTracker td {
   border-top: var(--border_inner) !important;
 }
 

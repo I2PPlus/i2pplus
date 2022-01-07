@@ -1032,6 +1032,11 @@ td:first-child {
 }
 
 .magnetLabel {
+  display: inline-block;
+  vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-style: italic;
 }
 
@@ -1135,7 +1140,7 @@ tr:not(.peerInfo):hover .percentBarText {
   background: var(--bg3);
 }
 
-.rowOdd, .SnarkTorrentEven {
+.rowOdd, .rowEven {
   border-bottom: var(--border_soft);
 }
 
@@ -3874,6 +3879,9 @@ td.peerCount {
   }
   #torrentDisplay {
     top: 39px !important;
+  }
+  .magnetLabel {
+    max-width: 240px;
   }
 }
 
