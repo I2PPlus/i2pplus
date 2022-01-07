@@ -90,7 +90,7 @@ body {
 }
 
 #sb_logo img, .routersummary h3, .routersummary h3 a, #sb_internals, #sb_advanced, #sb_services,
-.confignav, *::before, *::after, div.app, .themechoice, .langselect, .langbox,
+.confignav, *::before, *::after, div.app, .themechoice, .langselect,
 .newsAuthor, #newsDisplay, #netdbcountrylist img, .viewfullentry, .sybil_routerinfo th img, .graphspanel, h1 {
   user-select: none;
 }
@@ -1899,10 +1899,6 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 
 .main#home .welcome h2 {
   margin: -9px -10px -8px;
-}
-
-.main#home .langbox {
-  margin-right: -7px;
 }
 
 div.welcome {
@@ -9066,9 +9062,9 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel{
   box-shadow: 0 0 0 1px var(--border), var(--highlight), inset 0 0 0 2px var(--bg4);
   background-blend-mode: luminosity;
   background-size: 32px !important;
+  -webkit-column-break-inside: avoid;
   break-inside: avoid;
   page-break-inside: avoid;
-  -webkit-column-break-inside: avoid;
   transition: ease box-shadow .2s;
 }
 
@@ -9225,8 +9221,8 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel{
 
 .sitelink, .chatlink, .consolelink {
   padding: 0 3px 0 16px;
-  border-radius: 1px;
   white-space: nowrap;
+  border-radius: 1px;
 }
 
 /* end link icons */
@@ -9280,17 +9276,17 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel{
 }
 
 #stats h3 {
-  border-width: 1px;
   margin-bottom: 6px !important;
+  border-width: 1px;
 }
 
 #stats .toggle_input {
-  position: absolute;
-  opacity: 0;
   width: 0;
   height: 0;
+  position: absolute;
   top: -99999px;
   left: -99999px
+  opacity: 0;
 }
 
 #stats input:not(:checked) + h3,
@@ -9356,11 +9352,11 @@ p#gatherstats {
 }
 
 .ibgw::after, .obep::after, .ptcp::after {
-  content: "";
-  display: inline-block;
   width: 28px;
   height: 20px;
+  display: inline-block;
   background: var(--ibgw) no-repeat center center / auto 28px;
+  content: "";
 }
 
 .obep::after {
@@ -9490,10 +9486,10 @@ p#gatherstats {
 
 #sybilTask th {
   padding-left: 8px;
-  text-transform: uppercase;
-  letter-spacing: .1em;
-  font-size: 11pt !important;
   text-align: left;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  font-size: 11pt !important;
 }
 
 #sybilTask select, #sybilTask input {
@@ -9632,11 +9628,11 @@ p#gatherstats {
 }
 
 .graphContainer:active {
-  box-shadow: inset 2px 2px 2px rgba(0,0,0,.3);
+  box-shadow: var(--btn_shadow_active);
 }
 
 .graphContainer:active img {
-  transform: scale(.99);
+  transform: scale(.97);
 }
 
 #graphs .statimage, #graphs .statimage:hover, #graphs a:hover .statimage, #graph_single .statimage, #graph_single .statimage:hover {
@@ -9670,10 +9666,10 @@ p#gatherstats {
 }
 
 #wizardpage .yes, #wizardpage .no {
-  font-size: 0;
-  display: inline-block;
   width: 20px;
   height: 20px;
+  display: inline-block;
+  font-size: 0;
 }
 
 #wizardpage .yes {
@@ -9757,13 +9753,13 @@ p#gatherstats {
   width: 220px;
   display: inline-block;
   box-sizing: border-box;
-  font-size: 90%;
   text-align: left;
+  font-size: 90%;
   border: 1px solid var(--border_badge);
   border-radius: 1px;
   background: var(--badge);
-  will-change: transform;
   outline: none !important;
+  will-change: transform;
 }
 
 .stattograph b {
@@ -10278,7 +10274,7 @@ div.app:hover img, .sitemaplink:hover img {
   margin-left: 3px;
   padding: 2px 4px 4px;
   display: inline-block;
-  border: 1px solid #bbc;
+  border: 1px solid var(--border_badge);
   border-radius: 2px;
   background: var(--badge);
 }
@@ -10482,9 +10478,6 @@ iframe {
   #sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after,
   #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {
     min-height: 12px;
-  }
-  .langbox {
-    padding: 6px 3px 6px 1px;
   }
   #sb_localtunnels td:first-child {
     padding-right: 3px !important;
