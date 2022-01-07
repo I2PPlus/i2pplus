@@ -672,12 +672,6 @@ a.control {
   text-align: right;
 }
 
-@media screen and (max-width: 1200px) {
-  .tunnelDestinationLabel {
-    min-width: 120px;
-  }
-}
-
 input {
   vertical-align: middle;
 }
@@ -1055,89 +1049,6 @@ td.tunnelDescription, .tunnelInfo + .tunnelInfo .tunnelDestination {
   text-overflow: ellipsis;
 }
 
-@media screen and (max-width: 900px) {
-  .tunnelInfo .selectAll {
-    max-width: 110px;
-  }
-}
-
-@media screen and (min-width: 1500px) {
-  .tunnelInfo .selectAll {
-    max-width: none;
-  }
-}
-
-/* end more space */
-
-/* responsive layout */
-
-@media screen and (max-width: 700px) {
-#leasesetKey, #tunnelDepth, #tunnelVariance, #tunnelQuantity, #tunnelBackupQuantity,
-#tunnelDepthOut, #tunnelVarianceOut, #tunnelQuantityOut, #tunnelBackupQuantityOut, #leasesetKey {
-  min-width: 270px;
-}
-}
-
-@media screen and (max-width: 800px) {
-.tunnelType, .tunnelInterface, .tunnelProperties td:nth-child(n+2) {
-  text-align: center;
-}
-
-.tunnelProperties td {
-  border-right: 1px solid #dfe1ec;
-}
-
-.tunnelProperties td:last-child {
-  border-right: 1px solid var(--border);
-}
-
-div[class^="status"] {
-  background-size: auto 14px;
-}
-
-.port, .quantity, .period {
-  width: 50px;
-}
-
-b + .port {
-  margin-left: 2px !important;
-  width: 40px;
-}
-
-#clientHost, .host {
-  width: 160px;
-  min-width: 160px;
-}
-
-.control, .control:link, .control:visited {
-  min-width: 60px !important;
-}
-
-#tunnelWizardPage #targetDestination {
-  width: 200px !important;
-}
-}
-
-@media screen and (min-width: 1200px) {
-body, .control, button, select, .freetext {
-  font-size: 10pt !important;
-}
-
-th {
-  font-size: 10.5pt;
-}
-
-h2, h3, #messages h2, #globalTunnelControl h2, #servers h2, #clients h2, #tunnelEditPage h2, #tunnelEditPage h3, #registration h2, #registration h3, #wizardPanel h2 {
-  padding: 10px 10px 8px 35px;
-  font-size: 12pt;
-  background-position: 8px center, 0 0 !important;
-}
-
-#localDestination, .authentication {
-  height: 34px !important;
-}
-}
-
 /* TO DO: merge with main classes */
 
 .panel {
@@ -1182,7 +1093,7 @@ input[name="nofilter_blindedPassword"] {
   font-family: var(--monospaced);
   border: 1px solid var(--border);
   border-radius: 2px;
-  box-shadow: inset 1px 1px 1px #ddd;
+  box-shadow: var(--shadow_input);
   background: #fff;
   user-select: all;
 }
@@ -1243,33 +1154,6 @@ th .help::after {
   content: "";
 }
 
-@media screen and (max-width: 800px) {
-  .displayText, .displayText:empty:hover, .displayText:empty:focus {
-    width: 260px;
-    font-size: 8pt;
-  }
-}
-
-@media screen and (max-width: 1200px) {
-  #reachableBy {min-width: 0}
-  th {font-size: 9pt}
-}
-
-@media screen and (min-width: 1000px) {
-  .displayText, .displayText:empty:hover, .displayText:empty:focus {width: 386px}
-  #registration .displayText {width: 600px}
-}
-
-@media screen and (min-width: 1500px) {
-  .displayText, .displayText:empty:hover, .displayText:empty:focus {width: 552px}
-  #registration .displayText {width: 800px}
-  th .help::after {
-    width: 20px;
-    height: 20px;
-    background-size: 20px;
-  }
-}
-
 #notReady, #down {
   margin: 35px auto 30px;
   padding: 30px;
@@ -1303,12 +1187,6 @@ th .help::after {
 
 #toggleInfo:hover img, #toggleInfo:focus img {
   mix-blend-mode: normal;
-}
-
-@media screen and (min-width: 1500px) {
-  #toggleInfo {
-    margin: -2px -2px 0 0 !important;
-  }
 }
 
 #keyringManager {
@@ -1440,4 +1318,74 @@ textarea:focus::placeholder, input:focus::placeholder, #filter input:focus::plac
 #filter input::placeholder {
   color: var(--ink);
   opacity: .4;
+}
+
+/* responsive layout */
+
+@media screen and (max-width: 1200px) {
+  #reachableBy {min-width: 0}
+  th {font-size: 9pt}
+  .tunnelDestinationLabel {min-width: 120px}
+}
+
+@media screen and (max-width: 900px) {
+  .tunnelInfo .selectAll {max-width: 110px}
+}
+
+@media screen and (max-width: 800px) {
+  .tunnelType, .tunnelInterface, .tunnelProperties td:nth-child(n+2) {text-align: center}
+  .tunnelProperties td {border-right: 1px solid #dfe1ec}
+  .tunnelProperties td:last-child {border-right: 1px solid var(--border)}
+  div[class^="status"] {background-size: auto 14px}
+  .port, .quantity, .period {width: 50px}
+  .control, .control:link, .control:visited {min-width: 60px !important}
+  #tunnelWizardPage #targetDestination {width: 200px !important}
+  b + .port {
+    margin-left: 2px !important;
+    width: 40px;
+  }
+  #clientHost, .host {
+    width: 160px;
+    min-width: 160px;
+  }
+  .displayText, .displayText:empty:hover, .displayText:empty:focus {
+    width: 260px;
+    font-size: 8pt;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  #leasesetKey, #tunnelDepth, #tunnelVariance, #tunnelQuantity, #tunnelBackupQuantity,
+  #tunnelDepthOut, #tunnelVarianceOut, #tunnelQuantityOut, #tunnelBackupQuantityOut, #leasesetKey {
+    min-width: 270px;
+  }
+}
+
+@media screen and (min-width: 1000px) {
+  .displayText, .displayText:empty:hover, .displayText:empty:focus {width: 386px}
+  #registration .displayText {width: 600px}
+}
+
+@media screen and (min-width: 1200px) {
+  body, .control, button, select, .freetext {font-size: 10pt !important}
+  th {font-size: 10.5pt}
+  h2, h3, #messages h2, #globalTunnelControl h2, #servers h2, #clients h2,
+  #tunnelEditPage h2, #tunnelEditPage h3, #registration h2, #registration h3, #wizardPanel h2 {
+    padding: 10px 10px 8px 35px;
+    font-size: 12pt;
+    background-position: 8px center, 0 0 !important;
+  }
+  #localDestination, .authentication {height: 34px !important}
+}
+
+@media screen and (min-width: 1500px) {
+  .tunnelInfo .selectAll {max-width: none}
+  .displayText, .displayText:empty:hover, .displayText:empty:focus {width: 552px}
+  #registration .displayText {width: 800px}
+  #toggleInfo {margin: -2px -2px 0 0 !important}
+  th .help::after {
+    width: 20px;
+    height: 20px;
+    background-size: 20px;
+  }
 }
