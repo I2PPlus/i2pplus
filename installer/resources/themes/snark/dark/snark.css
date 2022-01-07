@@ -1123,7 +1123,7 @@ tr.peerinfo:hover .percentBarText {
   mix-blend-mode: normal;
 }
 
-.rowOdd td, .SnarkTorrentEven td {
+.rowOdd td, .rowEven td {
   border-bottom: 1px solid #000;
 }
 

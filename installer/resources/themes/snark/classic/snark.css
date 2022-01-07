@@ -1135,7 +1135,7 @@ tr:not(.peerInfo):hover .percentBarText {
   background: var(--bg3);
 }
 
-.rowOdd, .SnarkTorrentEven {
+.rowOdd, .rowEven {
   border-bottom: var(--border_soft);
 }
 
