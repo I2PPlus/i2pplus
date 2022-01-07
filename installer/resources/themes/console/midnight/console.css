@@ -3556,33 +3556,6 @@ h2, h3, h4, .confignav {
 
 /* welcome */
 
-.langbox {
-  margin: 5px 4px 2px 5px;
-  padding: 0;
-  color: var(--ink);
-  font-size: 7pt;
-  width: 400px;
-  text-align: right;
-  float: right;
-  vertical-align: middle;
-}
-
-.langbox img {
-  margin: 0 !important;
-  padding: 0;
-  opacity: .7;
-  filter: drop-shadow(0 0 1px #000);
-}
-
-.langbox img:hover, .langbox a:focus img {
-  opacity: 1;
-  transform: scale(1.1);
-}
-
-.langbox img:active {
-  transform: none !important;
-}
-
 .twocol {
   margin: 5px 0 -5px;
   display: block;
@@ -9706,11 +9679,6 @@ div.joblog h3 {
   margin-bottom: -10px !important;
 }
 
-.langbox {
-  margin-top: 6px;
-  line-height: 16px;
-}
-
 button.control[class], button.control[class]:hover, button.control[class]:focus {
   padding: 14px !important;
   font-size: 0 !important;
@@ -12149,10 +12117,6 @@ html, body {
 
 .main#rawtext {
   padding: 0;
-}
-
-#console .langbox {
-  display: none;
 }
 
 /* sidebar ajax router down */

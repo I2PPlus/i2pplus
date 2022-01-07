@@ -328,12 +328,6 @@ ul#banlist {
 h3#webappconfiguration, h3#i2pclientconfig {
   margin-bottom: -16px !important;
 }
-
-.langbox {
-  margin-top: 5px !important;
-  margin-right: 5px !important;
-  line-height: 17px;
-}
 }
 
 @media screen and (min-width: 1500px) {

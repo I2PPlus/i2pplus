@@ -55,12 +55,6 @@ button.search {
   font-size: 11pt !important;
 }
 
-.langbox {
-  margin-top: 4px !important;
-  margin-right: 5px !important;
-  width: 460px;
-}
-
 .applabel, .themechoice, .langselect {
   width: 152px !important;
 }
@@ -359,11 +353,6 @@ span#newtab {
 
 div.app a:link, div.app a:hover, div.app a:active {
   font-size: 11pt !important;
-}
-
-.langbox {
-  margin-top: 5px !important;
-  line-height: 16px;
 }
 
 .langselect .optbox {

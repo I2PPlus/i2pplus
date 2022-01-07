@@ -149,7 +149,7 @@ a:active, a:visited:active {
   color: #f30 !important;
 }
 
-#sidebar a, #sidebar img[src$="i2plogo.png"], #sidebar h3, .confignav, *::before, *::after, div.app, .themechoice, .langselect, .langbox,
+#sidebar a, #sidebar img[src$="i2plogo.png"], #sidebar h3, .confignav, *::before, *::after, div.app, .themechoice, .langselect,
 .newsAuthor, #netdbcountrylist img, .viewfullentry, .sybil_routerinfo th img, .graphspanel, #themeoptions, #graphopts, #newsDisplay,
 #version a, #sb_internals, #sb_advanced, #sb_services, #sb_help, .sb_netstatus, .tunnelbuildstatus, #sidebar form, h1, h2, h3, h4, button, img {
   user-select: none;
@@ -4711,41 +4711,6 @@ div[lang="sv"] li::first-letter {
 
 div[lang="de"] .links li {
   padding-left: 0;
-}
-
-.langbox {
-  margin: 3px 1px 0 5px;
-  padding: 2px 3px;
-  font-size: 7pt;
-  width: 360px;
-  float: right;
-  vertical-align: middle;
-  text-align: right;
-}
-
-#console .langbox {
-  display: none;
-}
-
-.langbox img {
-  margin: -1px 0 0;
-  padding: 0 !important;
-  border: 1px solid #afafcf;
-  border-radius: 1px;
-  opacity: .9;
-  filter: none;
-}
-
-.langbox img:hover, .langbox a:focus img {
-  border: 1px solid #f60;
-  opacity: 1;
-  filter: none !important;
-  transform: scale(1.2);
-  transition: ease box-shadow .3s, ease border .3s;
-}
-
-.langbox a:active img {
-  transform: scale(1.0);
 }
 
 .twocol {
@@ -11379,15 +11344,6 @@ h1 {
 #sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after,
 #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {
   min-height: 14px;
-}
-
-.langbox {
-  margin: 4px 2px 0 5px;
-  line-height: 120%;
-}
-
-.langbox img {
-  margin: -1px 0 2px 2px;
 }
 
 .th_title a {

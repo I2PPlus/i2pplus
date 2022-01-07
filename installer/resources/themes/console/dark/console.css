@@ -2308,34 +2308,6 @@ button.control:active {
   border-bottom: 1px solid var(--ink);
 }
 
-.langbox {
-  margin: 4px 3px 2px 5px;
-  padding: 0;
-  width: 400px;
-  float: right;
-  line-height: 16px;
-  vertical-align: middle;
-  text-align: right;
-  font-size: 7pt;
-}
-
-.langbox img {
-  margin: 0 1px -2px !important;
-  padding: 0 !important;
-  border: 1px solid #000;
-  opacity: .7;
-  transition: ease opacity .3s;
-}
-
-.langbox img:hover, .langbox a:focus img {
-  opacity: 1;
-  transform: scale(1.1);
-}
-
-.langbox a:active img {
-  transform: scale(1);
-}
-
 hr {
   color: #242;
   background: #242;
@@ -5793,14 +5765,6 @@ h3#bannedpeers {
     linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), var(--h3_fade) !important;
   background-size: 24px, 4px 100%, 100%, 100% !important;
   background-blend-mode: luminosity, normal, normal;
-}
-
-#home .welcome .langbox {
-  margin-right: -2px !important;
-}
-
-#console .langbox {
-  display: none;
 }
 
 #home .welcome {
@@ -13760,9 +13724,6 @@ body.iframed {
   .tunneldisplay .cells {
     padding: 4px 2px !important;
   }
-  .langbox {
-    line-height: 15px;
-  }
 }
 
 @media screen and (min-width: 1200px) {
@@ -14162,13 +14123,6 @@ body.iframed {
   }
   .main#jobs h2 {
     margin-bottom: 3px !important;
-  }
-  .langbox {
-    margin: 4px 4px 2px 5px;
-    line-height: 17px !important;
-  }
-  .langbox img {
-    margin-bottom: -1px;
   }
   #help .confignav {
     padding: 0 !important;

@@ -975,36 +975,6 @@ div[lang="pt"] li br {
   text-align: justify;
 }
 
-.langbox {
-  margin: 0;
-  padding: 7px 6px 7px 4px;
-  width: 30px;
-  float: right;
-  overflow: hidden;
-  text-align: right;
-  font-size: 7pt;
-  color: #001;
-  border-left: 1px solid var(--border);
-}
-
-.langbox img {
-  margin: 0 1px -1px;
-  padding: 3px !important;
-  width: 20px;
-  height: 20px;
-  opacity: .9;
-  transform: none !important;
-}
-
-.langbox img:hover, .langbox a:focus img {
-  opacity: 1;
-  transform: scale(1.1) !important;
-}
-
-.langbox img:hover:active {
-  transform: none !important;
-}
-
 .links {
   margin-top: 5px !important;
   padding-bottom: 0;
