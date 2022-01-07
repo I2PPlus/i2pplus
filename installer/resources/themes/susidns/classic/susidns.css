@@ -578,6 +578,7 @@ p.buttons {
 }
 
 .fakebutton, input[type=submit], input[type="reset"], input[type=checkbox], input[type=radio], select {
+  color: var(--ink_light);
   cursor: pointer;
 }
 
@@ -587,7 +588,7 @@ input[type=text], input[type=password], textarea {
   min-width: 160px;
   vertical-align: middle;
   font: 9pt/130% var(--bodyfont);
-  color: #222;
+  color: var(--ink_light);
   border: 1px solid var(--border);
   border-radius: 2px;
   box-shadow: inset 1px 1px 1px #ddd;
@@ -595,7 +596,7 @@ input[type=text], input[type=password], textarea {
 }
 
 input[type=text]:focus, input[type=password]:focus, textarea:focus {
-  color: #000;
+  color: var(--ink);
   box-shadow: inset 0 0 0 1px #89f, 0 0 1px rgba(136, 153, 255, .4);
 }
 
@@ -612,7 +613,7 @@ input[type=file]::file-selector-button {
   margin: 3px 3px 3px 0;
   padding: 6px 10px;
   font: 9pt/130% var(--bodyfont);
-  color: #222;
+  color: var(--ink_light);
   border: 1px solid var(--border);
   border-radius: 2px;
   box-shadow: inset 1px 1px 1px #ddd;
@@ -620,7 +621,7 @@ input[type=file]::file-selector-button {
 }
 
 input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
-  color: #222;
+  color: var(--ink);
   border: 1px solid var(--border);
   background: var(--btn_hover);
   filter: drop-shadow(0 0 1px #89f);
@@ -628,7 +629,7 @@ input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selec
 }
 
 input[type=file]:active::file-selector-button {
-  color: #333;
+  color: var(--ink_light);
   border: 1px solid #bbb;
   box-shadow: var(--highlight), inset 3px 3px 3px #999;
 }
@@ -662,7 +663,6 @@ td.destinations textarea, td.destinations textarea:focus {
 .fakebutton, input[type=submit], input[type="reset"] {
   margin: 2px 0 2px 4px;
   padding: 5px 8px !important;
-  color: #333 !important;
   border-radius: 2px;
   border: 1px solid var(--border);
   box-shadow: var(--btn_shadow);
@@ -675,14 +675,14 @@ input.update {
 
 .fakebutton:hover, input[type=submit]:hover, input[type="reset"]:hover,
 .fakebutton:focus, input[type=submit]:focus, input[type="reset"]:focus {
-  color: #222;
+  color: var(--ink);
   border: 1px solid var(--border);
   background: var(--btn_hover);
   box-shadow: var(--btn_shadow_hover);
 }
 
 .fakebutton:active, input[type=submit]:active, input[type="reset"]:active {
-  color: #333;
+  color: var(--ink_light);
   border: 1px solid #bbb;
   box-shadow: var(--highlight), inset 3px 3px 3px #999;
 }
