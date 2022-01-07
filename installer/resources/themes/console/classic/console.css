@@ -8453,11 +8453,15 @@ input[type="file"]:hover {
 
 /* profiles */
 
-#thresholds {
-  margin-bottom: 13px;
+#profiles_overview {
+  background-image: url(/themes/console/images/svg/profile.svg);
 }
 
-#profiles .widescroll + .tabletitle {
+#thresholds {
+  margin: -1px 0 0;
+}
+
+#peer_thresholds h3, #profiles .widescroll + .tabletitle {
   margin-top: 13px !important;
 }
 
