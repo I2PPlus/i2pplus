@@ -4605,7 +4605,7 @@ h3#graphinfo {
   color: #557 !important;
   border: 1px solid var(--a);
   box-shadow: 0 0 0 1px rgba(220,220,255,.6), var(--highlight);
-  background: linear-gradient(180deg, var(--bg)50%, var(--bg4) 50%);
+  background: linear-gradient(180deg, var(--bg) 50%, var(--bg4) 50%);
 }
 
 #graphopts a:active, #newsDisplay a:active,
@@ -4819,9 +4819,9 @@ img[src^="/flags"], img.unknownflag {
 }
 
 p#helptranslate {
+  padding: 15px 10px 15px 50px !important;
   position: relative;
   top: 4px;
-  padding: 15px 10px 15px 50px !important;
   text-align: left !important;
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
@@ -4924,9 +4924,9 @@ p#helptranslate {
 }
 
 .langselect:active .ui_lang, .langselect:active > .optbox + img + .ui_lang {
-  background: var(--hover);
   color: var(--bg) !important;
   box-shadow: var(--highlight);
+  background: var(--hover);
 }
 
 .langselect:active .optbox:checked + img + .ui_lang,
@@ -5030,7 +5030,8 @@ td#pw_adduser input {
   text-align: left;
 }
 
-#clientconfig th:nth-child(2), #clientconfig th:nth-child(3), #webappconfig th:nth-child(2), #webappconfig th:nth-child(3), #pluginconfig th:first-child {
+#clientconfig th:nth-child(2), #clientconfig th:nth-child(3), #pluginconfig th:first-child,
+#webappconfig th:nth-child(2), #webappconfig th:nth-child(3) {
   text-align: center;
 }
 
@@ -5127,7 +5128,7 @@ td#pw_adduser input {
 }
 
 .netdbentry img {
-  margin: 1px 0 0 0;
+  margin: 1px 0 0;
 }
 
 #leasesetsummary {
@@ -5154,8 +5155,8 @@ td#pw_adduser input {
 
 #leasesetdebug th, #leasesetsummary th {
   padding: 8px 5px;
-  font-weight: 700;
   text-align: left;
+  font-weight: 700;
 }
 
 #leasesetdebug th:first-child, #leasesetsummary th:first-child {
@@ -5165,8 +5166,8 @@ td#pw_adduser input {
 #leasesetdebug th a, #leasesetsummary th a {
   word-spacing: normal;
   letter-spacing: normal;
-  font-size: 8pt;
   text-transform: capitalize;
+  font-size: 8pt;
 }
 
 #leasesetdebug th a:not(old), #leasesetsummary th a:not(old) {
@@ -5317,10 +5318,10 @@ td#pw_adduser input {
 }
 
 #sybilnav li a {
+  width: calc(100% - 30px);
   display: inline-block;
   vertical-align: middle;
   line-height: 1;
-  width: calc(100% - 30px);
 }
 
 #sybilnav li::before {

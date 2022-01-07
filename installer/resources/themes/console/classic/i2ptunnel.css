@@ -17,10 +17,12 @@
   --active: #f30;
   --highlight: inset 0 0 0 1px rgba(255,255,255,.8);
   --shadow_inset: inset 2px 2px 4px rgba(204,204,240,.6);
+  --shadow_input: inset 1px 1px 1px rgba(0,0,0,.2);
   --btn: linear-gradient(180deg, var(--bg) 50%, var(--bg2), var(--bg3));
   --btn_hover: linear-gradient(180deg,#ddd,#fff);
   --btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 #fff, inset 0 0 4px 2px #f0f0ff, 0 1px 1px rgba(220,220,255,.5);
   --btn_shadow_hover: var(--highlight), 0 0 0 1px #fff, 0 0 0 2px rgba(255,96,0,.4);
+  --btn_shadow_active: var(--highlight), inset 3px 3px 3px 1px rgba(32,32,64,.3);
   --border: #bfc3d9;
   --h2: linear-gradient(180deg,#fff 50%,#fafbff 50%);
   --bg: #fff;
@@ -131,13 +133,13 @@ hr {
   color: #5e626e;
   border: 1px solid var(--border);
   border-radius: 2px;
-  box-shadow: inset 1px 1px 1px #ddd;
+  box-shadow: var(--shadow_input);
   background: #fff;
 }
 
 .freetext:focus {
   color: var(--ink);
-  box-shadow: inset 0 0 0 1px rgba(255,96,0,.5);
+  box-shadow: var(--btn_shadow_hover), var(--btn_shadow_active);
 }
 
 .freetext[readonly], .freetext[readonly]:focus {
@@ -181,7 +183,7 @@ hr {
 
 .control:active, button:active {
   border: 1px solid var(--border);
-  box-shadow: var(--highlight), inset 3px 3px 3px 1px #555 !important;
+  box-shadow: var(--btn_shadow_active);
 }
 
 .iframed .panel.iframed {
@@ -200,7 +202,8 @@ hr {
   border-radius: 2px;
   box-shadow: inset 0 0 1px #999;
   background: #fff;
-  background: linear-gradient(90deg, #fff 0%, rgba(247, 248, 255, .5), #fff), linear-gradient(180deg,#eff1ff, #fff, #eff1ff);
+  background: linear-gradient(90deg, #fff 0%, rgba(247, 248, 255, .5), #fff),
+    linear-gradient(180deg,#eff1ff, #fff, #eff1ff);
 }
 
 .iframed .panel {
@@ -1135,23 +1138,6 @@ h2, h3, #messages h2, #globalTunnelControl h2, #servers h2, #clients h2, #tunnel
 }
 }
 
-/* Edge/IE tweaks */
-
-_:-ms-lang(x), td {
-  border-top: 1px solid #cfd1ff;
-}
-
-_:-ms-lang(x), td.tunnelDestination, td.tunnelDescription {
-  border-bottom-color: transparent;
-}
-
-_:-ms-lang(x), h2, h3 {
-  box-shadow: none;
-}
-
-/* end Edge/IE tweaks */
-
-
 /* TO DO: merge with main classes */
 
 .panel {
@@ -1159,9 +1145,7 @@ _:-ms-lang(x), h2, h3 {
 }
 
 @supports not (-moz-appearance: none) { /* fixes chrome/blinkoverflow issue */
-select {
-  white-space: normal;
-}
+  select {white-space: normal}
 }
 
 label {
@@ -1200,8 +1184,6 @@ input[name="nofilter_blindedPassword"] {
   border-radius: 2px;
   box-shadow: inset 1px 1px 1px #ddd;
   background: #fff;
-  -moz-user-select: all;
-  -webkit-user-select: all;
   user-select: all;
 }
 
