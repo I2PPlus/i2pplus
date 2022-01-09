@@ -9711,7 +9711,7 @@ a[href^="configpeer?peer"]:hover::after {
   border-top: none !important;
 }
 
-#jardump, #jardump tr {
+#jarfiles, #jarfiles tr {
   border-left: none !important;
   border-right: none !important;
 }
@@ -9907,7 +9907,7 @@ a[href^="configpeer?peer"]:hover::after {
   width: calc(100% - 1px) !important;
 }
 
-#jardump, #jardump tr {
+#jarfiles, #jarfiles tr {
   border-left: none !important;
   border-right: none !important;
 }

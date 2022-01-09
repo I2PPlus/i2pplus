@@ -4147,7 +4147,7 @@ a[name="chelp"]:hover, a[name="help"]:hover, a[name="chelp"]:active, a[name="hel
   margin: 5px -7px;
 }
 
-tr#addnew {
+tr.addnew {
   border-top: var(--innerborder);
 }
 
@@ -9979,7 +9979,7 @@ div[id^="config_"] .tab:first-child {
   font-size: 10.5pt !important;
 }
 
-#logs li, pre#servicelogs, #routerlogs li {
+#logs li, pre#service_logs, #routerlogs li {
   font-size: 9.5pt !important;
 }
 

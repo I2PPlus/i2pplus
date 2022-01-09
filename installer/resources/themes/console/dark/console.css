@@ -3326,7 +3326,7 @@ a[name="chelp"]:hover, a[name="help"]:hover, a[name="chelp"]:active, a[name="hel
   margin-bottom: -2px !important;
 }
 
-tr#addnew, tr#addnew:hover {
+tr.addnew, tr.addnew:hover {
   border-top: var(--border);
   background: #000800;
 }

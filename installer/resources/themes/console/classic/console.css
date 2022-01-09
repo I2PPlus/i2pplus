@@ -4126,11 +4126,11 @@ h3#totaljobstats {
   border-top: 1px solid var(--border);
 }
 
-#addnew td:first-child {
+.addnew td:first-child {
   text-align: right;
 }
 
-tr#addnew:hover {
+tr.addnew:hover {
   color: var(--ink) !important;
 }
 

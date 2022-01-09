@@ -114,7 +114,7 @@ code, pre, tt {
   font-size: 10pt !important;
 }
 
-#routerlogs li, #criticallogs li, pre#servicelogs {
+#routerlogs li, #criticallogs li, pre#service_logs {
   font-size: 9pt !important;
 }
 
