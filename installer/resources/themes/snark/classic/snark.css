@@ -1032,6 +1032,7 @@ td:first-child {
 }
 
 .magnetLabel {
+  padding: 2px;
   display: inline-block;
   vertical-align: middle;
   white-space: nowrap;
@@ -1260,16 +1261,16 @@ tr:nth-child(even) + .peerinfo:nth-child(odd) {
 }
 
 .percentBarText {
-  margin-top: 1px;
-  text-align: center;
-  font-weight: 700 !important;
-  font-size: 95%;
+  margin-bottom: 1px;
   white-space: nowrap;
+  line-height: 15px;
+  text-align: center;
+  font-size: 95%;
+  font-weight: 700 !important;
   color: var(--ink);
   text-shadow: 0 0 1px rgba(255,255,255,.5);
   opacity: 0;
   transition: ease opacity .1s;
-  line-height: 14px;
 }
 
 .percentBarText:hover, .percentBarText:focus {
@@ -1319,8 +1320,8 @@ tr:nth-child(even) + .peerinfo:nth-child(odd) {
   position: absolute;
   left: 1px;
   top: 1px;
-  background: linear-gradient(180deg,#fefeff,#daecee);
   z-index: 1;
+  background: linear-gradient(180deg,#fefeff,#daecee);
 }
 
 .txBarInner[style="width: calc(100% - 2px)"] {
@@ -3457,10 +3458,6 @@ hr.debug {
 
 .snarkMessages .infohash:hover {
   color: #070;
-}
-
-.snarkTorrents .infohash, .magnetLabel {
-  vertical-align: text-bottom;
 }
 
 .torrentlink {
