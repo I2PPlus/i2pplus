@@ -1975,6 +1975,7 @@ h1, .confignav {
 .tab a {
   padding: 3px 14px;
   display: inline-block;
+  -webkit-text-stroke: 1px rgba(255,255,255,.1);
 }
 
 .tab:hover a {
@@ -12091,35 +12092,24 @@ th[aria-sort] {
 }
 
 @media screen and (max-width: 1400px) {
-#peers #ntcpconnections th:nth-last-child(2), #peers #ntcpconnections th:nth-last-child(3) {
-  font-size: 0 !important;
+  #peers #ntcpconnections th.queue {
+    font-size: 0 !important;
+  }
+  #peers #ntcpconnections th.queue::after {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    background: var(--err) no-repeat center center / 16px;
+    content: "";
+  }
+  #peers .ipv6, #peers .rto, #peers .mtu,
+  #peers .sst, #peers .cwnd, #peers .rtt {
+    display: none;
+  }
 }
 
-#peers #ntcpconnections th:nth-last-child(2)::after, #peers #ntcpconnections th:nth-last-child(3)::after {
-  content: "";
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  background: var(--err) no-repeat center center / 16px;
-}
-
-#peers #ntcpconnections th:nth-last-child(3)::after {
-  background: var(--timer) no-repeat center center;
-}
-
-#peers #ntcpconnections th:nth-last-child(4) {
-  max-width: 22px;
-  overflow: hidden;
-  padding-left: 0;
-  padding-right: 0;
-}
-
-#peers .ipv6, #peers .rto, #peers .mtu, #peers .sst, #peers .cwnd, #peers .rtt {
-  display: none;
-}
-}
-
-#peers img[src$="bound.svg"], #profiles img[src$="bound.svg"], #tunnels img[src$="bound.svg"] {
+#peers img[src$="bound.svg"], #profiles img[src$="bound.svg"],
+#tunnels img[src$="bound.svg"] {
   opacity: 0;
 }
 
@@ -12783,14 +12773,14 @@ i {
   box-shadow: none !important;
 }
 
-.stattograph:active, .optbox:checked + label > .stattograph:active {
-  color: #fff;
-  box-shadow: inset 0 0 0 1px #930, inset 3px 3px 3px rgba(0,0,0,.2) !important;
+.stattograph:active, .optbox:checked + label > .stattograph:active,
+.optbox:not(:checked) + label > .stattograph:active {
+  box-shadow: inset 0 0 0 1px #930, inset 3px 3px 3px rgba(0,0,0,.4) !important;
   background: #f60;
 }
 
 .stattograph:active b, .optbox:checked + label > .stattograph:active b, .optbox:checked + label > .stattograph:hover b {
-  color: #f60 !important;
+  color: #fff !important;
 }
 
 .optbox:checked + label > .stattograph:hover b {

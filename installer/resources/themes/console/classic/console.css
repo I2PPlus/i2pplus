@@ -10495,24 +10495,15 @@ iframe {
 }
 
 @media screen and (max-width: 1400px) {
-  #peers #ntcpconnections th:nth-last-child(2), #peers #ntcpconnections th:nth-last-child(3) {
+  #peers #ntcpconnections th.queue {
     font-size: 0 !important;
   }
-  #peers #ntcpconnections th:nth-last-child(2)::after, #peers #ntcpconnections th:nth-last-child(3)::after {
+  #peers #ntcpconnections th.queue::after {
     width: 16px;
     height: 16px;
     display: inline-block;
     background: var(--err) no-repeat center center / 16px;
     content: "";
-  }
-  #peers #ntcpconnections th:nth-last-child(3)::after {
-    background: var(--timer) no-repeat center center;
-  }
-  #peers #ntcpconnections th:nth-last-child(4) {
-    padding-left: 0;
-    padding-right: 0;
-    max-width: 22px;
-    overflow: hidden;
   }
   #peers .ipv6, #peers .rto, #peers .mtu, #peers .sst, #peers .cwnd, #peers .rtt {
     display: none;
