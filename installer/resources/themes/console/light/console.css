@@ -6277,11 +6277,20 @@ h3#udpcon {
   margin-top: 7px;
 }
 
+.confignav + #udp > h3#udpcon {
+  margin-top: 15px;
+}
+
 #udpconnections {
   margin-bottom: 0;
 }
 
+#udpconnections tr, #udpconnections td:first-child {
+  border-left: 1px solid var(--border_inner) !important;
+}
+
 .reachability {
+  margin: 4px 4px 0;
   float: right;
   font-size: 70%;
   color: #4f4f5f;
