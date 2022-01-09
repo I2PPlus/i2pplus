@@ -98,7 +98,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     private final TunnelController _controller;
 
 //    public static final int PACKET_DELAY = 100;
-    public static final int PACKET_DELAY = 50;
+    public static final int PACKET_DELAY = 80;
 
     public boolean ownDest = false;
 
