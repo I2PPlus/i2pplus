@@ -667,7 +667,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                 }
             } catch (RouterRestartException rre) {
                 // Delay and loop if router is soft restarting
-                _log.logAlways(Log.WARN, "Waiting for router restart");
+                _log.logAlways(Log.WARN, "Waiting for router restart...");
                 if (i2ps != null) try { i2ps.close(); } catch (IOException ioe) {}
                 try {
                     Thread.sleep(2*60*1000);
@@ -676,7 +676,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                 // so sockMgr will call ConnectionManager.setAllowIncomingConnections(true) again
                 i2pss = sockMgr.getServerSocket();
             } catch (I2PException ipe) {
-                String s = "Error accepting - KILLING THE TUNNEL SERVER";
+                String s = "Error accepting server socket connection - KILLING THE TUNNEL SERVER!";
                 _log.log(Log.CRIT, s, ipe);
                 l.log(s + ": " + ipe);
                 // Tell TunnelController so it will change state
@@ -693,7 +693,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                     break;
                 if (_log.shouldLog(Log.ERROR))
 //                    _log.error("Error accepting", ce);
-                    _log.error("Error accepting connection \n* " + ce.getMessage());
+                    _log.error("Error accepting server socket connection \n* " + ce.getMessage());
                 try {
                     Thread.sleep(2*60*1000);
                 } catch (InterruptedException ie) {}
