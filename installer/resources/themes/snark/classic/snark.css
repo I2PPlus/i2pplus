@@ -1292,6 +1292,22 @@ tr:nth-child(even) + .peerinfo:nth-child(odd) {
   background: var(--badge);
 }
 
+.peerSeed img {
+  font-size: 0;
+  opacity: .7;
+  transform: scale(1);
+}
+
+.active .peerSeed img {
+  opacity: 1;
+  animation: scale .2s linear 3s 2 forwards;
+}
+
+@keyframes scale {
+  0%,100% {transform: scale(1)}
+  50% {transform: scale(1.3)}
+}
+
 .uploaded {
   position: relative;
   overflow: hidden;

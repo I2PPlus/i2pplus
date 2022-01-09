@@ -160,11 +160,6 @@ input.search, input.search:focus {
   text-align: right !important;
 }
 
-.langbox {
-  float: left;
-  text-align: left;
-}
-
 .formaction {
   text-align: left;
 }

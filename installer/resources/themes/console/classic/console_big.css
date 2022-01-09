@@ -200,12 +200,6 @@ div.main, div.news, h1, .sorry {
   margin-left: 227px;
 }
 
-.langbox {
-  width: 400px;
-  margin-top: 5px;
-  margin-right: 8px;
-}
-
 .joblog li i {
   font-weight: 400;
 }
@@ -610,10 +604,6 @@ h1 {
 
 .routersummary td, .routersummary a, .routersummary button, .routersummary h4, .routersummary h4 a, div.news, #banlist li {
   font-size: 11pt !important;
-}
-
-.langbox {
-  margin-top: 2px !important;
 }
 
 .routersummary div[style="height: 36px;"] {

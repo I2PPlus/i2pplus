@@ -1312,11 +1312,11 @@ public class SummaryHelper extends HelperBase {
             if (name == null)
                 continue;
             buf.append("<tr><td align=\"center\"><input type=\"checkbox\" class=\"optbox\" id=\"")
-               .append(name.replace(" ", "_"))
+               .append(name.replace(" ", "_").replace("\'", "").replace("(", "").replace(")", "").replace("&amp;", ""))
                .append("\" name=\"delete_")
                .append(i)
                .append("\"></td><td align=\"left\"><label for=\"")
-               .append(name.replace(" ", "_"))
+               .append(name.replace(" ", "_").replace("\'", "").replace("(", "").replace(")", "").replace("&amp;", ""))
                .append("\">")
                .append(_t(name))
                .append("</label></td><td align=\"right\"><input type=\"hidden\" name=\"order_")

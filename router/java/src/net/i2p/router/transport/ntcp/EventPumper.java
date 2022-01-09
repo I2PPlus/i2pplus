@@ -801,12 +801,14 @@ class EventPumper implements Runnable {
             }
         // catch and close outside the write lock to avoid deadlocks in NTCPCon.locked_close()
         } catch (CancelledKeyException cke) {
-            if (_log.shouldLog(Log.WARN)) _log.warn("Error writing on: " + con, cke);
+//            if (_log.shouldLog(Log.WARN)) _log.warn("Error writing on: " + con + "\n* Reason: " + cke.getMessage());
+            if (_log.shouldLog(Log.WARN)) _log.warn("Error writing on: " + con + "\n* Reason: Cancelled Key Exception");
             _context.statManager().addRateData("ntcp.writeError", 1);
             con.close();
             rv = true;
         } catch (IOException ioe) {
-            if (_log.shouldLog(Log.WARN)) _log.warn("Error writing on: " + con, ioe);
+//            if (_log.shouldLog(Log.WARN)) _log.warn("Error writing on: " + con + "\n* Reason: " + ioe.getMessage());
+            if (_log.shouldLog(Log.WARN)) _log.warn("Error writing on: " + con + "\n* Reason: IO Error");
             _context.statManager().addRateData("ntcp.writeError", 1);
             con.close();
             rv = true;
