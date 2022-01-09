@@ -372,8 +372,10 @@ public class HomeHelper extends HelperBase {
             } else {
                 buf.append("<td align=\"center\" class=\"noicon\">");
             }
-            buf.append("</td><td align=\"left\"><label for=\"")
-               .append(app.name.replace(" ", "_").replace("\'", ""))
+            buf.append("</td><td align=\"left\"><label for=\"");
+            if (url.contains("%s"))
+                buf.append("search_");
+            buf.append(app.name.replace(" ", "_").replace("\'", ""))
                .append("\">")
                .append(DataHelper.escapeHTML(app.name))
                .append("</label></td><td align=\"left\"><a href=\"");
