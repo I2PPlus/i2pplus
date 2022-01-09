@@ -333,8 +333,8 @@ public class PeerHelper extends HelperBase {
                        "<th class=\"tx\" title=\"").append(_t("Messages sent")).append("\">").append(_t("TX")).append("</th>" +
                        "<th class=\"rx\" title=\"").append(_t("Messages received")).append("\">").append(_t("RX")).append("</th>" +
                        "<th class=\"queue\" title=\"").append(_t("Queued messages to send to peer")).append("\">").append(_t("Out Queue")).append("</th>" +
-                       "<th title=\"").append(_t("Is peer backlogged?")).append("\">").append(_t("Backlogged?")).append("</th>");
-            buf.append("<th class=\"spacer\">&nbsp;</th>" +
+//                       "<th title=\"").append(_t("Is peer backlogged?")).append("\">").append(_t("Backlogged?")).append("</th>");
+//            buf.append("<th class=\"spacer\">&nbsp;</th>" +
                        //"<th>").append(_t("Reading?")).append("</th>" +
                        "</tr>\n");
         }
@@ -400,11 +400,11 @@ public class PeerHelper extends HelperBase {
             if (outQueue > 0) {
                 buf.append("<span>").append(outQueue).append("</span>");
             }
-            buf.append("</td><td class=\"cells\" align=\"center\">");
+//            buf.append("</td><td class=\"cells\" align=\"center\">");
             if (con.isBacklogged())
-                buf.append("<span class=\"backlogged\">&#x2713;</span>");
-            else
-                buf.append("&nbsp;");
+                buf.append("&nbsp;<span class=\"backlogged\" title=\"").append(_t("Connection is backlogged")).append("\">!!</span>");
+//            else
+//                buf.append("&nbsp;");
             //long readTime = con.getReadTime();
             //if (readTime <= 0) {
             //    buf.append("</td> <td class=\"cells\" align=\"center\">0");
@@ -412,7 +412,7 @@ public class PeerHelper extends HelperBase {
             //    buf.append("</td> <td class=\"cells\" align=\"center\">").append(DataHelper.formatDuration(readTime));
             //}
             buf.append("</td>");
-            buf.append("<td class=\"cells spacer\">&nbsp;</td>");
+//            buf.append("<td class=\"cells spacer\">&nbsp;</td>");
             buf.append("</tr>\n");
             out.write(buf.toString());
             buf.setLength(0);
@@ -431,8 +431,8 @@ public class PeerHelper extends HelperBase {
             buf.append("</b></span></td>");
             buf.append("<td class=\"tx\" align=\"right\"><span><b>").append(totalSend)
                .append("</b></span></td><td class=\"rx\" align=\"right\"><span><b>").append(totalRecv).append("</b></span></td>");
-            buf.append("<td>&nbsp;</td><td>&nbsp;</td>");
-            buf.append("<td class=\"spacer\">&nbsp;</td></tr>\n");
+            buf.append("<td>&nbsp;</td></tr>\n");//<td>&nbsp;</td>");
+//            buf.append("<td class=\"spacer\">&nbsp;</td></tr>\n");
         }
 
         buf.append("</table>\n</div></div>\n");
