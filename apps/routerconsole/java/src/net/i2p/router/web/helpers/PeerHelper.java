@@ -307,18 +307,15 @@ public class PeerHelper extends HelperBase {
         long totalSend = 0;
         long totalRecv = 0;
 
-//        if (!isAdvanced()) {
-            for (Iterator<NTCPConnection> iter = peers.iterator(); iter.hasNext(); ) {
-                 // outbound conns get put in the map before they are established
-                 if (!iter.next().isEstablished())
-                     iter.remove();
-            }
-//        }
+        for (Iterator<NTCPConnection> iter = peers.iterator(); iter.hasNext(); ) {
+             // outbound conns get put in the map before they are established
+             if (!iter.next().isEstablished())
+                 iter.remove();
+        }
 
         StringBuilder buf = new StringBuilder(4*1024);
         buf.append("<div id=\"ntcp\">\n<h3 id=\"ntcpcon\">").append(_t("NTCP connections")).append(":&nbsp; ").append(peers.size());
         buf.append(" / ").append(nt.getMaxConnections());
-        //buf.append(". ").append(_t("Timeout")).append(": ").append(DataHelper.formatDuration2(_pumper.getIdleTimeout()));
         buf.append("&nbsp;<span class=\"reachability\">").append(_t("Status")).append(": ")
            .append(nt.getReachabilityStatus().toLocalizedStatusString(_context)).append("</span></h3>\n")
            .append("<div class=\"widescroll\">\n<table id=\"ntcpconnections\">\n");
@@ -333,9 +330,6 @@ public class PeerHelper extends HelperBase {
                        "<th class=\"tx\" title=\"").append(_t("Messages sent")).append("\">").append(_t("TX")).append("</th>" +
                        "<th class=\"rx\" title=\"").append(_t("Messages received")).append("\">").append(_t("RX")).append("</th>" +
                        "<th class=\"queue\" title=\"").append(_t("Queued messages to send to peer")).append("\">").append(_t("Out Queue")).append("</th>" +
-//                       "<th title=\"").append(_t("Is peer backlogged?")).append("\">").append(_t("Backlogged?")).append("</th>");
-//            buf.append("<th class=\"spacer\">&nbsp;</th>" +
-                       //"<th>").append(_t("Reading?")).append("</th>" +
                        "</tr>\n");
         }
         out.write(buf.toString());
@@ -349,12 +343,14 @@ public class PeerHelper extends HelperBase {
             //    buf.append(' ').append(_context.blocklist().toStr(ip));
             buf.append("</td><td class=\"cells direction\" align=\"center\">");
             if (con.isInbound())
-                buf.append("<span class=\"inbound\"><img src=\"/themes/console/images/svg/inbound.svg\" alt=\"Inbound\" title=\"").append(_t("Inbound")).append("\"/></span>");
+                buf.append("<span class=\"inbound\"><img src=\"/themes/console/images/svg/inbound.svg\" alt=\"Inbound\" title=\"")
+                   .append(_t("Inbound")).append("\"/></span>");
             else
-                buf.append("<span class=\"outbound\"><img src=\"/themes/console/images/svg/outbound.svg\" alt=\"Outbound\" title=\"").append(_t("Outbound")).append("\"/></span>");
+                buf.append("<span class=\"outbound\"><img src=\"/themes/console/images/svg/outbound.svg\" alt=\"Outbound\" title=\"")
+                   .append(_t("Outbound")).append("\"/></span>");
             buf.append("</td><td class=\"cells ipv6\" align=\"center\">");
             if (con.isIPv6())
-                buf.append("<span class=\"backlogged\">&#x2713;</span>");
+                buf.append("<span class=\"isIPv6\">&#x2713;</span>");
             else
                 buf.append("");
             buf.append("</td><td class=\"cells idle\" align=\"center\"><span class=\"right\">");
@@ -400,20 +396,9 @@ public class PeerHelper extends HelperBase {
             if (outQueue > 0) {
                 buf.append("<span>").append(outQueue).append("</span>");
             }
-//            buf.append("</td><td class=\"cells\" align=\"center\">");
             if (con.isBacklogged())
                 buf.append("&nbsp;<span class=\"backlogged\" title=\"").append(_t("Connection is backlogged")).append("\">!!</span>");
-//            else
-//                buf.append("&nbsp;");
-            //long readTime = con.getReadTime();
-            //if (readTime <= 0) {
-            //    buf.append("</td> <td class=\"cells\" align=\"center\">0");
-            //} else {
-            //    buf.append("</td> <td class=\"cells\" align=\"center\">").append(DataHelper.formatDuration(readTime));
-            //}
-            buf.append("</td>");
-//            buf.append("<td class=\"cells spacer\">&nbsp;</td>");
-            buf.append("</tr>\n");
+            buf.append("</td></tr>\n");
             out.write(buf.toString());
             buf.setLength(0);
         }
@@ -423,18 +408,15 @@ public class PeerHelper extends HelperBase {
                .append(ngettext("{0} peer", "{0} peers", peers.size()));
             String rx = formatRate(bpsRecv/1000).replace(".00", "");
             String tx = formatRate(bpsSend/1000).replace(".00", "");
-            buf.append("</b></td><td class=\"direction\">&nbsp;</td><td class=\"ipv6\">&nbsp;</td><td class=\"idle\">&nbsp;</td>");
-            buf.append("<td class=\"inout\" align=\"center\" nowrap><span class=\"right\"><b>").append(rx).append("</b></span>");
-            buf.append(THINSP).append("<span class=\"left\"><b>").append(tx).append("</b></span>");
-            buf.append("</td><td class=\"uptime\" align=\"right\"><span><b>").append(DataHelper.formatDuration2(totalUptime/peers.size()));
-            buf.append("</b></span></td><td class=\"skew\" align=\"right\"><span><b>").append(DataHelper.formatDuration2(offsetTotal*1000/peers.size()));
-            buf.append("</b></span></td>");
-            buf.append("<td class=\"tx\" align=\"right\"><span><b>").append(totalSend)
-               .append("</b></span></td><td class=\"rx\" align=\"right\"><span><b>").append(totalRecv).append("</b></span></td>");
-            buf.append("<td>&nbsp;</td></tr>\n");//<td>&nbsp;</td>");
-//            buf.append("<td class=\"spacer\">&nbsp;</td></tr>\n");
+            buf.append("</b></td><td class=\"direction\">&nbsp;</td><td class=\"ipv6\">&nbsp;</td>" +
+                       "<td class=\"idle\">&nbsp;</td><td class=\"inout\" align=\"center\" nowrap>" +
+                       "<span class=\"right\"><b>").append(rx).append("</b></span>").append(THINSP).append("<span class=\"left\"><b>").append(tx).append("</b></span></td>" +
+                       "<td class=\"uptime\" align=\"right\"><span><b>").append(DataHelper.formatDuration2(totalUptime/peers.size())).append("</b></span></td>" +
+                       "<td class=\"skew\" align=\"right\"><span><b>").append(DataHelper.formatDuration2(offsetTotal*1000/peers.size())).append("</b></span></td>" +
+                       "<td class=\"tx\" align=\"right\"><span><b>").append(totalSend).append("</b></span></td>" +
+                       "<td class=\"rx\" align=\"right\"><span><b>").append(totalRecv).append("</b></span></td>" +
+                       "<td>&nbsp;</td></tr>\n");
         }
-
         buf.append("</table>\n</div></div>\n");
         out.write(buf.toString());
         buf.setLength(0);
