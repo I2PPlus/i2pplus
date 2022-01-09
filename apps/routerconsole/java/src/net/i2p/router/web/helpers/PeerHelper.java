@@ -336,6 +336,9 @@ public class PeerHelper extends HelperBase {
         buf.setLength(0);
         long now = _context.clock().now();
         for (NTCPConnection con : peers) {
+            // exclude older peers
+            if (con.getTimeSinceReceive(now) > 60*1000 || con.getTimeSinceSend(now) > 60*1000)
+                continue;
             buf.append("<tr class=\"lazy\"><td class=\"cells peer\" align=\"left\" nowrap>");
             buf.append(_context.commSystem().renderPeerHTML(con.getRemotePeer().calculateHash()));
             //byte[] ip = getIP(con.getRemotePeer().calculateHash());
@@ -560,7 +563,7 @@ public class PeerHelper extends HelperBase {
         long now = _context.clock().now();
         for (PeerState peer : peers) {
 //            if (now-peer.getLastReceiveTime() > 60*60*1000)
-            if (now-peer.getLastReceiveTime() > 20*60*1000)
+            if (now-peer.getLastReceiveTime() > 60*1000)
                 continue; // don't include old peers
             buf.append("<tr class=\"lazy\"><td class=\"cells peer\" align=\"left\" nowrap>");
             buf.append(_context.commSystem().renderPeerHTML(peer.getRemotePeer()));
