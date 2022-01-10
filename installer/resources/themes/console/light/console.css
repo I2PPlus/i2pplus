@@ -3416,6 +3416,16 @@ div.app img {
   white-space: nowrap;
 }
 
+div.app img, .sitemapLink img {
+  animation: zoom .1s ease-out .9s both;
+  will-change: transform;
+}
+
+@keyframes zoom {
+  from {transform: scale(0)}
+  to {scale: scale(1)}
+}
+
 /* home search */
 
 #searchbar {
