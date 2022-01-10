@@ -3275,7 +3275,7 @@ div.app {
   padding: 0;
   position: relative;
   float: left;
-  min-width: 140px;
+  width: 160px;
   text-align: center !important;
   border: 1px solid var(--border_inner);
   border: 1px solid #999adf;
@@ -3366,14 +3366,13 @@ div.app:active img {
 }
 
 div.app img {
+  padding: 10px 60px;
   width: auto;
   height: 32px;
   max-height: 32px;
   max-width: 32px;
-  padding: 6px;
-  padding: 10px 60px;
-  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
   opacity: .9;
+  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
 .app table {
@@ -3396,20 +3395,17 @@ div.app img {
 }
 
 .applabel {
-  background: #fcfcff !important;
-  background: linear-gradient(180deg,#fff 50%, #eef 50%) !important;
-  background: #f8f8ff !important;
-  font-size: 8pt;
   margin: 0;
   padding: 4px 6px;
-  border-top: 1px solid var(--border_inner);
-  border-top: 1px solid #999adf;
-  box-shadow: var(--highlight), inset 0 0 2px 1px #eef;
-  text-align: center;
-  width: 146px;
+  width: 148px;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  text-align: center;
+  font-size: 8pt;
+  border-top: 1px solid var(--border_inner);
+  box-shadow: var(--highlight), inset 0 0 2px 1px #eef;
+  background: #f8f8ff !important;
 }
 
 .applabel a {
@@ -10348,14 +10344,6 @@ b.suboption {
   content: "";
 }
 
-div.app {
-  width: 160px;
-}
-
-.applabel {
-  width: 148px !important;
-}
-
 .footnote {
   font-size: 8pt !important;
 }
@@ -10499,7 +10487,6 @@ td.optionsave, .formaction, table#addkeyring tr:last-child td {
 
 #view_profile a img {
   margin-right: 34px !important;
-}
 }
 
 /* highlight anchored links */
@@ -12435,6 +12422,27 @@ iframe {
   #tunnels .tunnel_cap {
     margin-left: 1px !important;
     margin-right: 1px !important;
+  }
+  div.app {
+    width: 140px;
+  }
+  div.app img {
+    padding: 10px 40px;
+    width: auto;
+    height: 24px;
+    max-height: 24px;
+    max-width: 24px;
+  }
+  .appimg {
+    min-height: 36px;
+  }
+  .applabel {
+    width: 128px;
+  }
+  .sitemapLink img {
+    padding: 12px 10px 10px;
+    height: 24px;
+    width: 24px;
   }
 }
 
