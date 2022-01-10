@@ -6255,7 +6255,6 @@ h3#udpcon {
 #tunnels .routerid {
   margin: 0;
   padding: 1px 4px;
-  width: 68px !important;
   display: inline-block;
   vertical-align: middle;
   white-space: nowrap;
@@ -9750,14 +9749,13 @@ b.suboption {
   margin: 0;
   padding: 1px 2px;
   width: auto !important;
-  min-width: 58px !important;
-  min-height: 18px !important;
+  min-width: 70px !important;
 }
 
 #tunnels .tunnel_local {
   margin: 0 2px !important;
-  padding: 1px !important;
   min-width: 0;
+  line-height: 18px;
   text-align: center;
 }
 #tunnels .tunnel_id:empty::after {
@@ -11609,9 +11607,13 @@ i {
   line-height: 1;
 }
 
+.routerid tt {
+  vertical-align: text-bottom !important;
+}
+
 .routerid .flag {
-  margin: 0 -3px;
-  padding: 2px 3px 2px 2px;
+  margin: -1px -1px -1px -4px;
+  padding: 2px 3px 2px 1px;
   border-right: 1px solid #bbd;
 }
 
@@ -11620,9 +11622,9 @@ i {
 }
 
 .routerid .flag img {
-  width: 16px !important;
-  height: 12px !important;
-  border: 1px solid #ccd;
+  width: 18px;
+  height: 13px;
+  box-shadow: 0 0 0 1px #ccd;
 }
 
 #peers .routerid .flag, #profiles .routerid .flag, #tunnelPeerCount .routerid .flag {
@@ -12760,8 +12762,6 @@ iframe {
     margin-left: 3px !important;
     margin-top: -2px !important;
     display: inline-block;
-    vertical-align: middle;
-    letter-spacing: .1em !important;
   }
   .homelinkedit th:first-child, #sidebarconf th:first-child,
   #consolepass th:first-child {font-size: 0 !important}
@@ -12800,19 +12800,20 @@ iframe {
     contain: paint;
   }
   .routerid .flag {
-    margin-top: -1px;
-    margin-bottom: -2px;
-    width: 19px;
+    margin-top: 1px -3px -2px;
+    padding-left: 4px !important;
+    width: 21px;
     height: 17px;
     display: inline-block;
     vertical-align: middle;
   }
   .routerid .flag img {
-    margin: 0 0 0 -1px !important;
-    width: 19px !important;
-    height: 14px !important;
+    margin: 0 !important;
+    width: 20px !important;
+    height: 15px !important;
     display: inline-block;
     vertical-align: middle;
+    border: 1px solid transparent;
   }
   #tunnelPeerCount .routerid .flag img {
     margin: 2px -2px 0 0 !important;
@@ -12830,7 +12831,7 @@ iframe {
     padding-bottom: 6px !important;
   }
   #tunnels td:last-child .routerid {margin-left: -20px}
-  #tunnels td:last-child .tunnel_peer:not(.tunnel_local) + .tunnel_cap {margin-left: -8px !important}
+  #tunnels td:last-child .tunnel_peer:not(.tunnel_local) + .tunnel_cap {margin-left: -6px !important}
   #netdbcountrylist img {
     width: 24px;
     height: auto;
