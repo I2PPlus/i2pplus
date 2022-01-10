@@ -11521,7 +11521,7 @@ i {
 }
 
 #peers .routerid .flag img, #profiles .routerid .flag img, #tunnelPeerCount .routerid .flag img {
-  margin: 3px 0 0;
+  margin: 3px 2px 0 -2px;
   display: inline-block;
 }
 
@@ -11720,6 +11720,10 @@ i {
   white-space: normal;
   word-break: break-all;
   width: 15%;
+}
+
+.ipaddress a {
+  line-height: 1;
 }
 
 #tunnelPeerCount .configpeer {
@@ -12678,7 +12682,7 @@ iframe {
   .routerid .flag {
     margin-top: 1px -3px -2px;
     padding-left: 4px !important;
-    width: 21px;
+    width: 20px;
     height: 17px;
     display: inline-block;
     vertical-align: middle;
@@ -12691,14 +12695,15 @@ iframe {
     vertical-align: middle;
     border: 1px solid transparent;
   }
+  #tunnelPeerCount .routerid .flag {
+    width: 19px;
+  }
   #tunnelPeerCount .routerid .flag img {
-    margin: 2px -2px 0 0 !important;
-    height: 15px !important;
+    margin: 2px 1px 0 -2px !important;
     border: none !important;
   }
   #peers .flag img, #profiles .flag img {
-    margin: 1px 0px 1px -6px !important;
-    height: 15px !important;
+    margin: 1px -1px 1px -5px !important;
   }
   h1[class], #wizardpage h1 {background-size: 38px auto, 4px, 100%, 100%, 100% !important}
   #pluginconfig td:first-child label::before {height: 20px}
