@@ -5355,6 +5355,14 @@ img.unknownflag {
   text-align: left;
 }
 
+#profiles .ok {
+  display: inline-block;
+  font-size: 0;
+  width: 12px;
+  height: 12px;
+  background-size: 11px;
+}
+
 #profilelist td:first-child, #profilelist th:first-child, #profilelist td:nth-last-child(2), #profilelist th:nth-last-child(2) {
   white-space: nowrap;
   text-align: center;
@@ -7773,7 +7781,7 @@ h4#sb_shutdownstatus span {
   color: #58ce3a;
 }
 
-.tunnelBuildStatus.active::before {
+.tunnelBuildStatus.active::before, .ok {
   background: var(--tunn_active) var(--center) / 15px;
 }
 

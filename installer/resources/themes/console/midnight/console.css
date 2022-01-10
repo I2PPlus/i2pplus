@@ -2247,7 +2247,7 @@ p:empty + .sb_notice {
   background: var(--tunn_ready) no-repeat center center / 15px;
 }
 
-.tunnelBuildStatus.active::before {
+.tunnelBuildStatus.active::before, .ok {
   background: var(--tunn_active) no-repeat center center / 15px;
 }
 
@@ -11572,6 +11572,14 @@ th .version {
 
 #profiles .version {
   margin: 0 2px;
+}
+
+#profiles .ok {
+  display: inline-block;
+  font-size: 0;
+  width: 12px;
+  height: 12px;
+  background-size: 11px;
 }
 
 #sybil_ourinfo .unreachable, #netdb_ourinfo .unreachable {

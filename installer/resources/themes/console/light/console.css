@@ -26,7 +26,7 @@
   --btn_shadow_active: var(--highlight), inset 3px 3px 3px 1px rgba(0,0,64,.3);
   --input_shadow: inset 1px 1px 1px rgba(0,0,48,.2);
   --border: #6c6c93;
-  --border_inner: #9898b3;
+  --border_inner: #a7a7be;
   --bevel: inset 0 0 0 1px #d0d0da;
   --selected: #27377f;
 }
@@ -1145,7 +1145,7 @@ p:empty + .sb_notice {
   background: var(--tunn_ready) no-repeat center center / 15px;
 }
 
-.tunnelBuildStatus.active::before {
+.tunnelBuildStatus.active::before, .ok {
   background: var(--tunn_active) no-repeat center center / 15px;
 }
 
@@ -3703,6 +3703,14 @@ p#profiles_overview {
 
 #profiles .wideload {
   text-align: center;
+}
+
+#profiles .ok {
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  font-size: 0;
+  background-size: 11px;
 }
 
 .infohelp + hr {
@@ -9738,7 +9746,7 @@ b.suboption {
 }
 
 .main#tunnels h3 {
-  margin-top: 5px;
+  margin-top: 10px;
 }
 
 #tunnels th:nth-child(n+2), #tunnels td, .statusnotes {
@@ -11593,6 +11601,10 @@ i {
   margin-bottom: 4px !important;
 }
 
+.routerid tt {
+  vertical-align: text-bottom !important;
+}
+
 #peers .routerid, #peers .routerid .flag, #peers .routerid tt,
 #profiles .routerid, #profiles .routerid .flag, #profiles .routerid tt,
 #tunnelPeerCount .routerid, #tunnelPeerCount .routerid tt {
@@ -11600,15 +11612,16 @@ i {
   line-height: 1;
 }
 
+#peers .routerid tt, #profiles .routerid tt,
+#peers .routerid tt, #tunnelPeerCount .routerid tt {
+  vertical-align: middle !important;
+}
+
 #profiles #banlist tt {
   margin-top: -2px;
   vertical-align: baseline;
   display: inline-block;
   line-height: 1;
-}
-
-.routerid tt {
-  vertical-align: text-bottom !important;
 }
 
 .routerid .flag {
@@ -11629,7 +11642,7 @@ i {
 
 #peers .routerid .flag, #profiles .routerid .flag, #tunnelPeerCount .routerid .flag {
   margin: -1px 0 -1px -2px !important;
-  padding: 1px 4px 3px 3px;
+  padding: 1px 1px 3px 3px;
   display: inline-block;
   border-right: 1px solid #bbd;
 }
@@ -12821,7 +12834,7 @@ iframe {
     border: none !important;
   }
   #peers .flag img, #profiles .flag img {
-    margin: 1px -2px 1px -2px !important;
+    margin: 1px 0px 1px -6px !important;
     height: 15px !important;
   }
   h1[class], #wizardpage h1 {background-size: 38px auto, 4px, 100%, 100%, 100% !important}

@@ -185,7 +185,7 @@ class ProfileOrganizerRenderer {
                 long bonus = prof.getSpeedBonus();
                 long capBonus = prof.getCapacityBonus();
                 if (ok && fails == 0) {
-                    buf.append(_t("OK"));
+                    buf.append("<span class=\"ok\">").append(_t("OK")).append("</span>");
                 } else if (fails > 0) {
                     Rate accepted = prof.getTunnelCreateResponseTime().getRate(60*60*1000);
                     long total = fails + accepted.computeAverages(ra, false).getTotalEventCount();
