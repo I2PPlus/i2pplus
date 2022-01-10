@@ -712,7 +712,7 @@ div.refresh {
   background: var(--tunn_ready) no-repeat center center / 15px;
 }
 
-.tunnelBuildStatus.active::before, .ok {
+.tunnelBuildStatus.active::before, .ok, #ntcpconnections td.queue:empty::before {
   background: var(--tunn_active) no-repeat center center / 15px;
 }
 
@@ -8459,12 +8459,16 @@ input[type="file"]:hover {
   background-image: url(/themes/console/images/svg/profile.svg);
 }
 
-#profiles .ok {
+#profiles .ok, #ntcpconnections td.queue:empty::before {
   display: inline-block;
   font-size: 0;
   width: 12px;
   height: 12px;
-  background-size: 11px;
+  background-size: 11px !important;
+}
+
+#ntcpconnections td.queue:empty::before {
+  content: "";
 }
 
 #thresholds {

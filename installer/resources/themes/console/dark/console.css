@@ -5355,12 +5355,16 @@ img.unknownflag {
   text-align: left;
 }
 
-#profiles .ok {
-  display: inline-block;
-  font-size: 0;
+#profiles .ok, #ntcpconnections td.queue:empty::before {
   width: 12px;
   height: 12px;
-  background-size: 11px;
+  display: inline-block;
+  font-size: 0;
+  background-size: 11px !important;
+}
+
+#ntcpconnections td.queue:empty::before {
+  content: "";
 }
 
 #profilelist td:first-child, #profilelist th:first-child, #profilelist td:nth-last-child(2), #profilelist th:nth-last-child(2) {
@@ -7781,7 +7785,7 @@ h4#sb_shutdownstatus span {
   color: #58ce3a;
 }
 
-.tunnelBuildStatus.active::before, .ok {
+.tunnelBuildStatus.active::before, .ok, #ntcpconnections td.queue:empty::before {
   background: var(--tunn_active) var(--center) / 15px;
 }
 
@@ -10460,7 +10464,8 @@ input[type=file] {
   vertical-align: middle !important;
 }
 
-#floodfills td:empty::before, #ntcpconnections td:empty::before, #udpconnections td:empty::before, #profilelist td:empty::before, #tunnels .cells:empty::after {
+#floodfills td:empty::before, #ntcpconnections td:not(:last-child):empty::before,
+#udpconnections td:not(:last-child):empty::before, #profilelist td:empty::before, #tunnels .cells:empty::after {
   width: 100%;
   display: inline-block;
   text-align: center;
@@ -10837,8 +10842,9 @@ input[type=text]:focus::placeholder, #homesearch input.search:focus::placeholder
 /* end /info */
 
 .reachability {
+  margin-top: 2px;
   float: right;
-  font-size: 80%;
+  font-size: 80% !important;
 }
 
 .version a:hover, .version a:focus, a:hover .version, a:focus .version,
@@ -14247,6 +14253,11 @@ body.iframed {
   }
   #pluginconfig th {
     font-size: 9pt !important;
+  }
+  #peers .routerid .flag img {
+    margin: -3px -3px -1px !important;
+    width: 20px !important;
+    height: 15px !important;
   }
 }
 
