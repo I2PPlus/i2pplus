@@ -4618,12 +4618,12 @@ input.accept[value^="Create"]:focus, button.accept[value^="Create"]:focus {
 
 input.accept[value^="Filter"], button.accept[value^="Filter"] {
   padding: 5px 9px 5px 27px;
-  background: var(--filter) no-repeat 8px center / 16px, var(--btn);
+  background: var(--filter) no-repeat 8px center / 15px, var(--btn) !important;
 }
 
 input.accept[value^="Filter"]:hover, button.accept[value^="Filter"]:hover,
 input.accept[value^="Filter"]:focus, button.accept[value^="Filter"]:focus {
-  background: var(--filter) no-repeat 8px center / 16px, var(--btn_hover);
+  background: var(--filter) no-repeat 8px center / 15px, var(--btn_hover) !important;
 }
 
 input.add, button.add {
@@ -5250,7 +5250,7 @@ h3 + .statusnotes {
 }
 
 #jobs h2 + h3 {
-  margin-top: 42px;
+  margin-top: 48px;
 }
 
 #jobs h3 {
