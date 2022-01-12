@@ -319,9 +319,8 @@ pre {
 #sidebar h3 a, #sidebar h3 a:visited {
   padding: 3px 0 2px;
   display: inline-block;
-  width: 100%;
   width: calc(100% - 4px);
-  line-height: 110%;
+  line-height: 1.1;
   word-spacing: -.12em;
   text-transform: uppercase;
   text-decoration: none;
@@ -341,7 +340,7 @@ pre {
 #sidebar h4 {
   margin: -7px;
   padding: 6px 2px !important;
-  line-height: 105%;
+  line-height: 1.05;
   font-size: 8.5pt;
   letter-spacing: 0;
   text-transform: none;
@@ -382,7 +381,7 @@ h4.sb_info {
 }
 
 .sb_info b {
-  line-height: 120%;
+  line-height: 1.2;
 }
 
 h4.sb_info + hr + form {
@@ -738,7 +737,6 @@ a:active #sb_bandwidthgraph {
   border-top: none;
   border-radius: 0 0 3px 3px;
   box-shadow: var(--highlight);
-  background: #e0e0eb;
   background: linear-gradient(90deg, #ddf, #efefff 30%, #efefff 60%, #ddf);
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
@@ -830,7 +828,7 @@ a:active #sb_bandwidthgraph {
 }
 
 #sb_warning a {
-  line-height: 100%;
+  line-height: 1;
 }
 
 #sb_warning + p:empty + form, #sb_notice + p:empty + form {
@@ -845,7 +843,7 @@ a:active #sb_bandwidthgraph {
 .sb_notice, #sidebar #xhr hr + b {
   margin: -5px -5px -6px;
   padding: 5px 6px;
-  line-height: 120%;
+  line-height: 1.2;
   font-weight: 700;
   border: 1px solid #89f;
   border-radius: 2px;
@@ -1024,7 +1022,7 @@ p:empty + .sb_notice {
   display: inline-block;
   box-sizing: border-box;
   vertical-align: baseline;
-  line-height: 120%;
+  line-height: 1.2;
   text-shadow: 0 1px 1px #fff;
   border: 1px solid #88f;
   border-radius: 2px;
@@ -1043,7 +1041,6 @@ p:empty + .sb_notice {
 #sidebar .error, .tunnelBuildStatus.rejecting {
   color: #922;
   box-shadow: inset 0 0 0 1px rgba(200,0,0,.5), 0 0 1px rgba(96,96,96,.5);
-  background: rgba(255,110,110,.1);
   background: repeating-linear-gradient(135deg, rgba(255,100,100,.05) 2px, rgba(255,200,200,.2) 3px, rgba(255,100,100,.05) 5px);
 }
 
@@ -1198,7 +1195,7 @@ p:empty + .sb_notice {
 
 #sidebar .sb_newsheadings td {
   padding: 6px 1px 6px 21px !important;
-  line-height: 100%;
+  line-height: 1;
   text-align: left;
   border-bottom: 1px dotted #ddf !important;
   background: var(--newsbullet) no-repeat 3px center / 16px !important;
@@ -1605,7 +1602,6 @@ td.tabletextarea {
   font-size: 9pt;
   border: none !important;
   box-shadow: none;
-  background: #f8f8ff !important;
   background: linear-gradient(135deg, #f8f8ff, #efefff) !important;
   filter: none !important;
 }
@@ -1646,7 +1642,6 @@ td.tabletextarea {
   border: 1px solid var(--border_inner);
   border-radius: 0 0 2px 2px;
   box-shadow: var(--highlight);
-  background: #eef !important;
   background: linear-gradient(180deg,rgba(250,250,255,.3), rgba(236,236,255,.6)), repeating-linear-gradient(135deg, rgba(255,255,255,.3) 2px, rgba(240, 240, 255, .3) 3px, rgba(236,236,255,.3) 4px) !important;
 }
 
@@ -1655,7 +1650,7 @@ td.tabletextarea {
   padding: 0;
   font-size: 9.3pt;
   text-align: justify !important;
-  line-height: 140%;
+  line-height: 1.2;
   text-shadow: 0 0 1px #fff;
 }
 
@@ -1702,7 +1697,6 @@ td.tabletextarea {
 #fullhistory a:hover, #fullhistory a:focus, #fullhistory a:visited:hover, #fullhistory a:visited:focus,
 #routerinformation tr:nth-child(n+2) a:not(#revision):hover, #routerinformation tr:nth-child(n+2) a:focus {
   border: 1px solid var(--border_inner);
-  background: #e2e2ff;
   background: linear-gradient(180deg,#f8f8ff 50%, #e2e2ff 50%);
 }
 
@@ -1909,7 +1903,6 @@ h1, .confignav {
   color: #fafaff;
   text-shadow: 0 1px 1px #113;
   box-shadow: inset 3px 3px 3px rgba(0, 0, 16, .7);
-  background: #6288cb;
   background: radial-gradient(at center bottom, rgba(128, 128, 172, .6) 0, rgba(0, 0, 0, 0) 50%),
     linear-gradient(180deg,rgba(31, 43, 63, .7), rgba(31, 43, 63, .5)),
     linear-gradient( 90deg, #6288cb, #7fadff, #6288cb);
@@ -1986,7 +1979,6 @@ h3 a.script, th a.script {
   border: none;
   border-left: 1px solid var(--border_inner);
   border-radius: 0;
-  background: #ddf;
   background: linear-gradient(180deg,#f8f8ff 60%, #dedeff);
 }
 
@@ -2417,7 +2409,6 @@ p#tunnelconfig {
   text-transform: capitalize;
   border-top: 1px solid #77789f;
   box-shadow: var(--highlight);
-  background: #e8e8ff;
   background: repeating-linear-gradient(135deg, rgba(248,248,255,.6) 2px, rgba(220, 220, 255, .3) 3px, #f8f8ff 5px), #f8f8ff;
   filter: drop-shadow(0 0 1px #ccc);
 }
@@ -2426,7 +2417,7 @@ p#tunnelconfig {
   margin: 3px -2px !important;
   padding: 1px 10px !important;
   display: inline-block;
-  line-height: 140%;
+  line-height: 1.4;
 }
 
 #graphopts a:empty {
@@ -2484,7 +2475,7 @@ to {
   margin: 1px 0;
   padding: 2px 5px;
   background: #eaeaff;
-  line-height: 100%;
+  line-height: 1;
 }
 
 #graphs .nowrap:hover {
@@ -2557,18 +2548,19 @@ to {
   margin: 15px 0;
   padding: 15px;
   font-weight: 700;
-  line-height: 130%;
+  line-height: 1.3;
   box-shadow: var(--highlight);
   border: 1px solid var(--border_inner);
   border-radius: 2px;
-  background: #eef;
-  background: url(/themes/snark/ubergine/images/hat.png) no-repeat bottom right / auto 100%, linear-gradient(90deg, #fafaff, #eef);
+  background: url(/themes/snark/ubergine/images/hat.png) no-repeat bottom right / auto 100%,
+    linear-gradient(90deg, #fafaff, #eef);
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
 .main#config_update .messages {
   padding: 20px 15px 20px 50px;
-  background: var(--news) no-repeat 15px center / 28px, url(/themes/snark/ubergine/images/hat.png) no-repeat bottom right / auto 100%, var(--div_infohelp);
+  background: var(--news) no-repeat 15px center / 28px,
+    url(/themes/snark/ubergine/images/hat.png) no-repeat bottom right / auto 100%, var(--div_infohelp);
 }
 
 .main#graphs .messages {
@@ -2601,7 +2593,7 @@ to {
 .messages li, .messages li:first-child, .error li:first-child, .error li {
   margin: 0 10px 0 0 !important;
   padding: 0 0 0 24px !important;
-  line-height: 135%;
+  line-height: 1.35;
   list-style: none;
   text-align: justify !important;
   font-weight: 700;
@@ -2845,7 +2837,7 @@ table#wrapperlogs {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  line-height: 100%;
+  line-height: 1;
   vertical-align: top;
   text-align: center;
   color: #fff;
@@ -3082,11 +3074,10 @@ th {
   color: var(--ink_light);
   text-align: left;
   font-size: 9pt;
-  line-height: 110%;
+  line-height: 1.1;
   border-bottom: 1px solid var(--border_inner) !important;
   border-top: 1px solid var(--border_inner) !important;
   vertical-align: middle;
-  background: #f6f6ff !important;
   background: linear-gradient(180deg,#fcfcff 51%, #fafaff 51%, #f6f6ff 100%) !important;
 }
 
@@ -3108,14 +3099,10 @@ tr {
 }
 
 tr:nth-child(even), pre#activetransports, #debug .sentTags:hover td, #debug .expiry:hover td {
-  background: #efefff;
-  background: repeating-linear-gradient(135deg, rgba(252,252,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px) #fafaff;
   background: linear-gradient(180deg,#fff, #eef);
 }
 
 tr:nth-child(odd) {
-  background: #f7f8ff;
-  background: repeating-linear-gradient(45deg, rgba(255,255,255,.5) 2px, rgba(200, 200, 255, .3) 3px, #fafaff 5px), #fafaff;
   background: linear-gradient(180deg,#fff, #eef);
 }
 
@@ -3136,7 +3123,6 @@ td {
 }
 
 #tunnelconfig tr:last-child, #webappconfig tr:last-child {
-  background: #efefff;
   background: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fff 5px);
 }
 
@@ -3176,7 +3162,6 @@ h4.app, h4.app2 {
   border: 1px solid var(--border_inner);
   border-radius: 2px;
   box-shadow: var(--highlight), 0 0 1px rgba(220,220,220,.3);
-  background: #eef;
   background: linear-gradient(180deg,#fff 50%, #eef 50%);
 }
 
@@ -3574,7 +3559,7 @@ tt::selection, .sybil_routerinfo th code::selection {
   list-style: square;
   margin: 2px 20px 0 40px;
   padding: 1px 10px;
-  line-height: 150%;
+  line-height: 1.5;
   word-wrap: break-word;
 }
 
@@ -3610,7 +3595,7 @@ a, h1, h2, h3, h4, th, input[type=submit], input[type=reset], button, select {
 .links li {
   list-style: var(--star) !important;
   text-align: justify !important;
-  line-height: 140% !important;
+  line-height: 1.4 !important;
   margin-right: 10px !important;
 }
 
@@ -3644,7 +3629,7 @@ a, h1, h2, h3, h4, th, input[type=submit], input[type=reset], button, select {
 
 p {
   text-align: justify;
-  line-height: 130%;
+  line-height: 1.3;
 }
 
 .infohelp {
@@ -3657,7 +3642,7 @@ p {
 
 p.infohelp, p.sybilinfo, p#debugmode, p#upnpstatus, p#pluginconfigtext, p#gatherstats {
   padding: 20px 15px 20px 50px;
-  line-height: 130%;
+  line-height: 1.3;
   border: 1px solid var(--border_inner);
   box-shadow: var(--highlight), inset 0 0 0 2px #bbc;
   background: var(--infohelp) no-repeat 15px center / 28px, var(--div_infohelp);
@@ -3667,7 +3652,6 @@ p.infohelp, p.sybilinfo, p#debugmode, p#upnpstatus, p#pluginconfigtext, p#gather
 .infohelp#pagenav {
   text-align: center;
   font-weight: 700;
-  background: #fff;
   background: var(--p);
 }
 
@@ -3759,7 +3743,7 @@ p.sybilinfo.experimental {
 
 p.infowarn {
   padding: 20px 15px 20px 50px;
-  line-height: 130%;
+  line-height: 1.3;
   border: 1px solid var(--border_inner);
   background: var(--infowarn) no-repeat 15px center / 28px, var(--div_infohelp);
 }
@@ -3913,7 +3897,6 @@ p#enablefullstats, p#gatherstats {
 p#gatherstats + form, ul.statlist {
   border: 1px solid var(--border_inner);
   padding: 10px;
-  background: #fafaff;
   background: var(--p);
 }
 
@@ -3931,7 +3914,7 @@ ul.statlist {
 }
 
 .joblog .statlist li {
-  line-height: 140% !important;
+  line-height: 1.4 !important;
   padding-top: 6px;
   padding-bottom: 0;
   margin-right: 5px;
@@ -4098,7 +4081,7 @@ h1 {
   padding: 16px 15px 15px 52px;
   min-width: 546px;
   z-index: 999;
-  line-height: 90%;
+  line-height: .9;
   letter-spacing: .12em;
   white-space: normal;
   text-transform: uppercase;
@@ -4516,7 +4499,7 @@ input[type=submit], input[type=reset], button, .optbox, select {
 input, input:visited, button, button:visited {
   margin: 3px;
   padding: 5px;
-  line-height: 140%;
+  line-height: 1.4;
   font-size: 9pt;
   color: var(--ink_light);
   text-decoration: none;
@@ -4561,7 +4544,7 @@ button:hover, input[type=submit]:hover, input[type=reset]:hover, button:focus, i
 input[type=file]::file-selector-button {
   margin: 3px 10px 3px 3px;
   padding: 4px 10px;
-  line-height: 140%;
+  line-height: 1.4;
   font-family: var(--bodyfont);
   font-size: 9pt;
   color: var(--ink_light);
@@ -4917,7 +4900,7 @@ button.download.control:hover, button.download.control:focus {
   margin: -5px 0 7px;
   width: 100%;
   display: inline-block;
-  line-height: 120%;
+  line-height: 1.2;
   font-size: 9pt;
   opacity: .9;
 }
@@ -5411,13 +5394,13 @@ h3#scheduledjobs + ol li::before {
 .joblog ul {
   word-wrap: break-word !important;
   text-align: justify;
-  line-height: 100% !important;
+  line-height: 1 !important;
   margin-top: -5px !important;
 }
 
 .joblog li {
   word-wrap: break-word !important;
-  line-height: 115% !important;
+  line-height: 1.15 !important;
   padding: 0;
   font-size: 9pt !important;
   page-break-inside: avoid;
@@ -5446,7 +5429,7 @@ h3#scheduledjobs + ol li::before {
 }
 
 .joblog p {
-  line-height: 130%;
+  line-height: 1.3;
 }
 
 .joblog hr {
@@ -5481,7 +5464,7 @@ h3#scheduledjobs + ol li::before {
 
 .tablefooter tr, .tablefooter td {
   padding: 8px 2px;
-  line-height: 110%;
+  line-height: 1.1;
   font-size: 9pt;
   border-top: 1px solid var(--border_inner);
   border-bottom: 1px solid var(--border_inner) !important;
@@ -6092,7 +6075,7 @@ h3#udpcon {
 
 #peerdefs td {
   padding: 5px;
-  line-height: 150%;
+  line-height: 1.5;
 }
 
 .peer_arrow {
@@ -6125,7 +6108,6 @@ h3#udpcon {
   display: inline-block;
   border: 1px solid #bbd;
   box-shadow: var(--highlight), inset 0 0 2px 1px #ddf, 0 0 1px #ddf;
-  background: #e8e8ff;
   background: rgba(248,248,255,.6);
   -webkit-column-break-inside: avoid;
   break-inside: avoid;
@@ -6190,7 +6172,7 @@ h3#udpcon {
   margin: -1px 0 0;
   padding: 3px 4px;
   float: right;
-  line-height: 100%;
+  line-height: 1;
   text-transform: none;
   font-family: var(--monospaced);
   color: #171;
@@ -6404,7 +6386,6 @@ p:empty { /* empty paragraph nuke */
   letter-spacing: 0;
   text-transform: none;
   font-size: 9pt;
-  background: #f6f6ff;
   background: linear-gradient(180deg,#fcfcff 50%, rgba(255, 255, 255, .6) 50%, rgba(240, 240, 255, .4)) !important;
 }
 
@@ -6462,7 +6443,6 @@ p:empty { /* empty paragraph nuke */
   #netdboverview table td {
     padding: 5px 10px;
     box-shadow: var(--highlight) !important;
-    background: rgba(240,240,255,.4);
     background: linear-gradient(180deg,#fff, #eef);
   }
   #netdboverview #netdbversions td:first-child, #netdboverview #netdbtransports td:first-child, #netdboverview #netdbcountrylist td:first-child,
@@ -6559,7 +6539,7 @@ th code {
 }
 
 .netdb_addresses {
-  line-height: 135%;
+  line-height: 1.35;
 }
 
 .netdb_addresses br:first-child, .sybil_routerinfo tr:last-child td br:first-child {
@@ -6647,7 +6627,7 @@ b.netdb_transport {
   margin: 0 !important;
   padding: 1px 10px 1px 0 !important;
   white-space: normal;
-  line-height: 140%;
+  line-height: 1.4;
   list-style: none !important;
 }
 
@@ -6750,7 +6730,7 @@ b.netdb_transport {
 }
 
 .netdb_addresses {
-  line-height: 150%;
+  line-height: 1.5;
 }
 
 .netdb_header {
@@ -6825,12 +6805,11 @@ b.netdb_transport {
   margin: -1px 4px -4px -6px;
   padding: 3px 2px 4px;
   min-width: 52px;
-  line-height: 160%;
+  line-height: 1.6;
   text-align: center;
   border: 1px solid #ddf;
   border-radius: 2px 0 0 2px;
   box-shadow: var(--highlight);
-  background: #fff;
   background: linear-gradient(180deg,#fff, #eef);
 }
 
@@ -6975,7 +6954,7 @@ b.netdb_transport {
 }
 
 .leaseset td {
-  line-height: 150%;
+  line-height: 1.5;
   background: linear-gradient(180deg,#fff, #eef);
   border-top: 1px solid var(--border_inner);
   border-bottom: 1px solid var(--border_inner);
@@ -7061,8 +7040,6 @@ b.netdb_transport {
   display: inline-block;
   border: 1px solid #bbd;
   border-radius: 2px;
-  background: #e2e2ff;
-  background: rgba(204, 204, 255, .4);
   background: linear-gradient(180deg,#fff, #eef);
 }
 
@@ -7123,7 +7100,7 @@ img.unknownflag {
 
 #sybils_summary {
   padding: 20px 10px 20px 50px;
-  line-height: 160%;
+  line-height: 1.6;
   background: var(--floodfill) no-repeat 8px center,
     repeating-linear-gradient(135deg, rgba(248,238,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
   columns: 400px auto;
@@ -7145,7 +7122,7 @@ h3.sybils {
 #sybilnav li {
   margin: 4px 0;
   padding: 5px 3px 5px 27px;
-  line-height: 88%;
+  line-height: .88;
   list-style: none;
   border-radius: 2px;
   box-shadow: 0 0 0 1px rgba(200,200,255,.8), var(--highlight);
@@ -7351,12 +7328,10 @@ p.family + p.family, p.sybil_info + p.sybil_info {
 }
 
 p.family:nth-child(even) {
-  background: #efefff;
   background: var(--eye) no-repeat 8px center / 16px, repeating-linear-gradient(45deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fafaff 5px), #fafaff;
 }
 
 p.family:nth-child(odd) {
-  background: #f7f8ff;
   background: var(--eye) no-repeat 8px center / 16px, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fff;
 }
 
@@ -7406,7 +7381,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 #netdb .sybil_addresses {
   padding: 0;
   border-bottom: 1px solid var(--border_inner);
-  line-height: 120%;
+  line-height: 1.2;
 }
 
 .sybil_addresses table, .sybil_addresses td {
@@ -7443,7 +7418,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   margin-left: -12px;
   width: 100%;
   display: inline-block;
-  line-height: 120%;
+  line-height: 1.2;
   list-style: none;
   -webkit-column-break-inside: avoid;
   break-inside: avoid;
@@ -7615,7 +7590,6 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   border: 1px solid #bbc;
   border-radius: 2px;
   box-shadow: var(--highlight);
-  background: #eef;
   background: linear-gradient(180deg,#fff, #eef);
 }
 
@@ -7656,11 +7630,11 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 }
 
 #netdboverview td {
-  line-height: 160% !important;
+  line-height: 1.6 !important;
 }
 
 #netdboverview .version {
-  line-height: 120%;
+  line-height: 1.2;
 }
 
 .keysearch, .signingkey, .version, .version a {
@@ -7697,7 +7671,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   margin-left: 2px;
   padding: 0 2px 0 0;
   display: inline-block;
-  line-height: 150%;
+  line-height: 1.5;
   border-radius: 2px;
 }
 
@@ -7755,7 +7729,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   min-height: 34px;
   display: inline-block;
   position: relative;
-  line-height: 120%;
+  line-height: 1.2;
   list-style: none;
   font-size: 95%;
   box-shadow: 0 0 0 1px #9898b3, var(--highlight), inset 0 0 8px 3px rgba(232,232,255,.6);
@@ -7810,7 +7784,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 
 #banlist .routerid {
   margin: 0 !important;
-  line-height: 110% !important;
+  line-height: 1.1 !important;
   min-width: 0;
   border: none;
   box-shadow: none;
@@ -8241,7 +8215,7 @@ table#schedjobs {
 
 #thresholds p {
   margin-left: 5px;
-  line-height: 140%;
+  line-height: 1.4;
 }
 
 #profile_defs b {
@@ -8257,7 +8231,7 @@ table#schedjobs {
 
 #profile_defs td:last-child {
   white-space: normal;
-  line-height: 120%;
+  line-height: 1.2;
 }
 
 #profile_defs td:nth-child(2)::first-letter {
@@ -8421,7 +8395,7 @@ select[name="newlogclass"] {
 #loggingoptions p {
   text-align: left;
   margin: 0 5px 2px;
-  line-height: 150%;
+  line-height: 1.5;
 }
 
 /* /help */
@@ -8505,7 +8479,7 @@ select[name="newlogclass"] {
 #help p {
   padding-left: 10px;
   padding-right: 10px;
-  line-height: 150%;
+  line-height: 1.5;
 }
 
 #help p.infohelp {
@@ -8513,7 +8487,7 @@ select[name="newlogclass"] {
 }
 
 #help td {
-  line-height: 150%;
+  line-height: 1.5;
 }
 
 #help td.infohelp, #help td.infowarn, #help td.infohelp:hover, #help td.infowarn:hover {
@@ -8711,7 +8685,7 @@ select[name="newlogclass"] {
 #routerinfo p {
   margin: 20px 5px 10px;
   padding: 10px 0;
-  line-height: 180%;
+  line-height: 1.8;
   border: 1px solid #99b;
   box-shadow: var(--highlight), 0 0 1px #e0e0eb;
   background: var(--p);
@@ -8875,7 +8849,6 @@ h4#updateplugins {
   font-size: 10pt;
   color: var(--ink_light);
   border: 1px solid var(--border_inner);
-  background: #fcfcff !important;
   background: linear-gradient(180deg,#fff 50%, rgba(238, 238, 255, .2) 50%, #eef 100%) #fff !important;
 }
 
@@ -8994,7 +8967,7 @@ a[href^="configpeer?peer"]:hover::after {
 }
 
 .debug_container, #debug td {
-  line-height: 140%;
+  line-height: 1.4;
 }
 
 #portmapper .separator, #portmapper .separator td {
@@ -9031,7 +9004,6 @@ a[href^="configpeer?peer"]:hover::after {
 }
 
 .skm_key td, .debug_outboundtarget td {
-  background: #f6f6ff !important;
   background: linear-gradient(180deg,#fcfcff 51%, #fafaff 51%, #f6f6ff 100%) !important;
 }
 
@@ -9127,7 +9099,7 @@ a[href^="configpeer?peer"]:hover::after {
 
 #skm_dest {
   vertical-align: middle;
-  line-height: 100%;
+  line-height: 1;
   word-spacing: 0;
   letter-spacing: 0;
   white-space: nowrap;
@@ -9564,7 +9536,6 @@ b.suboption {
   border: 1px solid var(--border_inner);
   border-bottom: none;
   box-shadow: var(--highlight);
-  background: #fdfdff;
   background: linear-gradient(180deg,#fff 50%, #eef 50%);
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
@@ -9663,7 +9634,6 @@ b.suboption {
   font-weight: 700;
   font-size: 11pt;
   color: var(--ink_light);
-  background: #fff;
   background: linear-gradient(90deg, #fff, #eef);
 }
 
@@ -9677,7 +9647,6 @@ b.suboption {
   margin: 3px;
   padding: 5px 8px;
   box-shadow: 0 0 0 1px rgba(185,185,198,.65), var(--highlight), 0 0 2px #adadeb;
-  background: #d0d0ff;
   background: linear-gradient(180deg,#fff, #ccccf0);
 }
 
@@ -9806,9 +9775,8 @@ b.suboption {
   display: inline-block;
   margin: 1px 0;
   padding: 2px 5px;
-  background: #eaeaff;
   background: rgba(234,234,255,.7);
-  line-height: 100% !important;
+  line-height: 1 !important;
 }
 
 #netconfig label:hover, #externali2cp .optionlist label:hover, #externali2cp .optionlist .nowrap:hover,
@@ -10448,7 +10416,7 @@ td.optionsave, .formaction, table#addkeyring tr:last-child td {
 }
 
 #events tr {
-  line-height: 140%;
+  line-height: 1.4;
 }
 
 @supports (text-justify: auto) {
@@ -10546,7 +10514,6 @@ td.optionsave, .formaction, table#addkeyring tr:last-child td {
   text-align: center;
   font-weight: 700;
   border: 1px solid #7789bf;
-  background: #e8e8ff;
   background: rgba(248,248,255,.6);
   box-shadow: var(--highlight), inset 0 0 2px 1px #ddf, 0 0 1px #ddf;
 }
@@ -11057,8 +11024,8 @@ th[aria-sort] {
   color: #fafaff !important;
   text-shadow: 0 1px 1px #113;
   box-shadow: inset 2px 2px 2px rgba(31, 43, 63, .7);
-  background: #6288cb;
-  background: linear-gradient(180deg,rgba(31, 43, 63, .7), rgba(31, 43, 63,.2) 50%, rgba(31, 43, 63, 0) 50%, rgba(31, 43, 63, .4) 50%, rgba(31, 43, 63, .5)), linear-gradient( 90deg, #6288cb, #7fadff, #6288cb);
+  background: linear-gradient(180deg,rgba(31, 43, 63, .7), rgba(31, 43, 63,.2) 50%, rgba(31, 43, 63, 0) 50%, rgba(31, 43, 63, .4) 50%, rgba(31, 43, 63, .5)),
+    linear-gradient( 90deg, #6288cb, #7fadff, #6288cb);
 }
 
 #stats .tab2:hover {
@@ -11099,7 +11066,7 @@ p#gatherstats {
 .graphstat {
   margin-right: 4px;
   padding: 1px 8px 2px;
-  line-height: 100%;
+  line-height: 1;
 }
 
 .statvalue {
@@ -11330,7 +11297,6 @@ i {
   padding: 5px 0;
   margin: 1px;
   height: 48px;
-  width: calc(100% - 1px);
   width: 100%;
   display: inline-block;
   vertical-align: middle;
