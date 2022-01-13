@@ -7756,7 +7756,10 @@ h4#sb_shutdownstatus span {
 
 .sb_netstatus.running:not(:hover)::before, .sb_netstatus.hidden:not(:hover)::before,
 .sb_netstatus.firewalled:not(:hover)::before, .sb_netstatus.testing:not(:hover)::before {
-  background-size: 18px !important;
+  margin: -2px 0;
+  height: 20px;
+  width: 20px;
+  background-size: 20px !important;
 }
 
 .sb_netstatus.testing, .sb_netstatus.running,
@@ -13204,6 +13207,13 @@ body.iframed {
 }
 
 @media screen and (max-width: 1499px) {
+  .sb_netstatus.running:not(:hover)::before, .sb_netstatus.hidden:not(:hover)::before,
+  .sb_netstatus.firewalled:not(:hover)::before, .sb_netstatus.testing:not(:hover)::before {
+    margin: 0;
+    height: 18px;
+    width: 18px;
+    background-size: 18px !important;
+  }
   #sidebar .reload, #sidebar .stop, #sidebar .stop:hover, #sidebar .stop:focus,
   #sidebar .reload[value="restartImmediate"] {
     background-size: 12px, 100% !important;
