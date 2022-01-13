@@ -7704,9 +7704,9 @@ h4#sb_shutdownstatus span {
 }
 
 .sb_netstatus::before, .tunnelBuildStatus::before {
-  margin: 0 4px 0 -4px;
-  height: 16px;
-  width: 16px;
+  margin: 0 2px 0 -4px;
+  height: 18px;
+  width: 18px;
   display: inline-block;
   vertical-align: middle;
   content: "";
@@ -7714,6 +7714,10 @@ h4#sb_shutdownstatus span {
 
 .sb_netstatus::before {
   background-size: 16px !important;
+}
+
+.sb_netstatus.running:not(:hover)::before, .sb_netstatus.hidden:not(:hover)::before {
+  background-size: 18px !important;
 }
 
 @supports not (-moz-appearance: none) {
@@ -7752,6 +7756,14 @@ h4#sb_shutdownstatus span {
 
 .sb_netstatus.clockskew::before {
   background: var(--net_clockskew) var(--center);
+}
+
+.sb_netstatus.running, .sb_netstatus.hidden {
+  font-size: 0;
+}
+
+.sb_netstatus.running:hover, .sb_netstatus.hidden {
+  font-size: inherit;
 }
 
 /* end network status */
