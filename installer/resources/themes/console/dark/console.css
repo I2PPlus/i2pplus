@@ -7716,10 +7716,6 @@ h4#sb_shutdownstatus span {
   background-size: 16px !important;
 }
 
-.sb_netstatus.running:not(:hover)::before, .sb_netstatus.hidden:not(:hover)::before {
-  background-size: 18px !important;
-}
-
 @supports not (-moz-appearance: none) {
   .tunnelBuildStatus, .tunnelBuildStatus::before {
     vertical-align: middle !important;
@@ -7758,11 +7754,18 @@ h4#sb_shutdownstatus span {
   background: var(--net_clockskew) var(--center);
 }
 
-.sb_netstatus.running, .sb_netstatus.hidden {
+.sb_netstatus.running:not(:hover)::before, .sb_netstatus.hidden:not(:hover)::before,
+.sb_netstatus.firewalled:not(:hover)::before, .sb_netstatus.testing:not(:hover)::before {
+  background-size: 18px !important;
+}
+
+.sb_netstatus.testing, .sb_netstatus.running,
+.sb_netstatus.hidden, .sb_netstatus.firewalled {
   font-size: 0;
 }
 
-.sb_netstatus.running:hover, .sb_netstatus.hidden {
+.sb_netstatus.running:hover, .sb_netstatus.hidden:hover,
+.sb_netstatus.firewalled:hover, .sb_netstatus.testing:hover {
   font-size: inherit;
 }
 
