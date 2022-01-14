@@ -108,10 +108,6 @@ body {
   contain: layout;
 }
 
-.main {
-  contain: layout paint;
-}
-
 .main * {
   scrollbar-color: rgba(16,48,16,.4) rgba(0,0,0,0);
 }
@@ -900,6 +896,66 @@ div.refresh {
 }
 
 /* end status bar */
+
+.warntext {
+  color: #b00;
+}
+
+.routersummary table, .routersummary form {
+  background: repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.1) 2px, rgba(0,16,0,.1) 3px) !important;
+}
+
+.routersummary form {
+  margin: -7px -10px -9px;
+  padding: 4px 3px;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000;
+}
+
+#sb_peers, #sb_peersadvanced, #sb_tunnels, #sb_queue, #sb_bandwidth, #sb_general, #sb_advancedgeneral,
+#sb_localtunnels, #sb_advanced, #sb_internals, #sb_services {
+  margin-top: -6px !important;
+  margin-bottom: -8px !important;
+  padding: 0 1px 2px;
+  border-top: 1px solid rgba(16,64,16,.3);
+  border-bottom: 1px solid rgba(16,64,16,.3);
+}
+
+#sb_peers tr:hover td, #sb_tunnels tr:hover td, #sb_queue tr:hover td, #sb_bandwidth tr:hover td,
+#sb_general tr:hover td, #sb_advancedgeneral tr:hover td {
+  color: #ff5 !important;
+  background: rgba(0,48,0,.2);
+}
+
+#sb_localtunnels {
+  padding: 0;
+}
+
+#sb_localtunnels tr:first-child td {
+  padding-top: 0;
+}
+
+#sb_localtunnels tr:last-child td {
+  padding-bottom: 0;
+}
+
+#sb_advanced, #sb_internals, #sb_services {
+  padding: 0 1px 1px;
+}
+
+#sb_advanced, #sb_advanced td, #sb_internals, #sb_internals td, #sb_services, #sb_services td {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.routersummary td {
+  text-shadow: var(--textshadow);
+}
+
+.routersummary h3 {
+  margin: -7px -10px -9px !important;
+  padding: 6px 2px !important;
+}
+
 /* end sidebar */
 
 /* console error messages */
@@ -1018,9 +1074,11 @@ h1 + .sorry, #console_404 .sorry {
   text-align: left;
   font-size: 9pt;
   border-radius: 0 0 3px 3px;
+  box-shadow: var(--highlight), 0 1px 5px #000;
   background: repeating-linear-gradient(90deg, rgba(0,0,0,.3) 2px, rgba(0,24,0,.6) 4px),
     repeating-linear-gradient(180deg,rgba(0,0,0,.3) 2px, rgba(0,24,0,.2) 4px) !important;
   background-size: 4px 100%, 100% 4px !important;
+  contain: layout paint;
 }
 
 .main#dns {
@@ -10847,6 +10905,8 @@ input[type=text]:focus::placeholder, #homesearch input.search:focus::placeholder
 
 #routerinformation p#upnpstatus {
   margin: 12px 0 0;
+  padding-left: 46px !important;
+  background-size: 24px !important;
 }
 
 /* end /info */
@@ -10862,71 +10922,7 @@ a:hover .tier, a:focus .tier {
   color: var(--hover) !important;
 }
 
-/* TODO: merge with main classes */
-
-.main {
-  box-shadow: var(--highlight), 0 1px 5px #000;
-}
-
-.routersummary table, .routersummary form {
-  background: repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.1) 2px, rgba(0,16,0,.1) 3px) !important;
-}
-
-.routersummary form {
-  margin: -7px -10px -9px;
-  padding: 4px 3px;
-  box-shadow: var(--highlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000;
-}
-
-#sb_peers, #sb_peersadvanced, #sb_tunnels, #sb_queue, #sb_bandwidth, #sb_general, #sb_advancedgeneral,
-#sb_localtunnels, #sb_advanced, #sb_internals, #sb_services {
-  margin-top: -6px !important;
-  margin-bottom: -8px !important;
-  padding: 0 1px 2px;
-  border-top: 1px solid rgba(16,64,16,.3);
-  border-bottom: 1px solid rgba(16,64,16,.3);
-}
-
-#sb_peers tr:hover td, #sb_tunnels tr:hover td, #sb_queue tr:hover td, #sb_bandwidth tr:hover td,
-#sb_general tr:hover td, #sb_advancedgeneral tr:hover td {
-  color: #ff5 !important;
-  background: rgba(0,48,0,.2);
-}
-
-#sb_localtunnels {
-  padding: 0;
-}
-
-#sb_localtunnels tr:first-child td {
-  padding-top: 0;
-}
-
-#sb_localtunnels tr:last-child td {
-  padding-bottom: 0;
-}
-
-#sb_advanced, #sb_internals, #sb_services {
-  padding: 0 1px 1px;
-}
-
-#sb_advanced, #sb_advanced td, #sb_internals, #sb_internals td, #sb_services, #sb_services td {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-}
-
-.routersummary td {
-  text-shadow: var(--textshadow);
-}
-.warntext {
-  color: #b00;
-}
-
-.routersummary h3 {
-  margin: -7px -10px -9px !important;
-  padding: 6px 2px !important;
-}
-
-/* logs */i2
+/* logs */
 
 #logs pre, #logs li {
   font-weight: 700;
@@ -12356,10 +12352,10 @@ i {
 }
 
 #sybilTask .nowrap::before {
-  content: "";
-  display: inline-block;
   height: 48px;
+  display: inline-block;
   vertical-align: middle;
+  content: "";
 }
 
 #sybilTask .nowrap:hover {
