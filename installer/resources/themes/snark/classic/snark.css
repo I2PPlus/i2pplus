@@ -3368,6 +3368,12 @@ td.peerCount {
   background: var(--hash) no-repeat 4px center / 12px, linear-gradient(180deg,#efe,#e6ffe6);
 }
 
+@media screen and (max-width: 1500px) {
+  .snarkTorrents .infohash {
+    max-width: 56px;
+  }
+}
+
 .torrentInfo .infohash {
   margin: 0 6px 0 10px;
   padding: 0 4px;
