@@ -108,10 +108,6 @@ body {
   contain: layout;
 }
 
-.main {
-  contain: layout paint;
-}
-
 .main * {
   scrollbar-color: rgba(16,48,16,.4) rgba(0,0,0,0);
 }
@@ -900,6 +896,66 @@ div.refresh {
 }
 
 /* end status bar */
+
+.warntext {
+  color: #b00;
+}
+
+.routersummary table, .routersummary form {
+  background: repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.1) 2px, rgba(0,16,0,.1) 3px) !important;
+}
+
+.routersummary form {
+  margin: -7px -10px -9px;
+  padding: 4px 3px;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000;
+}
+
+#sb_peers, #sb_peersadvanced, #sb_tunnels, #sb_queue, #sb_bandwidth, #sb_general, #sb_advancedgeneral,
+#sb_localtunnels, #sb_advanced, #sb_internals, #sb_services {
+  margin-top: -6px !important;
+  margin-bottom: -8px !important;
+  padding: 0 1px 2px;
+  border-top: 1px solid rgba(16,64,16,.3);
+  border-bottom: 1px solid rgba(16,64,16,.3);
+}
+
+#sb_peers tr:hover td, #sb_tunnels tr:hover td, #sb_queue tr:hover td, #sb_bandwidth tr:hover td,
+#sb_general tr:hover td, #sb_advancedgeneral tr:hover td {
+  color: #ff5 !important;
+  background: rgba(0,48,0,.2);
+}
+
+#sb_localtunnels {
+  padding: 0;
+}
+
+#sb_localtunnels tr:first-child td {
+  padding-top: 0;
+}
+
+#sb_localtunnels tr:last-child td {
+  padding-bottom: 0;
+}
+
+#sb_advanced, #sb_internals, #sb_services {
+  padding: 0 1px 1px;
+}
+
+#sb_advanced, #sb_advanced td, #sb_internals, #sb_internals td, #sb_services, #sb_services td {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.routersummary td {
+  text-shadow: var(--textshadow);
+}
+
+.routersummary h3 {
+  margin: -7px -10px -9px !important;
+  padding: 6px 2px !important;
+}
+
 /* end sidebar */
 
 /* console error messages */
@@ -1018,9 +1074,11 @@ h1 + .sorry, #console_404 .sorry {
   text-align: left;
   font-size: 9pt;
   border-radius: 0 0 3px 3px;
+  box-shadow: var(--highlight), 0 1px 5px #000;
   background: repeating-linear-gradient(90deg, rgba(0,0,0,.3) 2px, rgba(0,24,0,.6) 4px),
     repeating-linear-gradient(180deg,rgba(0,0,0,.3) 2px, rgba(0,24,0,.2) 4px) !important;
   background-size: 4px 100%, 100% 4px !important;
+  contain: layout paint;
 }
 
 .main#dns {
@@ -3980,7 +4038,6 @@ form[action="events"] > .formaction {
 }
 
 #addkeyring textarea, #addkeyring input[type=text], #addkeyring select, #addkeyring input[type=password] {
-  width: 95%;
   width: calc(100% - 15px);
 }
 
@@ -4035,7 +4092,6 @@ p#webappconfig + p, p#pluginconfigtext {
 #pluginconfig td:last-child table {
   margin: 5px 15px 5px 5px !important;
   padding: 5px;
-  width: 99%;
   width: calc(100% - 8px);
 }
 
@@ -4175,7 +4231,6 @@ form > table {
 
 #tunnelconfig input[type=text] {
   margin: 6px 16px 6px 0;
-  width: 100%;
   width: calc(100% - 4px);
 }
 
@@ -4204,7 +4259,6 @@ form > table {
 }
 
 #i2pupdates input[name*="URL"], #i2pupdates textarea {
-  width: 98%;
   width: calc(100% - 17px);
 }
 
@@ -4242,7 +4296,6 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 
 #loggingoptions textarea {
   margin-bottom: 8px;
-  width: 99%;
   width: calc(100% - 6px);
   height: 120px;
   resize: none;
@@ -4739,7 +4792,6 @@ h3#servicedebug a, h3#graphinfo a {
 
 #configinfo {
   margin: 0 auto 0;
-  width: 99%;
   width: calc(100% - 20px);
   border: none !important;
 }
@@ -5353,6 +5405,18 @@ img.unknownflag {
 
 #profilelist td:nth-child(2), #profilelist th:nth-child(2) {
   text-align: left;
+}
+
+#profiles .ok, #ntcpconnections td.queue:empty::before {
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  font-size: 0;
+  background-size: 11px !important;
+}
+
+#ntcpconnections td.queue:empty::before {
+  content: "";
 }
 
 #profilelist td:first-child, #profilelist th:first-child, #profilelist td:nth-last-child(2), #profilelist th:nth-last-child(2) {
@@ -7300,7 +7364,6 @@ h4.embeddedtitle#updateplugins {
 }
 
 #manualreseed input[type=text] {
-  width: 50%;
   width: calc(100% - 300px);
 }
 
@@ -7692,9 +7755,9 @@ h4#sb_shutdownstatus span {
 }
 
 .sb_netstatus::before, .tunnelBuildStatus::before {
-  margin: 0 4px 0 -4px;
-  height: 16px;
-  width: 16px;
+  margin: 0 2px 0 -4px;
+  height: 18px;
+  width: 18px;
   display: inline-block;
   vertical-align: middle;
   content: "";
@@ -7742,6 +7805,24 @@ h4#sb_shutdownstatus span {
   background: var(--net_clockskew) var(--center);
 }
 
+.sb_netstatus.running:not(:hover)::before, .sb_netstatus.hidden:not(:hover)::before,
+.sb_netstatus.firewalled:not(:hover)::before, .sb_netstatus.testing:not(:hover)::before {
+  margin: -2px 0;
+  height: 20px;
+  width: 20px;
+  background-size: 20px !important;
+}
+
+.sb_netstatus.testing, .sb_netstatus.running,
+.sb_netstatus.hidden, .sb_netstatus.firewalled {
+  font-size: 0;
+}
+
+.sb_netstatus.running:hover, .sb_netstatus.hidden:hover,
+.sb_netstatus.firewalled:hover, .sb_netstatus.testing:hover {
+  font-size: inherit;
+}
+
 /* end network status */
 
 /* tunnel build status */
@@ -7773,7 +7854,7 @@ h4#sb_shutdownstatus span {
   color: #58ce3a;
 }
 
-.tunnelBuildStatus.active::before {
+.tunnelBuildStatus.active::before, .ok, #ntcpconnections td.queue:empty::before {
   background: var(--tunn_active) var(--center) / 15px;
 }
 
@@ -8575,7 +8656,6 @@ th code {
 
 #jardump tr:hover td:first-child b {
   margin: 0 0 -2px -2px;
-  width: 95%;
   width: calc(100% - 10px);
   border: 1px solid #010;
   box-shadow: 0 0 1px 0 #010;
@@ -10452,7 +10532,8 @@ input[type=file] {
   vertical-align: middle !important;
 }
 
-#floodfills td:empty::before, #ntcpconnections td:empty::before, #udpconnections td:empty::before, #profilelist td:empty::before, #tunnels .cells:empty::after {
+#floodfills td:empty::before, #ntcpconnections td:not(:last-child):empty::before,
+#udpconnections td:not(:last-child):empty::before, #profilelist td:empty::before, #tunnels .cells:empty::after {
   width: 100%;
   display: inline-block;
   text-align: center;
@@ -10824,13 +10905,16 @@ input[type=text]:focus::placeholder, #homesearch input.search:focus::placeholder
 
 #routerinformation p#upnpstatus {
   margin: 12px 0 0;
+  padding-left: 46px !important;
+  background-size: 24px !important;
 }
 
 /* end /info */
 
 .reachability {
+  margin-top: 2px;
   float: right;
-  font-size: 80%;
+  font-size: 80% !important;
 }
 
 .version a:hover, .version a:focus, a:hover .version, a:focus .version,
@@ -10838,71 +10922,7 @@ a:hover .tier, a:focus .tier {
   color: var(--hover) !important;
 }
 
-/* TODO: merge with main classes */
-
-.main {
-  box-shadow: var(--highlight), 0 1px 5px #000;
-}
-
-.routersummary table, .routersummary form {
-  background: repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.1) 2px, rgba(0,16,0,.1) 3px) !important;
-}
-
-.routersummary form {
-  margin: -7px -10px -9px;
-  padding: 4px 3px;
-  box-shadow: var(--highlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000;
-}
-
-#sb_peers, #sb_peersadvanced, #sb_tunnels, #sb_queue, #sb_bandwidth, #sb_general, #sb_advancedgeneral,
-#sb_localtunnels, #sb_advanced, #sb_internals, #sb_services {
-  margin-top: -6px !important;
-  margin-bottom: -8px !important;
-  padding: 0 1px 2px;
-  border-top: 1px solid rgba(16,64,16,.3);
-  border-bottom: 1px solid rgba(16,64,16,.3);
-}
-
-#sb_peers tr:hover td, #sb_tunnels tr:hover td, #sb_queue tr:hover td, #sb_bandwidth tr:hover td,
-#sb_general tr:hover td, #sb_advancedgeneral tr:hover td {
-  color: #ff5 !important;
-  background: rgba(0,48,0,.2);
-}
-
-#sb_localtunnels {
-  padding: 0;
-}
-
-#sb_localtunnels tr:first-child td {
-  padding-top: 0;
-}
-
-#sb_localtunnels tr:last-child td {
-  padding-bottom: 0;
-}
-
-#sb_advanced, #sb_internals, #sb_services {
-  padding: 0 1px 1px;
-}
-
-#sb_advanced, #sb_advanced td, #sb_internals, #sb_internals td, #sb_services, #sb_services td {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-}
-
-.routersummary td {
-  text-shadow: var(--textshadow);
-}
-.warntext {
-  color: #b00;
-}
-
-.routersummary h3 {
-  margin: -7px -10px -9px !important;
-  padding: 6px 2px !important;
-}
-
-/* logs */i2
+/* logs */
 
 #logs pre, #logs li {
   font-weight: 700;
@@ -12325,7 +12345,6 @@ i {
   padding: 5px 0;
   margin: 1px;
   height: 48px;
-  width: calc(100% - 1px);
   width: 100%;
   display: inline-block;
   vertical-align: middle;
@@ -12333,10 +12352,10 @@ i {
 }
 
 #sybilTask .nowrap::before {
-  content: "";
-  display: inline-block;
   height: 48px;
+  display: inline-block;
   vertical-align: middle;
+  content: "";
 }
 
 #sybilTask .nowrap:hover {
@@ -13175,6 +13194,13 @@ body.iframed {
 }
 
 @media screen and (max-width: 1499px) {
+  .sb_netstatus.running:not(:hover)::before, .sb_netstatus.hidden:not(:hover)::before,
+  .sb_netstatus.firewalled:not(:hover)::before, .sb_netstatus.testing:not(:hover)::before {
+    margin: 0;
+    height: 18px;
+    width: 18px;
+    background-size: 18px !important;
+  }
   #sidebar .reload, #sidebar .stop, #sidebar .stop:hover, #sidebar .stop:focus,
   #sidebar .reload[value="restartImmediate"] {
     background-size: 12px, 100% !important;
@@ -13268,8 +13294,10 @@ body.iframed {
     padding-top: 9px;
     font-size: 16pt;
   }
-  .netdbentry .tunnel_cap, .netdbentry .tier, .netdbentry .ff, .netdbentry .reachable, .netdbentry .unreachable, .netdbentry .version,
-  .sybil_routerinfo .tunnel_cap, .sybil_routerinfo .tier, .sybil_routerinfo .ff, .sybil_routerinfo .reachable, .sybil_routerinfo .unreachable, .sybil_routerinfo .version {
+  .netdbentry .tunnel_cap, .netdbentry .tier, .netdbentry .ff, .netdbentry .reachable,
+  .netdbentry .unreachable, .netdbentry .version, .sybil_routerinfo .tunnel_cap,
+  .sybil_routerinfo .tier, .sybil_routerinfo .ff, .sybil_routerinfo .reachable,
+  .sybil_routerinfo .unreachable, .sybil_routerinfo .version {
     padding: 2px 4px !important;
   }
   #tunnels .tunnel_cap {
@@ -14239,6 +14267,11 @@ body.iframed {
   }
   #pluginconfig th {
     font-size: 9pt !important;
+  }
+  #peers .routerid .flag img {
+    margin: -3px -3px -1px !important;
+    width: 20px !important;
+    height: 15px !important;
   }
 }
 
