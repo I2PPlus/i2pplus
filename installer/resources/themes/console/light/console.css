@@ -32,7 +32,10 @@
   --bevel: inset 0 0 0 1px #d0d0da;
   --selected: #27377f;
   --row: linear-gradient(180deg,#fff,#eef);
+  --row_odd: linear-gradient(180deg,rgba(240,240,255,.6) 50%, rgba(240,240,255,.4));
+  --row_even: linear-gradient(180deg,rgba(248,248,255,.6) 50%, rgba(248,248,255,.2));
   --suboption: linear-gradient(180deg,#fff 50%,#eef 50%);
+  --table: repeating-linear-gradient(135deg, rgba(248,248,255,.8) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fff;
 }
 
 html, body {
@@ -2963,18 +2966,18 @@ table#wrapperlogs {
 /* i2p version & environment */
 
 #enviro tr, .configtable tr, #pluginconfig table tr, #graphs tr, #netdb tr, #routerinformation tr {
-  background: linear-gradient(180deg,rgba(248,248,255,.6) 50%, rgba(248,248,255,.2)) !important;
+  background: var(--row_even) !important;
   box-shadow: var(--highlight);
 }
 
 #enviro, .configtable, #graphs table, #netdb table, #routerinforamation table {
   box-shadow: inset 0 0 4px 2px #eef;
-  background: repeating-linear-gradient(135deg, rgba(248,248,255,.8) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fff;
+  background: var(--table);
 }
 
 #sidebarconf tr:nth-child(odd), .homelinkedit tr:nth-child(odd), #clientconfig tr:nth-child(odd), #netdb tr:nth-child(even),
 #webappconfig tr:nth-child(odd), #configstats tr:nth-child(odd), #pluginconfig table tr:nth-child(even), #routerinformation tr:nth-child(odd) {
-  background: linear-gradient(180deg,rgba(240,240,255,.6) 50%, rgba(240,240,255,.4)) !important;
+  background: var(--row_odd) !important;
 }
 
 #bandwidthconfig tr {
@@ -10460,6 +10463,11 @@ td.optionsave, .formaction, table#addkeyring tr:last-child td {
   vertical-align: top;
   font-size: 80%;
   text-transform: lowercase;
+}
+
+#events tr:not(:last-child) td {
+  border-top: var(--border_soft);
+  border-bottom: var(--border_soft);
 }
 
 #eventlog th, #eventlog td {
