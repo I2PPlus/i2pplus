@@ -12806,7 +12806,7 @@ iframe {
   #sb_services {width: 242px !important}
   #sidebar .sb_newsheadings table {width: 240px !important}
   #sidebar h3::after {
-    min-height: 18px;
+    min-height: 19px;
     display: inline-block;
     vertical-align: middle;
     box-sizing: border-box;
