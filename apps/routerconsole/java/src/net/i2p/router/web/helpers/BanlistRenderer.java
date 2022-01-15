@@ -49,7 +49,7 @@ class BanlistRenderer {
 
         entries.putAll(_context.banlist().getEntries());
         if (entries.isEmpty()) {
-            buf.append("<i>").append(_t("none")).append("</i>");
+            buf.append("<i>").append(_t("none").replace("none", "No bans currently active")).append("</i>");
             out.write(buf.toString());
             return;
         }
@@ -63,7 +63,7 @@ class BanlistRenderer {
             if (expires <= 0)
                 continue;
             buf.append("<li>").append(_context.commSystem().renderPeerHTML(key));
-            buf.append(' ');
+            buf.append(' ').append("<span class=\"banreason\">");
             String expireString = DataHelper.formatDuration2(expires);
             if (key.equals(Hash.FAKE_HASH))
                 buf.append(_t("Permanently banned"));
@@ -71,6 +71,7 @@ class BanlistRenderer {
                 buf.append(_t("Temporary ban expiring in {0}", expireString));
             else
                 buf.append(_t("Banned for {0} / until restart", expireString));
+            buf.append("</span>");
             Set<String> transports = entry.transports;
             if ( (transports != null) && (!transports.isEmpty()) )
                 buf.append(" on the following transport: ").append(transports);
