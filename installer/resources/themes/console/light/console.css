@@ -11474,10 +11474,17 @@ i {
 }
 
 #profiles #banlist tt {
-  margin-top: -2px;
+  margin: -2px 4px 0 8px !important;
+  padding: 0 !important;
   vertical-align: baseline;
   display: inline-block;
   line-height: 1;
+}
+
+#profiles #banlist tt a {
+  margin: 0 0 0 -4px !important;
+  padding: 0 !important;
+  display: inline-block;
 }
 
 .routerid .flag {
