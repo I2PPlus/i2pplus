@@ -14100,6 +14100,12 @@ body.iframed {
     margin-top: 7px !important;
     padding-top: 7px !important;
   }
+  #jobs .joblog li, #schedjobs td, #jobstats td:first-child, #jobs .jobcount {
+    font-size: 9pt !important;
+  }
+  #schedjobs ul {
+    columns: 270px auto;
+  }
   #certs.main p + p:empty + h4 {
     margin-top: -15px !important;
   }
