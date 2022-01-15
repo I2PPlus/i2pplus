@@ -13341,6 +13341,11 @@ body.iframed {
   h3#advancedconfig a {
     padding-top: 9px;
   }
+  #jardump a[href^="https://gitlab.com/i2pplus"] {
+    padding-left: 11px;
+    background-size: 8px;
+    background-position: left top;
+  }
 }
 
 @supports (columns: 2 500px) {
@@ -14094,6 +14099,12 @@ body.iframed {
   .joblog h3 {
     margin-top: 7px !important;
     padding-top: 7px !important;
+  }
+  #jobs .joblog li, #schedjobs td, #jobstats td:first-child, #jobs .jobcount {
+    font-size: 9pt !important;
+  }
+  #schedjobs ul {
+    columns: 270px auto;
   }
   #certs.main p + p:empty + h4 {
     margin-top: -15px !important;

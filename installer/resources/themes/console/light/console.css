@@ -13,6 +13,7 @@
   --h2: linear-gradient(180deg,#fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
     linear-gradient(90deg, #fcfcff 5%, rgba(231, 231, 255, .8) 25%);
   --h3: linear-gradient(180deg,#fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4));
+  --h4app: linear-gradient(90deg, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) #f8f8ff;
   --p: linear-gradient(135deg, #fafaff, #f8f8ff);
   --div_infohelp: repeating-linear-gradient(180deg,rgba(255,255,255,.4) 2px, rgba(232,232,255,.7) 4px), var(--p);
   --highlight: inset 0 0 0 1px #fff;
@@ -21,8 +22,8 @@
   --ink_light: #5b5b71;
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, Verdana, Helvetica, sans-serif;
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
-  --btn: linear-gradient(180deg,#fff, #efefff);
-  --btn_hover: linear-gradient(180deg,#eee, #fff);
+  --btn: linear-gradient(180deg,#fff,#efefff);
+  --btn_hover: linear-gradient(180deg,#eee,#fff);
   --btn_shadow_active: var(--highlight), inset 3px 3px 3px 1px rgba(0,0,64,.3);
   --input_shadow: inset 1px 1px 1px rgba(0,0,48,.2);
   --border: #6c6c93;
@@ -30,6 +31,11 @@
   --border_soft: 1px solid #e0e0eb;
   --bevel: inset 0 0 0 1px #d0d0da;
   --selected: #27377f;
+  --row: linear-gradient(180deg,#fff,#eef);
+  --row_odd: linear-gradient(180deg,rgba(240,240,255,.6) 50%, rgba(240,240,255,.4));
+  --row_even: linear-gradient(180deg,rgba(248,248,255,.6) 50%, rgba(248,248,255,.2));
+  --suboption: linear-gradient(180deg,#fff 50%,#eef 50%);
+  --table: repeating-linear-gradient(135deg, rgba(248,248,255,.8) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fff;
 }
 
 html, body {
@@ -2960,18 +2966,18 @@ table#wrapperlogs {
 /* i2p version & environment */
 
 #enviro tr, .configtable tr, #pluginconfig table tr, #graphs tr, #netdb tr, #routerinformation tr {
-  background: linear-gradient(180deg,rgba(248,248,255,.6) 50%, rgba(248,248,255,.2)) !important;
+  background: var(--row_even) !important;
   box-shadow: var(--highlight);
 }
 
 #enviro, .configtable, #graphs table, #netdb table, #routerinforamation table {
   box-shadow: inset 0 0 4px 2px #eef;
-  background: repeating-linear-gradient(135deg, rgba(248,248,255,.8) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fff;
+  background: var(--table);
 }
 
 #sidebarconf tr:nth-child(odd), .homelinkedit tr:nth-child(odd), #clientconfig tr:nth-child(odd), #netdb tr:nth-child(even),
 #webappconfig tr:nth-child(odd), #configstats tr:nth-child(odd), #pluginconfig table tr:nth-child(even), #routerinformation tr:nth-child(odd) {
-  background: linear-gradient(180deg,rgba(240,240,255,.6) 50%, rgba(240,240,255,.4)) !important;
+  background: var(--row_odd) !important;
 }
 
 #bandwidthconfig tr {
@@ -3122,19 +3128,19 @@ tr {
 }
 
 tr:nth-child(even), pre#activetransports, #debug .sentTags:hover td, #debug .expiry:hover td {
-  background: linear-gradient(180deg,#fff, #eef);
+  background: var(--row);
 }
 
 tr:nth-child(odd) {
-  background: linear-gradient(180deg,#fff, #eef);
+  background: var(--row);
 }
 
 td {
   padding: 3px 5px;
   color: var(--ink);
   vertical-align: middle;
-  border-top: 1px inset #e0e0eb;
-  border-bottom: 1px inset #e0e0eb;
+  border-top: 1px solid #a7a7be;
+  border-bottom: 1px solid #a7a7be;
 }
 
 #floodfillconfig tr:nth-child(2) td {
@@ -3185,18 +3191,17 @@ h4.app, h4.app2 {
   border: 1px solid var(--border_inner);
   border-radius: 2px;
   box-shadow: var(--highlight), 0 0 1px rgba(220,220,220,.3);
-  background: linear-gradient(180deg,#fff 50%, #eef 50%);
 }
 
 h4.app {
   margin-top: 15px;
-  background: url(images/favicon.svg) no-repeat 10px center / 16px, var(--h3), linear-gradient(90deg, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) #f8f8ff !important;
+  background: url(images/favicon.svg) no-repeat 10px center / 16px, var(--h3), var(--h4app) !important;
 }
 
 h4.app2 {
   clear: left;
   margin-top: 10px !important;
-  background: var(--globe) no-repeat 10px center / 16px, var(--h3), linear-gradient(90deg, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) #f8f8ff !important;
+  background: var(--globe) no-repeat 10px center / 16px, var(--h3), var(--h4app) !important;
 }
 
 h4.app img, h4.app2 img, #sitemap h3 img {
@@ -5321,7 +5326,7 @@ h3 + .statusnotes {
 
 h3#finishedjobs + ol li, h3#scheduledjobs + ol li, h3#activejobs + ol li, h3#readyjobs + ol li {
   list-style: none !important;
-  background: linear-gradient(180deg,#fff, #eef);
+  background: var(--row);
 }
 
 h3#activejobs + ol li::before, h3#scheduledjobs + ol li::before, h3#readyjobs + ol li::before, h3#finishedjobs + ol li::before {
@@ -6313,7 +6318,7 @@ h3#udpcon {
 
 #tunnels .routerid, .tunnel_local, #profiles .routerid, .leaseset .routerid, #peers .routerid {
   border: 1px solid #bbd;
-  background: linear-gradient(180deg,#fff, #eef);
+  background: var(--row);
 }
 
 /* end tunnels */
@@ -6466,7 +6471,7 @@ p:empty { /* empty paragraph nuke */
   #netdboverview table td {
     padding: 5px 10px;
     box-shadow: var(--highlight) !important;
-    background: linear-gradient(180deg,#fff, #eef);
+    background: var(--row);
   }
   #netdboverview #netdbversions td:first-child, #netdboverview #netdbtransports td:first-child, #netdboverview #netdbcountrylist td:first-child,
   #netdbtiers td:first-child {
@@ -6720,7 +6725,7 @@ b.netdb_transport {
   border: 1px solid #bbc;
   border-radius: 2px;
   box-shadow: var(--highlight), 0 0 0 1px #eef;
-  background: linear-gradient(180deg,#fff, #eef);
+  background: var(--row);
 }
 
 #netdb .netdbentry th code, #netdb .leaseset th code {
@@ -6833,7 +6838,7 @@ b.netdb_transport {
   border: 1px solid #ddf;
   border-radius: 2px 0 0 2px;
   box-shadow: var(--highlight);
-  background: linear-gradient(180deg,#fff, #eef);
+  background: var(--row);
 }
 
 .netdb_ouraddresses:empty {
@@ -6864,7 +6869,7 @@ b.netdb_transport {
   line-height: 0;
   border: 1px solid #bbc;
   border-radius: 2px;
-  background: linear-gradient(180deg,#fff, #eef);
+  background: var(--row);
 }
 
 #tunnels .configpeer img, #profiles .configpeer img, #peers .configpeer img {
@@ -6978,7 +6983,7 @@ b.netdb_transport {
 
 .leaseset td {
   line-height: 1.5;
-  background: linear-gradient(180deg,#fff, #eef);
+  background: var(--row);
   border-top: 1px solid var(--border_inner);
   border-bottom: 1px solid var(--border_inner);
 }
@@ -7063,7 +7068,7 @@ b.netdb_transport {
   display: inline-block;
   border: 1px solid #bbd;
   border-radius: 2px;
-  background: linear-gradient(180deg,#fff, #eef);
+  background: var(--row);
 }
 
 .netdb_leases .tunnel_id {
@@ -7613,7 +7618,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   border: 1px solid #bbc;
   border-radius: 2px;
   box-shadow: var(--highlight);
-  background: linear-gradient(180deg,#fff, #eef);
+  background: var(--row);
 }
 
 #netdbtiers a {
@@ -7672,11 +7677,11 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   border: 1px solid #bbd;
   border-radius: 2px;
   box-shadow: var(--highlight);
-  background: var(--crypto) no-repeat 1px center / 14px, linear-gradient(180deg,#fff, #eef);
+  background: var(--crypto) no-repeat 1px center / 14px, var(--row);
 }
 
 .signingkey.encryption {
-  background: var(--lock) no-repeat 1px center / 14px, linear-gradient(180deg,#fff, #eef);
+  background: var(--lock) no-repeat 1px center / 14px, var(--row);
 }
 
 #netdb_ram {
@@ -7687,7 +7692,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   box-shadow: var(--highlight);
   border: 1px solid #bbd;
   border-radius: 2px;
-  background: linear-gradient(180deg,#fff, #eef);
+  background: var(--row);
 }
 
 .leaseset .routerid {
@@ -9563,7 +9568,7 @@ b.suboption {
   border: 1px solid var(--border_inner);
   border-bottom: none;
   box-shadow: var(--highlight);
-  background: linear-gradient(180deg,#fff 50%, #eef 50%);
+  background: var(--suboption);
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
@@ -10458,6 +10463,11 @@ td.optionsave, .formaction, table#addkeyring tr:last-child td {
   vertical-align: top;
   font-size: 80%;
   text-transform: lowercase;
+}
+
+#events tr:not(:last-child) td {
+  border-top: var(--border_soft);
+  border-bottom: var(--border_soft);
 }
 
 #eventlog th, #eventlog td {
@@ -11575,7 +11585,7 @@ i {
   border: 1px solid #99b;
   border-left-width: 3px;
   border-radius: 1px;
-  background: linear-gradient(180deg,#fff, #eef);
+  background: var(--row);
   outline: none !important;
   will-change: transform;
 }
@@ -11918,7 +11928,7 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
   display: inline-block;
   border: 1px solid #bbc;
   border-radius: 2px;
-  background: linear-gradient(180deg,#fff, #eef);
+  background: var(--row);
 }
 
 .lsdest {
@@ -11926,18 +11936,18 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
   border-radius: 0;
   border-left-width: 4px;
   border-right-width: 4px;
-  background: var(--hardhat) no-repeat 4px center / 14px, linear-gradient(180deg,#fff, #eef);
+  background: var(--hardhat) no-repeat 4px center / 14px, var(--row);
 }
 
 .lsdest.published {
   padding-left: 38px;
   background: var(--hardhat) no-repeat 4px center / 14px, var(--globe) no-repeat 21px center / 14px,
-    linear-gradient(180deg,#fff, #eef);
+    var(--row);
 }
 
 .leaseset th:last-child a[href$="i2p/"] {
   padding-left: 22px;
-  background: var(--link) no-repeat 5px center / 12px, linear-gradient(180deg,#fff, #eef);
+  background: var(--link) no-repeat 5px center / 12px, var(--row);
 }
 
 /* /profiles group icons */
@@ -12561,7 +12571,7 @@ iframe {
   #ntcpconnections .spacer {display: none}
   .tunnel_id:not(:empty) {
     border: 1px solid #bbd;
-    background: var(--hardhat) no-repeat 5px center / 14px, linear-gradient(180deg,#fff, #eef);
+    background: var(--hardhat) no-repeat 5px center / 14px, var(--row);
   }
   .tunnel_id:not(:empty)::before {
     width: 16px;

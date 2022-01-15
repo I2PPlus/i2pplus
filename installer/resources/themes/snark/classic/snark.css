@@ -3368,6 +3368,12 @@ td.peerCount {
   background: var(--hash) no-repeat 4px center / 12px, linear-gradient(180deg,#efe,#e6ffe6);
 }
 
+@media screen and (max-width: 1500px) {
+  .snarkTorrents .infohash {
+    max-width: 56px;
+  }
+}
+
 .torrentInfo .infohash {
   margin: 0 6px 0 10px;
   padding: 0 4px;
@@ -4026,12 +4032,19 @@ td.peerCount {
   .ascending, .descending {
     top: -12px !important;
   }
+  .snarkTorrents td {
+    padding-top: 2px;
+    padding-bottom: 2px;
+  }
   .graphicStatus {
     padding-left: 4px !important;
     max-width: 20px !important;
   }
   .graphicStatus img {
-    height: 17px;
+    height: 19px;
+  }
+  td.graphicStatus img {
+    margin-left: 1px !important;
   }
   .torrentName a:not(old) {
     max-width: 360px !important;

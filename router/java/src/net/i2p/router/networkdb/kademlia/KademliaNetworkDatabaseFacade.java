@@ -667,7 +667,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         key = _blindCache.getHash(key);
         if (isNegativeCached(key))
             return;
-        search(key, null, null, 20*1000, true, fromLocalDest);
+//        search(key, null, null, 20*1000, true, fromLocalDest);
+        search(key, null, null, 30*1000, true, fromLocalDest);
     }
 
     /**
@@ -1604,7 +1605,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  3 or 4, to allow at least that many peers to be attempted for a store.
      */
     private static final int MAX_PER_PEER_TIMEOUT = 5*1000;
-    private static final int TIMEOUT_MULTIPLIER = 3;
+//    private static final int TIMEOUT_MULTIPLIER = 3;
+    private static final int TIMEOUT_MULTIPLIER = 5;
 
     /** todo: does this need more tuning? */
     public int getPeerTimeout(Hash peer) {
