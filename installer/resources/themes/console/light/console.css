@@ -3032,6 +3032,19 @@ table#wrapperlogs {
   padding-bottom: 6px;
 }
 
+#routerinformation td, #enviro td {
+  border-top: var(--border_soft);
+  border-bottom: var(--border_soft);
+}
+
+#routerinformation tr:first-child td, #enviro tr:first-child td {
+  border-top: var(--border_inner);
+}
+
+#routerinformation tr:last-child td, #enviro tr:last-child td {
+  border-bottom: var(--border_inner);
+}
+
 #logs #enviro:hover td {
   color: #19191f;
   border-top: 1px inset transparent;
