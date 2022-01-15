@@ -11473,18 +11473,31 @@ i {
   vertical-align: middle !important;
 }
 
-#profiles #banlist tt {
+#profiles #banlist tt, #config_peers #banlist tt {
   margin: -2px 4px 0 8px !important;
   padding: 0 !important;
-  vertical-align: baseline;
   display: inline-block;
   line-height: 1;
 }
 
-#profiles #banlist tt a {
-  margin: 0 0 0 -3px !important;
+#config_peers #banlist tt {
+  margin-left: 6px !important
+}
+
+#profiles #banlist tt a, #config_peers #banlist tt a {
+  margin: 0 0 0 -2px !important;
   padding: 0 !important;
   display: inline-block;
+}
+
+#config_peers #banlist tt a {
+  margin-left: -3px !important;
+}
+
+.banreason {
+  margin: 1px 0 0 1px;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .routerid .flag {
