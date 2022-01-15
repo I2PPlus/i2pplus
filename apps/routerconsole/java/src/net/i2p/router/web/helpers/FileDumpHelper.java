@@ -162,10 +162,13 @@ public class FileDumpHelper extends HelperBase {
         buf.append("</td><td>");
         s = getAtt(att, "Created-By");
         if (s != null) {
-            buf.append(s.replace("(Oracle Corporation)", "(Oracle)")
+            buf.append(s.replaceAll("-.*? ", "")
+                        .replace("Amazon.com Inc.", "Amazon")
                         .replace("Apache Maven", "Maven")
+                        .replace("(Oracle Corporation)", "(Oracle)")
+                        .replace("(Private Build)", "(OpenJDK)")
                         .replace("(Sun Microsystems Inc.)", "(Sun)")
-                        .replace(" (Private Build)", " (OpenJDK)"));
+                        .replace("(", " ("));
         }
         buf.append("</td><td title=\"UTC\">");
         s = getAtt(att, "Build-Date");
