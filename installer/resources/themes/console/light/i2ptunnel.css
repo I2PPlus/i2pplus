@@ -935,8 +935,7 @@ input.tunnelName, input.tunnelDescriptionText, #userAgents, .freetext.tunnelDesc
 input.tunnelName, input.tunnelDescriptionText, #userAgents, .freetext.tunnelDescription,
 #websiteName, #localDest, #altlocaldest, .proxyList, #targetDestination, #leasesetKey,
 input[type=text]:not([readonly]) {
-  box-shadow: var(--highlight), inset 3px 3px 3px #d2d2de;
-  box-shadow: var(--highlight), inset 1px 1px 1px #d2d2de;
+  box-shadow: var(--highlight), inset 2px 2px 2px rgba(0,0,0,.3);
 }
 
 #targetHost, .host {
