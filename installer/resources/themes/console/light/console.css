@@ -10478,9 +10478,18 @@ td.optionsave, .formaction, table#addkeyring tr:last-child td {
   text-transform: lowercase;
 }
 
-#events tr:not(:last-child) td {
+#events tr:not(:last-child) td, #profilelist tr:not(:last-child) td,
+#profile_defs tr:not(:last-child) td, #profiles tr:not(:last-child) td {
   border-top: var(--border_soft);
   border-bottom: var(--border_soft);
+}
+
+#profilelist tr:first-child td, #profile_defs tr:first-child td {
+  border-top: var(--border_inner);
+}
+
+#profiles th {
+  font-size: 90% !important;
 }
 
 #eventlog th, #eventlog td {
