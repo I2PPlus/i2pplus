@@ -3321,12 +3321,12 @@ td.trackerDetails img {
 }
 
 @keyframes downloadbar {
-  0% {background-position: left center}
-  100% {background-position: 20% center}
+  0%,100% {background-position: left center}
+  50% {background-position: 20% center}
 }
 
 .downloading.active .percentBarOuter, .peerinfo.active .percentBarOuter {
-  animation: downloadbar 5s linear both infinite;
+  animation: downloadbar 1s linear 3s both;
   opacity: 1;
 }
 
