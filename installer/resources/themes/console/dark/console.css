@@ -14003,7 +14003,8 @@ body.iframed {
     vertical-align: middle;
   }
   .routersummary td, .routersummary a, .routersummary button, .routersummary h4, .routersummary h4 a,
-  #floodfill th, #jardump td, .smallhead th, .sybil_distance th, .leaseset a[href$=".i2p"], .leaseset th code, .footnote, .topness {
+  #floodfill th, #jardump td, .smallhead th, .sybil_distance th, .leaseset a[href$=".i2p"],
+  .leaseset th code, .footnote, .topness, #jobs .joblog li, #schedjobs td, #jobstats td:first-child, #jobs .jobcount {
     font-size: 9pt !important;
   }
   #newsDisplay a, pre, #logs li, #updateAvailable, code, tt {
@@ -14099,9 +14100,6 @@ body.iframed {
   .joblog h3 {
     margin-top: 7px !important;
     padding-top: 7px !important;
-  }
-  #jobs .joblog li, #schedjobs td, #jobstats td:first-child, #jobs .jobcount {
-    font-size: 9pt !important;
   }
   #schedjobs ul {
     columns: 270px auto;

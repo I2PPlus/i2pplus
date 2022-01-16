@@ -3032,17 +3032,19 @@ table#wrapperlogs {
   padding-bottom: 6px;
 }
 
-#routerinformation td, #enviro td {
+#routerinformation td, #enviro td, #jobstats td {
   border-top: var(--border_soft);
   border-bottom: var(--border_soft);
 }
 
-#routerinformation tr:first-child td, #enviro tr:first-child td {
-  border-top: var(--border_inner);
+#routerinformation tr:first-child td, #enviro tr:first-child td,
+#jobstats tr:first-child td, #jobs #jobstats tr:last-child td {
+  border-top: 1px solid var(--border_inner);
 }
 
-#routerinformation tr:last-child td, #enviro tr:last-child td {
-  border-bottom: var(--border_inner);
+#routerinformation tr:last-child td, #enviro tr:last-child td,
+#jobstats tr:last-child td, #jobs #jobstats tr:nth-last-child(2) td {
+  border-bottom: 1px solid var(--border_inner);
 }
 
 #logs #enviro:hover td {
@@ -12588,7 +12590,7 @@ iframe {
   }
   #jobstats tr:last-child td:first-child, #jobstats tr:last-child:hover td:first-child {
     padding: 7px 8px;
-    background-image: none;
+    background-image: none !important;
   }
   #ntcpconnections .spacer {display: none}
   .tunnel_id:not(:empty) {
@@ -12650,7 +12652,7 @@ iframe {
 
 @media screen and (min-width: 1500px) {
   body, .main, .main td, .news p, #news p, .newscontent p, .tab, .tab2,
-  .main li b, .joblog li, .themelabel, .ui_lang, #sidebar button.download,
+  .main li b, .themelabel, .ui_lang, #sidebar button.download,
   #peerdefs, #profile_defs, #thresholds, #configinfo, .infohelp, .infowarn,
   button, input, select, #configinfo th, code, th, .statusnotes,
   #help code, #help tt, #console code, .percentBarText,
@@ -12888,7 +12890,8 @@ iframe {
     background-size: 12px;
     background-position: left center !important;
   }
-  .topness, .footnote {
+  .topness, .footnote, #jobs .joblog li, #jobs #schedjobs td,
+  #jobstats td:first-child, #jobs .jobcount, #jobs li b {
     font-size: 9pt !important;
   }
 }
