@@ -12466,9 +12466,7 @@ iframe {
     padding-left: 10px;
     background: none;
   }
-  form[action="events"] select {
-    min-width: 80px;
-  }
+  form[action="events"] select {min-width: 80px}
   form[action="events"] select + b,
   form[action="events"] input[type=submit] {margin-left: 3px}
   .tunnel_id, .tunnel_peer {
@@ -12495,6 +12493,15 @@ iframe {
   .encDests code {max-width: 60px}
   .encKey {font-size: 80%}
   #tunnels .confignav {margin: -1px -5px -10px}
+  #jardump th, #jardump th.subheading, .subheading b {
+    font-size: 8.5pt !important;
+  }
+  #jardump th:nth-child(3), #jardump td:nth-child(3),
+  #jardump th:nth-child(4), #jardump td:nth-child(4),
+  #jardump th:nth-child(6), #jardump td:nth-child(6),
+  #jardump th:nth-child(9), #jardump td:nth-child(9) {
+    display: none;
+  }
 }
 
 @media screen and (max-width: 900px) {
