@@ -3032,9 +3032,9 @@ table#wrapperlogs {
   padding-bottom: 6px;
 }
 
-#routerinformation td, #enviro td, #jobstats td {
-  border-top: var(--border_soft);
-  border-bottom: var(--border_soft);
+#routerinformation td, #enviro td, #jobstats td, #jardump td, #jardump th {
+  border-top: var(--border_soft) !important;
+  border-bottom: var(--border_soft) !important;
 }
 
 #routerinformation tr:first-child td, #enviro tr:first-child td,
@@ -12891,7 +12891,7 @@ iframe {
     background-position: left center !important;
   }
   .topness, .footnote, #jobs .joblog li, #jobs #schedjobs td,
-  #jobstats td:first-child, #jobs .jobcount, #jobs li b {
+  #jobstats td:first-child, #jobs .jobcount, #jobs li b, #jardump th {
     font-size: 9pt !important;
   }
 }
