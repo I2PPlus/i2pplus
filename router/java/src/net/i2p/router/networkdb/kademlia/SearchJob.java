@@ -68,7 +68,7 @@ class SearchJob extends JobImpl {
      *
      */
 //    private static final int PER_PEER_TIMEOUT = 5*1000;
-    private static final int PER_PEER_TIMEOUT = 4*1000;
+    private static final int PER_PEER_TIMEOUT = 6*1000;
 
     /**
      * give ourselves 30 seconds to send out the value found to the closest
@@ -164,7 +164,7 @@ class SearchJob extends JobImpl {
 
     /** timeout */
 //    static final int PER_FLOODFILL_PEER_TIMEOUT = 10*1000;
-    static final int PER_FLOODFILL_PEER_TIMEOUT = 5*1000;
+    static final int PER_FLOODFILL_PEER_TIMEOUT = 8*1000;
 //    static final long MIN_TIMEOUT = 2500;
     static final long MIN_TIMEOUT = 3000;
 
@@ -504,7 +504,7 @@ class SearchJob extends JobImpl {
 
         // use the 4-arg one so we pick up the override in ExploreJob
         //I2NPMessage msg = buildMessage(expiration);
-        I2NPMessage msg = buildMessage(null, to, expiration, router);	
+        I2NPMessage msg = buildMessage(null, to, expiration, router);
         if (msg == null) {
             if (_log.shouldWarn())
                 _log.warn("Failed to create DatabaseLookupMessage to: " + router);

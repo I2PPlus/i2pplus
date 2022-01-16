@@ -17,8 +17,7 @@ class SingleSearchJob extends FloodOnlySearchJob {
     private final Hash _to;
     private OutNetMessage _onm;
 
-//    private static final int TIMEOUT = 8*1000;
-    private static final int TIMEOUT = 5*1000;
+    private static final int TIMEOUT = 8*1000;
 
     /**
      *  @param key for Router Info ONLY

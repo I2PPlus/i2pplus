@@ -34,7 +34,8 @@ import net.i2p.data.Hash;
  */
 public class LookupDest {
 
-    private static final long DEFAULT_TIMEOUT = 15*1000;
+//    private static final long DEFAULT_TIMEOUT = 15*1000;
+    private static final long DEFAULT_TIMEOUT = 20*1000;
 
     protected LookupDest(I2PAppContext context) {}
 

@@ -1,6 +1,6 @@
 /*
- * Released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
+ * Released into the public domain
+ * with no warranty of any kind, either expressed or implied.
  */
 package net.i2p.router.client;
 
@@ -39,7 +39,8 @@ class LookupDestJob extends JobImpl {
     private final Hash _fromLocalDest;
     private final BlindData _blindData;
 
-    private static final long DEFAULT_TIMEOUT = 15*1000;
+//    private static final long DEFAULT_TIMEOUT = 15*1000;
+    private static final long DEFAULT_TIMEOUT = 20*1000;
 
     public LookupDestJob(RouterContext context, ClientConnectionRunner runner, Hash h, Hash fromLocalDest) {
         this(context, runner, -1, DEFAULT_TIMEOUT, null, h, null, fromLocalDest);
@@ -193,7 +194,7 @@ class LookupDestJob extends JobImpl {
     }
 
     private class DoneJob extends JobImpl {
-        public DoneJob(RouterContext enclosingContext) { 
+        public DoneJob(RouterContext enclosingContext) {
             super(enclosingContext);
         }
         public String getName() { return "Lookup LeaseSet &amp; Reply to Client"; }
