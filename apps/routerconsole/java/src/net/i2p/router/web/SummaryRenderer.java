@@ -554,7 +554,7 @@ class SummaryRenderer {
                         }
                     }
                 }
-                if ((height >= 90 && lsnr2 == null) || (height > 75 && lsnr2 != null)) {
+                if (height >= 90) {
                     def.setShowSignature(true);
                     def.setSignature(sdf.format(new Date(start)) + " - " + sdf.format(new Date(end)) + " UTC");
                 } else {
