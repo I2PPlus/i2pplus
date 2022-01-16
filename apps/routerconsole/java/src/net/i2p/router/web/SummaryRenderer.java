@@ -554,15 +554,10 @@ class SummaryRenderer {
                         }
                     }
                 }
-                if (height >= 90) {
-                    def.setShowSignature(true);
-                    def.setSignature(sdf.format(new Date(start)) + " - " + sdf.format(new Date(end)) + " UTC");
-                } else {
-                    def.setShowSignature(true);
-                    def.setSignature(sdf.format(new Date(end)) + " UTC");
-                }
-//                def.comment(sdf.format(new Date(start)) + " — " + sdf.format(new Date(end)) + " UTC\\r");
-            } else if (hideLegend && !showCredit) {
+                def.comment(sdf.format(new Date(start)) + " — " + sdf.format(new Date(end)) + " UTC\\r");
+            }
+
+            if (!showCredit) {
                 def.setShowSignature(false);
             } else if (hideLegend) {
                 if (height > 65)
@@ -570,7 +565,6 @@ class SummaryRenderer {
                 else
                     def.setSignature(sdf.format(new Date(end)) + " UTC");
             }
-
             /*
             // these four lines set up a graph plotting both values and events on the same chart
             // (but with the same coordinates, so the values may look pretty skewed)
