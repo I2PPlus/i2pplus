@@ -1851,11 +1851,18 @@ p:empty + .sb_notice {
 }
 
 #sb_services a[href="/orchid/"], #sb_services a[href*="/orchid/"] {
-  background: #000010 var(--orchid) no-repeat 5px center;
 }
 
 #sb_services a[href="/orchid/"]:hover, #sb_services a[href*="/orchid/"]:hover {
   background: #1e0b28 var(--orchid) no-repeat 5px center;
+}
+
+#sb_services a[href*="/outproxy"] {
+  background: #000010 var(--socks) no-repeat 5px center;
+}
+
+#sb_services a[href*="/outproxy"]:hover {
+  background: #1e0b28 var(--socks) no-repeat 5px center;
 }
 
 #sb_services a[href*="torrents"] {
@@ -1873,7 +1880,6 @@ p:empty + .sb_notice {
 #sb_services a[href*="7658"]:hover, #sb_services a[href*="7668"]:hover {
   background: #1e0b28 var(--webserver) no-repeat 5px center;
 }
-
 
 #sb_services a[href*="/tracker"] {
   background: #000010 var(--zzzot) no-repeat 5px center;
