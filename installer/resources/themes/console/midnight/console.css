@@ -77,7 +77,6 @@ div.clearer {
 
 ::selection {
   color: white;
-  background: #22296f !important;
   background: rgba(34, 41, 111, .9) !important;
 }
 
@@ -282,7 +281,6 @@ select[disabled], select[disabled]:hover, select[disabled]:focus, select[disable
   color: var(--a) !important;
   border: 1px solid #27235c !important;
   box-shadow: var(--highlight), 0 0 0 1px #000 !important;
-  background: #000 !important;
   background: var(--btn) !important;
   opacity: .7;
   cursor: default;
@@ -312,7 +310,6 @@ button, button:visited, input[type=submit], input[type=reset] {
   text-shadow: 0 1px 1px #000;
   vertical-align: middle;
   border: 1px solid #27235c;
-  background: #000;
   background: var(--btn) !important;
 }
 
@@ -1027,7 +1024,6 @@ pre {
   color: var(--ink);
   border: var(--border_inner);
   box-shadow: var(--highlight), 0 0 0 4px #225;
-  background: #000;
   background: repeating-linear-gradient(180deg,#000, #002 2px);
 }
 
@@ -1291,9 +1287,7 @@ div.logo hr {
 }
 
 .routersummary h3:hover {
-  box-shadow: inset 0 0 0 1px #101;
   box-shadow: var(--highlight), inset 0 0 1px 1px #a5a;
-  background: linear-gradient(180deg,#001020 50%, #000 50%) !important;
   background: radial-gradient(at center bottom, rgba(96, 32, 96, .6) 0, rgba(0, 0, 0, 0) 80%),
     linear-gradient(90deg, rgba(64,0,64,.03), rgba(96,0,96,.1), rgba(64,0,64,.03)),
     linear-gradient(180deg,#1d1a2d 50%, #000 50%) !important;
@@ -1694,7 +1688,6 @@ p:empty + .sb_notice {
 }
 
 #sb_services a:hover {
-  background: var(--hover);
   background: linear-gradient(90deg, var(--hover), #501f6c);
   background-blend-mode: normal;
 }
@@ -1870,7 +1863,6 @@ p:empty + .sb_notice {
   position: relative;
   border: var(--border_inner);
   box-shadow: var(--highlight), inset 0 2px 2px 2px rgba(0,0,0,.45);
-  background: #000;
   background: repeating-linear-gradient(90deg, #000 1px, #000 2px, #003 2px, #003 4px);
   opacity: 1;
 }
@@ -1884,7 +1876,6 @@ p:empty + .sb_notice {
   height: 14px;
   max-width: 100%;
   box-shadow: var(--highlight), inset 0 -2px 4px rgba(0,0,0,.6);
-  background: #227;
   background: linear-gradient(90deg, rgba(0,0,0,0) 100px, rgba(255,0,255,.1) 160px, rgba(0,0,255,.15)),
     linear-gradient(180deg, #33a, #226 50%, #003 50%, #000);
 }
@@ -2011,7 +2002,6 @@ p:empty + .sb_notice {
   color: #944;
   border: 1px solid #311;
   box-shadow: 0 0 0 1px #003, var(--highlight), inset 0 0 2px 1px #611 !important;
-  background: #200010;
   background: radial-gradient(circle, #200010, #000);
 }
 
@@ -2019,7 +2009,6 @@ p:empty + .sb_notice {
   color: #d00;
   border: 1px solid #a00;
   box-shadow: 0 0 0 1px #003, var(--highlight), inset 0 0 2px 1px #d00 !important;
-  background: #300;
   background: radial-gradient(circle, #300000, #100000);
 }
 
@@ -2027,7 +2016,6 @@ p:empty + .sb_notice {
   color: #911;
   border: 1px solid #400;
   box-shadow: 0 0 0 1px #003, var(--highlight), inset 0 0 2px 1px #700 !important;
-  background: #100;
   background: radial-gradient(circle, #200000, #080000);
 }
 
@@ -2035,7 +2023,6 @@ p:empty + .sb_notice {
   color: #991;
   border: 1px solid #771;
   box-shadow: 0 0 0 1px #003, var(--highlight), inset 0 0 2px 1px #551 !important;
-  background: #110;
   background: linear-gradient(90deg, #220, #000, #220);
 }
 
@@ -2043,7 +2030,6 @@ p:empty + .sb_notice {
   color: #999;
   border: var(--border_inner);
   box-shadow: 0 0 0 1px #222, var(--highlight), inset 0 0 2px 1px #333 !important;
-  background: #222;
   background: radial-gradient(circle, #333, #111);
 }
 
@@ -2051,7 +2037,6 @@ p:empty + .sb_notice {
   color: #191;
   border: 1px solid rgba(16,96,16,.7);
   box-shadow: 0 0 0 1px #003, var(--highlight), inset 0 0 2px 1px #131 !important;
-  background: #000300;
   background: radial-gradient(circle, #001600, #000300);
 }
 
@@ -2295,9 +2280,7 @@ div.sorry hr {
   margin: -11px 0 10px;
   padding: 1px 12px 6px;
   border-radius: 0 0 2px 2px;
-  box-shadow: var(--highlight);
   box-shadow: var(--highlight), inset 0 0 2px 1px #191939, inset 0 0 5px 3px #001;
-  background: #000 var(--earth) right -50px bottom -50px no-repeat;
   background: var(--earth) right -50px bottom -50px no-repeat, linear-gradient(135deg, #000010, #000);
   background-size: 100px auto, 100%;
 }
@@ -2398,7 +2381,6 @@ div.sorry hr {
   color: var(--a);
   border: 1px solid #003;
   border-radius: 15px;
-  box-shadow: var(--outline);
   box-shadow: 0 0 1px rgba(0,0,0,.8), var(--highlight);
   background: #002;
 }
@@ -2498,7 +2480,6 @@ div.sorry hr {
 
 .main#config_update .messages {
   box-shadow: var(--highlight) !important;
-  background: var(--infohelp) no-repeat 15px center, var(--earth) bottom right no-repeat #000 !important;
   background: var(--infohelp) no-repeat 15px center, var(--earth) bottom right no-repeat, linear-gradient(135deg, #000020, #000) !important;
   background-size: 28px, 80px auto, 100% !important;
 }
@@ -2531,7 +2512,6 @@ div.confignav {
   font-weight: 700 !important;
   border: 1px solid #26235c;
   box-shadow: var(--highlight);
-  background: #010010 url(images/titles.png) center center repeat-x !important;
   background: var(--th) !important;
   background-size: 4px 100%, 100% !important;
 }
@@ -2570,7 +2550,6 @@ div.confignav {
 
 .tab:active {
   box-shadow: var(--highlight), inset 3px 3px 3px 1px #2d103f !important;
-  background: var(--hover) !important;
   background: radial-gradient(at center bottom, rgba(200, 96, 200, .8) 0, rgba(0, 0, 0, 0) 90%), linear-gradient(180deg,#501f6c, var(--hover)) !important;
 }
 
@@ -3060,14 +3039,12 @@ tr:nth-child(even), #netdbversions tr:nth-child(even), #netdbtransports tr:nth-c
 #netdbcountrylist tr:nth-child(even), #netdbtiers tr:nth-child(even),
 #pluginconfig table tr:nth-child(even) {
   vertical-align: middle;
-  background: #080818;
   background: var(--tr);
 }
 
 tr:nth-child(odd), #netdbversions tr:nth-child(odd), #netdbtransports tr:nth-child(odd), #netdbcountrylist tr:nth-child(odd), #netdbtiers tr:nth-child(odd),
 #pluginconfig tr {
   vertical-align: middle;
-  background: #010010;
   background: var(--tr);
 }
 
@@ -3473,7 +3450,6 @@ fieldset {
   border: var(--border_inner) !important;
   margin: -3px 0 5px 0;
   padding: 7px;
-  background: #000;
   background: linear-gradient(180deg,#010014, #010010 50%);
 }
 
@@ -3559,7 +3535,6 @@ h2#jobrunners {
   margin-top: -11px !important;
   margin-bottom: 5px !important;
   padding: 0;
-  width: 97%;
   width: calc(100% - 8px);
   display: block;
   border: var(--border_inner);
@@ -3714,7 +3689,6 @@ form[action="events"] {
 }
 
 .tablefooter, .tablefooter:hover td {
-  background: #000 url(images/header.png) repeat-x center center !important;
   background: linear-gradient(180deg,#010014, #010010 50%, #010010 100%) !important;
 }
 
@@ -3725,15 +3699,14 @@ form[action="events"] {
 }
 
 h3[id$="con"] { /* peers h3 + tables */
-  background: var(--hover);
   margin-bottom: -2px;
-  border-radius: 0;
   padding: 8px 10px;
-  font-size: 10pt;
   word-spacing: .1em;
   letter-spacing: .08em;
+  font-size: 10pt;
   border: var(--border_inner);
-  border: var(--border_inner);
+  border-radius: 0;
+  background: var(--hover);
 }
 
 h3[id="udpcon"] {
@@ -4017,7 +3990,6 @@ tr.addnew {
 .themechoice:hover .themelabel {
   color: var(--hover);
   border-top: 1px solid var(--hover) !important;
-  background: #000 !important;
   background: linear-gradient(180deg,#1e0b28 50%, #0a030d 50%) !important;
 }
 
@@ -4126,7 +4098,6 @@ p#helptranslate {
   color: var(--a);
   border-top: var(--border_inner) !important;
   box-shadow: var(--highlight);
-  background: #001;
   background: linear-gradient(180deg,#141221, #001);
 }
 
@@ -4236,7 +4207,6 @@ td#themeselect {
 .langselect:hover .ui_lang {
   color: var(--hover);
   border-top: 1px solid var(--hover);
-  background: #000;
   background: linear-gradient(180deg,#1e0b28 50%, #0a030d 50%) !important;
 }
 
@@ -4290,16 +4260,15 @@ td#themeselect {
   margin: 10px -4px 0 !important;
   padding: 3px 2px 4px;
   width: 124px;
+  text-align: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   text-transform: capitalize;
-  text-align: center;
   color: var(--a);
   border-top: var(--border_inner);
   border-radius: 0 0 2px 2px;
   box-shadow: var(--highlight);
-  background: #001;
   background: linear-gradient(180deg,#141221, #001);
 }
 
@@ -4716,7 +4685,6 @@ table#addkeyring tr:last-child td {
 }
 
 #addkeyring textarea, #addkeyring input[type=text] {
-  width: 95%;
   width: calc(100% - 15px);
   resize: none;
 }
@@ -4800,16 +4768,15 @@ h3#pconfig {
 }
 
 #webappconfig td:first-child::after {
-  content: "";
-  display: inline-block;
   min-height: 28px;
+  display: inline-block;
   vertical-align: middle;
+  content: "";
 }
 
 #pluginconfig td:last-child table {
-  padding: 5px;
   margin: 5px 15px 5px 5px !important;
-  width: 99%;
+  padding: 5px;
   width: calc(100% - 8px);
 }
 
@@ -5007,7 +4974,6 @@ form > table {
 }
 
 #i2pupdates input[name*="URL"], #i2pupdates textarea {
-  width: 98%;
   width: calc(100% - 10px);
   resize: none;
 }
@@ -5055,7 +5021,6 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 }
 
 #loggingoptions textarea {
-  width: 99%;
   width: calc(100% - 8px);
   resize: none;
 }
@@ -5085,8 +5050,6 @@ table#sidebarconf {
   padding: 6px !important;
   min-width: 0;
   border-radius: 1px;
-  background: #000;
-  background: 8px 5px no-repeat, var(-button) !important;
 }
 
 #sidebarconf button:active {
@@ -5098,8 +5061,8 @@ table#sidebarconf {
 }
 
 #sidebarconf button img {
-  height: 12px;
   width: 12px;
+  height: 12px;
 }
 
 #sidebarconf th:nth-child(1), .homelinkedit th:first-child, #consolepass th:first-child {
@@ -5450,7 +5413,6 @@ div#volunteer {
   text-align: left;
   font-family: var(--monospaced);
   color: #393;
-  background: #002;
   background: linear-gradient(90deg, #000, #000016) !important;
 }
 
@@ -5604,7 +5566,6 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 
 #netdboverview {
   margin: -4px auto 8px;
-  background: #000010;
   background: repeating-linear-gradient(180deg,rgba(0,0,0,.7) 2px, rgba(0,0,16,.5) 4px);
   background-size: 100% 4px;
 }
@@ -6581,7 +6542,6 @@ table#jardump {
 }
 
 #jardump tr:hover td:first-child b {
-  width: 95%;
   width: calc(100% - 12px);
   border: 1px solid #001;
   box-shadow: 0 0 1px 0 #001;
@@ -7146,7 +7106,6 @@ div.app {
   text-align: center !important;
   border: var(--border_inner);
   box-shadow: var(--highlight);
-  background: #000;
   background: linear-gradient(180deg,#020020, #000);
   will-change: transform;
 }
@@ -7302,7 +7261,6 @@ div.app:active img {
   border-top: var(--border_inner);
   border-radius: 0 0 2px 2px;
   box-shadow: var(--highlight);
-  background: #001;
   background: linear-gradient(180deg,#141221, #001);
 }
 
@@ -7316,17 +7274,16 @@ div.app:active img {
   padding: 2px 0;
   display: inline-block;
   max-width: 144px;
+  overflow: hidden;
   text-overflow: ellipsis;
   text-decoration: none !important;
-  overflow: hidden;
   outline: none;
 }
 
 div.app:hover .applabel {
-  border-top: 1px solid var(--hover) !important;
-  background: #000;
-  background: linear-gradient(180deg,#1e0b28 50%, #0a030d 50%);
   color: var(--hover);
+  border-top: 1px solid var(--hover) !important;
+  background: linear-gradient(180deg,#1e0b28 50%, #0a030d 50%);
 }
 
 /* home search */
@@ -7723,7 +7680,6 @@ span#distance {
 
 #sybilnav ul li:hover {
   border: 1px solid var(--hover);
-  background: var(--hover);
   background: linear-gradient(90deg, var(--hover), #501f6c);
 }
 
@@ -8189,13 +8145,12 @@ h4.embeddedtitle#updateplugins {
 }
 
 #manualreseed input[type=text] {
-  width: 50%;
   width: calc(100% - 300px);
 }
 
 #loggingoptions, table#addkeyring {
-  margin-bottom: -3px !important;
   margin-top: -1px;
+  margin-bottom: -3px !important;
 }
 
 /* /configpeers banlist */
@@ -8262,7 +8217,6 @@ h4.embeddedtitle#updateplugins {
 #ipv4, #ipv6, #permabanned tr:nth-child(2) {
   border-top: var(--border_inner) !important;
   border-bottom: var(--border_inner) !important;
-  background: #000 url(images/titles.png) center center repeat-x;
   background: linear-gradient(180deg,#080818 50%, #000 50%);
 }
 
@@ -8755,7 +8709,6 @@ img + tt {
   display: inline-block;
   border: 1px solid #225;
   box-shadow: var(--highlight), inset 0 0 1px 2px #003, 0 0 0 3px #000;
-  background: #002;
   background: linear-gradient(135deg, #001 5%, #000020 15%, #001);
   -webkit-column-break-inside: avoid;
   break-inside: avoid;
@@ -9709,7 +9662,6 @@ label:hover .optbox {
 
 .statusnotes {
   box-shadow: var(--highlight) !important;
-  background: #002 !important;
   background: linear-gradient(90deg, rgba(0,0,24,.6), rgba(0,0,8,.6), rgba(0,0,24,.6)), var(--label) !important;
 }
 
@@ -9802,8 +9754,7 @@ label:hover .optbox {
 .net_bw {
   display: inline-block;
   padding: 5px 8px;
-  background: #002;
-  background: linear-gradient(180deg,#003, #001);
+  background: var(--label);
   box-shadow: 0 0 0 1px #004, var(--highlight);
   white-space: nowrap;
   text-align: center;
@@ -9862,13 +9813,12 @@ tr:nth-child(4) .net_bwrate::before {
 }
 
 .bw_title {
+  margin: 2px -13px 0 -38px;
+  padding: 2px 5px 4px;
   display: block;
   text-align: left;
   font-weight: 700;
   font-size: 11pt;
-  margin: 2px -13px 0 -38px;
-  padding: 2px 5px 4px;
-  background: #000;
   background: linear-gradient(90deg, #000, #001);
 }
 
@@ -9883,9 +9833,9 @@ tr:nth-child(4) .net_bwrate::before {
 #createNewfamily table, #createNewfamily tr, #createNewfamily td,
 #joinfamily table, #joinfamily tr:nth-child(n+3), #joinfamily tr:nth-child(n+3) td, #joinfamily tr:nth-child(n+3) table tr {
   margin: 0;
-  background: none !important;
   border: none !important;
   box-shadow: none !important;
+  background: none !important;
 }
 
 #joinfamily tr:nth-child(n+3) {
@@ -10281,7 +10231,6 @@ input[type="file"]:hover {
   border: 1px solid #113;
   border-radius: 2px 0 0 2px;
   box-shadow: var(--highlight);
-  background: linear-gradient(180deg,#003, #000);
   background: #002;
 }
 
@@ -10414,7 +10363,6 @@ th .version {
   border: 1px solid #113;
   border-radius: 2px;
   box-shadow: var(--highlight);
-  background: #113;
   background: var(--element);
 }
 
@@ -10511,16 +10459,16 @@ th .version {
 }
 
 #floodfills .percentBarInner {
-  display: inline-block;
   width: inherit;
-  background: #900;
-  background: linear-gradient(180deg,rgba(255,255,255,.1) 50%, rgba(0,0,0,.1) 50%), linear-gradient(90deg, #700 25px, #800 40px, #900 50px);
+  display: inline-block;
+  background: linear-gradient(180deg,rgba(255,255,255,.1) 50%, rgba(0,0,0,.1) 50%),
+    linear-gradient(90deg, #700 25px, #800 40px, #900 50px);
 }
 
 #floodfills .percentBarInner[style="width:0%"] {
   width: 100% !important;
-  background: #090;
-  background: linear-gradient(180deg,rgba(255,255,255,.1) 50%, rgba(0,0,0,.1) 50%), linear-gradient(90deg, #070, #080);
+  background: linear-gradient(180deg,rgba(255,255,255,.1) 50%, rgba(0,0,0,.1) 50%),
+    linear-gradient(90deg, #070, #080);
 }
 
 #floodfills .percentBarText {
@@ -10581,33 +10529,27 @@ th .version {
 }
 
 .ff, #profiles .ff {
-  background: #421;
   background: linear-gradient(180deg,#421, #310);
 }
 
 .reachable, #profiles .reachable {
-  background: #131;
   background: linear-gradient(180deg,#131, #121);
 }
 
 .unreachable, #profiles .unreachable {
-  background: #300;
   background: linear-gradient(180deg,#300, #200);
 }
 
 .hidden, #profiles .hidden {
   color: #777;
-  background: #333;
   background: linear-gradient(180deg,#333, #222);
 }
 
 .ssutesting, #profiles .ssutesting {
-  background: #331;
   background: linear-gradient(180deg,#331, #221);
 }
 
 .ssuintro, #profiles .ssuintro {
-  background: #313;
   background: linear-gradient(180deg,#313, #212);
 }
 
@@ -10617,15 +10559,14 @@ th .version {
 @supports (background-blend-mode: luminosity) {  /* exclude ms browsers */
 input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked,
 input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
-  position: relative;
   width: 21px !important;
   height: 21px !important;
-  outline: none;
+  position: relative;
   vertical-align: middle !important;
   box-sizing: border-box;
+  outline: none;
   border: 1px solid #27235c !important;
   box-shadow: var(--highlight), inset 3px 3px 3px 1px #000;
-  background: #001;
   background: linear-gradient(180deg,#030306, #112);
   appearance: none;
   filter: drop-shadow(0 0 1px #000);
@@ -10881,9 +10822,8 @@ html, body {
 #embedded iframe {
   margin: 1px -10px -4px !important;
   width: calc(100% + 20px);
-  background: #001;
-  background: linear-gradient(180deg,#001, #000);
   height: calc(100% + 2px) !important;
+  background: linear-gradient(180deg,#001, #000);
 }
 
 .embedlink {
@@ -12057,12 +11997,10 @@ h1::first-letter {
 
 @keyframes grid-fade {
 from {
-  background: #001000;
   background: repeating-linear-gradient(90deg, rgba(0,0,0,0), #003 1px, rgba(0,0,0,0) 1px, rgba(0,0,0,0) 10px),
     repeating-linear-gradient(180deg,#000, #003 1px, #000 1px, #000 10px);
 }
 to {
-  background: #000;
   background: repeating-linear-gradient(90deg, rgba(0,0,0,0), #000 1px, rgba(0,0,0,0) 1px, rgba(0,0,0,0) 10px),
     repeating-linear-gradient(180deg,#000, #000 1px, #000 1px, #000 10px);
 }
@@ -12474,7 +12412,6 @@ h1 {
   top: 3px;
   z-index: 100;
   box-shadow: var(--highlight), inset 0 0 2px 1px #808 !important;
-  background: #000;
   background: var(--infohelp) no-repeat 15px center,
     var(--close) right 6px top 6px no-repeat, #000 !important;
   background-size: 28px, 14px !important;
@@ -12647,15 +12584,15 @@ a:active #sb_graphstats {
 .routersummary table:not(#sb_localtunnels):not(#sb_services)::before {
   width: 0;
   height: 1px;
+  display: block;
   position: absolute;
   top: -2px;
   left: -1px;
-  display: block;
+  z-index: 99999;
   background: linear-gradient(to left, #717, #404);
   content: "";
   animation: ease-in bar .1s reverse;
   will-change: transform;
-  z-index: 99999;
 }
 
 @keyframes bar {
@@ -12707,8 +12644,7 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
   display: inline-block;
   border: 1px solid #113;
   border-radius: 2px;
-  background: #002;
-  background: linear-gradient(180deg,#003, #001);
+  background: var(--label);
 }
 
 .lsdest {
@@ -12716,20 +12652,19 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
   border-radius: 0;
   border-left-width: 4px;
   border-right-width: 4px;
-  background: var(--hardhat) no-repeat 4px center / 14px, linear-gradient(180deg,#003, #001);
+  background: var(--hardhat) no-repeat 4px center / 14px, var(--label);
 }
 
 .lsdest.published {
   padding-left: 38px;
   background: var(--hardhat) no-repeat 4px center / 14px,
     var(--globe) no-repeat 22px center / 12px,
-    linear-gradient(180deg,#003, #001);
+    var(--label);
 }
 
 .leaseset th:last-child a[href$="i2p/"] {
   padding-left: 22px;
-  background: #020 var(--link) no-repeat 5px center;
-  background: var(--link) no-repeat 5px center / 12px, linear-gradient(180deg,#003, #001);
+  background: var(--link) no-repeat 5px center / 12px, var(--label);
 }
 
 /* /profiles group icons */
