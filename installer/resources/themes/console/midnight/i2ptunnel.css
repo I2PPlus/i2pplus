@@ -21,7 +21,6 @@ body {
   font-family: var(--bodyfont);
   font-size: 9pt;
   color: #c9ceff;
-  background: #000010;
   background: repeating-linear-gradient(180deg,rgba(0,0,24,.75) 3px, rgba(0,0,0,.9) 5px, rgba(0,0,0,.7) 6px), var(--tile), #000010;
 }
 
@@ -51,13 +50,7 @@ body.iframed {
 }
 
 ::selection {
-  background: #22296f !important;
   background: rgba(34, 41, 111, .9) !important;
-  color: white;
-}
-
-::-moz-selection {
-  background: #22296f !important;
   color: white;
 }
 
@@ -263,11 +256,6 @@ h2, h3 {
 
 .panel:hover h2, .panel:hover h3 {
   background-blend-mode: normal, normal, normal !important;
-}
-
-h2::first-letter {
-  margin-right: 1px;
-  font-size: 110%;
 }
 
 #messages h2 {
@@ -494,7 +482,6 @@ textarea {
 textarea:focus {
   color: #c9ceff;
   border: 1px solid #6466a5 !important;
-  box-shadow: 0 0 0 1px rgba(101, 39, 135, .5);
   box-shadow: 0 0 0 1px rgba(101, 39, 135, .5), 0 0 2px 2px #202;
   background: #000 !important;
   transition: ease filter .3s 0s;
@@ -514,12 +501,11 @@ textarea#statusMessages, textarea#statusMessages:active, textarea#statusMessages
 }
 
 .freetext {
-  width: 150px;
-  border: 1px solid #302b74;
   padding: 4px;
+  width: 150px;
   font: bold 9pt var(--monospaced);
-  background: #fff;
   color: #7171d1;
+  border: 1px solid #302b74;
   box-shadow: inset 2px 2px 1px #ccc;
   cursor: text;
 }
@@ -618,18 +604,17 @@ input[type=password] {
 
 input[type=text], input[type=password], textarea, textarea[readonly="readonly"]:focus {
   color: #7171d1;
-  border: 1px solid #2b2668;
-  box-shadow: inset 0 0 3px 3px #000;
+  border: 1px solid #27235c;
+  box-shadow: var(--highlight), 0 0 0 1px #000;
   background: #000;
-  background: linear-gradient(180deg,#000 0%, #000019 100%);
   filter: none;
 }
 
 input[type=text]:focus, input[type=password]:focus {
   color: #c9ceff;
-  background: #000;
-  box-shadow: 0 0 0 1px rgba(101, 39, 135, .5);
-  box-shadow: 0 0 0 1px rgba(101, 39, 135, .5), 0 0 2px 2px #202;
+  border: 1px solid #6466a5;
+  box-shadow: 0 0 0 1px rgba(101, 39, 135, .5), 0 0 2px 2px #202, inset 3px 3px 3px #000;
+  background: linear-gradient(180deg,#002,#000028);
   transition: ease filter .3s 0s;
 }
 
@@ -740,7 +725,6 @@ button, input[type=submit], input[type="reset"], a.control {
   text-align: right !important;
   border-top: 1px solid #26235c !important;
   box-shadow: var(--highlight), inset 0 0 2px 1px #191939, inset 0 0 5px 3px #002;
-  background: #000;
   background: linear-gradient(180deg,#001, #000);
 }
 
@@ -790,7 +774,6 @@ input {
 }
 
 select#profile, #sigType, #targetDestination {
-  width: 70%;
   width: calc(100% - 10px) !important;
 }
 
@@ -1030,7 +1013,6 @@ input.tunnelName, input.tunnelDescriptionText, #userAgents, .tunnelDescription, 
   font-size: 11pt;
   border: 1px solid #005;
   box-shadow: var(--highlight), inset 0 0 4px 4px rgba(0,0,0,.4), 0 0 0 1px #000, 0 0 0 2px #001, 0 0 0 6px #002, 0 0 0 8px #003;
-  background: #002;
   background: repeating-linear-gradient(180deg,#002 2px, #001 4px);
 }
 
@@ -1367,31 +1349,29 @@ input[type=text] + label {
 }
 
 .displayText {
-  font-family: var(--monospaced);
-  width: calc(100% - 10px);
-  width: 290px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  word-break: break-all;
   margin: 5px;
   padding: 4px;
-  user-select: all;
-  border: 1px solid #302b74;
-  background: #000;
-  background: linear-gradient(180deg,#000 0%, #000019 100%);
+  width: calc(100% - 10px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  font-family: var(--monospaced);
   color: #7171d1;
+  border: 1px solid #302b74;
+  background: linear-gradient(180deg,#000 0%, #000019 100%);
   box-shadow: var(--highlight);
+  user-select: all;
 }
 
 .displayText:hover, .displayText:focus {
-  overflow: auto;
-  text-overflow: clip;
   margin: .5px 5px;
   padding: 2px 4px;
-  background: #000;
+  overflow: auto;
+  text-overflow: clip;
   color: #dd0;
   outline: none;
+  background: #000;
 }
 
 .displayText:focus {
@@ -1577,11 +1557,11 @@ input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input
   vertical-align: middle !important;
   border: 1px solid #363181 !important;
   box-shadow: var(--highlight), inset 3px 3px 3px 1px #000;
-  background: #001;
   background: linear-gradient(180deg,#030306, #112);
   box-sizing: border-box;
   -moz-appearance: none;
   -webkit-appearance: inherit;
+  appearance: none;
   filter: drop-shadow(0 0 1px #000);
   will-change: transform;
 }

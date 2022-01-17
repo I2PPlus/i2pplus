@@ -75,12 +75,12 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         _context.statManager().createRateStat("netDb.successPeers", "Number of peers we sent a search to that succeeded", "NetworkDatabase", rate);
         _context.statManager().createRateStat("netDb.failedPeers", "Number of peers failing to respond to a NetDb lookup", "NetworkDatabase", rate);
         _context.statManager().createRateStat("netDb.searchCount", "Total number of searches sent", "NetworkDatabase", rate);
-        _context.statManager().createRateStat("netDb.failedRetries", "Number of additional queries for a failed Iterative search", "NetworkDatabase", rate);
-        _context.statManager().createRateStat("netDb.successRetries", "Number of additional queries for a successful Iterative search", "NetworkDatabase", rate);
+        _context.statManager().createRateStat("netDb.failedRetries", "Additional queries for failed Iterative search", "NetworkDatabase", rate);
+        _context.statManager().createRateStat("netDb.successRetries", "Additional queries for successful Iterative search", "NetworkDatabase", rate);
         _context.statManager().createRateStat("netDb.searchMessageCount", "Total number of messages for all searches sent", "NetworkDatabase", rate);
-        _context.statManager().createRateStat("netDb.searchReplyValidated", "Number of NetDb search replies we are able to validate (fetch)", "NetworkDatabase", rate);
-        _context.statManager().createRateStat("netDb.searchReplyNotValidated", "Number of NetDb search replies we are NOT able to validate (fetch)", "NetworkDatabase", rate);
-        _context.statManager().createRateStat("netDb.searchReplyValidationSkipped", "Number of NetDb search replies from unreliable peers that we skip", "NetworkDatabase", rate);
+        _context.statManager().createRateStat("netDb.searchReplyValidated", "Validated NetDb search replies", "NetworkDatabase", rate);
+        _context.statManager().createRateStat("netDb.searchReplyNotValidated", "Unvalidated NetDb search replies", "NetworkDatabase", rate);
+        _context.statManager().createRateStat("netDb.searchReplyValidationSkipped", "Skipped NetDb search replies (unreliable peers)", "NetworkDatabase", rate);
         _context.statManager().createRateStat("netDb.republishQuantity", "Number of peers we need to send a found LeaseSet to", "NetworkDatabase", rate);
         // for ISJ
         _context.statManager().createRateStat("netDb.RILookupDirect", "Number of direct Iterative RouterInfo lookups", "NetworkDatabase", rate);

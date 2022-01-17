@@ -992,13 +992,16 @@ p:empty + .sb_notice {
   background-image: var(--zzzot);
 }
 
+#sb_services a[href*="/outproxy"]::before {
+  background-image: var(--socks);
+}
+
 #sb_services a::before {
   vertical-align: sub !important;
-  filter: saturate(.05);
+  filter: saturate(.4);
 }
 
 #sb_services a:hover::before {
-  mix-blend-mode: normal;
   filter: saturate(1);
 }
 
