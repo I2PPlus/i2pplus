@@ -15,6 +15,7 @@
   --ink_light: #5b5b71;
   --ink_lighter: #71718e;
   --highlight: inset 0 0 0 1px #fff;
+  --outline: 0 0 0 1px #000;
   --h2: linear-gradient(180deg,#fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(135deg, #fcfcff 15%, rgba(231, 231, 255, .8) 35%);
   --border: #6c6c93;
   --border_inner: #9898b3;
@@ -276,7 +277,7 @@ hr {
 .freetext:focus, .displayText:focus, textarea:focus {
   color: #19191f;
   border: 1px solid #676c7f;
-  box-shadow: 0 0 1px #89f;
+  box-shadow: 0 0 1px #89f, var(--highlight), inset 3px 3px 3px rgba(0,0,0,.3) !important;
   background: #fff;
   outline: none;
 }
@@ -932,8 +933,9 @@ input.tunnelName, input.tunnelDescriptionText, #userAgents, .freetext.tunnelDesc
 }
 
 input.tunnelName, input.tunnelDescriptionText, #userAgents, .freetext.tunnelDescription,
-#websiteName, #localDest, #altlocaldest, .proxyList, #targetDestination, #leasesetKey, input[type=text]:not([readonly]) {
-  box-shadow: var(--highlight), inset 3px 3px 3px #d2d2de;
+#websiteName, #localDest, #altlocaldest, .proxyList, #targetDestination, #leasesetKey,
+input[type=text]:not([readonly]) {
+  box-shadow: var(--highlight), inset 2px 2px 2px rgba(0,0,0,.3);
 }
 
 #targetHost, .host {

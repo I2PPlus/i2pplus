@@ -1228,7 +1228,19 @@ tr:nth-child(even) + .peerinfo:nth-child(odd) {
   margin: 0 auto;
   border: var(--border_main);
   box-shadow: var(--btn_shadow_active);
+  background: repeating-linear-gradient(90deg,#eef 1px, #eef 5px, #fff 6px, #fff 11px);
+  background-size: 400%;
+}
+
+.active .percentBarOuter {
   background: repeating-linear-gradient(135deg,var(--bg3) 1px, var(--bg3) 5px, var(--bg4) 6px, var(--bg4) 11px);
+  background-size: 150%;
+  animation: activity .5s linear 2.5s both;
+}
+
+@keyframes activity {
+  0%, 100% {background-position: left center}
+  50% {background-position: center center}
 }
 
 .percentBarInner, .txBarInner {
@@ -1240,7 +1252,11 @@ tr:nth-child(even) + .peerinfo:nth-child(odd) {
   opacity: .8;
 }
 
-.peerinfo .percentBarInner {
+.inactive .percentBarInner {
+  background: #dde;
+}
+
+.active .peerinfo .percentBarInner {
   background: linear-gradient(180deg,var(--bg), var(--bg3) 50%,#bbf 50%,#99f);
 }
 

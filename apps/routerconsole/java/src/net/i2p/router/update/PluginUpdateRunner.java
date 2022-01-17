@@ -138,7 +138,7 @@ class PluginUpdateRunner extends UpdateRunner {
                     _mgr.notifyTaskFailed(this, msg, null);
                     return;
                 }
-                updateStatus("<b>" + _t("Downloading plugin from {0}", _xpi2pURL) + "</b>");
+                updateStatus("<b>" + _t("Downloading plugin from {0}", _xpi2pURL).replace("http://", "") + "</b>");
                 try {
                     if (shouldProxy)
                         // 10 retries!!
@@ -415,7 +415,7 @@ class PluginUpdateRunner extends UpdateRunner {
                 version.indexOf('<') >= 0 || version.indexOf('>') >= 0 ||
                 appName.startsWith(".") || appName.indexOf('/') >= 0 || appName.indexOf('\\') >= 0) {
                 to.delete();
-                statusDone("<b>" + _t("Plugin from {0} has invalid name or version", url) + "</b>");
+                statusDone("<b>" + _t("Plugin from {0} has invalid name or version", url).replace("http://", "") + "</b>");
                 return;
             }
             if (!version.equals(sudVersion)) {
@@ -472,7 +472,8 @@ class PluginUpdateRunner extends UpdateRunner {
                 if (oldVersion == null ||
                     VersionComparator.comp(oldVersion, version) >= 0) {
                     to.delete();
-                    statusDone("<b>" + _t("Downloaded plugin version {0} is not newer than installed plugin", version) + "</b>");
+                    statusDone("<b>" + _t("Downloaded plugin version {0} is not newer than installed plugin", version)
+                                       .replace("Downloaded plugin version", "") + "</b>");
                     return;
                 }
                 minVersion = PluginStarter.stripHTML(props, "min-installed-version");

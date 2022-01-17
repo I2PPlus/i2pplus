@@ -3032,6 +3032,21 @@ table#wrapperlogs {
   padding-bottom: 6px;
 }
 
+#routerinformation td, #enviro td, #jobstats td, #jardump td, #jardump th {
+  border-top: var(--border_soft) !important;
+  border-bottom: var(--border_soft) !important;
+}
+
+#routerinformation tr:first-child td, #enviro tr:first-child td,
+#jobstats tr:first-child td, #jobs #jobstats tr:last-child td {
+  border-top: 1px solid var(--border_inner) !important;
+}
+
+#routerinformation tr:last-child td, #enviro tr:last-child td,
+#jobstats tr:last-child td, #jobs #jobstats tr:nth-last-child(2) td {
+  border-bottom: 1px solid var(--border_inner) !important;
+}
+
 #logs #enviro:hover td {
   color: #19191f;
   border-top: 1px inset transparent;
@@ -10465,9 +10480,18 @@ td.optionsave, .formaction, table#addkeyring tr:last-child td {
   text-transform: lowercase;
 }
 
-#events tr:not(:last-child) td {
+#events tr:not(:last-child) td, #profilelist tr:not(:last-child) td,
+#profile_defs tr:not(:last-child) td, #profiles tr:not(:last-child) td {
   border-top: var(--border_soft);
   border-bottom: var(--border_soft);
+}
+
+#profilelist tr:first-child td, #profile_defs tr:first-child td {
+  border-top: var(--border_inner);
+}
+
+#profiles th {
+  font-size: 90% !important;
 }
 
 #eventlog th, #eventlog td {
@@ -12442,9 +12466,7 @@ iframe {
     padding-left: 10px;
     background: none;
   }
-  form[action="events"] select {
-    min-width: 80px;
-  }
+  form[action="events"] select {min-width: 80px}
   form[action="events"] select + b,
   form[action="events"] input[type=submit] {margin-left: 3px}
   .tunnel_id, .tunnel_peer {
@@ -12471,6 +12493,15 @@ iframe {
   .encDests code {max-width: 60px}
   .encKey {font-size: 80%}
   #tunnels .confignav {margin: -1px -5px -10px}
+  #jardump th, #jardump th.subheading, .subheading b {
+    font-size: 8.5pt !important;
+  }
+  #jardump th:nth-child(3), #jardump td:nth-child(3),
+  #jardump th:nth-child(4), #jardump td:nth-child(4),
+  #jardump th:nth-child(6), #jardump td:nth-child(6),
+  #jardump th:nth-child(9), #jardump td:nth-child(9) {
+    display: none;
+  }
 }
 
 @media screen and (max-width: 900px) {
@@ -12566,7 +12597,7 @@ iframe {
   }
   #jobstats tr:last-child td:first-child, #jobstats tr:last-child:hover td:first-child {
     padding: 7px 8px;
-    background-image: none;
+    background-image: none !important;
   }
   #ntcpconnections .spacer {display: none}
   .tunnel_id:not(:empty) {
@@ -12628,7 +12659,7 @@ iframe {
 
 @media screen and (min-width: 1500px) {
   body, .main, .main td, .news p, #news p, .newscontent p, .tab, .tab2,
-  .main li b, .joblog li, .themelabel, .ui_lang, #sidebar button.download,
+  .main li b, .themelabel, .ui_lang, #sidebar button.download,
   #peerdefs, #profile_defs, #thresholds, #configinfo, .infohelp, .infowarn,
   button, input, select, #configinfo th, code, th, .statusnotes,
   #help code, #help tt, #console code, .percentBarText,
@@ -12793,7 +12824,7 @@ iframe {
   #sb_services {width: 242px !important}
   #sidebar .sb_newsheadings table {width: 240px !important}
   #sidebar h3::after {
-    min-height: 18px;
+    min-height: 19px;
     display: inline-block;
     vertical-align: middle;
     box-sizing: border-box;
@@ -12866,7 +12897,8 @@ iframe {
     background-size: 12px;
     background-position: left center !important;
   }
-  .topness, .footnote {
+  .topness, .footnote, #jobs .joblog li, #jobs #schedjobs td,
+  #jobstats td:first-child, #jobs .jobcount, #jobs li b, #jardump th {
     font-size: 9pt !important;
   }
 }

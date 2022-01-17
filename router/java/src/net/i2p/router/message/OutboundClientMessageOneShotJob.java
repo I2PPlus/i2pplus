@@ -145,7 +145,8 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     private final static long OVERALL_TIMEOUT_MS_DEFAULT = 60*1000;
     private final static long OVERALL_TIMEOUT_MS_MIN = 8*1000;
     private final static long OVERALL_TIMEOUT_MS_MAX = 90*1000;
-    private final static long LS_LOOKUP_TIMEOUT = 15*1000;
+//    private final static long LS_LOOKUP_TIMEOUT = 15*1000;
+    private final static long LS_LOOKUP_TIMEOUT = 20*1000;
     private final static long OVERALL_TIMEOUT_NOLS_MIN = OVERALL_TIMEOUT_MS_MIN + LS_LOOKUP_TIMEOUT;
     private final static long REPLY_TIMEOUT_MS_MIN = OVERALL_TIMEOUT_MS_DEFAULT - 5*1000;
     // callback timeout. Longer so we can have success-after-failure

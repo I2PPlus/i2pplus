@@ -2735,30 +2735,31 @@ td.commentAuthor .commentAuthorName {
   margin-right: 3px;
 }
 
-.info_tracker {
-  margin: 2px 1px;
-  padding: 2px 6px 2px 18px;
-  max-width: 150px;
+.info_tracker, .info_tracker a,
+#snarkTorrentEdit .info_tracker a,
+#torrentInfo .info_tracker a {
   display: inline-block;
-  white-space: nowrap;
   vertical-align: middle;
+  white-space: nowrap !important;
   overflow: hidden;
   text-overflow: ellipsis;
   line-height: 1.2;
-  color: #ccccf0;
-  box-shadow: 0 0 0 1px #ccf;
-  border-radius: 3px;
-  background: #fff var(--tracker) no-repeat 3px center / 14px;
-  background-size: 14px auto;
+  font-size: 8.5pt !important;
 }
 
-.info_tracker a {
-  max-width: 130px;
-  display: inline-block;
-  white-space: nowrap !important;
-  vertical-align: middle;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.info_tracker a:not(:hover),
+#snarkTorrentEdit .info_tracker a:not(:hover),
+#torrentInfo .info_tracker a:not(:hover) {
+  color: #58589b;
+}
+
+.info_tracker {
+  margin: 2px 1px;
+  padding: 2px 6px 2px 16px;
+  max-width: 150px;
+  box-shadow: 0 0 0 1px #ccf;
+  border-radius: 3px;
+  background: #fff var(--tracker) no-repeat 3px center / 12px;
 }
 
 .info_tracker a[href*=".b32.i2p"] {
@@ -2770,7 +2771,8 @@ td.commentAuthor .commentAuthorName {
 }
 
 .info_tracker:hover {
-  background: var(--tracker_hover) no-repeat 3px center / 14px, linear-gradient(180deg,#fff 50%,#ddf 50%) !important;
+  background: var(--tracker_hover) no-repeat 3px center / 12px,
+    linear-gradient(180deg,#fff 50%,#ddf 50%) !important;
 }
 
 .info_tracker:active, .info_tracker:active a {
@@ -3319,12 +3321,12 @@ td.trackerDetails img {
 }
 
 @keyframes downloadbar {
-  0% {background-position: left center}
-  100% {background-position: 20% center}
+  0%,100% {background-position: left center}
+  50% {background-position: 20% center}
 }
 
 .downloading.active .percentBarOuter, .peerinfo.active .percentBarOuter {
-  animation: downloadbar 5s linear both infinite;
+  animation: downloadbar 1s linear 3s both;
   opacity: 1;
 }
 
@@ -3983,7 +3985,7 @@ td.torrentAction input[type=submit] {
 }
 
 #snarkTorrentEdit .info_tracker {
-  min-width: 60px;
+  min-width: 68px;
   text-align: left;
 }
 
