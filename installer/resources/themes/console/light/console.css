@@ -998,11 +998,10 @@ p:empty + .sb_notice {
 
 #sb_services a::before {
   vertical-align: sub !important;
-  filter: saturate(.05);
+  filter: saturate(.4);
 }
 
 #sb_services a:hover::before {
-  mix-blend-mode: normal;
   filter: saturate(1);
 }
 
