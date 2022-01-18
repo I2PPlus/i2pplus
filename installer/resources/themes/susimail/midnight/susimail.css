@@ -12,8 +12,8 @@
   --highlight: inset 0 0 0 1px #000;
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
-  --button: linear-gradient(180deg,#11101c 50%, #000010 50%);
-  --button_hover: linear-gradient(180deg,#202 50%, #000 50%);
+  --button: linear-gradient(180deg,#11101c 50%,#000010 50%);
+  --button_hover: linear-gradient(180deg,#202 50%,#000 50%);
 }
 
 html, body {
@@ -60,41 +60,19 @@ div.header {
 }
 
 hr {
-  color: #26225d;
-  background: #26225d;
-  height: 1px;
-  border: 0 solid #26225d;
-  width: 100%;
   margin: 5px 0;
+  width: 100%;
+  height: 1px;
   text-align: center;
+  color: #26225d;
+  border: 0 solid #26225d;
+  background: #26225d;
 }
 
-li {
-  color: #c9ceff;
-  line-height: 12pt;
-  font-size: 10pt;
-  margin-left: 5mm;
-  margin-right: 5mm;
-}
-
-p {
-  color: #c9ceff;
-  line-height: 12pt;
-  margin-left: 5mm;
-  margin-right: 5mm;
-  font-size: 9pt;
-}
-
-p.hl {
-  font-size: 12pt;
-  letter-spacing: 2pt;
-  line-height: 18pt;
-  font-weight: 700;
-}
-
-p.text {
-  margin-left: 10mm;
-  margin-right: 10mm;
+li, p {
+  margin-left: 15px;
+  margin-right: 15px;
+  line-height: 1.5;
 }
 
 p.info, p.error {
@@ -105,7 +83,8 @@ p.info, p.error {
   color: #c9ceff;
   border: 1px solid #27235c;
   border-radius: 2px;
-  background: var(--infohelp) no-repeat 10px center / 28px, linear-gradient(90deg, #000000, #010015 65%, #020018 90%);
+  background: var(--infohelp) no-repeat 10px center / 28px,
+    linear-gradient(90deg, #000000, #010015 65%, #020018 90%);
 }
 
 p.error {
@@ -261,11 +240,10 @@ td.mailListSize {
 
 #mailbox th {
   padding: 8px 8px 8px 3px;
-  font-weight: 700 !important;
-  font-size: 8.5pt;
-  font-size: 9pt;
   white-space: nowrap;
   text-transform: capitalize !important;
+  font-size: 9pt;
+  font-weight: 700 !important;
   text-shadow: 0 1px 1px #000;
   border-top: 1px solid #27235c;
   border-bottom: none;
@@ -281,7 +259,6 @@ th.mailListSubject {
 
 #mailbox td {
   padding: 4px 8px;
-  border-right: 1px solid #27235c;
   border-right: 1px solid rgba(38, 35, 92,.7);
 }
 
@@ -290,14 +267,14 @@ th.mailListSubject {
 }
 
 #mailbox td[colspan="3"], #mailbox td[colspan="4"] {
-  border-top: 1px solid #27235c !important;
   padding: 6px 0 2px !important;
+  border-top: 1px solid #27235c !important;
 }
 
 #mailbox td[colspan="3"] {
-  border-bottom: none;
   padding-left: 6px !important;
   padding-bottom: 6px !important;
+  border-bottom: none;
   background: #000;
 }
 
@@ -321,8 +298,8 @@ th.mailListSubject {
 }
 
 #mailbox td#from {
-  white-space: nowrap;
   width: 100px;
+  white-space: nowrap;
 }
 
 #mailbox td#subject {
@@ -340,8 +317,8 @@ td#deleteattached {
 }
 
 #attachedfile {
-  border-bottom: 1px dotted #322e6b;
   padding: 5px 5px 5px 8px !important;
+  border-bottom: 1px dotted #322e6b;
 }
 
 tr.bottombuttons:last-child td {
@@ -368,19 +345,17 @@ a:active {
 }
 
 td {
-  color: #c9ceff;
   margin: 0 5px;
-  font-size: 9pt;
   padding: 2px;
+  color: #c9ceff;
+  font-size: 9pt;
 }
 
 .list0 {
-  background-color: #080818;
   background: linear-gradient(180deg,#080818, #010010);
 }
 
 .list1 {
-  background-color: #010010;
   background: linear-gradient(180deg,#080818, #010010);
 }
 
@@ -389,8 +364,6 @@ td {
 .list0 td, .list1 td {
   padding: 4px;
   color: #7670c2;
-  border-top: 1px solid #27235c;
-  border-bottom: 1px solid #27235c;
   border-top: 1px solid rgba(38, 35, 92,.7);
   border-bottom: 1px solid rgba(38, 35, 92,.7);
 }
@@ -400,8 +373,8 @@ td {
 }
 
 .list0:hover, .list1:hover, .list0:hover a, .list1:hover a {
-  background: #1e0b28;
   color: #bf2295;
+  background: #1e0b28;
 }
 
 .list0:active, .list1:active, .list0:active a, .list1:active a {
@@ -421,9 +394,9 @@ td {
 }
 
 .list0 td:first-child, .list1 td:first-child, #mailbox th:first-child {
-  text-align: center !important;
   width: 1%;
   white-space: nowrap;
+  text-align: center !important;
 }
 
 td.mailListSender {
@@ -482,12 +455,12 @@ pre {
 }
 
 .page {
-  color: #c9ceff;
   margin: 0;
   padding: 0;
-  font-size: 9pt !important;
-  text-align: center;
   min-width: 700px;
+  text-align: center;
+  font-size: 9pt !important;
+  color: #c9ceff;
 }
 
 table {
@@ -495,13 +468,12 @@ table {
 }
 
 th {
+  padding: 7px;
   font-size: 9pt;
   font-weight: 700;
-  background: #001;
-  background: linear-gradient(180deg,#080818, #001) !important;
-  padding: 7px;
   border-bottom: 1px solid #27235c;
   border-top: 1px solid #27235c;
+  background: linear-gradient(180deg,#080818, #001) !important;
 }
 
 form {
@@ -739,8 +711,9 @@ input.delete {
   width: 600px;
   padding: 0 0 10px;
   box-shadow: 0 0 2px 1px #000, var(--highlight), inset 0 0 0 2px #000026;
-  background: #000010;
-  background: url(images/hatter_med.png) right bottom no-repeat, repeating-linear-gradient(180deg,rgba(0,0,0,.9), rgba(0,0,32,.5) 2px, rgba(0,0,0,.5) 3px), linear-gradient(180deg,#000016, #000006);
+  background: url(images/hatter_med.png) right bottom no-repeat,
+    repeating-linear-gradient(180deg,rgba(0,0,0,.9), rgba(0,0,32,.5) 2px, rgba(0,0,0,.5) 3px),
+    linear-gradient(180deg,#000016, #000006);
   background-size: 27% auto, 100%, 100%;
   filter: opacity(0);
   animation: linear fade-in .15s .6s forwards;
@@ -753,7 +726,7 @@ input.delete {
 
 #dologin h1 {
   margin: -1px -1px 15px -1px;
-  padding: 10px 16px;
+  padding: 10px 16px 10px 48px;
   text-transform: uppercase;
   font-size: 14pt;
   text-align:left;
@@ -762,7 +735,8 @@ input.delete {
   text-shadow: 0 1px 1px #000;
   border: 1px solid #211e51;
   box-shadow: var(--highlight);
-  background: linear-gradient(180deg,#080818 50%, #000008 50%) !important;
+  background: url(images/favicon.svg) no-repeat 12px center / 26px,
+    linear-gradient(180deg,#080818 50%, #000008 50%) !important;
 }
 
 #dologin table {
@@ -829,7 +803,6 @@ input.delete {
 #dologin tr:last-child a:hover {
   color: #bf2295;
   box-shadow: 0 0 1px #000, var(--highlight);
-  background: #030;
   background: linear-gradient(180deg,#003 50%, #000 50%) #000;
   transition: ease all .2s;
 }
@@ -1437,7 +1410,6 @@ input[type=submit]:active, input.cancel:active, #pageRefresh:active {
   text-shadow: 0 1px 1px #000;
   border-radius: 3px;
   box-shadow: var(--highlight);
-  background: #113;
   background: linear-gradient(180deg,#113, #080818);
 }
 
@@ -1477,7 +1449,6 @@ select option:hover, select option:focus, select option:checked {
 }
 
 select:hover, select:focus, select:active {
-  color: #652787;
   color: #bf2295;
   text-shadow: 0 1px 1px #000;
   border: 1px solid #652787 !important;
@@ -1561,8 +1532,8 @@ select:hover, select:focus, select:active {
 }
 
 .notifications p {
-  letter-spacing: .07em;
   word-spacing: .2em;
+  letter-spacing: .07em;
   font-weight: 700;
   animation: fade-in 1s linear;
 }
