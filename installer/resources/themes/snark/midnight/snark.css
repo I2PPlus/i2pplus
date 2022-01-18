@@ -2170,8 +2170,7 @@ a:hover img, a:focus img {
 }
 
 #configs textarea, #configs input[type=text], .trackerconfig textarea, .trackerconfig input[type=text], select, input.r, input[type=checkbox] {
-  margin-top: 3px !important;
-  margin-bottom: 3px !important;
+  margin: 3px;
   display: inline-block;
 }
 

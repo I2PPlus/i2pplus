@@ -2,6 +2,7 @@
   --a: #7171d1;
   --a_hover: #bf2295;
   --border_inner: 1px solid rgba(38,35,92,.7);
+  --border_input: #27235c;
 }
 
 ::placeholder {
@@ -20,6 +21,7 @@ input::placeholder {
 }
 
 input {
+  margin: 3px;
   font: bold 9pt var(--bodyfont);
 }
 
@@ -61,7 +63,7 @@ input[type=text], input[type=password] {
   color: var(--ink);
   text-decoration: none;
   font: bold 9pt var(--bodyfont);
-  border: var(--border_inner) !important;
+  border: var(--border_input);
 }
 
 input[type=text]:focus, input[type=password]:focus, textarea:focus {
@@ -116,7 +118,7 @@ input:disabled {
 
 input[type=text]:disabled, input[readonly], input[readonly]:focus {
   color: #26235c !important;
-  border: var(--border_inner) !important;
+  border: var(--border_inner);
   box-shadow: none;
   background: linear-gradient(180deg,#000, #000019);
   filter: none;
@@ -125,7 +127,7 @@ input[type=text]:disabled, input[readonly], input[readonly]:focus {
 
 select {
   margin: 5px 10px;
-  padding: 5px 24px 5px 6px !important;
+  padding: 5px 24px 5px 6px;
   min-width: 110px;
   appearance: none;
   overflow: hidden;
@@ -135,14 +137,14 @@ select {
   text-align: center;
   border: 1px solid #27235c;
   cursor: pointer;
-  background: var(--dropdown) center right 10px no-repeat, var(--btn) !important;
+  background: var(--dropdown) center right 10px no-repeat, var(--btn);
   background-size: 10px auto, 100% !important;
   filter: none !important;
 }
 
 select option {
   font-weight: 400;
-  font-size: 9.5pt !important;
+  font-size: 9.5pt;
   color: #000;
   box-shadow: inset 0 0 20px 20px #000;
 }
@@ -185,7 +187,7 @@ button, button:visited, input[type=submit], input[type=reset] {
   text-shadow: 0 1px 1px #000;
   vertical-align: middle;
   border: 1px solid #27235c;
-  background: var(--btn) !important;
+  background: var(--btn);
 }
 
 input[type=file]::file-selector-button {
@@ -200,7 +202,7 @@ input[type=file]::file-selector-button {
   border: 1px solid #27235c;
   border-radius: 1px;
   box-shadow: var(--highlight), inset 0 0 2px 0 #559;
-  background: var(--btn) !important;
+  background: var(--btn);
   cursor: pointer;
 }
 
@@ -216,12 +218,12 @@ input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selec
   color: var(--a_hover);
   border: 1px solid var(--hover);
   box-shadow: var(--highlight), inset 0 0 2px 1px #757;
-  background: var(--btn_hover) !important;
+  background: var(--btn_hover);
   cursor: pointer;
 }
 
 input[type=file]:active::file-selector-button {
-  background: var(--hover) !important;
+  background: var(--hover);
 }
 
 input[type=submit], input[type=reset], button {
@@ -240,7 +242,7 @@ input[type=submit]:active, input[type=reset]:active, button:active {
   box-shadow: var(--highlight), inset 3px 3px 3px #000;
   background: var(--hover);
   background-size: 12px, 100%;
-  background-blend-mode: luminosity !important;
+  background-blend-mode: luminosity;
 }
 
 input[type=file]:active::file-selector-button {
@@ -251,41 +253,6 @@ input[type=file]:active::file-selector-button {
   background: var(--hover);
   background-size: 14px, 100%;
   background-blend-mode: luminosity !important;
-}
-
-input.accept, button.accept {
-  padding: 5px 9px 5px 25px !important;
-  background: var(--yes) no-repeat 8px center, var(--btn) !important;
-  background-size: 12px, 100% !important;
-}
-
-input.accept:hover, button.accept:hover,
-input.accept:focus, button.accept:focus {
-  background: var(--yes) no-repeat 8px center, var(--btn_hover) !important;
-  background-size: 12px, 100% !important;
-}
-
-input.accept:active, button.accept:active {
-  padding: 5px 9px 5px 25px !important;
-  background: var(--yes) no-repeat 8px center, var(--btn_active) !important;
-  background-size: 12px, 100% !important;
-}
-
-input.cancel, button.cancel {
-  padding: 5px 9px 5px 25px !important;
-  background: var(--no) no-repeat 10px center, var(--btn) !important;
-  background-size: 10px, 100% !important;
-}
-
-input.cancel:hover, button.cancel:hover,
-input.cancel:focus, button.cancel:focus {
-  background: var(--no) no-repeat 10px center, var(--btn_hover) !important;
-  background-size: 10px, 100% !important;
-}
-
-input.cancel:active, button.cancel:active {
-  background: var(--no) no-repeat 10px center, var(--btn_active) !important;
-  background-size: 10px, 100% !important;
 }
 
 .optbox {
