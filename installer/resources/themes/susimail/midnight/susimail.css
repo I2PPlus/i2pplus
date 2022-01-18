@@ -746,10 +746,6 @@ input.delete {
   animation: linear fade-in .15s .6s forwards;
 }
 
-@media screen and (max-width: 1200px) {
-  #dologin {width: 500px}
-}
-
 @keyframes fade-in {
   0%,80% {filter: opacity(0)}
   100% {filter: opacity(1)}
@@ -757,7 +753,7 @@ input.delete {
 
 #dologin h1 {
   margin: -1px -1px 15px -1px;
-  padding: 10px 10px 10px 42px;
+  padding: 10px 16px;
   text-transform: uppercase;
   font-size: 14pt;
   text-align:left;
@@ -766,7 +762,7 @@ input.delete {
   text-shadow: 0 1px 1px #000;
   border: 1px solid #211e51;
   box-shadow: var(--highlight);
-  background: var(--login_header) no-repeat 12px center / 23px, linear-gradient(180deg,#080818 50%, #000008 50%) !important;
+  background: linear-gradient(180deg,#080818 50%, #000008 50%) !important;
 }
 
 #dologin table {
@@ -1402,41 +1398,6 @@ input[type=submit]:active, input.cancel:active, #pageRefresh:active {
   display: none;
 }
 
-/* responsive layout */
-
-@media screen and (max-width: 700px) {
-.topbuttons input[type=submit], .topbuttons input[type="reset"] {
-  margin: 3px 5px !important;
-  min-width: 50px !important;
-}
-}
-
-@media screen and (min-width: 1300px) {
-.iframed body, .iframed td, .iframed textarea, .iframed div, .iframed p.mailbody, .iframed input, .iframed input[type=submit], .iframed input[type="reset"], .iframed p.error {
-  font-size: 10pt !important;
-}
-
-.iframed .pagenav input {
-  font-size: 0 !important;
-}
-}
-
-@media screen and (min-width: 1500px) {
-body, td, textarea, div, p.mailbody, input, input[type=submit], input[type="reset"], p.error, #settings, .fakebutton {
-  font-size: 10pt !important;
-}
-
-#dologin tr:last-child a {
-  font-size: 9pt;
-}
-
-.pagenav input {
-  font-size: 0 !important;
-}
-}
-
-/* end responsive layout */
-
 /* timedate in mail listing */
 
 .listDate, .listTime, .listClock {
@@ -1683,4 +1644,31 @@ div:not(#pagesize).topbuttons, .iframed div:not(#pagesize).topbuttons {
 
 #mailhead, .iframed #mailhead {
   margin: -9px 0;
+}
+
+/* responsive layout */
+
+@media screen and (max-width: 1200px) {
+  #dologin {width: 500px}
+}
+
+@media screen and (max-width: 700px) {
+  .topbuttons input[type=submit], .topbuttons input[type="reset"] {
+    margin: 3px 5px !important;
+    min-width: 50px !important;
+  }
+}
+
+@media screen and (min-width: 1300px) {
+  .iframed body, .iframed td, .iframed textarea, .iframed div,
+  .iframed p.mailbody, .iframed input, .iframed input[type=submit],
+  .iframed input[type="reset"], .iframed p.error {font-size: 10pt !important}
+  .iframed .pagenav input {font-size: 0 !important}
+}
+
+@media screen and (min-width: 1500px) {
+  body, td, textarea, div, p.mailbody, input, input[type=submit],
+  input[type="reset"], p.error, #settings, .fakebutton {font-size: 10pt !important}
+  #dologin tr:last-child a {font-size: 9pt}
+  .pagenav input {font-size: 0 !important}
 }
