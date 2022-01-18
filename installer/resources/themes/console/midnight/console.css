@@ -11146,6 +11146,7 @@ a:hover .sitemapLink {
 
 #help_faq, #help_glossary {
   background: var(--question) no-repeat 15px center, var(--helpsection);
+  background-size: 32px, 100% 4px;
 }
 
 #help_troubleshoot {
