@@ -2,10 +2,8 @@
 /* Author: dr|z3d */
 
 @import url(/themes/console/midnight/global.css);
-@import url(/themes/fonts/DroidSans.css);
 @import url(../images/images.css);
 @import url(images/images.css);
-@import url(/themes/console/midnight/images/tile.css);
 
 :root {
   --nav: linear-gradient(180deg,#181828 50%, #000 50%);
@@ -13,20 +11,19 @@
 }
 
 body {
-  font-family: var(--bodyfont);
-  background-color: #000010;
-  background: repeating-linear-gradient(180deg,rgba(0,0,24,.75) 3px, rgba(0,0,0,.9) 5px, rgba(0,0,0,.7) 6px), var(--tile), #000010;
-  color:#c9ceff;
   margin: 0 10px;
-  font-size: 9.5pt;
   overflow-x: hidden;
+  font-family: var(--bodyfont);
+  font-size: 9.5pt;
+  color:#c9ceff;
+  background: repeating-linear-gradient(180deg,rgba(0,0,24,.75) 3px, rgba(0,0,0,.9) 5px, rgba(0,0,0,.7) 6px), var(--tile), #000010;
 }
 
 body.iframed {
-  background: transparent !important;
   margin: 0;
   padding: 0;
   overflow: hidden;
+  background: transparent !important;
 }
 
 .destaddress {
@@ -34,35 +31,8 @@ body.iframed {
   scrollbar-width: thin;
 }
 
-* {
-  outline: none;
-}
-
-::selection {
-  background: #22296f !important;
-  background: rgba(34, 41, 111, .9) !important;
-  color: white;
-}
-
-::-moz-selection {
-  background: #22296f !important;
-  color: white;
-}
-
 #navi, .buttons, #buttons, #host_list tr:first-child, #host_list img, #host_list td:nth-child(n+2) a {
   user-select: none;
-}
-
-input, button {
-  cursor: pointer;
-}
-
-input[type=text], textarea {
-  cursor: text;
-}
-
-a, button, input {
-  -webkit-text-stroke: .5px rgba(0,0,0,.4);
 }
 
 /* topnav */

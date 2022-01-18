@@ -1,3 +1,7 @@
+@import url(/themes/fonts/DroidSans.css);
+@import url(chromescroll.css);
+@import url(/themes/console/midnight/images/tile.css);
+
 :root {
   --a: #7171d1;
   --active: #fc1c66;
@@ -26,6 +30,27 @@
   --th: repeating-linear-gradient(90deg, rgba(0,0,64,.4) 2px, #000 4px), linear-gradient(180deg,#000018, #000);
   --title: repeating-linear-gradient(90deg, rgba(0,0,48,.4) 2px, #000 4px), linear-gradient(180deg,#003, #002 50%, #001 50%, #000);
   --tr: linear-gradient(180deg,#001,#000);
+}
+
+* {
+  outline: none;
+}
+
+::selection {
+  background: rgba(34, 41, 111, .9) !important;
+  color: white;
+}
+
+input, button {
+  cursor: pointer;
+}
+
+input[type=text], textarea {
+  cursor: text;
+}
+
+a, button, input {
+  -webkit-text-stroke: .5px rgba(0,0,0,.4);
 }
 
 ::placeholder {

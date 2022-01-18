@@ -3,10 +3,8 @@
 /* Droid Sans font family and css3 compliant browser recommended for optimal results */
 
 @import url(/themes/console/midnight/global.css);
-@import url(/themes/fonts/DroidSans.css);
 @import url(../images/images.css);
 @import url(images/images.css);
-@import url(/themes/console/midnight/images/tile.css);
 
 html, body {
   min-height: 100%;

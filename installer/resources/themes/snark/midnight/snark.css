@@ -1,9 +1,7 @@
 /* I2PSnark theme "Midnight" */
 /* Author: dr|z3d */
 
-@import url(/themes/fonts/DroidSans.css);
 @import url(/themes/console/midnight/global.css);
-@import url(/themes/console/midnight/images/tile.css);
 
 :root {
   --btnAction_active: linear-gradient(180deg,#3c1751, #652787);
@@ -39,14 +37,6 @@ body.iframed {
   margin: 1px 0 !important;
   background: none;
   overflow: hidden;
-}
-
-* {
-  outline: none;
-}
-
-a, button, input {
-  -webkit-text-stroke: .5px rgba(0,0,0,.4);
 }
 
 .toggleview, .configTitle, .snarknavbar, img, input[type=submit], input[type=radio], input[type=checkbox],
