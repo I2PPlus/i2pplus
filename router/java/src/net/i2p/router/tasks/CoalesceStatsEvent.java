@@ -48,9 +48,10 @@ public class CoalesceStatsEvent implements SimpleTimer.TimedEvent {
         sm.createRateStat("router.tunnelBacklog", _x("Size of tunnel acceptor backlog"), "Tunnels", new long[] { 60*1000, 60*60*1000 });
         sm.createRateStat("clock.skew", "Clock step adjustment (ms)", "Router", new long[] { 60*1000, 3*60*60*1000, 24*60*60*1000 });
         _maxMemory = Runtime.getRuntime().maxMemory();
-        String legend = "(Bytes)";
+//        String legend = "(Bytes)";
+        String legend = "";
         if (_maxMemory < Long.MAX_VALUE)
-            legend += " Max is " + DataHelper.formatSize(_maxMemory) + 'B';
+            legend += "Maximum allocated to the JVM is " + DataHelper.formatSize(_maxMemory) + 'B';
         // router.memoryUsed currently has the max size in the description so it can't be tagged
         sm.createRequiredRateStat("router.memoryUsed", legend, "Router", new long[] { 60*1000 });
     }
