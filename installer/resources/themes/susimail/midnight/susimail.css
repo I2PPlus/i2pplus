@@ -653,14 +653,28 @@ input[type=text], input[type=password], textarea {
 }
 
 input[name="user"], input[name="pass"] {
+  padding-left: 26px !important;
   border: 1px solid #322e6b;
   background: #000;
+  background-blend-mode: luminosity;
 }
 
 input[name="user"]:focus, input[name="pass"]:focus, input[type=text]:focus, textarea:focus {
   color: var(--ink);
   border: 1px solid #6466a5 !important;
   box-shadow: 0 0 0 1px rgba(101, 39, 135, .5), 0 0 2px 2px #202;
+}
+
+#dologin input[name="user"] {
+  background: #000 var(--user) no-repeat 6px center / 14px !important;
+}
+
+#dologin input[name="pass"] {
+  background: #000 var(--key) no-repeat 6px center / 14px !important;
+}
+
+input[name="user"]:focus, input[name="pass"]:focus {
+  background-blend-mode: normal;
 }
 
 input::placeholder {
@@ -718,6 +732,7 @@ input.delete {
 #dologin h1 {
   margin: -1px -1px 15px -1px;
   padding: 10px 16px;
+  position: relative;
   text-transform: uppercase;
   font-size: 14pt;
   text-align:left;
@@ -731,16 +746,30 @@ input.delete {
   -webkit-text-stroke: 1px rgba(0,0,0,.3);
 }
 
+#dologin h1::before, #dologin h1::after {
+  display: inline-block;
+  content: "";
+}
+
 #dologin h1::before {
   margin: -2px 9px 1px 0;
   width: 26px;
   height: 26px;
-  display: inline-block;
   vertical-align: middle;
   background: url(images/favicon.svg) no-repeat center center / 24px;
   filter: saturate(.1) brightness(5) drop-shadow(0 0 1px #c9ceff);
   opacity: .6;
-  content: "";
+}
+
+#dologin h1::after {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #c9ceff;
+  opacity: .5;
+  mix-blend-mode: overlay;
 }
 
 #dologin table {
