@@ -1723,10 +1723,6 @@ a img:hover, a img:focus {
   filter: saturate(200%) drop-shadow(0 0 2px #652787) !important;
 }
 
-input[type=text]:focus, textarea:focus {
-  border: 1px solid #444081;
-}
-
 thead a img:hover, thead a img:focus, thead a:hover img, thead a:focus img,
 thead a::after:hover img, thead a::after:focus img {
   filter: saturate(200%) hue-rotate(80deg) drop-shadow(0 0 2px #652787) !important;
@@ -1734,10 +1730,6 @@ thead a::after:hover img, thead a::after:focus img {
 
 thead a:active img {
   transform: scale(0.9);
-}
-
-label {
-  cursor: pointer;
 }
 
 thead a img:hover {
@@ -1750,9 +1742,6 @@ input[type=text]:hover, input.r:hover {
 }
 
 input[type=text]:focus, textarea:focus, input.r:focus, textarea[name="i2cpOpts"]:focus, input[name="nofilter_dataDir"]:focus {
-  color: #7166ff;
-  background: #000;
-  box-shadow: 0 0 0 1px rgba(101, 39, 135, .5), 0 0 2px 2px #202;
   transition: ease all .3s;
 }
 
@@ -1768,8 +1757,8 @@ textarea[name="i2cpOpts"], input[name="nofilter_dataDir"] {
 }
 
 thead img, thead img:hover {
-  opacity: .8;
   max-height: 20px !important;
+  opacity: .8;
 }
 
 th a:link img, th a:visited img {
@@ -1805,26 +1794,6 @@ input[size="85"] {
 
 textarea {
   border-radius: 0 !important;
-}
-
-select {
-  font: 9pt var(--bodyfont);
-  font-weight: 700;
-  min-width: 100px;
-  margin: 2px 4px 2px 0;
-  padding: 5px 24px 5px 4px;
-  cursor: pointer;
-  text-overflow: ellipsis;
-  color: var(--a);
-  border: 1px solid #27235f;
-  border-bottom-color: #171539;
-  border-right-color: #171539;
-  border-radius: 1px;
-  box-shadow: var(--highlight), inset 0 0 1px 0 #446;
-  background: var(--dropdown) center right 10px no-repeat, var(--btn) !important;
-  background-size: 10px auto, 100% !important;
-  -moz-appearance: none;
-  -webkit-appearance: none;
 }
 
 select:hover, select:focus, select:active {

@@ -71,7 +71,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
   border: 1px solid #6466a5 !important;
   box-shadow: 0 0 0 1px rgba(101, 39, 135, .5), 0 0 2px 2px #202, inset 3px 3px 3px #000;
   background: linear-gradient(180deg,#002,#000028);
-  transition: filter ease .3s;
+  transition: filter all .3s;
 }
 
 button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset]::-moz-focus-inner {
@@ -162,12 +162,8 @@ select:hover, select:focus, select:active {
 }
 
 select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active {
-  color: var(--a) !important;
-  border: 1px solid #27235c !important;
-  box-shadow: var(--highlight), 0 0 0 1px #000 !important;
-  background: var(--btn) !important;
   opacity: .7;
-  cursor: default;
+  pointer-events: none;
 }
 
 button, input[type=submit], input[type=reset], select {
