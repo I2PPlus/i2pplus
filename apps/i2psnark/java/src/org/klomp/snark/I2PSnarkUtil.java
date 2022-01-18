@@ -515,13 +515,16 @@ public class I2PSnarkUtil implements DisconnectListener {
         EepGet get = new I2PSocketEepGet(_context, _manager, retries, out.getAbsolutePath(), fetchURL);
         get.addHeader("User-Agent", EEPGET_USER_AGENT);
         int truncate = url.indexOf("&");
+        String convertedurl = url.replace("ahsplxkbhemefwvvml7qovzl5a2b5xo5i7lyai7ntdunvcyfdtna.b32.i2p", "tracker2.postman.i2p")
+                                 .replace("lnQ6yoBTxQuQU8EQ1FlF395ITIQF-HGJxUeFvzETLFnoczNjQvKDbtSB7aHhn853zjVXrJBgwlB9sO57KakBDaJ50lUZgVPhjlI19TgJ-CxyHhHSCeKx5JzURdEW-ucdONMynr-b2zwhsx8VQCJwCEkARvt21YkOyQDaB9IdV8aTAmP~PUJQxRwceaTMn96FcVenwdXqleE16fI8CVFOV18jbJKrhTOYpTtcZKV4l1wNYBDwKgwPx5c0kcrRzFyw5~bjuAKO~GJ5dR7BQsL7AwBoQUS4k1lwoYrG1kOIBeDD3XF8BWb6K3GOOoyjc1umYKpur3G~FxBuqtHAsDRICkEbKUqJ9mPYQlTSujhNxiRIW-oLwMtvayCFci99oX8MvazPS7~97x0Gsm-onEK1Td9nBdmq30OqDxpRtXBimbzkLbR1IKObbg9HvrKs3L-kSyGwTUmHG9rSQSoZEvFMA-S0EXO~o4g21q1oikmxPMhkeVwQ22VHB0-LZJfmLr4SAAAA.i2p", "tracker2.postman.i2p")
+                                .replace("nfrjvknwcw47itotkzmk6mdlxmxfxsxhbhlr5ozhlsuavcogv4hq.b32.i2p", "torrfreedom.i2p");
         if (get.fetch(timeout)) {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Transfer successful [" + url.substring(0, truncate) + "...] (Size: " + out.length() + " bytes)");
+                _log.debug("Transfer successful [" + convertedurl.substring(0, truncate) + "...] (Size: " + out.length() + " bytes)");
             return out;
         } else {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Transfer failed [" + url.substring(0, truncate) + "...]");
+                _log.warn("Transfer failed [" + convertedurl.substring(0, truncate) + "...]");
             out.delete();
             return null;
         }
