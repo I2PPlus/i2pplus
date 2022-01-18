@@ -14,6 +14,9 @@
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
   --button: linear-gradient(180deg,#11101c 50%,#000010 50%);
   --button_hover: linear-gradient(180deg,#202 50%,#000 50%);
+  --border_inner: 1px solid #27235c;
+  --a: #7171d1;
+  --ink: #c9ceff;
 }
 
 html, body {
@@ -24,7 +27,7 @@ body {
   margin: 6px 5px;
   font-family: var(--bodyfont);
   font-size: 9pt;
-  color: #c9ceff;
+  color: var(--ink);
   background: repeating-linear-gradient(180deg,rgba(0,0,24,.75) 3px, rgba(0,0,0,.9) 5px, rgba(0,0,0,.7) 6px),
   var(--tile),
   var(--compose_hover),
@@ -80,8 +83,7 @@ p.info, p.error {
   padding: 15px 10px 15px 45px;
   display: block !important;
   text-align: left;
-  color: #c9ceff;
-  border: 1px solid #27235c;
+  border: var(--border_inner);
   border-radius: 2px;
   background: var(--infohelp) no-repeat 10px center / 28px,
     linear-gradient(90deg, #000000, #010015 65%, #020018 90%);
@@ -145,14 +147,14 @@ div.topbuttons {
   margin: -1px -1px -10px -1px;
   padding: 7px 0 8px !important;
   font-weight: 700;
-  border: 1px solid #27235c;
+  border: var(--border_inner);
   border-radius: 2px 2px 0 0;
   background: #000010;
 }
 
 .iframed .topbuttons {
   border: none !important;
-  border-bottom: 1px solid #27235c !important;
+  border-bottom: var(--border_inner) !important;
   border-radius: 0;
 }
 
@@ -245,7 +247,7 @@ td.mailListSize {
   font-size: 9pt;
   font-weight: 700 !important;
   text-shadow: 0 1px 1px #000;
-  border-top: 1px solid #27235c;
+  border-top: var(--border_inner);
   border-bottom: none;
 }
 
@@ -268,7 +270,7 @@ th.mailListSubject {
 
 #mailbox td[colspan="3"], #mailbox td[colspan="4"] {
   padding: 6px 0 2px !important;
-  border-top: 1px solid #27235c !important;
+  border-top: var(--border_inner) !important;
 }
 
 #mailbox td[colspan="3"] {
@@ -323,11 +325,11 @@ td#deleteattached {
 
 tr.bottombuttons:last-child td {
   padding-bottom: 20px !important;
-  border-bottom: 1px solid #27235c !important;
+  border-bottom: var(--border_inner) !important;
 }
 
 a:link {
-  color: #7171d1;
+  color: var(--a);
   text-decoration: none;
   font-weight: 700;
 }
@@ -347,7 +349,6 @@ a:active {
 td {
   margin: 0 5px;
   padding: 2px;
-  color: #c9ceff;
   font-size: 9pt;
 }
 
@@ -368,10 +369,6 @@ td {
   border-bottom: 1px solid rgba(38, 35, 92,.7);
 }
 
-.list0:hover td, .list1:hover td {
-  color: #c9ceff;
-}
-
 .list0:hover, .list1:hover, .list0:hover a, .list1:hover a {
   color: #bf2295;
   background: #1e0b28;
@@ -382,7 +379,7 @@ td {
 }
 
 .list0:hover td:nth-child(3) a, .list1:hover td:nth-child(3) a {
-  color: #c9ceff !important;
+  color: var(--ink) !important;
 }
 
 .list0:hover td:first-child, .list1:hover td:first-child {
@@ -409,7 +406,7 @@ td.mailListSender {
 
 .mailListSender a, .mailListDate, .mailListSize {
   font-weight: 400 !important;
-  color: #c9ceff !important;
+  color: var(--ink) !important;
 }
 
 img.sort {
@@ -460,7 +457,6 @@ pre {
   min-width: 700px;
   text-align: center;
   font-size: 9pt !important;
-  color: #c9ceff;
 }
 
 table {
@@ -471,16 +467,16 @@ th {
   padding: 7px;
   font-size: 9pt;
   font-weight: 700;
-  border-bottom: 1px solid #27235c;
-  border-top: 1px solid #27235c;
+  border-bottom: var(--border_inner);
+  border-top: var(--border_inner);
   background: linear-gradient(180deg,#080818, #001) !important;
 }
 
 form {
   margin: 0;
   padding-bottom: 0;
-  line-height: 160%;
-  border: 1px solid #27235c;
+  line-height: 1.6;
+  border: var(--border_inner);
   background: #000010;
 }
 
@@ -490,8 +486,8 @@ form table {
 
 textarea {
   background: #000;
-  color: #c9ceff;
-  border: 1px solid #27235c;
+  color: var(--ink);
+  border: var(--border_inner);
   padding: 5px;
 }
 
@@ -520,7 +516,7 @@ td#attachedfile {
   font-size: 9pt;
   font-weight: 700;
   background: #002;
-  border: 1px solid #27235c;
+  border: var(--border_inner);
   border-left: none;
   border-right: none;
 }
@@ -584,7 +580,7 @@ input {
   font: bold 9pt var(--bodyfont);
   color: #4e47bf;
   text-align: left;
-  border: 1px solid #27235c;
+  border: var(--border_inner);
 }
 
 input.optbox {
@@ -602,7 +598,7 @@ input[type=submit], input.cancel, #settings, .fakebutton, #expand, #collapse {
   padding: 5px 8px !important;
   font: bold 9pt var(--bodyfont);
   text-align: center;
-  color: #7171d1 !important;
+  color: var(--a) !important;
   border: 1px solid #26225c;
   border-radius: 1px;
   box-shadow: var(--highlight), inset 0 0 2px 0 #559;
@@ -662,14 +658,14 @@ input[name="user"], input[name="pass"] {
 }
 
 input[name="user"]:focus, input[name="pass"]:focus, input[type=text]:focus, textarea:focus {
-  color: #c9ceff;
+  color: var(--ink);
   border: 1px solid #6466a5 !important;
   box-shadow: 0 0 0 1px rgba(101, 39, 135, .5), 0 0 2px 2px #202;
 }
 
 input::placeholder {
-  opacity: .7;
   font-style: italic;
+  opacity: .7;
 }
 
 input:focus::placeholder {
@@ -677,21 +673,21 @@ input:focus::placeholder {
 }
 
 input[name="host"], input[name="pop3"], input[name="smtp"] {
-  display: inline !important;
   margin-top: 3px !important;
+  display: inline !important;
   font-family: var(--monospaced);
   color: #652787;
-  background: none !important;
   border-radius: 0;
   box-shadow: none;
+  background: none !important;
 }
 
 input.delete {
   margin-left: 2px;
 }
 .page td[colspan="2"] {
-  text-align: left;
   padding: 0 0 10px 0;
+  text-align: left;
 }
 
 .page td[colspan="2"] hr {
@@ -719,24 +715,32 @@ input.delete {
   animation: linear fade-in .15s .6s forwards;
 }
 
-@keyframes fade-in {
-  0%,80% {filter: opacity(0)}
-  100% {filter: opacity(1)}
-}
-
 #dologin h1 {
   margin: -1px -1px 15px -1px;
-  padding: 10px 16px 10px 48px;
+  padding: 10px 16px;
   text-transform: uppercase;
   font-size: 14pt;
   text-align:left;
   letter-spacing:.08em;
   word-spacing: .1em;
+  color: #bbbbcf;
   text-shadow: 0 1px 1px #000;
   border: 1px solid #211e51;
   box-shadow: var(--highlight);
-  background: url(images/favicon.svg) no-repeat 12px center / 26px,
-    linear-gradient(180deg,#080818 50%, #000008 50%) !important;
+  background: linear-gradient(180deg,#080818 50%, #000008 50%);
+  -webkit-text-stroke: 1px rgba(0,0,0,.3);
+}
+
+#dologin h1::before {
+  margin: -2px 9px 1px 0;
+  width: 26px;
+  height: 26px;
+  display: inline-block;
+  vertical-align: middle;
+  background: url(images/favicon.svg) no-repeat center center / 24px;
+  filter: saturate(.1) brightness(5) drop-shadow(0 0 1px #c9ceff);
+  opacity: .6;
+  content: "";
 }
 
 #dologin table {
@@ -762,8 +766,8 @@ input.delete {
 }
 
 #dologin td[colspan="2"] {
-  text-align: center;
   padding: 3px 3px 5px !important;
+  text-align: center;
 }
 
 #dologin tr:last-child td {
@@ -792,7 +796,7 @@ input.delete {
   padding: 3px 10px;
   min-width: 140px;
   display: inline-block;
-  color: #7171d1;
+  color: var(--a);
   font-size: 8.5pt;
   border: 1px solid #003;
   border-radius: 25px;
@@ -819,7 +823,7 @@ input.delete {
 }
 
 h3#config {
-  border: 1px solid #27235c;
+  border: var(--border_inner);
   padding: 5px;
   margin: 9px auto 18px auto;
   width: 400px;
@@ -835,7 +839,7 @@ h3#config {
 #mailheader {
   padding: 10px;
   margin: 3px -1px;
-  border: 1px solid #27235c;
+  border: var(--border_inner);
   font-size: 10pt !important;
   background: #020019;
 }
@@ -866,7 +870,7 @@ p.mailbody {
 div.attached {
   margin: 0 -1px -1px;
   padding: 10px 10px 10px 30px !important;
-  border: 1px solid #27235c;
+  border: var(--border_inner);
   border-radius: 0 0 2px 2px;
   background: #020019 var(--attach) no-repeat 5px center / 20px;
 }
@@ -883,7 +887,7 @@ div.attached {
 }
 
 .attached img {
-  border: 1px solid #27235c;
+  border: var(--border_inner);
   border-radius: 2px;
   image-orientation: from-image;
 }
@@ -904,13 +908,13 @@ div#emptymailbox {
 .pagenav {
   margin: 0 auto;
   width: 100%;
-  border-top: 1px solid #27235c;
+  border-top: var(--border_inner);
   background: #000010;
   user-select: none;
 }
 
 .topbuttons .pagenav {
-  border-bottom: 1px solid #27235c;
+  border-bottom: var(--border_inner);
 }
 
 .topbuttons input {
@@ -1239,7 +1243,7 @@ input[type=file]::file-selector-button {
   text-decoration: none;
   text-align: center;
   text-shadow: 0 1px 1px #000;
-  border: 1px solid #27235c;
+  border: var(--border_inner);
   border-radius: 1px;
   box-shadow: var(--highlight), inset 0 0 2px 0 #559;
   background: var(--button) !important;
@@ -1410,7 +1414,7 @@ input[type=submit]:active, input.cancel:active, #pageRefresh:active {
   text-shadow: 0 1px 1px #000;
   border-radius: 3px;
   box-shadow: var(--highlight);
-  background: linear-gradient(180deg,#113, #080818);
+  background: linear-gradient(180deg,#113,#080818);
 }
 
 #infoUser {
@@ -1427,7 +1431,7 @@ select {
   overflow: hidden;
   text-overflow: ellipsis;
   font: bold 9pt var(--bodyfont);
-  color: #7171d1;
+  color: var(--a);
   text-align: center;
   border: 1px solid #27235f;
   border-radius: 1px;
@@ -1501,7 +1505,7 @@ select:hover, select:focus, select:active {
   z-index: 9999;
   text-align: center;
   text-shadow: 0 1px 1px #000;
-  border: 1px solid #27235c;
+  border: var(--border_inner);
   background: #113 var(--no) no-repeat right 24px top 4px / 14px;
   background-blend-mode: luminosity;
   cursor: crosshair;
@@ -1515,17 +1519,12 @@ select:hover, select:focus, select:active {
   background: #113 var(--no) no-repeat right 6px top 5px / 14px;
 }
 
-@keyframes hide-up {
-  from {margin-top: 0}
-  to {margin-top: -300px}
-}
-
 .notifications:hover {
   background-blend-mode: normal;
 }
 
 .notifications p.info, .notifications p.info b {
-  line-height: 160%;
+  line-height: 1.6;
   font-size: 10pt !important;
   color: #fff;
   text-shadow: none !important;
@@ -1536,11 +1535,6 @@ select:hover, select:focus, select:active {
   letter-spacing: .07em;
   font-weight: 700;
   animation: fade-in 1s linear;
-}
-
-@keyframes fade-in {
-  from {filter: opacity(0)}
-  to {filter: opacity(1)}
 }
 
 .notifications p.info, .notifications p.error {
@@ -1601,7 +1595,7 @@ div:not(#pagesize).topbuttons, .iframed div:not(#pagesize).topbuttons {
 
 .debugHeader td {
   color: #cc3;
-  border-bottom: 1px solid #27235c;
+  border-bottom: var(--border_inner);
   box-shadow: var(--highlight), inset 0 0 2px 1px #991;
   background: repeating-linear-gradient(180deg,#000 2px, #003 4px);
   background-size: 100% 4px;
@@ -1615,6 +1609,21 @@ div:not(#pagesize).topbuttons, .iframed div:not(#pagesize).topbuttons {
 
 #mailhead, .iframed #mailhead {
   margin: -9px 0;
+}
+
+@keyframes fade-in {
+  0%,80% {filter: opacity(0)}
+  100% {filter: opacity(1)}
+}
+
+@keyframes hide-up {
+  from {margin-top: 0}
+  to {margin-top: -300px}
+}
+
+@keyframes fade-in {
+  from {filter: opacity(0)}
+  to {filter: opacity(1)}
 }
 
 /* responsive layout */
