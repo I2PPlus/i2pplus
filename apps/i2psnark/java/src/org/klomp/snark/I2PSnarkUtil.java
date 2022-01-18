@@ -526,7 +526,7 @@ public class I2PSnarkUtil implements DisconnectListener {
             return out;
         } else {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Transfer failed [" + convertedurl.substring(0, truncate) + "...]");
+                _log.warn("Timeout (" + timeout + "s) attempting fetch of [" + convertedurl.substring(0, truncate) + "...]");
             out.delete();
             return null;
         }
@@ -574,7 +574,7 @@ public class I2PSnarkUtil implements DisconnectListener {
             return out.toByteArray();
         } else {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Transfer failed [" + convertedurl.substring(0, truncate) + "...]");
+                _log.warn("Timeout (" + timeout + "s) attempting fetch of [" + convertedurl.substring(0, truncate) + "...]");
             return null;
         }
     }
