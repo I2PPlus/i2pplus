@@ -670,9 +670,12 @@ public class TrackerClient implements Runnable {
                     rv = pids.size();
                     pids.clear();
                 }
+            } else if (meta.isPrivate()) {
+                if (_log.shouldLog(Log.INFO))
+                    _log.info("Not requesting PEX peers for [" + snark.getInfoHash() + "] as torrent is marked private");
             } else {
                 if (_log.shouldLog(Log.INFO))
-                    _log.info("Not getting PEX peers");
+                    _log.info("Not requesting PEX peers for [" + snark.getInfoHash() + "] as we have enough already");
             }
             return rv;
     }
