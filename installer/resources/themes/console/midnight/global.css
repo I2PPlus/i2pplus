@@ -1,8 +1,31 @@
 :root {
   --a: #7171d1;
+  --active: #fc1c66;
   --a_hover: #bf2295;
+  --badge: linear-gradient(180deg,#080818 50%,#000 50%);
+  --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
+  --border: 1px solid #26235c;
+  --border_btn: 1px solid #26225c;
   --border_inner: 1px solid rgba(38,35,92,.7);
   --border_input: #27235c;
+  --btn_active: linear-gradient(180deg,#401856, #501f6c);
+  --btn_hover: linear-gradient(180deg,#202 50%,#000 50%);
+  --btn: linear-gradient(180deg,#11101c 50%,#000010 50%);
+  --btn_shadow_active: var(--highlight), inset 4px 4px 4px rgba(0,0,0,.7);
+  --element: linear-gradient(180deg,#224,#000);
+  --formaction: linear-gradient(180deg,#001, #030306);
+  --helpsection: repeating-linear-gradient(180deg,#080820 2px, #010010 4px);
+  --highlight: inset 0 0 0 1px #000;
+  --hover: #652787;
+  --ink: #c9ceff;
+  --label: linear-gradient(180deg,#002,#001);
+  --li: #8589ad;
+  --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
+  --outline: 0 0 0 1px #000;
+  --panel: linear-gradient(180deg,#080818, #040410);
+  --th: repeating-linear-gradient(90deg, rgba(0,0,64,.4) 2px, #000 4px), linear-gradient(180deg,#000018, #000);
+  --title: repeating-linear-gradient(90deg, rgba(0,0,48,.4) 2px, #000 4px), linear-gradient(180deg,#003, #002 50%, #001 50%, #000);
+  --tr: linear-gradient(180deg,#001,#000);
 }
 
 ::placeholder {
@@ -84,17 +107,17 @@ textarea {
   padding: 3px 8px;
   width: calc(100% - 15px);
   min-height: 100px;
-  min-width: 97%;
   text-align: left;
   font: 9pt var(--monospaced);
   color: var(--ink);
   box-shadow: inset 1px 1px 1px 0 #000;
   resize: none;
-  scrollbar-width: thin !important;
+  scrollbar-color: rgba(24,24,80,.8) rgba(0,0,0,0);
+  scrollbar-width: thin;
 }
 
 textarea:focus {
-  scrollbar-width: auto !important;
+  scrollbar-width: auto;
 }
 
 input[type="file"] {

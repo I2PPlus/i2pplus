@@ -5,33 +5,10 @@
 /* Additional thanks to NASA for the planet earth image */
 /* Author: dr|z3d */
 
-@import url(optbox.css);
+@import url(global.css);
 @import url(chromescroll.css);
 @import url(/themes/console/midnight/images/tile.css);
 @import url(../images/itooplus.css);
-
-:root {
-  --ink: #c9ceff;
-  --hover: #652787;
-  --title: repeating-linear-gradient(90deg, rgba(0,0,48,.4) 2px, #000 4px), linear-gradient(180deg,#003, #002 50%, #001 50%, #000);
-  --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
-  --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
-  --btn: linear-gradient(180deg,#11101c 50%, #000010 50%);
-  --btn_hover: linear-gradient(180deg,#202 50%, #000 50%);
-  --btn_active: linear-gradient(180deg,#401856, #501f6c);
-  --formaction: linear-gradient(180deg,#001, #030306);
-  --border_inner: 1px solid rgba(38,35,92,.7);
-  --tr: linear-gradient(180deg,#001,#000);
-  --th: repeating-linear-gradient(90deg, rgba(0,0,64,.4) 2px, #000 4px), linear-gradient(180deg,#000018, #000);
-  --panel: linear-gradient(180deg,#080818, #040410);
-  --helpsection: repeating-linear-gradient(180deg,#080820 2px, #010010 4px);
-  --highlight: inset 0 0 0 1px #000;
-  --outline: 0 0 0 1px #000;
-  --element: linear-gradient(180deg,#224,#000);
-  --a: #7171d1;
-  --a_hover: #bf2295;
-  --label: linear-gradient(180deg,#002,#001);
-}
 
 textarea {
   will-change: transform;
@@ -226,6 +203,41 @@ input.check[value^="View"]:active, button.check[value^="View"]:active,
 input.showconsole:active {
   padding: 5px 9px 5px 25px !important;
   background: var(--eye) no-repeat 8px center / 14px, var(--btn_active) !important;
+}
+
+input.accept, button.accept {
+  padding: 5px 9px 5px 25px !important;
+  background: var(--yes) no-repeat 8px center, var(--btn) !important;
+  background-size: 12px, 100% !important;
+}
+
+input.accept:hover, button.accept:hover,
+input.accept:focus, button.accept:focus {
+  background: var(--yes) no-repeat 8px center, var(--btn_hover) !important;
+  background-size: 12px, 100% !important;
+}
+
+input.accept:active, button.accept:active {
+  padding: 5px 9px 5px 25px !important;
+  background: var(--yes) no-repeat 8px center, var(--btn_active) !important;
+  background-size: 12px, 100% !important;
+}
+
+input.cancel, button.cancel {
+  padding: 5px 9px 5px 25px !important;
+  background: var(--no) no-repeat 10px center, var(--btn) !important;
+  background-size: 10px, 100% !important;
+}
+
+input.cancel:hover, button.cancel:hover,
+input.cancel:focus, button.cancel:focus {
+  background: var(--no) no-repeat 10px center, var(--btn_hover) !important;
+  background-size: 10px, 100% !important;
+}
+
+input.cancel:active, button.cancel:active {
+  background: var(--no) no-repeat 10px center, var(--btn_active) !important;
+  background-size: 10px, 100% !important;
 }
 
 input.cancel[value^="Hide"], button.cancel[value^="Hide"],
@@ -7135,7 +7147,6 @@ div.app:hover .applabel {
 }
 
 /* end search */
-
 
 iframe.iframed {
   margin: 15px 0 0;
