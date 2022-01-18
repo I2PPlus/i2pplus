@@ -576,36 +576,6 @@ input[type="file"] {
   text-decoration: underline;
 }
 
-label {
-  cursor: pointer;
-}
-
-input[type=password] {
-  cursor: text;
-}
-
-input[type=text], input[type=password], textarea, textarea[readonly="readonly"]:focus {
-  color: #7171d1;
-  border: 1px solid #27235c;
-  box-shadow: var(--highlight), 0 0 0 1px #000;
-  background: #000;
-  filter: none;
-}
-
-input[type=text]:focus, input[type=password]:focus {
-  color: #c9ceff;
-  border: 1px solid #6466a5;
-  box-shadow: 0 0 0 1px rgba(101, 39, 135, .5), 0 0 2px 2px #202, inset 3px 3px 3px #000;
-  background: linear-gradient(180deg,#002,#000028);
-  transition: ease filter .3s 0s;
-}
-
-input[readonly="readonly"]:focus {
-  box-shadow: none;
-  filter: none;
-  background: linear-gradient(180deg,#000 0%, #010 100%) !important;
-}
-
 a.control, input.control {
   white-space: nowrap;
   vertical-align: middle;
@@ -781,30 +751,6 @@ textarea[name="accessList"] {
 
 textarea[name="accessList"]:focus {
   height: 80px !important;
-}
-
-::placeholder {
-  font-size: 90%;
-  font-style: italic;
-  opacity: .4 !important;
-}
-
-input::-moz-placeholder {
-  color: #f00;
-  font-weight: 700;
-}
-
-::-webkit-input-placeholder {
-  color: #f00;
-  font-weight: 700;
-}
-
-input:focus::-moz-placeholder {
-  opacity: 0;
-}
-
-:focus::-webkit-input-placeholder {
-  opacity: 0;
 }
 
 #filter {
