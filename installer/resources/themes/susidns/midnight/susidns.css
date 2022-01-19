@@ -201,12 +201,13 @@ td.search > * {
 #search input[type=text] {
   margin-left: 5px;
   padding: 6px 6px 6px 30px !important;
-  background: var(--search) no-repeat 8px center / 14px, linear-gradient(180deg,#000 0%, #000019 100%) !important;
+  vertical-align: middle;
+  background: #000 var(--search) no-repeat 8px center / 14px !important;
   background-blend-mode: luminosity;
 }
 
 #search input[type=text]:focus {
-  background: #000 var(--search) no-repeat 8px center / 14px !important;
+  background: var(--search) no-repeat 8px center / 14px, var(--text_focus) !important;
   background-blend-mode: normal;
 }
 
@@ -1407,7 +1408,7 @@ input:focus::placeholder {
 }
 
 #add input[type=text], #import input[type=file] {
-  width: 100%;
+  width: calc(100% - 16px);
 }
 
 #import table + p.buttons, #add table + p.buttons {

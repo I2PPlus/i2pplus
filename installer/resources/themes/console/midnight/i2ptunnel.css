@@ -453,7 +453,7 @@ textarea#statusMessages, textarea#statusMessages:active, textarea#statusMessages
   border: none !important;
   border-radius: 0;
   box-shadow: var(--highlight) !important;
-  background: linear-gradient(180deg,#000 0%, #000019 100%) !important;
+  background: var(--text_focus) !important;
 }
 
 .freetext {
@@ -1193,7 +1193,7 @@ input[type=text] + label {
   font-family: var(--monospaced);
   color: #7171d1;
   border: 1px solid #302b74;
-  background: linear-gradient(180deg,#000 0%, #000019 100%);
+  background: var(--text_focus);
   box-shadow: var(--highlight);
   user-select: all;
 }

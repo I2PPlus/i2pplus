@@ -10,6 +10,7 @@
   --a_hover: #bf2295;
   --active: #fc1c66;
   --badge: linear-gradient(180deg,#080818 50%,#000 50%);
+  --text_focus: linear-gradient(180deg,#002,#000028);
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
   --border: 1px solid #26235c;
   --border_btn: 1px solid #26225c;
@@ -139,7 +140,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
   color: var(--ink) !important;
   border: 1px solid #6466a5 !important;
   box-shadow: var(--outline), var(--btn_shadow_active);
-  background: linear-gradient(180deg,#002,#000028);
+  background: var(--text_focus);
   transition: filter all .3s;
 }
 
