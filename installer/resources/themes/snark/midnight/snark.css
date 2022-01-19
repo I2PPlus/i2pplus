@@ -228,7 +228,7 @@ td.peerCount {
   background: var(--forum_active) no-repeat 9px center, var(--nav_active) !important;
 }
 
-.nav_search:link:active {
+.nav_search:active {
   background: var(--search_active) no-repeat 9px center, var(--nav_active) !important;
 }
 
@@ -4070,10 +4070,10 @@ td.torrentAction input[type=submit] {
 
 @media screen and (max-width: 1199px) {
   .dirInfoComplete {display: none}
-  .snarkNav:link {padding-left: 24px !important}
-  .snarkNav:link, .snarkNav:hover, .snarkNav:focus, .snarkNav:active, .snarkNav:link:active,
-  .nav_search:link:hover, .nav_search:link:focus, .nav_forum:link:hover,
-  .nav_forum:link:focus, .nav_main:link:hover, .nav_main:link:focus {background-size: 14px 14px, 100%, 100% !important}
+  .snarkNav {padding-left: 24px !important}
+  .snarkNav, .snarkNav:hover, .snarkNav:focus, .snarkNav:active, .snarkNav:active,
+  .nav_search:hover, .nav_search:focus, .nav_forum:hover,
+  .nav_forum:focus, .nav_main:hover, .nav_main:focus {background-size: 14px 14px, 100%, 100% !important}
   #pagenavcontrols {transform: translateX(40px) !important}
   .dirInfo .percentBarText {line-height: 1.4 !important}
   .percentBarText, .percentBarOuter {width: 100px}
@@ -4128,7 +4128,7 @@ td.torrentAction input[type=submit] {
   b.alwaysShow {display: inline}
   .snarkTorrents td:first-child img {max-height: 18px}
   .snarknavbar, .page {min-width: 600px !important}
-  .snarkNav:link:first-child {padding-left: 26px !important}
+  .snarkNav:first-child {padding-left: 26px !important}
   #pagenavcontrols {transform: translateX(52px) !important}
   .iframed #pagenavcontrols {transform: translateX(44px) !important}
   .addtorrentsection tr:last-child, .snarkAddInfo {display: none}
@@ -4184,7 +4184,7 @@ td.torrentAction input[type=submit] {
   .snarkNav {font-size: 10.5pt !important}
   #pagenavcontrols {transform: translateX(52px) !important}
   .iframed #pagenavcontrols {transform: translateX(46px) !important}
-  .configsectionpanel .configTitle, .snarkNav:link {font-size: 11pt !important}
+  .configsectionpanel .configTitle, .snarkNav {font-size: 11pt !important}
   .toggleview, .configsection .configTitle {min-width: 340px !important}
   .percentDownloaded {pointer-events: none} /* hide tooltip */
   #closelog img, #expand img, #shrink img {
@@ -4222,11 +4222,11 @@ td.torrentAction input[type=submit] {
     width: 15px;
     background-size: 10px 10px;
   }
-  .snarkNav:link {
+  .snarkNav {
     padding-top: 4px !important;
     padding-bottom: 4px !important;
   }
-  .snarkNav:link:first-child {padding-left: 28px !important}
+  .snarkNav:first-child {padding-left: 28px !important}
   #pagenavcontrols {transform: translateX(70px) !important}
   .iframed #pagenavcontrols {transform: translateX(66px) !important}
   .configsectionpanel .configTitle {font-size: 12.5pt !important}

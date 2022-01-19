@@ -147,7 +147,7 @@ tr, .navbar, .mainsection, .lowersection {
   box-shadow: var(--highlight), 0 0 1px rgba(200,200,200,.6);
 }
 
-.snarkNav:link, .snarkNav:visited {
+.snarkNav, .snarkNav:visited {
   margin: -1px -2px -1px -3px;
   padding: 5px 7px 5px 23px;
   display: inline-block;
@@ -162,24 +162,24 @@ tr, .navbar, .mainsection, .lowersection {
   opacity: .85;
 }
 
-.snarkNav:link:last-child {
+.snarkNav:last-child {
   border-radius: 0 3px 3px 0;
 }
 
-.nav_main:link {
+.nav_main {
   background: var(--snark) no-repeat 7px center, var(--nav);
   border-radius: 3px 0 0 3px;
 }
 
-.nav_forum:link {
+.nav_forum {
   background: var(--forum) no-repeat 7px center, var(--nav);
 }
 
-.nav_tracker:link {
+.nav_tracker {
   background: var(--tracker) no-repeat 7px center, var(--nav);
 }
 
-.nav_search:link {
+.nav_search {
   background: var(--search) no-repeat 7px center, var(--nav);
 }
 
@@ -235,7 +235,7 @@ tr, .navbar, .mainsection, .lowersection {
   background: var(--search_active) no-repeat 7px center, var(--btn_active) !important;
 }
 
-.snarkNav:link, .snarkNav:hover, .snarkNav:focus {
+.snarkNav, .snarkNav:hover, .snarkNav:focus {
   background-size: 16px, 100% !important;
 }
 
@@ -3940,7 +3940,7 @@ td.peerCount {
   .logshim {
     margin-top: -5px !important;
   }
-  .snarkNav:link, .snarkNav:hover, .snarkNav:focus {
+  .snarkNav, .snarkNav:hover, .snarkNav:focus {
     background-size: 14px, 100% !important;
   }
   .nav_main {
@@ -4036,7 +4036,7 @@ td.peerCount {
   .snarknavbar {
     min-width: 688px !important;
   }
-  .snarkNav:link.nav_main:not(:last-child), .snarkNav:link.nav_forum {
+  .snarkNav.nav_main:not(:last-child), .snarkNav.nav_forum {
     padding-left: 8px !important;
     width: 12px !important;
     text-indent: -999999px;
@@ -4200,7 +4200,7 @@ td.peerCount {
   .snarkNav {
     font-size: 11pt !important;
   }
-  .snarkNav:link {
+  .snarkNav {
     padding-left: 25px !important;
   }
   .percentDownloaded {
