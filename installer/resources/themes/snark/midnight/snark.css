@@ -22,7 +22,6 @@ html, body {
 body {
   margin: 4px 2px;
   font: 9pt var(--bodyfont);
-  color: var(--ink);
   background: #000;
 }
 

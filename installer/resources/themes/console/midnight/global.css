@@ -35,13 +35,17 @@
   --tr: linear-gradient(180deg,#001,#000);
 }
 
-* {
-  outline: none;
+*, :focus, :active, :checked {
+  outline: none !important;
 }
 
 ::selection {
   background: rgba(34, 41, 111, .9) !important;
   color: white;
+}
+
+body {
+  color: var(--ink);
 }
 
 input, button {

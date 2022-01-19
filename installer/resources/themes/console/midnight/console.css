@@ -27,7 +27,6 @@ body {
   padding: 0;
   text-align: center;
   font: 8.5pt/130% var(--bodyfont);
-  color: var(--ink);
 }
 
 @supports (-moz-appearance: none) {
@@ -64,10 +63,6 @@ html, .main * {
 
 .routersummary h3:hover {
   background: linear-gradient(90deg, rgba(64,0,64,.1), rgba(96,0,96,.2), rgba(64,0,64,.1)), linear-gradient(180deg,#1d1a2d 50%, #000 50%) !important;
-}
-
-:focus, :active, :checked {
-  outline: none !important;
 }
 
 textarea[cols="70"], textarea[name="levels"] {
