@@ -8,6 +8,10 @@
 @import url(global.css);
 @import url(../images/itooplus.css);
 
+:root {
+  --box: linear-gradient(180deg,#020020,#000);
+}
+
 html, body {
   min-height: 100%;
 }
@@ -3692,7 +3696,7 @@ tr.addnew {
   text-align: center;
   box-shadow: var(--highlight);
   border: var(--border_inner);
-  background: linear-gradient(180deg,#020020, #000);
+  background: var(--box);
 }
 
 .themechoice:hover {
@@ -3853,7 +3857,7 @@ td#themeselect {
   float: left;
   text-align: center;
   border: var(--border_inner);
-  background: linear-gradient(180deg,#020020, #000);
+  background: var(--box);
 }
 
 #config_ui .langselect .optbox {
@@ -6332,9 +6336,9 @@ table#jardump {
 
 .main#certs h3 {
   margin-bottom: -16px !important;
+  padding: 7px 10px;
   border: var(--border_inner);
   border-radius: 0;
-  padding: 7px 10px;
 }
 
 .main#certs h4 {
@@ -6366,8 +6370,8 @@ table#jardump {
 }
 
 #certs h4 span {
-  letter-spacing: 0;
   word-spacing: 0;
+  letter-spacing: 0;
   text-transform: none;
   font-size: 90%;
 }
@@ -6407,11 +6411,11 @@ table#jardump {
 }
 
 #routerinfo a {
+  margin: -3px 5px -3px 0 !important;
+  padding: 3px 10px !important;
   display: inline-block;
   white-space: nowrap;
-  margin: -3px 5px -3px 0 !important;
   font-size: smaller !important;
-  padding: 3px 10px !important;
 }
 
 #routerinfo td {
@@ -6421,8 +6425,8 @@ table#jardump {
 }
 
 #routerinfo td:first-child, #routerinfo td:nth-child(3) {
-  text-align: right;
   white-space: nowrap;
+  text-align: right;
 }
 
 #routerinfo td:nth-child(2):not([colspan]) {
@@ -6463,7 +6467,7 @@ table#jardump {
 
 #debug h2 {
   padding: 10px !important;
-  background: var(--bug) no-repeat right 5px center,  var(--title) !important;
+  background: var(--bug) no-repeat right 5px center, var(--title) !important;
   background-size: 24px, 4px 100%, 100% !important;
   background-blend-mode: luminosity, normal;
 }
@@ -6502,8 +6506,8 @@ table#jardump {
 
 .debug_container {
   margin-top: -11px;
-  border: var(--border_inner);
   padding: 10px 15px;
+  border: var(--border_inner);
   background: #000008;
 }
 
@@ -6578,10 +6582,10 @@ table#jardump {
 #debug td span {
   max-width: 300px;
   display: inline-block;
+  vertical-align: text-bottom;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  vertical-align: text-bottom;
 }
 
 .debug_sesskey, .debug_pubkey, .skm_key td:first-child {
@@ -6611,11 +6615,11 @@ table#jardump {
 }
 
 #debug li {
-  display: inline-block;
-  text-align: left !important;
   margin: 0 !important;
   padding: 2px 0 !important;
+  display: inline-block;
   min-width: 400px !important;
+  text-align: left !important;
 }
 
 .buckets {
@@ -6696,25 +6700,23 @@ table#jardump {
 /* end debug */
 
 .footnote {
+  margin-bottom: 5px !important;
   text-align: right;
   font-size: 8pt;
-  margin-bottom: 5px !important;
 }
 
 .footnote hr {
   margin: 10px 0 5px 0 !important;
-  color: #26235c;
-  background: #26235c;
   height: 1px;
-  border: 0 solid #26235c;
+  color: #26235c;
+  border: none;
+  background: #26235c;
 }
 
 .topness {
-  font-size: 7.5pt;
+  margin: -10px 5px -5px 0;
   text-align: right;
-  margin-top: -10px !important;
-  margin-bottom: -5px;
-  margin-right: 5px;
+  font-size: 7.5pt;
 }
 
 /* begin home page */
@@ -6752,8 +6754,8 @@ h4.app2 {
 }
 
 h4.app a, h4.app2 a {
-  display: inline !important;
   width: auto !important;
+  display: inline !important;
 }
 
 h4.app img, h4.app2 img {
@@ -6810,22 +6812,22 @@ div.app {
   text-align: center !important;
   border: var(--border_inner);
   box-shadow: var(--highlight);
-  background: linear-gradient(180deg,#020020, #000);
+  background: var(--box);
   will-change: transform;
 }
 
 .app a:link, .app a:visited, .version a:not(:hover), .version a:not(:hover):visited {
-  color: var(--a);
-  display: inline-block;
   width: 100%;
+  display: inline-block;
+  color: var(--a);
 }
 
 div.app:hover {
-  opacity: 1;
-  border: 1px solid var(--hover);
-  background: #000;
-  box-shadow: none;
   color: var(--hover) !important;
+  border: 1px solid var(--hover);
+  box-shadow: none;
+  background: #000;
+  opacity: 1;
 }
 
 div.app:active .applabel {
@@ -10715,7 +10717,7 @@ a:hover .sitemapLink {
 .sitemapLink, #sitemap div.app {
   margin: 2px 2px 6px;
   box-shadow: var(--outline);
-  background: linear-gradient(180deg,#020020, #000);
+  background: var(--box);
 }
 
 .sitemapLink:hover, .sitemapLink:hover .sitemapLabel, #sitemap div.app:hover {
