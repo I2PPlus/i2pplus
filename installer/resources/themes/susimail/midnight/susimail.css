@@ -318,11 +318,7 @@ td {
   font-size: 9pt;
 }
 
-.list0 {
-  background: var(--row);
-}
-
-.list1 {
+.list0, .list1 {
   background: var(--row);
 }
 
@@ -389,7 +385,7 @@ img.sort {
   height: 10px;
   vertical-align: middle;
   font-size: 0;
-  border: 1px solid #26225c;
+  border: var(--border_btn);
   border-radius: 2px;
   opacity: .6;
 }
@@ -565,7 +561,7 @@ input[type=submit], input.cancel, #settings, .fakebutton, #expand, #collapse {
   font: bold 9pt var(--bodyfont);
   text-align: center;
   color: var(--a) !important;
-  border: 1px solid #26225c;
+  border: var(--border_btn);
   border-radius: 1px;
   box-shadow: var(--highlight), inset 0 0 2px 0 #559;
   background: var(--btn) !important;
