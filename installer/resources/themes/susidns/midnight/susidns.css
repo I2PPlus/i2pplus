@@ -1214,6 +1214,7 @@ td.names:hover, #host_list td.b32link:hover, #host_list td.helper:hover, #host_l
 }
 
 .names a[href$=".i2p/"] {
+  padding-right: 10px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -1531,8 +1532,8 @@ input#exporthosts:active {
   margin-top: -1px;
   position: relative;
   display: inline-block;
-  line-height: 0;
   vertical-align: middle;
+  line-height: 0;
 }
 
 #prev.inactive, #next.inactive {
@@ -1592,47 +1593,37 @@ input#exporthosts:active {
     margin-top: -3px !important;
     margin-right: 2px !important;
   }
-
   form[action="export"]::after {
     height: 21px;
   }
-
   #addressbook input#exporthosts {
     margin-top: 4px !important;
   }
-
   #prev, #next, #current {
     font-size: 10pt;
   }
-
   #filtered, #results {
     font-size: 9.5pt;
   }
-
   .headline h3, #subscriptions.headline h3, #configure.headline h3 {
     padding-left: 30px;
     background-size: 20px, 4px 100%, 100% !important;
     background-position: 6px center !important;
   }
-
   .iframed #prev a, .iframed #next a {
     padding: 11px 10px !important;
   }
-
   .iframed #prev::after, .iframed #next::after {
     top: calc(50% - 5px);
   }
-
   #prev.inactive::after, #next.inactive::after {
     top: calc(50% - 6px);
   }
-
   #current {
     padding: 2px 10px;
     display: inline-block;
     font-size: 10pt;
   }
-
   .names a[href$=".i2p/"] {
     max-width: 260px;
   }
@@ -1646,12 +1637,14 @@ input#exporthosts:active {
     top: -1px;
     right: 6px;
   }
-
   input#exporthosts {
     margin: 6px 0 -2px 2px;
   }
-
   #addressbook.headline h3 {
     padding-right: 45px;
+  }
+  #host_list td.b32link a::after, #host_list td.helper a::after {
+    width: 18px;
+    height: 18px;
   }
 }
