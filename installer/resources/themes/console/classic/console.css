@@ -4,59 +4,6 @@
 
 @import url(optbox.css);
 
-:root {
-  --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
-  --monospaced: Droid Sans Mono, Andale Mono, DejaVu Sans Mono, Lucida Console, monospace;
-  --bodybg: #e2e2f3;
-  --bg_doc: var(--bodybg) url(images/bg0.png) center center / 90px;
-  --ink: #41444d;
-  --ink_light: #5e626e;
-  --ink_h1: #6c7293;
-  --code: #272;
-  --disabled: #757a8a;
-  --selected: #559;
-  --a: #5c5c8a;
-  --hover: #f60;
-  --active: #f90;
-  --visited: #6b6b94;
-  --btn: linear-gradient(180deg, var(--bg) 50%, var(--bg2), var(--bg3));
-  --btn_hover: linear-gradient(180deg, #ddd, #fff);
-  --btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 #fff, inset 0 0 4px 2px #f0f0ff, 0 1px 1px rgba(220,220,255,.5);
-  --btn_shadow_hover: var(--highlight), 0 0 0 1px #fff, 0 0 0 2px rgba(255,96,0,.4);
-  --btn_shadow_active: var(--highlight), inset 3px 3px 3px 1px rgba(32,32,64,.3);
-  --shadow_input: inset 1px 1px 1px rgba(0,0,0,.2);
-  --badge: linear-gradient(180deg, #fff, var(--bg3));
-  --badge_hover: linear-gradient(180deg, var(--bg3), #fff);
-  --box_border_badge: 0 0 0 1px #bbd;
-  --border: #bfc3d9;
-  --border_soft: #cfd2e2;
-  --border_warn: #fb7;
-  --border_badge: #aad;
-  --highlight: inset 0 0 0 1px rgba(255,255,255,.8);
-  --highlight_hover: inset 0 0 0 1px #a79;
-  --highlight_active: inset 3px 3px 3px 1px #5f2400;
-  --bg: #fff;
-  --bg2: #f8f8ff;
-  --bg3: #f0f0ff;
-  --bg4: #e8e8ff;
-  --th: linear-gradient(180deg, #fff, var(--bg2));
-  --subheading: linear-gradient(90deg, var(--bg), var(--bg3));
-  --header: linear-gradient(180deg, var(--bg) 50%, var(--bg2) 50%);
-  --header_hover: linear-gradient(180deg, var(--bg) 50%, var(--row_hover) 50%);
-  --header_active: linear-gradient(180deg, #ffd, #ffe);
-  --header_shiney: linear-gradient(90deg, rgba(255,255,255,.3), rgba(0,0,0,0)), linear-gradient(180deg, var(--bg) 50%, var(--bg4) 50%);
-  --row_hover: #ffd;
-  --ls_target: 1px solid #5a5 !important;
-  --reload: linear-gradient(90deg, #930, var(--hover));
-  --down: repeating-linear-gradient(135deg, #fffff2, #fffff2 10px, #ddddd2 10px, #ddddd2 20px);
-  --down_shadow: inset 0 0 0 1px #800, inset 0 0 1px 3px #eeeee2, inset 0 0 0 4px #ccccc2;
-  --flatbar: #99c;
-  --hr: #89f;
-  --select: #4a90d9;
-  --label_focus: linear-gradient(90deg, var(--bg3), var(--bg), var(--bg3));
-  --scroll: #acafb9;
-}
-
 html, body {
   min-height: 100%;
   scrollbar-color: var(--scroll) var(--bodybg);
@@ -74,16 +21,6 @@ body {
 
 @supports (text-justify: auto) { /* Firefox 55+ */
   body {background-attachment: fixed !important}
-}
-
-::selection {
-  text-shadow: none;
-  color: var(--bg);
-  background: var(--select);
-}
-
-* {
-  outline: none;
 }
 
 .routersummary, .routersummaryouter, h1, .main, iframe, tr {
@@ -104,10 +41,6 @@ div.clearer {
   height: 0;
   line-height: 0;
   clear: left;
-}
-
-img {
-  border: none;
 }
 
 i {
@@ -1119,19 +1052,7 @@ tt, code, .bucket {
 
 select {
   margin: 3px 5px;
-  padding: 5px 20px 5px 5px;
   min-width: 120px;
-  vertical-align: middle;
-  text-overflow: ellipsis;
-  color: #333;
-  border: 1px solid var(--border);
-  border-radius: 3px;
-  box-shadow: var(--btn_shadow);
-  background: var(--dropdown) no-repeat right 8px center / 10px, var(--btn);
-  cursor: pointer;
-  -moz-appearance: none;
-  -webkit-appearance: none;
-  appearance: none;
 }
 
 @supports not (-moz-appearance: none) {
