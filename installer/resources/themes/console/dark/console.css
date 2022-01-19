@@ -1852,25 +1852,6 @@ a:active tt {
   color: #bb0 !important;
 }
 
-.tidylist {
-  text-align: justify !important;
-  line-height: 1.5;
-}
-
-.tidylist:last-child {
-  padding-bottom: 10px;
-}
-
-.tidylist code {
-  margin: 0 2px;
-  padding: 1px 3px;
-  text-align: left;
-  font: 8.5pt var(--monospaced);
-  color: #dd0;
-  border-radius: 3px;
-  background: #030;
-}
-
 ol {
   padding: 1px 0 0 20px;
   display: inline;

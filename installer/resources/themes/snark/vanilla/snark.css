@@ -151,7 +151,11 @@ label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
   background: var(--th);
 }
 
-.snarkNav:link, .snarkNav:visited {
+#top a:not(:hover):not(:focus):not(:active) {
+  color: #3f271b !important;
+}
+
+.snarkNav, .snarkNav:visited {
   margin: -3px -4px -4px 0 !important;
   padding: 4px 10px 4px 28px !important;
   display: inline-block;
@@ -170,6 +174,7 @@ label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
   background-size: 17px, 100%, 100%, 17px, 17px !important;
   background-position: 12px center, center center, center center !important;
   background-repeat: no-repeat !important;
+  animation: fade-in .01s ease 1.5s both;
 }
 
 .snarkNav:hover, .snarkNav:focus {
@@ -186,25 +191,26 @@ label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
   transition: ease box-shadow .01s;
 }
 
-.nav_main:link {
-  background: var(--b_snark) no-repeat 11px center / 18px, var(--nav), var(--b_snark_hover) no-repeat 11px center / 18px,
-    var(--b_snark_active) no-repeat 11px center / 18px !important;
+.nav_main {
+  background: var(--b_snark) no-repeat 9px center / 16px, var(--nav),
+    var(--b_snark_hover) no-repeat 9px center / 16px,
+    var(--b_snark_active) no-repeat 9px center / 16px !important;
 }
 
-.nav_forum:link {
+.nav_forum {
   background: var(--b_forum), var(--nav), var(--b_forum_hover), var(--b_forum_active);
 }
 
-.nav_tracker:link {
+.nav_tracker {
   background: var(--b_tracker), var(--nav), var(--b_tracker_hover), var(--b_tracker_active);
 }
 
-.nav_search:link {
+.nav_search {
   background: var(--b_search), var(--nav), var(--b_search_hover), var(--b_search_active);
 }
 
 .nav_main:hover, .nav_main:focus {
-  background: var(--b_snark_hover) no-repeat 11px center, var(--nav_hover) !important;
+  background: var(--b_snark_hover) no-repeat 9px center / 18px, var(--nav_hover) !important;
   background-size: 18px, 100% !important;
 }
 
@@ -221,7 +227,7 @@ label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
 }
 
 .nav_main:active {
-  background: var(--b_snark_active) no-repeat 11px center, var(--nav_active) !important;
+  background: var(--b_snark_active) no-repeat 9px center, var(--nav_active) !important;
   background-size: 18px, 100% !important;
 }
 
@@ -241,9 +247,11 @@ label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
   border-radius: 0 2px 2px 0;
 }
 
-.snarkNav:first-child {
-  padding-left: 30px !important;
+.snarkNav:first-child, .snarkNav:hover:first-child {
+  padding-left: 27px !important;
   border-radius: 2px 0 0 2px;
+  background-position: 9px center !important;
+  background-size: 16px, 100%, 16px !important;
 }
 
 .snarkNav:last-child[href="/i2psnark/"] {
@@ -265,7 +273,7 @@ label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
     justify-content: center;
   }
 
-  .snarkNav:link, .snarkNav:visited {
+  .snarkNav, .snarkNav:visited {
     margin-left: 0 !important;
     margin-right: 0 !important;
     border-right: none;
@@ -1046,6 +1054,14 @@ img[src$="details.png"] {
   color: #fff5ef;
   border-radius: 2px;
   background: rgba(0,80,0,.8) var(--hash2) no-repeat 3px center / 11px;
+}
+
+.magnetLabel {
+  display: inline-block;
+  vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .torrentInfo .infohash {
@@ -2037,13 +2053,8 @@ a:hover img, a:focus img {
 }
 
 @keyframes fade-in {
-0% {
-  filter: opacity(0);
-}
-
-100% {
-  filter: opacity(1);
-}
+  0% {filter: opacity(0)}
+  100% {filter: opacity(1)}
 }
 
 .addtorrentsection table, .newtorrentsection table {
@@ -4229,6 +4240,9 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {
   .trackerDetails img {
     display: none;
   }
+  .magnetLabel {
+    max-width: 280px;
+  }
   .torrentETA {
     padding-right: 10px !important;
   }
@@ -4291,16 +4305,16 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {
 }
 
 @media screen and (max-width: 1000px) {
-  .snarkNav:link {
+  .snarkNav {
     padding: 4px 8px 4px 24px !important;
     background-size: 15px auto, 100%, 100% !important;
     background-position: 8px center, center center, center center !important;
   }
-  .nav_main:link {
+  .nav_main {
     padding: 4px 8px 4px 23px !important;
     background-position: 6px center, center center, center center !important;
   }
-  .nav_tracker:link {
+  .nav_tracker {
     padding: 4px 8px 4px 20px !important;
     background-position: 5px center, center center, center center !important;
   }
@@ -4403,7 +4417,7 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {
   .logshim {
     margin-top: -8px !important;
   }
-  .snarkNav:link, .snarkNav:visited, #configs td, #configs input, #configs select {
+  .snarkNav, .snarkNav:visited, #configs td, #configs input, #configs select {
     font-size: 8pt !important;
   }
   .torrentETA a img, .trackerDetails a img {
@@ -4518,18 +4532,19 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {
 }
 
 @media screen and (min-width: 1000px) {
-  body, .snarkTorrents td, .snarkAddInfo, th, td, .snarkFileName, a.control, input[type=submit], input[type="reset"], select, button {
+  body, .snarkTorrents td, .snarkAddInfo, th, td, .snarkFileName, a.control,
+  input[type=submit], input[type="reset"], select, button {
     font-size: 9pt !important;
   }
-  .snarkNav:link {
+  .snarkNav {
     font-size: 11pt;
     padding: 4px 8px 4px 26px !important;
     background-position: 8px center, center center, center center !important;
   }
-  .nav_main:link {
+  .nav_main {
     background-position: 7px center, center center, center center !important;
   }
-  .nav_tracker:link {
+  .nav_tracker {
     padding-left: 23px !important;
     background-position: 5px center, center center, center center !important;
   }
@@ -4591,12 +4606,12 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {
     padding-top: 4px !important;
     padding-bottom: 4px !important;
   }
-  .snarkNav:link {
+  .snarkNav {
     padding: 4px 8px 4px 26px !important;
     background-size: 16px, 100%, 100% !important;
     background-position: 8px center, center center, center center !important;
   }
-  .nav_main:link {
+  .nav_main {
     padding: 4px 8px 4px 27px !important;
     background-position: 8px center, center center, center center !important;
     background-size: 18px, 100%, 100% !important;
@@ -4788,17 +4803,21 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {
   .configsectionpanel td, .snarkNewTorrent td, select, select option, input, textarea, input[name="nofilter_dataDir"] {
     font-size: 10pt !important;
   }
-  .snarkNav:link {
+  .snarkNav {
     font-size: 11.5pt;
-    background-size: 17px auto, 100%, 100% !important;
+    background-size: 17px, 100%, 100% !important;
   }
-  .nav_main:link, .nav_forum:link {
+  .snarkNav:first-child, .snarkNav:hover:first-child {
+    padding-left: 28px !important;
+    background-size: 17px, 100%, 100% !important;
+  }
+  .nav_main, .nav_forum {
     padding-left: 27px !important;
   }
-  .nav_forum:link {
+  .nav_forum {
     background-position: 9px center, center center, center center !important;
   }
-  .nav_tracker:link {
+  .nav_tracker {
     padding-left: 25px !important;
     background-position: 7px center, center center, center center !important;
   }

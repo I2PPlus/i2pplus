@@ -13,9 +13,7 @@
 body {
   margin: 0 10px;
   overflow-x: hidden;
-  font-family: var(--bodyfont);
   font-size: 9.5pt;
-  color:#c9ceff;
   background: repeating-linear-gradient(180deg,rgba(0,0,24,.75) 3px, rgba(0,0,0,.9) 5px, rgba(0,0,0,.7) 6px), var(--tile), #000010;
 }
 
@@ -65,7 +63,7 @@ div#navi  {
   padding: 5px;
   display: inline-block;
   outline: none;
-  line-height: 120%;
+  line-height: 1.2;
   color: #89f !important;
   text-transform: capitalize;
   text-shadow: 0 1px 1px #000;
@@ -86,7 +84,7 @@ div#navi  {
 #navi a:active {
   text-shadow: none;
   border: 1px solid #652787;
-  box-shadow: var(--highlight), inset 3px 3px 3px #000 !important;
+  box-shadow: var(--btn_shadow_active) !important;
 }
 
 #navi .abook {
@@ -95,7 +93,7 @@ div#navi  {
 }
 
 #navi .abook:hover, #navi .abook:focus {
-  box-shadow: inset 0 1px 1px 0 #c9ceff;
+  box-shadow: inset 0 1px 1px 0 var(--ink);
   background: var(--abook_hover) no-repeat 6px center / 14px, var(--nav_hover);
 }
 
@@ -109,7 +107,7 @@ div#navi  {
 }
 
 #navi #subs:hover, #navi #subs:focus  {
-  box-shadow: inset 0 1px 1px 0 #c9ceff;
+  box-shadow: inset 0 1px 1px 0 var(--ink);
   background: var(--subs_hover) no-repeat 6px center / 14px, var(--nav_hover);
 }
 
@@ -136,7 +134,7 @@ div#navi  {
 }
 
 #navi #overview:hover, #navi #overview:focus {
-  box-shadow: inset 0 1px 1px 0 #c9ceff;
+  box-shadow: inset 0 1px 1px 0 var(--ink);
   background: var(--overview_hover) no-repeat 6px center / 14px, var(--nav_hover);
 }
 
@@ -203,12 +201,14 @@ td.search > * {
 #search input[type=text] {
   margin-left: 5px;
   padding: 6px 6px 6px 30px !important;
-  background: var(--search) no-repeat 8px center / 14px, linear-gradient(180deg,#000 0%, #000019 100%) !important;
+  vertical-align: middle;
+  background: #000 var(--search) no-repeat 8px center / 14px !important;
   background-blend-mode: luminosity;
 }
 
 #search input[type=text]:focus {
-  background: #000 var(--search) no-repeat 8px center / 14px !important;
+  box-shadow: var(--outline), var(--btn_shadow_active);
+  background: var(--search) no-repeat 8px center / 14px, var(--text_focus) !important;
   background-blend-mode: normal;
 }
 
@@ -250,12 +250,13 @@ p#filtered {
 }
 
 #filter a:hover, #filter a:focus  {
-  border: 1px solid #652787;
+  color: var(--a_hover);
+  border: 1px solid var(--a_hover);
   transform: scale(1.1);
 }
 
 #filter a:active {
-  color: #c9ceff !important;
+  color: var(--ink) !important;
   box-shadow: var(--highlight), inset 3px 3px 3px #000;
   background: #652787;
 }
@@ -291,7 +292,7 @@ p#filtered {
 }
 
 p {
-  color:#c9ceff;
+  color:var(--ink);
   margin: 0 0 4px;
   font-size: 9.5pt;
   text-align: justify;
@@ -323,26 +324,26 @@ span.addrhlpr {
 
 h3 {
   padding: 7px 10px;
-  color: #c9ceff;
+  word-spacing: .1em;
+  letter-spacing: .08em;
   font-size: 10pt;
   font-weight: 700;
+  color: var(--ink);
+  text-shadow: 0 0 2px #010011;
   border: 1px solid #26235c;
   border-radius: 2px;
-  background: var(--title) !important;
-  letter-spacing: .08em;
-  word-spacing: .1em;
-  text-shadow: 0 0 2px #010011;
   text-transform: uppercase;
   box-shadow: var(--highlight);
+  background: var(--title) !important;
 }
 
 #content h3 {
-  border: none;
-  border-radius: 0;
-  border-bottom: 1px dotted #2d295f;
-  background: none !important;
   margin: 0 20px 10px;
   padding: 5px 10px;
+  border: none;
+  border-bottom: 1px dotted #2d295f;
+  border-radius: 0;
+  background: none !important;
 }
 
 #content p + h3 {
@@ -350,8 +351,8 @@ h3 {
 }
 
 .headline h3 {
-  border-radius: 2px 2px 0 0;
   margin-top: -10px;
+  border-radius: 2px 2px 0 0;
 }
 
 .headline h3:first-child {
@@ -399,12 +400,12 @@ div#book p {
 }
 
 h4 {
-  font-size: 9pt;
   margin-top: -15px;
-  word-spacing: .1em;
-  border: 1px solid #26235c;
-  padding: 8px 10px;
   margin-bottom: 30px !important;
+  padding: 8px 10px;
+  word-spacing: .1em;
+  font-size: 9pt;
+  border: 1px solid #26235c;
   background: linear-gradient(90deg, #000, #001);
 }
 
@@ -417,32 +418,15 @@ div#messages > p.messages {
   background: var(--infohelp) no-repeat 6px center / 28px;
 }
 
-a:link {
-  color: #7171d1;
-  text-decoration: none;
-  font-weight: 700;
-  outline: none;
-}
-
-a:hover, a:focus {
-  text-decoration: none;
-  color: #bf2295 !important;
-}
-
 a:visited {
   color: #4e47bf;
-  text-decoration: none;
-}
-
-a:active {
-  color: #fc1c66 !important;
 }
 
 th {
   padding: 5px 10px;
   text-align: left;
   font-size: 9pt;
-  color: #c9ceff;
+  color: var(--ink);
   background: var(--title);
   background-size: 4px 100%, 100% !important;
 }
@@ -457,10 +441,10 @@ table.book td:first-child {
 }
 
 td {
-  color: #c9ceff;
   padding: 5px;
-  font-size: 9pt;
   vertical-align: center;
+  font-size: 9pt;
+  color: var(--ink);
 }
 
 td.checkbox {
@@ -477,12 +461,12 @@ td.names a {
 }
 
 td > img[width="320"], td > img[src^="/imagegen"] {
-  border-radius: 2px;
+  margin: 10px 3px;
+  padding: 5px;
   width: 240px;
   height: 240px;
+  border-radius: 2px;
   border: 1px solid #26235c;
-  padding: 5px;
-  margin: 10px 3px;
   background: #000;
 }
 
@@ -492,34 +476,28 @@ img[src="/imagegen/id?s=256&c="], img[src="/imagegen/id?s=20&c="] {
 
 ol, ul {
   margin: 0 20px 0 10px;
-  display: table-row;
   padding: 0px 10px;
+  display: table-row;
 }
 
 li {
-  color: #c9ceff;
-  line-height: 150%;
   margin: 0;
-  font-size: 9pt;
+  line-height: 1.5;
   list-style: square;
+  font-size: 9pt;
+  color: var(--ink);
 }
 
-#host_list tr:nth-child(odd), #host_details tr:nth-child(odd) {
-  background-color: #010011;
-  background: linear-gradient(180deg,#080818, #010010);
-}
-
+#host_list tr:nth-child(odd), #host_details tr:nth-child(odd),
 #host_list tr:nth-child(even), #host_details tr:nth-child(even) {
-  background-color: #000;
-  background: linear-gradient(180deg,#080818, #010010);
+  background: var(--row);
 }
 
 p.messages {
-  color:#c9ceff;
-  border: 1px solid #26235c;
-  padding: 5px 5px 10px;
-  margin: 5px 0 10px;
   margin: -15px 0 14px;
+  padding: 5px 5px 10px;
+  color: var(--ink);
+  border: 1px solid #26235c;
   border-radius: 0;
 }
 
@@ -528,10 +506,10 @@ p.messages {
 }
 
 .help {
-  border: 1px solid #26235c;
-  padding: 20px 30px;
-  background: #001;
   margin-bottom: 5px;
+  padding: 20px 30px;
+  border: 1px solid #26235c;
+  background: #001;
 }
 
 .help h3 {
@@ -553,9 +531,9 @@ p.messages {
 }
 
 #helpsubs {
-  margin: -18px 0 -11px;
-  padding: 15px 15px 15px 52px;
-  background: #001 var(--infohelp) no-repeat 12px center / 28px;
+  margin: -16px 0 -11px;
+  padding: 20px 15px 15px 48px;
+  background: #001 var(--infohelp) no-repeat 12px center / 24px;
 }
 
 .iframed #helpsubs {
@@ -564,43 +542,34 @@ p.messages {
 
 div#content p {
   padding: 0 30px;
-  line-height: 140%;
+  line-height: 1.4;
 }
 
 p.footer {
-  font-size: 8pt;
-  text-align: center;
-  border: 1px solid #113;
   padding: 5px 0 2px;
+  text-align: center;
+  font-size: 8pt;
+  border: 1px solid #113;
 }
 
-#footer {
-  position: fixed;
-  bottom: -4px;
-  width: calc(100% - 20px);
-  margin: 0;
-  display: none;
-}
-
-.iframed #footer {
+#footer, .iframed #footer {
   display: none;
 }
 
 #buttons {
   text-align: right;
-  background: #001;
   background: linear-gradient(90deg, #001, #000) !important;
 }
 
 p.buttons, .buttons {
-  text-align: right;
   margin: 5px 0 -5px;
   padding: 0 3px;
+  text-align: right;
 }
 
 p.buttons {
-  border: 1px solid #26235c;
   padding: 8px 5px;
+  border: 1px solid #26235c;
 }
 
 div#book + div#buttons {
@@ -608,8 +577,8 @@ div#book + div#buttons {
 }
 
 #add p.buttons, #import p.buttons {
-  border: none;
   padding: 0;
+  border: none;
 }
 
 form[action="subscriptions"] {
@@ -631,10 +600,9 @@ textarea[name="config"] {
 }
 
 div#config + div#buttons, div#content + div#buttons {
-  border: 1px solid #26235c;
-  margin-top: -3px;
+  margin: -3px 0 12px;
   padding: 10px 5px;
-  margin-bottom: 15px;
+  border: 1px solid #26235c;
   background: #001;
 }
 
@@ -667,7 +635,7 @@ svg #space, svg .subs {
 
 svg .a.tooltip, svg .private {
   fill: #225;
-  stroke: #c9ceff;
+  stroke: var(--ink);
 }
 
 svg .privatezone {
@@ -675,7 +643,7 @@ svg .privatezone {
 }
 
 svg tspan {
-  fill: #c9ceff;
+  fill: var(--ink);
 }
 
 svg tspan:hover, svg .tooltip:hover .g {
@@ -683,12 +651,12 @@ svg tspan:hover, svg .tooltip:hover .g {
 }
 
 svg .tooltip.link:hover {
-  stroke: #bf2295;
+  stroke: var(--hover);
 }
 
 svg a tspan:hover, svg #sublist:hover #hovershow,
 svg .a.tooltip:hover + .b > tspan, svg .a.private:hover + .b > tspan, svg a:hover .g {
-  fill: #bf2295;
+  fill: var(--hover);
 }
 
 svg #hover stop:first-child, svg #hover2 stop:first-child {
@@ -757,7 +725,7 @@ div#book, #emptybook {
 }
 
 #book td {
-  border-bottom: 1px solid #17142f;
+  border-bottom: var(--border_soft);
 }
 
 #book #visualid td {
@@ -769,7 +737,7 @@ div#book, #emptybook {
 }
 
 #book table tr:hover textarea {
-  color: #c9ceff;
+  color: var(--ink);
 }
 
 #book, #messages, #filter, #search {
@@ -902,7 +870,7 @@ div#add {
   margin: 10px 0;
   padding: 0;
   font-size: 9pt !important;
-  color: #c9ceff;
+  color: var(--ink);
   background: linear-gradient(180deg,rgba(0,0,16,.2), transparent);
 }
 
@@ -970,10 +938,10 @@ input[type=submit]:active, input[type=reset]:active, .fakebutton:active {
 textarea, #subslog pre {
   padding: 3px 5px;
   width: 100%;
-  height: 120px;
+  height: 200px;
   resize: none;
   font: 700 8.5pt var(--monospaced);
-  line-height: 140%;
+  line-height: 1.4;
   color: #7670c2;
   border: 1px solid #26225d;
   background: #000;
@@ -986,7 +954,7 @@ textarea, #subslog pre {
   height: auto;
   white-space: pre-wrap;
   font-weight: 400;
-  color: #c9ceff;
+  color: var(--ink);
   background: #000 !important;
 }
 
@@ -995,7 +963,7 @@ textarea:focus::placeholder {
 }
 
 input[type=text]:focus, textarea[name="destination"]:focus {
-  color: #c9ceff !important;
+  color: var(--ink) !important;
   border: 1px solid #6466a5 !important;
   box-shadow: 0 0 0 1px rgba(101, 39, 135, .5), 0 0 2px 2px #202;
   background: #000;
@@ -1018,7 +986,7 @@ textarea[cols="70"] {
   overflow-y: hidden !important;
   border-radius: 0;
   border: none;
-  border-left: 1px solid #17142f;
+  border-left: var(--border_soft);
   border-right: 3px solid #17142f;
 }
 
@@ -1075,7 +1043,9 @@ input.export {
 }
 
 .headline#subscriptions h3 span a {
-  font-size: 90% !important;
+  margin-top: 3px;
+  display: inline-block;
+  font-size: 80% !important;
 }
 
 .headline#configure h3 {
@@ -1121,7 +1091,7 @@ p.book {
   white-space: nowrap;
   text-align: right;
   font-weight: 700;
-  border-right: 1px solid #17142f;
+  border-right: var(--border_soft);
 }
 
 #host_details td:last-child {
@@ -1182,7 +1152,7 @@ p.book {
   font-family: var(--bodyfont);
   font-size: inherit !important;
   font-weight: 400;
-  color: #c9ceff !important;
+  color: var(--ink) !important;
   border: none;
   box-shadow: none;
   opacity: 1;
@@ -1194,7 +1164,7 @@ p.book {
 }
 
 #hostNotes textarea:focus {
-  border-bottom: 1px solid #17142f;
+  border-bottom: var(--border_soft);
   background: #000 !important;
 }
 
@@ -1215,7 +1185,7 @@ p.book {
 }
 
 #host_list td:not(:first-child):not(:last-child) {
-  border-left: 1px solid #17142f;
+  border-left: var(--border_soft);
 }
 
 .info {
@@ -1231,7 +1201,7 @@ p.book {
 }
 
 td.names {
-  border-left: 1px solid #17142f;
+  border-left: var(--border_soft);
 }
 
 td.names:hover, #host_list td.b32link:hover, #host_list td.helper:hover, #host_list td.destinations:hover {
@@ -1246,7 +1216,7 @@ td.names:hover, #host_list td.b32link:hover, #host_list td.helper:hover, #host_l
 }
 
 .names a[href$=".i2p/"] {
-  max-width: 260px;
+  padding-right: 10px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -1340,8 +1310,8 @@ td.names:hover, #host_list td.b32link:hover, #host_list td.helper:hover, #host_l
 
 td.destinations {
   max-width: 50px !important;
-  border-left: 1px solid #17142f;
-  border-right: 1px solid #17142f;
+  border-left: var(--border_soft);
+  border-right: var(--border_soft);
 }
 
 tr:hover td.destinations {
@@ -1391,12 +1361,14 @@ tr:hover td.destinations {
 }
 
 @media screen and (min-width: 1500px) {
-body, input[type=text], select, h4, td.names a, #filter p, #search td, p, a, .help li, td, tt, code, textarea, input[type=submit], input[type=reset], .destaddress {
+body, #navi a, input[type=text], select, h4, td.names a,
+#filter p, #search td, p, a, .help li, td, tt, code,
+input[type=submit], input[type=reset], .destaddress {
   font-size: 10.5pt !important;
 }
 
-#navi a {
-  font-size: 10.5pt !important;
+textarea, #subslog pre {
+  font-size: 10pt !important;
 }
 
 h3 {
@@ -1432,7 +1404,7 @@ h3 {
 input::placeholder {
   font-weight: 400;
   font-style: italic;
-  color: #c9ceff;
+  color: var(--ink);
   opacity: .7;
 }
 
@@ -1441,7 +1413,7 @@ input:focus::placeholder {
 }
 
 #add input[type=text], #import input[type=file] {
-  width: 100%;
+  width: calc(100% - 16px);
 }
 
 #import table + p.buttons, #add table + p.buttons {
@@ -1555,7 +1527,7 @@ input#exporthosts:active {
   vertical-align: middle;
   text-align: center;
   font-size: 11pt !important;
-  color: #c9ceff;
+  color: var(--ink);
   border-left: 1px solid #26225d;
   border-right: 1px solid #26225d;
 }
@@ -1564,8 +1536,8 @@ input#exporthosts:active {
   margin-top: -1px;
   position: relative;
   display: inline-block;
-  line-height: 0;
   vertical-align: middle;
+  line-height: 0;
 }
 
 #prev.inactive, #next.inactive {
@@ -1603,11 +1575,11 @@ input#exporthosts:active {
 }
 
 #prev:not(.inactive):hover::after, #prev:not(.inactive) a:focus::after {
-  border-color: transparent #bf2295 transparent transparent;
+  border-color: transparent var(--hover) transparent transparent;
 }
 
 #next:not(.inactive):hover::after, #next:not(.inactive) a:focus::after {
-  border-color: transparent transparent transparent #bf2295;
+  border-color: transparent transparent transparent var(--hover);
 }
 
 #empty {
@@ -1625,45 +1597,39 @@ input#exporthosts:active {
     margin-top: -3px !important;
     margin-right: 2px !important;
   }
-
   form[action="export"]::after {
     height: 21px;
   }
-
   #addressbook input#exporthosts {
     margin-top: 4px !important;
   }
-
   #prev, #next, #current {
     font-size: 10pt;
   }
-
   #filtered, #results {
     font-size: 9.5pt;
   }
-
   .headline h3, #subscriptions.headline h3, #configure.headline h3 {
     padding-left: 30px;
     background-size: 20px, 4px 100%, 100% !important;
     background-position: 6px center !important;
   }
-
   .iframed #prev a, .iframed #next a {
     padding: 11px 10px !important;
   }
-
   .iframed #prev::after, .iframed #next::after {
     top: calc(50% - 5px);
   }
-
   #prev.inactive::after, #next.inactive::after {
     top: calc(50% - 6px);
   }
-
   #current {
     padding: 2px 10px;
     display: inline-block;
     font-size: 10pt;
+  }
+  .names a[href$=".i2p/"] {
+    max-width: 260px;
   }
 }
 
@@ -1675,12 +1641,14 @@ input#exporthosts:active {
     top: -1px;
     right: 6px;
   }
-
   input#exporthosts {
     margin: 6px 0 -2px 2px;
   }
-
   #addressbook.headline h3 {
     padding-right: 45px;
+  }
+  #host_list td.b32link a::after, #host_list td.helper a::after {
+    width: 18px;
+    height: 18px;
   }
 }

@@ -12,9 +12,6 @@ body {
   margin: 5px 0 15px;
   padding: 0;
   text-align: center;
-  font-family: var(--bodyfont);
-  font-size: 9pt;
-  color: #c9ceff;
   background: repeating-linear-gradient(180deg,rgba(0,0,24,.75) 3px, rgba(0,0,0,.9) 5px, rgba(0,0,0,.7) 6px), var(--tile), #000010;
 }
 
@@ -26,10 +23,6 @@ body.iframed {
 }
 
 * {
-  outline: none;
-}
-
-* {
   scrollbar-color: rgba(16,16,48,.8) rgba(0,0,0,0);
   transition: ease scrollbar-color .5s;
 }
@@ -37,15 +30,6 @@ body.iframed {
 *:hover {
   scrollbar-color: rgba(24,24,80,.8) rgba(0,0,0,.9);
   transition: ease scrollbar-color .2s;
-}
-
-:-moz-focusring {
-  outline: none !important;
-}
-
-::selection {
-  background: rgba(34, 41, 111, .9) !important;
-  color: white;
 }
 
 h2, h3, th, .buttons, .newTunnel, .control, label, .infohelp, .infowarn, .nowrap, b, #throttler td {
@@ -62,28 +46,6 @@ h2, h3, th, .buttons, .newTunnel, .control, label, .infohelp, .infowarn, .nowrap
 
 div {
   box-sizing: border-box;
-}
-
-a, button, input, .control {
-  -webkit-text-stroke: .5px rgba(0,0,0,.4);
-}
-
-a {
-  text-decoration: none;
-  font-weight: 700;
-}
-
-a:link, a:visited {
-  color: #7171d1;
-  outline: none;
-}
-
-a:hover, a:focus {
-  color: #bf2295;
-}
-
-a:active {
-  color: #fc1c66;
 }
 
 .accesskey {
@@ -491,7 +453,7 @@ textarea#statusMessages, textarea#statusMessages:active, textarea#statusMessages
   border: none !important;
   border-radius: 0;
   box-shadow: var(--highlight) !important;
-  background: linear-gradient(180deg,#000 0%, #000019 100%) !important;
+  background: var(--text_focus) !important;
 }
 
 .freetext {
@@ -1231,7 +1193,7 @@ input[type=text] + label {
   font-family: var(--monospaced);
   color: #7171d1;
   border: 1px solid #302b74;
-  background: linear-gradient(180deg,#000 0%, #000019 100%);
+  background: var(--text_focus);
   box-shadow: var(--highlight);
   user-select: all;
 }

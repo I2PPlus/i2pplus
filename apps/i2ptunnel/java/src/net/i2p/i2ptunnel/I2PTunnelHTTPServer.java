@@ -818,7 +818,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             } catch (IOException ioe) {
                 if (_log.shouldLog(Log.WARN))
 //                    _log.debug("[HTTPServer] " + _name + ": Error sending", ioe);
-                    _log.warn("[HTTPServer] " + _name + ": Error sending (" + ioe.getMessage() + ")");
+                    _log.warn("[HTTPServer] " + _name + ": Error sending -> " + ioe.getMessage());
                 synchronized(this) {
                     _failure = ioe;
                 }

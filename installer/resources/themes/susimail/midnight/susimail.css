@@ -12,9 +12,6 @@ html, body {
 
 body {
   margin: 6px 5px;
-  font-family: var(--bodyfont);
-  font-size: 9pt;
-  color: var(--ink);
   background: repeating-linear-gradient(180deg,rgba(0,0,24,.75) 3px, rgba(0,0,0,.9) 5px, rgba(0,0,0,.7) 6px),
   var(--tile),
   var(--compose_hover),
@@ -248,7 +245,7 @@ th.mailListSubject {
 
 #mailbox td {
   padding: 4px 8px;
-  border-right: 1px solid rgba(38, 35, 92,.7);
+  border-right: var(--border_soft);
 }
 
 .bottombuttons td, .pagenav td {
@@ -315,36 +312,14 @@ tr.bottombuttons:last-child td {
   border-bottom: var(--border_inner) !important;
 }
 
-a:link {
-  color: var(--a);
-  text-decoration: none;
-  font-weight: 700;
-}
-
-a:hover, a:visited:hover {
-  color: #bf2295;
-}
-
-a:visited {
-  color: #4e47bf;
-}
-
-a:active {
-  color: #fc1c66;
-}
-
 td {
   margin: 0 5px;
   padding: 2px;
   font-size: 9pt;
 }
 
-.list0 {
-  background: linear-gradient(180deg,#080818, #010010);
-}
-
-.list1 {
-  background: linear-gradient(180deg,#080818, #010010);
+.list0, .list1 {
+  background: var(--row);
 }
 
 /* mailbox display finessing */
@@ -352,17 +327,25 @@ td {
 .list0 td, .list1 td {
   padding: 4px;
   color: #7670c2;
-  border-top: 1px solid rgba(38, 35, 92,.7);
-  border-bottom: 1px solid rgba(38, 35, 92,.7);
+  border-top: var(--border_soft);
+  border-bottom: var(--border_soft);
+}
+
+#mailbox tr:first-child th {
+  border-bottom: var(--border_inner) !important;
+}
+
+#mailbox tr:nth-child(3) td {
+  border-top: var(--border_inner) !important;
 }
 
 .list0:hover, .list1:hover, .list0:hover a, .list1:hover a {
-  color: #bf2295;
+  color: var(--hover);
   background: #1e0b28;
 }
 
 .list0:active, .list1:active, .list0:active a, .list1:active a {
-  color: #fc1c66;
+  color: var(--active);
 }
 
 .list0:hover td:nth-child(3) a, .list1:hover td:nth-child(3) a {
@@ -402,7 +385,7 @@ img.sort {
   height: 10px;
   vertical-align: middle;
   font-size: 0;
-  border: 1px solid #26225c;
+  border: var(--border_btn);
   border-radius: 2px;
   opacity: .6;
 }
@@ -556,7 +539,7 @@ input[type="file"] {
 
 input[type="file"]:hover {
   color: #652787;
-  color: #bf2295;
+  color: var(--hover);
 }
 
 input.new_upload {
@@ -578,7 +561,7 @@ input[type=submit], input.cancel, #settings, .fakebutton, #expand, #collapse {
   font: bold 9pt var(--bodyfont);
   text-align: center;
   color: var(--a) !important;
-  border: 1px solid #26225c;
+  border: var(--border_btn);
   border-radius: 1px;
   box-shadow: var(--highlight), inset 0 0 2px 0 #559;
   background: var(--btn) !important;
@@ -593,7 +576,7 @@ input[type=submit]:hover, input.cancel:hover,
 input[type=submit]:focus, input.cancel:focus,
 #settings:hover, #settings:focus, .fakebutton:hover, .fakebutton:focus,
 #expand:hover, #expand:focus, #collapse:hover, #expand:focus {
-  color: #bf2295 !important;
+  color: var(--a_hover) !important;
   border: 1px solid #652787;
   box-shadow: var(--highlight), inset 0 0 2px 1px #757;
   background: #000 !important;
@@ -641,19 +624,27 @@ input[name="user"], input[name="pass"] {
 input[name="user"]:focus, input[name="pass"]:focus, input[type=text]:focus, textarea:focus {
   color: var(--ink);
   border: 1px solid #6466a5 !important;
-  box-shadow: 0 0 0 1px rgba(101, 39, 135, .5), 0 0 2px 2px #202;
+  box-shadow: var(--btn_shadow_active);
 }
 
 #dologin input[name="user"] {
-  background: #000 var(--user) no-repeat 6px center / 14px !important;
+  background: #000 var(--user) no-repeat 6px center / 14px;
 }
 
 #dologin input[name="pass"] {
-  background: #000 var(--key) no-repeat 6px center / 14px !important;
+  background: #000 var(--key) no-repeat 6px center / 14px;
 }
 
 input[name="user"]:focus, input[name="pass"]:focus {
   background-blend-mode: normal;
+}
+
+input[name="user"]:focus {
+  background: var(--user) no-repeat 6px center / 14px, var(--text_focus) !important;
+}
+
+input[name="pass"]:focus {
+  background: var(--key) no-repeat 6px center / 14px, var(--text_focus) !important;
 }
 
 input::placeholder {
@@ -817,7 +808,7 @@ input.delete {
 }
 
 #dologin tr:last-child a:hover {
-  color: #bf2295;
+  color: var(--hover);
   box-shadow: 0 0 1px #000, var(--highlight);
   background: linear-gradient(180deg,#003 50%, #000 50%) #000;
   transition: ease all .2s;

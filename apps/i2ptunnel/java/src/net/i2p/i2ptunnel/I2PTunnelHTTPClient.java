@@ -1067,7 +1067,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         shout = true;
                     }
                     String origHost = origRequestURI.getHost();
-                    if (origHost != null && origHost.startsWith("skank.i2p"))
+                    if (origHost != null && (origHost.startsWith("skank.i2p") || origHost.endsWith(".skank.i2p")))
                         plus = true;
                 }
 
