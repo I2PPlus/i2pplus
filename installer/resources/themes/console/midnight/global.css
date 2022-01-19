@@ -94,21 +94,6 @@ label {
   cursor: pointer;
 }
 
-input:hover, input:focus {
-  color: var(--a_hover);
-  border: 1px solid var(--hover);
-  box-shadow: inset 0 1px 1px 0 var(--ink);
-  background: #000;
-  cursor: pointer;
-}
-
-input:active {
-  color: var(--ink);
-  border: 1px solid var(--hover);
-  box-shadow: var(--highlight);
-  background: #000;
-}
-
 input[type=text], input[type=password], textarea {
   padding: 6px 8px;
   color: var(--a) !important;
