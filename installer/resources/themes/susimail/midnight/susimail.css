@@ -572,16 +572,6 @@ input {
   border: var(--border_inner);
 }
 
-input.optbox {
-  min-width: 16px !important;
-  min-height: 16px !important;
-}
-
-input[type=submit]::-moz-focus-inner, input.cancel::-moz-focus-inner, button::-moz-focus-inner {
-  border: none;
-  box-shadow: none;
-}
-
 input[type=submit], input.cancel, #settings, .fakebutton, #expand, #collapse {
   margin: 4px 5px;
   padding: 5px 8px !important;
@@ -781,15 +771,6 @@ input.delete {
 #dologin td:last-child {
   width: 75%;
   white-space: nowrap;
-}
-
-@media screen and (max-width: 1200px) {
-  #dologin td:first-child {
-    width: 22%;
-  }
-  #dologin td:last-child {
-    width: 78%;
-  }
 }
 
 #dologin td[colspan="2"], #dologin td[colspan="2"] input {
@@ -1621,6 +1602,8 @@ div:not(#pagesize).topbuttons, .iframed div:not(#pagesize).topbuttons {
 
 @media screen and (max-width: 1200px) {
   #dologin {width: 500px}
+  #dologin td:first-child {width: 22%}
+  #dologin td:last-child {width: 78%}
 }
 
 @media screen and (max-width: 700px) {
