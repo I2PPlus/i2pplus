@@ -774,13 +774,22 @@ input.delete {
 
 #dologin td:first-child {
   padding-right: 5px !important;
-  width: 29%;
+  width: 25%;
   white-space: nowrap;
 }
 
 #dologin td:last-child {
-  width: 71%;
+  width: 75%;
   white-space: nowrap;
+}
+
+@media screen and (max-width: 1200px) {
+  #dologin td:first-child {
+    width: 22%;
+  }
+  #dologin td:last-child {
+    width: 78%;
+  }
 }
 
 #dologin td[colspan="2"], #dologin td[colspan="2"] input {
