@@ -1,3 +1,6 @@
+/* I2P Midnight theme globals */
+/* Author: (c) dr|z3d 2022 */
+
 @import url(/themes/fonts/DroidSans.css);
 @import url(chromescroll.css);
 @import url(/themes/console/midnight/images/tile.css);
@@ -304,7 +307,7 @@ input[type=file]:active::file-selector-button {
   box-sizing: border-box;
   outline: none;
   border: 1px solid #27235c !important;
-  box-shadow: var(--highlight), inset 3px 3px 3px 1px #000;
+  box-shadow: var(--btn_shadow_active);
   background: linear-gradient(180deg,#030306, #112);
   appearance: none;
   filter: drop-shadow(0 0 1px #000);
@@ -322,7 +325,7 @@ input[type=file]:active::file-selector-button {
 }
 
 .optbox:not(:checked) {
-  box-shadow: var(--highlight), inset 3px 3px 3px 1px #000;
+  box-shadow: var(--btn_shadow_active);
 }
 
 .optbox:active {

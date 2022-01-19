@@ -1278,35 +1278,6 @@ input.new_upload:hover, input.new_upload:focus {
   background: var(--attach_hover) no-repeat 9px center, var(--btn_hover) !important;
 }
 
-input[type=file]::file-selector-button {
-  margin: 2px 10px 2px 3px;
-  padding: 5px 8px;
-  vertical-align: middle;
-  font: bold 100% var(--bodyfont);
-  color: var(--a);
-  text-decoration: none;
-  text-align: center;
-  text-shadow: 0 1px 1px #000;
-  border: var(--border_inner);
-  border-radius: 1px;
-  box-shadow: var(--highlight), inset 0 0 2px 0 #559;
-  background: var(--btn) !important;
-  cursor: pointer;
-}
-
-input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
-  color: #652787;
-  color: #bf2295;
-  border: 1px solid #652787;
-  box-shadow: var(--highlight), inset 0 0 2px 1px #757;
-  background: var(--btn_hover) !important;
-  cursor: pointer;
-}
-
-input[type=file]:active::file-selector-button {
-  background: #652787 !important;
-}
-
 /* pagenav */
 
 input.firstpage, input[name="firstpage"],
