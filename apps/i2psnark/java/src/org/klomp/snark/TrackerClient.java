@@ -600,7 +600,7 @@ public class TrackerClient implements Runnable {
                                   .replace("afuuortfaqejkesne272krqvmafn65mhls6nvcwv3t7l2ic2p4kq.b32.i2p", "lyoko.i2p")
                                   .replace("s5ikrdyjwbcgxmqetxb3nyheizftms7euacuub2hic7defkh3xhq.b32.i2p", "tracker.thebland.i2p")
                                   .replace("nfrjvknwcw47itotkzmk6mdlxmxfxsxhbhlr5ozhlsuavcogv4hq.b32.i2p", "torrfreedom.i2p")
-                                  .replace("http://", ""));
+                                  .replace("http://", "") + "]");
 //                                  "]\n* " + ioe.getMessage());
                     tr.trackerProblems = ioe.getMessage();
                     // don't show secondary tracker problems to the user
