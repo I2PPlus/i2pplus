@@ -1005,34 +1005,26 @@ p + .twocol {
 
 /* end welcome */
 
-a:link {
-  word-wrap: break-word;
-  text-decoration: none;
-  font-weight: 700;
-}
-
 .main a:visited[target="_blank"] {
   color: var(--visited);
 }
 
-a:link, a:visited, #sitemapcontainer a:visited, #home .extlink:visited, .main .applabel a:visited {
+#sitemapcontainer a:visited, #home .extlink:visited,
+.main .applabel a:visited {
   color: var(--a);
 }
 
-a:hover, a:visited:hover, a:focus, a:visited:focus, a:hover .b32 {
+a:hover .b32 {
   color: var(--hover) !important;
-  text-decoration: none;
-  outline: none;
 }
 
-a:active, a:visited:active, a:active .b32 {
+a:active .b32 {
   color: var(--active) !important;
-  text-decoration: none;
 }
 
 a.script {
-  letter-spacing: normal;
   word-spacing: normal;
+  letter-spacing: normal;
 }
 
 pre {

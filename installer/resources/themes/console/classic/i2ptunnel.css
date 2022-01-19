@@ -238,23 +238,6 @@ select[disabled]:focus, select[disabled]:active {
   background: var(--crypto) no-repeat left center / 16px !important;
 }
 
-a:link, a:visited {
-  word-wrap: break-word;
-  text-decoration: none;
-  font-weight: 700;
-  color: var(--a);
-  outline: none;
-}
-
-a:hover, a:focus {
-  text-decoration: none;
-  color: var(--hover);
-}
-
-a:active {
-  color: var(--active);
-}
-
 input[type="hidden"], input.default {
   display: none;
 }

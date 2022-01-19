@@ -68,8 +68,21 @@ img {
   border: none;
 }
 
-a {
+a:link, a:visited {
+  word-wrap: break-word;
   text-decoration: none;
+  font-weight: 700;
+  color: var(--a);
+  outline: none;
+}
+
+a:hover, a:focus {
+  text-decoration: none;
+  color: var(--hover);
+}
+
+a:active {
+  color: var(--active);
 }
 
 select {
