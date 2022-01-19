@@ -2914,41 +2914,39 @@ a:active, .h3navlinks a:active, a:active .b32, .signingkey a:active {
 }
 
 .links {
-  text-align: justify;
   margin-top: 10px;
   margin-bottom: -10px;
+  text-align: justify;
 }
 
 .links li {
-  list-style-image: url(images/link.png) !important;
-  text-align: justify! important;
   line-height: 1.5;
+  text-align: justify! important;
+  list-style-image: var(--star) !important;
 }
 
 .links b {
-  color: #ebdbff !important;
   color: #8f7959 !important;
   letter-spacing: .08em;
   line-height: 165%;
 }
 
 p {
-  text-align: justify;
   line-height: 1.6;
+  text-align: justify;
 }
 
 p img:first-child {
   display: none !important;
 }
 
-p:empty { /* kills empty paragraphs that are likely erroneous eg. see top of /profiles?f=1, /profiles */
+p:empty {
   display: none;
-  border: 1px dotted var(--hover); /* display in order to bug hunt */
 }
 
 #config_logging p {
-  text-align: left;
   margin: 3px 0 0 !important;
+  text-align: left;
 }
 
 h1 {

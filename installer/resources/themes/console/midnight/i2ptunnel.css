@@ -23,10 +23,6 @@ body.iframed {
 }
 
 * {
-  outline: none;
-}
-
-* {
   scrollbar-color: rgba(16,16,48,.8) rgba(0,0,0,0);
   transition: ease scrollbar-color .5s;
 }
@@ -34,15 +30,6 @@ body.iframed {
 *:hover {
   scrollbar-color: rgba(24,24,80,.8) rgba(0,0,0,.9);
   transition: ease scrollbar-color .2s;
-}
-
-:-moz-focusring {
-  outline: none !important;
-}
-
-::selection {
-  background: rgba(34, 41, 111, .9) !important;
-  color: white;
 }
 
 h2, h3, th, .buttons, .newTunnel, .control, label, .infohelp, .infowarn, .nowrap, b, #throttler td {
@@ -59,10 +46,6 @@ h2, h3, th, .buttons, .newTunnel, .control, label, .infohelp, .infowarn, .nowrap
 
 div {
   box-sizing: border-box;
-}
-
-a, button, input, .control {
-  -webkit-text-stroke: .5px rgba(0,0,0,.4);
 }
 
 a {
