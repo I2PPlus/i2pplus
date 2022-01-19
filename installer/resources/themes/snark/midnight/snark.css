@@ -3565,7 +3565,19 @@ tr:not(.peerinfo) .torrentDownloaded .percentBarText::after {
   border: 1px solid #181858;
   border-left-width: 5px;
   box-shadow: var(--highlight), 0 0 0 1px #000, inset 3px 3px 3px rgba(0,0,0,.8);
-  background: repeating-linear-gradient(90deg,#000,#000 10%,#080848 10%,#080848 20%);
+  background: repeating-linear-gradient(90deg,#000,#000 5%,#080848 5%,#080848 10%);
+  background-size: 200%;
+}
+
+@keyframes uploading {
+  from {background-position: left center}
+  to {background-position: 20% center}
+}
+
+.active .uploaded {
+  background: repeating-linear-gradient(90deg,#000,#000 5%,#303 5%,#505 10%);
+  background-size: 200%;
+  animation: uploading .5s linear 4s 1 reverse;
 }
 
 tr:hover .uploaded {
@@ -3582,6 +3594,10 @@ tr:hover .uploaded {
   background: rgba(192,48,192,.25);
   box-shadow: inset 3px 3px 3px rgba(0,0,0,.8);
   border: none;
+}
+
+.txBarInner[style="width: calc(100% - 2px)"] {
+  box-shadow: 0 0 0 1px #000, inset 0 2px 3px 2px rgba(255,255,255,.1);
 }
 
 .active .txBarInner {
