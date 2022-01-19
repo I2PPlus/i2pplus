@@ -136,11 +136,6 @@ td.peerCount {
   animation: ease-out navslide .2s .5s forwards;
 }
 
-@keyframes navslide {
-  from {transform: translateY(-200px)}
-  to {transform: translateY(0)}
-}
-
 .snarkNav, .snarkNav:visited {
   margin: 0 -2px;
   padding: 4px 9px 4px 26px !important;
@@ -652,6 +647,7 @@ td.torrentDetails img, .dirInfo td:first-child img:not(.thumb) {
 }
 
 .torrentName a:active, .snarkFileName a:active {
+  color: var(--active) !important;
   box-shadow: inset 3px 3px 3px 3px rgba(0,0,0,.3);
 }
 
@@ -747,10 +743,6 @@ td.torrentDetails img, .dirInfo td:first-child img:not(.thumb) {
 .active td.torrentAction {
   background: linear-gradient(to left, rgba(0,0,0,0) 1px, #b3b 2px, rgba(0,0,0,0) 2px);
   animation: ease active 2s forwards;
-}
-
-@keyframes active {
-  from {background: linear-gradient(to left, rgba(0,0,0,0) 1px, #f5f 3px, rgba(0,0,0,0) 3px)}
 }
 
 .peerinfo td:nth-child(4) {
@@ -1059,21 +1051,20 @@ tr:hover .percentBarText {
   opacity: .9;
 }
 
-.rowEven {
-  background: linear-gradient(180deg,#080818, #010010) !important;
+.rowEven, .rowOdd, .knownTracker, #trackerselect tr:nth-child(n+2) td {
+  background: linear-gradient(180deg,#040414, #010010) !important;
 }
 
 .rowOdd, .rowOdd td, .rowEven, .rowEven td, .peerinfo td, .knownTracker td {
-  border-top: var(--border_inner) !important;
-}
-
-.rowOdd, .knownTracker, #trackerselect tr:nth-child(n+2) td {
-  background: linear-gradient(180deg,#080818, #010010) !important;
+  border-top: var(--border_inner);
 }
 
 .rowOdd td, .rowEven td {
-  color: #ccd1ff !important;
-  border-top: none !important;
+  color: #ccd1ff;
+}
+
+.snarkTorrents .rowOdd td, .snarkTorrents .roweven td {
+  border-top: 1px solid #171537;
 }
 
 .snarkTorrents .rowEven:first-of-type td {
@@ -1113,11 +1104,6 @@ tr:hover .percentBarText {
   animation: progress 5s linear infinite both;
   backface-visibility: hidden;
   will-change: transform;
-}
-
-@keyframes progress {
-  from {background: repeating-linear-gradient(135deg, #001 1px, #001 5px, #112 6px, #113 11px)}
-  to {background: repeating-linear-gradient(135deg, #112 1px, #113 5px, #001 6px, #001 11px)}
 }
 
 .peerinfo .percentBarOuter {
@@ -1221,10 +1207,6 @@ tr:hover .percentBarComplete {
 .active:hover .percentBarComplete {
   box-shadow: var(--highlight), inset 0 1px 1px 1px #404, inset 0 -1px 1px 1px #202;
   background: radial-gradient(at center bottom, rgba(80, 0, 80, .55) 10%, rgba(32, 0, 32, .1) 60%, rgba(0, 0, 0, 0) 70%), linear-gradient(180deg,#303, #101);
-}
-
-@keyframes seeding {
-  from {box-shadow: var(--highlight), inset 0 1px 3px 1px #505, inset 0 -1px 1px 1px #202}
 }
 
 /* end download bars */
@@ -2088,30 +2070,6 @@ a:hover img, a:focus img {
   border: none !important;
 }
 
-@keyframes slide-in {
-0% {
-  transform: translateY(-50px);
-}
-
-100% {
-  transform: translateY(0);
-}
-}
-
-@keyframes fade-in {
-0% {
-  filter: opacity(0);
-}
-
-20% {
-  filter: opacity(0);
-}
-
-100% {
-  filter: opacity(1);
-}
-}
-
 .addtorrentsection table, .newtorrentsection table:not(#trackerselect) {
   animation: fade-in .3s linear, slide-in .15s ease-out;
 }
@@ -2259,10 +2217,6 @@ code {
   animation: linear spin 5s reverse infinite;
 }
 
-@keyframes spin {
-  from {transform: rotate(360deg)}
-}
-
 input.trackername {
   width: 100px;
 }
@@ -2297,10 +2251,6 @@ input:not(checked) + label + hr + table + table {
 input:checked + label + hr + table,
 input:checked + label + hr + table + table {
   display: table;
-}
-
-.rowEven td, .rowOdd td {
-  border-top: var(--border_inner) !important;
 }
 
 .peerinfo, .debuginfo {
@@ -3453,11 +3403,6 @@ tr:not(.peerinfo) .torrentDownloaded .percentBarText::after {
   background-size: 200%;
 }
 
-@keyframes uploading {
-  from {background-position: left center}
-  to {background-position: 20% center}
-}
-
 .active .uploaded {
   background: repeating-linear-gradient(90deg,#000,#000 5%,#303 5%,#505 10%);
   background-size: 200%;
@@ -4036,6 +3981,43 @@ td.torrentAction input[type=submit] {
 }
 
 /* end torrent edit */
+
+@keyframes navslide {
+  from {transform: translateY(-200px)}
+  to {transform: translateY(0)}
+}
+
+@keyframes active {
+  from {background: linear-gradient(to left, rgba(0,0,0,0) 1px, #f5f 3px, rgba(0,0,0,0) 3px)}
+}
+
+@keyframes progress {
+  from {background: repeating-linear-gradient(135deg, #001 1px, #001 5px, #112 6px, #113 11px)}
+  to {background: repeating-linear-gradient(135deg, #112 1px, #113 5px, #001 6px, #001 11px)}
+}
+
+@keyframes seeding {
+  from {box-shadow: var(--highlight), inset 0 1px 3px 1px #505, inset 0 -1px 1px 1px #202}
+}
+
+@keyframes spin {
+  from {transform: rotate(360deg)}
+}
+
+@keyframes uploading {
+  from {background-position: left center}
+  to {background-position: 20% center}
+}
+
+@keyframes slide-in {
+  0% {transform: translateY(-50px)}
+  100% {transform: translateY(0)}
+}
+
+@keyframes fade-in {
+  0%,20% {filter: opacity(0)}
+  100% {filter: opacity(1)}
+}
 
 /* responsive layout */
 
