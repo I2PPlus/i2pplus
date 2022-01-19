@@ -783,6 +783,10 @@ input.delete {
   white-space: nowrap;
 }
 
+#dologin td[colspan="2"], #dologin td[colspan="2"] input {
+  vertical-align: middle;
+}
+
 #dologin td[colspan="2"] {
   padding: 3px 3px 5px !important;
   text-align: center;
@@ -1230,7 +1234,12 @@ input.send:hover, input.send:focus {
 
 input.configure, #settings {
   padding: 6px 9px 6px 27px !important;
+  vertical-align: middle;
   background: var(--configure) no-repeat 9px center / 14px, var(--btn) !important;
+}
+
+#settings {
+  display: inline-block;
 }
 
 input.configure:hover, input.configure:focus,
