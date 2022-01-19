@@ -53,15 +53,12 @@ a, button, input {
   -webkit-text-stroke: .5px rgba(0,0,0,.4);
 }
 
-::placeholder {
+::placeholder, input::placeholder {
   font-size: 90%;
+  font-weight: 700 !important;
   font-style: italic;
+  color: #aaf !important;
   opacity: .4 !important;
-}
-
-input::placeholder {
-  color: #aaf;
-  font-weight: 700;
 }
 
 :focus::placeholder {
