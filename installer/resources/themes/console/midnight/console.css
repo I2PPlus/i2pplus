@@ -2811,7 +2811,7 @@ tt {
   color: #393;
 }
 
-table tt {
+table tt, #jardump td:nth-child(4) {
   color: #393;
 }
 
@@ -6281,11 +6281,6 @@ table#jardump {
   background: #400;
   color: #fff;
   border-radius: 2px;
-}
-
-.revision:hover, .sha256:hover {
-  overflow: auto;
-  text-overflow: clip;
 }
 
 .revision, .sha256, .unsignedmod {
@@ -12616,10 +12611,6 @@ iframe {
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .revision:hover, .sha256:hover {
-    overflow: auto;
-    text-overflow: clip;
-  }
   #criticallogs + h3.tabletitle a:first-child {
     padding-left: 4px !important;
     padding-right: 10px !important;
@@ -12777,6 +12768,10 @@ iframe {
   .tunnels_participating td:nth-child(4) {
     width: 1% !important;
     min-width: 72px !important;
+  }
+  #jardump th:nth-child(3), #jardump th:nth-child(4), #jardump th:nth-child(5), #jardump th:nth-child(6),
+  #jardump td:nth-child(3), #jardump td:nth-child(4), #jardump td:nth-child(5), #jardump td:nth-child(6) {
+    display: none;
   }
 }
 
