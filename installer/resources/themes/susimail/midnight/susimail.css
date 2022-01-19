@@ -319,7 +319,7 @@ a:link {
 }
 
 a:hover, a:visited:hover {
-  color: #bf2295;
+  color: var(--hover);
 }
 
 a:visited {
@@ -327,7 +327,7 @@ a:visited {
 }
 
 a:active {
-  color: #fc1c66;
+  color: var(--active);
 }
 
 td {
@@ -354,12 +354,12 @@ td {
 }
 
 .list0:hover, .list1:hover, .list0:hover a, .list1:hover a {
-  color: #bf2295;
+  color: var(--hover);
   background: #1e0b28;
 }
 
 .list0:active, .list1:active, .list0:active a, .list1:active a {
-  color: #fc1c66;
+  color: var(--active);
 }
 
 .list0:hover td:nth-child(3) a, .list1:hover td:nth-child(3) a {
@@ -553,7 +553,7 @@ input[type="file"] {
 
 input[type="file"]:hover {
   color: #652787;
-  color: #bf2295;
+  color: var(--hover);
 }
 
 input.new_upload {
@@ -590,7 +590,7 @@ input[type=submit]:hover, input.cancel:hover,
 input[type=submit]:focus, input.cancel:focus,
 #settings:hover, #settings:focus, .fakebutton:hover, .fakebutton:focus,
 #expand:hover, #expand:focus, #collapse:hover, #expand:focus {
-  color: #bf2295 !important;
+  color: var(--hover) !important;
   border: 1px solid #652787;
   box-shadow: var(--highlight), inset 0 0 2px 1px #757;
   background: #000 !important;
@@ -814,7 +814,7 @@ input.delete {
 }
 
 #dologin tr:last-child a:hover {
-  color: #bf2295;
+  color: var(--hover);
   box-shadow: 0 0 1px #000, var(--highlight);
   background: linear-gradient(180deg,#003 50%, #000 50%) #000;
   transition: ease all .2s;

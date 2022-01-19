@@ -8,7 +8,6 @@
 :root {
   --a: #7171d1;
   --active: #fc1c66;
-  --a_hover: #bf2295;
   --badge: linear-gradient(180deg,#080818 50%,#000 50%);
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
   --border: 1px solid #26235c;
@@ -31,8 +30,8 @@
   --outline: 0 0 0 1px #000;
   --panel: linear-gradient(180deg,#080818, #040410);
   --th: repeating-linear-gradient(90deg, rgba(0,0,64,.4) 2px, #000 4px), var(--titlebg) repeat center center / 100%, #001;
-  --title: repeating-linear-gradient(90deg, rgba(0,0,48,.4) 2px, #000 4px), var(--titlebg) repeat center center / 100%, #001;
   --titlebg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 2'%3E%3Cpath fill='%23000018' d='M0 0h1v1H0z'/%3E%3Cpath d='M0 1h1v1H0z'/%3E%3C/svg%3E");
+  --title: repeating-linear-gradient(90deg, rgba(0,0,48,.4) 2px, #000 4px), var(--titlebg) repeat center center / 100%, #001;
   --tr: linear-gradient(180deg,#001,#000);
 }
 
@@ -207,14 +206,14 @@ input[type=file]::file-selector-button {
 
 input[type=submit]:hover, input[type=reset]:hover, button:hover, button:focus,
 input[type=submit]:focus, input[type=reset]:focus, select:hover, select:focus {
-  color: var(--a_hover);
+  color: var(--hover);
   border: 1px solid var(--hover);
   box-shadow: var(--highlight), inset 0 0 2px 1px #757;
   cursor: pointer;
 }
 
 input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
-  color: var(--a_hover);
+  color: var(--hover);
   border: 1px solid var(--hover);
   box-shadow: var(--highlight), inset 0 0 2px 1px #757;
   background: var(--btn_hover);

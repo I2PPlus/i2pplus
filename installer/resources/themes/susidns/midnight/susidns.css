@@ -424,7 +424,7 @@ a:link {
 
 a:hover, a:focus {
   text-decoration: none;
-  color: #bf2295 !important;
+  color: var(--hover) !important;
 }
 
 a:visited {
@@ -433,7 +433,7 @@ a:visited {
 }
 
 a:active {
-  color: #fc1c66 !important;
+  color: var(--active) !important;
 }
 
 th {
@@ -681,12 +681,12 @@ svg tspan:hover, svg .tooltip:hover .g {
 }
 
 svg .tooltip.link:hover {
-  stroke: #bf2295;
+  stroke: var(--hover);
 }
 
 svg a tspan:hover, svg #sublist:hover #hovershow,
 svg .a.tooltip:hover + .b > tspan, svg .a.private:hover + .b > tspan, svg a:hover .g {
-  fill: #bf2295;
+  fill: var(--hover);
 }
 
 svg #hover stop:first-child, svg #hover2 stop:first-child {
@@ -1601,11 +1601,11 @@ input#exporthosts:active {
 }
 
 #prev:not(.inactive):hover::after, #prev:not(.inactive) a:focus::after {
-  border-color: transparent #bf2295 transparent transparent;
+  border-color: transparent var(--hover) transparent transparent;
 }
 
 #next:not(.inactive):hover::after, #next:not(.inactive) a:focus::after {
-  border-color: transparent transparent transparent #bf2295;
+  border-color: transparent transparent transparent var(--hover);
 }
 
 #empty {

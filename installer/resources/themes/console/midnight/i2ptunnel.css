@@ -59,7 +59,7 @@ a:link, a:visited {
 }
 
 a:hover, a:focus {
-  color: #bf2295;
+  color: var(--hover);
 }
 
 a:active {
