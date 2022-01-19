@@ -2255,13 +2255,13 @@ div.confignav {
 }
 
 .tab {
-  background: linear-gradient(180deg,#181828 50%, #000 50%) !important;
+  background: linear-gradient(180deg,#112,#080818 50%, #000) !important;
   box-shadow: var(--highlight), inset 0 0 1px 0 #446;
 }
 
 .tab:hover {
   box-shadow: var(--highlight), inset 0 0 1px 1px rgba(112,80,112,.7);
-  background: radial-gradient(at center bottom, rgba(96, 32, 96, .6) 0, rgba(0, 0, 0, 0) 90%), var(--btn_hover) !important;
+  background: radial-gradient(at center bottom, rgba(96,32,96,.6) 0, rgba(0,0,0,0) 90%), var(--btn_hover) !important;
 }
 
 .tab:hover a {

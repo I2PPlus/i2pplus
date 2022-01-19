@@ -16,7 +16,7 @@
   --border_inner: 1px solid rgba(38,35,92,.7);
   --border_input: #27235c;
   --btn_active: linear-gradient(180deg,#401856, #501f6c);
-  --btn_hover: linear-gradient(180deg,#202 50%,#000 50%);
+  --btn_hover: linear-gradient(180deg,#202,#101 50%, #080008 50%,#000);
   --btn: linear-gradient(180deg,#11101c 50%,#000010 50%);
   --btn_shadow_active: var(--highlight), inset 4px 4px 4px rgba(0,0,0,.7);
   --element: linear-gradient(180deg,#112,#000);
