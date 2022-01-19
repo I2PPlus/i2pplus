@@ -48,24 +48,6 @@ div {
   box-sizing: border-box;
 }
 
-a {
-  text-decoration: none;
-  font-weight: 700;
-}
-
-a:link, a:visited {
-  color: #7171d1;
-  outline: none;
-}
-
-a:hover, a:focus {
-  color: var(--hover);
-}
-
-a:active {
-  color: #fc1c66;
-}
-
 .accesskey {
   display: none !important;
   text-decoration: underline;

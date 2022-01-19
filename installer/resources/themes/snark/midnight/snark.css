@@ -7,8 +7,9 @@
   --btnAction_active: linear-gradient(180deg,#3c1751, #652787);
   --btnAction_hover: var(--nav_hover);
   --btnAction: linear-gradient(180deg,#181d4f 50%, #001 50%);
-  --nav_hover: linear-gradient(180deg,#652787 50%, #3C1751 50%);
   --nav: linear-gradient(180deg,#181828 50%, #000 50%);
+  --nav_hover: linear-gradient(180deg,#652787 50%, #3c1751 50%);
+  --nav_active: linear-gradient(180deg,#3c1751,#652787);
   --tab_active: linear-gradient(90deg, rgba(0,0,32,.1), rgba(64,0,64,.2), rgba(0,0,32,.1)), linear-gradient(180deg,#080008, #0a000a);
   --tab_hover: linear-gradient(90deg, rgba(0,0,16,.05), rgba(96,0,96,.15), rgba(0,0,16,.05)), linear-gradient(180deg,#1d1a2d 50%, #000 50%);
   --tab: linear-gradient(90deg, rgba(0,0,16,.7), rgba(0,0,0,.1), rgba(0,0,16,.7)), var(--nav);
@@ -140,7 +141,7 @@ td.peerCount {
   to {transform: translateY(0)}
 }
 
-.snarkNav:link, .snarkNav:visited {
+.snarkNav, .snarkNav:visited {
   margin: 0 -2px;
   padding: 4px 9px 4px 26px !important;
   position: relative;
@@ -158,7 +159,7 @@ td.peerCount {
   will-change: transform;
 }
 
-.snarkNav:link::before, .snarkNav:link::after {
+.snarkNav::before, .snarkNav::after {
   width: 1px;
   height: 1px;
   display: inline-block;
@@ -166,45 +167,27 @@ td.peerCount {
   content: "";
 }
 
-.snarkNav:link:first-child {
+.snarkNav:first-child {
   padding-left: 26px !important;
   border-radius: 2px 0 0 2px;
 }
 
-.nav_main:link {
+.nav_main {
   background: var(--snark) no-repeat 9px center, var(--nav);
 }
 
-.nav_forum:link {
+.nav_forum {
   background: var(--forum) no-repeat 9px center, var(--nav);
 }
 
-.nav_search:link {
+.nav_search {
   background: var(--search) no-repeat 9px center, var(--nav);
-}
-
-.nav_main:link:hover, .nav_main:link:focus, .nav_main:link:active {
-  background: var(--snark_active), var(--nav_hover) !important;
-  background-repeat: no-repeat !important;
-  background-position: 9px center, center center !important;
-}
-
-.nav_forum:link:hover, .nav_forum:link:focus, .nav_forum:link:active {
-  background: var(--forum_active), var(--nav_hover) !important;
-  background-repeat: no-repeat !important;
-  background-position: 9px center, center center !important;
-}
-
-.nav_search:link:hover, .nav_search:link:focus, .nav_search:link:active {
-  background: var(--search_active), var(--nav_hover) !important;
-  background-repeat: no-repeat !important;
-  background-position: 9px center, center center !important;
 }
 
 .snarkNav:hover, .snarkNav:focus, .snarkNav:active {
   z-index: 999;
   text-decoration: none !important;
-  color: #fff;
+  color: #fff !important;
   text-shadow: none;
   border-color: #652787;
   background: var(--tracker_active), var(--nav_hover) !important;
@@ -216,16 +199,44 @@ td.peerCount {
   box-shadow: var(--highlight), inset 0 0 1px 1px #717;
 }
 
-.snarkNav:active, .nav_search:link:active, .nav_forum:link:active, .nav_main:link:active {
+.snarkNav:active {
+  background: var(--tracker_active) no-repeat 9px center, var(--nav_active) !important;
+}
+
+.nav_main:hover, .nav_main:focus {
+  background: var(--snark_active) no-repeat 9px center, var(--nav_hover) !important;
+}
+
+.nav_forum:hover, .nav_forum:focus {
+  background: var(--forum_active) no-repeat 9px center, var(--nav_hover) !important;
+}
+
+.snarkNav:active, .nav_search:active, .nav_forum:active, .nav_main:active {
   box-shadow: var(--btn_shadow_active);
   transition: ease box-shadow .1s;
 }
 
-.snarkNav:link:last-of-type {
+.nav_search:active {
+  background: var(--search_active) no-repeat 9px center, var(--nav_active) !important;
+}
+
+.nav_main:active {
+  background: var(--snark_active) no-repeat 9px center, var(--nav_active) !important;
+}
+
+.nav_forum:active {
+  background: var(--forum_active) no-repeat 9px center, var(--nav_active) !important;
+}
+
+.nav_search:link:active {
+  background: var(--search_active) no-repeat 9px center, var(--nav_active) !important;
+}
+
+.snarkNav:last-of-type {
   border-radius: 2px !important;
 }
 
-.snarkNav:link[target="_blank"]:last-child {
+.snarkNav[target="_blank"]:last-child {
   border-radius: 0 2px 2px 0 !important;
 }
 
@@ -233,9 +244,9 @@ td.peerCount {
   border-radius: 0 2px 2px 0 !important;
 }
 
-.snarkNav:link, .snarkNav:hover, .snarkNav:focus, .snarkNav:active, .snarkNav:link:active,
-.nav_search:link:hover, .nav_search:link:focus, .nav_forum:link:hover, .nav_forum:link:focus,
-.nav_main:link:hover, .nav_main:link:focus {
+.snarkNav, .snarkNav:hover, .snarkNav:focus, .snarkNav:active, .snarkNav:active,
+.nav_search:hover, .nav_search:focus, .nav_forum:hover, .nav_forum:focus,
+.nav_main:hover, .nav_main:focus {
   background-size: 16px, 100%, 100% !important;
 }
 
@@ -244,7 +255,7 @@ td.peerCount {
     display: flex;
     justify-content: center;
   }
-  .snarkNav:link {
+  .snarkNav {
     margin-left: -1px !important;
     margin-right: -1px !important;
   }
@@ -1506,21 +1517,9 @@ hr {
   margin-bottom: 10px;
 }
 
-a:link, a:visited {
-  color: var(--a);
-  font-weight: 700;
-  text-decoration: none;
-  word-wrap: break-word;
-  border-radius: 0;
-}
-
 a:hover, a:focus, .trackerName a:visited:hover, .trackerName a:visited:focus,
 .snarkTorrents a:visited:hover, .snarkTorrents a:visited:focus, .snarkMessages a:visited:hover {
   color: var(--hover);
-}
-
-a:active {
-  color: var(--active);
 }
 
 input.r {

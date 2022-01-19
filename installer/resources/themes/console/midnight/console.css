@@ -76,7 +76,7 @@ textarea[cols="70"], textarea[name="levels"] {
 input[name="refreshInterval"] {
   margin-right: 3px;
   margin-left: 0;
-  width: 40px;
+  width: 80px;
   text-align: right;
 }
 
@@ -1226,7 +1226,7 @@ div.logo hr {
 
 #sb_services a:hover, #sb_internals a:hover, #sb_advanced a:hover, #sb_localtunnels tr:hover, .sb_newsheadings a:hover,
 #sb_localtunnels tr:hover a, #sb_help a:hover, .news a:hover, #console a:hover, #help a:hover {
-  color: var(--a_hover) !important;
+  color: var(--hover) !important;
   border-radius: 2px;
   background-color: #1e0b28;
 }
@@ -1249,7 +1249,7 @@ div.logo hr {
 #sb_peers a:hover, #sb_peers a:focus,
 #sb_peersadvanced a:hover, #sb_peersadvanced a:focus,
 #sb_tunnels a:hover, #sb_tunnels a:focus {
-  color: var(--a_hover);
+  color: var(--a);
 }
 
 #sb_peersadvanced .separator td::after {
@@ -1375,7 +1375,7 @@ p:empty + .sb_notice {
 }
 
 .routersummary a:hover {
-  color: var(--a_hover);
+  color: var(--hover);
 }
 
 .routersummary hr:last-child {
@@ -1705,7 +1705,7 @@ p:empty + .sb_notice {
 }
 
 .sb_netstatus a:hover, .sb_netstatus a:visited:hover {
-  color: var(--a_hover) !important;
+  color: var(--a) !important;
 }
 
 .sb_netstatus {
@@ -2109,7 +2109,7 @@ div.sorry hr {
 
 #newsDisplay a:hover, #newsDisplay a:focus, #graphopts a:hover, #graphopts a:focus,
 #routerinfo a:hover, #routerinfo a:focus, .graphstat:hover, .graphstat:focus {
-  color: var(--a_hover) !important;
+  color: var(--a) !important;
   text-shadow: 0 1px 1px #000;
   border: 1px solid #000;
   box-shadow: 0 0 1px #000, inset 0 0 0 1px #303;
@@ -2829,7 +2829,7 @@ a:link tt, a:visited tt {
 }
 
 a:hover tt {
-  color: var(--a_hover);
+  color: var(--a);
 }
 
 a:active tt {
@@ -2886,30 +2886,13 @@ code {
   color: #393;
 }
 
-a:link {
-  color: var(--a);
-  text-decoration: none;
-  font-weight: 700;
-  word-wrap: break-word;
-  outline: none;
-}
-
-a:visited {
-  color: #4e47bf;
-  color: var(--a);
-  text-decoration: none;
-  font-weight: 700;
-  word-wrap: break-word;
-}
-
-a:hover, a:focus, .h3navlinks a:hover, .h3navlinks a:focus, a:hover .b32, a:focus .b32, .signingkey a:hover, .signingkey a:focus {
+.h3navlinks a:hover, .h3navlinks a:focus,
+a:hover .b32, a:focus .b32, .signingkey a:hover,
+.signingkey a:focus {
   color: var(--a_hover);
-  text-decoration: none;
-  font-weight: 700;
-  word-wrap: break-word;
 }
 
-a:active, .h3navlinks a:active, a:active .b32, .signingkey a:active {
+.h3navlinks a:active, a:active .b32, .signingkey a:active {
   color: #851768 !important;
 }
 
@@ -11197,7 +11180,7 @@ li.noevents::after {
 }
 
 #stats .tab:not(.tab2):hover {
-  color: var(--a_hover);
+  color: var(--a);
 }
 
 #stats .tab:not(.tab2):active {
@@ -12445,7 +12428,7 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 
 .viewprofile:hover, .familysearch:hover, .configpeer:hover,
 .viewprofile:focus, .familysearch:focus, .configpeer:focus {
-  border: 1px solid var(--a_hover);
+  border: 1px solid var(--a);
 }
 
 #profilelist .version {

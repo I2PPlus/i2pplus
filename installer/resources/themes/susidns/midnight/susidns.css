@@ -248,7 +248,8 @@ p#filtered {
 }
 
 #filter a:hover, #filter a:focus  {
-  border: 1px solid #652787;
+  color: var(--a_hover);
+  border: 1px solid var(--a_hover);
   transform: scale(1.1);
 }
 
@@ -415,25 +416,8 @@ div#messages > p.messages {
   background: var(--infohelp) no-repeat 6px center / 28px;
 }
 
-a:link {
-  color: #7171d1;
-  text-decoration: none;
-  font-weight: 700;
-  outline: none;
-}
-
-a:hover, a:focus {
-  text-decoration: none;
-  color: var(--hover) !important;
-}
-
 a:visited {
   color: #4e47bf;
-  text-decoration: none;
-}
-
-a:active {
-  color: var(--active) !important;
 }
 
 th {
@@ -1244,7 +1228,6 @@ td.names:hover, #host_list td.b32link:hover, #host_list td.helper:hover, #host_l
 }
 
 .names a[href$=".i2p/"] {
-  max-width: 260px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -1662,6 +1645,10 @@ input#exporthosts:active {
     padding: 2px 10px;
     display: inline-block;
     font-size: 10pt;
+  }
+
+  .names a[href$=".i2p/"] {
+    max-width: 260px;
   }
 }
 

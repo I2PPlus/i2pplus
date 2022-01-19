@@ -312,24 +312,6 @@ tr.bottombuttons:last-child td {
   border-bottom: var(--border_inner) !important;
 }
 
-a:link {
-  color: var(--a);
-  text-decoration: none;
-  font-weight: 700;
-}
-
-a:hover, a:visited:hover {
-  color: var(--hover);
-}
-
-a:visited {
-  color: #4e47bf;
-}
-
-a:active {
-  color: var(--active);
-}
-
 td {
   margin: 0 5px;
   padding: 2px;
@@ -590,7 +572,7 @@ input[type=submit]:hover, input.cancel:hover,
 input[type=submit]:focus, input.cancel:focus,
 #settings:hover, #settings:focus, .fakebutton:hover, .fakebutton:focus,
 #expand:hover, #expand:focus, #collapse:hover, #expand:focus {
-  color: var(--hover) !important;
+  color: var(--a_hover) !important;
   border: 1px solid #652787;
   box-shadow: var(--highlight), inset 0 0 2px 1px #757;
   background: #000 !important;
