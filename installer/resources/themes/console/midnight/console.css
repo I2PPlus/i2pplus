@@ -1482,6 +1482,7 @@ p:empty + .sb_notice {
 }
 
 #sb_services a[href="/orchid/"], #sb_services a[href*="/orchid/"] {
+  background: #000010 var(--orchid) no-repeat 5px center;
 }
 
 #sb_services a[href="/orchid/"]:hover, #sb_services a[href*="/orchid/"]:hover {
