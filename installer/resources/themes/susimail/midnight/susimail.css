@@ -1453,7 +1453,7 @@ select {
 .topbuttons .folders input,
 .topbuttons .folders select {
   margin-top: 5px;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
 }
 
 #pagenavbottom .folders {
