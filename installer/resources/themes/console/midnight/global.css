@@ -20,7 +20,7 @@
   --btn: linear-gradient(180deg,#11101c 50%,#000010 50%);
   --btn_shadow_active: var(--highlight), inset 4px 4px 4px rgba(0,0,0,.7);
   --element: linear-gradient(180deg,#224,#000);
-  --formaction: linear-gradient(180deg,#001, #030306);
+  --formaction: linear-gradient(180deg,#001,#030306);
   --helpsection: repeating-linear-gradient(180deg,#080820 2px, #010010 4px);
   --highlight: inset 0 0 0 1px #000;
   --hover: #652787;
@@ -57,7 +57,7 @@ input[disabled] {
 }
 
 a, button, input {
-  -webkit-text-stroke: .5px rgba(0,0,0,.4);
+  -webkit-text-stroke: .5px rgba(0,0,0,.3);
 }
 
 ::placeholder, input::placeholder {

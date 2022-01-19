@@ -920,7 +920,7 @@ li .infohash::selection, .snarkTorrents .infohash::selection {
 }
 
 .dirInfo th {
-  padding: 4px 6px;
+  padding: 8px 6px;
 }
 
 .dirInfo th img {
@@ -940,7 +940,7 @@ li .infohash::selection, .snarkTorrents .infohash::selection {
 }
 
 .dirInfo th:first-child {
-  padding-left: 6px;
+  padding-left: 10px;
 }
 
 .dirInfo td:first-child {
@@ -997,39 +997,10 @@ li .infohash::selection, .snarkTorrents .infohash::selection {
   mix-blend-mode: luminosity;
 }
 
-.headerstatus {
-  text-align: center;
-}
-
-.headerpriority {
-  padding-left: 10px;
-  text-align: left;
-}
-
-.headerpriority input[type=submit] {
-  margin: 5px;
-}
-
-.subHeaderPriority, .priority {
+.priority {
   width: 0;
   padding: 0 10px !important;
   text-align: center !important;
-}
-
-.subHeaderPriority {
-  font-weight: 700;
-  padding: 0 1px !important;
-  text-align: center !important;
-  background: #020022;
-  background: url(images/snarktopnav.png) repeat-x scroll center center #010011;
-}
-
-.headerpriority br {
-  display: none;
-}
-
-.headerpriority img {
-  padding: 4px !important;
 }
 
 .priority {
@@ -1038,10 +1009,6 @@ li .infohash::selection, .snarkTorrents .infohash::selection {
 
 tr.priority:last-child {
   border-bottom: none !important;
-}
-
-th.headerdownloaded {
-  padding-left: 25px !important;
 }
 
 #setPriority th {
@@ -1592,35 +1559,14 @@ a:active {
   color: var(--active);
 }
 
-input {
-  font: bold 9pt var(--bodyfont);
-  margin: 2px 4px 2px 0;
-  padding: 3px 4px !important;
-  cursor: pointer;
-  text-align: left;
-  color: var(--a);
-  border: var(--border);
-  background: #001;
-}
-
-input:disabled {
-  cursor: auto;
-  opacity: .5 !important;
-}
-
 input.r {
   text-align: right;
   border: var(--border);
   background: #001;
 }
 
-input[type=submit]::-moz-focus-inner, input[type="reset"]::-moz-focus-inner {
-  border: none;
-  outline: none;
-}
-
 input[type=submit], input[type="reset"], a.control, a.controld, a.controld:hover, a.controld:focus, a.controld:active,
-input:disabled[type=submit], input:disabled:hover[type=submit], input:disabled:active[type=submit]  {
+input:disabled[type=submit], input:disabled:hover[type=submit], input:disabled:active[type=submit] {
   padding: 5px 12px !important;
   min-width: 95px !important;
   text-align: center;
@@ -1654,23 +1600,19 @@ a.control img, a.controld img {
 }
 
 input[type=submit]:hover, input[type=submit]:focus, input[type="reset"]:hover, input[type="reset"]:focus, a.control:hover, a.control:focus {
-  cursor: pointer;
   color: #652787 !important;
   border: 1px solid #652787 !important;
   box-shadow: var(--highlight), inset 0 0 2px 1px #757;
   background: var(--btn_hover);
+  cursor: pointer;
 }
 
 input[type=submit]:active, input[type="reset"]:active, a.control:active {
-  color: #83529F !important;
+  color: #83529f !important;
   text-shadow: 0 1px 1px #3c1751;
   border: 1px solid #652787;
   box-shadow: var(--btn_shadow_active);
   background: #652787;
-}
-
-input:disabled {
-  cursor: not-allowed;
 }
 
 a.controld {
@@ -1752,7 +1694,6 @@ input.default {
 }
 
 input[size="85"] {
-  width: 550px;
   width: calc(100% - 150px);
 }
 
@@ -1982,9 +1923,8 @@ a:hover img, a:focus img {
 }
 
 #trackerselect {
-  width: 100% !important;
-  width: calc(100% - 150px) !important;
   margin: 8px 5px 4px 5px;
+  width: calc(100% - 150px) !important;
   border: 1px solid #120f35;
 }
 
@@ -2001,7 +1941,7 @@ a:hover img, a:focus img {
 #trackerselect tr:first-child td {
   font-weight: 700;
   border-bottom: 1px solid #120f35;
-  background: linear-gradient(180deg,#080818, #000);
+  background: linear-gradient(180deg,#080818,#000);
 }
 
 #trackerselect tr:first-child td {
@@ -2031,8 +1971,8 @@ a:hover img, a:focus img {
 }
 
 .trackerconfig th {
-  min-width: 50px;
   padding: 7px 5px;
+  min-width: 50px;
 }
 
 .trackerconfig th:first-child {
@@ -2061,18 +2001,9 @@ a:hover img, a:focus img {
   padding-left: 10px !important;
 }
 
-.trackerconfig tr:nth-child(odd), .snarkConfig tr:nth-child(odd) {
-  background: #010009;
-}
-
 .trackerconfig tr:last-child {
   border: var(--border);
-  background: #001;
   background: linear-gradient(180deg,#010011, #000) repeat scroll 0 0 #000;
-}
-
-.trackerconfig tr:nth-child(even), .snarkConfig tr:nth-child(even) {
-  background: #010011;
 }
 
 .trackerconfig input {
@@ -2085,8 +2016,8 @@ a:hover img, a:focus img {
 }
 
 .snarkNewTorrent td:nth-child(2), .snarkNewTorrent td:nth-child(3) {
-  font-weight: 700;
   padding-right: 5px;
+  font-weight: 700;
 }
 
 .snarkNewTorrent td[rowspan="0"] {

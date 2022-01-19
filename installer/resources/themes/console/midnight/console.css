@@ -2890,10 +2890,6 @@ code {
   color: #393;
 }
 
-a, button, input {
-  -webkit-text-stroke: .5px rgba(0,0,0,.4);
-}
-
 a:link {
   color: var(--a);
   text-decoration: none;
@@ -9338,10 +9334,6 @@ h3#shutdownrouter {
   border-bottom: 1px solid #120f35;
 }
 
-input[type="file"] {
-  background: none;
-}
-
 #netconfig th, #config_family th {
   padding: 8px 10px !important;
 }
@@ -9619,7 +9611,6 @@ tr:nth-child(4) .net_bwrate::before {
 input[type="file"]:hover {
   border-radius: 0 15px 15px 0;
   background: linear-gradient(90deg, rgba(0,0,0,0), #414);
-  cursor: pointer;
 }
 
 #joinfamily td, #newfamily td {
