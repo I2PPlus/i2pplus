@@ -1921,10 +1921,6 @@ div.welcome {
   margin-top: 0;
 }
 
-.welcome + div .tidylist {
-  line-height: 1.5 !important;
-}
-
 .main#dns, .main#webmail, .main#torrents {
   padding: 0 !important;
   min-width: 606px;
@@ -4374,20 +4370,6 @@ p#enablefullstats {
 #pluginconfig td:first-child {
   width: 80px;
   white-space: nowrap;
-}
-
-.tidylist {
-  margin-left: 15px;
-  margin-right: 15px !important;
-  padding-right: 25px;
-  text-align: justify;
-}
-
-.tidylist code {
-  text-align: left;
-  font: 9pt var(--monospaced);
-  font-weight: 700;
-  color: #723;
 }
 
 /* graphs */

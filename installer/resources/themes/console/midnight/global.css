@@ -85,7 +85,8 @@ input[disabled] {
   pointer-events: none;
 }
 
-a, button, input, .control {
+a:not(:hover):not(:focus), button:not(:hover):not(:focus),
+input:not(:hover):not(:focus), .control:not(:hover):not(:focus) {
   -webkit-text-stroke: .5px rgba(0,0,0,.3);
 }
 

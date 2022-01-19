@@ -2833,7 +2833,7 @@ a:hover tt {
 }
 
 a:active tt {
-  color: #9FE9F9;
+  color: #9fe9f9;
 }
 
 .main ul {
@@ -2847,28 +2847,9 @@ a:active tt {
   word-wrap: break-word;
 }
 
-.tidylist {
-  text-align: justify !important;
-  line-height: 1.5;
-}
-
-.tidylist:last-child {
-  padding-bottom: 10px;
-}
-
-.tidylist code {
-  text-align: left;
-  font: bold 8.5pt var(--monospaced);
-  color: #fff;
-  padding: 2px 3px;
-  background: #040033;
-  margin: 0 2px;
-  border-radius: 2px;
-}
-
 ol {
-  display: inline;
   padding: 1px 0 0 20px;
+  display: inline;
 }
 
 ol li:first-child {
