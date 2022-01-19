@@ -236,6 +236,11 @@ input[type=submit]:focus, input[type=reset]:focus, select:hover, select:focus {
   cursor: pointer;
 }
 
+input[type="file"]:hover {
+  border-radius: 0 20px 20px 0;
+  background: linear-gradient(90deg, rgba(0,0,0,0), #414) !important;
+}
+
 input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
   color: var(--a_hover);
   border: 1px solid var(--a_hover);
