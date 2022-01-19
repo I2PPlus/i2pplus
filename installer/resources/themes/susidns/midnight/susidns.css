@@ -1,45 +1,29 @@
 /* SusiDNS "Midnight" theme */
 /* Author: dr|z3d */
 
-@import url(/themes/console/midnight/optbox.css);
-@import url(/themes/fonts/DroidSans.css);
+@import url(/themes/console/midnight/global.css);
 @import url(../images/images.css);
 @import url(images/images.css);
-@import url(/themes/console/midnight/images/tile.css);
 
 :root {
-  --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
-  --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
-  --title: repeating-linear-gradient(90deg, rgba(0,0,48,.4) 2px, #000 4px), linear-gradient(180deg,#003, #002 50%, #001 50%, #000);
-  --highlight: inset 0 0 0 1px #000;
   --nav: linear-gradient(180deg,#181828 50%, #000 50%);
   --nav_hover: linear-gradient(180deg,#3c1751 50%, #0a030d 50%);
 }
 
 body {
-  font-family: var(--bodyfont);
-  background-color: #000010;
-  background: repeating-linear-gradient(180deg,rgba(0,0,24,.75) 3px, rgba(0,0,0,.9) 5px, rgba(0,0,0,.7) 6px), var(--tile), #000010;
-  color:#c9ceff;
   margin: 0 10px;
-  font-size: 9.5pt;
   overflow-x: hidden;
+  font-family: var(--bodyfont);
+  font-size: 9.5pt;
+  color:#c9ceff;
+  background: repeating-linear-gradient(180deg,rgba(0,0,24,.75) 3px, rgba(0,0,0,.9) 5px, rgba(0,0,0,.7) 6px), var(--tile), #000010;
 }
 
 body.iframed {
-  background: transparent !important;
   margin: 0;
   padding: 0;
   overflow: hidden;
-}
-
-textarea {
-  scrollbar-color: rgba(24,24,80,.8) rgba(0,0,0,0);
-  scrollbar-width: thin;
-}
-
-textarea:hover, textarea:focus {
-  scrollbar-width: auto;
+  background: transparent !important;
 }
 
 .destaddress {
@@ -47,35 +31,8 @@ textarea:hover, textarea:focus {
   scrollbar-width: thin;
 }
 
-* {
-  outline: none;
-}
-
-::selection {
-  background: #22296f !important;
-  background: rgba(34, 41, 111, .9) !important;
-  color: white;
-}
-
-::-moz-selection {
-  background: #22296f !important;
-  color: white;
-}
-
 #navi, .buttons, #buttons, #host_list tr:first-child, #host_list img, #host_list td:nth-child(n+2) a {
   user-select: none;
-}
-
-input, button {
-  cursor: pointer;
-}
-
-input[type=text], textarea {
-  cursor: text;
-}
-
-a, button, input {
-  -webkit-text-stroke: .5px rgba(0,0,0,.4);
 }
 
 /* topnav */
@@ -660,11 +617,11 @@ form[action="subscriptions"] {
 }
 
 textarea[name="config"], textarea[name="content"] {
-  border-radius: 0;
-  margin-top: -26px;
+  margin: -26px 0 0;
   resize: none;
-  border: 1px solid #26235c;
   font-size: 8.5pt;
+  border: 1px solid #26235c;
+  border-radius: 0;
 }
 
 textarea[name="config"] {
@@ -988,18 +945,6 @@ input[type=submit], input[type=reset], .fakebutton, .fakebutton:visited {
   background: linear-gradient(180deg,#11101c 50%, #000010 50%) !important;
 }
 
-input[type=file]::file-selector-button {
-  padding: 6px 10px !important;
-  min-width: 100px !important;
-  font: 700 9pt var(--bodyfont);
-  color: #7171d1;
-  text-align: center;
-  border: 1px solid #27235c;
-  border-radius: 2px;
-  box-shadow: var(--highlight), inset 0 0 2px 0 #559;
-  background: linear-gradient(180deg,#11101c 50%, #000010 50%) !important;
-}
-
 input.update {
   margin-left: 5px;
 }
@@ -1013,25 +958,7 @@ input[type=submit]:focus, input[type=reset]:focus,
   background: linear-gradient(180deg,#202 50%, #000 50%) !important;
 }
 
-input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
-  color: #652787;
-  border: 1px solid #652787;
-  border-radius: 1px;
-  box-shadow: var(--highlight), inset 0 0 2px 1px #757;
-  background: #000 !important;
-  background: linear-gradient(180deg,#202 50%, #000 50%) !important;
-}
-
 input[type=submit]:active, input[type=reset]:active, .fakebutton:active {
-  color: #83529F !important;
-  text-shadow: 0 1px 1px #3C1751;
-  border: 1px solid #652787;
-  box-shadow: var(--highlight), inset 3px 3px 3px #000 !important;
-  background: #652787 !important;
-  background:  linear-gradient(180deg,#401856, #501f6c) !important;
-}
-
-input[type=file]:active::file-selector-button {
   color: #83529F !important;
   text-shadow: 0 1px 1px #3C1751;
   border: 1px solid #652787;
@@ -1063,16 +990,6 @@ textarea, #subslog pre {
   background: #000 !important;
 }
 
-input[type=text], textarea {
-  box-shadow: inset 0 0 3px 3px #000;
-  background: linear-gradient(180deg,#000 0%, #000019 100%) !important;
-}
-
-input[type=text]:focus, textarea:focus {
-  color: #c9ceff;
-  background: #000 !important;
-}
-
 textarea:focus::placeholder {
   opacity: 0;
 }
@@ -1080,10 +997,9 @@ textarea:focus::placeholder {
 input[type=text]:focus, textarea[name="destination"]:focus {
   color: #c9ceff !important;
   border: 1px solid #6466a5 !important;
-  box-shadow: 0 0 0 1px rgba(101, 39, 135, .5);
   box-shadow: 0 0 0 1px rgba(101, 39, 135, .5), 0 0 2px 2px #202;
   background: #000;
-  transition: filter ease 0.3s;
+  transition: filter ease .3s;
 }
 
 textarea[cols="70"] {
@@ -1106,22 +1022,15 @@ textarea[cols="70"] {
   border-right: 3px solid #17142f;
 }
 
-/* iframed content border removal */
-
-/*.iframed #navi, .iframed h3, .iframed h4, .iframed #book, .iframed #add, .iframed #filtered, .iframed #filter, .iframed #search,
-table.book, .iframed #buttons, .iframed .buttons, .iframed #messages + p, .iframed p.book, .iframed #helpsubs,
-.iframed textarea[name="config"], .iframed textarea[name="content"], .iframed textarea[name="log"], .iframed #helpconfig, .iframed p.messages {
-  border-right: none !important;
-  border-left: none !important;
-}*/
-
 .iframed #navi {
   border-right: none !important;
   border-left: none !important;
 }
 
-.iframed .headline h3, .iframed h4, .iframed #filtered, .iframed #filter, .iframed #search, .iframed #book, .iframed div#book + div#buttons, .iframed #add, .iframed #import,
-.iframed#sbs #content, .iframed div#config, .iframed div#config + div#buttons, .iframed div#content + div#buttons, .iframed #helpsubs, .iframed #helpconfig {
+.iframed .headline h3, .iframed h4, .iframed #filtered, .iframed #filter, .iframed #search,
+.iframed #book, .iframed div#book + div#buttons, .iframed #add, .iframed #import,
+.iframed#sbs #content, .iframed div#config, .iframed div#config + div#buttons,
+.iframed div#content + div#buttons, .iframed #helpsubs, .iframed #helpconfig {
   margin-left: 10px !important;
   margin-right: 10px !important;
 }

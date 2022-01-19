@@ -2,18 +2,11 @@
 /* Author: dr|z3d.  */
 
 @import url(/themes/fonts/DroidSans.css);
-@import url(optbox.css);
+@import url(global.css);
 @import url(/themes/console/images/images.css);
 @import url(images/images.css);
 @import url(/themes/console/images/i2ptunnel.css);
 @import url(/themes/console/midnight/images/tile.css);
-
-:root {
-  --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
-  --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
-  --title: repeating-linear-gradient(90deg, rgba(0,0,48,.4) 2px, #000 4px), linear-gradient(180deg,#003, #002 50%, #001 50%, #000);
-  --highlight: inset 0 0 0 1px #000;
-}
 
 body {
   margin: 5px 0 15px;
@@ -576,36 +569,6 @@ input[type="file"] {
   text-decoration: underline;
 }
 
-label {
-  cursor: pointer;
-}
-
-input[type=password] {
-  cursor: text;
-}
-
-input[type=text], input[type=password], textarea, textarea[readonly="readonly"]:focus {
-  color: #7171d1;
-  border: 1px solid #27235c;
-  box-shadow: var(--highlight), 0 0 0 1px #000;
-  background: #000;
-  filter: none;
-}
-
-input[type=text]:focus, input[type=password]:focus {
-  color: #c9ceff;
-  border: 1px solid #6466a5;
-  box-shadow: 0 0 0 1px rgba(101, 39, 135, .5), 0 0 2px 2px #202, inset 3px 3px 3px #000;
-  background: linear-gradient(180deg,#002,#000028);
-  transition: ease filter .3s 0s;
-}
-
-input[readonly="readonly"]:focus {
-  box-shadow: none;
-  filter: none;
-  background: linear-gradient(180deg,#000 0%, #010 100%) !important;
-}
-
 a.control, input.control {
   white-space: nowrap;
   vertical-align: middle;
@@ -655,46 +618,19 @@ button, input[type=submit], input[type="reset"], .control, select {
   box-shadow: var(--highlight), inset 0 0 2px 0 #559;
 }
 
-select {
-  padding: 5px 24px 5px 5px !important;
-  min-width: 120px;
-  overflow: hidden;
-  appearance: none;
-  text-overflow: ellipsis;
-  font: 8.5pt var(--bodyfont);
-  font-weight: 700;
-  color: #7171d1;
-  border: 1px solid #26225c;
-  background: var(--dropdown) center right 10px no-repeat, linear-gradient(180deg,#11101c 50%, #000010 50%) !important;
-  background-size: 10px auto, 100% 100% !important;
-  filter: none;
-  cursor: pointer;
-}
-
-select:hover, select:focus, select:active {
-  color: #652787;
-  text-shadow: 0 1px 1px #000;
-  border: 1px solid #652787 !important;
-  box-shadow: var(--highlight), inset 0 0 1px 1px #757;
-  background: var(--dropdown_hover) center right 10px no-repeat, linear-gradient(180deg,#202 50%, #000 50%) !important;
-  background-size: 10px auto, 100% 100% !important;
-}
-
-select option {
-  font-weight: 400;
-}
-
-select option:hover, select option:focus, select option:checked {
-  box-shadow: inset 0 0 20px 20px #652787;
-}
-
-select::-ms-expand {
-  display: none;
-}
-
 input, select, button {
   font-size: 9pt;
   vertical-align: middle;
+}
+
+input {
+  float: none;
+  vertical-align: middle;
+}
+
+select {
+  text-align: left;
+  color: #7171d1;
 }
 
 button, input[type=submit], input[type="reset"], a.control {
@@ -722,11 +658,6 @@ button, input[type=submit], input[type="reset"], a.control {
   .tunnelDestinationLabel {
     min-width: 120px;
   }
-}
-
-input {
-  float: none;
-  vertical-align: middle;
 }
 
 #hostField, #leasesetKey, #userAgents {
@@ -783,30 +714,6 @@ textarea[name="accessList"]:focus {
   height: 80px !important;
 }
 
-::placeholder {
-  font-size: 90%;
-  font-style: italic;
-  opacity: .4 !important;
-}
-
-input::-moz-placeholder {
-  color: #f00;
-  font-weight: 700;
-}
-
-::-webkit-input-placeholder {
-  color: #f00;
-  font-weight: 700;
-}
-
-input:focus::-moz-placeholder {
-  opacity: 0;
-}
-
-:focus::-webkit-input-placeholder {
-  opacity: 0;
-}
-
 #filter {
   vertical-align: top;
 }
@@ -825,22 +732,12 @@ th .help::after {
 }
 
 th .help:hover::after, th .help:focus::after {
-  background: var(--helplink_hover) no-repeat center center;
-  background-size: 16px;
-}
-
-#filter input::placeholder {
-  color: #c9ceff;
-  opacity: .5;
-}
-
-input:focus::placeholder, textarea:focus::placeholder, #filter input:focus::placeholder {
-  opacity: 0;
+  background: var(--helplink_hover) no-repeat center center / 16px;
 }
 
 #localDestination, .authentication {
-  height: 32px !important;
   margin: 0 !important;
+  height: 32px !important;
 }
 
 #localDestination:focus, .authentication:focus {
@@ -848,14 +745,14 @@ input:focus::placeholder, textarea:focus::placeholder, #filter input:focus::plac
 }
 
 #leasesetKey {
-  height: 24px !important;
   padding: 3px;
+  height: 24px !important;
 }
 
 .multiOption {
-  display: inline-block;
   margin: 2px 10px 2px 0;
   padding: 0;
+  display: inline-block;
 }
 
 .multiOption input {
@@ -864,14 +761,12 @@ input:focus::placeholder, textarea:focus::placeholder, #filter input:focus::plac
 
 .multiOption#isServer {
   padding-left: 28px;
-  background: var(--server) no-repeat 4px center;
-  background-size: 22px;
+  background: var(--server) no-repeat 4px center / 22px;
 }
 
 .multiOption#isClient {
   padding-left: 28px;
-  background: var(--client) no-repeat 4px center;
-  background-size: 22px 22px;
+  background: var(--client) no-repeat 4px center / 22px;
 }
 
 td#throttle, #clientAuthConfig {
@@ -929,7 +824,6 @@ table {
 }
 
 input.tunnelName, input.tunnelDescriptionText, #userAgents, .tunnelDescription, #localDest {
-  width: 80%;
   width: calc(100% - 10px);
   min-width: 280px;
   text-overflow: ellipsis;
@@ -954,29 +848,26 @@ input.tunnelName, input.tunnelDescriptionText, #userAgents, .tunnelDescription, 
 
 .username {
   padding-left: 26px;
-  background: var(--user) no-repeat 6px center, linear-gradient(180deg,#001, #000) !important;
-  background-size: 14px, 100% !important;
+  background: var(--user) no-repeat 6px center / 14px, linear-gradient(180deg,#001, #000) !important;
   background-blend-mode: luminosity;
 }
 
 .username:focus {
   padding-left: 26px;
-  background: #000 var(--user) no-repeat 6px center !important;
-  background-size: 14px, 100% !important;
+  background: #000 var(--user) no-repeat 6px center / 14px !important;
   background-blend-mode: normal;
 }
 
 .password {
   padding-left: 26px;
-  background: var(--key) no-repeat 6px center, linear-gradient(180deg,#001, #000) !important;
-  background-size: 14px, 100% !important;
+  background: var(--key) no-repeat 6px center / 14px, linear-gradient(180deg,#001, #000) !important;
   background-blend-mode: luminosity;
 }
 
 
 .password:focus {
   padding-left: 26px;
-  background: #000 var(--key) no-repeat 6px center !important;
+  background: #000 var(--key) no-repeat 6px center / 14px !important;
   background-size: 14px, 100% !important;
   background-blend-mode: normal;
 }
@@ -1008,8 +899,7 @@ input.tunnelName, input.tunnelDescriptionText, #userAgents, .tunnelDescription, 
   height: 32px;
   display: inline-block;
   vertical-align: middle;
-  background: var(--update) no-repeat center center;
-  background-size: 32px;
+  background: var(--update) no-repeat center center / 32px;
   content: "";
   mix-blend-mode: luminosity;
   animation: linear spin 5s forwards infinite;
@@ -1621,7 +1511,8 @@ select[disabled], select[disabled]:hover, select[disabled]:focus, select[disable
 }
 
 #sigType[disabled] {
-  padding-left: 14px !important;
+  padding-left: 16px !important;
+  text-align: left;
   background: var(--crypto) no-repeat left center / 16px !important;
 }
 

@@ -84,7 +84,7 @@ public class I2PSnarkUtil implements DisconnectListener {
 //    private static final int EEPGET_CONNECT_TIMEOUT = 45*1000;
     private static final int EEPGET_CONNECT_TIMEOUT = 60*1000;
 //    private static final int EEPGET_CONNECT_TIMEOUT_SHORT = 5*1000;
-    private static final int EEPGET_CONNECT_TIMEOUT_SHORT = 15*1000;
+    private static final int EEPGET_CONNECT_TIMEOUT_SHORT = 20*1000;
     public static final int DEFAULT_STARTUP_DELAY = 3;
     public static final boolean DEFAULT_COLLAPSE_PANELS = true;
     public static final boolean DEFAULT_SHOW_STATUSFILTER = false;
@@ -526,7 +526,7 @@ public class I2PSnarkUtil implements DisconnectListener {
             return out;
         } else {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Transfer failed [" + convertedurl.substring(0, truncate) + "...]");
+                _log.warn("Timeout (" + timeout / 1000 + "s) attempting fetch of [" + convertedurl.substring(0, truncate) + "...]");
             out.delete();
             return null;
         }
@@ -563,13 +563,18 @@ public class I2PSnarkUtil implements DisconnectListener {
         EepGet get = new I2PSocketEepGet(_context, _manager, retries, -1, maxSize, null, out, fetchURL);
         get.addHeader("User-Agent", EEPGET_USER_AGENT);
         int truncate = url.indexOf("&");
+        String convertedurl = url.replace("ahsplxkbhemefwvvml7qovzl5a2b5xo5i7lyai7ntdunvcyfdtna.b32.i2p", "tracker2.postman.i2p")
+                                 .replace("lnQ6yoBTxQuQU8EQ1FlF395ITIQF-HGJxUeFvzETLFnoczNjQvKDbtSB7aHhn853zjVXrJBgwlB9sO57KakBDaJ50lUZgVPhjlI19TgJ-CxyHhHSCeKx5JzURdEW-ucdONMynr-b2zwhsx8VQCJwCEkARvt21YkOyQDaB9IdV8aTAmP~PUJQxRwceaTMn96FcVenwdXqleE16fI8CVFOV18jbJKrhTOYpTtcZKV4l1wNYBDwKgwPx5c0kcrRzFyw5~bjuAKO~GJ5dR7BQsL7AwBoQUS4k1lwoYrG1kOIBeDD3XF8BWb6K3GOOoyjc1umYKpur3G~FxBuqtHAsDRICkEbKUqJ9mPYQlTSujhNxiRIW-oLwMtvayCFci99oX8MvazPS7~97x0Gsm-onEK1Td9nBdmq30OqDxpRtXBimbzkLbR1IKObbg9HvrKs3L-kSyGwTUmHG9rSQSoZEvFMA-S0EXO~o4g21q1oikmxPMhkeVwQ22VHB0-LZJfmLr4SAAAA.i2p", "tracker2.postman.i2p")
+                                  .replace("w7tpbzncbcocrqtwwm3nezhnnsw4ozadvi2hmvzdhrqzfxfum7wa.b32.i2p", "opentracker.dg2.i2p")
+                                  .replace("afuuortfaqejkesne272krqvmafn65mhls6nvcwv3t7l2ic2p4kq.b32.i2p", "lyoko.i2p")
+                                  .replace("nfrjvknwcw47itotkzmk6mdlxmxfxsxhbhlr5ozhlsuavcogv4hq.b32.i2p", "torrfreedom.i2p");
         if (get.fetch(timeout)) {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Transfer successful [" + url.substring(0, truncate) + "...] (Size: " + out.size() + " bytes)");
+                _log.debug("Transfer successful [" + convertedurl.substring(0, truncate) + "...] (Size: " + out.size() + " bytes)");
             return out.toByteArray();
         } else {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Transfer failed [" + url.substring(0, truncate) + "...]");
+                _log.warn("Timeout (" + timeout / 1000 + "s) attempting fetch of [" + convertedurl.substring(0, truncate) + "...]");
             return null;
         }
     }

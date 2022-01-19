@@ -1,35 +1,17 @@
 /* I2PSnark theme "Midnight" */
 /* Author: dr|z3d */
 
-@import url(/themes/fonts/DroidSans.css);
-@import url(/themes/console/midnight/optbox.css);
-@import url(/themes/console/midnight/images/tile.css);
+@import url(/themes/console/midnight/global.css);
 
 :root {
-  --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
-  --monospaced: var(--monospaced);
-  --ink: #c9ceff;
-  --li: #8589ad;
-  --title: repeating-linear-gradient(90deg, rgba(0,0,48,.4) 2px, #000 4px), linear-gradient(180deg,#003, #002 50%, #001 50%, #000);
-  --highlight: inset 0 0 0 1px #000;
-  --btn: linear-gradient(180deg,#11101c 50%,#000010 50%);
-  --btn_hover: linear-gradient(180deg,#202 50%,#000 50%);
-  --btnAction: linear-gradient(180deg,#181d4f 50%, #001 50%);
-  --btnAction_hover: var(--nav_hover);
   --btnAction_active: linear-gradient(180deg,#3c1751, #652787);
-  --btn_shadow_active: var(--highlight), inset 4px 4px 4px rgba(0,0,0,.7);
-  --badge: linear-gradient(180deg,#080818 50%,#000 50%);
-  --border: 1px solid #26235c;
-  --border_inner: 1px solid #113;
-  --border_btn: 1px solid #26225c;
-  --a: #7171d1;
-  --hover: #bf2295;
-  --active: #fc1c66;
-  --nav: linear-gradient(180deg,#181828 50%, #000 50%);
+  --btnAction_hover: var(--nav_hover);
+  --btnAction: linear-gradient(180deg,#181d4f 50%, #001 50%);
   --nav_hover: linear-gradient(180deg,#652787 50%, #3C1751 50%);
-  --tab: linear-gradient(90deg, rgba(0,0,16,.7), rgba(0,0,0,.1), rgba(0,0,16,.7)), var(--nav);
-  --tab_hover: linear-gradient(90deg, rgba(0,0,16,.05), rgba(96,0,96,.15), rgba(0,0,16,.05)), linear-gradient(180deg,#1d1a2d 50%, #000 50%);
+  --nav: linear-gradient(180deg,#181828 50%, #000 50%);
   --tab_active: linear-gradient(90deg, rgba(0,0,32,.1), rgba(64,0,64,.2), rgba(0,0,32,.1)), linear-gradient(180deg,#080008, #0a000a);
+  --tab_hover: linear-gradient(90deg, rgba(0,0,16,.05), rgba(96,0,96,.15), rgba(0,0,16,.05)), linear-gradient(180deg,#1d1a2d 50%, #000 50%);
+  --tab: linear-gradient(90deg, rgba(0,0,16,.7), rgba(0,0,0,.1), rgba(0,0,16,.7)), var(--nav);
 }
 
 html, body {
@@ -55,14 +37,6 @@ body.iframed {
   margin: 1px 0 !important;
   background: none;
   overflow: hidden;
-}
-
-* {
-  outline: none;
-}
-
-a, button, input {
-  -webkit-text-stroke: .5px rgba(0,0,0,.4);
 }
 
 .toggleview, .configTitle, .snarknavbar, img, input[type=submit], input[type=radio], input[type=checkbox],
@@ -320,7 +294,7 @@ td.trackerDetails img::before, td.torrentDetails img::before {
   height: 56px;
   overflow: hidden;
   text-align: left;
-  font: normal 8.5pt var(--monospaced);
+  font: 700 8.5pt var(--bodyfont);
   color: #778;
   border-spacing: 0;
   border-bottom: var(--border);
@@ -372,11 +346,6 @@ td.trackerDetails img::before, td.torrentDetails img::before {
   display: inline-block;
   background: var(--bullet) no-repeat left bottom / 9px;
   content: "";
-}
-
-.snarkMessages li, .snarkMessages a {
-  font-weight: 700;
-  font-size: 8.5pt !important;
 }
 
 #closelog, #expand, #shrink {
@@ -1723,10 +1692,6 @@ a img:hover, a img:focus {
   filter: saturate(200%) drop-shadow(0 0 2px #652787) !important;
 }
 
-input[type=text]:focus, textarea:focus {
-  border: 1px solid #444081;
-}
-
 thead a img:hover, thead a img:focus, thead a:hover img, thead a:focus img,
 thead a::after:hover img, thead a::after:focus img {
   filter: saturate(200%) hue-rotate(80deg) drop-shadow(0 0 2px #652787) !important;
@@ -1734,10 +1699,6 @@ thead a::after:hover img, thead a::after:focus img {
 
 thead a:active img {
   transform: scale(0.9);
-}
-
-label {
-  cursor: pointer;
 }
 
 thead a img:hover {
@@ -1750,9 +1711,6 @@ input[type=text]:hover, input.r:hover {
 }
 
 input[type=text]:focus, textarea:focus, input.r:focus, textarea[name="i2cpOpts"]:focus, input[name="nofilter_dataDir"]:focus {
-  color: #7166ff;
-  background: #000;
-  box-shadow: 0 0 0 1px rgba(101, 39, 135, .5), 0 0 2px 2px #202;
   transition: ease all .3s;
 }
 
@@ -1768,8 +1726,8 @@ textarea[name="i2cpOpts"], input[name="nofilter_dataDir"] {
 }
 
 thead img, thead img:hover {
-  opacity: .8;
   max-height: 20px !important;
+  opacity: .8;
 }
 
 th a:link img, th a:visited img {
@@ -1805,26 +1763,6 @@ input[size="85"] {
 
 textarea {
   border-radius: 0 !important;
-}
-
-select {
-  font: 9pt var(--bodyfont);
-  font-weight: 700;
-  min-width: 100px;
-  margin: 2px 4px 2px 0;
-  padding: 5px 24px 5px 4px;
-  cursor: pointer;
-  text-overflow: ellipsis;
-  color: var(--a);
-  border: 1px solid #27235f;
-  border-bottom-color: #171539;
-  border-right-color: #171539;
-  border-radius: 1px;
-  box-shadow: var(--highlight), inset 0 0 1px 0 #446;
-  background: var(--dropdown) center right 10px no-repeat, var(--btn) !important;
-  background-size: 10px auto, 100% !important;
-  -moz-appearance: none;
-  -webkit-appearance: none;
 }
 
 select:hover, select:focus, select:active {
@@ -2170,8 +2108,7 @@ a:hover img, a:focus img {
 }
 
 #configs textarea, #configs input[type=text], .trackerconfig textarea, .trackerconfig input[type=text], select, input.r, input[type=checkbox] {
-  margin-top: 3px !important;
-  margin-bottom: 3px !important;
+  margin: 3px;
   display: inline-block;
 }
 
@@ -3628,7 +3565,19 @@ tr:not(.peerinfo) .torrentDownloaded .percentBarText::after {
   border: 1px solid #181858;
   border-left-width: 5px;
   box-shadow: var(--highlight), 0 0 0 1px #000, inset 3px 3px 3px rgba(0,0,0,.8);
-  background: repeating-linear-gradient(90deg,#000,#000 10%,#080848 10%,#080848 20%);
+  background: repeating-linear-gradient(90deg,#000,#000 5%,#080848 5%,#080848 10%);
+  background-size: 200%;
+}
+
+@keyframes uploading {
+  from {background-position: left center}
+  to {background-position: 20% center}
+}
+
+.active .uploaded {
+  background: repeating-linear-gradient(90deg,#000,#000 5%,#303 5%,#505 10%);
+  background-size: 200%;
+  animation: uploading .5s linear 4s 1 reverse;
 }
 
 tr:hover .uploaded {
@@ -3645,6 +3594,10 @@ tr:hover .uploaded {
   background: rgba(192,48,192,.25);
   box-shadow: inset 3px 3px 3px rgba(0,0,0,.8);
   border: none;
+}
+
+.txBarInner[style="width: calc(100% - 2px)"] {
+  box-shadow: 0 0 0 1px #000, inset 0 2px 3px 2px rgba(255,255,255,.1);
 }
 
 .active .txBarInner {
@@ -4459,5 +4412,5 @@ td.torrentAction input[type=submit] {
   }
   .percentBarComplete {padding-top: 3px}
   #torrentDisplay {margin-top: 9px}
-  .iframed #torrentDisplay {margin: 0 0 -1px}
+  .iframed #torrentDisplay {margin: -10px 0 -1px}
 }
