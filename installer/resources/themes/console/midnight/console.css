@@ -11524,6 +11524,11 @@ h1::first-letter {
   text-align: center;
 }
 
+.encDests td, .encDests th {
+  font-size: 90% !important;
+  border: var(--border_inner);
+}
+
 .encDests code {
   max-width: 100px;
   display: inline-block;
@@ -13248,6 +13253,7 @@ iframe {
   #news .newsentry p, #console p, #console li, #help p, #help li, #console code, #help code,
   #help table, #warning p, #warning li, #warning a, .logo a, #warning h4, .infowarn, .infohelp,
   td.infowarn, td.infohelp, p, div[id^="config_"] td {font-size: 10.5pt !important}
+  div[id^="config_"] .encDests td, div[id^="config_"] .encDests th {font-size: 9pt !important}
   div[id^="config_"] td:not(.infowarn):not(.infohelp) {
     padding-top: 8px !important;
     padding-bottom: 8px !important;
@@ -13270,12 +13276,12 @@ iframe {
     padding: 20px 15px 20px 50px !important
   }
   div[id^="config_"] div.confignav {
+    padding: 4px 4px 5px 3px !important;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     align-content: space-evenly;
     justify-content: center;
-    padding: 4px 4px 5px 3px !important;
   }
   div[id^="config_"] .tab, div[id^="config_"] .tab2 {
     flex: auto;
