@@ -15,6 +15,7 @@
   --border_btn: 1px solid #26225c;
   --border_inner: 1px solid rgba(38,35,92,.7);
   --border_input: #27235c;
+  --border_soft: 1px solid #100e25;
   --btn_active: linear-gradient(180deg,#401856, #501f6c);
   --btn_hover: linear-gradient(180deg,#202,#101 50%, #080008 50%,#000);
   --btn: linear-gradient(180deg,#11101c 50%,#000010 50%);
@@ -30,6 +31,7 @@
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
   --outline: 0 0 0 1px #000;
   --panel: linear-gradient(180deg,#080818, #040410);
+  --row: linear-gradient(180deg,#040414,#010010);
   --th: repeating-linear-gradient(90deg, rgba(0,0,64,.4) 2px, #000 4px), var(--titlebg) repeat center center / 100%, #001;
   --titlebg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 2'%3E%3Cpath fill='%23000018' d='M0 0h1v1H0z'/%3E%3Cpath d='M0 1h1v1H0z'/%3E%3C/svg%3E");
   --title: repeating-linear-gradient(90deg, rgba(0,0,48,.4) 2px, #000 4px), var(--titlebg) repeat center center / 100%, #001;

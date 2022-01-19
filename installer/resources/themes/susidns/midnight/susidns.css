@@ -488,12 +488,12 @@ li {
 
 #host_list tr:nth-child(odd), #host_details tr:nth-child(odd) {
   background-color: #010011;
-  background: linear-gradient(180deg,#080818, #010010);
+  background: var(--row);
 }
 
 #host_list tr:nth-child(even), #host_details tr:nth-child(even) {
   background-color: #000;
-  background: linear-gradient(180deg,#080818, #010010);
+  background: var(--row);
 }
 
 p.messages {
@@ -739,7 +739,7 @@ div#book, #emptybook {
 }
 
 #book td {
-  border-bottom: 1px solid #17142f;
+  border-bottom: var(--border_soft);
 }
 
 #book #visualid td {
@@ -1000,7 +1000,7 @@ textarea[cols="70"] {
   overflow-y: hidden !important;
   border-radius: 0;
   border: none;
-  border-left: 1px solid #17142f;
+  border-left: var(--border_soft);
   border-right: 3px solid #17142f;
 }
 
@@ -1103,7 +1103,7 @@ p.book {
   white-space: nowrap;
   text-align: right;
   font-weight: 700;
-  border-right: 1px solid #17142f;
+  border-right: var(--border_soft);
 }
 
 #host_details td:last-child {
@@ -1176,7 +1176,7 @@ p.book {
 }
 
 #hostNotes textarea:focus {
-  border-bottom: 1px solid #17142f;
+  border-bottom: var(--border_soft);
   background: #000 !important;
 }
 
@@ -1197,7 +1197,7 @@ p.book {
 }
 
 #host_list td:not(:first-child):not(:last-child) {
-  border-left: 1px solid #17142f;
+  border-left: var(--border_soft);
 }
 
 .info {
@@ -1213,7 +1213,7 @@ p.book {
 }
 
 td.names {
-  border-left: 1px solid #17142f;
+  border-left: var(--border_soft);
 }
 
 td.names:hover, #host_list td.b32link:hover, #host_list td.helper:hover, #host_list td.destinations:hover {
@@ -1321,8 +1321,8 @@ td.names:hover, #host_list td.b32link:hover, #host_list td.helper:hover, #host_l
 
 td.destinations {
   max-width: 50px !important;
-  border-left: 1px solid #17142f;
-  border-right: 1px solid #17142f;
+  border-left: var(--border_soft);
+  border-right: var(--border_soft);
 }
 
 tr:hover td.destinations {

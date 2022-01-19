@@ -1052,7 +1052,7 @@ tr:hover .percentBarText {
 }
 
 .rowEven, .rowOdd, .knownTracker, #trackerselect tr:nth-child(n+2) td {
-  background: linear-gradient(180deg,#040414, #010010) !important;
+  background: var(--row) !important;
 }
 
 .rowOdd, .rowOdd td, .rowEven, .rowEven td, .peerinfo td, .knownTracker td {
@@ -1064,7 +1064,7 @@ tr:hover .percentBarText {
 }
 
 .snarkTorrents .rowOdd td, .snarkTorrents .roweven td {
-  border-top: 1px solid #171537;
+  border-top: var(--border_soft);
 }
 
 .snarkTorrents .rowEven:first-of-type td {

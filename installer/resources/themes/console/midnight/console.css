@@ -2774,8 +2774,8 @@ td {
   padding: 4px 6px;
   color: var(--ink);
   vertical-align: middle;
-  border-top: var(--border_inner);
-  border-right: var(--border_inner);
+  border-top: var(--border_soft);
+  border-right: var(--border_soft);
 }
 
 tr:first-child td {

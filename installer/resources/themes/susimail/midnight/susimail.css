@@ -245,7 +245,7 @@ th.mailListSubject {
 
 #mailbox td {
   padding: 4px 8px;
-  border-right: 1px solid rgba(38, 35, 92,.7);
+  border-right: var(--border_soft);
 }
 
 .bottombuttons td, .pagenav td {
@@ -319,11 +319,11 @@ td {
 }
 
 .list0 {
-  background: linear-gradient(180deg,#080818, #010010);
+  background: var(--row);
 }
 
 .list1 {
-  background: linear-gradient(180deg,#080818, #010010);
+  background: var(--row);
 }
 
 /* mailbox display finessing */
@@ -331,8 +331,16 @@ td {
 .list0 td, .list1 td {
   padding: 4px;
   color: #7670c2;
-  border-top: 1px solid rgba(38, 35, 92,.7);
-  border-bottom: 1px solid rgba(38, 35, 92,.7);
+  border-top: var(--border_soft);
+  border-bottom: var(--border_soft);
+}
+
+#mailbox tr:first-child th {
+  border-bottom: var(--border_inner) !important;
+}
+
+#mailbox tr:nth-child(3) td {
+  border-top: var(--border_inner) !important;
 }
 
 .list0:hover, .list1:hover, .list0:hover a, .list1:hover a {
