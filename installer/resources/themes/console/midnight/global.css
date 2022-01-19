@@ -16,8 +16,8 @@
   --border_inner: 1px solid rgba(38,35,92,.7);
   --border_input: #27235c;
   --border_soft: 1px solid #100e25;
-  --btn_active: linear-gradient(180deg,#401856, #501f6c);
-  --btn_hover: linear-gradient(180deg,#202,#101 50%, #080008 50%,#000);
+  --btn_active: linear-gradient(180deg,#401856,#501f6c);
+  --btn_hover: linear-gradient(180deg,#202,#101 50%,#080008 50%,#000);
   --btn: linear-gradient(180deg,#11101c 50%,#000010 50%);
   --btn_shadow_active: var(--highlight), inset 4px 4px 4px rgba(0,0,0,.7);
   --element: linear-gradient(180deg,#112,#000);
@@ -29,8 +29,9 @@
   --label: linear-gradient(180deg,#002,#001);
   --li: #8589ad;
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
+  --optbox: linear-gradient(180deg,#030306,#112);
   --outline: 0 0 0 1px #000;
-  --panel: linear-gradient(180deg,#080818, #040410);
+  --panel: linear-gradient(180deg,#080818,#040410);
   --row: linear-gradient(180deg,#040414,#010010);
   --th: repeating-linear-gradient(90deg, rgba(0,0,64,.4) 2px, #000 4px), var(--titlebg) repeat center center / 100%, #001;
   --titlebg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 2'%3E%3Cpath fill='%23000018' d='M0 0h1v1H0z'/%3E%3Cpath d='M0 1h1v1H0z'/%3E%3C/svg%3E");
@@ -137,7 +138,7 @@ input[type=text], input[type=password] {
 input[type=text]:focus, input[type=password]:focus, textarea:focus {
   color: var(--ink) !important;
   border: 1px solid #6466a5 !important;
-  box-shadow: 0 0 0 1px rgba(101, 39, 135, .5), 0 0 2px 2px #202, inset 3px 3px 3px #000;
+  box-shadow: var(--outline), var(--btn_shadow_active);
   background: linear-gradient(180deg,#002,#000028);
   transition: filter all .3s;
 }
@@ -325,7 +326,7 @@ select[disabled], select[disabled]:hover, select[disabled]:focus, select[disable
   outline: none;
   border: 1px solid #27235c !important;
   box-shadow: var(--btn_shadow_active);
-  background: linear-gradient(180deg,#030306, #112);
+  background: var(--optbox);
   appearance: none;
   filter: drop-shadow(0 0 1px #000);
   will-change: transform;
