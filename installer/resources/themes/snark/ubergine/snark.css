@@ -190,7 +190,7 @@ label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
   transition: ease box-shadow .01s;
 }
 
-.snarkNav:link:first-child, .snarkNav:last-child[href="/i2psnark/"] {
+.snarkNav:first-child, .snarkNav:last-child[href="/i2psnark/"] {
   padding-left: 28px !important;
   background: var(--snark) no-repeat 11px center / 18px, var(--nav),
     var(--snark_hover) no-repeat 11px center / 18px, var(--snark_active) no-repeat 11px center / 18px;
@@ -201,42 +201,42 @@ label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
   border-radius: 2px !important;
 }
 
-.nav_main:link:hover, .nav_main:link:focus {
+.nav_main:hover, .nav_main:link:focus {
   color: #d2baff !important;
   background: var(--snark_hover) no-repeat 11px center / 18px, var(--nav_hover);
 }
 
-.nav_main:link:active, .snarkNav:last-child[href="/i2psnark/"]:active {
+.nav_main:active, .snarkNav:last-child[href="/i2psnark/"]:active {
   color: #fff !important;
   background: var(--snark_active) no-repeat 11px center / 18px, var(--nav_active);
 }
 
-.nav_forum:link {
+.nav_forum {
   background: var(--forum) no-repeat 11px center / 16px, var(--nav),
     var(--forum_hover) no-repeat 11px center / 16px,  var(--forum_active) no-repeat 11px center / 16px;
 }
 
-.nav_forum:link:hover, .nav_forum:link:focus {
+.nav_forum:hover, .nav_forum:focus {
   color: #d2baff !important;
   background: var(--forum_hover) no-repeat 11px center / 16px, var(--nav_hover);
 }
 
-.nav_forum:link:active {
+.nav_forum:active {
   color: #fff !important;
   background: var(--forum_active) no-repeat 11px center / 16px, var(--nav_active);
 }
 
-.nav_search:link {
+.nav_search {
   background: var(--search) no-repeat 11px center / 16px, var(--nav),
     var(--search_hover) no-repeat 11px center / 16px, var(--search_active) no-repeat 11px center / 16px;
 }
 
-.nav_search:link:hover, .nav_search:link:focus {
+.nav_search:hover, .nav_search:focus {
   color: #d2baff !important;
   background: var(--search_hover) no-repeat 11px center / 16px, var(--nav_hover);
 }
 
-.nav_search:link:active {
+.nav_search:active {
   color: #fff !important;
   background: var(--search_active) no-repeat 11px center / 16px, var(--nav_active);
 }
