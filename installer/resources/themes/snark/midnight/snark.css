@@ -44,8 +44,6 @@ label, th img, .newtorrentsection, #closeLog, #expand, #shrink {
   user-select: none;
 }
 
-/* mitigate header/column resize on refresh when multiple snark tabs open */
-
 th img, td img, #closelog, #expand, #shrink {
   font-size: 0 !important;
 }
@@ -56,21 +54,6 @@ td.trackerDetails img {
 
 td.trackerDetails a:hover img, td.trackerDetails a:focus img {
   opacity: 1;
-}
-
-th.graphicStatus::before, td.graphicStatus img::before, #closelog img::after, #expand img::after, #shrink img::after,
-td.trackerDetails img::before, td.torrentDetails img::before {
-  content: "";
-  display: inline-block;
-  vertical-align: middle;
-}
-
-th.graphicStatus::before {
-  height: 28px;
-}
-
-td.graphicStatus img::before {
-  width: 23px;
 }
 
 th.peerCount a img {
@@ -87,8 +70,8 @@ td.peerCount {
 }
 
 .peerCount .right, .peerCount .left {
-  display: inline-block;
   min-width: 24px;
+  display: inline-block;
 }
 
 .peerCount .left {
@@ -102,16 +85,6 @@ td.peerCount {
   margin-right: 2px;
   text-align: right;
 }
-
-td.trackerDetails img::before, td.torrentDetails img::before {
-  width: 19px;
-}
-
-#closelog img::after {
-  height: 10px;
-}
-
-/* end header/column resize mitigation */
 
 .page {
   margin: 5px 0 0 0;
@@ -4152,7 +4125,6 @@ td.torrentAction input[type=submit] {
   #torrentdisplay, #torrentdisplay label:last-child {border-right: none !important}
   #torrentDisplay label {flex-grow: 1}
 }
-
 
 /* mini-mode - hides upload columns + text torrent status in main torrent listing and shrinks other ui elements */
 
