@@ -156,7 +156,7 @@ label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
 }
 
 @supports not (-moz-appearance: none) {
-  .iframed .snarkNav:link, .iframed .snarkNav:visited {
+  .iframed .snarkNav, .iframed .snarkNav:visited {
     padding-bottom: 3px;
   }
 }
@@ -201,7 +201,7 @@ label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
   border-radius: 2px !important;
 }
 
-.nav_main:hover, .nav_main:link:focus {
+.nav_main:hover, .nav_main:focus {
   color: #d2baff !important;
   background: var(--snark_hover) no-repeat 11px center / 18px, var(--nav_hover);
 }
@@ -5398,12 +5398,12 @@ td.torrentAction input[type=submit] {
     min-width: 600px;
     transition: ease width .5s .5s;
   }
-  .snarkNav:link, .snarkNav:visited, .iframed .snarkNav:link, .iframed .snarkNav:visited {
+  .snarkNav, .snarkNav:visited, .iframed .snarkNav:link, .iframed .snarkNav:visited {
     padding: 4px 8px 4px 22px !important;
     background-size: 15px auto, 100% !important;
     background-position: 6px 50%, center center !important;
   }
-  .snarkNav.nav_main:link, .snarkNav:last-child[href="/i2psnark/"] {
+  .snarkNav.nav_main, .snarkNav:last-child[href="/i2psnark/"] {
     padding-left: 24px !important;
   }
   .iframed #pagenavtop {
@@ -5441,7 +5441,7 @@ td.torrentAction input[type=submit] {
 }
 
 @media screen and (min-resolution: 120dpi)  and (max-width: 1180px) {
-  .snarkNav.nav_main:link, .snarkNav:last-child[href="/i2psnark/"] {
+  .snarkNav.nav_main, .snarkNav:last-child[href="/i2psnark/"] {
     padding-left: 26px !important;
     background-position: 8px 50%, center center !important;
   }
@@ -5621,7 +5621,7 @@ td.torrentAction input[type=submit] {
   .snarkMessages li {
     font-size: 8.5pt;
   }
-  .snarkNav:link, .snarkNav:visited {
+  .snarkNav, .snarkNav:visited {
     font-size: 9pt !important;
     background-size: 10pt auto, 100% !important;
   }
@@ -5876,11 +5876,12 @@ td.torrentAction input[type=submit] {
   select, select option, button, a.control, .snarkTorrents a:link {
     font-size: 9.5pt !important;
   }
-  .snarkNav:link {
+  .snarkNav {
     font-size: 10.5pt;
   }
-  .snarkNav:link:first-child, .snarkNav[href="/i2psnark/"]:last-child {
-    padding-left: 32px !important;
+  .snarkNav:first-child, .snarkNav[href="/i2psnark/"]:last-child {
+    padding-left: 29px !important;
+    background-position: 8px center;
   }
   .iframed #pagenavtop {
     margin-top: 2px !important;
@@ -5989,13 +5990,13 @@ td.torrentAction input[type=submit] {
   .snarknavbar img {
     margin: -2px -9px 0 -5px;
   }
-  .snarkNav:link:first-child {
+  .snarkNav:first-child {
     padding-left: 32px !important;
   }
-  .snarkNav:link:first-child, .snarkNav:last-child[href="/i2psnark/"] {
+  .snarkNav:first-child, .snarkNav:last-child[href="/i2psnark/"] {
     background-position: 11px 45%, center center !important;
   }
-  .snarkNav:link {
+  .snarkNav {
     font-size: 12pt;
   }
   .snarkMessages {
