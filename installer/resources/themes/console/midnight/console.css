@@ -2761,13 +2761,13 @@ tr:nth-child(even), #netdbversions tr:nth-child(even), #netdbtransports tr:nth-c
 #netdbcountrylist tr:nth-child(even), #netdbtiers tr:nth-child(even),
 #pluginconfig table tr:nth-child(even) {
   vertical-align: middle;
-  background: var(--tr);
+  background: var(--row);
 }
 
-tr:nth-child(odd), #netdbversions tr:nth-child(odd), #netdbtransports tr:nth-child(odd), #netdbcountrylist tr:nth-child(odd), #netdbtiers tr:nth-child(odd),
-#pluginconfig tr {
+tr:nth-child(odd), #netdbversions tr:nth-child(odd), #netdbtransports tr:nth-child(odd),
+#netdbcountrylist tr:nth-child(odd), #netdbtiers tr:nth-child(odd), #pluginconfig tr {
   vertical-align: middle;
-  background: var(--tr);
+  background: var(--row);
 }
 
 td {
@@ -4421,7 +4421,7 @@ h3#pconfig {
 }
 
 #pluginconfig table tr {
-  background: var(--tr);
+  background: var(--row);
 }
 
 #webappconfig th:first-child {
@@ -7629,7 +7629,7 @@ td.optionsave {
   padding: 7px 5px !important;
   text-align: right;
   border-top: var(--border_inner);
-  background: var(--tr);
+  background: var(--row);
 }
 
 #floodfillconfig form, #plugininstall form, #updateplugins form, .configtable form {
