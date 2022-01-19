@@ -12,8 +12,6 @@ body {
   margin: 5px 0 15px;
   padding: 0;
   text-align: center;
-  font-family: var(--bodyfont);
-  font-size: 9pt;
   background: repeating-linear-gradient(180deg,rgba(0,0,24,.75) 3px, rgba(0,0,0,.9) 5px, rgba(0,0,0,.7) 6px), var(--tile), #000010;
 }
 
