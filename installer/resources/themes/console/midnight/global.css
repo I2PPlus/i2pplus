@@ -147,6 +147,7 @@ textarea {
   resize: none;
   scrollbar-color: rgba(24,24,80,.8) rgba(0,0,0,0);
   scrollbar-width: thin;
+  will-change: transform;
 }
 
 textarea:focus {
@@ -172,7 +173,7 @@ input[type=text]:disabled, input[readonly], input[readonly]:focus {
   color: #26235c !important;
   border: var(--border_inner);
   box-shadow: none;
-  background: linear-gradient(180deg,#000, #000019);
+  background: linear-gradient(180deg,#000,#000019);
   filter: none;
   cursor: not-allowed;
 }
