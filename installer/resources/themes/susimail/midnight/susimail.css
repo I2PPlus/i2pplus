@@ -624,19 +624,27 @@ input[name="user"], input[name="pass"] {
 input[name="user"]:focus, input[name="pass"]:focus, input[type=text]:focus, textarea:focus {
   color: var(--ink);
   border: 1px solid #6466a5 !important;
-  box-shadow: 0 0 0 1px rgba(101, 39, 135, .5), 0 0 2px 2px #202;
+  box-shadow: var(--btn_shadow_active);
 }
 
 #dologin input[name="user"] {
-  background: #000 var(--user) no-repeat 6px center / 14px !important;
+  background: #000 var(--user) no-repeat 6px center / 14px;
 }
 
 #dologin input[name="pass"] {
-  background: #000 var(--key) no-repeat 6px center / 14px !important;
+  background: #000 var(--key) no-repeat 6px center / 14px;
 }
 
 input[name="user"]:focus, input[name="pass"]:focus {
   background-blend-mode: normal;
+}
+
+input[name="user"]:focus {
+  background: var(--user) no-repeat 6px center / 14px, var(--text_focus) !important;
+}
+
+input[name="pass"]:focus {
+  background: var(--key) no-repeat 6px center / 14px, var(--text_focus) !important;
 }
 
 input::placeholder {
