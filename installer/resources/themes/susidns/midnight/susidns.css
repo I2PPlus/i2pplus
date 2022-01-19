@@ -63,7 +63,7 @@ div#navi  {
   padding: 5px;
   display: inline-block;
   outline: none;
-  line-height: 120%;
+  line-height: 1.2;
   color: #89f !important;
   text-transform: capitalize;
   text-shadow: 0 1px 1px #000;
@@ -84,7 +84,7 @@ div#navi  {
 #navi a:active {
   text-shadow: none;
   border: 1px solid #652787;
-  box-shadow: var(--highlight), inset 3px 3px 3px #000 !important;
+  box-shadow: var(--btn_shadow_active) !important;
 }
 
 #navi .abook {
@@ -207,6 +207,7 @@ td.search > * {
 }
 
 #search input[type=text]:focus {
+  box-shadow: var(--outline), var(--btn_shadow_active);
   background: var(--search) no-repeat 8px center / 14px, var(--text_focus) !important;
   background-blend-mode: normal;
 }
@@ -530,9 +531,9 @@ p.messages {
 }
 
 #helpsubs {
-  margin: -18px 0 -11px;
-  padding: 15px 15px 15px 52px;
-  background: #001 var(--infohelp) no-repeat 12px center / 28px;
+  margin: -16px 0 -11px;
+  padding: 20px 15px 15px 48px;
+  background: #001 var(--infohelp) no-repeat 12px center / 24px;
 }
 
 .iframed #helpsubs {
@@ -541,7 +542,7 @@ p.messages {
 
 div#content p {
   padding: 0 30px;
-  line-height: 140%;
+  line-height: 1.4;
 }
 
 p.footer {
@@ -599,8 +600,7 @@ textarea[name="config"] {
 }
 
 div#config + div#buttons, div#content + div#buttons {
-  margin-top: -3px;
-  margin-bottom: 15px;
+  margin: -3px 0 12px;
   padding: 10px 5px;
   border: 1px solid #26235c;
   background: #001;
@@ -938,10 +938,10 @@ input[type=submit]:active, input[type=reset]:active, .fakebutton:active {
 textarea, #subslog pre {
   padding: 3px 5px;
   width: 100%;
-  height: 120px;
+  height: 200px;
   resize: none;
   font: 700 8.5pt var(--monospaced);
-  line-height: 140%;
+  line-height: 1.4;
   color: #7670c2;
   border: 1px solid #26225d;
   background: #000;
@@ -1043,7 +1043,9 @@ input.export {
 }
 
 .headline#subscriptions h3 span a {
-  font-size: 90% !important;
+  margin-top: 3px;
+  display: inline-block;
+  font-size: 80% !important;
 }
 
 .headline#configure h3 {
@@ -1359,12 +1361,14 @@ tr:hover td.destinations {
 }
 
 @media screen and (min-width: 1500px) {
-body, input[type=text], select, h4, td.names a, #filter p, #search td, p, a, .help li, td, tt, code, textarea, input[type=submit], input[type=reset], .destaddress {
+body, #navi a, input[type=text], select, h4, td.names a,
+#filter p, #search td, p, a, .help li, td, tt, code,
+input[type=submit], input[type=reset], .destaddress {
   font-size: 10.5pt !important;
 }
 
-#navi a {
-  font-size: 10.5pt !important;
+textarea, #subslog pre {
+  font-size: 10pt !important;
 }
 
 h3 {
