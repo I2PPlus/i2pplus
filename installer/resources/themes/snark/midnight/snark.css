@@ -4,12 +4,12 @@
 @import url(/themes/console/midnight/global.css);
 
 :root {
-  --btnAction_active: linear-gradient(180deg,#3c1751, #652787);
+  --btnAction_active: linear-gradient(180deg,#3c1751,#652787);
   --btnAction_hover: var(--nav_hover);
-  --btnAction: linear-gradient(180deg,#181d4f 50%, #001 50%);
-  --nav: linear-gradient(180deg,#181828 50%, #000 50%);
-  --nav_hover: linear-gradient(180deg,#652787 50%, #3c1751 50%);
-  --nav_active: linear-gradient(180deg,#3c1751,#652787);
+  --btnAction: linear-gradient(180deg,#181d4f 50%,#001 50%);
+  --nav: linear-gradient(180deg,#181828 50%,#000 50%);
+  --nav_hover: linear-gradient(180deg,#652787,#4a1c63 50%,#3c1751 50%,#2c113c);
+  --nav_active: linear-gradient(180deg,#2c113c,#652787);
   --tab_active: linear-gradient(90deg, rgba(0,0,32,.1), rgba(64,0,64,.2), rgba(0,0,32,.1)), linear-gradient(180deg,#080008, #0a000a);
   --tab_hover: linear-gradient(90deg, rgba(0,0,16,.05), rgba(96,0,96,.15), rgba(0,0,16,.05)), linear-gradient(180deg,#1d1a2d 50%, #000 50%);
   --tab: linear-gradient(90deg, rgba(0,0,16,.7), rgba(0,0,0,.1), rgba(0,0,16,.7)), var(--nav);
@@ -3819,7 +3819,7 @@ td.peerCount b a:active {
   float: none !important;
   vertical-align: middle;
   font-size: 0 !important;
-  border: 1px solid #181833;
+  border: 1px solid #1e2462;
   border-radius: 2px !important;
   box-shadow: var(--highlight), inset 0 0 1px 0 #446;
   background-position: center center !important;
