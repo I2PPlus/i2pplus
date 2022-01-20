@@ -2820,6 +2820,16 @@ table tt, #jardump td:nth-child(4) {
   color: #393;
 }
 
+#revision, #jardump a tt {
+  padding-left: 16px;
+  background: var(--gitlab) no-repeat left center / 13px;
+}
+
+#jardump a tt {
+  padding-left: 13px;
+  background-size: 11px;
+}
+
 .infohelp tt {
   font-size: 9pt;
 }
@@ -9553,11 +9563,6 @@ tr:nth-child(4) .net_bwrate::before {
 
 #installPluginUrl input[type=text], #installPluginFile input[type="file"] {
   width: 100%;
-}
-
-input[type="file"]:hover {
-  border-radius: 0 15px 15px 0;
-  background: linear-gradient(90deg, rgba(0,0,0,0), #414);
 }
 
 #joinfamily td, #newfamily td {
