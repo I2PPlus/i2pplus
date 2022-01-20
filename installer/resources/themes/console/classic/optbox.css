@@ -85,6 +85,28 @@ a:active {
   color: var(--active);
 }
 
+input, label {
+  vertical-align: middle;
+}
+
+input::-moz-placeholder {
+  color: #900;
+  opacity: 1;
+}
+
+::-webkit-input-placeholder {
+  color: #900;
+  opacity: 1;
+}
+
+input:focus::-moz-placeholder {
+  opacity: 0;
+}
+
+:focus::-webkit-input-placeholder {
+  opacity: 0;
+}
+
 select {
   padding: 5px 20px 5px 5px;
   vertical-align: middle;
