@@ -1748,9 +1748,8 @@ input[name="nofilter_commentsName"] {
 
 textarea {
   padding: 1px 4px 0;
-  font: 8pt var(--monospaced);
+  font-size: 8pt;
   font-weight: 700;
-  color: var(--ink_light);
   border: var(--border_main);
   border-radius: 2px;
   background: var(--bg2);
@@ -1766,15 +1765,9 @@ textarea[name="i2cpOpts"] {
 
 img {
   margin: 0 3px 1px 3px;
-  line-height: 1;
   vertical-align: middle;
-  opacity: 1;
-}
-
-img:hover {
   line-height: 1;
   border: none;
-  opacity: 1;
 }
 
 /* pagenav */

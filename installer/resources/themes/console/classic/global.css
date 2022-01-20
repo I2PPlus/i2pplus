@@ -132,13 +132,22 @@ button::-moz-focus-inner, input::-moz-focus-inner {
 }
 
 input, button, select, label {
+  text-decoration: none;
   font-family: var(--bodyfont);
   outline: none;
   cursor: pointer;
 }
 
 textarea {
+  width: 100%;
+  resize: none;
   font-family: var(--monospaced);
+  color: var(--ink_light);
+  scrollbar-color: #acafb9 #f2f2ff;
+}
+
+textarea:focus {
+  color: var(--ink);
 }
 
 select {

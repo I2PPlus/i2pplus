@@ -586,9 +586,6 @@ input[type=file]::file-selector-button {
 
 textarea {
   margin: 0 auto 10px;
-  width: 100%;
-  resize: none;
-  color: #444;
 }
 
 td.destinations textarea, td.destinations textarea:focus {
