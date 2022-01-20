@@ -820,11 +820,6 @@ div.refresh {
   background: repeating-linear-gradient(135deg, rgba(238, 238, 255,.7) 1px, rgba(238, 238, 255, .7) 5px, rgba(221, 221, 255, .7) 6px, rgba(221, 221, 255, .7) 11px);
 }
 
-@keyframes downloadbar {
-  from {background: repeating-linear-gradient(135deg, rgba(221, 221, 255, .7) 1px, rgba(221, 221, 255, .7) 6px, rgba(238, 238, 255,.7) 7px, rgba(238, 238, 255,.7) 11px)}
-  to {background: repeating-linear-gradient(135deg, rgba(238, 238, 255,.7) 1px, rgba(238, 238, 255, .7) 5px, rgba(221, 221, 255, .7) 6px, rgba(221, 221, 255, .7) 11px)}
-}
-
 .sb_info .percentBarOuter {
   animation: downloadbar 3s infinite;
 }
@@ -1135,28 +1130,7 @@ input[type="file"] {
 }
 
 input[type=text], input[type=password] {
-  margin: 3px 5px 3px 5px;
-  padding: 5px 7px;
-  min-width: 120px;
-  vertical-align: middle;
-  color: var(--ink_light);
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  box-shadow: var(--shadow_input);
-  background-color: var(--bg2);
-}
-
-input[type=text]:focus, input[type=password]:focus {
-  padding: 5px 5px 5px 9px;
-  color: var(--ink);
-  box-shadow: var(--btn_shadow_hover), var(--btn_shadow_active);
-  background-color: var(--bg);
-}
-
-input[type=text][readonly], input[type=text][readonly]:focus, input[type=text][disabled] {
-  color: var(--disabled);
-  box-shadow: var(--shadow_input);
-  background: var(--bg3);
+  margin: 3px 5px;
 }
 
 button, input, select {
@@ -1165,16 +1139,10 @@ button, input, select {
 }
 
 input[type=file]::file-selector-button {
-  font: 9pt/130% var(--bodyfont);
-  color: var(--ink_light);
+  margin: 3px 8px 3px 0;
 }
 
 button:hover, input[type=submit]:hover, input[type=reset]:hover {
-  color: var(--ink);
-  background: var(--btn_hover);
-}
-
-input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
   color: var(--ink);
   background: var(--btn_hover);
 }
@@ -1183,24 +1151,10 @@ button:active, input[type=submit]:active, input[type=reset]:active {
   background-color: var(--bg);
 }
 
-input[type=file]:active::file-selector-button {
-  background-color: var(--bg);
-}
-
 input[name="refreshInterval"] {
   width: 80px;
   min-width: 80px;
   text-align: right;
-}
-
-input[type=submit], input[type=reset], button, .optbox {
-  outline: none;
-  cursor: pointer;
-}
-
-button::-moz-focus-inner, input::-moz-focus-inner {
-  outline: none;
-  border: none;
 }
 
 /* confignet tidyup */
@@ -1231,19 +1185,6 @@ input[type=submit], input[type=reset], button {
   border: 1px solid var(--border);
   border-radius: 3px;
   box-shadow: var(--btn_shadow);
-  background: var(--btn);
-  background-size: 14px, 100% !important;
-}
-
-input[type=file]::file-selector-button {
-  margin: 3px 8px 3px 0;
-  padding: 4px 8px;
-  text-decoration: none;
-  font: 9pt var(--bodyfont);
-  color: var(--ink_light);
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  box-shadow: var(--highlight), 0 0 1px #ddd;
   background: var(--btn);
   background-size: 14px, 100% !important;
 }
@@ -9575,11 +9516,6 @@ p#gatherstats {
   min-height: 40px;
 }
 
-@keyframes zoom {
-  from {transform: scale(.8)}
-  to {transform: scale(1)}
-}
-
 .graphContainer > * {
   vertical-align: middle !important;
 }
@@ -9945,11 +9881,6 @@ p#gatherstats {
   animation: ease-out reloader 1s forwards;
 }
 
-@keyframes reloader {
-  0%, 100% {width: 0}
-  80%, 99% {width: 120%}
-}
-
 th, td {
   position: relative;
 }
@@ -10084,14 +10015,6 @@ div.app:hover img, .sitemaplink:hover img {
     repeating-linear-gradient(to top, rgba(0, 0, 0, 0) 11px, rgba(120, 120, 255, .5) 12px, rgba(255, 255, 255, 0) 12px, rgba(255, 255, 255, 0) 24px) !important;
 }
 
-@keyframes update {
-  from {filter: opacity(.6); color: #900;}
-}
-
-@keyframes logupdate {
-  from {background-color: rgba(80,255,80,.3)}
-}
-
 #routerlogs li {
   animation: ease logupdate 1s;
 }
@@ -10111,20 +10034,6 @@ div.app:hover img, .sitemaplink:hover img {
   content: "";
   animation: ease-in bar .15s reverse;
   will-change: transform;
-}
-
-@keyframes bar {
-  from {width: calc(100% + 2px)}
-}
-
-@keyframes fade {
-  from {opacity: 1}
-  to {opacity: 0}
-}
-
-@keyframes disappear {
-  from {visibility: visible}
-  to {visibility: hidden}
 }
 
 #down {
@@ -10160,14 +10069,6 @@ div.app:hover img, .sitemaplink:hover img {
   width: 36px;
   height: 36px;
   background-size: 32px;
-}
-
-@keyframes down {
-  from {background-position: center center, 100%}
-}
-
-@keyframes spin {
-  from {transform: rotate(-360deg)}
 }
 
 #sb_localtunnels td[colspan="3"] {
@@ -10384,6 +10285,51 @@ iframe {
   opacity: .7;
   content: "";
   animation: ease-out reloader 20s forwards;
+}
+
+@keyframes downloadbar {
+  from {background: repeating-linear-gradient(135deg, rgba(221, 221, 255, .7) 1px, rgba(221, 221, 255, .7) 6px, rgba(238, 238, 255,.7) 7px, rgba(238, 238, 255,.7) 11px)}
+  to {background: repeating-linear-gradient(135deg, rgba(238, 238, 255,.7) 1px, rgba(238, 238, 255, .7) 5px, rgba(221, 221, 255, .7) 6px, rgba(221, 221, 255, .7) 11px)}
+}
+
+@keyframes zoom {
+  from {transform: scale(.8)}
+  to {transform: scale(1)}
+}
+
+@keyframes reloader {
+  0%, 100% {width: 0}
+  80%, 99% {width: 120%}
+}
+
+@keyframes update {
+  from {filter: opacity(.6); color: #900;}
+}
+
+@keyframes logupdate {
+  from {background-color: rgba(80,255,80,.3)}
+}
+
+@keyframes bar {
+  from {width: calc(100% + 2px)}
+}
+
+@keyframes fade {
+  from {opacity: 1}
+  to {opacity: 0}
+}
+
+@keyframes disappear {
+  from {visibility: visible}
+  to {visibility: hidden}
+}
+
+@keyframes down {
+  from {background-position: center center, 100%}
+}
+
+@keyframes spin {
+  from {transform: rotate(-360deg)}
 }
 
 /* responsive layout */
