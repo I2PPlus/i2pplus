@@ -863,6 +863,14 @@ th .magnetlink img, th .torrentlink img {
   opacity: .8;
 }
 
+.snarkTorrents .infohash {
+  margin-right: 4px;
+  padding: 1px 6px 1px 18px;
+  color: #000;
+  box-shadow: var(--outline), var(--highlight);
+  background: var(--hash) no-repeat 4px center / 12px, linear-gradient(to bottom, #cc0, #990);
+}
+
 .torrentInfo .infohash {
   margin: -1px 6px -1px 10px;
   padding: 4px 3px 4px 18px;
