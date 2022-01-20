@@ -131,6 +131,10 @@ button::-moz-focus-inner, input::-moz-focus-inner {
   border: none;
 }
 
+input, button, select, label, textarea {
+  font-size: 9pt;
+}
+
 input, button, select, label {
   text-decoration: none;
   font-family: var(--bodyfont);
@@ -141,7 +145,7 @@ input, button, select, label {
 textarea {
   width: 100%;
   resize: none;
-  font-family: var(--monospaced);
+  font: 9pt var(--monospaced);
   color: var(--ink_light);
   scrollbar-color: #acafb9 #f2f2ff;
 }
@@ -156,7 +160,6 @@ select {
   overflow: hidden;
   text-overflow: ellipsis;
   font-family: var(--bodyfont);
-  font-size: 9pt;
   color: var(--ink_light);
   border: 1px solid var(--border);
   border-radius: 3px;
