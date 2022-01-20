@@ -1450,6 +1450,7 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
   margin: 0 0 -4px;
   padding: 3px 1px;
   min-width: 260px;
+  line-height: 1.5;
   vertical-align: middle;
   letter-spacing: .08em;
   font-size: 11pt;
