@@ -131,11 +131,6 @@ td.peerCount {
   border-radius: 0;
 }
 
-.snarknavbar {
-  transform: translateY(-200px);
-  animation: ease-out navslide .2s .5s forwards;
-}
-
 .snarkNav, .snarkNav:visited {
   margin: 0 -2px;
   padding: 4px 9px 4px 26px !important;
@@ -149,8 +144,9 @@ td.peerCount {
   border: var(--border_btn);
   border-radius: 0;
   box-shadow: var(--highlight), inset 0 0 1px 0 #446;
-  background: var(--tracker) no-repeat 9px center, var(--nav);
+  background: var(--tracker) no-repeat 9px center, var(--nav), var(--tracker_hover), var(--tracker_active);
   transition: ease box-shadow .1s;
+  animation: fade-in .5s ease 2.5s both;
   will-change: transform;
 }
 
@@ -167,15 +163,15 @@ td.peerCount {
 }
 
 .nav_main {
-  background: var(--snark) no-repeat 9px center, var(--nav);
+  background: var(--snark) no-repeat 9px center, var(--nav), var(--snark_hover), var(--snark_active);
 }
 
 .nav_forum {
-  background: var(--forum) no-repeat 9px center, var(--nav);
+  background: var(--forum) no-repeat 9px center, var(--nav), var(--forum_hover), var(--forum_active);
 }
 
 .nav_search {
-  background: var(--search) no-repeat 9px center, var(--nav);
+  background: var(--search) no-repeat 9px center, var(--nav), var(--search_hover), var(--search_active);
 }
 
 .snarkNav:hover, .snarkNav:focus, .snarkNav:active {
@@ -3989,11 +3985,6 @@ td.torrentAction input[type=submit] {
 }
 
 /* end torrent edit */
-
-@keyframes navslide {
-  from {transform: translateY(-200px)}
-  to {transform: translateY(0)}
-}
 
 @keyframes active {
   from {background: linear-gradient(to left, rgba(0,0,0,0) 1px, #f5f 3px, rgba(0,0,0,0) 3px)}
