@@ -202,6 +202,10 @@ input[type=text][readonly], input[type=text][readonly]:focus, input[type=text][d
   background: var(--bg3);
 }
 
+input[type=file], input[type=file]::file-selector-button {
+  cursor: pointer;
+}
+
 input[type=file]::file-selector-button {
   padding: 4px 8px;
   text-decoration: none;

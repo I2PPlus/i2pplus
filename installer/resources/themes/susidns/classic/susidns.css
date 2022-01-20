@@ -583,11 +583,6 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
   box-shadow: inset 0 0 0 1px #89f, 0 0 1px rgba(136, 153, 255, .4);
 }
 
-input[type=submit]::-moz-focus-inner, input[type="reset"]::-moz-focus-inner {
-  border: none;
-  outline: none;
-}
-
 input[type=submit], input[type="reset"] {
   min-width: 80px;
 }
@@ -595,26 +590,6 @@ input[type=submit], input[type="reset"] {
 input[type=file]::file-selector-button {
   margin: 3px 3px 3px 0;
   padding: 6px 10px;
-  font: 9pt/130% var(--bodyfont);
-  color: var(--ink_light);
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  box-shadow: inset 1px 1px 1px #ddd;
-  background: var(--btn);
-}
-
-input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
-  color: var(--ink);
-  border: 1px solid var(--border);
-  background: var(--btn_hover);
-  filter: drop-shadow(0 0 1px #89f);
-  cursor: pointer;
-}
-
-input[type=file]:active::file-selector-button {
-  color: var(--ink_light);
-  border: 1px solid #bbb;
-  box-shadow: var(--highlight), inset 3px 3px 3px #999;
 }
 
 textarea {
