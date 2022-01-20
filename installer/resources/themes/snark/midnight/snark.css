@@ -7,7 +7,7 @@
   --btnAction_active: linear-gradient(180deg,#3c1751,#652787);
   --btnAction_hover: var(--nav_hover);
   --btnAction: linear-gradient(180deg,#181d4f 50%,#001 50%);
-  --nav: linear-gradient(180deg,#181828 50%,#000 50%);
+  --nav: linear-gradient(180deg,#112,#080818 50%,#000);
   --nav_hover: linear-gradient(180deg,#652787,#4a1c63 50%,#3c1751 50%,#2c113c);
   --nav_active: linear-gradient(180deg,#2c113c,#652787);
   --tab_active: linear-gradient(90deg, rgba(0,0,32,.1), rgba(64,0,64,.2), rgba(0,0,32,.1)), linear-gradient(180deg,#080008, #0a000a);
