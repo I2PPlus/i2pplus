@@ -3125,16 +3125,21 @@ h3#iptransport a:hover {
 }
 
 #config_logging h3 a::before, #webappconfiguration a::before,
-#i2pclientconfig a::before, #pluginmanage a::before {
+#i2pclientconfig a::before, #pluginmanage a::before, #version a::before {
   width: 18px;
-  height: 13px;
+  height: 14px;
   display: inline-block;
   vertical-align: middle;
   background: var(--eye) no-repeat left center / 14px;
   content: "";
 }
 
-#config_logging h3 a:hover::before, #config_logging h3 a:focus::before {
+#version a::before {
+  margin-top: -2px;
+}
+
+#config_logging h3 a:hover::before, #config_logging h3 a:focus::before,
+#version a:hover::before, #version a:focus::before {
   background: var(--eye_hover) no-repeat left center / 14px;
 }
 
@@ -8840,9 +8845,14 @@ div.app.js:hover::before {
   white-space: nowrap;
 }
 
-#revision {
-  padding-left: 19px;
-  background: var(--gitlab) no-repeat left center / 16px;
+#revision, #jardump a tt {
+  padding-left: 16px;
+  background: var(--gitlab) no-repeat left center / 13px;
+}
+
+#jardump a tt {
+  padding-left: 13px;
+  background-size: 11px;
 }
 
 #routerinformation tr:nth-child(n+2) a:not(#revision) {
@@ -10701,6 +10711,10 @@ iframe {
   #profilelist td:nth-last-child(2) span, #profilelist td:nth-last-child(3) span, #profilelist td:nth-last-child(5) span {
     text-align: center !important;
   }
+  #jardump th:nth-child(3), #jardump th:nth-child(4), #jardump th:nth-child(5), #jardump th:nth-child(6),
+  #jardump td:nth-child(3), #jardump td:nth-child(4), #jardump td:nth-child(5), #jardump td:nth-child(6) {
+    display: none;
+  }
 }
 
 @media screen and (max-width: 1100px) {
@@ -11059,6 +11073,9 @@ body, .main, .main td, .news p, #news p, .tab, .tab2, .main li b, .joblog li, .t
   button, input, select, textarea, .netdbentry th, .configtable th, .statlist a[name],
   .statlist b, .statlist li b, .statlist a[name]:hover, div.messages, th {
     font-size: 10pt !important;
+  }
+  .main[id^="config_"] .encDests th, .main[id^="config_"] .encDests td {
+    font-size: 9pt !important;
   }
   body {
     overflow-x: hidden;
