@@ -124,21 +124,12 @@ label {
   cursor: pointer;
 }
 
-input::-moz-placeholder {
-  color: #900;
-  opacity: 1;
+input::placeholder {
+  color: var(--ink_light);
+  opacity: .7;
 }
 
-::-webkit-input-placeholder {
-  color: #900;
-  opacity: 1;
-}
-
-input:focus::-moz-placeholder {
-  opacity: 0;
-}
-
-:focus::-webkit-input-placeholder {
+input:focus::placeholder {
   opacity: 0;
 }
 
