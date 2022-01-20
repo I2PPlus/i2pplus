@@ -51,7 +51,7 @@
   --shadow_input: inset 1px 1px 1px rgba(0,0,0,.2);
   --shadow_inset: inset 2px 2px 4px rgba(204,204,240,.6);
   --subheading: linear-gradient(90deg, var(--bg), var(--bg3));
-  --th: linear-gradient(180deg, #fff, var(--bg2));
+  --th: linear-gradient(180deg,#fff,#fafbff);
   --visited: #6b6b94;
 }
 
@@ -87,6 +87,12 @@ img {
 
 table {
   width: 100%;
+}
+
+th {
+  font-size: 9pt;
+  font-weight: 700;
+  color: var(--ink_light);
 }
 
 a:link, a:visited {

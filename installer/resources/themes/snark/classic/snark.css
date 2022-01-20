@@ -547,12 +547,9 @@ tfoot tr:first-child th {
 }
 
 th {
-  font-size: 9pt;
   padding: 3px 2px;
-  color: var(--ink_light);
   border-top: var(--border_main);
   border-bottom: var(--border_main);
-  background: var(--bg);
   background: var(--th);
 }
 

@@ -302,10 +302,9 @@ th {
   padding: 7px 5px;
   text-align: left;
   font-size: 10pt;
-  color: var(--ink_light);
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
-  background: linear-gradient(180deg,#fff, #fafbff);
+  background: var(--th);
 }
 
 tr {
@@ -807,7 +806,7 @@ input[type="file"] {
 }
 
 #wizardTunnelTypes tr:last-child {
-  background: linear-gradient(180deg,#fff, #fafbff);
+  background: var(--th);
 }
 
 #wizardPanel #name, #wizardPanel #description {

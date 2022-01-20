@@ -82,7 +82,7 @@ table.book th {
 }
 
 .book th:last-child {
-  background: var(--nuke) no-repeat center calc(50% + 1px) / 14px, var(--heading);
+  background: var(--nuke) no-repeat center calc(50% + 1px) / 14px, var(--th);
 }
 
 table.book tr:hover textarea {
@@ -141,7 +141,7 @@ input:focus::placeholder {
   top: -1px;
   z-index: 999;
   border: 1px solid var(--border);
-  background: var(--heading);
+  background: var(--th);
 }
 
 .iframed #navi {
@@ -156,7 +156,8 @@ input:focus::placeholder {
 
 #content h3 {
   padding: 3px 10px 4px 30px !important;
-  background: var(--question) no-repeat 4px center / 20px, linear-gradient(90deg, #fafafa 28px, rgba(0,0,0,0) 28px);
+  background: var(--question) no-repeat 4px center / 20px,
+    linear-gradient(90deg, #fafafa 28px, rgba(0,0,0,0) 28px);
   background-blend-mode: luminosity;
 }
 
@@ -249,7 +250,7 @@ h3 {
   font-weight: 700;
   color: var(--ink_light);
   border: 1px solid var(--border);
-  background: var(--heading);
+  background: var(--th);
 }
 
 #help h3 {
@@ -260,7 +261,7 @@ h4 {
   margin: -11px -11px 10px;
   padding: 3px 10px;
   border: 1px solid var(--border);
-  background: var(--heading);
+  background: var(--th);
 }
 
 a {
@@ -284,11 +285,11 @@ a:active {
 
 th {
   padding: 5px 10px;
-  line-height: 12pt;
+  line-height: 1.2;
   font-size: 10pt;
   border-bottom: 1px solid var(--border);
   border-top: 1px solid var(--border);
-  background: var(--heading);
+  background: var(--th);
 }
 
 td {
@@ -430,7 +431,7 @@ div#filter {
 
 .iframed #booksearch, .iframed #filter {
   background: #eff2ff;
-  background: var(--heading);
+  background: var(--th);
 }
 
 #search input[type=text] {
@@ -770,7 +771,7 @@ textarea[name="config"], textarea[name="content"] {
   letter-spacing: .08em;
   text-transform: uppercase;
   font-size: 12pt;
-  background: var(--addressbook) no-repeat 10px center / 22px, var(--heading);
+  background: var(--addressbook) no-repeat 10px center / 22px, var(--th);
 }
 
 body:not(.iframed) #addressbook.headline h3 {
@@ -778,11 +779,11 @@ body:not(.iframed) #addressbook.headline h3 {
 }
 
 .headline#subscriptions h3 {
-  background: var(--subscription) no-repeat 10px center / 22px, var(--heading);
+  background: var(--subscription) no-repeat 10px center / 22px, var(--th);
 }
 
 .headline#configure h3 {
-  background: var(--config) no-repeat 10px center / 22px, var(--heading);
+  background: var(--config) no-repeat 10px center / 22px, var(--th);
 }
 
 .iframed .headline#subscriptions, .iframed .headline#configure {
