@@ -4208,7 +4208,7 @@ body, th, td, table a, input, input[type=text], input.r, input[name="nofilter_da
     min-width: 220px !important;
   }
   .iframed #snarkFiles {margin-top: 5px !important}
-  .iframed #snarkTorrentEditSection + #snarkFiles {margin-top: 0 !important}
+  #snarkTorrentEditSection + #snarkFiles {margin-top: 0 !important}
   .torrentInfo th:first-child img, #torrentinfostats img, #trackers img {
     margin: -3px 4px 0 !important;
     max-height: 18px !important;
@@ -4216,7 +4216,8 @@ body, th, td, table a, input, input[type=text], input.r, input[name="nofilter_da
   #torrentInfoStats .nowrap {
     margin-right: 6px;
   }
-  #torrentInfoStats img[src$="head_tx.png"], #torrentInfoStats img[src$="head_rx.png"] {
+  #torrentInfoStats img[src$="head_tx.png"],
+  #torrentInfoStats img[src$="head_rx.png"] {
     margin: -3px 3px 0 4px !important;
   }
   .trackerhome, .trackerannounce, .knowntracker a {
