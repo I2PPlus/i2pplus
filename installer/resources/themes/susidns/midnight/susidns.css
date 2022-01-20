@@ -860,10 +860,13 @@ div#add {
   padding-left: 15px;
 }
 
-#import input[type=file] {
-  margin-left: -5px !important;
+input[type=file] {
   border: none;
   background: none !important;
+}
+
+#import input[type=file] {
+  margin-left: -5px !important;
 }
 
 .page {

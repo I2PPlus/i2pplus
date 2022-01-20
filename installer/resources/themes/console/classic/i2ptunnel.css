@@ -7,30 +7,6 @@
 @import url(images/i2ptunnel.css);
 @import url(optbox.css);
 
-:root {
-  --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
-  --monospaced: Droid Sans Mono, Andale Mono, DejaVu Sans Mono, Lucida Console, monospace;
-  --ink: #41444d;
-  --ink_light: #5e626e;
-  --a: #5c5c8a;
-  --hover: #f60;
-  --active: #f30;
-  --highlight: inset 0 0 0 1px rgba(255,255,255,.8);
-  --shadow_inset: inset 2px 2px 4px rgba(204,204,240,.6);
-  --shadow_input: inset 1px 1px 1px rgba(0,0,0,.2);
-  --btn: linear-gradient(180deg, var(--bg) 50%, var(--bg2), var(--bg3));
-  --btn_hover: linear-gradient(180deg,#ddd,#fff);
-  --btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 #fff, inset 0 0 4px 2px #f0f0ff, 0 1px 1px rgba(220,220,255,.5);
-  --btn_shadow_hover: var(--highlight), 0 0 0 1px #fff, 0 0 0 2px rgba(255,96,0,.4);
-  --btn_shadow_active: var(--highlight), inset 3px 3px 3px 1px rgba(32,32,64,.3);
-  --border: #bfc3d9;
-  --h2: linear-gradient(180deg,#fff 50%,#fafbff 50%);
-  --bg: #fff;
-  --bg2: #f8f8ff;
-  --bg3: #f0f0ff;
-  --bg4: #e8e8ff;
-}
-
 html {
   scrollbar-color: #acafb9 #e2e2f3;
 }
@@ -52,16 +28,12 @@ body.iframed {
   background: none !important;
 }
 
-* {
-  outline: none;
+div {
+  box-sizing: border-box;
 }
 
 b {
   color: var(--ink_light);
-}
-
-div {
-  box-sizing: border-box;
 }
 
 h2, h3, th, .buttons, .newTunnel, .control, label, .infohelp, .infowarn, .nowrap, b, #throttler td {
@@ -74,10 +46,6 @@ h2, h3, th, .buttons, .newTunnel, .control, label, .infohelp, .infowarn, .nowrap
 
 .selectAll:hover {
   background: #eef;
-}
-
-a {
-  text-decoration: none;
 }
 
 form {
@@ -251,44 +219,14 @@ hr {
 
 select {
   margin: 4px !important;
-  padding: 5px 20px 5px 5px;
   min-width: 140px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-family: var(--bodyfont);
-  font-size: 9pt;
-  color: #5e626e;
-  border: 1px solid var(--border);
-  border-radius: 3px;
-  box-shadow: var(--btn_shadow);
-  background: var(--dropdown) no-repeat right 8px center / 10px, var(--btn);
-  cursor: pointer;
-  appearance: none;
 }
 
-select:hover {
-  color: var(--ink);
-}
-
-select:hover, select:active {
-  box-shadow: var(--btn_shadow_hover);
-  background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover) !important;
-  outline: none !important;
-}
-
-select:focus {
-  background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover) !important;
-  outline: none !important;
-}
-
-select option {
-  background: #fff;
-}
-
-select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active {
+select[disabled], select[disabled]:hover,
+select[disabled]:focus, select[disabled]:active {
   margin: 0;
   padding: 0;
-  color: #757a8a;
+  color: var(--ink);
   border: none;
   box-shadow: none;
   background: none !important;
@@ -298,23 +236,6 @@ select[disabled], select[disabled]:hover, select[disabled]:focus, select[disable
 #sigType[disabled] {
   padding-left: 14px !important;
   background: var(--crypto) no-repeat left center / 16px !important;
-}
-
-a:link, a:visited {
-  word-wrap: break-word;
-  text-decoration: none;
-  font-weight: 700;
-  color: var(--a);
-  outline: none;
-}
-
-a:hover, a:focus {
-  text-decoration: none;
-  color: var(--hover);
-}
-
-a:active {
-  color: var(--active);
 }
 
 input[type="hidden"], input.default {
@@ -518,25 +439,6 @@ th.tunnelControl {
   text-align: center;
 }
 
-/*input[type=checkbox], input[type=radio] {
-  margin: 2px 2px 2px 0;
-  min-width: 16px;
-  min-height: 16px;
-  vertical-align: middle;
-  background: none;
-}
-
-input[type=radio]:hover, input[type=radio]:focus, input[type=checkbox]:hover, input[type=checkbox]:focus {
-  box-shadow: inset 0 0 1px 2px #89f;
-  outline: none;
-  filter: drop-shadow(0 0 2px #89f);
-}
-
-input[type=radio][disabled]:hover, input[type=radio][disabled]:focus {
-  box-shadow: none !important;
-  filter: none !important;
-}*/
-
 .optbox {
   margin: 2px 2px 2px 0;
 }
@@ -618,7 +520,6 @@ textarea {
 }
 
 textarea:focus {
-  box-shadow: inset 0 0 0 1px #89f;
   box-shadow: inset 0 0 0 1px #89f, 0 0 1px rgba(136, 153, 255, .4);
   color: var(--ink);
 }
@@ -670,10 +571,6 @@ a.control {
   display: inline-block;
   white-space: nowrap;
   text-align: right;
-}
-
-input {
-  vertical-align: middle;
 }
 
 #hostField, #leasesetKey, #userAgents {
@@ -808,24 +705,6 @@ table#statusMessages textarea, table#statusMessages textarea:active {
 
 .required:not(old) {
   display: none;
-}
-
-input::-moz-placeholder {
-  color: #900;
-  opacity: 1;
-}
-
-::-webkit-input-placeholder {
-  color: #900;
-  opacity: 1;
-}
-
-input:focus::-moz-placeholder {
-  opacity: 0;
-}
-
-:focus::-webkit-input-placeholder {
-  opacity: 0;
 }
 
 input.tunnelName, input.tunnelDescriptionText, #userAgents, #filterDefinition, #websiteName {
@@ -1057,10 +936,6 @@ td.tunnelDescription, .tunnelInfo + .tunnelInfo .tunnelDestination {
 
 @supports not (-moz-appearance: none) { /* fixes chrome/blinkoverflow issue */
   select {white-space: normal}
-}
-
-label {
-  vertical-align: middle;
 }
 
 input[type=text] + label {

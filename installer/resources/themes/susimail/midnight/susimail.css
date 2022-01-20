@@ -472,7 +472,8 @@ textarea[name="config_text"] {
 
 textarea[name="new_text"] {
   min-width: 581px;
-  margin: 10px 0 10px 3px;
+  margin: 10px 0 10px 10;
+  resize: vertical;
   text-align: left;
 }
 

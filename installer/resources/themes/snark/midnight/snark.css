@@ -4,12 +4,12 @@
 @import url(/themes/console/midnight/global.css);
 
 :root {
-  --btnAction_active: linear-gradient(180deg,#3c1751, #652787);
+  --btnAction_active: linear-gradient(180deg,#3c1751,#652787);
   --btnAction_hover: var(--nav_hover);
-  --btnAction: linear-gradient(180deg,#181d4f 50%, #001 50%);
-  --nav: linear-gradient(180deg,#181828 50%, #000 50%);
-  --nav_hover: linear-gradient(180deg,#652787 50%, #3c1751 50%);
-  --nav_active: linear-gradient(180deg,#3c1751,#652787);
+  --btnAction: linear-gradient(180deg,#181d4f 50%,#001 50%);
+  --nav: linear-gradient(180deg,#112,#080818 50%,#000);
+  --nav_hover: linear-gradient(180deg,#652787,#4a1c63 50%,#3c1751 50%,#2c113c);
+  --nav_active: linear-gradient(180deg,#2c113c,#652787);
   --tab_active: linear-gradient(90deg, rgba(0,0,32,.1), rgba(64,0,64,.2), rgba(0,0,32,.1)), linear-gradient(180deg,#080008, #0a000a);
   --tab_hover: linear-gradient(90deg, rgba(0,0,16,.05), rgba(96,0,96,.15), rgba(0,0,16,.05)), linear-gradient(180deg,#1d1a2d 50%, #000 50%);
   --tab: linear-gradient(90deg, rgba(0,0,16,.7), rgba(0,0,0,.1), rgba(0,0,16,.7)), var(--nav);
@@ -131,11 +131,6 @@ td.peerCount {
   border-radius: 0;
 }
 
-.snarknavbar {
-  transform: translateY(-200px);
-  animation: ease-out navslide .2s .5s forwards;
-}
-
 .snarkNav, .snarkNav:visited {
   margin: 0 -2px;
   padding: 4px 9px 4px 26px !important;
@@ -149,8 +144,9 @@ td.peerCount {
   border: var(--border_btn);
   border-radius: 0;
   box-shadow: var(--highlight), inset 0 0 1px 0 #446;
-  background: var(--tracker) no-repeat 9px center, var(--nav);
+  background: var(--tracker) no-repeat 9px center, var(--nav), var(--tracker_hover), var(--tracker_active);
   transition: ease box-shadow .1s;
+  animation: fade-in .5s ease 2.5s both;
   will-change: transform;
 }
 
@@ -162,21 +158,20 @@ td.peerCount {
   content: "";
 }
 
-.snarkNav:first-child {
-  padding-left: 26px !important;
-  border-radius: 2px 0 0 2px;
+.snarkNav:first-child, .snarkNav[href*="i2psnark"]:last-child {
+  padding-left: 27px !important;
 }
 
 .nav_main {
-  background: var(--snark) no-repeat 9px center, var(--nav);
+  background: var(--snark) no-repeat 9px center, var(--nav), var(--snark_hover), var(--snark_active);
 }
 
 .nav_forum {
-  background: var(--forum) no-repeat 9px center, var(--nav);
+  background: var(--forum) no-repeat 9px center, var(--nav), var(--forum_hover), var(--forum_active);
 }
 
 .nav_search {
-  background: var(--search) no-repeat 9px center, var(--nav);
+  background: var(--search) no-repeat 9px center, var(--nav), var(--search_hover), var(--search_active);
 }
 
 .snarkNav:hover, .snarkNav:focus, .snarkNav:active {
@@ -185,7 +180,7 @@ td.peerCount {
   color: #fff !important;
   text-shadow: none;
   border-color: #652787;
-  background: var(--tracker_active), var(--nav_hover) !important;
+  background: var(--tracker_hover), var(--nav_hover) !important;
   background-repeat: no-repeat, repeat, repeat !important;
   background-position: 9px center, center center, center center !important;
 }
@@ -195,15 +190,16 @@ td.peerCount {
 }
 
 .snarkNav:active {
+  color: #8634b2 !important;
   background: var(--tracker_active) no-repeat 9px center, var(--nav_active) !important;
 }
 
 .nav_main:hover, .nav_main:focus {
-  background: var(--snark_active) no-repeat 9px center, var(--nav_hover) !important;
+  background: var(--snark_hover) no-repeat 9px center, var(--nav_hover) !important;
 }
 
 .nav_forum:hover, .nav_forum:focus {
-  background: var(--forum_active) no-repeat 9px center, var(--nav_hover) !important;
+  background: var(--forum_hover) no-repeat 9px center, var(--nav_hover) !important;
 }
 
 .snarkNav:active, .nav_search:active, .nav_forum:active, .nav_main:active {
@@ -239,10 +235,18 @@ td.peerCount {
   border-radius: 0 2px 2px 0 !important;
 }
 
+.snarkNav:first-child {
+  border-radius: 2px 0 0 2px;
+}
+
+.snarkNav[href*="i2psnark"] {
+  border-radius: 2px !important;
+}
+
 .snarkNav, .snarkNav:hover, .snarkNav:focus, .snarkNav:active, .snarkNav:active,
 .nav_search:hover, .nav_search:focus, .nav_forum:hover, .nav_forum:focus,
 .nav_main:hover, .nav_main:focus {
-  background-size: 16px, 100%, 100% !important;
+  background-size: 15px, 100%, 100% !important;
 }
 
 @supports (justify-content: center) {
@@ -857,6 +861,14 @@ th .magnetlink img, th .torrentlink img {
   overflow: hidden;
   text-overflow: ellipsis;
   opacity: .8;
+}
+
+.snarkTorrents .infohash {
+  margin-right: 4px;
+  padding: 1px 6px 1px 18px;
+  color: #000;
+  box-shadow: var(--outline), var(--highlight);
+  background: var(--hash) no-repeat 4px center / 12px, linear-gradient(to bottom, #cc0, #990);
 }
 
 .torrentInfo .infohash {
@@ -3787,6 +3799,17 @@ td.peerCount b a:hover .left, td.peerCount b a:hover .right {
   background: linear-gradient(180deg,rgba(32,16,32,.9), rgba(64,16,64,.9));
 }
 
+.inactive td.peerCount b a:hover,
+.inactive td.peerCount b a:hover .left,
+td.peerCount b a:hover .right {
+  color: #fff !important;
+}
+
+.inactive td.peerCount b a:hover .left, td.peerCount b a:hover .right {
+  box-shadow: rgba(255,255,0,.5), inset 2px 2px 2px rgba(0,0,0,.3);
+  background: linear-gradient(180deg,rgba(128,128,0,.9), rgba(192,192,0,.9));
+}
+
 td.peerCount b:not(:empty) {
   color: #aaa !important;
 }
@@ -3819,7 +3842,7 @@ td.peerCount b a:active {
   float: none !important;
   vertical-align: middle;
   font-size: 0 !important;
-  border: 1px solid #181833;
+  border: 1px solid #1e2462;
   border-radius: 2px !important;
   box-shadow: var(--highlight), inset 0 0 1px 0 #446;
   background-position: center center !important;
@@ -3981,11 +4004,6 @@ td.torrentAction input[type=submit] {
 }
 
 /* end torrent edit */
-
-@keyframes navslide {
-  from {transform: translateY(-200px)}
-  to {transform: translateY(0)}
-}
 
 @keyframes active {
   from {background: linear-gradient(to left, rgba(0,0,0,0) 1px, #f5f 3px, rgba(0,0,0,0) 3px)}

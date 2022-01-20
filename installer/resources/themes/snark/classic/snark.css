@@ -22,13 +22,6 @@
   --highlight: inset 0 0 0 1px rgba(255,255,255,.8);
   --nav_hover: #f50;
   --row_hover: #ffd;
-  --btn_hover: linear-gradient(180deg,#ddd,var(--bg));
-  --btn_hover2: linear-gradient(180deg,var(--bg) 50%,#ffe4db 50%,#ffc6b3);
-  --btn_active: linear-gradient(180deg,#f60,#f90);
-  --btn: linear-gradient(180deg, var(--bg) 50%, var(--bg2), var(--bg3));
-  --btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 var(--bg), inset 0 0 4px 2px #f0f0ff, 0 1px 1px rgba(220,220,255,.5);
-  --btn_shadow_hover: var(--highlight), 0 0 0 1px var(--bg), 0 0 0 2px rgba(255,96,0,.4);
-  --btn_shadow_active: var(--highlight), inset 3px 3px 3px 1px rgba(32,32,64,.3);
   --border: #bfc3d9;
   --border_main: 1px solid #bfc3d9;
   --border_hard: 1px solid #9fa5c6;
@@ -37,7 +30,7 @@
   --active: #f30;
   --nav_a: #5e6099;
   --header_hover: linear-gradient(180deg, var(--bg) 50%, var(--row_hover) 50%);
-  --header_active: linear-gradient(180deg, var(--row_hover),#ffe);
+  --header_active: linear-gradient(180deg,#ffd,#ffe);
   --badge: linear-gradient(180deg,var(--bg),var(--bg4));
   --title_shadow: var(--highlight), inset 0 0 0 0 var(--bg), 0 1px 1px var(--bg4);
   --section: linear-gradient(180deg,var(--bg2), var(--bg3));
@@ -138,9 +131,9 @@ tr, .navbar, .mainsection, .lowersection {
 .iframed .snarknavbar {
   margin-top: -1px;
   padding: 8px 0;
+  position: static;
   border-top: none;
   border-radius: 0;
-  position: static;
 }
 
 .snarkNav {
@@ -151,7 +144,7 @@ tr, .navbar, .mainsection, .lowersection {
   margin: -1px -2px -1px -3px;
   padding: 5px 7px 5px 23px;
   display: inline-block;
-  line-height: 110%;
+  line-height: 1.1;
   letter-spacing: .1em;
   text-transform: uppercase;
   font-size: 9pt;
@@ -1563,26 +1556,6 @@ hr {
   background: transparent;
 }
 
-a:link, a:visited {
-  font-weight: 700 !important;
-  text-decoration: none;
-  word-wrap: break-word;
-  opacity: 1;
-  color: #6b6b94;
-  border-radius: 0;
-}
-
-a:hover, a:focus {
-  font-weight: 400;
-  color: var(--hover) !important;
-  outline: none;
-}
-
-a:active {
-  font-weight: 400;
-  color: #f93 !important;
-}
-
 input {
   font: bold 9pt var(--bodyfont);
   margin: 2px 4px 2px 0;
@@ -1647,7 +1620,9 @@ input[type=submit], input[type="reset"], a.control {
   cursor: pointer !important;
 }
 
-input[type=submit]:hover, input[type="reset"]:hover, input[type=submit]:focus, input[type="reset"]:focus, a.control:hover, a.control:focus {
+input[type=submit]:hover, input[type="reset"]:hover,
+input[type=submit]:focus, input[type="reset"]:focus,
+a.control:hover, a.control:focus {
   color: var(--ink);
   border: var(--border_main);
   box-shadow: var(--btn_shadow_hover);
@@ -1658,18 +1633,6 @@ input[type=submit]:active, input[type="reset"]:active, a.control:active {
   border: 1px solid #999;
   box-shadow: var(--btn_shadow_active), var(--btn_shadow_hover);
   background: #ddd;
-}
-
-input[name="savepri"] {
-  margin-right: -2px !important;
-}
-
-#configs input[type=submit], .trackerconfig input[type=submit], input[name="savepri"] {
-  text-transform: capitalize;
-}
-
-input[type=text], textarea {
-  cursor: text !important;
 }
 
 a.control {
@@ -1697,6 +1660,18 @@ a.control img {
   width: 14px;
 }
 
+input[name="savepri"] {
+  margin-right: -2px !important;
+}
+
+#configs input[type=submit], .trackerconfig input[type=submit], input[name="savepri"] {
+  text-transform: capitalize;
+}
+
+input[type=text], textarea {
+  cursor: text !important;
+}
+
 .script {
   margin: 5px 0 2px;
   display: inline-block;
@@ -1708,11 +1683,13 @@ input.r {
   background: var(--bg);
 }
 
-input[type=text]:focus, textarea:focus, input.r:focus, textarea[name="i2cpOpts"]:focus, input[name="nofilter_dataDir"]:focus {
+input[type=text]:focus, textarea:focus, input.r:focus,
+textarea[name="i2cpOpts"]:focus, input[name="nofilter_dataDir"]:focus {
   background: var(--bg);
 }
 
-input[type=text], input[type=password], input.r, input[name="nofilter_dataDir"], textarea[name="i2cpOpts"] {
+input[type=text], input[type=password], input.r,
+input[name="nofilter_dataDir"], textarea[name="i2cpOpts"] {
   margin: 2px 2px 2px 0;
   padding: 5px 8px !important;
   min-width: 160px;
@@ -1727,7 +1704,8 @@ input[type=text], input[type=password], input.r, input[name="nofilter_dataDir"],
   user-select: auto;
 }
 
-input[type=text]:focus, input[type=password]:focus, input.r:focus, input[name="nofilter_dataDir"]:focus, textarea[name="i2cpOpts"]:focus {
+input[type=text]:focus, input[type=password]:focus, input.r:focus,
+input[name="nofilter_dataDir"]:focus, textarea[name="i2cpOpts"]:focus {
   padding: 5px 10px !important;
   color: var(--ink) !important;
   border: var(--border_hard);
@@ -1756,10 +1734,6 @@ input[type=text], input.r {
   min-width: 100px;
 }
 
-label {
-  cursor: pointer;
-}
-
 input.default {
   visibility: hidden;
   width: 1px;
@@ -1783,56 +1757,18 @@ input[name="nofilter_commentsName"] {
   width: 250px;
 }
 
-select {
-  padding: 5px 20px 5px 5px;
-  vertical-align: middle;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font: 9pt var(--bodyfont);
-  color: var(--ink_light);
-  border: var(--border_main);
-  border-radius: 3px;
-  box-shadow: var(--btn_shadow);
-  background: var(--dropdown) no-repeat scroll right 8px center / 10px, var(--btn);
-  outline: none;
-  cursor: pointer;
-  appearance: none;
-}
-
-select option {
-  font-size: 9.5pt;
-  font-weight: 400;
-  background: var(--bg);
-}
-
-select:hover, select:active {
-  color: var(--ink);
-  box-shadow: var(--btn_shadow_hover);
-  background: var(--dropdown_hover) no-repeat scroll right 8px center / 10px, var(--btn_hover) !important;
-}
-
-select:focus {
-  background: var(--dropdown_hover) no-repeat scroll right 8px center / 10px, var(--btn_hover) !important;
-}
-
-select[disabled], select[disabled]:hover {
-  background: var(--th) !important;
-  opacity: .7;
-  cursor: not-allowed;
-}
-
 textarea {
   padding: 1px 4px 0;
   font: 8pt var(--monospaced);
   font-weight: 700;
-  color: #006;
+  color: var(--ink_light);
   border: var(--border_main);
   border-radius: 2px;
   background: var(--bg2);
 }
 
 textarea:focus {
-  color: #22f !important;
+  color: var(--ink) !important;
 }
 
 textarea[name="i2cpOpts"] {
@@ -1843,7 +1779,6 @@ img {
   margin: 0 3px 1px 3px;
   line-height: 1;
   vertical-align: middle;
-  border: none;
   opacity: 1;
 }
 
@@ -3619,6 +3554,10 @@ th #nameRequired, th .commentAuthorName {
  border-bottom: var(--border_main);
 }
 
+.iframed #snarkFiles + #snarkCommentSection {
+  margin-top: 5px;
+}
+
 #dirInfo tr:last-child, #newrating {
   border-bottom: none;
 }
@@ -3641,6 +3580,10 @@ th #nameRequired, th .commentAuthorName {
 
 #snarkInfo + .mainsection table tr:last-child, #snarkInfo + .mainsection table tr:last-child td:not(#addCommentText) {
   border-bottom: none !important;
+}
+
+.dirInfo {
+  margin-top: 11px;
 }
 
 .iframed .dirInfo, .iframed .dirInfo tr:last-child td {
@@ -4265,6 +4208,7 @@ body, th, td, table a, input, input[type=text], input.r, input[name="nofilter_da
     min-width: 220px !important;
   }
   .iframed #snarkFiles {margin-top: 5px !important}
+  #snarkTorrentEditSection + #snarkFiles {margin-top: 0 !important}
   .torrentInfo th:first-child img, #torrentinfostats img, #trackers img {
     margin: -3px 4px 0 !important;
     max-height: 18px !important;
@@ -4272,7 +4216,8 @@ body, th, td, table a, input, input[type=text], input.r, input[name="nofilter_da
   #torrentInfoStats .nowrap {
     margin-right: 6px;
   }
-  #torrentInfoStats img[src$="head_tx.png"], #torrentInfoStats img[src$="head_rx.png"] {
+  #torrentInfoStats img[src$="head_tx.png"],
+  #torrentInfoStats img[src$="head_rx.png"] {
     margin: -3px 3px 0 4px !important;
   }
   .trackerhome, .trackerannounce, .knowntracker a {

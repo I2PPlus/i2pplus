@@ -1,3 +1,216 @@
+:root {
+  --a: #5c5c8a;
+  --active: #f90;
+  --badge_hover: linear-gradient(180deg, var(--bg3), #fff);
+  --badge: linear-gradient(180deg, #fff, var(--bg3));
+  --bg2: #f8f8ff;
+  --bg3: #f0f0ff;
+  --bg4: #e8e8ff;
+  --bg_doc: var(--bodybg) url(images/bg0.png) center center / 90px;
+  --bg: #fff;
+  --bodybg: #e2e2f3;
+  --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
+  --border_badge: #aad;
+  --border: #bfc3d9;
+  --border_soft: #cfd2e2;
+  --border_warn: #fb7;
+  --box_border_badge: 0 0 0 1px #bbd;
+  --btn_active: linear-gradient(180deg,#f60,#f90);
+  --btn_hover2: linear-gradient(180deg,var(--bg) 50%,#ffe4db 50%,#ffc6b3);
+  --btn_hover: linear-gradient(180deg,#ddd,#fff);
+  --btn: linear-gradient(180deg, var(--bg) 50%, var(--bg2), var(--bg3));
+  --btn_shadow_active: var(--highlight), inset 3px 3px 3px 1px rgba(32,32,64,.3);
+  --btn_shadow_hover: var(--highlight), 0 0 0 1px #fff, 0 0 0 2px rgba(255,96,0,.4);
+  --btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 #fff, inset 0 0 4px 2px #f0f0ff, 0 1px 1px rgba(220,220,255,.5);
+  --code: #272;
+  --disabled: #757a8a;
+  --down: repeating-linear-gradient(135deg, #fffff2, #fffff2 10px, #ddddd2 10px, #ddddd2 20px);
+  --down_shadow: inset 0 0 0 1px #800, inset 0 0 1px 3px #eeeee2, inset 0 0 0 4px #ccccc2;
+  --flatbar: #99c;
+  --h2: linear-gradient(180deg,#fff 50%,#fafbff 50%);
+  --header_active: linear-gradient(180deg, #ffd, #ffe);
+  --header_hover: linear-gradient(180deg, var(--bg) 50%, var(--row_hover) 50%);
+  --header: linear-gradient(180deg, var(--bg) 50%, var(--bg2) 50%);
+  --header_shiney: linear-gradient(90deg, rgba(255,255,255,.3), rgba(0,0,0,0)), linear-gradient(180deg, var(--bg) 50%, var(--bg4) 50%);
+  --highlight_active: inset 3px 3px 3px 1px #5f2400;
+  --highlight_hover: inset 0 0 0 1px #a79;
+  --highlight: inset 0 0 0 1px rgba(255,255,255,.8);
+  --hover: #f60;
+  --hr: #89f;
+  --ink: #41444d;
+  --ink_h1: #6c7293;
+  --ink_light: #5e626e;
+  --label_focus: linear-gradient(90deg, var(--bg3), var(--bg), var(--bg3));
+  --ls_target: 1px solid #5a5 !important;
+  --monospaced: Droid Sans Mono, Andale Mono, DejaVu Sans Mono, Lucida Console, monospace;
+  --reload: linear-gradient(90deg, #930, var(--hover));
+  --row_hover: #ffd;
+  --scroll: #acafb9;
+  --select: #4a90d9;
+  --selected: #559;
+  --shadow_input: inset 1px 1px 1px rgba(0,0,0,.2);
+  --shadow_inset: inset 2px 2px 4px rgba(204,204,240,.6);
+  --subheading: linear-gradient(90deg, var(--bg), var(--bg3));
+  --th: linear-gradient(180deg, #fff, var(--bg2));
+  --visited: #6b6b94;
+}
+
+::selection {
+  text-shadow: none;
+  color: var(--bg);
+  background: var(--select);
+}
+
+* {
+  outline: none;
+}
+
+img {
+  border: none;
+}
+
+a:link, a:visited {
+  word-wrap: break-word;
+  text-decoration: none;
+  font-weight: 700;
+  color: var(--a);
+  outline: none;
+}
+
+a:hover, a:focus {
+  text-decoration: none;
+  color: var(--hover);
+}
+
+a:active {
+  color: var(--active);
+}
+
+input[type=submit], input[type=reset], button, .optbox, select {
+  outline: none;
+  cursor: pointer;
+}
+
+button::-moz-focus-inner, input::-moz-focus-inner {
+  outline: none;
+  border: none;
+}
+
+input, label {
+  vertical-align: middle;
+}
+
+label {
+  cursor: pointer;
+}
+
+input::-moz-placeholder {
+  color: #900;
+  opacity: 1;
+}
+
+::-webkit-input-placeholder {
+  color: #900;
+  opacity: 1;
+}
+
+input:focus::-moz-placeholder {
+  opacity: 0;
+}
+
+:focus::-webkit-input-placeholder {
+  opacity: 0;
+}
+
+select {
+  padding: 5px 20px 5px 5px;
+  vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: var(--bodyfont);
+  font-size: 9pt;
+  color: var(--ink_light);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  box-shadow: var(--btn_shadow);
+  background: var(--dropdown) no-repeat right 8px center / 10px, var(--btn);
+  cursor: pointer;
+  appearance: none;
+}
+
+@supports not (-moz-appearance: none) {
+  select {padding: 5px 20px 5px 8px !important}
+}
+
+select:hover, select:active, select:focus {
+  color: var(--ink);
+  box-shadow: var(--btn_shadow_hover);
+  background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover);
+  outline: none;
+}
+
+select:focus {
+  background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover) !important;
+  outline: none !important;
+}
+
+select option {
+  background: var(--bg);
+}
+
+select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active {
+  border: 1px solid var(--border);
+  box-shadow: var(--highlight);
+  background: var(--btn);
+  color: var(--disabled);
+  cursor: default;
+  opacity: .7;
+}
+
+input[type=text], input[type=password] {
+  padding: 5px 7px;
+  min-width: 120px;
+  vertical-align: middle;
+  color: var(--ink_light);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  box-shadow: var(--shadow_input);
+  background-color: var(--bg2);
+}
+
+input[type=text]:focus, input[type=password]:focus {
+  padding: 5px 5px 5px 9px;
+  color: var(--ink);
+  box-shadow: var(--btn_shadow_hover), var(--btn_shadow_active);
+  background-color: var(--bg);
+}
+
+input[type=text][readonly], input[type=text][readonly]:focus, input[type=text][disabled] {
+  color: var(--disabled);
+  box-shadow: var(--shadow_input);
+  background: var(--bg3);
+}
+
+input[type=file]::file-selector-button {
+  padding: 4px 8px;
+  text-decoration: none;
+  font: 9pt var(--bodyfont);
+  color: var(--ink_light);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  box-shadow: var(--highlight), 0 0 1px #ddd;
+  background: var(--btn);
+}
+
+input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
+  color: var(--ink);
+  background: var(--btn_hover);
+}
+
+input[type=file]:active::file-selector-button {
+  background-color: var(--bg);
+}
+
 .optbox, .optbox:checked {
   position: relative;
   width: 19px;
