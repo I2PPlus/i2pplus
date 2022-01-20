@@ -2,9 +2,9 @@
 /* Author: dr|z3d */
 
 @import url(/themes/fonts/DroidSans.css);
+@import url(/themes/console/classic/global.css);
 @import url(../images/images.css);
 @import url(images/images.css);
-@import url(/themes/console/classic/optbox.css);
 
 :root {
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
