@@ -3791,6 +3791,17 @@ td.peerCount b a:hover .left, td.peerCount b a:hover .right {
   background: linear-gradient(180deg,rgba(32,16,32,.9), rgba(64,16,64,.9));
 }
 
+.inactive td.peerCount b a:hover,
+.inactive td.peerCount b a:hover .left,
+td.peerCount b a:hover .right {
+  color: #fff !important;
+}
+
+.inactive td.peerCount b a:hover .left, td.peerCount b a:hover .right {
+  box-shadow: rgba(255,255,0,.5), inset 2px 2px 2px rgba(0,0,0,.3);
+  background: linear-gradient(180deg,rgba(128,128,0,.9), rgba(192,192,0,.9));
+}
+
 td.peerCount b:not(:empty) {
   color: #aaa !important;
 }
