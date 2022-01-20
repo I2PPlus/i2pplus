@@ -42,21 +42,12 @@ body {
   background: #eef url(/themes/console/classic/images/bg0.png) center center / 120px;
 }
 
-body.iframed {
-  margin: 0;
-  background: transparent !important;
-}
-
 #navi, .buttons, #buttons, #host_list tr:first-child, #host_list img, #host_list td:nth-child(n+2) a {
   user-select: none;
 }
 
 hr {
   display: none;
-}
-
-table {
-  width: 100%;
 }
 
 table.book {

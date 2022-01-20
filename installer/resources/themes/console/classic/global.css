@@ -65,6 +65,12 @@ body {
   scrollbar-color: var(--scroll) var(--bg);
 }
 
+body.iframed {
+  margin: 0;
+  overflow: hidden; /* webkit fix */
+  background: none !important;
+}
+
 ::selection {
   text-shadow: none;
   color: var(--bg);
@@ -77,6 +83,10 @@ body {
 
 img {
   border: none;
+}
+
+table {
+  width: 100%;
 }
 
 a:link, a:visited {

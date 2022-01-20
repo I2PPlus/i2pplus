@@ -37,8 +37,6 @@ body {
 
 body.iframed {
   margin: 5px 0 0 0;
-  overflow: hidden; /* webkit fix */
-  background: transparent !important;
 }
 
 b, th, .mailListSender a {
@@ -465,7 +463,6 @@ pre {
 }
 
 table {
-  width: 100%;
   text-align: justify;
   color: var(--ink_light);
   border-collapse: collapse;
@@ -1386,6 +1383,10 @@ body, td, textarea, input, div, p.mailbody, p.error, #settings, select {
 
 #mailbox td.mailListSender {
   padding-left: 18px;
+}
+
+#mailbox td.mailListSender a {
+  font-weight: 400;
 }
 
 img.sort {
