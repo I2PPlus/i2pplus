@@ -162,9 +162,8 @@ td.peerCount {
   content: "";
 }
 
-.snarkNav:first-child {
-  padding-left: 26px !important;
-  border-radius: 2px 0 0 2px;
+.snarkNav:first-child, .snarkNav[href*="i2psnark"]:last-child {
+  padding-left: 27px !important;
 }
 
 .nav_main {
@@ -185,7 +184,7 @@ td.peerCount {
   color: #fff !important;
   text-shadow: none;
   border-color: #652787;
-  background: var(--tracker_active), var(--nav_hover) !important;
+  background: var(--tracker_hover), var(--nav_hover) !important;
   background-repeat: no-repeat, repeat, repeat !important;
   background-position: 9px center, center center, center center !important;
 }
@@ -195,15 +194,16 @@ td.peerCount {
 }
 
 .snarkNav:active {
+  color: #8634b2 !important;
   background: var(--tracker_active) no-repeat 9px center, var(--nav_active) !important;
 }
 
 .nav_main:hover, .nav_main:focus {
-  background: var(--snark_active) no-repeat 9px center, var(--nav_hover) !important;
+  background: var(--snark_hover) no-repeat 9px center, var(--nav_hover) !important;
 }
 
 .nav_forum:hover, .nav_forum:focus {
-  background: var(--forum_active) no-repeat 9px center, var(--nav_hover) !important;
+  background: var(--forum_hover) no-repeat 9px center, var(--nav_hover) !important;
 }
 
 .snarkNav:active, .nav_search:active, .nav_forum:active, .nav_main:active {
@@ -239,10 +239,18 @@ td.peerCount {
   border-radius: 0 2px 2px 0 !important;
 }
 
+.snarkNav:first-child {
+  border-radius: 2px 0 0 2px;
+}
+
+.snarkNav[href*="i2psnark"] {
+  border-radius: 2px !important;
+}
+
 .snarkNav, .snarkNav:hover, .snarkNav:focus, .snarkNav:active, .snarkNav:active,
 .nav_search:hover, .nav_search:focus, .nav_forum:hover, .nav_forum:focus,
 .nav_main:hover, .nav_main:focus {
-  background-size: 16px, 100%, 100% !important;
+  background-size: 15px, 100%, 100% !important;
 }
 
 @supports (justify-content: center) {
