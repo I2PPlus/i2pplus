@@ -3178,14 +3178,21 @@ input[name="nofilter_commentsName"] {
 }
 
 #torrentDisplay label:hover {
-  color: #743c93;
-  background: var(--badge);
+  color: #fff;
+  background: var(--nav_hover);
 }
 
 #torrentDisplay label:active, #torrentDisplay input:checked + label {
-  text-shadow: 0 1px 1px #000;
-  color: #349;
   box-shadow: var(--btn_shadow_active);
+}
+
+#torrentDisplay label:active {
+  color: #943d94;
+  background: var(--nav_active);
+}
+
+#torrentDisplay input:checked + label {
+  text-shadow: 0 1px 1px rgba(255,255,255,.5);
   background: #113;
 }
 

@@ -2,7 +2,7 @@
 /* Author: dr|z3d */
 
 @import url(/themes/fonts/DroidSans.css);
-@import url(/themes/console/classic/optbox.css);
+@import url(/themes/console/classic/global.css);
 @import url(../light/sliders.css);
 
 :root {
@@ -160,8 +160,8 @@ tr, .navbar, .mainsection, .lowersection {
 }
 
 .nav_main {
-  background: var(--snark) no-repeat 7px center, var(--nav);
   border-radius: 3px 0 0 3px;
+  background: var(--snark) no-repeat 7px center, var(--nav);
 }
 
 .nav_forum {

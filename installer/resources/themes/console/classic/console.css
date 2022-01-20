@@ -2,7 +2,7 @@
 /* I2P Description: Light blue "classic" I2P theme; optimized for less capable browsers and system specifications. */
 /* Author: dr|z3d */
 
-@import url(optbox.css);
+@import url(global.css);
 
 html, body {
   min-height: 100%;
@@ -45,6 +45,22 @@ div.clearer {
 
 i {
   padding-right: 1px;
+}
+
+tt, pre, textarea, code {
+  font: 8.5pt var(--monospaced);
+}
+
+textarea {
+  font-size: 9pt;
+}
+
+hr {
+  margin: 3px 0;
+  height: 2px;
+  color: var(--border);
+  border: none;
+  background: var(--border);
 }
 
 /* sidebar */
@@ -2064,18 +2080,18 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 }
 
 #configstats th {
-  text-align: left;
   padding: 6px 10px;
-  font-size: 10pt;
-  text-transform: uppercase;
-  letter-spacing: .08em;
+  text-align: left;
   word-spacing: .1em;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-size: 10pt;
 }
 
 #configstats th a {
   float: right;
-  font-size: 9pt;
   text-transform: none;
+  font-size: 9pt;
 }
 
 #configstats td:first-child:empty + td > label, #configstats td:first-child:empty + td > label:hover { /* remove pointer from inert labels */
@@ -2478,9 +2494,9 @@ ul#banlist + h3.tabletitle {
   list-style: none;
   box-shadow: 0 0 0 1px var(--border_soft), 0 0 1px 1px #ddd;
   background: #f9f9ff;
+  -webkit-column-break-inside: avoid;
   break-inside: avoid;
   page-break-inside: avoid;
-  -webkit-column-break-inside: avoid;
 }
 
 #banlist li img {
@@ -2535,9 +2551,9 @@ ul#banlist + h3.tabletitle {
 }
 
 #bannedips td {
-  vertical-align: top;
   padding: 0;
   width: 50%;
+  vertical-align: top;
 }
 
 #bannedips table tr td {
@@ -2545,8 +2561,8 @@ ul#banlist + h3.tabletitle {
 }
 
 #bannedips table td {
-  text-align: center;
   padding: 4px 2px;
+  text-align: center;
 }
 
 #bannedips table tr:last-child {
@@ -2618,9 +2634,9 @@ pre#activetransports {
 }
 
 #view_profile pre {
-  word-break: break-all;
-  word-wrap: break-word;
   white-space: pre-wrap;
+  word-wrap: break-word;
+  word-break: break-all;
 }
 
 #view_profile h2 {
@@ -2664,8 +2680,8 @@ pre#activetransports {
 }
 
 #i2pupdates input[type=text], #i2pupdates select {
-  min-width: 200px;
   margin-left: 10px;
+  min-width: 200px;
 }
 
 #i2pupdates input[name*="URL"], #i2pupdates textarea {
@@ -2817,10 +2833,10 @@ div.configure h2:first-child {
 }
 
 .messages li, .messages ul {
-  padding: 0 !important;
   margin: -10px 0 0 25px !important;
-  list-style: none;
+  padding: 0 !important;
   text-align: left;
+  list-style: none;
 }
 
 .messages .error li, .messages .error ul {
@@ -2845,8 +2861,8 @@ div.configure h2:first-child {
 }
 
 #events .messages li {
-  padding: 0 !important;
   margin: 10px 10px 0 35px !important;
+  padding: 0 !important;
   text-align: justify;
 }
 
@@ -3027,7 +3043,9 @@ h3#bwlimiter, h3#iptransport {
   margin: 15px 0 -1px !important;
 }
 
-h3#iptransport a, th#upnpconfig a, h3#bwlimiter a, #config_stats h3 a, #config_logging h3 a, h3#graphdisplay a, #logs h3 a, h3#advancedconfig a, .h3navlinks, #reseedsetup a {
+h3#iptransport a, th#upnpconfig a, h3#bwlimiter a, #config_stats h3 a,
+#config_logging h3 a, h3#graphdisplay a, #logs h3 a, h3#advancedconfig a,
+.h3navlinks, #reseedsetup a {
   float: right;
   letter-spacing: normal;
   font-size: 9pt;
@@ -3241,12 +3259,13 @@ td.optionsave[colspan="2"] {
   background: var(--bg);
 }
 
-td.infohelp, p.infohelp, td.infowarn, p.infowarn, p#upnpstatus, p#gatherstats, p#debugmode, p.sybilinfo, p#pluginconfigtext {
+td.infohelp, p.infohelp, td.infowarn, p.infowarn, p#upnpstatus,
+p#gatherstats, p#debugmode, p.sybilinfo, p#pluginconfigtext {
   padding: 15px 15px 15px 55px !important;
-  border: 1px solid var(--border);
-  background: var(--bg) var(--infohelp) no-repeat 15px center / 28px;
   white-space: normal !important;
   text-align: justify;
+  border: 1px solid var(--border);
+  background: var(--bg) var(--infohelp) no-repeat 15px center / 28px;
 }
 
 #config_ui .infohelp {
@@ -3364,7 +3383,6 @@ h4.app, h4.app2 {
 h4.app, h4.app2, #sitemap h3 {
   padding-left: 32px;
   background: url(images/favicon.svg) no-repeat 8px center / 18px, var(--bg);
-/*  background-blend-mode: luminosity, normal;*/
 }
 
 h4.app {
@@ -3532,8 +3550,8 @@ div.app:hover .applabel {
 }
 
 .appimg a {
-  display: inline-block;
   width: 100%;
+  display: inline-block;
 }
 
 div.appgroup {
@@ -3593,8 +3611,8 @@ div.appgroup {
   padding-left: 10px;
   padding-right: 44px;
   min-width: 240px;
-  border-radius: 0 3px 3px 0;
   border-left: none;
+  border-radius: 0 3px 3px 0;
   box-shadow: var(--shadow_input);
 }
 
@@ -3643,8 +3661,8 @@ div.app img {
 .app table {
   margin: auto;
   width: auto;
-  background: none;
   border: 0;
+  background: none;
 }
 
 .app tr {
@@ -3668,22 +3686,6 @@ div.app img {
 
 #i2ptunnelframe {
   margin-bottom: -3px;
-}
-
-tt, pre, textarea, code {
-  font: 8.5pt var(--monospaced);
-}
-
-textarea {
-  font-size: 9pt;
-}
-
-hr {
-  margin: 3px 0;
-  height: 2px;
-  color: var(--border);
-  border: none;
-  background: var(--border);
 }
 
 p.infohelp + hr, p.infohelp + p + hr, #tunnelconfig + hr { /*configservice */
