@@ -131,9 +131,9 @@ tr, .navbar, .mainsection, .lowersection {
 .iframed .snarknavbar {
   margin-top: -1px;
   padding: 8px 0;
+  position: static;
   border-top: none;
   border-radius: 0;
-  position: static;
 }
 
 .snarkNav {
@@ -144,7 +144,7 @@ tr, .navbar, .mainsection, .lowersection {
   margin: -1px -2px -1px -3px;
   padding: 5px 7px 5px 23px;
   display: inline-block;
-  line-height: 110%;
+  line-height: 1.1;
   letter-spacing: .1em;
   text-transform: uppercase;
   font-size: 9pt;
