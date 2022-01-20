@@ -90,7 +90,6 @@ hr {
 .freetext {
   padding: 5px 7px;
   width: 150px;
-  font: 9pt var(--monospaced);
   color: #5e626e;
   border: 1px solid var(--border);
   border-radius: 2px;
@@ -681,6 +680,7 @@ table#statusMessages textarea, table#statusMessages textarea:active {
 input.tunnelName, input.tunnelDescriptionText, #userAgents, #filterDefinition, #websiteName {
   width: calc(100% - 26px) !important;
   min-width: 280px;
+  overflow: hidden;
   text-overflow: ellipsis;
 }
 

@@ -1119,14 +1119,6 @@ input {
   margin: 3px 5px 3px 0;
 }
 
-label {
-  cursor: pointer;
-}
-
-label:hover {
-  color: #03050f;
-}
-
 label[for="0"] {
   cursor: default;
   color: var(--ink);
@@ -1144,11 +1136,6 @@ input[type="file"] {
 
 input[type=text], input[type=password] {
   margin: 3px 5px;
-}
-
-button, input, select {
-  font: 9pt/130% var(--bodyfont);
-  color: var(--ink_light);
 }
 
 input[type=file]::file-selector-button {

@@ -137,9 +137,17 @@ input, button, select, label, textarea {
 
 input, button, select, label {
   text-decoration: none;
-  font-family: var(--bodyfont);
+  font: 9pt/130% var(--bodyfont);
   outline: none;
   cursor: pointer;
+}
+
+label:hover {
+  color: #03050f;
+}
+
+button, input, select {
+  color: var(--ink_light);
 }
 
 textarea {
