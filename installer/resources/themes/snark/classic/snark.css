@@ -1620,7 +1620,9 @@ input[type=submit], input[type="reset"], a.control {
   cursor: pointer !important;
 }
 
-input[type=submit]:hover, input[type="reset"]:hover, input[type=submit]:focus, input[type="reset"]:focus, a.control:hover, a.control:focus {
+input[type=submit]:hover, input[type="reset"]:hover,
+input[type=submit]:focus, input[type="reset"]:focus,
+a.control:hover, a.control:focus {
   color: var(--ink);
   border: var(--border_main);
   box-shadow: var(--btn_shadow_hover);
@@ -1631,18 +1633,6 @@ input[type=submit]:active, input[type="reset"]:active, a.control:active {
   border: 1px solid #999;
   box-shadow: var(--btn_shadow_active), var(--btn_shadow_hover);
   background: #ddd;
-}
-
-input[name="savepri"] {
-  margin-right: -2px !important;
-}
-
-#configs input[type=submit], .trackerconfig input[type=submit], input[name="savepri"] {
-  text-transform: capitalize;
-}
-
-input[type=text], textarea {
-  cursor: text !important;
 }
 
 a.control {
@@ -1670,6 +1660,18 @@ a.control img {
   width: 14px;
 }
 
+input[name="savepri"] {
+  margin-right: -2px !important;
+}
+
+#configs input[type=submit], .trackerconfig input[type=submit], input[name="savepri"] {
+  text-transform: capitalize;
+}
+
+input[type=text], textarea {
+  cursor: text !important;
+}
+
 .script {
   margin: 5px 0 2px;
   display: inline-block;
@@ -1681,11 +1683,13 @@ input.r {
   background: var(--bg);
 }
 
-input[type=text]:focus, textarea:focus, input.r:focus, textarea[name="i2cpOpts"]:focus, input[name="nofilter_dataDir"]:focus {
+input[type=text]:focus, textarea:focus, input.r:focus,
+textarea[name="i2cpOpts"]:focus, input[name="nofilter_dataDir"]:focus {
   background: var(--bg);
 }
 
-input[type=text], input[type=password], input.r, input[name="nofilter_dataDir"], textarea[name="i2cpOpts"] {
+input[type=text], input[type=password], input.r,
+input[name="nofilter_dataDir"], textarea[name="i2cpOpts"] {
   margin: 2px 2px 2px 0;
   padding: 5px 8px !important;
   min-width: 160px;
@@ -1700,7 +1704,8 @@ input[type=text], input[type=password], input.r, input[name="nofilter_dataDir"],
   user-select: auto;
 }
 
-input[type=text]:focus, input[type=password]:focus, input.r:focus, input[name="nofilter_dataDir"]:focus, textarea[name="i2cpOpts"]:focus {
+input[type=text]:focus, input[type=password]:focus, input.r:focus,
+input[name="nofilter_dataDir"]:focus, textarea[name="i2cpOpts"]:focus {
   padding: 5px 10px !important;
   color: var(--ink) !important;
   border: var(--border_hard);
@@ -1756,14 +1761,14 @@ textarea {
   padding: 1px 4px 0;
   font: 8pt var(--monospaced);
   font-weight: 700;
-  color: #006;
+  color: var(--ink_light);
   border: var(--border_main);
   border-radius: 2px;
   background: var(--bg2);
 }
 
 textarea:focus {
-  color: #22f !important;
+  color: var(--ink) !important;
 }
 
 textarea[name="i2cpOpts"] {
@@ -3549,6 +3554,10 @@ th #nameRequired, th .commentAuthorName {
  border-bottom: var(--border_main);
 }
 
+.iframed #snarkFiles + #snarkCommentSection {
+  margin-top: 5px;
+}
+
 #dirInfo tr:last-child, #newrating {
   border-bottom: none;
 }
@@ -3571,6 +3580,10 @@ th #nameRequired, th .commentAuthorName {
 
 #snarkInfo + .mainsection table tr:last-child, #snarkInfo + .mainsection table tr:last-child td:not(#addCommentText) {
   border-bottom: none !important;
+}
+
+.dirInfo {
+  margin-top: 11px;
 }
 
 .iframed .dirInfo, .iframed .dirInfo tr:last-child td {
@@ -4195,6 +4208,7 @@ body, th, td, table a, input, input[type=text], input.r, input[name="nofilter_da
     min-width: 220px !important;
   }
   .iframed #snarkFiles {margin-top: 5px !important}
+  .iframed #snarkTorrentEditSection + #snarkFiles {margin-top: 0 !important}
   .torrentInfo th:first-child img, #torrentinfostats img, #trackers img {
     margin: -3px 4px 0 !important;
     max-height: 18px !important;
