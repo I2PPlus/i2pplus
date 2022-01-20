@@ -37,14 +37,8 @@
   --th: linear-gradient(180deg,var(--bg), var(--bg3));
 }
 
-html, body {
-  scrollbar-color: #acafb9 var(--bodybg);
-}
-
 body {
   margin: 3px 4px;
-  font: 9pt var(--bodyfont);
-  color: var(--ink);
   background: var(--bg3) url(/themes/console/classic/images/bg0.png) repeat scroll center bottom / 120px;
 }
 

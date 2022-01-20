@@ -2,23 +2,16 @@
 /* Author: dr|z3d */
 
 @import url(/themes/fonts/DroidSans.css);
+@import url(global.css);
 @import url(/themes/console/images/i2ptunnel.css);
 @import url(../images/images.css);
 @import url(images/i2ptunnel.css);
-@import url(optbox.css);
-
-html {
-  scrollbar-color: #acafb9 #e2e2f3;
-}
 
 body {
   margin: 2.5% 2%;
   padding: 0;
   text-align: center;
-  font-family: var(--bodyfont);
-  font-size: 9pt;
-  color: var(--ink);
-  background: #eef url(images/bg0.png) center center scroll;
+  background: #eef url(images/bg0.png) scroll center center / 90px;
   background-size: 90px;
   image-rendering: -webkit-optimize-contrast;
 }
@@ -36,7 +29,8 @@ b {
   color: var(--ink_light);
 }
 
-h2, h3, th, .buttons, .newTunnel, .control, label, .infohelp, .infowarn, .nowrap, b, #throttler td {
+h2, h3, th, .buttons, .newTunnel, .control, label,
+.infohelp, .infowarn, .nowrap, b, #throttler td {
   user-select: none;
 }
 

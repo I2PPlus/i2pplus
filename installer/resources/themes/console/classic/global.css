@@ -55,6 +55,16 @@
   --visited: #6b6b94;
 }
 
+html {
+  scrollbar-color: var(--scroll) var(--bodybg);
+}
+
+body {
+  font: 9pt var(--bodyfont);
+  color: var(--ink);
+  scrollbar-color: var(--scroll) var(--bg);
+}
+
 ::selection {
   text-shadow: none;
   color: var(--bg);
