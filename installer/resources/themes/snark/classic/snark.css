@@ -810,7 +810,7 @@ tt, .bucket, #bucketSet code {
   padding-left: 3px;
 }
 
-.SnarkDirInfo {
+.dirInfo {
   margin-top: 10px !important;
   margin-bottom: 0;
   border-bottom: var(--border_main);
@@ -872,7 +872,7 @@ tt, .bucket, #bucketSet code {
   margin: 5px;
 }
 
-.SnarkDirInfo img:not(.thumb) {
+.dirInfo img:not(.thumb) {
   margin: -2px 0;
   width: 20px;
   height: 20px;
@@ -936,24 +936,13 @@ tt, .bucket, #bucketSet code {
 
 /* end torrent directory */
 
-td {
-  font-size: 9pt;
-  padding: 2px;
-  color: var(--ink_light) !important;
-}
-
-td:first-child {
-  font-size: 9pt;
-  text-align: right;
-}
-
 .center {
   text-align: center !important;
 }
 
 .torrentName {
-  line-height: 110%;
   padding: 4px 3px;
+  line-height: 1.1;
 }
 
 .torrentName a, .dirInfo td.snarkFileName a {
@@ -2620,7 +2609,6 @@ td.commentAuthor .commentAuthorName {
   padding: 5px 10px 6px;
   display: inline-block;
   min-width: 160px !important;
-  font-size: 95%;
   color: #47597f;
   text-align: right;
   border-radius: 15px 5px 5px 15px;
@@ -2755,10 +2743,14 @@ td.commentAuthor .commentAuthorName {
 
 .configOption {
   padding: 0 4px;
+  width: calc(100% - 20px);
   display: inline-block;
   vertical-align: middle;
   white-space: nowrap;
-  width: calc(100% - 20px);
+}
+
+.configOption b, .configOption label {
+  font-size: 9pt !important;
 }
 
 .configOption::after {
@@ -3869,6 +3861,9 @@ td.peerCount {
   }
   .dirInfo .percentBarText, .dirInfo .percentBarOuter {
     width: 60px;
+  }
+  .configOption b, .configOption label {
+    font-size: 8.5pt !important;
   }
 }
 
