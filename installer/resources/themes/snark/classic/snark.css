@@ -1666,49 +1666,41 @@ input[type=text], textarea {
   display: inline-block;
 }
 
-input.r {
-  text-align: right;
-  border: var(--border_main);
-  background: var(--bg);
-}
-
-input[type=text]:focus, textarea:focus, input.r:focus,
-textarea[name="i2cpOpts"]:focus, input[name="nofilter_dataDir"]:focus {
-  background: var(--bg);
+input.default {
+  visibility: hidden;
+  width: 1px;
+  height: 1px;
 }
 
 input[type=text], input[type=password], input.r,
-input[name="nofilter_dataDir"], textarea[name="i2cpOpts"] {
+input[name="nofilter_dataDir"] {
   margin: 2px 2px 2px 0;
   padding: 5px 8px !important;
   min-width: 160px;
-  vertical-align: middle;
-  font: 9pt var(--bodyfont);
-  color: var(--ink_light);
-  border: var(--border_main);
-  border-radius: 2px;
-  box-shadow: inset 1px 1px 1px #ddd;
-  background: var(--bg2);
-  cursor: text;
+  font-weight: 400;
   user-select: auto;
 }
 
-input[type=text]:focus, input[type=password]:focus, input.r:focus,
-input[name="nofilter_dataDir"]:focus, textarea[name="i2cpOpts"]:focus {
-  padding: 5px 10px !important;
-  color: var(--ink) !important;
-  border: var(--border_hard);
-  box-shadow: 0 0 0 1px rgba(255,96,0,.7), var(--btn_shadow_active);
-  outline: none;
+select, input[type=text], input.r {
+  min-width: 120px;
 }
 
-textarea[name="i2cpOpts"], input[name="nofilter_dataDir"] {
+input.r {
+  text-align: right;
+}
+
+input[name="nofilter_dataDir"] {
   width: 500px;
   margin: 3px 0;
   padding: 5px;
   resize: none;
   cursor: text;
   overflow: hidden;
+}
+
+input[size="85"] {
+  width: 550px;
+  width: calc(100% - 150px);
 }
 
 thead img, thead img:hover {
@@ -1719,27 +1711,8 @@ th a:link img, th a:visited img {
   opacity: 1;
 }
 
-input[type=text], input.r {
-  min-width: 100px;
-}
-
-input.default {
-  visibility: hidden;
-  width: 1px;
-  height: 1px;
-}
-
-input[size="85"] {
-  width: 550px;
-  width: calc(100% - 150px);
-}
-
 .addtorrentsection input, .newtorrentsection input {
   margin-left: 5px !important;
-}
-
-select, input.r {
-  min-width: 120px;
 }
 
 input[name="nofilter_commentsName"] {
@@ -2940,18 +2913,21 @@ input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilte
 
 /* tracker config */
 
+.knowntracker label {
+ font-weight: 700;
+}
+
 .knowntracker:hover td {
-  background: var(--row_hover);
-  background: linear-gradient(180deg,#ffe,var(--row_hover)) !important;
+  background: #ffd !important;
 }
 
 .knowntracker a {
   display: inline-block;
+  width: 220px !important;
+  max-width: 220px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 220px;
-  width: 220px !important;
 }
 
 .trackerhome, .trackerannounce {
