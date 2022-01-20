@@ -1556,26 +1556,6 @@ hr {
   background: transparent;
 }
 
-a:link, a:visited {
-  font-weight: 700 !important;
-  text-decoration: none;
-  word-wrap: break-word;
-  opacity: 1;
-  color: #6b6b94;
-  border-radius: 0;
-}
-
-a:hover, a:focus {
-  font-weight: 400;
-  color: var(--hover) !important;
-  outline: none;
-}
-
-a:active {
-  font-weight: 400;
-  color: #f93 !important;
-}
-
 input {
   font: bold 9pt var(--bodyfont);
   margin: 2px 4px 2px 0;
@@ -1749,10 +1729,6 @@ input[type=text], input.r {
   min-width: 100px;
 }
 
-label {
-  cursor: pointer;
-}
-
 input.default {
   visibility: hidden;
   width: 1px;
@@ -1798,7 +1774,6 @@ img {
   margin: 0 3px 1px 3px;
   line-height: 1;
   vertical-align: middle;
-  border: none;
   opacity: 1;
 }
 

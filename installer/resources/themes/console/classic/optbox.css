@@ -90,6 +90,10 @@ input, label {
   vertical-align: middle;
 }
 
+label {
+  cursor: pointer;
+}
+
 input::-moz-placeholder {
   color: #900;
   opacity: 1;
