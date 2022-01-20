@@ -15,7 +15,8 @@
   --border_soft: #cfd2e2;
   --border_warn: #fb7;
   --box_border_badge: 0 0 0 1px #bbd;
-  --btn_hover: linear-gradient(180deg, #ddd, #fff);
+  --btn_active: linear-gradient(180deg,#f60,#f90);
+  --btn_hover2: linear-gradient(180deg,var(--bg) 50%,#ffe4db 50%,#ffc6b3);
   --btn_hover: linear-gradient(180deg,#ddd,#fff);
   --btn: linear-gradient(180deg, var(--bg) 50%, var(--bg2), var(--bg3));
   --btn_shadow_active: var(--highlight), inset 3px 3px 3px 1px rgba(32,32,64,.3);

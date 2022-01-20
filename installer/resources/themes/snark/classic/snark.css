@@ -22,13 +22,6 @@
   --highlight: inset 0 0 0 1px rgba(255,255,255,.8);
   --nav_hover: #f50;
   --row_hover: #ffd;
-  --btn_hover: linear-gradient(180deg,#ddd,var(--bg));
-  --btn_hover2: linear-gradient(180deg,var(--bg) 50%,#ffe4db 50%,#ffc6b3);
-  --btn_active: linear-gradient(180deg,#f60,#f90);
-  --btn: linear-gradient(180deg, var(--bg) 50%, var(--bg2), var(--bg3));
-  --btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 var(--bg), inset 0 0 4px 2px #f0f0ff, 0 1px 1px rgba(220,220,255,.5);
-  --btn_shadow_hover: var(--highlight), 0 0 0 1px var(--bg), 0 0 0 2px rgba(255,96,0,.4);
-  --btn_shadow_active: var(--highlight), inset 3px 3px 3px 1px rgba(32,32,64,.3);
   --border: #bfc3d9;
   --border_main: 1px solid #bfc3d9;
   --border_hard: 1px solid #9fa5c6;
@@ -37,7 +30,7 @@
   --active: #f30;
   --nav_a: #5e6099;
   --header_hover: linear-gradient(180deg, var(--bg) 50%, var(--row_hover) 50%);
-  --header_active: linear-gradient(180deg, var(--row_hover),#ffe);
+  --header_active: linear-gradient(180deg,#ffd,#ffe);
   --badge: linear-gradient(180deg,var(--bg),var(--bg4));
   --title_shadow: var(--highlight), inset 0 0 0 0 var(--bg), 0 1px 1px var(--bg4);
   --section: linear-gradient(180deg,var(--bg2), var(--bg3));
@@ -1781,44 +1774,6 @@ select, input.r {
 
 input[name="nofilter_commentsName"] {
   width: 250px;
-}
-
-select {
-  padding: 5px 20px 5px 5px;
-  vertical-align: middle;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font: 9pt var(--bodyfont);
-  color: var(--ink_light);
-  border: var(--border_main);
-  border-radius: 3px;
-  box-shadow: var(--btn_shadow);
-  background: var(--dropdown) no-repeat scroll right 8px center / 10px, var(--btn);
-  outline: none;
-  cursor: pointer;
-  appearance: none;
-}
-
-select option {
-  font-size: 9.5pt;
-  font-weight: 400;
-  background: var(--bg);
-}
-
-select:hover, select:active {
-  color: var(--ink);
-  box-shadow: var(--btn_shadow_hover);
-  background: var(--dropdown_hover) no-repeat scroll right 8px center / 10px, var(--btn_hover) !important;
-}
-
-select:focus {
-  background: var(--dropdown_hover) no-repeat scroll right 8px center / 10px, var(--btn_hover) !important;
-}
-
-select[disabled], select[disabled]:hover {
-  background: var(--th) !important;
-  opacity: .7;
-  cursor: not-allowed;
 }
 
 textarea {
