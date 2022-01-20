@@ -126,14 +126,6 @@ td.destinations {
   width: calc(100% - 2px);
 }
 
-input::placeholder {
-  font-style: italic;
-}
-
-input:focus::placeholder {
-  opacity: 0;
-}
-
 #navi {
   margin: -1px -11px 0;
   padding: 0;
@@ -196,7 +188,7 @@ div.page {
   padding: 0 10px;
   color: var(--ink);
   font-size: 9pt !important;
-  line-height: 160% !important;
+  line-height: 1.6 !important;
 }
 
 .iframed .page {
@@ -237,7 +229,7 @@ div.help {
 p {
   margin-left: 10px;
   margin-right: 10px;
-  line-height: 140%;
+  line-height: 1.4;
   text-align: justify;
   font-size: 9pt;
 }
@@ -319,7 +311,7 @@ li {
 p.help {
   margin: 0;
   padding: 15px 15px 15px 45px;
-  line-height: 120%;
+  line-height: 1.2;
   background: #ffe var(--infohelp) no-repeat 8px center / 32px;
 }
 
@@ -357,7 +349,7 @@ div#filter {
   text-align: center;
   position: relative;
   z-index: 10;
-  line-height: 220%;
+  line-height: 2.2;
   text-transform: capitalize;
 }
 
@@ -366,7 +358,7 @@ div#filter {
   padding: 0 6px;
   min-width: 16px;
   display: inline-block;
-  line-height: 180%;
+  line-height: 1.8;
   text-transform: capitalize;
   font-size: 10pt;
   color: #5c5c8a;
@@ -377,7 +369,7 @@ div#filter {
 }
 
 #filter span a {
-  line-height: 140%;
+  line-height: 1.4;
   font-weight: 400;
   color: #333 !important;
 }
@@ -398,18 +390,18 @@ div#filter {
 }
 
 #filter span b {
-  font-size: 11pt;
-  text-transform: uppercase;
-  color: #115;
-  line-height: 80%;
-  display: inline-block;
   margin-top: -2px;
+  display: inline-block;
+  line-height: .8;
+  text-transform: uppercase;
+  font-size: 11pt;
+  color: #115;
 }
 
 #filter span a {
   margin: 0 5px !important;
-  display:inline-block;
   padding: 1px 5px;
+  display:inline-block;
 }
 
 #search {
@@ -430,7 +422,6 @@ div#filter {
 }
 
 .iframed #booksearch, .iframed #filter {
-  background: #eff2ff;
   background: var(--th);
 }
 
@@ -1040,7 +1031,7 @@ td.destinations {
 #filter a {
   min-width: 6px;
   padding: 0 6px !important;
-  line-height: 150%;
+  line-height: 1.5;
 }
 
 #host_list th {
@@ -1293,7 +1284,7 @@ div#messages {
   right: 0;
   position: fixed;
   z-index: 999;
-  line-height: 150%;
+  line-height: 1.5;
   text-align: center;
   border-radius: 0 0 4px 4px;
   box-shadow: 0 1px 2px rgba(100,100,200,.7);

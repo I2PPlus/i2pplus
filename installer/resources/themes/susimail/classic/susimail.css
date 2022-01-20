@@ -505,16 +505,6 @@ table#message_full {
   border-bottom: 1px solid var(--border);
 }
 
-input { /* opera fix */
-  font-family: var(--bodyfont);
-  font-size: 9pt;
-}
-
-textarea {
-  font-family: var(--monospaced);
-  font-size: 9pt;
-}
-
 input[type=text], input[type=password], textarea {
   padding: 4px 5px !important;
   color: var(--ink_light);
@@ -536,10 +526,11 @@ input.new_upload, input.delete_attachment {
 }
 
 @-moz-document url-prefix(http://) {
-button::-moz-focus-inner, input[type="button"]::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type="reset"]::-moz-focus-inner {
-  padding: 0 !important;
-  border: 0 none !important;
-}
+  button::-moz-focus-inner, input[type="button"]::-moz-focus-inner,
+  input[type=submit]::-moz-focus-inner, input[type="reset"]::-moz-focus-inner {
+    padding: 0 !important;
+    border: 0 none !important;
+  }
 }
 
 button:focus, input[type=submit]:focus, input[type="reset"]:focus, .fakebutton:focus {
@@ -590,14 +581,6 @@ input[disabled][type=submit], input[disabled][type=submit]:hover, input[disabled
   opacity: .3;
   filter: none;
   pointer-events: none;
-}
-
-input, label {
-  cursor: pointer;
-}
-
-input[type=text], input[type=password] {
-  cursor: text;
 }
 
 /* illustrated images inc */

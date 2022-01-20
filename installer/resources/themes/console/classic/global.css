@@ -112,9 +112,18 @@ a:active {
   color: var(--active);
 }
 
-input[type=submit], input[type=reset], button, .optbox, select {
-  outline: none;
-  cursor: pointer;
+input, label {
+  vertical-align: middle;
+}
+
+input::placeholder {
+  font-style: italic;
+  color: var(--ink_light);
+  opacity: .7;
+}
+
+input:focus::placeholder {
+  opacity: 0;
 }
 
 button::-moz-focus-inner, input::-moz-focus-inner {
@@ -122,21 +131,14 @@ button::-moz-focus-inner, input::-moz-focus-inner {
   border: none;
 }
 
-input, label {
-  vertical-align: middle;
-}
-
-label {
+input, button, select, label {
+  font-family: var(--bodyfont);
+  outline: none;
   cursor: pointer;
 }
 
-input::placeholder {
-  color: var(--ink_light);
-  opacity: .7;
-}
-
-input:focus::placeholder {
-  opacity: 0;
+textarea {
+  font-family: var(--monospaced);
 }
 
 select {
