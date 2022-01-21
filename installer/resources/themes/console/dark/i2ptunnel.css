@@ -554,14 +554,6 @@ input[type="file"] {
   background: none;
 }
 
-button:hover, button:focus {
-  color: var(--hover);
-  border: 1px solid var(--hover);
-  box-shadow: var(--btn_shadow_hover);
-  background: var(--btn_hover_radial);
-  cursor: pointer;
-}
-
 .editDisabled input[type=radio], .editDisabled label {
   cursor: not-allowed !important;
 }

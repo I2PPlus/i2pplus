@@ -166,7 +166,8 @@ input[type=submit], input[type=reset] {
 }
 
 input[type=submit]:hover, input[type=reset]:hover,
-input[type=submit]:focus, input[type=reset]:focus {
+input[type=submit]:focus, input[type=reset]:focus,
+button:hover, button:focus {
   color: var(--hover) !important;
   border: 1px solid var(--hover) !important;
   box-shadow: var(--btn_shadow_hover) !important;

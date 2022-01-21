@@ -1696,7 +1696,9 @@ input.r {
   text-align: right;
 }
 
-input[type=text], input.r, textarea[name="i2cpOpts"], input[name="nofilter_dataDir"], textarea[name="nofilter_newComment"] {
+input[type=text], input.r, textarea[name="i2cpOpts"],
+input[name="nofilter_dataDir"],
+textarea[name="nofilter_newComment"] {
   padding: 6px 7px !important;
   color: #bb7;
   border: 1px solid #184818;
@@ -1710,7 +1712,9 @@ input[type=text]:hover, input.r:hover {
   cursor: text;
 }
 
-input[type=text]:focus, textarea:focus, input.r:focus, textarea[name="i2cpOpts"]:focus, input[name="nofilter_dataDir"]:focus,  textarea[name="nofilter_newComment"]:focus {
+input[type=text]:focus, textarea:focus, input.r:focus,
+textarea[name="i2cpOpts"]:focus, input[name="nofilter_dataDir"]:focus,
+textarea[name="nofilter_newComment"]:focus {
   color: var(--ink);
   border: 1px solid #373;
   box-shadow: var(--highlight), inset 4px 4px 4px #000, 0 0 0 1px rgba(255,96,0,.3);
@@ -1733,6 +1737,7 @@ input[name="nofilter_dataDir"] {
 
 input[name="nofilter_commentsName"] {
   width: 250px;
+  overflow: hidden;
   text-overflow: ellipsis;
 }
 
