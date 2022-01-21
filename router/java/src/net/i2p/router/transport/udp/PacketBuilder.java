@@ -1100,7 +1100,7 @@ class PacketBuilder {
 
     /**
      * Build a packet as if we are either Bob or Charlie and we are helping test Alice.
-     * 
+     *
      * @param aliceCipherKey the intro key if we are Charlie
      * @param aliceMACKey the intro key if we are Charlie
      * @return ready to send packet, or null if there was a problem
@@ -1256,8 +1256,8 @@ class PacketBuilder {
                 // FIXME this will have already failed in isValid() above, right?
                 (Arrays.equals(iaddr.getAddress(), _transport.getExternalIP()) && !_transport.allowLocal())) {
                 if (_log.shouldWarn())
-                    _log.warn("Cannot build a relay request for " + state.getRemoteIdentity().calculateHash() +
-                              "\n* Reason: Introducer address is invalid or blocklisted: " + Addresses.toString(iaddr.getAddress(), iport));
+                    _log.warn("Cannot build a relay request for [" + state.getRemoteIdentity().calculateHash().toBase64().substring(0,6) +
+                              "] \n* Reason: Introducer address is invalid or blocklisted: " + Addresses.toString(iaddr.getAddress(), iport));
                 // TODO implement some sort of introducer banlist
                 continue;
             }
