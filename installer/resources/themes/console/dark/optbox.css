@@ -292,6 +292,32 @@ select option:hover, select option:checked {
   background: #000;
 }
 
+textarea {
+  margin: 10px;
+  padding: 5px;
+  width: calc(100% - 15px);
+  min-width: 97%;
+  min-height: 100px;
+  resize: none;
+  text-align: left;
+  font: 8.5pt var(--monospaced);
+  color: var(--ink);
+  border: var(--border_hard);
+  border-radius: 2px;
+  box-shadow: var(--highlight);
+  background: linear-gradient(180deg,#000, #010);
+}
+
+input[type=text]:focus, input[type=password]:focus, textarea:focus {
+  color: var(--ink) !important;
+  border: 1px solid #373 !important;
+  box-shadow: var(--btn_shadow_active);
+  background: var(--input_txt);
+  outline: none;
+  filter: drop-shadow(0 0 1px var(--hover));
+  transition: filter ease .3s;
+}
+
 .optbox {
   position: relative;
   width: 20px;

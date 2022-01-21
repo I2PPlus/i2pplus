@@ -1948,13 +1948,6 @@ button:active a {
   color: var(--ink);
 }
 
-button:active {
-  color: var(--ink);
-  border: 1px solid var(--hover);
-  box-shadow: var(--highlight);
-  background: var(--hover);
-}
-
 /* sidebar buttons */
 
 #sidebar .reload, #sidebar .stop {
@@ -2235,7 +2228,7 @@ input[type=image] {
 
 input[name="refreshInterval"] {
   margin-right: 3px;
-  width: 40px;
+  width: 100px;
   text-align: right;
 }
 
@@ -2256,11 +2249,6 @@ input[class="check"] { /* nudge "check for updates" button into alignment on /co
 
 input[name="ntcphost"], input[name="udpHost1"] {
   width: 260px;
-}
-
-fieldset {
-  position: relative;
-  overflow: hidden;
 }
 
 select {
@@ -2293,33 +2281,8 @@ select {
   cursor: default;
 }
 
-textarea {
-  margin: 10px;
-  padding: 5px;
-  width: calc(100% - 15px);
-  min-width: 97%;
-  min-height: 100px;
-  font: 8.5pt var(--monospaced);
-  color: var(--ink);
-  border-radius: 2px;
-  border: 1px solid #184818;
-  box-shadow: var(--highlight);
-  text-align: left;
-  background: linear-gradient(180deg,#000, #010) !important;
-}
-
 textarea[cols="70"], textarea[name="levels"] {
   width: calc(100% - 20px);
-}
-
-input[type=text]:focus, input[type=password]:focus, textarea:focus {
-  color: var(--ink) !important;
-  border: 1px solid #373 !important;
-  box-shadow: var(--btn_shadow_active);
-  background: var(--input_txt) !important;
-  outline: none;
-  filter: drop-shadow(0 0 1px var(--hover));
-  transition: filter ease .3s;
 }
 
 #advancedsettings:focus {
