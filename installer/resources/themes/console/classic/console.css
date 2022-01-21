@@ -3714,6 +3714,7 @@ h3#servicedebug a, h3#graphinfo a, h3#browseronstart a {
 }
 
 .main#tunnels h3 a[href^="/configtunnels#"]::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]::after, #logs h3 a::after {
+  margin-top: 2px;
   padding: 1px;
   width: 16px;
   height: 16px;
@@ -3728,7 +3729,7 @@ h3#servicedebug a, h3#graphinfo a, h3#browseronstart a {
 }
 
 #logs h3 a.delete::after {
-  margin-left: 6px;
+  margin-left: 9px;
   background: var(--close) no-repeat center center / 16px;
 }
 
@@ -3739,7 +3740,7 @@ h3#servicedebug a, h3#graphinfo a, h3#browseronstart a {
 #logs h3 a.delete::before {
   margin: -6px 0 -6px 6px;
   width: 1px;
-  height: 24px;
+  height: 32px;
   display: inline-block;
   vertical-align: middle;
   background: var(--border);
