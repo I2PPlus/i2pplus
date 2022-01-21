@@ -82,7 +82,12 @@ body.iframed {
 }
 
 img {
+  font-size: 0;
   border: none;
+}
+
+b {
+  color: var(--ink_light);
 }
 
 table {
