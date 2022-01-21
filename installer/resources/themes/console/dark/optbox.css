@@ -132,6 +132,11 @@ textarea {
   resize: none;
 }
 
+button::-moz-focus-inner, input::-moz-focus-inner {
+  outline: none;
+  border: none;
+}
+
 input[type=file] {
   margin: 5px 8px;
   padding: 0 !important;

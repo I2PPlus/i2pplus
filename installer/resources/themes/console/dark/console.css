@@ -1935,11 +1935,6 @@ h1, h4.app, h4.app2, #news h3 {
   background-blend-mode: normal, normal, exclusion, exclusion;
 }
 
-button::-moz-focus-inner, input::-moz-focus-inner {
-  outline: none;
-  border: none;
-}
-
 button, button:visited {
   margin: 2px 3px;
   padding: 4px 2px !important;

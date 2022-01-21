@@ -1629,11 +1629,6 @@ input {
   cursor: pointer;
 }
 
-input[type=submit]::-moz-focus-inner, input[type=reset]::-moz-focus-inner {
-  border: none;
-  outline: none;
-}
-
 input.disabled, a.controld {
   opacity: .5 !important;
   cursor: not-allowed;
