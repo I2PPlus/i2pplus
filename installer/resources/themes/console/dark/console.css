@@ -1937,26 +1937,7 @@ h1, h4.app, h4.app2, #news h3 {
 
 button, button:visited {
   margin: 2px 3px;
-  padding: 4px 2px !important;
   min-width: 75px;
-  vertical-align: middle;
-  text-align: center;
-  font-weight: 700;
-  font-size: 9pt;
-  text-decoration: none;
-  color: var(--a);
-  border: 1px outset #191;
-  border-radius: 2px;
-  background: #000;
-  filter: drop-shadow(0 0 1px #000);
-}
-
-button:hover, button:focus {
-  color: var(--hover);
-  border: 1px solid var(--hover);
-  box-shadow: var(--btn_shadow_hover);
-  background: var(--btn_hover_radial);
-  cursor: pointer;
 }
 
 button:hover a {
@@ -2350,9 +2331,9 @@ input[type=text]:focus, input[type=password]:focus {
 }
 
 input[readonly]:focus {
-  filter: none !important;
-  color: #161 !important;
   font-weight: 400;
+  color: #161 !important;
+  filter: none !important;
 }
 
 #consolepass input[name="name"], #externali2cp input[name="user"] {
@@ -2383,31 +2364,11 @@ textarea[readonly]:focus {
 }
 
 input[type=submit], input[type=reset], select, button {
-  line-height: 1.2;
   font-size: 8.5pt;
-  border: 1px solid #000;
-  border-radius: 2px;
-  box-shadow: var(--btn_shadow);
-  background: var(--btn);
 }
 
 input[type=file]::file-selector-button {
-  line-height: 1.2;
-  font-size: 8.5pt;
-  border: 1px solid #000;
-  border-radius: 2px;
-  box-shadow: var(--btn_shadow);
-  background: var(--btn);
-}
-
-input[type=submit], input[type=reset], button {
-  padding: 7px 12px !important;
-  outline: none;
-}
-
-input[type=file]::file-selector-button {
-  padding: 7px 12px !important;
-  outline: none;
+   font-size: 8.5pt;
 }
 
 .statusnotes {

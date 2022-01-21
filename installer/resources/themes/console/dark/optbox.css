@@ -154,13 +154,14 @@ input, select, button {
   font-family: var(--bodyfont);
 }
 
-input[type=submit], input[type=reset], a.control {
+input[type=submit], input[type=reset], button, a.control {
   margin: 5px;
-  padding: 5px 12px;
+  padding: 7px 12px;
   min-width: 110px;
+  line-height: 1.2;
   text-decoration: none;
   color: var(--a);
-  border: 1px solid #252;
+  border: 1px solid #000;
   border-radius: 2px;
   box-shadow: var(--btn_shadow);
   background: #000;
@@ -168,20 +169,21 @@ input[type=submit], input[type=reset], a.control {
 
 input[type=submit]:hover, input[type=reset]:hover,
 input[type=submit]:focus, input[type=reset]:focus,
-button:hover, button:focus {
+button:hover, button:focus,
+a.control:hover, a.control:focus {
   color: var(--hover) !important;
-  border: 1px solid var(--hover) !important;
-  box-shadow: var(--btn_shadow_hover) !important;
+  border: 1px solid var(--hover);
+  box-shadow: var(--btn_shadow_hover);
   background: var(--btn_hover_radial);
   cursor: pointer;
 }
 
-input[type=submit]:active, input[type=reset]:active {
+input[type=submit]:active, input[type=reset]:active, button:active, a.control:active {
   color: var(--ink) !important;
   text-shadow: var(--textshadow);
-  border: 1px solid var(--hover) !important;
-  box-shadow: var(--btn_shadow_active) !important;
-  background: var(--hover) !important;
+  border: 1px solid var(--hover);
+  box-shadow: var(--btn_shadow_active);
+  background: var(--hover);
 }
 
 input[type=file] {
@@ -206,7 +208,7 @@ input[type=file]:hover, input[type=file]:active {
 
 input[type=file]::file-selector-button {
   margin: 2px 10px 2px 3px;
-  padding: 4px 2px !important;
+  padding: 7px 12px;
   min-width: 75px;
   vertical-align: middle;
   font: bold 9pt var(--bodyfont);
