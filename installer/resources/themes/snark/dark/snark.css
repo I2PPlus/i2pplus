@@ -1600,12 +1600,9 @@ p {
 }
 
 hr {
-  color: #444;
-  background: #444;
-  height: 1px;
-  border: 0 solid #444;
-  width: 0;
   margin: 5px 0 7px;
+  width: 0;
+  height: 1px;
   text-align: center;
 }
 
@@ -1615,18 +1612,6 @@ a:link, a:visited {
 
 a:hover, a:focus {
   color: #f40;
-}
-
-input {
-  text-align: left;
-  padding: 3px 4px !important;
-  border: var(--border);
-  background: #000;
-  color: #494;
-  margin: 2px 4px 2px 0;
-  font-size: 8pt;
-  font-weight: 700;
-  cursor: pointer;
 }
 
 input.disabled, a.controld {
