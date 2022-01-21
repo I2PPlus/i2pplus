@@ -2222,16 +2222,6 @@ hr:last-child {
   text-align: center;
 }
 
-input[type=submit]:hover, input[type=reset]:hover, input[type=submit]:focus, input[type=reset]:focus {
-  box-shadow: var(--btn_shadow_hover) !important;
-  background: var(--btn_hover_radial);
-}
-
-input[type=submit]:active, input[type=reset]:active {
-  text-shadow: var(--textshadow);
-  box-shadow: var(--btn_shadow_active) !important;
-}
-
 button:active {
   text-shadow: var(--textshadow);
   box-shadow: var(--btn_shadow_active) !important;
@@ -2450,12 +2440,12 @@ input[type=file]::file-selector-button {
 }
 
 input[type=submit], input[type=reset], button {
-  padding: 7px 8px !important;
+  padding: 7px 12px !important;
   outline: none;
 }
 
 input[type=file]::file-selector-button {
-  padding: 7px 8px !important;
+  padding: 7px 12px !important;
   outline: none;
 }
 

@@ -156,26 +156,29 @@ input, select, button {
 
 input[type=submit], input[type=reset] {
   margin: 5px;
-  padding: 4px 2px;
+  padding: 5px 12px;
   min-width: 110px;
   text-decoration: none;
   color: var(--a);
   border: 1px solid #252;
   border-radius: 2px;
   background: #000;
-  cursor: pointer;
 }
 
 input[type=submit]:hover, input[type=reset]:hover,
 input[type=submit]:focus, input[type=reset]:focus {
   color: var(--hover) !important;
   border: 1px solid var(--hover) !important;
-  background: #000;
+  box-shadow: var(--btn_shadow_hover) !important;
+  background: var(--btn_hover_radial);
+  cursor: pointer;
 }
 
 input[type=submit]:active, input[type=reset]:active {
   color: var(--ink) !important;
+  text-shadow: var(--textshadow);
   border: 1px solid var(--hover) !important;
+  box-shadow: var(--btn_shadow_active) !important;
   background: var(--hover) !important;
 }
 
