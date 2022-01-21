@@ -1,9 +1,7 @@
 /* I2PSnark theme "Camo" aka Dark */
 /* Author: dr|z3d */
 
-@import url(/themes/fonts/DroidSans.css);
 @import url(/themes/console/dark/optbox.css);
-@import url(/themes/console/dark/chromescroll.css);
 @import url(sliders.css);
 
 :root {
@@ -35,9 +33,6 @@ body {
   margin: 3px;
   color: var(--ink);
   font-size: 9pt;
-  background: repeating-linear-gradient(180deg,rgba(0,0,0,.9) 2px, rgba(0,8,0,.5) 4px),
-    url(/themes/console/dark/images/camotile2.png) fixed top left,#000800;
-  background-size: 100% 4px, 175px !important;
 }
 
 body.iframed {
