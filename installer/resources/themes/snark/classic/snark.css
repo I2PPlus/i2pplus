@@ -568,7 +568,7 @@ tfoot th {
 }
 
 .snarkTorrents tfoot tr:first-child {
-  line-height: 130%;
+  line-height: 1.3;
 }
 
 .headerstatus {
@@ -2426,7 +2426,7 @@ td.commentAuthor .commentAuthorName {
 .commentWrapper {
   margin: 2px 0;
   padding: 8px 10px 8px 26px;
-  line-height: 120%;
+  line-height: 1.2;
   text-align: left;
   border: var(--border_main);
   border-radius: 3px;
@@ -2450,9 +2450,9 @@ td.commentAuthor .commentAuthorName {
 }
 
 .commentAction, .commentDelete {
+  padding-left: 0;
   width: 1%;
   white-space: nowrap;
-  padding-left: 0;
 }
 
 .addCommentText, .commentText {
@@ -2786,8 +2786,8 @@ input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilte
   height: 20px;
   display: inline-block;
   vertical-align: middle;
+  line-height: 1.6;
   text-align: center;
-  line-height: 160%;
   font-weight: 700;
   color: var(--bg);
   text-shadow: 0 1px 1px #557;
@@ -2906,15 +2906,16 @@ input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilte
 
 /* tracker config */
 
-.knowntracker label {
+.knownTracker label {
  font-weight: 700;
+ color: var(--ink_light);
 }
 
-.knowntracker:hover td {
+.knownTracker:hover td {
   background: #ffd !important;
 }
 
-.knowntracker a {
+.knownTracker a {
   display: inline-block;
   width: 220px !important;
   max-width: 220px;
@@ -2942,10 +2943,6 @@ input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilte
 }
 
 /* end tracker config */
-
-.snarkTorrents img {
-  font-size: 0;
-}
 
 .peerCount {
   padding-left: 0;
@@ -3087,13 +3084,13 @@ td.peerCount {
 }
 
 .peerCount .left, .peerCount .right {
-  display: inline-block;
   min-width: 20px;
+  display: inline-block;
 }
 
 .peerCount .left {
-  text-align: left;
   padding-left: 2px;
+  text-align: left;
 }
 
 .peerCount .right {
@@ -3107,8 +3104,8 @@ td.peerCount {
 
 .rowOdd:not(.peerinfo) .torrentDownloaded .percentBarText,
 .rowEven:not(.peerinfo) .torrentDownloaded .percentBarText {
-  min-width: 140px !important;
   padding: 3px;
+  min-width: 140px !important;
   position: relative;
   top: -18px;
   left: -32px;
@@ -3147,7 +3144,8 @@ td.peerCount {
   z-index: 5;
 }
 
-.dirInfo .percentBarText, .dirInfo .percentBarOuter, .peerinfo .percentBarText, .peerinfo .percentBarOuter {
+.dirInfo .percentBarText, .dirInfo .percentBarOuter,
+.peerinfo .percentBarText, .peerinfo .percentBarOuter {
   width: 84px !important;
 }
 
@@ -3164,7 +3162,7 @@ td.peerCount {
 .peerclient, .peerinfo tt, .clientid {
   display: inline-block;
   vertical-align: middle;
-  line-height: 120% !important;
+  line-height: 1.2 !important;
 }
 
 .peerinfo tt {
@@ -3304,7 +3302,7 @@ td.peerCount {
 }
 
 .debuginfo td {
-  line-height: 120% !important;
+  line-height: 1.2 !important;
 }
 
 .debuginfo b {
@@ -3449,7 +3447,7 @@ th #nameRequired, th .commentAuthorName {
 
 #metacomment {
   padding: 0 !important;
-  line-height: 140%;
+  line-height: 1.4;
   text-align: justify !important;
 }
 
@@ -3476,11 +3474,11 @@ th #nameRequired, th .commentAuthorName {
 }
 
 .snarkCommented {
-  position: absolute;
   display: inline-block;
-  z-index: 20;
+  position: absolute;
   top: -3px;
   right: 1px;
+  z-index: 20;
   line-height: 0;
   font-size: 0;
 }
@@ -3577,10 +3575,10 @@ td.peerCount {
 }
 
 #completion:hover #metainfo {
+  display: inline-block !important;
   position: absolute;
   top: 28px;
   left: -120px;
-  display: inline-block !important;
 }
 
 #metacomment .commentWrapper {
@@ -3602,7 +3600,6 @@ td.peerCount {
   box-shadow: var(--highlight);
   background-position: center center;
   opacity: .9;
-  cursor: pointer;
   will-change: transform;
 }
 
@@ -4130,7 +4127,7 @@ td.peerCount {
   .trackerconfig th:last-child, .trackerconfig td:last-child {
     padding-left: 50px !important;
   }
-  .trackerhome, .trackerannounce, .knowntracker a {
+  .trackerhome, .trackerannounce, .knownTracker a {
     width: 300px !important;
     max-width: 300px !important;
   }
@@ -4174,7 +4171,7 @@ body, th, td, table a, input, input[type=text], input.r, input[name="nofilter_da
   #torrentInfoStats img[src$="head_rx.png"] {
     margin: -3px 3px 0 4px !important;
   }
-  .trackerhome, .trackerannounce, .knowntracker a {
+  .trackerhome, .trackerannounce, .knownTracker a {
     width: 400px !important;
     max-width: 400px !important;
   }
