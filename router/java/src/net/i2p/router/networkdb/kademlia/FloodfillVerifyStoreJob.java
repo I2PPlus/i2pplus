@@ -51,7 +51,8 @@ class FloodfillVerifyStoreJob extends JobImpl {
 
     private static final int START_DELAY = 18*1000;
     private static final int START_DELAY_RAND = 9*1000;
-    private static final int VERIFY_TIMEOUT = 20*1000;
+//    private static final int VERIFY_TIMEOUT = 20*1000;
+    private static final int VERIFY_TIMEOUT = 30*1000;
 //    private static final int MAX_PEERS_TO_TRY = 4;
     private static final int MAX_PEERS_TO_TRY = 8;
     private static final int IP_CLOSE_BYTES = 3;

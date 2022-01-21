@@ -1,10 +1,9 @@
 /* Susimail "Classic" Theme */
 /* Author: dr|z3d */
 
-@import url(/themes/fonts/DroidSans.css);
+@import url(/themes/console/classic/global.css);
 @import url(../images/images.css);
 @import url(images/images.css);
-@import url(/themes/console/classic/optbox.css);
 
 :root {
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
@@ -30,32 +29,13 @@
   --hover: #f60;
 }
 
-html {
-  scrollbar-color: #acafb9 var(--bodybg);
-}
-
 body {
   margin: 3px 4px;
-  color: var(--ink);
-  font-family: var(--bodyfont);
-  font-size: 9pt;
   background: var(--bg3) url(/themes/console/classic/images/bg0.png) left top / 120px;
-  scrollbar-color: #acafb9 var(--bg);
 }
 
 body.iframed {
   margin: 5px 0 0 0;
-  overflow: hidden; /* webkit fix */
-  background: transparent !important;
-}
-
-* {
-  outline: none;
-}
-
-button::-moz-focus-inner, input::-moz-focus-inner {
-  outline: none;
-  border: none;
 }
 
 b, th, .mailListSender a {
@@ -482,7 +462,6 @@ pre {
 }
 
 table {
-  width: 100%;
   text-align: justify;
   color: var(--ink_light);
   border-collapse: collapse;
@@ -490,7 +469,6 @@ table {
 
 th {
   font-size: 10pt;
-  font-weight: 700;
 }
 
 form {
@@ -526,16 +504,6 @@ table#message_full {
   border-bottom: 1px solid var(--border);
 }
 
-input { /* opera fix */
-  font-family: var(--bodyfont);
-  font-size: 9pt;
-}
-
-textarea {
-  font-family: var(--monospaced);
-  font-size: 9pt;
-}
-
 input[type=text], input[type=password], textarea {
   padding: 4px 5px !important;
   color: var(--ink_light);
@@ -557,10 +525,11 @@ input.new_upload, input.delete_attachment {
 }
 
 @-moz-document url-prefix(http://) {
-button::-moz-focus-inner, input[type="button"]::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type="reset"]::-moz-focus-inner {
-  padding: 0 !important;
-  border: 0 none !important;
-}
+  button::-moz-focus-inner, input[type="button"]::-moz-focus-inner,
+  input[type=submit]::-moz-focus-inner, input[type="reset"]::-moz-focus-inner {
+    padding: 0 !important;
+    border: 0 none !important;
+  }
 }
 
 button:focus, input[type=submit]:focus, input[type="reset"]:focus, .fakebutton:focus {
@@ -611,14 +580,6 @@ input[disabled][type=submit], input[disabled][type=submit]:hover, input[disabled
   opacity: .3;
   filter: none;
   pointer-events: none;
-}
-
-input, label {
-  cursor: pointer;
-}
-
-input[type=text], input[type=password] {
-  cursor: text;
 }
 
 /* illustrated images inc */
@@ -1403,6 +1364,10 @@ body, td, textarea, input, div, p.mailbody, p.error, #settings, select {
 
 #mailbox td.mailListSender {
   padding-left: 18px;
+}
+
+#mailbox td.mailListSender a {
+  font-weight: 400;
 }
 
 img.sort {

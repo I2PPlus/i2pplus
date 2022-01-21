@@ -1,7 +1,6 @@
 /* SusiDNS theme "Classic" */
 /* Author: dr|z3d */
 
-@import url(/themes/fonts/DroidSans.css);
 @import url(/themes/console/classic/global.css);
 @import url(../images/images.css);
 @import url(images/images.css);
@@ -34,26 +33,12 @@
 html, body {
   min-height: 100%;
   background: var(--bg);
-  scrollbar-color: #acafb9 var(--bodybg);
 }
 
 body {
   min-width: 700px;
-  color: var(--ink);
-  font: 9pt/130% var(--bodyfont);
-  background: #eef;
-  background: #eef url(/themes/console/classic/images/bg0.png);
-  background-size: 120px 120px;
-  scrollbar-color: #acafb9 var(--bg);
-}
-
-body.iframed {
-  margin: 0;
-  background: transparent !important;
-}
-
-*, *:active {
-  outline: none;
+  line-height: 1.3;
+  background: #eef url(/themes/console/classic/images/bg0.png) center center / 120px;
 }
 
 #navi, .buttons, #buttons, #host_list tr:first-child, #host_list img, #host_list td:nth-child(n+2) a {
@@ -62,10 +47,6 @@ body.iframed {
 
 hr {
   display: none;
-}
-
-table {
-  width: 100%;
 }
 
 table.book {
@@ -100,7 +81,7 @@ table.book th {
 }
 
 .book th:last-child {
-  background: var(--nuke) no-repeat center calc(50% + 1px) / 14px, var(--heading);
+  background: var(--nuke) no-repeat center calc(50% + 1px) / 14px, var(--th);
 }
 
 table.book tr:hover textarea {
@@ -144,14 +125,6 @@ td.destinations {
   width: calc(100% - 2px);
 }
 
-input::placeholder {
-  font-style: italic;
-}
-
-input:focus::placeholder {
-  opacity: 0;
-}
-
 #navi {
   margin: -1px -11px 0;
   padding: 0;
@@ -159,7 +132,7 @@ input:focus::placeholder {
   top: -1px;
   z-index: 999;
   border: 1px solid var(--border);
-  background: var(--heading);
+  background: var(--th);
 }
 
 .iframed #navi {
@@ -174,7 +147,8 @@ input:focus::placeholder {
 
 #content h3 {
   padding: 3px 10px 4px 30px !important;
-  background: var(--question) no-repeat 4px center / 20px, linear-gradient(90deg, #fafafa 28px, rgba(0,0,0,0) 28px);
+  background: var(--question) no-repeat 4px center / 20px,
+    linear-gradient(90deg, #fafafa 28px, rgba(0,0,0,0) 28px);
   background-blend-mode: luminosity;
 }
 
@@ -213,7 +187,7 @@ div.page {
   padding: 0 10px;
   color: var(--ink);
   font-size: 9pt !important;
-  line-height: 160% !important;
+  line-height: 1.6 !important;
 }
 
 .iframed .page {
@@ -254,7 +228,7 @@ div.help {
 p {
   margin-left: 10px;
   margin-right: 10px;
-  line-height: 140%;
+  line-height: 1.4;
   text-align: justify;
   font-size: 9pt;
 }
@@ -267,7 +241,7 @@ h3 {
   font-weight: 700;
   color: var(--ink_light);
   border: 1px solid var(--border);
-  background: var(--heading);
+  background: var(--th);
 }
 
 #help h3 {
@@ -278,7 +252,7 @@ h4 {
   margin: -11px -11px 10px;
   padding: 3px 10px;
   border: 1px solid var(--border);
-  background: var(--heading);
+  background: var(--th);
 }
 
 a {
@@ -302,11 +276,11 @@ a:active {
 
 th {
   padding: 5px 10px;
-  line-height: 12pt;
+  line-height: 1.2;
   font-size: 10pt;
   border-bottom: 1px solid var(--border);
   border-top: 1px solid var(--border);
-  background: var(--heading);
+  background: var(--th);
 }
 
 td {
@@ -336,7 +310,7 @@ li {
 p.help {
   margin: 0;
   padding: 15px 15px 15px 45px;
-  line-height: 120%;
+  line-height: 1.2;
   background: #ffe var(--infohelp) no-repeat 8px center / 32px;
 }
 
@@ -374,7 +348,7 @@ div#filter {
   text-align: center;
   position: relative;
   z-index: 10;
-  line-height: 220%;
+  line-height: 2.2;
   text-transform: capitalize;
 }
 
@@ -383,7 +357,7 @@ div#filter {
   padding: 0 6px;
   min-width: 16px;
   display: inline-block;
-  line-height: 180%;
+  line-height: 1.8;
   text-transform: capitalize;
   font-size: 10pt;
   color: #5c5c8a;
@@ -394,7 +368,7 @@ div#filter {
 }
 
 #filter span a {
-  line-height: 140%;
+  line-height: 1.4;
   font-weight: 400;
   color: #333 !important;
 }
@@ -415,18 +389,18 @@ div#filter {
 }
 
 #filter span b {
-  font-size: 11pt;
-  text-transform: uppercase;
-  color: #115;
-  line-height: 80%;
-  display: inline-block;
   margin-top: -2px;
+  display: inline-block;
+  line-height: .8;
+  text-transform: uppercase;
+  font-size: 11pt;
+  color: #115;
 }
 
 #filter span a {
   margin: 0 5px !important;
-  display:inline-block;
   padding: 1px 5px;
+  display:inline-block;
 }
 
 #search {
@@ -447,14 +421,18 @@ div#filter {
 }
 
 .iframed #booksearch, .iframed #filter {
-  background: #eff2ff;
-  background: var(--heading);
+  background: var(--th);
 }
 
 #search input[type=text] {
   width: 200px;
   padding: 5px 5px 5px 25px;
   background: var(--bg) var(--search) no-repeat 5px center / 15px;
+  background-blend-mode: luminosity;
+}
+
+#search input[type=text]:focus {
+  background-blend-mode: normal;
 }
 
 #messages:empty {
@@ -586,23 +564,6 @@ input[type=text], input[type=password], textarea {
   margin: 3px 3px 3px 0;
   padding: 6px 10px;
   min-width: 160px;
-  vertical-align: middle;
-  font: 9pt/130% var(--bodyfont);
-  color: var(--ink_light);
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  box-shadow: inset 1px 1px 1px #ddd;
-  background: var(--bg);
-}
-
-input[type=text]:focus, input[type=password]:focus, textarea:focus {
-  color: var(--ink);
-  box-shadow: inset 0 0 0 1px #89f, 0 0 1px rgba(136, 153, 255, .4);
-}
-
-input[type=submit]::-moz-focus-inner, input[type="reset"]::-moz-focus-inner {
-  border: none;
-  outline: none;
 }
 
 input[type=submit], input[type="reset"] {
@@ -612,33 +573,10 @@ input[type=submit], input[type="reset"] {
 input[type=file]::file-selector-button {
   margin: 3px 3px 3px 0;
   padding: 6px 10px;
-  font: 9pt/130% var(--bodyfont);
-  color: var(--ink_light);
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  box-shadow: inset 1px 1px 1px #ddd;
-  background: var(--btn);
-}
-
-input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
-  color: var(--ink);
-  border: 1px solid var(--border);
-  background: var(--btn_hover);
-  filter: drop-shadow(0 0 1px #89f);
-  cursor: pointer;
-}
-
-input[type=file]:active::file-selector-button {
-  color: var(--ink_light);
-  border: 1px solid #bbb;
-  box-shadow: var(--highlight), inset 3px 3px 3px #999;
 }
 
 textarea {
   margin: 0 auto 10px;
-  width: 100%;
-  resize: none;
-  color: #444;
 }
 
 td.destinations textarea, td.destinations textarea:focus {
@@ -657,7 +595,7 @@ td.destinations textarea, td.destinations textarea:focus {
 #subsLog pre {
   padding: 8px 10px;
   white-space: pre-wrap;
-  font: normal 8pt var(--monospaced);
+  line-height: 1.2;
 }
 
 .fakebutton, input[type=submit], input[type="reset"] {
@@ -808,11 +746,12 @@ textarea[name="config"], textarea[name="content"] {
 
 .headline h3 {
   padding: 10px 5px 10px 36px;
+  line-height: 1.2;
   word-spacing: .1em;
   letter-spacing: .08em;
   text-transform: uppercase;
   font-size: 12pt;
-  background: var(--addressbook) no-repeat 10px center / 22px, var(--heading);
+  background: var(--addressbook) no-repeat 10px center / 22px, var(--th);
 }
 
 body:not(.iframed) #addressbook.headline h3 {
@@ -820,11 +759,11 @@ body:not(.iframed) #addressbook.headline h3 {
 }
 
 .headline#subscriptions h3 {
-  background: var(--subscription) no-repeat 10px center / 22px, var(--heading);
+  background: var(--subscription) no-repeat 10px center / 22px, var(--th);
 }
 
 .headline#configure h3 {
-  background: var(--config) no-repeat 10px center / 22px, var(--heading);
+  background: var(--config) no-repeat 10px center / 22px, var(--th);
 }
 
 .iframed .headline#subscriptions, .iframed .headline#configure {
@@ -1058,66 +997,6 @@ td.destinations {
   max-width: 50px !important;
 }
 
-/* responsive layout */
-
-@media screen and (max-width: 1000px) {
-.iframed .illustrate {
-  margin: 10px auto 10px;
-  min-width: 450px;
-  width: 90%;
-}
-}
-
-@media screen and (max-width: 1200px) {
-#filter {
-  padding: 0 5px;
-}
-
-#filter p {
-  margin-left: 0;
-  margin-right: 0;
-}
-
-#filter a {
-  min-width: 6px;
-  padding: 0 6px !important;
-  line-height: 150%;
-}
-
-#host_list th {
-  font-size: 8.5pt;
-}
-}
-
-@media screen and (min-width: 1400px) {
-body, p, td, textarea, input, button, li, a {
-  font-size: 10pt !important;
-}
-
-code, tt {
-  font-size: 9pt !important;
-}
-
-h4, #navi a {
-  font-size: 11pt;
-}
-
-h3, h3 a {
-  font-size: 12pt !important;
-}
-
-#filter span, #filter a, #activefilter {
-  font-size: 10pt !important;
-  min-width: 16px !important;
-}
-
-.illustrate {
-  margin-top: 25px;
-}
-}
-
-/* end responsive layout */
-
 #hostNotes td:first-child {
   padding-top: 8px !important;
   vertical-align: top;
@@ -1221,12 +1100,16 @@ input[disabled] {
   background: linear-gradient(180deg,#fff 50%, #dde0f0 50%);
 }
 
+#paginate, #paginate a, #prev, #next, #current {
+  line-height: 1.3;
+}
+
 #prev a, #next a, #current {
   box-shadow: var(--highlight) !important;
 }
 
 #current {
-  padding: 0 10px;
+  padding: 1px 10px 0;
   display: inline-block;
   vertical-align: middle;
   text-align: center;
@@ -1306,26 +1189,6 @@ input[disabled] {
   padding-bottom: 0;
 }
 
-@media screen and (max-width: 1200px) {
-  .iframed #prev a, .iframed #next a {
-    padding: 10px 14px !important;
-  }
-
-  .iframed #prev::after, .iframed #next::after {
-    top: calc(50% - 5px);
-  }
-
-  .headline h3 {
-    padding-left: 36px;
-    font-size: 10pt;
-    background-size: 20px, 100%;
-  }
-
-  #filtered, #results {
-    font-size: 9.5pt;
-  }
-}
-
 div#messages {
   margin: 0 3%;
   padding: 5px 20px;
@@ -1334,7 +1197,7 @@ div#messages {
   right: 0;
   position: fixed;
   z-index: 999;
-  line-height: 150%;
+  line-height: 1.5;
   text-align: center;
   border-radius: 0 0 4px 4px;
   box-shadow: 0 1px 2px rgba(100,100,200,.7);
@@ -1371,11 +1234,74 @@ p.messages {
 }
 
 @keyframes hide-up {
-from {
-  margin-top: 0
+  from {margin-top: 0}
+  to {margin-top: -300px}
 }
 
-to {
-  margin-top: -300px;
+/* responsive layout */
+
+@media screen and (max-width: 1000px) {
+  .iframed .illustrate {
+    margin: 10px auto 10px;
+    width: 90%;
+    min-width: 450px;
+  }
 }
+
+@media screen and (max-width: 1200px) {
+  .iframed #prev a, .iframed #next a {
+    padding: 11px 14px !important;
+  }
+  .iframed #prev::after, .iframed #next::after {
+    top: calc(50% - 5px);
+  }
+  .headline h3 {
+    padding-left: 36px;
+    line-height: 1.4;
+    font-size: 10pt;
+    background-size: 20px, 100%;
+  }
+  #filtered, #results {
+    font-size: 9.5pt;
+  }
+  #subsLog pre {
+    font-size: 8.5pt;
+  }
+  #filter {
+    padding: 0 5px;
+  }
+  #filter p {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  #filter a {
+    padding: 0 6px !important;
+    min-width: 6px;
+    line-height: 1.5;
+  }
+  #host_list th {
+    font-size: 8.5pt;
+  }
+}
+
+@media screen and (min-width: 1400px) {
+  body, p, td, textarea, input, button, li, a {
+    font-size: 10pt !important;
+  }
+  code, tt {
+    font-size: 9pt !important;
+  }
+  h4, #navi a {
+    font-size: 11pt;
+  }
+  h3, h3 a {
+    font-size: 12pt !important;
+  }
+  #filter span, #filter a, #activefilter {
+    min-width: 16px !important;
+    font-size: 10pt !important;
+  }
+  .illustrate {
+    margin-top: 25px;
+  }
 }

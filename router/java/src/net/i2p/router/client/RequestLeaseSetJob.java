@@ -54,7 +54,7 @@ class RequestLeaseSetJob extends JobImpl {
 
     public void runJob() {
         if (_runner.isDead()) return;
-        
+
         boolean isLS2 = false;
         SessionConfig cfg = _runner.getPrimaryConfig();
         if (cfg != null) {
@@ -135,7 +135,7 @@ class RequestLeaseSetJob extends JobImpl {
             getContext().jobQueue().addJob(new CheckLeaseRequestStatus());
         } catch (I2CPMessageException ime) {
             getContext().statManager().addRateData("client.requestLeaseSetDropped", 1);
-            _log.error("Error sending I2CP message requesting the lease set", ime);
+            _log.error("Error sending I2CP message requesting the LeaseSet", ime);
             _requestState.setIsSuccessful(false);
             if (_requestState.getOnFailed() != null)
                 RequestLeaseSetJob.this.getContext().jobQueue().addJob(_requestState.getOnFailed());
@@ -163,7 +163,7 @@ class RequestLeaseSetJob extends JobImpl {
         public void runJob() {
             if (_runner.isDead()) {
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("Already dead, don't try to expire the leaseSet lookup");
+                    _log.debug("Runner is already dead, not trying to expire the LeaseSet lookup");
                 return;
             }
             if (_requestState.getIsSuccessful()) {
@@ -174,7 +174,7 @@ class RequestLeaseSetJob extends JobImpl {
                 CheckLeaseRequestStatus.this.getContext().statManager().addRateData("client.requestLeaseSetTimeout", 1);
                 if (_log.shouldLog(Log.ERROR)) {
                     long waited = System.currentTimeMillis() - _start;
-                    _log.error("Failed to receive a leaseSet in the time allotted (" + waited + "): " + _requestState);
+                    _log.error("Failed to receive a LeaseSet in the time allotted (" + waited + "ms): " + _requestState);
                 }
                 if (_requestState.getOnFailed() != null)
                     RequestLeaseSetJob.this.getContext().jobQueue().addJob(_requestState.getOnFailed());

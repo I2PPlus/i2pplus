@@ -1,7 +1,6 @@
 /* I2PSnark theme "Classic" */
 /* Author: dr|z3d */
 
-@import url(/themes/fonts/DroidSans.css);
 @import url(/themes/console/classic/global.css);
 @import url(../light/sliders.css);
 
@@ -37,14 +36,8 @@
   --th: linear-gradient(180deg,var(--bg), var(--bg3));
 }
 
-html, body {
-  scrollbar-color: #acafb9 var(--bodybg);
-}
-
 body {
   margin: 3px 4px;
-  font: 9pt var(--bodyfont);
-  color: var(--ink);
   background: var(--bg3) url(/themes/console/classic/images/bg0.png) repeat scroll center bottom / 120px;
 }
 
@@ -60,7 +53,6 @@ body::before {
 
 body.iframed {
   margin: 1px 0 !important;
-  background: none !important;
 }
 
 * {
@@ -535,7 +527,6 @@ tr, .navbar, .mainsection, .lowersection {
 table {
   margin: 0 0 10px 0;
   padding: 0;
-  width: 100%;
   border: none;
   border-spacing: 0;
   border-collapse: collapse;
@@ -555,12 +546,9 @@ tfoot tr:first-child th {
 }
 
 th {
-  font-size: 9pt;
   padding: 3px 2px;
-  color: var(--ink_light);
   border-top: var(--border_main);
   border-bottom: var(--border_main);
-  background: var(--bg);
   background: var(--th);
 }
 
@@ -579,7 +567,7 @@ tfoot th {
 }
 
 .snarkTorrents tfoot tr:first-child {
-  line-height: 130%;
+  line-height: 1.3;
 }
 
 .headerstatus {
@@ -821,7 +809,7 @@ tt, .bucket, #bucketSet code {
   padding-left: 3px;
 }
 
-.SnarkDirInfo {
+.dirInfo {
   margin-top: 10px !important;
   margin-bottom: 0;
   border-bottom: var(--border_main);
@@ -883,7 +871,7 @@ tt, .bucket, #bucketSet code {
   margin: 5px;
 }
 
-.SnarkDirInfo img:not(.thumb) {
+.dirInfo img:not(.thumb) {
   margin: -2px 0;
   width: 20px;
   height: 20px;
@@ -947,24 +935,13 @@ tt, .bucket, #bucketSet code {
 
 /* end torrent directory */
 
-td {
-  font-size: 9pt;
-  padding: 2px;
-  color: var(--ink_light) !important;
-}
-
-td:first-child {
-  font-size: 9pt;
-  text-align: right;
-}
-
 .center {
   text-align: center !important;
 }
 
 .torrentName {
-  line-height: 110%;
   padding: 4px 3px;
+  line-height: 1.1;
 }
 
 .torrentName a, .dirInfo td.snarkFileName a {
@@ -1472,6 +1449,7 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
   margin: 0 0 -4px;
   padding: 3px 1px;
   min-width: 260px;
+  line-height: 1.5;
   vertical-align: middle;
   letter-spacing: .08em;
   font-size: 11pt;
@@ -1677,49 +1655,41 @@ input[type=text], textarea {
   display: inline-block;
 }
 
-input.r {
-  text-align: right;
-  border: var(--border_main);
-  background: var(--bg);
-}
-
-input[type=text]:focus, textarea:focus, input.r:focus,
-textarea[name="i2cpOpts"]:focus, input[name="nofilter_dataDir"]:focus {
-  background: var(--bg);
+input.default {
+  visibility: hidden;
+  width: 1px;
+  height: 1px;
 }
 
 input[type=text], input[type=password], input.r,
-input[name="nofilter_dataDir"], textarea[name="i2cpOpts"] {
+input[name="nofilter_dataDir"] {
   margin: 2px 2px 2px 0;
   padding: 5px 8px !important;
   min-width: 160px;
-  vertical-align: middle;
-  font: 9pt var(--bodyfont);
-  color: var(--ink_light);
-  border: var(--border_main);
-  border-radius: 2px;
-  box-shadow: inset 1px 1px 1px #ddd;
-  background: var(--bg2);
-  cursor: text;
+  font-weight: 400;
   user-select: auto;
 }
 
-input[type=text]:focus, input[type=password]:focus, input.r:focus,
-input[name="nofilter_dataDir"]:focus, textarea[name="i2cpOpts"]:focus {
-  padding: 5px 10px !important;
-  color: var(--ink) !important;
-  border: var(--border_hard);
-  box-shadow: 0 0 0 1px rgba(255,96,0,.7), var(--btn_shadow_active);
-  outline: none;
+select, input[type=text], input.r {
+  min-width: 120px;
 }
 
-textarea[name="i2cpOpts"], input[name="nofilter_dataDir"] {
+input.r {
+  text-align: right;
+}
+
+input[name="nofilter_dataDir"] {
   width: 500px;
   margin: 3px 0;
   padding: 5px;
   resize: none;
   cursor: text;
   overflow: hidden;
+}
+
+input[size="85"] {
+  width: 550px;
+  width: calc(100% - 150px);
 }
 
 thead img, thead img:hover {
@@ -1730,27 +1700,8 @@ th a:link img, th a:visited img {
   opacity: 1;
 }
 
-input[type=text], input.r {
-  min-width: 100px;
-}
-
-input.default {
-  visibility: hidden;
-  width: 1px;
-  height: 1px;
-}
-
-input[size="85"] {
-  width: 550px;
-  width: calc(100% - 150px);
-}
-
 .addtorrentsection input, .newtorrentsection input {
   margin-left: 5px !important;
-}
-
-select, input.r {
-  min-width: 120px;
 }
 
 input[name="nofilter_commentsName"] {
@@ -1759,9 +1710,8 @@ input[name="nofilter_commentsName"] {
 
 textarea {
   padding: 1px 4px 0;
-  font: 8pt var(--monospaced);
+  font-size: 8pt;
   font-weight: 700;
-  color: var(--ink_light);
   border: var(--border_main);
   border-radius: 2px;
   background: var(--bg2);
@@ -1777,15 +1727,9 @@ textarea[name="i2cpOpts"] {
 
 img {
   margin: 0 3px 1px 3px;
-  line-height: 1;
   vertical-align: middle;
-  opacity: 1;
-}
-
-img:hover {
   line-height: 1;
   border: none;
-  opacity: 1;
 }
 
 /* pagenav */
@@ -2481,7 +2425,7 @@ td.commentAuthor .commentAuthorName {
 .commentWrapper {
   margin: 2px 0;
   padding: 8px 10px 8px 26px;
-  line-height: 120%;
+  line-height: 1.2;
   text-align: left;
   border: var(--border_main);
   border-radius: 3px;
@@ -2505,9 +2449,9 @@ td.commentAuthor .commentAuthorName {
 }
 
 .commentAction, .commentDelete {
+  padding-left: 0;
   width: 1%;
   white-space: nowrap;
-  padding-left: 0;
 }
 
 .addCommentText, .commentText {
@@ -2665,7 +2609,6 @@ td.commentAuthor .commentAuthorName {
   padding: 5px 10px 6px;
   display: inline-block;
   min-width: 160px !important;
-  font-size: 95%;
   color: #47597f;
   text-align: right;
   border-radius: 15px 5px 5px 15px;
@@ -2800,10 +2743,14 @@ td.commentAuthor .commentAuthorName {
 
 .configOption {
   padding: 0 4px;
+  width: calc(100% - 20px);
   display: inline-block;
   vertical-align: middle;
   white-space: nowrap;
-  width: calc(100% - 20px);
+}
+
+.configOption b, .configOption label {
+  font-size: 9pt !important;
 }
 
 .configOption::after {
@@ -2838,8 +2785,8 @@ input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilte
   height: 20px;
   display: inline-block;
   vertical-align: middle;
+  line-height: 1.6;
   text-align: center;
-  line-height: 160%;
   font-weight: 700;
   color: var(--bg);
   text-shadow: 0 1px 1px #557;
@@ -2958,18 +2905,22 @@ input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilte
 
 /* tracker config */
 
-.knowntracker:hover td {
-  background: var(--row_hover);
-  background: linear-gradient(180deg,#ffe,var(--row_hover)) !important;
+.knownTracker label {
+ font-weight: 700;
+ color: var(--ink_light);
 }
 
-.knowntracker a {
+.knownTracker:hover td {
+  background: #ffd !important;
+}
+
+.knownTracker a {
   display: inline-block;
+  width: 220px !important;
+  max-width: 220px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 220px;
-  width: 220px !important;
 }
 
 .trackerhome, .trackerannounce {
@@ -2991,10 +2942,6 @@ input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilte
 }
 
 /* end tracker config */
-
-.snarkTorrents img {
-  font-size: 0;
-}
 
 .peerCount {
   padding-left: 0;
@@ -3136,13 +3083,13 @@ td.peerCount {
 }
 
 .peerCount .left, .peerCount .right {
-  display: inline-block;
   min-width: 20px;
+  display: inline-block;
 }
 
 .peerCount .left {
-  text-align: left;
   padding-left: 2px;
+  text-align: left;
 }
 
 .peerCount .right {
@@ -3156,8 +3103,8 @@ td.peerCount {
 
 .rowOdd:not(.peerinfo) .torrentDownloaded .percentBarText,
 .rowEven:not(.peerinfo) .torrentDownloaded .percentBarText {
-  min-width: 140px !important;
   padding: 3px;
+  min-width: 140px !important;
   position: relative;
   top: -18px;
   left: -32px;
@@ -3196,7 +3143,8 @@ td.peerCount {
   z-index: 5;
 }
 
-.dirInfo .percentBarText, .dirInfo .percentBarOuter, .peerinfo .percentBarText, .peerinfo .percentBarOuter {
+.dirInfo .percentBarText, .dirInfo .percentBarOuter,
+.peerinfo .percentBarText, .peerinfo .percentBarOuter {
   width: 84px !important;
 }
 
@@ -3213,7 +3161,7 @@ td.peerCount {
 .peerclient, .peerinfo tt, .clientid {
   display: inline-block;
   vertical-align: middle;
-  line-height: 120% !important;
+  line-height: 1.2 !important;
 }
 
 .peerinfo tt {
@@ -3353,7 +3301,7 @@ td.peerCount {
 }
 
 .debuginfo td {
-  line-height: 120% !important;
+  line-height: 1.2 !important;
 }
 
 .debuginfo b {
@@ -3498,7 +3446,7 @@ th #nameRequired, th .commentAuthorName {
 
 #metacomment {
   padding: 0 !important;
-  line-height: 140%;
+  line-height: 1.4;
   text-align: justify !important;
 }
 
@@ -3525,11 +3473,11 @@ th #nameRequired, th .commentAuthorName {
 }
 
 .snarkCommented {
-  position: absolute;
   display: inline-block;
-  z-index: 20;
+  position: absolute;
   top: -3px;
   right: 1px;
+  z-index: 20;
   line-height: 0;
   font-size: 0;
 }
@@ -3626,10 +3574,10 @@ td.peerCount {
 }
 
 #completion:hover #metainfo {
+  display: inline-block !important;
   position: absolute;
   top: 28px;
   left: -120px;
-  display: inline-block !important;
 }
 
 #metacomment .commentWrapper {
@@ -3651,7 +3599,6 @@ td.peerCount {
   box-shadow: var(--highlight);
   background-position: center center;
   opacity: .9;
-  cursor: pointer;
   will-change: transform;
 }
 
@@ -3911,6 +3858,9 @@ td.peerCount {
   }
   .dirInfo .percentBarText, .dirInfo .percentBarOuter {
     width: 60px;
+  }
+  .configOption b, .configOption label {
+    font-size: 8.5pt !important;
   }
 }
 
@@ -4176,7 +4126,7 @@ td.peerCount {
   .trackerconfig th:last-child, .trackerconfig td:last-child {
     padding-left: 50px !important;
   }
-  .trackerhome, .trackerannounce, .knowntracker a {
+  .trackerhome, .trackerannounce, .knownTracker a {
     width: 300px !important;
     max-width: 300px !important;
   }
@@ -4220,7 +4170,7 @@ body, th, td, table a, input, input[type=text], input.r, input[name="nofilter_da
   #torrentInfoStats img[src$="head_rx.png"] {
     margin: -3px 3px 0 4px !important;
   }
-  .trackerhome, .trackerannounce, .knowntracker a {
+  .trackerhome, .trackerannounce, .knownTracker a {
     width: 400px !important;
     max-width: 400px !important;
   }

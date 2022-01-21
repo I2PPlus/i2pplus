@@ -1,3 +1,8 @@
+/* I2P Midnight theme globals */
+/* Author: (c) dr|z3d 2022 */
+
+@import url(/themes/fonts/DroidSans.css);
+
 :root {
   --a: #5c5c8a;
   --active: #f90;
@@ -51,8 +56,24 @@
   --shadow_input: inset 1px 1px 1px rgba(0,0,0,.2);
   --shadow_inset: inset 2px 2px 4px rgba(204,204,240,.6);
   --subheading: linear-gradient(90deg, var(--bg), var(--bg3));
-  --th: linear-gradient(180deg, #fff, var(--bg2));
+  --th: linear-gradient(180deg,#fff,#fafbff);
   --visited: #6b6b94;
+}
+
+html {
+  scrollbar-color: var(--scroll) var(--bodybg);
+}
+
+body {
+  font: 9pt var(--bodyfont);
+  color: var(--ink);
+  scrollbar-color: var(--scroll) var(--bg);
+}
+
+body.iframed {
+  margin: 0;
+  overflow: hidden; /* webkit fix */
+  background: none !important;
 }
 
 ::selection {
@@ -66,7 +87,22 @@
 }
 
 img {
+  font-size: 0;
   border: none;
+}
+
+b {
+  color: var(--ink_light);
+}
+
+table {
+  width: 100%;
+}
+
+th {
+  font-size: 9pt;
+  font-weight: 700;
+  color: var(--ink_light);
 }
 
 a:link, a:visited {
@@ -86,9 +122,18 @@ a:active {
   color: var(--active);
 }
 
-input[type=submit], input[type=reset], button, .optbox, select {
-  outline: none;
-  cursor: pointer;
+input, label {
+  vertical-align: middle;
+}
+
+input::placeholder {
+  font-style: italic;
+  color: var(--ink_light);
+  opacity: .7;
+}
+
+input:focus::placeholder {
+  opacity: 0;
 }
 
 button::-moz-focus-inner, input::-moz-focus-inner {
@@ -96,30 +141,35 @@ button::-moz-focus-inner, input::-moz-focus-inner {
   border: none;
 }
 
-input, label {
-  vertical-align: middle;
+input, button, select, label, textarea {
+  font-size: 9pt;
 }
 
-label {
+input, button, select, label {
+  text-decoration: none;
+  font: 9pt/130% var(--bodyfont);
+  outline: none;
   cursor: pointer;
 }
 
-input::-moz-placeholder {
-  color: #900;
-  opacity: 1;
+label:hover {
+  color: #03050f;
 }
 
-::-webkit-input-placeholder {
-  color: #900;
-  opacity: 1;
+button, input, select {
+  color: var(--ink_light);
 }
 
-input:focus::-moz-placeholder {
-  opacity: 0;
+textarea {
+  width: 100%;
+  resize: none;
+  font: 9pt var(--monospaced);
+  color: var(--ink_light);
+  scrollbar-color: #acafb9 #f2f2ff;
 }
 
-:focus::-webkit-input-placeholder {
-  opacity: 0;
+textarea:focus {
+  color: var(--ink);
 }
 
 select {
@@ -128,7 +178,6 @@ select {
   overflow: hidden;
   text-overflow: ellipsis;
   font-family: var(--bodyfont);
-  font-size: 9pt;
   color: var(--ink_light);
   border: 1px solid var(--border);
   border-radius: 3px;
@@ -176,12 +225,13 @@ input[type=text], input[type=password] {
   border-radius: 2px;
   box-shadow: var(--shadow_input);
   background-color: var(--bg2);
+  cursor: text;
 }
 
 input[type=text]:focus, input[type=password]:focus {
   padding: 5px 5px 5px 9px;
   color: var(--ink);
-  box-shadow: var(--btn_shadow_hover), var(--btn_shadow_active);
+  box-shadow: var(--btn_shadow_active), 0 0 1px 1px rgba(255,96,0,.6);
   background-color: var(--bg);
 }
 
@@ -189,6 +239,10 @@ input[type=text][readonly], input[type=text][readonly]:focus, input[type=text][d
   color: var(--disabled);
   box-shadow: var(--shadow_input);
   background: var(--bg3);
+}
+
+input[type=file], input[type=file]::file-selector-button {
+  cursor: pointer;
 }
 
 input[type=file]::file-selector-button {

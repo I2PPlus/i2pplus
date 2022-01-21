@@ -756,7 +756,7 @@ public class EepGet {
                 int truncate = _url.indexOf("&");
                 if (_log.shouldLog(Log.WARN))
                      if (_url.contains("&") && _url.contains("info_hash"))
-                        _log.warn("Transfer failed [" + _url.substring(0, truncate) + "...] (" + ioe.getMessage() + ")");
+                        _log.warn("Transfer failed [" + _url.substring(0, truncate).replace("http://", "") + "...] (" + ioe.getMessage() + ")");
                      else
                         _log.warn("Transfer failed [" + _url + "] (" + ioe.getMessage() + ")");
                 if (ioe instanceof MalformedURLException ||
