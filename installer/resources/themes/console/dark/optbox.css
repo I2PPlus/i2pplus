@@ -137,6 +137,40 @@ button::-moz-focus-inner, input::-moz-focus-inner {
   border: none;
 }
 
+label {
+  cursor: pointer;
+}
+
+label[disabled] {
+  opacity: .5;
+  pointer-events: none;
+}
+
+input {
+  margin: 5px;
+  padding: 4px 2px;
+  min-width: 110px;
+  text-decoration: none;
+  font-family: var(--bodyfont);
+  color: var(--a);
+  border: 1px solid #252;
+  border-radius: 2px;
+  background: #000;
+}
+
+input:hover, input:focus {
+  color: var(--hover) !important;
+  border: 1px solid var(--hover) !important;
+  background: #000;
+  cursor: pointer;
+}
+
+input:active {
+  color: var(--ink) !important;
+  border: 1px solid var(--hover) !important;
+  background: var(--hover) !important;
+}
+
 input[type=file] {
   margin: 5px 8px;
   padding: 0 !important;

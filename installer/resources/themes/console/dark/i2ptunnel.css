@@ -553,17 +553,11 @@ input, select, button, a {
 }
 
 input {
-  background-color: #020;
-  color: #ee9;
   margin: 0 2px 0 2px;
-  font-family: var(--bodyfont)
-  border: 1px solid #252;
-  text-decoration: none;
 }
 
 input[type="file"] {
   background: none;
-  border: none;
 }
 
 button:hover, button:focus {
@@ -599,15 +593,8 @@ button:hover, button:focus {
   display: inline;
 }
 
-label {
-  cursor: pointer;
-}
-
-input[type=password] {
-  cursor: text;
-}
-
-input[type=text], input[type=password], textarea, textarea[readonly="readonly"]:focus  {
+input[type=text], input[type=password],
+textarea, textarea[readonly="readonly"]:focus  {
   padding: 6px 8px;
   color: #bb7;
   font-weight: 700;

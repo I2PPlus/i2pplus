@@ -2222,24 +2222,6 @@ hr:last-child {
   text-align: center;
 }
 
-input {
-  margin: 5px;
-  padding: 4px 2px;
-  min-width: 110px;
-  text-decoration: none;
-  color: var(--a);
-  border: 1px outset #191;
-  border-radius: 2px;
-  background: #000;
-}
-
-input:hover, input:focus {
-  color: var(--hover) !important;
-  border: 1px solid var(--hover) !important;
-  background: #000;
-  cursor: pointer;
-}
-
 input[type=submit]:hover, input[type=reset]:hover, input[type=submit]:focus, input[type=reset]:focus {
   box-shadow: var(--btn_shadow_hover) !important;
   background: var(--btn_hover_radial);
@@ -2253,12 +2235,6 @@ input[type=submit]:active, input[type=reset]:active {
 button:active {
   text-shadow: var(--textshadow);
   box-shadow: var(--btn_shadow_active) !important;
-}
-
-input:active {
-  color: var(--ink) !important;
-  border: 1px solid var(--hover) !important;
-  background: var(--hover) !important;
 }
 
 input[type=text], input[type=password] {
@@ -2280,16 +2256,6 @@ input[type=text], input[type=password], textarea {
 
 input[type=image] {
   min-width: 0;
-}
-
-label {
-  cursor: pointer;
-}
-
-label.disabled {
-  cursor: not-allowed;
-  opacity: .5;
-  pointer-events: none;
 }
 
 .main#config_clients label[for="0"] {
