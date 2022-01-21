@@ -504,6 +504,10 @@ pre {
   margin-top: -5px !important;
 }
 
+#sb_services img {
+  display: none;
+}
+
 #sb_internals a, #sb_services a, #sb_advanced a, #sb_help a {
   padding: 1px 3px;
   display: inline-block;
