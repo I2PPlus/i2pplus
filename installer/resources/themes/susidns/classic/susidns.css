@@ -428,6 +428,11 @@ div#filter {
   width: 200px;
   padding: 5px 5px 5px 25px;
   background: var(--bg) var(--search) no-repeat 5px center / 15px;
+  background-blend-mode: luminosity;
+}
+
+#search input[type=text]:focus {
+  background-blend-mode: normal;
 }
 
 #messages:empty {
@@ -559,16 +564,6 @@ input[type=text], input[type=password], textarea {
   margin: 3px 3px 3px 0;
   padding: 6px 10px;
   min-width: 160px;
-  vertical-align: middle;
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  box-shadow: inset 1px 1px 1px #ddd;
-  background: var(--bg);
-}
-
-input[type=text]:focus, input[type=password]:focus, textarea:focus {
-  padding: 6px 10px;
-  box-shadow: inset 0 0 0 1px #89f, 0 0 1px rgba(136, 153, 255, .4);
 }
 
 input[type=submit], input[type="reset"] {
