@@ -52,8 +52,8 @@ class SchedulerChooser {
     private class NullScheduler implements TaskScheduler {
 
         public void eventOccurred(Connection con) {
-            if (_log.shouldLog(Log.WARN))
-                _log.warn("Yell at jrandom: Event occurred on " + con, new Exception("source"));
+            if (_log.shouldLog(Log.INFO))
+                _log.info("Yell at jrandom: Event occurred on " + con, new Exception("source"));
         }
         public boolean accept(Connection con) { return true; }
     };
