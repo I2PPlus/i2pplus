@@ -350,8 +350,6 @@ label, th img, .newtorrentsection, #closeLog, #pagenav {
 table {
   margin: 0 0 10px;
   padding: 0;
-  width: 100%;
-  border-collapse: collapse;
   border: none;
   border-spacing: 0;
 }
@@ -1613,18 +1611,10 @@ hr {
 
 a:link, a:visited {
   color: #7c7;
-  text-decoration: none;
-  word-wrap: break-word;
-  border-radius: 0;
-  outline: none;
 }
 
 a:hover, a:focus {
-  color: #f40 !important;
-}
-
-a:active {
-  color: #f90 !important;
+  color: #f40;
 }
 
 input {
