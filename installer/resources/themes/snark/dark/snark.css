@@ -40,16 +40,6 @@ body, input, select, .snarkCommentInfo textarea, textarea[name="i2cpOpts"] {
   font-family: var(--bodyfont);
 }
 
-img {
-  display: inline-block;
-  overflow: hidden;
-  font-size: 0;
-}
-
-tt, textarea, code {
-  font-family: var(--monospaced);
-}
-
 .page {
   margin: 5px 0 0;
   min-width: 890px;
@@ -69,16 +59,6 @@ tt, textarea, code {
 .toggleview, .configTitle, .snarknavbar, img, input[type=submit], input[type=radio], input[type=checkbox],
 label, th img, .newtorrentsection, #closeLog, #pagenav {
   user-select: none;
-}
-
-::selection {
-  color: #000;
-  text-shadow: none;
-  background: rgba(0,187,0,.99) !important;
-}
-
-* {
-  outline: none;
 }
 
 /* topnav */
