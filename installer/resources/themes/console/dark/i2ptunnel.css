@@ -543,13 +543,7 @@ input[type="hidden"], input.default {
 }
 
 input, select, button, a {
-  font-family: var(--bodyfont)
-  -moz-box-sizing: border-box;
   box-sizing: border-box;
-  font-size: 9pt;
-  color: #ee9;
-  resize: none;
-  cursor: pointer;
 }
 
 input {

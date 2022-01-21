@@ -146,26 +146,29 @@ label[disabled] {
   pointer-events: none;
 }
 
-input {
+input, select, button {
+  font-family: var(--bodyfont);
+}
+
+input[type=submit], input[type=reset] {
   margin: 5px;
   padding: 4px 2px;
   min-width: 110px;
   text-decoration: none;
-  font-family: var(--bodyfont);
   color: var(--a);
   border: 1px solid #252;
   border-radius: 2px;
   background: #000;
 }
 
-input:hover, input:focus {
+input[type=submit]:hover, input[type=reset]:hover,
+input[type=submit]:focus, input[type=reset]:focus {
   color: var(--hover) !important;
   border: 1px solid var(--hover) !important;
   background: #000;
-  cursor: pointer;
 }
 
-input:active {
+input[type=submit]:active, input[type=reset]:active {
   color: var(--ink) !important;
   border: 1px solid var(--hover) !important;
   background: var(--hover) !important;
