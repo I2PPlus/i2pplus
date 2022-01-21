@@ -2194,27 +2194,20 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
   width: 170px;
 }
 
+/* profiles */
+
 #profilelist {
   margin: 0 !important;
 }
 
+#profilelist th, #profilelist td {
+  text-align: center;
+}
+
 #profilelist th {
-  padding: 3px 6px;
+  padding: 3px 4px;
   white-space: nowrap;
   font-size: 90% !important;
-}
-
-#profilelist th:nth-child(7) {
-  text-align: right;
-}
-
-#profilelist td:first-child, #profilelist td:last-child, #profilelist td:nth-last-child(2) {
-  width: 1%;
-  white-space: nowrap;
-}
-
-#profilelist th:nth-child(3), #profiles th:nth-child(4), #profiles th:nth-child(5), #profiles th:nth-child(6) {
-  text-align: right;
 }
 
 #profilelist td[colspan="10"], #profilelist tr td[colspan="10"]:hover {
@@ -2231,7 +2224,27 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
   display: none;
 }
 
-#profilelist tr:hover, #floodfills tr:hover,  #ntcpconnections tr:hover, #udpconnections tr:hover,
+#profilelist td:nth-child(1), #profilelist td:nth-child(2),
+#profilelist td:nth-child(3), #profilelist td:nth-child(7),
+#profilelist td:nth-child(10) {
+  width: 1%;
+  white-space: nowrap;
+}
+
+#profilelist td:nth-child(2) {
+  text-align: left !important;
+}
+
+#profilelist td:nth-child(6) span,
+#profilelist td:nth-child(7) span,
+#profilelist td:nth-child(8) span {
+  display: inline-block;
+  min-width: 60px;
+  text-align: right;
+}
+
+#profilelist tr:hover, #floodfills tr:hover,
+#ntcpconnections tr:hover, #udpconnections tr:hover,
 .homelinkedit tr:hover, #portmapper tr:hover {
   color: #104e99;
   background: var(--row_hover);
@@ -2241,9 +2254,260 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
   background: var(--bg);
 }
 
+#profiles_overview {
+  background-image: url(/themes/console/images/svg/profile.svg);
+}
+
+#profiles .ok, #ntcpconnections td.queue:empty::before {
+  display: inline-block;
+  font-size: 0;
+  width: 12px;
+  height: 12px;
+  background-size: 11px !important;
+}
+
+#ntcpconnections td.queue:empty::before {
+  content: "";
+}
+
+#thresholds {
+  margin: -1px 0 0;
+}
+
+#peer_thresholds h3, #profiles .widescroll + .tabletitle {
+  margin-top: 13px !important;
+}
+
+.tunnel_cap, .tier, #capabilities_key b, #netdbtiers td a {
+  margin: 1px 2px 0;
+  padding: 1px 2px;
+  min-width: 14px;
+  display:inline-block;
+  text-align: center !important;
+  text-shadow: 0 1px 1px var(--bg);
+  box-shadow: var(--highlight), 0 0 0 1px var(--border_soft);
+  background: var(--badge);
+}
+
+#netdbtiers td a {
+  margin-right: 6px;
+}
+
+#netdbtiers td a:hover {
+  box-shadow: var(--highlight), 0 0 0 1px var(--hover);
+}
+
+#netdbtiers td a:active {
+  box-shadow: var(--btn_shadow_active), 0 0 0 1px var(--hover);
+}
+
+#netdbtiers td a:hover b {
+  color: var(--hover);
+}
+
+.version, .tier, .reachable, .unreachable, .ff {
+  margin: 1px 3px;
+  padding: 1px 4px;
+  display: inline-block;
+  min-width: 12px;
+  text-align: center;
+}
+
+.ff, .reachable, .unreachable, .hidden, .ssutesting, .ssuintro, .tier, .tunnel_cap, #capabilities_key b {
+  box-shadow: var(--box_border_badge), var(--highlight);
+}
+
+.ff {
+  background: linear-gradient(180deg, #fff, #fdb) !important;
+}
+
+.reachable {
+  background: linear-gradient(180deg, #fff, #cfc) !important;
+}
+
+.unreachable {
+  background: linear-gradient(180deg, #fff, #fcc) !important;
+}
+
+#netdb_ourinfo .unreachable {
+  display: none;
+}
+
+.hidden {
+  color: #999 !important;
+  background: var(--btn) !important;
+}
+
+.ssutesting {
+  background: linear-gradient(180deg, #fff, #ffb) !important;
+}
+
+.ssuintro {
+  background: linear-gradient(180deg, #fff, #fbf) !important;
+}
+
+#profiles .routerid, #peers .routerid {
+  padding: 2px 3px 2px 4px;
+}
+
+#profilelist .nospeed {
+  text-align: center !important;
+}
+
+#profilelist .lowlatency, #profilelist .highlatency {
+  width: 12px;
+  min-width: 0 !important;
+  color: #373 !important;
+}
+
+#profilelist .highlatency {
+  color: #900 !important;
+}
+
+#profilelist td:nth-child(8) span, #profilelist td:nth-child(9) span {
+  min-width: 40px;
+  display: inline-block;
+  text-align: right;
+}
+
+#profilelist td:nth-child(9) span {
+  min-width: 30px;
+}
+
+#profilelist td:last-child a::after,
+a[href^="/configpeer?"]::after,
+a[href^="/viewprofile"]::after,
+.profiledump::after,
+.familysearch img {
+  margin: 1px 2px;
+  padding: 2px;
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  vertical-align: middle;
+  border: 1px solid #bbd;
+  border-radius: 2px;
+  background: var(--bg);
+}
+
+a.viewfullentry, #profilelist td:last-child a, a[href^="/viewprofile"], .profiledump::after {
+  font-size: 0 !important;
+}
+
+#profilelist td:last-child a::after, a[href^="/viewprofile"]::after, a[href^="/configpeer?"]::after, .profiledump::after {
+  margin: 0 2px;
+  height: 14px;
+  width: 14px;
+  display: inline-block;
+  vertical-align: middle;
+  background: var(--bg) var(--eye) no-repeat center center / 12px;
+  content: "";
+}
+
+#profilelist td:last-child .viewprofile:hover::after, .viewprofile:hover::after, .profiledump:hover::after {
+  background: var(--bg) var(--eye_hover) no-repeat center center / 12px;
+}
+
+#profilelist td:last-child a[href^="/configpeer"]::after, a[href^="/configpeer?"]::after {
+  background: var(--bg) var(--edit) no-repeat center center / 12px;
+}
+
+#profilelist td:last-child a[href^="/configpeer"]:hover::after, a[href^="/configpeer?"]:hover::after {
+  background: var(--bg) var(--edit_hover) no-repeat center center / 12px;
+}
+
+#profilelist td:last-child a:active::after, a[href^="/viewprofile"]:active::after,
+a[href^="/configpeer?"]:active::after, .profiledump:active::after {
+  box-shadow: var(--btn_shadow_active);
+}
+
+a.viewfullentry:hover {
+  filter: drop-shadow(0 0 1px var(--hover));
+}
+
+#profilelist td:last-child img, a[href^="/configpeer?"] img,
+a[href^="/viewprofile"] img, .profiledump img {
+  display: none !important;
+}
+
+#view_profile h3 {
+  position: relative;
+  z-index: 10;
+}
+
+#view_profile h3 a::after {
+  margin-top: -1.5px;
+}
+
+#view_profile .configpeer {
+  margin-right: -5px;
+}
+
+#profile_defs table tr:first-child {
+  border-top: none;
+}
+
+#floodfills th, #floodfills td {
+  text-align: center !important;
+}
+
+#floodfills td:nth-child(2) {
+  white-space: nowrap;
+}
+
+#floodfills .percentBarOuter, #floodfills .percentBarText {
+  margin: 0 2px;
+  width: 50px;
+  display: inline-block;
+}
+
+#floodfills .percentBarOuter {
+  text-align: left;
+  border: 1px solid var(--border);
+  box-shadow: var(--highlight);
+  background: var(--bg2);
+  opacity: .9;
+}
+
+#floodfills .percentBarInner {
+  display: inline-block;
+  width: inherit;
+  background: linear-gradient(180deg, rgba(255,255,255,.1) 50%, rgba(0,0,0,.1) 50%), linear-gradient(90deg, #900 25px, #a00 40px, #b00 50px);
+}
+
+#floodfills .percentBarInner[style="width:0%"] {
+  width: 100% !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.1) 50%, rgba(0,0,0,.1) 50%), linear-gradient(90deg, #090, #0b0);
+}
+
+#floodfills .percentBarText {
+  color: var(--bg);
+  text-shadow: 0 1px 1px #000;
+}
+
+#floodfills td:empty {
+  text-align: center;
+}
+
+#floodfills td:empty::before, #ntcpconnections td:empty::before, #udpconnections td:empty::before, #profilelist td:empty::before {
+  width: 100%;
+  display: inline-block;
+  text-align: center;
+  opacity: .8;
+  content: "‒";
+}
+
+#floodfills td:nth-child(3) span {
+  min-width: 20px;
+  display: inline-block;
+  text-align: right;
+}
+
 tr.tablefooter:hover td, tr:hover .infohelp {
   color: var(--ink);
 }
+
+/* end /profiles */
 
 /* peers - sort icons */
 
@@ -8293,280 +8557,6 @@ input[type="file"]:hover {
 }
 
 /* end peers */
-
-/* profiles */
-
-#profiles_overview {
-  background-image: url(/themes/console/images/svg/profile.svg);
-}
-
-#profiles .ok, #ntcpconnections td.queue:empty::before {
-  display: inline-block;
-  font-size: 0;
-  width: 12px;
-  height: 12px;
-  background-size: 11px !important;
-}
-
-#ntcpconnections td.queue:empty::before {
-  content: "";
-}
-
-#thresholds {
-  margin: -1px 0 0;
-}
-
-#peer_thresholds h3, #profiles .widescroll + .tabletitle {
-  margin-top: 13px !important;
-}
-
-.tunnel_cap, .tier, #capabilities_key b, #netdbtiers td a {
-  margin: 1px 2px 0;
-  padding: 1px 2px;
-  min-width: 14px;
-  display:inline-block;
-  text-align: center !important;
-  text-shadow: 0 1px 1px var(--bg);
-  box-shadow: var(--highlight), 0 0 0 1px var(--border_soft);
-  background: var(--badge);
-}
-
-#netdbtiers td a {
-  margin-right: 6px;
-}
-
-#netdbtiers td a:hover {
-  box-shadow: var(--highlight), 0 0 0 1px var(--hover);
-}
-
-#netdbtiers td a:active {
-  box-shadow: var(--btn_shadow_active), 0 0 0 1px var(--hover);
-}
-
-#netdbtiers td a:hover b {
-  color: var(--hover);
-}
-
-.version, .tier, .reachable, .unreachable, .ff {
-  margin: 1px 3px;
-  padding: 1px 4px;
-  display: inline-block;
-  min-width: 12px;
-  text-align: center;
-}
-
-.ff, .reachable, .unreachable, .hidden, .ssutesting, .ssuintro, .tier, .tunnel_cap, #capabilities_key b {
-  box-shadow: var(--box_border_badge), var(--highlight);
-}
-
-.ff {
-  background: linear-gradient(180deg, #fff, #fdb) !important;
-}
-
-.reachable {
-  background: linear-gradient(180deg, #fff, #cfc) !important;
-}
-
-.unreachable {
-  background: linear-gradient(180deg, #fff, #fcc) !important;
-}
-
-#netdb_ourinfo .unreachable {
-  display: none;
-}
-
-.hidden {
-  color: #999 !important;
-  background: var(--btn) !important;
-}
-
-.ssutesting {
-  background: linear-gradient(180deg, #fff, #ffb) !important;
-}
-
-.ssuintro {
-  background: linear-gradient(180deg, #fff, #fbf) !important;
-}
-
-#profiles .routerid, #peers .routerid {
-  padding: 2px 3px 2px 4px;
-}
-
-#profilelist th, #profilelist td {
-  text-align: center !important;
-}
-
-#profilelist th {
-  padding: 3px 4px;
-  font-size: 90% !important;
-}
-
-#profilelist td:nth-child(2) {
-  text-align: left !important;
-}
-
-#profilelist td:nth-child(1), #profilelist td:nth-child(2), #profilelist td:nth-child(3), #profilelist td:nth-child(7) {
-  width: 1%;
-  white-space: nowrap;
-}
-
-#profilelist td:nth-child(6) span, #profilelist td:nth-child(7) span, #profilelist td:nth-child(8) span {
-  display: inline-block;
-  min-width: 60px;
-  text-align: right;
-}
-
-#profilelist .nospeed {
-  text-align: center !important;
-}
-
-#profilelist .lowlatency, #profilelist .highlatency {
-  width: 12px;
-  min-width: 0 !important;
-  color: #373 !important;
-}
-
-#profilelist .highlatency {
-  color: #900 !important;
-}
-
-#profilelist td:nth-child(8) span, #profilelist td:nth-child(9) span {
-  min-width: 40px;
-  display: inline-block;
-  text-align: right;
-}
-
-#profilelist td:nth-child(9) span {
-  min-width: 30px;
-}
-
-#profilelist td:last-child a::after, a[href^="/configpeer?"]::after, a[href^="/viewprofile"]::after, .profiledump::after,
-.familysearch img {
-  margin: 1px 2px;
-  padding: 2px;
-  width: 14px;
-  height: 14px;
-  display: inline-block;
-  vertical-align: middle;
-  border: 1px solid #bbd;
-  border-radius: 2px;
-  background: var(--bg);
-}
-
-a.viewfullentry, #profilelist td:last-child a, a[href^="/viewprofile"], .profiledump::after {
-  font-size: 0 !important;
-}
-
-#profilelist td:last-child a::after, a[href^="/viewprofile"]::after, a[href^="/configpeer?"]::after, .profiledump::after {
-  margin: 0 2px;
-  height: 14px;
-  width: 14px;
-  display: inline-block;
-  vertical-align: middle;
-  background: var(--bg) var(--eye) no-repeat center center / 12px;
-  content: "";
-}
-
-#profilelist td:last-child .viewprofile:hover::after, .viewprofile:hover::after, .profiledump:hover::after {
-  background: var(--bg) var(--eye_hover) no-repeat center center / 12px;
-}
-
-#profilelist td:last-child a[href^="/configpeer"]::after, a[href^="/configpeer?"]::after {
-  background: var(--bg) var(--edit) no-repeat center center / 12px;
-}
-
-#profilelist td:last-child a[href^="/configpeer"]:hover::after, a[href^="/configpeer?"]:hover::after {
-  background: var(--bg) var(--edit_hover) no-repeat center center / 12px;
-}
-
-#profilelist td:last-child a:active::after, a[href^="/viewprofile"]:active::after,
-a[href^="/configpeer?"]:active::after, .profiledump:active::after {
-  box-shadow: var(--btn_shadow_active);
-}
-
-a.viewfullentry:hover {
-  filter: drop-shadow(0 0 1px var(--hover));
-}
-
-#profilelist td:last-child img, a[href^="/configpeer?"] img,
-a[href^="/viewprofile"] img, .profiledump img {
-  display: none !important;
-}
-
-#view_profile h3 {
-  position: relative;
-  z-index: 10;
-}
-
-#view_profile h3 a::after {
-  margin-top: -1.5px;
-}
-
-#view_profile .configpeer {
-  margin-right: -5px;
-}
-
-#profile_defs table tr:first-child {
-  border-top: none;
-}
-
-#floodfills th, #floodfills td {
-  text-align: center !important;
-}
-
-#floodfills td:nth-child(2) {
-  white-space: nowrap;
-}
-
-#floodfills .percentBarOuter, #floodfills .percentBarText {
-  margin: 0 2px;
-  width: 50px;
-  display: inline-block;
-}
-
-#floodfills .percentBarOuter {
-  text-align: left;
-  border: 1px solid var(--border);
-  box-shadow: var(--highlight);
-  background: var(--bg2);
-  opacity: .9;
-}
-
-#floodfills .percentBarInner {
-  display: inline-block;
-  width: inherit;
-  background: linear-gradient(180deg, rgba(255,255,255,.1) 50%, rgba(0,0,0,.1) 50%), linear-gradient(90deg, #900 25px, #a00 40px, #b00 50px);
-}
-
-#floodfills .percentBarInner[style="width:0%"] {
-  width: 100% !important;
-  background: linear-gradient(180deg, rgba(255,255,255,.1) 50%, rgba(0,0,0,.1) 50%), linear-gradient(90deg, #090, #0b0);
-}
-
-#floodfills .percentBarText {
-  color: var(--bg);
-  text-shadow: 0 1px 1px #000;
-}
-
-#floodfills td:empty {
-  text-align: center;
-}
-
-#floodfills td:empty::before, #ntcpconnections td:empty::before, #udpconnections td:empty::before, #profilelist td:empty::before {
-  width: 100%;
-  display: inline-block;
-  text-align: center;
-  opacity: .8;
-  content: "‒";
-}
-
-#floodfills td:nth-child(3) span {
-  min-width: 20px;
-  display: inline-block;
-  text-align: right;
-}
-
-/* end /profiles */
 
 /* /netdb */
 
