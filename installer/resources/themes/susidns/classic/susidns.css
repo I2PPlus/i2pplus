@@ -751,6 +751,7 @@ textarea[name="config"], textarea[name="content"] {
 
 .headline h3 {
   padding: 10px 5px 10px 36px;
+  line-height: 1.2;
   word-spacing: .1em;
   letter-spacing: .08em;
   text-transform: uppercase;
@@ -1261,6 +1262,7 @@ p.messages {
   }
   .headline h3 {
     padding-left: 36px;
+    line-height: 1.4;
     font-size: 10pt;
     background-size: 20px, 100%;
   }
