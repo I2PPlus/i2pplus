@@ -1,6 +1,9 @@
 /* I2P Dark theme globals */
 /* Author: (c) dr|z3d 2022 */
 
+@import url(/themes/fonts/DroidSans.css);
+@import url(chromescroll.css);
+
 :root {
   --a: #494;
   --active: #f90;
@@ -42,6 +45,7 @@ html {
 }
 
 body {
+  font-family: var(--bodyfont);
   color: var(--ink);
 }
 

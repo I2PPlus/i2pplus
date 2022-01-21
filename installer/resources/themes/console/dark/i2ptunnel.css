@@ -1,9 +1,7 @@
 /* I2P TunnelManager theme: "Camo". Aka "dark". As in ops. */
 /* Author: dr|z3d */
 
-@import url(/themes/fonts/DroidSans.css);
 @import url(optbox.css);
-@import url(chromescroll.css);
 
 :root {
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
@@ -21,14 +19,12 @@
 
 html {
   min-height: 100%;
-  scrollbar-color: rgba(16,72,16,.8) #000800;
 }
 
 body {
   margin: 0 8px 12px;
   padding: 0;
   text-align: center;
-  font-family: var(--bodyfont);
   font-size: 9pt;
   color: #ee9;
   background: #000;
@@ -44,11 +40,6 @@ body.iframed {
 }
 
 ::selection {
-  color: black;
-  background: #ff0 !important;
-}
-
-::-moz-selection {
   color: black;
   background: #ff0 !important;
 }
@@ -79,24 +70,6 @@ h2, h3, th, .buttons, .newTunnel, .control, label, .infohelp, .infowarn, .nowrap
 
 div {
   box-sizing: border-box;
-}
-
-a {
-  text-decoration: none;
-  font-weight: 700;
-}
-
-a:link, a:visited {
-  color: #494;
-  outline: none;
-}
-
-a:hover, a:focus {
-  color: #f60;
-}
-
-a:active {
-  color: #f90;
 }
 
 .accesskey {
