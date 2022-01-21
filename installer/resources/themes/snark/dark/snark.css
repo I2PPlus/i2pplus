@@ -351,7 +351,7 @@ table {
   margin: 0 0 10px;
   padding: 0;
   border: none;
-  border-spacing: 0;
+  border-collapse: collapse;
 }
 
 thead, thead:hover tr, tfoot {
