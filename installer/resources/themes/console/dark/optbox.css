@@ -132,50 +132,6 @@ textarea {
   resize: none;
 }
 
-table {
-  margin: 1px 0;
-  padding: 1px;
-  width: 100%;
-  font-size: 9pt;
-  border: var(--border);
-  border-collapse: collapse;
-}
-
-table hr {
-  margin: 0 0;
-  padding: 0 0;
-  height: 1px;
-  display: none;
-  color: var(--a);
-  border: none;
-  background: #252;
-}
-
-th {
-  padding: 7px 2px;
-  line-height: 1.1;
-  text-align: center;
-  font-size: 9pt;
-  border-top: var(--border);
-  border-bottom: var(--border) !important;
-  background: linear-gradient(180deg,#002000, #000 75%);
-}
-
-tr {
-  vertical-align: middle;
-  contain: layout;
-}
-
-tr:nth-child(even), tr:nth-child(odd) {
-  background: linear-gradient(180deg,rgba(0,24,0,.5), rgba(0,8,0,.5));
-}
-
-td {
-  padding: 4px 6px;
-  vertical-align: middle;
-  border-top: 1px inset #131;
-}
-
 input[type=file] {
   margin: 5px 8px;
   padding: 0 !important;
