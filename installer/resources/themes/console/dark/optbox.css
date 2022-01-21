@@ -154,7 +154,7 @@ input, select, button {
   font-family: var(--bodyfont);
 }
 
-input[type=submit], input[type=reset] {
+input[type=submit], input[type=reset], a.control {
   margin: 5px;
   padding: 5px 12px;
   min-width: 110px;
@@ -162,6 +162,7 @@ input[type=submit], input[type=reset] {
   color: var(--a);
   border: 1px solid #252;
   border-radius: 2px;
+  box-shadow: var(--btn_shadow);
   background: #000;
 }
 
@@ -232,6 +233,61 @@ input[type=file]:active::file-selector-button {
   border: 1px solid var(--hover);
   box-shadow: var(--btn_shadow_active);
   background: var(--hover);
+}
+
+select {
+  margin: 5px 10px;
+  padding: 7px 24px 7px 7px;
+  min-width: 110px;
+  color: var(--a);
+  font-size: 8pt;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  outline: none;
+  box-shadow: var(--btn_shadow);
+  border: 1px solid #000;
+  border-radius: 2px;
+  background: var(--dropdown) no-repeat right 10px center / 10px, var(--btn) !important;
+  cursor: pointer;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+select:hover, select:focus {
+  color: var(--hover);
+  border: 1px solid #f60;
+}
+
+select:hover, select:focus, select:active {
+  color: var(--hover);
+  box-shadow: var(--btn_shadow_hover);
+  background: #000 var(--dropdown_hover) no-repeat right 10px center / 10px !important;
+}
+
+select[disabled], select[disabled]:hover {
+  color: #494 !important;
+  border: none;
+  box-shadow: var(--btn_shadow);
+  background: var(--dropdown) no-repeat right 10px center, var(--btn) / 10px !important;
+  opacity: .7;
+  cursor: not-allowed;
+}
+
+select option {
+  font-weight: 400;
+  font-size: 9.5pt;
+  color: var(--hover);
+  box-shadow: inset 0 0 20px 20px #000;
+  background: #000;
+}
+
+select option:hover, select option:checked {
+  box-shadow: inset 0 0 20px 20px #f60;
+}
+
+select option:hover, select option:checked {
+  background: #000;
 }
 
 .optbox {

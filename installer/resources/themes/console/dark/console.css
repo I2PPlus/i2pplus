@@ -2284,51 +2284,12 @@ fieldset {
 
 select {
   margin: 5px 10px;
-  padding: 6px 24px 6px 6px !important;
   min-width: 110px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  color: var(--a);
   font-size: 9.5pt;
-  border-radius: 2px;
-  background: var(--dropdown) no-repeat right 10px center, var(--btn) !important;
-  background-size: 10px, 100% !important;
-  -moz-appearance: none;
-  -webkit-appearance: none;
-  appearance: none;
-  cursor: pointer;
 }
 
 .search select {
   margin-bottom: 4px;
-}
-
-@supports not (-moz-appearance: none) {
-select {
-  padding: 7px 24px 7px 9px !important;
-  }
-}
-
-select option {
-  font-size: 9.5pt !important;
-  box-shadow: inset 0 0 20px 20px #000;
-  color: var(--hover) !important;
-  background: #000 !important;
-}
-
-select option:hover, select option:checked {
-  background: #000 !important;
-}
-
-select:focus, select:hover {
-  color: var(--hover);
-  border: 1px solid var(--hover);
-  box-shadow: var(--btn_shadow_hover);
-}
-
-select:hover, select:focus, select:active {
-  background: #000 var(--dropdown_hover) no-repeat right 10px center !important;
-  background-size: 10px, 100% !important;
 }
 
 #config_tunnels select {
