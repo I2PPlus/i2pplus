@@ -1,3 +1,8 @@
+/* I2P Midnight theme globals */
+/* Author: (c) dr|z3d 2022 */
+
+@import url(/themes/fonts/DroidSans.css);
+
 :root {
   --a: #5c5c8a;
   --active: #f90;
