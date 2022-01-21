@@ -1337,6 +1337,7 @@ tr.configerror {
 #toggleInfo {
   margin: 0 -2px 0 0 !important;
   padding: 2px 5px;
+  min-width: 0;
   vertical-align: middle;
   background: url(images/expand.svg) no-repeat center center;
   background-size: 8px;
@@ -1627,6 +1628,6 @@ body#tunnelEditPage:not(.iframed) h3 {
     margin: 3px -3px 3px 0 !important;
   }
   #toggleInfo {
-    margin: -1px -2px 0 0 !important;
+    margin: -1px -3px 0 0 !important;
   }
 }
