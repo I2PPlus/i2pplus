@@ -90,6 +90,17 @@ body {
   display: none !important;
 }
 
+input::placeholder {
+  font-weight: 700;
+  font-style: italic;
+  color: var(--ink);
+  opacity: .5;
+}
+
+input:focus::placeholder {
+  opacity: 0;
+}
+
 a:link, a:visited {
   word-wrap: break-word;
   text-decoration: none;
@@ -112,7 +123,6 @@ img {
   font-size: 0;
   border: none;
 }
-
 
 tt, textarea, code {
   font-family: var(--monospaced);

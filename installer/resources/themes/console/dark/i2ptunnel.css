@@ -825,24 +825,8 @@ table {
   display: none;
 }
 
-input::-moz-placeholder {
-  font-weight: 700;
+input[required]::placeholder, input[placeholder="required"]::placeholder {
   color: #f00;
-  opacity: 1;
-}
-
-::-webkit-input-placeholder {
-  font-weight: 700;
-  color: #f00;
-  opacity: 1;
-}
-
-input:focus::-moz-placeholder {
-  opacity: 0;
-}
-
-:focus::-webkit-input-placeholder {
-  opacity: 0;
 }
 
 input.tunnelName, input.tunnelDescription, #userAgents {
