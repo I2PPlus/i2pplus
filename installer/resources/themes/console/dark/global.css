@@ -334,6 +334,8 @@ input[type=text], input[type=password] {
 
 input[type=text], input[type=password], textarea {
   color: #bb7;
+  border: var(--border_hard);
+  background: #000;
 }
 
 input[type=text]:disabled, input[type=text]:disabled:active,
@@ -352,8 +354,6 @@ textarea {
   resize: none;
   text-align: left;
   font: 8.5pt var(--monospaced);
-  color: #bb7;
-  border: var(--border_hard);
   border-radius: 2px;
   box-shadow: var(--highlight);
   background: linear-gradient(180deg,#000, #010);
@@ -365,7 +365,7 @@ textarea[disabled] {
 
 input[type=text]:focus, input[type=password]:focus, textarea:focus {
   color: var(--ink) !important;
-  border: 1px solid #373 !important;
+  border: 1px solid #373;
   box-shadow: var(--btn_shadow_active);
   background: var(--input_txt);
   outline: none;
