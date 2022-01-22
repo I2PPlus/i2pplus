@@ -1,7 +1,7 @@
 /* I2P TunnelManager theme: "Camo". Aka "dark". As in ops. */
 /* Author: dr|z3d */
 
-@import url(optbox.css);
+@import url(global.css);
 
 html {
   min-height: 100%;

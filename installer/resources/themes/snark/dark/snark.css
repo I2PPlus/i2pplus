@@ -1,7 +1,7 @@
 /* I2PSnark theme "Camo" aka Dark */
 /* Author: dr|z3d */
 
-@import url(/themes/console/dark/optbox.css);
+@import url(/themes/console/dark/global.css);
 @import url(sliders.css);
 
 :root {
@@ -1791,10 +1791,6 @@ textarea {
   padding: 1px 4px 0;
   font-size: 8pt;
   font-weight: 700;
-  color: #bb7;
-  border: var(--border);
-  border-radius: 2px;
-  background: #000;
 }
 
 textarea:focus {
@@ -4088,6 +4084,7 @@ td.torrentAction input[type=submit] {
 }
 
 #snarkTorrentEdit textarea {
+  margin: 0;
   width: 100%;
   height: 80px;
   min-height: 80px;
