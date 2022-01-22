@@ -24,7 +24,6 @@ button, input, select, #debug .skm_key td:first-child b {
 
 button, input, input[type=text], input[type=password], select {
   font-size: 9pt;
-  font-weight: 700;
 }
 
 #config_ui :-moz-broken {
@@ -2201,23 +2200,6 @@ button:active {
   box-shadow: var(--btn_shadow_active) !important;
 }
 
-input[type=text], input[type=password] {
-  margin: 5px 10px;
-  padding: 6px 8px;
-  text-decoration: none;
-  color: var(--ink);
-  border: 1px solid #151 !important;
-  border-radius: 1px;
-  box-shadow: var(--outline);
-  background: #000800;
-  cursor: text;
-  filter: none;
-}
-
-input[type=text], input[type=password], textarea {
-  color: #bb7 !important;
-}
-
 input[type=image] {
   min-width: 0;
 }
@@ -2230,17 +2212,6 @@ input[name="refreshInterval"] {
   margin-right: 3px;
   width: 100px;
   text-align: right;
-}
-
-input:disabled, input[readonly] {
-  cursor: default;
-  pointer-events: none;
-}
-
-input[type=text]:disabled, input[type=text]:disabled:active, input[readonly="readonly"] {
-  color: #161 !important;
-  border: 1px solid #141 !important;
-  background: #000 !important;
 }
 
 input[class="check"] { /* nudge "check for updates" button into alignment on /configupdate */
@@ -2287,16 +2258,6 @@ textarea[cols="70"], textarea[name="levels"] {
 
 #advancedsettings:focus {
   border: none !important;
-}
-
-input[type=text]:focus, input[type=password]:focus {
-  border: 1px solid #373 !important;
-}
-
-input[readonly]:focus {
-  font-weight: 400;
-  color: #161 !important;
-  filter: none !important;
 }
 
 #consolepass input[name="name"], #externali2cp input[name="user"] {

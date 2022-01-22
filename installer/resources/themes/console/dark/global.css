@@ -91,6 +91,7 @@ body {
 }
 
 input::placeholder {
+  font-family: var(--bodyfont);
   font-weight: 700;
   font-style: italic;
   color: var(--ink);
@@ -164,6 +165,10 @@ label {
 
 label[disabled] {
   opacity: .5;
+  pointer-events: none;
+}
+
+input:disabled {
   pointer-events: none;
 }
 
@@ -243,7 +248,8 @@ input[type=file]::file-selector-button {
   background: #000;
 }
 
-input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
+input[type=file]:hover::file-selector-button,
+input[type=file]:focus::file-selector-button {
   color: var(--hover);
   border: 1px solid var(--hover);
   box-shadow: var(--btn_shadow_hover);
@@ -314,6 +320,29 @@ select::-moz-focus-inner {
   border: none !important;
 }
 
+input[type=text], input[type=password] {
+  margin: 5px 10px;
+  padding: 6px 8px;
+  text-decoration: none;
+  color: var(--ink);
+  border: 1px solid #151;
+  border-radius: 1px;
+  box-shadow: var(--outline);
+  cursor: text;
+  filter: none;
+}
+
+input[type=text], input[type=password], textarea {
+  color: #bb7;
+}
+
+input[type=text]:disabled, input[type=text]:disabled:active,
+input[readonly="readonly"] {
+  color: #161 !important;
+  border: 1px solid #141 !important;
+  background: #000 !important;
+}
+
 textarea {
   margin: 10px;
   padding: 5px;
@@ -342,6 +371,12 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
   outline: none;
   filter: drop-shadow(0 0 1px var(--hover));
   transition: filter ease .3s;
+}
+
+input[readonly]:focus {
+  font-weight: 400;
+  color: #161 !important;
+  filter: none !important;
 }
 
 .optbox {
