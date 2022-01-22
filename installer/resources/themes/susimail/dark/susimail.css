@@ -2133,7 +2133,6 @@ td.mailListFlagged, td.mailListSender, td.mailListAttachment, td.mailListSubject
 }
 
 #viewmail .folders select {
-  padding: 5px 24px 5px 10px !important;
   margin: 1px 4px 2px 0;
 }
 
