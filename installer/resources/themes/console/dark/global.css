@@ -181,10 +181,11 @@ input[type=submit], input[type=reset], button, .control, select {
   line-height: 1.2;
 }
 
-input[type=submit], input[type=reset], button, .control {
+input[type=submit], input[type=reset], button, .control, .fakebutton {
   margin: 5px;
   padding: 7px 12px;
   min-width: 110px;
+  text-align: center;
   text-decoration: none;
   color: var(--a);
   border: 1px solid #000;
@@ -195,8 +196,8 @@ input[type=submit], input[type=reset], button, .control {
 
 input[type=submit]:hover, input[type=reset]:hover,
 input[type=submit]:focus, input[type=reset]:focus,
-button:hover, button:focus,
-.control:hover, .control:focus {
+button:hover, button:focus, .control:hover, .control:focus,
+.fakebutton:hover, .fakebutton:focus {
   color: var(--hover) !important;
   border: 1px solid var(--hover);
   box-shadow: var(--btn_shadow_hover);
@@ -205,7 +206,7 @@ button:hover, button:focus,
 }
 
 input[type=submit]:active, input[type=reset]:active,
-button:active, .control:active {
+button:active, .control:active, .fakebutton:active {
   color: var(--ink) !important;
   text-shadow: var(--textshadow);
   border: 1px solid var(--hover);
@@ -320,22 +321,22 @@ select::-moz-focus-inner {
   border: none !important;
 }
 
+input[type=text], input[type=password], textarea {
+  color: #bb7;
+  border: var(--border_hard);
+  background: #000;
+}
+
 input[type=text], input[type=password] {
   margin: 5px 10px;
   padding: 6px 8px;
   text-decoration: none;
-  color: var(--ink);
+  font-weight: 700;
   border: 1px solid #151;
   border-radius: 1px;
   box-shadow: var(--outline);
   cursor: text;
   filter: none;
-}
-
-input[type=text], input[type=password], textarea {
-  color: #bb7;
-  border: var(--border_hard);
-  background: #000;
 }
 
 input[type=text]:disabled, input[type=text]:disabled:active,

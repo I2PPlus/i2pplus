@@ -560,10 +560,7 @@ input[type="file"] {
 input[type=text], input[type=password],
 textarea, textarea[readonly="readonly"]:focus  {
   padding: 6px 8px;
-  color: #bb7;
-  font-weight: 700;
   box-shadow: none;
-  background: #000;
   filter: none;
 }
 
@@ -605,7 +602,7 @@ input, select, button {
 
 select {
   min-width: 120px;
-  font-size: 8.5pt !important;
+  font-size: 8.5pt;
 }
 
 .buttons, .newTunnel {
@@ -825,7 +822,8 @@ table {
   display: none;
 }
 
-input[required]::placeholder, input[placeholder="required"]::placeholder {
+input[required]::placeholder,
+input[placeholder="required"]::placeholder {
   color: #f00;
 }
 
@@ -981,14 +979,8 @@ input.tunnelName, input.tunnelDescription, #userAgents {
   line-height: 140%;
 }
 
-#wizardPanel input::-moz-placeholder {
+#wizardPanel input::placeholder {
   font-weight: 400;
-  color: #bb7;
-}
-
-#wizardPanel ::-webkit-input-placeholder {
-  font-weight: 400;
-  color: #bb7;
 }
 
 #wizardPanel .options {
@@ -1022,7 +1014,7 @@ input.tunnelName, input.tunnelDescription, #userAgents {
   border-top: 1px solid #1c3f1b;
 }
 
-input[type=checkbox], input[type=radio] {
+.optbox {
   margin: 5px 3px 5px 5px;
 }
 

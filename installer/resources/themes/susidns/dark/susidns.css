@@ -25,7 +25,7 @@ body {
 
 body.iframed {
   margin: 0;
-  background: transparent !important;
+  background: none !important;
 }
 
 ::selection {
@@ -879,25 +879,12 @@ div#add, div#import {
   background: none;
 }
 
-input::placeholder {
-  font-style: italic;
-}
-
-input:focus::placeholder {
-  opacity: 0;
-}
-
 .fakebutton, .fakebutton:visited {
   color: #494;
 }
 
 .fakebutton:hover, .fakebutton:focus {
   color: #f60;
-}
-
-input[type=submit]::-moz-focus-inner, input[type=reset]::-moz-focus-inner {
-  border: none;
-  outline: none;
 }
 
 input {
@@ -912,92 +899,28 @@ input {
   background: none;
 }
 
-input[type=file] {
-  cursor: pointer;
-}
-
 input[type=submit], input[type=reset], .fakebutton {
   margin: 5px 2px;
   padding: 7px 12px !important;
   min-width: 92px !important;
-  text-align: center;
-  font-weight: 700;
-  color: #494;
-  border-radius: 2px;
-  border: 1px solid #000;
-  border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
-  background: #000;
-  background: linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
-  cursor: pointer;
-}
-
-input[type=file]::file-selector-button {
-  margin: 5px 10px 2px -5px;
-  padding: 6px 12px !important;
-  min-width: 92px !important;
-  text-align: center;
-  font-size: 90%;
-  font-weight: 700;
-  color: #494;
-  border-radius: 2px;
-  border: 1px solid #000;
-  border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
-  background: #000;
-  background: linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
-  cursor: pointer;
-}
-
-input[type=submit]:hover, input[type=reset]:hover,
-input[type=submit]:focus, input[type=reset]:focus,
-.fakebutton:hover, #fakebutton:focus {
-  color: #f60;
-  border: 1px solid #f60;
-  box-shadow: var(--highlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000 !important;
-  background: #000;
-}
-
-input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
-  color: #f60;
-  border: 1px solid #f60;
-  box-shadow: var(--highlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000 !important;
-  background: #000;
-}
-
-input[type=submit]:active, input[type=reset]:active, .fakebutton:active {
-  color: var(--ink) !important;
-  text-shadow: 0 1px 1px #000;
-  border: 1px solid #f60;
-  box-shadow: var(--highlight), inset 3px 3px 3px 2px #310 !important;
-  background: #f60 !important;
-  filter: none;
-}
-
-input[type=file]:active::file-selector-button {
-  color: var(--ink) !important;
-  text-shadow: 0 1px 1px #000;
-  border: 1px solid #f60;
-  box-shadow: var(--highlight), inset 3px 3px 3px 2px #310 !important;
-  background: #f60 !important;
-  filter: none;
-}
-
-input.update {
-  margin-left: 5px;
-}
-
-.fakebutton {
-  margin-right: 3px;
 }
 
 input[type=submit]:last-of-type, input[type=reset]:last-of-type {
   margin-right: 5px;
 }
 
-input[type=text], textarea {
-  color: #bb7;
-  background: #000;
+.fakebutton {
+  margin-right: 3px;
+}
+
+input[type=file]::file-selector-button {
+  margin: 5px 10px 2px 2px;
+  padding: 6px 12px !important;
+  min-width: 92px !important;
+}
+
+input.update {
+  margin-left: 5px;
 }
 
 input[type=text] {
@@ -1034,8 +957,6 @@ textarea[cols="70"] {
 }
 
 textarea:focus {
-  box-shadow: inset 0 0 1px #880;
-  background: #010;
   filter: none;
 }
 

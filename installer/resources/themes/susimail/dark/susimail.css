@@ -341,7 +341,6 @@ label:hover {
 
 input[type=text], input[type=password] {
   font-size: 9pt;
-  border: 1px solid #184818;
   cursor: text;
 }
 
@@ -728,7 +727,6 @@ input[type=submit]:active, input[type=reset]:active, #settings:active, .fakebutt
 
 input[disabled], input[disabled]:hover, input[disabled]:focus {
   border: 1px solid transparent;
-  cursor: default;
   opacity: .4;
   pointer-events: none;
 }
