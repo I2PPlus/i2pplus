@@ -163,7 +163,7 @@ input, select, button {
 }
 
 input[type=submit], input[type=reset], button, .control, select {
-  line-height: 1.3;
+  line-height: 1.2;
 }
 
 input[type=submit], input[type=reset], button, .control {
