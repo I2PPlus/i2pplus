@@ -152,6 +152,7 @@ label[disabled] {
 
 input, select, button {
   font-family: var(--bodyfont);
+  font-weight: 700;
 }
 
 input[type=submit], input[type=reset], button, a.control {
@@ -239,7 +240,7 @@ input[type=file]:active::file-selector-button {
 
 select {
   margin: 5px 10px;
-  padding: 7px 24px 7px 7px;
+  padding: 7px 24px 7px 12px;
   min-width: 110px;
   color: var(--a);
   font-size: 8pt;
@@ -290,6 +291,15 @@ select option:hover, select option:checked {
 
 select option:hover, select option:checked {
   background: #000;
+}
+
+select:-moz-focusring {
+  outline: 1px solid transparent;
+}
+
+select::-moz-focus-inner {
+  outline: none !important;
+  border: none !important;
 }
 
 textarea {

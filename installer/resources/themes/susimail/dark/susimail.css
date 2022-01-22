@@ -28,19 +28,7 @@
   --txt_shadow: 0 1px 1px #000;
 }
 
-html {
-  min-height: 100%;
-  background: repeating-linear-gradient(180deg,rgba(0,0,0,.9) 2px, rgba(0,16,0,.9) 4px), var(--camo) #010;
-  background-size: 100%, 2048px;
-  scrollbar-color: rgba(8,48,8,.8) #000800;
-}
-
-html:hover {
-  scrollbar-color: rgba(16,72,16,.8) #000800;
-  transition: ease scrollbar-color .1s;
-}
-
-body, input[type=submit], input[type=reset], input[type=text], input[type=password], select, #settings {
+body, input, select, #settings {
   font-family: var(--bodyfont);
 }
 
@@ -52,7 +40,6 @@ body {
   margin: 5px;
   min-width: 920px;
   font-size: 9pt;
-  color: var(--ink);
 }
 
 body.iframed {
@@ -73,10 +60,6 @@ body.iframed {
   background-size: 0 !important;
 }
 
-* {
-  outline: none;
-}
-
 textarea {
   scrollbar-color: rgba(16,48,16,.4) rgba(0,0,0,0);
   transition: ease scrollbar-color .5s;
@@ -87,7 +70,8 @@ textarea:hover {
   transition: ease scrollbar-color .2s;
 }
 
-.pagenav, .sort, .topbuttons, h3, .footer, .bottombuttons, .topbuttons, th img, h3, #dologin, th, #loading  {
+.pagenav, .sort, .topbuttons, h3, .footer, .bottombuttons,
+.topbuttons, th img, h3, #dologin, th, #loading  {
   user-select: none;
 }
 
@@ -115,13 +99,6 @@ p {
   margin-right: 15px;
   font-size: 8.5pt;
   color: var(--ink);
-}
-
-p.hl {
-  line-height: 18pt;
-  font-size: 12pt;
-  font-weight: 700;
-  letter-spacing: 2pt;
 }
 
 p.text {
@@ -228,13 +205,6 @@ p.mailbody {
   font-size: 9pt;
 }
 
-a {
-  color: #494;
-  text-decoration:none;
-  font-weight: 700;
-  outline: none;
-}
-
 .linkspam {
   color: #300;
 }
@@ -249,7 +219,7 @@ a {
 
 a:hover, a:focus, tr:hover td[onclick] a {
   text-decoration: none;
-  color: #f60 !important;
+  color: var(--hover) !important;
 }
 
 a:visited {
@@ -257,7 +227,7 @@ a:visited {
 }
 
 a:active, tr:hover td[onclick]:active a {
-  color: #f30 !important;
+  color: var(--active) !important;
 }
 
 .noborder {
@@ -293,10 +263,6 @@ pre {
   border: none;
   border-radius: 0;
   background-color: rgba(0,16,0,.3);
-}
-
-table {
-  width: 100%;
 }
 
 th {
@@ -385,17 +351,9 @@ form {
 
 /* buttons and inputs */
 
-input, select, button {
-  font-weight: 700 !important;
-}
-
 button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset]::-moz-focus-inner  {
   outline: none;
   border: none;
-}
-
-input, label {
-  cursor: pointer;
 }
 
 label:hover {
@@ -411,18 +369,19 @@ input[type=text], input[type=password] {
 input[type=submit], input[type=reset], #settings, .topbuttons .fakebutton {
   margin: 3px;
   padding: 7px 6px;
-  color: #494;
+  min-width: 0;
+  text-decoration: none;
   font-size: 8.5pt;
   font-weight: 700;
-  text-decoration: none;
+  color: #494;
   text-shadow: var(--txt_shadow);
-  opacity: 1;
-  cursor: pointer;
   box-shadow: var(--btn_shadow);
   border: 1px solid #000;
   border-radius: 2px;
   background: var(--btn);
   background-size: 12px, 100%;
+  opacity: 1;
+  cursor: pointer;
 }
 
 input.cancel, #nukemail input.clearselection {
@@ -444,7 +403,6 @@ input.clearselection {
 }
 
 input.clearselection:hover {
-  background: #010 url(/themes/susimail/images/none.png) no-repeat 8px center;
   background: url(/themes/susimail/images/none.png) no-repeat 8px center, var(--btn_hover);
 }
 
@@ -838,10 +796,6 @@ select {
   appearance: none;
 }
 
-select:-moz-focusring {
-  outline: 1px solid transparent;
-}
-
 select option {
   background: #fff;
 }
@@ -850,11 +804,6 @@ select:hover, select:active, select:focus {
   cursor: pointer;
   color: #f60;
   background: var(--dropdown_hover) no-repeat right 10px center / 10px, var(--btn_hover) !important;
-}
-
-select::-moz-focus-inner {
-  outline: none !important;
-  border: none !important;
 }
 
 input:active, .fakebutton:active {
@@ -2243,14 +2192,28 @@ td.mailListFlagged, td.mailListSender, td.mailListAttachment, td.mailListSubject
   position: absolute;
 }
 
+
+#viewmail .folders, #viewmail .folders select, #viewmail .moveto {
+  vertical-align: middle;
+}
+
 #viewmail .folders {
-  top: -1px;
+  padding: 0 0 0 4px;
+  top: 0;
   right: -1px;
-  padding: 4px 6px 4px 4px;
   border: var(--border);
-  box-shadow: var(--highlight);
   border-radius: 0 0 0 3px;
+  box-shadow: var(--highlight);
   background: var(--th);
+}
+
+#viewmail .folders select {
+  padding: 5px 24px 5px 10px !important;
+  margin: 1px 4px 2px 0;
+}
+
+#viewmail .moveto {
+  margin-left: 0;
 }
 
 #folderName {
@@ -2372,6 +2335,8 @@ tr.mailbody td {
 @media screen and (max-width: 1500px) {
   .debugHeader pre {font-size: 8.5pt}
   body:not(.iframed) #mailbox tr:nth-child(2) {top: 47px}
+  #viewmail .folders {top: -1px}
+  #viewmail .folders select {margin-top: 2px}
 }
 
 @media screen and (max-width: 1300px) {
