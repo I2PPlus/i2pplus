@@ -3,17 +3,11 @@
 
 @import url(global.css);
 
-html {
-  min-height: 100%;
-}
-
 body {
   margin: 0 8px 12px;
   padding: 0;
   text-align: center;
   font-size: 9pt;
-  color: #ee9;
-  background: #000;
   background: repeating-linear-gradient(180deg,rgba(0,0,0,.9) 2px, rgba(0,8,0,.5) 4px), url(images/camotile2.png) top left scroll #010;
   background-size: 100% 4px, 175px;
 }

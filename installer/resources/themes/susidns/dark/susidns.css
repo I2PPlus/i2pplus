@@ -5,34 +5,6 @@
 @import url(../images/images.css);
 @import url(images/images.css);
 
-:root {
-  --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
-  --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
-  --ink: #ee9;
-  --highlight: inset 0 0 0 1px #000;
-  --nav: linear-gradient(180deg,#002900, #000400);
-  --border: 1px solid #252;
-  --border_soft: 1px solid #131;
-  --border_inner: 1px solid #242;
-  --btn_shadow_active: var(--highlight), inset 3px 3px 3px 2px rgba(0,0,0,.8);
-  --th: linear-gradient(180deg,#010,#000);
-  --help: repeating-linear-gradient(90deg,#000 2px,#010 4px);
-  --txt_focus: linear-gradient(180deg,#001800,#001000);
-}
-
-body, html {
-  min-height: 100%;
-}
-
-html {
-  scrollbar-color: rgba(8,48,8,.8) #000800;
-}
-
-html:hover {
-  scrollbar-color: rgba(16,72,16,.8) #000800;
-  transition: ease scrollbar-color .1s;
-}
-
 body, input, input[type=submit], input[type=reset], .fakebutton, #hostNotes td:last-child, #hostNotes textarea {
   font-family: var(--bodyfont);
 }
@@ -46,7 +18,6 @@ body {
   padding-top: 5px;
   min-width: 650px;
   line-height: 1.2;
-  color: var(--ink);
   background: repeating-linear-gradient(90deg, rgba(0,16,0,.5) 2px, rgba(0,25,0,.5) 4px),
     repeating-linear-gradient(180deg,#000 2px, #020 4px), #010;
   background-size: 4px 100%, 100% 4px;
@@ -108,7 +79,7 @@ body.iframed {
   top: -1px;
   z-index: 999;
   text-align: center;
-  border: var(--border);
+  border: var(--border_hard);
   border-radius: 0 1px 2px 2px;
   box-shadow: var(--highlight), 0 2px 2px 2px rgba(0,0,0,.4);
   background: repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,48,0,.3) 4px),
@@ -121,7 +92,7 @@ body.iframed {
   margin: -6px -15px 27px;
   padding: 5px 0;
   position: static;
-  border: var(--border);
+  border: var(--border_hard);
   border-right: none;
   border-left: none;
   border-radius: 0;
@@ -147,7 +118,7 @@ body.iframed {
   display: inline-block;
   color: #494 !important;
   text-shadow: 0 1px 1px #000;
-  border: var(--border);
+  border: var(--border_hard);
   box-shadow: var(--highlight), inset 0 0 1px 1px #040;
 }
 
@@ -227,7 +198,7 @@ hr {
 #filter {
   margin-top: -1px;
   padding: 15px 5px;
-  border: var(--border_inner);
+  border: var(--border);
   text-align: center;
   background: #001000;
 }
@@ -242,7 +213,7 @@ hr {
   margin-top: -25px;
   margin-bottom: -14px;
   padding: 0 10px;
-  border: var(--border_inner);
+  border: var(--border);
 }
 
 #booksearch {
@@ -312,7 +283,7 @@ h3 {
   text-transform: uppercase;
   text-shadow: 0 0 2px #001100;
   color: var(--ink);
-  border: var(--border_inner);
+  border: var(--border);
   box-shadow: var(--highlight);
   -webkit-text-stroke: 1px rgba(237, 237, 146,.3);
 }
@@ -349,7 +320,7 @@ h3 {
   padding-left: 34px;
   letter-spacing: .12em;
   word-spacing: .1em;
-  border: var(--border_inner);
+  border: var(--border);
   background: var(--question) no-repeat 8px center,
     linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%),
     repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px),
@@ -388,7 +359,7 @@ div#messages {
   z-index: 999;
   line-height: 1.2;
   font-weight: 700;
-  border: var(--border_inner);
+  border: var(--border);
   box-shadow: var(--highlight);
   background: #020 url(/themes/snark/dark/images/delete.png) right 6px top 6px no-repeat;
   background-blend-mode: luminosity;
@@ -410,7 +381,7 @@ div#messages:hover {
 
 #messages + p, p.book {
   padding: 20px 20px 20px 50px !important;
-  border: var(--border_inner);
+  border: var(--border);
   box-shadow: var(--highlight), inset 0 0 2px 1px #030;
   background: #000 var(--addressbook) no-repeat 10px center / 20px;
 }
@@ -435,7 +406,7 @@ h4 {
   padding: 8px 10px 8px 35px;
   word-spacing: .1em;
   font-size: 9pt;
-  border: var(--border_inner);
+  border: var(--border);
   box-shadow: var(--highlight), inset 0 0 2px 1px #030 !important;
   background: var(--files) no-repeat 9px center / 16px, linear-gradient(90deg, #000, #000800) !important;
   display: none; /* largely useless information */
@@ -496,7 +467,7 @@ td.checkbox {
 
 #visualid table {
   width: 100%;
-  border: var(--border_inner);
+  border: var(--border);
   border-collapse: collapse;
   background: #000900;
 }
@@ -515,7 +486,7 @@ td.checkbox {
 
 #visualid td[colspan="2"] {
   padding: 15px 3px;
-  border-top: var(--border_inner);
+  border-top: var(--border);
 }
 
 #visualid tr:last-child {
@@ -525,14 +496,14 @@ td.checkbox {
 form[action="addressbook"] > p.buttons {
   margin: -13px -3px 0;
   padding: 8px 5px;
-  border: var(--border_inner);
+  border: var(--border);
 }
 
 td > img[width="320"], td > img[src^="/imagegen"] {
   margin: 10px 3px;
   padding: 2px;
   border-radius: 1px;
-  border: var(--border_inner);
+  border: var(--border);
   box-shadow: var(--highlight);
   background: #000;
 }
@@ -561,7 +532,7 @@ li {
 
 .help {
   padding: 20px 30px;
-  border: var(--border_inner);
+  border: var(--border);
 }
 
 #sbs h3 a {
@@ -641,14 +612,14 @@ p.buttons, #buttons {
 div#book + div#buttons {
   margin-top: 3px;
   padding: 0 0 10px;
-  border: var(--border_inner);
+  border: var(--border);
   background: #000;
 }
 
 form[action="export"] > div#buttons {
   margin-top: 15px;
   padding: 0 0 10px;
-  border: var(--border_inner);
+  border: var(--border);
   background: #000;
 }
 
@@ -668,7 +639,7 @@ div#config + div#buttons, div#content + div#buttons {
   margin-top: -3px;
   margin-bottom: 10px;
   padding: 7px 5px 5px;
-  border: var(--border_inner);
+  border: var(--border);
   background: #000;
 }
 
@@ -684,7 +655,7 @@ div#content + div#buttons {
   max-width: 700px;
   height: auto;
   font-size: 10pt;
-  border: var(--border_inner);
+  border: var(--border);
   border-radius: 4px;
   box-shadow: var(--highlight), inset 0 0 2px 1px #242;
   background: #000;
@@ -805,7 +776,7 @@ div#book, #emptybook {
 div#empty {
   margin-top: -4px;
   width: 100%;
-  border-bottom: var(--border_inner);
+  border-bottom: var(--border);
 }
 
 #emptybook {
@@ -814,7 +785,7 @@ div#empty {
 
 #book table {
   width: 100%;
-  border: var(--border_inner);
+  border: var(--border);
   border-collapse: separate;
 }
 
@@ -827,7 +798,7 @@ div#empty {
 
 #book table th {
   padding: 10px 0;
-  border-bottom: var(--border_inner);
+  border-bottom: var(--border);
 }
 
 #book th:last-child {
@@ -857,7 +828,7 @@ div#empty {
 div#add, div#import {
   margin-top: 23px;
   padding: 0 0 10px;
-  border: var(--border_inner);
+  border: var(--border);
   background: #000;
 }
 
@@ -892,7 +863,7 @@ div#add, div#import {
 #add p.buttons, #import p.buttons {
   margin-top: 5px;
   padding-top: 5px;
-  border-top: var(--border_inner);
+  border-top: var(--border);
 }
 
 #import {
@@ -936,7 +907,7 @@ input {
   text-align: left;
   font-size: 8.5pt;
   color: #494;
-  border: var(--border);
+  border: var(--border_hard);
   border-radius: 1px;
   background: none;
 }
@@ -1044,7 +1015,7 @@ textarea, #subslog pre {
   font-weight: 700;
   font-size: 8.5pt;
   color: #bb7;
-  border: var(--border_inner);
+  border: var(--border);
   border-radius: 2px;
   box-shadow: var(--highlight);
 }
@@ -1145,7 +1116,7 @@ p.book {
 }
 
 #messages + p, p.book {
-  border: var(--border_inner);
+  border: var(--border);
   background: #000 var(--addressbook) no-repeat 5px center / 20px;
 }
 
@@ -1224,7 +1195,7 @@ p.book {
   width: 24px;
   height: 24px;
   vertical-align: middle;
-  border: var(--border_inner);
+  border: var(--border);
   border-radius: 1px;
   background: #000;
   image-rendering: crisp-edges;
@@ -1400,7 +1371,7 @@ p#filtered {
 #visualid tr td, #visualid tr:hover td {
   border-left: none !important;
   border-right: none !important;
-  border-bottom: var(--border_inner);
+  border-bottom: var(--border);
   box-shadow: none !important;
   background: #010;
   background: repeating-linear-gradient(180deg,rgba(0,0,0,.8), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), url(/themes/console/dark/images/camotile2.png) !important;
@@ -1484,7 +1455,7 @@ input#exporthosts:active {
   top: 2px;
   top: 0;
   right: 1px;
-  border-left: var(--border_inner);
+  border-left: var(--border);
   contain: paint;
 }
 
@@ -1517,7 +1488,7 @@ input#exporthosts:active {
   overflow: hidden;
   font-size: 0;
   text-align: center;
-  border: var(--border);
+  border: var(--border_hard);
   background: var(--th);
 }
 
@@ -1532,8 +1503,8 @@ input#exporthosts:active {
   text-align: center;
   font-size: 11pt !important;
   color: var(--ink);
-  border-left: var(--border);
-  border-right: var(--border);
+  border-left: var(--border_hard);
+  border-right: var(--border_hard);
 }
 
 #prev, #next {
