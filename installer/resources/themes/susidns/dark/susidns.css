@@ -1,9 +1,7 @@
 /* SusiDNS "Camo" theme (aka "dark") */
 /* Author: dr|z3d */
 
-@import url(/themes/fonts/DroidSans.css);
-@import url(/themes/console/dark/optbox.css);
-@import url(/themes/console/dark/chromescroll.css);
+@import url(/themes/console/dark/global.css);
 @import url(../images/images.css);
 @import url(images/images.css);
 

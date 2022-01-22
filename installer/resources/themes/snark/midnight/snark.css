@@ -4093,6 +4093,18 @@ td.torrentAction input[type=submit] {
     max-width: 210px;
     white-space: nowrap;
   }
+  .torrentName a, .magnetLabel {
+    max-width: 340px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .snarkTorrents .infohash {
+    width: 60px;
+  }
+  .magnetLabel {
+    max-width: 270px;
+  }
   #trackerselect a {max-width: 280px}
   .canhide {display: none}
   .torrentAction input[type=submit] {

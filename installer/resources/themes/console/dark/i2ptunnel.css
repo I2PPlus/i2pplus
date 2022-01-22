@@ -1,21 +1,7 @@
 /* I2P TunnelManager theme: "Camo". Aka "dark". As in ops. */
 /* Author: dr|z3d */
 
-@import url(optbox.css);
-
-:root {
-  --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
-  --monospaced: Droid Sans Mono, Noto Mono, Lucida Console, DejaVu Sans Mono, monospace;
-  --hover: #f60;
-  --h2: repeating-linear-gradient(90deg, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(180deg,#001800, #000 75%);
-  --heading: linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px);
-  --border: 1px solid #242;
-  --highlight: inset 0 0 0 1px #000;
-  --input_txt: linear-gradient(180deg,#001800,#001000);
-  --btn_shadow_hover: var(--highlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
-  --btn_shadow_active: var(--highlight), inset 3px 3px 3px 2px rgba(0,0,0,.8), 0 0 0 1px #000;
-  --btn_hover_radial: radial-gradient(at center bottom, rgba(96, 48, 0, .4) 0, rgba(0, 0, 0, 0) 80%), #000;
-}
+@import url(global.css);
 
 html {
   min-height: 100%;
@@ -119,13 +105,6 @@ div[class^="status"] {
   background-size: auto 16px;
   background-position: center center;
   background-repeat: no-repeat;
-}
-
-@media screen and (min-width: 1500px) {
-  div[class^="status"] {
-    height: 18px;
-    background-size: auto 18px !important;
-  }
 }
 
 hr {
@@ -410,18 +389,6 @@ td.infohelp {
   text-overflow: ellipsis;
 }
 
-@media screen and (max-width: 900px) {
-  .tunnelInfo .selectAll {
-    max-width: 110px;
-  }
-}
-
-@media screen and (min-width: 1500px) {
-  .tunnelInfo .selectAll {
-    max-width: none;
-  }
-}
-
 .newTunnel {
   padding: 5px !important;
   text-align: right;
@@ -464,13 +431,6 @@ td.infohelp {
   opacity: .65;
 }
 
-@media screen and (max-width: 1200px) {
-.tunnelName a {
-  background-position: 5px center !important;
-  background-size: 13px 13px !important;
-}
-}
-
 .tunnelType {
   width: 25%;
 }
@@ -509,57 +469,41 @@ th.tunnelControl {
 }
 
 textarea {
-  border: 1px solid #252;
   margin-left: 4px;
   margin-right: 4px;
   box-sizing: border-box;
   font: 9pt var(--monospaced);
-  resize: none;
-  border-radius: 2px;
-  background: #000;
 }
 
-textarea:focus {
-  color: #ee9;
-  background: var(--input_txt);
-  filter: drop-shadow(0 0 1px #880);
-  transition: ease filter .3s 0s;
-  box-shadow: var(--highlight), inset 4px 4px 4px #000, 0 0 0 1px #000;
-  outline: none;
-}
-
-textarea#statusMessages, textarea#statusMessages:active, textarea#statusMessages:focus {
+textarea#statusMessages,
+textarea#statusMessages:active,
+textarea#statusMessages:focus {
   margin: 0;
   padding: 2px 4px 2px 8px;
   width: 100%;
   height: 80px;
-  color: #69f;
-  font-family: "Droid Sans Mono", "Noto Mono", Consolas, "Lucida Console", "DejaVu Sans Mono", monospace;
+  color: #69f !important;
+  font-family: var(--monospaced);
   font-size: 8.5pt;
   font-weight: 700;
-  border: 0;
+  border: none !important;
   border-radius: 0;
-  box-shadow: inset 0 0 3px 3px #000 !important;
-  background: #000;
-  background: linear-gradient(180deg,#000 0%, #010 100%) !important;
-}
-
-_:-ms-lang(x), textarea#statusMessages, textarea#statusMessages:active, textarea#statusMessages:focus {
-  box-shadow: none !important;
+  box-shadow: inset 0 0 3px 3px #000;
+  background: linear-gradient(180deg,#000 0%, #010 100%);
 }
 
 .freetext {
-  width: 150px;
-  border: 1px solid #252;
   padding: 4px;
+  width: 150px;
   font: 8.5pt var(--monospaced);
-  background: #fff;
   color: #333;
+  border: var(--border_hard);
   border-radius: 1px;
-  box-shadow: inset 2px 2px 1px #ccc;
 }
 
-.freetext.tunnelDescriptionText, .freetext.tunnelName, #privKeyFile, #websiteName, .proxyList, #localDest, #altlocaldest, #altPrivKeyFile {
+.freetext.tunnelDescriptionText, .freetext.tunnelName,
+#privKeyFile, #websiteName, .proxyList, #localDest,
+#altlocaldest, #altPrivKeyFile {
   width: calc(100% - 10px) !important;
 }
 
@@ -574,7 +518,7 @@ _:-ms-lang(x), textarea#statusMessages, textarea#statusMessages:active, textarea
   box-shadow: inset 2px 2px 1px #000;
   color: #885;
   cursor: default;
-  border: 1px solid #252 !important;
+  border: var(--border_hard) !important;
   opacity: .8;
 }
 
@@ -583,70 +527,15 @@ input[type="hidden"], input.default {
 }
 
 input, select, button, a {
-  font-family: var(--bodyfont)
-  -moz-box-sizing: border-box;
   box-sizing: border-box;
-  font-size: 9pt;
-  color: #ee9;
-  resize: none;
-  cursor: pointer;
 }
 
 input {
-  background-color: #020;
-  color: #ee9;
   margin: 0 2px 0 2px;
-  font-family: var(--bodyfont)
-  border: 1px solid #252;
-  text-decoration: none;
-}
-
-input[type=submit]::-moz-focus-inner, input[type=reset]::-moz-focus-inner, button::-moz-focus-inner {
-  border: none;
-  outline: none;
 }
 
 input[type="file"] {
   background: none;
-  border: none;
-}
-
-input[type=file]::file-selector-button {
-  margin: 2px 10px 2px 3px;
-  padding: 4px 2px !important;
-  min-width: 75px;
-  vertical-align: middle;
-  font: bold 9pt var(--bodyfont);
-  text-align: center;
-  text-decoration: none;
-  color: #494;
-  border: 1px solid #252;
-  border-radius: 1px;
-  background: #000;
-  filter: drop-shadow(0 0 1px #000);
-}
-
-button:hover, button:focus {
-  color: var(--hover);
-  border: 1px solid var(--hover);
-  box-shadow: var(--btn_shadow_hover);
-  background: var(--btn_hover_radial);
-  cursor: pointer;
-}
-
-input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
-  color: var(--hover);
-  border: 1px solid var(--hover);
-  box-shadow: var(--btn_shadow_hover);
-  background: var(--btn_hover_radial);
-  cursor: pointer;
-}
-
-input[type=file]:active::file-selector-button {
-  color: var(--ink);
-  border: 1px solid var(--hover);
-  box-shadow: var(--btn_shadow_active);
-  background: var(--hover);
 }
 
 .editDisabled input[type=radio], .editDisabled label {
@@ -674,15 +563,8 @@ input[type=file]:active::file-selector-button {
   display: inline;
 }
 
-label {
-  cursor: pointer;
-}
-
-input[type=password] {
-  cursor: text;
-}
-
-input[type=text], input[type=password], textarea, textarea[readonly="readonly"]:focus  {
+input[type=text], input[type=password],
+textarea, textarea[readonly="readonly"]:focus  {
   padding: 6px 8px;
   color: #bb7;
   font-weight: 700;
@@ -725,12 +607,6 @@ a.control, input.control {
   text-decoration: none;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-}
-
-@media screen and (min-width: 1500px) {
-.control {
-  padding: 8px 12px 8px !important;
-}
 }
 
 .control, .control:link, .control:visited {
@@ -795,52 +671,8 @@ button, input[type=submit], input[type=reset], a.control, select {
 }
 
 select {
-  padding: 7px 24px 7px 8px !important;
   min-width: 120px;
-  font-family: var(--bodyfont)
-  font-weight: 700;
   font-size: 8.5pt !important;
-  color: #494;
-  border-radius: 2px;
-  background: var(--dropdown) no-repeat right 10px center, linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
-  background-size: 10px, 100% !important;
-  cursor: pointer;
-  -moz-appearance: none;
-  -webkit-appearance: none;
-  appearance: none;
-}
-
-@media screen and (min-width: 1500px) {
-  select {
-    padding: 8px 24px 8px 8px !important;
-  }
-}
-
-select option { /* dropdown menu reverts to normal font-weight */
-  font-weight: 400;
-  font-size: 9.5pt;
-}
-
-select option:hover, select option:checked {
-  box-shadow: inset 0 0 20px 20px #f60;
-}
-
-select:focus, select:hover {
-  color: #f60;
-  border: 1px solid #f60;
-}
-
-select:hover {
-  box-shadow: var(--highlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
-}
-
-select:hover, select:focus, select:active {
-  background: #000 var(--dropdown_hover) no-repeat right 10px center !important;
-  background-size: 10px auto !important;
-}
-
-select::-ms-expand {
-  display: none;
 }
 
 .buttons, .newTunnel {
@@ -1096,26 +928,6 @@ input.tunnelName, input.tunnelDescription, #userAgents {
   width: 70px;
 }
 
-@media screen and (max-width: 1100px) {
-  .nowrap {
-    margin-right: 10px !important;
-  }
-
-  .nowrap .port, .nowrap .quantity, .nowrap .period {
-    width: 60px;
-  }
-
-  .nowrap .multiOption {
-    margin-right: 3px !important;
-  }
-}
-
-@media screen and (max-width: 1000px) {
-  .nowrap .port, .nowrap .quantity, .nowrap .period {
-    width: 40px;
-  }
-}
-
 .username, .password, .filemanager {
   padding-left: 28px !important;
   width: 200px;
@@ -1322,10 +1134,6 @@ textarea[name="accessList"], #hostField, #localDestination, .authentication {
   margin: 5px !important;
 }
 
-textarea[name="accessList"] {
-  margin-top: 0 !important;
-}
-
 #customOptions, #userAgents, #leasesetKey, #filterDefinition {
   width: calc(100% - 10px) !important;
 }
@@ -1359,51 +1167,10 @@ _:-ms-lang(x), .tunnelProperties {
 
 /* end more space */
 
-/* responsive layout */
-
-@media screen and (max-width: 800px) {
-.statusNotRunning, .statusRunning, .statusStarting, .statusStandby {
-  background-size: auto 14px;
-}
-
-.port, .quantity, .period {
-  width: 60px;
-}
-
-#clientHost, .host {
-  width: 140px;
-  min-width: 140px;
-}
-}
-
-@media screen and (max-width: 1500px) {
-h2, h3 {
-  font-size: 11.5pt;
-}
-}
-
-@media screen and (min-width: 1500px) {
-body, td, a, button, input, .control, select, .freetext, textarea {
-  font-size: 10pt !important;
-}
-
-h2, h3 {
-  font-size: 12pt;
-}
-
-textarea#statusMessages, textarea#statusMessages:active, textarea#statusMessages:focus {
-  font-size: 9pt !important;
-}
-}
-
-/* end responsive layout */
-
 /* TO DO: merge with main classes */
 
 @supports not (-moz-appearance: none) { /* fixes chrome/blinkoverflow issue */
-select {
-  white-space: normal !important;
-}
+  select {white-space: normal !important}
 }
 
 label {
@@ -1434,7 +1201,7 @@ input[type=text] + label {
   text-overflow: ellipsis;
   word-break: break-all;
   font-family: var(--monospaced);
-  border: 1px solid #252;
+  border: var(--border_hard);
   border-radius: 1px;
   box-shadow: var(--highlight);
   background: linear-gradient(180deg,#000 0%, #010 100%);
@@ -1550,6 +1317,7 @@ tr.configerror {
 #toggleInfo {
   margin: 0 -2px 0 0 !important;
   padding: 2px 5px;
+  min-width: 0;
   vertical-align: middle;
   background: url(images/expand.svg) no-repeat center center;
   background-size: 8px;
@@ -1574,12 +1342,6 @@ tr.configerror {
   height: 8px;
   width: 12px;
   opacity: 0;
-}
-
-@media screen and (min-width: 1500px) {
-  #toggleInfo {
-    margin: -1px -2px 0 0 !important;
-  }
 }
 
 .base32 {
@@ -1733,16 +1495,63 @@ body#tunnelEditPage:not(.iframed) h3 {
   margin-top: -1px;
 }
 
+/* responsive layout */
+
+@media screen and (max-width: 1500px) {
+  h2, h3 {
+    font-size: 11.5pt;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .tunnelName a {
+    background-position: 5px center !important;
+    background-size: 13px 13px !important;
+  }
+}
+
+@media screen and (max-width: 1100px) {
+  .nowrap {
+    margin-right: 10px !important;
+  }
+  .nowrap .port, .nowrap .quantity, .nowrap .period {
+    width: 60px;
+  }
+  .nowrap .multiOption {
+    margin-right: 3px !important;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .nowrap .port, .nowrap .quantity, .nowrap .period {
+    width: 40px;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .tunnelInfo .selectAll {
+    max-width: 110px;
+  }
+}
+
 @media screen and (max-width: 800px) {
+  .statusNotRunning, .statusRunning, .statusStarting, .statusStandby {
+    background-size: auto 14px;
+  }
+  .port, .quantity, .period {
+    width: 60px;
+  }
+  #clientHost, .host {
+    width: 140px;
+    min-width: 140px;
+  }
   .displayText, .displayText:empty:hover, .displayText:empty:focus {
     width: 260px;
     font-size: 8pt;
   }
-
   #reachableBy {
     min-width: 0 !important;
   }
-
   .port {
     width: 50px !important;
   }
@@ -1759,25 +1568,46 @@ body#tunnelEditPage:not(.iframed) h3 {
 }
 
 @media screen and (min-width: 1500px) {
+  body, td, a, button, input, .control, select, .freetext, textarea {
+    font-size: 10pt !important;
+  }
+  h2, h3 {
+    font-size: 12pt;
+  }
+  textarea#statusMessages, textarea#statusMessages:active, textarea#statusMessages:focus {
+    font-size: 9pt !important;
+  }
+  div[class^="status"] {
+    height: 18px;
+    background-size: auto 18px !important;
+  }
+  .tunnelInfo .selectAll {
+    max-width: none;
+  }
+  .control {
+  padding: 8px 12px 8px !important;
+  }
+  select {
+    padding: 8px 24px 8px 8px !important;
+  }
   th {
     font-size: 10pt;
   }
-
   th .help::after, th .help:hover::after, th .help:focus::after {
     width: 20px;
     height: 20px;
     background-size: 20px 20px;
   }
-
   .displayText, .displayText:empty:hover, .displayText:empty:focus {
     width: 552px;
   }
-
   #registration .displayText {
     width: 800px;
   }
-
   .tunnelControl .control {
     margin: 3px -3px 3px 0 !important;
+  }
+  #toggleInfo {
+    margin: -1px -3px 0 0 !important;
   }
 }

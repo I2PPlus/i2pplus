@@ -44,6 +44,8 @@ public class SimpleTimer2 {
     private final String _name;
     private final AtomicInteger _count = new AtomicInteger();
     private final int _threads;
+    private final I2PAppContext _context;
+    private final Runnable _shutdown;
 
     /**
      *  To be instantiated by the context.
@@ -67,6 +69,7 @@ public class SimpleTimer2 {
      *  @since 0.9
      */
     protected SimpleTimer2(I2PAppContext context, String name, boolean prestartAllThreads) {
+        _context = context;
         _name = name;
         long maxMemory = SystemVersion.getMaxMemory();
         if (SystemVersion.isSlow() || SystemVersion.getCores() <= 4)
@@ -77,8 +80,8 @@ public class SimpleTimer2 {
         _executor = new CustomScheduledThreadPoolExecutor(_threads, new CustomThreadFactory());
         if (prestartAllThreads)
             _executor.prestartAllCoreThreads();
-        // don't bother saving ref to remove hook if somebody else calls stop
-        context.addShutdownTask(new Shutdown());
+        _shutdown = new Shutdown();
+        context.addShutdownTask(_shutdown);
     }
 
     /**
@@ -86,7 +89,7 @@ public class SimpleTimer2 {
      */
     private class Shutdown implements Runnable {
         public void run() {
-            stop();
+            stop(false);
         }
     }
 
@@ -96,6 +99,20 @@ public class SimpleTimer2 {
      * Cannot be restarted.
      */
     public void stop() {
+        stop(true);
+    }
+
+    /**
+     * Stops the SimpleTimer.
+     * Subsequent executions should not throw a RejectedExecutionException.
+     * Cannot be restarted.
+     *
+     * @param removeTask true to unregister the shutdown hook
+     * @since 0.9.53
+     */
+    private void stop(boolean removeTask) {
+        if (removeTask)
+            _context.removeShutdownTask(_shutdown);
         _executor.setRejectedExecutionHandler(new ThreadPoolExecutor.DiscardPolicy());
         _executor.shutdownNow();
     }

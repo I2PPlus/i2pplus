@@ -320,7 +320,7 @@
               todir="build/standalone-resources/.resources/themes/snark/light" />
         <copy file="../../../installer/resources/themes/console/classic/global.css"
               todir="build/standalone-resources/.resources/themes/snark/classic" />
-        <copy file="../../../installer/resources/themes/console/dark/optbox.css"
+        <copy file="../../../installer/resources/themes/console/dark/global.css"
               todir="build/standalone-resources/.resources/themes/snark/dark" />
         <copy file="../../../installer/resources/themes/console/midnight/global.css"
               todir="build/standalone-resources/.resources/themes/snark/midnight" />

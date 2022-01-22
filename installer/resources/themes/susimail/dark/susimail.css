@@ -3,9 +3,7 @@
 /* Thanks to Florian Kuhlmann for the hatface images. [http://www.flickr.com/photos/floriankuhlmann/] */
 /* Droid Sans font family and css3 compliant browser recommended for optimal results */
 
-@import url(/themes/fonts/DroidSans.css);
-@import url(/themes/console/dark/optbox.css);
-@import url(/themes/console/dark/chromescroll.css);
+@import url(/themes/console/dark/global.css);
 @import url(../images/images.css);
 @import url(images/images.css);
 
@@ -1597,6 +1595,7 @@ tr.bottombuttons:empty {
 }
 
 .notifications p.info, .notifications p.info b {
+  text-align: center;
   font-size: 10pt !important;
   text-shadow: none !important;
   color: var(--ink);
