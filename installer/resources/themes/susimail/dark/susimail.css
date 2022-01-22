@@ -757,53 +757,15 @@ input[disabled], input[disabled]:hover, input[disabled]:focus {
 input[type=file]::file-selector-button {
   margin: 2px 3px;
   padding: 4px 2px !important;
-  min-width: 75px;
-  vertical-align: middle;
-  text-align: center;
-  text-decoration: none;
-  font: bold 9pt var(--bodyfont);
-  color: #494;
-  border: 1px solid #000;
-  border-radius: 2px;
-  box-shadow: var(--btn_shadow);
-  background: #000;
-}
-
-input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
-  color: #f60;
-  border: var(--border_hover);
-  box-shadow: var(--btn_shadow_hover);
-  background: radial-gradient(at center bottom, rgba(96, 48, 0, .4) 0, rgba(0, 0, 0, 0) 80%), #000;
-  cursor: pointer;
-}
-
-input[type=file]:active::file-selector-button {
-  color: var(--ink) !important;
-  border: var(--border_hover);
-  box-shadow: var(--btn_shadow_active) !important;
-  background-color: #f60 !important;
 }
 
 select {
-  padding: 7px 24px 7px 5px !important;
-  text-align: left !important;
   font-size: 8.5pt;
-  color: #494;
-  border: 1px solid #000;
-  border-radius: 2px;
-  box-shadow: var(--btn_shadow);
-  background: var(--dropdown) no-repeat right 10px center / 10px, var(--btn);
-  appearance: none;
 }
 
-select option {
-  background: #fff;
-}
-
-select:hover, select:active, select:focus {
-  cursor: pointer;
-  color: #f60;
-  background: var(--dropdown_hover) no-repeat right 10px center / 10px, var(--btn_hover) !important;
+.topbuttons .select2 {
+  margin: 0 -2px !important;
+  padding: 7px 24px 7px 8px !important;
 }
 
 input:active, .fakebutton:active {
@@ -2191,7 +2153,6 @@ td.mailListFlagged, td.mailListSender, td.mailListAttachment, td.mailListSubject
 #viewmail .folders {
   position: absolute;
 }
-
 
 #viewmail .folders, #viewmail .folders select, #viewmail .moveto {
   vertical-align: middle;

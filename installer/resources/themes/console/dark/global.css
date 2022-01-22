@@ -155,11 +155,14 @@ input, select, button {
   font-weight: 700;
 }
 
+input[type=submit], input[type=reset], button, a.control, select {
+  line-height: 1.3;
+}
+
 input[type=submit], input[type=reset], button, a.control {
   margin: 5px;
   padding: 7px 12px;
   min-width: 110px;
-  line-height: 1.2;
   text-decoration: none;
   color: var(--a);
   border: 1px solid #000;
@@ -216,10 +219,10 @@ input[type=file]::file-selector-button {
   text-align: center;
   text-decoration: none;
   color: var(--a);
-  border: 1px outset #191;
+  border: 1px solid #000;
   border-radius: 2px;
+  box-shadow: var(--btn_shadow);
   background: #000;
-  filter: drop-shadow(0 0 1px #000);
 }
 
 input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
