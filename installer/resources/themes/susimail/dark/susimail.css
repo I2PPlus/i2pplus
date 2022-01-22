@@ -618,8 +618,7 @@ input.setpagesize, input.save {
 }
 
 input.setpagesize {
-  padding: 6px 18px 6px 30px;
-  background-position: 14px center;
+  padding: 7px 26px 7px 36px;
 }
 
 input.setpagesize:hover, input.setpagesize:focus, input.save:hover, input.save:focus {
@@ -628,6 +627,11 @@ input.setpagesize:hover, input.setpagesize:focus, input.save:hover, input.save:f
 
 input.setpagesize:active, input.save:active {
   background: #f60 var(--yes_active) no-repeat 10px center / 12px !important;
+}
+
+input.setpagesize, input.setpagesize:hover,
+input.setpagesize:focus, input.setpagesize:active {
+  background-position: 16px center !important;
 }
 
 input.send {
@@ -1041,35 +1045,12 @@ input[type="file"] {
 }
 
 input[type=text], input[type=password], textarea {
-  padding: 5px !important;
-  color: var(--ink);
-  border: var(--border);
   border-radius: 1px;
-  box-shadow: var(--outline);
-  background: #000;
 }
 
 input[name="new_from"] {
   box-shadow: none;
   color: var(--ink) !important;
-}
-
-input[type=text]:focus, input[type=password]:focus, textarea:focus {
-  color: var(--ink);
-  border: 1px solid #373;
-  box-shadow: var(--btn_shadow_active), 0 0 1px 1px rgba(255,96,0,.5);
-  background: #010;
-}
-
-input[type=text][disabled] {
-  margin-left: 0 !important;
-  padding-left: 0 !important;
-  color: #aa0;
-  border: none;
-  box-shadow: none;
-  background: transparent;
-  opacity: 1;
-  filter: none;
 }
 
 textarea {
@@ -1394,7 +1375,7 @@ body:not(.iframed) .topbuttons {
 }
 
 .topbuttons input[type=text] {
-  margin: 5px;
+  margin-right: 4px;
 }
 
 .bottombuttons br {
@@ -1483,6 +1464,7 @@ tr.bottombuttons:empty {
 
 p.error {
   font-size: 9.5pt !important;
+  text-align: center;
 }
 
 td p.error {
@@ -1494,8 +1476,8 @@ td p.error {
 /* compose mail */
 
 #composemail {
-  text-align: center !important;
   padding: 4px 8px 12px;
+  text-align: center !important;
   border-radius: 0 0 2px 2px;
   background: #010;
   background: repeating-linear-gradient(90deg, rgba(0,32,0,.4), rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px),
