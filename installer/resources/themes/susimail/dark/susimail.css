@@ -1754,14 +1754,8 @@ tr.list0:hover, tr.list1:hover {
   display: none;
 }
 
-body:not(.iframed) #mailbox tr:nth-child(2) {
-  position: sticky;
-  top: 49px;
-  z-index: 500;
-}
-
-@supports not (-moz-appearance: none) {
-  #mailbox tr:nth-child(2) {position: static}
+#mailbox tr:nth-child(3) td {
+  border-top: var(--border);
 }
 
 #mailbox th {
@@ -1769,7 +1763,6 @@ body:not(.iframed) #mailbox tr:nth-child(2) {
   white-space: nowrap;
   font-size: 70%;
   color: var(--ink);
-  border-bottom: var(--border);
   background: var(--th);
 }
 
@@ -1780,7 +1773,6 @@ body:not(.iframed) #mailbox tr:nth-child(2) {
 
 #mailbox th.mailListFlagged {
   background: url(/themes/susimail/images/status.png) no-repeat center center, var(--th);
-  background-blend-mode: luminosity, normal;
 }
 
 #mailbox th.MailListAttachment {
@@ -1793,10 +1785,6 @@ body:not(.iframed) #mailbox tr:nth-child(2) {
 
 #mailbox tr td {
   border-top: 1px solid #020;
-}
-
-#mailbox tr:nth-child(3) td {
-  border-top: none;
 }
 
 td.mailListSender a, td.mailListSender a:hover {
