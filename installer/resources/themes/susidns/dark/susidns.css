@@ -871,7 +871,7 @@ div#add, div#import {
 }
 
 #add input[type=text], #import input[type=file] {
-  width: calc(100% - 2px);
+  width: calc(100% - 20px);
 }
 
 #import input[type=file] {
