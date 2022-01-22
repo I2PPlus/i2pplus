@@ -162,11 +162,11 @@ input, select, button {
   font-weight: 700;
 }
 
-input[type=submit], input[type=reset], button, a.control, select {
+input[type=submit], input[type=reset], button, .control, select {
   line-height: 1.3;
 }
 
-input[type=submit], input[type=reset], button, a.control {
+input[type=submit], input[type=reset], button, .control {
   margin: 5px;
   padding: 7px 12px;
   min-width: 110px;
@@ -181,7 +181,7 @@ input[type=submit], input[type=reset], button, a.control {
 input[type=submit]:hover, input[type=reset]:hover,
 input[type=submit]:focus, input[type=reset]:focus,
 button:hover, button:focus,
-a.control:hover, a.control:focus {
+.control:hover, .control:focus {
   color: var(--hover) !important;
   border: 1px solid var(--hover);
   box-shadow: var(--btn_shadow_hover);
@@ -189,7 +189,8 @@ a.control:hover, a.control:focus {
   cursor: pointer;
 }
 
-input[type=submit]:active, input[type=reset]:active, button:active, a.control:active {
+input[type=submit]:active, input[type=reset]:active,
+button:active, .control:active {
   color: var(--ink) !important;
   text-shadow: var(--textshadow);
   border: 1px solid var(--hover);
