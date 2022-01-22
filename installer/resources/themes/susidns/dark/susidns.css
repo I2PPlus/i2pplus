@@ -1562,6 +1562,11 @@ input#exporthosts:active {
   font-size: 10pt;
 }
 
+#prev:hover::after, #next:hover::after,
+#prev:focus::after, #next:focus::after {
+  transform: scale(1.1);
+}
+
 #prev:active::after, #next:active::after {
   transform: scale(.9);
 }
