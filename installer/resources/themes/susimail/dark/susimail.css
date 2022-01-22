@@ -521,7 +521,6 @@ input.reload, input.refresh, input[name="refresh"][disabled], .topbuttons .fakeb
 
 .topbuttons .fakebutton {
   padding-left: 26px;
-  line-height: 1.3;
 }
 
 input[name="refresh"][disabled] {

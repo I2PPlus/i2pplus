@@ -177,7 +177,7 @@ input, select, button {
   font-weight: 700;
 }
 
-input[type=submit], input[type=reset], button, .control, select {
+input[type=submit], input[type=reset], button, .control, select, .fakebutton {
   line-height: 1.2;
 }
 
