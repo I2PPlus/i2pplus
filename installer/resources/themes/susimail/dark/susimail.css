@@ -1235,19 +1235,19 @@ div.pagenav {
 /* configuration */
 
 textarea[name="config_text"] {
-  margin-bottom: 15px;
+  margin: 0 auto 15px;
   padding: 0 5px !important;
   resize: none;
+  width: 600px;
+  min-width: 0;
   height: 370px;
   line-height: 20px;
-  color: #bb7;
   border: var(--border);
   box-shadow: 0 0 2px 2px rgba(0,0,0,.5);
   background: repeating-linear-gradient(180deg,#000800, #000800 20px, #000 20px, #000 40px);
 }
 
 textarea[name="config_text"]:focus {
-  color: var(--ink);
   border: var(--border);
   box-shadow: var(--highlight), 0 0 0 1px rgba(255,96,0,.15);
   background: repeating-linear-gradient(180deg,#010, #010 20px, #000800 20px, #000800 40px);
