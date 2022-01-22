@@ -1152,16 +1152,16 @@ hr {
 }
 
 #dologin input[name="user"], #dologin input[name="pass"] {
-  padding: 5px 5px 5px 26px !important;
+  padding: 7px 7px 7px 28px !important;
   background-blend-mode: luminosity;
 }
 
 #dologin input[name="user"] {
-  background: #000 var(--user) no-repeat 5px 6px / 16px;
+  background: #000 var(--user) no-repeat 7px center / 16px;
 }
 
 #dologin input[name="pass"] {
-  background: #000 var(--key) no-repeat 5px 5px / 16px;
+  background: #000 var(--key) no-repeat 7px center / 16px;
 }
 
 #dologin input[name="user"]:focus, #dologin input[name="pass"]:focus {
