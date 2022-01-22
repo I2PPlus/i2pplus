@@ -291,15 +291,6 @@ select option {
   font-weight: 400;
   font-size: 9.5pt;
   color: var(--hover);
-  box-shadow: inset 0 0 20px 20px #000;
-  background: #000;
-}
-
-select option:hover, select option:checked {
-  box-shadow: inset 0 0 20px 20px #f60;
-}
-
-select option:hover, select option:checked {
   background: #000;
 }
 

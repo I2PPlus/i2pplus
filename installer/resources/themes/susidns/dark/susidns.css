@@ -1516,13 +1516,13 @@ input#exporthosts:active {
 }
 
 #prev.inactive, #next.inactive {
-  padding: 10px;
+  padding: 10px 16px;
   border: none;
 }
 
 #prev a, #next a {
   margin: 0;
-  padding: 10px;
+  padding: 10px 16px;
   font-size: 0 !important;
 }
 
@@ -1539,8 +1539,9 @@ input#exporthosts:active {
   pointer-events: none;
 }
 
-#prev.inactive::after, #next.inactive::after {
+#prev.inactive, #next.inactive {
   opacity: .4;
+  pointer-events: none;
 }
 
 #next::after {
@@ -1559,6 +1560,10 @@ input#exporthosts:active {
 
 #filtered, #results {
   font-size: 10pt;
+}
+
+#prev:active::after, #next:active::after {
+  transform: scale(.9);
 }
 
 /* responsive layout */
