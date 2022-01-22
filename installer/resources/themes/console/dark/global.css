@@ -37,7 +37,7 @@
   --highlight: inset 0 0 0 1px #000;
   --hover: #f60;
   --ink: #ee9;
-  --input_txt: linear-gradient(180deg,#001000,#001800);
+  --input_txt: linear-gradient(180deg,#000800,#001800);
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
   --msg: linear-gradient(180deg,#010,#000400);
   --navbar: linear-gradient(180deg,#1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%);

@@ -1033,26 +1033,10 @@ textarea[cols="70"] {
   height: 40px;
 }
 
-input[type=text]:focus, #add textarea:focus {
-  color: var(--ink);
-  outline: none;
-  filter: drop-shadow(0 0 1px #880);
-  transition: ease filter .3s;
-  outline: none;
-}
-
-input[type=text]:focus {
-  border: 1px solid #373;
-  box-shadow: var(--btn_shadow_active), 0 0 0 1px #000;
-  background: var(--txt_focus);
-}
-
 textarea:focus {
   box-shadow: inset 0 0 1px #880;
-  box-shadow: var(--btn_shadow_active);
   background: #010;
   filter: none;
-  outline: none;
 }
 
 #booksearch input[name=search] {
