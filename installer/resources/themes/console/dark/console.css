@@ -3153,7 +3153,7 @@ tr.addnew, tr.addnew:hover {
 
 p#helptranslate {
   margin: 0 -7px;
-  padding: 18px 24px 18px 58px !important;
+  padding: 20px 24px 20px 58px !important;
   position: relative;
   top: 8px;
   text-align: left !important;
@@ -6786,7 +6786,7 @@ textarea#advancedsettings {
 }
 
 .configtable td.infohelp, p.infohelp, td.infohelp, p.infowarn, td.infowarn, p#debugmode, p.sybilinfo, #sybilanalysis {
-  padding: 18px 24px 18px 58px !important;
+  padding: 20px 24px 20px 58px !important;
   line-height: 1.3 !important;
   white-space: normal !important;
   font-weight: 400 !important;
@@ -12017,12 +12017,13 @@ i {
   margin: 14px 8px;
 }
 
-.encDests th {
-  text-align: left;
+.encDests th, .encDests td {
+  line-height: 1.2;
+  font-size: 8.5pt;
 }
 
-.encDests td {
-  line-height: 1.2;
+.encDests th {
+  text-align: left;
 }
 
 .encDests th:first-child, .encDests td:first-child,
@@ -13931,6 +13932,10 @@ body.iframed {
     margin: -3px -3px -1px !important;
     width: 20px !important;
     height: 15px !important;
+  }
+  .main[id^="config_"] .encDests th,
+  .main[id^="config_"] .encDests td {
+    font-size: 9pt !important;
   }
 }
 
