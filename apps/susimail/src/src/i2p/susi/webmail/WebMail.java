@@ -3184,7 +3184,7 @@ public class WebMail extends HttpServlet
             "<tr>" +
             "<td colspan=\"2\" align=\"center\">" +
             button(LOGIN, _t("Login")) + spacer + button(OFFLINE, _t("Read Mail Offline")) + spacer +
-            "<a href=\"/susimail/?configure\" id=\"settings\">" + _t("Settings") + "</a>" + 
+            "<a href=\"/susimail/?configure\" id=\"settings\" class=\"fakebutton\">" + _t("Settings") + "</a>" +
             "</td>" +
             "</tr>\n" +
             "<tr>" +

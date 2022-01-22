@@ -95,7 +95,7 @@ input::placeholder {
   font-weight: 700;
   font-style: italic;
   color: var(--ink);
-  opacity: .5;
+  opacity: .3;
 }
 
 input:focus::placeholder {
@@ -325,6 +325,7 @@ input[type=text], input[type=password], textarea {
   color: #bb7;
   border: var(--border_hard);
   background: #000;
+  cursor: text;
 }
 
 input[type=text], input[type=password] {
@@ -335,7 +336,6 @@ input[type=text], input[type=password] {
   border: 1px solid #151;
   border-radius: 1px;
   box-shadow: var(--outline);
-  cursor: text;
   filter: none;
 }
 
