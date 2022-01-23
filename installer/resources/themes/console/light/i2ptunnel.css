@@ -47,21 +47,8 @@ form {
   margin: 0;
 }
 
-input[type=checkbox], input[type=radio] {
+.optbox {
   margin: 5px 3px 5px 5px;
-  min-width: 16px;
-  min-height: 16px;
-  vertical-align: sub;
-  background: none;
-}
-
-input[type=checkbox]:hover, input[type=checkbox]:focus, input[type=radio]:hover, input[type=radio]:focus {
-  box-shadow: 0 0 1px #89f;
-  outline: none;
-}
-
-input[type=radio][disabled]:hover, input[type=radio][disabled]:focus {
-  box-shadow: none !important;
 }
 
 .editDisabled input[type=radio], .editDisabled label {
@@ -74,10 +61,6 @@ input[type=radio][disabled]:hover, input[type=radio][disabled]:focus {
 
 .editDisabled input[type=radio]:not(:checked) {
   opacity: .4;
-}
-
-label {
-  cursor: pointer;
 }
 
 label:hover {
@@ -109,12 +92,6 @@ button, input[type=submit], input[type="reset"], a.control, .freetext, textarea,
 
 textarea {
   font-family: var(--monospaced);
-  color: var(--ink);
-  border: 1px solid #97a2ce;
-  border-radius: 2px;
-  box-shadow: inset 1px 1px 1px #e4e4ee;
-  background: #fbfbff;
-  resize: none;
 }
 
 textarea[name="accessList"] {
@@ -126,12 +103,6 @@ textarea[name="accessList"] {
 
 textarea[name="accessList"]:focus {
   height: 80px !important;
-}
-
-textarea:focus, textarea[name="accessList"]:focus {
-  color: #19191f;
-  border: 1px solid #676c7f;
-  background: #fff;
 }
 
 textarea[name="accessList"]:focus {

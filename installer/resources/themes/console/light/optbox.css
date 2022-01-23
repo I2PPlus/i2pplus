@@ -56,6 +56,11 @@ body {
   text-shadow: none;
 }
 
+button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset]::-moz-focus-inner {
+  outline: none;
+  border: none;
+}
+
 input, textarea, select {
   outline: none;
 }
@@ -71,6 +76,124 @@ b {
 
 a {
   text-decoration: none;
+}
+
+label {
+  cursor: pointer;
+}
+
+select, select[disabled]:hover, select[disabled]:focus {
+  margin: 5px;
+  padding: 6px 24px 6px 8px !important;
+  min-width: 120px;
+  text-align: left !important;
+  font-size: 9pt;
+  color: var(--ink_light);
+  border: 1px solid #97a2ce;
+  border-radius: 2px;
+  box-shadow: var(--highlight);
+  box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
+  background: var(--dropdown) no-repeat right 8px center / 10px, var(--btn);
+  appearance: none;
+  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
+}
+
+select:-moz-focusring {
+  outline: 1px solid transparent;
+}
+
+select option {
+  background: #fff;
+}
+
+select, input[type=text] {
+  min-width: 120px;
+}
+
+select:hover, select:focus, select:active {
+  border: 1px solid #535979;
+}
+
+select:hover, select:active {
+  color: #19191f;
+  box-shadow: var(--highlight), 0 2px 1px #ddf;
+  background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover) !important;
+}
+
+select:focus {
+  color: #19191f;
+  box-shadow: 0 0 1px #89f;
+  background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover) !important;
+}
+
+select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active {
+  border: 1px solid #97a2ce !important;
+  box-shadow: var(--highlight) !important;
+  background: var(--btn) !important;
+  opacity: .8;
+  cursor: default;
+}
+
+select::-moz-focus-inner {
+  outline: none !important;
+  border: none !important;
+}
+
+input[readonly], input[disabled], input[readonly]:focus, input[disabled]:focus {
+  color: #4d4d5f;
+  border: 1px solid #a8b1d6;
+  box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6);
+  background: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(220, 220, 255, .3) 3px, #fafaff 4px), #fafaff;
+  filter: none;
+  cursor: default;
+}
+
+textarea {
+  margin: 5px;
+  padding: 5px 8px;
+  resize: none;
+  font-size: 9pt;
+  color: var(--ink);
+  border: 1px solid #97a2ce;
+  border-radius: 2px;
+  box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6);
+  background: #fbfbff;
+}
+
+textarea:focus {
+  color: #19191f;
+  border: 1px solid #676c7f;
+  box-shadow: var(--btn_shadow_active);
+  background: #fff;
+  filter: drop-shadow(0 0 1px #f60);
+}
+
+input[type=file]::file-selector-button {
+  margin: 3px 10px 3px 3px;
+  padding: 4px 10px;
+  line-height: 1.4;
+  font-family: var(--bodyfont);
+  font-size: 9pt;
+  color: var(--ink_light);
+  text-decoration: none;
+  text-shadow: 0 1px 1px #fff;
+  border: 1px solid #97a2ce;
+  border-radius: 2px;
+  box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
+  background: var(--btn);
+  background-size: 14px auto, 100% !important;
+  opacity: 1;
+  filter: drop-shadow(0 0 1px rgba(255,96,0,.7));
+  cursor: pointer;
+}
+
+input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
+  color: #19191f;
+  border: 1px solid #f60;
+  box-shadow: var(--highlight), inset 0 -8px 3px 8px rgba(255,96,0,.02), inset 0 0 10px rgba(255,96,0,.05), 0 0 1px rgba(255,96,0,.1), 0 7px 4px -4px rgba(0,0,0,.1);
+  background: var(--btn_hover);
+  filter: saturate(100%) drop-shadow(0 0 1px rgba(204, 204, 204, .8));
+  transition: ease border .7s;
 }
 
 input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
