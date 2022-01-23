@@ -629,9 +629,15 @@ form[action="export"] > div#buttons {
 }
 
 div#config > textarea, div#content > textarea, #subslog pre {
-  margin-top: -27px;
+  margin: -27px 0 0;
   padding: 6px 12px;
   border-radius: 0;
+}
+
+div#config > textarea:focus, div#content:focus {
+  border: var(--border);
+  box-shadow: var(--highlight), inset 4px 4px 4px rgba(0,0,0,.5);
+  filter: none;
 }
 
 textarea[name="config"] {
@@ -931,7 +937,6 @@ input.update {
 input[type=text] {
   padding: 7px !important;
   font-size: 110%;
-  border: 1px solid #184818;
 }
 
 textarea, #subslog pre {
