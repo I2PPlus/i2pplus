@@ -43,10 +43,10 @@
    boolean hasOverride = themeOverride.exists();
 %>
 <link rel="preload" href="<%=themePath%>global.css" as="style">
+<link rel="preload" href="/themes/fonts/DroidSans/DroidSans-Bold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="/themes/fonts/DroidSans/DroidSans.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="/themes/fonts/DroidSans/DroidSansMono.woff2" as="font" type="font/woff2" crossorigin="anonymous">
 <link rel="preload" href="/themes/fonts/DroidSans.css" as="style">
-<link rel="preload" href="/themes/fonts/DroidSans/DroidSans-Bold.woff2" as="font" type="font/woff2">
-<link rel="preload" href="/themes/fonts/DroidSans/DroidSans.woff2" as="font" type="font/woff2">
-<link rel="preload" href="/themes/fonts/DroidSans/DroidSansMono.woff2" as="font" type="font/woff2">
 <link rel="preload" href="<%=themePath%>images/i2plogo.png" as="image">
 <link rel="preload" href="/themes/console/images/images.css?<%=net.i2p.CoreVersion.VERSION%>" as="style">
 <link rel="preload" href="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>" as="script">
