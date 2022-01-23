@@ -2,7 +2,7 @@
 /* Description: Light blue highlights. */
 /* Author: dr|z3d */
 
-@import url(optbox.css);
+@import url(global.css);
 @import url(../images/itooplus.css);
 
 html, body {
@@ -3083,8 +3083,15 @@ td {
   padding: 3px 5px;
   color: var(--ink);
   vertical-align: middle;
-  border-top: 1px solid #a7a7be;
-  border-bottom: 1px solid #a7a7be;
+  border-top: var(--border_soft);
+  border-bottom: var(--border_soft);
+}
+
+#netdb table table tr:last-child td,
+#profiles tr:last-child td,
+#peers tr:last-child td,
+#tunnels tr:last-child td {
+  border-bottom: 1px solid var(--border_inner);
 }
 
 #floodfillconfig tr:nth-child(2) td {
@@ -12411,7 +12418,6 @@ iframe {
   }
   #ntcpconnections .spacer {display: none}
   .tunnel_id:not(:empty) {
-    border: 1px solid #bbd;
     background: var(--hardhat) no-repeat 5px center / 14px, var(--row);
   }
   .tunnel_id:not(:empty)::before {
@@ -12544,8 +12550,8 @@ iframe {
     contain: paint;
   }
   .routerid .flag {
-    margin-top: 1px -3px -2px;
-    padding-left: 4px !important;
+    margin: -1px -2px -1px -4px;
+    padding: 2px 4px;
     width: 20px;
     height: 17px;
     display: inline-block;
