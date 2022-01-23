@@ -296,7 +296,9 @@ public class ConfigNetHelper extends HelperBase {
 
     /** @return decimal */
     public String getShareRateMegabits() {
-        return Float.toString(Math.round(getShareBandwidth() / 1024f * 8));
+        float megabits = getShareBandwidth() / 1024f * 8;
+        String rounded = String.format("%.02f", megabits);
+        return rounded;
     }
 
     /** @param kbytes binary K */
