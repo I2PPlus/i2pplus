@@ -4986,16 +4986,6 @@ button.download.control:hover, button.download.control:focus {
 
 /* end sidebar buttons */
 
-input[type=text], input[type=password] {
-  padding: 5px 8px;
-  box-shadow: var(--input_shadow);
-  background: #fbfbff;
-}
-
-input[type=text]::placeholder {
-  font-style: italic;
-}
-
 .search input[type=text]:not(:hover)::placeholder, input[type=text]:focus::placeholder {
   opacity: 0;
 }
@@ -5004,15 +4994,6 @@ input[name="refreshInterval"] {
   text-align: right;
   min-width: 80px;
   width: 80px;
-}
-
-input[type=text]:focus, input[type=password]:focus {
-  background: #fff;
-  box-shadow: var(--highlight), inset 3px 3px 3px rgba(0,0,48,.2);
-  box-shadow: var(--btn_shadow_active);
-  filter: drop-shadow(0 0 1px #89f);
-  color: #19191f;
-  border: 1px solid #676c7f;
 }
 
 .main[id^="config_"] input[name="port"], input[name="sport"] {

@@ -176,6 +176,22 @@ input[readonly], input[disabled], input[readonly]:focus, input[disabled]:focus {
   cursor: default;
 }
 
+input[type=text], input[type=password] {
+  padding: 5px 8px;
+  box-shadow: var(--input_shadow);
+  background: #fbfbff;
+}
+
+input[type=text]:focus, input[type=password]:focus,
+.freetext:focus, .displayText:focus {
+  color: #19191f;
+  box-shadow: var(--highlight), var(--btn_shadow_active) !important;
+  border: 1px solid #676c7f;
+  background: #fff;
+  filter: drop-shadow(0 0 1px #f60) drop-shadow(0 0 1px rgba(255,96,0,.4));
+  transition: ease filter .1s;
+}
+
 textarea {
   margin: 5px;
   padding: 5px 8px;

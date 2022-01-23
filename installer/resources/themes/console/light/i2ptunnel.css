@@ -207,14 +207,6 @@ hr {
   .freetext, .freetext.tunnelDescription {padding: 5px !important}
 }
 
-.freetext:focus, .displayText:focus, textarea:focus {
-  color: #19191f;
-  border: 1px solid #676c7f;
-  box-shadow: 0 0 1px #89f, var(--highlight), inset 3px 3px 3px rgba(0,0,0,.3) !important;
-  background: #fff;
-  outline: none;
-}
-
 .freetext[readonly], .freetext[readonly]:focus {
   color: var(--ink_lighter);
   border: 1px solid #a8b1d6;
