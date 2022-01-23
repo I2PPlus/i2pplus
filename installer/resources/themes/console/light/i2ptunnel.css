@@ -2,7 +2,7 @@
 /* Description: Light blue highlights. */
 /* Author: dr|z3d */
 
-@import url(optbox.css);
+@import url(global.css);
 @import url(../images/images.css);
 @import url(images/images.css);
 @import url(/themes/console/images/i2ptunnel.css);
@@ -234,15 +234,6 @@ input[type=text][readonly] {
   width: 100px;
 }
 
-.control, input[type=radio], input[type=checkbox], select {
-  cursor: pointer;
-}
-
-.control::-moz-focus-inner {
-  outline: none;
-  border: none;
-}
-
 .control, .control:link, .control:visited, button {
   margin: 2px 4px !important;
   padding: 4px 8px;
@@ -358,34 +349,15 @@ a.control {
 }
 
 @supports not (-moz-appearance: none) {
-.iframed .panel#clients, .iframed .panel#ssl {
-  margin-bottom: -4px !important;
-}
-
-.iframed .panel:last-of-type {
-  padding-bottom: 8px !important;
-}
-
-.iframed .panel#ssl {
-  padding-bottom: 4px !important;
-}
-}
-
-a:link, a:visited {
-  word-wrap: break-word;
-  text-decoration: none;
-  font-weight: 700;
-  color: #4d5f80;
-  outline: none;
-}
-
-a:hover, a:focus {
-  color: #f60;
-  text-decoration: none;
-}
-
-a:active {
-  color: #f30;
+  .iframed .panel#clients, .iframed .panel#ssl {
+    margin-bottom: -4px !important;
+  }
+  .iframed .panel:last-of-type {
+    padding-bottom: 8px !important;
+  }
+  .iframed .panel#ssl {
+    padding-bottom: 4px !important;
+  }
 }
 
 input[type="hidden"], input.default {

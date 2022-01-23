@@ -92,24 +92,6 @@ button:hover, button:focus, button:active, select:hover, select:focus, select:ac
   text-shadow: none;
 }
 
-a:link, a:visited {
-  color: var(--a);
-  text-decoration: none;
-  font-weight: 700;
-  word-wrap: break-word;
-  outline: none;
-}
-
-a:link:hover, a:hover, a:focus, a:visited:hover {
-  color: #f60 !important;
-  text-decoration: none;
-  text-shadow: none;
-}
-
-a:active, a:visited:active {
-  color: #f30 !important;
-}
-
 #sidebar a, #sidebar img[src$="i2plogo.png"], #sidebar h3, .confignav, *::before, *::after, div.app, .themechoice, .langselect,
 .newsAuthor, #netdbcountrylist img, .viewfullentry, .sybil_routerinfo th img, .graphspanel, #themeoptions, #graphopts, #newsDisplay,
 #version a, #sb_internals, #sb_advanced, #sb_services, #sb_help, .sb_netstatus, .tunnelbuildstatus, #sidebar form, h1, h2, h3, h4, button, img {
