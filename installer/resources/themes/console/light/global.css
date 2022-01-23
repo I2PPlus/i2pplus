@@ -156,7 +156,7 @@ select:hover, select:active {
 
 select:focus {
   color: #19191f;
-  box-shadow: 0 0 1px #89f;
+  box-shadow: 0 0 1px #f60;
   background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover) !important;
 }
 
@@ -231,7 +231,7 @@ input[type=file]::file-selector-button {
   background: var(--btn);
   background-size: 14px auto, 100% !important;
   opacity: 1;
-  filter: drop-shadow(0 0 1px rgba(255,96,0,.7));
+  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
   cursor: pointer;
 }
 
