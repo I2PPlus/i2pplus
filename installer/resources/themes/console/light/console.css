@@ -2600,6 +2600,8 @@ td.optionsave {
 }
 
 td.optionsave, .formaction, form[action="configpeer"] tr:last-child td, table#addkeyring tr:last-child td {
+  border-top: 1px solid var(--border_inner) !important;
+  border-bottom: 1px solid var(--border_inner) !important;
   background: linear-gradient(180deg,#fafaff 50%, rgba(220,220,255,.3)),
     repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) !important;
 }
@@ -2612,8 +2614,13 @@ td.optionsave, .formaction, form[action="configpeer"] tr:last-child td, table#ad
   padding: 5px;
 }
 
-.configtable tr:last-child td {
+.configtable tr:first-child td {
   border-top: 1px solid var(--border_inner) !important;
+}
+
+.configtable tr:last-child td, .configtable tr:nth-last-child(2) td, .encDests td:last-child {
+  border-top: 1px solid var(--border_inner) !important;
+  border-bottom: 1px solid var(--border_inner) !important;
 }
 
 .infowarn, .infohelp, #pluginconfigtext {
@@ -3093,8 +3100,15 @@ div[id^="config"] tr:last-child td,
 #profiles tr:last-child td,
 #peers tr:last-child td,
 #tunnels tr:last-child td,
-td.tabletextarea, .configtable tr:nth-last-child(2) td {
-  border-bottom: 1px solid var(--border_inner);
+td.tabletextarea, .configtable tr:nth-last-child(2) td,
+#consolepass tr:first-child td, td.infohelp. #updatehelper,
+#i2pupdates tr:first-child td, #i2pupdates tr:nth-child(2) td {
+  border-bottom: 1px solid var(--border_inner) !important;
+}
+
+.th_title, #consolepass tr:first-child td, td.infohelp,
+#i2pupdates tr:nth-child(2) td, #updatehelper {
+  border-top: 1px solid var(--border_inner) !important;
 }
 
 #floodfillconfig tr:nth-child(2) td {
