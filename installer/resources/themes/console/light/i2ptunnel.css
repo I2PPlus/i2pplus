@@ -854,18 +854,16 @@ input[type=text]:not([readonly]) {
 }
 
 .username, .clientName {
-  background: var(--user) no-repeat 8px center #fafaff;
+  background:  #fafaff var(--user) no-repeat 8px center / 15px !important;
   background-size: 15px;
 }
 
 .password, .clientKey {
-  background: var(--key) no-repeat 8px center #fafaff;
-  background-size: 15px;
+  background:  #fafaff var(--key) no-repeat 8px center / 15px !important;
 }
 
 .filemanager {
-  background: var(--files) no-repeat 8px center #fafaff;
-  background-size: 15px;
+  background: #fafaff var(--files) no-repeat 8px center / 15px !important;
 }
 
 .username:focus, .password:focus, .clientName:focus, .clientKey:focus, .filemanager:focus {
@@ -874,18 +872,15 @@ input[type=text]:not([readonly]) {
 }
 
 .username:focus, .clientName:focus {
-  background: var(--user) no-repeat 8px center #fff;
-  background-size: 15px;
+  background:  #fff var(--user) no-repeat 8px center / 15px !important;
 }
 
 .password:focus, .clientKey:focus {
-  background: var(--key) no-repeat 8px center #fff;
-  background-size: 15px;
+  background:  #fff var(--key) no-repeat 8px center / 15px !important;
 }
 
 .filemanager:focus {
-  background: var(--files) no-repeat 8px center #fff;
-  background-size: 15px;
+  background: #fff var(--files) no-repeat 8px center / 15px !important;
 }
 
 #notReady, #notFound, #down {

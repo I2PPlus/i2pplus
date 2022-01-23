@@ -189,7 +189,6 @@ input[type=text]:focus, input[type=password]:focus,
   border: 1px solid #676c7f;
   background: #fff;
   filter: drop-shadow(0 0 1px #f60) drop-shadow(0 0 1px rgba(255,96,0,.4));
-  transition: ease filter .1s;
 }
 
 textarea {
