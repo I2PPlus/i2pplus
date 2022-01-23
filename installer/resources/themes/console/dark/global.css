@@ -395,6 +395,7 @@ input[readonly]:focus {
   -moz-appearance: none;
   -webkit-appearance: inherit;
   appearance: none;
+  cursor: pointer;
 }
 
 .optbox[type=checkbox] {
