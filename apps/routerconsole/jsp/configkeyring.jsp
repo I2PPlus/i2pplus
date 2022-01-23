@@ -30,7 +30,7 @@
 <input type="hidden" name="nonce" value="<%=pageNonce%>" >
 <jsp:getProperty name="keyringhelper" property="summary" />
 <h3 class="tabletitle"><%=intl._t("Manual Keyring Addition")%></h3>
-<table id="addkeyring">
+<table id="addkeyring" class="configtable">
 <tr>
 <td class="infohelp" colspan="2">
 <%=intl._t("Enter keys for encrypted remote destinations here.")%>&nbsp;
