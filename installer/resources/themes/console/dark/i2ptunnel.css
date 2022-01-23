@@ -3,17 +3,11 @@
 
 @import url(global.css);
 
-html {
-  min-height: 100%;
-}
-
 body {
   margin: 0 8px 12px;
   padding: 0;
   text-align: center;
   font-size: 9pt;
-  color: #ee9;
-  background: #000;
   background: repeating-linear-gradient(180deg,rgba(0,0,0,.9) 2px, rgba(0,8,0,.5) 4px), url(images/camotile2.png) top left scroll #010;
   background-size: 100% 4px, 175px;
 }
@@ -566,10 +560,7 @@ input[type="file"] {
 input[type=text], input[type=password],
 textarea, textarea[readonly="readonly"]:focus  {
   padding: 6px 8px;
-  color: #bb7;
-  font-weight: 700;
   box-shadow: none;
-  background: #000;
   filter: none;
 }
 
@@ -577,12 +568,8 @@ textarea[readonly="readonly"]:focus {
   box-shadow: inset 0 0 0 1px #880;
 }
 
-input[type=text]:focus, input[type=password]:focus {
-  color: #ee9;
-  box-shadow: var(--highlight), inset 4px 4px 4px #000, 0 0 0 1px #000;
-  background: var(--input_txt);
-  filter: drop-shadow(0 0 1px #880);
-  transition: ease filter .3s 0s;
+button, input[type=submit], input[type=reset], a.control, select {
+  font-size: 8.5pt;
 }
 
 a.control, input.control {
@@ -598,55 +585,9 @@ a.control, input.control {
   overflow: hidden;
   white-space: nowrap;
   vertical-align: middle;
+  text-align: center;
+  box-sizing: border-box;
   font-size: 8.5pt;
-  font-weight: 700;
-  text-align: center;
-  font-style: normal;
-  color: #494 !important;
-  border-radius: 2px;
-  text-decoration: none;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
-
-.control, .control:link, .control:visited {
-  text-align: center;
-  text-decoration: none;
-  border-radius: 2px;
-  box-shadow: var(--highlight);
-  box-sizing: border-box;
-}
-
-.control:link {
-  color: #494 !important;
-}
-
-.control:visited {
-  text-decoration: none;
-  color: #494 !important;
-}
-
-.control:hover, .control:focus, select:hover, select:focus {
-  text-decoration: none;
-  color: #f60 !important;
-  border: 1px solid #f60 !important;
-  box-shadow: var(--highlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000 !important;
-  background: #000;
-}
-
-.control:hover, .control:focus {
-  background: radial-gradient(at center bottom, rgba(96, 48, 0, .4) 0, rgba(0, 0, 0, 0) 80%), #000;
-}
-
-.control:active {
-  text-decoration: none;
-  color: #ee9 !important;
-  box-shadow: var(--highlight), inset 3px 3px 3px 2px #310 !important;
-  background: #f60 !important;
-}
-
-a.control {
-  display: inline-block;
 }
 
 .control.start, .control.stop {
@@ -655,30 +596,18 @@ a.control {
 }
 
 input, select, button {
-  font-size: 9pt;
   vertical-align: middle;
-}
-
-button, input[type=submit], input[type=reset], a.control, select {
-  line-height: 120%;
-  font-family: var(--bodyfont)
-  font-size: 8.5pt;
-  font-weight: 700;
-  border: 1px solid #000;
-  border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2) !important;
-  background: linear-gradient(180deg,#001000, #000 5%, #000 95%, #001000);
+  font-size: 9pt;
 }
 
 select {
   min-width: 120px;
-  font-size: 8.5pt !important;
+  font-size: 8.5pt;
 }
 
 .buttons, .newTunnel {
   padding: 7px 5px !important;
   text-align: right !important;
-  background: #000;
   background: linear-gradient(-135deg, #000, rgba(0,0,0,0) 40%),
     repeating-linear-gradient(90deg, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px),
     linear-gradient(180deg,#020, #000 75%);
@@ -893,24 +822,9 @@ table {
   display: none;
 }
 
-input::-moz-placeholder {
-  font-weight: 700;
+input[required]::placeholder,
+input[placeholder="required"]::placeholder {
   color: #f00;
-  opacity: 1;
-}
-
-::-webkit-input-placeholder {
-  font-weight: 700;
-  color: #f00;
-  opacity: 1;
-}
-
-input:focus::-moz-placeholder {
-  opacity: 0;
-}
-
-:focus::-webkit-input-placeholder {
-  opacity: 0;
 }
 
 input.tunnelName, input.tunnelDescription, #userAgents {
@@ -1065,14 +979,8 @@ input.tunnelName, input.tunnelDescription, #userAgents {
   line-height: 140%;
 }
 
-#wizardPanel input::-moz-placeholder {
+#wizardPanel input::placeholder {
   font-weight: 400;
-  color: #bb7;
-}
-
-#wizardPanel ::-webkit-input-placeholder {
-  font-weight: 400;
-  color: #bb7;
 }
 
 #wizardPanel .options {
@@ -1106,7 +1014,7 @@ input.tunnelName, input.tunnelDescription, #userAgents {
   border-top: 1px solid #1c3f1b;
 }
 
-input[type=checkbox], input[type=radio] {
+.optbox {
   margin: 5px 3px 5px 5px;
 }
 

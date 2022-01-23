@@ -27,7 +27,7 @@
 <input type="hidden" name="nonce" value="<%=pageNonce%>" >
 <input type="hidden" name="action" value="blah" >
 <h3 class="tabletitle"><%=intl._t("Configure I2P Logging Options")%>&nbsp;<span class="h3navlinks" style="float: right;"><a title="<%=intl._t("View Router Logs")%>" href="/logs"><%=intl._t("View Logs")%></a></span></h3>
-<table id="loggingoptions" border="0" cellspacing="5">
+<table id="loggingoptions" class="configtable">
 <tr>
 <td align="right"><b><%=intl._t("Log file")%>:</b></td>
 <td><input type="text" name="logfilename" size="40" disabled="disabled" title="<%=intl._t("Edit {0} to change", "logger.config")%>" value="<jsp:getProperty name="logginghelper" property="logFilePattern" />" ></td>

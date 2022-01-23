@@ -7816,6 +7816,10 @@ b.suboption {
   background: var(--bg) !important;
 }
 
+#netconfig tr:first-child td.infohelp {
+  background-image: url(/themes/console/images/svg/networkconfig.svg);
+}
+
 #netconfig tr:nth-last-child(3) .optionlist {
   margin-bottom: -1px;
 }

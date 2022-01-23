@@ -24,7 +24,6 @@ button, input, select, #debug .skm_key td:first-child b {
 
 button, input, input[type=text], input[type=password], select {
   font-size: 9pt;
-  font-weight: 700;
 }
 
 #config_ui :-moz-broken {
@@ -1348,7 +1347,7 @@ div.messages {
   font-weight: 700;
   font-size: 9.5pt;
   box-shadow: var(--highlight), inset 0 0 2px 0 #393 !important;
-  background: var(--infohelp) no-repeat 12px center, repeating-linear-gradient(180deg,rgba(0,0,0,.6) 2px, rgba(0,32,0,.3) 4px),
+  background: var(--infohelp) no-repeat 15px center, repeating-linear-gradient(180deg,rgba(0,0,0,.6) 2px, rgba(0,32,0,.3) 4px),
     var(--hat) right 2px bottom -2px no-repeat, var(--msg);
   background-size: 28px, 100% 4px, auto 93%, 100%;
 }
@@ -1362,7 +1361,7 @@ div.messages {
   z-index: 100;
   animation: 2s hide-up 8s ease-out forwards;
   box-shadow: inset 0 0 1px 0 #f00, 0 0 2px 2px #000 !important;
-  background: var(--infohelp) no-repeat 12px center, var(--close) right 7px top 6px no-repeat,
+  background: var(--infohelp) no-repeat 15px center, var(--close) right 7px top 6px no-repeat,
     repeating-linear-gradient(180deg,rgba(0,0,0,.6) 2px, rgba(0,32,0,.3) 4px),
     var(--hat) right 2px bottom -2px no-repeat, var(--msg);
   background-size: 28px, 14px, 100% 4px, auto 93%, 100%;
@@ -1370,7 +1369,7 @@ div.messages {
 }
 
 .main:not(#config_update) div.messages:hover, #config_update #messages:hover {
-  background: var(--infohelp) no-repeat 12px center, var(--close_hover) right 7px top 6px no-repeat,
+  background: var(--infohelp) no-repeat 15px center, var(--close_hover) right 7px top 6px no-repeat,
     repeating-linear-gradient(180deg,rgba(0,0,0,.6) 2px, rgba(0,32,0,.3) 4px),
     var(--hat) right 2px bottom -2px no-repeat, var(--msg);
   background-size: 28px, 14px, 100% 4px, auto 93%, 100%;
@@ -2201,23 +2200,6 @@ button:active {
   box-shadow: var(--btn_shadow_active) !important;
 }
 
-input[type=text], input[type=password] {
-  margin: 5px 10px;
-  padding: 6px 8px;
-  text-decoration: none;
-  color: var(--ink);
-  border: 1px solid #151 !important;
-  border-radius: 1px;
-  box-shadow: var(--outline);
-  background: #000800;
-  cursor: text;
-  filter: none;
-}
-
-input[type=text], input[type=password], textarea {
-  color: #bb7 !important;
-}
-
 input[type=image] {
   min-width: 0;
 }
@@ -2230,17 +2212,6 @@ input[name="refreshInterval"] {
   margin-right: 3px;
   width: 100px;
   text-align: right;
-}
-
-input:disabled, input[readonly] {
-  cursor: default;
-  pointer-events: none;
-}
-
-input[type=text]:disabled, input[type=text]:disabled:active, input[readonly="readonly"] {
-  color: #161 !important;
-  border: 1px solid #141 !important;
-  background: #000 !important;
 }
 
 input[class="check"] { /* nudge "check for updates" button into alignment on /configupdate */
@@ -2287,16 +2258,6 @@ textarea[cols="70"], textarea[name="levels"] {
 
 #advancedsettings:focus {
   border: none !important;
-}
-
-input[type=text]:focus, input[type=password]:focus {
-  border: 1px solid #373 !important;
-}
-
-input[readonly]:focus {
-  font-weight: 400;
-  color: #161 !important;
-  filter: none !important;
 }
 
 #consolepass input[name="name"], #externali2cp input[name="user"] {
@@ -3153,14 +3114,13 @@ tr.addnew, tr.addnew:hover {
 
 p#helptranslate {
   margin: 0 -7px;
-  padding: 15px 10px 15px 50px !important;
+  padding: 20px 24px 20px 58px !important;
   position: relative;
   top: 8px;
   text-align: left !important;
   border-top: var(--border);
   border-bottom: var(--border);
-  background: #000 url(images/favicon.svg) no-repeat left 14px center;
-  background-size: 28px !important;
+  background: #000 url(images/favicon.svg) no-repeat left 18px center / 28px;
 }
 
 #themeoptions input {
@@ -3483,8 +3443,8 @@ form[action="/createreseed"] > h3 {
 }
 
 #exportfamily tr:nth-child(2) td:first-child {
-  padding: 15px 15px 15px 50px;
-  background: #000 var(--joinfamily) no-repeat 12px center / 28px;
+  padding: 18px 15px 18px 58px;
+  background: #000 var(--joinfamily) no-repeat 15px center / 28px;
 }
 
 #leavefamily {
@@ -3492,8 +3452,8 @@ form[action="/createreseed"] > h3 {
 }
 
 #leavefamily tr:last-child td:first-child {
-  padding: 15px 15px 15px 50px;
-  background: #000 var(--leavefamily) no-repeat 12px center / 28px;
+  padding: 18px 15px 18px 58px;
+  background: #000 var(--leavefamily) no-repeat 15px center / 28px;
 }
 
 /* configreseed */
@@ -3568,8 +3528,8 @@ p#defaultswork {
 
 p#confignotes {
   margin-bottom: -21px;
-  padding: 15px 15px 15px 50px;
-  background: var(--infohelp) no-repeat 12px center;
+  padding: 18px 15px 18px 58px;
+  background: var(--infohelp) no-repeat 15px center;
 }
 
 p#ipconfig, p#ipv4config, p#udpconfig, p#externaltcp {
@@ -3597,6 +3557,10 @@ p#ipconfig, p#ipv4config, p#udpconfig, p#externaltcp {
 }
 
 /* confignet tidyup */
+
+#netconfig tr:first-child td.infohelp {
+  background-image: url(/themes/console/images/svg/networkconfig.svg) !important;
+}
 
 #netconfig .optbox {
   margin: 10px 6px 2px !important;
@@ -3689,9 +3653,9 @@ form[action="events"] > .formaction {
 }
 
 p#keyringhelp, p#webappconfig, p#availableplugins, p#pluginconfigtext, p#clientdefaultshelp, p#bwshare, p#editclients, p#upnpstatus, p#gatherstats {
-  padding: 15px 15px 15px 50px;
+  padding: 18px 15px 18px 58px;
   border: var(--border);
-  background: #000 var(--infohelp) no-repeat 12px center;
+  background: #000 var(--infohelp) no-repeat 15px center;
 }
 
 p#gatherstats {
@@ -3961,7 +3925,7 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 
 #refreshsidebar td {
   padding-left: 45px;
-  background: #000 var(--timer) no-repeat 12px center / 32px;
+  background: #000 var(--timer) no-repeat 15px center / 32px;
 }
 
 #refreshsidebar td:last-child {
@@ -6354,10 +6318,10 @@ span#distance {
 
 #noleasesets, #notinitialized, .netdbnotfound {
   margin-bottom: 10px;
-  padding: 15px 15px 15px 50px;
+  padding: 18px 15px 18px 58px;
   text-align: left;
   border: var(--border);
-  background: #000 var(--infohelp) no-repeat 12px center / 28px;
+  background: #000 var(--infohelp) no-repeat 15px center / 28px;
 }
 
 #sybilnav, #sybils_summary {
@@ -6369,9 +6333,9 @@ span#distance {
 }
 
 #sybils_summary {
-  padding: 12px 15px 12px 55px;
+  padding: 18px 15px 18px 58px;
   line-height: 2;
-  background: #000 var(--floodfill) no-repeat 12px center / 32px;
+  background: #000 var(--floodfill) no-repeat 18px center / 28px;
 }
 
 #sybilnav {
@@ -6787,18 +6751,22 @@ textarea#advancedsettings {
 }
 
 .configtable td.infohelp, p.infohelp, td.infohelp, p.infowarn, td.infowarn, p#debugmode, p.sybilinfo, #sybilanalysis {
-  padding: 15px 15px 15px 50px !important;
+  padding: 20px 24px 20px 58px !important;
   line-height: 1.3 !important;
   white-space: normal !important;
   font-weight: 400 !important;
   text-align: justify;
   border-bottom: var(--border);
   border-top: var(--border);
-  background: #000 var(--infohelp) no-repeat 12px center / 28px !important;
+  background: #000 var(--infohelp) no-repeat 15px center / 28px !important;
+}
+
+td.infohelp.joinfamily {
+  padding: 20px 24px 20px 58px !important;
 }
 
 #bannedpeercount {
-  background: #000 var(--ban) no-repeat 12px center / 28px !important;
+  background: #000 var(--ban) no-repeat 15px center / 28px !important;
 }
 
 #profiles #bannedpeercount {
@@ -6810,7 +6778,7 @@ textarea#advancedsettings {
 }
 
 #config_ui .infohelp {
-  background: #000 var(--ui) no-repeat 12px center / 28px !important;
+  background: #000 var(--ui) no-repeat 15px center / 28px !important;
 }
 
 table.logtable, #logs #enviro {
@@ -6823,10 +6791,10 @@ p.infohelp, p#debugmode, p.sybilinfo, p#gatherstats, #bugreports td.infohelp {
 }
 
 p.infowarn, td.infowarn {
-  padding: 15px 15px 15px 50px;
+  padding: 18px 15px 18px 58px;
   border: var(--border);
   box-shadow: var(--highlight), inset 0 0 2px 1px #900;
-  background: #000 var(--infowarn) no-repeat 12px center / 28px !important;
+  background: #000 var(--infowarn) no-repeat 15px center / 28px !important;
 }
 
 .infowarn#clientconf {
@@ -6955,7 +6923,7 @@ h3#i2pclientconfig, h3#pconfig, h3#pluginfromurl, h3#pluginfromfile, h3#webappco
 p#javaclienthelp {
   padding: 10px 10px 10px 50px !important;
   border: var(--border);
-  background: var(--infohelp) no-repeat 12px center !important;
+  background: var(--infohelp) no-repeat 15px center !important;
 }
 
 div#clientsconfig {
@@ -7114,38 +7082,38 @@ p#enablefullstats {
 /* infohelp/warn overrides and misc ornamentation */
 
 #bugreports td.infohelp {
-  padding: 15px 15px 15px 50px;
-  background: #000 var(--bug) no-repeat 12px center / 28px !important;
+  padding: 18px 15px 18px 58px;
+  background: #000 var(--bug) no-repeat 15px center / 28px !important;
 }
 
 p#debugmode {
-  padding: 15px 15px 15px 50px;
-  background: #000 var(--bug) no-repeat 12px center / 28px !important;
+  padding: 18px 15px 18px 58px;
+  background: #000 var(--bug) no-repeat 15px center / 28px !important;
 }
 
 p.sybilinfo {
   margin: 8px 0;
-  padding: 15px 15px 15px 50px;
-  background: #000 var(--sybil) no-repeat 12px center / 28px !important;
+  padding: 18px 15px 18px 58px;
+  background: #000 var(--sybil) no-repeat 15px center / 28px !important;
 }
 
 p.sybilinfo.experimental {
-  background: #000 var(--experimental) no-repeat 12px center / 28px !important;
+  background: #000 var(--experimental) no-repeat 15px center / 28px !important;
 }
 
 #bandwidthconfig tr:first-child .infohelp, #bandwidth.infohelp {
-  padding: 15px 15px 15px 50px;
-  background: #000 var(--speed) no-repeat 12px center / 28px !important;
+  padding: 18px 15px 18px 58px;
+  background: #000 var(--speed) no-repeat 15px center / 28px !important;
 }
 
 #addkeyring td.infohelp {
-  padding: 15px 15px 15px 50px;
-  background: #000 var(--keys) no-repeat 12px center / 28px !important;
+  padding: 18px 15px 18px 58px;
+  background: #000 var(--keys) no-repeat 15px center / 28px !important;
 }
 
 #floodfillconfig tr:first-child .infohelp {
-  padding: 15px 15px 15px 50px;
-  background: #000 var(--floodfill) no-repeat 12px center / 28px !important;
+  padding: 18px 15px 18px 58px;
+  background: #000 var(--floodfill) no-repeat 15px center / 28px !important;
 }
 
 #floodfillconfig tr:nth-child(2) td {
@@ -7157,98 +7125,98 @@ p.sybilinfo.experimental {
 }
 
 p#clientconf.infohelp, p#webappconfigtext.infohelp {
-  padding: 15px 15px 15px 50px;
+  padding: 18px 15px 18px 58px;
   position: relative;
   z-index: 10;
-  background: #000 var(--editclient) no-repeat 12px center / 28px !important;
+  background: #000 var(--editclient) no-repeat 15px center / 28px !important;
 }
 
 p#pluginconfigtext {
-  padding: 15px 15px 15px 50px;
-  background: #000 var(--pluginconfig) no-repeat 12px center / 28px !important;
+  padding: 18px 15px 18px 58px;
+  background: #000 var(--pluginconfig) no-repeat 15px center / 28px !important;
 }
 
 #plugininstall .infohelp {
-  padding: 15px 15px 15px 50px;
-  background: #000 var(--plugin) no-repeat 12px center / 28px !important;
+  padding: 18px 15px 18px 58px;
+  background: #000 var(--plugin) no-repeat 15px center / 28px !important;
 }
 
 #manualreseed tr:nth-last-child(2) td.infohelp {
-  padding: 15px 15px 15px 50px;
-  background: #000 var(--package) no-repeat 12px center / 28px !important;
+  padding: 18px 15px 18px 58px;
+  background: #000 var(--package) no-repeat 15px center / 28px !important;
 }
 
 #config_peers tr:nth-child(3) td.infohelp {
-  padding: 15px 15px 15px 50px;
-  background: #000 var(--ban) no-repeat 12px center / 28px !important;
+  padding: 18px 15px 18px 58px;
+  background: #000 var(--ban) no-repeat 15px center / 28px !important;
 }
 
 h3#shutdownrouter + p.infohelp {
-  padding: 15px 15px 15px 50px;
-  background: #000 var(--power) no-repeat 12px center / 28px !important;
+  padding: 18px 15px 18px 58px;
+  background: #000 var(--power) no-repeat 15px center / 28px !important;
 }
 
 h3#restartrouter + p.infohelp, #config_family .infohelp.needrestart {
-  padding: 15px 15px 15px 50px;
-  background: #000 var(--reboot) no-repeat 12px center / 28px !important;
+  padding: 18px 15px 18px 58px;
+  background: #000 var(--reboot) no-repeat 15px center / 28px !important;
 }
 
 h3#systray + p.infohelp {
-  padding: 15px 15px 15px 50px;
-  background: #000 var(--systray) no-repeat 12px center / 28px !important;
+  padding: 18px 15px 18px 58px;
+  background: #000 var(--systray) no-repeat 15px center / 28px !important;
 }
 
 h3#servicedebug + p.infohelp {
-  padding: 15px 15px 15px 50px;
-  background: #000 var(--bug) no-repeat 12px center / 28px !important;
+  padding: 18px 15px 18px 58px;
+  background: #000 var(--bug) no-repeat 15px center / 28px !important;
 }
 
 h3#browseronstart + p.infohelp, .infohelp#webbrowser {
-  padding: 15px 15px 15px 50px;
-  background: #000 var(--firefox) no-repeat 12px center / 28px !important;
+  padding: 18px 15px 18px 58px;
+  background: #000 var(--firefox) no-repeat 15px center / 28px !important;
 }
 
 .main#config_reseed p.infohelp {
-  padding: 15px 15px 15px 50px;
-  background: #000 var(--reseed) no-repeat 12px center / 28px !important;
+  padding: 18px 15px 18px 58px;
+  background: #000 var(--reseed) no-repeat 15px center / 28px !important;
 }
 
 .infohelp#flags {
-  padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/info/flags.png) no-repeat 12px center / 28px !important;
+  padding: 18px 15px 18px 58px;
+  background: #000 url(/themes/console/images/info/flags.png) no-repeat 15px center / 28px !important;
 }
 
 p#enablefullstats, p#gatherstats {
-  padding: 15px 15px 15px 50px;
-  background: #000 var(--stats) no-repeat 12px center / 28px !important;
+  padding: 18px 15px 18px 58px;
+  background: #000 var(--stats) no-repeat 15px center / 28px !important;
 }
 
 #config_family .infohelp {
-  padding: 15px 15px 15px 50px;
-  background: #000 var(--family) no-repeat 12px center / 28px !important;
+  padding: 18px 15px 18px 58px;
+  background: #000 var(--family) no-repeat 15px center / 28px !important;
 }
 
 #consolepass tr:first-child td {
-  padding: 15px 15px 15px 50px;
-  background: #000 var(--useradd) no-repeat 12px center;
+  padding: 18px 15px 18px 58px;
+  background: #000 var(--useradd) no-repeat 15px center;
   background-size: 28px, 100% !important;
 }
 
 form[action="events"] {
   padding: 10px 10px 10px 50px;
-  background: #000 var(--logs) no-repeat 12px center;
+  background: #000 var(--logs) no-repeat 15px center;
   background-size: 28px;
 }
 
 #plugininstall tr:nth-child(3) td:nth-last-child(2), #manualreseed tr:nth-child(3) td:nth-last-child(2) {
-  padding: 15px 15px 15px 50px;
-  background: #000 var(--link) no-repeat 12px center;
+  padding: 18px 15px 18px 58px;
+  background: #000 var(--link) no-repeat 15px center;
   background-size: 28px;
 }
 
 #manualreseed tr:nth-child(5) td:nth-last-child(2), #plugininstall tr:nth-child(5) td:nth-last-child(2) {
-  padding: 15px 15px 15px 50px;
-  background: #000 var(--files) no-repeat 12px center;
+  padding: 18px 15px 18px 58px;
+  background: #000 var(--files) no-repeat 15px center;
   background-size: 28px;
 }
 
@@ -8518,10 +8486,6 @@ th.options, #externali2cp th {
   background: #030;
 }
 
-#wrapperlogs pre {
-  max-height: 500px;
-}
-
 /* graphs */
 
 #graphs td:first-child {
@@ -9011,7 +8975,7 @@ b.suboption {
 }
 
 .service_container .infohelp {
-  padding: 15px 15px 15px 50px !important;
+  padding: 18px 15px 18px 58px !important;
 }
 
 .service_container h3 a {
@@ -9258,9 +9222,9 @@ b.suboption {
 }
 
 #manualreseed td.infohelp {
-  padding: 15px 15px 15px 50px;
+  padding: 18px 15px 18px 58px;
   box-shadow: var(--highlight), inset 0 0 2px 1px #040 !important;
-  background: #000 var(--infohelp) no-repeat 12px center / 28px !important;
+  background: #000 var(--infohelp) no-repeat 15px center / 28px !important;
 }
 
 #config_reseed #manualreseed .optionsingle table,
@@ -9405,7 +9369,7 @@ input[type=file] {
   min-width: 40px;
   display: inline-block;
   vertical-align: middle;
-  background: var(--experimental) no-repeat 12px center !important;
+  background: var(--experimental) no-repeat 15px center !important;
   background-size: 16px auto !important;
   content: "";
 }
@@ -9441,13 +9405,13 @@ input[type=file] {
 }
 
 #installPluginUrl td:first-child {
-  padding: 15px 15px 15px 50px !important;
-  background: var(--link) no-repeat 12px center / 28px !important;
+  padding: 18px 15px 18px 58px !important;
+  background: var(--link) no-repeat 15px center / 28px !important;
 }
 
 #installPluginFile td:first-child {
-  padding: 15px 15px 15px 50px;
-  background: var(--files) no-repeat 12px center / 28px !important;
+  padding: 18px 15px 18px 58px;
+  background: var(--files) no-repeat 15px center / 28px !important;
 }
 
 /* /configfamily */
@@ -9495,12 +9459,12 @@ input[type=file] {
 
 #joinfamily .infohelp {
   box-shadow: var(--highlight), inset 0 0 2px 1px #040 !important;
-  background: #000 var(--joinfamily) no-repeat 12px center / 28px !important;
+  background: #000 var(--joinfamily) no-repeat 15px center / 28px !important;
 }
 
 #newfamily .infohelp {
   box-shadow: var(--highlight), inset 0 0 2px 1px #040 !important;
-  background: #000 var(--newfamily) no-repeat 12px center / 28px !important;
+  background: #000 var(--newfamily) no-repeat 15px center / 28px !important;
 }
 
 #config_service .infohelp {
@@ -10597,8 +10561,8 @@ a:hover .tier, a:focus .tier {
 }
 
 #bugreports td {
-  padding: 15px 10px 15px 50px;
-  background: var(--infohelp) no-repeat 12px center !important;
+  padding: 18px 15px 18px 58px;
+  background: var(--infohelp) no-repeat 15px center !important;
 }
 
 #logs #enviro:hover {
@@ -10681,6 +10645,7 @@ table[id$="logs"] ul {
   max-height: 600px;
   white-space: pre-wrap;
   resize: none;
+  color: #8f935c;
 }
 
 .logtable ul li {
@@ -10692,7 +10657,7 @@ table[id$="logs"] ul {
   width: 100%;
   list-style: none;
   word-break: break-all;
-  line-height: 1.4;
+  line-height: 1.6 !important;
   text-align: left;
   font: bold 8.5pt var(--monospaced);
   border-top: 1px solid #001800;
@@ -10967,11 +10932,11 @@ a[href^="/netdb"]:hover span {
 
 #netconfig td.infohelp, #reseedconfig td.infohelp {
   box-shadow: var(--highlight), inset 0 0 1px 1px #040 !important;
-  background: #000 var(--infohelp) no-repeat 12px center  / 32px !important;
+  background: #000 var(--infohelp) no-repeat 15px center  / 32px !important;
 }
 
 #netconfig td.infowarn {
-  background: #000 var(--infowarn) no-repeat 12px center / 32px !important;
+  background: #000 var(--infowarn) no-repeat 15px center / 32px !important;
 }
 
 #manualreseed table tr, #newfamily tr:last-child table tr {
@@ -12014,12 +11979,13 @@ i {
   margin: 14px 8px;
 }
 
-.encDests th {
-  text-align: left;
+.encDests th, .encDests td {
+  line-height: 1.2;
+  font-size: 8.5pt;
 }
 
-.encDests td {
-  line-height: 1.2;
+.encDests th {
+  text-align: left;
 }
 
 .encDests th:first-child, .encDests td:first-child,
@@ -12275,7 +12241,7 @@ h3 + table {
 }
 
 #enablefullstats {
-  background: #000 var(--stats) no-repeat 12px center / 28px !important;
+  background: #000 var(--stats) no-repeat 15px center / 28px !important;
 }
 
 /* TunnelPeerCount */
@@ -13928,6 +13894,10 @@ body.iframed {
     margin: -3px -3px -1px !important;
     width: 20px !important;
     height: 15px !important;
+  }
+  .main[id^="config_"] .encDests th,
+  .main[id^="config_"] .encDests td {
+    font-size: 9pt !important;
   }
 }
 

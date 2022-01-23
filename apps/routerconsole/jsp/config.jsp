@@ -27,7 +27,7 @@
 <input type="hidden" name="nonce" value="<%=pageNonce%>">
 <input type="hidden" name="action" value="blah">
 <input type="hidden" name="ratesOnly" value="1">
-<h3 id="bwlimiter" class="tabletitle"><%=intl._t("Bandwidth Limiter")%>&nbsp;<span class="h3navlinks"><a href="confignet"><%=intl._t("Advanced Network Configuration")%></a></span></h3>
+<h3 id="bwlimiter" class="tabletitle"><%=intl._t("Bandwidth Limiter")%>&nbsp;<span class="h3navlinks" title="<%=intl._t("Advanced Network Configuration")%>"><a href="confignet"><%=intl._t("Advanced Network Configuration")%></a></span></h3>
 <table id="bandwidthconfig" class="configtable">
 <tr>
 <td class="infohelp" colspan="2">
@@ -93,7 +93,9 @@ A negative rate sets the default.</i><br>
 </tr>
 <tr>
 <td class="infohelp" colspan="2">
-<% int share = Math.round(nethelper.getShareBandwidth() * 1.024f);
+<%
+    int share = Math.round(nethelper.getShareBandwidth() * 1.024f);
+    float shareMegabits = Math.round(nethelper.getShareBandwidth() / 1024 * 8);
     if (share < 12) {
         out.print("<b>");
         out.print(intl._t("NOTE"));
@@ -105,7 +107,7 @@ A negative rate sets the default.</i><br>
         out.print(intl._t("Please enable sharing (participating in tunnels) by configuring more bandwidth. "));
         out.print(intl._t("It improves your anonymity by creating cover traffic, and helps the network. "));
     } else {
-        out.print(intl._t("You have configured I2P to share {0} KBps.", "<b id=\"sharebps\">" + share + "</b>").replace("I2P", "I2P+"));
+        out.print(intl._t("You have configured I2P to share {0} KBps {1}.", "<b id=\"sharebps\">" + share + "</b>", " (" + shareMegabits + " Mbit/s)").replace("I2P", "I2P+"));
         out.print("\n");
 
         out.print(intl._t("The higher the share bandwidth the more you improve your anonymity and help the network."));

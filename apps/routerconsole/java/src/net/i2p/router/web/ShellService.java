@@ -76,7 +76,7 @@ public class ShellService implements ClientApp {
 
         String[] procArgs = trimArgs(args);
 
-        String process = procArgs.toString();
+        String process = Arrays.toString(procArgs);
 
         if (_log.shouldLog(Log.DEBUG)) {
             _log.debug("Process: " + process);
@@ -91,7 +91,7 @@ public class ShellService implements ClientApp {
         _pb.redirectOutput(_outputLog);
         _pb.redirectError(_errorLog);
         _pb.directory(pluginDir);
-        changeState(ClientAppState.INITIALIZED, "ShellService: " + getName() + " set up and initialized");
+        changeState(ClientAppState.INITIALIZED, "ShellService: " + getName() + " setup and initialized");
     }
 
     private String[] trimArgs(String[] args) {
@@ -112,6 +112,8 @@ public class ShellService implements ClientApp {
                     i++;
                 }
             } else {
+                if (_log.shouldLog(Log.DEBUG))
+                    _log.debug("Adding arg: " + args[i]);
                 newargs.add(args[i]);
             }
         }
@@ -189,6 +191,8 @@ public class ShellService implements ClientApp {
      *         not running
      */
     public boolean isProcessRunning() {
+        if (_p == null)
+            return false;
         if (_log.shouldLog(Log.DEBUG))
             _log.debug("Checking process status " + getName() + _p.isAlive());
         return _p.isAlive();

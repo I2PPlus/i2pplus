@@ -2,41 +2,8 @@
 /* Description: Light blue highlights. */
 /* Author: dr|z3d */
 
-@import url(optbox.css);
+@import url(global.css);
 @import url(../images/itooplus.css);
-
-:root {
-  --bg: url("data:image/svg+xml,%3Csvg height='4' viewBox='0 0 4 4' width='4' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m1 3h1v1h-1zm2-2h1v1h-1z' fill='%23e2e2ff' fill-opacity='.5'/%3E%3C/svg%3E");
-  --h1: var(--bg), linear-gradient(135deg, #fcfcff, rgba(252,252,255,0) 600px),
-    linear-gradient(180deg,#fcfcff 50%, rgba(248,248,255,.6) 50%),
-    repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px);
-  --h2: linear-gradient(180deg,#fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
-    linear-gradient(90deg, #fcfcff 5%, rgba(231, 231, 255, .8) 25%);
-  --h3: linear-gradient(180deg,#fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4));
-  --h4app: linear-gradient(90deg, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) #f8f8ff;
-  --p: linear-gradient(135deg, #fafaff, #f8f8ff);
-  --div_infohelp: repeating-linear-gradient(180deg,rgba(255,255,255,.4) 2px, rgba(232,232,255,.7) 4px), var(--p);
-  --highlight: inset 0 0 0 1px #fff;
-  --a: #4d5f80;
-  --ink: #4f4f63;
-  --ink_light: #5b5b71;
-  --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, Verdana, Helvetica, sans-serif;
-  --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
-  --btn: linear-gradient(180deg,#fff,#efefff);
-  --btn_hover: linear-gradient(180deg,#eee,#fff);
-  --btn_shadow_active: var(--highlight), inset 3px 3px 3px 1px rgba(0,0,64,.3);
-  --input_shadow: inset 1px 1px 1px rgba(0,0,48,.2);
-  --border: #6c6c93;
-  --border_inner: #a7a7be;
-  --border_soft: 1px solid #e0e0eb;
-  --bevel: inset 0 0 0 1px #d0d0da;
-  --selected: #27377f;
-  --row: linear-gradient(180deg,#fff,#eef);
-  --row_odd: linear-gradient(180deg,rgba(240,240,255,.6) 50%, rgba(240,240,255,.4));
-  --row_even: linear-gradient(180deg,rgba(248,248,255,.6) 50%, rgba(248,248,255,.2));
-  --suboption: linear-gradient(180deg,#fff 50%,#eef 50%);
-  --table: repeating-linear-gradient(135deg, rgba(248,248,255,.8) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fff;
-}
 
 html, body {
   min-height: 100%;
@@ -44,7 +11,6 @@ html, body {
 
 html {
   margin: 0 !important;
-  scrollbar-color: #779 #a4a4cb;
 }
 
 body {
@@ -52,7 +18,6 @@ body {
   line-height: 1.3;
   text-align: center;
   font-size: 9pt;
-  color: var(--ink);
   background: #a4a4cb url(images/tile2.png) top left / 32px;
 }
 
@@ -112,18 +77,6 @@ div.clearer {
   line-height: 0;
 }
 
-::selection {
-  background: var(--selected) !important;
-  color: #fff;
-  text-shadow: none;
-}
-
-::-moz-selection {
-  background: var(--selected) !important;
-  color: #fff;
-  text-shadow: none;
-}
-
 body, input, button, select, #netdb .netdbentry th code, #netdb .sybil_routerinfo th code, #netdb .leaseset th code {
   font-family: var(--bodyfont)
 }
@@ -139,37 +92,10 @@ button:hover, button:focus, button:active, select:hover, select:focus, select:ac
   text-shadow: none;
 }
 
-a:link, a:visited {
-  color: var(--a);
-  text-decoration: none;
-  font-weight: 700;
-  word-wrap: break-word;
-  outline: none;
-}
-
-a:link:hover, a:hover, a:focus, a:visited:hover {
-  color: #f60 !important;
-  text-decoration: none;
-  text-shadow: none;
-}
-
-a:active, a:visited:active {
-  color: #f30 !important;
-}
-
 #sidebar a, #sidebar img[src$="i2plogo.png"], #sidebar h3, .confignav, *::before, *::after, div.app, .themechoice, .langselect,
 .newsAuthor, #netdbcountrylist img, .viewfullentry, .sybil_routerinfo th img, .graphspanel, #themeoptions, #graphopts, #newsDisplay,
 #version a, #sb_internals, #sb_advanced, #sb_services, #sb_help, .sb_netstatus, .tunnelbuildstatus, #sidebar form, h1, h2, h3, h4, button, img {
   user-select: none;
-}
-
-input, textarea, select {
-  outline: none;
-}
-
-img {
-  border: none;
-  font-size: 0;
 }
 
 pre {
@@ -1979,6 +1905,28 @@ h3, th {
   text-transform: capitalize;
 }
 
+h3#bwlimiter a {
+  font-size: 0;
+}
+
+h3#bwlimiter a::before {
+  margin: -3px 0;
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background: url(/themes/console/images/svg/networkconfig.svg) no-repeat center center;
+  vertical-align: middle;
+}
+
+h3#bwlimiter a:hover::before, h3#bwlimiter a:focus::before {
+  transform: scale(1.2);
+}
+
+h3#bwlimiter a:active::before {
+  transform: scale(.9);
+}
+
 .h3navlinks a:hover {
   color: #f60;
 }
@@ -2674,6 +2622,8 @@ td.optionsave {
 }
 
 td.optionsave, .formaction, form[action="configpeer"] tr:last-child td, table#addkeyring tr:last-child td {
+  border-top: 1px solid var(--border_inner) !important;
+  border-bottom: 1px solid var(--border_inner) !important;
   background: linear-gradient(180deg,#fafaff 50%, rgba(220,220,255,.3)),
     repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) !important;
 }
@@ -2686,8 +2636,13 @@ td.optionsave, .formaction, form[action="configpeer"] tr:last-child td, table#ad
   padding: 5px;
 }
 
-.configtable tr:last-child td {
+.configtable tr:first-child td {
   border-top: 1px solid var(--border_inner) !important;
+}
+
+.configtable tr:last-child td, .configtable tr:nth-last-child(2) td, .encDests td:last-child {
+  border-top: 1px solid var(--border_inner) !important;
+  border-bottom: 1px solid var(--border_inner) !important;
 }
 
 .infowarn, .infohelp, #pluginconfigtext {
@@ -3046,8 +3001,21 @@ table#wrapperlogs {
 }
 
 #routerinformation tr:last-child td, #enviro tr:last-child td,
-#jobstats tr:last-child td, #jobs #jobstats tr:nth-last-child(2) td {
+#jobstats tr:last-child td, #jobs #jobstats tr:nth-last-child(2) td,
+.lastrow:not(:last-of-type) td, #config_bandwidth #bandwidthconfig td,
+#externali2cp td, #netconfig td, #config_peers td,
+#pluginconfig td, #config_stats td, #config_ui td, #config_update td, #debug td,
+#netdblookup tr:nth-last-child(2) td, #netdblookup tr:nth-last-child(4) td,
+#schedjobs tr:last-child td {
   border-bottom: 1px solid var(--border_inner) !important;
+}
+
+#config_tunnels #tunnelconfig tr:nth-last-child(2) td {
+  border-bottom: var(--border_soft) !important;
+}
+
+#pluginconfig table td {
+  border: var(--border_soft) !important;
 }
 
 #logs #enviro:hover td {
@@ -3157,8 +3125,25 @@ td {
   padding: 3px 5px;
   color: var(--ink);
   vertical-align: middle;
-  border-top: 1px solid #a7a7be;
-  border-bottom: 1px solid #a7a7be;
+  border-top: var(--border_soft);
+  border-bottom: var(--border_soft);
+}
+
+div[id^="config"] tr:last-child td,
+#events tr:last-child td,
+#netdb table table tr:last-child td,
+#profiles tr:last-child td,
+#peers tr:last-child td,
+#tunnels tr:last-child td,
+td.tabletextarea, .configtable tr:nth-last-child(2) td,
+#consolepass tr:first-child td, td.infohelp. #updatehelper,
+#i2pupdates tr:first-child td, #i2pupdates tr:nth-child(2) td {
+  border-bottom: 1px solid var(--border_inner) !important;
+}
+
+.th_title, #consolepass tr:first-child td, td.infohelp,
+#i2pupdates tr:nth-child(2) td, #updatehelper {
+  border-top: 1px solid var(--border_inner) !important;
 }
 
 #floodfillconfig tr:nth-child(2) td {
@@ -4568,45 +4553,12 @@ input[type=submit], input[type=reset], button, select {
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
-button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset]::-moz-focus-inner {
-  outline: none;
-  border: none;
-}
-
 button a, button a:visited {
   font-weight: 400 !important;
   color: var(--ink_light);
 }
 
 button:hover, input[type=submit]:hover, input[type=reset]:hover, button:focus, input[type=submit]:focus, input[type=reset]:focus {
-  color: #19191f;
-  border: 1px solid #f60;
-  box-shadow: var(--highlight), inset 0 -8px 3px 8px rgba(255,96,0,.02), inset 0 0 10px rgba(255,96,0,.05), 0 0 1px rgba(255,96,0,.1), 0 7px 4px -4px rgba(0,0,0,.1);
-  background: var(--btn_hover);
-  filter: saturate(100%) drop-shadow(0 0 1px rgba(204, 204, 204, .8));
-  transition: ease border .7s;
-}
-
-input[type=file]::file-selector-button {
-  margin: 3px 10px 3px 3px;
-  padding: 4px 10px;
-  line-height: 1.4;
-  font-family: var(--bodyfont);
-  font-size: 9pt;
-  color: var(--ink_light);
-  text-decoration: none;
-  text-shadow: 0 1px 1px #fff;
-  border: 1px solid #97a2ce;
-  border-radius: 2px;
-  box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
-  background: var(--btn);
-  background-size: 14px auto, 100% !important;
-  opacity: 1;
-  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
-  cursor: pointer;
-}
-
-input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
   color: #19191f;
   border: 1px solid #f60;
   box-shadow: var(--highlight), inset 0 -8px 3px 8px rgba(255,96,0,.02), inset 0 0 10px rgba(255,96,0,.05), 0 0 1px rgba(255,96,0,.1), 0 7px 4px -4px rgba(0,0,0,.1);
@@ -5069,16 +5021,6 @@ button.download.control:hover, button.download.control:focus {
 
 /* end sidebar buttons */
 
-input[type=text], input[type=password] {
-  padding: 5px 8px;
-  box-shadow: var(--input_shadow);
-  background: #fbfbff;
-}
-
-input[type=text]::placeholder {
-  font-style: italic;
-}
-
 .search input[type=text]:not(:hover)::placeholder, input[type=text]:focus::placeholder {
   opacity: 0;
 }
@@ -5087,15 +5029,6 @@ input[name="refreshInterval"] {
   text-align: right;
   min-width: 80px;
   width: 80px;
-}
-
-input[type=text]:focus, input[type=password]:focus {
-  background: #fff;
-  box-shadow: var(--highlight), inset 3px 3px 3px rgba(0,0,48,.2);
-  box-shadow: var(--btn_shadow_active);
-  filter: drop-shadow(0 0 1px #89f);
-  color: #19191f;
-  border: 1px solid #676c7f;
 }
 
 .main[id^="config_"] input[name="port"], input[name="sport"] {
@@ -5118,10 +5051,6 @@ input[type="file"]:hover {
   filter: none;
 }
 
-label {
-  cursor: pointer;
-}
-
 label:hover, th label b:hover {
   color: #19191f !important;
 }
@@ -5140,95 +5069,13 @@ label.disabled, label.disabled:hover, label.disabled:active {
   cursor: not-allowed !important;
 }
 
-#oldhome label {
-  margin-right: 10px;
-}
-
-select, select[disabled]:hover, select[disabled]:focus {
-  margin: 5px;
-  padding: 6px 24px 6px 8px !important;
-  min-width: 120px;
-  text-align: left !important;
-  font-size: 9pt;
-  color: var(--ink_light);
-  border: 1px solid #97a2ce;
-  border-radius: 2px;
-  box-shadow: var(--highlight);
-  box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
-  background: var(--dropdown) no-repeat right 8px center / 10px, var(--btn);
-  appearance: none;
-  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
-}
-
-select:-moz-focusring {
-  outline: 1px solid transparent;
-}
-
-select option {
-  background: #fff;
-}
-
-select, input[type=text] {
-  min-width: 120px;
-}
-
-select:hover, select:focus, select:active {
-  border: 1px solid #535979;
-}
-
-select:hover, select:active {
-  color: #19191f;
-  box-shadow: var(--highlight), 0 2px 1px #ddf;
-  background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover) !important;
-}
-
-select:focus {
-  color: #19191f;
-  box-shadow: 0 0 1px #89f;
-  background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover) !important;
-}
-
-select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active {
-  border: 1px solid #97a2ce !important;
-  box-shadow: var(--highlight) !important;
-  background: var(--btn) !important;
-  opacity: .8;
-  cursor: default;
-}
-
-select::-moz-focus-inner {
-  outline: none !important;
-  border: none !important;
-}
-
-input[readonly], input[disabled], input[readonly]:focus, input[disabled]:focus {
-  color: #4d4d5f;
-  border: 1px solid #a8b1d6;
-  box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6);
-  background: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(220, 220, 255, .3) 3px, #fafaff 4px), #fafaff;
-  filter: none;
-  cursor: default;
-}
-
 textarea {
-  margin: 5px !important;
-  padding: 5px 8px;
   min-width: 97%;
   min-height: 100px;
-  font-size: 9pt;
-  color: var(--ink) !important;
-  border: 1px solid #97a2ce;
-  border-radius: 2px;
-  box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6);
-  background: #fbfbff;
 }
 
-textarea:focus {
-  color: #19191f !important;
-  border: 1px solid #676c7f;
-  box-shadow: var(--btn_shadow_active);
-  background: #fff;
-  filter: drop-shadow(0 0 1px #89f);
+#oldhome label {
+  margin-right: 10px;
 }
 
 #tunnels h3, #tunnels h3 a, #config_reseed h3, #config_reseed h3 a, #config_advanced h3 a {
@@ -5308,7 +5155,7 @@ h3 + .statusnotes {
 
 #jobs ol {
   margin-top: 1px;
-  padding: 4px 2px 2px;
+  padding: 4px 2px;
   border: 1px solid var(--border_inner);
   box-shadow: var(--highlight);
   background: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fff 5px), #fff;
@@ -7779,7 +7626,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   list-style: none;
   font-size: 95%;
   box-shadow: 0 0 0 1px #9898b3, var(--highlight), inset 0 0 8px 3px rgba(232,232,255,.6);
-  background: linear-gradient(180deg,rgba(232,232,255,.5), rgba(228,228,255,.5)) #f8f8ff;
+  background: linear-gradient(180deg,#fff,#f8f8ff);
   -webkit-break-inside: avoid;
   break-inside: avoid;
   page-break-inside: avoid;
@@ -9755,7 +9602,6 @@ b.suboption {
 }
 
 .bw_title {
-  margin: 2px -1px 0 -15px;
   font-size: 10pt;
 }
 
@@ -9802,6 +9648,10 @@ b.suboption {
 /* end bandwidth config */
 
 /* /confignet */
+
+#netconfig tr:first-child td.infohelp {
+  background-image: url(/themes/console/images/svg/networkconfig.svg);
+}
 
 #netconfig tr, #i2pupdates tr, #config_reseed tr {
   background: #fafaff !important;
@@ -12604,7 +12454,6 @@ iframe {
   }
   #ntcpconnections .spacer {display: none}
   .tunnel_id:not(:empty) {
-    border: 1px solid #bbd;
     background: var(--hardhat) no-repeat 5px center / 14px, var(--row);
   }
   .tunnel_id:not(:empty)::before {
@@ -12737,8 +12586,8 @@ iframe {
     contain: paint;
   }
   .routerid .flag {
-    margin-top: 1px -3px -2px;
-    padding-left: 4px !important;
+    margin: -1px -2px -1px -4px;
+    padding: 2px 4px;
     width: 20px;
     height: 17px;
     display: inline-block;

@@ -3,23 +3,16 @@
 
 /* #ovrvw, #bk, #cfg, #sbs to target pages (body ids) */
 
-@import url(/themes/fonts/DroidSans.css);
-@import url(/themes/console/light/optbox.css);
+@import url(/themes/console/light/global.css);
 @import url(../images/images.css);
 @import url(images/images.css);
 
 :root {
-  --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, Verdana, Helvetica, sans-serif;
-  --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
-  --highlight: inset 0 0 0 1px #fff;
   --nav: linear-gradient(180deg,#fff 50%, #eef 50%, #ebebff);
 }
 
 body {
   margin: 0 5px;
-  font-family: var(--bodyfont);
-  font-size: 9pt;
-  color: #4f4f63;
   background: #a4a4cb url(/themes/console/light/images/tile2.png) center center;
 }
 
@@ -29,29 +22,12 @@ body.iframed {
   overflow: hidden;
 }
 
-::selection {
-  background: #27377f !important;
-  color: white;
-  text-shadow: none;
-}
-
-::-moz-selection {
-  background: #27377f !important;
-  color: white;
-  text-shadow: none;
-}
-
 #navi, .buttons, #buttons, #host_list tr:first-child, #host_list img, #host_list td:nth-child(n+2) a {
   user-select: none;
 }
 
-* {
-  outline: none;
-}
-
 .optbox {
   margin: 3px 5px;
-  cursor: pointer;
 }
 
 b, td.search {

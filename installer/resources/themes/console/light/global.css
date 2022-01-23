@@ -1,0 +1,329 @@
+/* I2P Light theme globals */
+/* Author: (c) dr|z3d 2022 */
+
+@import url(/themes/fonts/DroidSans.css);
+
+:root {
+  --a: #4d5f80;
+  --badgeborder: 1px solid #bbc;
+  --badge: linear-gradient(180deg,#fff,#ddf);
+  --bevel: inset 0 0 0 1px #d0d0da;
+    --bg: url("data:image/svg+xml,%3Csvg height='4' viewBox='0 0 4 4' width='4' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m1 3h1v1h-1zm2-2h1v1h-1z' fill='%23e2e2ff' fill-opacity='.5'/%3E%3C/svg%3E");
+  --bg: url("data:image/svg+xml,%3Csvg height='4' viewBox='0 0 4 4' width='4' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m1 3h1v1h-1zm2-2h1v1h-1z' fill='%23e2e2ff' fill-opacity='.5'/%3E%3C/svg%3E");
+  --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
+  --border: #6c6c93;
+  --border_inner: #a7a7be;
+  --border_soft: 1px solid #e0e0eb;
+  --border_softer: 1px solid #dfdfec;
+  --btn_hover: linear-gradient(180deg,#eee,#fff);
+  --btn: linear-gradient(180deg,#fff,#efefff);
+  --btn_shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
+  --btn_shadow_active: var(--highlight), inset 3px 3px 3px 1px rgba(0,0,64,.3);
+  --div_infohelp: repeating-linear-gradient(180deg,rgba(255,255,255,.4) 2px, rgba(232,232,255,.7) 4px), var(--p);
+  --filter_focus: drop-shadow(0 0 1px #f60) drop-shadow(0 0 1px rgba(255,96,0,.4));
+  --h1: var(--bg), linear-gradient(135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(180deg,#fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px);
+  --h2: linear-gradient(180deg,#fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(135deg, #fcfcff 15%, rgba(231, 231, 255, .8) 35%);
+  --h2: linear-gradient(180deg,#fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(90deg, #fcfcff 5%, rgba(231, 231, 255, .8) 25%);
+  --h3: linear-gradient(180deg,#fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4));
+  --h4app: linear-gradient(90deg, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) #f8f8ff;
+  --highlight: inset 0 0 0 1px #fff;
+  --hover: #f60;
+  --ink: #4f4f63;
+  --ink_dark: #393947;
+  --ink_light: #5b5b71;
+  --ink_lighter: #71718e;
+  --input_shadow: inset 1px 1px 1px rgba(0,0,48,.2);
+  --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
+  --outline: 0 0 0 1px #000;
+  --p: linear-gradient(135deg, #fafaff, #f8f8ff);
+  --readonly: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(220, 220, 255, .5) 3px, #fafaff 4px), #fafaff;
+  --row: linear-gradient(180deg,#fff,#eef);
+  --row_even: linear-gradient(180deg,rgba(248,248,255,.6) 50%, rgba(248,248,255,.2));
+  --row_odd: linear-gradient(180deg,rgba(240,240,255,.6) 50%, rgba(240,240,255,.4));
+  --selected: #27377f;
+  --suboption: linear-gradient(180deg,#fff 50%,#eef 50%);
+  --table: repeating-linear-gradient(135deg, rgba(248,248,255,.8) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fff;
+  --th: linear-gradient(180deg,#fcfcff,#fafaff 50%,#f4f4ff 100%);
+}
+
+html {
+  scrollbar-color: #779 #a4a4cb;
+}
+
+body {
+  font-family: var(--bodyfont);
+  font-size: 9pt;
+  color: var(--ink);
+}
+
+* {
+  outline: none;
+}
+
+::selection {
+  background: var(--selected) !important;
+  color: #fff;
+  text-shadow: none;
+}
+
+button::-moz-focus-inner, input[type=submit]::-moz-focus-inner,
+input[type=reset]::-moz-focus-inner, .control::-moz-focus-inner,
+select::-moz-focus-inner {
+  outline: none;
+  border: none;
+}
+
+input, textarea, select {
+  outline: none;
+}
+
+img {
+  border: none;
+  font-size: 0;
+}
+
+b {
+  color: var(--ink_light);
+}
+
+tr {
+  content: layout;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:link, a:visited {
+  color: var(--a);
+  text-decoration: none;
+  font-weight: 700;
+  word-wrap: break-word;
+  outline: none;
+}
+
+a:link:hover, a:hover, a:focus, a:visited:hover {
+  color: #f60;
+  text-decoration: none;
+  text-shadow: none;
+}
+
+a:active, a:visited:active {
+  color: #f30;
+}
+
+.control, .optbox, select, input[type=submit], input[type=reset], label {
+  cursor: pointer;
+}
+
+select, select[disabled]:hover, select[disabled]:focus {
+  margin: 5px;
+  padding: 6px 24px 6px 8px !important;
+  min-width: 120px;
+  text-align: left !important;
+  font-size: 9pt;
+  color: var(--ink_light);
+  border: 1px solid #97a2ce;
+  border-radius: 2px;
+  box-shadow: var(--highlight);
+  box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
+  background: var(--dropdown) no-repeat right 8px center / 10px, var(--btn);
+  appearance: none;
+  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
+}
+
+select:-moz-focusring {
+  outline: 1px solid transparent;
+}
+
+select option {
+  background: #fff;
+}
+
+select, input[type=text] {
+  min-width: 120px;
+}
+
+select:hover, select:focus, select:active {
+  border: 1px solid #535979;
+}
+
+select:hover, select:active {
+  color: #19191f;
+  box-shadow: var(--highlight), 0 2px 1px #ddf;
+  background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover) !important;
+}
+
+select:focus {
+  color: #19191f;
+  box-shadow: 0 0 1px #f60;
+  background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover) !important;
+}
+
+select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active {
+  border: 1px solid #97a2ce !important;
+  box-shadow: var(--highlight) !important;
+  background: var(--btn) !important;
+  opacity: .8;
+  cursor: default;
+}
+
+input[readonly], input[disabled], input[readonly]:focus, input[disabled]:focus {
+  color: #4d4d5f;
+  border: 1px solid #a8b1d6;
+  box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6);
+  background: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(220, 220, 255, .3) 3px, #fafaff 4px), #fafaff;
+  filter: none;
+  cursor: default;
+}
+
+input[type=text], input[type=password] {
+  padding: 5px 8px;
+  box-shadow: var(--input_shadow);
+  background: #fbfbff;
+}
+
+input[type=text]:focus, input[type=password]:focus,
+.freetext:focus, .displayText:focus {
+  color: #19191f;
+  box-shadow: var(--highlight), var(--btn_shadow_active) !important;
+  border: 1px solid #676c7f;
+  background: #fff;
+  filter: var(--filter_focus);
+}
+
+input[type=text][disabled] {
+  color: var(--ink_lighter);
+}
+
+textarea {
+  margin: 5px;
+  padding: 5px 8px;
+  resize: none;
+  font-size: 9pt;
+  color: var(--ink);
+  border: 1px solid #97a2ce;
+  border-radius: 2px;
+  box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6);
+  background: #fbfbff;
+}
+
+textarea:focus {
+  color: #19191f;
+  border: 1px solid #676c7f;
+  box-shadow: var(--btn_shadow_active);
+  background: #fff;
+  filter: var(--filter_focus);
+}
+
+input[type=file]::file-selector-button {
+  margin: 3px 10px 3px 3px;
+  padding: 4px 10px;
+  line-height: 1.4;
+  font-family: var(--bodyfont);
+  font-size: 9pt;
+  color: var(--ink_light);
+  text-decoration: none;
+  text-shadow: 0 1px 1px #fff;
+  border: 1px solid #97a2ce;
+  border-radius: 2px;
+  box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
+  background: var(--btn);
+  background-size: 14px auto, 100% !important;
+  opacity: 1;
+  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
+  cursor: pointer;
+}
+
+input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
+  color: #19191f;
+  border: 1px solid #f60;
+  box-shadow: var(--highlight), inset 0 -8px 3px 8px rgba(255,96,0,.02), inset 0 0 10px rgba(255,96,0,.05), 0 0 1px rgba(255,96,0,.1), 0 7px 4px -4px rgba(0,0,0,.1);
+  background: var(--btn_hover);
+  filter: saturate(100%) drop-shadow(0 0 1px rgba(204, 204, 204, .8));
+  transition: ease border .7s;
+}
+
+input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
+  width: 19px !important;
+  height: 19px !important;
+  border-radius: 1px;
+}
+
+input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
+  width: 19px !important;
+  height: 19px !important;
+  border-radius: 50%;
+}
+
+input[type=checkbox]:checked::before, input[type=radio]:checked::before {
+  position: absolute;
+  background: linear-gradient(135deg, #6389cf, #3c6bc3);
+  box-shadow: inset 1px 1px 1px 1px #6389cf, inset -1px -1px 1px 1px #3c6bc3;
+  content: "";
+}
+
+input[type=checkbox]:checked::before {
+  top: 3px;
+  left: 3px;
+  width: 11px;
+  height: 11px;
+  line-height: 80%;
+  border-radius: 1px;
+}
+
+input[type=radio]:checked::before {
+  left: 4px;
+  top: 4px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  box-shadow: inset 1px 1px 1px 1px #6389cf, inset -1px -1px 1px 1px #3c6bc3, 0 0 0 1px #7698d5;
+}
+
+input[type=checkbox]:not(:checked) {
+  box-shadow: inset 0 0 0 1px #f8f8ff, inset 3px 3px 3px #aad;
+}
+
+input[type=radio]:not(:checked) {
+  box-shadow: inset 0 0 0 2px #f8f8ff, inset 3px 3px 3px #aad;
+}
+
+.optbox {
+  margin: 2px 0;
+  position: relative;
+  vertical-align: middle !important;
+  border: 1px solid #97a2ce !important;
+  background: #f8f8ff !important;
+  box-sizing: border-box;
+  appearance: none;
+  filter: drop-shadow(0 0 1px #e0e0eb) !important;
+}
+
+.optbox:checked {
+  box-shadow: inset 0 0 0 1px #fff;
+  background: linear-gradient(180deg,#fff, #f0f0ff) !important;
+}
+
+.optbox:hover, .optbox:focus, .optbox:active,
+.optbox:checked:hover, .optbox:checked:focus, .optbox:checked:active {
+  width: 19px !important;
+  height: 19px !important;
+  min-width: 19px !important;
+  min-height: 19px !important;
+  border: 1px solid #484e6a !important;
+  box-shadow: 0 0 2px #f60 !important;
+}
+
+.optbox:not(:checked)::before {
+  position: absolute;
+  top: 25%;
+  left: 4px;
+  color: transparent;
+  background: transparent;
+  content: "";
+}
+
+input[type=radio]:not(:checked)::before {
+  border-radius: 50%;
+}

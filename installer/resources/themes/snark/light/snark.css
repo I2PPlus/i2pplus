@@ -3,40 +3,21 @@
 /* Author: dr|z3d */
 /* Thanks to http://www.luxphile.com/2011/01/creative-commons-cat.html for the kitty image */
 
-@import url(/themes/fonts/DroidSans.css);
-@import url(/themes/console/light/optbox.css);
+@import url(/themes/console/light/global.css);
 @import url(sliders.css);
 
 :root {
-  --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
-  --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
-    --bg: url("data:image/svg+xml,%3Csvg height='4' viewBox='0 0 4 4' width='4' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m1 3h1v1h-1zm2-2h1v1h-1z' fill='%23e2e2ff' fill-opacity='.5'/%3E%3C/svg%3E");
-  --highlight: inset 0 0 0 1px #fff;
   --nav: linear-gradient(180deg,#fff 50%,#eef 51%,#eef 100%);
   --nav_hover: linear-gradient(180deg,#fcfaf7 50%,#ffe8bf 50%,#efd9b3 100%);
   --panel_iframed: linear-gradient(180deg,#fafaff,#f8f8ff,#fafaff);
   --btnAction: linear-gradient(180deg,#fff 50%,#eef 50%);
   --btnAction_hover: linear-gradient(180deg,#fff 50%,#ddf 50%);
-  --th: linear-gradient(180deg,#fcfcff,#fafaff 50%,#f4f4ff 100%);
-  --badge: linear-gradient(180deg,#fff,#ddf);
-  --border_soft: 1px solid #afafcf;
-  --border_softer: 1px solid #dfdfec;
-  --ink: #4f4f63;
-  --ink_light: #5b5b71;
-  --ink_lighter: #71718e;
-  --ink_dark: #393947;
-  --hover: #f60;
   --section: linear-gradient(180deg,#fafaff,#efefff);
-}
-
-html {
-  scrollbar-color: #779 #a4a4cb;
+  --border_soft: 1px solid #afafcf;
 }
 
 body {
   margin: 3px;
-  font: 9pt var(--bodyfont);
-  color: var(--ink);
   background: #a4a4cb url(/themes/console/light/images/tile2.png) center top / 32px;
   scrollbar-color: #779 rgba(255,255,255,.5);
 }

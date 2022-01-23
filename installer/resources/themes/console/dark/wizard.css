@@ -1,6 +1,7 @@
+@import url(global.css);
+
 #wizardpage .routersummary h3, #wizardpage .routersummary h3:hover, #wizardpage .routersummary h3:active {
-  background: var(--h3),
-    var(--navbar) !important;
+  background: var(--h3), var(--navbar) !important;
   box-shadow: var(--lowlight) !important;
   mix-blend-mode: normal !important;
 }

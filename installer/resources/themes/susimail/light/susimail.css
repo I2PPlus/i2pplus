@@ -2,31 +2,12 @@
 /* Codename: "Corporat" */
 /* Author: dr|z3d */
 
-@import url(/themes/fonts/DroidSans.css);
-@import url(/themes/console/light/optbox.css);
+@import url(/themes/console/light/global.css);
 @import url(../images/images.css);
 @import url(images/images.css);
 
-:root {
-  --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, Verdana, Helvetica, sans-serif;
-  --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
-  --badge: linear-gradient(180deg,#fff, #eef);
-  --badgeborder: 1px solid #bbc;
-  --btn: linear-gradient(180deg,#fff, #efefff);
-  --btn_hover: linear-gradient(180deg,#eee, #fff);
-  --highlight: inset 0 0 0 1px #fff;
-  --ink: #4f4f63;
-}
-
-html {
-  scrollbar-color: #779 #a4a4cb;
-}
-
 body {
   margin: 5px;
-  color: var(--ink);
-  font-family: var(--bodyfont);
-  font-size: 9pt;
   background: #a4a4cb url(/themes/console/light/images/tile2.png);
 }
 
@@ -49,28 +30,8 @@ body.iframed {
   background: transparent !important;
 }
 
-input, select, textarea {
-  outline: none;
-}
-
-tr {
-  content: layout;
-}
-
 .pagenav, .sort, .topbuttons, h3, .footer, .bottombuttons, .topbuttons, th img, h3, #dologin, th, #loading  {
   user-select: none;
-}
-
-::selection {
-  background: #27377f !important;
-  color: white;
-  text-shadow: none;
-}
-
-::-moz-selection {
-  background: #27377f !important;
-  color: white;
-  text-shadow: none;
 }
 
 b, h3, .pagenav td, th {
@@ -505,11 +466,14 @@ input.reload, input.refresh, input[name="refresh"][disabled], .fakebutton {
   background: var(--refresh) no-repeat 6px center / 12px, var(--btn) !important;
 }
 
-.fakebutton, .fakebutton:visited {
+.fakebutton {
   margin-top: 2px;
   padding-left: 24px;
-  float: left;
   line-height: 1.3
+}
+
+.fakebutton:not(#settings) {
+  float: left;
 }
 
 input[name="refresh"][disabled] {

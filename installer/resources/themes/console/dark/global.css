@@ -8,18 +8,20 @@
   --a: #494;
   --active: #f90;
   --badge: linear-gradient(180deg,#020, #010);
-  --badge: linear-gradient(180deg,#030,#010);
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   --border: 1px solid #242;
   --border_hard: 1px solid #252;
+  --border_hover: 1px solid #f60;
   --border_soft: 1px solid #131;
   --btnAction_hover: var(--nav_hover);
   --btnAction: linear-gradient(180deg,#030,#020 50%,#010 50%);
+  --btn_hover: linear-gradient(180deg,#000,#010);
   --btn_hover_radial: radial-gradient(at center bottom, rgba(96, 48, 0, .4) 0, rgba(0, 0, 0, 0) 80%), #000;
   --btn: linear-gradient(180deg,#001000,#000 5%,#000 95%,#001000);
-  --btn_shadow_active: var(--highlight), inset 3px 3px 3px 2px rgba(0,0,0,.8), 0 0 0 1px #000;
+  --btn_shadow_active: var(--highlight), inset 3px 3px 3px 3px rgba(0,0,0,.8), 0 0 0 1px #000;
   --btn_shadow_hover: var(--highlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
   --btn_shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
+  --camo: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cfilter id='a'%3E%3CfeTurbulence baseFrequency='.2' numOctaves='4' seed='7' stitchTiles='stitch' type='fractalNoise'/%3E%3CfeTile/%3E%3CfeComponentTransfer%3E%3CfeFuncR slope='0.9469288793103452' tableValues='0 0 0 0 1 1' type='discrete'/%3E%3CfeFuncG slope='1.1477696210488517' tableValues='0 0 0 1 1' type='discrete'/%3E%3CfeFuncB intercept='4.3091942798132177' slope='-1.9643779184626435' tableValues='0 1' type='discrete'/%3E%3CfeFuncA intercept='-3.5179822198275872' slope='3.4636819773706904' type='discrete'/%3E%3C/feComponentTransfer%3E%3CfeColorMatrix values='1 0 0 0 0 -1 1 0 0 0 -1 -1 1 0 0 0 0 0 0 1'/%3E%3CfeColorMatrix type='matrix' values='-0.08 0.42 0.09 0 0.08 -0.17 0.35 -0.08 0 0.17 -0.08 0.15 -0.04 0 0.08 0 0 0 0 1'/%3E%3C/filter%3E%3Cpath d='m-29.6-29.6h256v256h-256z' filter='url(%23a)'/%3E%3Cpath d='m-4-4h256v256h-256z' fill='%23080000' opacity='.7'/%3E%3C/svg%3E");
   --center: no-repeat center center;
   --dotted: 1px dotted #131;
   --download_bar: repeating-linear-gradient(135deg, #000 1px, #000 5px, #010 6px, #010 11px);
@@ -30,20 +32,25 @@
   --h3: repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px);
   --heading: linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px);
   --helpbox: linear-gradient(135deg, #000d00, #000900);
+  --help: repeating-linear-gradient(90deg,#000 2px,#010 4px);
   --highlight_badge: inset 0 0 0 1px #010, 0 0 0 1px #000;
   --highlight: inset 0 0 0 1px #000;
   --hover: #f60;
   --ink: #ee9;
-  --input_txt: linear-gradient(180deg,#001000,#001800);
+  --input_txt: linear-gradient(180deg,#000800,#001800);
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
   --msg: linear-gradient(180deg,#010,#000400);
   --navbar: linear-gradient(180deg,#1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%);
   --nav_hover: linear-gradient(180deg,#730,#620 50%,#410 50%,#000);
+  --nav: linear-gradient(180deg,#002900, #000400);
   --on: #6b6, 0 0 0 1px rgba(0,0,0,.7), 0 0 1px 0 rgba(0,0,0,.5);
   --option_highlight: inset 0 0 0 1px #002500;
   --outline: 0 0 0 1px #000;
   --textshadow: 0 1px 1px rgba(0,0,0,.8);
   --th: linear-gradient(180deg,#010,#000);
+  --tr: linear-gradient(180deg,#001400,#000600);
+  --txt_focus: linear-gradient(180deg,#001800,#001000);
+  --txt_shadow: 0 1px 1px #000;
   --vstripe: repeating-linear-gradient(180deg,rgba(0,0,0,.9) 2px, rgba(0,16,0,.9) 4px);
 }
 
@@ -83,6 +90,18 @@ body {
   display: none !important;
 }
 
+input::placeholder {
+  font-family: var(--bodyfont);
+  font-weight: 700;
+  font-style: italic;
+  color: var(--ink);
+  opacity: .3;
+}
+
+input:focus::placeholder {
+  opacity: 0;
+}
+
 a:link, a:visited {
   word-wrap: break-word;
   text-decoration: none;
@@ -105,7 +124,6 @@ img {
   font-size: 0;
   border: none;
 }
-
 
 tt, textarea, code {
   font-family: var(--monospaced);
@@ -150,15 +168,24 @@ label[disabled] {
   pointer-events: none;
 }
 
-input, select, button {
-  font-family: var(--bodyfont);
+input:disabled {
+  pointer-events: none;
 }
 
-input[type=submit], input[type=reset], button, a.control {
+input, select, button {
+  font-family: var(--bodyfont);
+  font-weight: 700;
+}
+
+input[type=submit], input[type=reset], button, .control, select, .fakebutton {
+  line-height: 1.2;
+}
+
+input[type=submit], input[type=reset], button, .control, .fakebutton {
   margin: 5px;
   padding: 7px 12px;
   min-width: 110px;
-  line-height: 1.2;
+  text-align: center;
   text-decoration: none;
   color: var(--a);
   border: 1px solid #000;
@@ -169,8 +196,8 @@ input[type=submit], input[type=reset], button, a.control {
 
 input[type=submit]:hover, input[type=reset]:hover,
 input[type=submit]:focus, input[type=reset]:focus,
-button:hover, button:focus,
-a.control:hover, a.control:focus {
+button:hover, button:focus, .control:hover, .control:focus,
+.fakebutton:hover, .fakebutton:focus {
   color: var(--hover) !important;
   border: 1px solid var(--hover);
   box-shadow: var(--btn_shadow_hover);
@@ -178,7 +205,8 @@ a.control:hover, a.control:focus {
   cursor: pointer;
 }
 
-input[type=submit]:active, input[type=reset]:active, button:active, a.control:active {
+input[type=submit]:active, input[type=reset]:active,
+button:active, .control:active, .fakebutton:active {
   color: var(--ink) !important;
   text-shadow: var(--textshadow);
   border: 1px solid var(--hover);
@@ -215,13 +243,14 @@ input[type=file]::file-selector-button {
   text-align: center;
   text-decoration: none;
   color: var(--a);
-  border: 1px outset #191;
+  border: 1px solid #000;
   border-radius: 2px;
+  box-shadow: var(--btn_shadow);
   background: #000;
-  filter: drop-shadow(0 0 1px #000);
 }
 
-input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
+input[type=file]:hover::file-selector-button,
+input[type=file]:focus::file-selector-button {
   color: var(--hover);
   border: 1px solid var(--hover);
   box-shadow: var(--btn_shadow_hover);
@@ -239,7 +268,7 @@ input[type=file]:active::file-selector-button {
 
 select {
   margin: 5px 10px;
-  padding: 7px 24px 7px 7px;
+  padding: 7px 24px 7px 12px;
   min-width: 110px;
   color: var(--a);
   font-size: 8pt;
@@ -280,16 +309,41 @@ select option {
   font-weight: 400;
   font-size: 9.5pt;
   color: var(--hover);
-  box-shadow: inset 0 0 20px 20px #000;
   background: #000;
 }
 
-select option:hover, select option:checked {
-  box-shadow: inset 0 0 20px 20px #f60;
+select:-moz-focusring {
+  outline: 1px solid transparent;
 }
 
-select option:hover, select option:checked {
+select::-moz-focus-inner {
+  outline: none !important;
+  border: none !important;
+}
+
+input[type=text], input[type=password], textarea {
+  color: #bb7;
+  border: var(--border_hard);
   background: #000;
+  cursor: text;
+}
+
+input[type=text], input[type=password] {
+  margin: 5px 10px;
+  padding: 6px 8px;
+  text-decoration: none;
+  font-weight: 700;
+  border: 1px solid #151;
+  border-radius: 1px;
+  box-shadow: var(--outline);
+  filter: none;
+}
+
+input[type=text]:disabled, input[type=text]:disabled:active,
+input[readonly="readonly"] {
+  color: #161 !important;
+  border: 1px solid #141 !important;
+  background: #000 !important;
 }
 
 textarea {
@@ -301,8 +355,6 @@ textarea {
   resize: none;
   text-align: left;
   font: 8.5pt var(--monospaced);
-  color: #bb7;
-  border: var(--border_hard);
   border-radius: 2px;
   box-shadow: var(--highlight);
   background: linear-gradient(180deg,#000, #010);
@@ -314,12 +366,18 @@ textarea[disabled] {
 
 input[type=text]:focus, input[type=password]:focus, textarea:focus {
   color: var(--ink) !important;
-  border: 1px solid #373 !important;
+  border: 1px solid #373;
   box-shadow: var(--btn_shadow_active);
   background: var(--input_txt);
   outline: none;
   filter: drop-shadow(0 0 1px var(--hover));
   transition: filter ease .3s;
+}
+
+input[readonly]:focus {
+  font-weight: 400;
+  color: #161 !important;
+  filter: none !important;
 }
 
 .optbox {
@@ -337,6 +395,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
   -moz-appearance: none;
   -webkit-appearance: inherit;
   appearance: none;
+  cursor: pointer;
 }
 
 .optbox[type=checkbox] {

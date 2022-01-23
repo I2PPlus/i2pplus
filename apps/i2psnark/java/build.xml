@@ -316,7 +316,7 @@
               todir="build/standalone-resources/.resources/themes/snark/dark/images" />
         <copy file="../../../installer/resources/themes/console/classic/images/bg0.png"
               todir="build/standalone-resources/.resources/themes/snark/classic/images" />
-        <copy file="../../../installer/resources/themes/console/light/optbox.css"
+        <copy file="../../../installer/resources/themes/console/light/global.css"
               todir="build/standalone-resources/.resources/themes/snark/light" />
         <copy file="../../../installer/resources/themes/console/classic/global.css"
               todir="build/standalone-resources/.resources/themes/snark/classic" />

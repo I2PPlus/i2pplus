@@ -1603,8 +1603,8 @@ hr {
   margin: 5px 0 7px;
   width: 0;
   height: 1px;
-  text-align: center;
   color: transparent;
+  opacity: 0;
 }
 
 a:link, a:visited {
@@ -3766,6 +3766,7 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {
 
 .newtorrentsection + .configsection {
   margin-top: -11px !important;
+  padding-bottom: 14px;
 }
 
 .snarknavbar, .newtorrentsection, .addtorrentsection, .configsection, .configsectionpanel, .optionlist, .routerdown {
