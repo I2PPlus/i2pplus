@@ -27,7 +27,7 @@
 <input type="hidden" name="nonce" value="<%=pageNonce%>">
 <input type="hidden" name="action" value="blah">
 <input type="hidden" name="ratesOnly" value="1">
-<h3 id="bwlimiter" class="tabletitle"><%=intl._t("Bandwidth Limiter")%>&nbsp;<span class="h3navlinks"><a href="confignet"><%=intl._t("Advanced Network Configuration")%></a></span></h3>
+<h3 id="bwlimiter" class="tabletitle"><%=intl._t("Bandwidth Limiter")%>&nbsp;<span class="h3navlinks" title="<%=intl._t("Advanced Network Configuration")%>"><a href="confignet"><%=intl._t("Advanced Network Configuration")%></a></span></h3>
 <table id="bandwidthconfig" class="configtable">
 <tr>
 <td class="infohelp" colspan="2">
