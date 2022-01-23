@@ -7610,7 +7610,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   list-style: none;
   font-size: 95%;
   box-shadow: 0 0 0 1px #9898b3, var(--highlight), inset 0 0 8px 3px rgba(232,232,255,.6);
-  background: linear-gradient(180deg,rgba(232,232,255,.5), rgba(228,228,255,.5)) #f8f8ff;
+  background: linear-gradient(180deg,#fff,#f8f8ff);
   -webkit-break-inside: avoid;
   break-inside: avoid;
   page-break-inside: avoid;
