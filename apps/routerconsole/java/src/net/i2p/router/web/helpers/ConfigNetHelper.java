@@ -297,7 +297,7 @@ public class ConfigNetHelper extends HelperBase {
     /** @return decimal */
     public String getShareRateMegabits() {
         float megabits = getShareBandwidth() / 1024f * 8;
-        String rounded = String.format("%.02f", megabits);
+        String rounded = String.format("%.02f", megabits).replace(".00", "");
         return rounded;
     }
 
