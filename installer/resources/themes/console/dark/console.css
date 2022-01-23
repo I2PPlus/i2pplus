@@ -8482,10 +8482,6 @@ th.options, #externali2cp th {
   background: #030;
 }
 
-#wrapperlogs pre {
-  max-height: 500px;
-}
-
 /* graphs */
 
 #graphs td:first-child {
@@ -10645,6 +10641,7 @@ table[id$="logs"] ul {
   max-height: 600px;
   white-space: pre-wrap;
   resize: none;
+  color: #8f935c;
 }
 
 .logtable ul li {
@@ -10656,7 +10653,7 @@ table[id$="logs"] ul {
   width: 100%;
   list-style: none;
   word-break: break-all;
-  line-height: 1.4;
+  line-height: 1.6 !important;
   text-align: left;
   font: bold 8.5pt var(--monospaced);
   border-top: 1px solid #001800;
