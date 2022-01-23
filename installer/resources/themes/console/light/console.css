@@ -1905,6 +1905,28 @@ h3, th {
   text-transform: capitalize;
 }
 
+h3#bwlimiter a {
+  font-size: 0;
+}
+
+h3#bwlimiter a::before {
+  margin: -3px 0;
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background: url(/themes/console/images/svg/networkconfig.svg) no-repeat center center;
+  vertical-align: middle;
+}
+
+h3#bwlimiter a:hover::before, h3#bwlimiter a:focus::before {
+  transform: scale(1.2);
+}
+
+h3#bwlimiter a:active::before {
+  transform: scale(.9);
+}
+
 .h3navlinks a:hover {
   color: #f60;
 }
