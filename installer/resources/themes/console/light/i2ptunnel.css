@@ -2,39 +2,15 @@
 /* Description: Light blue highlights. */
 /* Author: dr|z3d */
 
-@import url(/themes/fonts/DroidSans.css);
 @import url(optbox.css);
 @import url(../images/images.css);
 @import url(images/images.css);
 @import url(/themes/console/images/i2ptunnel.css);
 
-:root {
-  --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, Verdana, Helvetica, sans-serif;
-  --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
-  --ink: #4f4f63;
-  --ink_light: #5b5b71;
-  --ink_lighter: #71718e;
-  --highlight: inset 0 0 0 1px #fff;
-  --outline: 0 0 0 1px #000;
-  --h2: linear-gradient(180deg,#fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(135deg, #fcfcff 15%, rgba(231, 231, 255, .8) 35%);
-  --border: #6c6c93;
-  --border_inner: #9898b3;
-  --border_softer: 1px solid #dfdfec;
-  --btn_shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
-  --readonly: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(220, 220, 255, .5) 3px, #fafaff 4px), #fafaff;
-}
-
-html {
-  scrollbar-color: #779 #a4a4cb;
-}
-
 body {
   margin: 0;
   padding: 0;
   text-align: center;
-  font-family: var(--bodyfont);
-  color: var(--ink);
-  font-size: 9pt;
   background: #a4a4cb url(images/tile2.png) fixed;
   background-size: 32px;
   scrollbar-color: #779 #fff;
@@ -44,18 +20,6 @@ body.iframed {
   margin-bottom: -11px;
   padding: 5px 5px 10px;
   background: none !important;
-}
-
-::selection {
-  background: #27377f !important;
-  color: white;
-  text-shadow: none;
-}
-
-::-moz-selection {
-  background: #27377f !important;
-  color: white;
-  text-shadow: none;
 }
 
 h2, h3, th, .buttons, .newTunnel, .control, label, .infohelp, .infowarn, .nowrap, b, #throttler td {
@@ -77,14 +41,6 @@ div {
 
 button, h1, h2, h3, th, .control, .newTunnel, .buttons {
   user-select: none;
-}
-
-b {
-  color: var(--ink_light);
-}
-
-a {
-  text-decoration: none;
 }
 
 form {

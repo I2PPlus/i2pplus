@@ -1,3 +1,78 @@
+/* I2P Light theme globals */
+/* Author: (c) dr|z3d 2022 */
+
+@import url(/themes/fonts/DroidSans.css);
+
+:root {
+  --a: #4d5f80;
+  --bevel: inset 0 0 0 1px #d0d0da;
+  --bg: url("data:image/svg+xml,%3Csvg height='4' viewBox='0 0 4 4' width='4' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m1 3h1v1h-1zm2-2h1v1h-1z' fill='%23e2e2ff' fill-opacity='.5'/%3E%3C/svg%3E");
+  --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, Verdana, Helvetica, sans-serif;
+  --border: #6c6c93;
+  --border_inner: #9898b3;
+  --border_inner: #a7a7be;
+  --border_soft: 1px solid #e0e0eb;
+  --border_softer: 1px solid #dfdfec;
+  --btn_hover: linear-gradient(180deg,#eee,#fff);
+  --btn: linear-gradient(180deg,#fff,#efefff);
+  --btn_shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
+  --btn_shadow_active: var(--highlight), inset 3px 3px 3px 1px rgba(0,0,64,.3);
+  --div_infohelp: repeating-linear-gradient(180deg,rgba(255,255,255,.4) 2px, rgba(232,232,255,.7) 4px), var(--p);
+  --h1: var(--bg), linear-gradient(135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(180deg,#fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px);
+  --h2: linear-gradient(180deg,#fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(135deg, #fcfcff 15%, rgba(231, 231, 255, .8) 35%);
+  --h2: linear-gradient(180deg,#fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(90deg, #fcfcff 5%, rgba(231, 231, 255, .8) 25%);
+  --h3: linear-gradient(180deg,#fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4));
+  --h4app: linear-gradient(90deg, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) #f8f8ff;
+  --highlight: inset 0 0 0 1px #fff;
+  --ink: #4f4f63;
+  --ink_light: #5b5b71;
+  --ink_lighter: #71718e;
+  --input_shadow: inset 1px 1px 1px rgba(0,0,48,.2);
+  --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
+  --outline: 0 0 0 1px #000;
+  --p: linear-gradient(135deg, #fafaff, #f8f8ff);
+  --readonly: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(220, 220, 255, .5) 3px, #fafaff 4px), #fafaff;
+  --row_even: linear-gradient(180deg,rgba(248,248,255,.6) 50%, rgba(248,248,255,.2));
+  --row: linear-gradient(180deg,#fff,#eef);
+  --row_odd: linear-gradient(180deg,rgba(240,240,255,.6) 50%, rgba(240,240,255,.4));
+  --selected: #27377f;
+  --suboption: linear-gradient(180deg,#fff 50%,#eef 50%);
+  --table: repeating-linear-gradient(135deg, rgba(248,248,255,.8) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fff;
+}
+
+html {
+  scrollbar-color: #779 #a4a4cb;
+}
+
+body {
+  font-family: var(--bodyfont);
+  font-size: 9pt;
+  color: var(--ink);
+}
+
+::selection {
+  background: var(--selected) !important;
+  color: #fff;
+  text-shadow: none;
+}
+
+input, textarea, select {
+  outline: none;
+}
+
+img {
+  border: none;
+  font-size: 0;
+}
+
+b {
+  color: var(--ink_light);
+}
+
+a {
+  text-decoration: none;
+}
+
 input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
   width: 19px !important;
   height: 19px !important;
