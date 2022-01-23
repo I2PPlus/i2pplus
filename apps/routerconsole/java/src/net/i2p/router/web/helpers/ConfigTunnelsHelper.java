@@ -28,7 +28,7 @@ public class ConfigTunnelsHelper extends HelperBase {
             cur++;
         }
 
-        buf.append("<table id=\"tunnelconfig\">\n");
+        buf.append("<table id=\"tunnelconfig\" class=\"configtable\">\n");
         TunnelPoolSettings exploratoryIn = _context.tunnelManager().getInboundSettings();
         TunnelPoolSettings exploratoryOut = _context.tunnelManager().getOutboundSettings();
 
@@ -161,7 +161,10 @@ public class ConfigTunnelsHelper extends HelperBase {
         }
         // tunnel quantity
         int maxQuantity = advanced ? MAX_ADVANCED_QUANTITY : MAX_QUANTITY;
-        buf.append("<tr><td align=\"right\"><b>" + _t("Quantity") + ":</b></td>\n");
+        buf.append("<tr");
+        if (!advanced)
+            buf.append(" class=\"lastrow\"");
+        buf.append("><td align=\"right\"><b>" + _t("Quantity") + ":</b></td>\n");
         buf.append("<td align=\"center\"><select name=\"").append(index).append(".quantityInbound\"");
         if (!advanced && prefix != "exploratory")
             buf.append(" disabled");
@@ -186,7 +189,7 @@ public class ConfigTunnelsHelper extends HelperBase {
         // tunnel backup quantity
         if (advanced) {
             int maxBQuantity = advanced ? MAX_ADVANCED_BACKUP_QUANTITY : MAX_BACKUP_QUANTITY;
-            buf.append("<tr><td align=\"right\"><b>" + _t("Backup quantity") + ":</b></td>\n");
+            buf.append("<tr class=\"lastrow\"><td align=\"right\"><b>" + _t("Backup quantity") + ":</b></td>\n");
             buf.append("<td align=\"center\"><select name=\"").append(index).append(".backupInbound\">\n");
             now = in.getBackupQuantity();
             renderOptions(buf, 0, maxBQuantity, now, "", TUNNEL);
