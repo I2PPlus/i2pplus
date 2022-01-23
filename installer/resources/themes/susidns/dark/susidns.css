@@ -1485,12 +1485,12 @@ input#exporthosts:active {
 
 @media screen and (max-width: 710px) {
   #navi a {
-    padding: 2px 8px !important;
+    padding: 5px 8px !important;
     background: linear-gradient(180deg,#020 50%,#000 50%) !important;
   }
   #navi a.abook:hover, #navi a#overview:hover, #navi a#subs:hover, #navi a#configlink:hover,
   #navi a.abook:focus, #navi a#overview:focus, #navi a#subs:focus, #navi a#configlink:focus {
-    padding: 2px 8px !important;
+    padding: 5px 8px !important;
     background: #000 !important;
   }
   #navi a.abook:active, #navi a#overview:active, #navi a#subs:active, #navi a#configlink:active {
@@ -1524,7 +1524,7 @@ input#exporthosts:active {
     font-size: 10pt;
   }
   .iframed #prev a, .iframed #next a {
-    padding: 11px 10px !important;
+    padding: 11px 16px !important;
   }
   .iframed #prev::after, .iframed #next::after {
     top: calc(50% - 5px);
