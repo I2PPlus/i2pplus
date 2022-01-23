@@ -110,8 +110,8 @@ textarea[name="accessList"]:focus {
 }
 
 textarea#statusMessages {
-  padding: 2px 4px 2px 6px;
-  width: calc(100% - 11px);
+  padding: 2px 4px;
+  width: calc(100% - 14px);
   font: 8.5pt var(--monospaced);
   color: #070;
   border: none;
@@ -122,6 +122,12 @@ textarea#statusMessages {
 
 textarea#statusMessages:focus {
   background: #fafaff;
+  box-shadow: none !important;
+}
+
+textarea#statusMessages::selection {
+  color: #fff;
+  background: #070 !important;
 }
 
 #filter {
