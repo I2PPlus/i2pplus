@@ -9649,6 +9649,10 @@ b.suboption {
 
 /* /confignet */
 
+#netconfig tr:first-child td.infohelp {
+  background-image: url(/themes/console/images/svg/networkconfig.svg);
+}
+
 #netconfig tr, #i2pupdates tr, #config_reseed tr {
   background: #fafaff !important;
 }

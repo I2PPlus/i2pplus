@@ -3558,6 +3558,10 @@ p#ipconfig, p#ipv4config, p#udpconfig, p#externaltcp {
 
 /* confignet tidyup */
 
+#netconfig tr:first-child td.infohelp {
+  background-image: url(/themes/console/images/svg/networkconfig.svg) !important;
+}
+
 #netconfig .optbox {
   margin: 10px 6px 2px !important;
   display: inline-block !important;

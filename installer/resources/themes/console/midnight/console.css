@@ -7531,6 +7531,10 @@ p.sybil_info + a[name] + .sybil_routerinfo, p.hashdist + a[name] + .sybil_router
   word-spacing: .1em;
 }
 
+#netconfig tr:first-child td.infohelp {
+  background-image: url(/themes/console/images/svg/networkconfig.svg) !important;
+}
+
 .configtable td {
   padding: 6px 10px;
   line-height: 1.8;
