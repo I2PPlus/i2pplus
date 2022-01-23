@@ -13,6 +13,7 @@
   --btnAction: linear-gradient(180deg,#fff 50%,#eef 50%);
   --btnAction_hover: linear-gradient(180deg,#fff 50%,#ddf 50%);
   --section: linear-gradient(180deg,#fafaff,#efefff);
+  --border_soft: 1px solid #afafcf;
 }
 
 body {
