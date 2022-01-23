@@ -3087,10 +3087,13 @@ td {
   border-bottom: var(--border_soft);
 }
 
+div[id^="config"] tr:last-child td,
+#events tr:last-child td,
 #netdb table table tr:last-child td,
 #profiles tr:last-child td,
 #peers tr:last-child td,
-#tunnels tr:last-child td {
+#tunnels tr:last-child td,
+td.tabletextarea, .configtable tr:nth-last-child(2) td {
   border-bottom: 1px solid var(--border_inner);
 }
 
