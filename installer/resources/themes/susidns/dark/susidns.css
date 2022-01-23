@@ -240,7 +240,7 @@ hr {
 }
 
 #filter a, #activefilter {
-  margin: 1px 1px 3px;
+  margin: 1px 0 3px;
   padding: 1px 8px;
   min-width: 12px !important;
   display: inline-block;
@@ -248,19 +248,24 @@ hr {
   white-space: nowrap;
   text-transform: capitalize;
   font-size: 105%;
+  border: 1px solid transparent;
   box-shadow: 0 0 0 1px #030, 0 0 2px 1px rgba(0,0,0,.8), var(--highlight);
   background: var(--th);
 }
 
-#filter a:hover {
+#filter a:hover, #filter a:focus {
   text-decoration: none;
   color: #f60;
   box-shadow: 0 0 0 1px #930;
   background: #020;
+  transform: scale(1.1);
 }
 
 #filter a:active {
-  box-shadow: inset 3px 3px 3px #000, 0 0 0 1px #930;
+  border: 1px solid #930;
+  color: #930 !important;
+  box-shadow: var(--highlight), var(--btn_shadow_active);
+  transform: scale(.95);
 }
 
 p {
