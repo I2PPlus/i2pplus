@@ -2983,7 +2983,8 @@ table#wrapperlogs {
 .lastrow:not(:last-of-type) td, #config_bandwidth #bandwidthconfig td,
 #externali2cp td, #netconfig td, #config_peers td,
 #pluginconfig td, #config_stats td, #config_ui td, #config_update td, #debug td,
-#netdblookup tr:nth-last-child(2) td, #netdblookup tr:nth-last-child(4) td {
+#netdblookup tr:nth-last-child(2) td, #netdblookup tr:nth-last-child(4) td,
+#schedjobs tr:last-child td {
   border-bottom: 1px solid var(--border_inner) !important;
 }
 
