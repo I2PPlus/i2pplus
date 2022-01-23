@@ -20,6 +20,7 @@
   --btn_shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
   --btn_shadow_active: var(--highlight), inset 3px 3px 3px 1px rgba(0,0,64,.3);
   --div_infohelp: repeating-linear-gradient(180deg,rgba(255,255,255,.4) 2px, rgba(232,232,255,.7) 4px), var(--p);
+  --filter_focus: drop-shadow(0 0 1px #f60) drop-shadow(0 0 1px rgba(255,96,0,.4));
   --h1: var(--bg), linear-gradient(135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(180deg,#fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px);
   --h2: linear-gradient(180deg,#fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(135deg, #fcfcff 15%, rgba(231, 231, 255, .8) 35%);
   --h2: linear-gradient(180deg,#fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(90deg, #fcfcff 5%, rgba(231, 231, 255, .8) 25%);
@@ -188,7 +189,11 @@ input[type=text]:focus, input[type=password]:focus,
   box-shadow: var(--highlight), var(--btn_shadow_active) !important;
   border: 1px solid #676c7f;
   background: #fff;
-  filter: drop-shadow(0 0 1px #f60) drop-shadow(0 0 1px rgba(255,96,0,.4));
+  filter: var(--filter_focus);
+}
+
+input[type=text][disabled] {
+  color: var(--ink_lighter);
 }
 
 textarea {
@@ -208,7 +213,7 @@ textarea:focus {
   border: 1px solid #676c7f;
   box-shadow: var(--btn_shadow_active);
   background: #fff;
-  filter: drop-shadow(0 0 1px #f60);
+  filter: var(--filter_focus);
 }
 
 input[type=file]::file-selector-button {

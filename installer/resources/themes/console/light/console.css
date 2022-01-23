@@ -2979,8 +2979,20 @@ table#wrapperlogs {
 }
 
 #routerinformation tr:last-child td, #enviro tr:last-child td,
-#jobstats tr:last-child td, #jobs #jobstats tr:nth-last-child(2) td {
+#jobstats tr:last-child td, #jobs #jobstats tr:nth-last-child(2) td,
+.lastrow:not(:last-of-type) td, #config_bandwidth #bandwidthconfig td,
+#externali2cp td, #netconfig td, #config_peers td,
+#pluginconfig td, #config_stats td, #config_ui td, #config_update td, #debug td,
+#netdblookup tr:nth-last-child(2) td, #netdblookup tr:nth-last-child(4) td {
   border-bottom: 1px solid var(--border_inner) !important;
+}
+
+#config_tunnels #tunnelconfig tr:nth-last-child(2) td {
+  border-bottom: var(--border_soft) !important;
+}
+
+#pluginconfig table td {
+  border: var(--border_soft) !important;
 }
 
 #logs #enviro:hover td {
@@ -9567,7 +9579,6 @@ b.suboption {
 }
 
 .bw_title {
-  margin: 2px -1px 0 -15px;
   font-size: 10pt;
 }
 
