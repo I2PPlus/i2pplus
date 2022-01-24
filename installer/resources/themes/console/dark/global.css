@@ -46,6 +46,7 @@
   --on: #6b6, 0 0 0 1px rgba(0,0,0,.7), 0 0 1px 0 rgba(0,0,0,.5);
   --option_highlight: inset 0 0 0 1px #002500;
   --outline: 0 0 0 1px #000;
+  --stroke: 1px rgba(237,237,146,.3);
   --textshadow: 0 1px 1px rgba(0,0,0,.8);
   --th: linear-gradient(180deg,#010,#000);
   --tr: linear-gradient(180deg,#001400,#000600);
@@ -234,7 +235,7 @@ input[type=file]:hover, input[type=file]:active {
   color: var(--hover);
 }
 
-input[type=file]::file-selector-button {
+input[type=file]::file-selector-button {\
   margin: 2px 10px 2px 3px;
   padding: 7px 12px;
   min-width: 75px;

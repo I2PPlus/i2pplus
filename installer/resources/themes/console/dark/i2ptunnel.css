@@ -468,7 +468,7 @@ textarea {
   margin-left: 4px;
   margin-right: 4px;
   box-sizing: border-box;
-  font: 9pt var(--monospaced);
+  font-size: 9pt;
 }
 
 textarea#statusMessages,
@@ -478,14 +478,18 @@ textarea#statusMessages:focus {
   padding: 2px 4px 2px 8px;
   width: 100%;
   height: 80px;
-  color: #69f !important;
-  font-family: var(--monospaced);
   font-size: 8.5pt;
   font-weight: 700;
+  color: #69f !important;
   border: none !important;
   border-radius: 0;
   box-shadow: inset 0 0 3px 3px #000;
   background: linear-gradient(180deg,#000 0%, #010 100%);
+}
+
+#statusMessages::selection {
+  background: #69f !important;
+  color: #fff;
 }
 
 input[type="hidden"], input.default {
@@ -500,7 +504,7 @@ input {
   margin: 0 2px;
 }
 
-input[type="file"] {
+input[type=file] {
   background: none;
 }
 
@@ -1003,18 +1007,15 @@ input.tunnelName, input.tunnelDescription, #userAgents {
   margin: 5px 10px 5px 0;
 }
 
-#tunnelDepth, #tunnelVariance, #tunnelQuantity, #tunnelBackupQuantity, #tunnelDepthOut, #tunnelVarianceOut, #sigType, .clientKey, .clientName,
-#tunnelQuantityOut, #tunnelBackupQuantityOut, #leasesetKey, #encryptMode, select#profile, input[name="nofilter_blindedPassword"] {
+#tunnelDepth, #tunnelVariance, #tunnelQuantity, #tunnelBackupQuantity, #tunnelDepthOut,
+#tunnelVarianceOut, #sigType, .clientKey, .clientName, #tunnelQuantityOut, #tunnelBackupQuantityOut,
+#leasesetKey, #encryptMode, select#profile, input[name="nofilter_blindedPassword"],
+textarea[name="accessList"], #hostField, #localDestination, .authentication {
   margin: 5px !important;
   width: calc(100% - 10px) !important;
 }
 
 .tunnelConfig select, select#profile, select#connectionProfile {
-  margin: 5px !important;
-}
-
-textarea[name="accessList"], #hostField, #localDestination, .authentication {
-  width: calc(100% - 10px) !important;
   margin: 5px !important;
 }
 
@@ -1322,7 +1323,7 @@ th span {
 /* end server tunnel options */
 
 h2, h3 {
-  -webkit-text-stroke: 1px rgba(237,237,146,.3);
+  -webkit-text-stroke: var(--stroke);
 }
 
 h2 a, h3 a {

@@ -12548,8 +12548,8 @@ h3 + table {
   from {width: calc(100%)}
 }
 
-h1, .main h2, h4.app, h4.app2, .main h3 {
-  -webkit-text-stroke: 1px rgba(237, 237, 146,.3);
+h1, .main h2, .main h3, h4.app, h4.app2 {
+  -webkit-text-stroke: var(--stroke);
 }
 
 .main h3 a {
