@@ -18,6 +18,10 @@ body {
   html, body {background-attachment: fixed !important}
 }
 
+main * {
+  scrollbar-color: rgba(16,48,16,.4) rgba(0,0,0,0);
+}
+
 button, input, select, #debug .skm_key td:first-child b {
   font-family: var(--bodyfont)
 }
@@ -37,15 +41,6 @@ button, input, input[type=text], input[type=password], select {
 
 .routersummary, .routersummaryouter, h1 {
   contain: layout;
-}
-
-.main * {
-  scrollbar-color: rgba(16,48,16,.4) rgba(0,0,0,0);
-}
-
-.main pre:hover, .main textarea:hover, .widescroll:hover {
-  scrollbar-color: rgba(24,80,24,.8) rgba(0,0,0,.9);
-  transition: ease scrollbar-color .2s;
 }
 
 .routersummary img[src$="i2plogo.png"], .routersummary h3, .confignav,

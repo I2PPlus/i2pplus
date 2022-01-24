@@ -72,6 +72,16 @@ html {
   scrollbar-color: rgba(16,72,16,.8) rgba(0,16,0,.5);
 }
 
+pre, textarea, .widescroll {
+  scrollbar-color: rgba(16,48,16,.4) rgba(0,0,0,0);
+  transition: ease scrollbar-color .5s;
+}
+
+pre:hover, textarea:hover, .widescroll:hover {
+  scrollbar-color: rgba(24,80,24,.8) rgba(0,0,0,.9);
+  transition: ease scrollbar-color .2s;
+}
+
 body {
   font-family: var(--bodyfont);
   color: var(--ink);

@@ -39,16 +39,6 @@ body.iframed {
   background-size: 0 !important;
 }
 
-textarea {
-  scrollbar-color: rgba(16,48,16,.4) rgba(0,0,0,0);
-  transition: ease scrollbar-color .5s;
-}
-
-textarea:hover {
-  scrollbar-color: rgba(24,80,24,.8) rgba(0,0,0,.9);
-  transition: ease scrollbar-color .2s;
-}
-
 .pagenav, .sort, .topbuttons, h3, .footer, .bottombuttons,
 .topbuttons, th img, h3, #dologin, th, #loading  {
   user-select: none;

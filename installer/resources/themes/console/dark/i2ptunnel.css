@@ -36,18 +36,6 @@ h2, h3, th, .buttons, .newTunnel, .control, label, .infohelp, .infowarn, .nowrap
   background: #020;
 }
 
-* {
-  outline: none;
-}
-
-* {
-  scrollbar-color: rgba(16,48,16,.4) rgba(0,0,0,0);
-}
-
-*:hover {
-  scrollbar-color: rgba(24,80,24,.8) rgba(0,0,0,.9);
-}
-
 div {
   box-sizing: border-box;
 }

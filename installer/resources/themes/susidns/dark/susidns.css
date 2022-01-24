@@ -38,12 +38,6 @@ body.iframed {
   background: rgba(255,255,0,.99) !important;
 }
 
-::-moz-selection {
-  background: #0b0 !important;
-  color: #000;
-  text-shadow: none;
-}
-
 .destaddress, textarea {
   scrollbar-color: rgba(16,48,16,.4) rgba(0,0,0,0);
 }
