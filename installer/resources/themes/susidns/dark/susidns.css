@@ -298,13 +298,6 @@ h3 {
   padding-bottom: 5px;
 }
 
-@media screen and (min-width: 1200px) {
-#content h3 {
-  padding-top: 8px;
-  padding-bottom: 8px;
-}
-}
-
 .headline h3 {
   margin-top: -10px;
 }
@@ -982,13 +975,6 @@ textarea:focus {
   outline: none;
 }
 
-@media screen and (min-width: 1500px) {
-  #booksearch input[name=search], #booksearch input[name=search]:focus {
-    padding: 7px 8px 7px 32px !important;
-    min-width: 320px !important;
-  }
-}
-
 /* page titles */
 
 .headline h3, #add h3, #import h3 {
@@ -1488,29 +1474,6 @@ input#exporthosts:active {
 
 /* responsive layout */
 
-@media screen and (max-width: 710px) {
-  #navi a {
-    padding: 5px 8px !important;
-    background: linear-gradient(180deg,#020 50%,#000 50%) !important;
-  }
-  #navi a.abook:hover, #navi a#overview:hover, #navi a#subs:hover, #navi a#configlink:hover,
-  #navi a.abook:focus, #navi a#overview:focus, #navi a#subs:focus, #navi a#configlink:focus {
-    padding: 5px 8px !important;
-    background: #000 !important;
-  }
-  #navi a.abook:active, #navi a#overview:active, #navi a#subs:active, #navi a#configlink:active {
-    background: #f60 !important;
-  }
-}
-
-@media screen and (max-width: 1000px) {
-  .illustrate {
-    margin: 15px auto 10px;
-    width: 90%;
-    min-width: 450px;
-  }
-}
-
 @media screen and (max-width: 1200px) {
   #filter {
     padding: 9px 4px 8px;
@@ -1549,6 +1512,36 @@ input#exporthosts:active {
     max-width: 260px;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .illustrate {
+    margin: 15px auto 10px;
+    width: 90%;
+    min-width: 450px;
+  }
+}
+
+@media screen and (max-width: 710px) {
+  #navi a {
+    padding: 5px 8px !important;
+    background: linear-gradient(180deg,#020 50%,#000 50%) !important;
+  }
+  #navi a.abook:hover, #navi a#overview:hover, #navi a#subs:hover, #navi a#configlink:hover,
+  #navi a.abook:focus, #navi a#overview:focus, #navi a#subs:focus, #navi a#configlink:focus {
+    padding: 5px 8px !important;
+    background: #000 !important;
+  }
+  #navi a.abook:active, #navi a#overview:active, #navi a#subs:active, #navi a#configlink:active {
+    background: #f60 !important;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  #content h3 {
+    padding-top: 8px;
+    padding-bottom: 8px;
   }
 }
 
@@ -1607,6 +1600,10 @@ input#exporthosts:active {
   }
   th {
     font-size: 9pt;
+  }
+  #booksearch input[name=search], #booksearch input[name=search]:focus {
+    padding: 7px 8px 7px 32px !important;
+    min-width: 320px !important;
   }
 }
 
