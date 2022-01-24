@@ -12959,6 +12959,9 @@ body.iframed {
     background-size: 8px;
     background-position: left top;
   }
+  .log_debug, .log_info, .log_warn, .log_error, .log_crit, .log_omitted {
+    vertical-align: middle;
+  }
 }
 
 @supports (columns: 2 500px) {
