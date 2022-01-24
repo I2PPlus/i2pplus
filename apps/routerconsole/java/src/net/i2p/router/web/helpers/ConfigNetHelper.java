@@ -294,6 +294,13 @@ public class ConfigNetHelper extends HelperBase {
         return kbytesToBits(getShareBandwidth());
     }
 
+    /** @return decimal */
+    public String getShareRateMegabits() {
+        float megabits = getShareBandwidth() / 1024f * 8;
+        String rounded = String.format("%.02f", megabits).replace(".00", "");
+        return rounded;
+    }
+
     /** @param kbytes binary K */
     private String kbytesToBits(float kbytes) {
         return ("<span class=\"net_bwrate\">"

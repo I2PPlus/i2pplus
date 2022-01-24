@@ -38,12 +38,6 @@ body.iframed {
   background: rgba(255,255,0,.99) !important;
 }
 
-::-moz-selection {
-  background: #0b0 !important;
-  color: #000;
-  text-shadow: none;
-}
-
 .destaddress, textarea {
   scrollbar-color: rgba(16,48,16,.4) rgba(0,0,0,0);
 }
@@ -290,19 +284,12 @@ h3 {
   color: var(--ink);
   border: var(--border);
   box-shadow: var(--highlight);
-  -webkit-text-stroke: 1px rgba(237, 237, 146,.3);
+  -webkit-text-stroke: var(--stroke);
 }
 
 #content h3 {
   padding-top: 5px;
   padding-bottom: 5px;
-}
-
-@media screen and (min-width: 1200px) {
-#content h3 {
-  padding-top: 8px;
-  padding-bottom: 8px;
-}
 }
 
 .headline h3 {
@@ -943,13 +930,9 @@ textarea, #subslog pre {
   padding: 3px 5px;
   width: 100%;
   height: 120px;
-  resize: none;
   line-height: 1.4;
   font-weight: 700;
-  font-size: 8.5pt;
-  color: #bb7;
   border: var(--border);
-  border-radius: 2px;
   box-shadow: var(--highlight);
 }
 
@@ -958,6 +941,8 @@ textarea, #subslog pre {
   width: calc(100% - 26px);
   height: calc(100% - 105px);
   white-space: pre-wrap;
+  color: #bb7;
+  background: #000;
   border-radius: 0 0 2px 2px;
 }
 
@@ -980,13 +965,6 @@ textarea:focus {
 #booksearch input[name=search]:focus {
   background: var(--search) no-repeat 9px center / 14px, var(--txt_focus);
   outline: none;
-}
-
-@media screen and (min-width: 1500px) {
-  #booksearch input[name=search], #booksearch input[name=search]:focus {
-    padding: 7px 8px 7px 32px !important;
-    min-width: 320px !important;
-  }
 }
 
 /* page titles */
@@ -1488,29 +1466,6 @@ input#exporthosts:active {
 
 /* responsive layout */
 
-@media screen and (max-width: 710px) {
-  #navi a {
-    padding: 5px 8px !important;
-    background: linear-gradient(180deg,#020 50%,#000 50%) !important;
-  }
-  #navi a.abook:hover, #navi a#overview:hover, #navi a#subs:hover, #navi a#configlink:hover,
-  #navi a.abook:focus, #navi a#overview:focus, #navi a#subs:focus, #navi a#configlink:focus {
-    padding: 5px 8px !important;
-    background: #000 !important;
-  }
-  #navi a.abook:active, #navi a#overview:active, #navi a#subs:active, #navi a#configlink:active {
-    background: #f60 !important;
-  }
-}
-
-@media screen and (max-width: 1000px) {
-  .illustrate {
-    margin: 15px auto 10px;
-    width: 90%;
-    min-width: 450px;
-  }
-}
-
 @media screen and (max-width: 1200px) {
   #filter {
     padding: 9px 4px 8px;
@@ -1549,6 +1504,36 @@ input#exporthosts:active {
     max-width: 260px;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .illustrate {
+    margin: 15px auto 10px;
+    width: 90%;
+    min-width: 450px;
+  }
+}
+
+@media screen and (max-width: 710px) {
+  #navi a {
+    padding: 5px 8px !important;
+    background: linear-gradient(180deg,#020 50%,#000 50%) !important;
+  }
+  #navi a.abook:hover, #navi a#overview:hover, #navi a#subs:hover, #navi a#configlink:hover,
+  #navi a.abook:focus, #navi a#overview:focus, #navi a#subs:focus, #navi a#configlink:focus {
+    padding: 5px 8px !important;
+    background: #000 !important;
+  }
+  #navi a.abook:active, #navi a#overview:active, #navi a#subs:active, #navi a#configlink:active {
+    background: #f60 !important;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  #content h3 {
+    padding-top: 8px;
+    padding-bottom: 8px;
   }
 }
 
@@ -1607,6 +1592,10 @@ input#exporthosts:active {
   }
   th {
     font-size: 9pt;
+  }
+  #booksearch input[name=search], #booksearch input[name=search]:focus {
+    padding: 7px 8px 7px 32px !important;
+    min-width: 320px !important;
   }
 }
 

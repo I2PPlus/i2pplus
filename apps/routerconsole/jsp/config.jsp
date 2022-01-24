@@ -95,7 +95,7 @@ A negative rate sets the default.</i><br>
 <td class="infohelp" colspan="2">
 <%
     int share = Math.round(nethelper.getShareBandwidth() * 1.024f);
-    float shareMegabits = Math.round(nethelper.getShareBandwidth() / 1024 * 8);
+    String shareMegabits = nethelper.getShareRateMegabits();
     if (share < 12) {
         out.print("<b>");
         out.print(intl._t("NOTE"));

@@ -20,7 +20,7 @@ body.iframed {
 }
 
 ::selection {
-  color: black;
+  color: #000;
   background: #ff0 !important;
 }
 
@@ -34,18 +34,6 @@ h2, h3, th, .buttons, .newTunnel, .control, label, .infohelp, .infowarn, .nowrap
 
 .selectAll:hover {
   background: #020;
-}
-
-* {
-  outline: none;
-}
-
-* {
-  scrollbar-color: rgba(16,48,16,.4) rgba(0,0,0,0);
-}
-
-*:hover {
-  scrollbar-color: rgba(24,80,24,.8) rgba(0,0,0,.9);
 }
 
 div {
@@ -150,11 +138,13 @@ hr {
   width: 100%;
 }
 
-.iframed .panel#clients, #tunnelEditPage .panel, #tunnelRegistration .panel, #tunnelWizardPage .panel, #tunnelSSL .panel {
+.iframed .panel#clients, #tunnelEditPage .panel, #tunnelRegistration .panel,
+#tunnelWizardPage .panel, #tunnelSSL .panel {
   margin-bottom: 6px !important;
 }
 
-.iframed #messages, .iframed #messages, #tunnelEditPage .panel, #tunnelRegistration .panel, #tunnelWizardPage .panel, #tunnelSSL .panel {
+.iframed #messages, .iframed #messages, #tunnelEditPage .panel,
+#tunnelRegistration .panel, #tunnelWizardPage .panel, #tunnelSSL .panel {
   margin-top: -5px !important;
 }
 
@@ -466,7 +456,7 @@ textarea {
   margin-left: 4px;
   margin-right: 4px;
   box-sizing: border-box;
-  font: 9pt var(--monospaced);
+  font-size: 9pt;
 }
 
 textarea#statusMessages,
@@ -476,44 +466,18 @@ textarea#statusMessages:focus {
   padding: 2px 4px 2px 8px;
   width: 100%;
   height: 80px;
-  color: #69f !important;
-  font-family: var(--monospaced);
   font-size: 8.5pt;
   font-weight: 700;
+  color: #69f !important;
   border: none !important;
   border-radius: 0;
   box-shadow: inset 0 0 3px 3px #000;
   background: linear-gradient(180deg,#000 0%, #010 100%);
 }
 
-.freetext {
-  padding: 4px;
-  width: 150px;
-  font: 8.5pt var(--monospaced);
-  color: #333;
-  border: var(--border_hard);
-  border-radius: 1px;
-}
-
-.freetext.tunnelDescriptionText, .freetext.tunnelName,
-#privKeyFile, #websiteName, .proxyList, #localDest,
-#altlocaldest, #altPrivKeyFile {
-  width: calc(100% - 10px) !important;
-}
-
-.freetext:focus {
-  box-shadow: 0 0 1px #f60;
-  color: #111;
-  outline: none;
-}
-
-.freetext[readonly], .freetext[readonly]:focus {
-  background: #000 !important;
-  box-shadow: inset 2px 2px 1px #000;
-  color: #885;
-  cursor: default;
-  border: var(--border_hard) !important;
-  opacity: .8;
+#statusMessages::selection {
+  background: #69f !important;
+  color: #fff;
 }
 
 input[type="hidden"], input.default {
@@ -525,10 +489,10 @@ input, select, button, a {
 }
 
 input {
-  margin: 0 2px 0 2px;
+  margin: 0 2px;
 }
 
-input[type="file"] {
+input[type=file] {
   background: none;
 }
 
@@ -557,15 +521,24 @@ input[type="file"] {
   display: inline;
 }
 
-input[type=text], input[type=password],
-textarea, textarea[readonly="readonly"]:focus  {
-  padding: 6px 8px;
-  box-shadow: none;
-  filter: none;
+.freetext {
+  width: 150px;
+  font: 8.5pt var(--monospaced);
 }
 
-textarea[readonly="readonly"]:focus {
-  box-shadow: inset 0 0 0 1px #880;
+.freetext.tunnelDescriptionText, .freetext.tunnelName,
+#privKeyFile, #websiteName, .proxyList, #localDest,
+#altlocaldest, #altPrivKeyFile {
+  width: calc(100% - 10px) !important;
+}
+
+.freetext[readonly], .freetext[readonly]:focus {
+  background: #000 !important;
+  box-shadow: inset 2px 2px 1px #000;
+  color: #885;
+  cursor: default;
+  border: var(--border_hard) !important;
+  opacity: .8;
 }
 
 button, input[type=submit], input[type=reset], a.control, select {
@@ -672,11 +645,6 @@ select#profile, select#connectionProfile {
 
 select#connectionProfile, #targetDestination {
   width: calc(100% - 10px);
-}
-
-#customOptions, #userAgents {
-  width: calc(100% - 10px) !important;
-  width: 100% !important;
 }
 
 #localDestination, textarea[name="accessList"], #hostField {
@@ -1027,18 +995,15 @@ input.tunnelName, input.tunnelDescription, #userAgents {
   margin: 5px 10px 5px 0;
 }
 
-#tunnelDepth, #tunnelVariance, #tunnelQuantity, #tunnelBackupQuantity, #tunnelDepthOut, #tunnelVarianceOut, #sigType, .clientKey, .clientName,
-#tunnelQuantityOut, #tunnelBackupQuantityOut, #leasesetKey, #encryptMode, select#profile, input[name="nofilter_blindedPassword"] {
+#tunnelDepth, #tunnelVariance, #tunnelQuantity, #tunnelBackupQuantity, #tunnelDepthOut,
+#tunnelVarianceOut, #sigType, .clientKey, .clientName, #tunnelQuantityOut, #tunnelBackupQuantityOut,
+#leasesetKey, #encryptMode, select#profile, input[name="nofilter_blindedPassword"],
+textarea[name="accessList"], #hostField, #localDestination, .authentication {
   margin: 5px !important;
   width: calc(100% - 10px) !important;
 }
 
 .tunnelConfig select, select#profile, select#connectionProfile {
-  margin: 5px !important;
-}
-
-textarea[name="accessList"], #hostField, #localDestination, .authentication {
-  width: calc(100% - 10px) !important;
   margin: 5px !important;
 }
 
@@ -1055,18 +1020,6 @@ textarea[name="accessList"], #hostField, #localDestination, .authentication {
 .tunnelInfo {
   background: linear-gradient(90deg, #000 50%, #010) !important;
   box-shadow: none !important;
-}
-
-_:-ms-lang(x), .tunnelDestination {
-  border-bottom: none !important;
-}
-
-_:-ms-lang(x), .tunnelDescription {
-  border-top: none !important;
-}
-
-_:-ms-lang(x), .tunnelProperties {
-  border-bottom: 1px solid #010 !important;
 }
 
 .tunnelInfo b {
@@ -1358,7 +1311,7 @@ th span {
 /* end server tunnel options */
 
 h2, h3 {
-  -webkit-text-stroke: 1px rgba(237,237,146,.3);
+  -webkit-text-stroke: var(--stroke);
 }
 
 h2 a, h3 a {

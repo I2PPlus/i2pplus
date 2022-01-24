@@ -5422,6 +5422,7 @@ body.iframed {
   margin: 5px -5px 0;
   border: none;
   border-top: 1px solid var(--border_inner);
+  border-bottom: none !important;
   background: none;
 }
 

@@ -18,6 +18,10 @@ body {
   html, body {background-attachment: fixed !important}
 }
 
+main * {
+  scrollbar-color: rgba(16,48,16,.4) rgba(0,0,0,0);
+}
+
 button, input, select, #debug .skm_key td:first-child b {
   font-family: var(--bodyfont)
 }
@@ -39,16 +43,8 @@ button, input, input[type=text], input[type=password], select {
   contain: layout;
 }
 
-.main * {
-  scrollbar-color: rgba(16,48,16,.4) rgba(0,0,0,0);
-}
-
-.main pre:hover, .main textarea:hover, .widescroll:hover {
-  scrollbar-color: rgba(24,80,24,.8) rgba(0,0,0,.9);
-  transition: ease scrollbar-color .2s;
-}
-
-.routersummary img[src$="i2plogo.png"], .routersummary h3, .confignav, *::before, *::after, h1, h2, h3, #sb_internals, #sb_services, #sb_advanced,
+.routersummary img[src$="i2plogo.png"], .routersummary h3, .confignav,
+*::before, *::after, h1, h2, h3, #sb_internals, #sb_services, #sb_advanced,
 div.app, .sitemaplink, #sitemapcontainer {
   user-select: none;
 }
@@ -1593,13 +1589,13 @@ form[action="updategraphs"] {
 }
 
 #graphs td.infohelp {
+  padding: 5px 5px 5px 40px !important;
+  text-align: left;
   border: var(--border_soft);
   border-right: none;
   border-left: none;
   background-size: 20px !important;
-  padding: 5px 5px 5px 40px !important;
   background-color: #000800 !important;
-  text-align: left;
 }
 
 #graphs form input, #graphs form select {
@@ -4548,12 +4544,13 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 
 #faq h3 {
   padding-left: 35px !important;
-  background: var(--ask) no-repeat 10px center, linear-gradient(180deg,#0000 50%, #000 50%), repeating-linear-gradient(90deg, #00000080 1px, #00000080 2px, #00100080 3px), var(--h3_fade) !important;
-  background-size: 18px, 100% !important;
+  word-spacing: 0;
+  letter-spacing: 0;
   text-transform: none;
   font-size: 10.5pt !important;
-  letter-spacing: 0;
-  word-spacing: 0;
+  background: var(--ask) no-repeat 10px center / 18px, linear-gradient(180deg,#0000 50%, #000 50%),
+    repeating-linear-gradient(90deg, #00000080 1px, #00000080 2px, #00100080 3px), var(--h3_fade) !important;
+  background-size: 18px, 100%, 4px 100%, 100% !important;
 }
 
 #faq p.infohelp {
@@ -4581,16 +4578,16 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 }
 
 #portfaq th {
-  text-align: left;
   padding: 8px 5px !important;
+  text-align: left;
 }
 
 #portfaq th[colspan="3"] {
-  text-align: left;
-  font-size: 10.5pt !important;
-  letter-spacing: .08em;
-  word-spacing: .1em;
   padding: 8px 10px !important;
+  text-align: left;
+  word-spacing: .1em;
+  letter-spacing: .08em;
+  font-size: 10.5pt !important;
 }
 
 #portfaq td[colspan="3"] {
@@ -4606,8 +4603,8 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 }
 
 #portfaq td:last-child, #portfaq td[colspan="3"] {
-  text-align: justify;
   padding-right: 10px;
+  text-align: justify;
 }
 
 #faq ul {
@@ -4654,10 +4651,10 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 }
 
 #netdbversions, #netdbtransports, #netdbcountrylist, #netdbtiers {
+  margin-bottom: 0;
   border: var(--border_soft) !important;
   border-right: none !important;
   border-left: none !important;
-  margin-bottom: 0;
 }
 
 #netdbversions, #netdbtransports, #netdbtiers {
@@ -4776,8 +4773,8 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
 
 #netdblookup th {
   padding: 10px;
-  letter-spacing: .08em;
   text-align: left;
+  letter-spacing: .08em;
   text-transform: uppercase;
   font-size: 11pt;
 }
@@ -5064,8 +5061,8 @@ img.unknownflag {
 a[href^="configpeer?peer"] {
   width: 24px;
   height: 24px;
-  font-size: 0;
   display: inline-block;
+  font-size: 0;
   filter: drop-shadow(0 0 1px #777);
 }
 
@@ -5082,13 +5079,11 @@ a[href^="configpeer?peer"]::after {
 }
 
 a[href^="configpeer?peer"]:hover::after {
-  background: var(--edit_hover) var(--center);
-  background-size: 14px;
+  background: var(--edit_hover) var(--center) / 14px;
 }
 
 a[href^="configpeer?peer"]:active::after {
-  background: var(--edit_active) var(--center);
-  background-size: 14px;
+  background: var(--edit_active) var(--center) / 14px;
 }
 
 #profile_defs, #thresholds {
@@ -10221,8 +10216,6 @@ input[type=file] {
 
 #view_profile .configpeer, #view_profile .viewprofile {
   margin: -2px 27px -2px 0 !important;
-  display: inline-block;
-  vertical-align: middle;
 }
 
 #view_profile .viewprofile {
@@ -10238,9 +10231,8 @@ input[type=file] {
   width: 27px;
   height: 27px;
   position: absolute;
-  top: 1px;
-  right: 1px;
-  opacity: .7;
+  top: 2px;
+  right: 2px;
 }
 
 #viewprofile td {
@@ -12548,8 +12540,8 @@ h3 + table {
   from {width: calc(100%)}
 }
 
-h1, .main h2, h4.app, h4.app2, .main h3 {
-  -webkit-text-stroke: 1px rgba(237, 237, 146,.3);
+h1, .main h2, .main h3, h4.app, h4.app2 {
+  -webkit-text-stroke: var(--stroke);
 }
 
 .main h3 a {
@@ -12763,7 +12755,7 @@ body.iframed {
   padding: 1px !important;
 }
 
-.viewedit .configpeer:hover, .viewedit .configpeer:focus {
+.configpeer:hover, .configpeer:focus {
   background: var(--edit_hover) var(--center) / 12px, var(--badge);
 }
 
@@ -12792,8 +12784,10 @@ body.iframed {
   margin-top: -5px;
 }
 
-.netdbentry .tunnel_cap, .netdbentry .tier, .netdbentry .ff, .netdbentry .reachable, .netdbentry .unreachable, .netdbentry .version,
-.sybil_routerinfo .tunnel_cap, .sybil_routerinfo .tier, .sybil_routerinfo .ff, .sybil_routerinfo .reachable, .sybil_routerinfo .unreachable, .sybil_routerinfo .version {
+.netdbentry .tunnel_cap, .netdbentry .tier, .netdbentry .ff, .netdbentry .reachable,
+.netdbentry .unreachable, .netdbentry .version, .sybil_routerinfo .tunnel_cap,
+.sybil_routerinfo .tier, .sybil_routerinfo .ff, .sybil_routerinfo .reachable,
+.sybil_routerinfo .unreachable, .sybil_routerinfo .version {
   margin: 1px 2px 0 !important;
   padding: 0 4px !important;
   line-height: 1.6;
@@ -12948,8 +12942,8 @@ body.iframed {
     background-size: 12px;
   }
   #view_profile .identicon {
-    top: 0;
-    right: 0;
+    top: 1px;
+    right: 1px;
   }
   h3#advancedconfig a {
     padding-top: 9px;
@@ -12958,6 +12952,9 @@ body.iframed {
     padding-left: 11px;
     background-size: 8px;
     background-position: left top;
+  }
+  .log_debug, .log_info, .log_warn, .log_error, .log_crit, .log_omitted {
+    vertical-align: middle;
   }
 }
 

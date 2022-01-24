@@ -46,6 +46,7 @@
   --on: #6b6, 0 0 0 1px rgba(0,0,0,.7), 0 0 1px 0 rgba(0,0,0,.5);
   --option_highlight: inset 0 0 0 1px #002500;
   --outline: 0 0 0 1px #000;
+  --stroke: 1px rgba(237,237,146,.3);
   --textshadow: 0 1px 1px rgba(0,0,0,.8);
   --th: linear-gradient(180deg,#010,#000);
   --tr: linear-gradient(180deg,#001400,#000600);
@@ -69,6 +70,16 @@ html, body {
 
 html {
   scrollbar-color: rgba(16,72,16,.8) rgba(0,16,0,.5);
+}
+
+pre, textarea, .widescroll {
+  scrollbar-color: rgba(16,48,16,.4) rgba(0,0,0,0);
+  transition: ease scrollbar-color .5s;
+}
+
+pre:hover, textarea:hover, .widescroll:hover {
+  scrollbar-color: rgba(24,80,24,.8) rgba(0,0,0,.9);
+  transition: ease scrollbar-color .2s;
 }
 
 body {
@@ -148,12 +159,6 @@ table {
   width: 100%;
 }
 
-textarea {
-  background: #000;
-  font: 8.5pt var(--monospaced);
-  resize: none;
-}
-
 button::-moz-focus-inner, input::-moz-focus-inner {
   outline: none;
   border: none;
@@ -187,7 +192,9 @@ input[type=submit], input[type=reset], button, .control, .fakebutton {
   min-width: 110px;
   text-align: center;
   text-decoration: none;
+  font-weight: 700;
   color: var(--a);
+  text-shadow: var(--txt_shadow);
   border: 1px solid #000;
   border-radius: 2px;
   box-shadow: var(--btn_shadow);
@@ -234,7 +241,7 @@ input[type=file]:hover, input[type=file]:active {
   color: var(--hover);
 }
 
-input[type=file]::file-selector-button {
+input[type=file]::file-selector-button {\
   margin: 2px 10px 2px 3px;
   padding: 7px 12px;
   min-width: 75px;
@@ -264,6 +271,66 @@ input[type=file]:active::file-selector-button {
   border: 1px solid var(--hover);
   box-shadow: var(--btn_shadow_active);
   background: var(--hover);
+}
+
+input[type=text], input[type=password], textarea {
+  color: #bb7;
+  border: var(--border_hard);
+  background: #000;
+  cursor: text;
+}
+
+input[type=text], input[type=password] {
+  margin: 5px 10px;
+  padding: 6px 8px;
+  text-decoration: none;
+  font-weight: 700;
+  border: var(--border_hard);
+  border-radius: 1px;
+  box-shadow: var(--outline);
+  filter: none;
+}
+
+input[type=text]:disabled, input[type=text]:disabled:active,
+input[readonly="readonly"] {
+  color: #161 !important;
+  border: 1px solid #141 !important;
+  background: #000 !important;
+}
+
+textarea {
+  margin: 10px;
+  padding: 5px;
+  width: calc(100% - 15px);
+  min-height: 100px;
+  resize: none;
+  text-align: left;
+  font: 8.5pt var(--monospaced);
+  color: #bb7;
+  border: var(--border);
+  border-radius: 1px;
+  box-shadow: var(--highlight);
+  background: linear-gradient(180deg,#000, #010);
+}
+
+textarea[disabled] {
+  background: #000;
+}
+
+input[type=text]:focus, input[type=password]:focus, textarea:focus {
+  color: var(--ink) !important;
+  border: 1px solid #373;
+  box-shadow: var(--btn_shadow_active);
+  background: var(--input_txt);
+  outline: none;
+  filter: drop-shadow(0 0 1px var(--hover));
+  transition: filter ease .3s;
+}
+
+input[readonly]:focus {
+  font-weight: 400;
+  color: #161 !important;
+  filter: none !important;
 }
 
 select {
@@ -319,65 +386,6 @@ select:-moz-focusring {
 select::-moz-focus-inner {
   outline: none !important;
   border: none !important;
-}
-
-input[type=text], input[type=password], textarea {
-  color: #bb7;
-  border: var(--border_hard);
-  background: #000;
-  cursor: text;
-}
-
-input[type=text], input[type=password] {
-  margin: 5px 10px;
-  padding: 6px 8px;
-  text-decoration: none;
-  font-weight: 700;
-  border: 1px solid #151;
-  border-radius: 1px;
-  box-shadow: var(--outline);
-  filter: none;
-}
-
-input[type=text]:disabled, input[type=text]:disabled:active,
-input[readonly="readonly"] {
-  color: #161 !important;
-  border: 1px solid #141 !important;
-  background: #000 !important;
-}
-
-textarea {
-  margin: 10px;
-  padding: 5px;
-  width: calc(100% - 15px);
-  min-width: 97%;
-  min-height: 100px;
-  resize: none;
-  text-align: left;
-  font: 8.5pt var(--monospaced);
-  border-radius: 2px;
-  box-shadow: var(--highlight);
-  background: linear-gradient(180deg,#000, #010);
-}
-
-textarea[disabled] {
-  background: #000;
-}
-
-input[type=text]:focus, input[type=password]:focus, textarea:focus {
-  color: var(--ink) !important;
-  border: 1px solid #373;
-  box-shadow: var(--btn_shadow_active);
-  background: var(--input_txt);
-  outline: none;
-  filter: drop-shadow(0 0 1px var(--hover));
-  transition: filter ease .3s;
-}
-
-input[readonly]:focus {
-  font-weight: 400;
-  color: #161 !important;
-  filter: none !important;
 }
 
 .optbox {
