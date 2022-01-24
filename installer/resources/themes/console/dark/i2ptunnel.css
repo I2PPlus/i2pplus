@@ -20,7 +20,7 @@ body.iframed {
 }
 
 ::selection {
-  color: black;
+  color: #000;
   background: #ff0 !important;
 }
 
@@ -150,11 +150,13 @@ hr {
   width: 100%;
 }
 
-.iframed .panel#clients, #tunnelEditPage .panel, #tunnelRegistration .panel, #tunnelWizardPage .panel, #tunnelSSL .panel {
+.iframed .panel#clients, #tunnelEditPage .panel, #tunnelRegistration .panel,
+#tunnelWizardPage .panel, #tunnelSSL .panel {
   margin-bottom: 6px !important;
 }
 
-.iframed #messages, .iframed #messages, #tunnelEditPage .panel, #tunnelRegistration .panel, #tunnelWizardPage .panel, #tunnelSSL .panel {
+.iframed #messages, .iframed #messages, #tunnelEditPage .panel,
+#tunnelRegistration .panel, #tunnelWizardPage .panel, #tunnelSSL .panel {
   margin-top: -5px !important;
 }
 
@@ -486,36 +488,6 @@ textarea#statusMessages:focus {
   background: linear-gradient(180deg,#000 0%, #010 100%);
 }
 
-.freetext {
-  padding: 4px;
-  width: 150px;
-  font: 8.5pt var(--monospaced);
-  color: #333;
-  border: var(--border_hard);
-  border-radius: 1px;
-}
-
-.freetext.tunnelDescriptionText, .freetext.tunnelName,
-#privKeyFile, #websiteName, .proxyList, #localDest,
-#altlocaldest, #altPrivKeyFile {
-  width: calc(100% - 10px) !important;
-}
-
-.freetext:focus {
-  box-shadow: 0 0 1px #f60;
-  color: #111;
-  outline: none;
-}
-
-.freetext[readonly], .freetext[readonly]:focus {
-  background: #000 !important;
-  box-shadow: inset 2px 2px 1px #000;
-  color: #885;
-  cursor: default;
-  border: var(--border_hard) !important;
-  opacity: .8;
-}
-
 input[type="hidden"], input.default {
   display: none;
 }
@@ -525,7 +497,7 @@ input, select, button, a {
 }
 
 input {
-  margin: 0 2px 0 2px;
+  margin: 0 2px;
 }
 
 input[type="file"] {
@@ -557,15 +529,24 @@ input[type="file"] {
   display: inline;
 }
 
-input[type=text], input[type=password],
-textarea, textarea[readonly="readonly"]:focus  {
-  padding: 6px 8px;
-  box-shadow: none;
-  filter: none;
+.freetext {
+  width: 150px;
+  font: 8.5pt var(--monospaced);
 }
 
-textarea[readonly="readonly"]:focus {
-  box-shadow: inset 0 0 0 1px #880;
+.freetext.tunnelDescriptionText, .freetext.tunnelName,
+#privKeyFile, #websiteName, .proxyList, #localDest,
+#altlocaldest, #altPrivKeyFile {
+  width: calc(100% - 10px) !important;
+}
+
+.freetext[readonly], .freetext[readonly]:focus {
+  background: #000 !important;
+  box-shadow: inset 2px 2px 1px #000;
+  color: #885;
+  cursor: default;
+  border: var(--border_hard) !important;
+  opacity: .8;
 }
 
 button, input[type=submit], input[type=reset], a.control, select {
@@ -672,11 +653,6 @@ select#profile, select#connectionProfile {
 
 select#connectionProfile, #targetDestination {
   width: calc(100% - 10px);
-}
-
-#customOptions, #userAgents {
-  width: calc(100% - 10px) !important;
-  width: 100% !important;
 }
 
 #localDestination, textarea[name="accessList"], #hostField {
@@ -1055,18 +1031,6 @@ textarea[name="accessList"], #hostField, #localDestination, .authentication {
 .tunnelInfo {
   background: linear-gradient(90deg, #000 50%, #010) !important;
   box-shadow: none !important;
-}
-
-_:-ms-lang(x), .tunnelDestination {
-  border-bottom: none !important;
-}
-
-_:-ms-lang(x), .tunnelDescription {
-  border-top: none !important;
-}
-
-_:-ms-lang(x), .tunnelProperties {
-  border-bottom: 1px solid #010 !important;
 }
 
 .tunnelInfo b {
