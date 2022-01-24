@@ -54,12 +54,6 @@ textarea:hover {
   user-select: none;
 }
 
-::selection {
-  color: white;
-  text-shadow: none;
-  background: #27377f !important;
-}
-
 b, h3, .pagenav td, th {
   color: var(--ink);
   text-shadow: var(--txt_shadow);
@@ -338,22 +332,19 @@ input[type=text], input[type=password] {
   font-size: 9pt;
 }
 
-input[type=submit], input[type=reset], #settings, .topbuttons .fakebutton {
+input[type=submit], input[type=reset],
+#settings, .topbuttons .fakebutton {
   margin: 3px;
   padding: 7px 6px;
   min-width: 0;
-  text-decoration: none;
   font-size: 8.5pt;
-  font-weight: 700;
-  color: #494;
-  text-shadow: var(--txt_shadow);
-  box-shadow: var(--btn_shadow);
-  border: 1px solid #000;
-  border-radius: 2px;
   background: var(--btn);
   background-size: 12px, 100%;
-  opacity: 1;
   cursor: pointer;
+}
+
+#dologin input[type=submit], #dologin #settings {
+  line-height: 1.25;
 }
 
 input.cancel, #nukemail input.clearselection {

@@ -182,7 +182,9 @@ input[type=submit], input[type=reset], button, .control, .fakebutton {
   min-width: 110px;
   text-align: center;
   text-decoration: none;
+  font-weight: 700;
   color: var(--a);
+  text-shadow: var(--txt_shadow);
   border: 1px solid #000;
   border-radius: 2px;
   box-shadow: var(--btn_shadow);
