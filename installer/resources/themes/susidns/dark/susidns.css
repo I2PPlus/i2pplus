@@ -290,7 +290,7 @@ h3 {
   color: var(--ink);
   border: var(--border);
   box-shadow: var(--highlight);
-  -webkit-text-stroke: 1px rgba(237, 237, 146,.3);
+  -webkit-text-stroke: var(--stroke);
 }
 
 #content h3 {
