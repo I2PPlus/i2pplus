@@ -11,10 +11,11 @@ Content-Security-Policy: default-src 'none'; style-src 'self' 'unsafe-inline' ht
 <html>
 <head>
 <title>_("Website Unreachable")</title>
-<link rel="shortcut icon" href="http://proxy.i2p/themes/console/default/images/favicon.svg">
 <style type="text/css">body::before{animation:linear loader 15s forwards}</style>
 <meta http-equiv="refresh" content="15">
+<link href="http://proxy.i2p/themes/console/default/global.css" rel="stylesheet" type="text/css">
 <link href="http://proxy.i2p/themes/console/default/proxy.css" rel="stylesheet" type="text/css">
+<link rel="shortcut icon" href="http://proxy.i2p/themes/console/default/images/favicon.svg">
 </head>
 <body id="proxy_error">
 <div class="logo">

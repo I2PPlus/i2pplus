@@ -11,8 +11,9 @@ Content-Security-Policy: default-src 'none'; style-src 'self' 'unsafe-inline' ht
 <html>
 <head>
 <title>_("Warning: Non-HTTP Protocol")</title>
-<link rel="shortcut icon" href="http://proxy.i2p/themes/console/default/images/favicon.svg">
+<link href="http://proxy.i2p/themes/console/default/global.css" rel="stylesheet" type="text/css">
 <link href="http://proxy.i2p/themes/console/default/proxy.css" rel="stylesheet" type="text/css">
+<link rel="shortcut icon" href="http://proxy.i2p/themes/console/default/images/favicon.svg">
 </head>
 <body id="proxy_error">
 <div class="logo">
