@@ -1,7 +1,7 @@
 /* I2P+ Router Console: proxy error theme: Light */
 /* Author: dr|z3d */
 
-@import url(/themes/fonts/DroidSans.css);
+@import url(global.css);
 @import url(../images/itooplus.css);
 
 :root {
