@@ -482,10 +482,17 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 if (_log.shouldWarn())
 //                    _log.warn("Bad msg 3 payload", dfe);
                     _log.warn("Bad message #3 payload \n* Data Format Exception: " + dfe.getMessage());
-                // probably RI problems
+                // probably RI signature failure
                 // setDataPhase() will send termination
-                if (_msg3p2FailReason < 0)
+                if (_msg3p2FailReason < 0) {
                     _msg3p2FailReason = NTCPConnection.REASON_SIGFAIL;
+                    // buggy/forked and very persistent i2pd
+                    // So next time we will not accept the con from this IP,
+                    // rather than doing the whole handshake
+                    byte[] ip = _con.getRemoteIP();
+                    if (ip != null)
+                        _context.blocklist().add(ip);
+                }
                 _context.statManager().addRateData("ntcp.invalidInboundSignature", 1);
             } catch (I2NPMessageException ime) {
                 // shouldn't happen, no I2NP msgs in msg3p2
