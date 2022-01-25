@@ -19,10 +19,7 @@ body {
   margin: 3px;
   padding: 0;
   text-align: left;
-  font: 9pt/130% Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
-  color: #41444d;
-  background: #e2e2f3 url(images/bg0.png) center center scroll;
-  background-size: 90px 90px;
+  background: #e2e2f3 url(images/bg0.png) scroll center center / 90px;
 }
 
 body::before {
@@ -41,27 +38,6 @@ body::before {
   from {width: 0}
   99% {width: 100%}
   100% {width: 0}
-}
-
-* {
-  outline: none;
-}
-
-a {
-  font-weight: 600;
-  text-decoration: none;
-}
-
-a, a:visited {
-  color: #5c5c8a;
-}
-
-a:hover {
-  color: #f60;
-}
-
-a:active {
-  color: #f93;
 }
 
 /* Sidepanel for proxy errors */

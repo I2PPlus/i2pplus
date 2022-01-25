@@ -14,7 +14,7 @@ html, body {
 }
 
 html {
-  background: repeating-linear-gradient(90deg, rgba(0,16,0,.5) 2px, rgba(0,25,0,.5) 4px),
+  background: repeating-linear-gradient(90deg, rgba(0,8,0,.5) 2px, rgba(0,16,0,.5) 4px),
     repeating-linear-gradient(180deg,#000 2px, #010 4px) !important;
   background-size: 4px 100%, 100% 4px;
 }

@@ -38,16 +38,12 @@ html {
   background-size: 100% 4px, 4px 100%, 171px 148px;
 }
 
-body, p, td {
-  line-height: 1.3;
-  font-family: var(--bodyfont);
-  font-size: 10.5pt;
-}
-
 body {
   margin: 2px 0 0;
   padding: 0;
+  line-height: 1.3;
   text-align: center;
+  font-size: 10.5pt;
   color: #c9ceff;
 }
 
@@ -67,22 +63,6 @@ body::before {
   from {width: 0}
   99% {width: 100%}
   100% {width: 0}
-}
-
-a:link, a:visited {
-  color: var(--a);
-  text-decoration: none;
-  font-weight: 700;
-  word-wrap: break-word;
-  outline: none;
-}
-
-a:hover, a:focus {
-  color: #bf2295;
-}
-
-a:active {
-  color: #851768 !important;
 }
 
 .logo {
