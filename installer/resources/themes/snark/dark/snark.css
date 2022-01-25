@@ -10,6 +10,7 @@
 
 html {
   min-height: 100%;
+  background: none !important;
 }
 
 body {
@@ -19,7 +20,7 @@ body {
 
 body.iframed {
   margin: 1px 0;
-  background: none;
+  background: none !important;
 }
 
 body::before {

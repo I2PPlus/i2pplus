@@ -5,6 +5,10 @@
 @import url(../images/images.css);
 @import url(images/images.css);
 
+html {
+  background: none !important;
+}
+
 body, input, input[type=submit], input[type=reset], .fakebutton, #hostNotes td:last-child, #hostNotes textarea {
   font-family: var(--bodyfont);
 }

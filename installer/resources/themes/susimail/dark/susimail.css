@@ -7,6 +7,10 @@
 @import url(../images/images.css);
 @import url(images/images.css);
 
+html {
+  background: none !important;
+}
+
 body, input, select, .fakebutton {
   font-family: var(--bodyfont);
 }
