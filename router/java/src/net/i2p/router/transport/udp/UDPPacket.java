@@ -12,7 +12,7 @@ import net.i2p.data.DataHelper;
 import net.i2p.data.SessionKey;
 import net.i2p.router.RouterContext;
 import net.i2p.router.transport.FIFOBandwidthLimiter;
-import net.i2p.router.util.CDQEntry;
+import net.i2p.router.util.CDPQEntry;
 import net.i2p.util.TryCache;
 import net.i2p.util.Addresses;
 import net.i2p.util.Log;
@@ -23,10 +23,10 @@ import net.i2p.util.SystemVersion;
  * of object instances to allow rapid reuse.
  *
  */
-class UDPPacket implements CDQEntry {
+class UDPPacket implements CDPQEntry {
     private RouterContext _context;
     private final DatagramPacket _packet;
-    private volatile short _priority;
+    private int _priority;
     private volatile long _initializeTime;
     //private volatile long _expiration;
     private final byte[] _data;
@@ -46,6 +46,7 @@ class UDPPacket implements CDQEntry {
     private int _validateCount;
     // private boolean _isInbound;
     private FIFOBandwidthLimiter.Request _bandwidthRequest;
+    private long _seqNum;
 
     private static class PacketFactory implements TryCache.ObjectFactory<UDPPacket> {
         static RouterContext context;
@@ -176,6 +177,20 @@ class UDPPacket implements CDQEntry {
         _fragmentCount = 0;
     }
 
+    /**
+     *  CDPQEntry
+     *  @since 0.9.53
+     */
+    public void setSeqNum(long num) { _seqNum = num; }
+
+    /**
+     *  CDPQEntry
+     *  @since 0.9.53
+     */
+    public long getSeqNum() { return _seqNum; }
+
+
+    
   /****
     public void writeData(byte src[], int offset, int len) {
         verifyNotReleased();
@@ -187,7 +202,13 @@ class UDPPacket implements CDQEntry {
 
     /** */
     public synchronized DatagramPacket getPacket() { verifyNotReleased(); return _packet; }
-    public synchronized short getPriority() { verifyNotReleased(); return _priority; }
+    public int getPriority() { return _priority; }
+
+    /**
+     *  @since 0.9.53
+     */
+    public void setPriority(int pri) { _priority = pri; }
+
     //public long getExpiration() { verifyNotReleased(); return _expiration; }
     public synchronized long getBegin() { verifyNotReleased(); return _initializeTime; }
     public long getLifetime() { /** verifyNotReleased(); */ return _context.clock().now() - _initializeTime; }
@@ -403,6 +424,7 @@ class UDPPacket implements CDQEntry {
         buf.append(_packet.getLength());
         buf.append(" bytes");
         //buf.append(" id=").append(System.identityHashCode(this));
+        buf.append("; Priority: ").append(_priority);
         if (_messageType >= 0)
             buf.append("; Message Type: ").append(_messageType);
         if (_markedType >= 0)
