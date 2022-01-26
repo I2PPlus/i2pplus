@@ -452,16 +452,7 @@ textarea#statusMessages:focus {
   padding: 4px;
   width: 150px;
   font: bold 9pt var(--monospaced);
-  color: #7171d1;
-  border: 1px solid #302b74;
-  box-shadow: inset 2px 2px 1px #ccc;
   cursor: text;
-}
-
-.freetext:focus {
-  color: #111;
-  border: 1px solid #6466a5 !important;
-  box-shadow: 0 0 1px #99f;
 }
 
 .freetext[readonly], .freetext[readonly]:focus {
@@ -537,26 +528,17 @@ a.control, input.control {
   white-space: nowrap;
   text-decoration: none;
   text-align: center;
-  font-weight: 700;
-  font-style: normal;
-  color: #7171d1 !important;
-  border: 1px solid #26225c;
   background: linear-gradient(180deg,#11101c 50%, #000010 50%) !important;
 }
 
 .control:hover, .control:focus, button:hover, button:focus {
   text-decoration: none;
-  color: #652787 !important;
-  border: 1px solid #652787 !important;
-  box-shadow: var(--highlight), inset 0 0 1px 1px #757;
   background: linear-gradient(180deg,#202 50%, #000 50%) !important;
 }
 
 .control:active, button:active {
-  background: #652787 !important;
-  color: #c9ceff !important;
   text-decoration: none;
-  box-shadow: var(--highlight), inset 3px 3px 3px #000 !important;
+  background: var(--hover) !important;
 }
 
 a.control {
