@@ -1226,7 +1226,7 @@ div.logo hr {
 
 #sb_services a:hover, #sb_internals a:hover, #sb_advanced a:hover, #sb_localtunnels tr:hover, .sb_newsheadings a:hover,
 #sb_localtunnels tr:hover a, #sb_help a:hover, .news a:hover, #console a:hover, #help a:hover {
-  color: var(--hover) !important;
+  color: var(--a_hover) !important;
   border-radius: 2px;
   background-color: #1e0b28;
 }
