@@ -535,6 +535,7 @@ a.control, input.control {
 .control:hover, .control:focus, button:hover, button:focus {
   text-decoration: none;
   background: linear-gradient(180deg,#202 50%, #000 50%) !important;
+  color: var(--a_hover);
 }
 
 .control:active, button:active {
