@@ -207,24 +207,23 @@ button.go:active, button.accept:active {
 
 .warning {
   margin: 24px 26px 24px 260px;
-  padding: 14px 40px 40px 120px;
+  padding: 14px 45px 40px 120px;
   min-width: 300px;
+  min-height: 180px;
   position: relative;
-  text-align: left;
+  text-align: justify;
   word-wrap: break-word;
   color: #c9ceff;
-  text-align: justify;
   text-shadow: 0 1px 1px #000;
   box-shadow: inset 0 0 0 1px #44175f;
   border: 5px solid #26235c;
-  border-image: repeating-linear-gradient(135deg, #003 0px, #003 20px, #550 20px, #550 40px, #003 40px) 5 repeat repeat;
+  border-image: repeating-linear-gradient(135deg, #225, #225 19px, #000 20px, #770 20px, #770 39px, #000 40px, #225 40px) 5 repeat repeat;
   border-image-width: 5px;
-  border-image-outset: 1px;
-  box-shadow: inset 0 0 0 1px #44175f, inset 0 0 3px 3px #000, 0 0 0 2px #26235c, 0 0 0 3px #000, 0 0 0 6px #115, 0 0 0 7px #000;
-  background: var(--itooplus) no-repeat, repeating-linear-gradient(180deg,#000, #002 2px);
-  background-position: 30px calc(50% + 16px), center center;
+  border-image-outset: 2px;
+  box-shadow: inset 0 0 0 1px #44175f, 0 0 0 4px #000, 0 0 0 6px #225, 0 0 0 7px #000;
+  background: var(--itooplus) no-repeat, repeating-linear-gradient(180deg,#000 2px, #002 4px);
   background-size: auto 130px, 100% 4px;
-  min-height: 180px;
+  background-position: 30px calc(50% + 16px), center center;
 }
 
 .iframed .warning, #servletError .iframed #warning2 {
@@ -257,7 +256,7 @@ button.go:active, button.accept:active {
 }
 
 .warning h3 {
-  margin: -13px -39px 25px -119px;
+  margin: -13px -44px 25px -119px;
   padding: 12px 16px;
   letter-spacing: .1em;
   text-align: left;
