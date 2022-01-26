@@ -528,6 +528,7 @@ a.control, input.control {
   white-space: nowrap;
   text-decoration: none;
   text-align: center;
+  color: var(--a);
   background: linear-gradient(180deg,#11101c 50%, #000010 50%) !important;
 }
 
