@@ -32,6 +32,14 @@ body.iframed {
   transition: ease scrollbar-color .2s;
 }
 
+a:hover, a:visited:hover, a:focus, a:focus:hover {
+  color: var(--a_hover);
+}
+
+a:active, a:visited:active  {
+  color: var(--active) !important;
+}
+
 h2, h3, th, .buttons, .newTunnel, .control, label, .infohelp, .infowarn, .nowrap, b, #throttler td {
   user-select: none;
 }
