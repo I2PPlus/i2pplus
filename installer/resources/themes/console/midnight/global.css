@@ -110,6 +110,10 @@ input {
   font: bold 9pt var(--bodyfont);
 }
 
+input[type=hidden] {
+  display: none;
+}
+
 input[type=image] {
   min-width: 0;
 }
@@ -196,7 +200,7 @@ input[type="file"]:hover, input[type="file"]:active {
   color: var(--hover);
 }
 
-button, input[type=submit], input[type=reset], select, .fakebutton, .fakebutton:visited {
+button, input[type=submit], input[type=reset], select, .control, .fakebutton, .fakebutton:visited {
   border-radius: 1px;
   box-shadow: var(--highlight), inset 0 0 2px 0 #559;
   background: 8px 5px no-repeat, var(--btn);
@@ -208,7 +212,7 @@ input[type=submit], input[type=reset], button {
   background-size: 12px, 100%;
 }
 
-button, button:visited, input[type=submit], input[type=reset], .fakebutton {
+button, button:visited, input[type=submit], input[type=reset], .fakebutton, .control {
   margin: 2px 3px;
   padding: 5px 4px;
   font: bold 9pt var(--bodyfont);
@@ -223,18 +227,23 @@ button, button:visited, input[type=submit], input[type=reset], .fakebutton {
 
 input[type=submit]:hover, input[type=reset]:hover, button:hover, button:focus,
 input[type=submit]:focus, input[type=reset]:focus, select:hover, select:focus,
-.fakebutton:hover, .fakebutton:focus {
+.control:hover, .control:focus, .control:visited:hover, .control:visited:focus,
+.fakebutton:hover, .fakebutton:focus, .fakebutton:visited:hover, .fakebutton:visited:focus {
   color: var(--a_hover);
   border: 1px solid var(--a_hover);
   box-shadow: var(--highlight), inset 0 0 2px 1px #757;
+  background: var(--btn_hover);
   cursor: pointer;
 }
 
 input[type=submit]:hover, input[type=reset]:hover, button:hover {
+  color: var(--a_hover);
   background-size: 12px, 100%;
 }
 
-input[type=submit]:active, input[type=reset]:active, button:active {
+input[type=submit]:active, input[type=reset]:active, button:active,
+.control:active, .control:visited:active,
+.fakebutton:active, .fakebutton:visited:active {
   color: #83529f !important;
   text-shadow: 0 1px 1px #3c1751;
   border: 1px solid var(--hover);
@@ -291,6 +300,7 @@ select {
   margin: 5px 10px;
   padding: 5px 24px 5px 6px;
   min-width: 110px;
+  vertical-align: middle;
   appearance: none;
   overflow: hidden;
   text-overflow: ellipsis;

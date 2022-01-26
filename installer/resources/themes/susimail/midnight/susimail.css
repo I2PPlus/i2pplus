@@ -578,7 +578,7 @@ input[type=submit]:focus, input.cancel:focus,
 #settings:hover, #settings:focus, .fakebutton:hover, .fakebutton:focus,
 #expand:hover, #expand:focus, #collapse:hover, #expand:focus {
   color: var(--a_hover) !important;
-  border: 1px solid #652787;
+  border: 1px solid var(--a_hover);
   box-shadow: var(--highlight), inset 0 0 2px 1px #757;
   background: #000 !important;
 }
@@ -1313,16 +1313,21 @@ input.prev:hover, input[name="next"]:hover, input.prev[disabled]:hover, input[na
   padding: 5px 15px !important;
 }
 
-input[type=submit][disabled], input[type=submit][disabled]:hover, input[type=submit][disabled]:focus, input[type=submit][disabled]:active {
+input[type=submit][disabled], input[type=submit][disabled]:hover,
+input[type=submit][disabled]:focus, input[type=submit][disabled]:active {
   padding: 5px 15px !important;
-  opacity: .5;
   box-shadow: none;
+  opacity: .5;
   cursor: default;
   mix-blend-mode: luminosity;
 }
 
 #messagenav input {
   background-size: 16px, 100% !important;
+}
+
+.topbuttons #messagenav input {
+  margin-bottom: 10px !important;
 }
 
 /* end pagenav */
