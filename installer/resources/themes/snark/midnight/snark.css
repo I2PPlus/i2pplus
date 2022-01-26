@@ -3604,12 +3604,8 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {
   border-right: none !important;
 }
 
-.iframed #snarkInfo ~ .mainsection#snarkFiles {
-  margin-top: 5px !important;
-}
-
 .iframed #snarkCommentSection {
-  margin-bottom: -8px;
+  margin-bottom: -6px;
 }
 
 #snarkInfo ~ .mainsection table, .iframed #snarkInfo ~ .mainsection table {
@@ -3992,7 +3988,6 @@ td.torrentAction input[type=submit] {
 #addCommentText {
   padding: 18px 20px !important;
   text-align: center;
-  border-bottom: var(--border) !important;
 }
 
 #snarkTorrentEdit textarea {
