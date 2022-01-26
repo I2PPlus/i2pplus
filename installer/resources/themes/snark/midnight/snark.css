@@ -1513,7 +1513,7 @@ hr {
 
 a:hover, a:focus, .trackerName a:visited:hover, .trackerName a:visited:focus,
 .snarkTorrents a:visited:hover, .snarkTorrents a:visited:focus, .snarkMessages a:visited:hover {
-  color: var(--hover);
+  color: var(--a_hover);
 }
 
 input.r {
