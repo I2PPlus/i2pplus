@@ -2486,8 +2486,7 @@ div.messages {
   color: var(--ink) !important;
   border: var(--border_inner);
   box-shadow: var(--highlight), inset 0 0 2px 1px #808 !important;
-  background: #000 var(--infohelp) no-repeat 15px center;
-  background-size: 28px !important;
+  background: #000 var(--infohelp) no-repeat 15px center / 28px;
 }
 
 div.messages i {
@@ -4155,8 +4154,7 @@ table#reseedconfig input[type=text], table#reseedconfig input[type=password] {
 }
 
 #bannedpeercount {
-  background: #000 var(--ban) no-repeat 12px center !important;
-  background-size: 28px !important;
+  background: #000 var(--ban) no-repeat 15px center / 28px !important;
 }
 
 #banlist {
@@ -4263,14 +4261,13 @@ p#upnpconfig, p#ipchange, p#ipv6config, p#tcpconfig, p#confignotes, p#defaultswo
 }
 
 p#defaultswork {
-  padding: 15px 10px 15px 45px !important;
+  padding: 15px 25px 15px 55px !important;
 }
 
 p#confignotes {
   margin-bottom: -21px;
-  padding: 15px 10px 15px 45px;
-  background: var(--infohelp) no-repeat 12px center !important;
-  background-size: 28px !important;
+  padding: 15px 25px 15px 55px;
+  background: var(--infohelp) no-repeat 15px center / 28px !important;
 }
 
 p#ipconfig, p#ipv4config, p#udpconfig, p#externaltcp {
@@ -4384,8 +4381,7 @@ table#addkeyring tr:last-child td {
 p#keyringhelp, p#webappconfig, p#availableplugins, p#pluginconfigtext, p#clientdefaultshelp, p#bwshare, p#editclients, p#upnpstatus, p#gatherstats {
   padding: 20px 25px 20px 55px !important;
   border: var(--border_inner);
-  background: #000 var(--infohelp) no-repeat 12px center !important;
-  background-size: 28px !important;
+  background: #000 var(--infohelp) no-repeat 15px center / 28px !important;
 }
 
 #config_reseed p.infohelp, #config_family p.infohelp, p#tunnelconfig {
@@ -4725,8 +4721,7 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 
 #config_summarybar #refreshsidebar td:not(.optionsave) {
   padding-left: 50px;
-  background: var(--timer) no-repeat 12px center !important;
-  background-size: 28px !important;
+  background: var(--timer) no-repeat 15px center / 28px !important;
 }
 
 table#sidebarconf {
@@ -4883,8 +4878,7 @@ h3#shutdownrouter + p, h3#restartrouter + p, h3#servicedebug + p, h3#browseronst
   text-align: left;
   border: var(--border_inner);
   border-bottom: none;
-  background: #010008 var(--infohelp) no-repeat 12px center !important;
-  background-size: 28px !important;
+  background: #010008 var(--infohelp) no-repeat 15px center / 28px !important;
 }
 
 h3#servicedebug + p + p {
@@ -5608,9 +5602,8 @@ a[name="criticallogs"] + p + h3 + p + ul {
 }
 
 #bugreports td {
-  padding: 15px 10px 15px 50px;
-  background: var(--infohelp) no-repeat 12px center !important;
-  background-size: 28px !important;
+  padding: 15px 25px 15px 55px;
+  background: var(--bug) no-repeat 15px center / 28px !important;
 }
 
 #logs #enviro:hover {
@@ -5645,7 +5638,7 @@ a[name="criticallogs"] + p + h3 + p + ul {
 }
 
 #routerinformation #enviro + h3 {
-  margin-bottom: -2px !important;
+  margin-bottom: -3px !important;
 }
 
 #routerinformation #upnpstatus {
@@ -7326,8 +7319,7 @@ span#distance {
   text-align: left;
   font-weight: 700;
   border: var(--border_inner);
-  background: #000 var(--infohelp) no-repeat 12px center !important;
-  background-size: 28px !important;
+  background: #000 var(--infohelp) no-repeat 15px center / 28px !important;
 }
 
 #sybilnav, #sybils_summary {
@@ -7587,13 +7579,11 @@ textarea#advancedsettings:focus {
   font-weight: 400 !important;
   border-top: var(--border_inner);
   border-bottom: var(--border_inner);
-  background: #001 var(--infohelp) no-repeat 12px center !important;
-  background-size: 28px !important;
+  background: #001 var(--infohelp) no-repeat 15px center / 28px !important;
 }
 
 #config_ui .infohelp {
-  background: #000 var(--ui) no-repeat 12px center !important;
-  background-size: 28px !important;
+  background: #000 var(--ui) no-repeat 15px center / 28px !important;
 }
 
 p.infowarn, td.infowarn, p.infohelp, td.infohelp {
@@ -9572,14 +9562,12 @@ tr:nth-child(4) .net_bwrate::before {
 
 #url td:first-child {
   padding: 15px 25px 15px 55px !important;
-  background: var(--link) no-repeat 12px center !important;
-  background-size: 28px !important;
+  background: var(--link) no-repeat 15px center / 28px !important;
 }
 
 #installPluginFile td:first-child {
-  padding: 10px 15px 10px 50px;
-  background: var(--files) no-repeat 12px center !important;
-  background-size: 28px !important;
+  padding: 10px 25px 10px 55px;
+  background: var(--files) no-repeat 15px center / 28px !important;
 }
 
 #installPluginUrl input[type=text], #installPluginFile input[type="file"] {
@@ -11325,8 +11313,7 @@ h1::first-letter {
   width: 28px;
   height: 28px;
   display: inline-block;
-  background: var(--ibgw) no-repeat center center;
-  background-size: 28px !important;
+  background: var(--ibgw) no-repeat center center / 28px;
   content: "";
 }
 
@@ -11754,8 +11741,7 @@ to {
 }
 
 #enablefullstats {
-  background: #000 var(--stats) no-repeat 12px center !important;
-  background-size: 28px !important;
+  background: #000 var(--stats) no-repeat 15px center / 28px !important;
 }
 
 /* TunnelPeerCount */
