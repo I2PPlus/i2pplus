@@ -2095,7 +2095,7 @@ div.sorry hr {
 }
 
 #newsDisplay a, #graphopts a, #routerinfo a, .graphstat, .graphstat:visited,
-#routerinformation tr:nth-child(n+2) a {
+#routerinformation tr:nth-child(n+2) a:not(#revision) {
   margin: -2px;
   padding: 3px 15px;
   display: inline-block;
@@ -2109,7 +2109,8 @@ div.sorry hr {
 
 #newsDisplay a:hover, #newsDisplay a:focus, #graphopts a:hover, #graphopts a:focus,
 #routerinfo a:hover, #routerinfo a:focus, .graphstat:hover, .graphstat:focus,
-#routerinformation tr:nth-child(n+2) a:hover, #routerinformation tr:nth-child(n+2) a:focus {
+#routerinformation tr:nth-child(n+2) a:not(#revision):hover,
+#routerinformation tr:nth-child(n+2) a:not(#revision):focus {
   color: var(--a_hover) !important;
   text-shadow: 0 1px 1px #000;
   border: 1px solid #000;
@@ -2119,7 +2120,7 @@ div.sorry hr {
 }
 
 #newsDisplay a:active, #graphopts a:active, #routerinfo a:active, .graphstat:active,
-#routerinformation tr:nth-child(n+2) a:active {
+#routerinformation tr:nth-child(n+2) a:not(#revision):active {
   color: #83529f !important;
   text-shadow: 0 1px 1px #3c1751;
   box-shadow: inset 0 0 0 1px #303, inset 3px 3px 3px #14071b !important;
@@ -10530,7 +10531,7 @@ html, body {
   display: none;
 }
 
-#routerinformation table:hover tr:nth-child(n+2) a {
+#routerinformation table:hover tr:nth-child(n+2) a:not(#revision) {
   display: inline !important;
   margin: -3px 0 -3px 4px;
 }
