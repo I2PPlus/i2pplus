@@ -33,6 +33,10 @@ body.iframed {
   user-select: none;
 }
 
+a:hover, a:visited:hover {
+  color: var(--a_hover);
+}
+
 /* topnav */
 
 div#navi  {
@@ -1181,7 +1185,7 @@ td.names {
 }
 
 td.names:hover, #host_list td.b32link:hover, #host_list td.helper:hover, #host_list td.destinations:hover {
-  box-shadow: inset 0 0 0 1px #652787 !important;
+  box-shadow: inset 0 0 0 1px var(--a_hover) !important;
   background: #000 !important;
 }
 
