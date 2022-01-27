@@ -9464,7 +9464,7 @@ tr:nth-child(2) .net_bwrate::before, tr:nth-child(3) .net_bwrate::before, tr:nth
   height: 16px;
   vertical-align: middle;
   background:  url(/themes/console/images/svg/inbound.svg) left top no-repeat;
-  background-size: 14px !important;
+  background-size: 16px !important;
 }
 
 tr:nth-child(3) .net_bwrate::before {
@@ -9497,6 +9497,38 @@ tr:nth-child(4) .net_bwrate::before {
 
 #bandwidthconfig td:not(.infohelp) {
   background: #000 !important;
+}
+
+#config_bandwidth .h3navlinks a {
+  margin: -3px 0 0 -20px;
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+  color: transparent !important;
+  font-size: 0;
+  background: url(/themes/console/images/svg/networkconfig.svg) no-repeat calc(100% - 8px) center / 22px;
+  text-shadow: none;
+  border: none;
+  contain: paint;
+}
+
+#config_bandwidth .h3navlinks::before {
+  margin-top: -8px;
+  content: "";
+  display: inline-block;
+  border-left: var(--border_inner);
+  width: 1px;
+  height: 52px;
+  vertical-align: middle;
+}
+
+#config_bandwidth .h3navlinks a:hover {
+  filter: drop-shadow(0 0 1px var(--a_hover)) drop-shadow(0 0 2px var(--a_hover));
+}
+
+#config_bandwidth .h3navlinks a:active {
+  filter: none;
+  transform: scale(.9);
 }
 
 .bw_title {
@@ -12585,6 +12617,10 @@ iframe {
     background-size: 32px auto, 4px 100%, 100%, 100%, 164px 164px !important;
   }
   .main h3 a {line-height: 1}
+  #config_bandwidth .h3navlinks a {
+    margin: -4px 0 0 -16px;
+    background-size: 19px;
+  }
 }
 
 @media screen and (max-width: 1400px) {
