@@ -110,6 +110,10 @@ input {
   font: bold 9pt var(--bodyfont);
 }
 
+input[type=hidden] {
+  display: none;
+}
+
 input[type=image] {
   min-width: 0;
 }
@@ -139,9 +143,22 @@ input[type=text], input[type=password] {
 input[type=text]:focus, input[type=password]:focus, textarea:focus {
   color: var(--ink) !important;
   border: 1px solid #6466a5 !important;
-  box-shadow: var(--outline), var(--btn_shadow_active);
+  box-shadow: var(--outline), 0 0 0 2px var(--a_hover), var(--btn_shadow_active);
   background: var(--text_focus);
   transition: filter all .3s;
+}
+
+textarea:focus {
+  box-shadow: inset 0 0 0 1px var(--a_hover), var(--btn_shadow_active);
+}
+
+input[type=text]:disabled, input[readonly], input[readonly]:focus {
+  color: #26235c !important;
+  border: var(--border_inner);
+  box-shadow: none;
+  background: linear-gradient(180deg,#000,#000019);
+  filter: none;
+  cursor: not-allowed;
 }
 
 button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset]::-moz-focus-inner {
@@ -183,23 +200,19 @@ input[type="file"]:hover, input[type="file"]:active {
   color: var(--hover);
 }
 
-input[type=text]:disabled, input[readonly], input[readonly]:focus {
-  color: #26235c !important;
-  border: var(--border_inner);
-  box-shadow: none;
-  background: linear-gradient(180deg,#000,#000019);
-  filter: none;
-  cursor: not-allowed;
-}
-
-button, input[type=submit], input[type=reset], select {
+button, input[type=submit], input[type=reset], select, .control, .fakebutton, .fakebutton:visited {
   border-radius: 1px;
   box-shadow: var(--highlight), inset 0 0 2px 0 #559;
   background: 8px 5px no-repeat, var(--btn);
   cursor: pointer;
 }
 
-button, button:visited, input[type=submit], input[type=reset] {
+input[type=submit], input[type=reset], button {
+  min-width: 0 !important;
+  background-size: 12px, 100%;
+}
+
+button, button:visited, input[type=submit], input[type=reset], .fakebutton, .control {
   margin: 2px 3px;
   padding: 5px 4px;
   font: bold 9pt var(--bodyfont);
@@ -210,6 +223,35 @@ button, button:visited, input[type=submit], input[type=reset] {
   vertical-align: middle;
   border: 1px solid #27235c;
   background: var(--btn);
+}
+
+input[type=submit]:hover, input[type=reset]:hover, button:hover, button:focus,
+input[type=submit]:focus, input[type=reset]:focus, select:hover, select:focus,
+.control:hover, .control:focus, .control:visited:hover, .control:visited:focus,
+.fakebutton:hover, .fakebutton:focus, .fakebutton:visited:hover, .fakebutton:visited:focus,
+#settings:hover, #settings:focus {
+  color: var(--a_hover);
+  border: 1px solid var(--a_hover);
+  box-shadow: var(--highlight), inset 0 0 2px 1px #757;
+  background: var(--btn_hover);
+  cursor: pointer;
+}
+
+input[type=submit]:hover, input[type=reset]:hover, button:hover {
+  color: var(--a_hover);
+  background-size: 12px, 100%;
+}
+
+input[type=submit]:active, input[type=reset]:active, button:active,
+.control:active, .control:visited:active, #settings:active,
+.fakebutton:active, .fakebutton:visited:active {
+  color: #83529f !important;
+  text-shadow: 0 1px 1px #3c1751;
+  border: 1px solid var(--hover);
+  box-shadow:var(--btn_shadow_active), var(--outline);
+  background: var(--hover);
+  background-size: 12px, 100%;
+  background-blend-mode: luminosity;
 }
 
 input[type=file]::file-selector-button {
@@ -225,14 +267,6 @@ input[type=file]::file-selector-button {
   border-radius: 1px;
   box-shadow: var(--highlight), inset 0 0 2px 0 #559;
   background: var(--btn);
-  cursor: pointer;
-}
-
-input[type=submit]:hover, input[type=reset]:hover, button:hover, button:focus,
-input[type=submit]:focus, input[type=reset]:focus, select:hover, select:focus {
-  color: var(--a_hover);
-  border: 1px solid var(--a_hover);
-  box-shadow: var(--highlight), inset 0 0 2px 1px #757;
   cursor: pointer;
 }
 
@@ -253,25 +287,6 @@ input[type=file]:active::file-selector-button {
   background: var(--hover);
 }
 
-input[type=submit], input[type=reset], button {
-  min-width: 0 !important;
-  background-size: 12px, 100%;
-}
-
-input[type=submit]:hover, input[type=reset]:hover, button:hover {
-  background-size: 12px, 100%;
-}
-
-input[type=submit]:active, input[type=reset]:active, button:active {
-  color: #83529f !important;
-  text-shadow: 0 1px 1px #3c1751;
-  border: 1px solid var(--hover);
-  box-shadow: var(--highlight), inset 3px 3px 3px #000;
-  background: var(--hover);
-  background-size: 12px, 100%;
-  background-blend-mode: luminosity;
-}
-
 input[type=file]:active::file-selector-button {
   color: #83529f !important;
   text-shadow: 0 1px 1px #3c1751;
@@ -286,6 +301,7 @@ select {
   margin: 5px 10px;
   padding: 5px 24px 5px 6px;
   min-width: 110px;
+  vertical-align: middle;
   appearance: none;
   overflow: hidden;
   text-overflow: ellipsis;

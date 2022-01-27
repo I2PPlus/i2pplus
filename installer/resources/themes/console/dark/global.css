@@ -57,8 +57,7 @@
 
 html, body {
   min-height: 100%;
-  background: var(--vstripe), var(--camo), #000 !important;
-  background-size: 100% 4px, 2048px !important;
+  background: #000;
 }
 
 @supports not (-moz-appearance: none) {
@@ -70,6 +69,15 @@ html, body {
 
 html {
   scrollbar-color: rgba(16,72,16,.8) rgba(0,16,0,.5);
+}
+
+body {
+  background: var(--vstripe), var(--camo), #000 !important;
+  background-size: 100% 4px, 2048px !important;
+}
+
+body.iframed {
+  background: none !important;
 }
 
 pre, textarea, .widescroll {

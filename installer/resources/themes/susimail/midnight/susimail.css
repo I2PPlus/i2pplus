@@ -340,7 +340,7 @@ td {
 }
 
 .list0:hover, .list1:hover, .list0:hover a, .list1:hover a {
-  color: var(--hover);
+  color: var(--a_hover);
   background: #1e0b28;
 }
 
@@ -556,39 +556,22 @@ input {
   border: var(--border_inner);
 }
 
-input[type=submit], input.cancel, #settings, .fakebutton, #expand, #collapse {
+input[type=submit], input.cancel, #settings,
+.fakebutton, #expand, #collapse {
   margin: 4px 5px;
   padding: 5px 8px !important;
   font: bold 9pt var(--bodyfont);
   text-align: center;
-  color: var(--a) !important;
+  color: var(--a);
   border: var(--border_btn);
   border-radius: 1px;
   box-shadow: var(--highlight), inset 0 0 2px 0 #559;
-  background: var(--btn) !important;
+  background: var(--btn);
 }
 
 .fakebutton {
   padding-left: 27px;
   line-height: 1.3;
-}
-
-input[type=submit]:hover, input.cancel:hover,
-input[type=submit]:focus, input.cancel:focus,
-#settings:hover, #settings:focus, .fakebutton:hover, .fakebutton:focus,
-#expand:hover, #expand:focus, #collapse:hover, #expand:focus {
-  color: var(--a_hover) !important;
-  border: 1px solid #652787;
-  box-shadow: var(--highlight), inset 0 0 2px 1px #757;
-  background: #000 !important;
-}
-
-input[type=submit]:active, input.cancel:active, #settings:active, #settings:visited:active, #fakebutton:active,
-#expand:active, #collapse:active {
-  color: #83529f !important;
-  border: 1px inset #652787;
-  box-shadow: var(--highlight), inset 3px 3px 3px #000 !important;
-  background: #652787 !important;
 }
 
 #collapse, #expand {
@@ -598,13 +581,10 @@ input[type=submit]:active, input.cancel:active, #settings:active, #settings:visi
 
 input[type=text], input[type=password], textarea {
   padding: 6px 8px !important;
-  color: #7670c2;
-  border: 1px solid #322e6b;
-  background: #000;
-  cursor: text;
 }
 
-#dologin input:disabled, #dologin input:disabled:hover, #dologin input:disabled:active {
+#dologin input:disabled, #dologin input:disabled:hover,
+#dologin input:disabled:active {
   margin: 0;
   padding-top: 3px;
   text-align: left !important;
@@ -624,8 +604,6 @@ input[name="user"], input[name="pass"] {
 
 input[name="user"]:focus, input[name="pass"]:focus, input[type=text]:focus, textarea:focus {
   color: var(--ink);
-  border: 1px solid #6466a5 !important;
-  box-shadow: var(--btn_shadow_active);
 }
 
 #dologin input[name="user"] {
@@ -648,15 +626,6 @@ input[name="pass"]:focus {
   background: var(--key) no-repeat 6px center / 14px, var(--text_focus) !important;
 }
 
-input::placeholder {
-  font-style: italic;
-  opacity: .7;
-}
-
-input:focus::placeholder {
-  opacity: 0;;
-}
-
 input[name="host"], input[name="pop3"], input[name="smtp"] {
   margin-top: 3px !important;
   display: inline !important;
@@ -667,9 +636,16 @@ input[name="host"], input[name="pop3"], input[name="smtp"] {
   background: none !important;
 }
 
+input[type=submit]:active, input.cancel:active,
+#settings:active, #settings:visited:active, .fakebutton:active,
+#expand:active, #collapse:active, #pageRefresh:active {
+  background-color: #652787 !important;
+}
+
 input.delete {
   margin-left: 2px;
 }
+
 .page td[colspan="2"] {
   padding: 0 0 10px 0;
   text-align: left;
@@ -809,15 +785,15 @@ input.delete {
 }
 
 #dologin tr:last-child a:hover {
-  color: var(--hover);
-  box-shadow: 0 0 1px #000, var(--highlight);
-  background: linear-gradient(180deg,#003 50%, #000 50%) #000;
+  color: var(--a_hover);
+  box-shadow: var(--highlight), 0 0 0 1px var(--a_hover);
+  background: var(--btn_hover);
   transition: ease all .2s;
 }
 
 #dologin tr:last-child a:active {
   color: #337 !important;
-  box-shadow: inset 3px 3px 3px #000;
+  box-shadow: var(--btn_shadow_active);
   background: #000020;
   transition: ease box-shadow .1s;
 }
@@ -837,7 +813,8 @@ h3#config {
   word-spacing: .1em;
   background: #020017;
   border-radius: 0 0 2px 2px;
-  background: linear-gradient(90deg, rgba(0,0,16,0), rgba(16,0,16,0), rgba(0,0,16,0)), linear-gradient(180deg,#191729 50%, #001 50%) !important;
+  background: linear-gradient(90deg, rgba(0,0,16,0), rgba(16,0,16,0), rgba(0,0,16,0)),
+    linear-gradient(180deg,#191729 50%, #001 50%) !important;
 }
 
 #mailheader {
@@ -921,7 +898,7 @@ div#emptymailbox {
   border-bottom: var(--border_inner);
 }
 
-.topbuttons input {
+.topbuttons input, .topbuttons .fakebutton {
   margin-top: 4px;
   margin-bottom: 10px;
 }
@@ -1049,175 +1026,176 @@ input[type=submit][class]:focus, input[type=reset][class]:focus,
 
 input.cancel, input.cancel.beforePopup, #nukemail input.clearselection {
   padding: 6px 9px 6px 25px !important;
-  background: var(--no) no-repeat 9px center / 11px, var(--btn) !important;
+  background: var(--no) no-repeat 9px center / 11px, var(--btn);
 }
 
 input.cancel:hover, input.cancel:focus, input.cancel.beforePopup:hover, input.cancel.beforePopup:focus,
 #nukemail input.clearselection:hover, #nukemail input.clearselection:focus {
-  background: var(--no) no-repeat 9px center / 11px, var(--btn_hover) !important;
+  background: var(--no) no-repeat 9px center / 11px, var(--btn_hover);
 }
 
 input.clearselection {
   padding: 6px 9px 6px 27px !important;
-  background: url(../images/none.png) no-repeat 9px center, var(--btn) !important;
+  background: url(../images/none.png) no-repeat 9px center, var(--btn);
 }
 
 input.clearselection:hover, input.clearselection:focus {
-  background: url(../images/none.png) no-repeat 9px center, var(--btn_hover) !important;
+  background: url(../images/none.png) no-repeat 9px center, var(--btn_hover);
 }
 
 input.delete, input.delete_attachment, input.really_delete {
   padding: 6px 9px 6px 27px !important;
-  background: var(--delete) no-repeat 9px center / 14px, var(--btn) !important;
+  background: var(--delete) no-repeat 9px center / 14px, var(--btn);
 }
 
 input.delete:hover, input.delete_attachment:hover, input.really_delete:hover,
 input.delete:focus, input.delete_attachment:focus, input.really_delete:focus {
-  background: var(--delete_hover) no-repeat 9px center / 14px, var(--btn_hover) !important;
+  background: var(--delete_hover) no-repeat 9px center / 14px, var(--btn_hover);
 }
 
 input.download {
   padding: 6px 9px 6px 27px !important;
-  background: var(--download) no-repeat 9px center, var(--btn) !important;
+  background: var(--download) no-repeat 9px center, var(--btn);
 }
 
 input.download:hover, input.download:focus {
-  background: var(--download_hover) no-repeat 9px center, var(--btn_hover) !important;
+  background: var(--download_hover) no-repeat 9px center, var(--btn_hover);
 }
 
 input.offline {
   padding: 6px 9px 6px 27px !important;
-  background: var(--offline) no-repeat 9px center, var(--btn) !important;
+  background: var(--offline) no-repeat 9px center, var(--btn);
 }
 
 input.offline:hover, input.offline:focus {
-  background: var(--offline_hover) no-repeat 9px center, var(--btn_hover) !important;
+  background: var(--offline_hover) no-repeat 9px center, var(--btn_hover);
 }
 
 input.list, input.moveto, input.switchto {
   padding: 6px 9px 6px 27px !important;
-  background: var(--folder) no-repeat 9px center, var(--btn) !important;
+  background: var(--folder) no-repeat 9px center, var(--btn);
 }
 
-input.list:hover, input.list:focus, input.moveto:hover, input.switchto:hover, input.switchto:focus, input.moveto:focus, input.switchto:focus   {
-  background: var(--folder_hover) no-repeat 9px center, var(--btn_hover) !important;
+input.list:hover, input.list:focus, input.moveto:hover, input.switchto:hover,
+input.switchto:focus, input.moveto:focus, input.switchto:focus   {
+  background: var(--folder_hover) no-repeat 9px center, var(--btn_hover);
 }
 
 input.forward {
   padding: 6px 9px 6px 27px !important;
-  background: var(--forward) no-repeat 9px center, var(--btn) !important;
+  background: var(--forward) no-repeat 9px center, var(--btn);
 }
 
 input.forward:hover, input.forward:focus {
-  background: var(--forward_hover) no-repeat 9px center, var(--btn_hover) !important;
+  background: var(--forward_hover) no-repeat 9px center, var(--btn_hover);
 }
 
 input.login {
   padding: 6px 9px 6px 27px !important;
-  background: var(--login) no-repeat 9px center, var(--btn) !important;
+  background: var(--login) no-repeat 9px center, var(--btn);
 }
 
 input.login:hover, input.login:focus {
-  background: var(--login_hover) no-repeat 9px center, var(--btn_hover) !important;
+  background: var(--login_hover) no-repeat 9px center, var(--btn_hover);
 }
 
 input.logout {
   padding: 6px 9px 6px 27px !important;
-  background: var(--logout) no-repeat 9px center / 14px !important;
+  background: var(--logout) no-repeat 9px center / 14px;
 }
 
 input.logout:hover, input.logout:focus {
-  background: var(--logout_hover) no-repeat 9px center / 14px !important;
+  background: var(--logout_hover) no-repeat 9px center / 14px;
 }
 
 input.reload, input.refresh, .fakebutton {
   padding: 6px 9px 6px 27px !important;
-  background: var(--refresh) no-repeat 9px center, var(--btn) !important;
+  background: var(--refresh) no-repeat 9px center, var(--btn);
 }
 
 input.reload:hover, input.refresh:hover,
 input.reload:focus, input.refresh:focus,
 .fakebutton:hover, .fakebutton:focus {
-  background: var(--refresh_hover) no-repeat 9px center, var(--btn_hover) !important;
+  background: var(--refresh_hover) no-repeat 9px center, var(--btn_hover);
 }
 
 input.invertselection {
   padding: 6px 9px 6px 27px !important;
-  background: url(../images/selection.png) no-repeat 9px center, var(--btn) !important;
+  background: url(../images/selection.png) no-repeat 9px center, var(--btn);
 }
 
 input.invertselection:hover, input.invertselection:focus {
-  background: url(../images/selection.png) no-repeat 9px center, var(--btn_hover) !important;
+  background: url(../images/selection.png) no-repeat 9px center, var(--btn_hover);
 }
 
 input.show {
   padding: 6px 9px 6px 27px !important;
-  background: var(--yes) no-repeat 9px center / 12px, var(--btn) !important;
+  background: var(--yes) no-repeat 9px center / 12px, var(--btn);
 }
 
 input.show:hover, input.show:focus {
-  background: var(--yes) no-repeat 9px center / 12px, var(--btn_hover) !important;
+  background: var(--yes) no-repeat 9px center / 12px, var(--btn_hover);
 }
 
 .bottombuttons input.markall {
   padding: 6px 9px 6px 27px !important;
-  background: url(../images/all.png) no-repeat 9px center / 12px, var(--btn) !important;
+  background: url(../images/all.png) no-repeat 9px center / 12px, var(--btn);
 }
 
 .bottombuttons input.markall:hover, .bottombuttons input.markall:focus {
-  background: url(../images/all.png) no-repeat 9px center / 12px, var(--btn_hover) !important;
+  background: url(../images/all.png) no-repeat 9px center / 12px, var(--btn_hover);
 }
 
 input.new {
   padding: 6px 9px 6px 27px !important;
-  background: var(--compose) no-repeat 9px center, var(--btn) !important;
+  background: var(--compose) no-repeat 9px center, var(--btn);
 }
 
 input.new:hover, input.new:focus {
-  background: var(--compose_hover) no-repeat 9px center, var(--btn_hover) !important;
+  background: var(--compose_hover) no-repeat 9px center, var(--btn_hover);
 }
 
 input.reply {
   padding: 6px 9px 6px 27px !important;
-  background: var(--reply) no-repeat 9px center, var(--btn) !important;
+  background: var(--reply) no-repeat 9px center, var(--btn);
 }
 
 input.reply:hover, input.reply:focus {
-  background: var(--reply_hover) no-repeat 9px center, var(--btn_hover) !important;
+  background: var(--reply_hover) no-repeat 9px center, var(--btn_hover);
 }
 
 input.replyall {
   padding: 6px 9px 6px 27px !important;
-  background: var(--replyall) no-repeat 9px center, var(--btn) !important;
+  background: var(--replyall) no-repeat 9px center, var(--btn);
 }
 
 input.replyall:hover, input.replyall:focus {
-  background: var(--replyall_hover) no-repeat 9px center, var(--btn_hover) !important;
+  background: var(--replyall_hover) no-repeat 9px center, var(--btn_hover);
 }
 
 input.setpagesize, input.save {
   padding: 6px 9px 6px 27px !important;
-  background: var(--yes) no-repeat 9px center / 12px, var(--btn) !important;
+  background: var(--yes) no-repeat 9px center / 12px, var(--btn);
 }
 
 input.setpagesize:hover, input.save:hover,
 input.setpagesize:focus, input.save:focus {
-  background: var(--yes) no-repeat 9px center / 12px, var(--btn_hover) !important;
+  background: var(--yes) no-repeat 9px center / 12px, var(--btn_hover);
 }
 
 input.send {
   padding: 6px 9px 6px 27px !important;
-  background: var(--send) no-repeat 9px center, var(--btn) !important;
+  background: var(--send) no-repeat 9px center, var(--btn);
 }
 
 input.send:hover, input.send:focus {
-  background: var(--send_hover) no-repeat 9px center, var(--btn_hover) !important;
+  background: var(--send_hover) no-repeat 9px center, var(--btn_hover);
 }
 
 input.configure, #settings {
   padding: 6px 9px 6px 27px !important;
   vertical-align: middle;
-  background: var(--configure) no-repeat 9px center / 14px, var(--btn) !important;
+  background: var(--configure) no-repeat 9px center / 14px, var(--btn);
 }
 
 #settings {
@@ -1226,29 +1204,25 @@ input.configure, #settings {
 
 input.configure:hover, input.configure:focus,
 #settings:hover, #settings:focus {
-  background: var(--configure_hover) no-repeat 9px center / 14px, var(--btn_hover) !important;
-}
-
-#settings:active {
-  background-blend-mode: luminosity;
+  background: var(--configure_hover) no-repeat 9px center / 14px, var(--btn_hover);
 }
 
 input.saveas, input.saveasdraft {
   padding: 6px 9px 6px 27px !important;
-  background: var(--save) no-repeat 9px center, var(--btn) !important;
+  background: var(--save) no-repeat 9px center, var(--btn);
 }
 
 input.saveas:hover, input.saveas:focus, input.saveasdraft:hover, input.saveasdraft:focus {
-  background: var(--save_hover) no-repeat 9px center, var(--btn_hover) !important;
+  background: var(--save_hover) no-repeat 9px center, var(--btn_hover);
 }
 
 input.new_upload {
   padding: 6px 9px 6px 27px !important;
-  background: var(--attach) no-repeat 9px center, var(--btn) !important;
+  background: var(--attach) no-repeat 9px center, var(--btn);
 }
 
 input.new_upload:hover, input.new_upload:focus {
-  background: var(--attach_hover) no-repeat 9px center, var(--btn_hover) !important;
+  background: var(--attach_hover) no-repeat 9px center, var(--btn_hover);
 }
 
 /* pagenav */
@@ -1257,7 +1231,7 @@ input.firstpage, input[name="firstpage"],
 input.firstpage[disabled]:hover, input[name="firstpage"][disabled]:hover {
   padding: 5px 10px !important;
   text-indent: -99999px;
-  background: var(--first) no-repeat center center, var(--btn) !important;
+  background: var(--first) no-repeat center center, var(--btn);
 }
 
 input.firstpage[disabled]:hover, input[name="firstpage"][disabled]:hover {
@@ -1266,7 +1240,7 @@ input.firstpage[disabled]:hover, input[name="firstpage"][disabled]:hover {
 
 input.firstpage:hover, input[name="firstpage"]:hover,
 input.firstpage:focus, input[name="firstpage"]:focus {
-  background: var(--first) no-repeat center center, var(--btn_hover) !important;
+  background: var(--first) no-repeat center center, var(--btn_hover);
 }
 
 input.lastpage, input[name="lastpage"],
@@ -1274,12 +1248,12 @@ input.lastpage[disabled]:hover, input[name="lastpage"][disabled]:hover,
 input.lastpage[disabled]:focus, input[name="lastpage"][disabled]:focus {
   padding: 5px 10px !important;
   text-indent: -99999px;
-  background: var(--last) no-repeat center center, var(--btn) !important;
+  background: var(--last) no-repeat center center, var(--btn);
 }
 
 input.lastpage:hover, input[name="lastpage"]:hover,
 input.lastpage:focus, input[name="lastpage"]:focus {
-  background: var(--last) no-repeat center center, var(--btn_hover) !important;
+  background: var(--last) no-repeat center center, var(--btn_hover);
 }
 
 input.prevpage, input.prev, input[name="prev"], input[name="prevpage"],
@@ -1287,12 +1261,12 @@ input.prevpage[disabled]:hover, input.prev[disabled]:hover, input[name="prev"][d
 input.prevpage[disabled]:focus, input.prev[disabled]:focus, input[name="prev"][disabled]:focus, input[name="prevpage"][disabled]:focus {
   padding: 5px 10px !important;
   text-indent: -99999px;
-  background: var(--previous) no-repeat center center, var(--btn) !important;
+  background: var(--previous) no-repeat center center, var(--btn);
 }
 
 input.prevpage:hover, input[name="prev"]:hover, input[name="prevpage"]:hover,
 input.prevpage:focus, input[name="prev"]:focus, input[name="prevpage"]:focus {
-  background: var(--previous) no-repeat center center, var(--btn_hover) !important;
+  background: var(--previous) no-repeat center center, var(--btn_hover);
 }
 
 input[name="nextpage"], input.next, input[name="nextpage"], input[name="next"],
@@ -1300,12 +1274,12 @@ input[name="nextpage"][disabled]:hover, input.next[disabled]:hover, input[name="
 input[name="nextpage"][disabled]:focus, input.next[disabled]:focus, input[name="nextpage"][disabled]:focus, input[name="next"][disabled]:focus {
   padding: 5px 10px !important;
   text-indent: -99999px;
-  background: var(--next) no-repeat center center, var(--btn) !important;
+  background: var(--next) no-repeat center center, var(--btn);
 }
 
 input[name="nextpage"]:hover, input.next:hover, input[name="nextpage"]:hover,
 input[name="nextpage"]:focus, input.next:focus, input[name="nextpage"]:focus {
-  background: var(--next) no-repeat center center, var(--btn_hover) !important;
+  background: var(--next) no-repeat center center, var(--btn_hover);
 }
 
 input.prev, input[name="next"], input.prev[disabled], input[name="next"][disabled],
@@ -1313,16 +1287,21 @@ input.prev:hover, input[name="next"]:hover, input.prev[disabled]:hover, input[na
   padding: 5px 15px !important;
 }
 
-input[type=submit][disabled], input[type=submit][disabled]:hover, input[type=submit][disabled]:focus, input[type=submit][disabled]:active {
+input[type=submit][disabled], input[type=submit][disabled]:hover,
+input[type=submit][disabled]:focus, input[type=submit][disabled]:active {
   padding: 5px 15px !important;
-  opacity: .5;
   box-shadow: none;
+  opacity: .5;
   cursor: default;
   mix-blend-mode: luminosity;
 }
 
 #messagenav input {
   background-size: 16px, 100% !important;
+}
+
+.topbuttons #messagenav input {
+  margin-bottom: 10px !important;
 }
 
 /* end pagenav */
@@ -1332,15 +1311,6 @@ input.switchto {
 }
 
 /* end illustrated buttons */
-
-input[type=submit]:active, input.cancel:active, #pageRefresh:active {
-  color: #83529f !important;
-  border: 1px solid #652787;
-  box-shadow: inset 3px 3px 3px #000 !important;
-  box-shadow: var(--highlight), inset 3px 3px 3px #000 !important;
-  background-color: #652787 !important;
-  background-blend-mode: luminosity;
-}
 
 .topbuttons .logout, .topbuttons .logout:hover, .topbuttons .logout:focus, .topbuttons .logout:active {
   margin: -8px -8px -8px 8px !important;

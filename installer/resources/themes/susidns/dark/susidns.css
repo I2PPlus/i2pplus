@@ -5,6 +5,10 @@
 @import url(../images/images.css);
 @import url(images/images.css);
 
+html {
+  background: none !important;
+}
+
 body, input, input[type=submit], input[type=reset], .fakebutton, #hostNotes td:last-child, #hostNotes textarea {
   font-family: var(--bodyfont);
 }
@@ -937,13 +941,14 @@ textarea, #subslog pre {
 }
 
 #subslog pre {
+  margin-bottom: 12px;
   padding: 8px 12px;
   width: calc(100% - 26px);
   height: calc(100% - 105px);
   white-space: pre-wrap;
   color: #bb7;
-  background: #000;
   border-radius: 0 0 2px 2px;
+  background: #000;
 }
 
 textarea[cols="70"] {

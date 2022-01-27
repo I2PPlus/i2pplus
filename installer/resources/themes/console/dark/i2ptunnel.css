@@ -3,6 +3,10 @@
 
 @import url(global.css);
 
+html {
+  background: none !important;
+}
+
 body {
   margin: 0 8px 12px;
   padding: 0;

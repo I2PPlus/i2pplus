@@ -32,6 +32,14 @@ body.iframed {
   transition: ease scrollbar-color .2s;
 }
 
+a:hover, a:visited:hover, a:focus, a:focus:hover {
+  color: var(--a_hover);
+}
+
+a:active, a:visited:active  {
+  color: var(--active) !important;
+}
+
 h2, h3, th, .buttons, .newTunnel, .control, label, .infohelp, .infowarn, .nowrap, b, #throttler td {
   user-select: none;
 }
@@ -383,15 +391,6 @@ _:-ms-lang(x), .tunnelProperties {
   background: #001 var(--settings_active) no-repeat 6px center / 14px;
 }
 
-@media screen and (max-width: 1500px) {
-  .tunnelName a, .tunnelName a:hover, .tunnelName a:focus, .tunnelName a:active {
-    margin-left: 2px;
-    padding-left: 22px !important;
-    width: calc(100% - 40px);
-    background-size: 12px, 100% !important;
-  }
-}
-
 .tunnelType {
   width: 25%;
 }
@@ -443,7 +442,9 @@ textarea:focus {
   transition: ease filter .3s 0s;
 }
 
-textarea#statusMessages, textarea#statusMessages:active, textarea#statusMessages:focus {
+textarea#statusMessages,
+textarea#statusMessages:active,
+textarea#statusMessages:focus {
   margin: 0;
   padding: 2px 4px;
   width: 100%;
@@ -453,23 +454,13 @@ textarea#statusMessages, textarea#statusMessages:active, textarea#statusMessages
   border: none !important;
   border-radius: 0;
   box-shadow: var(--highlight) !important;
-  background: var(--text_focus) !important;
 }
 
 .freetext {
   padding: 4px;
   width: 150px;
   font: bold 9pt var(--monospaced);
-  color: #7171d1;
-  border: 1px solid #302b74;
-  box-shadow: inset 2px 2px 1px #ccc;
   cursor: text;
-}
-
-.freetext:focus {
-  color: #111;
-  border: 1px solid #6466a5 !important;
-  box-shadow: 0 0 1px #99f;
 }
 
 .freetext[readonly], .freetext[readonly]:focus {
@@ -545,26 +536,19 @@ a.control, input.control {
   white-space: nowrap;
   text-decoration: none;
   text-align: center;
-  font-weight: 700;
-  font-style: normal;
-  color: #7171d1 !important;
-  border: 1px solid #26225c;
+  color: var(--a);
   background: linear-gradient(180deg,#11101c 50%, #000010 50%) !important;
 }
 
 .control:hover, .control:focus, button:hover, button:focus {
   text-decoration: none;
-  color: #652787 !important;
-  border: 1px solid #652787 !important;
-  box-shadow: var(--highlight), inset 0 0 1px 1px #757;
   background: linear-gradient(180deg,#202 50%, #000 50%) !important;
+  color: var(--a_hover);
 }
 
 .control:active, button:active {
-  background: #652787 !important;
-  color: #c9ceff !important;
   text-decoration: none;
-  box-shadow: var(--highlight), inset 3px 3px 3px #000 !important;
+  background: var(--hover) !important;
 }
 
 a.control {
@@ -614,12 +598,6 @@ button, input[type=submit], input[type="reset"], a.control {
   display: inline-block;
   white-space: nowrap;
   text-align: right;
-}
-
-@media screen and (max-width: 1200px) {
-  .tunnelDestinationLabel {
-    min-width: 120px;
-  }
 }
 
 #hostField, #leasesetKey, #userAgents {
@@ -932,16 +910,11 @@ input.tunnelName, input.tunnelDescriptionText, #userAgents, .tunnelDescription, 
 #wizardPanel p {
   margin: 0;
   padding: 5px 15px;
-  line-height: 140%;
+  line-height: 1.4;
   text-align: justify;
 }
 
-#wizardPanel input::-moz-placeholder {
-  font-weight: 400;
-  color: #449;
-}
-
-#wizardPanel ::-webkit-input-placeholder {
+#wizardPanel input::placeholder {
   font-weight: 400;
   color: #449;
 }
@@ -999,18 +972,6 @@ input.tunnelName, input.tunnelDescriptionText, #userAgents, .tunnelDescription, 
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-@media screen and (max-width: 900px) {
-  .tunnelInfo .selectAll {
-    max-width: 110px;
-  }
-}
-
-@media screen and (min-width: 1500px) {
-  .tunnelInfo .selectAll {
-    max-width: none;
-  }
 }
 
 input[type=checkbox], input[type=radio] {
@@ -1089,63 +1050,6 @@ textarea[name="accessList"], #hostField, #localDestination, .authentication {
 }
 
 /* end more space */
-
-/* responsive layout */
-
-@media screen and (max-width: 800px) {
-th {
-  font-size: 9pt;
-}
-
-.statusNotRunning, .statusRunning, .statusStarting, .statusStandby {
-  background-size: auto 14px;
-}
-
-#leasesetKey {
-  height: 38px !important;
-}
-
-.port, .quantity, .period {
-  width: 60px;
-}
-
-#clientHost, .host {
-  width: 130px;
-  min-width: 130px;
-}
-}
-
-@media screen and (max-width: 1300px) {
-h2, h3 {
-  font-size: 10.5pt !important;
-}
-}
-
-@media screen and (min-width: 1000px) {
-th {
-  padding: 7px 5px;
-}
-}
-
-@media screen and (min-width: 1300px) {
-body, td, .control, select, input, textarea {
-  font-size: 10pt !important;
-}
-
-textarea#statusMessages, textarea#statusMessages:active, textarea#statusMessages:focus {
-  font-size: 9pt !important;
-}
-
-td {
-  padding: 7px 5px;
-}
-
-#localDestination, .authentication {
-  height: 34px !important;
-}
-}
-
-/* end responsive layout */
 
 /* TO DO: merge with main classes */
 
@@ -1250,134 +1154,6 @@ input[type=text] + label {
   padding: 8px;
 }
 
-@media screen and (max-width: 800px) {
-.displayText, .displayText:empty:hover, .displayText:empty:focus {
-  width: 260px;
-  font-size: 8pt;
-}
-}
-
-@media screen and (min-width: 1000px) {
-.displayText, .displayText:empty:hover, .displayText:empty:focus {
-  width: 386px;
-}
-
-#registration .displayText {
-  width: 600px;
-}
-}
-
-@media screen and (min-width: 1500px) {
-body, td, .control, select, input, textarea {
-  font-size: 10.5pt !important;
-}
-
-#tunnelMessages #statusMessages {
-  font-size: 9.5pt !important;
-}
-
-.panel {
-  max-width: 1800px;
-}
-
-h2, h3, th {
-  padding: 10px 15px !important;
-}
-
-h2, h3 {
-  padding-left: 34px !important;
-  font-size: 13pt !important;
-}
-
-#messages h2, #globalTunnelControl h2, #servers h2, #clients h2, #ssl h2, #wizardPanel h2,
-#tunnelEditPage h2, #tunnelEditPage h3, #registration h2, #registration h3 {
-  padding-left: 36px !important;
-  background-position: 10px center, center center !important;
-  background-size: 20px, 4px 100%, 100% !important;
-}
-
-th {
-  font-size: 11pt !important;
-}
-
-th .help::after, th .help:hover::after, th .help:focus::after {
-  width: 20px;
-  height: 20px;
-  background-size: 20px 20px;
-}
-
-td {
-  padding: 12px !important;
-}
-
-td#throttle, td#tunnelMessages {
-  padding: 0 !important;
-}
-
-#statusMessages {
-  padding: 8px 12px !important;
-  line-height: 130% !important;
-  height: 84px !important;
-}
-
-.control, .control:link, .control:visited, input.control {
-  margin: 4px !important;
-  padding: 7px 12px !important;
-  min-width: 125px !important;
-}
-
-.buttons, .newTunnel {
-  padding: 15px !important;
-}
-
-.displayText, .displayText:empty:hover, .displayText:empty:focus {
-  width: 552px;
-}
-
-textarea[name="accessList"], #hostField, #localDestination, .authentication {
-  margin: 6px !important;
-}
-
-#registration .displayText {
-  width: 800px;
-}
-
-.freetext, .displayText, #leasesetKey {
-  padding: 8px 10px !important;
-}
-
-.username, .password {
-  padding-left: 26px !important;
-  width: 300px;
-}
-
-.displayText:hover, .displayText:focus {
-  padding: 0 !important;
-}
-
-#registration .displayText:hover, #registration .displayText:focus {
-  padding: 4.5px 0 !important;
-}
-
-textarea[name="accessList"], #hostField, #localDestination, .authentication {
-  width: calc(100% - 20px) !important;
-}
-
-select, .newTunnel select {
-  margin: 4px 8px 4px 4px !important;
-  padding: 7px 20px 7px 7px !important;
-  min-width: 180px;
-}
-
-.port, .quantity, .period {
-  width: 100px;
-}
-
-div[class^="status"] {
-  background-size: auto 20px;
-}
-}
-
 .optionsDisabled {
   cursor: not-allowed;
 }
@@ -1411,12 +1187,6 @@ div[class^="status"] {
   mix-blend-mode: normal;
 }
 
-@media screen and (min-width: 1500px) {
-#toggleInfo {
-  margin: 0 -4px 0 0 !important;
-}
-}
-
 .base32 {
   max-width: 120px;
   display: inline-block;
@@ -1446,19 +1216,6 @@ div[class^="status"] {
 
 .nowrap, .nowrap > * {
   vertical-align: middle;
-}
-
-@media screen and (max-width: 1100px) {
-.nowrap {
-  margin-right: 0 !important;
-}
-.nowrap .port, .nowrap .quantity, .nowrap .period {
-  width: 50px;
-}
-.nowrap .multiOption {
-  margin-right: 2px !important;
-  margin-left: 0 !important;
-}
 }
 
 select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active {
@@ -1516,12 +1273,6 @@ select[disabled], select[disabled]:hover, select[disabled]:focus, select[disable
   border-bottom: 1px solid #17142f;
 }
 
-@media screen and (min-width: 1500px) {
-#tunnelOpts table td {
-  padding: 8px !important;
-}
-}
-
 #tunnelOpts table tr:first-child td {
   border-top: none;
 }
@@ -1554,4 +1305,125 @@ h2, h3 {
 
 h2 a, h3 a {
   -webkit-text-stroke: 0 !important;
+}
+
+/* responsive layout */
+
+@media screen and (max-width: 1500px) {
+  .tunnelName a, .tunnelName a:hover, .tunnelName a:focus, .tunnelName a:active {
+    margin-left: 2px;
+    padding-left: 22px !important;
+    width: calc(100% - 40px);
+    background-size: 12px, 100% !important;
+  }
+}
+
+@media screen and (max-width: 1300px) {
+  h2, h3 {font-size: 10.5pt !important}
+}
+
+@media screen and (max-width: 1200px) {
+  .tunnelDestinationLabel {min-width: 120px}
+}
+
+@media screen and (max-width: 1100px) {
+  .nowrap {margin-right: 0 !important}
+  .nowrap .port, .nowrap .quantity, .nowrap .period {width: 50px}
+  .nowrap .multiOption {
+    margin-right: 2px !important;
+    margin-left: 0 !important;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .tunnelInfo .selectAll {max-width: 110px}
+}
+
+@media screen and (max-width: 800px) {
+  th {font-size: 9pt}
+  .statusNotRunning, .statusRunning, .statusStarting, .statusStandby {background-size: auto 14px}
+  #leasesetKey {height: 38px !important}
+  .port, .quantity, .period {width: 60px}
+  #clientHost, .host {
+    width: 130px;
+    min-width: 130px;
+  }
+  .displayText, .displayText:empty:hover, .displayText:empty:focus {
+    width: 260px;
+    font-size: 8pt;
+  }
+}
+
+@media screen and (min-width: 1000px) {
+  th {padding: 7px 5px}
+  .displayText, .displayText:empty:hover, .displayText:empty:focus {
+    width: 386px;
+  }
+  #registration .displayText {
+    width: 600px;
+  }
+}
+
+@media screen and (min-width: 1300px) {
+  body, td, .control, select, input, textarea {font-size: 10pt !important}
+  textarea#statusMessages, textarea#statusMessages:active, textarea#statusMessages:focus {font-size: 9pt !important}
+  td {padding: 7px 5px}
+  #localDestination, .authentication {height: 34px !important}
+}
+
+@media screen and (min-width: 1500px) {
+  body, td, .control, select, input, textarea {font-size: 10.5pt !important}
+  #tunnelMessages #statusMessages {font-size: 9.5pt !important}
+  .panel {max-width: 1800px}
+  h2, h3, th {padding: 10px 15px !important}
+  h2, h3 {
+    padding-left: 34px !important;
+    font-size: 13pt !important;
+  }
+  #messages h2, #globalTunnelControl h2, #servers h2, #clients h2, #ssl h2, #wizardPanel h2,
+  #tunnelEditPage h2, #tunnelEditPage h3, #registration h2, #registration h3 {
+    padding-left: 36px !important;
+    background-position: 10px center, center center !important;
+    background-size: 20px, 4px 100%, 100% !important;
+  }
+  th {font-size: 11pt !important}
+  th .help::after, th .help:hover::after, th .help:focus::after {
+    width: 20px;
+    height: 20px;
+    background-size: 20px 20px;
+  }
+  td {padding: 12px !important}
+  td#throttle, td#tunnelMessages {padding: 0 !important}
+  #statusMessages {
+    padding: 4px 8px !important;
+    height: 84px !important;
+    line-height: 1.3 !important;
+  }
+  .control, .control:link, .control:visited, input.control {
+    margin: 4px !important;
+    padding: 7px 12px !important;
+    min-width: 125px !important;
+  }
+  .buttons, .newTunnel {padding: 15px !important}
+  .displayText, .displayText:empty:hover, .displayText:empty:focus {width: 552px}
+  textarea[name="accessList"], #hostField, #localDestination, .authentication {margin: 6px !important}
+  #registration .displayText {width: 800px}
+  .freetext, .displayText, #leasesetKey {padding: 8px 10px !important}
+  .username, .password {
+    padding-left: 26px !important;
+    width: 300px;
+  }
+  .displayText:hover, .displayText:focus {padding: 0 !important}
+  #registration .displayText:hover, #registration .displayText:focus {padding: 4.5px 0 !important}
+  textarea[name="accessList"], #hostField, #localDestination, .authentication {width: calc(100% - 20px) !important}
+  select, .newTunnel select {
+    margin: 4px 8px 4px 4px !important;
+    padding: 7px 20px 7px 7px !important;
+    min-width: 180px;
+  }
+  .port, .quantity, .period {width: 100px}
+  div[class^="status"] {background-size: auto 20px}
+  #toggleInfo {margin: 0 -4px 0 0 !important}
+  .tunnelInfo .selectAll {max-width: none}
+  #tunnelOpts table td {padding: 8px !important}
 }
