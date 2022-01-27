@@ -2839,8 +2839,8 @@ a:link tt, a:visited tt {
   color: #4e47bf;
 }
 
-a:hover tt {
-  color: var(--a);
+.main a:hover, a:hover tt {
+  color: var(--a_hover);
 }
 
 a:active tt {
