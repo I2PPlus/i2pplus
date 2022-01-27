@@ -4101,6 +4101,11 @@ td.torrentAction input[type=submit] {
     background-size: 12px !important;
   }
   #actionStopAll, #actionStartAll {padding: 10px 17px !important}
+  .tab_label::after {
+    width: 16px;
+    height: 16px;
+    background-size: 14px, 100% !important;
+  }
 }
 
 @media screen and (max-width: 1000px) {
