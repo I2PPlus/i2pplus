@@ -9015,12 +9015,10 @@ b.suboption {
   margin-bottom: -12px;
 }
 
-.service_container .infohelp {
-  padding: 20px 25px 20px 55px !important;
-}
-
-.service_container h3 a {
-  font-size: 8.5pt !important;
+#config_service .service_container .infohelp {
+  padding: 20px 10px 20px 40px !important;
+  background-size: 24px !important;
+  background-position: 10px center !important;
 }
 
 h3#shutdownrouter {
@@ -13182,7 +13180,7 @@ iframe {
   #plugininstall tr:nth-child(n+2) td {padding: 8px !important}
   #plugininstall #url td:first-child {padding-left: 50px !important}
   #plugininstall2 td {padding: 8px}
-  #config_service .h3navlinks a {padding: 10px 16px}
+  #config_service .h3navlinks a {padding: 9px 16px}
   #minigraph {width: 250px !important}
   #minigraphcontainer {
     width: 264px;
