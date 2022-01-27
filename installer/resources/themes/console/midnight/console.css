@@ -2373,7 +2373,7 @@ h4.app a:hover::after, h4.app a:focus::after, h4.app2 a:hover::after, h4.app2 a:
 .main#tunnels h3 a[href^="/configtunnels#"]:active::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]:active::after, #logs a.configure:active::after,
 h4.app a:active::after, h4.app2 a:active::after  {
   background: var(--settings_active) no-repeat center center;
-  transform: rotate(90deg);
+  transform: rotate(90deg) !important;
   transition: linear transform .2s;
 }
 
