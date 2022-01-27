@@ -898,7 +898,7 @@ div#emptymailbox {
   border-bottom: var(--border_inner);
 }
 
-.topbuttons input {
+.topbuttons input, .topbuttons .fakebutton {
   margin-top: 4px;
   margin-bottom: 10px;
 }
