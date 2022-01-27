@@ -9435,7 +9435,7 @@ label:hover .optbox {
 }
 
 #bandwidthconfig .optionsingle input, #bandwidthconfig select {
-  margin-top: 16px !important;
+  margin-top: 4px !important;
 }
 
 .net_bw {
