@@ -12,10 +12,6 @@
   --box: linear-gradient(180deg,#020020,#000);
 }
 
-html, body {
-  min-height: 100%;
-}
-
 html {
   background: repeating-linear-gradient(90deg, rgba(0,16,0,.5) 2px, rgba(0,0,0,.3) 4px),
     repeating-linear-gradient(180deg,rgba(0,0,32,.6) 2px, rgba(0,0,0,.3) 4px), var(--tile) #001;
@@ -48,10 +44,6 @@ div.clearer {
   height: 0;
   clear: left;
   line-height: 0;
-}
-
-html, .main * {
-  scrollbar-color: #225 #001;
 }
 
 .routersummary img[src$="i2plogo.png"], .routersummary h3, .confignav, *::before, *::after, h1, h2, h3, h4, div.app,

@@ -39,8 +39,22 @@
   --title: repeating-linear-gradient(90deg, rgba(0,0,48,.4) 2px, #000 4px), var(--titlebg) repeat center center / 100%, #001;
 }
 
+html, body {
+  min-height: 100%;
+  scrollbar-color: #225 #001;
+}
+
+body.iframed {
+  background: none;
+  overflow: hidden;
+}
+
 *, :focus, :active, :checked {
   outline: none !important;
+}
+
+a, button, input {
+  -webkit-text-stroke: 1px rgba(0,0,0,.3);
 }
 
 :-moz-focusring {

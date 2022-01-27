@@ -15,11 +15,6 @@
   --tab: linear-gradient(90deg, rgba(0,0,16,.7), rgba(0,0,0,.1), rgba(0,0,16,.7)), var(--nav);
 }
 
-html, body {
-  min-height: 100%;
-  scrollbar-color: #225 #001;
-}
-
 body {
   margin: 4px 2px;
   background: repeating-linear-gradient(180deg,rgba(0,0,24,.75) 2px, rgba(0,0,0,.7) 4px),
@@ -31,7 +26,6 @@ body.iframed {
   margin: 1px 0 !important;
   background: var(--offline), url(images/dropdown_hover.svg);
   background-size: 0, 0 !important;
-  overflow: hidden;
 }
 
 .toggleview, .configTitle, .snarknavbar, img, input[type=submit], input[type=radio], input[type=checkbox],
