@@ -10500,6 +10500,7 @@ html, body {
 
 #routerinformation table:hover tr:nth-child(n+2) a {
   display: inline !important;
+  margin: -3px 0 -3px 4px;
 }
 
 /* end /info */
