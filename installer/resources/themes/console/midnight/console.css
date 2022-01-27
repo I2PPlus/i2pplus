@@ -13297,7 +13297,7 @@ iframe {
     font-size: 12pt;
   }
   #newsStatus, #news #newsDisplay a, .newsAuthor {
-    font-size: 10pt !important;
+    font-size: 9pt !important;
   }
   .configtable td.infohelp, p.infohelp, td.infohelp, p#debugmode, p.sybilinfo, p.infowarn, td.infowarn {
     padding: 20px 15px 20px 50px !important

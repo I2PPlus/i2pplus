@@ -140,7 +140,7 @@ td.peerCount {
   box-shadow: var(--highlight), inset 0 0 1px 0 #446;
   background: var(--tracker) no-repeat 9px center, var(--nav), var(--tracker_hover), var(--tracker_active);
   transition: ease box-shadow .1s;
-  animation: fade-in .5s ease 2.5s both;
+  animation: fade-in .5s ease .5s both;
   will-change: transform;
 }
 
