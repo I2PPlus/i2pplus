@@ -1980,8 +1980,9 @@ div.sorry hr {
   margin: -1px 3px 0 212px;
   padding: 6px 20px 5px;
   min-width: 600px;
+  position: relative;
+  z-index: 10;
   text-align: right;
-  color: var(--a);
   font-size: 8pt;
   border: 1px solid #26235c;
   box-shadow: 0 1px 5px #000;
@@ -2054,6 +2055,10 @@ div.sorry hr {
   margin: 18px 5px; /* positional parity with homepage news */
 }
 
+#newsDisplay a {
+  line-height: 1.2 !important;
+}
+
 #newsStatus, #news #newsDisplay a {
   font-size: 8pt;
 }
@@ -2089,19 +2094,23 @@ div.sorry hr {
   display: inline-block;
 }
 
-#newsDisplay a, #graphopts a, #routerinfo a, .graphstat, .graphstat:visited {
-  margin: 0 -2px;
-  padding: 2px 10px 1px !important;
+#newsDisplay a, #graphopts a, #routerinfo a, .graphstat, .graphstat:visited,
+#routerinformation tr:nth-child(n+2) a {
+  margin: -2px;
+  padding: 3px 15px;
+  display: inline-block;
+  line-height: 1;
   color: var(--a);
-  border: 1px solid #003;
+  border: 1px solid #113;
   border-radius: 15px;
   box-shadow: 0 0 1px rgba(0,0,0,.8), var(--highlight);
-  background: #002;
+  background: var(--btn);
 }
 
 #newsDisplay a:hover, #newsDisplay a:focus, #graphopts a:hover, #graphopts a:focus,
-#routerinfo a:hover, #routerinfo a:focus, .graphstat:hover, .graphstat:focus {
-  color: var(--a) !important;
+#routerinfo a:hover, #routerinfo a:focus, .graphstat:hover, .graphstat:focus,
+#routerinformation tr:nth-child(n+2) a:hover, #routerinformation tr:nth-child(n+2) a:focus {
+  color: var(--a_hover) !important;
   text-shadow: 0 1px 1px #000;
   border: 1px solid #000;
   box-shadow: 0 0 1px #000, inset 0 0 0 1px #303;
@@ -2109,7 +2118,8 @@ div.sorry hr {
   transition: ease box-shadow .05s;
 }
 
-#newsDisplay a:active, #graphopts a:active, #routerinfo a:active, .graphstat:active {
+#newsDisplay a:active, #graphopts a:active, #routerinfo a:active, .graphstat:active,
+#routerinformation tr:nth-child(n+2) a:active {
   color: #83529f !important;
   text-shadow: 0 1px 1px #3c1751;
   box-shadow: inset 0 0 0 1px #303, inset 3px 3px 3px #14071b !important;
@@ -2368,16 +2378,17 @@ h4.app a:active::after, h4.app2 a:active::after  {
 }
 
 #config_logging h3 a::before, #webappconfiguration a::before,
-#i2pclientconfig a::before, #pluginmanage a::before {
+#i2pclientconfig a::before, #pluginmanage a::before, #version a::before {
   width: 18px;
-  height: 13px;
+  height: 14px;
   display: inline-block;
   vertical-align: middle;
   background: var(--eye) no-repeat left center / 14px;
   content: "";
 }
 
-#config_logging h3 a:hover::before, #config_logging h3 a:focus::before {
+#config_logging h3 a:hover::before, #config_logging h3 a:focus::before,
+#version a:hover::before, #version a:focus::before {
   background: var(--eye_hover) no-repeat left center / 14px;
 }
 
@@ -2604,7 +2615,6 @@ div.widepanel h3 {
 
 #graphopts a {
   margin: 3px -2px;
-  padding: 0 10px !important;
   text-transform: capitalize;
 }
 
@@ -8216,9 +8226,12 @@ img + tt {
 }
 
 .tunnel_id {
+  margin-left: 6px;
+  padding-left: 13px;
   min-width: 78px;
   display: inline-block;
   text-align: center;
+  background: var(--hardhat) no-repeat left center / 12px;
 }
 
 #tunnels td > * {
@@ -10483,12 +10496,12 @@ html, body {
   white-space: nowrap;
 }
 
-#routerinformation tr:nth-child(n+2) a:not(#revision){
+#routerinformation tr:nth-child(n+2):not(:hover) a:not(#revision) {
   display: none;
 }
 
 #routerinformation table:hover tr:nth-child(n+2) a {
-  display: inline;
+  display: inline !important;
 }
 
 /* end /info */
@@ -12573,6 +12586,7 @@ iframe {
     padding-left: 50px;
     background-size: 32px auto, 4px 100%, 100%, 100%, 164px 164px !important;
   }
+  .main h3 a {line-height: 1}
 }
 
 @media screen and (max-width: 1400px) {
@@ -13048,9 +13062,6 @@ iframe {
   .newsAuthor {
     padding-left: 19px !important;
     background-size: 15px !important;
-  }
-  #news #newsDisplay a, #routerinfo a {
-    padding-top: 1px !important;
   }
   /* end news */
   table#reseedconfig input[type=text], table#reseedconfig input[type=password] {
