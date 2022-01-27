@@ -3636,8 +3636,8 @@ public class WebMail extends HttpServlet
             out.print("<tr>\n" +
                       "<td align=\"right\">" + _t("Subject") + ":</td>\n" +
                       "<td align=\"left\">" + subj + "<span id=\"toggleHeaders\" class=\"script\" style=\"float: right;\">" +
-                      "<a href=\"#\" class=\"script\" id=\"expand\">Show Headers</a> " +
-                      "<a href=\"#\" class=\"script\" id=\"collapse\" style=\"display: none;\">Hide Headers</a></span></td>\n" +
+                      "<a href=\"#\" class=\"script fakebutton\" id=\"expand\">Show Headers</a> " +
+                      "<a href=\"#\" class=\"script fakebutton\" id=\"collapse\" style=\"display: none;\">Hide Headers</a></span></td>\n" +
                       "</tr>\n" +
                       "<tr>\n" +
                       "<td colspan=\"2\" align=\"center\" class=\"spacer\"><hr></td>\n" +
