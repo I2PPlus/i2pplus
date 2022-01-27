@@ -11764,6 +11764,7 @@ to {
 
 #tunnels #peercount {
   margin-bottom: -3px !important;
+  background-image: url(/themes/console/images/svg/peers.svg) !important;
 }
 
 #tunnels #peercount a {
