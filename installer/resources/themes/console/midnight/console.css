@@ -47,7 +47,7 @@ div.clearer {
 }
 
 .routersummary img[src$="i2plogo.png"], .routersummary h3, .confignav, *::before, *::after, h1, h2, h3, h4, div.app,
-.clearer, .routersummary img, .formaction, label, #themeoptions, #helptranslate, #consolepass {
+.clearer, .routersummary img, .formaction, label, #themeoptions, #helptranslate, #consolepass, div.app, #sitemapcontainer {
   user-select: none;
 }
 
