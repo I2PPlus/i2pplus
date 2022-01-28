@@ -729,7 +729,7 @@ class EstablishmentManager {
         //peer.setTheyRelayToUsAs(0);
 
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Inbound SSU handle completely established to [" + peer.getRemotePeer().toBase64().substring(0,6) + "]\n*" + state);
+            _log.debug("Inbound SSU handle completely established to [" + peer.getRemotePeer().toBase64().substring(0,6) + "]\n* " + state);
 
         //if (true) // for now, only support direct
         //    peer.setRemoteRequiresIntroduction(false);
