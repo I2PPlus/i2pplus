@@ -11,6 +11,7 @@
 :root {
   --box: linear-gradient(180deg,#020020,#000);
   --btn_sidebar: linear-gradient(90deg, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)), linear-gradient(180deg,#322d52, #1e1b31 50%, #141221 50%, #0a0910);
+  --label_hover: var(--btn_hover_radial), linear-gradient(180deg,#1e0b28 50%, #0a030d 50%);
 }
 
 html {
@@ -3491,13 +3492,13 @@ tr.addnew {
 
 .themechoice:hover {
   border: 1px solid var(--hover);
-  background: #000;
+  background: var(--radial_glow_top) #000;
 }
 
 .themechoice:hover .themelabel {
   color: var(--hover);
   border-top: 1px solid var(--hover) !important;
-  background: linear-gradient(180deg,#1e0b28 50%, #0a030d 50%) !important;
+  background: var(--label_hover) !important;
 }
 
 .themechoice:active .themelabel, .langselect:active .ui_lang {
@@ -3708,13 +3709,13 @@ td#themeselect {
 
 .langselect:hover, .langselect:active {
   border: 1px solid var(--hover);
-  background: #000;
+  background: var(--radial_glow_top) #000;
 }
 
 .langselect:hover .ui_lang {
   color: var(--hover);
   border-top: 1px solid var(--hover);
-  background: linear-gradient(180deg,#1e0b28 50%, #0a030d 50%) !important;
+  background: var(--label_hover) !important;
 }
 
 /* large flags */
@@ -6609,7 +6610,7 @@ div.app:hover {
   color: var(--hover) !important;
   border: 1px solid var(--hover);
   box-shadow: none;
-  background: #000;
+  background: var(--radial_glow_top) #000;
   opacity: 1;
 }
 
@@ -6772,7 +6773,7 @@ div.app:active img {
 div.app:hover .applabel {
   color: var(--hover);
   border-top: 1px solid var(--hover) !important;
-  background: linear-gradient(180deg,#1e0b28 50%, #0a030d 50%);
+  background: var(--label_hover);
 }
 
 /* home search */
@@ -10545,7 +10546,7 @@ a:hover .sitemapLink {
 
 .sitemapLink:hover, .sitemapLink:hover .sitemapLabel, #sitemap div.app:hover {
   border-color: var(--hover);
-  background: #000;
+  background: var(--radial_glow_top) #000;
 }
 
 .sitemapLink img {
@@ -10581,7 +10582,7 @@ a:hover .sitemapLink {
 }
 
 .sitemapLink:hover .sitemapLabel {
-  background: linear-gradient(180deg,#1e0b28 50%, #0a030d 50%);
+  background: var(--label_hover);
 }
 
 #sitemap div.app {
@@ -12648,7 +12649,8 @@ iframe {
 }
 
 @media screen and (min-width: 1500px) {
-  body, .main, .main td, .news p, #news p, .statusnotes, textarea, th, .applabel a, tt, code, .messages, .messages #newsStatus, .messages #newsDisplay {
+  body, .main, .main td, .news p, #news p, .statusnotes, textarea, th, .applabel a, tt, code,
+  .messages, .messages #newsStatus, .messages #newsDisplay {
     font-size: 10pt !important;
   }
   #ntcpconnections th, #udpconnections th {
@@ -12663,8 +12665,9 @@ iframe {
     font-size: 9pt !important;
   }
   h1 {
-    padding: 14px 15px 15px;
+    padding: 14px 15px 15px 62px;
     font-size: 19pt;
+    background-position: 14px center !important;
   }
   h2 {
     font-size: 14pt !important;
@@ -12723,8 +12726,7 @@ iframe {
     font-size: 10pt !important;
   }
   .routersummary h3 {
-    padding-top: 5px !important;
-    padding-bottom: 2px !important;
+    padding: 5px 0 2px !important;
   }
   .routersummary h3 a, #netdboverview tr:first-child th[colspan="3"] {
     font-size: 11pt !important;
