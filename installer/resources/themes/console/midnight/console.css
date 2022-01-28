@@ -10,7 +10,7 @@
 
 :root {
   --box: linear-gradient(180deg,#020020,#000);
-  --btn_sidebar: linear-gradient(90deg, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)), linear-gradient(180deg,#141221 50%,#001 50%);
+  --btn_sidebar: linear-gradient(90deg, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)), linear-gradient(180deg,#322d52, #1e1b31 50%, #141221 50%, #0a0910);
 }
 
 html {
