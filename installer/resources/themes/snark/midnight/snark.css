@@ -5,10 +5,10 @@
 
 :root {
   --btnAction_active: linear-gradient(180deg,#3c1751,#652787);
-  --btnAction_hover: var(--nav_hover);
+  --btnAction_hover: var(--btn_hover_radial), var(--nav_hover);
   --btnAction: linear-gradient(180deg,#181d4f 50%,#001 50%);
   --nav: linear-gradient(180deg,#112,#080818 50%,#000);
-  --nav_hover: linear-gradient(180deg,#652787,#4a1c63 50%,#3c1751 50%,#2c113c);
+  --nav_hover: linear-gradient(180deg,#652787,#3c1650 50%,#3c1751 50%,#1d0b28);
   --nav_active: linear-gradient(180deg,#2c113c,#652787);
   --tab_active: linear-gradient(90deg, rgba(0,0,32,.1), rgba(64,0,64,.2), rgba(0,0,32,.1)), linear-gradient(180deg,#080008, #0a000a);
   --tab_hover: linear-gradient(90deg, rgba(0,0,16,.05), rgba(96,0,96,.15), rgba(0,0,16,.05)), linear-gradient(180deg,#1d1a2d 50%, #000 50%);
@@ -35,44 +35,6 @@ label, th img, .newtorrentsection, #closeLog, #expand, #shrink {
 
 th img, td img, #closelog, #expand, #shrink {
   font-size: 0 !important;
-}
-
-td.trackerDetails img {
-  opacity: .75;
-}
-
-td.trackerDetails a:hover img, td.trackerDetails a:focus img {
-  opacity: 1;
-}
-
-th.peerCount a img {
-  margin-left: -5px !important;
-}
-
-td.peerCount {
-  padding-left: 0 !important;
-  padding-right: 5px !important;
-  width: 1%;
-  white-space: nowrap;
-  text-align: center !important;
-  font-weight: 700;
-}
-
-.peerCount .right, .peerCount .left {
-  min-width: 24px;
-  display: inline-block;
-}
-
-.peerCount .left {
-  margin-left: 1px;
-  margin-right: 4px;
-  text-align: left;
-  opacity: .8;
-}
-
-.peerCount .right {
-  margin-right: 2px;
-  text-align: right;
 }
 
 .page {
@@ -174,7 +136,7 @@ td.peerCount {
   color: #fff !important;
   text-shadow: none;
   border-color: #652787;
-  background: var(--tracker_hover), var(--nav_hover) !important;
+  background: var(--tracker_hover), var(--btn_hover_radial), var(--nav_hover) !important;
   background-repeat: no-repeat, repeat, repeat !important;
   background-position: 9px center, center center, center center !important;
 }
@@ -189,11 +151,11 @@ td.peerCount {
 }
 
 .nav_main:hover, .nav_main:focus {
-  background: var(--snark_hover) no-repeat 9px center, var(--nav_hover) !important;
+  background: var(--snark_hover) no-repeat 9px center, var(--btn_hover_radial), var(--nav_hover) !important;
 }
 
 .nav_forum:hover, .nav_forum:focus {
-  background: var(--forum_hover) no-repeat 9px center, var(--nav_hover) !important;
+  background: var(--forum_hover) no-repeat 9px center, var(--btn_hover_radial), var(--nav_hover) !important;
 }
 
 .snarkNav:active, .nav_search:active, .nav_forum:active, .nav_main:active {
@@ -218,29 +180,29 @@ td.peerCount {
 }
 
 .snarkNav:last-of-type {
-  border-radius: 2px !important;
+  border-radius: 1px !important;
 }
 
 .snarkNav[target="_blank"]:last-child {
-  border-radius: 0 2px 2px 0 !important;
+  border-radius: 0 1px 1px 0 !important;
 }
 
 .snarkNav:last-child {
-  border-radius: 0 2px 2px 0 !important;
+  border-radius: 0 1px 1px 0 !important;
 }
 
 .snarkNav:first-child {
-  border-radius: 2px 0 0 2px;
+  border-radius: 1px 0 0 1px;
 }
 
 .snarkNav[href*="i2psnark"] {
-  border-radius: 2px !important;
+  border-radius: 1px !important;
 }
 
 .snarkNav, .snarkNav:hover, .snarkNav:focus, .snarkNav:active, .snarkNav:active,
 .nav_search:hover, .nav_search:focus, .nav_forum:hover, .nav_forum:focus,
 .nav_main:hover, .nav_main:focus {
-  background-size: 15px, 100%, 100% !important;
+  background-size: 15px, 100%, 100%, 100% !important;
 }
 
 @supports (justify-content: center) {
@@ -580,6 +542,14 @@ tfoot tr:nth-child(n+1) {
   margin: 0 !important;
   padding: 3px !important;
   border: 1px solid transparent !important;
+}
+
+td.trackerDetails img {
+  opacity: .75;
+}
+
+td.trackerDetails a:hover img, td.trackerDetails a:focus img {
+  opacity: 1;
 }
 
 td.torrentDetails img, .dirInfo td:first-child img:not(.thumb) {
@@ -3172,7 +3142,7 @@ input[name="nofilter_commentsName"] {
 
 #torrentDisplay label:hover {
   color: #fff;
-  background: var(--nav_hover);
+  background: var(--btn_hover_radial), var(--nav_hover);
 }
 
 #torrentDisplay label:active, #torrentDisplay input:checked + label {
@@ -3693,6 +3663,36 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {
 
 /* end table sort indicators */
 
+th.peerCount a img {
+  margin-left: -5px !important;
+}
+
+td.peerCount {
+  padding-left: 0 !important;
+  padding-right: 5px !important;
+  width: 1%;
+  white-space: nowrap;
+  text-align: center !important;
+  font-weight: 700;
+}
+
+.peerCount .right, .peerCount .left {
+  min-width: 24px;
+  display: inline-block;
+}
+
+.peerCount .left {
+  margin-left: 1px;
+  margin-right: 4px;
+  text-align: left;
+  opacity: .8;
+}
+
+.peerCount .right {
+  margin-right: 2px;
+  text-align: right;
+}
+
 td.peerCount b {
   padding: 4px 3px;
   min-width: 80px;
@@ -3837,7 +3837,7 @@ td.peerCount b a:hover, td.peerCount b a:focus, td.peerCount b a:active {
   vertical-align: middle;
   font-size: 0 !important;
   border: 1px solid #1e2462;
-  border-radius: 2px !important;
+  border-radius: 1px !important;
   box-shadow: var(--highlight), inset 0 0 1px 0 #446;
   background-position: center center !important;
   cursor: pointer;
