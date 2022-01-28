@@ -331,6 +331,65 @@ button[type=submit]:active {
   background-blend-mode: luminosity;
 }
 
+/* console error messages */
+
+.sorry {
+  margin: -1px 0 0 211px;
+  padding: 20px 20px 20px 75px;
+  min-width: 475px;
+  word-wrap: break-word;
+  text-align: justify;
+  font-weight: 700;
+  border: 1px solid var(--border);
+  box-shadow: var(--highlight), inset 0 0 1px 1px #900;
+  background: var(--bg) var(--err) no-repeat 20px 40% / 36px;
+}
+
+#error500 .sorry {
+  box-shadow: inset 0 0 0 1px #f99;
+}
+
+.sorry hr {
+  margin: 10px 0;
+  height: 1px;
+  background: var(--border);
+  opacity: .5;
+}
+
+.sorry p {
+  padding: 0 !important;
+}
+
+#warning2 {
+  margin-top: -1px;
+  padding: 0 15px 5px;
+  min-width: 540px;
+  font-weight: 400;
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px #f99;
+  background: linear-gradient(180deg,rgba(255, 255, 255, .8), rgba(255, 255, 255, .2)) repeat scroll 0 0 / 100%,
+    url(images/bg0.png) repeat scroll 0 0 / 120px;
+}
+
+#warning2 h3 {
+  margin: -1px -16px 15px;
+  padding: 8px 10px;
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px #f99;
+}
+
+#warning2 b {
+  margin-right: 3px;
+  min-width: 140px;
+  display: inline-block;
+  text-align: right;
+}
+
+#warning2 p {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
 @media screen and (max-width: 1000px) {
   .logo {
     float: none;
@@ -370,5 +429,29 @@ button[type=submit]:active {
 
   #warning {
     margin-left: 252px !important;
+  }
+  #error500 .routersummary img[src$="i2plogo.png"] {
+    margin: -2px 0 -5px -2px;
+    width: 232px;
+  }
+
+  #servletError.iframed .logo {
+    display: none;
+  }
+
+  #error500 .sorry {
+    margin-left: 252px !important;
+  }
+
+  #servletError #warning2.sorry, #servletError #warning.warning {
+    margin-right: 20px;
+  }
+
+  #servletError #warning.warning {
+    margin-bottom: 15px !important;
+  }
+
+  #servletError.iframed #warning.warning {
+    margin: 0 0 5px !important;
   }
 }

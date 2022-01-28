@@ -279,6 +279,122 @@ hr {
     box-shadow: none;
 }
 
+/* console error messages */
+
+.sorry {
+  margin: -11px 0 10px 214px;
+  padding: 20px 25px 20px 70px;
+  min-width: 481px;
+  word-wrap: break-word;
+  text-align: justify;
+  font-weight: 700;
+  border: 1px solid var(--border);
+  border-radius: 0 0 2px 2px;
+  box-shadow: inset 0 0 1px red;
+  background: var(--err) no-repeat 16px 40% / 40px,
+    linear-gradient(to top, rgba(250, 250, 255, .5), #f8f8ff 40px),
+    repeating-linear-gradient(135deg, #fafaff 2px, rgba(248, 248, 255, .8) 3px, #fafaff 5px) #f8f8ff;
+}
+
+.sorry {
+  color: var(--ink_light);
+}
+
+.sorry hr, .sorry hr:last-child {
+  margin: 10px 0 !important;
+  height: 1px;
+  color: #558;
+  background: linear-gradient(90deg, #558, #77a);
+}
+
+#warning2 {
+  margin-top: -25px;
+  margin-bottom: 5px;
+  padding: 20px 20px 5px;
+  min-width: 536px;
+  font-weight: 400;
+  color: var(--ink);
+  background: linear-gradient(180deg,rgba(252, 252, 255, .8), rgba(252, 252, 255, .5)) #fafaff;
+}
+
+#servletError #warning {
+  padding-bottom: 35px;
+}
+
+#servletError #warning2 {
+  margin: -32px 12px 15px 232px !important;
+  text-align: left !important;
+}
+
+.iframed#servletError #warning2 {
+  margin: -6px 10px 15px !important;
+}
+
+#warning2 h3 {
+  margin: -21px -19px 5px;
+  padding: 8px 10px;
+  border-width: 1px;
+  border-left: none;
+  border-right: none;
+  border-radius: 0;
+}
+
+#warning2 p + h3 {
+  margin-top: -10px !important;
+}
+
+#warning2 b {
+  display: inline-block;
+  min-width: 120px;
+  margin-right: 5px;
+  text-align: right;
+}
+
+/* error 500 */
+
+#errmsg {
+  padding: 3px 0 0 18px;
+  display: inline-block;
+  font-size: 13pt;
+  text-transform: none;
+  word-spacing: 0;
+  letter-spacing: 0;
+}
+
+#stacktrace p, #sysinfo p {
+  text-align: left;
+}
+
+#stacktrace {
+  margin: 18px 0 38px;
+  padding: 5px 10px 0;
+  border: 1px solid #700;
+  box-shadow: var(--highlight), 0 0 1px 1px #ddf;
+  background: #ffe;
+}
+
+#stacktrace p:first-child {
+  font-weight: 700;
+  font-size: 10pt;
+  border-bottom: 1px solid #700;
+  padding-bottom: 10px;
+}
+
+#stacktrace p:nth-child(2) {
+  padding-left: 15px;
+  margin-bottom: 0;
+  word-break: break-all;
+}
+
+#error500 #sidebar hr ~ a {
+  padding: 5px 0 !important;
+  display: inline-block;
+  font-size: 9.5pt;
+}
+
+/* end error 500 */
+/* end console error messages */
+
 @media screen and (max-width: 800px) {
   .warning {
     margin: 120px 5px 0;
