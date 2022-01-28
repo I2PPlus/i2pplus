@@ -1,5 +1,13 @@
 @import url(global.css);
 
+html {
+  background: var(--vstripe) #000 !important;
+}
+
+body {
+  background: none !important;
+}
+
 #wizardpage .routersummary h3, #wizardpage .routersummary h3:hover, #wizardpage .routersummary h3:active {
   background: var(--h3), var(--navbar) !important;
   box-shadow: var(--lowlight) !important;
