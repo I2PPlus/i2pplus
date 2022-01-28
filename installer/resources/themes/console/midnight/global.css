@@ -175,7 +175,9 @@ input[type=text]:disabled, input[readonly], input[readonly]:focus {
   cursor: not-allowed;
 }
 
-button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset]::-moz-focus-inner {
+button::-moz-focus-inner,
+input[type=submit]::-moz-focus-inner,
+input[type=reset]::-moz-focus-inner {
   outline: none;
   border: none;
 }

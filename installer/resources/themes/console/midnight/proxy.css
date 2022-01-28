@@ -219,8 +219,8 @@ button.go:active, button.accept:active {
   border: 5px solid #26235c;
   border-image: repeating-linear-gradient(135deg, #225, #225 19px, #000 20px, #770 20px, #770 39px, #000 40px, #225 40px) 5 repeat repeat;
   border-image-width: 5px;
-  border-image-outset: 2px;
-  box-shadow: inset 0 0 0 1px #44175f, 0 0 0 4px #000, 0 0 0 6px #225, 0 0 0 7px #000;
+  border-image-outset: 1px;
+  box-shadow: inset 0 0 0 1px #44175f, 0 0 0 3px #000, 0 0 0 6px #225, 0 0 0 7px #000;
   background: var(--itooplus) no-repeat, repeating-linear-gradient(180deg,#000 2px, #002 4px);
   background-size: auto 130px, 100% 4px;
   background-position: 30px calc(50% + 16px), center center;

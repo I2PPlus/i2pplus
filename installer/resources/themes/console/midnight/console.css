@@ -10,6 +10,7 @@
 
 :root {
   --box: linear-gradient(180deg,#020020,#000);
+  --btn_sidebar: linear-gradient(90deg, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)), linear-gradient(180deg,#141221 50%,#001 50%);
 }
 
 html {
@@ -18,17 +19,15 @@ html {
   background-size: 4px 100%, 100% 4px, 171px 148px;
 }
 
+@supports (-moz-appearance: none) {
+  html {background-attachment: fixed}
+}
+
 body {
   margin: 2px 0 0;
   padding: 0;
   text-align: center;
   font: 8.5pt/130% var(--bodyfont);
-}
-
-@supports (-moz-appearance: none) {
-  html {
-    background-attachment: fixed;
-  }
 }
 
 .routersummary, h1, .main, iframe {
@@ -182,37 +181,31 @@ input.showconsole:active {
 
 input.accept, button.accept {
   padding: 5px 9px 5px 25px !important;
-  background: var(--yes) no-repeat 8px center, var(--btn) !important;
-  background-size: 12px, 100% !important;
+  background: var(--yes) no-repeat 8px center / 12px, var(--btn) !important;
 }
 
 input.accept:hover, button.accept:hover,
 input.accept:focus, button.accept:focus {
-  background: var(--yes) no-repeat 8px center, var(--btn_hover) !important;
-  background-size: 12px, 100% !important;
+  background: var(--yes) no-repeat 8px center / 12px, var(--btn_hover) !important;
 }
 
 input.accept:active, button.accept:active {
   padding: 5px 9px 5px 25px !important;
-  background: var(--yes) no-repeat 8px center, var(--btn_active) !important;
-  background-size: 12px, 100% !important;
+  background: var(--yes) no-repeat 8px center / 12px, var(--btn_active) !important;
 }
 
 input.cancel, button.cancel {
   padding: 5px 9px 5px 25px !important;
-  background: var(--no) no-repeat 10px center, var(--btn) !important;
-  background-size: 10px, 100% !important;
+  background: var(--no) no-repeat 10px center / 10px, var(--btn) !important;
 }
 
 input.cancel:hover, button.cancel:hover,
 input.cancel:focus, button.cancel:focus {
-  background: var(--no) no-repeat 10px center, var(--btn_hover) !important;
-  background-size: 10px, 100% !important;
+  background: var(--no) no-repeat 10px center / 10px, var(--btn_hover) !important;
 }
 
 input.cancel:active, button.cancel:active {
-  background: var(--no) no-repeat 10px center, var(--btn_active) !important;
-  background-size: 10px, 100% !important;
+  background: var(--no) no-repeat 10px center / 10px, var(--btn_active) !important;
 }
 
 input.cancel[value^="Hide"], button.cancel[value^="Hide"],
@@ -534,7 +527,6 @@ button.stop.control:active {
 
 button.add.control {
   background: var(--edit) no-repeat center center / 16px, var(--btn) !important;
-  background-size: 16px, 100% !important;
 }
 
 button.add.control:hover, button.add.control:focus {
@@ -583,11 +575,6 @@ button.download.control:active {
   background: var(--download) no-repeat center center / 14px, var(--btn_active) !important;
 }
 
-button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset]::-moz-focus-inner {
-  outline: none;
-  border: none;
-}
-
 /* end project "X" */
 
 /* sidebar buttons */
@@ -610,7 +597,7 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 
 .routersummary .reload, .routersummary .reload[value$="restart"] {
   padding: 6px 5px !important;
-  background: var(--restart) no-repeat center center / 14px, linear-gradient(90deg, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)), linear-gradient(180deg,#141221 50%, #001 50%) !important;
+  background: var(--restart) no-repeat center center / 14px, var(--btn_sidebar) !important;
 }
 
 .routersummary .reload:hover, .routersummary .reload:focus, .routersummary .reload[value$="restart"]:hover, .routersummary .reload[value$="restart"]:focus {
@@ -625,7 +612,7 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 
 .routersummary .stop {
   padding: 6px 5px !important;
-  background: var(--shutdown) no-repeat center center / 14px, linear-gradient(90deg, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)), linear-gradient(180deg,#141221 50%, #001 50%) !important;
+  background: var(--shutdown) no-repeat center center / 14px, var(--btn_sidebar) !important;
 }
 
 .routersummary .stop:hover, .routersummary .stop:focus {
@@ -649,7 +636,7 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 }
 
 .routersummary .reload[value="restartImmediate"] {
-  background: var(--restart) no-repeat left 6px center / 12px, linear-gradient(90deg, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)), linear-gradient(90deg, rgba(0,0,16,.5), rgba(0,0,0,0) 30%), linear-gradient(180deg,#141221 50%, #001 50%) !important;
+  background: var(--restart) no-repeat left 6px center / 12px, var(--btn_sidebar) !important;
 }
 
 .routersummary .reload[value="restartImmediate"]:hover {
@@ -663,7 +650,7 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 }
 
 .routersummary .stop[value="shutdownImmediate"] {
-  background: var(--shutdown) no-repeat left 6px center / 12px, linear-gradient(90deg, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)), linear-gradient(90deg, rgba(0,0,16,.5), rgba(0,0,0,0) 30%), linear-gradient(180deg,#141221 50%, #001 50%) !important;
+  background: var(--shutdown) no-repeat left 6px center / 12px, var(--btn_sidebar) !important;
 }
 
 .routersummary .stop[value="shutdownImmediate"]:hover {
@@ -677,7 +664,7 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 }
 
 .routersummary .reload[value="Reseed"] {
-  background: var(--download) no-repeat left 6px center, linear-gradient(90deg, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)), linear-gradient(90deg, rgba(0,0,16,.5), rgba(0,0,0,0) 30%), linear-gradient(180deg,#141221 50%, #001 50%) !important;
+  background: var(--download) no-repeat left 6px center, var(--btn_sidebar) !important;
   background-size: 14px auto, 100%, 100%, 100% !important;
 }
 
@@ -723,154 +710,6 @@ pre {
   text-align: left;
   font: 8.5pt var(--monospaced);
   color: var(--ink);
-}
-
-/* proxy/server errors */
-
-.logo {
-  margin: 2px 20px 0 20px;
-  padding: 10px 10px 0;
-  width: 185px;
-  float: left;
-  text-align: center;
-  font-size: 9pt;
-  color: var(--ink);
-  border: var(--border_inner);
-  box-shadow: var(--highlight), 0 0 0 4px #225;
-  background: repeating-linear-gradient(180deg,#000, #002 2px);
-}
-
-.iframed .logo {
-  display: none;
-}
-
-.logo a img {
-  margin: -3px -5px -4px;
-  width: 181px;
-  opacity: .7;
-}
-
-.logo a img:hover {
-  opacity: 1;
-  filter: drop-shadow(0 0 3px var(--hover));
-}
-
-div.logo hr {
-  margin: 11px -11px 10px;
-  height: 4px;
-  color: #44175f;
-  border: 0 solid #225;
-  background: #225;
-}
-
-.logo a:link {
-  padding: 4px;
-  display: block;
-}
-
-  .logo hr ~ a {
-    border: 1px solid #225;
-    background: radial-gradient(at center bottom, rgba(128, 0, 128, .15), rgba(64, 0, 64, .08) 30%, rgba(0, 0, 0, 0) 90%),
-      linear-gradient(90deg, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)),
-      linear-gradient(90deg, rgba(0,0,16,.1), rgba(0,0,0,0), rgba(0,0,16,.1)),
-      linear-gradient(180deg,#0a0a1a 50%, #040414 50%) !important;
-  }
-
-  .logo hr ~ a:hover {
-    z-index: 10;
-    box-shadow: var(--highlight);
-    background: radial-gradient(at center bottom, rgba(96, 32, 96, .6) 0, rgba(0, 0, 0, 0) 80%),
-      linear-gradient(90deg, rgba(64,0,64,.03), rgba(96,0,96,.1), rgba(64,0,64,.03)),
-      linear-gradient(180deg,#1d1a2d 50%, #000 50%) !important;
-}
-
-  .logo hr ~ a:active {
-    box-shadow: var(--highlight), inset 0 0 1px 1px #737, inset 0 0 0 3px #101, inset 5px 5px 5px 2px #000;
-    background: radial-gradient(at center bottom, rgba(160,48,160,.2), rgba(0, 0, 0, 0) 35%),
-      linear-gradient(90deg, rgba(64,0,64,.1), rgba(64,0,64,.2), rgba(64,0,64,.1)),
-      linear-gradient(180deg,#080820, #1d1a2d) !important;
-  }
-
-.warning { /* proxy/server error messages */
-  margin: 20px 20px 20px 250px;
-  padding: 14px 40px 40px 100px;
-  min-width: 300px;
-  text-align: left;
-  word-wrap: break-word;
-  color: var(--ink);
-  text-align: justify;
-  font-size: 10pt;
-  text-shadow: 0 1px 1px #000;
-  box-shadow: inset 0 0 0 1px #44175f;
-  border: 5px solid #26235c;
-  border-image: repeating-linear-gradient(135deg, #003 0px, #003 20px, #550 20px, #550 40px, #003 40px) 5 repeat repeat;
-  border-image-width: 5px;
-  border-image-outset: 1px;
-  box-shadow: inset 0 0 0 1px #44175f, inset 0 0 3px 3px #000, 0 0 0 2px #26235c;
-  background: var(--itooplus) no-repeat 20px center, repeating-linear-gradient(180deg,#000 2px, #002 4px);
-  background-position: 20px calc(50% + 16px), center center;
-  background-size: auto 110px, 100% 4px;
-}
-
-.iframed .warning, #servletError .iframed #warning2 {
-  margin-left: 20px !important;
-}
-
-#proxy_error {
-  height: calc(100% - 20px);
-}
-
-#proxy_error .warning p:first-of-type {
-  padding-top: 15px !important;
-}
-
-#proxy_error .warning p:last-of-type {
-  padding-bottom: 5px !important;
-}
-
-#proxy_error p + a {
-  margin-top: -8px;
-  display: inline-block;
-}
-
-#proxy_error hr {
-  margin-bottom: 20px;
-}
-
-.warning p, .warning a {
-  font-size: 10pt;
-  line-height: 1.3;
-}
-
-.warning h3 {
-  text-align: left;
-  font-size: 10pt;
-  padding: 7px 10px;
-  text-align: left;
-  margin: -13px -39px 25px -99px;
-  border: none;
-  border-bottom: 1px solid #44175f;
-}
-
-#warning_localhost {
-  margin: 20px;
-  background-position: 20px calc(50% + 16px);
-}
-
-#warning_localhost p {
-  padding: 20px 10px 15px;
-}
-
-.warning h4 {
-  box-shadow: none !important;
-  text-align: left;
-  font-size: 10pt;
-  padding-bottom: 7px;
-}
-
-.warning p + .formaction {
-  margin: 0 0 20px;
-  padding: 0;
 }
 
 .main {
@@ -3351,21 +3190,6 @@ form[action="events"] {
   font-size: 9pt;
 }
 
-.optbox {
-  width: 21px !important;
-  height: 21px;
-  min-width: 21px !important;
-  max-width: 21px !important;
-  min-height: 21px;
-  max-height: 21px;
-  opacity: 1.0;
-  border: 0;
-  margin: 2px 4px;
-  padding: 2px;
-  overflow: hidden;
-  position: relative;
-}
-
 .cells {
   text-align: center;
 }
@@ -3934,15 +3758,14 @@ td#themeselect {
 }
 
 @supports not (-moz-appearance: none) {
-.langselect img {
-  margin-left: -19px !important;
-  margin-top: -31px !important;
-}
-
-.langselect input[name="lang"]:checked + img, .langselect input[name="lang"]:checked + #config_ui img[src="/flags.jsp?c=a1"] {
-  margin-left: -15px !important;
-  margin-top: -27px !important;
-}
+  .langselect img {
+    margin-left: -19px !important;
+    margin-top: -31px !important;
+  }
+  .langselect input[name="lang"]:checked + img, .langselect input[name="lang"]:checked + #config_ui img[src="/flags.jsp?c=a1"] {
+    margin-left: -15px !important;
+    margin-top: -27px !important;
+  }
 }
 
 /* end large flags */
@@ -13395,92 +13218,3 @@ iframe {
     border-bottom: 1px solid #26235c !important;
   }
 }
-
-/* responsive proxy errors */
-
-@media screen and (max-width: 800px) {
-  .logo hr ~ a {
-    margin: -8px -3px 12px !important;
-    padding: 6px 8px !important;
-    min-width: 110px;
-    position: relative;
-    background: #225;
-  }
-  .warning, .logo {
-    background: repeating-linear-gradient(180deg,#000 2px,#002 4px) !important;
-  }
-  .warning {
-    margin: 150px 18px 0 16px !important;
-    padding: 5px 30px 25px !important;
-  }
-  #proxyerror .warning {margin-top: 20px !important}
-  #proxyerror p {
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-  .warning h3, .warning a, .warning p {font-size: 9pt}
-  .logo {
-    margin: 6px 18px 0;
-    width: calc(100% - 60px) !important;
-    min-width: 320px;
-    display: block;
-    position: absolute;
-    top: -140px;
-    z-index: 999;
-  }
-  .warning h3 {padding: 7px 10px}
-  .logo a {
-    padding: 2px 5px !important;
-    width: auto !important;
-    display: inline-block !important;
-  }
-  .logo hr ~ a {
-    font-size: 110%;
-  }
-  .logo a img {
-    margin-top: -1px;
-    margin-bottom: -3px;
-    padding: 0 !important;
-  }
-}
-
-@media screen and (min-width: 800px) {
-  .logo hr + a {margin-top: -20px !important}
-  .logo hr ~ a {
-    margin: 0 -11px -1px;
-    padding: 10px 4px !important;
-    display: inline-block;
-  }
-}
-
-@media screen and (min-height: 700px) {
-.proxyfooter {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  padding: 0 20px 0 0;
-  text-align: right;
-  background: #003;
-  width: 100%;
-  opacity: .7;
-  border-top: 1px solid #000;
-}
-
-.proxyfooter p {
-  text-align: right;
-  line-height: 1.3 !important;
-  margin: 5px 0;
-}
-
-.warning {
-  margin-bottom: 30px;
-}
-}
-
-@media screen and (max-height: 700px) {
-.proxyfooter {
-  display: none;
-}
-}
-/* end proxy errors */
-/* end responsive layout */
