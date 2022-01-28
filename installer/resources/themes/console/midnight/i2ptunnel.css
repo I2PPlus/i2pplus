@@ -475,32 +475,19 @@ input[type="hidden"], input.default {
 }
 
 input, select, button, .control {
-  font-family: var(--bodyfont)
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  font-size: 9pt;
-  color: #c9ceff;
   resize: none;
+  box-sizing: border-box;
+  text-decoration: none;
+  font-family: var(--bodyfont)
+  font-size: 9pt;
+  color: var(--ink);
   cursor: pointer;
 }
 
 input {
-  background-color: #002;
-  color: #c9ceff;
   margin: 0 2px 0 2px;
-  font-family: var(--bodyfont);
+  background-color: #002;
   border: 1px solid #302b74;
-  text-decoration: none;
-}
-
-input[type=submit]::-moz-focus-inner, input[type="reset"]::-moz-focus-inner, button::-moz-focus-inner {
-  border: none;
-  outline: none;
-}
-
-input[type="file"] {
-  background: none;
-  border: none;
 }
 
 .editDisabled input[type=radio], .editDisabled label {
@@ -535,13 +522,13 @@ a.control, input.control {
   text-decoration: none;
   text-align: center;
   color: var(--a);
-  background: linear-gradient(180deg,#11101c 50%, #000010 50%) !important;
+  background: var(--btn) !important;
 }
 
 .control:hover, .control:focus, button:hover, button:focus {
   text-decoration: none;
-  background: linear-gradient(180deg,#202 50%, #000 50%) !important;
   color: var(--a_hover);
+  background: var(--btn_hover) !important;
 }
 
 .control:active, button:active {
@@ -555,11 +542,6 @@ a.control {
 
 button.control {
   box-sizing: border-box;
-  -moz-box-sizing: border-box;
-}
-
-button, input[type=submit], input[type="reset"], .control, select {
-  box-shadow: var(--highlight), inset 0 0 2px 0 #559;
 }
 
 input, select, button {
@@ -574,12 +556,7 @@ input {
 
 select {
   text-align: left;
-  color: #7171d1;
-}
-
-button, input[type=submit], input[type="reset"], a.control {
-  font-family: var(--bodyfont);
-  font-weight: 700;
+  color: var(--a);
 }
 
 .buttons, .newTunnel {
@@ -587,7 +564,7 @@ button, input[type=submit], input[type="reset"], a.control {
   text-align: right !important;
   border-top: 1px solid #26235c !important;
   box-shadow: var(--highlight), inset 0 0 2px 1px #191939, inset 0 0 5px 3px #002;
-  background: linear-gradient(180deg,#001, #000);
+  background: linear-gradient(180deg,#001,#000);
 }
 
 .tunnelDestinationLabel {
