@@ -56,8 +56,13 @@
   padding-bottom: 2px;
 }
 
+#wizard h3 {
+  padding: 10px 12px;
+  border-width: 1px;
+}
+
 #wizardpage .routersummary form {
-  padding: 5px 0 8px;
+  padding: 13px 0 15px;
 }
 
 .wizardbuttons {
@@ -73,4 +78,8 @@
   padding: 20px 20px 30px;
   border-left: var(--border_inner);
   border-right: var(--border_inner);
+}
+
+.bandwidthtester #wizard p + p {
+  padding-top: 0;
 }
