@@ -921,7 +921,7 @@ class EstablishmentManager {
      */
     private void sendRequest(OutboundEstablishState state) {
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Sent SessionRequest" + state);
+            _log.debug("Sent SessionRequest " + state);
         UDPPacket packet = _builder.buildSessionRequestPacket(state);
         if (packet != null) {
             _transport.send(packet);
