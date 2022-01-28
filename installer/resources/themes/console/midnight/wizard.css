@@ -1,0 +1,76 @@
+/* I2P+ Midight theme wizard specifics */
+/* Author: dr|z3d, 2022 */
+
+#wizardpage .routersummary img[src*="i2plogo"],
+#wizardpage .routersummary img[src*="i2plogo"]:hover,
+#wizardpage .routersummary img[src*="i2plogo"]:active {
+  margin-left: -2px !important;
+  width: 189px;
+  opacity: .7;
+  filter: sepia(100%) hue-rotate(180deg);
+}
+
+#wizardpage #messages {
+  top: -13px;
+}
+
+#wizardpage .yes {
+  background: var(--yes) no-repeat center center;
+}
+
+#wizardpage .no {
+  background: var(--no) no-repeat center center;
+}
+
+#wizardpage .yes, #wizardpage .no {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  font-size: 0;
+  background-size: 12px;
+}
+
+#bandwidthTestRunning {
+  margin: 10px 0;
+  padding: 10px;
+  text-align: center;
+  font-style: italic;
+  font-weight: 700;
+}
+
+#wizardpage .messages, #wizard p.infohelp {
+  margin-top: 12px;
+}
+
+#wizard p.infohelp {
+  margin-bottom: 12px;
+  line-height: 1.3 !important;
+}
+
+#wizard .langselect {
+  margin: 0 2px 7px !important;
+  float: none;
+}
+
+#wizard #langsettings {
+  padding-bottom: 2px;
+}
+
+#wizardpage .routersummary form {
+  padding: 5px 0 8px;
+}
+
+.wizardbuttons {
+  margin-top: -12px;
+}
+
+#bandwidthconfig + .wizardbuttons {
+  margin-top: 1px;
+}
+
+#wizard p {
+  margin: -12px 0 -2px;
+  padding: 20px 20px 30px;
+  border-left: var(--border_inner);
+  border-right: var(--border_inner);
+}

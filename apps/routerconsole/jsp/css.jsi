@@ -116,9 +116,9 @@
 <link href="<%=themePath%>override.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
 <%
     }
-    if (theme.equals("classic")) {
+    if (uri.endsWith("wizard") || uri.endsWith("wizard.jsp")) {
 %>
-<link href="<%=themePath%>errors.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
+<link href="<%=themePath%>wizard.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
 <%
     }
-%>
+%>    
