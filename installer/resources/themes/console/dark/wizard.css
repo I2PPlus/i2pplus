@@ -39,8 +39,8 @@ body#wizardpage {
 }
 
 #wizardpage .routersummary form {
-  padding: 0;
   margin: 0;
+  padding: 3px 0 7px;
   box-shadow: none;
 }
 
