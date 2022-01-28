@@ -469,11 +469,11 @@ class OutboundEstablishState {
         if (_log.shouldLog(Log.DEBUG) || (_log.shouldLog(Log.WARN) && !valid)) {
             StringBuilder buf = new StringBuilder(128);
             buf.append("Signed session created\n* ");
-            buf.append(" [Alice: ").append(Addresses.toString(_aliceIP, _alicePort));
-            buf.append("] [Bob: ").append(Addresses.toString(_bobIP, _bobPort));
-            buf.append("] \n* RelayTag: ").append(_receivedRelayTag);
-            buf.append("\n* Signed on: ").append(new Date(_receivedSignedOnTime));
             buf.append("\n* Signature: ").append(Base64.encode(_receivedSignature.getData()));
+            buf.append("\n* Signed on: ").append(new Date(_receivedSignedOnTime));
+            buf.append("Alice: ").append(Addresses.toString(_aliceIP, _alicePort));
+            buf.append("; Bob: ").append(Addresses.toString(_bobIP, _bobPort));
+            buf.append("\n* RelayTag: ").append(_receivedRelayTag);
             if (valid)
                 _log.debug(buf.toString());
             else if (_log.shouldLog(Log.WARN))
