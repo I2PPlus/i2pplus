@@ -1518,7 +1518,7 @@ input.r {
 
 input[type=submit], input[type="reset"], a.control, a.controld, a.controld:hover, a.controld:focus, a.controld:active,
 input:disabled[type=submit], input:disabled:hover[type=submit], input:disabled:active[type=submit] {
-  padding: 5px 12px !important;
+  padding: 6px 12px !important;
   min-width: 95px !important;
   text-align: center;
   font: bold 9pt var(--bodyfont);
@@ -1628,7 +1628,6 @@ th a:link img, th a:visited img {
 }
 
 input[type=text], input.r {
-  padding: 5px 6px !important;
   min-width: 100px;
 }
 
@@ -2871,7 +2870,7 @@ td .commentAuthorName {
 }
 
 input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilter_dataDir"] {
-  width: calc(100% - 178px) !important;
+  width: calc(100% - 183px) !important;
 }
 
 input[name="nofilter_commentsName"] {
