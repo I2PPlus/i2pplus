@@ -18,7 +18,8 @@
   --border_input: #27235c;
   --border_soft: 1px solid #100e25;
   --btn_active: linear-gradient(180deg,#401856,#501f6c);
-  --btn_hover: linear-gradient(180deg,#202,#101 50%,#080008 50%,#000);
+  --btn_hover_radial: radial-gradient(at center bottom, rgba(96, 0, 96, .4), rgba(0, 0, 0, 0) 60%);
+  --btn_hover: var(--btn_hover_radial), linear-gradient(180deg,#202,#101 50%,#080008 50%,#000);
   --btn: linear-gradient(180deg,#11101c 50%,#000010 50%);
   --btn_shadow_active: var(--highlight), inset 4px 4px 4px rgba(0,0,0,.7);
   --element: linear-gradient(180deg,#112,#000);
@@ -33,14 +34,29 @@
   --optbox: linear-gradient(180deg,#030306,#112);
   --outline: 0 0 0 1px #000;
   --panel: linear-gradient(180deg,#080818,#040410);
+  --radial_glow_top: radial-gradient(at center -50px, rgba(96, 0, 96, .4), rgba(0, 0, 0, 0) 85%);
   --row: linear-gradient(180deg,#040414,#010010);
   --th: repeating-linear-gradient(90deg, rgba(0,0,64,.4) 2px, #000 4px), var(--titlebg) repeat center center / 100%, #001;
   --titlebg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 2'%3E%3Cpath fill='%23000018' d='M0 0h1v1H0z'/%3E%3Cpath d='M0 1h1v1H0z'/%3E%3C/svg%3E");
   --title: repeating-linear-gradient(90deg, rgba(0,0,48,.4) 2px, #000 4px), var(--titlebg) repeat center center / 100%, #001;
 }
 
+html, body {
+  min-height: 100%;
+  scrollbar-color: #225 #001;
+}
+
+body.iframed {
+  background: none;
+  overflow: hidden;
+}
+
 *, :focus, :active, :checked {
   outline: none !important;
+}
+
+a, button, input {
+  -webkit-text-stroke: 1px rgba(0,0,0,.3);
 }
 
 :-moz-focusring {
@@ -161,7 +177,9 @@ input[type=text]:disabled, input[readonly], input[readonly]:focus {
   cursor: not-allowed;
 }
 
-button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset]::-moz-focus-inner {
+button::-moz-focus-inner,
+input[type=submit]::-moz-focus-inner,
+input[type=reset]::-moz-focus-inner {
   outline: none;
   border: none;
 }

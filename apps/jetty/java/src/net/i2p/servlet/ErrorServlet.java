@@ -53,8 +53,10 @@ public class ErrorServlet extends HttpServlet {
     private static final String BASE_THEME_PATH = "/themes/console/";
     private static final String DEFAULT_ICO = "images/favicon.svg";
     private static final String DEFAULT_CSS = "console.css";
+    private static final String PROXY_CSS = "proxy.css";
     /** to be added to head */
     private final String _icoPath = BASE_THEME_PATH + '/' + DEFAULT_ICO;
+    private final String _proxyCSSPath = BASE_THEME_PATH + '/' + PROXY_CSS;
     private String _cssPath;
     /** for webapp translation */
     private String _webappName;
@@ -134,18 +136,18 @@ public class ErrorServlet extends HttpServlet {
             out.print(_t("Error 500: Internal Error"));
         out.println("</title>\n");
         out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n");
+        out.println("<link href=\"" + _cssPath + '?' + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\">\n");
+        out.println("<link href=\"" + _proxyCSSPath + "\" rel=\"stylesheet\" type=\"text/css\">\n");
         if (_icoPath != null)
             out.println("<link rel=\"icon\" href=\"" + _icoPath + "\">\n");
-        out.println("<link href=\"" + _cssPath + '?' + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\">\n");
-        out.println("<link href=\"" + BASE_THEME_PATH + _context.getProperty(PROP_THEME_NAME, DEFAULT_THEME) + "/errors.css?" +
-                    CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\">\n");
         out.println("<script type=\"text/javascript\">if (window.location !== window.top.location) {window.top.location = window.location;}</script>\n"); // breakout of iframe
         out.println("<script type=\"text/javascript\" src=\"/js/iframeResizer/iframeResizer.contentWindow.js\"></script>\n"); // or ensure embedded correctly elsewise
         out.println("</head>\n<body id=\"servletError\">\n");
         out.println("<div class=\"logo\">");
-        out.println("<a href=\"/\" title=\"" + _t("Router Console") +
-                    "\"><img src=\"" + BASE_THEME_PATH + _context.getProperty(PROP_THEME_NAME, DEFAULT_THEME) + "/images/i2plogo.png\" alt=\"" +
-                    _t("I2P Router Console").replace("I2P", "I2P+") + "\" border=\"0\"></a>\n<hr>\n");
+        out.println("<a href=\"/\" title=\"" + _t("Router Console") + "\"><img src=\"" +
+                    BASE_THEME_PATH + _context.getProperty(PROP_THEME_NAME, DEFAULT_THEME) +
+                    "/images/i2plogo.png\" alt=\"" + _t("I2P Router Console").replace("I2P", "I2P+") +
+                    "\" border=\"0\"></a>\n<hr>\n");
         out.println("<a href=\"/config\">" + _t("Configuration") + "</a> <a href=\"/help\">" + _t("Help") + "</a>");
         out.println("</div>\n");
         out.println("<div class=\"warning\" id=\"warning\">\n");

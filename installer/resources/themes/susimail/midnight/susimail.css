@@ -6,10 +6,6 @@
 @import url(../images/images.css);
 @import url(images/images.css);
 
-html, body {
-  min-height: 100%;
-}
-
 body {
   margin: 6px 5px;
   background: repeating-linear-gradient(180deg,rgba(0,0,24,.75) 3px, rgba(0,0,0,.9) 5px, rgba(0,0,0,.7) 6px),
@@ -27,19 +23,10 @@ body {
 
 body.iframed {
   margin: 1px 0 0;
-  background: transparent !important;
-}
-
-* {
-  outline: none;
 }
 
 .iframed form {
   border: 1px solid transparent !important;
-}
-
-a, button, input {
-  -webkit-text-stroke: .5px rgba(0,0,0,.4);
 }
 
 div.header {
@@ -1443,12 +1430,12 @@ select {
   background: #113 var(--no) no-repeat right 24px top 4px / 14px;
   background-blend-mode: luminosity;
   cursor: crosshair;
-  animation: 2s hide-up 7s ease-out forwards;
+  animation: 2s hide-up 4s ease-out forwards;
 }
 
 .iframed .notifications {
   margin: 6px 30% 0;
-  padding: 5px 10px 0;
+  padding: 0 10px;
   top: -6px;
   background: #113 var(--no) no-repeat right 6px top 5px / 14px;
 }

@@ -547,7 +547,7 @@ class IntroductionManager {
         if (!isValid(aliceIP, alicePort, true)) {
             // not necessarily invalid ip/port, could be blocklisted
             if (_log.shouldWarn())
-                _log.warn("Refusing relay request from " + alice + " for " + Addresses.toString(aliceIP, alicePort) + " (invalid ip/port or blacklisted)");
+                _log.warn("Refusing relay request from " + alice + " for " + Addresses.toString(aliceIP, alicePort) + " (blocklisted or invalid ip/port)");
             _context.statManager().addRateData("udp.relayBadIP", 1);
             return;
         }

@@ -1,0 +1,73 @@
+/* I2P+ Classic theme wizard specifics */
+/* Author: dr|z3d, 2022 */
+
+#wizardpage .routersummary div[style="height: 36px;"] {
+  height: 39px !important;
+}
+
+#wizardpage .yes, #wizardpage .no {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  font-size: 0;
+}
+
+#wizardpage .yes {
+  background: var(--yes) no-repeat center center;
+}
+
+#wizardpage .no {
+  background: var(--no) no-repeat center center;
+}
+
+#wizard #langsettings {
+  margin-bottom: -1px !important;
+  padding: 6px 8px 5px !important;
+}
+
+#wizard .langselect {
+  margin: 3px 2px 4px;
+  float: none;
+}
+
+#wizard .optionsave {
+  border: 1px solid var(--border) !important;
+  background: none;
+}
+
+#wizard #flags.infohelp {
+  margin-top: 0;
+}
+
+#wizard #bandwidth ~ p {
+  margin-top: 0;
+  margin-bottom: 0;
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+}
+
+#wizard #bandwidth + h3 + p {
+  margin-top: -11px !important;
+  padding-top: 12px;
+}
+
+#wizard #bandwidth + h3 + p + p + p {
+  padding-bottom: 12px;
+}
+
+#wizard #bandwidth.infohelp {
+  margin-top: 0 !important;
+}
+
+#messages + form > #bandwidth.infohelp {
+  margin-top: 14px !important;
+}
+
+#bandwidthTestRunning {
+  margin: 10px 0;
+  padding: 10px;
+  width: calc(100% - 22px);
+  text-align: center;
+  font-style: italic;
+  font-weight: 700;
+}

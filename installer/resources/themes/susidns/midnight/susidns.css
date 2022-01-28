@@ -20,8 +20,6 @@ body {
 body.iframed {
   margin: 0;
   padding: 0;
-  overflow: hidden;
-  background: transparent !important;
 }
 
 .destaddress {
@@ -876,13 +874,13 @@ input[type=file] {
 input {
   margin: 2px 4px 2px 0;
   padding: 4px !important;
-  font: 700 9pt var(--bodyfont);
+/*  font: 700 9pt var(--bodyfont);
   font-size: 9pt;
   font-weight: 700;
   text-align: left;
   color: #4e47bf;
   border: 1px solid #26225d;
-  background: #000 none !important;
+  background: #000 none !important;*/
 }
 
 input[type=text] {
@@ -905,7 +903,6 @@ input[type=submit], input[type=reset], .fakebutton, .fakebutton:visited {
   padding: 6px 10px !important;
   min-width: 100px !important;
   text-align: center;
-  background: linear-gradient(180deg,#11101c 50%, #000010 50%) !important;
 }
 
 input.update {
@@ -915,12 +912,7 @@ input.update {
 input[type=submit]:hover, input[type=reset]:hover,
 input[type=submit]:focus, input[type=reset]:focus,
 .fakebutton:hover, .fakebutton:focus {
-  background: linear-gradient(180deg,#202 50%, #000 50%) !important;
-}
-
-input[type=submit]:active, input[type=reset]:active, .fakebutton:active {
-  color: #83529F !important;
-  background:  linear-gradient(180deg,#401856, #501f6c) !important;
+  background-size: auto;
 }
 
 textarea, #subslog pre {
@@ -984,8 +976,8 @@ textarea[cols="70"] {
 }
 
 .iframed #helpconfig {
-  margin-top: -5px !important;
-  margin-bottom: 10px;
+  margin-top: -1px !important;
+  margin-bottom: 12px;
 }
 
 .iframed#subsLog div#config {

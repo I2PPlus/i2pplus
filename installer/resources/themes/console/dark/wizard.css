@@ -1,5 +1,13 @@
 @import url(global.css);
 
+html#consolewizard {
+  background: var(--vstripe) #000 !important;
+}
+
+body#wizardpage {
+  background: none !important;
+}
+
 #wizardpage .routersummary h3, #wizardpage .routersummary h3:hover, #wizardpage .routersummary h3:active {
   background: var(--h3), var(--navbar) !important;
   box-shadow: var(--lowlight) !important;
@@ -31,8 +39,8 @@
 }
 
 #wizardpage .routersummary form {
-  padding: 0;
   margin: 0;
+  padding: 3px 0 7px;
   box-shadow: none;
 }
 
@@ -103,4 +111,10 @@
 #wizardpage #messages li {
   padding: 0 !important;
   text-align: center !important;
+}
+
+@media screen and (min-width: 1500px) {
+  #wizardpage #sb_logo {
+    padding: 9px 10px 16px;
+  }
 }

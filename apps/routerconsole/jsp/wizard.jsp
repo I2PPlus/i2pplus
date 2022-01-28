@@ -70,7 +70,7 @@
     if (ctx.getProperty("routerconsole.lang") != null)
         lang = ctx.getProperty("routerconsole.lang");
 %>
-<html lang="<%=lang%>">
+<html lang="<%=lang%>" id="consolewizard">
 <head>
 <%@include file="css.jsi" %>
 <%=intl.title("New Install Wizard")%>
@@ -85,7 +85,7 @@
 <%
     } else {
 %>
-<body id="wizardpage">
+<body id="wizardpage" class="bandwidthtester">
 <%
     }
 %>
