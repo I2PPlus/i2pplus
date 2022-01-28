@@ -368,7 +368,7 @@ class EstablishmentManager {
                     byte[] keyBytes = addr.getIntroKey();
                     if (keyBytes == null) {
                         _transport.markUnreachable(toHash);
-                        _transport.failed(msg, "Peer has no key, cannot establish");
+                        _transport.failed(msg, "Peer has no key, cannot establish connection -> marking unreachable");
                         return;
                     }
                     SessionKey sessionKey;
@@ -376,7 +376,7 @@ class EstablishmentManager {
                         sessionKey = new SessionKey(keyBytes);
                     } catch (IllegalArgumentException iae) {
                         _transport.markUnreachable(toHash);
-                        _transport.failed(msg, "Peer has bad key, cannot establish");
+                        _transport.failed(msg, "Peer has bad key, cannot establish connection -> marking unreachable");
                         return;
                     }
                     boolean allowExtendedOptions = VersionComparator.comp(toRouterInfo.getVersion(),
@@ -459,7 +459,7 @@ class EstablishmentManager {
     void receiveSessionRequest(RemoteHostId from, UDPPacketReader reader) {
         if (!TransportUtil.isValidPort(from.getPort()) || !_transport.isValid(from.getIP())) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Receive session request from invalid: " + from);
+                _log.warn("Received invalid SessionRequest from: " + from);
             return;
         }
 
@@ -492,7 +492,7 @@ class EstablishmentManager {
 
                 if (_replayFilter.add(state.getReceivedX(), 0, 8)) {
                     if (_log.shouldLog(Log.WARN))
-                        _log.warn("Duplicate X in session request from: " + from);
+                        _log.warn("Duplicate X in SessionRequest from: " + from);
                     _context.statManager().addRateData("udp.dupDHX", 1);
                     return; // drop the packet
                 }
@@ -519,10 +519,10 @@ class EstablishmentManager {
                 // we got an IB even though we were firewalled, hidden, not high cap, etc.
             }
             if (_log.shouldLog(Log.INFO))
-                _log.info("Received NEW session request: " + state);
+                _log.info("Received NEW SessionRequest: " + state);
         } else {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Receive DUP session request from: " + state);
+                _log.debug("Receive duplicate SessionRequest from: " + state);
         }
 
         notifyActivity();
