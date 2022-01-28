@@ -1,10 +1,10 @@
 @import url(global.css);
 
-html {
+html#consolewizard {
   background: var(--vstripe) #000 !important;
 }
 
-body {
+body#wizardpage {
   background: none !important;
 }
 
