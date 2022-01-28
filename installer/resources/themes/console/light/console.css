@@ -210,7 +210,6 @@ pre {
 #sidebar hr {
   margin: 8px -7px;
   height: 1px;
-  color: #adadeb;
   border-bottom: 1px solid #afafcf;
   box-shadow: inset 0 1px 1px 1px #fff;
   background: #adadeb;
@@ -219,7 +218,6 @@ pre {
 #sidebar hr.b {
   margin-bottom: 5px;
   height: 0 !important;
-  color: #fff;
   border-bottom: 1px solid transparent;
   background: transparent;
 }
