@@ -568,7 +568,7 @@ class EstablishmentManager {
      */
     void receiveSessionDestroy(RemoteHostId from, PeerState state) {
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Receive session destroy (EST) from: " + from);
+            _log.debug("Received SessionDestroy on established connection from: " + from);
         _transport.dropPeer(state, false, "Received destroy message");
     }
 
@@ -578,7 +578,7 @@ class EstablishmentManager {
      */
     void receiveSessionDestroy(RemoteHostId from, OutboundEstablishState state) {
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Receive session destroy (OB) from: " + from);
+            _log.debug("Received Outbound SessionDestroy from: " + from);
         _outboundStates.remove(from);
         Hash peer = state.getRemoteIdentity().calculateHash();
         _transport.dropPeer(peer, false, "Received destroy message during OB establish");
@@ -593,7 +593,7 @@ class EstablishmentManager {
      */
     void receiveSessionDestroy(RemoteHostId from) {
         if (_log.shouldLog(Log.WARN))
-            _log.warn("Receive session destroy (none) from: " + from);
+            _log.warn("Received unauthenticated SessionDestroy from: " + from);
         //InboundEstablishState state = _inboundStates.remove(from);
         //if (state != null) {
         //    Hash peer = state.getConfirmedIdentity().calculateHash();
