@@ -636,7 +636,7 @@ class EstablishmentManager {
         //    _log.log(Log.CRIT, "Admitted " + admitted + " with " + remaining + " remaining queued and " + active + " active");
 
         if (_log.shouldDebug())
-            _log.debug("Outbound SSU connection successfully established" + state);
+            _log.debug("Outbound SSU connection successfully established\n* " + state);
         PeerState peer = handleCompletelyEstablished(state);
         notifyActivity();
         return peer;
@@ -729,8 +729,7 @@ class EstablishmentManager {
         //peer.setTheyRelayToUsAs(0);
 
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Handle completely established (inbound): " + state
-                       + " - " + peer.getRemotePeer());
+            _log.debug("Inbound SSU handle completely established to [" + peer.getRemotePeer().toBase64().substring(0,6) + "]\n*" + state);
 
         //if (true) // for now, only support direct
         //    peer.setRemoteRequiresIntroduction(false);
@@ -834,9 +833,7 @@ class EstablishmentManager {
         //peer.setWeRelayToThemAs(0);
 
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Handle completely established (outbound): " + state
-                       + " - " + peer.getRemotePeer());
-
+            _log.debug("Outbound SSU handle completely established to [" + peer.getRemotePeer().toBase64().substring(0,6) + "]\n* " + state);
 
         _transport.addRemotePeerState(peer);
         _transport.setIP(remote.calculateHash(), state.getSentIP());
