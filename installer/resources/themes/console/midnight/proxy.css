@@ -22,13 +22,8 @@
   --yes: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m55.87 8.64a4.32 4.32 0 0 0 -3.06 1.24 1.78 1.78 0 0 0 0 0l-30.85 30.84-10.76-10.76c-1.6-1.6-4.5-1.56-6.05.05l-4.02 4.16a1.78 1.78 0 0 0 0 0c-1.53 1.58-1.5 4.4.07 5.95l17.78 17.64c1.57 1.56 4.42 1.56 5.98-.01a1.78 1.78 0 0 0 0 0l37.86-37.85c1.57-1.57 1.57-4.43 0-6l-4-4.02a1.78 1.78 0 0 0 0 0 4.29 4.29 0 0 0 -2.93-1.24z' fill='%2371c837'/%3E%3C/svg%3E");
 }
 
-html, body {
-    min-height: 100%;
-}
-
 html {
     margin: 0;
-    scrollbar-color: #225 #001;
 }
 
 html {
@@ -220,7 +215,7 @@ button.go:active, button.accept:active {
   border-image: repeating-linear-gradient(135deg, #225, #225 19px, #000 20px, #770 20px, #770 39px, #000 40px, #225 40px) 5 repeat repeat;
   border-image-width: 5px;
   border-image-outset: 1px;
-  box-shadow: inset 0 0 0 1px #44175f, 0 0 0 3px #000, 0 0 0 6px #225, 0 0 0 7px #000;
+  box-shadow: inset 0 0 0 1px #44175f, 0 0 0 2px #000, 0 0 0 3px #4141a4, 0 0 0 4px #000, 0 0 0 6px #225, 0 0 0 7px #000;
   background: var(--itooplus) no-repeat, repeating-linear-gradient(180deg,#000 2px, #002 4px);
   background-size: auto 130px, 100% 4px;
   background-position: 30px calc(50% + 16px), center center;
