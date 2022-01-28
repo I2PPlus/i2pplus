@@ -112,3 +112,9 @@ body#wizardpage {
   padding: 0 !important;
   text-align: center !important;
 }
+
+@media screen and (min-width: 1500px) {
+  #wizardpage #sb_logo {
+    padding: 9px 10px 16px;
+  }
+}
