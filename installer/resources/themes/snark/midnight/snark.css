@@ -3723,7 +3723,8 @@ td.peerCount b a:not(:hover):not(:focus), td.peerCount b a:not(:hover):not(:focu
   text-shadow: 0 1px 1px #000;
 }
 
-.inactive.downloading td.peerCount b a:not(:hover):not(:focus), .inactive.downloading td.peerCount b a:not(:hover):not(:focus):visited {
+.inactive.downloading td.peerCount b a:not(:hover):not(:focus),
+.inactive.downloading td.peerCount b a:not(:hover):not(:focus):visited {
   color: #900;
   text-shadow: 0 1px 1px #990 !important;
 }
@@ -3801,8 +3802,8 @@ td.peerCount b a:hover .right {
   color: #fff !important;
 }
 
-.inactive td.peerCount b a:hover .left, td.peerCount b a:hover .right {
-  box-shadow: rgba(255,255,0,.5), inset 2px 2px 2px rgba(0,0,0,.3);
+.inactive td.peerCount b:hover a .left, .inactive td.peerCount b:hover a .right {
+  box-shadow: inset 0 0 0 1px rgba(255,255,0,.5), inset 2px 2px 2px rgba(0,0,0,.3);
   background: linear-gradient(180deg,rgba(128,128,0,.9), rgba(192,192,0,.9));
 }
 
@@ -3816,16 +3817,13 @@ td.peerCount b:not(:empty) {
 }
 
 td.peerCount b a {
+  color: #ccc !important;
+}
+
+td.peerCount b a:hover, td.peerCount b a:focus, td.peerCount b a:active {
   color: #fff !important;
 }
 
-td.peerCount b a:hover, td.peerCount b a:focus {
-  color: var(--hover) !important;
-}
-
-td.peerCount b a:active {
-  color: var(--active) !important;
-}
  /* end peer count */
 
  /* action buttons */
