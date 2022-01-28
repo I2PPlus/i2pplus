@@ -6,11 +6,24 @@
 @import url(global.css);
 @import url(../images/itooplus.css);
 
+html {
+  background: var(--vstripe), var(--camo), #000 !important;
+  background-size: 100% 4px, 2048px !important;
+}
+
+@supports not (-moz-appearance: none) {
+  html {
+    background: repeating-linear-gradient(180deg,#010 2px, #000 4px) #000 !important;
+    background-size: 100% 4px !important;
+  }
+}
+
 body {
   margin: 5px 0 0 0;
   padding: 0;
   text-align: center;
   font: 8.5pt/1.3 var(--bodyfont);
+  background: none !important;
 }
 
 @supports (text-justify: auto) { /* Firefox 55+ */
