@@ -1,6 +1,10 @@
 /* I2P+ Midight theme wizard specifics */
 /* Author: dr|z3d, 2022 */
 
+body {
+  height: calc(100% - 2px);
+}
+
 #wizardpage .routersummary img[src*="i2plogo"],
 #wizardpage .routersummary img[src*="i2plogo"]:hover,
 #wizardpage .routersummary img[src*="i2plogo"]:active {
@@ -8,6 +12,10 @@
   width: 189px;
   opacity: .7;
   filter: sepia(100%) hue-rotate(180deg);
+}
+
+#wizardpage #sidebar h3 {
+    padding: 9px 0 !important;
 }
 
 #wizardpage #messages {
@@ -82,4 +90,14 @@
 
 .bandwidthtester #wizard p + p {
   padding-top: 0;
+}
+
+@media screen and (min-width: 1500px) {
+  #wizardpage #sb_logo {
+    padding: 3px 10px 9px;
+  }
+  #wizardpage #sidebar h3 {
+    padding: 9px 0 6px !important;
+    font-size: 11pt;
+  }
 }
