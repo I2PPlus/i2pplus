@@ -538,10 +538,10 @@ class EstablishmentManager {
             state.receiveSessionConfirmed(reader.getSessionConfirmedReader());
             notifyActivity();
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Receive session confirmed from: " + state);
+                _log.debug("Received SessionConfirmed from: " + state);
         } else {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Receive (DUP?) session confirmed from: " + from);
+                _log.warn("Receive possible duplicate SessionConfirmed from: " + from);
         }
     }
 
@@ -555,10 +555,10 @@ class EstablishmentManager {
             state.receiveSessionCreated(reader.getSessionCreatedReader());
             notifyActivity();
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Receive session created from: " + state);
+                _log.debug("Received SessionCreated from: " + state);
         } else {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Receive (DUP?) session created from: " + from);
+                _log.warn("Receive possible duplicate SessionCreated from: " + from);
         }
     }
 
@@ -770,7 +770,7 @@ class EstablishmentManager {
     private void sendInboundComplete(PeerState peer) {
         // SimpleTimer.getInstance().addEvent(new PublishToNewInbound(peer), 10*1000);
         if (_log.shouldDebug())
-            _log.debug("Completing handshake with: " + peer);
+            _log.debug("Completing initial handshake with: " + peer);
         DeliveryStatusMessage dsm = new DeliveryStatusMessage(_context);
         dsm.setArrival(_networkID); // overloaded, sure, but future versions can check this
                                            // This causes huge values in the inNetPool.droppedDeliveryStatusDelay stat
@@ -927,7 +927,7 @@ class EstablishmentManager {
             _transport.send(packet);
         } else {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Unable to build a session request packet for " + state);
+                _log.warn("Unable to build a SessionRequest packet for: " + state);
         }
         state.requestSent();
     }
@@ -951,7 +951,7 @@ class EstablishmentManager {
         List<UDPPacket> requests = _builder.buildRelayRequest(_transport, this, state, _transport.getIntroKey());
         if (requests.isEmpty()) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("No valid introducers for " + state);
+                _log.warn("No valid introducers for: " + state);
             processExpired(state);
             return;
         }
@@ -959,7 +959,7 @@ class EstablishmentManager {
             _transport.send(req);
         }
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Send relay request for " + state + " with our intro key as " + _transport.getIntroKey());
+            _log.debug("Send relay request for: " + state + " with our intro key as " + _transport.getIntroKey());
         state.introSent();
     }
 
@@ -1114,7 +1114,7 @@ class EstablishmentManager {
         UDPPacket packet = _builder.buildSessionDestroyPacket(state);
         if (packet != null) {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Send destroy to: " + state);
+                _log.debug("Sent SessionDestroy to: " + state);
             _transport.send(packet);
         }
     }
@@ -1132,7 +1132,7 @@ class EstablishmentManager {
         UDPPacket packet = _builder.buildSessionDestroyPacket(state);
         if (packet != null) {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Send destroy to: " + state);
+                _log.debug("Sent SessionDestroy to: " + state);
             _transport.send(packet);
         }
     }
@@ -1215,7 +1215,7 @@ class EstablishmentManager {
                     if (remote != null) {
                         if (_context.banlist().isBanlistedForever(remote.calculateHash())) {
                             if (_log.shouldLog(Log.WARN))
-                                _log.warn("Dropping inbound connection from permanently banlisted peer: " + remote.calculateHash());
+                                _log.warn("Dropping Inbound connection from permanently banlisted peer: " + remote.calculateHash());
                             // So next time we will not accept the con, rather than doing the whole handshake
                             _context.blocklist().add(inboundState.getSentIP());
                             inboundState.fail();
@@ -1506,7 +1506,7 @@ class EstablishmentManager {
                 if (state.getLifetime() > 3*MAX_OB_ESTABLISH_TIME) {
                     iter.remove();
                     if (_log.shouldLog(Log.WARN))
-                        _log.warn("Failsafe remove LI " + state);
+                        _log.warn("Failsafe removal of LiveIntroduction: " + state);
                 }
             }
             for (Iterator<OutboundEstablishState> iter = _outboundByClaimedAddress.values().iterator(); iter.hasNext(); ) {
@@ -1514,7 +1514,7 @@ class EstablishmentManager {
                 if (state.getLifetime() > 3*MAX_OB_ESTABLISH_TIME) {
                     iter.remove();
                     if (_log.shouldLog(Log.WARN))
-                        _log.warn("Failsafe remove OBBCA " + state);
+                        _log.warn("Failsafe removal of OutboundByClaimedAddress: " + state);
                 }
             }
             for (Iterator<OutboundEstablishState> iter = _outboundByHash.values().iterator(); iter.hasNext(); ) {
@@ -1522,7 +1522,7 @@ class EstablishmentManager {
                 if (state.getLifetime() > 3*MAX_OB_ESTABLISH_TIME) {
                     iter.remove();
                     if (_log.shouldLog(Log.WARN))
-                        _log.warn("Failsafe remove OBBH " + state);
+                        _log.warn("Failsafe removal of OutboundByHash: " + state);
                 }
             }
         }
