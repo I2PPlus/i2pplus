@@ -770,7 +770,7 @@ class EstablishmentManager {
     private void sendInboundComplete(PeerState peer) {
         // SimpleTimer.getInstance().addEvent(new PublishToNewInbound(peer), 10*1000);
         if (_log.shouldDebug())
-            _log.debug("Completing handshake with peer after Inbound confirmation: " + peer);
+            _log.debug("Completing handshake with: " + peer);
         DeliveryStatusMessage dsm = new DeliveryStatusMessage(_context);
         dsm.setArrival(_networkID); // overloaded, sure, but future versions can check this
                                            // This causes huge values in the inNetPool.droppedDeliveryStatusDelay stat
