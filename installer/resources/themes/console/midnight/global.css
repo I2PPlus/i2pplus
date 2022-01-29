@@ -252,7 +252,7 @@ input[type=submit]:focus, input[type=reset]:focus, select:hover, select:focus,
   color: var(--a_hover);
   border: 1px solid var(--a_hover);
   box-shadow: var(--highlight), inset 0 0 2px 1px #757;
-  background: var(--btn_hover);
+  background: var(--btn_hover_radial), var(--btn_hover);
   cursor: pointer;
 }
 
@@ -349,8 +349,8 @@ select:hover, select:focus, select:active {
   color: var(--a_hover);
   text-shadow: 0 1px 1px #000;
   border: 1px solid var(--a_hover) !important;
-  background: var(--dropdown_hover) center right 10px no-repeat, var(--btn_hover) !important;
-  background-size: 10px auto, 100% !important;
+  background: var(--dropdown_hover) center right 10px no-repeat, var(--btn_hover_radial), var(--btn_hover) !important;
+  background-size: 10px auto, 100%, 100% !important;
 }
 
 select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active {
