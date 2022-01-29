@@ -1802,13 +1802,14 @@ img {
 .addtorrentsection td:first-child {
   padding-right: 5px;
   padding-left: 5px;
+  width: 120px;
   white-space: nowrap;
   font-weight: 700;
 }
 
-.newtorrentsection td:first-child,
-.addtorrentsection td:first-child {
-  width: 120px;
+.newtorrentsection td:nth-child(n+2),
+.addtorrentsection td:nth-child(n+2) {
+  text-align: left;
 }
 
 #trackerselect {

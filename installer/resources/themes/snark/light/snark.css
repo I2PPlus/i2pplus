@@ -1951,6 +1951,11 @@ form:last-child .configsectionpanel {
   color: var(--ink_light);
 }
 
+.newtorrentsection td:nth-child(n+2),
+.addtorrentsection td:nth-child(n+2) {
+  text-align: left;
+}
+
 /* new torrent -> tracker select */
 
 #trackerselect {

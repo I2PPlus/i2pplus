@@ -2138,10 +2138,16 @@ a:hover img, a:focus img {
   border: none;
 }
 
-.addtorrentsection td:first-child, .newtorrentsection td:first-child {
+.addtorrentsection td:first-child,
+.newtorrentsection td:first-child {
   width: 120px;
   text-align: right;
   font-weight: 700;
+}
+
+.newtorrentsection td:nth-child(n+2),
+.addtorrentsection td:nth-child(n+2) {
+  text-align: left;
 }
 
 .addtorrentsection tr:first-child td:last-child {
@@ -2149,7 +2155,6 @@ a:hover img, a:focus img {
 }
 
 .addtorrentsection input[type=text], .newtorrentsection input[type=text] {
-  width: 75%;
   width: calc(100% - 200px);
 }
 
@@ -2158,8 +2163,8 @@ a:hover img, a:focus img {
 }
 
 .snarkConfig tr:nth-last-child(2) td, .trackerconfig tr:nth-last-child(2) td {
-  border-top: var(--border_hard) !important;
   padding-top: 10px;
+  border-top: var(--border_hard) !important;
 }
 
 .configsectionpanel tr:nth-last-child(2) td:last-child {
@@ -2179,11 +2184,11 @@ a:hover img, a:focus img {
 }
 
 code, tt {
-  font-size: 8.5pt;
-  color: #313;
   padding: 0 1px;
-  font-weight: 700;
   font-family: var(--monospaced);
+  font-size: 8.5pt;
+  font-weight: 700;
+  color: #313;
   user-select: all;
 }
 
