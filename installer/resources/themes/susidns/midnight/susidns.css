@@ -70,7 +70,7 @@ div#navi  {
   text-transform: capitalize;
   text-shadow: 0 1px 1px #000;
   border: 1px solid #224;
-  border-radius: 2px;
+  border-radius: 1px;
   box-shadow: var(--highlight), inset 0 0 1px 0 #446;
   opacity: .7;
   filter: drop-shadow(0 0 1px #000);
@@ -96,7 +96,7 @@ div#navi  {
 
 #navi .abook:hover, #navi .abook:focus {
   box-shadow: inset 0 1px 1px 0 var(--ink);
-  background: var(--abook_hover) no-repeat 6px center / 14px, var(--nav_hover);
+  background: var(--abook_hover) no-repeat 6px center / 14px, var(--btn_hover_radial), var(--nav_hover);
 }
 
 #navi .abook:active {
@@ -110,7 +110,7 @@ div#navi  {
 
 #navi #subs:hover, #navi #subs:focus  {
   box-shadow: inset 0 1px 1px 0 var(--ink);
-  background: var(--subs_hover) no-repeat 6px center / 14px, var(--nav_hover);
+  background: var(--subs_hover) no-repeat 6px center / 14px, var(--btn_hover_radial), var(--nav_hover);
 }
 
 #navi #subs:active {
@@ -123,7 +123,7 @@ div#navi  {
 }
 
 #navi #configlink:hover, #navi #configlink:focus {
-  background: var(--configure_hover) no-repeat 6px center / 14px, var(--nav_hover);
+  background: var(--configure_hover) no-repeat 6px center / 14px, var(--btn_hover_radial), var(--nav_hover);
 }
 
 #navi #configlink:active {
@@ -137,7 +137,7 @@ div#navi  {
 
 #navi #overview:hover, #navi #overview:focus {
   box-shadow: inset 0 1px 1px 0 var(--ink);
-  background: var(--overview_hover) no-repeat 6px center / 14px, var(--nav_hover);
+  background: var(--overview_hover) no-repeat 6px center / 14px, var(--btn_hover_radial), var(--nav_hover);
 }
 
 #navi #overview:active {
