@@ -326,6 +326,10 @@ td {
   border-top: var(--border_inner) !important;
 }
 
+.mailListSubject {
+  text-align: left;
+}
+
 .list0:hover, .list1:hover, .list0:hover a, .list1:hover a {
   color: var(--a_hover);
   background: #1e0b28;
