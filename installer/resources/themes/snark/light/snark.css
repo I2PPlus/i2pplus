@@ -33,24 +33,6 @@ body:not(.iframed) .snarknavbar, body:not(.iframed) .page {
   box-shadow: 0 0 0 1px rgba(96,96,128,.7) !important;
 }
 
-/* preload top navigation mouseovers */
-body::before {
-  width: 0;
-  height: 0;
-  display: inline-block;
-  background: var(--snark_hover),
-  var(--snark_active),
-  var(--tracker_hover),
-  var(--tracker_active),
-  var(--forum_hover),
-  var(--forum_active),
-  var(--search_hover),
-  var(--search_active),
-  var(--offline);
-  background-size: 0;
-  content: "";
-}
-
 /* accelerate rendering */
 .snarkNav, .torrentName a, .snarkTorrents:hover .percentBarText, .toggleview {
   will-change: transform;
@@ -204,15 +186,6 @@ button::-moz-focus-inner, input::-moz-focus-inner {
 #top.snarknavbar a, #top.snarknavbar a:visited,
 .snarknavbar a, .snarknavbar a:visited {
   color: #559;
-}
-
-.snarkNav::before {
-  margin-bottom: -1px;
-  display: inline-block;
-  width: 100%;
-  height: 2px;
-  vertical-align: top;
-  content: "";
 }
 
 @supports not (-moz-appearance: none) {
@@ -640,12 +613,13 @@ th.graphicStatus {
 
 .torrentName {
   padding: 0 0 0 3px;
+  text-align: left;
 }
 
 .torrentName a, .snarkFileName a {
-  display: inline-block;
-  width: 100%;
   padding: 3px 0;
+  width: 100%;
+  display: inline-block;
 }
 
 .torrentName a:hover, .snarkFileName a:hover {

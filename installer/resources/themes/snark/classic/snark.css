@@ -41,16 +41,6 @@ body {
   background: var(--bg3) url(/themes/console/classic/images/bg0.png) repeat scroll center bottom / 120px;
 }
 
-/* preload top navigation mouseovers */
-body::before {
-  width: 0;
-  height: 0;
-  display: inline-block;
-  background: var(--snark_hover), var(--snark_active), var(--tracker_hover), var(--tracker_active),
-    var(--forum_hover), var(--forum_active), var(--search_hover), var(--search_active), var(--bg3);
-  content: "";
-}
-
 body.iframed {
   margin: 1px 0 !important;
 }
@@ -1268,6 +1258,7 @@ tr:nth-child(even) + .peerinfo:nth-child(odd) {
   padding: 3px 0;
   display: inline-block;
   width: 84px;
+  vertical-align: middle;
   white-space: nowrap;
   line-height: 1.2;
   font-weight: 400;
@@ -4224,5 +4215,3 @@ body, th, td, table a, input, input[type=text], input.r, input[name="nofilter_da
 @media screen and (min-width: 1600px) {
   .snarkMessages li, .snarkTorrents tt {font-size: 9pt !important}
 }
-
-/* end responsive layout */
