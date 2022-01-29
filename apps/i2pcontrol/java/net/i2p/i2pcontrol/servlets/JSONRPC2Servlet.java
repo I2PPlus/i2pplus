@@ -184,7 +184,7 @@ public class JSONRPC2Servlet extends HttpServlet {
     private static void setHeaders(HttpServletResponse resp) {
         resp.setContentType("text/html");
         resp.setHeader("X-Frame-Options", "SAMEORIGIN");
-        resp.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self'; script-src 'self'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; media-src 'none'");
+        resp.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self'; script-src 'self'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; media-src 'none'; require-trusted-types-for 'script'");
         resp.setHeader("X-XSS-Protection", "1; mode=block");
         resp.setHeader("X-Content-Type-Options", "nosniff");
         resp.setHeader("Pragma", "no-cache");

@@ -1014,6 +1014,7 @@ hr {
   display: inline-block;
   margin: 8px -2px 6px;
   padding: 3px 10px;
+  line-height: 1.1;
   color: #327bbf;
   border: 1px solid rgba(119, 120, 159, .3);
   border-radius: 25px;

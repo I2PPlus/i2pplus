@@ -55,8 +55,8 @@ public class ErrorServlet extends HttpServlet {
     private static final String DEFAULT_CSS = "console.css";
     private static final String PROXY_CSS = "proxy.css";
     /** to be added to head */
-    private final String _icoPath = BASE_THEME_PATH + '/' + DEFAULT_ICO;
-    private final String _proxyCSSPath = BASE_THEME_PATH + '/' + PROXY_CSS;
+    private final String _icoPath = BASE_THEME_PATH + DEFAULT_ICO;
+    private final String _proxyCSSPath = BASE_THEME_PATH + PROXY_CSS;
     private String _cssPath;
     /** for webapp translation */
     private String _webappName;
@@ -93,7 +93,7 @@ public class ErrorServlet extends HttpServlet {
         resp.setHeader("Pragma", "no-cache");
 //        resp.setHeader("Content-Security-Policy", "default-src 'self'; script-src 'none'");
         // add unsafe-inline script-src to allow iframe escape to function
-        resp.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self unsafe-inline'; form-action 'none'; frame-ancestors 'self'; object-src 'none'; media-src 'none'");
+        resp.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self unsafe-inline'; form-action 'none'; frame-ancestors 'self'; object-src 'none'; media-src 'none'; require-trusted-types-for 'script'");
         Integer ERROR_CODE = (Integer) req.getAttribute("javax.servlet.error.status_code");
         String ERROR_URI = (String) req.getAttribute("javax.servlet.error.request_uri");
         String ERROR_MESSAGE = (String) req.getAttribute("javax.servlet.error.message");
@@ -128,7 +128,7 @@ public class ErrorServlet extends HttpServlet {
         }
         resp.setContentType("text/html");
         PrintWriter out = resp.getWriter();
-        out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n");
+        out.println("<!DOCTYPE HTML>\n");
         out.print("<html>\n<head>\n<title>");
         if (errorCode == 404)
             out.print(_t("Error 404: Page Not Found").replace("Page", "Resource"));

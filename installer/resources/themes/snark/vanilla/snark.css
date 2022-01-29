@@ -18,6 +18,7 @@
   --btnAction_active: linear-gradient(180deg,#e1d8d1, #fff2e6);
   --border: 1px solid #463e39;
   --border_hard: 1px solid #6f533e;
+  --ink: #2f1500;
 }
 
 html {
@@ -30,7 +31,7 @@ html {
 
 body {
   font: 9pt var(--bodyfont);
-  color: #2f1500;
+  color: var(--ink);
 }
 
 body.iframed {
@@ -65,6 +66,11 @@ hr {
 ::-moz-selection {
   background: #800 !important;
   color: white;
+}
+
+input[type=text], input[type=password], textarea, select {
+  box-sizing: border-box;
+  line-height: 1.3;
 }
 
 input[type=submit], input[type="reset"], button, a:link, .optbox[type=checkbox], .optbox[type=radio], select, label {
@@ -116,7 +122,7 @@ a:active, a:visited:active, th a:active, th a:visited:active, td a:active, td a:
 }
 
 .toggleview, .configTitle, .snarknavbar, img, input[type=submit], .optbox[type=radio], .optbox[type=checkbox],
-label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
+label, th img, .newtorrentsection, #closelog, #pagenavbottom {
   user-select: none;
 }
 
@@ -390,7 +396,7 @@ label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
   opacity: .8;
 }
 
-#closeLog img:hover, #closeLog img:focus, #expand img:hover, #expand img:focus, #shrink img:hover, #shrink img:focus {
+#closelog img:hover, #closelog img:focus, #expand img:hover, #expand img:focus, #shrink img:hover, #shrink img:focus {
   opacity: 1;
   filter: none !important;
 }
@@ -635,6 +641,7 @@ th.peerCount {
 .torrentName {
   padding-left: 5px !important;
   line-height: 1.1;
+  text-align: left;
 }
 
 .trackerDetails, .torrentDetails, .commentDetails {
@@ -875,8 +882,9 @@ td:hover .percentBarText {
   to {background: linear-gradient(to left, #7f7 3px, rgba(0,0,0,0) 3px)}
 }
 
-.peerinfo td[colspan="4"], .debuginfo td[colspan="10"] {
+.peerdata, .debuginfo td[colspan="10"] {
   padding-left: 0;
+  text-align: left;
 }
 
 .fileIcon {
@@ -2876,10 +2884,11 @@ td .commentAuthorName {
 
 #configs th {
   padding: 4px 8px;
+  font-size: 9pt !important;
+  color: var(--ink);
   border: var(--border_hard);
   border-radius: 2px !important;
   background: linear-gradient(180deg,#efefef 51%, #cfc7c2 52%);
-  font-size: 9pt !important;
   filter: drop-shadow(0 0 1px #aaa);
 }
 
@@ -3747,7 +3756,7 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {
 
 /* comment indicator */
 
-.snarkFileType {
+.snarkFiletype {
   position: relative;
   vertical-align: middle;
 }

@@ -20,7 +20,6 @@ body {
 
 body.iframed {
   margin: 1px 0;
-  background: none !important;
 }
 
 body::before {
@@ -57,7 +56,7 @@ body, input, select, .snarkCommentInfo textarea, textarea[name="i2cpOpts"] {
 }
 
 .toggleview, .configTitle, .snarknavbar, img, input[type=submit], input[type=radio], input[type=checkbox],
-label, th img, .newtorrentsection, #closeLog, #pagenav {
+label, th img, .newtorrentsection, #closelog, #pagenav {
   user-select: none;
 }
 
@@ -1577,7 +1576,7 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
 }
 
 .iframed .configsectionpanel .configTitle {
-  margin: -1px 0 -14px !important;
+  margin: -1px 0 -16px !important;
   border-left: none !important;
   border-right: none !important;
 }
@@ -1690,6 +1689,11 @@ thead a:active img {
 
 .snarkTorrents td[colspan="10"] {
   white-space: normal;
+}
+
+input[type=text], input[type=password], textarea, select {
+  box-sizing: border-box;
+  line-height: 1.3;
 }
 
 input.r {
@@ -3773,7 +3777,7 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {
   box-shadow: var(--highlight), inset 0 0 1px 1px #252;
 }
 
-.snarkFileType {
+.snarkFiletype {
   position: relative;
   vertical-align: middle;
 }

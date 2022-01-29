@@ -224,6 +224,11 @@ input[type=submit]::-moz-focus-inner, input[type=reset]::-moz-focus-inner {
 	outline: none;
 }
 
+input[type=text], input[type=password], textarea, select {
+	box-sizing: border-box;
+	line-height: 1.3;
+}
+
 a.snarkNav:hover {
 	border: 1px solid var(--a);
 	position: relative;
@@ -1173,12 +1178,13 @@ tt {
 	border-bottom: var(--border);
 }
 
-#addtracker + .spacer + tr td {
+/*#addtracker + .spacer + tr td {
 	padding: 8px 0 !important;
-}
+}*/
 
-.knowntracker + .spacer, #addtracker ~ .spacer {
-	display: none;
+.knownTracker + .spacer, #addtracker ~ .spacer,
+.knownTracker + .spacer td, #addtracker ~ .spacer td {
+	display: none !important;
 }
 
 #addtracker td {
@@ -1203,7 +1209,17 @@ tt {
 }
 
 .trackerconfig .delete, .trackerconfig .reload {
+	margin: 7px 12px 6px -3px;
 	float: left;
+}
+
+.trackerconfig .add {
+	margin-right: -3px;
+}
+
+.trackerconfig input[type=submit] {
+	margin-top: 7px;
+	margin-bottom: 6px;
 }
 
 .trackerconfig .default {
@@ -2370,7 +2386,7 @@ tr:not(.peerinfo) .torrentUploaded:empty::after {
 
 /* comment indicator */
 
-.snarkFileType {
+.snarkFiletype {
 	position: relative;
 	vertical-align: middle;
 }
@@ -2697,7 +2713,7 @@ td.graphicStatus img {
 
 #configs .suboption a {
 	margin-top: 4px;
-	font-size: 70%;
+	font-size: 85%;
 	vertical-align: middle;
 }
 

@@ -2004,7 +2004,7 @@ public class WebMail extends HttpServlet
         httpRequest.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
         response.setHeader("X-Frame-Options", "SAMEORIGIN");
-                response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; media-src 'none'");
+                response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; media-src 'none'; require-trusted-types-for 'script';");
         response.setHeader("X-XSS-Protection", "1; mode=block");
         response.setHeader("X-Content-Type-Options", "nosniff");
         response.setHeader("Referrer-Policy", "no-referrer");
@@ -2323,7 +2323,7 @@ public class WebMail extends HttpServlet
                 /*
                  * write header
                  */
-                out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n<html>\n" +
+                out.println("<!DOCTYPE HTML>\n<html>\n" +
                     "<head>\n" +
                     "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n" +
                     "<title>" + _t("I2PMail") + " - " + subtitle + "</title>\n" +

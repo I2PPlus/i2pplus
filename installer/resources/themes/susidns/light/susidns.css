@@ -1410,8 +1410,10 @@ input.reload:hover, input.reload:focus {
 }
 
 input.search[type=submit] {
+  margin-left: 4px;
   padding: 5px;
   width: 44px;
+  vertical-align: middle;
   color: transparent;
   text-shadow: none;
   background: var(--search) no-repeat center center / 14px, linear-gradient(180deg,#fff, #efefff);
@@ -1432,6 +1434,7 @@ input.search[type=submit]:hover, input.search[type=submit]:focus {
 input.search[type=text] {
   margin: 1px 0 0;
   padding: 5px 5px 5px 26px !important;
+  vertical-align: middle;
   background: #fbfbff var(--search) no-repeat 6px center / 14px;
   background-blend-mode: luminosity;
 }

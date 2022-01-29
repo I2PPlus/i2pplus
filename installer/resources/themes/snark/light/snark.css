@@ -117,7 +117,7 @@ b {
 }
 
 .toggleview, .configTitle, .snarknavbar, img, input[type=submit], input[type=radio], input[type=checkbox],
-label, th img, .newtorrentsection, #closeLog, #expand, #shrink, #pagenavbottom, #configs {
+label, th img, .newtorrentsection, #closelog, #expand, #shrink, #pagenavbottom, #configs {
   user-select: none;
 }
 
@@ -402,7 +402,7 @@ button::-moz-focus-inner, input::-moz-focus-inner {
   display: none;
 }
 
-#closeLog img, #expand img, #shrink img {
+#closelog img, #expand img, #shrink img {
   margin: 0;
   padding: 3px;
   width: 12px;
@@ -415,19 +415,19 @@ button::-moz-focus-inner, input::-moz-focus-inner {
   margin-right: -1px !important;
 }
 
-#closeLog img:hover, #expand img:hover, #shrink img:hover {
+#closelog img:hover, #expand img:hover, #shrink img:hover {
   border: 1px solid #77b;
   background: #fff;
   opacity: 1;
 }
 
-#closeLog, #expand, #shrink {
+#closelog, #expand, #shrink {
   margin: 0;
   padding: 0;
   z-index: 999;
 }
 
-#closeLog {
+#closelog {
   margin-right: -2px;
 }
 
@@ -3671,7 +3671,7 @@ tfoot .RateDown::after, tfoot .RateUp::after {
 
 /* comment indicator */
 
-.snarkFileType {
+.snarkFiletype {
   position: relative;
   vertical-align: middle;
 }

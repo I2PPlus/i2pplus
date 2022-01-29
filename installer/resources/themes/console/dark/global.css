@@ -77,7 +77,8 @@ body {
 }
 
 body.iframed {
-  background: none !important;
+  background: var(--vstripe) #000 !important;
+  background-size: 100% 4px !important;
 }
 
 pre, textarea, .widescroll {
@@ -190,11 +191,15 @@ input, select, button {
   font-weight: 700;
 }
 
+input[type=text], input[type=password], textarea {
+  box-sizing: border-box;
+}
+
 input[type=submit], input[type=reset], button, .control, select, .fakebutton {
   line-height: 1.2;
 }
 
-input[type=submit], input[type=reset], button, .control, .fakebutton {
+input[type=submit], input[type=reset], button, .control, .fakebutton, .fakebutton:visited {
   margin: 5px;
   padding: 7px 12px;
   min-width: 110px;

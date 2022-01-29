@@ -293,7 +293,7 @@ tr, .navbar, .mainsection, .lowersection {
   color: var(--hover) !important;
 }
 
-#closeLog, #expand, #shrink {
+#closelog, #expand, #shrink {
   float: right;
   position: sticky !important;
   top: 0 !important;
@@ -303,18 +303,18 @@ tr, .navbar, .mainsection, .lowersection {
   margin-top: -4px !important;
 }
 
-#closeLog img, #expand img, #shrink img {
+#closelog img, #expand img, #shrink img {
   width: 12px;
   padding: 3px;
   background: var(--bg);
   opacity: .7 !important;
 }
 
-#closeLog img:hover, #closeLog img:focus, #expand img:hover, #expand img:focus, #shrink img:hover, #shrink img:focus {
+#closelog img:hover, #closelog img:focus, #expand img:hover, #expand img:focus, #shrink img:hover, #shrink img:focus {
   opacity: 1 !important;
 }
 
-#closeLog img, #closeLog img:hover, #expand img, #expand img:hover, #shrink img, #shrink img:hover {
+#closelog img, #closelog img:hover, #expand img, #expand img:hover, #shrink img, #shrink img:hover {
   margin: -3px -6px 4px 5px !important;
   opacity: 1;
   border: var(--border_main);
@@ -2609,6 +2609,7 @@ td.commentAuthor .commentAuthorName {
   padding: 5px 10px 6px;
   display: inline-block;
   min-width: 160px !important;
+  line-height: 1.3;
   color: #47597f;
   text-align: right;
   border-radius: 15px 5px 5px 15px;
@@ -3467,7 +3468,7 @@ th #nameRequired, th .commentAuthorName {
 
 /* comment indicator */
 
-.snarkFileType {
+.snarkFiletype {
   position: relative;
   vertical-align: middle;
 }
