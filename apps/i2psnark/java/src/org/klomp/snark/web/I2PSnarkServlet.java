@@ -516,7 +516,7 @@ public class I2PSnarkServlet extends BasicServlet {
             if (!_manager.util().connected())
                 out.write(" init");
              out.write("\" tabindex=\"0\">\n" +
-                      "<a id=\"closeLog\" href=\"" + _contextPath + '/');
+                      "<a id=\"closelog\" href=\"" + _contextPath + '/');
             if (isConfigure)
                 out.write("configure");
             if (peerString.length() > 0)
@@ -2935,7 +2935,7 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write(_t("Switch to Fullscreen Mode"));
             out.write("</a>");
         }
-        out.write("</th></tr>\n<tr><td>\n<div class=\"optionList\">\n");
+        out.write("</th></tr>\n<tr><td>\n<div class=\"optionlist\">\n");
 
         out.write("<span class=\"configOption\"><b>");
         out.write(_t("Theme"));
@@ -3543,7 +3543,7 @@ public class I2PSnarkServlet extends BasicServlet {
         return escaped;
     }
 
-    private static final String DOCTYPE = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n";
+    private static final String DOCTYPE = "<!DOCTYPE HTML>\n";
     private static final String HEADER_A = "<link href=\"";
     private static final String HEADER_B = "snark.css?" + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\" >";
     private static final String HEADER_C = "nocollapse.css?" + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\" >";

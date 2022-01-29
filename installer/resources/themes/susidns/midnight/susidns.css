@@ -829,10 +829,6 @@ div#add {
   margin-top: -10px !important
 }
 
-.iframed div#import {
-  margin-bottom: -2px;
-}
-
 #add td:first-child, #import td:first-child {
   width: 1%;
   min-width: 120px;

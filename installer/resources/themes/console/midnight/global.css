@@ -14,7 +14,7 @@
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
   --border: 1px solid #26235c;
   --border_btn: 1px solid #26225c;
-  --border_inner: 1px solid rgba(38,35,92,.7);
+  --border_inner: 1px solid #1e1c4a;
   --border_input: #27235c;
   --border_soft: 1px solid #100e25;
   --btn_active: linear-gradient(180deg,#401856,#501f6c);
@@ -140,6 +140,7 @@ label {
 
 input[type=text], input[type=password], textarea {
   padding: 6px 8px;
+  box-sizing: border-box;
   color: var(--a) !important;
   border: 1px solid #27235c !important;
   box-shadow: var(--highlight), 0 0 0 1px #000;

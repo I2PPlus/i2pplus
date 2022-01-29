@@ -4,10 +4,6 @@
 
 @import url(global.css);
 
-html, body {
-  min-height: 100%;
-}
-
 body {
   margin: 3px;
   padding: 0;
@@ -1696,7 +1692,20 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
   background: var(--bg);
 }
 
+div[id^="config_"].main {
+  padding-bottom: 20px;
+}
+
+#config_service, #config_peers, #config_reseed {
+  padding-bottom: 9px;
+}
+
+#config_tunnels {
+  padding-bottom: 24px;
+}
+
 .main#dns, .main#webmail, .main#torrents, .main#tunnelmgr {
+  line-height: 0;
   will-change: unset !important;
 }
 
@@ -3728,7 +3737,7 @@ div.app:hover a, .app:hover .applabel a {
 
 .applabel {
   margin: 0;
-  padding: 3px 2px 5px;
+  padding: 3px 2px;
   width: 136px;
   line-height: 1.1;
   white-space: nowrap;
@@ -8240,8 +8249,9 @@ b.suboption {
 
 #installPluginUrl table, #installPluginUrl tr, #installPluginUrl td,
 #installPluginFile table, #installPluginFile tr, #installPluginFile td,
-#createNewfamily table, #createNewfamily tr, #createNewfamily td,
-#joinfamily table, #joinfamily tr:nth-child(n+3), #joinfamily tr:nth-child(n+3) td, #joinfamily tr:nth-child(n+3) table tr {
+#createNewFamily table, #createNewFamily tr, #createNewFamily td,
+#joinfamily table, #joinfamily tr:nth-child(n+3), #joinfamily tr:nth-child(n+3) td,
+#joinfamily tr:nth-child(n+3) table tr {
   margin: 0;
   background: none !important;
   border: none !important;
@@ -8819,6 +8829,7 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel{
 }
 
 .sitemapLabel {
+  margin: 0 0 -4px;
   padding: 4px 0;
   display: inline-block;
   overflow: hidden;
@@ -10906,7 +10917,7 @@ body, .main, .main td, .news p, #news p, .tab, .tab2, .main li b, .joblog li, .t
     padding: 10px 60px 9px;
   }
   .applabel {
-    padding: 2px 2px 4px !important;
+    padding: 2px !important;
     width: 156px !important;
   }
   .applabel a {

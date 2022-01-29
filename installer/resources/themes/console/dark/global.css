@@ -190,6 +190,10 @@ input, select, button {
   font-weight: 700;
 }
 
+input[type=text], input[type=password], textarea {
+  box-sizing: border-box;
+}
+
 input[type=submit], input[type=reset], button, .control, select, .fakebutton {
   line-height: 1.2;
 }

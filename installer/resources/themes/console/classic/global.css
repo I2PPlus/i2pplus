@@ -60,6 +60,10 @@
   --visited: #6b6b94;
 }
 
+html, body {
+  min-height: 100%;
+}
+
 html {
   scrollbar-color: var(--scroll) var(--bodybg);
 }
@@ -158,6 +162,10 @@ label:hover {
 
 button, input, select {
   color: var(--ink_light);
+}
+
+input[type=text], input[type=password], textarea {
+  box-sizing: border-box;
 }
 
 textarea {

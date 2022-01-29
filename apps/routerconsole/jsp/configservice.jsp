@@ -3,7 +3,7 @@
 <jsp:useBean class="net.i2p.router.web.CSSHelper" id="tester" scope="request" />
 <jsp:setProperty name="tester" property="contextId" value="<%=(String)session.getAttribute(\"i2p.contextId\")%>" />
 <% boolean embedApps = tester.embedApps(); %>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE HTML>
 <%
     net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
     String lang = "en";

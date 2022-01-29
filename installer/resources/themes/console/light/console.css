@@ -5,10 +5,6 @@
 @import url(global.css);
 @import url(../images/itooplus.css);
 
-html, body {
-  min-height: 100%;
-}
-
 html {
   margin: 0 !important;
 }
@@ -1183,8 +1179,28 @@ p:empty + .sb_notice {
   padding-bottom: 13px;
 }
 
-.main[id^="config_"] {
-  padding-bottom: 5px !important;
+div[id^="config_"].main {
+  padding-bottom: 16px;
+}
+
+#config_logging {
+  padding-bottom: 18px;
+}
+
+#config_service, #config_reseed {
+  padding-bottom: 9px;
+}
+
+#config_webapps, #config_network, #config_keyring, #config_i2cp, #config_bandwidth {
+  padding-bottom: 11px;
+}
+
+ #config_ui, #config_update, #config_family, #config_peers, #config_advanced {
+  padding-bottom: 5px;
+}
+
+.main#dns, .main#webmail, .main#torrents, .main#tunnelmgr {
+  line-height: 0;
 }
 
 .main#console {
@@ -3188,7 +3204,7 @@ div.app img {
 
 .applabel {
   margin: 0;
-  padding: 4px 6px;
+  padding: 4px 6px 1px;
   width: 148px;
   white-space: nowrap;
   overflow: hidden;
@@ -3303,7 +3319,7 @@ div.app img, .sitemapLink img {
   top: 5px;
   right: 5px;
   font-size: 0 !important;
-  height: 28px;
+  height: 29px;
   width: 36px;
   min-width: 0;
   border: none;
@@ -9433,6 +9449,10 @@ b.suboption {
   background: #fafaff !important;
 }
 
+#create td {
+  border-bottom: 1px solid var(--border_inner);
+}
+
 #netconfig tr:nth-last-child(3) .optionlist {
   margin-bottom: -1px;
 }
@@ -9880,9 +9900,13 @@ b.suboption {
   padding: 5px 5px 0 45px;
 }
 
+#installPluginUrl {
+  margin-bottom: 9px;
+}
+
 #installPluginUrl table, #installPluginUrl tr, #installPluginUrl td,
 #installPluginFile table, #installPluginFile tr, #installPluginFile td,
-#createNewfamily table, #createNewfamily tr, #createNewfamily td,
+#createNewFamily table, #createNewFamily tr, #createNewFamily td,
 #joinfamily table, #joinfamily tr:nth-child(n+3), #joinfamily tr:nth-child(n+3) td, #joinfamily tr:nth-child(n+3) table tr {
   border: none !important;
   box-shadow: none !important;
@@ -10294,6 +10318,7 @@ h1.webapp {
 }
 
 .sitemapLabel {
+  margin-bottom: -3px;
   padding: 4px 0;
   display: inline-block;
   white-space: nowrap;
@@ -12237,8 +12262,7 @@ iframe {
   #config_service h3 {margin-bottom: -15px}
   #iptransport a {padding-top: 6px}
   #advancedconfig a, #reseedsetup a {padding-top: 7px}
-  #config_service h3 {line-height: 18px}
-  #searchbar select {padding-top: 5px !important}
+  #config_service h3 {padding-left: 12px; line-height: 24px}
   #sb_localtunnels a {max-width: 188px}
   .sb_update b {font-size: 9pt !important}
   .sb_notice {font-size: 9pt}

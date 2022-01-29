@@ -2370,7 +2370,7 @@ tr:not(.peerinfo) .torrentUploaded:empty::after {
 
 /* comment indicator */
 
-.snarkFileType {
+.snarkFiletype {
 	position: relative;
 	vertical-align: middle;
 }

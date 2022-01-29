@@ -92,7 +92,7 @@ input[class="check"] { /* nudge "check for updates" button into alignment on /co
 /* buttons */
 
 input.accept[value^="Unban"] {
-  padding: 5px 9px 5px 25px !important;
+  padding: 6px 9px 6px 25px !important;
   background: var(--unban) no-repeat 8px center / 14px, var(--btn) !important;
 }
 
@@ -101,12 +101,12 @@ input.accept[value^="Unban"]:hover, input.accept[value^="Unban"]:focus {
 }
 
 input.accept[value^="Unban"]:active {
-  padding: 5px 9px 5px 25px !important;
+  padding: 6px 9px 6px 25px !important;
   background: var(--unban) no-repeat 8px center / 14px, var(--btn_active) !important;
 }
 
 input.accept[value^="Create"] {
-  padding: 5px 9px 5px 25px !important;
+  padding: 6px 9px 6px 25px !important;
   background: var(--add) no-repeat 8px center / 11px, var(--btn) !important;
 }
 
@@ -119,7 +119,7 @@ input.accept[value^="Create"]:active {
 }
 
 input.accept[value^="Filter"] {
-  padding: 5px 9px 5px 25px !important;
+  padding: 6px 9px 6px 25px !important;
   background: var(--filter) no-repeat 8px center / 14px, var(--btn) !important;
 }
 
@@ -128,7 +128,7 @@ input.accept[value^="Filter"]:hover, input.accept[value^="Filter"]:focus {
 }
 
 input.add, button.add {
-  padding: 5px 9px 5px 22px !important;
+  padding: 6px 9px 6px 22px !important;
   background: var(--add) no-repeat 8px center / 10px, var(--btn) !important;
 }
 
@@ -142,7 +142,7 @@ input.add:active, button.add:active {
 }
 
 input.add[value^="Adjust"] {
-  padding: 5px 9px 5px 25px !important;
+  padding: 6px 9px 6px 25px !important;
   background: var(--edit) no-repeat 8px center / 14px, var(--btn) !important;
 }
 
@@ -151,12 +151,12 @@ input.add[value^="Adjust"]:hover, input.add[value^="Adjust"]:focus {
 }
 
 input.add[value^="Adjust"]:active {
-  padding: 5px 9px 5px 25px !important;
+  padding: 6px 9px 6px 25px !important;
   background: var(--edit) no-repeat 8px center / 14px, var(--btn_active) !important;
 }
 
 input.accept[value^="Show"], input.check[value^="View"], input.showconsole {
-  padding: 5px 9px 5px 25px !important;
+  padding: 6px 9px 6px 25px !important;
   background: var(--eye) no-repeat 8px center / 14px, var(--btn) !important;
 }
 
@@ -167,12 +167,12 @@ input.showconsole:hover, input.showconsole:focus {
 }
 
 input.accept[value^="Show"]:active, input.check[value^="View"]:active, input.showconsole:active {
-  padding: 5px 9px 5px 25px !important;
+  padding: 6px 9px 6px 25px !important;
   background: var(--eye) no-repeat 8px center / 14px, var(--btn_active) !important;
 }
 
 input.accept, button.accept {
-  padding: 5px 9px 5px 25px !important;
+  padding: 6px 9px 6px 25px !important;
   background: var(--yes) no-repeat 8px center / 12px, var(--btn) !important;
 }
 
@@ -181,12 +181,12 @@ input.accept:hover, input.accept:focus {
 }
 
 input.accept:active {
-  padding: 5px 9px 5px 25px !important;
+  padding: 6px 9px 6px 25px !important;
   background: var(--yes) no-repeat 8px center / 12px, var(--btn_active) !important;
 }
 
 input.cancel {
-  padding: 5px 9px 5px 25px !important;
+  padding: 6px 9px 6px 25px !important;
   background: var(--no) no-repeat 10px center / 10px, var(--btn) !important;
 }
 
@@ -199,7 +199,7 @@ input.cancel:active {
 }
 
 input.cancel[value^="Hide"], input.delete[value^="Do not view"], input.hideconsole {
-  padding: 5px 9px 5px 25px !important;
+  padding: 6px 9px 6px 25px !important;
   background: var(--hide) no-repeat 8px center / 14px, var(--btn) !important;
 }
 
@@ -211,12 +211,12 @@ input.hideconsole:hover, input.hideconsole:focus {
 
 input.cancel[value^="Hide"]:active, input.delete[value^="Do not view"]:active,
 input.hideconsole:active {
-  padding: 5px 9px 5px 25px !important;
+  padding: 6px 9px 6px 25px !important;
   background: var(--hide) no-repeat 8px center / 14px, var(--btn_active) !important;
 }
 
 input.check {
-  padding: 5px 9px 5px 25px !important;
+  padding: 6px 9px 6px 25px !important;
   background: var(--yes) no-repeat 8px center / 14px, var(--btn) !important;
 }
 
@@ -225,12 +225,12 @@ input.check:hover, input.check:focus {
 }
 
 input.check:active {
-  padding: 5px 9px 5px 27px !important;
+  padding: 6px 9px 6px 27px !important;
   background: var(--yes) no-repeat 8px center / 14px, var(--btn_active) !important;
 }
 
 input.check[value$="updates"] {
-  padding: 5px 9px 5px 27px !important;
+  padding: 6px 9px 6px 27px !important;
   background: var(--refresh) no-repeat 8px center / 16px, var(--btn) !important;
 }
 
@@ -240,13 +240,13 @@ input.check[value$="updates"]:hover, input.check[value$="updates"]:focus {
 }
 
 input.check[value$="updates"]:active {
-  padding: 5px 9px 5px 27px !important;
+  padding: 6px 9px 6px 27px !important;
   background: var(--refresh_active) no-repeat 8px center / 16px, var(--btn_active) !important;
   background-blend-mode: luminosity !important;
 }
 
 input.delete, button.delete {
-  padding: 5px 9px 5px 25px !important;
+  padding: 6px 9px 6px 25px !important;
   background: var(--nuke) no-repeat 8px center / 14px, var(--btn) !important;
 }
 
@@ -255,13 +255,13 @@ input.delete:hover, input.delete:focus {
 }
 
 input.delete:active {
-  padding: 5px 9px 5px 25px !important;
+  padding: 6px 9px 6px 25px !important;
   background: var(--nuke) no-repeat 8px center / 14px, var(--btn_active) !important;
   background-blend-mode: luminosity;
 }
 
 input.delete[value^="Ban"] {
-  padding: 5px 9px 5px 25px !important;
+  padding: 6px 9px 6px 25px !important;
   background: var(--doban) no-repeat 8px center / 14px, var(--btn) !important;
 }
 
@@ -270,12 +270,12 @@ input.delete[value^="Ban"]:hover, input.delete[value^="Ban"]:focus {
 }
 
 input.delete[value^="Ban"]:active {
-  padding: 5px 9px 5px 25px !important;
+  padding: 6px 9px 6px 25px !important;
   background: var(--doban) no-repeat 8px center / 14px, var(--btn_active) !important;
 }
 
 input.download {
-  padding: 5px 9px 5px 25px !important;
+  padding: 6px 9px 6px 25px !important;
   background: var(--download) no-repeat 8px center / 14px, var(--btn) !important;
 }
 
@@ -284,12 +284,12 @@ input.download:hover, input.download:focus {
 }
 
 input.download:active {
-  padding: 5px 9px 5px 25px !important;
+  padding: 6px 9px 6px 25px !important;
   background: var(--download) no-repeat 8px center / 14px, var(--btn_active) !important;
 }
 
 input.download[value^="Join"] {
-  padding: 5px 9px 5px 27px !important;
+  padding: 6px 9px 6px 27px !important;
   background: var(--family) no-repeat 8px center / 14px, var(--btn) !important;
 }
 
@@ -302,7 +302,7 @@ input.download[value^="Join"]:active {
 }
 
 input.download[value$="from File"], input.download[value$="from file"] {
-  padding: 5px 9px 5px 25px !important;
+  padding: 6px 9px 6px 25px !important;
   background: var(--package) no-repeat 8px center / 14px, var(--btn) !important;
 }
 
@@ -312,27 +312,27 @@ input.download[value$="from file"]:hover, input.download[value$="from file"]:foc
 }
 
 input.download[value$="from file"]:active, input.download[value$="from File"]:active {
-  padding: 5px 9px 5px 25px !important;
+  padding: 6px 9px 6px 25px !important;
   background: var(--package) no-repeat 8px center / 14px, var(--btn_active) !important;
 }
 
 input.download[value^="Dump"] {
-  padding: 5px 9px 5px 25px !important;
+  padding: 6px 9px 6px 25px !important;
   background: var(--bug) no-repeat 8px center / 14px, var(--btn) !important;
 }
 
 input.download[value^="Dump"]:hover, input.download[value^="Dump"]:focus {
-  padding: 5px 9px 5px 25px !important;
+  padding: 6px 9px 6px 25px !important;
   background: var(--bug) no-repeat 8px center / 14px, var(--btn_hover) !important;
 }
 
 input.download[value^="Dump"]:active {
-  padding: 5px 9px 5px 25px !important;
+  padding: 6px 9px 6px 25px !important;
   background: var(--bug) no-repeat 8px center / 14px, var(--btn_active) !important;
 }
 
 input.go, input[value="GO"] {
-  padding: 5px 9px 5px 25px !important;
+  padding: 6px 9px 6px 25px !important;
   background: var(--go) no-repeat 8px center / 14px, var(--btn) !important;
 }
 
@@ -342,12 +342,12 @@ input.go:focus, input[value="GO"]:focus {
 }
 
 input.go:active, input[value="GO"]:active {
-  padding: 5px 9px 5px 25px !important;
+  padding: 6px 9px 6px 25px !important;
   background: var(--go) no-repeat 8px center / 14px, var(--btn_active) !important;
 }
 
 input.go[value^="Create"] {
-  padding: 5px 9px 5px 25px !important;
+  padding: 6px 9px 6px 25px !important;
   background: var(--wizard) no-repeat 8px center / 15px, var(--btn) !important;
 }
 
@@ -356,12 +356,12 @@ input.go[value^="Create"]:hover, input.go[value^="Create"]:focus {
 }
 
 input.go[value^="Create"]:active {
-  padding: 5px 9px 5px 25px !important;
+  padding: 6px 9px 6px 25px !important;
   background: var(--wizard) no-repeat 8px center / 15px, var(--btn_active) !important;
 }
 
 input.back {
-  padding: 5px 7px 5px 23px !important;
+  padding: 6px 7px 6px 23px !important;
   background: var(--back) no-repeat 6px center / 14px, var(--btn) !important;
 }
 
@@ -370,7 +370,7 @@ input.back:hover, input.back:focus {
 }
 
 input.reload {
-  padding: 5px 9px 5px 25px !important;
+  padding: 6px 9px 6px 25px !important;
   background: var(--reset) no-repeat 8px center / 14px, var(--btn) !important;
 }
 
@@ -379,12 +379,12 @@ input.reload:hover, input.reload:focus {
 }
 
 input.reload:active {
-  padding: 5px 9px 5px 25px !important;
+  padding: 6px 9px 6px 25px !important;
   background: var(--reset_active) no-repeat 8px center / 14px, var(--btn_active) !important;
 }
 
 input.reload[value$="restart"] {
-  padding: 5px 9px 5px 25px !important;
+  padding: 6px 9px 6px 25px !important;
   background: var(--restart) no-repeat 8px center / 12px, var(--btn) !important;
 }
 
@@ -394,12 +394,12 @@ input.reload[value$="restart"]:hover, input.reload[value$="restart"]:focus {
 }
 
 input.reload[value$="restart"]:active {
-  padding: 5px 9px 5px 25px !important;
+  padding: 6px 9px 6px 25px !important;
   background: var(--restart_hover) no-repeat 8px center / 12px, var(--btn_active) !important;
 }
 
 input.reload[value^="Update"] {
-  padding: 5px 9px 5px 25px !important;
+  padding: 6px 9px 6px 25px !important;
   background: var(--refresh) no-repeat 8px center / 14px, var(--btn) !important;
 }
 
@@ -408,12 +408,12 @@ input.reload[value^="Update"]:hover, input.reload[value^="Update"]:focus {
 }
 
 input.reload[value^="Update"]:active {
-  padding: 5px 9px 5px 25px !important;
+  padding: 6px 9px 6px 25px !important;
   background: var(--refresh_hover) no-repeat 8px center / 14px, var(--btn_active) !important;
 }
 
 input.reload[value="Force GC"], input.reload[value="Force garbage collection"] {
-  padding: 5px 9px 5px 25px !important;
+  padding: 6px 9px 6px 25px !important;
   background: var(--recycle) no-repeat 8px center / 13px, var(--btn) !important;
 }
 
@@ -425,23 +425,23 @@ input.reload[value="Force garbage collection"]:focus {
 
 input.reload[value="Force garbage collection"]:active,
 input.reload[value="Force garbage collection"]:active {
-  padding: 5px 9px 5px 25px !important;
+  padding: 6px 9px 6px 25px !important;
   background: var(--recycle) no-repeat 8px center / 13px, var(--btn_active) !important;
 }
 
 input.stop, button.stop {
-  padding: 5px 9px 5px 25px !important;
+  padding: 6px 9px 6px 25px !important;
   background: var(--shutdown) no-repeat 8px center / 13px, var(--btn) !important;
 }
 
 input.stop:hover, input.stop:focus {
-  padding: 5px 9px 5px 25px !important;
+  padding: 6px 9px 6px 25px !important;
   background: var(--shutdown_hover) no-repeat 8px center / 13px, var(--btn_hover) !important;
   background-blend-mode: normal;
 }
 
 input.stop:active {
-  padding: 5px 9px 5px 25px !important;
+  padding: 6px 9px 6px 25px !important;
   background: var(--shutdown_hover) no-repeat 8px center / 13px, var(--btn_active) !important;
 }
 
@@ -596,7 +596,7 @@ button.download.control:active {
 }
 
 .routersummary .cancel {
-  padding: 5px 9px 5px 25px !important;
+  padding: 6px 9px 6px 25px !important;
   background: var(--no) no-repeat 10px center / 10px, var(--btn_sidebar) !important;
 }
 
@@ -661,7 +661,7 @@ button.download.control:active {
 }
 
 .routersummary .download, .routersummary .download:hover, .routersummary .download:focus, .routersummary .download:active {
-  padding: 5px 9px 5px 25px !important;
+  padding: 6px 9px 6px 25px !important;
   background-size: 15px, 100% !important;
   background-position: 7px center !important;
 }
@@ -776,7 +776,6 @@ pre {
   position: relative;
   z-index: 20;
   height: 2px;
-  color: #26235c;
   border-bottom: var(--border_inner);
   box-shadow: inset 0 1px 0 2px #000;
   background: #26235c;
@@ -1773,7 +1772,7 @@ div.sorry hr {
 
 .main {
   margin: -1px 3px 5px 212px;
-  padding: 0 10px 1px 10px;
+  padding: 0 10px;
   width: auto;
   min-width: 620px;
   text-align: left;
@@ -1781,6 +1780,18 @@ div.sorry hr {
   color: var(--ink);
   border: 1px solid #26235c;
   box-shadow: var(--highlight), inset 0 0 2px 1px #26235c;
+}
+
+div[id^="config_"].main {
+  padding-bottom: 14px;
+}
+
+#config_service {
+  padding-bottom: 0;
+}
+
+#config_ui, #netdb {
+  padding-bottom: 3px;
 }
 
 .news {
@@ -2549,7 +2560,7 @@ th {
   border-top: var(--border_inner);
   border-bottom: var(--border_inner);
   background: var(--th);
-  background-size: 4px 100%, 100%;
+  background-size: 100% 4px, 4px 100%;
 }
 
 tr {
@@ -4756,12 +4767,20 @@ table#externali2cp {
 /* /config_plugins */
 
 #plugininstall2 {
-  margin-top: -15px;
-  margin-bottom: 15px !important;
+  margin: 1px auto 15px;
+  width: 100%;
 }
 
-#plugininstall2 td {
-  padding: 5px;
+#plugininstall td, #plugininstall2 td {
+  padding: 5px 5px 8px;
+}
+
+#plugininstall td {
+  padding-bottom: 5px;
+}
+
+@media screen and (min-width: 1500px) {
+  #plugininstall2 td {padding-bottom: 12px !important}
 }
 
 #pluginconfig table td:first-child {
@@ -5042,6 +5061,10 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 
 /* netdb (main section) */
 
+#netdb #pagenav ~ #pagenav {
+  display: none;
+}
+
 #netdboverview {
   margin: -4px auto 8px;
   background: repeating-linear-gradient(180deg,rgba(0,0,0,.7) 2px, rgba(0,0,16,.5) 4px);
@@ -5187,7 +5210,7 @@ table[cellspacing="30"] > tbody > tr > th[colspan="3"] { /* netdb header */
 /* Advanced lookup */
 
 #netdblookup {
-  margin-bottom: -4px;
+  margin-bottom: 8px;
 }
 
 #netdblookup th {
@@ -5235,7 +5258,7 @@ table[cellspacing="30"] > tbody > tr > th[colspan="3"] { /* netdb header */
 }
 
 #netdblookup tr:nth-last-child(n+3) input[type=text] {
-  width: calc(100% - 15px) !important;
+  width: calc(100% - 30px) !important;
 }
 
 #netdb .tabletitle {
@@ -6142,7 +6165,7 @@ table#jardump {
 
 .main#certs textarea {
   margin: -1px 0 -3px 0;
-  width: 100%;
+  width: calc(100% - 18px);
   border: var(--border_inner) !important;
 }
 
@@ -6192,6 +6215,10 @@ table#jardump {
 #routerinfo td:nth-child(2):not([colspan]) {
   white-space: nowrap;
   border-right: 1px inset #225;
+}
+
+.main#torrents, .main#tunnelmgr, .main#webmail, .main#dns {
+  line-height: 0;
 }
 
 .main#webmail {
@@ -6713,7 +6740,7 @@ div.app:active img {
 
 .applabel {
   margin: -4px 0 0;
-  padding: 5px 2px 6px;
+  padding: 3px 2px 4px;
   width: 150px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -6764,6 +6791,7 @@ div.app:hover .applabel {
 }
 
 #searchbar span {
+  margin: 0 0 -5px 0;
   display: inline-block;
   position: relative;
   overflow: hidden;
@@ -6771,9 +6799,10 @@ div.app:hover .applabel {
 }
 
 #searchbar table {
-  margin: 15px auto 0;
+  margin: 14px auto 12px;
   width: auto;
   border-collapse: separate;
+  border-spacing: 3px;
   border: 1px solid #26235c;
   background: #000;
   box-shadow: var(--highlight), inset 0 0 2px 1px #26235c;
@@ -6896,12 +6925,7 @@ iframe.iframed {
 
 #susidnsframe {
   margin-top: -2px;
-}
-
-/* Fixes for when app is not started and console error loads inside iframe */
-
-body.iframed {
-  background: transparent !important;
+  margin-bottom: 8px;
 }
 
 .iframed .routersummaryouter {
@@ -6915,8 +6939,6 @@ body.iframed {
 .iframed div.sorry {
   margin: -1px 5px 10px 5px !important;
 }
-
-/* end iframed console fixes */
 
 /* global overrides */
 
@@ -7339,8 +7361,8 @@ p.sybil_info + a[name] + .sybil_routerinfo, p.hashdist + a[name] + .sybil_router
 }
 
 textarea#advancedsettings {
-  margin: 0 !important;
-  width: 100%;
+  margin: 1px 1px -3px 1px !important;
+  width: calc(100% - 2px);
   resize: none;
   overflow-x: hidden;
   white-space: pre-wrap;
@@ -8885,13 +8907,14 @@ h3#shutdownrouter {
 }
 
 #i2pupdates textarea, #i2pupdates input[type=text] {
-  width: calc(100% - 216px) !important;
-  min-width: 0 !important;
   margin: 5px 5px 5px 10px !important;
+  width: calc(100% - 215px) !important;
+  min-width: 0 !important;
 }
 
 #i2pupdates textarea {
-  margin: 8px 5px 8px 10px !important;
+  margin: 6px 6px 8px 10px !important;
+  width: calc(100% - 216px) !important;
   height: 76px !important;
   min-height: 32px !important;
 }
@@ -8956,7 +8979,7 @@ h3#shutdownrouter {
   max-height: 90px !important;
   min-height: 90px !important;
   margin: 7px 6px !important;
-  width: calc(100% - 12px);
+  width: calc(100% - 29px);
 }
 
 #reseedproxytype {
@@ -8972,7 +8995,7 @@ h3#shutdownrouter {
 #reseed_urlselection label, #reseedproxytype label {
   margin: 1px -1px 1px 0;
   padding: 4px 10px;
-  min-width: 150px !important;
+  min-width: 120px !important;
   width: calc(100% - 20px);
   background: #001 !important;
 }
@@ -9341,8 +9364,9 @@ tr:nth-child(4) .net_bwrate::before {
 
 #installPluginUrl table, #installPluginUrl tr, #installPluginUrl td,
 #installPluginFile table, #installPluginFile tr, #installPluginFile td,
-#createNewfamily table, #createNewfamily tr, #createNewfamily td,
-#joinfamily table, #joinfamily tr:nth-child(n+3), #joinfamily tr:nth-child(n+3) td, #joinfamily tr:nth-child(n+3) table tr {
+#createNewFamily table, #createNewFamily tr, #createNewFamily td,
+#joinfamily table, #joinfamily tr:nth-child(n+3), #joinfamily tr:nth-child(n+3) td,
+#joinfamily tr:nth-child(n+3) table tr {
   margin: 0;
   border: none !important;
   box-shadow: none !important;
@@ -9362,7 +9386,7 @@ tr:nth-child(4) .net_bwrate::before {
 }
 
 #installPluginUrl input[type=text], #installPluginFile input[type="file"], #config_family input[type=text], #config_family input[type="file"] {
-  width: 100%;
+  width: calc(100% - 10px);
 }
 
 #installPluginFile, #installPluginUrl {
@@ -9370,12 +9394,14 @@ tr:nth-child(4) .net_bwrate::before {
   background: var(--panel);
 }
 
-#config_reseed form, #installPluginUrl form, #installPluginFile form, #newFamily form, #joinfamily form {
+#config_reseed form, #installPluginUrl form, #installPluginFile form,
+#newFamily form, #joinfamily form {
   margin: 0 !important;
   padding: 0 !important;
 }
 
-#installPluginFile td:last-child, #installPluginUrl td:last-child, #newfamily table td:last-child, #joinfamily table td:last-child {
+#installPluginFile td:last-child, #installPluginUrl td:last-child,
+#newfamily table td:last-child, #joinfamily table td:last-child {
   padding: 10px 5px 10px 10px;
   width: 1%;
   white-space: nowrap;
@@ -9420,6 +9446,10 @@ tr:nth-child(4) .net_bwrate::before {
   box-shadow: var(--highlight), inset 0 0 2px 1px #191939 !important;
   background: var(--key) no-repeat 10px center, var(--panel) !important;
   background-size: 28px, 100%, 100% !important;
+}
+
+#createNewFamily table, #createNewFamily tr, #createNewFamily td {
+  border: none !important;
 }
 
 #tunnelconfig th {
@@ -10542,6 +10572,7 @@ a:hover .sitemapLink {
 }
 
 .sitemapLabel {
+  margin-bottom: -4px;
   padding: 6px 4px 8px;
   display: inline-block;
   box-sizing: border-box;
@@ -12246,6 +12277,7 @@ iframe {
 }
 
 @media screen and (max-width: 1499px) {
+  #searchbar span {margin: 0 0 -4px 0}
   .sitemapLink, .sitemapLabel, #sitemap div.app, #sitemap .applabel {
     width: 160px !important;
     min-width: 160px !important;

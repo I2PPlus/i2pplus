@@ -128,7 +128,7 @@ public class ErrorServlet extends HttpServlet {
         }
         resp.setContentType("text/html");
         PrintWriter out = resp.getWriter();
-        out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n");
+        out.println("<!DOCTYPE HTML>\n");
         out.print("<html>\n<head>\n<title>");
         if (errorCode == 404)
             out.print(_t("Error 404: Page Not Found").replace("Page", "Resource"));

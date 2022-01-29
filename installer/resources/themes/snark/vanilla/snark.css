@@ -116,7 +116,7 @@ a:active, a:visited:active, th a:active, th a:visited:active, td a:active, td a:
 }
 
 .toggleview, .configTitle, .snarknavbar, img, input[type=submit], .optbox[type=radio], .optbox[type=checkbox],
-label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
+label, th img, .newtorrentsection, #closelog, #pagenavbottom {
   user-select: none;
 }
 
@@ -390,7 +390,7 @@ label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
   opacity: .8;
 }
 
-#closeLog img:hover, #closeLog img:focus, #expand img:hover, #expand img:focus, #shrink img:hover, #shrink img:focus {
+#closelog img:hover, #closelog img:focus, #expand img:hover, #expand img:focus, #shrink img:hover, #shrink img:focus {
   opacity: 1;
   filter: none !important;
 }
@@ -3747,7 +3747,7 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {
 
 /* comment indicator */
 
-.snarkFileType {
+.snarkFiletype {
   position: relative;
   vertical-align: middle;
 }

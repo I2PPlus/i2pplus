@@ -183,7 +183,7 @@ pre {
 #sb_logo {
   width: 100%;
   margin: -8px 0 -9px -10px;
-  padding: 8px 10px 9px;
+  padding: 9px 10px 10px;
   display: inline-block;
   border-radius: 3px 3px 0 0;
   box-shadow: var(--highlight), inset 0 0 0 2px rgba(32,80,32,.3);
@@ -207,8 +207,7 @@ pre {
 }
 
 .routersummary img[src$="i2plogo.png"] {
-  margin-top: -3px;
-  margin-left: -6px;
+  margin: -3px 0 -8px -6px;
   width: 206px;
   height: auto;
   filter: saturate(.5);
@@ -642,7 +641,7 @@ div.refresh {
 
 /* status bar */
 
-.percentBarouter {
+.percentBarOuter {
   margin: -3px 0 -5px -7px;
   width: 205px;
   position: relative;
@@ -653,7 +652,7 @@ div.refresh {
   opacity: 1;
 }
 
-.percentBarouter:hover .percentBarText {
+.percentBarOuter:hover .percentBarText {
   opacity: 1;
   transition: ease opacity .2s;
 }
@@ -932,8 +931,24 @@ h1 + .sorry, #console_404 .sorry {
   contain: layout paint;
 }
 
+div[id^="config_"].main {
+  padding-bottom: 14px;
+}
+
+#config_service {
+  padding-bottom: 0;
+}
+
+#config_ui {
+  padding-bottom: 3px;
+}
+
+#netdb {
+  padding-bottom: 1px;
+}
+
 .main#dns {
-  padding: 0 0 3px;
+  padding: 0 0 12px;
   min-width: 650px !important;
 }
 
@@ -941,10 +956,6 @@ h1 + .sorry, #console_404 .sorry {
   margin-top: -1px;
   padding: 0;
   background: #000 !important;
-}
-
-.main#torrents {
-  padding-bottom: 2px;
 }
 
 .main#tunnelmgr {
@@ -3978,7 +3989,7 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 }
 
 #config_service a[href$="#alternative_browser"] img {
-  opacity: 0
+  display: none;
 }
 
 #config_service a[href$="#alternative_browser"]::after, h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after {
@@ -4039,6 +4050,7 @@ h3#servicedebug a, h3#graphinfo a {
 
 #tunnels td > * {
   vertical-align: middle;
+  line-height: 1.2;
 }
 
 #tunnels .cells {
@@ -5592,7 +5604,7 @@ div.appgroup {
 }
 
 #searchbar span {
-  margin: 5px;
+  margin: 5px 5px 0;
   padding: 1px;
   display: inline-block;
   position: relative;
@@ -5609,7 +5621,7 @@ div.appgroup {
 }
 
 #searchbar table {
-  margin: 15px auto 0;
+  margin: 15px auto 13px;
   width: auto;
   border-radius: 0 0 3px 3px;
   border-collapse: separate;
@@ -5789,7 +5801,7 @@ div.app:hover .applabel, .sitemapLink:hover .sitemapLabel,
 
 .applabel {
   margin: 2px 0 0;
-  padding: 4px 2px;
+  padding: 3px 2px 2px;
   width: 155px;
   line-height: 1.2;
   vertical-align: bottom;
@@ -5865,6 +5877,7 @@ iframe {
   min-height: 4px;
   position: relative;
   overflow: hidden;
+  line-height: 0;
 }
 
 #tunnelmgr::before, #torrents::before, #webmail::before, #dns::before {
@@ -6150,13 +6163,13 @@ span#distance {
 }
 
 .addtobook a::after {
-  margin: -8px -4px -8px;
+  margin: -14px -4px -8px;
   padding-left: 6px;
   width: 24px;
   height: 26px;
   display: inline-block;
   vertical-align: middle;
-  border-left: var(--border);
+  border-left: var(--border_soft);
   background: var(--ahelp) var(--center) / 14px;
   content: "";
 }
@@ -7490,7 +7503,8 @@ h4#sb_shutdownstatus span {
 .tunnel_local {
   margin-left: -4px;
   margin-right: 4px;
-  padding: 3px 0 2px;
+  padding: 4px 0 2px;
+  line-height: 1.25;
   font-size: 8pt;
   text-transform: lowercase;
   text-align: center;
@@ -7658,6 +7672,10 @@ th code {
   -webkit-column-break-inside: avoid;
   break-inside: avoid;
   page-break-inside: avoid;
+}
+
+.leasesets_container table:last-child {
+  margin-bottom: 0;
 }
 
 .netdb_addresses {
@@ -8410,8 +8428,9 @@ th.options, #externali2cp th {
 .routerid {
   margin: 0;
   padding: 1px 2px;
-  display: inline-block;
   min-width: 64px;
+  display: inline-block;
+  vertical-align: middle;
   overflow: hidden;
   text-align: center;
   box-shadow: var(--outline);
@@ -8853,19 +8872,19 @@ b.suboption {
 }
 
 #config_service form {
-  columns: 500px 2;
-  column-gap: 10px;
+  margin: -15px -4px 12px;
   vertical-align: top;
-  margin: -15px -4px 8px;
+  columns: 500px 2;
+  column-gap: 4px;
 }
 
 .service_container {
-  margin-bottom: -6px;
-  width: 100%;
+  margin: 0 2px -10px;
+  width: calc(100% - 4px);
   display: inline-block;
+  -webkit-column-break-inside: avoid;
   break-inside: avoid;
   page-break-inside: avoid !important;
-  -webkit-column-break-inside: avoid;
   will-change: transform;
 }
 
@@ -9271,7 +9290,7 @@ input[type=file] {
 
 #installPluginUrl table, #installPluginUrl tr, #installPluginUrl td,
 #installPluginFile table, #installPluginFile tr, #installPluginFile td,
-#createNewfamily table, #createNewfamily tr, #createNewfamily td,
+#createNewFamily table, #createNewFamily tr, #createNewFamily td,
 #joinfamily table, #joinfamily tr:nth-child(n+3), #joinfamily tr:nth-child(n+3) td, #joinfamily tr:nth-child(n+3) table tr {
   margin: 0;
   border: none !important;
@@ -11437,6 +11456,7 @@ h2#jobrunners {
 }
 
 .sitemapLabel {
+  margin: 0 0 -4px;
   padding: 6px 4px 8px;
   display: inline-block;
   line-height: 1.05;
@@ -13358,7 +13378,7 @@ body.iframed {
   .sb_info.sb_update {
     padding: 5px 5px 6px !important;
   }
-  .percentBarouter {
+  .percentBarOuter {
     width: 251px !important;
   }
   #stacktrace p:first-of-type::first-line {
@@ -13434,7 +13454,7 @@ body.iframed {
     padding-right: 0 !important;
   }
   .addtobook a::after {
-    margin: -8px -6px -8px 0;
+    margin: -14px -6px -6px 0;
     padding-left: 0;
     padding-left: 8px;
     width: 24px;
@@ -13489,7 +13509,7 @@ body.iframed {
     min-width: 77px !important;
   }
   .tunnel_cap {
-    padding: 2px 2px 1px !important;
+    padding: 3px 2px 2px !important;
     min-width: 18px;
   }
   .tunnel_id {
@@ -13506,7 +13526,7 @@ body.iframed {
     margin-left: 1px !important;
   }
   #tunnels img[src^="/flags.jsp?"], #profiles img[src^="/flags.jsp?"], #peers img[src^="/flags.jsp?"] {
-    margin: -2px -2px 0 !important;
+    margin: -3px -1px 0 !important;
     width: auto !important;
     height: 14px !important;
     display: inline-block;
@@ -13583,7 +13603,6 @@ body.iframed {
     padding: 10px 53px 38px !important;
   }
   .applabel {
-    padding: 4px 2px !important;
     width: 140px !important;
   }
   .applabel a {
@@ -13628,8 +13647,7 @@ body.iframed {
     height: 44px !important;
   }
   .routersummary img[src$="i2plogo.png"] {
-    margin-top: -3px;
-    margin-left: -4px;
+    margin: -3px 0 -8px -4px;
     width: 248px !important;
     transform: none;
   }
@@ -13765,7 +13783,7 @@ body.iframed {
   }
   .tunnel_id {
     margin: 0 5px;
-    padding: 2px 4px 2px 6px;
+    padding: 3px 4px 2px 6px;
     min-width: 96px;
     display: inline-block;
     vertical-align: middle;

@@ -4,7 +4,7 @@
 <%
     String now = String.valueOf(net.i2p.I2PAppContext.getGlobalContext().clock().now());
 %>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE HTML>
 <%
     net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
     String lang = "en";
