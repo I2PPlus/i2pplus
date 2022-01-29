@@ -55,8 +55,8 @@ public class ErrorServlet extends HttpServlet {
     private static final String DEFAULT_CSS = "console.css";
     private static final String PROXY_CSS = "proxy.css";
     /** to be added to head */
-    private final String _icoPath = BASE_THEME_PATH + '/' + DEFAULT_ICO;
-    private final String _proxyCSSPath = BASE_THEME_PATH + '/' + PROXY_CSS;
+    private final String _icoPath = BASE_THEME_PATH + DEFAULT_ICO;
+    private final String _proxyCSSPath = BASE_THEME_PATH + PROXY_CSS;
     private String _cssPath;
     /** for webapp translation */
     private String _webappName;
