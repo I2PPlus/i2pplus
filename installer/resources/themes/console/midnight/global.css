@@ -36,7 +36,7 @@
   --panel: linear-gradient(180deg,#080818,#040410);
   --radial_glow_top: radial-gradient(at center -50px, rgba(96, 0, 96, .4), rgba(0, 0, 0, 0) 85%);
   --row: linear-gradient(180deg,#040414,#010010);
-  --th: repeating-linear-gradient(90deg, rgba(0,0,64,.4) 2px, #000 4px), var(--titlebg) repeat center center / 100%, #001;
+  --th: repeating-linear-gradient(180deg, rgba(0,0,48,.5) 2px, rgba(0,0,16,.9) 4px) left center / 4px 100%, repeating-linear-gradient(90deg, #000018 2px, #000 4px) left center / 100% 4px;
   --titlebg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 2'%3E%3Cpath fill='%23000018' d='M0 0h1v1H0z'/%3E%3Cpath d='M0 1h1v1H0z'/%3E%3C/svg%3E");
   --title: repeating-linear-gradient(90deg, rgba(0,0,48,.4) 2px, #000 4px), var(--titlebg) repeat center center / 100%, #001;
 }

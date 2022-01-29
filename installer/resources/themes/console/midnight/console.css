@@ -2068,8 +2068,8 @@ div.confignav {
   font-weight: 700 !important;
   border: 1px solid #26235c;
   box-shadow: var(--highlight);
-  background: var(--th) !important;
-  background-size: 4px 100%, 100% !important;
+  background: linear-gradient(to bottom, rgba(0,0,64,.15), rgba(0,0,48,.15) 50%, rgba(0,0,32,.15) 50%, rgba(0,0,16,.15)), var(--th) !important;
+  background-size: 100%, 100% 4px, 4px 100% !important;
 }
 
 .tab, .tab2 {
@@ -11073,9 +11073,8 @@ h1.newspage {
 }
 
 h1[class], h1 {
-  padding-left: 56px;
-  background-size: 38px auto, 4px 100%, 100%, 100% !important;
-  background-blend-mode: difference, normal, exclusion, normal;
+  padding-left: 62px;
+  background-size: 38px auto !important;
 }
 
 h1::first-letter {
@@ -12360,7 +12359,7 @@ iframe {
   #chooselang img, #configbandwidth img {margin-top: 0}
   h1[class], h1 {
     padding-left: 50px;
-    background-size: 32px auto, 4px 100%, 100%, 100%, 164px 164px !important;
+    background-size: 32px auto, 4px 100%, 100% 4px !important;
   }
   .main h3 a {line-height: 1}
   #config_bandwidth .h3navlinks a {
