@@ -10328,6 +10328,12 @@ h1.webapp {
   border-top: 1px solid #999adf;
 }
 
+@supports not (-moz-appearance: none) {
+ .sitemapLabel {
+   padding-bottom: 2px;
+ }
+}
+
 .sitemapLink img {
   padding: 12px 10px 10px;
   height: 32px;
