@@ -3749,6 +3749,12 @@ div.app:hover a, .app:hover .applabel a {
   border-top: 1px solid var(--border);
 }
 
+@supports not (-moz-appearance: none) {
+ .applabel {
+   padding-bottom: 1px;
+ }
+}
+
 .applabel a {
   margin: 0;
   padding: 1px;
@@ -8840,6 +8846,12 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel{
   border-top: 1px solid var(--border);
 }
 
+@supports not (-moz-appearance: none) {
+ .sitemapLabel {
+   padding-bottom: 2px;
+ }
+}
+
 .sitemapLink img {
   padding: 12px 10px 10px;
   height: 32px;
@@ -10923,6 +10935,11 @@ body, .main, .main td, .news p, #news p, .tab, .tab2, .main li b, .joblog li, .t
   .applabel a {
     padding-top: 3px;
     height: 16px !important;
+  }
+  @supports not (-moz-appearance: none) {
+    .applabel {
+      height: 20px !important;
+    }
   }
   .footnote {
     font-size: 8pt !important;
