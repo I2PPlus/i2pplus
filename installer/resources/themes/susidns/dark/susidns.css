@@ -215,7 +215,7 @@ hr {
 }
 
 #booksearch {
-  padding: 5px;
+  padding: 5px 5px 17px;
   text-align: center;
 }
 
@@ -903,7 +903,7 @@ input {
 
 input[type=submit], input[type=reset], .fakebutton {
   margin: 5px 2px;
-  padding: 7px 12px !important;
+  padding: 8px 12px !important;
   min-width: 92px !important;
 }
 
@@ -927,7 +927,6 @@ input.update {
 
 input[type=text] {
   padding: 7px !important;
-  font-size: 110%;
 }
 
 textarea, #subslog pre {
@@ -961,7 +960,7 @@ textarea:focus {
 }
 
 #booksearch input[name=search] {
-  padding: 6px 8px 6px 32px !important;
+  padding: 7px 8px 7px 32px !important;
   min-width: 280px !important;
   background: #000 var(--search) no-repeat 9px center / 14px;
   background-size: 14px !important;
