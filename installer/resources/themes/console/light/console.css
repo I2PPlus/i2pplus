@@ -1422,11 +1422,11 @@ td.tabletextarea {
   padding-bottom: 3px !important;
 }
 
-#newsdisplay, #graphopts {
+#newsDisplay, #graphopts {
   color: transparent;
 }
 
-#newsdisplay a, #graphopts a, #routerinfo a, #fullhistory a, #routerinformation tr:nth-child(n+2) a:not(#revision), .graphstat {
+#newsDisplay a, #graphopts a, #routerinfo a, #fullhistory a, #routerinformation tr:nth-child(n+2) a:not(#revision), .graphstat {
   margin-left: -3px;
   padding: 2px 10px;
   border: 1px solid var(--a);
@@ -1434,7 +1434,7 @@ td.tabletextarea {
   background: #f8f8ff;
 }
 
-#newsdisplay a:hover, #newsdisplay a:focus, #routerinfo a:hover, .graphstat:hover, .graphstat:focus,
+#newsDisplay a:hover, #newsDisplay a:focus, #routerinfo a:hover, .graphstat:hover, .graphstat:focus,
 #graphopts a:hover, #graphopts a:visited:hover, #graphopts a:focus, #graphopts a:visited:focus,
 #fullhistory a:hover, #fullhistory a:focus, #fullhistory a:visited:hover, #fullhistory a:visited:focus,
 #routerinformation tr:nth-child(n+2) a:not(#revision):hover, #routerinformation tr:nth-child(n+2) a:focus {
@@ -1442,11 +1442,11 @@ td.tabletextarea {
   background: linear-gradient(180deg,#f8f8ff 50%, #e2e2ff 50%);
 }
 
-#newsdisplay a:focus, #graphopts a:focus, #graphopts a:visited:focus, #routerinformation tr:nth-child(n+2) a:focus, .graphstat:focus {
+#newsDisplay a:focus, #graphopts a:focus, #graphopts a:visited:focus, #routerinformation tr:nth-child(n+2) a:focus, .graphstat:focus {
   border: 1px solid #f60;
 }
 
-#newsdisplay a:active, #graphopts a:active, #graphopts a:visited:active, #fullhistory a:active, .graphstat:active,
+#newsDisplay a:active, #graphopts a:active, #graphopts a:visited:active, #fullhistory a:active, .graphstat:active,
 #routerinformation tr:nth-child(n+2) a:active {
   box-shadow: inset 3px 3px 3px rgba(41,61,95,.8);
   color: #559 !important;
