@@ -773,7 +773,7 @@ input.delete {
 
 #dologin tr:last-child a:hover {
   color: var(--a_hover);
-  box-shadow: var(--highlight), 0 0 0 1px var(--a_hover);
+  box-shadow: var(--highlight), var(--btn_hover_radial), 0 0 0 1px var(--a_hover);
   background: var(--btn_hover);
   transition: ease all .2s;
 }
@@ -1002,13 +1002,18 @@ div#bottombuttons { /* config page button positioning */
 
 /* illustrated buttons inc */
 
+input[type=submit], input[type=reset], .fakebutton, select {
+  line-height: 1.3;
+}
+
 input[type=submit][class], input[type=reset][class],
 input[type=submit][class]:hover, input[type=reset][class]:hover,
 input[type=submit][class]:focus, input[type=reset][class]:focus,
 #settings, #settings:hover, #settings:focus, #pageRefresh, #pageRefresh:hover, #pageRefresh:focus,
 .pagenav input[type=submit], .pagenav input[type=submit]:hover, .pagenav input[type=submit]:focus,
 .pagenav input[type=submit]:disabled, .pagenav input[type=submit]:hover:disabled, .pagenav input[type=submit]:focus:disabled {
-  background-size: 14px, 100% !important;
+  display: inline-block;
+  background-size: 14px, 100%, 100% !important;
 }
 
 input.cancel, input.cancel.beforePopup, #nukemail input.clearselection {
@@ -1027,7 +1032,7 @@ input.clearselection {
 }
 
 input.clearselection:hover, input.clearselection:focus {
-  background: url(../images/none.png) no-repeat 9px center, var(--btn_hover);
+  background: url(../images/none.png) no-repeat 9px center, var(--btn_hover_radial), var(--btn_hover);
 }
 
 input.delete, input.delete_attachment, input.really_delete {
@@ -1037,7 +1042,7 @@ input.delete, input.delete_attachment, input.really_delete {
 
 input.delete:hover, input.delete_attachment:hover, input.really_delete:hover,
 input.delete:focus, input.delete_attachment:focus, input.really_delete:focus {
-  background: var(--delete_hover) no-repeat 9px center / 14px, var(--btn_hover);
+  background: var(--delete_hover) no-repeat 9px center / 14px, var(--btn_hover_radial), var(--btn_hover);
 }
 
 input.download {
@@ -1046,7 +1051,7 @@ input.download {
 }
 
 input.download:hover, input.download:focus {
-  background: var(--download_hover) no-repeat 9px center, var(--btn_hover);
+  background: var(--download_hover) no-repeat 9px center, var(--btn_hover_radial), var(--btn_hover);
 }
 
 input.offline {
@@ -1055,7 +1060,7 @@ input.offline {
 }
 
 input.offline:hover, input.offline:focus {
-  background: var(--offline_hover) no-repeat 9px center, var(--btn_hover);
+  background: var(--offline_hover) no-repeat 9px center, var(--btn_hover_radial), var(--btn_hover);
 }
 
 input.list, input.moveto, input.switchto {
@@ -1065,7 +1070,7 @@ input.list, input.moveto, input.switchto {
 
 input.list:hover, input.list:focus, input.moveto:hover, input.switchto:hover,
 input.switchto:focus, input.moveto:focus, input.switchto:focus   {
-  background: var(--folder_hover) no-repeat 9px center, var(--btn_hover);
+  background: var(--folder_hover) no-repeat 9px center, var(--btn_hover_radial), var(--btn_hover);
 }
 
 input.forward {
@@ -1074,7 +1079,7 @@ input.forward {
 }
 
 input.forward:hover, input.forward:focus {
-  background: var(--forward_hover) no-repeat 9px center, var(--btn_hover);
+  background: var(--forward_hover) no-repeat 9px center, var(--btn_hover_radial), var(--btn_hover);
 }
 
 input.login {
@@ -1083,7 +1088,7 @@ input.login {
 }
 
 input.login:hover, input.login:focus {
-  background: var(--login_hover) no-repeat 9px center, var(--btn_hover);
+  background: var(--login_hover) no-repeat 9px center, var(--btn_hover_radial), var(--btn_hover);
 }
 
 input.logout {
@@ -1103,7 +1108,7 @@ input.reload, input.refresh, .fakebutton {
 input.reload:hover, input.refresh:hover,
 input.reload:focus, input.refresh:focus,
 .fakebutton:hover, .fakebutton:focus {
-  background: var(--refresh_hover) no-repeat 9px center, var(--btn_hover);
+  background: var(--refresh_hover) no-repeat 9px center, var(--btn_hover_radial), var(--btn_hover);
 }
 
 input.invertselection {
@@ -1112,7 +1117,7 @@ input.invertselection {
 }
 
 input.invertselection:hover, input.invertselection:focus {
-  background: url(../images/selection.png) no-repeat 9px center, var(--btn_hover);
+  background: url(../images/selection.png) no-repeat 9px center, var(--btn_hover_radial), var(--btn_hover);
 }
 
 input.show {
@@ -1121,7 +1126,7 @@ input.show {
 }
 
 input.show:hover, input.show:focus {
-  background: var(--yes) no-repeat 9px center / 12px, var(--btn_hover);
+  background: var(--yes) no-repeat 9px center / 12px, var(--btn_hover_radial), var(--btn_hover);
 }
 
 .bottombuttons input.markall {
@@ -1130,7 +1135,7 @@ input.show:hover, input.show:focus {
 }
 
 .bottombuttons input.markall:hover, .bottombuttons input.markall:focus {
-  background: url(../images/all.png) no-repeat 9px center / 12px, var(--btn_hover);
+  background: url(../images/all.png) no-repeat 9px center / 12px, var(--btn_hover_radial), var(--btn_hover);
 }
 
 input.new {
@@ -1139,7 +1144,7 @@ input.new {
 }
 
 input.new:hover, input.new:focus {
-  background: var(--compose_hover) no-repeat 9px center, var(--btn_hover);
+  background: var(--compose_hover) no-repeat 9px center, var(--btn_hover_radial), var(--btn_hover);
 }
 
 input.reply {
@@ -1148,7 +1153,7 @@ input.reply {
 }
 
 input.reply:hover, input.reply:focus {
-  background: var(--reply_hover) no-repeat 9px center, var(--btn_hover);
+  background: var(--reply_hover) no-repeat 9px center, var(--btn_hover_radial), var(--btn_hover);
 }
 
 input.replyall {
@@ -1157,7 +1162,7 @@ input.replyall {
 }
 
 input.replyall:hover, input.replyall:focus {
-  background: var(--replyall_hover) no-repeat 9px center, var(--btn_hover);
+  background: var(--replyall_hover) no-repeat 9px center, var(--btn_hover_radial), var(--btn_hover);
 }
 
 input.setpagesize, input.save {
@@ -1167,7 +1172,7 @@ input.setpagesize, input.save {
 
 input.setpagesize:hover, input.save:hover,
 input.setpagesize:focus, input.save:focus {
-  background: var(--yes) no-repeat 9px center / 12px, var(--btn_hover);
+  background: var(--yes) no-repeat 9px center / 12px, var(--btn_hover_radial), var(--btn_hover);
 }
 
 input.send {
@@ -1176,7 +1181,7 @@ input.send {
 }
 
 input.send:hover, input.send:focus {
-  background: var(--send_hover) no-repeat 9px center, var(--btn_hover);
+  background: var(--send_hover) no-repeat 9px center, var(--btn_hover_radial), var(--btn_hover);
 }
 
 input.configure, #settings {
@@ -1191,7 +1196,7 @@ input.configure, #settings {
 
 input.configure:hover, input.configure:focus,
 #settings:hover, #settings:focus {
-  background: var(--configure_hover) no-repeat 9px center / 14px, var(--btn_hover);
+  background: var(--configure_hover) no-repeat 9px center / 14px, var(--btn_hover_radial), var(--btn_hover);
 }
 
 input.saveas, input.saveasdraft {
@@ -1200,7 +1205,7 @@ input.saveas, input.saveasdraft {
 }
 
 input.saveas:hover, input.saveas:focus, input.saveasdraft:hover, input.saveasdraft:focus {
-  background: var(--save_hover) no-repeat 9px center, var(--btn_hover);
+  background: var(--save_hover) no-repeat 9px center, var(--btn_hover_radial), var(--btn_hover);
 }
 
 input.new_upload {
@@ -1209,7 +1214,7 @@ input.new_upload {
 }
 
 input.new_upload:hover, input.new_upload:focus {
-  background: var(--attach_hover) no-repeat 9px center, var(--btn_hover);
+  background: var(--attach_hover) no-repeat 9px center, var(--btn_hover_radial), var(--btn_hover);
 }
 
 /* pagenav */
