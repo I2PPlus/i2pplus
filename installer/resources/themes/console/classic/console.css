@@ -6553,6 +6553,11 @@ p#enablefullstats, p#gatherstats {
   background: none;
 }
 
+#logs .embedlink {
+  margin-top: 1px;
+  font-size: 85%;
+}
+
 #routerlogs ul, #criticallogs ul {
   margin-left: -5px !important;
   margin-bottom: -3px !important;

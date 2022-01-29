@@ -10515,6 +10515,15 @@ a:hover .tier, a:focus .tier {
   border-top: var(--border);
 }
 
+#routerlogs td p, #wrapperlogs td p {
+  margin: 0;
+}
+
+#logs .embedlink {
+  margin-top: 1px;
+  font-size: 85%;
+}
+
 #criticallogs tr:first-child {
   display: none;
 }
