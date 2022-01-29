@@ -2481,12 +2481,13 @@ td.infowarn, #help tr:hover td.infowarn {
 }
 
 .main#logs ul li {
-  margin-left: 18px;
+  margin-left: -4px !important;
   padding-left: 0;
+  width: calc(100% - 18px);
 }
 
 .main#logs li:first-child {
-  margin-top: 0 !important;
+  margin-top: 1px !important;
 }
 
 #criticallogs li:last-child {
@@ -2507,7 +2508,12 @@ table#wrapperlogs {
   margin-bottom: 5px;
 }
 
+#routerlogs tr:first-child td, #wrapperlogs tr:first-child td {
+  border-bottom: var(--border_inner);
+}
+
 #wrapperlogs p, #routerlogs p {
+  margin: 0;
   vertical-align: middle;
 }
 
@@ -2516,8 +2522,7 @@ table#wrapperlogs {
   padding: 5px;
   float: right;
   vertical-align: middle;
-  border-left: 1px solid var(--border_inner);
-  box-shadow: var(--highlight);
+  font-size: 85%;
 }
 
 #logs table[id$="logs"] tr:first-child td, .subheading {
@@ -2844,15 +2849,15 @@ table#wrapperlogs {
 /* end i2p version & environment */
 
 table[id$="logs"] td {
-  padding: 5px;
+  padding: 5px 5px 2px;
 }
 
 table[id$="logs"] td:empty {
   display: none;
 }
 
-table[id$="logs"] tr:first-child {
-  border-bottom: 1px solid var(--border_inner);
+table[id$="logs"] tr:first-child td, table[id$="logs"] tr:last-child td {
+  border-bottom: 1px solid var(--border_inner) !important;
 }
 
 table[id$="logs"] ul li:last-child {

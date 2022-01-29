@@ -3846,7 +3846,7 @@ div.appgroup {
 }
 
 #searchbar td {
-  padding: 3px 2px;
+  padding: 3px 2px 1px;
   background: var(--bg);
 }
 
@@ -6551,6 +6551,11 @@ p#enablefullstats, p#gatherstats {
 
 #logs #enviro:hover #cputype {
   background: none;
+}
+
+#logs .embedlink {
+  margin-top: 1px;
+  font-size: 85%;
 }
 
 #routerlogs ul, #criticallogs ul {
@@ -10266,7 +10271,10 @@ iframe {
 /* responsive layout */
 
 @media screen and (max-width: 1499px) {
-  .sitemapLabel {font-size: 8pt}
+  .sitemapLabel {
+    margin-bottom: -3px;
+    font-size: 8pt
+  }
   .tunnelBuildStatus {font-size: 90%}
   #sb_tunnelstatus .tunnelBuildStatus::before {
     margin: -1px 0 0;

@@ -5460,10 +5460,17 @@ a[name="criticallogs"] + p + h3 + p + ul {
   margin-bottom: 1px;
 }
 
-#criticallogs td , #routerlogs td, #eventlogs td, #wrapperlogs td {
-  padding: 5px 10px;
-  font-weight: 400 !important;
-  border-top: var(--border_inner);
+#routerlogs td p, #wrapperlogs td p {
+  margin: 0;
+}
+
+#routerlogs tr:first-child td, #wrapperlogs tr:first-child td {
+  border-bottom: var(--border_inner);
+}
+
+#logs .embedlink {
+  margin-right: 2px;
+  font-size: 85%;
 }
 
 #criticallogs td:empty {
@@ -5499,8 +5506,9 @@ table[id$="logs"] ul {
 }
 
 .main#logs li {
-  margin: 0 0 0 10px !important;
+  margin: 0 0 0 13px !important;
   padding: 0 2px 0 8px !important;
+  width: calc(100% - 6px);
   word-break: break-all;
   font-family: var(--monospaced);
   border-top: 1px solid rgba(64,64,80,.2);
