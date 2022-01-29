@@ -143,19 +143,19 @@ tr, .navbar, .mainsection, .lowersection {
 
 .nav_main {
   border-radius: 3px 0 0 3px;
-  background: var(--snark) no-repeat 7px center, var(--nav);
+  background: var(--snark) no-repeat 7px center, var(--nav), var(--snark_hover), var(--snark_active);
 }
 
 .nav_forum {
-  background: var(--forum) no-repeat 7px center, var(--nav);
+  background: var(--forum) no-repeat 7px center, var(--nav), var(--forum_hover), var(--forum_active);
 }
 
 .nav_tracker {
-  background: var(--tracker) no-repeat 7px center, var(--nav);
+  background: var(--tracker) no-repeat 7px center, var(--nav), var(--tracker_hover), var(--tracker_active);
 }
 
 .nav_search {
-  background: var(--search) no-repeat 7px center, var(--nav);
+  background: var(--search) no-repeat 7px center, var(--nav), var(--search_hover), var(--search_active);
 }
 
 .snarkNav.nav_main:last-child {
