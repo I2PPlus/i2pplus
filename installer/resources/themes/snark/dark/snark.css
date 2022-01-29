@@ -20,7 +20,6 @@ body {
 
 body.iframed {
   margin: 1px 0;
-  background: none !important;
 }
 
 body::before {
@@ -1690,6 +1689,11 @@ thead a:active img {
 
 .snarkTorrents td[colspan="10"] {
   white-space: normal;
+}
+
+input[type=text], input[type=password], textarea, select {
+  box-sizing: border-box;
+  line-height: 1.3;
 }
 
 input.r {

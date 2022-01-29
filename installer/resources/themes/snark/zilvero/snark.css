@@ -224,6 +224,11 @@ input[type=submit]::-moz-focus-inner, input[type=reset]::-moz-focus-inner {
 	outline: none;
 }
 
+input[type=text], input[type=password], textarea, select {
+	box-sizing: border-box;
+	line-height: 1.3;
+}
+
 a.snarkNav:hover {
 	border: 1px solid var(--a);
 	position: relative;
