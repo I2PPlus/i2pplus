@@ -335,6 +335,7 @@ select {
 }
 
 select option {
+  text-align: left;
   font-weight: 400;
   font-size: 9.5pt;
   color: #000;
