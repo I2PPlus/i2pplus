@@ -44,11 +44,11 @@
 </tr>
 <tr>
 <td class="buttons volatile">
-<a class="control" href="list"><%=intl._t("Refresh")%></a>
+<a class="control refresh iconize" href="list"><%=intl._t("Refresh")%></a>
 <%
       if (isInitialized) {
 %>
-<a class="control" href="list?action=Clear&amp;msgid=<%=lastID%>&amp;nonce=<%=nextNonce%>"><%=intl._t("Clear")%></a>
+<a class="control clearlog iconize" href="list?action=Clear&amp;msgid=<%=lastID%>&amp;nonce=<%=nextNonce%>"><%=intl._t("Clear")%></a>
 <%
       }  // isInitialized
 %>
@@ -65,13 +65,13 @@
 <table>
 <tr>
 <td class="buttons">
-<a class="control" href="wizard"><%=intl._t("Tunnel Wizard")%></a>
-<a class="control" href="list?nonce=<%=nextNonce%>&amp;action=Stop%20all"><%=intl._t("Stop All")%></a>
-<a class="control" href="list?nonce=<%=nextNonce%>&amp;action=Start%20all"><%=intl._t("Start All")%></a>
-<a class="control" href="list?nonce=<%=nextNonce%>&amp;action=Restart%20all"><%=intl._t("Restart All")%></a>
+<a class="control wizard iconize" href="wizard"><%=intl._t("Tunnel Wizard")%></a>
+<a class="control stopall iconize" href="list?nonce=<%=nextNonce%>&amp;action=Stop%20all"><%=intl._t("Stop All")%></a>
+<a class="control startall iconize" href="list?nonce=<%=nextNonce%>&amp;action=Start%20all"><%=intl._t("Start All")%></a>
+<a class="control restartall iconize" href="list?nonce=<%=nextNonce%>&amp;action=Restart%20all"><%=intl._t("Restart All")%></a>
 <%--
 //this is really bad because it stops and restarts all tunnels, which is probably not what you want
-<a class="control" href="list?nonce=<%=nextNonce%>&amp;action=Reload%20configuration"><%=intl._t("Reload Config")%></a>
+<a class="control reloadconfig iconize" href="list?nonce=<%=nextNonce%>&amp;action=Reload%20configuration"><%=intl._t("Reload Config")%></a>
 --%>
 </td>
 </tr>
@@ -133,7 +133,7 @@ SSL
 <%
             if (("httpserver".equals(indexBean.getInternalType(curServer)) || ("httpbidirserver".equals(indexBean.getInternalType(curServer)))) && indexBean.getTunnelStatus(curServer) == IndexBean.RUNNING) {
 %>
-<a class="control" title="<%=intl._t("Test HTTP server through I2P")%>" href="http://<%=indexBean.getDestHashBase32(curServer)%>" target="_blank" rel="noreferrer"><%=intl._t("Preview")%></a>
+<a class="control preview iconize" title="<%=intl._t("Test HTTP server through I2P")%>" href="http://<%=indexBean.getDestHashBase32(curServer)%>" target="_blank" rel="noreferrer"><%=intl._t("Preview")%></a>
 <%
             } else if (indexBean.getTunnelStatus(curServer) == IndexBean.RUNNING) {
 %>
@@ -154,7 +154,7 @@ SSL
 <div class="statusStarting text" title="<%=intl._t("Starting...")%>"><%=intl._t("Starting...")%></div>
 </td>
 <td class="tunnelControl volatile">
-<a class="control" title="<%=intl._t("Stop this Tunnel")%>" href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curServer%>"><%=intl._t("Stop")%></a>
+<a class="control stop iconize" title="<%=intl._t("Stop this Tunnel")%>" href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curServer%>"><%=intl._t("Stop")%></a>
 <%
                 break;
                 case IndexBean.RUNNING:
@@ -162,7 +162,7 @@ SSL
 <div class="statusRunning text" title="<%=intl._t("Running")%>"><%=intl._t("Running")%></div>
 </td>
 <td class="tunnelControl">
-<a class="control" title="<%=intl._t("Stop this Tunnel")%>" href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curServer%>"><%=intl._t("Stop")%></a>
+<a class="control stop iconize" title="<%=intl._t("Stop this Tunnel")%>" href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curServer%>"><%=intl._t("Stop")%></a>
 <%
                 break;
                 case IndexBean.NOT_RUNNING:
@@ -170,7 +170,7 @@ SSL
 <div class="statusNotRunning text" title="<%=intl._t("Stopped")%>"><%=intl._t("Stopped")%></div>
 </td>
 <td class="tunnelControl">
-<a class="control" title="<%=intl._t("Start this Tunnel")%>" href="list?nonce=<%=nextNonce%>&amp;action=start&amp;tunnel=<%=curServer%>"><%=intl._t("Start")%></a>
+<a class="control start iconize" title="<%=intl._t("Start this Tunnel")%>" href="list?nonce=<%=nextNonce%>&amp;action=start&amp;tunnel=<%=curServer%>"><%=intl._t("Start")%></a>
 <%
                 break;
             }
@@ -305,7 +305,7 @@ ElGamal-2048
 <option value="ircserver">IRC</option>
 <option value="streamrserver">Streamr</option>
 </select>
-<input class="control" type="submit" value="<%=intl._t("Create")%>" />
+<input class="control create iconize" type="submit" value="<%=intl._t("Create")%>" />
 </form>
 </td>
 </tr>
@@ -380,7 +380,7 @@ ElGamal-2048
 <div class="statusStarting text" title="<%=intl._t("Starting...")%>"><%=intl._t("Starting...")%></div>
 </td>
 <td class="tunnelControl volatile">
-<a class="control" title="<%=intl._t("Stop this Tunnel")%>" href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curClient%>"><%=intl._t("Stop")%></a>
+<a class="control stop iconize" title="<%=intl._t("Stop this Tunnel")%>" href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curClient%>"><%=intl._t("Stop")%></a>
 <%
                    break;
                    case IndexBean.STANDBY:
@@ -388,7 +388,7 @@ ElGamal-2048
 <div class="statusStandby text" title="<%=intl._t("Standby")%>"><%=intl._t("Standby")%></div>
 </td>
 <td class="tunnelControl volatile">
-<a class="control" title="Stop this Tunnel" href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curClient%>"><%=intl._t("Stop")%></a>
+<a class="control stop iconize" title="Stop this Tunnel" href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curClient%>"><%=intl._t("Stop")%></a>
 <%
                    break;
                    case IndexBean.RUNNING:
@@ -396,7 +396,7 @@ ElGamal-2048
 <div class="statusRunning text" title="<%=intl._t("Running")%>"><%=intl._t("Running")%></div>
 </td>
 <td class="tunnelControl volatile">
-<a class="control" title="Stop this Tunnel" href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curClient%>"><%=intl._t("Stop")%></a>
+<a class="control stop iconize" title="Stop this Tunnel" href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curClient%>"><%=intl._t("Stop")%></a>
 <%
                    break;
                    case IndexBean.NOT_RUNNING:
@@ -404,7 +404,7 @@ ElGamal-2048
 <div class="statusNotRunning text" title="<%=intl._t("Stopped")%>"><%=intl._t("Stopped")%></div>
 </td>
 <td class="tunnelControl volatile">
-<a class="control" title="<%=intl._t("Start this Tunnel")%>" href="list?nonce=<%=nextNonce%>&amp;action=start&amp;tunnel=<%=curClient%>"><%=intl._t("Start")%></a>
+<a class="control start iconize" title="<%=intl._t("Start this Tunnel")%>" href="list?nonce=<%=nextNonce%>&amp;action=start&amp;tunnel=<%=curClient%>"><%=intl._t("Start")%></a>
 <%
                    break;
                }
@@ -529,7 +529,7 @@ ElGamal-2048
 <option value="connectclient">CONNECT</option>
 <option value="streamrclient">Streamr</option>
 </select>
-<input class="control" type="submit" value="<%=intl._t("Create")%>" />
+<input class="control create iconize" type="submit" value="<%=intl._t("Create")%>" />
 </form>
 </td>
 </tr>
