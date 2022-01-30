@@ -6,7 +6,6 @@
 /* Author: dr|z3d */
 
 @import url(global.css);
-@import url(../images/itooplus.css);
 
 :root {
   --box: linear-gradient(180deg,#020020,#000);
