@@ -1,4 +1,4 @@
-.snarkMessages.collapsed {
+#screenlog.collapsed {
   height: 56px !important;
   min-height: 56px !important;
   background-size: 80px auto, calc(100% - 80px) calc(100% - 4px), 100% 100%, 100% 100% !important;
@@ -14,7 +14,7 @@
 }
 
 @media screen and (min-width: 1500px) {
-  .snarkMessages.collapsed {
+  #screenlog.collapsed {
     height: 60px !important;
     min-height: 60px !important;
   }

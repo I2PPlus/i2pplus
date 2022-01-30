@@ -220,7 +220,7 @@ th img, td img, #closelog, #expand, #shrink {
 
 /* screenlog */
 
-.snarkMessages {
+#screenlog {
   margin: 0;
   padding: 2px 5px;
   width: auto;
@@ -245,35 +245,35 @@ th img, td img, #closelog, #expand, #shrink {
   background-blend-mode: overlay, normal, normal, normal;
 }
 
-.iframed .snarkMessages {
+.iframed #screenlog {
   margin-top: -5px;
 }
 
-.snarkMessages:hover, .snarkMessages:focus {
+#screenlog:hover, #screenlog:focus {
   overflow: auto;
 }
 
-.snarkMessages:focus {
+#screenlog:focus {
   box-shadow: inset 0 0 0 1px #930;
 }
 
-.snarkMessages a:active {
+#screenlog a:active {
   color: #ff007c !important;
 }
 
-.snarkMessages ul {
+#screenlog ul {
   margin: -1px 0 2px 0;
   padding: 0 0 0 14px;
   list-style: none;
 }
 
-.snarkMessages li {
+#screenlog li {
   margin-left: -15px;
   line-height: 1.25;
   color: var(--li);
 }
 
-.snarkMessages li::before {
+#screenlog li::before {
   width: 14px;
   height: 11px;
   display: inline-block;
@@ -1473,7 +1473,7 @@ hr {
 }
 
 a:hover, a:focus, .trackerName a:visited:hover, .trackerName a:visited:focus,
-#snarkTorrents a:visited:hover, #snarkTorrents a:visited:focus, .snarkMessages a:visited:hover {
+#snarkTorrents a:visited:hover, #snarkTorrents a:visited:focus, #screenlog a:visited:hover {
   color: var(--a_hover);
 }
 
@@ -2133,7 +2133,7 @@ a:hover img, a:focus img {
   border-right: none;
 }
 
-.iframed #snarkTorrents, .iframed .snarkMessages, .iframed .configsectionpanel, .iframed .dirInfo, .iframed .torrentInfo {
+.iframed #snarkTorrents, .iframed #screenlog, .iframed .configsectionpanel, .iframed .dirInfo, .iframed .torrentInfo {
   border-radius: 0;
   border-left: none;
   border-right: none;
@@ -3360,7 +3360,7 @@ tr:not(.peerinfo) .torrentDownloaded .percentBarText::after {
   display: inline-block;
 }
 
-.snarkMessages .infohash:hover {
+#screenlog .infohash:hover {
   color: #aa0;
 }
 
@@ -4044,7 +4044,7 @@ td.torrentAction input[type=submit] {
 /* responsive layout */
 
 @media screen and (max-width: 1499px) {
-  .iframed .snarkMessages {margin-top: -4px}
+  .iframed #screenlog {margin-top: -4px}
   .addtorrentsection, .newtorrentsection, .configsection {
     margin-left: 0;
     margin-right: 0;
@@ -4158,7 +4158,7 @@ td.torrentAction input[type=submit] {
   .torrentUploaded, .RateUp,
   tfoot .torrentAction, .debuginfo {display: none}
   tfoot .torrentDownloaded, tfoot .RateDown {font-size: 0 !important}
-  .snarkMessages li:first-child::after {
+  #screenlog li:first-child::after {
     content: "minimode";
     font-size: 8pt !important;
     float: right;
@@ -4228,17 +4228,17 @@ td.torrentAction input[type=submit] {
   textarea, input[name="nofilter_dataDir"], input {font-size: 10pt !important}
   code, tt {font-size: 10pt !important}
   #snarkTorrents tt {font-size: 9pt !important}
-  .snarkMessages {margin-bottom: -10px}
-  .iframed .snarkMessages {
+  #screenlog {margin-bottom: -10px}
+  .iframed #screenlog {
     margin-top: -6px;
     margin-bottom: 9px;
   }
-  .snarkMessages + form {margin-top: 9px}
+  #screenlog + form {margin-top: 9px}
   .logshim {margin-top: -9px !important}
-  .snarkMessages li, .snarkMessages li a {
+  #screenlog li, #screenlog li a {
     font-size: 9.5pt !important;
   }
-  .snarkMessages li::before {
+  #screenlog li::before {
     margin: 0 1px 0 1px;
     width: 15px;
     background-size: 10px 10px;
@@ -4254,7 +4254,7 @@ td.torrentAction input[type=submit] {
   .toggleview {padding-bottom: 5px !important}
   .configTitle, .toggleview {min-width: 340px !important}
   .configTitle a {margin-bottom: 0 !important}
-  .snarkMessages {height: 54px}
+  #screenlog {height: 54px}
   .torrentDownloaded {
     white-space: nowrap;
     padding: 0 10px !important;
@@ -4271,7 +4271,7 @@ td.torrentAction input[type=submit] {
   }
   .iframed .page {background: none !important}
   .newtorrentsection, .addtorrentsection, .configsection, .configsectionpanel,
-  .snarkMessages, #snarkTorrents, .dirInfo, .torrentInfo {border: var(--border)}
+  #screenlog, #snarkTorrents, .dirInfo, .torrentInfo {border: var(--border)}
   .dirInfo {margin-bottom: 0}
   #snarkTorrents {margin-top: 0 !important}
   .mainsection {background: none}

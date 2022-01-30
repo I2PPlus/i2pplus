@@ -18,7 +18,7 @@
   padding-left: 31px !important;
 }
 
-.snarkMessages li::before {
+#screenlog li::before {
   margin-right: 2px;
   background-size: 10px 10px;
 }
@@ -40,7 +40,7 @@
   font-size: 8pt !important;
 }
 
-input[type], select, select option, td, td a, .snarkMessages li, .snarkMessages li a, textarea, input.r, input[name="nofilter_dataDir"],
+input[type], select, select option, td, td a, #screenlog li, #screenlog li a, textarea, input.r, input[name="nofilter_dataDir"],
 .configsectionpanel, .configsectionpanel td, .snarkNewTorrent, .snarkNewTorrent td, .snarkAddInfo,
 #configs td, .trackerconfig td {
   font-size: 10.5pt !important;

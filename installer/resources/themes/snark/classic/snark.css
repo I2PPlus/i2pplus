@@ -218,7 +218,7 @@ tr, .navbar, .mainsection, .lowersection {
 
 /* screenlog */
 
-.snarkMessages {
+#screenlog {
   overflow: hidden;
   width: auto;
   height: 56px;
@@ -238,22 +238,22 @@ tr, .navbar, .mainsection, .lowersection {
   background-blend-mode: normal, soft-light, normal;
 }
 
-.snarkMessages:hover, .snarkMessages:focus {
+#screenlog:hover, #screenlog:focus {
   overflow: auto;
   overflow-x: hidden;
 }
 
-.snarkMessages:focus {
+#screenlog:focus {
   box-shadow: inset 0 0 0 1px #f90;
 }
 
-.snarkMessages ul {
+#screenlog ul {
   margin: -2px 0 2px 0;
   padding: 0 0 0 14px;
   list-style: none;
 }
 
-.snarkMessages li {
+#screenlog li {
   margin-left: -15px;
   margin-right: 50px;
   line-height: 1.2;
@@ -262,7 +262,7 @@ tr, .navbar, .mainsection, .lowersection {
   opacity: .8;
 }
 
-.snarkMessages li::before {
+#screenlog li::before {
   margin: 1px 1px 0 0;
   width: 14px;
   height: 11px;
@@ -272,14 +272,14 @@ tr, .navbar, .mainsection, .lowersection {
   opacity: .7;
 }
 
-.snarkMessages a:link,
-.snarkMessages a:visited {
+#screenlog a:link,
+#screenlog a:visited {
   color: #55f !important;
   font-weight: 700;
 }
 
-.snarkMessages a:hover,
-.snarkMessages a:focus {
+#screenlog a:hover,
+#screenlog a:focus {
   color: var(--hover) !important;
 }
 
@@ -3349,12 +3349,12 @@ hr.debug {
   color: var(--bg) !important;
 }
 
-.snarkMessages .infohash {
+#screenlog .infohash {
   color: #050 !important;
   font-weight: 700 !important;
 }
 
-.snarkMessages .infohash:hover {
+#screenlog .infohash:hover {
   color: #070;
 }
 
@@ -4134,10 +4134,10 @@ body, th, td, table a, input, input[type=text], input.r, input[name="nofilter_da
   select, textarea, textarea[name="i2cpOpts"], .snarkAddInfo, .snarkCommentInfo textarea {
     font-size: 10pt !important;
   }
-  .snarkMessages li, #snarkTorrents tt, code, #snarkTorrents tt, #ourDest tt {
+  #screenlog li, #snarkTorrents tt, code, #snarkTorrents tt, #ourDest tt {
     font-size: 9pt;
   }
-  .snarkMessages {
+  #screenlog {
     height: 60px;
   }
   .torrentAction {
@@ -4214,5 +4214,5 @@ body, th, td, table a, input, input[type=text], input.r, input[name="nofilter_da
 }
 
 @media screen and (min-width: 1600px) {
-  .snarkMessages li, #snarkTorrents tt {font-size: 9pt !important}
+  #screenlog li, #snarkTorrents tt {font-size: 9pt !important}
 }

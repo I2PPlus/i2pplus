@@ -1,15 +1,15 @@
-.snarkMessages {
+#screenlog {
   min-height: 56px !important;
   background-size: 80px auto, calc(100% - 80px) calc(100% - 4px), 100% 100%, 100% 100% !important;
   background-position: right -4px bottom -10px, left bottom 2px, center center, center top !important;
 }
 
-.snarkMessages.xpanded {
+#screenlog.xpanded {
   height: auto;
   max-height: 300px;
 }
 
-.snarkMessages:hover, .snarkMessages:focus {
+#screenlog:hover, #screenlog:focus {
   overflow-y: auto;
 }
 
@@ -22,7 +22,7 @@
 }
 
 @media screen and (min-width: 1500px) {
-  .snarkMessages {
+  #screenlog {
     min-height: 60px !important;
   }
 }

@@ -15,16 +15,16 @@
   padding-top: 3px !important;
 }
 
-.snarkMessages li::before {
+#screenlog li::before {
   width: 15px;
   background-size: 11px 11px;
 }
 
-.snarkMessages li, .iframed .snarkMessages li {
+#screenlog li, .iframed #screenlog li {
   font-weight: 400 !important;
 }
 
-input[type], select, select option, td, td a, .snarkMessages li, .snarkMessages li a, textarea, input.r, input[name="nofilter_dataDir"],
+input[type], select, select option, td, td a, #screenlog li, #screenlog li a, textarea, input.r, input[name="nofilter_dataDir"],
 .configsectionpanel, .configsectionpanel td, .snarkNewTorrent, .snarkNewTorrent td, #configs td, .trackerconfig td {
   font-size: 10.5pt !important;
 }

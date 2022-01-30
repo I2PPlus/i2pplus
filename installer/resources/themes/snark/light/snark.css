@@ -281,7 +281,7 @@ button::-moz-focus-inner, input::-moz-focus-inner {
 
 /* screenlog */
 
-.snarkMessages, #screenlog.collapsed {
+#screenlog, #screenlog.collapsed {
   margin: -2px 0 0;
   padding: 3px 5px 3px 5px;
   min-width: 810px;
@@ -310,34 +310,34 @@ button::-moz-focus-inner, input::-moz-focus-inner {
   font-weight: 700 !important;
 }
 
-.iframed .snarkMessages {
+.iframed #screenlog {
   margin-top: -12px !important;
 }
 
-.snarkMessages:hover, .snarkMessages:focus {
+#screenlog:hover, #screenlog:focus {
   overflow-y: auto;
 }
 
-.snarkMessages:focus {
+#screenlog:focus {
   box-shadow: inset 0 0 0 1px #f90;
 }
 
-.snarkMessages a:link, .snarkMessages a:visited {
+#screenlog a:link, #screenlog a:visited {
   color: #3b77bf !important;
   font-size: 8.5pt;
 }
 
-.snarkMessages a:hover {
+#screenlog a:hover {
   color: var(--hover) !important;
 }
 
-.snarkMessages ul {
+#screenlog ul {
   margin: -1px 0 0;
   padding: 0 0 0 14px;
   list-style: none;
 }
 
-.snarkMessages li {
+#screenlog li {
   margin-left: -18px;
   margin-right: -5px;
   padding: 0 20px 2px 5px;
@@ -350,12 +350,12 @@ button::-moz-focus-inner, input::-moz-focus-inner {
   word-spacing: 0;
 }
 
-.snarkMessages li, .snarkMessages li a {
+#screenlog li, #screenlog li a {
   line-height: 1.1 !important;
   font-size: 8.5pt !important;
 }
 
-.snarkMessages li::before {
+#screenlog li::before {
   margin: -1px 0 1px;
   display: inline-block;
   width: 14px;
@@ -1322,13 +1322,13 @@ body:not(.framed) .torrentInfo {
   box-shadow: 0 0 0 1px #ccf;
 }
 
-.snarkMessages .infohash {
+#screenlog .infohash {
   font-size: 90%;
   font-weight: 700;
   color: #151;
 }
 
-.snarkMessages .infohash:hover {
+#screenlog .infohash:hover {
   color: #070;
 }
 
@@ -3996,7 +3996,7 @@ td.torrentAction input[type=submit] {
   .nav_main {
     padding-left: 26px !important;
   }
-  .snarkMessages li {
+  #screenlog li {
     opacity: 1 !important;
   }
   .trackerDetails {
@@ -4008,7 +4008,7 @@ td.torrentAction input[type=submit] {
 }
 
 @media screen and (max-width: 1000px) {
-  body, td, .snarkMessages li, .snarkMessages a, button, input, select,
+  body, td, #screenlog li, #screenlog a, button, input, select,
   .snarkAddInfo, code, tt, th, a, a:link, .snarkAddInfo, .fileStatus {
     font-size: 8.5pt !important;
   }
@@ -4119,10 +4119,10 @@ td.torrentAction input[type=submit] {
   .page {
     min-width: 600px !important;
   }
-  .snarknavbar, .snarkMessages {
+  .snarknavbar, #screenlog {
     min-width: 580px !important;
   }
-  .snarkMessages li, .snarkMessages li a {
+  #screenlog li, #screenlog li a {
     font-weight: 700 !important;
   }
   .pagenavcontrols, .iframed .pagenavcontrols {
@@ -4205,7 +4205,7 @@ td.torrentAction input[type=submit] {
 }
 
 @media screen and (min-width: 1000px) {
-  .iframed .snarkMessages li {
+  .iframed #screenlog li {
     font-weight: 700 !important;
   }
   .snarkNav:link, .snarkNav:visited {
@@ -4250,7 +4250,7 @@ td.torrentAction input[type=submit] {
     padding-left: 27px !important;
     background-size: 17px, 100% !important;
   }
-  .snarkMessages li::before {
+  #screenlog li::before {
     background-size: 10px;
   }
   .percentDownloaded {
@@ -4442,12 +4442,12 @@ td.torrentAction input[type=submit] {
   code, tt {
     font-size: 9pt !important;
   }
-  .snarkMessages li::before {
+  #screenlog li::before {
     width: 15px;
     height: 11px;
     background-size: 10px 10px;
   }
-  .snarkMessages li, .snarkMessages li a {
+  #screenlog li, #screenlog li a {
     line-height: 1.3;
     font-size: 9.5pt !important;
   }
@@ -4460,7 +4460,7 @@ td.torrentAction input[type=submit] {
   input[type=submit] {
     min-width: 100px;
   }
-  .snarkMessages {
+  #screenlog {
     height: 60px;
   }
   .toggleview, #tab_config {

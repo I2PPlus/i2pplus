@@ -107,7 +107,7 @@ a:hover, a:focus, .configTitle a:hover, .toggleview:hover, .trackerName a:visite
 	color: var(--a);
 }
 
-.snarkMessages a:focus, .torrentName a:focus, .knownTracker a:focus, th.suboption a:focus {
+#screenlog a:focus, .torrentName a:focus, .knownTracker a:focus, th.suboption a:focus {
 	color: #fff !important;
 	border-radius: 1px;
 	background: var(--a);
@@ -270,7 +270,7 @@ td {
 	background: #eee;
 }
 
-.snarknavbar, table, .snarkMessages {
+.snarknavbar, table, #screenlog {
 	border: var(--border);
 	background: #eee;
 }
@@ -862,7 +862,7 @@ td.graphicStatus img {
 	background: #bfb8b3;
 }
 
-.snarkMessages {
+#screenlog {
 	margin-bottom: -1px;
 	height: 60px;
 	overflow: hidden;
@@ -875,11 +875,11 @@ td.graphicStatus img {
 	background-size: auto 80px, 100% !important;
 }
 
-.snarkMessages:hover {
+#screenlog:hover {
 	overflow-y: auto;
 }
 
-.snarkMessages ul {
+#screenlog ul {
 	margin: 2px 0 0 -20px;
 	list-style-type: square;
 	color: #384;
@@ -887,10 +887,10 @@ td.graphicStatus img {
 }
 
 @supports (-moz-user-select: all) {
-	.snarkMessages ul {margin-left: -24px}
+	#screenlog ul {margin-left: -24px}
 }
 
-.snarkMessages li, .snarkMessages li a {
+#screenlog li, #screenlog li a {
 	line-height: 1.25;
 }
 
@@ -1313,7 +1313,7 @@ tt {
 }
 
 .addtorrentsection, .newtorrentsection, .configsection, .configsectionpanel,
-.snarkConfig, .snarknavbar, .snarkMessages, #torrentDisplay, .pagenavcontrols {
+.snarkConfig, .snarknavbar, #screenlog, #torrentDisplay, .pagenavcontrols {
 	box-shadow: var(--highlight);
 	background: #eee;
 	background: var(--noise), linear-gradient(180deg,#fafafa, #eee);

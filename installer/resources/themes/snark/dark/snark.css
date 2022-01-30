@@ -210,7 +210,7 @@ label, th img, .newtorrentsection, #closelog, #pagenav {
 
 /* screenlog */
 
-.snarkMessages, #screenlog.collapsed {
+#screenlog, #screenlog.collapsed {
   margin: 0;
   padding: 3px 5px;
   width: auto;
@@ -237,50 +237,50 @@ label, th img, .newtorrentsection, #closelog, #pagenav {
   scrollbar-color: rgba(16,72,16,.8) #000800;
 }
 
-.snarkMessages:hover, .snarkMessages:focus {
+#screenlog:hover, #screenlog:focus {
   overflow: auto;
 }
 
-.snarkMessages:focus {
+#screenlog:focus {
   box-shadow: inset 0 0 0 1px #930;
 }
 
-.snarkMessages a:link, .snarkMessages a:visited {
+#screenlog a:link, #screenlog a:visited {
   font-weight: 700;
   color: #2b2 !important;
 }
 
-.snarkMessages a:hover {
+#screenlog a:hover {
   color: #f70 !important;
 }
 
-.snarkMessages ul {
+#screenlog ul {
   margin: -1px 0 2px;
   padding: 0 0 0 14px;
   list-style: none;
 }
 
-.snarkMessages li, .snarkMessages li a, #snarkTorrents tt, #ourDest tt {
+#screenlog li, #screenlog li a, #snarkTorrents tt, #ourDest tt {
   line-height: 1.15;
   font-size: 8.5pt !important;
   font-weight: 700;
 }
 
-.snarkMessages li, .snarkMessages li a {
+#screenlog li, #screenlog li a {
   line-height: 1.28;
   text-shadow: 0 0 1px #000, 0 0 2px #000, 0 0 3px #000, 0 0 4px #001000;
 }
 
-.snarkMessages li {
+#screenlog li {
   margin-left: -15px;
   opacity: .7;
 }
 
-.snarkMessages li:hover {
+#screenlog li:hover {
   opacity: 1;
 }
 
-.snarkMessages li::before {
+#screenlog li::before {
   width: 16px;
   height: 11px;
   display: inline-block;
@@ -313,7 +313,7 @@ label, th img, .newtorrentsection, #closelog, #pagenav {
   border-right: var(--border);
 }
 
-.snarkMessages:focus #closelog img, .snarkMessages:focus #expand img, .snarkMessages:focus #shrink img {
+#screenlog:focus #closelog img, #screenlog:focus #expand img, #screenlog:focus #shrink img {
   background: #000;
   opacity: 1;
 }
@@ -4601,10 +4601,10 @@ td.torrentAction input[type=submit] {
   body, #snarkTorrents td, .snarkAddInfo, th, td,  code, textarea, input, input[type=submit], input[type=reset], select, button, a {
     font-size: 10pt !important;
   }
-  .snarkMessages li, .snarkMessages li a, #snarkTorrents tt, #ourDest tt, tt {
+  #screenlog li, #screenlog li a, #snarkTorrents tt, #ourDest tt, tt {
     font-size: 9pt !important
   }
-  tt, #snarkTorrents tt, .snarkMessages, .snarkMessages a {
+  tt, #snarkTorrents tt, #screenlog, #screenlog a {
     font-size: 9pt !important;
   }
   #snarkTorrents {
@@ -4685,10 +4685,10 @@ td.torrentAction input[type=submit] {
   #configs td:first-child::after {
      min-height: 28px;
   }
-  .snarkMessages {
+  #screenlog {
     margin: -11px -11px 0;
   }
-  .iframed .snarkMessages {
+  .iframed #screenlog {
     margin: 0;
     position: static;
   }

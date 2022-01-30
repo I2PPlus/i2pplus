@@ -294,7 +294,7 @@ label, th img, .newtorrentsection, #closelog, #pagenavbottom {
 
 /* screenlog */
 
-.snarkMessages {
+#screenlog {
   margin: 2px 1px 11px;
   padding: 0 3px;
   height: 56px;
@@ -314,11 +314,11 @@ label, th img, .newtorrentsection, #closelog, #pagenavbottom {
   scrollbar-color: #a38a75 rgba(63,56,51,.7);
 }
 
-.snarkMessages.configpage {
+#screenlog.configpage {
   width: calc(100% - 10px);
 }
 
-.snarkMessages, #screenlog.collapsed, #screenlog.xpanded {
+#screenlog, #screenlog.collapsed, #screenlog.xpanded {
   background: repeating-linear-gradient(180deg,rgba(77,69,62,.5) 2px, rgba(111,96,90,.3) 4px),
     url(images/whippy.png) no-repeat scroll,
     url(/viewstat.jsp?stat=[I2PSnark]+InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true) no-repeat,
@@ -328,25 +328,25 @@ label, th img, .newtorrentsection, #closelog, #pagenavbottom {
   background-blend-mode: darken, lighten, luminosity, normal, normal;
 }
 
-.snarkMessages:hover, .snarkMessages:focus {
+#screenlog:hover, #screenlog:focus {
   overflow: auto;
 }
 
-.snarkMessages:focus {
+#screenlog:focus {
   box-shadow: 0 0 0 1px #ff1a85, 0 0 0 3px rgba(70,62,57,.5);
 }
 
-.snarkMessages ul {
+#screenlog ul {
   margin: 0;
   padding: 0 0 0 16px;
   list-style: none;
 }
 
-.snarkMessages li {
+#screenlog li {
   margin-left: -15px;
 }
 
-.snarkMessages li::before {
+#screenlog li::before {
   width: 13px;
   height: 11px;
   display: inline-block;
@@ -354,26 +354,26 @@ label, th img, .newtorrentsection, #closelog, #pagenavbottom {
   content: "";
 }
 
-.snarkMessages .infohash, .snarkMessages a, .snarkMessages a:visited {
+#screenlog .infohash, #screenlog a, #screenlog a:visited {
   color: #f90 !important;
   text-shadow: 0 0 1px #000;
   opacity: .9;
 }
 
-.snarkMessages a:hover, .snarkMessages a:visited:hover {
+#screenlog a:hover, #screenlog a:visited:hover {
   color: #fb0 !important;
   opacity: 1;
 }
 
-.snarkMessages a:link:active, .snarkMessages a:visited:active  {
+#screenlog a:link:active, #screenlog a:visited:active  {
   color: #f60 !important;
 }
 
-.snarkMessages .infohash {
+#screenlog .infohash {
   color: #5b5 !important;
 }
 
-.snarkMessages .infohash:hover {
+#screenlog .infohash:hover {
   color: #9f9 !important;
   opacity: 1;
 }
@@ -4425,7 +4425,7 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {
   .mainsection {
     padding: 8px;
   }
-  .snarkMessages {
+  #screenlog {
     margin-bottom: 8px;
   }
   .logshim {
@@ -4807,10 +4807,10 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {
   textarea {
     font-size: 9pt !important;
   }
-  tt, #snarkTorrents tt, .snarkMessages {
+  tt, #snarkTorrents tt, #screenlog {
     font-size: 9pt !important;
   }
-  .snarkMessages {
+  #screenlog {
     height: 60px;
   }
   .snarkAddInfo, .configsectionpanel td, .snarkNewTorrent td, .configsectionpanel th,
