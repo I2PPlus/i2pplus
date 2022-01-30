@@ -20,7 +20,7 @@
   --btn_active: linear-gradient(180deg,#401856,#501f6c);
   --btn_hover_radial: radial-gradient(at center bottom, rgba(96, 0, 96, .4), rgba(0, 0, 0, 0) 60%);
   --btn_hover: var(--btn_hover_radial), linear-gradient(180deg,#202,#101 50%,#080008 50%,#000);
-  --btn: radial-gradient(at center bottom, rgba(70,65,113,.25), rgba(0,0,0,0) 80%), linear-gradient(180deg,#1e1c31,#11101c 50%,#0a0910 50%,#001);
+  --btn: radial-gradient(at center bottom, rgba(70,65,113,.25), rgba(0,0,0,0) 80%), linear-gradient(180deg,#1e1c31,#11101c 50%,#0a0910 50%,#000);
   --btn_shadow_active: var(--highlight), inset 4px 4px 4px rgba(0,0,0,.7);
   --element: linear-gradient(180deg,#112,#000);
   --formaction: linear-gradient(180deg,#001,#030306);

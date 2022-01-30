@@ -28,7 +28,7 @@ body.iframed {
   background-size: 0, 0 !important;
 }
 
-.toggleview, .configTitle, .snarknavbar, img, input[type=submit], input[type=radio], input[type=checkbox],
+.toggleview, .configTitle, .snarknavbar, img, input[type=submit], .optbox,
 label, th img, .newtorrentsection, #closeLog, #expand, #shrink {
   user-select: none;
 }
@@ -347,10 +347,10 @@ thead {
 
 th {
   padding: 8px 2px;
+  font-size: 9pt;
   border-top: var(--border);
   border-bottom: var(--border);
   background: #001;
-  font-size: 9pt;
 }
 
 th {
@@ -403,7 +403,8 @@ tfoot td:first-child {
   text-align: left !important;
 }
 
-tfoot img, tfoot:nth-child(2) img, tfoot:nth-child(1) img, tfoot:nth-child(3) img, tfoot:nth-child(4) img {
+tfoot img, tfoot:nth-child(2) img, tfoot:nth-child(1) img,
+tfoot:nth-child(3) img, tfoot:nth-child(4) img {
   margin: 0 2px 3px 0 !important;
   padding-right: 0 !important;
 }
@@ -424,10 +425,6 @@ tfoot tr:nth-child(n+1) {
 
 .iframed .snarkTorrents {
   margin-top: -1px;
-}
-
-.snarkTorrents th br {
-  display: none; /* kill double height button display */
 }
 
 .snarkTorrents th {
