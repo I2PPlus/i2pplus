@@ -842,7 +842,7 @@ tt, .bucket, #bucketSet code {
   padding-right: 6px;
 }
 
-.dirInfo .ParentDir a, .dirInfo .snarkFileName a, #snarkTorrents.torrentName a {
+.dirInfo .ParentDir a, .dirInfo .snarkFileName a, #snarkTorrents .torrentName a {
   padding: 2px 0;
   width: 100%;
   display: inline-block;
@@ -1254,7 +1254,7 @@ tr:nth-child(even) + .peerinfo:nth-child(odd) {
   transition: ease opacity .1s;
 }
 
-#snarkTorrents.percentBarComplete, .uploaded {
+#snarkTorrents .percentBarComplete, .uploaded {
   padding: 3px 0;
   display: inline-block;
   width: 84px;
@@ -3242,7 +3242,7 @@ td.peerCount {
   color: var(--bg) !important;
 }
 
-#snarkTorrents.infohash, .torrentInfo .infohash {
+#snarkTorrents .infohash, .torrentInfo .infohash {
   display: inline-block;
   max-width: 80px;
   white-space: nowrap;
@@ -3251,7 +3251,7 @@ td.peerCount {
   text-overflow: ellipsis;
 }
 
-#snarkTorrents.infohash {
+#snarkTorrents .infohash {
   padding: 2px 4px 2px 18px;
   display: inline-block;
   max-width: 100px;
@@ -3261,7 +3261,7 @@ td.peerCount {
 }
 
 @media screen and (max-width: 1500px) {
-  #snarkTorrents.infohash {
+  #snarkTorrents .infohash {
     max-width: 56px;
   }
 }
@@ -3893,7 +3893,7 @@ td.peerCount {
   #snarkTorrentstd:nth-child(2), #snarkTorrentstd:nth-child(2) a {
     font-weight: 700;
   }
-  #snarkTorrents.debuginfo td, #snarkTorrents.peerinfo td {
+  #snarkTorrents .debuginfo td, #snarkTorrents .peerinfo td {
     font-weight: 400;
   }
   #snarkTorrentstfoot tr:first-child th:not(:empty) {

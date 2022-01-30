@@ -1469,7 +1469,7 @@ td.RateDown, td.RateUp, td.RateDown span, td.RateUp span {
 	font-style: italic !important;
 }
 
-.dirInfo .ParentDir a, .dirInfo .snarkFileName a, #snarkTorrents.torrentName a {
+.dirInfo .ParentDir a, .dirInfo .snarkFileName a, #snarkTorrents .torrentName a {
 	padding: 2px 0;
 	display: inline-block;
 	width: 100%;
@@ -2037,7 +2037,7 @@ select {
 	user-select: all;
 }
 
-#snarkTorrents.infohash {
+#snarkTorrents .infohash {
 	padding: 2px 4px 2px 18px;
 	display: inline-block;
 	border-radius: 1px;
@@ -2796,7 +2796,7 @@ input[name="i2cpOpts"], input[name="nofilter_dataDir"] {
 }
 
 @media screen and (max-width: 1200px) {
-	#snarkTorrents.infohash {
+	#snarkTorrents .infohash {
 		width: 64px;
 	}
 	.magnetLabel {

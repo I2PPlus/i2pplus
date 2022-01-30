@@ -4857,7 +4857,7 @@ body:not(.iframed) #torrentEdit tfoot td {
   color: #cc0 !important;
 }
 
-#snarkTorrents.infohash, .torrentInfo .infohash {
+#snarkTorrents .infohash, .torrentInfo .infohash {
   margin: 1px -1px 2px 0 !important;
   padding: 2px;
   display: inline-block;
@@ -4876,7 +4876,7 @@ body:not(.iframed) #torrentEdit tfoot td {
   background: linear-gradient(180deg,#cc0, #aa0);
 }
 
-#snarkTorrents.infohash {
+#snarkTorrents .infohash {
   margin-right: 2px !important;
   padding-left: 15px;
   background: var(--hash) no-repeat 2px center / 12px, linear-gradient(180deg,#cc0, #aa0);
@@ -5333,7 +5333,7 @@ td.torrentAction input[type=submit] {
   td.peerCount b .left, td.peerCount b .right {
     min-width: 35px !important;
   }
-  #snarkTorrents.infohash {
+  #snarkTorrents .infohash {
     width: 60px;
   }
   .magnetLabel {
@@ -6134,7 +6134,7 @@ td.torrentAction input[type=submit] {
   .RateDown:not(:empty), .RateUp:not(:empty) {
     min-width: 70px !important;
   }
-  #snarkTorrents.infohash {
+  #snarkTorrents .infohash {
     padding-left: 16px;
     max-width: 100px;
     background-size: 13px, 100%;

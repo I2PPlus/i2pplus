@@ -1295,7 +1295,7 @@ body:not(.framed) .torrentInfo {
   color: #fff !important;
 }
 
-#snarkTorrents.infohash, .torrentInfo .infohash {
+#snarkTorrents .infohash, .torrentInfo .infohash {
   display: inline-block;
   max-width: 80px;
   line-height: 1;
@@ -1306,7 +1306,7 @@ body:not(.framed) .torrentInfo {
   border-radius: 1px;
 }
 
-#snarkTorrents.infohash {
+#snarkTorrents .infohash {
   margin-right: 4px;
   padding: 2px 4px 2px 18px;
   max-width: 100px;
@@ -4104,7 +4104,7 @@ td.torrentAction input[type=submit] {
   .newTab {
     margin: 1px 4px 0;
   }
-  #snarkTorrents.infohash {
+  #snarkTorrents .infohash {
     max-width: 60px;
   }
   .magnetLabel {

@@ -1046,7 +1046,7 @@ img[src$="details.png"] {
   margin-right: 3px;
 }
 
-#snarkTorrents.infohash, .torrentInfo .infohash {
+#snarkTorrents .infohash, .torrentInfo .infohash {
   max-width: 90px;
   display: inline-block;
   vertical-align: middle;
@@ -1056,7 +1056,7 @@ img[src$="details.png"] {
   opacity: .8;
 }
 
-#snarkTorrents.infohash {
+#snarkTorrents .infohash {
   padding: 1px 1px 1px 16px;
   font-weight: 700;
   color: #fff5ef;
@@ -1156,7 +1156,7 @@ thead img.disable, img.disable:hover {
   min-width: 0 !important;
 }
 
-.dirInfo .ParentDir a, .dirInfo .snarkFileName a, #snarkTorrents.torrentName a {
+.dirInfo .ParentDir a, .dirInfo .snarkFileName a, #snarkTorrents .torrentName a {
   padding: 2px 0;
   width: 100%;
   display: inline-block;
@@ -4942,7 +4942,7 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {
   #torrentInfoStats .nowrap {
     margin-right: 6px;
   }
-  #snarkTorrents.infohash {
+  #snarkTorrents .infohash {
     background-size: 12px;
   }
   .torrentInfo .infohash {

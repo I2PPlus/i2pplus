@@ -814,7 +814,7 @@ th .magnetlink img, th .torrentlink img {
   user-select: all;
 }
 
-#snarkTorrents.infohash, .torrentInfo .infohash {
+#snarkTorrents .infohash, .torrentInfo .infohash {
   display: inline-block;
   max-width: 120px;
   white-space: nowrap;
@@ -824,7 +824,7 @@ th .magnetlink img, th .torrentlink img {
   opacity: .8;
 }
 
-#snarkTorrents.infohash {
+#snarkTorrents .infohash {
   margin-right: 4px;
   padding: 1px 6px 1px 18px;
   color: #000;
@@ -851,7 +851,7 @@ th .magnetlink img, th .torrentlink img {
   user-select: all;
 }
 
-li .infohash::selection, #snarkTorrents.infohash::selection {
+li .infohash::selection, #snarkTorrents .infohash::selection {
   color: #000;
   background: #cc0;
 }
@@ -1040,7 +1040,7 @@ tr:hover .percentBarText {
   border-top: var(--border_soft);
 }
 
-#snarkTorrents.rowEven:first-of-type td {
+#snarkTorrents .rowEven:first-of-type td {
   border-top: none !important
 }
 
@@ -3319,7 +3319,7 @@ tr:not(.peerinfo) .torrentDownloaded .percentBarText::after {
   display: inline-block;
 }
 
-.magnetLabel, #snarkTorrents.infohash {
+.magnetLabel, #snarkTorrents .infohash {
   vertical-align: text-bottom;
   line-height: 1.2;
 }
@@ -4096,7 +4096,7 @@ td.torrentAction input[type=submit] {
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  #snarkTorrents.infohash {
+  #snarkTorrents .infohash {
     width: 60px;
   }
   .magnetLabel {
@@ -4123,7 +4123,7 @@ td.torrentAction input[type=submit] {
     top: -22px;
     left: -22px;
   }
-  #snarkTorrents.trackerDetails {
+  #snarkTorrents .trackerDetails {
     padding: 0 !important;
     width: 0 !important;
     min-width: 0 !important;

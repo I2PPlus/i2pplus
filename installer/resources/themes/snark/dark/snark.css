@@ -519,7 +519,7 @@ td.peerCount:empty {
   padding: 1px !important;
 }
 
-#snarkTorrents.torrentDetails img:not([src$="rateme.svg"]) {
+#snarkTorrents .torrentDetails img:not([src$="rateme.svg"]) {
   margin-top: -2px !important;
   margin-bottom: -2px !important;
   padding: 4px !important;
@@ -765,14 +765,14 @@ td.graphicStatus {
   user-select: all;
 }
 
-#snarkTorrents.infohash {
+#snarkTorrents .infohash {
   margin-right: 3px;
   padding: 1px 5px 1px 17px;
   color: #000;
   background: #cc0 var(--hash2) no-repeat 3px center / 12px;
 }
 
-#snarkTorrents.infohash, .torrentInfo .infohash {
+#snarkTorrents .infohash, .torrentInfo .infohash {
   display: inline-block;
   max-width: 120px;
   white-space: nowrap;
@@ -787,7 +787,7 @@ td.graphicStatus {
   background: #0f0;
 }
 
-#snarkTorrents.infohash::selection {
+#snarkTorrents .infohash::selection {
   color: #ff0 !important;
   background: #000 !important;
 }
@@ -867,7 +867,7 @@ td.graphicStatus {
   width: 16px;
 }
 
-.dirInfo .ParentDir a, .dirInfo .snarkFileName a, #snarkTorrents.torrentName a {
+.dirInfo .ParentDir a, .dirInfo .snarkFileName a, #snarkTorrents .torrentName a {
   padding: 2px 0;
   width: 100%;
   display: inline-block;
@@ -877,7 +877,7 @@ tr:not(:hover) .torrentName a, tr:not(:hover) .snarkFileName a {
   -webkit-text-stroke: 2px rgba(0,0,0,.3);
 }
 
-#snarkTorrents.torrentName {
+#snarkTorrents .torrentName {
   padding-left: 2px;
 }
 
@@ -1168,14 +1168,14 @@ td.fileStatus {
   color: #dd7 !important;
 }
 
-#snarkTorrents.noneLoaded, #snarkTorrents.noneLoaded:hover {
+#snarkTorrents .noneLoaded, #snarkTorrents .noneLoaded:hover {
   font-size: 10pt;
   font-weight: 700;
   border-bottom: var(--border);
   background: #000;
 }
 
-#snarkTorrents.noneLoaded td, #snarkTorrents.noneLoaded:hover td {
+#snarkTorrents .noneLoaded td, #snarkTorrents .noneLoaded:hover td {
   padding: 10px !important;
   text-align: center !important;
   background: transparent !important;
@@ -2371,7 +2371,7 @@ input:checked + .toggleview + hr + table, input:checked + .toggleview + hr + tab
   background: var(--peer) no-repeat 9px center / 18px;
 }
 
-#snarkTorrents.peerinfo td, #snarkTorrents.debuginfo td {
+#snarkTorrents .peerinfo td, #snarkTorrents .debuginfo td {
   padding-top: 4px !important;
   padding-bottom: 4px !important;;
 }
@@ -4143,7 +4143,7 @@ td.torrentAction input[type=submit] {
     padding: 7px 0 5px;
   }
   #actionStopAll, #actionStartAll {padding: 11px 18px !important}
-  #snarkTorrents.infohash {
+  #snarkTorrents .infohash {
     padding-left: 15px;
     max-width: 60px;
     background-size: 11px;
@@ -4401,7 +4401,7 @@ td.torrentAction input[type=submit] {
     padding-top: 3px !important;
     padding-bottom: 3px !important;
   }
-  .dirInfo td, #snarkTorrents.peerinfo td {
+  .dirInfo td, #snarkTorrents .peerinfo td {
     padding-top: 4px !important;
     padding-bottom: 4px !important;
   }
@@ -4664,7 +4664,7 @@ td.torrentAction input[type=submit] {
   .trackerDetails, .SnarkTorrentDetails {
     width: 1% !important;
   }
-  #snarkTorrents.torrentName {
+  #snarkTorrents .torrentName {
     padding-left: 5px;
   }
   .torrentName a, .snarkFileName a, .torrentName:hover a, .snarkFileName:hover a {
