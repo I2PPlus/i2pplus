@@ -2946,9 +2946,22 @@ tr.addnew, tr.addnew:hover {
   filter: drop-shadow(0 0 1px var(--hover));
 }
 
+.themelabel {
+  margin-left: -4px;
+  margin-right: -4px;
+  padding: 3px 2px 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.5;
+  color: #bb7;
+  border-top: var(--border) !important;
+  background: var(--glow_bottom), linear-gradient(180deg,#001900,#001000 50%,#000);
+}
+
 .themechoice:hover .themelabel {
   border-top: 1px solid var(--hover) !important;
-  background: #000;
+  background: var(--glow_bottom_hover) #000;
 }
 
 .themechoice:active .themelabel {
@@ -3037,19 +3050,6 @@ p#helptranslate {
 
 #themeoptions input[type=checkbox] {
   min-height: 16px;
-}
-
-.themelabel {
-  margin-left: -4px;
-  margin-right: -4px;
-  padding: 3px 2px 4px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  line-height: 1.5;
-  color: #bb7;
-  border-top: var(--border) !important;
-  background: linear-gradient(180deg,#001000, #001900 50%, #000 51%, #000);
 }
 
 h3#themeheading, h3#langheading, h3#passwordheading {
@@ -5791,12 +5791,12 @@ div.app:hover img, .sitemapLink:hover img, a:focus .app img, a:focus .sitemaplin
 }
 
 .applabel, .sitemapLabel, .themeLabel, .ui_lang {
-  background: radial-gradient(at center bottom, rgba(16, 72, 16, .3) 0, rgba(0, 0, 0, 0) 50%) #000;
+  background: var(--glow_bottom), linear-gradient(180deg,#001900,#001000 50%,#000);
 }
 
 div.app:hover .applabel, .sitemapLink:hover .sitemapLabel,
 .themechoice:hover .themeLabel, .langselect:hover .ui_lang {
-  background: radial-gradient(at center bottom, rgba(256, 96, 0, .25) 0, rgba(0, 0, 0, 0) 50%) #000;
+  background: var(--glow_bottom_hover) #000;
 }
 
 .applabel {
