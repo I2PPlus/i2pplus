@@ -4535,8 +4535,8 @@ table#sidebarconf {
 }
 
 #sidebarconf button {
-  margin: 2px;
-  padding: 6px !important;
+  margin: 2px 6px 2px 2px;
+  padding: 4px 8px;
   min-width: 0;
   border-radius: 1px;
 }
@@ -4554,7 +4554,9 @@ table#sidebarconf {
   height: 12px;
 }
 
-#sidebarconf th:nth-child(1), .homelinkedit th:first-child, #consolepass th:first-child {
+#sidebarconf th:nth-child(1),
+.homelinkedit th:first-child,
+#consolepass th:first-child {
   width: 5%;
   text-align: center;
   text-indent: -99999px;
@@ -4567,16 +4569,21 @@ table#sidebarconf {
 }
 
 #sidebarconf td:first-child {
-  width: 72px;
+  width: 1%;
 }
 
 #sidebarconf td:nth-child(3), #sidebarconf td:nth-child(4) {
-  padding: 0;
-  width: 72px;
-  white-space:nowrap;
+  padding: 0 4px;
+  width: 1%;
+  white-space: nowrap;
+}
+
+#sidebarconf td:nth-child(3) {
+  padding-right: 0;
 }
 
 #sidebarconf td:nth-child(4) {
+  padding: 0;
   text-align: left;
 }
 
@@ -12397,6 +12404,14 @@ iframe {
     margin: -4px 0 0 -16px;
     background-size: 19px;
   }
+  @media screen and (max-width: 1499px) {
+  #sidebarconf button {
+    padding: 4px 7px;
+  }
+  #sidebarconf button img {
+   width: 10px;
+   height: 10px;
+  }
 }
 
 @media screen and (max-width: 1400px) {
@@ -12680,10 +12695,10 @@ iframe {
 
 @media screen and (min-width: 1500px) {
   body, .main, .main td, .news p, #news p, .statusnotes, textarea, th, .applabel a, tt, code,
-  .messages, .messages #newsStatus, .messages #newsDisplay {
+  .messages, .messages #newsStatus {
     font-size: 10pt !important;
   }
-  #ntcpconnections th, #udpconnections th {
+  #ntcpconnections th, #udpconnections th, #newsDisplay {
     font-size: 90% !important;
   }
   .cells tt, #profilelist tt, #floodfills tt {
