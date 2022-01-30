@@ -6049,10 +6049,10 @@ td.torrentAction input[type=submit] {
     max-width: none;
   }
   .magnetLabel {
-    padding: 2px 6px;
+    padding: 2px 6px 2px 18px;
     border-radius: 3px;
     box-shadow: var(--highlight);
-    background: #303;
+    background: #303 var(--tag) no-repeat 5px center / 11px;
   }
   .torrentUploaded {
     padding-left: 8px;
