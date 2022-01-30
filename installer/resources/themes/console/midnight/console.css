@@ -773,8 +773,8 @@ pre {
 .routersummary hr {
   margin: 8px -10px 7px -10px;
   position: relative;
-  z-index: 20;
-  height: 2px;
+  z-index: 999;
+  height: 1px;
   border-bottom: var(--border_inner);
   box-shadow: inset 0 1px 0 2px #000;
   background: #26235c;
@@ -12372,7 +12372,7 @@ iframe {
     margin: -2px 0;
     background-size: 12px;
   }
-  .routersummary h3 {margin-bottom: -10px}
+  .routersummary h3 {margin-bottom: -9px; padding: 5px 0 !important}
   .routersummary h3::before {height: 14px}
   .main#tunnels h3 a[href^="/configtunnels#"]::after,
   .main#tunnels h3 a[href$="i2ptunnelmgr"]::after,
@@ -12404,7 +12404,6 @@ iframe {
     margin: -4px 0 0 -16px;
     background-size: 19px;
   }
-  @media screen and (max-width: 1499px) {
   #sidebarconf button {
     padding: 4px 7px;
   }
