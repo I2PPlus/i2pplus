@@ -23,7 +23,7 @@
   background-size: 10px 10px;
 }
 
-#snarkTorrentsthead img {
+#snarkTorrents thead img {
   min-height: 13px !important;
 }
 
@@ -114,12 +114,12 @@ a.control, input[type=submit], input.accept, th {
   padding: 2px 0 3px;
 }
 
-#snarkTorrentstt {
+#snarkTorrents tt {
   letter-spacing: .2em !important;
   font-weight: 700 !important;
 }
 
-#snarkTorrentstd tt {
+#snarkTorrents td tt {
   padding: 0 3px !important;
   min-width: 38px;
   text-align: center;
@@ -173,13 +173,13 @@ a.control, input[type=submit], input.accept, th {
 }
 
 @media screen and (max-width: 800px) {
-  #snarkTorrentsthead img {
+  #snarkTorrents thead img {
     min-height: 10px !important;
   }
 }
 
 @media screen and (max-width: 1400px) {
-  .iframed #snarkTorrentstd.torrentName a {
+  .iframed #snarkTorrents td.torrentName a {
     max-width: 400px !important;
     display: inline-block; !important;
     white-space: nowrap !important;
