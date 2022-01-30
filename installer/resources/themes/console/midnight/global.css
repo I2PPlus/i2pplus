@@ -442,3 +442,9 @@ select[disabled], select[disabled]:hover, select[disabled]:focus, select[disable
   filter: none;
   pointer-events: none;
 }
+
+@media screen and (max-width: 1499px) {
+  select {
+    padding: 5px 24px 5px 6px;
+  }
+}
