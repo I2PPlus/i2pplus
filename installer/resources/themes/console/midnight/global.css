@@ -227,7 +227,7 @@ button, input[type=submit], input[type=reset], select, .control, .fakebutton, .f
 }
 
 input[type=submit], input[type=reset], button {
-  min-width: 0 !important;
+  min-width: 0;
   background-size: 12px, 100%;
 }
 

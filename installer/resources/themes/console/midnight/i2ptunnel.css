@@ -514,8 +514,8 @@ a.control, input.control {
 
 .control, .control:link, .control:visited, button {
   margin: 2px !important;
-  padding: 5px 8px !important;
-  min-width: 70px !important;
+  padding: 5px 12px !important;
+  min-width: 80px !important;
   box-sizing: border-box;
   overflow: hidden;
   white-space: nowrap;
