@@ -1,12 +1,16 @@
 /* I2P TunnelManager theme: "Midnight" */
 /* Author: dr|z3d.  */
 
-@import url(/themes/fonts/DroidSans.css);
 @import url(global.css);
 @import url(/themes/console/images/images.css);
 @import url(images/images.css);
 @import url(/themes/console/images/i2ptunnel.css);
-@import url(/themes/console/midnight/images/tile.css);
+
+:root {
+  --create: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%237670c2' d='M37.6 1C37 .4 36 0 35.2 0h-6.4a3.4 3.4 0 00-3.4 3.4l.1 22.1H3.3A3.4 3.4 0 000 28.8v6.4c0 1.8 1.5 3.4 3.3 3.4h22.2v22c0 1.8 1.5 3.4 3.3 3.4h6.4a3.4 3.4 0 003.4-3.4v-22h22c1.9 0 3.4-1.6 3.4-3.5v-6.3c0-1.8-1.6-3.4-3.4-3.4l-22 .1V3.3a3.4 3.4 0 00-1-2.3z'/%3E%3C/svg%3E%0A");
+  --create_hover: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%23bf2295' d='M37.6 1C37 .4 36 0 35.2 0h-6.4a3.4 3.4 0 00-3.4 3.4l.1 22.1H3.3A3.4 3.4 0 000 28.8v6.4c0 1.8 1.5 3.4 3.3 3.4h22.2v22c0 1.8 1.5 3.4 3.3 3.4h6.4a3.4 3.4 0 003.4-3.4v-22h22c1.9 0 3.4-1.6 3.4-3.5v-6.3c0-1.8-1.6-3.4-3.4-3.4l-22 .1V3.3a3.4 3.4 0 00-1-2.3z'/%3E%3C/svg%3E%0A");
+  --create_active: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%23fc1c66' d='M37.6 1C37 .4 36 0 35.2 0h-6.4a3.4 3.4 0 00-3.4 3.4l.1 22.1H3.3A3.4 3.4 0 000 28.8v6.4c0 1.8 1.5 3.4 3.3 3.4h22.2v22c0 1.8 1.5 3.4 3.3 3.4h6.4a3.4 3.4 0 003.4-3.4v-22h22c1.9 0 3.4-1.6 3.4-3.5v-6.3c0-1.8-1.6-3.4-3.4-3.4l-22 .1V3.3a3.4 3.4 0 00-1-2.3z'/%3E%3C/svg%3E%0A");
+}
 
 body {
   margin: 5px 0 15px;
@@ -174,7 +178,7 @@ hr {
 }
 
 #globalTunnelControl.panel:first-child ~ .panel#clients {
-  margin-bottom: -2px !important;
+  margin-bottom: 10px !important;
 }
 
 #globalTunnelControl.iframed.panel:first-child ~ .panel#clients::after {
@@ -332,10 +336,6 @@ td.infohelp {
 
 .tunnelProperties td {
   border-top: 1px solid #26235c !important;
-}
-
-_:-ms-lang(x), .tunnelProperties {
-  border-bottom: 1px solid #17142f !important;
 }
 
 #serverTunnels {
@@ -530,10 +530,63 @@ a.control, input.control {
   color: var(--a_hover);
   background: var(--btn_hover) !important;
 }
-
 .control:active, button:active {
   text-decoration: none;
   background: var(--hover) !important;
+}
+
+.control.start, .control.start:hover, .control.start:focus, .control.start:active,
+.control.stop, .control.stop:hover, .control.stop:focus, .control.stop:active,
+.control.preview, .control.preview:hover, .control.preview:focus, .control.preview:active,
+.control.create, .control.create:hover, .control.create:focus, .control.create:active {
+  background: var(--start) no-repeat center center / 16px, var(--btn), var(--start_hover), var(--start_active) !important;
+  color: transparent !important;
+  text-shadow: none;
+  -webkit-text-stroke: 0 !important;
+}
+
+.control.stop {
+  background: var(--stop) no-repeat center center / 15px, var(--btn), var(--stop_hover), var(--start_active) !important;
+}
+
+.control.preview {
+  background: var(--eye) no-repeat center center / 20px, var(--btn), var(--eye_hover), var(--eye_active) !important;
+}
+
+.control.create {
+  background: var(--create) no-repeat center center / 15px, var(--btn), var(--create_hover), var(--create_active) !important;
+}
+
+.control.start:hover, .control.start:focus {
+  background: var(--start_hover) no-repeat center center / 16px, var(--btn_hover) !important;
+}
+
+.control.stop:hover, .control.stop:focus {
+  background: var(--stop_hover) no-repeat center center / 15px, var(--btn_hover) !important;
+}
+
+.control.preview:hover,.control.preview:focus {
+  background: var(--eye_hover) no-repeat center center / 20px, var(--btn_hover) !important;
+}
+
+.control.create:hover,.control.create:focus {
+  background: var(--create_hover) no-repeat center center / 15px, var(--btn_hover) !important;
+}
+
+.control.start:active {
+  background: var(--hover) var(--start_active) no-repeat center center / 15px !important;
+}
+
+.control.stop:active {
+  background: var(--hover) var(--stop_active) no-repeat center center / 14px !important;
+}
+
+.control.preview:active {
+  background: var(--hover) var(--eye_active) no-repeat center center / 19px !important;
+}
+
+.control.create:active {
+  background: var(--hover) var(--create_active) no-repeat center center / 14px !important;
 }
 
 a.control {
