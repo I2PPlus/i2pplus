@@ -260,7 +260,7 @@ label, th img, .newtorrentsection, #closelog, #pagenav {
   list-style: none;
 }
 
-.snarkMessages li, .snarkMessages li a, .snarkTorrents tt, #ourDest tt {
+.snarkMessages li, .snarkMessages li a, #snarkTorrentstt, #ourDest tt {
   line-height: 1.15;
   font-size: 8.5pt !important;
   font-weight: 700;
@@ -361,7 +361,7 @@ thead, thead:hover tr {
   border-bottom: 1px solid #101;
 }
 
-.snarkTorrents thead {
+#snarkTorrentsthead {
   box-shadow: none;
 }
 
@@ -414,12 +414,12 @@ tfoot th {
   white-space: nowrap;
 }
 
-.snarkTorrents {
+#snarkTorrents{
   margin: 0;
   border: 1px solid #101;
 }
 
-.snarkTorrents th {
+#snarkTorrentsth {
   text-align: center;
 }
 
@@ -432,11 +432,11 @@ th.RateDown, th.RateUp, th.SnarkTorrentAction {
   text-align: center !important;
 }
 
-.snarkTorrents tfoot th {
+#snarkTorrentstfoot th {
   font-weight: 400;
 }
 
-.snarkTorrents tfoot tr:first-child th {
+#snarkTorrentstfoot tr:first-child th {
   padding: 7px 4px !important;
   vertical-align: middle;
   line-height: 1.4;
@@ -444,7 +444,7 @@ th.RateDown, th.RateUp, th.SnarkTorrentAction {
   background: transparent;
 }
 
-.snarkTorrents tfoot th br {
+#snarkTorrentstfoot th br {
   margin-left: 20px !important;
   display: inline-block;
 }
@@ -455,11 +455,11 @@ th.RateDown, th.RateUp, th.SnarkTorrentAction {
   text-align: center !important;
 }
 
-.snarkTorrents {
+#snarkTorrents{
   margin-top: -1px !important;
 }
 
-.snarkTorrents td {
+#snarkTorrentstd {
   line-height: 1.2;
   text-align: left;
   font-size: 8pt !important;
@@ -519,7 +519,7 @@ td.peerCount:empty {
   padding: 1px !important;
 }
 
-.snarkTorrents .torrentDetails img:not([src$="rateme.svg"]) {
+#snarkTorrents.torrentDetails img:not([src$="rateme.svg"]) {
   margin-top: -2px !important;
   margin-bottom: -2px !important;
   padding: 4px !important;
@@ -590,16 +590,16 @@ td.graphicStatus {
   padding-right: 6px;
 }
 
-.snarkTorrents td[colspan="10"] {
+#snarkTorrentstd[colspan="10"] {
   padding: 2px;
   color: #cc7 !important;
 }
 
-.snarkTorrents img {
+#snarkTorrentsimg {
   padding: 0;
 }
 
-.snarkTorrents tt {
+#snarkTorrentstt {
   margin: 1px 3px;
   padding: 1px 2px;
   display: inline-block;
@@ -716,11 +716,11 @@ td.graphicStatus {
   background: url(/themes/console/dark/images/camotile2.png) repeat scroll center bottom #010;
 }
 
-.torrentInfo tr:nth-child(even), #snarkTorrentEdit tr:nth-child(even) {
+.torrentInfo tr:nth-child(even), #torrentEdit tr:nth-child(even) {
   background: #001000;
 }
 
-.torrentInfo tr:nth-child(odd), #snarkTorrentEdit tr:nth-child(odd) {
+.torrentInfo tr:nth-child(odd), #torrentEdit tr:nth-child(odd) {
   background: #001a00;
 }
 
@@ -765,14 +765,14 @@ td.graphicStatus {
   user-select: all;
 }
 
-.snarkTorrents .infohash {
+#snarkTorrents.infohash {
   margin-right: 3px;
   padding: 1px 5px 1px 17px;
   color: #000;
   background: #cc0 var(--hash2) no-repeat 3px center / 12px;
 }
 
-.snarkTorrents .infohash, .torrentInfo .infohash {
+#snarkTorrents.infohash, .torrentInfo .infohash {
   display: inline-block;
   max-width: 120px;
   white-space: nowrap;
@@ -787,7 +787,7 @@ td.graphicStatus {
   background: #0f0;
 }
 
-.snarkTorrents .infohash::selection {
+#snarkTorrents.infohash::selection {
   color: #ff0 !important;
   background: #000 !important;
 }
@@ -867,7 +867,7 @@ td.graphicStatus {
   width: 16px;
 }
 
-.dirInfo .ParentDir a, .dirInfo .snarkFileName a, .snarkTorrents .torrentName a {
+.dirInfo .ParentDir a, .dirInfo .snarkFileName a, #snarkTorrents.torrentName a {
   padding: 2px 0;
   width: 100%;
   display: inline-block;
@@ -877,7 +877,7 @@ tr:not(:hover) .torrentName a, tr:not(:hover) .snarkFileName a {
   -webkit-text-stroke: 2px rgba(0,0,0,.3);
 }
 
-.snarkTorrents .torrentName {
+#snarkTorrents.torrentName {
   padding-left: 2px;
 }
 
@@ -1037,23 +1037,23 @@ tr:not(.peerinfo) .torrentUploaded:empty::after {
   padding-right: 6px !important;
 }
 
-.snarkTorrents th img {
+#snarkTorrentsth img {
   padding: 1px !important;
 }
 
-.snarkTorrents thead img {
+#snarkTorrentsthead img {
   opacity: .8 !important;
 }
 
-.snarkTorrents thead img:hover {
+#snarkTorrentsthead img:hover {
   opacity: 1 !important;
 }
 
-.snarkTorrents tr:hover td, .dirInfo tr:hover,
+#snarkTorrentstr:hover td, .dirInfo tr:hover,
 #trackerselect tr:nth-child(n+2):hover,
 .trackerconfig tr:nth-child(n+2):hover,
 .peerinfo:hover td, .peerinfo:hover + .debuginfo,
-#snarkTorrentEdit tr:not(:last-child):hover {
+#torrentEdit tr:not(:last-child):hover {
   background: #030 !important;
 }
 
@@ -1082,7 +1082,7 @@ tr.peerinfo:hover .percentBarText {
   border-bottom: 1px solid #000;
 }
 
-.snarkTorrents tbody tr:last-child td {
+#snarkTorrentstbody tr:last-child td {
   border-bottom: var(--border);
 }
 
@@ -1094,12 +1094,12 @@ tr.peerinfo:hover .percentBarText {
   background: linear-gradient(90deg,#000800 70%,#000d00) !important;
 }
 
-.snarkTorrents tbody td, .debuginfo.rowOdd td, .debuginfo.rowEven td {
+#snarkTorrentstbody td, .debuginfo.rowOdd td, .debuginfo.rowEven td {
   border-top: 1px solid #001b00 !important;
   border-bottom: 1px solid #001b00 !important;
 }
 
-.snarkTorrents tbody tr:last-child td {
+#snarkTorrentstbody tr:last-child td {
   border-bottom: var(--border) !important;
 }
 
@@ -1168,14 +1168,14 @@ td.fileStatus {
   color: #dd7 !important;
 }
 
-.snarkTorrents .noneLoaded, .snarkTorrents .noneLoaded:hover {
+#snarkTorrents.noneLoaded, #snarkTorrents.noneLoaded:hover {
   font-size: 10pt;
   font-weight: 700;
   border-bottom: var(--border);
   background: #000;
 }
 
-.snarkTorrents .noneLoaded td, .snarkTorrents .noneLoaded:hover td {
+#snarkTorrents.noneLoaded td, #snarkTorrents.noneLoaded:hover td {
   padding: 10px !important;
   text-align: center !important;
   background: transparent !important;
@@ -1687,7 +1687,7 @@ thead a:active img {
   white-space: nowrap;
 }
 
-.snarkTorrents td[colspan="10"] {
+#snarkTorrentstd[colspan="10"] {
   white-space: normal;
 }
 
@@ -2238,7 +2238,7 @@ img:hover {
 }
 
 .newtorrentsection, .addtorrentsection, .configsection, .configsectionpanel,
-#snarkFiles, #snarkCommentSection, #snarkTorrentEditSection {
+#snarkFiles, #snarkCommentSection, #torrentEditSection {
   background: repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px),
     repeating-linear-gradient(180deg,rgba(0,0,0,.8) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px),
     linear-gradient(180deg,rgba(0,16,0,.4), rgba(0,0,0,.5)),
@@ -2371,7 +2371,7 @@ input:checked + .toggleview + hr + table, input:checked + .toggleview + hr + tab
   background: var(--peer) no-repeat 9px center / 18px;
 }
 
-.snarkTorrents .peerinfo td, .snarkTorrents .debuginfo td {
+#snarkTorrents.peerinfo td, #snarkTorrents.debuginfo td {
   padding-top: 4px !important;
   padding-bottom: 4px !important;;
 }
@@ -3472,7 +3472,7 @@ td.graphicStatus img {
   display: inline-block;
 }
 
-/* alternative download bar popup bar text just for our downloads in .snarkTorrents */
+/* alternative download bar popup bar text just for our downloads in #snarkTorrents*/
 
 .rowOdd:not(.peerinfo) .torrentDownloaded .percentBarText,
 .rowEven:not(.peerinfo) .torrentDownloaded .percentBarText {
@@ -3804,7 +3804,7 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {
   filter: drop-shadow(0 0 1px #101) drop-shadow(0 0 2px rgba(128,128,0,.3));
 }
 
-.snarkTorrents td:empty, .snarkTorrents th:empty, .snarkTorrents tfoot tr:first-child th:empty {
+#snarkTorrentstd:empty, #snarkTorrentsth:empty, #snarkTorrentstfoot tr:first-child th:empty {
   padding-right: 0 !important;
   padding-left: 0 !important;
   width: 0 !important;
@@ -4058,15 +4058,15 @@ td.torrentAction input[type=submit] {
 
 /* torrent edit */
 
-#snarkTorrentEditSection hr {
+#torrentEditSection hr {
   margin-bottom: 0;
 }
 
-#snarkTorrentEdit {
+#torrentEdit {
   margin: 10px 0 0;
 }
 
-#snarkTorrentEdit th, #snarkTorrentEdit td {
+#torrentEdit th, #torrentEdit td {
   padding: 8px 20px;
   width: 25%;
   text-align: center;
@@ -4074,12 +4074,12 @@ td.torrentAction input[type=submit] {
   border-bottom: var(--border_soft);
 }
 
-#snarkTorrentEdit th:first-child:not([colspan]), #snarkTorrentEdit td:first-child {
+#torrentEdit th:first-child:not([colspan]), #torrentEdit td:first-child {
   width: 20%;
   text-align: right !important;
 }
 
-#snarkTorrentEdit th:nth-child(2), #snarkTorrentEdit td:nth-child(2) {
+#torrentEdit th:nth-child(2), #torrentEdit td:nth-child(2) {
   width: 30%;
   text-align: left;
 }
@@ -4090,7 +4090,7 @@ td.torrentAction input[type=submit] {
   border-bottom: var(--border) !important;
 }
 
-#snarkTorrentEdit textarea {
+#torrentEdit textarea {
   margin: 0;
   width: 100%;
   height: 80px;
@@ -4098,11 +4098,11 @@ td.torrentAction input[type=submit] {
   resize: vertical;
 }
 
-#snarkTorrentEdit textarea[readonly], #snarkTorrentEdit textarea[readonly]:focus {
+#torrentEdit textarea[readonly], #torrentEdit textarea[readonly]:focus {
   border: var(--border_soft);
 }
 
-#snarkTorrentEdit tfoot td:first-child {
+#torrentEdit tfoot td:first-child {
   padding: 14px 20px !important;
   text-align: center !important;
   font-weight: 700;
@@ -4110,19 +4110,19 @@ td.torrentAction input[type=submit] {
   background: var(--th);
 }
 
-#snarkTorrentEdit tfoot input {
+#torrentEdit tfoot input {
   margin-right: 0;
   float: right;
 }
 
-#snarkTorrentEdit .info_tracker {
+#torrentEdit .info_tracker {
   padding-left: 22px;
   min-width: 80px;
   text-align: left;
   background-position: 6px center;
 }
 
-#snarkTorrentEdit .info_tracker, #snarkTorrentEdit .info_tracker a {
+#torrentEdit .info_tracker, #torrentEdit .info_tracker a {
   font-size: 95%;
   font-weight: 700;
   color: #97b897;
@@ -4143,7 +4143,7 @@ td.torrentAction input[type=submit] {
     padding: 7px 0 5px;
   }
   #actionStopAll, #actionStartAll {padding: 11px 18px !important}
-  .snarkTorrents .infohash {
+  #snarkTorrents.infohash {
     padding-left: 15px;
     max-width: 60px;
     background-size: 11px;
@@ -4243,10 +4243,10 @@ td.torrentAction input[type=submit] {
 }
 
 @media screen and (max-width: 950px) {
-  .snarkTorrents td:nth-child(2) {white-space: nowrap}
-  .snarkTorrents td[colspan="10"] {white-space: normal}
+  #snarkTorrentstd:nth-child(2) {white-space: nowrap}
+  #snarkTorrentstd[colspan="10"] {white-space: normal}
   b.alwaysShow {display: none}
-  .snarkTorrents td:first-child img {max-height: 19px}
+  #snarkTorrentstd:first-child img {max-height: 19px}
   .percentBarComplete {padding: 3px 0 2px !important}
   .tab_label::after {
     width: 16px;
@@ -4288,7 +4288,7 @@ td.torrentAction input[type=submit] {
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .snarkTorrents th img, .snarkTorrents th img, .snarkTorrents th a:hover img {max-height: 18px !important}
+  #snarkTorrentsth img, #snarkTorrentsth img, #snarkTorrentsth a:hover img {max-height: 18px !important}
   th.peerCount img {display: none}
   th#torrentSort {text-align: center}
   .torrentUploaded, .RateUp, .peerinfo,
@@ -4393,15 +4393,15 @@ td.torrentAction input[type=submit] {
 }
 
 @media screen and (min-width: 1100px) {
-  body, .snarkTorrents td, .snarkAddInfo, th, td,  code, textarea,
+  body, #snarkTorrentstd, .snarkAddInfo, th, td,  code, textarea,
   input, input[type=submit], input[type=reset], select, button, a {
     font-size: 9pt !important;
   }
-  .snarkTorrents td {
+  #snarkTorrentstd {
     padding-top: 3px !important;
     padding-bottom: 3px !important;
   }
-  .dirInfo td, .snarkTorrents .peerinfo td {
+  .dirInfo td, #snarkTorrents.peerinfo td {
     padding-top: 4px !important;
     padding-bottom: 4px !important;
   }
@@ -4427,7 +4427,7 @@ td.torrentAction input[type=submit] {
   .snarkNav:first-child {
     padding-left: 25px !important;
   }
-  .snarkTorrents thead th {
+  #snarkTorrentsthead th {
     padding-top: 4px;
     padding-bottom: 5px;
     border-bottom: var(--border) !important;
@@ -4598,19 +4598,19 @@ td.torrentAction input[type=submit] {
 }
 
 @media screen and (min-width: 1500px) {
-  body, .snarkTorrents td, .snarkAddInfo, th, td,  code, textarea, input, input[type=submit], input[type=reset], select, button, a {
+  body, #snarkTorrentstd, .snarkAddInfo, th, td,  code, textarea, input, input[type=submit], input[type=reset], select, button, a {
     font-size: 10pt !important;
   }
-  .snarkMessages li, .snarkMessages li a, .snarkTorrents tt, #ourDest tt, tt {
+  .snarkMessages li, .snarkMessages li a, #snarkTorrentstt, #ourDest tt, tt {
     font-size: 9pt !important
   }
-  tt, .snarkTorrents tt, .snarkMessages, .snarkMessages a {
+  tt, #snarkTorrentstt, .snarkMessages, .snarkMessages a {
     font-size: 9pt !important;
   }
-  .snarkTorrents {
+  #snarkTorrents{
     margin-bottom: 11px;
   }
-  .iframed .snarkTorrents {
+  .iframed #snarkTorrents{
     margin-bottom: 0;
   }
   .snarkNav:link {
@@ -4646,12 +4646,12 @@ td.torrentAction input[type=submit] {
     height: 26px;
     font-weight: 700;
   }
-  .snarkTorrents thead th::before {
+  #snarkTorrentsthead th::before {
     min-height: 18px;
     display: inline-block;
     content: "";
   }
-  .snarkTorrents thead img {
+  #snarkTorrentsthead img {
     margin: 0 1px 3px !important;
     max-height: 22px !important;
   }
@@ -4664,7 +4664,7 @@ td.torrentAction input[type=submit] {
   .trackerDetails, .SnarkTorrentDetails {
     width: 1% !important;
   }
-  .snarkTorrents .torrentName {
+  #snarkTorrents.torrentName {
     padding-left: 5px;
   }
   .torrentName a, .snarkFileName a, .torrentName:hover a, .snarkFileName:hover a {
@@ -4724,13 +4724,13 @@ td.torrentAction input[type=submit] {
     width: 400px !important;
     max-width: 400px !important;
   }
-  .snarkTorrents thead img {margin-top: 1px !important}
+  #snarkTorrentsthead img {margin-top: 1px !important}
   .iframed .page #snarkInfo ~ .mainsection {margin: -11px 0 10px !important}
   td.torrentDetails img, .dirInfo td:first-child img:not(.thumb) {
     width: 22px !important;
     height: 22px !important;
   }
-  .snarkTorrents td.trackerDetails img {
+  #snarkTorrentstd.trackerDetails img {
     padding: 5px !important;
     width: 19px !important;
     height: 19px !important;

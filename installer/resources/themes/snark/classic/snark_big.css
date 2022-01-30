@@ -74,7 +74,7 @@ a.control, input[type=submit], input.accept, th, #trackerselect tr:first-child t
   font-size: 11pt !important;
 }
 
-.snarkTorrents tt {
+#snarkTorrentstt {
   font-size: 9.5pt !important;
 }
 
@@ -124,7 +124,7 @@ a.control, input[type=submit], input.accept, th, #trackerselect tr:first-child t
 }
 
 @media screen and (max-width: 1400px) {
-.iframed .snarkTorrents td.torrentName a {
+.iframed #snarkTorrentstd.torrentName a {
   max-width: 400px !important;
   display: inline-block; !important;
   white-space: nowrap !important;

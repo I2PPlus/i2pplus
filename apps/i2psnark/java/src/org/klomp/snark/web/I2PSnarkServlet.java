@@ -934,7 +934,7 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("<tfoot id=\"snarkFoot");
             if (_manager.util().isConnecting() || !_manager.util().connected())
                 out.write("\" class=\"initializing");
-            out.write("\">\n<tr>\n<th id=\"snarkTorrentTotals\" align=\"left\" colspan=\"11\"></th></tr></tfoot>");
+            out.write("\">\n<tr>\n<th id=\"torrentTotals\" align=\"left\" colspan=\"11\"></th></tr></tfoot>");
         } else /** if (snarks.size() > 1) */ {
 
             // Add a pagenav to bottom of table if we have 50+ torrents per page
@@ -944,7 +944,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 writePageNav(out, req, start, pageSize, total, noThinsp);
                 out.write("</div></td></tr>\n</tbody>\n");
             }
-            out.write("<tfoot id=\"snarkFoot\">\n<tr class=\"volatile\">\n<th id=\"snarkTorrentTotals\" align=\"left\" colspan=\"5\">");
+            out.write("<tfoot id=\"snarkFoot\">\n<tr class=\"volatile\">\n<th id=\"torrentTotals\" align=\"left\" colspan=\"5\">");
             out.write("<span id=\"totals\"><span class=\"canhide\">");
             out.write(_t("Totals"));
             out.write(":&nbsp;</span>");
@@ -3550,7 +3550,7 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final String HEADER_D = "snark_big.css?" + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\" >";
     private static final String HEADER_I = "images/images.css?" + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\" >";
     private static final String HEADER_Z = "override.css\" rel=\"stylesheet\" type=\"text/css\" >";
-    private static final String TABLE_HEADER = "<table border=\"0\" class=\"snarkTorrents\" id=\"snarkTorrents\" width=\"100%\" >\n" + "<thead id=\"snarkHead\">\n";
+    private static final String TABLE_HEADER = "<table border=\"0\" id=\"snarkTorrents\" width=\"100%\" >\n" + "<thead id=\"snarkHead\">\n";
     private static final String FOOTER = "</div>\n</center>\n<span id=\"endOfPage\" data-iframe-height></span>\n" +
                                          "<script type=\"text/javascript\" src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" +
                                          CoreVersion.VERSION + "\" id=\"iframeResizer\"></script>\n" +
@@ -5338,12 +5338,12 @@ public class I2PSnarkServlet extends BasicServlet {
         MetaInfo meta = snark.getMetaInfo();
         if (meta == null)
             return;
-        buf.append("<div id=\"snarkTorrentEditSection\" class=\"mainsection\">\n" +
+        buf.append("<div id=\"torrentEditSection\" class=\"mainsection\">\n" +
                    "<input hidden class=\"toggle_input\" id=\"toggle_torrentedit\" type=\"checkbox\">" +
                    "<label id=\"tab_torrentedit\" class=\"toggleview\" for=\"toggle_torrentedit\"><span class=\"tab_label\">");
         buf.append(_t("Edit Torrent"))
            .append("</span></label><hr>\n")
-           .append("<table id=\"snarkTorrentEdit\">\n");
+           .append("<table id=\"torrentEdit\">\n");
         boolean isRunning = !snark.isStopped();
         String announce = meta.getAnnounce();
         if (announce == null)
