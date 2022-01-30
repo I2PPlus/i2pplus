@@ -8,6 +8,7 @@
   --a: #494;
   --active: #f90;
   --badge: linear-gradient(180deg,#020, #010);
+  --bg_dots: repeating-linear-gradient(90deg, rgba(0,8,0,.5) 2px, rgba(0,16,0,.5) 4px), repeating-linear-gradient(180deg,#000 2px, #010 4px);
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   --border: 1px solid #242;
   --border_hard: 1px solid #252;
