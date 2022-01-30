@@ -28,6 +28,7 @@
   --download_bar: repeating-linear-gradient(135deg, #000 1px, #000 5px, #010 6px, #010 11px);
   --glow_bottom: radial-gradient(at center bottom, rgba(16,72,16,.3), rgba(0,0,0,0) 50%);
   --glow_bottom_hover: radial-gradient(at center bottom, rgba(256,96,0,.25), rgba(0,0,0,0) 50%);
+  --glow_top: radial-gradient(at center -45px, rgba(16,72,16,.3), rgba(0,0,0,0) 85%);
   --h1: var(--h3), linear-gradient(180deg,#1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 46%, #050d05 48%, #020602 52%, #010301 54%, #000000 56%), var(--camotile) #000;
   --h2: repeating-linear-gradient(90deg, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(180deg,#001800, #000 75%);
   --h3_blend: normal, normal, exclusion, exclusion;

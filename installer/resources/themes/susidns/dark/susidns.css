@@ -68,6 +68,14 @@ body.iframed {
   background: transparent !important;
 }
 
+.iframed .page::after {
+  content: "";
+  display: inline-block;
+  width: 100%;
+  height: 14px;
+  vertical-align: bottom;
+}
+
 /* topnav */
 
 #navi  {

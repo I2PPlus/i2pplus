@@ -7018,25 +7018,9 @@ span#distance {
   white-space: nowrap;
 }
 
-.gwhois, .banlisted {
+.gwhois, .gwhois:hover, .banlisted {
   vertical-align: middle;
-  font-size: 0;
-}
-
-.gwhois a::before {
-  margin-left: -2px;
-  width: 12px;
-  height: 12px;
-  display: inline-block;
-  vertical-align: middle;
-  background: var(--search) no-repeat left center / 11px;
-  opacity: .7;
-  content: "";
-}
-
-.gwhois:hover a::before, .gwhois a:focus::before {
-  opacity: 1;
-  transform: scale(1.2);
+  font-size: 0 !important;
 }
 
 .banlisted {
@@ -8110,20 +8094,25 @@ img + tt {
 }
 
 a[href^="https://gwhois"]::after {
-  margin: -2px 0 0 2px;
+  margin: 0 1px 0;
   width: 12px;
   height: 12px;
   display: inline-block;
   vertical-align: middle;
-  background: var(--search) no-repeat right top / 12px;
+  background: var(--search) no-repeat left center / 11px;
+  opacity: .7;
   content: "";
   mix-blend-mode: luminosity;
 }
 
 a[href^="https://gwhois"]:hover::after,
 a[href^="https://gwhois"]:focus::after {
+  opacity: 1;
   mix-blend-mode: normal;
+  transform: scale(1.2);
+  overflow: auto;
 }
+
 /* end tunnels */
 
 /* /peers */
@@ -9734,9 +9723,9 @@ tr:nth-child(4) .net_bwrate::before {
   max-width: 400px !important;
 }
 
-.netdb_addresses .netdb_info {
+.netdb_addresses span.netdb_info {
   margin-left: 3px;
-  max-width: 160px;
+  max-width: 180px;
   display: inline-block;
   white-space: nowrap;
   overflow: hidden;

@@ -948,7 +948,7 @@ div[id^="config_"].main {
 }
 
 .main#dns {
-  padding: 0 0 12px;
+  padding: 0;
   min-width: 650px !important;
 }
 
@@ -1209,7 +1209,7 @@ div.widescroll { /* only scroll content, not entire page eg /peers */
 
 .tab {
   box-shadow: var(--highlight), inset 0 0 1px 1px #040;
-  background: linear-gradient(180deg,#002900, #000400) !important;
+  background: var(--glow_top), linear-gradient(180deg,#002900, #000400) !important;
 }
 
 .tab:hover, #sidebar h3:hover {
@@ -5892,10 +5892,10 @@ iframe {
   background: linear-gradient(180deg,rgba(255,255,255,.1), rgba(0,0,0,.4)), linear-gradient(#d30, var(--hover));
   box-shadow: inset 0 0 0 2px rgba(0,0,0,.7);
   content: "";
-  animation: ease-out reloader 20s forwards;
+  animation: reloader 10s ease .5s forwards;
 }
 
-#webmail::before {
+#webmail::before, #dns::before {
   top: -1px;
 }
 
