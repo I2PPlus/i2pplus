@@ -2348,9 +2348,9 @@ tr:not(.peerinfo) .torrentUploaded:empty::after {
 
 #torrentDisplay label {
 	margin: 0;
-	padding: 2px 8px;
+	padding: 2px 12px;
 	display: inline-block;
-	min-width: 80px;
+	min-width: 84px;
 	line-height: 1.6;
 	font-weight: 700;
 	color: #777;
