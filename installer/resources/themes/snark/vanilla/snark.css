@@ -180,7 +180,7 @@ label, th img, .newtorrentsection, #closelog, #pagenavbottom {
   background-size: 17px, 100%, 100%, 17px, 17px !important;
   background-position: 12px center, center center, center center !important;
   background-repeat: no-repeat !important;
-  animation: fade-in .01s ease 1.5s both;
+  animation: fade-in .25s ease .5s both;
 }
 
 .snarkNav:hover, .snarkNav:focus {

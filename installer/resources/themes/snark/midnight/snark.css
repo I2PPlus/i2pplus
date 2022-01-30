@@ -236,13 +236,13 @@ th img, td img, #closelog, #expand, #shrink {
 }
 
 #screenlog, #screenlog.expanded, #screenlog.collapsed {
-  background: repeating-linear-gradient(180deg,rgba(0,0,16,.7) 2px, rgba(0,0,48,.5) 4px),
-    url(images/hat.png) no-repeat scroll right top,
+  background: url(images/hat.png) no-repeat scroll right top,
+    repeating-linear-gradient(180deg,rgba(0,0,16,.7) 2px, rgba(0,0,48,.5) 4px),
     url(/viewstat.jsp?stat=[I2PSnark]+InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true) no-repeat,
     linear-gradient(180deg,#001, #000008);
-  background-size: 100% 4px, 80px auto, calc(100% - 80px) calc(100% - 8px), 100% !important;
+  background-size: 80px auto, 100% 4px, calc(100% - 75px) calc(100% - 8px), 100% !important;
   background-position: right -4px bottom -10px, center center, left bottom, center top !important;
-  background-blend-mode: overlay, normal, normal, normal;
+  background-blend-mode: normal, overlay, normal, normal;
 }
 
 .iframed #screenlog {
@@ -3166,8 +3166,10 @@ input[name="nofilter_commentsName"] {
 }
 
 #torrentDisplay input:checked + label {
-  text-shadow: 0 1px 1px rgba(255,255,255,.5);
+  color: #fff;
+  text-shadow: 0 1px 1px rgba(0,0,0,.5);
   background: #113;
+  pointer-events: none;
 }
 
 #torrentDisplay label[for="all"] {
@@ -4135,8 +4137,8 @@ td.torrentAction input[type=submit] {
     top: 49px;
     display: flex;
   }
-  #torrentdisplay, #torrentdisplay label[for="all"] {border-left: none !important}
-  #torrentdisplay, #torrentdisplay label:last-child {border-right: none !important}
+  #torrentDisplay, #torrentDisplay label[for="all"] {border-left: none !important}
+  #torrentDisplay, #torrentDisplay label:last-child {border-right: none !important}
   #torrentDisplay label {flex-grow: 1}
 }
 

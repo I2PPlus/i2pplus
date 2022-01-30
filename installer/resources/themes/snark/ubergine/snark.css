@@ -3964,7 +3964,8 @@ input[name="nofilter_commentsName"] {
   border-radius: 0;
 }
 
-#torrentlist #torrentDisplay ~ #snarkTorrents, .iframed #torrentlist #torrentDisplay ~ #snarkTorrents {
+#torrentlist #torrentDisplay ~ #snarkTorrents,
+.iframed #torrentlist #torrentDisplay ~ #snarkTorrents {
   border-radius: 0 0 4px 4px !important;
   border-top: none !important;
   box-shadow: none !important;
@@ -4011,19 +4012,21 @@ input[name="nofilter_commentsName"] {
   opacity: 0;
 }
 
-#torrentDisplay input:checked + label, #torrentDisplay input:checked + label:hover, #torrentDisplay label:active {
+#torrentDisplay input:checked + label,
+#torrentDisplay input:checked + label:hover,
+#torrentDisplay label:active {
   color: #fb0 !important;
   text-shadow: 0 1px 1px #000;
-  box-shadow: var(--highlight), inset 2px 2px 2px 2px #3f1900;
+  box-shadow: var(--highlight), inset 2px 2px 2px 2px rgba(0,0,0,.5);
   background: linear-gradient(180deg,#f30, #f60);
 }
 
 #torrentDisplay input:checked + label {
-  color: #979 !important;
+  color: #dad !important;
   text-shadow: 0 1px 1px #000;
-  box-shadow: var(--highlight), inset 2px 2px 2px 2px #101;
   background: radial-gradient(at center bottom, rgba(255, 32, 160, .25), rgba(128, 64, 128, .15) 80%, rgba(0,0,0,0)),
     linear-gradient(180deg,#180818, #280828) !important;
+  pointer-events: none;
 }
 
 #torrentDisplay label:active {

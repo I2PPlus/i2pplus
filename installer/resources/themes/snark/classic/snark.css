@@ -2979,12 +2979,13 @@ td.peerCount, .nopeers td.peerCount {
 }
 
 #torrentDisplay {
-  margin: 0;
+  margin: -1px 0 0;
   display: block;
   position: sticky;
   top: 42px;
   z-index: 500;
   background: var(--th);
+  border-top: var(--border_main);
   border-bottom: var(--border_main);
 }
 
@@ -3002,7 +3003,7 @@ td.peerCount, .nopeers td.peerCount {
 
 #torrentDisplay label {
   margin: 0;
-  padding: 2px 8px;
+  padding: 5px 8px 4px;
   display: inline-block;
   min-width: 80px;
   font-weight: 700;
@@ -3028,11 +3029,20 @@ td.peerCount, .nopeers td.peerCount {
   background: var(--btn_active);
 }
 
-#torrentdisplay input:checked + label, #torrentdisplay input:checked + label:hover, #torrentdisplay input:checked + label:focus {
+#torrentDisplay input:checked + label,
+#torrentDisplay input:checked + label:hover,
+#torrentDisplay input:checked + label:focus {
   color: #66a;
-  box-shadow: var(--highlight), inset 2px 2px 2px #779;
+  box-shadow: var(--btn_shadow_active);
   background: var(--btn_hover2);
   cursor: default;
+}
+
+#torrentDisplay input:checked + label {
+  color: #88c;
+  box-shadow: var(--btn_shadow_active) !important;
+  background: linear-gradient(180deg,var(--bg2), var(--bg2));
+  pointer-events: none;
 }
 
 /* fix firefox rendering bug when filter displays no torrents */

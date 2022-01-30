@@ -3577,9 +3577,10 @@ td.graphicStatus img {
 }
 
 #torrentDisplay input:checked + label {
-  color: #262;
+  color: #3b3;
   text-shadow: 0 0 1px #000, 0 1px 2px #010;
   background: radial-gradient(at center bottom, rgba(16,72,16,.3), rgba(0,0,0,0) 50%), linear-gradient(180deg,#000a00,#020);
+  pointer-events: none;
 }
 
 .RateUp, .torrentUploaded {
