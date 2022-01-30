@@ -668,11 +668,12 @@ th.torrentUploaded a img {
 }
 
 #snarkTorrents tfoot {
+  line-height: .5;
   background: linear-gradient(180deg,#180018, #080008);
 }
 
 #snarkTorrents tfoot th {
-  padding: 5px 2px;
+  padding: 3px 2px;
   font-weight: 400;
   vertical-align: middle;
 }
@@ -682,11 +683,15 @@ th.torrentUploaded a img {
 }
 
 #snarkTorrents tfoot tr:first-child th {
-  padding: 3px 2px 1px;
-  color: #ddd !important;
-  font-weight: 700;
+  padding: 2px 2px 0;
   vertical-align: middle;
+  font-weight: 700;
+  color: #ddd !important;
   border-top: var(--border_inner);
+}
+
+#dhtDebug {
+  line-height: 1.5;
 }
 
 .iframed #snarkTorrents tfoot tr:first-child th {
@@ -1850,6 +1855,10 @@ input[type=submit], input[type=reset], a.control {
 
 input[type=submit]:hover, input[type=reset]:hover, a.control:hover, input[disabled] {
   text-shadow: none !important;
+}
+
+input[type=text], textarea, select {
+  box-sizing: border-box;
 }
 
 input.r {
@@ -3507,7 +3516,7 @@ span.trackerName::before {
 }
 
 input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilter_dataDir"] {
-  width: calc(100% - 186px) !important;
+  width: calc(100% - 166px) !important;
 }
 
 input[name="nofilter_commentsName"] {
@@ -5437,7 +5446,7 @@ td.torrentAction input[type=submit] {
     font-size: 11pt !important;
   }
   .configsection .configTitle, .toggleview {
-    padding: 3px 5px !important;
+    padding: 0 5px 1px !important;
   }
   .dirInfoComplete {
     display: none;
@@ -5605,7 +5614,7 @@ td.torrentAction input[type=submit] {
 }
 
 @media screen and (max-width: 950px) {
-  #snarkTorrents a, .torrentETA, #snarkTorrents td, #snarkTorrents tfoot th,
+  #snarkTorrents a:not(#debugMode), .torrentETA, #snarkTorrents td, #snarkTorrents tfoot th,
   .peerinfo td, .torrentInfo td, .dirInfo td {
     font-size: 8.5pt !important;
   }
@@ -5883,7 +5892,7 @@ td.torrentAction input[type=submit] {
 @media screen and (min-width: 1050px) {
   .iframed .page {margin-bottom: 0}
   .iframed .configsection .configTitle {margin-bottom: 0 !important}
-  #snarkTorrents a, th, td {font-size: 9pt !important}
+  #snarkTorrents a:not(#debugMode), th, td {font-size: 9pt !important}
   .mainsection td {
     padding-top: 3px !important;
     padding-bottom: 3px !important;
@@ -5892,7 +5901,7 @@ td.torrentAction input[type=submit] {
 
 @media screen and (min-width: 1180px) {
   body, th, td, .snarkCommentInfo textarea, input[type=submit], input[type="reset"],
-  select, select option, button, a.control, #snarkTorrents a:link {
+  select, select option, button, a.control, #snarkTorrents a:not(#debugMode) {
     font-size: 9.5pt !important;
   }
   .snarkNav {
@@ -5991,7 +6000,7 @@ td.torrentAction input[type=submit] {
     letter-spacing: 0 !important;
   }
   body, th, td, .snarkCommentInfo textarea, input[type=submit], input[type="reset"],
-  select, select option, button, a.control, #snarkTorrents a:link {
+  select, select option, button, a.control, #snarkTorrents a:not(#debugMode) {
     font-size: 10pt !important;
   }
   code {
