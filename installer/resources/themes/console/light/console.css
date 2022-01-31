@@ -333,6 +333,7 @@ h4.sb_info + hr + form {
 
 #sb_localtunnels td {
   vertical-align: middle;
+  line-height: 1;
 }
 
 #sb_localtunnels td:first-child {
@@ -3702,7 +3703,8 @@ p#enablefullstats, p#gatherstats {
   background: var(--joinfamily) no-repeat 15px center / 28px, var(--div_infohelp) !important;
 }
 
-#config_ui .infohelp {
+#config_ui p.infohelp {
+  margin-bottom: 10px;
   padding: 20px 15px 20px 50px !important;
   background: var(--ui) no-repeat 15px center / 28px, var(--div_infohelp) !important;
 }
@@ -5440,9 +5442,6 @@ p#helptranslate {
 }
 
 .langselect img[src^="/flags"] {
-  margin-bottom: 42px;
-  margin-left: 0;
-  margin-top: -52px;
   z-index: 3;
   position: relative;
   opacity: 1;
@@ -5469,7 +5468,6 @@ p#helptranslate {
 }
 
 .langselect input[name="lang"]:checked + img + .ui_lang {
-  margin: -32px -4px 0;
   z-index: 2;
   font-weight: 700;
   color: #338;
@@ -5504,20 +5502,22 @@ p#helptranslate {
 
 /* large flags */
 
+.langselect input[name="lang"] {
+  display: none;
+}
+
 .langselect img {
-  margin-top: -60px !important;
-  margin-bottom: 34px !important;
+/*  margin-top: -60px !important;
+  margin-bottom: 34px !important;*/
   width: 40px;
   height: 40px;
   opacity: .9 !important;
   filter: drop-shadow(0 0 1px #ddf);
 }
 
-.langselect input[name="lang"]:checked + img, .langselect input[name="lang"]:checked + #config_ui img[src="/flags.jsp?c=a1"] {
-  margin-top: -56px !important;
-  margin-bottom: 30px !important;
-  width: 32px !important;
-  height: 32px !important;
+.langselect input[name="lang"]:checked + img,
+.langselect input[name="lang"]:checked + #config_ui img[src="/flags.jsp?c=a1"] {
+  transform: scale(.8);
   opacity: 1 !important;
 }
 
@@ -5527,7 +5527,7 @@ p#helptranslate {
 }
 
 .langselect input[name="lang"]:checked + img + .ui_lang {
-  margin: -24px -4px 0;
+  font-size: 95% !important;
 }
 
 /* end large flags */
@@ -5540,7 +5540,7 @@ p#helptranslate {
 }
 
 .ui_lang {
-  margin: -32px -4px 0;
+  margin: 0 -4px;
   padding: 3px 2px;
   z-index: 2;
   white-space: nowrap;
@@ -11764,7 +11764,7 @@ iframe {
   background: linear-gradient(rgba(0,0,0,0) 10%, #d30 10%, #f60 90%, rgba(0,0,0,0) 90%);
   opacity: .7;
   content: "";
-  animation: ease-out reloader 20s forwards;
+  animation:reloader 8s ease-out .5s forwards;
 }
 
 /* responsive layout */

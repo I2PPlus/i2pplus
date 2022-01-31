@@ -312,7 +312,10 @@ public class I2PSnarkServlet extends BasicServlet {
         PrintWriter out = resp.getWriter();
         boolean isStandalone = !_context.isRouterContext();
         out.write(DOCTYPE + "<html>\n" +
-                  "<head>\n<link rel=\"preload\" href=\"/themes/fonts/DroidSans.css\" as=\"style\">\n" +
+                  "<head>\n" +
+                  "<meta charset=\"utf-8\">\n" +
+                  "<meta name=\"viewport\" content=\"width=device-width\">\n" +
+                  "<link rel=\"preload\" href=\"/themes/fonts/DroidSans.css\" as=\"style\">\n" +
                   "<link rel=\"preload\" href=\"" + _themePath + "images/images.css?" + CoreVersion.VERSION + "\" as=\"style\">\n" +
                   "<link rel=\"shortcut icon\" href=\"" + _contextPath + WARBASE + "icons/favicon.svg\">\n");
         if (!isStandalone)
@@ -485,7 +488,7 @@ public class I2PSnarkServlet extends BasicServlet {
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("text/html; charset=UTF-8");
         resp.setHeader("Cache-Control", "no-cache, private, max-age=2628000");
-        resp.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline' 'nonce-" + cspNonce + "'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; require-trusted-types-for 'script'; media-src '" + (allowMedia ? "self" : "none") + "'");
+        resp.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline' 'nonce-" + cspNonce + "'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; media-src '" + (allowMedia ? "self" : "none") + "'");
         resp.setHeader("X-Frame-Options", "SAMEORIGIN");
         resp.setHeader("X-XSS-Protection", "1; mode=block");
         resp.setHeader("X-Content-Type-Options", "nosniff");
@@ -498,7 +501,7 @@ public class I2PSnarkServlet extends BasicServlet {
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("text/html; charset=UTF-8");
         resp.setHeader("Cache-Control", "private, max-age=2628000");
-        resp.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline' 'nonce-" + cspNonce + "'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; require-trusted-types-for 'script'; media-src '" + (allowMedia ? "self" : "none") + "'");
+        resp.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline' 'nonce-" + cspNonce + "'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; media-src '" + (allowMedia ? "self" : "none") + "'");
         resp.setHeader("X-Frame-Options", "SAMEORIGIN");
         resp.setHeader("X-XSS-Protection", "1; mode=block");
         resp.setHeader("X-Content-Type-Options", "nosniff");
@@ -510,7 +513,7 @@ public class I2PSnarkServlet extends BasicServlet {
     private void writeMessages(PrintWriter out, boolean isConfigure, String peerString) throws IOException {
         List<UIMessages.Message> msgs = _manager.getMessages();
         if (!msgs.isEmpty()) {
-            out.write("<div id=\"screenlog\" class=\"snarkMessages");
+            out.write("<div id=\"screenlog\"");
             if (isConfigure)
                 out.write(" configpage");
             if (!_manager.util().connected())
@@ -934,7 +937,7 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("<tfoot id=\"snarkFoot");
             if (_manager.util().isConnecting() || !_manager.util().connected())
                 out.write("\" class=\"initializing");
-            out.write("\">\n<tr>\n<th id=\"snarkTorrentTotals\" align=\"left\" colspan=\"11\"></th></tr></tfoot>");
+            out.write("\">\n<tr>\n<th id=\"torrentTotals\" align=\"left\" colspan=\"11\"></th></tr></tfoot>");
         } else /** if (snarks.size() > 1) */ {
 
             // Add a pagenav to bottom of table if we have 50+ torrents per page
@@ -944,7 +947,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 writePageNav(out, req, start, pageSize, total, noThinsp);
                 out.write("</div></td></tr>\n</tbody>\n");
             }
-            out.write("<tfoot id=\"snarkFoot\">\n<tr class=\"volatile\">\n<th id=\"snarkTorrentTotals\" align=\"left\" colspan=\"5\">");
+            out.write("<tfoot id=\"snarkFoot\">\n<tr class=\"volatile\">\n<th id=\"torrentTotals\" align=\"left\" colspan=\"5\">");
             out.write("<span id=\"totals\"><span class=\"canhide\">");
             out.write(_t("Totals"));
             out.write(":&nbsp;</span>");
@@ -3550,7 +3553,7 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final String HEADER_D = "snark_big.css?" + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\" >";
     private static final String HEADER_I = "images/images.css?" + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\" >";
     private static final String HEADER_Z = "override.css\" rel=\"stylesheet\" type=\"text/css\" >";
-    private static final String TABLE_HEADER = "<table border=\"0\" class=\"snarkTorrents\" id=\"snarkTorrents\" width=\"100%\" >\n" + "<thead id=\"snarkHead\">\n";
+    private static final String TABLE_HEADER = "<table border=\"0\" id=\"snarkTorrents\" width=\"100%\" >\n" + "<thead id=\"snarkHead\">\n";
     private static final String FOOTER = "</div>\n</center>\n<span id=\"endOfPage\" data-iframe-height></span>\n" +
                                          "<script type=\"text/javascript\" src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" +
                                          CoreVersion.VERSION + "\" id=\"iframeResizer\"></script>\n" +
@@ -5338,12 +5341,12 @@ public class I2PSnarkServlet extends BasicServlet {
         MetaInfo meta = snark.getMetaInfo();
         if (meta == null)
             return;
-        buf.append("<div id=\"snarkTorrentEditSection\" class=\"mainsection\">\n" +
+        buf.append("<div id=\"torrentEditSection\" class=\"mainsection\">\n" +
                    "<input hidden class=\"toggle_input\" id=\"toggle_torrentedit\" type=\"checkbox\">" +
                    "<label id=\"tab_torrentedit\" class=\"toggleview\" for=\"toggle_torrentedit\"><span class=\"tab_label\">");
         buf.append(_t("Edit Torrent"))
            .append("</span></label><hr>\n")
-           .append("<table id=\"snarkTorrentEdit\">\n");
+           .append("<table id=\"torrentEdit\">\n");
         boolean isRunning = !snark.isStopped();
         String announce = meta.getAnnounce();
         if (announce == null)

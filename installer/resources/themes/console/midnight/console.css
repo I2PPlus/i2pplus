@@ -6,7 +6,6 @@
 /* Author: dr|z3d */
 
 @import url(global.css);
-@import url(../images/itooplus.css);
 
 :root {
   --box: linear-gradient(180deg,#020020,#000);
@@ -774,15 +773,15 @@ pre {
 .routersummary hr {
   margin: 8px -10px 7px -10px;
   position: relative;
-  z-index: 20;
-  height: 2px;
+  z-index: 999;
+  height: 1px;
   border-bottom: var(--border_inner);
   box-shadow: inset 0 1px 0 2px #000;
   background: #26235c;
 }
 
 .routersummary h3 {
-  margin: -7px -10px -11px;
+  margin: -7px -10px -10px;
   padding: 6px 0 4px !important;
   position: relative;
   z-index: 999;
@@ -954,6 +953,10 @@ pre {
   display: inline-block;
   width: 16px;
   height: 16px;
+}
+
+#sb_localtunnels td {
+ line-height: 1;
 }
 
 #sb_localtunnels td:first-child {
@@ -4536,8 +4539,8 @@ table#sidebarconf {
 }
 
 #sidebarconf button {
-  margin: 2px;
-  padding: 6px !important;
+  margin: 2px 6px 2px 2px;
+  padding: 4px 8px;
   min-width: 0;
   border-radius: 1px;
 }
@@ -4555,7 +4558,9 @@ table#sidebarconf {
   height: 12px;
 }
 
-#sidebarconf th:nth-child(1), .homelinkedit th:first-child, #consolepass th:first-child {
+#sidebarconf th:nth-child(1),
+.homelinkedit th:first-child,
+#consolepass th:first-child {
   width: 5%;
   text-align: center;
   text-indent: -99999px;
@@ -4568,16 +4573,21 @@ table#sidebarconf {
 }
 
 #sidebarconf td:first-child {
-  width: 72px;
+  width: 1%;
 }
 
 #sidebarconf td:nth-child(3), #sidebarconf td:nth-child(4) {
-  padding: 0;
-  width: 72px;
-  white-space:nowrap;
+  padding: 0 4px;
+  width: 1%;
+  white-space: nowrap;
+}
+
+#sidebarconf td:nth-child(3) {
+  padding-right: 0;
 }
 
 #sidebarconf td:nth-child(4) {
+  padding: 0;
   text-align: left;
 }
 
@@ -7012,25 +7022,9 @@ span#distance {
   white-space: nowrap;
 }
 
-.gwhois, .banlisted {
+.gwhois, .gwhois:hover, .banlisted {
   vertical-align: middle;
-  font-size: 0;
-}
-
-.gwhois a::before {
-  margin-left: -2px;
-  width: 12px;
-  height: 12px;
-  display: inline-block;
-  vertical-align: middle;
-  background: var(--search) no-repeat left center / 11px;
-  opacity: .7;
-  content: "";
-}
-
-.gwhois:hover a::before, .gwhois a:focus::before {
-  opacity: 1;
-  transform: scale(1.2);
+  font-size: 0 !important;
 }
 
 .banlisted {
@@ -7414,7 +7408,8 @@ textarea#advancedsettings:focus {
   background: #001 var(--infohelp) no-repeat 15px center / 28px !important;
 }
 
-#config_ui .infohelp {
+#config_ui p.infohelp {
+  margin-bottom: 8px;
   background: #000 var(--ui) no-repeat 15px center / 28px !important;
 }
 
@@ -8104,20 +8099,25 @@ img + tt {
 }
 
 a[href^="https://gwhois"]::after {
-  margin: -2px 0 0 2px;
+  margin: 0 1px 0;
   width: 12px;
   height: 12px;
   display: inline-block;
   vertical-align: middle;
-  background: var(--search) no-repeat right top / 12px;
+  background: var(--search) no-repeat left center / 11px;
+  opacity: .7;
   content: "";
   mix-blend-mode: luminosity;
 }
 
 a[href^="https://gwhois"]:hover::after,
 a[href^="https://gwhois"]:focus::after {
+  opacity: 1;
   mix-blend-mode: normal;
+  transform: scale(1.2);
+  overflow: auto;
 }
+
 /* end tunnels */
 
 /* /peers */
@@ -9728,9 +9728,9 @@ tr:nth-child(4) .net_bwrate::before {
   max-width: 400px !important;
 }
 
-.netdb_addresses .netdb_info {
+.netdb_addresses span.netdb_info {
   margin-left: 3px;
-  max-width: 160px;
+  max-width: 180px;
   display: inline-block;
   white-space: nowrap;
   overflow: hidden;
@@ -12284,7 +12284,7 @@ iframe {
   right: 0;
   background: linear-gradient(#d30, #f60);
   content: "";
-  animation: ease-out reloader 20s forwards;
+  animation:reloader 8s ease-out .5s forwards;
 }
 
 /* responsive layout */
@@ -12366,7 +12366,7 @@ iframe {
     margin: -2px 0;
     background-size: 12px;
   }
-  .routersummary h3 {margin-bottom: -10px}
+  .routersummary h3 {margin-bottom: -9px; padding: 5px 0 !important}
   .routersummary h3::before {height: 14px}
   .main#tunnels h3 a[href^="/configtunnels#"]::after,
   .main#tunnels h3 a[href$="i2ptunnelmgr"]::after,
@@ -12397,6 +12397,13 @@ iframe {
   #config_bandwidth .h3navlinks a {
     margin: -4px 0 0 -16px;
     background-size: 19px;
+  }
+  #sidebarconf button {
+    padding: 4px 7px;
+  }
+  #sidebarconf button img {
+   width: 10px;
+   height: 10px;
   }
 }
 
@@ -12681,10 +12688,10 @@ iframe {
 
 @media screen and (min-width: 1500px) {
   body, .main, .main td, .news p, #news p, .statusnotes, textarea, th, .applabel a, tt, code,
-  .messages, .messages #newsStatus, .messages #newsDisplay {
+  .messages, .messages #newsStatus {
     font-size: 10pt !important;
   }
-  #ntcpconnections th, #udpconnections th {
+  #ntcpconnections th, #udpconnections th, #newsDisplay {
     font-size: 90% !important;
   }
   .cells tt, #profilelist tt, #floodfills tt {

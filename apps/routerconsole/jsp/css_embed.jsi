@@ -28,10 +28,8 @@
    String UA = request.getHeader("User-Agent");
    String themePath = intl.getTheme(UA);
 %>
-<link rel="preload" href="/themes/fonts/DroidSans/DroidSans-Bold.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/themes/fonts/DroidSans/DroidSans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/themes/fonts/DroidSans/DroidSansMono.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/themes/fonts/DroidSans.css" as="style">
+<link rel="preload" href="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>" as="script">
 <link rel="icon" href="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/favicon.svg">
 <%
    String nonce = Integer.toHexString(net.i2p.util.RandomSource.getInstance().nextInt());
@@ -45,7 +43,7 @@
    // clickjacking
    if (intl.shouldSendXFrame()) {
       response.setHeader("X-Frame-Options", "SAMEORIGIN");
-      response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' http://127.0.0.1:* https://127.0.0.1:* 'nonce-" + cspNonce + "'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; media-src 'none'; require-trusted-types-for 'script'");
+      response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' http://127.0.0.1:* https://127.0.0.1:* 'nonce-" + cspNonce + "'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; media-src 'none'; base-uri 'self'");
       response.setHeader("X-XSS-Protection", "1; mode=block");
       response.setHeader("X-Content-Type-Options", "nosniff");
    }

@@ -4,7 +4,11 @@
 @import url(global.css);
 @import url(/themes/console/images/i2ptunnel.css);
 @import url(../images/images.css);
-@import url(images/i2ptunnel.css);
+
+:root {
+  --create: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%234d5f80' d='M37.6 1C37 .4 36 0 35.2 0h-6.4a3.4 3.4 0 00-3.4 3.4l.1 22.1H3.3A3.4 3.4 0 000 28.8v6.4c0 1.8 1.5 3.4 3.3 3.4h22.2v22c0 1.8 1.5 3.4 3.3 3.4h6.4a3.4 3.4 0 003.4-3.4v-22h22c1.9 0 3.4-1.6 3.4-3.5v-6.3c0-1.8-1.6-3.4-3.4-3.4l-22 .1V3.3a3.4 3.4 0 00-1-2.3z'/%3E%3C/svg%3E%0A");
+  --create_hover: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%23f60' d='M37.6 1C37 .4 36 0 35.2 0h-6.4a3.4 3.4 0 00-3.4 3.4l.1 22.1H3.3A3.4 3.4 0 000 28.8v6.4c0 1.8 1.5 3.4 3.3 3.4h22.2v22c0 1.8 1.5 3.4 3.3 3.4h6.4a3.4 3.4 0 003.4-3.4v-22h22c1.9 0 3.4-1.6 3.4-3.5v-6.3c0-1.8-1.6-3.4-3.4-3.4l-22 .1V3.3a3.4 3.4 0 00-1-2.3z'/%3E%3C/svg%3E%0A");
+}
 
 body {
   margin: 2.5% 2%;
@@ -143,6 +147,52 @@ hr {
 .control:active, button:active {
   border: 1px solid var(--border);
   box-shadow: var(--btn_shadow_active);
+}
+
+#serverTunnels .iconize, #clientTunnels .iconize {
+  min-width: 80px !important;
+}
+
+.control.start, .control.start:hover, .control.start:focus, .control.start:active,
+.control.stop, .control.stop:hover, .control.stop:focus, .control.stop:active,
+.control.preview, .control.preview:hover, .control.preview:focus, .control.preview:active,
+.control.create, .control.create:hover, .control.create:focus, .control.create:active {
+  color: transparent !important;
+  text-shadow: none;
+  background: var(--start) no-repeat center center / 15px, var(--btn), var(--start_hover) !important;
+  -webkit-text-stroke: 0 !important;
+}
+
+.control.stop {
+  background: var(--stop) no-repeat center center / 14px, var(--btn), var(--stop_hover) !important;
+}
+
+.control.preview {
+  background: var(--eye) no-repeat center center / 19px, var(--btn), var(--eye_hover) !important;
+}
+
+.control.create {
+  background: var(--create) no-repeat center center / 15px, var(--btn), var(--create_hover) !important;
+}
+
+.control.start:hover, .control.start:focus {
+  background: var(--start_hover) no-repeat center center / 15px, var(--btn_hover) !important;
+}
+
+.control.stop:hover, .control.stop:focus {
+  background: var(--stop_hover) no-repeat center center / 14px, var(--btn_hover) !important;
+}
+
+.control.preview:hover,.control.preview:focus {
+  background: var(--eye_hover) no-repeat center center / 19px, var(--btn_hover) !important;
+}
+
+.control.create:hover,.control.create:focus {
+  background: var(--create_hover) no-repeat center center / 15px, var(--btn_hover) !important;
+}
+
+.control.iconize:active {
+  background-blend-mode: luminosity;
 }
 
 .iframed .panel.iframed {
@@ -1166,6 +1216,20 @@ textarea:focus::placeholder, input:focus::placeholder, #filter input:focus::plac
 }
 
 /* responsive layout */
+
+@media screen and (max-width: 1300px) {
+  #serverTunnels .iconize, #clientTunnels .iconize {
+    padding: 12.5px 7px !important;
+    min-width: 48px !important;
+    vertical-align: middle;
+    font-size: 0;
+    background-size: 12px, 100% !important;
+  }
+  #serverTunnels .preview.iconize, #clientTunnels .preview.iconize {
+    min-width: 64px !important;
+    background-size: 16px, 100% !important;
+  }
+}
 
 @media screen and (max-width: 1200px) {
   #reachableBy {min-width: 0}

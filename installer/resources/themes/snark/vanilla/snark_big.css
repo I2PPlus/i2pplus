@@ -25,7 +25,7 @@
   font-size: 9.5pt !important;
 }
 
-input[type], select, #configs select, select option, #configs select option, td, td a, .snarkMessages li, .snarkMessages li a, textarea, input.r, input[name="nofilter_dataDir"],
+input[type], select, #configs select, select option, #configs select option, td, td a, #screenlog li, #screenlog li a, textarea, input.r, input[name="nofilter_dataDir"],
 .configsectionpanel, .configsectionpanel td, .snarkNewTorrent, .snarkNewTorrent td, .snarkAddInfo,
 #configs td, .trackerconfig td {
   font-size: 10.5pt !important;
@@ -92,7 +92,7 @@ select, a.control, input[type=submit], input.accept, th, #trackerselect tr:first
   font-size: 11pt !important;
 }
 
-.snarkTorrents tt {
+#snarkTorrents tt {
   font-size: 9.5pt !important;
 }
 
@@ -143,7 +143,7 @@ select, a.control, input[type=submit], input.accept, th, #trackerselect tr:first
 }
 
 @media screen and (max-width: 1400px) {
-.iframed .snarkTorrents td.torrentName a {
+.iframed #snarkTorrents td.torrentName a {
   max-width: 400px !important;
   display: inline-block; !important;
   white-space: nowrap !important;

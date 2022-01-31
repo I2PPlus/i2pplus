@@ -3,7 +3,6 @@
 
 @import url(global.css);
 @import url(../images/itooplus.css);
-@import url(images/tile.css);
 
 :root {
   --title: repeating-linear-gradient(90deg, rgba(0,0,48,.4) 2px, #000 4px), linear-gradient(180deg,#003, #002 50%, #001 50%, #000);
@@ -20,6 +19,7 @@
   --highlight: inset 0 0 0 1px #000;
   --a: #7171d1;
   --yes: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m55.87 8.64a4.32 4.32 0 0 0 -3.06 1.24 1.78 1.78 0 0 0 0 0l-30.85 30.84-10.76-10.76c-1.6-1.6-4.5-1.56-6.05.05l-4.02 4.16a1.78 1.78 0 0 0 0 0c-1.53 1.58-1.5 4.4.07 5.95l17.78 17.64c1.57 1.56 4.42 1.56 5.98-.01a1.78 1.78 0 0 0 0 0l37.86-37.85c1.57-1.57 1.57-4.43 0-6l-4-4.02a1.78 1.78 0 0 0 0 0 4.29 4.29 0 0 0 -2.93-1.24z' fill='%2371c837'/%3E%3C/svg%3E");
+  --link: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cg stroke-width='8'%3E%3Cpath fill='%236f7c91' d='M58.4 24.9L41.5 41.6a14 14 0 01-19.8-19.8L38.6 5.1a14 14 0 0119.7 19.8zm-30.5 3a5.4 5.4 0 007.6 7.6l16.8-16.7a5.4 5.4 0 00-7.6-7.6z'/%3E%3Cpath fill='%23939dac' d='M26.4 44.6l-7.6 7.7a5.4 5.4 0 01-7.6-7.6l16.7-16.8a5.4 5.4 0 017.6 7.6l9.2-9.1a14 14 0 00-22.8-4.6L5 38.6a14 14 0 0019.8 19.7l16.7-16.7a14 14 0 01-15.2 3z'/%3E%3C/g%3E%3C/svg%3E");
 }
 
 html {
@@ -79,7 +79,7 @@ body::before {
 }
 
 .logo a img {
-  margin: -8px -5px -3px;
+  margin: -8px -5px -8px;
   width: 177px;
   opacity: .7;
   filter: sepia(1) hue-rotate(180deg);
@@ -347,7 +347,8 @@ hr {
 }
 
 #proxyrequest {
-  padding: 5px 10px;
+  padding: 9px 10px 5px 22px;
+  background: var(--link) no-repeat left center / 16px;
 }
 
 #proxyNewAddressHelper .warning {

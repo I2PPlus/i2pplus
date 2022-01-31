@@ -43,15 +43,11 @@
    boolean hasOverride = themeOverride.exists();
 %>
 <link rel="preload" href="<%=themePath%>global.css" as="style">
-<link rel="preload" href="/themes/fonts/DroidSans/DroidSans-Bold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
-<link rel="preload" href="/themes/fonts/DroidSans/DroidSans.woff2" as="font" type="font/woff2" crossorigin="anonymous">
-<link rel="preload" href="/themes/fonts/DroidSans/DroidSansMono.woff2" as="font" type="font/woff2" crossorigin="anonymous">
 <link rel="preload" href="/themes/fonts/DroidSans.css" as="style">
 <link rel="preload" href="<%=themePath%>images/i2plogo.png" as="image">
 <link rel="preload" href="/themes/console/images/images.css?<%=net.i2p.CoreVersion.VERSION%>" as="style">
 <link rel="preload" href="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>" as="script">
 <link rel="preload" href="<%=themePath%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" as="style">
-<link rel="preload" href="<%=themePath%>proxy.css" as="style">
 <link rel="icon" href="<%=themePath%>images/favicon.svg">
 <script nonce="<%=cspNonce%>" type="text/javascript">if (top.location != location) {top.location.href = location.href;}</script>
 <script src="/js/progressx.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
@@ -64,7 +60,7 @@
     }
     // unsafe-inline is a fallback for browsers not supporting nonce
     // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src
-    response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline' 'nonce-" + cspNonce + "'; form-action 'self'; frame-ancestors 'self'; font-src 'self'; object-src 'none'; media-src 'none'; require-trusted-types-for 'script'");
+    response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline' 'nonce-" + cspNonce + "'; form-action 'self'; frame-ancestors 'self'; font-src 'self'; object-src 'none'; media-src 'none'; base-uri 'self'");
     response.setHeader("X-XSS-Protection", "1; mode=block");
     response.setHeader("X-Content-Type-Options", "nosniff");
     response.setHeader("Permissions-Policy", "accelerometer=(), ambient-light-sensor=(), autoplay=(), battery=(), camera=(), display-capture(), fullscreen=(self), geolocation=(), gyroscope=(), interest-cohort=(), magnetometer=(), microphone=(), midi=(), payment=(), usb=(), vibrate=(), vr=()");

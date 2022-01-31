@@ -1,9 +1,10 @@
 ::-webkit-scrollbar {
-  width: 12px;
+  width: 8px;
+  height: 8px;
   cursor: pointer !important;
 }
 ::-webkit-scrollbar-track {
-  background: rgba(0,0,0,0);
+  background: #130313;
   border-radius: 0;
 }
 

@@ -336,6 +336,7 @@ hr {
 
 #sb_localtunnels td {
   padding: 1px !important;
+  line-height: 1;
 }
 
 #sb_localtunnels a {
@@ -3523,7 +3524,8 @@ p#gatherstats, p#debugmode, p.sybilinfo, p#pluginconfigtext {
   background: var(--bg) var(--infohelp) no-repeat 15px center / 28px;
 }
 
-#config_ui .infohelp {
+#config_ui p.infohelp {
+  margin-bottom: -5px;
   background: var(--bg) var(--ui) no-repeat 15px center / 28px;
 }
 
@@ -10220,7 +10222,7 @@ iframe {
   background: linear-gradient(180deg, rgba(255,255,255,.2) 50%, rgba(0,0,0,.2) 50%), var(--reload);
   opacity: .7;
   content: "";
-  animation: ease-out reloader 20s forwards;
+  animation:reloader 8s ease-out .5s forwards;
 }
 
 @keyframes downloadbar {

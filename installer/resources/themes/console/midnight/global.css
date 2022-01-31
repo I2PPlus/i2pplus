@@ -2,8 +2,8 @@
 /* Author: (c) dr|z3d 2022 */
 
 @import url(/themes/fonts/DroidSans.css);
+@import url(images/tile.css);
 @import url(chromescroll.css);
-@import url(/themes/console/midnight/images/tile.css);
 
 :root {
   --a: #7171d1;
@@ -20,7 +20,7 @@
   --btn_active: linear-gradient(180deg,#401856,#501f6c);
   --btn_hover_radial: radial-gradient(at center bottom, rgba(96, 0, 96, .4), rgba(0, 0, 0, 0) 60%);
   --btn_hover: var(--btn_hover_radial), linear-gradient(180deg,#202,#101 50%,#080008 50%,#000);
-  --btn: linear-gradient(180deg,#11101c 50%,#000010 50%);
+  --btn: radial-gradient(at center bottom, rgba(70,65,113,.25), rgba(0,0,0,0) 80%), linear-gradient(180deg,#1e1c31,#11101c 50%,#0a0910 50%,#000);
   --btn_shadow_active: var(--highlight), inset 4px 4px 4px rgba(0,0,0,.7);
   --element: linear-gradient(180deg,#112,#000);
   --formaction: linear-gradient(180deg,#001,#030306);
@@ -227,7 +227,7 @@ button, input[type=submit], input[type=reset], select, .control, .fakebutton, .f
 }
 
 input[type=submit], input[type=reset], button {
-  min-width: 0 !important;
+  min-width: 0;
   background-size: 12px, 100%;
 }
 
@@ -318,7 +318,7 @@ input[type=file]:active::file-selector-button {
 
 select {
   margin: 5px 10px;
-  padding: 5px 24px 5px 6px;
+  padding: 6px 24px 6px 6px;
   min-width: 110px;
   vertical-align: middle;
   appearance: none;
@@ -335,10 +335,11 @@ select {
 }
 
 select option {
+  text-align: left;
   font-weight: 400;
   font-size: 9.5pt;
-  color: #000;
-  box-shadow: inset 0 0 20px 20px #000;
+  color: var(--ink);
+  background: #001;
 }
 
 select option:hover, select option:focus, select option:checked {
@@ -349,7 +350,7 @@ select:hover, select:focus, select:active {
   color: var(--a_hover);
   text-shadow: 0 1px 1px #000;
   border: 1px solid var(--a_hover) !important;
-  background: var(--dropdown_hover) center right 10px no-repeat, var(--btn_hover_radial), var(--btn_hover) !important;
+  background: var(--dropdown_hover) center right 10px no-repeat, var(--btn_hover) !important;
   background-size: 10px auto, 100%, 100% !important;
 }
 
@@ -440,4 +441,10 @@ select[disabled], select[disabled]:hover, select[disabled]:focus, select[disable
   opacity: .5;
   filter: none;
   pointer-events: none;
+}
+
+@media screen and (max-width: 1499px) {
+  select {
+    padding: 5px 24px 5px 6px;
+  }
 }

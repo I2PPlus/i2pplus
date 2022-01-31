@@ -345,6 +345,10 @@ pre {
   margin: -4px -7px -7px -8px !important;
 }
 
+#sb_localtunnels td {
+ line-height: 1;
+}
+
 #sb_localtunnels td:first-child {
   padding: 1px 0;
   width: 16px;
@@ -948,7 +952,7 @@ div[id^="config_"].main {
 }
 
 .main#dns {
-  padding: 0 0 12px;
+  padding: 0;
   min-width: 650px !important;
 }
 
@@ -1209,7 +1213,7 @@ div.widescroll { /* only scroll content, not entire page eg /peers */
 
 .tab {
   box-shadow: var(--highlight), inset 0 0 1px 1px #040;
-  background: linear-gradient(180deg,#002900, #000400) !important;
+  background: var(--glow_top), linear-gradient(180deg,#002900, #000400) !important;
 }
 
 .tab:hover, #sidebar h3:hover {
@@ -2946,9 +2950,22 @@ tr.addnew, tr.addnew:hover {
   filter: drop-shadow(0 0 1px var(--hover));
 }
 
+.themelabel {
+  margin-left: -4px;
+  margin-right: -4px;
+  padding: 3px 2px 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.5;
+  color: #bb7;
+  border-top: var(--border) !important;
+  background: var(--glow_bottom), linear-gradient(180deg,#001900,#001000 50%,#000);
+}
+
 .themechoice:hover .themelabel {
   border-top: 1px solid var(--hover) !important;
-  background: #000;
+  background: var(--glow_bottom_hover) #000;
 }
 
 .themechoice:active .themelabel {
@@ -3039,19 +3056,6 @@ p#helptranslate {
   min-height: 16px;
 }
 
-.themelabel {
-  margin-left: -4px;
-  margin-right: -4px;
-  padding: 3px 2px 4px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  line-height: 1.5;
-  color: #bb7;
-  border-top: var(--border) !important;
-  background: linear-gradient(180deg,#001000, #001900 50%, #000 51%, #000);
-}
-
 h3#themeheading, h3#langheading, h3#passwordheading {
   margin-bottom: 0;
   padding: 8px 10px;
@@ -3082,11 +3086,13 @@ td#themeselect {
   border: var(--border);
 }
 
+.themechoice img, .langselect img {
+  animation: fade .3s ease 1.15s both;
+}
+
 .langselect:hover {
   border: 1px solid var(--hover);
 }
-
-/* can we use the flags as the radio icon? */
 
 .langselect img {
   margin-top: -2px !important;
@@ -5790,13 +5796,14 @@ div.app:hover img, .sitemapLink:hover img, a:focus .app img, a:focus .sitemaplin
   background: none;
 }
 
-.applabel, .sitemapLabel, .themeLabel, .ui_lang {
-  background: radial-gradient(at center bottom, rgba(16, 72, 16, .3) 0, rgba(0, 0, 0, 0) 50%) #000;
+.applabel, .sitemapLabel, .themelabel, .ui_lang {
+  background: var(--glow_bottom), linear-gradient(180deg,#001900,#001000 50%,#000);
+  animation: fade .15s ease .95s both;
 }
 
 div.app:hover .applabel, .sitemapLink:hover .sitemapLabel,
-.themechoice:hover .themeLabel, .langselect:hover .ui_lang {
-  background: radial-gradient(at center bottom, rgba(256, 96, 0, .25) 0, rgba(0, 0, 0, 0) 50%) #000;
+.themechoice:hover .themelabel, .langselect:hover .ui_lang {
+  background: var(--glow_bottom_hover) #000;
 }
 
 .applabel {
@@ -5892,10 +5899,10 @@ iframe {
   background: linear-gradient(180deg,rgba(255,255,255,.1), rgba(0,0,0,.4)), linear-gradient(#d30, var(--hover));
   box-shadow: inset 0 0 0 2px rgba(0,0,0,.7);
   content: "";
-  animation: ease-out reloader 20s forwards;
+  animation: reloader 8s ease-out .5s forwards;
 }
 
-#webmail::before {
+#webmail::before, #dns::before {
   top: -1px;
 }
 
@@ -6685,7 +6692,8 @@ td.infohelp.joinfamily {
   margin: -1px 0;
 }
 
-#config_ui .infohelp {
+#config_ui p.infohelp {
+  margin-bottom: 10px;
   background: #000 var(--ui) no-repeat 15px center / 28px !important;
 }
 
