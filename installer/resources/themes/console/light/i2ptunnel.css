@@ -91,7 +91,8 @@ button {
   text-decoration: none;
 }
 
-button, input[type=submit], input[type="reset"], a.control, .freetext, textarea, .displayText {
+button, input[type=submit], input[type="reset"], a.control,
+.freetext, textarea, .displayText {
   font: 9pt var(--bodyfont);
 }
 
@@ -293,16 +294,16 @@ a.control {
 .control.create, .control.create:hover, .control.create:focus, .control.create:active {
   color: transparent !important;
   text-shadow: none;
-  background: var(--start) no-repeat center center / 16px, var(--btn), var(--start_hover) !important;
+  background: var(--start) no-repeat center center / 15px, var(--btn), var(--start_hover) !important;
   -webkit-text-stroke: 0 !important;
 }
 
 .control.stop {
-  background: var(--stop) no-repeat center center / 15px, var(--btn), var(--stop_hover) !important;
+  background: var(--stop) no-repeat center center / 14px, var(--btn), var(--stop_hover) !important;
 }
 
 .control.preview {
-  background: var(--eye) no-repeat center center / 20px, var(--btn), var(--eye_hover) !important;
+  background: var(--eye) no-repeat center center / 19px, var(--btn), var(--eye_hover) !important;
 }
 
 .control.create {
@@ -310,15 +311,15 @@ a.control {
 }
 
 .control.start:hover, .control.start:focus {
-  background: var(--start_hover) no-repeat center center / 16px, var(--btn_hover) !important;
+  background: var(--start_hover) no-repeat center center / 15px, var(--btn_hover) !important;
 }
 
 .control.stop:hover, .control.stop:focus {
-  background: var(--stop_hover) no-repeat center center / 15px, var(--btn_hover) !important;
+  background: var(--stop_hover) no-repeat center center / 14px, var(--btn_hover) !important;
 }
 
 .control.preview:hover,.control.preview:focus {
-  background: var(--eye_hover) no-repeat center center / 20px, var(--btn_hover) !important;
+  background: var(--eye_hover) no-repeat center center / 19px, var(--btn_hover) !important;
 }
 
 .control.create:hover,.control.create:focus {
