@@ -5513,6 +5513,7 @@ table[id$="logs"] ul {
   max-height: 600px;
   white-space: pre-wrap !important;
   word-wrap: break-word;
+  color: #a2a6d1;
 }
 
 .main#logs li {
@@ -12284,7 +12285,7 @@ iframe {
   right: 0;
   background: linear-gradient(#d30, #f60);
   content: "";
-  animation:reloader 8s ease-out .5s forwards;
+  animation: reloader 8s ease-out .5s forwards;
 }
 
 /* responsive layout */
