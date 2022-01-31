@@ -545,16 +545,16 @@ a.control, input.control {
 .control.create, .control.create:hover, .control.create:focus, .control.create:active {
   color: transparent !important;
   text-shadow: none;
-  background: var(--start) no-repeat center center / 16px, var(--btn), var(--start_hover), var(--start_active) !important;
+  background: var(--start) no-repeat center center / 15px, var(--btn), var(--start_hover), var(--start_active) !important;
   -webkit-text-stroke: 0 !important;
 }
 
 .control.stop {
-  background: var(--stop) no-repeat center center / 15px, var(--btn), var(--stop_hover), var(--start_active) !important;
+  background: var(--stop) no-repeat center center / 14px, var(--btn), var(--stop_hover), var(--start_active) !important;
 }
 
 .control.preview {
-  background: var(--eye) no-repeat center center / 20px, var(--btn), var(--eye_hover), var(--eye_active) !important;
+  background: var(--eye) no-repeat center center / 19px, var(--btn), var(--eye_hover), var(--eye_active) !important;
 }
 
 .control.create {
@@ -562,15 +562,15 @@ a.control, input.control {
 }
 
 .control.start:hover, .control.start:focus {
-  background: var(--start_hover) no-repeat center center / 16px, var(--btn_hover) !important;
+  background: var(--start_hover) no-repeat center center / 15px, var(--btn_hover) !important;
 }
 
 .control.stop:hover, .control.stop:focus {
-  background: var(--stop_hover) no-repeat center center / 15px, var(--btn_hover) !important;
+  background: var(--stop_hover) no-repeat center center / 14px, var(--btn_hover) !important;
 }
 
 .control.preview:hover,.control.preview:focus {
-  background: var(--eye_hover) no-repeat center center / 20px, var(--btn_hover) !important;
+  background: var(--eye_hover) no-repeat center center / 19px, var(--btn_hover) !important;
 }
 
 .control.create:hover,.control.create:focus {
@@ -578,15 +578,15 @@ a.control, input.control {
 }
 
 .control.start:active {
-  background: var(--hover) var(--start_active) no-repeat center center / 15px !important;
+  background: var(--hover) var(--start_active) no-repeat center center / 14px !important;
 }
 
 .control.stop:active {
-  background: var(--hover) var(--stop_active) no-repeat center center / 14px !important;
+  background: var(--hover) var(--stop_active) no-repeat center center / 13px !important;
 }
 
 .control.preview:active {
-  background: var(--hover) var(--eye_active) no-repeat center center / 19px !important;
+  background: var(--hover) var(--eye_active) no-repeat center center / 18px !important;
 }
 
 .control.create:active {
