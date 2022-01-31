@@ -312,7 +312,10 @@ public class I2PSnarkServlet extends BasicServlet {
         PrintWriter out = resp.getWriter();
         boolean isStandalone = !_context.isRouterContext();
         out.write(DOCTYPE + "<html>\n" +
-                  "<head>\n<link rel=\"preload\" href=\"/themes/fonts/DroidSans.css\" as=\"style\">\n" +
+                  "<head>\n" +
+                  "<meta charset=\"utf-8\">\n" +
+                  "<meta name=\"viewport\" content=\"width=device-width\">\n" +
+                  "<link rel=\"preload\" href=\"/themes/fonts/DroidSans.css\" as=\"style\">\n" +
                   "<link rel=\"preload\" href=\"" + _themePath + "images/images.css?" + CoreVersion.VERSION + "\" as=\"style\">\n" +
                   "<link rel=\"shortcut icon\" href=\"" + _contextPath + WARBASE + "icons/favicon.svg\">\n");
         if (!isStandalone)
