@@ -998,7 +998,7 @@ class EstablishmentManager {
         _context.statManager().addRateData("udp.receiveIntroRelayResponse", state.getLifetime());
         if (_log.shouldLog(Log.INFO))
             _log.info("Received RelayResponse for [" + state.getRemoteIdentity().calculateHash().toBase64().substring(0,6) + "]\n* Address: "
-                      + addr.toString() + ":" + port + " (according to " + bob + ") nonce=" + nonce);
+                      + addr.toString().replace("\\", "") + ":" + port + " (according to " + bob + ") [Nonce " + nonce + "]");
         synchronized (state) {
             RemoteHostId oldId = state.getRemoteHostId();
             state.introduced(ip, port);
