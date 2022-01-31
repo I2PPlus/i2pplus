@@ -5794,12 +5794,13 @@ div.app:hover img, .sitemapLink:hover img, a:focus .app img, a:focus .sitemaplin
   background: none;
 }
 
-.applabel, .sitemapLabel, .themeLabel, .ui_lang {
+.applabel, .sitemapLabel, .themelabel, .ui_lang {
   background: var(--glow_bottom), linear-gradient(180deg,#001900,#001000 50%,#000);
+  animation: fade .15s ease .95s both;
 }
 
 div.app:hover .applabel, .sitemapLink:hover .sitemapLabel,
-.themechoice:hover .themeLabel, .langselect:hover .ui_lang {
+.themechoice:hover .themelabel, .langselect:hover .ui_lang {
   background: var(--glow_bottom_hover) #000;
 }
 
