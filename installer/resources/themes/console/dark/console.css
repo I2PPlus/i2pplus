@@ -3086,11 +3086,13 @@ td#themeselect {
   border: var(--border);
 }
 
+.themechoice img, .langselect img {
+  animation: fade .3s ease 1.15s both;
+}
+
 .langselect:hover {
   border: 1px solid var(--hover);
 }
-
-/* can we use the flags as the radio icon? */
 
 .langselect img {
   margin-top: -2px !important;
