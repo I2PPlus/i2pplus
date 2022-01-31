@@ -12279,7 +12279,7 @@ iframe {
   right: 0;
   background: linear-gradient(#d30, #f60);
   content: "";
-  animation: ease-out reloader 20s forwards;
+  animation: ease-out reloader 10s forwards;
 }
 
 /* responsive layout */

@@ -11764,7 +11764,7 @@ iframe {
   background: linear-gradient(rgba(0,0,0,0) 10%, #d30 10%, #f60 90%, rgba(0,0,0,0) 90%);
   opacity: .7;
   content: "";
-  animation: ease-out reloader 20s forwards;
+  animation: ease-out reloader 10s forwards;
 }
 
 /* responsive layout */
