@@ -7408,7 +7408,8 @@ textarea#advancedsettings:focus {
   background: #001 var(--infohelp) no-repeat 15px center / 28px !important;
 }
 
-#config_ui .infohelp {
+#config_ui p.infohelp {
+  margin-bottom: 8px;
   background: #000 var(--ui) no-repeat 15px center / 28px !important;
 }
 

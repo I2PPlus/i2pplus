@@ -3524,7 +3524,8 @@ p#gatherstats, p#debugmode, p.sybilinfo, p#pluginconfigtext {
   background: var(--bg) var(--infohelp) no-repeat 15px center / 28px;
 }
 
-#config_ui .infohelp {
+#config_ui p.infohelp {
+  margin-bottom: -5px;
   background: var(--bg) var(--ui) no-repeat 15px center / 28px;
 }
 
