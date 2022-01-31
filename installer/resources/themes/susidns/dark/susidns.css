@@ -317,6 +317,10 @@ h3 {
   margin-bottom: 24px;
 }
 
+#dtls .headline h3:first-child {
+  margin-bottom: 28px;
+}
+
 #content {
   padding: 0 0 10px;
 }
