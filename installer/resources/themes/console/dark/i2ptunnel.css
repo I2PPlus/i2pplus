@@ -576,7 +576,7 @@ a.control, input.control {
 }
 
 #serverTunnels .iconize, #clientTunnels .iconize {
-  min-width: 80px !important;
+  min-width: 76px !important;
 }
 
 .control.start, .control.start:hover, .control.start:focus, .control.start:active,
@@ -1444,6 +1444,9 @@ body#tunnelEditPage:not(.iframed) h3 {
   #serverTunnels .preview.iconize, #clientTunnels .preview.iconize {
     min-width: 48px !important;
     background-size: 16px, 100% !important;
+  }
+  .iframed .buttons, .iframed .newTunnel {
+    padding: 5px 6px !important;
   }
 }
 
