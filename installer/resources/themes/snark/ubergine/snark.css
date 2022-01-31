@@ -1698,6 +1698,8 @@ th.priority br, #snarkTorrents thead th br {
   padding: 1px !important;
   width: 320px !important;
   min-width: 0 !important;
+  line-height: 0;
+  font-size: 0;
   color: transparent !important;
   font-size: 0;
   border: 1px solid #212;
@@ -5447,6 +5449,11 @@ td.torrentAction input[type=submit] {
   }
   .configsection .configTitle, .toggleview {
     padding: 0 5px 1px !important;
+  }
+  .tab_label::after {
+    width: 15px;
+    height: 15px;
+    background-size: 13px !important;
   }
   .dirInfoComplete {
     display: none;
