@@ -77,9 +77,9 @@ function initFilterBar() {
       on = "stopped";
     if (!btnAll.checked) {
         if (filtered.length == 1)
-          cell.innerHTML= "Displaying " + (filtered.length) + " " + on + " torrent";
+          cell.innerHTML = "Displaying " + (filtered.length) + " " + on + " torrent";
         else
-          cell.innerHTML= "Displaying " + (filtered.length) + " " + on + " torrents";
+          cell.innerHTML = "Displaying " + (filtered.length) + " " + on + " torrents";
     } else {
       var filterResults = document.getElementById("filterResults");
       if (filterResults)

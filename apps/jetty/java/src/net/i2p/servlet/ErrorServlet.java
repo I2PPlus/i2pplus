@@ -93,7 +93,7 @@ public class ErrorServlet extends HttpServlet {
         resp.setHeader("Pragma", "no-cache");
 //        resp.setHeader("Content-Security-Policy", "default-src 'self'; script-src 'none'");
         // add unsafe-inline script-src to allow iframe escape to function
-        resp.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self unsafe-inline'; form-action 'none'; frame-ancestors 'self'; object-src 'none'; media-src 'none'; require-trusted-types-for 'script'");
+        resp.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self unsafe-inline'; form-action 'none'; frame-ancestors 'self'; object-src 'none'; media-src 'none'; base-uri 'self'");
         Integer ERROR_CODE = (Integer) req.getAttribute("javax.servlet.error.status_code");
         String ERROR_URI = (String) req.getAttribute("javax.servlet.error.request_uri");
         String ERROR_MESSAGE = (String) req.getAttribute("javax.servlet.error.message");

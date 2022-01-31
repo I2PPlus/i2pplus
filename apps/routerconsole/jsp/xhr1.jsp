@@ -14,7 +14,7 @@
    } catch (IllegalStateException ise) {}
    // Browser should not load this directly
    response.setHeader("X-Frame-Options", "DENY");
-   response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'none'; script-src 'none'; form-action 'none'; frame-ancestors 'none'; object-src 'none'; media-src 'none'; require-trusted-types-for 'script'");
+   response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'none'; script-src 'none'; form-action 'none'; frame-ancestors 'none'; object-src 'none'; media-src 'none'; base-uri 'self'");
    response.setHeader("X-XSS-Protection", "1; mode=block");
    response.setHeader("X-Content-Type-Options", "nosniff");
 %>
