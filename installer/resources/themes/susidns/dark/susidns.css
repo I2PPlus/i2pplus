@@ -76,6 +76,11 @@ body.iframed {
   vertical-align: bottom;
 }
 
+#dtls.iframed .page::after {
+  height: 1px;
+  display: block;
+}
+
 /* topnav */
 
 #navi  {
@@ -462,11 +467,12 @@ td.checkbox {
 }
 
 #visualid h3 {
-  margin-bottom: -1px;
+  margin: 19px 0 -1px;
 }
 
 #idAddress {
   text-transform: none;
+  letter-spacing: 0;
 }
 
 #visualid table {
