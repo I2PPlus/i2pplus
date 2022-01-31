@@ -652,6 +652,10 @@ select {
   background-size: 100%, 4px 100%, 100%;
 }
 
+.iframed .buttons, .iframed .newTunnel {
+  padding: 5px 4px !important;
+}
+
 .newTunnel, .newTunnel > *, .newTunnel form > * {
   vertical-align: middle;
 }
