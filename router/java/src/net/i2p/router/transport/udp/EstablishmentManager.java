@@ -891,7 +891,7 @@ class EstablishmentManager {
      */
     private void sendCreated(InboundEstablishState state) {
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Sending SessionCreated (Inbound) to: " + state);
+            _log.debug("Sending SessionCreated to: " + state);
 
         try {
             state.generateSessionKey();
