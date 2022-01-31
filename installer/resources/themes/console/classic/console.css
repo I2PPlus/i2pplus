@@ -10222,7 +10222,7 @@ iframe {
   background: linear-gradient(180deg, rgba(255,255,255,.2) 50%, rgba(0,0,0,.2) 50%), var(--reload);
   opacity: .7;
   content: "";
-  animation: ease-out reloader 10s forwards;
+  animation:reloader 8s ease-out .5s forwards;
 }
 
 @keyframes downloadbar {

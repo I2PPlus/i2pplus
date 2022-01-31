@@ -5899,7 +5899,7 @@ iframe {
   background: linear-gradient(180deg,rgba(255,255,255,.1), rgba(0,0,0,.4)), linear-gradient(#d30, var(--hover));
   box-shadow: inset 0 0 0 2px rgba(0,0,0,.7);
   content: "";
-  animation: reloader 10s ease .5s forwards;
+  animation: reloader 8s ease-out .5s forwards;
 }
 
 #webmail::before, #dns::before {
