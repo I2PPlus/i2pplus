@@ -3274,7 +3274,7 @@ div#langsettings {
 /* console password layout */
 
 h3#passwordheading {
-  margin-top: 25px;
+  margin-top: 13px !important;
   margin-bottom: -2px;
 }
 
@@ -12892,6 +12892,9 @@ body.iframed {
   }
   .log_debug, .log_info, .log_warn, .log_error, .log_crit, .log_omitted {
     vertical-align: middle;
+  }
+  h3#passwordheading {
+    margin-top: 12px !important;
   }
 }
 
