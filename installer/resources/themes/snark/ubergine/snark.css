@@ -2756,7 +2756,7 @@ hr.debug {
 
 #totals {
   display: inline-block;
-  margin: 2px 0 2px 6px;
+  margin: 6px 0 5px 6px;
   font-weight: 700;
   vertical-align: middle;
 }
