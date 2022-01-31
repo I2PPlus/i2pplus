@@ -955,6 +955,10 @@ pre {
   height: 16px;
 }
 
+#sb_localtunnels td {
+ line-height: 1;
+}
+
 #sb_localtunnels td:first-child {
   padding: 2px 0 2px 1px;
   width: 16px;

@@ -345,6 +345,10 @@ pre {
   margin: -4px -7px -7px -8px !important;
 }
 
+#sb_localtunnels td {
+ line-height: 1;
+}
+
 #sb_localtunnels td:first-child {
   padding: 1px 0;
   width: 16px;

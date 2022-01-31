@@ -336,6 +336,7 @@ hr {
 
 #sb_localtunnels td {
   padding: 1px !important;
+  line-height: 1;
 }
 
 #sb_localtunnels a {
