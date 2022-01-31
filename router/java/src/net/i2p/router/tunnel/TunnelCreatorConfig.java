@@ -420,7 +420,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
         int fails = _failures.get();
         if (fails > 0)
-            buf.append(" with ").append(fails).append(" consec. failures");
+            buf.append(" with ").append(fails).append(" consecutive failures");
         return buf.toString();
     }
 
