@@ -2,6 +2,13 @@
 /* Author: dr|z3d */
 
 @import url(global.css);
+@import url(images/images.css);
+
+:root {
+  --create: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%23373' d='M37.6 1C37 .4 36 0 35.2 0h-6.4a3.4 3.4 0 00-3.4 3.4l.1 22.1H3.3A3.4 3.4 0 000 28.8v6.4c0 1.8 1.5 3.4 3.3 3.4h22.2v22c0 1.8 1.5 3.4 3.3 3.4h6.4a3.4 3.4 0 003.4-3.4v-22h22c1.9 0 3.4-1.6 3.4-3.5v-6.3c0-1.8-1.6-3.4-3.4-3.4l-22 .1V3.3a3.4 3.4 0 00-1-2.3z'/%3E%3C/svg%3E%0A");
+  --create_hover: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%23f60' d='M37.6 1C37 .4 36 0 35.2 0h-6.4a3.4 3.4 0 00-3.4 3.4l.1 22.1H3.3A3.4 3.4 0 000 28.8v6.4c0 1.8 1.5 3.4 3.3 3.4h22.2v22c0 1.8 1.5 3.4 3.3 3.4h6.4a3.4 3.4 0 003.4-3.4v-22h22c1.9 0 3.4-1.6 3.4-3.5v-6.3c0-1.8-1.6-3.4-3.4-3.4l-22 .1V3.3a3.4 3.4 0 00-1-2.3z'/%3E%3C/svg%3E%0A");
+  --create_active: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%23ee9' d='M37.6 1C37 .4 36 0 35.2 0h-6.4a3.4 3.4 0 00-3.4 3.4l.1 22.1H3.3A3.4 3.4 0 000 28.8v6.4c0 1.8 1.5 3.4 3.3 3.4h22.2v22c0 1.8 1.5 3.4 3.3 3.4h6.4a3.4 3.4 0 003.4-3.4v-22h22c1.9 0 3.4-1.6 3.4-3.5v-6.3c0-1.8-1.6-3.4-3.4-3.4l-22 .1V3.3a3.4 3.4 0 00-1-2.3z'/%3E%3C/svg%3E%0A");
+}
 
 html {
   background: none !important;
@@ -277,9 +284,6 @@ th {
   border-bottom: var(--border);
   background: #000;
   background: linear-gradient(180deg,#001400, #000 75%);
-}
-
-th {
 }
 
 #tunnelListPage th {
@@ -567,9 +571,66 @@ a.control, input.control {
   font-size: 8.5pt;
 }
 
-.control.start, .control.stop {
-  display: none !important;
-  float: left;
+.control {
+  float: none;
+}
+
+#serverTunnels .iconize, #clientTunnels .iconize {
+  min-width: 80px !important;
+}
+
+.control.start, .control.start:hover, .control.start:focus, .control.start:active,
+.control.stop, .control.stop:hover, .control.stop:focus, .control.stop:active,
+.control.preview, .control.preview:hover, .control.preview:focus, .control.preview:active,
+.control.create, .control.create:hover, .control.create:focus, .control.create:active {
+  color: transparent !important;
+  text-shadow: none;
+  background: var(--start) no-repeat center center / 16px, var(--btn), var(--start_hover), var(--start_active) !important;
+  -webkit-text-stroke: 0 !important;
+}
+
+.control.stop {
+  background: var(--stop) no-repeat center center / 15px, var(--btn), var(--stop_hover), var(--start_active) !important;
+}
+
+.control.preview {
+  background: var(--eye) no-repeat center center / 20px, var(--btn), var(--eye_hover), var(--eye_active) !important;
+}
+
+.control.create {
+  background: var(--create) no-repeat center center / 15px, var(--btn), var(--create_hover), var(--create_active) !important;
+}
+
+.control.start:hover, .control.start:focus {
+  background: var(--start_hover) no-repeat center center / 16px, var(--btn_hover_radial) !important;
+}
+
+.control.stop:hover, .control.stop:focus {
+  background: var(--stop_hover) no-repeat center center / 15px, var(--btn_hover_radial) !important;
+}
+
+.control.preview:hover,.control.preview:focus {
+  background: var(--eye_hover) no-repeat center center / 20px, var(--btn_hover_radial) !important;
+}
+
+.control.create:hover,.control.create:focus {
+  background: var(--create_hover) no-repeat center center / 15px, var(--btn_hover_radial) !important;
+}
+
+.control.start:active {
+  background: var(--hover) var(--start_active) no-repeat center center / 15px !important;
+}
+
+.control.stop:active {
+  background: var(--hover) var(--stop_active) no-repeat center center / 14px !important;
+}
+
+.control.preview:active {
+  background: var(--hover) var(--eye_active) no-repeat center center / 19px !important;
+}
+
+.control.create:active {
+  background: var(--hover) var(--create_active) no-repeat center center / 14px !important;
 }
 
 input, select, button {
@@ -583,7 +644,7 @@ select {
 }
 
 .buttons, .newTunnel {
-  padding: 7px 5px !important;
+  padding: 9px 8px !important;
   text-align: right !important;
   background: linear-gradient(-135deg, #000, rgba(0,0,0,0) 40%),
     repeating-linear-gradient(90deg, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px),
@@ -1365,6 +1426,20 @@ body#tunnelEditPage:not(.iframed) h3 {
 @media screen and (max-width: 1500px) {
   h2, h3 {
     font-size: 11.5pt;
+  }
+}
+
+@media screen and (max-width: 1300px) {
+  #serverTunnels .control.iconize, #clientTunnels .control.iconize {
+    padding: 14px 7px !important;
+    min-width: 48px !important;
+    vertical-align: middle;
+    font-size: 0;
+    background-size: 12px, 100% !important;
+  }
+  #serverTunnels .preview.iconize, #clientTunnels .preview.iconize {
+    min-width: 48px !important;
+    background-size: 16px, 100% !important;
   }
 }
 
