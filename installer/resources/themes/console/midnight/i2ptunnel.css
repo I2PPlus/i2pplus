@@ -418,7 +418,7 @@ td.infohelp {
   white-space: nowrap;
 }
 
-th.tunnelControl {
+th.tunnelControl, .tunnelType, .tunnelLocation, .tunnelInterface {
   text-align: center;
 }
 
