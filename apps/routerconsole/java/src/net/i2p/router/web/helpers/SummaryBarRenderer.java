@@ -713,7 +713,7 @@ class SummaryBarRenderer {
                   .append(_t("Clock Skew"))
                   .append("</b></td>" +
                            "<td class=\"digits");
-               if (_context.clock().getOffset() > 10000 || _context.clock().getOffset() < -10000)
+               if (_context.clock().getOffset() > 1000 || _context.clock().getOffset() < -1000)
                    buf.append(" warntext");
                buf.append("\" align=\"right\">")
                   .append(DataHelper.formatDuration2(_context.clock().getOffset()))
