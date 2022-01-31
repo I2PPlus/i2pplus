@@ -116,7 +116,7 @@ textarea[name="accessList"]:focus {
 
 textarea#statusMessages {
   padding: 2px 4px;
-  width: calc(100% - 14px);
+  width: calc(100% - 5px);
   font: 8.5pt var(--monospaced);
   color: #070;
   border: none;
