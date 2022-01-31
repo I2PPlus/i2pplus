@@ -26,6 +26,7 @@
   --panel: linear-gradient(180deg,#545,#434);
   --shadow_inset: inset 3px 3px 3px rgba(0,0,0,.6);
   --badge: linear-gradient(180deg,#414,#313);
+  --tabicon: linear-gradient(180deg,#767 50%,#323 50%,#212);
 }
 
 html, body {
@@ -1695,9 +1696,10 @@ th.priority br, #snarkTorrents thead th br {
 }
 
 .configsection .configTitle, .toggleview {
-  padding: 1px !important;
+  padding: 3px 1px !important;
   width: 320px !important;
   min-width: 0 !important;
+  vertical-align: middle;
   line-height: 0;
   font-size: 0;
   color: transparent !important;
@@ -1758,7 +1760,7 @@ th.priority br, #snarkTorrents thead th br {
 }
 
 .tab_label::after {
-  margin: 1px;
+  margin: 0;
   padding: 2px;
   width: 18px;
   height: 18px;
@@ -1776,9 +1778,9 @@ th.priority br, #snarkTorrents thead th br {
 }
 
 .toggleview:hover .tab_label::after, #tab_config:hover .tab_label::after {
-  box-shadow: 0 0 2px 1px rgba(255,128,0,.2) !important;
-  filter: drop-shadow(0 0 1px #000) drop-shadow(0 0 2px #730) drop-shadow(0 0 2px rgba(128,64,0,.6)) !important;
+  box-shadow: 0 0 1px 2px rgba(255,96,0,.4), 0 0 2px 1px rgba(192,80,0,.3) !important;
   mix-blend-mode: normal !important;
+  transition: ease box-shadow .05s;
 }
 
 .toggleview:active .tab_label::after, #tab_config:active .tab_label::after {
@@ -1793,27 +1795,27 @@ input:checked + .toggleview:active .tab_label::after {
 }
 
 #tab_addtorrent .tab_label::after {
-  background: var(--add) no-repeat center center / 16px, linear-gradient(180deg,#767 50%, #323 50%, #212);
+  background: var(--add) no-repeat center center / 16px, var(--tabicon);
 }
 
 #tab_newtorrent .tab_label::after {
-  background: var(--create) no-repeat right 2px top 2px / 16px, linear-gradient(180deg,#767 50%, #323 50%, #212);
+  background: var(--create) no-repeat right 2px top 2px / 16px, var(--tabicon);
 }
 
 #tab_config .tab_label::after {
-  background: var(--config) no-repeat center center / 16px, linear-gradient(180deg,#767 50%, #323 50%, #212);
+  background: var(--config) no-repeat center center / 16px, var(--tabicon);
 }
 
 #tab_files .tab_label::after {
-  background: var(--folder) no-repeat center center / 16px, linear-gradient(180deg,#767 50%, #323 50%, #212);
+  background: var(--folder) no-repeat center center / 16px, var(--tabicon);
 }
 
 #tab_comments .tab_label::after {
-  background: var(--comment) no-repeat center center / 16px, linear-gradient(180deg,#767 50%, #323 50%, #212);
+  background: var(--comment) no-repeat center center / 16px, var(--tabicon);
 }
 
 #tab_torrentedit .tab_label::after {
-  background: var(--edit) no-repeat center center / 16px, linear-gradient(180deg,#767 50%, #323 50%, #212);
+  background: var(--edit) no-repeat center center / 16px, var(--tabicon);
 }
 
 #tab_addtorrent:hover .tab_label::after, input:focus + .toggleview .tab_label::after  {
@@ -4311,8 +4313,8 @@ th.peerCount img {
 }
 
 #ourDest {
-  margin-left: 3px;
-  padding: 1px 1px 1px 4px;
+  margin: -3px 3px;
+  padding: 1px 0 1px 4px;
   display: inline-block;
   border: 1px solid #000;
   border-radius: 4px;
@@ -6080,8 +6082,8 @@ td.torrentAction input[type=submit] {
     padding-right: 3px !important;
   }
   #snarkTorrents tt {
-    margin: 1px 3px !important;
-    padding: 2px 3px;
+    margin: 1px 2px 1px 4px !important;
+    padding: 2px 3px 2px 5px;
     opacity: .9;
   }
   .priority {
