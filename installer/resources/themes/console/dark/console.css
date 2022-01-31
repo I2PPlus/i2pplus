@@ -10196,27 +10196,26 @@ div.app {
   position: relative;
 }
 
-.extlink::after, .sitemapLink.extlink::after {
-  width: 21px;
-  height: 18px;
+div.app::after, .sitemapLink::after {
+  width: 22px;
+  height: 19px;
   position: absolute;
   top: -1px;
   right: -1px;
   display: inline-block;
-  border: 1px solid #000 !important;
-  border-radius: 0 2px 0 2px;
+  border: 1px solid #000;
   background: transparent;
-  background-size: 12.5px 10px;
   opacity: 0;
   content: "";
   transform: scale(0);
 }
 
-div.app:hover .extlink::after, .sitemapLink.extlink:hover::after {
-  border: 1px solid #f50 !important;
-  background: #000 var(--newtab_hover) no-repeat 4.5px center / 12.5px 10px;
+div.app:hover::after, .sitemapLink:hover::after {
+  border: 1px solid #f50;
+  background: #000 var(--newtab_hover) no-repeat 4.5px center / 13px 11px;
   opacity: 1;
   transform: scale(1);
+  pointer-events: none;
 }
 
 /* /events */
