@@ -63,7 +63,7 @@ public class RandomArtServlet extends HttpServlet {
 					buf.append("span{padding:2px;width:24px;height:24px;display:inline-block;line-height:24px;vertical-align:middle;text-align:center;");
 					buf.append("font-size:24pt;border:1px solid #fff;box-shadow:0 0 0 1px #bbb;background:#fff}\n.spacer{background:#e8e8e8}\n");
 					buf.append(".spacer:nth-child(odd){background:#ddd}\n#title{display:none}\n");
-					buf.append("pre{width:360px;box-shadow:inset 0 0 0 14px #eee,inset 0 0 0 15px #999;background:#eee}\n");
+					buf.append("pre{width:360px;background:#fff}\n");
 					buf.append("</style>\n</head>\n<body>\n");
 				} else {
 					response.setContentType("text/plain");
