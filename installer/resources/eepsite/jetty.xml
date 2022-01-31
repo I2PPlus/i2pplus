@@ -82,7 +82,7 @@
            </New>
         </Arg>
         <Set name="minThreads">3</Set>
-        <Set name="maxThreads">20</Set>
+        <Set name="maxThreads">64</Set>
         <Set name="idleTimeout">60000</Set>
         <Set name="daemon">true</Set>
         <Set name="name">Eepsite Jetty</Set>
@@ -213,7 +213,7 @@
         <Arg>
           <New class="org.eclipse.jetty.deploy.providers.WebAppProvider">
             <Set name="monitoredDirName">./eepsite/contexts</Set>
-            <Set name="scanInterval">120</Set>
+            <Set name="scanInterval">300</Set>
           </New>
         </Arg>
       </Call>
@@ -237,7 +237,7 @@
         <Arg>
           <New id="WebAppProvider" class="org.eclipse.jetty.deploy.providers.WebAppProvider">
             <Set name="monitoredDirName">./eepsite/webapps</Set>
-	    <Set name="parentLoaderPriority">false</Set>
+        <Set name="parentLoaderPriority">false</Set>
             <!-- this is required because Jetty can't handle jars inside wars,
                  for example in php-java-bridge's JavaBridgeTemplate.war
                  See https://bugs.eclipse.org/bugs/show_bug.cgi?id=433708
@@ -304,7 +304,7 @@
         <New id="RequestLogImpl" class="net.i2p.jetty.I2PRequestLog">
           <Set name="filename">./eepsite/logs/yyyy_mm_dd.request.log</Set>
           <Set name="filenameDateFormat">yyyy_MM_dd</Set>
-          <Set name="retainDays">90</Set>
+          <Set name="retainDays">7</Set>
           <Set name="append">true</Set>
           <Set name="extended">false</Set>
           <Set name="logCookies">false</Set>
