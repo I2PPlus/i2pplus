@@ -522,7 +522,7 @@ class EstablishmentManager {
                 _log.info("Received NEW SessionRequest: " + state);
         } else {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Receive duplicate SessionRequest from: " + state);
+                _log.debug("Received duplicate SessionRequest from: " + state);
         }
 
         notifyActivity();
@@ -541,7 +541,7 @@ class EstablishmentManager {
                 _log.debug("Received SessionConfirmed from: " + state);
         } else {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Receive possible duplicate SessionConfirmed from: " + from);
+                _log.warn("Received possible duplicate SessionConfirmed from: " + from);
         }
     }
 
@@ -558,7 +558,7 @@ class EstablishmentManager {
                 _log.debug("Received SessionCreated from: " + state);
         } else {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Receive possible duplicate SessionCreated from: " + from);
+                _log.warn("Received possible duplicate SessionCreated from: " + from);
         }
     }
 
