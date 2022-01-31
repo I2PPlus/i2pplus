@@ -6,14 +6,6 @@
   display: table-row;
 }
 
-#torrentDisplay input#downloading {
-  pointer-events: none;
-}
-
-#torrentDisplay input:not(#downloading) {
-  pointer-events: auto;
-}
-
 .vanilla .rowOdd, .vanilla .rowEven, .vanilla .peerinfo {
   background: #dfd6d1 !important;
 }
@@ -36,8 +28,4 @@
 
 .classic .rowOdd, .classic .rowEven, .classic .peerinfo {
   background: #e7e8ff !important;
-}
-
-#torrentDisplay input#downloading + label {
-  cursor: default !important;
 }
