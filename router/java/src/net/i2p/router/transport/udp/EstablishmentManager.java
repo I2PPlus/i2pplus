@@ -959,7 +959,7 @@ class EstablishmentManager {
             _transport.send(req);
         }
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Sending RelayRequest for: " + state + " using intro key [" + _transport.getIntroKey() + "]");
+            _log.debug("Sending RelayRequest for: " + state + "\n* Introduction key: " + _transport.getIntroKey());
         state.introSent();
     }
 
