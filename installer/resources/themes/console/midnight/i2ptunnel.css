@@ -535,13 +535,17 @@ a.control, input.control {
   background: var(--hover) !important;
 }
 
+#serverTunnels .iconize, #clientTunnels .iconize {
+  min-width: 80px !important;
+}
+
 .control.start, .control.start:hover, .control.start:focus, .control.start:active,
 .control.stop, .control.stop:hover, .control.stop:focus, .control.stop:active,
 .control.preview, .control.preview:hover, .control.preview:focus, .control.preview:active,
 .control.create, .control.create:hover, .control.create:focus, .control.create:active {
-  background: var(--start) no-repeat center center / 16px, var(--btn), var(--start_hover), var(--start_active) !important;
   color: transparent !important;
   text-shadow: none;
+  background: var(--start) no-repeat center center / 16px, var(--btn), var(--start_hover), var(--start_active) !important;
   -webkit-text-stroke: 0 !important;
 }
 
@@ -1337,7 +1341,7 @@ h2 a, h3 a {
 
 /* responsive layout */
 
-@media screen and (max-width: 1500px) {
+@media screen and (max-width: 1499px) {
   .tunnelName a, .tunnelName a:hover, .tunnelName a:focus, .tunnelName a:active {
     margin-left: 2px;
     padding-left: 22px !important;
@@ -1348,6 +1352,17 @@ h2 a, h3 a {
 
 @media screen and (max-width: 1300px) {
   h2, h3 {font-size: 10.5pt !important}
+  #serverTunnels .iconize, #clientTunnels .iconize {
+    padding: 12.5px 7px !important;
+    min-width: 48px !important;
+    vertical-align: middle;
+    font-size: 0;
+    background-size: 12px, 100% !important;
+  }
+  #serverTunnels .preview.iconize, #clientTunnels .preview.iconize {
+    min-width: 64px !important;
+    background-size: 16px, 100% !important;
+  }
 }
 
 @media screen and (max-width: 1200px) {
