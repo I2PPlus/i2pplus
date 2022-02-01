@@ -832,6 +832,15 @@ tr:not(.peerinfo) .torrentUploaded:empty::after {
   box-shadow: inset 0 0 0 1px #f5f2f0, inset 0 0 0 2px #fb0;
 }
 
+#filterResults, #filterResults td {
+  animation: disappear .1s linear 2s both;
+}
+
+@keyframes disappear {
+  from {visibility: visible}
+  to {visibility: collapse}
+}
+
 #snarkTorrents tbody tr:hover, .dirInfo tbody tr:hover {
   background: #f9efcf !important;
   background: linear-gradient(90deg, rgba(119, 0, 0, .7) 2px, #f9efcf 2px) !important;

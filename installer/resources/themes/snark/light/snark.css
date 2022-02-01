@@ -818,6 +818,15 @@ td {
   background: linear-gradient(180deg,#fff,#ebebff);
 }
 
+#filterResults, #filterResults td {
+  animation: disappear .1s linear 2s both;
+}
+
+@keyframes disappear {
+  from {visibility: visible}
+  to {visibility: collapse}
+}
+
 #snarkTorrents tr, .torrentInfo tr, .dirInfo tr {
   box-shadow: var(--highlight);
 }
@@ -2174,14 +2183,19 @@ input:checked + label + hr + table, input:checked + label + hr + table + table {
 /* debug */
 
 #debugMode {
+  margin-top: -2px;
   padding: 8px;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 0;
+  box-sizing: border-box;
   font-size: 0 !important;
   background: var(--debug) no-repeat center center / 16px;
-  opacity: 0;
+  opacity: 0 !important;
 }
 
 #debugMode:hover {
-  opacity: 1;
+  opacity: 1 !important;
 }
 
 .debuginfo td {
@@ -3774,6 +3788,10 @@ tfoot .RateDown::after, tfoot .RateUp::after {
   border-width: 4px;
   border-style: solid;
   border-color: transparent transparent #aaf transparent;
+}
+
+.graphicStatus .ascending, .graphicStatus .descending {
+  right: -4px !important;
 }
 
 .descending {

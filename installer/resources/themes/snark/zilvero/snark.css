@@ -378,6 +378,15 @@ td {
 	background: linear-gradient(180deg,#fff,#f7f7f7);
 }
 
+#filterResults, #filterResults td {
+	animation: disappear .1s linear 2s both;
+}
+
+@keyframes disappear {
+	from {visibility: visible}
+	to {visibility: collapse}
+}
+
 #snarkTorrents thead th, #snarkTorrents tfoot th, tr:hover #snarkTorrents thead th, tr:hover #snarkTorrents tfoot th {
 	background: #fff !important;
 }

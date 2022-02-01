@@ -565,6 +565,15 @@ td.graphicStatus img::before {
   background: linear-gradient(180deg,#303,#202);
 }
 
+#filterResults, #filterResults td {
+  animation: disappear .1s linear 2s both;
+}
+
+@keyframes disappear {
+  from {visibility: visible}
+  to {visibility: collapse}
+}
+
 #snarkTorrents thead th  {
   padding-top: 3px;
   padding-bottom: 4px;

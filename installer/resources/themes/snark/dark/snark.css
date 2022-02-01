@@ -2403,9 +2403,14 @@ input:checked + .toggleview + hr + table, input:checked + .toggleview + hr + tab
 /* debug */
 
 #debugMode {
+  margin-top: -2px;
+  padding: 8px;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 0;
+  box-sizing: border-box;
   font-size: 0 !important;
   background: var(--debug) no-repeat center center;
-  padding: 8px;
   opacity: 0;
 }
 

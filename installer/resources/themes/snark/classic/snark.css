@@ -1149,6 +1149,15 @@ tr:nth-child(even) + .peerinfo:nth-child(odd) {
   background: linear-gradient(180deg,var(--bg), #ebebff);
 }
 
+#filterResults, #filterResults td {
+  animation: disappear .1s linear 2s both;
+}
+
+@keyframes disappear {
+  from {visibility: visible}
+  to {visibility: collapse}
+}
+
 .snarkFileName {
   padding: 4px 0 !important;
   text-align: left !important;

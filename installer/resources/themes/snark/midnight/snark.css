@@ -1050,6 +1050,15 @@ tr:hover .percentBarText {
   background: linear-gradient(180deg,#060610, #040408);
 }
 
+#filterResults, #filterResults td {
+  animation: disappear .1s linear 2s both;
+}
+
+@keyframes disappear {
+  from {visibility: visible}
+  to {visibility: collapse}
+}
+
 /* download bars */
 
 .torrentDownloaded {
