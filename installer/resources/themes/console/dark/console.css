@@ -5747,7 +5747,7 @@ div.appgroup {
 /* end search */
 
 div.app, .sitemapLink, .themechoice, .langselect {
-  animation: zoom .05s linear .25s both;
+  animation: zoom .15s linear .3s both;
   will-change: transform;
 }
 
