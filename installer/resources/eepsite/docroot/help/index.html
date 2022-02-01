@@ -222,12 +222,10 @@ hr {
 }
 
 .langbar img {
-  margin: 3px 2px 0;
+  margin: 3px 1px 0;
+  padding: 2px;
   width: 20px;
-  height: 15px;
-  border-radius: 1px;
-  box-shadow: 0 0 0 1px #333;
-  background: #333;
+  height: auto;
   opacity: .85;
   transform: scale(0);
   filter: opacity(0);
@@ -235,8 +233,11 @@ hr {
 }
 
 .langbar img:hover, .langbar a:focus img {
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px #222;
+  background: #666;
   opacity: 1 !important;
-  transform: scale(1.2) !important;
+  transform: scale(1.25) !important;
 }
 
 .langbar a:active img {
@@ -368,98 +369,6 @@ th {
   100% {transform: scale(1)}
 }
 
-/* template specific */
-
-#navbar {
-  margin: -3px -29px 20px;
-  text-align: center;
-  border-bottom: 1px solid #555353;
-  background: linear-gradient(to bottom, #333030, #222020);
-}
-
-#navbar a {
-  margin: -1px 0;
-  padding: 4px 8px 8px;
-  min-width: 140px;
-  position: relative;
-  display: inline-block;
-  letter-spacing: 0.08em;
-  text-decoration: none;
-  border: 1px solid #555353;
-  border-top: none;
-  border-right: none;
-  background: #343030;
-  background: linear-gradient(to bottom, #333030, #222020);
-  outline: none;
-}
-
-#navbar a:last-child {
-  border-right: 1px solid #555353;
-}
-
-#navbar a:hover, #navbar a:focus {
-  background: #383434;
-  background: linear-gradient(to bottom, #333030 50%, #222020 50%);
-}
-
-#navbar a:hover:not(:active)::after {
-  width: 100%;
-  height: 2px;
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 1px;
-  display: inline-block;
-  background: #f80;
-  content: "";
-  animation: ease highlight .2s;
-}
-
-#navbar a:active {
-  background: #444040;
-  background: linear-gradient(to bottom, #333030, #444040);
-  box-shadow: inset 0 0 0 1px #000, inset 4px 3px 3px rgba(0,0,0,.6);
-  color: #777070;
-}
-
-@keyframes highlight {
-  from {width: 0; left: 50%}
-}
-
-h3 {
-  position: relative;
-}
-
-.date {
-  position: absolute;
-  top: calc(50% - 9px);
-  right: 10px;
-  display: inline-block;
-  letter-spacing: 0;
-  font-size: 80%;
-  font-weight: 600;
-  font-style: italic;
-  font-variant: normal;
-  text-transform: none;
-}
-
-.twocol {
-  margin-top: -15px;
-  columns: 2 auto;
-  column-gap: 15px;
-}
-
-.twocol p {
-  display: inline-block;
-  break-inside: avoid;
-}
-
-@media screen and (max-width: 1200px) {
-  .date {
-    top: calc(50% - 8px);
-  }
-}
-
 /* responsive layout */
 
 @media screen and (min-width: 1000px) {
@@ -467,7 +376,6 @@ h3 {
     margin: 36px 40px;
     font-size: 11pt;
   }
-
   pre, code {
     font-size: 10.5pt;
   }
@@ -478,11 +386,9 @@ h3 {
     margin: 3% 8%;
     font-size: 12pt;
   }
-
   pre, code {
     font-size: 11.5pt;
   }
-
   h1 {
     margin-top: 40px;
     padding: 10px 0 10px 60px;
@@ -490,31 +396,24 @@ h3 {
     background-size: 48px 48px;
     background-position: left calc(50% + 1px);
   }
-
   h2 {
     font-size: 14pt;
   }
-
   h3 {
     font-size: 13pt;
   }
-
   .main {
     padding: 5px 50px 20px !important;
   }
-
   .langbar {
     margin: -6px -51px 0 0;
   }
-
   #navbar {
     margin: -4px -49px 20px;
   }
-
   #navbar a {
     margin: 0 0 -1px;
   }
-
   .notify {
     margin-top: 30px;
   }
