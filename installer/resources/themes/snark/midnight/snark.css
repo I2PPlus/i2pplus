@@ -3271,7 +3271,7 @@ tr:not(.peerinfo) .torrentDownloaded .percentBarText::after {
 }
 
 .clientid {
-  margin: 0 1px 0 -4px;
+  margin: 0 0 0 -4px;
   padding: 3px 1px 3px 2px;
   width: 52px;
   display: inline-block;
