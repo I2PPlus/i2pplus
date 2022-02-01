@@ -1524,7 +1524,7 @@ body#tunnelEditPage:not(.iframed) h3 {
   #messages h2, #globalTunnelControl h2,
   #servers h2, #clients h2, #tunnelEditPage h2, #tunnelEditPage h3,
   #registration h2, #registration h3, #wizardPanel h2, #ssl h2 {
-    padding: 10px 10px 10px 40px;
+    padding: 10.5px 10px 9.5px 40px !important;
     background-position: 10px center !important;
     background-size: 22px auto, 4px 100%, 100% !important;
   }
@@ -1539,7 +1539,7 @@ body#tunnelEditPage:not(.iframed) h3 {
     max-width: none;
   }
   .control {
-  padding: 8px 12px 8px !important;
+    padding: 8px 12px 8px !important;
   }
   select {
     padding: 8px 24px 8px 8px !important;
