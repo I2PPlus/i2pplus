@@ -3244,6 +3244,7 @@ tr:not(.peerinfo) .torrentDownloaded .percentBarText::after {
   display: inline-block;
   border-radius: 2px;
   background: #2a316f;
+  contain: paint;
 }
 
 #ourDest tt, .peerinfo tt {
@@ -3254,7 +3255,7 @@ tr:not(.peerinfo) .torrentDownloaded .percentBarText::after {
 
 #ourDest tt {
   margin: 0 0 0 5px;
-  padding: 0 3px 0 5px;
+  padding: 1px 3px 2px 5px;
   border-radius: 0 2px 2px 0;
 }
 
