@@ -220,7 +220,8 @@ hr:last-child {
 }
 
 #proxyrequest {
-  padding: 9px 10px 5px 42px;
+  margin-bottom: 12px;
+  padding: 9px 10px 9px 42px;
   display: inline-block;
   background: var(--link) no-repeat 20px center / 16px;
 }
