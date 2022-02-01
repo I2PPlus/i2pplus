@@ -2,30 +2,10 @@
   display: none;
 }
 
-.downloading {
+.downloading, #snarkFoot tr {
   display: table-row;
 }
 
-.vanilla .rowOdd, .vanilla .rowEven, .vanilla .peerinfo {
-  background: #dfd6d1 !important;
-}
-
-.zilvero .rowOdd, .zilvero .rowEven, .zilvero .peerinfo {
-  background: #f0f0f0 !important;
-}
-
-.midnight .rowOdd, .midnight .rowEven, .midnight .peerinfo {
-  background: linear-gradient(to bottom, #040408, #030306) !important;
-}
-
-.light .rowOdd, .light .rowEven, .light .peerinfo {
-  background: linear-gradient(to bottom, #fff, #eaeaff) !important;
-}
-
-.dark .rowOdd, .dark .rowEven, .dark .peerinfo {
-  background: linear-gradient(to bottom, #001400, #000600) !important;
-}
-
-.classic .rowOdd, .classic .rowEven, .classic .peerinfo {
-  background: #e7e8ff !important;
+#snarkTorrents tfoot tr:first-child th {
+  border-top: var(--border_filtered) !important;
 }

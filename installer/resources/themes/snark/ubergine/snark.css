@@ -6,27 +6,30 @@
 @import url(chromescroll.css);
 
 :root {
+  --badge: linear-gradient(180deg,#414,#313);
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, sans-serif;
-  --monospaced: Droid Sans Mono, Noto Mono, Lucida Console, DejaVu Sans Mono, monospace;
-  --highlight: inset 0 0 0 1px #000;
-  --nav: radial-gradient(at center bottom, rgba(148, 48, 0, .25), rgba(80, 16, 0, .15) 80%, rgba(0,0,0,0)), linear-gradient(180deg,#a68058 1%, #7a6045 27%, #5e4730 50%, #2e1700 51%, #1f0f00);
-  --nav_hover: radial-gradient(at center bottom, rgba(200, 96, 200, .6) 0, rgba(0,0,0,0) 90%), linear-gradient(180deg,#a15b73, #7e4062 50%, #591c3e 51%, #46133e);
-  --nav_active: radial-gradient(at center bottom, rgba(255, 200, 0, .5) 0, rgba(0,0,0,0) 70%), linear-gradient(180deg,#f50, #f70);
-  --select: linear-gradient(180deg,rgba(96,0,96,.2) 50%, rgba(16,0,16,.3) 50%), var(--tile);
-  --select_hover: linear-gradient(180deg,#f60 50%, #f40 50%);
-  --btn: linear-gradient(180deg,#989, #878);
-  --btn_hover: linear-gradient(180deg,#767, #989);
-  --btnAction: linear-gradient(180deg,#737, #582858 50%, #101 50%, #080008);
-  --btnAction_hover: linear-gradient(180deg,#b50, #730 50%, #212 50%, #100, #000);
-  --btnAction_active: linear-gradient(180deg,#212, #414);
-  --ink_btn: #2f1d30;
   --border_hard: 1px solid #101;
   --border_inner: 1px solid #313;
-  --th: linear-gradient(180deg,#202,#101);
+  --border_filtered: var(--border_hard);
+  --btnAction_active: linear-gradient(180deg,#212, #414);
+  --btnAction_hover: linear-gradient(180deg,#b50, #730 50%, #212 50%, #100, #000);
+  --btnAction: linear-gradient(180deg,#737, #582858 50%, #101 50%, #080008);
+  --btn_hover: linear-gradient(180deg,#767, #989);
+  --btn: linear-gradient(180deg,#989, #878);
+  --highlight: inset 0 0 0 1px #000;
+  --ink_btn: #2f1d30;
+  --monospaced: Droid Sans Mono, Noto Mono, Lucida Console, DejaVu Sans Mono, monospace;
+  --nav_active: radial-gradient(at center bottom, rgba(255, 200, 0, .5) 0, rgba(0,0,0,0) 70%), linear-gradient(180deg,#f50, #f70);
+  --nav_hover: radial-gradient(at center bottom, rgba(200, 96, 200, .6) 0, rgba(0,0,0,0) 90%), linear-gradient(180deg,#a15b73, #7e4062 50%, #591c3e 51%, #46133e);
+  --nav: radial-gradient(at center bottom, rgba(148, 48, 0, .25), rgba(80, 16, 0, .15) 80%, rgba(0,0,0,0)), linear-gradient(180deg,#a68058 1%, #7a6045 27%, #5e4730 50%, #2e1700 51%, #1f0f00);
   --panel: linear-gradient(180deg,#545,#434);
+  --row: linear-gradient(180deg,#260d26, #1f001f);
+  --row_filtered: var(--row);
+  --select_hover: linear-gradient(180deg,#f60 50%, #f40 50%);
+  --select: linear-gradient(180deg,rgba(96,0,96,.2) 50%, rgba(16,0,16,.3) 50%), var(--tile);
   --shadow_inset: inset 3px 3px 3px rgba(0,0,0,.6);
-  --badge: linear-gradient(180deg,#414,#313);
   --tabicon: linear-gradient(180deg,#767 50%,#323 50%,#212);
+  --th: linear-gradient(180deg,#202,#101);
 }
 
 html, body {
@@ -875,7 +878,7 @@ td:first-child {
 }
 
 .rowOdd, .rowEven {
-  background: linear-gradient(180deg,#260d26, #1f001f);
+  background: var(--row);
 }
 
 .dirInfo .rowOdd {

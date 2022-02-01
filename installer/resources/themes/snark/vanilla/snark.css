@@ -18,7 +18,11 @@
   --btnAction_active: linear-gradient(180deg,#e1d8d1, #fff2e6);
   --border: 1px solid #463e39;
   --border_hard: 1px solid #6f533e;
+  --border_filtered: var(--border_hard);
   --ink: #2f1500;
+  --row_even: linear-gradient(90deg, #998e88 3px, #e8dfda 3px);
+  --row_odd: linear-gradient(90deg, #72665f 3px, #e0d9d5 3px);
+  --row_filtered: var(--row_even);
 }
 
 html {
@@ -844,11 +848,11 @@ td:hover .percentBarText {
 }
 
 .rowEven + .rowEven:nth-child(even), .rowOdd + .rowOdd:nth-child(even) {
-  background: linear-gradient(90deg, #998e88 3px, #e8dfda 3px);
+  background: var(--row_even);
 }
 
 .rowEven + .rowEven:nth-child(odd), .rowOdd + .rowOdd:nth-child(odd) {
-  background: linear-gradient(90deg, #72665f 3px, #e0d9d5 3px);
+  background: var(--row_odd);
 }
 
 @supports not (-moz-appearance: none) { /* chrome fix - gradient otherwise applied to each td */

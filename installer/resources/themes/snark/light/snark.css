@@ -14,6 +14,8 @@
   --btnAction_hover: linear-gradient(180deg,#fff 50%,#ddf 50%);
   --section: linear-gradient(180deg,#fafaff,#efefff);
   --border_soft: 1px solid #afafcf;
+  --row: var(--bg) left top / 4px, linear-gradient(180deg,#fff,#f0f0ff);
+  --row_filtered: var(--row);
 }
 
 body {
@@ -782,7 +784,7 @@ td {
 
 .rowOdd, .rowEven, .snarkCommentInfo tr, .snarkComments tr {
   border-top: var(--border_softer) !important;
-  background: var(--bg) left top / 4px, linear-gradient(180deg,#fff,#f0f0ff);
+  background: var(--row);
 }
 
 .downloading.active td:last-child {

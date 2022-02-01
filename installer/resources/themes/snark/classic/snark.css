@@ -25,6 +25,7 @@
   --border_main: 1px solid #bfc3d9;
   --border_hard: 1px solid #9fa5c6;
   --border_soft: 1px solid #dfe1ec;
+  --border_filtered: var(--border_main);
   --hover: #f60;
   --active: #f30;
   --nav_a: #5e6099;
@@ -34,6 +35,7 @@
   --title_shadow: var(--highlight), inset 0 0 0 0 var(--bg), 0 1px 1px var(--bg4);
   --section: linear-gradient(180deg,var(--bg2), var(--bg3));
   --th: linear-gradient(180deg,var(--bg), var(--bg3));
+  --row_filtered: var(--bg3);
 }
 
 body {
