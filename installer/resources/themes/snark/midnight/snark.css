@@ -1124,10 +1124,6 @@ tr:hover .percentBarText {
   width: 80px;
 }
 
-.dirInfo .percentBarText, .dirInfo .percentBarOuter, .peerinfo .percentBarText, .peerinfo .percentBarOuter {
-  width: 84px;
-}
-
 .percentBarText {
   text-align: center;
   font-weight: 700 !important;
