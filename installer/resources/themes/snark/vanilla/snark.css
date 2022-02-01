@@ -4777,14 +4777,14 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {
   .inactive.downloading .peerCount b,
   .active.starting.processing .peerCount b {
     color: #333;
-    background: #bb0;
+    background: #fc0;
   }
   .inactive.downloading .peerCount b, .peerCount b .right, .peerCount b .left {
     text-shadow: 0 1px 1px #222 !important;
   }
   .inactive.downloading .peerCount b::before,
   .active.starting.processing .peerCount b::before {
-    border-color: transparent #bb0 transparent transparent;
+    border-color: transparent #fc0 transparent transparent;
   }
   .stopped.complete .peerCount b {
     background: #28f;
