@@ -6200,3 +6200,9 @@ td.torrentAction input[type=submit] {
     font-size: 9pt !important;
   }
 }
+
+@media screen and (-webkit-min-device-pixel-ratio: 1.2) {
+  .configsection .configTitle, .toggleview {
+    padding-bottom: 2px !important;
+  }
+}
