@@ -1245,32 +1245,38 @@ tr.configerror {
 }
 
 #toggleInfo {
-  margin: 0 -2px 0 0 !important;
-  padding: 2px 5px;
+  margin: -1px -2px 0 0;
+  padding: 3px 5px;
   min-width: 0;
   vertical-align: middle;
-  background: url(images/expand.svg) no-repeat center center;
-  background-size: 8px;
-}
-
-#toggleInfo:hover, #toggleInfo:focus {
-  background: url(images/expand_hover.svg) no-repeat center center;
-  background-size: 8px;
+  background: url(images/expand.svg) no-repeat center center / 8px, var(--btn);
 }
 
 #toggleInfo.collapse {
-  background: url(images/collapse.svg) no-repeat center center;
-  background-size: 8px;
+  background: url(images/collapse.svg) no-repeat center center / 8px, var(--btn);
+}
+
+#toggleInfo:hover, #toggleInfo:focus {
+  background: url(images/expand_hover.svg) no-repeat center center / 8px, var(--btn_hover);
 }
 
 #toggleInfo.collapse:hover, #toggleInfo.collapse:focus {
-  background: url(images/collapse_hover.svg) no-repeat center center;
-  background-size: 8px;
+  background: url(images/collapse_hover.svg) no-repeat center center / 8px, var(--btn_hover);
+}
+
+#toggleInfo:active, #toggleInfo.collapse:active {
+  box-shadow: var(--btn_shadow_active);
+  background: var(--hover) url(images/expand.svg) no-repeat center center / 8px;
+  background-blend-mode: color-dodge;
+}
+
+#toggleInfo.collapse:active {
+  background: var(--hover) url(images/collapse.svg) no-repeat center center / 8px;
 }
 
 #toggleInfo img {
-  height: 8px;
-  width: 12px;
+  height: 11px;
+  width: 11px;
   opacity: 0;
 }
 
@@ -1561,7 +1567,12 @@ body#tunnelEditPage:not(.iframed) h3 {
   .tunnelControl .control {
     margin: 3px -3px 3px 0 !important;
   }
-  #toggleInfo {
-    margin: -1px -3px 0 0 !important;
+  #globalTunnelControl #toggleInfo {
+    margin: -5px -4px 0 0 !important;
+    background-size: 10px;
+  }
+  #globalTunnelControl #toggleInfo img {
+    width: 17px;
+    height: 17px;
   }
 }
