@@ -2247,8 +2247,14 @@ input:checked + label + hr + table + table {
 
 /* debug */
 
+#snarkTorrents th a#debugMode {
+  display: inline-block;
+  vertical-align: middle;
+}
+
 #debugMode {
   padding: 8px;
+  box-sizing: border-box;
   font-size: 0 !important;
   background: var(--debug) no-repeat center center;
   opacity: 0;
