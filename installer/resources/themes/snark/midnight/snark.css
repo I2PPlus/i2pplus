@@ -1077,6 +1077,11 @@ tr:hover .percentBarText {
   animation: progress 5s linear infinite both;
   backface-visibility: hidden;
   will-change: transform;
+  background: repeating-linear-gradient(135deg, #001 1px, #001 5px, #112 6px, #113 11px);
+}
+
+.active.downloading .percentBarOuter {
+  animation: downloading 5s linear infinite both;
 }
 
 .peerinfo .percentBarOuter {
@@ -2240,7 +2245,6 @@ input:checked + label + hr + table + table {
 
 .peerinfo, .debuginfo {
   background: #040424 !important;
-  box-shadow: var(--highlight);
 }
 
 .debuginfo {
@@ -4018,6 +4022,17 @@ td.torrentAction input[type=submit] {
 @keyframes progress {
   from {background: repeating-linear-gradient(135deg, #001 1px, #001 5px, #112 6px, #113 11px)}
   to {background: repeating-linear-gradient(135deg, #112 1px, #113 5px, #001 6px, #001 11px)}
+}
+
+@keyframes downloading {
+  from {
+    background: linear-gradient(to left, rgba(0, 255, 0, .2), rgba(255, 255, 0, .2), rgba(255, 0, 0, .2)),
+      repeating-linear-gradient(135deg, #001 1px, #001 5px, #112 6px, #113 11px);
+  }
+  to {
+    background: linear-gradient(to left, rgba(0, 255, 0, .2), rgba(255, 255, 0, .2), rgba(255, 0, 0, .2)),
+      repeating-linear-gradient(135deg, #112 1px, #113 5px, #001 6px, #001 11px);
+  }
 }
 
 @keyframes seeding {
