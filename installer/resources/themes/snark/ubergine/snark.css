@@ -1343,8 +1343,7 @@ tr.active:hover .percentBarInner, tr.active:hover .peerinfo .percentBarInner {
 .active .percentBarOuter {
   box-shadow: 0 0 0 1px rgba(0,0,0,.7), inset 0 0 0 1px rgba(16,0,16,.75), var(--shadow_inset);
   background: repeating-linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,0) 7px, rgba(0,0,0,.2) 7px, rgba(0,0,0,.2) 8px, rgba(0,0,0,0) 8px),
-    linear-gradient(to left, rgba(0, 255, 0, .3), rgba(255, 255, 0, .3), rgba(255, 0, 0, .3));
-  background-size: 100%, 400% 100%, 100%;
+    linear-gradient(to left, rgba(0, 255, 0, .25), rgba(255, 255, 0, .25), rgba(255, 0, 0, .25));
   opacity: 1;
 }
 
@@ -4023,15 +4022,6 @@ input[name="nofilter_commentsName"] {
   position: absolute;
   z-index: -1;
   opacity: 0;
-}
-
-#torrentDisplay input:checked + label,
-#torrentDisplay input:checked + label:hover,
-#torrentDisplay label:active {
-  color: #fb0 !important;
-  text-shadow: 0 1px 1px #000;
-  box-shadow: var(--highlight), inset 2px 2px 2px 2px rgba(0,0,0,.5);
-  background: linear-gradient(180deg,#f30, #f60);
 }
 
 #torrentDisplay input:checked + label {
