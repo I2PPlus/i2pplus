@@ -762,9 +762,7 @@ tr:not(.peerinfo) .torrentUploaded:empty::after {
   padding: 2px 3px;
   letter-spacing: .1em;
   color: #fff;
-  border-radius: 2px;
   background: #7f654f;
-  opacity: .8;
 }
 
 .peerinfo tt {
@@ -1256,7 +1254,7 @@ thead img.disable, img.disable:hover {
 }
 
 .inactive .percentBarOuter {
-  background: linear-gradient(180deg,#efdfd1,#fff7ef);
+  background: repeating-linear-gradient(90deg, #f8f2ec 1px, #f8f2ec 5px, #f2e5d9 6px, #f2e5d9 11px);
 }
 
 .peerinfo .percentBarOuter, .peerinfo .percentBarText {
@@ -1330,12 +1328,12 @@ thead img.disable, img.disable:hover {
 }
 
 .torrentDownloaded .percentBarInner {
-  background: linear-gradient(90deg, rgba(255,64,0,.3) 20px, rgba(255,255,0,.3) 50px, rgba(0,255,0,.3)),
+  background: linear-gradient(90deg, rgba(255,64,0,.4) 20px, rgba(255,255,0,.4) 50px, rgba(0,255,0,.4)),
     linear-gradient(180deg,rgba(255,255,255,.1), rgba(0,0,0,.1)), rgba(255,255,255,.5);
 }
 
 .inactive .torrentDownloaded .percentBarInner {
-  background: linear-gradient(90deg, rgba(128,32,0,.2) 20px, rgba(128,128,0,.2) 50px, rgba(0,128,0,.2)),
+  background: linear-gradient(90deg, rgba(128,32,0,.15) 20px, rgba(128,128,0,.15) 50px, rgba(0,128,0,.15)),
     linear-gradient(180deg,rgba(255,255,255,.1), rgba(0,0,0,.1)), rgba(255,255,255,.5);
 }
 
@@ -3580,12 +3578,10 @@ td.torrentDetails {
 }
 
 #ourDest tt, .peerinfo tt {
-  margin: 0 0 0 4px !important;
+  margin: 1px 1px 1px 4px;
   padding: 0 4px 0 6px;
   display: inline-block;
   background: #3f271b;
-  border-radius: 0 2px 2px 0;
-  box-shadow: var(--highlight);
 }
 
 .peerclient, .peerinfo tt, .clientid {
@@ -3595,18 +3591,16 @@ td.torrentDetails {
 }
 
 .peerinfo tt {
-  margin-left: 0 !important;
+  margin-left: 1px !important;
   padding: 2px 5px;
-  border-radius: 1px 0 0 1px;
   box-shadow: none;
   opacity: .8;
 }
 
 .clientid {
-  margin: 0 0 0 -3px;
-  padding: 2px 4px;
-  max-width: 55px;
-  min-width: 55px;
+  margin: 0 1px 0 -3px;
+  padding: 2px 4px 2px 0;
+  width: 55px;
   display: inline-block;
   overflow: hidden;
   white-space: nowrap;
