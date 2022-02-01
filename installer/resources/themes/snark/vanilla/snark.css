@@ -19,7 +19,7 @@
   --border: 1px solid #463e39;
   --border_hard: 1px solid #6f533e;
   --border_filtered: var(--border_hard);
-  --ink: #2f1500;
+  --ink: #331700;
   --row_even: linear-gradient(90deg, #998e88 3px, #e8dfda 3px);
   --row_odd: linear-gradient(90deg, #72665f 3px, #e0d9d5 3px);
   --row_filtered: var(--row_even);
@@ -424,6 +424,7 @@ table {
 th {
   padding: 4px 2px;
   font-size: 8pt;
+  color: var(--ink);
   border-top: var(--border_hard);
   border-bottom: var(--border_hard);
 }
