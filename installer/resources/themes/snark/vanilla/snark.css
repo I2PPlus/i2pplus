@@ -4845,6 +4845,9 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {
     padding-left: 25px !important;
     background-position: 7px center, center center, center center !important;
   }
+  #torrentDisplay {
+    margin: -4px 0 -1px;
+  }
   #snarkTorrents thead th {
     padding-top: 5px;
     padding-bottom: 5px;
