@@ -4005,25 +4005,19 @@ input[name="nofilter_commentsName"] {
   border-right: var(--border_inner);
 }
 
-#torrentDisplay input:checked + label:hover {
-  color: #3f1900 !important;
-  cursor: default;
-  background: linear-gradient(180deg,#313, #202 50%, #101 50%);
-  pointer-events: none;
-}
-
 #torrentDisplay label:hover {
   color: #f60 !important;
   box-shadow: var(--highlight), inset 0 0 0 2px rgba(255,128,0,.3);
   background: var(--btnAction_hover);
 }
 
+#torrentDisplay label:active {
+  text-shadow: none;
+  -webkit-text-stroke: 0;
+}
+
 #torrentDisplay input {
-  height: 0 !important;
-  width: 0 !important;
-  position: absolute;
-  z-index: -1;
-  opacity: 0;
+  display: none;
 }
 
 #torrentDisplay input:checked + label {
@@ -4032,11 +4026,6 @@ input[name="nofilter_commentsName"] {
   background: radial-gradient(at center bottom, rgba(255, 32, 160, .25), rgba(128, 64, 128, .15) 80%, rgba(0,0,0,0)),
     linear-gradient(180deg,#180818, #280828) !important;
   pointer-events: none;
-}
-
-#torrentDisplay label:active {
-  text-shadow: none;
-  -webkit-text-stroke: 0;
 }
 
 .pagenavcontrols {
