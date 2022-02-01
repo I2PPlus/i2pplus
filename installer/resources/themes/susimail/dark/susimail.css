@@ -925,7 +925,6 @@ tr.bottombuttons .pagenav {
 
 .pagenavcontainer {
   padding: 1px 0 2px 6px;
-  border-left: 1px solid #242;
 }
 
 #messagenav {
@@ -988,8 +987,9 @@ tr.bottombuttons .pagenav {
 }
 
 a.sort {
-  vertical-align: middle;
   display: inline-block;
+  vertical-align: middle;
+  line-height: 1;
   opacity: .9;
 }
 
@@ -1718,13 +1718,14 @@ td.mailListSender a, td.mailListSender a:hover {
 
 td.mailListSender, tr:hover td.mailListSender {
   padding-right: 6px !important;
-  padding-left: 22px !important;
+  padding-left: 24px !important;
   width: 1%;
   white-space: nowrap;
+  text-align: left;
   background-image: var(--user) !important;
   background-position: 6px center !important;
   background-repeat: no-repeat !important;
-  background-size: 12px;
+  background-size: 13px;
 }
 
 #mailbox tr:hover .mailListSender a {
