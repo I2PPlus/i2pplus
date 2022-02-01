@@ -3629,12 +3629,14 @@ img {
 }
 
 @keyframes downloadbar {
-  0% {background: repeating-linear-gradient(135deg, #fff7ef 1px, #fff7ef 5px, #efdfd1 6px, #efdfd1 11px)}
-  100% {background: repeating-linear-gradient(135deg, #efdfd1 1px, #efdfd1 5px, #fff7ef 6px, #fff7ef 11px)}
+  0% {background-position: left center}
+  100% {background-position: -29.5px center}
 }
 
 .downloading.active .percentBarOuter, .peerinfo.active .percentBarOuter {
-  animation: downloadbar 2s linear infinite forwards reverse;
+  background: repeating-linear-gradient(135deg, #fff7ef, #fff7ef 5px, #efdfd1 5px, #efdfd1 10px);
+  background-size: 200%;
+  animation: downloadbar 1s linear 2s both;
   opacity: 1;
 }
 
