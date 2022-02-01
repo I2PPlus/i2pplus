@@ -190,6 +190,11 @@ label, th img, .newtorrentsection, #closelog, #pagenavbottom {
     var(--snark_hover) no-repeat 11px center / 18px, var(--snark_active) no-repeat 11px center / 18px;
 }
 
+.snarkNav:first-child:hover, .snarkNav:last-child[href="/i2psnark/"]:hover,
+.snarkNav:first-child:focus, .snarkNav:last-child[href="/i2psnark/"]:focus {
+  background: var(--snark_hover) no-repeat 11px center / 18px, var(--nav_hover);
+}
+
 .snarkNav:last-child[href="/i2psnark/"] {
   display: inline-block;
   border-radius: 2px !important;
@@ -6015,11 +6020,18 @@ td.torrentAction input[type=submit] {
   .snarknavbar img {
     margin: -2px -9px 0 -5px;
   }
-  .snarkNav:first-child {
+  .snarkNav:first-child:not(:last-child) {
     padding-left: 32px !important;
   }
-  .snarkNav:first-child, .snarkNav:last-child[href="/i2psnark/"] {
+  #torrents .nav_main[href="/i2psnark/"] {
+    padding-left: 36px !important;
+  }
+  .snarkNav:first-child:not(:last-child) {
     background-position: 11px center, center center !important;
+  }
+  #torrents .nav_main[href="/i2psnark/"],
+  .snarkNav:last-child[href="/i2psnark/"] {
+    background-position: 8px center, center center !important;
   }
   .snarkNav {
     font-size: 12pt;
