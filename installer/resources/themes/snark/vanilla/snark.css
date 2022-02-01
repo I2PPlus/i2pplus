@@ -3271,11 +3271,11 @@ input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilte
 /* torrent filter bar */
 
 #torrentDisplay {
-  margin: 0 0 -1px;
+  margin: -3px 0 -1px;
   padding: 0;
+  display: block;
   position: relative;
   z-index: 100;
-  display: block;
   white-space: nowrap;
   border: var(--border_hard);
   background: var(--th);
