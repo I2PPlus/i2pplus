@@ -5346,10 +5346,10 @@ td.torrentAction input[type=submit] {
     margin-bottom: 6px;
   }
   td.peerCount b {
-    min-width: 98px;
+    min-width: 90px;
   }
   td.peerCount b .left, td.peerCount b .right {
-    min-width: 35px !important;
+    min-width: 32px !important;
   }
   #snarkTorrents .infohash {
     width: 60px;
