@@ -463,8 +463,8 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {marg
 #profiles .routerid, #peers .routerid {padding: 2px 3px 2px 4px}
 #profiles td span {vertical-align: middle}
 #profilelist .nospeed {text-align: center}
-#profilelist .lowlatency, #profilelist .highlatency {width: 12px; min-width: 0 !important; color: #373 !important}
-#profilelist .highlatency {color: #900 !important}
+#profilelist .lowlatency, #profilelist .highlatency {width: 12px; min-width: 0 !important; color: #373}
+#profilelist .highlatency {color: #900}
 #profilelist td:nth-child(8) span, #profilelist td:nth-child(9) span {min-width: 40px; display: inline-block; text-align: right}
 #profilelist td:nth-child(9) span {min-width: 30px}
 #profilelist td:last-child a::after, a[href^="/configpeer?"]::after, a[href^="/viewprofile"]::after, .profiledump::after, .familysearch img {margin: 1px 2px; padding: 2px; width: 14px; height: 14px; display: inline-block; vertical-align: middle; border: 1px solid #bbd; border-radius: 2px; background: var(--bg)}
@@ -501,17 +501,17 @@ tr.tablefooter:hover td, tr:hover .infohelp {color: var(--ink)}
 #peers > #ntcpcon {margin-top: 0 !important}
 #upnpstatus + #ntcpcon {margin-top: 10px !important}
 #upnpscan {border: var(--border); margin: -11px 0 5px; padding: 0 10px 5px; background: var(--bg)}
-.sortup, .sortdown, .sortupactive, .sortdownactive {margin: 2px 1px 0; padding: 1px 0; width: 16px; height: 12px; display: inline-block; vertical-align: middle; text-align: center; border: 1px solid #999; border-radius: 2px; background-size: 10px, 100%}
-.sortup, .sortdown {box-shadow: var(--highlight), 0 0 1px #ddd; opacity: .7}
+.sortup, .sortdown, .sortupactive, .sortdownactive {margin: 2px 1px 0; padding: 1px 0; width: 16px; height: 12px; display: inline-block; vertical-align: middle; text-align: center; border: var(--border); border-radius: 2px}
+.sortup, .sortdown {box-shadow: var(--highlight), 0 0 1px #ddd; opacity: .85}
 .sortup img, .sortdown img, .sortupactive img, .sortdownactive img {margin: 0; padding: 0; width: 16px; height: 14px; vertical-align: middle; text-align: center; opacity: 0}
-.sortup {background: var(--mv_up) no-repeat center center / 16px 14px, var(--btn)}
-.sortdown {background: var(--mv_down) no-repeat center center / 16px 14px, var(--btn)}
-.sortup:hover {border: var(--border); background: var(--mv_up_hover) no-repeat center center, var(--btn_hover); opacity: 1}
-.sortdown:hover {border: var(--border); background: var(--mv_down_hover) no-repeat center center, var(--btn_hover); opacity: 1}
+.sortup {background: var(--mv_up) no-repeat center center / 9px, var(--btn)}
+.sortdown {background: var(--mv_down) no-repeat center center / 9px, var(--btn)}
+.sortup:hover {border: var(--border); background: var(--mv_up_hover) no-repeat center center / 9px, var(--btn_hover); opacity: 1}
+.sortdown:hover {border: var(--border); background: var(--mv_down_hover) no-repeat center center / 9px, var(--btn_hover); opacity: 1}
 .sortup a:focus, .sortdown a:focus {margin-top: -1px; display: inline-block; border-radius: 2px; box-shadow: var(--highlight); background: rgba(255,102,0,.15)}
 .sortupactive, .sortdownactive {box-shadow: inset 1px 1px 1px #ccc; opacity: 1}
-.sortupactive {background: var(--mv_up_hover) no-repeat center cente, var(--bg)}
-.sortdownactive {background: var(--mv_down_hover) no-repeat center center, var(--bg)}
+.sortupactive {background: var(--mv_up_hover) no-repeat center center / 9px, var(--bg)}
+.sortdownactive {background: var(--mv_down_hover) no-repeat center center / 9px, var(--bg)}
 /* end peer sort */
 .backlogged {font-size: 14pt; line-height: 0}
 tr:hover th {color: var(--ink)}
