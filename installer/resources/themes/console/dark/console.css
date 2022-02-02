@@ -3087,7 +3087,7 @@ td#themeselect {
 }
 
 .themechoice img, .langselect img {
-  animation: fade .3s ease 1.15s reverse both;
+  animation: fade .15s ease .3s reverse both;
 }
 
 .langselect:hover {
@@ -5636,7 +5636,7 @@ div.appgroup {
   border: 1px solid #151;
   background: #000;
   box-shadow: var(--highlight), inset 0 0 0 2px rgba(0,64,0,.5);
-  animation: fade .3s 1.1s reverse both;
+  animation: fade .15s .5s reverse both;
 }
 
 #searchbar td {
@@ -5748,7 +5748,7 @@ div.appgroup {
 /* end search */
 
 div.app, .sitemapLink, .themechoice, .langselect {
-  animation: zoom .15s linear .3s both;
+  animation: zoom .15s linear .2s both;
   will-change: transform;
 }
 
@@ -5768,7 +5768,7 @@ div.app img {
 
 div.app img, .sitemapLink img {
   filter: sepia(100%) hue-rotate(70deg) grayscale(.3);
-  animation: zoom .1s linear .9s both;
+  animation: zoom .15s linear .3s both;
 }
 
 @keyframes zoom {
@@ -5803,7 +5803,7 @@ div.app:hover img, .sitemapLink:hover img, a:focus .app img, a:focus .sitemaplin
 
 .applabel, .sitemapLabel, .themelabel, .ui_lang {
   background: var(--glow_bottom), linear-gradient(180deg,#001900,#001000 50%,#000);
-  animation: fade .15s ease .95s reverse both;
+  animation: fade .15s ease .25s reverse both;
 }
 
 div.app:hover .applabel, .sitemapLink:hover .sitemapLabel,
