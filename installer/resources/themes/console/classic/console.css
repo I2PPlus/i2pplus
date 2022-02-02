@@ -6,6 +6,7 @@
 .routersummary, .routersummaryouter, h1, .main, iframe, tr {contain: layout}
 #sb_logo img, .routersummary h3, .routersummary h3 a, #sb_internals, #sb_advanced, #sb_services, .confignav, *::before, *::after, div.app, .themechoice, .langselect, .newsAuthor, #newsDisplay, #netdbcountrylist img, .viewfullentry, .sybil_routerinfo th img, .graphspanel, h1 {user-select: none}
 .hide, .hideme {display: none}
+tr, h3, h4 {contain: paint}
 div.clearer {height: 0; line-height: 0; clear: left}
 i {padding-right: 1px}
 tt, pre, textarea, code, .bucket, #logs li, #servicelogs li {font: 8.5pt var(--monospaced)}
@@ -647,10 +648,10 @@ h3#i2pclientconfig {margin-top: 15px; margin-bottom: -13px}
 h3#bannedpeers {margin-top: 16px; margin-bottom: -16px}
 h3#bwlimiter, h3#iptransport {margin: 15px 0 -1px !important}
 h3#iptransport a, th#upnpconfig a, h3#bwlimiter a, #config_stats h3 a, #config_logging h3 a, h3#graphdisplay a, #logs h3 a, h3#advancedconfig a, .h3navlinks, #reseedsetup a {float: right; letter-spacing: normal; font-size: 9pt}
-.h3navlinks a {margin-left: 5px; letter-spacing: normal; text-transform: capitalize}
+.h3navlinks a {margin: 2px 0 0 5px; display: inline-block; letter-spacing: normal; text-transform: capitalize}
 h3#iptransport a, h3#advancedconfig a, #reseedsetup a {font-size: 0}
 #browseronstart .h3navlinks img, #servicedebug .h3navlinks img {width: 0; height: 0}
-h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after, #browseronstart .h3navlinks a::after, #servicedebug .h3navlinks a::after {margin: -6px -10px -3px 0; padding: 8px 0 2px 10px; display: inline-block; vertical-align: bottom; height: 19px !important; width: 19px; border-left: var(--border); background: url(/themes/console/images/svg/helplink.svg) no-repeat center center / 19px; content: ""}
+h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after, #browseronstart .h3navlinks a::after, #servicedebug .h3navlinks a::after {margin: -6px -10px -9px 0; padding: 10px 2px 2px 12px; display: inline-block; vertical-align: bottom; height: 19px !important; width: 19px; border-left: var(--border); background: url(/themes/console/images/svg/helplink.svg) no-repeat center center / 19px; content: ""}
 h3#iptransport a:hover {filter: drop-shadow(0 0 1px var(--hover))}
 #config_logging h3 a::before, #webappconfiguration a::before, #i2pclientconfig a::before, #pluginmanage a::before, #version a::before {width: 18px; height: 14px; display: inline-block; vertical-align: middle; background: var(--eye) no-repeat left center / 14px; content: ""}
 #version a::before {margin-top: -2px}
