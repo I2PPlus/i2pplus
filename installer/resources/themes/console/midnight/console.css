@@ -9997,10 +9997,15 @@ th .version {
   text-align: center !important;
 }
 
+#floodfills .percentBarOuter, #floodfills .percentBarOuter, #floodfills .percentBarText {
+  box-sizing: border-box;
+  float: none;
+}
+
 #floodfills .percentBarOuter, #floodfills .percentBarText {
-  display: inline-block;
-  width: 50px;
   margin: 0 2px;
+  width: 50px;
+  display: inline-block;
 }
 
 #floodfills .percentBarOuter {
@@ -10008,6 +10013,7 @@ th .version {
   background: #000;
   border: var(--border_inner);
   opacity: .9;
+  height: 16px;
 }
 
 #floodfills .percentBarInner {
@@ -10026,6 +10032,7 @@ th .version {
 #floodfills .percentBarText {
   color: #fff;
   text-shadow: 0 1px 1px #000;
+  display: none;
 }
 
 #floodfills td:empty {
