@@ -649,21 +649,16 @@ tt, .bucket, #bucketSet code {
 }
 
 #snarkTorrents tt {
-  font-size: 8pt;
-  color: #301;
+  display: inline-block;
+  letter-spacing: .1em;
   font-weight: 700;
   color: var(--bg);
-  background: var(--bg5);
   border-radius: 2px;
-  margin: 3px;
-  padding: 2px 3px;
-  letter-spacing: .1em;
-  display: inline-block;
 }
 
 #snarkTorrents tfoot th tt {
-  display: inline;
   margin-left: 3px;
+  display: inline;
 }
 
 /* end torrent display */
@@ -3169,25 +3164,26 @@ td.peerCount {
   display: inline-block;
   vertical-align: middle;
   line-height: 1.2 !important;
+  box-sizing: border-box;
+  font-size: 90% !important;
 }
 
 .peerinfo tt {
-  margin: 0;
+  margin: -1px 0;
   border-radius: 2px 0 0 2px;
   padding: 0 5px;
   background: none;
 }
 
 .clientid {
-  margin-left: -3px;
-  padding: 2px 4px;
-  max-width: 50px;
-  min-width: 50px;
+  margin: 0 0 0 -3px;
+  padding: 2px 1px;
+  width: 50px;
   display: inline-block;
   border-radius: 0 1px 1px 0;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-size: 90%;
+  font-size: 90% !important;
   text-align: center;
   white-space: nowrap;
   background: var(--bg3);
@@ -3219,7 +3215,7 @@ td.peerCount {
 }
 
 #ourDest tt {
-  margin: -1px 1px -1px 4px !important;
+  margin: -1px 0 -1px 4px !important;
   padding: 2px 4px 2px 6px;
   display: inline-block;
   background: #99f;
@@ -4228,5 +4224,5 @@ body, th, td, table a, input, input[type=text], input.r, input[name="nofilter_da
 }
 
 @media screen and (min-width: 1600px) {
-  #screenlog li, #snarkTorrents tt {font-size: 9pt !important}
+  #screenlog li {font-size: 9pt !important}
 }
