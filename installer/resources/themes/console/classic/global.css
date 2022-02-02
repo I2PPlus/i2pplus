@@ -54,7 +54,9 @@
   --ink_light: #5e626e;
   --label_focus: linear-gradient(90deg, var(--bg3), var(--bg), var(--bg3));
   --ls_target: 1px solid #5a5 !important;
+  --note: #1f7096;
   --monospaced: Droid Sans Mono, Andale Mono, DejaVu Sans Mono, Lucida Console, monospace;
+  --pad_info: 20px 25px 20px 55px;
   --reload: linear-gradient(90deg, rgba(0,0,0,0) 85%, rgba(64,255,64,.15)), linear-gradient(90deg, #bcf, #def);
   --row_hover: #ffd;
   --scroll: #acafb9;
