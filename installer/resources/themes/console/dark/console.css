@@ -744,11 +744,6 @@ div.refresh {
   padding: 7px 5px 5px !important;
 }
 
-@keyframes downloadbar {
-  from {background: var(--download_bar)}
-  to {background: repeating-linear-gradient(135deg, #010 1px, #010 6px, #000 7px, #000 11px)}
-}
-
 /* end status bar */
 
 .warntext {
@@ -1245,12 +1240,6 @@ div.widescroll { /* only scroll content, not entire page eg /peers */
 }
 
 /* end topnav */
-
-@keyframes hide-up {
-  0% {margin-top: 0; filter: opacity(1)}
-  30% {filter: opacity(0)}
-  100% {margin-top: -300px}
-}
 
 div.messages {
   margin: 12px 0 -1px 0;
@@ -5636,7 +5625,7 @@ div.appgroup {
   border: 1px solid #151;
   background: #000;
   box-shadow: var(--highlight), inset 0 0 0 2px rgba(0,64,0,.5);
-  animation: fade .15s .5s reverse both;
+  animation: fade .15s .5s reverse both, slide .1s ease 1s both;
 }
 
 #searchbar td {
@@ -5748,8 +5737,9 @@ div.appgroup {
 /* end search */
 
 div.app, .sitemapLink, .themechoice, .langselect {
-  animation: zoom .15s linear .2s both;
+  animation: zoom .1s linear .2s both;
   will-change: transform;
+  contain: paint;
 }
 
 .appimg {
@@ -5769,11 +5759,6 @@ div.app img {
 div.app img, .sitemapLink img {
   filter: sepia(100%) hue-rotate(70deg) grayscale(.3);
   animation: zoom .15s linear .3s both;
-}
-
-@keyframes zoom {
-  from {transform: scale(0)}
-  to {scale: scale(1)}
 }
 
 div.app:hover img, .sitemapLink:hover img, a:focus .app img, a:focus .sitemaplink img {
@@ -7283,11 +7268,6 @@ h4#sb_shutdownstatus span {
   background: repeating-linear-gradient(90deg, rgba(0,0,0,.3), rgba(0,0,0,.3) 10px, rgba(0,32,0,.3) 10px, rgba(0,32,0,.3) 20px) #010;
   background-size: 400%;
   animation: progress 120s 3s linear infinite both;
-}
-
-@keyframes progress {
-  from {background-position: 200%}
-  to {background-position: 0}
 }
 
 .sb_netstatus::before, .tunnelBuildStatus::before {
@@ -10414,14 +10394,6 @@ input[type=text]:focus::placeholder, #homesearch input.search:focus::placeholder
   background-size: 48px;
 }
 
-@keyframes spin {
-  from {transform: rotate(-360deg)}
-}
-
-@keyframes routerdown {
-  from {background-position: left center}
-}
-
 /* end sidebar routerdown */
 
 #webappconfig {
@@ -10663,10 +10635,6 @@ table[id$="logs"] ul {
   border-radius: 50%;
   filter: saturate(1);
   animation: linear ping .1s;
-}
-
-@keyframes ping {
-  from {filter: saturate(2)}
 }
 
 .log_debug, .log_info, .log_warn, .log_error, .log_crit, .log_omitted {
@@ -12028,21 +11996,6 @@ i {
   animation: grid-fade .15s ease .4s forwards both;
 }
 
-@keyframes fade {
-  from {filter: opacity(1)}
-  to {filter: opacity(0)}
-}
-
-@keyframes grid-fade {
-  from {
-    background: repeating-linear-gradient(90deg, rgba(0,0,0,0), #020 1px, rgba(0,0,0,0) 1px, rgba(0,0,0,0) 10px),
-      repeating-linear-gradient(180deg,#000, #020 1px, #000 1px, #000 10px);
-  }
-  to {
-    background: #000;
-  }
-}
-
 .graphContainer > * {
   vertical-align: middle !important;
 }
@@ -12424,11 +12377,6 @@ h3 + table {
   opacity: .4;
 }
 
-@keyframes reloader {
- 0%,100% {width: 0}
-  80%,99% {width: 120%}
-}
-
 .unbold {
   font-weight: 400;
 }
@@ -12498,10 +12446,6 @@ h3 + table {
 
 .routersummary .sb_newsheadings table::before {
   content: none !important;
-}
-
-@keyframes bar {
-  from {width: calc(100%)}
 }
 
 h1, .main h2, .main h3, h4.app, h4.app2 {
@@ -12755,6 +12699,64 @@ body.iframed {
   margin: 1px 2px 0 !important;
   padding: 0 4px !important;
   line-height: 1.6;
+}
+
+@keyframes bar {
+  from {width: calc(100%)}
+}
+
+@keyframes downloadbar {
+  from {background: var(--download_bar)}
+  to {background: repeating-linear-gradient(135deg, #010 1px, #010 6px, #000 7px, #000 11px)}
+}
+
+@keyframes fade {
+  from {filter: opacity(1)}
+  to {filter: opacity(0)}
+}
+
+@keyframes hide-up {
+  0% {margin-top: 0; filter: opacity(1)}
+  30% {filter: opacity(0)}
+  100% {margin-top: -300px}
+}
+
+@keyframes grid-fade {
+  from {background: repeating-linear-gradient(90deg, rgba(0,0,0,0), #020 1px, rgba(0,0,0,0) 1px, rgba(0,0,0,0) 10px),
+          repeating-linear-gradient(180deg,#000, #020 1px, #000 1px, #000 10px)}
+  to {background: #000}
+}
+
+@keyframes ping {
+  from {filter: saturate(2)}
+}
+
+@keyframes progress {
+  from {background-position: 200%}
+  to {background-position: 0}
+}
+
+@keyframes routerdown {
+  from {background-position: left center}
+}
+
+@keyframes spin {
+  from {transform: rotate(-360deg)}
+}
+
+@keyframes reloader {
+  0%,100% {width: 0}
+  80%,99% {width: 120%}
+}
+
+@keyframes slide {
+  from {transform: translateY(-20px)}
+  to {transform: translateY(0)}
+}
+
+@keyframes zoom {
+  from {transform: scale(0); opacity: 0}
+  to {scale: scale(1); opacity: 1}
 }
 
 /* responsive layout */
