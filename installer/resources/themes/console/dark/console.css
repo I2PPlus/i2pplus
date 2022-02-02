@@ -4938,15 +4938,17 @@ img.unknownflag {
   width: 12px;
   height: 12px;
   display: inline-block;
+  vertical-align: middle;
   font-size: 0;
-  background-size: 11px !important;
+  background-size: 11px;
 }
 
 #ntcpconnections td.queue:empty::before {
   content: "";
 }
 
-#profilelist td:first-child, #profilelist th:first-child, #profilelist td:nth-last-child(2), #profilelist th:nth-last-child(2) {
+#profilelist td:first-child, #profilelist th:first-child,
+#profilelist td:nth-last-child(2), #profilelist th:nth-last-child(2) {
   white-space: nowrap;
   text-align: center;
 }
@@ -10037,6 +10039,7 @@ input[type=file] {
 
 #floodfills .percentBarOuter, #floodfills .percentBarOuter, #floodfills .percentBarText,
 #tunnels .percentBarOuter, #tunnels .percentBarOuter, #tunnels .percentBarText {
+  display: inline-block;
   box-sizing: border-box;
   float: none;
 }
