@@ -1834,7 +1834,7 @@ h3 a.script, th a.script {
   color: #f70;
 }
 
-h3#iptransport a:not(old), h3#advancedconfig a:not(old), h3#reseedsetup a:not(old) {
+h3#iptransport a, h3#advancedconfig a, h3#reseedsetup a {
   font-size: 0;
   height: 20px;
 }
@@ -1889,7 +1889,7 @@ h3#exploratory {
   margin-top: 15px;
 }
 
-#tunnels h3 a:not(old):not(.lsview), #logs a.delete:not(old), #logs a.configure:not(old) {
+#tunnels h3 a:not(.lsview), #logs a.delete, #logs a.configure {
   font-size: 0 !important;
 }
 
@@ -3753,7 +3753,7 @@ ul.statlist {
   margin-right: 5px;
 }
 
-.statlist li:not(old) {
+.statlist li {
   list-style: none !important;
 }
 
@@ -6544,7 +6544,7 @@ b.netdb_transport {
 
 /* leasesets */
 
-#leasesetdebug th a:not(old), table#leasesetsummary th a:not(old) {
+#leasesetdebug th a, table#leasesetsummary th a {
   font-size: 0;
 }
 
@@ -6666,7 +6666,7 @@ b.netdb_transport {
   text-align: right;
 }
 
-.addtobook a:not(old) {
+.addtobook a {
   font-size: 0;
 }
 
@@ -8255,13 +8255,13 @@ select[name="newlogclass"] {
   color: #050;
 }
 
-#upnphelp:not(old) {
+#upnphelp {
   margin-top: -10px !important;
   display: inline-table;
   columns: auto 400px !important;
 }
 
-#upnphelp li:not(old) {
+#upnphelp li {
   min-width: 400px;
   display: inline-block;
 }
@@ -9542,7 +9542,7 @@ b.suboption {
   transition: ease width .1s;
 }
 
-.config_experimental:not(old) {
+.config_experimental {
   font-size: 0;
 }
 
@@ -11802,7 +11802,7 @@ iframe {
   #sb_tunnels td::after, #sb_queue td::after {min-height: 12px}
   #sb_internals a, #sb_advanced a #sb_help a {max-width: 200px}
   #clock {font-size: 16pt}
-  .tunnels_client th:first-child:not(old) {font-size: 0}
+  .tunnels_client th:first-child {font-size: 0}
   .tunnels_client th:first-child::after {
     vertical-align: middle;
     line-height: 0;
@@ -12113,7 +12113,7 @@ iframe {
     font-size: 10pt;
     letter-spacing: 0;
   }
-  #ntcpconnections th:last-child:not(old) {font-size: 0}
+  #ntcpconnections th:last-child {font-size: 0}
   #ntcpconnections th:last-child::before {content: var(--err) !important}
   .main#config_family input.download {
     max-width: 230px;
@@ -12235,7 +12235,7 @@ iframe {
 }
 
 @media screen and (min-width: 1400px) {
-  #help #changelog pre:not(old) {
+  #help #changelog pre {
     margin-left: -10px !important;
     padding-left: 10px;
     padding-bottom: 5px;

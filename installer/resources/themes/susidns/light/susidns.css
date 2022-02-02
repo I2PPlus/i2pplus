@@ -45,7 +45,7 @@ b, td.search {
   background-size: auto 50px, 100%;
 }
 
-#logo:not(old) {
+#logo {
   background: linear-gradient(180deg,#fff, #eef);
 }
 
@@ -909,7 +909,7 @@ tr:hover .destaddress {
   text-align: center;
 }
 
-#host_list td.b32link a:not(old), #host_list td.helper a:not(old) {
+#host_list td.b32link a, #host_list td.helper a {
   font-size: 0 !important;
 }
 
@@ -943,12 +943,12 @@ tr:hover .destaddress {
   color: #5a5a6f;
 }
 
-#host_list .destaddress:not(old) {
+#host_list .destaddress {
   overflow: hidden !important;
   text-overflow: ellipsis;
 }
 
-#host_list .destaddress:not(old):focus {
+#host_list .destaddress:focus {
   margin-bottom: -2px;
   padding: 1px 3px 3px !important;
   overflow: auto !important;

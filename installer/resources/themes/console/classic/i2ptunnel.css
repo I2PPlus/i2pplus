@@ -728,7 +728,7 @@ table#statusMessages textarea, table#statusMessages textarea:active {
   padding: 0;
 }
 
-.required:not(old) {
+.required {
   display: none;
 }
 

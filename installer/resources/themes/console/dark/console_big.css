@@ -139,8 +139,8 @@ table {
   font-size: 9pt !important;
 }
 
-table#leasesetdebug th a:not(old), table#leasesetsummary th a:not(old), #tunnels.main h3 a:not(old), #logs h3 a:not(old),
-a[href^="configpeer?peer"], h3#iptransport a:not(old), h3#iptransport a:not(old) {
+table#leasesetdebug th a, table#leasesetsummary th a, #tunnels.main h3 a, #logs h3 a,
+a[href^="configpeer?peer"], h3#iptransport a, h3#iptransport a {
   font-size: 0 !important;
 }
 
@@ -295,7 +295,7 @@ p#fullhistory {
   padding: 5px 8px !important;
 }
 
-h3#iptransport a:not(old), h3#advancedconfig a:not(old), #reseedsetup a:not(old) {
+h3#iptransport a, h3#advancedconfig a, #reseedsetup a {
   font-size: 0 !important;
 }
 

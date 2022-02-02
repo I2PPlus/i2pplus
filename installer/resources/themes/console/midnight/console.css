@@ -2170,7 +2170,7 @@ h3 + p, h3 + table {
   margin-top: 10px;
 }
 
-.main#tunnels h3 a:not(old):not(.lsview), #logs a.delete:not(old), #logs a.configure:not(old) {
+.main#tunnels h3 a:not(.lsview), #logs a.delete, #logs a.configure {
   font-size: 0 !important;
 }
 
@@ -2272,7 +2272,7 @@ h4.app a, h4.app2 a {
   padding-bottom: 8px !important;
 }
 
-h3#iptransport a:not(old), h3#advancedconfig a:not(old), #reseedsetup a:not(old) {
+h3#iptransport a, h3#advancedconfig a, #reseedsetup a {
   font-size: 0;
   height: 20px;
 }
@@ -4316,7 +4316,7 @@ h3.stats {
   background: #000;
 }
 
-.main .statlist li:not(old) {
+.main .statlist li {
   list-style: none !important;
 }
 
@@ -5551,7 +5551,7 @@ table[id$="logs"] ul {
   background: rgba(10,10,34,.6);
 }
 
-.logtable ul li:not(old) {
+.logtable ul li {
   margin-left: 15px;
   list-style: none !important;
 }
@@ -5745,7 +5745,7 @@ font[color="#000099"] { /* info */
   color: #900 !important;
 }
 
-a[href^="configpeer?peer"]:not(old) {
+a[href^="configpeer?peer"] {
   font-size: 0 !important;
   filter: drop-shadow(0 0 1px #777);
 }
@@ -7113,7 +7113,7 @@ span#distance {
   width: 10px;
 }
 
-#leasesetdebug th a:not(old), #leasesetsummary th a:not(old) {
+#leasesetdebug th a, #leasesetsummary th a {
   font-size: 0;
 }
 
@@ -7121,7 +7121,7 @@ span#distance {
   text-align: right;
 }
 
-.addtobook a:not(old) {
+.addtobook a {
   font-size: 0;
 }
 
@@ -9213,7 +9213,7 @@ label:hover .optbox {
   display: none;
 }
 
-.config_experimental:not(old) {
+.config_experimental {
   font-size: 0;
 }
 
@@ -12356,7 +12356,7 @@ iframe {
   #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {
     min-height: 14px;
   }
-  .tunnels_client th:first-child:not(old) {
+  .tunnels_client th:first-child {
     font-size: 0;
   }
   .tunnels_client th:first-child::after {
@@ -12667,7 +12667,7 @@ iframe {
 }
 
 @media screen and (min-width: 1400px) {
-  #help #changelog pre:not(old) {
+  #help #changelog pre {
     margin-left: 0;
     padding-left: 10px;
     width: calc(100% - 22px) !important;
@@ -13163,7 +13163,7 @@ iframe {
   h3#pluginfromfile, h3#updateplugins, h3#pluginmanage, h3#bannedpeers, h3.ptitle, h3#transports, h3#upnpstatus, h3.sybils, #config_keyring h3 {
     padding: 9px 10px !important;
   }
-  .main#tunnels h3 a:not(old):not(.lsview), #criticallogs + h3.tabletitle a:not(old), h3#iptransport a:not(old), h3#advancedconfig a:not(old), #reseedsetup a:not(old) {
+  .main#tunnels h3 a:not(.lsview), #criticallogs + h3.tabletitle a, h3#iptransport a, h3#advancedconfig a, #reseedsetup a {
     font-size: 0 !important;
   }
   #updateHelper .nowrap::after, #updateProxyHostPort .nowrap::after, #i2pupdates .nowrap::after {

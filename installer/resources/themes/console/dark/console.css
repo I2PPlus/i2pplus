@@ -13310,7 +13310,7 @@ body.iframed {
 }
 
 @media screen and (max-width: 900px) {
-  #ntcpconnections th:last-child:not(old) {
+  #ntcpconnections th:last-child {
     font-size: 0;
   }
   #ntcpconnections th:last-child::before {
@@ -13383,7 +13383,7 @@ body.iframed {
     padding: 10px 5px;
     border: none;
   }
-  .main#help #changelog pre:not(old) {
+  .main#help #changelog pre {
     margin-left: 0;
     padding-left: 10px;
     width: calc(100% - 22px) !important;

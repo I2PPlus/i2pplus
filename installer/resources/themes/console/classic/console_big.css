@@ -372,11 +372,11 @@ input.search[type=text] {
   font-size: 10pt !important;
 }
 
-table#leasesetdebug th a:not(old), table#leasesetsummary th a:not(old), #tunnels.main h3 a:not(old), #logs h3 a:not(old), a[href^="configpeer?peer"] {
+table#leasesetdebug th a, table#leasesetsummary th a, #tunnels.main h3 a, #logs h3 a, a[href^="configpeer?peer"] {
   font-size: 0 !important;
 }
 
-h3#iptransport a:not(old), h3#advancedconfig a:not(old) {
+h3#iptransport a, h3#advancedconfig a {
   font-size: 0 !important;
 }
 
