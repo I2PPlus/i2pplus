@@ -9,6 +9,7 @@
   --badge_hover: linear-gradient(180deg, var(--bg3), #fff);
   --badge: linear-gradient(180deg, #fff, var(--bg3));
   --bg2: #f4f4ff;
+  --bg3: #eef;
   --bg3: #f0f0ff;
   --bg4: #e8e8ff;
   --bg_doc: var(--bodybg) url(images/bg0.png) center center / 90px;
@@ -16,13 +17,15 @@
   --bodybg: #e2e2f3;
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
   --border: 1px solid #bfc3d9;
-  --border_badge: #aad;
+  --border_badge: #bbc;
+  --border: 1px solid #bfc3d9;
   --border_color: #bfc3d9;
   --border_soft: #cfd2e2;
   --border_warn: #fb7;
   --box_border_badge: 0 0 0 1px #bbd;
   --btn_active: linear-gradient(180deg,#f60,#f90);
   --btn_hover2: linear-gradient(180deg,var(--bg) 50%,#ffe4db 50%,#ffc6b3);
+  --btn_hover: linear-gradient(180deg,#ddd, #fff);
   --btn_hover: linear-gradient(180deg,#ddd,#fff);
   --btn: linear-gradient(180deg, var(--bg) 50%, var(--bg2), var(--bg3));
   --btn_shadow_active: var(--highlight), inset 3px 3px 3px 1px rgba(32,32,64,.3);

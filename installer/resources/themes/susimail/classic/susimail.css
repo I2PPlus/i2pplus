@@ -5,30 +5,6 @@
 @import url(../images/images.css);
 @import url(images/images.css);
 
-:root {
-  --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
-  --monospaced: Droid Sans Mono, Andale Mono, DejaVu Sans Mono, Lucida Console, monospace;
-  --ink: #41444d;
-  --ink_light: #5e626e;
-  --bodybg: #e2e2f3;
-  --bg: #fff;
-  --bg2: #f4f4ff;
-  --bg3: #eef;
-  --highlight: inset 0 0 0 1px #fff;
-  --btn: linear-gradient(180deg, var(--bg) 50%, var(--bg2), var(--bg3));
-  --btn_hover: linear-gradient(180deg,#ddd, #fff);
-  --btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 #fff, inset 0 0 4px 2px #f0f0ff, 0 1px 1px rgba(220,220,255,.5);
-  --btn_shadow_hover: var(--highlight), 0 0 0 1px #fff, 0 0 0 2px rgba(255,96,0,.4);
-  --btn_shadow_active: var(--highlight), inset 3px 3px 3px 1px rgba(32,32,64,.3);
-  --header: linear-gradient(180deg,#fff 50%, #f2f2ff 50%);
-  --hover: #f60;
-  --active: #f30;
-  --border: #bfc3d9;
-  --border_soft: #cfd2e2;
-  --border_badge: #bbc;
-  --hover: #f60;
-}
-
 body {
   margin: 3px 4px;
   background: var(--bg3) url(/themes/console/classic/images/bg0.png) left top / 120px;
@@ -50,6 +26,7 @@ h3#config {
   margin: -11px auto 10px;
   padding: 5px 10px;
   width: 300px;
+  font-size: 11pt;
   color: var(--ink_light);
   border: var(--border);
   border-radius: 0 0 2px 2px;
