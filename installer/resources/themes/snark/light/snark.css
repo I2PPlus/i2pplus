@@ -3214,8 +3214,8 @@ td.trackerDetails img {
 #torrentDisplay {
   margin: -1px 0 -2px;
   position: sticky;
-  top: 43px;
-  z-index: 999;
+  top: 42px;
+  z-index: 2002;
   border-top: var(--border_soft);
   border-bottom: var(--border_soft);
   background: var(--th);
@@ -3980,6 +3980,7 @@ td.torrentAction input[type=submit] {
 /*responsive layout */
 
 @media screen and (max-width: 1499px) {
+  #torrentDisplay {top: 40px}
   td.trackerDetails img {
     margin-right: -10px !important;
     height: 14px !important;
@@ -3991,12 +3992,8 @@ td.torrentAction input[type=submit] {
   .torrentAction input:active {
     background-size: auto 11px, 100% !important;
   }
-  #actionStopAll, #actionStartAll {
-    padding: 11px 18px !important;
-  }
-  #configs a[href="/config.jsp"] {
-    margin-top: 2px;
-  }
+  #actionStopAll, #actionStartAll {padding: 11px 18px !important}
+  #configs a[href="/config.jsp"] {margin-top: 2px}
 }
 
 @media screen and (max-width: 1200px) {
