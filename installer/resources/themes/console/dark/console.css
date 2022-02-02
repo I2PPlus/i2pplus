@@ -4940,7 +4940,7 @@ img.unknownflag {
   display: inline-block;
   vertical-align: middle;
   font-size: 0;
-  background-size: 11px;
+  background-size: 11px !important;
 }
 
 #ntcpconnections td.queue:empty::before {
