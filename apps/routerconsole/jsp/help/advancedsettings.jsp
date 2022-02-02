@@ -25,7 +25,6 @@
 <span class="tab"><a href="/help/reseed"><%=intl._t("Reseeding")%></a></span>
 <span class="tab"><a href="/help/tunnelfilter"><%=intl._t("Tunnel Filtering")%></a></span>
 <span class="tab"><a href="/help/webhosting"><%=intl._t("Web Hosting")%></a></span>
-<span class="tab"><a href="/help/hostnameregistration"><%=intl._t("Hostname Registration")%></a></span>
 <span class="tab"><a href="/help/faq"><%=intl._t("FAQ")%></a></span>
 <span class="tab"><a href="/help/newusers"><%=intl._t("New User Guide")%></a></span>
 <span class="tab"><a href="/help/webhosting"><%=intl._t("Web Hosting")%></a></span>
