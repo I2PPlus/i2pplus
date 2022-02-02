@@ -840,6 +840,8 @@ public class PluginStarter implements Runnable {
                         argVal[i] = argVal[i].replace("$I2P", ctx.getBaseDir().getAbsolutePath());
                         argVal[i] = argVal[i].replace("$CONFIG", ctx.getConfigDir().getAbsolutePath());
                         argVal[i] = argVal[i].replace("$PLUGIN", pluginDir.getAbsolutePath());
+                        argVal[i] = argVal[i].replace("$OS", SystemVersion.getOS());
+                        argVal[i] = argVal[i].replace("$ARCH", SystemVersion.getArch());
                     }
                 }
                 ClientApp ca = ctx.routerAppManager().getClientApp(app.className, argVal);
@@ -879,6 +881,8 @@ public class PluginStarter implements Runnable {
                     argVal[i] = argVal[i].replace("$I2P", ctx.getBaseDir().getAbsolutePath());
                     argVal[i] = argVal[i].replace("$CONFIG", ctx.getConfigDir().getAbsolutePath());
                     argVal[i] = argVal[i].replace("$PLUGIN", pluginDir.getAbsolutePath());
+                    argVal[i] = argVal[i].replace("$OS", SystemVersion.getOS());
+                    argVal[i] = argVal[i].replace("$ARCH", SystemVersion.getArch());
                 }
             }
 
@@ -889,6 +893,8 @@ public class PluginStarter implements Runnable {
                     cp = cp.replace("$I2P", ctx.getBaseDir().getAbsolutePath());
                     cp = cp.replace("$CONFIG", ctx.getConfigDir().getAbsolutePath());
                     cp = cp.replace("$PLUGIN", pluginDir.getAbsolutePath());
+                    cp = cp.replace("$OS", SystemVersion.getOS());
+                    cp = cp.replace("$ARCH", SystemVersion.getArch());
                 }
 
                 // Old way - add for the whole JVM
