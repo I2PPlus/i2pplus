@@ -757,6 +757,7 @@ input.send:hover, input.send:focus {
 
 input.configure, #settings {
   padding: 5px 8px 5px 24px;
+  vertical-align: middle;
   background: var(--configure) no-repeat 7px center, var(--btn);
 }
 
