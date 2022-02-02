@@ -5,18 +5,18 @@
 
 :root {
   --a: #5c5c8a;
-  --active: #f90;
+  --active: #f30;
   --badge_hover: linear-gradient(180deg, var(--bg3), #fff);
   --badge: linear-gradient(180deg, #fff, var(--bg3));
-  --bg2: #f8f8ff;
+  --bg2: #f4f4ff;
   --bg3: #f0f0ff;
   --bg4: #e8e8ff;
   --bg_doc: var(--bodybg) url(images/bg0.png) center center / 90px;
   --bg: #fff;
   --bodybg: #e2e2f3;
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
-  --border_badge: #aad;
   --border: 1px solid #bfc3d9;
+  --border_badge: #aad;
   --border_color: #bfc3d9;
   --border_soft: #cfd2e2;
   --border_warn: #fb7;
@@ -39,6 +39,7 @@
   --header_hover: linear-gradient(180deg, var(--bg) 50%, var(--row_hover) 50%);
   --header: linear-gradient(180deg, var(--bg) 50%, var(--bg2) 50%);
   --header_shiney: linear-gradient(90deg, rgba(255,255,255,.3), rgba(0,0,0,0)), linear-gradient(180deg, var(--bg) 50%, var(--bg4) 50%);
+  --heading: linear-gradient(180deg,#fff,#fafbff);
   --highlight_active: inset 3px 3px 3px 1px #5f2400;
   --highlight_hover: inset 0 0 0 1px #a79;
   --highlight: inset 0 0 0 1px rgba(255,255,255,.8);
@@ -46,8 +47,8 @@
   --hr: #89f;
   --ink: #41444d;
   --ink_h1: #6c7293;
-  --ink_light: #5e626e;
   --ink_hover: #104e99;
+  --ink_light: #5e626e;
   --label_focus: linear-gradient(90deg, var(--bg3), var(--bg), var(--bg3));
   --ls_target: 1px solid #5a5 !important;
   --monospaced: Droid Sans Mono, Andale Mono, DejaVu Sans Mono, Lucida Console, monospace;
