@@ -161,7 +161,7 @@ div.refresh {margin-top: 10px; margin-bottom: 10px; padding: 2px 0}
 /* end sidebar */
 /* welcome */
 div[lang="es"] li, div[lang="pt"] li, div[lang="sv"] li, div[lang="zh"] li {list-style: none}
-div[lang="sv"] li::first-letter {text-transform: uppercase !important}
+div[lang="sv"] li::first-letter {text-transform: uppercase}
 div[lang="ar"] li {margin: 0 10px 0 30px}
 div[lang="ar"] h3, div[lang="ar"] li {text-align: right}
 div[lang="es"] li {list-style-type: none; margin-left: -10px}
@@ -348,8 +348,8 @@ div[id^="config_"].main {padding-bottom: 20px}
 #sitemap {padding-bottom: 6px}
 .main#home .welcome h2 {margin: -9px -10px -8px}
 div.welcome {margin-top: 0}
-.main#dns, .main#webmail, .main#torrents {padding: 0 !important; min-width: 606px}
-.main#dns {background: linear-gradient(180deg, rgba(255,255,255,.8), rgba(255,255,255,.8)), url(images/bg0.png) !important}
+.main#dns, .main#webmail, .main#torrents {padding: 0; min-width: 606px}
+.main#dns {background: linear-gradient(180deg, rgba(255,255,255,.8), rgba(255,255,255,.8)), url(images/bg0.png)}
 .main#tunnelmgr {padding: 0 10px 9px; min-width: 550px}
 .main.embedded {padding: 0}
 .welcome h2 {margin-top: 0}
@@ -1683,19 +1683,10 @@ input[type="file"]:hover {cursor: pointer}
 #peerdefs ul {display: inline-block; columns: 500px auto; column-gap: 0; margin: 0; width: 100%}
 #peerdefs li {display: inline-block; width: calc(100% - 24px); margin: 3px; padding: 4px 8px; background: rgba(250,250,255,.5); box-shadow: var(--highlight), 0 0 1px var(--bg4); border: 1px solid #bbd}
 .smallhead th, #ntcpconnections th {font-size: 8pt}
-#ntcpconnections td:nth-last-child(2), #ntcpconnections td:nth-last-child(3) {width: 20%}
-.cells.peer {padding: 5px 2px; width: 1%; width: 75px; text-align: center}
-.cells.ipv6 {width: 1%; max-width: 24px}
-.cells.direction {width: 1%; width: 60px; white-space: nowrap}
-.cells.idle, .cells.inout {width: 1%; min-width: 120px}
-.cells.inout {min-width: 110px}
-.cells.uptime {width: 1%; min-width: 70px}
-.cells.skew {width: 1%; min-width: 64px}
-.cells.tx, .cells.rx, .cells.duptx, .cells.duprx {width: 1%; min-width: 48px}
-.cells.spacer {width: 35%}
+.cells.peer {padding: 5px 2px; text-align: center !important}
+.cells.direction {white-space: nowrap}
 .cells.mtu {white-space: nowrap}
-#peers tr:nth-last-child(n+2) td.rtt, #peers tr:nth-last-child(n+2) td.skew {text-align: right}
-#peers td.direction i {display: inline-block; border-top: 1px solid var(--bg4); border-radius: 2px; width: 100%; margin: 3px -3px -4px; font-style: normal; font-size: 90%; text-align: center; color: #412}
+#peers td.direction i {display: inline-block; width: 100%; margin: 3px -3px -4px; font-style: normal; font-size: 90%; text-align: center; color: #412; border-top: 1px solid var(--bg4); border-radius: 2px}
 #ntcpconnections .ipv6:empty::before, #udpconnections .ipv6:empty::before {content: ""}
 #ntcpconnections td span:empty {display: none}
 #ntcpconnections th, #ntcpconnections td, #udpconnections th, #udpconnections td {text-align: center}
