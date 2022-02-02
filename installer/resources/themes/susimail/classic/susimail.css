@@ -38,6 +38,7 @@ h3#config {
 }
 
 textarea[name="config_text"] {
+  width: 600px;
   resize: none;
 }
 
