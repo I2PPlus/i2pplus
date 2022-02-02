@@ -170,6 +170,7 @@ p.mailbody {
   line-height: 1.3;
   text-align: left;
   font-size: 9pt;
+  color: #b5b774;
 }
 
 .linkspam {
@@ -346,7 +347,8 @@ input.cancel, #nukemail input.clearselection {
   background: var(--no) no-repeat 10px center / 12px, var(--btn);
 }
 
-input.cancel:hover, #nukemail input.clearselection:hover {
+input.cancel:hover, #nukemail input.clearselection:hover,
+input.cancel:focus, #nukemail input.clearselection:focus {
   background: var(--no_hover) no-repeat 10px center / 12px, var(--btn_hover);
 }
 
@@ -359,7 +361,7 @@ input.clearselection {
   background: url(/themes/susimail/images/none.png) no-repeat 8px center, var(--btn);
 }
 
-input.clearselection:hover {
+input.clearselection:hover, input.clearselection:focus {
   background: url(/themes/susimail/images/none.png) no-repeat 8px center, var(--btn_hover);
 }
 
@@ -373,7 +375,8 @@ input.delete, input.delete_attachment, input.really_delete {
   background-size: 16px, 100% !important;
 }
 
-input.delete:hover, input.delete_attachment:hover, input.really_delete:hover {
+input.delete:hover, input.delete_attachment:hover, input.really_delete:hover,
+input.delete:focus, input.delete_attachment:focus, input.really_delete:focus {
   background: var(--delete_hover) no-repeat 8px center, var(--btn_hover);
   background-size: 16px, 100% !important;
 }
@@ -388,7 +391,7 @@ input.download {
   background: var(--download) no-repeat 10px center / 14px, var(--btn);
 }
 
-input.download:hover {
+input.download:hover, input.download:focus {
   background: var(--download) no-repeat 10px center / 14px, var(--btn_hover);
 }
 
@@ -402,7 +405,7 @@ input.offline {
   background-size: 14px, 100% !important;
 }
 
-input.offline:hover {
+input.offline:hover, input.offline:focus {
   background: var(--offline_hover) no-repeat 8px center, var(--btn_hover);
   background-size: 14px, 100% !important;
 }
@@ -417,7 +420,8 @@ input.list, input.moveto, #pagenav input.switchto {
   background: var(--folder) no-repeat 8px center, var(--btn);
 }
 
-input.list:hover, input.moveto:hover, #pagenav input.switchto:hover {
+input.list:hover, input.moveto:hover, #pagenav input.switchto:hover,
+input.list:focus, input.moveto:focus, #pagenav input.switchto:focus {
   background: var(--folder_hover) no-repeat 8px center, var(--btn_hover);
 }
 
@@ -431,7 +435,7 @@ input.forward {
   background-size: 14px, 100% !important;
 }
 
-input.forward:hover {
+input.forward:hover, input.forward:focus {
   background: var(--forward_hover) no-repeat 10px center / 14px, var(--btn_hover) !important;
   background-size: 14px, 100% !important;
 }
@@ -445,7 +449,7 @@ input.login {
   background: var(--login) no-repeat 10px center / 14px, var(--btn) !important;
 }
 
-input.login:hover {
+input.login:hover, input.login:focus {
   background: var(--login_hover) no-repeat 10px center / 14px , var(--btn_hover) !important;
 }
 
@@ -462,7 +466,7 @@ input.logout {
   background: var(--logout) no-repeat 10px center / 14px, var(--btn);
 }
 
-input.logout:hover {
+input.logout:hover, input.logout:focus {
   background: var(--logout_hover) no-repeat 10px center / 14px, var(--btn_hover);
 }
 
@@ -484,7 +488,7 @@ input.logout:active {
   filter: none;
 }
 
-#info input.logout:hover {
+#info input.logout:hover, #info input.logout:focus {
   background: var(--logout_hover) no-repeat 10px center / 14px, var(--badge);
 }
 
@@ -506,7 +510,8 @@ input[name="refresh"][disabled] {
   margin-top: 2px;
 }
 
-input.reload:hover, input.refresh:hover, .fakebutton:hover {
+input.reload:hover, input.refresh:hover, .fakebutton:hover,
+input.reload:focus, input.refresh:focus, .fakebutton:focus {
   background: var(--refresh_hover) no-repeat 10px center / 13px, var(--btn_hover);
 }
 
@@ -519,7 +524,7 @@ input.invertselection {
   background: url(/themes/susimail/images/selection.png) no-repeat 8px center, var(--btn);
 }
 
-input.invertselection:hover {
+input.invertselection:hover, input.invertselection:focus {
   background: url(/themes/susimail/images/selection.png) no-repeat 8px center, var(--btn_hover);
 }
 
@@ -532,7 +537,7 @@ input.show {
   background: -var(--yes) no-repeat 8px center, var(--btn);
 }
 
-input.show:hover {
+input.show:hover, input.show:focus {
   background: var(--yes_hover) no-repeat 8px center, var(--btn_hover);
 }
 
@@ -545,7 +550,7 @@ input.markall {
   background: url(/themes/susimail/images/all.png) no-repeat 8px center, var(--btn);
 }
 
-input.markall:hover {
+input.markall:hover, input.markall:focus {
   background: url(/themes/susimail/images/all.png) no-repeat 8px center, var(--btn_hover);
 }
 
@@ -558,7 +563,7 @@ input.new {
   background: var(--compose) no-repeat 10px center / 14px, var(--btn);
 }
 
-input.new:hover {
+input.new:hover, input.new:focus {
   background: var(--compose_hover) no-repeat 10px center / 14px, var(--btn_hover);
 }
 
@@ -572,7 +577,7 @@ input.reply {
   background: var(--reply) no-repeat 8px center / 14px, var(--btn);
 }
 
-input.reply:hover {
+input.reply:hover, input.reply:focus {
   background: var(--reply_hover) no-repeat 8px center / 14px, var(--btn_hover);
 }
 
@@ -585,7 +590,7 @@ input.replyall {
   background: var(--replyall) no-repeat 10px center / 14px, var(--btn);
 }
 
-input.replyall:hover {
+input.replyall:hover, input.replyall:focus {
   background: var(--replyall_hover) no-repeat 10px center / 14px, var(--btn_hover);
 }
 
@@ -624,7 +629,7 @@ input.send {
   background: var(--send) no-repeat 10px center / 16px, var(--btn_hover);
 }
 
-input.send:hover {
+input.send:hover, input.send:focus {
   background: var(--send_hover) no-repeat 10px center / 16px, var(--btn_hover);
 }
 
@@ -641,7 +646,8 @@ input.configure, #settings {
   background: var(--configure) no-repeat 10px center / 14px, var(--btn);
 }
 
-input.configure:hover, #settings:hover {
+input.configure:hover, #settings:hover,
+input.configure:focus, #settings:focus {
   background: var(--configure_hover) no-repeat 10px center / 14px, var(--btn_hover);
 }
 
@@ -654,7 +660,8 @@ input.saveas, input.saveasdraft {
   background: var(--save) no-repeat 10px center / 15px, var(--btn);
 }
 
-input.saveas:hover, input.saveasdraft:hover {
+input.saveas:hover, input.saveasdraft:hover,
+input.saveas:focus, input.saveasdraft:focus {
   background: var(--save_hover) no-repeat 10px center / 15px, var(--btn_hover);
 }
 
@@ -667,7 +674,7 @@ input.new_upload {
   background: var(--attach) no-repeat 10px center / 15px, var(--btn);
 }
 
-input.new_upload:hover {
+input.new_upload:hover, input.new_upload:focus {
   background: var(--attach_hover) no-repeat 10px center / 15px, var(--btn_hover);
 }
 
@@ -685,7 +692,7 @@ input.switchto, input.moveto {
   background: var(--folder) no-repeat 10px center / 14px, var(--btn);
 }
 
-input.switchto:hover, input.moveto:hover {
+input.switchto:hover, input.moveto:hover, input.switchto:focus, input.moveto:focus {
   background: var(--folder_hover) no-repeat 10px center / 14px, var(--btn_hover);
 }
 
@@ -693,8 +700,7 @@ input.switchto:active, input.moveto:active {
   background: #f60 var(--folder_active) no-repeat 10px center / 14px;
 }
 
-input[disabled], input[disabled]:hover, input[disabled]:focus {
-  border: 1px solid transparent;
+input[disabled] {
   opacity: .4;
   pointer-events: none;
 }
@@ -925,7 +931,6 @@ tr.bottombuttons .pagenav {
 
 .pagenavcontainer {
   padding: 1px 0 2px 6px;
-  border-left: 1px solid #242;
 }
 
 #messagenav {
@@ -988,8 +993,9 @@ tr.bottombuttons .pagenav {
 }
 
 a.sort {
-  vertical-align: middle;
   display: inline-block;
+  vertical-align: middle;
+  line-height: 1;
   opacity: .9;
 }
 
@@ -1718,13 +1724,14 @@ td.mailListSender a, td.mailListSender a:hover {
 
 td.mailListSender, tr:hover td.mailListSender {
   padding-right: 6px !important;
-  padding-left: 22px !important;
+  padding-left: 24px !important;
   width: 1%;
   white-space: nowrap;
+  text-align: left;
   background-image: var(--user) !important;
   background-position: 6px center !important;
   background-repeat: no-repeat !important;
-  background-size: 12px;
+  background-size: 13px;
 }
 
 #mailbox tr:hover .mailListSender a {
@@ -2126,36 +2133,27 @@ tr.mailbody td {
 }
 
 #toggleHeaders {
+  margin-right: -8px;
   padding: 4px;
   min-width: 110px;
   vertical-align: middle;
   text-align: center;
-  box-shadow: var(--btn_shadow);
-  border: 1px solid #000;
-  border-radius: 2px;
-  background: #000;
 }
 
 #toggleHeaders a, #toggleHeaders a:visited {
+  font-size: 90% !important;
   color: #494 !important;
+  background-image: none !important;
 }
 
-#toggleHeaders:hover {
-  border: var(--border_hover);
-  box-shadow: var(--btn_shadow_hover) !important;
-}
-
-#toggleHeaders:hover a {
+#toggleHeaders:hover a, #toggleHeaders a:focus {
   color: #f60 !important;
-}
-
-#toggleHeaders:active {
-  box-shadow: var(--btn_shadow_active) !important;
-  background: #f60 !important;
+  background: var(--btn_hover) !important;
 }
 
 #toggleHeaders:active a {
   color: var(--ink) !important;
+  background: var(--hover) !important;
 }
 
 #mailhead td {

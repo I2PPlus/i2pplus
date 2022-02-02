@@ -301,9 +301,11 @@ public class HomeHelper extends HelperBase {
                 url = "/embed?url=/i2pbote&amp;name=BoteMail";
             } else if ((app.url.contains("BwSchedule") && (embedApps))) {
                 url = "/embed?url=/BwSchedule/home&amp;name=Bandwidth+Scheduler";
+            } else if ((app.url.contains("outproxy") && (embedApps))) {
+                url = "/embed?url=/outproxy/&amp;name=SOCKS+Outproxy+Plugin";
             // if external links set to open in new tab, add class so we can indicate external links with overlay
             // plugins need to be manually added
-            } else if (((app.url.contains("webmail") || (app.url.contains("torrents"))) && (!embedApps))
+            } else if (((app.url.contains("webmail") || (app.url.contains("torrents") || (app.url.contains("outproxy"))) && (!embedApps)))
                     || ((app.url.contains("bote") || (app.url.contains("orchid") || (app.url.contains("BwSchedule"))
                     || ((app.url.contains(".i2p"))) || (app.url.contains("history.txt")))))) {
                 url = app.url + "\" target=\"_blank\" class=\"extlink";

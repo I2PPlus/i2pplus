@@ -13,6 +13,8 @@
   --tab_active: linear-gradient(90deg, rgba(0,0,32,.1), rgba(64,0,64,.2), rgba(0,0,32,.1)), linear-gradient(180deg,#080008, #0a000a);
   --tab_hover: linear-gradient(90deg, rgba(0,0,16,.05), rgba(96,0,96,.15), rgba(0,0,16,.05)), linear-gradient(180deg,#1d1a2d 50%, #000 50%);
   --tab: linear-gradient(90deg, rgba(0,0,16,.7), rgba(0,0,0,.1), rgba(0,0,16,.7)), var(--nav);
+  --row_filtered: var(--row);
+  --border_filtered: var(--border);
 }
 
 body {
@@ -413,6 +415,10 @@ tfoot tr:nth-child(n+1) {
   text-align: left;
 }
 
+#snarkTorrents #dhtDebug th {
+  border-top: var(--border) !important;
+}
+
 /* main torrent listing */
 
 #snarkTorrents {
@@ -451,17 +457,6 @@ tfoot tr:nth-child(n+1) {
 #snarkTorrentsimg {
   margin: 0 !important;
   padding: 0 !important;
-}
-
-#snarkTorrents tt {
-  margin: 1px 3px;
-  padding: 2px 3px;
-  display: inline-block;
-  letter-spacing: .1em;
-  font: bold 8.5pt var(--monospaced);
-  color: #fff;
-  border-radius: 2px;
-  background: #2d103f;
 }
 
 #snarkTorrents tbody tr {
@@ -1055,6 +1050,15 @@ tr:hover .percentBarText {
   background: linear-gradient(180deg,#060610, #040408);
 }
 
+#filterResults, #filterResults td {
+  animation: disappear .1s linear 2s both;
+}
+
+@keyframes disappear {
+  from {visibility: visible}
+  to {visibility: collapse}
+}
+
 /* download bars */
 
 .torrentDownloaded {
@@ -1077,6 +1081,11 @@ tr:hover .percentBarText {
   animation: progress 5s linear infinite both;
   backface-visibility: hidden;
   will-change: transform;
+  background: repeating-linear-gradient(135deg, #001 1px, #001 5px, #112 6px, #113 11px);
+}
+
+.active.downloading .percentBarOuter {
+  animation: downloading 5s linear infinite both;
 }
 
 .peerinfo .percentBarOuter {
@@ -1117,10 +1126,6 @@ tr:hover .percentBarText {
   height: 16px;
   vertical-align: middle;
   width: 80px;
-}
-
-.dirInfo .percentBarText, .dirInfo .percentBarOuter, .peerinfo .percentBarText, .peerinfo .percentBarOuter {
-  width: 84px;
 }
 
 .percentBarText {
@@ -2240,11 +2245,6 @@ input:checked + label + hr + table + table {
 
 .peerinfo, .debuginfo {
   background: #040424 !important;
-  box-shadow: var(--highlight);
-}
-
-.debuginfo {
-  background: #001000 !important;
 }
 
 .peerinfo td:first-child {
@@ -2258,8 +2258,14 @@ input:checked + label + hr + table + table {
 
 /* debug */
 
+#snarkTorrents th a#debugMode {
+  display: inline-block;
+  vertical-align: middle;
+}
+
 #debugMode {
   padding: 8px;
+  box-sizing: border-box;
   font-size: 0 !important;
   background: var(--debug) no-repeat center center;
   opacity: 0;
@@ -2305,7 +2311,6 @@ input:checked + label + hr + table + table {
 
 .debugConnStat, .debugRequests {
   font-family: var(--monospaced);
-  color: #995fbf;
 }
 
 .debugConnStat b {
@@ -3225,67 +3230,71 @@ tr:not(.peerinfo) .torrentDownloaded .percentBarText::after {
 
 /* peerid + client */
 
+#snarkTorrents tt {
+  display: inline-block;
+  letter-spacing: .1em;
+  font-family: var(--monospaced);
+  font-weight: 700;
+}
+
 .peerdata {
   padding-left: 0;
 }
 
 .peerclient {
-  margin: 1px 0;
+  margin: 1px 2px 1px 0;
   padding: 1px 0;
   border-radius: 2px;
-  background: #002;
-  box-shadow: 0 0 0 1px #113, var(--highlight);
+  background: #2a316f;
+  contain: layout;
 }
 
 #ourDest {
-  margin-left: 3px;
-  padding: 1px 1px 1px 4px;
+  margin-left: 4px;
+  padding: 0 1px 0 4px;
   display: inline-block;
-  border: 1px solid #003;
-  border-radius: 4px;
-  background: #002;
-  box-shadow: var(--highlight);
+  border-radius: 2px;
+  background: #2a316f;
+  contain: paint;
+}
+
+#ourDest tt, .peerinfo tt {
+  color: #bb0;
+  text-shadow: 0 1px 1px rgba(0,0,0,.7);
+  background: #3f49a6;
 }
 
 #ourDest tt {
-  margin: 0 0 0 4px !important;
-  padding: 2px 3px 2px 4px;
-  display: inline-block;
-  color: #bb0;
-  background: #001;
+  margin: 0 0 0 5px;
+  padding: 1px 3px 2px 5px;
   border-radius: 0 2px 2px 0;
 }
 
 .peerclient, .peerinfo tt, .clientid {
-  display: inline-block;
+  line-height: 1.2;
   vertical-align: middle;
-  line-height: 1.2 !important;
 }
 
 .peerinfo tt {
-  margin-left: 1px !important;
+  margin: -2px 1px -2px -1px;
   margin-right: 0 !important;
-  padding: 2px 5px;
-  color: #bb0;
+  padding: 3px 5px;
   border-radius: 2px 0 0 2px;
-  background: #001;
 }
 
 .clientid {
-  margin: 0 1px 0 -4px;
-  padding: 2px;
-  max-width: 60px;
-  min-width: 60px;
+  margin: 0 0 0 -4px;
+  padding: 3px 1px 3px 2px;
+  width: 52px;
   display: inline-block;
   overflow: hidden;
   white-space: nowrap;
-  vertical-align: middle;
   text-overflow: ellipsis;
-  font-size: 90%;
-  line-height: 1.3 !important;
+  font-size: 85%;
+  line-height: 1.3;
   text-align: center;
   border-radius: 0 2px 2px 0;
-  background: linear-gradient(180deg,#002,#000);
+  background: #2a316f;
 }
 
 .clientversion {
@@ -3294,6 +3303,22 @@ tr:not(.peerinfo) .torrentDownloaded .percentBarText::after {
 
 .peerinfo td > * {
   vertical-align: middle;
+}
+
+.peerSeed img {
+  font-size: 0;
+  opacity: .7;
+  transform: scale(1);
+}
+
+.active .peerSeed img {
+  opacity: 1;
+  animation: scale .2s linear 3s 2 forwards;
+}
+
+@keyframes scale {
+  0%,100% {transform: scale(1)}
+  50% {transform: scale(1.3)}
 }
 
 /* end peer + client */
@@ -4018,6 +4043,17 @@ td.torrentAction input[type=submit] {
 @keyframes progress {
   from {background: repeating-linear-gradient(135deg, #001 1px, #001 5px, #112 6px, #113 11px)}
   to {background: repeating-linear-gradient(135deg, #112 1px, #113 5px, #001 6px, #001 11px)}
+}
+
+@keyframes downloading {
+  from {
+    background: linear-gradient(to left, rgba(0, 255, 0, .2), rgba(255, 255, 0, .2), rgba(255, 0, 0, .2)),
+      repeating-linear-gradient(135deg, #001 1px, #001 5px, #112 6px, #113 11px);
+  }
+  to {
+    background: linear-gradient(to left, rgba(0, 255, 0, .2), rgba(255, 255, 0, .2), rgba(255, 0, 0, .2)),
+      repeating-linear-gradient(135deg, #112 1px, #113 5px, #001 6px, #001 11px);
+  }
 }
 
 @keyframes seeding {

@@ -15,9 +15,11 @@
 	--highlight: inset 0 0 0 1px #fff;
 	--border: 1px solid #999;
 	--border_hard: 1px solid #777;
+	--border_filtered: none;
 	--a: #d23;
 	--tr: linear-gradient(180deg,#fcfcfc,#ededed);
 	--td_dl: linear-gradient(270deg, #3d3 3px, rgba(0,0,0,0) 3px);
+	--row_filtered: #fafafa;
 }
 
 html {
@@ -374,6 +376,15 @@ td {
 	font-style: italic;
 	box-shadow: var(--highlight);
 	background: linear-gradient(180deg,#fff,#f7f7f7);
+}
+
+#filterResults, #filterResults td {
+	animation: disappear .1s linear 2s both;
+}
+
+@keyframes disappear {
+	from {visibility: visible}
+	to {visibility: collapse}
 }
 
 #snarkTorrents thead th, #snarkTorrents tfoot th, tr:hover #snarkTorrents thead th, tr:hover #snarkTorrents tfoot th {

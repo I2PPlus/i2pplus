@@ -576,7 +576,7 @@ a.control, input.control {
 }
 
 #serverTunnels .iconize, #clientTunnels .iconize {
-  min-width: 80px !important;
+  min-width: 76px !important;
 }
 
 .control.start, .control.start:hover, .control.start:focus, .control.start:active,
@@ -1245,32 +1245,38 @@ tr.configerror {
 }
 
 #toggleInfo {
-  margin: 0 -2px 0 0 !important;
-  padding: 2px 5px;
+  margin: -1px -2px 0 0;
+  padding: 3px 5px;
   min-width: 0;
   vertical-align: middle;
-  background: url(images/expand.svg) no-repeat center center;
-  background-size: 8px;
-}
-
-#toggleInfo:hover, #toggleInfo:focus {
-  background: url(images/expand_hover.svg) no-repeat center center;
-  background-size: 8px;
+  background: url(images/expand.svg) no-repeat center center / 8px, var(--btn);
 }
 
 #toggleInfo.collapse {
-  background: url(images/collapse.svg) no-repeat center center;
-  background-size: 8px;
+  background: url(images/collapse.svg) no-repeat center center / 8px, var(--btn);
+}
+
+#toggleInfo:hover, #toggleInfo:focus {
+  background: url(images/expand_hover.svg) no-repeat center center / 8px, var(--btn_hover);
 }
 
 #toggleInfo.collapse:hover, #toggleInfo.collapse:focus {
-  background: url(images/collapse_hover.svg) no-repeat center center;
-  background-size: 8px;
+  background: url(images/collapse_hover.svg) no-repeat center center / 8px, var(--btn_hover);
+}
+
+#toggleInfo:active, #toggleInfo.collapse:active {
+  box-shadow: var(--btn_shadow_active);
+  background: var(--hover) url(images/expand.svg) no-repeat center center / 8px;
+  background-blend-mode: color-dodge;
+}
+
+#toggleInfo.collapse:active {
+  background: var(--hover) url(images/collapse.svg) no-repeat center center / 8px;
 }
 
 #toggleInfo img {
-  height: 8px;
-  width: 12px;
+  height: 11px;
+  width: 11px;
   opacity: 0;
 }
 
@@ -1445,6 +1451,9 @@ body#tunnelEditPage:not(.iframed) h3 {
     min-width: 48px !important;
     background-size: 16px, 100% !important;
   }
+  .iframed .buttons, .iframed .newTunnel {
+    padding: 5px 6px !important;
+  }
 }
 
 @media screen and (max-width: 1200px) {
@@ -1516,7 +1525,14 @@ body#tunnelEditPage:not(.iframed) h3 {
     font-size: 10pt !important;
   }
   h2, h3 {
-    font-size: 12pt;
+    font-size: 12.5pt;
+  }
+  #messages h2, #globalTunnelControl h2,
+  #servers h2, #clients h2, #tunnelEditPage h2, #tunnelEditPage h3,
+  #registration h2, #registration h3, #wizardPanel h2, #ssl h2 {
+    padding: 10.5px 10px 9.5px 40px !important;
+    background-position: 10px center !important;
+    background-size: 22px auto, 4px 100%, 100% !important;
   }
   textarea#statusMessages, textarea#statusMessages:active, textarea#statusMessages:focus {
     font-size: 9pt !important;
@@ -1529,7 +1545,7 @@ body#tunnelEditPage:not(.iframed) h3 {
     max-width: none;
   }
   .control {
-  padding: 8px 12px 8px !important;
+    padding: 8px 12px 8px !important;
   }
   select {
     padding: 8px 24px 8px 8px !important;
@@ -1551,7 +1567,12 @@ body#tunnelEditPage:not(.iframed) h3 {
   .tunnelControl .control {
     margin: 3px -3px 3px 0 !important;
   }
-  #toggleInfo {
-    margin: -1px -3px 0 0 !important;
+  #globalTunnelControl #toggleInfo {
+    margin: -5px -4px 0 0 !important;
+    background-size: 10px;
+  }
+  #globalTunnelControl #toggleInfo img {
+    width: 17px;
+    height: 17px;
   }
 }

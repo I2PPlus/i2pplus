@@ -18,7 +18,11 @@
   --btnAction_active: linear-gradient(180deg,#e1d8d1, #fff2e6);
   --border: 1px solid #463e39;
   --border_hard: 1px solid #6f533e;
-  --ink: #2f1500;
+  --border_filtered: var(--border_hard);
+  --ink: #331700;
+  --row_even: linear-gradient(90deg, #998e88 3px, #e8dfda 3px);
+  --row_odd: linear-gradient(90deg, #72665f 3px, #e0d9d5 3px);
+  --row_filtered: var(--row_even);
 }
 
 html {
@@ -420,6 +424,7 @@ table {
 th {
   padding: 4px 2px;
   font-size: 8pt;
+  color: var(--ink);
   border-top: var(--border_hard);
   border-bottom: var(--border_hard);
 }
@@ -758,9 +763,7 @@ tr:not(.peerinfo) .torrentUploaded:empty::after {
   padding: 2px 3px;
   letter-spacing: .1em;
   color: #fff;
-  border-radius: 2px;
   background: #7f654f;
-  opacity: .8;
 }
 
 .peerinfo tt {
@@ -828,6 +831,15 @@ tr:not(.peerinfo) .torrentUploaded:empty::after {
   box-shadow: inset 0 0 0 1px #f5f2f0, inset 0 0 0 2px #fb0;
 }
 
+#filterResults, #filterResults td {
+  animation: disappear .1s linear 2s both;
+}
+
+@keyframes disappear {
+  from {visibility: visible}
+  to {visibility: collapse}
+}
+
 #snarkTorrents tbody tr:hover, .dirInfo tbody tr:hover {
   background: #f9efcf !important;
   background: linear-gradient(90deg, rgba(119, 0, 0, .7) 2px, #f9efcf 2px) !important;
@@ -844,11 +856,11 @@ td:hover .percentBarText {
 }
 
 .rowEven + .rowEven:nth-child(even), .rowOdd + .rowOdd:nth-child(even) {
-  background: linear-gradient(90deg, #998e88 3px, #e8dfda 3px);
+  background: var(--row_even);
 }
 
 .rowEven + .rowEven:nth-child(odd), .rowOdd + .rowOdd:nth-child(odd) {
-  background: linear-gradient(90deg, #72665f 3px, #e0d9d5 3px);
+  background: var(--row_odd);
 }
 
 @supports not (-moz-appearance: none) { /* chrome fix - gradient otherwise applied to each td */
@@ -1243,7 +1255,7 @@ thead img.disable, img.disable:hover {
 }
 
 .inactive .percentBarOuter {
-  background: linear-gradient(180deg,#efdfd1,#fff7ef);
+  background: repeating-linear-gradient(90deg, #f8f2ec 1px, #f8f2ec 5px, #f2e5d9 6px, #f2e5d9 11px);
 }
 
 .peerinfo .percentBarOuter, .peerinfo .percentBarText {
@@ -1317,12 +1329,12 @@ thead img.disable, img.disable:hover {
 }
 
 .torrentDownloaded .percentBarInner {
-  background: linear-gradient(90deg, rgba(255,64,0,.3) 20px, rgba(255,255,0,.3) 50px, rgba(0,255,0,.3)),
+  background: linear-gradient(90deg, rgba(255,64,0,.4) 20px, rgba(255,255,0,.4) 50px, rgba(0,255,0,.4)),
     linear-gradient(180deg,rgba(255,255,255,.1), rgba(0,0,0,.1)), rgba(255,255,255,.5);
 }
 
 .inactive .torrentDownloaded .percentBarInner {
-  background: linear-gradient(90deg, rgba(128,32,0,.2) 20px, rgba(128,128,0,.2) 50px, rgba(0,128,0,.2)),
+  background: linear-gradient(90deg, rgba(128,32,0,.15) 20px, rgba(128,128,0,.15) 50px, rgba(0,128,0,.15)),
     linear-gradient(180deg,rgba(255,255,255,.1), rgba(0,0,0,.1)), rgba(255,255,255,.5);
 }
 
@@ -3259,11 +3271,11 @@ input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilte
 /* torrent filter bar */
 
 #torrentDisplay {
-  margin: 0 0 -1px;
+  margin: -3px 0 -1px;
   padding: 0;
+  display: block;
   position: relative;
   z-index: 100;
-  display: block;
   white-space: nowrap;
   border: var(--border_hard);
   background: var(--th);
@@ -3567,12 +3579,10 @@ td.torrentDetails {
 }
 
 #ourDest tt, .peerinfo tt {
-  margin: 0 0 0 4px !important;
+  margin: 1px 1px 1px 4px;
   padding: 0 4px 0 6px;
   display: inline-block;
   background: #3f271b;
-  border-radius: 0 2px 2px 0;
-  box-shadow: var(--highlight);
 }
 
 .peerclient, .peerinfo tt, .clientid {
@@ -3582,18 +3592,16 @@ td.torrentDetails {
 }
 
 .peerinfo tt {
-  margin-left: 0 !important;
+  margin-left: 1px !important;
   padding: 2px 5px;
-  border-radius: 1px 0 0 1px;
   box-shadow: none;
   opacity: .8;
 }
 
 .clientid {
-  margin: 0 0 0 -3px;
-  padding: 2px 4px;
-  max-width: 55px;
-  min-width: 55px;
+  margin: 0 1px 0 -3px;
+  padding: 2px 4px 2px 0;
+  width: 55px;
   display: inline-block;
   overflow: hidden;
   white-space: nowrap;
@@ -3621,12 +3629,14 @@ img {
 }
 
 @keyframes downloadbar {
-  0% {background: repeating-linear-gradient(135deg, #fff7ef 1px, #fff7ef 5px, #efdfd1 6px, #efdfd1 11px)}
-  100% {background: repeating-linear-gradient(135deg, #efdfd1 1px, #efdfd1 5px, #fff7ef 6px, #fff7ef 11px)}
+  0% {background-position: left center}
+  100% {background-position: -29.5px center}
 }
 
 .downloading.active .percentBarOuter, .peerinfo.active .percentBarOuter {
-  animation: downloadbar 2s linear infinite forwards reverse;
+  background: repeating-linear-gradient(135deg, #fff7ef, #fff7ef 5px, #efdfd1 5px, #efdfd1 10px);
+  background-size: 200%;
+  animation: downloadbar 1s linear 2s both;
   opacity: 1;
 }
 
@@ -4769,14 +4779,14 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {
   .inactive.downloading .peerCount b,
   .active.starting.processing .peerCount b {
     color: #333;
-    background: #bb0;
+    background: #fc0;
   }
   .inactive.downloading .peerCount b, .peerCount b .right, .peerCount b .left {
     text-shadow: 0 1px 1px #222 !important;
   }
   .inactive.downloading .peerCount b::before,
   .active.starting.processing .peerCount b::before {
-    border-color: transparent #bb0 transparent transparent;
+    border-color: transparent #fc0 transparent transparent;
   }
   .stopped.complete .peerCount b {
     background: #28f;
@@ -4834,6 +4844,9 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {
   .nav_tracker {
     padding-left: 25px !important;
     background-position: 7px center, center center, center center !important;
+  }
+  #torrentDisplay {
+    margin: -4px 0 -1px;
   }
   #snarkTorrents thead th {
     padding-top: 5px;

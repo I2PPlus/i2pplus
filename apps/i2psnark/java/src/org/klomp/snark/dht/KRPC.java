@@ -1118,7 +1118,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
        ***/
         } catch (Exception e) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Receive error for message", e);
+                _log.warn("Received error for message", e);
         }
     }
 

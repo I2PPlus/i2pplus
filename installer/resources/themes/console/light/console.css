@@ -3518,6 +3518,10 @@ p#profiles_overview {
   text-align: center;
 }
 
+#profiles td span {
+  vertical-align: middle;
+}
+
 #profiles .ok, #ntcpconnections td.queue:empty::before {
   width: 15px;
   height: 15px;
@@ -7786,24 +7790,45 @@ table#schedjobs {
   text-align: right;
 }
 
+#floodfills .percentBarOuter, #floodfills .percentBarOuter, #floodfills .percentBarText,
+#tunnels .percentBarOuter, #tunnels .percentBarOuter, #tunnels .percentBarText {
+  display: inline-block;
+  vertical-align: middle;
+  box-sizing: border-box;
+  float: none;
+}
+
 #floodfills .percentBarOuter, #floodfills .percentBarText,
 #tunnels .percentBarOuter, #tunnels .percentBarText {
   width: 50px;
-  display: inline-block;
+}
+
+#tunnels .percentBarText {
+  text-align: center;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  vertical-align: middle;
 }
 
 #floodfills .percentBarOuter, #tunnels .percentBarOuter {
   margin: 0;
+  height: 16px;
+  position: relative;
   text-align: left;
-  opacity: .9;
-  box-shadow: var(--highlight);
   border: 1px solid #ccccf0;
+  box-shadow: var(--highlight);
   background: #eef;
+  opacity: .9;
 }
 
 #floodfills .percentBarInner, #tunnels .percentBarInner {
-  display: inline-block;
   width: inherit;
+  display: inline-block;
+  vertical-align: top;
   background: linear-gradient(180deg,rgba(255,255,255,.1) 50%, rgba(0,0,0,.1) 50%), linear-gradient(90deg, #900 25px, #a00 40px, #b00 50px);
 }
 
@@ -7815,6 +7840,7 @@ table#schedjobs {
 #floodfills .percentBarText {
   color: #fff;
   text-shadow: 0 1px 1px #000;
+  display: none !important;
 }
 
 #profilelist td:nth-last-child(3) span, #profilelist td:nth-last-child(4) span {

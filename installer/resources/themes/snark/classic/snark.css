@@ -5,35 +5,29 @@
 @import url(../light/sliders.css);
 
 :root {
-  --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
-  --monospaced: Droid Sans Mono, Andale Mono, DejaVu Sans Mono, Lucida Console, monospace;
-  --ink: #41444d;
-  --ink_light: #5e626e;
-  --navbar: linear-gradient(180deg,var(--bg),var(--bg2));
-  --nav: linear-gradient(180deg,var(--bg) 50%,var(--bg2) 50%);
-  --bodybg: #e2e2f3;
-  --page: repeating-linear-gradient(90deg,#cfd9ff 2px,var(--bg) 4px);
-  --bg: #fff;
+  --active: #f30;
+  --badge: linear-gradient(180deg,var(--bg),var(--bg4));
   --bg2: #f4f4ff;
   --bg3: #eef;
   --bg4: #ddf;
   --bg5: #aaf;
-  --highlight: inset 0 0 0 1px rgba(255,255,255,.8);
-  --nav_hover: #f50;
-  --row_hover: #ffd;
-  --border: #bfc3d9;
-  --border_main: 1px solid #bfc3d9;
+  --bg: #fff;
+  --border_filtered: var(--border_main);
   --border_hard: 1px solid #9fa5c6;
-  --border_soft: 1px solid #dfe1ec;
-  --hover: #f60;
-  --active: #f30;
-  --nav_a: #5e6099;
-  --header_hover: linear-gradient(180deg, var(--bg) 50%, var(--row_hover) 50%);
+  --border_main: 1px solid #bfc3d9;
   --header_active: linear-gradient(180deg,#ffd,#ffe);
-  --badge: linear-gradient(180deg,var(--bg),var(--bg4));
-  --title_shadow: var(--highlight), inset 0 0 0 0 var(--bg), 0 1px 1px var(--bg4);
+  --header_hover: linear-gradient(180deg, var(--bg) 50%, var(--row_hover) 50%);
+  --highlight: inset 0 0 0 1px rgba(255,255,255,.8);
+  --nav_a: #5e6099;
+  --navbar: linear-gradient(180deg,var(--bg),var(--bg2));
+  --nav_hover: #f50;
+  --nav: linear-gradient(180deg,var(--bg) 50%,var(--bg2) 50%);
+  --page: repeating-linear-gradient(90deg,#cfd9ff 2px,var(--bg) 4px);
+  --row_filtered: var(--bg3);
+  --row_hover: #ffd;
   --section: linear-gradient(180deg,var(--bg2), var(--bg3));
-  --th: linear-gradient(180deg,var(--bg), var(--bg3));
+  --title_shadow: var(--highlight), inset 0 0 0 0 var(--bg), 0 1px 1px var(--bg4);
+
 }
 
 body {
@@ -655,21 +649,16 @@ tt, .bucket, #bucketSet code {
 }
 
 #snarkTorrents tt {
-  font-size: 8pt;
-  color: #301;
+  display: inline-block;
+  letter-spacing: .1em;
   font-weight: 700;
   color: var(--bg);
-  background: var(--bg5);
   border-radius: 2px;
-  margin: 3px;
-  padding: 2px 3px;
-  letter-spacing: .1em;
-  display: inline-block;
 }
 
 #snarkTorrents tfoot th tt {
-  display: inline;
   margin-left: 3px;
+  display: inline;
 }
 
 /* end torrent display */
@@ -1145,6 +1134,15 @@ tr:nth-child(even) + .peerinfo:nth-child(odd) {
   border-bottom: var(--border_main) !important;
   box-shadow: var(--highlight);
   background: linear-gradient(180deg,var(--bg), #ebebff);
+}
+
+#filterResults, #filterResults td {
+  animation: disappear .1s linear 2s both;
+}
+
+@keyframes disappear {
+  from {visibility: visible}
+  to {visibility: collapse}
 }
 
 .snarkFileName {
@@ -2759,7 +2757,7 @@ td.commentAuthor .commentAuthorName {
 }
 
 .optbox, .optbox[disabled] {
-  border: 1px solid var(--border) !important;
+  border: var(--border) !important;
 }
 
 input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilter_dataDir"] {
@@ -3157,6 +3155,7 @@ td.peerCount {
 
 .peerclient {
   padding: 1px;
+  box-sizing: border-box;
   border-radius: 2px;
   background: #99f;
 }
@@ -3165,25 +3164,26 @@ td.peerCount {
   display: inline-block;
   vertical-align: middle;
   line-height: 1.2 !important;
+  box-sizing: border-box;
+  font-size: 90% !important;
 }
 
 .peerinfo tt {
-  margin: 0;
+  margin: -1px 0;
   border-radius: 2px 0 0 2px;
   padding: 0 5px;
   background: none;
 }
 
 .clientid {
-  margin-left: -3px;
-  padding: 2px 4px;
-  max-width: 50px;
-  min-width: 50px;
+  margin: 0 0 0 -3px;
+  padding: 2px 1px;
+  width: 50px;
   display: inline-block;
   border-radius: 0 1px 1px 0;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-size: 90%;
+  font-size: 90% !important;
   text-align: center;
   white-space: nowrap;
   background: var(--bg3);
@@ -3215,7 +3215,7 @@ td.peerCount {
 }
 
 #ourDest tt {
-  margin: -1px 1px -1px 4px !important;
+  margin: -1px 0 -1px 4px !important;
   padding: 2px 4px 2px 6px;
   display: inline-block;
   background: #99f;
@@ -4224,5 +4224,5 @@ body, th, td, table a, input, input[type=text], input.r, input[name="nofilter_da
 }
 
 @media screen and (min-width: 1600px) {
-  #screenlog li, #snarkTorrents tt {font-size: 9pt !important}
+  #screenlog li {font-size: 9pt !important}
 }

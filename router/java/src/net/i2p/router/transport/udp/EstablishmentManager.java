@@ -396,7 +396,7 @@ class EstablishmentManager {
                         if (isIndirect && maybeTo != null)
                             _outboundByClaimedAddress.put(maybeTo, state);
                         if (_log.shouldLog(Log.DEBUG))
-                            _log.debug("Adding new " + state);
+                            _log.debug("Adding new Outbound connection to: " + state);
                     } else {
                         // whoops, somebody beat us to it, throw out the state we just created
                         state = oldState;
@@ -522,7 +522,7 @@ class EstablishmentManager {
                 _log.info("Received NEW SessionRequest: " + state);
         } else {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Receive duplicate SessionRequest from: " + state);
+                _log.debug("Received duplicate SessionRequest from: " + state);
         }
 
         notifyActivity();
@@ -541,7 +541,7 @@ class EstablishmentManager {
                 _log.debug("Received SessionConfirmed from: " + state);
         } else {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Receive possible duplicate SessionConfirmed from: " + from);
+                _log.warn("Received possible duplicate SessionConfirmed from: " + from);
         }
     }
 
@@ -558,7 +558,7 @@ class EstablishmentManager {
                 _log.debug("Received SessionCreated from: " + state);
         } else {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Receive possible duplicate SessionCreated from: " + from);
+                _log.warn("Received possible duplicate SessionCreated from: " + from);
         }
     }
 
@@ -891,7 +891,7 @@ class EstablishmentManager {
      */
     private void sendCreated(InboundEstablishState state) {
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Send created to: " + state);
+            _log.debug("Sending SessionCreated to: " + state);
 
         try {
             state.generateSessionKey();
@@ -959,7 +959,7 @@ class EstablishmentManager {
             _transport.send(req);
         }
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Send relay request for: " + state + " with our intro key as " + _transport.getIntroKey());
+            _log.debug("Sending RelayRequest for: " + state + "\n* Introduction key: " + _transport.getIntroKey());
         state.introSent();
     }
 
@@ -971,7 +971,7 @@ class EstablishmentManager {
         OutboundEstablishState state = _liveIntroductions.remove(Long.valueOf(nonce));
         if (state == null) {
             if (_log.shouldLog(Log.INFO))
-                _log.info("Duplicate or unknown RelayResponse: " + nonce);
+                _log.info("Duplicate or unknown RelayResponse: [Nonce " + nonce + "]");
             return; // already established
         }
 
@@ -998,7 +998,7 @@ class EstablishmentManager {
         _context.statManager().addRateData("udp.receiveIntroRelayResponse", state.getLifetime());
         if (_log.shouldLog(Log.INFO))
             _log.info("Received RelayResponse for [" + state.getRemoteIdentity().calculateHash().toBase64().substring(0,6) + "]\n* Address: "
-                      + addr.toString() + ":" + port + " (according to " + bob + ") nonce=" + nonce);
+                      + addr.toString().replace("/", "") + ":" + port + " (according to " + bob + ") [Nonce " + nonce + "]");
         synchronized (state) {
             RemoteHostId oldId = state.getRemoteHostId();
             state.introduced(ip, port);
@@ -1093,7 +1093,7 @@ class EstablishmentManager {
         UDPPacket packets[] = _builder.buildSessionConfirmedPackets(state, _context.router().getRouterInfo().getIdentity());
 
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Sending confirm " + state);
+            _log.debug("Sending SessionConfirmed to: " + state);
 
         for (int i = 0; i < packets.length; i++)
             _transport.send(packets[i]);
@@ -1114,7 +1114,7 @@ class EstablishmentManager {
         UDPPacket packet = _builder.buildSessionDestroyPacket(state);
         if (packet != null) {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Sent SessionDestroy to: " + state);
+                _log.debug("Sending SessionDestroy to: " + state);
             _transport.send(packet);
         }
     }
@@ -1398,7 +1398,7 @@ class EstablishmentManager {
         _outboundStates.remove(outboundState.getRemoteHostId(), outboundState);
         if (outboundState.getState() != OB_STATE_CONFIRMED_COMPLETELY) {
             if (_log.shouldLog(Log.INFO))
-                _log.info("Session expired " + outboundState + "; Lifetime: " + outboundState.getLifetime() + "ms ");
+                _log.info("Session with " + outboundState + " has expired; Lifetime: " + outboundState.getLifetime() + "ms ");
             OutNetMessage msg;
             while ((msg = outboundState.getNextQueuedMessage()) != null) {
                 _transport.failed(msg, "Expired during failed establishment attempt");

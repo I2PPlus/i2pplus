@@ -232,7 +232,7 @@ button:hover, button:focus, .control:hover, .control:focus,
 input[type=submit]:active, input[type=reset]:active,
 button:active, .control:active, .fakebutton:active {
   color: var(--ink) !important;
-  text-shadow: var(--textshadow);
+  text-shadow: none;
   border: 1px solid var(--hover);
   box-shadow: var(--btn_shadow_active);
   background: var(--hover);

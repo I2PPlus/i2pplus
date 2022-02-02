@@ -215,7 +215,7 @@ class PacketHandler {
                     }
                 } else if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
                     if (_log.shouldLog(Log.WARN))
-                        _log.warn("Receive a SYN packet with the wrong IDs, sending reset: " + packet);
+                        _log.warn("Received a SYN packet with the wrong IDs, sending reset: " + packet);
                     sendReset(packet);
                     packet.releasePayload();
                 } else {

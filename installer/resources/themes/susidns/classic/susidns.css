@@ -50,7 +50,7 @@ hr {
 }
 
 table.book {
-  border: 1px solid var(--border);
+  border: var(--border);
   margin: 10px 0 !important;
   border-collapse: collapse;
 }
@@ -61,11 +61,11 @@ table.book {
 }
 
 #host_details tr:first-child {
-  border-top: 1px solid var(--border);
+  border-top: var(--border);
 }
 
 #host_details tr:last-child {
-  border-bottom: 1px solid var(--border);
+  border-bottom: var(--border);
 }
 
 table.book td {
@@ -131,7 +131,7 @@ td.destinations {
   position: sticky;
   top: -1px;
   z-index: 999;
-  border: 1px solid var(--border);
+  border: var(--border);
   background: var(--th);
 }
 
@@ -155,7 +155,7 @@ td.destinations {
 .iframed #content h3 {
   border: none;
   margin: 0;
-  border-bottom: 1px dotted var(--border);
+  border-bottom: 1px dotted var(--border_color);
 }
 
 .iframed #content h3:first-child {
@@ -181,7 +181,7 @@ td.destinations {
 }
 
 div.page {
-  border: 1px solid var(--border);
+  border: var(--border);
   background: var(--bg) !important;
   margin: 0;
   padding: 0 10px;
@@ -197,7 +197,7 @@ div.page {
 }
 
 div.help {
-  border: 1px solid var(--border);
+  border: var(--border);
   margin: 0 0 10px;
   background: #eef;
 }
@@ -240,7 +240,7 @@ h3 {
   font-size: 11pt;
   font-weight: 700;
   color: var(--ink_light);
-  border: 1px solid var(--border);
+  border: var(--border);
   background: var(--th);
 }
 
@@ -251,7 +251,7 @@ h3 {
 h4 {
   margin: -11px -11px 10px;
   padding: 3px 10px;
-  border: 1px solid var(--border);
+  border: var(--border);
   background: var(--th);
 }
 
@@ -278,8 +278,8 @@ th {
   padding: 5px 10px;
   line-height: 1.2;
   font-size: 10pt;
-  border-bottom: 1px solid var(--border);
-  border-top: 1px solid var(--border);
+  border-bottom: var(--border);
+  border-top: var(--border);
   background: var(--th);
 }
 
@@ -340,7 +340,7 @@ p.footer {
 }
 
 div#filter {
-  border: 1px solid var(--border);
+  border: var(--border);
   padding: 6px 10px 5px;
   margin: 11px 0 -13px !important;
   word-spacing: .2em;
@@ -361,7 +361,7 @@ div#filter {
   text-transform: capitalize;
   font-size: 10pt;
   color: #5c5c8a;
-  border: 1px solid var(--border);
+  border: var(--border);
   border-radius: 1px;
   box-shadow: var(--highlight);
   background: var(--btn);
@@ -412,7 +412,7 @@ div#filter {
   padding: 5px 5px 4px;
   min-width: 300px;
   white-space: nowrap;
-  border: 1px solid var(--border);
+  border: var(--border);
   background: var(--bg);
 }
 
@@ -470,7 +470,7 @@ div#filter {
 }
 
 #visualid td[colspan="2"] {
-  border-top: 1px solid var(--border);
+  border-top: var(--border);
   padding: 15px 0;
 }
 
@@ -505,7 +505,7 @@ img[src="/imagegen/id?s=256&c="], img[src="/imagegen/id?s=20&c="] {
 }
 
 .illustrate:hover {
-  border: 1px solid var(--border);
+  border: var(--border);
   background: var(--bg);
   opacity: 1;
   transition: ease all .2s;
@@ -531,7 +531,7 @@ img[src="/imagegen/id?s=256&c="], img[src="/imagegen/id?s=20&c="] {
 #content + #buttons, #config + #buttons {
   margin: -21px -11px 0;
   padding: 10px;
-  border: 1px solid var(--border);
+  border: var(--border);
 }
 
 #config + #buttons {
@@ -545,7 +545,7 @@ img[src="/imagegen/id?s=256&c="], img[src="/imagegen/id?s=20&c="] {
 }
 
 p.buttons {
-  border: 1px solid var(--border);
+  border: var(--border);
   padding: 10px;
   margin: 0 -11px -13px;
   background: var(--bg);
@@ -602,7 +602,7 @@ td.destinations textarea, td.destinations textarea:focus {
   margin: 2px 0 2px 4px;
   padding: 5px 8px !important;
   border-radius: 2px;
-  border: 1px solid var(--border);
+  border: var(--border);
   box-shadow: var(--btn_shadow);
   background: var(--btn);
 }
@@ -614,7 +614,7 @@ input.update {
 .fakebutton:hover, input[type=submit]:hover, input[type="reset"]:hover,
 .fakebutton:focus, input[type=submit]:focus, input[type="reset"]:focus {
   color: var(--ink);
-  border: 1px solid var(--border);
+  border: var(--border);
   background: var(--btn_hover);
   box-shadow: var(--btn_shadow_hover);
 }
@@ -645,7 +645,7 @@ div#config, form[action="subscriptions"] div#content {
 textarea[name="config"], textarea[name="content"] {
   padding: 2px 5px;
   height: 200px !important;
-  border: 1px solid var(--border);
+  border: var(--border);
   box-shadow: none;
 }
 
@@ -665,7 +665,7 @@ textarea[name="config"], textarea[name="content"] {
 }
 
 #navi a, #navi a:visited {
-  border: 1px solid var(--border);
+  border: var(--border);
   border-radius: 2px;
   margin: 3px 0 !important;
   box-shadow: 0 0 1px 0 #ddd, var(--highlight);
@@ -715,7 +715,7 @@ textarea[name="config"], textarea[name="content"] {
 
 .iframed #navi a:hover, .iframed #navi a:focus {
   z-index: 1;
-  border-color: var(--border);
+  border-color: var(--border_color);
 }
 
 #navi a:active {
@@ -729,7 +729,7 @@ textarea[name="config"], textarea[name="content"] {
 
 #book + #buttons {
   margin: -12px 10px 23px;
-  border: 1px solid var(--border);
+  border: var(--border);
   border-top: none;
   border-bottom: none;
 }
@@ -843,7 +843,7 @@ p.book {
 }
 
 .info img[src^="/imagegen"] {
-  border: 1px solid var(--border);
+  border: var(--border);
   border-radius: 2px;
   background: var(--bg);
 }
@@ -868,11 +868,11 @@ p.book {
 }
 
 #host_list td:first-child {
-  border-left: 1px solid var(--border);
+  border-left: var(--border);
 }
 
 #host_list td:last-child {
-  border-right: 1px solid var(--border);
+  border-right: var(--border);
 }
 
 #host_list .info {
@@ -1051,7 +1051,7 @@ td.destinations {
   position: absolute;
   top: 0;
   right: 3px;
-  border-left: 1px solid var(--border);
+  border-left: var(--border);
 }
 
 input#exporthosts {
@@ -1095,7 +1095,7 @@ input[disabled] {
   overflow: hidden;
   font-size: 0;
   text-align: center;
-  border: 1px solid var(--border);
+  border: var(--border);
   border-radius: 4px;
   background: linear-gradient(180deg,#fff 50%, #dde0f0 50%);
 }
@@ -1115,8 +1115,8 @@ input[disabled] {
   text-align: center;
   font-size: 11.5pt !important;
   color: #525660;
-  border-left: 1px solid var(--border);
-  border-right: 1px solid var(--border);
+  border-left: var(--border);
+  border-right: var(--border);
 }
 
 #prev a, #prev.inactive {

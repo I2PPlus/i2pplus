@@ -6,6 +6,8 @@
 
 :root {
   --tabIcon: linear-gradient(180deg,#000 50%,#040 50%);
+  --row_filtered: var(--tr);
+  --border_filtered: var(--border);
 }
 
 html {
@@ -600,16 +602,10 @@ td.graphicStatus {
 }
 
 #snarkTorrents tt {
-  margin: 1px 3px;
-  padding: 1px 2px;
   display: inline-block;
   line-height: 1.2;
   letter-spacing: .1em;
-  font-size: 8pt;
   font-weight: 700;
-  color: #000;
-  border-radius: 2px;
-  background: #990;
 }
 
 .torrentInfo img {
@@ -1103,13 +1099,24 @@ tr.peerinfo:hover .percentBarText {
   border-bottom: var(--border) !important;
 }
 
-#filterResults td {
-  padding: 10px 8px !important;
+#filterResults, #filterResults td {
+  animation: disappear .1s linear 2s both;
+}
+
+#filterResults td, #filterResults tr:hover td {
+  padding: 8px 8px 16px !important;
   text-align: center;
+  vertical-align: middle;
+  line-height: 2.5;
   font-weight: 700;
   font-style: italic;
-  border-bottom: var(--border);
+  border-bottom: var(--border) !important;
   background: linear-gradient(180deg,#002000,#001000);
+}
+
+@keyframes disappear {
+  from {visibility: visible}
+  to {visibility: collapse}
 }
 
 .snarkFileName {
@@ -2390,9 +2397,14 @@ input:checked + .toggleview + hr + table, input:checked + .toggleview + hr + tab
 /* debug */
 
 #debugMode {
+  margin-top: -2px;
+  padding: 8px;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 0;
+  box-sizing: border-box;
   font-size: 0 !important;
   background: var(--debug) no-repeat center center;
-  padding: 8px;
   opacity: 0;
 }
 

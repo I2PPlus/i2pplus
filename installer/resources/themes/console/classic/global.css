@@ -16,7 +16,8 @@
   --bodybg: #e2e2f3;
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
   --border_badge: #aad;
-  --border: #bfc3d9;
+  --border: 1px solid #bfc3d9;
+  --border_color: #bfc3d9;
   --border_soft: #cfd2e2;
   --border_warn: #fb7;
   --box_border_badge: 0 0 0 1px #bbd;
@@ -27,6 +28,7 @@
   --btn_shadow_active: var(--highlight), inset 3px 3px 3px 1px rgba(32,32,64,.3);
   --btn_shadow_hover: var(--highlight), 0 0 0 1px #fff, 0 0 0 2px rgba(255,96,0,.4);
   --btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 #fff, inset 0 0 4px 2px #f0f0ff, 0 1px 1px rgba(220,220,255,.5);
+  --btn_shadow_refresh: 0 0 0 1px #bbd, inset 0 0 0 1px #fff, inset 3px 3px 3px rgba(0,0,0,.3);
   --code: #272;
   --disabled: #757a8a;
   --down: repeating-linear-gradient(135deg, #fffff2, #fffff2 10px, #ddddd2 10px, #ddddd2 20px);
@@ -45,6 +47,7 @@
   --ink: #41444d;
   --ink_h1: #6c7293;
   --ink_light: #5e626e;
+  --ink_hover: #104e99;
   --label_focus: linear-gradient(90deg, var(--bg3), var(--bg), var(--bg3));
   --ls_target: 1px solid #5a5 !important;
   --monospaced: Droid Sans Mono, Andale Mono, DejaVu Sans Mono, Lucida Console, monospace;
@@ -53,6 +56,7 @@
   --scroll: #acafb9;
   --select: #4a90d9;
   --selected: #559;
+  --shadow_filter_hover: drop-shadow(0 0 1px var(--hover)) drop-shadow(0 0 2px var(--hover));
   --shadow_input: inset 1px 1px 1px rgba(0,0,0,.2);
   --shadow_inset: inset 2px 2px 4px rgba(204,204,240,.6);
   --subheading: linear-gradient(90deg, var(--bg), var(--bg3));
@@ -187,7 +191,7 @@ select {
   text-overflow: ellipsis;
   font-family: var(--bodyfont);
   color: var(--ink_light);
-  border: 1px solid var(--border);
+  border: var(--border);
   border-radius: 3px;
   box-shadow: var(--btn_shadow);
   background: var(--dropdown) no-repeat right 8px center / 10px, var(--btn);
@@ -216,7 +220,7 @@ select option {
 }
 
 select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active {
-  border: 1px solid var(--border);
+  border: var(--border);
   box-shadow: var(--highlight);
   background: var(--btn);
   color: var(--disabled);
@@ -229,7 +233,7 @@ input[type=text], input[type=password] {
   min-width: 120px;
   vertical-align: middle;
   color: var(--ink_light);
-  border: 1px solid var(--border);
+  border: var(--border);
   border-radius: 2px;
   box-shadow: var(--shadow_input);
   background-color: var(--bg2);
@@ -239,7 +243,7 @@ input[type=text], input[type=password] {
 input[type=text]:focus, input[type=password]:focus {
   padding: 5px 5px 5px 9px;
   color: var(--ink);
-  box-shadow: var(--btn_shadow_active), 0 0 1px 1px rgba(255,96,0,.6);
+  box-shadow: var(--btn_shadow_active), 0 0 0 1px rgba(255,96,0,.6);
   background-color: var(--bg);
 }
 
@@ -258,7 +262,7 @@ input[type=file]::file-selector-button {
   text-decoration: none;
   font: 9pt var(--bodyfont);
   color: var(--ink_light);
-  border: 1px solid var(--border);
+  border: var(--border);
   border-radius: 2px;
   box-shadow: var(--highlight), 0 0 1px #ddd;
   background: var(--btn);
@@ -279,7 +283,7 @@ input[type=file]:active::file-selector-button {
   height: 19px;
   vertical-align: middle;
   box-sizing: border-box;
-  border: 1px solid var(--border);
+  border: var(--border);
   background: var(--bg);
   -moz-appearance: none;
   -webkit-appearance: inherit;
@@ -346,7 +350,7 @@ input[type=radio]:checked::before {
 
 .optbox[disabled], .optbox:hover[disabled],
 .optbox:focus[disabled], .optbox:active[disabled], label:hover > .optbox[disabled] {
-  border: 1px solid var(--border) !important;
+  border: var(--border) !important;
   opacity: .5;
   pointer-events: none;
 }

@@ -76,6 +76,11 @@ body.iframed {
   vertical-align: bottom;
 }
 
+#dtls.iframed .page::after {
+  height: 1px;
+  display: block;
+}
+
 /* topnav */
 
 #navi  {
@@ -312,6 +317,10 @@ h3 {
   margin-bottom: 24px;
 }
 
+#dtls .headline h3:first-child {
+  margin-bottom: 28px;
+}
+
 #content {
   padding: 0 0 10px;
 }
@@ -462,11 +471,12 @@ td.checkbox {
 }
 
 #visualid h3 {
-  margin-bottom: -1px;
+  margin: 19px 0 -1px;
 }
 
 #idAddress {
   text-transform: none;
+  letter-spacing: 0;
 }
 
 #visualid table {
@@ -1154,7 +1164,7 @@ p.book {
   filter: drop-shadow(0 0 1px #353);
 }
 
-#host_list td.b32link a:not(old), #host_list td.helper a:not(old) {
+#host_list td.b32link a, #host_list td.helper a {
   font-size: 0 !important;
 }
 
@@ -1181,6 +1191,7 @@ p.book {
 #host_list td.b32link a:hover, #host_list td.helper a:hover,
 #host_list td.b32link a:focus, #host_list td.helper a:focus {
   filter: drop-shadow(0 0 1px #f60);
+  transform: scale(1.2);
 }
 
 .destaddress:hover, .destaddress:focus {
@@ -1608,6 +1619,12 @@ input#exporthosts:active {
   #booksearch input[name=search], #booksearch input[name=search]:focus {
     padding: 7px 8px 7px 32px !important;
     min-width: 320px !important;
+  }
+  #host_list td.helper a::after,
+  #host_list td.b32link a::after {
+    width: 18px;
+    height: 18px;
+    background-size: 18px;
   }
 }
 
