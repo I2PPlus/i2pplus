@@ -16,7 +16,8 @@
   --bodybg: #e2e2f3;
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
   --border_badge: #aad;
-  --border: #bfc3d9;
+  --border: 1px solid #bfc3d9;
+  --border-color: #bfc3d9;
   --border_soft: #cfd2e2;
   --border_warn: #fb7;
   --box_border_badge: 0 0 0 1px #bbd;
@@ -190,7 +191,7 @@ select {
   text-overflow: ellipsis;
   font-family: var(--bodyfont);
   color: var(--ink_light);
-  border: 1px solid var(--border);
+  border: var(--border);
   border-radius: 3px;
   box-shadow: var(--btn_shadow);
   background: var(--dropdown) no-repeat right 8px center / 10px, var(--btn);
@@ -219,7 +220,7 @@ select option {
 }
 
 select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active {
-  border: 1px solid var(--border);
+  border: var(--border);
   box-shadow: var(--highlight);
   background: var(--btn);
   color: var(--disabled);
@@ -232,7 +233,7 @@ input[type=text], input[type=password] {
   min-width: 120px;
   vertical-align: middle;
   color: var(--ink_light);
-  border: 1px solid var(--border);
+  border: var(--border);
   border-radius: 2px;
   box-shadow: var(--shadow_input);
   background-color: var(--bg2);
@@ -261,7 +262,7 @@ input[type=file]::file-selector-button {
   text-decoration: none;
   font: 9pt var(--bodyfont);
   color: var(--ink_light);
-  border: 1px solid var(--border);
+  border: var(--border);
   border-radius: 2px;
   box-shadow: var(--highlight), 0 0 1px #ddd;
   background: var(--btn);
@@ -282,7 +283,7 @@ input[type=file]:active::file-selector-button {
   height: 19px;
   vertical-align: middle;
   box-sizing: border-box;
-  border: 1px solid var(--border);
+  border: var(--border);
   background: var(--bg);
   -moz-appearance: none;
   -webkit-appearance: inherit;
@@ -349,7 +350,7 @@ input[type=radio]:checked::before {
 
 .optbox[disabled], .optbox:hover[disabled],
 .optbox:focus[disabled], .optbox:active[disabled], label:hover > .optbox[disabled] {
-  border: 1px solid var(--border) !important;
+  border: var(--border) !important;
   opacity: .5;
   pointer-events: none;
 }
