@@ -348,10 +348,6 @@ div[id^="config_"].main {padding-bottom: 20px}
 #sitemap {padding-bottom: 6px}
 .main#home .welcome h2 {margin: -9px -10px -8px}
 div.welcome {margin-top: 0}
-.main#dns, .main#webmail, .main#torrents {padding: 0; min-width: 606px}
-.main#dns {background: linear-gradient(180deg, rgba(255,255,255,.8), rgba(255,255,255,.8)), url(images/bg0.png)}
-.main#tunnelmgr {padding: 0 10px 9px; min-width: 550px}
-.main.embedded {padding: 0}
 .welcome h2 {margin-top: 0}
 .main h2:first-child, .main h3:first-child {margin-top: 0}
 .topness {text-align: right; font-size: 8pt}
@@ -1974,8 +1970,11 @@ div.app:hover img, .sitemaplink:hover img {filter: none}
 .viewedit br {display: none}
 .viewprofile, .configpeer, .familysearch {font-size: 0}
 iframe {height: 0}
-#tunnelmgr, #torrents, #webmail, #dns {position: relative; overflow: hidden; min-height: 9px}
-#tunnelmgr {min-height: 0}
+.main.embedded {padding: 0}
+#dns, #webmail, #torrents {padding: 0; min-width: 606px}
+#dns {background: linear-gradient(180deg, rgba(255,255,255,.8), rgba(255,255,255,.8)), url(images/bg0.png)}
+#tunnelmgr, #torrents, #webmail, #dns, #tunnelmgr {position: relative; overflow: hidden; min-height: 9px}
+#tunnelmgr {padding: 0 10px; min-width: 550px}
 #tunnelmgr::before, #torrents::before, #webmail::before, #dns::before {width: 0; height: 9px; display: block; position: absolute; top: 0; left: 0; right: 0; background: linear-gradient(180deg, rgba(255,255,255,.2) 50%, rgba(0,0,0,.2) 50%), var(--reload); opacity: .7; content: ""; animation: reloader 8s ease-out .5s forwards}
 @keyframes downloadbar {from {background: repeating-linear-gradient(135deg, rgba(221, 221, 255, .7) 1px, rgba(221, 221, 255, .7) 6px, rgba(238, 238, 255,.7) 7px, rgba(238, 238, 255,.7) 11px)} to {background: repeating-linear-gradient(135deg, rgba(238, 238, 255,.7) 1px, rgba(238, 238, 255, .7) 5px, rgba(221, 221, 255, .7) 6px, rgba(221, 221, 255, .7) 11px)}}
 @keyframes bar {from {width: calc(100% + 2px)}}

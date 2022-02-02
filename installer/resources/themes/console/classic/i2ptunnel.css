@@ -20,7 +20,7 @@ body {
 }
 
 body.iframed {
-  margin: 0;
+  margin: 0 0 9px;
 }
 
 div {
@@ -50,6 +50,13 @@ form {
 
 br {
   clear: left;
+}
+
+.iframed #page::after {
+  width: 100%;
+  height: 11px;
+  display: block;
+  content: "";
 }
 
 .statusNotRunning {
