@@ -842,7 +842,7 @@ td {
 }
 
 .peerinfo:hover td:first-child {
-  background: #ffd var(--peer) no-repeat scroll center center / 14px !important;
+  background: #ffd var(--peer) no-repeat scroll center center / 18px;
 }
 
 .rowEven + .rowEven td:nth-child(2), .rowOdd td + .rowOdd td:nth-child(2) {
@@ -2164,7 +2164,7 @@ input:checked + label + hr + table, input:checked + label + hr + table + table {
 
 .peerinfo td:first-child {
   padding-right: 10px !important;
-  background: var(--peer) no-repeat scroll center center / 16px;
+  background: var(--peer) no-repeat scroll center center / 18px;
 }
 
 .peerinfo td, .debuginfo td {
