@@ -1684,7 +1684,7 @@ input[type="file"]:hover {cursor: pointer}
 #peerdefs ul {display: inline-block; columns: 500px auto; column-gap: 0; margin: 0; width: 100%}
 #peerdefs li {display: inline-block; width: calc(100% - 24px); margin: 3px; padding: 4px 8px; background: rgba(250,250,255,.5); box-shadow: var(--highlight), 0 0 1px var(--bg4); border: 1px solid #bbd}
 .smallhead th, #ntcpconnections th {font-size: 8pt}
-.cells.peer {padding: 5px 4px; text-align: center !important}
+.cells.peer {padding: 5px; text-align: center !important}
 .cells.direction {white-space: nowrap}
 .cells.mtu {white-space: nowrap}
 #peers td.direction i {display: inline-block; width: 100%; margin: 3px -3px -4px; font-style: normal; font-size: 90%; text-align: center; color: #412; border-top: 1px solid var(--bg4); border-radius: 2px}
@@ -1707,7 +1707,7 @@ input[type="file"]:hover {cursor: pointer}
 #sitemapcontainer h3 {margin-bottom: 12px; text-transform: uppercase; letter-spacing: .08em}
 #sitemapcontainer h3:nth-child(n+2) {margin-top: 4px}
 .sitemapLink, .sitemapLabel {width: 140px; display: inline-block; text-align: center; border: var(--border); background: var(--bg)}
-html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel{width: 160px}
+html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel {width: 160px}
 .sitemapLink {margin: 1px -8px 8px 14px}
 .sitemapLabel {margin: 0 0 -4px; padding: 4px 0; display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 9pt; border: none; border-top: var(--border)}
 @supports not (-moz-appearance: none) {.sitemapLabel {padding-bottom: 2px}}
