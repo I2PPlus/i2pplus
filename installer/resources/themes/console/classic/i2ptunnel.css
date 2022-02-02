@@ -548,7 +548,6 @@ textarea:focus {
 textarea#statusMessages {
   margin: 0;
   padding: 2px 4px 2px 8px;
-  width: calc(100% - 12px);
   word-break: break-all;
   color: #070;
   border: none;
