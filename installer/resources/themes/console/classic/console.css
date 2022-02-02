@@ -2,7 +2,7 @@
 /* I2P Description: Light blue "classic" I2P theme; optimized for less capable browsers and system specifications. */
 /* Author: dr|z3d */
 @import url(global.css); body {margin: 3px; padding: 0; text-align: left; line-height: 1.3; background: var(--bg_doc)}
-@supports (text-justify: auto) {body {background-attachment: fixed !important}/* Firefox 55+ */}
+@supports (text-justify: auto) {body {background-attachment: fixed}/* Firefox 55+ */}
 .routersummary, .routersummaryouter, h1, .main, iframe, tr {contain: layout}
 #sb_logo img, .routersummary h3, .routersummary h3 a, #sb_internals, #sb_advanced, #sb_services, .confignav, *::before, *::after, div.app, .themechoice, .langselect, .newsAuthor, #newsDisplay, #netdbcountrylist img, .viewfullentry, .sybil_routerinfo th img, .graphspanel, h1 {user-select: none}
 .hide, .hideme {display: none}
@@ -18,13 +18,13 @@ hr {margin: 3px 0; height: 2px; border: none; background: var(--border_color)}
 /* siderbar logo */
 #sb_logo {margin-left: -2px; height: 32px !important}
 #sb_logo img {width: 200px; height: auto; filter: sepia(1) hue-rotate(190deg); user-select: none}
-#sb_logo a:active img {transform: scale(.97) !important; filter: none}
+#sb_logo a:active img {transform: scale(.97); filter: none}
 #sb_logo a img {border: none; opacity: .9; image-rendering: -webkit-optimize-contrast}
 #sb_logo a:hover img, #sb_logo a:active img {opacity: 1; filter: none}
 #sb_logo a:hover img, #sb_logo a img {transition: ease filter .08s}
 /* end sb logo */
 .routersummary h4 a {padding: 0; vertical-align: text-bottom}
-.routersummary input[type=text] {text-align: right !important}
+#sidebar input[type=text] {text-align: right}
 .routersummary button[type=submit] {margin: 2px 2px 1px; min-width: 87px}
 #updateAvailable {margin-bottom: 2px; width: 100%; display: inline-block; line-height: 1.2; font-size: 9pt}
 #updateAvailable + br + button + br + #updateAvailable::before {margin: 2px 0 4px; width: calc(100% - 20px); height: 1px; display: inline-block; background: var(--bg4); content: ""}
@@ -37,9 +37,8 @@ hr {margin: 3px 0; height: 2px; border: none; background: var(--border_color)}
 .routersummary h3:hover:not(:active) a, #sidebar td:first-child a:hover b, #sidebar td:first-child a:visited:hover b {color: var(--hover) !important}
 .routersummary h3:active {box-shadow: var(--btn_shadow_active); background: var(--header_active)}
 .routersummary h3:active a {color: var(--active); transform: scale(.95) translateY(2px)}
-.routersummary h4 {margin: -7px -1px -7px -1px !important; padding: 8px 2px; line-height: 1.08; text-transform: capitalize; font-size: 8.5pt; color: #1f7096; border: none !important; box-shadow: inset 0 0 2px 1px #f2f7fa; text-decoration: none !important; background: var(--label_focus)}
+.routersummary h4 {margin: -7px -1px -7px -1px !important; padding: 8px 2px; line-height: 1.08; text-transform: capitalize; font-size: 8.5pt; color: #1f7096; border: none; box-shadow: inset 0 0 2px 1px #f2f7fa; text-decoration: none !important; background: var(--label_focus)}
 .routersummary h3 a {width: calc(100% - 5px); display: inline-block; white-space: normal; text-decoration: none}
-.routersummary ul {text-align: left !important}
 #sidebar tr, .routersummary table, .routersummary td {background: none; border: none}
 .routersummary table {margin: -5px 0 -5px 0; padding: 0; width: 204px !important; overflow: hidden; table-layout: fixed; text-align: center; font-size: 8pt}
 .routersummary td {padding: 0 3px}
@@ -223,7 +222,7 @@ input[name="refreshInterval"] {width: 80px; min-width: 80px; text-align: right}
 /* end confignet tidyup */
 /* graphical buttons */
 input[type=submit], input[type=reset], button {margin: 3px 8px 3px 0; padding: 4px 5px; text-decoration: none; font: 9pt var(--bodyfont); color: var(--ink_light); border: var(--border); border-radius: 3px; box-shadow: var(--btn_shadow); background: var(--btn); background-size: 14px, 100%}
-button a, button a:visited {font-weight: 400 !important; color: var(--ink_light)}
+button a, button a:visited {font-weight: 400; color: var(--ink_light)}
 button:hover:not(:active) a {color: var(--ink)}
 button:active a {color: var(--ink_light)}
 button:hover, input[type=submit]:hover, input[type=reset]:hover, button:focus, input[type=submit]:focus, input[type=reset]:focus {color: var(--ink); border: var(--border); box-shadow: var(--btn_shadow_hover); background: var(--btn_hover)}
@@ -234,8 +233,8 @@ input.accept[value^="Unban"] {padding: 5px 8px 5px 24px; background: var(--unban
 input.accept[value^="Unban"]:hover, input.accept[value^="Unban"]:focus, input.accept[value^="Unban"]:active {background: var(--unban) no-repeat 8px center / 14px, var(--btn_hover)}
 input.accept[value^="Create"], button.accept[value^="Create"] {padding: 5px 8px 5px 25px; background: var(--wizard) no-repeat 8px center / 16px, var(--btn)}
 input.accept[value^="Create"]:hover, button.accept[value^="Create"]:hover, input.accept[value^="Create"]:focus, button.accept[value^="Create"]:focus {background: var(--wizard) no-repeat 8px center / 16px, var(--btn_hover)}
-input.accept[value^="Filter"], button.accept[value^="Filter"] {padding: 5px 8px 5px 23px; background: var(--filter) no-repeat 8px center / 18px, var(--btn)}
-input.accept[value^="Filter"]:hover, button.accept[value^="Filter"]:hover, input.accept[value^="Filter"]:focus, button.accept[value^="Filter"]:focus {background: var(--filter) no-repeat 8px center / 18px, var(--btn_hover)}
+input.accept[value^="Filter"], button.accept[value^="Filter"] {padding: 5px 8px 5px 25px; background: var(--filter) no-repeat 8px center / 14px, var(--btn)}
+input.accept[value^="Filter"]:hover, button.accept[value^="Filter"]:hover, input.accept[value^="Filter"]:focus, button.accept[value^="Filter"]:focus {background: var(--filter) no-repeat 8px center / 14px, var(--btn_hover)}
 input.add {padding: 5px 8px 5px 21px; background: var(--add) no-repeat 8px center / 11px, var(--btn)}
 input.add:hover, input.add:focus, input.add:active {background: var(--add) no-repeat 8px center / 11px, var(--btn_hover)}
 input.add[value^="Adjust"], button.add[value^="Adjust"] {padding: 5px 8px 5px 23px; background: var(--edit) no-repeat 8px center / 14px, var(--btn)}
@@ -305,7 +304,7 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 .buttonBottom:hover, .buttonBottom:focus {background-image: var(--mv_bottom_hover), var(--btn_hover)}
 .buttonUp:hover, .buttonUp:focus {background-image: var(--mv_up_hover), var(--btn_hover)}
 .buttonDown:hover, .buttonDown:focus {background-image: var(--mv_down_hover), var(--btn_hover)}
-.buttonTop, .buttonBottom, .buttonUp, .buttonDown,.buttonTop:hover, .buttonBottom:hover, .buttonUp:hover, .buttonDown:hover, .buttonTop:focus, .buttonBottom:focus, .buttonUp:focus, .buttonDown:focus {width: 20px; height: 20px; border-radius: 2px; background-repeat: no-repeat !important; background-position: center center !important; background-size: 12px, 100%}
+.buttonTop, .buttonBottom, .buttonUp, .buttonDown,.buttonTop:hover, .buttonBottom:hover, .buttonUp:hover, .buttonDown:hover, .buttonTop:focus, .buttonBottom:focus, .buttonUp:focus, .buttonDown:focus {width: 20px; height: 20px; border-radius: 2px; background-repeat: no-repeat; background-position: center center; background-size: 12px, 100%}
 .buttonTop img, .buttonBottom img, .buttonUp img, .buttonDown img {display: none}
 /* end project "X" */
 /* sidebar buttons */
@@ -338,7 +337,7 @@ div[id^="config_"].main {padding-bottom: 20px}
 .main#news p {padding: 0 10px}
 .main ul {margin: -10px 0 10px -10px; list-style-type: square}
 .main li {padding: 0 0 5px 0; word-wrap: break-word; margin-right: 20px}
-.links li b:first-of-type {color: #1f7096 !important}
+.links li b:first-of-type {color: #1f7096}
 .main hr:last-child {margin: 15px 0 10px 0}
 .main textarea {margin: 2px 0 2px 5px; padding: 3px 4px; width: calc(100% - 5px); min-height: 96px; resize: none; color: var(--ink_light); border: var(--border); border-radius: 2px; box-shadow: var(--shadow_input); background: var(--bg2)}
 .main textarea:focus, .main .tabletextarea textarea:focus {color: var(--ink); box-shadow: inset 0 0 0 1px var(--active); background: var(--bg); outline: none}
@@ -430,11 +429,11 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {marg
 #reseedconfig td {width: 50%}
 #loggingoptions td:nth-child(2) {width: 170px}
 /* profiles */
-#profilelist {margin: 0 !important}
+#profilelist {margin: 0}
 #profilelist th, #profilelist td {text-align: center}
 #profilelist th {padding: 3px 4px; white-space: nowrap; font-size: 90% !important}
 #profilelist td[colspan="10"], #profilelist tr td[colspan="10"]:hover {padding: 1px !important; background: var(--border_soft)}
-#profilelist td[colspan="10"]::after {display: none !important; content: none !important}
+#profilelist td[colspan="10"]::after {display: none; content: none}
 #profilelist td[colspan="10"] hr {display: none}
 #profilelist td:nth-child(1), #profilelist td:nth-child(2), #profilelist td:nth-child(3), #profilelist td:nth-child(7), #profilelist td:nth-child(10) {width: 1%; white-space: nowrap}
 #profilelist td:nth-child(2) {text-align: left !important}
@@ -584,7 +583,7 @@ div.configure tr, div.configure td {padding: 5px}
 div.configure li:first-child, .main li:first-child {margin-top: -10px}
 div.configure li:last-child {margin-bottom: -5px}
 div.configure h2:first-child {margin-top: 15px}
-#sidebarconf button {margin: 2px !important}
+#sidebarconf button {margin: 2px}
 #sidebarconf th:nth-child(1) {text-align: center}
 #sidebarconf th:nth-child(2), #sidebarconf td:nth-child(2) {padding-left: 20px; text-align: left}
 #sidbarconf td:last-child[colspan="2"] {padding: 2px; text-align: center}
@@ -838,15 +837,13 @@ p.infohelp + p.infowarn {margin-top: -1px; padding: 10px}
 p#keyringhelp {margin-top: 15px}
 p#pluginconfigtext {margin: -11px 0 -1px; padding: 10px; border: var(--border)}
 #config_logging p {margin: 3px 0 5px -15px !important; text-align: left}
-.formaction, td.optionsave {padding-right: 3px !important}
 .configtable tr:last-child, #addkeyring tr:last-child, #loggingoptions tr:last-child {border-top: var(--border); background: var(--bg)}
 #addkeyring tr:last-child td {padding: 7px 2px}
 .formaction form, td form {margin-bottom: 0}
+.formaction, td.optionsave {padding-right: 3px !important}
 p#enablefullstats {padding: 5px 10px; line-height: 1.2; text-align: left; background: var(--bg)}
 .formaction {margin: 0; padding: 8px 5px; text-align: right; background: var(--th)}
-.formaction, td.optionsave {padding-right: 3px !important}
 .configtable tr:last-child, #addkeyring tr:last-child, #loggingoptions tr:last-child {border-top: var(--border); background: var(--bg)}
-.formaction form, td form {margin-bottom: 0}
 .formaction#shutdown, .formaction#restart, .formaction#systray, .formaction#runonstart, .formaction#dumpthreads, .formaction#browserstart, .formaction#sidebardefaults, .formaction#tunnelconfigsave, .formaction#updateplugins, .formaction#submitconsolepass {margin-top: -13px; margin-bottom: -5px; border: var(--border)}
 .formaction#clientsconfig, .formaction#webappconfigactions, .formaction#sidebardefaults, .formaction#tunnelconfigsave, .formaction#submitconsolepass {margin-top: -6px; border: var(--border)}
 .formaction#tunnelconfigsave {margin-top: -6px; margin-bottom: -9px !important}
@@ -979,8 +976,6 @@ p#helptranslate {padding: 15px 10px 15px 50px !important; position: relative; to
 .langselect:active .optbox:checked + img + .ui_lang, .langselect .optbox:focus + img + .ui_lang {color: var(--hover) !important; box-shadow: none; background: var(--label_focus)}
 .langselect .optbox:active + img + .ui_lang {color: var(--bg); background: var(--hover)}
 .langselect .optbox:checked + img + .ui_lang, .langselect .optbox:focus:checked + img + .ui_lang {padding: 4px 2px 2px !important; z-index: 2; font-size: 95% !important; font-weight: 700; color: var(--selected); box-shadow: var(--btn_shadow_active); background: var(--label_focus)}
-.langselect + br {display: none !important}
-.langselect br {display: block}
 .ui_lang {margin: -32px -4px 0; text-align: center; padding: 3px 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-transform: capitalize; font-size: 9pt; z-index: 2; border-top: var(--border); border-radius: 0 0 2px 2px; background: var(--header)}
 p#helptranslate {margin: 0 -5px; padding: 5px 10px 10px; clear: both; text-align: right}
 /* configui password*/
@@ -1000,7 +995,7 @@ td#pw_adduser input {margin: 5px 20px 5px 5px !important}
 #netconfig {line-height: 1.6}
 /* netdb */
 #netdb hr {margin: 2px 0 !important; display: none; width: 100%}
-#sybilanalysis hr {margin: 12px 0 !important; display: block}
+#sybilanalysis hr {margin: 12px 0; display: block}
 #netdb ul, .netdb_addresses {margin: 0; padding: 0; columns: auto; line-height: 1.2}
 #netdb li, #netdb li:first-child {margin: 1px 0; padding: 0; display: inline-block; vertical-align: middle}
 .netdbentry tr:nth-child(2) td:last-child {white-space: nowrap; text-align: right}
@@ -1015,7 +1010,6 @@ a.keysearch {padding: 2px 5px 2px 15px; display: inline-block; font-size: 90%; b
 #view_profile span {padding: 5px; float: right}
 #viewprofile td {padding: 0}
 #view_profile pre {margin: 0; padding: 20px; width: calc(100% - 40px); line-height: 20px; background: repeating-linear-gradient(180deg, #7878ff33, #d2d2ff66 1px, #d2d2ff66 19px, #7878ff33 19px, #f0f0ff66 20px, #f0f0ff66 40px)}
-#sybil_ourinfo .unreachable {display: none !important}
 .netdb_transport {padding: 1px 3px; display: inline-block; font-size: 90%; background: var(--bg4)}
 .netdb_addresses .nowrap {margin: 0 0 0 3px}
 #netdb_ram {padding: 1px 3px}
@@ -1126,7 +1120,7 @@ p:empty {display: none}
 .netdb_leases .tunnel_peer tt, .netdb_leases .tunnel_peer tt a {letter-spacing: .1em}
 .netdb_leases .tunnel_id {min-width: 74px; line-height: 1.5; text-align: center}
 .netdb_leases .tunnel_peer tt {margin: 0 3px 0 0}
-.main li .netdb_expiry {font-weight: 400; text-transform: lowercase; color: var(--ink) !important; font-style: italic}
+.main li .netdb_expiry {font-weight: 400; text-transform: lowercase; font-style: italic}
 #console h2, #console h3 {border-radius: 2px; box-shadow: 0 0 2px rgba(200,200,200,.5)}
 img.unknownflag {opacity: .8}
 /* end leasesets */
@@ -1137,7 +1131,7 @@ h3.stats {border: var(--border); border-radius: 0}
 .statlist {margin-left: 0 !important; margin-bottom: -27px !important; padding: 0 10px 0 0; border: var(--border); background: var(--bg3)}
 .statlist:last-of-type {margin-bottom: -22px !important}
 .statlist a[name], .statlist b, .statlist li b, .statlist a[name]:hover {line-height: 1.2; letter-spacing: normal; text-decoration: none; font-size: 9pt}
-.statlist ul + br {display: none !important}
+.statlist ul + br {display: none}
 .statlist li b, .statlist b a:hover, h3.stats a:hover {color: var(--ink_light)}
 .statlist li::before {margin-left: 5px; vertical-align: baseline; line-height: .6; font-size: 14pt; color: var(--ink); content: "\2B26\00A0"}
 .statlist li {margin-left: 5px; padding: 2px; list-style: none}
@@ -1396,7 +1390,7 @@ th code {user-select: all}
 .netdbentry th:first-child::after {min-height: 20px; display: inline-block; vertical-align: middle; content: ""}
 .netdbentry th:last-child > *, .sybil_routerinfo th:nth-child(2) > * {display: inline-block; vertical-align: middle !important}
 .netdbentry td:first-child {text-align: right}
-#netdb td code {font-weight: 400 !important}
+#netdb td code {font-weight: 400}
 .netdb_name {vertical-align: text-bottom; text-transform: capitalize; font-weight: 700; color: var(--ink_light)}
 .netdb_info {margin-right: 1px}
 .netdb_expiry {margin-left: 1px}
