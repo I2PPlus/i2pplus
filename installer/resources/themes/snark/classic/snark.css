@@ -2770,7 +2770,7 @@ td.commentAuthor .commentAuthorName {
 }
 
 .optbox, .optbox[disabled] {
-  border: 1px solid var(--border) !important;
+  border: var(--border) !important;
 }
 
 input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilter_dataDir"] {

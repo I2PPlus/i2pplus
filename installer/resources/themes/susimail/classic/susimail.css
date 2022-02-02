@@ -51,7 +51,7 @@ h3#config {
   padding: 5px 10px;
   width: 300px;
   color: var(--ink_light);
-  border: 1px solid var(--border);
+  border: var(--border);
   border-radius: 0 0 2px 2px;
   background: var(--header);
 }
@@ -91,7 +91,7 @@ p.error, p.info {
   text-align: left;
   font-weight: 700;
   color: #900;
-  border: 1px solid var(--border);
+  border: var(--border);
   box-shadow: var(--highlight);
   background: #ffd var(--err) no-repeat 8px center / 28px;
 }
@@ -105,8 +105,8 @@ tr.mailbody p.error {
 }
 
 tr.mailbody:nth-child(n+3) {
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
+  border-top: var(--border);
+  border-bottom: var(--border);
   background: var(--bg);
 }
 
@@ -124,7 +124,7 @@ div.footer {
   margin: 0 -10px -10px;
   padding: 1px;
   display: none;
-  border-top: 1px solid var(--border);
+  border-top: var(--border);
   background: rgba(255,255,255,.5);
 }
 
@@ -174,7 +174,7 @@ div.attached {
 }
 
 td#addattach {
-  border-bottom: 1px solid var(--border);
+  border-bottom: var(--border);
 }
 
 td#attachedfile {
@@ -231,7 +231,7 @@ a.linknew {
   line-height: 1.4;
   text-align: center;
   font-size: 90%;
-  border: 1px solid var(--border);
+  border: var(--border);
   background: var(--btn);
 }
 
@@ -288,7 +288,7 @@ table.noborder {
 }
 
 table#mailbox {
-  border: 1px solid var(--border);
+  border: var(--border);
   background: var(--bg3);
 }
 
@@ -298,7 +298,7 @@ table#mailbox {
 
 @supports not (-moz-appearance: none) {  /* webkit fixes */
   table#mailbox {margin-top: 1px}
-  div#prefsave {border-bottom: 1px solid var(--border)}
+  div#prefsave {border-bottom: var(--border)}
 }
 
 #mailbox th > * {
@@ -308,7 +308,7 @@ table#mailbox {
 #mailbox th {
   padding: 6px;
   font-size: 70%;
-  border-bottom: 1px solid var(--border);
+  border-bottom: var(--border);
   background: var(--header) !important;
 }
 
@@ -383,7 +383,7 @@ td.mailListAttachment.isAttached {
 #mailbox tr.bottombuttons td {
   padding-top: 5px;
   padding-bottom: 5px;
-  border-top: 1px solid var(--border);
+  border-top: var(--border);
   background: var(--bg);
 }
 
@@ -447,7 +447,7 @@ pre {
   line-height: 1.6 !important;
   text-align: center;
   font-size: 9pt !important;
-  border: 1px solid var(--border);
+  border: var(--border);
   box-shadow: 0 0 0 1px #eee;
   background: linear-gradient(180deg,rgba(255,255,255,.7),rgba(255,255,255,.2)), url(/themes/console/classic/images/bg2.png) var(--bg3);
   background-size: 100% 100%, 120px 120px;
@@ -481,19 +481,19 @@ form {
 
 #viewmail {
   margin: -9px -10px;
-  border-top: 1px solid var(--border);
+  border-top: var(--border);
   background: var(--bg3);
 }
 
 .iframed #viewmail {
   margin: 1px 0 -10px;
   padding: 0;
-  border: 1px solid var(--border);
+  border: var(--border);
 }
 
 table#message_full {
   margin-bottom: -23px;
-  border-top: 1px solid var(--border);
+  border-top: var(--border);
 }
 
 .iframed #message_full {
@@ -501,13 +501,13 @@ table#message_full {
 }
 
 #message_full tr:last-child {
-  border-bottom: 1px solid var(--border);
+  border-bottom: var(--border);
 }
 
 input[type=text], input[type=password], textarea {
   padding: 4px 5px !important;
   color: var(--ink_light);
-  border: 1px solid var(--border);
+  border: var(--border);
   border-radius: 2px;
   box-shadow: inset 1px 1px 1px #ddd;
   background: var(--bg);
@@ -540,7 +540,7 @@ button, input[type=submit], input[type="reset"], #settings, .fakebutton {
   padding: 5px;
   display: inline-block;
   color: var(--ink_light);
-  border: 1px solid var(--border);
+  border: var(--border);
   border-radius: 3px;
   box-shadow: var(--btn_shadow);
   background-size: 14px, 100% !important;
@@ -557,7 +557,7 @@ button:hover, input[type=submit]:hover, input[type="reset"]:hover,
 button:focus, input[type=submit]:focus, input[type="reset"]:focus,
 #settings:hover, #settings:focus, .fakebutton:focus {
   color: var(--ink);
-  border: 1px solid var(--border);
+  border: var(--border);
   box-shadow: var(--btn_shadow_hover);
   background: var(--btn_hover);
 }
@@ -888,7 +888,7 @@ select {
   font-size: 9pt;
   color: var(--ink_light);
   border-radius: 3px;
-  border: 1px solid var(--border);
+  border: var(--border);
   box-shadow: var(--btn_shadow);
   background: var(--dropdown) no-repeat right 8px center / 10px, var(--btn);
   appearance: none;
@@ -942,7 +942,7 @@ select:focus {
 }
 
 #message_full tr:first-child {
-  border-bottom: 1px solid var(--border);
+  border-bottom: var(--border);
 }
 
 #mailhead tr {
@@ -960,7 +960,7 @@ select:focus {
 /* login panel */
 
 #dologin {
-  border: 1px solid var(--border);
+  border: var(--border);
   padding: 10px 0 0;
   width: 500px;
   margin: 55px auto 40px;
@@ -1041,7 +1041,7 @@ select:focus {
   font-size: 14pt;
   color: var(--ink_light);
   word-spacing: .1em;
-  border-bottom: 1px solid var(--border);
+  border-bottom: var(--border);
   box-shadow: var(--highlight);
   background: linear-gradient(90deg, #fff 30%, #eff2ff);
 }
@@ -1049,7 +1049,7 @@ select:focus {
 #dologin hr {
   display: block !important;
   box-shadow: 0 0 0 1px rgba(255,255,255,.5);
-  background: var(--border);
+  background: var(--border_color);
 }
 
 #dologin tr:nth-child(6) hr {
@@ -1133,7 +1133,7 @@ hr {
 }
 
 div#pagenav {
-  border-top: 1px solid var(--border);
+  border-top: var(--border);
   padding: 10px 5px 0;
   font-size: 9.5pt;
   border-radius: 0 0 4px 4px;
@@ -1145,13 +1145,13 @@ div#pagenav {
   padding: 6px 0 0;
   background: var(--bg) !important;
   background: linear-gradient(180deg,#fff 0%, var(--bg3) 100%) !important;
-  border: 1px solid var(--border);
+  border: var(--border);
   border-bottom: none;
 }
 
 .topbuttons#pagesize {
   padding: 6px 0 4px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: var(--border);
 }
 
 .topbuttons #mailboxcontrols, .topbuttons .folders {
@@ -1169,7 +1169,7 @@ div#pagenav {
 
 .iframed .topbuttons, .iframed p.error, .iframed p.info {
   margin: -1px -11px;
-  border: 1px solid var(--border);
+  border: var(--border);
   border-left: none;
   border-right: none;
 }
@@ -1211,7 +1211,7 @@ div#pagenav {
 .topbuttons .pagenav {
   margin: 7px 0 -3px;
   width: 100%;
-  border-top: 1px solid var(--border) !important;
+  border-top: var(--border) !important;
 }
 
 .topbuttons .pagenav td {
@@ -1238,7 +1238,7 @@ div#pagenav {
 #prefsave {
   margin: 10px -10px -21px;
   padding: 6px 0 5px;
-  border-top: 1px solid var(--border);
+  border-top: var(--border);
   background: var(--bg);
 }
 
@@ -1253,7 +1253,7 @@ tr.bottombuttons table.pagenav {
 }
 
 #pagenavbottom td {
-  border-top: 1px solid var(--border);
+  border-top: var(--border);
 }
 
 #pagenavbottom td table td {
@@ -1376,8 +1376,8 @@ img.sort {
 }
 
 .topbuttons .pagenavcontrols {
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
+  border-top: var(--border);
+  border-bottom: var(--border);
 }
 
 .iframed .topbuttons .pagenavcontrols {
@@ -1537,7 +1537,7 @@ tr:hover .listDate {
 /* end confirm delete */
 
 .debugHeader:nth-child(n+3) td {
-  border-top: 1px solid var(--border);
+  border-top: var(--border);
 }
 
 .debugHeader pre {
