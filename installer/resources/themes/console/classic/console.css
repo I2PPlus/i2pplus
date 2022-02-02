@@ -1162,6 +1162,7 @@ h3.stats {margin-bottom: 9px !important}
 #netdboverview td {padding: 0; border-left: var(--border); border-right: var(--border); background: rgba(255,255,255,.4)}
 #netdboverview table th, #netdboverview table td {padding: 4px 8px}
 #netdboverview th {font-size: 10pt; color: var(--ink_light); pointer-events: none}
+#netdboverview th[role="columnheader"] {pointer-events: auto}
 #netdboverview table th {font-size: 90%}
 #netdboverview table td:not(:first-child):not(:last-child) {border-left: 1px solid var(--border_soft); border-right: 1px solid var(--border_soft)}
 #netdboverview table tr:hover {background: var(--row_hover) !important}
@@ -1926,7 +1927,7 @@ th, td {position: relative}
 .tabletitle + table tr:first-child td {border-top: var(--border)}
 #config_tunnels select {min-width: 180px}
 #config_tunnels input[type=text] {width: calc(100% - 6px)}
-th[role="columnheader"] {position: relative !important}
+th[role="columnheader"] {position: relative}
 #floodfills th {font-size: 90% !important}
 div.app img, .sitemaplink img {filter: grayscale(.6)}
 div.app:hover img, .sitemaplink:hover img {filter: none}
@@ -1940,7 +1941,7 @@ div.app:hover img, .sitemaplink:hover img {filter: none}
 #nographs {font-size: 0}
 #down::after, #nographs::after {width: 26px; height: 26px; vertical-align: middle; display: inline-block; background: url(/themes/console/images/svg/update.svg) no-repeat center center / 24px; content: ""; transform: rotate(0); filter: sepia(1); animation: linear spin 3s forwards infinite}
 #nographs::after {width: 36px; height: 36px; background-size: 32px}
-#sb_localtunnels td[colspan="3"] {line-height: 20px; font-size: 0 !important; background: var(--down) !important}
+#sb_localtunnels td[colspan="3"] {line-height: 20px; font-size: 0; background: var(--down) !important}
 /* highlight linked leaseset */
 .leaseset:target {border: var(--ls_target)}
 .leaseset:target tr:first-child th, .leaseset:target td {border-top: var(--ls_target); border-bottom: var(--ls_target)}
@@ -1953,15 +1954,15 @@ div.app:hover img, .sitemaplink:hover img {filter: none}
 .lsdest.published {padding-left: 38px; background: var(--hardhat) no-repeat 4px center / 14px, var(--globe) no-repeat 22px center / 12px, var(--badge)}
 .leaseset th:last-child a[href$="i2p/"] {padding-left: 22px; background: var(--link) no-repeat 5px center / 12px, var(--badge)}
 /* /profiles group icons */
-#profilelist th:nth-child(4), #profilelist td:nth-child(4) {width: 15% !important}
-#profilelist th:nth-child(5), #profilelist td:nth-child(5) {width: 10% !important; min-width: 56px; white-space: nowrap !important}
+#profilelist th:nth-child(4), #profilelist td:nth-child(4) {width: 15%}
+#profilelist th:nth-child(5), #profilelist td:nth-child(5) {width: 10%; min-width: 56px; white-space: nowrap}
 #profilelist .fast, #profilelist .highcap, #profilelist .integrated, #profilelist .standard, #profilelist .fast.integrated, #profilelist .highcap.integrated, #profilelist .standard.integrated {width: 56px; height: 16px; display: inline-block; font-size: 0; background-size: 16px}
 #profilelist .fast {background: var(--fast) no-repeat calc(50% - 10px) center, var(--highcap) no-repeat calc(50% + 10px) center}
-#profilelist .fast.integrated {background: var(--fast) no-repeat left center, var(--highcap) no-repeat center center, var(--integrated) no-repeat right center !important}
 #profilelist .highcap {background: var(--highcap) no-repeat center center}
 #profilelist .highcap.integrated {background: var(--highcap) no-repeat calc(50% - 10px) center, var(--integrated) no-repeat calc(50% + 10px) center}
 #profilelist .standard {background: var(--standard) no-repeat center center}
 #profilelist .standard.integrated {background: var(--standard) no-repeat calc(50% - 10px) center, var(--integrated) no-repeat calc(50% + 10px) center}
+#profilelist .fast.integrated {background: var(--fast) no-repeat left center, var(--highcap) no-repeat center center, var(--integrated) no-repeat right center !important}
 .profilegroup::before {width: 20px; height: 16px; display: inline-block; vertical-align: middle; content: ""}
 .profilegroup.fast::before {background: var(--fast) no-repeat left center}
 .profilegroup.highcap::before {background: var(--highcap) no-repeat left center}
@@ -1983,17 +1984,17 @@ div.app:hover img, .sitemaplink:hover img {filter: none}
 iframe {height: 0}
 #tunnelmgr, #torrents, #webmail, #dns {position: relative; overflow: hidden; min-height: 9px}
 #tunnelmgr {min-height: 0}
-#tunnelmgr::before, #torrents::before, #webmail::before, #dns::before {width: 0; height: 9px; display: block; position: absolute; top: 0; left: 0; right: 0; background: linear-gradient(180deg, rgba(255,255,255,.2) 50%, rgba(0,0,0,.2) 50%), var(--reload); opacity: .7; content: ""; animation:reloader 8s ease-out .5s forwards}
+#tunnelmgr::before, #torrents::before, #webmail::before, #dns::before {width: 0; height: 9px; display: block; position: absolute; top: 0; left: 0; right: 0; background: linear-gradient(180deg, rgba(255,255,255,.2) 50%, rgba(0,0,0,.2) 50%), var(--reload); opacity: .7; content: ""; animation: reloader 8s ease-out .5s forwards}
 @keyframes downloadbar {from {background: repeating-linear-gradient(135deg, rgba(221, 221, 255, .7) 1px, rgba(221, 221, 255, .7) 6px, rgba(238, 238, 255,.7) 7px, rgba(238, 238, 255,.7) 11px)} to {background: repeating-linear-gradient(135deg, rgba(238, 238, 255,.7) 1px, rgba(238, 238, 255, .7) 5px, rgba(221, 221, 255, .7) 6px, rgba(221, 221, 255, .7) 11px)}}
-@keyframes zoom {from {transform: scale(.8)} to {transform: scale(1)}}
-@keyframes reloader {0%, 100% {width: 0} 80%, 99% {width: 120%}}
-@keyframes update {from {filter: opacity(.6); color: #900}}
-@keyframes logupdate {from {background-color: rgba(80,255,80,.3)}}
 @keyframes bar {from {width: calc(100% + 2px)}}
-@keyframes fade {from {opacity: 1} to {opacity: 0}}
 @keyframes disappear {from {visibility: visible} to {visibility: hidden}}
 @keyframes down {from {background-position: center center, 100%}}
+@keyframes fade {from {opacity: 1} to {opacity: 0}}
+@keyframes logupdate {from {background-color: rgba(80,255,80,.3)}}
+@keyframes reloader {0%, 100% {width: 0} 80%, 99% {width: 120%}}
 @keyframes spin {from {transform: rotate(-360deg)}}
+@keyframes update {from {filter: opacity(.6); color: #900}}
+@keyframes zoom {from {transform: scale(.8)} to {transform: scale(1)}}
 /* responsive layout */
 @media screen and (max-width: 1499px) {.sitemapLabel {margin-bottom: -3px; font-size: 8pt} .tunnelBuildStatus {font-size: 90%} #sb_tunnelstatus .tunnelBuildStatus::before {margin: -1px 0 0; background-size: 12px} .newsentry + hr + #newsStatus + #newsDisplay {margin: 1px 3px -1px} #config_logging h3 a::before, #webappconfiguration a::before, #i2pclientconfig a::before, #pluginmanage a::before {margin-top: -2px} #sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after, #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {min-height: 12px} #sb_localtunnels td:first-child {padding-right: 3px} .tunnels_client th:first-child {font-size: 0 !important} .tunnels_client th:first-child::after {content: "\21E9\21E7"; font-family: sans-serif; font-size: 12pt; line-height: 0; vertical-align: middle; letter-spacing: -.3em} #help h3, #faq h3 {font-size: 10.5pt} #clock {font-size: 16pt}}
 @media screen and (max-width: 1400px) {#peers #ntcpconnections th.queue {font-size: 0 !important} #peers #ntcpconnections th.queue::after {width: 16px; height: 16px; display: inline-block; background: var(--err) no-repeat center center / 16px; content: ""}
