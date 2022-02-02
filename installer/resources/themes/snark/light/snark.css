@@ -918,7 +918,7 @@ th.snarkFileSize {
 }
 
 .uploaded {
-  padding: 3px 2px 1px;
+  padding: 1px 2px;
   min-width: 68px;
   display: inline-block;
   position: relative;
