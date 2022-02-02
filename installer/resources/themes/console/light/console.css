@@ -1519,12 +1519,12 @@ hr + #newsStatus, hr + #newsStatus + #newsDisplay {
   text-transform: none;
   font-size: 8pt !important;
   background: var(--user) no-repeat 2px center / 11px;
-  animation: linear fade 1s 1s both;
+  animation: fade .15s linear .75s reverse both;
 }
 
 @keyframes fade {
-  from {filter: opacity(0)}
-  to {filter: opacity(1)}
+  from {filter: opacity(1)}
+  to {filter: opacity(0)}
 }
 
 .newsDate {
@@ -3272,8 +3272,7 @@ div.app img, .sitemapLink img {
   border: 1px solid var(--border);
   background: var(--bg);
   box-shadow: var(--bevel);
-  filter: opacity(0);
-  animation: ease fade .3s 1s forwards;
+  animation: fade .15s ease .75s reverse both;
 }
 
 #searchbar td {

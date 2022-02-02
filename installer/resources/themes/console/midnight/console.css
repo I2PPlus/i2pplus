@@ -2347,8 +2347,8 @@ div.widepanel h3 {
 /* graphs */
 
 @keyframes fade {
-  from {opacity: 0}
-  to {opacity: 1}
+  from {opacity: 1}
+  to {opacity: 0}
 }
 
 #graphdisplay + form {
@@ -2359,7 +2359,7 @@ div.widepanel h3 {
 
 #graphdisplay:hover + form, #graphdisplay + form:hover {
   display: block;
-  animation: ease .5s .2s fade forwards;
+  animation: fade .5s ease .2s reverse both;
 }
 
 #graphs .messages {
@@ -6831,8 +6831,7 @@ div.app:hover .applabel {
   border: 1px solid #26235c;
   background: #000;
   box-shadow: var(--highlight), inset 0 0 2px 1px #26235c;
-  opacity: 0;
-  animation: ease fade .3s 1s forwards;
+  animation: fade .3s ease 1s reverse both;
 }
 
 #searchbar tr {
@@ -11385,7 +11384,7 @@ h1::first-letter {
   border: var(--border_inner);
   box-shadow: var(--highlight), inset 0 0 2px 1px #26235c;
   max-width: calc(100% - 18px);
-  animation: ease grid-fade 2s forwards;
+  animation: grid-fade 2s 2s ease forwards;
 }
 
 .graphContainer#hidpi {
