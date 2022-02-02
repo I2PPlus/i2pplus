@@ -438,6 +438,7 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {marg
 #profilelist td[colspan="10"] hr {display: none}
 #profilelist td:nth-child(1), #profilelist td:nth-child(2), #profilelist td:nth-child(3), #profilelist td:nth-child(7), #profilelist td:nth-child(10) {width: 1%; white-space: nowrap}
 #profilelist td:nth-child(2) {text-align: left !important}
+#profilelist td:nth-child(4):not(:empty) {color: #900}
 #profilelist td:nth-child(6) span, #profilelist td:nth-child(7) span, #profilelist td:nth-child(8) span {display: inline-block; min-width: 60px; text-align: right}
 #profilelist tr:hover, #floodfills tr:hover, #ntcpconnections tr:hover, #udpconnections tr:hover, .homelinkedit tr:hover, #portmapper tr:hover {color: var(--ink_hover); background: var(--row_hover)}
 #thresholds tr:last-child:hover td {background: var(--bg)}
