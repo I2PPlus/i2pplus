@@ -13082,8 +13082,8 @@ iframe {
   .applabel {width: 160px !important}
   .applabel a, .applabel a:hover {max-width: 154px !important}
   #sb_localtunnels td {
-    padding-top: 3px !important;
-    padding-bottom: 3px !important;
+    padding-top: 1px !important;
+    padding-bottom: 1px !important;
   }
   #news .newsentry p, #console p, #console li, #help p, #help li, #console code, #help code,
   #help table, #warning p, #warning li, #warning a, .logo a, #warning h4, .infowarn, .infohelp,
