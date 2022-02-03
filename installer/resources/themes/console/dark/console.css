@@ -4086,6 +4086,10 @@ h3#servicedebug a, h3#graphinfo a {
   background-size: 18px, 100%, 4px 100%, 100% !important;
 }
 
+#tunnels_part ~ .statusnotes:last-of-type {
+  margin-bottom: 9px;
+}
+
 #tunnels h3:last-of-type {
   padding-left: 35px;
   padding-bottom: 7px !important;
