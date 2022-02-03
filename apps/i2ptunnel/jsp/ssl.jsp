@@ -574,7 +574,7 @@
 <tr><th colspan="4"><%=intl._t("Add Port Routing")%></th></tr>
 <tr><td><input type="text" size="6" maxlength="5" id="i2pPort" name="i2pPort" title="<%=intl._t("Specify the port the server is running on")%>" value="" class="freetext port" placeholder="<%=intl._t("required")%>" /></td>
 <td><input type="text" size="20" id="websiteName" name="spoofedHost" title="<%=intl._t("Website Hostname e.g. mysite.i2p")%>" value="<%=name%>" class="freetext" /></td>
-<td><input value="1" type="checkbox" name="useSSL" class="optbox" /></td>
+<td><input value="1" type="checkbox" name="useSSL" class="optbox slider" /></td>
 <td><input type="text" size="20" name="targetHost" title="<%=intl._t("Hostname or IP address of the target server")%>" value="<%=targetHost%>" class="freetext host" /> :
 <input type="text" size="6" maxlength="5" id="targetPort" name="targetPort" title="<%=intl._t("Specify the port the server is running on")%>" value="" class="freetext port" placeholder="<%=intl._t("required")%>" />
 </td></tr>

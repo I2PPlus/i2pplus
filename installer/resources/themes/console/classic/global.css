@@ -249,6 +249,7 @@ input[type=text], input[type=password] {
 input[type=text]:focus, input[type=password]:focus {
   padding: 5px 5px 5px 9px;
   color: var(--ink);
+  border-radius: 0;
   box-shadow: var(--btn_shadow_active), 0 0 0 1px rgba(255,96,0,.6);
   background-color: var(--bg);
 }
@@ -358,5 +359,61 @@ input[type=radio]:checked::before {
 .optbox:focus[disabled], .optbox:active[disabled], label:hover > .optbox[disabled] {
   border: var(--border) !important;
   opacity: .5;
+  pointer-events: none;
+}
+
+/* sliders */
+.optbox.slider[type=checkbox], .optbox.slider, .optbox.slider:hover, .optbox.slider:focus {
+  width: 40px !important;
+  height: 21px !important;
+  border-radius: 1px;
+  position: relative;
+  box-shadow: inset 0 0 0 1px #f2f2ff, inset 3px 3px 3px rgba(0,0,0,.2);
+  background: linear-gradient(180deg,#eef, #ddf);
+  outline: none;
+  transition: ease-in left .15s;
+  appearance: none;
+}
+
+.optbox.slider:checked {
+  background: linear-gradient(180deg,#393, #4a4) !important;
+}
+
+.optbox.slider:not(:checked):active {
+  background: linear-gradient(180deg,#393, #4a4) !important;
+}
+
+.optbox.slider:checked:active {
+  background: linear-gradient(180deg,#cf0f00, #f00) !important;
+}
+
+.optbox.slider:hover, ..optbox.slider {
+  box-shadow: 0 0 0 1px #6f645d, 0 0 0 2px #f60, inset 0 0 0 1px #f9f5f2, inset 3px 3px 3px rgba(0,0,0,.2);
+}
+
+.optbox.slider[type=checkbox]::before,
+.optbox.slider::before,
+.optbox.slider:hover::before,
+.optbox.slider:focus::before,
+.optbox.slider:active::before {
+  width: 20px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: -1px;
+  border-radius: 1px;
+  box-shadow: inset 0 0 0 1px #99a, inset 0 0 0 2px #fff, 0 2px 5px rgba(0,0,0,.2);
+  background: linear-gradient(#fff, #ddf);
+  content: "";
+  transform: scale(.85);
+  transition: ease-in left .15s;
+}
+
+.optbox.slider:checked::before {
+  left: 18px !important;
+}
+
+.optbox.slider:disabled, .optbox.slider:disabled + label {
+  opacity: .45;
   pointer-events: none;
 }
