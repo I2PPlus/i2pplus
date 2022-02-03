@@ -121,11 +121,12 @@ class ProfileOrganizerRenderer {
                     integrated++;
                 }
 
-                if (tier != prevTier)
+                if (tier != prevTier) {
                     buf.append("<tr");
-                if (tier == 2)
-                    buf.append(" id=\"highcap_peers\"");
-                buf.append("><td colspan=\"10\" class=\"separator\"><hr></td></tr>\n");
+                    if (tier == 2)
+                        buf.append(" id=\"highcap_peers\"");
+                    buf.append("><td colspan=\"10\" class=\"separator\"><hr></td></tr>\n");
+                }
                 prevTier = tier;
 
                 buf.append("<tr class=\"lazy\"><td align=\"center\" nowrap>");
