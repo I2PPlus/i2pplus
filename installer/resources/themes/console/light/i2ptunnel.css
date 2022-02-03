@@ -68,10 +68,6 @@ form {
   opacity: .4;
 }
 
-label:hover {
-  color: #19191f;
-}
-
 .editDisabled label, .editDisabled label:hover {
   color: var(--ink_light);
 }
@@ -241,7 +237,7 @@ input[type=text][readonly] {
 .control, .control:link, .control:visited, button {
   margin: 2px 4px !important;
   padding: 4px 8px;
-  min-width: 70px !important;
+  min-width: 100px !important;
   text-align: center;
   white-space: nowrap;
   box-sizing: border-box;
@@ -1072,6 +1068,7 @@ textarea[name="accessList"], #hostField, #localDestination, .authentication {
   margin: 5px !important;
   padding: 2px 4px;
   width: calc(100% - 20px) !important;
+  box-sizing: unset;
 }
 
 #hostField {
@@ -1475,7 +1472,7 @@ textarea:focus::placeholder, input:focus::placeholder, #filter input:focus::plac
     min-width: 140px;
   }
   .multiOption {margin-right: 3px}
-  .control, .control:link, .control:visited {min-width: 60px !important}
+  .control, .control:link, .control:visited {min-width: 80px !important}
   .displayText, .displayText:empty:hover, .displayText:empty:focus {
     width: 260px;
     font-size: 8pt;

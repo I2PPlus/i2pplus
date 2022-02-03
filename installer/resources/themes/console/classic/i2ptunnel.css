@@ -776,7 +776,7 @@ input[type="file"] {
 
 .proxyList {
   margin: 5px !important;
-  width: calc(100% - 26px) !important;
+  width: calc(100% - 10px) !important;
 }
 
 #notReady {
@@ -912,11 +912,11 @@ input[type="file"] {
 
 textarea[name="accessList"], #hostField, #localDestination, .authentication {
   margin: 5px !important;
-  width: calc(100% - 21px) !important;
+  width: calc(100% - 10px) !important;
 }
 
 #customOptions, #userAgents, #leasesetKey, .clientName, .clientKey  {
-  width: calc(100% - 26px) !important;
+  width: calc(100% - 10px) !important;
 }
 
 .tunnelConfig td > b {

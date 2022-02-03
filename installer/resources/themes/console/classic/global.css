@@ -166,12 +166,12 @@ input, button, select, label {
   cursor: pointer;
 }
 
-label:hover {
-  color: #03050f;
-}
-
 button, input, select {
   color: var(--ink_light);
+}
+
+label:not([disabled]):hover {
+  color: var(--ink);
 }
 
 input[type=text], input[type=password], textarea {
@@ -413,7 +413,7 @@ input[type=radio]:checked::before {
   left: 18px !important;
 }
 
-.optbox.slider:disabled, .optbox.slider:disabled + label {
+.optbox[disabled] {
   opacity: .45;
   pointer-events: none;
 }

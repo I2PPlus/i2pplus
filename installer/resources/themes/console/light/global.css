@@ -202,7 +202,7 @@ input[type=text]:focus, input[type=password]:focus,
   filter: var(--filter_focus);
 }
 
-input[type=text][disabled] {
+input[type=text][disabled], label[disabled] {
   color: var(--ink_lighter);
 }
 
@@ -365,8 +365,13 @@ input[type=radio]:not(:checked)::before {
   background: linear-gradient(180deg,#cf0f00, #f00) !important;
 }
 
-.optbox.slider:hover, ..optbox.slider {
+.optbox.slider:not([disabled]):hover, .optbox.slider:not([disabled]):focus {
   box-shadow: 0 0 0 1px #6f645d, 0 0 0 2px #f60, inset 0 0 0 1px #f9f5f2, inset 3px 3px 3px rgba(0,0,0,.2);
+}
+
+label[disabled]:hover .optbox.slider, label[disabled]:focus .optbox.slider {
+  border: var(--border_input) !important;
+  box-shadow: inset 0 0 0 1px #f2f2ff, inset 3px 3px 3px rgba(0,0,0,.2) !important;
 }
 
 .optbox.slider[type=checkbox]::before,
@@ -392,16 +397,24 @@ input[type=radio]:not(:checked)::before {
   left: 18px !important;
 }
 
-.optbox.slider:hover, .optbox.slider:focus, .optbox.slider:checked:focus, .optbox.slider:checked:active {
+.optbox.slider:not([disabled]):hover, .optbox.slider:not([disabled]):focus,
+.optbox.slider:not([disabled]):checked:focus, .optbox.slider:not([disabled]):checked:active {
   box-shadow: none !important
 }
 
 .optbox.slider:not([disabled]):hover, .optbox.slider:not([disabled]):focus {
   border: 1px solid var(--hover) !important;
-  box-shadow: none !importnat;
+  box-shadow: none !important;
 }
 
-.optbox.slider[disabled], label[disabled] {
+label:not([disabled]):hover {
+  color: var(--ink_dark);
+}
+
+label[disabled], label[disabled]:hover  {
   opacity: .45;
-  pointer-events: none;
+}
+
+.optbox:hover, label[disabled]:hover .optbox {
+  pointer-events: none !important;
 }
