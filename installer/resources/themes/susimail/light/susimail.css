@@ -1980,7 +1980,7 @@ select {
   text-align: left !important;
   font-size: 9pt;
   color: #5b5b71;
-  border: 1px solid #97a2ce;
+  border: var(--border_input);
   border-radius: 2px;
   box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
   background: var(--dropdown) no-repeat right 8px center / 10px, var(--btn);

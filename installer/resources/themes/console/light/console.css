@@ -992,7 +992,7 @@ p:empty + .sb_notice {
 }
 
 #sidebar .vmcomm {
-  border: 1px solid #97a2ce;
+  border: var(--border_input);
 }
 
 #sidebar .running, .tunnelBuildStatus.accepting {
@@ -3307,7 +3307,7 @@ div.app img, .sitemapLink img {
   padding-right: 44px;
   min-width: 240px;
   border-radius: 0 3px 3px 0;
-  border: 1px solid #97a2ce;
+  border: var(--border_input);
   border-left: none !important;
   background: var(--txtinput);
 }
@@ -3328,7 +3328,7 @@ div.app img, .sitemapLink img {
   width: 36px;
   min-width: 0;
   border: none;
-  border-left: 1px solid #97a2ce !important;
+  border-left: var(--border_input) !important;
   border-radius: 0 3px 3px 0;
   background: var(--search) no-repeat center center / 14px, var(--btn) !important;
   background-blend-mode: luminosity;
@@ -4336,7 +4336,7 @@ input, input:visited, button, button:visited {
   color: var(--ink_light);
   text-decoration: none;
   text-shadow: 0 1px 1px #fff;
-  border: 1px solid #97a2ce;
+  border: var(--border_input);
   border-radius: 2px;
   box-shadow: var(--highlight), var(--highlight);
   box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.08) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.08);
@@ -7546,7 +7546,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   display: inline-block;
   vertical-align: middle;
   text-align: center;
-  border: 1px solid #97a2ce;
+  border: var(--border_input);
   border-radius: 2px;
   background-size: 9px auto, 100% !important;
 }
@@ -12516,6 +12516,6 @@ iframe {
   }
   #searchbar button {
     height: 29px;
-    border-bottom: 1px solid #97a2ce !important;
+    border-bottom: var(--border_input) !important;
   }
 }

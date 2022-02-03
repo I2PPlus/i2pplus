@@ -204,7 +204,7 @@ hr {
   padding: 5px 8px !important;
   width: 150px;
   color: var(--ink);
-  border: 1px solid #97a2ce;
+  border: var(--border_input);
   border-radius: 2px;
   background: #fbfbff;
 }
@@ -249,7 +249,7 @@ input[type=text][readonly] {
   font-style: normal;
   font-weight: 400;
   color: var(--ink);
-  border: 1px solid #97a2ce;
+  border: var(--border_input);
   border-radius: 2px;
   box-shadow: var(--btn_shadow);
   background: linear-gradient(180deg,#fff, #efefff);
@@ -814,7 +814,7 @@ select {
   background-size: 10px, 100% !important;
   color: var(--ink);
   font: 9pt var(--bodyfont);
-  border: 1px solid #97a2ce;
+  border: var(--border_input);
   border-radius: 2px;
   box-shadow: var(--highlight);
   box-shadow: var(--btn_shadow);
@@ -1168,7 +1168,7 @@ input[name="nofilter_blindedPassword"] {
   white-space: nowrap;
   word-break: break-all;
   font-family: var(--monospaced);
-  border: 1px solid #97a2ce;
+  border: var(--border_input);
   border-radius: 2px;
   box-shadow: inset 1px 1px 1px #e4e4ee;
   background: #fafaff;
