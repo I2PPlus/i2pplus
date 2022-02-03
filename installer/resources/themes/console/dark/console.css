@@ -309,7 +309,7 @@ pre {
   text-align: left !important;
 }
 
-#sidebar table {
+.routersummary table {
   margin: -5px -7px -6px -8px !important;
   padding: 1px 1px 0;
   width: 210px !important;
@@ -475,10 +475,6 @@ pre {
   text-overflow: ellipsis;
 }
 
-#sb_peers a, #sb_peersadvanced a, #sb_tunnels a, #sb_general a, #sb_shortgeneral a, #sb_advancedgeneral a {
-  color: var(--ink);
-}
-
 #sb_peersadvanced .separator td::after {
   min-height: 0;
 }
@@ -557,11 +553,15 @@ div.refresh {
 
 #sidebar a:link, #sidebar a:visited {
   word-spacing: .05em;
-  color: var(--a);
 }
 
-#sidebar a:hover {
-  color: var(--hover);
+#sidebar #sb_peers a:not(:hover):not(:focus):not(:active),
+#sidebar #sb_peersadvanced a:not(:hover):not(:focus):not(:active),
+#sidebar #sb_tunnels a:not(:hover):not(:focus):not(:active),
+#sidebar #sb_general a:not(:hover):not(:focus):not(:active),
+#sidebar #sb_shortgeneral a:not(:hover):not(:focus):not(:active),
+#sidebar #sb_advancedgeneral a:not(:hover):not(:focus):not(:active) {
+  color: var(--ink);
 }
 
 #sidebar td {
@@ -750,7 +750,7 @@ div.refresh {
   color: #b00;
 }
 
-#sidebar table, #sidebar form {
+.routersummary table, #sidebar form {
   background: repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.1) 2px, rgba(0,16,0,.1) 3px) !important;
 }
 
@@ -5737,9 +5737,8 @@ div.appgroup {
 /* end search */
 
 div.app, .sitemapLink, .themechoice, .langselect {
-  animation: zoom .1s linear .2s both;
+  animation: zoom .1s linear .15s both;
   will-change: transform;
-  contain: paint;
 }
 
 .appimg {
@@ -10730,7 +10729,7 @@ h3#servicelogs {
 
 /* end logs */
 
-#sidebar table {
+.routersummary table {
   border-spacing: 2px;
 }
 
@@ -12398,11 +12397,11 @@ h3 + table {
   height: 38px;
 }
 
-#sidebar table {
+.routersummary table {
   position: relative;
 }
 
-#sidebar table:not(#sb_localtunnels):not(#sb_services):not(#sb_advanced)::before {
+.routersummary table:not(#sb_localtunnels):not(#sb_services):not(#sb_advanced)::before {
   width: 0;
   height: 1px;
   position: absolute;
@@ -12711,18 +12710,23 @@ body.iframed {
   from {background-position: left center}
 }
 
-@keyframes spin {
-  from {transform: rotate(-360deg)}
-}
-
 @keyframes reloader {
   0%,100% {width: 0}
   80%,99% {width: 120%}
 }
 
+@keyframes scaleY {
+  from {transform: scaleY(0)}
+  to {transform: scaleY(1)}
+}
+
 @keyframes slide {
   from {transform: translateY(-20px)}
   to {transform: translateY(0)}
+}
+
+@keyframes spin {
+  from {transform: rotate(-360deg)}
 }
 
 @keyframes zoom {
@@ -13508,12 +13512,6 @@ body.iframed {
   h3#i2pclientconfig {
     margin-bottom: -15px !important;
   }
-  .sb_netstatus, .tunnelBuildStatus {
-    padding: 9px 3px !important;
-  }
-  .sb_netstatus::before, .tunnelBuildStatus::before {
-    margin-top: -1px !important;
-  }
   #peers .cells:nth-child(n+2) {
     padding-left: 15px;
     padding-right: 15px;
@@ -13599,7 +13597,13 @@ body.iframed {
   #sidebar {
     width: 240px !important;
   }
-  #sidebar table[id^="sb_"] {
+  .sb_netstatus, .tunnelBuildStatus {
+    padding: 9px 3px !important;
+  }
+  .sb_netstatus::before, .tunnelBuildStatus::before {
+    margin-top: -1px !important;
+  }
+  .routersummary table[id^="sb_"] {
     width: 256px !important;
   }
   #sb_localtunnels a {
@@ -13613,6 +13617,32 @@ body.iframed {
   }
   .sb_info .percentBarOuter {
     margin-bottom: -16px !important;
+  }
+  #sidebar button.reload, #sidebar button.stop {
+    min-width: 120px;
+  }
+  #sb_internals {
+    margin-top: -9px !important;
+  }
+  #sb_services, #sb_advanced {
+    margin-top: -7px !important;
+  }
+  #sidebar div[style="height: 36px;"] {
+    height: 44px !important;
+  }
+  #sidebar img[src$="i2plogo.png"] {
+    margin: -3px 0 -8px -4px;
+    width: 248px !important;
+    transform: none;
+  }
+  #error500 #sidebar img[src$="i2plogo.png"] {
+    margin-bottom: -5px;
+  }
+  #sidebar h3::after {
+    min-height: 20px;
+  }
+  #sb_services a:link, #sb_internals a:link, #sb_advanced a:link, #sb_help a:link {
+    max-width: 216px !important;
   }
   .appimg {
     padding: 5px 0 8px;
@@ -13656,29 +13686,9 @@ body.iframed {
   #certs.main p + p:empty + h4 {
     margin-top: -15px !important;
   }
-  #sidebar button.reload, #sidebar button.stop {
-    min-width: 120px;
-  }
   p#fullhistory {
     margin-top: -13px;
     text-align: right;
-  }
-  #sidebar div[style="height: 36px;"] {
-    height: 44px !important;
-  }
-  #sidebar img[src$="i2plogo.png"] {
-    margin: -3px 0 -8px -4px;
-    width: 248px !important;
-    transform: none;
-  }
-  #error500 #sidebar img[src$="i2plogo.png"] {
-    margin-bottom: -5px;
-  }
-  #sidebar h3::after {
-    min-height: 20px;
-  }
-  #sb_services a:link, #sb_internals a:link, #sb_advanced a:link, #sb_help a:link {
-    max-width: 216px !important;
   }
   #banlist + h3.tabletitle {
     margin-bottom: -2px !important;
