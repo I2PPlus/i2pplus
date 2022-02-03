@@ -59,6 +59,8 @@ class TunnelRenderer {
         writeGraphLinks(out, ei, eo);
         out.write("</h3>\n");
         renderPool(out, ei, eo);
+        // add empty span so we can link to client tunnels in the sidebar
+        out.write("<span id=\"client_tunnels\"></span>");
 
         List<Hash> destinations = null;
         Map<Hash, TunnelPool> clientInboundPools = _context.tunnelManager().getInboundClientPools();

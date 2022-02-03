@@ -1101,7 +1101,7 @@ class SummaryBarRenderer {
             buf.append("<tr title=\"")
                .append(_t("Tunnels we are using to provide or access services on the network")).append(" (").append(_t("inbound / outbound")).append(")")
                .append("\">" +
-                       "<td align=\"left\"><a href=\"/tunnels\"><b>")
+                       "<td align=\"left\"><a href=\"/tunnels#client_tunnels\"><b>")
                .append(_t("Client"))
                .append("</b></a></td><td class=\"digits\" align=\"right\">")
 //               .append(_helper.getInboundClientTunnels() + _helper.getOutboundClientTunnels())
