@@ -24,6 +24,7 @@ a.script {word-spacing: normal; letter-spacing: normal}
 #sitemapcontainer a:visited, #home .extlink:visited, .main .applabel a:visited {color: var(--a)}
 pre {margin: 0 20px; padding-top: 10px; width: 95%; overflow: auto; font-size: 8.5pt}
 tt, code, .bucket {color: var(--code)}
+div.refresh {margin-top: 10px; margin-bottom: 10px; padding: 2px 0}
 
 /* sidebar */
 .routersummaryouter {margin: 0; padding: 0; width: 193px; position: absolute; border: none}
@@ -38,7 +39,6 @@ tt, code, .bucket {color: var(--code)}
 #sb_logo a:hover img, #sb_logo a:active img {opacity: 1; filter: none}
 #sb_logo a:hover img, #sb_logo a img {transition: ease filter .08s}
 
-.routersummary h4 a {padding: 0; vertical-align: text-bottom}
 #sidebar input[type=text] {text-align: right}
 .routersummary button[type=submit] {margin: 2px 2px 1px; min-width: 87px}
 #updateAvailable {margin-bottom: 2px; width: 100%; display: inline-block; line-height: 1.2; font-size: 9pt}
@@ -51,12 +51,16 @@ tt, code, .bucket {color: var(--code)}
 .routersummary h3:hover {background: var(--header_hover)}
 .routersummary h3:hover:not(:active) a, #sidebar td:first-child a:hover b, #sidebar td:first-child a:visited:hover b {color: var(--hover) !important}
 .routersummary h3:active {box-shadow: var(--btn_shadow_active); background: var(--header_active)}
+.routersummary h3 a {width: calc(100% - 5px); display: inline-block; white-space: normal; text-decoration: none}
 .routersummary h3:active a {color: var(--active); transform: scale(.95) translateY(2px)}
 .routersummary h4 {margin: -7px -1px -7px -1px !important; padding: 8px 2px; line-height: 1.08; text-transform: capitalize; font-size: 8.5pt; color: #1f7096; border: none; box-shadow: inset 0 0 2px 1px #f2f7fa; text-decoration: none !important; background: var(--label_focus)}
-.routersummary h3 a {width: calc(100% - 5px); display: inline-block; white-space: normal; text-decoration: none}
+.routersummary h4 a {padding: 0; vertical-align: text-bottom}
 #sidebar tr, .routersummary table, .routersummary td {background: none; border: none}
-.routersummary table {margin: -5px 0 -5px 0; padding: 0; width: 204px !important; overflow: hidden; table-layout: fixed; text-align: center; font-size: 8pt}
+.routersummary table {margin: -5px 0 -5px 0; padding: 0; width: 204px !important; position: relative; overflow: hidden; table-layout: fixed; text-align: center; font-size: 8pt}
+.routersummary table:not(#sb_localtunnels):not(#sb_services)::before {width: 0; height: 2px; display: block; position: absolute; top: -4px; left: -1px; background: #bfb; content: ""; animation: ease-in bar .15s reverse; will-change: transform}
 .routersummary td {padding: 0 3px}
+.routersummary p {padding: 0}
+.routersummary form {margin: -2px -2px -3px}
 #sb_shortgeneral, #sb_advancedgeneral, #sb_bandwidth, #sb_peers, #sb_peersadvanced, #sb_tunnels, #sb_queue {border-collapse: separate; border-spacing: 1px}
 #sb_general, #sb_shortgeneral, #sb_advancedgeneral, #sb_bandwidth, #sb_peers, #sb_peersadvanced, #sb_tunnels, #sb_queue {margin-bottom: -5px !important; margin-top: -6px !important}
 #sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after, #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {min-height: 14px;  display: inline-block;  content: ""}
@@ -82,11 +86,12 @@ tt, code, .bucket {color: var(--code)}
 #sb_localtunnels td:last-child {padding-right: 2px !important; width: 12px; text-align: right}
 #sb_localtunnels td:first-child, #sb_localtunnels tr:hover td:first-child {background: var(--client) no-repeat center center / 16px}
 #sb_localtunnels td.tunnelServer, #sb_localtunnels tr:hover td.tunnelServer  {background: var(--server) no-repeat center center / 16px}
-#sb_localtunnels td.ping, #sb_localtunnels tr:hover td.ping {background-image: var(--ping) no-repeat center center / 16px !important}
+#sb_localtunnels td.ping, #sb_localtunnels tr:hover td.ping {background: var(--ping) no-repeat center center / 16px !important}
 #sb_localtunnels td:last-child, #sb_localtunnels tr:hover td:last-child {background: var(--local_inprogress) no-repeat right 1px center / 16px}
 #sb_localtunnels td.tunnelReady, #sb_localtunnels tr:hover td.tunnelReady {background-image: var(--local_up)}
 #sb_localtunnels td.tunnelRebuilding, #sb_localtunnels tr:hover td.tunnelRebuilding {background-image: var(--local_down)}
 #sb_localtunnels tr:hover {background-color: var(--row_hover) !important; transition: ease background .3s}
+#sb_localtunnels td[colspan="3"] {line-height: 20px; font-size: 0; background: var(--down) !important}
 #sb_localtunnels img {width: 16px; height: 16px; font-size: 0; opacity: 0}
 #sb_warning {border-bottom: var(--border)}
 #sb_warning + hr {margin-bottom: 5px}
@@ -95,19 +100,14 @@ tt, code, .bucket {color: var(--code)}
 .sb_notice + .sb_notice {margin-top: 8px}
 .sb_notice a {padding: 0; vertical-align: baseline}
 #sb_warning + .sb_notice {margin-top: 10px}
-p:empty + .sb_notice {margin-top: 7px}
-.routersummary form {margin: -2px -2px -3px}
 #sb_warning + hr {opacity: 0}
 #sb_warning + hr + form {margin-top: -1px}
 #sb_warning + p:empty + form {margin-top: 10px; margin-bottom: -3px}
+p:empty + .sb_notice {margin-top: 7px}
 #sb_internals, #sb_services, #sb_advanced {margin-top: -5px !important}
 #minigraph {margin-top: -22px; height: 40px; width: 250px; position: relative; z-index: 0}
 #minigraphcontainer {margin-top: -57px; margin-left: 1px; width: 240px; height: 38px; background-size: 239px 40px; background-repeat: no-repeat}
 #sb_graphcontainer {margin: -5px 1px -6px 1px !important; overflow: hidden; border: var(--border); box-shadow: var(--highlight); background: repeating-linear-gradient(90deg, rgba(0, 0, 0, 0) 15px, rgba(120, 120, 255, .5) 16px, rgba(0, 0, 0, 0) 16px, rgba(0, 0, 0, 0) 30px), repeating-linear-gradient(to top, rgba(0, 0, 0, 0) 11px, rgba(120, 120, 255, .5) 12px, rgba(255, 255, 255, 0) 12px, rgba(255, 255, 255, 0) 24px)}
-#sb_localtunnels td[colspan="3"] {line-height: 20px; font-size: 0; background: var(--down) !important}
-.routersummary table {position: relative}
-.routersummary table:not(#sb_localtunnels):not(#sb_services)::before {width: 0; height: 2px; display: block; position: absolute; top: -4px; left: -1px; background: #bfb; content: ""; animation: ease-in bar .15s reverse; will-change: transform}
-@supports not (-moz-appearance: none) {#sb_warning + p:empty + form {margin-top: 12px}}
 
 /* sidebar news */
 .sb_newsheadings {margin: -3px 0 -7px 0; padding: 0; text-align: right; font-size: 8pt}
@@ -117,10 +117,6 @@ p:empty + .sb_notice {margin-top: 7px}
 .sb_newsheadings td {padding-left: 20px; padding-right: 8px; vertical-align: middle; text-align: left; word-spacing: .1em; background: var(--star2) no-repeat 4px 4px / 12px; transition: ease background .2s}
 .sb_newsheadings tr:hover td {background-color: var(--row_hover); background-blend-mode: normal; transition: ease background .1s}
 .sb_newsheadings td a {margin: 0; padding: 0; width: 100%; display: inline-block; line-height: 1.1}
-
-div.refresh {margin-top: 10px; margin-bottom: 10px; padding: 2px 0}
-.routersummary p {padding: 0}
-.routersummary a:hover {color: var(--hover)}
 
 /* network status */
 .sb_netstatus, .tunnelBuildStatus {margin: -6px 0 -7px; padding: 6px 5px; width: calc(100% - 12px); display: inline-block; vertical-align: text-bottom; line-height: 1.2; text-shadow: 0 1px 1px var(--bg); border: var(--border); box-shadow: var(--highlight), 0 0 1px rgba(96,96,96,.5)}
@@ -210,7 +206,6 @@ p + .twocol {margin: 10px 30px}
 
 /* buttons & inputs */
 select {margin: 3px 5px; min-width: 120px}
-@supports not (-moz-appearance: none) {select {padding: 5px 20px 5px 8px !important}}
 select option {background: var(--bg)}
 select:hover, select:active, select:focus {color: var(--ink); box-shadow: var(--btn_shadow_hover); background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover); outline: none}
 select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active {border: var(--border); box-shadow: var(--highlight); background: var(--btn); color: var(--disabled); cursor: default; opacity: .7}
@@ -346,7 +341,6 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 div[id^="config_"].main {padding-bottom: 20px}
 #config_service, #config_peers, #config_reseed {padding-bottom: 9px}
 #config_tunnels {padding-bottom: 24px}
-.main#dns, .main#webmail, .main#torrents, .main#tunnelmgr {line-height: 0; will-change: unset}
 .main#news h3 {padding: 3px 0; font-size: 10pt; border: none; border-bottom: 1px solid var(--border_soft); background: none}
 .main#news p {padding: 0 10px}
 .main ul {margin: -10px 0 10px -10px; list-style-type: square}
@@ -732,13 +726,14 @@ h4.app a:hover::after, h4.app2 a:hover::after, h4.app a:focus::after, h4.app2 a:
 #chooselang img, #configbandwidth img {margin: 1px -5px 0 20px; display: inline-block; opacity: .8}
 h4.app a:hover img, h4.app2 a:hover img, h4.app a:hover::after, h4.app2 a:hover::after {margin-top: -1px; opacity: 1; transform: scale(1.3)}
 div.ag2 {margin: 0 -15px -9px}
+div.app img, .sitemaplink img {filter: grayscale(.6)}
+div.app:hover img, .sitemaplink:hover img {filter: none}
 div.app {margin: 3px; padding: 0; width: 140px; float: left; text-align: center; border: none; border: var(--border); background: var(--bg)}
 #sitemap div.app {float: none}
 div.app:hover {border: 1px solid var(--hover); cursor: pointer}
 div.app:hover a, .app:hover .applabel a {color: var(--hover) !important}
 .app td {vertical-align: middle}
 .applabel {margin: 0; padding: 3px 2px; width: 136px; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center; text-transform: lowercase; font-size: 8pt; border-top: var(--border)}
-@supports not (-moz-appearance: none) {.applabel {padding-bottom: 1px}}
 .applabel a {margin: 0; padding: 1px; display: inline-block; width: calc(100% - 2px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
 .app:hover .applabel {border-top: 1px solid var(--hover); background: var(--bg)}
 .app:active .applabel {color: var(--bg) !important; box-shadow: var(--highlight) !important; background: var(--hover) !important}
@@ -1613,7 +1608,6 @@ b.suboption {margin: 0 !important; padding: 5px 10px; position: relative; z-inde
 #config_reseed .optionsingle:hover {border: var(--border); box-shadow: var(--highlight_hover); transition: ease box-shadow .5s}
 #config_reseed .optionsingle.optiontextarea textarea {margin: 7px 6px !important; padding: 2px 5px; width: calc(100% - 12px); height: 90px !important; max-height: 90px !important}
 #reseed_urlselection.optionsingle, #reseedproxytype {columns: 5 auto; column-gap: 1px}
-@supports not (-moz-appearance: none) {#reseedproxytype {columns: 2}}
 #reseed_urlselection.optionsingle, #reseedproxytype, #config_reseed .optionlist:hover, #graphs .optionlist:hover, #config_network .optionlist:hover, #config_i2cp .optionlist:hover {background: var(--bg) !important}
 #reseedproxytype label {margin: 1px -1px 1px 0; padding: 4px 5px; min-width: 100px !important; width: calc(100% - 10px); background: var(--bg3) !important}
 #reseed_urlselection label::before, #reseedproxytype label::before {min-height: 34px !important}
@@ -1624,7 +1618,6 @@ b.suboption {margin: 0 !important; padding: 5px 10px; position: relative; z-inde
 #config_reseed form {margin: 0 !important; padding: 0 !important}
 #manualreseed .optionlist input[type=text], #manualreseed .optionlist input[type="file"] {width: 50% !important; min-width: 0 !important; max-width: 50% !important}
 #manualreseed .optionsingle {padding: 5px 0 5px 10px}
-@supports not (-moz-appearance: none) {#reseedproxysslhostport.optionlist {columns: 1} .optionsingle#reseedproxytype {columns: 2}}
 #config_network .optionlist:hover, #config_i2cp .optionlist:hover, #reseedssl:hover, #manualreseed .optionsingle:hover, .optiontextarea:hover, #reseed_urlselection:hover {border: var(--border); box-shadow: var(--highlight_hover) !important; transition: ease box-shadow .5s}
 #manualreseed {margin: 0 0 7px; background: none}
 #manualreseed td {padding: 5px; border-bottom: var(--border)}
@@ -1723,7 +1716,6 @@ input[type="file"]:hover {cursor: pointer}
 html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel {width: 160px}
 .sitemapLink {margin: 1px -8px 8px 14px}
 .sitemapLabel {margin: 0 0 -4px; padding: 4px 0; display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 9pt; border: none; border-top: var(--border)}
-@supports not (-moz-appearance: none) {.sitemapLabel {padding-bottom: 2px}}
 .sitemapLink img {padding: 12px 10px 10px; height: 32px; width: 32px}
 .sitemapLink:hover img {filter: drop-shadow(0 0 1px var(--hover))}
 .sitemapLink:active img {transform: scale(.8)}
@@ -1935,9 +1927,6 @@ th, td {position: relative}
 #events tr:hover td:first-child {border-left: 1px solid #393; background: linear-gradient(90deg, #393 2px, rgba(0,0,0,.02) 2px)}
 #events tr:hover td:last-child {border-right: 1px solid #393; background: linear-gradient(to left, #393 2px, rgba(0,0,0,.02) 2px)}
 
-div.app img, .sitemaplink img {filter: grayscale(.6)}
-div.app:hover img, .sitemaplink:hover img {filter: none}
-
 .tabletitle + table tr:first-child td {border-top: var(--border)}
 #config_tunnels select {min-width: 180px}
 #config_tunnels input[type=text] {width: calc(100% - 6px)}
@@ -1995,11 +1984,11 @@ th[role="columnheader"] {position: relative}
 #i2ptunnelframe {margin-bottom: -3px}
 iframe {height: 0}
 .main.embedded {padding: 0}
-#dns, #webmail, #torrents {padding: 0; min-width: 606px}
+#torrents, #webmail, #dns, #tunnelmgr {min-height: 9px; position: relative; overflow: hidden; line-height: 0; will-change: unset}
+#dns, #torrents, #webmail {padding: 0; min-width: 606px}
 #dns {background: linear-gradient(180deg, rgba(255,255,255,.8), rgba(255,255,255,.8)), url(images/bg0.png)}
-#tunnelmgr, #torrents, #webmail, #dns, #tunnelmgr {position: relative; overflow: hidden; min-height: 9px}
 #tunnelmgr {padding: 0 10px; min-width: 550px}
-#tunnelmgr::before, #torrents::before, #webmail::before, #dns::before {width: 0; height: 9px; display: block; position: absolute; top: 0; left: 0; right: 0; background: linear-gradient(180deg, rgba(255,255,255,.2) 50%, rgba(0,0,0,.2) 50%), var(--reload); opacity: .7; content: ""; animation: reloader 8s ease-out .5s forwards}
+#dns::before, #torrents::before, #tunnelmgr::before, #webmail::before {width: 0; height: 9px; display: block; position: absolute; top: 0; left: 0; right: 0; background: linear-gradient(180deg, rgba(255,255,255,.2) 50%, rgba(0,0,0,.2) 50%), var(--reload); opacity: .7; content: ""; animation: reloader 8s ease-out .5s forwards}
 
 /*animations */
 @keyframes downloadbar {from {background: repeating-linear-gradient(135deg, rgba(221, 221, 255, .7) 1px, rgba(221, 221, 255, .7) 6px, rgba(238, 238, 255,.7) 7px, rgba(238, 238, 255,.7) 11px)} to {background: repeating-linear-gradient(135deg, rgba(238, 238, 255,.7) 1px, rgba(238, 238, 255, .7) 5px, rgba(221, 221, 255, .7) 6px, rgba(221, 221, 255, .7) 11px)}}
@@ -2012,8 +2001,11 @@ iframe {height: 0}
 @keyframes spin {from {transform: rotate(-360deg)}}
 @keyframes update {from {filter: opacity(.6); color: #900}}
 @keyframes zoom {from {transform: scale(.8)} to {transform: scale(1)}}
-/* responsive layout */
 
+/* chrome overrides */
+@supports not (-moz-appearance: none) {#sb_warning + p:empty + form {margin-top: 12px} select {padding: 5px 20px 5px 8px !important} .applabel {padding-bottom: 1px} #reseedproxytype {columns: 2} #reseedproxysslhostport.optionlist {columns: 1} .optionsingle#reseedproxytype {columns: 2} .sitemapLabel {padding-bottom: 2px}}
+
+/* responsive layout */
 @media screen and (max-width: 1499px) {.sitemapLabel {margin-bottom: -3px; font-size: 8pt} .tunnelBuildStatus {font-size: 90%} #sb_tunnelstatus .tunnelBuildStatus::before {margin: -1px 0 0; background-size: 12px} .newsentry + hr + #newsStatus + #newsDisplay {margin: 1px 3px -1px} #config_logging h3 a::before, #webappconfiguration a::before, #i2pclientconfig a::before, #pluginmanage a::before {margin-top: -2px} #sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after, #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {min-height: 12px} #sb_localtunnels td:first-child {padding-right: 3px} .tunnels_client th:first-child {font-size: 0 !important} .tunnels_client th:first-child::after {content: "\21E9\21E7"; font-family: sans-serif; font-size: 12pt; line-height: 0; vertical-align: middle; letter-spacing: -.3em} #help h3, #faq h3 {font-size: 10.5pt} #clock {font-size: 16pt}}
 
 @media screen and (max-width: 1400px) {#peers #ntcpconnections th.queue {font-size: 0 !important} #peers #ntcpconnections th.queue::after {width: 16px; height: 16px; display: inline-block; background: var(--err) no-repeat center center / 16px; content: ""}

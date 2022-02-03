@@ -1,7 +1,8 @@
-/* I2P Midnight theme globals */
+/* I2P Classic theme globals */
 /* Author: (c) dr|z3d 2022 */
 
 @import url(/themes/fonts/DroidSans.css);
+@import url(/themes/console/images/images.css);
 
 :root {
   --a: #5c5c8a;
