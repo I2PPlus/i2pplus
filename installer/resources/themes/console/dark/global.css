@@ -181,11 +181,6 @@ label {
   cursor: pointer;
 }
 
-label[disabled] {
-  opacity: .5;
-  pointer-events: none;
-}
-
 input:disabled {
   pointer-events: none;
 }
@@ -497,7 +492,7 @@ select::-moz-focus-inner {
   height: 21px !important;
   border-radius: 1px;
   position: relative;
-  border: 1px solid #242;
+  border: var(--border);
   box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px rgba(0,0,0,.5);
   background: linear-gradient(180deg,#010,#020);
   outline: none;
@@ -517,7 +512,7 @@ select::-moz-focus-inner {
   background: linear-gradient(180deg,#800,#a00) !important;
 }
 
-.optbox.slider:hover, .optbox.slider:focus  {
+.optbox.slider:not([disabled]):hover, .optbox.slider:not([disabled]):focus  {
   box-shadow: 0 0 0 1px #000, 0 0 0 2px rgba(255,96,0,.7), inset 0 0 0 1px #000, inset 3px 3px 3px rgba(0,0,0,.2);
 }
 
@@ -541,17 +536,27 @@ select::-moz-focus-inner {
   opacity: 1 !important;
 }
 
-.optbox.slider:not(:checked)::before,
-.optbox.slider:active:checked::before {
+.optbox.slider:not([disabled]):not(:checked)::before, .optbox.slider:not([disabled]):active:checked::before {
   box-shadow: inset 0 0 0 1px #900, inset 0 0 0 2px #000, 0 2px 5px rgba(0,0,0,.2);
   background: linear-gradient(180deg,#a22,#811);
+}
+
+label:hover .optbox.slider[disabled], .optbox.slider[disabled],
+.optbox.slider[disabled]:hover, .optbox.slider[disabled]:focus {
+  border: var(--border) !important;
+  background: #030 !important;
+  pointer-events: none;
 }
 
 .optbox.slider:checked::before {
   left: 18px;
 }
 
-.optbox.slider[disabled], label[disabled] {
-  opacity: .45 !important;
-  pointer-events: none;
+label[disabled], label[disabled]:hover  {
+  opacity: .45;
+  cursor: default;
+}
+
+.optbox:hover, label[disabled]:hover .optbox {
+  pointer-events: none !important;
 }

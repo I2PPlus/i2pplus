@@ -901,7 +901,7 @@ tr.bottombuttons .pagenav {
   margin: -1px 0 0 2px !important;
   padding-left: 2px;
   float: left;
-  border-left: 1px solid #242;
+  border-left: var(--border);
 }
 
 #messagenav {
@@ -2105,7 +2105,7 @@ input[type=text]::placeholder, input[type=password]::placeholder {
 }
 
 tr.mailbody td {
-  border-top: 1px solid #242 !important;
+  border-top: var(--border) !important;
 }
 
 .debugHeader {
@@ -2118,7 +2118,7 @@ tr.mailbody td {
 }
 
 .debugHeader:nth-child(n+3) td {
-  border-top: 1px solid #242 !important;
+  border-top: var(--border) !important;
 }
 
 .debugHeader pre {
