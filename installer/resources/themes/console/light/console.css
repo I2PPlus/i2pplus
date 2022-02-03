@@ -47,7 +47,7 @@ body {
   will-change: transform;
 }
 
-.main#dns, .main#webmail, .main#torrents, .main#tunnelmgr, .main.embedded {
+#dns, #webmail, #torrents, #tunnelmgr, .main.embedded {
   background: #f6f6ff !important;
 }
 
@@ -1176,7 +1176,7 @@ p:empty + .sb_notice {
   box-shadow: var(--bevel);
 }
 
-.main#home {
+#home {
   padding-bottom: 13px;
 }
 
@@ -1200,11 +1200,11 @@ div[id^="config_"].main {
   padding-bottom: 5px;
 }
 
-.main#dns, .main#webmail, .main#torrents, .main#tunnelmgr {
+#dns, #webmail, #torrents, #tunnelmgr {
   line-height: 0;
 }
 
-.main#console {
+#console {
   box-shadow: var(--bevel) !important;
 }
 
@@ -1214,7 +1214,7 @@ div[id^="config_"].main {
     repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #f8f8ff !important;
 }
 
-.main#news {
+#news {
   padding: 3px 15px 5px;
 }
 
@@ -1233,7 +1233,7 @@ div[id^="config_"].main {
   box-shadow: var(--bevel), inset 0 0 0 2px rgba(255,255,255,.2);
 }
 
-.main#torrents {
+#torrents {
   padding: 0;
   min-width: 576px;
 }
@@ -1242,7 +1242,7 @@ div[id^="config_"].main {
   margin: 0;
 }
 
-.main#webmail {
+#webmail {
   padding: 0 8px;
 }
 
@@ -1250,7 +1250,7 @@ div[id^="config_"].main {
   margin-top: 3px;
 }
 
-.main#dns {
+#dns {
   padding: 0;
   min-width: 576px;
 }
@@ -1261,7 +1261,7 @@ div[id^="config_"].main {
   overflow: hidden;
 }
 
-.main#tunnelmgr {
+#tunnelmgr {
   padding: 0 10px;
   min-width: 556px;
 }
@@ -1375,7 +1375,7 @@ td.tabletextarea {
   margin-top: -2px;
 }
 
-.main#news .newsentry:last-child {
+#news .newsentry:last-child {
   margin-bottom: -5px !important;
 }
 
@@ -1825,7 +1825,7 @@ h3 a.script, th a.script {
   filter: none;
 }
 
-.main#tunnels h3, #tunnels h3 a, #config_service h3 {
+#tunnels h3, #tunnels h3 a, #config_service h3 {
   position: relative;
   z-index: 10;
 }
@@ -2206,7 +2206,7 @@ h3#graphdisplay {
   filter: none;
 }
 
-.main#graphs form {
+#graphs form {
   border: 1px solid var(--border_inner);
   padding: 10px;
   margin: -16px 0 5px;
@@ -2323,17 +2323,17 @@ to {
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
-.main#config_update .messages {
+#config_update .messages {
   padding: 20px 15px 20px 50px;
   background: var(--news) no-repeat 15px center / 28px,
     url(/themes/snark/ubergine/images/hat.png) no-repeat bottom right / auto 100%, var(--div_infohelp);
 }
 
-.main#graphs .messages {
+#graphs .messages {
   margin-bottom: -5px;
 }
 
-.main#events .messages {
+#events .messages {
   margin-bottom: 0;
 }
 
@@ -2481,13 +2481,13 @@ td.infowarn, #help tr:hover td.infowarn {
   display: none; /* hide empty placeholder for log location */
 }
 
-.main#logs ul li {
+#logs ul li {
   margin-left: -4px !important;
   padding-left: 0;
   width: calc(100% - 18px);
 }
 
-.main#logs li:first-child {
+#logs li:first-child {
   margin-top: 1px !important;
 }
 
@@ -3679,7 +3679,7 @@ h3#browseronstart + p.infohelp {
   background: var(--firefox) no-repeat 15px center / 28px, var(--div_infohelp);
 }
 
-.main#config_reseed p.infohelp {
+#config_reseed p.infohelp {
   padding: 20px 15px 20px 50px;
   background: var(--reseed) no-repeat 15px center / 28px, var(--div_infohelp);
   border-radius: 2px;
@@ -3714,11 +3714,11 @@ p#enablefullstats, p#gatherstats {
 
 /* stats page */
 
-.main#stats {
+#stats {
   padding-bottom: 15px;
 }
 
-.main#stats h3 {
+#stats h3 {
   border-width: 1px;
   border-radius: 0;
   filter: none;
@@ -4034,7 +4034,7 @@ h2 {
   filter: none;
 }
 
-.main#home .welcome + #homepanel > .ag2 > h4 { /* fix placement of initial /home "welcome to i2p" h2 */
+#home .welcome + #homepanel > .ag2 > h4 { /* fix placement of initial /home "welcome to i2p" h2 */
   margin-top: -1px;
 }
 
@@ -4306,7 +4306,7 @@ div[lang="de"] .links li {
   margin-top: 0 !important;
 }
 
-.main#console p {
+#console p {
    margin-left: 10px;
    margin-right: 10px;
 }
@@ -4860,7 +4860,7 @@ th label b:hover, th label:hover {
   color: #333337 !important;
 }
 
-.main#config_clients label[for="0"] {
+#config_clients label[for="0"] {
   cursor: default;
 }
 
@@ -7639,7 +7639,7 @@ table#schedjobs {
   font-size: 9pt;
 }
 
-.main#tunnels th, .main#peers th {
+#tunnels th, #peers th {
   text-align: center;
 }
 
@@ -8170,7 +8170,7 @@ select[name="newlogclass"] {
   margin-right: -1px !important;
 }
 
-#help div, .logtable tr:nth-child(n+2) td, .main#console, .debug_container {
+#help div, .logtable tr:nth-child(n+2) td, #console, .debug_container {
   background: linear-gradient(180deg,rgba(248,248,255,.5), rgba(250,250,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #fafaff !important;
   margin-bottom: 13px;
   box-shadow: var(--highlight);
@@ -8180,7 +8180,7 @@ select[name="newlogclass"] {
   box-shadow: none !important;
 }
 
-.main#console {
+#console {
   margin-bottom: 4px;
 }
 
@@ -8493,7 +8493,7 @@ select[name="newlogclass"] {
   background: var(--search) no-repeat center center / 18px;
 }
 
-.main#config_homepage input.delete {
+#config_homepage input.delete {
   float: left;
 }
 
@@ -8789,11 +8789,11 @@ a[href^="configpeer?peer"]:hover::after {
   display: none;
 }
 
-.main#debug h3 {
+#debug h3 {
   border-width: 1px;
 }
 
-.main#debug h3 + table {
+#debug h3 + table {
   margin-top: -16px;
 }
 
@@ -9437,7 +9437,7 @@ b.suboption {
   min-height: 64px;
 }
 
-.main#tunnels h3 {
+#tunnels h3 {
   margin-top: 10px;
 }
 
@@ -10101,7 +10101,7 @@ td.optionsave, .formaction, table#addkeyring tr:last-child td {
 
 /* end chrome overrides */
 
-.main#tunnels .cells, #tunnel_defs td:nth-child(n+3), .cells, #profilelist td, #profile_defs td, #floodfills td, #debug td, #jardump td, #jobstats td,
+#tunnels .cells, #tunnel_defs td:nth-child(n+3), .cells, #profilelist td, #profile_defs td, #floodfills td, #debug td, #jardump td, #jobstats td,
 #eventlog td, #webappconfig td, #tunnelconfig td, #sidebarconf td, #configstats td, #loggingoptions td, #addkeyring td, .homelinkedit td,
 #clientconfig td, .netdbentry td, #netdblookup td, #peerdefs td, #help td:not(.infohelp):not(.infowarn), #pluginconfig td,
 #thresholds td, #leasesetdebug td, #enviro td, #routerinformation td {
@@ -10109,7 +10109,7 @@ td.optionsave, .formaction, table#addkeyring tr:last-child td {
   background: rgba(240,240,255,.4);
 }
 
-.main#tunnels .cells, #tunnel_defs td:nth-child(n+3), .cells, #profilelist td:not(:first-child),
+#tunnels .cells, #tunnel_defs td:nth-child(n+3), .cells, #profilelist td:not(:first-child),
 #profile_defs td:not(:first-child), #floodfills td:not(:first-child), #debug td:not(:first-child),
 #jardump td:not(:first-child), #jobstats td:not(:first-child), #eventlog td:not(:first-child),
 #webappconfig td:not(:first-child), #tunnelconfig td:not(:first-child), #sidebarconf td:not(:first-child),
@@ -10121,7 +10121,7 @@ td.optionsave, .formaction, table#addkeyring tr:last-child td {
   border-left: var(--border_soft);
 }
 
-.main#tunnels tr:hover .cells, #tunnel_defs tr:hover td, tr:hover .cells, #profilelist tr:hover td, #profile_defs tr:hover td, #floodfills tr:hover td,
+#tunnels tr:hover .cells, #tunnel_defs tr:hover td, tr:hover .cells, #profilelist tr:hover td, #profile_defs tr:hover td, #floodfills tr:hover td,
 #debug tr:hover td, #jardump tr:hover td, #jobstats tr:hover td, #eventlog tr:hover td, #webappconfig tr:hover td, #tunnelconfig tr:hover td,
 #sidebarconf tr:hover td, #configstats tr:hover td, #loggingoptions tr:hover td, #addkeyring tr:hover td, .homelinkedit tr:hover td,
 #clientconfig tr:hover td, .netdbentry tr:hover td, #netdblookup tr:hover td, #peerdefs tr:hover td, #help tr:hover td:not(.infohelp):not(.infowarn)
@@ -10239,11 +10239,11 @@ td.optionsave, .formaction, table#addkeyring tr:last-child td {
 
 /* /embed */
 
-.main#imagegen {
+#imagegen {
   padding: 0 0 15px !important;
 }
 
-.main#imagegen iframe {
+#imagegen iframe {
   margin-top: 0;
 }
 
@@ -12025,13 +12025,13 @@ iframe {
     width: 70px;
     min-width: 70px;
   }
-  .main#config_clients th, #bannedips th {
+  #config_clients th, #bannedips th {
     padding-left: 2px !important;
     padding-right: 2px !important;
     font-size: 9pt !important;
   }
-  .main#config_clients td:last-child {word-break: break-all}
-  .main#tunnels {
+  #config_clients td:last-child {word-break: break-all}
+  #tunnels {
     padding: 0 5px;
     min-width: 566px;
   }
@@ -12114,7 +12114,7 @@ iframe {
   }
   #ntcpconnections th:last-child {font-size: 0}
   #ntcpconnections th:last-child::before {content: var(--err) !important}
-  .main#config_family input.download {
+  #config_family input.download {
     max-width: 230px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -12135,7 +12135,7 @@ iframe {
     width: 220px;
     min-width: 220px;
   }
-  .main#profiles, .main#peers, .main#tunnels {
+  #profiles, #peers, #tunnels {
     overflow: auto;
   }
   #reseedproxytype {columns: 3 auto}
