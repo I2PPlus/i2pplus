@@ -352,7 +352,7 @@ div.wideload {
   text-align: right;
 }
 
-.main#home {
+#home {
   padding-bottom: 10px;
 }
 
@@ -457,11 +457,11 @@ div[lang="ar"] ul, div[lang="ar"] p {
   margin-top: 15px !important;
 }
 
-.main#help .links li:first-child {
+#help .links li:first-child {
   margin-top: -10px !important;
 }
 
-.main#help .links li {
+#help .links li {
   margin: 5px 50px 5px 20px;
 }
 
@@ -534,7 +534,7 @@ span#newtab {
   text-align: right;
 }
 
-.main#config_plugins {
+#config_plugins {
   overflow: hidden;
 }
 
@@ -554,7 +554,7 @@ p#pluginconfig, #plugininstall .infohelp,
 #config_peers tr:nth-child(3) td.infohelp,
 h3#shutdownrouter + p.infohelp, h3#restartrouter + p.infohelp,
 h3#systray + p.infohelp, h3#servicedebug + p.infohelp,
-h3#browseronstart + p.infohelp, .main#config_reseed p.infohelp,
+h3#browseronstart + p.infohelp, #config_reseed p.infohelp,
 p#enablefullstats, p#gatherstats, #config_family .infohelp,
 #consolepass tr:first-child td, form[action="events"],
 #plugininstall tr:nth-child(3) td:nth-last-child(2), #manualreseed tr:nth-child(3) td:nth-last-child(2),
@@ -691,7 +691,7 @@ h3#advancedconfig a, h3#bwlimiter a, h3.tabletitle a, h3.ptitle a, th a.script, 
   float: left;
 }
 
-.main#config_advanced .wideload {
+#config_advanced .wideload {
   margin-left: 0 !important;
   margin-right: 0 !important;
 }
@@ -995,7 +995,7 @@ p#profiles_overview, #profiles .widescroll + h3, #thresholds + h3, #profiles #ba
   margin-bottom: -10px !important;
 }
 
-.main#profiles ul#banlist {
+#profiles ul#banlist {
   margin-bottom: -10px !important;
 }
 
@@ -1287,7 +1287,7 @@ input[type="file"]:hover {
 }
 
 @media screen and (min-width: 800px) {
-.main#console {
+#console {
   overflow: hidden;
 }
 }

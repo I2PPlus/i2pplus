@@ -288,7 +288,7 @@ h3.stats {
   margin-top: -1px !important;
 }
 
-.main#stats form {
+#stats form {
   margin-top: 0;
   margin-bottom: -1px;
 }
@@ -364,7 +364,7 @@ input.search[type=text] {
   background-position: 8px center;
 }
 
-.main#jardump b {
+#jardump b {
   font-size: 9pt !important;
 }
 
@@ -520,7 +520,7 @@ div.news h3, .newsDate, div.news a {
   margin-top: -5px !important;
 }
 
-.main#console code {
+#console code {
   font-size: 13pt !important;
 }
 
@@ -553,7 +553,7 @@ div.news h3, .newsDate, div.news a {
   font-size: 9pt !important;
 }
 
-.main#tunnels td, .tunnel_cap, .tunnel_id, #tunnels .cells, #tunnels tt a {
+#tunnels td, .tunnel_cap, .tunnel_id, #tunnels .cells, #tunnels tt a {
   font-size: 10pt !important;
   letter-spacing: 0 !important;
   word-spacing: 0 !important;
