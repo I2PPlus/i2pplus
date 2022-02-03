@@ -895,14 +895,10 @@ pre {
 
 #sb_internals td:first-child, #sb_advanced td:first-child, #sb_help td:first-child {
   margin: 0 -10px;
-  padding: 0 0 3px !important;
+  padding: 0 0 2px !important;
   width: 106% !important;
-  max-width: 400px !important;
+  max-width: 240px !important;
   display: inline-block;
-}
-
-#sb_advanced td:first-child {
-  padding-bottom: 4px !important;
 }
 
 #sb_general, #sb_shortgeneral, #sb_advancedgeneral, #sb_bandwidth, #sb_peers, #sb_peersadvanced, #sb_tunnels, #sb_queue {
@@ -1171,7 +1167,9 @@ p:empty + .sb_notice {
 }
 
 #sidebar a:link, #sidebar a:visited {
-  padding: 0 2px;
+  padding: 1px 2px;
+  display: inline-block;
+  line-height: 1.2;
   word-spacing: 0;
 }
 
@@ -1411,7 +1409,7 @@ a:active #sb_graphstats {
 }
 
 #xhr > hr + #sb_graphcontainer > span + a > #minigraph {
-  height: 41px;
+  height: 40px;
 }
 
 #minigraphcontainer {
@@ -12747,15 +12745,9 @@ iframe {
     width: 230px;
     transform: none;
   }
-  #sidebar table[id^="sb_"], #sb_localtunnels {
-    width: 236px !important;
-  }
-  #sb_internals, #sb_advanced, #sb_help {
-    width: 240px !important;
-  }
-  #sidebar form {
-    margin-bottom: -8px;
-  }
+  table[id^="sb_"], #sidebar #sb_localtunnels {width: 236px !important}
+  #sb_internals, #sb_advanced, #sb_help {width: 240px !important}
+  #sidebar form {margin-bottom: -8px}
   #sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after,
   #sb_bandwidth td::after, #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {
      min-height: 18px;
@@ -12783,7 +12775,7 @@ iframe {
     width: 230px;
     font-size: 10pt !important;
   }
-  .percentBarOuter, .percentBarInner {
+  #sidebar .percentBarOuter, #sidebar .percentBarInner {
     width: 230px;
   }
   div.app {
@@ -13027,8 +13019,11 @@ iframe {
     margin-top: -1px;
     margin-bottom: -9px;
   }
-  #sidebar table[id^="sb_"], #sb_localtunnels {
+  table[id^="sb_"] {
     width: 256px !important;
+  }
+  #sidebar #sb_services {
+    width: 260px !important;
   }
   #sidebar button, #sidebar .stop, #sidebar .reload {
     min-width: 121px !important;
@@ -13048,7 +13043,13 @@ iframe {
     margin: 0;
     width: auto !important;
   }
-  .percentBarOuter {width: 250px}
+  #sb_internals td:first-child, #sb_advanced td:first-child, #sb_help td:first-child {
+    padding: 0 0 5px !important;
+  }
+  #sb_advanced td:first-child {
+    padding-bottom: 6px !important;
+  }
+  #sidebar .percentBarOuter {width: 250px}
   #sidebar #sb_newsheadings table {width: 258px !important}
   #sb_newsheadings td:first-child {
     width: 240px !important;
