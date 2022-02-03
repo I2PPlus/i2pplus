@@ -845,7 +845,7 @@ p img:first-child {display: none}
 p.infohelp, p.infohelp + p, p#enablefullstats {border: var(--border)}
 p.infohelp + p.infowarn {margin-top: -1px; padding: 10px}
 p#keyringhelp {margin-top: 15px}
-p#pluginconfigtext {margin: -11px 0 -1px; padding: 10px; border: var(--border)}
+p#pluginconfigtext {margin: -11px 0 14px; padding: 10px; border: var(--border)}
 #config_logging p {margin: 3px 0 5px -15px !important; text-align: left}
 .configtable tr:last-child, #addkeyring tr:last-child, #loggingoptions tr:last-child {border-top: var(--border); background: var(--bg)}
 #addkeyring tr:last-child td {padding: 7px 2px}
@@ -1322,7 +1322,7 @@ p#enablefullstats, p#gatherstats {padding: var(--pad_info); background: var(--bg
 #routerlogs li:first-child, #criticallogs li:first-child, #routerlogs li:first-child:hover, #criticallogs li:first-child:hover {border-top: none}
 #routerlogs li:first-child, #criticallogs li:first-child {padding-top: 0; margin-top : 1px}
 #routerlogs li:last-child, #criticallogs li:last-child {border-bottom: none; padding-bottom: 7px !important}
-#wrapperlogs pre {white-space: pre-wrap; word-break: break-all; margin: 0; width: 100%; padding: 0; max-height: 600px; overflow: auto}
+#wrapperlogs pre {white-space: pre-wrap; word-break: break-all; margin: 0; padding: 0; width: 100%; max-height: 500px; overflow: auto}
 #wrapperlogs tr:last-child td {padding: 0 0 0 2px}
 #criticallogs tr:first-child {display: none}
 .logtable tr:first-child {border-bottom: var(--border); padding: 5px 10px}
@@ -1510,10 +1510,10 @@ h2#debug_portmapper {margin-top: 14px !important}
 #jardump td:first-child {padding-left: 24px; background: var(--package) no-repeat left 5px center / 14px}
 
 /* TO DO: Merge with main classes */
-#pluginconfigtext input {float: right; margin: -6px -6px 0 0}
+#pluginconfigtext input {float: right; margin: -6px -15px 0 0}
 #externaltcp .nowrap:first-child {margin: 5px 0 -18px !important; display: inline-block}
 #cputype {display: inline-block; margin: -2px 2px -2px 0; padding: 2px 5px; font-weight: 700; text-transform: uppercase; border-radius: 2px; background: var(--bg4)}
-#wrapperlogs pre {max-height: 500px}
+
 /* graphs */
 #graphs td:first-child {font-weight: 400; text-align: left; padding: 5px 0 0}
 #graphs td b {min-width: 150px; text-align: right; display: inline-block; margin-right: 5px}
@@ -1657,6 +1657,7 @@ b.suboption {margin: 0 !important; padding: 5px 10px; position: relative; z-inde
 #installPluginUrl input[type=text], #installPluginFile input[type="file"], #config_family input[type=text], #config_family input[type="file"] {width: 100%}
 #config_reseed form, #installPluginUrl form, #installPluginFile form, #newFamily form, #joinfamily form {margin: 0; padding: 0}
 #installPluginUrl, #installPluginFile {background: var(--bg2)}
+#installPluginUrl {margin-bottom: 4px}
 #installPluginUrl td:first-child {padding: var(--pad_info); background: var(--bg2) var(--link) no-repeat 15px center / 28px}
 #installPluginFile td:first-child {padding: var(--pad_info); background: var(--bg2) var(--files) no-repeat 15px center / 28px}
 #installPluginUrl:hover td, #installPluginFile #file:hover td {background-color: var(--row_hover)}
