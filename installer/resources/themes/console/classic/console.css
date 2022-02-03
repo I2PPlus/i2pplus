@@ -88,17 +88,19 @@ p:empty {display: none}
 #sb_tunnels a {padding-left: 0 !important}
 #sb_tunnels a:not(:hover):not(:focus) {color: var(--ink) !important}
 #sb_localtunnels {margin: -6px -2px -7px 0 !important; width: 196px; text-align: center; box-sizing: border-box}
-#sb_localtunnels td {padding: 1px !important; line-height: 1}
+#sb_localtunnels tr:nth-child(even) {background: var(--bg3)}
+#sb_localtunnels td {padding: 1px; vertical-align: middle; line-height: 1}
 #sb_localtunnels td:first-child {padding-right: 0; width: 12px; text-align: left}
 #sb_localtunnels a {width: 100%; max-width: 164px; white-space: nowrap; display: inline-block; overflow: hidden; text-overflow: ellipsis; text-transform: none}
 #sb_localtunnels td:nth-child(2) {padding-left: 0; min-width: 156px}
 #sb_localtunnels td:last-child {padding-right: 2px !important; width: 12px; text-align: right}
 #sb_localtunnels td:first-child, #sb_localtunnels tr:hover td:first-child {background: var(--client) no-repeat center center / 16px}
 #sb_localtunnels td.tunnelServer, #sb_localtunnels tr:hover td.tunnelServer  {background: var(--server) no-repeat center center / 16px}
-#sb_localtunnels td.ping, #sb_localtunnels tr:hover td.ping {background: var(--ping) no-repeat center center / 16px !important}
+#sb_localtunnels td.ping, #sb_localtunnels tr:hover td.ping {background: var(--ping) no-repeat center center / 16px}
 #sb_localtunnels td:last-child, #sb_localtunnels tr:hover td:last-child {background: var(--local_inprogress) no-repeat right 1px center / 16px}
 #sb_localtunnels td.tunnelReady, #sb_localtunnels tr:hover td.tunnelReady {background-image: var(--local_up)}
 #sb_localtunnels td.tunnelRebuilding, #sb_localtunnels tr:hover td.tunnelRebuilding {background-image: var(--local_down)}
+#sb_localtunnels tr:last-child td {padding-bottom: 2px}
 #sb_localtunnels tr:hover {background-color: var(--row_hover) !important; transition: ease background .3s}
 #sb_localtunnels td[colspan="3"] {line-height: 20px; font-size: 0; background: var(--down) !important}
 #sb_localtunnels img {width: 16px; height: 16px; font-size: 0; opacity: 0}
@@ -718,7 +720,6 @@ tr:nth-child(even), #pluginconfig table tr:nth-child(even) td, #profile_defs tr:
 tr:nth-child(odd), #pluginconfig table tr:nth-child(odd) td, #profiles ul#banlist, #profile_defs table tr:nth-child(odd), #profile_defs table tr:nth-child(even) {background: var(--bg2)}
 #sidebarconf tr:last-child td {background: var(--bg)}
 .configtable th {text-align: left}
-#version a::before {margin-top: -2px}
 
 /* home */
 #home {padding-bottom: 1px}
@@ -811,6 +812,7 @@ h3 + .statusnotes {margin-top: -1px}
 .refreshpage:hover,.refreshpage:focus {background: var(--refresh_hover) no-repeat center center / 16px}
 .refreshpage:active {box-shadow: var(--btn_shadow_refresh)}
 #version a {font-size: 9pt}
+#version a::before {margin-top: -2px}
 #version a::after {content: none !important}
 
 /* jobs */
@@ -1341,10 +1343,10 @@ p#enablefullstats, p#gatherstats {padding: var(--pad_info); background: var(--bg
 #logs li::after {margin: 2px 0 -4px; width: 100%; display: block; content: ""}
 #logs li:last-child::after {border: none; margin: -4px}
 #logs font[color^="#"]::before {margin-right: 5px; margin-left: -17px; width: 6px; height: 6px; display: inline-block; vertical-align: calc(1px); border-radius: 50%; background: var(--bg); content: ""}
-#logs li font[color="#cc0000"]::before {background: #cc0000}
+#logs li font[color="#cc0000"]::before {background: #c00}
 #logs li font[color="#006600"] {color: #444}
 #logs li font[color="#006600"]::before {background: #444}
-#logs li font[color="#ff3300"]::before {background: #ff3300}
+#logs li font[color="#ff3300"]::before {background: #f30}
 #logs li font[color="#bf00df"] {color: #717}
 #logs li font[color="#bf00df"]::before {background: #717}
 #logs li font[color="#000099"] {color: #339}
