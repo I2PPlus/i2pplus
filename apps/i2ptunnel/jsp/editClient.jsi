@@ -86,7 +86,7 @@
                          (isShared ? bStopFirst : aStopFirst);
         String shdisabled = canChangePort ? "" : " disabled=\"disabled\" ";
 %>
-<label title="<%=shtitle%>">
+<label title="<%=shtitle%>" <%=shdisabled%>>
 <input value="true" type="checkbox" name="shared" <%=(isShared ? " checked=\"checked\"" : "")%> class="optbox slider" <%=shdisabled%>/>
 <%=intl._t("Share tunnels with other configured clients")%>
 </label>
@@ -356,7 +356,7 @@
 <tr><th><%=intl._t("Delay tunnel open until required")%></th><th><%=intl._t("Signature type")%></th></tr>
 <tr>
 <td>
-<label title="<%=intl._t("Conserve resources by only creating tunnels when required")%>"><input value="1" type="checkbox" name="delayOpen"<%=(editBean.getDelayOpen(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox slider" />
+<label title="<%=intl._t("Conserve resources by only creating tunnels when required")%>"><input value="1" type="checkbox" name="delayOpen"<%=(editBean.getDelayOpen(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox slider">
 <%=intl._t("Don't open tunnel until activity is detected on port")%></label>
 </td>
 <%        } else { %>
