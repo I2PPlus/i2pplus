@@ -211,12 +211,12 @@ td.optionsave {
    min-height: 14px !important;
 }
 
-.sb_newsheadings td, .sb_newsheadings tr:hover td {
+#sb_newsheadings td, #sb_newsheadings tr:hover td {
   background-position: 4px center !important;
   padding-left: 24px !important;
 }
 
-.sb_newsheadings a {
+#sb_newsheadings a {
   font-size: 9.5pt !important;
 }
 

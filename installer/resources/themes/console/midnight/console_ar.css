@@ -535,14 +535,14 @@ div[lang="ar"] ul, div[lang="ar"] p {
   margin-right: 12px;
 }
 
-.sb_newsheadings td, .sb_newsheadings tr:hover td {
+#sb_newsheadings td, #sb_newsheadings tr:hover td {
   background-position: right 4px center !important;
   padding-right: 22px !important;
   padding-left: 8px !important;
   text-align: right !important;
 }
 
-.sb_newsheadings td a {
+#sb_newsheadings td a {
   font-size: 9pt !important;
   font-weight: 700;
 }
@@ -646,11 +646,11 @@ div[lang="ar"], div[lang="ar"] code, div[lang="ar"] b {
   width: 210px;
 }
 
-.sb_newsheadings table {
+#sb_newsheadings table {
   width: 218px !important;
 }
 
-.sb_newsheadings td:first-child {
+#sb_newsheadings td:first-child {
   max-width: 200px !important;
   width: 200px !important;
 }

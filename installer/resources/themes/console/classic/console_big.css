@@ -545,11 +545,11 @@ div.news h3, .newsDate, div.news a {
   font-size: 12pt !important;
 }
 
-.sb_newsheadings td, .sb_newsheadings tr:hover td {
+#sb_newsheadings td, #sb_newsheadings tr:hover td {
   background-position: 4px center !important;
 }
 
-.sb_newsheadings td a {
+#sb_newsheadings td a {
   font-size: 9pt !important;
 }
 

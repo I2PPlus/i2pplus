@@ -1118,28 +1118,28 @@ p:empty + .sb_notice {
 
 /* sidebar news */
 
-#sidebar .sb_newsheadings {
+#sidebar #sb_newsheadings {
   margin: -5px 0 0 8px;
 }
 
-#sidebar .sb_newsheadings table {
+#sidebar #sb_newsheadings table {
   margin: -12px 0 -9px -14px !important;
   width: 204px !important;
   table-layout: auto;
 }
 
-#sidebar .sb_newsheadings td a {
+#sidebar #sb_newsheadings td a {
   padding: 2px 0 !important;
   width: 100%;
   display: inline-block;
 }
 
-#sidebar .sb_newsheadings a {
+#sidebar #sb_newsheadings a {
   margin: -1px 0 -2px;
   display: inline-block;
 }
 
-#sidebar .sb_newsheadings td {
+#sidebar #sb_newsheadings td {
   padding: 6px 1px 6px 21px !important;
   line-height: 1;
   text-align: left;
@@ -1147,11 +1147,11 @@ p:empty + .sb_notice {
   background: var(--newsbullet) no-repeat 3px center / 16px !important;
 }
 
-#sidebar .sb_newsheadings tr:hover td {
+#sidebar #sb_newsheadings tr:hover td {
   background: #ffd var(--newsbullet_hover) no-repeat 3px center / 16px !important;
 }
 
-#sidebar .sb_newsheadings tr:last-child td {
+#sidebar #sb_newsheadings tr:last-child td {
   border-bottom: none !important;
 }
 
@@ -12417,7 +12417,7 @@ iframe {
   #sidebar table[id^="sb_"] {width: 238px !important}
   #sidebar form {margin-bottom: -2px}
   #sb_services {width: 242px !important}
-  #sidebar .sb_newsheadings table {width: 240px !important}
+  #sidebar #sb_newsheadings table {width: 240px !important}
   #sidebar h3::after {
     min-height: 19px;
     display: inline-block;

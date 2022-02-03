@@ -242,25 +242,25 @@ div.wideload {
   text-align: center !important;
 }
 
-.sb_newsheadings {
+#sb_newsheadings {
   margin: 5px -8px 0 0 !important;
 }
 
-.sb_newsheadings:hover {
+#sb_newsheadings:hover {
   margin: 5px -5px 0 0 !important;
 }
 
-.sb_newsheadings table {
+#sb_newsheadings table {
   margin: -12px 0 -8px -10px;
   border-collapse: separate;
   border-spacing: 0;
 }
 
-.sb_newsheadings table:hover {
+#sb_newsheadings table:hover {
   padding-right: 3px;
 }
 
-.sb_newsheadings tr td, .sb_newsheadings tr:hover td {
+#sb_newsheadings tr td, #sb_newsheadings tr:hover td {
   padding-right: 24px !important;
   padding-left: 6px !important;
   background-position: right 6px center !important;
@@ -1127,14 +1127,14 @@ p#enablefullstats, p#gatherstats, p#pluginconfigtext, #plugininstall .infohelp, 
   padding-right: 0 !important;
 }
 
-.sb_newsheadings td, .sb_newsheadings tr:hover td {
+#sb_newsheadings td, #sb_newsheadings tr:hover td {
   background-position: right center !important;
   padding-right: 18px !important;
   padding-left: 8px !important;
   text-align: right !important;
 }
 
-.sb_newsheadings td a {
+#sb_newsheadings td a {
   font-size: 9pt !important;
 }
 

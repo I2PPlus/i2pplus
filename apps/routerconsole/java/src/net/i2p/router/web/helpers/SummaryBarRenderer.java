@@ -1320,7 +1320,7 @@ class SummaryBarRenderer {
                         // Set up title and pre-headings stuff.
                         buf.append("<h3><a href=\"/news\">")
                            .append(_t("News &amp; Updates"))
-                           .append("</a></h3><hr class=\"b\"><div class=\"sb_newsheadings\">\n<table>\n");
+                           .append("</a></h3><hr class=\"b\"><div id=\"sb_newsheadings\">\n<table>\n");
                     }
                     buf.append("<tr><td><a href=\"/?news=1&amp;consoleNonce=")
                        .append(consoleNonce)

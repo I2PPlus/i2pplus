@@ -584,31 +584,31 @@ div.refresh {
 
 /* sidebar news */
 
-.sb_newsheadings {
+#sb_newsheadings {
   margin-left: 0;
   margin-bottom: -7px !important;
   width: 192px;
   text-align: right;
 }
 
-.sb_newsheadings table {
+#sb_newsheadings table {
   margin-bottom: 3px !important;
 }
 
-.sb_newsheadings a {
+#sb_newsheadings a {
   padding: 0 3px 0 0;
   width: 100%;
   display: inline-block;
 }
 
-.sb_newsheadings td {
+#sb_newsheadings td {
   padding: 4px 5px 4px 23px;
   text-align: left;
   border-bottom: var(--border_soft) !important;
   background: var(--newsbullet) no-repeat 4px center / 14px !important;
 }
 
-.sb_newsheadings tr:last-child td {
+#sb_newsheadings tr:last-child td {
   border-bottom: none !important;
 }
 
@@ -12444,7 +12444,7 @@ h3 + table {
   will-change: transform;
 }
 
-.routersummary .sb_newsheadings table::before {
+.routersummary #sb_newsheadings table::before {
   content: none !important;
 }
 
@@ -13409,10 +13409,10 @@ body.iframed {
   input[type=submit], input[type=reset], select, button, .sb_notice {
     font-size: 9pt;
   }
-  .sb_newsheadings {
+  #sb_newsheadings {
     width: 200px !important;
   }
-  .sb_newsheadings table {
+  #sb_newsheadings table {
     width: 254px !important;
   }
   #sb_memoryBar .percentBarText {

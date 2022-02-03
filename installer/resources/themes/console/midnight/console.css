@@ -1025,14 +1025,14 @@ pre {
   vertical-align: middle;
 }
 
-#sb_services a:hover, #sb_internals a:hover, #sb_advanced a:hover, #sb_localtunnels tr:hover, .sb_newsheadings a:hover,
+#sb_services a:hover, #sb_internals a:hover, #sb_advanced a:hover, #sb_localtunnels tr:hover, #sb_newsheadings a:hover,
 #sb_localtunnels tr:hover a, #sb_help a:hover, .news a:hover, #console a:hover, #help a:hover {
   color: var(--a_hover) !important;
   border-radius: 2px;
   background-color: #1e0b28;
 }
 
-#sb_services a:active, #sb_internals a:active, #sb_advanced a:active, #sb_help a:active, .sb_newsheadings a:active,
+#sb_services a:active, #sb_internals a:active, #sb_advanced a:active, #sb_help a:active, #sb_newsheadings a:active,
 #sb_localtunnels tr:active, .news a:active, #console a:active, #help a:active {
   color: var(--active) !important;
   background-color: #39144f;
@@ -1326,7 +1326,7 @@ p:empty + .sb_notice {
 
 /* sidebar news */
 
-.sb_newsheadings {
+#sb_newsheadings {
   width: 192px;
   margin-left: 0;
   margin-top: -5px !important;
@@ -1334,13 +1334,13 @@ p:empty + .sb_notice {
   text-align: right;
 }
 
-.sb_newsheadings table {
+#sb_newsheadings table {
   margin-bottom: 0 !important;
   border-collapse: collapse;
   border-spacing: 1px;
 }
 
-.sb_newsheadings a {
+#sb_newsheadings a {
   margin-top: 1px;
   padding: 3px !important;
   display: inline-block;
@@ -1349,11 +1349,11 @@ p:empty + .sb_notice {
   border-radius: 3px !important;
 }
 
-.sb_newsheadings a:hover {
+#sb_newsheadings a:hover {
   background: none;
 }
 
-.sb_newsheadings td {
+#sb_newsheadings td {
   padding: 3px 8px 3px 20px !important;
   text-align: left;
   border-bottom: 2px solid #000 !important;
@@ -1361,12 +1361,12 @@ p:empty + .sb_notice {
   background-size: 15px, 100% !important;
 }
 
-.sb_newsheadings td:hover {
+#sb_newsheadings td:hover {
   background: var(--newsbullet_hover) no-repeat 4px center, linear-gradient(90deg, #202, #101) !important;
   background-size: 15px, 100% !important;
 }
 
-.sb_newsheadings tr:last-child td {
+#sb_newsheadings tr:last-child td {
   border-bottom: none !important;
 }
 
@@ -12949,12 +12949,12 @@ iframe {
   #sb_localtunnels a {max-width: 188px}
   .sb_notice {margin-bottom: -8px}
   .percentBarOuter {width: 210px}
-  .sb_newsheadings {
+  #sb_newsheadings {
     margin-left: -1px !important;
     margin-bottom: -10px !important;
     width: 200px !important;
   }
-  .sb_newsheadings table {width: 218px !important}
+  #sb_newsheadings table {width: 218px !important}
   #pluginconfig {margin-top: -15px !important}
   #netdboverview table th, #netdboverview table td {padding: 7px 8px !important}
   .log_debug, .log_info, .log_warn, .log_error, .log_crit, .log_omitted {
@@ -13053,8 +13053,8 @@ iframe {
     width: auto !important;
   }
   .percentBarOuter {width: 250px}
-  .sb_newsheadings table {width: 258px !important}
-  .sb_newsheadings td:first-child {
+  #sb_newsheadings table {width: 258px !important}
+  #sb_newsheadings td:first-child {
     width: 240px !important;
     max-width: 240px !important;
   }
