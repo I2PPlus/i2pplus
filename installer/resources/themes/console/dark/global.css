@@ -492,7 +492,7 @@ select::-moz-focus-inner {
   background: #373;
 }
 
-.optbox.slider[type=checkbox], .optbox.slider[type=checkbox]:focus, .optbox.slider[type=checkbox]:focus {
+.optbox.slider[type=checkbox], .optbox.slider[type=checkbox]:hover, .optbox.slider[type=checkbox]:focus {
   width: 40px !important;
   height: 21px !important;
   border-radius: 1px;
@@ -505,15 +505,15 @@ select::-moz-focus-inner {
   appearance: none;
 }
 
-.optbox.slider:not(:checked), .optbox.slider:not(:checked) {
+.optbox.slider:not(:checked) {
   background: linear-gradient(180deg,#400,#600) !important;
 }
 
-.optbox.slider:not(:checked):active, .optbox.slider:not(:checked):active {
+.optbox.slider:not(:checked):active {
   background: linear-gradient(180deg,#060,#080) !important;
 }
 
-.optbox.slider:checked:active, .optbox.slider:checked:active {
+.optbox.slider:checked:active {
   background: linear-gradient(180deg,#800,#a00) !important;
 }
 
@@ -551,7 +551,7 @@ select::-moz-focus-inner {
   left: 18px;
 }
 
-.optbox.slider:disabled, label:disabled {
+.optbox.slider[disabled], label[disabled] {
   opacity: .45 !important;
   pointer-events: none;
 }
