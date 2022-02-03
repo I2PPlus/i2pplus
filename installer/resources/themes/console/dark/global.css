@@ -85,6 +85,10 @@ body.iframed {
   background-size: 100% 4px !important;
 }
 
+::selection {
+  text-shadow: none;
+}
+
 pre, textarea, .widescroll {
   scrollbar-color: rgba(16,48,16,.4) rgba(0,0,0,0);
   transition: ease scrollbar-color .5s;
