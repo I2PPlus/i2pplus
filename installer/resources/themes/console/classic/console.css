@@ -25,6 +25,7 @@ a.script {word-spacing: normal; letter-spacing: normal}
 pre {margin: 0 20px; padding-top: 10px; width: 95%; overflow: auto; font-size: 8.5pt}
 tt, code, .bucket {color: var(--code)}
 div.refresh {margin-top: 10px; margin-bottom: 10px; padding: 2px 0}
+tr.tablefooter:hover td, tr:hover .infohelp {color: var(--ink)}
 
 /* sidebar */
 .routersummaryouter {margin: 0; padding: 0; width: 193px; position: absolute; border: none}
@@ -226,6 +227,9 @@ input[type=file]::file-selector-button {margin: 3px 8px 3px 0}
 button:hover, input[type=submit]:hover, input[type=reset]:hover {color: var(--ink); background: var(--btn_hover)}
 button:active, input[type=submit]:active, input[type=reset]:active {background-color: var(--bg)}
 input[name="refreshInterval"] {width: 80px; min-width: 80px; text-align: right}
+.main textarea {margin: 2px 0 2px 5px; padding: 3px 4px; width: calc(100% - 5px); min-height: 96px; resize: none; color: var(--ink_light); border: var(--border); border-radius: 2px; box-shadow: var(--shadow_input); background: var(--bg2)}
+.main textarea:focus, .main .tabletextarea textarea:focus {color: var(--ink); box-shadow: inset 0 0 0 1px var(--hover); background: var(--bg); outline: none}
+.main .tabletextarea textarea:focus {border-radius: 0}
 
 /* graphical buttons */
 input[type=submit], input[type=reset], button {margin: 3px 8px 3px 0; padding: 4px 5px; text-decoration: none; font: 9pt var(--bodyfont); color: var(--ink_light); border: var(--border); border-radius: 3px; box-shadow: var(--btn_shadow); background: var(--btn); background-size: 14px, 100%}
@@ -272,8 +276,6 @@ input.go, button.go, input[value="GO"], button#run {padding: 5px 8px 5px 23px; b
 input.go:hover, button.go:hover, input[value="GO"]:hover, input.go:focus, button.go:focus, input[value="GO"]:focus {background: var(--go) no-repeat 8px center / 14px, var(--btn_hover)}
 input.go[value^="Create"], button.go[value^="Create"] {padding: 5px 8px 5px 25px; background: var(--package) no-repeat 8px center / 16px, var(--btn)}
 input.go[value^="Create"]:hover, button.go[value^="Create"]:hover, input.go[value^="Create"]:focus, button.go[value^="Create"]:focus {background: var(--package) no-repeat 8px center / 16px, var(--btn_hover)}
-#sybilanalysis input.go {padding: 5px 8px 5px 25px; background: var(--eye) no-repeat 8px center / 16px, var(--btn)}
-#sybilanalysis input.go:hover, #sybilanalysis input.go:focus {background: var(--eye_hover) no-repeat 8px center / 16px, var(--btn_hover)}
 input.back {padding: 5px 8px 5px 23px; background: var(--back) no-repeat 8px center / 14px, var(--btn)}
 input.back:hover, input.back:focus {background: var(--back) no-repeat 8px center / 14px, var(--btn_hover)}
 input.reload, button.reload {padding: 5px 8px 5px 23px; background: var(--reset) no-repeat 8px center / 14px, var(--btn)}
@@ -282,12 +284,14 @@ input.reload[value$="restart"], button.reload[value$="restart"] {padding: 5px 8p
 input.reload[value$="restart"]:hover, input.reload[value$="restart"]:focus {background: var(--restart_hover) no-repeat 8px center / 12px, var(--btn_hover)}
 input.reload[value^="Update"], button.reload[value^="Update"] {padding: 5px 8px 5px 23px; background: var(--refresh) no-repeat 8px center / 14px, var(--btn)}
 input.reload[value^="Update"]:hover, input.reload[value^="Update"]:focus, input.reload[value^="Update"]:active {background: var(--refresh_hover) no-repeat 8px center / 14px, var(--btn_hover)}
-#dumpthreads input.reload {padding: 5px 8px 5px 25px; background: var(--recycle) no-repeat 8px center / 15px, var(--btn)}
-#dumpthreads input.reload:hover, #dumpthreads input.reload:focus {background: var(--recycle) no-repeat 8px center / 15px, var(--btn_hover)}
 input.stop {padding: 5px 8px 5px 23px; background: var(--shutdown) no-repeat 8px center / 12px, var(--btn)}
 input.stop:hover, button.stop:focus, input.stop:active {background: var(--shutdown_hover) no-repeat 8px center / 12px, var(--btn_hover)}
 button.search {padding: 5px 7px 5px 25px; background: var(--search) no-repeat 7px 6px / 14px, var(--btn)}
 button.search:hover, button.search:focus {background: var(--search) no-repeat 7px 6px / 14px, var(--btn_hover)}
+#sybilanalysis input.go {padding: 5px 8px 5px 25px; background: var(--eye) no-repeat 8px center / 16px, var(--btn)}
+#sybilanalysis input.go:hover, #sybilanalysis input.go:focus {background: var(--eye_hover) no-repeat 8px center / 16px, var(--btn_hover)}
+#dumpthreads input.reload {padding: 5px 8px 5px 25px; background: var(--recycle) no-repeat 8px center / 15px, var(--btn)}
+#dumpthreads input.reload:hover, #dumpthreads input.reload:focus {background: var(--recycle) no-repeat 8px center / 15px, var(--btn_hover)}
 
 /* client config buttons aka project "X" */
 button.control {padding: 12px; font-size: 0; background-size: 16px, 100%}
@@ -347,9 +351,6 @@ div[id^="config_"].main {padding-bottom: 20px}
 .main li {padding: 0 0 5px 0; word-wrap: break-word; margin-right: 20px}
 .links li b:first-of-type {color: #1f7096}
 .main hr:last-child {margin: 15px 0 10px 0}
-.main textarea {margin: 2px 0 2px 5px; padding: 3px 4px; width: calc(100% - 5px); min-height: 96px; resize: none; color: var(--ink_light); border: var(--border); border-radius: 2px; box-shadow: var(--shadow_input); background: var(--bg2)}
-.main textarea:focus, .main .tabletextarea textarea:focus {color: var(--ink); box-shadow: inset 0 0 0 1px var(--hover); background: var(--bg); outline: none}
-.main .tabletextarea textarea:focus {border-radius: 0}
 .main h2 {margin-bottom: 10px !important}
 #home {padding-bottom: 1px}
 #sitemap {padding-bottom: 6px}
@@ -361,8 +362,9 @@ div.welcome {margin-top: 0}
 .wideload h2 {margin-bottom: 0 !important}
 .wideload h3 {margin-top: 15px !important; margin-bottom: 0 !important}
 .wideload p {margin-top: 5px !important}
+
+/* news */
 div.news {margin: -1px 0 0 211px; padding: 3px 10px 3px 10px; min-width: 586px; text-align: right; font-size: 8pt; border: var(--border); border-bottom: var(--border); border-right: var(--border); background: var(--bg)}
-/* convert the list entry to our title */
 div.news li {margin: 15px 15px -10px -20px; padding: 3px 5px 5px 0; text-align: justify; text-transform: capitalize; font-size: 10pt; list-style: none; color: var(--border_color); border-bottom: 2px dotted var(--border_color)}
 #news h3 {margin: 10px 10px -7px !important; padding: 5px 0 3px 10px; letter-spacing: .1em; text-align: left; text-transform: capitalize; font-size: 10pt; text-shadow: none !important; border: none !important; border-bottom: 1px dotted var(--border_color) !important; box-shadow: none}
 .newsentry:first-child {margin-top: -6px}
@@ -382,6 +384,7 @@ div.news hr:last-child {margin-bottom: 10px !important}
 .newsentry + hr + #newsStatus {margin: 6px 0 -2px 3px}
 .messages #newsStatus, .messages #newsDisplay {float: none}
 .messages #newsDisplay {margin-left: 5px}
+
 /* top navigation */
 .confignav {margin: -16px -16px 5px -16px; padding: 5px 7px 6px; border: var(--border); font-size: 9pt; text-align: center; font-weight: 700; background: var(--th); display: flex; justify-content: center; flex-wrap: wrap}
 #peers .confignav {padding-top: 0; padding-bottom: 0}
@@ -395,7 +398,8 @@ div[id^="config"] .tab a {padding-right: 18px}
 .tab:active {box-shadow: inset 0 0 0 1px #f90, var(--highlight_active); background: var(--hover)}
 .tab:active a {color: var(--bg) !important}
 .tab2 {padding: 7px 15px 5px; z-index: 10; vertical-align: top; color: #565799; text-shadow: 0 1px 1px var(--bg); box-shadow: var(--btn_shadow_active); background: linear-gradient(180deg, var(--bg4), var(--bg2))}
-/* end topnav */
+
+/* configure */
 div.configure {padding: 0}
 div.configure hr {margin: 15px 0; display: none}
 div.configure table {font-size: 9pt; border: var(--border)}
@@ -432,8 +436,15 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {marg
 #reseedconfig tr:nth-child(2) label {margin-right: 10px; white-space: nowrap}
 #reseedconfig td {width: 50%}
 #loggingoptions td:nth-child(2) {width: 170px}
+
 /* profiles */
+a.viewfullentry:hover {filter: drop-shadow(0 0 1px var(--hover))}
+#view_profile h3 {position: relative; z-index: 10}
+#view_profile h3 a::after {margin-top: -1.5px}
+#view_profile .configpeer {margin-right: -5px}
+#profiles_overview {background-image: url(/themes/console/images/svg/profile.svg)}
 #profilelist {margin: 0}
+a.viewfullentry, #profilelist td:last-child a, a[href^="/viewprofile"], .profiledump::after {font-size: 0 !important}
 #profilelist th, #profilelist td {text-align: center}
 #profilelist th {padding: 3px 4px; white-space: nowrap; font-size: 90% !important}
 #profilelist td[colspan="10"], #profilelist tr td[colspan="10"]:hover {padding: 1px !important; background: var(--border_soft)}
@@ -444,8 +455,18 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {marg
 #profilelist td:nth-child(4):not(:empty) {color: #900}
 #profilelist td:nth-child(6) span, #profilelist td:nth-child(7) span, #profilelist td:nth-child(8) span {display: inline-block; min-width: 60px; text-align: right}
 #profilelist tr:hover, #floodfills tr:hover, #ntcpconnections tr:hover, #udpconnections tr:hover, .homelinkedit tr:hover, #portmapper tr:hover {color: var(--ink_hover); background: var(--row_hover)}
+#profilelist td:nth-child(8) span, #profilelist td:nth-child(9) span {min-width: 40px; display: inline-block; text-align: right}
+#profilelist td:nth-child(9) span {min-width: 30px}
+#profilelist td:last-child a::after, a[href^="/viewprofile"]::after, a[href^="/configpeer?"]::after, .profiledump::after {margin: 0 2px; padding: 2px; height: 14px; width: 14px; display: inline-block; vertical-align: middle; border: 1px solid #bbd; border-radius: 2px; background: var(--bg) var(--eye) no-repeat center center / 12px; content: ""}
+#profilelist td:last-child .viewprofile:hover::after, .viewprofile:hover::after, .profiledump:hover::after {background: var(--bg) var(--eye_hover) no-repeat center center / 12px}
+#profilelist td:last-child a[href^="/configpeer"]::after, a[href^="/configpeer?"]::after {background: var(--bg) var(--edit) no-repeat center center / 12px}
+#profilelist td:last-child a[href^="/configpeer"]:hover::after, a[href^="/configpeer?"]:hover::after {background: var(--bg) var(--edit_hover) no-repeat center center / 12px}
+#profilelist td:last-child a:active::after, a[href^="/viewprofile"]:active::after, a[href^="/configpeer?"]:active::after, .profiledump:active::after {box-shadow: var(--btn_shadow_active)}
+#profiles td span {vertical-align: middle}
+#profilelist .nospeed {text-align: center}
+#profilelist .lowlatency, #profilelist .highlatency {width: 12px; min-width: 0 !important; color: #373}
+#profilelist .highlatency {color: #900}
 #thresholds tr:last-child:hover td {background: var(--bg)}
-#profiles_overview {background-image: url(/themes/console/images/svg/profile.svg)}
 #profiles .ok, #ntcpconnections td.queue:empty::before {display: inline-block; font-size: 0; width: 12px; height: 12px; background-size: 11px !important}
 #ntcpconnections td.queue:empty::before {content: ""}
 #thresholds {margin: -1px 0 0}
@@ -460,30 +481,11 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {marg
 .ff {background: linear-gradient(180deg, #fff, #fdb)}
 .reachable {background: linear-gradient(180deg, #fff, #cfc)}
 .unreachable {background: linear-gradient(180deg, #fff, #fcc)}
-#netdb_ourinfo .unreachable {display: none}
 .hidden {color: #999 !important; background: var(--btn)}
 .ssutesting {background: linear-gradient(180deg, #fff, #ffb)}
 .ssuintro {background: linear-gradient(180deg, #fff, #fbf)}
 #profiles .routerid, #peers .routerid {padding: 2px 3px 2px 4px}
-#profiles td span {vertical-align: middle}
-#profilelist .nospeed {text-align: center}
-#profilelist .lowlatency, #profilelist .highlatency {width: 12px; min-width: 0 !important; color: #373}
-#profilelist .highlatency {color: #900}
-#profilelist td:nth-child(8) span, #profilelist td:nth-child(9) span {min-width: 40px; display: inline-block; text-align: right}
-#profilelist td:nth-child(9) span {min-width: 30px}
-#profilelist td:last-child a::after, a[href^="/configpeer?"]::after, a[href^="/viewprofile"]::after, .profiledump::after, .familysearch img {margin: 1px 2px; padding: 2px; width: 14px; height: 14px; display: inline-block; vertical-align: middle; border: 1px solid #bbd; border-radius: 2px; background: var(--bg)}
-a.viewfullentry, #profilelist td:last-child a, a[href^="/viewprofile"], .profiledump::after {font-size: 0 !important}
-#profilelist td:last-child a::after, a[href^="/viewprofile"]::after, a[href^="/configpeer?"]::after, .profiledump::after {margin: 0 2px; height: 14px; width: 14px; display: inline-block; vertical-align: middle; background: var(--bg) var(--eye) no-repeat center center / 12px; content: ""}
-#profilelist td:last-child .viewprofile:hover::after, .viewprofile:hover::after, .profiledump:hover::after {background: var(--bg) var(--eye_hover) no-repeat center center / 12px}
-#profilelist td:last-child a[href^="/configpeer"]::after, a[href^="/configpeer?"]::after {background: var(--bg) var(--edit) no-repeat center center / 12px}
-#profilelist td:last-child a[href^="/configpeer"]:hover::after, a[href^="/configpeer?"]:hover::after {background: var(--bg) var(--edit_hover) no-repeat center center / 12px}
-#profilelist td:last-child a:active::after, a[href^="/viewprofile"]:active::after, a[href^="/configpeer?"]:active::after, .profiledump:active::after {box-shadow: var(--btn_shadow_active)}
-a.viewfullentry:hover {filter: drop-shadow(0 0 1px var(--hover))}
 #profilelist td:last-child img, a[href^="/configpeer?"] img, a[href^="/viewprofile"] img, .profiledump img {display: none}
-#view_profile h3 {position: relative; z-index: 10}
-#view_profile h3 a::after {margin-top: -1.5px}
-#view_profile .configpeer {margin-right: -5px}
-#profile_defs table tr:first-child {border-top: none}
 #floodfills th, #floodfills td {text-align: center}
 #floodfills td:nth-child(2) {white-space: nowrap}
 #floodfills .percentBarOuter, #floodfills .percentBarOuter, #floodfills .percentBarText, #tunnels .percentBarOuter, #tunnels .percentBarOuter, #tunnels .percentBarText {display: inline-block; box-sizing: border-box; float: none}
@@ -497,7 +499,7 @@ a.viewfullentry:hover {filter: drop-shadow(0 0 1px var(--hover))}
 #floodfills td:empty {text-align: center}
 #floodfills td:empty::before, #ntcpconnections td:empty::before, #udpconnections td:empty::before, #profilelist td:empty::before {width: 100%; display: inline-block; text-align: center; opacity: .8; content: "‒"}
 #floodfills td:nth-child(3) span {min-width: 20px; display: inline-block; text-align: right}
-tr.tablefooter:hover td, tr:hover .infohelp {color: var(--ink)}
+#profile_defs table tr:first-child {border-top: none}
 /* end /profiles */
 /* peers - sort icons */
 #udpconnections th {padding-top: 3px; vertical-align: top; background: var(--bg)}
@@ -710,14 +712,12 @@ tr:nth-child(even), #pluginconfig table tr:nth-child(even) td, #profile_defs tr:
 tr:nth-child(odd), #pluginconfig table tr:nth-child(odd) td, .main#profiles ul#banlist, #profile_defs table tr:nth-child(odd), #profile_defs table tr:nth-child(even) {background: var(--bg2)}
 #sidebarconf tr:last-child td {background: var(--bg)}
 .configtable th {text-align: left}
-/* begin home page */
+
+/* home */
 h4.app, h4.app2 {margin: 0 0 7px; padding: 7px 10px 6px; word-spacing: .1em; letter-spacing: .08em; text-transform: uppercase; font-size: 11pt; border: var(--border); border-left: none; border-right: none; box-shadow: var(--highlight)}
 h4.app, h4.app2, #sitemap h3 {padding-left: 32px; background: url(images/favicon.svg) no-repeat 8px center / 18px, var(--bg)}
 h4.app {margin-top: -5px}
 h4.app2 {margin-top: 5px !important; clear: left; background: var(--planet) no-repeat 8px center / 18px, var(--bg)}
-#sitemap h3:nth-of-type(2) {background: url(/themes/console/images/svg/info.svg) no-repeat 8px center / 18px, var(--bg)}
-#sitemap h3:nth-of-type(3) {background: var(--configure) no-repeat 8px center / 18px, var(--bg)}
-#sitemap h3:nth-of-type(4) {background: var(--help) no-repeat 8px center / 18px, var(--bg)}
 h4.app img, h4.app2 img {display: none}
 h4.app a, h4.app2 a {font-size: 0}
 h4.app a::after, h4.app2 a::after {margin: 1px -2px 0 0; width: 16px; height: 16px; display: inline-block; vertical-align: middle; background: var(--settings) no-repeat center center / 16px; content: ""; opacity: .8}
@@ -725,28 +725,33 @@ h4.app a:hover::after, h4.app2 a:hover::after, h4.app a:focus::after, h4.app2 a:
 #chooselang::after, #configbandwidth::after {content: none}
 #chooselang img, #configbandwidth img {margin: 1px -5px 0 20px; display: inline-block; opacity: .8}
 h4.app a:hover img, h4.app2 a:hover img, h4.app a:hover::after, h4.app2 a:hover::after {margin-top: -1px; opacity: 1; transform: scale(1.3)}
+div.appgroup {margin: 0; padding: 0 8px; width: auto}
 div.ag2 {margin: 0 -15px -9px}
-div.app img, .sitemaplink img {filter: grayscale(.6)}
-div.app:hover img, .sitemaplink:hover img {filter: none}
-div.app {margin: 3px; padding: 0; width: 140px; float: left; text-align: center; border: none; border: var(--border); background: var(--bg)}
-#sitemap div.app {float: none}
+div.app {margin: 3px; padding: 0; width: 140px; position: relative; float: left; text-align: center; border: none; border: var(--border); background: var(--bg)}
 div.app:hover {border: 1px solid var(--hover); cursor: pointer}
+div.app img, .sitemaplink img {filter: grayscale(.6)}
+div.app img {padding: 10px 46px 9px; width: auto; height: 32px; max-height: 32px; max-width: 32px}
+div.app:hover img, .sitemaplink:hover img {filter: none}
 div.app:hover a, .app:hover .applabel a {color: var(--hover) !important}
-.app td {vertical-align: middle}
+div.app.js:hover::before {padding: 1px 3px 5px; display: inline-block; position: absolute; top: -1px; left: -1px; line-height: 1; border: 1px solid var(--hover); content: "*js"}
+div.app:active img {transform: scale(.9)}
+div.app:last-child {margin-bottom: 10px}
+div.app:hover a, .applabel a:focus {color: var(--hover); outline: none}
+div.app:hover img, .appimg a:focus {filter: drop-shadow(0 0 1px rgba(255, 102, 0, .6)) saturate(150%); outline: none}
+div.app:hover .applabel {box-shadow: none}
+.app table {margin: auto; width: auto; border: 0; background: none}
+.app tr {margin: 0; border: 0; background: none}
+.app td {margin: 0; padding: 0; vertical-align: middle; border: 0; background: none}
+.appimg {min-height: 42px}
+.appimg a {width: 100%; display: inline-block}
+div.app:hover .appimg .extlink::after {width: 21px; height: 18px; display: inline-block; position: absolute; top: -1px; right: -1px; border: 1px solid #f50; background: url(images/newtab.png) no-repeat 4.5px center / 12.5px 10px; opacity: .75; content: ""}
 .applabel {margin: 0; padding: 3px 2px; width: 136px; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center; text-transform: lowercase; font-size: 8pt; border-top: var(--border)}
+.applabel:hover {box-shadow: none}
 .applabel a {margin: 0; padding: 1px; display: inline-block; width: calc(100% - 2px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
 .app:hover .applabel {border-top: 1px solid var(--hover); background: var(--bg)}
 .app:active .applabel {color: var(--bg) !important; box-shadow: var(--highlight) !important; background: var(--hover) !important}
 .app:active .applabel a, .app:active .applabel a:visited {color: var(--bg) !important}
-div.app:active img {transform: scale(.9)}
-div.app:last-child {margin-bottom: 10px}
-div.app a:link, div.app a:visited, div.app a:hover, div.app a:active {text-decoration: none}
-div.app:hover a, .applabel a:focus {color: var(--hover); outline: none}
-div.app:hover img, .appimg a:focus {filter: drop-shadow(0 0 1px rgba(255, 102, 0, .6)) saturate(150%); outline: none}
-div.app:hover .applabel {box-shadow: none}
-.appimg {min-height: 42px}
-.appimg a {width: 100%; display: inline-block}
-div.appgroup {margin: 0; padding: 0 8px; width: auto}
+
 /* home search */
 #searchbar {margin: -24px 10px 0 10px; padding: 8px 0 2px; width: auto; white-space: nowrap; text-align: center}
 #searchbar span {margin: 2px 3px; display: inline-block; position: relative; overflow: hidden}
@@ -761,12 +766,25 @@ div.appgroup {margin: 0; padding: 0 8px; width: auto}
 #searchbar input:focus {box-shadow: var(--btn_shadow_active)}
 #searchbar input::placeholder {opacity: 0}
 #searchbar input:hover::placeholder {font-style: italic; opacity: .6}
-/* end search */
-div.app img {padding: 10px 46px 9px; width: auto; height: 32px; max-height: 32px; max-width: 32px}
-.app table {margin: auto; width: auto; border: 0; background: none}
-.app tr {margin: 0; border: 0; background: none}
-.app td {margin: 0; padding: 0; border: 0; background: none}
-.applabel:hover {box-shadow: none}
+
+/* sitemap */
+#sitemapcontainer {margin: 0 -16px -2px; padding: 4px 0 0}
+#sitemapcontainer h3 {margin-bottom: 12px; text-transform: uppercase; letter-spacing: .08em}
+#sitemapcontainer h3:nth-child(n+2) {margin-top: 4px}
+#sitemap h3:nth-of-type(2) {background: url(/themes/console/images/svg/info.svg) no-repeat 8px center / 18px, var(--bg)}
+#sitemap h3:nth-of-type(3) {background: var(--configure) no-repeat 8px center / 18px, var(--bg)}
+#sitemap h3:nth-of-type(4) {background: var(--help) no-repeat 8px center / 18px, var(--bg)}
+.sitemapLink, .sitemapLabel {width: 140px; display: inline-block; text-align: center; border: var(--border); background: var(--bg)}
+.sitemapLink {margin: 1px -8px 8px 14px}
+html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel {width: 160px}
+.sitemapLink:hover, .sitemapLink:hover .sitemapLabel {border-color: var(--hover)}
+.sitemapLink img {padding: 12px 10px 10px; height: 32px; width: 32px}
+.sitemapLink:hover img {filter: drop-shadow(0 0 1px var(--hover))}
+.sitemapLink:active img {transform: scale(.8)}
+.sitemapLink:active .sitemapLabel {color: var(--bg); box-shadow: var(--highlight); background: var(--hover) !important}
+.sitemapLabel {margin: 0 0 -4px; padding: 4px 0; display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 9pt; border: none; border-top: var(--border); contain: layout}
+.sitemapLink:hover .sitemapLabel {color: var(--hover)}
+.sitemapLink:active .sitemapLabel {color: #fff}
 
 p.infohelp + hr, p.infohelp + p + hr, #tunnelconfig + hr {/*configservice */
 display: none}
@@ -787,6 +805,8 @@ h3#servicedebug a, h3#graphinfo a, h3#browseronstart a {float: right; font-size:
 h3 + .statusnotes {margin-top: -1px}
 .statusnotes {margin: -6px 0 7px; padding: 8px 0; color: var(--ink); font-style: italic; font-size: 9pt; text-align: center; border: var(--border); background: var(--bg)}
 .statusnotes + .statusnotes {margin-top: -8px !important}
+
+/* jobs */
 .joblog {margin: 10px 0; line-height: 1.3}
 .joblog li {word-wrap: break-word; line-height: 1.05}
 .joblog li:first-child {margin-top: -5px}
@@ -823,7 +843,7 @@ h3#totaljobstats {margin: 8px 0 -1px}
 #schedjobs ul {margin: 0 !important; padding: 0 !important; columns: 272px auto; column-gap: 20px}
 #schedjobs li {margin: 2px 0; min-width: 272px; display: inline-block; border-radius: 0 15px 15px 0}
 #schedjobs li:first-child {padding-top: 0 !important}
-#oldhome {margin-bottom: 10px}
+
 .homelinkedit th:first-child, #sidebarconf th:first-child, #consolepass th:first-child {width: 5%; font-size: 0 !important; background: var(--nuke) no-repeat center center / 14px , var(--th)}
 .homelinkedit th:last-child, .homelinkedit th:nth-child(3) {text-align: left !important}
 .homelinkedit input[type=text], #reseedconfig input[type=text], #reseedconfig input[type=password], #reseedconfig .optbox, #reseedconfig textarea {margin-left: 0}
@@ -999,6 +1019,8 @@ td#pw_adduser input {margin: 5px 20px 5px 5px !important}
 
 /* netdb */
 #netdb hr {margin: 2px 0 !important; display: none; width: 100%}
+#netdb_ourinfo .unreachable {display: none}
+.familysearch img {margin: 1px 2px; padding: 2px; height: 14px; width: 14px; display: inline-block; vertical-align: middle; border: 1px solid #bbd; border-radius: 2px; background: var(--bg)}
 #sybilanalysis hr {margin: 12px 0; display: block}
 #netdb ul, .netdb_addresses {margin: 0; padding: 0; columns: auto; line-height: 1.2}
 #netdb li, #netdb li:first-child {margin: 1px 0; padding: 0; display: inline-block; vertical-align: middle}
@@ -1022,9 +1044,6 @@ a.keysearch {padding: 2px 5px 2px 15px; display: inline-block; font-size: 90%; b
 #leasesetsummary tr:last-child td:last-child {text-align: left}
 .config_experimental {margin-left: 2px; font-size: 0}
 .config_experimental::after {margin-bottom: -2px; width: 16px; height: 16px; display: inline-block; background: var(--experimental) no-repeat right center / 16px; content: ""}
-div.app {position: relative}
-div.app:hover .appimg .extlink::after {width: 21px; height: 18px; display: inline-block; position: absolute; top: -1px; right: -1px; border: 1px solid #f50; background: url(images/newtab.png) no-repeat 4.5px center / 12.5px 10px; opacity: .75; content: ""}
-div.app.js:hover::before {padding: 1px 3px 5px; display: inline-block; position: absolute; top: -1px; left: -1px; line-height: 1; border: 1px solid var(--hover); content: "*js"}
 #lookupCondensed {display: none}
 .netdbentry {margin-top: 10px !important}
 .netdbentry th {font-weight: 400}
@@ -1677,6 +1696,7 @@ input[type="file"]:hover {cursor: pointer}
 .routerid img {margin-bottom: -1px}
 
 /* /peers */
+#peers img[src$="bound.svg"], #profiles img[src$="bound.svg"], #tunnels img[src$="bound.svg"] {opacity: 0}
 #peerdefs img {font-size: 0}
 #peers p.infohelp {margin-top: 14px}
 #peers .spacer {display: none}
@@ -1707,24 +1727,6 @@ input[type="file"]:hover {cursor: pointer}
 #jardump a tt {padding-left: 13px; background-size: 11px}
 #routerinformation tr:nth-child(n+2) a:not(#revision) {display: none}
 #routerinformation table:hover tr:nth-child(n+2) a {display: inline}
-
-/* sitemap */
-#sitemapcontainer {margin: 0 -16px -2px; padding: 4px 0 0}
-#sitemapcontainer h3 {margin-bottom: 12px; text-transform: uppercase; letter-spacing: .08em}
-#sitemapcontainer h3:nth-child(n+2) {margin-top: 4px}
-.sitemapLink, .sitemapLabel {width: 140px; display: inline-block; text-align: center; border: var(--border); background: var(--bg)}
-html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel {width: 160px}
-.sitemapLink {margin: 1px -8px 8px 14px}
-.sitemapLabel {margin: 0 0 -4px; padding: 4px 0; display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 9pt; border: none; border-top: var(--border)}
-.sitemapLink img {padding: 12px 10px 10px; height: 32px; width: 32px}
-.sitemapLink:hover img {filter: drop-shadow(0 0 1px var(--hover))}
-.sitemapLink:active img {transform: scale(.8)}
-.sitemapLink:active .sitemapLabel {color: var(--bg); box-shadow: var(--highlight); background: var(--hover) !important}
-#sitemap .appgroup {padding: 0}
-#sitemap div.app {margin: 1px 3px 8px; width: 140px !important; border-color: var(--border_color); background: var(--bg2)}
-#sitemap div.app img {padding-left: 0; padding-right: 0}
-#sitemap .applabel {width: 136px !important; border-color: var(--border_color); background: var(--bg2)}
-#sitemap div.app:hover, #sitemap div.app:hover .applabel, .sitemapLink:hover, .sitemapLink:hover .sitemapLabel {border-color: var(--hover)}
 
 /* help section */
 #help .confignav + div:not(#changelog):last-of-type {margin: 20px 0 5px !important}
@@ -1803,7 +1805,6 @@ p#gatherstats {margin: 15px 0 !important}
 .ptcp::after {background: var(--ptcp) no-repeat center center / 24px}
 #tunnels .cells:first-child {width: 1% !important; max-width: 64px !important; min-width: 64px !important}
 
-.tunnelBuildStatus.rejecting {color: #933}
 #filterlist code {margin: 0 10px 10px; padding-left: 12px; display: inline-block; border-left: 2px solid #272}
 #filterlist code + h3, #filterlist ul + h3 {margin-top: 5px}
 #filterlist p + h3 {margin-top: 10px}
@@ -1872,6 +1873,11 @@ p#gatherstats {margin: 15px 0 !important}
 #enablefullstats {padding: var(--pad_info); background: var(--stats) no-repeat 15px center / 28px}
 
 /* /tunnelpeercount */
+#tunnels .percentBarInner {background: var(--flatbar)}
+#tunnels .percentBarOuter:hover .percentBarInner {box-shadow: none; background: transparent}
+#tunnels .percentBarOuter, #tunnels .percentbarInner, #tunnels .percentBarText {display: inline-block}
+#tunnels .percentBarOuter, #tunnels .percentBarText {width: 100px !important}
+#tunnels .percentBarOuter {background: var(--bg2) !important; text-align: left}
 #tunnels #peercount {padding-left: 30px !important; background: var(--hardhat) no-repeat 8px 6px / 18px, linear-gradient(180deg, var(--bg)50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(90deg, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important}
 #tunnels #tunnelPeerCount .cells {white-space: nowrap; width: auto !important; max-width: 0 !important; min-width: 0 !important}
 #tunnels #tunnelPeerCount .cells.bar, #tunnels #tunnelPeerCount th.bar, #tunnels #tunnelPeerCount td:nth-child(n+3), #tunnels #tunnelPeerCount th:nth-child(n+3) {padding-left: 8px !important; padding-right: 8px !important; width: 10% !important; white-space: nowrap}
@@ -1879,21 +1885,17 @@ p#gatherstats {margin: 15px 0 !important}
 #tunnels #tunnelPeerCount td:first-child span {border: none !important; box-shadow: none !important; background: none}
 #tunnels #tunnelPeerCount td:first-child > * {vertical-align: middle; line-height: 1.2}
 #tunnels #tunnelPeerCount td:nth-child(2) {white-space: normal; word-break: break-all}
-#tunnels .percentBarInner {background: var(--flatbar)}
-#tunnels .percentBarOuter:hover .percentBarInner {box-shadow: none; background: transparent}
+#tunnels #tunnelPeerCount .routerid {padding: 0 4px 0 2px !important}
 #tunnels #tunnelPeerCount tr:not(:last-child) td {padding: 3px !important}
 #tunnelPeerCount td:first-child span {margin: 0 1px; vertical-align: middle}
 #tunnelPeerCount td:nth-child(2) {text-align: center}
 #tunnelPeerCount .tunnel_cap {padding: 1px 2px 0}
-#tunnels #tunnelPeerCount .routerid {padding: 0 4px 0 2px !important}
 #tunnelPeerCount .version {padding-bottom: 0}
 #tunnelPeerCount .configpeer {margin: 0 0 0 3px !important; display: inline-block; vertical-align: middle}
 #tunnelPeerCount tr:not(:last-child):hover {background: var(--row_hover)}
-#tunnels .percentBarOuter, #tunnels .percentbarInner, #tunnels .percentBarText {display: inline-block}
-#tunnels .percentBarOuter, #tunnels .percentBarText {width: 100px !important}
-#tunnels .percentBarOuter {background: var(--bg2) !important; text-align: left}
 #tunnels .left, #tunnels .right {margin: 0; width: 50%; display: inline-block; line-height: 1; vertical-align: text-bottom}
-#tunnels img[src$="bound.png"], #peers img[src$="bound.png"] {opacity: 0}
+#tunnels img[src$="bound.png"] {opacity: 0}
+
 .inbound, .outbound  {width: 16px; height: 16px; display: inline-block; vertical-align: middle; background: var(--in) no-repeat center center / 16px !important}
 .outbound  {background: var(--out) no-repeat center center / 16px !important}
 .inbound.small, .outbound.small {background-size: 12px !important; background-position: center center !important}
@@ -1976,7 +1978,6 @@ th[role="columnheader"] {position: relative}
 .leasesets_container .lazy.lazyhide, .leasesets_container .lazy.lazyhide td, .leasesets_container .lazy:not(.lazyshow) {opacity: 1; contain: none}
 #tunnelpeercount .lazy {contain: none}
 
-#peers img[src$="bound.svg"], #profiles img[src$="bound.svg"], #tunnels img[src$="bound.svg"] {opacity: 0}
 .viewedit br {display: none}
 .viewprofile, .configpeer, .familysearch {font-size: 0}
 
