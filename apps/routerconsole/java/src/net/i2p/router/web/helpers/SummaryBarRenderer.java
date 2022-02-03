@@ -857,16 +857,16 @@ class SummaryBarRenderer {
                    "<tr title=\"")
            .append(_t("The number of peers available for building client tunnels"))
            .append("\">" +
-                   "<td align=\"left\"><b>")
+                   "<td align=\"left\"><a href=\"/profiles?f=1#profilelist\"><b>")
            .append(_t("Fast"))
-           .append("</b></td><td class=\"digits\" align=\"right\">")
+           .append("</b></a></td><td class=\"digits\" align=\"right\">")
            .append(_helper.getFastPeers())
            .append("</td></tr>\n" +
 
                    "<tr title=\"")
            .append(_t("The number of peers available for building exploratory tunnels"))
            .append("\">" +
-                   "<td align=\"left\"><a href=\"/profiles?f=1\"><b>")
+                   "<td align=\"left\"><a href=\"/profiles?f=1#highcap_peers\"><b>")
            .append(_t("High capacity"))
            .append("</b></a></td><td class=\"digits\" align=\"right\">")
            .append(_helper.getHighCapacityPeers())
@@ -1101,9 +1101,9 @@ class SummaryBarRenderer {
             buf.append("<tr title=\"")
                .append(_t("Tunnels we are using to provide or access services on the network")).append(" (").append(_t("inbound / outbound")).append(")")
                .append("\">" +
-                       "<td align=\"left\"><b>")
+                       "<td align=\"left\"><a href=\"/tunnels\"><b>")
                .append(_t("Client"))
-               .append("</b></td><td class=\"digits\" align=\"right\">")
+               .append("</b></a></td><td class=\"digits\" align=\"right\">")
 //               .append(_helper.getInboundClientTunnels() + _helper.getOutboundClientTunnels())
                .append(_helper.getInboundClientTunnels()).append(" / ").append(_helper.getOutboundClientTunnels())
                .append("</td></tr>\n");
@@ -1112,9 +1112,9 @@ class SummaryBarRenderer {
         buf.append("<tr title=\"")
            .append(_t("Used for building and testing tunnels, and communicating with floodfill peers")).append(" (").append(_t("inbound / outbound")).append(")")
            .append("\">" +
-                   "<td align=\"left\"><b>")
+                   "<td align=\"left\"><a href=\"/tunnels#exploratory\"><b>")
            .append(_t("Exploratory"))
-           .append("</b></td><td class=\"digits\" align=\"right\">")
+           .append("</b></a></td><td class=\"digits\" align=\"right\">")
 //           .append(_helper.getInboundTunnels() + _helper.getOutboundTunnels())
            .append(_helper.getInboundTunnels()).append(" / ").append(_helper.getOutboundTunnels())
            .append("</td></tr>\n");
