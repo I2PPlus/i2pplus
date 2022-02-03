@@ -1,10 +1,12 @@
 /* I2P Theme: Classic */
 /* I2P Description: Light blue "classic" I2P theme; optimized for less capable browsers and system specifications. */
 /* Author: dr|z3d */
-@import url(global.css); body {margin: 3px; padding: 0; text-align: left; line-height: 1.3; background: var(--bg_doc)}
-@supports (text-justify: auto) {body {background-attachment: fixed}/* Firefox 55+ */}
-.routersummary, .routersummaryouter, h1, .main, iframe, tr {contain: layout}
-#sb_logo img, .routersummary h3, .routersummary h3 a, #sb_internals, #sb_advanced, #sb_services, .confignav, *::before, *::after, div.app, .themechoice, .langselect, .newsAuthor, #newsDisplay, #netdbcountrylist img, .viewfullentry, .sybil_routerinfo th img, .graphspanel, h1 {user-select: none}
+
+@import url(global.css);
+
+body {margin: 3px; padding: 0; text-align: left; line-height: 1.3; background: var(--bg_doc); background-attachment: fixed}
+
+/* globals */
 .hide, .hideme {display: none}
 tr, h3, h4 {contain: paint}
 div.clearer {height: 0; line-height: 0; clear: left}
@@ -12,18 +14,30 @@ i {padding-right: 1px}
 tt, pre, textarea, code, .bucket, #logs li, #servicelogs li {font: 8.5pt var(--monospaced)}
 textarea {font-size: 9pt}
 hr {margin: 3px 0; height: 2px; border: none; background: var(--border_color)}
+.footnote, .footnote hr, .topness {display: none !important}
+.routersummary, .routersummaryouter, h1, .main, iframe, tr {contain: layout}
+#sb_logo img, .routersummary h3, .routersummary h3 a, #sb_internals, #sb_advanced, #sb_services, .confignav, *::before, *::after, div.app, .themechoice, .langselect, .newsAuthor, #newsDisplay, #netdbcountrylist img, .viewfullentry, .sybil_routerinfo th img, .graphspanel, h1 {user-select: none}
+a:hover:not(:active) .b32 {color: var(--hover) !important}
+a:active .b32 {color: var(--active) }
+.main a:visited[target="_blank"] {color: var(--visited)}
+a.script {word-spacing: normal; letter-spacing: normal}
+#sitemapcontainer a:visited, #home .extlink:visited, .main .applabel a:visited {color: var(--a)}
+pre {margin: 0 20px; padding-top: 10px; width: 95%; overflow: auto; font-size: 8.5pt}
+tt, code, .bucket {color: var(--code)}
+
 /* sidebar */
 .routersummaryouter {margin: 0; padding: 0; width: 193px; position: absolute; border: none}
 .routersummary {margin: 0 0 5px; padding: 9px 1px 7px 1px; width: 204px; line-height: 1.25; word-wrap: break-word; text-align: center; font-size: 9pt; color: inherit; border: var(--border); background: var(--bg)}
 .routersummary a {padding: 2px; vertical-align: middle; user-select: none}
-/* siderbar logo */
+
+/* logo */
 #sb_logo {margin-left: -2px; height: 32px !important}
 #sb_logo img {width: 200px; height: auto; filter: sepia(1) hue-rotate(190deg); user-select: none}
 #sb_logo a:active img {transform: scale(.97); filter: none}
 #sb_logo a img {border: none; opacity: .9; image-rendering: -webkit-optimize-contrast}
 #sb_logo a:hover img, #sb_logo a:active img {opacity: 1; filter: none}
 #sb_logo a:hover img, #sb_logo a img {transition: ease filter .08s}
-/* end sb logo */
+
 .routersummary h4 a {padding: 0; vertical-align: text-bottom}
 #sidebar input[type=text] {text-align: right}
 .routersummary button[type=submit] {margin: 2px 2px 1px; min-width: 87px}
@@ -38,7 +52,7 @@ hr {margin: 3px 0; height: 2px; border: none; background: var(--border_color)}
 .routersummary h3:hover:not(:active) a, #sidebar td:first-child a:hover b, #sidebar td:first-child a:visited:hover b {color: var(--hover) !important}
 .routersummary h3:active {box-shadow: var(--btn_shadow_active); background: var(--header_active)}
 .routersummary h3:active a {color: var(--active); transform: scale(.95) translateY(2px)}
-.routersummary h4 {margin: -7px -1px -7px -1px !important; padding: 8px 2px; line-height: 1.08; text-transform: capitalize; font-size: 8.5pt; color: var(--note); border: none; box-shadow: inset 0 0 2px 1px #f2f7fa; text-decoration: none !important; background: var(--label_focus)}
+.routersummary h4 {margin: -7px -1px -7px -1px !important; padding: 8px 2px; line-height: 1.08; text-transform: capitalize; font-size: 8.5pt; color: #1f7096; border: none; box-shadow: inset 0 0 2px 1px #f2f7fa; text-decoration: none !important; background: var(--label_focus)}
 .routersummary h3 a {width: calc(100% - 5px); display: inline-block; white-space: normal; text-decoration: none}
 #sidebar tr, .routersummary table, .routersummary td {background: none; border: none}
 .routersummary table {margin: -5px 0 -5px 0; padding: 0; width: 204px !important; overflow: hidden; table-layout: fixed; text-align: center; font-size: 8pt}
@@ -86,7 +100,15 @@ p:empty + .sb_notice {margin-top: 7px}
 #sb_warning + hr {opacity: 0}
 #sb_warning + hr + form {margin-top: -1px}
 #sb_warning + p:empty + form {margin-top: 10px; margin-bottom: -3px}
+#sb_internals, #sb_services, #sb_advanced {margin-top: -5px !important}
+#minigraph {margin-top: -22px; height: 40px; width: 250px; position: relative; z-index: 0}
+#minigraphcontainer {margin-top: -57px; margin-left: 1px; width: 240px; height: 38px; background-size: 239px 40px; background-repeat: no-repeat}
+#sb_graphcontainer {margin: -5px 1px -6px 1px !important; overflow: hidden; border: var(--border); box-shadow: var(--highlight); background: repeating-linear-gradient(90deg, rgba(0, 0, 0, 0) 15px, rgba(120, 120, 255, .5) 16px, rgba(0, 0, 0, 0) 16px, rgba(0, 0, 0, 0) 30px), repeating-linear-gradient(to top, rgba(0, 0, 0, 0) 11px, rgba(120, 120, 255, .5) 12px, rgba(255, 255, 255, 0) 12px, rgba(255, 255, 255, 0) 24px)}
+#sb_localtunnels td[colspan="3"] {line-height: 20px; font-size: 0; background: var(--down) !important}
+.routersummary table {position: relative}
+.routersummary table:not(#sb_localtunnels):not(#sb_services)::before {width: 0; height: 2px; display: block; position: absolute; top: -4px; left: -1px; background: #bfb; content: ""; animation: ease-in bar .15s reverse; will-change: transform}
 @supports not (-moz-appearance: none) {#sb_warning + p:empty + form {margin-top: 12px}}
+
 /* sidebar news */
 .sb_newsheadings {margin: -3px 0 -7px 0; padding: 0; text-align: right; font-size: 8pt}
 .sb_newsheadings table {margin: -6px 0 2px !important; width: 100%; table-layout: auto; background: var(--bg)}
@@ -95,10 +117,11 @@ p:empty + .sb_notice {margin-top: 7px}
 .sb_newsheadings td {padding-left: 20px; padding-right: 8px; vertical-align: middle; text-align: left; word-spacing: .1em; background: var(--star2) no-repeat 4px 4px / 12px; transition: ease background .2s}
 .sb_newsheadings tr:hover td {background-color: var(--row_hover); background-blend-mode: normal; transition: ease background .1s}
 .sb_newsheadings td a {margin: 0; padding: 0; width: 100%; display: inline-block; line-height: 1.1}
-/* end sidebar news */
+
 div.refresh {margin-top: 10px; margin-bottom: 10px; padding: 2px 0}
 .routersummary p {padding: 0}
 .routersummary a:hover {color: var(--hover)}
+
 /* network status */
 .sb_netstatus, .tunnelBuildStatus {margin: -6px 0 -7px; padding: 6px 5px; width: calc(100% - 12px); display: inline-block; vertical-align: text-bottom; line-height: 1.2; text-shadow: 0 1px 1px var(--bg); border: var(--border); box-shadow: var(--highlight), 0 0 1px rgba(96,96,96,.5)}
 .routersummary .firewalled {box-shadow: var(--highlight), inset 0 0 0 2px rgba(96,96,255,.2); background: repeating-linear-gradient(135deg, rgba(220,255,220,.3) 2px, rgba(255,255,220,.3) 3px, rgba(220,255,220,.3) 5px)}
@@ -120,7 +143,7 @@ div.refresh {margin-top: 10px; margin-bottom: 10px; padding: 2px 0}
 .sb_netstatus.running:not(:hover)::before, .sb_netstatus.hidden:not(:hover)::before, .sb_netstatus.firewalled:not(:hover)::before, .sb_netstatus.testing:not(:hover)::before {background-size: 18px !important}
 .sb_netstatus.testing, .sb_netstatus.running, .sb_netstatus.hidden, .sb_netstatus.firewalled {font-size: 0}
 .sb_netstatus.running:hover, .sb_netstatus.hidden:hover, .sb_netstatus.firewalled:hover, .sb_netstatus.testing:hover {font-size: inherit}
-/* end network status */
+
 /* tunnel build status */
 .tunnelBuildStatus {color: #393}
 .tunnelBuildStatus::before {margin: -3px 0 -1px; width: 16px; height: 16px; display: inline-block; vertical-align: middle; border-radius: 50%; content: ""; transform: scale(.7)}
@@ -132,7 +155,7 @@ div.refresh {margin-top: 10px; margin-bottom: 10px; padding: 2px 0}
 .tunnelBuildStatus.rejecting::before {background: var(--tunn_reject) no-repeat center center / 15px}
 .tunnelBuildStatus.hidden {color: #999}
 .tunnelBuildStatus.hidden::before {background: var(--tunn_hidden) no-repeat center center / 15px}
-/* end tunnel build status */
+
 /* mini sidebar graph */
 #sb_bandwidthgraph {margin: -20px 0 0 0; padding: 0; width: 202px !important; border-collapse: separate; border-spacing: 0; border: var(--border); will-change: transform}
 #minigraph:hover {cursor: zoom-in}
@@ -140,13 +163,14 @@ div.refresh {margin-top: 10px; margin-bottom: 10px; padding: 2px 0}
 #sb_graphstats {padding: 2px 8px; position: relative; z-index: 10; display: inline-block; font-weight: 700; border: var(--border); border-top: none; border-radius: 0 0 3px 3px; box-shadow: var(--highlight); background: var(--label_focus); opacity: 0; transition: ease opacity .3s; pointer-events: none}
 #sb_graphcontainer:hover #sb_graphstats {opacity: .8; transition: ease opacity .3s}
 #sb_graphcontainer {margin: 0 2px -9px 1px; padding: 0 5px 0 0; height: 38px; background-color: var(--bg); background-position: left 0 top -2px; background-size: 200px 36px; background-repeat: no-repeat}
-/* end mini sidebar graph */
+
 /* status bars */
 .percentBarOuter, #bandwidthTestRunning {width: 196px; margin: -4px 0 -5px 3px; position: relative; text-align: center; border: var(--border); box-shadow: 0 0 1px rgba(200,200,200,.8), var(--highlight); box-shadow: var(--btn_shadow_active); background: repeating-linear-gradient(90deg, rgba(210, 210, 255, .7) 1px, rgba(210, 210, 255, .7) 2px, rgba(230, 230, 255, .7) 2px, rgba(230, 230, 255, .7) 4px)}
 .percentBarInner {vertical-align: middle; border: none; border-right: 1px solid var(--border_soft); height: 14px; max-width: 100%; background: linear-gradient(90deg, rgba(0,255,0,.1) 65px, rgba(255,255,0,.1) 110px, rgba(255,128,0,.1) 175px, rgba(255,0,0,.1)), linear-gradient(180deg, rgba(255, 255, 255, .9), rgba(240, 240, 250,.7) 50%, rgba(220, 220, 255, .7) 50%, rgba(140, 140, 220, .9)); box-shadow: var(--highlight)}
 .percentBarInner[style="width: 100%;"] {border-right: none}
 .percentBarText {white-space: nowrap; text-align: center; font-weight: 700 !important; color: var(--ink); text-shadow: 0 1px 1px rgba(255,255,255,.8); float: left; width: 100%; height: 14px; padding: 0; opacity: 0; transition: ease opacity .2s}
 .percentBarOuter:hover .percentBarText {opacity: 1; transition: ease opacity .2s}
+
 /* updates download bar */
 .sb_update b {line-height: 1.2}
 .sb_updatestatus {margin: -8px 2px 5px !important; padding: 3px 0 4px; display: block; font-style: italic; color: var(--ink); border: var(--border); border-top: none; border-radius: 0 0 3px 3px; box-shadow: var(--highlight); background: linear-gradient(90deg, var(--bg3), #eff2ff 30%, #eff2ff 60%, var(--bg3)); box-sizing: border-box}
@@ -156,9 +180,7 @@ div.refresh {margin-top: 10px; margin-bottom: 10px; padding: 2px 0}
 .sb_info .percentBarText {padding-top: 2px; mix-blend-mode: multiply; color: #33f}
 #sb_memoryBar .percentBarText {padding: 1px 0 4px; width: 70%; float: none; position: absolute; top: -20px; left: 15%; right: 15%; vertical-align: middle; font-size: 110%; border-radius: 1px; background: #eef; filter: drop-shadow(0 0 1px #ddf) drop-shadow(0 0 1px #779)}
 #sb_memoryBar .percentBarText::after {width: 0; height: 0; position: absolute; left: calc(50% - 5px); bottom: -15px; border-style: solid; border-width: 8px; border-color: #eef transparent transparent transparent; content: ""}
-/* end updates download bar */
-/* end status bars */
-/* end sidebar */
+
 /* welcome */
 div[lang="es"] li, div[lang="pt"] li, div[lang="sv"] li, div[lang="zh"] li {list-style: none}
 div[lang="sv"] li::first-letter {text-transform: uppercase}
@@ -185,14 +207,7 @@ p + .twocol {margin: 10px 30px}
 #console div[lang="es"] .twocol {margin-left: 0}
 .twocol li {margin-left: 20px}}
 .main#console p {padding-top: 0; padding-bottom: 0}
-/* end welcome */
-.main a:visited[target="_blank"] {color: var(--visited)}
-#sitemapcontainer a:visited, #home .extlink:visited, .main .applabel a:visited {color: var(--a)}
-a:hover:not(:active) .b32 {color: var(--hover) !important}
-a:active .b32 {color: var(--active) }
-a.script {word-spacing: normal; letter-spacing: normal}
-pre {margin: 0 20px; padding-top: 10px; width: 95%; overflow: auto; font-size: 8.5pt}
-tt, code, .bucket {color: var(--code)}
+
 /* buttons & inputs */
 select {margin: 3px 5px; min-width: 120px}
 @supports not (-moz-appearance: none) {select {padding: 5px 20px 5px 8px !important}}
@@ -216,11 +231,7 @@ input[type=file]::file-selector-button {margin: 3px 8px 3px 0}
 button:hover, input[type=submit]:hover, input[type=reset]:hover {color: var(--ink); background: var(--btn_hover)}
 button:active, input[type=submit]:active, input[type=reset]:active {background-color: var(--bg)}
 input[name="refreshInterval"] {width: 80px; min-width: 80px; text-align: right}
-/* confignet tidyup */
-#netconfig .optbox {margin: 4px}
-#netconfig input[type=text] + br + .optbox, #netconfig .optbox[name="ntcpAutoPort"] {margin-top: 3px}
-#netconfig input[name*="ost"] {width: 250px}
-/* end confignet tidyup */
+
 /* graphical buttons */
 input[type=submit], input[type=reset], button {margin: 3px 8px 3px 0; padding: 4px 5px; text-decoration: none; font: 9pt var(--bodyfont); color: var(--ink_light); border: var(--border); border-radius: 3px; box-shadow: var(--btn_shadow); background: var(--btn); background-size: 14px, 100%}
 button a, button a:visited {font-weight: 400; color: var(--ink_light)}
@@ -282,6 +293,7 @@ input.stop {padding: 5px 8px 5px 23px; background: var(--shutdown) no-repeat 8px
 input.stop:hover, button.stop:focus, input.stop:active {background: var(--shutdown_hover) no-repeat 8px center / 12px, var(--btn_hover)}
 button.search {padding: 5px 7px 5px 25px; background: var(--search) no-repeat 7px 6px / 14px, var(--btn)}
 button.search:hover, button.search:focus {background: var(--search) no-repeat 7px 6px / 14px, var(--btn_hover)}
+
 /* client config buttons aka project "X" */
 button.control {padding: 12px; font-size: 0; background-size: 16px, 100%}
 button.accept.control {background: var(--start) no-repeat center center / 14px, var(--btn)}
@@ -307,7 +319,7 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 .buttonDown:hover, .buttonDown:focus {background-image: var(--mv_down_hover), var(--btn_hover)}
 .buttonTop, .buttonBottom, .buttonUp, .buttonDown,.buttonTop:hover, .buttonBottom:hover, .buttonUp:hover, .buttonDown:hover, .buttonTop:focus, .buttonBottom:focus, .buttonUp:focus, .buttonDown:focus {width: 20px; height: 20px; border-radius: 2px; background-repeat: no-repeat; background-position: center center; background-size: 12px, 100%}
 .buttonTop img, .buttonBottom img, .buttonUp img, .buttonDown img {display: none}
-/* end project "X" */
+
 /* sidebar buttons */
 .routersummary button {margin: 0 1px -3px; min-width: 87px}
 .routersummary .reload, .routersummary .stop, .routersummary .reload[value="restart"] {padding: 6px 7px !important; min-width: 92px !important; text-indent: -99999px}
@@ -316,6 +328,7 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 .routersummary .reload:active, .routersummary .stop:active, .routersummary .download:active {border: 1px solid #999 !important; box-shadow: var(--btn_shadow_active)}
 .routersummary .stop {background: var(--shutdown) no-repeat center center / 14px, var(--btn)}
 .routersummary .stop:hover, .routersummary .stop:focus {border: var(--border); background: var(--shutdown_hover) no-repeat center center / 14px, var(--btn_hover)}
+
 /* Show text on context specific buttons (eg deferred shutdown) */
 .routersummary .reload[value="restartImmediate"], .routersummary .stop[value="shutdownImmediate"], .routersummary .reload[value="Reseed"] {padding: 6px 7px 6px 23px !important; min-width: 0 !important; text-indent: 0; text-align: left; text-transform: capitalize}
 .routersummary .cancel {text-transform: capitalize}
@@ -327,8 +340,8 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 .routersummary .reload[value="Reseed"]:hover, .routersummary .reload[value="Reseed"]:focus, .routersummary .reload[value="Reseed"]:active {background: var(--download) no-repeat 8px center / 12px, var(--btn_hover)}
 .routersummary .download {background: var(--download) no-repeat 8px center / 12px, var(--btn)}
 .routersummary .download:hover, .routersummary .download:focus, .routersummary .download:active {background: var(--download) no-repeat 8px center / 12px, var(--btn_hover)}
-/* end sidebar buttons */
-/* end buttons & inputs */
+
+/* main */
 .main {margin: 0 0 4px 211px; padding: 15px 15px 10px 15px; min-width: 580px; text-align: left; color: var(--ink); border: var(--border); border-top: none; background: var(--bg)}
 div[id^="config_"].main {padding-bottom: 20px}
 #config_service, #config_peers, #config_reseed {padding-bottom: 9px}
@@ -338,10 +351,10 @@ div[id^="config_"].main {padding-bottom: 20px}
 .main#news p {padding: 0 10px}
 .main ul {margin: -10px 0 10px -10px; list-style-type: square}
 .main li {padding: 0 0 5px 0; word-wrap: break-word; margin-right: 20px}
-.links li b:first-of-type {color: var(--note)}
+.links li b:first-of-type {color: #1f7096}
 .main hr:last-child {margin: 15px 0 10px 0}
 .main textarea {margin: 2px 0 2px 5px; padding: 3px 4px; width: calc(100% - 5px); min-height: 96px; resize: none; color: var(--ink_light); border: var(--border); border-radius: 2px; box-shadow: var(--shadow_input); background: var(--bg2)}
-.main textarea:focus, .main .tabletextarea textarea:focus {color: var(--ink); box-shadow: inset 0 0 0 1px var(--active); background: var(--bg); outline: none}
+.main textarea:focus, .main .tabletextarea textarea:focus {color: var(--ink); box-shadow: inset 0 0 0 1px var(--hover); background: var(--bg); outline: none}
 .main .tabletextarea textarea:focus {border-radius: 0}
 .main h2 {margin-bottom: 10px !important}
 #home {padding-bottom: 1px}
@@ -356,8 +369,8 @@ div.welcome {margin-top: 0}
 .wideload p {margin-top: 5px !important}
 div.news {margin: -1px 0 0 211px; padding: 3px 10px 3px 10px; min-width: 586px; text-align: right; font-size: 8pt; border: var(--border); border-bottom: var(--border); border-right: var(--border); background: var(--bg)}
 /* convert the list entry to our title */
-div.news li {margin: 15px 15px -10px -20px; padding: 3px 5px 5px 0; text-align: justify; text-transform: capitalize; font-size: 10pt; list-style: none; color: var(--border_color); border-bottom: 2px dotted var(--border)}
-#news h3 {margin: 10px 10px -7px !important; padding: 5px 0 3px 10px; letter-spacing: .1em; text-align: left; text-transform: capitalize; font-size: 10pt; text-shadow: none !important; border: none !important; border-bottom: 1px dotted var(--border) !important; box-shadow: none}
+div.news li {margin: 15px 15px -10px -20px; padding: 3px 5px 5px 0; text-align: justify; text-transform: capitalize; font-size: 10pt; list-style: none; color: var(--border_color); border-bottom: 2px dotted var(--border_color)}
+#news h3 {margin: 10px 10px -7px !important; padding: 5px 0 3px 10px; letter-spacing: .1em; text-align: left; text-transform: capitalize; font-size: 10pt; text-shadow: none !important; border: none !important; border-bottom: 1px dotted var(--border_color) !important; box-shadow: none}
 .newsentry:first-child {margin-top: -6px}
 .newsentry h3 {padding-left: 22px !important; letter-spacing: .1em; box-shadow: none; background: url(/themes/console/images/svg/news.svg) no-repeat left center !important; background-size: 16px !important}
 .newsentry h3 a {letter-spacing: .08em !important; font-size: 10pt}
@@ -759,8 +772,7 @@ div.app img {padding: 10px 46px 9px; width: auto; height: 32px; max-height: 32px
 .app tr {margin: 0; border: 0; background: none}
 .app td {margin: 0; padding: 0; border: 0; background: none}
 .applabel:hover {box-shadow: none}
-/* end home page */
-#i2ptunnelframe {margin-bottom: -3px}
+
 p.infohelp + hr, p.infohelp + p + hr, #tunnelconfig + hr {/*configservice */
 display: none}
 h3#servicedebug a, h3#graphinfo a, h3#browseronstart a {float: right; font-size: 9pt}
@@ -868,6 +880,7 @@ p#enablefullstats {padding: 5px 10px; line-height: 1.2; text-align: left; backgr
 #externali2cp .optionlist b {min-width: 120px; display: inline-block; text-align: right}
 #pluginconfig tr {border-bottom: var(--border)}
 #pluginconfig td:first-child {width: 80px; white-space: nowrap}
+
 /* graphs */
 .graphspanel {margin: -16px -16px -11px -16px; padding: 15px 5px 1px; overflow: hidden; text-align: center}
 #graphs .graphspanel {margin: -16px}
@@ -886,6 +899,7 @@ h3#graphdisplay {margin: 12px -16px 10px}
 #graphs form[action="graphs"] hr {margin: 5px -11px 3px; height: 1px}
 #graphs form[action="graphs"] input[type=text] {min-width: 80px !important}
 .formaction#graphing {margin: -3px -10px -5px}
+
 /* graphs optionbox */
 #graphs form {padding: 0 !important}
 #graphs form hr {margin: 0 -1px 8px !important}
@@ -897,7 +911,7 @@ h3#graphdisplay {margin: 12px -16px 10px}
 #graphs td.infohelp {padding: 5px 5px 5px 40px !important; text-align: left; border: none; background: var(--bg2) var(--infohelp) no-repeat 15px center / 20px}
 #graphs form input, #graphs form select {margin: 3px 5px 3px 0; vertical-align: middle}
 #graphs input[type=text] {min-width: 60px}
-/* end graphs optionbox */
+
 /* single view */
 #graph_single {padding-left: 0; padding-right: 0}
 #graph_single > .infohelp {margin: 3px 20px 10px}
@@ -914,14 +928,7 @@ h3#graphinfo {margin: 0 15px 9px; text-transform: capitalize}
 #graphopts a:empty {display: none}
 #graphopts a:hover, #graphopts a:focus, #newsDisplay a:hover, #newsDisplay a:focus, #routerinformation tr:nth-child(n+2) a:not(#revision):hover, #routerinformation tr:nth-child(n+2) a:not(#revision):focus {color: #557 !important; border: 1px solid var(--a); box-shadow: 0 0 0 1px rgba(220,220,255,.6), var(--highlight); background: linear-gradient(180deg, var(--bg) 50%, var(--bg4) 50%)}
 #graphopts a:active, #newsDisplay a:active, #routerinformation tr:nth-child(n+2) a:active {color: var(--ink_light) !important; box-shadow: var(--btn_shadow_active); background: var(--btn_active)}
-/* end single view */
-/* end graphs */
-.footnote, .footnote hr, .topness {display: none !important}
-/* Fixes for when app is not started and console error loads inside iframe */
-.iframed .routersummaryouter {display: none !important}
-.iframed h1 {margin: 0 !important}
-.iframed .sorry {margin: -1px 0 0 !important}
-/* end iframed console fixes */
+
 img[src^="/flags"], img.unknownflag {width: 16px !important; height: 12px !important; vertical-align: middle; font-size: 0; border: 1px solid #d8d8d8}
 #tunnelpeercount img[src^="/flags"] {margin-left: -6px; width: 20px !important; height: 15px !important}
 #netdbcountrylist img[src^="/flags"], .netdb_header img[src^="/flags"] {width: 24px !important; height: 18px !important}
@@ -933,6 +940,7 @@ img[src^="/flags"], img.unknownflag {width: 16px !important; height: 12px !impor
 #banlist img[src^="/flags.jsp"] {margin-top: -2px}
 #peers .routerid .flag, #profiles .routerid .flag {margin: -2px 1px -2px -4px}
 #profiles .routerid .flag {margin-left: -3px}
+
 /* Theme choice & Language selection in /configui */
 .themechoice .optbox, .langselect .optbox {vertical-align: text-bottom}
 .themechoice .optbox::after, .langselect .optbox::after {display: none; content: none}
@@ -955,7 +963,7 @@ img[src^="/flags"], img.unknownflag {width: 16px !important; height: 12px !impor
 #themeoptions br {display: none}
 p#helptranslate {padding: 15px 10px 15px 50px !important; position: relative; top: 4px; text-align: left !important; border-top: var(--border); border-bottom: var(--border); background: var(--bg) url(images/favicon.svg) no-repeat left 14px center / 28px}
 #themeoptions input {margin: 2px 8px 2px 6px}
-#themesettings {margin: -1px 0; padding: 4px 5px 0; clear: both; border: var(--border); background: var(--bg3)}
+#themesettings {margin: -1px 0 6px; padding: 4px 5px 0; clear: both; border: var(--border); background: var(--bg3)}
 #langsettings {padding: 4px 5px 0; border: var(--border); background: var(--bg3)}
 #themesettings hr {display: none}
 #langsettings hr {margin: 0 -5px; height: 1px}
@@ -976,6 +984,7 @@ p#helptranslate {padding: 15px 10px 15px 50px !important; position: relative; to
 .langselect .optbox:checked + img + .ui_lang, .langselect .optbox:focus:checked + img + .ui_lang {padding: 4px 2px 2px !important; z-index: 2; font-size: 95% !important; font-weight: 700; color: var(--selected); box-shadow: var(--btn_shadow_active); background: var(--label_focus)}
 .ui_lang {margin: -32px -4px 0; text-align: center; padding: 3px 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-transform: capitalize; font-size: 9pt; z-index: 2; border-top: var(--border); border-radius: 0 0 2px 2px; background: var(--header)}
 p#helptranslate {margin: 0 -5px; padding: 5px 10px 10px; clear: both; text-align: right}
+
 /* configui password*/
 #consolepass th:nth-child(2) {text-align: left}
 #consolepass tr:first-child td {padding: var(--pad_info); background: var(--bg) var(--useradd) no-repeat 15px center / 28px}
@@ -984,13 +993,15 @@ p#helptranslate {margin: 0 -5px; padding: 5px 10px 10px; clear: both; text-align
 #consolepass td#pw_adduser {padding: 5px 10px; border-top: var(--border)}
 td#pw_adduser input {margin: 5px 20px 5px 5px !important}
 #consolepass input[name="name"] {margin-right: 20px}
-/* end configui */
+#passwordheading {margin-top: 13px !important}
+
 .main#netdb > .confignav {margin-bottom: 15px}
 #clientconfig th:first-child, #webappconfig th:first-child {text-align: right}
 #clientconfig th:last-child, #webappconfig th:last-child, #pluginconfig th:last-child {text-align: left}
 #clientconfig th:nth-child(2), #clientconfig th:nth-child(3), #pluginconfig th:first-child, #webappconfig th:nth-child(2), #webappconfig th:nth-child(3) {text-align: center}
 #clientconfig td:nth-child(3) {white-space: nowrap}
 #netconfig {line-height: 1.6}
+
 /* netdb */
 #netdb hr {margin: 2px 0 !important; display: none; width: 100%}
 #sybilanalysis hr {margin: 12px 0; display: block}
@@ -1084,6 +1095,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 .sybil_routerinfo + .threatpoints + ul + a[name] + table {margin-top: -11px}
 .sybil_routerinfo b[style^="float: right"] {margin: 4px; font-size: 90%; opacity: .8}
 p:empty {display: none}
+
 /* Advanced lookup */
 #netdblookup {margin-bottom: 4px}
 #netdblookup tr:nth-child(n+2) {border-top: 1px solid var(--border_soft)}
@@ -1096,6 +1108,7 @@ p:empty {display: none}
 #closetorouter {margin-left: 6px !important}
 .subheading {padding: 10px; text-align: left !important; border: var(--border); background: var(--bg)}
 .subheading b {font-size: 10pt}
+
 /* leasesets */
 #netdb .netdb_leases {margin-left: 0 !important; columns: 8 104px; column-gap: 2px}
 #netdb .debugMode .netdb_leases {margin-right: 12px; columns: auto 380px; column-gap: 4px; page-break-inside: avoid}
@@ -1121,8 +1134,7 @@ p:empty {display: none}
 .main li .netdb_expiry {font-weight: 400; text-transform: lowercase; font-style: italic}
 #console h2, #console h3 {border-radius: 2px; box-shadow: 0 0 2px rgba(200,200,200,.5)}
 img.unknownflag {opacity: .8}
-/* end leasesets */
-/* end netdb */
+
 /* /stats */
 form#statnav {padding: 10px 10px 10px 15px; border: var(--border)}
 h3.stats {border: var(--border); border-radius: 0}
@@ -1152,7 +1164,7 @@ h3.stats {border: var(--border); border-radius: 0}
 #gatherstats + form {background: var(--bg)}
 .main#stats form {margin: -13px 0 -11px; padding: 10px; border: var(--border)}
 h3.stats {margin-bottom: 9px !important}
-/* end stats */
+
 /* netdb (main section) */
 #netdb td {padding-top: 6px; padding-bottom: 6px; position: static}
 #netdboverview {margin: 15px 0 5px; border: var(--border)}
@@ -1179,6 +1191,7 @@ h3.stats {margin-bottom: 9px !important}
 .sybil_distance th {text-align: left; padding: 5px}
 .sybil_distance th:last-child, .sybil_distance td:last-child {text-align: right}
 .sybil_distance tr:nth-child(n+2):hover {background: var(--row_hover); font-weight: 700}
+
 /* /help */
 #volunteer, #sidebarhelp, #configurationhelp, #reachabilityhelp, #legal, #changelog, #browserconfig, #tunnman, #faq, #reseedhelp, #troubleshoot, #newuserguide, #filterlist, #webhosting, #themeoverride, #glossary {margin-top: 15px !important; margin-bottom: 20px; padding: 10px 15px 5px; border: var(--border); background: rgba(240,240,255,.5); box-shadow: var(--highlight)}
 #configurationhelp {margin-top: 19px !important}
@@ -1209,6 +1222,7 @@ p#fullhistory {margin: -5px -1px -6px !important; padding: 7px 10px 4px 5px !imp
 #fullhistory::before {width: 18px; height: 20px; display: inline-block; vertical-align: middle; background: var(--eye) no-repeat left 45% / 14px; content: ""}
 #fullhistory:hover::before, #fullhistory:focus::before {background: var(--eye_hover) no-repeat left 45% / 14px}
 #help td.infohelp, #help td.infowarn, #help td.infohelp, #help p.infohelp {padding-left: 46px; background-size: 24px}
+
 /* mini faq */
 #faq h3 {padding-left: 35px; word-spacing: 0; letter-spacing: 0; text-transform: none; font-size: 10.5pt; background: var(--question) no-repeat 10px center / 18px, var(--header); background-blend-mode: luminosity, normal}
 #faq p.infohelp {margin: -11px -16px 4px}
@@ -1223,14 +1237,14 @@ p#fullhistory {margin: -5px -1px -6px !important; padding: 7px 10px 4px 5px !imp
 #portfaq td:last-child, #portfaq td[colspan="3"] {text-align: justify; padding-right: 10px}
 #portfaq td[colspan="3"] {font-weight: 400}
 #glossary b {font-size: 110%}
-/* end mini faq */
+
 /* webhosting */
 #webhosting th {text-align: left}
 #webhosting td {padding: 10px}
 #webhosting td:first-child {width: 1%; white-space: nowrap; font-weight: 700}
 #webhosting #guides {list-style-type: none; margin-left: -25px}
 #webhosting #guides a {padding-left: 20px}
-/* end /help */
+
 .eventspanel br {display: none}
 .eventspanel h3 {margin-top: 0}
 .eventspanel form {margin-top: -11px; padding: 10px 10px 10px 50px; border: var(--border); background: var(--bg) var(--logs) no-repeat 15px center / 28px}
@@ -1254,6 +1268,7 @@ p#fullhistory {margin: -5px -1px -6px !important; padding: 7px 10px 4px 5px !imp
 #configinfo th {text-align: left; font-family: var(--monospaced); padding: 7px 10px; color: #050}
 #configinfo td {text-align: justify; padding: 5px 15px; background: rgba(230,230,255,.5)}
 #help #configinfo td.infowarn {padding: 10px 10px 10px 38px !important; border: var(--border); background: #fffff5 var(--infowarn) no-repeat 10px center / 20px !important}
+
 /* informational images */
 #bugreports td.infohelp {padding: var(--pad_info); background: var(--bg) var(--bug) no-repeat 15px center / 28px !important}
 p#debugmode {padding: var(--pad_info); background: var(--bg) var(--bug) no-repeat 15px center / 28px}
@@ -1287,10 +1302,11 @@ h3#browseronstart + p.infohelp {padding: var(--pad_info); position: relative; ba
 p#enablefullstats, p#gatherstats {padding: var(--pad_info); background: var(--bg) var(--stats) no-repeat 15px center / 28px}
 #config_family .infohelp {margin-bottom: -1px !important; padding: var(--pad_info); background: var(--bg) var(--family) no-repeat 15px center / 28px}
 #certs .infohelp:first-of-type {background: var(--bg) var(--certs) no-repeat 15px center / 28px}
-/* end informational images */
+
 /* login inputs */
 #consolepass input[name="name"], #externali2cp input[name="user"], #consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"] {padding: 4px 5px 4px 26px !important; background: var(--bg) var(--user) no-repeat 5px center / 16px}
 #consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"] {background: var(--bg) var(--key) no-repeat 5px center / 16px}
+
 /* logs */
 #logs #enviro {user-select: all; cursor: text}
 #logs #enviro:hover tr, #logs #enviro:hover td {background: var(--row_hover); border-top: 1px inset transparent; border-bottom: 1px inset transparent}
@@ -1333,10 +1349,9 @@ font[color="#bf00df"] span {color: var(--bg); background: #717}
 font[color="#000099"] span {color: var(--bg); background: #339}
 font[color="#006600"] span {color: var(--bg); background: #444}
 .embedlink {padding-left: 5px; float: right; border-left: var(--border)}
-/* end logs */
-/* peers, profiles, tunnels */
+
 .cells tt, #profilelist tt {font-size: 8.5pt}
-/* end peers, profiles, tunnels dests */
+
 /* /tunnels */
 #tunnels .tab, #tunnels .tab2 {min-width: 140px !important}
 #tunnels td > * {vertical-align: middle}
@@ -1361,7 +1376,7 @@ span.b32 {margin-right: 5px; padding: 2px 4px; float: right; line-height: 1.2; l
 span.b32:hover {opacity: 1}
 span.b32:active {box-shadow: 0 0 0 1px var(--border_color), var(--btn_shadow_active)}
 #tunnels h3 a img {margin: 3px 3px 0 0}
-/* end tunnels */
+
 /* /peers */
 #peers p.infohelp {margin: 14px 0}
 #udpcon {margin-top: 9px}
@@ -1378,7 +1393,7 @@ span.b32:active {box-shadow: 0 0 0 1px var(--border_color), var(--btn_shadow_act
 .peer_arrow {margin-right: 3px; width: 18px; display: inline-block; text-align: center}
 #ntcpconnections td:nth-last-child(2), #udpconnections td:last-child, #profiles td:last-child {border-right: var(--border) !important}
 #profiles table td:last-child {border: none !important}
-/* end peers */
+
 /* netdb router address info */
 .leasesets_container {columns: 680px 2; column-gap: 10px}
 th code {user-select: all}
@@ -1400,7 +1415,7 @@ th code {user-select: all}
 .sybil_container {margin: 10px 0; columns: 680px 2}
 .sybil_container p:first-child {margin-top: 0}
 .sybil_container p:last-child {margin-bottom: 0}
-/* end netdb router address */
+
 /* sybils */
 .leaseset th:last-child, .leaseset td:last-child, .sybil_routerinfo th:last-child, .sybil_routerinfo td:last-child {border-right: var(--border)}
 .sybil_routerinfo table td:last-child {border-right: none !important}
@@ -1420,7 +1435,7 @@ th code {user-select: all}
 .threatpoints + ul li:last-child {margin-bottom: 0 !important; padding-bottom: 0 !important}
 .threatpoints + ul li {list-style: none; margin-left: -15px; line-height: 1.2}
 .threatpoints + ul li a {white-space: nowrap}
-/* end sybils */
+
 /* debug */
 .main#debug h2 {padding: 8px 10px; font-size: 12pt}
 .main#debug h3 {padding: 5px 10px}
@@ -1466,7 +1481,7 @@ h2#debug_portmapper {margin-top: 14px !important}
 #debug h3.debug_outboundsessions {margin-top: -6px !important; background: url(/themes/console/images/svg/outbound.svg) no-repeat 6px center / 18px, var(--header) !important}
 #debug h3.debug_inboundsessions {background: url(/themes/console/images/svg/inbound.svg) no-repeat 6px center / 18px, var(--header) !important}
 .debug_version {color: var(--code)}
-/* end debug */
+
 /* jar dump */
 #jardump {padding: 0; overflow-x: auto; overflow-y: hidden; min-width: 570px}
 #jardump table {border-left: none; border-right: none; margin-top: -1px; margin-bottom: -1px; font-size: 8pt}
@@ -1493,12 +1508,8 @@ h2#debug_portmapper {margin-top: 14px !important}
 #jardump hr {margin: 2px 0 !important; background: var(--border_soft)}
 .unsignedmod:empty {display: none}
 #jardump td:first-child {padding-left: 24px; background: var(--package) no-repeat left 5px center / 14px}
-/* end jardump */
+
 /* TO DO: Merge with main classes */
-/* /configui */
-#passwordheading {margin-top: 0 !important}
-#langsettings {margin-bottom: -6px !important}
-/* end /configui */
 #pluginconfigtext input {float: right; margin: -6px -6px 0 0}
 #externaltcp .nowrap:first-child {margin: 5px 0 -18px !important; display: inline-block}
 #cputype {display: inline-block; margin: -2px 2px -2px 0; padding: 2px 5px; font-weight: 700; text-transform: uppercase; border-radius: 2px; background: var(--bg4)}
@@ -1510,6 +1521,7 @@ h2#debug_portmapper {margin-top: 14px !important}
 /* end graphs */
 .buckets br + br {line-height: 5px}
 #debug td div, #debug td ul {columns: 400px auto}
+
 /* config overhaul */
 /* multi-column responsive globals/shared */
 .optionlist, .optionsingle, #reseedssl, #updatehelper.optionlist:hover, #updateProxyHostPort.optionlist:hover {vertical-align: middle}
@@ -1533,8 +1545,8 @@ b.suboption {margin: 0 !important; padding: 5px 10px; position: relative; z-inde
 #config_reseed .suboption label:last-child, #externali2cp .suboption label {margin-right: 0}
 #config_reseed .suboption .optbox, .suboption .optbox[name="sauth"], #externali2cp .suboption .optbox {margin: -3px 3px 3px; margin-bottom: 0}
 #netconfig .suboption {padding: 3px 10px !important}
-/* end multi-column responsive globals */
 #externali2cp input[name="port"] {margin-left: 6px}
+
 /* bandwidth config */
 #bandwidthconfig td:first-child:not(.infohelp):not(.optionsave) {padding: 0 50px 0 5px; background: url(/themes/console/images/svg/arrow_right.svg) no-repeat right 9px center / 24px}
 #bandwidthconfig .optionsingle {margin: 8px 0 8px 3px; padding: 0 15px 0 40px; background: var(--bg2) !important}
@@ -1548,8 +1560,11 @@ b.suboption {margin: 0 !important; padding: 5px 10px; position: relative; z-inde
 .net_datausage {margin: 3px -7px -4px; padding: 8px 5px 4px; display: inline-block; width: 100%; min-width: 320px; white-space: nowrap; text-align: center; font-style: italic; border-top: 1px solid var(--bg4)}
 #config_bandwidth tr:nth-last-child(2) .infohelp b {margin-right: -1px; font-size: 120%}
 .bw_title {margin: 2px -13px 0 -38px; padding: 4px 5px; display: block; text-align: left; font-weight: 700; font-size: 11pt; background: var(--subheading)}
-/* end bandwidth config */
-/* /confignet */
+
+/* confignet */
+#netconfig .optbox {margin: 4px}
+#netconfig input[type=text] + br + .optbox, #netconfig .optbox[name="ntcpAutoPort"] {margin-top: 3px}
+#netconfig input[name*="ost"] {width: 250px}
 #netconfig tr, #config_reseed tr, #i2pupdates tr {background: var(--bg) !important}
 #netconfig tr:first-child td.infohelp {background-image: url(/themes/console/images/svg/networkconfig.svg)}
 #netconfig tr:nth-last-child(3) .optionlist {margin-bottom: -1px}
@@ -1563,14 +1578,14 @@ b.suboption {margin: 0 !important; padding: 5px 10px; position: relative; z-inde
 #netconfig input[name*="ost"] {width: 250px !important}
 #netconfig input[type=text] {transition: ease width .1s; will-change: transform}
 #netconfig .optbox:not(:checked) + input[type=text][name="ntcphost"]:not(:focus), #netconfig .optbox:not(:checked) + input[type=text][name="udpHost1"]:not(:focus) {width: 140px !important; min-width: 140px !important; transition: ease width .1s}
-/* end /confignet */
+
 /* /configservice */
 #config_service .messages {margin: 12px -4px 6px}
 #config_service form {columns: 500px 2; column-gap: 10px; vertical-align: top; margin: -2px -4px 0}
 .service_container {display: inline-block; width: 100%; margin: 8px 0 6px}
 .service_container .infohelp {padding: var(--pad_info) !important}
 .service_container h3 a {font-size: 8.5pt}
-/* end /configservice */
+
 /* configupdate */
 #i2pupdates td {padding-top: 6px; padding-bottom: 6px}
 #i2pupdates textarea {margin-left: 6px !important}
@@ -1612,7 +1627,7 @@ b.suboption {margin: 0 !important; padding: 5px 10px; position: relative; z-inde
 @supports not (-moz-appearance: none) {#reseedproxysslhostport.optionlist {columns: 1} .optionsingle#reseedproxytype {columns: 2}}
 #config_network .optionlist:hover, #config_i2cp .optionlist:hover, #reseedssl:hover, #manualreseed .optionsingle:hover, .optiontextarea:hover, #reseed_urlselection:hover {border: var(--border); box-shadow: var(--highlight_hover) !important; transition: ease box-shadow .5s}
 #manualreseed {margin: 0 0 7px; background: none}
-#manualreseed td {padding: 5px}
+#manualreseed td {padding: 5px; border-bottom: var(--border)}
 #manualreseed td.infohelp {padding: var(--pad_info)}
 #config_reseed #manualreseed .optionsingle table, #config_reseed #manualreseed .optionsingle tr, #config_reseed #manualreseed .optionsingle td {background: none !important; border: none !important; box-shadow: none}
 #manualreseed .optionsingle {padding: 5px 5px 0 45px; vertical-align: middle}
@@ -1625,18 +1640,18 @@ b.suboption {margin: 0 !important; padding: 5px 10px; position: relative; z-inde
 #reseedconfig .reload {margin-left: 3px !important}
 #reseedconfig .download, #i2pupdates .check, #i2pupdates .accept, #externali2cp .accept {margin-right: 3px !important}
 #manualreseed .optionsingle td:last-child {text-align: right !important; width: 1%; white-space: nowrap; padding-right: 0 !important}
-/* end configreseed */
+
 #i2pupdates td, #manualreseed td:not(.infohelp), #reseedconfig td:not(.infohelp), #netconfig td:not(.infohelp):not(.infowarn), #graphs td {padding: 5px}
 #i2pupdates td {padding-top: 6px; padding-bottom: 6px}
 #i2pupdates .optionsave {border-bottom: var(--border)}
-#manualreseed td {padding: 5px; border-bottom: var(--border)}
+
 /* reseed help ordered list */
 #reseedhelp ol {display: block; margin-right: 30px; margin-top: 15px}
 #reseedhelp ol ul li {list-style-type: square}
 #reseedhelp ol li {list-style-type: decimal; display: list-item}
 #reseedhelp ol ul li:first-child {margin-top: 10px}
 #reseedhelp ol ul li:last-child {margin-bottom: -10px}
-/* end reseed help ordered list */
+
 #config_keyring h3 {margin-bottom: -2px}
 #installPluginUrl table, #installPluginUrl tr, #installPluginUrl td, #installPluginFile table, #installPluginFile tr, #installPluginFile td, #createNewFamily table, #createNewFamily tr, #createNewFamily td, #joinfamily table, #joinfamily tr:nth-child(n+3), #joinfamily tr:nth-child(n+3) td, #joinfamily tr:nth-child(n+3) table tr {margin: 0; background: none !important; border: none !important; box-shadow: none}
 #installPluginUrl input[type=text], #installPluginFile input[type="file"], #config_family input[type=text], #config_family input[type="file"] {width: 100%}
@@ -1662,9 +1677,11 @@ input[type="file"]:hover {cursor: pointer}
 #tunnelconfig th[colspan="3"] > font {color: #944}
 #tunnelconfig th[colspan="3"] > font::before {background: var(--infowarn) no-repeat left center / 16px; content: ""; display: inline-block; width: 20px; height: 16px; vertical-align: middle; opacity: .7}
 #oldmsie {margin: -6px -6px -1px; box-shadow: inset 0 0 1px #f00}
+
 /* tunnels */
 .routerid {display: inline-block; box-shadow: inset var(--box_border_badge), inset 0 0 0 2px var(--bg); background: var(--th)}
 .routerid img {margin-bottom: -1px}
+
 /* /peers */
 #peerdefs img {font-size: 0}
 #peers p.infohelp {margin-top: 14px}
@@ -1674,7 +1691,6 @@ input[type="file"]:hover {cursor: pointer}
 #ntcpconnections th:nth-child(n+2), #ntcpconnections td, #udpconnections th:nth-child(n+2), #udpconnections td {text-align: center}
 #ntcpconnections tr:nth-last-child(n+2) td, #udpconnections tr:nth-last-child(n+2) td, #profilelist td, #profile_defs td, #floodfills td, #tunnelPeerCount td {border-right: 1px solid var(--border_soft)}
 #ntcpconnections tr:nth-last-child(n+2) td::after, #udpconnections tr:nth-last-child(n+2) td::after, #profilelist td::after, #profile_defs td::after, #floodfills td::after {content: ""; position: absolute; top: -1px; right: -1px; height: 1px; width: 1px; display: inline-block; background: var(--border_color)}
-#ntcpconnections td:nth-child(n+6) span, #ntcpconnections .tablefooter td:nth-child(n+5) span {display: inline-block; min-width: 40px; text-align: right}
 #peerdefs td {padding: 4px}
 #peerdefs ul {margin: 0; padding: 0; columns: 400px auto; column-gap: 6px}
 #peerdefs ul {display: inline-block; columns: 500px auto; column-gap: 0; margin: 0; width: 100%}
@@ -1687,9 +1703,9 @@ input[type="file"]:hover {cursor: pointer}
 #ntcpconnections .ipv6:empty::before, #udpconnections .ipv6:empty::before {content: ""}
 #ntcpconnections td span:empty {display: none}
 #ntcpconnections th, #ntcpconnections td, #udpconnections th, #udpconnections td {text-align: center}
-#ntcpconnections td:nth-child(n+6) span, #ntcpconnections .tablefooter td:nth-child(n+5) span {display: inline-block; min-width: 40px; text-align: right}
+#ntcpconnections td:nth-child(n+6) span, #ntcpconnections .tablefooter td:nth-child(n+5) span { min-width: 40px; display: inline-block}
 .reachability {float: right; font-size: 85%}
-/* end peers */
+
 /* /info */
 #routerinformation td {padding: 8px 4px}
 #routerinformation td:first-child {padding-left: 12px; width: 1%; min-width: 80px; max-width: 80px; white-space: nowrap}
@@ -1697,7 +1713,7 @@ input[type="file"]:hover {cursor: pointer}
 #jardump a tt {padding-left: 13px; background-size: 11px}
 #routerinformation tr:nth-child(n+2) a:not(#revision) {display: none}
 #routerinformation table:hover tr:nth-child(n+2) a {display: inline}
-/* end /info */
+
 /* sitemap */
 #sitemapcontainer {margin: 0 -16px -2px; padding: 4px 0 0}
 #sitemapcontainer h3 {margin-bottom: 12px; text-transform: uppercase; letter-spacing: .08em}
@@ -1716,11 +1732,12 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel {width: 160px}
 #sitemap div.app img {padding-left: 0; padding-right: 0}
 #sitemap .applabel {width: 136px !important; border-color: var(--border_color); background: var(--bg2)}
 #sitemap div.app:hover, #sitemap div.app:hover .applabel, .sitemapLink:hover, .sitemapLink:hover .sitemapLabel {border-color: var(--hover)}
-/* end sitemap */
+
 /* help section */
 #help .confignav + div:not(#changelog):last-of-type {margin: 20px 0 5px !important}
 #help .confignav + #sidebarhelp {margin-top: 20px !important}
 #sidebarhelp + #reachabilityhelp {margin-bottom: 5px}
+
 /* help toc */
 #help #helptoc {margin: 1px 0 6px -16px; display: block; columns: 550px 2; column-gap: 12px}
 #helptoc li, #helptoc li:last-child {margin: 10px 0 12px; padding: 20px 10px 20px 60px; width: calc(100% - 70px); list-style: none; box-shadow: 0 0 0 1px var(--border_color), var(--highlight), inset 0 0 0 2px var(--bg4); background-blend-mode: luminosity; background-size: 32px; transition: ease box-shadow .2s}
@@ -1753,14 +1770,14 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel {width: 160px}
 #themeoverride h2 {padding-left: 38px; background: var(--ui) no-repeat 8px center / 24px, var(--header)}
 #browserconfig h2 {padding-left: 38px; background: var(--firefox) no-repeat 8px center / 24px, var(--header)}
 #tunnman h2 {padding-left: 38px; background: var(--hardhat) no-repeat 8px center / 24px, var(--header)}
-/* end help toc */
+
 /* link icons for new user guide */
 .consolelink {background: url(images/favicon.svg) no-repeat 2px center / 12px}
 .sitelink {background: var(--link) no-repeat 2px center / 12px}
 .chatlink {background: var(--chat) no-repeat 2px center / 12px}
 .sitelink.external {background: var(--planet) no-repeat 2px center / 12px}
 .sitelink, .chatlink, .consolelink {padding: 0 3px 0 16px; white-space: nowrap; border-radius: 1px}
-/* end link icons */
+
 #help .footnote, #help .topness {display: none}
 #newuserguide li {margin-right: 15px}
 #newuserguide .links {margin-bottom: 25px}
@@ -1770,6 +1787,7 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel {width: 160px}
 .debug_pubkey {max-width: 300px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom}
 .skm_key td, .debug_outboundtarget td {background: linear-gradient(180deg, #fcfcff, #fafaff 51%, #f6f6ff 100%) !important}
 .debug_outboundtarget td:last-child, .skm_key td:last-child {white-space: nowrap; width: 1%}
+
 /* stats */
 #stats label {display: inline-block}
 #stats h3 {margin-bottom: 6px !important; border-width: 1px}
@@ -1784,15 +1802,14 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel {width: 160px}
 p#gatherstats {margin: 15px 0 !important}
 #stats .joblog {margin-top: -4px !important; margin-bottom: 0 !important; overflow: hidden}
 #stats ul.statlist {margin: -7px 0 0 !important; padding: 0 !important; width: calc(100% - 2px); box-shadow: var(--highlight), inset 0 0 2px 1px var(--bg4)}
-/* end /stats */
+
 /* /tunnels */
 .tunnels_participating td.cells:first-child {font-size: 0 !important}
-.ibgw::after, .obep::after, .ptcp::after {width: 28px; height: 20px; display: inline-block; background: var(--ibgw) no-repeat center center / auto 28px; content: ""}
-.obep::after {background: var(--obep) no-repeat center center / auto 28px}
-.ptcp::after {background: var(--ptcp) no-repeat center center / auto 28px}
+.ibgw::after, .obep::after, .ptcp::after {width: 24px; height: 24px; display: inline-block; background: var(--ibgw) no-repeat center center / 24px; content: ""}
+.obep::after {background: var(--obep) no-repeat center center / 24px}
+.ptcp::after {background: var(--ptcp) no-repeat center center / 24px}
 #tunnels .cells:first-child {width: 1% !important; max-width: 64px !important; min-width: 64px !important}
-#tunnels .cells:nth-child(2), #tunnels .cells:nth-child(3), .tunnels_participating td:nth-child(4) {width: 2% !important; max-width: 112px !important; min-width: 112px !important; vertical-align: middle !important}
-/* end /tunnels */
+
 .tunnelBuildStatus.rejecting {color: #933}
 #filterlist code {margin: 0 10px 10px; padding-left: 12px; display: inline-block; border-left: 2px solid #272}
 #filterlist code + h3, #filterlist ul + h3 {margin-top: 5px}
@@ -1800,12 +1817,12 @@ p#gatherstats {margin: 15px 0 !important}
 #filterlist p + p, #filterlist ul + p {margin-top: -6px}
 #filterlist h3 {margin-bottom: 8px}
 #filterlist h4 {text-transform: none; letter-spacing: 0; word-spacing: 0; font-size: 105%; border-width: 0; border-bottom-width: 1px; box-shadow: none; background: none}
-#filterlist .example {margin-right: 2px; color: darkgreen; font-weight: 700}
+#filterlist .example {margin-right: 2px; color: #070; font-weight: 700}
 #pageloader {top: -1px !important}
 .netdb_info {display: inline-block; white-space: nowrap; max-width: 120px; overflow: hidden; text-overflow: ellipsis; vertical-align: text-bottom}
 .netdb_transport {width: 44px; text-align: center}
 #clock {margin: -5px 1px -6px; padding: 4px 0; line-height: 1; font-size: 18pt; font-weight: 700; letter-spacing: .1em; color: #535979; border: var(--border); box-shadow: var(--highlight), 0 0 1px rgba(96,96,96,.5); background: var(--label_focus); user-select: none}
-#clock::after {margin-left: 3px; content: "UTC"; display: inline-block; vertical-align: middle; font-size: 50%}
+#clock::after {margin-left: 3px; display: inline-block; vertical-align: middle; font-size: 50%; content: "UTC"}
 .sybilscan table, .sybilscan tr {border: none; background: none; box-shadow: none}
 .sybilscan tr td {border: none}
 #netdb .sybilscan:last-of-type table {margin-bottom: -14px !important}
@@ -1860,6 +1877,7 @@ p#gatherstats {margin: 15px 0 !important}
 #config_stats .tabletitle {margin: 15px 0 -1px !important}
 #config_stats #graphchoice {margin-bottom: -2px !important}
 #enablefullstats {padding: var(--pad_info); background: var(--stats) no-repeat 15px center / 28px}
+
 /* /tunnelpeercount */
 #tunnels #peercount {padding-left: 30px !important; background: var(--hardhat) no-repeat 8px 6px / 18px, linear-gradient(180deg, var(--bg)50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(90deg, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important}
 #tunnels #tunnelPeerCount .cells {white-space: nowrap; width: auto !important; max-width: 0 !important; min-width: 0 !important}
@@ -1893,54 +1911,55 @@ p#gatherstats {margin: 15px 0 !important}
 #logs #enviro ~ .tabletitle::after, #jobs h3::after, #tunnels h3[id]::after {width: 0; height: 1px; display: inline-block; position: absolute; bottom: 0; left: 0; background: var(--reload); opacity: .6; content: ""; animation: ease-out reloader 1s forwards}
 th, td {position: relative}
 #netdblookup th, #netdblookup td, #refreshsidebar td, #pluginconfig table td, #config_advanced td, #bandwidthconfig td, #i2pupdates td, #help th, #help td, #config_plugins td, #externali2cp td, #config_keyring td, #config_logging td, #config_network td, #config_peers td, .formaction, #sidebarconf tr:last-child td, #config_ui td, #config_reseed td, #config_family td, #logs td, #peers th, #peers td, #profiles th, #profiles td {position: static}
-/* /events */
+
+/* events */
 #events td {line-height: 1.4}
 #events td:first-child span {margin: 1px 0 0 -2px; display: inline-block; vertical-align: top; font-size: 80%; text-transform: lowercase}
 #eventlog th, #eventlog td {padding-left: 8px; padding-right: 8px}
 #eventlog td {background: none}
 #eventlog td:last-child::first-letter {text-transform: uppercase}
+
 /* error */
 #events .crashed, #events .outofmem, #events .critical, #events .installf {background: rgba(255,0,0,.1)}
+
 /* warning */
 #events .watchdog, #events .reseed, #events .clockshi, #events .aborteds, #events .reachabi, #events .rekeyed, #events .changedp, #events .changeip, #events .network {background: rgba(255,0,255,.05)}
+
 /* info */
 #events .softrest, #events .updated, #events .enabledf, #events .disabled, #events .installe, .becamefl {background: rgba(255,255,0,.07)}
+
 /* notice */
 #events .started, #events .stopped {background: rgba(0,255,0,.05)}
 #events tr:hover td {position: static; border-top: 1px solid #393; border-bottom: 1px solid #393; background: rgba(0,0,0,.02)}
 #events tr:hover td:first-child {border-left: 1px solid #393; background: linear-gradient(90deg, #393 2px, rgba(0,0,0,.02) 2px)}
 #events tr:hover td:last-child {border-right: 1px solid #393; background: linear-gradient(to left, #393 2px, rgba(0,0,0,.02) 2px)}
-/* end /events */
-#sb_internals, #sb_services, #sb_advanced {margin-top: -5px !important}
+
+div.app img, .sitemaplink img {filter: grayscale(.6)}
+div.app:hover img, .sitemaplink:hover img {filter: none}
+
 .tabletitle + table tr:first-child td {border-top: var(--border)}
 #config_tunnels select {min-width: 180px}
 #config_tunnels input[type=text] {width: calc(100% - 6px)}
 th[role="columnheader"] {position: relative}
 #floodfills th {font-size: 90% !important}
-div.app img, .sitemaplink img {filter: grayscale(.6)}
-div.app:hover img, .sitemaplink:hover img {filter: none}
-#minigraph {margin-top: -22px; height: 40px; width: 250px; position: relative; z-index: 0}
-#minigraphcontainer {margin-top: -57px; margin-left: 1px; width: 240px; height: 38px; background-size: 239px 40px; background-repeat: no-repeat}
-#sb_graphcontainer {margin: -5px 1px -6px 1px !important; overflow: hidden; border: var(--border); box-shadow: var(--highlight); background: repeating-linear-gradient(90deg, rgba(0, 0, 0, 0) 15px, rgba(120, 120, 255, .5) 16px, rgba(0, 0, 0, 0) 16px, rgba(0, 0, 0, 0) 30px), repeating-linear-gradient(to top, rgba(0, 0, 0, 0) 11px, rgba(120, 120, 255, .5) 12px, rgba(255, 255, 255, 0) 12px, rgba(255, 255, 255, 0) 24px)}
 #routerlogs li {animation: ease logupdate 1s}
-.routersummary table {position: relative}
-.routersummary table:not(#sb_localtunnels):not(#sb_services)::before {width: 0; height: 2px; display: block; position: absolute; top: -4px; left: -1px; background: #bfb; content: ""; animation: ease-in bar .15s reverse; will-change: transform}
 #down {margin: -6px -6px -7px; width: 100%; display: inline-block; line-height: 32px; font-size: 0; color: #770; box-shadow: var(--down_shadow); background: var(--down); background-size: 300%; animation: down linear 10s reverse infinite}
 #nographs {font-size: 0}
 #down::after, #nographs::after {width: 26px; height: 26px; vertical-align: middle; display: inline-block; background: url(/themes/console/images/svg/update.svg) no-repeat center center / 24px; content: ""; transform: rotate(0); filter: sepia(1); animation: linear spin 3s forwards infinite}
 #nographs::after {width: 36px; height: 36px; background-size: 32px}
-#sb_localtunnels td[colspan="3"] {line-height: 20px; font-size: 0; background: var(--down) !important}
+
 /* highlight linked leaseset */
 .leaseset:target {border: var(--ls_target)}
 .leaseset:target tr:first-child th, .leaseset:target td {border-top: var(--ls_target); border-bottom: var(--ls_target)}
 .leaseset:target th:first-child, .leaseset:target td:first-child {border-left: var(--ls_target)}
 .leaseset:target th:last-child, .leaseset:target td:last-child {border-right: var(--ls_target)}
-/* end highlight linked leaseset */
+
 .lsdest, .leaseset th:last-child a[href$="i2p/"] {margin-left: 3px; padding: 2px 4px 4px; display: inline-block; border: 1px solid var(--border_badge); border-radius: 2px; background: var(--badge)}
 .lsdest, .leaseset a[href$="i2p/"], .leaseset a[href$="i2p"] {font-size: 90%}
 .lsdest {padding-left: 22px; border-radius: 0; border-left-width: 4px; border-right-width: 4px; background: var(--hardhat) no-repeat 4px center / 14px, var(--badge)}
 .lsdest.published {padding-left: 38px; background: var(--hardhat) no-repeat 4px center / 14px, var(--globe) no-repeat 22px center / 12px, var(--badge)}
 .leaseset th:last-child a[href$="i2p/"] {padding-left: 22px; background: var(--link) no-repeat 5px center / 12px, var(--badge)}
+
 /* /profiles group icons */
 #profilelist th:nth-child(4), #profilelist td:nth-child(4) {width: 15%}
 #profilelist th:nth-child(5), #profilelist td:nth-child(5) {width: 10%; min-width: 56px; white-space: nowrap}
@@ -1956,6 +1975,7 @@ div.app:hover img, .sitemaplink:hover img {filter: none}
 .profilegroup.highcap::before {background: var(--highcap) no-repeat left center}
 .profilegroup.integrated::before {background: var(--integrated) no-repeat left center}
 .profilegroup.standard::before {background: var(--standard) no-repeat left center}
+
 /* lazy loading */
 .lazy.lazyhide, .lazy.lazyhide td {opacity: 0; contain: strict}
 .lazy.lazyshow, .lazy.lazyshow td, #peers .lazy:not(.lazyhide) {opacity: 1}
@@ -1965,10 +1985,13 @@ div.app:hover img, .sitemaplink:hover img {filter: none}
 .newsentry.lazyshow:last-child{margin-bottom: 5px}
 .leasesets_container .lazy.lazyhide, .leasesets_container .lazy.lazyhide td, .leasesets_container .lazy:not(.lazyshow) {opacity: 1; contain: none}
 #tunnelpeercount .lazy {contain: none}
-/* end lazy loading */
+
 #peers img[src$="bound.svg"], #profiles img[src$="bound.svg"], #tunnels img[src$="bound.svg"] {opacity: 0}
 .viewedit br {display: none}
 .viewprofile, .configpeer, .familysearch {font-size: 0}
+
+/* embedded */
+#i2ptunnelframe {margin-bottom: -3px}
 iframe {height: 0}
 .main.embedded {padding: 0}
 #dns, #webmail, #torrents {padding: 0; min-width: 606px}
@@ -1976,6 +1999,8 @@ iframe {height: 0}
 #tunnelmgr, #torrents, #webmail, #dns, #tunnelmgr {position: relative; overflow: hidden; min-height: 9px}
 #tunnelmgr {padding: 0 10px; min-width: 550px}
 #tunnelmgr::before, #torrents::before, #webmail::before, #dns::before {width: 0; height: 9px; display: block; position: absolute; top: 0; left: 0; right: 0; background: linear-gradient(180deg, rgba(255,255,255,.2) 50%, rgba(0,0,0,.2) 50%), var(--reload); opacity: .7; content: ""; animation: reloader 8s ease-out .5s forwards}
+
+/*animations */
 @keyframes downloadbar {from {background: repeating-linear-gradient(135deg, rgba(221, 221, 255, .7) 1px, rgba(221, 221, 255, .7) 6px, rgba(238, 238, 255,.7) 7px, rgba(238, 238, 255,.7) 11px)} to {background: repeating-linear-gradient(135deg, rgba(238, 238, 255,.7) 1px, rgba(238, 238, 255, .7) 5px, rgba(221, 221, 255, .7) 6px, rgba(221, 221, 255, .7) 11px)}}
 @keyframes bar {from {width: calc(100% + 2px)}}
 @keyframes disappear {from {visibility: visible} to {visibility: hidden}}
@@ -1987,18 +2012,32 @@ iframe {height: 0}
 @keyframes update {from {filter: opacity(.6); color: #900}}
 @keyframes zoom {from {transform: scale(.8)} to {transform: scale(1)}}
 /* responsive layout */
+
 @media screen and (max-width: 1499px) {.sitemapLabel {margin-bottom: -3px; font-size: 8pt} .tunnelBuildStatus {font-size: 90%} #sb_tunnelstatus .tunnelBuildStatus::before {margin: -1px 0 0; background-size: 12px} .newsentry + hr + #newsStatus + #newsDisplay {margin: 1px 3px -1px} #config_logging h3 a::before, #webappconfiguration a::before, #i2pclientconfig a::before, #pluginmanage a::before {margin-top: -2px} #sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after, #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {min-height: 12px} #sb_localtunnels td:first-child {padding-right: 3px} .tunnels_client th:first-child {font-size: 0 !important} .tunnels_client th:first-child::after {content: "\21E9\21E7"; font-family: sans-serif; font-size: 12pt; line-height: 0; vertical-align: middle; letter-spacing: -.3em} #help h3, #faq h3 {font-size: 10.5pt} #clock {font-size: 16pt}}
+
 @media screen and (max-width: 1400px) {#peers #ntcpconnections th.queue {font-size: 0 !important} #peers #ntcpconnections th.queue::after {width: 16px; height: 16px; display: inline-block; background: var(--err) no-repeat center center / 16px; content: ""}
 #peers .ipv6, #peers .rto, #peers .mtu, #peers .sst, #peers .cwnd, #peers .rtt {display: none} .cells.peer, .cells.direction {min-width: 0 !important} .cells.idle, .cells.inout {min-width: 90px !important}}
+
 @media screen and (max-width: 1200px) {#profiles #banlist {margin-top: -6px !important; margin-bottom: 0 !important} h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after, #browseronstart .h3navlinks a::after, #servicedebug .h3navlinks a::after {height: 20px !important; width: 20px; background-size: 20px} .tab, .tab2 {padding: 1px 0; min-width: 50px !important} .tab2 {padding: 3px 10px} .tab a {padding: 2px 12px} div[id^="config"] .tab a {padding-right: 13px} #peers .confignav {margin: -6px -6px 5px -6px; padding-top: 0; padding-bottom: 0} .main#peers th {font-size: 8pt} #peers img[src^="/flags.jsp"], #profiles img[src^="/flags.jsp"], #tunnels img[src^="/flags.jsp"] {transform: scale(.9)} p#enablefullstats input[type=checkbox] {margin-top: 0; float: left} #tunnels .flag {margin: -2px 0; padding: 1px 2px 2px 0} #tunnels .flag img {margin: -1px 0 0 -1px !important} .main#profiles, .main#peers, .main#tunnels, .main#jobs, .main#netdb {padding: 5px; min-width: 590px} .main#profiles h3, .main#peers h3, .main#tunnels h3 {margin: 5px 0 -6px !important; font-size: 10.5pt} table[id*="connections"] td, #floodfills td,  #profilelist td, #jobstats td, .main#tunnels td {padding: 3px; border-right: 1px solid var(--border_soft)} .eventspanel form {padding: 10px !important; background: var(--bg) !important} .eventspanel select {margin-right: 8px !important} #tunnels .cells:first-child {width: 1% !important; max-width: 48px !important; min-width: 48px !important} #tunnels .cells:nth-child(2), #tunnels .cells:nth-child(3), .tunnels_participating td:nth-child(4) {width: 1% !important; min-width: 72px !important} #tunnels .confignav {margin: -6px -6px 7px !important} #tunnels .percentBarOuter, #tunnels .percentBarText {margin: 0; width: 50px !important} #tunnels #tunnelPeerCount td:nth-child(2), #tunnels #tunnelPeerCount td:nth-child(2) a {line-height: 1.1; font-size: 90% !important} #tunnels #tunnelPeerCount .cells.bar {min-width: 60px !important} #ntcpconnections th, #udpconnections th {font-size: 8pt} div.app, .sitemapLink, .sitemapLabel {width: 120px} .sitemapLink {margin: 0 -11px 6px 14px} .applabel {width: 116px} .appimg img, .sitemapLink img {max-height: 24px !important; max-width: 24px !important; display: inline-block} #floodfills th:nth-child(8), #floodfills td:nth-child(8), #floodfills th:nth-child(9), #floodfills td:nth-child(9), #floodfills th:nth-child(13), #floodfills td:nth-child(13), #floodfills th:nth-child(14), #floodfills td:nth-child(14), #floodfills th:nth-child(15), #floodfills td:nth-child(15), #peers .duptx, #peers .duprx, #peers .skew, #jardump th:nth-child(3), #jardump th:nth-child(4), #jardump th:nth-child(5), #jardump th:nth-child(6), #jardump td:nth-child(3), #jardump td:nth-child(4), #jardump td:nth-child(5), #jardump td:nth-child(6) {display: none} #floodfills td {font-size: 90%} #minigraph {margin-left: -50px !important} #minigraphcontainer {margin-top: -57px; margin-left: 1px; width: 249px; height: 38px; background-size: 248px 38px; background-position: left 51px bottom} #sb_graphcontainer {background: repeating-linear-gradient(90deg, rgba(0, 0, 0, 0) 12px, rgba(120, 120, 255, .5) 13px, rgba(0, 0, 0, 0) 13px, rgba(0, 0, 0, 0) 28px), repeating-linear-gradient(to top, rgba(0, 0, 0, 0) 11px, rgba(120, 120, 255, .5) 12px, rgba(255, 255, 255, 0) 12px, rgba(255, 255, 255, 0) 24px) !important} #profilelist th {white-space: normal; line-height: 1.1} #profilelist td:nth-child(6) span, #profilelist td:nth-child(8) span {text-align: center} #profilelist .fast, #profilelist .highcap, #profilelist .integrated, #profilelist .standard, #profilelist .fast.integrated, #profilelist .highcap.integrated, #profilelist .standard.integrated {width: 50px; height: 14px; background-size: 14px !important} #profilelist .fast, #profilelist .highcap.integrated, #profilelist .standard.integrated {background-position: calc(50% - 8px) center, calc(50% + 8px) center !important; background-size: 14px !important} .profilegroup::before {width: 18px; height: 14px} #profilelist td:nth-last-child(2) span, #profilelist td:nth-last-child(3) span, #profilelist td:nth-last-child(5) span {text-align: center} #debugmode {margin-bottom: -6px !important} #floodfills, #profiles ul {margin-top: 11px !important} h2 {font-size: 12pt} h3 + .statusnotes {margin-top: 5px !important} h3#totaljobstats {margin-top: 11px !important} #help h3, #faq h3 {font-size: 10pt} #jobstats {margin-bottom: 0} .main#jobs h2 {margin-bottom: 5px !important} .main#jobs h3 {margin-top: 0} .main#jobs h3 + ol:empty + h3 {margin-top: -16px !important} .main#netdb #netdboverview, #netdblookup {margin: 11px 0 0} .main#peers .infohelp {margin: 5px 0 !important} .main#peers pre + h3 {margin-bottom: 5px !important} .main#peers pre {margin-top: -1px} .main#profiles .confignav, .main#netdb .confignav {margin: -6px} .main#profiles .infohelp {margin: 11px 0 5px !important} .main#profiles table, .main#peers table, .main#tunnels table {margin: 5px 0} .main#tunnels h3#exploratorytunnels {margin-top: 0 !important} .main#tunnels h3 {margin-top: -2px !important} #netconfig label, #externali2cp td label, #externali2cp .optionlist .nowrap, #reseedconfig .nowrap {width: calc(100% - 10px)} .netdbentry:last-child, table.leaseset:last-child {margin-bottom: 0 !important} .netdbentry, #leasesetdebug, #leasesetsummary, table.leaseset {margin: 11px 0 -6px !important} .netdbentry th code, .sybil_routerinfo th code, .leaseset th code {font-size: 8pt} #netdb h3.tabletitle, h3.sybils {font-size: 10pt} #netdblookup {margin-bottom: -11px} #ntcpconnections {margin-bottom: 0 !important} #portfaq td:nth-child(2) {white-space: normal} #profiles #peerprofiles + h3.tabletitle {margin-top: 3px !important} #profile_defs, #floodfills, #profiles ul, .main#peers h3#transports {margin-bottom: 0 !important} #profilelist th:last-child {font-size: 0 !important} p.sybilinfo {margin: -3px 0 8px} #reseedurl input[type=text], #reseedzip input[type="file"], #reseedcreatefile p {white-space: normal} #schedjobs {margin: -11px 0 -6px !important} #searchbar button {height: 25px} .statusnotes:last-child {margin-bottom: 0} #sybilanalysis {margin: -3px 0 0} #sybilnav {margin: 5px -6px 8px !important} table.sybil_routerinfo:last-child {margin-bottom: 0 !important} #upnpstatus + #ntcpcon {margin-top: 5px !important} .widescroll + .infohelp {margin: 0 !important}}
+
 @media screen and (max-width: 1100px) {.tunnel_id {width: auto !important; text-align: center}}
+
 @media screen and (max-width: 1000px) {.welcome h2 {font-size: 11pt} .confignav {font-size: 8.5pt} .tab2 {padding: 3px 8px} .tab a {padding: 2px 10px} input[name="pluginURL"] {width: 260px} #plugininstall tr:nth-child(3) td:nth-last-child(2), #plugininstall2 tr:nth-child(2) td:nth-last-child(2) {padding: 15px 0 15px 36px; background-size: 20px; background-position: 10px center} .logo {margin: 0 5px !important; width: calc(100% - 36px); min-width: 530px; display: block; position: absolute; top: 10px !important; float: none; background-size: 200px auto !important} .warning {margin: 140px 5px 0 !important} #proxyerror .warning {margin-top: 10px !important; padding-bottom: 10px !important} .warning h3:first-child {font-size: 11pt} .logo a:nth-child(n+2) {width: 25%; white-space: nowrap; font-size: 10pt} .proxyfooter {display: none} img[src$="bound.png"] {transform: scale(.9)} .main#tunnels th, .main#profiles th {font-size: 8pt} #config_update .messages {padding-left: 40px; background-size: 22px; background-position: 8px center} .main#view_profile {padding: 0 !important; min-width: 540px} #view_profile pre {margin: -5px 5px; width: calc(100% - 5px)} #view_profile h2 {margin: -1px; font-size: 13pt} #viewprofile {border: none; min-width: 500px} input[name="speed"], input[name="capacity"] {min-width: 80px; width: 80px} #netdboverview th {font-size: 9.5pt} #netdboverview table th::before, #netdboverview table td::before {height: 20px; vertical-align: middle} #netdboverview a, #netdtiers a {margin: -1px 5px !important; vertical-align: middle} #netdboverview table th, #netdboverview table td {padding: 4px !important; min-width: 60px} .main#events {min-width: 510px} #events select {min-width: 100px} #events table {table-layout: fixed; width: 100%} #events td:last-child {word-break: break-all} #tunnels .confignav {margin: -1px -5px -10px} .encDests code {max-width: 140px} #bandwidthconfig .bw_out, #bandwidthconfig .bw_in, #bandwidthconfig .bw_share {padding-left: 5px; padding-right: 8px; background: var(--bg2) !important} #bandwidthconfig td:not(.infohelp):first-child {padding-right: 0; background: none} #bandwidthconfig .infohelp {padding-right: 10px !important} .net_datausage {padding: 4px 0; min-width: 260px; white-space: normal} .bw_title {margin: 2px -6px -2px -3px; font-size: 10pt} #updateHelper select {max-width: 200px !important} #reseedproxytype {columns: 2 auto} #reseedconfig .nowrap b {min-width: 50px !important} #reseed_urlselection.optionsingle {columns: 1 auto} #reseedconfig tr:nth-child(3) td label {padding: 5px 4px 5px 0 !important; width: calc(100% - 4px) !important} #view_profile h3 {border: none; border-bottom: var(--border)}}
+
 @media screen and (max-width: 900px) {.welcome h2 {font-size: 10pt} .homelinkedit input[name="nofilter_url"] {width: 240px !important} #newfamily input[type=text] {width: 160px !important} #joinfamily input[type="file"] {width: 220px} h3.ptitle, h3.tabletitle, th.th_title, h3#udpcon, h3#ntcpcon {font-size: 10pt} #ntcpconnections th:last-child {font-size: 0} #ntcpconnections th:last-child::before {content: var(--err) !important} #consolepass input[name="name"], #externali2cp input[name="user"], #consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"] {width: 130px !important; min-width: 130px !important} input[name="pluginURL"] {margin-left: 0 !important; width: 190px !important} #plugininstall tr:nth-child(3) td:nth-last-child(2), #plugininstall tr:nth-child(5) td:nth-last-child(2) {padding-left: 5px !important; background-size: 0 !important} #plugininstall .optionsave, #plugininstall2 .optionsave {padding-right: 0 !important} input[name="pluginFile"] {margin-left: 0 !important; transform: scale(.9)} .main#profiles table, .main#peers table, .main#tunnels table, .main#jobs table {font-size: 8pt} #netdbversions th:last-child, #netdbtransports th:last-child, #netdbcountrylist th:last-child {max-width: 60px; overflow: hidden; text-overflow: ellipsis} #netdbversions td, #netdbtransports td, #netdbcountrylist td {font-size: 8.5pt}}
+
 @media screen and (min-width: 900px) {#consolepass input[name="name"], #externali2cp input[name="user"], #consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"] {width: 160px}}
+
 @media screen and (min-width: 1060px) {#graphs td:first-child {padding: 5px 0}}
+
 @media screen and (min-width: 1000px) {th.queue {white-space: nowrap}}
+
 @media screen and (min-width: 1200px) {#peers .confignav + #udp, #peers .confignav + #ntcp {margin-top: 15px !important} #terms {padding: 5px 0 15px; columns: 2 auto; column-gap: 35px; column-rule: var(--border_color)} #terms p {-webkit-column-break-inside: avoid; break-inside: avoid; page-break-inside: avoid} #terms p:first-child {margin-top: 0} .cells tt, #profilelist tt {margin-left: 2px !important} #jobstats td:first-child, #jobstats tr:hover td:first-child {padding: 6px 0 6px 26px; background: var(--yes) no-repeat 8px center / 12px}}
+
 @media screen and (min-width: 1400px) {#help #changelog pre {margin-left: 0; padding-left: 10px; columns: 560px auto; column-gap: 40px; column-rule: 1px dotted #abf} .statlist li.statsName:first-child {margin-top: 0} .joblog ul {margin-left: -40px} #stats ul.statlist {margin-top: 10px !important; padding-bottom: 0 !important; width: 100%; border: none; background: none} .statsName {margin: 0 6px 10px 0 !important; padding: 10px 10px 0 !important; width: calc(100% - 22px); min-width: 540px; display: inline-block; border: var(--border); box-shadow: var(--highlight); background: var(--th)} .statsName > b {padding-left: 14px; background: var(--stats) no-repeat left center / 10px} .statsViewGraphs {margin: 4px 0; padding: 1px 8px 2px; width: calc(100% - 46px); display: inline-block; border-top: 1px solid var(--border_soft); border-bottom: 1px solid var(--border_soft)} a.graphstat {margin-right: 2px; font-size: 90%} .statlist li::before, .statlist li li::before, .statlist li li:last-child::before, a.graphstat::before {display: none; content: none} .statlist li br, .statlist li li br {display: inline-block !important} .statlist li b {line-height: 1.5; font-size: 105% !important} .statlist li i {margin-left: 12px; opacity: .8} .statlist li li {margin-right: -10px} .statlist li li b {font-size: 100%} .statlist li li:not(.noevents):last-child {margin-bottom: -20px} .statlist li li:last-child {border-bottom: none} .statsName b, .statsLongName {width: 100%; display: inline-block; text-align: left} .statsLongName {margin-bottom: 8px} .statsName b, .statsName i {display: inline-block} .statsName::before {content: none} ul.statlist {padding-top: 10px; text-align: center; columns: auto 540px; column-gap: 10px} .statlist .bullet {display: none}}
-@media screen and (min-width: 1500px) {body, .main, .main td, .news p, #news p, .tab, .tab2, .main li b, .joblog li, .themelabel, .ui_lang, .statusnotes, .routersummary button.download, #peerdefs, #profile_defs, #thresholds, #configinfo, .infohelp, .infowarn, button, input, select, textarea, .netdbentry th, .configtable th, .statlist a[name], .statlist b, .statlist li b, .statlist a[name]:hover, div.messages, th, label, input, input[type="submit"], input[type="reset"], button {font-size: 10pt} .main[id^="config_"] .encDests th, .main[id^="config_"] .encDests td {font-size: 9pt} body {overflow-x: hidden} .applabel a, #updateAvailable, code, tt, pre, #logs li, #routerlogs li, #servicelogs li, tt, tt a, code, .bucket {font-size: 9.5pt} .routersummary td, .routersummary a, .routersummary button, .routersummary h4, .routersummary h4 a, div.news, #banlist li, .news #newsStatus, .news #newsDisplay, .topness, .footnote, .cells tt, #profilelist tt, .sb_notice, #help code, #help tt {font-size: 9pt} .routersummary .reload, .routersummary .stop {min-width: 102px !important} .cells tt, #profilelist tt {padding-right: 3px; margin-left: -1px !important; margin-right: 0 !important} tt a, .cells tt, #profilelist tt {font-size: 9pt} .main, .news, h1, #warning {margin-left: 252px !important} h1 {padding: 18px 20px 18px 56px !important; font-size: 19pt} .routersummary {width: 245px !important} #sb_logo {height: 37px !important} #sb_logo img {margin-top: -2px; margin-left: -2px; width: 240px; transform: none} .routersummary table[id^="sb_"], .sb_newsheadings table {width: 245px !important; min-width: 245px !important} #sb_bandwidthgraph {width: 243px !important; min-width: 243px !important} .routersummary h3 a, #netdboverview th {font-size: 11pt} .routersummary h3 {padding: 4px 0 3px !important} #sb_internals a, #sb_services a, #sb_advanced a, #sb_help a {max-width: 232px} .routersummary button[type=submit], .routersummary .reload[value="restart"] {margin: 2px 4px 1px; min-width: 110px !important} .percentBarOuter {width: 237px} div.app {width: 160px !important} div.app img {padding: 10px 60px 9px} .applabel {padding: 2px !important; width: 156px !important} .applabel a {padding-top: 3px; height: 16px !important} @supports not (-moz-appearance: none) {.applabel {height: 20px !important}} .footnote {font-size: 8pt} h3, h3.ptitle, h3.tabletitle, th.th_title {font-size: 11pt} .sb_newsheadings ul {width: 213px !important} .newsentry h3, .newsentry h3 a, #news.main h3, .newsDate {font-size: 10.5pt} .newsAuthor {padding-left: 14px; font-size: 9pt; background-size: 12px; background-position: left center} #console h3 {font-size: 12pt} #netdb h3.tabletitle, h3.sybils {font-size: 10.5pt} h3#i2pclientconfig, h3.ptitle {margin-bottom: -15px !important} h3#systray, h3#servicedebug, h3#browseronstart {margin-bottom: -15px !important} h4#updateplugins {margin-top: -16px !important; padding: 5px 10px; font-size: 10pt} h3#webappconfiguration {margin-bottom: -33px} #shutdown.formaction, #restart.formaction, #systray.formaction, #runonstart.formaction, #dumpthreads.formaction, #browserstart.formaction,  #updateplugins.formaction {margin-top: -15px} button.control {padding: 14px !important; font-size: 0 !important} #jardump td {font-size: 9pt} #jardump tt {font-size: 8pt} #leasesetdebug th, #leasesetsummary th {font-size: 11pt} div.news {padding-bottom: 5px !important} .sorry {margin-left: 251px !important} .joblog h3 {margin-top: 8px} .subheading b {font-size: 10.5pt} #stats.main form {margin-top: -14px} .confignav {padding: 0 5px !important} .tab, .tab2 {margin-top: -1px !important} #help .confignav {padding: 0 !important; position: sticky; top: -1px; z-index: 999} #help .tab {margin-top: -1px !important; margin-bottom: -1px !important} .main[id^="config_"] th, h4#updateplugins {font-size: 10.5pt} .homelinkedit th:first-child, #sidebarconf th:first-child, #consolepass th:first-child {font-size: 0 !important} .themechoice, .langselect {width: 140px !important} .themechoice .optbox, .langselect .optbox {width: 144px !important} .themechoice .optbox {margin-left: -48px !important} .langselect .optbox {margin-left: -64px !important} .sb_newsheadings table {width: 224px !important} .sb_newsheadings td:last-child, .sb_newsheadings tr:hover td:last-child {background-position: 4px 5px !important} #wizardpage .routersummary div[style="height: 36px;"] {height: 45px !important} #sybilTask th {font-size: 12pt} h3#webappconfiguration {margin-bottom: -14px} #sb_localtunnels a {max-width: 194px} #sb_bandwidthgraph {width: 223px} #sb_graphcontainer {background-size: 244px 36px} #sb_memoryBar .percentBarText {padding: 1px 0 2px} #pluginconfig {margin: -15px 0 0 !important} .routerid .flag img {margin: 0 0 2px !important} .newsAuthor i {margin-top: -1px; display: inline-block} .tunnel_cap {margin-left: 10px; padding: 1px; min-width: 15px} .tunnel_id:empty {margin-right: -10px} #tunnels td:last-child .routerid {margin-left: -10px} #tunnels td:last-child .tunnel_peer:not(.tunnel_local) + .tunnel_cap {margin-left: 2px !important} #netconfig label::before {min-height: 36px !important} #externali2cp td label::before, #externali2cp .nowrap::before, #reseedconfig .nowrap::before {min-height: 44px !important}}
+
+@media screen and (min-width: 1500px) {body, .main, .main td, .news p, #news p, .tab, .tab2, .main li b, .joblog li, .themelabel, .ui_lang, .statusnotes, .routersummary button.download, #peerdefs, #profile_defs, #thresholds, #configinfo, .infohelp, .infowarn, button, input, select, textarea, .netdbentry th, .configtable th, .statlist a[name], .statlist b, .statlist li b, .statlist a[name]:hover, div.messages, th, label, input, input[type="submit"], input[type="reset"], button {font-size: 10pt} .main[id^="config_"] .encDests th, .main[id^="config_"] .encDests td {font-size: 9pt} body {overflow-x: hidden} .applabel a, #updateAvailable, code, tt, pre, #logs li, #routerlogs li, #servicelogs li, tt, tt a, code, .bucket {font-size: 9.5pt} .routersummary td, .routersummary a, .routersummary button, .routersummary h4, .routersummary h4 a, div.news, #banlist li, .news #newsStatus, .news #newsDisplay, .topness, .footnote, .cells tt, #profilelist tt, .sb_notice, #help code, #help tt {font-size: 9pt} .routersummary .reload, .routersummary .stop {min-width: 102px !important} .cells tt, #profilelist tt {padding-right: 3px; margin-left: -1px !important; margin-right: 0 !important} tt a, .cells tt, #profilelist tt {font-size: 9pt} .main, .news, h1, #warning {margin-left: 252px !important} h1 {padding: 18px 20px 18px 56px !important; font-size: 19pt} .routersummary {width: 245px !important} #sb_logo {height: 37px !important} #sb_logo img {margin-top: -2px; margin-left: -2px; width: 240px; transform: none} .routersummary table[id^="sb_"], .sb_newsheadings table {width: 245px !important; min-width: 245px !important} #sb_bandwidthgraph {width: 243px !important; min-width: 243px !important} .routersummary h3 a, #netdboverview th {font-size: 11pt} .routersummary h3 {padding: 4px 0 3px !important} #sb_internals a, #sb_services a, #sb_advanced a, #sb_help a {max-width: 232px} .routersummary button[type=submit], .routersummary .reload[value="restart"] {margin: 2px 4px 1px; min-width: 110px !important} .percentBarOuter {width: 237px} div.app {width: 160px !important} div.app img {padding: 10px 60px 9px} .applabel {padding: 2px !important; width: 156px !important} .applabel a {padding-top: 3px; height: 16px !important} @supports not (-moz-appearance: none) {.applabel {height: 20px !important}} .footnote {font-size: 8pt} h3, h3.ptitle, h3.tabletitle, th.th_title {font-size: 11pt} .sb_newsheadings ul {width: 213px !important} .newsentry h3, .newsentry h3 a, #news.main h3, .newsDate {font-size: 10.5pt} .newsAuthor {padding-left: 14px; font-size: 9pt; background-size: 12px; background-position: left center} #console h3 {font-size: 12pt} #netdb h3.tabletitle, h3.sybils {font-size: 10.5pt} h3#i2pclientconfig, h3.ptitle {margin-bottom: -15px !important} h3#systray, h3#servicedebug, h3#browseronstart {margin-bottom: -15px !important} h4#updateplugins {margin-top: -16px !important; padding: 5px 10px; font-size: 10pt} h3#webappconfiguration {margin-bottom: -33px} #shutdown.formaction, #restart.formaction, #systray.formaction, #runonstart.formaction, #dumpthreads.formaction, #browserstart.formaction,  #updateplugins.formaction {margin-top: -15px} button.control {padding: 14px !important; font-size: 0 !important} #jardump td {font-size: 9pt} #jardump tt {font-size: 8pt} #leasesetdebug th, #leasesetsummary th {font-size: 11pt} div.news {padding-bottom: 5px !important} .sorry {margin-left: 251px !important} .joblog h3 {margin-top: 8px} .subheading b {font-size: 10.5pt} #stats.main form {margin-top: -14px} .confignav {padding: 0 5px !important} .tab, .tab2 {margin-top: -1px !important} #help .confignav {padding: 0 !important; position: sticky; top: -1px; z-index: 999} #help .tab {margin-top: -1px !important; margin-bottom: -1px !important} .main[id^="config_"] th, h4#updateplugins {font-size: 10.5pt} .homelinkedit th:first-child, #sidebarconf th:first-child, #consolepass th:first-child {font-size: 0 !important} .themechoice, .langselect {width: 140px !important} .themechoice .optbox, .langselect .optbox {width: 144px !important} .themechoice .optbox {margin-left: -48px !important} .langselect .optbox {margin-left: -64px !important} .sb_newsheadings table {width: 224px !important} .sb_newsheadings td:last-child, .sb_newsheadings tr:hover td:last-child {background-position: 4px 5px !important} #wizardpage .routersummary div[style="height: 36px;"] {height: 45px !important} #sybilTask th {font-size: 12pt} h3#webappconfiguration {margin-bottom: -14px} #sb_localtunnels a {max-width: 194px} #sb_bandwidthgraph {width: 223px} #sb_graphcontainer {background-size: 244px 36px} #sb_memoryBar .percentBarText {padding: 1px 0 2px} #pluginconfig {margin: -15px 0 0 !important} .routerid .flag img {margin: 0 0 2px !important} .newsAuthor i {margin-top: -1px; display: inline-block} .tunnel_cap {margin-left: 10px; padding: 1px; min-width: 15px} .tunnel_id:empty {margin-right: -10px} #tunnels td:last-child .routerid {margin-left: -10px} #tunnels td:last-child .tunnel_peer:not(.tunnel_local) + .tunnel_cap {margin-left: 2px !important} #netconfig label::before {min-height: 36px !important} #externali2cp td label::before, #externali2cp .nowrap::before, #reseedconfig .nowrap::before {min-height: 44px !important} #searchbar button {height: 27px}}
+
 @media screen and (min-width: 1600px) {#sb_localtunnels td:first-child {width: 20px}}
+
 @media screen and (min-width: 1634px) {.leasesets_container {margin-bottom: 2px} th code {font-size: 9pt}}
