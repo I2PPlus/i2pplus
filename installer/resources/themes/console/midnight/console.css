@@ -11996,12 +11996,8 @@ h3#bannedpeers {
 }
 
 @keyframes reloader {
-  0%, 100% {
-    width: 0;
-  }
-  80%, 99% {
-    width: 120%;
-  }
+  0%, 100% {width: 0}
+  80%, 99% {width: 120%}
 }
 
 @keyframes bar {
@@ -12288,7 +12284,8 @@ iframe {
   top: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(#d30, #f60);
+  background: linear-gradient(180deg, rgba(255,255,255,.05) 50%, rgba(0,0,0,.2) 50%), linear-gradient(#101, #707);
+  opacity: .7;
   content: "";
   animation: reloader 8s ease-out .5s forwards;
 }
