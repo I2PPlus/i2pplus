@@ -13019,7 +13019,7 @@ iframe {
     margin-top: -1px;
     margin-bottom: -9px;
   }
-  table[id^="sb_"] {
+  #sidebar table[id^="sb_"], #sidebar #sb_localtunnels {
     width: 256px !important;
   }
   #sidebar #sb_services {
