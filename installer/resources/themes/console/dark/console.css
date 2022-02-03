@@ -13720,10 +13720,10 @@ body.iframed {
     width: 55px;
   }
   h1[class], h1, h1.conf.adv {
-    padding: 13px 15px 13px 62px;
+    padding: 14px 15px 14px 65px;
     font-size: 20pt !important;
     background-size: 40px, 4px 100%, 100%, 164px !important;
-    background-position: 12px center;
+    background-position: 15px center !important;
   }
   .main#jobs h2 {
     margin-bottom: 3px !important;
