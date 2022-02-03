@@ -7181,7 +7181,7 @@ form[action="events"] {
 }
 
 #profilelist {
-  margin-top: -2px;
+  margin-top: 1px;
 }
 
 #peerprofiles + h3 {
@@ -12992,7 +12992,7 @@ body.iframed {
     margin-top: -5px !important;
   }
   #profilelist {
-    margin-top: -5px;
+    margin-top: -1px;
   }
   #profilelist th, #profilelist td:nth-child(4), #profilelist td:nth-child(5) {
     font-size: 85%;
