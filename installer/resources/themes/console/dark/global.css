@@ -50,6 +50,7 @@
   --on: #6b6, 0 0 0 1px rgba(0,0,0,.7), 0 0 1px 0 rgba(0,0,0,.5);
   --option_highlight: inset 0 0 0 1px #002500;
   --outline: 0 0 0 1px #000;
+  --row: linear-gradient(180deg,rgba(0,24,0,.5), rgba(0,8,0,.5));
   --stroke: 1px rgba(237,237,146,.3);
   --textshadow: 0 1px 1px rgba(0,0,0,.8);
   --th: linear-gradient(180deg,#010,#000);

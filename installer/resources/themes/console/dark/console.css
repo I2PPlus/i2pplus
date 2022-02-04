@@ -94,7 +94,7 @@ th {
   font-size: 9pt;
   border-top: var(--border);
   border-bottom: var(--border) !important;
-  background: linear-gradient(180deg,#002000, #000 75%);
+  background: var(--th);
 }
 
 tr {
@@ -103,7 +103,7 @@ tr {
 }
 
 tr:nth-child(even), tr:nth-child(odd) {
-  background: linear-gradient(180deg,rgba(0,24,0,.5), rgba(0,8,0,.5));
+  background: var(--row);
 }
 
 td {
@@ -337,7 +337,8 @@ pre {
   white-space: nowrap;
 }
 
-#sb_general td:first-child, #sb_shortgeneral td:first-child,  #sb_advancedgeneral td:first-child, #sb_peersadvanced td:first-child {
+#sb_general td:first-child, #sb_shortgeneral td:first-child,
+#sb_advancedgeneral td:first-child, #sb_peersadvanced td:first-child {
   max-width: 130px;
 }
 
@@ -2698,7 +2699,7 @@ form[action="events"] {
   border-top: var(--border) !important;
   border-bottom: var(--border) !important;
   line-height: 1.4;
-  background: linear-gradient(180deg,#002000, #000 75%) !important;
+  background: var(--th) !important;
 }
 
  #peers .tablefooter {
@@ -3727,12 +3728,12 @@ form > table {
 
 #tunnelconfig th:not([colspan="3"]):nth-child(n+2) {
   padding-left: 20px !important;
-  background: var(--in) no-repeat 20px center / 14px, linear-gradient(180deg,#002000, #000 75%);
+  background: var(--in) no-repeat 20px center / 14px, var(--th);
 }
 
 #tunnelconfig th:not([colspan="3"]):last-child {
   padding-left: 17px !important;
-  background: var(--out) no-repeat 20px center / 14px, linear-gradient(180deg,#002000, #000 75%);
+  background: var(--out) no-repeat 20px center / 14px, var(--th);
 }
 
 #tunnelconfig td:first-child {
@@ -3783,7 +3784,8 @@ form > table {
 
 /* /configlogging */
 
-input[name="logfilename"], input[name="logformat"], input[name="logdateformat"], input[name="logfilesize"], select[name="defaultloglevel"], select[name="newloglevel"] {
+input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
+input[name="logfilesize"], select[name="defaultloglevel"], select[name="newloglevel"] {
   width: 125px;
 }
 
@@ -3904,7 +3906,7 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 #sidebarconf th:nth-child(1), .homelinkedit th:first-child, #consolepass th:first-child {
   text-align: center;
   font-size: 0 !important;
-  background: var(--nuke) var(--center) / 16px, linear-gradient(180deg,#002000, #000 75%) !important;
+  background: var(--nuke) var(--center) / 16px, var(--th) !important;
 }
 
 .buttonTop img, .buttonBottom img, .buttonUp img, .buttonDown img {
@@ -4145,7 +4147,7 @@ h3#servicedebug a, h3#graphinfo a {
   z-index: 0;
 }
 
-#tunnels #participating, #tunnels #participating ~ h3 {
+#participating, #participating ~ h3 {
   padding-bottom: 8px;
 }
 
@@ -4184,7 +4186,7 @@ h3#servicedebug a, h3#graphinfo a {
 }
 
 #tunnels h3 a[href^="/configtunnels#"]:active::after, #tunnels h3 a[href$="/i2ptunnelmgr"]:active::after,
- #logs a.configure:active::after,  h4.app a:active::after, h4.app2 a:active::after {
+ #logs a.configure:active::after, h4.app a:active::after, h4.app2 a:active::after {
   opacity: .7;
   transform: rotate(90deg);
   transition: linear transform .2s;
@@ -4222,20 +4224,20 @@ h3#servicedebug a, h3#graphinfo a {
 /* configclients */
 
 #clientconfig th:first-child {
-  text-align: right;
   padding-right: 5px;
+  text-align: right;
 }
 
 #clientconfig th:last-child {
-  text-align: left;
   padding-left: 5px;
+  text-align: left;
 }
 
 .formaction#clientsconfig, .formaction#webappconfigactions, .formaction#pluginconfigactions {
-  border: var(--border);
-  padding: 5px;
-  background: #000;
   margin-bottom: -4px;
+  padding: 5px;
+  border: var(--border);
+  background: #000;
 }
 
 .formaction#webappconfigactions, .formaction#pluginconfigactions {
@@ -5264,7 +5266,7 @@ h3#bannedpeers {
 #ipv4, #ipv6, #permabanned tr:nth-child(2) {
   border-top: var(--border);
   border-bottom: var(--border);
-  background: linear-gradient(180deg,#002000, #000 75%) !important;
+  background: var(--th) !important;
 }
 
 /* end /configpeers banlist */
@@ -6884,7 +6886,7 @@ h4.embeddedtitle#updateplugins {
   text-align: left;
   font-size: 10pt;
   border: var(--border);
-  background: linear-gradient(180deg,#002000, #000 75%) !important;
+  background: var(--th) !important;
 }
 
 #manualreseed input[type=text] {
@@ -7455,7 +7457,7 @@ h4#sb_shutdownstatus span {
   background: linear-gradient(180deg,#500, #100) !important;
 }
 
-.ff,  #capabilities_key a .ff {
+.ff, #capabilities_key a .ff {
   background: linear-gradient(180deg,#730, #310) !important;
 }
 
@@ -7478,7 +7480,7 @@ h4#sb_shutdownstatus span {
   opacity: 0;
 }
 
-#tunnels #tunnels_part .cells, #tunnels_part .cells > * {
+#tunnels_part .cells, #tunnels_part .cells > * {
   vertical-align: middle;
 }
 
@@ -9282,11 +9284,11 @@ input[type=file] {
   margin-top: -13px;
 }
 
-#pluginInstall .suboption, #pluginInstall2 .suboption,  #config_family .suboption {
+#pluginInstall .suboption, #pluginInstall2 .suboption, #config_family .suboption {
   padding: 2px 12px 3px 10px;
 }
 
-#installPluginUrl input[type=text], #installPluginFile input[type=file],  #joinfamily input[type=file], #newfamily input[type=text] {
+#installPluginUrl input[type=text], #installPluginFile input[type=file], #joinfamily input[type=file], #newfamily input[type=text] {
   width: 100% !important;
 }
 
@@ -11275,16 +11277,42 @@ h3#scheduledjobs {
 }
 
 #tunnels .cells:first-child {
-  width: 1% !important;
-  max-width: 64px !important;
-  min-width: 64px !important;
+  width: 1%;
+  max-width: 64px;
+  min-width: 64px;
 }
 
 #tunnels .cells:nth-child(2), #tunnels .cells:nth-child(3), .tunnels_participating td:nth-child(4) {
-  width: 2% !important;
-  max-width: 112px !important;
-  min-width: 112px !important;
+  width: 2%;
+  max-width: 112px;
+  min-width: 112px;
   vertical-align: middle !important;
+}
+
+#tunnels #tunnelpeercount td:nth-child(n+2) {
+  width: auto;
+}
+
+#tunnelPeerCount .ipaddress {
+  min-width: 140px;
+  display: inline-block;
+  text-align: right;
+}
+
+#tunnelPeerCount a.script[href^="https://gwhois.org"]::after {
+  margin: -1px 0 1px 3px;
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  vertical-align: middle;
+  background: var(--search) no-repeat center center / 11px;
+  opacity: .7;
+  content: "";
+}
+
+#tunnels #peercount {
+  background: url(/themes/console/images/svg/peers.svg) no-repeat 9px center / 18px, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
+  background-size: 18px, 100%, 4px 100%, 100% !important
 }
 
 #tunnels h3#exploratory a, #tunnels h3.server a, #tunnels h3.client a {
@@ -11292,7 +11320,7 @@ h3#scheduledjobs {
   padding: 7px 4px 14px 10px !important;
 }
 
-#tunnels #participating a::after, #tunnels #peercount a::after {
+#participating a::after, #peercount a::after {
   margin: -10px 0 -15px -12px !important;
   padding: 9px 2px 9px 0 !important;
 }
@@ -12129,7 +12157,7 @@ h3 + table {
 
 /* TunnelPeerCount */
 
-#tunnels #peercount {
+#peercount {
   margin-bottom: -3px !important;
   background: var(--hardhat) no-repeat 8px center,
     linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), var(--h3),
@@ -12137,23 +12165,23 @@ h3 + table {
   background-size: 20px, 100%, 4px 100%, 100% !important;
 }
 
-#tunnels #peercount img, #tunnels #participating img {
+#peercount img, #participating img {
   margin: 0 0 -2px !important;
   padding: 8px 6px 6px;
   vertical-align: middle;
   border: none !important;
 }
 
-#tunnels #participating img, #tunnels #peercount img {
+#participating img, #peercount img {
   width: 0;
   height: 0;
 }
 
-#tunnels #participating a, #tunnels #peercount a {
+#participating a, #peercount a {
   border-left: var(--border);
 }
 
-#tunnels #participating a::after, #tunnels #peercount a::after {
+#participating a::after, #peercount a::after {
   margin-left: 2px;
   width: 18px;
   height: 18px;
@@ -12163,12 +12191,12 @@ h3 + table {
   content: "";
 }
 
-#tunnels #participating a:hover::after, #tunnels #participating a:focus::after,
-#tunnels #peercount a:hover::after, #tunnels #peercount a:focus::after {
+#participating a:hover::after, #participating a:focus::after,
+#peercount a:hover::after, #peercount a:focus::after {
   background: var(--refresh_hover) var(--center);
 }
 
-#tunnels #participating a:active::after, #tunnels #peercount a:active::after {
+#participating a:active::after, #peercount a:active::after {
   opacity: .7;
   transform: rotate(90deg);
   transition: ease transform .15s;
@@ -12178,7 +12206,7 @@ h3 + table {
   margin-bottom: 9px;
 }
 
-#tunnels #tunnelPeerCount .cells {
+#tunnelPeerCount .cells {
   width: auto !important;
   max-width: inherit !important;
   min-width: 0 !important;
@@ -12199,8 +12227,8 @@ h3 + table {
   min-width: 0 !important;
 }
 
-#tunnels #tunnelPeerCount .cells.bar, #tunnels #tunnelPeerCount th.bar,
-#tunnels #tunnelPeerCount td:nth-child(n+3), #tunnels #tunnelPeerCount th:nth-child(n+3) {
+#tunnelPeerCount .cells.bar, #tunnelPeerCount th.bar,
+#tunnelPeerCount td:nth-child(n+3), #tunnelPeerCount th:nth-child(n+3) {
   padding-left: 8px !important;
   padding-right: 8px !important;
   width: 10% !important;
@@ -12212,7 +12240,7 @@ h3 + table {
   line-height: 1.4 !important;
 }
 
-#tunnels #tunnelPeerCount td:nth-child(2) {
+#tunnelPeerCount td:nth-child(2) {
   white-space: normal;
   word-break: break-all;
 }
@@ -12317,14 +12345,14 @@ h3 + table {
   line-height: 1.6 !important;
 }
 
-#tunnels #tunnelPeerCount td:first-child {
+#tunnelPeerCount td:first-child {
   padding-left: 5px !important;
   padding-right: 5px !important;
   width: 1%;
   white-space: nowrap;
 }
 
-#tunnels #tunnelPeerCount .routerid {
+#tunnelPeerCount .routerid {
   min-width: 72px !important;
 }
 
@@ -13097,7 +13125,7 @@ body.iframed {
   #tunnels h3 {
     margin-top: 6px;
   }
-  #tunnels #participating a::after, #tunnels #peercount a::after {
+  #participating a::after, #peercount a::after {
     width: 16px;
     height: 16px;
     background-size: 16px !important;
@@ -13131,7 +13159,7 @@ body.iframed {
   #floodfills th:nth-child(14), #floodfills td:nth-child(14) {
     display: none;
   }
-  #tunnels #peercount img {
+  #peercount img {
     margin: -2px -4px;
   }
   #tunnelPeerCount {
@@ -13778,7 +13806,7 @@ body.iframed {
     margin: -8px 0 -8px 0 !important;
     padding: 7px 2px 14px 0 !important;
   }
-  #tunnels #participating a::after, #tunnels #peercount a::after {
+  #participating a::after, #peercount a::after {
     margin: -8px 0 -13px -12px !important;
     padding: 9px 6px 9px 0 !important;
   }
