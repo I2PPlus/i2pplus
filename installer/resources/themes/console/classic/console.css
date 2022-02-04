@@ -336,11 +336,11 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 /* form submission */
 .formaction form, td form {margin-bottom: 0}
 .formaction, td.optionsave {padding-right: 3px !important}
-.formaction {margin: 0; padding: 8px 5px; text-align: right; background: var(--th)}
+.formaction {margin: 0; padding: 10px 5px; text-align: right; background: var(--th)}
 .configtable tr:last-child, #addkeyring tr:last-child, #loggingoptions tr:last-child {border-top: var(--border); background: var(--bg)}
 .formaction#clientsconfig, .formaction#webappconfigactions, .formaction#sidebardefaults, .formaction#tunnelconfigsave, .formaction#submitconsolepass {margin-top: -6px; border: var(--border)}
-.formaction#graphing {margin: -9px 0 0; padding: 5px; border-left: none; border-right: none}
-.formaction[id*="home"] {margin-top: -6px; padding: 5px; border: var(--border)}
+.formaction#graphing {margin: -9px 0 0; border-left: none; border-right: none}
+.formaction[id*="home"] {margin-top: -6px; padding: 10px 5px; border: var(--border)}
 .formaction#homeapps {margin-top: -6px; margin-bottom: -5px}
 .formaction#homesites {margin-top: -6px; margin-bottom: -6px}
 .formaction#langui {margin: 0 -5px}
@@ -350,7 +350,7 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 .formaction#themeui {margin: 8px -5px 0; border-top: var(--border)}
 .formaction#tunnelconfigsave {margin-top: 4px; margin-bottom: -9px}
 .formaction#webappconfigactions, .formaction#clientsconfig {margin-top: -6px; margin-bottom: -5px}
-.optionsave {padding: 8px 5px; text-align: right; border-top: var(--border); background: var(--bg)}
+.optionsave {padding: 10px 5px; text-align: right; border-top: var(--border); background: var(--bg)}
 .optionsave[colspan="2"] {background: var(--bg)}
 #i2pupdates .optionsave {border-bottom: var(--border)}
 #manualreseed .optionsave {padding-left: 0}
