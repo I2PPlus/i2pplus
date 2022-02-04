@@ -542,7 +542,7 @@ div[id^="config_"].main {padding-bottom: 20px}
 .configure tr, .configure td {padding: 5px}
 .configure h2:first-child {margin-top: 15px}
 .configtable, #permabanned, #loggingoptions, #configstats, #banlist {margin-bottom: -5px}
-.configtable td, #joinfamily td {padding: 5px 10px; border-top: var(--border); border-bottom: var(--border)}
+.configtable td, #joinfamily td {padding: 10px; border-top: var(--border); border-bottom: var(--border)}
 .configtable.homelinkedit td, .configtable.homelinkedit tr, .configtable#sidebarconf td, .configtable#sidebarconf tr {padding-top: 4px; padding-bottom: 4px; border-top: 1px inset var(--bg4) !important; border-bottom: 1px inset var(--bg4) !important}
 #floodfillconfig, #joinfamily {margin-bottom: 0}
 #config_homepage td {padding: 5px}
