@@ -150,7 +150,8 @@ class PeerTestManager {
 
     /** initial - ContinueTest adds backoff */
     private static final int RESEND_TIMEOUT = 4*1000;
-    private static final int MAX_TEST_TIME = 30*1000;
+//    private static final int MAX_TEST_TIME = 30*1000;
+    private static final int MAX_TEST_TIME = 15*1000;
     private static final long MAX_NONCE = (1l << 32) - 1l;
 
     /**
