@@ -610,11 +610,11 @@ pre#activetransports {margin: -11px 0 0; padding: 15px 15px 0; width: calc(100% 
 #sidebarconf td:last-child[colspan="2"] {padding: 2px; text-align: center}
 
 /* messages */
-.messages {margin: -6px -15px 10px -16px; padding: 15px 10px; text-align: center; font-weight: 700; font-size: 9pt; border: var(--border); border-right: 0; background: var(--bg)}
-.notice {margin: 0; padding: 10px 10px 10px 0; background: var(--infohelp) var(--bgpos_info)}
-.notice ul, .notice li {margin: 10px 0}
+.messages {margin: -6px -15px 10px -16px; padding: 8px 10px; text-align: center; font-weight: 700; font-size: 9pt; border: var(--border); border-right: 0; background: var(--bg)}
+.notice {margin: 0; padding: 5px 10px 5px 0; background: var(--infohelp) var(--bgpos_info)}
+.notice ul, .notice li {margin: 2px 0}
 .error {margin-left: -5px; padding: 10px 5px; color: #900; background: var(--err) no-repeat 20px center / 28px}
-.messages li, .messages ul {margin: 10px 0; padding: 0; text-align: left; list-style: none}
+.messages li, .messages ul {margin: 3px 0; padding: 0; text-align: left; list-style: none}
 .messages li {padding-left: 60px}
 .messages .error li, .messages .error ul {margin: 0}
 .messages #newsStatus, .messages #newsDisplay {float: none}
