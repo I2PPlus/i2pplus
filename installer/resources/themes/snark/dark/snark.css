@@ -2020,7 +2020,7 @@ img:hover {
   margin: 3px !important;
 }
 
-#trackerselect a:not(old) {
+#trackerselect a {
   display: inline-block;
   white-space: nowrap;
   overflow: hidden;

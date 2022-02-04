@@ -399,7 +399,7 @@ public class ConfigClientsHelper extends HelperBase {
             if (name.length() > 0)
                 buf.append("<label for=\"").append("client_").append(index).append("\">").append(_t(escapedName)).append("</label>");
         }
-        buf.append("</td><td align=\"center\"><input type=\"checkbox\" class=\"optbox\" id=\"client_")
+        buf.append("</td><td align=\"center\"><input type=\"checkbox\" class=\"optbox slider\" id=\"client_")
            .append(index).append("\" name=\"").append(index).append(".enabled\"");
         if (enabled) {
             buf.append(CHECKED);

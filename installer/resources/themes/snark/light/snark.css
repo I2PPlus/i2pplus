@@ -842,7 +842,7 @@ td {
 }
 
 .peerinfo:hover td:first-child {
-  background: #ffd var(--peer) no-repeat scroll center center / 14px !important;
+  background: #ffd var(--peer) no-repeat scroll center center / 18px;
 }
 
 .rowEven + .rowEven td:nth-child(2), .rowOdd td + .rowOdd td:nth-child(2) {
@@ -918,7 +918,7 @@ th.snarkFileSize {
 }
 
 .uploaded {
-  padding: 3px 2px 1px;
+  padding: 1px 2px;
   min-width: 68px;
   display: inline-block;
   position: relative;
@@ -1417,7 +1417,7 @@ input {
   text-align: left;
   padding: 4px !important;
   border-radius: 2px;
-  border: 1px solid #97a2ce;
+  border: var(--border_input);
   background: #fff;
   color: var(--ink);
   margin: 2px 4px 2px 0;
@@ -1427,7 +1427,7 @@ input {
 input.r {
   text-align: right;
   background: #fff;
-  border: 1px solid #97a2ce;
+  border: var(--border_input);
   color: var(--ink);
 }
 
@@ -1439,7 +1439,7 @@ input[type=submit], a.control, input.disabled {
   font: bold 9pt var(--bodyfont);
   color: #227;
   text-shadow: 0 1px 1px #fff;
-  border: 1px solid #97a2ce;
+  border: var(--border_input);
   border-radius: 2px;
   box-shadow: var(--highlight), 0 0 1px #ddd;
   background: linear-gradient(180deg,#fff 50%,#f2f2ff 50%);
@@ -1486,7 +1486,7 @@ input[type=submit], a.control:not(.disabled) {
   color: var(--ink_light);
   font-weight: 400;
   box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
-  border: 1px solid #97a2ce;
+  border: var(--border_input);
   background: linear-gradient(180deg,#fff,#efefff);
   transition: ease border .7s;
 }
@@ -1615,7 +1615,7 @@ select {
   color: var(--ink_light);
   color: #6373b6;
   font: bold 9pt var(--bodyfont);
-  border: 1px solid #97a2ce;
+  border: var(--border_input);
   border-radius: 2px;
   box-shadow: var(--highlight);
   background: var(--dropdown) no-repeat scroll right 8px center / 10px, linear-gradient(180deg,#fff 50%,#f6f6ff 50%) !important;
@@ -2164,7 +2164,7 @@ input:checked + label + hr + table, input:checked + label + hr + table + table {
 
 .peerinfo td:first-child {
   padding-right: 10px !important;
-  background: var(--peer) no-repeat scroll center center / 16px;
+  background: var(--peer) no-repeat scroll center center / 18px;
 }
 
 .peerinfo td, .debuginfo td {
@@ -3365,7 +3365,7 @@ td.trackerDetails {
   padding: 3px !important;
   width: 12px !important;
   height: 12px !important;
-  border: 1px solid #97a2ce;
+  border: var(--border_input);
   border-radius: 2px;
   background: linear-gradient(180deg,#fff 50%,#ddf 50%);
   opacity: .8;
@@ -3832,7 +3832,7 @@ tfoot .RateDown::after, tfoot .RateUp::after {
   float: none !important;
   vertical-align: middle;
   font-size: 0 !important;
-  border: 1px solid #97a2ce;
+  border: var(--border_input);
   border-radius: 2px;
   box-shadow: var(--highlight);
   background-position: center center !important;

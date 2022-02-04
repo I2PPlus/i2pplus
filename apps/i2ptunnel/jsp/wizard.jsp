@@ -514,7 +514,7 @@
 </tr>
 <tr>
 <td class="options">
-<label title="<%=intl._t("Enable this option to ensure this service is available when the router starts")%>"><input value="1" type="checkbox" id="startOnLoad" name="startOnLoad" <%=("1".equals(request.getParameter("startOnLoad")) ? " checked=\"checked\"" : "")%> class="optbox" />
+<label title="<%=intl._t("Enable this option to ensure this service is available when the router starts")%>"><input value="1" type="checkbox" id="startOnLoad" name="startOnLoad" <%=("1".equals(request.getParameter("startOnLoad")) ? " checked=\"checked\"" : "")%> class="optbox slider" />
             &nbsp;<%=intl._t("Automatically start tunnel when router starts")%>
 </label>
 </td>

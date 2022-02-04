@@ -45,7 +45,7 @@ b, td.search {
   background-size: auto 50px, 100%;
 }
 
-#logo:not(old) {
+#logo {
   background: linear-gradient(180deg,#fff, #eef);
 }
 
@@ -661,7 +661,7 @@ input[type=text], input[type=password], textarea {
   padding: 5px !important;
   font-family: var(--bodyfont);
   color: #4f4f63;
-  border: 1px solid #97a2ce;
+  border: var(--border_input);
   border-radius: 2px;
   box-shadow: var(--highlight), inset 3px 3px 3px rgba(0,0,48,.2);
   background: #fbfbff;
@@ -682,7 +682,7 @@ textarea, #subslog pre {
   font-size: 9pt;
   color: #4f4f63;
   border-radius: 2px;
-  border: 1px solid #97a2ce;
+  border: var(--border_input);
   resize: none;
   scrollbar-color: #a7a7be rgba(255,255,255,.4);
   will-change: transform;
@@ -909,7 +909,7 @@ tr:hover .destaddress {
   text-align: center;
 }
 
-#host_list td.b32link a:not(old), #host_list td.helper a:not(old) {
+#host_list td.b32link a, #host_list td.helper a {
   font-size: 0 !important;
 }
 
@@ -943,12 +943,12 @@ tr:hover .destaddress {
   color: #5a5a6f;
 }
 
-#host_list .destaddress:not(old) {
+#host_list .destaddress {
   overflow: hidden !important;
   text-overflow: ellipsis;
 }
 
-#host_list .destaddress:not(old):focus {
+#host_list .destaddress:focus {
   margin-bottom: -2px;
   padding: 1px 3px 3px !important;
   overflow: auto !important;
@@ -1273,7 +1273,7 @@ input[type=submit], input[type=reset], .fakebutton {
   font: 9pt var(--bodyfont);
   text-decoration: none;
   color: #4f4f63;
-  border: 1px solid #97a2ce;
+  border: var(--border_input);
   border-radius: 2px;
   box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
   background: linear-gradient(180deg,#fff, #efefff);
@@ -1317,7 +1317,7 @@ input[type=file]::file-selector-button {
   color: #5b5b71;
   text-decoration: none;
   text-shadow: 0 1px 1px #fff;
-  border: 1px solid #97a2ce;
+  border: var(--border_input);
   border-radius: 2px;
   box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
   background: linear-gradient(180deg,#fff, #efefff);

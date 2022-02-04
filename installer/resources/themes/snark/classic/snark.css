@@ -3958,7 +3958,7 @@ td.peerCount {
   td.graphicStatus img {
     margin-left: 1px !important;
   }
-  .torrentName a:not(old) {
+  .torrentName a {
     max-width: 360px !important;
   }
   #snarkTorrents th img {

@@ -293,7 +293,7 @@ h3#iptransport a, th#upnpconfig a, h3#bwlimiter a, #config_stats h3 a, #config_l
   text-align: right;
 }
 
-.main#debug {
+#debug {
   direction: ltr;
 }
 
@@ -365,13 +365,13 @@ p.infowarn, td.infowarn {
   background: #000 var(--infowarn) no-repeat right 8px center / 28px !important;
 }
 
-.main#config_update .messages {
+#config_update .messages {
   padding: 15px 55px 15px 15px;
   text-align: right;
   background: #000 var(--infohelp) no-repeat right 10px center / 28px !important;
 }
 
-.main#config_update .messages a {
+#config_update .messages a {
   float: left;
   margin: 0 5px
 }
@@ -543,14 +543,14 @@ a.viewfullentry::after, a[href^="viewprofile"]::after {
   margin-left: 3px !important;
 }
 
-.sb_newsheadings td, .sb_newsheadings tr:hover td {
+#sb_newsheadings td, #sb_newsheadings tr:hover td {
   background-position: right 4px center !important;
   padding-right: 22px !important;
   padding-left: 8px !important;
   text-align: right !important;
 }
 
-.sb_newsheadings td a {
+#sb_newsheadings td a {
   font-size: 9pt !important;
   font-weight: 700;
 }
@@ -569,7 +569,7 @@ a.viewfullentry::after, a[href^="viewprofile"]::after {
   direction: ltr;
 }
 
-.main#console .twocol {
+#console .twocol {
   margin: 15px 35px 5px 0 !important;
   background: rgba(0, 32, 0, .5);
   border-radius: 3px;

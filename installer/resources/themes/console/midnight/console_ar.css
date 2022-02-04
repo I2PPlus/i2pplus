@@ -316,7 +316,7 @@ table.leaseset th:last-child, table.leaseset td:nth-child(2) {
   text-align: right;
 }
 
-.main#debug {
+#debug {
   direction: ltr;
 }
 
@@ -384,13 +384,13 @@ p.infowarn, td.infowarn {
   background: #000 url(images/infowarn.png) no-repeat right 8px center !important;
 }
 
-.main#config_update .messages {
+#config_update .messages {
   padding: 15px 55px 15px 15px;
   background: #000 var(--infohelp) no-repeat right 10px center / 28px !important;
   text-align: right;
 }
 
-.main#config_update .messages a {
+#config_update .messages a {
   margin: 0 5px
   float: left;
 }
@@ -535,14 +535,14 @@ div[lang="ar"] ul, div[lang="ar"] p {
   margin-right: 12px;
 }
 
-.sb_newsheadings td, .sb_newsheadings tr:hover td {
+#sb_newsheadings td, #sb_newsheadings tr:hover td {
   background-position: right 4px center !important;
   padding-right: 22px !important;
   padding-left: 8px !important;
   text-align: right !important;
 }
 
-.sb_newsheadings td a {
+#sb_newsheadings td a {
   font-size: 9pt !important;
   font-weight: 700;
 }
@@ -646,11 +646,11 @@ div[lang="ar"], div[lang="ar"] code, div[lang="ar"] b {
   width: 210px;
 }
 
-.sb_newsheadings table {
+#sb_newsheadings table {
   width: 218px !important;
 }
 
-.sb_newsheadings td:first-child {
+#sb_newsheadings td:first-child {
   max-width: 200px !important;
   width: 200px !important;
 }

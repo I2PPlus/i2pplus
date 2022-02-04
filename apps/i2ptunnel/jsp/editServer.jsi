@@ -76,7 +76,7 @@
 <input type="text" size="30" maxlength="50" name="name" title="<%=intl._t("Name of tunnel to be displayed on Tunnel Manager home page and the router console sidebar")%>" value="<%=editBean.getTunnelName(curTunnel)%>" class="freetext tunnelName" />
 </td>
 <td>
-<label title="<%=intl._t("Enable this option to ensure this service is available when the router starts")%>"><input value="1" type="checkbox" name="startOnLoad"<%=(editBean.startAutomatically(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox" />
+<label title="<%=intl._t("Enable this option to ensure this service is available when the router starts")%>"><input value="1" type="checkbox" name="startOnLoad"<%=(editBean.startAutomatically(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox slider" />
 <%=intl._t("Automatically start tunnel when router starts")%></label>
 </td>
 </tr>
@@ -177,7 +177,7 @@
     if (!"streamrserver".equals(tunnelType)) {
 %>
 <label title="<%=intl._t("To avoid traffic sniffing if connecting to a remote server, you can enable an SSL connection. Note that the target server must be configured to accept SSL connections.")%>">
-<input value="1" type="checkbox" name="useSSL"<%=(editBean.isSSLEnabled(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox" />
+<input value="1" type="checkbox" name="useSSL"<%=(editBean.isSSLEnabled(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox slider" />
 <%=intl._t("Use SSL to connect to target")%>
 </label>
 <%
@@ -619,7 +619,7 @@
 <tr>
 <td>
 <label>
-<input value="1" type="checkbox" id="startOnLoad" name="reduce" <%=(editBean.getReduce(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox" />
+<input value="1" type="checkbox" id="startOnLoad" name="reduce" <%=(editBean.getReduce(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox slider" />
 <%=intl._t("Reduce tunnels to conserve resources")%>
 </label>
 </td>
@@ -637,11 +637,11 @@
 %>
 <tr>
 <td>
-<label title="<%=intl._t("Prevent clients from accessing this service via an inproxy")%>"><input value="1" type="checkbox" name="rejectInproxy"<%=(editBean.isRejectInproxy(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox" />
+<label title="<%=intl._t("Prevent clients from accessing this service via an inproxy")%>"><input value="1" type="checkbox" name="rejectInproxy"<%=(editBean.isRejectInproxy(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox slider" />
 <%=intl._t("Block Access via Inproxies")%></label>
 </td>
 <td>
-<label><input value="1" type="checkbox" name="rejectReferer"<%=(editBean.isRejectReferer(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox" />
+<label><input value="1" type="checkbox" name="rejectReferer"<%=(editBean.isRejectReferer(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox slider" />
 <%=intl._t("Block Accesses containing Referers")%></label>
 </td>
 </tr>
@@ -651,12 +651,12 @@
 <tr>
 <td>
 <label title="<%=intl._t("Use unique IP addresses for each connecting client (local non-SSL servers only)")%>">
-<input value="1" type="checkbox" name="uniqueLocal"<%=(editBean.getUniqueLocal(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox" />
+<input value="1" type="checkbox" name="uniqueLocal"<%=(editBean.getUniqueLocal(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox slider" />
 <%=intl._t("Unique Local Address per Client")%>
 </label>
 </td>
 <td>
-<label title="<%=intl._t("Only enable if you are hosting this service on multiple routers")%>"><input value="<%=(editBean.getMultihome(curTunnel) ? 1 : 0)%>" type="checkbox" name="multihome"<%=(editBean.getMultihome(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox" />
+<label title="<%=intl._t("Only enable if you are hosting this service on multiple routers")%>"><input value="<%=(editBean.getMultihome(curTunnel) ? 1 : 0)%>" type="checkbox" name="multihome"<%=(editBean.getMultihome(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox slider" />
 <%=intl._t("Optimize for Multihoming")%>
 </label>
 </td>
@@ -666,7 +666,7 @@
 %>
 <tr>
 <td>
-<label title="<%=intl._t("Deny User-Agents matching these strings (probably from inproxies)")%>"><input value="1" type="checkbox" name="rejectUserAgents"<%=(editBean.isRejectUserAgents(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox" />
+<label title="<%=intl._t("Deny User-Agents matching these strings (probably from inproxies)")%>"><input value="1" type="checkbox" name="rejectUserAgents"<%=(editBean.isRejectUserAgents(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox slider" />
 <%=intl._t("Block these User-Agents")%>:</label>
 </td>
 <td>
@@ -828,7 +828,7 @@
 <tr>
 <td><input type="text" value="<%=cname%>" size="44" name="nofilter_clientName" class="freetext clientName" /></td>
 <td><input type="text" value="<%=ckey%>" size="44" name="clientKey readonly" readonly="readonly" class="freetext clientKey readonly" /></td>
-<td><input value="<%=i%>" type="checkbox" name="revokeClient" class="optbox" /></td>
+<td><input value="<%=i%>" type="checkbox" name="revokeClient" class="optbox slider" /></td>
 </tr>
 <%
                             i++;
@@ -862,7 +862,7 @@
                 } // dhClient
 %>
 </td>
-<td><input value="1" type="checkbox" name="addClient" class="optbox" /></td>
+<td><input value="1" type="checkbox" name="addClient" class="optbox slider" /></td>
 </tr>
 </table>
 </td>

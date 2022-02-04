@@ -28,9 +28,10 @@ class OutboundMessageDistributor {
 
     private static final long MAX_DISTRIBUTE_TIME = 15*1000;
     // This is probably too high, to be reduced later
-    private static final int MAX_ROUTERS_PER_PERIOD = 60;
+//    private static final int MAX_ROUTERS_PER_PERIOD = 60;
+    private static final int MAX_ROUTERS_PER_PERIOD = 100;
 //    private static final long NEW_ROUTER_PERIOD = 30*1000;
-    private static final long NEW_ROUTER_PERIOD = 25*1000;
+    private static final long NEW_ROUTER_PERIOD = 15*1000;
 
     /**
      *  @param priority OutNetMessage.PRIORITY_PARTICIPATING for somebody else's OBEP, or

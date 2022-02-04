@@ -84,7 +84,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     private static final String[] SERVER_SKIPHEADERS = {DATE_HEADER, SERVER_HEADER, X_POWERED_BY_HEADER, X_RUNTIME_HEADER, PROXY_HEADER};
     /** timeout for first request line */
 //    private static final long HEADER_TIMEOUT = 15*1000;
-    private static final long HEADER_TIMEOUT = 20*1000;
+    private static final long HEADER_TIMEOUT = 30*1000;
     /** total timeout for the request and all the headers */
     private static final long TOTAL_HEADER_TIMEOUT = 2 * HEADER_TIMEOUT;
     private static final long START_INTERVAL = (60 * 1000) * 3;

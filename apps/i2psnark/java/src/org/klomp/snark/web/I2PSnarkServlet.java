@@ -3014,7 +3014,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         out.write("<span class=\"configOption\"><label for=\"smartSort\"><b>");
         out.write(_t("Smart torrent sorting"));
-        out.write("</b> </label><input type=\"checkbox\" class=\"optbox\" name=\"smartSort\" id=\"smartSort\" value=\"true\" "
+        out.write("</b> </label><input type=\"checkbox\" class=\"optbox slider\" name=\"smartSort\" id=\"smartSort\" value=\"true\" "
                   + (smartSort ? "checked " : "")
                   + "title=\"");
         out.write(_t("Ignore words such as 'a' and 'the' when sorting"));
@@ -3022,7 +3022,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         out.write("<span class=\"configOption\"><label for=\"collapsePanels\"><b>");
         out.write(_t("Collapsible panels"));
-        out.write("</b> </label><input type=\"checkbox\" class=\"optbox\" name=\"collapsePanels\" id=\"collapsePanels\" value=\"true\" "
+        out.write("</b> </label><input type=\"checkbox\" class=\"optbox slider\" name=\"collapsePanels\" id=\"collapsePanels\" value=\"true\" "
                   + (collapsePanels ? "checked " : "")
                   + "title=\"");
         if (noCollapse) {
@@ -3037,7 +3037,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         out.write("<span class=\"configOption\"><label for=\"showStatusFilter\"><b>");
         out.write(_t("Torrent filter bar"));
-        out.write("</b> </label><input type=\"checkbox\" class=\"optbox\" name=\"showStatusFilter\" id=\"showStatusFilter\" value=\"true\" "
+        out.write("</b> </label><input type=\"checkbox\" class=\"optbox slider\" name=\"showStatusFilter\" id=\"showStatusFilter\" value=\"true\" "
                   + (showStatusFilter ? "checked " : "")
                   + "title=\"");
         out.write(_t("Show filter bar above torrents for selective display based on status"));
@@ -3046,7 +3046,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         out.write("<span class=\"configOption\"><label for=\"enableLightbox\"><b>");
         out.write(_t("Enable lightbox"));
-        out.write("</b> </label><input type=\"checkbox\" class=\"optbox\" name=\"enableLightbox\" id=\"enableLightbox\" value=\"true\" "
+        out.write("</b> </label><input type=\"checkbox\" class=\"optbox slider\" name=\"enableLightbox\" id=\"enableLightbox\" value=\"true\" "
                   + (enableLightbox ? "checked " : "")
                   + "title=\"");
         out.write(_t("Use a lightbox to display images when thumbnails are clicked"));
@@ -3055,7 +3055,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         out.write("<span class=\"configOption\"><label for=\"enableAddCreate\"><b>");
         out.write(_t("Persist Add/Create"));
-        out.write("</b> </label><input type=\"checkbox\" class=\"optbox\" name=\"enableAddCreate\" id=\"enableAddCreate\" value=\"true\" "
+        out.write("</b> </label><input type=\"checkbox\" class=\"optbox slider\" name=\"enableAddCreate\" id=\"enableAddCreate\" value=\"true\" "
                   + (enableAddCreate ? "checked " : "")
                   + "title=\"");
         out.write(_t("Display the 'Add' and 'Create' sections on all torrent listing pages when in multipage mode"));
@@ -3071,7 +3071,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         out.write("<span class=\"configOption\"><label for=\"ratings\"><b>");
         out.write(_t("Enable Ratings"));
-        out.write("</b></label> <input type=\"checkbox\" class=\"optbox\" name=\"ratings\" id=\"ratings\" value=\"true\" "
+        out.write("</b></label> <input type=\"checkbox\" class=\"optbox slider\" name=\"ratings\" id=\"ratings\" value=\"true\" "
                   + (useRatings ? "checked " : "")
                   + "title=\"");
         out.write(_t("Show ratings on torrent pages"));
@@ -3079,7 +3079,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         out.write("<span class=\"configOption\"><label for=\"comments\"><b>");
         out.write(_t("Enable Comments"));
-        out.write("</b></label> <input type=\"checkbox\" class=\"optbox\" name=\"comments\" id=\"comments\" value=\"true\" "
+        out.write("</b></label> <input type=\"checkbox\" class=\"optbox slider\" name=\"comments\" id=\"comments\" value=\"true\" "
                   + (useComments ? "checked " : "")
                   + "title=\"");
         out.write(_t("Show comments on torrent pages"));
@@ -3132,7 +3132,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         out.write("<span class=\"configOption\"><label for=\"useOpenTrackers\"><b>");
         out.write(_t("Use open trackers also").replace(" also", ""));
-        out.write("</b></label> <input type=\"checkbox\" class=\"optbox\" name=\"useOpenTrackers\" id=\"useOpenTrackers\" value=\"true\" "
+        out.write("</b></label> <input type=\"checkbox\" class=\"optbox slider\" name=\"useOpenTrackers\" id=\"useOpenTrackers\" value=\"true\" "
                   + (useOpenTrackers ? "checked " : "")
                   + "title=\"");
         out.write(_t("Announce torrents to open trackers as well as trackers listed in the torrent file"));
@@ -3140,7 +3140,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         out.write("<span class=\"configOption\"><label for=\"useDHT\"><b>");
         out.write(_t("Enable DHT"));
-        out.write("</b></label> <input type=\"checkbox\" class=\"optbox\" name=\"useDHT\" id=\"useDHT\" value=\"true\" "
+        out.write("</b></label> <input type=\"checkbox\" class=\"optbox slider\" name=\"useDHT\" id=\"useDHT\" value=\"true\" "
                   + (useDHT ? "checked " : "")
                   + "title=\"");
         out.write(_t("Use DHT to find additional peers"));
@@ -3148,7 +3148,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         out.write("<span class=\"configOption\"><label for=\"autoStart\"><b>");
         out.write(_t("Auto start torrents"));
-        out.write("</b> </label><input type=\"checkbox\" class=\"optbox\" name=\"autoStart\" id=\"autoStart\" value=\"true\" "
+        out.write("</b> </label><input type=\"checkbox\" class=\"optbox slider\" name=\"autoStart\" id=\"autoStart\" value=\"true\" "
                   + (autoStart ? "checked " : "")
                   + "title=\"");
         out.write(_t("Automatically start torrents when added and restart torrents when I2PSnark starts"));
@@ -3211,7 +3211,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         out.write("<span class=\"configOption\"><label for=\"filesPublic\"><b>");
         out.write(_t("Files readable by all"));
-        out.write("</b> </label><input type=\"checkbox\" class=\"optbox\" name=\"filesPublic\" id=\"filesPublic\" value=\"true\" " +
+        out.write("</b> </label><input type=\"checkbox\" class=\"optbox slider\" name=\"filesPublic\" id=\"filesPublic\" value=\"true\" " +
                   (filesPublic ? "checked " : "") + "title=\"");
         out.write(_t("Set file permissions to allow other local users to access the downloaded files"));
         out.write("\" ></span>\n");

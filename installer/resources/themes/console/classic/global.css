@@ -1,21 +1,24 @@
-/* I2P Midnight theme globals */
+/* I2P Classic theme globals */
 /* Author: (c) dr|z3d 2022 */
 
 @import url(/themes/fonts/DroidSans.css);
+@import url(/themes/console/images/images.css);
 
 :root {
   --a: #5c5c8a;
-  --active: #f90;
+  --active: #f30;
   --badge_hover: linear-gradient(180deg, var(--bg3), #fff);
   --badge: linear-gradient(180deg, #fff, var(--bg3));
-  --bg2: #f8f8ff;
+  --bg2: #f4f4ff;
+  --bg3: #eef;
   --bg3: #f0f0ff;
   --bg4: #e8e8ff;
   --bg_doc: var(--bodybg) url(images/bg0.png) center center / 90px;
   --bg: #fff;
   --bodybg: #e2e2f3;
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
-  --border_badge: #aad;
+  --border: 1px solid #bfc3d9;
+  --border_badge: #bbc;
   --border: 1px solid #bfc3d9;
   --border_color: #bfc3d9;
   --border_soft: #cfd2e2;
@@ -23,6 +26,7 @@
   --box_border_badge: 0 0 0 1px #bbd;
   --btn_active: linear-gradient(180deg,#f60,#f90);
   --btn_hover2: linear-gradient(180deg,var(--bg) 50%,#ffe4db 50%,#ffc6b3);
+  --btn_hover: linear-gradient(180deg,#ddd, #fff);
   --btn_hover: linear-gradient(180deg,#ddd,#fff);
   --btn: linear-gradient(180deg, var(--bg) 50%, var(--bg2), var(--bg3));
   --btn_shadow_active: var(--highlight), inset 3px 3px 3px 1px rgba(32,32,64,.3);
@@ -35,10 +39,12 @@
   --down_shadow: inset 0 0 0 1px #800, inset 0 0 1px 3px #eeeee2, inset 0 0 0 4px #ccccc2;
   --flatbar: #99c;
   --h2: linear-gradient(180deg,#fff 50%,#fafbff 50%);
+  --h4: linear-gradient(90deg,#fff,#eff2ff);
   --header_active: linear-gradient(180deg, #ffd, #ffe);
   --header_hover: linear-gradient(180deg, var(--bg) 50%, var(--row_hover) 50%);
   --header: linear-gradient(180deg, var(--bg) 50%, var(--bg2) 50%);
   --header_shiney: linear-gradient(90deg, rgba(255,255,255,.3), rgba(0,0,0,0)), linear-gradient(180deg, var(--bg) 50%, var(--bg4) 50%);
+  --heading: linear-gradient(180deg,#fff,#fafbff);
   --highlight_active: inset 3px 3px 3px 1px #5f2400;
   --highlight_hover: inset 0 0 0 1px #a79;
   --highlight: inset 0 0 0 1px rgba(255,255,255,.8);
@@ -46,12 +52,14 @@
   --hr: #89f;
   --ink: #41444d;
   --ink_h1: #6c7293;
-  --ink_light: #5e626e;
   --ink_hover: #104e99;
+  --ink_light: #5e626e;
   --label_focus: linear-gradient(90deg, var(--bg3), var(--bg), var(--bg3));
   --ls_target: 1px solid #5a5 !important;
+  --note: #1f7096;
   --monospaced: Droid Sans Mono, Andale Mono, DejaVu Sans Mono, Lucida Console, monospace;
-  --reload: linear-gradient(90deg, #930, var(--hover));
+  --pad_info: 20px 25px 20px 55px;
+  --reload: linear-gradient(90deg, rgba(0,0,0,0) 85%, rgba(64,255,64,.15)), linear-gradient(90deg, #bcf, #def);
   --row_hover: #ffd;
   --scroll: #acafb9;
   --select: #4a90d9;
@@ -160,12 +168,12 @@ input, button, select, label {
   cursor: pointer;
 }
 
-label:hover {
-  color: #03050f;
-}
-
 button, input, select {
   color: var(--ink_light);
+}
+
+label:not([disabled]):hover {
+  color: var(--ink);
 }
 
 input[type=text], input[type=password], textarea {
@@ -243,6 +251,7 @@ input[type=text], input[type=password] {
 input[type=text]:focus, input[type=password]:focus {
   padding: 5px 5px 5px 9px;
   color: var(--ink);
+  border-radius: 0;
   box-shadow: var(--btn_shadow_active), 0 0 0 1px rgba(255,96,0,.6);
   background-color: var(--bg);
 }
@@ -352,5 +361,61 @@ input[type=radio]:checked::before {
 .optbox:focus[disabled], .optbox:active[disabled], label:hover > .optbox[disabled] {
   border: var(--border) !important;
   opacity: .5;
+  pointer-events: none;
+}
+
+/* sliders */
+.optbox.slider[type=checkbox], .optbox.slider, .optbox.slider:hover, .optbox.slider:focus {
+  width: 40px !important;
+  height: 21px !important;
+  border-radius: 1px;
+  position: relative;
+  box-shadow: inset 0 0 0 1px #f2f2ff, inset 3px 3px 3px rgba(0,0,0,.2);
+  background: linear-gradient(180deg,#eef, #ddf);
+  outline: none;
+  transition: ease-in left .15s;
+  appearance: none;
+}
+
+.optbox.slider:checked {
+  background: linear-gradient(180deg,#393, #4a4) !important;
+}
+
+.optbox.slider:not(:checked):active {
+  background: linear-gradient(180deg,#393, #4a4) !important;
+}
+
+.optbox.slider:checked:active {
+  background: linear-gradient(180deg,#cf0f00, #f00) !important;
+}
+
+.optbox.slider:hover, ..optbox.slider {
+  box-shadow: 0 0 0 1px #6f645d, 0 0 0 2px #f60, inset 0 0 0 1px #f9f5f2, inset 3px 3px 3px rgba(0,0,0,.2);
+}
+
+.optbox.slider[type=checkbox]::before,
+.optbox.slider::before,
+.optbox.slider:hover::before,
+.optbox.slider:focus::before,
+.optbox.slider:active::before {
+  width: 20px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: -1px;
+  border-radius: 1px;
+  box-shadow: inset 0 0 0 1px #99a, inset 0 0 0 2px #fff, 0 2px 5px rgba(0,0,0,.2);
+  background: linear-gradient(#fff, #ddf);
+  content: "";
+  transform: scale(.85);
+  transition: ease-in left .15s;
+}
+
+.optbox.slider:checked::before {
+  left: 18px !important;
+}
+
+.optbox[disabled] {
+  opacity: .45;
   pointer-events: none;
 }

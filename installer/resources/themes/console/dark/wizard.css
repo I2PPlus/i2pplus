@@ -26,8 +26,8 @@ body#wizardpage {
 #wizard p {
   margin: -10px 0;
   padding: 10px 15px;
-  border-left: 1px solid #242;
-  border-right: 1px solid #242;
+  border-left: var(--border);
+  border-right: var(--border);
 }
 
 #wizard p.infohelp {
@@ -54,7 +54,7 @@ body#wizardpage {
   text-align: center;
   font-style: italic;
   font-weight: 700;
-  border: 1px solid #242;
+  border: var(--border);
 }
 
 #wizardpage #bandwidthconfig tr:nth-child(n+2) td:last-child:not(.infohelp) {

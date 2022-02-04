@@ -5,33 +5,7 @@
 @import url(../images/images.css);
 @import url(images/images.css);
 
-:root {
-  --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
-  --monospaced: Droid Sans Mono, Andale Mono, DejaVu Sans Mono, Lucida Console, monospace;
-  --bodybg: #e2e2f3;
-  --bg: #fff;
-  --ink: #41444d;
-  --ink_light: #5e626e;
-  --highlight: inset 0 0 0 1px rgba(255,255,255,.8);
-  --btn: linear-gradient(180deg, var(--bg) 50%, var(--bg2), var(--bg3));
-  --btn_hover: linear-gradient(180deg,#ddd, #fff);
-  --btn_shadow: inset 0 0 1px 1px rgba(255,255,255,.6), inset 0 2px 0 0 #fff, inset 0 0 4px 2px #f0f0ff, 0 1px 1px rgba(220,220,255,.5);
-  --btn_shadow_hover: var(--highlight), 0 0 0 1px #fff, 0 0 0 2px rgba(255,96,0,.4);
-  --btn_shadow_active: var(--highlight), inset 3px 3px 3px 1px rgba(32,32,64,.3);
-  --heading: linear-gradient(180deg,#fff,#fafbff);
-  --border: #bfc3d9;
-  --border_soft: #cfd2e2;
-  --hover: #f60;
-  --active: #f30;
-  --border: #bfc3d9;
-  --h2: linear-gradient(180deg,#fff 50%,#fafbff 50%);
-  --bg: #fff;
-  --bg2: #f4f4ff;
-  --bg3: #eef;
-}
-
 html, body {
-  min-height: 100%;
   background: var(--bg);
 }
 
@@ -95,7 +69,7 @@ table.book td:last-child {
   text-align: center;
 }
 
-.book td:nth-child(3) a:not(old) {
+.book td:nth-child(3) a {
   font-size: 0 !important;
 }
 
@@ -104,10 +78,12 @@ td.destinations {
 }
 
 #add {
+  margin-top: -12px;
   background: var(--bg);
 }
 
 .iframed #add {
+  margin-top: 12px;
   background: transparent;
 }
 
@@ -171,16 +147,16 @@ td.destinations {
 }
 
 #sbs h3 a {
-  margin-right: 5px;
+  margin: 3px 5px 0 0;
   float: right;
-  font-size: 80% !important;
+  font-size: 8.5pt !important;
 }
 
 #ovrvw #content {
   margin-top: 25px;
 }
 
-div.page {
+.page {
   border: var(--border);
   background: var(--bg) !important;
   margin: 0;
@@ -196,7 +172,7 @@ div.page {
   border: none;
 }
 
-div.help {
+.help {
   border: var(--border);
   margin: 0 0 10px;
   background: #eef;
@@ -545,9 +521,9 @@ img[src="/imagegen/id?s=256&c="], img[src="/imagegen/id?s=20&c="] {
 }
 
 p.buttons {
-  border: var(--border);
+  margin: 0 -11px;
   padding: 10px;
-  margin: 0 -11px -13px;
+  border: var(--border);
   background: var(--bg);
 }
 
@@ -754,12 +730,16 @@ textarea[name="config"], textarea[name="content"] {
   background: var(--addressbook) no-repeat 10px center / 22px, var(--th);
 }
 
-body:not(.iframed) #addressbook.headline h3 {
-  margin-top: -13px;
+#addressbook.headline h3 {
+  margin-top: -22px;
+}
+
+.iframed #addressbook.headline h3 {
+  margin-top: -8px;
 }
 
 .headline#subscriptions h3 {
-  background: var(--subscription) no-repeat 10px center / 22px, var(--th);
+  background: var(--subscription) no-repeat 10px center / 20px, var(--th);
 }
 
 .headline#configure h3 {
@@ -909,15 +889,16 @@ p.book {
   text-align: center;
 }
 
-#host_list td.b32link a:not(old), #host_list td.helper a:not(old) {
+#host_list td.b32link a, #host_list td.helper a {
   width: 100%;
   display: inline-block;
+  vertical-align: middle;
   font-size: 0 !important;
 }
 
 #host_list td.b32link a::after, #host_list td.helper a::after, #host_list td.destinations a::after {
-  opacity: .8;
   vertical-align: middle;
+  opacity: .8;
 }
 
 #host_list td.b32link a:hover::after, #host_list td.b32link a:focus::after,
@@ -936,7 +917,7 @@ p.book {
   cursor: pointer;
 }
 
-#host_list td.helper a:not(old) {
+#host_list td.helper a {
   font-size: 0 !important;
 }
 
@@ -955,7 +936,7 @@ p.book {
   box-shadow: inset 0 0 0 1px #000, inset 0 0 0 2px #f00;
 }
 
-#host_list td.b32 a:not(old), #host_list td.helper a:not(old) {
+#host_list td.b32 a, #host_list td.helper a {
   font-size: 0 !important;
 }
 
@@ -970,12 +951,12 @@ p.book {
   user-select: all;
 }
 
-#host_list .destaddress:not(old) {
+#host_list .destaddress {
   overflow: hidden !important;
   text-overflow: ellipsis;
 }
 
-#host_list .destaddress:not(old):focus {
+#host_list .destaddress:focus {
   margin-right: 0;
   padding-top: 0;
   padding-bottom: 0;
@@ -1020,6 +1001,7 @@ td.destinations {
 }
 
 #paginate {
+  margin-top: -1px;
   display: inline-block;
 }
 

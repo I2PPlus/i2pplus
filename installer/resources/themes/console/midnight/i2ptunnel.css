@@ -791,7 +791,7 @@ table {
   padding: 0;
 }
 
-.required:not(old) {
+.required {
   display: none;
 }
 

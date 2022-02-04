@@ -2244,7 +2244,7 @@ input:checked + label + hr + table + table {
 }
 
 .peerinfo, .debuginfo {
-  background: #040424 !important;
+  background: #030317 !important;
 }
 
 .peerinfo td:first-child {

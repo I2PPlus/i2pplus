@@ -45,14 +45,14 @@ div.clearer {
   line-height: 0;
 }
 
-.routersummary img[src$="i2plogo.png"], .routersummary h3, .confignav, *::before, *::after, h1, h2, h3, h4, div.app,
-.clearer, .routersummary img, .formaction, label, #themeoptions, #helptranslate, #consolepass, div.app, #sitemapcontainer {
+#sidebar img[src$="i2plogo.png"], #sidebar h3, .confignav, *::before, *::after, h1, h2, h3, h4, div.app,
+.clearer, #sidebar img, .formaction, label, #themeoptions, #helptranslate, #consolepass, div.app, #sitemapcontainer {
   user-select: none;
 }
 
 /* standard buttons and inputs */
 
-.routersummary h3:hover {
+#sidebar h3:hover {
   background: linear-gradient(90deg, rgba(64,0,64,.1), rgba(96,0,96,.2), rgba(64,0,64,.1)), linear-gradient(180deg,#1d1a2d 50%, #000 50%) !important;
 }
 
@@ -60,7 +60,7 @@ textarea[cols="70"], textarea[name="levels"] {
   width: calc(100% - 20px);
 }
 
-.main#config_clients label[for="0"] {
+#config_clients label[for="0"] {
   cursor: default;
 }
 
@@ -546,13 +546,13 @@ button.download.control:active {
 
 /* sidebar buttons */
 
-.routersummary button {
+#sidebar button {
   margin: 2px;
   min-width: 87px !important;
   background-blend-mode: normal;
 }
 
-.routersummary .reload, .routersummary .stop {
+#sidebar .reload, #sidebar .stop {
   margin-top: 3px;
   margin-bottom: 3px;
   padding: 6px 5px !important;
@@ -562,47 +562,47 @@ button.download.control:active {
   background-position: center center !important;
 }
 
-.routersummary .reload, .routersummary .reload[value$="restart"] {
+#sidebar .reload, #sidebar .reload[value$="restart"] {
   padding: 6px 5px !important;
   background: var(--restart) no-repeat center center / 14px, var(--btn_sidebar) !important;
 }
 
-.routersummary .reload:hover, .routersummary .reload:focus,
-.routersummary .reload[value$="restart"]:hover,
-.routersummary .reload[value$="restart"]:focus {
+#sidebar .reload:hover, #sidebar .reload:focus,
+#sidebar .reload[value$="restart"]:hover,
+#sidebar .reload[value$="restart"]:focus {
   padding: 6px 5px !important;
   background: var(--shutdown_hover) no-repeat 37% center / 14px, var(--restart_hover) no-repeat 63% center / 14px, var(--btn_hover) !important;
 }
 
-.routersummary .reload:active, .routersummary .reload[value$="restart"]:active {
+#sidebar .reload:active, #sidebar .reload[value$="restart"]:active {
   padding: 6px 5px !important;
   background: var(--shutdown) no-repeat 37% center / 14px, var(--restart) no-repeat 63% center / 14px, var(--btn_active) !important;
 }
 
-.routersummary .stop {
+#sidebar .stop {
   padding: 6px 5px !important;
   background: var(--shutdown) no-repeat center center / 14px, var(--btn_sidebar) !important;
 }
 
-.routersummary .stop:hover, .routersummary .stop:focus {
+#sidebar .stop:hover, #sidebar .stop:focus {
   padding: 6px 5px !important;
   background: var(--shutdown_hover) no-repeat center center / 14px, var(--btn_hover) !important;
 }
 
-.routersummary .stop:active {
+#sidebar .stop:active {
   padding: 6px 5px !important;
   background: var(--shutdown) no-repeat center center / 14px, var(--btn_active) !important;
 }
 
-.routersummary .cancel {
+#sidebar .cancel {
   padding: 6px 9px 6px 25px !important;
   background: var(--no) no-repeat 10px center / 10px, var(--btn_sidebar) !important;
 }
 
 /* Show text on context specific buttons (eg deferred shutdown) */
 
-.routersummary .reload[value="restartImmediate"], .routersummary .stop[value="shutdownImmediate"],
-.routersummary .reload[value="Reseed"], .routersummary .cancel {
+#sidebar .reload[value="restartImmediate"], #sidebar .stop[value="shutdownImmediate"],
+#sidebar .reload[value="Reseed"], #sidebar .cancel {
   padding: 6px 9px 6px 25px !important;
   min-width: 0 !important;
   text-indent: 0;
@@ -610,66 +610,66 @@ button.download.control:active {
   text-transform: capitalize;
 }
 
-.routersummary .reload[value="restartImmediate"] {
+#sidebar .reload[value="restartImmediate"] {
   background: var(--restart) no-repeat left 6px center / 12px, var(--btn_sidebar) !important;
 }
 
-.routersummary .reload[value="restartImmediate"]:hover {
+#sidebar .reload[value="restartImmediate"]:hover {
   padding: 6px 9px 6px 25px !important;
   background: var(--restart_hover) no-repeat left 6px center / 12px, var(--btn_hover) !important;
 }
 
-.routersummary .reload[value="restartImmediate"]:focus,
-.routersummary .reload[value="restartImmediate"]:active {
+#sidebar .reload[value="restartImmediate"]:focus,
+#sidebar .reload[value="restartImmediate"]:active {
   padding: 6px 9px 6px 25px !important;
   background: var(--hover) var(--restart_hover) no-repeat left 6px center / 12px !important;
 }
 
-.routersummary .stop[value="shutdownImmediate"] {
+#sidebar .stop[value="shutdownImmediate"] {
   background: var(--shutdown) no-repeat left 6px center / 12px, var(--btn_sidebar) !important;
 }
 
-.routersummary .stop[value="shutdownImmediate"]:hover {
+#sidebar .stop[value="shutdownImmediate"]:hover {
   padding: 6px 9px 6px 25px !important;
   background: #000 var(--shutdown_hover) no-repeat left 6px center / 12px !important;
 }
 
-.routersummary .stop[value="shutdownImmediate"]:focus, .routersummary .stop[value="shutdownImmediate"]:active {
+#sidebar .stop[value="shutdownImmediate"]:focus, #sidebar .stop[value="shutdownImmediate"]:active {
   padding: 6px 9px 6px 25px !important;
   background: var(--shutdown_hover) no-repeat left 6px center / 12px;
 }
 
-.routersummary .reload[value="Reseed"] {
+#sidebar .reload[value="Reseed"] {
   background: var(--download) no-repeat left 6px center, var(--btn_sidebar) !important;
   background-size: 14px auto, 100%, 100%, 100% !important;
 }
 
-.routersummary .reload[value="Reseed"]:hover {
+#sidebar .reload[value="Reseed"]:hover {
   padding: 6px 9px 6px 25px !important;
   background: #000 var(--download_hover) no-repeat left 6px center / 14px !important;
 }
 
-.routersummary .reload[value="Reseed"]:focus, .routersummary .reload[value="Reseed"]:active {
+#sidebar .reload[value="Reseed"]:focus, #sidebar .reload[value="Reseed"]:active {
   padding: 6px 9px 6px 25px !important;
   background: var(--hover) var(--download_hover) no-repeat left 6px center / 14px !important;
 }
 
-.routersummary .download, .routersummary .download:hover, .routersummary .download:focus {
+#sidebar .download, #sidebar .download:hover, #sidebar .download:focus {
   min-width: 0 !important;
   background: var(--download) no-repeat 7px center / 15px !important;
 }
 
-.routersummary .download, .routersummary .download:hover, .routersummary .download:focus, .routersummary .download:active {
+#sidebar .download, #sidebar .download:hover, #sidebar .download:focus, #sidebar .download:active {
   padding: 6px 9px 6px 25px !important;
   background-size: 15px, 100% !important;
   background-position: 7px center !important;
 }
 
-.routersummary .download:hover {
+#sidebar .download:hover {
   background: var(--download_hover) no-repeat 7px center / 15px, var(--btn_hover) !important;
 }
 
-.routersummary .download:active {
+#sidebar .download:active {
   background: var(--hover) var(--download) no-repeat 7px center / 15px !important;
 }
 
@@ -694,7 +694,7 @@ pre {
   background-size: 4px 100%, 100% 4px !important;
 }
 
-.routersummary {
+#sidebar {
   background: repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(4,4,32,.5) 4px),
     repeating-linear-gradient(180deg,rgba(0,0,0,.5) 2px, rgba(4,4,32,.5) 4px);
   background-size: 4px 100%, 100% 4px !important;
@@ -714,7 +714,7 @@ pre {
   border: 0;
 }
 
-.routersummary {
+#sidebar {
   margin-left: -3px;
   margin-bottom: 7px !important;
   padding: 8px 10px 8px;
@@ -725,11 +725,11 @@ pre {
   border: 1px solid #26235c;
 }
 
-.routersummary div[style="height: 36px;"] {
+#sidebar div[style="height: 36px;"] {
   height: 36px !important;
 }
 
-.routersummary img[src*="i2plogo"] {
+#sidebar img[src*="i2plogo"] {
   margin-top: 0;
   margin-left: -7px;
   width: 190px;
@@ -741,36 +741,36 @@ pre {
   filter: saturate(0) sepia(1) hue-rotate(180deg);
 }
 
-#error500 .routersummary img[src$="i2plogo.png"] {
+#error500 #sidebar img[src$="i2plogo.png"] {
   margin-bottom: -7px;
 }
 
-.routersummary img[src*="i2plogo"]:hover {
+#sidebar img[src*="i2plogo"]:hover {
   opacity: .5;
   transition: ease-in opacity .15s;
   filter: saturate(.2) drop-shadow(0 0 1px #450519) drop-shadow(0 0 3px #450519);
   filter: saturate(.7) opacity(.7);
 }
 
-.routersummary a:hover img[src*="i2plogo"], a:focus img[src*="i2plogo"] {
+#sidebar a:hover img[src*="i2plogo"], a:focus img[src*="i2plogo"] {
   opacity: .8;
   transition: ease filter .15s;
   filter: saturate(.8);
 }
 
-.routersummary a:active img[src*="i2plogo"] {
+#sidebar a:active img[src*="i2plogo"] {
   opacity: .5;
   filter: saturate(.4) !important;
   transition: none;
   transform: scale(.97);
 }
 
-.routersummary input[type=text] {
+#sidebar input[type=text] {
   text-align: right !important;
   box-shadow: inset 1px 1px 1px 0 #000;
 }
 
-.routersummary hr {
+#sidebar hr {
   margin: 8px -10px 7px -10px;
   position: relative;
   z-index: 999;
@@ -780,7 +780,7 @@ pre {
   background: #26235c;
 }
 
-.routersummary h3 {
+#sidebar h3 {
   margin: -7px -10px -10px;
   padding: 6px 0 4px !important;
   position: relative;
@@ -796,7 +796,7 @@ pre {
     linear-gradient(180deg,#0a0a1a 50%, #040414 50%) !important;
 }
 
-.routersummary h3::before {
+#sidebar h3::before {
   content: "";
   display: inline-block;
   height: 22px;
@@ -804,25 +804,25 @@ pre {
   will-change: transform;
 }
 
-.routersummary h3:hover {
+#sidebar h3:hover {
   box-shadow: var(--highlight), inset 0 0 1px 1px #a5a;
   background: radial-gradient(at center bottom, rgba(96, 32, 96, .6) 0, rgba(0, 0, 0, 0) 80%),
     linear-gradient(90deg, rgba(64,0,64,.03), rgba(96,0,96,.1), rgba(64,0,64,.03)),
     linear-gradient(180deg,#1d1a2d 50%, #000 50%) !important;
 }
 
-.routersummary h3:hover a {
+#sidebar h3:hover a {
   color: var(--hover) !important;
 }
 
-.routersummary h3:active {
+#sidebar h3:active {
   box-shadow: var(--highlight), inset 0 0 1px 1px #737, inset 4px 4px 4px #000;
   background: radial-gradient(at center bottom, rgba(160,48,160,.2), rgba(0, 0, 0, 0) 35%),
     linear-gradient(90deg, rgba(64,0,64,.1), rgba(64,0,64,.2), rgba(64,0,64,.1)),
     linear-gradient(180deg,#080820, #1d1a2d) !important;
 }
 
-.routersummary h3 a, .routersummary h3 a:visited {
+#sidebar h3 a, #sidebar h3 a:visited {
   margin: 0;
   padding: 1px 0 !important;
   width: calc(100% - 6px);
@@ -831,11 +831,11 @@ pre {
   color: var(--a);
 }
 
-.routersummary h3:active a, .routersummary h3:active a:visited {
+#sidebar h3:active a, #sidebar h3:active a:visited {
   color: rgba(101,39,135,.7) !important;
 }
 
-.routersummary h4 {
+#sidebar h4 {
   margin: -7px -10px -9px !important;
   padding: 7px 4px;
   line-height: 1.2;
@@ -847,17 +847,17 @@ pre {
 }
 
 @supports not (-moz-appearance: none) {
-  .routersummary h4 {
+  #sidebar h4 {
     box-shadow: none;
   }
 }
 
-.routersummary h4.sb_update, .routersummary h4.sb_update {
+#sidebar h4.sb_update, #sidebar h4.sb_update {
   padding-top: 9px;
   padding-bottom: 9px;
 }
 
-.routersummary ul {
+#sidebar ul {
   text-align: left !important;
 }
 
@@ -895,14 +895,10 @@ pre {
 
 #sb_internals td:first-child, #sb_advanced td:first-child, #sb_help td:first-child {
   margin: 0 -10px;
-  padding: 0 0 1px !important;
+  padding: 0 0 2px !important;
   width: 106% !important;
-  max-width: 400px !important;
+  max-width: 240px !important;
   display: inline-block;
-}
-
-#sb_advanced td:first-child {
-  padding-bottom: 2px !important;
 }
 
 #sb_general, #sb_shortgeneral, #sb_advancedgeneral, #sb_bandwidth, #sb_peers, #sb_peersadvanced, #sb_tunnels, #sb_queue {
@@ -1025,14 +1021,14 @@ pre {
   vertical-align: middle;
 }
 
-#sb_services a:hover, #sb_internals a:hover, #sb_advanced a:hover, #sb_localtunnels tr:hover, .sb_newsheadings a:hover,
+#sb_services a:hover, #sb_internals a:hover, #sb_advanced a:hover, #sb_localtunnels tr:hover, #sb_newsheadings a:hover,
 #sb_localtunnels tr:hover a, #sb_help a:hover, .news a:hover, #console a:hover, #help a:hover {
   color: var(--a_hover) !important;
   border-radius: 2px;
   background-color: #1e0b28;
 }
 
-#sb_services a:active, #sb_internals a:active, #sb_advanced a:active, #sb_help a:active, .sb_newsheadings a:active,
+#sb_services a:active, #sb_internals a:active, #sb_advanced a:active, #sb_help a:active, #sb_newsheadings a:active,
 #sb_localtunnels tr:active, .news a:active, #console a:active, #help a:active {
   color: var(--active) !important;
   background-color: #39144f;
@@ -1142,13 +1138,13 @@ p:empty + .sb_notice {
   margin-bottom: 5px !important;
 }
 
-.routersummary tr {
+#sidebar tr {
   border: 0 !important;
   background-image: none !important;
   background-color: transparent !important;
 }
 
-.routersummary form {
+#sidebar form {
   margin: -4px -9px -7px;
 }
 
@@ -1156,11 +1152,11 @@ p:empty + .sb_notice {
   margin-top: 9px !important;
 }
 
-.routersummary form:first-child {
+#sidebar form:first-child {
   margin: 6px 0 -5px 0 !important;
 }
 
-.routersummary p {
+#sidebar p {
   padding: 0;
 }
 
@@ -1170,16 +1166,18 @@ p:empty + .sb_notice {
   padding: 2px 0 0 0 !important;
 }
 
-.routersummary a:link, .routersummary a:visited {
-  padding: 0 2px;
+#sidebar a:link, #sidebar a:visited {
+  padding: 1px 2px;
+  display: inline-block;
+  line-height: 1.2;
   word-spacing: 0;
 }
 
-.routersummary a:hover {
+#sidebar a:hover {
   color: var(--hover);
 }
 
-.routersummary hr:last-child {
+#sidebar hr:last-child {
   margin-top: 5px;
   margin-bottom: -5px !important;
 }
@@ -1326,7 +1324,7 @@ p:empty + .sb_notice {
 
 /* sidebar news */
 
-.sb_newsheadings {
+#sb_newsheadings {
   width: 192px;
   margin-left: 0;
   margin-top: -5px !important;
@@ -1334,13 +1332,13 @@ p:empty + .sb_notice {
   text-align: right;
 }
 
-.sb_newsheadings table {
+#sb_newsheadings table {
   margin-bottom: 0 !important;
   border-collapse: collapse;
   border-spacing: 1px;
 }
 
-.sb_newsheadings a {
+#sb_newsheadings a {
   margin-top: 1px;
   padding: 3px !important;
   display: inline-block;
@@ -1349,11 +1347,11 @@ p:empty + .sb_notice {
   border-radius: 3px !important;
 }
 
-.sb_newsheadings a:hover {
+#sb_newsheadings a:hover {
   background: none;
 }
 
-.sb_newsheadings td {
+#sb_newsheadings td {
   padding: 3px 8px 3px 20px !important;
   text-align: left;
   border-bottom: 2px solid #000 !important;
@@ -1361,16 +1359,113 @@ p:empty + .sb_notice {
   background-size: 15px, 100% !important;
 }
 
-.sb_newsheadings td:hover {
+#sb_newsheadings td:hover {
   background: var(--newsbullet_hover) no-repeat 4px center, linear-gradient(90deg, #202, #101) !important;
   background-size: 15px, 100% !important;
 }
 
-.sb_newsheadings tr:last-child td {
+#sb_newsheadings tr:last-child td {
   border-bottom: none !important;
 }
 
 /* end sidebar news */
+
+a:active #sb_graphstats {
+  border-color: var(--active);
+}
+
+#sb_graphstats {
+  padding: 2px 8px;
+  display: inline-block;
+  font-weight: 700;
+  border: 1px solid #83529f;
+  border-top: none;
+  background: #001;
+  opacity: 0;
+  transition: ease opacity .3s;
+}
+
+#sb_graphcontainer:hover #sb_graphstats {
+  opacity: 1;
+  transition: ease opacity .3s;
+}
+
+#sb_graphcontainer {
+  margin: -4px -7px -7px !important;
+  padding: 0 1px;
+  height: 44px;
+  position: relative;
+  z-index: 10;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px #26235c, inset 0 0 0 2px #000, inset 0 0 3px 1px #004;
+  background: repeating-linear-gradient(90deg, rgba(0,0,0,0) 14px, rgba(112,107,199,.7) 15px, rgba(0,0,0,0) 15px, rgba(0,0,0,0) 30px),
+    repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(112,107,199,.3), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 14px) !important;
+}
+
+#minigraph {
+  margin: -19px -1px 0 0;
+  width: 194px !important;
+  height: 40px;
+}
+
+#xhr > hr + #sb_graphcontainer > span + a > #minigraph {
+  height: 40px;
+}
+
+#minigraphcontainer {
+  margin-top: -43px;
+  margin-left: 1px;
+  width: 204px;
+  height: 39px;
+  background-repeat: no-repeat;
+  background-size: 204px 40px;
+}
+
+#homepage #minigraphcontainer {
+  margin-top: -42px;
+  height: 38px;
+}
+
+#sb_graphcontainer::before {
+  position: absolute;
+  top: 2px;
+  left: -1px;
+  width: 100%;
+  height: 40px;
+  content: "";
+  display: inline-block;
+  background: linear-gradient(180deg,rgba(0,0,0,0), rgba(0,0,0,0), rgba(0,0,0,.3));
+  pointer-events: none;
+  will-change: transform;
+}
+
+#sb_graphstats {
+  position: relative;
+  z-index: 1000;
+}
+
+#sidebar {
+  overflow: hidden;
+}
+
+#sidebar table {
+  position: relative;
+  max-width: none !important;
+}
+
+#sidebar table:not(#sb_localtunnels):not(#sb_services)::before {
+  width: 0;
+  height: 1px;
+  display: block;
+  position: absolute;
+  top: -2px;
+  left: -1px;
+  z-index: 99999;
+  background: linear-gradient(to left, #717, #404);
+  content: "";
+  animation: ease-in bar .1s reverse;
+  will-change: transform;
+}
 
 /* status bar */
 
@@ -1495,7 +1590,7 @@ p:empty + .sb_notice {
 
 /* network status */
 
-.routersummary h4 a {
+#sidebar h4 a {
   width: auto !important;
   vertical-align: middle;
   display: inline;
@@ -1811,7 +1906,7 @@ div[id^="config_"].main {
   background-size: auto 200px;
 }
 
-.main#news .newscontent {
+#news .newscontent {
   border: var(--border_inner);
   margin: -11px 0 10px;
   padding: 1px 12px 6px;
@@ -1821,20 +1916,20 @@ div[id^="config_"].main {
   background-size: 100px auto, 100%;
 }
 
-.main#news .newsentry h3 {
+#news .newsentry h3 {
   border: var(--border_inner);
   border-radius: 2px 2px 0 0;
 }
 
-.main#news .newsentry {
+#news .newsentry {
   margin-bottom: 14px !important;
 }
 
-.main#news .newsentry:first-child {
+#news .newsentry:first-child {
   margin-top: -3px !important;
 }
 
-.main#news .newsentry:last-child {
+#news .newsentry:last-child {
   margin-bottom: -5px !important;
 }
 
@@ -1988,27 +2083,27 @@ div[id^="config_"].main {
   display: inline-block;
 }
 
-.main#jobs .joblog {
+#jobs .joblog {
   margin-top: 10px !important;
   overflow: hidden;
 }
 
-.main#jobs ol {
+#jobs ol {
   padding: 5px 1px 5px 5px;
   columns: auto 400px;
   column-gap: 0;
   text-align: left;
 }
 
-.main#jobs ol:empty {
+#jobs ol:empty {
   display: none;
 }
 
-.main#jobs ol li:first-child, #schedjobs li:first-child {
+#jobs ol li:first-child, #schedjobs li:first-child {
   margin-top: 0 !important;
 }
 
-.main#jobs ol li {
+#jobs ol li {
   break-inside: avoid;
   page-break-inside: avoid;
   -webkit-break-inside: avoid;
@@ -2020,17 +2115,17 @@ div[id^="config_"].main {
   min-width: 0;
 }
 
-.main#config_update input, .main#config_update button, .main#config_update select, .main#config_update textarea {
+#config_update input, #config_update button, #config_update select, #config_update textarea {
   margin-left: 0 !important;
 }
 
-.main#config_update .messages {
+#config_update .messages {
   box-shadow: var(--highlight) !important;
   background: var(--update) no-repeat 15px center, var(--earth) bottom right no-repeat, linear-gradient(135deg, #000020, #000) !important;
   background-size: 28px, 80px auto, 100% !important;
 }
 
-.main#events .messages {
+#events .messages {
   margin-top: 21px;
   margin-bottom: -16px;
   box-shadow: inset 0 0 0 1px #300 !important;
@@ -2166,15 +2261,15 @@ h3 + p, h3 + table {
   margin-right: -4px;
 }
 
-.main#tunnels h3:first-child {
+#tunnels h3:first-child {
   margin-top: 10px;
 }
 
-.main#tunnels h3 a:not(old):not(.lsview), #logs a.delete:not(old), #logs a.configure:not(old) {
+#tunnels h3 a:not(.lsview), #logs a.delete, #logs a.configure {
   font-size: 0 !important;
 }
 
-.main#tunnels h3 a[href^="/configtunnels#"]::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]::after,
+#tunnels h3 a[href^="/configtunnels#"]::after, #tunnels h3 a[href$="i2ptunnelmgr"]::after,
 #logs a.configure::after, #logs a.delete::after, h4.app a::after, h4.app2 a::after {
   padding: 0;
   width: 16px;
@@ -2185,14 +2280,14 @@ h3 + p, h3 + table {
   content: "";
 }
 
-.main#tunnels h3 a[href^="/configtunnels#"]:hover::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]:hover::after,
-.main#tunnels h3 a[href^="/configtunnels#"]:focus::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]:focus::after,
+#tunnels h3 a[href^="/configtunnels#"]:hover::after, #tunnels h3 a[href$="i2ptunnelmgr"]:hover::after,
+#tunnels h3 a[href^="/configtunnels#"]:focus::after, #tunnels h3 a[href$="i2ptunnelmgr"]:focus::after,
 #logs a.configure:hover::after, #logs a.configure:focus::after,
 h4.app a:hover::after, h4.app a:focus::after, h4.app2 a:hover::after, h4.app2 a:focus::after {
   background: var(--settings_hover) no-repeat center center;
 }
 
-.main#tunnels h3 a[href^="/configtunnels#"]:active::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]:active::after, #logs a.configure:active::after,
+#tunnels h3 a[href^="/configtunnels#"]:active::after, #tunnels h3 a[href$="i2ptunnelmgr"]:active::after, #logs a.configure:active::after,
 h4.app a:active::after, h4.app2 a:active::after  {
   background: var(--settings_active) no-repeat center center;
   transform: rotate(90deg) !important;
@@ -2252,11 +2347,11 @@ h4.app a, h4.app2 a {
   font-size: 0;
 }
 
-.main#tunnels h3 + h3 {
+#tunnels h3 + h3 {
   margin-top: -1px;
 }
 
-.main#tunnels h3 + h3 a {
+#tunnels h3 + h3 a {
   display: none;
 }
 
@@ -2272,7 +2367,7 @@ h4.app a, h4.app2 a {
   padding-bottom: 8px !important;
 }
 
-h3#iptransport a:not(old), h3#advancedconfig a:not(old), #reseedsetup a:not(old) {
+h3#iptransport a, h3#advancedconfig a, #reseedsetup a {
   font-size: 0;
   height: 20px;
 }
@@ -2347,8 +2442,8 @@ div.widepanel h3 {
 /* graphs */
 
 @keyframes fade {
-  from {opacity: 0}
-  to {opacity: 1}
+  from {opacity: 1}
+  to {opacity: 0}
 }
 
 #graphdisplay + form {
@@ -2359,7 +2454,7 @@ div.widepanel h3 {
 
 #graphdisplay:hover + form, #graphdisplay + form:hover {
   display: block;
-  animation: ease .5s .2s fade forwards;
+  animation: fade .5s ease .2s reverse both;
 }
 
 #graphs .messages {
@@ -2576,7 +2671,7 @@ tr:hover {
   box-shadow: none;
 }
 
-.routersummary tr {
+#sidebar tr {
   box-shadow: none;
 }
 
@@ -2919,7 +3014,7 @@ p + .twocol, div[lang="de"] p + .twocol {
   margin-top: 0 !important;
 }
 
-.main#console p {
+#console p {
    margin: 5px 20px 10px;
 }
 
@@ -3040,7 +3135,7 @@ h2#jobrunners {
   display: none;
 }
 
-.main#jobs h2 {
+#jobs h2 {
   border-radius: 0;
 }
 
@@ -4316,7 +4411,7 @@ h3.stats {
   background: #000;
 }
 
-.main .statlist li:not(old) {
+.main .statlist li {
   list-style: none !important;
 }
 
@@ -4374,7 +4469,7 @@ h3.stats {
   display: none;
 }
 
-.main#stats form {
+#stats form {
   border: var(--border_inner);
   padding: 10px;
   margin: -15px 0 10px;
@@ -5516,7 +5611,7 @@ table[id$="logs"] ul {
   color: #a2a6d1;
 }
 
-.main#logs li {
+#logs li {
   margin: 0 0 0 13px !important;
   padding: 0 2px 0 8px !important;
   width: calc(100% - 6px);
@@ -5534,12 +5629,12 @@ table[id$="logs"] ul {
   background: rgba(26,26,58,.5);
 }
 
-.main#logs li:last-child {
+#logs li:last-child {
   margin-bottom: 7px !important;
   border-bottom: 1px solid rgba(64,64,80,.2);
 }
 
-.main#logs li:hover {
+#logs li:hover {
   background: #113;
 }
 
@@ -5551,7 +5646,7 @@ table[id$="logs"] ul {
   background: rgba(10,10,34,.6);
 }
 
-.logtable ul li:not(old) {
+.logtable ul li {
   margin-left: 15px;
   list-style: none !important;
 }
@@ -5745,7 +5840,7 @@ font[color="#000099"] { /* info */
   color: #900 !important;
 }
 
-a[href^="configpeer?peer"]:not(old) {
+a[href^="configpeer?peer"] {
   font-size: 0 !important;
   filter: drop-shadow(0 0 1px #777);
 }
@@ -6132,18 +6227,18 @@ table#jardump {
 
 /* end jardump */
 
-.main#certs {
+#certs {
   padding-top: 3px;
 }
 
-.main#certs h3 {
+#certs h3 {
   margin-bottom: -16px !important;
   padding: 7px 10px;
   border: var(--border_inner);
   border-radius: 0;
 }
 
-.main#certs h4 {
+#certs h4 {
   padding: 5px 10px;
   margin: 15px 0 0;
   border: var(--border_inner);
@@ -6152,7 +6247,7 @@ table#jardump {
   background: linear-gradient(90deg, #000, #002);
 }
 
-.main#certs h3 + p {
+#certs h3 + p {
   margin-top: 15px;
 }
 
@@ -6160,14 +6255,14 @@ table#jardump {
   margin-top: 8px;
 }
 
-.main#certs p:not(.infohelp) {
+#certs p:not(.infohelp) {
   margin-top: -1px;
   padding: 10px;
   border: var(--border_inner);
   background: #000;
 }
 
-.main#certs p + h4 {
+#certs p + h4 {
   margin-top: -1px !important;
 }
 
@@ -6182,13 +6277,13 @@ table#jardump {
   margin: -1px 0 10px;
 }
 
-.main#certs textarea {
+#certs textarea {
   margin: -1px 0 -3px 0;
   width: calc(100% - 18px);
   border: var(--border_inner) !important;
 }
 
-.main#certs textarea + #end, #certs h3 + #end {
+#certs textarea + #end, #certs h3 + #end {
   margin-bottom: 14px !important;
   display: block !important;
 }
@@ -6197,7 +6292,7 @@ table#jardump {
   margin-bottom: 26px !important;
 }
 
-.main#tunnels th {
+#tunnels th {
   padding: 5px 2px;
 }
 
@@ -6236,27 +6331,27 @@ table#jardump {
   border-right: 1px inset #225;
 }
 
-.main#torrents, .main#tunnelmgr, .main#webmail, .main#dns {
+#torrents, #tunnelmgr, #webmail, #dns {
   line-height: 0;
 }
 
-.main#webmail {
+#webmail {
   padding: 0;
   background: #000 !important;
   min-width: 736px;
 }
 
-.main#torrents, .main#tunnelmgr {
+#torrents, #tunnelmgr {
   padding: 0;
   background: linear-gradient(180deg,#000, #001) !important;
   background-size: 100% 2px !important;
 }
 
-.main#torrents {
+#torrents {
   min-width: 640px;
 }
 
-.main#tunnelmgr {
+#tunnelmgr {
   padding: 0 5px;
   min-width: 630px;
 }
@@ -6831,8 +6926,7 @@ div.app:hover .applabel {
   border: 1px solid #26235c;
   background: #000;
   box-shadow: var(--highlight), inset 0 0 2px 1px #26235c;
-  opacity: 0;
-  animation: ease fade .3s 1s forwards;
+  animation: fade .3s ease 1s reverse both;
 }
 
 #searchbar tr {
@@ -6946,7 +7040,7 @@ iframe.iframed {
   margin-top: 0;
 }
 
-.main#dns {
+#dns {
   padding: 0;
   min-width: 640px;
   background: #000010 !important;
@@ -7113,7 +7207,7 @@ span#distance {
   width: 10px;
 }
 
-#leasesetdebug th a:not(old), #leasesetsummary th a:not(old) {
+#leasesetdebug th a, #leasesetsummary th a {
   font-size: 0;
 }
 
@@ -7121,7 +7215,7 @@ span#distance {
   text-align: right;
 }
 
-.addtobook a:not(old) {
+.addtobook a {
   font-size: 0;
 }
 
@@ -7892,7 +7986,7 @@ h3#browseronstart + p.infohelp {
   background: #000 var(--firefox) no-repeat 15px center / 28px !important;
 }
 
-.main#config_reseed p.infohelp {
+#config_reseed p.infohelp {
   padding: 15px 25px 15px 55px;
   background: #000 var(--reseed) no-repeat 15px center / 28px !important;
 }
@@ -9213,7 +9307,7 @@ label:hover .optbox {
   display: none;
 }
 
-.config_experimental:not(old) {
+.config_experimental {
   font-size: 0;
 }
 
@@ -9510,7 +9604,7 @@ tr:nth-child(4) .net_bwrate::before {
   letter-spacing: 0;
 }
 
-.sb_netstatus hr, .routersummary .sb_netstatus hr:last-child {
+.sb_netstatus hr, #sidebar .sb_netstatus hr:last-child {
   margin: 3px 0 6px !important;
 }
 
@@ -10279,12 +10373,12 @@ html, body {
   height: 100%;
 }
 
-.main#embedded {
+#embedded {
   padding: 1px 11px 4px;
   text-align: center;
 }
 
-.main#embedded {
+#embedded {
   height: calc(100% - 68px) !important;
 }
 
@@ -10299,7 +10393,7 @@ html, body {
   float: right;
 }
 
-.main#rawtext {
+#rawtext {
   padding: 0;
 }
 
@@ -10481,7 +10575,7 @@ html, body {
   transform: scale(0.8);
 }
 
-.main#sitemap {
+#sitemap {
   padding-left: 6px;
   padding-right: 6px;
 }
@@ -11385,7 +11479,7 @@ h1::first-letter {
   border: var(--border_inner);
   box-shadow: var(--highlight), inset 0 0 2px 1px #26235c;
   max-width: calc(100% - 18px);
-  animation: ease grid-fade 2s forwards;
+  animation: grid-fade 2s 2s ease forwards;
 }
 
 .graphContainer#hidpi {
@@ -11900,110 +11994,8 @@ h3#bannedpeers {
 }
 
 @keyframes reloader {
-  0%, 100% {
-    width: 0;
-  }
-  80%, 99% {
-    width: 120%;
-  }
-}
-
-/* mini sidebar graph */
-
-a:active #sb_graphstats {
-  border-color: var(--active);
-}
-
-#sb_graphstats {
-  padding: 2px 8px;
-  display: inline-block;
-  font-weight: 700;
-  border: 1px solid #83529f;
-  border-top: none;
-  background: #001;
-  opacity: 0;
-  transition: ease opacity .3s;
-}
-
-#sb_graphcontainer:hover #sb_graphstats {
-  opacity: 1;
-  transition: ease opacity .3s;
-}
-
-#sb_graphcontainer {
-  margin: -4px -7px -7px !important;
-  padding: 0 1px;
-  height: 44px;
-  position: relative;
-  z-index: 10;
-  overflow: hidden;
-  box-shadow: inset 0 0 0 1px #26235c, inset 0 0 0 2px #000, inset 0 0 3px 1px #004;
-  background: repeating-linear-gradient(90deg, rgba(0,0,0,0) 14px, rgba(112,107,199,.7) 15px, rgba(0,0,0,0) 15px, rgba(0,0,0,0) 30px),
-    repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(112,107,199,.3), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 14px) !important;
-}
-
-#minigraph {
-  margin: -19px -1px 0 0;
-  width: 194px !important;
-  height: 40px;
-}
-
-#xhr > hr + #sb_graphcontainer > span + a > #minigraph {
-  height: 41px;
-}
-
-#minigraphcontainer {
-  margin-top: -43px;
-  margin-left: 1px;
-  width: 204px;
-  height: 39px;
-  background-repeat: no-repeat;
-  background-size: 204px 40px;
-}
-
-#homepage #minigraphcontainer {
-  margin-top: -42px;
-  height: 38px;
-}
-
-#sb_graphcontainer::before {
-  position: absolute;
-  top: 2px;
-  left: -1px;
-  width: 100%;
-  height: 40px;
-  content: "";
-  display: inline-block;
-  background: linear-gradient(180deg,rgba(0,0,0,0), rgba(0,0,0,0), rgba(0,0,0,.3));
-  pointer-events: none;
-  will-change: transform;
-}
-
-#sb_graphstats {
-  position: relative;
-  z-index: 1000;
-}
-
-#sidebar {
-  overflow: hidden;
-}
-
-.routersummary table {
-  position: relative;
-}
-
-.routersummary table:not(#sb_localtunnels):not(#sb_services)::before {
-  width: 0;
-  height: 1px;
-  display: block;
-  position: absolute;
-  top: -2px;
-  left: -1px;
-  z-index: 99999;
-  background: linear-gradient(to left, #717, #404);
-  content: "";
-  animation: ease-in bar .1s reverse;
-  will-change: transform;
+  0%, 100% {width: 0}
+  80%, 99% {width: 120%}
 }
 
 @keyframes bar {
@@ -12290,7 +12282,8 @@ iframe {
   top: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(#d30, #f60);
+  background: linear-gradient(180deg, rgba(255,255,255,.05) 50%, rgba(0,0,0,.2) 50%), linear-gradient(#101, #707);
+  opacity: .7;
   content: "";
   animation: reloader 8s ease-out .5s forwards;
 }
@@ -12356,7 +12349,7 @@ iframe {
   #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {
     min-height: 14px;
   }
-  .tunnels_client th:first-child:not(old) {
+  .tunnels_client th:first-child {
     font-size: 0;
   }
   .tunnels_client th:first-child::after {
@@ -12374,10 +12367,10 @@ iframe {
     margin: -2px 0;
     background-size: 12px;
   }
-  .routersummary h3 {margin-bottom: -9px; padding: 5px 0 !important}
-  .routersummary h3::before {height: 14px}
-  .main#tunnels h3 a[href^="/configtunnels#"]::after,
-  .main#tunnels h3 a[href$="i2ptunnelmgr"]::after,
+  #sidebar h3 {margin-bottom: -9px; padding: 5px 0 !important}
+  #sidebar h3::before {height: 14px}
+  #tunnels h3 a[href^="/configtunnels#"]::after,
+  #tunnels h3 a[href$="i2ptunnelmgr"]::after,
   #logs a.configure::after, #logs a.delete::after {
     width: 14px;
     height: 14px;
@@ -12667,7 +12660,7 @@ iframe {
 }
 
 @media screen and (min-width: 1400px) {
-  #help #changelog pre:not(old) {
+  #help #changelog pre {
     margin-left: 0;
     padding-left: 10px;
     width: calc(100% - 22px) !important;
@@ -12740,47 +12733,41 @@ iframe {
   #servletError .iframed #warning2, .iframed #warning2.sorry {
     margin: -16px 8px 10px !important;
   }
-  .routersummary {
+  #sidebar {
     width: 220px !important;
   }
-  .routersummary div[style="height: 36px;"] {
+  #sidebar div[style="height: 36px;"] {
     margin-top: 2px;
     height: 41px !important;
   }
-  .routersummary img[src$="i2plogo.png"] {
+  #sidebar img[src$="i2plogo.png"] {
     margin: -2px 0 -8px -8px !important;
     width: 230px;
     transform: none;
   }
-  .routersummary table[id^="sb_"], #sb_localtunnels {
-    width: 236px !important;
-  }
-  #sb_internals, #sb_advanced, #sb_help {
-    width: 240px !important;
-  }
-  .routersummary form {
-    margin-bottom: -8px;
-  }
+  table[id^="sb_"], #sidebar #sb_localtunnels {width: 236px !important}
+  #sb_internals, #sb_advanced, #sb_help {width: 240px !important}
+  #sidebar form {margin-bottom: -8px}
   #sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after,
   #sb_bandwidth td::after, #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {
      min-height: 18px;
   }
-  .routersummary td, .routersummary a, .routersummary button, .routersummary h4, .routersummary h4 a, .smallhead, pre, #newsStatus, #newsDisplay {
+  .routersummary td, #sidebar a, #sidebar button, #sidebar h4, #sidebar h4 a, .smallhead, pre, #newsStatus, #newsDisplay {
     font-size: 9pt !important;
   }
-  .routersummary button.download {
+  #sidebar button.download {
     font-size: 10pt !important;
   }
-  .routersummary h3 {
+  #sidebar h3 {
     padding: 5px 0 2px !important;
   }
-  .routersummary h3 a, #netdboverview tr:first-child th[colspan="3"] {
+  #sidebar h3 a, #netdboverview tr:first-child th[colspan="3"] {
     font-size: 11pt !important;
   }
-  .routersummary button, .routersummary .stop, .routersummary .reload {
+  #sidebar button, #sidebar .stop, #sidebar .reload {
     min-width: 110px !important;
   }
-  .routersummary hr {
+  #sidebar hr {
     margin-top: 9px;
   }
   .percentBarText {
@@ -12788,7 +12775,7 @@ iframe {
     width: 230px;
     font-size: 10pt !important;
   }
-  .percentBarOuter, .percentBarInner {
+  #sidebar .percentBarOuter, #sidebar .percentBarInner {
     width: 230px;
   }
   div.app {
@@ -12942,20 +12929,20 @@ iframe {
   #homepage #minigraphcontainer {height: 38px}
   #tunnels .tab, #tunnels .tab2 {line-height: 1.3 !important}
   #help .tab, #help .tab2 {margin-top: -1px !important}
-  #wizardpage .routersummary img[src$="i2plogo.png"] {
+  #wizardpage #sidebar img[src$="i2plogo.png"] {
     margin-left: -1px !important;
     width: 223px !important;
   }
-  .routersummary h4 {margin: -7px -10px -10px !important}
+  #sidebar h4 {margin: -7px -10px -10px !important}
   #sb_localtunnels a {max-width: 188px}
   .sb_notice {margin-bottom: -8px}
   .percentBarOuter {width: 210px}
-  .sb_newsheadings {
+  #sb_newsheadings {
     margin-left: -1px !important;
     margin-bottom: -10px !important;
     width: 200px !important;
   }
-  .sb_newsheadings table {width: 218px !important}
+  #sb_newsheadings table {width: 218px !important}
   #pluginconfig {margin-top: -15px !important}
   #netdboverview table th, #netdboverview table td {padding: 7px 8px !important}
   .log_debug, .log_info, .log_warn, .log_error, .log_crit, .log_omitted {
@@ -13017,25 +13004,28 @@ iframe {
     background-size: 256px 40px;
   }
   .main, .news, h1, #warning.sorry, #warning2.sorry {margin-left: 268px !important}
-  .routersummary {width: 240px !important}
-  .routersummary div[style="height: 36px;"] {
+  #sidebar {width: 240px !important}
+  #sidebar div[style="height: 36px;"] {
     margin-top: 1px;
     height: 47px !important;
   }
-  .routersummary img[src$="i2plogo.png"] {
+  #sidebar img[src$="i2plogo.png"] {
     margin-top: -1px;
     margin-left: -6px;
     width: 244px;
     transform: none;
   }
-  #error500 .routersummary img[src$="i2plogo.png"] {
+  #error500 #sidebar img[src$="i2plogo.png"] {
     margin-top: -1px;
     margin-bottom: -9px;
   }
-  .routersummary table[id^="sb_"], #sb_localtunnels {
+  #sidebar table[id^="sb_"], #sidebar #sb_localtunnels {
     width: 256px !important;
   }
-  .routersummary button, .routersummary .stop, .routersummary .reload {
+  #sidebar #sb_services {
+    width: 260px !important;
+  }
+  #sidebar button, #sidebar .stop, #sidebar .reload {
     min-width: 121px !important;
   }
   .routersummary td:first-child {
@@ -13044,7 +13034,7 @@ iframe {
   #sb_services {
     width: 260px !important;
   }
-  #sb_internals, #sb_advanced, #sb_help {
+  #sidebar #sb_internals, #sidebar #sb_advanced, #sidebar #sb_help {
     margin: -3px 0 -9px -7px !important;
     width: 255px !important;
   }
@@ -13053,9 +13043,15 @@ iframe {
     margin: 0;
     width: auto !important;
   }
-  .percentBarOuter {width: 250px}
-  .sb_newsheadings table {width: 258px !important}
-  .sb_newsheadings td:first-child {
+  #sb_internals td:first-child, #sb_advanced td:first-child, #sb_help td:first-child {
+    padding: 0 0 5px !important;
+  }
+  #sb_advanced td:first-child {
+    padding-bottom: 6px !important;
+  }
+  #sidebar .percentBarOuter {width: 250px}
+  #sidebar #sb_newsheadings table {width: 258px !important}
+  #sb_newsheadings td:first-child {
     width: 240px !important;
     max-width: 240px !important;
   }
@@ -13063,7 +13059,7 @@ iframe {
     padding-top: 5px !important;
     padding-bottom: 5px !important;
   }
-  .routersummary form {margin-bottom: -8px}
+  #sidebar form {margin-bottom: -8px}
   #sb_services a:link, #sb_internals a:link,
   #sb_advanced a:link, #sb_help a:link {max-width: 247px !important}
   .routersummary td {
@@ -13074,8 +13070,8 @@ iframe {
     padding: 8px 10px 8px 34px !important;
     font-size: 11pt;
   }
-  .routersummary td, .routersummary a, .routersummary button, .routersummary h4,
-  .routersummary h4 a, .smallhead, pre, #newsStatus, #newsDisplay, .footnote, .topness,
+  .routersummary td, #sidebar a, #sidebar button, #sidebar h4,
+  #sidebar h4 a, .smallhead, pre, #newsStatus, #newsDisplay, .footnote, .topness,
    #bwlimiter a, #advancedconfig a, .tabletitle a, #upnpconfig a, #servicedebug a,
   .ptitle a, #configstats th a, h3#graphinfo a, .h3navlinks, div.app a:link, div.app a:hover,
   div.app a:active {font-size: 9.5pt !important}
@@ -13086,8 +13082,8 @@ iframe {
   .applabel {width: 160px !important}
   .applabel a, .applabel a:hover {max-width: 154px !important}
   #sb_localtunnels td {
-    padding-top: 3px !important;
-    padding-bottom: 3px !important;
+    padding-top: 1px !important;
+    padding-bottom: 1px !important;
   }
   #news .newsentry p, #console p, #console li, #help p, #help li, #console code, #help code,
   #help table, #warning p, #warning li, #warning a, .logo a, #warning h4, .infowarn, .infohelp,
@@ -13163,7 +13159,7 @@ iframe {
   h3#pluginfromfile, h3#updateplugins, h3#pluginmanage, h3#bannedpeers, h3.ptitle, h3#transports, h3#upnpstatus, h3.sybils, #config_keyring h3 {
     padding: 9px 10px !important;
   }
-  .main#tunnels h3 a:not(old):not(.lsview), #criticallogs + h3.tabletitle a:not(old), h3#iptransport a:not(old), h3#advancedconfig a:not(old), #reseedsetup a:not(old) {
+  #tunnels h3 a:not(.lsview), #criticallogs + h3.tabletitle a, h3#iptransport a, h3#advancedconfig a, #reseedsetup a {
     font-size: 0 !important;
   }
   #updateHelper .nowrap::after, #updateProxyHostPort .nowrap::after, #i2pupdates .nowrap::after {

@@ -62,7 +62,7 @@
 <tr><th><%=intl._t("Name")%></th><th><%=intl._t("Auto Start Tunnel")%></th></tr>
 <tr>
 <td><input type="text" size="30" maxlength="50" name="name" title="<%=intl._t("Name of tunnel to be displayed on Tunnel Manager home page and the router console sidebar")%>" value="<%=editBean.getTunnelName(curTunnel)%>" class="freetext tunnelName" /></td>
-<td><label title="<%=intl._t("Enable this option to ensure this service is available when the router starts")%>"><input value="1" type="checkbox" name="startOnLoad"<%=(editBean.startAutomatically(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox" /> <%=intl._t("Automatically start tunnel when router starts")%></label></td>
+<td><label title="<%=intl._t("Enable this option to ensure this service is available when the router starts")%>"><input value="1" type="checkbox" name="startOnLoad"<%=(editBean.startAutomatically(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox slider" /> <%=intl._t("Automatically start tunnel when router starts")%></label></td>
 </tr>
 <tr><th><%=intl._t("Description")%></th>
 <th>
@@ -86,8 +86,8 @@
                          (isShared ? bStopFirst : aStopFirst);
         String shdisabled = canChangePort ? "" : " disabled=\"disabled\" ";
 %>
-<label title="<%=shtitle%>">
-<input value="true" type="checkbox" name="shared" <%=(isShared ? " checked=\"checked\"" : "")%> class="optbox" <%=shdisabled%>/>
+<label title="<%=shtitle%>" <%=shdisabled%>>
+<input value="true" type="checkbox" name="shared" <%=(isShared ? " checked=\"checked\"" : "")%> class="optbox slider" <%=shdisabled%>/>
 <%=intl._t("Share tunnels with other configured clients")%>
 </label>
 <%
@@ -180,14 +180,14 @@
       if ("httpclient".equals(tunnelType) || "sockstunnel".equals(tunnelType)) {
 %>
 <label title="<%=intl._t("If an outproxy plugin is installed (e.g. Orchid), use this instead of any configured outproxies to access websites outside of I2P")%>">
-<input value="1" type="checkbox" name="useOutproxyPlugin" <%=(editBean.getUseOutproxyPlugin(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox" />
+<input value="1" type="checkbox" name="useOutproxyPlugin" <%=(editBean.getUseOutproxyPlugin(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox slider" />
 <%=intl._t("Use plugin instead of proxies listed below if available")%>
 </label>
 <%
       }  else if ("ircclient".equals(tunnelType)) {
 %>
 <label title="<%=intl._t("Enables direct chat and file transfers, bypassing I2P. Note that this will compromise your anonymity and is not recommended.")%>">
-<input value="1" type="checkbox" name="DCC"<%=(editBean.getDCC(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox" />
+<input value="1" type="checkbox" name="DCC"<%=(editBean.getDCC(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox slider" />
 <%=intl._t("Enable Direct Client-to-Client protocol")%>
 </label>
 <%
@@ -256,7 +256,7 @@
 %>
 <td>
 <label title="<%=intl._t("If you are accessing a service on a remote I2P router, you may wish to connect with SSL to avoid traffic interception. The client application should be also be configured to use SSL.")%>">
-<input value="1" type="checkbox" name="useSSL" <%=(editBean.isSSLEnabled(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox" />
+<input value="1" type="checkbox" name="useSSL" <%=(editBean.isSSLEnabled(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox slider" />
 <%=intl._t("Clients use SSL to connect to tunnel")%>
 </label>
 <%
@@ -327,7 +327,7 @@
 </select>
 </td>
 <td>
-<label title="<%=intl._t("Delay Connection")%>"><input value="200" type="checkbox" name="connectDelay"<%=(editBean.shouldDelay(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox" />
+<label title="<%=intl._t("Delay Connection")%>"><input value="200" type="checkbox" name="connectDelay"<%=(editBean.shouldDelay(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox slider" />
 (<%=intl._t("for request/response connections")%>)</label>
 <% // TODO: Convey to users: Where is the (1s) delay introduced? What is the difference between delay connect and delay open? %>
 </td>
@@ -356,7 +356,7 @@
 <tr><th><%=intl._t("Delay tunnel open until required")%></th><th><%=intl._t("Signature type")%></th></tr>
 <tr>
 <td>
-<label title="<%=intl._t("Conserve resources by only creating tunnels when required")%>"><input value="1" type="checkbox" name="delayOpen"<%=(editBean.getDelayOpen(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox" />
+<label title="<%=intl._t("Conserve resources by only creating tunnels when required")%>"><input value="1" type="checkbox" name="delayOpen"<%=(editBean.getDelayOpen(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox slider">
 <%=intl._t("Don't open tunnel until activity is detected on port")%></label>
 </td>
 <%        } else { %>
@@ -519,7 +519,7 @@
 <tr>
 <td>
 <label title="<%=intl._t("Reduce tunnel count when idle to conserve resources but keep tunnel open (to ensure immediate availability)")%>">
-<input value="1" type="checkbox" name="reduce"<%=(editBean.getReduce(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox" />
+<input value="1" type="checkbox" name="reduce"<%=(editBean.getReduce(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox slider" />
 <%=intl._t("Reduce tunnel quantity when idle")%>
 </label>
 </td>
@@ -535,7 +535,7 @@ minutes</span>
 <tr>
 <td>
 <label title="<%=intl._t("To conserve resources, close tunnels when not in use")%>">
-<input value="1" type="checkbox" name="close"<%=(editBean.getClose(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox" />
+<input value="1" type="checkbox" name="close"<%=(editBean.getClose(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox slider" />
 <%=intl._t("Close client tunnels after specified idle period")%>
 </label>
 </td>
@@ -581,12 +581,12 @@ minutes</span>
 <tr id=\"httpfilter\">
 <td>
 <label title="<%=intl._t("When enabled, the user agent of your web browser or http client will not be spoofed, potentially reducing your anonymity")%>">
-<input value="1" type="checkbox" name="allowUserAgent"<%=(editBean.getAllowUserAgent(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox" />
+<input value="1" type="checkbox" name="allowUserAgent"<%=(editBean.getAllowUserAgent(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox slider" />
 <%=intl._t("Do not spoof User-Agent header")%></label>
 </td>
 <td>
 <label title="<%=intl._t("When enabled, the referer (originating page) of your web requests will not be filtered, potentially reducing your anonymity")%>">
-<input value="1" type="checkbox" name="allowReferer"<%=(editBean.getAllowReferer(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox" />
+<input value="1" type="checkbox" name="allowReferer"<%=(editBean.getAllowReferer(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox slider" />
 <%=intl._t("Do not block Referer header")%>
 </label>
 </td>
@@ -594,13 +594,13 @@ minutes</span>
 <tr>
 <td>
 <label title="<%=intl._t("When enabled, the accept headers (mime types support) broadcast by your web browser will not be filtered, potentially reducing your anonymity")%>">
-<input value="1" type="checkbox" name="allowAccept"<%=(editBean.getAllowAccept(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox" />
+<input value="1" type="checkbox" name="allowAccept"<%=(editBean.getAllowAccept(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox slider" />
 <%=intl._t("Do not block Accept headers")%>
 </label>
 </td>
 <td>
 <label title="<%=intl._t("Allow SSL to I2P addresses when enabled")%>">
-<input value="1" type="checkbox" name="allowInternalSSL"<%=(editBean.getAllowInternalSSL(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox" />
+<input value="1" type="checkbox" name="allowInternalSSL"<%=(editBean.getAllowInternalSSL(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox slider" />
 <%=intl._t("Allow SSL to I2P addresses")%>
 </label>
 </td>
@@ -613,7 +613,7 @@ minutes</span>
 <tr>
 <td>
 <label title="<%=intl._t("Enable to require a username and password to access this local service (for example if hosting on a LAN)")%>">
-<input value="1" type="checkbox" name="proxyAuth"<%=(editBean.getProxyAuth(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox" />
+<input value="1" type="checkbox" name="proxyAuth"<%=(editBean.getProxyAuth(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox slider" />
 <%=intl._t("Require local authorization for this service")%>
 </label>
 </td>
@@ -628,7 +628,7 @@ minutes</span>
 <tr>
 <td>
 <label title="<%=intl._t("Enable if the outproxy a username and password to access")%>">
-<input value="1" type="checkbox" id="startOnLoad" name="outproxyAuth"<%=(editBean.getOutproxyAuth(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox" />
+<input value="1" type="checkbox" id="startOnLoad" name="outproxyAuth"<%=(editBean.getOutproxyAuth(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox slider" />
 <%=intl._t("Outproxy requires authorization")%></label>
 </td>
 <td>

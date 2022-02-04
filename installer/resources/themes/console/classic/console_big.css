@@ -288,7 +288,7 @@ h3.stats {
   margin-top: -1px !important;
 }
 
-.main#stats form {
+#stats form {
   margin-top: 0;
   margin-bottom: -1px;
 }
@@ -364,7 +364,7 @@ input.search[type=text] {
   background-position: 8px center;
 }
 
-.main#jardump b {
+#jardump b {
   font-size: 9pt !important;
 }
 
@@ -372,11 +372,11 @@ input.search[type=text] {
   font-size: 10pt !important;
 }
 
-table#leasesetdebug th a:not(old), table#leasesetsummary th a:not(old), #tunnels.main h3 a:not(old), #logs h3 a:not(old), a[href^="configpeer?peer"] {
+table#leasesetdebug th a, table#leasesetsummary th a, #tunnels.main h3 a, #logs h3 a, a[href^="configpeer?peer"] {
   font-size: 0 !important;
 }
 
-h3#iptransport a:not(old), h3#advancedconfig a:not(old) {
+h3#iptransport a, h3#advancedconfig a {
   font-size: 0 !important;
 }
 
@@ -520,7 +520,7 @@ div.news h3, .newsDate, div.news a {
   margin-top: -5px !important;
 }
 
-.main#console code {
+#console code {
   font-size: 13pt !important;
 }
 
@@ -545,15 +545,15 @@ div.news h3, .newsDate, div.news a {
   font-size: 12pt !important;
 }
 
-.sb_newsheadings td, .sb_newsheadings tr:hover td {
+#sb_newsheadings td, #sb_newsheadings tr:hover td {
   background-position: 4px center !important;
 }
 
-.sb_newsheadings td a {
+#sb_newsheadings td a {
   font-size: 9pt !important;
 }
 
-.main#tunnels td, .tunnel_cap, .tunnel_id, #tunnels .cells, #tunnels tt a {
+#tunnels td, .tunnel_cap, .tunnel_id, #tunnels .cells, #tunnels tt a {
   font-size: 10pt !important;
   letter-spacing: 0 !important;
   word-spacing: 0 !important;

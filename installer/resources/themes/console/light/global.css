@@ -13,6 +13,7 @@
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   --border: #6c6c93;
   --border_inner: #a7a7be;
+  --border_input: 1px solid #97a2ce;
   --border_soft: 1px solid #e0e0eb;
   --border_softer: 1px solid #dfdfec;
   --btn_hover: linear-gradient(180deg,#eee,#fff);
@@ -132,7 +133,7 @@ select, select[disabled]:hover, select[disabled]:focus {
   text-align: left !important;
   font-size: 9pt;
   color: var(--ink_light);
-  border: 1px solid #97a2ce;
+  border: var(--border_input);
   border-radius: 2px;
   box-shadow: var(--highlight);
   box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
@@ -170,7 +171,7 @@ select:focus {
 }
 
 select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active {
-  border: 1px solid #97a2ce !important;
+  border: var(--border_input) !important;
   box-shadow: var(--highlight) !important;
   background: var(--btn) !important;
   opacity: .8;
@@ -201,7 +202,7 @@ input[type=text]:focus, input[type=password]:focus,
   filter: var(--filter_focus);
 }
 
-input[type=text][disabled] {
+input[type=text][disabled], label[disabled] {
   color: var(--ink_lighter);
 }
 
@@ -211,7 +212,7 @@ textarea {
   resize: none;
   font-size: 9pt;
   color: var(--ink);
-  border: 1px solid #97a2ce;
+  border: var(--border_input);
   border-radius: 2px;
   box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6);
   background: #fbfbff;
@@ -234,7 +235,7 @@ input[type=file]::file-selector-button {
   color: var(--ink_light);
   text-decoration: none;
   text-shadow: 0 1px 1px #fff;
-  border: 1px solid #97a2ce;
+  border: var(--border_input);
   border-radius: 2px;
   box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
   background: var(--btn);
@@ -302,7 +303,7 @@ input[type=radio]:not(:checked) {
   margin: 2px 0;
   position: relative;
   vertical-align: middle !important;
-  border: 1px solid #97a2ce !important;
+  border: var(--border_input) !important;
   background: #f8f8ff !important;
   box-sizing: border-box;
   appearance: none;
@@ -335,4 +336,85 @@ input[type=radio]:not(:checked) {
 
 input[type=radio]:not(:checked)::before {
   border-radius: 50%;
+}
+
+/* sliders */
+.optbox.slider[type=checkbox], .optbox.slider[type=checkbox][disabled],
+.optbox.slider, .optbox.slider:hover, .optbox.slider:focus {
+  width: 40px !important;
+  height: 21px !important;
+  border-radius: 1px;
+  position: relative;
+  box-shadow: inset 0 0 0 1px #f2f2ff, inset 3px 3px 3px rgba(0,0,0,.2);
+  background: linear-gradient(180deg,#eef, #ddf);
+  outline: none;
+  transition: ease-in left .05s;
+  appearance: none;
+  will-change: transform;
+}
+
+.optbox.slider:checked {
+  background: linear-gradient(180deg,#393, #4a4) !important;
+}
+
+.optbox.slider:not(:checked):active {
+  background: linear-gradient(180deg,#393, #4a4) !important;
+}
+
+.optbox.slider:checked:active {
+  background: linear-gradient(180deg,#cf0f00, #f00) !important;
+}
+
+.optbox.slider:not([disabled]):hover, .optbox.slider:not([disabled]):focus {
+  box-shadow: 0 0 0 1px #6f645d, 0 0 0 2px #f60, inset 0 0 0 1px #f9f5f2, inset 3px 3px 3px rgba(0,0,0,.2);
+}
+
+label[disabled]:hover .optbox.slider, label[disabled]:focus .optbox.slider {
+  border: var(--border_input) !important;
+  box-shadow: inset 0 0 0 1px #f2f2ff, inset 3px 3px 3px rgba(0,0,0,.2) !important;
+}
+
+.optbox.slider[type=checkbox]::before,
+.optbox.slider[type=checkbox][disabled]::before,
+.optbox.slider::before,
+.optbox.slider:hover::before,
+.optbox.slider:focus::before,
+.optbox.slider:active::before {
+  width: 20px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: -1px;
+  border-radius: 1px;
+  box-shadow: inset 0 0 0 1px #99a, inset 0 0 0 2px #fff, 0 2px 5px rgba(0,0,0,.2);
+  background: linear-gradient(#fff, #ddf);
+  content: "";
+  transform: scale(.85);
+  transition: ease-in left .05s;
+}
+
+.optbox.slider:checked::before {
+  left: 18px !important;
+}
+
+.optbox.slider:not([disabled]):hover, .optbox.slider:not([disabled]):focus,
+.optbox.slider:not([disabled]):checked:focus, .optbox.slider:not([disabled]):checked:active {
+  box-shadow: none !important
+}
+
+.optbox.slider:not([disabled]):hover, .optbox.slider:not([disabled]):focus {
+  border: 1px solid var(--hover) !important;
+  box-shadow: none !important;
+}
+
+label:not([disabled]):hover {
+  color: var(--ink_dark);
+}
+
+label[disabled], label[disabled]:hover  {
+  opacity: .45;
+}
+
+.optbox:hover, label[disabled]:hover .optbox {
+  pointer-events: none !important;
 }

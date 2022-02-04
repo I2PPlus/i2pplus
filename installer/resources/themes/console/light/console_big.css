@@ -77,7 +77,7 @@ button.control {
   line-height: 130%;
 }
 
-.sb_newsheadings td, .sb_newsheadings tr:hover td {
+#sb_newsheadings td, #sb_newsheadings tr:hover td {
   padding-left: 22px !important;
   background-position: 4px center !important;
 }

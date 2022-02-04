@@ -68,10 +68,6 @@ form {
   opacity: .4;
 }
 
-label:hover {
-  color: #19191f;
-}
-
 .editDisabled label, .editDisabled label:hover {
   color: var(--ink_light);
 }
@@ -204,7 +200,7 @@ hr {
   padding: 5px 8px !important;
   width: 150px;
   color: var(--ink);
-  border: 1px solid #97a2ce;
+  border: var(--border_input);
   border-radius: 2px;
   background: #fbfbff;
 }
@@ -241,7 +237,7 @@ input[type=text][readonly] {
 .control, .control:link, .control:visited, button {
   margin: 2px 4px !important;
   padding: 4px 8px;
-  min-width: 70px !important;
+  min-width: 100px !important;
   text-align: center;
   white-space: nowrap;
   box-sizing: border-box;
@@ -249,7 +245,7 @@ input[type=text][readonly] {
   font-style: normal;
   font-weight: 400;
   color: var(--ink);
-  border: 1px solid #97a2ce;
+  border: var(--border_input);
   border-radius: 2px;
   box-shadow: var(--btn_shadow);
   background: linear-gradient(180deg,#fff, #efefff);
@@ -801,7 +797,7 @@ table#statusMessages textarea, table#statusMessages textarea:active {
   padding: 0;
 }
 
-.required:not(old) {
+.required {
   display: none;
 }
 
@@ -814,7 +810,7 @@ select {
   background-size: 10px, 100% !important;
   color: var(--ink);
   font: 9pt var(--bodyfont);
-  border: 1px solid #97a2ce;
+  border: var(--border_input);
   border-radius: 2px;
   box-shadow: var(--highlight);
   box-shadow: var(--btn_shadow);
@@ -1072,6 +1068,7 @@ textarea[name="accessList"], #hostField, #localDestination, .authentication {
   margin: 5px !important;
   padding: 2px 4px;
   width: calc(100% - 20px) !important;
+  box-sizing: unset;
 }
 
 #hostField {
@@ -1168,7 +1165,7 @@ input[name="nofilter_blindedPassword"] {
   white-space: nowrap;
   word-break: break-all;
   font-family: var(--monospaced);
-  border: 1px solid #97a2ce;
+  border: var(--border_input);
   border-radius: 2px;
   box-shadow: inset 1px 1px 1px #e4e4ee;
   background: #fafaff;
@@ -1475,7 +1472,7 @@ textarea:focus::placeholder, input:focus::placeholder, #filter input:focus::plac
     min-width: 140px;
   }
   .multiOption {margin-right: 3px}
-  .control, .control:link, .control:visited {min-width: 60px !important}
+  .control, .control:link, .control:visited {min-width: 80px !important}
   .displayText, .displayText:empty:hover, .displayText:empty:focus {
     width: 260px;
     font-size: 8pt;

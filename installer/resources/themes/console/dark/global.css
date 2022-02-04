@@ -50,6 +50,7 @@
   --on: #6b6, 0 0 0 1px rgba(0,0,0,.7), 0 0 1px 0 rgba(0,0,0,.5);
   --option_highlight: inset 0 0 0 1px #002500;
   --outline: 0 0 0 1px #000;
+  --row: linear-gradient(180deg,rgba(0,24,0,.5), rgba(0,8,0,.5));
   --stroke: 1px rgba(237,237,146,.3);
   --textshadow: 0 1px 1px rgba(0,0,0,.8);
   --th: linear-gradient(180deg,#010,#000);
@@ -83,6 +84,10 @@ body {
 body.iframed {
   background: var(--vstripe) #000 !important;
   background-size: 100% 4px !important;
+}
+
+::selection {
+  text-shadow: none;
 }
 
 pre, textarea, .widescroll {
@@ -179,11 +184,6 @@ button::-moz-focus-inner, input::-moz-focus-inner {
 
 label {
   cursor: pointer;
-}
-
-label[disabled] {
-  opacity: .5;
-  pointer-events: none;
 }
 
 input:disabled {
@@ -490,4 +490,78 @@ select::-moz-focus-inner {
 .optbox[type][disabled]::before {
   box-shadow: none;
   background: #373;
+}
+
+.optbox.slider[type=checkbox], .optbox.slider[type=checkbox]:hover, .optbox.slider[type=checkbox]:focus {
+  width: 40px !important;
+  height: 21px !important;
+  border-radius: 1px;
+  position: relative;
+  border: var(--border);
+  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px rgba(0,0,0,.5);
+  background: linear-gradient(180deg,#010,#020);
+  outline: none;
+  transition: ease-in left .15s;
+  appearance: none;
+}
+
+.optbox.slider:not(:checked) {
+  background: linear-gradient(180deg,#400,#600) !important;
+}
+
+.optbox.slider:not(:checked):active {
+  background: linear-gradient(180deg,#060,#080) !important;
+}
+
+.optbox.slider:checked:active {
+  background: linear-gradient(180deg,#800,#a00) !important;
+}
+
+.optbox.slider:not([disabled]):hover, .optbox.slider:not([disabled]):focus  {
+  box-shadow: 0 0 0 1px #000, 0 0 0 2px rgba(255,96,0,.7), inset 0 0 0 1px #000, inset 3px 3px 3px rgba(0,0,0,.2);
+}
+
+.optbox.slider[type=checkbox]::before,
+.optbox.slider::before,
+.optbox.slider:hover::before,
+.optbox.slider:focus::before,
+.optbox.slider:active::before,
+.optbox.slider:active:not(:checked)::before {
+  width: 20px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: -1px;
+  border-radius: 1px;
+  box-shadow: inset 0 0 0 1px #373, inset 0 0 0 2px #000, 0 2px 5px rgba(0,0,0,.2);
+  background: linear-gradient(180deg,#373,#252);
+  content: "";
+  transform: scale(.85) !important;
+  transition: ease-in left .15s;
+  opacity: 1 !important;
+}
+
+.optbox.slider:not([disabled]):not(:checked)::before, .optbox.slider:not([disabled]):active:checked::before {
+  box-shadow: inset 0 0 0 1px #900, inset 0 0 0 2px #000, 0 2px 5px rgba(0,0,0,.2);
+  background: linear-gradient(180deg,#a22,#811);
+}
+
+label:hover .optbox.slider[disabled], .optbox.slider[disabled],
+.optbox.slider[disabled]:hover, .optbox.slider[disabled]:focus {
+  border: var(--border) !important;
+  background: #030 !important;
+  pointer-events: none;
+}
+
+.optbox.slider:checked::before {
+  left: 18px;
+}
+
+label[disabled], label[disabled]:hover  {
+  opacity: .45;
+  cursor: default;
+}
+
+.optbox:hover, label[disabled]:hover .optbox {
+  pointer-events: none !important;
 }

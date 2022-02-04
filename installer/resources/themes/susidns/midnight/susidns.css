@@ -753,7 +753,7 @@ div#book, #emptybook {
   text-align: center;
 }
 
-.book td:nth-child(3) a:not(old) {
+.book td:nth-child(3) a {
   font-size: 0 !important;
 }
 
@@ -1230,7 +1230,7 @@ td.names:hover, #host_list td.b32link:hover, #host_list td.helper:hover, #host_l
   text-align: center;
 }
 
-#host_list td.b32link a:not(old), #host_list td.helper a:not(old) {
+#host_list td.b32link a, #host_list td.helper a {
   font-size: 0 !important;
 }
 
