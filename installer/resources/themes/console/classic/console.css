@@ -32,6 +32,12 @@ p:empty {display: none}
 #newtab {text-align: right; font-size: 8pt; float: right; letter-spacing: 0}
 #newtabimg:hover {filter: drop-shadow(0 0 1px var(--hover))}
 #pageloader {top: -1px !important}
+#down {margin: -6px -6px -7px; width: 100%; display: inline-block; line-height: 32px; font-size: 0; color: #770; box-shadow: var(--down_shadow); background: var(--down); background-size: 300%; animation: down linear 10s reverse infinite}
+#down::after, #nographs::after {width: 26px; height: 26px; vertical-align: middle; display: inline-block; background: url(/themes/console/images/svg/update.svg) no-repeat center center / 24px; content: ""; transform: rotate(0); filter: sepia(1); animation: linear spin 3s forwards infinite}
+#nographs {font-size: 0}
+#nographs::after {width: 36px; height: 36px; background-size: 32px}
+.viewedit br {display: none}
+th[role="columnheader"] {position: relative}
 
 /* sidebar */
 .routersummaryouter {margin: 0; padding: 0; width: 193px; position: absolute; border: none}
@@ -427,41 +433,20 @@ a.viewfullentry:hover {filter: drop-shadow(0 0 1px var(--hover))}
 .ssutesting {background: linear-gradient(180deg,#fff,#ffb)}
 .ssuintro {background: linear-gradient(180deg,#fff,#fbf)}
 .backlogged {font-size: 14pt; line-height: 0}
+.viewprofile, .configpeer, .familysearch {font-size: 0}
 #view_profile h3 {position: relative; z-index: 10}
 #view_profile h3 a::after {margin-top: -1.5px}
 #view_profile .configpeer {margin-right: -5px}
 #profiles_overview {background-image: url(/themes/console/images/svg/profile.svg)}
-#profilelist {margin: 0}
-#profilelist th, #profilelist td {text-align: center}
-#profilelist th {padding: 3px 4px; white-space: nowrap; font-size: 90% !important}
-#profilelist td[colspan="10"], #profilelist tr td[colspan="10"]:hover {padding: 1px !important; background: var(--border_soft)}
-#profilelist td[colspan="10"]::after {display: none; content: none}
-#profilelist td[colspan="10"] hr {display: none}
-#profilelist td:nth-child(1), #profilelist td:nth-child(2), #profilelist td:nth-child(3), #profilelist td:nth-child(7), #profilelist td:nth-child(10) {width: 1%; white-space: nowrap}
-#profilelist td:nth-child(2) {text-align: left !important}
-#profilelist td:nth-child(4):not(:empty) {color: #900}
-#profilelist td:nth-child(6) span, #profilelist td:nth-child(7) span, #profilelist td:nth-child(8) span {display: inline-block; min-width: 60px; text-align: right}
-#profilelist tr:hover, #floodfills tr:hover, #ntcpconnections tr:hover, #udpconnections tr:hover, .homelinkedit tr:hover, #portmapper tr:hover {color: var(--ink_hover); background: var(--row_hover)}
-#profilelist td:nth-child(8) span, #profilelist td:nth-child(9) span {min-width: 40px; display: inline-block; text-align: right}
-#profilelist td:nth-child(9) span {min-width: 30px}
-#profilelist td:last-child a::after, a[href^="/viewprofile"]::after, a[href^="/configpeer?"]::after, .profiledump::after {margin: 0 2px; padding: 2px; height: 14px; width: 14px; display: inline-block; vertical-align: middle; border: 1px solid #bbd; border-radius: 2px; background: var(--bg) var(--eye) no-repeat center center / 12px; content: ""}
-#profilelist td:last-child .viewprofile:hover::after, .viewprofile:hover::after, .profiledump:hover::after {background: var(--bg) var(--eye_hover) no-repeat center center / 12px}
-#profilelist td:last-child a[href^="/configpeer"]::after, a[href^="/configpeer?"]::after {background: var(--bg) var(--edit) no-repeat center center / 12px}
-#profilelist td:last-child a[href^="/configpeer"]:hover::after, a[href^="/configpeer?"]:hover::after {background: var(--bg) var(--edit_hover) no-repeat center center / 12px}
-#profilelist td:last-child a:active::after, a[href^="/viewprofile"]:active::after, a[href^="/configpeer?"]:active::after, .profiledump:active::after {box-shadow: var(--btn_shadow_active)}
-#profiles td:last-child {border: none !important}
-#profiles td span {vertical-align: middle}
-#profilelist .nospeed {text-align: center}
-#profilelist .lowlatency, #profilelist .highlatency {width: 12px; min-width: 0 !important; color: #373}
-#profilelist .highlatency {color: #900}
 #thresholds tr:last-child:hover td {background: var(--bg)}
 #profiles .ok, #ntcpconnections td.queue:empty::before {display: inline-block; font-size: 0; width: 12px; height: 12px; background-size: 11px !important}
 #thresholds {margin: -1px 0 0}
 #profiles .routerid, #peers .routerid {padding: 2px 3px 2px 4px}
-#profilelist td:last-child img, a[href^="/configpeer?"] img, a[href^="/viewprofile"] img, .profiledump img {display: none}
+#profiles td:last-child {border: none !important}
+#profiles td span {vertical-align: middle}
 #floodfills {margin-top: 10px}
 #floodfills th, #floodfills td {text-align: center}
-#floodfills th {font-size: 8pt}
+#floodfills th {font-size: 90% !important}
 #floodfills td:nth-child(2) {white-space: nowrap}
 #floodfills td:nth-child(3) span {min-width: 20px; display: inline-block; text-align: right}
 #floodfills .percentBarOuter, #floodfills .percentBarOuter, #floodfills .percentBarText, #tunnels .percentBarOuter, #tunnels .percentBarOuter, #tunnels .percentBarText {display: inline-block; box-sizing: border-box; float: none}
@@ -492,6 +477,41 @@ a.viewfullentry:hover {filter: drop-shadow(0 0 1px var(--hover))}
 #capabilities_key table td:nth-child(odd) {width: 1%; max-width: 24px; text-align: center}
 #capabilities_key table td:nth-child(2)::first-letter {text-transform: none}
 #capabilities_key b {padding: 1px 2px; min-width: 16px; display: inline-block; text-transform: none !important; text-align: center; text-shadow: 0 1px 1px var(--bg); background: var(--badge)}
+.profilegroup::before {width: 20px; height: 16px; display: inline-block; vertical-align: middle; content: ""}
+.profilegroup.fast::before {background: var(--fast) no-repeat left center}
+.profilegroup.highcap::before {background: var(--highcap) no-repeat left center}
+.profilegroup.integrated::before {background: var(--integrated) no-repeat left center}
+.profilegroup.standard::before {background: var(--standard) no-repeat left center}
+#profilelist {margin: 0}
+#profilelist tr:hover, #floodfills tr:hover, #ntcpconnections tr:hover, #udpconnections tr:hover, .homelinkedit tr:hover, #portmapper tr:hover {color: var(--ink_hover); background: var(--row_hover)}
+#profilelist th, #profilelist td {text-align: center}
+#profilelist th {padding: 3px 4px; white-space: nowrap; font-size: 90% !important}
+#profilelist td[colspan="10"], #profilelist tr td[colspan="10"]:hover {padding: 1px !important; background: var(--border_soft)}
+#profilelist td[colspan="10"]::after {display: none; content: none}
+#profilelist td[colspan="10"] hr {display: none}
+#profilelist td:nth-child(1), #profilelist td:nth-child(2), #profilelist td:nth-child(3), #profilelist td:nth-child(7), #profilelist td:nth-child(10) {width: 1%; white-space: nowrap}
+#profilelist td:nth-child(2) {text-align: left !important}
+#profilelist td:nth-child(4):not(:empty) {color: #900}
+#profilelist th:nth-child(5), #profilelist td:nth-child(5) {min-width: 56px; white-space: nowrap}
+#profilelist td:nth-child(6) span, #profilelist td:nth-child(7) span, #profilelist td:nth-child(8) span {display: inline-block; min-width: 60px; text-align: right}
+#profilelist td:nth-child(8) span, #profilelist td:nth-child(9) span {min-width: 40px; display: inline-block; text-align: right}
+#profilelist td:nth-child(9) span {min-width: 30px}
+#profilelist td:last-child a::after, a[href^="/viewprofile"]::after, a[href^="/configpeer?"]::after, .profiledump::after {margin: 0 2px; padding: 2px; height: 14px; width: 14px; display: inline-block; vertical-align: middle; border: 1px solid #bbd; border-radius: 2px; background: var(--bg) var(--eye) no-repeat center center / 12px; content: ""}
+#profilelist td:last-child .viewprofile:hover::after, .viewprofile:hover::after, .profiledump:hover::after {background: var(--bg) var(--eye_hover) no-repeat center center / 12px}
+#profilelist td:last-child img, a[href^="/configpeer?"] img, a[href^="/viewprofile"] img, .profiledump img {display: none}
+#profilelist td:last-child a[href^="/configpeer"]::after, a[href^="/configpeer?"]::after {background: var(--bg) var(--edit) no-repeat center center / 12px}
+#profilelist td:last-child a[href^="/configpeer"]:hover::after, a[href^="/configpeer?"]:hover::after {background: var(--bg) var(--edit_hover) no-repeat center center / 12px}
+#profilelist td:last-child a:active::after, a[href^="/viewprofile"]:active::after, a[href^="/configpeer?"]:active::after, .profiledump:active::after {box-shadow: var(--btn_shadow_active)}
+#profilelist .nospeed {text-align: center}
+#profilelist .lowlatency, #profilelist .highlatency {width: 12px; min-width: 0 !important; color: #373}
+#profilelist .highlatency {color: #900}
+#profilelist .fast, #profilelist .highcap, #profilelist .integrated, #profilelist .standard, #profilelist .fast.integrated, #profilelist .highcap.integrated, #profilelist .standard.integrated {width: 56px; height: 16px; display: inline-block; font-size: 0; background-size: 16px}
+#profilelist .fast {background: var(--fast) no-repeat calc(50% - 10px) center, var(--highcap) no-repeat calc(50% + 10px) center}
+#profilelist .highcap {background: var(--highcap) no-repeat center center}
+#profilelist .highcap.integrated {background: var(--highcap) no-repeat calc(50% - 10px) center, var(--integrated) no-repeat calc(50% + 10px) center}
+#profilelist .standard {background: var(--standard) no-repeat center center}
+#profilelist .standard.integrated {background: var(--standard) no-repeat calc(50% - 10px) center, var(--integrated) no-repeat calc(50% + 10px) center}
+#profilelist .fast.integrated {background: var(--fast) no-repeat left center, var(--highcap) no-repeat center center, var(--integrated) no-repeat right center !important}
 
 /* sort icons */
 .sortup, .sortdown, .sortupactive, .sortdownactive {margin: 2px 1px 0; padding: 1px 0; width: 16px; height: 12px; display: inline-block; vertical-align: middle; text-align: center; border: var(--border); border-radius: 2px}
@@ -525,6 +545,8 @@ div[id^="config_"].main {padding-bottom: 20px}
 #config_peers #permabanned {margin-bottom: 5px}
 #config_service, #config_peers, #config_reseed {padding-bottom: 9px}
 #config_tunnels {padding-bottom: 24px}
+#config_tunnels select {min-width: 180px}
+#config_tunnels input[type=text] {width: calc(100% - 6px)}
 #config_peers .routerid {padding: 1px 3px; line-height: 1; border-radius: 2px}
 #configstats th {padding: 6px 10px; text-align: left; word-spacing: .1em; letter-spacing: .08em; text-transform: uppercase; font-size: 10pt}
 #configstats th a {float: right; text-transform: none; font-size: 9pt}
@@ -568,8 +590,8 @@ pre#activetransports {margin: -11px 0 0; padding: 15px 15px 0; width: calc(100% 
 #i2pupdates input.check, .optbox {margin-left: 5px}
 #i2pupdates td.infohelp {padding: 20px 15px 20px 40px; background-size: 22px; background-position: 10px}
 #i2pupdates .infohelp code {user-select: all}
-#sidebarconf tr, .homelinkedit tr, #clientconfig tr, #webappconfig tr,  #configstats tr, #tunnelconfig tr, #profiles tr, #floodfills tr, #netdboverview tr, .netdbentry tr, #leasesetdebug tr, #leasesetsummary tr, .leaseset tr, #tunnel_defs tr, .sybil_routerinfo tr, #enviro tr, #routerinformation tr, #schedjobs tr, #jobstats tr, #eventlog tr, .tunneldisplay tr, #udpconnections tr, #ntcpconnections tr, #tunnelPeerCount tr {border-top: 1px solid var(--border_soft)}
 #config_stats tr:not(.tablefooter) td:first-child::after {min-height: 24px; display: inline-block; vertical-align: middle; content: ""}
+#sidebarconf tr, .homelinkedit tr, #clientconfig tr, #webappconfig tr,  #configstats tr, #tunnelconfig tr, #profiles tr, #floodfills tr, #netdboverview tr, .netdbentry tr, #leasesetdebug tr, #leasesetsummary tr, .leaseset tr, #tunnel_defs tr, .sybil_routerinfo tr, #enviro tr, #routerinformation tr, #schedjobs tr, #jobstats tr, #eventlog tr, .tunneldisplay tr, #udpconnections tr, #ntcpconnections tr, #tunnelPeerCount tr {border-top: 1px solid var(--border_soft)}
 #sidebarconf tr:hover, #eventlog tr:hover, .tunneldisplay tr:hover, #jobstats tr:hover, #schedjobs tr:hover, #jardump tr:hover {color: #104e99; background: var(--row_hover)}
 #sidebarconf button {margin: 2px}
 #sidebarconf th:nth-child(1) {text-align: center}
@@ -579,6 +601,7 @@ pre#activetransports {margin: -11px 0 0; padding: 15px 15px 0; width: calc(100% 
 #sidebarconf td:first-child {width: 60px; text-align: center}
 #sidebarconf td:nth-child(3), #sidebarconf td:nth-child(4) {width: 59px; padding: 0; white-space: nowrap}
 #sidebarconf td:nth-child(4) {text-align: left}
+#sidebarconf tr:last-child td {background: var(--bg)}
 #sidebarconf tr:last-child td:last-child {padding-right: 2px; text-align: right}
 #sidbarconf td:last-child[colspan="2"] {padding: 2px; text-align: center}
 
@@ -652,8 +675,10 @@ h2 {padding: 10px; font-size: 14pt; word-spacing: .1em; letter-spacing: .08em; t
 h3, h4#updateplugins {margin-bottom: 10px; padding: 6px 10px; font-size: 11pt; border: var(--border); background: var(--bg)}
 h3.tabletitle {margin-bottom: -1px}
 h3.ptitle, h3.tabletitle, th.th_title {font-size: 11pt}
+.tabletitle + table tr:first-child td {border-top: var(--border)}
 h3.ptitle {margin-bottom: -13px}
 h3.embeddedtitle, h4.embeddedtitle {margin-bottom: 5px !important}
+.h3navlinks a {margin: 2px 0 0 5px; display: inline-block; letter-spacing: normal; text-transform: capitalize}
 h3[id*="heading"] {margin: 18px 0 -1px}
 h3#configsites {margin-top: 20px}
 h3#udpcon, h3#ntcpcon {margin-bottom: -1px}
@@ -664,7 +689,6 @@ h3#advancedclientconfig, h3#ffconf, h3#advancedconfig {margin-bottom: -1px !impo
 h3#advancedclientconfig, h3#pconfig {margin-top: 15px}
 h3#webappconfiguration {margin-bottom: -13px; margin-top: 15px}
 h3#pluginmanage {margin-bottom: -1px !important}
-.h3navlinks a {margin: 2px 0 0 5px; display: inline-block; letter-spacing: normal; text-transform: capitalize}
 h3#iptransport a, th#upnpconfig a, h3#bwlimiter a, #config_stats h3 a, #config_logging h3 a, h3#graphdisplay a, #logs h3 a, h3#advancedconfig a, .h3navlinks, #reseedsetup a {float: right; letter-spacing: normal; font-size: 9pt}
 h3#iptransport a, h3#advancedconfig a, #reseedsetup a {font-size: 0}
 #browseronstart .h3navlinks img, #servicedebug .h3navlinks img {width: 0; height: 0}
@@ -683,6 +707,8 @@ table[id*="connections"] td {text-align: center}
 table[id*="connections"] td:first-child {width: 1%; white-space: nowrap; text-align: right}
 table[id*="connections"] .tablefooter td:first-child {text-align: left}
 table {margin: 0 0 5px; font-size: 9pt; border-collapse: collapse; border: var(--border)}
+table hr {margin: -5px -5px -10px -5px !important; padding: 0; height: 1px; color: var(--hr); border: 0 solid var(--hr); background: var(--hr)}
+table tt {font-size: 8pt}
 tr:nth-child(even), #pluginconfig table tr:nth-child(even) td, #profile_defs tr:nth-child(odd) {background: var(--bg)}
 tr:nth-child(odd), #pluginconfig table tr:nth-child(odd) td, #profiles ul#banlist, #profile_defs table tr:nth-child(odd), #profile_defs table tr:nth-child(even) {background: var(--bg2)}
 th {padding: 5px; text-align: center; border-bottom: var(--border); border-top: var(--border); background: var(--th)}
@@ -690,17 +716,15 @@ th.th_title {padding: 6px 10px; text-align: left}
 .configtable th {padding: 6px 10px; text-align: left; line-height: normal; pointer-events: none}
 .smallhead th {font-size: 8pt}
 td {padding: 3px 5px}
-td.optionsave {padding: 8px 5px !important; text-align: right; border-top: var(--border); background: var(--bg)}
-td.optionsave[colspan="2"] {background: var(--bg)}
 .infowarn, .infohelp {line-height: 1.25}
 td.infohelp, p.infohelp, td.infowarn, p.infowarn, #upnpstatus, #gatherstats, #debugmode, p.sybilinfo, #pluginconfigtext {padding: 20px 15px 20px 55px; white-space: normal; text-align: justify; border: var(--border); background: var(--bg) var(--infohelp) no-repeat 15px center / 28px}
 .infohelp#jsRequired {border: none}
 td.infowarn, p.infowarn {background: var(--bg) var(--infowarn) no-repeat 15px center / 28px}
 p.infohelp + hr, p.infohelp + p + hr, #tunnelconfig + hr {display: none}
+td.optionsave {padding: 8px 5px !important; text-align: right; border-top: var(--border); background: var(--bg)}
+td.optionsave[colspan="2"] {background: var(--bg)}
 td.tabletextarea {padding: 0 !important}
 .confignav + .infohelp, .confignav + h3.tabletitle, .confignav + form > h3.tabletitle, .confignav + .configure > form > h3.ptitle {margin-top: 15px !important}
-table hr {margin: -5px -5px -10px -5px !important; padding: 0; height: 1px; color: var(--hr); border: 0 solid var(--hr); background: var(--hr)}
-table tt {font-size: 8pt}
 #clientconf {margin-bottom: -1px !important}
 #webappconfigtext {margin-bottom: -1px}
 #config_tunnels .infohelp {background-image: var(--hardhat)}
@@ -708,7 +732,6 @@ table tt {font-size: 8pt}
 #refreshsidebar td:not(.optionsave) {padding: var(--pad_info); background: var(--bg) var(--timer) no-repeat 15px center / 28px}
 #tunnelmgr .infohelp#jsRequired {margin-top: 20px !important}
 #profiles_overview, h3#themeheading {margin-top: 15px}
-#sidebarconf tr:last-child td {background: var(--bg)}
 #enablefullstats {padding: 5px 10px; line-height: 1.2; text-align: left; background: var(--bg)}
 
 /* home */
@@ -1036,10 +1059,6 @@ a.keysearch {padding: 2px 5px 2px 15px; display: inline-block; font-size: 90%; b
 .banlisted {width: 18px; height: 18px; display: inline-block; background: var(--ban)}
 .gwhois a::before {margin-left: -2px; width: 12px; height: 12px; display: inline-block; vertical-align: middle; background: var(--search) no-repeat left center / 11px; opacity: .7; content: ""}
 .gwhois:hover a::before, .gwhois a:focus::before {opacity: 1; transform: scale(1.2)}
-.leaseset {margin: 5px 0 10px; font-size: 9pt}
-.leaseset:last-child {margin-bottom: 5px}
-.leaseset th {padding: 5px; text-align: left; font-weight: 400}
-.leaseset th:last-child, .leaseset td:nth-child(2) {padding-right: 5px; text-align: right}
 .addtobook {text-align: right}
 .addtobook a {font-size: 0}
 .addtobook a::after {width: 16px; height: 16px; display: inline-block; vertical-align: middle; background: var(--abook_helper) no-repeat center center / 16px; content: ""}
@@ -1049,6 +1068,21 @@ p.family + p.family, p.sybil_info + p.sybil_info {margin-top: -4px}
 #netdb_ram, .netdbentry .version, .netdb_transport {padding: 1px 5px; display: inline-block; box-shadow: var(--box_border_badge); background: var(--badge)}
 #netdb code, #netdb tt {color: #03183f; font-family: var(--bodyfont); font-weight: 400}
 #lookupCondensed {display: none}
+
+/* lesesets */
+.leaseset {margin: 5px 0 10px; font-size: 9pt}
+.leaseset:last-child {margin-bottom: 5px}
+.leaseset th {padding: 5px; text-align: left; font-weight: 400}
+.leaseset th:last-child, .leaseset td:nth-child(2) {padding-right: 5px; text-align: right}
+.leaseset th:last-child a[href$="i2p/"] {padding-left: 22px; background: var(--link) no-repeat 5px center / 12px, var(--badge)}
+.leaseset:target {border: var(--ls_target)}
+.leaseset:target tr:first-child th, .leaseset:target td {border-top: var(--ls_target); border-bottom: var(--ls_target)}
+.leaseset:target th:first-child, .leaseset:target td:first-child {border-left: var(--ls_target)}
+.leaseset:target th:last-child, .leaseset:target td:last-child {border-right: var(--ls_target)}
+.lsdest, .leaseset th:last-child a[href$="i2p/"] {margin-left: 3px; padding: 2px 4px 4px; display: inline-block; border: 1px solid var(--border_badge); border-radius: 2px; background: var(--badge)}
+.lsdest, .leaseset a[href$="i2p/"], .leaseset a[href$="i2p"] {font-size: 90%}
+.lsdest {padding-left: 22px; border-radius: 0; border-left-width: 4px; border-right-width: 4px; background: var(--hardhat) no-repeat 4px center / 14px, var(--badge)}
+.lsdest.published {padding-left: 38px; background: var(--hardhat) no-repeat 4px center / 14px, var(--globe) no-repeat 22px center / 12px, var(--badge)}
 #leasesetsummary {margin-top: 15px; margin-bottom: 10px}
 #leasesetsummary tr:last-child td:last-child {text-align: left}
 #leasesetsummary td:first-child {width: 50px; white-space: nowrap}
@@ -1335,7 +1369,7 @@ h3#browseronstart + p.infohelp {padding: var(--pad_info); position: relative; ba
 #logs #enviro:hover #cputype {background: none}
 #logs .embedlink {margin-top: 1px; font-size: 85%}
 #routerlogs ul, #criticallogs ul {margin-left: -5px !important; margin-bottom: -3px !important; padding-left: 0 !important; padding-right: 0 !important; width: calc(100% + 10px); margin-right: -20px !important}
-#routerlogs li, #criticallogs li {padding: 0 2px 4px 22px !important; width: 100%; width: calc(100% - 24px) !important; border-top: 1px solid var(--border_soft); border-bottom: 1px solid var(--border_soft); background: transparent; opacity: .85}
+#routerlogs li, #criticallogs li {padding: 0 2px 4px 22px !important; width: 100%; width: calc(100% - 24px) !important; border-top: 1px solid var(--border_soft); border-bottom: 1px solid var(--border_soft); background: transparent; opacity: .85; animation: ease logupdate 1s}
 #routerlogs li:nth-child(n+2), #criticallogs li:nth-child(n+2) {margin-top: -1px}
 #routerlogs li:hover, #criticallogs li:hover {position: relative; z-index: 10; border-top: var(--border); border-bottom: var(--border); background: var(--row_hover); opacity: 1; transition: ease all .15s}
 #routerlogs li:first-child, #criticallogs li:first-child, #routerlogs li:first-child:hover, #criticallogs li:first-child:hover {border-top: none}
@@ -1485,11 +1519,6 @@ h2#debug_portmapper {margin-top: 14px !important}
 #revision, #jardump a tt {padding-left: 16px; background: var(--gitlab) no-repeat left center / 13px}
 #jardump a tt {padding-left: 13px; background-size: 11px}
 
-/* TO DO: Merge with main classes */
-
-#externaltcp .nowrap:first-child {margin: 5px 0 -18px !important; display: inline-block}
-
-
 /* graphs */
 #graphs td:first-child {font-weight: 400; text-align: left; padding: 5px 0 0}
 #graphs td b {min-width: 150px; text-align: right; display: inline-block; margin-right: 5px}
@@ -1552,6 +1581,7 @@ b.suboption {margin: 0 !important; padding: 5px 10px; position: relative; z-inde
 #netconfig label::before {min-height: 34px}
 #externali2cp .optionlist label::before, #externali2cp .optionlist .nowrap::before, #reseedconfig .nowrap::before, #manualreseed .nowrap::before, #graphs .nowrap::before {min-height: 40px}
 #externaltcp {padding: 0}
+#externaltcp .nowrap:first-child {margin: 5px 0 -18px !important; display: inline-block}
 #netconfig input[name*="ost"] {width: 250px !important}
 #netconfig input[type=text] {transition: ease width .1s; will-change: transform}
 #netconfig .optbox:not(:checked) + input[type=text][name="ntcphost"]:not(:focus), #netconfig .optbox:not(:checked) + input[type=text][name="udpHost1"]:not(:focus) {width: 140px !important; min-width: 140px !important; transition: ease width .1s}
@@ -1908,45 +1938,6 @@ th, td {position: relative}
 #events tr:hover td:first-child {border-left: 1px solid #393; background: linear-gradient(90deg, #393 2px, rgba(0,0,0,.02) 2px)}
 #events tr:hover td:last-child {border-right: 1px solid #393; background: linear-gradient(to left, #393 2px, rgba(0,0,0,.02) 2px)}
 
-.tabletitle + table tr:first-child td {border-top: var(--border)}
-#config_tunnels select {min-width: 180px}
-#config_tunnels input[type=text] {width: calc(100% - 6px)}
-th[role="columnheader"] {position: relative}
-#floodfills th {font-size: 90% !important}
-#routerlogs li {animation: ease logupdate 1s}
-#down {margin: -6px -6px -7px; width: 100%; display: inline-block; line-height: 32px; font-size: 0; color: #770; box-shadow: var(--down_shadow); background: var(--down); background-size: 300%; animation: down linear 10s reverse infinite}
-#nographs {font-size: 0}
-#down::after, #nographs::after {width: 26px; height: 26px; vertical-align: middle; display: inline-block; background: url(/themes/console/images/svg/update.svg) no-repeat center center / 24px; content: ""; transform: rotate(0); filter: sepia(1); animation: linear spin 3s forwards infinite}
-#nographs::after {width: 36px; height: 36px; background-size: 32px}
-
-/* highlight linked leaseset */
-.leaseset:target {border: var(--ls_target)}
-.leaseset:target tr:first-child th, .leaseset:target td {border-top: var(--ls_target); border-bottom: var(--ls_target)}
-.leaseset:target th:first-child, .leaseset:target td:first-child {border-left: var(--ls_target)}
-.leaseset:target th:last-child, .leaseset:target td:last-child {border-right: var(--ls_target)}
-
-.lsdest, .leaseset th:last-child a[href$="i2p/"] {margin-left: 3px; padding: 2px 4px 4px; display: inline-block; border: 1px solid var(--border_badge); border-radius: 2px; background: var(--badge)}
-.lsdest, .leaseset a[href$="i2p/"], .leaseset a[href$="i2p"] {font-size: 90%}
-.lsdest {padding-left: 22px; border-radius: 0; border-left-width: 4px; border-right-width: 4px; background: var(--hardhat) no-repeat 4px center / 14px, var(--badge)}
-.lsdest.published {padding-left: 38px; background: var(--hardhat) no-repeat 4px center / 14px, var(--globe) no-repeat 22px center / 12px, var(--badge)}
-.leaseset th:last-child a[href$="i2p/"] {padding-left: 22px; background: var(--link) no-repeat 5px center / 12px, var(--badge)}
-
-/* /profiles group icons */
-#profilelist th:nth-child(4), #profilelist td:nth-child(4) {width: 15%}
-#profilelist th:nth-child(5), #profilelist td:nth-child(5) {width: 10%; min-width: 56px; white-space: nowrap}
-#profilelist .fast, #profilelist .highcap, #profilelist .integrated, #profilelist .standard, #profilelist .fast.integrated, #profilelist .highcap.integrated, #profilelist .standard.integrated {width: 56px; height: 16px; display: inline-block; font-size: 0; background-size: 16px}
-#profilelist .fast {background: var(--fast) no-repeat calc(50% - 10px) center, var(--highcap) no-repeat calc(50% + 10px) center}
-#profilelist .highcap {background: var(--highcap) no-repeat center center}
-#profilelist .highcap.integrated {background: var(--highcap) no-repeat calc(50% - 10px) center, var(--integrated) no-repeat calc(50% + 10px) center}
-#profilelist .standard {background: var(--standard) no-repeat center center}
-#profilelist .standard.integrated {background: var(--standard) no-repeat calc(50% - 10px) center, var(--integrated) no-repeat calc(50% + 10px) center}
-#profilelist .fast.integrated {background: var(--fast) no-repeat left center, var(--highcap) no-repeat center center, var(--integrated) no-repeat right center !important}
-.profilegroup::before {width: 20px; height: 16px; display: inline-block; vertical-align: middle; content: ""}
-.profilegroup.fast::before {background: var(--fast) no-repeat left center}
-.profilegroup.highcap::before {background: var(--highcap) no-repeat left center}
-.profilegroup.integrated::before {background: var(--integrated) no-repeat left center}
-.profilegroup.standard::before {background: var(--standard) no-repeat left center}
-
 /* lazy loading */
 .lazy.lazyhide, .lazy.lazyhide td {opacity: 0; contain: strict}
 .lazy.lazyshow, .lazy.lazyshow td, #peers .lazy:not(.lazyhide) {opacity: 1}
@@ -1956,9 +1947,6 @@ th[role="columnheader"] {position: relative}
 .newsentry.lazyshow:last-child{margin-bottom: 5px}
 .leasesets_container .lazy.lazyhide, .leasesets_container .lazy.lazyhide td, .leasesets_container .lazy:not(.lazyshow) {opacity: 1; contain: none}
 #tunnelpeercount .lazy {contain: none}
-
-.viewedit br {display: none}
-.viewprofile, .configpeer, .familysearch {font-size: 0}
 
 /* embedded */
 #i2ptunnelframe {margin-bottom: -3px}
