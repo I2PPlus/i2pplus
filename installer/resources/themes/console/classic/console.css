@@ -679,7 +679,6 @@ h2, h3, h4, th, b {color: var(--ink_light)}
 h2, h3, h4#updateplugins {box-shadow: var(--highlight); background: var(--bg)}
 h2 {padding: 10px; font-size: 14pt; word-spacing: .1em; letter-spacing: .08em; text-transform: uppercase; border: var(--border); background: var(--bg)}
 .main h2 {margin-bottom: 10px}
-.main h2:first-child, .main h3:first-child {margin-top: 0}
 .wideload h2 {margin-bottom: 0}
 h3, h4#updateplugins {margin-bottom: 10px; padding: 6px 10px; font-size: 11pt; border: var(--border); background: var(--bg)}
 h3.tabletitle {margin-bottom: -1px}
