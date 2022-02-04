@@ -39,6 +39,7 @@
   --down_shadow: inset 0 0 0 1px #800, inset 0 0 1px 3px #eeeee2, inset 0 0 0 4px #ccccc2;
   --flatbar: #99c;
   --h2: linear-gradient(180deg,#fff 50%,#fafbff 50%);
+  --h4: linear-gradient(90deg,#fff,#eff2ff);
   --header_active: linear-gradient(180deg, #ffd, #ffe);
   --header_hover: linear-gradient(180deg, var(--bg) 50%, var(--row_hover) 50%);
   --header: linear-gradient(180deg, var(--bg) 50%, var(--bg2) 50%);
