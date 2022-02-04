@@ -1339,7 +1339,7 @@ ul#reachability {padding-left: 15px}
 #pluginconfigtext {margin: -11px 0 14px; padding: var(--pad_info); border: var(--border); background: var(--bg) var(--pluginconfig) var(--bgpos_info)}
 #pluginconfigtext input {float: right; margin: -6px -15px 0 0}
 #plugininstall .infohelp {padding: var(--pad_info); background: var(--bg) var(--plugin) var(--bgpos_info)}
-#plugininstall tr:nth-child(3) td:nth-last-child(2), #manualreseed tr:nth-child(3) td:nth-last-child(2) {padding: var(--pad_info); background: var(--bg) var(--link) var(--bgpos_info)}
+#plugininstall tr:nth-child(3) td:nth-last-child(2) {padding: var(--pad_info); background: var(--bg) var(--link) var(--bgpos_info)}
 #manualreseed tr:nth-child(5) td:nth-last-child(2), #plugininstall2 tr:nth-child(2) td:nth-last-child(2) {padding: var(--pad_info); background: var(--bg) var(--files) var(--bgpos_info)}
 #manualreseed tr:nth-last-child(2) td.infohelp {padding: var(--pad_info); background: var(--bg) var(--package) var(--bgpos_info)}
 #config_peers tr:nth-child(3) td.infohelp, #bannedpeercount {padding: var(--pad_info); background: var(--bg) var(--ban) var(--bgpos_info)}
@@ -1640,7 +1640,7 @@ b.suboption {margin: 0 !important; padding: 5px 10px; position: relative; z-inde
 #reseedconfig .download, #i2pupdates .check, #i2pupdates .accept, #externali2cp .accept {margin-right: 3px !important}
 #manualreseed .optionsingle td:last-child {text-align: right !important; width: 1%; white-space: nowrap; padding-right: 0 !important}
 
-#i2pupdates td, #manualreseed td:not(.infohelp), #reseedconfig td:not(.infohelp), #netconfig td:not(.infohelp):not(.infowarn), #graphs td {padding: 5px}
+#i2pupdates td, #netconfig td:not(.infohelp):not(.infowarn), #graphs td {padding: 5px}
 #i2pupdates td {padding-top: 6px; padding-bottom: 6px}
 
 /* reseed help ordered list */
@@ -1651,7 +1651,7 @@ b.suboption {margin: 0 !important; padding: 5px 10px; position: relative; z-inde
 #reseedhelp ol ul li:last-child {margin-bottom: -10px}
 
 #config_keyring h3 {margin-bottom: -2px}
-#installPluginUrl table, #installPluginUrl tr, #installPluginUrl td, #installPluginFile table, #installPluginFile tr, #installPluginFile td, #createNewFamily table, #createNewFamily tr, #createNewFamily td, #joinfamily table, #joinfamily tr:nth-child(n+3), #joinfamily tr:nth-child(n+3) td, #joinfamily tr:nth-child(n+3) table tr {margin: 0; background: none !important; border: none !important; box-shadow: none}
+#installPluginUrl table, #installPluginUrl tr, #installPluginUrl td, #installPluginFile table, #installPluginFile tr, #installPluginFile td, #createNewFamily table, #createNewFamily tr, #createNewFamily td, #joinfamily table, #joinfamily tr:nth-child(n+3), #joinfamily tr:nth-child(n+3) td, #joinfamily tr:nth-child(n+3) table tr {background: none; border: none !important; box-shadow: none}
 #installPluginUrl input[type=text], #installPluginFile input[type="file"], #config_family input[type=text], #config_family input[type="file"] {width: 100%}
 #config_reseed form, #installPluginUrl form, #installPluginFile form, #newFamily form, #joinfamily form {margin: 0; padding: 0}
 #installPluginUrl, #installPluginFile {background: var(--bg2)}
@@ -1666,7 +1666,7 @@ input[type="file"]:hover {cursor: pointer}
 #newfamily .optionsingle {padding: 5px 5px 0 45px; background: var(--bg2) var(--tag) no-repeat 10px center / 28px}
 #joinfamily .optionsingle {padding: 5px 5px 0 45px; background: var(--bg2) var(--key) no-repeat 10px center / 28px}
 #newfamily .optionsingle:hover, #joinfamily .optionsingle:hover {background-color: var(--row_hover)}
-#installPluginFile td:last-child, #installPluginUrl td:last-child, #newfamily table td:last-child, #joinfamily table td:last-child {padding: 10px 0 10px 10px; width: 1%; white-space: nowrap; text-align: right}
+#installPluginFile td:last-child, #installPluginUrl td:last-child, #newfamily table td:last-child, #joinfamily table td:last-child {padding: 10px; width: 1%; white-space: nowrap; text-align: right}
 #tunnels h3 + h3 {margin-top: 0}
 #tunnels h3 + h3 a {display: none}
 #skm_dest {white-space: nowrap; font-size: smaller; text-transform: none; letter-spacing: 0}
