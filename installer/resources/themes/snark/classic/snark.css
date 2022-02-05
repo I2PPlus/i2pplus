@@ -1106,22 +1106,12 @@ tr:not(.peerInfo):hover .percentBarText {
   background: var(--bg);
 }
 
-tr:nth-child(odd) + .peerinfo:nth-child(even) {
-  border-bottom: var(--border_soft);
-  background: var(--bg3);
-}
-
-tr:nth-child(even) + .peerinfo:nth-child(odd) {
-  border-bottom: var(--border_soft);
-  background: var(--bg);
+.peerinfo {
+  background: var(--bodybg);
 }
 
 .rowOdd td, .rowEven td {
   border-top: none !important;
-}
-
-.rowOdd tr:nth-child(odd) {
-  background: var(--bg3);
 }
 
 #snarkTorrents tr.active .torrentAction, #snarkTorrents tr.active:hover .torrentAction {
@@ -2690,21 +2680,21 @@ td.commentAuthor .commentAuthorName {
 }
 
 #bwHoverHelp:hover + #bwHelp {
+  padding: 20px !important;
+  width: 100%;
   display: block;
   position: fixed;
   float: left;
   top: 48px;
   left: 0;
   z-index: 9999;
-  background: #313;
-  border-bottom: 5px solid #212;
-  border-top: 5px solid #212;
-  box-shadow: 0 1px 3px #101;
-  padding: 20px !important;
-  width: 100%;
   white-space: nowrap;
   text-align: center;
   font-size: 12pt;
+  border-bottom: 5px solid #212;
+  border-top: 5px solid #212;
+  box-shadow: 0 1px 3px #101;
+  background: #313;
 }
 
 /* end tooltip */
@@ -2725,12 +2715,11 @@ td.commentAuthor .commentAuthorName {
 
 .optionlist {
   margin: 0 !important;
+  padding: 7px 6px 6px;
   columns: 400px 3;
   column-gap: 20px;
-  background: var(--bg3);
-  margin: -5px 0 5px;
-  padding: 7px 6px 6px;
   box-shadow: var(--highlight);
+  background: var(--bg3);
   transition: ease-in-out .5s box-shadow;
   will-change: transform;
 }
