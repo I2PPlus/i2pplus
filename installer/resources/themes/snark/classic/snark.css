@@ -299,7 +299,7 @@ tr, .navbar, .mainsection, .lowersection {
 }
 
 #closelog img, #closelog img:hover, #expand img, #expand img:hover, #shrink img, #shrink img:hover {
-  margin: -3px -6px 4px 5px !important;
+  margin: -6px -6px 4px 5px !important;
   opacity: 1;
   border: var(--border_main);
   border-top: none;
@@ -367,6 +367,10 @@ tr, .navbar, .mainsection, .lowersection {
 #snarkTorrents {
   margin: 0;
   background: var(--bg);
+}
+
+#snarkTorrents tr {
+  border-bottom: 1px solid var(--border_soft);
 }
 
 #snarkTorrents th {
@@ -1079,11 +1083,15 @@ tr:not(.peerinfo) .torrentUploaded:empty::after {
 }
 
 tr:hover .percentBarText {
-  opacity: 1 !important;
+  opacity: 1;
 }
 
 tr:not(.peerInfo):hover .percentBarText {
   filter: drop-shadow(0 0 1px #777);
+}
+
+.peerinfo .percentBarText, .peerinfo:hover .percentBarText {
+  display: none;
 }
 
 .rowEven {
@@ -3001,7 +3009,7 @@ td.peerCount, .nopeers td.peerCount {
 
 #torrentDisplay label {
   margin: 0;
-  padding: 5px 8px 4px;
+  padding: 3px 8px 4px;
   display: inline-block;
   min-width: 80px;
   font-weight: 700;
