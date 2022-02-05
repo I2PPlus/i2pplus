@@ -1407,7 +1407,7 @@ ul#reachability {padding-left: 15px}
 #certs .infohelp:first-of-type {background: var(--bg) var(--certs) var(--bgpos_info)}
 
 /* login inputs */
-#consolepass input[name="name"], #externali2cp input[name="user"], #consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"] {padding: 4px 5px 4px 26px !important; background: var(--bg) var(--user) no-repeat 5px center / 16px}
+#consolepass input[name="name"], #externali2cp input[name="user"], #consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"] {padding: 4px 5px 4px 26px; background: var(--bg) var(--user) no-repeat 5px center / 16px}
 #consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"] {background: var(--bg) var(--key) no-repeat 5px center / 16px}
 
 /* logs */
@@ -1430,12 +1430,6 @@ font[color="#006600"] span {color: var(--bg); background: #444}
 #logs .logtable tr:first-child {border-bottom: var(--border); padding: 5px 10px}
 #logs .logtable p {margin: 0; padding: 0}
 #logs code {font-size: 8pt}
-#logs li {vertical-align: middle}
-#logs ul {margin-left: -22px; margin-right: -28px; margin: -4px 0 0 -20px; display: inline-block; word-break: break-all}
-#logs .logtable ul {margin-bottom: 0}
-#logs li {width: 100%; line-height: 1.3; text-align: left; list-style: none; box-shadow: var(--highlight), inset 0 0 1px 1px #edefff}
-#logs li::after {margin: 2px 0 -4px; width: 100%; display: block; content: ""}
-#logs li:last-child::after {border: none; margin: -4px}
 #logs font[color^="#"]::before {margin-right: 5px; margin-left: -17px; width: 6px; height: 6px; display: inline-block; vertical-align: calc(1px); border-radius: 50%; background: var(--bg); content: ""}
 #logs li font[color="#cc0000"]::before {background: #c00}
 #logs li font[color="#006600"] {color: #444}
@@ -1445,17 +1439,23 @@ font[color="#006600"] span {color: var(--bg); background: #444}
 #logs li font[color="#bf00df"]::before {background: #717}
 #logs li font[color="#000099"] {color: #339}
 #logs li font[color="#000099"]::before {background: #339}
+#logs li {vertical-align: middle}
+#logs ul {margin-left: -22px; margin-right: -28px; margin: -4px 0 0 -20px; display: inline-block; word-break: break-all}
+#logs .logtable ul {margin-bottom: 0}
+#logs li {width: 100%; line-height: 1.3; text-align: left; list-style: none; box-shadow: var(--highlight), inset 0 0 1px 1px #edefff}
+#logs li::after {margin: 2px 0 -4px; width: 100%; display: block; content: ""}
+#logs li:last-child::after {border: none; margin: -4px}
+#logs li:first-child {padding-top: 0; margin-top : 1px}
+#logs ul {margin-left: -5px; margin-bottom: -3px; padding-left: 0; padding-right: 0; width: calc(100% + 10px); margin-right: -20px}
+#logs li {padding: 0 2px 4px 22px; width: 100%; width: calc(100% - 24px); border-top: 1px solid var(--border_soft); border-bottom: 1px solid var(--border_soft); background: transparent; opacity: .85; animation: ease logupdate 1s}
+#logs li:first-child, #logs li:first-child:hover {border-top: none}
+#logs li:nth-child(n+2) {margin-top: -1px}
+#logs li:hover {position: relative; z-index: 10; border-top: var(--border); border-bottom: var(--border); background: var(--row_hover); opacity: 1; transition: ease all .15s}
+#logs li:last-child {border-bottom: none}
 #logs li span {margin: 0 -2px; min-width: 50px; display: inline-block; line-height: 1.1; text-align: center; vertical-align: middle; border-radius: 2px; opacity: .7}
-#routerlogs li:first-child, #criticallogs li:first-child, #routerlogs li:first-child:hover, #criticallogs li:first-child:hover {border-top: none}
-#routerlogs li:first-child, #criticallogs li:first-child {padding-top: 0; margin-top : 1px}
-#routerlogs li:last-child, #criticallogs li:last-child {border-bottom: none; padding-bottom: 7px}
-#wrapperlogs pre {white-space: pre-wrap; word-break: break-all; margin: 0; padding: 0; width: 100%; max-height: 500px; overflow: auto}
-#wrapperlogs tr:last-child td {padding: 0 0 0 2px}
 #criticallogs tr:first-child {display: none}
-#routerlogs ul, #criticallogs ul {margin-left: -5px; margin-bottom: -3px; padding-left: 0; padding-right: 0; width: calc(100% + 10px); margin-right: -20px}
-#routerlogs li, #criticallogs li {padding: 0 2px 4px 22px !important; width: 100%; width: calc(100% - 24px); border-top: 1px solid var(--border_soft); border-bottom: 1px solid var(--border_soft); background: transparent; opacity: .85; animation: ease logupdate 1s}
-#routerlogs li:nth-child(n+2), #criticallogs li:nth-child(n+2) {margin-top: -1px}
-#routerlogs li:hover, #criticallogs li:hover {position: relative; z-index: 10; border-top: var(--border); border-bottom: var(--border); background: var(--row_hover); opacity: 1; transition: ease all .15s}
+#wrapperlogs tr:last-child td {padding: 0 0 0 2px}
+#wrapperlogs pre {white-space: pre-wrap; word-break: break-all; margin: 0; padding: 0; width: 100%; max-height: 500px; overflow: auto}
 
 /* debug */
 .debug_container {margin-top: -16px; padding: 10px 15px; border: var(--border)}
