@@ -1256,7 +1256,7 @@ h3.stats {margin-bottom: 9px !important; border: var(--border); border-radius: 0
 #netdbcountrylist td:last-child, #netdbtransports td:last-child, #netdbtiers td:last-child, #netdbversions td:last-child {border-right: none}
 #netdbtransports {position: relative}
 #netdbtransports td:last-child, #netdbtiers td:last-child {width: 30%; text-align: center}
-#netdbversions .version {margin: 0 !important; padding: 0 !important}
+#netdbversions .version {margin: 0; padding: 0}
 #netdbcountrylist img {margin-right: 5px; font-size: 80%; text-align: center}
 #netdbtiers td a {margin-right: 6px}
 #netdbtiers td a:hover {box-shadow: var(--highlight), 0 0 0 1px var(--hover)}
@@ -1268,14 +1268,13 @@ h3.stats {margin-bottom: 9px !important; border: var(--border); border-radius: 0
 
 /* /help */
 #volunteer, #sidebarhelp, #configurationhelp, #reachabilityhelp, #legal, #changelog, #browserconfig, #tunnman, #faq, #reseedhelp, #troubleshoot, #newuserguide, #filterlist, #webhosting, #themeoverride, #glossary {margin-top: 15px !important; margin-bottom: 20px; padding: 10px 15px 5px; border: var(--border); background: rgba(240,240,255,.5); box-shadow: var(--highlight)}
-#configurationhelp {margin-top: 19px !important}
+#configurationhelp {margin-top: 19px}
 #configurationhelp, #browserconfig {margin-bottom: 8px}
 #tunnman {margin-bottom: 6px}
 #advancedsettings {margin-top: -4px}
 #volunteer {margin-top: 20px; padding-bottom: 0; background: linear-gradient(180deg, rgba(230,230,255,.5), rgba(230,230,255,.5)), url(/themes/snark/ubergine/images/hat.png) no-repeat right bottom / auto 75%}
-#volunteer ul li, #volunteer ul li:first-child {padding: 2px 0 !important}
+#volunteer ul li, #volunteer ul li:first-child {padding: 2px 0}
 #volunteer .links {margin: -10px 10px 0}
-#sidebarhelp h2 {margin-bottom: 5px !important}
 #help h2 {margin: -16px -16px 0}
 #help h3 {margin: 0 -16px 8px}
 #help p:not(.infohelp):not(.infowarn) {padding: 5px 10px 0; margin-top: 0}
@@ -1294,23 +1293,21 @@ ul#reachability {padding-left: 15px}
 #changelog {margin-top: 14px; margin-bottom: 11px !important; padding: 0}
 #changelog h2 {margin: -1px -1px 5px !important}
 #help pre {margin: -5px 0 5px 10px; padding-left: 0; padding-bottom: 20px; width: calc(100% - 10px); height: 600px; white-space: pre-wrap; overflow: auto; font-size: 9pt}
-#fullhistory {margin: -5px -1px -6px !important; padding: 7px 10px 4px 5px !important; text-align: right; border: var(--border); background: linear-gradient(90deg, #eff2ff 50%, #fff)}
+#fullhistory {margin: -5px -1px -6px; padding: 7px 10px 4px 5px; text-align: right; border: var(--border); background: linear-gradient(90deg, #eff2ff 50%, #fff)}
 #fullhistory::before {width: 18px; height: 20px; display: inline-block; vertical-align: middle; background: var(--eye) no-repeat left 45% / 14px; content: ""}
 #fullhistory:hover::before, #fullhistory:focus::before {background: var(--eye_hover) no-repeat left 45% / 14px}
 #help td.infohelp, #help td.infowarn, #help td.infohelp, #help p.infohelp {padding-left: 46px; background-size: 24px}
 
 /* mini faq */
-#faq h3 {padding-left: 35px; word-spacing: 0; letter-spacing: 0; text-transform: none; font-size: 10.5pt; background: var(--question) no-repeat 10px center / 18px, var(--header); background-blend-mode: luminosity, normal}
-#faq p.infohelp {margin: -11px -16px 4px}
-#faq ul {margin: -5px 15px 0 !important}
-#faq ul + h3 {margin-top: 2px}
-#portfaq {margin: -4px -16px -6px; width: auto}
-#portfaq th:first-child, #portfaq td:first-child {font-weight: 700; text-align: right; padding-top: 6px; padding-bottom: 6px; padding-left: 10px}
+#help #faq h3 {padding-left: 35px; word-spacing: 0; letter-spacing: 0; text-transform: none; font-size: 10.5pt; background: var(--question) no-repeat 10px center / 18px, var(--header); background-blend-mode: luminosity, normal}
+#help #faq p.infohelp {margin: -1px -16px}
+#portfaq {margin: -9px -16px -6px; width: auto}
+#portfaq th:first-child, #portfaq td:not([colspan]):not(.infohelp):first-child {font-weight: 700; text-align: right; padding-top: 6px; padding-bottom: 6px; padding-left: 10px}
 #portfaq th:nth-child(n+2) {text-align: left}
-#portfaq .infohelp {padding-top: 15px !important; padding-bottom: 15px !important}
+#portfaq .infohelp {padding: var(--pad_info)}
 #portfaq th[colspan="3"] {text-align: left; font-size: 10.5pt; letter-spacing: .08em; word-spacing: .1em}
 #portfaq td:nth-child(2) {white-space: nowrap}
-#portfaq td:last-child, #portfaq td[colspan="3"] {text-align: justify; padding-right: 10px}
+#portfaq td:not(.infohelp):last-child, #portfaq td:not(.infohelp)[colspan="3"] {text-align: justify; padding-right: 10px}
 #portfaq td[colspan="3"] {font-weight: 400}
 #glossary b {font-size: 110%}
 
