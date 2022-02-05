@@ -810,6 +810,9 @@ h3[id*="heading"] {margin: 18px 0 -1px}
 #pluginmanage {margin-bottom: -1px !important}
 h4 {margin: 5px 0; padding: 3px 5px; font-size: 9pt; border: var(--border); background: var(--h4)}
 h4#updateplugins {margin-top: -13px}
+#logs .tabletitle, #jobs h3, #tunnels h3[id] {position: relative; overflow: hidden}
+#logs .tabletitle:first-of-type {margin-top: 0}
+#logs #enviro ~ .tabletitle::after, #jobs h3::after, #tunnels h3[id]::after {width: 0; height: 1px; display: inline-block; position: absolute; bottom: 0; left: 0; background: var(--reload); opacity: .6; content: ""; animation: ease-out reloader 1s forwards}
 
 /* home */
 #home {padding-bottom: 1px}
@@ -1717,7 +1720,7 @@ table[id*="connections"] .tablefooter td:first-child {text-align: left}
 #peerdefs td {padding: 4px}
 #peerdefs img {font-size: 0}
 #peerdefs ul {margin: 0; padding: 0; width: 100%; display: inline-block; columns: 500px auto; column-gap: 0}
-#peerdefs li {display: inline-block; width: calc(100% - 24px); margin: 3px; padding: 4px 8px; background: rgba(250,250,255,.5); box-shadow: var(--highlight), 0 0 1px var(--bg4); border: 1px solid #bbd}
+#peerdefs li {margin: 3px; padding: 4px 8px; width: calc(100% - 24px); display: inline-block; line-height: 1.6; border: 1px solid #bbd; box-shadow: var(--highlight), 0 0 1px var(--bg4); background: rgba(250,250,255,.5)}
 #peer_thresholds h3, #profiles .widescroll + .tabletitle {margin-top: 13px !important}
 
 /* routerinfo */
@@ -1873,28 +1876,25 @@ h3 + .statusnotes {margin-top: -1px}
 #tunnels .percentBarOuter:hover .percentBarInner {box-shadow: none; background: transparent}
 #tunnels .percentBarOuter, #tunnels .percentbarInner, #tunnels .percentBarText {display: inline-block}
 #tunnels .percentBarOuter, #tunnels .percentBarText {width: 100px !important}
-#tunnels .percentBarOuter {background: var(--bg2) !important; text-align: left}
+#tunnels .percentBarOuter {background: var(--bg2); text-align: left}
 #tunnels .left, #tunnels .right {margin: 0; width: 50%; display: inline-block; line-height: 1; vertical-align: text-bottom}
 #tunnels img[src$="bound.png"] {opacity: 0}
-#tunnels #peercount {padding-left: 30px !important; background: var(--hardhat) no-repeat 8px 6px / 18px, linear-gradient(180deg, var(--bg)50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(90deg, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important}
+#tunnels #peercount {padding-left: 30px !important; background: var(--hardhat) no-repeat 8px 6px / 18px, linear-gradient(180deg, var(--bg)50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(90deg, #fafaff 5%, rgba(231, 231, 255, .8) 25%)}
 #tunnelPeerCount .cells {white-space: nowrap; width: auto !important; max-width: 0 !important; min-width: 0 !important}
 #tunnelPeerCount .cells.bar, #tunnelPeerCount th.bar, #tunnelPeerCount td:nth-child(n+3), #tunnelPeerCount th:nth-child(n+3) {padding-left: 8px !important; padding-right: 8px !important; width: 10% !important; white-space: nowrap}
-#tunnelPeerCount tr:not(:last-child) td:first-child {width: 1% !important; min-width: 178px !important; white-space: nowrap; background: var(--th); box-sizing: border-box}
-#tunnelPeerCount td:first-child span {border: none !important; box-shadow: none !important; background: none}
+#tunnelPeerCount tr:not(:last-child) td:first-child {width: 1%; min-width: 178px; white-space: nowrap; background: var(--th); box-sizing: border-box}
+#tunnelPeerCount td:first-child span {border: none; box-shadow: none; background: none}
 #tunnelPeerCount td:first-child > * {vertical-align: middle; line-height: 1.2}
 #tunnelPeerCount td:nth-child(2) {white-space: normal; word-break: break-all}
-#tunnelPeerCount .routerid {padding: 0 4px 0 2px !important}
-#tunnelPeerCount tr:not(:last-child) td {padding: 3px !important}
+#tunnelPeerCount .routerid {padding: 0 4px 0 2px}
+#tunnelPeerCount tr:not(:last-child) td {padding: 3px}
 #tunnelPeerCount td:first-child span {margin: 0 1px; vertical-align: middle}
 #tunnelPeerCount td:nth-child(2) {text-align: center}
 #tunnelPeerCount .tunnel_cap {padding: 1px 2px 0}
 #tunnelPeerCount .version {padding-bottom: 0}
-#tunnelPeerCount .configpeer {margin: 0 0 0 3px !important; display: inline-block; vertical-align: middle}
+#tunnelPeerCount .configpeer {margin: 0 0 0 3px; display: inline-block; vertical-align: middle}
 #tunnelPeerCount tr:not(:last-child):hover {background: var(--row_hover)}
-#peerdefs li {line-height: 1.6 !important}
-#logs .tabletitle, #jobs h3, #tunnels h3[id] {position: relative; overflow: hidden}
-#logs #enviro ~ .tabletitle::after, #jobs h3::after, #tunnels h3[id]::after {width: 0; height: 1px; display: inline-block; position: absolute; bottom: 0; left: 0; background: var(--reload); opacity: .6; content: ""; animation: ease-out reloader 1s forwards}
-#netdblookup th, #netdblookup td, #refreshsidebar td, #pluginconfig table td, #config_advanced td, #bandwidthconfig td, #i2pupdates td, #help th, #help td, #config_plugins
+#peerdefs li {line-height: 1.6}
 
 /* events */
 #events td {line-height: 1.4}
