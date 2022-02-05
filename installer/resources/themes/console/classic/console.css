@@ -7,6 +7,7 @@
 :root {
   --bgpos_info: no-repeat 15px center / 28px;
   --grid: repeating-linear-gradient(90deg, rgba(0, 0, 0, 0) 15px, rgba(120, 120, 255, .5) 16px, rgba(0, 0, 0, 0) 16px, rgba(0, 0, 0, 0) 30px), repeating-linear-gradient(to top, rgba(0, 0, 0, 0) 11px, rgba(120, 120, 255, .5) 12px, rgba(255, 255, 255, 0) 12px, rgba(255, 255, 255, 0) 24px);
+  --updating: repeating-linear-gradient(135deg, rgba(238, 238, 255,.7) 1px, rgba(238, 238, 255, .7) 5px, rgba(221, 221, 255, .7) 6px, rgba(221, 221, 255, .7) 11px);
 }
 
 body {margin: 3px; padding: 0; text-align: left; line-height: 1.3; background: var(--bg_doc); background-attachment: fixed}
@@ -23,8 +24,8 @@ hr {margin: 3px 0; height: 2px; border: none; background: var(--border_color)}
 p {padding: 5px 20px 0 20px; text-align: justify}
 .footnote, .footnote hr, .topness {display: none}
 #sb_logo img, #sidebar h3, #sidebar h3 a, #sb_internals, #sb_advanced, #sb_services, .confignav, *::before, *::after, div.app, .themechoice, .langselect, .newsAuthor, #newsDisplay, #netdbcountrylist img, .viewfullentry, .sybil_routerinfo th img, .graphspanel, h1 {user-select: none}
-a:hover:not(:active) .b32 {color: var(--hover) !important}
-a:active .b32 {color: var(--active) }
+a:hover:not(:active) span.b32 {color: var(--hover) !important}
+a:active span.b32 {color: var(--active) }
 a.script {word-spacing: normal; letter-spacing: normal}
 .main a:visited[target="_blank"] {color: var(--visited)}
 pre {margin: 0 20px; padding-top: 10px; width: 95%; overflow: auto; font-size: 8.5pt}
@@ -192,7 +193,7 @@ p:empty + .sb_notice {margin-top: 7px}
 /* updates download bar */
 .sb_update b {line-height: 1.2}
 .sb_updatestatus {margin: -8px 2px 5px !important; padding: 3px 0 4px; display: block; font-style: italic; color: var(--ink); border: var(--border); border-top: none; border-radius: 0 0 3px 3px; box-shadow: var(--highlight); background: linear-gradient(90deg, var(--bg3), #eff2ff 30%, #eff2ff 60%, var(--bg3)); box-sizing: border-box}
-.sb_info .percentBarOuter {margin: 3px -4px -5px 2px; background: repeating-linear-gradient(135deg, rgba(238, 238, 255,.7) 1px, rgba(238, 238, 255, .7) 5px, rgba(221, 221, 255, .7) 6px, rgba(221, 221, 255, .7) 11px)}
+.sb_info .percentBarOuter {margin: 3px -4px -5px 2px; background: var(--updating)}
 .sb_info .percentBarOuter {animation: downloadbar 3s infinite}
 .sb_info .percentBarInner {height: 16px; background: linear-gradient(180deg, rgba(255, 255, 255,.6) 0%, rgba(238, 238, 255, .6) 50%, rgba(180, 180, 255, .7) 50%, rgba(140, 140, 255, .7) 100%)}
 .sb_info .percentBarText {padding-top: 2px; mix-blend-mode: multiply; color: #33f}
@@ -1130,10 +1131,10 @@ p.family + p.family, p.sybil_info + p.sybil_info {margin-top: -4px}
 #netdb .netdb_leases li {display: inline-block; white-space: nowrap; vertical-align: middle}
 #netdb .netdb_leases li::before {min-height: 24px; display: inline-block; vertical-align: middle; content: ""}
 #netdb .netdb_leases li > * {vertical-align: middle}
-#netdb .netdb_leases img[src^="/flags"] {margin: -2px 0 1px -5px !important}
+#netdb .netdb_leases img[src^="/flags"] {margin: -2px 0 1px -5px}
 #netdb .netdb_leases img.unknownflag, #peers img.unknownflag, #profiles img.unknownflag {margin-top: -2px !important}
 #netdb .netdb_leases .routerid {vertical-align: middle; overflow: hidden}
-#netdb tr:not(.debugMode) .netdb_leases li {margin: -2px -4px -4px 0 !important}
+#netdb tr:not(.debugMode) .netdb_leases li {margin: -2px -4px -4px 0}
 #noleasesets, #notinitialized, .netdbnotfound {margin: 10px 0 7px; padding: 20px; text-align: center; font-weight: 700; border: var(--border); background: var(--bg3)}
 
 /* Advanced lookup */
@@ -1329,7 +1330,7 @@ ul#reachability {padding-left: 15px}
 #portfaq tr {box-shadow: none}
 #configinfo th {box-shadow: var(--highlight)}
 #changelog:hover pre, #wrapperlogs:hover pre {will-change: transform}
-#changelog {margin-top: 14px; margin-bottom: 11px !important; padding: 0}
+#changelog {margin-top: 14px; margin-bottom: 11px; padding: 0}
 #changelog h2 {margin: -1px -1px 5px}
 #help pre {margin: -5px 0 5px 10px; padding-left: 0; padding-bottom: 20px; width: calc(100% - 10px); height: 600px; white-space: pre-wrap; overflow: auto; font-size: 9pt}
 #fullhistory {margin: -5px -1px -6px; padding: 7px 10px 4px 5px; text-align: right; border: var(--border); background: linear-gradient(90deg, #eff2ff 50%, #fff)}
@@ -1939,7 +1940,7 @@ iframe {height: 0}
 #dns::before, #torrents::before, #tunnelmgr::before, #webmail::before {width: 0; height: 9px; display: block; position: absolute; top: 0; left: 0; right: 0; background: linear-gradient(180deg, rgba(255,255,255,.2) 50%, rgba(0,0,0,.2) 50%), var(--reload); opacity: .7; content: ""; animation: reloader 8s ease-out .5s forwards}
 
 /*animations */
-@keyframes downloadbar {from {background: repeating-linear-gradient(135deg, rgba(221, 221, 255, .7) 1px, rgba(221, 221, 255, .7) 6px, rgba(238, 238, 255,.7) 7px, rgba(238, 238, 255,.7) 11px)} to {background: repeating-linear-gradient(135deg, rgba(238, 238, 255,.7) 1px, rgba(238, 238, 255, .7) 5px, rgba(221, 221, 255, .7) 6px, rgba(221, 221, 255, .7) 11px)}}
+@keyframes downloadbar {from {background: repeating-linear-gradient(135deg, rgba(221, 221, 255, .7) 1px, rgba(221, 221, 255, .7) 6px, rgba(238, 238, 255,.7) 7px, rgba(238, 238, 255,.7) 11px)} to {background: var(--updating)}}
 @keyframes bar {from {width: calc(100% + 2px)}}
 @keyframes disappear {from {visibility: visible} to {visibility: hidden}}
 @keyframes down {from {background-position: center center, 100%}}
