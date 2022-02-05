@@ -69,7 +69,7 @@ p:empty + .sb_notice {margin-top: 7px}
 #sidebar h4 {margin: -7px -1px -7px -1px; padding: 8px 2px; line-height: 1.08; text-transform: capitalize; font-size: 8.5pt; color: #1f7096; border: none; box-shadow: inset 0 0 2px 1px #f2f7fa; text-decoration: none; background: var(--label_focus)}
 #sidebar h4 a {padding: 0; vertical-align: text-bottom}
 #sidebar tr, #sidebar table, #sidebar td {background: none; border: none}
-#sidebar table {margin: -5px 0 -5px 0; padding: 0; width: 204px; position: relative; overflow: hidden; table-layout: fixed; text-align: center; font-size: 8pt}
+.routersummary table {margin: -5px 0 -5px 0; padding: 0; width: 204px; position: relative; overflow: hidden; table-layout: fixed; text-align: center; font-size: 8pt}
 #sidebar table:not(#sb_localtunnels):not(#sb_services)::before {width: 0; height: 2px; display: block; position: absolute; top: -4px; left: -1px; background: #bfb; content: ""; animation: ease-in bar .15s reverse; will-change: transform}
 #sidebar td {padding: 0 3px}
 #sidebar p {padding: 0}
@@ -103,13 +103,13 @@ p:empty + .sb_notice {margin-top: 7px}
 #sb_internals a, #sb_services a, #sb_advanced a, #sb_help a {padding: 1 2px; max-width: 194px; display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle}
 #sb_tunnels a {padding-left: 0}
 #sb_tunnels a:not(:hover):not(:focus) {color: var(--ink) !important}
-#sb_localtunnels {margin: -6px -2px -7px 0 !important; width: 196px; text-align: center; box-sizing: border-box}
+#sb_localtunnels {margin: -6px -2px -7px 0; width: 196px; text-align: center; box-sizing: border-box}
 #sb_localtunnels tr:nth-child(even) {background: var(--bg3)}
 #sb_localtunnels td {padding: 1px; vertical-align: middle; line-height: 1}
 #sb_localtunnels td:first-child {padding-right: 0; width: 12px; text-align: left}
 #sb_localtunnels a {width: 100%; max-width: 164px; white-space: nowrap; display: inline-block; overflow: hidden; text-overflow: ellipsis; text-transform: none}
 #sb_localtunnels td:nth-child(2) {padding-left: 0; min-width: 156px}
-#sb_localtunnels td:last-child {padding-right: 2px !important; width: 12px; text-align: right}
+#sb_localtunnels td:last-child {padding-right: 2px; width: 12px; text-align: right}
 #sb_localtunnels td:first-child, #sb_localtunnels tr:hover td:first-child {background: var(--client) no-repeat center center / 16px}
 #sb_localtunnels td.tunnelServer, #sb_localtunnels tr:hover td.tunnelServer  {background: var(--server) no-repeat center center / 16px}
 #sb_localtunnels td.ping, #sb_localtunnels tr:hover td.ping {background: var(--ping) no-repeat center center / 16px}
@@ -126,13 +126,13 @@ p:empty + .sb_notice {margin-top: 7px}
 #sb_warning + hr {margin-bottom: 5px; opacity: 0}
 #sb_warning + hr + form {margin-top: -1px}
 #sb_warning + p:empty + form {margin-top: 10px; margin-bottom: -3px}
-#sb_internals, #sb_services, #sb_advanced {margin-top: -5px !important}
+#sb_internals, #sb_services, #sb_advanced {margin-top: -5px}
 #clock {margin: -5px 1px -6px; padding: 4px 0; line-height: 1; font-size: 18pt; font-weight: 700; letter-spacing: .1em; color: #535979; border: var(--border); box-shadow: var(--highlight), 0 0 1px rgba(96,96,96,.5); background: var(--label_focus); user-select: none}
 #clock::after {margin-left: 3px; display: inline-block; vertical-align: middle; font-size: 50%; content: "UTC"}
 
 /* sidebar news */
 #sb_newsheadings {margin: -3px 0 -7px 0; padding: 0; text-align: right; font-size: 8pt}
-#sb_newsheadings table {margin: -6px 0 2px !important; width: 100%; table-layout: auto; background: var(--bg)}
+#sb_newsheadings table {margin: -6px 0 2px; width: 100%; table-layout: auto; background: var(--bg)}
 #sb_newsheadings td {padding: 5px 8px 5px 20px; line-height: 1; vertical-align: middle; text-align: left; word-spacing: .1em; border-collapse: collapse; border: none; border-bottom: var(--border); background: var(--star2) no-repeat 4px 4px / 12px; transition: ease background .2s}
 #sb_newsheadings table tr:last-child td {padding-bottom: 3px; border-bottom: none}
 #sb_newsheadings tr:hover td {background-color: var(--row_hover); background-blend-mode: normal; transition: ease background .1s}
@@ -281,7 +281,7 @@ input.stop {padding: 5px 8px 5px 23px; background: var(--shutdown) no-repeat 8px
 input.stop:hover, button.stop:focus, input.stop:active {background: var(--shutdown_hover) no-repeat 8px center / 12px, var(--btn_hover)}
 button.search {padding: 5px 7px 5px 25px; background: var(--search) no-repeat 7px 6px / 14px, var(--btn)}
 button.search:hover, button.search:focus {background: var(--search) no-repeat 7px 6px / 14px, var(--btn_hover)}
-#sybilanalysis input.go {padding: 5px 8px 5px 25px; background: var(--eye) no-repeat 8px center / 16px, var(--btn)}
+#sybilanalysis input.go {padding: 5px 8px 5px 28px; background: var(--eye) no-repeat 8px center / 16px, var(--btn)}
 #sybilanalysis input.go:hover, #sybilanalysis input.go:focus {background: var(--eye_hover) no-repeat 8px center / 16px, var(--btn_hover)}
 #dumpthreads input.reload {padding: 5px 8px 5px 25px; background: var(--recycle) no-repeat 8px center / 15px, var(--btn)}
 #dumpthreads input.reload:hover, #dumpthreads input.reload:focus {background: var(--recycle) no-repeat 8px center / 15px, var(--btn_hover)}
@@ -344,7 +344,7 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 .formaction#homeapps {margin-top: -6px; margin-bottom: -5px}
 .formaction#homesites {margin-top: -6px; margin-bottom: -6px}
 .formaction#langui {margin: 0 -5px}
-.formaction#pluginconfigactions {margin-top: -1px; margin-bottom: -9px; border: var(--border)}
+.formaction#pluginconfigactions {margin-top: -1px; margin-bottom: -5px; border: var(--border)}
 .formaction#resetreseed {margin: 0 -3px 0 0; background: none}
 .formaction#shutdown, .formaction#restart, .formaction#systray, .formaction#runonstart, .formaction#dumpthreads, .formaction#browserstart, .formaction#tunnelconfigsave, .formaction#updateplugins, .formaction#submitconsolepass {margin-top: -6px; margin-bottom: -5px; border: var(--border)}
 .formaction#themeui {margin: 8px -5px 0; border-top: var(--border)}
@@ -422,7 +422,7 @@ p + .twocol {margin: 10px 30px}
 .newsentry + hr + #newsStatus {margin: 6px 0 -2px 3px}
 .newsAuthor {padding: 2px 4px 2px 14px; float: right; text-transform: none; font-size: 8.5pt; background: var(--user) no-repeat left 2px center / 10px; opacity: .8}
 .newsDate {font-size: 10pt}
-#news h3 {margin: 10px 10px -7px; padding: 5px 0 3px 10px; letter-spacing: .1em; text-align: left; text-transform: capitalize; font-size: 10pt; text-shadow: none !important; border: none; border-bottom: 1px dotted var(--border_color); box-shadow: none; background: none}
+#news h3 {margin: 10px 10px -7px; padding: 5px 0 3px 10px; letter-spacing: .1em; text-align: left; text-transform: capitalize; font-size: 10pt; text-shadow: none; border: none; border-bottom: 1px dotted var(--border_color); box-shadow: none; background: none}
 #news p {padding: 0 10px}
 #newsStatus {float: left; text-align: justify}
 #newsDisplay {white-space: nowrap; margin-left: 10px; color: #663; font-weight: 700}
@@ -603,7 +603,7 @@ div[id^="config_"].main {padding-bottom: 20px}
 #leavefamily {margin-top: 19px; margin-bottom: 7px}
 #leavefamily tr:last-child td:first-child {padding: var(--pad_info); background: var(--bg) var(--leavefamily) var(--bgpos_info)}
 #bandwidthconfig td:first-child {width: 1%; white-space: nowrap}
-#advconf {margin-bottom: -7px !important}
+#advconf {margin-bottom: -7px}
 #advconf .infohelp {padding: 20px 15px 20px 36px; background-size: 22px; background-position: 8px center}
 #addkeyring {margin-bottom: -5px}
 #addkeyring td:first-child:not(.infohelp) {line-height: 1.15}
@@ -619,14 +619,14 @@ a[href^="configpeer?peer"]::after {width: 16px; height: 16px; display: inline-bl
 a[href^="configpeer?peer"]:hover::after {background: var(--edit_hover) no-repeat 2px center / 11px}
 pre#activetransports {margin: -11px 0 0; padding: 15px 15px 0; width: calc(100% - 32px); border: var(--border); background: var(--bg)}
 #view_profile pre {white-space: pre-wrap; word-wrap: break-word; word-break: break-all}
-#view_profile h2 {margin-bottom: -1px !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.2; word-spacing: 0; letter-spacing: 0; text-transform: none}
-#pluginconfig {margin: -14px 0 0 !important}
+#view_profile h2 {margin-bottom: -1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.2; word-spacing: 0; letter-spacing: 0; text-transform: none}
+#pluginconfig {margin: -14px 0 0}
 #pluginconfig table {margin: 3px; width: calc(100% - 5px)}
 #pluginconfig tr td {background: var(--bg)}
 #pluginconfig button, #webappconfig button, #clientconfig button {margin: 3px}
 #pluginconfig td:first-child label {margin-left: 6px; padding: 2px 5px 2px 21px; min-width: 100px; display: inline-block; text-align: left; border-radius: 2px 15px 15px 2px; box-shadow: 0 0 0 1px var(--border_soft); background: var(--plugin) no-repeat 4px center / 14px, var(--btn); background-blend-mode: luminosity}
 #pluginmanage {margin-top: 15px}
-#pluginmanage + p {padding: 5px 0 0 !important}
+#pluginmanage + p {padding: 5px 0 0}
 #i2pupdates input[type=text], #i2pupdates select {margin-left: 10px; min-width: 200px}
 #i2pupdates input[name*="URL"], #i2pupdates textarea {width: calc(100% - 12px)}
 #i2pupdates input[type=submit] {margin-right: 6px}
@@ -806,7 +806,8 @@ h3[id*="heading"] {margin: 18px 0 -1px}
 #bannedpeers {margin-top: 16px; margin-bottom: -16px}
 #bwlimiter, #iptransport {margin: 15px 0 -1px !important}
 #advancedclientconfig, #ffconf, #advancedconfig {margin-bottom: -1px !important}
-#advancedclientconfig, #pconfig {margin-top: 15px}
+#advancedclientconfig {margin-top: 15px}
+#pconfig {margin-top: 20px}
 #webappconfiguration {margin-bottom: -13px; margin-top: 15px}
 #pluginmanage {margin-bottom: -1px !important}
 h4 {margin: 5px 0; padding: 3px 5px; font-size: 9pt; border: var(--border); background: var(--h4)}
