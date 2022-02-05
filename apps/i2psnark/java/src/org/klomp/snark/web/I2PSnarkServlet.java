@@ -2418,9 +2418,8 @@ public class I2PSnarkServlet extends BasicServlet {
                         String ps = String.valueOf(pct);
                         if (ps.length() > 5)
                             ps = ps.substring(0, 5);
-                        out.write("<div class=\"percentBarOuter\">");
+                        out.write("<div class=\"percentBarOuter\" title=\"" + ps + "%\">");
                         out.write("<div class=\"percentBarInner\" style=\"width:" + ps + "%;\">");
-                        out.write("<div class=\"percentBarText\" tabindex=\"0\">" + ps + "%</div>");
                         out.write("</div></div>");
                     }
                 } else {
