@@ -442,7 +442,7 @@ div[id^="config"] .tab a {padding-right: 18px}
 #peers .confignav {padding-top: 0; padding-bottom: 0}
 
 /* profiles */
-a.viewfullentry, #profilelist td:last-child a, a[href^="/viewprofile"], .profiledump::after {font-size: 0 !important}
+a.viewfullentry, #profilelist td:last-child a, a[href^="/viewprofile"], .profiledump::after {font-size: 0}
 a.viewfullentry:hover {filter: drop-shadow(0 0 1px var(--hover))}
 .tunnel_cap, .tier, #capabilities_key b, #netdbtiers td a {margin: 1px 2px 0; padding: 1px 2px; min-width: 14px; display:inline-block; text-align: center; text-shadow: 0 1px 1px var(--bg); box-shadow: var(--highlight), 0 0 0 1px var(--border_soft); background: var(--badge)}
 .version, .tier, .reachable, .unreachable, .ff {margin: 1px 3px; padding: 1px 4px; display: inline-block; min-width: 12px; text-align: center}
@@ -459,9 +459,9 @@ a.viewfullentry:hover {filter: drop-shadow(0 0 1px var(--hover))}
 #view_profile h3 a::after {margin-top: -1.5px}
 #view_profile .configpeer {margin-right: -5px}
 #profiles_overview {background-image: url(/themes/console/images/svg/profile.svg)}
-#profiles .ok, #ntcpconnections td.queue:empty::before {display: inline-block; font-size: 0; width: 12px; height: 12px; background-size: 11px !important}
+#profiles .ok, #ntcpconnections td.queue:empty::before {display: inline-block; font-size: 0; width: 12px; height: 12px; background-size: 11px}
 #profiles .routerid, #peers .routerid {padding: 2px 3px 2px 4px}
-#profiles td:last-child {border: none !important}
+#profiles #capabilities_key table td:last-child {border: none}
 #profiles td span {vertical-align: middle}
 #floodfills {margin-top: 10px}
 #floodfills th, #floodfills td {text-align: center}
@@ -472,7 +472,7 @@ a.viewfullentry:hover {filter: drop-shadow(0 0 1px var(--hover))}
 #floodfills .percentBarOuter, #floodfills .percentBarText {margin: 0 2px; width: 50px}
 #floodfills .percentBarOuter, #tunnels .percentBarOuter {height: 16px; overflow: hidden}
 #floodfills .percentBarOuter {text-align: left; border: var(--border); box-shadow: var(--highlight); background: var(--bg2); opacity: .9}
-#floodfills .percentBarInner, #tunnels .percentBarInner {width: inherit; display: inline-block; vertical-align: top !important}
+#floodfills .percentBarInner, #tunnels .percentBarInner {width: inherit; display: inline-block; vertical-align: top}
 #floodfills .percentBarInner {background: linear-gradient(180deg, rgba(255,255,255,.1) 50%, rgba(0,0,0,.1) 50%), linear-gradient(90deg, #900 25px, #a00 40px, #b00 50px)}
 #floodfills .percentBarInner[style="width:0%"] {width: 100%; background: linear-gradient(180deg, rgba(255,255,255,.1) 50%, rgba(0,0,0,.1) 50%), linear-gradient(90deg, #090, #0b0)}
 #floodfills .percentBarText {color: var(--bg); text-shadow: 0 1px 1px #000; display: none}
@@ -488,16 +488,16 @@ a.viewfullentry:hover {filter: drop-shadow(0 0 1px var(--hover))}
 #profile_defs b {text-transform: capitalize}
 #thresholds {margin: -1px 0 0}
 #thresholds tr:last-child td {background: var(--bg)}
-#thresholds th, #thresholds td {width: auto !important; text-align: center}
+#thresholds th, #thresholds td {width: auto; text-align: center}
 #thresholds tr:last-child:hover td {background: var(--bg)}
-#thresholds p {margin-top: 0 !important; padding: 0 10px 0 5px}
-#capabilities_key table {margin: 0 !important; border: none !important}
-#capabilities_key td {padding: 0 !important}
+#thresholds p {margin-top: 0; padding: 0 10px 0 5px}
+#capabilities_key table {margin: 0; border: none}
+#capabilities_key td {padding: 0}
 #capabilities_key table tr:first-child td {border-top: none}
-#capabilities_key table td {padding: 3px 5px !important}
+#capabilities_key table td {padding: 3px 5px}
 #capabilities_key table td:nth-child(odd) {width: 1%; max-width: 24px; text-align: center}
 #capabilities_key table td:nth-child(2)::first-letter {text-transform: none}
-#capabilities_key b {padding: 1px 2px; min-width: 16px; display: inline-block; text-transform: none !important; text-align: center; text-shadow: 0 1px 1px var(--bg); background: var(--badge)}
+#capabilities_key b {padding: 1px 2px; min-width: 16px; display: inline-block; text-transform: none; text-align: center; text-shadow: 0 1px 1px var(--bg); background: var(--badge)}
 .profilegroup::before {width: 20px; height: 16px; display: inline-block; vertical-align: middle; content: ""}
 .profilegroup.fast::before {background: var(--fast) no-repeat left center}
 .profilegroup.highcap::before {background: var(--highcap) no-repeat left center}
@@ -511,10 +511,10 @@ a.viewfullentry:hover {filter: drop-shadow(0 0 1px var(--hover))}
 #profilelist td[colspan="10"]::after {display: none; content: none}
 #profilelist td[colspan="10"] hr {display: none}
 #profilelist td:nth-child(1), #profilelist td:nth-child(2), #profilelist td:nth-child(3), #profilelist td:nth-child(7), #profilelist td:nth-child(10) {width: 1%; white-space: nowrap}
-#profilelist td:nth-child(2) {text-align: left !important}
+#profilelist td:nth-child(2) {text-align: left}
 #profilelist td:nth-child(4):not(:empty) {color: #900}
 #profilelist th:nth-child(5), #profilelist td:nth-child(5) {min-width: 56px; white-space: nowrap}
-#profilelist td:nth-child(6) span, #profilelist td:nth-child(7) span, #profilelist td:nth-child(8) span {display: inline-block; min-width: 60px; text-align: right}
+#profilelist td:nth-child(6) span, #profilelist td:nth-child(8) span, #profilelist td:nth-child(9) span {display: inline-block; min-width: 60px; text-align: right}
 #profilelist td:nth-child(8) span, #profilelist td:nth-child(9) span {min-width: 40px; display: inline-block; text-align: right}
 #profilelist td:nth-child(9) span {min-width: 30px}
 #profilelist td:last-child a::after, a[href^="/viewprofile"]::after, a[href^="/configpeer?"]::after, .profiledump::after {margin: 0 2px; padding: 2px; height: 14px; width: 14px; display: inline-block; vertical-align: middle; border: 1px solid #bbd; border-radius: 2px; background: var(--bg) var(--eye) no-repeat center center / 12px; content: ""}
@@ -524,7 +524,7 @@ a.viewfullentry:hover {filter: drop-shadow(0 0 1px var(--hover))}
 #profilelist td:last-child a[href^="/configpeer"]:hover::after, a[href^="/configpeer?"]:hover::after {background: var(--bg) var(--edit_hover) no-repeat center center / 12px}
 #profilelist td:last-child a:active::after, a[href^="/viewprofile"]:active::after, a[href^="/configpeer?"]:active::after, .profiledump:active::after {box-shadow: var(--btn_shadow_active)}
 #profilelist .nospeed {text-align: center}
-#profilelist .lowlatency, #profilelist .highlatency {width: 12px; min-width: 0 !important; color: #373}
+#profilelist .lowlatency, #profilelist .highlatency {width: 12px; min-width: 0; color: #373}
 #profilelist .highlatency {color: #900}
 #profilelist .fast, #profilelist .highcap, #profilelist .integrated, #profilelist .standard, #profilelist .fast.integrated, #profilelist .highcap.integrated, #profilelist .standard.integrated {width: 56px; height: 16px; display: inline-block; font-size: 0; background-size: 16px}
 #profilelist .fast {background: var(--fast) no-repeat calc(50% - 10px) center, var(--highcap) no-repeat calc(50% + 10px) center}
@@ -532,7 +532,7 @@ a.viewfullentry:hover {filter: drop-shadow(0 0 1px var(--hover))}
 #profilelist .highcap.integrated {background: var(--highcap) no-repeat calc(50% - 10px) center, var(--integrated) no-repeat calc(50% + 10px) center}
 #profilelist .standard {background: var(--standard) no-repeat center center}
 #profilelist .standard.integrated {background: var(--standard) no-repeat calc(50% - 10px) center, var(--integrated) no-repeat calc(50% + 10px) center}
-#profilelist .fast.integrated {background: var(--fast) no-repeat left center, var(--highcap) no-repeat center center, var(--integrated) no-repeat right center !important}
+#profilelist .fast.integrated {background: var(--fast) no-repeat left center, var(--highcap) no-repeat center center, var(--integrated) no-repeat right center}
 
 /* sort icons */
 .sortup, .sortdown, .sortupactive, .sortdownactive {margin: 2px 1px 0; padding: 1px 0; width: 16px; height: 12px; display: inline-block; vertical-align: middle; text-align: center; border: var(--border); border-radius: 2px}
@@ -587,17 +587,17 @@ div[id^="config_"].main {padding-bottom: 20px}
 #configstats td:first-child {width: 1%}
 #configstats td:last-child {border-right: var(--border)}
 #config_stats tr:not(.tablefooter) td:first-child::after {min-height: 24px; display: inline-block; vertical-align: middle; content: ""}
-#configstats .graphableStat td {padding: 4px 6px; columns: auto; white-space: normal !important}
+#configstats .graphableStat td {padding: 4px 6px; columns: auto; white-space: normal}
 #configstats label {position: relative; font-size: 90%}
 #configstats label::after {padding: 4px 8px; content: attr(data-tooltip); display: none; position: absolute; top: -30px; left: 1px; background: var(--row_hover); white-space: nowrap; z-index: 10; border-radius: 1px; font-size: 110%; box-shadow: 0 0 0 1px #999, var(--highlight)}
 #configstats label:hover::after {display: inline-block}
-#config_stats .tabletitle {margin: 15px 0 -1px !important}
-#config_stats #graphchoice {margin-bottom: -2px !important}
+#config_stats .tabletitle {margin: 15px 0 -1px}
+#config_stats #graphchoice {margin-bottom: -2px}
 #statconfig {margin: 0 auto 10px}
 #enablefullstats {padding: var(--pad_info); background: var(--stats) var(--bgpos_info)}
 #enablefull label {margin-top: 6px; display: inline-block}
 #enablefull input[type=submit] {float: right}
-#joinfamily, #exportfamily{margin-top: 15px !important}
+#joinfamily, #exportfamily{margin-top: 15px}
 #newfamily {margin-top: 4px; margin-bottom: -6px}
 #exportfamily tr:nth-child(2) td:first-child {padding: var(--pad_info); background: var(--bg) var(--joinfamily) var(--bgpos_info)}
 #leavefamily {margin-top: 19px; margin-bottom: 7px}
@@ -921,13 +921,13 @@ h2#jobrunners {margin-top: -10px}
 #jobstats th:first-child, #jobstats td:first-child {padding-left: 10px; text-align: left}
 #jobstats th {text-align: right; font-size: 90%}
 #jobstats .tablefooter td {font-size: 9pt}
-#schedjobs {margin: -11px 0 0 !important; width: 100%}
+#schedjobs {margin: -11px 0 0; width: 100%}
 #schedjobs th, #schedjobs td {padding: 3px 10px}
 #schedjobs th:first-child {text-align: left}
 #schedjobs td:first-child {font-weight: 700}
-#schedjobs ul {margin: 0 !important; padding: 0 !important; columns: 272px auto; column-gap: 20px}
-#schedjobs li {margin: 2px 0; min-width: 272px; display: inline-block; border-radius: 0 15px 15px 0}
-#schedjobs li:first-child {padding-top: 0 !important}
+#schedjobs ul {margin: 0; padding: 0; columns: 272px auto; column-gap: 20px}
+#schedjobs li {margin: 2px 0 2px 25px; min-width: 272px; display: inline-block; border-radius: 0 15px 15px 0}
+#schedjobs li:first-child {padding-top: 0}
 
 .tablefooter {border-top: var(--border); border-bottom: var(--border)}
 .tablefooter:hover td, tr:hover .infohelp {color: var(--ink)}
@@ -1938,7 +1938,7 @@ iframe {height: 0}
 #dns, #torrents, #webmail {padding: 0; min-width: 606px}
 #dns {background: linear-gradient(180deg, rgba(255,255,255,.8), rgba(255,255,255,.8)), url(images/bg0.png)}
 #tunnelmgr {padding: 0 10px; min-width: 550px}
-#tunnelmgr .infohelp#jsRequired {margin-top: 20px !important}
+#tunnelmgr .infohelp#jsRequired {margin-top: 20px}
 #dns::before, #torrents::before, #tunnelmgr::before, #webmail::before {width: 0; height: 9px; display: block; position: absolute; top: 0; left: 0; right: 0; background: linear-gradient(180deg, rgba(255,255,255,.2) 50%, rgba(0,0,0,.2) 50%), var(--reload); opacity: .7; content: ""; animation: reloader 8s ease-out .5s forwards}
 
 /*animations */
