@@ -371,7 +371,7 @@ td {padding: 3px 5px}
 
 /* main */
 .main {margin: 0 0 4px 211px; padding: 15px 15px 10px 15px; min-width: 580px; text-align: left; color: var(--ink); border: var(--border); border-top: none; background: var(--bg)}
-.main ul {margin: -10px 0 10px -10px; list-style-type: square}
+.main ul {margin: -10px 0 10px 20px; list-style-type: square}
 .main li {margin-right: 20px; padding: 0 0 5px 0; word-wrap: break-word}
 .main hr:last-child {margin: 15px 0 10px 0}
 .wideload p {margin-top: 5px}
@@ -1277,14 +1277,16 @@ h3.stats {margin-bottom: 9px !important; border: var(--border); border-radius: 0
 #volunteer .links {margin: -10px 10px 0}
 #sidebarhelp h2 {margin-bottom: 5px !important}
 #help h2 {margin: -16px -16px 0}
-#help h3 {margin: -5px -16px 3px}
-#help p:not(.infohelp):not(.infowarn) {padding: 5px 0 0; margin-top: 0}
-#help ul {margin-bottom: 8px; margin-top: -2px; padding-left: 15px}
+#help h3 {margin: 0 -16px 8px}
+#help p:not(.infohelp):not(.infowarn) {padding: 5px 10px 0; margin-top: 0}
+#help h2 + p:not(.infohelp):not(.infowarn) {padding-top: 15px}
+#help ul {margin-bottom: 8px; margin-top: 8px; padding-left: 15px}
+#help h2 + ul, #help h3 + ul {margin-top: 15px}
 #help ul:not(#helptoc) li:first-child {padding-top: 0; margin-top: 5px}
 #help ul.links {margin-left: 20px; padding-top: 10px}
 #help code, #help tt {font-size: 8pt}
 ul#reachability {padding-left: 15px}
-#help li {margin-right: 0; margin-left: -10px; text-align: justify}
+#help li {margin-right: 10px; margin-left: -10px; text-align: justify}
 #help li, #help p, #help td {line-height: 1.4}
 #portfaq tr {box-shadow: none}
 #configinfo th {box-shadow: var(--highlight)}
