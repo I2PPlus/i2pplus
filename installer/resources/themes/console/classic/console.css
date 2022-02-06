@@ -556,6 +556,7 @@ div[id^="config_"].main {padding-bottom: 20px}
 .configure h2:first-child {margin-top: 15px}
 .configtable, #permabanned, #loggingoptions, #configstats, #banlist {margin-bottom: -5px}
 .configtable td:not(.infohelp):not(.infowarn):not(.b32), #joinfamily td {padding: 10px; border-top: var(--border); border-bottom: var(--border)}
+#externali2cp td, #plugininstall td, #plugininstall2 td, #tunnelconfig td {padding: 5px}
 .configtable.homelinkedit td, .configtable.homelinkedit tr, .configtable#sidebarconf td, .configtable#sidebarconf tr {padding-top: 4px; padding-bottom: 4px; border-top: 1px inset var(--bg4); border-bottom: 1px inset var(--bg4)}
 .configtable tr:last-child, #addkeyring tr:last-child, #loggingoptions tr:last-child {border-top: var(--border); background: var(--bg)}
 .stattograph {margin: 2px 1px 2px 0; padding: 4px 8px 2px; width: 220px; display: inline-block; box-sizing: border-box; line-height: 1.2; vertical-align: middle; text-align: left; font-size: 90%; border: 1px solid var(--border_badge); border-radius: 1px; background: var(--badge); outline: none; will-change: transform}
@@ -955,12 +956,11 @@ p.infohelp + hr, p.infohelp + p + hr, #tunnelconfig + hr {display: none}
 #clientconf {margin-bottom: -1px}
 #config_tunnels .infohelp {background-image: var(--hardhat)}
 #config_ui p.infohelp {margin-bottom: -5px; background: var(--bg) var(--ui) var(--bgpos_info)}
-#enablefullstats {padding: 5px 10px; line-height: 1.2; text-align: left; background: var(--bg)}
+#enablefullstats {line-height: 1.2; text-align: left; background: var(--bg)}
 #profiles_overview, #themeheading {margin-top: 15px}
 #refreshsidebar td:not(.optionsave) {padding: var(--pad_info); background: var(--bg) var(--timer) var(--bgpos_info)}
 #webappconfigtext {margin-bottom: -1px}
-#enablefull td {padding: 10px 5px}
-#config_stats .tablefooter td {padding: 10px}
+#config_stats .tablefooter td, #enablefull td {padding: 10px}
 #netconfig tr, #externali2cp tr {background: var(--bg)}
 #externali2cp label + br {display: none}
 #externali2cp label {display: inline-block; white-space: nowrap}
@@ -1799,7 +1799,7 @@ table[id*="connections"] .tablefooter td:first-child {text-align: left}
 
 /* stats */
 #stats label {display: inline-block}
-#stats h3 {margin-bottom: 6px; border-width: 1px}
+#stats .joblog h3 {margin-bottom: 6px; border-width: 1px}
 #stats .toggle_input {width: 0; height: 0; position: absolute; top: -99999px; left: -99999px; opacity: 0}
 #stats input:not(:checked) + h3, #stats input:not(:checked) + h3 + ul.statlist, #stats input:not(:checked) + h3 + ul.statlist + br {display: none}
 #stats input:checked + h3 + ul.statlist {display: block; margin-bottom: -13px}
