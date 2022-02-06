@@ -4,7 +4,6 @@
 /* Thanks to http://www.luxphile.com/2011/01/creative-commons-cat.html for the kitty image */
 
 @import url(/themes/console/light/global.css);
-@import url(sliders.css);
 
 :root {
   --nav: linear-gradient(180deg,#fff 50%,#eef 51%,#eef 100%);

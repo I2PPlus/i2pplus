@@ -2,7 +2,6 @@
 /* Author: dr|z3d */
 
 @import url(/themes/console/dark/global.css);
-@import url(sliders.css);
 
 :root {
   --tabIcon: linear-gradient(180deg,#000 50%,#040 50%);
@@ -11,7 +10,6 @@
 }
 
 html {
-  min-height: 100%;
   background: none !important;
 }
 
