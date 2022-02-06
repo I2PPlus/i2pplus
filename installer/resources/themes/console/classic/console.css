@@ -14,41 +14,38 @@
 body {margin: 3px; padding: 0; text-align: left; line-height: 1.3; background: var(--bg_doc); background-attachment: fixed}
 
 /* globals */
-h1, .main, .sorry, .news {margin-left: 211px}
-.hide, .hideme {display: none}
-div.clearer {height: 0; line-height: 0; clear: left}
-tr, h3, h4 {contain: paint}
 .routersummary, .routersummaryouter, h1, .main, iframe, tr {contain: layout}
-i {padding-right: 1px}
-tt, pre, code, .bucket, #logs li, #servicelogs li {font: 8.5pt var(--monospaced)}
-hr {margin: 3px 0; height: 2px; border: none; background: var(--border_color)}
-p {padding: 5px 20px 0 20px; text-align: justify}
-.footnote, .footnote hr, .topness {display: none}
-#sb_logo img, #sidebar h3, #sidebar h3 a, #sb_internals, #sb_advanced, #sb_services, .confignav, *::before, *::after, div.app, .themechoice, .langselect, .newsAuthor, #newsDisplay, #netdbcountrylist img, .viewfullentry, .sybil_routerinfo th img, .graphspanel, h1 {user-select: none}
-a:hover:not(:active) span.b32 {color: var(--hover) !important}
-a:active span.b32 {color: var(--active) }
-a.script {word-spacing: normal; letter-spacing: normal}
-.main a:visited[target="_blank"] {color: var(--visited)}
-pre {margin: 0 20px; padding-top: 10px; width: 95%; overflow: auto; font-size: 8.5pt}
-tt, code, .bucket {color: var(--code)}
-div.refresh {margin-top: 10px; margin-bottom: 10px; padding: 2px 0}
-tr:hover th {color: var(--ink)}
-.widescroll {overflow: auto}
+h1, .main, .sorry, .news {margin-left: 211px}
+.clearer {height: 0; line-height: 0; clear: left}
 .nowrap {display: inline-block; white-space: nowrap}
+.widescroll {overflow: auto}
+#sb_logo img, #sidebar h3, #sidebar h3 a, #sb_internals, #sb_advanced, #sb_services, .confignav, *::before, *::after, div.app, .themechoice, .langselect, .newsAuthor, #newsDisplay, #netdbcountrylist img, .viewfullentry, .sybil_routerinfo th img, .graphspanel, h1 {user-select: none}
+.hide, .hideme, p:empty, .footnote, .footnote hr, .topness, .viewedit br {display: none}
+hr {margin: 3px 0; height: 2px; border: none; background: var(--border_color)}
+i {padding-right: 1px}
 .links li b:first-of-type {color: #1f7096}
-p:empty {display: none}
+p {padding: 5px 20px 0 20px; text-align: justify}
+pre {margin: 0 20px; padding-top: 10px; width: 95%; overflow: auto; font-size: 8.5pt}
+tr, h3, h4 {contain: paint}
+th, td {position: relative}
+tr:hover th {color: var(--ink)}
+tt, code, .bucket {color: var(--code)}
+tt, pre, code, .bucket, #logs li, #servicelogs li {font: 8.5pt var(--monospaced)}
+.refresh {margin-top: 10px; margin-bottom: 10px; padding: 2px 0}
+.refreshpage {margin: 0 0 -2px; padding: 2px; width: 16px; height: 16px; display: inline-block; vertical-align: middle; background: var(--refresh) no-repeat center center / 16px}
+.refreshpage:hover,.refreshpage:focus {background: var(--refresh_hover) no-repeat center center / 16px}
+.refreshpage:active {box-shadow: var(--btn_shadow_refresh)}
 #newtab {text-align: right; font-size: 8pt; float: right; letter-spacing: 0}
 #newtabimg:hover {filter: drop-shadow(0 0 1px var(--hover))}
 #pageloader {top: -1px}
 #down {margin: -6px -6px -7px; width: 100%; display: inline-block; line-height: 32px; font-size: 0; color: #770; box-shadow: var(--down_shadow); background: var(--down); background-size: 300%; animation: down linear 10s reverse infinite}
 #down::after, #nographs::after {width: 26px; height: 26px; vertical-align: middle; display: inline-block; background: url(/themes/console/images/svg/update.svg) no-repeat center center / 24px; content: ""; transform: rotate(0); filter: sepia(1); animation: linear spin 3s forwards infinite}
-#nographs {font-size: 0}
-#nographs::after {width: 36px; height: 36px; background-size: 32px}
-.viewedit br {display: none}
-th, td {position: relative}
-.refreshpage {margin: 0 0 -2px; padding: 2px; width: 16px; height: 16px; display: inline-block; vertical-align: middle; background: var(--refresh) no-repeat center center / 16px}
-.refreshpage:hover,.refreshpage:focus {background: var(--refresh_hover) no-repeat center center / 16px}
-.refreshpage:active {box-shadow: var(--btn_shadow_refresh)}
+
+/* links */
+a:active span.b32 {color: var(--active) }
+a:hover:not(:active) span.b32 {color: var(--hover) !important}
+a.script {word-spacing: normal; letter-spacing: normal}
+.main a:visited[target="_blank"] {color: var(--visited)}
 
 /* sidebar */
 .routersummaryouter {margin: 0; padding: 0; width: 193px; position: absolute; border: none}
@@ -202,6 +199,9 @@ p:empty + .sb_notice {margin-top: 7px}
 #sb_memoryBar .percentBarText::after {width: 0; height: 0; position: absolute; left: calc(50% - 5px); bottom: -15px; border-style: solid; border-width: 8px; border-color: #eef transparent transparent transparent; content: ""}
 
 /* buttons & inputs */
+button a, button a:visited {font-weight: 400; color: var(--ink_light)}
+button:hover:not(:active) a {color: var(--ink)}
+button:active a {color: var(--ink_light)}
 input {margin: 3px 5px 3px 0}
 input:disabled:hover {filter: none}
 select {margin: 3px 5px; min-width: 120px}
@@ -213,71 +213,67 @@ select[name="newlogclass"] {margin-right: 0; width: calc(100% - 180px)}
 .homelinkedit td:nth-child(2) {width: 52px; text-align: center}
 .homelinkedit td:nth-child(2) img {width: 20px; height: 20px}
 label[for="0"] {cursor: default; color: var(--ink)}
-#config_clients label[for="0"] {cursor: default; color: var(--ink)}
 input[type="file"] {margin: 3px 5px; background: none}
 input[type=text], input[type=password] {margin: 3px 5px}
 input[type=file]::file-selector-button {margin: 3px 8px 3px 0}
 button:hover, input[type=submit]:hover, input[type=reset]:hover {color: var(--ink); background: var(--btn_hover)}
 button:active, input[type=submit]:active, input[type=reset]:active {background-color: var(--bg)}
 input[name="refreshInterval"] {width: 80px; min-width: 80px; text-align: right}
-td.tabletextarea {padding: 0 !important}
 textarea {margin: 2px 0 2px 5px; padding: 3px 4px; width: calc(100% - 5px); min-height: 96px; resize: none; font-size: 9pt; color: var(--ink_light); border: var(--border); border-radius: 2px; box-shadow: var(--shadow_input); background: var(--bg2)}
 textarea:focus, .main .tabletextarea textarea:focus {color: var(--ink); box-shadow: inset 0 0 0 1px var(--hover); background: var(--bg); outline: none}
+.tabletextarea {padding: 0 !important}
 .tabletextarea textarea {margin: 0; padding: 5px; width: 100%; height: 600px; resize: none; overflow: auto; white-space: pre-wrap; word-break: break-all; font-size: 9pt; border: none; border-top: var(--border); border-radius: 0; box-shadow: none; background: var(--bg)}
 .tabletextarea textarea:focus {border-radius: 0}
 
 /* graphical buttons */
 input[type=submit], input[type=reset], button {margin: 3px 8px 3px 0; padding: 4px 5px; text-decoration: none; font: 9pt var(--bodyfont); color: var(--ink_light); border: var(--border); border-radius: 3px; box-shadow: var(--btn_shadow); background: var(--btn); background-size: 14px, 100%}
-button a, button a:visited {font-weight: 400; color: var(--ink_light)}
-button:hover:not(:active) a {color: var(--ink)}
-button:active a {color: var(--ink_light)}
 button:hover, input[type=submit]:hover, input[type=reset]:hover, button:focus, input[type=submit]:focus, input[type=reset]:focus {color: var(--ink); border: var(--border); box-shadow: var(--btn_shadow_hover); background: var(--btn_hover)}
 button:active, input[type=submit]:active, input[type=reset]:active {color: #555; border: 1px solid #999; box-shadow: var(--btn_shadow_active); background-color: #ddd; background-blend-mode: luminosity}
 input.accept, button.accept {padding: 5px 8px 5px 22px; background: var(--yes) no-repeat 8px center / 12px, var(--btn)}
 input.accept:hover, button.accept:hover, input.accept:focus, button.accept:focus {background: var(--yes) no-repeat 8px center / 12px, var(--btn_hover)}
 input.accept[value^="Unban"] {padding: 5px 8px 5px 24px; background: var(--unban) no-repeat 8px center / 14px, var(--btn)}
 input.accept[value^="Unban"]:hover, input.accept[value^="Unban"]:focus, input.accept[value^="Unban"]:active {background: var(--unban) no-repeat 8px center / 14px, var(--btn_hover)}
-input.accept[value^="Create"], button.accept[value^="Create"] {padding: 5px 8px 5px 25px; background: var(--wizard) no-repeat 8px center / 16px, var(--btn)}
-input.accept[value^="Create"]:hover, button.accept[value^="Create"]:hover, input.accept[value^="Create"]:focus, button.accept[value^="Create"]:focus {background: var(--wizard) no-repeat 8px center / 16px, var(--btn_hover)}
-input.accept[value^="Filter"], button.accept[value^="Filter"] {padding: 5px 8px 5px 25px; background: var(--filter) no-repeat 8px center / 14px, var(--btn)}
-input.accept[value^="Filter"]:hover, button.accept[value^="Filter"]:hover, input.accept[value^="Filter"]:focus, button.accept[value^="Filter"]:focus {background: var(--filter) no-repeat 8px center / 14px, var(--btn_hover)}
+input.accept[value^="Create"] {padding: 5px 8px 5px 25px; background: var(--wizard) no-repeat 8px center / 16px, var(--btn)}
+input.accept[value^="Create"]:hover, input.accept[value^="Create"]:focus {background: var(--wizard) no-repeat 8px center / 16px, var(--btn_hover)}
+input.accept[value^="Filter"] {padding: 5px 8px 5px 25px; background: var(--filter) no-repeat 8px center / 14px, var(--btn)}
+input.accept[value^="Filter"]:hover, input.accept[value^="Filter"]:focus {background: var(--filter) no-repeat 8px center / 14px, var(--btn_hover)}
 input.add {padding: 5px 8px 5px 21px; background: var(--add) no-repeat 8px center / 11px, var(--btn)}
 input.add:hover, input.add:focus, input.add:active {background: var(--add) no-repeat 8px center / 11px, var(--btn_hover)}
-input.add[value^="Adjust"], button.add[value^="Adjust"] {padding: 5px 8px 5px 23px; background: var(--edit) no-repeat 8px center / 14px, var(--btn)}
-input.add[value^="Adjust"]:hover, button.add[value^="Adjust"]:hover, input.add[value^="Adjust"]:focus, button.add[value^="Adjust"]:focus {background: var(--edit_hover) no-repeat 8px center / 14px, var(--btn_hover)}
+input.add[value^="Adjust"] {padding: 5px 8px 5px 23px; background: var(--edit) no-repeat 8px center / 14px, var(--btn)}
+input.add[value^="Adjust"]:hover, input.add[value^="Adjust"]:focus {background: var(--edit_hover) no-repeat 8px center / 14px, var(--btn_hover)}
 input.cancel, button.cancel {padding: 5px 8px 5px 22px; background: var(--no) no-repeat 8px center / 10px, var(--btn)}
 input.cancel:hover, button.cancel:hover, input.cancel:focus, button.cancel:focus {background: var(--no) no-repeat 8px center / 10px, var(--btn_hover)}
-input.accept[value^="Show"], button.accept[value^="Show"], input.check[value^="View"], button.check[value^="View"], input.showconsole {padding: 5px 8px 5px 23px; background: var(--show) no-repeat 8px center / 14px, var(--btn)}
-input.accept[value^="Show"]:hover, button.accept[value^="Show"]:hover, input.check[value^="View"]:hover, button.check[value^="View"]:hover, input.accept[value^="Show"]:focus, button.accept[value^="Show"]:focus, input.check[value^="View"]:focus, button.check[value^="View"]:focus, input.showconsole:hover, input.showconsole:focus {background: var(--show) no-repeat 8px center / 14px, var(--btn_hover)}
-input.cancel[value^="Hide"], button.cancel[value^="Hide"], input.delete[value^="Do not view"], button.delete[value^="Do not view"], input.hideconsole {padding: 5px 8px 5px 23px; background: var(--hide) no-repeat 8px center / 14px, var(--btn)}
-input.cancel[value^="Hide"]:hover, button.cancel[value^="Hide"]:hover, input.delete[value^="Do not view"]:hover, button.delete[value^="Do not view"]:hover, input.cancel[value^="Hide"]:focus, button.cancel[value^="Hide"]:focus, input.delete[value^="Do not view"]:focus, button.delete[value^="Do not view"]:focus, input.hideconsole:hover, input.hideconsole:focus {background: var(--hide) no-repeat 8px center / 14px, var(--btn_hover)}
+input.accept[value^="Show"], input.check[value^="View"], input.showconsole {padding: 5px 8px 5px 23px; background: var(--show) no-repeat 8px center / 14px, var(--btn)}
+input.accept[value^="Show"]:hover, input.check[value^="View"]:hover, input.accept[value^="Show"]:focus, input.check[value^="View"]:focus, input.showconsole:hover, input.showconsole:focus {background: var(--show) no-repeat 8px center / 14px, var(--btn_hover)}
+input.cancel[value^="Hide"], input.delete[value^="Do not view"], input.hideconsole {padding: 5px 8px 5px 23px; background: var(--hide) no-repeat 8px center / 14px, var(--btn)}
+input.cancel[value^="Hide"]:hover, input.delete[value^="Do not view"]:hover, input.cancel[value^="Hide"]:focus, input.delete[value^="Do not view"]:focus, input.hideconsole:hover, input.hideconsole:focus {background: var(--hide) no-repeat 8px center / 14px, var(--btn_hover)}
 input.check, button.check {padding: 5px 8px 5px 23px; background: var(--yes) no-repeat 8px center / 14px, var(--btn)}
 input.check:hover, button.check:hover, input.check:focus, button.check:focus, input.check:active, button.check:active {background: var(--yes) no-repeat 8px center / 14px, var(--btn_hover)}
-input.check[value$="updates"], button.check[value$="updates"] {padding: 5px 8px 5px 23px; background: var(--refresh) no-repeat 8px center / 14px, var(--btn)}
-input.check[value$="updates"]:hover, button.check[value$="updates"]:hover, input.check[value$="updates"]:focus, button.check[value$="updates"]:focus, input.check[value$="updates"]:active, button.check[value$="updates"]:active {background: var(--refresh_hover) no-repeat 8px center / 14px, var(--btn_hover)}
-input.delete, button.delete {padding: 5px 8px 5px 23px; background: var(--nuke) no-repeat 8px center / 14px, var(--btn)}
-input.delete:hover, button.delete:hover, input.delete:focus, button.delete:focus {background: var(--nuke) no-repeat 8px center / 14px, var(--btn_hover)}
-input.delete[value^="Ban"], button.delete[value^="Ban"] {padding: 5px 8px 5px 25px; background: var(--ban) no-repeat 8px center / 14px, var(--btn)}
-input.delete[value^="Ban"]:hover, button.delete[value^="Ban"]:hover, input.delete[value^="Ban"]:focus, button.delete[value^="Ban"]:focus {background: var(--ban) no-repeat 8px center / 14px, var(--btn_hover)}
+input.check[value$="updates"] {padding: 5px 8px 5px 23px; background: var(--refresh) no-repeat 8px center / 14px, var(--btn)}
+input.check[value$="updates"]:hover, input.check[value$="updates"]:focus, input.check[value$="updates"]:active {background: var(--refresh_hover) no-repeat 8px center / 14px, var(--btn_hover)}
+input.delete {padding: 5px 8px 5px 23px; background: var(--nuke) no-repeat 8px center / 14px, var(--btn)}
+input.delete:hover, input.delete:focus {background: var(--nuke) no-repeat 8px center / 14px, var(--btn_hover)}
+input.delete[value^="Ban"] {padding: 5px 8px 5px 25px; background: var(--ban) no-repeat 8px center / 14px, var(--btn)}
+input.delete[value^="Ban"]:hover, input.delete[value^="Ban"]:focus {background: var(--ban) no-repeat 8px center / 14px, var(--btn_hover)}
 input.download, button.download {padding: 5px 8px 5px 23px; background: var(--download) no-repeat 8px center / 14px, var(--btn)}
 input.download:hover, button.download:hover, input.download:focus, button.download:focus, input.download:active, button.download:active {background: var(--download_hover) no-repeat 8px center / 14px, var(--btn_hover)}
-input.download[value^="Join"], button.download[value^="Join"] {padding: 5px 8px 5px 25px; background: var(--family) no-repeat 8px center / 14px, var(--btn)}
+input.download[value^="Join"] {padding: 5px 8px 5px 25px; background: var(--family) no-repeat 8px center / 14px, var(--btn)}
 input.download[value^="Join"]:hover, input.download[value^="Join"]:focus, input.download[value^="Join"]:active {background: var(--family) no-repeat 8px center / 14px, var(--btn_hover)}
-input.download[value$="from File"], button.download[value$="from File"], input.download[value$="from file"], button.download[value$="from file"] {padding: 5px 8px 5px 25px; background: var(--files) no-repeat 8px center / 14px , var(--btn)}
-input.download[value$="from File"]:hover, button.download[value$="from File"]:hover, input.download[value$="from file"]:hover, button.download[value$="from file"]:hover, input.download[value$="from File"]:focus, button.download[value$="from File"]:focus, input.download[value$="from file"]:focus, button.download[value$="from file"]:focus {background: var(--files) no-repeat 8px center / 14px, var(--btn_hover)}
-input.download[value^="Dump"], button.download[value^="Dump"] {padding: 5px 8px 5px 23px; background: var(--bug) no-repeat 8px center / 14px, var(--btn)}
-input.download[value^="Dump"]:hover, button.download[value^="Dump"]:hover, input.download[value^="Dump"]:focus, button.download[value^="Dump"]:focus {background: var(--bug) no-repeat 8px center / 14px, var(--btn_hover)}
-input.go, button.go, input[value="GO"], button#run {padding: 5px 8px 5px 23px; background: var(--go) no-repeat 8px center / 14px, var(--btn)}
-input.go:hover, button.go:hover, input[value="GO"]:hover, input.go:focus, button.go:focus, input[value="GO"]:focus {background: var(--go) no-repeat 8px center / 14px, var(--btn_hover)}
-input.go[value^="Create"], button.go[value^="Create"] {padding: 5px 8px 5px 25px; background: var(--package) no-repeat 8px center / 16px, var(--btn)}
-input.go[value^="Create"]:hover, button.go[value^="Create"]:hover, input.go[value^="Create"]:focus, button.go[value^="Create"]:focus {background: var(--package) no-repeat 8px center / 16px, var(--btn_hover)}
+input.download[value$="from File"], input.download[value$="from file"] {padding: 5px 8px 5px 25px; background: var(--files) no-repeat 8px center / 14px , var(--btn)}
+input.download[value$="from File"]:hover, input.download[value$="from file"]:hover, input.download[value$="from File"]:focus, input.download[value$="from file"]:focus {background: var(--files) no-repeat 8px center / 14px, var(--btn_hover)}
+input.download[value^="Dump"] {padding: 5px 8px 5px 23px; background: var(--bug) no-repeat 8px center / 14px, var(--btn)}
+input.download[value^="Dump"]:hover, input.download[value^="Dump"]:focus {background: var(--bug) no-repeat 8px center / 14px, var(--btn_hover)}
+input.go, button#run {padding: 5px 8px 5px 23px; background: var(--go) no-repeat 8px center / 14px, var(--btn)}
+input.go:hover, input[value="GO"]:hover, input.go:focus, input[value="GO"]:focus {background: var(--go) no-repeat 8px center / 14px, var(--btn_hover)}
+input.go[value^="Create"] {padding: 5px 8px 5px 25px; background: var(--package) no-repeat 8px center / 16px, var(--btn)}
+input.go[value^="Create"]:hover, input.go[value^="Create"]:focus {background: var(--package) no-repeat 8px center / 16px, var(--btn_hover)}
 input.back {padding: 5px 8px 5px 23px; background: var(--back) no-repeat 8px center / 14px, var(--btn)}
 input.back:hover, input.back:focus {background: var(--back) no-repeat 8px center / 14px, var(--btn_hover)}
 input.reload, button.reload {padding: 5px 8px 5px 23px; background: var(--reset) no-repeat 8px center / 14px, var(--btn)}
 input.reload:hover, input.reload:focus, input.reload:active {background: var(--reset_hover) no-repeat 8px center / 14px, var(--btn_hover)}
-input.reload[value$="restart"], button.reload[value$="restart"] {padding: 5px 8px 5px 23px; background: var(--restart) no-repeat 8px center / 12px, var(--btn)}
+input.reload[value$="restart"] {padding: 5px 8px 5px 23px; background: var(--restart) no-repeat 8px center / 12px, var(--btn)}
 input.reload[value$="restart"]:hover, input.reload[value$="restart"]:focus {background: var(--restart_hover) no-repeat 8px center / 12px, var(--btn_hover)}
-input.reload[value^="Update"], button.reload[value^="Update"] {padding: 5px 8px 5px 23px; background: var(--refresh) no-repeat 8px center / 14px, var(--btn)}
+input.reload[value^="Update"] {padding: 5px 8px 5px 23px; background: var(--refresh) no-repeat 8px center / 14px, var(--btn)}
 input.reload[value^="Update"]:hover, input.reload[value^="Update"]:focus, input.reload[value^="Update"]:active {background: var(--refresh_hover) no-repeat 8px center / 14px, var(--btn_hover)}
 input.stop {padding: 5px 8px 5px 23px; background: var(--shutdown) no-repeat 8px center / 12px, var(--btn)}
 input.stop:hover, button.stop:focus, input.stop:active {background: var(--shutdown_hover) no-repeat 8px center / 12px, var(--btn_hover)}
@@ -574,6 +570,7 @@ div[id^="config_"].main {padding-bottom: 20px}
 .stattograph:active b, .optbox:checked + label > .stattograph:active b, .optbox:checked + label > .stattograph:hover b {color: var(--hover)}
 .optbox:checked + label > .stattograph:hover b {color: var(--bg)}
 #floodfillconfig, #joinfamily {margin-bottom: 0}
+#config_clients label[for="0"] {cursor: default; color: var(--ink)}
 #config_homepage td:not(.optionsave), #config_reseed td:not(.optionsave) {padding: 5px}
 #config_homepage .noicon {background: var(--search) no-repeat center center / 18px}
 #config_homepage .delete {float: left; margin-left: 5px}
@@ -801,22 +798,22 @@ h3.ptitle {margin-bottom: -13px}
 .confignav + .infohelp, .confignav + h3.tabletitle, .confignav + form > h3.tabletitle, .confignav + .configure > form > h3.ptitle {margin-top: 15px}
 h3.embeddedtitle, h4.embeddedtitle {margin-bottom: 5px}
 .wideload h3 {margin-top: 15px; margin-bottom: 0}
+h4 {margin: 5px 0; padding: 3px 5px; font-size: 9pt; border: var(--border); background: var(--h4)}
 h3[id*="heading"] {margin: 18px 0 -1px}
-#configsites {margin-top: 20px}
-#udpcon, #ntcpcon {margin-bottom: -1px}
-#i2pclientconfig {margin-top: 15px; margin-bottom: -13px}
-#bannedpeers {margin-top: 16px; margin-bottom: -16px}
-#bwlimiter, #iptransport {margin: 15px 0 -1px}
 #advancedclientconfig, #ffconf, #advancedconfig {margin-bottom: -1px}
 #advancedclientconfig {margin-top: 15px}
-#pconfig {margin-top: 20px}
-#webappconfiguration {margin-bottom: -13px; margin-top: 15px}
-#pluginmanage {margin-bottom: -1px}
-h4 {margin: 5px 0; padding: 3px 5px; font-size: 9pt; border: var(--border); background: var(--h4)}
+#bannedpeers {margin-top: 16px; margin-bottom: -16px}
+#bwlimiter, #iptransport {margin: 15px 0 -1px}
+#configsites {margin-top: 20px}
 h4#updateplugins {margin-top: -13px}
-#logs .tabletitle, #jobs h3, #tunnels h3[id] {position: relative; overflow: hidden}
-#logs .tabletitle:first-of-type {margin-top: 0}
+#i2pclientconfig {margin-top: 15px; margin-bottom: -13px}
 #logs #enviro ~ .tabletitle::after, #jobs h3::after, #tunnels h3[id]::after {width: 0; height: 1px; display: inline-block; position: absolute; bottom: 0; left: 0; background: var(--reload); opacity: .6; content: ""; animation: ease-out reloader 1s forwards}
+#logs .tabletitle:first-of-type {margin-top: 0}
+#logs .tabletitle, #jobs h3, #tunnels h3[id] {position: relative; overflow: hidden}
+#pconfig {margin-top: 20px}
+#pluginmanage {margin-bottom: -1px}
+#webappconfiguration {margin-bottom: -13px; margin-top: 15px}
+
 
 /* home */
 #home {padding-bottom: 1px}
@@ -1000,6 +997,8 @@ p.infohelp + hr, p.infohelp + p + hr, #tunnelconfig + hr {display: none}
 #graphs .statimage, #graphs .statimage:hover, #graphs a:hover .statimage, #graph_single .statimage, #graph_single .statimage:hover {margin: 0; padding: 0; max-width: calc(100% + 2px); border: none; box-shadow: none}
 #graphs .statimage {min-width: 180px; min-height: 40px}
 #updategraphs .messages {margin-bottom: -11px}
+#nographs {font-size: 0}
+#nographs::after {width: 36px; height: 36px; background-size: 32px}
 
 /* graph options */
 #graphs form {padding: 0}
@@ -1308,7 +1307,7 @@ p.sybil_info, p.family, p.threatpoints, p.hashdist, p.notfound, #sybil_totals {m
 #gatherstats + form {background: var(--bg)}
 
 /* /help */
-#volunteer, #sidebarhelp, #configurationhelp, #reachabilityhelp, #legal, #changelog, #browserconfig, #tunnman, #faq, #reseedhelp, #troubleshoot, #newuserguide, #filterlist, #webhosting, #themeoverride, #glossary {margin-top: 15px margin-bottom: 20px; padding: 10px 15px 5px; border: var(--border); background: rgba(240,240,255,.5); box-shadow: var(--highlight)}
+#volunteer, #sidebarhelp, #configurationhelp, #reachabilityhelp, #legal, #changelog, #browserconfig, #tunnman, #faq, #reseedhelp, #troubleshoot, #newuserguide, #filterlist, #webhosting, #themeoverride, #glossary {margin-top: 15px; margin-bottom: 20px; padding: 10px 15px 5px; border: var(--border); background: rgba(240,240,255,.5); box-shadow: var(--highlight)}
 #configurationhelp {margin-top: 19px}
 #configurationhelp, #browserconfig {margin-bottom: 8px}
 #tunnman {margin-bottom: 6px}
@@ -1713,6 +1712,7 @@ table[id*="connections"] .tablefooter td:first-child {text-align: left}
 #ntcpconnections tr:nth-last-child(n+2) td, #udpconnections tr:nth-last-child(n+2) td, #profilelist td, #profile_defs td, #floodfills td, #tunnelPeerCount td {border-right: 1px solid var(--border_soft)}
 #ntcpconnections tr:nth-last-child(n+2) td::after, #udpconnections tr:nth-last-child(n+2) td::after, #profilelist td::after, #profile_defs td::after, #floodfills td::after {content: ""; position: absolute; top: -1px; right: -1px; height: 1px; width: 1px; display: inline-block; background: var(--border_color)}
 #ntcpconnections .ipv6:empty::before, #udpconnections .ipv6:empty::before, #ntcpconnections td.queue:empty::before {content: ""}
+#udpcon, #ntcpcon {margin-bottom: -1px}
 #udpcon {margin-top: 9px}
 #udpconnections th {padding-top: 3px; vertical-align: top; background: var(--bg)}
 #peerdefs {padding: 5px; line-height: 1.4}
