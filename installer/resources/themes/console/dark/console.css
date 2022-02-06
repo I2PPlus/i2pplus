@@ -94,8 +94,8 @@ text-align: center; will-change: transform}
 #sb_localtunnels tr:last-child td:first-child {background-position: center center}
 #sb_localtunnels .tunnelServer {background-image: var(--server)}
 #sb_localtunnels .ping {background-image: var(--ping)}
-#sb_localtunnels .tunnelReady {background-image: var(--local_up)}
-#sb_localtunnels .tunnelRebuilding {background-image: var(--local_down)}
+#sb_localtunnels td.tunnelReady {background-image: var(--local_up)}
+#sb_localtunnels td.tunnelRebuilding {background-image: var(--local_down)}
 #sb_localtunnels td[colspan="3"] {line-height: 20px; font-size: 0}
 #sb_internals td, #sb_services td, #sb_advanced td, #sb_help td {color: #595}
 #sb_services, #sb_internals, #sb_advanced, #sb_help {margin-top: -5px !important}
