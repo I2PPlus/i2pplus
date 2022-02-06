@@ -8,7 +8,7 @@
 
 /* global */
 @supports (text-justify: auto) {html, body {background-attachment: fixed !important}}
-html {background: var(--vstripe), var(--camo), #000 background-size: 100% 4px, 2048px}
+html {background: var(--vstripe), var(--camo), #000; background-size: 100% 4px, 2048px}
 body {margin: 5px 0 0 0; padding: 0; text-align: center; font: 8.5pt/1.3 var(--bodyfont); background: none}
 main * {scrollbar-color: rgba(16,48,16,.4) rgba(0,0,0,0)}
 .routersummary, .routersummaryouter, h1 {contain: layout}
