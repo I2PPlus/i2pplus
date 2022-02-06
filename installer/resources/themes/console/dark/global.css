@@ -140,12 +140,12 @@ a:link, a:visited {
 
 a:hover, a:focus {
   text-decoration: none;
-  color: var(--hover) !important;
+  color: var(--hover);
   outline: none;
 }
 
 a:active {
-  color: var(--active) !important;
+  color: var(--active);
 }
 
 img {
