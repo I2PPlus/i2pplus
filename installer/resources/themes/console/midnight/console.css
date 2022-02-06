@@ -12327,10 +12327,8 @@ iframe {
   h4.app2 + .appgroup div.app:last-child {
     margin-bottom: 8px;
   }
-  input.check[value$="updates"], button.check[value$="updates"],
-  input.check[value$="updates"]:hover, button.check[value$="updates"]:hover,
-  input.check[value$="updates"]:focus, button.check[value$="updates"]:focus,
-  input.check[value$="updates"]:active, button.check[value$="updates"]:active {
+  input.check[value$="updates"], input.check[value$="updates"]:hover,
+  input.check[value$="updates"]:focus, input.check[value$="updates"]:active {
     padding-left: 26px !important;
     background-size: 14px, 100% !important;
   }
@@ -12718,8 +12716,7 @@ iframe {
   .main input[type=submit]:hover, .main input[type=reset]:hover,
   .main input[type=submit]:focus, .main input[type=reset]:focus,
   .main input[type=submit]:active, .main input[type=reset]:active,
-  input.download[value^="Dump"]:hover, button.download[value^="Dump"]:hover,
-  input.download[value^="Dump"]:focus, button.download[value^="Dump"]:focus {
+  input.download[value^="Dump"]:hover, input.download[value^="Dump"]:focus {
     padding-top: 6px !important;
     padding-bottom: 6px !important;
   }
