@@ -1254,6 +1254,10 @@ thead img.disable, img.disable:hover {
   opacity: 1;
 }
 
+.peerinfo .percentBarOuter, .peerinfo .percentBarInner {
+  height: 12px !important;
+}
+
 .inactive .percentBarOuter {
   background: repeating-linear-gradient(90deg, #f8f2ec 1px, #f8f2ec 5px, #f2e5d9 6px, #f2e5d9 11px);
 }

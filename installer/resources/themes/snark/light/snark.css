@@ -1032,6 +1032,10 @@ tr:hover .percentBarComplete {
   text-align: center;
 }
 
+.peerinfo .percentBarOuter, .peerinfo .percentBarInner {
+  height: 10px !important;
+}
+
 .percentBarOuter.filecheck {
   max-width: none !important;
 }

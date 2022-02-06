@@ -1174,9 +1174,9 @@ tr:not(.peerInfo):hover .percentBarText {
 /* download bars */
 
 .torrentDownloaded {
-  text-align: center !important;
-  width: 1%;
   padding: 2px 5px;
+  width: 1%;
+  text-align: center !important;
 }
 
 .percentBarOuter {
@@ -1185,6 +1185,10 @@ tr:not(.peerInfo):hover .percentBarText {
   box-shadow: var(--btn_shadow_active);
   background: repeating-linear-gradient(90deg,#eef 1px, #eef 5px, #fff 6px, #fff 11px);
   background-size: 400%;
+}
+
+.peerinfo .percentBarOuter, .peerinfo .percentBarInner {
+  height: 10px !important;
 }
 
 .active .percentBarOuter {

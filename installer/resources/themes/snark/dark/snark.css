@@ -1208,6 +1208,10 @@ td.fileStatus {
   opacity: 1;
 }
 
+.peerinfo .percentBarOuter, .peerinfo .percentBarInner {
+  height: 10px;
+}
+
 .peerinfo.inactive .percentBarOuter {
   opacity: .8;
 }

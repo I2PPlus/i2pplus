@@ -1360,8 +1360,8 @@ tr.active:hover .percentBarInner, tr.active:hover .peerinfo .percentBarInner {
     linear-gradient(90deg, #202,#303,#404);
 }
 
-.peerinfo .percentBarText {
-  color: #c19e91;
+.peerinfo .percentBarOuter, .peerinfo .percentBarInner {
+  height: 12px !important;
 }
 
 .peerSeed img {
