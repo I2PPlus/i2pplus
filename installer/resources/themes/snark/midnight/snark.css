@@ -1088,10 +1088,6 @@ tr:hover .percentBarText {
   animation: downloading 5s linear infinite both;
 }
 
-.peerinfo .percentBarOuter {
-  opacity: .8;
-}
-
 .percentBarInner {
   height: 100%;
   border: none;
@@ -1100,6 +1096,14 @@ tr:hover .percentBarText {
   box-shadow: var(--highlight);
   background: linear-gradient(180deg, #33a, #226 50%, #003 50%, #000);
   opacity: .8;
+}
+
+.peerinfo .percentBarOuter {
+  opacity: .8;
+}
+
+.peerinfo .percentBarOuter, .peerinfo .percentBarInner {
+  height: 12px !important;
 }
 
 .torrentDownloaded .percentBarInner {

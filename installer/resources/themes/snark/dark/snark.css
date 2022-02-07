@@ -2,7 +2,6 @@
 /* Author: dr|z3d */
 
 @import url(/themes/console/dark/global.css);
-@import url(sliders.css);
 
 :root {
   --tabIcon: linear-gradient(180deg,#000 50%,#040 50%);
@@ -11,7 +10,6 @@
 }
 
 html {
-  min-height: 100%;
   background: none !important;
 }
 
@@ -1208,6 +1206,10 @@ td.fileStatus {
   background: repeating-linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,0) 7px, rgba(0,48,0,.6) 7px, rgba(0,48,0,.6) 8px, rgba(0,0,0,0) 8px) #010;
   background-size: 400%;
   opacity: 1;
+}
+
+.peerinfo .percentBarOuter, .peerinfo .percentBarInner {
+  height: 10px;
 }
 
 .peerinfo.inactive .percentBarOuter {

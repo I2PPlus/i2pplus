@@ -614,10 +614,6 @@ tr.active.downloading:not(.peerinfo):hover .percentBarInner {
 	opacity: 0;
 }
 
-.peerinfo .percentBarText {
-	display: none;
-}
-
 .peerinfo .percentBarInner {
 	height: 15px !important;
 }
@@ -636,12 +632,11 @@ tr:hover .fileStatus .percentBarText, .txBarText {
 	text-shadow: 0 1px 1px #333;
 }
 
-.snarkTorrentDownload {
+.torrentDownloaded {
 	width: 1% !important;
 }
 
-.rowOdd:not(.peerinfo) .torrentDownloaded .percentBarText,
-.rowEven:not(.peerinfo) .torrentDownloaded .percentBarText {
+.torrentDownloaded .percentBarText {
 	padding: 3px;
 	width: 110px;
 	display: inline-block;
@@ -653,15 +648,12 @@ tr:hover .fileStatus .percentBarText, .txBarText {
 	filter: drop-shadow(0 0 1px #999);
 }
 
-.rowOdd:not(.peerinfo) .torrentDownloaded .percentBarInner,
-.rowEven:not(.peerinfo) .torrentDownloaded .percentBarInner,
-.rowOdd:not(.peerinfo) .torrentDownloaded .percentBarOuter,
-.rowEven:not(.peerinfo) .torrentDownloaded .percentBarOuter {
+.torrentDownloaded .percentBarInner,
+.torrentDownloaded .percentBarOuter {
 	max-width: 84px !important;
 }
 
-.rowOdd:not(.peerinfo) .torrentDownloaded .percentBarText::after,
-.rowEven:not(.peerinfo) .torrentDownloaded .percentBarText::after {
+.torrentDownloaded .percentBarText::after {
 	margin-left: -7px;
 	position: absolute;
 	top: 90%;
@@ -670,6 +662,10 @@ tr:hover .fileStatus .percentBarText, .txBarText {
 	border-style: solid;
 	border-color: #eee transparent transparent transparent;
 	content: "";
+}
+
+.peerinfo .percentBarOuter, .peerinfo .percentBarInner {
+  height: 9px !important;
 }
 
 /* end alternative popup */

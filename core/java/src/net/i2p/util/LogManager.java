@@ -71,7 +71,7 @@ public class LogManager implements Flushable {
     //public final static String DEFAULT_DATEFORMAT = "HH:mm:ss.SSS";
     /** blank means default short date and medium time for the locale - see DateFormat */
     // TODO: Sync time format for router and wrapper logs and dates in router log messages (currently 3 different formats)
-    public final static String DEFAULT_DATEFORMAT = "yyyy/MM/dd HH:mm:ss";
+    public final static String DEFAULT_DATEFORMAT = "yyyy/MM/dd HH:mm:ss.SSS";
     public final static String DEFAULT_FILENAME = "logs/log-@.txt";
 //    public final static String DEFAULT_FILESIZE = "10m";
     public final static String DEFAULT_FILESIZE = "5m";

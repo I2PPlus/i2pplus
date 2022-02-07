@@ -2,7 +2,6 @@
 /* Author: dr|z3d */
 
 @import url(/themes/console/classic/global.css);
-@import url(../light/sliders.css);
 
 :root {
   --active: #f30;
@@ -299,7 +298,7 @@ tr, .navbar, .mainsection, .lowersection {
 }
 
 #closelog img, #closelog img:hover, #expand img, #expand img:hover, #shrink img, #shrink img:hover {
-  margin: -3px -6px 4px 5px !important;
+  margin: -6px -6px 4px 5px !important;
   opacity: 1;
   border: var(--border_main);
   border-top: none;
@@ -367,6 +366,10 @@ tr, .navbar, .mainsection, .lowersection {
 #snarkTorrents {
   margin: 0;
   background: var(--bg);
+}
+
+#snarkTorrents tr {
+  border-bottom: 1px solid var(--border_soft);
 }
 
 #snarkTorrents th {
@@ -1079,11 +1082,15 @@ tr:not(.peerinfo) .torrentUploaded:empty::after {
 }
 
 tr:hover .percentBarText {
-  opacity: 1 !important;
+  opacity: 1;
 }
 
 tr:not(.peerInfo):hover .percentBarText {
   filter: drop-shadow(0 0 1px #777);
+}
+
+.peerinfo .percentBarText, .peerinfo:hover .percentBarText {
+  display: none;
 }
 
 .rowEven {
@@ -1098,22 +1105,12 @@ tr:not(.peerInfo):hover .percentBarText {
   background: var(--bg);
 }
 
-tr:nth-child(odd) + .peerinfo:nth-child(even) {
-  border-bottom: var(--border_soft);
-  background: var(--bg3);
-}
-
-tr:nth-child(even) + .peerinfo:nth-child(odd) {
-  border-bottom: var(--border_soft);
-  background: var(--bg);
+.peerinfo {
+  background: var(--bodybg);
 }
 
 .rowOdd td, .rowEven td {
   border-top: none !important;
-}
-
-.rowOdd tr:nth-child(odd) {
-  background: var(--bg3);
 }
 
 #snarkTorrents tr.active .torrentAction, #snarkTorrents tr.active:hover .torrentAction {
@@ -1177,9 +1174,9 @@ tr:nth-child(even) + .peerinfo:nth-child(odd) {
 /* download bars */
 
 .torrentDownloaded {
-  text-align: center !important;
-  width: 1%;
   padding: 2px 5px;
+  width: 1%;
+  text-align: center !important;
 }
 
 .percentBarOuter {
@@ -1188,6 +1185,10 @@ tr:nth-child(even) + .peerinfo:nth-child(odd) {
   box-shadow: var(--btn_shadow_active);
   background: repeating-linear-gradient(90deg,#eef 1px, #eef 5px, #fff 6px, #fff 11px);
   background-size: 400%;
+}
+
+.peerinfo .percentBarOuter, .peerinfo .percentBarInner {
+  height: 10px !important;
 }
 
 .active .percentBarOuter {
@@ -2682,21 +2683,21 @@ td.commentAuthor .commentAuthorName {
 }
 
 #bwHoverHelp:hover + #bwHelp {
+  padding: 20px !important;
+  width: 100%;
   display: block;
   position: fixed;
   float: left;
   top: 48px;
   left: 0;
   z-index: 9999;
-  background: #313;
-  border-bottom: 5px solid #212;
-  border-top: 5px solid #212;
-  box-shadow: 0 1px 3px #101;
-  padding: 20px !important;
-  width: 100%;
   white-space: nowrap;
   text-align: center;
   font-size: 12pt;
+  border-bottom: 5px solid #212;
+  border-top: 5px solid #212;
+  box-shadow: 0 1px 3px #101;
+  background: #313;
 }
 
 /* end tooltip */
@@ -2717,12 +2718,11 @@ td.commentAuthor .commentAuthorName {
 
 .optionlist {
   margin: 0 !important;
+  padding: 7px 6px 6px;
   columns: 400px 3;
   column-gap: 20px;
-  background: var(--bg3);
-  margin: -5px 0 5px;
-  padding: 7px 6px 6px;
   box-shadow: var(--highlight);
+  background: var(--bg3);
   transition: ease-in-out .5s box-shadow;
   will-change: transform;
 }
@@ -3001,7 +3001,7 @@ td.peerCount, .nopeers td.peerCount {
 
 #torrentDisplay label {
   margin: 0;
-  padding: 5px 8px 4px;
+  padding: 3px 8px 4px;
   display: inline-block;
   min-width: 80px;
   font-weight: 700;

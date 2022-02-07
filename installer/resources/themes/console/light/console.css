@@ -4401,23 +4401,21 @@ input.accept[value^="Unban"]:hover, input.accept[value^="Unban"]:focus, input.ac
   background: var(--unban) no-repeat 8px center / 14px, var(--btn_hover) !important;
 }
 
-input.accept[value^="Create"], button.accept[value^="Create"] {
+input.accept[value^="Create"] {
   padding: 5px 9px 5px 26px;
   background: var(--wizard) no-repeat 8px center / 16px, var(--btn);
 }
 
-input.accept[value^="Create"]:hover, button.accept[value^="Create"]:hover,
-input.accept[value^="Create"]:focus, button.accept[value^="Create"]:focus {
+input.accept[value^="Create"]:hover, input.accept[value^="Create"]:focus {
   background: var(--wizard) no-repeat 8px center / 16px, var(--btn_hover);
 }
 
-input.accept[value^="Filter"], button.accept[value^="Filter"] {
+input.accept[value^="Filter"] {
   padding: 5px 9px 5px 27px;
   background: var(--filter) no-repeat 8px center / 15px, var(--btn) !important;
 }
 
-input.accept[value^="Filter"]:hover, button.accept[value^="Filter"]:hover,
-input.accept[value^="Filter"]:focus, button.accept[value^="Filter"]:focus {
+input.accept[value^="Filter"]:hover, input.accept[value^="Filter"]:focus {
   background: var(--filter) no-repeat 8px center / 15px, var(--btn_hover) !important;
 }
 
@@ -4478,13 +4476,12 @@ input.check:focus, button.check:focus {
   background: var(--yes) no-repeat 8px center, var(--btn_hover);
 }
 
-input.check[value$="updates"], button.check[value$="updates"] {
+input.check[value$="updates"] {
   padding: 5px 9px 5px 24px;
   background: var(--refresh) no-repeat 8px center, var(--btn);
 }
 
-input.check[value$="updates"]:hover, button.check[value$="updates"]:hover,
-input.check[value$="updates"]:focus, button.check[value$="updates"]:focus {
+input.check[value$="updates"]:hover, input.check[value$="updates"]:focus {
   background: var(--refresh_hover) no-repeat 8px center, var(--btn_hover);
 }
 
@@ -4517,37 +4514,32 @@ input.download:focus, button.download:focus {
   background: var(--download_hover) no-repeat 8px center, var(--btn_hover);
 }
 
-input.download[value^="Join"], button.download[value^="Join"] {
+input.download[value^="Join"] {
   padding: 5px 9px 5px 26px;
   background: var(--family) no-repeat 8px center, var(--btn);
 }
 
-input.download[value^="Join"]:hover, button.download[value^="Join"]:hover,
-input.download[value^="Join"]:focus, button.download[value^="Join"]:focus {
+input.download[value^="Join"]:hover, input.download[value^="Join"]:focus {
   background: var(--family) no-repeat 8px center, var(--btn_hover);
 }
 
-input.download[value$="from File"], button.download[value$="from File"],
-input.download[value$="from file"], button.download[value$="from file"],
+input.download[value$="from File"], input.download[value$="from file"],
 #reseedzip .download {
   padding: 5px 9px 5px 26px;
   background: var(--package) no-repeat 8px center, var(--btn);
 }
 
-input.download[value$="from File"]:hover, button.download[value$="from File"]:hover,
-input.download[value$="from file"]:hover, button.download[value$="from file"]:hover,
-input.download[value$="from File"]:focus, button.download[value$="from File"]:focus,
-input.download[value$="from file"]:focus, button.download[value$="from file"]:focus {
+input.download[value$="from File"]:hover, input.download[value$="from file"]:hover,
+input.download[value$="from File"]:focus, input.download[value$="from file"]:focus {
   background: var(--package) no-repeat 8px center, var(--btn_hover);
 }
 
-input.download[value^="Dump"], button.download[value^="Dump"] {
+input.download[value^="Dump"] {
   padding: 5px 9px 5px 24px;
   background: var(--bug) no-repeat 8px center / 14px, var(--btn);
 }
 
-input.download[value^="Dump"]:hover, button.download[value^="Dump"]:hover,
-input.download[value^="Dump"]:focus, button.download[value^="Dump"]:focus {
+input.download[value^="Dump"]:hover, input.download[value^="Dump"]:focus {
   background: var(--bug) no-repeat 8px center / 14px, var(--btn_hover);
 }
 
@@ -4556,18 +4548,18 @@ input.go, button.go, input[value="GO"], #embedurl input[type=submit], button#run
   background: var(--go) no-repeat 8px center / 14px, var(--btn);
 }
 
-input.go:hover, button.go:hover, input[value="GO"]:hover, input.go:focus, button.go:focus, input[value="GO"]:focus,
-#embedurl input[type=submit]:hover, #embedurl input[type=submit]:focus {
+input.go:hover, button.go:hover, input[value="GO"]:hover, input.go:focus,
+button.go:focus, input[value="GO"]:focus, #embedurl input[type=submit]:hover,
+#embedurl input[type=submit]:focus {
   background: var(--go) no-repeat 8px center / 14px, var(--btn_hover);
 }
 
-input.go[value^="Create"], button.go[value^="Create"], #reseedcreatefile .go {
+input.go[value^="Create"], #reseedcreatefile .go {
   padding: 5px 9px 5px 26px;
   background: var(--wizard) no-repeat 8px center / 15px, var(--btn);
 }
 
-input.go[value^="Create"]:hover, button.go[value^="Create"]:hover,
-input.go[value^="Create"]:focus, button.go[value^="Create"]:focus {
+input.go[value^="Create"]:hover, input.go[value^="Create"]:focus {
   background: var(--wizard) no-repeat 8px center / 15px, var(--btn_hover);
 }
 
@@ -4576,8 +4568,7 @@ input.back {
   background: var(--back) no-repeat 8px center / 14px, var(--btn);
 }
 
-input.back:hover,
-input.back:focus {
+input.back:hover, input.back:focus {
   background: var(--back) no-repeat 8px center / 14px, var(--btn_hover);
 }
 
@@ -4591,13 +4582,12 @@ input.reload:focus, button.reload:focus {
   background: var(--reset_hover) no-repeat 8px center, var(--btn_hover);
 }
 
-input.reload[value$="restart"], button.reload[value$="restart"] {
+input.reload[value$="restart"] {
   padding: 5px 9px 5px 24px;
   background: var(--restart) no-repeat 8px center / 12px, var(--btn);
 }
 
-input.reload[value$="restart"]:hover, button.reload[value$="restart"]:hover,
-input.reload[value$="restart"]:focus, button.reload[value$="restart"]:focus {
+input.reload[value$="restart"]:hover, input.reload[value$="restart"]:focus {
   background: var(--restart_hover) no-repeat 8px center, var(--btn_hover);
 }
 
@@ -4605,13 +4595,12 @@ input.reload[value$="restart"]:focus, button.reload[value$="restart"]:focus {
   background-size: 12px, 100% !important;
 }
 
-input.reload[value^="Update"], button.reload[value^="Update"] {
+input.reload[value^="Update"] {
   padding: 5px 9px 5px 24px;
   background: var(--refresh) no-repeat 8px center, var(--btn);
 }
 
-input.reload[value^="Update"]:hover, button.reload[value^="Update"]:hover,
-input.reload[value^="Update"]:focus, button.reload[value^="Update"]:focus {
+input.reload[value^="Update"]:hover, input.reload[value^="Update"]:focus {
   background: var(--refresh_hover) no-repeat 8px center, var(--btn_hover);
 }
 
