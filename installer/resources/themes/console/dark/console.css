@@ -7,7 +7,7 @@
 @import url(../images/itooplus.css);
 
 /* global */
-@supports (text-justify: auto) {html, body {background-attachment: fixed !important}}
+/*@supports (text-justify: auto) {html, body {background-attachment: fixed !important}}*/
 html {background: var(--vstripe), var(--camo), #000; background-size: 100% 4px, 2048px}
 body {margin: 5px 0 0 0; padding: 0; text-align: center; font: 8.5pt/1.3 var(--bodyfont); background: none}
 main * {scrollbar-color: rgba(16,48,16,.4) rgba(0,0,0,0)}
@@ -494,12 +494,6 @@ input[type=file]::file-selector-button {font-size: 8.5pt}
 .joblog li:last-child {padding-bottom: 10px}
 .joblog ul li li li {margin-bottom: 10px}
 .joblog ul li li:last-child {margin-bottom: -30px}
-#finishedjobs + ol li, #scheduledjobs + ol li, #activejobs + ol li, #readyjobs + ol li {list-style: none}
-#activejobs + ol li::before, #scheduledjobs + ol li::before, #readyjobs + ol li::before, #finishedjobs + ol li::before, #schedjobs li::before {margin: 0 6px 0 2px; width: 16px; height: 16px; display: inline-block; vertical-align: text-top; background: var(--clock) var(--center) / 16px; content: ""}
-#activejobs + ol li::before {background: var(--start) var(--center)}
-#finishedjobs + ol li::before {background: var(--yes) var(--center) / 12px}
-#readyjobs + ol li::before {color: #dd3}
-#scheduledjobs + ol li::before, #scheduledjobs + ol li::before {color: #773; opacity: .8}
 .joblog form:first-child {margin-top: 10px}
 .joblog table {margin-top: 15px; margin-left: 0; margin-bottom: 15px}
 .joblog table td:first-child {font-weight: 700}
@@ -508,11 +502,19 @@ input[type=file]::file-selector-button {font-size: 8.5pt}
 
 /* jobs */
 #jobs h2 {margin: -16px 0 -15px; display: inline-block; border-radius: 0}
+#jobs #jobrunners {display: none}
+#jobs #finishedjobs {margin-top: -5px}
 #jobs h3 + ol + h3 {margin-top: 10px}
 #jobs .jobqueue {margin-bottom: 5px; margin-top: -11px; width: calc(100% - 14px); display: block; border: var(--border); background: #000800}
 #jobs .jobqueue li:last-child {margin-bottom: 5px}
 h3[id*="jobs"] {clear: both; margin-top: 25px}
 #schedjobs {width: 100%; margin: -6px 0 0}
+#finishedjobs + ol li, #scheduledjobs + ol li, #activejobs + ol li, #readyjobs + ol li {list-style: none}
+#activejobs + ol li::before, #scheduledjobs + ol li::before, #readyjobs + ol li::before, #finishedjobs + ol li::before, #schedjobs li::before {margin: 0 6px 0 2px; width: 16px; height: 16px; display: inline-block; vertical-align: text-top; background: var(--clock) var(--center) / 16px; content: ""}
+#activejobs + ol li::before {background: var(--start) var(--center)}
+#finishedjobs + ol li::before {background: var(--yes) var(--center) / 12px}
+#readyjobs + ol li::before {color: #dd3}
+#scheduledjobs + ol li::before, #scheduledjobs + ol li::before {color: #773; opacity: .8}
 #schedjobs ul {columns: 250px auto; margin: 0 8px 0 0; column-gap: 0}
 #schedjobs li:first-child {margin-top: 0; padding-top: 0}
 #schedjobs li {width: calc(100% - 12px); margin: 0 4px}
@@ -1240,18 +1242,18 @@ th code {user-select: all}
 .sybil_container, .sybilinfo_container, .threatpoints + ul {padding: 4px 5px; columns: 300px 5; column-gap: 0}
 .sybil_routerinfo b.netdb_transport {margin-left: -13px; margin-right: 0}
 .sybil_routerinfo td[colspan="3"] {white-space: normal}
-.sybil_routerinfo .viewprofile img, .sybil_routerinfo .viewfullentry img, .sybil_routerinfo .familysearch img, .sybil_routerinfo .configpeer img {margin-bottom: 1px !important; margin-right: 6px !important}
-.sybil_routerinfo td:first-child, .netdbentry td:first-child {padding-right: 0; text-align: right !important}
-.sybil_routerinfo th img[src^="/flags"] {margin-right: 5px; width: 28px; height: 22px}
+.sybil_routerinfo .viewprofile img, .sybil_routerinfo .viewfullentry img, .sybil_routerinfo .familysearch img, .sybil_routerinfo .configpeer img {margin-bottom: 1px; margin-right: 6px}
+.sybil_routerinfo td:first-child, .netdbentry td:first-child {padding-right: 0; text-align: right}
+.sybil_routerinfo th img[src^="/flags"] {margin-right: 5px; width: 30px; height: 22px}
 .sybil_routerinfo .identicon {vertical-align: middle}
-.sybil_routerinfo table td:last-child {border-right: none !important}
+.sybil_routerinfo table td:last-child {border-right: none}
 .sybilinfo_params {padding: 0; border-bottom: var(--border)}
 .sybilinfo_container {padding: 4px 5px}
 .sybilinfo_container b {color: #bb3}
 .sybil_routerinfo {margin-bottom: 10px}
 .sybil_routerinfo:first-of-type {margin-top: -11px}
 .sybil_routerinfo tr:last-child {border-top: none}
-.sybil_routerinfo th {padding: 1px 1px 1px 6px !important}
+.sybil_routerinfo th {padding: 1px 1px 1px 6px}
 .sybil_routerinfo th b[style="float: right;"] {margin-right: 6px; font-size: 85%; font-weight: 400; font-style: italic}
 .sybil_routerinfo th:first-child {white-space: nowrap; text-align: left}
 .sybil_routerinfo th:last-child {width: 1%; white-space: nowrap}
@@ -1259,10 +1261,10 @@ th code {user-select: all}
 .sybil_routerinfo p {margin: 0 0 0 3px; padding: 0; line-height: 1.4; -webkit-column-break-inside: avoid; break-inside: avoid; page-break-inside: avoid}
 .sybil_routerinfo hr {margin: -2px 0}
 .sybil_routerinfo code {margin-left: 5px; font-size: 9pt}
-.sybil_routerinfo .familysearch img {margin-right: 1px !important}
+.sybil_routerinfo .familysearch img {margin-right: 1px}
 .sybil_routerinfo .netdbheader {margin-right: 0; padding: 3px; text-align: right}
-.sybil_routerinfo .netdb_header img[src^="/flags.jsp?c="] {margin: 0 5px 0 3px !important}
-.sybil_routerinfo .netdb_transport {margin: 0 3px !important; display: inline-block}
+.sybil_routerinfo .netdb_header img[src^="/flags.jsp?c="] {margin: 0 5px 0 3px}
+.sybil_routerinfo .netdb_transport {margin: 0 3px; display: inline-block}
 .sybil_routerinfo + .threatpoints + ul + a[name] + table {margin-top: -11px}
 .sybilinfo_familyname {display: inline-block; vertical-align: top; max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
 .sybil_addresses table, .sybil_addresses td {text-align: left; border: none}
@@ -1273,7 +1275,7 @@ th code {user-select: all}
 .threatpoints + ul {margin: -4px 0 10px; padding: 5px 5px 0; border: var(--border); background: #000}
 .threatpoints + ul li:first-child {margin-top: 0}
 .threatpoints + ul li:last-child {margin-bottom: 0}
-.threatpoints + ul li {list-style: none; margin-left: 3px; line-height: 1.2; -webkit-column-break-inside: avoid !important; break-inside: avoid !important; page-break-inside: avoid !important}
+.threatpoints + ul li {list-style: none; margin-left: 3px; line-height: 1.2; -webkit-column-break-inside: avoid; break-inside: avoid; page-break-inside: avoid}
 .threatpoints + ul li a {max-width: 200px; display: inline-block; vertical-align: text-bottom; white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
 .threatpoints.hot {background: var(--eye_threat) no-repeat 8px center / 20px, var(--hot) no-repeat right 2px center / 24px, linear-gradient(90deg, #000, #000800 80%, #001000)}
 .sybilscan table, .sybilscan tr {border: none; background: none}
@@ -1281,15 +1283,15 @@ th code {user-select: all}
 .sybil_info, p.family, .threatpoints, p.hashdist, #sybil_totals, p.notfound {margin: 3px 0; padding: 5px 5px 5px 33px; font-weight: 700; color: #cc0; border: var(--border); box-shadow: inset 0 0 0 1px #300; background: var(--eye) no-repeat 8px center / 16px, linear-gradient(90deg, #000, #000800 80%, #001000)}
 .sybil_info, #sybil_totals {margin-bottom: 10px; padding-left: 35px; background-image: var(--eye_threat); background-size: 20px, 100%}
 .sybilinfo {line-height: 1.4}
-.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sybil_routerinfo {margin-top: 10px !important}
-#sybilSearch td:nth-child(2) {text-align: left !important}
+.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sybil_routerinfo {margin-top: 10px}
+#sybilSearch td:nth-child(2) {text-align: left}
 #sybilSearch input[type=text] {width: calc(50% - 66px)}
-#sybilTask {margin: 31px 0 -4px !important}
-#sybilTask th {padding-left: 8px; text-transform: uppercase; letter-spacing: .1em; font-size: 11pt !important; text-align: left}
+#sybilTask {margin: 31px 0 -4px}
+#sybilTask th {padding-left: 8px; text-transform: uppercase; letter-spacing: .1em; font-size: 11pt; text-align: left}
 #sybilTask select, #sybilTask input {margin: 6px}
 #sybilTask select, #sybilTask input[type=text] {width: 140px}
-#sybilTask td {padding: 1px 2px 1px 0 !important; padding: 0 !important; background: #000}
-#sybilTask .optionlist, #sybilTask .optionlist:hover {padding: 1px 3px 1px 1px; text-align: left; border: none !important; box-shadow: none !important; background: #000 !important; columns: 500px 3; column-gap: 2px}
+#sybilTask td {padding: 1px 2px 1px 0; padding: 0; background: #000}
+#sybilTask .optionlist, #sybilTask .optionlist:hover {padding: 1px 3px 1px 1px; text-align: left; border: none; box-shadow: none; background: #000; columns: 500px 3; column-gap: 2px}
 #sybilTask .optionlist b {padding-right: 5px; display: inline-block; min-width: 220px; vertical-align: middle; text-align: right}
 #sybilTask .nowrap {padding: 5px 0; margin: 1px; height: 48px; width: 100%; display: inline-block; vertical-align: middle; background: #010}
 #sybilTask .nowrap::before {height: 48px; display: inline-block; vertical-align: middle; content: ""}
@@ -1298,13 +1300,13 @@ th code {user-select: all}
 #sybil_totals {font-weight: 400}
 #sybilnav, #sybils_summary {margin-bottom: 10px; padding: 10px; line-height: 1.6; border: var(--border); background: #000}
 #sybils_summary {padding: 18px 15px 18px 58px; line-height: 2; background: #000 var(--floodfill) no-repeat 18px center / 28px}
-#sybilnav {margin: -12px -11px 10px; padding: 6px 5px; overflow: hidden; border: var(--border) !important; box-shadow: var(--highlight), inset 0 0 2px 1px #030; columns: 5 200px; column-gap: 4px}
+#sybilnav {margin: -12px -11px 10px; padding: 6px 5px; overflow: hidden; border: var(--border); box-shadow: var(--highlight), inset 0 0 2px 1px #030; columns: 5 200px; column-gap: 4px}
 #sybilnav li {-webkit-column-break-inside: avoid; break-inside: avoid; page-break-before: right}
-#sybilnav ul {margin: 0 !important}
+#sybilnav ul {margin: 0}
 #sybilnav ul li {margin-left: 0; margin-bottom: 4px; padding-left: 0; min-width: 150px; white-space: nowrap; list-style: none; border: 1px solid #151; box-shadow: var(--highlight), inset 0 0 2px 1px #030; background: linear-gradient(90deg, #000, #010 80%)}
 #sybilnav ul li:hover {border: 1px solid var(--hover); box-shadow: var(--highlight), inset 0 0 2px 1px var(--hover); background: #000}
 #sybilnav ul li:active {border: 1px solid var(--hover); box-shadow: var(--highlight), inset 3px 3px 3px 1px #5f2400; background: var(--hover)}
-#sybilnav ul li:active a {color: var(--ink) !important}
+#sybilnav ul li:active a {color: var(--ink)}
 #sybilnav a {width: 100%; display: inline-block; text-shadow: var(--textshadow)}
 #sybilnav ul li:hover a {color: var(--hover)}
 #sybilnav ul li a {padding-right: 30%; box-sizing: border-box}
@@ -2020,17 +2022,17 @@ input[type=text]:focus::placeholder, #homesearch input.search:focus::placeholder
 /* routerinfo */
 #routerinfo p {padding: 0; margin: 10px -5px 5px; border: none; filter: none}
 #routerinfo table {margin: 0}
-#routerinfo a {margin: -3px 5px -3px 0 !important; padding: 3px 10px !important; display: inline-block; white-space: nowrap; font-size: smaller !important}
+#routerinfo a {margin: -3px 5px -3px 0; padding: 3px 10px; display: inline-block; white-space: nowrap; font-size: smaller}
 #routerinfo td {padding: 8px 4px; width: 25%; border-bottom: var(--border)}
 #routerinfo td:first-child, #routerinfo td:nth-child(3) {text-align: right; white-space: nowrap}
 #routerinfo td:nth-child(2):not([colspan]) {white-space: nowrap; border-right: var(--border)}
 #routerinformation {padding-bottom: 12px}
-#routerinformation h3 {margin-bottom: -2px !important}
-#routerinformation td {padding: 8px !important}
-#routerinformation td:first-child {width: 1%; min-width: 80px !important; max-width: 80px !important; text-align: left !important}
+#routerinformation h3 {margin-bottom: -2px}
+#routerinformation td {padding: 8px}
+#routerinformation td:first-child {width: 1%; min-width: 80px; max-width: 80px; text-align: left}
 #routerinformation tr:nth-child(n+2) a:not(#revision) {display: none}
 #routerinformation table:hover tr:nth-child(n+2) a:not(#revision) {display: inline}
-#routerinformation #upnpstatus {margin: 12px 0 0; padding-left: 46px !important; background-size: 24px !important}
+#routerinformation #upnpstatus {margin: 12px 0 0; padding-left: 46px; background-size: 24px}
 
 .reachability {margin-top: 2px; float: right; font-size: 80% !important}
 .version a:hover, .version a:focus, a:hover .version, a:focus .version, a:hover .tier, a:focus .tier {color: var(--hover) !important}
@@ -2184,12 +2186,11 @@ h1[class], h1 {margin: 0 5px 0 226px; position: relative; z-index: 999; white-sp
 #tunnelPeerCount .ipaddress {min-width: 140px; display: inline-block; text-align: right}
 #tunnelPeerCount a.script[href^="https://gwhois.org"]::after {margin: -1px 0 1px 3px; width: 12px; height: 12px; display: inline-block; vertical-align: middle; background: var(--search) no-repeat center center / 11px; opacity: .7; content: ""}
 #tunnels #peercount {background: url(/themes/console/images/svg/peers.svg) no-repeat 9px center / 18px, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important; background-size: 18px, 100%, 4px 100%, 100% !important}
-#tunnels #exploratory a, #tunnels h3.server a, #tunnels h3.client a {margin: -8px 0 -8px 0 !important; padding: 7px 4px 14px 10px !important}
-#participating a::after, #peercount a::after {margin: -10px 0 -15px -12px !important; padding: 9px 2px 9px 0 !important}
+#tunnels #exploratory a, #tunnels h3.server a, #tunnels h3.client a {margin: -8px 0 -8px 0; padding: 7px 4px 14px 10px}
+#participating a::after, #peercount a::after {margin: -10px 0 -15px -12px; padding: 9px 2px 9px 0}
 #banneduntilrestart td {border-right: var(--border) !important}
 h2, h2.welcome, h3, h3.welcome, #themeoptions {border-color: #242}
 .news hr {color: #242; background: repeating-linear-gradient(90deg, #242 2px, #000 4px); background-size: 4px 100%}
-h2#jobrunners {padding: 5px 10px; font-size: 10pt; border-color: #242 !important}
 #news.news hr {opacity: .7}
 #configinfo th {border: none !important}
 #configinfo td {border-top: 1px solid #010}
