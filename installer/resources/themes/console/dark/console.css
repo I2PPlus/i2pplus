@@ -137,18 +137,27 @@ p:empty + .sb_notice {margin-top: 9px}
 .routersummary table, #sidebar form {background: repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.1) 2px, rgba(0,16,0,.1) 3px) !important}
 #sb_peers, #sb_peersadvanced, #sb_tunnels, #sb_queue, #sb_bandwidth, #sb_general, #sb_advancedgeneral, #sb_localtunnels, #sb_advanced, #sb_internals, #sb_services {margin-top: -6px !important; margin-bottom: -8px !important; padding: 0 1px 2px; border-top: 1px solid rgba(16,64,16,.3); border-bottom: 1px solid rgba(16,64,16,.3)}
 #sb_peers tr:hover td, #sb_tunnels tr:hover td, #sb_queue tr:hover td, #sb_bandwidth tr:hover td, #sb_general tr:hover td, #sb_advancedgeneral tr:hover td {color: #ff5 !important; background: rgba(0,48,0,.2)}
+#homepage #minigraphcontainer {margin-top: -42px; height: 38px}
+.routersummary table {position: relative}
+.routersummary table:not(#sb_localtunnels):not(#sb_services):not(#sb_advanced)::before {width: 0; height: 1px; position: absolute; top: -4px; left: -1px; display: block; background: #730; content: ""; animation: ease-in bar .15s reverse; will-change: transform}
 
 /* sidebar news */
 #sb_newsheadings {margin-left: 0; margin-bottom: -7px !important; width: 192px; text-align: right}
 #sb_newsheadings table {margin-bottom: 3px !important}
+#sidebar #sb_newsheadings table::before {content: none}
 #sb_newsheadings a {padding: 0 3px 0 0; width: 100%; display: inline-block}
 #sb_newsheadings td {padding: 4px 5px 4px 23px; text-align: left; border-bottom: var(--border_soft) !important; background: var(--newsbullet) no-repeat 4px center / 14px !important}
 #sb_newsheadings tr:last-child td {border-bottom: none !important}
 
 /* mini sidebar graph */
+#sb_graphcontainer {margin: -5px -7px -7px !important; padding: 0 1px 1px; height: 41px; position: relative; z-index: 10; overflow: hidden; box-shadow: inset 0 0 0 1px #131, inset 0 0 0 2px #000, inset 0 0 3px 1px #040; background: repeating-linear-gradient(90deg, rgba(0,0,0,0) 14px, rgba(64,160,64,.3) 15px, rgba(0,0,0,0) 15px, rgba(0,0,0,0) 30px), repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(48,152,48,.2), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 14px) !important}
 #sb_graphcontainer:hover a {cursor: zoom-in}
-#sb_graphstats {padding: 2px 8px; display: inline-block; font-size: 110%; font-weight: 700; color: #050; text-shadow: none; border: var(--border_soft); border-top: none; border-radius: 0 0 2px 2px; background: #000; opacity: 0; transition: ease opacity .3s; pointer-events: none}
+#sb_graphstats {padding: 2px 8px; display: inline-block; position: relative; z-index: 1000; font-size: 110%; font-weight: 700; color: #050; text-shadow: none; border: var(--border_soft); border-top: none; border-radius: 0 0 2px 2px; background: #000; opacity: 0; transition: ease opacity .3s; pointer-events: none}
 #sb_graphcontainer:hover #sb_graphstats {opacity: 1; transition: ease opacity .2s}
+#minigraphcontainer {margin-top: -43px; margin-left: 1px; width: 204px; height: 39px; background-repeat: no-repeat; background-size: 204px 40px}
+#minigraph {margin-top: -17px; height: 38px !important; width: 204px; opacity: .9}
+#xhr > hr + #sb_graphcontainer > span + a > #minigraph {height: 39px}
+#homepage #minigraph {margin-top: -18px}
 
 /* status bar */
 .percentBarOuter {margin: -3px 0 -5px -7px; width: 205px; position: relative; border: var(--border_soft); box-shadow: var(--highlight), inset 0 3px 3px rgba(0,0,0,.8); background: linear-gradient(90deg, rgba(0,128,0,.05) 45%, rgba(255,96,0,.1), rgba(255,0,0,.1)), repeating-linear-gradient(90deg, #000 1px, #000 2px, #010 2px, #010 4px); opacity: 1}
@@ -642,12 +651,12 @@ tr.addnew, tr.addnew:hover {border-top: var(--border); background: #000800}
 .themelabel {margin-left: -4px; margin-right: -4px; padding: 3px 2px 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.5; color: #bb7; border-top: var(--border) !important; background: var(--glow_bottom), linear-gradient(180deg,#001900,#001000 50%,#000)}
 .themechoice:hover .themelabel {border-top: 1px solid var(--hover) !important; background: var(--glow_bottom_hover) #000}
 .themechoice:active .themelabel {color: var(--ink) !important; box-shadow: var(--highlight) !important; background: var(--hover) !important}
+.themechoice .optbox {display: none}
 .themechoice .optbox:checked + img {transform: scale(0.8)}
 .themechoice .optbox:hover + img ~ .themelabel {color: var(--hover)}
 .themechoice .optbox:checked + img ~ .themelabel {font-weight: 700; color: var(--ink); box-shadow: var(--highlight), inset 0 0 2px 1px #050 !important; background: #030 !important}
 .themechoice .optbox:focus + img ~ .themelabel {color: var(--hover) !important; box-shadow: inset 0 0 10px 3px #000 !important}
 .themechoice .optbox:active:not(:checked) + img ~ .themelabel {color: var(--ink) !important; box-shadow: var(--highlight), inset 3px 3px 3px 1px #5f2400 !important}
-.themechoice .optbox {margin-left: -38px; min-width: 124px !important; min-height: 80px !important; position: absolute !important; z-index: 999; opacity: 0; /* hide the radio icon so we can use thumbnail img instead */}
 .themechoice img {padding: 5px 0}
 .themechoice:active img {transform: scale(0.8)}
 .themechoice img, .langselect img {animation: fade .15s ease .3s reverse both}
@@ -666,6 +675,9 @@ tr.addnew, tr.addnew:hover {border-top: var(--border); background: #000800}
 .langselect input:focus + img + div.ui_lang, .langselect input[name="lang"]:checked:focus + img + div.ui_lang {color: var(--hover) !important; box-shadow: inset 0 0 10px 3px #000}
 .langselect:active .optbox:not(:checked) + img {transform: scale(0.8)}
 #config_ui .langselect .optbox {margin: -7px 0 -34px -2px; min-width: 124px !important; min-height: 66px; position: relative !important; z-index: 999; vertical-align: text-bottom; text-align: center; opacity: 0}
+#chooselang img, #configbandwidth img {margin: -1px 10px 0; display: inline-block}
+#chooselang:hover img, #configbandwidth:hover img {transform: scale(1.3); filter: none !important}
+#chooselang::after, #configbandwidth::after {content: none}
 #themeoptions {margin: 0 -7px 5px; padding: 8px 10px 8px 5px; position: relative; top: 8px; clear: both; border-top: var(--border); border-bottom: var(--border); background: #000800}
 #themeoptions br {display: none}
 #themeoptions label {margin: 4px 10px 4px 0 !important; display: inline-block; white-space: nowrap}
@@ -687,7 +699,6 @@ div.ui_lang {margin: 10px -4px 0 !important; padding: 3px 2px 4px; text-align: c
 #langsettings hr {display: none}
 #langui {margin: 7px -8px -15px; padding: 5px; border: var(--border); background: #000}
 #helptranslate {padding: 6px 10px 10px; clear: both; text-align: right}
-
 
 /* console password */
 #config_ui #passwordheading {margin-top: 13px; margin-bottom: -2px}
@@ -783,8 +794,7 @@ form[action="/createreseed"] > h3 {margin-bottom: -13px; padding: 10px; word-spa
 #netconfig input[type=text] + br + .optbox, #netconfig .optbox[name="ntcpAutoPort"] {margin-top: 3px}
 #netconfig input[name*="ost"] {width: 250px}
 
-/* /events */
-
+/* events */
 div.eventspanel {margin-top: -15px}
 form[action="events"] {margin-top: -11px; margin-bottom: 20px; padding: 10px 20px 10px; border: var(--border)}
 form[action="events"] > br {display: none}
@@ -1388,25 +1398,23 @@ h4.app, h4.app2 {margin: 11px -6px -9px; padding: 9px 8px 7px 35px; line-height:
 h4.app {background: url(images/favicon.svg) no-repeat 8px center, var(--h1) !important; background-size: 18px, 4px 100%, 100%, 175px !important; background-blend-mode: var(--h3_blend) !important}
 h4.app2 {clear: left; background: var(--globe) no-repeat 8px center, var(--h1) !important; background-size: 18px, 4px 100%, 100%, 175px !important; background-blend-mode: var(--h3_blend) !important}
 #homepage .main h4 {contain: paint}
-h4.app a, h4.app2 a {word-spacing: 0; letter-spacing: 0}
 #homepage .main h4 a {margin: -9px 0 -10px; padding: 14px 4px 12px; border-left: var(--border)}
-#homepage h4.app a {margin: -13px 0 -12px}
-#homepage h4.app2 a {margin: -14px 0 -10px}
+.ag2 {margin: 0 0 10px; padding: 0 3px}
 h4.app::first-letter, h4.app2::first-letter {font-size: 115%; display: inline-block; margin-right: .05em}
-h4.app img, h4.app2 img {opacity: .5}
-#chooselang img, #configbandwidth img {margin: -1px 10px 0; display: inline-block}
-#chooselang:hover img, #configbandwidth:hover img {transform: scale(1.3); filter: none !important}
-#chooselang::after, #configbandwidth::after {content: none}
+h4.app a, h4.app2 a {word-spacing: 0; letter-spacing: 0}
 h4.app:hover img, h4.app2:hover img {opacity: 1}
+h4.app img, h4.app2 img {opacity: .5}
 h4.app2 img, #sitemap h3 a img {margin-top: 1px}
 h4.app img:hover, h4.app2 img:hover {filter: drop-shadow(0 0 1px var(--hover)) !important}
 h4.app img:active, h4.app2 img:active {transform: rotateZ(90deg)}
-.ag2 {margin: 0 0 10px; padding: 0 3px}
+#homepage h4.app a {margin: -13px 0 -12px}
+#homepage h4.app2 a {margin: -14px 0 -10px}
 div.app {margin: 2px 4px 6px; padding: 2px 0 0 !important; min-width: 70px; float: left; text-align: center !important; background: #000; opacity: .9}
 div.app, .extlink::after, input, button {will-change: transform}
 div.app.js:hover::before {padding: 1px 4px 3px; display: inline-block; position: absolute; top: -1px; left: -1px; border: 1px solid var(--hover); box-shadow: var(--highlight), inset 0 0 1px 1px #730 !important; content: "*js"}
-div.app, .applabel, .statusnotes, .main, div.news, .routersummary, .search tr, .logo, .themechoice, .themelabel, .langselect, .ui_lang {box-shadow: var(--highlight), inset 0 0 1px 1px #050 !important}
-.search tr {box-shadow: var(--highlight), inset -1px -1px 0 1px #000, inset 0 0 2px 1px #040, inset -1px -1px 2px 1px #040, inset 0 0 0 3px #000, inset -1px -1px 0 3px #000 !important}
+div.app, .applabel, .statusnotes, .main, div.news, .routersummary, .search tr, .logo, .themechoice, .themelabel, .langselect, .ui_lang {box-shadow: var(--highlight), inset 0 0 1px 1px #050}
+div.app a:link, div.app a:hover, div.app a:active {text-decoration: none; outline: none}
+div.app {position: relative}
 div.app:hover, div.app:hover .applabel, div.app:hover .extlink::after, .sitemapLink.extlink:hover::after, .themechoice:hover, .themechoice:hover .themelabel, .langselect:hover, .langselect:hover .ui_lang {box-shadow: var(--highlight), inset 0 0 1px 1px #730 !important}
 .app a:link, .app a:visited {padding: 2px; display: inline-block; color: var(--a)}
 div.app:hover, .sitemapLink:hover, .themechoice:hover, .langselect:hover {background: radial-gradient(circle at center -90px, rgba(255,96,0,.3), #000 70%), #000}
@@ -1414,14 +1422,16 @@ div.app:hover {color: var(--hover) !important; border: 1px solid var(--hover); o
 .langselect:hover {background: radial-gradient(circle at center -60px, rgba(255,96,0,.3), #000 70%)}
 div.app:active .applabel, .sitemapLink:active .sitemapLabel {color: var(--ink) !important; box-shadow: var(--highlight), inset 3px 3px 3px 1px #5f2400 !important; background: var(--hover) !important}
 div.app:active .applabel a {color: var(--ink) !important}
-div.app a:link, div.app a:hover, div.app a:active {text-decoration: none; outline: none}
 div.app:hover a:link, div.app:hover a:visited {color: var(--hover)}
 .ag2 div.app:last-of-type {margin-bottom: 7px}
 div.app:active img {transform: scale(0.9)}
 div.appgroup {margin: 0 0 10px; padding: 16px 0; width: auto}
-/* home search */
+div.app::after, .sitemapLink::after {width: 22px; height: 19px; position: absolute; top: -1px; right: -1px; display: inline-block; border: 1px solid #000; background: transparent; opacity: 0; content: ""; transform: scale(0)}
+div.app:hover::after, .sitemapLink:hover::after {border: 1px solid #f50; background: #000 var(--newtab_hover) no-repeat 4.5px center / 13px 11px; opacity: 1; transform: scale(1); pointer-events: none}
 
+/* home search */
 #searchbar {margin: -24px 10px -16px; padding: 8px 0 2px; width: auto; white-space: nowrap; text-align: center}
+#searchbar tr {box-shadow: var(--highlight), inset -1px -1px 0 1px #000, inset 0 0 2px 1px #040, inset -1px -1px 2px 1px #040, inset 0 0 0 3px #000, inset -1px -1px 0 3px #000}
 #searchbar span {margin: 5px 5px 0; padding: 1px; display: inline-block; position: relative; overflow: hidden; border: 1px solid #151; border-radius: 2px; background: none}
 #searchbar span:focus-within {box-shadow: inset -38px 0 1px 2px rgba(0,0,0,.6), inset 0 0 2px 2px rgba(0,0,0,.7), 0 0 0 1px #000, 0 0 0 2px rgba(255,96,0,.8), 0 0 0 3px rgba(144,48,0,.7); background: var(--input_txt); transition: linear box-shadow .15s}
 #searchbar table {margin: 15px auto 13px; width: auto; border-radius: 0 0 3px 3px; border-collapse: separate; border: 1px solid #151; background: #000; box-shadow: var(--highlight), inset 0 0 0 2px rgba(0,64,0,.5); animation: fade .15s .5s reverse both, slide .1s ease 1s both}
@@ -1937,10 +1947,6 @@ th.options, #externali2cp th {padding: 7px 10px !important}
 #viewprofile span {margin: -26px -1px -1px 0; padding: 5px; float: right; border: var(--border); background: #000}
 #profile_defs {margin-bottom: 9px}
 
-div.app {position: relative}
-div.app::after, .sitemapLink::after {width: 22px; height: 19px; position: absolute; top: -1px; right: -1px; display: inline-block; border: 1px solid #000; background: transparent; opacity: 0; content: ""; transform: scale(0)}
-div.app:hover::after, .sitemapLink:hover::after {border: 1px solid #f50; background: #000 var(--newtab_hover) no-repeat 4.5px center / 13px 11px; opacity: 1; transform: scale(1); pointer-events: none}
-
 /* events */
 #eventlog {border-bottom: 2px solid #242 !important; background: #010} #events h3 {box-shadow: var(--highlight)}
 #events tr {line-height: 1.4}
@@ -2365,16 +2371,6 @@ h3 + table {position: relative; z-index: 0}
 #logs .tabletitle, #jobs h3, #tunnels h3[id] {position: relative; overflow: hidden}
 #logs #enviro ~ .tabletitle::after, #jobs h3::after, #tunnels h3[id]::after {width: 0; height: 1px; display: inline-block; position: absolute; bottom: 0; left: 0; background: linear-gradient(90deg, #d30, var(--hover)); content: ""; animation: ease-out reloader 1s forwards; opacity: .4}
 .unbold {font-weight: 400}
-#sb_graphcontainer {margin: -5px -7px -7px !important; padding: 0 1px 1px; height: 41px; position: relative; z-index: 10; overflow: hidden; box-shadow: inset 0 0 0 1px #131, inset 0 0 0 2px #000, inset 0 0 3px 1px #040; background: repeating-linear-gradient(90deg, rgba(0,0,0,0) 14px, rgba(64,160,64,.3) 15px, rgba(0,0,0,0) 15px, rgba(0,0,0,0) 30px), repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(48,152,48,.2), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 14px) !important}
-#sb_graphstats {position: relative; z-index: 1000}
-#minigraph {margin-top: -17px; height: 38px !important; width: 204px; opacity: .9}
-#xhr > hr + #sb_graphcontainer > span + a > #minigraph {height: 39px}
-#homepage #minigraph {margin-top: -18px}
-#minigraphcontainer {margin-top: -43px; margin-left: 1px; width: 204px; height: 39px; background-repeat: no-repeat; background-size: 204px 40px}
-#homepage #minigraphcontainer {margin-top: -42px; height: 38px}
-.routersummary table {position: relative}
-.routersummary table:not(#sb_localtunnels):not(#sb_services):not(#sb_advanced)::before {width: 0; height: 1px; position: absolute; top: -4px; left: -1px; display: block; background: #730; content: ""; animation: ease-in bar .15s reverse; will-change: transform}
-#sidebar #sb_newsheadings table::before {content: none !important}
 h1, .main h2, .main h3, h4.app, h4.app2 {-webkit-text-stroke: var(--stroke)}
 .main h3 a {-webkit-text-stroke: 0 !important}
 
