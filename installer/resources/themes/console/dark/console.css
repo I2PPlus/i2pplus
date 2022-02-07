@@ -662,12 +662,48 @@ h3[id="udpcon"] {width: auto}
 .profilegroup.integrated::before {background: var(--integrated) no-repeat left center}
 .profilegroup.standard::before {background: var(--standard) no-repeat left center}
 .profilegroup::before {width: 20px; height: 16px; display: inline-block; vertical-align: middle; content: ""}
-#profilelist th, #profilelist td {padding-left: 8px; padding-right: 8px}
-#profilelist th:nth-child(5), #profilelist td:nth-child(5) {width: 40%; text-align: center}
+#profilelist {margin-top: 1px}
+#profilelist th {font-size: 90% !important}
+#profilelist th:first-child, #profilelist th:nth-last-child(2), #profilelist td:first-child, #profilelist td:nth-last-child(2) {white-space: nowrap; text-align: center}
+#profilelist th, #profilelist td {padding-left: 8px; padding-right: 8px; ; text-align: right}
 #profilelist th:first-child, #profilelist th:nth-child(2), #profilelist th:nth-child(3), #profilelist th:nth-child(4), #profilelist td:first-child, #profilelist td:nth-child(2), #profilelist td:nth-child(3), #profilelist td:nth-child(4) {width: 1%; white-space: nowrap; text-align: center}
+#profilelist th:nth-child(4), #profilelist td:nth-child(4) {width: 15%}
+#profilelist th:nth-child(5), #profilelist td:nth-child(5) {width: 40%; text-align: center}
+#profilelist th:nth-child(5), #profilelist td:nth-child(5) {width: 10%; min-width: 56px; white-space: nowrap}
+#profilelist .tier, #profilelist .reachable, #profilelist .unreachable, #profilelist .ff {margin-top: -6px; margin-bottom: -6px; padding-top: 2px; padding-bottom: 1px}
+#profilelist tr:hover, #floodfills tr:hover {background: #030}
+#profilelist tr:hover td, #floodfills tr:hover td {color: var(--ink)}
+#profilelist td:nth-child(2), #profilelist th:nth-child(2) {text-align: left}
+#profilelist td:nth-child(3) {letter-spacing: .1em}
+#profilelist th:last-child {text-align: left; font-size: 0 !important}
 #profilelist td:first-child {min-width: 68px}
 #profilelist td:nth-child(2) {text-align: left}
 #profilelist td:nth-child(5) span {width: 56px; height: 16px; display: inline-block; font-size: 0}
+#profilelist td {padding: 2px 1px; color: #bb7}
+#profilelist td:first-child, #profilelist td:nth-child(2), #profilelist td:nth-child(3) {padding-left: 3px; padding-right: 3px}
+#profilelist td:nth-child(2), #profilelist td:nth-child(7), #floodfills td:last-child {width: 1%; white-space: nowrap}
+#profilelist td:nth-child(2) span {margin-left: 1px !important; margin-right: 3px !important}
+#profilelist td:nth-child(2) span:first-child {margin-left: 1px !important}
+#profilelist td:nth-child(2) span:last-child {margin-right: 1px !important}
+#profilelist td:nth-child(2) i {width: 100%; display: inline-block; text-align: center}
+#floodfills td:nth-child(3), #profilelist th:nth-last-child(3), #profilelist td:nth-last-child(3), #profilelist th:nth-last-child(4), #profilelist th:nth-last-child(5), #profilelist th:nth-last-child(6), #profilelist td:nth-last-child(4), #profilelist td:nth-last-child(5), #profilelist td:nth-last-child(6) {text-align: center}
+#profilelist td:last-child {width: 1%; white-space: nowrap; text-align: center}
+#profilelist td:nth-last-child(5) span {min-width: 40px}
+#profilelist td[colspan="10"], #profilelist td[colspan="10"]:hover {padding: 1px; border: var(--border); border-top: 1px solid #000; border-bottom: 1px solid #000; background: #040}
+#profilelist .fast {background: var(--fast) no-repeat calc(50% - 10px) center, var(--highcap) no-repeat calc(50% + 10px) center}
+#profilelist .fast.integrated {background: var(--fast) no-repeat left center, var(--highcap) var(--center), var(--integrated) no-repeat right center}
+#profilelist .highcap {background: var(--highcap) var(--center)}
+#profilelist .highcap.integrated {background: var(--highcap) no-repeat calc(50% - 10px) center, var(--integrated) no-repeat calc(50% + 10px) center}
+#profilelist .standard {background: var(--standard) var(--center)}
+#profilelist .standard.integrated {background: var(--standard) no-repeat calc(50% - 10px) center, var(--integrated) no-repeat calc(50% + 10px) center}
+#profilelist .routerid {margin-left: 1px; margin-right: 1px}
+#profilelist .version {line-height: 1.3}
+#profilelist .viewprofile, #profilelist .configpeer {margin: 1px}
+#profilelist .viewedit {padding: 1px}
+#profilelist .version {line-height: 1.4}
+#profilelist .nospeed {text-align: center !important}
+#profilelist .lowlatency, #profilelist .highlatency {width: 12px; min-width: 0 !important; color: #373 !important}
+#profilelist .highlatency {color: #900 !important}
 #floodfills td:nth-child(2) {padding-left: 3px; padding-right: 3px; white-space: nowrap}
 #floodfills td:nth-last-child(2) {text-align: center}
 #floodfills td:nth-child(2), #floodfills td:last-child, #floodfills td:nth-last-child(2) {width: 1%; white-space: nowrap}
@@ -681,11 +717,7 @@ h3[id="udpcon"] {width: auto}
 #floodfills .percentBarText {color: #fff; text-shadow: var(--textshadow); display: none}
 #floodfills td:empty, #tunnels .cells:empty {text-align: center; vertical-align: middle}
 #floodfills td:empty::before, #ntcpconnections td:not(:last-child):empty::before, #udpconnections td:not(:last-child):empty::before, #profilelist td:empty::before, #tunnels .cells:empty::after {width: 100%; display: inline-block; text-align: center; content: "\2013"; opacity: .8}
-#floodfills td:nth-child(3), #profilelist th:nth-last-child(3), #profilelist td:nth-last-child(3), #profilelist th:nth-last-child(4), #profilelist th:nth-last-child(5), #profilelist th:nth-last-child(6), #profilelist td:nth-last-child(4), #profilelist td:nth-last-child(5), #profilelist td:nth-last-child(6) {text-align: center}
 #floodfills td:nth-child(3) span, #profilelist td:nth-last-child(3) span, #profilelist td:nth-last-child(4) span, #profilelist td:nth-last-child(5) span, #profilelist td:nth-last-child(6) span, #profilelist td:nth-last-child(2) span {min-width: 20px; display: inline-block; vertical-align: middle; text-align: right}
-#profilelist td:nth-last-child(5) span {min-width: 40px}
-#profilelist td:nth-child(2), #profilelist td:nth-child(7), #floodfills td:last-child {width: 1%; white-space: nowrap}
-#profilelist td:nth-child(2) i {width: 100%; display: inline-block; text-align: center}
 #peerprofiles.widescroll {margin-top: -10px; padding-top: 112px; position: relative}
 #peer_thresholds {width: 100%; position: absolute; top: 0}
 #view_profile h3 {margin-bottom: 13px; position: relative; vertical-align: middle; border-width: 1px; border-radius: 0}
@@ -697,19 +729,38 @@ h3[id="udpcon"] {width: auto}
 #viewprofile td {padding: 0}
 #viewprofile pre, pre#activetransports {margin: 0; padding: 20px 20px 0; width: calc(100% - 45px); line-height: 20px; letter-spacing: .05em; text-shadow: var(--textshadow); border-left: 5px solid #030; background: repeating-linear-gradient(180deg,rgba(0,8,0,.6) 0, rgba(0,8,0,.6) 20px, rgba(0,20,0,.6) 20px, rgba(0,20,0,.6) 40px); background-size: 100% 40px}
 #viewprofile span {margin: -26px -1px -1px 0; padding: 5px; float: right; border: var(--border); background: #000}
+#profiles_overview {margin-bottom: 9px; background-image: url(../images/svg/profile.svg) !important}
+#peerprofiles + h3 {margin-top: 10px}
+#profiles .version {margin: 0 2px}
+#profiles .ok, #ntcpconnections td.queue:empty::before {width: 12px; height: 12px; display: inline-block; vertical-align: middle; font-size: 0; background-size: 11px !important}
+#ntcpconnections td.queue:empty::before {content: ""}
+a[href^="configpeer?peer"] {width: 24px; height: 24px; display: inline-block; font-size: 0; filter: drop-shadow(0 0 1px #777)}
+a[href^="configpeer?peer"]::after {margin-left: 2px; width: 22px; height: 22px; display: inline-block; vertical-align: middle; text-align: center; background: var(--edit) var(--center); background-size: 14px; content: ""}
+a[href^="configpeer?peer"]:hover::after {background: var(--edit_hover) var(--center) / 14px}
+a[href^="configpeer?peer"]:active::after {background: var(--edit_active) var(--center) / 14px}
+#profile_defs, #thresholds {margin-top: -1px; margin-bottom: 10px}
 #profile_defs {margin-bottom: 9px}
-#profilelist .viewprofile, #profilelist .configpeer {margin: 1px}
-#profilelist .viewedit {padding: 1px}
-#profilelist .version {line-height: 1.4}
-#profilelist th:nth-child(4), #profilelist td:nth-child(4) {width: 15%}
-#profilelist th:nth-child(5), #profilelist td:nth-child(5) {width: 10%; min-width: 56px; white-space: nowrap}
-#profilelist .fast {background: var(--fast) no-repeat calc(50% - 10px) center, var(--highcap) no-repeat calc(50% + 10px) center}
-#profilelist .fast.integrated {background: var(--fast) no-repeat left center, var(--highcap) var(--center), var(--integrated) no-repeat right center}
-#profilelist .highcap {background: var(--highcap) var(--center)}
-#profilelist .highcap.integrated {background: var(--highcap) no-repeat calc(50% - 10px) center, var(--integrated) no-repeat calc(50% + 10px) center}
-#profilelist .standard {background: var(--standard) var(--center)}
-#profilelist .standard.integrated {background: var(--standard) no-repeat calc(50% - 10px) center, var(--integrated) no-repeat calc(50% + 10px) center}
+#profile_defs td, #thresholds td {padding: 5px}
+#profile_defs td:first-child {width: 5% !important; white-space: nowrap; text-align: right}
+#profile_defs td:last-child {white-space: normal; line-height: 1.2}
+#profile_defs b {text-transform: capitalize}
+#profile_defs + hr {display: none}
+#thresholds th, #thresholds td {text-align: center}
+#capabilities_key td {padding: 0 !important}
+#capabilities_key table {margin: 0 !important; border: none; border-top: var(--border); border-bottom: var(--border)}
+#capabilities_key table td {padding: 3px 5px !important}
+#capabilities_key a b, #capabilities_key span {padding: 2px !important; border-radius: 0 !important; box-shadow: var(--highlight) !important}
 #profiles #capabilities_key, #profiles #capabilities_key tr, #profiles #capabilities_key td:last-child {border-right: none !important}
+#capabilities_key b {padding: 1px 2px; min-width: 16px; display: inline-block; text-align: center; text-transform: none !important; text-shadow: var(--textshadow); border-radius: 2px; background: #002000}
+#capabilities_key b {text-transform: none !important}
+#floodfills {margin: 12px 0 9px}
+#floodfills + hr {display: none}
+#floodfills th {padding: 8px 6px; max-width: 55px; white-space: normal; text-align: center}
+#floodfills td {padding: 3px 4px !important; vertical-align: middle; white-space: nowrap; color: #bb7}
+#floodfills th:first-child, #floodfills td:first-child {padding: 3px !important; width: 1%; white-space: nowrap}
+#viewprofile {margin-top: -14px; margin-bottom: 10px}
+#viewprofile td {padding: 10px 15px 0}
+#viewprofile pre {margin-bottom: 0; white-space: pre-wrap}
 
 #tunnels .percentBarInner {height: 14px; display: inline-block}
 
@@ -974,7 +1025,7 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 #sidebarconf tr:last-child {background: #000; border-top: var(--border)}
 #sidebarconf tr:last-child td:last-child {padding: 0; text-align: center}
 #sidebarconf select {margin-left: 0; width: 100%}
-#sidebarconf th:nth-child(1), #config_home .homelinkedit th:first-child, #consolepass th:first-child {text-align: center; font-size: 0; background: var(--nuke) var(--center) / 16px, var(--th)}
+#sidebarconf th:first-child, #config_homepage .homelinkedit th:first-child, #consolepass th:first-child {text-align: center; font-size: 0; background: var(--nuke) var(--center) / 16px, var(--th)}
 .buttonTop img, .buttonBottom img, .buttonUp img, .buttonDown img {width: 0; height: 0; opacity: 0}
 .buttonTop, .buttonBottom, .buttonUp, .buttonDown {width: 26px; height: 26px; box-sizing: border-box}
 .buttonTop {background: var(--mv_top) var(--center), var(--btn)}
@@ -990,18 +1041,6 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 .buttonDown:active {background: var(--hover) var(--mv_down_active) var(--center)}
 .buttonBottom:active {background: var(--hover) var(--mv_bottom_active) var(--center)}
 .buttonTop, .buttonBottom, .buttonUp, .buttonDown {background-size: 11px, 100% !important}
-
-/* configservice */
-#config_service .confignav {margin-bottom: 10px}
-#config_service .h3navlinks {margin-top: 0}
-#config_service a[href$="#alternative_browser"] img {display: none}
-#config_service a[href$="#alternative_browser"]::after, #iptransport a::after, #advancedconfig a::after, #reseedsetup a::after {background: var(--helplink) var(--center)}
-#config_service a[href$="#alternative_browser"]:hover::after, #iptransport a:hover::after, #advancedconfig a:hover::after, #reseedsetup a:hover::after {background: var(--helplink_hover) var(--center)}
-#config_service a[href$="#alternative_browser"]::after {margin-left: -3px; width: 18px; height: 18px; display: inline-block; vertical-align: middle; background-size: 18px; content: ""}
-#shutdownrouter, #restartrouter, #servicedebug, #browseronstart, #rononstartup, #systray {margin-bottom: -6px}
-#shutdownrouter + p, #restartrouter + p, #servicedebug + p, #browseronstart + p, #runonstartup + p, #systray + p {margin: 5px 0 -20px; border-bottom: none}
-#servicedebug + p + p {margin-top: 20px; margin-bottom: -21px; padding: 10px; border: var(--border); border-bottom: none; background: #001000}
-#servicedebug a, #graphinfo a {float: right; font-size: 9pt; text-transform: none; letter-spacing: normal}
 
 /* tunnels */
 #tunnels .tab, #tunnels .tab2 {min-width: 140px !important}
@@ -1405,50 +1444,6 @@ p.family a {padding-left: 4px; width: calc(100% - 141px); max-width: 400px; disp
 p.family a:hover {background: #020}
 p.family + p.family, .sybil_info + .sybil_info {margin-top: -4px}
 
-/* profiles */
-#profiles .version {margin: 0 2px}
-#profilelist .routerid {margin-left: 1px; margin-right: 1px}
-#profilelist .version {line-height: 1.3}
-#profilelist th:last-child {text-align: left; font-size: 0 !important}
-#profilelist td {padding: 2px 1px !important}
-#profilelist tr:hover, #floodfills tr:hover {background: #030}
-#profilelist tr:hover td, #floodfills tr:hover td {color: var(--ink)}
-#profilelist th, #profilelist td {padding-left: 5px; text-align: right}
-#profilelist td {color: #bb7}
-#profilelist td:nth-child(2), #profilelist th:nth-child(2) {text-align: left}
-#profiles .ok, #ntcpconnections td.queue:empty::before {width: 12px; height: 12px; display: inline-block; vertical-align: middle; font-size: 0; background-size: 11px !important}
-#ntcpconnections td.queue:empty::before {content: ""}
-#profilelist td:first-child, #profilelist th:first-child, #profilelist td:nth-last-child(2), #profilelist th:nth-last-child(2) {white-space: nowrap; text-align: center}
-#profilelist td:nth-child(3) {letter-spacing: .1em}
-#profilelist td[colspan="10"], #profilelist td[colspan="10"]:hover {padding: 1px; border: var(--border); border-top: 1px solid #000; border-bottom: 1px solid #000; background: #040}
-#profilelist .nospeed {text-align: center !important}
-#profilelist .lowlatency, #profilelist .highlatency {width: 12px; min-width: 0 !important; color: #373 !important}
-#profilelist .highlatency {color: #900 !important}
-a[href^="configpeer?peer"] {width: 24px; height: 24px; display: inline-block; font-size: 0; filter: drop-shadow(0 0 1px #777)}
-a[href^="configpeer?peer"]::after {margin-left: 2px; width: 22px; height: 22px; display: inline-block; vertical-align: middle; text-align: center; background: var(--edit) var(--center); background-size: 14px; content: ""}
-a[href^="configpeer?peer"]:hover::after {background: var(--edit_hover) var(--center) / 14px}
-a[href^="configpeer?peer"]:active::after {background: var(--edit_active) var(--center) / 14px}
-#profile_defs, #thresholds {margin-top: -1px; margin-bottom: 10px}
-#profile_defs td, #thresholds td {padding: 5px}
-#profile_defs td:first-child {width: 5% !important; white-space: nowrap; text-align: right}
-#profile_defs td:last-child {white-space: normal; line-height: 1.2}
-#thresholds th, #thresholds td {text-align: center}
-#capabilities_key td {padding: 0 !important}
-#capabilities_key table {margin: 0 !important; border: none; border-top: var(--border); border-bottom: var(--border)}
-#capabilities_key table td {padding: 3px 5px !important}
-#capabilities_key b {padding: 1px 2px; min-width: 16px; display: inline-block; text-align: center; text-transform: none !important; text-shadow: var(--textshadow); border-radius: 2px; background: #002000}
-#profile_defs b {text-transform: capitalize}
-#capabilities_key b {text-transform: none !important}
-#profile_defs + hr {display: none}
-#floodfills {margin: 12px 0 9px}
-#floodfills + hr {display: none}
-#floodfills th {padding: 8px 6px; max-width: 55px; white-space: normal; text-align: center}
-#floodfills td {padding: 3px 4px !important; vertical-align: middle; white-space: nowrap; color: #bb7}
-#floodfills th:first-child, #floodfills td:first-child {padding: 3px !important; width: 1%; white-space: nowrap}
-#viewprofile {margin-top: -14px; margin-bottom: 10px}
-#viewprofile td {padding: 10px 15px 0}
-#viewprofile pre {margin-bottom: 0; white-space: pre-wrap}
-
 /* banlist */
 #bannedpeers {margin-top: 15px}
 #banlist {margin: -1px 0 13px; padding: 8px 5px; columns: 328px auto; column-gap: 8px; column-rule: var(--dotted); border: var(--border); background: none}
@@ -1713,18 +1708,17 @@ form[action="events"] {padding: 10px 10px 10px 50px; background: #000 var(--logs
 #plugininstall tr:nth-child(3) td:nth-last-child(2), #manualreseed tr:nth-child(3) td:nth-last-child(2) {padding: 18px 15px 18px 58px; background: #000 var(--link) no-repeat 15px center; background-size: 28px}
 #manualreseed tr:nth-child(5) td:nth-last-child(2), #plugininstall tr:nth-child(5) td:nth-last-child(2) {padding: 18px 15px 18px 58px; background: #000 var(--files) no-repeat 15px center; background-size: 28px}
 
-#profilelist .tier, #profilelist .reachable, #profilelist .unreachable, #profilelist .ff {margin-top: -6px; margin-bottom: -6px; padding-top: 2px; padding-bottom: 1px}
-#profilelist th {font-size: 90% !important}
-#profilelist td {padding-top: 2px; padding-bottom: 2px}
-#profilelist td:first-child, #profilelist td:nth-child(2), #profilelist td:nth-child(3) {padding-left: 3px; padding-right: 3px}
-#profilelist td:nth-child(2) span {margin-left: 1px !important; margin-right: 3px !important}
-#profilelist td:nth-child(2) span:first-child {margin-left: 1px !important}
-#profilelist td:nth-child(2) span:last-child {margin-right: 1px !important}
-#profilelist td:last-child {width: 1%; white-space: nowrap; text-align: center}
-#profiles_overview {margin-bottom: 9px; background-image: url(../images/svg/profile.svg) !important}
-#capabilities_key a b, #capabilities_key span {padding: 2px !important; border-radius: 0 !important; box-shadow: var(--highlight) !important}
-#profilelist {margin-top: 1px}
-#peerprofiles + h3 {margin-top: 10px}
+/* configservice */
+#config_service .confignav {margin-bottom: 10px}
+#config_service .h3navlinks {margin-top: 0}
+#config_service a[href$="#alternative_browser"] img {display: none}
+#config_service a[href$="#alternative_browser"]::after, #iptransport a::after, #advancedconfig a::after, #reseedsetup a::after {background: var(--helplink) var(--center)}
+#config_service a[href$="#alternative_browser"]:hover::after, #iptransport a:hover::after, #advancedconfig a:hover::after, #reseedsetup a:hover::after {background: var(--helplink_hover) var(--center)}
+#config_service a[href$="#alternative_browser"]::after {margin-left: -3px; width: 18px; height: 18px; display: inline-block; vertical-align: middle; background-size: 18px; content: ""}
+#shutdownrouter, #restartrouter, #servicedebug, #browseronstart, #rononstartup, #systray {margin-bottom: -6px}
+#shutdownrouter + p, #restartrouter + p, #servicedebug + p, #browseronstart + p, #runonstartup + p, #systray + p {margin: 5px 0 -20px; border-bottom: none}
+#servicedebug + p + p {margin-top: 20px; margin-bottom: -21px; padding: 10px; border: var(--border); border-bottom: none; background: #001000}
+#servicedebug a, #graphinfo a {float: right; font-size: 9pt; text-transform: none; letter-spacing: normal}
 
 /* debug */
 #debug {line-height: 1.4; padding-bottom: 0}
