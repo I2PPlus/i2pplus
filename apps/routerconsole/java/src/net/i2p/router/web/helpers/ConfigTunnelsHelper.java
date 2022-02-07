@@ -112,8 +112,8 @@ public class ConfigTunnelsHelper extends HelperBase {
 
         // tunnel depth
         int maxLength = advanced ? MAX_ADVANCED_LENGTH : MAX_LENGTH;
-        buf.append("<tr><td align=\"right\"><b>" + _t("Length") + ":</b></td>\n");
-        buf.append("<td align=\"center\"><select name=\"").append(index).append(".depthInbound\"");
+        buf.append("<tr><td><b>" + _t("Length") + ":</b></td>\n");
+        buf.append("<td><select name=\"").append(index).append(".depthInbound\"");
         if (!advanced && prefix != "exploratory")
             buf.append(" disabled");
         buf.append(">\n");
@@ -123,7 +123,7 @@ public class ConfigTunnelsHelper extends HelperBase {
             renderOptions(buf, now, now, now, "", HOP);
         buf.append("</select></td>\n");
 
-        buf.append("<td align=\"center\"><select name=\"").append(index).append(".depthOutbound\"");
+        buf.append("<td><select name=\"").append(index).append(".depthOutbound\"");
         if (!advanced && prefix != "exploratory")
             buf.append(" disabled");
         buf.append(">\n");
@@ -136,8 +136,8 @@ public class ConfigTunnelsHelper extends HelperBase {
 
         // tunnel depth variance
         if (advanced) {
-            buf.append("<tr><td align=\"right\"><b>" + _t("Randomization") + ":</b></td>\n");
-            buf.append("<td align=\"center\"><select name=\"").append(index).append(".varianceInbound\">\n");
+            buf.append("<tr><td><b>" + _t("Randomization") + ":</b></td>\n");
+            buf.append("<td><select name=\"").append(index).append(".varianceInbound\">\n");
             now = in.getLengthVariance();
             renderOptions(buf, 0, 0, now, "", HOP);
             renderOptions(buf, 1, MAX_VARIANCE, now, "+ 0-", HOP);
@@ -148,7 +148,7 @@ public class ConfigTunnelsHelper extends HelperBase {
                 renderOptions(buf, now, now, now, "+/- 0", HOP);
             buf.append("</select></td>\n");
 
-            buf.append("<td align=\"center\"><select name=\"").append(index).append(".varianceOutbound\">\n");
+            buf.append("<td><select name=\"").append(index).append(".varianceOutbound\">\n");
             now = out.getLengthVariance();
             renderOptions(buf, 0, 0, now, "", HOP);
             renderOptions(buf, 1, MAX_VARIANCE, now, "+ 0-", HOP);
@@ -164,8 +164,8 @@ public class ConfigTunnelsHelper extends HelperBase {
         buf.append("<tr");
         if (!advanced)
             buf.append(" class=\"lastrow\"");
-        buf.append("><td align=\"right\"><b>" + _t("Quantity") + ":</b></td>\n");
-        buf.append("<td align=\"center\"><select name=\"").append(index).append(".quantityInbound\"");
+        buf.append("><td><b>" + _t("Quantity") + ":</b></td>\n");
+        buf.append("<td><select name=\"").append(index).append(".quantityInbound\"");
         if (!advanced && prefix != "exploratory")
             buf.append(" disabled");
         buf.append(">\n");
@@ -175,7 +175,7 @@ public class ConfigTunnelsHelper extends HelperBase {
             renderOptions(buf, now, now, now, "", TUNNEL);
         buf.append("</select></td>\n");
 
-        buf.append("<td align=\"center\"><select name=\"").append(index).append(".quantityOutbound\"");
+        buf.append("<td><select name=\"").append(index).append(".quantityOutbound\"");
         if (!advanced && prefix != "exploratory")
             buf.append(" disabled");
         buf.append(">\n");
@@ -189,15 +189,15 @@ public class ConfigTunnelsHelper extends HelperBase {
         // tunnel backup quantity
         if (advanced) {
             int maxBQuantity = advanced ? MAX_ADVANCED_BACKUP_QUANTITY : MAX_BACKUP_QUANTITY;
-            buf.append("<tr class=\"lastrow\"><td align=\"right\"><b>" + _t("Backup quantity") + ":</b></td>\n");
-            buf.append("<td align=\"center\"><select name=\"").append(index).append(".backupInbound\">\n");
+            buf.append("<tr class=\"lastrow\"><td><b>" + _t("Backup quantity") + ":</b></td>\n");
+            buf.append("<td><select name=\"").append(index).append(".backupInbound\">\n");
             now = in.getBackupQuantity();
             renderOptions(buf, 0, maxBQuantity, now, "", TUNNEL);
             if (now > maxBQuantity)
                 renderOptions(buf, now, now, now, "", TUNNEL);
             buf.append("</select></td>\n");
 
-            buf.append("<td align=\"center\"><select name=\"").append(index).append(".backupOutbound\">\n");
+            buf.append("<td><select name=\"").append(index).append(".backupOutbound\">\n");
             now = out.getBackupQuantity();
             renderOptions(buf, 0, maxBQuantity, now, "", TUNNEL);
             if (now > maxBQuantity)
@@ -212,8 +212,8 @@ public class ConfigTunnelsHelper extends HelperBase {
         // And let's not display them at all unless they have contents, which should be rare.
         Properties props = in.getUnknownOptions();
         if (!props.isEmpty()) {
-            buf.append("<tr><td align=\"right\"><b>" + _t("Inbound options") + ":</b></td>\n" +
-                       "<td colspan=\"2\" align=\"center\"><input name=\"").append(index);
+            buf.append("<tr><td><b>" + _t("Inbound options") + ":</b></td>\n" +
+                       "<td colspan=\"2\"><input name=\"").append(index);
             buf.append(".inboundOptions\" type=\"text\" size=\"32\" disabled=\"disabled\" " +
                        "value=\"");
             for (String prop : props.stringPropertyNames()) {
@@ -224,8 +224,8 @@ public class ConfigTunnelsHelper extends HelperBase {
         }
         props = out.getUnknownOptions();
         if (!props.isEmpty()) {
-            buf.append("<tr><td align=\"right\"><b>" + _t("Outbound options") + ":</b></td>\n" +
-                       "<td colspan=\"2\" align=\"center\"><input name=\"").append(index);
+            buf.append("<tr><td><b>" + _t("Outbound options") + ":</b></td>\n" +
+                       "<td colspan=\"2\"><input name=\"").append(index);
             buf.append(".outboundOptions\" type=\"text\" size=\"32\" disabled=\"disabled\" " +
                        "value=\"");
             for (String prop : props.stringPropertyNames()) {

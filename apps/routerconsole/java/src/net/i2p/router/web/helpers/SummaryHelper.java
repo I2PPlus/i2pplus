@@ -739,7 +739,7 @@ public class SummaryHelper extends HelperBase {
                     }
                     buf.append("\" width=\"16\" height=\"16\">");
                 }
-                buf.append("</td><td align=\"left\"><b><a href=\"/tunnels#").append(h.toBase64().substring(0,4));
+                buf.append("</td><td><b><a href=\"/tunnels#").append(h.toBase64().substring(0,4));
                 buf.append("\" target=\"_top\" title=\"").append(_t("Show tunnels")).append("\">");
                 // Increase permitted max length of tunnel name & handle overflow with css
                 if (name.length() <= 32)
@@ -1311,15 +1311,15 @@ public class SummaryHelper extends HelperBase {
             String name = sectionNames.get(section);
             if (name == null)
                 continue;
-            buf.append("<tr><td align=\"center\"><input type=\"checkbox\" class=\"optbox\" id=\"")
+            buf.append("<tr><td><input type=\"checkbox\" class=\"optbox\" id=\"")
                .append(name.replace(" ", "_").replace("\'", "").replace("(", "").replace(")", "").replace("&amp;", ""))
                .append("\" name=\"delete_")
                .append(i)
-               .append("\"></td><td align=\"left\"><label for=\"")
+               .append("\"></td><td><label for=\"")
                .append(name.replace(" ", "_").replace("\'", "").replace("(", "").replace(")", "").replace("&amp;", ""))
                .append("\">")
                .append(_t(name))
-               .append("</label></td><td align=\"right\"><input type=\"hidden\" name=\"order_")
+               .append("</label></td><td><input type=\"hidden\" name=\"order_")
                .append(i).append('_').append(section)
                .append("\" value=\"")
                .append(i)
@@ -1346,7 +1346,7 @@ public class SummaryHelper extends HelperBase {
                    .append(_t("Move up"))
                    .append("\"/></button>");
             }
-            buf.append("</td><td align=\"left\">");
+            buf.append("</td><td>");
             if (i < sections.size() - 1) {
                 buf.append("<button type=\"submit\" class=\"buttonDown\" name=\"action\" value=\"move_")
                    .append(i)
@@ -1371,10 +1371,10 @@ public class SummaryHelper extends HelperBase {
             }
             buf.append("</td></tr>\n");
         }
-        buf.append("<tr><td align=\"center\">" +
+        buf.append("<tr><td>" +
                    "<input type=\"submit\" name=\"action\" class=\"delete\" value=\"")
            .append(_t("Delete selected"))
-           .append("\"></td><td align=\"left\">")
+           .append("\"></td><td>")
            .append("<select name=\"name\">\n" +
                    "<option value=\"\" selected=\"selected\">")
            .append(_t("Select a section to add"))
@@ -1391,7 +1391,7 @@ public class SummaryHelper extends HelperBase {
                    "<input type=\"hidden\" name=\"order\" value=\"")
            .append(sections.size())
            .append("\"></td>" +
-                   "<td align=\"center\" colspan=\"2\">" +
+                   "<td colspan=\"2\">" +
                    "<input type=\"submit\" name=\"action\" class=\"add\" value=\"")
            .append(_t("Add item"))
            .append("\"></td></tr>")

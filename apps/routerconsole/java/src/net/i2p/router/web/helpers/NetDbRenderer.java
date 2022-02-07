@@ -863,7 +863,7 @@ class NetDbRenderer {
 
         if (!showStats) {
             // the summary table
-            buf.append("<table id=\"netdboverview\" border=\"0\" cellspacing=\"30\" align=\"center\" width=\"100%\">\n<tr>\n<th colspan=\"3\">")
+            buf.append("<table id=\"netdboverview\" border=\"0\" cellspacing=\"30\" width=\"100%\">\n<tr>\n<th colspan=\"3\">")
                .append(_t("Network Database Router Statistics"))
                .append("</th></tr>\n<tr>\n<td style=\"vertical-align: top;\">");
             // versions table
@@ -875,8 +875,8 @@ class NetDbRenderer {
                 for (String routerVersion : versionList) {
                     int num = versions.count(routerVersion);
                     String ver = DataHelper.stripHTML(routerVersion);
-                    buf.append("<tr>\n<td align=\"center\"><span class=\"version\"><a href=\"/netdb?v=").append(ver).append("\">").append(ver);
-                    buf.append("</a></span></td>\n<td align=\"center\">").append(num).append("</td>\n</tr>\n");
+                    buf.append("<tr>\n<td><span class=\"version\"><a href=\"/netdb?v=").append(ver).append("\">").append(ver);
+                    buf.append("</a></span></td>\n<td>").append(num).append("</td>\n</tr>\n");
                 }
                 buf.append("</table>\n");
             }
@@ -889,7 +889,7 @@ class NetDbRenderer {
                 start = end;
             }
             buf.append("<table id=\"netdbtiers\">\n");
-            buf.append("<thead>\n<tr>\n<th align=\"left\">" + _t("Bandwidth Tier") + "</th><th>" + _t("Count") + "</th></tr>\n</thead>\n");
+            buf.append("<thead>\n<tr>\n<th>" + _t("Bandwidth Tier") + "</th><th>" + _t("Count") + "</th></tr>\n</thead>\n");
             buf.append("<tr>\n<td><a href=\"/netdb?caps=K\" title=\"Show all routers with this capability in the NetDb\"><b>K</b></a>Under 12&#8239;KB/s</td>\n<td>")
                .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW12).size()).append("</td>\n</tr>\n");
             buf.append("<tr>\n<td><a href=\"/netdb?caps=L\" title=\"Show all routers with this capability in the NetDb\"><b>L</b></a>12 - 48&#8239;KB/s</td>\n<td>")
@@ -915,12 +915,12 @@ class NetDbRenderer {
 
             // transports table
             buf.append("<table id=\"netdbtransports\">\n");
-            buf.append("<thead>\n<tr>\n<th align=\"left\">" + _t("Transports") + "</th><th>" + _t("Count") + "</th></tr>\n</thead>\n");
+            buf.append("<thead>\n<tr>\n<th>" + _t("Transports") + "</th><th>" + _t("Count") + "</th></tr>\n</thead>\n");
             for (int i = 0; i < TNAMES.length; i++) {
                 int num = transportCount[i];
                 if (num > 0) {
                     buf.append("<tr>\n<td>").append(_t(TNAMES[i]));
-                    buf.append("</td>\n<td align=\"center\">").append(num).append("</td>\n</tr>\n");
+                    buf.append("</td>\n<td>").append(num).append("</td>\n</tr>\n");
                 }
             }
             buf.append("</table>\n");
@@ -932,14 +932,14 @@ class NetDbRenderer {
             if (!countryList.isEmpty()) {
                 Collections.sort(countryList, new CountryComparator());
                 buf.append("<table id=\"netdbcountrylist\" data-sortable>\n");
-                buf.append("<thead>\n<tr>\n<th align=\"left\">" + _t("Country") + "</th><th>" + _t("Count") + "</th></tr>\n</thead>\n");
+                buf.append("<thead>\n<tr>\n<th>" + _t("Country") + "</th><th>" + _t("Count") + "</th></tr>\n</thead>\n");
                 for (String country : countryList) {
                     int num = countries.count(country);
                     buf.append("<tr>\n<td><a href=\"/netdb?c=").append(country).append("\">");
                     buf.append("<img style=\"vertical-align:middle\" width=\"20\" height=\"15\" alt=\"").append(country.toUpperCase(Locale.US)).append("\"");
                     buf.append(" src=\"/flags.jsp?c=").append(country).append("\">");
                     buf.append(getTranslatedCountry(country));
-                    buf.append("</a></td>\n<td align=\"center\">").append(num).append("</td>\n</tr>\n");
+                    buf.append("</a></td>\n<td>").append(num).append("</td>\n</tr>\n");
                 }
                 buf.append("</table>\n");
             }

@@ -239,11 +239,11 @@ public class ConfigUIHelper extends HelperBase {
                        "</td></tr>\n");
             buf.append("<tr><th title=\"" + _t("Mark for deletion") + "\">" + _t("Remove") + "</th><th>" + _t("Username") + "</th><th>&nbsp;</th></tr>\n");
             for (String name : userpw.keySet()) {
-                buf.append("<tr><td align=\"center\"><input type=\"checkbox\" class=\"optbox\" id=\"" + name + "\" name=\"delete_" + name + "\"></td>" +
+                buf.append("<tr><td><input type=\"checkbox\" class=\"optbox\" id=\"" + name + "\" name=\"delete_" + name + "\"></td>" +
                            "<td colspan=\"2\"><label for=\"" + name + "\">" + name + "</label></td></tr>\n");
             }
         }
-        buf.append("<tr><td id=\"pw_adduser\" align=\"left\" colspan=\"3\">" +
+        buf.append("<tr><td id=\"pw_adduser\" colspan=\"3\">" +
                    "<b>" + _t("Username") + ":</b> " + "<input type=\"text\" name=\"name\" title=\"" +
                    _t("Please supply a username") + "\"><b>" + _t("Password") + ":</b> " +
                    "<input type=\"password\" size=\"40\" name=\"nofilter_pw\" title=\"" +

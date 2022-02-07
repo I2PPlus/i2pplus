@@ -292,17 +292,17 @@ public class SybilRenderer {
                    "<input type=\"hidden\" name=\"f\" value=\"3\">\n" +
                    "<input type=\"hidden\" name=\"m\" value=\"13\">\n" +
                    "<input type=\"hidden\" name=\"nonce\" value=\"").append(nonce).append("\" >\n" +
-                   "<table>\n<tr><td align=\"left\"><b>")
+                   "<table>\n<tr><td><b>")
            .append(_x("Run analysis on Floodfills only"))
-           .append(":</b></td><td align=\"right\"><input type=\"submit\" name=\"action\" class=\"go\" value=\"Start Scan\" /> "+
+           .append(":</b></td><td><input type=\"submit\" name=\"action\" class=\"go\" value=\"Start Scan\" /> "+
                    "</td></tr>\n</table>\n</form>\n<hr>\n");
         buf.append("<form class=\"sybilScan\" action=\"netdb\" method=\"POST\">\n" +
                    "<input type=\"hidden\" name=\"f\" value=\"3\">\n" +
                    "<input type=\"hidden\" name=\"m\" value=\"16\">\n" +
                    "<input type=\"hidden\" name=\"nonce\" value=\"").append(nonce).append("\" >\n" +
-                   "<table><tr><td align=\"left\"><b>")
+                   "<table><tr><td><b>")
            .append(_x("Run analysis on all routers in NetDb"))
-           .append(":</b></td><td align=\"right\"><input type=\"submit\" name=\"action\" class=\"go\" value=\"Start Scan\" />" +
+           .append(":</b></td><td><input type=\"submit\" name=\"action\" class=\"go\" value=\"Start Scan\" />" +
                    "</td></tr>\n</table>\n</form>\n");
         writeBuf(out, buf);
     }
@@ -373,7 +373,7 @@ public class SybilRenderer {
            .append(thresh).append("\">").append(_t("threat points")).append("</span><br>\n<span class=\"nowrap\"><b>")
            .append(_t("Enforce block for")).append(":</b><input type=\"text\" name=\"days\" value=\"")
            .append(days).append("\">").append(_t("days")).append("</span><br>\n</td></tr>\n")
-           .append("<tr><td class=\"optionsave\" align=\"right\"><input type=\"submit\" name=\"action\" class=\"accept\" value=\"Save\" />\n</div>\n</td></tr>\n</table>\n</form>\n");
+           .append("<tr><td class=\"optionsave\"><input type=\"submit\" name=\"action\" class=\"accept\" value=\"Save\" />\n</div>\n</td></tr>\n</table>\n</form>\n");
         writeBuf(out, buf);
     }
 

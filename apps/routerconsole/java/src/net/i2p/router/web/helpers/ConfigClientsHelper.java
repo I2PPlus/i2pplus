@@ -131,9 +131,9 @@ public class ConfigClientsHelper extends HelperBase {
     public String getForm1() {
         StringBuilder buf = new StringBuilder(1024);
         buf.append("<table id=\"clientconfig\">\n" +
-                   "<tr><th align=\"right\">").append(_t("Client")).append("</th><th>")
+                   "<tr><th>").append(_t("Client")).append("</th><th>")
            .append(_t("Run at Startup?").replace("?", "")).append("</th><th>")
-           .append(_t("Control")).append("</th><th align=\"left\">")
+           .append(_t("Control")).append("</th><th>")
            .append(_t("Class and arguments")).append("</th></tr>\n");
 
         boolean allowEdit = isClientChangeEnabled();
@@ -226,9 +226,9 @@ public class ConfigClientsHelper extends HelperBase {
     public String getForm2() {
         StringBuilder buf = new StringBuilder(1024);
         buf.append("<table id=\"webappconfig\">\n" +
-                   "<tr><th align=\"right\">").append(_t("WebApp")).append("</th><th>")
+                   "<tr><th>").append(_t("WebApp")).append("</th><th>")
            .append(_t("Run at Startup?").replace("?", "")).append("</th><th>")
-           .append(_t("Control")).append("</th><th align=\"left\">")
+           .append(_t("Control")).append("</th><th>")
            .append(_t("Description")).append("</th></tr>\n");
         Properties props = RouterConsoleRunner.webAppProperties(_context);
         Set<String> keys = new TreeSet<String>(props.stringPropertyNames());
@@ -273,9 +273,9 @@ public class ConfigClientsHelper extends HelperBase {
     public String getForm3() {
         StringBuilder buf = new StringBuilder(1024);
         buf.append("<table id=\"pluginconfig\">\n" +
-                   "<tr><th align=\"right\">").append(_t("Plugin")).append("</th><th>")
+                   "<tr><th>").append(_t("Plugin")).append("</th><th>")
            .append(_t("Run at Startup?").replace("?", "")).append("</th><th>")
-           .append(_t("Control")).append("</th><th align=\"left\">")
+           .append(_t("Control")).append("</th><th>")
            .append(_t("Description")).append("</th></tr>\n");
         Properties props = PluginStarter.pluginProperties();
         Set<String> keys = new TreeSet<String>(Collator.getInstance());
@@ -378,7 +378,7 @@ public class ConfigClientsHelper extends HelperBase {
                             boolean showEditButton, boolean showUpdateButton, boolean showStopButton,
                             boolean showDeleteButton, boolean showStartButton) {
         String escapedName = DataHelper.escapeHTML(name);
-        buf.append("<tr><td align=\"right\">");
+        buf.append("<tr><td>");
         if (urlify) {
             String link = "/";
             if (! RouterConsoleRunner.ROUTERCONSOLE.equals(name))
@@ -399,14 +399,14 @@ public class ConfigClientsHelper extends HelperBase {
             if (name.length() > 0)
                 buf.append("<label for=\"").append("client_").append(index).append("\">").append(_t(escapedName)).append("</label>");
         }
-        buf.append("</td><td align=\"center\"><input type=\"checkbox\" class=\"optbox slider\" id=\"client_")
+        buf.append("</td><td><input type=\"checkbox\" class=\"optbox slider\" id=\"client_")
            .append(index).append("\" name=\"").append(index).append(".enabled\"");
         if (enabled) {
             buf.append(CHECKED);
         }
         if (ro || preventDisable)
             buf.append("disabled=\"disabled\" ");
-        buf.append("></td><td align=\"center\">");
+        buf.append("></td><td>");
 
         if (showStartButton && (!ro) && !edit) {
             buf.append("<button type=\"submit\" title=\"").append(_t("Start"))
@@ -435,7 +435,7 @@ public class ConfigClientsHelper extends HelperBase {
                .append("\" client=\"").append(_t(escapedName)).append("\">")
                .append(_t("Delete")).append("<span class=hide> ").append(index).append("</span></button>");
         }
-        buf.append("</td>\n<td align=\"left\">");
+        buf.append("</td>\n<td>");
         if (edit && !ro) {
             buf.append("<input type=\"text\" size=\"80\" spellcheck=\"false\" name=\"nofilter_desc").append(index).append("\" value=\"");
             buf.append(escapedDesc);
