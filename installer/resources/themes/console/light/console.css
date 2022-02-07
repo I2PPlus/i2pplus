@@ -7634,6 +7634,7 @@ table#schedjobs {
 
 #tunnels th, #peers th {
   text-align: center;
+  font-size: 90% !important;
 }
 
 /* /profiles */
