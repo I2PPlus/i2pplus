@@ -611,7 +611,7 @@ form[action="events"] {background: #000}
 .backlogged {line-height: 0}
 pre#activetransports {margin: 0 20px 0 0; padding: 15px 5px 5px 15px; width: calc(100% - 42px); border: var(--border); background: #000}
 a[name="chelp"]:hover, a[name="help"]:hover, a[name="chelp"]:active, a[name="help"]:active {color: var(--ink); text-decoration: none; text-shadow: none}
-.peersort {display: inline-block; text-align: center}
+.peersort {display: inline-block}
 .right {margin: 0 1px; width: 40%; display: inline-block; text-align: right}
 .left {margin: 0 1px; width: 40%; display: inline-block; text-align: left}
 .peeripv6:empty {padding: 0; width: 0}
@@ -619,9 +619,8 @@ a[name="chelp"]:hover, a[name="help"]:hover, a[name="chelp"]:active, a[name="hel
 .peer_arrow {vertical-align: middle}
 .cells.ipv6 {width: 1%; max-width: 24px}
 .cells.direction {width: 1%; min-width: 60px; max-width: 60px; white-space: nowrap}
-.queue span, .duptx span, .duprx span {min-width: 0; text-align: center}
-#peers .peer {width: 1%; white-space: nowrap; text-align: center}
-#peers .skew, #peers .uptime {text-align: right}
+.queue span, .duptx span, .duprx span {min-width: 0}
+#peers .peer {width: 1%; white-space: nowrap}
 #peers .cells, #tunnels .cells, #profilelist td:not(.separator) {box-shadow: var(--highlight); border-right: 1px inset #131}
 tr:hover .cells, #profiles tr:hover td {box-shadow: none}
 #peers .rx .right, #peers .tx .right {width: 1%; min-width: 30px}
@@ -629,6 +628,8 @@ tr:hover .cells, #profiles tr:hover td {box-shadow: none}
 #peers tr, #peers th:first-child, #peers td:first-child, #profiles tr, #profiles th:first-child, #profiles td:first-child {border-left: var(--border)}
 #peers tr, #peers th:last-child, #peers td:last-child, #profiles tr, #profiles th:last-child, #profiles td:last-child {border-right: var(--border)}
 #peers tr {border-left: var(--border); border-right: var(--border)}
+#peers th, #peers td {text-align: center}
+#peers th {font-size: 90%}
 #peers td.direction i {margin: 3px -3px -4px; width: 100%; display: inline-block; text-align: center; font-size: 90%; font-style: normal; color: #990; border-top: 1px solid #030; border-radius: 2px}
 #peers p.infohelp {margin-top: 12px}
 h3[id$="con"] {margin-bottom: -2px; border-radius: 0; padding: 8px 10px; font-size: 10pt; word-spacing: .1em; letter-spacing: .08em; background: linear-gradient(90deg, #000, #001000 70%, #001300 90%); border: var(--border)}
@@ -638,12 +639,10 @@ h3[id="udpcon"] {width: auto}
 #ntcpconnections td[class="cells"]:last-child {font-weight: 700}
 #ntcpconnections {overflow-x: scroll}
 #ntcpconnections .ipv6:empty::before, #udpconnections .ipv6:empty::before {content: ""}
-#ntcpconnections th, #udpconnections th {text-align: center}
+#udpconnections td, #ntcpconnections td, .tunneldisplay td {color: #bb7}
 #ntcpconnections td span:empty {display: none}
-#ntcpconnections th:nth-child(n+2), #ntcpconnections td {text-align: center}
 #ntcpconnections td:nth-child(4), #ntcpconnections td:nth-child(5), #udpconnections td:nth-child(4), #udpconnections td:nth-child(5), #udpconnections td:nth-child(8), #udpconnections td:nth-child(12) {white-space: nowrap}
-#ntcpconnections td:nth-child(n+6) span, #ntcpconnections .tablefooter td:nth-child(n+6) span {min-width: 40px; display: inline-block; text-align: right}
-#ntcpconnections th:nth-child(6), #ntcpconnections th:nth-child(7), #ntcpconnections th:nth-child(8), #ntcpconnections th:nth-child(9), #ntcpconnections th:nth-child(10) {text-align: right}
+#ntcpconnections td:nth-child(n+6) span, #ntcpconnections .tablefooter td:nth-child(n+6) span {min-width: 40px; display: inline-block}
 #udpconnections table {overflow-x: auto}
 #udpconnections table i {font-weight: 700; line-height: 1.5; letter-spacing: .1em}
 #udpconnections tr a img {margin-top: 3px}
@@ -651,9 +650,7 @@ h3[id="udpcon"] {width: auto}
 #udpconnections tr:hover td, #ntcpconnections tr:hover td, .tunneldisplay tr:hover td {color: var(--ink)}
 #udpconnections th {padding: 5px 2px; vertical-align: top}
 #udpconnections th:nth-child(6), #udpconnections th:nth-child(7), #udpconnections th:nth-child(n+9) {text-align: right}
-#udpconnections th:nth-child(12) {text-align: center}
 #udpconnections th:nth-child(n+13), #udpconnections .tablefooter th:nth-child(n+10), #udpconnections td:nth-child(n+13), #udpconnections .tablefooter td:nth-child(n+10) {padding-right: 1%}
-#udpconnections td, #ntcpconnections td, .tunneldisplay td {color: #bb7}
 #udpconnections td[class="cells"]:first-child, #ntcpconnections td[class="cells"]:first-child {text-align: right}
 #udpconnections td:first-child {width: 1%; padding: 2px 4px; white-space: nowrap}
 #udpconnections .tablefooter td, #ntcpconnections .tablefooter td {padding-top: 7px; padding-bottom: 7px; color: var(--ink); text-align: center}
