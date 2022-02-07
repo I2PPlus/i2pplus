@@ -1340,7 +1340,7 @@ h3[id*="job"] {margin: 12px 0 10px 0; padding: 8px; letter-spacing: .08em; text-
 
 /* confighome */
 .homelinkedit img {width: 22px; height: 22px}
-.homelinkedit td:first-child {width: 115px}
+.homelinkedit td:first-child {width: 115px; text-align: center}
 .homelinkedit th:nth-child(3), .homelinkedit th:last-child {padding-left: 5px; text-align: left; text-transform: none}
 .homelinkedit input[type=text] {margin-left: 0}
 .homelinkedit tr:nth-last-child(1) td:first-child {text-align: right}
