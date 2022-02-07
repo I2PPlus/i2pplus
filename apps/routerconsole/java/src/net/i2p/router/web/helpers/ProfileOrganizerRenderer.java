@@ -129,7 +129,7 @@ class ProfileOrganizerRenderer {
                 }
                 prevTier = tier;
 
-                buf.append("<tr class=\"lazy\"><td align=\"center\" nowrap>");
+                buf.append("<tr class=\"lazy\"><td nowrap>");
                 buf.append(_context.commSystem().renderPeerHTML(peer));
                 // debug
                 //if(prof.getIsExpandedDB())
@@ -158,9 +158,9 @@ class ProfileOrganizerRenderer {
                         .replace("P", "<a href=\"/netdb?caps=P\"><span class=\"tier\">P</span></a>")
                         .replace("X", "<a href=\"/netdb?caps=X\"><span class=\"tier\">X</span></a>")
                         .replace("\"><span", tooltip);
-                    buf.append("<td align=\"left\">").append(caps);
+                    buf.append("<td>").append(caps);
                 } else {
-                    buf.append("<td align=\"left\"><i>").append(_t("unknown")).append("</i>");
+                    buf.append("<td><i>").append(_t("unknown")).append("</i>");
                 }
                 buf.append("</td>");
                 buf.append("<td>");
@@ -169,7 +169,7 @@ class ProfileOrganizerRenderer {
                     buf.append("<span class=\"version\" title=\"").append(_t("Show all routers with this version in the NetDb"))
                        .append("\"><a href=\"/netdb?v=").append(DataHelper.stripHTML(v)).append("\">").append(DataHelper.stripHTML(v));
                 buf.append("</a></span></td>");
-                buf.append("<td align=\"center\">");
+                buf.append("<td>");
                 boolean ok = true;
                 if (_context.banlist().isBanlisted(peer)) {
                     buf.append(_t("Banned"));
@@ -204,7 +204,7 @@ class ProfileOrganizerRenderer {
                 }
 
                 buf.append("</td>");
-                buf.append("<td align=\"center\">");
+                buf.append("<td>");
                 buf.append("<span class=\"");
                 if (isIntegrated) buf.append("integrated ");
                 switch (tier) {
@@ -252,7 +252,7 @@ class ProfileOrganizerRenderer {
                 }
                 buf.append("</td>");
 
-                buf.append("<td align=\"center\">");
+                buf.append("<td>");
 
                 if (bonus >= 9999999)
                     buf.append("<span class=\"lowlatency\">✔</span>");
@@ -275,7 +275,7 @@ class ProfileOrganizerRenderer {
                 if (prof.getIntegrationValue() > 0) {
                     buf.append("<span>").append(integration).append("</span>");
                 }
-                buf.append("</td><td nowrap align=\"center\" class=\"viewedit\">");
+                buf.append("</td><td nowrap class=\"viewedit\">");
                 buf.append("<a class=\"viewprofile\" href=\"/viewprofile?peer=").append(peer.toBase64()).append("\" title=\"").append(_t("View profile"))
                    .append("\" alt=\"[").append(_t("View profile")).append("]\">").append(_t("Profile")).append("</a>");
                 buf.append("<br><a class=\"configpeer\" href=\"/configpeer?peer=").append(peer.toBase64()).append("\" title=\"").append(_t("Configure peer"))
@@ -347,7 +347,7 @@ class ProfileOrganizerRenderer {
             for (PeerProfile prof : order) {
                 Hash peer = prof.getPeer();
                 DBHistory dbh = prof.getDBHistory();
-                buf.append("<tr class=\"lazy\"><td align=\"center\" nowrap>");
+                buf.append("<tr class=\"lazy\"><td nowrap>");
                 buf.append(_context.commSystem().renderPeerHTML(peer));
                 buf.append("</td>");
                 RouterInfo info = _context.netDb().lookupRouterInfoLocally(peer);
@@ -371,37 +371,37 @@ class ProfileOrganizerRenderer {
                         .replace("P", "<a href=\"/netdb?caps=P\"><span class=\"tier\">P</span></a>")
                         .replace("X", "<a href=\"/netdb?caps=X\"><span class=\"tier\">X</span></a>")
                         .replace("\"><span", tooltip);
-                    buf.append("<td align=\"left\">").append(caps).append("</td>");
+                    buf.append("<td>").append(caps).append("</td>");
                 } else {
                     buf.append("<td>&nbsp;</td>");
                 }
                 String integration = num(prof.getIntegrationValue()).replace(".00", "");
-                buf.append("<td align=\"right\">");
+                buf.append("<td>");
                 if (prof.getIntegrationValue() > 0) {
                     buf.append("<span>").append(integration).append("</span>");
                 }
                 buf.append("</td>");
-                buf.append("<td align=\"right\">").append(formatInterval(now, prof.getLastHeardAbout())).append("</td>");
-                buf.append("<td align=\"right\">").append(formatInterval(now, prof.getLastHeardFrom())).append("</td>");
-                buf.append("<td align=\"right\">").append(formatInterval(now, prof.getLastSendSuccessful())).append("</td>");
-                buf.append("<td align=\"right\">").append(formatInterval(now, prof.getLastSendFailed())).append("</td>");
-//                buf.append("<td align=\"right\">").append(avg(prof, 10*60*1000l, ra)).append("</td>");
-                buf.append("<td align=\"right\">").append(avg(prof, 60*60*1000l, ra)).append("</td>");
-                buf.append("<td align=\"right\">").append(avg(prof, 24*60*60*1000l, ra)).append("</td>");
+                buf.append("<td>").append(formatInterval(now, prof.getLastHeardAbout())).append("</td>");
+                buf.append("<td>").append(formatInterval(now, prof.getLastHeardFrom())).append("</td>");
+                buf.append("<td>").append(formatInterval(now, prof.getLastSendSuccessful())).append("</td>");
+                buf.append("<td>").append(formatInterval(now, prof.getLastSendFailed())).append("</td>");
+//                buf.append("<td>").append(avg(prof, 10*60*1000l, ra)).append("</td>");
+                buf.append("<td>").append(avg(prof, 60*60*1000l, ra)).append("</td>");
+                buf.append("<td>").append(avg(prof, 24*60*60*1000l, ra)).append("</td>");
                 if (dbh != null) {
-                    buf.append("<td align=\"right\">").append(formatInterval(now, dbh.getLastLookupSuccessful())).append("</td>");
-                    buf.append("<td align=\"right\">").append(formatInterval(now, dbh.getLastLookupFailed())).append("</td>");
-                    buf.append("<td align=\"right\">").append(formatInterval(now, dbh.getLastStoreSuccessful())).append("</td>");
-                    buf.append("<td align=\"right\">").append(formatInterval(now, dbh.getLastStoreFailed())).append("</td>");
+                    buf.append("<td>").append(formatInterval(now, dbh.getLastLookupSuccessful())).append("</td>");
+                    buf.append("<td>").append(formatInterval(now, dbh.getLastLookupFailed())).append("</td>");
+                    buf.append("<td>").append(formatInterval(now, dbh.getLastStoreSuccessful())).append("</td>");
+                    buf.append("<td>").append(formatInterval(now, dbh.getLastStoreFailed())).append("</td>");
                     String hourfail = davg(dbh, 60*60*1000l, ra);
                     String dayfail = davg(dbh, 24*60*60*1000l, ra);
-                    buf.append("<td align=\"center\"><span class=\"percentBarOuter\"><span class=\"percentBarInner\" style=\"width:" +
+                    buf.append("<td><span class=\"percentBarOuter\"><span class=\"percentBarInner\" style=\"width:" +
                                hourfail + "\"><span class=\"percentBarText\">").append(hourfail).append("</span></span></span>").append("</td>");
-                    buf.append("<td align=\"center\"><span class=\"percentBarOuter\"><span class=\"percentBarInner\" style=\"width:" +
+                    buf.append("<td><span class=\"percentBarOuter\"><span class=\"percentBarInner\" style=\"width:" +
                                dayfail + "\"><span class=\"percentBarText\">").append(dayfail).append("</span></span></span>").append("</td>");
                 } else {
                     for (int i = 0; i < 6; i++)
-                        buf.append("<td align=\"right\">").append(_t(NA));
+                        buf.append("<td>").append(_t(NA));
                 }
                 buf.append("</tr>\n");
             }
