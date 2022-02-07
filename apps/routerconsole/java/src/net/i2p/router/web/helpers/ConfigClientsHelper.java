@@ -131,9 +131,9 @@ public class ConfigClientsHelper extends HelperBase {
     public String getForm1() {
         StringBuilder buf = new StringBuilder(1024);
         buf.append("<table id=\"clientconfig\">\n" +
-                   "<tr><th>").append(_t("Client")).append("</th><th>")
-           .append(_t("Run at Startup?").replace("?", "")).append("</th><th>")
-           .append(_t("Control")).append("</th><th>")
+                   "<tr><th class=\"right\">").append(_t("Client")).append("</th><th class=\"center\">")
+           .append(_t("Run at Startup?").replace("?", "")).append("</th><th class=\"center\">")
+           .append(_t("Control")).append("</th><th class=\"left\">")
            .append(_t("Class and arguments")).append("</th></tr>\n");
 
         boolean allowEdit = isClientChangeEnabled();
@@ -226,9 +226,9 @@ public class ConfigClientsHelper extends HelperBase {
     public String getForm2() {
         StringBuilder buf = new StringBuilder(1024);
         buf.append("<table id=\"webappconfig\">\n" +
-                   "<tr><th>").append(_t("WebApp")).append("</th><th>")
-           .append(_t("Run at Startup?").replace("?", "")).append("</th><th>")
-           .append(_t("Control")).append("</th><th>")
+                   "<tr><th class=\"right\">").append(_t("WebApp")).append("</th><th class=\"center\">")
+           .append(_t("Run at Startup?").replace("?", "")).append("</th><th class=\"center\">")
+           .append(_t("Control")).append("</th><th class=\"left\">")
            .append(_t("Description")).append("</th></tr>\n");
         Properties props = RouterConsoleRunner.webAppProperties(_context);
         Set<String> keys = new TreeSet<String>(props.stringPropertyNames());
@@ -273,9 +273,9 @@ public class ConfigClientsHelper extends HelperBase {
     public String getForm3() {
         StringBuilder buf = new StringBuilder(1024);
         buf.append("<table id=\"pluginconfig\">\n" +
-                   "<tr><th>").append(_t("Plugin")).append("</th><th>")
-           .append(_t("Run at Startup?").replace("?", "")).append("</th><th>")
-           .append(_t("Control")).append("</th><th>")
+                   "<tr><th class=\"right\">").append(_t("Plugin")).append("</th><th class=\"center\">")
+           .append(_t("Run at Startup?").replace("?", "")).append("</th><th class=\"center\">")
+           .append(_t("Control")).append("</th><th class=\"left\">")
            .append(_t("Description")).append("</th></tr>\n");
         Properties props = PluginStarter.pluginProperties();
         Set<String> keys = new TreeSet<String>(Collator.getInstance());
@@ -291,7 +291,7 @@ public class ConfigClientsHelper extends HelperBase {
                     continue;
                 StringBuilder desc = new StringBuilder(256);
                 desc.append("\n<table border=\"0\">\n")
-                    .append("<tr><td><b>").append(_t("Version")).append("</b></td><td>").append(stripHTML(appProps, "version"));
+                    .append("<tr><td class=\"right\"><b>").append(_t("Version")).append("</b></td><td class=\"left\">").append(stripHTML(appProps, "version"));
                 String s = stripHTML(appProps, "date");
                 if (s != null) {
                     long ms = 0;
@@ -308,8 +308,8 @@ public class ConfigClientsHelper extends HelperBase {
                 if (s == null)
                     s = stripHTML(appProps, "description");
                 if (s != null) {
-                    desc.append("<tr><td><b>")
-                        .append(_t("Description")).append("</b></td><td>").append(s);
+                    desc.append("<tr><td class=\"right\"><b>")
+                        .append(_t("Description")).append("</b></td><td class=\"left\">").append(s);
                 }
                 desc.append("</td></tr>\n");
                 s = stripHTML(appProps, "author");
@@ -317,15 +317,15 @@ public class ConfigClientsHelper extends HelperBase {
                     String[] authors = DataHelper.split(s, "[,; \r\n\t]");
                     Matcher m = VALID_EMAIL_ADDRESS_REGEX.matcher(s);
                     String author = m.find() ? m.group() : null;
-                    desc.append("<tr><td><b>")
-                        .append(_t("Author")).append("</b></td><td>");
+                    desc.append("<tr><td class=\"right\"><b>")
+                        .append(_t("Author")).append("</b></td><td class=\"left\">");
                     if (author != null)
                         desc.append("<a href=\"mailto:").append(author).append("\">").append(s).append("</a>");
                     else
                         desc.append(s);
                     desc.append("</td></tr>\n");
                 }
-                desc.append("<tr><td><b>").append(_t("Signed by")).append("</b></td><td>");
+                desc.append("<tr><td class=\"right\"><b>").append(_t("Signed by")).append("</b></td><td class=\"left\">");
                 s = stripHTML(appProps, "signer");
                 if (s != null) {
                     if (s.indexOf('@') > 0)
@@ -338,20 +338,20 @@ public class ConfigClientsHelper extends HelperBase {
                 if (updateURL == null)
                     updateURL = stripHTML(appProps, "updateURL");
                 if (updateURL != null) {
-                    desc.append("<tr><td><b>")
-                        .append(_t("Update link")).append("</b></td><td><a href=\"")
+                    desc.append("<tr><td class=\"right\"><b>")
+                        .append(_t("Update link")).append("</b></td><td class=\"left\"><a href=\"")
                         .append(updateURL).append("\">").append(updateURL).append("</a></td></tr>\n");
                 }
                 s = stripHTML(appProps, "websiteURL");
                 if (s != null) {
-                    desc.append("<tr><td><b>")
-                        .append(_t("Website")).append("</b></td><td><a href=\"")
+                    desc.append("<tr><td class=\"right\"><b>")
+                        .append(_t("Website")).append("</b></td><td class=\"left\"><a href=\"")
                         .append(s).append("\" target=\"_blank\">").append(s).append("</a></td></tr>\n");
                 }
                 s = stripHTML(appProps, "license");
                 if (s != null) {
-                    desc.append("<tr><td><b>")
-                        .append(_t("License")).append("</b></td><td>").append(s).append("</td></tr>\n");
+                    desc.append("<tr><td class=\"right\"><b>")
+                        .append(_t("License")).append("</b></td><td class=\"left\">").append(s).append("</td></tr>\n");
                 }
                 desc.append("\n</table>\n");
                 boolean isRunning = PluginStarter.isPluginRunning(app, _context);
@@ -378,7 +378,7 @@ public class ConfigClientsHelper extends HelperBase {
                             boolean showEditButton, boolean showUpdateButton, boolean showStopButton,
                             boolean showDeleteButton, boolean showStartButton) {
         String escapedName = DataHelper.escapeHTML(name);
-        buf.append("<tr><td>");
+        buf.append("<tr><td class=\"right\">");
         if (urlify) {
             String link = "/";
             if (! RouterConsoleRunner.ROUTERCONSOLE.equals(name))
@@ -399,14 +399,14 @@ public class ConfigClientsHelper extends HelperBase {
             if (name.length() > 0)
                 buf.append("<label for=\"").append("client_").append(index).append("\">").append(_t(escapedName)).append("</label>");
         }
-        buf.append("</td><td><input type=\"checkbox\" class=\"optbox slider\" id=\"client_")
+        buf.append("</td><td class=\"center\"><input type=\"checkbox\" class=\"optbox slider\" id=\"client_")
            .append(index).append("\" name=\"").append(index).append(".enabled\"");
         if (enabled) {
             buf.append(CHECKED);
         }
         if (ro || preventDisable)
             buf.append("disabled=\"disabled\" ");
-        buf.append("></td><td>");
+        buf.append("></td><td class=\"center\">");
 
         if (showStartButton && (!ro) && !edit) {
             buf.append("<button type=\"submit\" title=\"").append(_t("Start"))
@@ -435,7 +435,7 @@ public class ConfigClientsHelper extends HelperBase {
                .append("\" client=\"").append(_t(escapedName)).append("\">")
                .append(_t("Delete")).append("<span class=hide> ").append(index).append("</span></button>");
         }
-        buf.append("</td>\n<td>");
+        buf.append("</td>\n<td class=\"left\">");
         if (edit && !ro) {
             buf.append("<input type=\"text\" size=\"80\" spellcheck=\"false\" name=\"nofilter_desc").append(index).append("\" value=\"");
             buf.append(escapedDesc);
