@@ -1608,9 +1608,10 @@ th .h3navlinks, #config_stats .h3navlinks, #config_webapps .h3navlinks {margin-t
 /* webapps */
 #webappconfig {border-left-width: 1px}
 #webappconfig + #webappconfigtext {margin-top: -11px}
-#webappconfig tr:last-child, .configtable#clientconfig tr:last-child {border-top: 1px inset #131}
-#webappconfig th:first-child {text-align: right}
-#webappconfig th, #clientconfig th {text-align: center}
+#webappconfig tr:last-child, #clientconfig tr:last-child {border-top: 1px inset #131}
+#webappconfig th, #clientconfig th {text-align: center; font-size: 90%}
+#webappconfig th:first-child, #webappconfig td:first-child, #clientconfig th:first-child, #clientconfig td:first-child, #pluginconfig th:first-child, #pluginconfig td:first-child {text-align: right}
+#webappconfig th:nth-child(2), #webappconfig td:nth-child(2), #webappconfig th:nth-child(3), #webappconfig td:nth-child(3), #clientconfig th:nth-child(2), #clientconfig td:nth-child(2), #clientconfig th:nth-child(3), #clientconfig td:nth-child(3), #pluginconfig th:nth-child(2), #pluginconfig td:nth-child(2), #pluginconfig th:nth-child(3), #pluginconfig td:nth-child(3) {padding: 3px 20px; width: 15%; white-space: nowrap; text-align: center}
 #webappconfig td:first-child::before {min-height: 40px; display: inline-block; vertical-align: middle; content: ""}
 
 /* configclients */
@@ -1619,18 +1620,19 @@ th .h3navlinks, #config_stats .h3navlinks, #config_webapps .h3navlinks {margin-t
 #clientconfig th:last-child {padding-left: 5px; text-align: left}
 #webappconfig th:last-child {text-align: left}
 #externali2cp {margin-bottom: -4px !important}
-.infohel#clientconf {margin-bottom: -2px}
+.infohelp#clientconf {margin-bottom: -2px}
 
 /* plugins */
 #webappconfig + p, #pluginconfigtext {margin-bottom: -1px}
 #availableplugins {margin: 12px 0 -1px}
 #pluginconfig {margin-top: -15px !important}
-#pluginconfig th:first-child, #pluginconfig td:first-child {padding-right: 50px; width: 100px; white-space: nowrap; text-align: right}
-#pluginconfig td:last-child table {margin: 5px 15px 5px 5px; padding: 5px; width: calc(100% - 8px)}
+#pluginconfig th:first-child, #pluginconfig td:first-child {padding-right: 50px; width: 100px; white-space: nowrap; text-align: center}
 #pluginconfig table {border: var(--border); filter: drop-shadow(0 0 3px #000)}
-#pluginconfig table td:first-child {padding-right: 5px; width: 70px; white-space: nowrap}
-#pluginconfig td:last-child table {background: none}
+#pluginconfig table td:first-child {padding-right: 5px; width: 1%; max-width: 70px; white-space: nowrap}
+#pluginconfig td:last-child {width: 50%}
+#pluginconfig td:last-child table {margin: 5px 15px 5px 5px; padding: 5px; width: calc(100% - 8px); background: none}
 #pluginconfig td:last-child table tr {background: rgba(0,0,0,.2)}
+#pluginconfig table td:last-child {text-align: left}
 #plugininstall .infohelp {padding: 18px 15px 18px 58px; background: #000 var(--plugin) no-repeat 15px center / 28px}
 #plugininstall tr:nth-child(3) td:nth-last-child(2) {padding: 18px 15px 18px 58px; background: var(--link) no-repeat 15px center; background-size: 28px}
 #plugininstall tr:nth-child(5) td:nth-last-child(2) {padding: 18px 15px 18px 58px; background: var(--files) no-repeat 15px center; background-size: 28px}
