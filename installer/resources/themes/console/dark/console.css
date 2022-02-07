@@ -109,6 +109,9 @@ text-align: center; will-change: transform}
 #sb_general td:first-child, #sb_shortgeneral td:first-child, #sb_advancedgeneral td:first-child, #sb_peersadvanced td:first-child {max-width: 130px}
 #sb_general, #sb_shortgeneral, #sb_advancedgeneral, #sb_bandwidth, #sb_peers, #sb_peersadvanced, #sb_tunnels, #sb_queue {margin-bottom: -4px !important}
 #sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after, #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {min-height: 14px; display: inline-block; content: ""}
+#sidebar td:first-child, #sb_localtunnels td:nth-child(2) {text-align: left}
+#sidebar td:last-child {text-align: right}
+#sidebar #sb_internals td, #sidebar #sb_advanced td, #sidebar #sb_services td {text-align: center}
 #sb_localtunnels {margin: -4px -7px -7px -8px; padding: 0}
 #sb_localtunnels tr:first-child td {padding-top: 0}
 #sb_localtunnels tr:last-child td {padding-bottom: 0}
@@ -711,7 +714,7 @@ h3[id="udpcon"] {width: auto}
 #profilelist .viewedit {padding: 1px}
 #profilelist .version {line-height: 1.4}
 #profilelist .nospeed {text-align: center}
-#profilelist .lowlatency, #profilelist .highlatency {width: 12px; min-width: 0; color: #373}
+#profilelist .lowlatency, #profilelist .highlatency {width: 12px; min-width: 0; text-align: center; color: #373}
 #profilelist .highlatency {color: #900}
 #floodfills td:nth-child(2) {padding-left: 3px; padding-right: 3px; white-space: nowrap}
 #floodfills td:nth-last-child(2) {text-align: center}

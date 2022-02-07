@@ -887,6 +887,10 @@ pre {
   text-transform: capitalize;
 }
 
+#sidebar td:first-child, #sb_localtunnels td:nth-child(2) {text-align: left}
+#sidebar td:last-child {text-align: right}
+#sidebar #sb_internals td, #sidebar #sb_advanced td, #sidebar #sb_services td {text-align: center}
+
 #sb_internals, #sb_advanced, #sb_help {
   margin: -5px -6px -5px -10px !important;
   width: 204px !important;
