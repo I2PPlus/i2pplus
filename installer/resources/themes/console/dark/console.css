@@ -1913,18 +1913,18 @@ th.options, #externali2cp th {padding: 7px 10px !important}
 #profilelist td:nth-child(2) {text-align: left}
 #profilelist th:nth-child(5), #profilelist td:nth-child(5) {width: 40%; text-align: center}
 #floodfills td:nth-child(2) {padding-left: 3px; padding-right: 3px; white-space: nowrap}
-#floodfills td:nth-last-child(2) {text-align: center !important}
+#floodfills td:nth-last-child(2) {text-align: center}
 #floodfills td:nth-child(2), #floodfills td:last-child, #floodfills td:nth-last-child(2) {width: 1%; white-space: nowrap}
 #floodfills .percentBarOuter, #floodfills .percentBarOuter, #floodfills .percentBarText, #tunnels .percentBarOuter, #tunnels .percentBarOuter, #tunnels .percentBarText {display: inline-block; box-sizing: border-box; float: none}
-#floodfills .percentBarOuter, #floodfills .percentBarText {margin: 0 2px; width: 50px !important; display: inline-block; vertical-align: middle}
+#floodfills .percentBarOuter, #floodfills .percentBarText {margin: 0 2px; width: 50px; display: inline-block; vertical-align: middle}
 #floodfills .percentBarOuter, #tunnels .percentBarOuter {height: 16px; overflow: hidden}
 #floodfills .percentBarOuter {text-align: left; border: var(--border_soft); background: #000; opacity: .9}
-#floodfills tr:hover .percentBarOuter, #floodfills tr:hover .percentBarInner {border-color: #252 !important}
+#floodfills tr:hover .percentBarOuter, #floodfills tr:hover .percentBarInner {border-color: #252}
 #floodfills .percentBarInner {width: inherit; display: inline-block; background: linear-gradient(180deg,#700 50%, #500 50%)}
 #tunnels .percentBarInner {height: 14px; display: inline-block}
-#floodfills .percentBarInner[style="width:0%"] {width: 100% !important; background: linear-gradient(180deg,#373 50%, #151 50%)}
+#floodfills .percentBarInner[style="width:0%"] {width: 100%; background: linear-gradient(180deg,#373 50%, #151 50%)}
 #floodfills .percentBarText {color: #fff; text-shadow: var(--textshadow); display: none}
-#floodfills td:empty, #tunnels .cells:empty {text-align: center; vertical-align: middle !important}
+#floodfills td:empty, #tunnels .cells:empty {text-align: center; vertical-align: middle}
 #floodfills td:empty::before, #ntcpconnections td:not(:last-child):empty::before, #udpconnections td:not(:last-child):empty::before, #profilelist td:empty::before, #tunnels .cells:empty::after {width: 100%; display: inline-block; text-align: center; content: "\2013"; opacity: .8}
 #floodfills td:nth-child(3), #profilelist th:nth-last-child(3), #profilelist td:nth-last-child(3), #profilelist th:nth-last-child(4), #profilelist th:nth-last-child(5), #profilelist th:nth-last-child(6), #profilelist td:nth-last-child(4), #profilelist td:nth-last-child(5), #profilelist td:nth-last-child(6) {text-align: center}
 #floodfills td:nth-child(3) span, #profilelist td:nth-last-child(3) span, #profilelist td:nth-last-child(4) span, #profilelist td:nth-last-child(5) span, #profilelist td:nth-last-child(6) span, #profilelist td:nth-last-child(2) span {min-width: 20px; display: inline-block; vertical-align: middle; text-align: right}
@@ -1938,14 +1938,31 @@ th.options, #externali2cp th {padding: 7px 10px !important}
 #view_profile h3 {margin-bottom: 13px; position: relative; vertical-align: middle; border-width: 1px; border-radius: 0}
 #view_profile h3 a {letter-spacing: 0; font-size: 90%; text-transform: none}
 #view_profile .profiledump, #view_profile .configpeer, #view_profile h3 a.viewprofile {font-size: 0}
-#view_profile .configpeer, #view_profile .viewprofile {margin: -2px 27px -2px 0 !important}
-#view_profile .viewprofile {margin-right: 6px !important}
+#view_profile .configpeer, #view_profile .viewprofile {margin: -2px 27px -2px 0}
+#view_profile .viewprofile {margin-right: 6px}
 .sybil_routerinfo .identicon {vertical-align: middle}
 #view_profile .identicon {margin: 0; width: 27px; height: 27px; position: absolute; top: 2px; right: 2px}
 #viewprofile td {padding: 0}
 #viewprofile pre, pre#activetransports {margin: 0; padding: 20px 20px 0; width: calc(100% - 45px); line-height: 20px; letter-spacing: .05em; text-shadow: var(--textshadow); border-left: 5px solid #030; background: repeating-linear-gradient(180deg,rgba(0,8,0,.6) 0, rgba(0,8,0,.6) 20px, rgba(0,20,0,.6) 20px, rgba(0,20,0,.6) 40px); background-size: 100% 40px}
 #viewprofile span {margin: -26px -1px -1px 0; padding: 5px; float: right; border: var(--border); background: #000}
 #profile_defs {margin-bottom: 9px}
+#profilelist .viewprofile, #profilelist .configpeer {margin: 1px}
+#profilelist .viewedit {padding: 1px}
+#profilelist .version {line-height: 1.4}
+#profilelist th:nth-child(4), #profilelist td:nth-child(4) {width: 15%}
+#profilelist th:nth-child(5), #profilelist td:nth-child(5) {width: 10%; min-width: 56px; white-space: nowrap}
+#profilelist .fast {background: var(--fast) no-repeat calc(50% - 10px) center, var(--highcap) no-repeat calc(50% + 10px) center}
+#profilelist .fast.integrated {background: var(--fast) no-repeat left center, var(--highcap) var(--center), var(--integrated) no-repeat right center}
+#profilelist .highcap {background: var(--highcap) var(--center)}
+#profilelist .highcap.integrated {background: var(--highcap) no-repeat calc(50% - 10px) center, var(--integrated) no-repeat calc(50% + 10px) center}
+#profilelist .standard {background: var(--standard) var(--center)}
+#profilelist .standard.integrated {background: var(--standard) no-repeat calc(50% - 10px) center, var(--integrated) no-repeat calc(50% + 10px) center}
+#profilelist .fast, #profilelist .highcap, #profilelist .integrated, #profilelist .standard, #profilelist .fast.integrated, #profilelist .highcap.integrated, #profilelist .standard.integrated {width: 56px; height: 16px; display: inline-block; font-size: 0; background-size: 16px}
+.profilegroup.fast::before {background: var(--fast) no-repeat left center}
+.profilegroup.highcap::before {background: var(--highcap) no-repeat left center}
+.profilegroup.integrated::before {background: var(--integrated) no-repeat left center}
+.profilegroup.standard::before {background: var(--standard) no-repeat left center}
+.profilegroup::before {width: 20px; height: 16px; display: inline-block; vertical-align: middle; content: ""}
 
 /* events */
 #eventlog {border-bottom: 2px solid #242 !important; background: #010} #events h3 {box-shadow: var(--highlight)}
@@ -2383,22 +2400,6 @@ h1, .main h2, .main h3, h4.app, h4.app2 {-webkit-text-stroke: var(--stroke)}
 
 .infohelp.vmcomm {margin-bottom: 0}
 
-/* profiles group icons */
-#profilelist th:nth-child(4), #profilelist td:nth-child(4) {width: 15% !important}
-#profilelist th:nth-child(5), #profilelist td:nth-child(5) {width: 10% !important; min-width: 56px; white-space: nowrap !important}
-#profilelist .fast {background: var(--fast) no-repeat calc(50% - 10px) center, var(--highcap) no-repeat calc(50% + 10px) center}
-#profilelist .fast.integrated {background: var(--fast) no-repeat left center, var(--highcap) var(--center), var(--integrated) no-repeat right center !important}
-#profilelist .highcap {background: var(--highcap) var(--center)}
-#profilelist .highcap.integrated {background: var(--highcap) no-repeat calc(50% - 10px) center, var(--integrated) no-repeat calc(50% + 10px) center}
-#profilelist .standard {background: var(--standard) var(--center)}
-#profilelist .standard.integrated {background: var(--standard) no-repeat calc(50% - 10px) center, var(--integrated) no-repeat calc(50% + 10px) center}
-#profilelist .fast, #profilelist .highcap, #profilelist .integrated, #profilelist .standard, #profilelist .fast.integrated, #profilelist .highcap.integrated, #profilelist .standard.integrated {width: 56px; height: 16px; display: inline-block; font-size: 0; background-size: 16px}
-.profilegroup.fast::before {background: var(--fast) no-repeat left center}
-.profilegroup.highcap::before {background: var(--highcap) no-repeat left center}
-.profilegroup.integrated::before {background: var(--integrated) no-repeat left center}
-.profilegroup.standard::before {background: var(--standard) no-repeat left center}
-.profilegroup::before {width: 20px; height: 16px; display: inline-block; vertical-align: middle; content: ""}
-
 /* lazy loading */
 .lazy.lazyhide, .lazy.lazyhide td {opacity: 0; contain: strict}
 .newsentry.lazyhide {contain: none}
@@ -2420,9 +2421,6 @@ a.configpeer {background: var(--edit) var(--center) / 12px, var(--badge)}
 .netdb_header img[src^="/flags"] {margin: 0 0 0 4px}
 .netdb_header img[src="/flags.jsp?c=a0"] {margin-top: -5px}
 .familysearch {background: var(--family) var(--center) / 12px, var(--badge)}
-#profilelist .viewprofile, #profilelist .configpeer {margin: 1px !important}
-#profilelist .viewedit {padding: 1px !important}
-#profilelist .version {line-height: 1.4}
 
 /* animations */
 @keyframes bar {from {width: calc(100%)}}
