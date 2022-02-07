@@ -864,6 +864,7 @@ div.ui_lang {margin: 10px -4px 0 !important; padding: 3px 2px 4px; text-align: c
 #leavefamily tr:last-child td:first-child {padding: 18px 15px 18px 58px; background: #000 var(--leavefamily) no-repeat 15px center / 28px}
 
 /* configreseed */
+
 form[action="/createreseed"] > h3 {margin-bottom: -13px; padding: 10px; word-spacing: .1em; letter-spacing: .08em; font-size: 10.5pt; border: var(--border); border-radius: 0; background: linear-gradient(90deg, #000, #001000 70%, #001300 90%)}
 #reseedconfig input[type=text], #reseedconfig input[type=password] {width: 170px}
 #reseednow {margin-top: -16px}
@@ -872,7 +873,7 @@ form[action="/createreseed"] > h3 {margin-bottom: -13px; padding: 10px; word-spa
 #reseedconfig tr:nth-child(2) br {display: none}
 #reseedconfig tr:nth-child(2) label {margin-right: 10px; white-space: nowrap}
 #reseedconfig td:first-child {line-height: 1.2}
-#reseedconfig .optbox[type=checkbox] {vertical-align: sub !important}
+#reseedconfig .optbox[type=checkbox] {vertical-align: sub}
 #config_reseed .reload, #config_reseed .download {float: left}
 #config_reseed .download {margin-left: 8px}
 #config_reseed .optionsingle {margin: 0; background: #010}
@@ -886,21 +887,22 @@ form[action="/createreseed"] > h3 {margin-bottom: -13px; padding: 10px; word-spa
 #reseedconfig td:first-child label {white-space: nowrap; display: inline-block}
 #reseed_urlselection.optionsingle, #reseedproxytype {columns: 3 auto; column-gap: 1px}
 #reseed_urlselection.optionsingle, #reseedproxytype, #config_reseed .optionlist:hover, #graphs .optionlist:hover, #config_network .optionlist:hover, #config_i2cp .optionlist:hover {background: #000 !important}
-#reseedproxysslhostport.optionlist, #reseedproxysslhostport.optionlist:hover {margin: 1px -1px 0 !important; padding: 0; border: 1px solid #000 !important; border-top: none !important; border-bottom: none !important}
-#reseedproxytype, #reseedproxysslhostport.optionlist, #reseedproxytype:hover, #reseedproxysslhostport.optionlist:hover {box-shadow: none !important; border: none !important}
+#reseedproxysslhostport.optionlist, #reseedproxysslhostport.optionlist:hover {margin: 1px -1px 0; padding: 0; border: 1px solid #000; border-top: none; border-bottom: none !important}
+#reseedproxytype, #reseedproxysslhostport.optionlist, #reseedproxytype:hover, #reseedproxysslhostport.optionlist:hover {box-shadow: none; border: none}
 #reseedproxytype {margin-bottom: -1px; columns: 250px 5; column-gap: 1px}
-#reseedproxytype label {margin: 1px -1px 1px 0; padding: 4px 10px; min-width: 100px !important; width: calc(100% - 20px); background: #010 !important}
-#reseedproxytype label::before {min-height: 34px !important}
-#reseedproxytype .optbox {margin-left: 10px !important}
-#config_reseed form {margin: 0 !important; padding: 0 !important}
-#config_network .optionlist:hover, #config_i2cp .optionlist:hover, #reseedssl:hover, #manualreseed .optionsingle:hover, .optiontextarea:hover, #reseed_urlselection:hover {border: var(--border); box-shadow: var(--option_highlight) !important; transition: ease box-shadow .5s}
+#reseedproxytype label {margin: 1px -1px 1px 0; padding: 4px 10px; min-width: 100px; width: calc(100% - 20px); background: #010}
+#reseedproxytype label::before {min-height: 34px}
+#reseedproxytype .optbox {margin-left: 10px}
+#config_reseed form {margin: 0; padding: 0}
+#config_network .optionlist:hover, #config_i2cp .optionlist:hover, #reseedssl:hover, #manualreseed .optionsingle:hover, .optiontextarea:hover, #reseed_urlselection:hover {border: var(--border); box-shadow: var(--option_highlight); transition: ease box-shadow .5s}
 #manualreseed {margin: -1px 0 -4px; background: none}
 #manualreseed td {padding: 5px; border-bottom: var(--border)}
-#manualreseed td.infohelp {padding: 18px 15px 18px 58px; box-shadow: var(--highlight), inset 0 0 2px 1px #040 !important; background: #000 var(--infohelp) no-repeat 15px center / 28px !important}
+#manualreseed td.infohelp {padding: 18px 15px 18px 58px; box-shadow: var(--highlight), inset 0 0 2px 1px #040; background: #000 var(--infohelp) no-repeat 15px center / 28px}
+#manualreseed tr:nth-last-child(2) td.infohelp {padding: 18px 15px 18px 58px; background: #000 var(--package) no-repeat 15px center / 28px}
 #manualreseed .optionsingle {padding: 5px 5px 0 45px}
-#manualreseed .optionlist input[type=text], #manualreseed .optionlist input[type=file] {width: 50% !important; min-width: 0 !important; max-width: 50% !important}
-#manualreseed .optionsingle table, #manualreseed .optionsingle tr, #manualreseed .optionsingle td {background: none !important; border: none !important; box-shadow: none}
-#manualreseed .optionsingle td:last-child {padding-right: 3px; width: 1%; white-space: nowrap; text-align: right !important}
+#manualreseed .optionlist input[type=text], #manualreseed .optionlist input[type=file] {width: 50%; min-width: 0; max-width: 50%}
+#manualreseed .optionsingle table, #manualreseed .optionsingle tr, #manualreseed .optionsingle td {background: none; border: none; box-shadow: none}
+#manualreseed .optionsingle td:last-child {padding-right: 3px; width: 1%; white-space: nowrap; text-align: right}
 #manualreseed input[type=submit] {margin-right: 0 !important; min-width: 120px}
 #reseedurl {background: #010 var(--link) no-repeat 16px center / 28px !important}
 #reseedurl:hover {background: #002500 var(--link) no-repeat 16px center / 28px !important}
@@ -947,20 +949,6 @@ form[action="events"] > .formaction {margin-bottom: -11px !important; margin-rig
 #addkeyring textarea, #addkeyring input[type=text], #addkeyring select, #addkeyring input[type=password] {width: calc(100% - 15px)}
 #keyringhelp, #availableplugins, #pluginconfigtext, #clientdefaultshelp, #bwshare, #editclients, #upnpstatus, #gatherstats {padding: 18px 15px 18px 58px; border: var(--border); background: #000 var(--infohelp) no-repeat 15px center}
 #gatherstats {margin: -4px 0 24px}
-
-#webappconfig {border-left-width: 1px}
-#webappconfig + #webappconfigtext {margin-top: -11px}
-#webappconfig tr:last-child, .configtable#clientconfig tr:last-child {border-top: 1px inset #131}
-#webappconfig th:first-child {text-align: right}
-#webappconfig th, #clientconfig th {text-align: center}
-#webappconfig td:first-child::before {min-height: 40px; display: inline-block; vertical-align: middle; content: ""}
-#availableplugins {margin: 12px 0 -1px}
-#webappconfig + p, #pluginconfigtext {margin-bottom: -1px}
-#pluginconfig {margin-top: -15px !important}
-#pluginconfig th:first-child, #pluginconfig td:first-child {padding-right: 50px; width: 100px; white-space: nowrap; text-align: right}
-#pluginconfig td:last-child table {margin: 5px 15px 5px 5px; padding: 5px; width: calc(100% - 8px)}
-#pluginconfig table {border: var(--border); filter: drop-shadow(0 0 3px #000)}
-#pluginconfig table td:first-child {padding-right: 5px; width: 70px; white-space: nowrap}
 
 /* advanced */
 input[name="ff"] + br {display: none}
@@ -1096,15 +1084,6 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 #capabilities_key table td:first-child, #capabilities_key td:nth-child(3) {width: 1% !important; text-align: center}
 #capabilities_key td:nth-child(2), #capabilities_key td:nth-child(3) {border-right: var(--border_soft)}
 #capabilities_key td:last-child {border-right: none}
-
-/* configclients */
-#clientsconfig, #webappconfigactions, #pluginconfigactions {margin-bottom: -4px; padding: 5px; border: var(--border); background: #000}
-#webappconfigactions, #pluginconfigactions {margin-top: -2px}
-#clientconfig th:first-child {padding-right: 5px; text-align: right}
-#clientconfig th:last-child {padding-left: 5px; text-align: left}
-#webappconfig th:last-child {text-align: left}
-#externali2cp {margin-bottom: -4px !important}
-.infohel#clientconf {margin-bottom: -2px}
 
 /* help */
 #help .confignav {margin-bottom: 11px}
@@ -1588,7 +1567,6 @@ th .h3navlinks, #config_stats .h3navlinks, #config_webapps .h3navlinks {margin-t
 #iptransport a:hover::after, #advancedconfig a:hover::after, #reseedsetup a:hover::after {background: var(--helplink_hover) var(--center) / 18px}
 #config_logging h3 a::before, #webappconfiguration a::before, #i2pclientconfig a::before, #pluginmanage a::before {width: 19px; height: 15px; display: inline-block; vertical-align: middle; background: var(--eye) no-repeat left center / 15px; content: ""}
 #config_logging h3 a:hover::before, #config_logging h3 a:focus::before {background: var(--eye_hover) no-repeat left center / 15px}
-#webappconfiguration a::before, #i2pclientconfig a::before, #pluginmanage a::before {margin-top: -1px; width: 15px; background: var(--settings) no-repeat left center / 12px}
 #config_bandwidth .h3navlinks {margin: -10px 0 -11px; padding: 11px 0 10px; display: inline-block; border-left: var(--border)}
 #config_bandwidth .h3navlinks a {margin-bottom: -10px; padding-top: 11px; width: 24px; color: transparent !important; background: url(../images/svg/networkconfig.svg) no-repeat calc(100% - 8px) center / 22px; text-shadow: none; border: none; contain: paint}
 #config_bandwidth .h3navlinks a:hover {filter: drop-shadow(0 0 1px #f60) drop-shadow(0 0 2px #f60)}
@@ -1601,10 +1579,44 @@ th .h3navlinks, #config_stats .h3navlinks, #config_webapps .h3navlinks {margin-t
 .configtable tr:last-child {border-top: var(--border)}
 #netconfig th, #externali2cp th, #plugininstall th, #plugininstall2 th, .configtable th, th.th_title {padding: 7px 10px !important; word-spacing: .1em; letter-spacing: .08em; text-transform: uppercase; text-align: left; font-size: 10pt}
 .configtable td {padding: 6px 10px; line-height: 1.8; background: #000}
-#plugininstall2 td {padding: 5px}
 .configtable td.tabletextarea {padding: 0}
-textarea#advancedsettings {margin: 0 !important; padding-top: 3px; width: 100%; overflow-x: hidden; word-break: break-all; white-space: pre-wrap; border: none; border-radius: 0; resize: none}
 .configtable td.infohelp, p.infohelp, td.infohelp, p.infowarn, td.infowarn, #debugmode, .sybilinfo, #sybilanalysis {padding: 20px 24px 20px 58px; line-height: 1.3; white-space: normal; font-weight: 400; text-align: justify; border-bottom: var(--border); border-top: var(--border); background: #000 var(--infohelp) no-repeat 15px center / 28px}
+
+#clientsconfig, #webappconfigactions, #pluginconfigactions {margin-bottom: -4px; padding: 5px; border: var(--border); background: #000}
+#webappconfiguration a::before, #i2pclientconfig a::before, #pluginmanage a::before {margin-top: -1px; width: 15px; background: var(--settings) no-repeat left center / 12px}
+
+/* webapps */
+#webappconfig {border-left-width: 1px}
+#webappconfig + #webappconfigtext {margin-top: -11px}
+#webappconfig tr:last-child, .configtable#clientconfig tr:last-child {border-top: 1px inset #131}
+#webappconfig th:first-child {text-align: right}
+#webappconfig th, #clientconfig th {text-align: center}
+#webappconfig td:first-child::before {min-height: 40px; display: inline-block; vertical-align: middle; content: ""}
+
+/* configclients */
+#webappconfigactions, #pluginconfigactions {margin-top: -2px}
+#clientconfig th:first-child {padding-right: 5px; text-align: right}
+#clientconfig th:last-child {padding-left: 5px; text-align: left}
+#webappconfig th:last-child {text-align: left}
+#externali2cp {margin-bottom: -4px !important}
+.infohel#clientconf {margin-bottom: -2px}
+
+/* plugins */
+#webappconfig + p, #pluginconfigtext {margin-bottom: -1px}
+#availableplugins {margin: 12px 0 -1px}
+#pluginconfig {margin-top: -15px !important}
+#pluginconfig th:first-child, #pluginconfig td:first-child {padding-right: 50px; width: 100px; white-space: nowrap; text-align: right}
+#pluginconfig td:last-child table {margin: 5px 15px 5px 5px; padding: 5px; width: calc(100% - 8px)}
+#pluginconfig table {border: var(--border); filter: drop-shadow(0 0 3px #000)}
+#pluginconfig table td:first-child {padding-right: 5px; width: 70px; white-space: nowrap}
+#plugininstall .infohelp {padding: 18px 15px 18px 58px; background: #000 var(--plugin) no-repeat 15px center / 28px}
+#plugininstall tr:nth-child(3) td:nth-last-child(2) {padding: 18px 15px 18px 58px; background: var(--link) no-repeat 15px center; background-size: 28px}
+#plugininstall tr:nth-child(5) td:nth-last-child(2) {padding: 18px 15px 18px 58px; background: var(--files) no-repeat 15px center; background-size: 28px}
+#plugininstall input[type=text] {width: 50%; min-width: 400px}
+#plugininstall input.cancel {display: none}
+#plugininstall2 td {padding: 5px}
+
+textarea#advancedsettings {margin: 0 !important; padding-top: 3px; width: 100%; overflow-x: hidden; word-break: break-all; white-space: pre-wrap; border: none; border-radius: 0; resize: none}
 td.infohelp.joinfamily {padding: 20px 24px 20px 58px}
 #bannedpeercount {background: #000 var(--ban) no-repeat 15px center / 28px}
 #profiles #bannedpeercount {margin-bottom: 0}
@@ -1646,13 +1658,13 @@ h3.ptitle {margin-bottom: -6px !important}
 #tunnelconfig th {padding: 6px 10px}
 #tunnelconfig td:nth-child(n+2) {text-align: left}
 th.th_title {padding: 8px 10px; text-align: left; background: linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important; background-size: 100%, 4px 100%, 100%}
-#plugininstall input[type=text] {width: 50%; min-width: 400px}
-#plugininstall input.cancel {display: none}
 #tunnelconfigsave, #homeapps {margin-bottom: -2px}
 h4.embeddedtitle#updateplugins {margin-top: -13px; padding: 5px 10px; word-spacing: .1em; letter-spacing: .08em; text-transform: uppercase; text-align: left; font-size: 10pt; border: var(--border); background: var(--th)}
 #loggingoptions, #addkeyring {margin-bottom: -3px; margin-top: -1px}
 #permabanned {margin-top: -1px; margin-bottom: 9px}
 #permabanned th, #banneduntilrestart th {padding: 5px 10px}
+
+/* configstats */
 #config_stats h3 a, #config_logging h3 a {float: right; letter-spacing: normal; text-transform: none; font-size: 9pt}
 #configstats {margin-bottom: -2px}
 #configstats th {padding: 8px 10px; text-align: left}
@@ -1671,8 +1683,8 @@ cursor: default}
 #configstats input.optbox {display: none !important}
 #configstats .tablefooter td {padding: 5px 10px}
 #enablefullstats {margin-top: 5px; padding: 5px 10px; border: var(--border)}
-/* infohelp/warn overrides and misc ornamentation */
 
+/* infohelp/warn overrides and misc ornamentation */
 #bugreports td.infohelp {padding: 18px 15px 18px 58px; background: #000 var(--bug) no-repeat 15px center / 28px !important}
 #debugmode {padding: 18px 15px 18px 58px; background: #000 var(--bug) no-repeat 15px center / 28px !important}
 .sybilinfo {margin: 8px 0; padding: 18px 15px 18px 58px; background: #000 var(--sybil) no-repeat 15px center / 28px !important}
@@ -1684,8 +1696,6 @@ cursor: default}
 #floodfillconfig tr:nth-child(2) b {margin-right: 10px}
 #clientconf.infohelp, #webappconfigtext.infohelp {padding: 18px 15px 18px 58px; position: relative; z-index: 10; background: #000 var(--editclient) no-repeat 15px center / 28px !important}
 #pluginconfigtext {padding: 18px 15px 18px 58px; background: #000 var(--pluginconfig) no-repeat 15px center / 28px !important}
-#plugininstall .infohelp {padding: 18px 15px 18px 58px; background: #000 var(--plugin) no-repeat 15px center / 28px !important}
-#manualreseed tr:nth-last-child(2) td.infohelp {padding: 18px 15px 18px 58px; background: #000 var(--package) no-repeat 15px center / 28px !important}
 #config_peers tr:nth-child(3) td.infohelp {padding: 18px 15px 18px 58px; background: #000 var(--ban) no-repeat 15px center / 28px !important}
 #shutdownrouter + p.infohelp {padding: 18px 15px 18px 58px; background: #000 var(--power) no-repeat 15px center / 28px !important}
 #restartrouter + p.infohelp, #config_family .infohelp.needrestart {padding: 18px 15px 18px 58px; background: #000 var(--reboot) no-repeat 15px center / 28px !important}
@@ -1698,8 +1708,6 @@ cursor: default}
 #config_family .infohelp {padding: 18px 15px 18px 58px; background: #000 var(--family) no-repeat 15px center / 28px !important}
 #consolepass tr:first-child td {padding: 18px 15px 18px 58px; background: #000 var(--useradd) no-repeat 15px center; background-size: 28px, 100% !important}
 form[action="events"] {padding: 10px 10px 10px 50px; background: #000 var(--logs) no-repeat 15px center; background-size: 28px}
-#plugininstall tr:nth-child(3) td:nth-last-child(2), #manualreseed tr:nth-child(3) td:nth-last-child(2) {padding: 18px 15px 18px 58px; background: #000 var(--link) no-repeat 15px center; background-size: 28px}
-#manualreseed tr:nth-child(5) td:nth-last-child(2), #plugininstall tr:nth-child(5) td:nth-last-child(2) {padding: 18px 15px 18px 58px; background: #000 var(--files) no-repeat 15px center; background-size: 28px}
 
 /* configservice */
 #config_service .confignav {margin-bottom: 10px}
