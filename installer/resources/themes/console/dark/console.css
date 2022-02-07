@@ -42,7 +42,7 @@ i {padding-right: 2px}
 .optionlist:hover, .optionsingle:hover, .optiontextarea:hover {border: var(--border_soft); box-shadow: var(--option_highlight); transition: ease box-shadow .5s, ease background .2s .01s; background: #002500}
 th.options {padding: 8px 5px 8px 10px !important; font-size: 9pt}
 .options input[type=checkbox], .suboption .optbox {margin: 0 3px 0 0}
-b.suboption {margin: 0 !important; padding: 5px 8px 6px 10px; display: inline-block; white-space: nowrap; text-shadow: var(--textshadow); border: var(--border_soft); border-bottom: none; box-shadow: var(--highlight); background: linear-gradient(180deg,#010 50%, #000 50%)}
+b.suboption {margin: 0; padding: 5px 8px 6px 10px; display: inline-block; white-space: nowrap; text-shadow: var(--textshadow); border: var(--border_soft); border-bottom: none; box-shadow: var(--highlight); background: linear-gradient(180deg,#010 50%, #000 50%)}
 
 .hide, .hideme, #hideme {display: none}
 .clearer {margin-bottom: -16px; height: 0; line-height: 0; clear: left}
@@ -50,6 +50,9 @@ b.suboption {margin: 0 !important; padding: 5px 8px 6px 10px; display: inline-bl
 div.widescroll {overflow: auto}
 .widescroll table {white-space: nowrap}
 .footnote, .topness, .footnote hr {display: none}
+.underline {margin: 0 0 10px 0; padding: 5px 0 5px 0; border-bottom: 1px solid var(--ink)}
+hr {margin: 20px 0 10px; height: 1px; border: 0 solid #242; background: #242}
+hr:last-child {margin-top: 20px; margin-bottom: 20px}
 input[type=file] {background: none}
 #config_ui :-moz-broken {display: inline-block; visibility: hidden}
 #sidebar .refresh {margin-top: -10px; margin-bottom: -4px; padding: 2px 0 0 0}
@@ -410,6 +413,7 @@ h2, h3, h4 {box-shadow: var(--highlight); contain: paint}
 h1, h4.app, h4.app2, #news h3 {text-shadow: var(--textshadow); box-shadow: var(--highlight); background: var(--h1); background-size: 4px 100%, 100%, 175px; background-blend-mode: normal, exclusion, exclusion}
 #news h3 {padding: 6px 8px 6px 30px; word-spacing: 0; letter-spacing: .08em; border-bottom: var(--border); background: var(--news) no-repeat 8px center, var(--h1); background-size: 16px, 4px 100%, 100%, 175px; background-blend-mode: normal, normal, exclusion, exclusion}
 button, button:visited {margin: 2px 3px; min-width: 75px}
+button:active {text-shadow: var(--textshadow); box-shadow: var(--btn_shadow_active)}
 button:hover a {color: var(--hover)}
 button:active a {color: var(--ink)}
 
@@ -437,13 +441,12 @@ button:active a {color: var(--ink)}
 #sidebar .reload[value="Reseed"]:hover, #sidebar .reload[value="Reseed"]:focus, #sidebar .reload[value="Reseed"]:active {background: var(--download_hover) no-repeat center left 6px / 14px, var(--btn_hover_radial)}
 
 /* client config buttons aka project "X" */
-button.control {margin: 3px; padding: 15px; min-width: 0; font-size: 0; background-size: 14px, 100%}
-button.accept.control {background: var(--start) var(--center), var(--btn)}
-button.accept.control:hover, button.accept.control:focus {background: #000 var(--start_hover) var(--center)}
-button.accept.control:active {background: var(--hover) var(--start_active) var(--center)}
-button.stop.control {background: var(--stop) var(--center), var(--btn)}
-button.stop.control:hover, button.stop.control:focus {background: #000 var(--stop_hover) var(--center)}
-button.stop.control:active {background: var(--hover) var(--stop_active) var(--center)}
+button.accept.control {background: var(--start) var(--center) / 14px, var(--btn)}
+button.accept.control:hover, button.accept.control:focus {background: #000 var(--start_hover) var(--center) / 14px}
+button.accept.control:active {background: var(--hover) var(--start_active) var(--center) / 14px}
+button.stop.control {background: var(--stop) var(--center) / 14px, var(--btn)}
+button.stop.control:hover, button.stop.control:focus {background: #000 var(--stop_hover) var(--center) / 14px}
+button.stop.control:active {background: var(--hover) var(--stop_active) var(--center) / 14px}
 button.add.control {background: var(--edit) var(--center) / 16px, var(--btn)}
 button.add.control:hover, button.add.control:focus {background: #000 var(--edit_hover) var(--center) / 16px}
 button.add.control:active {background: var(--hover) var(--edit_active) var(--center) / 16px}
@@ -457,6 +460,7 @@ button.download.control {background: var(--download) var(--center) / 14px, var(-
 button.download.control:hover, button.download.control:focus {background: #000 var(--download_hover) var(--center) / 14px}
 button.download.control:active {background: var(--hover) var(--download_active) var(--center) / 14px}
 button.control:active {background-size: 12px; transition: ease background .05s}
+button.control {margin: 3px; padding: 15px; min-width: 0; font-size: 0}
 
 .sidebarlogo {text-align: center}
 #sidebar button.reload, #sidebar button.stop, #sidebar button.cancel {margin: 3px 2px; min-width: 97px; text-transform: capitalize}
@@ -464,12 +468,9 @@ button.control:active {background-size: 12px; transition: ease background .05s}
 #updateAvailable {margin: 0 0 3px; width: 100%; display: inline-block; line-height: 1.2; color: #dd3; font-size: 9pt; text-shadow: var(--textshadow); opacity: .9}
 #updateAvailable + br + button + br + #updateAvailable::before {margin: 2px 0 4px; width: 100%; height: 1px; display: inline-block; background: #020; content: ""}
 #updateAvailable + br + button + br + #updateAvailable {margin-top: 2px}
-.underline {margin: 0 0 10px 0; padding: 5px 0 5px 0; border-bottom: 1px solid var(--ink)}
-hr {color: #242; background: #242; height: 1px; border: 0 solid #242; margin: 20px 0 10px}
-hr:last-child {margin-top: 20px; margin-bottom: 20px}
+
 .joblog hr {margin: 10px 0}
 .wideload > a[href^="tunnels"] ~ hr, .wideload > a[href^="/susidns/"] ~ hr {margin: 10px 0}
-button:active {text-shadow: var(--textshadow); box-shadow: var(--btn_shadow_active)}
 input[type=image] {min-width: 0}
 #config_clients label[for="0"] {cursor: default}
 input[name="refreshInterval"] {margin-right: 3px; width: 100px; text-align: right}
@@ -784,26 +785,28 @@ a[href^="configpeer?peer"]:active::after {background: var(--edit_active) var(--c
 tr.addnew, tr.addnew:hover {border-top: var(--border); background: #000800}
 
 /* configui */
-
 .themechoice, .langselect {margin: 4px; width: 140px; float: left; text-align: center; border: var(--border); background: radial-gradient(circle at center -90px, rgba(0,96,0,.9), #000 60%), linear-gradient(180deg,#010, #000 80%)}
 .themechoice {padding: 0 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
 .langselect {padding: 8px 4px 0; background: radial-gradient(circle at center -70px, rgba(0,96,0,.9), #000 60%), linear-gradient(180deg,#010, #000 80%)}
 .themechoice:hover {border: 1px solid var(--hover); background: #000}
-.themechoice img {opacity: .6}
-.themechoice .optbox:checked + img {filter: none; opacity: 1}
-.themechoice:hover img {filter: drop-shadow(0 0 1px var(--hover))}
-.themelabel {margin-left: -4px; margin-right: -4px; padding: 3px 2px 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.5; color: #bb7; border-top: var(--border) !important; background: var(--glow_bottom), linear-gradient(180deg,#001900,#001000 50%,#000)}
-.themechoice:hover .themelabel {border-top: 1px solid var(--hover) !important; background: var(--glow_bottom_hover) #000}
-.themechoice:active .themelabel {color: var(--ink) !important; box-shadow: var(--highlight) !important; background: var(--hover) !important}
 .themechoice .optbox {display: none}
-.themechoice .optbox:checked + img {transform: scale(0.8)}
-.themechoice .optbox:hover + img ~ .themelabel {color: var(--hover)}
-.themechoice .optbox:checked + img ~ .themelabel {font-weight: 700; color: var(--ink); box-shadow: var(--highlight), inset 0 0 2px 1px #050 !important; background: #030 !important}
-.themechoice .optbox:focus + img ~ .themelabel {color: var(--hover) !important; box-shadow: inset 0 0 10px 3px #000 !important}
-.themechoice .optbox:active:not(:checked) + img ~ .themelabel {color: var(--ink) !important; box-shadow: var(--highlight), inset 3px 3px 3px 1px #5f2400 !important}
-.themechoice img {padding: 5px 0}
-.themechoice:active img {transform: scale(0.8)}
+.themechoice .optbox:checked + img {opacity: 1; filter: none; transform: scale(0.8)}
+.themechoice img {padding: 5px 0; opacity: .6}
 .themechoice img, .langselect img {animation: fade .15s ease .3s reverse both}
+.themechoice:hover img {filter: drop-shadow(0 0 1px var(--hover))}
+.themechoice:active img {transform: scale(0.8)}
+.themechoice .themelabel {margin-left: -4px; margin-right: -4px; padding: 3px 2px 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.5; color: #bb7; border-top: var(--border); background: var(--glow_bottom), linear-gradient(180deg,#001900,#001000 50%,#000)}
+.themechoice:hover .themelabel, .themechoice .optbox:focus ~ .themelabel {color: var(--hover); border-top: 1px solid var(--hover); box-shadow: inset 0 0 10px 3px #000; background: var(--glow_bottom_hover) #000}
+.themechoice:active .themelabel {color: var(--ink) !important; border-top: 1px solid var(--hover); box-shadow: var(--btn_shadow_active) !important; background: var(--hover) !important}
+.themechoice .optbox:checked ~ .themelabel {font-weight: 700; color: var(--ink); box-shadow: var(--highlight), inset 0 0 2px 1px #050; background: #030}
+#themeheading, #langheading, #passwordheading {margin-bottom: 0; padding: 8px 10px; letter-spacing: .08em; word-spacing: .1em; font-size: 10.5pt; border-radius: 0; border: var(--border); background: linear-gradient(90deg, #000, #001000 70%, #001300 90%)}
+#themeselect {margin: -1px 0; padding: 8px 7px 0; clear: both; border: var(--border)}
+#themeoptions {margin: 0 -7px 5px; padding: 8px 10px 8px 5px; position: relative; top: 8px; clear: both; border-top: var(--border); border-bottom: var(--border); background: #000800}
+#themeoptions br {display: none}
+#themeoptions label {margin: 4px 10px 4px 0 !important; display: inline-block; white-space: nowrap}
+#themeoptions input {margin: 1px 5px}
+#themesettings {clear: both; border: var(--border); padding: 8px 7px 0; margin: -1px 0; background: #000}
+#themesettings hr {display: none}
 .langselect:hover {border: 1px solid var(--hover)}
 .langselect img {margin-top: -2px !important; margin-bottom: 2px !important; border: 1px solid #002000}
 .langselect img {margin-top: 7px !important; margin-bottom: 0; margin-left: -71px; position: absolute; border: 1px solid #002000}
@@ -813,25 +816,16 @@ tr.addnew, tr.addnew:hover {border-top: var(--border); background: #000800}
 .langselect input:hover + img + div.ui_lang {color: var(--hover); border-top: 1px solid var(--hover)}
 .langselect input:active:not(:checked) + img + div.ui_lang {color: var(--ink) !important; box-shadow: var(--highlight), inset 3px 3px 3px 1px #5f2400 !important}
 .langselect:hover .ui_lang {color: var(--hover); border-top: 1px solid var(--hover); background: #000}
-.langselect:active .ui_lang {background: var(--hover) !important; color: var(--ink) !important; box-shadow: var(--highlight)}
+.langselect:active .ui_lang {background: var(--hover) !important; color: var(--ink); box-shadow: var(--highlight)}
 .langselect input[name="lang"]:checked + img, .langselect input[name="lang"]:checked + #config_ui img[src="/flags.jsp?c=a1"] {margin-top: 6px !important; margin-left: -72px; width: 19px !important; height: 13px !important; border: 1px solid var(--hover); box-shadow: 0 0 1px #f30}
-.langselect input[name="lang"]:checked + img + div.ui_lang {color: var(--ink); font-weight: 700; box-shadow: var(--highlight), inset 0 0 2px 1px #050 !important; background: #030}
-.langselect input:focus + img + div.ui_lang, .langselect input[name="lang"]:checked:focus + img + div.ui_lang {color: var(--hover) !important; box-shadow: inset 0 0 10px 3px #000}
+.langselect input[name="lang"]:checked + img + div.ui_lang {color: var(--ink); font-weight: 700; box-shadow: var(--highlight), inset 0 0 2px 1px #050; background: #030}
+.langselect input:focus + img + div.ui_lang, .langselect input[name="lang"]:checked:focus + img + div.ui_lang {color: var(--hover); box-shadow: inset 0 0 10px 3px #000}
 .langselect:active .optbox:not(:checked) + img {transform: scale(0.8)}
-#config_ui .langselect .optbox {margin: -7px 0 -34px -2px; min-width: 124px !important; min-height: 66px; position: relative !important; z-index: 999; vertical-align: text-bottom; text-align: center; opacity: 0}
+#config_ui .langselect .optbox {margin: -7px 0 -34px -2px; min-width: 124px !important; min-height: 66px; position: relative; z-index: 999; vertical-align: text-bottom; text-align: center; opacity: 0}
 #chooselang img, #configbandwidth img {margin: -1px 10px 0; display: inline-block}
-#chooselang:hover img, #configbandwidth:hover img {transform: scale(1.3); filter: none !important}
+#chooselang:hover img, #configbandwidth:hover img {transform: scale(1.3); filter: none}
 #chooselang::after, #configbandwidth::after {content: none}
-#themeoptions {margin: 0 -7px 5px; padding: 8px 10px 8px 5px; position: relative; top: 8px; clear: both; border-top: var(--border); border-bottom: var(--border); background: #000800}
-#themeoptions br {display: none}
-#themeoptions label {margin: 4px 10px 4px 0 !important; display: inline-block; white-space: nowrap}
 #helptranslate {margin: 0 -7px; padding: 20px 24px 20px 58px !important; position: relative; top: 8px; text-align: left !important; border-top: var(--border); border-bottom: var(--border); background: #000 url(images/favicon.svg) no-repeat left 18px center / 28px}
-#themeoptions input {margin: 1px 5px}
-#themeoptions input[type=checkbox] {min-height: 16px}
-#themeheading, #langheading, #passwordheading {margin-bottom: 0; padding: 8px 10px; letter-spacing: .08em; word-spacing: .1em; font-size: 10.5pt; border-radius: 0; border: var(--border); background: linear-gradient(90deg, #000, #001000 70%, #001300 90%)}
-#themesettings {clear: both; border: var(--border); padding: 8px 7px 0; margin: -1px 0; background: #000}
-#themesettings hr {display: none}
-#themeselect {margin: -1px 0; padding: 8px 7px 0; clear: both; border: var(--border)}
 
 /* large flags */
 .langselect img {margin-top: -6px !important; margin-left: -82px; width: 40px; height: 40px; position: absolute; border: none !important; box-shadow: none; opacity: .6; filter: drop-shadow(0 0 1px #000)}
