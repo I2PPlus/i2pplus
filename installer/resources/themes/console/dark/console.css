@@ -33,6 +33,7 @@ ol li:first-child {margin-top: 10px}
 ul {margin: 0; padding: 0}
 code {text-align: left; font: 9pt var(--monospaced); color: #dd0}
 i {padding-right: 2px}
+.nowrap {white-space: nowrap}
 .optionsingle {background: #010}
 .optionlist, .optionsingle, #reseedssl {padding: 1px 2px; border: var(--border_soft); box-shadow: inset 0 0 0 2px #000; column-gap: 1px; transition: ease box-shadow .2s; background: repeating-linear-gradient(180deg,#000 1px, #000800 2px, #000800 3px)}
 .optionlist {padding-bottom: 1px; columns: 500px auto}
@@ -58,7 +59,7 @@ input[type=file] {background: none}
 #tunnels img[src^="/flags.jsp?"], #profiles img[src^="/flags.jsp?"], #peers img[src^="/flags.jsp?"] {width: 16px; height: 12px}
 .unbold {font-weight: 400}
 h1, .main h2, .main h3, h4.app, h4.app2 {-webkit-text-stroke: var(--stroke)}
-.main h3 a {-webkit-text-stroke: 0 !important}
+.main h3 a {-webkit-text-stroke: 0}
 .main ul {list-style: square}
 .main li {margin: 2px 0 2px 30px; padding: 2px 10px 2px 0; word-wrap: break-word; text-align: left}
 
@@ -396,9 +397,9 @@ p + .twocol {margin: 10px 25px}
 .links + .twocol {margin-top: -5px}
 .links {margin-top: 10px; text-align: justify}
 .links li {margin-left: 25px; list-style-image: var(--star); text-align: justify; line-height: 1.6}
-.links b {color: #bb0 !important; letter-spacing: .08em; line-height: 1.65}
-#home .welcome h2 {margin: 12px -5px !important}
-#console .welcome h2 {background: url(images/favicon.svg) no-repeat right 6px center / 24px, var(--h3), linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), var(--h3_fade) !important; background-size: 24px, 4px 100%, 100%, 100% !important; background-blend-mode: luminosity, normal, normal}
+.links b {color: #bb0; letter-spacing: .08em; line-height: 1.65}
+#home .welcome h2 {margin: 12px -5px}
+#console .welcome h2 {background: url(images/favicon.svg) no-repeat right 6px center / 24px, var(--h3), linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), var(--h3_fade); background-size: 24px, 4px 100%, 100%, 100%; background-blend-mode: luminosity, normal, normal}
 #home .welcome {display: none}
 div[lang="pt"] .twocol, div[lang="es"] .twocol, div[lang="sv"] .twocol {margin: 10px -5px 5px; padding: 10px; border: 1px solid #000; border-radius: 4px; background: rgba(0,32,0,.3)}
 div[lang="es"] li, div[lang="pt"] li, div[lang="sv"] li {list-style: none}
@@ -550,16 +551,15 @@ ul.statlist li li {margin-left: 16px; margin-right: -20px; line-height: 1.4; lis
 ul.statlist li li::before, ul.statlist li li:last-child::before {margin-top: 2px; margin-bottom: -12px; vertical-align: bottom; display: inline-block; color: #994; content: "\279F\00A0"}
 ul.statlist li li:last-child {padding-bottom: 0}
 ul.statlist li li:last-child::after {margin-top: 6px; margin-bottom: -12px; display: block; content: ""}
-li.noevents {margin-bottom: 5px}
-li.noevents::after {margin-top: 6px; margin-bottom: 0; margin-right: 20px}
+#stats .noevents {margin-bottom: 5px}
+#stats .noevents::after {margin-top: 6px; margin-bottom: 0; margin-right: 20px}
 ul.statlist li b {color: #994}
 ul.statlist li li:last-child::before {margin-top: 3px; vertical-align: top; color: #994; content: "\27A1\00A0"}
-.nowrap {white-space: nowrap}
 .statsLongName {line-height: 1.2; font-weight: 700; color: #dd0}
 #stats form {margin: -13px 0 -11px; padding: 10px; border: var(--border); background: #000}
 #stats form > * {vertical-align: middle}
 ul.statlist li li:last-child {margin-bottom: -20px}
-li.noevents {padding: 0 0 18px}
+#stats .noevents {padding: 0 0 18px}
 #stats h3 a:hover {color: var(--ink)}
 .statlist li.statsName:first-child {margin-top: 0}
 .statlist {padding-bottom: 0}
@@ -567,18 +567,37 @@ li.noevents {padding: 0 0 18px}
 .statlist li b {font-size: 110%}
 .statlist li li b {font-size: 100%}
 .statlist li i {margin-left: 6px; opacity: .8}
-.statsName b {width: calc(100% - 24px)}
 .statlist ul li:last-child b {padding-left: 0; width: auto}
-.statsName {margin: 0 6px 10px 0; padding: 10px 10px 0 10px; width: calc(100% - 22px); display: inline-block; border: var(--border); box-shadow: var(--highlight), inset 0 0 2px 1px #030; background: #000800}
-.statsName b, .statsName i {display: inline-block}
-.statsName::before {content: none}
-li.noevents, ul.statlist li li:last-child::after {margin-bottom: 0}
-li.noevents::after, ul.statlist li li:last-child::after {margin-bottom: 0; padding-bottom: 0; border-bottom-color: transparent}
-li.noevents::after {padding-bottom: 10px}
+.statlist li.statsName b {padding-left: 20px; background: var(--star) left top 1px no-repeat; background-size: 14px}
+.statlist li.statsName ul li b {background: none}
 .statlist .bullet {display: none}
-/* end stats */
+#stats .statsName {margin: 0 6px 10px 0; padding: 10px 10px 0 10px; width: calc(100% - 22px); display: inline-block; border: var(--border); box-shadow: var(--highlight), inset 0 0 2px 1px #030; background: #000800}
+#stats .statsName::before {content: none}
+#stats .statsName b, .statsName i {display: inline-block}
+#stats .statsName b {width: calc(100% - 24px)}
+.statvalue {padding: 0 2px 0 0; font-weight: 700; font-style: italic; color: var(--ink)}
+.statsLongName {margin-left: 15px; margin-bottom: -24px; padding-bottom: 8px; display: block; width: calc(100% - 27px); border-bottom: var(--border_soft)}
+.statsViewGraphs {margin: 2px 0 2px -3px; width: 100%; display: inline-block; font-size: 90%}
+.graphstat {margin: 0 1px; padding: 0 8px 2px; line-height: 1}
+#stats .noevents, ul.statlist li li:last-child::after {margin-bottom: 0}
+#stats .noevents::after, ul.statlist li li:last-child::after {margin-bottom: 0; padding-bottom: 0; border-bottom-color: transparent}
+#stats .noevents::after {padding-bottom: 10px}
+#stats label {display: inline-block}
+#stats h3 {border-width: 1px; border-radius: 0}
+#stats form, #stats .toggle_input, #stats input:not(:checked) + h3, #stats input:not(:checked) + h3 + ul.statlist, #stats input:not(:checked) + h3 + ul.statlist + br {display: none}
+#stats input:checked + h3 + ul.statlist {margin-bottom: -13px; display: block}
+#stats .confignav {position: sticky; top: -1px; z-index: 999}
+#stats .tab, #stats .tab2 {margin: 0 -1px -1px 0; padding: 5px 14px; font-size: 90%}
+#stats .tab:not(.tab2) {color: var(--a)}
+#stats .tab2 {text-shadow: var(--textshadow); box-shadow: var(--highlight), inset 3px 3px 2px #010; background: linear-gradient(180deg,#030, #003800)}
+#stats .tab:not(.tab2):hover {color: var(--hover)}
+#stats .tab:not(.tab2):active {color: var(--ink)}
+#stats #gatherstats {margin: 15px 0 11px}
+#stats ul.statlist {margin-bottom: 50px}
+#stats .joblog {margin-top: -4px; margin-bottom: -9px; overflow: hidden}
+#stats ul.statlist {margin: 0; padding: 0; border: none; background: none}
 
-/* /eventlogs */
+/* eventlogs */
 
 #eventlog {margin-top: -21px; margin-bottom: 10px}
 #eventlog th {word-spacing: 0; letter-spacing: 0; text-transform: none}
@@ -822,7 +841,6 @@ tr.addnew, tr.addnew:hover {border-top: var(--border); background: #000800}
 .langselect:hover {border: 1px solid var(--hover)}
 .langselect img {margin-top: -2px !important; margin-bottom: 2px !important; border: 1px solid #002000}
 .langselect img {margin-top: 7px !important; margin-bottom: 0; margin-left: -71px; position: absolute; border: 1px solid #002000}
-.langselect img[src="/flags.jsp?c=a1"] {width: 16px !important; height: 11px !important}
 .langselect input + img {opacity: .6}
 .langselect input:hover + img {box-shadow: 0 0 2px 1px var(--hover); opacity: 1; transition: ease all .05s}
 .langselect input:hover + img + div.ui_lang {color: var(--hover); border-top: 1px solid var(--hover)}
@@ -1068,15 +1086,15 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 #tunnelPeerCount .configpeer img {padding: 3px}
 .routerid tt {letter-spacing: .1em}
 .tunnel_cap, .tier, .ff, .unreachable, .reachable, #capabilities_key b {margin: 1px 2px; padding: 3px 2px; display: inline-block; min-width: 20px; color: #bb7; text-shadow: var(--textshadow); text-align: center !important; border: 1px solid #030; box-shadow: var(--outline); background: var(--badge)}
-.tunnel_cap, .tier, .reachable, .ff {box-shadow: var(--highlight_badge) !important}
+.tunnel_cap, .tier, .reachable, .ff {box-shadow: var(--highlight_badge)}
 #tunnels .tunnel_cap {padding: 2px; border-radius: 0}
-.tier, a .tier, #capabilities_key b {background: linear-gradient(180deg,#397, #021) !important}
-.ssutesting, #capabilities_key a .ssutesting {background: linear-gradient(180deg,#770, #330) !important}
-.ssutesting, #capabilities_key a .ssuintro {background: linear-gradient(180deg,#515, #313) !important}
-.hidden, #capabilities_key a .hidden {background: linear-gradient(180deg,#777, #333) !important}
-.reachable, #capabilities_key a .reachable {background: linear-gradient(180deg,#171, #131) !important}
-.unreachable, #capabilities_key a .unreachable {background: linear-gradient(180deg,#500, #100) !important}
-.ff, #capabilities_key a .ff {background: linear-gradient(180deg,#730, #310) !important}
+.tier, a .tier, #capabilities_key b {background: linear-gradient(180deg,#397, #021)}
+.ssutesting, #capabilities_key a .ssutesting {background: linear-gradient(180deg,#770, #330)}
+.ssutesting, #capabilities_key a .ssuintro {background: linear-gradient(180deg,#515, #313)}
+.hidden, #capabilities_key a .hidden {background: linear-gradient(180deg,#777, #333)}
+.reachable, #capabilities_key a .reachable {background: linear-gradient(180deg,#171, #131)}
+.unreachable, #capabilities_key a .unreachable {background: linear-gradient(180deg,#500, #100)}
+.ff, #capabilities_key a .ff {background: linear-gradient(180deg,#730, #310)}
 .tunnel_cap:empty::after {content: "?"}
 .tunnel_id {margin: 1px 2px 1px 5px; padding: 2px; min-width: 78px; display: inline-block; line-height: 1.2; color: #bb7; text-shadow: var(--textshadow); text-align: center !important}
 .tunnel_id:empty {opacity: 0}
@@ -1541,27 +1559,27 @@ div.app:hover .applabel, .sitemapLink:hover .sitemapLabel, .themechoice:hover .t
 .applabel {margin: 2px 0 0; padding: 3px 2px 2px; width: 155px; line-height: 1.2; vertical-align: bottom; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 8.5pt; color: var(--a); border: none; border-top: var(--border_hard); border-radius: 0 0 2px 2px}
 .applabel:hover {color: var(--hover); border-top: 1px solid var(--hover)}
 .applabel a {padding: 2px 2px 3px !important; max-width: 146px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: capitalize; text-shadow: var(--textshadow)}
-.app2 + .appgroup .applabel a {text-transform: none !important}
+.app2 + .appgroup .applabel a {text-transform: none}
 .applabel a, .applabel a:hover {text-decoration: none !important; outline: none}
 div.app:hover .applabel {color: var(--hover); border-top: 1px solid var(--hover) !important}
 /* end home page */
 
 h3[id*="job"] {margin: 12px 0 10px 0; padding: 8px; letter-spacing: .08em; text-transform: uppercase; border: var(--border); border-radius: 0}
 #certs {padding-top: 3px; padding-bottom: 10px}
-#certs h3 {margin-bottom: -16px !important}
+#certs h3 {margin-bottom: -16px}
 #certs h3:first-of-type {margin-top: 8px}
 #certs h4 {margin: 15px 0 0; padding: 8px 10px; letter-spacing: .08em; font-size: 10pt; border: var(--border); background: linear-gradient(90deg, #000, #001000)}
 #certs h4:nth-of-type(n+2) {margin-top: 0}
 #certs h3 + p {margin: 15px 0 10px}
 #certs .infohelp {margin-top: 8px}
-#certs .infohelp:first-of-type {background-image: url(/themes/console/images/svg/certs.svg) !important}
+#certs .infohelp:first-of-type {background-image: url(/themes/console/images/svg/certs.svg)}
 #certs p:not(.infohelp) {margin-top: -1px; padding: 10px; border: var(--border); background: #000}
 #certs h4 {letter-spacing: 0; word-spacing: 0}
-#certs p + h4 {margin-top: -13px !important}
+#certs p + h4 {margin-top: -13px}
 #certs h4 + .infohelp {margin: -1px 0 10px}
 #certs textarea {margin: -1px 0; width: 100%; height: 120px}
 #certs textarea + #end, #certs h3 + #end {margin-bottom: 10px; display: inline-block}
-.unbold {font-weight: 400 !important}
+.unbold {font-weight: 400}
 
 /* configure */
 #advancedconfig {position: relative; z-index: 100}
@@ -1732,28 +1750,28 @@ cursor: default}
 #statconfig {margin: 0 auto 10px}
 
 /* infohelp/warn overrides and misc ornamentation */
-#bugreports td.infohelp {padding: 18px 15px 18px 58px; background: #000 var(--bug) no-repeat 15px center / 28px !important}
-#debugmode {padding: 18px 15px 18px 58px; background: #000 var(--bug) no-repeat 15px center / 28px !important}
-.sybilinfo {margin: 8px 0; padding: 18px 15px 18px 58px; background: #000 var(--sybil) no-repeat 15px center / 28px !important}
-.sybilinfo.experimental {background: #000 var(--experimental) no-repeat 15px center / 28px !important}
-#bandwidthconfig tr:first-child .infohelp, #bandwidth.infohelp {padding: 18px 15px 18px 58px; background: #000 var(--speed) no-repeat 15px center / 28px !important}
-#addkeyring td.infohelp {padding: 18px 15px 18px 58px; background: #000 var(--keys) no-repeat 15px center / 28px !important}
-#floodfillconfig tr:first-child .infohelp {padding: 18px 15px 18px 58px; background: #000 var(--floodfill) no-repeat 15px center / 28px !important}
+#bugreports td.infohelp {padding: 18px 15px 18px 58px; background: #000 var(--bug) no-repeat 15px center / 28px}
+#debugmode {padding: 18px 15px 18px 58px; background: #000 var(--bug) no-repeat 15px center / 28px}
+.sybilinfo {margin: 8px 0; padding: 18px 15px 18px 58px; background: #000 var(--sybil) no-repeat 15px center / 28px}
+.sybilinfo.experimental {background: #000 var(--experimental) no-repeat 15px center / 28px}
+#bandwidthconfig tr:first-child .infohelp, #bandwidth.infohelp {padding: 18px 15px 18px 58px; background: #000 var(--speed) no-repeat 15px center / 28px}
+#addkeyring td.infohelp {padding: 18px 15px 18px 58px; background: #000 var(--keys) no-repeat 15px center / 28px}
+#floodfillconfig tr:first-child .infohelp {padding: 18px 15px 18px 58px; background: #000 var(--floodfill) no-repeat 15px center / 28px}
 #floodfillconfig tr:nth-child(2) td {padding: 12px 10px 12px 18px}
 #floodfillconfig tr:nth-child(2) b {margin-right: 10px}
-#clientconf.infohelp, #webappconfigtext.infohelp {padding: 18px 15px 18px 58px; position: relative; z-index: 10; background: #000 var(--editclient) no-repeat 15px center / 28px !important}
-#pluginconfigtext {padding: 18px 15px 18px 58px; background: #000 var(--pluginconfig) no-repeat 15px center / 28px !important}
-#config_peers tr:nth-child(3) td.infohelp {padding: 18px 15px 18px 58px; background: #000 var(--ban) no-repeat 15px center / 28px !important}
-#shutdownrouter + p.infohelp {padding: 18px 15px 18px 58px; background: #000 var(--power) no-repeat 15px center / 28px !important}
-#restartrouter + p.infohelp, #config_family .infohelp.needrestart {padding: 18px 15px 18px 58px; background: #000 var(--reboot) no-repeat 15px center / 28px !important}
-#systray + p.infohelp {padding: 18px 15px 18px 58px; background: #000 var(--systray) no-repeat 15px center / 28px !important}
-#servicedebug + p.infohelp {padding: 18px 15px 18px 58px; background: #000 var(--bug) no-repeat 15px center / 28px !important}
-#browseronstart + p.infohelp, .infohel#webbrowser {padding: 18px 15px 18px 58px; background: #000 var(--firefox) no-repeat 15px center / 28px !important}
-#config_reseed p.infohelp {padding: 18px 15px 18px 58px; background: #000 var(--reseed) no-repeat 15px center / 28px !important}
-.infohel#flags {padding: 18px 15px 18px 58px; background: #000 url(/themes/console/images/info/flags.png) no-repeat 15px center / 28px !important}
-#enablefullstats, #gatherstats {padding: 18px 15px 18px 58px; background: #000 var(--stats) no-repeat 15px center / 28px !important}
-#config_family .infohelp {padding: 18px 15px 18px 58px; background: #000 var(--family) no-repeat 15px center / 28px !important}
-#consolepass tr:first-child td {padding: 18px 15px 18px 58px; background: #000 var(--useradd) no-repeat 15px center; background-size: 28px, 100% !important}
+#clientconf.infohelp, #webappconfigtext.infohelp {padding: 18px 15px 18px 58px; position: relative; z-index: 10; background: #000 var(--editclient) no-repeat 15px center / 28px}
+#pluginconfigtext {padding: 18px 15px 18px 58px; background: #000 var(--pluginconfig) no-repeat 15px center / 28px}
+#config_peers tr:nth-child(3) td.infohelp {padding: 18px 15px 18px 58px; background: #000 var(--ban) no-repeat 15px center / 28px}
+#shutdownrouter + p.infohelp {padding: 18px 15px 18px 58px; background: #000 var(--power) no-repeat 15px center / 28px}
+#restartrouter + p.infohelp, #config_family .infohelp.needrestart {padding: 18px 15px 18px 58px; background: #000 var(--reboot) no-repeat 15px center / 28px}
+#systray + p.infohelp {padding: 18px 15px 18px 58px; background: #000 var(--systray) no-repeat 15px center / 28px}
+#servicedebug + p.infohelp {padding: 18px 15px 18px 58px; background: #000 var(--bug) no-repeat 15px center / 28px}
+#browseronstart + p.infohelp, .infohel#webbrowser {padding: 18px 15px 18px 58px; background: #000 var(--firefox) no-repeat 15px center / 28px}
+#config_reseed p.infohelp {padding: 18px 15px 18px 58px; background: #000 var(--reseed) no-repeat 15px center / 28px}
+.infohel#flags {padding: 18px 15px 18px 58px; background: #000 url(/themes/console/images/info/flags.png) no-repeat 15px center / 28px}
+#enablefullstats, #gatherstats {padding: 18px 15px 18px 58px; background: #000 var(--stats) no-repeat 15px center / 28px}
+#config_family .infohelp {padding: 18px 15px 18px 58px; background: #000 var(--family) no-repeat 15px center / 28px}
+#consolepass tr:first-child td {padding: 18px 15px 18px 58px; background: #000 var(--useradd) no-repeat 15px center; background-size: 28px, 100%}
 form[action="events"] {padding: 10px 10px 10px 50px; background: #000 var(--logs) no-repeat 15px center; background-size: 28px}
 
 /* configservice */
@@ -1777,27 +1795,27 @@ form[action="events"] {padding: 10px 10px 10px 50px; background: #000 var(--logs
 #debug th:first-child {text-align: left}
 #debug td:last-child {vertical-align: top}
 #debug h2, #debug h3 {border-radius: 0}
-#debug h2 {margin-top: 11px !important; padding: 8px 10px; font-size: 11.5pt; background: var(--bug) no-repeat right 6px center, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(90deg, rgba(0,16,0,.5) 2px, rgba(0,16,0,.4) 4px), var(--h3_fade) !important; background-size: 18px, 100%, 4px 100%, 100% !important;}
-#debug h2#debug_portmapper {margin-top: 15px !important}
+#debug h2 {margin-top: 11px; padding: 8px 10px; font-size: 11.5pt; background: var(--bug) no-repeat right 6px center, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(90deg, rgba(0,16,0,.5) 2px, rgba(0,16,0,.4) 4px), var(--h3_fade); background-size: 18px, 100%, 4px 100%, 100%;}
+#debug h2#debug_portmapper {margin-top: 15px}
 #debug h2 + hr, .buckets hr {display: none}
-#debug h3 {border-width: 1px !important; padding: 5px 10px !important; font-size: 10pt}
+#debug h3 {border-width: 1px; padding: 5px 10px; font-size: 10pt}
 .debug_container {margin-top: -11px; border: var(--border); padding: 10px 15px; background: #000800}
 .debug_container:empty::after {content: "None"; display: inline-block; font-style: italic}
 .buckets {margin-top: -13px; margin-bottom: 10px; padding-bottom: 14px; max-height: 600px; overflow: auto; word-break: break-all}
 .debug_container + h3, .debug_outboundsessions {margin-top: -1px}
 #debug h2 + h3, .buckets {margin-top: -13px}
-#debug ul, #debug li {margin: 0 !important; text-align: left !important}
+#debug ul, #debug li {margin: 0; text-align: left}
 #debug li:last-child {padding-bottom: 2px}
-#debug li {display: inline-block; padding: 2px 0 !important; min-width: 400px !important}
+#debug li {display: inline-block; padding: 2px 0; min-width: 400px}
 #debug ul, .debug_targetinfo {columns: 400px 2; column-rule: var(--border_soft); column-gap: 30px}
 .debug_targetinfo {line-height: 1.4; white-space: normal; word-break: break-all}
 .debug_targetinfo b {margin-right: 3px}
-#debug h3.debug_outboundsessions {margin-top: -2px !important; background: var(--out) no-repeat 8px center, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(90deg, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.4) 3px), var(--h3_fade) !important}
-#debug h3.debug_inboundsessions {background: var(--in) no-repeat 8px center, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(90deg, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.4) 3px), var(--h3_fade) !important}
-#debug h3.debug_outboundsessions, #debug h3.debug_inboundsessions {padding: 6px 10px 8px 28px !important; background-size: 14px !important}
+#debug h3.debug_outboundsessions {margin-top: -2px; background: var(--out) no-repeat 8px center, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(90deg, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.4) 3px), var(--h3_fade)}
+#debug h3.debug_inboundsessions {background: var(--in) no-repeat 8px center, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(90deg, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.4) 3px), var(--h3_fade)}
+#debug h3.debug_outboundsessions, #debug h3.debug_inboundsessions {padding: 6px 10px 8px 28px; background-size: 14px}
 .debug_version {color: #aa0; font-weight: 700}
 #portmapper td:first-child, #sockets td:first-child {font-weight: 700}
-#portmapper th:last-child, #portmapper td:last-child, #sockets td:last-child {text-align: left !important}
+#portmapper th:last-child, #portmapper td:last-child, #sockets td:last-child {text-align: left}
 
 #debugDHT, #debugStats, .bucketCount, #bucketSet {font-size: 110%}
 #debugDHT {margin: 1px 0 10px}
@@ -2198,39 +2216,34 @@ h2, h2.welcome, h3, h3.welcome, #themeoptions {border-color: #242}
 #sitemapcontainer {padding: 0 0 1px}
 #sitemapcontainer h3 {margin-bottom: 6px}
 #sitemapcontainer h3:nth-child(n+2) {margin-top: 2px}
-#sitemap h3, h4.app, h4.app2 {border: var(--border_hard) !important}
-#sitemap h3 {margin-left: -7px; margin-right: -7px; padding-left: 35px; line-height: 1.2; letter-spacing: .12em; font-size: 10.5pt; background: url(images/favicon.svg) no-repeat 9px center, var(--h1) !important; background-size: 18px, 4px 100%, 100%, 175px !important; background-blend-mode: var(--h3_blend) !important}
+#sitemap h3, h4.app, h4.app2 {border: var(--border_hard)}
+#sitemap h3 {margin-left: -7px; margin-right: -7px; padding-left: 35px; line-height: 1.2; letter-spacing: .12em; font-size: 10.5pt; background: url(images/favicon.svg) no-repeat 9px center, var(--h1); background-size: 18px, 4px 100%, 100%, 175px; background-blend-mode: var(--h3_blend)}
 #sitemap h3::first-letter {margin-right: .05em; display: inline-block; font-size: 115%}
-#sitemap h3:nth-of-type(2) {background: var(--infobox) no-repeat 9px center, var(--h1) !important; background-size: 18px, 4px 100%, 100%, 175px !important; background-blend-mode: var(--h3_blend) !important}
-#sitemap h3:nth-of-type(3) {background: var(--configure) no-repeat 9px center, var(--h1) !important; background-size: 18px, 4px 100%, 100%, 175px !important; background-blend-mode: var(--h3_blend) !important}
-#sitemap h3:nth-of-type(4) {background: var(--help) no-repeat 9px center, var(--h1) !important; background-size: 18px, 4px 100%, 100%, 175px !important; background-blend-mode: var(--h3_blend) !important}
-#sitemap h3:nth-of-type(5) {background: var(--globe) no-repeat 9px center, var(--h1) !important; background-size: 18px, 4px 100%, 100%, 175px !important; background-blend-mode: var(--h3_blend) !important}
-.sitemapLink, .sitemapLabel {width: 180px !important; display: inline-block; text-align: center; will-change: transform}
+#sitemap h3:nth-of-type(2) {background: var(--infobox) no-repeat 9px center, var(--h1); background-size: 18px, 4px 100%, 100%, 175px; background-blend-mode: var(--h3_blend)}
+#sitemap h3:nth-of-type(3) {background: var(--configure) no-repeat 9px center, var(--h1); background-size: 18px, 4px 100%, 100%, 175px; background-blend-mode: var(--h3_blend)}
+#sitemap h3:nth-of-type(4) {background: var(--help) no-repeat 9px center, var(--h1); background-size: 18px, 4px 100%, 100%, 175px; background-blend-mode: var(--h3_blend)}
+#sitemap h3:nth-of-type(5) {background: var(--globe) no-repeat 9px center, var(--h1); background-size: 18px, 4px 100%, 100%, 175px; background-blend-mode: var(--h3_blend)}
+.sitemapLink, .sitemapLabel {width: 180px; display: inline-block; text-align: center; will-change: transform}
 .sitemapLink {position: relative}
-.sitemapLink, .sitemapLabel, #sitemap div.app, #sitemap .applabel {width: 180px !important; min-width: 180px !important}
-.en .sitemapLink, .en .sitemapLabel, .en #sitemap div.app, .en #sitemap .applabel, .en #sitemap .app table {width: 136px !important; min-width: 136px !important}
-#sitemap .applabel {padding: 4px 0 !important}
-.sitemapLink, #sitemap div.app {margin: 2px 2px 6px; box-shadow: var(--outline), var(--highlight), inset 0 0 1px 1px #242; background: radial-gradient(circle at center -90px, rgba(0,96,0,.9), #000 60%), linear-gradient(180deg,#000800, #000)}
-.sitemapLink:hover, .sitemapLink:hover .sitemapLabel, #sitemap div.app:hover {border-color: var(--hover); box-shadow: var(--highlight), inset 0 0 1px 1px var(--hover)}
+.sitemapLink, .sitemapLabel {width: 180px; min-width: 180px}
+.en .sitemapLink, .en .sitemapLabel {width: 136px; min-width: 136px}
+.sitemapLink {margin: 2px 2px 6px; box-shadow: var(--outline), var(--highlight), inset 0 0 1px 1px #242; background: radial-gradient(circle at center -90px, rgba(0,96,0,.9), #000 60%), linear-gradient(180deg,#000800, #000)}
+.sitemapLink:hover, .sitemapLink:hover .sitemapLabel {border-color: var(--hover); box-shadow: var(--highlight), inset 0 0 1px 1px var(--hover)}
 .sitemapLink img {padding: 12px 10px 10px; height: 32px; width: 32px; opacity: .8}
-.sitemapLink:active img, .sitemapLink img:active, div.app:active img, div.app img:active {transform: scale(0.9); filter: sepia(100%) drop-shadow(0 0 1px var(--hover)) drop-shadow(0 0 2px rgba(148,0,0,.5)) !important}
+.sitemapLink:active img, .sitemapLink img:active, div.app:active img, div.app img:active {transform: scale(0.9); filter: sepia(100%) drop-shadow(0 0 1px var(--hover)) drop-shadow(0 0 2px rgba(148,0,0,.5))}
 .sitemapLabel {margin: 0 0 -4px; padding: 6px 4px 8px; display: inline-block; line-height: 1.05; overflow: hidden; white-space: nowrap; box-sizing: border-box; text-overflow: ellipsis; font-size: 90%; text-shadow: var(--textshadow); border: none; border-top: var(--border); box-shadow: var(--highlight), inset 0 0 1px 1px #242}
-#sitemap div.app {float: none}
-#sitemap div.app img {padding-left: 72px !important; padding-right: 72px !important}
-.en #sitemap div.app img {padding-left: 50px !important; padding-right: 50px !important}
-#sitemap .appgroup {margin: 0 0 -3px !important; padding: 0}
 
-#newuserguide div[lang] {margin: 0; padding: 0; box-shadow: none !important}
+#newuserguide div[lang] {margin: 0; padding: 0; box-shadow: none}
 #newuserguide .topness {display: none}
-#peers .confignav, #profiles .confignav {padding: 0 !important; min-width: 685px}
-#peers .tab, #peers .tab2, #profiles .tab, #profiles .tab2 {margin-top: -1px !important}
+#peers .confignav, #profiles .confignav {padding: 0; min-width: 685px}
+#peers .tab, #peers .tab2, #profiles .tab, #profiles .tab2 {margin-top: -1px}
 th[aria-sort] {font-style: italic}
-#sybilanalysis {margin: 10px 0 9px !important; padding: 10px 10px 8px 50px !important; border: var(--border); box-shadow: var(--highlight), inset 0 0 2px 1px #030; background-image: var(--sybil) !important; background-size: 28px}
+#sybilanalysis {margin: 10px 0 9px; padding: 10px 10px 8px 50px; border: var(--border); box-shadow: var(--highlight), inset 0 0 2px 1px #030; background-image: var(--sybil); background-size: 28px}
 #sybilanalysis hr, #sybilanalysis i {margin: 8px 0}
 #sybilanalysis i {display: inline-block}
 #sybilanalysis form {margin: 0}
 #sybilnav::after {width: 100%; height: 10px; display: block; content: ""}
-#sybil_totals, p.notfound {margin-bottom: 10px !important}
+#sybil_totals, p.notfound {margin-bottom: 10px}
 #sybilnav ul li, #sybilnav ul li::before {vertical-align: middle}
 #sybilnav ul li::before {margin-left: 8px; padding-left: 5px; width: 18px; height: 16px; display: inline-block; background: var(--eye) no-repeat left center / 16px; content: ""}
 #sybilnav ul li:hover::before {background: var(--eye_hover) no-repeat left center / 16px}
@@ -2242,39 +2255,17 @@ th[aria-sort] {font-style: italic}
 #sybilnav ul li#configurePeriodic:hover::before {background: var(--settings_hover) no-repeat left center / 14px}
 #sybilnav ul li#configurePeriodic:active::before {filter: sepia(1) hue-rotate(-45deg) saturate(1.4) brightness(1.6)}
 
-/* stats */
-#stats label {display: inline-block}
-#stats h3 {border-width: 1px; border-radius: 0}
-#stats form, #stats .toggle_input, #stats input:not(:checked) + h3, #stats input:not(:checked) + h3 + ul.statlist, #stats input:not(:checked) + h3 + ul.statlist + br {display: none}
-#stats input:checked + h3 + ul.statlist {margin-bottom: -13px !important; display: block}
-#stats .confignav {position: sticky; top: -1px; z-index: 999}
-#stats .tab, #stats .tab2 {margin: 0 -1px -1px 0 !important; padding: 5px 14px !important}
-#stats .tab:not(.tab2) {color: var(--a)}
-#stats .tab2 {text-shadow: var(--textshadow); box-shadow: var(--highlight), inset 3px 3px 2px #010; background: linear-gradient(180deg,#030, #003800) !important}
-#stats .tab:not(.tab2):hover {color: var(--hover)}
-#stats .tab:not(.tab2):active {color: var(--ink)}
-#gatherstats {margin: 15px 0 11px !important}
-#stats ul.statlist {margin-bottom: 50px !important}
-#stats .joblog {margin-top: -4px !important; margin-bottom: -9px !important; overflow: hidden}
-#stats ul.statlist {margin: 0 !important; padding: 0 !important; border: none; background: none}
-.statvalue {padding: 0 2px 0 0; font-weight: 700; font-style: italic; color: var(--ink)}
-.statsLongName {margin-left: 15px; margin-bottom: -24px !important; padding-bottom: 8px; display: block; width: calc(100% - 27px); border-bottom: var(--border_soft)}
-.statsViewGraphs {margin: 2px 0 2px -3px; width: 100%; display: inline-block; font-size: 90%}
-.graphstat {margin: 0 1px; padding: 0 8px 2px; line-height: 1}
-.statlist li.statsName b {padding-left: 20px; background: var(--star) left top 1px no-repeat; background-size: 14px}
-.statlist li.statsName ul li b {background: none}
-
 .encDests th, .encDests td {line-height: 1.2; font-size: 8.5pt}
 .encDests th {text-align: left}
 .encDests th:first-child, .encDests td:first-child, .encDests th:nth-child(3), .encDests td:nth-child(3) {width: 10%}
-.encDests th:nth-child(2), .encDests td:nth-child(2), .encDests th:nth-child(3), .encDests td:nth-child(3), .encDests th:nth-child(4), .encDests td:nth-child(4), .encDests th:nth-child(5), .encDests td:nth-child(5), .encDests td[colspan="8"] {text-align: center !important}
+.encDests th:nth-child(2), .encDests td:nth-child(2), .encDests th:nth-child(3), .encDests td:nth-child(3), .encDests th:nth-child(4), .encDests td:nth-child(4), .encDests th:nth-child(5), .encDests td:nth-child(5), .encDests td[colspan="8"] {text-align: center}
 .encDests th:nth-child(2), .encDests td:nth-child(2), .encDests th:nth-child(4), .encDests td:nth-child(4), .encDests th:nth-child(5), .encDests td:nth-child(5) {width: 22%}
 .encDests th:last-child, .encDests td:last-child {text-align: center}
-.encDests .b32 {float: none !important}
-.encDests code {padding: 2px 3px; max-width: 160px; display: inline-block; white-space: pre-wrap; word-break: break-all; font-size: 80% !important; color: var(--ink); border-radius: 3px; border: none; user-select: all}
+.encDests .b32 {float: none}
+.encDests code {padding: 2px 3px; max-width: 160px; display: inline-block; white-space: pre-wrap; word-break: break-all; font-size: 80%; color: var(--ink); border-radius: 3px; border: none; user-select: all}
 .encDests .created, .encDests .expires {white-space: nowrap; font-style: italic}
-.graphContainer {margin: 4px 3px !important; padding: 4px 0 !important; max-width: calc(100% - 18px); min-width: 140px; min-height: 60px; position: relative; display: inline-block; overflow: hidden; vertical-align: middle; text-align: center; border: var(--border); box-shadow: var(--highlight), inset 0 0 1px 1px #050; animation: ease grid-fade 2s forwards}
-.statimage, .statimage:hover, #graphs a:hover .statimage, #graph_single .statimage, #graph_single .statimage:hover {margin: 4px 0 2px !important; padding: 0 !important; max-width: 100%; border: none !important; box-shadow: none !important; animation: grid-fade .15s ease forwards both}
+.graphContainer {margin: 4px 3px; padding: 4px 0; max-width: calc(100% - 18px); min-width: 140px; min-height: 60px; position: relative; display: inline-block; overflow: hidden; vertical-align: middle; text-align: center; border: var(--border); box-shadow: var(--highlight), inset 0 0 1px 1px #050; animation: ease grid-fade 2s forwards}
+.statimage, .statimage:hover, #graphs a:hover .statimage, #graph_single .statimage, #graph_single .statimage:hover {margin: 4px 0 2px; padding: 0; max-width: 100%; border: none; box-shadow: none; animation: grid-fade .15s ease forwards both}
 #config_logging h3 {position: relative}
 h3 + table {position: relative; z-index: 0}
 
