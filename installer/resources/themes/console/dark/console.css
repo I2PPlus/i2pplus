@@ -2413,11 +2413,10 @@ h1, .main h2, .main h3, h4.app, h4.app2 {-webkit-text-stroke: var(--stroke)}
 
 .netdb_header .viewprofile, .netdb_header .configpeer, .netdb_header .familysearch, .sybil_routerinfo .viewprofile, .sybil_routerinfo .configpeer, .sybil_routerinfo .familysearch {margin: 3px !important; width: 14px; height: 14px}
 .netdbentry .tunnel_cap, .netdbentry .tier, .netdbentry .ff, .netdbentry .reachable, .netdbentry .unreachable, .netdbentry .version, .sybil_routerinfo .tunnel_cap, .sybil_routerinfo .tier, .sybil_routerinfo .ff, .sybil_routerinfo .reachable, .sybil_routerinfo .unreachable, .sybil_routerinfo .version {margin: 1px 2px 0 !important; padding: 0 4px !important; line-height: 1.6}
-.configpeer {background: var(--edit) var(--center) / 12px, var(--badge)}
+a.configpeer {background: var(--edit) var(--center) / 12px, var(--badge)}
 .configpeer:hover, .configpeer:focus {background: var(--edit_hover) var(--center) / 12px, var(--badge)}
 .viewedit br {display: none}
-.viewprofile, .configpeer, .familysearch {margin: 1px 2px !important; padding: 4px; width: 12px; height: 12px; vertical-align: middle; display: inline-block; line-height: 0; border: 1px solid #030; box-shadow: var(--outline); background: var(--badge)}
-.viewprofile, .configpeer, .familysearch {font-size: 0}
+.viewprofile, .configpeer, .familysearch {margin: 1px 2px !important; padding: 4px; width: 12px; height: 12px; vertical-align: middle; display: inline-block; line-height: 0; font-size: 0; border: 1px solid #030; box-shadow: var(--outline); background: var(--badge)}
 .viewprofile {background: var(--eye) var(--center) / 12px, var(--badge)}
 .viewprofile:hover, .familysearch:hover, .configpeer:hover {border: 1px solid #d50}
 .viewprofile:hover, .viewprofile:focus {background: var(--eye_hover) var(--center) / 12px, var(--badge)}
