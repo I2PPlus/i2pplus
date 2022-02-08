@@ -840,9 +840,9 @@ form[action="events"] > .formaction {margin-bottom: -11px; margin-right: -21px; 
 #tunnels h3:last-of-type {padding-left: 35px; padding-bottom: 7px; background: var(--speed) no-repeat 9px center, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade); background-size: 18px, 100%, 4px 100%, 100%}
 .pending:nth-of-type(2)::before {content: "\2022\2008\2008"}
 #tunnels h3 a img {display: inline-block}
-#tunnels h3 img, #tunnels h3 a:first-child {margin: -8px 0 -8px 0; padding: 11px 8px; border-left: var(--border)}
+#tunnels h3 a:not(.refreshpage) img, #tunnels h3 a:not(.refreshpage):first-child {margin: -8px 0 -8px 0; padding: 11px 8px; border-left: var(--border)}
 #tunnels h3 img:first-of-type {margin-left: -1px; border-right: var(--border)}
-#tunnels h3 a:first-child {padding: 8px 4px 14px 22px; border-left: none}
+#tunnels h3 a:not(.refreshpage):first-child {padding: 8px 4px 14px 22px; border-left: none}
 #tunnels img {font-size: 0}
 #tunnels .tunneldisplay td:nth-child(n+4) {vertical-align: top}
 #tunnels h3 + h3 {margin-top: -1px; display: none}
@@ -857,6 +857,7 @@ form[action="events"] > .formaction {margin-bottom: -11px; margin-right: -21px; 
 #tunnels h3 a[href^="/configtunnels#"]:hover::after, #tunnels h3 a[href^="/configtunnels#"]:focus::after, #tunnels h3 a[href$="/i2ptunnelmgr"]:hover::after, #tunnels h3 a[href$="/i2ptunnelmgr"]:focus::after, #logs a.configure:hover::after, #logs a.configure:focus::after, h4.app a:hover::after, h4.app a:focus::after, h4.app2 a:hover::after, h4.app2 a:focus::after {background: var(--settings_hover) var(--center)}
 #tunnels h3 a[href^="/configtunnels#"]:active::after, #tunnels h3 a[href$="/i2ptunnelmgr"]:active::after, #logs a.configure:active::after, h4.app a:active::after, h4.app2 a:active::after {opacity: .7; transform: rotate(90deg); transition: linear transform .2s}
 #tunnelPeerCount .configpeer img {padding: 3px}
+#tunnels h3 .refreshpage, #tunnels h3 .refreshpage img {margin: -7px 1px -7px 0; padding: 8px 0 9px; border: none}
 .routerid tt {letter-spacing: .1em}
 .tunnel_cap, .tier, .ff, .unreachable, .reachable, #capabilities_key b {margin: 1px 2px; padding: 3px 2px; display: inline-block; min-width: 20px; color: #bb7; text-shadow: var(--textshadow); text-align: center !important; border: 1px solid #030; box-shadow: var(--outline); background: var(--badge)}
 .tunnel_cap, .tier, .reachable, .ff {box-shadow: var(--highlight_badge)}
@@ -894,8 +895,8 @@ h3.tabletitle + .statusnotes, table.tunneldisplay {margin-top: -1px}
 #peercount img, #participating img {margin: 0 0 -2px; padding: 8px 6px 6px; vertical-align: middle; border: none}
 #participating img, #peercount img {width: 0; height: 0}
 #participating a, #peercount a {border-left: var(--border)}
-#participating a::after, #peercount a::after {margin-left: 2px; width: 18px; height: 18px; display: inline-block; vertical-align: middle; background: var(--refresh) var(--center) / 18px; content: ""}
-#participating a:hover::after, #participating a:focus::after, #peercount a:hover::after, #peercount a:focus::after {background: var(--refresh_hover) var(--center)}
+#participating a::after, #peercount a::after {margin: -2px 0 -2px 2px; width: 18px; height: 18px; display: inline-block; vertical-align: middle; background: var(--refresh) var(--center) / 18px; content: ""}
+#participating a:hover::after, #participating a:focus::after, #peercount a:hover::after, #peercount a:focus::after {background: var(--refresh_hover) var(--center) / 18px}
 #participating a:active::after, #peercount a:active::after {opacity: .7; transform: rotate(90deg); transition: ease transform .15s}
 #tunnelPeerCount {margin-bottom: 9px}
 #tunnelPeerCount .cells {width: auto; max-width: inherit; min-width: 0; white-space: nowrap}
@@ -2183,7 +2184,8 @@ h1[class], h1 {margin: 0 5px 0 226px; position: relative; z-index: 999; white-sp
 .ptcp::after {background: var(--ptcp) var(--center)}
 #tunnels .cells:first-child {width: 1%; max-width: 64px; min-width: 64px}
 #tunnels .cells:nth-child(2), #tunnels .cells:nth-child(3), .tunnels_participating td:nth-child(4) {width: 2%; max-width: 112px; min-width: 112px; vertical-align: middle !important}
-#tunnels #tunnelpeercount td:nth-child(n+2) {width: auto}
+#tunnels #tunnelPeerCount td {width: auto}
+#tunnels #tunnelPeerCount td:first-child {width: 192px}
 #tunnelPeerCount .ipaddress {min-width: 140px; display: inline-block; text-align: right}
 #tunnelPeerCount a.script[href^="https://gwhois.org"]::after {margin: -1px 0 1px 3px; width: 12px; height: 12px; display: inline-block; vertical-align: middle; background: var(--search) no-repeat center center / 11px; opacity: .7; content: ""}
 #tunnels #peercount {background: url(/themes/console/images/svg/peers.svg) no-repeat 9px center / 18px, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important; background-size: 18px, 100%, 4px 100%, 100% !important}
@@ -2372,7 +2374,7 @@ ul#upnphelp li:last-child, #legal ul li:last-child {padding-bottom: 0}
 .newsentry.lazyshow {transition: ease opacity .15s}
 .lazy.lazyshow, .lazy.lazyshow td, #peers .lazy:not(.lazyhide) {opacity: 1}
 .leasesets_container .lazy.lazyhide, .leasesets_container .lazy.lazyhide td, .leasesets_container .lazy:not(.lazyshow) {opacity: 1; contain: none}
-#tunnelpeercount .lazy {contain: none}
+#tunnelPeerCount .lazy {contain: none}
 
 /* animations */
 @keyframes bar {from {width: calc(100%)}}
