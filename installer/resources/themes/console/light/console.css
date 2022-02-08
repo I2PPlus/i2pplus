@@ -740,6 +740,7 @@ a:active #sb_bandwidthgraph {
 /* end status bars */
 
 #sb_warning {
+  margin-bottom: 8px !important;
   border-bottom: 1px solid #afafcf;
 }
 

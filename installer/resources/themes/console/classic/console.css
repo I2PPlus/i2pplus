@@ -133,12 +133,12 @@ p:empty + .sb_notice {margin-top: 7px}
 #sidebar #sb_internals td, #sidebar #sb_advanced td, #sidebar #sb_services td {text-align: center}
 
 /* sidebar news */
-#sb_newsheadings {margin: -3px 0 -7px 0; padding: 0; text-align: right; font-size: 8pt}
-#sb_newsheadings table {margin: -6px 0 2px; width: 100%; table-layout: auto; background: var(--bg)}
-#sb_newsheadings td {padding: 5px 8px 5px 20px; line-height: 1; vertical-align: middle; text-align: left; word-spacing: .1em; border-collapse: collapse; border: none; border-bottom: var(--border); background: var(--star2) no-repeat 4px 4px / 12px; transition: ease background .2s}
-#sb_newsheadings table tr:last-child td {padding-bottom: 3px; border-bottom: none}
-#sb_newsheadings tr:hover td {background-color: var(--row_hover); background-blend-mode: normal; transition: ease background .1s}
-#sb_newsheadings td a {margin: 0; padding: 0; width: 100%; display: inline-block; line-height: 1.1}
+#sidebar #sb_newsheadings {margin: -3px 0 -7px 0; padding: 0; text-align: right; font-size: 8pt}
+#sidebar #sb_newsheadings table {margin: -6px 0 2px; width: 100%; table-layout: auto; background: var(--bg)}
+#sidebar #sb_newsheadings td {padding: 5px 8px 5px 20px; line-height: 1; vertical-align: middle; text-align: left; word-spacing: .1em; border-collapse: collapse; border: none; border-bottom: var(--border); background: var(--star2) no-repeat 4px 4px / 12px; transition: ease background .2s}
+#sidebar #sb_newsheadings table tr:last-child td, #sidebar #sb_newsheadings table tr:last-child:hover td {padding-bottom: 3px; border-bottom: none}
+#sidebar #sb_newsheadings tr:hover td {background-color: var(--row_hover); background-blend-mode: normal; transition: ease background .1s}
+#sidebar #sb_newsheadings td a {margin: 0; padding: 0; width: 100%; display: inline-block; line-height: 1.1}
 
 /* network status */
 #sidebar .running, .tunnelBuildStatus.active {color: #393; box-shadow: var(--highlight), inset 0 0 0 2px rgba(96,255,96,.2); background: rgba(220,255,220,.2)}

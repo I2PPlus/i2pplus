@@ -1355,7 +1355,7 @@ p:empty + .sb_notice {
   background: none;
 }
 
-#sb_newsheadings td {
+#sidebar #sb_newsheadings td {
   padding: 3px 8px 3px 20px !important;
   text-align: left;
   border-bottom: 2px solid #000 !important;
