@@ -919,7 +919,7 @@ h3.tabletitle + .statusnotes, table.tunneldisplay {margin-top: -1px}
 #tunnelPeerCount .tunnel_cap {padding: 1px; min-width: 22px}
 #tunnels .percentBarOuter, #tunnels .PercentBarInner, #tunnels .percentBarText {display: inline-block}
 #tunnels .percentBarOuter, #tunnels .percentBarText {width: 100px}
-#tunnels .percentBarOuter {text-align: left; background: #000}
+#tunnels .percentBarOuter {margin-bottom: 1px; text-align: left; background: #000}
 #tunnels .percentBarInner {text-align: center}
 #thresholds th {font-weight: inherit}
 #tunnels .left, #tunnels .right {margin: 0; width: 50%; display: inline-block; vertical-align: text-bottom; line-height: 1}
