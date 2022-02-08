@@ -648,8 +648,7 @@ a[name="chelp"]:hover, a[name="help"]:hover, a[name="chelp"]:active, a[name="hel
 .left {text-align: left}
 .right {text-align: right}
 .center {text-align: center}
-span.left {margin: 0 1px; width: 40%; display: inline-block}
-span.right {margin: 0 1px; width: 40%; display: inline-block}
+span.left, span.right {margin: 0 1px; width: 40%; display: inline-block}
 .peeripv6:empty {padding: 0; width: 0}
 .cwnd .left, .cwnd .right {width: auto}
 .peer_arrow {vertical-align: middle}

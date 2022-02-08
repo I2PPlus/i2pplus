@@ -8317,18 +8317,22 @@ a[href^="https://gwhois"]:focus::after {
   display: inline-block;
 }
 
-.right {
-  margin: 0 1px;
-  width: 40%;
-  display: inline-block;
-  text-align: right !important;
+.left {
+  text-align: left;
 }
 
-.left {
+.right {
+  text-align: right;
+}
+
+.center {
+  text-align: center;
+}
+
+span.left, span.right {
   margin: 0 1px;
   width: 40%;
   display: inline-block;
-  text-align: left !important;
 }
 
 .peeripv6:empty {

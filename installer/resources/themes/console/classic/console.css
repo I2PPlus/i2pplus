@@ -1690,10 +1690,13 @@ input[type="file"]:hover {cursor: pointer}
 #config_tunnels select {width: calc(100% - 4px); text-align: center}
 #config_tunnels select[disabled] {opacity: .7; pointer-events: none}
 
+.left {text-align: left}
+.right {text-align: right}
+.center {text-align: center}
+span.right, span.left {margin: 0 1px; display: inline-block; width: 40%}
+
 /* peers */
 .peersort {text-align: center; display: inline-block}
-.right {text-align: right; margin: 0 1px; display: inline-block; width: 40%}
-.left {margin: 0 1px; width: 40%; display: inline-block; text-align: left}
 .peeripv6:empty {padding: 0; width: 0}
 .cwnd .left, .cwnd .right {width: auto}
 .peer_arrow {margin-right: 3px; width: 18px; display: inline-block; text-align: center}

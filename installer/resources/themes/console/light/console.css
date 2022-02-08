@@ -5724,18 +5724,22 @@ h3#udpcon {
   content: "";
 }
 
+.left {
+  text-align: left;
+}
+
 .right {
-  margin: 0 1px;
-  width: 40%;
-  display: inline-block;
   text-align: right;
 }
 
-.left {
-  text-align: left;
+.center {
+  text-align: center;
+}
+
+span.left, span.right {
   margin: 0 1px;
+  width: 40%;
   display: inline-block;
-  width: 40%
 }
 
 .peersort {
