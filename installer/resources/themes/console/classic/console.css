@@ -1379,8 +1379,6 @@ ul#reachability {padding-left: 15px}
 /* informational images */
 #bugreports td.infohelp {padding: var(--pad_info); background: var(--bg) var(--bug) var(--bgpos_info)}
 #debugmode {padding: var(--pad_info); background: var(--bg) var(--bug) var(--bgpos_info)}
-.infowarn#tunnelconfig {margin-top: 15px}
-#tunnelconfig td:nth-child(n+2) {text-align: left; padding-left: 0}
 #bandwidthconfig tr:first-child .infohelp {padding: var(--pad_info); background: var(--bg) var(--speed) var(--bgpos_info)}
 #addkeyring td.infohelp {padding: var(--pad_info); background: var(--bg) var(--keys) var(--bgpos_info)}
 #floodfillconfig tr:first-child .infohelp {padding: var(--pad_info); background: var(--bg) var(--floodfill) var(--bgpos_info)}
@@ -1676,9 +1674,21 @@ input[type="file"]:hover {cursor: pointer}
 #skm_dest {white-space: nowrap; font-size: smaller; text-transform: none; letter-spacing: 0}
 .skm_key td:first-child b::before {margin: 0 5px -4px 4px; content: ""; display: inline-block; width: 16px; height: 16px; background: url(/themes/console/images/info/cryptokey.svg) left bottom no-repeat; transform: rotate(-90deg); mix-blend-mode: luminosity}
 .debug_inboundsessions + table th, .debug_outboundsessions + table th {padding: 6px 6px 6px 28px}
+
+/* tunnel config */
+.infowarn#tunnelconfig {margin-top: 15px}
+#tunnelconfig td:nth-child(n+2) {text-align: left; padding-left: 0}
 #tunnelconfig th {text-align: left}
 #tunnelconfig th[colspan="3"] > font {color: #944}
 #tunnelconfig th[colspan="3"] > font::before {background: var(--infowarn) no-repeat left center / 16px; content: ""; display: inline-block; width: 20px; height: 16px; vertical-align: middle; opacity: .7}
+#tunnelconfig .inbound, #tunnelconfig .outbound {padding-left: 30px; width: auto; height: auto; display: table-cell; background: var(--in) no-repeat 10px center / 14px, var(--th)}
+#tunnelconfig .outbound {background: var(--out) no-repeat 10px center / 14px, var(--th)}
+#tunnelconfig th:not(.th_title)[colspan="4"] {padding: 10px 10px 10px 34px; text-transform: none; letter-spacing: 0; word-spacing: 0; text-shadow: var(--textshadow); background: var(--infowarn) no-repeat 10px center / 20px, var(--th)}
+#tunnelconfig th:not([colspan="4"]):first-child, #tunnelconfig th:not([colspan="4"]):last-child {width: 30%}
+#tunnelconfig th a {pointer-events: none}
+#tunnelconfig td:first-child {text-align: right; font-weight: 700; white-space: nowrap;}
+#config_tunnels select {width: calc(100% - 4px); text-align: center}
+#config_tunnels select[disabled] {opacity: .7; pointer-events: none}
 
 /* peers */
 .peersort {text-align: center; display: inline-block}

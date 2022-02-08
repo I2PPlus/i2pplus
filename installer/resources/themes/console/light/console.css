@@ -547,7 +547,7 @@ a:active #sb_bandwidthgraph {
 }
 
 #sb_graphcontainer {
-  margin: -6px -5px -7px;
+  margin: -6px -5px -10px;
   height: 38px;
   display: inline-block;
   overflow: hidden;
@@ -2894,7 +2894,7 @@ th {
   border-bottom: 1px solid var(--border_inner) !important;
   border-top: 1px solid var(--border_inner) !important;
   vertical-align: middle;
-  background: linear-gradient(180deg,#fcfcff 51%, #fafaff 51%, #f6f6ff 100%) !important;
+  background: linear-gradient(180deg,#fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
 }
 
 .main[id^="config_"] th {
@@ -10598,17 +10598,37 @@ th[aria-sort] {
   opacity: 0;
 }
 
-#config_tunnels img[src$="bound.svg"] {
-  margin: -2px 0;
-  width: 18px;
+#tunnelconfig .inbound, #tunnelconfig .outbound {
+  padding-left: 30px;
+  width: auto;
   height: auto;
+  display: table-cell;
+  background: var(--in) no-repeat 10px center / 14px, var(--th);
+}
+
+#tunnelconfig .outbound {
+  background: var(--out) no-repeat 10px center / 14px, var(--th);
+}
+
+#tunnelconfig th:not([colspan="4"]):first-child, #tunnelconfig th:not([colspan="4"]):last-child {
+  width: 30%
+}
+
+#tunnelconfig td:first-child {
+  text-align: right;
+  white-space: nowrap;
+  font-weight: 700;
+}
+
+#tunnelconfig select {
+  width: calc(100% - 10px);
 }
 
 /* link icons for new user guide */
 
 .sitelink, .chatlink, .consolelink {
-  border-radius: 1px;
   white-space: nowrap;
+  border-radius: 1px;
 }
 
 .sitelink {
