@@ -1460,7 +1460,7 @@ tr.addnew, tr.addnew:hover {border-top: var(--border); background: #000800}
 .themechoice:hover .themelabel, .themechoice .optbox:focus ~ .themelabel {color: var(--hover); border-top: 1px solid var(--hover); box-shadow: inset 0 0 10px 3px #000; background: var(--glow_bottom_hover) #000}
 .themechoice:active .themelabel {color: var(--ink) !important; border-top: 1px solid var(--hover); box-shadow: var(--btn_shadow_active) !important; background: var(--hover) !important}
 .themechoice .optbox:checked ~ .themelabel {font-weight: 700; color: var(--ink); box-shadow: var(--highlight), inset 0 0 2px 1px #050; background: #030}
-#themeheading, #langheading, #passwordheading {margin-bottom: 0; padding: 8px 10px; letter-spacing: .08em; word-spacing: .1em; font-size: 10.5pt; border-radius: 0; border: var(--border); background: linear-gradient(90deg, #000, #001000 70%, #001300 90%)}
+#themeheading, #langheading, #passwordheading {margin-bottom: 0; padding: 8px 10px; letter-spacing: .08em; word-spacing: .1em; font-size: 10.5pt; border-radius: 0; border: var(--border)}
 #themeselect {margin: -1px 0; padding: 8px 7px 0; clear: both; border: var(--border)}
 #themeoptions {margin: 0 -7px 5px; padding: 8px 10px 8px 5px; position: relative; top: 8px; clear: both; border-top: var(--border); border-bottom: var(--border); background: #000800}
 #themeoptions br {display: none}
