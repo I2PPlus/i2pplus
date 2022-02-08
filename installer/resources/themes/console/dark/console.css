@@ -828,6 +828,7 @@ form[action="events"] > .formaction {margin-bottom: -11px; margin-right: -21px; 
 /* tunnels */
 #tunnels .tab, #tunnels .tab2 {min-width: 140px !important}
 #tunnels table {position: relative; z-index: 1}
+#tunnels th {font-size: 90%}
 #tunnels td > * {vertical-align: middle; line-height: 1.2}
 #tunnels .cells {padding-top: 6px; padding-bottom: 6px}
 #tunnels h3.client {padding-left: 35px; background: var(--client) no-repeat 9px center, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade); background-size: 18px, 100%, 4px 100%, 100%}
