@@ -355,11 +355,12 @@ div.news hr {margin: 8px 0 5px}
 #graphs .messages {top: -16px; z-index: 999}
 
 /* graphs */
+.graphContainer {margin: 4px 3px; padding: 4px 0; max-width: calc(100% - 18px); min-width: 140px; min-height: 60px; position: relative; display: inline-block; overflow: hidden; vertical-align: middle; text-align: center; border: var(--border); box-shadow: var(--highlight), inset 0 0 1px 1px #050; animation: ease grid-fade 2s forwards}
 .graphspanel {margin: 11px 0 -15px 0; padding: 0; width: 100%; overflow: hidden; text-align: center; background: none}
 .graphspanel form {margin-bottom: 25px; padding: 0 15px 0 15px; text-align: left}
-.graphspanel img {padding: 2px; vertical-align: top; box-shadow: var(--highlight), inset 0 0 2px 1px #050}
-.graphspanel a img {margin: 5px 4px; padding: 3px; text-align: center; border: var(--border)}
-.graphspanel a img:hover {padding: 3px; text-align: center; border: 1px solid #d40; box-shadow: var(--highlight), inset 0 0 2px 1px #d30; cursor: zoom-in; filter: none; transition: ease border .05s}
+.graphspanel img {padding: 2px; vertical-align: top}
+.graphspanel a img {margin: 5px 4px; padding: 3px; text-align: center}
+.graphspanel a img:hover {padding: 3px; text-align: center; cursor: zoom-in; filter: none; transition: ease border .05s}
 .graphspanel p {margin-top: 10px; padding: 10px 10px 15px; text-align: center; text-transform: capitalize; border-top: var(--border)}
 .graphspanel p:last-child {display: none}
 .graphspanel a {font-size: 0}
@@ -2247,8 +2248,6 @@ th[aria-sort] {font-style: italic}
 .encDests .b32 {float: none}
 .encDests code {padding: 2px 3px; max-width: 160px; display: inline-block; white-space: pre-wrap; word-break: break-all; font-size: 80%; color: var(--ink); border-radius: 3px; border: none; user-select: all}
 .encDests .created, .encDests .expires {white-space: nowrap; font-style: italic}
-.graphContainer {margin: 4px 3px; padding: 4px 0; max-width: calc(100% - 18px); min-width: 140px; min-height: 60px; position: relative; display: inline-block; overflow: hidden; vertical-align: middle; text-align: center; border: var(--border); box-shadow: var(--highlight), inset 0 0 1px 1px #050; animation: ease grid-fade 2s forwards}
-.statimage, .statimage:hover, #graphs a:hover .statimage, #graph_single .statimage, #graph_single .statimage:hover {margin: 4px 0 2px; padding: 0; max-width: 100%; border: none; box-shadow: none; animation: grid-fade .15s ease forwards both}
 #config_logging h3 {position: relative}
 h3 + table {position: relative; z-index: 0}
 
