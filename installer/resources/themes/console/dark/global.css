@@ -10,6 +10,7 @@
   --badge: linear-gradient(180deg,#020, #010);
   --bevel: var(--highlight), inset 0 0 0 2px rgba(32,80,32,.3);
   --bg_dots: repeating-linear-gradient(90deg, rgba(0,8,0,.5) 2px, rgba(0,16,0,.5) 4px), repeating-linear-gradient(180deg,#000 2px, #010 4px);
+  --bg_title: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2 1'%3E%3Cpath fill='%2300180088' d='M0 0h1v1H0z'/%3E%3Cpath fill='%2300000050' d='M1 0h1v1H1z'/%3E%3C/svg%3E");;
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   --border: 1px solid #242;
   --border_hard: 1px solid #252;
@@ -34,7 +35,7 @@
   --h2: repeating-linear-gradient(90deg, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(180deg,#001800, #000 75%);
   --h3_blend: normal, normal, exclusion, exclusion;
   --h3_fade: linear-gradient(180deg,#005000, #000 75%);
-  --h3: repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,32,0,.5) 4px);
+  --h3: var(--bg_title);
   --heading: linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px);
   --helpbox: linear-gradient(135deg, #000d00, #000900);
   --help: repeating-linear-gradient(90deg,#000 2px,#010 4px);
