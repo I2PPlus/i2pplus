@@ -65,6 +65,7 @@ ul {margin: 0; padding: 0}
 #newtab:hover {background: var(--newtab_hover) var(--center)}
 #newtab img {opacity: 0}
 #newtab {width: 24px; height: 20px; float: right; letter-spacing: 0; text-align: right; font-size: 8pt}
+.extlink::after, input, button {will-change: transform}
 
 /* sidebar */
 .routersummaryouter {margin: 0 0 10px 5px; padding: 0; width: auto; display: block; position: absolute; /* so no interference with /home app icons */
@@ -282,7 +283,7 @@ iframe {height: 0}
 #i2ptunnelframe {margin: 0 0 -5px}
 #tunnelmgr, #torrents, #webmail, #dns {min-height: 4px; position: relative; overflow: hidden; line-height: 0}
 #tunnelmgr::before, #torrents::before, #webmail::before, #dns::before {width: 0; height: 6px; display: block; position: absolute; top: 0; left: 1px; right: 1px; opacity: .9; background: linear-gradient(180deg,rgba(255,255,255,.1), rgba(0,0,0,.4)), linear-gradient(#d30, var(--hover)); box-shadow: inset 0 0 0 2px rgba(0,0,0,.7); content: ""; animation: reloader 8s ease-out .5s forwards}
-#pageloader {top: -1px; width: 100% !important; height: 2px}
+#pageloader {top: -1px; width: 100%; height: 2px}
 /* Fixes for when app is not started and console error loads inside iframe */
 .iframed h1 {margin: 0 5px 0 5px !important}
 .iframed div.sorry {margin: -1px 5px 10px 5px !important}
@@ -522,6 +523,7 @@ form[action="updategraphs"] {margin: -11px -11px -18px; border: var(--border); b
 
 /* jobs */
 #jobs h2 {margin: -16px 0 -15px; display: inline-block; border-radius: 0}
+h3[id*="job"] {margin: 12px 0 10px 0; padding: 8px; letter-spacing: .08em; text-transform: uppercase; border: var(--border); border-radius: 0}
 #jobs #jobrunners {display: none}
 #jobs #finishedjobs {margin-top: -5px}
 #jobs h3 + ol + h3 {margin-top: 10px}
@@ -937,7 +939,7 @@ h3.tabletitle + .statusnotes, table.tunneldisplay {margin-top: -1px}
 #tunnelPeerCount .tunnel_cap {padding: 1px; min-width: 22px}
 #tunnelPeerCount .ipaddress {min-width: 140px; display: inline-block; text-align: right}
 #tunnelPeerCount a.script[href^="https://gwhois.org"]::after {margin: -1px 0 1px 3px; width: 12px; height: 12px; display: inline-block; vertical-align: middle; background: var(--search) no-repeat center center / 11px; opacity: .7; content: ""}
-#tunnels #peercount {background: url(/themes/console/images/svg/peers.svg) no-repeat 9px center / 18px, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important; background-size: 18px, 100%, 4px 100%, 100% !important}
+#tunnels #peercount {background: url(/themes/console/images/svg/peers.svg) no-repeat 9px center / 18px, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade); background-size: 18px, 100%, 4px 100%, 100%}
 #tunnels .percentBarOuter, #tunnels .PercentBarInner, #tunnels .percentBarText {display: inline-block}
 #tunnels .percentBarOuter, #tunnels .percentBarText {width: 100px}
 #tunnels .percentBarOuter {margin-bottom: 1px; text-align: left; background: #000}
@@ -1308,86 +1310,100 @@ p.family + p.family, .sybil_info + .sybil_info {margin-top: -4px}
 
 #peers #udpconnections .routerid {margin: 2px 0; min-width: 70px}
 
+div.app, .applabel, .statusnotes, .main, div.news, .routersummary, .search tr, .logo, .themechoice, .themelabel, .langselect, .ui_lang {box-shadow: var(--highlight), inset 0 0 1px 1px #050}
+div.app, .sitemapLink, .themechoice, .langselect {animation: zoom .1s linear .15s both; will-change: transform}
+.applabel, .sitemapLabel, .themelabel, .ui_lang {background: var(--glow_bottom), linear-gradient(180deg,#001900,#001000 50%,#000); animation: fade .15s ease .25s reverse both}
 
 /* home */
-#homepanel {margin: 0 -8px}
-h4.app a::after, h4.app2 a::after {margin-left: 9px}
-h4.app a::after {margin-top: -1px}
-h4.app2 a::after {margin-top: 1px}
+.appgroup {margin: 0 0 10px; padding: 16px 0; width: auto}
+.ag2 div.app:last-of-type {margin-bottom: 7px}
+.ag2 {margin: 0 0 10px; padding: 0 3px}
+.app2 + .appgroup .applabel a {text-transform: none}
+.app a:link, .app a:visited {padding: 2px; display: inline-block; color: var(--a)}
+.appimg {height: 32px; padding: 0 0 6px}
+.applabel a {padding: 2px 2px 3px; max-width: 146px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: capitalize; text-shadow: var(--textshadow)}
+.applabel:hover {color: var(--hover); border-top: 1px solid var(--hover)}
+.applabel {margin: 2px 0 0; padding: 3px 2px 2px; width: 155px; line-height: 1.2; vertical-align: bottom; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 8.5pt; color: var(--a); border: none; border-top: var(--border_hard); border-radius: 0 0 2px 2px}
+.app table {margin: auto; width: auto; border: none; background: none}
+.app tr {margin: 0; border: none; background: none}
+.app td {margin: 0; padding: 3px 0 0; border: none; background: none}
+div.app {margin: 2px 4px 6px; padding: 2px 0 0; min-width: 70px; position: relative; float: left; text-align: center; background: #000; opacity: .9}
+div.app:hover, .sitemapLink:hover, .themechoice:hover, .langselect:hover {background: radial-gradient(circle at center -90px, rgba(255,96,0,.3), #000 70%), #000}
+div.app:hover, div.app:hover .applabel, div.app:hover .extlink::after, .sitemapLink.extlink:hover::after, .themechoice:hover, .themechoice:hover .themelabel, .langselect:hover, .langselect:hover .ui_lang {box-shadow: var(--highlight), inset 0 0 1px 1px #730}
+div.app:hover {color: var(--hover); border: 1px solid var(--hover); opacity: 1}
+div.app:hover::after, .sitemapLink:hover::after {border: 1px solid #f50; background: #000 var(--newtab_hover) no-repeat 4.5px center / 13px 11px; opacity: 1; transform: scale(1); pointer-events: none}
+div.app:hover a:link, div.app:hover a:visited {color: var(--hover)}
+div.app:hover .applabel, .sitemapLink:hover .sitemapLabel, .themechoice:hover .themelabel, .langselect:hover .ui_lang {background: var(--glow_bottom_hover) #000}
+div.app:hover .applabel {color: var(--hover); border-top: 1px solid var(--hover)}
+div.app:hover img, .sitemapLink:hover img, a:focus .app img, a:focus .sitemaplink img {opacity: 1; filter: none}
+div.app a:link, div.app a:hover, div.app a:active {text-decoration: none; outline: none}
+div.app:active .applabel, .sitemapLink:active .sitemapLabel {color: var(--ink); box-shadow: var(--highlight), inset 3px 3px 3px 1px #5f2400; background: var(--hover)}
+div.app:active .applabel a {color: var(--ink)}
+div.app:active img {transform: scale(0.9)}
+div.app::after, .sitemapLink::after {width: 22px; height: 19px; position: absolute; top: -1px; right: -1px; display: inline-block; border: 1px solid #000; background: transparent; opacity: 0; content: ""; transform: scale(0)}
+div.app img, .sitemapLink img {filter: sepia(100%) hue-rotate(70deg) grayscale(.3); animation: zoom .15s linear .3s both}
+div.app img {margin: -4px 0 1px; padding: 10px 52px 38px; width: auto; height: 32px; max-width: 32px; max-height: 32px}
+div.app.js:hover::before {padding: 1px 4px 3px; display: inline-block; position: absolute; top: -1px; left: -1px; border: 1px solid var(--hover); box-shadow: var(--highlight), inset 0 0 1px 1px #730; content: "*js"}
 h4.app, h4.app2 {margin: 11px -6px -9px; padding: 9px 8px 7px 35px; line-height: 1; overflow: hidden; letter-spacing: .15em; word-spacing: 0; font-size: 10.5pt; font-variant: small-caps; text-transform: uppercase; text-align: left; border-radius: 0}
 h4.app {background: url(images/favicon.svg) no-repeat 8px center, var(--h1); background-size: 18px, 4px 100%, 100%, 175px; background-blend-mode: var(--h3_blend)}
 h4.app2 {clear: left; background: var(--globe) no-repeat 8px center, var(--h1); background-size: 18px, 4px 100%, 100%, 175px; background-blend-mode: var(--h3_blend)}
-#homepage .main h4 {contain: paint}
-#homepage .main h4 a {margin: -9px 0 -10px; padding: 14px 4px 12px; border-left: var(--border)}
-.ag2 {margin: 0 0 10px; padding: 0 3px}
-h4.app::first-letter, h4.app2::first-letter {font-size: 115%; display: inline-block; margin-right: .05em}
-h4.app a, h4.app2 a {word-spacing: 0; letter-spacing: 0}
-h4.app:hover img, h4.app2:hover img {opacity: 1}
-h4.app img, h4.app2 img {opacity: .5}
 h4.app2 img, #sitemap h3 a img {margin-top: 1px}
+h4.app a, h4.app2 a {word-spacing: 0; letter-spacing: 0}
+h4.app img, h4.app2 img {opacity: .5}
+h4.app:hover img, h4.app2:hover img {opacity: 1}
 h4.app img:hover, h4.app2 img:hover {filter: drop-shadow(0 0 1px var(--hover))}
 h4.app img:active, h4.app2 img:active {transform: rotateZ(90deg)}
+h4.app::first-letter, h4.app2::first-letter {font-size: 115%; display: inline-block; margin-right: .05em}
+h4.app a::after, h4.app2 a::after {margin-left: 9px}
+h4.app a::after {margin-top: -1px}
+h4.app2 a::after {margin-top: 1px}
+#homepage .main h4 {contain: paint}
+#homepage .main h4 a {margin: -9px 0 -10px; padding: 14px 4px 12px; border-left: var(--border)}
 #homepage h4.app a {margin: -13px 0 -12px}
 #homepage h4.app2 a {margin: -14px 0 -10px}
-div.app {margin: 2px 4px 6px; padding: 2px 0 0 !important; min-width: 70px; float: left; text-align: center; background: #000; opacity: .9}
-div.app, .extlink::after, input, button {will-change: transform}
-div.app.js:hover::before {padding: 1px 4px 3px; display: inline-block; position: absolute; top: -1px; left: -1px; border: 1px solid var(--hover); box-shadow: var(--highlight), inset 0 0 1px 1px #730 !important; content: "*js"}
-div.app, .applabel, .statusnotes, .main, div.news, .routersummary, .search tr, .logo, .themechoice, .themelabel, .langselect, .ui_lang {box-shadow: var(--highlight), inset 0 0 1px 1px #050}
-div.app a:link, div.app a:hover, div.app a:active {text-decoration: none; outline: none}
-div.app {position: relative}
-div.app:hover, div.app:hover .applabel, div.app:hover .extlink::after, .sitemapLink.extlink:hover::after, .themechoice:hover, .themechoice:hover .themelabel, .langselect:hover, .langselect:hover .ui_lang {box-shadow: var(--highlight), inset 0 0 1px 1px #730 !important}
-.app a:link, .app a:visited {padding: 2px; display: inline-block; color: var(--a)}
-div.app:hover, .sitemapLink:hover, .themechoice:hover, .langselect:hover {background: radial-gradient(circle at center -90px, rgba(255,96,0,.3), #000 70%), #000}
-div.app:hover {color: var(--hover) !important; border: 1px solid var(--hover); opacity: 1}
-.langselect:hover {background: radial-gradient(circle at center -60px, rgba(255,96,0,.3), #000 70%)}
-div.app:active .applabel, .sitemapLink:active .sitemapLabel {color: var(--ink) !important; box-shadow: var(--highlight), inset 3px 3px 3px 1px #5f2400 !important; background: var(--hover) !important}
-div.app:active .applabel a {color: var(--ink) !important}
-div.app:hover a:link, div.app:hover a:visited {color: var(--hover)}
-.ag2 div.app:last-of-type {margin-bottom: 7px}
-div.app:active img {transform: scale(0.9)}
-div.appgroup {margin: 0 0 10px; padding: 16px 0; width: auto}
-div.app::after, .sitemapLink::after {width: 22px; height: 19px; position: absolute; top: -1px; right: -1px; display: inline-block; border: 1px solid #000; background: transparent; opacity: 0; content: ""; transform: scale(0)}
-div.app:hover::after, .sitemapLink:hover::after {border: 1px solid #f50; background: #000 var(--newtab_hover) no-repeat 4.5px center / 13px 11px; opacity: 1; transform: scale(1); pointer-events: none}
+#homepanel {margin: 0 -8px}
 
 /* home search */
 #searchbar {margin: -24px 10px -16px; padding: 8px 0 2px; width: auto; white-space: nowrap; text-align: center}
-#searchbar tr {box-shadow: var(--highlight), inset -1px -1px 0 1px #000, inset 0 0 2px 1px #040, inset -1px -1px 2px 1px #040, inset 0 0 0 3px #000, inset -1px -1px 0 3px #000}
 #searchbar span {margin: 5px 5px 0; padding: 1px; display: inline-block; position: relative; overflow: hidden; border: 1px solid #151; border-radius: 2px; background: none}
 #searchbar span:focus-within {box-shadow: inset -38px 0 1px 2px rgba(0,0,0,.6), inset 0 0 2px 2px rgba(0,0,0,.7), 0 0 0 1px #000, 0 0 0 2px rgba(255,96,0,.8), 0 0 0 3px rgba(144,48,0,.7); background: var(--input_txt); transition: linear box-shadow .15s}
 #searchbar table {margin: 15px auto 13px; width: auto; border-radius: 0 0 3px 3px; border-collapse: separate; border: 1px solid #151; background: #000; box-shadow: var(--highlight), inset 0 0 0 2px rgba(0,64,0,.5); animation: fade .15s .5s reverse both, slide .1s ease 1s both}
 #searchbar td {padding: 0; border: none; box-shadow: none; background: none}
-#searchbar button, #searchbar select {box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000 !important}
-#searchbar button, #searchbar select {margin: 2px 0 0 !important}
-#searchbar button:hover, #searchbar select:hover, #searchbar button:focus, #searchbar select:focus {box-shadow: var(--highlight)}
-#searchbar select {padding: 8px 24px 8px 8px !important; width: 200px; position: absolute; top: -1px; left: -1px; border: none; border-radius: 2px 0 0 2px}
-#searchbar select:hover, #searchbar select:focus, #searchbar select:active {border: none !important; outline: none}
-#searchbar button.search {padding: 0 3px 0 0; position: absolute; right: -1px; top: -1px; font-size: 0 !important; height: 31px; width: 38px; min-width: 0; border: none; border-right: 1px solid var(--border) !important; border-radius: 0 2px 2px 0; background: var(--search) var(--center) / 14px, var(--btn); background-blend-mode: luminosity}
-#searchbar button:hover, #searchbar button:focus {background-blend-mode: normal}
-#searchbar button:active {background-size: 12px; background-blend-mode: luminosity}
-#searchbar button, #searchbar select, #searchbar input {margin-top: -2px !important; height: calc(100% + 6px) !important; box-sizing: border-box; border-top: none !important; border-bottom: none !important}
-#searchbar button:active {box-shadow: var(--btn_shadow_active)}
-#searchbar input {margin: 2px 0 1px 198px !important; padding-left: 10px; padding-right: 42px; min-width: 240px; height: calc(100% + 2px) !important; border-radius: 0; box-shadow: none; background: #000; border: none !important; filter: none !important}
-#searchbar input:focus {box-shadow: inset 4px 2px 3px 1px rgba(0,0,0,.8); border-color: #151 !important; background: none !important}
+#searchbar input {margin: 2px 0 1px 198px; padding-left: 10px; padding-right: 42px; min-width: 240px; height: calc(100% + 2px); border-radius: 0; box-shadow: none; background: #000; border: none; filter: none}
+#searchbar input:focus {box-shadow: inset 4px 2px 3px 1px rgba(0,0,0,.8); border-color: #151; background: none}
 #searchbar input::placeholder {opacity: 0}
 #searchbar input:hover::placeholder {font-style: italic; opacity: .6}
-div.app, .sitemapLink, .themechoice, .langselect {animation: zoom .1s linear .15s both; will-change: transform}
-.appimg {height: 32px; padding: 0 0 6px}
-div.app img {margin: -4px 0 1px; padding: 10px 52px 38px; width: auto; height: 32px; max-width: 32px; max-height: 32px}
-div.app img, .sitemapLink img {filter: sepia(100%) hue-rotate(70deg) grayscale(.3); animation: zoom .15s linear .3s both}
-div.app:hover img, .sitemapLink:hover img, a:focus .app img, a:focus .sitemaplink img {opacity: 1; filter: none}
-.app table {margin: auto; width: auto; border: none; background: none}
-.app tr {margin: 0; border: none; background: none}
-.app td {margin: 0; padding: 3px 0 0; border: none; background: none}
-.applabel, .sitemapLabel, .themelabel, .ui_lang {background: var(--glow_bottom), linear-gradient(180deg,#001900,#001000 50%,#000); animation: fade .15s ease .25s reverse both}
-div.app:hover .applabel, .sitemapLink:hover .sitemapLabel, .themechoice:hover .themelabel, .langselect:hover .ui_lang {background: var(--glow_bottom_hover) #000}
-.applabel {margin: 2px 0 0; padding: 3px 2px 2px; width: 155px; line-height: 1.2; vertical-align: bottom; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 8.5pt; color: var(--a); border: none; border-top: var(--border_hard); border-radius: 0 0 2px 2px}
-.applabel:hover {color: var(--hover); border-top: 1px solid var(--hover)}
-.applabel a {padding: 2px 2px 3px !important; max-width: 146px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: capitalize; text-shadow: var(--textshadow)}
-.app2 + .appgroup .applabel a {text-transform: none}
-.applabel a, .applabel a:hover {text-decoration: none !important; outline: none}
-div.app:hover .applabel {color: var(--hover); border-top: 1px solid var(--hover) !important}
+#searchbar button, #searchbar select, #searchbar input {margin-top: -2px; height: calc(100% + 6px); box-sizing: border-box; border-top: none; border-bottom: none}
+#searchbar button, #searchbar select {margin: -2px 0 0; box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000}
+#searchbar button {padding: 0 3px 0 0; position: absolute; right: -1px; top: -1px; font-size: 0; width: 38px; min-width: 0; border: none; border-right: 1px solid var(--border); border-radius: 0 2px 2px 0; background: var(--search) var(--center) / 14px, var(--btn); background-blend-mode: luminosity}
+#searchbar button:hover, #searchbar select:hover, #searchbar button:focus, #searchbar select:focus {box-shadow: var(--highlight)}
+#searchbar button:hover, #searchbar button:focus {background-blend-mode: normal}
+#searchbar button:active {background-size: 12px; background-blend-mode: luminosity}
+#searchbar button:active {box-shadow: var(--btn_shadow_active)}
+#searchbar select {padding: 8px 24px 8px 8px; width: 200px; position: absolute; top: -1px; left: -1px; border: none; border-radius: 2px 0 0 2px}
+#searchbar select:hover, #searchbar select:focus, #searchbar select:active {border: none; outline: none}
 
-h3[id*="job"] {margin: 12px 0 10px 0; padding: 8px; letter-spacing: .08em; text-transform: uppercase; border: var(--border); border-radius: 0}
+/* sitemap */
+#sitemap {padding-left: 6px; padding-right: 6px}
+#sitemapcontainer {padding: 0 0 1px}
+#sitemapcontainer h3 {margin-bottom: 6px}
+#sitemapcontainer h3:nth-child(n+2) {margin-top: 2px}
+#sitemap h3, h4.app, h4.app2 {border: var(--border_hard)}
+#sitemap h3 {margin-left: -7px; margin-right: -7px; padding-left: 35px; line-height: 1.2; letter-spacing: .12em; font-size: 10.5pt; background: url(images/favicon.svg) no-repeat 9px center, var(--h1); background-size: 18px, 4px 100%, 100%, 175px; background-blend-mode: var(--h3_blend)}
+#sitemap h3::first-letter {margin-right: .05em; display: inline-block; font-size: 115%}
+#sitemap h3:nth-of-type(2) {background: var(--infobox) no-repeat 9px center, var(--h1); background-size: 18px, 4px 100%, 100%, 175px; background-blend-mode: var(--h3_blend)}
+#sitemap h3:nth-of-type(3) {background: var(--configure) no-repeat 9px center, var(--h1); background-size: 18px, 4px 100%, 100%, 175px; background-blend-mode: var(--h3_blend)}
+#sitemap h3:nth-of-type(4) {background: var(--help) no-repeat 9px center, var(--h1); background-size: 18px, 4px 100%, 100%, 175px; background-blend-mode: var(--h3_blend)}
+#sitemap h3:nth-of-type(5) {background: var(--globe) no-repeat 9px center, var(--h1); background-size: 18px, 4px 100%, 100%, 175px; background-blend-mode: var(--h3_blend)}
+.sitemapLink, .sitemapLabel {width: 180px; display: inline-block; text-align: center; will-change: transform}
+.sitemapLink {position: relative}
+.sitemapLink, .sitemapLabel {width: 180px; min-width: 180px}
+.en .sitemapLink, .en .sitemapLabel {width: 136px; min-width: 136px}
+.sitemapLink {margin: 2px 2px 6px; box-shadow: var(--outline), var(--highlight), inset 0 0 1px 1px #242; background: radial-gradient(circle at center -90px, rgba(0,96,0,.9), #000 60%), linear-gradient(180deg,#000800, #000)}
+.sitemapLink:hover, .sitemapLink:hover .sitemapLabel {border-color: var(--hover); box-shadow: var(--highlight), inset 0 0 1px 1px var(--hover)}
+.sitemapLink img {padding: 12px 10px 10px; height: 32px; width: 32px; opacity: .8}
+.sitemapLink:active img, .sitemapLink img:active, div.app:active img, div.app img:active {transform: scale(0.9); filter: sepia(100%) drop-shadow(0 0 1px var(--hover)) drop-shadow(0 0 2px rgba(148,0,0,.5))}
+.sitemapLabel {margin: 0 0 -4px; padding: 6px 4px 8px; display: inline-block; line-height: 1.05; overflow: hidden; white-space: nowrap; box-sizing: border-box; text-overflow: ellipsis; font-size: 90%; text-shadow: var(--textshadow); border: none; border-top: var(--border); box-shadow: var(--highlight), inset 0 0 1px 1px #242}
 
 /* certs */
 #certs {padding-top: 3px; padding-bottom: 10px}
@@ -1463,13 +1479,7 @@ th.th_title {padding: 8px 10px; text-align: left; background: linear-gradient(18
 #clientsconfig, #webappconfigactions, #pluginconfigactions {margin-bottom: -4px; padding: 5px; border: var(--border); background: #000}
 
 #configclient {margin-top: -11px}
-#config_logging h3 a::before, #webappconfiguration a::before, #i2pclientconfig a::before, #pluginmanage a::before {width: 19px; height: 15px; display: inline-block; vertical-align: middle; background: var(--eye) no-repeat left center / 15px; content: ""}
-#config_logging h3 a:hover::before, #config_logging h3 a:focus::before {background: var(--eye_hover) no-repeat left center / 15px}
-#config_logging h3 a, #webappconfiguration a, #i2pclientconfig a, #pluginmanage a {padding-top: 11px; display: inline-block; vertical-align: middle}
-#config_logging p {margin: 3px 0 5px; text-align: left}
-#config_logging tr, #tunnelconfig tr, #config_summarybar tr, .homelinkedit tr, #config_bandwidth tr, #bandwidthconfig tr, #config_clients tr, #config_webapps tr, #config_peers #bannedips td:first-child tr:nth-child(n+3):not(#ipv6), #configstats tr:not(.tablefooter) {box-shadow: var(--highlight), inset 0 -1px 0 1px #000, inset -1px 0 0 1px #000, inset 0 0 2px 0 #020, inset 0 -1px 2px 0 #020, inset -1px 0 2px 0 #020}
 #config_peers #bannedpeercount {margin: -1px 0}
-#config_ui p.infohelp {margin-bottom: 10px; background: #000 var(--ui) no-repeat 15px center / 28px}
 #externali2cp th {text-align: left}
 #floodfillconfig form, #plugininstall form, #updateplugins form, .configtable form {margin-bottom: 0}
 #i2pclientconfig, #pconfig, #pluginfromurl, #pluginfromfile, #webappconfiguration {margin-bottom: -14px}
@@ -1536,6 +1546,7 @@ textarea#advancedsettings {margin: 0; padding-top: 3px; width: 100%; overflow-x:
 tr.addnew, tr.addnew:hover {border-top: var(--border); background: #000800}
 
 /* configui */
+#config_ui p.infohelp {margin-bottom: 10px; background: #000 var(--ui) no-repeat 15px center / 28px}
 .themechoice, .langselect {margin: 4px; width: 140px; float: left; text-align: center; border: var(--border); background: radial-gradient(circle at center -90px, rgba(0,96,0,.9), #000 60%), linear-gradient(180deg,#010, #000 80%)}
 .themechoice {padding: 0 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
 .langselect {padding: 8px 4px 0; background: radial-gradient(circle at center -70px, rgba(0,96,0,.9), #000 60%), linear-gradient(180deg,#010, #000 80%)}
@@ -1558,7 +1569,7 @@ tr.addnew, tr.addnew:hover {border-top: var(--border); background: #000800}
 #themeoptions input {margin: 1px 5px}
 #themesettings {clear: both; border: var(--border); padding: 8px 7px 0; margin: -1px 0; background: #000}
 #themesettings hr {display: none}
-.langselect:hover {border: 1px solid var(--hover)}
+.langselect:hover {border: 1px solid var(--hover); background: radial-gradient(circle at center -60px, rgba(255,96,0,.3), #000 70%)}
 .langselect img {margin-top: -2px !important; margin-bottom: 2px !important; border: 1px solid #002000}
 .langselect img {margin-top: 7px !important; margin-bottom: 0; margin-left: -71px; position: absolute; border: 1px solid #002000}
 .langselect input + img {opacity: .6}
@@ -1579,9 +1590,9 @@ tr.addnew, tr.addnew:hover {border-top: var(--border); background: #000800}
 #config_ui :-moz-broken {display: inline-block; visibility: hidden}
 
 /* large flags */
-.langselect img {margin-top: -6px !important; margin-left: -82px; width: 40px; height: 40px; position: absolute; border: none !important; box-shadow: none; opacity: .6; filter: drop-shadow(0 0 1px #000)}
-.langselect input[name="lang"]:checked + img, .langselect input[name="lang"]:checked + #config_ui img[src="/flags.jsp?c=a1"] {margin-top: -2px !important; margin-left: -78px; margin-bottom: 0; width: 32px !important; height: 32px !important; border: none !important; box-shadow: none !important; opacity: 1}
-.langselect input:hover + img {box-shadow: none !important; transition: none !important; filter: drop-shadow(0 0 1px var(--hover))}
+.langselect img {margin-top: -6px !important; margin-left: -82px; width: 40px; height: 40px; position: absolute; border: none; box-shadow: none; opacity: .6; filter: drop-shadow(0 0 1px #000)}
+.langselect input[name="lang"]:checked + img, .langselect input[name="lang"]:checked + #config_ui img[src="/flags.jsp?c=a1"] {margin-top: -2px !important; margin-left: -78px; margin-bottom: 0; width: 32px !important; height: 32px !important; border: none; box-shadow: none; opacity: 1}
+.langselect input:hover + img {box-shadow: none; transition: none; filter: drop-shadow(0 0 1px var(--hover))}
 div.ui_lang {margin: 10px -4px 0 !important; padding: 3px 2px 4px; text-align: center; overflow: hidden;; white-space: nowrap; line-height: 1.5; text-overflow: ellipsis; color: #bb7; text-transform: capitalize; border-top: var(--border); border-radius: 0 0 2px 2px}
 #langheading {margin-bottom: 0}
 #langsettings {margin-top: -1px; margin-bottom: 10px; padding: 8px 7px 12px; border: var(--border); background: #000}
@@ -1592,7 +1603,7 @@ div.ui_lang {margin: 10px -4px 0 !important; padding: 3px 2px 4px; text-align: c
 /* console password */
 #config_ui #passwordheading {margin-top: 13px; margin-bottom: -2px}
 #consolepass th:nth-child(2) {text-align: left}
-#consolepass td:first-child {width: 100px; white-space:nowrap}
+#consolepass td:first-child {width: 100px; white-space: nowrap}
 #consolepass th {padding: 5px}
 #consolepass td {padding: 2px 3px}
 #consolepass td {padding: 5px 10px; border-bottom: var(--border)}
@@ -1711,6 +1722,11 @@ form > table {font-size: 9pt}
 #tunnelconfigsave {margin-top: -1px}
 
 /* configlogging */
+#config_logging h3 a::before, #webappconfiguration a::before, #i2pclientconfig a::before, #pluginmanage a::before {width: 19px; height: 15px; display: inline-block; vertical-align: middle; background: var(--eye) no-repeat left center / 15px; content: ""}
+#config_logging h3 a:hover::before, #config_logging h3 a:focus::before {background: var(--eye_hover) no-repeat left center / 15px}
+#config_logging h3 a, #webappconfiguration a, #i2pclientconfig a, #pluginmanage a {padding-top: 11px; display: inline-block; vertical-align: middle}
+#config_logging p {margin: 3px 0 5px; text-align: left}
+#config_logging tr, #tunnelconfig tr, #config_summarybar tr, .homelinkedit tr, #config_bandwidth tr, #bandwidthconfig tr, #config_clients tr, #config_webapps tr, #config_peers #bannedips td:first-child tr:nth-child(n+3):not(#ipv6), #configstats tr:not(.tablefooter) {box-shadow: var(--highlight), inset 0 -1px 0 1px #000, inset -1px 0 0 1px #000, inset 0 0 2px 0 #020, inset 0 -1px 2px 0 #020, inset -1px 0 2px 0 #020}
 input[name="logfilename"], input[name="logformat"], input[name="logdateformat"], input[name="logfilesize"], select[name="defaultloglevel"], select[name="newloglevel"] {width: 125px}
 #loggingoptions td {padding: 6px}
 #loggingoptions td:first-child {padding-right: 3px}
@@ -1798,18 +1814,18 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 .stattograph b {display: inline-block; word-break: break-all; white-space: nowrap; vertical-align: middle; overflow: hidden; box-sizing: border-box; text-overflow: ellipsis; pointer-events: none; text-transform: capitalize}
 .optbox:not(:checked) + label > .stattograph b {color: var(--a)}
 .optbox:checked + label > .stattograph b {color: var(--ink); text-shadow: var(--textshadow)}
-.stattograph:hover b, .stattograph:focus b {color: var(--ink) !important}
-.optbox:checked + label > .stattograph {padding-left: 22px; border: var(--border_soft); border-left-width: 3px; box-shadow: var(--highlight), inset 4px 4px 4px rgba(0,0,0,.6) !important; background: var(--yes) no-repeat 8px center, linear-gradient(180deg,#010, #020); background-size: 8px, 100% !important; background-blend-mode: normal, normal !important}
+.stattograph:hover b, .stattograph:focus b {color: var(--ink)}
+.optbox:checked + label > .stattograph {padding-left: 22px; border: var(--border_soft); border-left-width: 3px; box-shadow: var(--highlight), inset 4px 4px 4px rgba(0,0,0,.6); background: var(--yes) no-repeat 8px center, linear-gradient(180deg,#010, #020); background-size: 8px, 100%; background-blend-mode: normal, normal}
 .stattograph:hover, .optbox:checked + label > .stattograph:hover {border-color: var(--hover); background: #000}
 .optbox:checked + label > .stattograph:hover {background: #d50 var(--yes) no-repeat 8px center; background-size: 8px}
-.optbox:checked + label > .stattograph:hover b {color: var(--ink) !important; text-shadow: none}
-.optbox:not(:checked) + label > .stattograph:hover b {color: var(--hover) !important}
-.stattograph:active, .optbox:checked + label > .stattograph:active {background: var(--hover); box-shadow: var(--highlight), inset 4px 4px 4px rgba(0,0,0,.6) !important}
-.stattograph:active b, .optbox:checked + label > .stattograph:active b {color: var(--ink) !important}
+.optbox:checked + label > .stattograph:hover b {color: var(--ink); text-shadow: none}
+.optbox:not(:checked) + label > .stattograph:hover b {color: var(--hover)}
+.stattograph:active, .optbox:checked + label > .stattograph:active {background: var(--hover); box-shadow: var(--highlight), inset 4px 4px 4px rgba(0,0,0,.6)}
+.stattograph:active b, .optbox:checked + label > .stattograph:active b {color: var(--ink)}
 .statdesc {display: none}
 #configstats {margin-bottom: -2px}
 #config_stats h3 a, #config_logging h3 a {float: right; letter-spacing: normal; text-transform: none; font-size: 9pt}
-#config_stats .tabletitle {margin: 15px 0 -1px !important}
+#config_stats .tabletitle {margin: 15px 0 -1px}
 #configstats tr {border-top: 1px inset #131}
 #configstats th {padding: 8px 10px; text-align: left}
 #configstats .tablefooter td {padding: 5px 10px}
@@ -1824,8 +1840,8 @@ cursor: default}
 #configstats .tablefooter td {padding: 5px 10px}
 #configstats .tablefooter:last-child td {text-align: right; background: #000}
 #configstats td b {color: var(--ink)}
-#configstats input.optbox {display: none !important}
-#config_stats #graphchoice {margin-bottom: -2px !important}
+#configstats input.optbox {display: none}
+#config_stats #graphchoice {margin-bottom: -2px}
 #enablefullstats {margin-top: 5px; padding: 5px 10px; border: var(--border); background: #000 var(--stats) no-repeat 15px center / 28px}
 #enablefull label {margin-top: 7px; display: inline-block}
 #enablefull input[type=submit] {float: right}
@@ -2228,32 +2244,8 @@ h2, h2.welcome, h3, h3.welcome, #themeoptions {border-color: #242}
 #news.news hr {opacity: .7}
 #configinfo th {border: none !important}
 #configinfo td {border-top: 1px solid #010}
-
-/* sitemap */
-#sitemap {padding-left: 6px; padding-right: 6px}
-#sitemapcontainer {padding: 0 0 1px}
-#sitemapcontainer h3 {margin-bottom: 6px}
-#sitemapcontainer h3:nth-child(n+2) {margin-top: 2px}
-#sitemap h3, h4.app, h4.app2 {border: var(--border_hard)}
-#sitemap h3 {margin-left: -7px; margin-right: -7px; padding-left: 35px; line-height: 1.2; letter-spacing: .12em; font-size: 10.5pt; background: url(images/favicon.svg) no-repeat 9px center, var(--h1); background-size: 18px, 4px 100%, 100%, 175px; background-blend-mode: var(--h3_blend)}
-#sitemap h3::first-letter {margin-right: .05em; display: inline-block; font-size: 115%}
-#sitemap h3:nth-of-type(2) {background: var(--infobox) no-repeat 9px center, var(--h1); background-size: 18px, 4px 100%, 100%, 175px; background-blend-mode: var(--h3_blend)}
-#sitemap h3:nth-of-type(3) {background: var(--configure) no-repeat 9px center, var(--h1); background-size: 18px, 4px 100%, 100%, 175px; background-blend-mode: var(--h3_blend)}
-#sitemap h3:nth-of-type(4) {background: var(--help) no-repeat 9px center, var(--h1); background-size: 18px, 4px 100%, 100%, 175px; background-blend-mode: var(--h3_blend)}
-#sitemap h3:nth-of-type(5) {background: var(--globe) no-repeat 9px center, var(--h1); background-size: 18px, 4px 100%, 100%, 175px; background-blend-mode: var(--h3_blend)}
-.sitemapLink, .sitemapLabel {width: 180px; display: inline-block; text-align: center; will-change: transform}
-.sitemapLink {position: relative}
-.sitemapLink, .sitemapLabel {width: 180px; min-width: 180px}
-.en .sitemapLink, .en .sitemapLabel {width: 136px; min-width: 136px}
-.sitemapLink {margin: 2px 2px 6px; box-shadow: var(--outline), var(--highlight), inset 0 0 1px 1px #242; background: radial-gradient(circle at center -90px, rgba(0,96,0,.9), #000 60%), linear-gradient(180deg,#000800, #000)}
-.sitemapLink:hover, .sitemapLink:hover .sitemapLabel {border-color: var(--hover); box-shadow: var(--highlight), inset 0 0 1px 1px var(--hover)}
-.sitemapLink img {padding: 12px 10px 10px; height: 32px; width: 32px; opacity: .8}
-.sitemapLink:active img, .sitemapLink img:active, div.app:active img, div.app img:active {transform: scale(0.9); filter: sepia(100%) drop-shadow(0 0 1px var(--hover)) drop-shadow(0 0 2px rgba(148,0,0,.5))}
-.sitemapLabel {margin: 0 0 -4px; padding: 6px 4px 8px; display: inline-block; line-height: 1.05; overflow: hidden; white-space: nowrap; box-sizing: border-box; text-overflow: ellipsis; font-size: 90%; text-shadow: var(--textshadow); border: none; border-top: var(--border); box-shadow: var(--highlight), inset 0 0 1px 1px #242}
-
 #logs .tabletitle, #jobs h3, #tunnels h3[id] {position: relative; overflow: hidden}
 #logs #enviro ~ .tabletitle::after, #jobs h3::after, #tunnels h3[id]::after {width: 0; height: 1px; display: inline-block; position: absolute; bottom: 0; left: 0; background: linear-gradient(90deg, #d30, var(--hover)); content: ""; animation: ease-out reloader 1s forwards; opacity: .4}
-
 .infohelp.vmcomm {margin-bottom: 0}
 
 /* help */
@@ -2393,7 +2385,7 @@ ul#upnphelp li:last-child, #legal ul li:last-child {padding-bottom: 0}
 
 /* responsive layout */
 @media screen and (max-width: 1599px) {#reseedproxytype {columns: 250px 3} #reseed_urlselection.optionsingle {columns: 1 auto}}
-@media screen and (max-width: 1499px) {.sb_netstatus.running:not(:hover)::before, .sb_netstatus.hidden:not(:hover)::before, .sb_netstatus.firewalled:not(:hover)::before, .sb_netstatus.testing:not(:hover)::before {margin: 0; height: 18px; width: 18px; background-size: 18px} #sidebar .reload, #sidebar .stop, #sidebar .stop:hover, #sidebar .stop:focus, #sidebar .reload[value="restartImmediate"] {background-size: 12px, 100%} #sidebar .reload[value="restartImmediate"], #sidebar .reload[value="restartImmediate"]:hover, #sidebar .reload[value="restartImmediate"]:focus {margin-bottom: -6px; background-size: 10px, 100%; background-position: 9px center} #sidebar .reload:hover, #sidebar .reload:focus {background-size: 12px, 12px, 100%} h3[id*="jobs"]:first-of-type {margin-top: 21px} #pluginconfig {margin-top: -13px} h4.app a::after {margin-top: -3px} h4.app2 a::after {margin-top: -1px} #sitemapcontainer {padding: 0} #netdboverview th[colspan="3"] {font-size: 11pt} #profilelist th {white-space: normal} #profiles #banlist {padding: 5px 9px} div.app img, .sitemapLink img {height: 24px; max-height: 24px; max-width: 24px} .appimg {padding: 2px 0 0} .applabel {width: 116px} .applabel a {max-width: 112px} #profiles #bannedpeercount {margin: 15px 8px 0} #sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after, #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {min-height: 12px} #banlist + h3 {margin-bottom: -2px} div.app img {padding: 10px 40px 40px} .applabel {margin-top: 8px} #help h3, #faq h3 {font-size: 10.5pt} #pluginconfigtext input {margin: -5px -6px 0 0} .netdbStats li {margin: 1px 5px} .longstat.fam {margin: 2px 5px -5px} .netdb_header img[src="/flags.jsp?c=a0"] {margin-bottom: -4px} #sb_internals {border-spacing: 0} #sb_internals td {padding-top: 2px; padding-bottom: 2px} h1[class], h1, h1.conf.adv {padding: 13px 15px 12px 50px; min-width: 620px; font-size: 17pt; background-size: 32px, 4px 100%, 100%, 164px; background-position: 10px center} .sitemapLink, .sitemapLabel, #sitemap div.app, #sitemap .applabel {width: 160px; min-width: 160px} .en .sitemapLink, .en .sitemapLabel, .en #sitemap div.app, .en #sitemap .applabel, .en #sitemap .app table {width: 120px; min-width: 120px} #sitemap div.app img {padding-left: 62px; padding-right: 62px} .en #sitemap div.app img {padding-left: 35px; padding-right: 35px} #clock {padding-top: 9px; font-size: 16pt} .netdbentry .tunnel_cap, .netdbentry .tier, .netdbentry .ff, .netdbentry .reachable, .netdbentry .unreachable, .netdbentry .version, .sybil_routerinfo .tunnel_cap, .sybil_routerinfo .tier, .sybil_routerinfo .ff, .sybil_routerinfo .reachable, .sybil_routerinfo .unreachable, .sybil_routerinfo .version {padding: 2px 4px} #tunnels .tunnel_cap {height: 15px; line-height: 15px} #tunnels .routerid tt {height: 18px; line-height: 18px} .tunnel_local {line-height: 14px} #tunnels .routerid + .tunnel_cap {margin-left: -2px} #tunnels .tunnel_local + .tunnel_cap {margin-left: 2px} #routerinformation .h3navlinks {margin: 1px -2px -1px -2px} #routerinformation h3 span a {padding: 12px 3px 12px 12px} #routerinformation .h3navlinks a::before {margin-left: 0} #webappconfiguration a, #i2pclientconfig a, #pluginmanage a {padding-top: 9px} .tunnelBuildStatus {font-size: 90%} #sb_tunnelstatus .tunnelBuildStatus::before {margin: -2px 0; background-size: 12px} #view_profile .identicon {top: 1px; right: 1px} #advancedconfig a {padding-top: 9px} #jardump a[href^="https://gitlab.com/i2pplus"] {padding-left: 11px; background-size: 8px; background-position: left top} .log_debug, .log_info, .log_warn, .log_error, .log_crit, .log_omitted {vertical-align: middle} #passwordheading {margin-top: 12px}}
+@media screen and (max-width: 1499px) {.sb_netstatus.running:not(:hover)::before, .sb_netstatus.hidden:not(:hover)::before, .sb_netstatus.firewalled:not(:hover)::before, .sb_netstatus.testing:not(:hover)::before {margin: 0; height: 18px; width: 18px; background-size: 18px} #sidebar .reload, #sidebar .stop, #sidebar .stop:hover, #sidebar .stop:focus, #sidebar .reload[value="restartImmediate"] {background-size: 12px, 100%} #sidebar .reload[value="restartImmediate"], #sidebar .reload[value="restartImmediate"]:hover, #sidebar .reload[value="restartImmediate"]:focus {margin-bottom: -6px; background-size: 10px, 100%; background-position: 9px center} #sidebar .reload:hover, #sidebar .reload:focus {background-size: 12px, 12px, 100%} h3[id*="jobs"]:first-of-type {margin-top: 21px} #pluginconfig {margin-top: -13px} h4.app a::after {margin-top: -3px} h4.app2 a::after {margin-top: -1px} #sitemapcontainer {padding: 0} #netdboverview th[colspan="3"] {font-size: 11pt} #profilelist th {white-space: normal} #profiles #banlist {padding: 5px 9px} div.app img, .sitemapLink img {height: 24px; max-height: 24px; max-width: 24px} .appimg {padding: 2px 0 0} .applabel {width: 116px} .applabel a {max-width: 112px} #profiles #bannedpeercount {margin: 15px 8px 0} #sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after, #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {min-height: 12px} #banlist + h3 {margin-bottom: -2px} div.app img {padding: 10px 40px 40px} .applabel {margin-top: 8px} #help h3, #faq h3 {font-size: 10.5pt} #pluginconfigtext input {margin: -5px -6px 0 0} .netdbStats li {margin: 1px 5px} .longstat.fam {margin: 2px 5px -5px} .netdb_header img[src="/flags.jsp?c=a0"] {margin-bottom: -4px} #sb_internals {border-spacing: 0} #sb_internals td {padding-top: 2px; padding-bottom: 2px} h1[class], h1, h1.conf.adv {padding: 13px 15px 12px 50px; min-width: 620px; font-size: 17pt; background-size: 32px, 4px 100%, 100%, 164px; background-position: 10px center} .sitemapLink, .sitemapLabel, #sitemap div.app, #sitemap .applabel {width: 160px; min-width: 160px} .en .sitemapLink, .en .sitemapLabel, .en #sitemap div.app, .en #sitemap .applabel, .en #sitemap .app table {width: 120px; min-width: 120px} #sitemap div.app img {padding-left: 62px; padding-right: 62px} .en #sitemap div.app img {padding-left: 35px; padding-right: 35px} #clock {padding-top: 9px; font-size: 16pt} .netdbentry .tunnel_cap, .netdbentry .tier, .netdbentry .ff, .netdbentry .reachable, .netdbentry .unreachable, .netdbentry .version, .sybil_routerinfo .tunnel_cap, .sybil_routerinfo .tier, .sybil_routerinfo .ff, .sybil_routerinfo .reachable, .sybil_routerinfo .unreachable, .sybil_routerinfo .version {padding: 2px 4px} #tunnels .tunnel_cap {height: 15px; line-height: 15px} #tunnels .routerid tt {height: 18px; line-height: 18px} .tunnel_local {line-height: 14px} #tunnels .routerid + .tunnel_cap {margin-left: -2px} #tunnels .tunnel_local + .tunnel_cap {margin-left: 2px} #routerinformation .h3navlinks {margin: 1px -2px -1px -2px} #routerinformation h3 span a {padding: 12px 3px 12px 12px} #routerinformation .h3navlinks a::before {margin-left: 0} #webappconfiguration a, #i2pclientconfig a, #pluginmanage a {padding-top: 9px} .tunnelBuildStatus {font-size: 90%} #sb_tunnelstatus .tunnelBuildStatus::before {margin: -2px 0; background-size: 12px} #view_profile .identicon {top: 1px; right: 1px} #advancedconfig a {padding-top: 9px} #jardump a[href^="https://gitlab.com/i2pplus"] {padding-left: 11px; background-size: 8px; background-position: left top} .log_debug, .log_info, .log_warn, .log_error, .log_crit, .log_omitted {vertical-align: middle} #passwordheading {margin-top: 12px} #searchbar span {margin: 3px 3px 0}}
 @supports (columns: 2 500px) {@media screen and (max-width: 1399px) {ul.statlist {padding: 10px; columns: auto 520px; column-gap: 10px; text-align: center}}}
 @media screen and (max-width: 1399px) {.revision, .sha256 {display: inline-block; max-width: 100px; overflow: hidden; text-overflow: ellipsis} .revision:hover, .sha256:hover {overflow: auto; text-overflow: clip} #peers .cells, #peers .cells[class] {min-width: 0}}
 @media screen and (min-width: 1280px) {#submitconsolepass {margin-bottom: 0}}
