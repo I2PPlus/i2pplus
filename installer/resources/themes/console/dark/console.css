@@ -1551,14 +1551,14 @@ tr.addnew, tr.addnew:hover {border-top: var(--border); background: #000800}
 .themechoice {padding: 0 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
 .langselect {padding: 8px 4px 0; background: radial-gradient(circle at center -70px, rgba(0,96,0,.9), #000 60%), linear-gradient(180deg,#010,#000 80%)}
 .themechoice:hover {border: 1px solid var(--hover); background: #000}
-.themechoice .optbox, .langselect .optbox {display: none}
+.themechoice .optbox, .langselect .optbox {position: absolute; opacity: 0;}
 .themechoice .optbox:checked + img {opacity: 1; filter: none; transform: scale(0.8)}
 .themechoice img {padding: 5px 0; opacity: .6}
 .themechoice img, .langselect img {animation: fade .15s ease .3s reverse both}
 .themechoice:hover img {filter: drop-shadow(0 0 1px var(--hover))}
 .themechoice:active img {transform: scale(0.8)}
 .themechoice .themelabel {margin-left: -4px; margin-right: -4px; padding: 3px 2px 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.5; color: #bb7; border-top: var(--border); background: var(--glow_bottom), linear-gradient(180deg,#001900,#001000 50%,#000)}
-.themechoice:hover .themelabel, .themechoice .optbox:focus ~ .themelabel {color: var(--hover); border-top: 1px solid var(--hover); box-shadow: inset 0 0 10px 3px #000; background: var(--glow_bottom_hover) #000}
+.themechoice:hover .themelabel {color: var(--hover); border-top: 1px solid var(--hover); box-shadow: inset 0 0 10px 3px #000; background: var(--glow_bottom_hover) #000}
 .themechoice:active .themelabel {font-weight: 700; color: var(--ink); border-top: 1px solid var(--hover); box-shadow: var(--btn_shadow_active); background: var(--hover)}
 .themechoice .optbox:checked ~ .themelabel {font-weight: 700; color: var(--ink); box-shadow: var(--highlight), inset 0 0 2px 1px #050; background: #030}
 #themeheading, #langheading, #passwordheading {margin-bottom: 0; padding: 8px 10px; letter-spacing: .08em; word-spacing: .1em; font-size: 10.5pt; border-radius: 0; border: var(--border)}
@@ -1578,7 +1578,7 @@ tr.addnew, tr.addnew:hover {border-top: var(--border); background: #000800}
 .langselect img {margin: 0 0 -8px; width: 40px; height: 40px; border: none; box-shadow: none; opacity: .6; filter: drop-shadow(0 0 1px #000)}
 .langselect:hover img {box-shadow: none; transition: none; opacity: 1; filter: drop-shadow(0 0 1px var(--hover))}
 .langselect:hover .ui_lang {color: var(--hover); border-top: 1px solid var(--hover); background: #000}
-.langselect input:focus + img + div.ui_lang, .langselect input[name="lang"]:checked:focus + img + div.ui_lang {color: var(--hover); box-shadow: inset 0 0 10px 3px #000}
+.langselect input:focus + img + div.ui_lang, .langselect input[name="lang"]:checked:focus + img + div.ui_lang, .themechoice .optbox:focus ~ .themelabel {color: var(--hover); box-shadow: inset 0 0 10px 3px #000}
 .langselect:active .ui_lang {color: var(--ink); box-shadow: var(--highlight), inset 3px 3px 3px 1px #5f2400; background: var(--hover)}
 .langselect input[name="lang"]:checked + img, .langselect input[name="lang"]:checked + #config_ui img[src="/flags.jsp?c=a1"] {opacity: 1; transform: scale(.8)}
 .langselect input[name="lang"]:checked + img + div.ui_lang {color: var(--ink); font-weight: 700; box-shadow: var(--highlight), inset 0 0 2px 1px #050; background: #030}
