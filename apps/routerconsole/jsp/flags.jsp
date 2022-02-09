@@ -26,10 +26,12 @@ if (c != null && (c.length() == 2 || c.length() == 7) && c.replaceAll("[a-z0-9_]
     String flagSet = "flags_svg";
     String ext = ".svg";
     String s = request.getParameter("s");
+/*
     if (s != null && s.equals("48")) {
         flagSet = "flags48x48";
         ext = ".png";
     }
+*/
     java.io.File ffile;
     long lastmod = 0;
     java.io.InputStream fin = flags_jsp.class.getResourceAsStream("/net/i2p/router/web/resources/icons/" + flagSet + '/' + c + ext);
