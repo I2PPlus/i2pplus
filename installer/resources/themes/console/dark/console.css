@@ -1579,13 +1579,13 @@ tr.addnew, tr.addnew:hover {border-top: var(--border); background: #000800}
 #langsettings {margin-top: -1px; margin-bottom: 10px; padding: 8px 7px 12px; border: var(--border); background: #000}
 #langsettings hr {display: none}
 #langui {margin: 7px -8px -15px; padding: 5px; border: var(--border); background: #000}
-.langflag {margin: 5px 0 2px; width: 40px; height: 30px; position: relative; display: inline-block; border-radius: 2px; opacity: .7}
+.langflag {margin: 5px 0 2px; width: 40px; height: 30px; position: relative; display: inline-block; border-radius: 3px; opacity: .8}
 .langselect:hover {border: 1px solid var(--hover); background: radial-gradient(circle at center -60px, rgba(255,96,0,.3), #000 70%)}
 .langselect:hover .optbox:not(:checked) + .langflag {opacity: 1; transform: scale(1.1)}
 .langselect .optbox:checked + .langflag {opacity: 1; transform: scale(.9)}
-.langflag img {width: 40px; height: 30px; border-radius: 2px}
+.langflag img {width: 40px; height: 30px; border-radius: 3px}
 .langselect:active .optbox:not(:checked) + .langflag {transform: scale(.8)}
-.langflag::before {position: absolute; top: 0; bottom: 0; left: 0; right: 0; z-index: 10; border-radius: 3px; background: linear-gradient(180deg, rgba(255,255,255,.5), rgba(0,0,0,0) 75%); content: ""; display: inline-block}
+.langflag::before {position: absolute; top: 0; bottom: 0; left: 0; right: 0; z-index: 10; border-radius: 3px; box-shadow: 0 0 0 1px #000, inset 0 0 0 1px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.3); background: linear-gradient(180deg, rgba(255,255,255,.5), rgba(0,0,0,0) 75%); content: ""; display: inline-block}
 #helptranslate {padding: 6px 10px 10px; clear: both; text-align: right}
 
 /* console password */
@@ -1918,7 +1918,7 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 #debug th:first-child {text-align: left}
 #debug td:last-child {vertical-align: top}
 #debug h2, #debug h3 {border-radius: 0}
-#debug h2 {margin-top: 11px; padding: 8px 10px; font-size: 11.5pt; background: var(--bug) no-repeat right 6px center, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(90deg, rgba(0,16,0,.5) 2px, rgba(0,16,0,.4) 4px), var(--h3_fade); background-size: 18px, 100%, 2px, 100%;}
+#debug h2 {margin-top: 11px; padding: 10px 10px 8px; font-size: 11.5pt; background: var(--bug) no-repeat right 6px center, var(--h3), #010; background-size: 18px, 2px;}
 #debug h2#debug_portmapper {margin-top: 15px}
 #debug h2 + hr, .buckets hr {display: none}
 #debug h3 {border-width: 1px; padding: 5px 10px; font-size: 10pt}
@@ -1943,12 +1943,10 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 #debugDHT {margin: 1px 0 10px}
 #bucketSet {margin: 0 3px -5px}
 #bucketSet code {user-select: all}
-#bucketSet code::selection {background: #cc0 !important}
 .bucketsContainer, .bucketCount {margin: 0; text-align: center; border: var(--border_soft); box-shadow: var(--highlight)}
 .bucketsContainer {margin: -1px 0 -8px; padding: 5px; background: #000700}
 .bucketCount {padding: 3px 0; background: linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,.7), rgba(0,0,0,0)), var(--label)}
 .bucket {margin: 2px; padding: 1px 4px; max-width: 50px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #880; font-family: var(--monospaced); box-shadow: 0 0 0 1px #030, var(--highlight); background: #010; user-select: all}
-.bucket::selection {background: #050 !important; color: #fff}
 .bucket:empty {display: none}
 
 /* jardump */
