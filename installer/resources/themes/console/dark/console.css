@@ -203,7 +203,7 @@ p:empty + .sb_notice {margin-top: 9px}
 /* network status */
 h4#sb_shutdownstatus span {margin: 3px 0; display: inline-block}
 #sidebar h4 a {width: auto; display: inline}
-#sb_warning {margin-bottom: 7px; padding: 6px 4px; background: #000; text-align: center; line-height: 1.2}
+#sidebar #sb_warning {margin-bottom: 7px; padding: 6px 4px; background: #000; text-align: center; line-height: 1.2}
 #sb_warning + p:empty + form {margin-top: 11px; margin-bottom: -6px}
 .sb_netstatus, .tunnelBuildStatus, #bandwidthTestRunning {margin: -5px 0; padding: 7px 3px; width: 100%; display: inline-block; vertical-align: middle; text-shadow: var(--textshadow); box-shadow: var(--highlight), inset 0 0 2px 1px #040; box-sizing: border-box}
 #sidebar .firewalled, .tunnelBuildStatus {color: #bb7; box-shadow: var(--highlight), inset 0 0 2px 1px #040}
