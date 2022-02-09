@@ -305,9 +305,9 @@ public class HomeHelper extends HelperBase {
                 url = "/embed?url=/outproxy/&amp;name=SOCKS+Outproxy+Plugin";
             // if external links set to open in new tab, add class so we can indicate external links with overlay
             // plugins need to be manually added
-            } else if ((app.url.contains("webmail") || (app.url.contains("torrents") || (app.url.contains("outproxy")) && !embedApps))
-                    || ((app.url.contains("bote") || (app.url.contains("orchid") || (app.url.contains("BwSchedule"))
-                    || ((app.url.contains(".i2p"))) || (app.url.contains("history.txt")))))) {
+            } else if ((!embedApps && (app.url.contains("webmail") || app.url.contains("torrents") || app.url.contains("outproxy")
+                    || app.url.contains("bote") || app.url.contains("orchid") || app.url.contains("BwSchedule")))
+                    || app.url.contains(".i2p") || app.url.contains("history.txt")) {
                 url = app.url + "\" target=\"_blank\" class=\"extlink";
             } else {
                 url = app.url;
