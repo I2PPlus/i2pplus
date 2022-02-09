@@ -305,7 +305,7 @@ public class HomeHelper extends HelperBase {
                 url = "/embed?url=/outproxy/&amp;name=SOCKS+Outproxy+Plugin";
             // if external links set to open in new tab, add class so we can indicate external links with overlay
             // plugins need to be manually added
-            } else if (((app.url.contains("webmail") || (app.url.contains("torrents") || (app.url.contains("outproxy"))) && (!embedApps)))
+            } else if ((app.url.contains("webmail") || (app.url.contains("torrents") || (app.url.contains("outproxy")) && !embedApps))
                     || ((app.url.contains("bote") || (app.url.contains("orchid") || (app.url.contains("BwSchedule"))
                     || ((app.url.contains(".i2p"))) || (app.url.contains("history.txt")))))) {
                 url = app.url + "\" target=\"_blank\" class=\"extlink";
@@ -351,7 +351,7 @@ public class HomeHelper extends HelperBase {
 
     private String renderConfig(Collection<App> apps) {
         StringBuilder buf = new StringBuilder(1024);
-        buf.append("<table class=\"homelinkedit\"><tr><th title=\"")
+        buf.append("<table class=\"homelinkedit\"><tr><th class=\"center\" title=\"")
            .append(_t("Mark for deletion"))
            .append("\">")
            .append(_t("Remove"))
@@ -362,7 +362,7 @@ public class HomeHelper extends HelperBase {
            .append("</th></tr>\n");
         for (App app : apps) {
             String url = DataHelper.escapeHTML(app.url);
-            buf.append("<tr><td><input type=\"checkbox\" class=\"optbox\" name=\"delete_")
+            buf.append("<tr><td class=\"center\"><input type=\"checkbox\" class=\"optbox\" name=\"delete_")
                .append(app.name)
                .append("\" id=\"");
             if (url.contains("%s"))
