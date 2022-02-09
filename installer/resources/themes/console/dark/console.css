@@ -2214,7 +2214,7 @@ h1.sched {background: var(--h1_tasks) no-repeat 10px center, var(--h1)}
 h1.log {background: var(--h1_logs) no-repeat 10px center, var(--h1)}
 h1.webapp {background: var(--h1_webapp) no-repeat 10px center, var(--h1)}
 h1.newspage {background: var(--h1_news) no-repeat 10px center, var(--h1)}
-h1[class], h1 {margin: 0 5px 0 226px; position: relative; z-index: 999; white-space: normal; line-height: 1.2; letter-spacing: .15em; text-transform: uppercase; text-align: left; font-weight: 700; font-style: normal; text-shadow: 0 0 1px #000, 0 0 2px #040, 0 0 3px #000; border-radius: 3px 3px 0 0; background-blend-mode: normal, normal, exclusion, normal}
+h1[class], h1 {margin: 0 5px 0 226px; position: relative; z-index: 999; white-space: normal; line-height: 1.2; letter-spacing: .15em; text-transform: uppercase; text-align: left; font-weight: 700; font-style: normal; text-shadow: 0 0 1px #000, 0 0 2px #040, 0 0 3px #000; border-radius: 3px 3px 0 0; box-shadow: var(--highlight), inset 0 0 0 2px rgba(32,80,32,.3); background-blend-mode: normal, normal, exclusion, normal}
 /* temp fix for .9.36 news */
 .newscontent a[href="/configadvanced"] + tt {margin-left: .35em}
 
