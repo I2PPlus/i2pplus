@@ -779,7 +779,7 @@ h3[id="udpcon"] {width: auto}
 #view_profile .viewprofile {margin-right: 6px}
 #view_profile .identicon {margin: 0; width: 27px; height: 27px; position: absolute; top: 2px; right: 2px}
 #viewprofile td {padding: 0}
-#viewprofile pre, pre#activetransports {margin: 0; padding: 20px 20px 0; width: calc(100% - 45px); line-height: 20px; letter-spacing: .05em; text-shadow: var(--textshadow); border-left: 5px solid #030; background: repeating-linear-gradient(180deg,rgba(0,8,0,.6) 0, rgba(0,8,0,.6) 20px, rgba(0,20,0,.6) 20px, rgba(0,20,0,.6) 40px); background-size: 100% 40px}
+#viewprofile pre, pre#activetransports {margin: 0; padding: 20px 20px 0; width: calc(100% - 46px); line-height: 20px; letter-spacing: .05em; text-shadow: var(--textshadow); border-left: 5px solid #030; background: repeating-linear-gradient(180deg,rgba(0,8,0,.6) 0, rgba(0,8,0,.6) 20px, rgba(0,20,0,.6) 20px, rgba(0,20,0,.6) 40px); background-size: 100% 40px}
 #viewprofile span {margin: -26px -1px -1px 0; padding: 5px; float: right; border: var(--border); background: #000}
 #profiles_overview {margin-bottom: 9px; background-image: url(../images/svg/profile.svg)}
 #peerprofiles + h3 {margin-top: 10px}
