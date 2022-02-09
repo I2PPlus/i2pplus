@@ -39,7 +39,7 @@ if (c != null && (c.length() == 2 || c.length() == 7) && c.replaceAll("[a-z0-9_]
         java.io.File war = new java.io.File(net.i2p.I2PAppContext.getGlobalContext().getBaseDir(), "webapps/routerconsole.war");
         ffile = null;
         lastmod = war.lastModified();
-/*
+
     } else {
         // fallback to flags dir, which will be symlinked to /usr/share/flags/countries/16x11 for package builds
         String base = net.i2p.I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath() +
@@ -54,8 +54,8 @@ if (c != null && (c.length() == 2 || c.length() == 7) && c.replaceAll("[a-z0-9_]
             response.setHeader("Content-Length", Long.toString(length));
             lastmod = ffile.lastModified();
         }
-*/
     }
+
     if (lastmod > 0) {
         long iflast = request.getDateHeader("If-Modified-Since");
         // iflast is -1 if not present; round down file time
@@ -78,7 +78,7 @@ if (c != null && (c.length() == 2 || c.length() == 7) && c.replaceAll("[a-z0-9_]
 */
     response.setHeader("Accept-Ranges", "none");
     java.io.OutputStream cout = response.getOutputStream();
-/*
+
     try {
         // flags dir may be a symlink, which readFile will reject
         // We carefully vetted the "c" value above.
@@ -99,7 +99,7 @@ if (c != null && (c.length() == 2 || c.length() == 7) && c.replaceAll("[a-z0-9_]
         if (fin != null)
             try { fin.close(); } catch (java.io.IOException ioe) {}
     }
-*/
+
 } else {
     /*
      *  Send a 403 instead of a 404, because the server sends error.jsp
