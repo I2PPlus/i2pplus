@@ -186,6 +186,9 @@
 <tr><th>routerconsole.sitemapSites={true|false} <span class="plus">I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]")%></td></tr>
 
+<tr id="ntpserverconfig"><th>time.sntpServerList={server1,server2}</th></tr>
+<tr><td><%=intl._t("This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]")%></td></tr>
+
 <tr><th>desktopgui.enabled={true|false}</th></tr>
 <tr><td><%=intl._t("If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]")%></td></tr>
 
