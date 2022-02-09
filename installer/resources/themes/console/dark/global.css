@@ -8,6 +8,7 @@
   --a: #494;
   --active: #f90;
   --badge: linear-gradient(180deg,#020, #010);
+  --bevel: var(--highlight), inset 0 0 0 2px rgba(32,80,32,.3);
   --bg_dots: repeating-linear-gradient(90deg, rgba(0,8,0,.5) 2px, rgba(0,16,0,.5) 4px), repeating-linear-gradient(180deg,#000 2px, #010 4px);
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   --border: 1px solid #242;
@@ -27,13 +28,13 @@
   --dotted: 1px dotted #131;
   --download_bar: repeating-linear-gradient(135deg, #000 1px, #000 5px, #010 6px, #010 11px);
   --glow_bottom: radial-gradient(at center bottom, rgba(16,72,16,.3), rgba(0,0,0,0) 50%);
-  --glow_bottom_hover: radial-gradient(at center bottom, rgba(256,96,0,.25), rgba(0,0,0,0) 50%);
+  --glow_bottom_hover: radial-gradient(at center bottom, rgba(255,96,0,.25), rgba(0,0,0,0) 50%);
   --glow_top: radial-gradient(at center -45px, rgba(16,72,16,.3), rgba(0,0,0,0) 85%);
   --h1: var(--h3), linear-gradient(180deg,#020, #010 50%, #010 50%, #000), var(--camotile) #000;
   --h2: repeating-linear-gradient(90deg, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(180deg,#001800, #000 75%);
   --h3_blend: normal, normal, exclusion, exclusion;
   --h3_fade: linear-gradient(180deg,#005000, #000 75%);
-  --h3: repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px);
+  --h3: repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,32,0,.5) 4px);
   --heading: linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px);
   --helpbox: linear-gradient(135deg, #000d00, #000900);
   --help: repeating-linear-gradient(90deg,#000 2px,#010 4px);
@@ -59,7 +60,7 @@
   --txt_focus: linear-gradient(180deg,#001800,#001000);
   --txt_shadow: 0 1px 1px #000;
   --vstripe: repeating-linear-gradient(180deg,rgba(0,0,0,.9) 2px, rgba(0,16,0,.9) 4px);
-  --footer: linear-gradient(180deg,#020, #000 75%);
+  --footer: linear-gradient(180deg,#010,#000 75%);
 }
 
 html, body {
