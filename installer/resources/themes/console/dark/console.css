@@ -264,26 +264,6 @@ h1 + .sorry, #console_404 .sorry {margin: -1px 5px 10px 226px; padding: 20px 20p
 div[id^="config_"].main {padding-bottom: 14px}
 #netdb {padding-bottom: 1px}
 
-/* iframes */
-iframe.iframed {margin: 15px 0 0}
-iframe {height: 0}
-#dns {padding: 0; min-width: 650px}
-#webmail, #torrents {margin-top: -1px; padding: 0; background: #000}
-#tunnelmgr {min-width: 665px; background-size: 3px, 175px}
-#main#embedded {padding: 0}
-#rawtext_frame {margin: 0}
-#webmail::before, #dns::before {top: -1px}
-#susimailframe, #i2psnarkframe {margin: 0; background: #000800}
-#susidnsframe {margin: 0 0 -3px}
-#i2psnarkframe {margin-bottom: -2px}
-#i2ptunnelframe {margin: 0 0 -5px}
-#tunnelmgr, #torrents, #webmail, #dns {min-height: 4px; position: relative; overflow: hidden; line-height: 0}
-#tunnelmgr::before, #torrents::before, #webmail::before, #dns::before {width: 0; height: 6px; display: block; position: absolute; top: 0; left: 1px; right: 1px; opacity: .9; background: linear-gradient(180deg,rgba(255,255,255,.1), rgba(0,0,0,.4)), linear-gradient(#d30, var(--hover)); box-shadow: inset 0 0 0 2px rgba(0,0,0,.7); content: ""; animation: reloader 8s ease-out .5s forwards}
-#pageloader {top: -1px; width: 100%; height: 2px}
-/* Fixes for when app is not started and console error loads inside iframe */
-.iframed h1 {margin: 0 5px 0 5px !important}
-.iframed div.sorry {margin: -1px 5px 10px 5px !important}
-
 /* news */
 #news h3 font {letter-spacing: .2em; text-transform: none}
 div.news h3, #newspage h3 {letter-spacing: .03em; text-align: left; font-size: 10pt}
@@ -518,6 +498,7 @@ form[action="updategraphs"] {margin: -11px -11px -18px; border: var(--border); b
 #graphs .nowrap {text-align: left; line-height: 3}
 
 /* jobs */
+.jobcount {font-weight: 400; font-size: 85%}
 #jobs h2 {margin: -16px 0 -15px; display: inline-block; border-radius: 0}
 h3[id*="job"] {margin: 12px 0 10px 0; padding: 8px; letter-spacing: .08em; text-transform: uppercase; border: var(--border); border-radius: 0}
 #jobs #jobrunners {display: none}
@@ -526,7 +507,7 @@ h3[id*="job"] {margin: 12px 0 10px 0; padding: 8px; letter-spacing: .08em; text-
 #jobs .jobqueue {margin-bottom: 5px; margin-top: -11px; width: calc(100% - 14px); display: block; border: var(--border); background: #000800}
 #jobs .jobqueue li:last-child {margin-bottom: 5px}
 h3[id*="jobs"] {clear: both; margin-top: 25px}
-#schedjobs {width: 100%; margin: -6px 0 0}
+#schedjobs {width: 100%; margin: 10px 0 0}
 #finishedjobs + ol li, #scheduledjobs + ol li, #activejobs + ol li, #readyjobs + ol li {list-style: none}
 #activejobs + ol li::before, #scheduledjobs + ol li::before, #readyjobs + ol li::before, #finishedjobs + ol li::before, #schedjobs li::before {margin: 0 6px 0 2px; width: 16px; height: 16px; display: inline-block; vertical-align: text-top; background: var(--clock) var(--center) / 16px; content: ""}
 #activejobs + ol li::before {background: var(--start) var(--center)}
@@ -548,6 +529,7 @@ h3[id*="jobs"] {clear: both; margin-top: 25px}
 #totaljobstats {margin-bottom: -2px; margin-top: 10px}
 #jobs ol {column-gap: 4px}
 #jobs li, #jobs li:first-child {margin: 0 4px; padding: 8px 6px; width: calc(100% - 8px); list-style: none; box-shadow: var(--highlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000; background: linear-gradient(180deg,#000b00, #000600)}
+#finishedjobs ol + #scheduledjobs + ol {margin-bottom: -1px}
 
 /* stats */
 form#statnav {padding: 10px 10px 10px 15px; border: var(--border)}
@@ -1455,7 +1437,7 @@ th.options, #externali2cp th {padding: 7px 10px}
 .h3navlinks a:first-child {padding-right: 9px}
 .h3navlinks a:hover {color: var(--hover)}
 .h3navlinks a:last-child {padding-right: 5px}
-.h3navlinks a {margin: -10px 0; padding: 9px 5px 9px 16px; text-transform: capitalize; letter-spacing: normal; border-left: var(--border)}
+.h3navlinks a {margin: -8px 0 -6px; padding: 9px 5px 9px 16px; text-transform: capitalize; letter-spacing: normal; font-size: 85%; border-left: var(--border)}
 .h3navlinks {white-space: nowrap}
 h3.ptitle {margin-bottom: -6px}
 h3.sybils + div, h3.sybils + a[name] + table {margin-top: -1px}
@@ -1469,7 +1451,7 @@ table.logtable, #logs #enviro {margin-top: -1px}
 td.infohelp.joinfamily {padding: 20px 24px 20px 58px}
 td.optionsave {padding: 5px; text-align: right; border-top: var(--border); background: #000}
 th .h3navlinks, #config_stats .h3navlinks, #config_webapps .h3navlinks {margin-top: 0}
-th.th_title {padding: 8px 10px; text-align: left; background: linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade); background-size: 100%, 4px 100%, 100%}
+th.th_title {padding: 8px 10px; text-align: left; background: var(--h1); background-size: 2px, 100% 4px, 100%, 128px}
 #bannedpeercount {background: #000 var(--ban) no-repeat 15px center / 28px}
 #clientsconfig {margin-top: -2px}
 #clientsconfig, #webappconfigactions, #pluginconfigactions {margin-bottom: -4px; padding: 5px; border: var(--border); background: #000}
@@ -1541,7 +1523,7 @@ textarea#advancedsettings {margin: 0; padding-top: 3px; width: 100%; overflow-x:
 /* bandwidth */
 #config_bandwidth .h3navlinks a:active {filter: none; transform: scale(.9)}
 #config_bandwidth .h3navlinks a:hover {filter: drop-shadow(0 0 1px #f60) drop-shadow(0 0 2px #f60)}
-#config_bandwidth .h3navlinks a {margin-bottom: -10px; padding-top: 11px; width: 24px; color: transparent; background: url(../images/svg/networkconfig.svg) no-repeat calc(100% - 8px) center / 22px; text-shadow: none; border: none; contain: paint}
+#config_bandwidth .h3navlinks a {margin-bottom: -9px; padding-top: 7px; width: 24px; color: transparent; background: url(../images/svg/networkconfig.svg) no-repeat calc(100% - 8px) center / 22px; text-shadow: none; border: none; contain: paint}
 #config_bandwidth .h3navlinks {margin: -10px 0 -11px; padding: 11px 0 10px; display: inline-block; border-left: var(--border)}
 #configbandwidth img {margin: -1px 10px 0; display: inline-block}
 
@@ -1710,7 +1692,7 @@ input[name="ff"] + br {display: none}
 input[name="ff"] + br + input[name="ff"] + br {display: none}
 .wideload > form > input[type=hidden] + table + p + hr + .formaction {border-left: none; border-right: none}
 input[type=hidden] + p {margin-bottom: -21px; padding: 10px; border: var(--border); background: #000}
-form[action="configclients"]:first-child > input[type=hidden] + p {margin-top: -1px !important; margin-bottom: -21px; padding: 10px; border: var(--border); background: #000}
+form[action="configclients"]:first-child > input[type=hidden] + p {margin-top: -1px; margin-bottom: -21px; padding: 10px; border: var(--border); background: #000}
 input[type=hidden] + p + p {margin-top: 20px; margin-bottom: -21px; padding: 10px; border: var(--border); background: #001000}
 form > table {font-size: 9pt}
 
@@ -1720,7 +1702,7 @@ form > table {font-size: 9pt}
 #config_tunnels select[disabled] {opacity: .7; pointer-events: none}
 #tunnelconfig .inbound, #tunnelconfig .outbound {padding-left: 30px; width: auto; height: auto; display: table-cell; background: var(--in) no-repeat 10px center / 14px, var(--th)}
 #tunnelconfig .outbound {background: var(--out) no-repeat 10px center / 14px, var(--th)}
-#tunnelconfig th:not(.th_title)[colspan="4"] {padding: 12px 10px 12px 34px !important; text-transform: none; letter-spacing: 0; word-spacing: 0; text-shadow: var(--textshadow); background: var(--infowarn) no-repeat 10px center, linear-gradient(180deg,rgba(128,128,128,.05), rgba(0,0,0,.3)), repeating-linear-gradient(180deg,#300 2px, #100 4px); background-size: 18px, 100%, 100% 4px}
+#tunnelconfig th:not(.th_title)[colspan="4"] {padding: 12px 10px 12px 34px; text-transform: none; letter-spacing: 0; word-spacing: 0; text-shadow: var(--textshadow); background: var(--infowarn) no-repeat 10px center, linear-gradient(180deg,rgba(128,128,128,.05), rgba(0,0,0,.3)), repeating-linear-gradient(180deg,#300 2px, #100 4px); background-size: 18px, 100%, 100% 4px}
 #tunnelconfig th a {pointer-events: none}
 #tunnelconfig th:not([colspan="4"]):first-child, #tunnelconfig th:not([colspan="4"]):last-child {width: 30%}
 #tunnelconfig td:first-child {text-align: right; font-weight: 700; white-space: nowrap;}
@@ -1790,13 +1772,13 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 #clientconfig th:first-child {padding-right: 5px; text-align: right}
 #clientconfig th:last-child {padding-left: 5px; text-align: left}
 #webappconfig th:last-child {text-align: left}
-#externali2cp {margin-bottom: -4px !important}
+#externali2cp {margin-bottom: -4px}
 .infohelp#clientconf {margin-bottom: -2px}
 
 /* plugins */
 #webappconfig + p, #pluginconfigtext {margin-bottom: -1px}
 #availableplugins {margin: 12px 0 -1px}
-#pluginconfig {margin-top: -15px !important}
+#pluginconfig {margin-top: -15px}
 #pluginconfig th:first-child, #pluginconfig td:first-child {padding-right: 50px; width: 100px; white-space: nowrap; text-align: center}
 #pluginconfig table {border: var(--border); filter: drop-shadow(0 0 3px #000)}
 #pluginconfig table td:first-child {padding-right: 5px; width: 1%; max-width: 70px; white-space: nowrap}
@@ -1809,7 +1791,7 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 #plugininstall tr:nth-child(5) td:nth-last-child(2) {padding: 18px 15px 18px 58px; background: var(--files) no-repeat 15px center; background-size: 28px}
 #plugininstall input[type=text] {width: 50%; min-width: 400px}
 #plugininstall input.cancel {display: none}
-#plugininstall2 td {padding: 5px}
+#plugininstall td, #plugininstall2 td, #config_family td:not(.infohelp) {padding: 5px}
 #plugininstall table, #plugininstall2 table {width: 100%; border-spacing: 0; border-collapse: separate}
 #plugininstall table tr, #plugininstall2 table tr {box-shadow: none; background: linear-gradient(180deg,#001800, #010)}
 #plugininstall table tr:hover, #plugininstall2 table tr:hover {box-shadow: var(--highlight)}
@@ -1924,7 +1906,7 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 .configtable th {word-spacing: 0; letter-spacing: 0; text-transform: none}
 #updateHelper .nowrap::after, #updateProxyHostPort .nowrap::after, #i2pupdates .nowrap::after, #bandwidthconfig .optionsingle::after, .optionlist label::before, #netconfig label::before, #externali2cp .optionlist label::before, #externali2cp .optionlist .nowrap::before, #reseedconfig .nowrap::before, #manualreseed .nowrap::before, #reseed_urlselection label::before, #reseedproxytype label::before, #graphs .nowrap::before {content: ""; display: inline-block; vertical-align: middle}
 .optionlist label, .optionlist .nowrap {min-width: 300px; -webkit-column-break-inside: avoid; break-inside: avoid; page-break-inside: avoid; will-change: transform}
-#updatehelper .optionlist:hover, #updateProxyHostPort.optionlist:hover {background: #000 !important; transition: ease box-shadow .2s; box-shadow: var(--option_highlight)}
+#updatehelper .optionlist:hover, #updateProxyHostPort.optionlist:hover {background: #000; transition: ease box-shadow .2s; box-shadow: var(--option_highlight)}
 #externali2cp input[name="port"] {margin-left: 6px}
 
 /* debug */
@@ -1965,7 +1947,7 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 .bucketsContainer, .bucketCount {margin: 0; text-align: center; border: var(--border_soft); box-shadow: var(--highlight)}
 .bucketsContainer {margin: -1px 0 -8px; padding: 5px; background: #000700}
 .bucketCount {padding: 3px 0; background: linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,.7), rgba(0,0,0,0)), var(--label)}
-.bucket {margin: 2px; padding: 1px 4px; max-width: 50px; display: inline-block; white-space: nowrap !important; overflow: hidden; text-overflow: ellipsis; color: #880; font-family: var(--monospaced); box-shadow: 0 0 0 1px #030, var(--highlight); background: #010; user-select: all}
+.bucket {margin: 2px; padding: 1px 4px; max-width: 50px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #880; font-family: var(--monospaced); box-shadow: 0 0 0 1px #030, var(--highlight); background: #010; user-select: all}
 .bucket::selection {background: #050 !important; color: #fff}
 .bucket:empty {display: none}
 
@@ -2007,44 +1989,43 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 #reseedhelp ol {display: block; margin-right: 30px}
 #reseedhelp ol ul li {list-style-type: square}
 #reseedhelp ol li {list-style-type: decimal; display: list-item}
-#reseedhelp ol ul li:first-child {margin-top: 5px !important}
-#reseedhelp ol ul li:last-child {margin-bottom: -10px !important}
+#reseedhelp ol ul li:first-child {margin-top: 5px}
+#reseedhelp ol ul li:last-child {margin-bottom: -10px}
 
 .config_experimental {font-size: 0}
 .config_experimental::after {margin-top: -10px; margin-left: -10px; min-height: 40px; min-width: 40px; display: inline-block; vertical-align: middle; background: var(--experimental) no-repeat 15px center; background-size: 16px; content: ""}
-#installPluginUrl table, #installPluginUrl tr, #installPluginUrl td, #installPluginFile table, #installPluginFile tr, #installPluginFile td, #createNewFamily table, #createNewFamily tr, #createNewFamily td, #joinfamily table, #joinfamily tr:nth-child(n+3), #joinfamily tr:nth-child(n+3) td, #joinfamily tr:nth-child(n+3) table tr {margin: 0; border: none !important; box-shadow: none !important; background: none !important}
-#joinfamily table, #joinfamily tr:nth-child(n+3), #joinfamily tr:nth-child(n+3) td {background: #010 !important}
+#installPluginUrl table, #installPluginUrl tr, #installPluginUrl td, #installPluginFile table, #installPluginFile tr, #installPluginFile td, #createNewFamily table, #createNewFamily tr, #createNewFamily td, #joinfamily table, #joinfamily tr:nth-child(n+3), #joinfamily tr:nth-child(n+3) td, #joinfamily tr:nth-child(n+3) table tr {margin: 0; border: none; box-shadow: none; background: none}
+#joinfamily table, #joinfamily tr:nth-child(n+3), #joinfamily tr:nth-child(n+3) td {background: #010}
 #pluginInstall td {padding: 5px}
 #pluginInstall2 {margin-top: -13px}
 #pluginInstall .suboption, #pluginInstall2 .suboption, #config_family .suboption {padding: 2px 12px 3px 10px}
-#installPluginUrl input[type=text], #installPluginFile input[type=file], #joinfamily input[type=file], #newfamily input[type=text] {width: 100% !important}
-#installPluginUrl td:first-child {padding: 18px 15px 18px 58px !important; background: var(--link) no-repeat 15px center / 28px !important}
-#installPluginFile td:first-child {padding: 18px 15px 18px 58px; background: var(--files) no-repeat 15px center / 28px !important}
+#installPluginUrl input[type=text], #installPluginFile input[type=file], #joinfamily input[type=file], #newfamily input[type=text] {width: 100%}
+#installPluginUrl td:first-child {padding: 18px 15px 18px 58px; background: var(--link) no-repeat 15px center / 28px}
+#installPluginFile td:first-child {padding: 18px 15px 18px 58px; background: var(--files) no-repeat 15px center / 28px}
 
 /* configfamily */
 #config_family .confignav {margin-bottom: 12px}
-#newfamily {margin-top: 14px; margin-bottom: -2px !important}
-#newfamily .optionsingle {padding: 5px 5px 0 45px; box-shadow: inset 0 0 0 1px #010, inset 0 0 2px 1px #191939 !important; background: #010 var(--tag) no-repeat 10px center !important; background-size: 28px, 100%, 100% !important}
-#joinfamily tr:nth-child(3) td {background: #000 !important}
-#joinfamily tr:nth-child(3) td table td {background-color: #010 !important}
-#joinfamily .optionsingle {padding: 5px 5px 0 45px; box-shadow: inset 0 0 0 1px #010, inset 0 0 2px 1px #191939 !important; background: #010 var(--key) no-repeat 10px center !important; background-size: 28px, 100%, 100% !important}
-#joinfamily .optionsingle:hover, #joinfamily .optionsingle:hover tr, #joinfamily .optionsingle:hover td, #newfamily .optionsingle:hover, #newfamily .optionsingle:hover tr, #newfamily .optionsingle:hover td {background-color: #020 !important; transition: ease background .1s}
- #joinfamily tr:last-child td, #newfamily tr:last-child td, #plugininstall tr:nth-child(n+2) td {padding: 5px}
-#joinfamily .infohelp {box-shadow: var(--highlight), inset 0 0 2px 1px #040 !important; background: #000 var(--joinfamily) no-repeat 15px center / 28px !important}
-#newfamily .infohelp {box-shadow: var(--highlight), inset 0 0 2px 1px #040 !important; background: #000 var(--newfamily) no-repeat 15px center / 28px !important}
+#newfamily {margin-top: 14px; margin-bottom: -2px}
+#newfamily .optionsingle {padding: 5px 5px 0 45px; box-shadow: inset 0 0 0 1px #010, inset 0 0 2px 1px #191939; background: #010 var(--tag) no-repeat 10px center; background-size: 28px, 100%, 100%}
+#joinfamily tr:nth-child(3) td {background: #000}
+#joinfamily tr:nth-child(3) td table td {background-color: #010}
+#joinfamily .optionsingle {padding: 5px 5px 0 45px; box-shadow: inset 0 0 0 1px #010, inset 0 0 2px 1px #191939; background: #010 var(--key) no-repeat 10px center; background-size: 28px, 100%, 100%}
+#joinfamily .optionsingle:hover, #joinfamily .optionsingle:hover tr, #joinfamily .optionsingle:hover td, #newfamily .optionsingle:hover, #newfamily .optionsingle:hover tr, #newfamily .optionsingle:hover td {background-color: #020; transition: ease background .1s}
+#joinfamily .infohelp {box-shadow: var(--highlight), inset 0 0 2px 1px #040; background: #000 var(--joinfamily) no-repeat 15px center / 28px}
+#newfamily .infohelp {box-shadow: var(--highlight), inset 0 0 2px 1px #040; background: #000 var(--newfamily) no-repeat 15px center / 28px}
 #config_service .infohelp {text-align: left}
 #pluginconfig th:first-child {text-align: center}
 #pluginconfig td:first-child label {margin-left: 6px; padding: 3px 5px 3px 24px; min-width: 100px; display: inline-block; text-align: left; font-weight: 700; border-radius: 2px 15px 15px 2px; box-shadow: 0 0 0 1px #010, 0 0 0 2px rgba(0,0,0,.7); background: var(--plugin) no-repeat 5px center / 14px, linear-gradient(180deg,#020, #000); background-blend-mode: luminosity}
 #installPluginFile td:last-child, #installPluginUrl td:last-child, #newfamily table td:last-child, #joinfamily table td:last-child {padding: 10px 5px 10px 10px; width: 1%; white-space: nowrap; text-align: right}
 #reseedproxysslhostport, #updateProxyHostPort {columns: 500px 2}
-#installPluginUrl form, #installPluginfile form {margin: 2px 0 0 !important}
-#installPluginfile form {margin-bottom: -1px !important}
+#installPluginUrl form, #installPluginfile form {margin: 2px 0 0}
+#installPluginfile form {margin-bottom: -1px}
 .warning #timer {min-width: 120px; display: inline-block; position: absolute; right: 0; bottom: 0; text-align: center; font-weight: 700; font-style: italic; border: 1px solid #700; box-shadow: var(--highlight), inset 0 0 3px 1px #040, inset 0 0 0 4px #000; background: repeating-linear-gradient(135deg, #010 1px, #010 5px, #030 5px, #030 10px); animation: downloadbar .6s infinite}
 #timer::after, #countdown::after {height: 22px; display: inline-block; vertical-align: middle; content: ""}
 #countdown {min-width: 120px; display: inline-block; letter-spacing: .1em; text-align: center; font-size: 10pt; text-shadow: var(--textshadow); background: #020; background: linear-gradient(90deg, #010, #000, #010); box-shadow: var(--highlight)}
 
 /* events */
-#eventlog {border-bottom: 2px solid #242 !important; background: #010} #events h3 {box-shadow: var(--highlight)}
+#eventlog {border-bottom: 2px solid #242; background: #010} #events h3 {box-shadow: var(--highlight)}
 #events tr {line-height: 1.4}
 #events tr:nth-child(n+1):hover td {background: rgba(0,0,0,.1)}
 #events td:first-child span {margin: 1px 0 0 -2px; display: inline-block; vertical-align: top; font-size: 80%; text-transform: lowercase}
@@ -2060,9 +2041,9 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 #events .started, #events .stopped {background: linear-gradient(90deg, #030, #030 4px, rgba(0,0,0,0) 4px)}
 
 /* embedded mode */
-.main.embedded {padding: 0 !important}
-.main.embedded#bote {padding: 3px 3px 0 !important}
-#bote iframe {margin: 0 !important}
+.main.embedded {padding: 0}
+.main.embedded#bote {padding: 3px 3px 0}
+#bote iframe {margin: 0}
 #lookupCondensed {display: none}
 .b32 {margin: -2px 10px 0 0; padding: 2px 5px; float: right; font-family: var(--monospaced); font-size: 80%; color: #aa0; text-transform: none; box-shadow: 0 0 1px 1px #010; background: rgba(0,48,0,.5)}
 h3 .b32 {margin: -2px 5px -4px; border: 1px solid #030; box-shadow: inset 0 0 0 1px #010}
@@ -2140,29 +2121,29 @@ table[id$="logs"] ul {margin: -6px 12px -5px -18px}
 #logs font[color^="#"]::before {margin-left: 0; margin-right: 5px; content: ""; display: inline-block; width: 6px; height: 6px; vertical-align: calc(1px); color: #777; border-radius: 50%; filter: saturate(1); animation: linear ping .1s}
 
 /* critical */
-font[color="#cc0000"] {color: #900 !important}
+font[color="#cc0000"] {color: #900}
 #logs li font[color="#cc0000"]::before {background: #900}
 .log_crit {background: #900}
 /* warning */
-font[color="#bf00df"] {color: #636 !important}
+font[color="#bf00df"] {color: #636}
 #logs li font[color="#bf00df"]::before {background: #636}
 .log_warn {background: #636}
 /* error */
-font[color="#ff3300"] {color: #730 !important}
+font[color="#ff3300"] {color: #730}
 #logs li font[color="#ff3300"]::before {background: #730}
 .log_error {background: #730}
 /* debug */
-font[color="#006600"] {color: #346 !important}
+font[color="#006600"] {color: #346}
 #logs li font[color="#006600"]::before {background: #346}
 .log_debug, .log_omitted {background: #346}
 /* info */
-font[color="#000099"], #servicelogs {color: #363 !important}
+font[color="#000099"], #servicelogs {color: #363}
 #logs li font[color="#000099"]::before {background: #363}
 .log_info {background: #363}
-#routerlogs ul, #criticallogs ul {margin: -4px 0 !important; border: none}
-#routerlogs li, #criticallogs li {margin: 0 -11px 0 -9px !important; padding: 0 10px !important; line-height: 1.7; width: calc(100% - 5px)}
+#routerlogs ul, #criticallogs ul {margin: -4px 0; border: none}
+#routerlogs li, #criticallogs li {margin: 0 -11px 0 -9px; padding: 0 10px; line-height: 1.7; width: calc(100% - 5px)}
 #routerlogs li::after, #criticallogs li::after {display: none}
-#routerlogs li:hover font, #criticallogs li:hover font {filter: saturate(300%)}
+#routerlogs li:hover font, #criticallogs li:hover font {filter: saturate(200%)}
 #routerlogs li:hover font[color="#cc0000"], #criticallogs li:hover [color="#cc0000"] {filter: saturate(120%)}
 #servicelogs {color: var(--ink)}
 #logs .nologs {padding: 5px 10px 7px}
@@ -2221,10 +2202,7 @@ h1[class], h1 {margin: 0 5px 0 226px; position: relative; z-index: 999; white-sp
 #config_bandwidth td.optionsave, #config_advanced td.optionsave, #config_clients .formaction, #config_homepage .formaction, #config_i2cp td.optionsave, #config_keyring tr:last-child, #config_logging td.optionsave, #config_network td.optionsave, #config_peers .configtable tr:nth-child(4) td, #config_peers .configtable tr:last-child td, #pluginconfigactions.formaction, #reseedconfig td.optionsave, #config_service .formaction, #configstats tr.tablefooter, #config_summarybar .formaction,#sidebarconf tr:last-child, #tunnelconfigsave.formaction, #config_ui .formaction, #graphing.formaction, #i2pupdates tr:nth-child(2), #i2pupdates tr.tablefooter, #webappconfigactions.formaction, #sybilTask .optionsave {background: var(--h3), var(--footer); background-size: 2px, 100%}
 
 #configinfo .infowarn {display: none}
-.jobcount {font-weight: 400; font-size: 85%}
-#scheduledjobs {margin-top: 10px !important}
-#finishedjobs ol + #scheduledjobs + ol {margin-bottom: -1px !important}
-#profiles th::after {display: none !important}
+#profiles th::after {display: none}
 #banneduntilrestart td {border-right: var(--border) !important}
 h2, h2.welcome, h3, h3.welcome, #themeoptions {border-color: #242}
 .news hr {color: #242; background: repeating-linear-gradient(90deg, #242 2px, #000 4px); background-size: 4px 100%}
@@ -2351,6 +2329,26 @@ ul#upnphelp li:last-child, #legal ul li:last-child {padding-bottom: 0}
 .lazy.lazyshow, .lazy.lazyshow td, #peers .lazy:not(.lazyhide) {opacity: 1}
 .leasesets_container .lazy.lazyhide, .leasesets_container .lazy.lazyhide td, .leasesets_container .lazy:not(.lazyshow) {opacity: 1; contain: none}
 #tunnelPeerCount .lazy {contain: none}
+
+/* iframes */
+iframe.iframed {margin: 15px 0 0}
+iframe {height: 0}
+#dns {padding: 0; min-width: 650px}
+#webmail, #torrents {margin-top: -1px; padding: 0; background: #000}
+#tunnelmgr {min-width: 665px; background-size: 3px, 175px}
+#main#embedded {padding: 0}
+#rawtext_frame {margin: 0}
+#webmail::before, #dns::before {top: -1px}
+#susimailframe, #i2psnarkframe {margin: 0; background: #000800}
+#susidnsframe {margin: 0 0 -3px}
+#i2psnarkframe {margin-bottom: -2px}
+#i2ptunnelframe {margin: 0 0 -5px}
+#tunnelmgr, #torrents, #webmail, #dns {min-height: 4px; position: relative; overflow: hidden; line-height: 0}
+#tunnelmgr::before, #torrents::before, #webmail::before, #dns::before {width: 0; height: 6px; display: block; position: absolute; top: 0; left: 1px; right: 1px; opacity: .9; background: linear-gradient(180deg,rgba(255,255,255,.1), rgba(0,0,0,.4)), linear-gradient(#d30, var(--hover)); box-shadow: inset 0 0 0 2px rgba(0,0,0,.7); content: ""; animation: reloader 8s ease-out .5s forwards}
+#pageloader {top: -1px; width: 100%; height: 2px}
+/* Fixes for when app is not started and console error loads inside iframe */
+.iframed h1 {margin: 0 5px 0 5px}
+.iframed div.sorry {margin: -1px 5px 10px 5px}
 
 /* animations */
 @keyframes bar {from {width: calc(100%)}}
