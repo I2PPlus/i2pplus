@@ -1552,7 +1552,7 @@ tr.addnew, tr.addnew:hover {border-top: var(--border); background: #000800}
 .themechoice .optbox, .langselect .optbox {position: absolute; opacity: 0;}
 .themechoice .optbox:checked + img {opacity: 1; filter: none; transform: scale(0.8)}
 .themechoice img {padding: 5px 0; opacity: .6}
-.themechoice img, .langselect img {animation: fade .15s ease .3s reverse both}
+.themechoice img, .langflag {animation: fade .15s ease .3s reverse both}
 .themechoice:hover img {filter: drop-shadow(0 0 1px var(--hover))}
 .themechoice:active img {transform: scale(0.8)}
 .themechoice .themelabel {margin-left: -4px; margin-right: -4px; padding: 3px 2px 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.5; color: #bb7; border-top: var(--border); background: var(--glow_bottom), linear-gradient(180deg,#001900,#001000 50%,#000)}
@@ -1586,6 +1586,7 @@ tr.addnew, tr.addnew:hover {border-top: var(--border); background: #000800}
 .langflag img {width: 40px; height: 30px; border-radius: 3px}
 .langselect:active .optbox:not(:checked) + .langflag {transform: scale(.8)}
 .langflag::before {position: absolute; top: 0; bottom: 0; left: 0; right: 0; z-index: 10; border-radius: 3px; box-shadow: 0 0 0 1px #000, inset 0 0 0 1px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.3); background: linear-gradient(180deg, rgba(255,255,255,.5), rgba(0,0,0,0) 75%); content: ""; display: inline-block}
+.langselect:hover .optbox:not(:checked) ~ .langflag::before {box-shadow: 0 0 0 1px #000, inset 0 0 0 1px rgba(255,96,0,.6), inset 0 0 0 1px rgba(255,255,255,.5)}
 #helptranslate {padding: 6px 10px 10px; clear: both; text-align: right}
 
 /* console password */
@@ -2108,7 +2109,7 @@ table[id$="logs"] tr:nth-child(2) {background: none}
 #wrapperlogs tr:nth-child(2) {background: rgba(0,16,0,.3)}
 #wrapperlogs {margin-bottom: 10px; width: 100%; table-layout: fixed}
 #wrapperlogs tr:last-child td {padding: 0}
-#wrapperlogs pre {margin-bottom: 0; padding: 0 0 0 5px; width: calc(100% - 5px); max-height: 600px; white-space: pre-wrap; resize: none; color: #8f935c}
+#wrapperlogs pre {margin: 0; padding: 4px 6px; width: calc(100% - 5px); max-height: 600px; white-space: pre-wrap; resize: none; color: #8f935c}
 table[id$="logs"] ul {margin: -6px 12px -5px -18px}
 #logs li {width: 100%; list-style: none; word-break: break-all; line-height: 1.6; text-align: left; font: bold 8.5pt var(--monospaced); border-top: 1px solid #001800; border-right: 1px solid #001800; border-bottom: 1px solid #000}
 #logs li:last-child {border-bottom: 1px solid #001800}
