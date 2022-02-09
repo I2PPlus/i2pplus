@@ -691,15 +691,14 @@ td, #externali2cp td, #config_keyring td, #config_logging td, #config_network td
 .langselect .optbox {width: 122px; height: 66px}
 .themechoice .optbox, .langselect .optbox, .themechoice .optbox:checked, .langselect .optbox:checked {margin: 0; position: absolute; z-index: -999; opacity: 0}
 .themechoice, .langselect {width: 120px; float: left; text-align: center}
-#config_ui .langselect img {margin: 0 0 35px; width: 40px; height: auto; position: relative; z-index: 3; border: none}
+.langflag img {margin: 0 0 -4px; width: 40px; height: 30px; position: relative; z-index: 3; border: none}
 .langselect input, .themechoice input {cursor: pointer}
-.langselect input:hover + img, .langselect input:checked + img {transition: none; filter: var(--shadow_filter_hover)}
-.langselect .optbox:checked + img {transform: scale(.8)}
-.langselect:hover > .optbox + img + .ui_lang {font-weight: 700; color: var(--hover); border-top: 1px solid var(--hover); background: var(--bg)}
-.langselect:active .ui_lang, .langselect:active > .optbox + img + .ui_lang {color: var(--bg); box-shadow: var(--highlight); background: var(--hover)}
-.langselect:active .optbox:checked + img + .ui_lang, .langselect .optbox:focus + img + .ui_lang {color: var(--hover); box-shadow: none; background: var(--label_focus)}
-.langselect .optbox:active + img + .ui_lang {color: var(--bg); background: var(--hover)}
-.langselect .optbox:checked + img + .ui_lang, .langselect .optbox:focus:checked + img + .ui_lang {padding: 4px 2px 2px; z-index: 2; font-size: 95%; font-weight: 700; color: var(--selected); box-shadow: var(--btn_shadow_active); background: var(--label_focus)}
+.langselect:hover + .langflag, .langselect .optbox:checked + .langflag {transition: none; filter: var(--shadow_filter_hover)}
+.langselect:hover ~ .ui_lang {font-weight: 700; color: var(--hover); border-top: 1px solid var(--hover); background: var(--bg)}
+.langselect:active .ui_lang, .langselect:active > .optbox ~ .ui_lang {color: var(--bg); box-shadow: var(--highlight); background: var(--hover)}
+.langselect:active .optbox:checked ~ .ui_lang, .langselect .optbox:focus ~ .ui_lang {color: var(--hover); box-shadow: none; background: var(--label_focus)}
+.langselect .optbox:active ~ .ui_lang {color: var(--bg); background: var(--hover)}
+.langselect .optbox:checked ~ .ui_lang, .langselect .optbox:focus:checked ~ .ui_lang {padding: 4px 2px 2px; z-index: 2; font-size: 95%; font-weight: 700; color: var(--selected); box-shadow: var(--btn_shadow_active); background: var(--label_focus)}
 .ui_lang {margin: -32px -4px 0; text-align: center; padding: 3px 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-transform: capitalize; font-size: 9pt; z-index: 2; border-top: var(--border); border-radius: 0 0 2px 2px; background: var(--header)}
 #themeoptions {margin: 0 -5px -3px; padding: 5px 10px 5px 5px; position: relative; top: 4px; clear: both; border-top: var(--border); background: var(--bg3)}
 #themeoptions label {margin: 4px 10px 4px 0; display: inline-block; white-space: nowrap}
@@ -710,6 +709,8 @@ td, #externali2cp td, #config_keyring td, #config_logging td, #config_network td
 #langsettings {padding: 4px 5px 0; border: var(--border); background: var(--bg3)}
 #langsettings hr {margin: 0 -5px; height: 1px}
 #helptranslate {margin: 0 -5px; padding: 15px 10px 15px 50px; position: relative; top: 4px; clear: both; text-align: left; border-top: var(--border); border-bottom: var(--border); background: var(--bg) url(images/favicon.svg) no-repeat left 14px center / 28px}
+.langflag {margin: 4px 0 38px; display: inline-block; box-shadow: 0 0 0 1px #bbc}
+.langselect .optbox:checked + .langflag {transform: scale(.8); box-shadow: 0 0 0 1px #f60}
 
 /* configui password */
 #consolepass th:nth-child(2) {text-align: left}
