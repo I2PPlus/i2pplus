@@ -473,7 +473,7 @@ input[type=file]::file-selector-button {font-size: 8.5pt}
 .Lease .flag {padding: 2px 4px 2px 2px}
 .leaseNumber + .tunnel_peer .routerid {margin-right: -2px}
 .routerid .flag a {margin-top: 2.5px; display: inline-block}
-.routerid .flag img, #peers .routerid .flag img, #peers #udpconnections .routerid .flag img {margin: -3px 0 1px; padding: 0; width: 16px; height: 12px; display: inline-block; border: 1px solid #000}
+.routerid .flag img {margin: -3px 0 1px; padding: 0; width: 16px; height: 12px; display: inline-block; border: 1px solid #000}
 .routerid .flag, #peers .routerid .flag {padding: 3px 4px 2px 2px; border-right: 1px solid #030}
 .routerid img {margin: 1px 0 -1px}
 .routerid {margin: 0; padding: 1px 2px; min-width: 64px; display: inline-block; vertical-align: middle; overflow: hidden; text-align: center; box-shadow: var(--outline); background: var(--badge)}
@@ -2332,8 +2332,8 @@ ul#upnphelp li:last-child, #legal ul li:last-child {padding-bottom: 0}
 #portfaq th[colspan="3"] {padding: 8px 10px; text-align: left; word-spacing: .1em; letter-spacing: .08em; font-size: 10.5pt}
 #portfaq td[colspan="3"] {font-weight: 400}
 #portfaq td:nth-child(2) {white-space: nowrap}
-#portfaq td:first-child {padding-left: 10px}
-#portfaq td:last-child, #portfaq td[colspan="3"] {padding-right: 10px; text-align: justify}
+#portfaq td:not(.infohelp):first-child {padding-left: 10px}
+#portfaq td:not(.infohelp):last-child, #portfaq td[colspan="3"] {padding-right: 10px; text-align: justify}
 #faq ul {margin-bottom: 15px}
 #faq code {user-select: all}
 #faq li code {margin-left: 10px}
