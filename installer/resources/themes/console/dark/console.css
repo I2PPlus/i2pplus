@@ -1842,7 +1842,7 @@ cursor: default}
 #configstats td b {color: var(--ink)}
 #configstats input.optbox {display: none}
 #config_stats #graphchoice {margin-bottom: -2px}
-#enablefullstats {margin-top: 5px; padding: 5px 10px; border: var(--border); background: #000 var(--stats) no-repeat 15px center / 28px}
+#enablefullstats {margin-top: 5px; padding: 20px 24px 20px 58px; border: var(--border); background: #000 var(--stats) no-repeat 15px center / 28px}
 #enablefull label {margin-top: 7px; display: inline-block}
 #enablefull input[type=submit] {float: right}
 #configstats .graphableStat td {padding: 4px 6px; white-space: normal}
