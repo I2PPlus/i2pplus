@@ -198,13 +198,15 @@ public class ConfigUIHelper extends HelperBase {
             if (lang.equals("xx") && !isAdvanced())
                 continue;
             // we use "lang" so it is set automagically in CSSHelper
-            buf.append("<label for=\"").append(lang).append("\"><div class=\"langselect\" style=\"display: inline-block; text-align: center;\">")
+            buf.append("<label for=\"").append(lang).append("\"><div class=\"langselect\">")
                .append("<input type=\"radio\" class=\"optbox\" name=\"lang\" ");
             if (lang.equals(current))
                 buf.append(CHECKED);
             buf.append("value=\"").append(lang).append("\" id=\"").append(lang).append("\">")
-               .append("<img height=\"48\" width=\"48\" alt=\"\" src=\"/flags.jsp?s=48&amp;c=").append(langs[i][1]).append("\">")
-               .append("<div class=\"ui_lang\" style=\"text-align: center;\">");
+//               .append("<img height=\"48\" width=\"48\" alt=\"\" src=\"/flags.jsp?s=48&amp;c=").append(langs[i][1]).append("\">")
+               .append("<span class=\"langflag\"><img width=\"48\" height=\"36\" alt=\"\" src=\"/flags.jsp?c=")
+               .append(langs[i][1]).append("\"></span>")
+               .append("<div class=\"ui_lang\">");
             int under = lang.indexOf('_');
             String slang = (under > 0) ? lang.substring(0, under) : lang;
             buf.append(langs[i][2]);

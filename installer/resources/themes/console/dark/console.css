@@ -1590,21 +1590,23 @@ tr.addnew, tr.addnew:hover {border-top: var(--border); background: #000800}
 #config_ui #helptranslate {margin: 0 -7px; padding: 20px 24px 20px 58px; position: relative; top: 8px; text-align: left; border-top: var(--border); border-bottom: var(--border); background: #000 url(images/favicon.svg) no-repeat left 18px center / 28px}
 #config_ui :-moz-broken {display: inline-block; visibility: hidden}
 .langselect:hover {border: 1px solid var(--hover); background: radial-gradient(circle at center -60px, rgba(255,96,0,.3), #000 70%)}
-.langselect img {margin: 0 0 -8px; width: 40px; height: 40px; border: none; box-shadow: none; opacity: .6; filter: drop-shadow(0 0 1px #000)}
+.langselect img {width: 40px; height: 30px; border: none; border-radius: 2px; box-shadow: none; opacity: .6; filter: drop-shadow(0 0 1px #000)}
 .langselect:hover img {box-shadow: none; transition: none; opacity: 1; filter: drop-shadow(0 0 1px var(--hover))}
 .langselect:hover .ui_lang {color: var(--hover); border-top: 1px solid var(--hover); background: #000}
-.langselect input:focus + img + div.ui_lang, .langselect input[name="lang"]:checked:focus + img + div.ui_lang, .themechoice .optbox:focus ~ .themelabel {color: var(--hover); box-shadow: inset 0 0 10px 3px #000}
+.langselect input:focus + img + div.ui_lang, .langselect input[name="lang"]:checked:focus + .langflag + div.ui_lang, .themechoice .optbox:focus ~ .themelabel {color: var(--hover); box-shadow: inset 0 0 10px 3px #000}
 .langselect:active .ui_lang {color: var(--ink); box-shadow: var(--highlight), inset 3px 3px 3px 1px #5f2400; background: var(--hover)}
-.langselect input[name="lang"]:checked + img, .langselect input[name="lang"]:checked + #config_ui img[src="/flags.jsp?c=a1"] {opacity: 1; transform: scale(.8)}
-.langselect input[name="lang"]:checked + img + div.ui_lang {color: var(--ink); font-weight: 700; box-shadow: var(--highlight), inset 0 0 2px 1px #050; background: #030}
-.langselect:hover .optbox:not(:checked) + img {transform: scale(1.1)}
-.langselect:active .optbox:not(:checked) + img {transform: scale(.8)}
-.ui_lang {margin: 10px -4px 0 !important; padding: 3px 2px 4px; text-align: center; overflow: hidden;; white-space: nowrap; line-height: 1.5; text-overflow: ellipsis; color: #bb7; text-transform: capitalize; border-top: var(--border); border-radius: 0 0 2px 2px}
+.langselect:hover .optbox:not(:checked) + .langflag {transform: scale(1.1); box-shadow: inset 0 0 0 1px #f60}
+.langselect:active .optbox:not(:checked) + .langflag {transform: scale(.8)}
+.ui_lang {margin: 10px -4px 0 !important; padding: 3px 2px 4px; text-align: center; overflow: hidden; white-space: nowrap; line-height: 1.5; text-overflow: ellipsis; color: #bb7; text-transform: capitalize; border-top: var(--border); border-radius: 0 0 2px 2px}
 #langheading {margin-bottom: 0}
 #langsettings {margin-top: -1px; margin-bottom: 10px; padding: 8px 7px 12px; border: var(--border); background: #000}
 #langsettings hr {display: none}
 #langui {margin: 7px -8px -15px; padding: 5px; border: var(--border); background: #000}
 #helptranslate {padding: 6px 10px 10px; clear: both; text-align: right}
+.langflag {margin: 5px 0 2px; padding: 2px; width: 40px; height: 30px; position: relative; display: inline-block; border-radius: 4px; box-shadow: inset 0 0 0 2px #020, 0 0 0 1px #000; background: #000}
+.langflag::before {position: absolute; top: 2px; bottom: 2px; left: 2px; right: 2px; border-radius: 3px; background: linear-gradient(180deg, rgba(255,255,255,.8), rgba(0,0,0,0) 16px); content: ""; display: inline-block}
+.langselect input[name="lang"]:checked + .langflag {opacity: 1; transform: scale(.8)}
+.langselect input[name="lang"]:checked + .langflag + div.ui_lang {color: var(--ink); font-weight: 700; box-shadow: var(--highlight), inset 0 0 2px 1px #050; background: #030}
 
 /* console password */
 #config_ui #passwordheading {margin-top: 13px; margin-bottom: -3px}
@@ -2218,7 +2220,7 @@ h1[class], h1 {margin: 0 5px 0 226px; position: relative; z-index: 999; white-sp
 .newscontent a[href="/configadvanced"] + tt {margin-left: .35em}
 
 #configstats tr.tablefooter td.optionsave, #sidebarconf tr:last-child td, #i2pupdates tr.tablefooter td {background: transparent }
-#config_bandwidth td.optionsave, #config_advanced td.optionsave, #config_clients .formaction, #config_homepage .formaction, #config_i2cp td.optionsave, #config_keyring tr:last-child, #config_logging td.optionsave, #config_network td.optionsave, #config_peers .configtable tr:nth-child(4) td, #config_peers .configtable tr:last-child td, #pluginconfigactions.formaction, #reseedconfig td.optionsave, #config_service .formaction, #configstats tr.tablefooter, #config_summarybar .formaction,#sidebarconf tr:last-child, #tunnelconfigsave.formaction, #config_ui .formaction, #graphing.formaction, #i2pupdates tr:nth-child(2), #i2pupdates tr.tablefooter, #webappconfigactions.formaction, #sybilTask .optionsave {background: var(--h3), var(--footer); background-size: 4px 100%, 100%, 100%, 100%}
+#config_bandwidth td.optionsave, #config_advanced td.optionsave, #config_clients .formaction, #config_homepage .formaction, #config_i2cp td.optionsave, #config_keyring tr:last-child, #config_logging td.optionsave, #config_network td.optionsave, #config_peers .configtable tr:nth-child(4) td, #config_peers .configtable tr:last-child td, #pluginconfigactions.formaction, #reseedconfig td.optionsave, #config_service .formaction, #configstats tr.tablefooter, #config_summarybar .formaction,#sidebarconf tr:last-child, #tunnelconfigsave.formaction, #config_ui .formaction, #graphing.formaction, #i2pupdates tr:nth-child(2), #i2pupdates tr.tablefooter, #webappconfigactions.formaction, #sybilTask .optionsave {background: var(--h3), var(--footer); background-size: 2px, 100%}
 
 #configinfo .infowarn {display: none}
 .jobcount {font-weight: 400; font-size: 85%}
