@@ -1587,6 +1587,7 @@ tr.addnew, tr.addnew:hover {border-top: var(--border); background: #000800}
 .langselect:active .optbox:not(:checked) + .langflag {transform: scale(.8)}
 .langflag::before {position: absolute; top: 0; bottom: 0; left: 0; right: 0; z-index: 10; border-radius: 3px; box-shadow: 0 0 0 1px #000, inset 0 0 0 1px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.3); background: linear-gradient(180deg, rgba(255,255,255,.5), rgba(0,0,0,0) 75%); content: ""; display: inline-block}
 .langselect:hover .optbox:not(:checked) ~ .langflag::before {box-shadow: 0 0 0 1px #000, inset 0 0 0 1px rgba(255,96,0,.6), inset 0 0 0 1px rgba(255,255,255,.5)}
+.langselect .optbox:checked ~ .langflag::after {padding: 2px; width: 16px; height: 16px; display: inline-block; position: absolute; z-index: 20; right: -8px; bottom: -8px; border-radius: 50%; box-shadow: 0 0 0 2px #000, inset 0 0 0 1px #6ec436; background: #252 var(--yes) no-repeat center center / 10px; content: ""}
 #helptranslate {padding: 6px 10px 10px; clear: both; text-align: right}
 
 /* console password */
