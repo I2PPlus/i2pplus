@@ -219,7 +219,7 @@ h4#sb_shutdownstatus span {margin: 3px 0; display: inline-block}
 .sb_netstatus.firewalled::before {background: var(--net_firewalled) var(--center)}
 .sb_netstatus.vmcomm::before {background: var(--net_vm) var(--center)}
 .sb_netstatus.clockskew::before {background: var(--net_clockskew) var(--center)}
-.sb_netstatus.running:not(:hover)::before, .sb_netstatus.hidden:not(:hover)::before, .sb_netstatus.firewalled:not(:hover)::before, .sb_netstatus.testing:not(:hover)::before {margin: -2px 0; height: 20px; width: 20px; background-size: 20px}
+.sb_netstatus.running:not(:hover)::before, .sb_netstatus.hidden:not(:hover)::before, .sb_netstatus.firewalled:not(:hover)::before, .sb_netstatus.testing:not(:hover)::before {margin: -1px 0; height: 20px; width: 20px; background-size: 20px}
 .sb_netstatus.testing, .sb_netstatus.running, .sb_netstatus.hidden, .sb_netstatus.firewalled {font-size: 0}
 .sb_netstatus.running:hover, .sb_netstatus.hidden:hover, .sb_netstatus.firewalled:hover, .sb_netstatus.testing:hover {font-size: inherit}
 
@@ -2460,7 +2460,7 @@ input[type=text], input[type=password] {padding: 7px 9px}
 #sb_localtunnels a {max-width: 200px}
 #sb_memoryBar .percentBarText {margin-top: -2px}
 .sb_netstatus, .tunnelBuildStatus {padding: 9px 3px}
-.sb_netstatus::before, .tunnelBuildStatus::before {margin: -1px 0}
+.sb_netstatus::before, .tunnelBuildStatus::before {margin: -1px 2px; height: 20px}
 #sb_newsheadings {margin-left: -9px; width: 258px}
 #sb_newsheadings table {width: 254px}
 #sb_services a:link, #sb_internals a:link, #sb_advanced a:link, #sb_help a:link {max-width: 216px}
