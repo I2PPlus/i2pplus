@@ -12,38 +12,8 @@ h3#webappconfiguration, h3#i2pclientconfig {margin-bottom: -16px}
 h4, h4.app, h4.app2, #sitemap h3 {font-size: 14pt}
 h4.app::first-letter, h4.app2::first-letter, #sitemap h3::first-letter {font-size: 14pt}
 .confignav {font-size: 13pt}
-button, button:visited, input[type=submit], input[type="reset"], .cancel, .accept {margin: 4px; padding: 6px 8px; display: inline-block; min-width: 80px; line-height: 1.5; font-weight: 400; letter-spacing: .05em}
-button.control {min-width: 32px}
-select {font-weight: 400; font-size: 11pt; min-height: 30px}
-.percentBarOuter {margin-top: -3px; margin-bottom: -5px}
-.percentBarText {margin-top: -2px}
-#sidebar button.reload, #sidebar button.stop {padding: 3px 8px; min-width: 94px}
-#sidebar table td {padding: 2px 1px}
-#sidebar h3, #sidebar h4, #sidebar p, #sidebar h3 a, #sidebar a {text-shadow: none}
-#sidebar h3 a {font-size: 14pt; font-weight: 400; text-transform: uppercase; letter-spacing: .15em}
-#sidebar h4, #sidebar h4 a {font-size: 11pt; font-weight: 400}
-#sidebar a, #sidebar b {font-size: 10pt; font-weight: 400}
-#updateAvailable {margin-top: 5px}
-#sb_warning {padding-top: 10px; padding-bottom: 10px}
-#sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after,
-#sb_graphcontainer {background-size: 336px 60px; background-position: left -72px top -2px}
-#sb_internals a, #sb_services a, #sb_advanced a {padding: 1px 3px}
-#sb_newsheadings a {font-size: 9.5pt}
-#sb_newsheadings td, #sb_newsheadings tr:hover td {background-position: 4px center; padding-left: 24px}
-.sb_notice, .sb_notice a {font-size: 10pt; line-height: 1.2}
-#sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after { content: "";  display: inline-block;  min-height: 14px}
-#sb_graphcontainer {background-position: left -72px top -8px; background-size: 290px 64px}
-#sidebar button {font-size: 11pt; padding: 5px 8px}
 .sorry {font-size: 12pt}
-#searchbar span {margin: 5px}
-#sidebarconf button {min-width: 32px}
-a[href^="configpeer?peer"], h3#iptransport a, h3#iptransport a {font-size: 0}
 .cells tt, .cells tt a {font-size: 9pt}
-#changelog pre {font-size: 10pt}
-#console code {letter-spacing: normal; word-spacing: normal}
-#console div[lang="zh"] a {background: rgba(0,64,0,.3); padding: 0 3px; border-radius: 2px; line-height: 180%}
-#console div[lang="zh"], #console li, #console p {line-height: 170%; letter-spacing: .15em; word-spacing: 0; font-size: 10.5pt}
-#console li {list-style: none; margin-left: 40px}
 div.news {font-size: 10pt; font-style: normal}
 .langselect {font-size: 9pt}
 .langselect input + img, .langselect .optbox + img {transition: none}
@@ -54,14 +24,43 @@ div.news {font-size: 10pt; font-style: normal}
 .tab2 {padding-top: 6px; padding-bottom: 5px}
 .main table {line-height: 1.3; font-size: 10pt}
 .smallhead, th {font-size: 10pt; font-weight: 400}
-table#leasesetdebug th a, table#leasesetsummary th a, #tunnels.main h3 a, #logs h3 a, .tab, .tab2, .confignav a {font-size: 11pt; margin-right: -2px}
 td > * {vertical-align: middle}
 td.optionsave {border-top: 1px solid #252}
-.twocol li {text-align: left; margin-left: 50px}
-.twocol {margin: -10px 0 -15px; column-gap: 0; padding: 10px 0}
+table#leasesetdebug th a, table#leasesetsummary th a, #tunnels.main h3 a, #logs h3 a, .tab, .tab2, .confignav a {font-size: 11pt; margin-right: -2px}
+button, button:visited, input[type=submit], input[type="reset"], .cancel, .accept {margin: 4px; padding: 6px 8px; display: inline-block; min-width: 80px; line-height: 1.5; font-weight: 400; letter-spacing: .05em}
+button.control {min-width: 32px}
+select {font-weight: 400; font-size: 11pt; min-height: 30px}
+.percentBarOuter {margin-top: -3px; margin-bottom: -5px}
+.percentBarText {margin-top: -2px}
+.sb_notice, .sb_notice a {font-size: 10pt; line-height: 1.2}
+#sidebar button.reload, #sidebar button.stop {padding: 3px 8px; min-width: 94px}
+#sidebar table td {padding: 2px 1px}
+#sidebar h3, #sidebar h4, #sidebar p, #sidebar h3 a, #sidebar a {text-shadow: none}
+#sidebar h3 a {font-size: 14pt; font-weight: 400; text-transform: uppercase; letter-spacing: .15em}
+#sidebar h4, #sidebar h4 a {font-size: 11pt; font-weight: 400}
+#sidebar a, #sidebar b {font-size: 10pt; font-weight: 400}
+#updateAvailable {margin-top: 5px}
+#sidebar table {width: 262px}
+#sb_warning {padding-top: 10px; padding-bottom: 10px}
+#sb_newsheadings td, #sb_newsheadings tr:hover td {background-position: 4px center; padding-left: 24px}
+#sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after, #sb_internals a, #sb_services a, #sb_advanced a {padding: 1px 3px}
+#sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after { content: "";  display: inline-block;  min-height: 14px}
+#sb_newsheadings a {font-size: 9.5pt}
+#sidebar button {font-size: 11pt; padding: 5px 8px}
+#minigraph {margin-top: -24px}
+#searchbar span {margin: 5px}
+#sidebarconf button {min-width: 32px}
+a[href^="configpeer?peer"], h3#iptransport a, h3#iptransport a {font-size: 0}
 ul#banlist {-moz-column-width: 500px; -webkit-column-width: 500px; column-width: 500px}
 #routerlogs li, #criticallogs li, pre#service_logs {font-size: 9pt}
+#changelog pre {font-size: 10pt}
 #fullhistory {margin-top: -13px}
+#console code {letter-spacing: normal; word-spacing: normal}
+#console div[lang="zh"] a {background: rgba(0,64,0,.3); padding: 0 3px; border-radius: 2px; line-height: 180%}
+#console div[lang="zh"], #console li, #console p {line-height: 170%; letter-spacing: .15em; word-spacing: 0; font-size: 10.5pt}
+#console li {list-style: none; margin-left: 40px}
+.twocol li {text-align: left; margin-left: 50px}
+.twocol {margin: -10px 0 -15px; column-gap: 0; padding: 10px 0}
 
 @media screen and (max-width: 1500px) {.tab, .tab2 {font-size: 10.5pt; margin-right: -3px}}
 @media screen and (max-width: 1076px) {.tab2 {padding-top: 5px; padding-bottom: 4.5px}}
