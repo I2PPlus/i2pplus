@@ -1,268 +1,56 @@
 /* I2P Theme Override: Light */
 /* Comment: Larger text & other optimizations for Chinese & other doublebyte charactersets */
 /* Author: dr|z3d */
-
-h1, h2, h3, h4 {
-  font-weight: 400 !important;
-  text-shadow: none;
-  word-spacing: .1em;
-}
-
-h3 {
-  font-size: 12pt;
-}
-
-b, a, input, button, input[type=submit], input[type="reset"], i, th, thead, tfoot, .mediumtags, .themelabel {
-  font-weight: 400 !important;
-  font-style: normal !important;
-}
-
-b {
-  color: #112;
-}
-
-button, input[type=submit], input[type="reset"] {
-  padding: 3px 5px 3px 22px !important;
-  display: inline-block;
-  line-height: 140% !important;
-  letter-spacing: .15em;
-  font-size: 10.5pt !important;
-}
-
-button.reload[value="restart"], button.stop[value="shutdown"] {
-  padding-top: 3px !important;
-  padding-bottom: 3px !important;
-}
-
-button.control {
-  padding: 12px 11px !important;
-}
-
-#clock {
-  font-size: 16pt !important;
-}
-
-#sidebarconf button {
-  padding: 3px !important;
-}
-
-.routersummary table {
-  font-size: 8.5pt;
-}
-
-.routersummary a {
-  font-size: 10pt !important;
-}
-
-.routersummary h3, .routersummary h4, .routersummary p, .routersummary h3 a, .routersummary a {
-  text-shadow: none !important;
-}
-
-.routersummary h3 a {
-  font-size: 11pt !important;
-}
-
-.routersummary h4, .routersummary h4 a {
-  font-size: 10.5pt !important;
-}
-
-.routersummary b {
-  font-size: 9.5pt;
-  font-weight: 400 !important;
-}
-
-.routersummary a {
-  word-spacing: .1em !important;
-  font-size: 10pt;
-  line-height: 130%;
-}
-
-#sb_newsheadings td, #sb_newsheadings tr:hover td {
-  padding-left: 22px !important;
-  background-position: 4px center !important;
-}
-
+h1, h2, h3, h4 {font-weight: 400; text-shadow: none; word-spacing: .1em}
+h3 {font-size: 12pt}
+code, tt, div, input, button {font-size: 10pt}
+b, a, input, button, input[type=submit], input[type="reset"], i, th, thead, tfoot, .mediumtags, .themelabel {font-weight: 400; font-style: normal}
+b {color: #112}
+button, input[type=submit], input[type="reset"] {padding: 3px 5px 3px 22px; display: inline-block; line-height: 140%; letter-spacing: .15em; font-size: 10.5pt}
+button.reload[value="restart"], button.stop[value="shutdown"] {padding-top: 3px; padding-bottom: 3px}
+button.control {padding: 12px 11px}
+#clock {font-size: 16pt}
+#sidebarconf button {padding: 3px}
+#sidebar table {font-size: 8.5pt}
+#sidebar a {font-size: 10pt; font-weight: 400}
+#sidebar h3, #sidebar h4, #sidebar p, #sidebar h3 a, #sidebar a {text-shadow: none}
+#sidebar h3 a {font-size: 11pt}
+#sidebar h4, #sidebar h4 a {font-size: 10.5pt}
+#sidebar b {font-size: 9.5pt; font-weight: 400}
+#sidebar a {word-spacing: .1em; font-size: 10pt; line-height: 1.3}
+#sb_newsheadings td, #sb_newsheadings tr:hover td {padding-left: 22px; background-position: 4px center}
 #sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after,
-#sb_bandwidth td::after, #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {
-   min-height: 15px !important;
-}
-
-.sb_netstatus a {
-  vertical-align: middle !important;
-}
-
-div.news, .newscontent p {
-  font-size: 10pt !important;
-}
-
-#newsStatus, #newsDisplay {
-  font-size: 10.5pt !important;
-  letter-spacing: .05em;
-}
-
-h4.app, h4.app2 {
-  font-size: 13pt;
-}
-
-div.app {
-  min-height: 82px;
-}
-
-.applabel {
-  height: 22px !important;
-  line-height: 140% !important;
-}
-
-.applabel a {
-  padding: 2px 2px 0;
-  display: inline-block;
-  vertical-align: middle;
-  font-size: 11pt !important;
-}
-
-input, input:visited, button {
-  font-size: 10pt !important;
-}
-
-.smallhead {
-  font-size: 8.5pt
-}
-
-th {
-  font-size: 10pt;
-}
-
-.tunneldisplay th {
-  font-size: 10.5pt !important;
-}
-
-td, .mediumtags {
-  font-size: 10pt !important;
-  font-weight: 400 !important;
-}
-
-.statusnotes {
-  font-size: 10.5pt !important;
-  letter-spacing: .2em !important;
-  text-shadow: none !important;
-}
-
-.tablefooter tr, .tablefooter td {
-  font-size: 10pt !important;
-}
-
-div.tunnels a {
-  font-size: 9.5pt !important;
-  word-spacing: 0 !important;
-  letter-spacing: 0 !important;
-}
-
-code, tt, div {
-  font-size: 10pt !important;
-}
-
-.messages, .messages li, .infohelp, .infowarn  {
-  font-weight: 400 !important;
-  font-size: 11pt !important;
-}
-
-.tab, .tab2 {
-  font-size: 11pt;
-  font-weight: 400;
-}
-
-.ui_lang {
-  font-size: 9pt !important;
-}
-
-#externali2cp td label + br {
-  display: none;
-}
-
-#externali2cp td label {
-  margin-right: 8px;
-  white-space: nowrap;
-}
-
-#config_service p.infohelp, #config_clients p.infohelp, #config_clients p.infowarn, #config_clients p#pluginconfig, #config_tunnels p.infohelp,
-p#enablefullstats {
-  margin-top: 12px;
-}
-
-#config_family p.infohelp {
-  margin-bottom: 12px;
-}
-
-#jardump td, #jardump td tt {
-  font-size: 8.5pt !important;
-}
-
-#console p, #console li, #console b {
-  font-size: 10.5pt !important;
-  word-spacing: 0;
-  letter-spacing: .15em;
-  line-height: 160%;
-}
-
-#console code, #console a {
-  word-spacing: normal;
-  letter-spacing: normal;
-  font-size: 10.5pt !important;
-}
-
-#console p a, #console li a {
-  padding: 1px 4px;
-  display: inline-block;
-  background: rgba(220,220,255,.5);
-  border-radius: 2px;
-}
-
-#console li {
-  margin-left: 20px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  text-align: justify;
-  list-style: none;
-}
-
-#console .links li {
-  margin-left: 35px;
-}
-
-#console .twocol {
-  margin-bottom: -5px !important;
-}
-
-#console .twocol li {
-  text-align: left;
-}
-
-#console a:hover code {
-  color: #f60 !important;
-}
-
-.tunnel_cap b, b.tunnel_cap {
-  color: #fff !important;
-  font-weight: 700 !important;
-}
-
-.cells tt, #profilelist tt, tt a {
-  font-weight: 700 !important;
-}
-
-.formaction {
-  margin-top: -16px;
-}
-
-.netdb_name {
-  font-weight: 400;
-  color: #112;
-}
-
-.sybilinfo_params {
-}
-
-@media screen and (min-width: 1500px) {
-  #console p, #console li, #console code, #console a, .themelabel {font-size: 11pt !important}
-  .ui_lang {font-size: 10pt !important}
-}
+#sb_bandwidth td::after, #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {min-height: 15px}
+.sb_netstatus a {vertical-align: middle}
+.tab, .tab2 {font-size: 11pt; font-weight: 400}
+th, td, .mediumtags, div.news, .newscontent p {font-size: 10pt; font-weight: 400}
+.tunneldisplay th {font-size: 10.5pt}
+.ui_lang {font-size: 9pt}
+.cells tt, #profilelist tt, tt a {font-weight: 700}
+h4.app, h4.app2 {font-size: 13pt}
+div.app {min-height: 82px}
+.applabel {height: 22px; line-height: 1.4}
+#home .applabel a, .sitemapLabel {font-size: 11pt; font-weight: 400}
+.applabel a {padding: 2px 2px 0; display: inline-block; vertical-align: middle}
+#jardump td, #jardump td tt, .smallhead {font-size: 8.5pt}
+.statusnotes {font-size: 10.5pt; letter-spacing: .2em; text-shadow: none}
+.tablefooter tr, .tablefooter td {font-size: 10pt}
+div.tunnels a {font-size: 9.5pt; word-spacing: 0; letter-spacing: 0}
+.messages, .messages li, .infohelp, .infowarn{font-weight: 400; font-size: 11pt}
+.tunnel_cap b, b.tunnel_cap {color: #fff; font-weight: 700}
+.formaction {margin-top: -16px}
+.netdb_name {font-weight: 400; color: #112}
+#newsStatus, #newsDisplay {font-size: 10.5pt; letter-spacing: .05em}
+#externali2cp td label + br {display: none}
+#externali2cp td label {margin-right: 8px; white-space: nowrap}
+#config_service p.infohelp, #config_clients p.infohelp, #config_clients p.infowarn, #config_clients p#pluginconfig, #config_tunnels p.infohelp, #enablefullstats {margin-top: 12px}
+#config_family p.infohelp {margin-bottom: 12px}
+#console p, #console li, #console b {font-size: 10.5pt; word-spacing: 0; letter-spacing: .15em; line-height: 1.6}
+#console code, #console a {word-spacing: normal; letter-spacing: normal; font-size: 10.5pt}
+#console p a, #console li a {padding: 1px 4px; display: inline-block; background: rgba(220,220,255,.5); border-radius: 2px}
+#console li {margin-left: 20px; margin-top: 10px; margin-bottom: 10px; text-align: justify; list-style: none}
+#console .links li {margin-left: 35px}
+#console .twocol {margin-bottom: -5px}
+#console .twocol li {text-align: left}
+#console a:hover code {color: #f60}
+@media screen and (min-width: 1500px) {#console p, #console li, #console code, #console a, #home .applabel a, .themelabel {font-size: 11pt} .ui_lang {font-size: 10pt}}
