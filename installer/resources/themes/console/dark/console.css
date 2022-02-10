@@ -78,7 +78,6 @@ ul {margin: 0; padding: 0}
 #sidebar img[src$="i2plogo.png"]:hover {filter: saturate(1); transition: ease filter .1s}
 #sidebar img[src$="i2plogo.png"]:active {filter: sepia(1) hue-rotate(45deg) saturate(2) opacity(.65) drop-shadow(0 0 1px rgba(156,32,0,.3)); transform: scale(.97); transition: none}
 #sidebar input[type=text] {text-align: right; box-shadow: inset 1px 1px 1px 0 #000}
-#sidebar hr {margin: 9px -10px 7px -10px; height: 1px; color: var(--a); background: #252}
 #sidebar td b:not(::selection), .infohelp b:not(::selection) {color: #ffffa8; -webkit-text-stroke: 1px rgba(0,0,0,.4)}
 #sidebar td a {-webkit-text-stroke: 0}
 #sidebar td a:hover {border-radius: 2px; box-shadow: 0 0 0 2px rgba(0,0,0,.3); background: repeating-linear-gradient(180deg,rgba(16,16,0,.5) 1px, rgba(16,16,0,.5) 2px, rgba(0,64,0,.6) 3px)}
@@ -145,12 +144,13 @@ p:empty + .sb_notice {margin-top: 9px}
 #sidebar p {padding: 0}
 #sidebar a:link, #sidebar a:visited {word-spacing: .05em}
 #sidebar #sb_peers a:not(:hover):not(:focus):not(:active), #sidebar #sb_peersadvanced a:not(:hover):not(:focus):not(:active), #sidebar #sb_tunnels a:not(:hover):not(:focus):not(:active), #sidebar #sb_general a:not(:hover):not(:focus):not(:active), #sidebar #sb_shortgeneral a:not(:hover):not(:focus):not(:active), #sidebar #sb_advancedgeneral a:not(:hover):not(:focus):not(:active) {color: var(--ink)}
-#sidebar hr:last-child {margin-top: 5px; margin-bottom: -5px !important}
 #sidebar .refresh {margin-top: -10px; margin-bottom: -4px; padding: 2px 0 0 0}
 #sb_warning {margin-left: -10px; margin-right: -10px; border-bottom: var(--border)}
 #sb_warning a {color: #900}
 #sb_warning + #sb_notice {margin-top: -6px}
+#sidebar hr {margin: 9px -10px 7px -10px; height: 1px; background: #252}
 #sb_warning + hr {margin-top: 7px}
+#sidebar hr:last-child {margin-top: 5px; margin-bottom: -5px}
 .warntext {color: #b00}
 
 /* sidebar news */
@@ -604,6 +604,7 @@ form[action="events"] {background: #000}
 .formaction {text-align: right; margin-bottom: -5px}
 
 /* peers */
+.reachability {margin-top: 2px; float: right; font-size: 75%}
 #peers .confignav, #profiles .confignav {padding: 0; min-width: 685px}
 #peers .tab, #peers .tab2, #profiles .tab, #profiles .tab2 {margin-top: -1px}
 .sortup, .sortdown, .sortupactive, .sortdownactive {margin: 5px 1px 0; padding: 1px 0; width: 16px; height: 12px; display: inline-block; vertical-align: middle; text-align: center; border: 1px solid #171; border-radius: 1px; background-size: 10px auto, 100%; opacity: .7}
@@ -845,7 +846,7 @@ form[action="events"] > .formaction {margin-bottom: -11px; margin-right: -21px; 
 #tunnels h3 a:not(.lsview), #logs a.configure, #logs a.delete, h4.app a, h4.app2 a {font-size: 0}
 #tunnels h3 a:not(.lsview) {margin-left: 4px; border-left: var(--border)}
 #tunnels h3 a[href^="/configtunnels#"]::after, #tunnels h3 a[href$="/i2ptunnelmgr"]::after, #logs a.configure::after, #logs a.delete::after, h4.app a::after, h4.app2 a::after {width: 16px; height: 16px; float: right; background: var(--settings) var(--center); background-size: 16px; content: ""}
-#tunnels h3 a[href^="/configtunnels#"]:hover::after, #tunnels h3 a[href^="/configtunnels#"]:focus::after, #tunnels h3 a[href$="/i2ptunnelmgr"]:hover::after, #tunnels h3 a[href$="/i2ptunnelmgr"]:focus::after, #logs a.configure:hover::after, #logs a.configure:focus::after, h4.app a:hover::after, h4.app a:focus::after, h4.app2 a:hover::after, h4.app2 a:focus::after {background: var(--settings_hover) var(--center)}
+#tunnels h3 a[href^="/configtunnels#"]:hover::after, #tunnels h3 a[href^="/configtunnels#"]:focus::after, #tunnels h3 a[href$="/i2ptunnelmgr"]:hover::after, #tunnels h3 a[href$="/i2ptunnelmgr"]:focus::after, #logs a.configure:hover::after, #logs a.configure:focus::after, h4.app a:hover::after, h4.app a:focus::after, h4.app2 a:hover::after, h4.app2 a:focus::after {background: var(--settings_hover) var(--center) / 16px}
 #tunnels h3 a[href^="/configtunnels#"]:active::after, #tunnels h3 a[href$="/i2ptunnelmgr"]:active::after, #logs a.configure:active::after, h4.app a:active::after, h4.app2 a:active::after {opacity: .7; transform: rotate(90deg); transition: linear transform .2s}
 #tunnelPeerCount .configpeer img {padding: 3px}
 #tunnels h3 .refreshpage, #tunnels h3 .refreshpage img {margin: -7px 1px -7px 0; padding: 8px 0 9px; border: none}
@@ -886,7 +887,7 @@ h3.tabletitle + .statusnotes, table.tunneldisplay {margin-top: -1px}
 .tunneldisplay .routerid, .tunnel_local {margin-right: 2px; margin-left: 0; min-width: 64px}
 
 /* tunnelPeerCount */
-#peercount {margin-bottom: -3px; background: var(--hardhat) no-repeat 8px center, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade); background-size: 20px, 100%, 2px, 100%}
+#peercount {margin-bottom: -3px; background: var(--hardhat) no-repeat 8px center, var(--h1); background-size: 20px, 2px, 100% 4px, 100%, 96px}
 #peercount img, #participating img {margin: 0 0 -2px; padding: 8px 6px 6px; vertical-align: middle; border: none}
 #participating img, #peercount img {width: 0; height: 0}
 #participating a, #peercount a {border-left: var(--border)}
@@ -1275,6 +1276,7 @@ th code {user-select: all}
 #bannedips table tr:last-child {border-bottom: var(--border)}
 #permabanned, #banneduntilrestart {margin-top: -1px; border: none}
 #permabanned {margin-top: -1px; margin-bottom: 9px}
+#permabanned th, #banneduntilrestart th, #permabanned tr:nth-child(2) td, #banneduntilrestart tr:nth-child(2) td, #ipv6 td {font-size: 95%}
 #permabanned th, #banneduntilrestart th {padding: 5px 10px}
 #permabanned td:first-child {padding-right: 10px; width: 49%; text-align: right; border-left: var(--border)}
 #permabanned td:nth-child(2) {width: 2%}
@@ -1319,7 +1321,7 @@ div.app::after, .sitemapLink::after {width: 22px; height: 19px; position: absolu
 div.app img, .sitemapLink img {filter: sepia(100%) hue-rotate(70deg) grayscale(.3); animation: zoom .15s linear .3s both}
 div.app img {margin: -4px 0 1px; padding: 10px 52px 38px; width: auto; height: 32px; max-width: 32px; max-height: 32px}
 div.app.js:hover::before {padding: 1px 4px 3px; display: inline-block; position: absolute; top: -1px; left: -1px; border: 1px solid var(--hover); box-shadow: var(--highlight), inset 0 0 1px 1px #730; content: "*js"}
-h4.app, h4.app2 {margin: 11px -6px -9px; padding: 9px 8px 7px 35px; line-height: 1; overflow: hidden; letter-spacing: .15em; word-spacing: 0; font-size: 10.5pt; font-variant: small-caps; text-transform: uppercase; text-align: left; border-radius: 0}
+h4.app, h4.app2 {margin: 11px -6px -9px; padding: 9px 8px 7px 35px; line-height: 1; overflow: hidden; letter-spacing: .15em; word-spacing: 0; font-size: 10.5pt; text-transform: uppercase; text-align: left; border-radius: 0}
 h4.app {background: url(images/favicon.svg) no-repeat 8px center, var(--h1); background-size: 18px, 2px, 100% 4px, 100%, 175px; background-blend-mode: var(--h3_blend)}
 h4.app2 {clear: left; background: var(--globe) no-repeat 8px center, var(--h1); background-size: 18px, 2px, 100% 4px, 100%, 175px; background-blend-mode: var(--h3_blend)}
 h4.app2 img, #sitemap h3 a img {margin-top: 1px}
@@ -1501,6 +1503,7 @@ textarea#advancedsettings {margin: 0; padding-top: 3px; width: 100%; overflow-x:
 #iptransport a, th#upnpconfig a, #bwlimiter a, #config_stats h3 a, #config_logging h3 a, #graphdisplay a, #logs h3 a, #advancedconfig a, .h3navlinks, #reseedsetup a {float: right}
 #iptransport a:hover::after, #advancedconfig a:hover::after, #reseedsetup a:hover::after {background: var(--helplink_hover) var(--center) / 18px}
 #iptransport a::after, #advancedconfig a::after, #reseedsetup a::after {margin: 0 2px 0 0; padding: 0; width: 19px; height: 19px; float: right; background-size: 19px; content: ""}
+#advancedconfig a::after {margin: -1px 2px -4px 0}
 
 /* keyring */
 #config_keyring h3 {margin-bottom: -1px; border-width: 1px}
@@ -2071,8 +2074,6 @@ input[type=text]:focus::placeholder, #homesearch input.search:focus::placeholder
 #routerinformation #upnpstatus {margin: 12px 0 0; padding-left: 46px; background-size: 24px}
 #cputype {margin: -2px 0 -2px 0; padding: 2px 5px; display: inline-block; font-weight: 700; text-transform: uppercase; border-radius: 2px; background: #030}
 
-.reachability {margin-top: 2px; float: right; font-size: 80% !important}
-
 /* logs */
 .logtable ul li {margin-left: 15px; list-style: none}
 .log_debug, .log_info, .log_warn, .log_error, .log_crit, .log_omitted {padding: 1px 2px; min-width: 36px; max-width: 36px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: inline-block; line-height: 1; text-align: center; color: #000; border-radius: 2px}
@@ -2197,14 +2198,11 @@ h1[class], h1 {margin: 0 5px 0 226px; position: relative; z-index: 999; white-sp
 #configstats tr.tablefooter td.optionsave, #sidebarconf tr:last-child td, #i2pupdates tr.tablefooter td {background: transparent }
 #config_bandwidth td.optionsave, #config_advanced td.optionsave, #config_clients .formaction, #config_homepage .formaction, #config_i2cp td.optionsave, #config_keyring tr:last-child, #config_logging td.optionsave, #config_network td.optionsave, #config_peers .configtable tr:nth-child(4) td, #config_peers .configtable tr:last-child td, #pluginconfigactions.formaction, #reseedconfig td.optionsave, #config_service .formaction, #configstats tr.tablefooter, #config_summarybar .formaction,#sidebarconf tr:last-child, #tunnelconfigsave.formaction, #config_ui .formaction, #graphing.formaction, #i2pupdates tr:nth-child(2), #i2pupdates tr.tablefooter, #webappconfigactions.formaction, #sybilTask .optionsave {background: var(--h3), var(--footer); background-size: 2px, 100%}
 
-#configinfo .infowarn {display: none}
 #profiles th::after {display: none}
-#banneduntilrestart td {border-right: var(--border) !important}
+#banneduntilrestart th, #banneduntilrestart td {border-right: var(--border)}
 h2, h2.welcome, h3, h3.welcome, #themeoptions {border-color: #242}
 .news hr {color: #242; background: repeating-linear-gradient(90deg, #242 2px, #000 4px); background-size: 4px 100%}
 #news.news hr {opacity: .7}
-#configinfo th {border: none !important}
-#configinfo td {border-top: 1px solid #010}
 #logs .tabletitle, #jobs h3, #tunnels h3[id] {position: relative; overflow: hidden}
 #logs #enviro ~ .tabletitle::after, #jobs h3::after, #tunnels h3[id]::after {width: 0; height: 1px; display: inline-block; position: absolute; bottom: 0; left: 0; background: linear-gradient(90deg, #d30, var(--hover)); content: ""; animation: ease-out reloader 1s forwards; opacity: .4}
 .infohelp.vmcomm {margin-bottom: 0}
@@ -2231,8 +2229,10 @@ h2, h2.welcome, h3, h3.welcome, #themeoptions {border-color: #242}
 #legal h2, #sidebarhelp h2, #volunteer h2, #reachabilityhelp h2, #configurationhelp h2, #advancedsettings h2, #browserconfig h2, #tunnman h2, #faq h2, #reseedhelp h2, #troubleshoot h2, #newuserguide h2, #filterlist h2, #webhosting h2, #themeoverride h2, #glossary h2 {margin: -1px -21px 10px; padding: 10px; word-spacing: .1em; letter-spacing: .08em; text-align: left; text-transform: uppercase; font-size: 11pt; border-radius: 0; background: linear-gradient(90deg, #000, #001000 70%, #001300 90%)}
 #advancedsettings h2 {margin: -1px -16px 15px}
 #configinfo {margin: 0 auto 0; width: calc(100% - 20px); border: none}
-#configinfo th {text-align: left; padding: 5px 0; letter-spacing: .05em; font: 9pt var(--monospaced); color: #dd0; background: #000; border: none; border-bottom: var(--border_soft)}
-#configinfo td {padding: 5px 15px; line-height: 1.4; text-align: justify; background: #000}
+#configinfo th {text-align: left; padding: 10px 0 5px; letter-spacing: .05em; font: 9pt var(--monospaced); color: #dd0; background: #000; border: none}
+#configinfo td {padding: 5px 15px 10px; line-height: 1.4; text-align: justify; background: #000}
+#configinfo tr:nth-last-child(n+2) td {border-bottom: var(--border_dotted)}
+#configinfo .infowarn {display: none}
 #help h2 a:hover {color: var(--ink)}
 #sidebarhelp h3, #faq h3, #reseedhelp h3 {margin: 0 -21px 10px; padding: 10px; word-spacing: .1em; letter-spacing: .08em; text-align: left; text-transform: uppercase; font-size: 10.5pt; border-radius: 0; background: linear-gradient(90deg, #000, #001000 70%, #001300 90%); border: var(--border)}
 #changelog h2 {margin: 0 0 -11px; padding: 10px; word-spacing: .1em; letter-spacing: .08em; text-align: left; text-transform: uppercase; font-size: 11pt; border-radius: 0}
@@ -2271,22 +2271,23 @@ ul#upnphelp li:last-child, #legal ul li:last-child {padding-bottom: 0}
 #help_legal {background: var(--legal) no-repeat 15px center / 32px, var(--helpbox)}
 #help_changelog {background: var(--changelog) no-repeat 15px center / 32px, var(--helpbox)}
 #help_webhosting {background: var(--server) no-repeat 15px center / 32px, var(--helpbox)}
-#configurationhelp h2, #advancedsettings h2, #filterlist h2 {padding-left: 38px; background: var(--settings_inert) no-repeat 10px center, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade); background-size: 20px, 100%, 2px, 100%}
-#sidebarhelp h2, #reachabilityhelp h2 {padding-left: 38px; background: url(/themes/console/images/svg/sidebar.svg) no-repeat 10px center, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade); background-size: 20px, 100%, 2px, 100%}
-#reseedhelp h2 {padding-left: 38px; background: var(--reseed) no-repeat 10px center, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade); background-size: 20px, 100%, 2px, 100%}
-#newuserguide h2 {padding-left: 38px; background: url(images/favicon.svg) no-repeat 10px center, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade); background-size: 20px, 100%, 2px, 100%}
-#troubleshoot h2 {padding-left: 38px; background: var(--wrench) no-repeat 10px center, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade); background-size: 20px, 100%, 2px, 100%}
-#legal h2 {padding-left: 38px; background: var(--legal) no-repeat 10px center, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade); background-size: 20px, 100%, 2px, 100%}
-#changelog h2 {padding-left: 38px; background: var(--changelog) no-repeat 10px center, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade); background-size: 20px, 100%, 2px, 100%}
-#faq h2, #glossary h2 {padding-left: 38px; background: var(--ask) no-repeat 10px center, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade); background-size: 20px, 100%, 2px, 100%}
-#webhosting h2 {padding-left: 38px; background: var(--server) no-repeat 10px center, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade); background-size: 20px, 100%, 2px, 100%}
-#themeoverride h2 {padding-left: 38px; background: var(--ui) no-repeat 10px center, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade); background-size: 20px, 100%, 2px, 100%}
-#browserconfig h2 {padding-left: 38px; background: var(--firefox) no-repeat 10px center, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade); background-size: 20px, 100%, 2px, 100%}
+#configurationhelp h2, #advancedsettings h2, #filterlist h2 {padding-left: 38px; background: var(--settings_inert) no-repeat 10px center, var(--h1); background-size: 20px, 2px, 100% 4px, 100%, 96px}
+#sidebarhelp h2, #reachabilityhelp h2 {padding-left: 38px; background: url(/themes/console/images/svg/sidebar.svg) no-repeat 10px center, var(--h1); background-size: 20px, 2px, 100% 4px, 100%, 96px}
+#reseedhelp h2 {padding-left: 38px; background: var(--reseed) no-repeat 10px center, var(--h1); background-size: 20px, 2px, 100% 4px, 100%, 96px}
+#newuserguide h2 {padding-left: 38px; background: url(images/favicon.svg) no-repeat 10px center, var(--h1); background-size: 20px, 2px, 100% 4px, 100%, 96px}
+#troubleshoot h2 {padding-left: 38px; background: var(--wrench) no-repeat 10px center, var(--h1); background-size: 20px, 2px, 100% 4px, 100%, 96px}
+#legal h2 {padding-left: 38px; background: var(--legal) no-repeat 10px center, var(--h1); background-size: 20px, 2px, 100% 4px, 100%, 96px}
+#changelog h2 {padding-left: 38px; background: var(--changelog) no-repeat 10px center, var(--h1); background-size: 20px, 2px, 100% 4px, 100%, 96px}
+#faq h2, #glossary h2 {padding-left: 38px; background: var(--ask) no-repeat 10px center, var(--h1); background-size: 20px, 2px, 100% 4px, 100%, 96px}
+#webhosting h2 {padding-left: 38px; background: var(--server) no-repeat 10px center, var(--h1); background-size: 20px, 2px, 100% 4px, 100%, 96px}
+#themeoverride h2 {padding-left: 38px; background: var(--ui) no-repeat 10px center, var(--h1); background-size: 20px, 2px, 100% 4px, 100%, 96px}
+#browserconfig h2 {padding-left: 38px; background: var(--firefox) no-repeat 10px center, var(--h1); background-size: 20px, 2px, 100% 4px, 100%, 96px}
 #browserconfig ol {margin: -10px 20px -5px -20px; display: inline-block}
-#tunnman h2 {padding-left: 38px; background: var(--hardhat) no-repeat 10px center, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade); background-size: 20px, 100%, 2px, 100%}
+#tunnman h2 {padding-left: 38px; background: var(--hardhat) no-repeat 10px center, var(--h1); background-size: 20px, 2px, 100% 4px, 100%, 96px}
+#help h2, #help h3, #help #faq h3, #help #webhosting h3 {background-repeat: no-repeat, repeat, repeat, no-repeat, repeat; background-blend-mode: normal, exclusion, overlay}
 
 /* faq */
-#faq h3 {padding-left: 35px; word-spacing: 0; letter-spacing: 0; text-transform: none; font-size: 10.5pt; background: var(--ask) no-repeat 10px center / 18px, linear-gradient(180deg,#0000 50%, #000 50%), repeating-linear-gradient(90deg, #00000080 1px, #00000080 2px, #00100080 3px), var(--h3_fade); background-size: 18px, 100%, 2px, 100%}
+#faq h3 {padding-left: 35px; word-spacing: 0; letter-spacing: 0; text-transform: none; font-size: 10.5pt; background: var(--ask) no-repeat 10px center / 18px, var(--h1); background-size: 18px, 2px, 100% 4px, 100%, 96px}
 #faq p.infohelp {margin: -1px -11px 9px}
 #portfaq {margin: 9px -10px 10px; width: auto}
 #portfaq td, #portfaq th {padding-top: 10px; padding-bottom: 10px}
@@ -2317,6 +2318,7 @@ ul#upnphelp li:last-child, #legal ul li:last-child {padding-bottom: 0}
 #webhosting #guides {margin-left: -25px; list-style: none}
 #webhosting #guides li a {padding-left: 22px}
 #webhosting i {font-weight: 700}
+#webhosting h3 {padding-left: 32px; background: var(--server) no-repeat 8px center / auto 50%, var(--h1); background-size: auto 50%, 2px, 100% 4px, 100%, 96px}
 
 /* lazy loading */
 .lazy.lazyhide, .lazy.lazyhide td {opacity: 0; contain: strict}
@@ -2429,6 +2431,7 @@ input.search, input.search:focus {padding: 6px 8px 6px 28px}
 input[type=text], input[type=password] {padding: 7px 9px}
 #iptransport a::after, #advancedconfig a::after, #reseedsetup a::after {margin: 0 0 -3px -4px; width: 20px; height: 20px; background-size: 20px}
 #iptransport a:hover::after, #advancedconfig a:hover::after, #reseedsetup a:hover::after {background-size: 20px}
+#advancedconfig a::after {margin: -4px 0 -3px}
 .joblog h3 {margin-top: 7px; padding-top: 7px}
 #jobs h2 {margin-bottom: 3px}
 .leaseset th {line-height: 1}
@@ -2446,7 +2449,6 @@ input[type=text], input[type=password] {padding: 7px 9px}
 #peers .cells:nth-child(n+2) {padding-left: 15px; padding-right: 15px}
 #peers .routerid .flag img, #netdb .flag img {margin: -3px -3px -1px; width: 20px; height: 15px}
 .percentBarOuter {width: 251px}
-#permabanned {margin-top: -3px}
 #pluginconfigtext + form > input {margin-top: 3px}
 #pluginInstall2 {margin-top: -14px}
 #reseedconfig input[type=text], #reseedconfig input[type=password] {width: 250px}

@@ -16,6 +16,7 @@
   --border_hard: 1px solid #252;
   --border_hover: 1px solid #f60;
   --border_soft: 1px solid #131;
+  --border_dotted: 1px dotted #242;
   --btnAction_hover: var(--nav_hover);
   --btnAction: linear-gradient(180deg,#030,#020 50%,#010 50%);
   --btn_hover: linear-gradient(180deg,#000,#010);
