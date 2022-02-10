@@ -44,7 +44,7 @@ select {font-weight: 400; font-size: 11pt; min-height: 30px}
 #sb_warning {padding-top: 10px; padding-bottom: 10px}
 #sb_newsheadings td, #sb_newsheadings tr:hover td {background-position: 4px center; padding-left: 24px}
 #sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after, #sb_internals a, #sb_services a, #sb_advanced a {padding: 1px 3px}
-#sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after { content: "";  display: inline-block;  min-height: 14px}
+#sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {display: inline-block;  min-height: 14px; content: ""}
 #sb_newsheadings a {font-size: 9.5pt}
 #sidebar button {font-size: 11pt; padding: 5px 8px}
 #minigraph {margin-top: -24px}
