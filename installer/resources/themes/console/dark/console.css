@@ -1498,7 +1498,7 @@ textarea#advancedsettings {margin: 0; padding-top: 3px; width: 100%; overflow-x:
 #config_service a[href$="#alternative_browser"] img {display: none}
 #config_service a[href$="#alternative_browser"]::after, #iptransport a::after, #advancedconfig a::after, #reseedsetup a::after {background: var(--helplink) var(--center)}
 #config_service a[href$="#alternative_browser"]:hover::after, #iptransport a:hover::after, #advancedconfig a:hover::after, #reseedsetup a:hover::after {background: var(--helplink_hover) var(--center)}
-#config_service a[href$="#alternative_browser"]::after {margin-left: -3px; width: 18px; height: 18px; display: inline-block; vertical-align: middle; background-size: 18px; content: ""}
+#config_service a[href$="#alternative_browser"]::after {margin: -3px 0 -4px -3px; padding: 0 0 2px; width: 18px; height: 18px; display: inline-block; vertical-align: middle; background-size: 18px; content: ""}
 #iptransport a, #advancedconfig a, #reseedsetup a {font-size: 0}
 #iptransport a, th#upnpconfig a, #bwlimiter a, #config_stats h3 a, #config_logging h3 a, #graphdisplay a, #logs h3 a, #advancedconfig a, .h3navlinks, #reseedsetup a {float: right}
 #iptransport a:hover::after, #advancedconfig a:hover::after, #reseedsetup a:hover::after {background: var(--helplink_hover) var(--center) / 18px}
