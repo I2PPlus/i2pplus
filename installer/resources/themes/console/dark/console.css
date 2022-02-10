@@ -1350,7 +1350,7 @@ h4.app2 a::after {margin-top: 1px}
 #searchbar input:focus {box-shadow: inset 4px 2px 3px 1px rgba(0,0,0,.8); border-color: #151; background: none}
 #searchbar input::placeholder {opacity: 0}
 #searchbar input:hover::placeholder {font-style: italic; opacity: .6}
-#searchbar button, #searchbar select, #searchbar input {margin-top: -2px; height: calc(100% + 6px); box-sizing: border-box; border-top: none; border-bottom: none}
+#searchbar button, #searchbar select, #searchbar input[type=text] {margin-top: -2px; height: calc(100% + 6px); box-sizing: border-box; border-top: none; border-bottom: none}
 #searchbar button, #searchbar select {margin: -2px 0 0; box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000}
 #searchbar button {padding: 0 3px 0 0; position: absolute; right: -1px; top: -1px; font-size: 0; width: 38px; min-width: 0; border: none; border-right: 1px solid var(--border); border-radius: 0 2px 2px 0; background: var(--search) var(--center) / 14px, var(--btn); background-blend-mode: luminosity}
 #searchbar button:hover, #searchbar select:hover, #searchbar button:focus, #searchbar select:focus {box-shadow: var(--highlight)}
@@ -2431,6 +2431,7 @@ h4#updateplugins {margin-top: -15px}
 #i2pclientconfig {margin-bottom: -15px}
 input.search, input.search:focus {padding: 6px 8px 6px 28px}
 input[type=text], input[type=password] {padding: 7px 9px}
+#searchbar input[type=text]:focus {padding-top: 7px; padding-bottom: 7px}
 #iptransport a::after, #advancedconfig a::after, #reseedsetup a::after {margin: 0 0 -3px -4px; width: 20px; height: 20px; background-size: 20px}
 #iptransport a:hover::after, #advancedconfig a:hover::after, #reseedsetup a:hover::after {background-size: 20px}
 #advancedconfig a::after {margin: -4px 0 -3px}
