@@ -1170,15 +1170,20 @@ p:empty + .sb_notice {
   padding: 2px 0 0 0 !important;
 }
 
-#sidebar a:link, #sidebar a:visited {
+#sidebar a {
   padding: 1px 2px;
   display: inline-block;
   line-height: 1.2;
   word-spacing: 0;
 }
 
+#sidebar #sb_advancedgeneral a, #sidebar #sb_general a, #sidebar #sb_shortgeneral a {
+  padding: 0;
+  display: inline-block;
+}
+
 #sidebar a:hover {
-  color: var(--hover);
+  color: var(--a_hover);
 }
 
 #sidebar hr:last-child {
