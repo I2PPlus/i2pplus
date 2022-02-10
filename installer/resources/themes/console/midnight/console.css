@@ -3553,6 +3553,10 @@ tr.addnew {
 
 /* /configui lang selection boxes + theme selection */
 
+.themechoice .optbox, .langselect .optbox {
+  position: absolute;
+}
+
 #themeui .cancel, #langui .cancel, #consolepass .cancel {
   display: none;
 }
@@ -3625,27 +3629,27 @@ tr.addnew {
   padding: 5px 0 !important;
 }
 
-.themechoice .optbox:hover + img ~ .themelabel {
+.themechoice .optbox:hover ~ .themelabel {
   color: var(--hover);
 }
 
-.themechoice .optbox:checked + img ~ .themelabel {
+.themechoice .optbox:checked ~ .themelabel {
   font-weight: 700;
   color: var(--ink);
   background: #040033 !important;
 }
 
-.themechoice .optbox:checked + img {
+.themechoice .optbox:checked + .langflag {
   transform: scale(0.9);
   opacity: 1;
 }
 
-.themechoice .optbox:focus + img ~ .themelabel {
+.themechoice .optbox:focus ~ .themelabel {
   color: var(--hover);
   box-shadow: inset 0 0 10px 3px #000;
 }
 
-.themechoice:hover .optbox:checked + img {
+.themechoice:hover .optbox:checked + .langflag {
   transform: scale(0.92);
   animation: glo ease-in-out 1.5s infinite alternate .5s;
 }
@@ -3790,10 +3794,14 @@ td#themeselect {
   background: var(--label_hover) !important;
 }
 
+.langflag, .langflag img {
+  width: 40px;
+  height: 30px;
+  border-radius: 3px;
+}
+
 .langflag {
   margin: 0 0 -8px;
-  width: 40px;
-  height: 36px;
   opacity: .75;
   text-align: center;
   display: inline-block;
