@@ -429,7 +429,7 @@ input[type=file]::file-selector-button {font-size: 8.5pt}
 .joblog {margin-top: 15px; text-align: justify; border-radius: 4px 4px 0 0; }
 .joblog h3 {margin-top: 10px}
 .joblog br {margin-bottom: 5px}
-#jobs .jobqueue {padding: 4px 12px 3px 0; display: inline-block; columns: 4 400px; column-gap: 4px}
+#jobs .jobqueue {padding: 5px 12px 0 0; display: inline-block; columns: 4 400px; column-gap: 4px}
 .joblog ol li {padding-bottom: 5px; width: calc(100% - 45px); min-width: 360px; display: inline-block; text-align: left; list-style-position: inside; -webkit-break-inside: avoid; break-inside: avoid; page-break-inside: avoid}
 .joblog ol li:last-child {border: none; text-align: left}
 .joblog ol:empty {display: none}
@@ -500,7 +500,7 @@ form[action="updategraphs"] {margin: -11px -11px -18px; border: var(--border); b
 /* jobs */
 .jobcount {font-weight: 400; font-size: 85%}
 #jobs h2 {margin: -16px 0 -15px; display: inline-block; border-radius: 0}
-h3[id*="job"] {margin: 12px 0 10px 0; padding: 8px; letter-spacing: .08em; text-transform: uppercase; border: var(--border); border-radius: 0}
+h3[id*="job"] {margin: 12px 0 10px 0; padding: 8px 10px; letter-spacing: .08em; text-transform: uppercase; border: var(--border); border-radius: 0}
 #jobs #jobrunners {display: none}
 #jobs #finishedjobs {margin-top: -5px}
 #jobs h3 + ol + h3 {margin-top: 10px}
