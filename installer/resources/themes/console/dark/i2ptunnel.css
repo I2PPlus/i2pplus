@@ -41,27 +41,27 @@ h2 a, h3 a {-webkit-text-stroke: 0}
 body:not(.iframed) .panel, body:not(.iframed) .panel#clients {margin: 24px auto 22px; padding: 0; max-width: calc(100% - 28px); box-shadow: 0 0 0 2px #000, 0 0 0 5px #020, 0 0 1px 5px #010, 0 0 0 7px #000}
 body:not(.iframed) #serverTunnels {margin-bottom: 0}
 body#tunnelEditPage:not(.iframed) .panel, body#tunnelRegistration:not(.iframed) .panel, body#tunnelWizardPage:not(.iframed) .panel {margin-top: 24px; margin-bottom: 24px}
+#serverTunnels {margin: -1px 0 8px}
+#globalTunnelControl {margin: -13px auto -13px}
+body:not(.iframed) #globalTunnelControl {margin: 1px auto -1px}
 .iframed .panel#clients {margin-top: -18px}
 .iframed .panel.iframed {margin: 0 auto -8px}
 .iframed .panel {margin: 14px auto -10px; width: 100%}
 .iframed .panel#clients, #tunnelEditPage .panel, #tunnelRegistration .panel, #tunnelWizardPage .panel, #tunnelSSL .panel {margin-bottom: 6px}
 .iframed #messages, .iframed #messages, #tunnelEditPage .panel, #tunnelRegistration .panel, #tunnelWizardPage .panel, #tunnelSSL .panel {margin-top: -5px}
-#globalTunnelControl {margin: -13px auto -13px}
 .iframed #globalTunnelControl {margin: 3px auto -26px}
 .iframed #messages + #globalTunnelControl {margin: 6px auto -26px}
 #globalTunnelControl.iframed.panel:first-child ~ .panel#clients::after {width: 100%; height: 5px; display: block; content: ""}
-#serverTunnels {margin: -1px 0 8px}
 
 /* headings */
 h2, h3 {margin: 10px 0 -1px; padding: 8px 10px 8px 34px; word-spacing: .1em; letter-spacing: .08em; text-transform: uppercase; text-shadow: 0 1px 1px #000; font-size: 11pt; color: #ee9; border: var(--border); box-shadow: var(--highlight), inset 0 0 1px 1px #030; background: var(--heading), linear-gradient(180deg,#004000, #000 75%), url(/themes/console/dark/images/camotile2.png) top left}
 h2 span {margin-top: 2px}
 .iframed h2 {margin: 14px 0 -1px}
 body:not(.iframed) .panel h2 {margin-top: 0}
-#messages h2 {margin-top: 12px; background: var(--logs) no-repeat left 8px center, var(--h2); background-size: 20px auto, 4px 100%, 100%}
+#messages h2 {background: var(--logs) no-repeat left 8px center, var(--h2); background-size: 20px auto, 4px 100%, 100%}
 #globalTunnelControl h2 {background: var(--mouse) no-repeat left 8px center, var(--h2); background-size: 20px auto, 4px 100%, 100%}
 .iframed #globalTunnelControl h2 {margin-top: 6px}
 #clients h2 {background: var(--client) no-repeat left 8px center, var(--h2); background-size: 20px auto, 4px 100%, 100%}
-#clients h2:not(.iframed) {margin-top: 12px}
 #servers h2 {background: var(--server) no-repeat left 8px center, var(--h2); background-size: 20px auto, 4px 100%, 100%}
 #tunnelEditPage h2, #tunnelEditPage h3, #registration h2, #registration h3 {background: var(--settings_inert) no-repeat left 8px center, var(--h2); background-size: 20px auto, 4px 100%, 100%; background-blend-mode: normal, normal, exclusion, normal}
 #wizardPanel h2, #ssl h2 {background: var(--wizard) no-repeat left 8px center, var(--h2); background-size: 20px auto, 4px 100%, 100%; background-blend-mode: normal, normal, exclusion, normal}
