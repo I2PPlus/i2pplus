@@ -26,12 +26,8 @@
 <input type="hidden" name="nonce" value="<%=pageNonce%>" >
 <input type="hidden" name="action" value="blah" >
 <h3 id="iptransport" class="tabletitle"><%=intl._t("IP and Transport Configuration")%>&nbsp;<span class="h3navlinks"><a title="<%=intl._t("Help with router configuration")%>" href="/help/configuration">[<%=intl._t("Configuration Help")%>]</a></span></h3>
+<p class="infohelp"><%=intl._t("The default settings will work for most people.")%>&ensp;<%=intl._t("Changing these settings will restart your router.").replace("restart your router.", "perform a soft restart of your router.")%></p>
 <table id="netconfig" class="configtable">
-<tr>
-<td class="infohelp">
-<%=intl._t("The default settings will work for most people.")%>&ensp;<%=intl._t("Changing these settings will restart your router.").replace("restart your router.", "perform a soft restart of your router.")%>
-</td>
-</tr>
 <tr>
 <th id="ipconfig"><%=intl._t("IP Configuration")%></th>
 </tr>

@@ -8,7 +8,9 @@
   --a: #494;
   --active: #f90;
   --badge: linear-gradient(180deg,#020, #010);
+  --bevel: var(--highlight), inset 0 0 0 2px rgba(32,80,32,.3);
   --bg_dots: repeating-linear-gradient(90deg, rgba(0,8,0,.5) 2px, rgba(0,16,0,.5) 4px), repeating-linear-gradient(180deg,#000 2px, #010 4px);
+  --bg_title: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2 1'%3E%3Cpath fill='%2300180088' d='M0 0h1v1H0z'/%3E%3Cpath fill='%2300000050' d='M1 0h1v1H1z'/%3E%3C/svg%3E");;
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   --border: 1px solid #242;
   --border_hard: 1px solid #252;
@@ -26,14 +28,15 @@
   --center: no-repeat center center;
   --dotted: 1px dotted #131;
   --download_bar: repeating-linear-gradient(135deg, #000 1px, #000 5px, #010 6px, #010 11px);
+  --footer: linear-gradient(180deg,#020,#000 75%);
   --glow_bottom: radial-gradient(at center bottom, rgba(16,72,16,.3), rgba(0,0,0,0) 50%);
-  --glow_bottom_hover: radial-gradient(at center bottom, rgba(256,96,0,.25), rgba(0,0,0,0) 50%);
+  --glow_bottom_hover: radial-gradient(at center bottom, rgba(255,96,0,.25), rgba(0,0,0,0) 50%);
   --glow_top: radial-gradient(at center -45px, rgba(16,72,16,.3), rgba(0,0,0,0) 85%);
-  --h1: var(--h3), linear-gradient(180deg,#1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 46%, #050d05 48%, #020602 52%, #010301 54%, #000000 56%), var(--camotile) #000;
+  --h1: var(--h3), repeating-linear-gradient(to bottom, rgba(0,24,0,.3) 2px, rgba(0,0,0,.3) 4px), linear-gradient(180deg,#020, #010 50%, #010 50%, #000), var(--camotile) #000;
   --h2: repeating-linear-gradient(90deg, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(180deg,#001800, #000 75%);
-  --h3_blend: normal, normal, exclusion, exclusion;
+  --h3_blend: normal, normal, normal, exclusion;
   --h3_fade: linear-gradient(180deg,#005000, #000 75%);
-  --h3: repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px);
+  --h3: var(--bg_title);
   --heading: linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px);
   --helpbox: linear-gradient(135deg, #000d00, #000900);
   --help: repeating-linear-gradient(90deg,#000 2px,#010 4px);
@@ -42,6 +45,7 @@
   --hover: #f60;
   --ink: #ee9;
   --input_txt: linear-gradient(180deg,#000800,#001800);
+  --label: linear-gradient(180deg,#001800 50%,#000 50%);
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
   --msg: linear-gradient(180deg,#010,#000400);
   --navbar: linear-gradient(180deg,#1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%);
@@ -50,8 +54,9 @@
   --on: #6b6, 0 0 0 1px rgba(0,0,0,.7), 0 0 1px 0 rgba(0,0,0,.5);
   --option_highlight: inset 0 0 0 1px #002500;
   --outline: 0 0 0 1px #000;
-  --row: linear-gradient(180deg,rgba(0,24,0,.5), rgba(0,8,0,.5));
+  --row: linear-gradient(180deg,rgba(0,16,0,.5), rgba(0,8,0,.5));
   --stroke: 1px rgba(237,237,146,.3);
+  --tab_hover: linear-gradient(180deg,#730,#410 50%,#310 50%,#180800,#000);
   --textshadow: 0 1px 1px rgba(0,0,0,.8);
   --th: linear-gradient(180deg,#010,#000);
   --tr: linear-gradient(180deg,#001400,#000600);
@@ -546,10 +551,8 @@ select::-moz-focus-inner {
   background: linear-gradient(180deg,#a22,#811);
 }
 
-label:hover .optbox.slider[disabled], .optbox.slider[disabled],
-.optbox.slider[disabled]:hover, .optbox.slider[disabled]:focus {
-  border: var(--border) !important;
-  background: #030 !important;
+label:hover .optbox.slider[disabled],
+.optbox:hover, label[disabled]:hover .optbox {
   pointer-events: none;
 }
 
@@ -560,8 +563,4 @@ label:hover .optbox.slider[disabled], .optbox.slider[disabled],
 label[disabled], label[disabled]:hover  {
   opacity: .45;
   cursor: default;
-}
-
-.optbox:hover, label[disabled]:hover .optbox {
-  pointer-events: none !important;
 }

@@ -13,7 +13,7 @@
 	--btn_active: linear-gradient(180deg,#f2f2f2, #f8f8f8);
 	--btn_shadow_active: var(--highlight), inset 3px 3px 3px rgba(0,0,0,.4);
 	--highlight: inset 0 0 0 1px #fff;
-	--border: 1px solid #999;
+	--border: 1px solid #aaa;
 	--border_hard: 1px solid #777;
 	--border_filtered: none;
 	--a: #d23;
@@ -524,8 +524,8 @@ td.peerCount:empty::after {
 }
 
 td.torrentDetails img:not([src$="rateme.svg"]), .dirInfo td:first-child img:not(.thumb) {
-	width: 20px !important;
-	height: 20px !important;
+	width: 21px;
+	height: 21px;
 }
 
 td.torrentDetails a:hover img, td.torrentDetails a:focus img,
@@ -1157,6 +1157,10 @@ tt {
 .knownTracker input[disabled] {
 	display: inline;
 	opacity: .5;
+}
+
+.trackerconfig th {
+	border-bottom: none;
 }
 
 .trackerconfig th:first-child, .knownTracker td:first-child, #addtracker td:first-child {
@@ -2896,9 +2900,10 @@ input[name="i2cpOpts"], input[name="nofilter_dataDir"] {
 	.RateDown:not(:empty), .torrentUploaded:not(:empty) {
 		min-width: 50px;
 	}
-	td.torrentDetails img, .dirInfo td:first-child img:not(.thumb) {
-		width: 22px !important;
-		height: 22px !important;
+	td.torrentDetails img:not([src$="rateme.svg"]),
+	.dirInfo td:first-child img:not(.thumb) {
+		width: 23px;
+		height: 23px;
 	}
 	.torrentDetails img[src$="rateme.svg"] {
 		margin-top: -6px !important;

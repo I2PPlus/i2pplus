@@ -887,6 +887,10 @@ pre {
   text-transform: capitalize;
 }
 
+#sidebar td:first-child, #sb_localtunnels td:nth-child(2) {text-align: left}
+#sidebar td:last-child {text-align: right}
+#sidebar #sb_internals td, #sidebar #sb_advanced td, #sidebar #sb_services td {text-align: center}
+
 #sb_internals, #sb_advanced, #sb_help {
   margin: -5px -6px -5px -10px !important;
   width: 204px !important;
@@ -1351,7 +1355,7 @@ p:empty + .sb_notice {
   background: none;
 }
 
-#sb_newsheadings td {
+#sidebar #sb_newsheadings td {
   padding: 3px 8px 3px 20px !important;
   text-align: left;
   border-bottom: 2px solid #000 !important;
@@ -3736,58 +3740,41 @@ td#themeselect {
   background: var(--box);
 }
 
-#config_ui .langselect .optbox {
-  margin: -5px 0 -30px -2px;
-  position: relative !important;
-  z-index: 999;
-  min-height: 60px !important;
-  min-width: 125px !important;
-  vertical-align: text-bottom;
-  text-align: center;
-  outline: 1px dotted !important;
+.langselect .optbox {
+  position: absolute;
   opacity: 0;
 }
 
 .langselect img {
-  margin-bottom: 0;
-  margin-left: -72px;
-  margin-top: 7px !important;
+  margin-bottom: -6px;
   width: 40px;
-  height: 40px;
-  position: absolute;
+  height: 36px;
 }
 
-.langselect input[name="lang"]:checked + img {
-  margin-top: 6px !important;
-  margin-left: -73px;
-  width: 19px;
-  height: 13px;
-}
-
-.langselect input[name="lang"]:hover + img {
+.langselect .optbox:hover + .langflag {
   filter: drop-shadow(0 0 1px var(--hover));
 }
 
-.langselect input[name="lang"]:hover + img + div.ui_lang {
+.langselect .optbox:hover ~ div.ui_lang {
   color: var(--hover);
 }
 
-.langselect input[name="lang"]:checked + img + div.ui_lang {
+.langselect .optbox:checked ~ div.ui_lang {
   color: var(--ink);
   font-weight: 700;
   background: #040033 !important;
 }
 
-.langselect:hover input[name="lang"]:checked + img {
+.langselect:hover .optbox:checked + .langflag {
   animation: glo ease-in-out 1.5s infinite alternate .5s;
 }
 
-.langselect input[name="lang"]:focus + img + div.ui_lang {
+.langselect .optbox:focus ~ div.ui_lang {
   color: var(--hover) !important;
   box-shadow: inset 0 0 10px 3px #000 !important;
 }
 
-.langselect input[name="lang"]:active + img + div.ui_lang {
+.langselect .optbox:active ~ div.ui_lang {
   color: var(--ink) !important;
   box-shadow: var(--highlight), inset 3px 3px 2px #1e0b28 !important;
 }
@@ -3803,52 +3790,21 @@ td#themeselect {
   background: var(--label_hover) !important;
 }
 
-/* large flags */
-
-.langselect img {
-  margin-top: -6px !important;
-  margin-left: -82px;
+.langflag {
+  margin: 0 0 -8px;
   width: 40px;
-  height: 40px;
-  position: absolute;
-  border: none !important;
-  box-shadow: none;
+  height: 36px;
   opacity: .75;
-  filter: drop-shadow(0 0 1px #000);
+  text-align: center;
+  display: inline-block;
 }
 
-.langselect input[name="lang"]:checked + img, .langselect input[name="lang"]:checked + #config_ui img[src="/flags.jsp?c=a1"] {
-  margin-top: -2px !important;
-  margin-left: -78px;
-  margin-bottom: 0;
-  width: 32px !important;
-  height: 32px !important;
-  border: none !important;
-  box-shadow: none !important;
+.langselect:active .langflag, .optbox:checked + .langflag {
+  transform: scale(.8);
   opacity: 1;
 }
 
-.langselect input:hover + img {
-  box-shadow: none !important;
-  transition: none !important;
-  filter: drop-shadow(0 0 2px var(--hover));
-}
-
-@supports not (-moz-appearance: none) {
-  .langselect img {
-    margin-left: -19px !important;
-    margin-top: -31px !important;
-  }
-  .langselect input[name="lang"]:checked + img, .langselect input[name="lang"]:checked + #config_ui img[src="/flags.jsp?c=a1"] {
-    margin-left: -15px !important;
-    margin-top: -27px !important;
-  }
-}
-
-/* end large flags */
-/* end flag as radio icons */
-
-.ui_lang { /* lang text label */
+.ui_lang {
   margin: 10px -4px 0 !important;
   padding: 3px 2px 4px;
   width: 124px;
@@ -3874,7 +3830,7 @@ h3#langheading {
   margin-bottom: 0;
 }
 
-div#langsettings {
+#langsettings {
   margin-top: -1px;
   margin-bottom: -12px;
   padding: 8px 7px 12px;
@@ -4529,10 +4485,26 @@ form > table {
   font-size: 9pt;
 }
 
+.inbound, .outbound {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+  background-size: 16px !important;
+}
+
+.inbound {
+  background: var(--in) no-repeat center center;
+}
+
+.outbound {
+  background: var(--out) no-repeat center center;
+}
+
 /* configtunnels */
 
-#tunnelconfig th a:hover {
-  color: var(--ink) !important;
+#tunnelconfig th a {
+  pointer-events: none;
 }
 
 #tunnelconfig td:first-child {
@@ -4545,6 +4517,69 @@ form > table {
 
 .formaction#tunnelconfigsave {
   margin-top: -32px !important;
+}
+
+#tunnelconfig th {
+  background: #000;
+}
+
+#tunnelconfig th[colspan="3"] > font::before {
+  display: inline-block;
+  width: 20px; height: 16px;
+  vertical-align: middle;
+  background: var(--infowarn) no-repeat left center / 16px;
+  opacity: .7;
+  content: "";
+}
+
+#tunnelconfig .inbound, #tunnelconfig .outbound {
+  padding-left: 34px;
+  width: auto;
+  height: auto;
+  display: table-cell;
+  background: var(--in) no-repeat 10px center / 14px, var(--th);
+}
+
+#tunnelconfig .outbound {
+  background: var(--out) no-repeat 10px center / 14px, var(--th);
+}
+
+#tunnelconfig th {
+  padding: 10px 8px;
+  background: var(--th);
+}
+
+#tunnelconfig th:not(.th_title)[colspan="4"] {
+  padding: 10px 10px 10px 34px;
+  text-transform: none;
+  letter-spacing: 0;
+  word-spacing: 0;
+  text-shadow: var(--textshadow);
+  background: var(--infowarn) no-repeat 10px center / 20px, var(--th);
+}
+
+#tunnelconfig th:not([colspan="4"]):first-child, #tunnelconfig th:not([colspan="4"]):last-child {
+  width: 30%;
+}
+
+#tunnelconfig th a {
+  pointer-events: none;
+}
+
+#tunnelconfig td:first-child {
+  white-space: nowrap;
+  text-align: right;
+  font-weight: 700;
+}
+
+#config_tunnels select {
+  width: calc(100% - 10px);
+  text-align: center;
+}
+
+#config_tunnels select[disabled] {
+  opacity: .7;
+  pointer-events: none;
 }
 
 /* end /configtunnels */
@@ -7439,7 +7474,7 @@ p.sybil_info + a[name] + .sybil_routerinfo, p.hashdist + a[name] + .sybil_router
 
 #netconfig th, #externali2cp th, #plugininstall th, .configtable th, th.th_title {
   text-align: left;
-  padding: 5px 10px !important;
+  padding: 5px 10px;
   text-transform: uppercase;
   font-size: 10pt;
   letter-spacing: .08em;
@@ -8234,18 +8269,22 @@ a[href^="https://gwhois"]:focus::after {
   display: inline-block;
 }
 
-.right {
-  margin: 0 1px;
-  width: 40%;
-  display: inline-block;
-  text-align: right !important;
+.left {
+  text-align: left;
 }
 
-.left {
+.right {
+  text-align: right;
+}
+
+.center {
+  text-align: center;
+}
+
+span.left, span.right {
   margin: 0 1px;
   width: 40%;
   display: inline-block;
-  text-align: left !important;
 }
 
 .peeripv6:empty {
@@ -11833,41 +11872,9 @@ to {
   vertical-align: text-bottom !important;
 }
 
-#tunnels img[src$="bound.png"], #peers img[src$="bound.png"], #tunnelconfig img[src$="bound.svg"] {
+#tunnels img[src$="bound.png"], #peers img[src$="bound.png"] {
   opacity: 0 !important;
   background: none !important;
-}
-
-.inbound, .outbound {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  background-size: 16px !important;
-}
-
-.inbound {
-  background: var(--in) no-repeat center center;
-}
-
-.outbound {
-  background: var(--out) no-repeat center center;
-}
-
-#tunnelconfig th {
-  background: #000;
-}
-
-#tunnelconfig th:nth-child(n+2) {
-  padding-left: 18px !important;
-  background: #000 var(--in);
-  background-repeat: no-repeat !important;
-  background-position: 20px center !important;
-  background-size: 14px !important;
-}
-
-#tunnelconfig th:not([colspan="3"]):last-child {
-  background: #000 var(--out);
 }
 
 .inbound.small, .outbound.small {
@@ -12884,24 +12891,6 @@ iframe {
   .ui_lang {
     width: 138px;
   }
-  .themechoice .optbox, .langselect .optbox {
-    min-width: 138px !important;
-    outline: 1px dotted #f00;
-    opacity: 0;
-  }
-  .themechoice .optbox {
-    margin-left: -42px !important;
-  }
-  .langselect .optbox {
-    margin: -7px 0 -34px -2px;
-    min-height: 64px;
-  }
-  .langselect img {
-    margin-left: -80px !important;
-  }
-  .langselect input[name="lang"]:checked + img {
-    margin-left: -78px !important;
-  }
   #banlist {
     padding: 3px !important;
   }
@@ -12969,11 +12958,11 @@ iframe {
 
 @supports not (-moz-appearance: none) {
   @media screen and (min-width: 1500px) {
-    .langselect img, .langselect input[name="lang"]:checked + img {
+    .langselect img, .langselect .optbox:checked + img {
       margin-top: -6px !important;
       margin-left: -82px;
     }
-    .langselect input[name="lang"]:checked + img {
+    .langselect .optbox:checked + img {
       margin-top: -2px !important;
       margin-left: -76px !important;
     }

@@ -331,6 +331,10 @@ h4.sb_info + hr + form {
   background-color: transparent !important;
 }
 
+#sidebar td:first-child, #sb_localtunnels td:nth-child(2) {text-align: left}
+#sidebar td:last-child {text-align: right}
+#sidebar #sb_internals td, #sidebar #sb_advanced td, #sidebar #sb_services td {text-align: center}
+
 #sb_localtunnels td {
   vertical-align: middle;
   line-height: 1;
@@ -543,7 +547,7 @@ a:active #sb_bandwidthgraph {
 }
 
 #sb_graphcontainer {
-  margin: -6px -5px -7px;
+  margin: -6px -5px -10px;
   height: 38px;
   display: inline-block;
   overflow: hidden;
@@ -736,6 +740,7 @@ a:active #sb_bandwidthgraph {
 /* end status bars */
 
 #sb_warning {
+  margin-bottom: 8px !important;
   border-bottom: 1px solid #afafcf;
 }
 
@@ -2890,7 +2895,7 @@ th {
   border-bottom: 1px solid var(--border_inner) !important;
   border-top: 1px solid var(--border_inner) !important;
   vertical-align: middle;
-  background: linear-gradient(180deg,#fcfcff 51%, #fafaff 51%, #f6f6ff 100%) !important;
+  background: linear-gradient(180deg,#fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
 }
 
 .main[id^="config_"] th {
@@ -5429,63 +5434,62 @@ p#helptranslate {
   opacity: 0;
 }
 
-.langselect:hover > input + img {
+.langselect:hover .langflag {
   transform: scale(1.1);
 }
 
 .langselect img[src^="/flags"] {
   z-index: 3;
   position: relative;
-  opacity: 1;
 }
 
 .langselect input, .themechoice input {
   cursor: pointer;
 }
 
-.langselect input[name="lang"]:checked + img {
+.langselect .optbox:checked + img {
   transform: scale(1.1);
   filter: drop-shadow(0 0 1px rgba(256, 100, 0, .1));
 }
 
-.langselect:hover > input[name="lang"] + img + .ui_lang {
+.langselect:hover > input[name="lang"] ~ .ui_lang {
   color: #f60;
   border-top: 1px solid #f60;
   background: linear-gradient(180deg,#fff 50%, #ffe8bf 50%, #efd9b3 100%) !important;
 }
 
-.langselect:active > input[name="lang"] + img + .ui_lang {
+.langselect:active > input[name="lang"] ~ .ui_lang {
   color: #fff;
   background: #f60 !important;
 }
 
-.langselect input[name="lang"]:checked + img + .ui_lang {
+.langselect .optbox:checked ~ .ui_lang {
   z-index: 2;
   font-weight: 700;
   color: #338;
   background: #e2e2ff !important;
 }
 
-.langselect input[name="lang"]:focus + img + .ui_lang {
+.langselect .optbox:focus ~ .ui_lang {
   color: #f60 !important;
   box-shadow: var(--highlight);
   background: linear-gradient(90deg, #eef, #fff, #eef) !important;
 }
 
-.langselect input[name="lang"]:active + img + .ui_lang {
+.langselect .optbox:active ~ .ui_lang {
   color: #fff !important;
   box-shadow: var(--highlight), inset 3px 3px 3px rgba(0,0,0,.2);
   background: #f60 !important;
 }
 
-.langselect input[name="lang"]:checked:active + img + .ui_lang {
+.langselect .optbox:checked:active ~ .ui_lang {
   color: #f60 !important;
   box-shadow: var(--highlight);
   background: linear-gradient(90deg, #eef, #fff, #eef) !important;
 }
 
 .langselect + br {
-  display: none !important;
+  display: none;
 }
 
 .langselect br {
@@ -5494,31 +5498,51 @@ p#helptranslate {
 
 /* large flags */
 
-.langselect input[name="lang"] {
+.langflag {
+  margin: 5px 0 8px;
+  width: 40px;
+  height: 30px;
+  display: inline-block;
+  position: relative;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px #bbc;
+  opacity: .85;
+}
+
+.langflag::before {
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  border-radius: 1px;
+  background: linear-gradient(180deg, rgba(255,255,255,.5), rgba(0,0,0,0) 75%);
+  content: "";
+}
+
+.langselect .optbox {
   display: none;
 }
 
 .langselect img {
-/*  margin-top: -60px !important;
-  margin-bottom: 34px !important;*/
   width: 40px;
-  height: 40px;
-  opacity: .9 !important;
-  filter: drop-shadow(0 0 1px #ddf);
+  height: 30px;
+  border-radius: 1px;
 }
 
-.langselect input[name="lang"]:checked + img,
-.langselect input[name="lang"]:checked + #config_ui img[src="/flags.jsp?c=a1"] {
+.langselect .optbox:checked + .langflag {
   transform: scale(.8);
-  opacity: 1 !important;
+  opacity: 1;
 }
 
-.langselect input:hover + img {
-  border: none !important;
-  filter: drop-shadow(0 0 1px #f60);
+.langselect input:hover + .langflag {
+  box-shadow: 0 0 0 1px #f60;
+  opacity: 1;
 }
 
-.langselect input[name="lang"]:checked + img + .ui_lang {
+.langselect .optbox:checked ~ .ui_lang {
   font-size: 95% !important;
 }
 
@@ -5720,18 +5744,22 @@ h3#udpcon {
   content: "";
 }
 
+.left {
+  text-align: left;
+}
+
 .right {
-  margin: 0 1px;
-  width: 40%;
-  display: inline-block;
   text-align: right;
 }
 
-.left {
-  text-align: left;
+.center {
+  text-align: center;
+}
+
+span.left, span.right {
   margin: 0 1px;
+  width: 40%;
   display: inline-block;
-  width: 40%
 }
 
 .peersort {
@@ -7630,6 +7658,7 @@ table#schedjobs {
 
 #tunnels th, #peers th {
   text-align: center;
+  font-size: 90% !important;
 }
 
 /* /profiles */
@@ -10593,17 +10622,37 @@ th[aria-sort] {
   opacity: 0;
 }
 
-#config_tunnels img[src$="bound.svg"] {
-  margin: -2px 0;
-  width: 18px;
+#tunnelconfig .inbound, #tunnelconfig .outbound {
+  padding-left: 30px;
+  width: auto;
   height: auto;
+  display: table-cell;
+  background: var(--in) no-repeat 10px center / 14px, var(--th);
+}
+
+#tunnelconfig .outbound {
+  background: var(--out) no-repeat 10px center / 14px, var(--th);
+}
+
+#tunnelconfig th:not([colspan="4"]):first-child, #tunnelconfig th:not([colspan="4"]):last-child {
+  width: 30%
+}
+
+#tunnelconfig td:first-child {
+  text-align: right;
+  white-space: nowrap;
+  font-weight: 700;
+}
+
+#tunnelconfig select {
+  width: calc(100% - 10px);
 }
 
 /* link icons for new user guide */
 
 .sitelink, .chatlink, .consolelink {
-  border-radius: 1px;
   white-space: nowrap;
+  border-radius: 1px;
 }
 
 .sitelink {

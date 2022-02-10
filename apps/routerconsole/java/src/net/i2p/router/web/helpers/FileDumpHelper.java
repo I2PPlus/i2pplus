@@ -112,14 +112,14 @@ public class FileDumpHelper extends HelperBase {
 
     private static void dumpFile(StringBuilder buf, File f, boolean linkrev) {
         buf.append("<tr><td><b title=\"").append(f.getAbsolutePath()).append("\">").append(f.getName()).append("</b></td>" +
-                   "<td align=\"right\">").append(f.length()).append("</td>" +
+                   "<td>").append(f.length()).append("</td>" +
                    "<td title=\"UTC\">");
         long mod = f.lastModified();
         if (mod > 0)
             buf.append((new Date(mod)).toString().replace(" GMT", ""));
         else
             buf.append("<font color=\"red\">Not found</font>");
-        buf.append("</td><td align=\"center\">");
+        buf.append("</td><td>");
         if (mod > 0 && !FileUtil.verifyZip(f))
             buf.append("<font color=\"red\">CORRUPT</font><br>");
         byte[] hash = sha256(f);
@@ -138,7 +138,7 @@ public class FileDumpHelper extends HelperBase {
         Attributes att = attributes(f);
         if (att == null)
             att = new Attributes();
-        buf.append("<td align=\"center\">");
+        buf.append("<td>");
         String iv = getAtt(att, "Implementation-Version");
         if (iv != null)
             buf.append("<b>").append(iv).append("</b>");
@@ -174,7 +174,7 @@ public class FileDumpHelper extends HelperBase {
         s = getAtt(att, "Build-Date");
         if (s != null)
             buf.append(s.replace(" UTC", ""));
-        buf.append("</td><td align=\"center\">");
+        buf.append("</td><td>");
         s = getAtt(att, "Built-By");
         if (s != null)
             buf.append(s);

@@ -41,7 +41,7 @@ public class ConfigKeyringHelper extends HelperBase {
         buf.append("<h3>").append(_t("Remote encrypted destinations")).append("</h3>");
         boolean rv2 = render(buf, false);
         if (rv1 || rv2) {
-            buf.append("\n<table id=\"keyringbuttons\" class=\"configtable\"><tr><td align=\"right\" class=\"optionsave\">" +
+            buf.append("\n<table id=\"keyringbuttons\" class=\"configtable\"><tr><td class=\"optionsave\">" +
                        "<input type=\"reset\" class=\"cancel\" value=\"").append(_t("Cancel")).append("\">" +
                        "<input type=\"submit\" name=\"action\" class=\"delete\" value=\"").append(_t("Delete key")).append("\">" +
                        "</td></tr></table>");
@@ -58,22 +58,22 @@ public class ConfigKeyringHelper extends HelperBase {
     private boolean render(StringBuilder buf, boolean local) {
         boolean rv = false;
         buf.append("\n<table class=\"configtable encDests\">\n<tr>");
-        buf.append("<th align=\"left\">").append(_t("Name"));
-        buf.append("<th align=\"left\">").append(_t("Destination")).append("<th align=\"left\">");
+        buf.append("<th>").append(_t("Name"));
+        buf.append("<th>").append(_t("Destination")).append("<th>");
         if (!local)
             buf.append(_t("Type"));
         buf.append("</th>");
-        buf.append("<th align=\"left\">").append(_t("Encryption Key"));
+        buf.append("<th>").append(_t("Encryption Key"));
         buf.append("</th><th>");
         if (!local)
             buf.append(_t("Lookup Password"));
-        buf.append("</th><th align=\"left\">");
+        buf.append("</th><th>");
         if (!local)
             buf.append(_t("Created"));
-        buf.append("</th><th align=\"left\">");
+        buf.append("</th><th>");
         if (!local)
             buf.append(_t("Expires"));
-        buf.append("</th><th align=\"center\">");
+        buf.append("</th><th>");
         if (!local)
             buf.append(_t("Delete"));
         buf.append("</th>");
@@ -175,8 +175,8 @@ public class ConfigKeyringHelper extends HelperBase {
             }
         }
         if (!rv) {
-//            buf.append("<tr><td align=\"center\" colspan=\"").append(local ? '3' : '8').append("\"><i>")
-            buf.append("<tr><td align=\"center\" colspan=\"8\"><i>")
+//            buf.append("<tr><td colspan=\"").append(local ? '3' : '8').append("\"><i>")
+            buf.append("<tr><td colspan=\"8\"><i>")
                .append(_t("none")).append("</i></td></tr>");
         }
         buf.append("\n</table>\n");

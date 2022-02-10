@@ -2930,7 +2930,9 @@
             <file name="../i2p-${Extended.Version}/apps/susidns/src/lib/jstl.jar" />
             <!-- libjakarta-taglibs-standard-java or glassfish-javaee or libtaglibs-standard -->
             <file name="../i2p-${Extended.Version}/apps/susidns/src/lib/standard.jar" />
+            <!--
             <fileset dir="../i2p-${Extended.Version}/installer/resources/icons/flags" />
+            -->
             <!-- anything added above, add in debian-release-tarball also -->
         </delete>
         <tar longfile="gnu" destfile="../${debian.tarball.name}" compression="bzip2">
@@ -3081,7 +3083,9 @@
             <file name="../i2p-${Extended.Version}/apps/susidns/src/lib/jstl.jar" />
             -->
             <file name="../i2p-${Extended.Version}/apps/susidns/src/lib/standard.jar" />
+            <!--
             <fileset dir="../i2p-${Extended.Version}/installer/resources/icons/flags" />
+            -->
             <!-- anything added above, add in debian-tarball also -->
         </delete>
         <tar longfile="gnu" destfile="../${debian.tarball.name}" compression="bzip2">
@@ -3146,7 +3150,9 @@
             <fileset dir="../i2p-${Extended.Version}/apps/jetty/apache-tomcat-${tomcat.ver}" />
             <file name="../i2p-${Extended.Version}/apps/susidns/src/lib/jstl.jar" />
             <file name="../i2p-${Extended.Version}/apps/susidns/src/lib/standard.jar" />
+            <!--
             <fileset dir="../i2p-${Extended.Version}/installer/resources/icons/flags" />
+            -->
             <!-- anything added above, add in debian-tarball also -->
         </delete>
         <tar longfile="gnu" destfile="../${debian.tarball.name}" compression="bzip2">
