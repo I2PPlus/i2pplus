@@ -87,7 +87,7 @@ ul {margin: 0; padding: 0}
 #sidebar h3:active {box-shadow: var(--highlight), inset 4px 4px 4px rgba(0,0,0,.7)}
 #sidebar h3::after {min-height: 15px; display: inline-block; vertical-align: middle; content: ""}
 #sidebar h3 a, #sidebar h4 a {width: calc(100% - 5px); display: inline-block; white-space: normal}
-#sidebar h3 a {width: 100%; vertical-align: middle; text-shadow: var(--textshadow)}
+#sidebar h3 a {width: 100%; vertical-align: middle; line-height: 1; text-shadow: var(--textshadow)}
 #sidebar h3:hover a {color: var(--hover)}
 #sidebar h3:active {transition: ease box-shadow .01s}
 #sidebar h4 {margin: -6px -9px -8px; padding: 6px 1px; line-height: 1.2; font-size: 8pt; text-decoration: none; color: #2b2; border: 0; border-bottom: none; box-shadow: inset 0 0 0 1px #121, inset 0 0 5px 2px #000; background: linear-gradient(90deg, #001900, #001000 5%, #000 50%, #001000 95%, #001900)}
@@ -1785,6 +1785,7 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 #pluginconfig table td:first-child {padding-right: 5px; width: 1%; max-width: 70px; white-space: nowrap}
 #pluginconfig td:last-child {width: 50%}
 #pluginconfig td:last-child table {margin: 5px 15px 5px 5px; padding: 5px; width: calc(100% - 8px); background: none}
+#pluginconfig td:last-child table td:first-child {text-align: right}
 #pluginconfig td:last-child table tr {background: rgba(0,0,0,.2)}
 #pluginconfig table td:last-child {text-align: left}
 #plugininstall .infohelp {padding: 18px 15px 18px 58px; background: #000 var(--plugin) no-repeat 15px center / 28px}
