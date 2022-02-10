@@ -34,16 +34,16 @@ select {font-weight: 400; font-size: 11pt; min-height: 30px}
 .percentBarText {margin-top: -2px}
 .sb_notice, .sb_notice a {font-size: 10pt; line-height: 1.2}
 #sidebar button.reload, #sidebar button.stop {padding: 3px 8px; min-width: 94px}
-#sidebar table td {padding: 2px 1px}
 #sidebar h3, #sidebar h4, #sidebar p, #sidebar h3 a, #sidebar a {text-shadow: none}
 #sidebar h3 a {font-size: 14pt; font-weight: 400; text-transform: uppercase; letter-spacing: .15em}
 #sidebar h4, #sidebar h4 a {font-size: 11pt; font-weight: 400}
 #sidebar a, #sidebar b {font-size: 10pt; font-weight: 400}
 #updateAvailable {margin-top: 5px}
-#sidebar table {width: 262px}
 #sb_warning {padding-top: 10px; padding-bottom: 10px}
+#sidebar table {padding: 0; width: 255px}
+#sidebar table td {padding: 1px}
 #sb_newsheadings td, #sb_newsheadings tr:hover td {background-position: 4px center; padding-left: 24px}
-#sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after, #sb_internals a, #sb_services a, #sb_advanced a {padding: 1px 3px}
+#sb_internals a, #sb_services a, #sb_advanced a {padding: 1px 3px}
 #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {display: inline-block;  min-height: 14px; content: ""}
 #sb_newsheadings a {font-size: 9.5pt}
 #sidebar button {font-size: 11pt; padding: 5px 8px}
