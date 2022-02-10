@@ -130,7 +130,7 @@ p:empty + .sb_notice {margin-top: 7px}
 #clock::after {margin-left: 3px; display: inline-block; vertical-align: middle; font-size: 50%; content: "UTC"}
 #sidebar td:first-child, #sb_localtunnels td:nth-child(2) {text-align: left}
 #sidebar td:last-child {text-align: right}
-#sidebar #sb_internals td, #sidebar #sb_advanced td, #sidebar #sb_services td {text-align: center}
+#sidebar #sb_internals td, #sidebar #sb_advanced td, #sidebar #sb_services td, #sidebar #sb_help td {text-align: center}
 
 /* sidebar news */
 #sidebar #sb_newsheadings {margin: -3px 0 -7px 0; padding: 0; text-align: right; font-size: 8pt}
