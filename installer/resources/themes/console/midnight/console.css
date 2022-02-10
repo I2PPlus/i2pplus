@@ -3805,12 +3805,16 @@ td#themeselect {
   opacity: .75;
   text-align: center;
   display: inline-block;
+  position: relative;
 }
 
 .langselect:active .langflag, .optbox:checked + .langflag {
   transform: scale(.8);
   opacity: 1;
 }
+
+.langflag::before {position: absolute; top: 0; bottom: 0; left: 0; right: 0; z-index: 10; border-radius: 3px; box-shadow: 0 0 0 1px #000, inset 0 0 0 1px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.4); background: linear-gradient(180deg, rgba(255,255,255,.5), rgba(0,0,0,0) 75%); content: ""; display: inline-block}
+.langselect:hover .optbox:not(:checked) ~ .langflag::before {box-shadow: 0 0 0 1px #000, inset 0 0 0 1px rgba(106,22,152,.5), inset 0 0 0 1px rgba(255,255,255,.5)}
 
 .ui_lang {
   margin: 10px -4px 0 !important;
