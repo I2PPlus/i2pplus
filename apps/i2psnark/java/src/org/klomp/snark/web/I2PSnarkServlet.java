@@ -3536,7 +3536,7 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final String HEADER_D = "snark_big.css?" + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\" >";
     private static final String HEADER_I = "images/images.css?" + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\" >";
     private static final String HEADER_Z = "override.css\" rel=\"stylesheet\" type=\"text/css\" >";
-    private static final String TABLE_HEADER = "<table border=\"0\" id=\"snarkTorrents\" width=\"100%\" >\n" + "<thead id=\"snarkHead\">\n";
+    private static final String TABLE_HEADER = "<table border=\"0\" id=\"torrents\" width=\"100%\" >\n" + "<thead id=\"snarkHead\">\n";
     private static final String FOOTER = "</div>\n</center>\n<span id=\"endOfPage\" data-iframe-height></span>\n" +
                                          "<script type=\"text/javascript\" src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" +
                                          CoreVersion.VERSION + "\" id=\"iframeResizer\"></script>\n" +
@@ -4168,7 +4168,7 @@ public class I2PSnarkServlet extends BasicServlet {
             }
             if (er || ec) {
                 CommentSet comments = snark.getComments();
-                buf.append("<div class=\"mainsection\" id=\"snarkCommentSection\">")
+                buf.append("<div class=\"mainsection\" id=\"commentSection\">")
                    .append("<input class=\"toggle_input\" id=\"toggle_comments\" type=\"checkbox\"");
                 if (comments != null && !comments.isEmpty())
                     buf.append(" checked");
@@ -4537,7 +4537,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         CommentSet comments = snark.getComments();
         if (er || ec) {
-            buf.append("<div class=\"mainsection\" id=\"snarkCommentSection\">\n");
+            buf.append("<div class=\"mainsection\" id=\"commentSection\">\n");
                 buf.append("<input class=\"toggle_input\" id=\"toggle_comments\" type=\"checkbox\"");
                 if (comments != null && !comments.isEmpty())
                     buf.append(" checked");
