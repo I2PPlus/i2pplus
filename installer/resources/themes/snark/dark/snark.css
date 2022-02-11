@@ -93,20 +93,6 @@ th#torrentSort {text-align: right}
 #torrents .noneLoaded td, #torrents .noneLoaded:hover td {padding: 10px; text-align: center; background: transparent}
 .noneLoaded i {padding: 15px 10px; display: inline-block; font-size: 115%}
 
-/* media */
-.thumb {max-height: 32px; box-shadow: 0 0 0 1px #030; background: #000}
-.thumb:hover, tr:hover .thumb {box-shadow: 0 0 0 1px #930; filter: none}
-audio, video {padding: 1px; width: 240px; border: 1px solid #000; box-shadow: inset 0 0 0 1px #131; background: #000}
-audio {height: 28px}
-.audioPreview {padding: 0 4px; white-space: nowrap; border-radius: 3px; background: #001800}
-audio:hover, video:hover, audio:focus, video:focus {box-shadow: inset 0 0 0 1px #f60}
-video:fullscreen, video:fullscreen:hover, video:fullscreen:focus {padding: none; box-shadow: none}
-video::-webkit-media-controls-timeline {padding: 0 16px 16px}
-audio::-webkit-media-controls-enclosure {border-radius: 0; filter: invert(1)}
-::-webkit-media-controls-panel, ::-internal-media-controls-button-panel {position: relative; z-index: 10}
-video::-webkit-media-controls-panel {display: none}
-video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-panel {display: flex}
-
 .infohash {font-family: var(--monospaced); color: #cc0; border-radius: 2px; user-select: all}
 .infohash::selection {color: #000; background: #0f0}
 .torrentInfo .infohash::selection {background: #cc0; color: #000}
@@ -119,37 +105,6 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
 #torrents .infohash {margin-right: 3px; padding: 1px 5px 1px 17px; color: #000; background: #cc0 var(--hash2) no-repeat 3px center / 12px}
 #torrents .infohash, .torrentInfo .infohash {display: inline-block; max-width: 120px; white-space: nowrap; vertical-align: middle; overflow: hidden; text-overflow: ellipsis; opacity: .8}
 #torrents .infohash::selection {color: #ff0; background: #000}
-
-/* download bars */
-tr:hover .percentBarText {opacity: 1}
-.dirInfo .fileStatus img {margin: 0}
-.percentBarOuter {margin: 1px auto; border: 1px solid #020; border-radius: 1px; box-shadow: 0 0 0 1px rgba(0,0,0,.8), var(--highlight), inset 0 2px 2px 2px rgba(0,0,0,.5); background: repeating-linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,0) 7px, rgba(0,48,0,.6) 7px, rgba(0,48,0,.6) 8px, rgba(0,0,0,0) 8px) #010; background-size: 400%; opacity: 1}
-.peerinfo .percentBarOuter, .peerinfo .percentBarInner {height: 10px}
-.peerinfo.inactive .percentBarOuter {opacity: .8}
-.peerinfo.active .percentBarOuter {background: repeating-linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,0) 7px, rgba(0,32,0,.6) 7px, rgba(0,32,0,.6) 8px, rgba(0,0,0,0) 8px), linear-gradient(90deg,#000400,#010)}
-.active.downloading .percentBarOuter, .peerinfo.active .percentBarOuter, .dirInfo .volatile .percentBarOuter {border: 1px solid #030; animation: ease downloading .3s forwards}
-.active.downloading:not(.peerinfo) .percentBarOuter {background: repeating-linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,0) 7px, rgba(0,16,0,.6) 7px, rgba(0,16,0,.6) 8px, rgba(0,0,0,0) 8px), linear-gradient(to left, rgba(0,255,0,.2), rgba(255,255,0,.2), rgba(255,0,0,.2)) #010}
-.percentBarInner, .uploaded {height: 100%; border-right: 1px solid #020; border-radius: 1px; box-shadow: var(--highlight); background: linear-gradient(180deg,rgba(148, 148, 148, .2), rgba(47, 47, 47, .2) 70%, rgba(27, 27, 27, .2), rgba(17, 17, 17, .4) 100%), rgba(0,64,0,.4)}
-.uploaded {padding: 2px 2px 0; min-width: 68px; display: inline-block; position: relative; text-align: center; line-height: 1.3; border: 1px solid #141; border-left-width: 5px; box-shadow: var(--highlight), inset 0 3px 3px rgba(0,0,0,.6); background: repeating-linear-gradient(90deg,#000,#000 10%,#020 10%,#020 20%)}
-.active.seeding .uploaded {background: repeating-linear-gradient(90deg,#000,#000 5%,#141 5%,#141 10%); background-size: 200%; animation: uploading .5s linear 4s 1 reverse}
-.txBarInner {height: calc(100% - 2px); display: inline-block; position: absolute; top: 1px; left: 1px; box-shadow: var(--outline), inset 0 3px 3px rgba(0,0,0,.6); background: linear-gradient(0deg, rgba(80,192,0,.25), rgba(48,154,0,.3))}
-.txBarInner[style="width: calc(100% - 2px)"] {box-shadow: var(--outline), inset 0 3px 5px 2px rgba(255,255,255,.1)}
-.active.seeding .txBarInner {background: linear-gradient(0deg, rgba(170,170,0,.3), rgba(255,160,0,.3))}
-.txBarText {position: relative; z-index: 5; font-weight: 700; text-shadow: 0 1px 1px #000}
-.active.downloading .percentBarInner {border-right: 1px solid #030; background: linear-gradient(180deg,rgba(148, 148, 148, .4), rgba(47, 47, 47, .2) 50%, rgba(27, 27, 27, .4) 50%, rgba(17, 17, 17, .3) 100%) center center, repeating-linear-gradient(135deg, rgba(255,128,0,.3), rgba(0,16,0,.8) 1px, rgba(0,16,0,.8) 4px, rgba(255,128,0,.3) 5px, rgba(0,64,0,.3) 5px, rgba(0,64,0,.3) 10px) left center; background-size: 400%; animation: progress 1s 3s linear forwards}
-.peerinfo.inactive .percentBarInner {background: #020}
-.peerinfo.active .percentBarInner {background: repeating-linear-gradient(135deg, rgba(0,16,0,.8) 1px, rgba(0,16,0,.8) 5px, rgba(0,64,0,.8) 6px, rgba(0,64,0,.8) 11px)}
-.peerSeed img {font-size: 0; opacity: .7; transform: scale(1)}
-.active .peerSeed img {opacity: 1; animation: scale .2s linear 3s 2 forwards}
-.peerinfo .RateDown .left, .peerinfo .RateDown .right, .peerinfo .RateUp .left, .peerinfo .RateUp .right {opacity: .5; text-shadow: 0 0 1px #000}
-.peerinfo .RateDown.ten .left, .peerinfo .RateDown.ten .right, .peerinfo .RateUp.ten .left, .peerinfo .RateUp.ten .right {opacity: .75}
-.RateDown.hundred .left, .RateDown.hundred .right, .RateUp.hundred .left, .RateUp.hundred .right {opacity: 1}
-.percentBarText, .percentBarOuter {width: 110px; display: inline-block; vertical-align: middle; text-align: center}
-.dirInfo .percentBarOuter {display: inline-block}
-.dirInfo .percentBarText, .dirInfo .percentBarOuter, .peerinfo .percentBarText, .peerinfo .percentBarOuter {width: 84px}
-.percentBarText {height: 1em; line-height: 1; text-align: center; font-weight: 700; margin: auto; padding: 1px 4px 1px 2px; white-space: nowrap; display: block; color: #dfd137; opacity: 0; text-shadow: 0 0 1px rgba(0,0,0,.8); transition: ease opacity .15s}
-.percentBarComplete {padding: 2px 0 3px; width: 84px; max-width: 84px; display: inline-block; line-height: 1.3; vertical-align: middle; text-align: center; text-shadow: 0 1px 1px #000; border-radius: 15px; box-shadow: inset 0 0 0 1px rgba(0,0,0,.7), inset 0 0 2px 1px rgba(0,48,0,.6); background: var(--badge)}
-.active.seeding .percentBarComplete {box-shadow: inset 0 0 0 1px rgba(0,0,0,.7), inset 0 0 0 2px rgba(16,64,16,.5); background: radial-gradient(at center bottom, rgba(16, 72, 16, .4) 0, rgba(0, 0, 0, 0) 40%), linear-gradient(180deg,#030,#000400); animation: ease-in seeding .5s forwards}
 
 /* peer status */
 .choked {color: #f00000}
@@ -213,6 +168,8 @@ img:hover {border: none}
 input.trackername {width: 100px}
 input.trackerhome, input.trackerannounce {width: 210px}
 
+.iframed .snarknavbar, .iframed .mainsection, .iframed #addSection, .iframed #createSection, .iframed .configsection, .iframed .configsectionpanel {border-left: none; border-right: none; border-radius: 0}
+
 /* pagenav */
 .pagenavcontrols > * {vertical-align: top}
 .pagenavcontrols {padding: 2px 10px; display: inline-block; vertical-align: middle; line-height: 1.2; font-weight: 700}
@@ -226,12 +183,6 @@ input.trackerhome, input.trackerannounce {width: 210px}
 .pagenavcontrols img::before {content: ""; display: inline-block; height: 16px; width: 14px; vertical-align: middle}
 #pagecount {margin: -2px 6px 0; padding: 5px 10px; display: inline-block; vertical-align: middle; color: #494; letter-spacing: .2em; text-shadow: 0 1px 1px #000; border-radius: 3px; box-shadow: inset 0 0 0 1px #010; background: linear-gradient(180deg,#131,#121)}
 .pagenavcontrols:hover #pagecount {color: var(--ink); background: linear-gradient(180deg,#141,#121); mix-blend-mode: normal}
-
-#addSection table[border="0"] {margin-bottom: 10px}
-#createSection table[border="0"] {margin-bottom: 15px}
-#createSection td:first-child, #addSection td:first-child {padding-right: 5px; padding-left: 5px; font-weight: 700; width: 120px}
-#createSection td:nth-child(n+2), #addSection td:nth-child(n+2) {text-align: left}
-#addSection table, #createSection table {background: none}
 
 /* newtorrent tracker selection */
 #trackerselect {margin: 2px 5px 0; width: 100%; width: calc(100% - 170px); min-width: 460px; border: var(--border_soft)}
@@ -250,18 +201,22 @@ input.trackerhome, input.trackerannounce {width: 210px}
 #trackerselect td:last-child {text-align: left}
 #trackerselect input {margin: 3px}
 #trackerselect a {display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
-
-.configsectionpanel td:first-child {padding-right: 10px; padding-left: 5px; font-weight: 700}
-#addtracker td {padding-top: 8px; padding-bottom: 8px; border-top: var(--border); background: var(--th)}
 .snarkNewTorrent td {padding: 2px 3px}
 .snarkNewTorrent td:nth-child(2), .snarkNewTorrent td:nth-child(3) {padding-right: 5px; min-width: 72px; font-weight: 700}
 .snarkNewTorrent td[rowspan="0"]{width: 50%}
 .snarkConfig tr:last-child {border: var(--border)}
 .optbox[name="add_tracker_type"] {cursor: pointer}
 
-.trackerconfig table {border: none}
+#addSection table, #createSection table {background: none}
 #addSection table, #createSection table:not(#trackerselect) {animation: fade-in .2s linear, slide-in .15s ease-out; will-change: transform}
 .iframed #addSection table, .iframed #createSection table:not(#trackerselect) {animation: fade-in .15s linear; will-change: transform}
+#addSection table[border="0"] {margin-bottom: 10px}
+#createSection table[border="0"] {margin-bottom: 15px}
+#createSection td:first-child, #addSection td:first-child {padding-right: 5px; padding-left: 5px; font-weight: 700; width: 120px}
+#createSection td:nth-child(n+2), #addSection td:nth-child(n+2) {text-align: left}
+.configsectionpanel td:first-child {padding-right: 10px; padding-left: 5px; font-weight: 700}
+#addtracker td {padding-top: 8px; padding-bottom: 8px; border-top: var(--border); background: var(--th)}
+.trackerconfig table {border: none}
 .section, .mainsection, #createSection, #addSection, .configsection, .configsectionpanel {background: #000; border: var(--border); text-align: center}
 #createSection, #addSection, .configsection {box-shadow: inset 0 0 5px 2px #000}
 .section, .mainsection {margin: 0; padding: 0; border-bottom: none}
@@ -269,10 +224,6 @@ input.trackerhome, input.trackerannounce {width: 210px}
 #createSection {margin: -1px 0 10px; padding: 0 10px}
 #addSection {margin: -1px 0 0; padding: 0 10px}
 .snarkAddInfo code {user-select: all}
-.iframed .snarknavbar, .iframed .mainsection, .iframed #addSection, .iframed #createSection, .iframed .configsection, .iframed .configsectionpanel {border-left: none; border-right: none; border-radius: 0}
-.routerdown {padding: 15px; font-size: 120%; text-shadow: 0 0 1px #000; border-bottom: var(--border); background: repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px), repeating-linear-gradient(180deg,rgba(0,0,0,.8) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px), url(/themes/console/dark/images/camotile2.png) repeat top left}
-.routerdown span {display: none}
-.routerdown::after {width: 40px; height: 40px; display: inline-block; background: var(--offline) no-repeat center center / 40px; content: ""; animation: linear spin 5s reverse infinite}
 
 /* torrents */
 #snarkhead th {background: none}
@@ -281,6 +232,7 @@ input.trackerhome, input.trackerannounce {width: 210px}
 #torrents th:first-child {padding-left: 2px; text-align: left}
 #torrents td {line-height: 1.2; text-align: left; font-size: 8pt}
 #torrents td[colspan="10"] {padding: 2px; color: #cc7}
+#torrents td:empty, #torrents th:empty, #torrents tfoot tr:first-child th:empty {padding-right: 0; padding-left: 0; width: 0; min-width: 0}
 #torrents tbody tr:last-child td {border-bottom: var(--border)}
 #torrents td.torrentDetails img:not([src$="rateme.svg"]) {margin-top: -2px; margin-bottom: -2px; padding: 4px; width: 19px; height: 19px}
 #torrents tfoot th {font-weight: 400}
@@ -331,8 +283,12 @@ tr:not(:hover) .torrentName a, tr:not(:hover) .snarkFileName a {-webkit-text-str
 .torrentUploaded .left {min-width: 12px}
 .RateDown .left, .RateUp .left, .torrentUploaded .left, .RateDown .right, .RateUp .right, .torrentUploaded .right {min-width: 22px; display: inline-block; text-align: left}
 .RateDown .right, .RateUp .right, .torrentUploaded .right {min-width: 40px; text-align: right}
+tfoot .RateDown:not(:empty)::before, tfoot .torrentDownloaded:not(:empty)::before, tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {margin-top: -3px; margin-right: -1px; display: inline-block; vertical-align: middle; line-height: 0; font-size: 80%; font-style: normal; text-shadow: 0 0 1px #010}
+tfoot .RateDown:not(:empty)::before, tfoot .torrentDownloaded:not(:empty)::before {content: "\27A4"; transform: rotate(90deg) scaleX(0.6)}
+tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {content: "\27A4"; transform: rotate(-90deg) scaleX(0.6)}
 .torrentDownloaded {text-align: center; white-space: nowrap; font-weight: 700}
 .torrentUploaded {padding-right: 6px}
+.torrentUploaded .left {min-width: 12px}
 .snarkFileName {padding: 4px 5px; word-break: break-all; text-align: left}
 .torrentETA {padding-right: 2px; font-style: italic; color: #dd7}
 .downloading.active td#torrents .torrentAction {background: linear-gradient(to left,#3c3,#3c3 2px, transparent 2px)}
@@ -344,19 +300,76 @@ td.graphicStatus img {margin-top: -3px; margin-bottom: -3px; width: auto; height
 .tooltipped:hover::before, .tooltipped:active::before {margin-left: -10px; top: calc(50% - 6px); left: 30px; border-width: 6px; border-style: solid; border-color: transparent #000 transparent transparent; content: ""; animation: fade-in .1s ease 3s reverse both}
 .tooltipped:hover::after, .tooltipped:active::after {padding: 3px 6px; top: -3px; left: 32px; border: 1px solid #000; border-radius: 3px; box-shadow: var(--highlight); background: #000; content: attr(data-tooltip); animation: fade-in .1s ease 3s reverse both}
 .tooltipped:hover::before, .tooltipped:active::before, .tooltipped:hover::after, .tooltipped:active::after {position: absolute; display: inline-block}
+.inactivity {margin-left: 15px; height: 4px; min-width: 5px; max-width: 400px; display: inline-block; border-radius: 3px; box-shadow: 0 0 0 1px #010; background: repeating-linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,0) 15px, rgba(0,0,0,.6) 15px, rgba(0,0,0,.6) 16px, rgba(0,0,0,0) 16px), linear-gradient(180deg,rgba(255,255,255,.3) 50%, rgba(0,0,0,.3) 50%), linear-gradient(90deg,#770 60px,#900)}
+.inactivity[style="width: 0px;"], .inactivity[style="width: 1px;"], .inactivity[style="width: 2px;"], .inactivity[style="width: 3px;"], .inactivity[style="width: 4px;"], .inactivity[style="width: 5px;"] {display: none}
+.choked .left {display: none}
+#totals {margin-left: 3px; display: inline-block; white-space: nowrap; font-weight: 700}
+.snarkFiletype {position: relative; vertical-align: middle}
+.snarkCommented {position: absolute; display: inline-block; z-index: 20; top: -2px; right: 3px; line-height: 0; font-size: 0}
+.snarkCommented img {padding: 0; width: auto; height: 11px; position: absolute; top: -2px; right: -2px; filter: drop-shadow(0 0 1px #101) drop-shadow(0 0 2px rgba(128,128,0,.3))}
+
+/* table sort indicators */
+.sortIcon {position: relative}
+.sortIcon:hover .ascending, .sortIcon:hover .descending {transform: rotate(180deg); transition: linear transform .1s}
+.ascending, .descending {position: absolute; top: -2px; right: -8px; display: inline-block; border-width: 4px; border-style: solid; border-color: transparent transparent #252 transparent}
+.descending {top: 2px; border-color: #252 transparent transparent transparent}
+.sortIcon:hover .ascending {top: 2px; border-color: transparent transparent #f60 transparent}
+.sortIcon:hover .descending {top: -2px; border-color: #f60 transparent transparent transparent}
+#torrentSort .ascending, th#torrentSort .descending {right: -11px}
+
+/* action buttons */
+#torrents .torrentAction {padding: 1px; width: 1%; white-space: nowrap; text-align: center}
+#torrents .torrentAction input[type=submit] {margin: 1px 2px; padding: 11px; min-width: 0; min-height: 0; float: none; vertical-align: middle; font-size: 0; border: 1px solid #262; border-radius: 1px; box-shadow: var(--highlight); background-position: center center; opacity: .75; cursor: pointer; will-change: transform}
+#torrents .actionStart {background: var(--start) no-repeat center center / 14px, var(--btnAction), var(--start_hover) no-repeat center center / 14px}
+#torrents .actionStart:hover, #torrents .actionStart:focus {background: var(--start_hover) no-repeat center center / 14px, var(--btnAction_hover)}
+#torrents .actionStop {background: var(--stop) no-repeat center center / 14px, var(--btnAction), var(--stop_hover) no-repeat center center / 14px}
+#torrents .actionStop:hover, #torrents .actionStop:focus {background: var(--stop_hover) no-repeat center center / 14px, var(--btnAction_hover)}
+#torrents .actionRemove {background: var(--remove) no-repeat center center / 14px, var(--btnAction), var(--remove_hover) no-repeat center center / 14px}
+#torrents .actionRemove:hover, #torrents .actionRemove:focus {background: var(--remove_hover) no-repeat center center / 14px, var(--btnAction_hover)}
+#torrents .actionDelete {background: var(--delete) no-repeat center center / 14px, var(--btnAction), var(--delete_hover) no-repeat center center / 14px}
+#torrents .actionDelete:hover, #torrents .actionDelete:focus {background: var(--delete_hover) no-repeat center center / 14px, var(--btnAction_hover)}
+#torrents #actionStopAll, #torrents #actionStartAll {margin-top: -1px; padding: 11px 19px}
+#torrents #actionStopAll {background: var(--stopall) no-repeat center center / auto 14px, var(--btnAction), var(--stopall_hover) no-repeat center center / auto 14px}
+#torrents #actionStartAll {background: var(--startall) no-repeat center center / auto 14px, var(--btnAction), var(--startall_hover) no-repeat center center / auto 14px}
+#torrents #actionStartAll:hover, #torrents .actionStartAll:focus {background: var(--startall_hover) no-repeat center center / auto 14px, var(--btnAction_hover)}
+#torrents #actionStopAll:hover, #torrents .actionStopAll:focus {background: var(--stopall_hover) no-repeat center center / auto 14px, var(--btnAction_hover)}
+#torrents .torrentAction input:hover, #torrents .torrentAction input:focus {border: 1px solid #f60; opacity: 1; transition: ease box-shadow .1s; background-blend-mode: normal}
+#torrents .torrentAction input:active {box-shadow: var(--highlight), inset 3px 3px 3px #000; transform: scale(0.9); transition: ease transform .05s; filter: none}
+
+/* percent bars */
+tr:hover .percentBarText {opacity: 1}
+.dirInfo .fileStatus img {margin: 0}
+.percentBarOuter {margin: 1px auto; border: 1px solid #020; border-radius: 1px; box-shadow: 0 0 0 1px rgba(0,0,0,.8), var(--highlight), inset 0 2px 2px 2px rgba(0,0,0,.5); background: repeating-linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,0) 7px, rgba(0,48,0,.6) 7px, rgba(0,48,0,.6) 8px, rgba(0,0,0,0) 8px) #010; background-size: 400%; opacity: 1}
+.peerinfo .percentBarOuter, .peerinfo .percentBarInner {height: 10px}
+.peerinfo.inactive .percentBarOuter {opacity: .8}
+.peerinfo.active .percentBarOuter {background: repeating-linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,0) 7px, rgba(0,32,0,.6) 7px, rgba(0,32,0,.6) 8px, rgba(0,0,0,0) 8px), linear-gradient(90deg,#000400,#010)}
+.active.downloading .percentBarOuter, .peerinfo.active .percentBarOuter, .dirInfo .volatile .percentBarOuter {border: 1px solid #030; animation: ease downloading .3s forwards}
+.active.downloading:not(.peerinfo) .percentBarOuter {background: repeating-linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,0) 7px, rgba(0,16,0,.6) 7px, rgba(0,16,0,.6) 8px, rgba(0,0,0,0) 8px), linear-gradient(to left, rgba(0,255,0,.2), rgba(255,255,0,.2), rgba(255,0,0,.2)) #010}
+.percentBarInner, .uploaded {height: 100%; border-right: 1px solid #020; border-radius: 1px; box-shadow: var(--highlight); background: linear-gradient(180deg,rgba(148, 148, 148, .2), rgba(47, 47, 47, .2) 70%, rgba(27, 27, 27, .2), rgba(17, 17, 17, .4) 100%), rgba(0,64,0,.4)}
+.uploaded {padding: 2px 2px 0; min-width: 68px; display: inline-block; position: relative; text-align: center; line-height: 1.3; border: 1px solid #141; border-left-width: 5px; box-shadow: var(--highlight), inset 0 3px 3px rgba(0,0,0,.6); background: repeating-linear-gradient(90deg,#000,#000 10%,#020 10%,#020 20%)}
+.active.seeding .uploaded {background: repeating-linear-gradient(90deg,#000,#000 5%,#141 5%,#141 10%); background-size: 200%; animation: uploading .5s linear 4s 1 reverse}
+.txBarInner {height: calc(100% - 2px); display: inline-block; position: absolute; top: 1px; left: 1px; box-shadow: var(--outline), inset 0 3px 3px rgba(0,0,0,.6); background: linear-gradient(0deg, rgba(80,192,0,.25), rgba(48,154,0,.3))}
+.txBarInner[style="width: calc(100% - 2px)"] {box-shadow: var(--outline), inset 0 3px 5px 2px rgba(255,255,255,.1)}
+.active.seeding .txBarInner {background: linear-gradient(0deg, rgba(170,170,0,.3), rgba(255,160,0,.3))}
+.txBarText {position: relative; z-index: 5; font-weight: 700; text-shadow: 0 1px 1px #000}
+.active.downloading .percentBarInner {border-right: 1px solid #030; background: linear-gradient(180deg,rgba(148, 148, 148, .4), rgba(47, 47, 47, .2) 50%, rgba(27, 27, 27, .4) 50%, rgba(17, 17, 17, .3) 100%) center center, repeating-linear-gradient(135deg, rgba(255,128,0,.3), rgba(0,16,0,.8) 1px, rgba(0,16,0,.8) 4px, rgba(255,128,0,.3) 5px, rgba(0,64,0,.3) 5px, rgba(0,64,0,.3) 10px) left center; background-size: 400%; animation: progress 1s 3s linear forwards}
+.peerinfo.inactive .percentBarInner {background: #020}
+.peerinfo.active .percentBarInner {background: repeating-linear-gradient(135deg, rgba(0,16,0,.8) 1px, rgba(0,16,0,.8) 5px, rgba(0,64,0,.8) 6px, rgba(0,64,0,.8) 11px)}
+.peerSeed img {font-size: 0; opacity: .7; transform: scale(1)}
+.active .peerSeed img {opacity: 1; animation: scale .2s linear 3s 2 forwards}
+.peerinfo .RateDown .left, .peerinfo .RateDown .right, .peerinfo .RateUp .left, .peerinfo .RateUp .right {opacity: .5; text-shadow: 0 0 1px #000}
+.peerinfo .RateDown.ten .left, .peerinfo .RateDown.ten .right, .peerinfo .RateUp.ten .left, .peerinfo .RateUp.ten .right {opacity: .75}
+.RateDown.hundred .left, .RateDown.hundred .right, .RateUp.hundred .left, .RateUp.hundred .right {opacity: 1}
+.percentBarText, .percentBarOuter {width: 110px; display: inline-block; vertical-align: middle; text-align: center}
+.dirInfo .percentBarOuter {display: inline-block}
+.dirInfo .percentBarText, .dirInfo .percentBarOuter, .peerinfo .percentBarText, .peerinfo .percentBarOuter {width: 84px}
+.percentBarText {height: 1em; line-height: 1; text-align: center; font-weight: 700; margin: auto; padding: 1px 4px 1px 2px; white-space: nowrap; display: block; color: #dfd137; opacity: 0; text-shadow: 0 0 1px rgba(0,0,0,.8); transition: ease opacity .15s}
+.percentBarComplete {padding: 2px 0 3px; width: 84px; max-width: 84px; display: inline-block; line-height: 1.3; vertical-align: middle; text-align: center; text-shadow: 0 1px 1px #000; border-radius: 15px; box-shadow: inset 0 0 0 1px rgba(0,0,0,.7), inset 0 0 2px 1px rgba(0,48,0,.6); background: var(--badge)}
+.active.seeding .percentBarComplete {box-shadow: inset 0 0 0 1px rgba(0,0,0,.7), inset 0 0 0 2px rgba(16,64,16,.5); background: radial-gradient(at center bottom, rgba(16, 72, 16, .4) 0, rgba(0, 0, 0, 0) 40%), linear-gradient(180deg,#030,#000400); animation: ease-in seeding .5s forwards}
 .rowOdd:not(.peerinfo) .torrentDownloaded .percentBarText, .rowEven:not(.peerinfo) .torrentDownloaded .percentBarText {padding: 3px 10px; width: auto; min-width: 100px; display: inline-block; position: relative; top: -18px; left: -18px; border-radius: 2px; background: #000; filter: drop-shadow(0 0 1px #151)}
 .rowOdd.inactive:not(.peerinfo) .torrentDownloaded .percentBarText, .rowEven.inactive:not(.peerinfo) .torrentDownloaded .percentBarText {color: #777; filter: drop-shadow(0 0 1px #555)}
 .rowOdd:not(.peerinfo) .torrentDownloaded .percentBarInner, .rowEven:not(.peerinfo) .torrentDownloaded .percentBarInner, .rowOdd:not(.peerinfo) .torrentDownloaded .percentBarOuter, .rowEven:not(.peerinfo) .torrentDownloaded .percentBarOuter {max-height: 15px; max-width: 84px}
 .torrentDownloaded .percentBarText::after {margin-left: -7px; position: absolute; top: 90%; left: 50%; border-width: 7px; border-style: solid; border-color: #000 transparent transparent transparent; content: ""}
-.inactivity {margin-left: 15px; height: 4px; min-width: 5px; max-width: 400px; display: inline-block; border-radius: 3px; box-shadow: 0 0 0 1px #010; background: repeating-linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,0) 15px, rgba(0,0,0,.6) 15px, rgba(0,0,0,.6) 16px, rgba(0,0,0,0) 16px), linear-gradient(180deg,rgba(255,255,255,.3) 50%, rgba(0,0,0,.3) 50%), linear-gradient(90deg,#770 60px,#900)}
-.inactivity[style="width: 0px;"], .inactivity[style="width: 1px;"], .inactivity[style="width: 2px;"], .inactivity[style="width: 3px;"], .inactivity[style="width: 4px;"], .inactivity[style="width: 5px;"] {display: none}
-.RateDown .left, .RateUp .left, .torrentUploaded .left {min-width: 22px; display: inline-block; text-align: left}
-.torrentUploaded .left {min-width: 12px}
-.choked .left {display: none}
-tfoot .RateDown:not(:empty)::before, tfoot .torrentDownloaded:not(:empty)::before, tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {margin-top: -3px; margin-right: -1px; display: inline-block; vertical-align: middle; line-height: 0; font-size: 80%; font-style: normal; text-shadow: 0 0 1px #010}
-tfoot .RateDown:not(:empty)::before, tfoot .torrentDownloaded:not(:empty)::before {content: "\27A4"; transform: rotate(90deg) scaleX(0.6)}
-tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {content: "\27A4"; transform: rotate(-90deg) scaleX(0.6)}
-#totals {margin-left: 3px; display: inline-block; white-space: nowrap; font-weight: 700}
 
 /* peers */
 .peerinfo tt {margin: 0 8px 0 0; padding: 1px 4px; float: left}
@@ -445,28 +458,26 @@ td .commentAuthorName {margin: 0 0 0 4px; padding: 0 4px 0 22px; min-width: 120p
 #metacomment .commentWrapper {margin: 5px 4px; padding: 9px 10px 10px; box-shadow: var(--highlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000800; background: #010}
 
 /* files */
+#snarkFiles table {margin-bottom: -1px}
+.snarkFilename .targetfile, .snarkFilename:hover .tags, .snarkFileName a:empty {display: none}
+.snarkFilename:hover .targetfile {display: inline-block}
+.thumb {max-height: 32px; box-shadow: 0 0 0 1px #030; background: #000}
+.thumb:hover, tr:hover .thumb {box-shadow: 0 0 0 1px #930; filter: none}
+audio, video {padding: 1px; width: 240px; border: 1px solid #000; box-shadow: inset 0 0 0 1px #131; background: #000}
+audio {height: 28px}
+.audioPreview {padding: 0 4px; white-space: nowrap; border-radius: 3px; background: #001800}
+audio:hover, video:hover, audio:focus, video:focus {box-shadow: inset 0 0 0 1px #f60}
+video:fullscreen, video:fullscreen:hover, video:fullscreen:focus {padding: none; box-shadow: none}
+video::-webkit-media-controls-timeline {padding: 0 16px 16px}
+audio::-webkit-media-controls-enclosure {border-radius: 0; filter: invert(1)}
+::-webkit-media-controls-panel, ::-internal-media-controls-button-panel {position: relative; z-index: 10}
+video::-webkit-media-controls-panel {display: none}
+video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-panel {display: flex}
 #mediaContainer {margin-top: -1px}
 #mediaContainer th {padding: 10px 5px 10px 30px; background: url(/i2psnark/.resources/icons/film.png) no-repeat 8px center, linear-gradient(180deg,#000a00 50%,#000 50%)}
 #mediaContainer th.audio {background: url(/i2psnark/.resources/icons/music.png) no-repeat 8px center, linear-gradient(180deg,#000a00 50%,#000 50%)}
 #mediaContainer td {padding: 20px 15px; text-align: center}
 #mediaContainer audio, #mediaContainer video {width: auto; max-width: 100%}
-
-/* miminal tabs */
-#dhtDebugPanel .toggleview:hover {mix-blend-mode: normal}
-#dhtDebugPanel .toggleview:active {border-top: var(--border); margin-top: -1px}
-.toggleview, .configsection .configTitle {min-width: 340px; text-align: center; will-change: transform}
-.toggleview, .configsection .configTitle a {font-size: 0}
-.configTitle a {display: inline-block; width: 100%}
-.tab_label::after {margin: 3px; padding: 3px; width: 18px; height: 18px; display: inline-block; vertical-align: middle; border: 2px solid #000; border-radius: 50%; box-shadow: 0 0 1px 1px rgba(32,0,48,.5); background-size: 16px, 100%; content: ""; mix-blend-mode: luminosity; pointer-events: none; will-change: transform}
-.toggleview:hover .tab_label::after, #tab_config:hover .tab_label::after {mix-blend-mode: normal; filter: drop-shadow(0 0 1px #f30)}
-.toggleview:active .tab_label::after, #tab_config:active .tab_label::after {transform: rotate(90deg) scale(.9); transition: ease transform .01s}
-input:checked + .toggleview:active .tab_label::after {box-shadow: 0 0 0 2px rgb(153,51,0,.7); filter: drop-shadow(0 0 1px #930); transform: rotate(-90deg) scale(.9); transition: linear transform .01s}
-#tab_addtorrent .tab_label::after {background: var(--add) no-repeat scroll center center / 16px, var(--tabIcon)}
-#tab_newtorrent .tab_label::after {background: var(--create) no-repeat scroll center center / 16px, var(--tabIcon)}
-#tab_config .tab_label::after {background: var(--config) no-repeat scroll center center / 16px, var(--tabIcon)}
-#tab_files .tab_label::after {background: var(--folder) no-repeat scroll center center / 16px, var(--tabIcon)}
-#tab_comments .tab_label::after {background: var(--comment) no-repeat scroll center center / 16px, var(--tabIcon)}
-#tab_torrentedit .tab_label::after {background: var(--edit) no-repeat scroll center center / 16px, var(--tabIcon)}
 
 /* details */
 .ParentDir {padding: 4px 0 4px 5px; font-size: 8pt; text-align: left; border: var(--border); border-left: 0; border-right: 0; background: #000}
@@ -522,13 +533,17 @@ td.subHeaderPriority {padding: 0 1px; font-size: 7.5pt; font-weight: 700; backgr
 th.headerdownloaded {padding-left: 25px}
 .headerpriority br {display: none}
 .headerpriority img {padding: 4px}
-
-.info_tracker {margin: 3px 2px; padding: 2px 6px 2px 18px; max-width: 155px; display: inline-block; white-space: nowrap; vertical-align: middle; line-height: 1.4; overflow: hidden; text-overflow: ellipsis; color: #484; box-shadow: var(--outline); background: var(--tracker) no-repeat left 2px center / 14px, var(--badge); background-blend-mode: luminosity, normal}
-.info_tracker a[href*=".b32.i2p"] {margin-right: -2px; max-width: 85px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
-.info_tracker:hover, .info_tracker:hover a {color: #f60}
-.info_tracker:hover {box-shadow: 0 0 0 1px rgba(200,80,0,.7); background: var(--tracker_hover) no-repeat left 2px center / 14px, linear-gradient(180deg,#020 50%,#000 50%); background-blend-mode: normal, normal; transition: ease all .15s}
-.info_tracker:active, .info_tracker:active a {color: #fff}
-.info_tracker:active {color: #fff; box-shadow: 0 0 0 1px #f60, inset 3px 3px 3px #420; background: #f60 var(--tracker_active) no-repeat left 3px center / 14px}
+.page #snarkInfo ~ .mainsection {margin: 10px 0; border-bottom: var(--border)}
+.iframed .page #snarkInfo ~ #snarkFiles, .iframed .page #snarkInfo ~ #commentSection {margin: -11px 0 10px; border-bottom: var(--border)}
+.page #snarkInfo ~ .mainsection:last-child, .iframed .page #snarkInfo ~ .mainsection#commentSection {margin-bottom: -7px}
+#snarkInfo ~ .mainsection input:not(:checked) + .toggleview {margin-bottom: 5px}
+#snarkInfo ~ .mainsection input:checked + .toggleview {margin-bottom: -5px}
+#snarkInfo ~ #commentSection input:not(:checked) + .toggleview, #snarkInfo ~ #snarkFiles input:not(:checked) + .toggleview {margin-bottom: -2px}
+#completion {position: relative}
+#metainfo {padding: 4px 9px 4px 7px; text-align: left; border: var(--border_soft); box-shadow: var(--highlight), inset 0 0 1px 1px #141, 0 0 2px 2px rgba(0,0,0,.3); background: #000}
+#completion:not(:hover) #metainfo {display: none}
+#completion:hover #metainfo {display: inline-block; position: absolute; top: 28px; left: -120px}
+#completion #metainfo img {margin: 0 4px 0 0}
 .datetime b {min-width: 84px; display: inline-block}
 .datetime span {padding: 0 6px; min-width: 240px; display: inline-block; text-align: center; box-shadow: var(--outline); background: var(--badge)}
 .headerstatus {text-align: center}
@@ -539,6 +554,12 @@ td.fileStatus {background: rgba(0,32,0,.2)}
 .fileStatusIcon {padding: 0 4px 0 0; width: 24px; text-align: center}
 .fileStatus img[src*="clock"] {mix-blend-mode: normal}
 .priorityIndicator {margin-right: 5px; display: none}
+.info_tracker {margin: 3px 2px; padding: 2px 6px 2px 18px; max-width: 155px; display: inline-block; white-space: nowrap; vertical-align: middle; line-height: 1.4; overflow: hidden; text-overflow: ellipsis; color: #484; box-shadow: var(--outline); background: var(--tracker) no-repeat left 2px center / 14px, var(--badge); background-blend-mode: luminosity, normal}
+.info_tracker a[href*=".b32.i2p"] {margin-right: -2px; max-width: 85px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
+.info_tracker:hover, .info_tracker:hover a {color: #f60}
+.info_tracker:hover {box-shadow: 0 0 0 1px rgba(200,80,0,.7); background: var(--tracker_hover) no-repeat left 2px center / 14px, linear-gradient(180deg,#020 50%,#000 50%); background-blend-mode: normal, normal; transition: ease all .15s}
+.info_tracker:active, .info_tracker:active a {color: #fff}
+.info_tracker:active {color: #fff; box-shadow: 0 0 0 1px #f60, inset 3px 3px 3px #420; background: #f60 var(--tracker_active) no-repeat left 3px center / 14px}
 
 /* configure */
 .configOption {padding: 2px 4px; display: inline-block; vertical-align: middle; text-align: left; white-space: nowrap; width: calc(100% - 20px)}
@@ -664,52 +685,6 @@ input[name="nofilter_commentsName"] {max-width: 248px}
 #mainsection + #lowersection > .configsection {margin-top: -1px}
 #mainsection + #lowersection #createSection + .configsection {margin-top: -11px; padding-bottom: 14px}
 .snarknavbar, #createSection, #addSection, .configsection, .configsectionpanel, .optionlist, .routerdown {box-shadow: var(--highlight), inset 0 0 1px 1px #252}
-.snarkFiletype {position: relative; vertical-align: middle}
-.snarkCommented {position: absolute; display: inline-block; z-index: 20; top: -2px; right: 3px; line-height: 0; font-size: 0}
-.snarkCommented img {padding: 0; width: auto; height: 11px; position: absolute; top: -2px; right: -2px; filter: drop-shadow(0 0 1px #101) drop-shadow(0 0 2px rgba(128,128,0,.3))}
-#torrents td:empty, #torrents th:empty, #torrents tfoot tr:first-child th:empty {padding-right: 0; padding-left: 0; width: 0; min-width: 0}
-.page #snarkInfo ~ .mainsection {margin: 10px 0; border-bottom: var(--border)}
-.iframed .page #snarkInfo ~ #snarkFiles, .iframed .page #snarkInfo ~ #commentSection {margin: -11px 0 10px; border-bottom: var(--border)}
-.page #snarkInfo ~ .mainsection:last-child, .iframed .page #snarkInfo ~ .mainsection#commentSection {margin-bottom: -7px}
-#snarkInfo ~ .mainsection input:not(:checked) + .toggleview {margin-bottom: 5px}
-#snarkInfo ~ .mainsection input:checked + .toggleview {margin-bottom: -5px}
-#snarkInfo ~ #commentSection input:not(:checked) + .toggleview, #snarkInfo ~ #snarkFiles input:not(:checked) + .toggleview {margin-bottom: -2px}
-#snarkFiles table {margin-bottom: -1px}
-.snarkFilename .targetfile, .snarkFilename:hover .tags, .snarkFileName a:empty {display: none}
-.snarkFilename:hover .targetfile {display: inline-block}
-#completion {position: relative}
-#metainfo {padding: 4px 9px 4px 7px; text-align: left; border: var(--border_soft); box-shadow: var(--highlight), inset 0 0 1px 1px #141, 0 0 2px 2px rgba(0,0,0,.3); background: #000}
-#completion:not(:hover) #metainfo {display: none}
-#completion:hover #metainfo {display: inline-block; position: absolute; top: 28px; left: -120px}
-#completion #metainfo img {margin: 0 4px 0 0}
-
-/* table sort indicators */
-.sortIcon {position: relative}
-.sortIcon:hover .ascending, .sortIcon:hover .descending {transform: rotate(180deg); transition: linear transform .1s}
-.ascending, .descending {position: absolute; top: -2px; right: -8px; display: inline-block; border-width: 4px; border-style: solid; border-color: transparent transparent #252 transparent}
-.descending {top: 2px; border-color: #252 transparent transparent transparent}
-.sortIcon:hover .ascending {top: 2px; border-color: transparent transparent #f60 transparent}
-.sortIcon:hover .descending {top: -2px; border-color: #f60 transparent transparent transparent}
-#torrentSort .ascending, th#torrentSort .descending {right: -11px}
-
-/* action buttons */
-#torrents .torrentAction {padding: 1px; width: 1%; white-space: nowrap; text-align: center}
-#torrents .torrentAction input[type=submit] {margin: 1px 2px; padding: 11px; min-width: 0; min-height: 0; float: none; vertical-align: middle; font-size: 0; border: 1px solid #262; border-radius: 1px; box-shadow: var(--highlight); background-position: center center; opacity: .75; cursor: pointer; will-change: transform}
-#torrents .actionStart {background: var(--start) no-repeat center center / 14px, var(--btnAction), var(--start_hover) no-repeat center center / 14px}
-#torrents .actionStart:hover, #torrents .actionStart:focus {background: var(--start_hover) no-repeat center center / 14px, var(--btnAction_hover)}
-#torrents .actionStop {background: var(--stop) no-repeat center center / 14px, var(--btnAction), var(--stop_hover) no-repeat center center / 14px}
-#torrents .actionStop:hover, #torrents .actionStop:focus {background: var(--stop_hover) no-repeat center center / 14px, var(--btnAction_hover)}
-#torrents .actionRemove {background: var(--remove) no-repeat center center / 14px, var(--btnAction), var(--remove_hover) no-repeat center center / 14px}
-#torrents .actionRemove:hover, #torrents .actionRemove:focus {background: var(--remove_hover) no-repeat center center / 14px, var(--btnAction_hover)}
-#torrents .actionDelete {background: var(--delete) no-repeat center center / 14px, var(--btnAction), var(--delete_hover) no-repeat center center / 14px}
-#torrents .actionDelete:hover, #torrents .actionDelete:focus {background: var(--delete_hover) no-repeat center center / 14px, var(--btnAction_hover)}
-#torrents #actionStopAll, #torrents #actionStartAll {margin-top: -1px; padding: 11px 19px}
-#torrents #actionStopAll {background: var(--stopall) no-repeat center center / auto 14px, var(--btnAction), var(--stopall_hover) no-repeat center center / auto 14px}
-#torrents #actionStartAll {background: var(--startall) no-repeat center center / auto 14px, var(--btnAction), var(--startall_hover) no-repeat center center / auto 14px}
-#torrents #actionStartAll:hover, #torrents .actionStartAll:focus {background: var(--startall_hover) no-repeat center center / auto 14px, var(--btnAction_hover)}
-#torrents #actionStopAll:hover, #torrents .actionStopAll:focus {background: var(--stopall_hover) no-repeat center center / auto 14px, var(--btnAction_hover)}
-#torrents .torrentAction input:hover, #torrents .torrentAction input:focus {border: 1px solid #f60; opacity: 1; transition: ease box-shadow .1s; background-blend-mode: normal}
-#torrents .torrentAction input:active {box-shadow: var(--highlight), inset 3px 3px 3px #000; transform: scale(0.9); transition: ease transform .05s; filter: none}
 
 /* torrent edit */
 #editSection hr {margin-bottom: 0}
@@ -733,6 +708,28 @@ position: absolute; opacity: 0; z-index: -1; height: 0; width: 0}
 input:not(:checked) + .toggleview + hr + table, input:not(:checked) + .toggleview + hr + table + table {display: none}
 input:checked + .toggleview + hr + table, input:checked + .toggleview + hr + table + table {display: table}
 .toggleview, .configTitle a:visited {color: #7c7}
+
+/* tabs */
+#dhtDebugPanel .toggleview:hover {mix-blend-mode: normal}
+#dhtDebugPanel .toggleview:active {border-top: var(--border); margin-top: -1px}
+.toggleview, .configsection .configTitle {min-width: 340px; text-align: center; will-change: transform}
+.toggleview, .configsection .configTitle a {font-size: 0}
+.configTitle a {display: inline-block; width: 100%}
+.tab_label::after {margin: 3px; padding: 3px; width: 18px; height: 18px; display: inline-block; vertical-align: middle; border: 2px solid #000; border-radius: 50%; box-shadow: 0 0 1px 1px rgba(32,0,48,.5); background-size: 16px, 100%; content: ""; mix-blend-mode: luminosity; pointer-events: none; will-change: transform}
+.toggleview:hover .tab_label::after, #tab_config:hover .tab_label::after {mix-blend-mode: normal; filter: drop-shadow(0 0 1px #f30)}
+.toggleview:active .tab_label::after, #tab_config:active .tab_label::after {transform: rotate(90deg) scale(.9); transition: ease transform .01s}
+input:checked + .toggleview:active .tab_label::after {box-shadow: 0 0 0 2px rgb(153,51,0,.7); filter: drop-shadow(0 0 1px #930); transform: rotate(-90deg) scale(.9); transition: linear transform .01s}
+#tab_addtorrent .tab_label::after {background: var(--add) no-repeat scroll center center / 16px, var(--tabIcon)}
+#tab_newtorrent .tab_label::after {background: var(--create) no-repeat scroll center center / 16px, var(--tabIcon)}
+#tab_config .tab_label::after {background: var(--config) no-repeat scroll center center / 16px, var(--tabIcon)}
+#tab_files .tab_label::after {background: var(--folder) no-repeat scroll center center / 16px, var(--tabIcon)}
+#tab_comments .tab_label::after {background: var(--comment) no-repeat scroll center center / 16px, var(--tabIcon)}
+#tab_torrentedit .tab_label::after {background: var(--edit) no-repeat scroll center center / 16px, var(--tabIcon)}
+
+/* router down */
+.routerdown {padding: 15px; font-size: 120%; text-shadow: 0 0 1px #000; border-bottom: var(--border); background: repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px), repeating-linear-gradient(180deg,rgba(0,0,0,.8) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px), url(/themes/console/dark/images/camotile2.png) repeat top left}
+.routerdown span {display: none}
+.routerdown::after {width: 40px; height: 40px; display: inline-block; background: var(--offline) no-repeat center center / 40px; content: ""; animation: linear spin 5s reverse infinite}
 
 /* Resource Errors */
 .resourceError {margin-bottom: 0; border: none}
