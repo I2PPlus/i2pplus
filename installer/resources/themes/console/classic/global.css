@@ -21,7 +21,8 @@
   --border_badge: #bbc;
   --border: 1px solid #bfc3d9;
   --border_color: #bfc3d9;
-  --border_soft: #dfe1ec;
+  --border_soft: #cfd2e2;
+  --border_softer: #dfe1ec;
   --border_warn: #fb7;
   --border_hard: 1px solid #9fa5c6;
   --box_border_badge: 0 0 0 1px #bbd;
@@ -186,11 +187,14 @@ textarea {
   resize: none;
   font: 9pt var(--monospaced);
   color: var(--ink_light);
+  border: var(--border);
+  box-shadow: var(--shadow_input);
   scrollbar-color: #acafb9 #f2f2ff;
 }
 
 textarea:focus {
   color: var(--ink);
+  box-shadow: var(--btn_shadow_active), 0 0 0 1px rgba(255,96,0,.6);
 }
 
 select {

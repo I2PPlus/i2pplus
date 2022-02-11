@@ -637,7 +637,7 @@ pre#activetransports {margin: -11px 0 0; padding: 15px 15px 0; width: calc(100% 
 #i2pupdates input.check, .optbox {margin-left: 5px}
 #i2pupdates td.infohelp {padding: 20px 15px 20px 40px; background-size: 22px; background-position: 10px}
 #i2pupdates .infohelp code {user-select: all}
-#sidebarconf tr, .homelinkedit tr, #clientconfig tr, #webappconfig tr,  #configstats tr, #tunnelconfig tr, #profiles tr, #floodfills tr, #netdboverview tr, .netdbentry tr, #leasesetdebug tr, #leasesetsummary tr, .leaseset tr, #tunnel_defs tr, .sybil_routerinfo tr, #enviro tr, #routerinformation tr, #schedjobs tr, #jobstats tr, #eventlog tr, .tunneldisplay tr, #udpconnections tr, #ntcpconnections tr, #tunnelPeerCount tr {border-top: 1px solid var(--border_soft)}
+#sidebarconf tr, .homelinkedit tr, #clientconfig tr, #webappconfig tr,  #configstats tr, #tunnelconfig tr, #profiles tr, #floodfills tr, #netdboverview tr, .netdbentry tr, #leasesetdebug tr, #leasesetsummary tr, .leaseset tr, #tunnel_defs tr, .sybil_routerinfo tr, #enviro tr, #routerinformation tr, #schedjobs tr, #jobstats tr, #eventlog tr, .tunneldisplay tr, #udpconnections tr, #ntcpconnections tr, #tunnelPeerCount tr {border-top: 1px solid var(--border_softer)}
 #sidebarconf tr:hover, #eventlog tr:hover, .tunneldisplay tr:hover, #jobstats tr:hover, #schedjobs tr:hover, #jardump tr:hover {color: #104e99; background: var(--row_hover)}
 #sidebarconf button {margin: 2px}
 #sidebarconf th:nth-child(1) {text-align: center}
@@ -1126,7 +1126,7 @@ p.family + p.family, p.sybil_info + p.sybil_info {margin-top: -4px}
 #leasesetdebug th a, #leasesetsummary th a {word-spacing: normal; letter-spacing: normal; text-transform: capitalize; font-size: 0}
 #leasesetdebug td, #leaseset td {padding: 5px}
 #leasesetdebug td:nth-child(even) {white-space: nowrap; text-align: left}
-#leasesetdebug td:nth-child(odd) {width: 200px; white-space: nowrap; text-align: right; border-right: 1px solid var(--border_soft)}
+#leasesetdebug td:nth-child(odd) {width: 200px; white-space: nowrap; text-align: right; border-right: 1px solid var(--border_softer)}
 #leasesetdebug td:nth-child(2) {width: 10px}
 #netdb .debugMode .netdb_leases {margin-right: 12px; columns: auto 380px; column-gap: 4px; page-break-inside: avoid}
 #netdb .netdb_leases {margin-left: 0 !important; columns: 8 104px; column-gap: 2px}
@@ -1141,7 +1141,7 @@ p.family + p.family, p.sybil_info + p.sybil_info {margin-top: -4px}
 
 /* Advanced lookup */
 #netdblookup {margin-bottom: 4px}
-#netdblookup tr:nth-child(n+2) {border-top: 1px solid var(--border_soft)}
+#netdblookup tr:nth-child(n+2) {border-top: 1px solid var(--border_softer)}
 #netdblookup th {text-align: left; font-size: 140% }
 #netdblookup th, #netdblookup td {padding: 10px}
 #netdblookup td:nth-child(odd) {padding-right: 0; white-space: nowrap; text-align: right; font-weight: 700}
@@ -1257,7 +1257,7 @@ p.sybil_info, p.family, p.threatpoints, p.hashdist, p.notfound, #sybil_totals {m
 #netdboverview th {font-size: 10pt; color: var(--ink_light); pointer-events: none}
 #netdboverview th[role="columnheader"] {pointer-events: auto}
 #netdboverview table th {font-size: 90%}
-#netdboverview table td:not(:first-child):not(:last-child) {border-left: 1px solid var(--border_soft); border-right: 1px solid var(--border_soft)}
+#netdboverview table td:not(:first-child):not(:last-child) {border-left: 1px solid var(--border_softer); border-right: 1px solid var(--border_softer)}
 #netdboverview table tr:hover {background: var(--row_hover)}
 #netdboverview table th::before, #netdboverview table td::before {height: 24px; display: inline-block; vertical-align: middle; content: ""}
 #netdboverview span, #netdboverview a {margin-top: 0; margin-bottom: 0}
@@ -1446,10 +1446,10 @@ font[color="#006600"] span {color: var(--bg); background: #444}
 #logs li:last-child::after {border: none; margin: -4px}
 #logs li:first-child {padding-top: 0; margin-top : 1px}
 #logs ul {margin-left: -5px; margin-bottom: -3px; padding-left: 0; padding-right: 0; width: calc(100% + 10px); margin-right: -20px}
-#logs li {padding: 0 2px 4px 22px; width: 100%; width: calc(100% - 24px); border-top: 1px solid var(--border_soft); border-bottom: 1px solid var(--border_soft); background: transparent; opacity: .85; animation: ease logupdate 1s}
+#logs li {padding: 0 2px 4px 22px; width: 100%; width: calc(100% - 24px); border-top: 1px solid var(--border_softer); border-bottom: 1px solid var(--border_softer); background: transparent; opacity: .85; animation: ease logupdate 1s}
 #logs li:first-child, #logs li:first-child:hover {border-top: none}
 #logs li:nth-child(n+2) {margin-top: -1px}
-#logs li:hover {position: relative; z-index: 10; border-top: var(--border); border-bottom: var(--border); background: var(--row_hover); opacity: 1; transition: ease all .15s}
+#logs li:hover {position: relative; z-index: 10; border-top: var(--border_soft); border-bottom: var(--border_soft); background: var(--row_hover); opacity: 1; transition: ease all .15s}
 #logs li:last-child {border-bottom: none}
 #logs li span {margin: 0 -2px; min-width: 50px; display: inline-block; line-height: 1.1; text-align: center; vertical-align: middle; border-radius: 2px; opacity: .7}
 #criticallogs tr:first-child {display: none}
@@ -1516,7 +1516,7 @@ font[color="#006600"] span {color: var(--bg); background: #444}
 #jardump table {border-left: none; border-right: none; margin-top: -1px; margin-bottom: -1px; font-size: 8pt}
 #jardump th {padding: 5.5px 5px; font-size: 9pt; text-align: center; border-left: none; border-right: none}
 #jardump th:first-child {text-align: left}
-#jardump td, #config_logging tr {border-top: 1px solid var(--border_soft)}
+#jardump td, #config_logging tr {border-top: 1px solid var(--border_softer)}
 #jardump td {vertical-align: top}
 #jardump td:nth-child(2) {font-style: italic}
 #jardump td {border-left: 1px solid var(--border_soft); vertical-align: middle; text-align: center}
@@ -1724,14 +1724,14 @@ table[id*="connections"] .tablefooter td:first-child {text-align: left}
 #ntcpconnections td:nth-last-child(2), #udpconnections td:last-child, #profiles td:last-child {border-right: var(--border)}
 #udpconnections .tablefooter td, #ntcpconnections .tablefooter td {padding-left: 5px; padding-right: 5px}
 #ntcpconnections td span:empty {display: none}
-#ntcpconnections tr:nth-last-child(n+2) td, #udpconnections tr:nth-last-child(n+2) td, #profilelist td, #profile_defs td, #floodfills td, #tunnelPeerCount td {border-right: 1px solid var(--border_soft)}
+#ntcpconnections tr:nth-last-child(n+2) td, #udpconnections tr:nth-last-child(n+2) td, #profilelist td, #profile_defs td, #floodfills td, #tunnelPeerCount td {border-right: 1px solid var(--border_softer)}
 #ntcpconnections tr:nth-last-child(n+2) td::after, #udpconnections tr:nth-last-child(n+2) td::after, #profilelist td::after, #profile_defs td::after, #floodfills td::after {content: ""; position: absolute; top: -1px; right: -1px; height: 1px; width: 1px; display: inline-block; background: var(--border_color)}
 #ntcpconnections .ipv6:empty::before, #udpconnections .ipv6:empty::before, #ntcpconnections td.queue:empty::before {content: ""}
 #udpcon, #ntcpcon {margin-bottom: -1px}
 #udpcon {margin-top: 9px}
 #udpconnections th {padding-top: 3px; vertical-align: top; background: var(--bg)}
 #peerdefs {padding: 5px; line-height: 1.4}
-#peerdefs tr {border-top: 1px solid var(--border_soft)}
+#peerdefs tr {border-top: 1px solid var(--border_softer)}
 #peerdefs td {padding: 4px}
 #peerdefs img {font-size: 0}
 #peerdefs ul {margin: 0; padding: 0; width: 100%; display: inline-block; columns: 500px auto; column-gap: 0}
@@ -1742,9 +1742,9 @@ table[id*="connections"] .tablefooter td:first-child {text-align: left}
 #routerinfo p {padding: 0; margin: -5px -5px 0; border: none; box-shadow: 0 0 1px #ccf; filter: none}
 #routerinfo table {margin: 0}
 #routerinfo a {display: inline-block; white-space: nowrap; margin: 0 5px 0 0; font-size: 90%}
-#routerinfo td {padding: 8px 4px; width: 25%; border-bottom: 1px solid var(--border_soft)}
+#routerinfo td {padding: 8px 4px; width: 25%; border-bottom: 1px solid var(--border_softer)}
 #routerinfo td:first-child, #routerinfo td:nth-child(3) {text-align: right; white-space: nowrap}
-#routerinfo td:nth-child(2):not([colspan]) {white-space: nowrap; border-right: 1px solid var(--border_soft)}
+#routerinfo td:nth-child(2):not([colspan]) {white-space: nowrap; border-right: 1px solid var(--border_softer)}
 #routerinformation td {padding: 8px 4px}
 #routerinformation td:first-child {padding-left: 12px; width: 1%; min-width: 80px; max-width: 80px; white-space: nowrap}
 #upnpstatus {margin: 15px 0 6px}

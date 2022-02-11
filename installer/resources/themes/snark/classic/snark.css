@@ -159,7 +159,7 @@ a.controld {display: none}
 #torrents {margin: 0; background: var(--bg)}
 #pagenav, .torrentETA, .torrentDownloaded, .RateDown, .RateUp, .torrentAction {text-align: center}
 .rowEven {background: var(--bg3)}
-.rowOdd, .rowEven {border-bottom: var(--border_soft)}
+.rowOdd, .rowEven {border-bottom: var(--border_softer)}
 .rowOdd {background: var(--bg)}
 .rowOdd td, .rowEven td {border-top: none}
 .RateUp, .RateDown {text-align: right}
@@ -215,7 +215,7 @@ td.trackerDetails {text-align: right}
 #torrents {margin-top: -1px}
 #torrents .RateUp, #torrents .RateDown, #torrents .torrentDownloaded, #torrents .torrentUploaded {text-align: center}
 #torrents th img {padding: 1px; max-height: 22px}
-#torrents tr {border-bottom: 1px solid var(--border_soft)}
+#torrents tr {border-bottom: 1px solid var(--border_softer)}
 #torrents tr.active .torrentAction, #torrents tr.active:hover .torrentAction {background: linear-gradient(-90deg, #7f7 2px, rgba(0,0,0,0) 2px)}
 #torrents tr.active.seeding .torrentAction, #torrents tr.active.seeding:hover .torrentAction, #torrents tr.peerinfo.active .torrentAction, #torrents tr.peerinfo.active:hover .torrentAction {background: linear-gradient(-90deg, #f7f 2px, rgba(0,0,0,0) 2px)}
 #torrents th:empty, #torrents td:empty, .torrentETA:empty, .RateUp:empty, .torrentUploaded:empty, .RateDown:empty {width: 0; min-width: 0; max-width: 0; padding: 0; font-size: 0}
@@ -231,7 +231,7 @@ td.trackerDetails {text-align: right}
 #torrents th:first-child {width: 30px; padding-right: 0; text-align: center}
 #torrents th:nth-child(2) {text-align: left}
 #torrents th:nth-child(4), #torrents th:nth-child(5), #torrents th:nth-child(6), #torrents th:nth-child(7), #torrents th:nth-child(8), #torrents th:nth-child(9), #torrents th:last-child {text-align: center}
-#torrents td {text-align: left; padding-top: 4px; padding-bottom: 4px}
+#torrents td {padding-top: 4px; padding-bottom: 4px; text-align: left}
 #torrents td[colspan="10"] {padding: 4px 2px}
 #torrents tfoot tr:first-child th:not(:empty) {padding: 6px 4px; vertical-align: middle}
 #torrents tfoot tr:first-child th:first-child {text-align: left}
@@ -270,7 +270,7 @@ td.trackerDetails {text-align: right}
 .ParentDir img {padding-left: 3px}
 .dirInfo {margin-top: 10px; margin-bottom: 0; border-bottom: var(--border); background: var(--bg3)}
 .dirInfo thead img {margin: 0; width: auto}
-.dirInfo tr {border: 1px solid var(--border_soft)}
+.dirInfo tr {border: 1px solid var(--border_softer)}
 .dirInfo tr:last-child {border-bottom: var(--border)}
 .dirInfo th img {margin: 0; max-height: 22px; padding-top: 3px; padding-bottom: 3px}
 .dirInfo th:nth-child(2) {width: 32px; text-align: right}
@@ -410,8 +410,8 @@ input#toggle_addtorrent:checked + label + hr + table, input#toggle_createtorrent
 #configs .spacer, .trackerconfig .spacer {display: none}
 #configs a {font-weight: 700}
 #trackerselect {margin: 2px 5px 0 5px; width: 100%; width: calc(100% - 150px); border-collapse: separate; border: var(--border); border-radius: 2px; box-shadow: 0 0 1px #ccf}
-#trackerselect tr:nth-child(even) {border-bottom: var(--border_soft); background: var(--bg3)}
-#trackerselect tr:nth-child(odd) {border-bottom: var(--border_soft); background: var(--bg)}
+#trackerselect tr:nth-child(even) {border-bottom: var(--border_softer); background: var(--bg3)}
+#trackerselect tr:nth-child(odd) {border-bottom: var(--border_softer); background: var(--bg)}
 #trackerselect tr:last-child {border-bottom: var(--border)}
 #trackerselect tr:first-child {font-weight: 700; border-bottom: 1px #bfc3d9}
 #trackerselect tr:first-child td {padding: 5px 10px; font-weight: 700; border-bottom: var(--border); background: linear-gradient(180deg,var(--bg),var(--bg3))}
