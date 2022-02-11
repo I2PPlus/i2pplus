@@ -538,9 +538,10 @@ ul.statlist:last-of-type {margin-bottom: -13px}
 ul.statlist a[name], ul.statlist b, ul.statlist li b, ul.statlist a[name]:hover {letter-spacing: normal; text-decoration: none; color: #bb3}
 ul.statlist li::before {line-height: .5; vertical-align: baseline; font-size: 14pt; color: #bb3; content: "\2B26\00A0"}
 ul.statlist li {margin-left: 10px; line-height: 1.6; list-style: none}
-ul.statlist li li {margin-left: 16px; margin-right: -20px; line-height: 1.4; list-style: none}
+ul.statlist li li {margin: 10px -20px -10px 16px; line-height: 1.4; list-style: none}
+ul.statlist li li:not(.noevents):first-child {margin-top: -10px}
 ul.statlist li li::before, ul.statlist li li:last-child::before {margin-top: 2px; margin-bottom: -12px; vertical-align: bottom; display: inline-block; color: #994; content: "\279F\00A0"}
-ul.statlist li li:last-child {padding-bottom: 0}
+ul.statlist li li:not(.noevents):last-child {margin-top: 30px; padding-bottom: 0}
 ul.statlist li li:last-child::after {margin-top: 6px; margin-bottom: -12px; display: block; content: ""}
 #stats .noevents {margin-bottom: 5px}
 #stats .noevents::after {margin-top: 6px; margin-bottom: 0; margin-right: 20px}
@@ -550,7 +551,7 @@ ul.statlist li li:last-child::before {margin-top: 3px; vertical-align: top; colo
 #stats form {margin: -13px 0 -11px; padding: 10px; border: var(--border); background: #000}
 #stats form > * {vertical-align: middle}
 ul.statlist li li:last-child {margin-bottom: -20px}
-#stats .noevents {padding: 0 0 18px}
+#stats .noevents {padding: 5px 0 18px}
 #stats h3 a:hover {color: var(--ink)}
 .statlist li.statsName:first-child {margin-top: 0}
 .statlist {padding-bottom: 0}
