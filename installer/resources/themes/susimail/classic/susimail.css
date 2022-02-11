@@ -16,7 +16,7 @@ a.linkspam {color: #8f1a1a}
 a.linknew {color: #2a7f00}
 a.sort {font-size: 0; line-height: 1}
 hr {margin: 5px 0; width: 100%; height: 1px; display: none; border: none; background: #555}
-li, p {margin-left: 15px; margin-right: 15px; font-size: 9pt; color: #0c153d}
+li, p {margin-left: 15px; margin-right: 15px; font-size: 9pt; color: var(--ink)}
 th {font-size: 10pt}
 td {padding: 1px 3px; line-height: 12pt; font-size: 9pt}
 
@@ -25,8 +25,6 @@ div.attached {padding: 5px 0 5px 25px; vertical-align: middle; text-align: left;
 div.footer {margin: 0 -10px -10px; padding: 1px; display: none; border-top: var(--border); background: rgba(255,255,255,.5)}
 div.header {display: none}
 div#pagenav {border-top: var(--border); padding: 10px 5px 0; font-size: 9.5pt; border-radius: 0 0 4px 4px; margin: 0 -11px}
-#expand:active, #collapse:active {box-shadow: var(--highlight), inset 2px 2px 2px rgba(0,0,0,.3)}
-#expand, #collapse {margin: 0 -7px -3px 0; padding: 2px 10px; min-width: 90px; display: inline-block; line-height: 1.4; text-align: center; font-size: 90%; border: var(--border); background: var(--btn)}
 .folders {margin-left: -2px; padding: 0 5px 5px}
 .folders > * {vertical-align: middle}
 h3#config {margin: -11px auto 10px; padding: 5px 10px; width: 300px; font-size: 11pt; color: var(--ink_light); border: var(--border); border-radius: 0 0 2px 2px; background: var(--header)}
@@ -192,8 +190,8 @@ input.firstpage:hover, input[name="firstpage"]:hover, input.firstpage:focus, inp
 input.lastpage, input[name="lastpage"], input.lastpage[disabled]:hover, input[name="lastpage"][disabled]:hover, input.lastpage[disabled]:focus, input[name="lastpage"][disabled]:focus {padding: 5px 14px; text-indent: -99999px; background: var(--last) no-repeat center center / 16px, var(--btn)}
 input.lastpage:hover, input[name="lastpage"]:hover, input.lastpage:focus, input[name="lastpage"]:focus {background: var(--last_hover) no-repeat center center / 16px, var(--btn_hover)}
 input.prevpage, input.prev, input[name="prev"], input[name="prevpage"], input.prevpage[disabled]:hover, input.prev[disabled]:hover, input[name="prev"][disabled]:hover, input[name="prevpage"][disabled]:hover, input.prevpage[disabled]:focus, input.prev[disabled]:focus, input[name="prev"][disabled]:focus, input[name="prevpage"][disabled]:focus {padding: 5px 14px; text-indent: -99999px; background: var(--previous) no-repeat center center / 16px, var(--btn)}
-input.prevpage:hover, input.prev, input[name="prev"]:hover, input[name="prevpage"]:hover, input.prevpage:focus, input.prev, input[name="prev"]:focus, input[name="prevpage"]:focus {background: var(--previous_hover) no-repeat center center / 16px, var(--btn_hover)}
 input.nextpage, input.next, input[name="nextpage"], input[name="next"], input.nextpage[disabled]:hover, input.next[disabled]:hover, input[name="nextpage"][disabled]:hover, input[name="next"][disabled]:hover, input.nextpage[disabled]:focus, input.next[disabled]:focus, input[name="nextpage"][disabled]:focus, input[name="next"][disabled]:focus {padding: 5px 14px; text-indent: -99999px; background: var(--next) no-repeat center center / 16px, var(--btn)}
+input.prevpage:hover, input.prev:hover, input[name="prev"]:hover, input[name="prevpage"]:hover, input.prevpage:focus, input.prev:focus, input[name="prev"]:focus, input[name="prevpage"]:focus {background: var(--previous_hover) no-repeat center center / 16px, var(--btn_hover)}
 input.nextpage:hover, input.next:hover, input[name="nextpage"]:hover, input.nextpage:focus, input.next:focus, input[name="nextpage"]:focus {background: var(--next_hover) no-repeat center center / 16px, var(--btn_hover)}
 #pagenav input[disabled] {border: 1px solid #bbb; box-shadow: var(--highlight)}
 
@@ -248,8 +246,11 @@ tr:hover .listDate {opacity: .9}
 #newmail input[type=text] {width: 665px}
 #newmail td:first-child {font-weight: 700; padding-right: 10px}
 #viewmail {margin: -9px -10px; border-top: var(--border); background: var(--bg3)}
-.debugHeader:nth-child(n+3) td {border-top: var(--border)}
+.debugHeader td {border-top: var(--border)}
 .debugHeader pre {margin: 4px 10px; white-space: pre-wrap; line-height: 1.3; font-size: 9.5pt; opacity: .9}
+#expand, #collapse {margin: 0 -7px -3px 0; padding: 2px 10px; min-width: 90px; display: inline-block; line-height: 1.4; text-align: center; font-size: 90%; color: var(--ink_light); border: var(--border); border-radius: 4px 0 0 0; background: var(--btn)}
+#expand:hover, #collapse:hover {color: var(--ink_hover)}
+#expand:active, #collapse:active {box-shadow: var(--highlight), inset 2px 2px 2px rgba(0,0,0,.3)}
 
 /* confirm mail delete */
 #confirmdelete td {padding: 10px; box-shadow: var(--highlight); background: #900; background: repeating-linear-gradient(45deg, #900, #900 10px, #ee9 10px, #ee9 20px); background-size: 400%; animation: attention 240s linear infinite both}
