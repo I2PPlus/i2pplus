@@ -51,6 +51,37 @@ tr, .navbar, .mainsection, .lowersection {contain: layout}
 .iframed .snarknavbar, .iframed .mainsection, .iframed #addSection, .iframed #createSection, .iframed .configsection, .iframed .configsectionpanel {border-right: none; border-left: none; border-radius: 0}
 #torrentDisplay label, #addTracker, #addTracker + tr, .toggleview, .configTitle, .snarknavbar, img, input {user-select: none}
 
+/* forms */
+form {margin-bottom: 0}
+input::-moz-focus-inner {border: 0; outline: 0}
+input.default {visibility: hidden; width: 1px; height: 1px}
+input {font: bold 9pt var(--bodyfont); margin: 2px 4px 2px 0; cursor: pointer; text-align: left; color: #006; border: var(--border); border-radius: 2px; background: var(--bg)}
+input[disabled] {opacity: .5}
+input[disabled][type=submit]:hover, input[disabled][type=submit]:focus {border: 1px solid #999; background: var(--th); box-shadow: var(--highlight); color: #555; pointer-events: none}
+#configs input[type=submit], .trackerconfig input[type=submit], input[name="savepri"] {text-transform: capitalize}
+input[type=submit], input[type="reset"], a.control {padding: 5px 8px; min-width: 90px; font-size: 9pt; font-weight: 400; color: var(--ink_light); text-align: center; border: var(--border); border-radius: 3px; box-shadow: var(--btn_shadow); background: var(--btn); outline: none; cursor: pointer}
+input[type=submit]:hover, input[type="reset"]:hover, input[type=submit]:focus, input[type="reset"]:focus, a.control:hover, a.control:focus {color: var(--ink); border: var(--border); box-shadow: var(--btn_shadow_hover); background: var(--btn_hover)}
+input[type=submit]:active, input[type="reset"]:active, a.control:active {border: 1px solid #999; box-shadow: var(--btn_shadow_active), var(--btn_shadow_hover); background: #ddd}
+input[name="savepri"] {margin-right: -2px}
+input[type=text], input[type=password], input.r, input[name="nofilter_dataDir"] {margin: 2px 2px 2px 0; padding: 5px 8px; min-width: 160px; font-weight: 400; user-select: auto}
+input[type=text], textarea {cursor: text}
+select, input[type=text], input.r {min-width: 120px}
+input[name="nofilter_dataDir"] {width: 500px; margin: 3px 0; padding: 5px; resize: none; cursor: text; overflow: hidden}
+input[name="nofilter_commentsName"] {width: 250px}
+input[size="85"] {width: 550px; width: calc(100% - 150px)}
+input.r {text-align: right}
+input.trackername {width: 100px}
+input.trackerhome {width: 210px}
+input.trackerannounce {width: 210px}
+#addSection input, #createSection input {margin-left: 5px}
+textarea {padding: 1px 4px 0; font-size: 8pt; font-weight: 700; border: var(--border); border-radius: 2px; background: var(--bg2)}
+textarea:focus {color: var(--ink)}
+a.control {margin: -1px 0 1px 5px; padding: 4px 8px 3px 3px; min-width: 0; display: inline-block; vertical-align: middle; text-align: left; color: #333}
+a.control:hover, a.control:focus {color: #111; border: var(--border)}
+a.control:active img {mix-blend-mode: luminosity}
+a.control img {margin: -1px 3px 1px 2px; height: 14px; width: 14px}
+a.controld {display: none}
+
 /* top nav */
 .snarknavbar {margin: 0 0 -6px; padding: 8px 0; min-width: 906px; position: sticky; top: -1px; z-index: 999; text-align: center; text-transform: uppercase; font-size: 11.5pt; font-weight: 700; box-shadow: var(--highlight); border: var(--border); border-radius: 3px 3px 0 0; background: var(--navbar)}
 .iframed .snarknavbar {margin-top: -1px; padding: 8px 0; position: static; border-top: none; border-radius: 0}
@@ -330,37 +361,6 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
 .configTitle a:hover, .configTitle a:focus, .toggleview:hover, .toggleview:hover .tab_label, .toggleview:focus, .toggleview:focus .tab_label {color: var(--hover); text-shadow: none; transition: ease box-shadow .05s}
 .configTitle a:active, input:active + .toggleview {color: #f90}
 .configsectionpanel > .snarkConfig {font-size: 10pt; width: 100%; padding-top: 0}
-
-/* forms */
-form {margin-bottom: 0}
-input::-moz-focus-inner {border: 0; outline: 0}
-input.default {visibility: hidden; width: 1px; height: 1px}
-input {font: bold 9pt var(--bodyfont); margin: 2px 4px 2px 0; cursor: pointer; text-align: left; color: #006; border: var(--border); border-radius: 2px; background: var(--bg)}
-input[disabled] {opacity: .5}
-input[disabled][type=submit]:hover, input[disabled][type=submit]:focus {border: 1px solid #999; background: var(--th); box-shadow: var(--highlight); color: #555; pointer-events: none}
-#configs input[type=submit], .trackerconfig input[type=submit], input[name="savepri"] {text-transform: capitalize}
-input[type=submit], input[type="reset"], a.control {padding: 5px 8px; min-width: 90px; font-size: 9pt; font-weight: 400; color: var(--ink_light); text-align: center; border: var(--border); border-radius: 3px; box-shadow: var(--btn_shadow); background: var(--btn); outline: none; cursor: pointer}
-input[type=submit]:hover, input[type="reset"]:hover, input[type=submit]:focus, input[type="reset"]:focus, a.control:hover, a.control:focus {color: var(--ink); border: var(--border); box-shadow: var(--btn_shadow_hover); background: var(--btn_hover)}
-input[type=submit]:active, input[type="reset"]:active, a.control:active {border: 1px solid #999; box-shadow: var(--btn_shadow_active), var(--btn_shadow_hover); background: #ddd}
-input[name="savepri"] {margin-right: -2px}
-input[type=text], input[type=password], input.r, input[name="nofilter_dataDir"] {margin: 2px 2px 2px 0; padding: 5px 8px; min-width: 160px; font-weight: 400; user-select: auto}
-input[type=text], textarea {cursor: text}
-select, input[type=text], input.r {min-width: 120px}
-input[name="nofilter_dataDir"] {width: 500px; margin: 3px 0; padding: 5px; resize: none; cursor: text; overflow: hidden}
-input[name="nofilter_commentsName"] {width: 250px}
-input[size="85"] {width: 550px; width: calc(100% - 150px)}
-input.r {text-align: right}
-input.trackername {width: 100px}
-input.trackerhome {width: 210px}
-input.trackerannounce {width: 210px}
-#addSection input, #createSection input {margin-left: 5px}
-textarea {padding: 1px 4px 0; font-size: 8pt; font-weight: 700; border: var(--border); border-radius: 2px; background: var(--bg2)}
-textarea:focus {color: var(--ink)}
-a.control {margin: -1px 0 1px 5px; padding: 4px 8px 3px 3px; min-width: 0; display: inline-block; vertical-align: middle; text-align: left; color: #333}
-a.control:hover, a.control:focus {color: #111; border: var(--border)}
-a.control:active img {mix-blend-mode: luminosity}
-a.control img {margin: -1px 3px 1px 2px; height: 14px; width: 14px}
-a.controld {display: none}
 
 #createSection td:first-child, #addSection td:first-child {padding-right: 5px; padding-left: 5px; width: 120px; white-space: nowrap; font-weight: 700}
 #createSection td:nth-child(n+2), #addSection td:nth-child(n+2) {text-align: left}
