@@ -23,6 +23,7 @@
   --border_color: #bfc3d9;
   --border_soft: #cfd2e2;
   --border_warn: #fb7;
+  --border_hard: 1px solid #9fa5c6;
   --box_border_badge: 0 0 0 1px #bbd;
   --btn_active: linear-gradient(180deg,#f60,#f90);
   --btn_hover2: linear-gradient(180deg,var(--bg) 50%,#ffe4db 50%,#ffc6b3);
