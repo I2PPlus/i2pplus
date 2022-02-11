@@ -1,364 +1,68 @@
 /* I2P Theme Override: Dark */
 /* Comment: Larger text (and other tweaks) for Chinese & other doublebyte charactersets */
 /* Author: dr|z3d */
-
-h1, h2, h3, h4 {
-  text-shadow: none !important;
-  font-weight: 400 !important;
-}
-
-.routersummary table td {
-  padding: 2px 1px;
-}
-
-.routersummary h3, .routersummary h4, .routersummary p, .routersummary h3 a, .routersummary a {
-  text-shadow: none !important;
-}
-
-.routersummary h3 a {
-  font-size: 14pt !important;
-  text-transform: uppercase !important;
-  letter-spacing: .15em !important;
-}
-
-.routersummary h4, .routersummary h4 a {
-  font-size: 11pt !important;
-  font-weight: 400;
-}
-
-.routersummary b {
-  font-size: 10pt;
-  font-weight: 400;
-}
-
-.routersummary a {
-  font-size: 10pt;
-  font-weight: 400;
-}
-
-.percentBarouter {
-  margin-top: -3px !important;
-  margin-bottom: -5px !important;
-}
-
-.percentBarText {
-  margin-top: -2px !important;
-}
-
-#sb_warning {
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
-
-#sb_graphcontainer {
-  background-position: left -72px top -8px !important;
-  background-size: 290px 64px !important;
-}
-
-.messages, .messages li, div.error, .error ul li {
-  font-size: 11pt;
-  font-weight: 400 !important;
-}
-
-b, a, a:link, a:hover, a:visited {
-  font-weight: 400;
-  font-size: 11pt !important;
-}
-
-p, div.main {
-  font-size: 11pt;
-}
-
-button, button:visited, input[type=submit], input[type="reset"], .cancel, .accept {
-  margin: 4px !important;
-  padding: 4px 8px !important;
-  display: inline-block;
-  min-width: 80px !important;
-  min-height: 30px !important;
-  line-height: 140% !important;
-  font: normal 11pt "Droid Sans", "Open Sans", "Noto Sans", Verdana, "Bitstream Vera Sans", Tahoma, Helvetica, sans-serif !important;
-  letter-spacing: .05em;
-}
-
-.routersummary button.reload, .routersummary button.stop {
-  padding: 3px 8px !important;
-  min-width: 94px !important;
-}
-
-#sidebarconf button {
-  min-width: 32px !important;
-}
-
-select {
-  font-weight: 400 !important;
-  font-size: 11pt !important;
-  min-height: 30px !important;
-}
-
-.main li, ul.statlist li b, ul.statlist a[name] {
-  line-height: 160%;
-  font-size: 11pt !important;
-}
-
-code, pre, tt {
-  font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
-  font-size: 11pt;
-  font-weight: 400;
-}
-
-.cells tt, .cells tt a {
-  font-size: 9pt !important;
-}
-
-#changelog pre {
-  font-size: 10pt !important;
-}
-
-#routerlogs li, #criticallogs li, pre#service_logs {
-  font-size: 9pt !important;
-}
-
-.smallhead, th {
-  font-size: 10pt;
-  font-weight: 400;
-}
-
-table {
-  font: 10pt/130% "Droid Sans", Verdana, "Bitstream Vera Sans", Tahoma, Helvetica, sans-serif;
-}
-
-.confignav {
-  font-size: 13pt;
-}
-
-.themechoice {
-  font-size: 11pt !important;
-}
-
-.langselect {
-  font-size: 9pt !important;
-}
-
-table#leasesetdebug th a, table#leasesetsummary th a, #tunnels.main h3 a, #logs h3 a,
-a[href^="configpeer?peer"], h3#iptransport a, h3#iptransport a {
-  font-size: 0 !important;
-}
-
-td > * {
-  vertical-align: middle;
-}
-
-h3#webappconfiguration, h3#i2pclientconfig {
-  margin-bottom: -15px !important;
-}
-
-td.optionsave {
-  border-top: 1px solid #252;
-}
-
-.newsentry + hr {
-  margin-bottom: 5px !important;
-}
-
-#newsDisplay, #newsDisplay a, #newsStatus, td.infohelp, td.infowarn, p.infohelp, p.infowarn {
-  font-size: 11pt !important;
-}
-
-#console div[lang="zh"], #console li, #console p {
-  line-height: 170%;
-  letter-spacing: .15em;
-  word-spacing: 0;
-  font-size: 10.5pt !important;
-}
-
-#console code {
-  letter-spacing: normal;
-  word-spacing: normal;
-}
-
-#console li {
-  list-style: none;
-  margin-left: 40px;
-}
-
-.twocol {
-  margin: -10px 0 -15px !important;
-  column-gap: 0 !important;
-  padding: 10px 0;
-}
-
-.twocol li {
-  text-align: left !important;
-  margin-left: 50px !important;
-}
-
-#console div[lang="zh"] a {
-  background: rgba(0,64,0,.3);
-  padding: 0 3px;
-  border-radius: 2px;
-  line-height: 180%;
-}
-
-.sb_notice, .sb_notice a {
-  font-size: 10pt !important;
-  line-height: 120% !important;
-}
-
-#sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after,
-#sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {
-   content: "";
-   display: inline-block;
-   min-height: 14px !important;
-}
-
-#sb_newsheadings td, #sb_newsheadings tr:hover td {
-  background-position: 4px center !important;
-  padding-left: 24px !important;
-}
-
-#sb_newsheadings a {
-  font-size: 9.5pt !important;
-}
-
-.search select, .search button, .search input[type=text] {
-  font-size: 10pt !important;
-}
-
-button.control {
-  min-width: 32px !important;
-}
-
-@media screen and (min-width: 0) {
-body {
-  font-family: "Droid Sans", "Open Sans", "Noto Sans", Verdana, "Bitstream Vera Sans", Tahoma, Helvetica, sans-serif;
-  font-size: 12pt;
-  line-height: 130%;
-}
-
-div.news {
-  font-size: 10pt;
-  font-style: normal !important;
-}
-
-.sorry {
-  font-size: 12pt !important;
-}
-
-#sb_internals a, #sb_services a, #sb_advanced a {
-  padding: 1px 3px !important;
-}
-
-h1 {
-  font-size: 18pt !important;
-  padding: 12px 15px;
-}
-
-h2 {
-  font-size: 16pt !important;
-  text-shadow: none;
-  font-weight: 400;
-}
-
-h3 {
-  font-size: 14pt !important;
-  padding: 7px 10px;
-}
-
-h4, h4.app, h4.app2 {
-  font-size: 14pt;
-}
-
-p, .main, #console code {
-  font-size: 11pt !important;
-}
-
-.tab, .tab2, .confignav a {
-  font-size: 11pt !important;
-  margin-right: -2px !important;
-}
-
-.tab2 {
-  padding-top: 6px !important;
-  padding-bottom: 5px !important;
-}
-
-.news p, .news a {
-  font-size: 10pt !important;
-}
-
-p#fullhistory {
-  margin-top: -13px !important;
-}
-
-.routersummary button {
-  font-size: 11pt !important;
-  padding: 5px 8px !important;
-}
-
-h3#iptransport a, h3#advancedconfig a, #reseedsetup a {
-  font-size: 0 !important;
-}
-
-ul#banlist {
-  -moz-column-width: 500px;
-  -webkit-column-width: 500px;
-  column-width: 500px;
-}
-}
-
-@media screen and (max-width: 1000px) {
-#console div[lang="zh"], #console p, #console li {
-  font-size: 10.5pt !important;
-}
-}
-
-@media screen and (max-width: 1076px) {
-.tab2 {
-  padding-top: 5px !important;
-  padding-bottom: 4.5px !important;
-}
-}
-
-@media screen and (max-width: 1500px) {
-.tab, .tab2 {
-  font-size: 10.5pt !important;
-  margin-right: -3px !important;
-}
-
-h3#webappconfiguration, h3#i2pclientconfig {
-  margin-bottom: -16px !important;
-}
-}
-
-@media screen and (min-width: 1500px) {
-.routersummary button.reload, .routersummary button.stop {
-  padding-top: 6px !important;
-  padding-bottom: 6px !important;
-  min-width: 116px !important;
-}
-#sb_graphcontainer {
-  background-size: 336px 60px !important;
-  background-position: left -72px top -2px !important;
-}
-
-h1 {
-  font-size: 20pt !important;
-  padding: 14px 15px 13px;
-}
-}
-
-@media screen and @supports (display: -webkit-box) and (min-width: 1500px) {
-.langselect img {
-  margin-left: -8px !important;
-  margin-top: -18px !important;
-}
-
-.langselect input + img, .langselect .optbox + img {
-  transition: none !important;
-}
-
-.langselect input[name="lang"]:checked + img {
-  margin-left: -10px !important;
-  margin-top: -20px !important;
-}
-}
+.main, #sidebar, p, b, a, .messages, .messages li, div.error, .error ul li, .applabel a, .sitemapLabel a, code, pre, tt, #newsDisplay, #newsDisplay a, #newsStatus, .infohelp, .infowarn, .main li, ul.statlist li b, ul.statlist a[name], .themechoice, .sitemapLabel {font-size: 11pt; font-weight: 400}
+h1[class], h2, h3, h4 {text-shadow: none; font-weight: 400}
+h1[class] {padding: 14px 15px 13px 68px; font-size: 20pt}
+h2 {font-size: 16pt; font-weight: 400; text-shadow: none}
+h3 {font-size: 14pt; padding: 7px 10px}
+h3#iptransport a, h3#advancedconfig a, #reseedsetup a {font-size: 0}
+h3#webappconfiguration, h3#i2pclientconfig {margin-bottom: -15px}
+h3#webappconfiguration, h3#i2pclientconfig {margin-bottom: -16px}
+h4, h4.app, h4.app2, #sitemap h3 {font-size: 14pt}
+h4.app::first-letter, h4.app2::first-letter, #sitemap h3::first-letter {font-size: 14pt}
+.confignav {font-size: 13pt}
+.sorry {font-size: 12pt}
+.cells tt, .cells tt a {font-size: 9pt}
+div.news {font-size: 10pt; font-style: normal}
+.langselect {font-size: 9pt}
+.langselect input + img, .langselect .optbox + img {transition: none}
+.langselect input[name="lang"]:checked + img {margin-left: -10px; margin-top: -20px}
+.main li, ul.statlist li b, ul.statlist a[name] {line-height: 1.6}
+.newsentry + hr {margin-bottom: 5px}
+.news p, .news a, .sb_notice, .sb_notice a, .search select, .search button, .search input[type=text] {font-size: 10pt}
+.tab2 {padding-top: 6px; padding-bottom: 5px}
+.main table {line-height: 1.3; font-size: 10pt}
+.smallhead, th {font-size: 10pt; font-weight: 400}
+td > * {vertical-align: middle}
+td.optionsave {border-top: 1px solid #252}
+table#leasesetdebug th a, table#leasesetsummary th a, #tunnels.main h3 a, #logs h3 a, .tab, .tab2, .confignav a {font-size: 11pt; margin-right: -2px}
+button, button:visited, input[type=submit], input[type="reset"], .cancel, .accept {margin: 4px; padding: 6px 8px; display: inline-block; min-width: 80px; line-height: 1.5; font-weight: 400; letter-spacing: .05em}
+button.control {min-width: 32px}
+select {font-weight: 400; font-size: 11pt; min-height: 30px}
+.percentBarOuter {margin-top: -3px; margin-bottom: -5px}
+.percentBarText {margin-top: -2px}
+.sb_notice, .sb_notice a {font-size: 10pt; line-height: 1.2}
+#sidebar button.reload, #sidebar button.stop {padding: 3px 8px; min-width: 94px}
+#sidebar h3, #sidebar h4, #sidebar p, #sidebar h3 a, #sidebar a {text-shadow: none}
+#sidebar h3 a {font-size: 14pt; font-weight: 400; text-transform: uppercase; letter-spacing: .15em}
+#sidebar h4, #sidebar h4 a {font-size: 11pt; font-weight: 400}
+#sidebar a, #sidebar b {font-size: 10pt; font-weight: 400}
+#updateAvailable {margin-top: 5px}
+#sb_warning {padding-top: 10px; padding-bottom: 10px}
+#sidebar table td {padding: 1px}
+#sb_newsheadings td, #sb_newsheadings tr:hover td {background-position: 4px center; padding-left: 24px}
+#sb_internals a, #sb_services a, #sb_advanced a {padding: 1px 3px}
+#sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {display: inline-block;  min-height: 14px; content: ""}
+#sb_newsheadings a {font-size: 9.5pt}
+#sidebar button {font-size: 11pt; padding: 5px 8px}
+#minigraph {margin-top: -24px}
+#searchbar span {margin: 5px}
+#sidebarconf button {min-width: 32px}
+a[href^="configpeer?peer"], h3#iptransport a, h3#iptransport a {font-size: 0}
+ul#banlist {-moz-column-width: 500px; -webkit-column-width: 500px; column-width: 500px}
+#routerlogs li, #criticallogs li, pre#service_logs {font-size: 9pt}
+#changelog pre {font-size: 10pt}
+#fullhistory {margin-top: -13px}
+#console code {letter-spacing: normal; word-spacing: normal}
+#console div[lang="zh"] a {background: rgba(0,64,0,.3); padding: 0 3px; border-radius: 2px; line-height: 180%}
+#console div[lang="zh"], #console li, #console p {line-height: 170%; letter-spacing: .15em; word-spacing: 0; font-size: 10.5pt}
+#console li {list-style: none; margin-left: 40px}
+.twocol li {text-align: left; margin-left: 50px}
+.twocol {margin: -10px 0 -15px; column-gap: 0; padding: 10px 0}
+
+@media screen and (max-width: 1500px) {.tab, .tab2 {font-size: 10.5pt; margin-right: -3px}}
+@media screen and (max-width: 1076px) {.tab2 {padding-top: 5px; padding-bottom: 4.5px}}
+@media screen and (max-width: 1000px) {#console div[lang="zh"], #console p, #console li {font-size: 10.5pt}}
+@media screen and (min-width: 0) {body {font-size: 12pt; line-height: 1.3}}
+@media screen and (min-width: 1500px) {#sidebar table {padding: 0; width: 255px; #sidebar button.reload, #sidebar button.stop {padding-top: 5px; padding-bottom: 5px; min-width: 119px}}

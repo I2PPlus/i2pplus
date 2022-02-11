@@ -9,12 +9,12 @@ input.toggle_input:checked + label + hr + table, input.toggle_input + label + hr
 	margin-top: 20px;
 }
 
-.toggleview:hover, .toggleview:active, .addtorrentsection:hover .toggleview, .newtorrentsection:hover .toggleview {
+.toggleview:hover, .toggleview:active, #addSection:hover .toggleview, #createSection:hover .toggleview {
 	color: #777 !important;
 	cursor: default !important;
 	background: linear-gradient(180deg,#fff 50%, #efefef 50%) !important;
 }
 
-.addtorrentsection:hover, .newtorrentsection:hover, .addtorrentsection:hover .toggleview, .newtorrentsection:hover .toggleview {
+#addSection:hover, #createSection:hover, #addSection:hover .toggleview, #createSection:hover .toggleview {
 	box-shadow: inset 0 0 0 1px #fff !important;
 }

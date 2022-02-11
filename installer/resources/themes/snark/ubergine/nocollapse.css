@@ -41,7 +41,7 @@ input#toggle_createtorrent:not(:checked) + label + hr + table, input#toggle_crea
 .toggleview:focus img, .toggleview img:active, .toggleview:active img,
 .mainsection[id] .toggleview img, .mainsection[id] .toggleview img:active, .mainsection[id]:hover .toggleview img,
 .mainsection[id] .toggleview:focus img, .mainsection[id] .toggleview img:active, .mainsection[id] .toggleview:active img,
-input:not(:checked) + .toggleview > img, #snarkCommentSection input:not(:checked) + .toggleview > img {
+input:not(:checked) + .toggleview > img, #commentSection input:not(:checked) + .toggleview > img {
   background: linear-gradient(180deg,#767 50%, #323 50%, #212) !important;
   mix-blend-mode: normal !important;
   transform: none !important;
@@ -49,12 +49,12 @@ input:not(:checked) + .toggleview > img, #snarkCommentSection input:not(:checked
   box-shadow: none !important;
 }
 
-.addtorrentsection:hover table, .newtorrentsection:hover table:not(#trackerselect),
+#addSection:hover table, #createSection:hover table:not(#trackerselect),
 .configsection .configTitle, .toggleview {
   will-change: auto !important;
 }
 
-.addtorrentsection table, .newtorrentsection table:not(#trackerselect) {
+#addSection table, #createSection table:not(#trackerselect) {
   animation: none !important;
 }
 

@@ -2745,19 +2745,17 @@ public class I2PSnarkServlet extends BasicServlet {
         //String newFile = req.getParameter("newFile");
         //if ( (newFile == null) || (newFile.trim().length() <= 0) ) newFile = "";
 
-        out.write("<div id=\"add\" class=\"snarkNewTorrent\">\n" +
+        out.write("<div id=\"add\" class=\"snarkNewTorrent\">\n");
         // *not* enctype="multipart/form-data", so that the input type=file sends the filename, not the file
-                  "<form action=\"_post\" method=\"POST\">\n");
+        out.write("<form action=\"_post\" method=\"POST\">\n");
+        out.write("<div class=\"sectionPanel\" id=\"addSection\">\n");
         writeHiddenInputs(out, req, "Add");
-        out.write("<div class=\"addtorrentsection\">" +
-                  "<input hidden class=\"toggle_input\" id=\"toggle_addtorrent\" type=\"checkbox\"");
+        out.write("<input hidden class=\"toggle_input\" id=\"toggle_addtorrent\" type=\"checkbox\"");
         if (newURL.length() > 0)
             out.write(" checked=\"checked\">");  // force toggle open
         else
             out.write('>');
         out.write("<label id=\"tab_addtorrent\" class=\"toggleview\" for=\"toggle_addtorrent\"><span class=\"tab_label\">");
-//        out.write(toThemeImg("add"));
-//        out.write(' ');
         out.write(_t("Add Torrent"));
         out.write("</span></label>");
 
@@ -2779,25 +2777,17 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write(" title=\"");
         out.write(_t("Enter the directory to save the data in (default {0})", _manager.getDataDir().getAbsolutePath()));
         out.write("\"></td></tr>\n");
-
-//        out.write("<tr><td>&nbsp;<td><span class=\"snarkAddInfo\">");
-//        out.write(_t("You can also copy .torrent files to: {0}.", "<code>" + _manager.getDataDir().getAbsolutePath() + "</code>"));
-//        out.write("\n");
-//        out.write(_t("Removing a .torrent will cause it to stop."));
-//        out.write("<br></span></td></tr></table>\n");
         out.write("</table>\n");
-        out.write("</div></form></div>");
+        out.write("</div>\n</form>\n</div>\n");
     }
 
     private void writeSeedForm(PrintWriter out, HttpServletRequest req, List<Tracker> sortedTrackers) throws IOException {
-        out.write("<div id=\"new\" class=\"newtorrentsection\"><div class=\"snarkNewTorrent\">\n" +
+        out.write("<div class=\"sectionPanel\" id=\"createSection\">\n<div>\n");
         // *not* enctype="multipart/form-data", so that the input type=file sends the filename, not the file
-                  "<form action=\"_post\" method=\"POST\">\n");
+        out.write("<form action=\"_post\" method=\"POST\">\n");
         writeHiddenInputs(out, req, "Create");
         out.write("<input hidden class=\"toggle_input\" id=\"toggle_createtorrent\" type=\"checkbox\">" +
                   "<label id=\"tab_newtorrent\" class=\"toggleview\" for=\"toggle_createtorrent\"><span class=\"tab_label\">");
-//        out.write(toThemeImg("create"));
-//        out.write(' ');
         out.write(_t("Create Torrent"));
         out.write("</span></label><hr>\n<table border=\"0\"><tr><td>");
         //out.write("From file: <input type=\"file\" name=\"newFile\" size=\"50\" value=\"" + newFile + "\" /><br>\n");
@@ -2873,7 +2863,7 @@ public class I2PSnarkServlet extends BasicServlet {
         //out.write("\" > " +
         out.write("</td>\n</tr>\n" +
                   "</table>\n" +
-                  "</form>\n</div>\n</div>");
+                  "</form>\n</div>\n</div>\n");
     }
 
     private static final int[] times = { 5, 15, 30, 60, 2*60, 5*60, 10*60, 30*60, 60*60, -1 };
@@ -2903,8 +2893,6 @@ public class I2PSnarkServlet extends BasicServlet {
                   "<div class=\"configsectionpanel lang_" + lang + "\"><div class=\"snarkConfig\">\n");
         writeHiddenInputs(out, req, "Save");
         out.write("<span class=\"configTitle\">");
-//        out.write(toThemeImg("config"));
-//        out.write(' ');
         out.write(_t("Configuration"));
         out.write("</span><hr>\n" +
                   "<table border=\"0\" id=\"configs\">\n");
@@ -3536,7 +3524,7 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final String HEADER_D = "snark_big.css?" + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\" >";
     private static final String HEADER_I = "images/images.css?" + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\" >";
     private static final String HEADER_Z = "override.css\" rel=\"stylesheet\" type=\"text/css\" >";
-    private static final String TABLE_HEADER = "<table border=\"0\" id=\"snarkTorrents\" width=\"100%\" >\n" + "<thead id=\"snarkHead\">\n";
+    private static final String TABLE_HEADER = "<table border=\"0\" id=\"torrents\" width=\"100%\" >\n" + "<thead id=\"snarkHead\">\n";
     private static final String FOOTER = "</div>\n</center>\n<span id=\"endOfPage\" data-iframe-height></span>\n" +
                                          "<script type=\"text/javascript\" src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" +
                                          CoreVersion.VERSION + "\" id=\"iframeResizer\"></script>\n" +
@@ -4168,7 +4156,7 @@ public class I2PSnarkServlet extends BasicServlet {
             }
             if (er || ec) {
                 CommentSet comments = snark.getComments();
-                buf.append("<div class=\"mainsection\" id=\"snarkCommentSection\">")
+                buf.append("<div class=\"mainsection\" id=\"commentSection\">")
                    .append("<input class=\"toggle_input\" id=\"toggle_comments\" type=\"checkbox\"");
                 if (comments != null && !comments.isEmpty())
                     buf.append(" checked");
@@ -4537,7 +4525,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         CommentSet comments = snark.getComments();
         if (er || ec) {
-            buf.append("<div class=\"mainsection\" id=\"snarkCommentSection\">\n");
+            buf.append("<div class=\"mainsection\" id=\"commentSection\">\n");
                 buf.append("<input class=\"toggle_input\" id=\"toggle_comments\" type=\"checkbox\"");
                 if (comments != null && !comments.isEmpty())
                     buf.append(" checked");
@@ -5324,7 +5312,7 @@ public class I2PSnarkServlet extends BasicServlet {
         MetaInfo meta = snark.getMetaInfo();
         if (meta == null)
             return;
-        buf.append("<div id=\"torrentEditSection\" class=\"mainsection\">\n" +
+        buf.append("<div id=\"editSection\" class=\"mainsection\">\n" +
                    "<input hidden class=\"toggle_input\" id=\"toggle_torrentedit\" type=\"checkbox\">" +
                    "<label id=\"tab_torrentedit\" class=\"toggleview\" for=\"toggle_torrentedit\"><span class=\"tab_label\">");
         buf.append(_t("Edit Torrent"))

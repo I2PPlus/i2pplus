@@ -333,7 +333,7 @@ h4.sb_info + hr + form {
 
 #sidebar td:first-child, #sb_localtunnels td:nth-child(2) {text-align: left}
 #sidebar td:last-child {text-align: right}
-#sidebar #sb_internals td, #sidebar #sb_advanced td, #sidebar #sb_services td {text-align: center}
+#sidebar #sb_internals td, #sidebar #sb_advanced td, #sidebar #sb_services td, #sidebar #sb_help td {text-align: center}
 
 #sb_localtunnels td {
   vertical-align: middle;

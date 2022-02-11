@@ -889,7 +889,7 @@ pre {
 
 #sidebar td:first-child, #sb_localtunnels td:nth-child(2) {text-align: left}
 #sidebar td:last-child {text-align: right}
-#sidebar #sb_internals td, #sidebar #sb_advanced td, #sidebar #sb_services td {text-align: center}
+#sidebar #sb_internals td, #sidebar #sb_advanced td, #sidebar #sb_services td, #sidebar #sb_help td {text-align: center}
 
 #sb_internals, #sb_advanced, #sb_help {
   margin: -5px -6px -5px -10px !important;
@@ -1170,15 +1170,20 @@ p:empty + .sb_notice {
   padding: 2px 0 0 0 !important;
 }
 
-#sidebar a:link, #sidebar a:visited {
+#sidebar a {
   padding: 1px 2px;
   display: inline-block;
   line-height: 1.2;
   word-spacing: 0;
 }
 
+#sidebar #sb_advancedgeneral a, #sidebar #sb_general a, #sidebar #sb_shortgeneral a {
+  padding: 0;
+  display: inline-block;
+}
+
 #sidebar a:hover {
-  color: var(--hover);
+  color: var(--a_hover);
 }
 
 #sidebar hr:last-child {
@@ -3553,6 +3558,10 @@ tr.addnew {
 
 /* /configui lang selection boxes + theme selection */
 
+.themechoice .optbox, .langselect .optbox {
+  position: absolute;
+}
+
 #themeui .cancel, #langui .cancel, #consolepass .cancel {
   display: none;
 }
@@ -3625,27 +3634,27 @@ tr.addnew {
   padding: 5px 0 !important;
 }
 
-.themechoice .optbox:hover + img ~ .themelabel {
+.themechoice .optbox:hover ~ .themelabel {
   color: var(--hover);
 }
 
-.themechoice .optbox:checked + img ~ .themelabel {
+.themechoice .optbox:checked ~ .themelabel {
   font-weight: 700;
   color: var(--ink);
   background: #040033 !important;
 }
 
-.themechoice .optbox:checked + img {
+.themechoice .optbox:checked + .langflag {
   transform: scale(0.9);
   opacity: 1;
 }
 
-.themechoice .optbox:focus + img ~ .themelabel {
+.themechoice .optbox:focus ~ .themelabel {
   color: var(--hover);
   box-shadow: inset 0 0 10px 3px #000;
 }
 
-.themechoice:hover .optbox:checked + img {
+.themechoice:hover .optbox:checked + .langflag {
   transform: scale(0.92);
   animation: glo ease-in-out 1.5s infinite alternate .5s;
 }
@@ -3790,19 +3799,27 @@ td#themeselect {
   background: var(--label_hover) !important;
 }
 
+.langflag, .langflag img {
+  width: 40px;
+  height: 30px;
+  border-radius: 3px;
+}
+
 .langflag {
   margin: 0 0 -8px;
-  width: 40px;
-  height: 36px;
   opacity: .75;
   text-align: center;
   display: inline-block;
+  position: relative;
 }
 
 .langselect:active .langflag, .optbox:checked + .langflag {
   transform: scale(.8);
   opacity: 1;
 }
+
+.langflag::before {position: absolute; top: 0; bottom: 0; left: 0; right: 0; z-index: 10; border-radius: 3px; box-shadow: 0 0 0 1px #000, inset 0 0 0 1px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.4); background: linear-gradient(180deg, rgba(255,255,255,.5), rgba(0,0,0,0) 75%); content: ""; display: inline-block}
+.langselect:hover .optbox:not(:checked) ~ .langflag::before {box-shadow: 0 0 0 1px #000, inset 0 0 0 1px rgba(106,22,152,.5), inset 0 0 0 1px rgba(255,255,255,.5)}
 
 .ui_lang {
   margin: 10px -4px 0 !important;

@@ -1308,7 +1308,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         }
 
 //        if (_log.shouldLog(Log.INFO)) _log.info(getPrefix() + "Destroying the session", new Exception("DestroySession()"));
-        if (_log.shouldLog(Log.INFO)) _log.info(getPrefix() + "Destroying the session");
+        if (_log.shouldLog(Log.INFO)) _log.info(getPrefix() + "Destroying the session...");
         if (sendDisconnect) {
             if (_producer != null) {    // only null if overridden by I2PSimpleSession
             try {
@@ -1343,7 +1343,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     private void closeSocket() {
         if (_log.shouldLog(Log.INFO))
 //            _log.info(getPrefix() + "Closing the socket", new Exception("closeSocket"));
-            _log.info(getPrefix() + "Closing the socket");
+            _log.info(getPrefix() + "Closing the socket...");
         // maybe not the right place for this, but let's be sure
         Destination d = _myDestination;
         if (d != null)
@@ -1880,7 +1880,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         if (!_routerSupportsBlindingInfo)
             throw new I2PSessionException("Router does not support BlindingInfo");
         if (_log.shouldInfo())
-            _log.info("Sending BlindingInfo");
+            _log.info("Sending BlindingInfo...");
         SessionId id = _sessionId;
         if (id == null)
             id = DUMMY_SESSION;
@@ -1904,7 +1904,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         if (_isReduced) {
             _isReduced = false;
             if (_log.shouldLog(Log.WARN))
-                _log.warn(getPrefix() + "Restoring configured tunnel quantity");
+                _log.warn(getPrefix() + "Restoring configured tunnel quantity...");
             try {
                 _producer.updateTunnels(this, 0);
             } catch (I2PSessionException ise) {
