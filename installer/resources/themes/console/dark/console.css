@@ -154,7 +154,7 @@ p:empty + .sb_notice {margin-top: 9px}
 .warntext {color: #b00}
 
 /* sidebar news */
-#sb_newsheadings {margin-left: 0; margin-bottom: -7px; width: 192px; text-align: right}
+#sb_newsheadings {margin-left: -12px; margin-bottom: -7px; width: 206px; text-align: right}
 #sidebar.routersummary #sb_newsheadings table {margin: -8px 0 3px}
 #sb_newsheadings table::before {content: none}
 #sb_newsheadings a {padding: 0 3px 0 0; width: 100%; display: inline-block}
