@@ -796,7 +796,7 @@ td.graphicStatus img {
 	margin: -2px -3px 0 0;
 }
 
-.addtorrentsection table {
+#addSection table {
 	margin-bottom: 6px;
 }
 
@@ -1319,11 +1319,11 @@ tt {
 	width: 30%;
 }
 
-.addtorrentsection, .newtorrentsection, .configsection, .configsectionpanel {
+#addSection, #createSection, .configsection, .configsectionpanel {
 	border: var(--border);
 }
 
-.addtorrentsection, .newtorrentsection, .configsection, .configsectionpanel,
+#addSection, #createSection, .configsection, .configsectionpanel,
 .snarkConfig, .snarknavbar, #screenlog, #torrentDisplay, .pagenavcontrols {
 	box-shadow: var(--highlight);
 	background: #eee;
@@ -1331,55 +1331,55 @@ tt {
 	background-size: 248px, 100%;
 }
 
-.addtorrentsection, .newtorrentsection {
+#addSection, #createSection {
 	padding-bottom: 5px;
 	transition: ease box-shadow .3s;
 }
 
-.addtorrentsection:hover, .newtorrentsection:hover, .addtorrentsection:hover .toggleview, .newtorrentsection:hover .toggleview,
+#addSection:hover, #createSection:hover, #addSection:hover .toggleview, #createSection:hover .toggleview,
 .configsection .configTitle:hover, #torrentDisplay label:hover, .mainsection:hover .toggleview {
 	box-shadow: inset 0 0 0 1px rgba(200,32,48,.5), inset 0 0 0 2px #fff;
 	transition: ease box-shadow .3s;
 }
 
-.addtorrentsection:hover .toggleview, .newtorrentsection:hover .toggleview, .mainsection:hover .toggleview,
+#addSection:hover .toggleview, #createSection:hover .toggleview, .mainsection:hover .toggleview,
 #tab_config a:hover, #tab_config a:focus {
 	color: #b23 !important;
 }
 
-.addtorrentsection:hover .toggleview:active, .newtorrentsection:hover .toggleview:active, .toggleview:hover, .toggleview:active {
+#addSection:hover .toggleview:active, #createSection:hover .toggleview:active, .toggleview:hover, .toggleview:active {
 	color: #bbb !important;
 }
 
-.addtorrentsection:active, .newtorrentsection:active {
+#addSection:active, #createSection:active {
 	box-shadow: var(--highlight);
 }
 
-.addtorrentsection td:first-child, .newtorrentsection td:first-child {
+#addSection td:first-child, #createSection td:first-child {
 	white-space: nowrap;
 	min-width: 120px;
 }
 
-.addtorrentsection td:first-child {
+#addSection td:first-child {
 	padding-right: 10px;
 	text-align: right;
 	font-weight: 700;
 }
 
-.newtorrentsection table tr:first-child td:first-child {
+#createSection table tr:first-child td:first-child {
 	font-weight: 700 !important;
 }
 
-.newtorrentsection td:first-child {
+#createSection td:first-child {
 	padding-right: 10px;
 	text-align: right !important;
 }
 
-.newtorrentsection td:nth-child(2) td:first-child {
+#createSection td:nth-child(2) td:first-child {
 	text-align: left !important;
 }
 
-.addtorrentsection input[type=text], .newtorrentsection input[type=text] {
+#addSection input[type=text], #createSection input[type=text] {
 	max-width: 70%;
 	min-width: 452px;
 }
@@ -1403,7 +1403,7 @@ hr {
 	border: none;
 }
 
-.addtorrentsection hr, .newtorrentsection hr {
+#addSection hr, #createSection hr {
 	margin: -6px 0;
 }
 
@@ -1897,11 +1897,11 @@ textarea[name="nofilter_newComment"]:focus {
 	display: none;
 }
 
-.newtorrentsection td:first-child {
+#createSection td:first-child {
 	font-weight: 700;
 }
 
-.newtorrentsection #trackerselect td:first-child {
+#createSection #trackerselect td:first-child {
 	font-weight: 400;
 }
 
@@ -2425,7 +2425,7 @@ tr:not(.peerinfo) .torrentUploaded:empty::after {
 	border: var(--border);
 }
 
-#torrentEditSection {
+#editSection {
 	margin: -1px 0 0 !important;
 	border: var(--border);
 }
@@ -2439,7 +2439,7 @@ tr:not(.peerinfo) .torrentUploaded:empty::after {
 	margin-bottom: 0 !important;
 }
 
-#snarkInfo ~ #torrentEditSection input:checked + .toggleview + hr + table {
+#snarkInfo ~ #editSection input:checked + .toggleview + hr + table {
 	margin-top: 1px;
 }
 
@@ -2630,26 +2630,26 @@ td.graphicStatus img {
 	to {background: linear-gradient(270deg, #7f7 3px, rgba(0,0,0,0) 3px)}
 }
 
-.addtorrentsection input[type=submit], .newtorrentsection input[type=submit] {
+#addSection input[type=submit], #createSection input[type=submit] {
 	min-width: 90px;
 	float: none !important;
 }
 
-.addtorrentsection table, .newtorrentsection table, .configsection table, .configsectionpanel table {
+#addSection table, #createSection table, .configsection table, .configsectionpanel table {
 	border: none;
 	background: none;
 }
 
-.configsection, .newtorrentsection {
+.configsection, #createSection {
 	margin-top: 5px;
 }
 
-.addtorrentsection {
+#addSection {
 	margin-top: -1px;
 }
 
 @supports (-moz-user-select: all) {
-	.configsection, .addtorrentsection, .newtorrentsection {
+	.configsection, #addSection, #createSection {
 		margin-top: -1px !important;
 	}
 }
@@ -2827,7 +2827,7 @@ input[name="i2cpOpts"], input[name="nofilter_dataDir"] {
 }
 
 @media screen and (max-width: 1000px) {
-	.addtorrentsection input[type=text], .newtorrentsection input[type=text] {
+	#addSection input[type=text], #createSection input[type=text] {
 		min-width: 0;
 	}
 	input.add, input.create {

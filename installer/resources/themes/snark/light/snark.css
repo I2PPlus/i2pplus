@@ -100,7 +100,7 @@ b {
 }
 
 .toggleview, .configTitle, .snarknavbar, img, input[type=submit], input[type=radio], input[type=checkbox],
-label, th img, .newtorrentsection, #closelog, #expand, #shrink, #pagenavbottom, #configs {
+label, th img, #createSection, #closelog, #expand, #shrink, #pagenavbottom, #configs {
   user-select: none;
 }
 
@@ -1542,11 +1542,11 @@ thead a:active img {
   filter: hue-rotate(45deg) drop-shadow(0 0 1px #f30) !important;
 }
 
-.addtorrentsection input[type=text], .newtorrentsection input[type=text] {
+#addSection input[type=text], #createSection input[type=text] {
   width: 80%;
 }
 
-.addtorrentsection tr:first-child td > *, .newtorrentsection tr:first-child td > * {
+#addSection tr:first-child td > *, #createSection tr:first-child td > * {
   vertical-align: middle;
 }
 
@@ -1756,7 +1756,7 @@ img[src$="details.png"] {
   display: inline-block;
 }
 
-.newtorrentsection td:first-child, .addtorrentsection td:first-child, .configsectionpanel td:first-child {
+#createSection td:first-child, #addSection td:first-child, .configsectionpanel td:first-child {
   width: auto !important;
   text-align: right;
 }
@@ -1775,13 +1775,13 @@ img[src$="details.png"] {
   100% {filter: opacity(1)}
 }
 
-.addtorrentsection table, .newtorrentsection table:not(#trackerselect) {
+#addSection table, #createSection table:not(#trackerselect) {
   position: relative;
   animation: slide-in .2s ease-out, fade-in .3s ease-out;
   will-change: transform;
 }
 
-.iframed .addtorrentsection table, .iframed .newtorrentsection table:not(#trackerselect) {
+.iframed #addSection table, .iframed #createSection table:not(#trackerselect) {
   position: static;
   animation: fade-in .1s ease-out;
   animation: none;
@@ -1816,11 +1816,11 @@ img[src$="details.png"] {
   border-top: var(--border_soft);
 }
 
-.iframed #torrentEditSection {
+.iframed #editSection {
   margin-top: -3px !important;
 }
 
-#snarkFiles, #commentSection, #torrentEditSection {
+#snarkFiles, #commentSection, #editSection {
   background: var(--section);
 }
 
@@ -1848,7 +1848,7 @@ body:not(.iframed) #commentSection {
   margin-bottom: -6px !important;
 }
 
-.newtorrentsection, .addtorrentsection, .configsection, .configsectionpanel {
+#createSection, #addSection, .configsection, .configsectionpanel {
   padding: 0 10px;
   text-align: center;
   border: var(--border_soft);
@@ -1856,16 +1856,16 @@ body:not(.iframed) #commentSection {
   background: var(--section) !important;
 }
 
-.newtorrentsection {
+#createSection {
   margin: 0 0 10px 0;
   background: #fff;
 }
 
-.iframed .newtorrentsection {
+.iframed #createSection {
   background: var(--panel_iframed);
 }
 
-.addtorrentsection {
+#addSection {
   margin: -1px 0 10px;
   background: linear-gradient(180deg,#fafaff,#e0e0ef);
 }
@@ -1874,7 +1874,7 @@ body:not(.iframed) #commentSection {
   background: linear-gradient(180deg,#f8f8ff,#f2f2ff) !important;
 }
 
-.iframed .addtorrentsection {
+.iframed #addSection {
   background: var(--panel_iframed);
 }
 
@@ -1949,24 +1949,24 @@ form:last-child .configsectionpanel {
   border-bottom: var(--border_soft);
 }
 
-.newtorrentsection, .addtorrentsection, .configsection, .configsectionpanel {
+#createSection, #addSection, .configsection, .configsectionpanel {
   margin-bottom: -1px;
   border-left: none;
   border-right: none;
 }
 
-.newtorrentsection table, .addtorrentsection table {
+#createSection table, #addSection table {
   margin-top: -5px;
 }
 
-.newtorrentsection td:first-child, .addtorrentsection td:first-child {
+#createSection td:first-child, #addSection td:first-child {
   min-width: 140px;
   font-weight: 700;
   color: var(--ink_light);
 }
 
-.newtorrentsection td:nth-child(n+2),
-.addtorrentsection td:nth-child(n+2) {
+#createSection td:nth-child(n+2),
+#addSection td:nth-child(n+2) {
   text-align: left;
 }
 
@@ -3513,7 +3513,7 @@ td.trackerDetails {
   margin-top: 10px;
 }
 
-#lowersection > .newtorrentsection + .configsection {
+#lowersection > #createSection + .configsection {
   margin-top: 0;
 }
 
@@ -4188,17 +4188,17 @@ td.torrentAction input[type=submit] {
   .canhide {
     display: none;
   }
-  .addtorrentsection input[type=text], .newtorrentsection input[type=text] {
+  #addSection input[type=text], #createSection input[type=text] {
     width: 70%;
   }
   .trackerconfig input[type=text] {
     min-width: 50px !important;
     max-width: 140px !important;
   }
-  .newtorrentsection td:first-child, .addtorrentsection td:first-child {
+  #createSection td:first-child, #addSection td:first-child {
     min-width: 80px;
   }
-  .newtorrentsection a, .trackerconfig a {
+  #createSection a, .trackerconfig a {
     max-width: 200px;
     display: inline-block;
     overflow: hidden;

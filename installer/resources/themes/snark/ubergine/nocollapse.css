@@ -49,12 +49,12 @@ input:not(:checked) + .toggleview > img, #commentSection input:not(:checked) + .
   box-shadow: none !important;
 }
 
-.addtorrentsection:hover table, .newtorrentsection:hover table:not(#trackerselect),
+#addSection:hover table, #createSection:hover table:not(#trackerselect),
 .configsection .configTitle, .toggleview {
   will-change: auto !important;
 }
 
-.addtorrentsection table, .newtorrentsection table:not(#trackerselect) {
+#addSection table, #createSection table:not(#trackerselect) {
   animation: none !important;
 }
 

@@ -57,7 +57,7 @@ th img, a img {
 }
 
 .toggleview, .configTitle, .snarknavbar, img, input[type=submit], input[type=radio], input[type=checkbox],
-label, th img, .newtorrentsection, #closelog, #pagenavbottom {
+label, th img, #createSection, #closelog, #pagenavbottom {
   user-select: none;
 }
 
@@ -2326,17 +2326,17 @@ img:hover {
   100% {filter: opacity(1)}
 }
 
-.addtorrentsection table, .newtorrentsection table:not(#trackerselect) {
+#addSection table, #createSection table:not(#trackerselect) {
   animation: fade-in .05s linear, slide-in .05s linear;
   will-change: transform;
 }
 
-.iframed .addtorrentsection table {
+.iframed #addSection table {
   animation: fade-in .05s linear, slide-in .05s ease-out;
   animation: none;
 }
 
-.iframed .newtorrentsection table:not(#trackerselect) {
+.iframed #createSection table:not(#trackerselect) {
   animation: fade-in .05s linear;
   animation: none;
 }
@@ -2345,7 +2345,7 @@ img:hover {
   animation: fade-in .05s ease-out;
 }
 
-.newtorrentsection, .addtorrentsection, .configsection, .configsectionpanel, .section, .mainsection {
+#createSection, #addSection, .configsection, .configsectionpanel, .section, .mainsection {
   margin: 0 0 10px 0;
   padding: 0 10px;
   word-wrap: break-word;
@@ -2356,16 +2356,16 @@ img:hover {
   background: var(--panel);
 }
 
-.newtorrentsection:hover, .addtorrentsection:hover, .configsection:hover,
-.iframed .newtorrentsection:hover, .iframed .addtorrentsection:hover, .iframed .configsection:hover {
+#createSection:hover, #addSection:hover, .configsection:hover,
+.iframed #createSection:hover, .iframed #addSection:hover, .iframed .configsection:hover {
   background-blend-mode: normal;
 }
 
-.iframed #torrentEditSection, .iframed #commentSection {
+.iframed #editSection, .iframed #commentSection {
   margin: -1px 0 0;
 }
 
-#torrentEditSection hr {
+#editSection hr {
   margin-bottom: 0;
 }
 
@@ -2403,7 +2403,7 @@ select, input, input.r, input[name="nofilter_dataDir"], a.control {
   font: 9pt var(--bodyfont);
 }
 
-.iframed .mainsection, .iframed .newtorrentsection, .iframed .addtorrentsection,
+.iframed .mainsection, .iframed #createSection, .iframed #addSection,
 .iframed .configsection, .iframed .configsectionpanel {
   border-radius: 0;
   box-shadow: inset 0 0 1px 0 #ffeffd;
@@ -2411,7 +2411,7 @@ select, input, input.r, input[name="nofilter_dataDir"], a.control {
   background-blend-mode: luminosity, normal;
 }
 
-.iframed .newtorrentsection, .iframed .addtorrentsection, .iframed .configsection, .iframed .configsectionpanel,
+.iframed #createSection, .iframed #addSection, .iframed .configsection, .iframed .configsectionpanel,
 .iframed .mainsection#commentSection {
   margin-top: -11px;
 }
@@ -2440,7 +2440,7 @@ select, input, input.r, input[name="nofilter_dataDir"], a.control {
   margin-bottom: 1px !important;
 }
 
-.iframed #torrentEditSection + #commentSection {
+.iframed #editSection + #commentSection {
   margin-top: -1px;
 }
 
@@ -2449,7 +2449,7 @@ select, input, input.r, input[name="nofilter_dataDir"], a.control {
 }
 
 .iframed .mainsection#commentSection,
-.iframed #torrentEditSection {
+.iframed #editSection {
   margin-bottom: 0;
 }
 
@@ -2457,16 +2457,16 @@ select, input, input.r, input[name="nofilter_dataDir"], a.control {
   margin-top: -1px !important;
 }
 
-.iframed .newtorrentsection, .iframed .addtorrentsection {
+.iframed #createSection, .iframed #addSection {
   padding-bottom: 3px;
 }
 
-.addtorrentsection td:first-child, .newtorrentsection td:first-child {
+#addSection td:first-child, #createSection td:first-child {
   width: 10%;
   white-space: nowrap;
 }
 
-.addtorrentsection input[type=text], .newtorrentsection input[type=text] {
+#addSection input[type=text], #createSection input[type=text] {
   width: 80%;
 }
 
@@ -2484,7 +2484,7 @@ select, input, input.r, input[name="nofilter_dataDir"], a.control {
   display: none;
 }
 
-.newtorrentsection form, .configsection form, .addtorrentsection form {
+#createSection form, .configsection form, #addSection form {
   margin-top: 1px;
   color: #ddd !important;
 }
@@ -5315,14 +5315,14 @@ td.torrentAction input[type=submit] {
   #actionStopAll, #actionStartAll {
     padding: 11px 18px !important;
   }
-  .iframed #torrentEditSection + #commentSection,
-  .iframed #torrentEditSection {
+  .iframed #editSection + #commentSection,
+  .iframed #editSection {
     margin-top: -7px;
   }
-  .iframed #torrentEditSection + #commentSection {
+  .iframed #editSection + #commentSection {
    margin-bottom: 6px;
   }
-  .iframed #torrentEditSection hr {
+  .iframed #editSection hr {
     margin-bottom: 6px;
   }
   td.peerCount b {
@@ -5464,10 +5464,10 @@ td.torrentAction input[type=submit] {
   .section, .mainsection {
     padding: 6px;
   }
-  .mainsection, .addtorrentsection, .newtorrentsection, .configsection, .configsectionpanel {
+  .mainsection, #addSection, #createSection, .configsection, .configsectionpanel {
     margin-bottom: 6px !important;
   }
-  #torrentEditSection {
+  #editSection {
     padding-bottom: 2px;
   }
   .iframed #snarkFiles {
@@ -5545,7 +5545,7 @@ td.torrentAction input[type=submit] {
   b.alwaysShow {
     display: inline;
   }
-  .addtorrentsection input[type=text], .newtorrentsection input[type=text] {
+  #addSection input[type=text], #createSection input[type=text] {
     width: 75%;
   }
   .knownTracker a, #trackerselect td a {
@@ -5692,7 +5692,7 @@ td.torrentAction input[type=submit] {
     font-size: 0 !important;
     color: transparent !important;
   }
-  .addtorrentsection td:first-child, .newtorrentsection td:first-child {
+  #addSection td:first-child, #createSection td:first-child {
     width: 20%;
   }
   .configsectionpanel .configTitle {
@@ -5711,7 +5711,7 @@ td.torrentAction input[type=submit] {
     margin-right: 0 !important;
     height: 14px;
   }
-  #configs td, .addtorrentsection td, .newtorrentsection td, input, input[name="nofilter_dataDir"], select, textarea {
+  #configs td, #addSection td, #createSection td, input, input[name="nofilter_dataDir"], select, textarea {
     font-size: 8.5pt !important;
   }
   #configs td:first-child, .configsectionpanel input[name="nofilter_dataDir"], .configsectionpanel textarea {
@@ -5746,7 +5746,7 @@ td.torrentAction input[type=submit] {
   th a img {
     max-height: 16px !important;
   }
-  .addtorrentsection input[type=text], .newtorrentsection input[type=text] {
+  #addSection input[type=text], #createSection input[type=text] {
     width: 65% !important;
   }
   .snarkCommentInfo td:first-child, .snarkComments td:first-child {
@@ -6101,7 +6101,7 @@ td.torrentAction input[type=submit] {
   select, input, input.r, input[name="nofilter_dataDir"] {
     font-size: 10pt !important;
   }
-  .addtorrentsection td:first-child, .newtorrentsection td:first-child {width: 200px}
+  #addSection td:first-child, #createSection td:first-child {width: 200px}
   .debuginfo td {
     font-size: 9pt !important;
     line-height: 1.2;

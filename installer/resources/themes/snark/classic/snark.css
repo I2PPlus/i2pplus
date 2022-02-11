@@ -1690,7 +1690,7 @@ th a:link img, th a:visited img {
   opacity: 1;
 }
 
-.addtorrentsection input, .newtorrentsection input {
+#addSection input, #createSection input {
   margin-left: 5px !important;
 }
 
@@ -1793,8 +1793,8 @@ img {
 
 /* end pagenav */
 
-.newtorrentsection td:first-child,
-.addtorrentsection td:first-child {
+#createSection td:first-child,
+#addSection td:first-child {
   padding-right: 5px;
   padding-left: 5px;
   width: 120px;
@@ -1802,8 +1802,8 @@ img {
   font-weight: 700;
 }
 
-.newtorrentsection td:nth-child(n+2),
-.addtorrentsection td:nth-child(n+2) {
+#createSection td:nth-child(n+2),
+#addSection td:nth-child(n+2) {
   text-align: left;
 }
 
@@ -2021,13 +2021,13 @@ img {
   100% {filter: opacity(1)}
 }
 
-.addtorrentsection table, .newtorrentsection table:not(#trackerselect) {
+#addSection table, #createSection table:not(#trackerselect) {
   animation: slide-in .1s ease-out, fade-in .5s linear;
   position: relative;
   will-change: transform;
 }
 
-.iframed .addtorrentsection table, .iframed .newtorrentsection table:not(#trackerselect) {
+.iframed #addSection table, .iframed #createSection table:not(#trackerselect) {
   animation: fade-in .2s ease-out;
   will-change: transform;
 }
@@ -2036,20 +2036,20 @@ img {
   animation: fade-in .5s ease-out;
 }
 
-.mainsection, .newtorrentsection, .addtorrentsection, .configsection, .configsectionpanel {
+.mainsection, #createSection, #addSection, .configsection, .configsectionpanel {
   word-wrap: break-word;
   text-align: center;
   border: var(--border_main);
   background: var(--bg);
 }
 
-.newtorrentsection, .addtorrentsection, .configsection {
+#createSection, #addSection, .configsection {
   border-radius: 3px;
   box-shadow: var(--highlight);
   background-blend-mode: luminosity;
 }
 
-.iframed .newtorrentsection, .iframed .addtorrentsection, .iframed .configsection {
+.iframed #createSection, .iframed #addSection, .iframed .configsection {
   border-radius: 0;
 }
 
@@ -2064,14 +2064,14 @@ img {
   margin: -1px 0;
 }
 
-.newtorrentsection {
+#createSection {
   margin: 0 0 9px 0;
   padding: 0 10px;
   background: var(--bg3);
   background: var(--section);
 }
 
-.addtorrentsection {
+#addSection {
   margin: 9px 0;
   padding: 0 10px;
   background: var(--bg3);
@@ -2091,7 +2091,7 @@ img {
   background: linear-gradient(180deg,var(--bg),var(--bg3) 40px,var(--bg));
 }
 
-.iframed .addtorrentsection, .iframed #new, .iframed .addtorrentsection, .iframed .newtorrentsection {
+.iframed #addSection, .iframed #new, .iframed #addSection, .iframed #createSection {
   margin-top: -1px !important;
 }
 
@@ -2101,7 +2101,7 @@ img {
 
 /* end panels */
 
-.addtorrentsection table, .newtorrentsection table {
+#addSection table, #createSection table {
   margin-top: -5px;
 }
 
@@ -2111,8 +2111,8 @@ code {
   color: #050;
 }
 
-.iframed .snarknavbar, .iframed .mainsection, .iframed .addtorrentsection,
-.iframed .newtorrentsection, .iframed .configsection, .iframed .configsectionpanel {
+.iframed .snarknavbar, .iframed .mainsection, .iframed #addSection,
+.iframed #createSection, .iframed .configsection, .iframed .configsectionpanel {
   border-right: none !important;
   border-left: none !important;
   border-radius: 0;
@@ -3694,7 +3694,7 @@ td.peerCount {
 
 /* torrent edit */
 
-.iframed #torrentEditSection {
+.iframed #editSection {
   margin-top: 5px !important;
 }
 
@@ -3835,7 +3835,7 @@ td.peerCount {
   .nav_main {
     padding-left: 22px !important;
   }
-  .addtorrentsection, .newtorrentsection, .configsection, .configsectionpanel {
+  #addSection, #createSection, .configsection, .configsectionpanel {
     margin-top: 4px !important;
     margin-bottom: 4px !important;
   }
@@ -3985,7 +3985,7 @@ td.peerCount {
   #totals {
     margin-left: 2px !important;
   }
-  .addtorrentsection td:first-child, .newtorrentsection td:first-child {
+  #addSection td:first-child, #createSection td:first-child {
     width: 20%;
   }
   .toggleview, .configTitle {
@@ -4058,7 +4058,7 @@ td.peerCount {
   #configs tr {
     border: none !important;
   }
-  .addtorrentsection input[type=text], .newtorrentsection input[type=text] {
+  #addSection input[type=text], #createSection input[type=text] {
     width: 65% !important;
   }
   .snarkCommentInfo td:first-child, .snarkComments td:first-child {
@@ -4157,7 +4157,7 @@ body, th, td, table a, input, input[type=text], input.r, input[name="nofilter_da
     min-width: 220px !important;
   }
   .iframed #snarkFiles {margin-top: 5px !important}
-  #torrentEditSection + #snarkFiles {margin-top: 0 !important}
+  #editSection + #snarkFiles {margin-top: 0 !important}
   .torrentInfo th:first-child img, #torrentinfostats img, #trackers img {
     margin: -3px 4px 0 !important;
     max-height: 18px !important;
