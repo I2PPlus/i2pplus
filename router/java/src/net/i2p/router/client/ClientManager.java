@@ -281,7 +281,7 @@ class ClientManager {
             if (ids != null && !ids.isEmpty()) {
                 _log.warn("Dropping client connection with IDs: " + ids);
             } else {
-                _log.warn("Dropping a client connection");
+                _log.warn("Dropping a client connection...");
             }
         synchronized (_runners) {
             for (SessionId id : ids) {
