@@ -234,7 +234,7 @@ td.trackerDetails {text-align: right}
 #torrents td {text-align: left; padding-top: 4px; padding-bottom: 4px}
 #torrents td[colspan="10"] {padding: 4px 2px}
 #torrents tfoot tr:first-child th:not(:empty) {padding: 6px 4px; vertical-align: middle}
-#torrents tfoot tr:first-child th:first-child {; text-align: left}
+#torrents tfoot tr:first-child th:first-child {text-align: left}
 #torrents tfoot tr:first-child {line-height: 1.3}
 #torrents tfoot th br {display: inline-block; margin-left: 20px}
 #torrents tfoot tr:first-child th {vertical-align: middle}
