@@ -13,7 +13,7 @@ html {background: none}
 body {margin: 3px; font-size: 9pt}
 body.iframed {margin: 1px 0}
 body::before {width: 32px; height: 32px; display: inline-block; position: absolute; bottom: 0; right: 0; background: var(--snark_hover), var(--forum_hover), var(--tracker_hover), var(--search_hover), var(--snark_active), var(--forum_active), var(--tracker_active), var(--search_active); opacity: 0; content: ""}
-body, input, select, .snarkCommentInfo textarea, textarea[name="i2cpOpts"] {font-family: var(--bodyfont)}
+body, input, select, .snarkCommentInfo textarea {font-family: var(--bodyfont)}
 .page {margin: 5px 0 0; min-width: 890px; line-height: 1.6; text-align: center; font-size: 9pt; background: #000}
 .iframed .page {margin: 5px 0; padding: 0; border: none; background: none}
 .toggleview, .configTitle, .snarknavbar, img, input[type=submit], input[type=radio], input[type=checkbox], label, th img, .newtorrentsection, #closelog, #pagenav {user-select: none}

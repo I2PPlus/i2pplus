@@ -1711,10 +1711,6 @@ textarea:focus {
   color: var(--ink) !important;
 }
 
-textarea[name="i2cpOpts"] {
-  overflow: hidden;
-}
-
 img {
   margin: 0 3px 1px 3px;
   vertical-align: middle;
@@ -3881,7 +3877,7 @@ td.peerCount {
 
 @media screen and (max-width: 950px) {
   body, th, td, table a, input, input[type=text], input.r, input[name="nofilter_dataDir"],
-  select, textarea, textarea[name="i2cpOpts"], .snarkAddInfo {
+  select, textarea, .snarkAddInfo {
     font-size: 8.5pt;
   }
   #torrents a {
@@ -4090,7 +4086,7 @@ td.peerCount {
 
 @media screen and (min-width: 1100px) {
   body, th, td, table a, input, input[type=text], input.r, input[name="nofilter_dataDir"],
-  select, textarea, textarea[name="i2cpOpts"], .snarkAddInfo {
+  select, textarea, .snarkAddInfo {
     font-size: 9pt !important;
   }
   .snarkNav {
@@ -4141,7 +4137,7 @@ td.peerCount {
 
 @media screen and (min-width: 1500px) {
 body, th, td, table a, input, input[type=text], input.r, input[name="nofilter_dataDir"],
-  select, textarea, textarea[name="i2cpOpts"], .snarkAddInfo, .snarkCommentInfo textarea {
+  select, textarea, .snarkAddInfo, .snarkCommentInfo textarea {
     font-size: 10pt !important;
   }
   #screenlog li, #torrents tt, code, #torrents tt, #ourDest tt {

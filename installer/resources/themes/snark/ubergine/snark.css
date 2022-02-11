@@ -2007,10 +2007,6 @@ input[type=text]:disabled {
   cursor: not-allowed;
 }
 
-textarea[name="i2cpOpts"] {
-  overflow: hidden;
-}
-
 input[name="nofilter_commentsName"]:focus::placeholder {
   opacity: 0;
 }
@@ -2403,7 +2399,7 @@ img:hover {
 }
 
 .configsectionpanel, .configsectionpanel td, .snarkNewTorrent, .snarkNewTorrent td,
-select, input, input.r, input[name="nofilter_dataDir"], textarea[name="i2cpOpts"], a.control {
+select, input, input.r, input[name="nofilter_dataDir"], a.control {
   font: 9pt var(--bodyfont);
 }
 
@@ -6102,7 +6098,7 @@ td.torrentAction input[type=submit] {
   .configsectionpanel textarea {height: 30px}
   .dirInfoComplete {margin-right: 3px}
   .configsectionpanel, .configsectionpanel td, .snarkNewTorrent, .snarkNewTorrent td,
-  select, input, input.r, input[name="nofilter_dataDir"], textarea[name="i2cpOpts"] {
+  select, input, input.r, input[name="nofilter_dataDir"] {
     font-size: 10pt !important;
   }
   .addtorrentsection td:first-child, .newtorrentsection td:first-child {width: 200px}

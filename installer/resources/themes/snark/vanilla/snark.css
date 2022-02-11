@@ -2040,11 +2040,7 @@ textarea, input[name="nofilter_dataDir"] {
   background: #efe6e0;
 }
 
-textarea[name="i2cpOpts"] {
-  overflow: hidden;
-}
-
-textarea[name="i2cpOpts"]:focus, .r:focus, input[type=text]:focus, select:focus, input[name="nofilter_dataDir"]:focus, .optbox[type=checkbox]:focus, .optbox[type=radio]:focus {
+.r:focus, input[type=text]:focus, select:focus, input[name="nofilter_dataDir"]:focus, .optbox[type=checkbox]:focus, .optbox[type=radio]:focus {
   box-shadow: var(--highlight), inset 0 0 0 1px rgba(16,12,0,.25), 0 0 1px rgba(223,0,103,.6);
   transition: ease box-shadow .15s;
 }

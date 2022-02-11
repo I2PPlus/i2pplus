@@ -1579,11 +1579,11 @@ input[type=text]:hover, input.r:hover {
   cursor: text;
 }
 
-input[type=text]:focus, textarea:focus, input.r:focus, textarea[name="i2cpOpts"]:focus, input[name="nofilter_dataDir"]:focus {
+input[type=text]:focus, textarea:focus, input.r:focus, input[name="nofilter_dataDir"]:focus {
   transition: ease all .3s;
 }
 
-textarea[name="i2cpOpts"], input[name="nofilter_dataDir"] {
+input[name="nofilter_dataDir"] {
   margin: 3px 0;
   padding: 6px !important;
   min-width: 500px;
@@ -4213,7 +4213,7 @@ td.torrentAction input[type=submit] {
     border-radius: 4px 0 0 4px;
     z-index: 0;
   }
-  textarea[name="i2cpOpts"], input[name="nofilter_dataDir"] {
+  input[name="nofilter_dataDir"] {
     width: 350px !important;
     max-width: 350px !important;
   }
