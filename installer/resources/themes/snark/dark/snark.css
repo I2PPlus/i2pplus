@@ -16,6 +16,10 @@ body::before {width: 32px; height: 32px; display: inline-block; position: absolu
 body, input, select, .snarkCommentInfo textarea {font-family: var(--bodyfont)}
 .page {margin: 5px 0 0; min-width: 890px; line-height: 1.6; text-align: center; font-size: 9pt; background: #000}
 .iframed .page {margin: 5px 0; padding: 0; border: none; background: none}
+p {line-height: 1.5}
+hr {margin: 5px 0 7px; width: 0; height: 1px; color: transparent; opacity: 0}
+a, a:link, a:visited {color: #7c7}
+a:hover, a:focus {color: #f40}
 .newTab {margin: 1px 4px -2px; float: right; filter: sepia(1) saturate(0) invert(1)}
 .newTab:hover, .newTab:focus {filter: sepia(1) saturate(0) invert(1) drop-shadow(0 0 2px #f60)}
 .toggleview, .configTitle, .snarknavbar, img, input[type=submit], input[type=radio], input[type=checkbox], label, th img, #createSection, #closelog, #pagenav {user-select: none}
@@ -36,7 +40,8 @@ body, input, select, .snarkCommentInfo textarea {font-family: var(--bodyfont)}
 .nav_tracker:active {background: var(--tracker_active) no-repeat 7px center #f50}
 .nav_search:active {background: var(--search_active) no-repeat 7px center #f50}
 .nav_main.snarkNav:last-child {border-radius: 1px}
-.snarkNav {margin: -1px -2px 0; padding: 4px 7px 5px 23px; display: inline-block; position: relative; line-height: 1.2; letter-spacing: .1em; text-transform: uppercase; font-size: 10pt; font-weight: 700; text-shadow: 0 0 1px #000; color: #3f3; border: 1px solid #4a4; border-radius: 0; box-shadow: var(--highlight), inset 0 0 1px 1px #0f0; opacity: .45}
+.snarkNav {margin: -1px -2px 0; padding: 4px 7px 5px 23px; display: inline-block; position: relative; line-height: 1.2; letter-spacing: .1em; text-transform: uppercase; font-size: 10pt; font-weight: 700; text-shadow: 0 0 1px #000; border: 1px solid #4a4; border-radius: 0; box-shadow: var(--highlight), inset 0 0 1px 1px #0f0; opacity: .5}
+.snarkNav, .snarkNav:visited {color: #32ff32}
 .snarkNav, .snarkNav:hover, .snarkNav:focus {color: #177d17; background-size: 15px, 100%; background-position: 7px center, center center, center center; background-repeat: no-repeat, repeat}
 .snarkNav:hover, .snarkNav:focus {z-index: 10; color: #f60; border: 1px solid #930; border-radius: 0; box-shadow: var(--highlight), inset 0 0 0 2px rgba(255,96,0,.2); opacity: 1}
 .snarkNav:last-child {border-radius: 0 1px 1px 0}
@@ -289,10 +294,6 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
 .snarkConfig {font-size: 10pt; width: 100%}
 .snarkConfig i {padding-left: 5px}
 form {margin-bottom: 0}
-p {line-height: 1.5}
-hr {margin: 5px 0 7px; width: 0; height: 1px; color: transparent; opacity: 0}
-a, a:visited {color: #7c7}
-a:hover, a:focus {color: #f40}
 input.disabled, a.controld {opacity: .5; cursor: not-allowed}
 #configs input[type=submit], .trackerconfig input[type=submit], input[name="savepri"] {text-transform: capitalize}
 #setPriority input.disabled, #setPriority a.controld {display: none}
