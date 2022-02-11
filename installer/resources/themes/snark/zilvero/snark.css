@@ -1486,11 +1486,11 @@ td.RateDown, td.RateUp, td.RateDown span, td.RateUp span {
 	width: 100%;
 }
 
-.parentDir {
+.ParentDir {
 	border-bottom: var(--border);
 }
 
-.parentDir img {
+.ParentDir img {
 	display: none;
 }
 

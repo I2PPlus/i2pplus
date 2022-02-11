@@ -926,12 +926,12 @@ li .infohash::selection, #torrents .infohash::selection {
   font-weight: 700 !important;
 }
 
-.parentDir img {
+.ParentDir img {
   margin-right: 5px;
   padding-left: 3px;
 }
 
-.parentDir img {
+.ParentDir img {
   mix-blend-mode: luminosity;
 }
 
