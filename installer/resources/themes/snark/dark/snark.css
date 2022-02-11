@@ -189,7 +189,6 @@ td {vertical-align: middle; font-size: 9pt}
 .RateUp:not(:empty), .RateDown:not(:empty), .torrentDownloaded:not(:empty), .torrentUploaded:not(:empty) {padding: 0 3px; width: 1%; white-space: nowrap; line-height: .9; color: #bb7}
 .RateUp, .RateDown, .torrentUploaded {text-align: center}
 .torrentUploaded .left {min-width: 12px}
-tr:not(.peerinfo) .torrentUploaded:empty::after {content: "‒"; display: inline; font-size: 9pt}
 .RateDown .left, .RateUp .left, .torrentUploaded .left, .RateDown .right, .RateUp .right, .torrentUploaded .right {min-width: 22px; display: inline-block; text-align: left}
 .RateDown .right, .RateUp .right, .torrentUploaded .right {min-width: 40px; text-align: right}
 .torrentDownloaded {text-align: center}
