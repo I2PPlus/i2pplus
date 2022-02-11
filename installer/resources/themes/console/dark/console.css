@@ -1438,6 +1438,9 @@ th.options, #externali2cp th {padding: 7px 10px}
 .h3navlinks a:last-child {padding-right: 5px}
 .h3navlinks a {margin: -8px 0 -6px; padding: 9px 5px 9px 16px; display: inline-block; text-transform: capitalize; letter-spacing: normal; font-size: 85%; border-left: var(--border)}
 .h3navlinks {white-space: nowrap}
+#config_logging h3 a::before, #webappconfiguration a::before, #i2pclientconfig a::before, #pluginmanage a::before {width: 19px; height: 15px; display: inline-block; vertical-align: middle; background: var(--eye) no-repeat left center / 15px; content: ""}
+#config_logging h3 a:hover::before, #config_logging h3 a:focus::before {background: var(--eye_hover) no-repeat left center / 15px}
+#config_logging h3 a, #webappconfiguration a, #i2pclientconfig a, #pluginmanage a {padding-top: 11px; display: inline-block; vertical-align: middle}
 h3.ptitle {margin-bottom: -6px}
 h3.sybils + div, h3.sybils + a[name] + table {margin-top: -1px}
 h3.sybils {margin-bottom: 10px}
@@ -1480,7 +1483,7 @@ textarea#advancedsettings {margin: 0; padding-top: 3px; width: 100%; overflow-x:
 #upnpstatus {margin-bottom: 7px}
 #webappconfigtext {margin: 13px 0 -2px 0}
 #webappconfiguration a::before, #i2pclientconfig a::before, #pluginmanage a::before {margin-top: -1px; width: 15px; background: var(--settings) no-repeat left center / 12px}
-#webappconfiguration a:hover::before, #webappconfiguration a:focus::before, #i2pclientconfig a:hover::before, #i2pclientconfig a:focus::before, #pluginmanage a:hover::before, #pluginmanage a:focus::before {background: var(--settings_hover) no-repeat left center / 12px}
+#webappconfiguration a:hover::before, #webappconfiguration a:focus::before, #i2pclientconfig a:hover::before, #i2pclientconfig a:focus::before, #config_plugins #pluginmanage a:hover::before, #pluginmanage a:focus::before {background: var(--settings_hover) no-repeat left center / 12px}
 
 /* service */
 #config_service {padding-bottom: 0}
@@ -1713,9 +1716,6 @@ form > table {font-size: 9pt}
 #tunnelconfigsave {margin-top: -1px}
 
 /* configlogging */
-#config_logging h3 a::before, #webappconfiguration a::before, #i2pclientconfig a::before, #pluginmanage a::before {width: 19px; height: 15px; display: inline-block; vertical-align: middle; background: var(--eye) no-repeat left center / 15px; content: ""}
-#config_logging h3 a:hover::before, #config_logging h3 a:focus::before {background: var(--eye_hover) no-repeat left center / 15px}
-#config_logging h3 a, #webappconfiguration a, #i2pclientconfig a, #pluginmanage a {padding-top: 11px; display: inline-block; vertical-align: middle}
 #config_logging p {margin: 3px 0 5px; text-align: left}
 #config_logging tr, #tunnelconfig tr, #config_summarybar tr, .homelinkedit tr, #config_bandwidth tr, #bandwidthconfig tr, #config_clients tr, #config_webapps tr, #config_peers #bannedips td:first-child tr:nth-child(n+3):not(#ipv6), #configstats tr:not(.tablefooter) {box-shadow: var(--highlight), inset 0 -1px 0 1px #000, inset -1px 0 0 1px #000, inset 0 0 2px 0 #020, inset 0 -1px 2px 0 #020, inset -1px 0 2px 0 #020}
 input[name="logfilename"], input[name="logformat"], input[name="logdateformat"], input[name="logfilesize"], select[name="defaultloglevel"], select[name="newloglevel"] {width: 125px}
