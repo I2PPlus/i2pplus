@@ -691,9 +691,8 @@ td, #externali2cp td, #config_keyring td, #config_logging td, #config_network td
 .langselect .optbox {width: 122px; height: 66px}
 .themechoice .optbox, .langselect .optbox, .themechoice .optbox:checked, .langselect .optbox:checked {margin: 0; position: absolute; z-index: -999; opacity: 0}
 .themechoice, .langselect {width: 120px; float: left; text-align: center}
-.langflag img {margin: 0 0 -4px; width: 40px; height: 30px; position: relative; z-index: 3; border: none}
 .langselect input, .themechoice input {cursor: pointer}
-.langselect:hover + .langflag, .langselect .optbox:checked + .langflag {transition: none; filter: var(--shadow_filter_hover)}
+.langselect:hover + .langflag, .langselect .optbox:checked + .langflag {transition: none}
 .langselect:hover ~ .ui_lang {font-weight: 700; color: var(--hover); border-top: 1px solid var(--hover); background: var(--bg)}
 .langselect:active .ui_lang, .langselect:active > .optbox ~ .ui_lang {color: var(--bg); box-shadow: var(--highlight); background: var(--hover)}
 .langselect:active .optbox:checked ~ .ui_lang, .langselect .optbox:focus ~ .ui_lang {color: var(--hover); box-shadow: none; background: var(--label_focus)}
@@ -709,7 +708,11 @@ td, #externali2cp td, #config_keyring td, #config_logging td, #config_network td
 #langsettings {padding: 4px 5px 0; border: var(--border); background: var(--bg3)}
 #langsettings hr {margin: 0 -5px; height: 1px}
 #helptranslate {margin: 0 -5px; padding: 15px 10px 15px 50px; position: relative; top: 4px; clear: both; text-align: left; border-top: var(--border); border-bottom: var(--border); background: var(--bg) url(images/favicon.svg) no-repeat left 14px center / 28px}
-.langflag {margin: 4px 0 38px; display: inline-block; box-shadow: 0 0 0 1px #bbc}
+.langflag, .langflag img {border-radius: 4px}
+.langflag {margin: 4px 0 38px; padding: 1px; display: inline-block; position: relative; box-shadow: 0 0 0 1px #bbc; background: linear-gradient(to bottom, var(--border_softer), var(--border_soft)); opacity: .9}
+.langflag::before {display: inline-block; position: absolute; top: 0; bottom: 0; left: 0; right: 0; z-index: 10; border-radius: 4px; background: linear-gradient(180deg, rgba(255,255,255,.5), rgba(0,0,0,0) 55%, rgba(0,0,0,.1)); content: ""}
+.langflag img {margin: 0 0 -4px; width: 40px; height: 30px; position: relative; z-index: 3; border: none}
+.langselect .optbox:checked + .langflag, .langselect:hover > .langflag {opacity: 1}
 .langselect .optbox:checked + .langflag {transform: scale(.8); box-shadow: 0 0 0 1px #f60}
 
 /* configui password */
