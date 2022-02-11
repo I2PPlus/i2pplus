@@ -264,7 +264,7 @@ div[id^="config_"].main {padding-bottom: 14px}
 /* news */
 #news h3 font {letter-spacing: .2em; text-transform: none}
 div.news h3, #newspage h3 {letter-spacing: .03em; text-align: left; font-size: 10pt}
-#news h3 {padding: 6px 8px 6px 30px; word-spacing: 0; letter-spacing: .08em; border-bottom: var(--border); background: var(--news) no-repeat 8px center, var(--h1); background-size: 16px, 4px 100%, 100%, 175px; background-blend-mode: normal, normal, exclusion, exclusion}
+#news h3 {padding: 6px 8px 6px 30px; word-spacing: 0; letter-spacing: .08em; border-bottom: var(--border); box-shadow: var(--bevel); background: var(--news) no-repeat 8px center, var(--h1); background-size: 15px, 2px, 4px 100%, 175px; background-blend-mode: normal, exclusion, exclusion, overlay}
 .news .newsentry:first-child {margin-top: -3px}
 div.news {margin: -1px 5px 0 226px; padding: 6px 15px 8px; min-width: 655px; font-size: 8pt; text-align: right; box-shadow: 0 1px 5px #000; background: linear-gradient(180deg,rgba(0,0,0,.3), rgba(0,0,0,.5)), var(--radar) no-repeat right bottom, repeating-linear-gradient(180deg,rgba(0,0,0,.8) 2px, rgba(0,16,0,.8) 4px), var(--camo), #000; background-size: 100%, auto, 2048px; background-blend-mode: normal, lighten, normal}
 #newspage h3 {margin: 5px 0 10px; border: none; box-shadow: 0 0 0 1px #242, var(--highlight), inset 0 0 2px 0 #030}
@@ -1436,7 +1436,7 @@ th.options, #externali2cp th {padding: 7px 10px}
 .h3navlinks a:first-child {padding-right: 9px}
 .h3navlinks a:hover {color: var(--hover)}
 .h3navlinks a:last-child {padding-right: 5px}
-.h3navlinks a {margin: -8px 0 -6px; padding: 9px 5px 9px 16px; text-transform: capitalize; letter-spacing: normal; font-size: 85%; border-left: var(--border)}
+.h3navlinks a {margin: -8px 0 -6px; padding: 9px 5px 9px 16px; display: inline-block; text-transform: capitalize; letter-spacing: normal; font-size: 85%; border-left: var(--border)}
 .h3navlinks {white-space: nowrap}
 h3.ptitle {margin-bottom: -6px}
 h3.sybils + div, h3.sybils + a[name] + table {margin-top: -1px}
