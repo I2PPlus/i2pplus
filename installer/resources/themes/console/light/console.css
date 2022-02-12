@@ -3176,7 +3176,7 @@ div.app:active img {
 }
 
 .appimg {
-  min-height: 52px;
+  min-height: 50px;
 }
 
 .appgroup {
@@ -3186,7 +3186,7 @@ div.app:active img {
 }
 
 div.app img {
-  padding: 10px 60px;
+  padding: 10px 60px 5px;
   width: auto;
   height: 32px;
   max-height: 32px;
@@ -10400,7 +10400,7 @@ h1.webapp {
 }
 
 .sitemapLink img {
-  padding: 12px 10px 10px;
+  padding: 10px 10px 6px;
   height: 32px;
   width: 32px;
 }
