@@ -2066,7 +2066,7 @@ input[type=text]:focus::placeholder, #homesearch input.search:focus::placeholder
 #routerinfo td:nth-child(2):not([colspan]) {white-space: nowrap; border-right: var(--border)}
 #routerinformation {padding-bottom: 12px}
 #routerinformation h3 {margin-bottom: -2px}
-#routerinformation h3 span a {padding-right: 6px; text-transform: capitalize}
+#routerinformation h3 span a {padding-right: 6px; margin: -14px 0 -11px; vertical-align: middle; text-transform: capitalize}
 #routerinformation .h3navlinks {margin-top: 1px}
 #routerinformation .h3navlinks a::before {margin: 0 3px 0 -2px; width: 14px; height: 14px; display: inline-block; vertical-align: middle; background: var(--eye) no-repeat left center / 14px; content: ""}
 #routerinformation .h3navlinks a:hover::before {background: var(--eye_hover) no-repeat left center / 14px}
