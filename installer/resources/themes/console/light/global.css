@@ -6,6 +6,7 @@
 
 :root {
   --a: #4d5f80;
+  --activity: repeating-linear-gradient(135deg, rgba(238, 238, 255,.7) 1px, rgba(238, 238, 255, .7) 5px, rgba(221, 221, 255, .7) 6px, rgba(221, 221, 255, .7) 11px);
   --badgeborder: 1px solid #bbc;
   --badge: linear-gradient(180deg,#fff,#ddf);
   --bevel: inset 0 0 0 1px #d0d0da;
@@ -38,6 +39,7 @@
   --outline: 0 0 0 1px #000;
   --p: linear-gradient(135deg, #fafaff, #f8f8ff);
   --readonly: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(220, 220, 255, .5) 3px, #fafaff 4px), #fafaff;
+  --refresh: linear-gradient(180deg,#fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px);
   --row: linear-gradient(180deg,#fff,#eef);
   --row_even: linear-gradient(180deg,rgba(248,248,255,.6) 50%, rgba(248,248,255,.2));
   --row_odd: linear-gradient(180deg,rgba(240,240,255,.6) 50%, rgba(240,240,255,.4));
