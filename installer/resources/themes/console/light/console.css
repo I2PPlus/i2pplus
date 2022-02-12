@@ -996,7 +996,7 @@ h3#udpcon {margin-top: 7px}
 #peerdefs li {margin: 3px; padding: 4px 8px; width: calc(100% - 24px); display: inline-block; border: 1px solid #bbd; box-shadow: var(--highlight), inset 0 0 2px 1px #ddf, 0 0 1px #ddf; background: rgba(248,248,255,.6); -webkit-column-break-inside: avoid; break-inside: avoid; page-break-inside: avoid}
 #peers td.direction i {margin: 3px -3px -4px; width: 100%; display: inline-block; text-align: center; font-style: normal; font-size: 90%; color: #412; border-top: 1px solid #ddf; border-radius: 2px}
 #ntcpconnections td:first-child, #udpconnections td:first-child {min-width: 58px}
-#peer_thresholds {position: absolute; top: 0; width: 100%}
+#peer_thresholds {position: absolute; top: 10px; width: 100%}
 #thresholds tr:hover td, #leasesetdebug tr:hover td, tr:hover .cells {box-shadow: inset 0 0 0 1px #ffe; transition: ease all .05s}
 
 /* tunnels */
@@ -1363,7 +1363,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 #profiles .tunnel_peer {margin-left: -6px}
 #profiles .wideload {text-align: center}
 #profiles .separator hr {display: none}
-#peerprofiles.widescroll {margin-top: -12px; padding-top: 108px; position: relative}
+#peerprofiles.widescroll {margin-top: -12px; padding-top: 120px; position: relative}
 #profilelist td:last-child {padding-right: 5px; width: 1%; white-space: nowrap; text-align: center}
 #profilelist td:nth-child(3) i {width: 100%; display: inline-block; text-align: center; letter-spacing: 0}
 #profilelist th:nth-child(3), #profilelist td:nth-child(3) {text-align: left}
@@ -2505,7 +2505,7 @@ h3#restartrouter, p#tunnelconfig {margin-bottom: -15px}
 #netdboverview table th:last-child::after, #netdboverview table td:last-child::after {width: 5px; display: inline-block; content: ""}
 #netdboverview table th {padding-top: 9px; padding-bottom: 9px}
 .newsAuthor {padding: 0 0 0 14px; font-size: 9.5pt; background-size: 12px; background-position: left center}
-#peerprofiles.widescroll {padding-top: 113px}
+#peerprofiles.widescroll {padding-top: 123px}
 #peers .routerid {padding: 1px 0 1px 3px}
 #tunnelPeerCount .flag {padding: 1px 2px 3px 3px}
 #peers .flag { padding: 2px 5px 5px 4px}
