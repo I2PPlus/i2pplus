@@ -692,7 +692,7 @@ th #nameRequired, th .commentAuthorName {margin-top: 8px; vertical-align: middle
 .iframed .dirInfo, .iframed .dirInfo tr:last-child td {border-bottom: 1px solid transparent}
 .mainsection input:not(:checked) + .toggleview {margin-bottom: -6px}
 .mainsection input:checked + .toggleview {margin-bottom: -10px}
-td.peerCount {padding-left: 10px; padding-right: 10px}
+#torrents td.peerCount {padding-left: 10px; padding-right: 10px; text-align: center}
 .snarkFilename .targetfile, .snarkFilename:hover .tags, .snarkFileName a:empty {display: none}
 .snarkFilename:hover .targetfile {display: inline-block}
 #completion {position: relative}
