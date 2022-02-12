@@ -72,7 +72,7 @@ input.update {margin-left: 5px}
 
 /* pagenav */
 #paginate, #filtered, #results {margin-right: 4px; float: right; word-spacing: 0; letter-spacing: 0; text-transform: none}
-#filtered, #results {font-size: 10pt}
+#filtered, #results {margin: 4px 8px 0 0; font-size: 10pt}
 #prev, #next, #current {font-size: 11pt; text-shadow: none}
 #showing, #paginate {display: inline-block}
 #showing {margin-left: 6px}
