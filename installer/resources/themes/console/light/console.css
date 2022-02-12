@@ -12018,7 +12018,7 @@ iframe {
     width: 140px;
   }
   div.app img {
-    padding: 10px 40px;
+    padding: 8px 40px 4px;
     width: auto;
     height: 24px;
     max-height: 24px;
@@ -12031,7 +12031,7 @@ iframe {
     width: 128px;
   }
   .sitemapLink img {
-    padding: 12px 10px 10px;
+    padding: 7px 10px 3px;
     height: 24px;
     width: 24px;
   }
