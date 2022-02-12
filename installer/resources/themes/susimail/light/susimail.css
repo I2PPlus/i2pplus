@@ -8,7 +8,7 @@
 
 body {
   margin: 5px;
-  background: #a4a4cb url(/themes/console/light/images/tile2.png);
+  background: var(--bodybg) url(/themes/console/light/images/tile2.png);
 }
 
 /* preload button mouseovers */
@@ -21,7 +21,7 @@ body {
   var(--save_hover),
   var(--send_hover),
   var(--configure_hover),
-  var(--refresh_hover), #a4a4cb !important;
+  var(--refresh_hover), var(--bodybg) !important;
   background-size: 32px, 0, 0, 0, 0, 0, 0, 0, 0 !important;
 }
 

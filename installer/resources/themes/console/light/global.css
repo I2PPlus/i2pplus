@@ -2,14 +2,15 @@
 /* Author: (c) dr|z3d 2022 */
 
 @import url(/themes/fonts/DroidSans.css);
+@import url(../images/itooplus.css);
 
 :root {
   --a: #4d5f80;
   --badgeborder: 1px solid #bbc;
   --badge: linear-gradient(180deg,#fff,#ddf);
   --bevel: inset 0 0 0 1px #d0d0da;
-    --bg: url("data:image/svg+xml,%3Csvg height='4' viewBox='0 0 4 4' width='4' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m1 3h1v1h-1zm2-2h1v1h-1z' fill='%23e2e2ff' fill-opacity='.5'/%3E%3C/svg%3E");
   --bg: url("data:image/svg+xml,%3Csvg height='4' viewBox='0 0 4 4' width='4' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m1 3h1v1h-1zm2-2h1v1h-1z' fill='%23e2e2ff' fill-opacity='.5'/%3E%3C/svg%3E");
+  --bodybg: #a4a4cb;
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   --border: #6c6c93;
   --border_inner: #a7a7be;
@@ -23,7 +24,6 @@
   --div_infohelp: repeating-linear-gradient(180deg,rgba(255,255,255,.4) 2px, rgba(232,232,255,.7) 4px), var(--p);
   --filter_focus: drop-shadow(0 0 1px #f60) drop-shadow(0 0 1px rgba(255,96,0,.4));
   --h1: var(--bg), linear-gradient(135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(180deg,#fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px);
-  --h2: linear-gradient(180deg,#fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(135deg, #fcfcff 15%, rgba(231, 231, 255, .8) 35%);
   --h2: linear-gradient(180deg,#fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(90deg, #fcfcff 5%, rgba(231, 231, 255, .8) 25%);
   --h3: linear-gradient(180deg,#fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4));
   --h4app: linear-gradient(90deg, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) #f8f8ff;
@@ -52,7 +52,7 @@ html, body {
 }
 
 html {
-  scrollbar-color: #779 #a4a4cb;
+  scrollbar-color: #779 var(--bodybg);
 }
 
 body {

@@ -19,7 +19,7 @@
 
 body {
   margin: 3px;
-  background: #a4a4cb url(/themes/console/light/images/tile2.png) center top / 32px;
+  background: var(--bodybg) url(/themes/console/light/images/tile2.png) center top / 32px;
   scrollbar-color: #779 rgba(255,255,255,.5);
 }
 
