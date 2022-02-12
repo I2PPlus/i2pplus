@@ -1740,7 +1740,7 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 #sidebarconf button img {width: 12px; height: auto}
 #sidebarconf th:nth-child(1) {text-align: center}
 #sidebarconf th:nth-child(2) {text-align: left}
-#sidebarconf td:first-child {width: 60px}
+#sidebarconf td:first-child {width: 60px; text-align: center}
 #sidebarconf td:nth-child(3), #sidebarconf td:nth-child(4) {padding: 0; width: 1%; white-space: nowrap}
 #sidebarconf td:nth-child(3) {padding-left: 0}
 #sidebarconf td:nth-child(4) {padding-right: 5px; text-align: left}
