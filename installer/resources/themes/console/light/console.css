@@ -40,6 +40,10 @@ h1, .confignav {position: relative}
 .right {text-align: right}
 .center {text-align: center}
 .separator hr, .separator hr:last-child {margin: 3px 0 -10px; height: 1px; display: block; color: transparent; border-bottom: 1px dashed #adadeb; background: transparent}
+#tunnels h3 a[href^="/configtunnels#"]:hover, #logs a.configure:hover::after {background: var(--settings_hover) no-repeat center center / 16px}
+#tunnels h3 a[href^="/configtunnels#"]:active, #logs a.configure:active::after, #logs a.delete:active::after {background-size: 12px}
+#tunnels h3 a[href^="/configtunnels#"]::after, #tunnels h3 a[href$="i2ptunnelmgr"]::after, #logs a.delete::after, #logs a.configure::after {margin-top: 2px; margin-bottom: -1px; width: 16px; height: 16px; float: right; background: var(--settings) no-repeat center center / 16px; content: ""}
+#tunnels h3 a[href^="/configtunnels#"]:hover::after, #tunnels h3 a[href$="i2ptunnelmgr"]:hover::after, #logs a.delete::after, #logs a.configure:hover::after {background: var(--settings_hover) no-repeat center center / 16px}
 
 /* sidebar */
 .routersummaryouter {margin: 0 0 10px; padding: 0; width: 200px; display: block; position: absolute; float: left; clear: left; text-align: center; border: 0}
@@ -459,17 +463,17 @@ td.infowarn, #help tr:hover td.infowarn {background: var(--infowarn) no-repeat 1
 .log_omitted {margin-right: 1px}
 .nologs {padding: 6px 8px}
 #logs font[color^="#"]::before {margin-right: 5px; margin-left: -17px; margin: -2px 5px 0 -17px; width: 6px; height: 6px; display: inline-block; content: ""; vertical-align: middle; border-radius: 50%; background: #fff}
-#logs li:first-child {margin-top: 1px}
-#logs li:hover {box-shadow: inset 0 0 0 1px #ddf, inset 0 0 0 2px #ff9; background: #ffe; opacity: 1}
-#logs li:last-child::after {border: none; margin: 0}
-#logs li:hover::after, #logs li:hover::before {opacity: .8}
 #logs li {margin: 0 0 -1px -5px; padding: 1px 6px 1px 20px; width: calc(100% - 16px); list-style: none; font-size: 8.5pt; text-align: left; opacity: .8; box-shadow: inset 0 0 0 1px #ddf, inset 0 0 0 2px #fff}
 #logs li:nth-child(even) {background: #f0f0ff}
 #logs li:nth-child(odd) {background: #f3f3ff}
+#logs li:first-child {margin-top: 1px}
+#logs li:hover {box-shadow: inset 0 0 0 1px #ddf, inset 0 0 0 2px #ff9; background: #ffe; opacity: 1}
+#logs li:hover::after, #logs li:hover::before {opacity: .8}
+#logs li:last-child::after {border: none; margin: 0}
 #logs table[id$="logs"] tr:first-child td, .subheading {background: linear-gradient(45deg, #fcfcff, #eef); box-shadow: var(--highlight)}
 #logs > .tabletitle {margin-top: 15px}
-#logs ul li {margin-left: -4px; padding-left: 0; width: calc(100% + 2px)}
 #logs ul {margin: -5px 0 -3px; width: 100%; display: inline-block; word-break: break-all}
+#logs ul li {margin: 0 0 -1px -4px; padding-left: 0; width: calc(100% + 2px)}
 #logs a.configure, #logs a.delete, #logs a.configure:hover, #logs a.delete:hover, #logs a.configure:focus, #logs a.delete:focus, #logs a.active:hover, #logs a.active:hover {border-left: none; box-shadow: none; background: none; display: inline-block}
 #logs a.delete::after, #logs a.configure::after {margin: -7px -8px -6px 0; padding: 8px 4px 8px 20px; border-left: 1px solid #aab}
 #logs a.configure::after {padding-left: 23px; padding-right: 6px}
@@ -1022,10 +1026,6 @@ h3#udpcon {margin-top: 7px}
 #tunnels h3, #tunnels h3 a, #config_service h3 {position: relative; z-index: 10}
 #tunnels h3 a:not(.lsview), #logs a.delete, #logs a.configure {font-size: 0}
 #tunnels h3 a:nth-child(n+2):hover img {filter: none}
-#tunnels h3 a[href^="/configtunnels#"]:hover, #logs a.configure:hover::after {background: var(--settings_hover) no-repeat center center / 16px}
-#tunnels h3 a[href^="/configtunnels#"]:active, #logs a.configure:active::after, #logs a.delete:active::after {background-size: 12px}
-#tunnels h3 a[href^="/configtunnels#"]::after, #tunnels h3 a[href$="i2ptunnelmgr"]::after, #logs a.delete::after, #logs a.configure::after {margin-top: 2px; margin-bottom: -1px; width: 16px; height: 16px; float: right; background: var(--settings) no-repeat center center / 16px; content: ""}
-#tunnels h3 a[href^="/configtunnels#"]:hover::after, #tunnels h3 a[href$="i2ptunnelmgr"]:hover::after, #logs a.delete::after, #logs a.configure:hover::after {background: var(--settings_hover) no-repeat center center / 16px}
 #tunnels .cells:first-child {width: 1%; max-width: 64px; min-width: 64px}
 #tunnels .cells:nth-child(2), #tunnels .cells:nth-child(3), .tunnels_participating td:nth-child(4) {width: 2%; max-width: 112px; min-width: 112px; vertical-align: middle}
 #tunnels h3 {margin-top: 10px}
