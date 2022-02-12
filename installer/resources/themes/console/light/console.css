@@ -403,12 +403,13 @@ h4.sb_info + hr + form {
 }
 
 #sb_localtunnels a {
-  display: inline-block;
   width: 100%;
   max-width: 158px;
+  display: inline-block;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  line-height: 1.3;
 }
 
 #sb_localtunnels tr:hover td {
