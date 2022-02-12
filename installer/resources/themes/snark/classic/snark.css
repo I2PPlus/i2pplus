@@ -409,14 +409,14 @@ input#toggle_addtorrent:checked + label + hr + table, input#toggle_createtorrent
 /* configure */
 #configs .spacer, .trackerconfig .spacer {display: none}
 #configs a {font-weight: 700}
-#trackerselect {margin: 2px 5px 0 5px; width: 100%; width: calc(100% - 150px); border-collapse: separate; border: var(--border); border-radius: 2px; box-shadow: 0 0 1px #ccf}
+#createSection #trackerselect {margin: 5px 5px 0 5px; width: 100%; width: calc(100% - 150px); border-collapse: separate; border: var(--border); border-radius: 2px}
 #trackerselect tr:nth-child(even) {border-bottom: var(--border_softer); background: var(--bg3)}
 #trackerselect tr:nth-child(odd) {border-bottom: var(--border_softer); background: var(--bg)}
 #trackerselect tr:last-child {border-bottom: var(--border)}
 #trackerselect tr:first-child {font-weight: 700; border-bottom: 1px #bfc3d9}
 #trackerselect tr:first-child td {padding: 5px 10px; font-weight: 700; border-bottom: var(--border); background: linear-gradient(180deg,var(--bg),var(--bg3))}
-#trackerselect td {padding: 3px 10px}
-#trackerselect td:first-child, #trackerselect td:last-child {width: 35%; font-weight: 400}
+#trackerselect td {padding: 3px 10px; border-top: 1px solid var(--border_softer)}
+#trackerselect td:first-child, #trackerselect td:last-child {padding: 3px 10px; width: 35%; font-weight: 400}
 #trackerselect td:nth-child(2), #trackerselect td:nth-child(3) {width: 15%}
 #trackerselect input {margin: 3px}
 .snarkNewTorrent td {padding: 2px 3px}
@@ -437,7 +437,7 @@ input#toggle_addtorrent:checked + label + hr + table, input#toggle_createtorrent
 .trackerconfig input {margin: 3px 0; cursor: default}
 .knownTracker input[type=radio] {opacity: .3; cursor: default}
 .knownTracker input[type=radio]:checked, .knownTracker input[type=radio]:checked:hover {opacity: .5}
-.trackerconfig td, .snarkConfig td {padding: 5px 1px}
+.trackerconfig td, .snarkConfig td {padding: 5px 1px; border-top: 1px solid var(--border_softer)}
 .trackerconfig {margin-bottom: 7px; text-align: left}
 .snarkConfig table tr:first-child {border-top: var(--border)}
 .trackerconfig th:nth-child(n+4), .trackerconfig th:nth-child(n+5), .trackerconfig td:nth-child(n+4), .trackerconfig td:nth-child(n+5) {text-align: center}
@@ -539,7 +539,7 @@ td.commentAuthor .commentAuthorName {padding: 2px 5px 2px 24px; width: 125px; wh
 #bwHoverHelp:hover + #bwHelp {padding: 20px; width: 100%; display: block; position: fixed; float: left; top: 48px; left: 0; z-index: 9999; white-space: nowrap; text-align: center; font-size: 12pt; border-bottom: 5px solid #212; border-top: 5px solid #212; box-shadow: 0 1px 3px #101; background: #313}
 
 #configs td, #configs td:first-child {padding: 0; padding-right: 0}
-#configs tr:nth-last-child(2) td {padding: 10px 8px 0}
+#configs tr:nth-last-child(2) td {padding: 10px 8px 0; text-align: right}
 #configs th {padding: 6px 8px; vertical-align: middle}
 .optionlist {margin: 0; padding: 7px 6px 6px; columns: 400px 3; column-gap: 20px; box-shadow: var(--highlight); background: var(--bg3); transition: ease-in-out .5s box-shadow; will-change: transform}
 .optionlist:hover {box-shadow: inset 0 0 0 1px #fb0; transition: ease-in-out .5s box-shadow}
