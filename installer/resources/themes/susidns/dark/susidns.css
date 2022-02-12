@@ -158,7 +158,7 @@ p#filtered {box-shadow: var(--highlight), inset 0 0 2px 1px #030; background: re
 p#filtered {margin: -27px 0 10px; padding: 12px 10px 8px 20px; font-size: 10pt}
 #sbs h3 a {margin-right: 4px; float: right; font-size: 80%}
 #search {margin-top: -25px; margin-bottom: -14px; padding: 0 10px; border: var(--border)}
-#subslog pre {margin-bottom: 12px; padding: 8px 12px; width: calc(100% - 26px); height: calc(100% - 105px); white-space: pre-wrap; color: #bb7; border-radius: 0 0 2px 2px; background: #000}
+#subsLog pre {margin: -25px 0 0; padding: 8px 12px; width: calc(100% - 26px); white-space: pre-wrap; color: #bb7; border: var(--border); background: #000}
 
 #activefilter, .selected {font-weight: 700; color: #999; box-shadow: var(--highlight), inset 2px 2px 2px rgba(0,0,0,.9) !important}
 #activefilter {box-shadow: 0 0 0 1px #030, 0 0 2px 1px rgba(0,0,0,.8), var(--highlight), inset 3px 3px 3px rgba(0,0,0,.9) !important}
@@ -322,16 +322,16 @@ textarea[name="config"] {height: 280px}
 
 @media screen and (min-width: 1500px) {
 body, input[type=submit], input[type=reset], .fakebutton, input, select, h4, td.names a, li, #filter a, #filter span a, #host_details td, #search td, .destaddress {font-size: 10pt}
+th, pre {font-size: 9pt}
 input[type=submit], input[type=reset], .fakebutton {padding: 8px 12px 8px}
 input[type=text] {padding: 8px}
-th {font-size: 9pt}
 #booksearch input[name=search], #booksearch input[name=search]:focus {padding: 7px 8px 7px 32px; min-width: 320px}
 #host_list td.helper a::after, #host_list td.b32link a::after {width: 18px; height: 18px; background-size: 18px}
 }
 
 @media screen and (min-width: 1600px) {
 p, #content p, li, #content li {font-size: 10.5pt}
-textarea {font-size: 9.5pt}
+textarea, pre {font-size: 9.5pt}
 }
 
 input#exporthosts {font-size: 0}
