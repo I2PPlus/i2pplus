@@ -154,18 +154,16 @@ td.destinations {max-width: 50px; padding: 1px 8px}
 #booksearch input[name=search] {padding: 7px 8px 7px 32px; min-width: 280px; background: #000 var(--search) no-repeat 9px center / 14px; background-size: 14px}
 #booksearch {padding: 5px 5px 17px; text-align: center}
 #booksearch > * {vertical-align: middle}
-#activefilter, .selected {font-weight: 700; color: #999; box-shadow: var(--highlight), inset 2px 2px 2px rgba(0,0,0,.9) !important}
-#activefilter {box-shadow: 0 0 0 1px #030, 0 0 2px 1px rgba(0,0,0,.8), var(--highlight), inset 3px 3px 3px rgba(0,0,0,.9) !important}
-#filter a:active {border: 1px solid #930; color: #930; box-shadow: var(--highlight), var(--btn_shadow_active); transform: scale(.95)}
-#filter a, #activefilter {margin: 1px 0 3px; padding: 1px 8px; min-width: 12px; display: inline-block; line-height: 1.6; white-space: nowrap; text-transform: capitalize; font-size: 105%; border: 1px solid transparent; box-shadow: 0 0 0 1px #030, 0 0 2px 1px rgba(0,0,0,.8), var(--highlight); background: var(--th)}
-#filter a:hover, #filter a:focus {text-decoration: none; color: #f60; box-shadow: 0 0 0 1px #930; background: #020; transform: scale(1.1)}
 #filter {margin-top: -1px; padding: 15px 5px; border: var(--border); text-align: center; background: #001000}
+#filter a, #activefilter {margin: 1px 0 2px; padding: 2px 8px; min-width: 12px; display: inline-block; line-height: 1.6; white-space: nowrap; text-transform: capitalize; font-size: 105%; box-shadow: 0 0 0 1px #030, 0 0 2px 1px rgba(0,0,0,.8), var(--highlight); background: var(--th)}
+#filter a:hover, #filter a:focus {text-decoration: none; color: #f60; text-shadow: 0 1px 1px rgba(0,0,0,.8); box-shadow: 0 0 0 1px #030, var(--highlight), inset 0 0 0 2px #930; background: #030; transform: scale(1.15)}
+#filter a:active {color: #930; box-shadow: 0 0 0 1px #252, var(--btn_shadow_active); transform: scale(.95)}
+#filter span a {padding: 2px 6px; display: inline-block; font-size: 8.5pt}
 #filter p:first-child {padding-bottom: 0}
 #filter p {margin: 8px 0 -8px; padding: 0 10px; line-height: 2.1; word-spacing: .1em; font-weight: 700; text-align: center; text-transform: capitalize}
-#filter span a {padding: 2px 6px; display: inline-block; font-size: 8.5pt}
-p#filtered {padding: 12px 250px 12px 12px}
-p#filtered {box-shadow: var(--highlight), inset 0 0 2px 1px #030; background: repeating-linear-gradient(180deg,rgba(0,0,0,.8), rgba(0,16,0,.6) 1px, rgba(0,16,0,.6) 2px), url(/themes/console/dark/images/camotile2.png)}
-p#filtered {margin: -27px 0 10px; padding: 12px 10px 8px 20px; font-size: 10pt}
+p#filtered {margin: -27px 0 10px; padding: 12px 10px 8px 20px; font-size: 10pt; box-shadow: var(--highlight), inset 0 0 2px 1px #030; background: repeating-linear-gradient(180deg,rgba(0,0,0,.8), rgba(0,16,0,.6) 1px, rgba(0,16,0,.6) 2px), url(/themes/console/dark/images/camotile2.png)}
+#activefilter, .selected {font-weight: 700; color: #999; box-shadow: 0 0 0 1px #030, var(--btn_shadow_active) !important}
+#activefilter {margin: 1px 1px 2px; padding: 3px 10px 2px; color: var(--ink); text-shadow: 0 -1px 1px rgba(0,0,0,.8); box-shadow: 0 0 0 1px #252, var(--btn_shadow_active) !important; background: #030}
 
 /* add/import/export */
 #add, #import {margin-top: 23px; padding: 0 0 10px; border: var(--border); background: #000}
