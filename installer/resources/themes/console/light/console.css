@@ -1856,7 +1856,7 @@ table#consolepass input[name="name"] {margin-right: 20px}
 #i2pupdates .nowrap, #i2pupdates .nowrap b {display: inline-block; vertical-align: middle}
 #i2pupdates .optiontextarea .nowrap b {margin-top: -48px; margin-bottom: -28px; height: 76px; vertical-align: middle}
 #i2pupdates textarea, #i2pupdates input[type=text] {margin: 5px 0 5px 10px; width: calc(100% - 210px); min-width: 0; box-sizing: border-box}
-#i2pupdates input[name="devSU3URL"], #i2pupdates input[name="newsURL"] {width: calc(100% - 210px) !important}
+#i2pupdates input[name="devSU3URL"], #i2pupdates input[name="newsURL"], #i2pupdates input[name="zipURL"] {width: calc(100% - 210px) !important}
 #i2pupdates textarea {margin: 8px 0 8px 3px; height: 76px; min-height: 32px}
 
 /* reseed */
