@@ -327,7 +327,7 @@ td p.error {padding: 10px}
 #imageInfo::before {width: 20px; height: 16px; display: inline-block; vertical-align: text-bottom; background: var(--package) no-repeat left center / 16px; content: ""}
 
 /* mail list */
-tr.list0, tr.list1 {background: var(--tr)}
+tr.list0, tr.list1 {background: var(--row)}
 tr.list0:hover, tr.list1:hover {background-color: #030; box-shadow: var(--highlight)}
 th.mailListDate {padding-left: 8px; text-align: left}
 th.mailListDelete:empty {min-width: 24px}
