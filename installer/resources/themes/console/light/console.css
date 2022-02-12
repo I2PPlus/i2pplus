@@ -5500,11 +5500,12 @@ p#helptranslate {
 
 .langflag {
   margin: 5px 0 8px;
+  padding: 1px;
   width: 40px;
   height: 30px;
   display: inline-block;
   position: relative;
-  border-radius: 2px;
+  border-radius: 4px;
   box-shadow: 0 0 0 1px #bbc;
   opacity: .85;
 }
@@ -5517,7 +5518,7 @@ p#helptranslate {
   left: 0;
   right: 0;
   z-index: 10;
-  border-radius: 1px;
+  border-radius: 4px;
   background: linear-gradient(180deg, rgba(255,255,255,.5), rgba(0,0,0,0) 75%);
   content: "";
 }
@@ -5529,7 +5530,7 @@ p#helptranslate {
 .langselect img {
   width: 40px;
   height: 30px;
-  border-radius: 1px;
+  border-radius: 4px;
 }
 
 .langselect .optbox:checked + .langflag {
@@ -5544,6 +5545,21 @@ p#helptranslate {
 
 .langselect .optbox:checked ~ .ui_lang {
   font-size: 95% !important;
+}
+
+.langselect .optbox:checked ~ .langflag::after {
+  padding: 2px;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  position: absolute;
+  right: -14px;
+  bottom: calc(50% - 10px);
+  z-index: 20;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px #bbc, 0 0 0 5px #fff;
+  background: #f2f2ff var(--yes) no-repeat center center / 10px;
+  content: "";
 }
 
 /* end large flags */
