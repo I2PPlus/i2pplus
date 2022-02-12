@@ -3816,6 +3816,11 @@ ul.statlist {
   font-size: 110% !important;
 }
 
+.statsName > b:first-child {
+  padding-left: 19px;
+  background: var(--stats) no-repeat left top / 15px;
+}
+
 .statlist li i {
   margin-left: 6px;
   opacity: .8;
