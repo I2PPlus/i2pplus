@@ -42,7 +42,7 @@
         rval = intl.getRefresh();
 %>
 <input type="text" name="refreshInterval" maxlength="4" pattern="[0-9]{1,4}" required value="<%=rval%>">
-<%=intl._t("seconds")%>
+<%=intl._t("seconds")%>&emsp;(<%=intl._t("Set to 0 to disable.")%>)
 </td>
 <td class="optionsave">
 <input type="submit" name="action" class="accept" value="<%=intl._t("Save")%>" >

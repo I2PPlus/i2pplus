@@ -154,7 +154,7 @@ p:empty + .sb_notice {margin-top: 9px}
 .warntext {color: #b00}
 
 /* sidebar news */
-#sb_newsheadings {margin-left: 0; margin-bottom: -7px; width: 192px; text-align: right}
+#sb_newsheadings {margin-left: -12px; margin-bottom: -7px; width: 206px; text-align: right}
 #sidebar.routersummary #sb_newsheadings table {margin: -8px 0 3px}
 #sb_newsheadings table::before {content: none}
 #sb_newsheadings a {padding: 0 3px 0 0; width: 100%; display: inline-block}
@@ -1555,7 +1555,7 @@ tr.addnew, tr.addnew:hover {border-top: var(--border); background: #000800}
 .themechoice:hover {border: 1px solid var(--hover); background: #000}
 .themechoice .optbox, .langselect .optbox {position: absolute; opacity: 0;}
 .themechoice .optbox:checked + img {opacity: 1; filter: none; transform: scale(0.8)}
-.themechoice img {padding: 5px 0; opacity: .6}
+.themechoice img {padding: 8px 0 3px; opacity: .6}
 .themechoice img, .langflag {animation: fade .15s ease .3s reverse both}
 .themechoice:hover img {filter: drop-shadow(0 0 1px var(--hover))}
 .themechoice:active img {transform: scale(0.8)}
@@ -1583,10 +1583,10 @@ tr.addnew, tr.addnew:hover {border-top: var(--border); background: #000800}
 #langsettings {margin-top: -1px; margin-bottom: 10px; padding: 8px 7px 12px; border: var(--border); background: #000}
 #langsettings hr {display: none}
 #langui {margin: 7px -8px -15px; padding: 5px; border: var(--border); background: #000}
-.langflag {margin: 5px 0 2px; width: 40px; height: 30px; position: relative; display: inline-block; border-radius: 3px; opacity: .8}
+.langflag {margin: 3px 0 0; width: 40px; height: 30px; vertical-align: middle; position: relative; display: inline-block; border-radius: 3px; opacity: .8}
 .langselect:hover {border: 1px solid var(--hover); background: radial-gradient(circle at center -60px, rgba(255,96,0,.3), #000 70%)}
 .langselect:hover .optbox:not(:checked) + .langflag {opacity: 1; transform: scale(1.1)}
-.langselect .optbox:checked + .langflag {opacity: 1; transform: scale(.9)}
+.langselect .optbox:checked + .langflag {margin: 0 0 3px; opacity: 1; transform: scale(.9)}
 .langflag img {width: 40px; height: 30px; border-radius: 3px}
 .langselect:active .optbox:not(:checked) + .langflag {transform: scale(.8)}
 .langflag::before {position: absolute; top: 0; bottom: 0; left: 0; right: 0; z-index: 10; border-radius: 3px; box-shadow: 0 0 0 1px #000, inset 0 0 0 1px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.3); background: linear-gradient(180deg, rgba(255,255,255,.5), rgba(0,0,0,0) 75%); content: ""; display: inline-block}
@@ -1740,7 +1740,7 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 #sidebarconf button img {width: 12px; height: auto}
 #sidebarconf th:nth-child(1) {text-align: center}
 #sidebarconf th:nth-child(2) {text-align: left}
-#sidebarconf td:first-child {width: 60px}
+#sidebarconf td:first-child {width: 60px; text-align: center}
 #sidebarconf td:nth-child(3), #sidebarconf td:nth-child(4) {padding: 0; width: 1%; white-space: nowrap}
 #sidebarconf td:nth-child(3) {padding-left: 0}
 #sidebarconf td:nth-child(4) {padding-right: 5px; text-align: left}
@@ -2066,7 +2066,7 @@ input[type=text]:focus::placeholder, #homesearch input.search:focus::placeholder
 #routerinfo td:nth-child(2):not([colspan]) {white-space: nowrap; border-right: var(--border)}
 #routerinformation {padding-bottom: 12px}
 #routerinformation h3 {margin-bottom: -2px}
-#routerinformation h3 span a {padding-right: 6px; text-transform: capitalize}
+#routerinformation h3 span a {padding-right: 6px; margin: -14px 0 -11px; vertical-align: middle; text-transform: capitalize}
 #routerinformation .h3navlinks {margin-top: 1px}
 #routerinformation .h3navlinks a::before {margin: 0 3px 0 -2px; width: 14px; height: 14px; display: inline-block; vertical-align: middle; background: var(--eye) no-repeat left center / 14px; content: ""}
 #routerinformation .h3navlinks a:hover::before {background: var(--eye_hover) no-repeat left center / 14px}

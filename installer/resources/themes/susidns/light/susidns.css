@@ -13,7 +13,7 @@
 
 body {
   margin: 0 5px;
-  background: #a4a4cb url(/themes/console/light/images/tile2.png) center center;
+  background: var(--bodybg) url(/themes/console/light/images/tile2.png) center center;
 }
 
 body.iframed {

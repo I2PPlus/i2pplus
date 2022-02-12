@@ -16,7 +16,7 @@ body {
   margin: 0;
   padding: 0;
   text-align: center;
-  background: #a4a4cb url(images/tile2.png) fixed;
+  background: var(--bodybg) url(images/tile2.png) fixed;
   background-size: 32px;
   scrollbar-color: #779 #fff;
 }

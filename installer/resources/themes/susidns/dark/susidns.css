@@ -5,1640 +5,333 @@
 @import url(../images/images.css);
 @import url(images/images.css);
 
-html {
-  background: none !important;
-}
+html {background: none}
+body, input, input[type=submit], input[type=reset], .fakebutton, #hostNotes td:last-child, #hostNotes textarea {font-family: var(--bodyfont)}
+textarea, #helpconfig li b, .destaddress {font-family: var(--monospaced)}
+body {margin: 0 10px; padding-top: 5px; min-width: 650px; line-height: 1.2; background: repeating-linear-gradient(90deg, rgba(0,16,0,.5) 2px, rgba(0,25,0,.5) 4px), repeating-linear-gradient(180deg,#000 2px, #020 4px), #010; background-size: 4px 100%, 100% 4px}
+body.iframed {margin: 0; background: none}
+::selection {background: rgba(0,187,0,.99); color: #000; text-shadow: none}
+a:link, #filter a:visited {color: #494; text-decoration: none; font-weight: 700; outline: none}
+a:visited {color: #7b7; text-decoration: none}
+a:hover, a:focus {text-decoration: none; color: #f60}
+a:active {color: #f90}
+hr {margin: 5px 0; width: 100%; height: 1px; display: none; text-align: center; border: none; background: #242}
+h3 {padding: 7px 10px; letter-spacing: .18em; word-spacing: .1em; font-size: 10pt; font-weight: 700; text-transform: uppercase; text-shadow: 0 0 2px #001100; color: var(--ink); border: var(--border); box-shadow: var(--highlight); -webkit-text-stroke: var(--stroke)}
+h4 {margin-top: -15px; margin-bottom: 30px; padding: 8px 10px 8px 35px; word-spacing: .1em; font-size: 9pt; border: var(--border); box-shadow: var(--highlight), inset 0 0 2px 1px #030; background: var(--files) no-repeat 9px center / 16px, linear-gradient(90deg, #000, #000800); display: none; /* largely useless information */}
+p {color:var(--ink); margin: 0 0 4px; font-size: 9pt; text-align: justify}
+ol, ul {margin: 0 20px 0 10px; display: table-row}
+li {margin: 0; line-height: 1.5; list-style: square; font-size: 9pt; color: var(--ink)}
+th {padding: 5px 10px; text-align: left; color: var(--ink); font-size: 8.5pt}
+td {padding: 5px; vertical-align: middle; color: var(--ink); font-size: 9pt}
 
-body, input, input[type=submit], input[type=reset], .fakebutton, #hostNotes td:last-child, #hostNotes textarea {
-  font-family: var(--bodyfont);
-}
-
-textarea, #helpconfig li b, .destaddress {
-  font-family: var(--monospaced);
-}
-
-body {
-  margin: 0 10px;
-  padding-top: 5px;
-  min-width: 650px;
-  line-height: 1.2;
-  background: repeating-linear-gradient(90deg, rgba(0,16,0,.5) 2px, rgba(0,25,0,.5) 4px),
-    repeating-linear-gradient(180deg,#000 2px, #020 4px), #010;
-  background-size: 4px 100%, 100% 4px;
-}
-
-body.iframed {
-  margin: 0;
-  background: none !important;
-}
-
-::selection {
-  background: rgba(0,187,0,.99) !important;
-  color: #000;
-  text-shadow: none;
-}
-
-.destaddress::selection {
-  background: rgba(255,255,0,.99) !important;
-}
-
-.destaddress, textarea {
-  scrollbar-color: rgba(16,48,16,.4) rgba(0,0,0,0);
-}
-
-.destaddress:hover, textarea:hover {
-  scrollbar-color: rgba(24,80,24,.9) rgba(0,0,0,.9);
-}
-
-#navi, .buttons, #buttons, #host_list tr:first-child, #host_list img, #host_list td:nth-child(n+2) a {
-  user-select: none;
-}
-
-.page {
-  margin: 10px 0;
-  padding: 0 5px;
-  position: relative;
-  color: var(--ink);
-  font-size: 9pt !important;
-}
-
-.iframed .page {
-  margin: 0;
-  padding: 0 12px;
-  background: transparent !important;
-}
-
-.iframed .page::after {
-  content: "";
-  display: inline-block;
-  width: 100%;
-  height: 14px;
-  vertical-align: bottom;
-}
-
-#dtls.iframed .page::after {
-  height: 1px;
-  display: block;
-}
+textarea, #subslog pre {padding: 3px 5px; width: 100%; height: 120px; line-height: 1.4; font-weight: 700; border: var(--border); box-shadow: var(--highlight)}
+textarea[name="config"] {height: 250px; overflow-y: scroll; resize: none}
+textarea[cols="70"] {width: 100%; height: 40px}
+textarea:focus {filter: none}
+#navi, .buttons, #buttons, #host_list tr:first-child, #host_list img, #host_list td:nth-child(n+2) a {user-select: none}
 
 /* topnav */
-
-#navi  {
-  margin: -16px auto 30px;
-  padding: 5px 3px;
-  position: sticky;
-  top: -1px;
-  z-index: 999;
-  text-align: center;
-  border: var(--border_hard);
-  border-radius: 0 1px 2px 2px;
-  box-shadow: var(--highlight), 0 2px 2px 2px rgba(0,0,0,.4);
-  background: repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,48,0,.3) 4px),
-    var(--th), url(/themes/console/dark/images/camotile2.png) !important;
-  background-size: 4px 100%, 100%, 175px !important;
-  background-blend-mode: normal, exclusion, normal !important;
-}
-
-.iframed #navi  {
-  margin: -6px -15px 27px;
-  padding: 5px 0;
-  position: static;
-  border: var(--border_hard);
-  border-right: none;
-  border-left: none;
-  border-radius: 0;
-  box-shadow: var(--highlight);
-}
-
-#navi a:link {
-  text-transform: capitalize;
-}
-
-#navi a:first-child {
-  border-radius: 2px 0 0 2px;
-}
-
-#navi a:last-child {
-  border-radius: 0 2px 2px 0;
-}
-
-#navi a, #navi a:visited {
-  margin: 1px -4px;
-  padding: 3px 8px 4px 25px;
-  position: relative;
-  display: inline-block;
-  color: #494 !important;
-  text-shadow: 0 1px 1px #000;
-  border: var(--border_hard);
-  box-shadow: var(--highlight), inset 0 0 1px 1px #040;
-}
-
-#navi a:hover, #navi a:focus  {
-  z-index: 10;
-  color: #f60 !important;
-  box-shadow: var(--highlight), inset 0 0 1px 1px rgba(255,128,0,.8);
-  background: #000;
-}
-
-#navi a:active {
-  box-shadow: var(--highlight), inset 4px 4px 4px rgba(0,0,0,.85);
-  color: var(--ink) !important;
-  text-shadow: none !important;
-}
-
-#navi a.abook {
-  background: var(--abook) no-repeat 6px center / 14px, var(--nav);
-}
-
-#navi a.abook:hover, #navi a.abook:focus {
-  background: #000 var(--abook_hover) no-repeat 6px center / 14px;
-}
-
-#navi a.abook:active {
-  background: #f60 var(--abook_active) no-repeat 6px center / 14px;
-}
-
-#navi a#subs {
-  background: var(--subs) no-repeat 6px center / 14px, var(--nav);
-}
-
-#navi a#subs:hover, #navi a#subs:focus {
-  background: #000 var(--subs_hover) no-repeat 6px center / 14px;
-}
-
-#navi a#subs:active {
-  background: #f60 var(--subs_active) no-repeat 6px center / 14px;
-}
-
-#navi a#configlink {
-  background: var(--configure) no-repeat 6px center / 14px, var(--nav);
-}
-
-#navi a#configlink:hover, #navi a#configlink:focus {
-  background: #000 var(--configure_hover) no-repeat 6px center / 14px;
-}
-
-#navi a#configlink:active {
-  background: #f60 var(--configure_active) no-repeat 6px center / 14px;
-}
-
-#navi a#overview {
-  background: var(--overview) no-repeat 6px center / 14px, var(--nav);
-}
-
-#navi a#overview:hover, #navi a#overview:focus {
-  background: #000 var(--overview_hover) no-repeat 6px center / 14px;
-}
-
-#navi a#overview:active {
-  background: #f60 var(--overview_active) no-repeat 6px center / 14px;
-}
-
-/* end topnav */
-
-hr {
-  margin: 5px 0;
-  width: 100%;
-  height: 1px;
-  display: none;
-  text-align: center;
-  border: none;
-  background: #242;
-}
-
-#filter {
-  margin-top: -1px;
-  padding: 15px 5px;
-  border: var(--border);
-  text-align: center;
-  background: #001000;
-}
-
-#filter span a {
-  padding: 2px 6px;
-  display: inline-block;
-  font-size: 8.5pt;
-}
-
-#search {
-  margin-top: -25px;
-  margin-bottom: -14px;
-  padding: 0 10px;
-  border: var(--border);
-}
-
-#booksearch {
-  padding: 5px 5px 17px;
-  text-align: center;
-}
-
-#booksearch > * {
-  vertical-align: middle;
-}
-
-#filter p:first-child {
-  padding-bottom: 0;
-}
-
-#filter p {
-  margin: 8px 0 -8px;
-  padding: 0 10px;
-  line-height: 2.1;
-  word-spacing: .1em;
-  font-weight: 700;
-  text-align: center;
-  text-transform: capitalize;
-}
-
-#filter a, #activefilter {
-  margin: 1px 0 3px;
-  padding: 1px 8px;
-  min-width: 12px !important;
-  display: inline-block;
-  line-height: 1.6;
-  white-space: nowrap;
-  text-transform: capitalize;
-  font-size: 105%;
-  border: 1px solid transparent;
-  box-shadow: 0 0 0 1px #030, 0 0 2px 1px rgba(0,0,0,.8), var(--highlight);
-  background: var(--th);
-}
-
-#filter a:hover, #filter a:focus {
-  text-decoration: none;
-  color: #f60;
-  box-shadow: 0 0 0 1px #930;
-  background: #020;
-  transform: scale(1.1);
-}
-
-#filter a:active {
-  border: 1px solid #930;
-  color: #930 !important;
-  box-shadow: var(--highlight), var(--btn_shadow_active);
-  transform: scale(.95);
-}
-
-p {
-  color:var(--ink);
-  margin: 0 0 4px;
-  font-size: 9pt;
-  text-align: justify;
-}
-
-span.addrhlpr {
-  font-size: 9pt;
-}
-
-h3 {
-  padding: 7px 10px;
-  letter-spacing: .18em;
-  word-spacing: .1em;
-  font-size: 10pt;
-  font-weight: 700;
-  text-transform: uppercase;
-  text-shadow: 0 0 2px #001100;
-  color: var(--ink);
-  border: var(--border);
-  box-shadow: var(--highlight);
-  -webkit-text-stroke: var(--stroke);
-}
-
-#content h3 {
-  padding-top: 5px;
-  padding-bottom: 5px;
-}
-
-.headline h3 {
-  margin-top: -10px;
-}
-
-.headline h3:first-child {
-  margin-bottom: 24px;
-}
-
-#dtls .headline h3:first-child {
-  margin-bottom: 28px;
-}
-
-#content {
-  padding: 0 0 10px;
-}
-
-#ovrvw #content {
-  padding: 10px 10px 20px;
-}
-
-#content h3 {
-  padding-left: 34px;
-  letter-spacing: .12em;
-  word-spacing: .1em;
-  border: var(--border);
-  background: var(--question) no-repeat 8px center,
-    linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%),
-    repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px),
-    linear-gradient(180deg,#004000, #000 75%);
-  background-size: 18px, 100%, 4px 100%, 100%;
-}
-
-#content h3::first-letter {
-  font-size: 114% !important;
-}
-
-#content h3:first-child {
-  margin-top: -15px;
-}
-
-#content p {
-  margin-bottom: 8px;
-  line-height: 1.6;
-  font-size: 110%;
-}
-
-.headline h3:first-child + h4 {
-  margin-top: -25px;
-  margin-bottom: 26px !important;
-}
-
-.headline {
-  margin-top: -14px;
-}
-
-div#messages {
-  padding: 18px 20px 20px;
-  width: calc(100% - 66px);
-  position: absolute;
-  top: 0;
-  z-index: 999;
-  line-height: 1.2;
-  font-weight: 700;
-  border: var(--border);
-  box-shadow: var(--highlight);
-  background: #020 url(/themes/snark/dark/images/delete.png) right 6px top 6px no-repeat;
-  background-blend-mode: luminosity;
-}
-
-div#messages:hover {
-  cursor: crosshair;
-  background-blend-mode: normal;
-}
-
-#messages p {
-  margin: 0;
-  padding: 15px 15px 15px 50px !important;
-  color: var(--ink);
-  border-radius: 0;
-  background: car(--infohelp) no-repeat 6px center;
-  background-size: 32px;
-}
-
-#messages + p, p.book {
-  padding: 20px 20px 20px 50px !important;
-  border: var(--border);
-  box-shadow: var(--highlight), inset 0 0 2px 1px #030;
-  background: #000 var(--addressbook) no-repeat 10px center / 20px;
-}
-
-#messages:empty {
-  display: none;
-}
-
-p#filtered {
-  margin: -27px 0 10px;
-  padding: 12px 10px 8px 20px;
-  font-size: 10pt;
-}
-
-div#book p, p.messages {
-  font-size: 10pt;
-}
-
-h4 {
-  margin-top: -15px;
-  margin-bottom: 30px !important;
-  padding: 8px 10px 8px 35px;
-  word-spacing: .1em;
-  font-size: 9pt;
-  border: var(--border);
-  box-shadow: var(--highlight), inset 0 0 2px 1px #030 !important;
-  background: var(--files) no-repeat 9px center / 16px, linear-gradient(90deg, #000, #000800) !important;
-  display: none; /* largely useless information */
-}
-
-a:link, #filter a:visited {
-  color: #494;
-  text-decoration: none;
-  font-weight: 700;
-  outline: none;
-}
-
-a:hover, a:focus {
-  text-decoration: none;
-  color: #f60 !important;
-}
-
-a:visited {
-  color: #7b7;
-  text-decoration: none;
-}
-
-a:active {
-  color: #f90 !important;
-}
-
-th {
-  padding: 5px 10px;
-  text-align: left;
-  color: var(--ink);
-  font-size: 8.5pt;
-}
-
-td {
-  padding: 5px;
-  vertical-align: middle;
-  color: var(--ink);
-  font-size: 9pt;
-}
-
-td.checkbox {
-  padding: 3px 10px;
-  width: 1% !important;
-}
-
-.iframed #visualid {
-  margin-top: 16px;
-  margin-bottom: 16px;
-}
-
-#visualid h3 {
-  margin: 19px 0 -1px;
-}
-
-#idAddress {
-  text-transform: none;
-  letter-spacing: 0;
-}
-
-#visualid table {
-  width: 100%;
-  border: var(--border);
-  border-collapse: collapse;
-  background: #000900;
-}
-
-#visualid tr:first-child td {
-  padding: 15px 5px !important;
-}
-
-#visualid td:first-child {
-  text-align: right;
-}
-
-#visualid td {
-  text-align: left;
-}
-
-#visualid td[colspan="2"] {
-  padding: 15px 3px;
-  border-top: var(--border);
-}
-
-#visualid tr:last-child {
-  background: #000;
-}
-
-form[action="addressbook"] > p.buttons {
-  margin: -13px -3px 0;
-  padding: 8px 5px;
-  border: var(--border);
-}
-
-td > img[width="320"], td > img[src^="/imagegen"] {
-  margin: 10px 3px;
-  padding: 2px;
-  border-radius: 1px;
-  border: var(--border);
-  box-shadow: var(--highlight);
-  background: #000;
-}
-
-img[src="/imagegen/id?s=256&c="], img[src="/imagegen/id?s=20&c="] {
-  opacity: 0; /* hide broken identicons but ensure hostlist remains intact */
-}
-
-ol, ul {
-  margin: 0 20px 0 10px;
-  display: table-row;
-}
-
-li {
-  margin: 0;
-  line-height: 1.5;
-  list-style: square;
-  font-size: 9pt;
-  color: var(--ink);
-}
-
-#host_list tr:nth-child(odd), #host_details tr:nth-child(odd),
-#host_list tr:nth-child(even), #host_details tr:nth-child(even) {
-  background: linear-gradient(180deg,#001400,#000600);
-}
-
-.help {
-  padding: 20px 30px;
-  border: var(--border);
-}
-
-#sbs h3 a {
-  margin-right: 4px;
-  float: right;
-  font-size: 80% !important;
-}
-
-.help h3 {
-  margin: 10px -31px;
-}
-
-.help h3:first-child {
-  margin-top: -21px;
-}
-
-.help ul li:last-child {
-  margin-bottom: -10px;
-}
-
-#helpsubs {
-  padding: 15px 0 10px 40px;
-  background: var(--infohelp) no-repeat 15px center, var(--help) !important;
-  background-size: 32px, 4px 100% !important;
-}
-
-#helpsubs p {
-  padding: 15px;
-  line-height: 1.3;
-  border: none;
-}
-
-#helpconfig {
-  background: var(--help);
-  background-size: 4px 100%;
-}
-
-#helpconfig ul {
-  margin: 0 0 -5px -40px;
-  display: block;
-  columns: 2 500px;
-  column-gap: 40px;
-}
-
-.iframed #helpconfig, .iframed #helpsubs {
-  margin-bottom: 13px;
-}
-
-#helpconfig li {
-  margin: 0 3px;
-}
-
-#helpconfig li b {
-  color: #990;
-}
-
-div#content p {
-  padding: 0 10px;
-}
-
-p.footer {
-  display: none;
-  font-size: 7pt;
-  text-align: center;
-}
-
-.iframed #footer {
-  display: none;
-}
-
-p.buttons, #buttons {
-  margin: 5px 0 -5px;
-  padding: 0 3px;
-  text-align: right;
-}
-
-div#book + div#buttons {
-  margin-top: 3px;
-  padding: 0 0 10px;
-  border: var(--border);
-  background: #000;
-}
-
-form[action="export"] > div#buttons {
-  margin-top: 15px;
-  padding: 0 0 10px;
-  border: var(--border);
-  background: #000;
-}
-
-div#config > textarea, div#content > textarea, #subslog pre {
-  margin: -27px 0 0;
-  padding: 6px 12px;
-  border-radius: 0;
-}
-
-div#config > textarea:focus, div#content:focus {
-  border: var(--border);
-  box-shadow: var(--highlight), inset 4px 4px 4px rgba(0,0,0,.5);
-  filter: none;
-}
-
-textarea[name="config"] {
-  height: 250px;
-  overflow-y: scroll;
-  resize: none;
-}
-
-div#config + div#buttons, div#content + div#buttons {
-  margin-top: -3px;
-  margin-bottom: 10px;
-  padding: 7px 5px 5px;
-  border: var(--border);
-  background: #000;
-}
-
-div#content + div#buttons {
-  margin-top: -13px;
-}
-
-/* overview -> svg */
-
-.illustrate {
-  margin: 20px auto 10px;
-  padding: 0 11px;
-  max-width: 700px;
-  height: auto;
-  font-size: 10pt;
-  border: var(--border);
-  border-radius: 4px;
-  box-shadow: var(--highlight), inset 0 0 2px 1px #242;
-  background: #000;
-  opacity: .8;
-}
-
-.illustrate:hover {
-  opacity: 1;
-}
-
-#ovrvw p:last-of-type::after {
-  margin: 20px 0 25px;
-  width: 100%;
-  height: 1px;
-  display: block;
-  background: #131;
-  background: linear-gradient(90deg, rgba(0,0,0,0) 15%, #131, rgba(0,0,0,0) 85%);
-  content: "";
-  filter: drop-shadow(0 1px 1px #000);
-}
-
-svg #space, svg .subs {
-  fill: #010;
-  stroke: #242;
-}
-
-svg .subs {
-  filter: drop-shadow(0 0 1px #000);
-}
-
-svg .a.tooltip, svg .private {
-  fill: #030;
-  stroke: #272;
-}
-
-svg path.a.tooltip:not(:hover) {
-  fill: #272;
-  stroke: #000;
-  stroke-width: 2px;
-}
-
-svg .privatezone {
-  fill: none;
-  stroke-width: 2px;
-}
-
-svg tspan {
-  fill: var(--ink);
-}
-
-svg tspan.c {
-  font-weight: 400;
-}
-
-svg tspan:hover, svg .tooltip:hover .g {
-  fill: #252;
-  cursor: help;
-}
-
-svg a tspan:hover, svg #sublist:hover #hovershow,
-svg .a.tooltip:hover + .b > tspan, svg .a.private:hover + .b > tspan, svg a:hover .g {
-  fill: #f60;
-  cursor: pointer;
-}
-
-svg path.a.tooltip {
-  cursor: help;
-}
-
-svg rect.tooltip.a, svg path.a.tooltip.link, input[type=checkbox] {
-  cursor: pointer;
-}
-
-svg rect.tooltip, svg .private {
-  filter: drop-shadow(0 1px 1px #f50);
-}
-
-svg text {
-  filter: drop-shadow(0 1px 1px #000);
-}
-
-svg path.link, svg a tspan {
-  filter: drop-shadow(0 0 1px rgba(255,80,0,.6));
-}
-
-svg #hover stop:first-child, svg #hover2 stop:first-child {
-  stop-color: #040;
-}
-
-svg #hover stop:last-child, svg #hover2 stop:last-child {
-  stop-color: #010;
-}
-
-svg #arrow stop:first-child {
-  stop-color: #070;
-}
-
-svg #arrow stop:nth-child(2) {
-  stop-color: #030;
-}
-
-svg #arrow stop:last-child {
-  stop-color: #010;
-}
-
-_:-ms-lang(x), img.illustrate {
-  width: auto;
-  max-width: 600px;
-}
-
-/* end overview -> svg */
-
-div#book, #emptybook {
-  margin: -29px 0 -5px;
-  padding: 0;
-}
-
-div#empty {
-  margin-top: -4px;
-  width: 100%;
-  border-bottom: var(--border);
-}
-
-#emptybook {
-  margin-bottom: -7px;
-}
-
-#book table {
-  width: 100%;
-  border: var(--border);
-  border-collapse: separate;
-}
-
-#book tr.head {
-  background: linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%),
-    repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px),
-    linear-gradient(180deg,#002000, #000 75%) !important;
-  background-size: 100%, 4px 100%, 100% !important;
-}
-
-#book table th {
-  padding: 10px 0;
-  border-bottom: var(--border);
-}
-
-#book th:last-child {
-  background: var(--nuke) no-repeat center center / 15px !important;
-}
-
-#book tr:hover td {
-  background: #001a00;
-}
-
-#host_list tr:hover td {
-  border-right: 1px solid transparent;
-}
-
-#book tr:hover td:last-child {
-  border-right: none;
-}
-
-#book  tr:hover td textarea {
-  color: var(--ink);
-}
-
-#book input[type=checkbox] {
-  margin: 0;
-}
-
-div#add, div#import {
-  margin-top: 23px;
-  padding: 0 0 10px;
-  border: var(--border);
-  background: #000;
-}
-
-#add h3, #import h3 {
-  margin: -6px -1px 15px;
-  padding: 8px 10px 8px 36px;
-  font-size: 11pt;
-}
-
-#add table, #import table {
-  margin: -15px 0 -4px;
-  padding: 6px 3px;
-  width: 100%;
-  border-collapse: separate;
-  border-top: 1px solid rgba(0,48,0,.5);
-  border-bottom: 1px solid rgba(0,48,0,.5);
-  border-spacing: 0;
-}
-
-#add td:first-child,
-#import table td:first-child {
-  width: 100px;
-  white-space: nowrap;
-  text-align: right;
-}
-
-#add td:last-child,
-#import td:last-child {
-  padding-right: 5px;
-}
-
-#add p.buttons, #import p.buttons {
-  margin-top: 5px;
-  padding-top: 5px;
-  border-top: var(--border);
-}
-
-#import {
-  margin-top: 18px !important;
-}
-
-#add input[type=text], #import input[type=file] {
-  width: calc(100% - 20px);
-}
-
-#import input[type=file] {
-  border: none;
-  background: none;
-}
-
-.fakebutton, .fakebutton:visited {
-  color: #494;
-}
-
-.fakebutton:hover, .fakebutton:focus {
-  color: #f60;
-}
-
-input {
-  margin: 2px 4px 2px 0;
-  padding: 5px !important;
-  min-width: 64px !important;
-  text-align: left;
-  font-size: 8.5pt;
-  color: #494;
-  border: var(--border_hard);
-  border-radius: 1px;
-  background: none;
-}
-
-input[type=submit], input[type=reset], .fakebutton {
-  margin: 5px 2px;
-  padding: 8px 12px !important;
-  min-width: 92px !important;
-}
-
-input[type=submit]:last-of-type, input[type=reset]:last-of-type {
-  margin-right: 5px;
-}
-
-.fakebutton {
-  margin-right: 3px;
-}
-
-input[type=file]::file-selector-button {
-  margin: 5px 10px 2px 2px;
-  padding: 6px 12px !important;
-  min-width: 92px !important;
-}
-
-input.update {
-  margin-left: 5px;
-}
-
-input[type=text] {
-  padding: 7px !important;
-}
-
-textarea, #subslog pre {
-  padding: 3px 5px;
-  width: 100%;
-  height: 120px;
-  line-height: 1.4;
-  font-weight: 700;
-  border: var(--border);
-  box-shadow: var(--highlight);
-}
-
-#subslog pre {
-  margin-bottom: 12px;
-  padding: 8px 12px;
-  width: calc(100% - 26px);
-  height: calc(100% - 105px);
-  white-space: pre-wrap;
-  color: #bb7;
-  border-radius: 0 0 2px 2px;
-  background: #000;
-}
-
-textarea[cols="70"] {
-  width: 100% !important;
-  height: 40px;
-}
-
-textarea:focus {
-  filter: none;
-}
-
-#booksearch input[name=search] {
-  padding: 7px 8px 7px 32px !important;
-  min-width: 280px !important;
-  background: #000 var(--search) no-repeat 9px center / 14px;
-  background-size: 14px !important;
-}
-
-#booksearch input[name=search]:focus {
-  background: var(--search) no-repeat 9px center / 14px, var(--txt_focus);
-  outline: none;
-}
+#navi{margin: -16px auto 30px; padding: 5px 3px; position: sticky; top: -1px; z-index: 999; text-align: center; border: var(--border_hard); border-radius: 0 1px 2px 2px; box-shadow: var(--highlight), 0 2px 2px 2px rgba(0,0,0,.4); background: repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,48,0,.3) 4px), var(--th), url(/themes/console/dark/images/camotile2.png); background-size: 4px 100%, 100%, 175px; background-blend-mode: normal, exclusion, normal}
+.iframed #navi{margin: -6px -15px 27px; padding: 5px 0; position: static; border: var(--border_hard); border-right: none; border-left: none; border-radius: 0; box-shadow: var(--highlight)}
+#navi a:link {text-transform: capitalize}
+#navi a:first-child {border-radius: 2px 0 0 2px}
+#navi a:last-child {border-radius: 0 2px 2px 0}
+#navi a, #navi a:visited {margin: 1px -4px; padding: 3px 8px 4px 25px; position: relative; display: inline-block; color: #494; text-shadow: 0 1px 1px #000; border: var(--border_hard); box-shadow: var(--highlight), inset 0 0 1px 1px #040}
+#navi a:hover, #navi a:focus{z-index: 10; color: #f60; box-shadow: var(--highlight), inset 0 0 1px 1px rgba(255,128,0,.8); background: #000}
+#navi a:active {box-shadow: var(--highlight), inset 4px 4px 4px rgba(0,0,0,.85); color: var(--ink); text-shadow: none}
+#navi a.abook {background: var(--abook) no-repeat 6px center / 14px, var(--nav)}
+#navi a.abook:hover, #navi a.abook:focus {background: #000 var(--abook_hover) no-repeat 6px center / 14px}
+#navi a.abook:active {background: #f60 var(--abook_active) no-repeat 6px center / 14px}
+#navi a#subs {background: var(--subs) no-repeat 6px center / 14px, var(--nav)}
+#navi a#subs:hover, #navi a#subs:focus {background: #000 var(--subs_hover) no-repeat 6px center / 14px}
+#navi a#subs:active {background: #f60 var(--subs_active) no-repeat 6px center / 14px}
+#navi a#configlink {background: var(--configure) no-repeat 6px center / 14px, var(--nav)}
+#navi a#configlink:hover, #navi a#configlink:focus {background: #000 var(--configure_hover) no-repeat 6px center / 14px}
+#navi a#configlink:active {background: #f60 var(--configure_active) no-repeat 6px center / 14px}
+#navi a#overview {background: var(--overview) no-repeat 6px center / 14px, var(--nav)}
+#navi a#overview:hover, #navi a#overview:focus {background: #000 var(--overview_hover) no-repeat 6px center / 14px}
+#navi a#overview:active {background: #f60 var(--overview_active) no-repeat 6px center / 14px}
+
+.active {color: #ff6}
+.destaddress:hover, textarea:hover {scrollbar-color: rgba(24,80,24,.9) rgba(0,0,0,.9)}
+.destaddress::selection {background: rgba(255,255,0,.99)}
+.destaddress, textarea {scrollbar-color: rgba(16,48,16,.4) rgba(0,0,0,0)}
+.fakebutton, .fakebutton:visited {color: #494}
+.fakebutton:hover, .fakebutton:focus {color: #f60}
+.fakebutton {margin-right: 3px}
+.help h3:first-child {margin-top: -21px}
+.help h3 {margin: 10px -31px}
+.help {padding: 20px 30px; border: var(--border)}
+.help ul li:last-child {margin-bottom: -10px}
+.page {margin: 10px 0; padding: 0 5px; position: relative; color: var(--ink); font-size: 9pt}
+p.book {padding-left: 35px}
+p.buttons, #buttons {margin: 5px 0 -5px; padding: 0 3px; text-align: right}
+p.footer {display: none; font-size: 7pt; text-align: center}
+span.addrhlpr {font-size: 9pt}
+td.checkbox {padding: 3px 10px; width: 1%}
+
+#add h3, #import h3 {margin: -6px -1px 15px; padding: 8px 10px 8px 36px; font-size: 11pt}
+#add, #import {box-shadow: var(--highlight), inset 0 0 2px 1px #030; background: repeating-linear-gradient(180deg,rgba(0,0,0,.8), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), url(/themes/console/dark/images/camotile2.png)}
+#add, #import {margin-top: 23px; padding: 0 0 10px; border: var(--border); background: #000}
+#add input[type=text], #import input[type=file] {width: calc(100% - 20px)}
+#add p.buttons, #import p.buttons {margin-top: 5px; padding-top: 5px; border-top: var(--border)}
+#add p.buttons {margin-bottom: -10px; padding-bottom: 4px}
+#addressbook.headline h3 {padding-right: 44px; contain: paint}
+#addressbook.headline {position: relative}
+#add table, #import table {margin: -15px 0 -4px; padding: 6px 3px; width: 100%; border-collapse: separate; border-top: 1px solid rgba(0,48,0,.5); border-bottom: 1px solid rgba(0,48,0,.5); border-spacing: 0}
+#add td:first-child, #import table td:first-child {width: 100px; white-space: nowrap; text-align: right}
+#add td:last-child, #import td:last-child {padding-right: 5px}
+#book + #buttons {margin-top: 3px; padding: 0 0 10px; border: var(--border); background: #000}
+#book, #emptybook {margin: -29px 0 -5px; padding: 0}
+#book input[type=checkbox] {margin: 0}
+#book p, p.messages {font-size: 10pt}
+#booksearch input[name=search]:focus {background: var(--search) no-repeat 9px center / 14px, var(--txt_focus); outline: none}
+#booksearch input[name=search] {padding: 7px 8px 7px 32px; min-width: 280px; background: #000 var(--search) no-repeat 9px center / 14px; background-size: 14px}
+#booksearch {padding: 5px 5px 17px; text-align: center}
+#booksearch > * {vertical-align: middle}
+#book table th {padding: 10px 0; border-bottom: var(--border)}
+#book table {width: 100%; border: var(--border); border-collapse: separate}
+#book th:last-child {background: var(--nuke) no-repeat center center / 15px}
+#book tr.head {background: linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px), linear-gradient(180deg,#002000, #000 75%); background-size: 100%, 4px 100%, 100%}
+#book tr:hover td {background: #001a00}
+#book tr:hover td:last-child {border-right: none}
+#booktr:hover td textarea {color: var(--ink)}
+#config + #buttons, #content + #buttons {margin-top: -3px; margin-bottom: 10px; padding: 7px 5px 5px; border: var(--border); background: #000}
+#config > textarea, #content > textarea, #subslog pre {margin: -27px 0 0; padding: 6px 12px; border-radius: 0}
+#config > textarea:focus, #content:focus {border: var(--border); box-shadow: var(--highlight), inset 4px 4px 4px rgba(0,0,0,.5); filter: none}
+#content + #buttons {margin-top: -13px}
+#content h3:first-child {margin-top: -15px}
+#content h3::first-letter {font-size: 114%}
+#content h3 {padding-left: 34px; letter-spacing: .12em; word-spacing: .1em; border: var(--border); background: var(--question) no-repeat 8px center, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px), linear-gradient(180deg,#004000, #000 75%); background-size: 18px, 100%, 4px 100%, 100%}
+#content h3 {padding-top: 5px; padding-bottom: 5px}
+#content {padding: 0 0 10px}
+#content p {margin-bottom: 8px; line-height: 1.6; font-size: 110%}
+#content p {padding: 0 10px}
+#dtls .headline h3:first-child {margin-bottom: 28px}
+#dtls.iframed .page::after {height: 1px; display: block}
+#emptybook {margin-bottom: -7px}
+#empty {margin-top: -4px; width: 100%; border-bottom: var(--border)}
+#exporthosts:disabled {pointer-events: none; opacity: .5}
+#export {padding-left: 3px; height: 44px; position: absolute; top: 2px; top: 0; right: 1px; border-left: var(--border); contain: paint}
+#filter a:active {border: 1px solid #930; color: #930; box-shadow: var(--highlight), var(--btn_shadow_active); transform: scale(.95)}
+#filter a, #activefilter {margin: 1px 0 3px; padding: 1px 8px; min-width: 12px; display: inline-block; line-height: 1.6; white-space: nowrap; text-transform: capitalize; font-size: 105%; border: 1px solid transparent; box-shadow: 0 0 0 1px #030, 0 0 2px 1px rgba(0,0,0,.8), var(--highlight); background: var(--th)}
+#filter a:hover, #filter a:focus {text-decoration: none; color: #f60; box-shadow: 0 0 0 1px #930; background: #020; transform: scale(1.1)}
+#filter {margin-top: -1px; padding: 15px 5px; border: var(--border); text-align: center; background: #001000}
+#filter p:first-child {padding-bottom: 0}
+#filter p {margin: 8px 0 -8px; padding: 0 10px; line-height: 2.1; word-spacing: .1em; font-weight: 700; text-align: center; text-transform: capitalize}
+#filter span a {padding: 2px 6px; display: inline-block; font-size: 8.5pt}
+form[action="addressbook"] > p.buttons, #filter, #search, #visualid tr:last-child td, #buttons, #add p.buttons {box-shadow: var(--highlight), inset 0 0 2px 1px #030; background: repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px), linear-gradient(180deg,#020, #000 75%); background-size: 4px 100%, 100%}
+form[action="addressbook"] > p.buttons {margin: -13px -3px 0; padding: 8px 5px; border: var(--border)}
+form[action="export"] > #buttons {margin-top: 15px; padding: 0 0 10px; border: var(--border); background: #000}
+#helpconfig {background: var(--help); background-size: 4px 100%}
+#helpconfig li b {color: #990}
+#helpconfig li {margin: 0 3px}
+#helpconfig ul {margin: 0 0 -5px -40px; display: block; columns: 2 500px; column-gap: 40px}
+#helpsubs {padding: 15px 0 10px 40px; background: var(--infohelp) no-repeat 15px center, var(--help); background-size: 32px, 4px 100%}
+#helpsubs p {padding: 15px; line-height: 1.3; border: none}
+#host_details.book {margin-top: -25px}
+#host_list tr:hover td {border-right: 1px solid transparent}
+#host_list tr:nth-child(odd), #host_details tr:nth-child(odd), #host_list tr:nth-child(even), #host_details tr:nth-child(even) {background: linear-gradient(180deg,#001400,#000600)}
+#idAddress {text-transform: none; letter-spacing: 0}
+#import input[type=file] {border: none; background: none}
+#import {margin-top: 18px}
+#import {margin-top: 18px}
+input#exporthosts:active {background: #f60 var(--download_active) no-repeat center center / 16px}
+input#exporthosts:hover {background: #000 var(--download_hover) no-repeat center center / 16px}
+input#exporthosts {margin: 7px 6px 0 4px; padding: 0; width: 28px; height: 28px; min-width: 0; display: inline-block; font-size: 0; background: var(--download) no-repeat center center / 16px, var(--th)}
+input {margin: 2px 4px 2px 0; padding: 5px; min-width: 64px; text-align: left; font-size: 8.5pt; color: #494; border: var(--border_hard); border-radius: 1px; background: none}
+input[type=file]::file-selector-button {margin: 5px 10px 2px 2px; padding: 6px 12px; min-width: 92px}
+input[type=submit], input[type=reset], .fakebutton {margin: 5px 2px; padding: 8px 12px; min-width: 92px}
+input[type=submit]:last-of-type, input[type=reset]:last-of-type {margin-right: 5px}
+input[type=text] {padding: 7px}
+input.update {margin-left: 5px}
+#messages:empty {display: none}
+#messages:hover {cursor: crosshair; background-blend-mode: normal}
+#messages {padding: 18px 20px 20px; width: calc(100% - 66px); position: absolute; top: 0; z-index: 999; line-height: 1.2; font-weight: 700; border: var(--border); box-shadow: var(--highlight); background: #020 url(/themes/snark/dark/images/delete.png) right 6px top 6px no-repeat; background-blend-mode: luminosity}
+#messages + p, p.book {border: var(--border); background: #000 var(--addressbook) no-repeat 5px center / 20px}
+#messages p {margin: 0; padding: 15px 15px 15px 50px; color: var(--ink); border-radius: 0; background: car(--infohelp) no-repeat 6px center; background-size: 32px}
+#messages + p, p.book {padding: 20px 20px 20px 50px; border: var(--border); box-shadow: var(--highlight), inset 0 0 2px 1px #030; background: #000 var(--addressbook) no-repeat 10px center / 20px}
+#ovrvw #content {padding: 10px 10px 20px}
+#paginate, #filtered, #results {margin-right: 4px; float: right; word-spacing: 0; letter-spacing: 0; text-transform: none}
+p#filtered {padding: 12px 250px 12px 12px}
+p#filtered {box-shadow: var(--highlight), inset 0 0 2px 1px #030; background: repeating-linear-gradient(180deg,rgba(0,0,0,.8), rgba(0,16,0,.6) 1px, rgba(0,16,0,.6) 2px), url(/themes/console/dark/images/camotile2.png)}
+p#filtered {margin: -27px 0 10px; padding: 12px 10px 8px 20px; font-size: 10pt}
+#sbs h3 a {margin-right: 4px; float: right; font-size: 80%}
+#search {margin-top: -25px; margin-bottom: -14px; padding: 0 10px; border: var(--border)}
+#subsLog pre {margin: -25px 0 0; padding: 8px 12px; width: calc(100% - 26px); white-space: pre-wrap; color: #bb7; border: var(--border); background: #000}
+
+#activefilter, .selected {font-weight: 700; color: #999; box-shadow: var(--highlight), inset 2px 2px 2px rgba(0,0,0,.9) !important}
+#activefilter {box-shadow: 0 0 0 1px #030, 0 0 2px 1px rgba(0,0,0,.8), var(--highlight), inset 3px 3px 3px rgba(0,0,0,.9) !important}
+
+/* imagegen */
+img[src="/imagegen/id?s=256&c="], img[src="/imagegen/id?s=20&c="] {opacity: 0}
+td > img[width="320"], td > img[src^="/imagegen"] {margin: 10px 3px; padding: 2px; border-radius: 1px; border: var(--border); box-shadow: var(--highlight); background: #000}
+#visualid h3 {margin: 19px 0 -1px}
+#visualid table {width: 100%; border: var(--border); border-collapse: collapse; border-spacing: 0; background: #000900}
+#visualid td {text-align: left}
+#visualid td:first-child {text-align: right}
+#visualid td[colspan="2"] {padding: 15px 3px; border-top: var(--border)}
+#visualid tr:last-child {background: #000}
+#visualid tr td, #visualid tr:hover td {border-left: none; border-right: none; border-bottom: var(--border); box-shadow: none; background: #010; background: repeating-linear-gradient(180deg,rgba(0,0,0,.8), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), url(/themes/console/dark/images/camotile2.png)}
+#visualid tr:first-child td {padding: 15px 5px}
+#visualid tr:last-child td {padding: 18px 6px; border: none}
+
+/* svg */
+.illustrate {margin: 20px auto 10px; padding: 0 11px; max-width: 700px; height: auto; font-size: 10pt; border: var(--border); border-radius: 4px; box-shadow: var(--highlight), inset 0 0 2px 1px #242; background: #000; opacity: .8}
+.illustrate:hover {opacity: 1}
+#ovrvw p:last-of-type::after {margin: 20px 0 25px; width: 100%; height: 1px; display: block; background: #131; background: linear-gradient(90deg, rgba(0,0,0,0) 15%, #131, rgba(0,0,0,0) 85%); content: ""; filter: drop-shadow(0 1px 1px #000)}
+svg #space, svg .subs {fill: #010; stroke: #242}
+svg .subs {filter: drop-shadow(0 0 1px #000)}
+svg .a.tooltip, svg .private {fill: #030; stroke: #272}
+svg path.a.tooltip:not(:hover) {fill: #272; stroke: #000; stroke-width: 2px}
+svg .privatezone {fill: none; stroke-width: 2px}
+svg tspan {fill: var(--ink)}
+svg tspan.c {font-weight: 400}
+svg tspan:hover, svg .tooltip:hover .g {fill: #252; cursor: help}
+svg a tspan:hover, svg #sublist:hover #hovershow, svg .a.tooltip:hover + .b > tspan, svg .a.private:hover + .b > tspan, svg a:hover .g {fill: #f60; cursor: pointer}
+svg path.a.tooltip {cursor: help}
+svg rect.tooltip.a, svg path.a.tooltip.link, input[type=checkbox] {cursor: pointer}
+svg rect.tooltip, svg .private {filter: drop-shadow(0 1px 1px #f50)}
+svg text {filter: drop-shadow(0 1px 1px #000)}
+svg path.link, svg a tspan {filter: drop-shadow(0 0 1px rgba(255,80,0,.6))}
+svg #hover stop:first-child, svg #hover2 stop:first-child {stop-color: #040}
+svg #hover stop:last-child, svg #hover2 stop:last-child {stop-color: #010}
+svg #arrow stop:first-child {stop-color: #070}
+svg #arrow stop:nth-child(2) {stop-color: #030}
+svg #arrow stop:last-child {stop-color: #010}
 
 /* page titles */
-
-.headline h3, #add h3, #import h3 {
-  padding: 10px 5px 10px 35px;
-  text-transform: uppercase;
-  font-size: 11.5pt;
-  background: var(--addressbook) no-repeat 9px center,
-    linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%),
-    repeating-linear-gradient(90deg, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px),
-    linear-gradient(180deg,#004000, #000 75%);
-  background-size: 20px, 100%, 4px 100%, 100%;
-}
-
-.headline h3::first-letter {
-  font-size: 115%;
-}
-
-.headline#subscriptions h3 {
-  background: var(--subscription) 9px center no-repeat,
-    linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%),
-    repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px),
-    linear-gradient(180deg,#004000, #000 75%);
-  background-size: 18px, 100%, 4px 100%, 100% !important;
-}
-
-.headline#configure h3 {
-  background: var(--config) no-repeat 9px center,
-    linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%),
-    repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px),
-    linear-gradient(180deg,#004000, #000 75%);
-  background-size: 20px, 100%, 4px 100%, 100% !important;
-}
-
-p#filtered {
-  padding: 12px 250px 12px 12px !important;
-}
-
-p.book {
-  padding-left: 35px !important;
-}
-
-#messages + p, p.book {
-  border: var(--border);
-  background: #000 var(--addressbook) no-repeat 5px center / 20px;
-}
+.headline {margin-top: -14px}
+.headline h3, #add h3, #import h3 {padding: 10px 5px 10px 35px; text-transform: uppercase; font-size: 11.5pt; background: var(--addressbook) no-repeat 9px center, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(90deg, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(180deg,#004000, #000 75%); background-size: 20px, 100%, 4px 100%, 100%}
+.headline h3 {margin-top: -10px}
+.headline h3:first-child {margin-bottom: 24px}
+.headline h3::first-letter {font-size: 115%}
+.headline#subscriptions h3 {background: var(--subscription) 9px center no-repeat, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px), linear-gradient(180deg,#004000, #000 75%); background-size: 18px, 100%, 4px 100%, 100%}
+.headline#configure h3 {background: var(--config) no-repeat 9px center, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px), linear-gradient(180deg,#004000, #000 75%); background-size: 20px, 100%, 4px 100%, 100%}
+.headline h3:first-child + h4 {margin-top: -25px; margin-bottom: 26px}
 
 /* host details page */
-
-#host_details tr {
-  box-shadow: var(--highlight), inset 0 -1px 0 1px #000, inset 0 0 2px 1px #030, inset 0 -1px 2px 1px #030 !important;
-}
-
-#host_details td {
-  padding: 8px 5px 8px 10px !important;
-  border-bottom: 1px solid #131;
-}
-
-#host_details td:first-child {
-  padding-right: 0 !important;
-  width: 1%;
-  white-space: nowrap;
-  vertical-align: top;
-  font-weight: 700;
-  text-align: right;
-}
-
-#host_details td:last-child {
-  text-align: left;
-  border-left: none !important;
-  border-right: none !important;
-}
-
-#host_details td.destinations {
-  background: none;
-}
-
-#host_details .destaddress {
-  margin-right: 5px;
-  word-break: break-all !important;
-  white-space: normal !important;
-  user-select: all;
-}
-
-#host_details b {
-  margin: 0 6px 0 10px;
-}
-
-#lastMod:empty::before {
-  content: "n/a";
-}
-
-/* end host details */
+#host_details tr {box-shadow: var(--highlight), inset 0 -1px 0 1px #000, inset 0 0 2px 1px #030, inset 0 -1px 2px 1px #030}
+#host_details td {padding: 8px 5px 8px 10px; border-bottom: 1px solid #131}
+#host_details td:first-child {padding-right: 0; width: 1%; white-space: nowrap; vertical-align: top; font-weight: 700; text-align: right}
+#host_details td:last-child {text-align: left; border-left: none; border-right: none}
+#host_details td.destinations {background: none}
+#host_details .destaddress {margin-right: 5px; word-break: break-all; white-space: normal; user-select: all}
+#host_details b {margin: 0 6px 0 10px}
+#lastMod:empty::before {content: "n/a"}
 
 /* hostname list */
-
-#host_list th {
-  padding: 6px 9px !important;
-}
-
-#host_list td {
-  padding: 4px 8px;
-  border-right: 1px solid #131;
-  border-bottom: 1px solid #131;
-  box-shadow: var(--highlight), inset 0 0 2px 0 #040;
-}
-
-#host_list tr:hover td {
-  box-shadow: none;
-}
-
-#host_list .info {
-  padding: 4px !important;
-  width: 1%;
-  text-align: center;
-}
-
-.info img {
-  padding: 2px;
-  width: 24px;
-  height: 24px;
-  vertical-align: middle;
-  border: var(--border);
-  border-radius: 1px;
-  background: #000;
-  image-rendering: crisp-edges;
-}
-
-.info img:hover, .info a:focus img {
-  border: 1px solid #f60;
-  background: #d30;
-}
-
-.info a:active img, .info a:focus img {
-  transform: rotate(45deg) scale(.6);
-}
-
-#host_list {
-  margin-top: 28px;
-}
-
-#host_list .names {
-  width: 30%;
-  white-space: nowrap;
-}
-
-#host_list .checkbox {
-  width: 21px !important;
-  white-space: nowrap;
-  text-align: center;
-  font-weight: 700;
-  border-right: none;
-}
-
-.names a[href$=".i2p/"], #host_list td.b32link a, #host_list td.helper a {
-  width: 100%;
-  display: inline-block;
-  vertical-align: middle;
-}
-
-#host_list td:hover {
-  box-shadow: inset 0 0 0 1px #930 !important;
-  background: #000 !important;
-}
-
-#host_list .b32link, #host_list .helper {
-  width: 5%;
-  min-width: 72px;
-  white-space: nowrap;
-  text-align: center;
-}
-
-#host_list td.b32link a, #host_list td.helper a {
-  filter: drop-shadow(0 0 1px #353);
-}
-
-#host_list td.b32link a, #host_list td.helper a {
-  font-size: 0 !important;
-}
-
-#host_list td.b32link a::after {
-  width: 16px;
-  height: 16px;
-  display: inline-block;
-  text-align: center;
-  background: var(--link) no-repeat center center / 16px;
-  content: "";
-  cursor: pointer;
-}
-
-#host_list td.helper a::after {
-  width: 16px;
-  height: 16px;
-  display: inline-block;
-  background: var(--helper) no-repeat center center / 16px;
-  background-size: 16px;
-  cursor: pointer;
-  content: "";
-}
-
-#host_list td.b32link a:hover, #host_list td.helper a:hover,
-#host_list td.b32link a:focus, #host_list td.helper a:focus {
-  filter: drop-shadow(0 0 1px #f60);
-  transform: scale(1.2);
-}
-
-.destaddress:hover, .destaddress:focus {
-  background: #000;
-  outline: none;
-}
-
-#host_list .destaddress {
-  padding: 6px 0 !important;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-weight: 400;
-  user-select: all;
-}
-
-#host_list .destaddress:focus {
-  text-overflow: clip;
-}
-
-/* end hostname list */
-
-td.destinations {
-  max-width: 50px !important;
-  padding: 1px 8px !important;
-}
-
-#host_list tr:hover td.destinations {
-  color: #bb0;
-}
-
-/* host notes */
-
-#host_details .destaddress {
-  word-break: break-all !important;
-  white-space: normal !important;
-}
-
-#hostNotes td:last-child {
-  padding: 0 0 1px !important;
-}
-
-#hostNotes:hover td {
-  background: transparent !important;
-}
-
-#hostNotes td:last-child input[type=submit] {
-  margin: 13px 10px 10px;
-  float: right;
-  display: none;
-}
-
-#hostNotes td:last-child textarea:focus + input[type=submit] {
-  display: inline-block;
-}
-
-#hostNotes textarea {
-  margin: 0;
-  padding: 7px 8px !important;
-  height: 72px !important;
-  font-size: 9pt;
-  font-weight: 400;
-  border: none !important;
-  border-radius: 0;
-  box-shadow: none;
-  background: transparent !important;
-}
-
-#hostNotes textarea:hover, #hostNotes textarea:focus {
-  border-right: none;
-  border-left: none;;
-  box-shadow: inset 0 0 0 1px rgba(255,96,0,.5);
-  background: #000 !important;
-}
-
-#hostNotes textarea::placeholder {
-  font-style: italic;
-}
-
-#hostNotes textarea:focus::placeholder {
-  color: transparent;
-}
-
-p#filtered {
-  box-shadow: var(--highlight), inset 0 0 2px 1px #030 !important;
-  background: repeating-linear-gradient(180deg,rgba(0,0,0,.8), rgba(0,16,0,.6) 1px, rgba(0,16,0,.6) 2px), url(/themes/console/dark/images/camotile2.png) !important;
-}
-
-#visualid table {
-  border-spacing: 0;
-}
-
-#visualid tr td, #visualid tr:hover td {
-  border-left: none !important;
-  border-right: none !important;
-  border-bottom: var(--border);
-  box-shadow: none !important;
-  background: #010;
-  background: repeating-linear-gradient(180deg,rgba(0,0,0,.8), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), url(/themes/console/dark/images/camotile2.png) !important;
-}
-
-#visualid tr:last-child td {
-  padding: 18px 6px;
-  border: none;
-}
-
-form[action="addressbook"] > p.buttons, #filter, #search, #visualid tr:last-child td, #buttons, #add p.buttons {
-  box-shadow: var(--highlight), inset 0 0 2px 1px #030 !important;
-  background: repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px),
-    linear-gradient(180deg,#020, #000 75%) !important;
-  background-size: 4px 100%, 100% !important;
-}
-
-#add, #import {
-  box-shadow: var(--highlight), inset 0 0 2px 1px #030 !important;
-  background: repeating-linear-gradient(180deg,rgba(0,0,0,.8), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), url(/themes/console/dark/images/camotile2.png) !important;
-}
-
-#add p.buttons {
-  margin-bottom: -10px !important;
-  padding-bottom: 4px !important;
-}
-
-#host_details.book {
-  margin-top: -25px !important;
-}
-
-#showing, #paginate {
-  display: inline-block;
-}
-
-#paginate, #filtered, #results {
-  margin-right: 4px;
-  float: right;
-  word-spacing: 0;
-  letter-spacing: 0;
-  text-transform: none;
-}
-
-#addressbook.headline h3 {
-  padding-right: 44px;
-  contain: paint;
-}
-
-#addressbook.headline {
-  position: relative;
-}
-
-input#exporthosts {
-  margin: 7px 6px 0 4px;
-  padding: 0 !important;
-  width: 28px;
-  height: 28px;
-  min-width: 0 !important;
-  display: inline-block;
-  font-size: 0 !important;
-  background: var(--download) no-repeat center center / 16px, var(--th);
-}
-
-input#exporthosts:hover {
-  background: #000 var(--download_hover) no-repeat center center / 16px;
-}
-
-input#exporthosts:active {
-  background: #f60 var(--download_active) no-repeat center center / 16px !important;
-}
-
-#exporthosts:disabled {
-  pointer-events: none;
-  opacity: .5;
-}
-
-#export {
-  padding-left: 3px;
-  height: 44px;
-  position: absolute;
-  top: 2px;
-  top: 0;
-  right: 1px;
-  border-left: var(--border);
-  contain: paint;
-}
-
-#activefilter, .selected {
-  font-weight: 700;
-  color: #999;
-  box-shadow: var(--highlight), inset 2px 2px 2px rgba(0,0,0,.9) !important;
-}
-
-#activefilter {
-  box-shadow: 0 0 0 1px #030, 0 0 2px 1px rgba(0,0,0,.8), var(--highlight), inset 3px 3px 3px rgba(0,0,0,.9) !important;
-}
-
-.active {
-  color: #ff6;
-}
-
-#prev, #next, #current {
-  font-size: 11pt;
-  text-shadow: none;
-}
-
-#showing {
-  margin-left: 6px;
-}
-
-#paginate {
-  margin: -2px 7px -1px 0;
-  position: relative;
-  overflow: hidden;
-  font-size: 0;
-  text-align: center;
-  border: var(--border_hard);
-  background: var(--th);
-}
-
-#prev a, #next a, #current {
-  box-shadow: var(--highlight) !important;
-}
-
-#current {
-  padding: 3px 10px;
-  display: inline-block;
-  vertical-align: middle;
-  text-align: center;
-  font-size: 11pt !important;
-  color: var(--ink);
-  border-left: var(--border_hard);
-  border-right: var(--border_hard);
-}
-
-#prev, #next {
-  margin-top: -1px;
-  position: relative;
-  display: inline-block;
-  line-height: 0;
-  vertical-align: middle;
-}
-
-#prev.inactive, #next.inactive {
-  padding: 10px 16px;
-  border: none;
-}
-
-#prev a, #next a {
-  margin: 0;
-  padding: 10px 16px;
-  font-size: 0 !important;
-}
-
-#prev::after, #next::after {
-  height: 0;
-  width: 0;
-  position: absolute;
-  top: calc(50% - 5px);
-  right: calc(50% - 3px);
-  border-width: 6px;
-  border-style: solid;
-  border-color: transparent #494 transparent transparent;
-  content: "";
-  pointer-events: none;
-}
-
-#prev.inactive, #next.inactive {
-  opacity: .4;
-  pointer-events: none;
-}
-
-#next::after {
-  left: calc(50% - 3px);
-  right: 0;
-  border-color: transparent transparent transparent #494;
-}
-
-#prev:not(.inactive):hover::after, #prev:not(.inactive) a:focus::after {
-  border-color: transparent #f60 transparent transparent;
-}
-
-#next:not(.inactive):hover::after, #next:not(.inactive) a:focus::after {
-  border-color: transparent transparent transparent #f60;
-}
-
-#filtered, #results {
-  font-size: 10pt;
-}
-
-#prev:hover::after, #next:hover::after,
-#prev:focus::after, #next:focus::after {
-  transform: scale(1.1);
-}
-
-#prev:active::after, #next:active::after {
-  transform: scale(.9);
-}
-
-/* responsive layout */
+#host_list th {padding: 6px 9px}
+#host_list td {padding: 4px 8px; border-right: 1px solid #131; border-bottom: 1px solid #131; box-shadow: var(--highlight), inset 0 0 2px 0 #040}
+#host_list tr:hover td {box-shadow: none}
+#host_list .info {padding: 4px; width: 1%; text-align: center}
+.info img {padding: 2px; width: 24px; height: 24px; vertical-align: middle; border: var(--border); border-radius: 1px; background: #000; image-rendering: crisp-edges}
+.info img:hover, .info a:focus img {border: 1px solid #f60; background: #d30}
+.info a:active img, .info a:focus img {transform: rotate(45deg) scale(.6)}
+#host_list {margin-top: 28px}
+#host_list .names {width: 30%; white-space: nowrap}
+#host_list .checkbox {width: 21px; white-space: nowrap; text-align: center; font-weight: 700; border-right: none}
+.names a[href$=".i2p/"], #host_list td.b32link a, #host_list td.helper a {width: 100%; display: inline-block; vertical-align: middle}
+#host_list td:hover {box-shadow: inset 0 0 0 1px #930; background: #000}
+#host_list .b32link, #host_list .helper {width: 5%; min-width: 72px; white-space: nowrap; text-align: center}
+#host_list td.b32link a, #host_list td.helper a {filter: drop-shadow(0 0 1px #353)}
+#host_list td.b32link a, #host_list td.helper a {font-size: 0}
+#host_list td.b32link a::after {width: 16px; height: 16px; display: inline-block; text-align: center; background: var(--link) no-repeat center center / 16px; content: ""; cursor: pointer}
+#host_list td.helper a::after {width: 16px; height: 16px; display: inline-block; background: var(--helper) no-repeat center center / 16px; background-size: 16px; cursor: pointer; content: ""}
+#host_list td.b32link a:hover, #host_list td.helper a:hover, #host_list td.b32link a:focus, #host_list td.helper a:focus {filter: drop-shadow(0 0 1px #f60); transform: scale(1.2)}
+.destaddress:hover, .destaddress:focus {background: #000; outline: none}
+#host_list .destaddress {padding: 6px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 400; user-select: all}
+#host_list .destaddress:focus {text-overflow: clip}
+td.destinations {max-width: 50px; padding: 1px 8px}
+#host_list tr:hover td.destinations {color: #bb0}
+
+/* notes */
+#host_details .destaddress {word-break: break-all; white-space: normal}
+#hostNotes td:last-child {padding: 0 0 1px}
+#hostNotes:hover td {background: transparent}
+#hostNotes td:last-child input[type=submit] {margin: 13px 10px 10px; float: right; display: none}
+#hostNotes td:last-child textarea:focus + input[type=submit] {display: inline-block}
+#hostNotes textarea {margin: 0; padding: 7px 8px; height: 72px; font-size: 9pt; font-weight: 400; border: none; border-radius: 0; box-shadow: none; background: transparent}
+#hostNotes textarea:hover, #hostNotes textarea:focus {border-right: none; border-left: none;; box-shadow: inset 0 0 0 1px rgba(255,96,0,.5); background: #000}
+#hostNotes textarea::placeholder {font-style: italic}
+#hostNotes textarea:focus::placeholder {color: transparent}
+
+/* pagenav */
+#prev, #next, #current {font-size: 11pt; text-shadow: none}
+#showing, #paginate {display: inline-block}
+#showing {margin-left: 6px}
+#paginate {margin: -2px 7px -1px 0; position: relative; overflow: hidden; font-size: 0; text-align: center; border: var(--border_hard); background: var(--th)}
+#prev a, #next a, #current {box-shadow: var(--highlight)}
+#current {padding: 3px 10px; display: inline-block; vertical-align: middle; text-align: center; font-size: 11pt; color: var(--ink); border-left: var(--border_hard); border-right: var(--border_hard)}
+#prev, #next {margin-top: -1px; position: relative; display: inline-block; line-height: 0; vertical-align: middle}
+#prev.inactive, #next.inactive {padding: 10px 16px; border: none}
+#prev a, #next a {margin: 0; padding: 10px 16px; font-size: 0}
+#prev::after, #next::after {height: 0; width: 0; position: absolute; top: calc(50% - 5px); right: calc(50% - 3px); border-width: 6px; border-style: solid; border-color: transparent #494 transparent transparent; content: ""; pointer-events: none}
+#prev.inactive, #next.inactive {opacity: .4; pointer-events: none}
+#next::after {left: calc(50% - 3px); right: 0; border-color: transparent transparent transparent #494}
+#prev:not(.inactive):hover::after, #prev:not(.inactive) a:focus::after {border-color: transparent #f60 transparent transparent}
+#next:not(.inactive):hover::after, #next:not(.inactive) a:focus::after {border-color: transparent transparent transparent #f60}
+#filtered, #results {font-size: 10pt}
+#prev:hover::after, #next:hover::after, #prev:focus::after, #next:focus::after {transform: scale(1.1)}
+#prev:active::after, #next:active::after {transform: scale(.9)}
+
+/* iframe */
+.iframed #footer {display: none}
+.iframed #helpconfig, .iframed #helpsubs {margin-bottom: -1px}
+.iframed .page {margin: 0; padding: 0 12px; background: transparent}
+.iframed .page::after {content: ""; display: inline-block; width: 100%; height: 14px; vertical-align: bottom}
+.iframed #visualid {margin-top: 16px; margin-bottom: 16px}
 
 @media screen and (max-width: 1200px) {
-  #filter {
-    padding: 9px 4px 8px;
-  }
-  #filter a {
-    margin: 3px 1px;
-    padding: 0 4px;
-  }
-  #filtered, #results {
-    font-size: 9.5pt;
-  }
-  #paginate {
-    margin: -2px 6px -2px 2px;
-  }
-  #prev, #next, #current {
-    font-size: 10pt;
-  }
-  .iframed #prev a, .iframed #next a {
-    padding: 11px 16px !important;
-  }
-  .iframed #prev::after, .iframed #next::after {
-    top: calc(50% - 5px);
-  }
-  #prev.inactive::after, #next.inactive::after {
-    top: calc(50% - 6px);
-  }
-  #current {
-    padding: 2px 10px;
-    display: inline-block;
-    font-size: 10pt;
-  }
-  input#exporthosts {
-    margin-top: 6px;
-  }
-  .names a[href$=".i2p/"] {
-    max-width: 260px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+#current {padding: 2px 10px; display: inline-block; font-size: 10pt}
+#filter a {margin: 3px 1px; padding: 0 4px}
+#filtered, #results {font-size: 9.5pt}
+#filter {padding: 9px 4px 8px}
+#exporthosts {margin-top: 6px}
+#paginate {margin: -2px 6px -2px 2px}
+#prev.inactive::after, #next.inactive::after {top: calc(50% - 6px)}
+#prev, #next, #current {font-size: 10pt}
+.iframed #prev::after, .iframed #next::after {top: calc(50% - 5px)}
+.iframed #prev a, .iframed #next a {padding: 11px 16px}
+.names a[href$=".i2p/"] {max-width: 260px; overflow: hidden; text-overflow: ellipsis}
 }
 
-@media screen and (max-width: 1000px) {
-  .illustrate {
-    margin: 15px auto 10px;
-    width: 90%;
-    min-width: 450px;
-  }
-}
+@media screen and (max-width: 1000px) {.illustrate {margin: 15px auto 10px; width: 90%; min-width: 450px}}
 
 @media screen and (max-width: 710px) {
-  #navi a {
-    padding: 5px 8px !important;
-    background: linear-gradient(180deg,#020 50%,#000 50%) !important;
-  }
-  #navi a.abook:hover, #navi a#overview:hover, #navi a#subs:hover, #navi a#configlink:hover,
-  #navi a.abook:focus, #navi a#overview:focus, #navi a#subs:focus, #navi a#configlink:focus {
-    padding: 5px 8px !important;
-    background: #000 !important;
-  }
-  #navi a.abook:active, #navi a#overview:active, #navi a#subs:active, #navi a#configlink:active {
-    background: #f60 !important;
-  }
-}
+#navi a.abook, #navi a#overview, #navi a#subs, #navi a#configlink {padding: 5px 8px; background: linear-gradient(180deg,#020 50%,#000 50%)}
+#navi a.abook:hover, #navi a#overview:hover, #navi a#subs:hover, #navi a#configlink:hover, #navi a.abook:focus, #navi a#overview:focus, #navi a#subs:focus, #navi a#configlink:focus {padding: 5px 8px; background: #000}
+#navi a.abook:active, #navi a#overview:active, #navi a#subs:active, #navi a#configlink:active {background: #f60}}
 
 @media screen and (min-width: 1200px) {
-  #content h3 {
-    padding-top: 8px;
-    padding-bottom: 8px;
-  }
+#content h3 {padding-top: 8px; padding-bottom: 8px}
 }
 
 @media screen and (min-width: 1400px) {
-  body, input[type=submit], input[type=reset], .fakebutton, input, select, h4, td.names a, li,
-  #filter a, #filter span a,  #host_details td, th, #search td, .destaddress {
-    font-size: 9.5pt !important;
-  }
-  p {
-    font-size: 10pt !important;
-  }
-  textarea, th {
-    font-size: 9pt;
-  }
-  #navi {
-    padding: 6px 5px !important;
-  }
-  #navi a.abook, #navi a.abook:hover, #navi a.abook:focus, #navi a.abook:active,
-  #navi a#overview, #navi a#overview:hover, #navi a#overview:focus, #navi a#overview:active,
-  #navi a#subs, #navi a#subs:hover, #navi a#subs:focus, #navi a#subs:active,
-  #navi a#configlink, #navi a#configlink:hover, #navi a#configlink:focus, #navi a#configlink:active {
-    padding: 6px 10px 6px 29px !important;
-    letter-spacing: .1em;
-    font-size: 10pt !important;
-    background-position: 10px center !important;
-  }
-  h3 {
-    font-size: 12pt !important;
-  }
-  #filter a {
-    margin: 0 2px -2px !important;
-    min-width: 14px;
-  }
-  div#filter {
-    background: linear-gradient(90deg, #000, #001000 10%, #001000 90%, #000);
-  }
-  form[action="addressbook"] > p.buttons {
-    margin-bottom: -20px;
-  }
-  textarea[name="config"] {
-    height: 280px;
-  }
+body, input[type=submit], input[type=reset], .fakebutton, input, select, h4, td.names a, li, #filter a, #filter span a,#host_details td, th, #search td, .destaddress {font-size: 9.5pt}
+p, #content p {font-size: 10pt}
+textarea, th {font-size: 9pt}
+#navi {padding: 6px 5px}
+#navi a.abook, #navi a.abook:hover, #navi a.abook:focus, #navi a.abook:active, #navi a#overview, #navi a#overview:hover, #navi a#overview:focus, #navi a#overview:active, #navi a#subs, #navi a#subs:hover, #navi a#subs:focus, #navi a#subs:active, #navi a#configlink, #navi a#configlink:hover, #navi a#configlink:focus, #navi a#configlink:active {padding: 6px 10px 6px 29px; letter-spacing: .1em; font-size: 10pt; background-position: 10px center}
+h3 {font-size: 12pt}
+#filter a {margin: 0 2px -2px; min-width: 14px}
+#filter {background: linear-gradient(90deg, #000, #001000 10%, #001000 90%, #000)}
+form[action="addressbook"] > p.buttons {margin-bottom: -20px}
+textarea[name="config"] {height: 280px}
 }
 
 @media screen and (min-width: 1500px) {
-  body, input[type=submit], input[type=reset], .fakebutton, input,
-  select, h4, td.names a, li, #filter a, #filter span a, #host_details td, #search td, .destaddress {
-    font-size: 10pt !important;
-  }
-  input[type=submit], input[type=reset], .fakebutton {
-    padding: 8px 12px 8px !important;
-    font-size: 9pt;
-  }
-  input[type=text] {
-    padding: 8px !important;
-  }
-  th {
-    font-size: 9pt;
-  }
-  #booksearch input[name=search], #booksearch input[name=search]:focus {
-    padding: 7px 8px 7px 32px !important;
-    min-width: 320px !important;
-  }
-  #host_list td.helper a::after,
-  #host_list td.b32link a::after {
-    width: 18px;
-    height: 18px;
-    background-size: 18px;
-  }
+body, input[type=submit], input[type=reset], .fakebutton, input, select, h4, td.names a, li, #filter a, #filter span a, #host_details td, #search td, .destaddress {font-size: 10pt}
+th, pre {font-size: 9pt}
+input[type=submit], input[type=reset], .fakebutton {padding: 8px 12px 8px}
+input[type=text] {padding: 8px}
+#booksearch input[name=search], #booksearch input[name=search]:focus {padding: 7px 8px 7px 32px; min-width: 320px}
+#host_list td.helper a::after, #host_list td.b32link a::after {width: 18px; height: 18px; background-size: 18px}
 }
 
 @media screen and (min-width: 1600px) {
-  p, li {
-    font-size: 10.5pt !important;
-  }
-  textarea {
-    font-size: 9.5pt !important;
-  }
+p, #content p, li, #content li {font-size: 10.5pt}
+textarea, pre {font-size: 9.5pt}
 }
 
-/* end responsive layout */
-
-input#exporthosts {
-  font-size: 0 !important;
-}
+input#exporthosts {font-size: 0}

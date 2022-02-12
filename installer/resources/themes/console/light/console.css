@@ -3,7 +3,6 @@
 /* Author: dr|z3d */
 
 @import url(global.css);
-@import url(../images/itooplus.css);
 
 html {
   margin: 0 !important;
@@ -14,7 +13,7 @@ body {
   line-height: 1.3;
   text-align: center;
   font-size: 9pt;
-  background: #a4a4cb url(images/tile2.png) top left / 32px;
+  background: var(--bodybg) url(images/tile2.png) top left / 32px;
 }
 
 .routersummary, h1, .main, iframe {
@@ -403,12 +402,13 @@ h4.sb_info + hr + form {
 }
 
 #sb_localtunnels a {
-  display: inline-block;
   width: 100%;
   max-width: 158px;
+  display: inline-block;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  line-height: 1.3;
 }
 
 #sb_localtunnels tr:hover td {
@@ -3175,7 +3175,7 @@ div.app:active img {
 }
 
 .appimg {
-  min-height: 52px;
+  min-height: 50px;
 }
 
 .appgroup {
@@ -3185,7 +3185,7 @@ div.app:active img {
 }
 
 div.app img {
-  padding: 10px 60px;
+  padding: 10px 60px 5px;
   width: auto;
   height: 32px;
   max-height: 32px;
@@ -3813,6 +3813,11 @@ ul.statlist {
 
 .statlist li b {
   font-size: 110% !important;
+}
+
+.statsName > b:first-child {
+  padding-left: 19px;
+  background: var(--stats) no-repeat left top / 15px;
 }
 
 .statlist li i {
@@ -5299,7 +5304,7 @@ body.iframed {
 }
 
 .themechoice .optbox + img {
-  margin: 6px 0 31px -1px;
+  margin: 5px 0 25px -1px;
   padding: 2px 0 !important;
 }
 
@@ -5500,11 +5505,12 @@ p#helptranslate {
 
 .langflag {
   margin: 5px 0 8px;
+  padding: 1px;
   width: 40px;
   height: 30px;
   display: inline-block;
   position: relative;
-  border-radius: 2px;
+  border-radius: 4px;
   box-shadow: 0 0 0 1px #bbc;
   opacity: .85;
 }
@@ -5517,7 +5523,7 @@ p#helptranslate {
   left: 0;
   right: 0;
   z-index: 10;
-  border-radius: 1px;
+  border-radius: 4px;
   background: linear-gradient(180deg, rgba(255,255,255,.5), rgba(0,0,0,0) 75%);
   content: "";
 }
@@ -5529,7 +5535,7 @@ p#helptranslate {
 .langselect img {
   width: 40px;
   height: 30px;
-  border-radius: 1px;
+  border-radius: 4px;
 }
 
 .langselect .optbox:checked + .langflag {
@@ -5544,6 +5550,21 @@ p#helptranslate {
 
 .langselect .optbox:checked ~ .ui_lang {
   font-size: 95% !important;
+}
+
+.langselect .optbox:checked ~ .langflag::after {
+  padding: 2px;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  position: absolute;
+  right: -14px;
+  bottom: calc(50% - 10px);
+  z-index: 20;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px #bbc, 0 0 0 5px #fff;
+  background: #f2f2ff var(--yes) no-repeat center center / 10px;
+  content: "";
 }
 
 /* end large flags */
@@ -10383,7 +10404,7 @@ h1.webapp {
 }
 
 .sitemapLink img {
-  padding: 12px 10px 10px;
+  padding: 10px 10px 6px;
   height: 32px;
   width: 32px;
 }
@@ -12001,7 +12022,7 @@ iframe {
     width: 140px;
   }
   div.app img {
-    padding: 10px 40px;
+    padding: 8px 40px 4px;
     width: auto;
     height: 24px;
     max-height: 24px;
@@ -12014,7 +12035,7 @@ iframe {
     width: 128px;
   }
   .sitemapLink img {
-    padding: 12px 10px 10px;
+    padding: 7px 10px 3px;
     height: 24px;
     width: 24px;
   }

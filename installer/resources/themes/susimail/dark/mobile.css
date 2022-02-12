@@ -1,44 +1,14 @@
-/* Susimail Mobile Theme Override "Light" */
+/* Susimail Mobile Theme Override "Dark" */
+/* Author: (c) dr|z3d 2022 */
 
-body {
-  margin: 0;
-}
-
-.page {
-  min-width: 560px;
-  padding: 5px 5px 0 !important;
-  border-radius: 0;
-}
-
-form {
-  margin-bottom: 5px;
-}
-
-#dologin {
-  width: 500px !important;
-}
-
-.header, .footer {
-  display: none;
-}
+body {margin: 0}
+.page {min-width: 560px; padding: 5px 5px 0; border-radius: 0}
+form {margin-bottom: 5px}
+#dologin {width: 500px}
+.header, .footer {display: none}
 
 @media screen and (max-width: 900px) {
-.mailListDate {
-  white-space: normal;
-  line-height: 100%;
-}
-
-.listDate {
-  padding-bottom: 2px;
-  text-align: center;
-  font-weight: 700;
-  color: #484e6a;
-  border-bottom: 1px solid #ddd;
-  opacity: .85;
-}
-
-.listTime {
-  text-align: center;
-  font-size: 95%;
-}
+.mailListDate {white-space: normal; line-height: 100%}
+.listDate {padding-bottom: 2px; text-align: center; font-weight: 700; color: #484e6a; border-bottom: 1px solid #ddd; opacity: .85}
+.listTime {text-align: center; font-size: 95%}
 }
