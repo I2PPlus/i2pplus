@@ -392,7 +392,7 @@ hr + #newsStatus, hr + #newsStatus + #newsDisplay {padding-top: 1px}
 .messages #newsDisplay a:last-child {margin-right: -5px; font-size: smaller}
 
 td.optionsave {padding: 5px; text-align: right; border-top: 1px solid var(--border_inner); background: #fafaff}
-td.optionsave, .formaction, form[action="configpeer"] tr:last-child td, #addkeyring tr:last-child td {border-top: 1px solid var(--border_inner); border-bottom: 1px solid var(--border_inner); background: var(--refresh)}
+td.optionsave, .formaction, form[action="configpeer"] tr:last-child td, #addkeyring tr:last-child td {border-top: 1px solid var(--border_inner); border-bottom: 1px solid var(--border_inner); background: var(--th)}
 .configtable {box-shadow: none}
 .configtable td {padding: 5px}
 .configtable tr:first-child td {border-top: 1px solid var(--border_inner)}
@@ -596,7 +596,7 @@ h3#systray + p.infohelp {padding: 20px 15px 20px 50px; box-shadow: var(--highlig
 .links ul {margin-top: -5px}
 .main li {text-align: left; list-style: square; margin: 2px 20px 0 40px; padding: 1px 10px; line-height: 1.5; word-wrap: break-word}
 .infohelp {box-shadow: var(--highlight), inset 0 0 1px 1px #ddf}
-.infowarn {box-shadow: var(--highlight), inset 0 0 0 2px #900}
+.infowarn {box-shadow: var(--highlight), inset 0 0 1px 1px #900}
 p.infohelp, p.sybilinfo, p#debugmode, p#upnpstatus, p#pluginconfigtext, p#gatherstats {padding: 20px 15px 20px 50px; line-height: 1.3; border: 1px solid var(--border_inner); box-shadow: var(--highlight), inset 0 0 0 2px #bbc; background: var(--infohelp) no-repeat 15px center / 28px, var(--div_infohelp); background-size: 28px, 100% 4px, 100%}
 p.infowarn {padding: 20px 15px 20px 50px; line-height: 1.3; border: 1px solid var(--border_inner); background: var(--infowarn) no-repeat 15px center / 28px, var(--div_infohelp)}
 .infohelp + hr {display: none}
@@ -1621,7 +1621,7 @@ h3#bwlimiter a {font-size: 0}
 h3#bwlimiter a:hover::before, h3#bwlimiter a:focus::before {transform: scale(1.2)}
 h3#exploratory {margin-top: 15px}
 h3#iptransport a::after, h3#advancedconfig a::after, h3#reseedsetup a::after, a[href="/help/faq#alternative_browser"]::after {margin-top: -2px; padding: 2px 0 0; width: 20px; height: 20px; display: inline-block; vertical-align: middle; background: var(--helplink) no-repeat center center / 20px; content: ""}
-h3#iptransport a, h3#advancedconfig a, h3#reseedsetup a {font-size: 0; height: 20px}
+h3#iptransport a, h3#advancedconfig a, h3#reseedsetup a {font-size: 0}
 h3#langheading, h3#themeheading, h3#pluginmanage, h3#pconfig, h3#webappconfiguration, h3#advancedclientconfig, h3#i2pclientconfig, #config_stats h3, #config_keyring h3 {position: relative; z-index: 100; border: 1px solid var(--border_inner); border-radius: 0; box-shadow: var(--highlight); filter: none}
 h3#passwordheading {margin-bottom: -2px; border: 1px solid var(--border_inner); border-radius: 0; filter: none}
 h3#pconfig, h3#webappconfiguration, h3#i2pclientconfig, p#clientconf.infohelp, #config_stats h3 {margin-bottom: -13px}
@@ -1737,6 +1737,7 @@ th.options {padding: 8px 5px 8px 10px; font-size: 9pt}
 #bandwidthconfig td:first-child:not(.infohelp) {padding: 0 50px 0 5px; background: url(/themes/console/images/svg/arrow_right.svg) no-repeat right 14px center / 24px}
 #bandwidthconfig td:not(.infohelp):first-child {padding-right: 0; background: none}
 #bandwidthconfig td:last-child {white-space: normal}
+#config_bandwidth #bandwidthconfig .optionsave {padding: 8px 6px}
 
 /* network */
 .config_experimental {font-size: 0}
@@ -2469,7 +2470,7 @@ tt {margin-left: 0; margin-right: 3px; letter-spacing: .1em}
 #advancedconfig a, #reseedsetup a {padding-top: 7px}
 #bandwidthconfig .bw_out, #bandwidthconfig .bw_in, #bandwidthconfig .bw_share {padding: 0 15px 0 80px; min-width: 240px; background-position: 30px calc(50% + 12px)}
 #bandwidthconfig .bw_share {background-size: 32px 32px; background-position: 28px calc(50% + 12px)}
-#bandwidthconfig td:first-child:not(.infohelp) {padding: 0 80px 0 5px; background-position: right 30px center}
+#bandwidthconfig td:first-child:not(.infohelp):not(.optionsave) {padding: 0 80px 0 5px; background-position: right 30px center}
 #banlist .routerid {margin: 0 -5px 0 -2px}
 #changelog pre {columns: 570px auto; column-gap: 50px}
 #config_peers #banlist .routerid {margin-left: 0}
