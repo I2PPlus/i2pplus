@@ -10,7 +10,7 @@ div#xhr {
   margin: 0 auto;
 }
 
-div.routersummaryouter {
+#sb_wrap {
   position: relative;
   float: none;
   width: auto;

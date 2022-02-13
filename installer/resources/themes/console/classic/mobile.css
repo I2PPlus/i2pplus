@@ -4,7 +4,7 @@ body {
   margin: 0 1px 3px !important;
 }
 
-.routersummaryouter {
+#sb_wrap {
   margin: 0 !important;
   width: auto !important;
   position: absolute;

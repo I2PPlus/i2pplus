@@ -27,7 +27,7 @@
  <jsp:setProperty name="newshelper" property="maxLines" value="300" />
  <jsp:useBean class="net.i2p.router.web.ConfigUpdateHelper" id="updatehelper" scope="request" />
  <jsp:setProperty name="updatehelper" property="contextId" value="<%=i2pcontextId%>" />
-<div class="routersummaryouter" style="width: 200px; float: left; margin-right: 20px;">
+<div id="sb_outer" style="width: 200px; float: left; margin-right: 20px;">
 <div class="routersummary" id="sidebar">
 <div id="sb_logo" style="height: 36px;">
 <a href="/sitemap"><img width="200" src="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/i2plogo.png" alt="<%=intl._t("I2P Router Console").replace("I2P", "I2P+")%>" title="<%=intl._t("I2P Router Console").replace("I2P", "I2P+")%>"></a>

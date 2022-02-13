@@ -702,7 +702,7 @@ pre {
 
 /* sidebar */
 
-.routersummaryouter {
+#sb_wrap {
   margin: 0 0 10px 5px;
   padding: 0;
   width: 200px;
@@ -7103,7 +7103,7 @@ iframe.iframed {
   margin-bottom: 8px;
 }
 
-.iframed .routersummaryouter {
+.iframed #sb_wrap {
   display: none !important;
 }
 

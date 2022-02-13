@@ -1,6 +1,6 @@
 /* Console Theme "Light" - Mobile Override */
 
-.routersummaryouter {
+#sb_wrap {
   float: none;
   margin: 0 !important;
   position: relative;

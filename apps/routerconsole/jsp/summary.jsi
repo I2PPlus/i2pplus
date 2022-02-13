@@ -5,7 +5,7 @@
 %>
 <jsp:setProperty name="newshelper" property="page" value="<%=newspath.getAbsolutePath()%>" />
 <jsp:setProperty name="newshelper" property="maxLines" value="300" />
-<div class="routersummaryouter" style="width: 200px; float: left; margin-right: 20px;">
+<div id="sb_wrap" style="width: 200px; float: left; margin-right: 20px;">
 <%
     // The refresh delay, 0 to disable
     String d = "0";

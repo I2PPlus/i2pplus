@@ -77,7 +77,7 @@ button.search {
   margin-right: 30px;
 }
 
-.routersummaryouter {
+#sb_wrap {
   margin-right: -2px !important;
 }
 
@@ -561,7 +561,7 @@ body {
   margin-left: 0 !important;
 }
 
-.routersummaryouter {
+#sb_wrap {
   margin-right: 27px !important;
 }
 

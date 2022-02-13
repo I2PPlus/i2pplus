@@ -43,7 +43,7 @@ hr:last-child {margin-top: 20px}
 .separator hr, .separator hr:last-child {margin: 3px 0 -10px; height: 1px; display: block; color: transparent; border-bottom: 1px dashed #adadeb; background: transparent}
 
 /* sidebar */
-.routersummaryouter {margin: 0 0 10px; padding: 0; width: 200px; display: block; position: absolute; float: left; clear: left; text-align: center; border: 0}
+#sb_wrap {margin: 0 0 10px; padding: 0; width: 200px; display: block; position: absolute; float: left; clear: left; text-align: center; border: 0}
 #clock {margin: -7px -10px -9px; padding: 0 0 1px; font-size: 17pt; font-weight: 700; letter-spacing: .1em; color: var(--ink_light); opacity: .9}
 #clock::after {margin-left: 3px; content: "UTC"; display: inline-block; font-size: 50%; vertical-align: middle}
 h4.sb_info {margin-top: -11px}
@@ -2195,7 +2195,7 @@ iframe {height: 0}
 
 /* Fixes for when app is not started and console error loads inside iframe */
 body.iframed {background: transparent}
-.iframed .routersummaryouter {display: none}
+.iframed #sb_wrap {display: none}
 .iframed h1 {margin: 0 10px 10px 7px}
 .iframed .sorry {margin: 5px 10px 10px 7px}
 iframe.iframed {margin: 10px 0 0}
