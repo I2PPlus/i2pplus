@@ -866,7 +866,7 @@ div.app:hover .appimg .extlink::after {width: 21px; height: 18px; display: inlin
 
 /* home search */
 #searchbar {margin: -24px 10px 0 10px; padding: 8px 0 2px; width: auto; white-space: nowrap; text-align: center}
-#searchbar span {margin: 2px 3px 1px; display: inline-block; position: relative; overflow: hidden}
+#searchbar span {margin: 1px; display: inline-block; position: relative; overflow: hidden}
 #searchbar table {margin: 0 auto; width: auto; border-radius: 0 0 3px 3px; border-collapse: separate}
 #searchbar td {padding: 3px 2px 0; background: var(--bg)}
 #searchbar button, #searchbar select {margin: 0}
