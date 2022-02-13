@@ -2509,7 +2509,7 @@ h3#restartrouter, p#tunnelconfig {margin-bottom: -15px}
 .log_omitted {margin-right: 1px}
 #logs font[color^="#"]::before {margin-right: 6px; margin-left: 5px; width: 7px; height: 7px}
 #logs li {font-size: 9pt}
-#minigraphcontainer {margin-top: -43px; margin-left: 1px; width: 234px; height: 38px; background-size: 235px 40px}
+#minigraphcontainer {margin-top: -43px; margin-left: 1px; width: 234px; height: 38px; background-size: 248px 40px}
 #minigraph {margin-top: -17px; width: 234px; height: 40px}
 #netconfig label::before, #externali2cp td label::before, #externali2cp .nowrap::before, #reseedconfig .nowrap::before {min-height: 48px}
 #netdbcountrylist img {width: 24px; height: auto}
