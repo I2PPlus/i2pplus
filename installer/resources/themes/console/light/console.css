@@ -92,7 +92,6 @@ h4.sb_info + hr + form {margin-bottom: -1px; padding-top: 5px}
 #sb_internals td {padding: 0}
 #sb_localtunnels a {width: 100%; max-width: 158px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3}
 #sb_localtunnels td {vertical-align: middle; line-height: 1}
-#sb_localtunnels td[colspan="3"] {line-height: 20px; font-size: 0; background: repeating-linear-gradient(135deg, #fffff2, #fffff2 10px, #ddddd2 10px, #ddddd2 20px)}
 #sb_localtunnels td:first-child {padding: 1px 2px; width: 16px; text-align: left; border-radius: 2px 0 0 2px}
 #sb_localtunnels td:first-child, #sb_localtunnels tr:hover td:first-child {background-image: var(--client); background-position: center center; background-repeat: no-repeat; background-size: 16px}
 #sb_peers td:first-child, #sb_peersadvanced td:first-child, #sb_tunnels td:first-child, #sb_queue td:first-child, #sb_bandwidth td:first-child, #sb_general td:first-child, #sb_shortgeneral td:first-child, #sb_advancedgeneral td:first-child {text-transform: capitalize}
@@ -106,6 +105,7 @@ h4.sb_info + hr + form {margin-bottom: -1px; padding-top: 5px}
 #sb_localtunnels td img::after {content: ""; display: inline-block; height: 16px}
 #sb_localtunnels td img {width: 16px; height: 16px; filter: drop-shadow(0 0 1px rgba(220,220,255,.7)); font-size: 0}
 #sb_localtunnels tr:hover td {background: #ffd}
+#sb_localtunnels td[colspan="3"], #sb_localtunnels tr:hover td[colspan="3"] {line-height: 20px; font-size: 0; background: repeating-linear-gradient(135deg, #fffff2, #fffff2 10px, #ddddd2 10px, #ddddd2 20px)}
 #sb_peersadvanced a:hover b, #sb_peersadvanced a:visited:hover b {color: #f60}
 #sb_peersadvanced a:active b, #sb_peersadvanced a:visited:active b {color: #f90}
 #sb_peersadvanced .separator td {padding: 0}
@@ -628,11 +628,11 @@ ul.statlist {border: 1px solid var(--border_inner); padding: 0 10px 10px; displa
 .statlist li {list-style: none}
 .statlist li::before, .statlist li a[href^="graph"]::before {margin-top: -4px; margin-right: 10px; margin-left: -17px; height: 4px; width: 4px; display: inline-block; vertical-align: middle; opacity: .8; content: ""; transform: rotate(45deg)}
 .statlist li::before {border: 1px solid #335; background: #779}
-.statlist li li br {display: none}
+.statlist li br, .statlist li li br {display: inline-block}
+.statlist li li br, .statlist .nowrap + br {display: none}
 .statlist li li:last-child + br {display: block}
 .statsViewGraphs {display: inline-block; width: 100%}
 ul.statlist {padding-bottom: 0}
-.statlist li br, .statlist li li br {display: inline-block}
 .statlist li b {font-size: 110%}
 .statlist li li b {font-size: 100%}
 .statlist li i {margin-left: 6px; opacity: .8}
@@ -890,7 +890,7 @@ h3#scheduledjobs + ol li::before {background: var(--timer) no-repeat 6px center 
 .joblog {border: none; margin-top: 5px}
 .joblog ul {word-wrap: break-word; text-align: justify; line-height: 1; margin-top: -5px}
 .joblog li {word-wrap: break-word; line-height: 1.15; padding: 0; font-size: 9pt; page-break-inside: avoid; -webkit-break-inside: avoid; break-inside: avoid}
-.joblog li:last-child {margin-bottom: -5px}
+.joblog li:last-child {margin-bottom: 10px}
 .joblog li li:first-child {margin-top: 0}
 .joblog form:first-child {margin-top: 10px}
 .joblog table {margin-top: 15px}
@@ -2306,6 +2306,7 @@ p#pluginconfigtext {margin-top: 11px}
 #bwlimiter a, #i2pclientconfig a, #config_logging h3 a, #graphdisplay a, #version a, #tunnels h3 a, #advancedconfig a, #iptransport a, #reseedsetup a, #graphinfo a, #config_service h3 a, .h3navlinks a {padding-top: 8px}
 #config_clients #i2pclientconfig a, #config_bandwidth #bwlimiter .h3navlinks {margin-top: -4px}
 #consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"], #reseedconfig input[type="password"] {width: 184px}
+.statsLongName {margin-bottom: 10px}
 }
 
 @media screen and (max-width: 1480px) {
@@ -2452,6 +2453,7 @@ th.queue {white-space: nowrap}
 }
 
 @media screen and (min-width: 1400px) {
+.statlist {margin: -15px 0}
 .statlist li.statlist .statsName:first-child {margin-top: 0}
 #changelog pre {margin-left: -10px; padding-left: 10px; padding-bottom: 5px; columns: 550px auto; column-gap: 25px; column-rule: 1px solid rgba(64, 64, 128, .5)}
 #profiles .tab:first-child, #profiles .tab2:first-child, #help .tab:first-child, #help .tab2:first-child, #netdb .tab:first-child, #netdb .tab2:first-child, #debug .tab:first-child, #debug .tab2:first-child {border-radius: 2px 0 0 2px}
