@@ -1495,7 +1495,7 @@ input[type=submit], a.control:not(.disabled) {
 }
 
 input[type=submit]:hover, input[type=submit]:focus, a.control:hover, a.control:focus {
-  color: #19191f;
+  color: var(--ink_darker);
   border: 1px solid var(--hover);
   box-shadow: var(--highlight), inset 0 -8px 3px 8px rgba(255,96,0,.02), inset 0 0 10px rgba(255,96,0,.05), 0 0 1px rgba(255,96,0,.1), 0 7px 4px -4px rgba(0,0,0,.1);
   background: linear-gradient(180deg,#eee,#fff);
@@ -2037,7 +2037,7 @@ form:last-child .configsectionpanel {
 
 #trackerselect tr:nth-child(n+2):hover td {
   background: #ffd;
-  color: #19191f !important;
+  color: var(--ink_darker) !important;
   border-radius: 6px !important;
 }
 
