@@ -529,7 +529,7 @@ div[id^="config"] tr:last-child td, #events tr:last-child td, #netdb table table
 .applink:hover, .sitemapLink:hover {border: 1px solid #f60; background: #fff; box-shadow: none; cursor: pointer}
 .applink.js:hover::before {padding: 1px 3px 5px; display: inline-block; position: absolute; top: -1px; left: -1px; line-height: 1; border: 1px solid #f60; content: "*js"}
 .applink img {padding: 10px 60px 5px; width: auto; height: 32px; max-height: 32px; max-width: 32px; opacity: .9; filter: drop-shadow(0 0 1px rgba(220,220,255,.7))}
-.applink img, .sitemapLink img {animation: zoom .1s ease-out .9s both; will-change: transform}
+.applink img, .sitemapLink img {animation: zoom .075s linear .6s both; will-change: transform}
 div.search + .linkcontainer {margin: -15px 0 0}
 
 /* home search */
@@ -537,7 +537,7 @@ div.search + .linkcontainer {margin: -15px 0 0}
 #news.news + .main > #homepanel > #searchbar {margin-top: -19px}
 #searchbar form {margin: 0 0 10px}
 #searchbar span {display: inline-block; position: relative; background: none}
-#searchbar table {margin: 15px auto 0; width: auto; border-radius: 0 0 2px 2px; border-collapse: separate; border: 1px solid var(--border); background: var(--bg); box-shadow: var(--bevel); animation: fade .15s ease .75s reverse both}
+#searchbar table {margin: 15px auto 0; width: auto; border-radius: 0 0 2px 2px; border-collapse: separate; border: 1px solid var(--border); background: var(--bg); box-shadow: var(--bevel); animation: slide .1s ease 1s both}
 #searchbar td {padding: 3px 2px; border: none; box-shadow: none; background: none}
 #searchbar button, #searchbar select {margin: 0; box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset}
 #searchbar button:hover, #searchbar select:hover, #searchbar button:focus, #searchbar select:focus {box-shadow: var(--highlight)}
@@ -2231,6 +2231,7 @@ iframe.iframed {margin: 10px 0 0}
 @keyframes highlight {from {background: #efe} to {background: transparent}}
 @keyframes reloader {0%, 100% {width: 0} 80%, 99% {width: 120%}}
 @keyframes routerdown {from {background: repeating-linear-gradient(135deg, #fffff2, #fffff2 10px, #ddddd2 10px, #ddddd2 20px)} to {background: repeating-linear-gradient(135deg, #ddddd2, #ddddd2 10px, #fffff2 10px, #fffff2 20px)}}
+@keyframes slide {from {transform: translateY(-60px)} to {transform: translateY(0)}}
 @keyframes spin {from {transform: rotate(-360deg)}}
 @keyframes zoom {from {transform: scale(0)} to {scale: scale(1)}}
 
