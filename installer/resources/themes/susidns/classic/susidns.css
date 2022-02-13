@@ -7,52 +7,22 @@
 
 html, body {background: var(--bg)}
 body {min-width: 700px; line-height: 1.3; background: #eef url(/themes/console/classic/images/bg0.png) center center / 120px}
+.page {border: var(--border); background: var(--bg); margin: 0; padding: 0 10px; color: var(--ink); font-size: 9pt; line-height: 1.6}
 a {color: #6b6b94; text-decoration: none; font-weight: 700}
 a:visited {color: #5c5c8a}
 a:hover, a:focus {text-decoration: none; color: var(--hover)}
 a:active {color: #f90}
+.active {color: #393; text-decoration: underline}
 hr {display: none}
 h3 {margin: -1px -11px 10px; padding: 5px 10px; text-transform: capitalize; font-size: 11pt; font-weight: 700; color: var(--ink_light); border: var(--border); background: var(--th)}
 h4 {margin: -11px -11px 10px; padding: 3px 10px; border: var(--border); background: var(--th)}
 li {margin-left: 15px; margin-right: 15px; font-size: 9pt}
 p {margin-left: 10px; margin-right: 10px; line-height: 1.4; text-align: justify; font-size: 9pt}
-th, td {padding: 5px 10px; line-height: 1.2; font-size: 9pt}
-th {border-top: var(--border); border-bottom: var(--border); background: var(--th)}
-.help {border: var(--border); margin: 0 0 10px; background: #eef}
-.help ul, .help ol {margin-left: -25px; list-style-type: square}
-.page {border: var(--border); background: var(--bg); margin: 0; padding: 0 10px; color: var(--ink); font-size: 9pt; line-height: 1.6}
 p.book, #messages + p {padding: 10px 10px 10px 38px; background: var(--addressbook) no-repeat center left / 32px}
 p.footer {position: absolute; top: 0; left: -24px; border: none; background: none; opacity: .3; font-size: 8pt; display: none}
-.active {color: #393; text-decoration: underline}
-#add table {margin-top: -9px}
-#add tr:first-child td {padding-bottom: 0}
-#empty {margin-top: -11px}
-#export {padding-left: 2px; height: 40px; position: absolute; top: 0; right: 3px; border-left: var(--border)}
-#exporthosts:disabled {pointer-events: none; opacity: .5}
-#exporthosts {margin: 6px 2px -2px 3px; padding: 0; width: 28px; height: 28px; min-width: 0; display: inline-block; font-size: 0; background: var(--download) no-repeat center center / 16px, var(--btn)}
-#importexport form, form[action="export"] {display: inline-block}
-#messages + form[action="export"] {display: inline-block}
-
+th, td {padding: 5px 10px; line-height: 1.2; font-size: 9pt}
+th {border-top: var(--border); border-bottom: var(--border); background: var(--th)}
 #navi, .buttons, #buttons, #host_list tr:first-child, #host_list img, #host_list td:nth-child(n+2) a {user-select: none}
-#add {margin-top: -12px; background: var(--bg)}
-#add input[type=text], #import input[type="file"] {width: calc(100% - 2px)}
-#add td:first-child, #import td:first-child {width: 100px; white-space: nowrap; text-align: right}
-
-#content {padding-bottom: 10px}
-#content h3 {padding: 3px 10px 4px 30px; background: var(--question) no-repeat 4px center / 20px, linear-gradient(90deg, #fafafa 28px, rgba(0,0,0,0) 28px); background-blend-mode: luminosity}
-
-#filter {border: var(--border); padding: 6px 10px 5px; margin: 11px 0 -13px; word-spacing: .2em; background: var(--bg); text-align: center; position: relative; z-index: 10; line-height: 2.2; text-transform: capitalize}
-#filter a, #filter a:visited, #activefilter {margin: 2px 0; padding: 0 6px; min-width: 16px; display: inline-block; line-height: 1.8; text-transform: capitalize; font-size: 10pt; color: #5c5c8a; border: var(--border); border-radius: 1px; box-shadow: var(--highlight); background: var(--btn)}
-#filter a:hover, #filter a:focus {text-decoration: none; color: var(--hover); border: 1px solid var(--hover); background: var(--bg)}
-#filter a:active {box-shadow: inset 3px 3px 3px #999}
-#filter span a {margin: 0 5px; padding: 1px 5px; display:inline-block; line-height: 1.4; font-weight: 400; color: #333}
-#filter span b {margin-top: -2px; display: inline-block; line-height: .8; text-transform: uppercase; font-size: 11pt; color: #115}
-#filter span > * {vertical-align: middle}
-
-#import table {margin-bottom: 10px}
-#messages:empty {display: none}
-#ovrvw #content {margin-top: 25px}
-
 
 /* forms */
 .fakebutton {margin: -4px 0 -4px 4px; display: inline-block}
@@ -72,9 +42,12 @@ textarea[name="config"], textarea[name="content"] {padding: 2px 5px; height: 200
 td.destinations textarea, td.destinations textarea:focus {margin: 0 0 0 5px; padding: 0; font: normal 8pt var(--monospaced); resize: none; border: none; border-left: 1px solid #888; border-right: 1px solid #888; border-radius: 0; box-shadow: 0 none; background: none}
 p.buttons {margin: 0 -11px; padding: 10px; border: var(--border); background: var(--bg)}
 #buttons, .buttons {text-align: right}
+#book + #buttons {margin: -12px 10px 23px; border: var(--border); border-top: none; border-bottom: none}
+#book p.buttons {margin-left: -11px}
 #config + #buttons {padding-top: 21px}
 #config, form[action="subscriptions"] #content {margin: -11px -11px 0}
 #content + #buttons, #config + #buttons {margin: -23px -11px 0; padding: 10px; border: var(--border)}
+#messages + form[action="export"] {display: inline-block}
 
 /* topnav */
 #navi {margin: -1px -11px 0; padding: 3px; display: flex; position: sticky; top: -1px; z-index: 999; text-align: center; flex-flow: wrap; justify-content: center; border: var(--border); background: var(--th)}
@@ -89,7 +62,6 @@ p.buttons {margin: 0 -11px; padding: 10px; border: var(--border); background: va
 .iframed #navi a:hover, .iframed #navi a:focus {z-index: 1; border-color: var(--border_color)}
 #navi a:active {color: #778; border: 1px solid #f90}
 .headline + #book > table {margin-top: 10px}
-#book + #buttons {margin: -12px 10px 23px; border: var(--border); border-top: none; border-bottom: none}
 
 /* page titles */
 .headline h3 {padding: 10px 5px 10px 36px; line-height: 1.2; word-spacing: .1em; letter-spacing: .08em; text-transform: uppercase; font-size: 12pt; background: var(--addressbook) no-repeat 10px center / 22px, var(--th)}
@@ -97,12 +69,9 @@ p.buttons {margin: 0 -11px; padding: 10px; border: var(--border); background: va
 .headline#subscriptions h3 {background: var(--subscription) no-repeat 10px center / 20px, var(--th)}
 .headline#configure h3 {background: var(--config) no-repeat 10px center / 22px, var(--th)}
 .headline h4 {padding: 5px 10px 5px 40px; background: #eff2ff var(--files) no-repeat 13px center / 16px}
-#filter {margin-top: -2px}
-#book p {margin-left: 2px}
-#book p.buttons {margin-left: -11px}
-p.book {padding-left: 26px; background-position: left center}
 
 /* host list */
+p.book {padding-left: 26px; background-position: left center}
 .book {border: var(--border); margin: 10px 0; border-collapse: collapse}
 .book tr {border-top: 1px solid #dfe1ec; border-bottom: 1px solid #dfe1ec}
 .book tr:hover textarea {background: var(--bg)}
@@ -116,6 +85,8 @@ td.destinations {padding: 0; max-width: 50px}
 #activefilter, .selected:not(.details) {font-weight: 700; color: #999; box-shadow: var(--highlight), inset 2px 2px 2px #aaa}
 #addressbook.headline {position: relative}
 #addressbook.headline h3 {padding-right: 40px; position: relative}
+#book p {margin-left: 2px}
+#empty {margin-top: -13px}
 #host_list tr:nth-child(even), #host_details tr:nth-child(even) {background: var(--bg)}
 #host_list tr:nth-child(odd), #host_details tr:nth-child(odd) {background: #f0f1ff}
 #host_list tr:hover {background: #ffd}
@@ -161,6 +132,18 @@ td.destinations {padding: 0; max-width: 50px}
 #hostNotes textarea + .accept {display: none}
 #hostNotes textarea:focus + .accept {display: inline-block}
 
+/* import/export/add */
+#add {margin-top: -12px; background: var(--bg)}
+#add input[type=text], #import input[type="file"] {width: calc(100% - 2px)}
+#add td:first-child, #import td:first-child {width: 100px; white-space: nowrap; text-align: right}
+#add table {margin-top: -9px}
+#add tr:first-child td {padding-bottom: 0}
+#export {padding-left: 2px; height: 40px; position: absolute; top: 0; right: 3px; border-left: var(--border)}
+#exporthosts:disabled {pointer-events: none; opacity: .5}
+#exporthosts {margin: 6px 2px -2px 3px; padding: 0; width: 28px; height: 28px; min-width: 0; display: inline-block; font-size: 0; background: var(--download) no-repeat center center / 16px, var(--btn)}
+#import table {margin-bottom: 10px}
+#importexport form, form[action="export"] {display: inline-block}
+
 /* paginate */
 #paginate, #filtered, #results {margin-right: 4px; float: right; word-spacing: 0; letter-spacing: 0; text-transform: none; font-size: 10pt}
 #paginate {margin-top: -1px; display: inline-block; position: relative; overflow: hidden; font-size: 0; text-align: center; border: var(--border); border-radius: 4px; background: linear-gradient(180deg,#fff 50%, #dde0f0 50%)}
@@ -185,6 +168,32 @@ td.destinations {padding: 0; max-width: 50px}
 #search input[type=text] {width: 200px; padding: 5px 5px 5px 25px; background: var(--bg) var(--search) no-repeat 5px center / 15px; background-blend-mode: luminosity}
 #search {text-align: center}
 
+/* filter */
+#filter {border: var(--border); padding: 6px 10px 5px; margin: -2px 0 -13px; word-spacing: .2em; background: var(--bg); text-align: center; position: relative; z-index: 10; line-height: 2.2; text-transform: capitalize}
+#filter a, #filter a:visited, #activefilter {margin: 2px 0; padding: 0 6px; min-width: 16px; display: inline-block; line-height: 1.8; text-transform: capitalize; font-size: 10pt; color: #5c5c8a; border: var(--border); border-radius: 1px; box-shadow: var(--highlight); background: var(--btn)}
+#filter a:hover, #filter a:focus {text-decoration: none; color: var(--hover); border: 1px solid var(--hover); background: var(--bg)}
+#filter a:active {box-shadow: inset 3px 3px 3px #999}
+#filter span a {margin: 0 5px; padding: 1px 5px; display:inline-block; line-height: 1.4; font-weight: 400; color: #333}
+#filter span b {margin-top: -2px; display: inline-block; line-height: .8; text-transform: uppercase; font-size: 11pt; color: #115}
+#filter span > * {vertical-align: middle}
+
+/* help */
+.help {border: var(--border); margin: 0 0 10px; background: #eef}
+.help ul, .help ol {margin-left: -25px; list-style-type: square}
+.illustrate {margin: 15px auto 20px; padding: 10px; max-width: 700px; height: auto; border: 1px solid var(--border_soft); border-radius: 4px; font-size: 10pt; text-align: center; box-shadow: var(--highlight); background: var(--bg2); opacity: .9; transition: ease all .2s}
+.illustrate:hover {border: var(--border); background: var(--bg); opacity: 1; transition: ease all .2s}
+.illustrate text:not(:hover) {fill: #41444d}
+.illustrate .a, .illustrate .subs {stroke: #41444d; stroke-width: 1px}
+.illustrate .a {filter: none}
+p.help {margin: 0; padding: 15px 15px 15px 42px; line-height: 1.2; background: #ffe var(--infohelp) no-repeat 10px center / 22px}
+#helpconfig {margin: -1px -11px; }
+#helpsubs {margin: -1px -11px; border: none}
+#helpconfig h3 {margin: -1px}
+#help h3 {margin: -1px -1px 10px}
+#ovrvw #content {margin-top: 25px}
+#content {padding-bottom: 10px}
+#content h3 {padding: 3px 10px 4px 30px; background: var(--question) no-repeat 4px center / 20px, linear-gradient(90deg, #fafafa 28px, rgba(0,0,0,0) 28px); background-blend-mode: luminosity}
+
 /* imagegen*/
 .info img[src^="/imagegen"] {border: var(--border); border-radius: 2px; background: var(--bg)}
 img[src="/imagegen/id?s=256&c="], img[src="/imagegen/id?s=20&c="] {opacity: 0}
@@ -196,18 +205,6 @@ img[src="/imagegen/id?s=256&c="], img[src="/imagegen/id?s=20&c="] {opacity: 0}
 #visualid tr:first-child td {padding: 10px 10px 20px}
 #visualid td:first-child {text-align: right}
 #visualid td[colspan="2"] {border-top: var(--border); padding: 15px 0}
-
-/* help */
-.illustrate {margin: 15px auto 20px; padding: 10px; max-width: 700px; height: auto; border: 1px solid var(--border_soft); border-radius: 4px; font-size: 10pt; text-align: center; box-shadow: var(--highlight); background: var(--bg2); opacity: .9; transition: ease all .2s}
-.illustrate:hover {border: var(--border); background: var(--bg); opacity: 1; transition: ease all .2s}
-.illustrate text:not(:hover) {fill: #41444d}
-.illustrate .a, .illustrate .subs {stroke: #41444d; stroke-width: 1px}
-.illustrate .a {filter: none}
-p.help {margin: 0; padding: 15px 15px 15px 42px; line-height: 1.2; background: #ffe var(--infohelp) no-repeat 10px center / 22px}
-#helpconfig {margin: -1px -11px; }
-#helpsubs {margin: -1px -11px; border: none}
-#helpconfig h3 {margin: -1px}
-#help h3 {margin: -1px -1px 10px}
 
 /* notifications */
 #messages {margin: 0 3%; padding: 5px 20px; top: 0; left: 0; right: 0; position: fixed; z-index: 999; line-height: 1.5; text-align: center; border-radius: 0 0 4px 4px; box-shadow: 0 1px 2px rgba(100,100,200,.7); background: #113 var(--no) right 8px top 5px no-repeat; background-size: 16px 16px; cursor: crosshair; animation: 2s hide-up 10s ease-out forwards}
@@ -268,7 +265,7 @@ p.messages {color: #fff; text-align: center; font-weight: 700}
 body, p, td, textarea, input, button, li, a {font-size: 10pt}
 code, tt {font-size: 9pt}
 h4, #navi a {font-size: 11pt}
-h3, h3 a {font-size: 12pt}
+h3, h3 a {font-size: 11pt}
 #filter span, #filter a, #activefilter {min-width: 16px; font-size: 10pt}
 .illustrate {margin-top: 25px}
 }
