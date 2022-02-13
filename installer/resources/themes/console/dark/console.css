@@ -291,7 +291,7 @@ div.news hr {margin: 8px 0 5px}
 #newspage {margin: 18px 5px}
 
 /* top navigation */
-.confignav {margin: -1px -11px -1px; padding: 7px 7px 8px; font-weight: 700; line-height: 1.36; text-align: center; box-shadow: var(--bevel); background: linear-gradient(180deg, rgba(0,32,0,.1), rgba(0,16,0,.1) 50%, rgba(0,16,0,.1) 50%, rgba(0,0,0,.1)), var(--h1), #030; background-size: 2px, 100% 4px, 100%, 256px; background-blend-mode: normal, normal, exclusion, exclusion;}
+.confignav {margin: -1px -11px -1px; padding: 7px 7px 8px; font-weight: 700; line-height: 1.36; text-align: center; box-shadow: var(--bevel); background: var(--topnav); background-size: var(--topnav_size)}
 #debug .confignav {margin-bottom: -4px; z-index: 999}
 #netdb .confignav {margin-bottom: 11px}
 .tab, .tab2 {margin: 0 -3px -1px -3px; padding: 1px 0 2px; min-width: 60px; display: inline-block; position: relative; box-sizing: border-box; background: #000}
