@@ -814,7 +814,7 @@ button.download.control {background: var(--download) no-repeat center center / 1
 button.download.control:hover, button.download.control:focus {background: var(--download_hover) no-repeat center center / 14px, var(--btn_hover)}
 
 /* sidebar buttons */
-#updateAvailable {margin: -5px 0 7px; width: 100%; display: inline-block; line-height: 1.2; font-size: 9pt; opacity: .9}
+#updateAvailable {margin: -2px 0 7px; width: 100%; display: inline-block; line-height: 1.2; font-size: 9pt; opacity: .9}
 #updateAvailable + br + button + br + #updateAvailable::before {margin: 2px 0 4px; width: calc(100% - 20px); height: 1px; display: inline-block; background: #ddf; content: ""}
 #updateAvailable + br + button + br + #updateAvailable {margin-top: 8px}
 #sidebar button {margin: 0 1px -3px; min-width: 87px}
