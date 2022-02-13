@@ -139,12 +139,12 @@ a:active #sb_bandwidthgraph {border: 1px solid #f30}
 .sb_info .percentBarInner {height: 16px}
 .sb_info .percentBarText {padding-top: 3px; opacity: 0; mix-blend-mode: multiply}
 .sb_info .percentBarOuter:hover .percentBarText {opacity: .8}
-.sb_update {margin-bottom: -9px}
-.sb_update a {white-space: nowrap; vertical-align: baseline}
-.sb_update b {margin-top: -2px; display: inline-block; line-height: 1.2; word-spacing: 0; letter-spacing: 0; vertical-align: middle; font-size: 8.5pt}
-.sb_update br::before {content: ""; display: inline-block; height: 3px}
-.sb_updatestatus {margin: -7px 2px 5px; padding: 4px 0 3px; display: block; font-style: italic; border: 1px solid #afafcf; border-top: none; border-radius: 0 0 3px 3px; box-shadow: var(--highlight); background: linear-gradient(90deg, #ddf, #efefff 30%, #efefff 60%, #ddf); filter: drop-shadow(0 0 1px rgba(220,220,255,.7))}
-.sb_updatestatus + .percentBarOuter {margin-bottom: -18px}
+#sidebar .sb_update {margin: -11px -7px -9px}
+#sidebar .sb_update a {white-space: nowrap; vertical-align: baseline}
+#sidebar .sb_update b {margin-top: -2px; display: inline-block; line-height: 1.2; word-spacing: 0; letter-spacing: 0; vertical-align: middle; font-size: 8.5pt}
+#sidebar .sb_update br::before {content: ""; display: inline-block; height: 3px}
+#sidebar .sb_updatestatus {margin: -7px 2px 5px; padding: 4px 0 3px; display: block; font-style: italic; border: 1px solid #afafcf; border-top: none; border-radius: 0 0 3px 3px; box-shadow: var(--highlight); background: linear-gradient(90deg, #ddf, #efefff 30%, #efefff 60%, #ddf); filter: drop-shadow(0 0 1px rgba(220,220,255,.7))}
+#sidebar .sb_updatestatus + .percentBarOuter {margin-bottom: -18px}
 
 /* notify */
 #sb_warning {margin-bottom: 8px; border-bottom: 1px solid #afafcf}
@@ -2527,7 +2527,7 @@ h3#restartrouter, p#tunnelconfig {margin-bottom: -15px}
 #sb_memoryBar .percentBarText {padding: 0 0 2px}
 .sb_notice {font-size: 9pt}
 #sb_services {width: 242px}
-.sb_update b {font-size: 9pt}
+#sidebar .sb_update b {font-size: 9pt}
 #sidebar .cancel[value="cancelShutdown"] {margin-top: 12px}
 #sidebar form {margin-bottom: -2px}
 #sidebar h3::after {min-height: 19px; display: inline-block; vertical-align: middle; box-sizing: border-box; content: ""}
