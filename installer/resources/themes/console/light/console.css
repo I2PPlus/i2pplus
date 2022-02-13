@@ -912,8 +912,8 @@ h3#scheduledjobs + ol li::before {background: var(--timer) no-repeat 6px center 
 
 #config_update form {margin-bottom: 0}
 table#addkeyring tr:last-child td {padding: 5px; border-top: 1px solid var(--border_inner)}
-#refreshsidebar tr:first-child td {padding-left: 50px; background: var(--timer) no-repeat 15px center / 28px, var(--refresh), #fff}
-#refreshsidebar tr:first-child td:last-child {background: var(--refresh), #fff}
+#refreshsidebar tr:first-child td {padding-left: 50px; background: var(--timer) no-repeat 15px center / 28px, var(--th)}
+#refreshsidebar tr:first-child td:last-child {background: var(--th)}
 
 /* peers, profiles, tunnels */
 tt {font-size: 8.5pt; font-weight: 700; letter-spacing: .1em}
@@ -1693,6 +1693,7 @@ th.options {padding: 8px 5px 8px 10px; font-size: 9pt}
 .stattograph:active, .optbox:checked + label > .stattograph:active, .optbox:not(:checked) + label > .stattograph:active {box-shadow: inset 0 0 0 1px #930, inset 3px 3px 3px rgba(0,0,0,.4); background: #f60}
 .stattograph b {display: inline-block; word-break: break-all; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: capitalize; color: var(--ink_light)}
 .stattograph:active b, .optbox:checked + label > .stattograph:active b, .optbox:checked + label > .stattograph:hover b {color: #fff}
+#configstats {margin-bottom: 0}
 #configstats .graphableStat td {padding: 4px 6px; white-space: normal; columns: auto}
 #config_stats #graphchoice {margin-bottom: -2px}
 #config_stats h3 {padding: 6px 5px 6px 10px; box-shadow: none; background: linear-gradient(180deg,#fafaff 50%, rgba(252, 252, 255, .8) 50%, #e2e2ff 100%) #fafaff}
@@ -2238,24 +2239,33 @@ iframe.iframed {margin: 10px 0 0}
 @supports (text-justify: auto) and (-moz-appearance: none) {body {background-attachment: fixed}}
 @supports (text-justify: auto) {#events tr {box-shadow: var(--highlight)}}
 @supports (scroll-behavior: auto) {#netdboverview table td {padding: 5px 10px; box-shadow: var(--highlight); background: var(--row)} #netdboverview #netdbversions td:first-child, #netdboverview #netdbtransports td:first-child, #netdboverview #netdbcountrylist td:first-child, #netdbtiers td:first-child {white-space: nowrap; border-right: var(--border_soft)}}
-@supports not (-moz-appearance: none) {.news h3, #news h3 {padding: 7px 10px 5px 30px}}
-@supports not (-moz-appearance: none) {#sidebar h4 {margin-bottom: -8px}}
-@supports not (-moz-appearance: none) {#sb_general, #sb_shortgeneral, #sb_advancedgeneral, #sb_bandwidth, #sb_peers, #sb_peersadvanced, #sb_tunnels, #sb_queue {margin-bottom: -6px}}
-@supports not (-moz-appearance: none) {#sb_warning + p:empty + form {margin-top: 15px}}
-@supports not (-moz-appearance: none) {.sb_notice {margin-bottom: -6px}}
-@supports not (-moz-appearance: none) {*:not(input):not(button):not(select) {filter: none}}
-@supports not (-moz-appearance: none) {div[lang="es"] li, div[lang="pt"] li, div[lang="sv"] li, div[lang="zh"] li {margin-left: 25px}}
-@supports not (-moz-appearance: none) {#netdbtiers {margin-left: -1px}}
-@supports not (-moz-appearance: none) {.leaseset th:last-child, .leaseset td:last-child, .sybil_routerinfo th:last-child {border-right: 1px solid var(--border_inner)}}
-@supports not (-moz-appearance: none) {.sybil_routerinfo .identicon {margin-right: -1px}}
-@supports not (-moz-appearance: none) {#jardump table {border: 1px solid var(--border_inner); border-bottom: none; border-top: none} #jarfiles, #jarfiles tr {border-left: none; border-right: none} .subheading.routerfiles {padding-left: 5px; box-shadow: none; background: url(images/favicon.svg) no-repeat right 5px center, linear-gradient(90deg, #fafaff, #eef); background-size: 16px, 100%} .subheading.pluginfiles {padding-left: 5px; background: var(--plugin) no-repeat right 5px center, linear-gradient(90deg, #fafaff, #eef); background-size: 16px, 100%; box-shadow: none}}
-@supports not (-moz-appearance: none) {#jardump table {border: 1px solid var(--border_inner); border-bottom: none; border-top: none; width: calc(100% - 1px)} #jarfiles, #jarfiles tr {border-left: none; border-right: none} #jardump td:nth-child(3), #jardump td:nth-child(7) {width: 10%}}
-@supports not (-moz-appearance: none) {#reseedconfig .optbox[type=radio] {margin: 4px 4px 4px 15px} #manualreseed th:last-child, #manualreseed td:last-child {border-right: 1px solid var(--border_inner)}}
-@supports not (-moz-appearance: none) {#reseedproxytype {columns: 2}}
-@supports not (-moz-appearance: none) {#reseedproxysslhostport.optionlist {columns: 1} .optionsingle#reseedproxytype {columns: 2}}
-@supports not (-moz-appearance: none) {.main tr, #themeoptions {box-shadow: none}
-th.options .optbox {vertical-align: sub} #netconfig tr:nth-last-child(3) .optionlist, #netconfig tr:nth-last-child(5) .optionlist, #externali2cp .optionlist, #config_update .optionlist {column-count: 1}}
-@supports not (-moz-appearance: none) {.sitemapLabel {padding-bottom: 2px}}
+
+@supports not (-moz-appearance: none) {
+div[lang="es"] li, div[lang="pt"] li, div[lang="sv"] li, div[lang="zh"] li {margin-left: 25px}
+.leaseset th:last-child, .leaseset td:last-child, .sybil_routerinfo th:last-child {border-right: 1px solid var(--border_inner)}
+.main tr, #themeoptions {box-shadow: none}
+.news h3, #news h3 {padding: 7px 10px 5px 30px}
+*:not(input):not(button):not(select) {filter: none}
+.optionsingle#reseedproxytype {columns: 2}
+.sb_notice {margin-bottom: -6px}
+.sitemapLabel {padding-bottom: 2px}
+.subheading.pluginfiles {padding-left: 5px; background: var(--plugin) no-repeat right 5px center, linear-gradient(90deg, #fafaff, #eef); background-size: 16px, 100%; box-shadow: none}
+.subheading.routerfiles {padding-left: 5px; box-shadow: none; background: url(images/favicon.svg) no-repeat right 5px center, linear-gradient(90deg, #fafaff, #eef); background-size: 16px, 100%}
+.sybil_routerinfo .identicon {margin-right: -1px}
+th.options .optbox {vertical-align: sub}
+#jardump table {border: 1px solid var(--border_inner); border-bottom: none; border-top: none; width: calc(100% - 1px)}
+#jardump td:nth-child(3), #jardump td:nth-child(7) {width: 10%}
+#jarfiles, #jarfiles tr {border-left: none; border-right: none}
+#manualreseed th:last-child, #manualreseed td:last-child {border-right: 1px solid var(--border_inner)}
+#netconfig tr:nth-last-child(3) .optionlist, #netconfig tr:nth-last-child(5) .optionlist, #externali2cp .optionlist, #config_update .optionlist {column-count: 1}
+#netdbtiers {margin-left: -1px}
+#reseedconfig .optbox[type=radio] {margin: 4px 4px 4px 15px}
+#reseedproxysslhostport.optionlist {columns: 1}
+#reseedproxytype {columns: 2}
+#sb_general, #sb_shortgeneral, #sb_advancedgeneral, #sb_bandwidth, #sb_peers, #sb_peersadvanced, #sb_tunnels, #sb_queue {margin-bottom: -6px}
+#sb_warning + p:empty + form {margin-top: 15px}
+#sidebar h4 {margin-bottom: -8px}
+}
 
 /* responsive layout */
 @media screen and (max-width: 1499px) {
@@ -2502,8 +2512,8 @@ h3#restartrouter, p#tunnelconfig {margin-bottom: -15px}
 #peers .routerid {padding: 1px 0 1px 3px}
 #tunnelPeerCount .flag {padding: 1px 2px 3px 3px}
 #peers .flag { padding: 2px 5px 5px 4px}
-#profiles .flag {padding-right: 1px;}
-#peers .flag img {margin: 1px 3px 1px 0px}
+#profiles .flag {padding-right: 1px}
+#peers .flag img {margin: 1px 3px 1px 0}
 #profiles .flag img {margin: 1px 1px 1px -5px}
 #pluginconfig td:first-child label::before {height: 20px}
 #plugininstall2 {margin-top: -15px}
