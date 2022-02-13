@@ -5,7 +5,7 @@
 %>
 <jsp:setProperty name="newshelper" property="page" value="<%=newspath.getAbsolutePath()%>" />
 <jsp:setProperty name="newshelper" property="maxLines" value="300" />
-<div class="routersummaryouter" style="width: 200px; float: left; margin-right: 20px;">
+<div id="sb_wrap" style="width: 200px; float: left; margin-right: 20px;">
 <%
     // The refresh delay, 0 to disable
     String d = "0";
@@ -33,7 +33,7 @@
                       "scrolling=\"auto\" frameborder=\"0\" title=\"sidepanel\">\n</noscript>\n");
     }
 %>
-<div class="routersummary" id="sidebar">
+<div class="sb" id="sidebar">
 <%
     if (allowIFrame) {
         // Display the whole summary bar

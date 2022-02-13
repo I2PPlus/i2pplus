@@ -5,9 +5,9 @@ body {
   height: calc(100% - 2px);
 }
 
-#wizardpage .routersummary img[src*="i2plogo"],
-#wizardpage .routersummary img[src*="i2plogo"]:hover,
-#wizardpage .routersummary img[src*="i2plogo"]:active {
+#wizardpage .sb img[src*="i2plogo"],
+#wizardpage .sb img[src*="i2plogo"]:hover,
+#wizardpage .sb img[src*="i2plogo"]:active {
   margin-left: -2px !important;
   width: 189px;
   opacity: .7;
@@ -69,7 +69,7 @@ body {
   border-width: 1px;
 }
 
-#wizardpage .routersummary form {
+#wizardpage .sb form {
   padding: 13px 0 15px;
 }
 

@@ -27,8 +27,8 @@ th, td, .mediumtags, div.news, .newscontent p {font-size: 10pt; font-weight: 400
 .tunneldisplay th {font-size: 10.5pt}
 .ui_lang {font-size: 9pt}
 .cells tt, #profilelist tt, tt a {font-weight: 700}
-h4.app, h4.app2 {font-size: 13pt}
-div.app {min-height: 82px}
+#applinks, #sitelinks {font-size: 13pt}
+.applink {min-height: 82px}
 .applabel {height: 22px; line-height: 1.4}
 #home .applabel a, .sitemapLabel {font-size: 11pt; font-weight: 400}
 .applabel a {padding: 2px 2px 0; display: inline-block; vertical-align: middle}

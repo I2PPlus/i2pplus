@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P routerconsole\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-14 18:50+0000\n"
+"POT-Creation-Date: 2022-02-12 22:38+0000\n"
 "PO-Revision-Date: 2010-06-15 14:09+0100\n"
 "Last-Translator: duck <duck@mail.i2p>\n"
 "Language-Team: duck <duck@mail.i2p>\n"
@@ -19,73 +19,73 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 #. * IPv4 OK, IPv6 OK or disabled or no address
-#: ../java/src/net/i2p/router/CommSystemFacade.java:377
+#: ../java/src/net/i2p/router/CommSystemFacade.java:380
 msgid "OK"
 msgstr ""
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:378
+#: ../java/src/net/i2p/router/CommSystemFacade.java:381
 msgid "IPv4: OK; IPv6: Testing"
 msgstr ""
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:379
+#: ../java/src/net/i2p/router/CommSystemFacade.java:382
 msgid "IPv4: OK; IPv6: Firewalled"
 msgstr ""
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:380
+#: ../java/src/net/i2p/router/CommSystemFacade.java:383
 msgid "IPv4: Testing; IPv6: OK"
 msgstr ""
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:381
+#: ../java/src/net/i2p/router/CommSystemFacade.java:384
 msgid "IPv4: Firewalled; IPv6: OK"
 msgstr ""
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:382
+#: ../java/src/net/i2p/router/CommSystemFacade.java:385
 msgid "IPv4: Disabled; IPv6: OK"
 msgstr ""
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:383
+#: ../java/src/net/i2p/router/CommSystemFacade.java:386
 msgid "IPv4: Symmetric NAT; IPv6: OK"
 msgstr ""
 
 #. * IPv4 symmetric NAT, IPv6 firewalled or disabled or no address
-#: ../java/src/net/i2p/router/CommSystemFacade.java:385
+#: ../java/src/net/i2p/router/CommSystemFacade.java:388
 msgid "Symmetric NAT"
 msgstr ""
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:386
+#: ../java/src/net/i2p/router/CommSystemFacade.java:389
 msgid "IPv4: Symmetric NAT; IPv6: Testing"
 msgstr ""
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:387
+#: ../java/src/net/i2p/router/CommSystemFacade.java:390
 msgid "IPv4: Firewalled; IPv6: Testing"
 msgstr ""
 
 #. * IPv4 firewalled, IPv6 firewalled or disabled or no address
-#: ../java/src/net/i2p/router/CommSystemFacade.java:389
+#: ../java/src/net/i2p/router/CommSystemFacade.java:392
 msgid "Firewalled"
 msgstr ""
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:390
+#: ../java/src/net/i2p/router/CommSystemFacade.java:393
 msgid "IPv4: Testing; IPv6: Firewalled"
 msgstr ""
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:391
+#: ../java/src/net/i2p/router/CommSystemFacade.java:394
 msgid "IPv4: Disabled; IPv6: Testing"
 msgstr ""
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:392
+#: ../java/src/net/i2p/router/CommSystemFacade.java:395
 msgid "IPv4: Disabled; IPv6: Firewalled"
 msgstr ""
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:393
+#: ../java/src/net/i2p/router/CommSystemFacade.java:396
 msgid "Disconnected"
 msgstr ""
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:394
+#: ../java/src/net/i2p/router/CommSystemFacade.java:397
 msgid "Port Conflict"
 msgstr ""
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:395
+#: ../java/src/net/i2p/router/CommSystemFacade.java:398
 msgid "Testing"
 msgstr ""
 
@@ -106,14 +106,14 @@ msgid "Declining all tunnel requests:<br>"
 msgstr ""
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:151
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:800
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:801
 msgid "Hidden Mode"
 msgstr ""
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:198
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:216
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:838
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:869
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:839
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:870
 msgid "Declining tunnel requests:<br>"
 msgstr ""
 
@@ -191,23 +191,23 @@ msgstr ""
 msgid "Dropping tunnel requests: Overloaded"
 msgstr ""
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:800
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:801
 msgid "Declining requests:"
 msgstr ""
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:838
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:839
 msgid "Request overload"
 msgstr ""
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:869
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:870
 msgid "Connection limit reached"
 msgstr ""
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1129
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1162
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1130
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1163
 msgid "Dropping tunnel requests: High load"
 msgstr ""
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1245
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1246
 msgid "Dropping tunnel requests: Queue time"
 msgstr ""

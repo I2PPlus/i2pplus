@@ -2,7 +2,7 @@ function refreshTorrents(timestamp) {
 
   var mainsection = document.getElementById("mainsection");
   var snarkInfo = document.getElementById("snarkInfo");
-  var torrents = document.getElementById("snarkTorrents");
+  var torrents = document.getElementById("torrents");
   var thead = document.getElementById("snarkHead");
   var tfoot = document.getElementById("snarkFoot");
   var noload = document.getElementById("noload");
@@ -38,7 +38,7 @@ function refreshTorrents(timestamp) {
         var peerinfo = document.getElementsByClassName("peerinfo");
         var debuginfo = document.getElementsByClassName("debuginfo");
         if (torrents) {
-          var torrentsResponse = xhrsnark.responseXML.getElementById("snarkTorrents");
+          var torrentsResponse = xhrsnark.responseXML.getElementById("torrents");
           var filterbarResponse = xhrsnark.responseXML.getElementById("torrentDisplay");
         }
 
@@ -58,7 +58,7 @@ function refreshTorrents(timestamp) {
         }
 
         if (control) {
-          var controlResponse = xhrsnark.responseXML.getElementById("torrentcontrolStats");
+          var controlResponse = xhrsnark.responseXML.getElementById("torrentInfoControl");
           if (controlResponse) {
             var controlParent = control.parentNode;
             if (!Object.is(control.innerHTML, controlResponse.innerHTML))

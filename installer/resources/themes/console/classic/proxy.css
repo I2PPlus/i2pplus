@@ -430,7 +430,7 @@ button[type=submit]:active {
   #warning {
     margin-left: 252px !important;
   }
-  #error500 .routersummary img[src$="i2plogo.png"] {
+  #error500 .sb img[src$="i2plogo.png"] {
     margin: -2px 0 -5px -2px;
     width: 232px;
   }

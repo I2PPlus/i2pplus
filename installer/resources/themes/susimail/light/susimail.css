@@ -875,7 +875,7 @@ input[type=text], input[type=password], textarea {
 }
 
 input[type=text]:focus, input[type=password]:focus, textarea:focus {
-  color: #19191f;
+  color: var(--ink_darker);
   box-shadow: 0 0 1px #89f;
   background: #fff;
   border: 1px solid #676c7f;
@@ -2004,13 +2004,13 @@ select option {
 
 select:hover, select:active {
   cursor: pointer;
-  color: #19191f;
+  color: var(--ink_darker);
   box-shadow: var(--highlight);
   background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover) !important;
 }
 
 select:focus {
-  color: #19191f;
+  color: var(--ink_darker);
   box-shadow: 0 0 1px #89f;
   background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover) !important;
 }

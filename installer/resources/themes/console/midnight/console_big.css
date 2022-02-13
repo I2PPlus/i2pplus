@@ -5,30 +5,30 @@
 
 /* sidepanel */
 
-.routersummary {
+.sb {
   font: 9.5pt/125%;
 }
 
-.routersummary h3 {
+.sb h3 {
   padding: 2px 4px !important;
 }
 
-.routersummary h3, .routersummary h3 a {
+.sb h3, .sb h3 a {
   font-size: 11.5pt !important;
 }
 
-.routersummary h4, .routersummary h4 a {
+.sb h4, .sb h4 a {
   font-size: 10.5pt !important;
   letter-spacing: 0;
 }
 
-.routersummary table, #sb_localtunnels {
+.sb table, #sb_localtunnels {
   margin: -5px 0 -5px 1px;
   width: 200px !important;
   font-size: 9pt;
 }
 
-.routersummary table a:link, .routersummary table a:visited {
+.sb table a:link, .sb table a:visited {
   font-size: 11pt !important;
 }
 
@@ -64,11 +64,11 @@ button.search {
   line-height: 140% !important;
 }
 
-.appimg {
+.appicon {
   height: 50px !important;
 }
 
-.app img {
+.applink img {
   padding: 12px 60px 40px !important;
 }
 
@@ -76,7 +76,7 @@ button.search {
   padding: 4px 2px;
 }
 
-.applabel a, .applabel a:hover, .themelabel, .app td {
+.applabel a, .applabel a:hover, .themelabel, .applink td {
   font-size: 11pt !important;
 }
 
@@ -187,7 +187,7 @@ ul.links li {
 /* global overrides */
 
 @media screen and (min-width: 0) {
-a, b, .routersummary h3 a, .routersummary h4 {
+a, b, .sb h3 a, .sb h4 {
   font-weight: 400 !important;
   font-size: 100%;
 }
@@ -205,7 +205,7 @@ h1 {
   font-weight: 400;
 }
 
-h2, h2 a[name], h3, h4.app, h4.app2 {
+h2, h2 a[name], h3, #applinks, #sitelinks {
   font-size: 14pt !important;
   font-weight: 400 !important;
   letter-spacing: .1em !important;
@@ -254,7 +254,7 @@ input[type=submit]:active, input[type="reset"]:active, input.reload[value="Force
   box-shadow: inset 0 8px 0 2px #fff;
 }
 
-.routersummary hr {
+.sb hr {
   position: relative;
   z-index: 999;
 }
@@ -290,16 +290,16 @@ input[type=text], input[type=password], textarea {
 }
 
 @media screen and (min-width: 1500px) {
-.routersummary, .routersummary .xhr {
+.sb, .sb .xhr {
   font: 9.5pt/125%;
   width: 210px !important;
 }
 
-.routersummary div[style="height: 36px;"] {
+.sb #sb_logo {
   height: 40px !important;
 }
 
-.routersummary div[style="height: 36px;"] img {
+.sb #sb_logo img {
   width: 212px;
   margin-top: -2px !important;
   margin-left: -4px !important;
@@ -312,7 +312,7 @@ input[type=text], input[type=password], textarea {
   background-position: left -68px top -10px !important;
 }
 
-.routersummary table, #sb_localtunnels, .routersummary table[id^="sb_"], #sb_localtunnels {
+.sb table, #sb_localtunnels, .sb table[id^="sb_"], #sb_localtunnels {
   width: 226px !important;
 }
 
@@ -324,7 +324,7 @@ input[type=text], input[type=password], textarea {
   width: 220px;
 }
 
-.routersummary .stop, .routersummary .reload {
+.sb .stop, .sb .reload {
   min-width: 106px !important;
 }
 
@@ -351,7 +351,7 @@ span#newtab {
   background-position: 2px center;
 }
 
-div.app a:link, div.app a:hover, div.app a:active {
+.applink a:link, .applink a:hover, .applink a:active {
   font-size: 11pt !important;
 }
 
@@ -400,7 +400,7 @@ input[type=submit]:focus, input[type="reset"]:focus, input.reload[value="Force g
   margin-bottom: -3px !important;
 }
 
-div.app {
+.applink {
   min-width: 164px;
   margin: 3px 4px 5px;
 }

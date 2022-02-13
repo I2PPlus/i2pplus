@@ -10,24 +10,24 @@ div#xhr {
   margin: 0 auto;
 }
 
-div.routersummaryouter {
+#sb_wrap {
   position: relative;
   float: none !important;
   width: auto;
   margin: 0 0 5px;
 }
 
-div.routersummary {
+.sb {
   float: none;
   width: 600px;
   margin: 0 auto;
 }
 
-div[style="height: 36px;"] {
+#sb_logo {
   height: auto !important;
 }
 
-div[style="height: 36px;"] + a, a[href="/summaryframe"] {
+#sb_logo + a, a[href="/summaryframe"] {
   display: inline-block;
   margin: 7px 0 0 !important;
   padding: 4px 15px !important;
@@ -39,7 +39,7 @@ a[href="/summaryframe"] {
   margin: 3px 0 2px !important;
 }
 
-div.routersummary img[src$="i2plogo.png"] {
+.sb img[src$="i2plogo.png"] {
   width: 357px;
   margin-top: 6px;
 }
@@ -53,30 +53,30 @@ div.routersummary img[src$="i2plogo.png"] {
 }
 
 @media screen and (min-width: 1500px) {
-div.routersummary {
+.sb {
   width: 600px !important;
 }
 
-.routersummary table[id^="sb_"] {
+.sb table[id^="sb_"] {
   width: 600px !important;
 }
 }
 
-.routersummary td,
-.routersummary a,
-.routersummary h4,
-.routersummary h4 a,
-.routersummary button {
+.sb td,
+.sb a,
+.sb h4,
+.sb h4 a,
+.sb button {
   font-size: 10pt !important;
 }
 
-.routersummary h3 a {
+.sb h3 a {
   font-size: 11pt !important;
   padding: 3px 1px;
 }
 
-div.routersummary table,
-.routersummary table[id^='sb_'] {
+.sb table,
+.sb table[id^='sb_'] {
   min-width: 100% !important;
   min-width: calc(100% - 1px) !important;
   margin-bottom: -7px !important;
@@ -90,52 +90,52 @@ div.routersummary table,
   margin-top: -5px !important;
 }
 
-.routersummary table {
+.sb table {
   border-collapse: collapse;
 }
 
-.routersummary tr:nth-child(odd) td {
+.sb tr:nth-child(odd) td {
   padding: 3px;
   background: #020;
   background: rgba(0,34,0,.5);
 }
 
-.routersummary tr:nth-child(even) td {
+.sb tr:nth-child(even) td {
   padding: 3px;
   background: #000;
   background: rgba(0,0,0,.3);
 }
 
-.routersummary tr td {
+.sb tr td {
   border-top: 1px inset transparent !important;
   border-bottom: 1px inset transparent !important;
 }
 
-.routersummary tr:hover td {
+.sb tr:hover td {
   border-top: 1px solid #030 !important;
   border-bottom: 1px solid #030 !important;
 }
 
-.routersummary tr:hover td {
+.sb tr:hover td {
   background: #020;
 }
 
-.routersummary h3,
-.routersummary h4,
-.routersummary hr {
+.sb h3,
+.sb h4,
+.sb hr {
   margin-right: 7px !important;
   margin-left: -10px !important;
 }
 
-div.routersummary h4 {
+.sb h4 {
   margin: -6px 7px -8px -10px !important;
 }
 
-div.routersummary form {
+.sb form {
   margin: -2px 5px -4px -11px !important;
 }
 
-.routersummary button[type=submit], .routersummary button[type=reset] {
+.sb button[type=submit], .sb button[type=reset] {
   margin: 5px 10px !important;
   padding: 8px 5px !important;
   min-width: 120px !important;

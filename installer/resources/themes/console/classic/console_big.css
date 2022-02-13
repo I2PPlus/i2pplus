@@ -28,11 +28,11 @@ input[type=submit], input[type=reset], input[type="file"], button, button.search
   letter-spacing: .05em;
 }
 
-input[type=submit], input[type=reset], input[type="file"], button, button.search, input.cancel, div.app, .themelabel, .ui_lang, .tab a, label, a, li {
+input[type=submit], input[type=reset], input[type="file"], button, button.search, input.cancel, .applink, .themelabel, .ui_lang, .tab a, label, a, li {
   letter-spacing: .05em !important;
 }
 
-.routersummary button {
+.sb button {
   min-width: 100px !important;
   padding-top: 3px !important;
   padding-bottom: 3px !important;
@@ -40,29 +40,29 @@ input[type=submit], input[type=reset], input[type="file"], button, button.search
 
 /* sidepanel */
 
-.routersummary div[style="height: 36px;"] {
+.sb #sb_logo {
   margin-top: 0 !important;
   margin-bottom: 18px !important;
 }
 
-.routersummary h3, .routersummary h3 a  {
+.sb h3, .sb h3 a  {
   font-size: 11.5pt !important;
 }
 
-.routersummary h4, .routersummary h4 a {
+.sb h4, .sb h4 a {
   font-size: 10.5pt !important;
   letter-spacing: 0;
 }
 
-.routersummary td {
+.sb td {
   font-size: 10.5pt;
 }
 
-.routersummary {
+.sb {
   width: 220px;
 }
 
-.routersummary table {
+.sb table {
   width: 219px !important;
 }
 
@@ -79,7 +79,7 @@ input[type=submit], input[type=reset], input[type="file"], button, button.search
   font-size: 10pt !important;
 }
 
-.routersummary table a:link, .routersummary table a:visited {
+.sb table a:link, .sb table a:visited {
   font-size: 12pt;
   font-weight: 400;
   text-shadow: none;
@@ -122,7 +122,7 @@ input[type=submit], input[type=reset], input[type="file"], button, button.search
 
 /* global overrides */
 
-a, b, .routersummary h3 a, .routersummary h4 {
+a, b, .sb h3 a, .sb h4 {
   font-weight: 400 !important;
   font-size: 100%;
 }
@@ -460,21 +460,21 @@ a:hover code {
 }
 
 @media screen and (max-width: 1500px) {
-div.applabel {
+.applinklabel {
   height: 22px !important;
   padding: 2px;
 }
 }
 
 @media screen and (min-width: 0) {
-.routersummary img[src$="i2plogo.png"] {
+.sb img[src$="i2plogo.png"] {
   margin-top: -1px;
   transform: none;
   width: 210px;
 }
 
-.routersummary .reload[value="restartImmediate"], .routersummary .stop[value="shutdownImmediate"],
-.routersummary .reload[value="Reseed"], .routersummary button[name="updateAction"] {
+.sb .reload[value="restartImmediate"], .sb .stop[value="shutdownImmediate"],
+.sb .reload[value="Reseed"], .sb button[name="updateAction"] {
   font-size: 11pt !important;
 }
 
@@ -602,27 +602,27 @@ h1 {
   font-size: 19pt;
 }
 
-.routersummary td, .routersummary a, .routersummary button, .routersummary h4, .routersummary h4 a, div.news, #banlist li {
+.sb td, .sb a, .sb button, .sb h4, .sb h4 a, div.news, #banlist li {
   font-size: 11pt !important;
 }
 
-.routersummary div[style="height: 36px;"] {
+.sb #sb_logo {
   height: 35px !important;
 }
 
-.routersummary img[src$="i2plogo.png"] {
+.sb img[src$="i2plogo.png"] {
   margin-top: -2px;
   margin-left: 0;
   width: 233px;
   transform: none;
 }
 
-.routersummary h3 {
+.sb h3 {
   padding-top: 2px !important;
   padding-bottom: 2px !important;
 }
 
-.routersummary table[id^="sb_"] {
+.sb table[id^="sb_"] {
   width: 225px !important;
 }
 

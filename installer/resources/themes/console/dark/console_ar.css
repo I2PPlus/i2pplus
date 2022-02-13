@@ -18,12 +18,12 @@ h1, h2, h3, h4 {direction: rtl; text-align: right}
 #debug h3.debug_inboundsessions, #debug h3.debug_outboundsessions {background-position: right 5px center; padding-right: 26px}
 h3, h3.welcome {border-width: 1px 5px 1px 1px}
 #news h3 {border-width: 1px 1px 1px 5px}
-h4.app, h4.app2 {padding-right: 32px; padding-left: 8px; text-align: right; background-position: right 8px center, center center, center center}
-h4.app a, h4.app2 a {float: left}
-div.app:hover .appimg .extlink::after {left: -1px; right: auto; border-radius: 2px 0 2px 0}
+#applinks, #sitelinks {padding-right: 32px; padding-left: 8px; text-align: right; background-position: right 8px center, center center, center center}
+#applinks a, #sitelinks a {float: left}
+.applink:hover .appicon .extlink::after {left: -1px; right: auto; border-radius: 2px 0 2px 0}
 button.search {margin-right: 30px}
 input.search, input.search:focus {padding: 4px 24px 4px 3px; background-position: right 4px center}
-.routersummaryouter {margin-right: 0; right: -17px; float: right;}
+#sb_wrap {margin-right: 0; right: -17px; float: right;}
 #sb_logo {margin: -8px -10px -9px 0}
 #sidebar h3, #sidebar h4, #sidebar a, #sidebar b {text-align: center; font-weight: 400}
 #sidebar h3 {font-size: 11pt}
@@ -143,8 +143,8 @@ input[type="file"]:hover {border-radius: 15px 0 0 15px; background: linear-gradi
 /* responsive layout */
 @media screen and (min-width: 1500px) {
 .main, .news, h1[class], .sorry {margin-right: 260px; margin-left: 6px}
-/*#sidebar .routersummaryouter {margin-right: 0}*/
-#sidebar div[style="height: 36px;"] { margin: -8px -10px -9px 0}
+/*#sidebar #sb_wrap {margin-right: 0}*/
+#sidebar #sb_logo { margin: -8px -10px -9px 0}
 #sidebar img[src$="i2plogo.png"] {margin-top: -3px}
 #sidebar h4 {font-size: 11pt}
 #sidebar td, #sidebar a {font-size: 10pt}

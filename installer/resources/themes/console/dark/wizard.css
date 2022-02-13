@@ -8,7 +8,7 @@ body#wizardpage {
   background: none !important;
 }
 
-#wizardpage .routersummary h3, #wizardpage .routersummary h3:hover, #wizardpage .routersummary h3:active {
+#wizardpage .sb h3, #wizardpage .sb h3:hover, #wizardpage .sb h3:active {
   background: var(--h3), var(--navbar) !important;
   box-shadow: var(--lowlight) !important;
   mix-blend-mode: normal !important;
@@ -38,7 +38,7 @@ body#wizardpage {
   padding-bottom: 20px;
 }
 
-#wizardpage .routersummary form {
+#wizardpage .sb form {
   margin: 0;
   padding: 3px 0 7px;
   box-shadow: none;

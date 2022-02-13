@@ -287,7 +287,7 @@ public class HomeHelper extends HelperBase {
         String website = _t("Web Server");
         StringBuilder buf = new StringBuilder(1024);
         boolean embedApps = _context.getBooleanProperty(CSSHelper.PROP_EMBED_APPS);
-        buf.append("<div class=\"appgroup\">");
+        buf.append("<div class=\"linkgroup\">");
         PortMapper pm = _context.portMapper();
         for (App app : apps) {
             String url;
@@ -326,12 +326,12 @@ public class HomeHelper extends HelperBase {
                         continue;
                 }
             }
-            buf.append("\n<div class=\"app");
+            buf.append("\n<div class=\"applink");
             // tag sites that require javascript to function
             if (url.contains("i2pmetrics") || url.contains("paste.r4sas") || url.contains("zeronet") || url.contains("speedtest"))
                 buf.append(" js");
             buf.append("\" style=\"display: inline-block; text-align: center;\">\n" +
-                       "<div class=\"appimg\">" +
+                       "<div class=\"appicon\">" +
                        // usability: add tabindex -1 so we avoid 2 tabs per app
                        "<a href=\"").append(url).append("\" tabindex=\"-1\">" +
                        "<img alt=\"\" title=\"").append(app.desc).append("\" style=\"max-width: 32px; max-height: 32px;\" src=\"").append(app.icon)
