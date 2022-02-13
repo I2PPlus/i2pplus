@@ -406,7 +406,7 @@ td.infowarn, #help tr:hover td.infowarn {background: var(--infowarn) no-repeat 1
 #configinfo td {padding: 10px; text-align: justify}
 #manualpeercontrol tr:nth-child(3) td.infohelp {padding: 20px 15px 20px 50px; background: var(--ban) no-repeat 15px center / 28px, linear-gradient(180deg,#fafaff 50%, rgba(220, 220, 255, .3)), rgba(0, 0, 0, 0), repeating-linear-gradient(135deg, rgba(255, 255, 255, .5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px)}
 #bannedpeercount {background: var(--ban) no-repeat 15px center / 28px, var(--div_infohelp)}
-#config_peers #bannedpeercount {margin: 9px 0 -15px}
+#config_peers #bannedpeercount {margin: 9px 0 -21px}
 
 /* logs */
 .embedlink {margin: -5px -5px -5px 0; padding: 5px; float: right; vertical-align: middle; font-size: 85%}
@@ -595,9 +595,9 @@ h3#systray + p.infohelp {padding: 20px 15px 20px 50px; box-shadow: var(--highlig
 .links li {list-style: var(--star); text-align: justify; line-height: 1.4; margin-right: 10px}
 .links ul {margin-top: -5px}
 .main li {text-align: left; list-style: square; margin: 2px 20px 0 40px; padding: 1px 10px; line-height: 1.5; word-wrap: break-word}
-.infohelp {box-shadow: var(--highlight), inset 0 0 1px 1px #ddf}
+.infohelp, #bannedpeercount {box-shadow: var(--highlight), inset 0 0 1px 1px var(--border)}
 .infowarn {box-shadow: var(--highlight), inset 0 0 1px 1px #900}
-p.infohelp, p.sybilinfo, p#debugmode, p#upnpstatus, p#pluginconfigtext, p#gatherstats {padding: 20px 15px 20px 50px; line-height: 1.3; border: 1px solid var(--border_inner); box-shadow: var(--highlight), inset 0 0 0 2px #bbc; background: var(--infohelp) no-repeat 15px center / 28px, var(--div_infohelp); background-size: 28px, 100% 4px, 100%}
+p.infohelp, p.sybilinfo, p#debugmode, p#upnpstatus, p#pluginconfigtext, p#gatherstats {padding: 20px 15px 20px 50px; line-height: 1.3; border: 1px solid var(--border_inner); box-shadow: inset 0 0 0 1px #7e7, inset 0 0 1px 1px var(--border); background: var(--infohelp) no-repeat 15px center / 28px, var(--div_infohelp)}
 p.infowarn {padding: 20px 15px 20px 50px; line-height: 1.3; border: 1px solid var(--border_inner); background: var(--infowarn) no-repeat 15px center / 28px, var(--div_infohelp)}
 .infohelp + hr {display: none}
 .infohelp#pagenav:first-of-type {margin-top: -6px}
@@ -1363,7 +1363,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 #profilelist td:nth-last-child(2) span, #profilelist td:nth-last-child(3) span {min-width: 28px; display: inline-block}
 #profilelist td[colspan="10"], #profilelist td[colspan="10"]:hover {padding: 0; background: #77f}
 #profilelist .nospeed {text-align: center}
-#profilelist .lowlatency, #profilelist .highlatency {width: 12px; min-width: 0; color: #373}
+#profilelist .lowlatency, #profilelist .highlatency {font-size: 120%; color: #373}
 #profilelist .highlatency {color: #900}
 #thresholds p {margin-left: 5px; line-height: 1.4}
 #profile_defs b {text-transform: capitalize}
