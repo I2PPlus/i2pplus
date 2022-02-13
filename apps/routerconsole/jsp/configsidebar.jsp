@@ -46,7 +46,7 @@
 <%
     if (!rval.equals("0")) {
 %>
-(<%=intl._t("Set to 0 to disable")%>)
+(<%=intl._t("0 to disable")%>)
 <%
     }
 %>
