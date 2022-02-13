@@ -529,7 +529,7 @@ div[id^="config"] tr:last-child td, #events tr:last-child td, #netdb table table
 .applink:hover, .sitemapLink:hover {border: 1px solid #f60; background: #fff; box-shadow: none; cursor: pointer}
 .applink.js:hover::before {padding: 1px 3px 5px; display: inline-block; position: absolute; top: -1px; left: -1px; line-height: 1; border: 1px solid #f60; content: "*js"}
 .applink img {padding: 10px 60px 5px; width: auto; height: 32px; max-height: 32px; max-width: 32px; opacity: .9; filter: drop-shadow(0 0 1px rgba(220,220,255,.7))}
-.applink img, .sitemapLink img {animation: zoom .075s linear .6s both; will-change: transform}
+.applink img, .sitemapLink img {animation: zoom .075s linear .5s both; backface-visibility: hidden; will-change: transform}
 div.search + .linkcontainer {margin: -15px 0 0}
 
 /* home search */
@@ -1802,16 +1802,16 @@ th.options {padding: 8px 5px 8px 10px; font-size: 9pt}
 #themesettings hr, #langsettings hr {display: none}
 #config_ui p.infohelp {margin-bottom: 10px; padding: 20px 15px 20px 50px; background: var(--ui) no-repeat 15px center / 28px, var(--div_infohelp)}
 .ui_lang {margin: 0 -4px; padding: 3px 2px; z-index: 2; white-space: nowrap; text-align: center; overflow: hidden; text-overflow: ellipsis; font-size: 9pt; text-transform: capitalize; border-top: 1px solid var(--border_inner); border-top: 1px solid var(--border_inner); border-radius: 0 0 2px 2px; box-shadow: var(--highlight); background: #f8f8ff}
-.langflag::before {display: inline-block; position: absolute; top: 0; bottom: 0; left: 0; right: 0; z-index: 10; border-radius: 4px; background: linear-gradient(180deg, rgba(255,255,255,.5), rgba(0,0,0,0) 75%); content: ""}
-.langflag {margin: 5px 0 8px; padding: 1px; width: 40px; height: 30px; display: inline-block; position: relative; border-radius: 4px; box-shadow: 0 0 0 1px #bbc; opacity: .85}
+.langflag::before {display: inline-block; position: absolute; top: 0; bottom: 0; left: 0; right: 0; z-index: 10; border-radius: 4px; background: linear-gradient(180deg, rgba(255,255,255,.5), rgba(0,0,0,0) 65%, rgba(0,0,0,.1)); content: ""}
+.langflag {margin: 5px 0 8px; padding: 1px; width: 40px; height: 30px; display: inline-block; position: relative; vertical-align: middle; border-radius: 4px; box-shadow: 0 0 0 1px #bbc; background: linear-gradient(to bottom, #e8e8ff, #f2f2ff); opacity: .85; backface-visibility: hidden}
 .langselect:active > input[name="lang"] ~ .ui_lang {color: #fff; background: #f60}
 .langselect br {display: block}
 .langselect + br {display: none}
 .langselect:hover {border: 1px solid #f60; background: #fff}
 .langselect:hover > input[name="lang"] ~ .ui_lang {color: #f60; border-top: 1px solid #f60; background: linear-gradient(180deg,#fff 50%, #ffe8bf 50%, #efd9b3 100%)}
-.langselect:hover .langflag {transform: scale(1.1)}
+.langselect:hover .langflag {transform: scale(1.15)}
 .langselect img[src^="/flags"] {z-index: 3; position: relative}
-.langselect img {width: 40px; height: 30px; border-radius: 4px}
+.langselect img {width: 40px; height: 30px; vertical-align: middle; border-radius: 4px}
 .langselect input:hover + .langflag {box-shadow: 0 0 0 1px #f60; opacity: 1}
 .langselect input, .themechoice input {cursor: pointer}
 .langselect {margin: 4px; padding: 4px 4px 0; width: 115px; min-height: 64px; float: left; text-align: center; border: 1px solid var(--border_inner); box-shadow: var(--highlight); background: #f8f8ff; transition: ease transform .05s; filter: drop-shadow(0 0 1px rgba(220,220,255,.7))}
