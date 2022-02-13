@@ -1791,6 +1791,7 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 #pluginconfig {margin-top: -15px}
 #pluginconfig th:first-child, #pluginconfig td:first-child {padding-right: 50px; width: 100px; white-space: nowrap; text-align: center}
 #pluginconfig table {border: var(--border); filter: drop-shadow(0 0 3px #000)}
+#pluginconfig table, #pluginconfig table td {border: var(--border_softer)}
 #pluginconfig table td:first-child {padding-right: 5px; width: 1%; max-width: 70px; white-space: nowrap}
 #pluginconfig td:last-child {width: 50%}
 #pluginconfig td:last-child table {margin: 5px 15px 5px 5px; padding: 5px; width: calc(100% - 8px); background: none}
