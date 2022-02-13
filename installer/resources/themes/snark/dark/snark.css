@@ -373,13 +373,13 @@ tr:hover .percentBarText {opacity: 1}
 
 /* peers */
 .peerinfo tt {margin: 0 8px 0 0; padding: 1px 4px; float: left}
+#torrents .peerinfo .torrentDownloaded {text-align: center}
 #torrents .peerinfo:hover td:first-child {background: #030 var(--peer) no-repeat 9px center / 18px}
 .peerinfo:hover .percentBarText {opacity: .8; font-size: 95%}
 .peerinfo, .debuginfo.rowOdd, .debuginfo.rowEven {background: linear-gradient(90deg,#000800 70%,#000d00)}
 .peerinfo td:first-child {background: var(--peer) no-repeat 9px center / 18px}
 .peerinfo td, .debuginfo td {padding-top: 4px; padding-bottom: 4px}
 .peerinfo td:first-child::before, .debuginfo td:first-child::before {min-height: 28px; display: inline-block; vertical-align: middle; content: ""}
-.peerinfo .torrentDownloaded {text-align: center}
 .peerclient {margin: 3px 0; padding: 1px; border-radius: 1px; background: #000; box-shadow: 0 0 0 1px #020}
 .peerclient, .peerinfo tt, .clientid {display: inline-block; vertical-align: middle; line-height: 1.2}
 .peerinfo tt {margin: 0; padding: 2px 9px 2px 5px; font-size: 85%; color: #bb0; border-radius: 4px 0 0 4px; background: none}
