@@ -224,9 +224,6 @@ button:active, input[type=submit]:active, input[type=reset]:active {background-c
 input[name="refreshInterval"] {width: 80px; min-width: 80px; text-align: right}
 textarea {margin: 2px 0 2px 5px; padding: 3px 4px; width: calc(100% - 5px); min-height: 96px; resize: none; font-size: 9pt; color: var(--ink_light); border: var(--border); border-radius: 2px; box-shadow: var(--shadow_input); background: var(--bg2)}
 textarea:focus, .main .tabletextarea textarea:focus {color: var(--ink); box-shadow: inset 0 0 0 1px var(--hover); background: var(--bg); outline: none}
-.tabletextarea {padding: 0}
-.tabletextarea textarea {margin: 0; padding: 5px; width: 100%; height: 600px; resize: none; overflow: auto; white-space: pre-wrap; word-break: break-all; font-size: 9pt; border: none; border-top: var(--border); border-radius: 0; box-shadow: none; background: var(--bg)}
-.tabletextarea textarea:focus {border-radius: 0}
 
 /* graphical buttons */
 input[type=submit], input[type=reset], button {margin: 3px 8px 3px 0; padding: 4px 5px; text-decoration: none; font: 9pt var(--bodyfont); color: var(--ink_light); border: var(--border); border-radius: 3px; box-shadow: var(--btn_shadow); background: var(--btn); background-size: 14px, 100%}
@@ -558,10 +555,13 @@ div[id^="config_"].main {padding-bottom: 20px}
 .configure tr, .configure td {padding: 5px}
 .configure h2:first-child {margin-top: 15px}
 .configtable, #permabanned, #loggingoptions, #configstats, #banlist {margin-bottom: -5px}
-.configtable td:not(.infohelp):not(.infowarn):not(.b32), #joinfamily td {padding: 10px; border-top: var(--border); border-bottom: var(--border)}
+.configtable td:not(.infohelp):not(.infowarn):not(.b32):not(.tabletextarea), #joinfamily td {padding: 10px; border-top: var(--border); border-bottom: var(--border)}
 #externali2cp td, #plugininstall td, #plugininstall2 td, #tunnelconfig td {padding: 5px}
 .configtable.homelinkedit td, .configtable.homelinkedit tr, .configtable#sidebarconf td, .configtable#sidebarconf tr {padding-top: 4px; padding-bottom: 4px; border-top: 1px inset var(--bg4); border-bottom: 1px inset var(--bg4)}
 .configtable tr:last-child, #addkeyring tr:last-child, #loggingoptions tr:last-child {border-top: var(--border); background: var(--bg)}
+.configure .tabletextarea {padding: 0}
+.configure .tabletextarea textarea {margin: 0; padding: 5px; width: 100%; height: 600px; resize: none; overflow: auto; white-space: pre-wrap; word-break: break-all; font-size: 9pt; border: none; border-top: var(--border); border-radius: 0; box-shadow: none; background: var(--bg)}
+.configure .tabletextarea textarea:focus {border-radius: 0}
 .stattograph {margin: 2px 1px 2px 0; padding: 4px 8px 2px; width: 220px; display: inline-block; box-sizing: border-box; line-height: 1.2; vertical-align: middle; text-align: left; font-size: 90%; border: 1px solid var(--border_badge); border-radius: 1px; background: var(--badge); outline: none; will-change: transform}
 .stattograph b {display: inline-block; word-break: break-all; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: capitalize; color: var(--ink_light)}
 .statdesc {display: none}
@@ -1339,7 +1339,7 @@ ul#reachability {padding-left: 15px}
 #changelog {margin-top: 14px; margin-bottom: 11px; padding: 0}
 #changelog h2 {margin: -1px -1px 5px}
 #help pre {margin: -5px 0 5px 10px; padding-left: 0; padding-bottom: 20px; width: calc(100% - 10px); height: 600px; white-space: pre-wrap; overflow: auto; font-size: 9pt}
-#fullhistory {margin: -5px -1px -6px; padding: 7px 10px 4px 5px; text-align: right; border: var(--border); background: linear-gradient(90deg, #eff2ff 50%, #fff)}
+#help #fullhistory {margin: -5px -1px -6px; padding: 7px 10px 4px 5px; text-align: right; font-size: 90%; border: var(--border); background: linear-gradient(90deg, #eff2ff 50%, #fff)}
 #fullhistory::before {width: 18px; height: 20px; display: inline-block; vertical-align: middle; background: var(--eye) no-repeat left 45% / 14px; content: ""}
 #fullhistory:hover::before, #fullhistory:focus::before {background: var(--eye_hover) no-repeat left 45% / 14px}
 #help td.infohelp, #help td.infowarn, #help td.infohelp, #help p.infohelp {padding-left: 46px; background-size: 24px}
