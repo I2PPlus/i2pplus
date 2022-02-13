@@ -23,7 +23,6 @@ th {border-top: var(--border); border-bottom: var(--border); background: var(--t
 .page {border: var(--border); background: var(--bg); margin: 0; padding: 0 10px; color: var(--ink); font-size: 9pt; line-height: 1.6}
 p.book, #messages + p {padding: 10px 10px 10px 38px; background: var(--addressbook) no-repeat center left / 32px}
 p.footer {position: absolute; top: 0; left: -24px; border: none; background: none; opacity: .3; font-size: 8pt; display: none}
-p.help {margin: 0; padding: 15px 15px 15px 45px; line-height: 1.2; background: #ffe var(--infohelp) no-repeat 8px center / 32px}
 .active {color: #393; text-decoration: underline}
 #add table {margin-top: -9px}
 #add tr:first-child td {padding-bottom: 0}
@@ -50,43 +49,35 @@ p.help {margin: 0; padding: 15px 15px 15px 45px; line-height: 1.2; background: #
 #filter span b {margin-top: -2px; display: inline-block; line-height: .8; text-transform: uppercase; font-size: 11pt; color: #115}
 #filter span > * {vertical-align: middle}
 
-#helpconfig h3 {margin: -1px}
-#help h3 {margin: -1px -1px 10px}
-
 #import table {margin-bottom: 10px}
 #messages:empty {display: none}
-#navi {margin: -1px -11px 0; padding: 0; position: sticky; top: -1px; z-index: 999; border: var(--border); background: var(--th)}
 #ovrvw #content {margin-top: 25px}
-#sbs #content {margin: -11px}
-#sbs h3 a {margin: 3px 5px 0 0; float: right; font-size: 8.5pt}
 
-input[type=file]::file-selector-button {margin: 3px 3px 3px 0; padding: 6px 10px}
-input[type=submit], input[type="reset"] {min-width: 80px}
-input[type=text], input[type=password], textarea {margin: 3px 3px 3px 0; padding: 6px 10px; min-width: 160px}
 
-.fakebutton, input, select {font: 9pt/130% var(--bodyfont)}
-.fakebutton, input[type=submit], input[type="reset"], input[type=checkbox], input[type=radio], select {color: var(--ink_light); cursor: pointer}
-.fakebutton, input[type=submit], input[type="reset"] {margin: 2px 0 2px 4px; padding: 5px 8px; border-radius: 2px; border: var(--border); box-shadow: var(--btn_shadow); background: var(--btn)}
+/* forms */
 .fakebutton {margin: -4px 0 -4px 4px; display: inline-block}
 .fakebutton:hover, input[type=submit]:hover, input[type="reset"]:hover, .fakebutton:focus, input[type=submit]:focus, input[type="reset"]:focus {color: var(--ink); border: var(--border); background: var(--btn_hover); box-shadow: var(--btn_shadow_hover)}
 .fakebutton:active, input[type=submit]:active, input[type="reset"]:active {color: var(--ink_light); border: 1px solid #bbb; box-shadow: var(--highlight), inset 3px 3px 3px #999}
-
+.fakebutton, input, select {font: 9pt/130% var(--bodyfont)}
+.fakebutton, input[type=submit], input[type="reset"], input[type=checkbox], input[type=radio], select {color: var(--ink_light); cursor: pointer}
+.fakebutton, input[type=submit], input[type="reset"] {margin: 2px 0 2px 4px; padding: 5px 8px; border-radius: 2px; border: var(--border); box-shadow: var(--btn_shadow); background: var(--btn)}
 form[action="subscriptions"], form[action="config"] {margin: 10px 0}
-
+input[disabled] {opacity: .6; pointer-events: none}
+input[type=file]::file-selector-button {margin: 3px 3px 3px 0; padding: 6px 10px}
+input[type=submit], input[type="reset"] {min-width: 80px}
+input[type=text], input[type=password], textarea {margin: 3px 3px 3px 0; padding: 6px 10px; min-width: 160px}
 input.update {margin-left: 0}
-p.buttons {margin: 0 -11px; padding: 10px; border: var(--border); background: var(--bg)}
 textarea {margin: 0 auto 10px}
 textarea[name="config"], textarea[name="content"] {padding: 2px 5px; height: 200px; border: var(--border); box-shadow: none}
 td.destinations textarea, td.destinations textarea:focus {margin: 0 0 0 5px; padding: 0; font: normal 8pt var(--monospaced); resize: none; border: none; border-left: 1px solid #888; border-right: 1px solid #888; border-radius: 0; box-shadow: 0 none; background: none}
+p.buttons {margin: 0 -11px; padding: 10px; border: var(--border); background: var(--bg)}
 #buttons, .buttons {text-align: right}
-#content + #buttons, #config + #buttons {margin: -21px -11px 0; padding: 10px; border: var(--border)}
 #config + #buttons {padding-top: 21px}
 #config, form[action="subscriptions"] #content {margin: -11px -11px 0}
-#subsLog pre {padding: 8px 10px; white-space: pre-wrap; line-height: 1.2}
-input[disabled] {opacity: .6; pointer-events: none}
+#content + #buttons, #config + #buttons {margin: -23px -11px 0; padding: 10px; border: var(--border)}
 
 /* topnav */
-#navi {padding: 3px; display: flex; text-align: center; flex-flow: wrap; justify-content: center}
+#navi {margin: -1px -11px 0; padding: 3px; display: flex; position: sticky; top: -1px; z-index: 999; text-align: center; flex-flow: wrap; justify-content: center; border: var(--border); background: var(--th)}
 #navi a, #navi a:visited {border: var(--border); border-radius: 2px; margin: 3px 0; box-shadow: 0 0 1px 0 #ddd, var(--highlight); display: inline-block; outline: none; color: #5c5c8a}
 #navi a {margin: -4px -3px; padding: 5px 12px 4px; background: linear-gradient(180deg,#fff 50%, #eaebff 50%); text-transform: uppercase; letter-spacing: .08em; flex-grow: 1; border-radius: 0; position: relative; z-index: 1}
 #navi a:first-child {border-left: none}
@@ -112,7 +103,6 @@ input[disabled] {opacity: .6; pointer-events: none}
 p.book {padding-left: 26px; background-position: left center}
 
 /* host list */
-
 .book {border: var(--border); margin: 10px 0; border-collapse: collapse}
 .book tr {border-top: 1px solid #dfe1ec; border-bottom: 1px solid #dfe1ec}
 .book tr:hover textarea {background: var(--bg)}
@@ -213,6 +203,11 @@ img[src="/imagegen/id?s=256&c="], img[src="/imagegen/id?s=20&c="] {opacity: 0}
 .illustrate text:not(:hover) {fill: #41444d}
 .illustrate .a, .illustrate .subs {stroke: #41444d; stroke-width: 1px}
 .illustrate .a {filter: none}
+p.help {margin: 0; padding: 15px 15px 15px 42px; line-height: 1.2; background: #ffe var(--infohelp) no-repeat 10px center / 22px}
+#helpconfig {margin: -1px -11px; }
+#helpsubs {margin: -1px -11px; border: none}
+#helpconfig h3 {margin: -1px}
+#help h3 {margin: -1px -1px 10px}
 
 /* notifications */
 #messages {margin: 0 3%; padding: 5px 20px; top: 0; left: 0; right: 0; position: fixed; z-index: 999; line-height: 1.5; text-align: center; border-radius: 0 0 4px 4px; box-shadow: 0 1px 2px rgba(100,100,200,.7); background: #113 var(--no) right 8px top 5px no-repeat; background-size: 16px 16px; cursor: crosshair; animation: 2s hide-up 10s ease-out forwards}
@@ -221,6 +216,11 @@ img[src="/imagegen/id?s=256&c="], img[src="/imagegen/id?s=20&c="] {opacity: 0}
 #messages:empty {display: none}
 #messages p {font-size: 9pt; letter-spacing: 2px; color: #ff9; text-shadow: 0 1px 1px #000}
 p.messages {color: #fff; text-align: center; font-weight: 700}
+
+/* subscriptions */
+#sbs #content {margin: -11px}
+#sbs h3 a {margin: 3px 5px 0 0; float: right; font-size: 8.5pt}
+#subsLog pre {padding: 8px 10px; white-space: pre-wrap; line-height: 1.2}
 
 /* iframe */
 .iframed .page {background: transparent; margin: 0 1px; border: none}
