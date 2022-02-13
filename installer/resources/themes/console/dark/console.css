@@ -11,7 +11,7 @@
 html {background: var(--vstripe), var(--camo), #000; background-size: 100% 4px, 2048px}
 body {margin: 5px 0 0 0; padding: 0; text-align: center; font: 8.5pt/1.3 var(--bodyfont); background: none}
 main * {scrollbar-color: rgba(16,48,16,.4) rgba(0,0,0,0)}
-.routersummary, #sb_wrap, h1 {contain: layout}
+.sb, #sb_wrap, h1 {contain: layout}
 
 a:link tt, a:visited tt {color: var(--a)}
 a:hover tt {color: var(--hover)}
@@ -69,7 +69,7 @@ ul {margin: 0; padding: 0}
 /* sidebar */
 #sb_wrap {margin: 0 0 10px 5px; padding: 0; width: auto; display: block; position: absolute; text-align: center; will-change: transform}
 .iframed #sb_wrap {display: none}
-.routersummary table {margin: -5px -7px -6px -8px; padding: 1px 1px 0; width: 210px; overflow: hidden; text-align: center; font-size: 8pt; border: 0; border-collapse: separate; border-spacing: 2px; background: none}
+.sb table {margin: -5px -7px -6px -8px; padding: 1px 1px 0; width: 210px; overflow: hidden; text-align: center; font-size: 8pt; border: 0; border-collapse: separate; border-spacing: 2px; background: none}
 #sidebar {margin-bottom: 7px; padding: 8px 10px 8px; width: 194px; text-align: center; font-size: 8pt; border: var(--border); border-radius: 3px; box-shadow: 0 1px 5px #000; background: repeating-linear-gradient(90deg, rgba(0,0,0,.4) 2px, rgba(0,16,0,.3) 4px), repeating-linear-gradient(180deg,rgba(0,0,0,.8) 2px, rgba(0,16,0,.8) 4px), var(--camo) #000; background-size: 4px 100%, 100% 4px, 1800px}
 #sb_logo {width: 100%; margin: -8px 0 -9px -10px; padding: 9px 10px 10px; display: inline-block; border-radius: 3px 3px 0 0; box-shadow: var(--bevel); background: linear-gradient(180deg,rgba(0,64,0,.3), rgba(0,24,0,.3)), repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px); background-size: 100%, 100% 4px}
 #sb_logo:hover {box-shadow: var(--highlight), inset 0 0 0 2px rgba(255,96,0,.6); background: linear-gradient(180deg,rgba(0,64,0,.6), rgba(0,24,0,.6)), repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px); background-size: 100%, 100% 4px; transition: ease background .15s}
@@ -94,8 +94,8 @@ ul {margin: 0; padding: 0}
 #clock {margin: -7px -10px -9px; padding: 8px 0; position: relative; line-height: 1; letter-spacing: .1em; font-size: 18pt; font-weight: 700; color: #ffa; text-shadow: var(--textshadow); box-shadow: var(--highlight), inset 0 0 1px 1px #050; background: repeating-linear-gradient(180deg,rgba(255,255,255,.05) 2px, rgba(0,16,0,.2) 4px), linear-gradient(90deg, #010, #000, #010); -webkit-text-stroke: 1px rgba(220,220,128,.5); opacity: .9}
 #clock::before {content: ""; position: absolute; top: 0; left: 0; height: 100%; width: 100%; box-shadow: var(--highlight), inset 0 0 1px 1px #050; background: repeating-linear-gradient(90deg, rgba(0,0,0,.3) 2px, rgba(0,16,0,.2) 4px)}
 #clock::after {margin-left: 3px; content: "UTC"; display: inline-block; font-size: 50%; vertical-align: middle}
-.routersummary table, #sidebar form {position: relative; background: repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.1) 2px, rgba(0,16,0,.1) 3px)}
-.routersummary table:not(#sb_localtunnels):not(#sb_services):not(#sb_advanced)::before {width: 0; height: 1px; position: absolute; top: -4px; left: -1px; display: block; background: #730; content: ""; animation: ease-in bar .15s reverse; will-change: transform}
+.sb table, #sidebar form {position: relative; background: repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.1) 2px, rgba(0,16,0,.1) 3px)}
+.sb table:not(#sb_localtunnels):not(#sb_services):not(#sb_advanced)::before {width: 0; height: 1px; position: absolute; top: -4px; left: -1px; display: block; background: #730; content: ""; animation: ease-in bar .15s reverse; will-change: transform}
 #sb_peers, #sb_peersadvanced, #sb_tunnels, #sb_queue, #sb_bandwidth, #sb_general, #sb_advancedgeneral, #sb_localtunnels, #sb_advanced, #sb_internals, #sb_services {margin-top: -9px; margin-bottom: -8px; padding: 0 1px 2px; border-top: 1px solid rgba(16,64,16,.3); border-bottom: 1px solid rgba(16,64,16,.3)}
 #sb_advanced, #sb_internals, #sb_services, #sb_help {margin-top: -6px; padding: 0 1px}
 #sb_localtunnels {margin: -6px -7px -7px -8px; padding: 0}
@@ -155,7 +155,7 @@ p:empty + .sb_notice {margin-top: 9px}
 
 /* sidebar news */
 #sb_newsheadings {margin-left: -12px; margin-bottom: -7px; width: 206px; text-align: right}
-#sidebar.routersummary #sb_newsheadings table {margin: -8px 0 3px}
+#sidebar.sb #sb_newsheadings table {margin: -8px 0 3px}
 #sb_newsheadings table::before {content: none}
 #sb_newsheadings a {padding: 0 3px 0 0; width: 100%; display: inline-block}
 #sidebar #sb_newsheadings td {padding: 2px 5px 2px 23px; text-align: left; border-bottom: var(--border_soft); background: var(--newsbullet) no-repeat 4px center / 14px}
@@ -255,7 +255,7 @@ h1 + .sorry, #console_404 .sorry {margin: -1px 5px 10px 226px; padding: 20px 20p
 .sorry hr {margin: 10px 0; height: 1px; color: var(--ink); border-top: 1px solid var(--ink); background: var(--ink); opacity: .7}
 
 /* main section */
-.routersummary, .main, h1, div.news, .confignav, .tab, .tab2, table.search, .applink, .sitemapLink, .sitemapLabel {border: var(--border_hard)}
+.sb, .main, h1, div.news, .confignav, .tab, .tab2, table.search, .applink, .sitemapLink, .sitemapLabel {border: var(--border_hard)}
 .main, div.news, h1, .sorry {margin-left: 226px}
 .main {margin: -1px 5px 5px 226px; padding: 0 10px 1px 10px; width: auto; min-width: 665px; position: relative; z-index: 10; text-align: left; font-size: 9pt; border-radius: 0 0 3px 3px; box-shadow: var(--highlight), 0 1px 5px #000; background: repeating-linear-gradient(90deg, rgba(0,0,0,.3) 2px, rgba(0,24,0,.6) 4px), repeating-linear-gradient(180deg,rgba(0,0,0,.3) 2px, rgba(0,24,0,.2) 4px); background-size: 4px 100%, 100% 4px; contain: layout paint}
 div[id^="config_"].main {padding-bottom: 14px}
@@ -1290,7 +1290,7 @@ th code {user-select: all}
 
 #peers #udpconnections .routerid {margin: 2px 0; min-width: 70px}
 
-.applink, .applabel, .statusnotes, .main, div.news, .routersummary, .search tr, .logo, .themechoice, .themelabel, .langselect, .ui_lang {box-shadow: var(--highlight), inset 0 0 1px 1px #050}
+.applink, .applabel, .statusnotes, .main, div.news, .sb, .search tr, .logo, .themechoice, .themelabel, .langselect, .ui_lang {box-shadow: var(--highlight), inset 0 0 1px 1px #050}
 .applink, .sitemapLink, .themechoice, .langselect {animation: zoom .05s linear .15s both; image-rendering: optimizeQuality; will-change: transform}
 .applabel, .sitemapLabel, .themelabel, .ui_lang {background: var(--glow_bottom), linear-gradient(180deg,#001900,#001000 50%,#000); animation: fade .15s ease .25s reverse both}
 
@@ -2458,7 +2458,7 @@ input[type=text], input[type=password] {padding: 7px 9px}
 #pluginconfigtext + form > input {margin-top: 3px}
 #pluginInstall2 {margin-top: -14px}
 #reseedconfig input[type=text], #reseedconfig input[type=password] {width: 250px}
-.routersummary table[id^="sb_"] {width: 256px}
+.sb table[id^="sb_"] {width: 256px}
 #sb_graphcontainer {height: 42px}
 .sb_info.sb_update {padding: 5px 5px 6px}
 .sb_info .percentBarOuter {margin-bottom: -16px}

@@ -1,7 +1,7 @@
 /* I2P+ Classic theme wizard specifics */
 /* Author: dr|z3d, 2022 */
 
-#wizardpage .routersummary div[style="height: 36px;"] {
+#wizardpage .sb #sb_logo {
   height: 39px !important;
 }
 

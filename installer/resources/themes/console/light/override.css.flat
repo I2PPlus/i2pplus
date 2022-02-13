@@ -6,11 +6,11 @@ html {
     filter: hue-rotate(10deg) saturate(.3);
 }
 
-h2, h3, .routersummary h3 {
+h2, h3, .sb h3 {
     background: #f9f9ff !important;
 }
 
-.main, .routersummary, h1, .confignav, .news#news, table.search {
+.main, .sb, h1, .confignav, .news#news, table.search {
     box-shadow: none;
     filter: none;
 }

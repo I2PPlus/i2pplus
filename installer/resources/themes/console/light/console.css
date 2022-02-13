@@ -8,7 +8,7 @@
 html {margin: 0}
 body {margin: 6px; line-height: 1.3; text-align: center; font-size: 9pt; background: var(--bodybg) url(images/tile2.png) top left / 32px}
 body, input, button, select, #netdb .netdbentry th code, #netdb .sybil_routerinfo th code, #netdb .leaseset th code {font-family: var(--bodyfont)}
-.routersummary, h1, .main, iframe {contain: layout}
+.sb, h1, .main, iframe {contain: layout}
 a, h1, h2, h3, h4, th, input[type=submit], input[type=reset], button, select {text-shadow: 0 1px 1px #fff}
 #help table, #help .confignav, #debug .confignav, #debug table, #jardump table, #netdb table, #logs table, #stats ul, #advconf textarea, #jobs table, #events table, #changelog, #wrapperlogs:hover pre, .buckets, #sb_graphcontainer {will-change: transform}
 a:hover, a:focus, a:active, .app:hover a, .app:focus a, .app:active a, input[type=submit]:hover, input[type=submit]:focus, input[type=submit]:active, input[type=reset]:hover, input[type=reset]:focus, input[type=reset]:active, button:hover, button:focus, button:active, select:hover, select:focus, select:active, .graphspanel a {text-shadow: none}
@@ -75,8 +75,8 @@ h4.sb_info + hr + form {margin-bottom: -1px; padding-top: 5px}
 #sidebar h4 {margin: -7px; padding: 6px 2px; line-height: 1.05; font-size: 8.5pt; letter-spacing: 0; text-transform: none; color: #4f617f; text-decoration: none; border: none; border-radius: 0; box-shadow: inset 0 0 0 1px #eef; background: linear-gradient(90deg, #ddf, #eef 10%, #fff 50%, #eef 90%, #ddf)}
 #sidebar h4::after {padding-top: 8px; padding-bottom: 8px; content: ""; display: inline-block; box-sizing: border-box; min-height: 12px; vertical-align: middle}
 #sidebar h4 a {vertical-align: baseline}
-.routersummary table {margin: -8px -5px -5px; width: 202px; position: relative; text-align: center; overflow: hidden; font-size: 8pt; border: none; background-image: none; background-color: transparent}
-.routersummary table:not(#sb_localtunnels):not(#sb_services)::before {width: 0; height: 1px; position: absolute; top: -2px; left: -1px; display: block; background: #f90; content: ""; animation: ease-in bar .15s reverse; will-change: transform}
+.sb table {margin: -8px -5px -5px; width: 202px; position: relative; text-align: center; overflow: hidden; font-size: 8pt; border: none; background-image: none; background-color: transparent}
+.sb table:not(#sb_localtunnels):not(#sb_services)::before {width: 0; height: 1px; position: absolute; top: -2px; left: -1px; display: block; background: #f90; content: ""; animation: ease-in bar .15s reverse; will-change: transform}
 #sidebar #sb_internals td, #sidebar #sb_advanced td, #sidebar #sb_services td, #sidebar #sb_help td {text-align: center}
 #sidebar tr, #sidebar tr:nth-child(n+0) {background-image: none; background-color: transparent; border: 0}
 #sidebar td {padding: 0 2px; border: none; background-image: none}
@@ -244,7 +244,7 @@ p:empty + .sb_notice {margin-top: 9px}
 .main {scrollbar-color: var(--border_inner) rgba(255,255,255,.4)}
 .main textarea {margin: 5px 0; resize: none; color: var(--ink); box-shadow: var(--highlight), inset 3px 3px 3px rgba(0,0,48,.2); box-shadow: var(--input_shadow); will-change: transform; scrollbar-color: #a7a7be rgba(255,255,255,.1)}
 .main textarea:focus {scrollbar-color: #a7a7be rgba(255,255,255,.4)}
-.main, .routersummary, .logo, .news#news {background: #f8f8ff var(--bg) repeat}
+.main, .sb, .logo, .news#news {background: #f8f8ff var(--bg) repeat}
 .main {margin: -12px 0 4px 214px; padding: 0 15px 10px; width: auto; min-width: 546px; text-align: left; color: var(--ink); border: 1px solid var(--border); border-radius: 0 0 2px 2px; box-shadow: var(--bevel)}
 .main hr, hr {color: #7e7fb9; background: #7e7fb9; height: 1px; border: 0 solid var(--border_inner); margin: 10px 0}
 .main .tunneldisplay tr:last-child td, .main #tunnelpeercount tr:nth-last-child(2) td, .main #udpconnections tr:nth-last-child(2) td, .main #ntcpconnections tr:nth-last-child(2) td {border-bottom: 1px solid var(--border_inner)}

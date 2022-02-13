@@ -144,7 +144,7 @@ input[type="file"]:hover {border-radius: 15px 0 0 15px; background: linear-gradi
 @media screen and (min-width: 1500px) {
 .main, .news, h1[class], .sorry {margin-right: 260px; margin-left: 6px}
 /*#sidebar #sb_wrap {margin-right: 0}*/
-#sidebar div[style="height: 36px;"] { margin: -8px -10px -9px 0}
+#sidebar #sb_logo { margin: -8px -10px -9px 0}
 #sidebar img[src$="i2plogo.png"] {margin-top: -3px}
 #sidebar h4 {font-size: 11pt}
 #sidebar td, #sidebar a {font-size: 10pt}

@@ -81,35 +81,35 @@ button.search {
   margin-right: -2px !important;
 }
 
-.routersummary img[src$="i2plogo.png"] {
+.sb img[src$="i2plogo.png"] {
   width: 190px;
   margin: -1px -5px 0 0;
 }
 
-.routersummary h3, .routersummary h4, .routersummary a, .routersummary b {
+.sb h3, .sb h4, .sb a, .sb b {
   text-align: center;
   font-weight: 400;
 }
 
-.routersummary h3, .routersummary h3 a {
+.sb h3, .sb h3 a {
   font-weight: 700 !important;
   padding: 3px 2px !important;
 }
 
-.routersummary h3, .routersummary h4 {
+.sb h3, .sb h4 {
   font-size: 11pt;
 }
 
-.routersummary td {
+.sb td {
   text-align: right;
 }
 
-.routersummary td:last-child {
+.sb td:last-child {
   text-align: left;
   margin-left: 3px;
 }
 
-.routersummary td:first-child {
+.sb td:first-child {
   text-align: right;
 }
 
@@ -154,7 +154,7 @@ button.search {
   direction: ltr;
 }
 
-.routersummary td a, .routersummary td:first-child {
+.sb td a, .sb td:first-child {
   font-size: 10pt;
 }
 
@@ -174,7 +174,7 @@ form {
   text-align: right;
 }
 
-.routersummary form {
+.sb form {
   text-align: center;
 }
 
@@ -565,16 +565,16 @@ body {
   margin-right: 27px !important;
 }
 
-.routersummary img[src$="i2plogo.png"] {
+.sb img[src$="i2plogo.png"] {
   width: 204px !important;
   margin: -2px -4px 0 0 !important;
 }
 
-.routersummary h4 {
+.sb h4 {
   font-size: 11pt !important;
 }
 
-.routersummary td, .routersummary a {
+.sb td, .sb a {
   font-size: 10pt !important;
 }
 
@@ -613,28 +613,28 @@ div[lang="ar"], div[lang="ar"] code, div[lang="ar"] b {
 }
 
 @media screen and (min-width: 1840px) {
-.routersummary {
+.sb {
   width: 200px !important;
 }
 
-.routersummary div[style="height: 36px;"] {
+.sb #sb_logo {
   height: 40px !important;
   margin-top: 1px;
 }
 
-.routersummary img[src$="i2plogo.png"] {
+.sb img[src$="i2plogo.png"] {
   width: 204px;
 }
 
-.routersummary table[id^="sb_"], #sb_localtunnels {
+.sb table[id^="sb_"], #sb_localtunnels {
   width: 216px !important;
 }
 
-.routersummary button, .routersummary .stop, .routersummary .reload {
+.sb button, .sb .stop, .sb .reload {
   min-width: 100px !important;
 }
 
-.routersummary td:first-child {
+.sb td:first-child {
   max-width: 90px !important;
 }
 

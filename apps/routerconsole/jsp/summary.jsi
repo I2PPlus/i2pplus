@@ -33,7 +33,7 @@
                       "scrolling=\"auto\" frameborder=\"0\" title=\"sidepanel\">\n</noscript>\n");
     }
 %>
-<div class="routersummary" id="sidebar">
+<div class="sb" id="sidebar">
 <%
     if (allowIFrame) {
         // Display the whole summary bar

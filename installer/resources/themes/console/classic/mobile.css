@@ -13,7 +13,7 @@ body {
   float: none;
 }
 
-.routersummary {
+.sb {
   margin: 0 auto -6px;
   width: auto;
   max-width: 600px;
@@ -28,15 +28,15 @@ body {
   margin-bottom: 7px !important;
 }
 
-.routersummary div[style="height: 36px;"] {
+.sb #sb_logo {
   margin: 0 0 15px !important;
 }
 
-.routersummary div[style="height: 36px;"] + a {
+.sb #sb_logo + a {
   display: inline-block;
 }
 
-div[style="height: 36px;"] + a, a[href="/summaryframe"] {
+#sb_logo + a, a[href="/summaryframe"] {
   display: inline-block;
   margin: -3px 0 !important;
   padding: 2px 10px;
@@ -48,19 +48,19 @@ a[href="/summaryframe"] {
   margin: 2px 0 !important;
 }
 
-.routersummary hr:first-child {
+.sb hr:first-child {
   margin-bottom: 11px;
 }
 
-.routersummary td, .routersummary h4, .routersummary a {
+.sb td, .sb h4, .sb a {
   font-size: 9pt !important;
 }
 
-.routersummary h3, .routersummary h3 a {
+.sb h3, .sb h3 a {
   font-size: 10.5pt !important;
 }
 
-.routersummary table, table[id^="sb_"] {
+.sb table, table[id^="sb_"] {
   width: 100% !important;
   margin: -6px 0 -7px !important;
 }
@@ -117,7 +117,7 @@ table[id^="sb_"] tr:hover td {
   max-width: 600px;
 }
 
-.routersummary button[type=submit], .routersummary button[type=reset] {
+.sb button[type=submit], .sb button[type=reset] {
   margin: 5px 5px 3px !important;
   padding: 8px 5px !important;
   min-width: 120px !important;
@@ -179,15 +179,15 @@ div.main {
   margin: -1px 0 0 !important;
 }
 
-.routersummary {
+.sb {
   width: 600px !important;
 }
 
-.routersummary div[style="height: 36px;"] {
+.sb #sb_logo {
   margin-top: 2px !important;
 }
 
-.routersummary table[id^="sb_"] {
+.sb table[id^="sb_"] {
   width: 600px !important;
 }
 }

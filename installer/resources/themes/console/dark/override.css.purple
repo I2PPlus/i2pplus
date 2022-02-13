@@ -13,7 +13,7 @@ body {
     background: repeating-linear-gradient(to right, rgba(0,0,0,0.8) 1px, rgba(0,0,0,0.8) 2px, rgba(32,0,32,0.6) 3px) #000;
 }
 
-img, #sb_localtunnels img, .routersummary *::before, #routerlogs li {
+img, #sb_localtunnels img, .sb *::before, #routerlogs li {
     filter: hue-rotate(-155deg) !important;
 }
 
@@ -29,7 +29,7 @@ h1 {
     background-blend-mode: luminosity, normal, exclusion, normal !important;
 }
 
-.main#console li b, code, .routersummary h4 {
+.main#console li b, code, .sb h4 {
     color: rgba(100,228,160,0.95) !important;
 }
 
@@ -37,12 +37,12 @@ h1 {
     mix-blend-mode: luminosity;
 }
 
-.routersummary div[style] img {
+.sb div[style] img {
     filter: hue-rotate(0) saturate(0.5) !important;
     mix-blend-mode: luminosity !important;
 }
 
-.routersummary div[style] img:hover {
+.sb div[style] img:hover {
     filter: hue-rotate(0) saturate(1.5) !important;
     mix-blend-mode: normal !important;
 }

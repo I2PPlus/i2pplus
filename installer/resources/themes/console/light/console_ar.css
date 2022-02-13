@@ -56,11 +56,11 @@ h2, h3 {
   margin-right: -1px !important;
 }
 
-.routersummary {
+.sb {
   margin-bottom: 4px;
 }
 
-.routersummary h4 {
+.sb h4 {
   text-align: center;
 }
 
@@ -146,7 +146,7 @@ form {
   margin: 0;
 }
 
-.routersummary img[src$="i2plogo.png"] {
+.sb img[src$="i2plogo.png"] {
   margin-left: 0 !important;
 }
 
@@ -225,7 +225,7 @@ form[action="configpeer"] > h3.tabletitle {
   margin-right: 0;
 }
 
-.routersummary form {
+.sb form {
   text-align: center;
 }
 
@@ -234,11 +234,11 @@ div.wideload {
   margin-right: 16px;
 }
 
-.routersummary h3 a {
+.sb h3 a {
   font-size: 120% !important;
 }
 
-.routersummary h3, .routersummary h4 {
+.sb h3, .sb h4 {
   text-align: center !important;
 }
 
@@ -315,7 +315,7 @@ div.wideload {
   direction: ltr;
 }
 
-.routersummary td:last-child {
+.sb td:last-child {
   text-align: left;
 }
 
@@ -1105,24 +1105,24 @@ p#enablefullstats, p#gatherstats, p#pluginconfigtext, #plugininstall .infohelp, 
   padding: 15px 50px 15px 15px !important;
 }
 
-.routersummary h4 {
+.sb h4 {
   font-size: 11pt !important;
 }
 
-.routersummary h4 span, .routersummary h4 span a {
+.sb h4 span, .sb h4 span a {
   font-size: 10pt !important;
 }
 
-.routersummary td:first-child, .routersummary td:nth-last-child(n+2), .routersummary td a {
+.sb td:first-child, .sb td:nth-last-child(n+2), .sb td a {
   font-size: 10pt !important;
 }
 
-.routersummary h4 span::before {
+.sb h4 span::before {
   padding: 0 0 0 5px;
 }
 
-.routersummary .error::before, .routersummary .warn::before, .routersummary .testing::before, .routersummary .hidden::before,
-.routersummary .running::before, .routersummary .firewalled::before, .routersummary .vmcomm::before, .routersummary .clockskew::before {
+.sb .error::before, .sb .warn::before, .sb .testing::before, .sb .hidden::before,
+.sb .running::before, .sb .firewalled::before, .sb .vmcomm::before, .sb .clockskew::before {
   padding-left: 6px !important;
   padding-right: 0 !important;
 }

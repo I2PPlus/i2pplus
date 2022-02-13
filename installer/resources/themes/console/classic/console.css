@@ -14,7 +14,7 @@
 body {margin: 3px; padding: 0; text-align: left; line-height: 1.3; font-size: 10pt; background: var(--bg_doc); background-attachment: fixed}
 
 /* globals */
-.routersummary, #sb_wrap, h1, .main, iframe, tr {contain: layout}
+.sb, #sb_wrap, h1, .main, iframe, tr {contain: layout}
 h1, .main, .sorry, .news {margin-left: 211px}
 .clearer {height: 0; line-height: 0; clear: left}
 .nowrap {display: inline-block; white-space: nowrap}
@@ -68,7 +68,7 @@ p:empty + .sb_notice {margin-top: 7px}
 #sidebar h4 {margin: -7px -1px -7px -1px; padding: 8px 2px; line-height: 1.08; text-transform: capitalize; font-size: 8.5pt; color: #1f7096; border: none; box-shadow: inset 0 0 2px 1px #f2f7fa; text-decoration: none; background: var(--label_focus)}
 #sidebar h4 a {padding: 0; vertical-align: text-bottom}
 #sidebar tr, #sidebar table, #sidebar td {background: none; border: none}
-.routersummary table {margin: -5px 0 -5px 0; padding: 0; width: 204px; position: relative; overflow: hidden; table-layout: fixed; text-align: center; font-size: 8pt}
+.sb table {margin: -5px 0 -5px 0; padding: 0; width: 204px; position: relative; overflow: hidden; table-layout: fixed; text-align: center; font-size: 8pt}
 #sidebar table:not(#sb_localtunnels):not(#sb_services)::before {width: 0; height: 2px; display: block; position: absolute; top: -4px; left: -1px; background: #bfb; content: ""; animation: ease-in bar .15s reverse; will-change: transform}
 #sidebar td {padding: 0 3px}
 #sidebar p {padding: 0}
@@ -2190,7 +2190,7 @@ h4#updateplugins {margin-top: -16px; padding: 5px 10px; font-size: 10pt}
 #tunnels td:last-child .routerid {margin-left: -10px}
 #tunnels td:last-child .tunnel_peer:not(.tunnel_local) + .tunnel_cap {margin-left: 1px}
 #webappconfiguration {margin-bottom: -14px}
-#wizardpage #sidebar div[style="height: 36px;"] {height: 45px !important}
+#wizardpage #sidebar #sb_logo {height: 45px !important}
 }
 
 @media screen and (min-width: 1600px) {#sb_localtunnels td:first-child {width: 20px}}

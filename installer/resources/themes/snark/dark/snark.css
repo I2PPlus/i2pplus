@@ -956,6 +956,7 @@ td.graphicStatus img {margin-top: -3px; margin-bottom: -3px; height: 24px}
 th.peerCount a img {margin-left: -20px}
 .torrentDownloaded, .torrentUploaded, .RateDown, .RateUp {min-width: 76px}
 #torrentinfostats img, #trackers img {margin: -3px 5px 0; max-height: 18px}
+.RateUp:not(:empty), .RateDown:not(:empty) {min-width: 80px}
 .torrentInfo th:first-child img {margin: -3px 3px 0 1px; max-height: 16px}
 .torrentName a, .snarkFileName a, .torrentName:hover a, .snarkFileName:hover a {margin: -2px 0; border-radius: 2px 20px 20px 2px; background: linear-gradient(90deg, rgba(0,0,0,0), rgba(0,16,0,.3))}
 .torrentName:active a, .snarkFileName:active a {box-shadow: inset 4px 4px 4px rgba(0,8,0,.8)}

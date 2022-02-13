@@ -30,7 +30,7 @@ body {
   font: 8.5pt/130% var(--bodyfont);
 }
 
-.routersummary, h1, .main, iframe {
+.sb, h1, .main, iframe {
   contain: layout;
 }
 
@@ -725,7 +725,7 @@ pre {
   border: 1px solid #26235c;
 }
 
-#sidebar div[style="height: 36px;"] {
+#sidebar #sb_logo {
   height: 36px !important;
 }
 
@@ -861,7 +861,7 @@ pre {
   text-align: left !important;
 }
 
-.routersummary table {
+.sb table {
   margin: -4px -7px -5px -8px !important;
   width: 200px !important;
   overflow: hidden;
@@ -874,7 +874,7 @@ pre {
   border-spacing: 1px;
 }
 
-.routersummary td {
+.sb td {
   padding: 0 2px 0 2px;
   max-width: 180px;
   word-spacing: -0.1em;
@@ -882,7 +882,7 @@ pre {
   background-image: none !important;
 }
 
-.routersummary td:first-child {
+.sb td:first-child {
   max-width: 90px;
   text-transform: capitalize;
 }
@@ -12757,7 +12757,7 @@ iframe {
   #sidebar {
     width: 220px !important;
   }
-  #sidebar div[style="height: 36px;"] {
+  #sidebar #sb_logo {
     margin-top: 2px;
     height: 41px !important;
   }
@@ -12773,7 +12773,7 @@ iframe {
   #sb_bandwidth td::after, #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {
      min-height: 18px;
   }
-  .routersummary td, #sidebar a, #sidebar button, #sidebar h4, #sidebar h4 a, .smallhead, pre, #newsStatus, #newsDisplay {
+  .sb td, #sidebar a, #sidebar button, #sidebar h4, #sidebar h4 a, .smallhead, pre, #newsStatus, #newsDisplay {
     font-size: 9pt !important;
   }
   #sidebar button.download {
@@ -13008,7 +13008,7 @@ iframe {
   }
   .main, .news, h1, #warning.sorry, #warning2.sorry {margin-left: 268px !important}
   #sidebar {width: 240px !important}
-  #sidebar div[style="height: 36px;"] {
+  #sidebar #sb_logo {
     margin-top: 1px;
     height: 47px !important;
   }
@@ -13031,7 +13031,7 @@ iframe {
   #sidebar button, #sidebar .stop, #sidebar .reload {
     min-width: 121px !important;
   }
-  .routersummary td:first-child {
+  .sb td:first-child {
     max-width: 120px !important;
   }
   #sb_services {
@@ -13065,7 +13065,7 @@ iframe {
   #sidebar form {margin-bottom: -8px}
   #sb_services a:link, #sb_internals a:link,
   #sb_advanced a:link, #sb_help a:link {max-width: 247px !important}
-  .routersummary td {
+  .sb td {
     padding-top: 1px;
     padding-bottom: 1px;
   }
@@ -13073,7 +13073,7 @@ iframe {
     padding: 8px 10px 8px 34px !important;
     font-size: 11pt;
   }
-  .routersummary td, #sidebar a, #sidebar button, #sidebar h4,
+  .sb td, #sidebar a, #sidebar button, #sidebar h4,
   #sidebar h4 a, .smallhead, pre, #newsStatus, #newsDisplay, .footnote, .topness,
    #bwlimiter a, #advancedconfig a, .tabletitle a, #upnpconfig a, #servicedebug a,
   .ptitle a, #configstats th a, h3#graphinfo a, .h3navlinks, .applink a:link, .applink a:hover,

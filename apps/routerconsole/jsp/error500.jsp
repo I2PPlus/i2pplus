@@ -37,7 +37,7 @@
 </head>
 <body id="error500">
 <div id="sb_wrap">
-<div class="routersummary" id="sidebar">
+<div class="sb" id="sidebar">
 <a href="/" title="<%=intl._t("Router Console")%>">
 <img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/i2plogo.png" alt="<%=intl._t("I2P Router Console").replace("I2P", "I2P+")%>" border="0"></a>
 <hr>
