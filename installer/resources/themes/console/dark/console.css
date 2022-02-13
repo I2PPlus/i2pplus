@@ -291,7 +291,7 @@ div.news hr {margin: 8px 0 5px}
 #newspage {margin: 18px 5px}
 
 /* top navigation */
-.confignav {margin: -1px -11px -1px; padding: 7px 7px 8px; font-weight: 700; line-height: 1.36; text-align: center; box-shadow: var(--bevel); background: linear-gradient(180deg, rgba(0,32,0,.1), rgba(0,16,0,.1) 50%, rgba(0,16,0,.1) 50%, rgba(0,0,0,.1)), var(--h1); background-size: 100%, 2px, 100%, 256px; background-blend-mode: normal, normal, exclusion, normal}
+.confignav {margin: -1px -11px -1px; padding: 7px 7px 8px; font-weight: 700; line-height: 1.36; text-align: center; box-shadow: var(--bevel); background: linear-gradient(180deg, rgba(0,32,0,.1), rgba(0,16,0,.1) 50%, rgba(0,16,0,.1) 50%, rgba(0,0,0,.1)), var(--h1), #030; background-size: 2px, 100% 4px, 100%, 256px; background-blend-mode: normal, normal, exclusion, exclusion;}
 #debug .confignav {margin-bottom: -4px; z-index: 999}
 #netdb .confignav {margin-bottom: 11px}
 .tab, .tab2 {margin: 0 -3px -1px -3px; padding: 1px 0 2px; min-width: 60px; display: inline-block; position: relative; box-sizing: border-box; background: #000}
@@ -825,6 +825,8 @@ form[action="events"] > .formaction {margin-bottom: -11px; margin-right: -21px; 
 #tunnels .tab, #tunnels .tab2 {min-width: 140px}
 #tunnels table {position: relative; z-index: 1}
 #tunnels th {font-size: 90%}
+#tunnels td:first-child, #tunnels #tunnelPeerCount td:first-child {border-left: var(--border)}
+#tunnels td:last-child, #tunnels #tunnelPeerCount td:last-child {border-right: var(--border)}
 #tunnels td > * {vertical-align: middle; line-height: 1.2}
 #tunnels .cells {padding-top: 6px; padding-bottom: 6px}
 #tunnels h3.client {padding-left: 35px; background: var(--client) no-repeat 9px center, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade); background-size: 18px, 100%, 2px, 100%}
@@ -1966,7 +1968,7 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 #jardump th {border-right: none; border-left: none}
 #jardump th, #jardump td {vertical-align: middle; text-align: center}
 #jardump th:first-child, #jardump td:first-child {text-align: left}
-#jardump td {border-right: 1px inset #131; padding: 2px 5px 3px; color: #bb7}
+#jardump td {border-right: var(--border_softer); padding: 2px 5px 3px; color: #bb7}
 #jardump td:first-child {padding-left: 22px; padding-right: 0; color: #eea; background: var(--package) no-repeat 6px center, linear-gradient(180deg,#001400, #000600); background-size: 14px, 100%; background-blend-mode: luminosity, normal}
 #jardump tr:hover td:first-child {padding-left: 18px; background: #001800 var(--package) no-repeat 6px center; background-size: 14px; background-blend-mode: normal}
 #jardump td:first-child b {margin-right: 4px; display: inline-block; padding: 4px; border-radius: 2px}
