@@ -6,6 +6,6 @@
   display: table-row;
 }
 
-#snarkTorrents tfoot tr:first-child th {
+#torrents tfoot tr:first-child th {
   border-top: var(--border_filtered) !important;
 }
