@@ -382,8 +382,8 @@ tr:hover .percentBarText {opacity: 1}
 .peerinfo .torrentDownloaded {text-align: center}
 .peerclient {margin: 3px 0; padding: 1px; border-radius: 1px; background: #000; box-shadow: 0 0 0 1px #020}
 .peerclient, .peerinfo tt, .clientid {display: inline-block; vertical-align: middle; line-height: 1.2}
-.peerinfo tt {margin: 0; padding: 2px 2px 2px 5px; font-size: 90%; color: #bb0; border-radius: 4px 0 0 4px; background: none}
-.clientid {margin-left: -8px; padding: 2px 4px; width: 54px; display: inline-block; overflow: hidden; white-space: nowrap; vertical-align: middle; text-overflow: ellipsis; font-size: 90%; text-align: center; background: var(--badge)}
+.peerinfo tt {margin: 0; padding: 2px 9px 2px 5px; font-size: 85%; color: #bb0; border-radius: 4px 0 0 4px; background: none}
+.clientid {margin-left: -8px; padding: 2px 4px; width: 57px; display: inline-block; overflow: hidden; white-space: nowrap; vertical-align: middle; text-overflow: ellipsis; font-size: 85%; text-align: center; background: var(--badge)}
 .clientVersion {display: none}
 .peerinfo td > * {vertical-align: middle}
 .peerdata {padding-left: 0}
@@ -930,7 +930,7 @@ td.peerCount b:hover a[href*="?p="]:hover::after, td.peerCount b:hover a[href*="
 
 @media screen and (min-width: 1500px) {
 body, #torrents td, .snarkAddInfo, th, td,code, textarea, input, input[type=submit], input[type=reset], input[type=text], select, button, a {font-size: 10pt}
-#screenlog li, #screenlog li a, #torrents tt, #ourDest tt, tt, tt, #torrents tt, #screenlog, #screenlog a {font-size: 9pt}
+#screenlog li, #screenlog li a, #ourDest tt, #screenlog, #screenlog a {font-size: 9pt}
 #addSection, #createSection, .configsection {margin-left: -11px; margin-right: -11px}
 #screenlog {margin: -11px -11px 0}
 #closelog, #expand, #shrink {margin-top: -4px}
