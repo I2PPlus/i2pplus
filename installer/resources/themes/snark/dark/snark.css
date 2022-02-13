@@ -269,8 +269,6 @@ tr:not(:hover) .torrentName a, tr:not(:hover) .snarkFileName a {-webkit-text-str
 .torrentETA:not(:empty), .torrentUploaded:not(:empty), .RateDown:not(:empty), .RateUp:not(:empty) {width: 5%; min-width: 40px; white-space: nowrap; font-weight: 700}
 .torrentETA:not(:empty) {padding-right: 6px}
 .graphicStatus {text-align: center}
-
-/* peer status */
 .RateUp:not(:empty), .RateDown:not(:empty), .torrentDownloaded:not(:empty), .torrentUploaded:not(:empty) {padding: 0 3px; width: 1%; white-space: nowrap; line-height: .9; color: #bb7}
 .RateUp, .RateDown, .torrentUploaded {text-align: center}
 .torrentUploaded .left {min-width: 12px}
@@ -279,12 +277,11 @@ tr:not(:hover) .torrentName a, tr:not(:hover) .snarkFileName a {-webkit-text-str
 .RateDown .choked .right, .RateDown .choked .left, .RateDown .idle .right, .RateDown .idle .left {text-align: center}
 .choked, .unchoked {font-weight: 700; font-style: italic; text-align: center}
 .choked {color: #f00000}
-.choked, .unchoked.idle {font-size: 0; width: 80px; display: inline-block; vertical-align: middle; text-align: center; line-height: 0}
+.choked, .unchoked.idle {font-size: 0; width: 74px; display: inline-block; vertical-align: middle; text-align: center; line-height: 0}
 .choked .right, .choked .left, .idle .right, .idle .left {display: none}
 .unchoked {color: #00f000}
 .choked::after {background: #900}
 .idle::after, .choked::after {width: 8px; height: 8px; display: inline-block; border-radius: 50%; background: #373; content: ""}
-
 tfoot .RateDown:not(:empty)::before, tfoot .torrentDownloaded:not(:empty)::before, tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {margin-top: -3px; margin-right: -1px; display: inline-block; vertical-align: middle; line-height: 0; font-size: 80%; font-style: normal; text-shadow: 0 0 1px #010}
 tfoot .RateDown:not(:empty)::before, tfoot .torrentDownloaded:not(:empty)::before {content: "\27A4"; transform: rotate(90deg) scaleX(0.6)}
 tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {content: "\27A4"; transform: rotate(-90deg) scaleX(0.6)}
@@ -293,9 +290,9 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {co
 .torrentUploaded .left {min-width: 12px}
 .snarkFileName {padding: 4px 5px; word-break: break-all; text-align: left}
 .torrentETA {padding-right: 2px; font-style: italic; color: #dd7}
-.downloading.active td#torrents .torrentAction {background: linear-gradient(to left,#3c3,#3c3 2px, transparent 2px)}
+.downloading.active td#torrents .torrentAction {background: linear-gradient(to left,#3c3,#3c3 2px,transparent 2px)}
 .downloading.active:hover td#torrents .torrentAction {background: linear-gradient(to left,#3c3,#3c3 2px,#030 2px)}
-.seeding.active td#torrents .torrentAction {background: linear-gradient(to left,#f64384,#f64384 2px, transparent 2px)}
+.seeding.active td#torrents .torrentAction {background: linear-gradient(to left,#f64384,#f64384 2px,transparent 2px)}
 .seeding.active:hover td#torrents .torrentAction {background: linear-gradient(to left,#f64384,#f64384 2px,#030 2px)}
 td.graphicStatus img {margin-top: -3px; margin-bottom: -3px; width: auto; height: 21px; display: inline-block; vertical-align: middle}
 .tooltipped {display: inline-block; position: relative; z-index: 99; content: ""}
@@ -393,13 +390,13 @@ tr:hover .percentBarText {opacity: 1}
 #ourDest tt {margin: 0 1px 0 4px; padding: 2px 4px 2px 6px; display: inline-block; line-height: 1.2; color: #bb0; text-shadow: 0 1px 1px #000; border-radius: 0 1px 1px 0; background: #010}
 
 /* debug */
-#debugMode {margin-top: -2px; padding: 8px; display: inline-block; vertical-align: middle; line-height: 0; box-sizing: border-box; font-size: 0; background: var(--debug) no-repeat center center; opacity: 0}
-#debugMode:hover {opacity: 1}
 .debuginfo td:first-child, .debuginfo:hover td:first-child {background: var(--debuginfo) no-repeat center center / 14px}
 .debuginfo td:nth-child(2) {padding-left: 0}
 .debuginfo b {text-transform: capitalize}
-#dhtDebug th {text-align: center}
 hr.debug {margin: 1px 0 -5px; width: 100%; background: linear-gradient(90deg,#000700,#131,#000700); display: none}
+#debugMode {margin-top: -2px; padding: 8px; display: inline-block; vertical-align: middle; line-height: 0; box-sizing: border-box; font-size: 0; background: var(--debug) no-repeat center center; opacity: 0}
+#debugMode:hover {opacity: 1}
+#dhtDebug th {text-align: center}
 
 /* priority */
 .priority {width: 1%; max-width: 160px; vertical-align: middle; font-size: 8pt}
