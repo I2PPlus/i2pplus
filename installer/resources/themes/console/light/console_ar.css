@@ -747,27 +747,27 @@ table.search {
   margin-right: 0 !important;
 }
 
-h4.app {
+#applinks {
   margin-top: 15px;
   background: url(images/favicon.svg) no-repeat 10px center / 16px,
     linear-gradient(180deg,#fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
     linear-gradient(to left, #fff 5%, rgba(231, 231, 255, .8) 15%) right center !important;
 }
 
-h4.app2 {
+#sitelinks {
   clear: left;
   margin-top: 10px !important;
   background: var(--planet) no-repeat 10px center / 16px, linear-gradient(180deg,#fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
     linear-gradient(to left, #fff 5%, rgba(231, 231, 255, .8) 15%) right center !important;
 }
 
-h4.app, h4.app2, #news h3, .news h3 {
+#applinks, #sitelinks, #news h3, .news h3 {
   background-position: right 7px center, right center, right center !important;
   padding: 6px 30px 6px 10px;
   direction: ltr !important;
 }
 
-h4.app a, h4.app2 a {
+#applinks a, #sitelinks a {
   float: left !important;
 }
 
@@ -775,7 +775,7 @@ h4.app a, h4.app2 a {
   font-size: 11pt;
 }
 
-div.app:hover .appimg .extlink::after {
+.applink:hover .appicon .extlink::after {
   left: -1px !important;
   right: auto;
   border-radius: 2px 0 2px 0;

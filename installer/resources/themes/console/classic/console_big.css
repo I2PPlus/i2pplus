@@ -28,7 +28,7 @@ input[type=submit], input[type=reset], input[type="file"], button, button.search
   letter-spacing: .05em;
 }
 
-input[type=submit], input[type=reset], input[type="file"], button, button.search, input.cancel, div.app, .themelabel, .ui_lang, .tab a, label, a, li {
+input[type=submit], input[type=reset], input[type="file"], button, button.search, input.cancel, .applink, .themelabel, .ui_lang, .tab a, label, a, li {
   letter-spacing: .05em !important;
 }
 
@@ -460,7 +460,7 @@ a:hover code {
 }
 
 @media screen and (max-width: 1500px) {
-div.applabel {
+.applinklabel {
   height: 22px !important;
   padding: 2px;
 }

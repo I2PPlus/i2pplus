@@ -71,8 +71,8 @@
 </table>
 </form>
 </div>
-<div class="ag2">
-<h4 class="app"><%=intl._t("Applications and Configuration")%>
+<div class="linkcontainer">
+<h4 id="applinks"><%=intl._t("Applications and Configuration")%>
 <span class="headerlinks">
 <a href="/confighome#configapps" class="customizelinks" style="float: right" title="<%=intl._t("Customize links")%>"><%=intl._t("Customize links")%></a>
 <%
@@ -93,8 +93,8 @@
 </h4>
 <jsp:getProperty name="homehelper" property="services" /><br>
 </div>
-<div class="ag2">
-<h4 class="app2"><%=intl._t("Sites of Interest")%>
+<div class="linkcontainer">
+<h4 id="sitelinks"><%=intl._t("Sites of Interest")%>
 <span class="headerlinks">
 <a href="/confighome#configsites" class="customizelinks" style="float: right" title="<%=intl._t("Customize links")%>"><%=intl._t("Customize links")%></a>
 </span>

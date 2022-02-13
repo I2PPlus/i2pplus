@@ -19,7 +19,7 @@ h1, .main, .sorry, .news {margin-left: 211px}
 .clearer {height: 0; line-height: 0; clear: left}
 .nowrap {display: inline-block; white-space: nowrap}
 .widescroll {overflow: auto}
-#sb_logo img, #sidebar h3, #sidebar h3 a, #sb_internals, #sb_advanced, #sb_services, .confignav, *::before, *::after, div.app, .themechoice, .langselect, .newsAuthor, #newsDisplay, #netdbcountrylist img, .viewfullentry, .sybil_routerinfo th img, .graphspanel, h1 {user-select: none}
+#sb_logo img, #sidebar h3, #sidebar h3 a, #sb_internals, #sb_advanced, #sb_services, .confignav, *::before, *::after, .applink, .themechoice, .langselect, .newsAuthor, #newsDisplay, #netdbcountrylist img, .viewfullentry, .sybil_routerinfo th img, .graphspanel, h1 {user-select: none}
 .hide, .hideme, p:empty, .footnote, .footnote hr, .topness, .viewedit br {display: none}
 hr {margin: 3px 0; height: 2px; border: none; background: var(--border_color)}
 i {padding-right: 1px}
@@ -826,37 +826,37 @@ h4#updateplugins {margin-top: -13px}
 /* home */
 #home {padding-bottom: 1px}
 #home .welcome h2 {margin: -9px -10px -8px}
-h4.app, h4.app2 {margin: 0 0 7px; padding: 7px 10px 6px; word-spacing: .1em; letter-spacing: .08em; text-transform: uppercase; font-size: 11pt; border: var(--border); border-left: none; border-right: none; box-shadow: var(--highlight)}
-h4.app, h4.app2, #sitemap h3 {padding-left: 32px; background: url(images/favicon.svg) no-repeat 8px center / 18px, var(--bg)}
-h4.app {margin-top: -5px}
-h4.app2 {margin-top: 5px; clear: left; background: var(--planet) no-repeat 8px center / 18px, var(--bg)}
-h4.app img, h4.app2 img {display: none}
-h4.app a, h4.app2 a {font-size: 0}
-h4.app a::after, h4.app2 a::after {margin: 1px -2px 0 0; width: 16px; height: 16px; display: inline-block; vertical-align: middle; background: var(--settings) no-repeat center center / 16px; content: ""; opacity: .8}
-h4.app a:hover::after, h4.app2 a:hover::after, h4.app a:focus::after, h4.app2 a:focus::after {opacity: 1}
+#applinks, #sitelinks {margin: 0 0 7px; padding: 7px 10px 6px; word-spacing: .1em; letter-spacing: .08em; text-transform: uppercase; font-size: 11pt; border: var(--border); border-left: none; border-right: none; box-shadow: var(--highlight)}
+#applinks, #sitelinks, #sitemap h3 {padding-left: 32px; background: url(images/favicon.svg) no-repeat 8px center / 18px, var(--bg)}
+#applinks {margin-top: -5px}
+#sitelinks {margin-top: 5px; clear: left; background: var(--planet) no-repeat 8px center / 18px, var(--bg)}
+#applinks img, #sitelinks img {display: none}
+#applinks a, #sitelinks a {font-size: 0}
+#applinks a::after, #sitelinks a::after {margin: 1px -2px 0 0; width: 16px; height: 16px; display: inline-block; vertical-align: middle; background: var(--settings) no-repeat center center / 16px; content: ""; opacity: .8}
+#applinks a:hover::after, #sitelinks a:hover::after, #applinks a:focus::after, #sitelinks a:focus::after {opacity: 1}
 #chooselang::after, #configbandwidth::after {content: none}
 #chooselang img, #configbandwidth img {margin: 1px -5px 0 20px; display: inline-block; opacity: .8}
-h4.app a:hover img, h4.app2 a:hover img, h4.app a:hover::after, h4.app2 a:hover::after {margin-top: -1px; opacity: 1; transform: scale(1.3)}
-div.appgroup {margin: 0; padding: 0 8px; width: auto}
-div.ag2 {margin: 0 -15px -9px}
-div.app {margin: 3px; padding: 0; width: 140px; position: relative; float: left; text-align: center; border: none; border: var(--border); background: var(--bg)}
-div.app:hover {border: 1px solid var(--hover); cursor: pointer}
-div.app img, .sitemaplink img {filter: grayscale(.6)}
-div.app img {padding: 10px 46px 9px; width: auto; height: 32px; max-height: 32px; max-width: 32px}
-div.app:hover img, .sitemaplink:hover img {filter: none}
+#applinks a:hover img, #sitelinks a:hover img, #applinks a:hover::after, #sitelinks a:hover::after {margin-top: -1px; opacity: 1; transform: scale(1.3)}
+.linkgroup {margin: 0; padding: 0 8px; width: auto}
+.linkcontainer {margin: 0 -15px -9px}
+.applink {margin: 3px; padding: 0; width: 140px; position: relative; float: left; text-align: center; border: none; border: var(--border); background: var(--bg)}
+.applink:hover {border: 1px solid var(--hover); cursor: pointer}
+.applink img, .sitemaplink img {filter: grayscale(.6)}
+.applink img {padding: 10px 46px 9px; width: auto; height: 32px; max-height: 32px; max-width: 32px}
+.applink:hover img, .sitemaplink:hover img {filter: none}
 #home .app:hover a, #home .app:hover .applabel a {color: var(--hover)}
-div.app.js:hover::before {padding: 1px 3px 5px; display: inline-block; position: absolute; top: -1px; left: -1px; line-height: 1; border: 1px solid var(--hover); content: "*js"}
-div.app:active img {transform: scale(.9)}
-div.app:last-child {margin-bottom: 10px}
-div.app:hover a, .applabel a:focus {color: var(--hover); outline: none}
-div.app:hover img, .appimg a:focus {filter: drop-shadow(0 0 1px rgba(255, 102, 0, .6)) saturate(150%); outline: none}
-div.app:hover .applabel {box-shadow: none}
-.app table {margin: auto; width: auto; border: 0; background: none}
-.app tr {margin: 0; border: 0; background: none}
-.app td {margin: 0; padding: 0; vertical-align: middle; border: 0; background: none}
-.appimg {min-height: 42px}
-.appimg a {width: 100%; display: inline-block}
-div.app:hover .appimg .extlink::after {width: 21px; height: 18px; display: inline-block; position: absolute; top: -1px; right: -1px; border: 1px solid #f50; background: url(images/newtab.png) no-repeat 4.5px center / 12.5px 10px; opacity: .75; content: ""}
+.applink.js:hover::before {padding: 1px 3px 5px; display: inline-block; position: absolute; top: -1px; left: -1px; line-height: 1; border: 1px solid var(--hover); content: "*js"}
+.applink:active img {transform: scale(.9)}
+.applink:last-child {margin-bottom: 10px}
+.applink:hover a, .applabel a:focus {color: var(--hover); outline: none}
+.applink:hover img, .appicon a:focus {filter: drop-shadow(0 0 1px rgba(255, 102, 0, .6)) saturate(150%); outline: none}
+.applink:hover .applabel {box-shadow: none}
+.applink table {margin: auto; width: auto; border: 0; background: none}
+.applink tr {margin: 0; border: 0; background: none}
+.applink td {margin: 0; padding: 0; vertical-align: middle; border: 0; background: none}
+.appicon {min-height: 42px}
+.appicon a {width: 100%; display: inline-block}
+.applink:hover .appicon .extlink::after {width: 21px; height: 18px; display: inline-block; position: absolute; top: -1px; right: -1px; border: 1px solid #f50; background: url(images/newtab.png) no-repeat 4.5px center / 12.5px 10px; opacity: .75; content: ""}
 .applabel {margin: 0; padding: 3px 2px; width: 136px; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center; text-transform: lowercase; font-size: 8pt; border-top: var(--border)}
 .applabel:hover {box-shadow: none}
 .applabel a {margin: 0; padding: 1px; display: inline-block; width: calc(100% - 2px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
@@ -1992,9 +1992,9 @@ iframe {height: 0}
 #peers .ipv6, #peers .rto, #peers .mtu, #peers .sst, #peers .cwnd, #peers .rtt {display: none} .cells.peer, .cells.direction {min-width: 0} .cells.idle, .cells.inout {min-width: 90px}}
 
 @media screen and (max-width: 1200px) {
-div.app, .sitemapLink, .sitemapLabel {width: 120px}
+.applink, .sitemapLink, .sitemapLabel {width: 120px}
 .applabel {width: 116px}
-.appimg img, .sitemapLink img {max-height: 24px; max-width: 24px; display: inline-block}
+.appicon img, .sitemapLink img {max-height: 24px; max-width: 24px; display: inline-block}
 .eventspanel form {padding: 10px; background: var(--bg)}
 .eventspanel select {margin-right: 8px}
 h2 {font-size: 12pt}
@@ -2122,15 +2122,15 @@ a.graphstat {margin-right: 2px; font-size: 90%}
 @media screen and (min-width: 1500px) {
 body, .main, .main td, .news p, #news p, .tab, .tab2, .main li b, .joblog li, .themelabel, .ui_lang, .statusnotes, #sidebar button.download, #peerdefs, #profile_defs, #thresholds, #configinfo, .infohelp, .infowarn, button, input, select, textarea, .netdbentry th, .configtable th, .statlist a[name], .statlist b, .statlist li b, .statlist a[name]:hover, div.messages, th, label, input, input[type="submit"], input[type="reset"], button {font-size: 10pt}
 body {overflow-x: hidden}
-.applabel a {padding-top: 3px}
-.applabel a, #updateAvailable, code, tt, pre, #logs li, #routerlogs li, #servicelogs li, tt, tt a, code, .bucket, .tabletextarea textarea {font-size: 9.5pt}
-.applabel {padding: 2px; width: 156px}
 button.control {padding: 14px}
 .cells tt, #profilelist tt {padding-right: 3px; margin-left: -1px; margin-right: 0}
 .confignav {padding: 0 5px}
-div.app img {padding: 10px 60px 9px}
-div.app {width: 160px}
+.applink {width: 160px}
+.applink img {padding: 10px 60px 9px}
 div.news {padding-bottom: 5px !important}
+.applabel a {padding-top: 3px}
+.applabel a, #updateAvailable, code, tt, pre, #logs li, #routerlogs li, #servicelogs li, tt, tt a, code, .bucket, .tabletextarea textarea {font-size: 9.5pt}
+.applabel {padding: 2px; width: 156px}
 .flag img, #peers .flag img, #profiles .flag img, #tunnels .flag img {margin: 1px -1px; width: 22px; height: 16px}
 .footnote {font-size: 8pt}
 h1[class], h1 {padding: 18px 20px 18px 60px; font-size: 19pt; background-size: 40px; background-position: 11px center}
@@ -2167,7 +2167,6 @@ h4#updateplugins {margin-top: -16px; padding: 5px 10px; font-size: 10pt}
 #peers .flag img {margin: 2px -1px -2px 2px}
 #pluginconfig {margin: -15px 0 0}
 #profiles .flag img, #peers .flag img {margin: 0 -2px 1px 2px !important}
-#sb_bandwidthgraph {width: 223px}
 #sb_bandwidthgraph {width: 243px; min-width: 243px}
 #sb_graphcontainer {background-size: 244px 36px}
 #sb_internals a, #sb_services a, #sb_advanced a, #sb_help a {max-width: 232px}
@@ -2176,14 +2175,14 @@ h4#updateplugins {margin-top: -16px; padding: 5px 10px; font-size: 10pt}
 #sb_logo img {margin-top: -2px; margin-left: -2px; width: 240px; transform: none}
 #sb_memoryBar .percentBarText {padding: 1px 0 2px}
 #shutdown.formaction, #restart.formaction, #systray.formaction, #runonstart.formaction, #dumpthreads.formaction, #browserstart.formaction,  #updateplugins.formaction {margin-top: -15px}
-#sidebar button[type=submit], #sidebar .reload[value="restart"] {margin: 2px 4px 1px; min-width: 110px}
-#sidebar h3 a, #netdboverview th {font-size: 11pt}
+#sidebar {width: 245px}
 #sidebar h3 {padding: 4px 0 3px}
+#sidebar h3 a, #netdboverview th {font-size: 11pt}
+#sidebar button[type=submit], #sidebar .reload[value="restart"] {margin: 2px 4px 1px; min-width: 110px}
 #sidebar .percentBarOuter {margin-left: 2px; width: 239px}
 #sidebar .reload, #sidebar .stop {min-width: 102px}
 #sidebar #sb_newsheadings td:last-child, #sidebar #sb_newsheadings tr:hover td:last-child {padding-bottom: 5px; background-position: 4px 6px}
 #sidebar table[id^="sb_"], #sb_newsheadings table {width: 245px; min-width: 245px}
-#sidebar {width: 245px}
 #stats.main form {margin-top: -14px}
 #sybilTask th {font-size: 12pt}
 #systray, #servicedebug, #browseronstart {margin-bottom: -15px}
@@ -2191,7 +2190,6 @@ h4#updateplugins {margin-top: -16px; padding: 5px 10px; font-size: 10pt}
 #tunnels td:last-child .routerid {margin-left: -10px}
 #tunnels td:last-child .tunnel_peer:not(.tunnel_local) + .tunnel_cap {margin-left: 1px}
 #webappconfiguration {margin-bottom: -14px}
-#webappconfiguration {margin-bottom: -33px}
 #wizardpage #sidebar div[style="height: 36px;"] {height: 45px !important}
 }
 

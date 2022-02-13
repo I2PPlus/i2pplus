@@ -18,9 +18,9 @@ h1, h2, h3, h4 {direction: rtl; text-align: right}
 #debug h3.debug_inboundsessions, #debug h3.debug_outboundsessions {background-position: right 5px center; padding-right: 26px}
 h3, h3.welcome {border-width: 1px 5px 1px 1px}
 #news h3 {border-width: 1px 1px 1px 5px}
-h4.app, h4.app2 {padding-right: 32px; padding-left: 8px; text-align: right; background-position: right 8px center, center center, center center}
-h4.app a, h4.app2 a {float: left}
-div.app:hover .appimg .extlink::after {left: -1px; right: auto; border-radius: 2px 0 2px 0}
+#applinks, #sitelinks {padding-right: 32px; padding-left: 8px; text-align: right; background-position: right 8px center, center center, center center}
+#applinks a, #sitelinks a {float: left}
+.applink:hover .appicon .extlink::after {left: -1px; right: auto; border-radius: 2px 0 2px 0}
 button.search {margin-right: 30px}
 input.search, input.search:focus {padding: 4px 24px 4px 3px; background-position: right 4px center}
 .routersummaryouter {margin-right: 0; right: -17px; float: right;}

@@ -9,8 +9,8 @@ h3 {font-size: 14pt; padding: 7px 10px}
 h3#iptransport a, h3#advancedconfig a, #reseedsetup a {font-size: 0}
 h3#webappconfiguration, h3#i2pclientconfig {margin-bottom: -15px}
 h3#webappconfiguration, h3#i2pclientconfig {margin-bottom: -16px}
-h4, h4.app, h4.app2, #sitemap h3 {font-size: 14pt}
-h4.app::first-letter, h4.app2::first-letter, #sitemap h3::first-letter {font-size: 14pt}
+h4, #applinks, #sitelinks, #sitemap h3 {font-size: 14pt}
+#applinks::first-letter, #sitelinks::first-letter, #sitemap h3::first-letter {font-size: 14pt}
 .confignav {font-size: 13pt}
 .sorry {font-size: 12pt}
 .cells tt, .cells tt a {font-size: 9pt}

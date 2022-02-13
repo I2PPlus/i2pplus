@@ -64,11 +64,11 @@ button.search {
   line-height: 140% !important;
 }
 
-.appimg {
+.appicon {
   height: 50px !important;
 }
 
-.app img {
+.applink img {
   padding: 12px 60px 40px !important;
 }
 
@@ -76,7 +76,7 @@ button.search {
   padding: 4px 2px;
 }
 
-.applabel a, .applabel a:hover, .themelabel, .app td {
+.applabel a, .applabel a:hover, .themelabel, .applink td {
   font-size: 11pt !important;
 }
 
@@ -205,7 +205,7 @@ h1 {
   font-weight: 400;
 }
 
-h2, h2 a[name], h3, h4.app, h4.app2 {
+h2, h2 a[name], h3, #applinks, #sitelinks {
   font-size: 14pt !important;
   font-weight: 400 !important;
   letter-spacing: .1em !important;
@@ -351,7 +351,7 @@ span#newtab {
   background-position: 2px center;
 }
 
-div.app a:link, div.app a:hover, div.app a:active {
+.applink a:link, .applink a:hover, .applink a:active {
   font-size: 11pt !important;
 }
 
@@ -400,7 +400,7 @@ input[type=submit]:focus, input[type="reset"]:focus, input.reload[value="Force g
   margin-bottom: -3px !important;
 }
 
-div.app {
+.applink {
   min-width: 164px;
   margin: 3px 4px 5px;
 }
