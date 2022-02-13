@@ -2553,6 +2553,7 @@ h3#restartrouter, p#tunnelconfig {margin-bottom: -15px}
 #udpconnections .cells {border-left: none; border-right: none}
 #updateHelper .nowrap::after, #updateProxyHostPort .nowrap::after, #i2pupdates .nowrap::after {min-height: 60px}
 #xhr > hr + #sb_shortgeneral {margin-top: -7px}
+#webappconfiguration a, #config_plugins .h3navlinks a {margin-top: -8px}
 }
 
 @media screen and (min-width: 1634px) {
