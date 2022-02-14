@@ -635,46 +635,6 @@ p#debugmode {padding: 20px 15px 20px 50px; background: var(--bug) no-repeat 15px
 p#enablefullstats, p#gatherstats {padding: 20px 15px 20px 50px; background: var(--stats) no-repeat 15px center / 28px, var(--div_infohelp)}
 #plugininstall .infohelp {padding: 20px 15px 20px 50px; background: var(--plugin) no-repeat 15px center / 28px, var(--div_infohelp)}
 p#pluginconfigtext {margin-top: 14px; padding: 20px 15px 20px 50px; box-shadow: none; background: var(--pluginconfig) no-repeat 15px center / 28px, var(--div_infohelp)}
-p#upnpstatus, p#keyringhelp, .widescroll + p.infohelp, #profiles ul#banlist, #config_reseed .confignav + p.infohelp
-.statlist b a:hover {color: var(--ink_light)}
-
-/* stats page */
-#stats {padding-bottom: 15px}
-#stats h3 {border-width: 1px; border-radius: 0; filter: none; margin-bottom: 4px; margin-top: -1px}
-p#gatherstats + form, ul.statlist {border: 1px solid var(--border_inner); padding: 10px; background: var(--p)}
-ul.statlist {border: 1px solid var(--border_inner); padding: 0 10px 10px; display: inline-block; width: calc(100% - 22px); background: #fafaff; box-shadow: var(--highlight)}
-#stats .statlist:last-of-type {margin-bottom: 0}
-.statlist li {line-height: 1.5; padding-top: 6px; padding-bottom: 0; margin-right: 5px}
-.statlist li {list-style: none}
-.statlist li::before, .statlist li a[href^="graph"]::before {margin-top: -4px; margin-right: 10px; margin-left: -17px; height: 4px; width: 4px; display: inline-block; vertical-align: middle; opacity: .8; content: ""; transform: rotate(45deg)}
-.statlist li::before {border: 1px solid #335; background: #779}
-.statlist li br, .statlist li li br {display: inline-block}
-.statlist li li br, .statlist .nowrap + br {display: none}
-.statlist li li:last-child + br {display: block}
-.statsViewGraphs {display: inline-block; width: 100%}
-ul.statlist {padding-bottom: 0}
-.statlist li b {font-size: 110%}
-.statlist li li {font-size: 95%}
-.statlist li i {margin-left: 6px; opacity: .8}
-.statlist .statsName i {font-weight: 700; color: #004f28}
-.statlist .statsName li i {color: inherit; font-weight: 400}
-.statlist .statsName {margin: 0 6px 10px 0; padding: 10px 10px 0; width: calc(100% - 22px); min-width: 540px; display: inline-block; border: 1px solid #bbd; box-shadow: var(--highlight), inset 0 0 2px 1px #ddf, 0 0 1px #ddf; background: rgba(248,248,255,.6)}
-.statlist .statsName::before {height: 6px; width: 6px; box-shadow: var(--highlight); background: #446; opacity: 1}
-.statlist .statsName::before {content: none}
-.statlist li li:last-child::before {background: #335}
-.statlist .statsName b {width: 100%}
-.statlist .statsName b, .statlist .statsName i {display: inline-block}
-.statlist .statsName > b:first-child {padding-left: 19px; background: var(--stats) no-repeat left top / 15px}
-.statlist {padding-top: 10px; text-align: center; columns: auto 540px; column-gap: 10px}
-.statlist .bullet {display: none}
-.statsViewGraphs {margin: 4px 0 5px; display: inline-block; font-size: 90%}
-.statsLongName {display: inline-block}
-.statsLongName::first-letter {text-transform: uppercase}
-.nowrap {display: inline-block; white-space: nowrap}
-.statlist > li::after {margin-top: -20px; display: block; width: 100%; height: 1px; border-top: 1px dotted #ddf; content: ""}
-.noevents::after {content: ""; margin-top: 11px; display: block}
-.statlist > li:last-child::after {display: none}
-.noevents {margin: 0 0 5px 40px; font-style: italic}
 
 /* h1 */
 h1 {margin: 0 0 10px 214px; padding: 16px 15px 15px 52px; min-width: 546px; z-index: 999; line-height: .9; letter-spacing: .12em; white-space: normal; text-transform: uppercase; font-size: 18pt; text-align: left; color: #54586F; text-shadow: 0 0 2px #fff; border: 1px solid var(--border); border-radius: 2px 2px 0 0; box-shadow: var(--bevel); background: var(--h1_network) no-repeat 10px center / 38px, var(--h1) #fafaff}
@@ -1007,7 +967,6 @@ h3#udpcon {margin-top: 7px}
 #profiles #banlist {margin: -3px 0 2px -5px; padding: 0; border: none; background: none}
 #banlist li {margin: 3px 0 2px 5px; padding: 3px 3px 3px 5px; min-width: calc(100% - 13px); min-height: 34px; display: inline-block; position: relative; line-height: 1.2; list-style: none; font-size: 95%; box-shadow: 0 0 0 1px #9898b3, var(--highlight), inset 0 0 8px 3px rgba(232,232,255,.6); background: linear-gradient(180deg,#fff,#f8f8ff); -webkit-break-inside: avoid; break-inside: avoid; page-break-inside: avoid}
 #config_peers #banlist li {margin: 0 -2px 5px 5px}
-#banlist li:first-child {margin-top: 0}
 #banlist li:hover {background: #ffe}
 #banlist li a[href^="configpeer"] {padding: 2px 2px 1px 0; position: absolute; top: 0; right: 0; line-height: 0; border-left: 1px solid var(--border_inner); border-bottom: 1px solid var(--border_inner); border-radius: 0 0 0 2px; box-shadow: var(--highlight), inset 0 0 1px 1px #ffe; background: #fff; filter: none}
 #banlist li a[href^="configpeer"]:hover, #banlist li a[href^="configpeer"]:focus {box-shadow: inset 0 0 0 1px #f60}
@@ -1467,25 +1426,51 @@ a[href^="configpeer?peer"]:hover::after {background: var(--edit_hover) no-repeat
 th[aria-sort] {font-style: italic}
 #peers img[src$="bound.svg"], #profiles img[src$="bound.svg"], #tunnels img[src$="bound.svg"] {opacity: 0}
 
-/* stats */
-#stats label {display: inline-block}
-#stats h3 {border-width: 1px; margin-bottom: 11px}
-#stats .toggle_input {position: absolute; opacity: 0; width: 0; height: 0; top: -99999px; left: -99999px}
-#stats input:not(:checked) + h3, #stats input:not(:checked) + h3 + ul.statlist, #stats input:not(:checked) + h3 + ul.statlist + br {display: none}
-#stats input:checked + h3 + ul.statlist {display: block; margin-bottom: -13px}
+/* stats page */
+.graphstat {margin-right: 4px; padding: 1px 8px 2px; line-height: 1}
+.noevents::after {content: ""; margin-top: 11px; display: block}
+.noevents {margin: 0 0 5px 40px; font-style: italic}
+.nowrap {display: inline-block; white-space: nowrap}
+p#gatherstats + form, ul.statlist {border: 1px solid var(--border_inner); padding: 10px; background: var(--p)}
+p#gatherstats {margin: 11px 0 12px}
+#stats .statlist {margin: -9px 0 -5px; padding: 0; width: 100%; display: block; text-align: center; columns: auto 540px; column-gap: 10px; border: none; box-shadow: none; background: none}
+.statlist {border: 1px solid var(--border_inner); padding: 0 10px 10px; display: inline-block; width: calc(100% - 22px); background: #fafaff; box-shadow: var(--highlight)}
+.statlist li {margin-right: 5px; padding-top: 6px; padding-bottom: 0; line-height: 1.5; list-style: none}
+.statlist .noevents {padding-top: 0; padding-bottom: 15px}
+.statlist li li {font-size: 95%}
+.statlist > li::after {margin-top: -5px; display: block; width: 100%; height: 1px; content: ""}
+.statlist li::before, .statlist li a[href^="graph"]::before {margin-top: -4px; margin-right: 10px; margin-left: -17px; height: 4px; width: 4px; display: inline-block; vertical-align: middle; opacity: .8; content: ""; transform: rotate(45deg)}
+.statlist li b {font-size: 110%}
+.statlist li br {display: none}
+.statlist li i {margin-left: 6px; opacity: .8}
+.statlist > li:last-child::after {display: none}
+.statlist li li:last-child + br {display: block}
+.statlist b a:hover {color: var(--ink_light)}
+.statlist .bullet {display: none}
+.statsLongName {margin-left: 15px; margin-bottom: -14px; padding-bottom: 5px; display: block; width: calc(100% - 27px); border-bottom: var(--border_soft)}
+.statlist .statsName {margin: 5px 6px 5px 0; padding: 10px 10px 0; width: calc(100% - 22px); min-width: 540px; display: inline-block; border: 1px solid #bbd; box-shadow: var(--highlight), inset 0 0 2px 1px #ddf, 0 0 1px #ddf; background: rgba(248,248,255,.6)}
+.statlist .statsName::before {content: none}
+.statlist .statsName::before {height: 6px; width: 6px; box-shadow: var(--highlight); background: #446; opacity: 1}
+.statlist .statsName > b:first-child {padding-left: 19px; background: var(--stats) no-repeat left top / 15px}
+.statlist .statsName b, .statlist .statsName i {display: inline-block}
+.statlist .statsName b {width: 100%}
+.statlist .statsName i {font-weight: 700; color: #004f28}
+.statlist .statsName li i {color: inherit; font-weight: 400}
 #stats form {display: none}
+#stats h3 {margin: -1px 0 14px; position: relative; z-index: 10; border-width: 1px; border-radius: 0}
+#stats input:not(:checked) + h3, #stats input:not(:checked) + h3 + ul.statlist, #stats input:not(:checked) + h3 + ul.statlist + br {display: none}
+#stats .joblog {margin-top: -4px; margin-bottom: -15px; overflow: hidden}
+#stats label {display: inline-block}
+#stats {padding-bottom: 15px}
 #stats .tab, #stats .tab2 {margin: 0 -1px -1px 0; padding: 4px 14px 6px}
 #stats .tab:not(.tab2) {color: var(--a)}
 #stats .tab2, #stats .tab2:hover {color: #fafaff; text-shadow: 0 1px 1px #113; box-shadow: inset 2px 2px 2px rgba(31, 43, 63, .7); background: linear-gradient(180deg,rgba(31, 43, 63, .7), rgba(31, 43, 63,.2) 50%, rgba(31, 43, 63, 0) 50%, rgba(31, 43, 63, .4) 50%, rgba(31, 43, 63, .5)), linear-gradient( 90deg, #6288cb, #7fadff, #6288cb)}
 #stats .tab2:hover {cursor: default}
 #stats .tab:not(.tab2):hover {color: #f60}
 #stats .tab:not(.tab2):active {color: #ffecdf; text-shadow: 0 1px 1px #5f2d0c; box-shadow: inset 3px 2px 2px #7f3000; background: #f60; transition: ease box-shadow .05s}
-p#gatherstats {margin: 11px 0 12px}
-#stats .joblog {margin-top: -4px; margin-bottom: -15px; overflow: hidden}
-#stats ul.statlist {margin: 0; padding: 0; width: 100%; border: none; box-shadow: none; background: none}
-.graphstat {margin-right: 4px; padding: 1px 8px 2px; line-height: 1}
+#stats .toggle_input {position: absolute; opacity: 0; width: 0; height: 0; top: -99999px; left: -99999px}
+.statsViewGraphs {margin: 4px 0 5px; width: 100%; display: inline-block; font-size: 90%}
 .statvalue {padding: 0 2px 0 0; color: var(--ink_light); font-weight: 700; font-style: italic}
-.statsLongName {margin-left: 15px; margin-bottom: -14px; padding-bottom: 5px; display: block; width: calc(100% - 27px); border-bottom: 1px solid #ddf}
 
 /* jobs */
 table#schedjobs {margin-top: -11px}
@@ -2439,7 +2424,6 @@ th.queue {white-space: nowrap}
 }
 
 @media screen and (min-width: 1400px) {
-.statlist {margin: -15px 0}
 .statlist li.statlist .statsName:first-child {margin-top: 0}
 #changelog pre {margin-left: -10px; padding-left: 10px; padding-bottom: 5px; columns: 550px auto; column-gap: 25px; column-rule: 1px solid rgba(64, 64, 128, .5)}
 #profiles .tab:first-child, #profiles .tab2:first-child, #help .tab:first-child, #help .tab2:first-child, #netdb .tab:first-child, #netdb .tab2:first-child, #debug .tab:first-child, #debug .tab2:first-child {border-radius: 2px 0 0 2px}
@@ -2464,11 +2448,13 @@ h4#updateplugins, #news p {font-size: 10pt}
 #tunnels .routerid img {margin: -2px 2px 0 0}
 .statlist li {padding: 0 10px}
 .statlist li a[href^="graph"]::before, .statlist li::before {margin: 0 10px -30px -17px; height: 6px; width: 6px; box-shadow: inset 0 0 0 1px rgba(255,255,255,.8)}
-.statlist .noevents {margin-top: 10px}
+.statlist .noevents {margin-top: 18px; margin-bottom: 0}
 .statlist .noevents::before {margin: -4px 10px 0 -17px}
+.statlist .noevents::after {margin-bottom: -22px}
 .statlist .statsName > b {margin: 0 0 0 3px}
 .statlist > li > ul b {margin: -5px 0 0 3px}
-.statlist .statsName::before {display: none}
+.statlist .statsName::before, .statlist li br {display: none}
+.statlist li > ul li:last-child {padding-bottom: 15px}
 #schedjobs li {min-width: 280px}
 #jobs #jobstats th, #jobs #jobstats td {font-size: 100%}
 .subheading b {font-size: 10.5pt}
