@@ -332,7 +332,7 @@ hr + #newsStatus, hr + #newsStatus + #newsDisplay {padding-top: 1px}
 #routerinformation tr:nth-child(n+2) a:not(#revision){font-size: 90%; margin: -1px 0 -1px 2px; display: none}
 #routerinformation table:hover tr:nth-child(n+2) a {display: inline}
 #routerinformation tr:first-child td, #enviro tr:first-child td, #jobstats tr:first-child td, #jobs #jobstats tr:last-child td {border-top: 1px solid var(--border_inner)}
-#routerinformation tr:last-child td, #enviro tr:last-child td, #jobstats tr:last-child td, #jobs #jobstats tr:nth-last-child(2) td, .lastrow:not(:last-of-type) td, #config_bandwidth #bandwidthconfig td, #externali2cp td, #netconfig td, #config_peers td, #pluginconfig td, #config_stats td, #config_ui td, #config_update td, #debug td, #netdblookup tr:nth-last-child(2) td, #netdblookup tr:nth-last-child(4) td, #schedjobs tr:last-child td {border-bottom: 1px solid var(--border_inner)}
+#routerinformation tr:last-child td, #enviro tr:last-child td, #jobstats tr:last-child td, #jobs #jobstats tr:nth-last-child(2) td, .lastrow:not(:last-of-type) td, #config_bandwidth #bandwidthconfig td, #externali2cp td, #netconfig td, #config_peers td, #pluginconfig td, #config_stats td, #config_ui td, #config_update td, #debug .debug_section td, #netdblookup tr:nth-last-child(2) td, #netdblookup tr:nth-last-child(4) td, #schedjobs tr:last-child td {border-bottom: 1px solid var(--border_inner)}
 #routerinformation code {font-size: 105%}
 #routerinformation h2 {margin-top: 12px; margin-bottom: -2px}
 #enviro td:last-child b, #routerinformation td:last-child b {margin-right: 1px}
@@ -1486,7 +1486,7 @@ table#schedjobs {margin-top: -11px}
 #debug li:first-child {margin-top: 0}
 #debug td:first-child, #debug th:first-child {padding-left: 10px; color: var(--ink_light)}
 #debug td:last-child {vertical-align: top; text-align: right}
-#debug ul li {margin-left: 0; padding: 0; list-style: none}
+#debug ul li {margin-left: 40px; padding: 0; list-style: none}
 #debug h2 {padding: 8px 10px; border-radius: 0}
 #debug h3 {border-radius: 0}
 #debug table {filter: drop-shadow(0 0 1px rgba(220,220,255,.7))}
