@@ -564,6 +564,8 @@ div.search + .linkcontainer {margin: -15px 0 0}
 #searchbar button:hover, #searchbar button:focus {background-blend-mode: normal}
 #searchbar button:active {box-shadow: var(--highlight), inset 2px 2px 2px #555; background-size: 12px; background-blend-mode: luminosity}
 #searchbar button:active {box-shadow: var(--btn_shadow_active)}
+#searchbar input::placeholder, #searchbar input:focus::placeholder {opacity: 0}
+#searchbar input:hover:not(:focus)::placeholder {font-style: italic; opacity: .6}
 
 /* sitemap */
 .sitemaplink {position: relative}
