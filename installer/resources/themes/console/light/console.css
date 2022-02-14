@@ -2459,6 +2459,8 @@ h4#updateplugins, #news p {font-size: 10pt}
 #schedjobs li {min-width: 280px}
 #jobs #jobstats th, #jobs #jobstats td {font-size: 100%}
 .subheading b {font-size: 10.5pt}
+.tab a {padding: 4px 14px}
+.tab2 {padding: 5px 12px}
 .th_title a {font-size: 11pt}
 tt {margin-left: 0; margin-right: 3px; letter-spacing: .1em}
 #advancedconfig a, #reseedsetup a {padding-top: 7px}
