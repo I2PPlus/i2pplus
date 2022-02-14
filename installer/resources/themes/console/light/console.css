@@ -105,8 +105,8 @@ h4.sb_info + hr + form {margin-bottom: -1px; padding-top: 5px}
 #sb_localtunnels td.tunnelRebuilding {background-image: var(--local_down)}
 #sb_localtunnels td.tunnelServer, #sb_localtunnels tr:hover td.tunnelServer {background-image: var(--server)}
 #sb_localtunnels td img::after {content: ""; display: inline-block; height: 16px}
-#sb_localtunnels td img {width: 16px; height: 16px; filter: drop-shadow(0 0 1px rgba(220,220,255,.7)); font-size: 0}
-#sb_localtunnels tr:hover td {background: #ffd}
+#sb_localtunnels td img {display: none}
+#sb_localtunnels tr:hover {background: #ffd}
 #sb_localtunnels td[colspan="3"], #sb_localtunnels tr:hover td[colspan="3"] {line-height: 20px; font-size: 0; background: repeating-linear-gradient(135deg, #fffff2, #fffff2 10px, #ddddd2 10px, #ddddd2 20px)}
 #sb_peersadvanced a:hover b, #sb_peersadvanced a:visited:hover b {color: #f60}
 #sb_peersadvanced a:active b, #sb_peersadvanced a:visited:active b {color: #f90}
