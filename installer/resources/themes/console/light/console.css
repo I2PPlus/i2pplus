@@ -1683,19 +1683,14 @@ th.options {padding: 8px 5px 8px 10px; font-size: 9pt}
 .buttonTop img, .buttonBottom img, .buttonUp img, .buttonDown img {opacity: 0}
 
 /* stats */
-.optbox:checked + label > .stattograph:hover {background: #d50 var(--yes) no-repeat 8px center / 8px; box-shadow: none}
-.optbox:checked + label > .stattograph:hover b {color: #fff}
-.optbox:checked + label > .stattograph:hover b {color: var(--ink_light)}
-.optbox:checked + label > .stattograph {padding-left: 18px; border-left-width: 3px; box-shadow: inset 0 0 0 1px #eef, inset 3px 3px 3px rgba(0,0,32,.2); background: var(--yes) no-repeat 8px center / 8px, linear-gradient(180deg,#eef, #fff)}
-.optbox:not(:checked) + label > .stattograph b {opacity: .8}
-.statdesc {display: none}
 .stattograph {margin: 2px 1px 2px 0; padding: 4px 8px; width: 220px; display: inline-block; box-sizing: border-box; font-size: 90%; text-align: left; border: 1px solid #99b; border-left-width: 3px; border-radius: 1px; background: var(--row); outline: none; will-change: transform}
-.stattograph:hover, .optbox:checked + label > .stattograph:hover {color: #fff; border-color: var(--hover); background: #fff; box-shadow: none}
-.stattograph:hover {box-shadow: 0 0 0 1px var(--hover); background: linear-gradient(180deg,#eef, #fff)}
-.stattograph:hover b, .stattograph:focus b {color: var(--hover)}
-.stattograph:active, .optbox:checked + label > .stattograph:active, .optbox:not(:checked) + label > .stattograph:active {box-shadow: inset 0 0 0 1px #930, inset 3px 3px 3px rgba(0,0,0,.4); background: var(--hover)}
 .stattograph b {display: inline-block; word-break: break-all; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: capitalize; color: var(--ink_light)}
-.stattograph:active b, .optbox:checked + label > .stattograph:active b, .optbox:checked + label > .stattograph:hover b {color: #fff}
+.optbox:checked + label > .stattograph {padding-left: 18px; border-left-width: 3px; box-shadow: inset 0 0 0 1px #eef, inset 3px 3px 3px rgba(0,0,32,.2); background: var(--yes) no-repeat 8px center / 8px, linear-gradient(180deg,#eef, #fff)}
+.optbox:not(:checked) + label > .stattograph b {font-style: italic; opacity: .8;}
+.stattograph:hover b {color: var(--hover)}
+.statdesc {display: none}
+.optbox:checked + label > .stattograph:active, .optbox:not(:checked) + label > .stattograph:active {box-shadow: inset 0 0 0 1px #930, inset 3px 3px 3px rgba(0,0,0,.4); background: var(--hover)}
+.stattograph:active b {color: #fff}
 #configstats {margin-bottom: 0}
 #configstats .graphableStat td {padding: 4px 6px; white-space: normal; columns: auto}
 #config_stats #graphchoice {margin-bottom: -2px}
