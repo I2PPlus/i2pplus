@@ -32,6 +32,8 @@ tr {vertical-align: middle; contain: layout}
 tr:nth-child(even), pre#activetransports, #debug .sentTags:hover td, #debug .expiry:hover td {background: var(--row)}
 tr:nth-child(odd) {background: var(--row)}
 tr:last-child td {border-bottom: 1px solid var(--border_inner)}
+th code {user-select: all}
+td.optionsave, .formaction, #addkeyring tr:last-child td {padding: 8px 6px}
 td {padding: 3px 5px; color: var(--ink); vertical-align: middle; border-top: var(--border_soft); border-bottom: var(--border_soft)}
 tt::selection, .sybil_routerinfo th code::selection {color: #fff; background: #070}
 b, #routerinformation td:first-child {color: var(--ink_light)}
@@ -183,7 +185,7 @@ p:empty + .sb_notice {margin-top: 9px}
 #sb_services a::before {vertical-align: sub; filter: saturate(.4)}
 #sb_services a:hover::before {filter: saturate(1)}
 
-/* sidebar network status */
+/* network status */
 .sb_netstatus, .tunnelBuildStatus {margin: -4px -1px -5px; padding: 6px 3px; width: 100%; display: inline-block; box-sizing: border-box; vertical-align: baseline; line-height: 1.2; text-shadow: 0 1px 1px #fff; border: 1px solid #88f; border-radius: 2px; box-shadow: var(--highlight), 0 0 1px rgba(96,96,96,.5)}
 .sb_netstatus a {vertical-align: baseline}
 #sidebar .firewalled {color: #676; background: repeating-linear-gradient(135deg, rgba(220,255,220,.3) 2px, rgba(255,255,220,.3) 3px, rgba(220,255,220,.3) 5px)}
@@ -249,9 +251,7 @@ p:empty + .sb_notice {margin-top: 9px}
 .main hr, hr {color: #7e7fb9; background: #7e7fb9; height: 1px; border: 0 solid var(--border_inner); margin: 10px 0}
 .main .tunneldisplay tr:last-child td, .main #tunnelpeercount tr:nth-last-child(2) td, .main #udpconnections tr:nth-last-child(2) td, .main #ntcpconnections tr:nth-last-child(2) td {border-bottom: 1px solid var(--border_inner)}
 .pending:nth-of-type(2)::before {content: "\2022\2008\2008"}
-#console {box-shadow: var(--bevel)}
 #help td:first-child, #tunnels td:first-child, #peers #ntcpconnections td:first-child {border-left: 1px solid var(--border_inner)}
-#home {padding-bottom: 13px}
 #lookupCondensed {display: none}
 #profiles th::after {display: none}
 #reseed_urlselection.optionsingle, #reseedproxytype, #config_reseed .optionlist:hover, #graphs .optionlist:hover, #config_network .optionlist:hover, #config_i2cp .optionlist:hover {background: #fff}
@@ -267,6 +267,22 @@ td.tabletextarea {padding: 0; background: #fafaff}
 #tunnels tr:hover .cells, #tunnel_defs tr:hover td, tr:hover .cells, #profilelist tr:hover td, #profile_defs tr:hover td, #floodfills tr:hover td, #debug tr:hover td, #jardump tr:hover td, #jobstats tr:hover td, #eventlog tr:hover td, #webappconfig tr:hover td, #tunnelconfig tr:hover td, #sidebarconf tr:hover td, #configstats tr:hover td, #loggingoptions tr:hover td, #addkeyring tr:hover td, .homelinkedit tr:hover td, #clientconfig tr:hover td, .netdbentry tr:hover td, #netdblookup tr:hover td, #peerdefs tr:hover td, #help tr:hover td:not(.infohelp):not(.infowarn)
 #udpconnections {margin-bottom: 4px}
 #warning2 {background: linear-gradient(180deg,rgba(248,248,255,.5), rgba(240,240,255,.5)), url(/themes/snark/ubergine/images/hat.png) no-repeat right bottom / auto 160px, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #f8f8ff}
+span#newtab {float: right; letter-spacing: 0; text-align: right; font-size: 8pt}
+#newtabimg {margin-top: -1px; opacity: .65}
+#newtabimg:hover {opacity: .8; filter: drop-shadow(0 0 1px #f60)}
+h2 {margin: 15px 0; padding: 10px; word-spacing: .1em; letter-spacing: .08em; word-wrap: break-word; text-transform: uppercase; font-size: 13pt; color: var(--ink_light); border: 1px solid var(--border_inner); border-radius: 2px; box-shadow: var(--highlight), 0 0 1px rgba(220,220,220,.3)}
+h2, h3 {background: var(--h3), linear-gradient(90deg, #fafaff 5%, rgba(231, 231, 255, .8) 25%)}
+#console .welcome h2 {white-space: nowrap; box-shadow: var(--highlight), 0 0 1px rgba(220,220,220,.3); background: url(images/favicon.svg) no-repeat right 8px center / 20px, var(--h2); background-blend-mode: luminosity, normal, normal; filter: none}
+#home .welcome + #homepanel > .linkcontainer > h4 {margin-top: -1px}
+h2 a, h3 a {word-spacing: .1em; letter-spacing: .08em; text-transform: uppercase}
+h2 a:hover, h3 a:hover {color: #115}
+h3.tabletitle a:hover, h3.ptitle a:hover, h3#graphinfo a:hover, #news h3 a:hover {color: #f60}
+h2 img {opacity: .9}
+h3, #routerinformation h2, #config_family th {margin: 12px 0 15px; padding: 7px 5px 6px 7px; word-spacing: .1em; text-transform: uppercase; letter-spacing: .08em; font-size: 11pt; color: var(--ink_light); border: 1px solid var(--border_inner); box-shadow: var(--highlight), 0 0 1px rgba(220,220,220,.3)}
+#help h3 {padding-left: 10px}
+h3.tabletitle, h3.ptitle, #config_advanced h3.tabletitle, h3#bannedpeers, #routerinformation h2 {margin-bottom: -2px; text-align: left; border-radius: 0; border: 1px solid var(--border_inner); box-shadow: var(--highlight)}
+h3.ptitle, h3#bannedpeers {margin-bottom: -13px}
+h4 {margin: 5px 0 10px; padding: 4px 6px; word-spacing: .1em; letter-spacing: .08em; font-size: 10pt; text-transform: uppercase; color: var(--ink_light); border: 1px solid var(--border_inner); border-radius: 2px; box-shadow: var(--highlight); background: linear-gradient(90deg, #fff, #eef)}
 
 /* news */
 #news {padding: 3px 15px 5px}
@@ -483,7 +499,7 @@ table[id$="logs"] ul li:last-child {margin-bottom: 10px}
 .main[id^="config_"] th {font-size: 9.5pt}
 .main[id^="config_"] .th_title, #configstats th, #config_family th {font-size: 11pt}
 .main[id^="config_"] th:first-child {padding-left: 10px}
-div[id^="config"] tr:last-child td, #events tr:last-child td, #netdb table table tr:last-child td, #profiles tr:last-child td, #peers tr:last-child td, #tunnels tr:last-child td, td.tabletextarea, .configtable tr:nth-last-child(2) td, #consolepass tr:first-child td, td.infohelp, #updatehelper, #i2pupdates tr:first-child td, #i2pupdates tr:nth-child(2) td {border-bottom: 1px solid var(--border_inner)}
+div[id^="config"] tr:last-child td, #events tr:last-child td, #profiles tr:last-child td, #peers tr:last-child td, #tunnels tr:last-child td, td.tabletextarea, .configtable tr:nth-last-child(2) td, #consolepass tr:first-child td, td.infohelp, #updatehelper, #i2pupdates tr:first-child td, #i2pupdates tr:nth-child(2) td {border-bottom: 1px solid var(--border_inner)}
 .th_title, #consolepass tr:first-child td, td.infohelp, #i2pupdates tr:nth-child(2) td, #updatehelper {border-top: 1px solid var(--border_inner)}
 #tunnelconfig tr:last-child, #webappconfig tr:last-child {background: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fff 5px)}
 #clientconfig td:first-child label {display: inline-block; vertical-align: middle}
@@ -491,22 +507,22 @@ div[id^="config"] tr:last-child td, #events tr:last-child td, #netdb table table
 #clientconfig tr:last-child {background: #f7f8ff}
 
 /* home */
+#home {padding-bottom: 13px}
 #homepanel {margin-bottom: 0}
-#applinks, #sitelinks {margin: 0 auto 3px; padding: 7px 10px 6px 32px; width: calc(100% - 44px); display: inline-block; overflow: hidden; word-spacing: .1em; letter-spacing: .08em; text-transform: uppercase; font-size: 11pt; color: var(--ink_light); border: 1px solid var(--border_inner); border-radius: 2px; box-shadow: var(--highlight), 0 0 1px rgba(220,220,220,.3)}
-#applinks {margin-top: 15px; background: url(images/favicon.svg) no-repeat 10px center / 16px, var(--h3), var(--h4app)}
+#applinks, #sitelinks, #sitemap h3 {margin: 0 auto 3px; padding: 7px 10px 6px 32px; width: calc(100% - 44px); display: inline-block; overflow: hidden; word-spacing: .1em; letter-spacing: .08em; text-transform: uppercase; font-size: 11pt; color: var(--ink_light); border: 1px solid var(--border_inner); border-radius: 2px; box-shadow: var(--highlight), 0 0 1px rgba(220,220,220,.3)}
+#applinks {margin-top: 18px; background: url(images/favicon.svg) no-repeat 10px center / 16px, var(--h3), var(--h4app)}
+#applinks, #sitemapcontainer h3:first-child {background: url(images/favicon.svg) no-repeat 10px center / 16px, var(--h3), var(--h4app)}
 #sitelinks {clear: left; margin-top: 10px; background: var(--globe) no-repeat 10px center / 16px, var(--h3), var(--h4app)}
 #applinks a, #sitelinks a {font-size: 0}
 #applinks img, #sitelinks img, #sitemap h3 img {margin: -8px 0; padding: 9px 0 7px 10px; display: none; border-left: 1px solid var(--border_inner); opacity: .8; filter: none; transition: ease all 1s}
 #applinks a:hover img, #sitelinks a:hover img, #applinks a:hover::after, #sitelinks a:hover::after {opacity: 1}
-#home h4 a[href$="configapps"], #home h4 a[href$="configsites"] {margin: -7px -10px -10px 0; padding: 10px 0 4px; border-left: 1px solid var(--border_inner)}
+#applinks a[href$="configapps"], #sitelinks a[href$="configsites"] {margin: -7px -10px -10px 0; padding: 10px 0 4px; border-left: 1px solid var(--border_inner)}
 #home h4 a::after {margin: -2px 10px 4px -8px; width: 16px; height: 18px; display: inline-block; vertical-align: middle; background: var(--settings) no-repeat center center / 16px; content: ""}
 #home h4 a:hover::after, #home h4 a:focus::after {background: var(--settings_hover) no-repeat center center / 16px}
 #home h4 a:active::after {transform: rotate(90deg); transition: ease transform .15s}
 #chooselang::after, #configbandwidth::after {content: none}
 #chooselang img, #configbandwidth img {margin: -9px -5px -8px 20px; padding-top: 11px; display: inline-block; opacity: .8}
 #chooselang img {margin-right: 10px}
-#configbandwidth img {margin-right: -10px}
-
 .applink:not(:hover) a:not(:hover):not(:focus):not(:active), .applink:not(:hover) a:not(:hover):not(:focus):not(:active):visited, .sitemaplink:not(:hover):not(:focus):not(:active) {color: #4b689b}
 #applinks:hover img, #sitelinks:hover img, #sitemap h3:hover img, #sitemap h3 img:hover {opacity: 1; transition: ease all .3s}
 .linkcontainer {margin: 0}
@@ -555,8 +571,11 @@ div.search + .linkcontainer {margin: -15px 0 0}
 .sitemaplink {position: relative}
 #sitemap table.search {margin-bottom: -15px}
 #sitemapcontainer {padding: 4px 0 0}
-#sitemapcontainer h3 {margin-bottom: 10px}
+#sitemapcontainer h3 {margin: 14px 0 10px}
 #sitemapcontainer h3:nth-child(n+2) {margin-top: 3px}
+#sitemapcontainer h3:nth-of-type(2) {background: url(/themes/console/images/svg/info.svg) no-repeat 10px center / 16px, var(--h3), var(--h4app)}
+#sitemapcontainer h3:nth-of-type(3) {background: url(/themes/console/images/svg/configure.svg) no-repeat 10px center / 16px, var(--h3), var(--h4app)}
+#sitemapcontainer h3:nth-of-type(4) {background: url(/themes/console/images/svg/help.svg) no-repeat 10px center / 16px, var(--h3), var(--h4app)}
 #sitemap h3 img {padding-right: 6px}
 .sitemapLink, .sitemapLabel {width: 180px; min-width: 180px; display: inline-block; text-align: center; font-size: 9pt; border: 1px solid var(--border_inner); border-radius: 0; box-shadow: var(--highlight), inset 0 0 2px 1px #efefff; background: #f8f8ff}
 .en .sitemapLink, .en .sitemapLabel {width: 136px; min-width: 136px}
@@ -599,6 +618,7 @@ h3#systray + p.infohelp {padding: 20px 15px 20px 50px; box-shadow: var(--highlig
 .infowarn {box-shadow: var(--highlight), inset 0 0 1px 1px #900}
 p.infohelp, p.sybilinfo, p#debugmode, p#upnpstatus, p#pluginconfigtext, p#gatherstats {padding: 20px 15px 20px 50px; line-height: 1.3; border: 1px solid var(--border_inner); box-shadow: inset 0 0 0 1px #7e7, inset 0 0 1px 1px var(--border); background: var(--infohelp) no-repeat 15px center / 28px, var(--div_infohelp)}
 p.infowarn {padding: 20px 15px 20px 50px; line-height: 1.3; border: 1px solid var(--border_inner); background: var(--infowarn) no-repeat 15px center / 28px, var(--div_infohelp)}
+#netdb .infohelp, p.sybilinfo {box-shadow: inset 0 0 0 1px #ddf, inset 0 0 1px 1px var(--border)}
 .infohelp + hr {display: none}
 .infohelp#pagenav:first-of-type {margin-top: -6px}
 .infohelp#pagenav:last-of-type {margin-bottom: 4px}
@@ -676,22 +696,6 @@ h1.webapp {min-height: 22px; background-image: var(--h1_webapp)}
 h1[class], #wizardpage h1 {background-size: 34px auto, 4px, 100%, 100%, 100%}
 h1::first-letter {font-size: 112%}
 
-span#newtab {float: right; letter-spacing: 0; text-align: right; font-size: 8pt}
-#newtabimg {margin-top: -1px; opacity: .65}
-#newtabimg:hover {opacity: .8; filter: drop-shadow(0 0 1px #f60)}
-h2 {margin: 15px 0; padding: 10px; word-spacing: .1em; letter-spacing: .08em; word-wrap: break-word; text-transform: uppercase; font-size: 13pt; color: var(--ink_light); border: 1px solid var(--border_inner); border-radius: 2px; box-shadow: var(--highlight), 0 0 1px rgba(220,220,220,.3)}
-h2, h3 {background: var(--h3), linear-gradient(90deg, #fafaff 5%, rgba(231, 231, 255, .8) 25%)}
-#console .welcome h2 {white-space: nowrap; box-shadow: var(--highlight), 0 0 1px rgba(220,220,220,.3); background: url(images/favicon.svg) no-repeat right 8px center / 20px, var(--h2); background-blend-mode: luminosity, normal, normal; filter: none}
-#home .welcome + #homepanel > .linkcontainer > h4 {margin-top: -1px}
-h2 a, h3 a {word-spacing: .1em; letter-spacing: .08em; text-transform: uppercase}
-h2 a:hover, h3 a:hover {color: #115}
-h3.tabletitle a:hover, h3.ptitle a:hover, h3#graphinfo a:hover, #news h3 a:hover {color: #f60}
-h2 img {opacity: .9}
-h3, #routerinformation h2, #config_family th {margin: 12px 0 15px; padding: 7px 5px 6px 7px; word-spacing: .1em; text-transform: uppercase; letter-spacing: .08em; font-size: 11pt; color: var(--ink_light); border: 1px solid var(--border_inner); box-shadow: var(--highlight), 0 0 1px rgba(220,220,220,.3)}
-#help h3 {padding-left: 10px}
-h3.tabletitle, h3.ptitle, #config_advanced h3.tabletitle, h3#bannedpeers, #routerinformation h2 {margin-bottom: -2px; text-align: left; border-radius: 0; border: 1px solid var(--border_inner); box-shadow: var(--highlight)}
-h3.ptitle, h3#bannedpeers {margin-bottom: -13px}
-
 /* /configpeers */
 #bannedips {margin-bottom: 10px}
 #bannedips td {vertical-align: top; padding: 0; width: 50%}
@@ -710,7 +714,6 @@ h3.ptitle, h3#bannedpeers {margin-bottom: -13px}
 #bannedips tr:nth-child(even) {background: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fff 5px)}
 #bannedips tr:nth-child(odd) {background: repeating-linear-gradient(45deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px)}
 
-h4 {margin: 5px 0 10px; padding: 4px 6px; word-spacing: .1em; letter-spacing: .08em; font-size: 10pt; text-transform: uppercase; color: var(--ink_light); border: 1px solid var(--border_inner); border-radius: 2px; box-shadow: var(--highlight); background: linear-gradient(90deg, #fff, #eef)}
 #certs h3 {margin-top: 15px; margin-bottom: -6px; border-width: 1px; border-radius: 0; filter: none}
 #certs h4 {padding: 8px 8px 6px; border-radius: 0}
 #certs h3 + p, #certs h4 + p:not(.infohelp) {padding: 15px; border: 1px solid var(--border_inner)}
@@ -724,8 +727,6 @@ h4 {margin: 5px 0 10px; padding: 4px 6px; word-spacing: .1em; letter-spacing: .0
 #certs h4 + textarea {margin: -11px 0; border: 1px solid var(--border_inner); box-shadow: none}
 #certs textarea + #end, #certs h3 + #end, #certs .infohelp + #end {margin-bottom: 15px; display: block}
 #certs h4 span {letter-spacing: 0; word-spacing: 0; text-transform: none}
-.unbold {font-weight: 400}
-.underline {border-bottom: 1px solid #002; padding: 5px 0; margin: 0 0 10px}
 
 /* welcome */
 div[lang="es"] li, div[lang="pt"] li, div[lang="sv"] li, div[lang="zh"] li {margin-left: 15px; margin-right: 15px; list-style: none; text-align: justify}
@@ -741,8 +742,6 @@ div[lang="de"] .links li {padding-left: 0}
 
 input[type=submit], input[type=reset], button, .optbox, select {cursor: pointer}
 input, input:visited, button, button:visited {margin: 3px; padding: 5px; line-height: 1.4; font-size: 9pt; color: var(--ink_light); text-decoration: none; text-shadow: 0 1px 1px #fff; border: var(--border_input); border-radius: 2px; box-shadow: var(--highlight), var(--highlight); box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.08) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.08); background: var(--btn); background-size: 14px, 100%; opacity: 1; filter: drop-shadow(0 0 1px rgba(220,220,255,.7))}
-input[type=text], textarea, input[type=password] {filter: drop-shadow(0 0 1px rgba(220,220,255,.7))}
-input[type=submit], input[type=reset], button, select {filter: drop-shadow(0 0 1px rgba(220,220,255,.7))}
 button a, button a:visited {font-weight: 400; color: var(--ink_light)}
 button:hover, input[type=submit]:hover, input[type=reset]:hover, button:focus, input[type=submit]:focus, input[type=reset]:focus {color: var(--ink_darker); border: 1px solid #f60; box-shadow: var(--highlight), inset 0 -8px 3px 8px rgba(255,96,0,.02), inset 0 0 10px rgba(255,96,0,.05), 0 0 1px rgba(255,96,0,.1), 0 7px 4px -4px rgba(0,0,0,.1); background: var(--btn_hover); filter: saturate(100%) drop-shadow(0 0 1px rgba(204, 204, 204, .8)); transition: ease border .7s}
 button:hover a {color: var(--ink_darker)}
@@ -999,10 +998,19 @@ h3#udpcon {margin-top: 7px}
 #tunnel_defs td {padding: 4px}
 
 /* netdb */
+#floodfills .ssuintro, #floodfills .unreachable, #floodfills .reachable, #floodfills .hidden, #capabilities_key b, .netdbentry .tier, .netdbentry .ff, .netdbentry .ssuintro, .netdbentry .unreachable, .netdbentry .reachable, .netdbentry .hidden, .sybil_routerinfo .tier, .sybil_routerinfo .ff, .sybil_routerinfo .ssuintro, .sybil_routerinfo .unreachable, .sybil_routerinfo .reachable, .sybil_routerinfo .hidden {margin: 2px; padding: 1px 0; display: inline-block; min-width: 18px; max-width: 18px; text-align: center; text-transform: none; font-weight: 700; color: #4a415e; text-shadow: 0 1px 1px #fff; border: 1px solid #bbc; border-radius: 2px; box-shadow: var(--highlight); background: linear-gradient(180deg,#fff, #dbecff)}
 #noleasesets, #notinitialized, .netdbnotfound {margin-top: -6px; margin-bottom: 5px; padding: 10px 20px; font-weight: 700; text-align: center; color: var(--ink_light); border: 1px solid var(--border_inner); box-shadow: 0 0 1px #e0e0eb; border-radius: 2px; background: linear-gradient(90deg, #f2f2ff, #f8f8ff, #f2f2ff)}
 #notinitialized, .netdbnotfound {margin-top: 15px}
+#netdb a:hover span, #profiles a:hover span, .version:hover a, #capabilities_key table b:hover {color: #f60}
+.netdb_header .viewprofile, .netdb_header .configpeer, .netdb_header .familysearch {margin: 3px; width: 14px; height: 14px}
+.netdbentry .tunnel_cap, .netdbentry .tier, .netdbentry .ff, .netdbentry .reachable, .netdbentry .unreachable, .netdbentry .version, .sybil_routerinfo .tunnel_cap, .sybil_routerinfo .tier, .sybil_routerinfo .ff, .sybil_routerinfo .reachable, .sybil_routerinfo .unreachable, .sybil_routerinfo .version {margin: 0 2px 0; padding: 1px 4px; line-height: 1.5; vertical-align: middle}
+.netdb_header .viewprofile, .netdb_header .configpeer, .netdb_header .familysearch {margin: 3px; width: 14px; height: 14px}
+.netdb_header .configpeer, .netdb_header .configpeer {margin-right: 5px}
+.confignav + .netdbentry, .infowarn + .netdbentry {margin-top: 10px}
 
 /* netdb overview */
+.version {margin: 0; padding: 1px 3px; min-width: 44px; display: inline-block; line-height: 1.2; vertical-align: middle; text-align: center; font-weight: 700; border: 1px solid #bbc; border-radius: 2px; box-shadow: var(--highlight); background: var(--row)}
+#netdb_ourinfo .version {margin-right: 4px}
 #netdboverview th, #netdblookup th {padding: 8px 5px 8px 32px; word-spacing: .1em; letter-spacing: .08em; text-transform: uppercase; font-size: 11pt; background:var(--globe) no-repeat 8px center / 18px, var(--h2)}
 #netdblookup input[type=checkbox] {margin-left: 3px}
 #netdblookup input[type=text] {margin-top: 5px; margin-bottom: 5px}
@@ -1010,36 +1018,29 @@ h3#udpcon {margin-top: 7px}
 #netdbversions th, #netdbtransports th, #netdbcountrylist th, #netdbtiers th {font-size: 9pt}
 #netdboverview th:last-child, #netdboverview td:last-child {text-align: right}
 #netdboverview th:first-child, #netdboverview td:first-child {text-align: left}
+#netdboverview td:nth-child(2) td:last-child {width: 20%}
 #netdboverview table {margin: -1px 0; border: none; border-bottom: 1px solid var(--border_inner)}
 #netdboverview table th {padding: 8px 5px; word-spacing: 0; letter-spacing: 0; text-transform: none; font-size: 9pt; background: linear-gradient(180deg,#fcfcff 50%, rgba(255, 255, 255, .6) 50%, rgba(240, 240, 255, .4))}
-#netdboverview table td {padding: 3px 5px}
-#netdboverview td {padding: 0}
+#netdboverview td {padding: 0; border: 1px solid var(--border_soft)}
+#netdboverview table th, #netdboverview table td {padding: 5px 8px; line-height: 1.2; border: var(--border_soft)}
+#netdboverview table th::before, #netdboverview table td::before {min-height: 26px; display: inline-block; vertical-align: middle; content: ""}
 #netdboverview a {display: inline-block; width: 100%}
-#netdbtiers a {width: auto; margin-right: 5px}
-#netdbversions tr {border-right: 1px solid var(--border)}
-#netdbversions th:first-child, #netdbversions td:first-child {padding-left: 8px; padding-right: 8px}
-#netdbversions td:first-child {text-align: center}
-#netdbversions .version {margin: 0}
-#netdbcountrylist tr {border-left: 1px solid var(--border)}
-#netdboverview #netdbcountrylist td:first-child {padding-left: 6px}
+#netdbtiers a, #netdbversions .version {margin: -2px 0; padding: 1px 3px; min-width: 44px; display: inline-block; line-height: 1.2; vertical-align: middle; text-align: center; font-weight: 700; border: 1px solid #bbc; border-radius: 2px; box-shadow: var(--highlight); background: var(--row)}
+#netdbtiers a {margin: -2px 8px -2px 0; width: auto; min-width: 20px}
+#netdbtiers a:hover b {color: #f60}
+#netdbversions th:first-child, #netdbversions td:first-child {text-align: center}
 #netdbcountrylist img {margin-right: 5px; text-align: right; border: 1px solid #d0d0db; border-radius: 3px}
-#netdbtiers td:first-child {border-left: 1px solid var(--border_inner)}
-#netdbtiers th:first-child {border-left: 1px solid var(--border_inner)}
-#netdboverview td:nth-child(2) td:last-child {width: 20%}
-
-.confignav + .netdbentry, .infowarn + .netdbentry {margin-top: 10px}
-.netdbentry th img, .sybil_routerinfo th img {margin: 0 3px}
+#netdb th span, #netdb th img, #netdb th code, #netdb th a, #netdb th b {vertical-align: middle}
 .netdbentry th img {margin: 0 8px}
 .netdbentry th {font-weight: 400}
 .netdbentry th:first-child, .netdbentry td:first-child {padding: 4px 6px; width: 1%; min-width: 80px; white-space: nowrap; text-align: right}
-.netdbentry th:last-child {text-align: right; padding: 5px; white-space: nowrap; width: 50px}
+.netdbentry th:last-child {text-align: right; padding: 1px; white-space: nowrap; width: 1%}
 .gwhois, .banlisted {vertical-align: middle; font-size: 0}
 .gwhois a::before {margin-left: -2px; width: 12px; height: 12px; display: inline-block; vertical-align: middle; background: var(--search) no-repeat left center / 11px; opacity: .7; content: ""}
 .gwhois:hover a::before, .gwhois a:focus::before {opacity: 1; transform: scale(1.2)}
 .banlisted {width: 18px; height: 18px; display: inline-block; background: var(--ban)}
 .netdbentry img {margin: 1px 0 0}
 .ls_crypto {display: inline-block; columns: 360px 2}
-th code {user-select: all}
 .netdb_addresses {line-height: 1.35}
 .netdb_addresses br:first-child, .sybil_routerinfo tr:last-child td br:first-child {display: none}
 b.netdb_transport {margin-right: 3px; display: inline-block}
@@ -1062,11 +1063,10 @@ b.netdb_transport {margin-right: 3px; display: inline-block}
 .longstat.fam {margin: 4px 0 -4px; padding: 1px 0; width: 240px; display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 1.2}
 .netdbStats b {margin-right: 2px; margin-left: 0; text-align: left}
 .netdbStats hr, .sybil_routerinfo hr {margin: -2px 0; display: block; color: transparent; opacity: .5; border-bottom: 1px solid #bbe; background: none}
-.netdbStats hr {margin: 2px 0}
-.netdbstats .hide + hr {display: none}
+.netdbstats .hide + hr, .netdbStats hr {display: none}
 .netdbstats hr#expl, .netdbstats hr#hrd {display: block}
 .netdbStats li .bullet:last-of-type {opacity: 0}
-#netdb .netdbentry th {padding-top: 6px; padding-bottom: 6px}
+#netdb .netdbentry th {padding-top: 1px; padding-bottom: 2px}
 #netdb .netdbentry th code, #netdb .sybil_routerinfo th code, #netdb .leaseset th code {margin: 2px 5px; padding: 1px 3px 2px; width: 150px; overflow: hidden; text-overflow: ellipsis; vertical-align: middle; white-space: nowrap; font-weight: 700; letter-spacing: .12em; color: #273; text-shadow: none; border: 1px solid #bbc; border-radius: 2px; box-shadow: var(--highlight), 0 0 0 1px #eef; background: var(--row)}
 #netdb .netdbentry th code, #netdb .leaseset th code {margin-left: 2px}
 .netdbentry th:nth-child(2) {padding-left: 0}
@@ -1074,23 +1074,36 @@ b.netdb_transport {margin-right: 3px; display: inline-block}
 #netdb .netdbentry th code:hover, #netdb .netdbentry th code:active, .leaseset th code:hover, .leaseset th code:active, #netdb .sybil_routerinfo th code:hover, #netdb .sybil_routerinfo th code:active {width: auto; letter-spacing: 0}
 #netdb .netdbentry th code::-moz-selection, #netdb .sybil_routerinfo th code::-moz-selection, .leaseset th code::-moz-selection {background: #070; color: #fff}
 #netdb .netdbentry th code::selection, #netdb .sybil_routerinfo th code::selection, .leaseset th code::selection {background: #070; color: #fff}
+.netdb_addresses .netdb_transport {margin: -1px 4px -4px -6px; padding: 3px 2px 4px; min-width: 52px; line-height: 1.6; text-align: center; border: 1px solid #ddf; border-radius: 2px 0 0 2px; box-shadow: var(--highlight); background: var(--row)}
 .netdb_header {margin: -2px 0 -4px; padding: 3px; min-width: 100px; display: inline-block; vertical-align: middle; line-height: 0}
 .netdb_addresses .netdb_info {font-size: 90%}
+.netdb_addresses ul {margin: 0; padding: 0; display: inline-block; columns: auto; column-gap: 0; width: 100%}
+.netdb_addresses li, .netdb_ouraddresses li {margin: 2px 2px 2px 0; padding: 0 5px 3px; vertical-align: middle; list-style: none; border: 1px solid #ddf; box-shadow: var(--highlight); background: #eef}
+.netdb_addresses .nowrap {margin: 0 2px 0 0; vertical-align: middle}
+.netdb_ouraddresses:empty {display: none}
+.netdb_ouraddresses .netdb_transport {margin: -1px 5px 0 -6px; padding: 2px; display: inline-block}
+.netdb_ouraddresses .netdb_transport:nth-of-type(n+2) {margin-left: 5px}
 .netdb_info + b {margin-left: 15px}
 .netdb_info.host, .netdb_info.port {font-size: 90%; color: #040; user-select: all}
 .netdb_info.port {color: #303}
 .netdb_info.host::-moz-selection {color: #fff; background: #070}
 .netdb_info.port::-moz-selection {color: #fff; background: #303}
-.netdb_addresses ul {margin: 0; padding: 0; display: inline-block; columns: auto; column-gap: 0; width: 100%}
-.netdb_addresses li, .netdb_ouraddresses li {margin: 2px 2px 2px 0; padding: 0 5px 3px; vertical-align: middle; list-style: none; border: 1px solid #ddf; box-shadow: var(--highlight); background: #eef}
-.netdb_addresses .nowrap {margin: 0 2px 0 0; vertical-align: middle}
 .netdb_transport {vertical-align: middle}
-.netdb_addresses .netdb_transport {margin: -1px 4px -4px -6px; padding: 3px 2px 4px; min-width: 52px; line-height: 1.6; text-align: center; border: 1px solid #ddf; border-radius: 2px 0 0 2px; box-shadow: var(--highlight); background: var(--row)}
-.netdb_ouraddresses:empty {display: none}
-.netdb_ouraddresses .netdb_transport {margin: -1px 5px 0 -6px; padding: 2px; display: inline-block}
-.netdb_ouraddresses .netdb_transport:nth-of-type(n+2) {margin-left: 5px}
-.netdb_header > * {font-size: 0; line-height: 0}
+.netdb_header img[src^="/flags"], th img[src^="/flags"] {margin-left: 2px; width: 24px; height: auto; border-radius: 2px; box-shadow: 0 0 0 1px #bbc}
+.netdb_header img[src="/flags.jsp?c=a0"] {margin-right: 0; display: inline-block; vertical-align: middle}
+.viewprofile, .configpeer, .familysearch {font-size: 0}
+.viewprofile, .configpeer, .familysearch {margin: 1px 2px; padding: 4px; width: 12px; height: 12px; vertical-align: middle; display: inline-block; line-height: 0; border: 1px solid #bbd; border-radius: 2px; box-shadow: var(--highlight)}
+.viewprofile {background: var(--eye) no-repeat center center / 12px, var(--btn)}
+.viewprofile:hover, .viewprofile:focus {background: var(--eye_hover) no-repeat center center / 12px, var(--btn_hover)}
+.viewprofile + .viewfullentry, .viewfullentry + .configpeer, .viewprofile + .configpeer {margin-left: -5px}
 .viewprofile img, .viewfullentry img, .familysearch img, .configpeer img, .profiledump img {padding: 2px; display: inline-block; width: 14px; height: 14px; vertical-align: middle; line-height: 0; border: 1px solid #bbc; border-radius: 2px; background: var(--row)}
+.viewedit br {display: none}
+.netdb_header img[src^="/flags"] {width: 30px}
+.configpeer {background: var(--edit) no-repeat center center / 12px, var(--btn)}
+.configpeer:hover, .configpeer:focus {background: var(--edit_hover) no-repeat center center / 12px, var(--btn_hover)}
+.familysearch {background: var(--family) no-repeat center center / 12px, var(--btn)}
+.familysearch:hover {background: var(--family) no-repeat center center / 12px, var(--btn_hover)}
+.familysearch img {margin-right: -4px; margin-left: 0}
 
 /* leasesets */
 #leasesetdebug th a, table#leasesetsummary th a {font-size: 0}
@@ -1111,6 +1124,9 @@ b.netdb_transport {margin-right: 3px; display: inline-block}
 .leaseset th {font-weight: 400; padding: 5px; text-align: left}
 .leaseset th:last-child {font-size: 90%}
 .leaseset th:last-child, .leaseset td:nth-child(2) {padding-right: 5px; text-align: right}
+.leaseset th:last-child a[href$="i2p/"] {padding-left: 22px; background: var(--link) no-repeat 5px center / 12px, var(--row)}
+.leaseset th:first-child code {margin-left: 4px}
+.leaseset th:last-child code {margin: 0 0 0 4px; width: auto}
 .leaseset td:first-child img {margin: 0 3px 2px 5px; vertical-align: middle}
 .leaseset tt, .leaseset tt a {margin-right: 3px}
 #leasesetdebug {margin-bottom: 14px}
@@ -1118,6 +1134,9 @@ b.netdb_transport {margin-right: 3px; display: inline-block}
 .leaseset td {line-height: 1.5; background: var(--row); border-top: 1px solid var(--border_inner); border-bottom: 1px solid var(--border_inner)}
 .leaseset td a[href$=".i2p"] {margin-left: 6px}
 .leaseset a {font-size: 90%}
+.lsdest, .leaseset th:last-child a[href$="i2p/"] {margin-left: 3px; padding: 2px 4px 4px; display: inline-block; border: 1px solid #bbc; border-radius: 2px; background: var(--row)}
+.lsdest {padding-left: 22px; border-radius: 0; border-left-width: 4px; border-right-width: 4px; background: var(--hardhat) no-repeat 4px center / 14px, var(--row)}
+.lsdest.published {padding-left: 38px; background: var(--hardhat) no-repeat 4px center / 14px, var(--globe) no-repeat 21px center / 14px, var(--row)}
 .addtobook {text-align: right}
 .addtobook a {font-size: 0}
 .addtobook a::after {width: 16px; height: 16px; display: inline-block; vertical-align: middle; background: var(--abook_helper) no-repeat center center / 16px; content: ""}
@@ -1140,6 +1159,14 @@ img.unknownflag {opacity: .8}
 .leasesets_container table:first-child {margin-top: 0}
 .leasesets_container table {break-inside: avoid; page-break-inside: avoid; -webkit-column-break-inside: avoid}
 .leaseset th:last-child, .leaseset tr:nth-child(2) {font-size: 90%}
+.leaseset .routerid {margin-left: 2px; padding: 0 2px 0 0; display: inline-block; line-height: 1.5; border-radius: 2px}
+.leaseset .routerid img {margin: -1px 0 0 4px}
+
+/* highlight linked leaseset */
+.leaseset:target {border: 1px solid #5a5}
+.leaseset:target tr:first-child th, .leaseset:target td {border-top: 1px solid #5a5; border-bottom: 1px solid #5a5}
+.leaseset:target th:first-child, .leaseset:target td:first-child {border-left: 1px solid #5a5}
+.leaseset:target th:last-child, .leaseset:target td:last-child {border-right: 1px solid #5a5}
 
 /* sybils */
 #sybilanalysis {margin: 14px 0 6px; padding: 10px 10px 8px 50px; border: 1px solid var(--border_inner); background: var(--sybil) no-repeat 15px center / 28px, var(--div_infohelp)}
@@ -1148,12 +1175,12 @@ img.unknownflag {opacity: .8}
 #sybils_summary {padding: 20px 10px 20px 50px; line-height: 1.6; background: var(--floodfill) no-repeat 8px center, repeating-linear-gradient(135deg, rgba(248,238,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff; columns: 400px auto}
 h3.sybils {margin-bottom: 9px}
 #sybilnav {margin: -6px -14px 10px; padding: 5px; border-left: none; border-right: none; columns: 5 200px; column-gap: 5px}
-#sybilnav li {margin: 4px 0; padding: 5px 3px 5px 27px; line-height: .88; list-style: none; border-radius: 2px; box-shadow: 0 0 0 1px rgba(200,200,255,.8), var(--highlight); background: var(--eye) no-repeat 6px center / 16px, linear-gradient(180deg,#fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,240,.4)) #e7e7ff}
+#sybilnav li {margin: 4px 0; padding: 5px 3px 5px 27px; line-height: .88; list-style: none; font-size: 95%; border-radius: 2px; box-shadow: 0 0 0 1px rgba(200,200,255,.8), var(--highlight); background: var(--eye) no-repeat 6px center / 16px, linear-gradient(180deg,#fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,240,.4)) #e7e7ff}
 #sybilnav li:hover {box-shadow: 0 0 0 1px rgba(255,96,0,.5), var(--highlight); background: #fff var(--eye_hover) no-repeat 6px center / 16px}
 #sybilnav li:active {box-shadow: 0 0 0 1px rgba(255,96,0,.5), var(--highlight), inset 3px 3px 3px #ccc; background: #fff var(--eye_active) no-repeat 6px center / 16px}
 #sybilnav li:hover a {color: #f60}
-#sybilnav ul li:first-child {margin-top: 0}
-#sybilnav ul li:last-child {margin-bottom: 0}
+#sybilnav ul li:first-child {margin-top: -20px}
+#sybilnav ul li:last-child {margin-bottom: -20px}
 #sybilnav li a {width: 100%; display: inline-block}
 .sybil_container, .sybilinfo_container, .threatpoints + ul {margin: 10px 0; padding: 4px 5px; columns: 300px 5; column-gap: 0}
 .sybilinfo_container {margin: 0}
@@ -1164,23 +1191,21 @@ h3.sybils {margin-bottom: 9px}
 .sybil_container p:last-child {margin-bottom: 0}
 .sybilinfo_container b {color: #335}
 .sybil_routerinfo {margin-bottom: 10px}
-#netdb .sybil_routerinfo:first-of-type {margin-top: -11px}
+#netdb .sybil_routerinfo:first-of-type {margin-top: -13px}
 .sybil_routerinfo:last-of-type {margin-bottom: 5px}
 #netdb .sybil_routerinfo tr:first-child, #netdb .sybil_routerinfo th {border-bottom: 1px solid var(--border_inner)}
 #netdb .sybil_routerinfo tr:nth-child(2), #netdb .sybil_routerinfo tr:nth-child(2) td {border-top: 1px solid var(--border_inner)}
-.sybil_routerinfo th {padding: 1px 1px 1px 6px}
+.sybil_routerinfo th {padding: 1px 1px 2px 6px}
 .sybil_routerinfo th[colspan="2"] {padding-right: 6px; font-size: 90%}
-.sybil_routerinfo th > * {vertical-align: middle}
 .sybil_routerinfo th:first-child {white-space: nowrap; text-align: left}
-.sybil_routerinfo th:last-child, .sybil_routerinfo th:last-child > * {vertical-align: middle}
 .sybil_routerinfo th:last-child {width: 1%; white-space: nowrap; text-align: right}
-#netdb .sybil_routerinfo th code {letter-spacing: .07em}
-.sybil_routerinfo th img[src^="/flags"] {margin-right: 3px; height: 11px; width: 16px}
+#netdb .sybil_routerinfo th code {margin-top: 5px; margin-bottom: 5px; letter-spacing: .07em}
+#netdb .sybil_routerinfo th img[src^="/flags"] {margin: -3px 0 0}
 .sybil_routerinfo td:first-child, .netdbentry td:first-child {padding-right: 8px; text-align: right}
 .sybil_routerinfo td:first-child {width: 50px; white-space: nowrap}
 .sybil_routerinfo td[colspan="3"] {white-space: normal}
-.sybil_routerinfo, .sybil_routerinfo tr:nth-child(2) td, .sybil_routerinfo tr:last-child td {border-bottom: none}
-.sybil_routerinfo tr:last-child td {border-top: none}
+.sybil_routerinfo tr:last-child td {padding-left: 10px; text-align: left; font-size: 100%; border-top: none}
+.sybil_routerinfo, .sybil_routerinfo tr:nth-child(2) td, #netdb .sybil_routerinfo tr:last-child td {border-bottom: none}
 .sybil_routerinfo b.netdb_transport {margin-left: -13px; margin-right: 0}
 .sybil_routerinfo p {margin: 0 0 0 3px; padding: 1px 0; width: 100%; min-width: 240px; -webkit-column-break-inside: avoid; break-inside: avoid; page-break-inside: avoid}
 p.sybil_info, p.family, p.threatpoints, p.hashdist, p#sybil_totals, p.notfound {margin: 3px 0; padding: 7px 5px 7px 30px; border: 1px solid var(--border_inner); box-shadow: var(--highlight); font-weight: 700; color: var(--ink_light); text-align: left; background: var(--eye) no-repeat 8px center / 16px, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff}
@@ -1209,52 +1234,32 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 .threatpoints + ul li:last-child {margin-bottom: 0}
 .threatpoints + ul li {margin-left: -12px; width: 100%; display: inline-block; line-height: 1.2; list-style: none; -webkit-column-break-inside: avoid; break-inside: avoid; page-break-inside: avoid}
 .threatpoints + ul li a {margin-left: 2px; padding: 0 2px; white-space: nowrap; font-size: 8pt; border-radius: 1px; background: #eef}
-.sybil_routerinfo + .threatpoints + ul + a[name] + table {margin-top: -11px}
+.sybil_routerinfo + .threatpoints + ul + a[name] + table {margin-top: -13px}
 .sybil_routerinfo + .threatpoints + ul + a[name] + table th:last-child img {margin-top: -1px}
 .sybil_distance th {text-align: left; padding: 5px}
 .sybil_distance th:last-child, .sybil_distance td:last-child {text-align: right}
 .sybil_distance tr:nth-child(n+2):hover {background: #ffe; font-weight: 700}
-.identicon {margin: -1px 0 -1px 2px; padding: 0; width: 28px; height: 28px; vertical-align: middle; border-left: 1px solid var(--border_inner); image-rendering: -webkit-optimize-contrast}
+.identicon {margin: -1px 0 -1px 2px; padding: 0; width: 28px; height: 28px; vertical-align: middle; image-rendering: optimize-contrast}
 #netdb #sybil_ourinfo th {padding-top: 3px; padding-bottom: 3px}
 #sybil_ourinfo .identicon {margin: -8px 0}
 .threatpoints + ul + a[name] + .sybil_routerinfo th img {margin-top: -1px; margin-bottom: -1px}
-.sybil_routerinfo hr {margin: -2px 0}
 .sybil_routerinfo .netdbheader {margin-right: 0; padding: 3px; text-align: right}
-.sybil_routerinfo .netdb_header img[src^="/flags"] {margin: 0 5px 0 3px}
-#netdb .sybil_routerinfo th code {margin-top: 5px; margin-bottom: 5px}
 .sybil_routerinfo th:last-child b[style="float: right;"] {margin-top: 2px; font-size: 90%; font-style: italic}
+.sybil_routerinfo th img {margin: 0 3px}
+.sybil_routerinfo hr {margin: -2px 0}
+.sybil_routerinfo .netdb_transport {margin: 0 3px; display: inline-block}
+.sybil_routerinfo .netdb_header .viewprofile {margin: 3px 10px}
 
 /* lookup */
 #netdblookup {margin-top: 15px; margin-bottom: -8px}
 #netdblookup td:nth-child(odd) {padding-left: 10px; white-space: nowrap; text-align: right; font-weight: 700; color: var(--ink_light)}
 #netdblookup td:nth-child(even) {width: 50%}
 #closetorouter {margin-left: 6px}
-.leaseset th:first-child code {margin-left: 4px}
-.leaseset th:last-child code {margin: 0 0 0 4px; width: auto}
-#profilelist .viewprofile img, #profilelist .configpeer img {margin-bottom: -3px}
-#profilelist .viewprofile {margin-right: 8px}
-.familysearch img {margin-right: -4px; margin-left: 0}
-.netdb_header .configpeer, .netdb_header .configpeer {margin-right: 5px}
-.viewprofile + .viewfullentry, .viewfullentry + .configpeer, .viewprofile + .configpeer {margin-left: -5px}
-.netdb_header img[src^="/flags"], th img[src^="/flags"] {margin-left: 2px; width: 24px; height: auto; border: 1px solid #bbc; border-radius: 2px}
-.netdb_header img[src="/flags.jsp?c=a0"] {margin: 1px 0 -4px; display: inline-block; vertical-align: middle}
-.version, #netdbtiers a {margin: 0; padding: 1px 3px; display: inline-block; min-width: 44px; text-align: center; font-weight: 700; border: 1px solid #bbc; border-radius: 2px; box-shadow: var(--highlight); background: var(--row)}
-#netdbtiers a {min-width: 20px; margin-right: 5px; padding: 0 3px; margin: -1px 5px -1px 0}
-#netdbtiers a:hover b {color: #f60}
-.version:empty {display: none}
-#netdb_ourinfo .version {margin-right: 4px}
-#netdb .version {margin: 0 8px 0 3px}
-#profiles .version {margin: 0 2px}
-#sybil_ourinfo .unreachable, #netdb_ourinfo .unreachable {display: none}
-.sybil_routerinfo .netdb_transport {margin: 0 3px; display: inline-block}
-#netdboverview td {line-height: 1.6}
-#netdboverview .version {line-height: 1.2}
+
 .keysearch, .signingkey, .version, .version a {color: var(--a)}
 .signingkey {margin: 2px 0; padding: 2px 4px 2px 16px; display: inline-block; font-size: 90%; border: 1px solid #bbd; border-radius: 2px; box-shadow: var(--highlight); background: var(--crypto) no-repeat 1px center / 14px, var(--row)}
 .signingkey.encryption {background: var(--lock) no-repeat 1px center / 14px, var(--row)}
 #netdb_ram {margin: 0 0 0 -2px; padding: 2px 3px; display: inline-block; font-size: 90%; box-shadow: var(--highlight); border: 1px solid #bbd; border-radius: 2px; background: var(--row)}
-.leaseset .routerid {margin-left: 2px; padding: 0 2px 0 0; display: inline-block; line-height: 1.5; border-radius: 2px}
-.leaseset .routerid img {margin: -1px 0 0 4px}
 #peers .routerid {margin: 1px 0; padding: 1px 2px 1px 3px; display: inline-block; border-radius: 2px}
 .netdb_tunnel {margin-right: 5px}
 #tunnels .routerid > * {vertical-align: middle}
@@ -1315,12 +1320,13 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 #profiles .tunnel_peer {margin-left: -6px}
 #profiles .wideload {text-align: center}
 #profiles .separator hr {display: none}
+#profiles .version {margin: 0 2px}
 #peerprofiles.widescroll {margin-top: -12px; padding-top: 120px; position: relative}
 #profilelist td:last-child {padding-right: 5px; width: 1%; white-space: nowrap; text-align: center}
 #profilelist td:nth-child(3) i {width: 100%; display: inline-block; text-align: center; letter-spacing: 0}
 #profilelist th:nth-child(3), #profilelist td:nth-child(3) {text-align: left}
-#profilelist .tier, #profilelist .ff, #profilelist .ssuintro, #profilelist .unreachable, #profilelist .reachable, #profilelist .hidden, #floodfills .tier, #floodfills .ff, #floodfills .ssuintro, #floodfills .unreachable, #floodfills .reachable, #floodfills .hidden, #capabilities_key b, .netdbentry .tier, .netdbentry .ff, .netdbentry .ssuintro, .netdbentry .unreachable, .netdbentry .reachable, .netdbentry .hidden, .sybil_routerinfo .tier, .sybil_routerinfo .ff, .sybil_routerinfo .ssuintro, .sybil_routerinfo .unreachable, .sybil_routerinfo .reachable, .sybil_routerinfo .hidden {margin: 2px; padding: 1px 0; display: inline-block; min-width: 18px; max-width: 18px; text-align: center; text-transform: none; font-weight: 700; color: #4a415e; text-shadow: 0 1px 1px #fff; border: 1px solid #bbc; border-radius: 2px; box-shadow: var(--highlight); background: linear-gradient(180deg,#fff, #dbecff)}
-#netdb a:hover span, #profiles a:hover span, .version:hover a, #capabilities_key table b:hover {color: #f60}
+#profilelist .tier, #profilelist .ff, #profilelist .ssuintro, #profilelist .unreachable, #profilelist .reachable, #profilelist .hidden, #floodfills .tier, #floodfills .ff,
+#profilelist .viewprofile, #profilelist .configpeer {margin: 1px}
 #tunnel_defs b {color: var(--ink_light)}
 #floodfills .tier, #floodfills .ff, #floodfills .ssuintro, #floodfills .unreachable, #floodfills .reachable, #floodfills .hidden {margin: 0 2px}
 #profilelist .reachable, #floodfills .reachable, #capabilities_key .reachable, .netdbentry .reachable, .sybil_routerinfo .reachable {background: linear-gradient(180deg,#fff, #e2ffe2)}
@@ -1331,6 +1337,8 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 #profilelist .ssuintro, #floodfills .ssuintro, #capabilities_key .ssuintro, .netdbentry .ssuintro {background: linear-gradient(180deg,#fff, #fbf)}
 #profilelist th, #profilelist td, #floodfills th, #floodfills td{text-align: center}
 #profilelist td:nth-child(2) {text-align: left}
+#profilelist .viewprofile img, #profilelist .configpeer img {margin-bottom: -3px}
+#profilelist .viewprofile {margin-right: 8px}
 #floodfills {margin-top: 8px; margin-bottom: 15px}
 #floodfills th {border-right: 1px solid var(--border_inner); box-shadow: var(--highlight), inset 0 0 1px 1px #ddf}
 #floodfills td {border-left: 0 solid transparent; border-right: 0 solid transparent}
@@ -1600,6 +1608,7 @@ b.suboption {margin: 0; padding: 5px 10px; display: inline-block; text-shadow: 0
 #bwlimiter a, #i2pclientconfig a, #config_logging h3 a, #graphdisplay a, #version a, #logs h3 a, #tunnels h3 a:not(.lsview), #advancedconfig a, #iptransport a, #reseedsetup a, #graphinfo a, #config_service h3 a, .h3navlinks a {margin: -6px -5px; padding: 6px 10px; display: inline-block; vertical-align: top; text-transform: capitalize; border: none; border-left: 1px solid var(--border_inner); border-radius: 0; background: linear-gradient(180deg,#f8f8ff 60%, #dedeff)}
 #config_clients #i2pclientconfig a {margin-top: -8px}
 #bwlimiter a, #i2pclientconfig a, #config_logging h3 a, #graphdisplay a, #version a, #tunnels h3 a, #advancedconfig a, #iptransport a, #reseedsetup a, #graphinfo a, #config_service h3 a, .h3navlinks a {margin: -5px -5px -9px; padding: 12px 14px 8px; box-shadow: var(--highlight); background: linear-gradient(180deg,#fff 48%, #efefff 48%)}
+#routerinformation .h3navlinks a, #config_logging .h3navlinks a {margin-top: -7px}
 #clientsconfig input.add {float: left}
 #config_logging h3 a::before, #webappconfiguration a::before, #routerinformation #version a::before, #i2pclientconfig a::before, #pluginmanage a::before {width: 18px; height: 13px; display: inline-block; vertical-align: middle; background: var(--eye) no-repeat left center / 14px; content: ""}
 #config_logging h3 a:hover::before, #config_logging h3 a:focus::before, #routerinformation #version a:hover::before, #routerinformation #version a:focus::before {background: var(--eye_hover) no-repeat left center / 14px}
@@ -1742,6 +1751,7 @@ th.options {padding: 8px 5px 8px 10px; font-size: 9pt}
 #bandwidthconfig td:not(.infohelp):first-child {padding-right: 0; background: none}
 #bandwidthconfig td:last-child {white-space: normal}
 #config_bandwidth #bandwidthconfig .optionsave {padding: 8px 6px}
+#configbandwidth img {margin-right: -10px}
 
 /* network */
 .config_experimental {font-size: 0}
@@ -1769,7 +1779,8 @@ th.options {padding: 8px 5px 8px 10px; font-size: 9pt}
 #config_service form {margin: -7px -4px 8px; vertical-align: top; columns: 500px 2; column-gap: 10px}
 
 /* ui */
-.themechoice .optbox, .langselect .optbox {vertical-align: text-bottom}
+.themechoice, .langselect {width: 140px}
+.themechoice .optbox {vertical-align: text-bottom}
 .themechoice .optbox {margin-top: 0; margin-left: -38px; min-height: 88px; min-width: 123px; position: absolute; z-index: 999; opacity: 0}
 .themechoice {margin: 4px; padding: 0 4px; width: 115px; float: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: center; border: 1px solid var(--border_inner); box-shadow: var(--highlight); background: #f8f8ff; transition: filter ease .05s; filter: drop-shadow(0 0 1px rgba(220,220,255,.7))}
 .themechoice:hover {border: 1px solid #f60; background: #fff; transition: filter ease .05s}
@@ -1777,6 +1788,8 @@ th.options {padding: 8px 5px 8px 10px; font-size: 9pt}
 .themechoice:active > img ~ .themelabel {color: #fff; background: #f60}
 .themechoice > img {filter: drop-shadow(0 0 1px #fff)}
 .themechoice:hover > img {filter: drop-shadow(0 0 1px #f60)}
+.themechoice .optbox {margin-left: -49px; min-height: 92px}
+.themechoice .optbox, .themechoice .optbox:hover, .themechoice .optbox:focus {width: 144px}
 .themechoice .optbox + img {margin: 5px 0 25px -1px; padding: 2px 0}
 .themechoice .optbox:checked + img, .themechoice .optbox:checked + img {padding: 6px 0; height: 40px; width: 40px}
 .themelabel {margin: -24px -4px 0; padding: 3px 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 9pt; border-top: 1px solid var(--border_inner); box-shadow: var(--highlight); background: #f8f8ff}
@@ -1824,7 +1837,7 @@ th.options {padding: 8px 5px 8px 10px; font-size: 9pt}
 .langselect .optbox:active ~ .ui_lang {color: #fff; box-shadow: var(--highlight), inset 3px 3px 3px rgba(0,0,0,.2); background: #f60}
 .langselect .optbox:checked:active ~ .ui_lang {color: #f60; box-shadow: var(--highlight); background: linear-gradient(90deg, #eef, #fff, #eef)}
 
-/* configui password*/
+/* console password */
 table#consolepass th:nth-child(2) {text-align: left}
 table#consolepass td:not[colspan]:first-child {width: 100px; white-space:nowrap}
 table#consolepass td {padding: 5px 10px}
@@ -1920,12 +1933,6 @@ table#consolepass input[name="name"] {margin-right: 20px}
 #joinfamily .optionsingle {padding: 5px 5px 0 45px; background: #eaeaff var(--key) no-repeat 12px center / 28px}
 #joinfamily .optionsingle:hover {background: #ffd var(--key) no-repeat 12px center / 28px}
 
-/* ui */
-.themechoice, .langselect {width: 140px}
-.themechoice .optbox, .langselect .optbox, .themechoice .optbox:hover, .langselect .optbox:hover, .themechoice .optbox:focus, .langselect .optbox:focus {width: 144px}
-.themechoice .optbox {margin-left: -49px; min-height: 92px}
-.langselect .optbox, .langselect .optbox:hover, .langselect .optbox:focus {margin-left: -2px}
-td.optionsave, .formaction, table#addkeyring tr:last-child td {padding: 8px 6px}
 #view_profile .identicon {height: 31px}
 #view_profile a img {margin-right: 34px}
 
@@ -2156,17 +2163,6 @@ td.optionsave, .formaction, table#addkeyring tr:last-child td {padding: 8px 6px}
 #logs .tabletitle, #jobs h3, #tunnels h3[id] {position: relative; overflow: hidden}
 #logs #enviro ~ .tabletitle::after, #jobs h3::after, #tunnels h3[id]::after {width: 0; height: 1px; display: inline-block; position: absolute; bottom: 0; left: 0; background: linear-gradient(90deg, #d30, #f60); content: ""; animation: ease-out reloader 1s forwards; opacity: .7}
 
-/* highlight linked leaseset */
-.leaseset:target {border: 1px solid #5a5}
-.leaseset:target tr:first-child th, .leaseset:target td {border-top: 1px solid #5a5; border-bottom: 1px solid #5a5}
-.leaseset:target th:first-child, .leaseset:target td:first-child {border-left: 1px solid #5a5}
-.leaseset:target th:last-child, .leaseset:target td:last-child {border-right: 1px solid #5a5}
-
-.lsdest, .leaseset th:last-child a[href$="i2p/"] {margin-left: 3px; padding: 2px 4px 4px; display: inline-block; border: 1px solid #bbc; border-radius: 2px; background: var(--row)}
-.lsdest {padding-left: 22px; border-radius: 0; border-left-width: 4px; border-right-width: 4px; background: var(--hardhat) no-repeat 4px center / 14px, var(--row)}
-.lsdest.published {padding-left: 38px; background: var(--hardhat) no-repeat 4px center / 14px, var(--globe) no-repeat 21px center / 14px, var(--row)}
-.leaseset th:last-child a[href$="i2p/"] {padding-left: 22px; background: var(--link) no-repeat 5px center / 12px, var(--row)}
-
 /* iframe */
 .main.embedded {text-align: center; padding: 2px; overflow: hidden}
 .main.embedded iframe {margin: 1px -10px -4px; background: #f2f2ff}
@@ -2207,22 +2203,6 @@ iframe.iframed {margin: 10px 0 0}
 .lazy.lazyshow, .lazy.lazyshow td, #peers .lazy:not(.lazyhide) {opacity: 1}
 .leasesets_container .lazy.lazyhide, .leasesets_container .lazy.lazyhide td, .leasesets_container .lazy:not(.lazyshow) {opacity: 1; contain: none}
 #tunnelpeercount .lazy, .newsentry.lazy {contain: none}
-.viewedit br {display: none}
-.viewprofile, .configpeer, .familysearch {font-size: 0}
-.viewprofile, .configpeer, .familysearch {margin: 1px 2px; padding: 4px; width: 12px; height: 12px; vertical-align: middle; display: inline-block; line-height: 0; border: 1px solid #bbd; border-radius: 2px; box-shadow: var(--highlight)}
-#profilelist .viewprofile, #profilelist .configpeer {margin: 1px}
-.netdb_header .viewprofile, .netdb_header .configpeer, .netdb_header .familysearch {margin: 3px; width: 14px; height: 14px}
-.viewprofile {background: var(--eye) no-repeat center center / 12px, var(--btn)}
-.viewprofile:hover, .viewprofile:focus {background: var(--eye_hover) no-repeat center center / 12px, var(--btn_hover)}
-.configpeer {background: var(--edit) no-repeat center center / 12px, var(--btn)}
-.configpeer:hover, .configpeer:focus {background: var(--edit_hover) no-repeat center center / 12px, var(--btn_hover)}
-.familysearch {background: var(--family) no-repeat center center / 12px, var(--btn)}
-.familysearch:hover {background: var(--family) no-repeat center center / 12px, var(--btn_hover)}
-.netdb_header .viewprofile, .netdb_header .configpeer, .netdb_header .familysearch {margin: 3px; width: 14px; height: 14px}
-.netdbentry .tunnel_cap, .netdbentry .tier, .netdbentry .ff, .netdbentry .reachable, .netdbentry .unreachable, .netdbentry .version, .sybil_routerinfo .tunnel_cap, .sybil_routerinfo .tier, .sybil_routerinfo .ff, .sybil_routerinfo .reachable, .sybil_routerinfo .unreachable, .sybil_routerinfo .version {margin: 0 2px 0; padding: 1px 4px; line-height: 1.5; vertical-align: middle}
-.netdb_header img[src^="/flags"] {width: 30px; height: auto; margin-left: 4px}
-.netdbentry .netdb_header img[src^="/flags"] {margin: -7px 0 0 4px}
-.netdbentry .netdb_header img[src="/flags.jsp?c=a0"] {margin-top: 0}
 
 /* animations */
 @keyframes bar {from {width: calc(100% + 2px)}}
@@ -2514,7 +2494,6 @@ h3#restartrouter, p#tunnelconfig {margin-bottom: -15px}
 #netconfig label::before, #externali2cp td label::before, #externali2cp .nowrap::before, #reseedconfig .nowrap::before {min-height: 48px}
 #netdbcountrylist img {width: 24px; height: auto}
 #netdboverview table th:last-child::after, #netdboverview table td:last-child::after {width: 5px; display: inline-block; content: ""}
-#netdboverview table th {padding-top: 9px; padding-bottom: 9px}
 .newsAuthor {padding: 0 0 0 14px; font-size: 9.5pt; background-size: 12px; background-position: left center}
 #peerprofiles.widescroll {padding-top: 123px}
 #peers .routerid {padding: 1px 0 1px 3px}
