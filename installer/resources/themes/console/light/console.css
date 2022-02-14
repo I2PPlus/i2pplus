@@ -745,7 +745,7 @@ input, input:visited, button, button:visited {margin: 3px; padding: 5px; line-he
 button a, button a:visited {font-weight: 400; color: var(--ink_light)}
 button:hover, input[type=submit]:hover, input[type=reset]:hover, button:focus, input[type=submit]:focus, input[type=reset]:focus {color: var(--ink_darker); border: 1px solid #f60; box-shadow: var(--highlight), inset 0 -8px 3px 8px rgba(255,96,0,.02), inset 0 0 10px rgba(255,96,0,.05), 0 0 1px rgba(255,96,0,.1), 0 7px 4px -4px rgba(0,0,0,.1); background: var(--btn_hover); filter: saturate(100%) drop-shadow(0 0 1px rgba(204, 204, 204, .8)); transition: ease border .7s}
 button:hover a {color: var(--ink_darker)}
-button:active, input[type=submit]:active, input[type=reset]:active {color: #4c526f; box-shadow: var(--highlight), inset 2px 2px 2px #555; background-blend-mode: luminosity; transition: none}
+button:active, input[type=submit]:active, input[type=reset]:active {color: #4c526f; box-shadow: var(--btn_shadow_active); background-blend-mode: luminosity; transition: none}
 button a:active {color: #4c526f}
 input.accept, button.accept {padding: 5px 9px 5px 24px; background: var(--yes) no-repeat 8px center / 12px, var(--btn)}
 input.accept:hover, button.accept:hover, input.accept:focus, button.accept:focus {background: var(--yes) no-repeat 8px center / 12px, var(--btn_hover)}
