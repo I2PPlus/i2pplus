@@ -34,6 +34,7 @@ tr {contain: layout}
 /* topnav */
 .snarknavbar {margin: 0 0 -6px; padding: 9px 0; min-width: 888px; position: sticky; top: -2px; z-index: 999; text-align: center; border: var(--border); box-shadow: var(--highlight), inset 0 0 1px 1px #050; background: var(--topnav); background-size: var(--topnav_size); will-change: transform}
 .iframed .snarknavbar {margin-top: -2px; padding: 8px 0 7px; position: static}
+#top a:not(:hover):not(:focus):not(:active), #top a:not(:hover):not(:focus):not(:active):visited {color: #32ff32}
 .nav_main {border-radius: 1px 0 0 1px; padding-left: 24px; background: #000 var(--snark) no-repeat 7px center}
 .nav_forum {background: #000 var(--forum) no-repeat 7px center}
 .nav_tracker {background: #000 var(--tracker) no-repeat 7px center}
@@ -42,17 +43,16 @@ tr {contain: layout}
 .nav_forum:hover, .nav_forum:focus {background-image: var(--forum_hover), var(--nav_hover)}
 .nav_tracker:hover, .nav_tracker:focus {background-image: var(--tracker_hover), var(--nav_hover)}
 .nav_search:hover, .nav_search:focus {background-image: var(--search_hover), var(--nav_hover)}
-.nav_main:active {background: var(--snark_active) no-repeat 7px center #f50}
-.nav_forum:active {background: var(--forum_active) no-repeat 7px center #f50}
-.nav_tracker:active {background: var(--tracker_active) no-repeat 7px center #f50}
-.nav_search:active {background: var(--search_active) no-repeat 7px center #f50}
+.nav_main:active {background: var(--snark_active) no-repeat 7px center, linear-gradient(180deg, #d30, #f50)}
+.nav_forum:active {background: var(--forum_active) no-repeat 7px center, linear-gradient(180deg, #d30, #f50)}
+.nav_tracker:active {background: var(--tracker_active) no-repeat 7px center, linear-gradient(180deg, #d30, #f50)}
+.nav_search:active {background: var(--search_active) no-repeat 7px center, linear-gradient(180deg, #d30, #f50)}
 .nav_main.snarkNav:last-child {border-radius: 1px}
 .snarkNav {margin: -1px -2px 0; padding: 4px 7px 5px 23px; display: inline-block; position: relative; line-height: 1.2; letter-spacing: .1em; text-transform: uppercase; font-size: 10pt; font-weight: 700; text-shadow: 0 0 1px #000; border: 1px solid #4a4; border-radius: 0; box-shadow: var(--highlight), inset 0 0 1px 1px #0f0; opacity: .5}
-.snarkNav, .snarkNav:visited {color: #32ff32}
 .snarkNav, .snarkNav:hover, .snarkNav:focus {color: #177d17; background-size: 15px, 100%; background-position: 7px center, center center, center center; background-repeat: no-repeat, repeat}
 .snarkNav:hover, .snarkNav:focus {z-index: 10; color: #f60; border: 1px solid #930; border-radius: 0; box-shadow: var(--highlight), inset 0 0 0 2px rgba(255,96,0,.2); opacity: 1}
 .snarkNav:last-child {border-radius: 0 1px 1px 0}
-.snarkNav:active, .snarkNav:active {box-shadow: var(--highlight), inset 3px 3px 3px 3px #3f1a04; text-shadow: none; color: #fff; background-size: 14px; background-repeat: no-repeat; filter: none; transition: ease box-shadow .05s}
+.snarkNav:active, .snarkNav:active {box-shadow: var(--highlight), inset 2px 2px 2px 1px rgba(0,0,0,.6); text-shadow: none; color: #fff; background-size: 14px; background-repeat: no-repeat; filter: none; transition: ease box-shadow .05s}
 .iframed .nav_main, .iframed .nav_main.snarkNav:last-child, .iframed .snarkNav:last-child {border-radius: 0}
 .iframed .snarkNav:last-child[href="/i2psnark/"] {margin-top: 0}
 
@@ -592,7 +592,8 @@ td.fileStatus {background: rgba(0,32,0,.2)}
 #configs {margin: -2px 0 0; user-select: none}
 #configs tr:nth-last-child(2) td {padding: 11px 10px 10px; text-align: right}
 #configs tr:nth-last-child(2) {box-shadow: var(--highlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000800}
-#configs th {padding: 8px 8px 8px 28px; font-size: 10pt; text-align: left; background: url(/i2psnark/.resources/icons/nopeers.svg) no-repeat 6px center / 20px, linear-gradient(135deg,#000,#000b00)}
+#configs th {padding: 8px; font-size: 10pt; text-align: left; background: linear-gradient(180deg,#020,#000)}
+#configs th.suboption::before {margin: -2px 3px 0 2px; width: 20px; height: 20px; display: inline-block; vertical-align: middle; background: url(/i2psnark/.resources/icons/stalled.svg) no-repeat center center / 20px; content: ""; filter: saturate(.3) brightness(1.2)}
 #configs td, #configs td:first-child {padding: 0}
 #configs td {min-width: 0; vertical-align: middle; text-align: left; font-weight: 400}
 #configs td:nth-child(2) {white-space: nowrap}
