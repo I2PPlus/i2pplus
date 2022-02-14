@@ -854,8 +854,8 @@ form[action="events"] > .formaction {margin-bottom: -11px; margin-right: -21px; 
 #tunnels h3 a {float: right}
 #tunnels h3 a:not(.lsview), #logs a.configure, #logs a.delete, #applinks a, #sitelinks a {font-size: 0}
 #tunnels h3 a:not(.lsview) {margin-left: 4px; border-left: var(--border)}
-#tunnels h3 a[href^="/configtunnels#"]::after, #tunnels h3 a[href$="/i2ptunnelmgr"]::after, #logs a.configure::after, #logs a.delete::after, #applinks a::after, #sitelinks a::after {width: 16px; height: 16px; float: right; background: var(--settings) var(--center); background-size: 16px; content: ""}
-#tunnels h3 a[href^="/configtunnels#"]:hover::after, #tunnels h3 a[href^="/configtunnels#"]:focus::after, #tunnels h3 a[href$="/i2ptunnelmgr"]:hover::after, #tunnels h3 a[href$="/i2ptunnelmgr"]:focus::after, #logs a.configure:hover::after, #logs a.configure:focus::after, #applinks a:hover::after, #applinks a:focus::after, #sitelinks a:hover::after, #sitelinks a:focus::after {background: var(--settings_hover) var(--center) / 16px}
+#tunnels h3 a[href^="/configtunnels#"]::after, #tunnels h3 a[href$="/i2ptunnelmgr"]::after, #logs a.configure::after, #logs a.delete::after, #applinks a::after, #sitelinks a::after {width: 16px; height: 16px; float: right; background: var(--settings) var(--center), var(--settings_hover) var(--center); background-size: 16px, 0; content: ""; filter: drop-shadow(0 0 1px #000) drop-shadow(0 0 2px #000)}
+#tunnels h3 a[href^="/configtunnels#"]:hover::after, #tunnels h3 a[href^="/configtunnels#"]:focus::after, #tunnels h3 a[href$="/i2ptunnelmgr"]:hover::after, #tunnels h3 a[href$="/i2ptunnelmgr"]:focus::after, #logs a.configure:hover::after, #logs a.configure:focus::after, #applinks a:hover::after, #applinks a:focus::after, #sitelinks a:hover::after, #sitelinks a:focus::after {background: var(--settings_hover) var(--center) / 16px; filter: none}
 #tunnels h3 a[href^="/configtunnels#"]:active::after, #tunnels h3 a[href$="/i2ptunnelmgr"]:active::after, #logs a.configure:active::after, #applinks a:active::after, #sitelinks a:active::after {opacity: .7; transform: rotate(90deg); transition: linear transform .2s}
 #tunnelPeerCount .configpeer img {padding: 3px}
 #tunnels h3 .refreshpage, #tunnels h3 .refreshpage img {margin: -7px 1px -7px 0; padding: 8px 0 9px; border: none}
@@ -1082,7 +1082,7 @@ p.family + p.family, .sybil_info + .sybil_info {margin-top: -4px}
 /* netdb lookup */
 #netdb .tabletitle {margin-bottom: -2px}
 #netdblookup {margin-bottom: 9px}
-#netdblookup th {padding: 10px; text-align: left; letter-spacing: .08em; text-transform: uppercase; font-size: 11pt}
+#netdblookup th {padding: 10px; text-align: left; letter-spacing: .08em; text-transform: uppercase; font-size: 11pt; background: var(--title)}
 #netdblookup td:nth-child(odd) {padding-left: 10px; padding-right: 0; text-align: right; white-space: nowrap; font-weight: 700}
 #netdblookup td:nth-child(even) {padding-left: 0; width: 50%}
 #netdblookup td:nth-child(2) {border-right: 1px inset #131}
@@ -1144,6 +1144,7 @@ th code {user-select: all}
 #leasesetdebug, #leasesetsummary {margin-bottom: 14px}
 .leaseset th {padding: 3px 5px; position: static; text-align: left; font-weight: 400}
 .leaseset th:last-child, .leaseset td:nth-child(2) {padding-right: 5px; white-space: nowrap; text-align: right}
+.leaseset th:last-child {padding-right: 0}
 .leaseset th {font-size: 9pt}
 .leaseset th code {font-size: 8.5pt}
 .lsdest, .leaseset th:last-child a[href$="i2p/"] {margin-left: 3px; padding: 2px 4px 4px; display: inline-block; border: 1px solid #020; border-radius: 2px; box-shadow: var(--outline); background: var(--badge)}
@@ -1152,9 +1153,9 @@ th code {user-select: all}
 .leaseset th:last-child a[href$="i2p/"] {padding-left: 22px; background: var(--link) no-repeat 5px center / 12px, var(--badge)}
 .addtobook {text-align: right}
 .addtobook a {font-size: 0}
-.addtobook a::after {margin: -14px -4px -8px; padding-left: 6px; width: 24px; height: 26px; display: inline-block; vertical-align: middle; border-left: var(--border_soft); background: var(--ahelp) var(--center) / 14px; content: ""}
+.addtobook a::after {margin: -14px -4px -8px; padding-left: 6px; width: 24px; height: 26px; display: inline-block; vertical-align: middle; border-left: var(--border_softer); background: var(--ahelp) var(--center) / 14px; content: ""}
 .addtobook a:hover {filter: drop-shadow(0 0 1px var(--hover))}
-#leasesetdebug th, #leasesetsummary th {padding: 5px 5px 5px 10px; word-spacing: .1em; letter-spacing: .08em; font-size: 10pt; font-weight: 700; text-transform: uppercase}
+#leasesetdebug th, #leasesetsummary th {padding: 8px 10px; word-spacing: .1em; letter-spacing: .08em; font-size: 10pt; font-weight: 700; text-transform: uppercase; background: var(--title)}
 #leasesetdebug th a, #leasesetsummary a {word-spacing: normal; letter-spacing: normal; font-size: 9pt; text-transform: capitalize}
 #leasesetsummary td:first-child {padding-left: 10px; width: 100px; white-space: nowrap}
 #leasesetdebug th:first-child, #leasesetsummary th:first-child {white-space: nowrap; text-align: left}
