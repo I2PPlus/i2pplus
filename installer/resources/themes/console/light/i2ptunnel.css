@@ -193,10 +193,10 @@ th.tunnelControl {text-align: center}
 #tunnelOpts td {padding: 0; width: 25%}
 #tunnelOpts table {border: none}
 #tunnelOpts table td {padding: 5px; border-bottom: var(--border_softer)}
+#tunnelOpts table tr, #tunnelOpts table td:first-child, #throttler tr, #throttler th:first-child, #throttler td:first-child, #clientAuth tr, #clientAuth th:first-child, #clientAuth td:first-child {border-left: none}
+#tunnelOpts table tr, #tunnelOpts table td:first-child, #throttler tr, #throttler th:last-child, #throttler td:last-child, #clientAuth tr, #clientAuth th:last-child, #clientAuth td:last-child {border-right: none}
 #tunnelOpts table tr:first-child td {border-top: none}
 #tunnelOpts table tr:last-child td {border-bottom: none}
-#tunnelOpts table td:first-child {border-left: none}
-#tunnelOpts table td:last-child {border-right: none}
 input[type=text].filemanager {background: #fafaff var(--files) no-repeat 8px center / 15px}
 input[type=text].filemanager:focus {background: #fff var(--files) no-repeat 8px center / 15px}
 input[type=password].password, input[type=text].clientKey {background: #fafaff var(--key) no-repeat 8px center / 15px}
@@ -210,8 +210,6 @@ input[type=text].username:focus, input[type=password].password:focus, input[type
 /* throttler */
 #throttler, #clientAuth {border: none}
 td#throttle, #clientAuthConfig {padding: 0; box-shadow: none}
-#throttler tr, #throttler th:first-child, #throttler td:first-child, #clientAuth tr, #clientAuth th:first-child, #clientAuth td:first-child {border-left: none}
-#throttler tr, #throttler th:last-child, #throttler td:last-child, #clientAuth tr, #clientAuth th:last-child, #clientAuth td:last-child {border-right: none}
 #throttler th {padding-left: 20px}
 #throttler td {width: 20%}
 #throttler td:first-child {width: 20%; white-space: nowrap; text-align: right}
