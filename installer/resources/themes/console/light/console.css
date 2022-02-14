@@ -1696,7 +1696,7 @@ th.options {padding: 8px 5px 8px 10px; font-size: 9pt}
 #config_stats #graphchoice {margin-bottom: -2px}
 #config_stats h3 {padding: 6px 5px 6px 10px; box-shadow: none; background: linear-gradient(180deg,#fafaff 50%, rgba(252, 252, 255, .8) 50%, #e2e2ff 100%) #fafaff}
 #configstats th {letter-spacing: .08em; word-spacing: .1em; text-transform: uppercase}
-#configstats label b {margin-left: 3px; margin-bottom: -1px; padding: 0; display: inline-block; vertical-align: middle}
+#configstats label b {margin-left: 3px; margin-bottom: -1px; padding: 0 2px 0 0; display: inline-block; vertical-align: middle}
 #configstats .tablefooter td {padding-top: 6px; padding-bottom: 6px}
 #configstats .tablefooter b {font-size: 90%}
 #configstats label {position: relative; font-size: 90%}
