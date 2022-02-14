@@ -1033,7 +1033,7 @@ h3#udpcon {margin-top: 7px}
 #profiles th {font-size: 90%}
 #profiles .routerid {margin: 2px; padding: 1px 2px 1px 4px; min-width: 0; display: inline-block; border-radius: 2px}
 #profiles .routerid tt {margin-left: 3px}
-#profilelist td:nth-child(2) span, #profilelist td:nth-child(3) span {margin: 0 2px; padding: 2px 4px; min-width: 20px; display: inline-block; box-sizing: border-box; vertical-align: middle; text-align: center; border: 1px solid #bbd; line-height: 1.3; border-radius: 2px}
+#profilelist td:nth-child(2) span, #profilelist td:nth-child(3) span, #floodfills .tier {margin: 0 2px; padding: 2px 4px; min-width: 20px; display: inline-block; box-sizing: border-box; vertical-align: middle; text-align: center; border: 1px solid #bbd; line-height: 1.3; border-radius: 2px}
 #floodfills td:empty::before, #ntcpconnections td:empty::before, #udpconnections td:empty::before, #profilelist td:empty::before, #tunnels .cells:empty::before {width: 100%; display: inline-block; text-align: center; opacity: .8; content: "‒"}
 #floodfills td:nth-child(3) span, #profilelist td:nth-last-child(3) span, #profilelist td:nth-last-child(5) span, #profilelist td:nth-last-child(6) span, #profilelist td:nth-last-child(2) span {min-width: 20px; display: inline-block; text-align: right}
 
@@ -1057,12 +1057,6 @@ h3#udpcon {margin-top: 7px}
 #profilelist .lowlatency, #profilelist .highlatency {font-size: 120%; color: #373}
 #profilelist .highlatency {color: #900}
 #profilelist .fast, #profilelist .highcap, #profilelist .integrated, #profilelist .standard, #profilelist .fast.integrated, #profilelist .highcap.integrated, #profilelist .standard.integrated {width: 56px; height: 16px; display: inline-block; font-size: 0; background-size: 16px}
-#profilelist .reachable, #floodfills .reachable, #capabilities_key .reachable, .netdbentry .reachable, .sybil_routerinfo .reachable {background: linear-gradient(180deg,#fff, #e2ffe2)}
-#profilelist .unreachable, #floodfills .unreachable, #capabilities_key .unreachable, .netdbentry .unreachable {background: linear-gradient(180deg,#fff, #faa)}
-#profilelist .ff, #floodfills .ff, #capabilities_key .ff, .netdbentry .ff, .sybil_routerinfo .ff {background: linear-gradient(180deg,#fff, #ffe2ad)}
-#profilelist .hidden, #floodfills .hidden, #capabilities_key .hidden, .netdbentry .hidden {color: #999; background: linear-gradient(180deg,#fff, #ddd)}
-#profilelist .ssutesting, #floodfills .ssutesting, #capabilities_key .ssutesting, .netdbentry .ssutesting {background: linear-gradient(180deg,#fff, #ffb)}
-#profilelist .ssuintro, #floodfills .ssuintro, #capabilities_key .ssuintro, .netdbentry .ssuintro {background: linear-gradient(180deg,#fff, #fbf)}
 #profilelist .fast {background: var(--fast) no-repeat calc(50% - 10px) center, var(--highcap) no-repeat calc(50% + 10px) center}
 #profilelist .fast.integrated {background: var(--fast) no-repeat left center, var(--highcap) no-repeat center center, var(--integrated) no-repeat right center}
 #profilelist .highcap {background: var(--highcap) no-repeat center center}
@@ -1117,7 +1111,7 @@ h3#udpcon {margin-top: 7px}
 #view_profile td span {padding: 3px 5px; position: absolute; bottom: 0; right: 0; display: inline-block; font-size: 90%; border: 1px solid var(--border_inner); border-radius: 4px 0 0 0; box-shadow: var(--highlight); background: linear-gradient(180deg,#fff 50%, #e2e2ff 50%); user-select: none}
 
 /* netdb */
-#floodfills .ssuintro, #floodfills .unreachable, #floodfills .reachable, #floodfills .hidden, #capabilities_key b, .netdbentry .tier, .netdbentry .ff, .netdbentry .ssuintro, .netdbentry .unreachable, .netdbentry .reachable, .netdbentry .hidden, .sybil_routerinfo .tier, .sybil_routerinfo .ff, .sybil_routerinfo .ssuintro, .sybil_routerinfo .unreachable, .sybil_routerinfo .reachable, .sybil_routerinfo .hidden {margin: 2px; padding: 1px 0; display: inline-block; min-width: 18px; max-width: 18px; text-align: center; text-transform: none; font-weight: 700; color: #4a415e; text-shadow: 0 1px 1px #fff; border: 1px solid #bbc; border-radius: 2px; box-shadow: var(--highlight); background: linear-gradient(180deg,#fff, #dbecff)}
+#floodfills .ssuintro, #floodfills .unreachable, #floodfills .reachable, #floodfills .hidden, #floodfills .tier, #capabilities_key b, .netdbentry .tier, .netdbentry .ff, .netdbentry .ssuintro, .netdbentry .unreachable, .netdbentry .reachable, .netdbentry .hidden, .sybil_routerinfo .tier, .sybil_routerinfo .ff, .sybil_routerinfo .ssuintro, .sybil_routerinfo .unreachable, .sybil_routerinfo .reachable, .sybil_routerinfo .hidden {margin: 2px; padding: 1px 0; display: inline-block; min-width: 20px; max-width: 20px; box-sizing: border-box; text-align: center; text-transform: none; font-weight: 700; color: #4a415e; text-shadow: 0 1px 1px #fff; border: 1px solid #bbc; border-radius: 2px; box-shadow: var(--highlight); background: linear-gradient(180deg,#fff, #dbecff)}
 #netdb a:hover span, #profiles a:hover span, .version:hover a, #capabilities_key table b:hover {color: var(--hover)}
 .netdb_header .viewprofile, .netdb_header .configpeer, .netdb_header .familysearch {margin: 3px; width: 14px; height: 14px}
 .netdbentry .tunnel_cap, .netdbentry .tier, .netdbentry .ff, .netdbentry .reachable, .netdbentry .unreachable, .netdbentry .version, .sybil_routerinfo .tunnel_cap, .sybil_routerinfo .tier, .sybil_routerinfo .ff, .sybil_routerinfo .reachable, .sybil_routerinfo .unreachable, .sybil_routerinfo .version {margin: 0 2px 0; padding: 1px 4px; line-height: 1.5; vertical-align: middle}
@@ -1126,6 +1120,13 @@ h3#udpcon {margin-top: 7px}
 .confignav + .netdbentry, .infowarn + .netdbentry {margin-top: 10px}
 #noleasesets, #notinitialized, .netdbnotfound {margin-top: -6px; margin-bottom: 5px; padding: 10px 20px; font-weight: 700; text-align: center; color: var(--ink_light); border: 1px solid var(--border_inner); box-shadow: 0 0 1px #e0e0eb; border-radius: 2px; background: linear-gradient(90deg, #f2f2ff, #f8f8ff, #f2f2ff)}
 #notinitialized, .netdbnotfound {margin-top: 15px}
+
+#profilelist .reachable, #floodfills .reachable, #capabilities_key .reachable, .netdbentry .reachable, .sybil_routerinfo .reachable {background: linear-gradient(180deg,#fff, #e2ffe2)}
+#profilelist .unreachable, #floodfills .unreachable, #capabilities_key .unreachable, .netdbentry .unreachable {background: linear-gradient(180deg,#fff, #faa)}
+#profilelist .ff, #floodfills .ff, #capabilities_key .ff, .netdbentry .ff, .sybil_routerinfo .ff {background: linear-gradient(180deg,#fff, #ffe2ad)}
+#profilelist .hidden, #floodfills .hidden, #capabilities_key .hidden, .netdbentry .hidden {color: #999; background: linear-gradient(180deg,#fff, #ddd)}
+#profilelist .ssutesting, #floodfills .ssutesting, #capabilities_key .ssutesting, .netdbentry .ssutesting {background: linear-gradient(180deg,#fff, #ffb)}
+#profilelist .ssuintro, #floodfills .ssuintro, #capabilities_key .ssuintro, .netdbentry .ssuintro {background: linear-gradient(180deg,#fff, #fbf)}
 
 /* netdb overview */
 .version {margin: 0; padding: 1px 3px; min-width: 44px; display: inline-block; line-height: 1.2; vertical-align: middle; text-align: center; font-weight: 700; border: 1px solid #bbc; border-radius: 2px; box-shadow: var(--highlight); background: var(--row)}
