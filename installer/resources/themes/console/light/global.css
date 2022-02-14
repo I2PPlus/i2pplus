@@ -21,7 +21,7 @@
   --btn_hover: linear-gradient(180deg,#eee,#fff);
   --btn: linear-gradient(180deg,#fff,#efefff);
   --btn_shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
-  --btn_shadow_active: var(--highlight), inset 3px 3px 3px 1px rgba(0,0,64,.3);
+  --btn_shadow_active: var(--highlight), inset 2px 2px 2px 1px rgba(0,0,64,.3);
   --div_infohelp: linear-gradient(180deg, #f8f8ff, #f0f0ff);
   --filter_focus: drop-shadow(0 0 1px #f60) drop-shadow(0 0 1px rgba(255,96,0,.4));
   --h1: var(--bg), linear-gradient(135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(180deg,#fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px);
@@ -48,6 +48,7 @@
   --suboption: linear-gradient(180deg,#fff 50%,#eef 50%);
   --table: repeating-linear-gradient(135deg, rgba(248,248,255,.8) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fff;
   --th: linear-gradient(180deg,#fcfcff,#fafaff 50%,#f4f4ff 100%);
+  --txtinput: linear-gradient(180deg, #f2f2ff, #fff);
 }
 
 html, body {
@@ -94,7 +95,13 @@ b {
   color: var(--ink_light);
 }
 
-.unbold {font-weight: 400}
+.unbold {
+  font-weight: 400;
+}
+
+.underline {
+  border-bottom: 1px solid #002; padding: 5px 0; margin: 0 0 10px;
+}
 
 tr {
   content: layout;
@@ -145,7 +152,7 @@ select, select[disabled]:hover, select[disabled]:focus {
   margin: 5px;
   padding: 6px 24px 6px 8px;
   min-width: 120px;
-  text-align: left !important;
+  text-align: left;
   font-size: 9pt;
   color: var(--ink_light);
   border: var(--border_input);
@@ -211,10 +218,11 @@ input[type=text], input[type=password] {
 input[type=text]:focus, input[type=password]:focus,
 .freetext:focus, .displayText:focus {
   color: #19191f;
-  box-shadow: var(--highlight), var(--btn_shadow_active) !important;
+  box-shadow: var(--highlight), var(--btn_shadow_active);
   border: 1px solid #676c7f;
   background: #fff;
   filter: var(--filter_focus);
+  transition: ease all .1s;
 }
 
 input[type=text][disabled], label[disabled] {
@@ -254,7 +262,7 @@ input[type=file]::file-selector-button {
   border-radius: 2px;
   box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
   background: var(--btn);
-  background-size: 14px auto, 100% !important;
+  background-size: 14px auto, 100%;
   opacity: 1;
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
   cursor: pointer;
@@ -270,14 +278,14 @@ input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selec
 }
 
 input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
-  width: 19px !important;
-  height: 19px !important;
+  width: 19px;
+  height: 19px;
   border-radius: 1px;
 }
 
 input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
-  width: 19px !important;
-  height: 19px !important;
+  width: 19px;
+  height: 19px;
   border-radius: 50%;
 }
 
@@ -317,27 +325,27 @@ input[type=radio]:not(:checked) {
 .optbox {
   margin: 2px 0;
   position: relative;
-  vertical-align: middle !important;
-  border: var(--border_input) !important;
-  background: #f8f8ff !important;
+  vertical-align: middle;
+  border: var(--border_input);
+  background: #f8f8ff;
   box-sizing: border-box;
   appearance: none;
-  filter: drop-shadow(0 0 1px #e0e0eb) !important;
+  filter: drop-shadow(0 0 1px #e0e0eb);
 }
 
 .optbox:checked {
   box-shadow: inset 0 0 0 1px #fff;
-  background: linear-gradient(180deg,#fff, #f0f0ff) !important;
+  background: linear-gradient(180deg,#fff, #f0f0ff);
 }
 
 .optbox:hover, .optbox:focus, .optbox:active,
 .optbox:checked:hover, .optbox:checked:focus, .optbox:checked:active {
-  width: 19px !important;
-  height: 19px !important;
-  min-width: 19px !important;
-  min-height: 19px !important;
-  border: 1px solid #484e6a !important;
-  box-shadow: 0 0 2px #f60 !important;
+  width: 19px;
+  height: 19px;
+  min-width: 19px;
+  min-height: 19px;
+  border: 1px solid #484e6a;
+  box-shadow: 0 0 2px #f60;
 }
 
 .optbox:not(:checked)::before {
@@ -356,8 +364,8 @@ input[type=radio]:not(:checked)::before {
 /* sliders */
 .optbox.slider[type=checkbox], .optbox.slider[type=checkbox][disabled],
 .optbox.slider, .optbox.slider:hover, .optbox.slider:focus {
-  width: 40px !important;
-  height: 21px !important;
+  width: 40px;
+  height: 21px;
   border-radius: 1px;
   position: relative;
   box-shadow: inset 0 0 0 1px #f2f2ff, inset 3px 3px 3px rgba(0,0,0,.2);
@@ -369,15 +377,15 @@ input[type=radio]:not(:checked)::before {
 }
 
 .optbox.slider:checked {
-  background: linear-gradient(180deg,#393, #4a4) !important;
+  background: linear-gradient(180deg,#393, #4a4);
 }
 
 .optbox.slider:not(:checked):active {
-  background: linear-gradient(180deg,#393, #4a4) !important;
+  background: linear-gradient(180deg,#393, #4a4);
 }
 
 .optbox.slider:checked:active {
-  background: linear-gradient(180deg,#cf0f00, #f00) !important;
+  background: linear-gradient(180deg,#cf0f00, #f00);
 }
 
 .optbox.slider:not([disabled]):hover, .optbox.slider:not([disabled]):focus {
@@ -385,8 +393,8 @@ input[type=radio]:not(:checked)::before {
 }
 
 label[disabled]:hover .optbox.slider, label[disabled]:focus .optbox.slider {
-  border: var(--border_input) !important;
-  box-shadow: inset 0 0 0 1px #f2f2ff, inset 3px 3px 3px rgba(0,0,0,.2) !important;
+  border: var(--border_input);
+  box-shadow: inset 0 0 0 1px #f2f2ff, inset 3px 3px 3px rgba(0,0,0,.2);
 }
 
 .optbox.slider[type=checkbox]::before,
@@ -409,17 +417,17 @@ label[disabled]:hover .optbox.slider, label[disabled]:focus .optbox.slider {
 }
 
 .optbox.slider:checked::before {
-  left: 18px !important;
+  left: 18px;
 }
 
 .optbox.slider:not([disabled]):hover, .optbox.slider:not([disabled]):focus,
 .optbox.slider:not([disabled]):checked:focus, .optbox.slider:not([disabled]):checked:active {
-  box-shadow: none !important
+  box-shadow: none
 }
 
 .optbox.slider:not([disabled]):hover, .optbox.slider:not([disabled]):focus {
-  border: 1px solid var(--hover) !important;
-  box-shadow: none !important;
+  border: 1px solid var(--hover);
+  box-shadow: none;
 }
 
 label:not([disabled]):hover {
@@ -431,5 +439,5 @@ label[disabled], label[disabled]:hover  {
 }
 
 .optbox:hover, label[disabled]:hover .optbox {
-  pointer-events: none !important;
+  pointer-events: none;
 }
