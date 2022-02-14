@@ -267,6 +267,22 @@ td.tabletextarea {padding: 0; background: #fafaff}
 #tunnels tr:hover .cells, #tunnel_defs tr:hover td, tr:hover .cells, #profilelist tr:hover td, #profile_defs tr:hover td, #floodfills tr:hover td, #debug tr:hover td, #jardump tr:hover td, #jobstats tr:hover td, #eventlog tr:hover td, #webappconfig tr:hover td, #tunnelconfig tr:hover td, #sidebarconf tr:hover td, #configstats tr:hover td, #loggingoptions tr:hover td, #addkeyring tr:hover td, .homelinkedit tr:hover td, #clientconfig tr:hover td, .netdbentry tr:hover td, #netdblookup tr:hover td, #peerdefs tr:hover td, #help tr:hover td:not(.infohelp):not(.infowarn)
 #udpconnections {margin-bottom: 4px}
 #warning2 {background: linear-gradient(180deg,rgba(248,248,255,.5), rgba(240,240,255,.5)), url(/themes/snark/ubergine/images/hat.png) no-repeat right bottom / auto 160px, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #f8f8ff}
+span#newtab {float: right; letter-spacing: 0; text-align: right; font-size: 8pt}
+#newtabimg {margin-top: -1px; opacity: .65}
+#newtabimg:hover {opacity: .8; filter: drop-shadow(0 0 1px #f60)}
+h2 {margin: 15px 0; padding: 10px; word-spacing: .1em; letter-spacing: .08em; word-wrap: break-word; text-transform: uppercase; font-size: 13pt; color: var(--ink_light); border: 1px solid var(--border_inner); border-radius: 2px; box-shadow: var(--highlight), 0 0 1px rgba(220,220,220,.3)}
+h2, h3 {background: var(--h3), linear-gradient(90deg, #fafaff 5%, rgba(231, 231, 255, .8) 25%)}
+#console .welcome h2 {white-space: nowrap; box-shadow: var(--highlight), 0 0 1px rgba(220,220,220,.3); background: url(images/favicon.svg) no-repeat right 8px center / 20px, var(--h2); background-blend-mode: luminosity, normal, normal; filter: none}
+#home .welcome + #homepanel > .linkcontainer > h4 {margin-top: -1px}
+h2 a, h3 a {word-spacing: .1em; letter-spacing: .08em; text-transform: uppercase}
+h2 a:hover, h3 a:hover {color: #115}
+h3.tabletitle a:hover, h3.ptitle a:hover, h3#graphinfo a:hover, #news h3 a:hover {color: #f60}
+h2 img {opacity: .9}
+h3, #routerinformation h2, #config_family th {margin: 12px 0 15px; padding: 7px 5px 6px 7px; word-spacing: .1em; text-transform: uppercase; letter-spacing: .08em; font-size: 11pt; color: var(--ink_light); border: 1px solid var(--border_inner); box-shadow: var(--highlight), 0 0 1px rgba(220,220,220,.3)}
+#help h3 {padding-left: 10px}
+h3.tabletitle, h3.ptitle, #config_advanced h3.tabletitle, h3#bannedpeers, #routerinformation h2 {margin-bottom: -2px; text-align: left; border-radius: 0; border: 1px solid var(--border_inner); box-shadow: var(--highlight)}
+h3.ptitle, h3#bannedpeers {margin-bottom: -13px}
+h4 {margin: 5px 0 10px; padding: 4px 6px; word-spacing: .1em; letter-spacing: .08em; font-size: 10pt; text-transform: uppercase; color: var(--ink_light); border: 1px solid var(--border_inner); border-radius: 2px; box-shadow: var(--highlight); background: linear-gradient(90deg, #fff, #eef)}
 
 /* news */
 #news {padding: 3px 15px 5px}
@@ -493,8 +509,9 @@ div[id^="config"] tr:last-child td, #events tr:last-child td, #profiles tr:last-
 /* home */
 #home {padding-bottom: 13px}
 #homepanel {margin-bottom: 0}
-#applinks, #sitelinks {margin: 0 auto 3px; padding: 7px 10px 6px 32px; width: calc(100% - 44px); display: inline-block; overflow: hidden; word-spacing: .1em; letter-spacing: .08em; text-transform: uppercase; font-size: 11pt; color: var(--ink_light); border: 1px solid var(--border_inner); border-radius: 2px; box-shadow: var(--highlight), 0 0 1px rgba(220,220,220,.3)}
-#applinks {margin-top: 15px; background: url(images/favicon.svg) no-repeat 10px center / 16px, var(--h3), var(--h4app)}
+#applinks, #sitelinks, #sitemap h3 {margin: 0 auto 3px; padding: 7px 10px 6px 32px; width: calc(100% - 44px); display: inline-block; overflow: hidden; word-spacing: .1em; letter-spacing: .08em; text-transform: uppercase; font-size: 11pt; color: var(--ink_light); border: 1px solid var(--border_inner); border-radius: 2px; box-shadow: var(--highlight), 0 0 1px rgba(220,220,220,.3)}
+#applinks {margin-top: 18px; background: url(images/favicon.svg) no-repeat 10px center / 16px, var(--h3), var(--h4app)}
+#applinks, #sitemapcontainer h3:first-child {background: url(images/favicon.svg) no-repeat 10px center / 16px, var(--h3), var(--h4app)}
 #sitelinks {clear: left; margin-top: 10px; background: var(--globe) no-repeat 10px center / 16px, var(--h3), var(--h4app)}
 #applinks a, #sitelinks a {font-size: 0}
 #applinks img, #sitelinks img, #sitemap h3 img {margin: -8px 0; padding: 9px 0 7px 10px; display: none; border-left: 1px solid var(--border_inner); opacity: .8; filter: none; transition: ease all 1s}
@@ -503,11 +520,9 @@ div[id^="config"] tr:last-child td, #events tr:last-child td, #profiles tr:last-
 #home h4 a::after {margin: -2px 10px 4px -8px; width: 16px; height: 18px; display: inline-block; vertical-align: middle; background: var(--settings) no-repeat center center / 16px; content: ""}
 #home h4 a:hover::after, #home h4 a:focus::after {background: var(--settings_hover) no-repeat center center / 16px}
 #home h4 a:active::after {transform: rotate(90deg); transition: ease transform .15s}
-
 #chooselang::after, #configbandwidth::after {content: none}
 #chooselang img, #configbandwidth img {margin: -9px -5px -8px 20px; padding-top: 11px; display: inline-block; opacity: .8}
 #chooselang img {margin-right: 10px}
-
 .applink:not(:hover) a:not(:hover):not(:focus):not(:active), .applink:not(:hover) a:not(:hover):not(:focus):not(:active):visited, .sitemaplink:not(:hover):not(:focus):not(:active) {color: #4b689b}
 #applinks:hover img, #sitelinks:hover img, #sitemap h3:hover img, #sitemap h3 img:hover {opacity: 1; transition: ease all .3s}
 .linkcontainer {margin: 0}
@@ -556,8 +571,11 @@ div.search + .linkcontainer {margin: -15px 0 0}
 .sitemaplink {position: relative}
 #sitemap table.search {margin-bottom: -15px}
 #sitemapcontainer {padding: 4px 0 0}
-#sitemapcontainer h3 {margin-bottom: 10px}
+#sitemapcontainer h3 {margin: 14px 0 10px}
 #sitemapcontainer h3:nth-child(n+2) {margin-top: 3px}
+#sitemapcontainer h3:nth-of-type(2) {background: url(/themes/console/images/svg/info.svg) no-repeat 10px center / 16px, var(--h3), var(--h4app)}
+#sitemapcontainer h3:nth-of-type(3) {background: url(/themes/console/images/svg/configure.svg) no-repeat 10px center / 16px, var(--h3), var(--h4app)}
+#sitemapcontainer h3:nth-of-type(4) {background: url(/themes/console/images/svg/help.svg) no-repeat 10px center / 16px, var(--h3), var(--h4app)}
 #sitemap h3 img {padding-right: 6px}
 .sitemapLink, .sitemapLabel {width: 180px; min-width: 180px; display: inline-block; text-align: center; font-size: 9pt; border: 1px solid var(--border_inner); border-radius: 0; box-shadow: var(--highlight), inset 0 0 2px 1px #efefff; background: #f8f8ff}
 .en .sitemapLink, .en .sitemapLabel {width: 136px; min-width: 136px}
@@ -678,22 +696,6 @@ h1.webapp {min-height: 22px; background-image: var(--h1_webapp)}
 h1[class], #wizardpage h1 {background-size: 34px auto, 4px, 100%, 100%, 100%}
 h1::first-letter {font-size: 112%}
 
-span#newtab {float: right; letter-spacing: 0; text-align: right; font-size: 8pt}
-#newtabimg {margin-top: -1px; opacity: .65}
-#newtabimg:hover {opacity: .8; filter: drop-shadow(0 0 1px #f60)}
-h2 {margin: 15px 0; padding: 10px; word-spacing: .1em; letter-spacing: .08em; word-wrap: break-word; text-transform: uppercase; font-size: 13pt; color: var(--ink_light); border: 1px solid var(--border_inner); border-radius: 2px; box-shadow: var(--highlight), 0 0 1px rgba(220,220,220,.3)}
-h2, h3 {background: var(--h3), linear-gradient(90deg, #fafaff 5%, rgba(231, 231, 255, .8) 25%)}
-#console .welcome h2 {white-space: nowrap; box-shadow: var(--highlight), 0 0 1px rgba(220,220,220,.3); background: url(images/favicon.svg) no-repeat right 8px center / 20px, var(--h2); background-blend-mode: luminosity, normal, normal; filter: none}
-#home .welcome + #homepanel > .linkcontainer > h4 {margin-top: -1px}
-h2 a, h3 a {word-spacing: .1em; letter-spacing: .08em; text-transform: uppercase}
-h2 a:hover, h3 a:hover {color: #115}
-h3.tabletitle a:hover, h3.ptitle a:hover, h3#graphinfo a:hover, #news h3 a:hover {color: #f60}
-h2 img {opacity: .9}
-h3, #routerinformation h2, #config_family th {margin: 12px 0 15px; padding: 7px 5px 6px 7px; word-spacing: .1em; text-transform: uppercase; letter-spacing: .08em; font-size: 11pt; color: var(--ink_light); border: 1px solid var(--border_inner); box-shadow: var(--highlight), 0 0 1px rgba(220,220,220,.3)}
-#help h3 {padding-left: 10px}
-h3.tabletitle, h3.ptitle, #config_advanced h3.tabletitle, h3#bannedpeers, #routerinformation h2 {margin-bottom: -2px; text-align: left; border-radius: 0; border: 1px solid var(--border_inner); box-shadow: var(--highlight)}
-h3.ptitle, h3#bannedpeers {margin-bottom: -13px}
-
 /* /configpeers */
 #bannedips {margin-bottom: 10px}
 #bannedips td {vertical-align: top; padding: 0; width: 50%}
@@ -712,7 +714,6 @@ h3.ptitle, h3#bannedpeers {margin-bottom: -13px}
 #bannedips tr:nth-child(even) {background: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fff 5px)}
 #bannedips tr:nth-child(odd) {background: repeating-linear-gradient(45deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px)}
 
-h4 {margin: 5px 0 10px; padding: 4px 6px; word-spacing: .1em; letter-spacing: .08em; font-size: 10pt; text-transform: uppercase; color: var(--ink_light); border: 1px solid var(--border_inner); border-radius: 2px; box-shadow: var(--highlight); background: linear-gradient(90deg, #fff, #eef)}
 #certs h3 {margin-top: 15px; margin-bottom: -6px; border-width: 1px; border-radius: 0; filter: none}
 #certs h4 {padding: 8px 8px 6px; border-radius: 0}
 #certs h3 + p, #certs h4 + p:not(.infohelp) {padding: 15px; border: 1px solid var(--border_inner)}
@@ -726,8 +727,6 @@ h4 {margin: 5px 0 10px; padding: 4px 6px; word-spacing: .1em; letter-spacing: .0
 #certs h4 + textarea {margin: -11px 0; border: 1px solid var(--border_inner); box-shadow: none}
 #certs textarea + #end, #certs h3 + #end, #certs .infohelp + #end {margin-bottom: 15px; display: block}
 #certs h4 span {letter-spacing: 0; word-spacing: 0; text-transform: none}
-.unbold {font-weight: 400}
-.underline {border-bottom: 1px solid #002; padding: 5px 0; margin: 0 0 10px}
 
 /* welcome */
 div[lang="es"] li, div[lang="pt"] li, div[lang="sv"] li, div[lang="zh"] li {margin-left: 15px; margin-right: 15px; list-style: none; text-align: justify}
