@@ -1611,6 +1611,7 @@ b.suboption {margin: 0; padding: 5px 10px; display: inline-block; text-shadow: 0
 #bwlimiter a, #i2pclientconfig a, #config_logging h3 a, #graphdisplay a, #version a, #logs h3 a, #tunnels h3 a:not(.lsview), #advancedconfig a, #iptransport a, #reseedsetup a, #graphinfo a, #config_service h3 a, .h3navlinks a {margin: -6px -5px; padding: 6px 10px; display: inline-block; vertical-align: top; text-transform: capitalize; border: none; border-left: 1px solid var(--border_inner); border-radius: 0; background: linear-gradient(180deg,#f8f8ff 60%, #dedeff)}
 #config_clients #i2pclientconfig a {margin-top: -8px}
 #bwlimiter a, #i2pclientconfig a, #config_logging h3 a, #graphdisplay a, #version a, #tunnels h3 a, #advancedconfig a, #iptransport a, #reseedsetup a, #graphinfo a, #config_service h3 a, .h3navlinks a {margin: -5px -5px -9px; padding: 12px 14px 8px; box-shadow: var(--highlight); background: linear-gradient(180deg,#fff 48%, #efefff 48%)}
+#routerinformation .h3navlinks a {margin-top: -7px}
 #clientsconfig input.add {float: left}
 #config_logging h3 a::before, #webappconfiguration a::before, #routerinformation #version a::before, #i2pclientconfig a::before, #pluginmanage a::before {width: 18px; height: 13px; display: inline-block; vertical-align: middle; background: var(--eye) no-repeat left center / 14px; content: ""}
 #config_logging h3 a:hover::before, #config_logging h3 a:focus::before, #routerinformation #version a:hover::before, #routerinformation #version a:focus::before {background: var(--eye_hover) no-repeat left center / 14px}

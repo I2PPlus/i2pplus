@@ -1883,7 +1883,7 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 /* update */
 #updateHelper .optionlist, #updateProxyHostPort .optionlist {column-gap: 1px; columns: 500px 2; margin: -1px 0}
 #updateHelper select, #updateProxyHostPort input, #updateProxyHostPort input[disabled] {min-width: 220px; max-width: 220px; margin-left: 6px; text-overflow: ellipsis; position: relative; z-index: 999}
-#i2pupdates {margin: -1px 0 -4px}
+#i2pupdates {margin: 0 0 -4px}
 #i2pupdates td:not(.infohelp), #manualreseed td:not(.infohelp), #reseedconfig td:not(.infohelp), #netconfig td:not(.infohelp):not(.infowarn), #graphs td {padding: 5px}
 #i2pupdates tr:first-child td {padding: 6px 5px}
 #i2pupdates tr:last-child td {padding-right: 6px; background: #000}
