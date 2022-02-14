@@ -1634,6 +1634,7 @@ h3#transports, h3#upnp {border: 1px solid var(--border_inner)}
 .optionlist label, .optionlist .nowrap {min-width: 300px; break-inside: avoid; page-break-inside: avoid; -webkit-column-break-inside: avoid}
 .optionlist, .optionsingle, #reseedssl {padding: 1px 2px; border: 1px solid var(--border_inner); box-shadow: inset 0 0 0 2px #fff; background: #fff; column-gap: 2px; filter: drop-shadow(0 0 1px rgba(220,220,255,.7)); transition: ease box-shadow .1s}
 .options input[type=checkbox], .suboption .optbox {margin: 0 3px 0 0}
+.suboption .optbox {margin-left: 3px}
 .optiontextarea, #reseedconfig .optiontextarea {box-shadow: inset 0 0 0 2px #fff; background: #f2f2ff}
 p#clientconf.infohelp + .wideload {margin-top: 12px}
 #pluginconfig table td {border: var(--border_soft)}
