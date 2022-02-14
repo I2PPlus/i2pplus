@@ -2331,7 +2331,7 @@ td.spacer, th.spacer {display: none}
 #tunnels .tunnel_cap {margin-left: 1px; margin-right: 1px}
 #jobs #jobstats th {font-size: 80%}
 #jobs #jobstats th:nth-child(n+2) {text-align: center}
-#jobs #jobstats td:nth-child(even) {background: rgba(220,220,255,.2)}
+#jobs #jobstats tr:not(:hover) td:nth-child(even) {background: rgba(220,220,255,.2)}
 }
 
 @media screen and (max-width: 1150px) {
