@@ -39,7 +39,7 @@ tt, pre, code, .bucket, #logs li, #servicelogs li {font: 8.5pt var(--monospaced)
 #newtabimg:hover {filter: drop-shadow(0 0 1px var(--hover))}
 #pageloader {top: -1px}
 #down {margin: -6px -6px -7px; width: 100%; display: inline-block; line-height: 32px; font-size: 0; color: #770; box-shadow: var(--down_shadow); background: var(--down); background-size: 300%; animation: down linear 10s reverse infinite}
-#down::after, #nographs::after {width: 26px; height: 26px; vertical-align: middle; display: inline-block; background: url(/themes/console/images/svg/update.svg) no-repeat center center / 24px; content: ""; transform: rotate(0); filter: sepia(1); animation: linear spin 3s forwards infinite}
+#down::after, #nographs::after {width: 26px; height: 26px; vertical-align: middle; display: inline-block; background: url(/themes/console/images/update.svg) no-repeat center center / 24px; content: ""; transform: rotate(0); filter: sepia(1); animation: linear spin 3s forwards infinite}
 
 /* links */
 a:active span.b32 {color: var(--active)}
@@ -410,7 +410,7 @@ p + .twocol {margin: 10px 30px}
 .news p {font-size: 9pt; margin-bottom: -10px}
 .news p:last-child {margin-bottom: 10px}
 .newsentry:first-child {margin-top: -6px}
-.newsentry h3 {padding-left: 22px; letter-spacing: .1em; box-shadow: none; background: url(/themes/console/images/svg/news.svg) no-repeat left center / 16px}
+.newsentry h3 {padding-left: 22px; letter-spacing: .1em; box-shadow: none; background: url(/themes/console/images/news.svg) no-repeat left center / 16px}
 .newsentry h3 a {letter-spacing: .08em; font-size: 10pt}
 .newsentry p {line-height: 1.4}
 .news hr {margin: 10px 0 1px; height: 1px; opacity: .7}
@@ -456,7 +456,7 @@ a.viewfullentry:hover {filter: drop-shadow(0 0 1px var(--hover))}
 #view_profile h3 {position: relative; z-index: 10}
 #view_profile h3 a::after {margin-top: -1.5px}
 #view_profile .configpeer {margin-right: -5px}
-#profiles_overview {background-image: url(/themes/console/images/svg/profile.svg)}
+#profiles_overview {background-image: url(/themes/console/images/profile.svg)}
 #profiles .ok, #ntcpconnections td.queue:empty::before {display: inline-block; font-size: 0; width: 12px; height: 12px; background-size: 11px}
 #profiles .routerid, #peers .routerid {padding: 2px 3px 2px 4px}
 #profiles #capabilities_key table td:last-child {border: none}
@@ -661,7 +661,7 @@ td, #externali2cp td, #config_keyring td, #config_logging td, #config_network td
 #iptransport a, th#upnpconfig a, #bwlimiter a, #config_stats h3 a, #config_logging h3 a, #graphdisplay a, #logs h3 a, #advancedconfig a, .h3navlinks, #reseedsetup a {float: right; letter-spacing: normal; font-size: 9pt}
 #iptransport a, #advancedconfig a, #reseedsetup a {font-size: 0}
 #browseronstart .h3navlinks img, #servicedebug .h3navlinks img {width: 0; height: 0}
-#iptransport a::after, #advancedconfig a::after, #reseedsetup a::after, #browseronstart .h3navlinks a::after, #servicedebug .h3navlinks a::after {margin: -10px -10px -9px 0; padding: 10px 2px 6px 12px; display: inline-block; vertical-align: bottom; height: 19px; width: 19px; border-left: var(--border); background: url(/themes/console/images/svg/helplink.svg) no-repeat center center / 19px; content: ""}
+#iptransport a::after, #advancedconfig a::after, #reseedsetup a::after, #browseronstart .h3navlinks a::after, #servicedebug .h3navlinks a::after {margin: -10px -10px -9px 0; padding: 10px 2px 6px 12px; display: inline-block; vertical-align: bottom; height: 19px; width: 19px; border-left: var(--border); background: url(/themes/console/images/helplink.svg) no-repeat center center / 19px; content: ""}
 #iptransport a:hover {filter: drop-shadow(0 0 1px var(--hover))}
 #config_logging h3 a::before, #webappconfiguration a::before, #i2pclientconfig a::before, #pluginmanage a::before, #version a::before {width: 18px; height: 14px; display: inline-block; vertical-align: middle; background: var(--eye) no-repeat left center / 14px; content: ""}
 #config_logging h3 a:hover::before, #config_logging h3 a:focus::before, #version a:hover::before, #version a:focus::before {background: var(--eye_hover) no-repeat left center / 14px}
@@ -736,7 +736,7 @@ td, #externali2cp td, #config_keyring td, #config_logging td, #config_network td
 .messages #newsStatus, .messages #newsDisplay {float: none}
 .messages #newsDisplay {margin-left: 5px}
 #messages {margin-bottom: 5px}
-#config_update .messages {padding: 20px 15px 20px 55px; text-align: left; font-weight: 400; background: var(--bg) url(/themes/console/images/svg/news.svg) no-repeat 15px center / 28px}
+#config_update .messages {padding: 20px 15px 20px 55px; text-align: left; font-weight: 400; background: var(--bg) url(/themes/console/images/news.svg) no-repeat 15px center / 28px}
 #graphs .messages, #events #messages, #netdb #messages {margin-top: -16px; margin-bottom: 15px}
 #events .messages li, #netdb #messages li {margin: 10px 10px 10px 60px; padding: 0; text-align: justify}
 #events form > * {vertical-align: middle}
@@ -884,7 +884,7 @@ h4#updateplugins {margin-top: -13px}
 #sitemapcontainer {margin: 0 -16px -2px; padding: 4px 0 0}
 #sitemapcontainer h3 {margin-bottom: 12px; text-transform: uppercase; letter-spacing: .08em}
 #sitemapcontainer h3:nth-child(n+2) {margin-top: 4px}
-#sitemap h3:nth-of-type(2) {background: url(/themes/console/images/svg/info.svg) no-repeat 8px center / 18px, var(--bg)}
+#sitemap h3:nth-of-type(2) {background: url(/themes/console/images/info.svg) no-repeat 8px center / 18px, var(--bg)}
 #sitemap h3:nth-of-type(3) {background: var(--configure) no-repeat 8px center / 18px, var(--bg)}
 #sitemap h3:nth-of-type(4) {background: var(--help) no-repeat 8px center / 18px, var(--bg)}
 #sitemapcontainer a:visited, #home .extlink:visited, .main .applabel a:visited {color: var(--a)}
@@ -1487,8 +1487,8 @@ font[color="#006600"] span {color: var(--bg); background: #444}
 #debug_portmapper {margin-top: 14px}
 #debug h3 {padding-left: 10px}
 #debug h3.debug_outboundsessions, #debug h3.debug_inboundsessions {padding: 6px 10px 6px 28px}
-#debug h3.debug_outboundsessions {margin-top: -6px; background: url(/themes/console/images/svg/outbound.svg) no-repeat 6px center / 18px, var(--header)}
-#debug h3.debug_inboundsessions {background: url(/themes/console/images/svg/inbound.svg) no-repeat 6px center / 18px, var(--header)}
+#debug h3.debug_outboundsessions {margin-top: -6px; background: url(/themes/console/images/outbound.svg) no-repeat 6px center / 18px, var(--header)}
+#debug h3.debug_inboundsessions {background: url(/themes/console/images/inbound.svg) no-repeat 6px center / 18px, var(--header)}
 #debug tr {border-bottom: var(--border)}
 #debug th {text-align: left}
 #debug td {padding: 5px; border: var(--border)}
@@ -1563,10 +1563,10 @@ b.suboption {margin: 0; padding: 5px 10px; position: relative; z-index: 10; disp
 #externali2cp input[name="port"] {margin-left: 6px}
 
 /* bandwidth config */
-#bandwidthconfig td:first-child:not(.infohelp):not(.optionsave) {padding: 0 50px 0 5px; background: url(/themes/console/images/svg/arrow_right.svg) no-repeat right 9px center / 24px}
+#bandwidthconfig td:first-child:not(.infohelp):not(.optionsave) {padding: 0 50px 0 5px; background: url(/themes/console/images/arrow_right.svg) no-repeat right 9px center / 24px}
 #bandwidthconfig .optionsingle {margin: 8px 0 8px 3px; padding: 0 15px 0 40px; background: var(--bg2)}
-#bandwidthconfig .bw_out {background: var(--bg2) url(/themes/console/images/svg/outbound.svg) no-repeat 10px calc(50% + 14px) / 24px}
-#bandwidthconfig .bw_in {background: var(--bg2) url(/themes/console/images/svg/inbound.svg) no-repeat 10px calc(50% + 14px) / 24px}
+#bandwidthconfig .bw_out {background: var(--bg2) url(/themes/console/images/outbound.svg) no-repeat 10px calc(50% + 14px) / 24px}
+#bandwidthconfig .bw_in {background: var(--bg2) url(/themes/console/images/inbound.svg) no-repeat 10px calc(50% + 14px) / 24px}
 #bandwidthconfig .bw_share {background: var(--bg2) var(--share) no-repeat 10px calc(50% + 14px) / 24px}
 #bandwidthconfig .optionsingle::after {min-height: 64px}
 .net_bw {display: inline-block; padding: 5px 8px; background: linear-gradient(180deg, #fff, var(--border_color)); box-shadow: 0 0 0 1px var(--border_color), var(--highlight), 0 0 2px #99f; white-space: nowrap; text-align: center; margin: 3px}
@@ -1580,7 +1580,7 @@ b.suboption {margin: 0; padding: 5px 10px; position: relative; z-index: 10; disp
 #netconfig input[type=text] + br + .optbox, #netconfig .optbox[name="ntcpAutoPort"] {margin-top: 3px}
 #netconfig input[name*="ost"] {width: 250px}
 #netconfig tr, #config_reseed tr, #i2pupdates tr {background: var(--bg)}
-#netconfig tr:first-child td.infohelp {background-image: url(/themes/console/images/svg/networkconfig.svg)}
+#netconfig tr:first-child td.infohelp {background-image: url(/themes/console/images/networkconfig.svg)}
 #netconfig tr:nth-last-child(3) .optionlist {margin-bottom: -1px}
 #netconfig .optionlist, .service_container {filter: drop-shadow(0 0 1px var(--bg4))}
 #reseedconfig th.options, #i2pupdates th.options {padding-left: 3px}
@@ -1786,7 +1786,7 @@ table[id*="connections"] .tablefooter td:first-child {text-align: left}
 #help_newusers {background: url(images/favicon.svg) no-repeat 15px center, var(--th)}
 #help_webhosting {background: var(--webserver) no-repeat 15px center / 32px, var(--th)}
 #configurationhelp h2, #advancedsettings h2, #filterlist h2 {padding-left: 38px; background: var(--configure) no-repeat 8px center / 24px, var(--header)}
-#sidebarhelp h2, #reachabilityhelp h2 {padding-left: 38px; background: url(/themes/console/images/svg/sidebar.svg) no-repeat 8px center / 24px, var(--header)}
+#sidebarhelp h2, #reachabilityhelp h2 {padding-left: 38px; background: url(/themes/console/images/sidebar.svg) no-repeat 8px center / 24px, var(--header)}
 #reseedhelp h2 {padding-left: 38px; background: var(--reseed) no-repeat 8px center / 24px, var(--header)}
 #faq h2, #glossary h2 {padding-left: 38px; background: var(--faq) no-repeat 8px center / 24px, var(--header)}
 #troubleshoot h2 {padding-left: 38px; background: var(--wrench) no-repeat 8px center / 24px, var(--header)}

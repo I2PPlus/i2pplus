@@ -7499,7 +7499,7 @@ p.sybil_info + a[name] + .sybil_routerinfo, p.hashdist + a[name] + .sybil_router
 }
 
 #netconfig tr:first-child td.infohelp {
-  background-image: url(/themes/console/images/svg/networkconfig.svg) !important;
+  background-image: url(/themes/console/images/networkconfig.svg) !important;
 }
 
 .configtable td {
@@ -9387,7 +9387,7 @@ label:hover .optbox {
 
 #bandwidthconfig tr:nth-last-child(n+3) td:first-child:not(.infohelp) {
   padding: 0 50px 0 5px;
-  background: #000010 url(/themes/console/images/svg/arrow_right.svg) no-repeat right 12px center !important;
+  background: #000010 url(/themes/console/images/arrow_right.svg) no-repeat right 12px center !important;
   background-size: 24px !important;
   background-blend-mode: luminosity;
 }
@@ -9399,11 +9399,11 @@ label:hover .optbox {
 }
 
 #bandwidthconfig .bw_out {
-  background: #000025 url(/themes/console/images/svg/outbound.svg) no-repeat 10px calc(50% + 14px) !important;
+  background: #000025 url(/themes/console/images/outbound.svg) no-repeat 10px calc(50% + 14px) !important;
 }
 
 #bandwidthconfig .bw_in {
-  background: #000025 url(/themes/console/images/svg/inbound.svg) no-repeat 10px calc(50% + 14px) !important;
+  background: #000025 url(/themes/console/images/inbound.svg) no-repeat 10px calc(50% + 14px) !important;
 }
 
 #bandwidthconfig .bw_share {
@@ -9447,12 +9447,12 @@ tr:nth-child(2) .net_bwrate::before, tr:nth-child(3) .net_bwrate::before, tr:nth
   width: 18px;
   height: 16px;
   vertical-align: middle;
-  background:  url(/themes/console/images/svg/inbound.svg) left top no-repeat;
+  background:  url(/themes/console/images/inbound.svg) left top no-repeat;
   background-size: 16px !important;
 }
 
 tr:nth-child(3) .net_bwrate::before {
-  background:  url(/themes/console/images/svg/outbound.svg) left top no-repeat;
+  background:  url(/themes/console/images/outbound.svg) left top no-repeat;
 }
 
 tr:nth-child(4) .net_bwrate::before {
@@ -9490,7 +9490,7 @@ tr:nth-child(4) .net_bwrate::before {
   display: inline-block;
   color: transparent !important;
   font-size: 0;
-  background: url(/themes/console/images/svg/networkconfig.svg) no-repeat calc(100% - 8px) center / 22px;
+  background: url(/themes/console/images/networkconfig.svg) no-repeat calc(100% - 8px) center / 22px;
   text-shadow: none;
   border: none;
   contain: paint;
@@ -10910,7 +10910,7 @@ a:hover .sitemapLink {
 
 #sidebarhelp h2, #reachabilityhelp h2 {
   padding-left: 38px !important;
-  background: url(/themes/console/images/svg/sidebar.svg) no-repeat 8px center, var(--title) !important;
+  background: url(/themes/console/images/sidebar.svg) no-repeat 8px center, var(--title) !important;
   background-size: 22px, 4px 100%, 100% !important;
 }
 
@@ -11717,7 +11717,7 @@ to {
 
 #tunnels #peercount {
   margin-bottom: -3px !important;
-  background-image: url(/themes/console/images/svg/peers.svg) !important;
+  background-image: url(/themes/console/images/peers.svg) !important;
 }
 
 #tunnels #peercount a {

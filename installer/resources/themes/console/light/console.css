@@ -574,9 +574,9 @@ div.search + .linkcontainer {margin: -15px 0 0}
 #sitemapcontainer {padding: 4px 0 0}
 #sitemapcontainer h3 {margin: 14px 0 10px}
 #sitemapcontainer h3:nth-child(n+2) {margin-top: 3px}
-#sitemapcontainer h3:nth-of-type(2) {background: url(/themes/console/images/svg/info.svg) no-repeat 10px center / 16px, var(--h3), var(--h4app)}
-#sitemapcontainer h3:nth-of-type(3) {background: url(/themes/console/images/svg/configure.svg) no-repeat 10px center / 16px, var(--h3), var(--h4app)}
-#sitemapcontainer h3:nth-of-type(4) {background: url(/themes/console/images/svg/help.svg) no-repeat 10px center / 16px, var(--h3), var(--h4app)}
+#sitemapcontainer h3:nth-of-type(2) {background: url(/themes/console/images/info.svg) no-repeat 10px center / 16px, var(--h3), var(--h4app)}
+#sitemapcontainer h3:nth-of-type(3) {background: url(/themes/console/images/configure.svg) no-repeat 10px center / 16px, var(--h3), var(--h4app)}
+#sitemapcontainer h3:nth-of-type(4) {background: url(/themes/console/images/help.svg) no-repeat 10px center / 16px, var(--h3), var(--h4app)}
 #sitemap h3 img {padding-right: 6px}
 .sitemapLink, .sitemapLabel {width: 180px; min-width: 180px; display: inline-block; text-align: center; font-size: 9pt; border: 1px solid var(--border_inner); border-radius: 0; box-shadow: var(--highlight), inset 0 0 2px 1px #efefff; background: #f8f8ff}
 .en .sitemapLink, .en .sitemapLabel {width: 136px; min-width: 136px}
@@ -682,7 +682,7 @@ h1::first-letter {font-size: 112%}
 #certs h4 + p {margin: -11px 0}
 #certs h3 + h4 {margin-top: 5px}
 #certs p + h3, #certs p + h4 {margin-top: 10px}
-#certs .infohelp:first-of-type {background-image: url(/themes/console/images/svg/certs.svg)}
+#certs .infohelp:first-of-type {background-image: url(/themes/console/images/certs.svg)}
 #certs p:not(.infohelp) {background: #efefff; box-shadow: var(--highlight)}
 #certs textarea {margin: -1px 0 10px; width: 100%; filter: none}
 #certs h4 + textarea {margin: -11px 0; border: 1px solid var(--border_inner); box-shadow: none}
@@ -1021,7 +1021,7 @@ h3#udpcon {margin-top: 7px}
 .profilegroup.standard::before {background: var(--standard) no-repeat left center}
 #peerprofiles.widescroll {margin-top: -12px; padding-top: 120px; position: relative}
 #profiles .ok, #ntcpconnections td.queue:empty::before {width: 15px; height: 15px; display: inline-block; font-size: 0; background-size: 10px}
-#profiles_overview {margin-bottom: 13px; background-image: url(../images/svg/profile.svg)}
+#profiles_overview {margin-bottom: 13px; background-image: url(../images/profile.svg)}
 #profiles_overview + .widescroll {margin-bottom: -5px}
 #profiles td span {vertical-align: middle}
 #profiles .tunnel_peer img {margin-left: -6px}
@@ -1533,8 +1533,8 @@ table#schedjobs {margin-top: -11px}
 #portmapper tr:hover td:first-child, #sockets tr:hover td:first-child {color: #363b4f}
 #portmapper td:last-child, #sockets td:last-child {text-align: left}
 #debug h3.debug_outboundsessions, #debug h3.debug_inboundsessions {padding: 6px 10px 6px 28px; background-blend-mode: luminosity, normal, normal}
-#debug h3.debug_outboundsessions {background: url(/themes/console/images/svg/outbound.svg) no-repeat 6px center / 18px, linear-gradient(180deg,#fcfcff 50%, rgba(255, 255, 255, .6) 50%, rgba(240, 240, 255, .4)), linear-gradient(90deg, #fcfcff 5%, rgba(231, 231, 255, .8) 25%)}
-#debug h3.debug_inboundsessions {background: url(/themes/console/images/svg/inbound.svg) no-repeat 6px center / 18px, linear-gradient(180deg,#fcfcff 50%, rgba(255, 255, 255, .6) 50%, rgba(240, 240, 255, .4)), linear-gradient(90deg, #fcfcff 5%, rgba(231, 231, 255, .8) 25%)}
+#debug h3.debug_outboundsessions {background: url(/themes/console/images/outbound.svg) no-repeat 6px center / 18px, linear-gradient(180deg,#fcfcff 50%, rgba(255, 255, 255, .6) 50%, rgba(240, 240, 255, .4)), linear-gradient(90deg, #fcfcff 5%, rgba(231, 231, 255, .8) 25%)}
+#debug h3.debug_inboundsessions {background: url(/themes/console/images/inbound.svg) no-repeat 6px center / 18px, linear-gradient(180deg,#fcfcff 50%, rgba(255, 255, 255, .6) 50%, rgba(240, 240, 255, .4)), linear-gradient(90deg, #fcfcff 5%, rgba(231, 231, 255, .8) 25%)}
 .debug_version {color: #050}
 .buckets br + br {line-height: 5px}
 
@@ -1617,7 +1617,7 @@ h3#advancedclientconfig, p#webappconfigtext, p#pluginconfigtext, p#clientconf.in
 h3#advancedconfig a, h3#bwlimiter a, h3.tabletitle a, h3.ptitle a, th a.script, th#upnpconfig a, h3#graphinfo a, h3#graphdisplay a, .h3navlinks {margin-top: -2px; float: right; font-size: 8.5pt; letter-spacing: 0; text-transform: capitalize}
 #config_advanced h3#advancedconfig a {margin-top: -6px}
 h3#bwlimiter a:active::before {transform: scale(.9)}
-h3#bwlimiter a::before {margin: -3px 0; content: ""; display: inline-block; width: 20px; height: 20px; background: url(/themes/console/images/svg/networkconfig.svg) no-repeat center center; vertical-align: middle}
+h3#bwlimiter a::before {margin: -3px 0; content: ""; display: inline-block; width: 20px; height: 20px; background: url(/themes/console/images/networkconfig.svg) no-repeat center center; vertical-align: middle}
 h3#bwlimiter a {font-size: 0}
 h3#bwlimiter a:hover::before, h3#bwlimiter a:focus::before {transform: scale(1.2)}
 h3#exploratory {margin-top: 15px}
@@ -1718,8 +1718,8 @@ th.options {padding: 8px 5px 8px 10px; font-size: 9pt}
 .net_bwrate {padding: 0 2px 12px; width: 100%; font-weight: 700; font-size: 125%; color: var(--ink_light)}
 .net_datausage {margin: -4px -7px; padding: 12px 5px 0; width: 100%; min-width: 320px; font-style: italic; border-top: 1px dotted #ddf}
 .net_datausage {padding: 4px 0; min-width: 260px; white-space: normal}
-#bandwidthconfig .bw_in {background: #eaeaff url(/themes/console/images/svg/inbound.svg) 18px calc(50% + 12px) no-repeat}
-#bandwidthconfig .bw_out {background: #eaeaff url(/themes/console/images/svg/outbound.svg) 18px calc(50% + 12px) no-repeat}
+#bandwidthconfig .bw_in {background: #eaeaff url(/themes/console/images/inbound.svg) 18px calc(50% + 12px) no-repeat}
+#bandwidthconfig .bw_out {background: #eaeaff url(/themes/console/images/outbound.svg) 18px calc(50% + 12px) no-repeat}
 #bandwidthconfig .bw_out, #bandwidthconfig .bw_in, #bandwidthconfig .bw_share {margin: 10px 0 10px 5px; background-size: 24px}
 #bandwidthconfig .bw_share {background: #eaeaff var(--share) 18px calc(50% + 12px) no-repeat}
 #bandwidthconfig .infohelp {padding-right: 10px}
@@ -1729,11 +1729,11 @@ th.options {padding: 8px 5px 8px 10px; font-size: 9pt}
 #bandwidthconfig .optionsingle input, #bandwidthconfig select {margin-top: 16px}
 #bandwidthconfig .optionsingle {margin-left: 2px; padding: 0 15px 0 60px; background-color: #eaeaff}
 #bandwidthconfig tr:first-child .infohelp {padding: 20px 15px 20px 50px; background: var(--speed) no-repeat 15px center, var(--div_infohelp); background-size: 28px}
-#bandwidthconfig tr:nth-child(2) .net_bwrate::before {background: url(/themes/console/images/svg/inbound.svg) no-repeat center center}
-#bandwidthconfig tr:nth-child(3) .net_bwrate::before, #bandwidthconfig tr:nth-child(4) .net_bwrate::before {background: url(/themes/console/images/svg/outbound.svg) no-repeat center center}
+#bandwidthconfig tr:nth-child(2) .net_bwrate::before {background: url(/themes/console/images/inbound.svg) no-repeat center center}
+#bandwidthconfig tr:nth-child(3) .net_bwrate::before, #bandwidthconfig tr:nth-child(4) .net_bwrate::before {background: url(/themes/console/images/outbound.svg) no-repeat center center}
 #config_bandwidth tr:nth-last-child(2) .infohelp b {margin-right: -1px; font-size: 120%}
 #bandwidthconfig td:first-child {padding-right: 10px; width: 200px; white-space: nowrap}
-#bandwidthconfig td:first-child:not(.infohelp) {padding: 0 50px 0 5px; background: url(/themes/console/images/svg/arrow_right.svg) no-repeat right 14px center / 24px}
+#bandwidthconfig td:first-child:not(.infohelp) {padding: 0 50px 0 5px; background: url(/themes/console/images/arrow_right.svg) no-repeat right 14px center / 24px}
 #bandwidthconfig td:not(.infohelp):first-child {padding-right: 0; background: none}
 #bandwidthconfig td:last-child {white-space: normal}
 #config_bandwidth #bandwidthconfig .optionsave {padding: 8px 6px}
@@ -1742,7 +1742,7 @@ th.options {padding: 8px 5px 8px 10px; font-size: 9pt}
 /* network */
 .config_experimental {font-size: 0}
 .config_experimental::after {margin-bottom: -2px; width: 16px; height: 16px; display: inline-block; background: var(--experimental) no-repeat right center / 16px; content: ""}
-#netconfig tr:first-child td.infohelp {background-image: url(/themes/console/images/svg/networkconfig.svg)}
+#netconfig tr:first-child td.infohelp {background-image: url(/themes/console/images/networkconfig.svg)}
 #netconfig tr, #i2pupdates tr, #config_reseed tr {background: #fafaff}
 #create td {border-bottom: 1px solid var(--border_inner)}
 #netconfig tr:nth-last-child(3) .optionlist {margin-bottom: -1px}
@@ -2006,7 +2006,7 @@ table#consolepass input[name="name"] {margin-right: 20px}
 #filterlist h2 {background: var(--filter) no-repeat 8px center, var(--h2)}
 #browserconfig h2 {background: var(--firefox) no-repeat 8px center, var(--h2)}
 #tunnman h2 {background: var(--hardhat) no-repeat 8px center, var(--h2)}
-#sidebarhelp h2, #reachabilityhelp h2 {background: url(/themes/console/images/svg/sidebar.svg) no-repeat 8px center, var(--h2)}
+#sidebarhelp h2, #reachabilityhelp h2 {background: url(/themes/console/images/sidebar.svg) no-repeat 8px center, var(--h2)}
 #reseedhelp h2 {background: var(--reseed) no-repeat 8px center, var(--h2)}
 #faq h2, #glossary h2 {background: var(--question) no-repeat 8px center, var(--h2)}
 #troubleshoot h2 {background: var(--wrench) no-repeat 8px center, var(--h2)}

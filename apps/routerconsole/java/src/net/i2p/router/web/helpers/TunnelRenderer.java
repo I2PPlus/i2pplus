@@ -356,17 +356,17 @@ class TunnelRenderer {
         // links are set to float:right in CSS so they will be displayed in reverse order
         if (or.getSummaryListener() != null) {
             out.write("<a href=\"graph?stat=" + orname + ".300000&amp;w=600&amp;h=200\">" +
-                      "<img src=\"/themes/console/images/svg/outbound.svg\" alt=\"" + tgd + "\" title=\"" + tgd + "\"></a>");
+                      "<img src=\"/themes/console/images/outbound.svg\" alt=\"" + tgd + "\" title=\"" + tgd + "\"></a>");
         } else {
             out.write("<a href=\"configstats#" + orname + "\">" +
-                      "<img src=\"/themes/console/images/svg/outbound.svg\" alt=\"" + tcg + "\" title=\"" + tcg + "\"></a>");
+                      "<img src=\"/themes/console/images/outbound.svg\" alt=\"" + tcg + "\" title=\"" + tcg + "\"></a>");
         }
         if (ir.getSummaryListener() != null) {
             out.write("<a href=\"graph?stat=" + irname + ".300000&amp;w=600&amp;h=200\">" +
-                      "<img src=\"/themes/console/images/svg/inbound.svg\" alt=\"" + tgd + "\" title=\"" + tgd + "\"></a> ");
+                      "<img src=\"/themes/console/images/inbound.svg\" alt=\"" + tgd + "\" title=\"" + tgd + "\"></a> ");
         } else {
             out.write("<a href=\"configstats#" + irname + "\">" +
-                      "<img src=\"/themes/console/images/svg/inbound.svg\" alt=\"" + tcg + "\" title=\"" + tcg + "\"></a>");
+                      "<img src=\"/themes/console/images/inbound.svg\" alt=\"" + tcg + "\" title=\"" + tcg + "\"></a>");
         }
     }
 
@@ -422,10 +422,10 @@ class TunnelRenderer {
             boolean isInbound = info.isInbound();
             if (isInbound)
                 out.write("<tr><td class=\"cells\"><span class=\"inbound\" title=\"" + tib +
-                          "\"><img src=\"/themes/console/images/svg/inbound.svg\" alt=\"" + tib + "\"></span></td>");
+                          "\"><img src=\"/themes/console/images/inbound.svg\" alt=\"" + tib + "\"></span></td>");
             else
                 out.write("<tr><td class=\"cells\"><span class=\"outbound\" title=\"" + tob +
-                          "\"><img src=\"/themes/console/images/svg/outbound.svg\" alt=\"" + tob + "\"></span></td>");
+                          "\"><img src=\"/themes/console/images/outbound.svg\" alt=\"" + tob + "\"></span></td>");
             out.write("<td class=\"cells\">" + DataHelper.formatDuration2(timeLeft) + "</td>\n");
             int count = info.getProcessedMessagesCount() * 1024 / 1000;
             out.write("<td class=\"cells datatransfer\">");

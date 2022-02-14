@@ -85,7 +85,7 @@
 <%
     if (homehelper.shouldShowBandwidthConfig()) {
 %>
-<a href="/config" id="configbandwidth" style="float: right" title="<%=intl._t("Configure router bandwidth")%>"><img src="/themes/console/images/svg/speedometer.svg" height="16" width="16" alt="Bandwidth"></a>
+<a href="/config" id="configbandwidth" style="float: right" title="<%=intl._t("Configure router bandwidth")%>"><img src="/themes/console/images/speedometer.svg" height="16" width="16" alt="Bandwidth"></a>
 <%
     } // shouldShowBandwidthConfig
 %>

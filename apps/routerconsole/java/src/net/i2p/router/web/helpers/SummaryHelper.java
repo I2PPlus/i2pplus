@@ -722,7 +722,7 @@ public class SummaryHelper extends HelperBase {
                     buf.append("class=\"tunnelServer\" ");
                 else if (isPing)
                     buf.append("class=\"ping\" ");
-                buf.append("align=\"right\"><img src=\"/themes/console/images/svg/");
+                buf.append("align=\"right\"><img src=\"/themes/console/images/");
                 if (server) {
                     buf.append("server.svg\" alt=\"Server\" title=\"").append(_t("Server"));
                     if (!isAdvanced()) {

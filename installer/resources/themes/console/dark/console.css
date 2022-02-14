@@ -768,7 +768,7 @@ h3[id="udpcon"] {width: auto}
 #viewprofile td {padding: 0}
 #viewprofile pre, pre#activetransports {margin: 0; padding: 20px 20px 0; width: calc(100% - 46px); line-height: 20px; letter-spacing: .05em; text-shadow: var(--textshadow); border-left: 5px solid #030; background: repeating-linear-gradient(180deg,rgba(0,8,0,.6) 0, rgba(0,8,0,.6) 20px, rgba(0,20,0,.6) 20px, rgba(0,20,0,.6) 40px); background-size: 100% 40px}
 #viewprofile span {margin: -26px -1px -1px 0; padding: 5px; float: right; border: var(--border); background: #000}
-#profiles_overview {margin-bottom: 9px; background-image: url(../images/svg/profile.svg)}
+#profiles_overview {margin-bottom: 9px; background-image: url(../images/profile.svg)}
 #peerprofiles + h3 {margin-top: 10px}
 #profiles .version {margin: 0 2px}
 #profiles .ok, #ntcpconnections td.queue:empty::before {width: 12px; height: 12px; display: inline-block; vertical-align: middle; font-size: 0; background-size: 9px}
@@ -924,7 +924,7 @@ h3.tabletitle + .statusnotes, table.tunneldisplay {margin-top: -1px}
 #tunnelPeerCount .tunnel_cap {padding: 1px; min-width: 22px}
 #tunnelPeerCount .ipaddress {min-width: 140px; display: inline-block; text-align: right}
 #tunnelPeerCount a.script[href^="https://gwhois.org"]::after {margin: -1px 0 1px 3px; width: 12px; height: 12px; display: inline-block; vertical-align: middle; background: var(--search) no-repeat center center / 11px; opacity: .7; content: ""}
-#tunnels #peercount {background: url(/themes/console/images/svg/peers.svg) no-repeat 9px center / 18px, var(--title)}
+#tunnels #peercount {background: url(/themes/console/images/peers.svg) no-repeat 9px center / 18px, var(--title)}
 #tunnels .percentBarOuter, #tunnels .PercentBarInner, #tunnels .percentBarText {display: inline-block}
 #tunnels .percentBarOuter, #tunnels .percentBarText {width: 100px}
 #tunnels .percentBarOuter {margin-bottom: 1px; text-align: left; background: #000}
@@ -1402,7 +1402,7 @@ th code {user-select: all}
 #certs h4:nth-of-type(n+2) {margin-top: 0}
 #certs h3 + p {margin: 15px 0 10px}
 #certs .infohelp {margin-top: 8px}
-#certs .infohelp:first-of-type {background-image: url(/themes/console/images/svg/certs.svg)}
+#certs .infohelp:first-of-type {background-image: url(/themes/console/images/certs.svg)}
 #certs p:not(.infohelp) {margin-top: -1px; padding: 10px; border: var(--border); background: #000}
 #certs h4 {letter-spacing: 0; word-spacing: 0}
 #certs p + h4 {margin-top: -13px}
@@ -1538,7 +1538,7 @@ textarea#advancedsettings {margin: 0; padding-top: 3px; width: 100%; overflow-x:
 /* bandwidth */
 #config_bandwidth .h3navlinks a:active {filter: none; transform: scale(.9)}
 #config_bandwidth .h3navlinks a:hover {filter: drop-shadow(0 0 1px #f60) drop-shadow(0 0 2px #f60)}
-#config_bandwidth .h3navlinks a {margin-bottom: -9px; padding-top: 7px; width: 24px; color: transparent; background: url(../images/svg/networkconfig.svg) no-repeat calc(100% - 8px) center / 22px; text-shadow: none; border: none; contain: paint}
+#config_bandwidth .h3navlinks a {margin-bottom: -9px; padding-top: 7px; width: 24px; color: transparent; background: url(../images/networkconfig.svg) no-repeat calc(100% - 8px) center / 22px; text-shadow: none; border: none; contain: paint}
 #config_bandwidth .h3navlinks {margin: -10px 0 -11px; padding: 11px 0 10px; display: inline-block; border-left: var(--border)}
 #configbandwidth img {margin: -1px 10px 0; display: inline-block}
 
@@ -1686,7 +1686,7 @@ form[action="/createreseed"] > h3 {margin-bottom: -13px; padding: 10px; word-spa
 #defaultswork {margin-bottom: 11px; padding: 15px 10px 15px 45px}
 #upnpconfig, #ipchange, #ipv6config, #tcpconfig, #confignotes, #defaultswork {margin-top: -12px; margin-bottom: -13px; padding: 10px/*; border: var(--border)*/}
 #confignotes {margin-bottom: -21px; padding: 18px 15px 18px 58px; background: var(--infohelp) no-repeat 15px center}
-#netconfig tr:first-child td.infohelp {background-image: url(/themes/console/images/svg/networkconfig.svg)}
+#netconfig tr:first-child td.infohelp {background-image: url(/themes/console/images/networkconfig.svg)}
 #netconfig .optbox {margin: 8px 6px; display: inline-block}
 #netconfig input[type=text] {transition: ease width .1s; will-change: transform}
 #netconfig input[name*="ost"] {width: 250px}
@@ -1860,10 +1860,10 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 #bandwidthconfig td:not(.infohelp):first-child {width: 200px; white-space: nowrap}
 #bandwidthconfig input, #bandwidthconfig select {margin-right: 3px}
 #bandwidthconfig tr:nth-last-child(n+3) td {background-color: #000800}
-#bandwidthconfig td:first-child:not(.infohelp):not(.optionsave) {padding: 0 50px 0 5px; background: #000800 url(/themes/console/images/svg/arrow_right.svg) no-repeat right 12px center / 24px; background-blend-mode: luminosity}
+#bandwidthconfig td:first-child:not(.infohelp):not(.optionsave) {padding: 0 50px 0 5px; background: #000800 url(/themes/console/images/arrow_right.svg) no-repeat right 12px center / 24px; background-blend-mode: luminosity}
 #bandwidthconfig .optionsingle {margin-left: 2px; padding: 0 15px 0 40px; background: #002500}
-#bandwidthconfig .bw_out {background: #020 url(/themes/console/images/svg/outbound.svg) no-repeat 10px calc(50% + 14px)}
-#bandwidthconfig .bw_in {background: #020 url(/themes/console/images/svg/inbound.svg) no-repeat 10px calc(50% + 14px)}
+#bandwidthconfig .bw_out {background: #020 url(/themes/console/images/outbound.svg) no-repeat 10px calc(50% + 14px)}
+#bandwidthconfig .bw_in {background: #020 url(/themes/console/images/inbound.svg) no-repeat 10px calc(50% + 14px)}
 #bandwidthconfig .bw_share {background: #020 var(--share) no-repeat 10px calc(50% + 14px)}
 #bandwidthconfig .bw_share {background-size: 28px}
 #bandwidthconfig .bw_out, #bandwidthconfig .bw_in, #bandwidthconfig .bw_share {margin: 10px 5px; background-size: 24px}
@@ -1874,8 +1874,8 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 .net_bwrate {font-size: 120%}
 #config_bandwidth tr:nth-last-child(2) .infohelp b {margin-right: -1px; font-size: 120%}
 #bandwidthconfig .net_bwrate::before {margin-right: 4px; content: ""; width: 20px; height: 20px; display: inline-block; vertical-align: middle; background-size: 20px}
-#bandwidthconfig tr:nth-child(2) .net_bwrate::before {background: url(/themes/console/images/svg/inbound.svg) var(--center)}
-#bandwidthconfig tr:nth-child(3) .net_bwrate::before, #bandwidthconfig tr:nth-child(4) .net_bwrate::before {background: url(/themes/console/images/svg/outbound.svg) var(--center)}
+#bandwidthconfig tr:nth-child(2) .net_bwrate::before {background: url(/themes/console/images/inbound.svg) var(--center)}
+#bandwidthconfig tr:nth-child(3) .net_bwrate::before, #bandwidthconfig tr:nth-child(4) .net_bwrate::before {background: url(/themes/console/images/outbound.svg) var(--center)}
 .net_bwrate::before, #bandwidthconfig tr:nth-child(4) .net_bwrate::before {background: var(--share) no-repeat left center; background-size: 18px}
 .net_bw {margin: 3px; padding: 5px 8px; display: inline-block; white-space: nowrap; text-align: center; box-shadow: 0 0 0 1px #020, var(--highlight); background: linear-gradient(180deg,#020, #000)}
 .net_bwrate {font-weight: 700; font-size: 110%; display: inline-block; padding: 2px; width: 100%; min-width: 320px; text-align: center}
@@ -2287,7 +2287,7 @@ ul#upnphelp li:last-child, #legal ul li:last-child {padding-bottom: 0}
 #help_changelog {background: var(--changelog) no-repeat 15px center / 32px, var(--helpbox)}
 #help_webhosting {background: var(--server) no-repeat 15px center / 32px, var(--helpbox)}
 #configurationhelp h2, #advancedsettings h2, #filterlist h2 {padding-left: 38px; background: var(--settings_inert) no-repeat 10px center, var(--h1); background-size: 20px, 2px, 100% 4px, 100%, 96px}
-#sidebarhelp h2, #reachabilityhelp h2 {padding-left: 38px; background: url(/themes/console/images/svg/sidebar.svg) no-repeat 10px center, var(--h1); background-size: 20px, 2px, 100% 4px, 100%, 96px}
+#sidebarhelp h2, #reachabilityhelp h2 {padding-left: 38px; background: url(/themes/console/images/sidebar.svg) no-repeat 10px center, var(--h1); background-size: 20px, 2px, 100% 4px, 100%, 96px}
 #reseedhelp h2 {padding-left: 38px; background: var(--reseed) no-repeat 10px center, var(--h1); background-size: 20px, 2px, 100% 4px, 100%, 96px}
 #newuserguide h2 {padding-left: 38px; background: url(images/favicon.svg) no-repeat 10px center, var(--h1); background-size: 20px, 2px, 100% 4px, 100%, 96px}
 #troubleshoot h2 {padding-left: 38px; background: var(--wrench) no-repeat 10px center, var(--h1); background-size: 20px, 2px, 100% 4px, 100%, 96px}
