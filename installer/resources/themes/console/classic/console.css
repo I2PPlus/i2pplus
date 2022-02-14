@@ -709,7 +709,7 @@ td, #externali2cp td, #config_keyring td, #config_logging td, #config_network td
 #langsettings hr {margin: 0 -5px; height: 1px}
 #helptranslate {margin: 0 -5px; padding: 15px 10px 15px 50px; position: relative; top: 4px; clear: both; text-align: left; border-top: var(--border); border-bottom: var(--border); background: var(--bg) url(images/favicon.svg) no-repeat left 14px center / 28px}
 .langflag, .langflag img {border-radius: 4px}
-.langflag {margin: 4px 0 38px; padding: 1px; display: inline-block; position: relative; box-shadow: 0 0 0 1px #bbc; background: linear-gradient(to bottom, var(--border_softer), var(--border_soft)); opacity: .9}
+.langflag {margin: 4px 0 38px; padding: 1px; display: inline-block; position: relative; box-shadow: 0 0 0 1px #bbc; background: linear-gradient(to bottom, #fff, #f2f2ff); opacity: .9}
 .langflag::before {display: inline-block; position: absolute; top: 0; bottom: 0; left: 0; right: 0; z-index: 10; border-radius: 4px; background: linear-gradient(180deg, rgba(255,255,255,.5), rgba(0,0,0,0) 55%, rgba(0,0,0,.1)); content: ""}
 .langflag img {margin: 0 0 -4px; width: 40px; height: 30px; position: relative; z-index: 3; border: none}
 .langselect .optbox:checked + .langflag, .langselect:hover > .langflag {opacity: 1}

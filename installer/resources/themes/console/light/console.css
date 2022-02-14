@@ -1019,7 +1019,7 @@ h3#udpcon {margin-top: 7px}
 .profilegroup.integrated::before {background: var(--integrated) no-repeat left center}
 .profilegroup.standard::before {background: var(--standard) no-repeat left center}
 #peerprofiles.widescroll {margin-top: -12px; padding-top: 120px; position: relative}
-#profiles .ok, #ntcpconnections td.queue:empty::before {width: 15px; height: 15px; display: inline-block; font-size: 0; background-size: 11px}
+#profiles .ok, #ntcpconnections td.queue:empty::before {width: 15px; height: 15px; display: inline-block; font-size: 0; background-size: 10px}
 #profiles_overview {margin-bottom: 13px; background-image: url(../images/svg/profile.svg)}
 #profiles_overview + .widescroll {margin-bottom: -5px}
 #profiles td span {vertical-align: middle}
@@ -2439,7 +2439,7 @@ h1[class], #wizardpage h1 {padding: 20px 15px 17px 55px; font-size: 19pt; backgr
 button.control {padding: 14px}
 .links code, #console code, pre, #logs li, .main[id^="config_"] th {font-size: 9.5pt}
 h4#updateplugins, #news p {font-size: 10pt}
-.main, .news, h1, .sorry {margin-left: 252px}
+.main, #news.news, h1, .sorry {margin-left: 252px}
 .percentBarOuter {width: 232px}
 .percentBarText {margin-top: -1px}
 .flag img {margin: 0; width: 20px; height: 15px; display: inline-block; vertical-align: middle; border: 1px solid transparent}
