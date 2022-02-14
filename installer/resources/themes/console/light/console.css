@@ -615,11 +615,11 @@ h3#systray + p.infohelp {padding: 20px 15px 20px 50px; box-shadow: var(--highlig
 .links li {list-style: var(--star); text-align: justify; line-height: 1.4; margin-right: 10px}
 .links ul {margin-top: -5px}
 .main li {text-align: left; list-style: square; margin: 2px 20px 0 40px; padding: 1px 10px; line-height: 1.5; word-wrap: break-word}
-.infohelp, #bannedpeercount {box-shadow: var(--highlight), inset 0 0 1px 1px var(--border)}
+.infohelp, #bannedpeercount, p#clientconf.infohelp, p#webappconfigtext.infohelp {box-shadow: inset 0 0 0 1px #ddf, inset 0 0 1px 1px var(--border)}
 .infowarn {box-shadow: var(--highlight), inset 0 0 1px 1px #900}
-p.infohelp, p.sybilinfo, p#debugmode, p#upnpstatus, p#pluginconfigtext, p#gatherstats {padding: 20px 15px 20px 50px; line-height: 1.3; border: 1px solid var(--border_inner); box-shadow: inset 0 0 0 1px #7e7, inset 0 0 1px 1px var(--border); background: var(--infohelp) no-repeat 15px center / 28px, var(--div_infohelp)}
+p.infohelp, p.sybilinfo, p#debugmode, p#upnpstatus, p#pluginconfigtext, p#gatherstats {padding: 20px 15px 20px 50px; line-height: 1.3; border: 1px solid var(--border_inner); background: var(--infohelp) no-repeat 15px center / 28px, var(--div_infohelp)}
 p.infowarn {padding: 20px 15px 20px 50px; line-height: 1.3; border: 1px solid var(--border_inner); background: var(--infowarn) no-repeat 15px center / 28px, var(--div_infohelp)}
-#netdb .infohelp, p.sybilinfo {box-shadow: inset 0 0 0 1px #ddf, inset 0 0 1px 1px var(--border)}
+div[id^="config_"] p.infohelp {box-shadow: inset 0 0 0 1px #7e7, inset 0 0 1px 1px var(--border)}
 .infohelp + hr {display: none}
 .infohelp#pagenav:first-of-type {margin-top: -6px}
 .infohelp#pagenav:last-of-type {margin-bottom: 4px}
@@ -631,7 +631,7 @@ p.infowarn {padding: 20px 15px 20px 50px; line-height: 1.3; border: 1px solid va
 #leavefamily tr:last-child td:first-child {padding: 20px 15px 20px 50px; background: var(--leavefamily) no-repeat 15px center / 28px, var(--refresh), #fff}
 #newfamily .infohelp {padding: 20px 15px 20px 50px; background: var(--newfamily) no-repeat 15px center / 28px, var(--div_infohelp)}
 #ntcpconnections td.queue:empty::before {content: ""}
-p#clientconf.infohelp, p#webappconfigtext.infohelp {padding: 20px 15px 20px 50px; box-shadow: var(--highlight); background: var(--editclient) no-repeat 15px center / 28px, var(--div_infohelp)}
+p#clientconf.infohelp, p#webappconfigtext.infohelp {padding: 20px 15px 20px 50px; background: var(--editclient) no-repeat 15px center / 28px, var(--div_infohelp)}
 p#debugmode {padding: 20px 15px 20px 50px; background: var(--bug) no-repeat 15px center / 28px, var(--div_infohelp)}
 p#enablefullstats, p#gatherstats {padding: 20px 15px 20px 50px; background: var(--stats) no-repeat 15px center / 28px, var(--div_infohelp)}
 #plugininstall .infohelp {padding: 20px 15px 20px 50px; background: var(--plugin) no-repeat 15px center / 28px, var(--div_infohelp)}
@@ -1730,7 +1730,7 @@ th.options {padding: 8px 5px 8px 10px; font-size: 9pt}
 #bandwidthconfig .optionsingle::after {min-height: 64px}
 #bandwidthconfig .optionsingle::after {min-height: 72px}
 #bandwidthconfig .optionsingle input, #bandwidthconfig select {margin-top: 16px}
-#bandwidthconfig .optionsingle {margin-left: 2px; padding: 0 15px 0 60px; background: #eaeaff}
+#bandwidthconfig .optionsingle {margin-left: 2px; padding: 0 15px 0 60px; background-color: #eaeaff}
 #bandwidthconfig tr:first-child .infohelp {padding: 20px 15px 20px 50px; background: var(--speed) no-repeat 15px center, var(--div_infohelp); background-size: 28px}
 #bandwidthconfig tr:nth-child(2) .net_bwrate::before {background: url(/themes/console/images/svg/inbound.svg) no-repeat center center}
 #bandwidthconfig tr:nth-child(3) .net_bwrate::before, #bandwidthconfig tr:nth-child(4) .net_bwrate::before {background: url(/themes/console/images/svg/outbound.svg) no-repeat center center}
@@ -2474,9 +2474,8 @@ tt {margin-left: 0; margin-right: 3px; letter-spacing: .1em}
 #configstats td::before {min-height: 24px}
 #error500 #sidebar img[src$="i2plogo.png"] {margin-top: -1px; margin-left: -3px; width: 232px}
 form[action="configplugins"] input.reload {margin-top: 1px; margin-right: 4px}
-h3#pconfig, h3#webappconfiguration, h3#i2pclientconfig, p#clientconf.infohelp, #config_stats h3 {margin-bottom: -15px}
-h3.ptitle {margin-bottom: -14px}
-h3#restartrouter, p#tunnelconfig {margin-bottom: -15px}
+h3.ptitle, h3#webappconfiguration, h3#i2pclientconfig, p#clientconf.infohelp, #config_stats h3 {margin-bottom: -14px}
+h3#pconfig, h3#restartrouter, p#tunnelconfig {margin-bottom: -15px}
 #helptoc b {font-size: 120%}
 .homelinkedit th:first-child, #sidebarconf th:first-child, #consolepass th:first-child {font-size: 0}
 #iptransport a {padding-top: 6px}
