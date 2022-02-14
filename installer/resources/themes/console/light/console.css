@@ -300,6 +300,7 @@ h4 {margin: 5px 0 10px; padding: 4px 6px; word-spacing: .1em; letter-spacing: .0
 #newsStatus, .news #newsDisplay {padding-top: 6px; padding-bottom: 3px}
 #newsDisplay, #graphopts {color: transparent}
 #newsDisplay a, #graphopts a, #routerinfo a, #fullhistory a, #routerinformation tr:nth-child(n+2) a:not(#revision), .graphstat {margin-left: -3px; padding: 2px 10px; border: 1px solid var(--a); border-radius: 15px; background: #f8f8ff}
+#newsDisplay a {min-width: 84px; display: inline-block; text-align: center}
 #newsDisplay a:hover, #newsDisplay a:focus, #routerinfo a:hover, .graphstat:hover, .graphstat:focus, #graphopts a:hover, #graphopts a:visited:hover, #graphopts a:focus, #graphopts a:visited:focus, #fullhistory a:hover, #fullhistory a:focus, #fullhistory a:visited:hover, #fullhistory a:visited:focus, #routerinformation tr:nth-child(n+2) a:not(#revision):hover, #routerinformation tr:nth-child(n+2) a:focus {border: 1px solid var(--border_inner); background: linear-gradient(180deg,#f8f8ff 50%, #e2e2ff 50%)}
 #newsDisplay a:focus, #graphopts a:focus, #graphopts a:visited:focus, #routerinformation tr:nth-child(n+2) a:focus, .graphstat:focus {border: 1px solid var(--hover)}
 #newsDisplay a:active, #graphopts a:active, #graphopts a:visited:active, #fullhistory a:active, .graphstat:active, #routerinformation tr:nth-child(n+2) a:active {box-shadow: inset 3px 3px 3px rgba(41,61,95,.8); color: #559; border: 1px solid var(--border_inner)}
