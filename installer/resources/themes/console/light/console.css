@@ -878,12 +878,15 @@ h3#finishedjobs + ol li {background: var(--yes) no-repeat 6px center / 12px}
 h3#activejobs + ol li::before {background: var(--start) no-repeat 6px center / 12px}
 h3#scheduledjobs + ol li::before {background: var(--timer) no-repeat 6px center / 12px}
 #schedjobs {margin: 15px 0 -2px; width: 100%}
+#jobs li {font-size: 90%}
 #jobs #schedjobs th {text-align: left}
 #schedjobs td, #jobs #schedjobs tr:hover td {padding: 2px 4px; font-weight: 400; color: var(--ink); background: #fcfcff}
 #schedjobs tr:hover td:first-child {background-image: var(--timer) no-repeat 6px center}
-#schedjobs ul {margin: 0; columns: auto auto; font-size: 90%}
-#schedjobs li {margin: 2px 0; padding: 3px 5px; min-width: 270px; display: inline-block; border: 1px solid #dde}
+#schedjobs ul {margin: 0; columns: auto auto}
+#schedjobs li {margin: 2px 0; padding: 3px 5px; ; width: auto; min-width: 270px; display: inline-block; border: 1px solid #dde}
 #jobstats {margin-top: 1px}
+#jobs #jobstats th, #jobs #jobstats td {font-size: 8.5pt}
+#jobs #jobstats th:nth-child(n+2), #jobs #jobstats td:nth-child(n+2) {text-align: right; padding-right: .5%}
 
 /* /stats */
 .joblog {border: none; margin-top: 5px}
@@ -2326,6 +2329,9 @@ td.spacer, th.spacer {display: none}
 #tunnels .cells:nth-child(2), #tunnels .cells:nth-child(3), .tunnels_participating td:nth-child(4) {width: 1%; min-width: 72px}
 #tunnels .percentBarOuter, #tunnels .percentBarText {margin: 0 2px; width: 70px}
 #tunnels .tunnel_cap {margin-left: 1px; margin-right: 1px}
+#jobs #jobstats th {font-size: 80%}
+#jobs #jobstats th:nth-child(n+2) {text-align: center}
+#jobs #jobstats td:nth-child(even) {background: rgba(220,220,255,.2)}
 }
 
 @media screen and (max-width: 1150px) {
@@ -2462,8 +2468,8 @@ h4#updateplugins, #news p {font-size: 10pt}
 .statlist li.noevents::before {margin: -4px 10px 0 -17px}
 .statlist li.statsName b {margin: 10px 0 0 3px}
 .statlist li.statsName::before {display: none}
-/*#schedjobs ul {columns: 300px auto; column-gap: 3px}*/
-#schedjobs li {min-width: 290px}
+#schedjobs li {min-width: 280px}
+#jobs #jobstats th, #jobs #jobstats td {font-size: 100%}
 .subheading b {font-size: 10.5pt}
 .th_title a {font-size: 11pt}
 tt {margin-left: 0; margin-right: 3px; letter-spacing: .1em}
