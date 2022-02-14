@@ -2462,6 +2462,7 @@ h4#updateplugins, #news p {font-size: 10pt}
 .th_title a {font-size: 11pt}
 tt {margin-left: 0; margin-right: 3px; letter-spacing: .1em}
 #advancedconfig a, #reseedsetup a {padding-top: 7px}
+h3#bwlimiter a {margin-top: -8px}
 #bandwidthconfig .bw_out, #bandwidthconfig .bw_in, #bandwidthconfig .bw_share {padding: 0 15px 0 80px; min-width: 240px; background-position: 30px calc(50% + 12px)}
 #bandwidthconfig .bw_share {background-size: 32px 32px; background-position: 28px calc(50% + 12px)}
 #bandwidthconfig td:first-child:not(.infohelp):not(.optionsave) {padding: 0 80px 0 5px; background-position: right 30px center}
