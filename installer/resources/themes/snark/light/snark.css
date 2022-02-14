@@ -2780,6 +2780,7 @@ td.commentAuthor .commentAuthorName {
   padding: 6px 10px 7px;
   min-width: 160px;
   display: inline-block;
+  line-height: 1.2;
   text-align: right;
   font-size: 95%;
   color: var(--ink_lighter);
