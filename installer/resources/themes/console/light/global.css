@@ -35,7 +35,7 @@
   --ink_darker: #19191f;
   --ink_light: #5b5b71;
   --ink_lighter: #71718e;
-  --input_shadow: inset 1px 1px 1px rgba(0,0,48,.2);
+  --input_shadow: var(--highlight), inset 2px 2px 1px 2px rgba(0,0,0,.3);
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
   --outline: 0 0 0 1px #000;
   --p: linear-gradient(135deg, #fafaff, #f8f8ff);
@@ -94,6 +94,8 @@ b {
   color: var(--ink_light);
 }
 
+.unbold {font-weight: 400}
+
 tr {
   content: layout;
 }
@@ -141,7 +143,7 @@ input[type=text], input[type=password], textarea, select {
 
 select, select[disabled]:hover, select[disabled]:focus {
   margin: 5px;
-  padding: 6px 24px 6px 8px !important;
+  padding: 6px 24px 6px 8px;
   min-width: 120px;
   text-align: left !important;
   font-size: 9pt;
@@ -174,19 +176,19 @@ select:hover, select:focus, select:active {
 select:hover, select:active {
   color: #19191f;
   box-shadow: var(--highlight), 0 2px 1px #ddf;
-  background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover) !important;
+  background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover);
 }
 
 select:focus {
   color: #19191f;
   box-shadow: 0 0 1px #f60;
-  background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover) !important;
+  background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover);
 }
 
 select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active {
-  border: var(--border_input) !important;
-  box-shadow: var(--highlight) !important;
-  background: var(--btn) !important;
+  border: var(--border_input);
+  box-shadow: var(--highlight);
+  background: var(--btn);
   opacity: .8;
   cursor: default;
 }

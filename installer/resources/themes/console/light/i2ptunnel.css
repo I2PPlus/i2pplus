@@ -12,6 +12,7 @@
 --create_hover: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%23f60' d='M37.6 1C37 .4 36 0 35.2 0h-6.4a3.4 3.4 0 00-3.4 3.4l.1 22.1H3.3A3.4 3.4 0 000 28.8v6.4c0 1.8 1.5 3.4 3.3 3.4h22.2v22c0 1.8 1.5 3.4 3.3 3.4h6.4a3.4 3.4 0 003.4-3.4v-22h22c1.9 0 3.4-1.6 3.4-3.5v-6.3c0-1.8-1.6-3.4-3.4-3.4l-22 .1V3.3a3.4 3.4 0 00-1-2.3z'/%3E%3C/svg%3E%0A");
 }
 
+/* global */
 body {margin: 0; padding: 0; text-align: center; background: var(--bodybg) url(images/tile2.png) fixed; background-size: 32px; scrollbar-color: #779 #fff}
 body.iframed {margin-bottom: -11px; padding: 5px 5px 10px; background: none}
 h2, h3, th, .buttons, .newTunnel, .control, label, .infohelp, .infowarn, .nowrap, b, #throttler td {user-select: none}
@@ -25,52 +26,18 @@ form {margin: 0}
 label {vertical-align: middle}
 table {background: #fafaff}
 tr {contain: layout}
-textarea, input, select, button {font-size: 9pt; vertical-align: middle}
-button, input[type=submit], input[type="reset"], a.control, .freetext, textarea, .displayText {font: 9pt var(--bodyfont)}
-button {float: none; text-decoration: none}
-textarea {font-family: var(--monospaced)}
-.optbox {margin: 5px 3px 5px 5px}
-.editDisabled input[type=radio], .editDisabled label {cursor: not-allowed}
-.editDisabled input[type=radio]:checked {opacity: 1}
-.editDisabled input[type=radio]:not(:checked) {opacity: .4}
-.editDisabled label, .editDisabled label:hover {color: var(--ink_light)}
-.editDisabled .optbox:checked + span {font-weight: 700; text-decoration: underline}
-textarea[name="accessList"] {padding: 4px 8px; height: 32px; line-height: 1.1; will-change: transform}
-textarea[name="accessList"]:focus {height: 80px}
-textarea[name="accessList"]:focus {height: 112px}
-textarea#statusMessages {padding: 2px 4px; width: calc(100% - 5px); font: 8.5pt var(--monospaced); color: #070; border: none; border-radius: 0; box-shadow: none; filter: none}
-textarea#statusMessages:focus {background: #fafaff; box-shadow: none}
-textarea#statusMessages::selection {color: #fff; background: #070}
+.required {display: none}
 #filter {vertical-align: top}
-th .help {font-size: 0}
-th .help::after {width: 16px; height: 16px; display: inline-block; background: var(--helplink) no-repeat center center / 16px; content: ""}
+th {padding: 6px 5px; text-align: left; font-size: 9.5pt; color: var(--ink_light); border-bottom: 1px solid var(--border_inner); border-top: 1px solid var(--border_inner); background: linear-gradient(180deg,#fcfcff 51%, #fafaff 51%, #f6f6ff 100%)}
+th {padding-left: 10px}
+th::first-letter {text-transform: uppercase}
+td {padding: 5px; vertical-align: middle; border-top: var(--border_softer)}
+h2, h3, th, a, button.control, select {text-shadow: 0 1px 1px #fff}
+a:hover, a:focus, a:active, button:hover, button:focus, button:active, select:hover, select:focus, select:active {text-shadow: none}
+.tunnelConfig tr, #wizardPanel tr, #registration tr {background: repeating-linear-gradient(135deg, rgba(252,252,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px) #fafaff}
+td.infohelp {padding: 10px 10px 10px 34px; box-shadow: var(--highlight), inset 0 0 1px 1px #ddf; border: 1px solid var(--border_inner); background: var(--infohelp) no-repeat 8px center / 20px}
 
-.statusNotRunning {color: #d00; background: var(--tunnelStopped)}
-.statusRunning {color: #0b0; background: var(--tunnelRunning)}
-.statusStarting {color: #ff3; background: var(--tunnelStarting)}
-.statusStandby {color: #d30; background: var(--tunnelStandby)}
-.statusNotRunning, .statusRunning, .statusStarting, .statusStandby {margin: 0; padding: 0; width: 100%; height: 24px; overflow: hidden; text-align: center; font-size: 0; background-size: auto 16px; background-position: center center; background-repeat: no-repeat; filter: drop-shadow(0 0 1px rgba(220,220,255,.7)); will-change: transform}
-
-.freetext, .freetext.tunnelDescription {padding: 5px 8px; width: 150px; color: var(--ink); border: var(--border_input); border-radius: 2px; background: #fbfbff}
-.freetext[readonly], .freetext[readonly]:focus {color: var(--ink_lighter); border: 1px solid #a8b1d6; box-shadow: inset 1px 1px 1px #e4e4ee; background: var(--readonly); filter: none}
-input[type=text][readonly] {box-shadow: inset 1px 1px 1px #e4e4ee}
-.clientKey[readonly] {background: var(--key) no-repeat 3px center, var(--readonly); background-size: 16px, 100%}
-#clientHost {width: 300px}
-#clientPort {width: 100px}
-.control, .control:link, .control:visited, button {margin: 2px 4px; padding: 5px 8px; min-width: 100px; text-align: center; white-space: nowrap; box-sizing: border-box; text-decoration: none; font-style: normal; font-weight: 400; color: var(--ink); border: var(--border_input); border-radius: 2px; box-shadow: var(--btn_shadow); background: linear-gradient(180deg,#fff, #efefff); filter: drop-shadow(0 0 1px rgba(220,220,255,.7))}
-.control:hover, .control:focus, button:hover, button:focus {text-decoration: none; color: var(--ink_darker); border: 1px solid #f60; box-shadow: var(--highlight), inset 0 -8px 3px 8px rgba(255,96,0,.02), inset 0 0 10px rgba(255,96,0,.05), 0 0 1px rgba(255,96,0,.1), 0 7px 4px -4px rgba(0,0,0,.1); background: linear-gradient(180deg,#eee, #fff); filter: drop-shadow(0 0 1px rgba(204, 204, 204, .8)); transition: ease border .7s}
-.control:active, button:active {box-shadow: var(--highlight), inset 2px 2px 2px #555; color: #4c526f}
-a.control {display: inline-block}
-#serverTunnels .iconize, #clientTunnels .iconize {min-width: 80px}
-.control.start, .control.start:hover, .control.start:focus, .control.start:active, .control.stop, .control.stop:hover, .control.stop:focus, .control.stop:active, .control.preview, .control.preview:hover, .control.preview:focus, .control.preview:active, .control.create, .control.create:hover, .control.create:focus, .control.create:active {color: transparent; text-shadow: none; background: var(--start) no-repeat center center / 15px, var(--btn), var(--start_hover); -webkit-text-stroke: 0}
-.control.stop {background: var(--stop) no-repeat center center / 14px, var(--btn), var(--stop_hover)}
-.control.preview {background: var(--eye) no-repeat center center / 19px, var(--btn), var(--eye_hover)}
-.control.create {background: var(--create) no-repeat center center / 15px, var(--btn), var(--create_hover)}
-.control.start:hover, .control.start:focus {background: var(--start_hover) no-repeat center center / 15px, var(--btn_hover)}
-.control.stop:hover, .control.stop:focus {background: var(--stop_hover) no-repeat center center / 14px, var(--btn_hover)}
-.control.preview:hover,.control.preview:focus {background: var(--eye_hover) no-repeat center center / 19px, var(--btn_hover)}
-.control.create:hover,.control.create:focus {background: var(--create_hover) no-repeat center center / 15px, var(--btn_hover)}
-.control.iconize:active {background-blend-mode: luminosity}
+/* panels */
 .panel {margin: 8px auto; padding: 0 10px 10px; width: calc(100% - 14px); max-width: 2000px; min-width: 650px; overflow: hidden; text-align: left; border: 1px solid #575775; border-radius: 2px; box-shadow: inset 0 0 1px #999; background: #fff; background: linear-gradient(90deg, #fff 0%, rgba(247, 248, 255, .5), #fff), linear-gradient(180deg,#efefff, #fff, #efefff); filter: drop-shadow(0 0 2px rgba(96,96,160,.7))}
 .iframed .panel.iframed {margin: 0 auto -8px auto}
 .iframed .panel {margin: 16px auto -8px auto; padding: 0; width: 100%; border: none; box-shadow: none; background: none; filter: drop-shadow(0 0 1px rgba(220,220,255,.7))}
@@ -83,11 +50,16 @@ a.control {display: inline-block}
 .iframed #messages.panel {padding-top: 2px}
 .iframed #messages.panel + #globalTunnelControl.panel {padding-top: 0}
 .iframed .panel:last-of-type {padding-bottom: 4px}
-input[type="hidden"], input.default {display: none}
-h2, h3 {margin: 10px 0 -1px; padding: 9px 10px 7px 30px; position: relative; font-size: 11.5pt; text-transform: uppercase; letter-spacing: .12em; word-spacing: .1em; color: var(--ink_light); border: 1px solid var(--border_inner); border-radius: 2px 2px 0 0; box-shadow: var(--highlight); background: #fcfcff; background: linear-gradient(180deg,#fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(135deg, #fcfcff 5%, rgba(231, 231, 255, .8) 15%) #fff}
-.iframed h2, .iframed h3 {margin-top: 14px}
+.panel table {margin: 0; width: 100%; border-collapse: collapse; border: 1px solid var(--border_inner); background: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fff 5px) #fff}
 
-/* title images */
+/* status */
+.statusNotRunning {color: #d00; background: var(--tunnelStopped)}
+.statusRunning {color: #0b0; background: var(--tunnelRunning)}
+.statusStarting {color: #ff3; background: var(--tunnelStarting)}
+.statusStandby {color: #d30; background: var(--tunnelStandby)}
+.statusNotRunning, .statusRunning, .statusStarting, .statusStandby {margin: 0; padding: 0; width: 100%; height: 24px; overflow: hidden; text-align: center; font-size: 0; background-size: auto 16px; background-position: center center; background-repeat: no-repeat; filter: drop-shadow(0 0 1px rgba(220,220,255,.7)); will-change: transform}
+
+/* headings */
 h2.error {padding-left: 40px; background: var(--err) no-repeat left 5px center / 24px, var(--h2) #fff; background-position: 8px center, center center, center center}
 #messages h2 {background: var(--logs) no-repeat left 5px center, var(--h2) #fff}
 #globalTunnelControl h2 {background: var(--mouse) no-repeat left 5px center, var(--h2) #fff}
@@ -98,60 +70,148 @@ h2.error {padding-left: 40px; background: var(--err) no-repeat left 5px center /
 #messages h2, #globalTunnelControl h2, #servers h2, #clients h2, #tunnelEditPage h2, #tunnelEditPage h3, #registration h2, #registration h3, #wizardPanel h2, #ssl h2 {background-size: 18px, 100%, 100%; background-position: 7px 60%, center center, center center}
 .iframed #globalTunnelControl h2 {margin-top: 6px}
 .iframed #globalTunnelControl {margin-bottom: -16px}
+h2, h3 {margin: 10px 0 -1px; padding: 9px 10px 7px 30px; position: relative; font-size: 11.5pt; text-transform: uppercase; letter-spacing: .12em; word-spacing: .1em; color: var(--ink_light); border: 1px solid var(--border_inner); border-radius: 2px 2px 0 0; box-shadow: var(--highlight); background: #fcfcff; background: linear-gradient(180deg,#fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(135deg, #fcfcff 5%, rgba(231, 231, 255, .8) 15%) #fff}
+.iframed h2, .iframed h3 {margin-top: 14px}
 
-.panel table {margin: 0; width: 100%; border-collapse: collapse; border: 1px solid var(--border_inner); background: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fff 5px) #fff}
-th {padding: 6px 5px; text-align: left; font-size: 9.5pt; color: var(--ink_light); border-bottom: 1px solid var(--border_inner); border-top: 1px solid var(--border_inner); background: linear-gradient(180deg,#fcfcff 51%, #fafaff 51%, #f6f6ff 100%)}
-th::first-letter {text-transform: uppercase}
-th {padding-left: 10px}
-h2, h3, th, a, button.control, select {text-shadow: 0 1px 1px #fff}
-a:hover, a:focus, a:active, button:hover, button:focus, button:active, select:hover, select:focus, select:active {text-shadow: none}
-.tunnelConfig tr, #wizardPanel tr, #registration tr {background: repeating-linear-gradient(135deg, rgba(252,252,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px) #fafaff}
-td {padding: 5px; vertical-align: middle; border-top: var(--border_softer)}
-#serverTunnels td, #clientTunnels td {border-top: var(--border_softer)}
-td.infohelp {padding: 10px 10px 10px 34px; box-shadow: var(--highlight), inset 0 0 1px 1px #ddf; border: 1px solid var(--border_inner); background: var(--infohelp) no-repeat 8px center / 20px}
-.tunnelconfig tr, .tunnelConfig th:first-child, .tunnelConfig td:first-child {border-left: 1px solid var(--border_inner)}
-.tunnelconfig tr, .tunnelConfig th:last-child, .tunnelConfig td:last-child {border-right: 1px solid var(--border_inner)}
-.tunnelConfig td {width: 50%}
-.tunnelConfig td > b {margin: 2px 0 2px 5px; min-width: 30px; display: inline-block}
-.tunnelProperties {background: #fafaff; transition: ease background .05s}
-.tunnelProperties td {border-top: var(--border_softer)}
-.tunnelProperties:hover, .tunnelProperties:hover + .tunnelInfo, .tunnelProperties:hover + .tunnelInfo + .tunnelInfo {background: #ffd; transition: ease background .05s}
-.tunnelProperties:hover + .tunnelInfo + .tunnelInfo td {border-top: 1px solid #ffd}
+/* forms */
+a.control {display: inline-block}
+button {float: none; text-decoration: none}
+button, input[type=submit], input[type="reset"], a.control, .freetext, textarea, .displayText {font: 9pt var(--bodyfont)}
+.buttons, .newTunnel {padding: 7px 5px; text-align: right; border-top: 1px solid var(--border_inner); box-shadow: var(--highlight); background: #fff; background: linear-gradient(180deg,#fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px)}
+.buttons > * {vertical-align: middle}
+.clientKey[readonly] {background: var(--key) no-repeat 3px center, var(--readonly); background-size: 16px, 100%}
+.control, .control:link, .control:visited, button {margin: 2px 4px; padding: 5px 8px; min-width: 100px; text-align: center; white-space: nowrap; box-sizing: border-box; text-decoration: none; font-style: normal; font-weight: 400; color: var(--ink); border: var(--border_input); border-radius: 2px; box-shadow: var(--btn_shadow); background: linear-gradient(180deg,#fff, #efefff); filter: drop-shadow(0 0 1px rgba(220,220,255,.7))}
+.control:hover, .control:focus, button:hover, button:focus {text-decoration: none; color: var(--ink_darker); border: 1px solid #f60; box-shadow: var(--highlight), inset 0 -8px 3px 8px rgba(255,96,0,.02), inset 0 0 10px rgba(255,96,0,.05), 0 0 1px rgba(255,96,0,.1), 0 7px 4px -4px rgba(0,0,0,.1); background: linear-gradient(180deg,#eee, #fff); filter: drop-shadow(0 0 1px rgba(204, 204, 204, .8)); transition: ease border .7s}
+.control:active, button:active {box-shadow: var(--highlight), inset 2px 2px 2px #555; color: #4c526f}
+.control.iconize:active {background-blend-mode: luminosity}
+.control.create {background: var(--create) no-repeat center center / 15px, var(--btn), var(--create_hover)}
+.control.create:hover,.control.create:focus {background: var(--create_hover) no-repeat center center / 15px, var(--btn_hover)}
+.control.preview {background: var(--eye) no-repeat center center / 19px, var(--btn), var(--eye_hover)}
+.control.preview:hover,.control.preview:focus {background: var(--eye_hover) no-repeat center center / 19px, var(--btn_hover)}
+.control.start, .control.start:hover, .control.start:focus, .control.start:active, .control.stop, .control.stop:hover, .control.stop:focus, .control.stop:active, .control.preview, .control.preview:hover, .control.preview:focus, .control.preview:active, .control.create, .control.create:hover, .control.create:focus, .control.create:active {color: transparent; text-shadow: none; background: var(--start) no-repeat center center / 15px, var(--btn), var(--start_hover); -webkit-text-stroke: 0}
+.control.start:hover, .control.start:focus {background: var(--start_hover) no-repeat center center / 15px, var(--btn_hover)}
+.control.stop {background: var(--stop) no-repeat center center / 14px, var(--btn), var(--stop_hover)}
+.control.stop:hover, .control.stop:focus {background: var(--stop_hover) no-repeat center center / 14px, var(--btn_hover)}
+.editDisabled input[type=radio]:checked {opacity: 1}
+.editDisabled input[type=radio], .editDisabled label {cursor: not-allowed}
+.editDisabled input[type=radio]:not(:checked) {opacity: .4}
+.editDisabled label, .editDisabled label:hover {color: var(--ink_light)}
+.editDisabled .optbox:checked + span {font-weight: 700; text-decoration: underline}
+.freetext, .freetext.tunnelDescription {padding: 5px 8px; width: 150px; color: var(--ink); border: var(--border_input); border-radius: 2px; background: #fbfbff}
+.freetext[readonly], .freetext[readonly]:focus {color: var(--ink_lighter); border: 1px solid #a8b1d6; box-shadow: inset 1px 1px 1px #e4e4ee; background: var(--readonly); filter: none}
+input {float: none; vertical-align: middle}
+input[required]:not(:focus)::placeholder, input.required:not(:focus)::placeholder {color: #f00; opacity: 1}
+input[type="hidden"], input.default {display: none}
+input[type=text][readonly] {box-shadow: inset 1px 1px 1px #e4e4ee}
+.multiOption {margin: 5px 10px 5px 5px; display: inline-block; vertical-align: middle}
+.optbox {margin: 5px 3px 5px 5px; vertical-align: middle}
+.optbox, .optbox::before {will-change: transform}
+.optionsDisabled {cursor: not-allowed}
+.optionsDisabled .optbox, .optionsDisabled label {pointer-events: none}
+.port, .quantity, .period {width: 80px}
+select {margin: 4px; padding: 5px 24px 5px 5px; min-width: 140px; background: #fff; background: var(--dropdown) no-repeat right 8px center, linear-gradient(180deg,#fff, #efefff); background-size: 10px, 100%; color: var(--ink); font: 9pt var(--bodyfont); border: var(--border_input); border-radius: 2px; box-shadow: var(--highlight); box-shadow: var(--btn_shadow); overflow: hidden; text-overflow: ellipsis; appearance: none; filter: drop-shadow(0 0 1px rgba(220,220,255,.7))}
+.tunnelConfig select, select#profile, select#connectionProfile {margin: 5px}
+select:hover, select:active, select:focus {border: 1px solid #535979; box-shadow: var(--highlight); background: var(--dropdown_hover) no-repeat right 8px center, linear-gradient(180deg,#eee, #fff); background-size: 10px, 100%}
+select:hover {color: var(--ink_darker)}
+select:focus {box-shadow: 0 0 1px #89f}
+select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active, #sigType[disabled] {margin: 0; padding: 2px 0 2px 3px; font-weight: 400; color: var(--ink); border: none; box-shadow: none; background: none; pointer-events: none}
+select#connectionProfile {width: calc(100% - 10px)}
+td[colspan="2"] > select#profile {width: calc(50% - 15px)}
+textarea, input, select, button {font-size: 9pt; vertical-align: middle}
+.freetext, .tunnelConfig textarea, #customOptions, #userAgents, #hostField {margin: 5px}
+textarea {font-family: var(--monospaced)}
+textarea[name="accessList"]:focus {height: 112px}
+textarea[name="accessList"]:focus {height: 80px}
+textarea[name="accessList"] {padding: 4px 8px; height: 32px; line-height: 1.1; will-change: transform}
+textarea#statusMessages:focus {background: #fafaff; box-shadow: none}
+textarea#statusMessages {padding: 2px 4px; width: calc(100% - 5px); font: 8.5pt var(--monospaced); color: #070; border: none; border-radius: 0; box-shadow: none; filter: none}
+textarea#statusMessages::selection {color: #fff; background: #070}
+textarea[name="accessList"], #hostField, #localDestination, .authentication {margin: 5px; padding: 2px 4px; width: calc(100% - 20px); box-sizing: unset}
+.tunnelDescriptionLabel, .tunnelDestinationLabel {margin-right: 3px; min-width: 150px; display: inline-block; white-space: nowrap; text-align: right}
+input.tunnelName, input.tunnelDescriptionText, #userAgents, .freetext.tunnelDescription, #websiteName, #localDest, #altlocaldest, .proxyList, #targetDestination, #leasesetKey, input[type=text]:not([readonly]), input[type=password]:not([readonly]) {box-shadow: var(--highlight), inset 2px 2px 2px rgba(0,0,0,.3)}
+#clientHost {width: 300px}
+#clientPort {width: 100px}
+#customOptions, #userAgents {width: calc(100% - 10px)}
+.tunnelName, input.tunnelDescriptionText, #userAgents, .freetext.tunnelDescription, #websiteName, #localDest, #altlocaldest, .proxyList, #targetDestination, #leasesetKey, #privKeyFile, #filterDefinition {width: 80%; width: calc(100% - 9px); min-width: 280px; overflow: hidden; text-overflow: ellipsis}
+#localDestination, textarea[name="accessList"], #hostField {margin: 3px 0; width: calc(100% - 5px)}
+#oldName {width: 30%; min-width: 310px}
+#serverTunnels .iconize, #clientTunnels .iconize {min-width: 80px}
+table#statusMessages textarea, table#statusMessages textarea:active {margin: 0; height: 80px; border: none; box-shadow: none}
+#targetHost, .host {width: 30%; min-width: 250px}
+#tunnelDepth, #tunnelVariance, #tunnelQuantity, #tunnelBackupQuantity, #tunnelDepthOut, #tunnelVarianceOut, #tunnelQuantityOut, #tunnelBackupQuantityOut, #localDestination, #customOptions, #name, #description, textarea[name="accessList"] {margin: 0; width: 100%; text-align: left}
+#tunnelMessages {padding: 0}
+input[type=text] + label {white-space: nowrap}
+#targetPort {margin-right: 10px}
+input[name="nofilter_blindedPassword"] {width: calc(100% - 38px)}
+#oldName {width: 45%}
+.displayText, .displayText:empty:hover, .displayText:empty:focus {margin: 5px; padding: 4px; width: calc(100% - 10px); width: 290px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; word-break: break-all; font-family: var(--monospaced); border: var(--border_input); border-radius: 2px; box-shadow: inset 1px 1px 1px #e4e4ee; background: #fafaff; user-select: all}
+.displayText:empty, .displayText:empty:hover, .displayText:empty:focus {background: #e9e9e9}
+.displayText:empty::before {min-height: 11px; display: inline-block; content: ""}
+.displayText:hover, .displayText:focus {box-shadow: 0 0 1px #89f; background: #ffe; outline: none}
+.displayText:focus {margin: 1px 5px; padding: 2px 4px; overflow: auto; text-overflow: clip; border: 1px solid #676c7f; background: #fff}
+.authentication {height: 30px}
+#oldDestFile {margin-left: 5px}
+#tunnelDepth, #tunnelVariance, #tunnelQuantity, #tunnelBackupQuantity, #tunnelDepthOut, #tunnelVarianceOut, #tunnelQuantityOut, #tunnelBackupQuantityOut, #encryptMode, #profile, #sigType {margin: 5px; width: calc(100% - 10px)}
+
+/* index */
 .newTunnel {padding: 7px; text-align: right; border-top: 2px solid var(--border_inner); background: #fff}
 .newTunnel select, .newTunnel input, .newTunnel .control {margin: 2px 4px 2px 2px}
 .newtunnel form {width: 100%; text-align: right}
+.tunnelDestination b, .tunnelDescription b {color: var(--ink_light)}
 .tunnelName {padding-left: 8px; width: 25%; min-width: 150px}
 .tunnelName a {padding: 3px 3px 3px 18px; background: var(--settings) no-repeat left center; background-size: 14px}
 .tunnelName a:hover {background: var(--settings_hover) no-repeat left center; background-size: 14px}
 .tunnelName a {font-weight: 700}
 .tunnelType {width: 25%}
+.tunnelInfo {background: linear-gradient(180deg,#fff, #eef)}
+.tunnelInfo b, .tunnelInfo .selectAll {display: inline-block; vertical-align: text-bottom}
+.tunnelInfo .selectAll {max-width: 140px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
+.tunnelInfo td {background: none; border: none}
+.tunnelInfo + .tunnelInfo td {border-top: 1px solid #d2d2e0}
 .tunnelPreview, .tunnelPort {width: 15%; text-align: center}
+.tunnelProperties {background: #fafaff; transition: ease background .05s}
+.tunnelProperties td {border-top: var(--border_softer)}
+.tunnelProperties + tr td {border-top: 1px solid var(--border_inner)}
+.tunnelProperties + tr + tr td {border-bottom: 1px solid var(--border_inner)}
+.tunnelProperties:hover, .tunnelProperties:hover + .tunnelInfo, .tunnelProperties:hover + .tunnelInfo + .tunnelInfo {background: #ffd; transition: ease background .05s}
+.tunnelProperties:hover + .tunnelInfo + .tunnelInfo td {border-top: 1px solid #ffd}
 .tunnelLocation, .tunnelInterface {width: 20%}
 .tunnelLocation font[color="red"] {margin-left: 2px}
 .tunnelStatus {text-align: center; width: 10%; min-width: 48px}
 .tunnelControl {width: 5%; white-space: nowrap; text-align: right}
 th.tunnelControl {text-align: center}
-.buttons, .newTunnel {padding: 7px 5px; text-align: right; border-top: 1px solid var(--border_inner); box-shadow: var(--highlight); background: #fff; background: linear-gradient(180deg,#fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px)}
-.buttons > * {vertical-align: middle}
-.tunnelDescriptionLabel, .tunnelDestinationLabel {margin-right: 3px; min-width: 150px; display: inline-block; white-space: nowrap; text-align: right}
-input {float: none; vertical-align: middle}
-.optbox {vertical-align: middle}
-#hostField, #userAgents {margin: 0; width: 90%; text-align: left}
-#tunnelDepth, #tunnelVariance, #tunnelQuantity, #tunnelBackupQuantity, #tunnelDepthOut, #tunnelVarianceOut, #tunnelQuantityOut, #tunnelBackupQuantityOut, #localDestination, #customOptions, #name, #description, textarea[name="accessList"] {margin: 0; width: 100%; text-align: left}
-#oldName {width: 30%; min-width: 310px}
-select#connectionProfile {width: calc(100% - 10px)}
-td[colspan="2"] > select#profile {width: calc(50% - 15px)}
-#customOptions, #userAgents {width: calc(100% - 10px)}
-#localDestination, textarea[name="accessList"], #hostField {margin: 3px 0; width: calc(100% - 5px)}
-.multiOption {margin: 5px 10px 5px 5px; display: inline-block; vertical-align: middle}
-.multiOption#isServer {padding-left: 28px; background: var(--server) no-repeat 4px center / 22px}
-.multiOption#isClient {padding-left: 28px; background: var(--client) no-repeat 4px center / 22px}
+#serverTunnels td, #clientTunnels td {border-top: var(--border_softer)}
+#tunnelListPage th:nth-child(n+2), .tunnelProperties td:nth-child(n+2) {text-align: center}
+
+/* edit */
+.tunnelConfig tr, .tunnelConfig th:first-child, .tunnelConfig td:first-child {border-left: 1px solid var(--border_inner)}
+.tunnelConfig tr, .tunnelConfig th:last-child, .tunnelConfig td:last-child {border-right: 1px solid var(--border_inner)}
+.tunnelConfig td {width: 50%}
+.tunnelConfig td > b {margin: 2px 0 2px 5px; min-width: 30px; display: inline-block}
+#keyringManager {margin: -2px 0; padding: 3px 3px 3px 22px; float: right; font-size: 90%; background: var(--keys) no-repeat left center; background-size: 20px}
+#sigType[disabled] {padding-left: 14px; background: var(--crypto) no-repeat left center / 16px}
+#tunnelOpts td {padding: 0; width: 25%}
+#tunnelOpts table {border: none}
+#tunnelOpts table td {padding: 5px; border-bottom: var(--border_softer)}
+#tunnelOpts table tr:first-child td {border-top: none}
+#tunnelOpts table tr:last-child td {border-bottom: none}
+#tunnelOpts table td:first-child {border-left: none}
+#tunnelOpts table td:last-child {border-right: none}
+input[type=text].filemanager {background: #fafaff var(--files) no-repeat 8px center / 15px}
+input[type=text].filemanager:focus {background: #fff var(--files) no-repeat 8px center / 15px}
+input[type=password].password, input[type=text].clientKey {background: #fafaff var(--key) no-repeat 8px center / 15px}
+input[type=text].username, input[type=password].password, input[type=text].clientName, input[type=text].clientKey, input[type=text].filemanager {padding-left: 30px; background-blend-mode: luminosity}
+input[type=text].username, input[type=text].clientName {background: #fafaff var(--user) no-repeat 8px center / 15px; background-size: 15px}
+input[type=text].username, input[type=password].password {width: 200px}
+input[type=password].password:focus, input[type=text].clientKey:focus {background: #fff var(--key) no-repeat 8px center / 15px}
+input[type=text].username:focus, input[type=text].clientName:focus {background: #fff var(--user) no-repeat 8px center / 15px}
+input[type=text].username:focus, input[type=password].password:focus, input[type=text].clientName:focus, input[type=text].clientKey:focus, input[type=text].filemanager:focus {padding-left: 30px; background-blend-mode: normal}
 
 /* throttler */
-td#throttle, #clientAuthConfig {padding: 0; box-shadow: none}
 #throttler, #clientAuth {border: none}
-#throttler th:first-child, #throttler td:first-child, #clientAuth th:first-child, #clientAuth td:first-child {border-left: none}
-#throttler th:last-child, #throttler td:last-child, #clientAuth th:last-child, #clientAuth td:last-child {border-right: none}
+td#throttle, #clientAuthConfig {padding: 0; box-shadow: none}
+#throttler tr, #throttler th:first-child, #throttler td:first-child, #clientAuth tr, #clientAuth th:first-child, #clientAuth td:first-child {border-left: none}
+#throttler tr, #throttler th:last-child, #throttler td:last-child, #clientAuth tr, #clientAuth th:last-child, #clientAuth td:last-child {border-right: none}
 #throttler th {padding-left: 20px}
 #throttler td {width: 20%}
 #throttler td:first-child {width: 20%; white-space: nowrap; text-align: right}
@@ -160,40 +220,13 @@ td.blankColumn {width: 20%}
 #throttler tr:nth-child(odd), #wizardTunnelTypes tr:nth-child(odd), #wizardSummary tr:nth-child(odd), #clientAuth tr:nth-child(even) {background: #f7f8ff; background: repeating-linear-gradient(45deg, rgba(255,255,255,.5) 2px, rgba(211, 211, 255, .3) 3px, #fff 5px)}
 #throttler tr:nth-child(even), #wizardTunnelTypes tr:nth-child(even), #wizardSummary tr:nth-child(even), #clientAuth tr:nth-child(odd) {background: #eef; background: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(230, 230, 255, .3) 3px, #fff 5px)}
 #throttler input[type=text] {width: 80px}
-table#statusMessages textarea, table#statusMessages textarea:active {margin: 0; height: 80px; border: none; box-shadow: none}
-#tunnelMessages {padding: 0}
-.required {display: none}
-select {margin: 4px; padding: 5px 24px 5px 5px; min-width: 140px; background: #fff; background: var(--dropdown) no-repeat right 8px center, linear-gradient(180deg,#fff, #efefff); background-size: 10px, 100%; color: var(--ink); font: 9pt var(--bodyfont); border: var(--border_input); border-radius: 2px; box-shadow: var(--highlight); box-shadow: var(--btn_shadow); overflow: hidden; text-overflow: ellipsis; appearance: none; filter: drop-shadow(0 0 1px rgba(220,220,255,.7))}
-select:hover {color: var(--ink_darker)}
-select:hover, select:active, select:focus {border: 1px solid #535979; box-shadow: var(--highlight); background: var(--dropdown_hover) no-repeat right 8px center, linear-gradient(180deg,#eee, #fff); background-size: 10px, 100%}
-select:focus {box-shadow: 0 0 1px #89f}
-select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active, #sigtype[disabled] {margin: 0; padding: 2px 0 2px 3px; font-weight: 400; color: var(--ink); border: none; box-shadow: none; background: none; cursor: default}
-#sigType[disabled] {padding-left: 14px; background: var(--crypto) no-repeat left center / 16px}
-input[required]:not(:focus)::placeholder, input.required:not(:focus)::placeholder {color: #f00; opacity: 1}
-input.tunnelName, input.tunnelDescriptionText, #userAgents, .freetext.tunnelDescription, #websiteName, #localDest, #altlocaldest, .proxyList, #targetDestination, #leasesetKey {width: 80%; width: calc(100% - 28px); min-width: 280px; text-overflow: ellipsis}
-input.tunnelName, input.tunnelDescriptionText, #userAgents, .freetext.tunnelDescription, #websiteName, #localDest, #altlocaldest, .proxyList, #targetDestination, #leasesetKey, input[type=text]:not([readonly]) {box-shadow: var(--highlight), inset 2px 2px 2px rgba(0,0,0,.3)}
-#targetHost, .host {width: 30%; min-width: 250px}
-.port, .quantity, .period {width: 80px}
-.username, .password {width: 200px}
-.username, .password, .clientName, .clientKey, .filemanager {padding-left: 30px; background-blend-mode: luminosity}
-.username, .clientName {background: #fafaff var(--user) no-repeat 8px center / 15px; background-size: 15px}
-.password, .clientKey {background: #fafaff var(--key) no-repeat 8px center / 15px}
-.filemanager {background: #fafaff var(--files) no-repeat 8px center / 15px}
-.username:focus, .password:focus, .clientName:focus, .clientKey:focus, .filemanager:focus {padding-left: 30px; background-blend-mode: normal}
-.username:focus, .clientName:focus {background: #fff var(--user) no-repeat 8px center / 15px}
-.password:focus, .clientKey:focus {background: #fff var(--key) no-repeat 8px center / 15px}
-.filemanager:focus {background: #fff var(--files) no-repeat 8px center / 15px}
-
-#notReady, #notFound, #down {margin: 60px auto 25px; padding: 30px; width: 400px; text-align: center; font-size: 11pt; font-weight: 700; border: 5px solid #900; border-image: repeating-linear-gradient(135deg, #dd0 0px, #dd0 20px, #900 20px, #900 40px, #dd0 40px) 5 repeat repeat; border-image-width: 5px; border-image-outset: 1px; box-shadow: inset 0 0 0 1px #113, inset 0 0 2px 2px rgba(0,0,0,.4), 0 0 0 2px #113, 0 0 3px 3px rgba(0,0,0,.4); background: #ffd; background: repeating-linear-gradient(180deg,#dd9 2px, #eeb 4px)}
-#notReady {border-image: repeating-linear-gradient(135deg, #ee9 0px, #ee9 20px, #d50 20px, #d50 40px, #ee9 40px) 5 repeat repeat; border-image-width: 5px; border-image-outset: 1px; background: repeating-linear-gradient(180deg,#ffd 2px, #eeb 4px)}
-#down b {color: #500}
-#notReady b {color: #733}
 
 /* register */
 #registration table:first-of-type tr:nth-child(2) td, #registration table:first-of-type tr:nth-child(3) td {padding: 10px 5px}
 #registration .displayText {width: 500px}
 #registration .infohelp {padding-top: 15px; padding-bottom: 15px}
 #registration input[type="file"] {margin-top: 5px; margin-bottom: 5px}
+#tunnelRegistration td b {margin-left: 5px}
 
 /* wizard specifics */
 #wizardTable {padding: 0}
@@ -213,43 +246,10 @@ input.tunnelName, input.tunnelDescriptionText, #userAgents, .freetext.tunnelDesc
 #wizardTunnelTypes, #wizardSummary {border: none; margin-top: -1px}
 #wizardTunnelTypes tr:last-child {background: #fafaff}
 #wizardPanel #name, #wizardPanel #description {width: 300px}
-
-/* more space */
-.freetext, .tunnelConfig textarea, #customOptions, #userAgents, #hostField {margin: 5px}
-#tunnelDepth, #tunnelVariance, #tunnelQuantity, #tunnelBackupQuantity, #tunnelDepthOut, #tunnelVarianceOut, #tunnelQuantityOut, #tunnelBackupQuantityOut, #encryptMode, #profile, #sigType {margin: 5px; width: calc(100% - 10px)}
-.tunnelConfig select, select#profile, select#connectionProfile {margin: 5px}
-textarea[name="accessList"], #hostField, #localDestination, .authentication {margin: 5px; padding: 2px 4px; width: calc(100% - 20px); box-sizing: unset}
-#hostField {height: 52px}
-#hostField:focus {height: 80px}
-.authentication {height: 30px}
-#customOptions, #userAgents, #filterDefinition {width: calc(100% - 28px)}
-.tunnelDestination b, .tunnelDescription b {color: var(--ink_light)}
-.tunnelInfo {background: linear-gradient(180deg,#fff, #eef)}
-.tunnelInfo td {background: none; border: none}
-.tunnelProperties + tr td {border-top: 1px solid var(--border_inner)}
-.tunnelProperties + tr + tr td {border-bottom: 1px solid var(--border_inner)}
-.tunnelInfo + .tunnelInfo td {border-top: 1px solid #d2d2e0}
-.tunnelInfo b, .tunnelInfo .selectAll {display: inline-block; vertical-align: text-bottom}
-.tunnelInfo .selectAll {max-width: 140px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
-#oldDestFile {margin-left: 5px}
-#tunnelRegistration td b {margin-left: 5px}
-
-/* TO DO: merge with main classes */
-
-input[type=text] + label {white-space: nowrap}
-#targetPort {margin-right: 10px}
-input[name="nofilter_blindedPassword"] {width: calc(100% - 38px)}
-#oldName {width: 45%}
-.displayText, .displayText:empty:hover, .displayText:empty:focus {margin: 5px; padding: 4px; width: calc(100% - 10px); width: 290px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; word-break: break-all; font-family: var(--monospaced); border: var(--border_input); border-radius: 2px; box-shadow: inset 1px 1px 1px #e4e4ee; background: #fafaff; user-select: all}
-.displayText:empty, .displayText:empty:hover, .displayText:empty:focus {background: #e9e9e9}
-.displayText:empty::before {min-height: 11px; display: inline-block; content: ""}
-.displayText:hover, .displayText:focus {box-shadow: 0 0 1px #89f; background: #ffe; outline: none}
-.displayText:focus {margin: 1px 5px; padding: 2px 4px; overflow: auto; text-overflow: clip; border: 1px solid #676c7f; background: #fff}
-.optbox, .optbox::before {will-change: transform}
-.optionsDisabled {cursor: not-allowed}
-.optionsDisabled .optbox, .optionsDisabled label {pointer-events: none}
-#tunnelListPage th:nth-child(n+2), .tunnelProperties td:nth-child(n+2) {text-align: center}
-#keyringManager {margin: -2px 0; padding: 3px 3px 3px 22px; float: right; font-size: 90%; background: var(--keys) no-repeat left center; background-size: 20px}
+.multiOption#isServer {padding-left: 28px; background: var(--server) no-repeat 4px center / 22px}
+.multiOption#isClient {padding-left: 28px; background: var(--client) no-repeat 4px center / 22px}
+th .help {font-size: 0}
+th .help::after {width: 16px; height: 16px; display: inline-block; background: var(--helplink) no-repeat center center / 16px; content: ""}
 
 /* SSL wizard */
 #messages + #ssl {margin-top: 8px}
@@ -259,6 +259,7 @@ input[name="nofilter_blindedPassword"] {width: calc(100% - 38px)}
 #ssl th:nth-child(n+3), #ssl td:nth-child(n+3) {text-align: center}
 #ssl .configerror td {padding: 20px 10px 20px 52px; font-weight: 700; background: #ffe var(--err) no-repeat 12px center / 28px}
 .configerror code {margin-left: 4px; font-weight: 700; color: #050}
+
 .tunnelInfo {display: none}
 #toggleInfo {margin: -2px -3px 0 0; padding: 2px 5px; min-width: 0; vertical-align: middle; cursor: pointer; transform: scale(1); animation: linear showToggle .1s .2s backwards}
 #toggleInfo img {height: 8px; width: 12px; mix-blend-mode: luminosity}
@@ -276,18 +277,14 @@ input[name="nofilter_blindedPassword"] {width: calc(100% - 38px)}
 #clientAuth tr:first-child td {border-top: none}
 #clientAuth #leasesetKey {width: calc(100% - 20px)}
 .clientName, .clientKey {width: calc(100% - 38px)}
-#filterDefinition, .freetext.filemanager, #privKeyFile {width: calc(100% - 50px)}
+.freetext[type=text].filemanager {width: calc(100% - 50px)}
 #regDisabled {margin-bottom: 3px}
 
-/* server tunnel options */
-#tunnelOpts td {padding: 0; width: 25%}
-#tunnelOpts table {border: none}
-#tunnelOpts table td {padding: 5px; border-bottom: var(--border_softer)}
-#tunnelOpts table tr:first-child td {border-top: none}
-#tunnelOpts table tr:last-child td {border-bottom: none}
-#tunnelOpts table td:first-child {border-left: none}
-#tunnelOpts table td:last-child {border-right: none}
-.unbold {font-weight: 400}
+/* initializing */
+#notReady, #notFound, #down {margin: 60px auto 25px; padding: 30px; width: 400px; text-align: center; font-size: 11pt; font-weight: 700; border: 5px solid #900; border-image: repeating-linear-gradient(135deg, #dd0 0px, #dd0 20px, #900 20px, #900 40px, #dd0 40px) 5 repeat repeat; border-image-width: 5px; border-image-outset: 1px; box-shadow: inset 0 0 0 1px #113, inset 0 0 2px 2px rgba(0,0,0,.4), 0 0 0 2px #113, 0 0 3px 3px rgba(0,0,0,.4); background: #ffd; background: repeating-linear-gradient(180deg,#dd9 2px, #eeb 4px)}
+#notReady {border-image: repeating-linear-gradient(135deg, #ee9 0px, #ee9 20px, #d50 20px, #d50 40px, #ee9 40px) 5 repeat repeat; border-image-width: 5px; border-image-outset: 1px; background: repeating-linear-gradient(180deg,#ffd 2px, #eeb 4px)}
+#notReady b {color: #733}
+#down b {color: #500}
 
 @keyframes showToggle {from {transform: scale(0)} to {transform: scale(1)}}
 
@@ -307,7 +304,8 @@ input[name="nofilter_blindedPassword"] {width: calc(100% - 38px)}
 .nowrap .multiOption {margin-right: 2px; margin-left: 0}
 }
 
-@media screen and (max-width: 900px) {.tunnelInfo .selectAll {max-width: 110px}
+@media screen and (max-width: 900px) {
+.tunnelInfo .selectAll {max-width: 110px}
 }
 
 @media screen and (max-width: 800px) {
