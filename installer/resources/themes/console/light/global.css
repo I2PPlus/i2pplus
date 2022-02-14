@@ -120,6 +120,16 @@ a:active, a:visited:active {
   color: #f30;
 }
 
+textarea::placeholder, input::placeholder {
+  font-style: italic;
+  color: var(--ink);
+  opacity: .4;
+}
+
+textarea:focus::placeholder, input:focus::placeholder {
+  opacity: 0;
+}
+
 .control, .optbox, select, input[type=submit], input[type=reset], label {
   cursor: pointer;
 }
