@@ -32,6 +32,7 @@ tr {vertical-align: middle; contain: layout}
 tr:nth-child(even), pre#activetransports, #debug .sentTags:hover td, #debug .expiry:hover td {background: var(--row)}
 tr:nth-child(odd) {background: var(--row)}
 tr:last-child td {border-bottom: 1px solid var(--border_inner)}
+td.optionsave, .formaction, #addkeyring tr:last-child td {padding: 8px 6px}
 td {padding: 3px 5px; color: var(--ink); vertical-align: middle; border-top: var(--border_soft); border-bottom: var(--border_soft)}
 tt::selection, .sybil_routerinfo th code::selection {color: #fff; background: #070}
 b, #routerinformation td:first-child {color: var(--ink_light)}
@@ -183,7 +184,7 @@ p:empty + .sb_notice {margin-top: 9px}
 #sb_services a::before {vertical-align: sub; filter: saturate(.4)}
 #sb_services a:hover::before {filter: saturate(1)}
 
-/* sidebar network status */
+/* network status */
 .sb_netstatus, .tunnelBuildStatus {margin: -4px -1px -5px; padding: 6px 3px; width: 100%; display: inline-block; box-sizing: border-box; vertical-align: baseline; line-height: 1.2; text-shadow: 0 1px 1px #fff; border: 1px solid #88f; border-radius: 2px; box-shadow: var(--highlight), 0 0 1px rgba(96,96,96,.5)}
 .sb_netstatus a {vertical-align: baseline}
 #sidebar .firewalled {color: #676; background: repeating-linear-gradient(135deg, rgba(220,255,220,.3) 2px, rgba(255,255,220,.3) 3px, rgba(220,255,220,.3) 5px)}
@@ -249,9 +250,7 @@ p:empty + .sb_notice {margin-top: 9px}
 .main hr, hr {color: #7e7fb9; background: #7e7fb9; height: 1px; border: 0 solid var(--border_inner); margin: 10px 0}
 .main .tunneldisplay tr:last-child td, .main #tunnelpeercount tr:nth-last-child(2) td, .main #udpconnections tr:nth-last-child(2) td, .main #ntcpconnections tr:nth-last-child(2) td {border-bottom: 1px solid var(--border_inner)}
 .pending:nth-of-type(2)::before {content: "\2022\2008\2008"}
-#console {box-shadow: var(--bevel)}
 #help td:first-child, #tunnels td:first-child, #peers #ntcpconnections td:first-child {border-left: 1px solid var(--border_inner)}
-#home {padding-bottom: 13px}
 #lookupCondensed {display: none}
 #profiles th::after {display: none}
 #reseed_urlselection.optionsingle, #reseedproxytype, #config_reseed .optionlist:hover, #graphs .optionlist:hover, #config_network .optionlist:hover, #config_i2cp .optionlist:hover {background: #fff}
@@ -483,7 +482,7 @@ table[id$="logs"] ul li:last-child {margin-bottom: 10px}
 .main[id^="config_"] th {font-size: 9.5pt}
 .main[id^="config_"] .th_title, #configstats th, #config_family th {font-size: 11pt}
 .main[id^="config_"] th:first-child {padding-left: 10px}
-div[id^="config"] tr:last-child td, #events tr:last-child td, #netdb table table tr:last-child td, #profiles tr:last-child td, #peers tr:last-child td, #tunnels tr:last-child td, td.tabletextarea, .configtable tr:nth-last-child(2) td, #consolepass tr:first-child td, td.infohelp, #updatehelper, #i2pupdates tr:first-child td, #i2pupdates tr:nth-child(2) td {border-bottom: 1px solid var(--border_inner)}
+div[id^="config"] tr:last-child td, #events tr:last-child td, #profiles tr:last-child td, #peers tr:last-child td, #tunnels tr:last-child td, td.tabletextarea, .configtable tr:nth-last-child(2) td, #consolepass tr:first-child td, td.infohelp, #updatehelper, #i2pupdates tr:first-child td, #i2pupdates tr:nth-child(2) td {border-bottom: 1px solid var(--border_inner)}
 .th_title, #consolepass tr:first-child td, td.infohelp, #i2pupdates tr:nth-child(2) td, #updatehelper {border-top: 1px solid var(--border_inner)}
 #tunnelconfig tr:last-child, #webappconfig tr:last-child {background: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fff 5px)}
 #clientconfig td:first-child label {display: inline-block; vertical-align: middle}
@@ -491,6 +490,7 @@ div[id^="config"] tr:last-child td, #events tr:last-child td, #netdb table table
 #clientconfig tr:last-child {background: #f7f8ff}
 
 /* home */
+#home {padding-bottom: 13px}
 #homepanel {margin-bottom: 0}
 #applinks, #sitelinks {margin: 0 auto 3px; padding: 7px 10px 6px 32px; width: calc(100% - 44px); display: inline-block; overflow: hidden; word-spacing: .1em; letter-spacing: .08em; text-transform: uppercase; font-size: 11pt; color: var(--ink_light); border: 1px solid var(--border_inner); border-radius: 2px; box-shadow: var(--highlight), 0 0 1px rgba(220,220,220,.3)}
 #applinks {margin-top: 15px; background: url(images/favicon.svg) no-repeat 10px center / 16px, var(--h3), var(--h4app)}
@@ -498,14 +498,14 @@ div[id^="config"] tr:last-child td, #events tr:last-child td, #netdb table table
 #applinks a, #sitelinks a {font-size: 0}
 #applinks img, #sitelinks img, #sitemap h3 img {margin: -8px 0; padding: 9px 0 7px 10px; display: none; border-left: 1px solid var(--border_inner); opacity: .8; filter: none; transition: ease all 1s}
 #applinks a:hover img, #sitelinks a:hover img, #applinks a:hover::after, #sitelinks a:hover::after {opacity: 1}
-#home h4 a[href$="configapps"], #home h4 a[href$="configsites"] {margin: -7px -10px -10px 0; padding: 10px 0 4px; border-left: 1px solid var(--border_inner)}
+#applinks a[href$="configapps"], #sitelinks a[href$="configsites"] {margin: -7px -10px -10px 0; padding: 10px 0 4px; border-left: 1px solid var(--border_inner)}
 #home h4 a::after {margin: -2px 10px 4px -8px; width: 16px; height: 18px; display: inline-block; vertical-align: middle; background: var(--settings) no-repeat center center / 16px; content: ""}
 #home h4 a:hover::after, #home h4 a:focus::after {background: var(--settings_hover) no-repeat center center / 16px}
 #home h4 a:active::after {transform: rotate(90deg); transition: ease transform .15s}
+
 #chooselang::after, #configbandwidth::after {content: none}
 #chooselang img, #configbandwidth img {margin: -9px -5px -8px 20px; padding-top: 11px; display: inline-block; opacity: .8}
 #chooselang img {margin-right: 10px}
-#configbandwidth img {margin-right: -10px}
 
 .applink:not(:hover) a:not(:hover):not(:focus):not(:active), .applink:not(:hover) a:not(:hover):not(:focus):not(:active):visited, .sitemaplink:not(:hover):not(:focus):not(:active) {color: #4b689b}
 #applinks:hover img, #sitelinks:hover img, #sitemap h3:hover img, #sitemap h3 img:hover {opacity: 1; transition: ease all .3s}
@@ -1003,6 +1003,7 @@ h3#udpcon {margin-top: 7px}
 #notinitialized, .netdbnotfound {margin-top: 15px}
 
 /* netdb overview */
+.version {margin: 0; padding: 1px 3px; min-width: 44px; display: inline-block; line-height: 1.2; vertical-align: middle; text-align: center; font-weight: 700; border: 1px solid #bbc; border-radius: 2px; box-shadow: var(--highlight); background: var(--row)}
 #netdboverview th, #netdblookup th {padding: 8px 5px 8px 32px; word-spacing: .1em; letter-spacing: .08em; text-transform: uppercase; font-size: 11pt; background:var(--globe) no-repeat 8px center / 18px, var(--h2)}
 #netdblookup input[type=checkbox] {margin-left: 3px}
 #netdblookup input[type=text] {margin-top: 5px; margin-bottom: 5px}
@@ -1010,24 +1011,21 @@ h3#udpcon {margin-top: 7px}
 #netdbversions th, #netdbtransports th, #netdbcountrylist th, #netdbtiers th {font-size: 9pt}
 #netdboverview th:last-child, #netdboverview td:last-child {text-align: right}
 #netdboverview th:first-child, #netdboverview td:first-child {text-align: left}
+#netdboverview td:nth-child(2) td:last-child {width: 20%}
 #netdboverview table {margin: -1px 0; border: none; border-bottom: 1px solid var(--border_inner)}
 #netdboverview table th {padding: 8px 5px; word-spacing: 0; letter-spacing: 0; text-transform: none; font-size: 9pt; background: linear-gradient(180deg,#fcfcff 50%, rgba(255, 255, 255, .6) 50%, rgba(240, 240, 255, .4))}
-#netdboverview table td {padding: 3px 5px}
-#netdboverview td {padding: 0}
+#netdboverview td {padding: 0; border: 1px solid var(--border_soft)}
+#netdboverview table th, #netdboverview table td {padding: 5px 8px; line-height: 1.2; border: var(--border_soft)}
+#netdboverview table th::before, #netdboverview table td::before {min-height: 26px; display: inline-block; vertical-align: middle; content: ""}
 #netdboverview a {display: inline-block; width: 100%}
-#netdbtiers a {width: auto; margin-right: 5px}
-#netdbversions tr {border-right: 1px solid var(--border)}
-#netdbversions th:first-child, #netdbversions td:first-child {padding-left: 8px; padding-right: 8px}
-#netdbversions td:first-child {text-align: center}
-#netdbversions .version {margin: 0}
-#netdbcountrylist tr {border-left: 1px solid var(--border)}
-#netdboverview #netdbcountrylist td:first-child {padding-left: 6px}
+#netdbtiers a, #netdbversions .version {margin: -2px 0; padding: 1px 3px; min-width: 44px; display: inline-block; line-height: 1.2; vertical-align: middle; text-align: center; font-weight: 700; border: 1px solid #bbc; border-radius: 2px; box-shadow: var(--highlight); background: var(--row)}
+#netdbtiers a {margin: -2px 8px -2px 0; width: auto; min-width: 20px}
+#netdbtiers a:hover b {color: #f60}
+#netdbversions th:first-child, #netdbversions td:first-child {text-align: center}
 #netdbcountrylist img {margin-right: 5px; text-align: right; border: 1px solid #d0d0db; border-radius: 3px}
-#netdbtiers td:first-child {border-left: 1px solid var(--border_inner)}
-#netdbtiers th:first-child {border-left: 1px solid var(--border_inner)}
-#netdboverview td:nth-child(2) td:last-child {width: 20%}
 
 .confignav + .netdbentry, .infowarn + .netdbentry {margin-top: 10px}
+#netdb th span, #netdb th img, #netdb th code, #netdb th a, #netdb th b {vertical-align: middle}
 .netdbentry th img, .sybil_routerinfo th img {margin: 0 3px}
 .netdbentry th img {margin: 0 8px}
 .netdbentry th {font-weight: 400}
@@ -1090,6 +1088,7 @@ b.netdb_transport {margin-right: 3px; display: inline-block}
 .netdb_ouraddresses .netdb_transport {margin: -1px 5px 0 -6px; padding: 2px; display: inline-block}
 .netdb_ouraddresses .netdb_transport:nth-of-type(n+2) {margin-left: 5px}
 .netdb_header > * {font-size: 0; line-height: 0}
+.viewprofile + .viewfullentry, .viewfullentry + .configpeer, .viewprofile + .configpeer {margin-left: -5px}
 .viewprofile img, .viewfullentry img, .familysearch img, .configpeer img, .profiledump img {padding: 2px; display: inline-block; width: 14px; height: 14px; vertical-align: middle; line-height: 0; border: 1px solid #bbc; border-radius: 2px; background: var(--row)}
 
 /* leasesets */
@@ -1111,6 +1110,9 @@ b.netdb_transport {margin-right: 3px; display: inline-block}
 .leaseset th {font-weight: 400; padding: 5px; text-align: left}
 .leaseset th:last-child {font-size: 90%}
 .leaseset th:last-child, .leaseset td:nth-child(2) {padding-right: 5px; text-align: right}
+.leaseset th:last-child a[href$="i2p/"] {padding-left: 22px; background: var(--link) no-repeat 5px center / 12px, var(--row)}
+.leaseset th:first-child code {margin-left: 4px}
+.leaseset th:last-child code {margin: 0 0 0 4px; width: auto}
 .leaseset td:first-child img {margin: 0 3px 2px 5px; vertical-align: middle}
 .leaseset tt, .leaseset tt a {margin-right: 3px}
 #leasesetdebug {margin-bottom: 14px}
@@ -1118,6 +1120,9 @@ b.netdb_transport {margin-right: 3px; display: inline-block}
 .leaseset td {line-height: 1.5; background: var(--row); border-top: 1px solid var(--border_inner); border-bottom: 1px solid var(--border_inner)}
 .leaseset td a[href$=".i2p"] {margin-left: 6px}
 .leaseset a {font-size: 90%}
+.lsdest, .leaseset th:last-child a[href$="i2p/"] {margin-left: 3px; padding: 2px 4px 4px; display: inline-block; border: 1px solid #bbc; border-radius: 2px; background: var(--row)}
+.lsdest {padding-left: 22px; border-radius: 0; border-left-width: 4px; border-right-width: 4px; background: var(--hardhat) no-repeat 4px center / 14px, var(--row)}
+.lsdest.published {padding-left: 38px; background: var(--hardhat) no-repeat 4px center / 14px, var(--globe) no-repeat 21px center / 14px, var(--row)}
 .addtobook {text-align: right}
 .addtobook a {font-size: 0}
 .addtobook a::after {width: 16px; height: 16px; display: inline-block; vertical-align: middle; background: var(--abook_helper) no-repeat center center / 16px; content: ""}
@@ -1140,6 +1145,14 @@ img.unknownflag {opacity: .8}
 .leasesets_container table:first-child {margin-top: 0}
 .leasesets_container table {break-inside: avoid; page-break-inside: avoid; -webkit-column-break-inside: avoid}
 .leaseset th:last-child, .leaseset tr:nth-child(2) {font-size: 90%}
+.leaseset .routerid {margin-left: 2px; padding: 0 2px 0 0; display: inline-block; line-height: 1.5; border-radius: 2px}
+.leaseset .routerid img {margin: -1px 0 0 4px}
+
+/* highlight linked leaseset */
+.leaseset:target {border: 1px solid #5a5}
+.leaseset:target tr:first-child th, .leaseset:target td {border-top: 1px solid #5a5; border-bottom: 1px solid #5a5}
+.leaseset:target th:first-child, .leaseset:target td:first-child {border-left: 1px solid #5a5}
+.leaseset:target th:last-child, .leaseset:target td:last-child {border-right: 1px solid #5a5}
 
 /* sybils */
 #sybilanalysis {margin: 14px 0 6px; padding: 10px 10px 8px 50px; border: 1px solid var(--border_inner); background: var(--sybil) no-repeat 15px center / 28px, var(--div_infohelp)}
@@ -1170,11 +1183,9 @@ h3.sybils {margin-bottom: 9px}
 #netdb .sybil_routerinfo tr:nth-child(2), #netdb .sybil_routerinfo tr:nth-child(2) td {border-top: 1px solid var(--border_inner)}
 .sybil_routerinfo th {padding: 1px 1px 1px 6px}
 .sybil_routerinfo th[colspan="2"] {padding-right: 6px; font-size: 90%}
-.sybil_routerinfo th > * {vertical-align: middle}
 .sybil_routerinfo th:first-child {white-space: nowrap; text-align: left}
-.sybil_routerinfo th:last-child, .sybil_routerinfo th:last-child > * {vertical-align: middle}
 .sybil_routerinfo th:last-child {width: 1%; white-space: nowrap; text-align: right}
-#netdb .sybil_routerinfo th code {letter-spacing: .07em}
+#netdb .sybil_routerinfo th code {margin-top: 5px; margin-bottom: 5px; letter-spacing: .07em}
 .sybil_routerinfo th img[src^="/flags"] {margin-right: 3px; height: 11px; width: 16px}
 .sybil_routerinfo td:first-child, .netdbentry td:first-child {padding-right: 8px; text-align: right}
 .sybil_routerinfo td:first-child {width: 50px; white-space: nowrap}
@@ -1221,7 +1232,6 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 .sybil_routerinfo hr {margin: -2px 0}
 .sybil_routerinfo .netdbheader {margin-right: 0; padding: 3px; text-align: right}
 .sybil_routerinfo .netdb_header img[src^="/flags"] {margin: 0 5px 0 3px}
-#netdb .sybil_routerinfo th code {margin-top: 5px; margin-bottom: 5px}
 .sybil_routerinfo th:last-child b[style="float: right;"] {margin-top: 2px; font-size: 90%; font-style: italic}
 
 /* lookup */
@@ -1229,32 +1239,25 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 #netdblookup td:nth-child(odd) {padding-left: 10px; white-space: nowrap; text-align: right; font-weight: 700; color: var(--ink_light)}
 #netdblookup td:nth-child(even) {width: 50%}
 #closetorouter {margin-left: 6px}
-.leaseset th:first-child code {margin-left: 4px}
-.leaseset th:last-child code {margin: 0 0 0 4px; width: auto}
-#profilelist .viewprofile img, #profilelist .configpeer img {margin-bottom: -3px}
-#profilelist .viewprofile {margin-right: 8px}
+
 .familysearch img {margin-right: -4px; margin-left: 0}
 .netdb_header .configpeer, .netdb_header .configpeer {margin-right: 5px}
-.viewprofile + .viewfullentry, .viewfullentry + .configpeer, .viewprofile + .configpeer {margin-left: -5px}
 .netdb_header img[src^="/flags"], th img[src^="/flags"] {margin-left: 2px; width: 24px; height: auto; border: 1px solid #bbc; border-radius: 2px}
 .netdb_header img[src="/flags.jsp?c=a0"] {margin: 1px 0 -4px; display: inline-block; vertical-align: middle}
-.version, #netdbtiers a {margin: 0; padding: 1px 3px; display: inline-block; min-width: 44px; text-align: center; font-weight: 700; border: 1px solid #bbc; border-radius: 2px; box-shadow: var(--highlight); background: var(--row)}
-#netdbtiers a {min-width: 20px; margin-right: 5px; padding: 0 3px; margin: -1px 5px -1px 0}
-#netdbtiers a:hover b {color: #f60}
-.version:empty {display: none}
+
 #netdb_ourinfo .version {margin-right: 4px}
-#netdb .version {margin: 0 8px 0 3px}
+
+#profilelist .viewprofile img, #profilelist .configpeer img {margin-bottom: -3px}
+#profilelist .viewprofile {margin-right: 8px}
 #profiles .version {margin: 0 2px}
-#sybil_ourinfo .unreachable, #netdb_ourinfo .unreachable {display: none}
+
+#sybil_ourinfo .unreachable, #netdb_ourinfo .unreachable, .version:empty {display: none}
 .sybil_routerinfo .netdb_transport {margin: 0 3px; display: inline-block}
-#netdboverview td {line-height: 1.6}
-#netdboverview .version {line-height: 1.2}
+
 .keysearch, .signingkey, .version, .version a {color: var(--a)}
 .signingkey {margin: 2px 0; padding: 2px 4px 2px 16px; display: inline-block; font-size: 90%; border: 1px solid #bbd; border-radius: 2px; box-shadow: var(--highlight); background: var(--crypto) no-repeat 1px center / 14px, var(--row)}
 .signingkey.encryption {background: var(--lock) no-repeat 1px center / 14px, var(--row)}
 #netdb_ram {margin: 0 0 0 -2px; padding: 2px 3px; display: inline-block; font-size: 90%; box-shadow: var(--highlight); border: 1px solid #bbd; border-radius: 2px; background: var(--row)}
-.leaseset .routerid {margin-left: 2px; padding: 0 2px 0 0; display: inline-block; line-height: 1.5; border-radius: 2px}
-.leaseset .routerid img {margin: -1px 0 0 4px}
 #peers .routerid {margin: 1px 0; padding: 1px 2px 1px 3px; display: inline-block; border-radius: 2px}
 .netdb_tunnel {margin-right: 5px}
 #tunnels .routerid > * {vertical-align: middle}
@@ -1742,6 +1745,7 @@ th.options {padding: 8px 5px 8px 10px; font-size: 9pt}
 #bandwidthconfig td:not(.infohelp):first-child {padding-right: 0; background: none}
 #bandwidthconfig td:last-child {white-space: normal}
 #config_bandwidth #bandwidthconfig .optionsave {padding: 8px 6px}
+#configbandwidth img {margin-right: -10px}
 
 /* network */
 .config_experimental {font-size: 0}
@@ -1769,7 +1773,8 @@ th.options {padding: 8px 5px 8px 10px; font-size: 9pt}
 #config_service form {margin: -7px -4px 8px; vertical-align: top; columns: 500px 2; column-gap: 10px}
 
 /* ui */
-.themechoice .optbox, .langselect .optbox {vertical-align: text-bottom}
+.themechoice, .langselect {width: 140px}
+.themechoice .optbox {vertical-align: text-bottom}
 .themechoice .optbox {margin-top: 0; margin-left: -38px; min-height: 88px; min-width: 123px; position: absolute; z-index: 999; opacity: 0}
 .themechoice {margin: 4px; padding: 0 4px; width: 115px; float: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: center; border: 1px solid var(--border_inner); box-shadow: var(--highlight); background: #f8f8ff; transition: filter ease .05s; filter: drop-shadow(0 0 1px rgba(220,220,255,.7))}
 .themechoice:hover {border: 1px solid #f60; background: #fff; transition: filter ease .05s}
@@ -1777,6 +1782,8 @@ th.options {padding: 8px 5px 8px 10px; font-size: 9pt}
 .themechoice:active > img ~ .themelabel {color: #fff; background: #f60}
 .themechoice > img {filter: drop-shadow(0 0 1px #fff)}
 .themechoice:hover > img {filter: drop-shadow(0 0 1px #f60)}
+.themechoice .optbox {margin-left: -49px; min-height: 92px}
+.themechoice .optbox, .themechoice .optbox:hover, .themechoice .optbox:focus {width: 144px}
 .themechoice .optbox + img {margin: 5px 0 25px -1px; padding: 2px 0}
 .themechoice .optbox:checked + img, .themechoice .optbox:checked + img {padding: 6px 0; height: 40px; width: 40px}
 .themelabel {margin: -24px -4px 0; padding: 3px 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 9pt; border-top: 1px solid var(--border_inner); box-shadow: var(--highlight); background: #f8f8ff}
@@ -1824,7 +1831,7 @@ th.options {padding: 8px 5px 8px 10px; font-size: 9pt}
 .langselect .optbox:active ~ .ui_lang {color: #fff; box-shadow: var(--highlight), inset 3px 3px 3px rgba(0,0,0,.2); background: #f60}
 .langselect .optbox:checked:active ~ .ui_lang {color: #f60; box-shadow: var(--highlight); background: linear-gradient(90deg, #eef, #fff, #eef)}
 
-/* configui password*/
+/* console password */
 table#consolepass th:nth-child(2) {text-align: left}
 table#consolepass td:not[colspan]:first-child {width: 100px; white-space:nowrap}
 table#consolepass td {padding: 5px 10px}
@@ -1920,12 +1927,6 @@ table#consolepass input[name="name"] {margin-right: 20px}
 #joinfamily .optionsingle {padding: 5px 5px 0 45px; background: #eaeaff var(--key) no-repeat 12px center / 28px}
 #joinfamily .optionsingle:hover {background: #ffd var(--key) no-repeat 12px center / 28px}
 
-/* ui */
-.themechoice, .langselect {width: 140px}
-.themechoice .optbox, .langselect .optbox, .themechoice .optbox:hover, .langselect .optbox:hover, .themechoice .optbox:focus, .langselect .optbox:focus {width: 144px}
-.themechoice .optbox {margin-left: -49px; min-height: 92px}
-.langselect .optbox, .langselect .optbox:hover, .langselect .optbox:focus {margin-left: -2px}
-td.optionsave, .formaction, table#addkeyring tr:last-child td {padding: 8px 6px}
 #view_profile .identicon {height: 31px}
 #view_profile a img {margin-right: 34px}
 
@@ -2155,17 +2156,6 @@ td.optionsave, .formaction, table#addkeyring tr:last-child td {padding: 8px 6px}
 #peerdefs li {line-height: 1.6}
 #logs .tabletitle, #jobs h3, #tunnels h3[id] {position: relative; overflow: hidden}
 #logs #enviro ~ .tabletitle::after, #jobs h3::after, #tunnels h3[id]::after {width: 0; height: 1px; display: inline-block; position: absolute; bottom: 0; left: 0; background: linear-gradient(90deg, #d30, #f60); content: ""; animation: ease-out reloader 1s forwards; opacity: .7}
-
-/* highlight linked leaseset */
-.leaseset:target {border: 1px solid #5a5}
-.leaseset:target tr:first-child th, .leaseset:target td {border-top: 1px solid #5a5; border-bottom: 1px solid #5a5}
-.leaseset:target th:first-child, .leaseset:target td:first-child {border-left: 1px solid #5a5}
-.leaseset:target th:last-child, .leaseset:target td:last-child {border-right: 1px solid #5a5}
-
-.lsdest, .leaseset th:last-child a[href$="i2p/"] {margin-left: 3px; padding: 2px 4px 4px; display: inline-block; border: 1px solid #bbc; border-radius: 2px; background: var(--row)}
-.lsdest {padding-left: 22px; border-radius: 0; border-left-width: 4px; border-right-width: 4px; background: var(--hardhat) no-repeat 4px center / 14px, var(--row)}
-.lsdest.published {padding-left: 38px; background: var(--hardhat) no-repeat 4px center / 14px, var(--globe) no-repeat 21px center / 14px, var(--row)}
-.leaseset th:last-child a[href$="i2p/"] {padding-left: 22px; background: var(--link) no-repeat 5px center / 12px, var(--row)}
 
 /* iframe */
 .main.embedded {text-align: center; padding: 2px; overflow: hidden}
@@ -2514,7 +2504,6 @@ h3#restartrouter, p#tunnelconfig {margin-bottom: -15px}
 #netconfig label::before, #externali2cp td label::before, #externali2cp .nowrap::before, #reseedconfig .nowrap::before {min-height: 48px}
 #netdbcountrylist img {width: 24px; height: auto}
 #netdboverview table th:last-child::after, #netdboverview table td:last-child::after {width: 5px; display: inline-block; content: ""}
-#netdboverview table th {padding-top: 9px; padding-bottom: 9px}
 .newsAuthor {padding: 0 0 0 14px; font-size: 9.5pt; background-size: 12px; background-position: left center}
 #peerprofiles.widescroll {padding-top: 123px}
 #peers .routerid {padding: 1px 0 1px 3px}
