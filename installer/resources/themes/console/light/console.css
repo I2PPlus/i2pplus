@@ -644,7 +644,7 @@ p#upnpstatus, p#keyringhelp, .widescroll + p.infohelp, #profiles ul#banlist, #co
 p#gatherstats + form, ul.statlist {border: 1px solid var(--border_inner); padding: 10px; background: var(--p)}
 ul.statlist {border: 1px solid var(--border_inner); padding: 0 10px 10px; display: inline-block; width: calc(100% - 22px); background: #fafaff; box-shadow: var(--highlight)}
 #stats .statlist:last-of-type {margin-bottom: 0}
-.joblog .statlist li {line-height: 1.5; padding-top: 6px; padding-bottom: 0; margin-right: 5px}
+.statlist li {line-height: 1.5; padding-top: 6px; padding-bottom: 0; margin-right: 5px}
 .statlist li {list-style: none}
 .statlist li::before, .statlist li a[href^="graph"]::before {margin-top: -4px; margin-right: 10px; margin-left: -17px; height: 4px; width: 4px; display: inline-block; vertical-align: middle; opacity: .8; content: ""; transform: rotate(45deg)}
 .statlist li::before {border: 1px solid #335; background: #779}
@@ -654,7 +654,7 @@ ul.statlist {border: 1px solid var(--border_inner); padding: 0 10px 10px; displa
 .statsViewGraphs {display: inline-block; width: 100%}
 ul.statlist {padding-bottom: 0}
 .statlist li b {font-size: 110%}
-.statlist li li b {font-size: 100%}
+.statlist li li {font-size: 95%}
 .statlist li i {margin-left: 6px; opacity: .8}
 .statlist .statsName i {font-weight: 700; color: #004f28}
 .statlist .statsName li i {color: inherit; font-weight: 400}
@@ -671,10 +671,10 @@ ul.statlist {padding-bottom: 0}
 .statsLongName {display: inline-block}
 .statsLongName::first-letter {text-transform: uppercase}
 .nowrap {display: inline-block; white-space: nowrap}
-.statlist > li::after {content: ""; display: block; width: 100%; height: 1px; border-top: 1px dotted #ddf}
-li.noevents::after {content: ""; margin-top: 11px; display: block}
+.statlist > li::after {margin-top: -20px; display: block; width: 100%; height: 1px; border-top: 1px dotted #ddf; content: ""}
+.noevents::after {content: ""; margin-top: 11px; display: block}
 .statlist > li:last-child::after {display: none}
-li.noevents {margin: 0 0 5px 40px; font-style: italic}
+.noevents {margin: 0 0 5px 40px; font-style: italic}
 
 /* h1 */
 h1 {margin: 0 0 10px 214px; padding: 16px 15px 15px 52px; min-width: 546px; z-index: 999; line-height: .9; letter-spacing: .12em; white-space: normal; text-transform: uppercase; font-size: 18pt; text-align: left; color: #54586F; text-shadow: 0 0 2px #fff; border: 1px solid var(--border); border-radius: 2px 2px 0 0; box-shadow: var(--bevel); background: var(--h1_network) no-repeat 10px center / 38px, var(--h1) #fafaff}
@@ -890,10 +890,9 @@ h3#scheduledjobs + ol li::before {background: var(--timer) no-repeat 6px center 
 
 /* /stats */
 .joblog {border: none; margin-top: 5px}
-.joblog ul {word-wrap: break-word; text-align: justify; line-height: 1; margin-top: -5px}
-.joblog li {word-wrap: break-word; line-height: 1.15; padding: 0; font-size: 9pt; page-break-inside: avoid; -webkit-break-inside: avoid; break-inside: avoid}
-.joblog li:last-child {margin-bottom: 10px}
-.joblog li li:first-child {margin-top: 0}
+.statlist ul {word-wrap: break-word; text-align: justify; line-height: 1; margin-top: -5px}
+.statlist li {word-wrap: break-word; line-height: 1.5; padding: 0; page-break-inside: avoid; -webkit-break-inside: avoid; break-inside: avoid}
+.statlist li a {font-size: 90%}
 .joblog form:first-child {margin-top: 10px}
 .joblog table {margin-top: 15px}
 .joblog p {line-height: 1.3}
@@ -2290,7 +2289,7 @@ p#pluginconfigtext {margin-top: 11px}
 #bwlimiter a, #i2pclientconfig a, #config_logging h3 a, #graphdisplay a, #version a, #tunnels h3 a, #advancedconfig a, #iptransport a, #reseedsetup a, #graphinfo a, #config_service h3 a, .h3navlinks a {padding-top: 8px}
 #config_clients #i2pclientconfig a, #config_bandwidth #bwlimiter .h3navlinks {margin-top: -4px}
 #consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"], #reseedconfig input[type="password"] {width: 184px}
-.statsLongName {margin-bottom: 10px}
+.statsLongName {margin-bottom: 0}
 }
 
 @media screen and (max-width: 1480px) {
@@ -2463,12 +2462,13 @@ h4#updateplugins, #news p {font-size: 10pt}
 .flag {margin: -1px -2px -1px -6px; padding: 2px 4px; width: 20px; height: 17px; display: inline-block; vertical-align: middle}
 .routerid {vertical-align: middle; contain: paint}
 #tunnels .routerid img {margin: -2px 2px 0 0}
-.joblog .statlist li {padding: 0 10px}
-.statlist li a[href^="graph"]::before, .statlist li::before {margin: 0 10px -50px -17px; height: 6px; width: 6px}
-.statlist li.noevents {padding-top: 10px}
-.statlist li.noevents::before {margin: -4px 10px 0 -17px}
-.statlist li.statsName b {margin: 10px 0 0 3px}
-.statlist li.statsName::before {display: none}
+.statlist li {padding: 0 10px}
+.statlist li a[href^="graph"]::before, .statlist li::before {margin: 0 10px -30px -17px; height: 6px; width: 6px; box-shadow: inset 0 0 0 1px rgba(255,255,255,.8)}
+.statlist .noevents {margin-top: 10px}
+.statlist .noevents::before {margin: -4px 10px 0 -17px}
+.statlist .statsName > b {margin: 0 0 0 3px}
+.statlist > li > ul b {margin: -5px 0 0 3px}
+.statlist .statsName::before {display: none}
 #schedjobs li {min-width: 280px}
 #jobs #jobstats th, #jobs #jobstats td {font-size: 100%}
 .subheading b {font-size: 10.5pt}
