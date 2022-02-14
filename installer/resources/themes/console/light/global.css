@@ -135,7 +135,7 @@ textarea::placeholder, input::placeholder {
   opacity: .4;
 }
 
-textarea:focus::placeholder, input:focus::placeholder {
+textarea:focus::placeholder, input:focus::placeholder, input[type=text]:focus::placeholder, input[type=password]:focus::placeholder {
   opacity: 0;
 }
 
