@@ -255,32 +255,34 @@ h1 + .sorry, #console_404 .sorry {margin: -1px 5px 10px 226px; padding: 20px 20p
 .sorry hr {margin: 10px 0; height: 1px; color: var(--ink); border-top: 1px solid var(--ink); background: var(--ink); opacity: .7}
 
 /* main section */
-.sb, .main, h1, div.news, .confignav, .tab, .tab2, table.search, .applink, .sitemapLink, .sitemapLabel {border: var(--border_hard)}
-.main, div.news, h1, .sorry {margin-left: 226px}
+.sb, .main, h1, #news, .confignav, .tab, .tab2, table.search, .applink, .sitemapLink, .sitemapLabel {border: var(--border_hard)}
+.main, #news, h1, .sorry {margin-left: 226px}
 .main {margin: -1px 5px 5px 226px; padding: 0 10px 1px 10px; width: auto; min-width: 665px; position: relative; z-index: 10; text-align: left; font-size: 9pt; border-radius: 0 0 3px 3px; box-shadow: var(--highlight), 0 1px 5px #000; background: repeating-linear-gradient(90deg, rgba(0,0,0,.3) 2px, rgba(0,24,0,.6) 4px), repeating-linear-gradient(180deg,rgba(0,0,0,.3) 2px, rgba(0,24,0,.2) 4px); background-size: 4px 100%, 100% 4px; contain: layout paint}
 div[id^="config_"].main {padding-bottom: 14px}
 #netdb {padding-bottom: 1px}
 
 /* news */
+#news {margin: -1px 5px 0 226px; padding: 6px 15px 8px; min-width: 655px; font-size: 8pt; text-align: right; box-shadow: 0 1px 5px #000}
+#homepage #news {background: var(--newsbg), var(--radar) no-repeat right bottom / auto 250px, #010; background-blend-mode: normal, normal, exclusion}
+#news .newsentry:first-child {margin-top: -3px}
 #news h3 font {letter-spacing: .2em; text-transform: none}
-div.news h3, #newspage h3 {letter-spacing: .03em; text-align: left; font-size: 10pt}
-#news h3 {padding: 6px 8px 6px 30px; word-spacing: 0; letter-spacing: .08em; border-bottom: var(--border); box-shadow: var(--bevel); background: var(--news) no-repeat 8px center, var(--h1); background-size: 15px, 2px, 4px 100%, 175px; background-blend-mode: normal, exclusion, exclusion, overlay}
-.news .newsentry:first-child {margin-top: -3px}
-div.news {margin: -1px 5px 0 226px; padding: 6px 15px 8px; min-width: 655px; font-size: 8pt; text-align: right; box-shadow: 0 1px 5px #000; background: linear-gradient(180deg,rgba(0,0,0,.3), rgba(0,0,0,.5)), var(--radar) no-repeat right bottom, repeating-linear-gradient(180deg,rgba(0,0,0,.8) 2px, rgba(0,16,0,.8) 4px), var(--camo), #000; background-size: 100%, auto, 2048px; background-blend-mode: normal, lighten, normal}
-#newspage h3 {margin: 5px 0 10px; border: none; box-shadow: 0 0 0 1px #242, var(--highlight), inset 0 0 2px 0 #030}
-#newspage .newsentry {margin-bottom: 14px; padding-bottom: 10px; box-shadow: 0 0 0 1px #242, 0 0 2px 2px #000, var(--highlight), inset 0 0 2px 0 #030; background: linear-gradient(180deg,rgba(0,16,0,.3), rgba(0,8,0,.3))}
+#news h3, #newspage h3 {letter-spacing: .03em; text-align: left; font-size: 10pt}
+#news h3 {padding: 6px 8px 6px 30px; word-spacing: 0; letter-spacing: .08em; border: none; border-bottom: var(--border); box-shadow: var(--bevel); background: var(--news) no-repeat 8px center, var(--h1); background-size: 15px, 2px, 4px 100%, 175px; background-blend-mode: normal, exclusion, exclusion, overlay}
+#homepage #news h3 {box-shadow: none; background: var(--news) no-repeat 8px center / 15px}
+#newspage .newsentry {margin-bottom: 14px; padding-bottom: 10px; box-shadow: 0 0 0 1px #242, 0 0 2px 2px #000, var(--highlight), inset 0 0 2px 0 #030; background: var(--newsbg) #000}
 #newspage .newsentry:first-child {margin-top: -2px}
 #newspage .newsentry:last-child {margin-bottom: -4px}
-div.news li {margin: 0 0 5px; padding: 5px 5px 5px 0; vertical-align: middle; word-wrap: break-word; list-style: none; text-align: justify; text-transform: capitalize; color: var(--a); font-size: 9.5pt; font-weight: 700; border-bottom: var(--dotted)}
-div.news h4 {margin: 5px 0 10px; padding: 0; text-transform: capitalize; font-size: 10pt; border-bottom: var(--dotted); opacity: 1}
-div.news p, div.newscontent p {margin: 0 15px; font-size: 9pt}
-div.news p:nth-child(n+2), div.newscontent p:nth-child(n+2) {margin-top: 8px}
-div.news hr {margin: 8px 0 5px}
+#news li {margin: 0 0 5px; padding: 5px 5px 5px 0; vertical-align: middle; word-wrap: break-word; list-style: none; text-align: justify; text-transform: capitalize; color: var(--a); font-size: 9.5pt; font-weight: 700; border-bottom: var(--dotted)}
+#news h4 {margin: 5px 0 10px; padding: 0; text-transform: capitalize; font-size: 10pt; border-bottom: var(--dotted); opacity: 1}
+#news p, #newscontent p {margin: 0 15px; font-size: 9pt}
+#news p:nth-child(n+2), #newscontent p:nth-child(n+2) {margin-top: 8px}
+#news hr {margin: 8px 0 5px}
 #news #newsStatus {padding-top: 3px; padding-bottom: 1px; float: left}
-#newsDisplay a, #graphopts a, #routerinfo a, #routerinformation tr:nth-child(n+2) a:not(#revision), #fullhistory a, .graphstat, .graphstat:visited {margin: 0 -2px; padding: 1px 10px; color: var(--a); border: 1px solid rgba(0,24,0,.5); border-radius: 15px; box-shadow: var(--highlight); background: rgba(0,48,0,.3)}
+#newsDisplay a, #graphopts a, #routerinfo a, #routerinformation tr:nth-child(n+2) a:not(#revision), #fullhistory a, .graphstat, .graphstat:visited {margin: 0 -2px; padding: 2px 10px; color: var(--a); border: 1px solid rgba(0,24,0,.5); border-radius: 15px; box-shadow: var(--highlight); background: rgba(0,48,0,.3)}
+#newsDisplay a {min-width: 90px; text-align: center}
 #news #newsDisplay a:hover, #news #newsDisplay a:focus, #graphopts a:hover, #graphopts a:focus, .graphstat:hover, .graphstat:focus, #routerinformation tr:nth-child(n+2) a:not(#revision):hover, #routerinformation tr:nth-child(n+2) a:not(#revision):focus, #fullhistory a:hover, #fullhistory a:focus {border: 1px solid #030; background: linear-gradient(180deg,#030 50%,#010 50%)}
 #news #newsDisplay a:active, #graphopts a:active, #routerinformation tr:nth-child(n+2) a:not(#revision):active, #fullhistory a:active, .graphstat:active {box-shadow: inset 2px 2px 2px #000; background: #020}
-.news #newsDisplay, .news #newsStatus {margin-top: 3px; display: inline-block}
+#news #newsDisplay, #news #newsStatus {margin-top: 3px; display: inline-block}
 .messages #newsDisplay {margin-right: 4px; float: right; white-space: nowrap; color: transparent}
 .messages #newsDisplay a:first-child {display: none}
 .messages #newsDisplay a:last-child {font-size: smaller}
@@ -653,6 +655,7 @@ tr:hover .cells, #profiles tr:hover td {box-shadow: none}
 #peers table {margin-bottom: 9px}
 h3[id$="con"] {margin-bottom: -2px; border-radius: 0; padding: 8px 10px; font-size: 10pt; word-spacing: .1em; letter-spacing: .08em; background: linear-gradient(90deg, #000, #001000 70%, #001300 90%); border: var(--border)}
 h3[id="udpcon"] {width: auto}
+#peers #udpconnections .routerid {margin: 2px 0; min-width: 70px}
 #udpconnections td:nth-child(2) img, #ntcpconnections td:nth-child(2) img {padding: 0}
 #udpconnections tr:last-child td, #ntcpconnections tr:last-child td {padding-top: 6px; padding-bottom: 6px}
 #ntcpconnections td[class="cells"]:last-child {font-weight: 700}
@@ -829,13 +832,13 @@ form[action="events"] > .formaction {margin-bottom: -11px; margin-right: -21px; 
 #tunnels td:last-child, #tunnels #tunnelPeerCount td:last-child {border-right: var(--border)}
 #tunnels td > * {vertical-align: middle; line-height: 1.2}
 #tunnels .cells {padding-top: 6px; padding-bottom: 6px}
-#tunnels h3.client {padding-left: 35px; background: var(--client) no-repeat 9px center, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade); background-size: 18px, 100%, 2px, 100%}
-#tunnels h3.ping {padding-left: 35px; background: var(--ping) no-repeat 9px center, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade); background-size: 18px, 100%, 2px, 100%}
-#tunnels #exploratory {padding-left: 35px; background: var(--globe) no-repeat 9px center, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade); background-size: 18px, 100%, 2px, 100%}
-#tunnels h3.server {padding-left: 35px; background: var(--server) no-repeat 9px center, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade); background-size: 18px, 100%, 2px, 100%}
-#tunnels #participating {padding: 6px 6px 4px 35px; letter-spacing: .1em; background: var(--share) no-repeat 10px center, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade); background-size: 18px, 100%, 2px, 100%}
+#tunnels h3.client {padding-left: 35px; background: var(--client) no-repeat 9px center / 18px, var(--title)}
+#tunnels h3.ping {padding-left: 35px; background: var(--ping) no-repeat 9px center / 18px, var(--title)}
+#tunnels #exploratory {padding-left: 35px; background: var(--globe) no-repeat 9px center / 18px, var(--title)}
+#tunnels h3.server {padding-left: 35px; background: var(--server) no-repeat 9px center / 18px, var(--title)}
+#tunnels #participating {padding: 6px 6px 4px 35px; letter-spacing: .1em; background: var(--share) no-repeat 10px center / 18px, var(--title)}
 #tunnels_part ~ .statusnotes:last-of-type {margin-bottom: 9px}
-#tunnels h3:last-of-type {padding-left: 35px; padding-bottom: 7px; background: var(--speed) no-repeat 9px center, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade); background-size: 18px, 100%, 2px, 100%}
+#tunnels h3:last-of-type {padding-left: 35px; padding-bottom: 7px; background: var(--speed) no-repeat no-repeat 9px center / 18px, var(--title); background-size: 18px, 100%, 2px, 100%}
 .pending:nth-of-type(2)::before {content: "\2022\2008\2008"}
 #tunnels h3 a img {display: inline-block}
 #tunnels h3 a:not(.refreshpage) img, #tunnels h3 a:not(.refreshpage):first-child {margin: -8px 0 -8px 0; padding: 11px 8px; border-left: var(--border)}
@@ -921,7 +924,7 @@ h3.tabletitle + .statusnotes, table.tunneldisplay {margin-top: -1px}
 #tunnelPeerCount .tunnel_cap {padding: 1px; min-width: 22px}
 #tunnelPeerCount .ipaddress {min-width: 140px; display: inline-block; text-align: right}
 #tunnelPeerCount a.script[href^="https://gwhois.org"]::after {margin: -1px 0 1px 3px; width: 12px; height: 12px; display: inline-block; vertical-align: middle; background: var(--search) no-repeat center center / 11px; opacity: .7; content: ""}
-#tunnels #peercount {background: url(/themes/console/images/svg/peers.svg) no-repeat 9px center / 18px, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade); background-size: 18px, 100%, 2px, 100%}
+#tunnels #peercount {background: url(/themes/console/images/svg/peers.svg) no-repeat 9px center / 18px, var(--title)}
 #tunnels .percentBarOuter, #tunnels .PercentBarInner, #tunnels .percentBarText {display: inline-block}
 #tunnels .percentBarOuter, #tunnels .percentBarText {width: 100px}
 #tunnels .percentBarOuter {margin-bottom: 1px; text-align: left; background: #000}
@@ -1295,9 +1298,7 @@ th code {user-select: all}
 #banneduntilrestart td {border-right: var(--border); text-align: center}
 #ipv4, #ipv6, #permabanned tr:nth-child(2) {border-top: var(--border); border-bottom: var(--border); background: var(--th)}
 
-#peers #udpconnections .routerid {margin: 2px 0; min-width: 70px}
-
-.applink, .applabel, .statusnotes, .main, div.news, .sb, .search tr, .logo, .themechoice, .themelabel, .langselect, .ui_lang {box-shadow: var(--highlight), inset 0 0 1px 1px #050}
+.applink, .applabel, .statusnotes, .main, #news, .sb, .search tr, .logo, .themechoice, .themelabel, .langselect, .ui_lang {box-shadow: var(--highlight), inset 0 0 1px 1px #050}
 .applink, .sitemapLink, .themechoice, .langselect {animation: zoom .05s linear .15s both; image-rendering: optimizeQuality; will-change: transform}
 .applabel, .sitemapLabel, .themelabel, .ui_lang {background: var(--glow_bottom), linear-gradient(180deg,#001900,#001000 50%,#000); animation: fade .15s ease .25s reverse both}
 
@@ -1332,8 +1333,8 @@ th code {user-select: all}
 .applink img {margin: -4px 0 1px; padding: 10px 52px 38px; width: auto; height: 32px; max-width: 32px; max-height: 32px}
 .applink.js:hover::before {padding: 1px 4px 3px; display: inline-block; position: absolute; top: -1px; left: -1px; border: 1px solid var(--hover); box-shadow: var(--highlight), inset 0 0 1px 1px #730; content: "*js"}
 #applinks, #sitelinks {margin: 11px -6px -9px; padding: 9px 8px 7px 35px; line-height: 1; overflow: hidden; letter-spacing: .15em; word-spacing: 0; font-size: 10.5pt; text-transform: uppercase; text-align: left; border-radius: 0}
-#applinks {background: url(images/favicon.svg) no-repeat 8px center, var(--h1); background-size: 18px, 2px, 100% 4px, 100%, 175px; background-blend-mode: var(--h3_blend)}
-#sitelinks {clear: left; background: var(--globe) no-repeat 8px center, var(--h1); background-size: 18px, 2px, 100% 4px, 100%, 175px; background-blend-mode: var(--h3_blend)}
+#applinks {background: url(images/favicon.svg) no-repeat 8px center / 18px, var(--title)}
+#sitelinks {clear: left; background: var(--globe) no-repeat 8px center / 18px, var(--title)}
 #sitelinks img, #sitemap h3 a img {margin-top: 1px}
 #applinks a, #sitelinks a {word-spacing: 0; letter-spacing: 0}
 #applinks img, #sitelinks img {opacity: .5}
@@ -1376,12 +1377,12 @@ th code {user-select: all}
 #sitemapcontainer h3 {margin-bottom: 6px}
 #sitemapcontainer h3:nth-child(n+2) {margin-top: 2px}
 #sitemap h3, #applinks, #sitelinks {border: var(--border_hard)}
-#sitemap h3 {margin-left: -7px; margin-right: -7px; padding-left: 35px; line-height: 1.2; letter-spacing: .12em; font-size: 10.5pt; background: url(images/favicon.svg) no-repeat 9px center, var(--h1); background-size: 18px, 2px, 100% 4px, 100%, 175px; background-blend-mode: var(--h3_blend)}
+#sitemap h3 {margin-left: -7px; margin-right: -7px; padding-left: 35px; line-height: 1.2; letter-spacing: .12em; font-size: 10.5pt; background: url(images/favicon.svg) no-repeat 9px center / 18px, var(--title)}
 #sitemap h3::first-letter {margin-right: .05em; display: inline-block; font-size: 115%}
-#sitemap h3:nth-of-type(2) {background: var(--infobox) no-repeat 9px center, var(--h1); background-size: 18px, 2px, 100% 4px, 100%, 175px; background-blend-mode: var(--h3_blend)}
-#sitemap h3:nth-of-type(3) {background: var(--configure) no-repeat 9px center, var(--h1); background-size: 18px, 2px, 100% 4px, 100%, 175px; background-blend-mode: var(--h3_blend)}
-#sitemap h3:nth-of-type(4) {background: var(--help) no-repeat 9px center, var(--h1); background-size: 18px, 2px, 100% 4px, 100%, 175px; background-blend-mode: var(--h3_blend)}
-#sitemap h3:nth-of-type(5) {background: var(--globe) no-repeat 9px center, var(--h1); background-size: 18px, 2px, 100% 4px, 100%, 175px; background-blend-mode: var(--h3_blend)}
+#sitemap h3:nth-of-type(2) {background: var(--infobox) no-repeat 9px center / 18px, var(--title)}
+#sitemap h3:nth-of-type(3) {background: var(--configure) no-repeat 9px center / 18px, var(--title)}
+#sitemap h3:nth-of-type(4) {background: var(--help) no-repeat 9px center / 18px, var(--title)}
+#sitemap h3:nth-of-type(5) {background: var(--globe) no-repeat 9px center / 18px, var(--title)}
 .sitemapLink, .sitemapLabel {width: 180px; display: inline-block; text-align: center; will-change: transform}
 .sitemapLink {position: relative}
 .sitemapLink, .sitemapLabel {width: 180px; min-width: 180px}
@@ -2075,7 +2076,7 @@ input[type=text]:focus::placeholder, #homesearch input.search:focus::placeholder
 #routerinfo td:first-child, #routerinfo td:nth-child(3) {text-align: right; white-space: nowrap}
 #routerinfo td:nth-child(2):not([colspan]) {white-space: nowrap; border-right: var(--border)}
 #routerinformation {padding-bottom: 12px}
-#routerinformation h3 {margin-bottom: -2px}
+#routerinformation h3 {margin-bottom: -1px; background: var(--title)}
 #routerinformation h3 span a {padding-right: 6px; margin: -14px 0 -11px; vertical-align: middle; text-transform: capitalize}
 #routerinformation .h3navlinks {margin-top: 1px}
 #routerinformation .h3navlinks a::before {margin: 0 3px 0 -2px; width: 14px; height: 14px; display: inline-block; vertical-align: middle; background: var(--eye) no-repeat left center / 14px; content: ""}
@@ -2214,8 +2215,8 @@ h1[class], h1 {margin: 0 5px 0 226px; position: relative; z-index: 999; white-sp
 #profiles th::after {display: none}
 #banneduntilrestart th, #banneduntilrestart td {border-right: var(--border)}
 h2, h2.welcome, h3, h3.welcome, #themeoptions {border-color: #242}
-.news hr {color: #242; background: repeating-linear-gradient(90deg, #242 2px, #000 4px); background-size: 4px 100%}
-#news.news hr {opacity: .7}
+#news hr {color: #242; background: repeating-linear-gradient(90deg, #242 2px, #000 4px); background-size: 4px 100%}
+#news#news hr {opacity: .7}
 #logs .tabletitle, #jobs h3, #tunnels h3[id] {position: relative; overflow: hidden}
 #logs #enviro ~ .tabletitle::after, #jobs h3::after, #tunnels h3[id]::after {width: 0; height: 1px; display: inline-block; position: absolute; bottom: 0; left: 0; background: linear-gradient(90deg, #d30, var(--hover)); content: ""; animation: ease-out reloader 1s forwards; opacity: .4}
 .infohelp.vmcomm {margin-bottom: 0}
@@ -2589,8 +2590,8 @@ th {font-size: 8pt}
 }
 
 @media screen and (min-width: 1500px) {
-.main, div.news, h1, h1[class], .sorry {margin-left: 272px}
-body, .main, .main td, .news p, #news p, textarea, .main textarea, code, tt, #changelog pre, th code, .statlist a[name], .statlist b, .statlist li b, .statlist a[name]:hover, .confignav, th, #configinfo th, .main button, .main input, select, textarea, input[type=file]::file-selector-button, div.news, #sidebar button, #warning2 p {font-size: 10pt}
+.main, #news, h1, h1[class], .sorry {margin-left: 272px}
+body, .main, .main td, #news p, #news p, textarea, .main textarea, code, tt, #changelog pre, th code, .statlist a[name], .statlist b, .statlist li b, .statlist a[name]:hover, .confignav, th, #configinfo th, .main button, .main input, select, textarea, input[type=file]::file-selector-button, #news, #sidebar button, #warning2 p {font-size: 10pt}
 h3, #sidebar h3 a, th.th_title, #leasesetdebug th, #leasesetsummary th, .netdbentry th, #help, #help li, #help p, #help code, #help td, #help th {font-size: 11pt}
 #help h2 {font-size: 14pt}
 #applinks, #sitelinks, #help h3, #sybilTask th {font-size: 12pt}
