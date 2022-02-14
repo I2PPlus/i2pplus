@@ -743,8 +743,6 @@ div[lang="de"] .links li {padding-left: 0}
 
 input[type=submit], input[type=reset], button, .optbox, select {cursor: pointer}
 input, input:visited, button, button:visited {margin: 3px; padding: 5px; line-height: 1.4; font-size: 9pt; color: var(--ink_light); text-decoration: none; text-shadow: 0 1px 1px #fff; border: var(--border_input); border-radius: 2px; box-shadow: var(--highlight), var(--highlight); box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.08) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.08); background: var(--btn); background-size: 14px, 100%; opacity: 1; filter: drop-shadow(0 0 1px rgba(220,220,255,.7))}
-input[type=text], textarea, input[type=password] {filter: drop-shadow(0 0 1px rgba(220,220,255,.7))}
-input[type=submit], input[type=reset], button, select {filter: drop-shadow(0 0 1px rgba(220,220,255,.7))}
 button a, button a:visited {font-weight: 400; color: var(--ink_light)}
 button:hover, input[type=submit]:hover, input[type=reset]:hover, button:focus, input[type=submit]:focus, input[type=reset]:focus {color: var(--ink_darker); border: 1px solid #f60; box-shadow: var(--highlight), inset 0 -8px 3px 8px rgba(255,96,0,.02), inset 0 0 10px rgba(255,96,0,.05), 0 0 1px rgba(255,96,0,.1), 0 7px 4px -4px rgba(0,0,0,.1); background: var(--btn_hover); filter: saturate(100%) drop-shadow(0 0 1px rgba(204, 204, 204, .8)); transition: ease border .7s}
 button:hover a {color: var(--ink_darker)}
