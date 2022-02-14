@@ -29,8 +29,8 @@ table hr {padding: 0; color: #adadeb; background: #adadeb; border: 0 solid #afaf
 th {padding: 6px 5px; color: var(--ink_light); text-align: left; font-size: 9pt; line-height: 1.1; border-bottom: 1px solid var(--border_inner); border-top: 1px solid var(--border_inner); vertical-align: middle; background: linear-gradient(180deg,#fcfcff 51%, #fafaff 51%, #f6f6ff 100%)}
 th code {font-weight: 700; margin-left: 3px}
 tr {vertical-align: middle; contain: layout}
-tr:nth-child(even), pre#activetransports, #debug .sentTags:hover td, #debug .expiry:hover td {background: var(--row)}
-tr:nth-child(odd) {background: var(--row)}
+tr:nth-child(even), pre#activetransports, #debug .sentTags:hover td, #debug .expiry:hover td {background: var(--bg), var(--row)}
+tr:nth-child(odd) {background: var(--bg), var(--row)}
 tr:last-child td {border-bottom: 1px solid var(--border_inner)}
 th code {user-select: all}
 td.optionsave, .formaction, #addkeyring tr:last-child td {padding: 8px 6px}
