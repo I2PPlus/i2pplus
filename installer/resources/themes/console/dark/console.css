@@ -10,7 +10,7 @@
 /*@supports (text-justify: auto) {html, body {background-attachment: fixed !important}}*/
 html {background: var(--vstripe), var(--camo), #000; background-size: 100% 4px, 2048px}
 body {margin: 5px 0 0 0; padding: 0; text-align: center; font: 8.5pt/1.3 var(--bodyfont); background: none}
-main * {scrollbar-color: rgba(16,48,16,.4) rgba(0,0,0,0)}
+.main {scrollbar-color: rgba(16,48,16,.4) rgba(0,0,0,0)}
 .sb, #sb_wrap, h1 {contain: layout}
 
 a:link tt, a:visited tt {color: var(--a)}
@@ -40,7 +40,7 @@ i {padding-right: 2px}
 ol li:first-child {margin-top: 10px}
 ol {padding: 1px 0 0 20px; display: inline}
 pre {width: 98%}
-#sidebar img[src$="i2plogo.png"], #sidebar h3, .confignav, *::before, *::after, h1, h2, h3, #applinks, #sitelinks, #sb_internals, #sb_services, #sb_advanced, .applink, .sitemaplink, #sitemapcontainer, .langselect, .themechoice {user-select: none}
+#sb_logo, #sidebar h3, #clock, form, .confignav, *::before, *::after, h1, h2, h3, #applinks, #sitelinks, #sb_internals, #sb_services, #sb_advanced, .applink, .sitemaplink, #sitemapcontainer, .langselect, .themechoice {user-select: none}
 table {margin: 1px 0; padding: 1px; width: 100%; font-size: 9pt; border: var(--border); border-collapse: collapse}
 table tt {color: #990; font-size: 8.5pt}
 table hr {margin: 0 0; padding: 0 0; height: 1px; display: none; color: var(--a); border: none; background: #252}
@@ -2258,7 +2258,8 @@ h2, h2.welcome, h3, h3.welcome, #themeoptions {border-color: #242}
 #changelog:hover pre {will-change: transform}
 #changelog pre {margin-top: 11px; padding: 10px 10px 10px 20px; width: calc(100% - 32px); max-height: 600px; overflow-y: scroll; border-left: var(--border); border-right: var(--border); background: #000}
 #fullhistory {margin-top: -12px; margin-bottom: 9px; padding: 6px; position: relative; z-index: 999; text-align: right; border: var(--border); background: #000}
-#fullhistory a {display: inline-block; line-height: 1.6}
+#fullhistory a {display: inline-block; line-height: 1.6; font-size: 90%}
+#fullhistory a:hover {color: var(--hover)}
 #fullhistory a::before {width: 19px; height: 20px; display: inline-block; vertical-align: middle; background: var(--eye) no-repeat left 45% / 16px; content: ""}
 #fullhistory a:hover::before {background-image: var(--eye_hover)}
 ul#upnphelp li:last-child, #legal ul li:last-child {padding-bottom: 0}
@@ -2587,7 +2588,7 @@ th {font-size: 8pt}
 }
 
 @media screen and (min-width: 1400px) {
-#help #changelog pre {margin-left: 0; padding-left: 10px; width: calc(100% - 22px); overflow-y: hidden; font-size: 9.5pt; columns: 510px auto; column-gap: 30px; column-rule: var(--dotted)}
+#help #changelog pre {margin-left: 0; padding-left: 10px; width: calc(100% - 22px); overflow-y: hidden; font-size: 10pt; columns: 515px auto; column-gap: 30px; column-rule: var(--dotted)}
 #help .confignav, #debug .confignav {position: sticky; top: 0}
 #profiles #banlist {margin: 3px -5px 0; padding: 10px 5px; border: none}
 .statsName {border: 1px solid #131}
