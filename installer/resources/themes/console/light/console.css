@@ -2432,12 +2432,11 @@ th.queue {white-space: nowrap}
 }
 
 @media screen and (min-width: 1500px) {
-body, .main, .main td, .news p, #news p, .newscontent p, .tab, .tab2, .main li b, .themelabel, .ui_lang, #sidebar button.download, #peerdefs, #profile_defs, #thresholds, #configinfo, .infohelp, .infowarn, button, input, select, #configinfo th, code, th, .statusnotes, #help code, #help tt, #console code, .percentBarText, #sidebar .reload[value="restartImmediate"], #sidebar .cancel {font-size: 10pt}
+body, .main, .main td, .news p, #news p, .newscontent p, .tab, .tab2, .main li b, .themelabel, .ui_lang, #sidebar button.download, #peerdefs, #profile_defs, #thresholds, #configinfo, .infohelp, .infowarn, button, input, select, #configinfo th, th, .statusnotes, #help code, #help tt, .percentBarText, #sidebar .reload[value="restartImmediate"], #sidebar .cancel {font-size: 10pt}
 h1[class], #wizardpage h1 {padding: 20px 15px 17px 55px; font-size: 19pt; background-size: 38px auto, 4px, 100%, 100%, 100%}
-.topness, .footnote, #jobs .joblog li, #jobs #schedjobs td, #jobstats td:first-child, #jobs .jobcount, #jobs li b, #jardump th {font-size: 9pt}
-.applabel a, textarea, #changelog pre, #updateAvailable, #news tt {font-size: 9.5pt}
+tt, tt a, pre, div.news, .footnote, .links code, .news, .topness, #console code, #help code, #help tt, #jardump td, #jardump th, #jardump tt, #jobs .jobcount, #jobs .joblog li, #jobs li b, #jobs #schedjobs td, #jobstats td:first-child, .leaseset tt, #logs li, .main[id^="config_"] .encDests th, #profilelist tt, #profilelist tt a, #sidebar a, #sidebar button, #sidebar h4, #sidebar h4 a, #sidebar td, .sb_notice, #sidebar .sb_update b {font-size: 9pt}
+.applabel a, code, code a, pre, textarea, #logs li, .main[id^="config_"] th, #changelog pre, #news tt, #updateAvailable {font-size: 9.5pt}
 button.control {padding: 14px}
-.links code, #console code, pre, #logs li, .main[id^="config_"] th {font-size: 9.5pt}
 h4#updateplugins, #news p {font-size: 10pt}
 .main, #news.news, h1, .sorry {margin-left: 252px}
 .percentBarOuter {width: 232px}
@@ -2486,7 +2485,6 @@ h3#pconfig, h3#restartrouter, p#tunnelconfig {margin-bottom: -15px}
 #loggingoptions {margin-bottom: -3px}
 .log_omitted {margin-right: 1px}
 #logs font[color^="#"]::before {margin-right: 6px; margin-left: 5px; width: 7px; height: 7px}
-#logs li {font-size: 9pt}
 #minigraphcontainer {margin-top: -43px; margin-left: 1px; width: 234px; height: 38px; background-size: 248px 40px}
 #minigraph {margin-top: -17px; width: 234px; height: 40px}
 #netconfig label::before, #externali2cp td label::before, #externali2cp .nowrap::before, #reseedconfig .nowrap::before {min-height: 48px}
@@ -2510,21 +2508,17 @@ h3#pconfig, h3#restartrouter, p#tunnelconfig {margin-bottom: -15px}
 #sb_localtunnels a {max-width: 188px}
 #sb_logo img {margin-top: -4px; margin-left: -2px; width: 240px}
 #sb_memoryBar .percentBarText {padding: 0 0 2px}
-.sb_notice {font-size: 9pt}
 #sb_services {width: 242px}
-#sidebar .sb_update b {font-size: 9pt}
 #sidebar .cancel[value="cancelShutdown"] {margin-top: 12px}
 #sidebar form {margin-bottom: -2px}
 #sidebar h3::after {min-height: 19px; display: inline-block; vertical-align: middle; box-sizing: border-box; content: ""}
 #sidebar h3 a {padding: 4px 0 2px; font-size: 11pt}
 #sidebar {margin-bottom: 5px; width: 228px}
-#sidebar .reload, #sidebar .stop {margin: 0 3px -5px; min-width: 110px}
-#sidebar .reload, #sidebar .stop {padding-top: 6px; padding-bottom: 6px}
+#sidebar .reload, #sidebar .stop {margin: 0 3px -5px; padding-top: 6px; padding-bottom: 6px; min-width: 110px}
 #sidebar .reload[value="restartImmediate"] {margin-top: 2px}
 #sidebar #sb_logo {margin-top: 4px; height: 41px !important}
 #sidebar #sb_newsheadings table {width: 240px}
 #sidebar table[id^="sb_"] {width: 238px}
-#sidebar td, #sidebar a, #sidebar button, #sidebar h4, #sidebar h4 a, .news, pre, #help code, #help tt, #jardump tt, #jardump td, div.news, #logs li, tt, .cells tt, #profilelist tt, .leaseset tt, .links code, #console code, tt a, .cells tt, #profilelist tt, .cells tt a, #profilelist tt a, .leaseset td tt, .main[id^="config_"] .encDests th {font-size: 9pt}
 #sybilTask th {font-size: 12pt}
 #tunnelPeerCount .flag img {margin: 2px 1px 0 -2px; border: none}
 #tunnelPeerCount .flag {width: 19px}
