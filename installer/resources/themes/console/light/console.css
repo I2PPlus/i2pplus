@@ -1832,10 +1832,10 @@ table#consolepass td#pw_adduser {padding: 5px 10px; border-top: 1px solid var(--
 td#pw_adduser input {margin: 5px 20px 5px 5px}
 table#consolepass input[name="name"] {margin-right: 20px}
 #consolepass input[name="name"], #externali2cp input[name="user"], #reseedconfig input[name="username"], #reseedconfig input[name="susername"] {background: #fbfbff var(--user) no-repeat 5px center}
-#consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"], #reseedconfig input[type=password] {padding: 4px 5px 4px 26px; background: #fbfbff var(--key) no-repeat 5px center; background-size: 16px; background-blend-mode: luminosity}
+#consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"], #reseedconfig input[type=password] {padding: 6px 5px 6px 26px; background: #fbfbff var(--key) no-repeat 5px center; background-size: 16px; background-blend-mode: luminosity}
 #consolepass input[name="name"]:focus, #externali2cp input[name="user"]:focus, #reseedconfig input[name="username"]:focus, #consolepass input[name="nofilter_pw"]:focus, #externali2cp input[name="nofilter_pw"]:focus, #reseedconfig input[type=password]:focus {background-color: #fff; background-blend-mode: normal}
 #consolepass input[name="name"], #externali2cp input[name="user"], #reseedconfig input[name="username"], #reseedconfig input[name="susername"]
-#consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"], #reseedconfig input[type=password] {padding: 4px 5px 4px 26px; background-size: 16px; background-blend-mode: luminosity}
+#consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"], #reseedconfig input[type=password] {padding: 6px 5px 6px 26px; background-size: 16px; background-blend-mode: luminosity}
 
 /* update */
 #i2pupdates input[type=text]:not([readonly]), #i2pupdates textarea, .main[id^="config_"] textarea, input[name="newsURL"] {margin-left: 3px; width: calc(100% - 6px)}
