@@ -6,6 +6,7 @@
 
 :root {
   --a: #4d5f80;
+  --active: #f30;
   --activity: repeating-linear-gradient(135deg, rgba(238, 238, 255,.7) 1px, rgba(238, 238, 255, .7) 5px, rgba(221, 221, 255, .7) 6px, rgba(221, 221, 255, .7) 11px);
   --badgeborder: 1px solid #bbc;
   --badge: linear-gradient(180deg,#fff,#ddf);
@@ -36,6 +37,7 @@
   --ink_light: #5b5b71;
   --ink_lighter: #71718e;
   --input_shadow: var(--highlight), inset 2px 2px 2px rgba(0,0,0,.25);
+  --membarinner_mobile: linear-gradient(180deg,rgba(255, 255, 255,.6), rgba(238, 238, 255, .6) 50%, rgba(180, 180, 255, .7) 50%, rgba(140, 140, 255, .7));
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
   --outline: 0 0 0 1px #000;
   --p: linear-gradient(135deg, #fafaff, #f8f8ff);

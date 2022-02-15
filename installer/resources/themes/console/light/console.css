@@ -115,7 +115,7 @@ h4.sb_info + hr + form {margin-bottom: -1px; padding-top: 5px}
 /* sidebar graph */
 #sb_bandwidthgraph {margin: -5px 0 0 3px; padding: 0; width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid #89f; border-radius: 2px; box-shadow: 0 0 1px #e0e0eb; transition: ease border .7s}
 #sb_bandwidthgraph:hover {border: 1px solid var(--hover); cursor: zoom-in; transition: ease border .7s}
-a:active #sb_bandwidthgraph {border: 1px solid #f30}
+a:active #sb_bandwidthgraph {border: 1px solid var(--active)}
 #sb_graphstats {padding: 2px 8px; display: inline-block; position: relative; z-index: 10000; font-size: 110%; font-weight: 700; text-shadow: 0 1px 1px rgba(255,255,255,.9); border: 1px solid var(--hover); border-top: none; box-shadow: inset 0 0 0 1px rgba(255,255,255,.9); background: linear-gradient(180deg,rgba(255,255,255,.7) 50%, rgba(220,220,255,.7) 50%); opacity: 0; transition: ease opacity .1s .2s; pointer-events: none}
 #sb_graphcontainer:hover #sb_graphstats {opacity: 1; transition: ease opacity .1s}
 #sb_graphcontainer {margin: -6px -5px -10px; height: 38px; display: inline-block; overflow: hidden; box-shadow: inset 0 0 0 2px #fff, inset 0 0 1px 1px #adadeb; border: 1px solid #afafcf; box-shadow: 0 0 1px #e0e0eb, var(--highlight); background: linear-gradient(180deg,rgba(255,255,255,.3), rgba(32,32,64,.05)), repeating-linear-gradient(to left, rgba(255,255,255,.0) 18px, rgba(120,120,255,.4) 18px, rgba(255,255,255,.0) 19px, rgba(255,255,255,.0) 36px), repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(0,0,0,0) 14px, rgba(120,120,255,.4) 14px, rgba(0,0,0,0) 15px)}
@@ -1713,7 +1713,7 @@ select[name="newlogclass"] {margin-left: 3px}
 
 /* bandwidth */
 .bw_title {font-size: 10pt}
-.bw_title {margin: 2px -13px 0 -58px; padding: 4px 5px; display: block; text-align: left; font-weight: 700; font-size: 11pt; color: var(--ink_light); background: linear-gradient(90deg, #fff, #eef)}
+.bw_title {padding: 4px 5px; margin: 0 0 0 -15px; width: calc(100% + 13px); display: block; text-align: left; font-weight: 700; font-size: 11pt; color: var(--ink_light); background: linear-gradient(90deg, #fff, #eef)}
 .net_bw {margin: 3px; padding: 5px 8px; box-shadow: 0 0 0 1px rgba(185,185,198,.65), var(--highlight), 0 0 2px #adadeb; background: linear-gradient(180deg,#fff, #ccccf0)}
 .net_bw, .net_bwrate, .net_datausage {display: inline-block; white-space: nowrap; text-align: center}
 .net_bwrate::before, #bandwidthconfig tr:nth-child(4) .net_bwrate::before {background: var(--share) no-repeat left center; background-size: 18px 18px}
@@ -1797,7 +1797,7 @@ select[name="newlogclass"] {margin-left: 3px}
 #themeoptions br {display: none}
 #themeoptions label {margin: 2px 10px 2px 0; display: inline-block; white-space: nowrap}
 #helptranslate {margin: 0 -5px; padding: 15px 10px 15px 50px; position: relative; top: 4px; clear: both; text-align: left; border-top: 1px solid var(--border_inner); background: url(images/favicon.svg)no-repeat left 14px center / 28px, var(--div_infohelp)}
-#themeoptions input {margin: 2px 5px; vertical-align: sub}
+#themeoptions input {margin: 2px 5px}
 #themesettings, #langsettings {margin: -16px 0 0; padding: 4px 5px 0; border: 1px solid var(--border_inner); background: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(248,248,255,.3) 3px, #fafaff 4px)}
 #themesettings {clear: both}
 #themesettings hr, #langsettings hr {display: none}
