@@ -44,6 +44,7 @@
   --readonly: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(220, 220, 255, .5) 3px, #fafaff 4px), #fafaff;
   --refresh: linear-gradient(180deg,#fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px);
   --row: linear-gradient(180deg,#fff,#eef);
+  --row_hover: #ffd;
   --row_even: linear-gradient(180deg,rgba(248,248,255,.6) 50%, rgba(248,248,255,.2));
   --row_odd: linear-gradient(180deg,rgba(240,240,255,.6) 50%, rgba(240,240,255,.4));
   --selected: #27377f;
@@ -121,7 +122,7 @@ a:link, a:visited {
   outline: none;
 }
 
-a:link:hover, a:hover, a:focus, a:visited:hover {
+a:link:hover, a:hover, a:visited:hover, a:visited:focus {
   color: #f60;
   text-decoration: none;
   text-shadow: none;
@@ -159,7 +160,7 @@ select, select[disabled]:hover, select[disabled]:focus {
   padding: 6px 24px 6px 8px;
   min-width: 120px;
   text-align: left;
-  font-size: 9pt;
+  font: 9pt var(--bodyfont);
   color: var(--ink_light);
   border: var(--border_input);
   border-radius: 2px;
