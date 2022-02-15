@@ -1713,7 +1713,7 @@ select[name="newlogclass"] {margin-left: 3px}
 
 /* bandwidth */
 .bw_title {font-size: 10pt}
-.bw_title {padding: 4px 5px; margin: 0 0 0 -15px; width: calc(100% + 13px); display: block; text-align: left; font-weight: 700; font-size: 11pt; color: var(--ink_light); background: linear-gradient(90deg, #fff, #eef)}
+.bw_title {margin: 1px 1px 1px -14px; padding: 4px 5px; width: calc(100% + 10px); display: block; text-align: left; font-weight: 700; font-size: 11pt; color: var(--ink_light); background: linear-gradient(90deg, #fff, #eef)}
 .net_bw {margin: 3px; padding: 5px 8px; box-shadow: 0 0 0 1px rgba(185,185,198,.65), var(--highlight), 0 0 2px #adadeb; background: linear-gradient(180deg,#fff, #ccccf0)}
 .net_bw, .net_bwrate, .net_datausage {display: inline-block; white-space: nowrap; text-align: center}
 .net_bwrate::before, #bandwidthconfig tr:nth-child(4) .net_bwrate::before {background: var(--share) no-repeat left center; background-size: 18px 18px}
@@ -2435,7 +2435,6 @@ th.queue {white-space: nowrap}
 body, .main, .main td, .news p, #news p, .newscontent p, .tab, .tab2, .main li b, .themelabel, .ui_lang, #sidebar button.download, #peerdefs, #profile_defs, #thresholds, #configinfo, .infohelp, .infowarn, button, input, select, #configinfo th, code, th, .statusnotes, #help code, #help tt, #console code, .percentBarText, #sidebar .reload[value="restartImmediate"], #sidebar .cancel {font-size: 10pt}
 h1[class], #wizardpage h1 {padding: 20px 15px 17px 55px; font-size: 19pt; background-size: 38px auto, 4px, 100%, 100%, 100%}
 .topness, .footnote, #jobs .joblog li, #jobs #schedjobs td, #jobstats td:first-child, #jobs .jobcount, #jobs li b, #jardump th {font-size: 9pt}
-.bw_title {margin-left: -78px}
 .applabel a, textarea, #changelog pre, #updateAvailable, #news tt {font-size: 9.5pt}
 button.control {padding: 14px}
 .links code, #console code, pre, #logs li, .main[id^="config_"] th {font-size: 9.5pt}
@@ -2465,9 +2464,11 @@ h4#updateplugins, #news p {font-size: 10pt}
 tt {margin-left: 0; margin-right: 3px; letter-spacing: .1em}
 #advancedconfig a, #reseedsetup a {padding-top: 7px}
 h3#bwlimiter a {margin-top: -8px}
-#bandwidthconfig .bw_out, #bandwidthconfig .bw_in, #bandwidthconfig .bw_share {padding: 0 15px 0 80px; min-width: 240px; background-position: 30px calc(50% + 12px)}
+#bandwidthconfig .bw_out, #bandwidthconfig .bw_in, #bandwidthconfig .bw_share {padding: 30px 15px 15px 80px; min-width: 240px; position: relative; background-position: 30px calc(50% + 12px)}
+.bw_title {margin: 0; width: calc(100% - 12px); position: absolute; left: 1px; right: 1px; top: 1px}
 #bandwidthconfig .bw_share {background-size: 32px 32px; background-position: 28px calc(50% + 12px)}
 #bandwidthconfig td:first-child:not(.infohelp):not(.optionsave) {padding: 0 80px 0 5px; background-position: right 30px center}
+#bandwidthconfig .optionsingle::after {display: none}
 #banlist .routerid {margin: 0 -5px 0 -2px}
 #changelog pre {columns: 570px auto; column-gap: 50px}
 #config_peers #banlist .routerid {margin-left: 0}
