@@ -1749,7 +1749,7 @@ th.options {padding: 8px 5px 8px 10px; font-size: 9pt}
 #netconfig tr:nth-last-child(3) .optionlist {margin-bottom: -1px}
 #netconfig .optionlist, .service_container {filter: drop-shadow(0 0 1px rgba(220,220,255,.7))}
 #reseedconfig th.options, #i2pupdates th.options {padding-left: 3px}
-#netconfig label, #externali2cp .optionlist label, #externali2cp .nowrap, #reseedconfig .nowrap, #updatehelper .nowrap, #updateProxyHostPort .nowrap, #i2pupdates .nowrap, #manualreseed .nowrap {min-width: 480px; width: calc(100% - 10px); display: inline-block; margin: 1px 0; padding: 2px 5px; background: rgba(234,234,255,.7); line-height: 1}
+#netconfig label, #externali2cp .optionlist label, #externali2cp .nowrap, #reseedconfig .nowrap, #updatehelper .nowrap, #updateProxyHostPort .nowrap, #i2pupdates .nowrap, #manualreseed .nowrap {min-width: 480px; width: calc(100% - 10px); display: inline-block; margin: 1px 0; padding: 2px 5px 0; background: rgba(234,234,255,.7); line-height: 1}
 #netconfig label:hover, #externali2cp .optionlist label:hover, #externali2cp .optionlist .nowrap:hover, #updateHelper .optionlist .nowrap:hover, #updateProxyHostPort .optionlist .nowrap:hover, #i2pupdates .nowrap:hover, #reseedconfig .nowrap:hover, #reseed_urlselection label:hover, #config_reseed .optionsingle.optiontextarea:hover {background: #ffd}
 #netconfig label::before {width: 4px; min-height: 40px}
 #externali2cp .optionlist label::before, #externali2cp .optionlist .nowrap::before, #reseedconfig .nowrap::before, #manualreseed .nowrap::before {min-height: 40px}
