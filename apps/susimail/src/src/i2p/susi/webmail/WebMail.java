@@ -2845,7 +2845,7 @@ public class WebMail extends HttpServlet
             try {
                 ByteArrayOutputStream baos = new ByteArrayOutputStream(4096);
                 draft.getPart().outputRaw(baos);
-				body.append(baos.toString("ISO-8859-1"));
+                body.append(baos.toString("ISO-8859-1"));
             } catch (IOException ioe) {
                 ok = false;
                 sessionObject.error += ioe.getMessage() + '\n';
@@ -3073,66 +3073,46 @@ public class WebMail extends HttpServlet
 
         out.println("<div id=\"composemail\">" +
                         "<table id=\"newmail\" cellspacing=\"0\" cellpadding=\"2\" width=\"100%\">\n" +
-                        "<tr>" +
-                        "<td colspan=\"2\"><hr></td>" +
-                        "</tr>\n" +
-                        "<tr>" +
-                        "<td>" + _t("From") + "</td>" +
+                        "<tr><td colspan=\"2\"><hr></td></tr>\n" +
+                        "<tr><td class=\"right\">" + _t("From") + "</td>" +
                         "<td><input type=\"text\" size=\"80\" name=\"" +
-                        NEW_FROM + "\" value=\"" + quoteHTML(from) + "\" " + (fixed ? "disabled" : "") +"></td>" +
-                        "</tr>\n" +
-                        "<tr>" +
-                        "<td>" + _t("To") + "</td><td><input type=\"text\" size=\"80\" name=\"" +
-                        NEW_TO + "\" value=\"" + quoteHTML(to) + "\"></td>" +
-                        "</tr>\n" +
-                        "<tr>" +
-                        "<td>" + _t("Cc") + "</td><td><input type=\"text\" size=\"80\" name=\"" +
-                        NEW_CC + "\" value=\"" + quoteHTML(cc) + "\"></td>" +
-                        "</tr>\n" +
-                        "<tr>" +
-                        "<td>" + _t("Bcc") + "</td><td><input type=\"text\" size=\"80\" name=\"" +
-                        NEW_BCC + "\" value=\"" + quoteHTML(bcc) + "\"></td>" +
-                        "</tr>\n" +
-                        "<tr>" +
-                        "<td>" + _t("Subject") + "</td>" +
+                        NEW_FROM + "\" value=\"" + quoteHTML(from) + "\" " + (fixed ? "disabled" : "") +"></td></tr>\n" +
+                        "<tr><td class=\"right\">" + _t("To") + "</td><td><input type=\"text\" size=\"80\" name=\"" +
+                        NEW_TO + "\" value=\"" + quoteHTML(to) + "\"></td></tr>\n" +
+                        "<tr><td class=\"right\">" + _t("Cc") + "</td><td><input type=\"text\" size=\"80\" name=\"" +
+                        NEW_CC + "\" value=\"" + quoteHTML(cc) + "\"></td></tr>\n" +
+                        "<tr><td class=\"right\">" + _t("Bcc") + "</td><td><input type=\"text\" size=\"80\" name=\"" +
+                        NEW_BCC + "\" value=\"" + quoteHTML(bcc) + "\"></td></tr>\n" +
+                        "<tr><td class=\"right\">" + _t("Subject") + "</td>" +
                         "<td><input type=\"text\" size=\"80\" name=\"" +
-                        NEW_SUBJECT + "\" value=\"" + quoteHTML(subject) + "\"></td>" +
-                        "</tr>\n" +
-                        "<tr>" +
-                        "<td></td>" +
-                        "<td><textarea cols=\"" + Config.getProperty(CONFIG_COMPOSER_COLS, 80) +
-                        "\" rows=\"" + Config.getProperty(CONFIG_COMPOSER_ROWS, 10)+ "\" name=\"" + NEW_TEXT + "\">" + text + "</textarea></td>" +
-                        "</tr>" +
-                        "<tr class=\"bottombuttons spacer\">" +
-                        "<td colspan=\"7\"><hr></td>" +
-                        "</tr>\n" +
-                        "<tr class=\"bottombuttons\" id=\"addattachment\">" +
-                        "<td>" + _t("Add Attachment") + "</td>" +
-                        "<td><input type=\"file\" size=\"50%\" name=\"" + NEW_FILENAME + "\" value=\"\">&nbsp;");
+                        NEW_SUBJECT + "\" value=\"" + quoteHTML(subject) + "\"></td></tr>\n" +
+                        "<tr><td></td><td><textarea cols=\"" + Config.getProperty(CONFIG_COMPOSER_COLS, 80) + "\" rows=\"" +
+                        Config.getProperty(CONFIG_COMPOSER_ROWS, 10)+ "\" name=\"" + NEW_TEXT + "\">" + text + "</textarea></td></tr>" +
+                        "<tr class=\"bottombuttons spacer\"><td colspan=\"7\"><hr></td></tr>\n" +
+                        "<tr class=\"bottombuttons\" id=\"addattachment\"><td class=\"right\">" + _t("Add Attachment") + "</td>" +
+                        "<td class=\"left\"><input type=\"file\" size=\"50%\" name=\"" + NEW_FILENAME + "\" value=\"\">&nbsp;");
                         // TODO: reset button label to "add attachment" when no attachments are visible (currently counts attachments added per session)
-            out.println(button(NEW_UPLOAD, _t("Add attachment")));
-            out.println("</td></tr>");
+            out.print(button(NEW_UPLOAD, _t("Add attachment")));
+            out.print("</td></tr>");
 
         if (sessionObject.attachments != null && !sessionObject.attachments.isEmpty()) {
             boolean wroteHeader = false;
             for(Attachment attachment : sessionObject.attachments) {
                 if(!wroteHeader) {
-                    out.println("<tr><td>" + _t("Attachments") + "</td>");
+                    out.println("<tr><td class=\"right\">" + _t("Attachments") + "</td>");
                     wroteHeader = true;
                 } else {
                     out.println("<tr><td>&nbsp;</td>");
                 }
-                out.println("<td id=\"attachedfile\"><label><input type=\"checkbox\" class=\"optbox\" name=\"check" +
+                out.print("<td id=\"attachedfile\" class=\"left\"><label><input type=\"checkbox\" class=\"optbox\" name=\"check" +
                                 attachment.hashCode() + "\" value=\"1\">&nbsp;" + quoteHTML(attachment.getFileName()) + "</label></td>" +
-                                "</tr>");
+                                "</tr>\n");
             }
             // TODO disable in JS if none selected
-            out.println("<tr class=\"bottombuttons\">" +
-                            "<td>&nbsp;</td>" +
-                            "<td id=\"deleteattached\">" + button(DELETE_ATTACHMENT, _t("Delete selected attachments")) + "</td>" +
-                            "</tr>");
+            out.println("<tr class=\"bottombuttons\"><td>&nbsp;</td><td id=\"deleteattached\" class=\"left\">" +
+                        button(DELETE_ATTACHMENT, _t("Delete selected attachments")) + "</td></tr>");
         }
-        out.println("</table></div>");
+        out.println("</table>\n</div>");
     }
 
     /**
