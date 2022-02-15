@@ -100,7 +100,7 @@ body.iframed {
   background: var(--select);
 }
 
-* {
+input, button, textarea, select, a {
   outline: none;
 }
 

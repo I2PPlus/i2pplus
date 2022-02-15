@@ -54,7 +54,7 @@ body, td, th, span, table a, input[type=submit], input[type=text], textarea {
 	font-size: 9pt;
 }
 
-* {
+input, button, textarea, select, a {
 	outline: none;
 }
 

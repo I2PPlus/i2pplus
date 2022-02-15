@@ -24,7 +24,7 @@ body.iframed {
   padding: 0;
 }
 
-* {
+input, button, textarea, select, a {
   scrollbar-color: rgba(16,16,48,.8) rgba(0,0,0,0);
   transition: ease scrollbar-color .5s;
 }

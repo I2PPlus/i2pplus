@@ -47,7 +47,7 @@ tt, code, pre, textarea {
   font-family: var(--monospaced);
 }
 
-* {
+input, button, textarea, select, a {
   outline: none;
   text-rendering: optimizeLegibility;
 }

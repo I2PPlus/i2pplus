@@ -116,7 +116,7 @@ body {
   color: var(--ink);
 }
 
-* {
+input, button, textarea, select, a {
   outline: none;
 }
 

@@ -89,7 +89,7 @@ b {
   color: var(--ink_light);
 }
 
-* {
+input, button, textarea, select, a {
   outline: none !important;
 }
 

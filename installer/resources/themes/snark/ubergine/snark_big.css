@@ -1,5 +1,5 @@
 @media screen and (min-width: 0) and (max-width: 4000px) {
-* {
+input, button, textarea, select, a {
   font-weight: 400 !important;
   font-family: "Noto Sans", "Droid Sans", "Roboto Sans", Ubuntu, "Segoe UI", "Lucida Grande", Helvetica, Arial, Verdana, sans-serif !important;
   line-height: 120% !important;
