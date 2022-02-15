@@ -34,7 +34,7 @@
   --glow_bottom: radial-gradient(at center bottom, rgba(16,72,16,.3), rgba(0,0,0,0) 50%);
   --glow_bottom_hover: radial-gradient(at center bottom, rgba(255,96,0,.25), rgba(0,0,0,0) 50%);
   --glow_top: radial-gradient(at center -45px, rgba(16,72,16,.3), rgba(0,0,0,0) 85%);
-  --h1: var(--bg_title), repeating-linear-gradient(to bottom, rgba(0,24,0,.3) 2px, rgba(0,0,0,.3) 4px), linear-gradient(180deg,#020, #010 50%, #010 50%, #000), var(--camotile) #000;
+  --h1: var(--bg_title) left top / 2px, repeating-linear-gradient(to bottom, rgba(0,24,0,.3) 2px, rgba(0,0,0,.3) 4px) center center / 100% 4px, linear-gradient(180deg,#020, #010 50%, #010 50%, #000), var(--camotile) left top /  256px, #000;
   --h2: repeating-linear-gradient(90deg, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(180deg,#001800, #000 75%);
   --h3_blend: normal, normal, normal, exclusion;
   --h3_fade: linear-gradient(180deg,#005000, #000 75%);
@@ -195,6 +195,18 @@ button::-moz-focus-inner, input::-moz-focus-inner {
 
 label {
   cursor: pointer;
+}
+
+.left {
+  text-align: left;
+}
+
+.right {
+  text-align: right;
+}
+
+.center {
+  text-align: center;
 }
 
 input:disabled {

@@ -171,6 +171,9 @@ a {
   outline: none;
 }
 
+a.fakebutton {
+  font-weight: 400;}
+
 .linkspam {
   color: #927b40;
 }
@@ -472,6 +475,12 @@ input.reload, input.refresh, input[name="refresh"][disabled], .fakebutton {
   line-height: 1.3
 }
 
+.fakebutton.script {
+  padding: 5px 7px;
+  font-weight: 400;
+  background: var(--btn) !important;
+}
+
 .fakebutton:not(#settings) {
   float: left;
 }
@@ -482,6 +491,10 @@ input[name="refresh"][disabled] {
 
 input.reload:hover, input.refresh:hover, .fakebutton:hover {
   background: var(--refresh_hover) no-repeat 6px center / 12px, var(--btn_hover) !important;
+}
+
+.fakebutton.script:hover {
+  background: var(--btn_hover) !important;
 }
 
 input.invertselection {
@@ -1501,16 +1514,8 @@ td[onclick] {
   cursor: pointer;
 }
 
-tr.list0 {
-  background: #eef;
-  background: repeating-linear-gradient(45deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px), #fff;
-  background: var(--badge);
-}
-
-tr.list1 {
-  background: #f7f8ff;
-  background: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fff 5px), #fff;
-  background: var(--badge);
+tr.list0, tr.list1 {
+  background: var(--row);
 }
 
 tr.list0:hover, tr.list1:hover {
@@ -1520,15 +1525,6 @@ tr.list0:hover, tr.list1:hover {
 
 tr.list0:hover td, tr.list1:hover td {
   background-color: rgba(240,240,200,.4) !important;
-}
-
-_:-ms-lang(x), tr.list0:hover, tr.list1:hover {
-  box-shadow: none !important;
-}
-
-.list0 td, .list1 td {
-  box-shadow: var(--highlight);
-  background: rgba(240,240,255,.4);
 }
 
 .list0:hover td, .list1:hover td {
@@ -1623,6 +1619,7 @@ td.mailListSender, tr:hover td.mailListSender {
   padding-right: 6px;
   width: 1%;
   white-space: nowrap;
+  text-align: left;
   background: var(--user) no-repeat 6px center / 12px !important;
 }
 

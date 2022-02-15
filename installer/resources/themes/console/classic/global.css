@@ -113,6 +113,10 @@ b {
   color: var(--ink_light);
 }
 
+.left {text-align: left}
+.right {text-align: right}
+.center {text-align: center}
+
 table {
   width: 100%;
 }

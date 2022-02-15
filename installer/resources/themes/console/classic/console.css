@@ -1695,9 +1695,6 @@ input[type="file"]:hover {cursor: pointer}
 #config_tunnels select {width: calc(100% - 4px); text-align: center}
 #config_tunnels select[disabled] {opacity: .7; pointer-events: none}
 
-.left {text-align: left}
-.right {text-align: right}
-.center {text-align: center}
 span.right, span.left {margin: 0 1px; display: inline-block; width: 40%}
 
 /* peers */

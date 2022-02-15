@@ -70,6 +70,7 @@ form {line-height: 1.6; border-top: none}
 #toggleHeaders:active a {color: var(--ink); background: var(--hover)}
 #toggleHeaders a, #toggleHeaders a:visited {font-size: 90%; color: #494; background-image: none}
 #toggleHeaders:hover a, #toggleHeaders a:focus {color: #f60; background: var(--btn_hover)}
+#toggleHeaders:active a {color: #f60; background: var(--hover)}
 #toggleHeaders {margin-right: -8px; padding: 4px; min-width: 110px; vertical-align: middle; text-align: center}
 
 /* buttons and inputs */
@@ -265,7 +266,8 @@ h3#config {margin: 0 0 20px; padding: 10px; text-align: center; text-transform: 
 /* top buttons */
 #info {margin: 4px 140px 0 4px; padding: 0 8px 0 3px; float: right; line-height: 1.5; text-transform: lowercase; font-weight: 400; color: var(--ink); border: 1px solid #131; border-radius: 2px; box-shadow: 0 0 1px 0 #000; background: var(--badge)}
 #infoUser {margin-right: 6px; padding: 3px 8px 4px 20px; display: inline-block; text-align: center; font-weight: 700; color: var(--ink); border-right: 1px solid #131; background: var(--user) no-repeat 2px center / 15px}
-.topbuttons {margin: -1px -1px 0; padding: 5px 5px 4px; width: calc(100% - 10px); min-width: 800px; display: inline-block; vertical-align: middle; white-space: nowrap; text-align: center; font-size: 9pt; font-weight: 700; border: var(--border); box-shadow: var(--highlight); background: var(--th)}
+.topbuttons {margin: -1px -1px 0; padding: 5px 5px 4px; width: calc(100% - 10px); min-width: 800px; display: inline-block; vertical-align: middle; white-space: nowrap; text-align: center; font-size: 9pt; font-weight: 700; border: var(--border); box-shadow: var(--bevel); background: var(--topnav)}
+.topbuttons#readmail {padding: 5px 5px 8px}
 body:not(.iframed) .topbuttons {position: sticky; top: -1px; z-index: 1000}
 .iframed .topbuttons {border-left: none; border-right: none}
 .topbuttons > * {vertical-align: middle}
@@ -282,7 +284,7 @@ body:not(.iframed) .topbuttons {position: sticky; top: -1px; z-index: 1000}
 .topbuttons input.list {padding: 5px 10px; text-indent: -99999px; background-position: center center; background-size: 14px}
 .topbuttons input[type=text] {margin-right: 4px}
 .bottombuttons br {display: none}
-tr.bottombuttons, .topbuttons {box-shadow: var(--highlight)}
+tr.bottombuttons {box-shadow: var(--highlight)}
 tr.bottombuttons:last-child {background: var(--th)}
 tr.bottombuttons:empty {display: none}
 #composemail .bottombuttons {background: none; box-shadow: none}
@@ -463,7 +465,7 @@ input.switchto, input.switchto:hover, input.switchto:focus, #serverRefresh, #inf
 }
 
 @media screen and (min-width: 1500px) {
-body, td, textarea, input, div, p.mailbody, th, a, select {font-size: 10pt}
+body, td, textarea, input, div, p.mailbody, th, a, .fakebutton, #settings, #pageRefresh, select {font-size: 10pt}
 a[class^="link"] {font-size: 95%}
 p.footer, p.footer a {line-height: 12pt; font-size: 9pt}
 p.mailbody + p.info {margin-top: -53px}

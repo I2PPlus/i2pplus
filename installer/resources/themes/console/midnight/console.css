@@ -8299,18 +8299,6 @@ a[href^="https://gwhois"]:focus::after {
   display: inline-block;
 }
 
-.left {
-  text-align: left;
-}
-
-.right {
-  text-align: right;
-}
-
-.center {
-  text-align: center;
-}
-
 span.left, span.right {
   margin: 0 1px;
   width: 40%;

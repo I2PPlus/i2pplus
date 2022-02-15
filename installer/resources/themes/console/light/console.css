@@ -39,9 +39,6 @@ tt::selection, .sybil_routerinfo th code::selection {color: #fff; background: #0
 b, #routerinformation td:first-child {color: var(--ink_light)}
 h1, .confignav {position: relative}
 hr:last-child {margin-top: 20px}
-.left {text-align: left}
-.right {text-align: right}
-.center {text-align: center}
 .separator hr, .separator hr:last-child {margin: 3px 0 -10px; height: 1px; display: block; color: transparent; border-bottom: 1px dashed #adadeb; background: transparent}
 textarea {margin: 5px 0; resize: none; color: var(--ink); box-shadow: var(--highlight), inset 3px 3px 3px rgba(0,0,48,.2); box-shadow: var(--input_shadow); will-change: transform; scrollbar-color: #a7a7be rgba(255,255,255,.1)}
 textarea:focus {scrollbar-color: #a7a7be rgba(255,255,255,.4)}
@@ -1572,7 +1569,7 @@ table#schedjobs {margin-top: -11px}
 
 /* configure */
 .configtable {box-shadow: none}
-.configtable td {padding: 5px}
+.configtable td:not(.infohelp):not(.inforwarn):not(.optionsave) {padding: 5px}
 .configtable tr:first-child td {border-top: 1px solid var(--border_inner)}
 .configtable tr:last-child td, .configtable tr:nth-last-child(2) td, .encDests td:last-child {border-top: 1px solid var(--border_inner); border-bottom: 1px solid var(--border_inner)}
 .th_title a, .th_title a:hover {color: var(--ink_light)}

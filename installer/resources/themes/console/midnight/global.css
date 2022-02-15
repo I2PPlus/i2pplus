@@ -92,6 +92,18 @@ a:active {
   color: var(--active);
 }
 
+.left {
+  text-align: left;
+}
+
+.right {
+  text-align: right;
+}
+
+.center {
+  text-align: center;
+}
+
 input, button {
   cursor: pointer;
 }

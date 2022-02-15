@@ -626,9 +626,6 @@ form[action="events"] {background: #000}
 pre#activetransports {margin: 0 20px 0 0; padding: 15px 5px 5px 15px; width: calc(100% - 42px); border: var(--border); background: #000}
 a[name="chelp"]:hover, a[name="help"]:hover, a[name="chelp"]:active, a[name="help"]:active {color: var(--ink); text-decoration: none; text-shadow: none}
 .peersort {display: inline-block}
-.left {text-align: left}
-.right {text-align: right}
-.center {text-align: center}
 span.left, span.right {margin: 0 1px; width: 40%; display: inline-block}
 .peeripv6:empty {padding: 0; width: 0}
 .cwnd .left, .cwnd .right {width: auto}
