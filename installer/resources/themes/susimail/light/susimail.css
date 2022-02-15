@@ -386,13 +386,6 @@ tr.mailbody td {border-top: 1px solid var(--border_inner)}
 @keyframes hide-up {from {margin-top: 0}  {margin-top: -300px}}
 @keyframes loading {0% {text-shadow: 0 0 1px #001, 0 0 5px #003; background: linear-gradient(180deg,rgba(255,255,255,.2) 50%, rgba(100,100,128,.3) 50%), repeating-linear-gradient(45deg, #77a 1px, #77a 20px, #449 20px, #449 40px)} 100% {text-shadow: 0 0 1px #001, 0 0 5px #505; background: linear-gradient(180deg,rgba(255,255,255,.2) 50%, rgba(100,100,128,.3) 50%), repeating-linear-gradient(45deg, #449 1px, #449 20px, #77a 20px, #77a 40px)}}
 
-/* browser specific */
-@supports (position: sticky) {#pagenavbottom {display: none}}
-@supports not (-moz-appearance: none) {.listSize, .listSizeUnit {font-size: 95%}}
-@supports not (-moz-appearance: none) {#mailbox tr:nth-child(2) {position: static}}
-@supports not (-moz-appearance: none) {td.mailListSubject a {margin: -1px 0; padding: 5px 0}}
-@supports not (-moz-appearance: none) {select {padding: 5px 16px 5px 6px}}
-
 @media screen and (max-width: 1500px) {.debugHeader pre {font-size: 8.5pt} .iframed .pagenavcontainer {top: 5px} .folders select {
   margin-left: -4px}}
 @media screen and (max-width: 1300px) {select {font-size: 9pt}}
