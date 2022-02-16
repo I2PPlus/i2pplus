@@ -3,6 +3,7 @@
 
 @import url(global.css);
 @import url(../images/itooplus.css);
+@import url(../images/images.css);
 
 :root {
   --err: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3ClinearGradient id='A' gradientUnits='userSpaceOnUse' x1='35.555' x2='35.555' y1='32.852' y2='19.692'%3E%3Cstop offset='0' stop-color='%23d40000'/%3E%3Cstop offset='1' stop-color='%23f55'/%3E%3C/linearGradient%3E%3Cpath d='M13.649 34.595l1.859 1.39 1.744.951 14.734-25.472 14.721 25.469 1.737-.947 1.865-1.396L34.353 6.986c-.488-.844-1.39-1.365-2.366-1.365s-1.878.52-2.366 1.364zm0 0L2.303 54.21c-.488.844-.489 1.883-.001 2.727a2.73 2.73 0 0 0 2.364 1.364h54.618a2.73 2.73 0 0 0 2.365-1.364c.488-.844.488-1.884 0-2.728L50.309 34.59l-1.865 1.396-1.737.947 9.875 17.084H7.371l9.881-17.08-1.744-.951-1.859-1.39z' stroke='%23000' stroke-width='4' stroke-linejoin='round'/%3E%3Cpath d='M32.013 5.653c-.975 0-1.877.52-2.365 1.364L2.341 54.251a2.73 2.73 0 0 0 2.362 4.092h54.593c2.101 0 3.415-2.274 2.364-4.093L34.377 7.019c-.487-.844-1.388-1.365-2.364-1.366z' fill='url(%23A)'/%3E%3Cpath d='M32.01 11.758l24.585 42.559H7.405L32.01 11.758z' fill='%23fff' stroke='red' stroke-linejoin='round'/%3E%3Cpath d='M29.233 23.607h5.533V39.76h-5.533zm0 20.452h5.533v6.158h-5.533z'/%3E%3C/svg%3E");
@@ -58,6 +59,67 @@ a img {
 
 a:hover img {
   filter: drop-shadow(0 0 1px #f60);
+}
+
+button {
+  margin: 3px;
+  padding: 5px;
+  line-height: 1.4;
+  font-size: 9pt;
+  color: var(--ink_light);
+  text-decoration: none;
+  text-shadow: 0 1px 1px #fff;
+  border: var(--border_input);
+  border-radius: 2px;
+  box-shadow: var(--highlight), var(--highlight);
+  box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.08) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.08);
+  background: var(--btn);
+  background-size: 14px, 100%;
+  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
+}
+
+button.accept {
+  background: var(--yes) no-repeat 8px center / 12px, var(--btn);
+}
+
+button.accept:hover, button.accept:focus {
+  background: var(--yes) no-repeat 8px center / 12px, var(--btn_hover);
+}
+
+button.go {
+  background: var(--go) no-repeat 8px center / 14px, var(--btn);
+}
+
+button.go:hover, button.go:focus {
+  background: var(--go) no-repeat 8px center / 14px, var(--btn_hover);
+}
+
+button:hover, button:focus {
+  color: var(--ink_darker);
+  border: 1px solid var(--hover);
+  box-shadow: var(--highlight), inset 0 -8px 3px 8px rgba(255,96,0,.02), inset 0 0 10px rgba(255,96,0,.05), 0 0 1px rgba(255,96,0,.1), 0 7px 4px -4px rgba(0,0,0,.1);
+  background: var(--btn_hover);
+  filter: saturate(100%) drop-shadow(0 0 1px rgba(204, 204, 204, .8));
+  transition: ease border .7s;
+}
+
+button:hover a {
+  color: var(--ink_darker);
+}
+
+button:active {
+  color: var(--ink_active);
+  box-shadow: var(--btn_shadow_active);
+  background-blend-mode: luminosity;
+  transition: none;
+}
+
+button a:active {
+  color: var(--ink_active);
+}
+
+button {
+  padding: 5px 9px 5px 24px;
 }
 
 h3 {
@@ -132,8 +194,7 @@ hr {
 }
 
 #proxyerror .warning {
-  margin-left: 12px;
-  background: var(--err) no-repeat 25px calc(50% + 10px) / 40px, linear-gradient(180deg,rgba(255,255,255,.8), rgba(255,255,255,.3)) #f8f8ff;
+  background: var(--err) no-repeat 34px calc(50% + 14px) / 60px, linear-gradient(180deg,rgba(255,255,255,.8), rgba(255,255,255,.3)) #f8f8ff;
 }
 
 #proxyerror p {
@@ -193,7 +254,7 @@ hr {
 }
 
 #proxyNewAddressHelper .warning {
-    padding-bottom: 5px;
+    padding-bottom: 20px;
 }
 
 #b64, #key {
@@ -242,19 +303,18 @@ hr {
 }
 
 .warning h4 {
+    margin: 20px 0 5px;
+    padding: 0 0 10px;
     box-shadow: none;
     text-align: left;
     font-size: 10pt;
-    margin-top: 20px;
     text-transform: none;
     letter-spacing: 0;
     word-spacing: 0;
     background: none;
     border-radius: 0;
     border: none;
-    border-bottom: 1px solid #7b7b9d;
-    padding-left: 0;
-    margin-bottom: -5px;
+    border-bottom: 1px solid var(--ink_lighter);
 }
 
 #jumplinks h4 {
@@ -265,11 +325,17 @@ hr {
 }
 
 .warning p + .formaction {
-    margin: -5px -3px 10px 0;
+    margin: 0 0 10px;
     padding: 0;
-    background: none;
+    width: 100%;
+    text-align: right;
     border: none;
     box-shadow: none;
+    background: none;
+}
+
+.warning hr {
+  display: none;
 }
 
 /* console error messages */

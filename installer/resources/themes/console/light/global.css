@@ -32,6 +32,7 @@
   --highlight: inset 0 0 0 1px #fff;
   --hover: #f60;
   --ink: #4f4f63;
+  --ink_active: #4c526f;
   --ink_dark: #393947;
   --ink_darker: #19191f;
   --ink_light: #5b5b71;
@@ -83,10 +84,6 @@ input[type=reset]::-moz-focus-inner, .control::-moz-focus-inner,
 select::-moz-focus-inner {
   outline: none;
   border: none;
-}
-
-input, textarea, select {
-  outline: none;
 }
 
 img {
@@ -146,7 +143,7 @@ textarea:focus::placeholder, input:focus::placeholder {
   opacity: 0;
 }
 
-.control, .optbox, select, input[type=submit], input[type=reset], label {
+.control, .optbox, select, input[type=submit], input[type=reset], label, button {
   cursor: pointer;
 }
 
