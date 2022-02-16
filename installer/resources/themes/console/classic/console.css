@@ -58,14 +58,14 @@ p:empty + .sb_notice {margin-top: 7px}
 #sidebar a {padding: 2px; vertical-align: middle; user-select: none}
 #sidebar input[type=text] {text-align: right}
 #sidebar button[type=submit] {margin: 2px 2px 1px; min-width: 87px}
+#sidebar h2, #sidebar h3 {position: relative; z-index: 10; background: var(--header)}
 #sidebar h3 {margin: -7px -1px -8px -1px; padding: 4px 0 3px; letter-spacing: .05em; text-transform: uppercase; font-size: 9.5pt; border: none; background: var(--header)}
-#sidebar h2, #sidebar h3 {background: var(--header)}
 #sidebar h3:hover {background: var(--header_hover)}
-#sidebar h3:hover:not(:active) a, #sidebar td:first-child a:hover b, #sidebar td:first-child a:visited:hover b {color: var(--hover)}
 #sidebar h3:active {box-shadow: var(--btn_shadow_active); background: var(--header_active)}
 #sidebar h3 a {width: calc(100% - 5px); display: inline-block; white-space: normal; text-decoration: none}
+#sidebar h3:hover:not(:active) a, #sidebar td:first-child a:hover b, #sidebar td:first-child a:visited:hover b {color: var(--hover)}
 #sidebar h3:active a {color: var(--active); transform: scale(.95) translateY(2px)}
-#sidebar h4 {margin: -7px -1px -7px -1px; padding: 8px 2px; line-height: 1.08; text-transform: capitalize; font-size: 8.5pt; color: #1f7096; border: none; box-shadow: inset 0 0 2px 1px #f2f7fa; text-decoration: none; background: var(--label_focus)}
+#sidebar h4 {margin: -7px -1px -7px -1px; padding: 8px 2px 4px; line-height: 1.08; text-transform: capitalize; font-size: 8.5pt; color: #1f7096; border: none; box-shadow: inset 0 0 2px 1px #f2f7fa; text-decoration: none; background: var(--label_focus)}
 #sidebar h4 a {padding: 0; vertical-align: text-bottom}
 #sidebar tr, #sidebar table, #sidebar td {background: none; border: none}
 .sb table {margin: -5px 0 -5px 0; padding: 0; width: 204px; position: relative; overflow: hidden; table-layout: fixed; text-align: center; font-size: 8pt}
@@ -84,8 +84,8 @@ p:empty + .sb_notice {margin-top: 7px}
 #sb_logo a:hover img, #sb_logo a:active img {opacity: 1; filter: none}
 #sb_logo a:hover img, #sb_logo a img {transition: ease filter .08s}
 #updateAvailable {margin-bottom: 2px; width: 100%; display: inline-block; line-height: 1.2; font-size: 9pt}
-#updateAvailable + br + button + br + #updateAvailable::before {margin: 2px 0 4px; width: calc(100% - 20px); height: 1px; display: inline-block; background: var(--bg4); content: ""}
 #updateAvailable + br + button + br + #updateAvailable {margin-top: 4px}
+#updateAvailable + br + button + br + #updateAvailable::before {margin: 2px 0 4px; width: calc(100% - 20px); height: 1px; display: inline-block; background: var(--bg4); content: ""}
 #sb_shortgeneral, #sb_advancedgeneral, #sb_bandwidth, #sb_peers, #sb_peersadvanced, #sb_tunnels, #sb_queue {border-collapse: separate; border-spacing: 1px}
 #sb_general, #sb_shortgeneral, #sb_advancedgeneral, #sb_bandwidth, #sb_peers, #sb_peersadvanced, #sb_tunnels, #sb_queue {margin-bottom: -5px; margin-top: -6px}
 #sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after, #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {min-height: 14px;  display: inline-block;  content: ""}
@@ -194,8 +194,7 @@ p:empty + .sb_notice {margin-top: 7px}
 /* updates download bar */
 .sb_update b {line-height: 1.2}
 .sb_updatestatus {margin: -8px 2px 5px !important; padding: 3px 0 4px; display: block; font-style: italic; color: var(--ink); border: var(--border); border-top: none; border-radius: 0 0 3px 3px; box-shadow: var(--highlight); background: linear-gradient(90deg, var(--bg3), #eff2ff 30%, #eff2ff 60%, var(--bg3)); box-sizing: border-box}
-.sb_info .percentBarOuter {margin: 3px -4px -5px 2px; background: var(--updating)}
-.sb_info .percentBarOuter {animation: downloadbar 3s infinite}
+.sb_info .percentBarOuter {margin: -1px -4px -5px 2px; background: var(--updating); animation: downloadbar 3s infinite}
 .sb_info .percentBarInner {height: 16px; background: linear-gradient(180deg, rgba(255, 255, 255,.6) 0%, rgba(238, 238, 255, .6) 50%, rgba(180, 180, 255, .7) 50%, rgba(140, 140, 255, .7) 100%)}
 .sb_info .percentBarText {padding-top: 2px; mix-blend-mode: multiply; color: #33f}
 #sb_memoryBar .percentBarText {padding: 1px 0 4px; width: 70%; float: none; position: absolute; top: -20px; left: 15%; right: 15%; vertical-align: middle; font-size: 110%; border-radius: 1px; background: #eef; filter: drop-shadow(0 0 1px #ddf) drop-shadow(0 0 1px #779)}
@@ -208,9 +207,9 @@ button:active a {color: var(--ink_light)}
 input {margin: 3px 5px 3px 0}
 input:disabled:hover {filter: none}
 select {margin: 3px 5px; min-width: 120px}
-select option {background: var(--bg)}
-select:hover, select:active, select:focus {color: var(--ink); box-shadow: var(--btn_shadow_hover); background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover); outline: none}
 select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active {border: var(--border); box-shadow: var(--highlight); background: var(--btn); color: var(--disabled); cursor: default; opacity: .7}
+select:hover, select:active, select:focus {color: var(--ink); box-shadow: var(--btn_shadow_hover); background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover); outline: none}
+select option {background: var(--bg)}
 select[name="newlogclass"] {margin-right: 0; width: calc(100% - 180px)}
 .homelinkedit .optbox {margin: 0}
 .homelinkedit td:nth-child(2) {width: 52px; text-align: center}
@@ -2179,7 +2178,7 @@ h4#updateplugins {margin-top: -16px; padding: 5px 10px; font-size: 10pt}
 #sidebar h3 {padding: 4px 0 3px}
 #sidebar h3 a, #netdboverview th {font-size: 11pt}
 #sidebar button[type=submit], #sidebar .reload[value="restart"] {margin: 2px 4px 1px; min-width: 110px}
-#sidebar .percentBarOuter {margin-left: 2px; width: 239px}
+#sidebar .percentBarOuter {margin-left: 2px; width: 237px}
 #sidebar .reload, #sidebar .stop {min-width: 102px}
 #sidebar #sb_newsheadings td:last-child, #sidebar #sb_newsheadings tr:hover td:last-child {padding-bottom: 5px; background-position: 4px 6px}
 #sidebar table[id^="sb_"], #sb_newsheadings table {width: 245px; min-width: 245px}
