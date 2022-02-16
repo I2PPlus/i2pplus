@@ -189,7 +189,7 @@ hr {color: #9ea8d1; background: #9ea8d1; height: 1px; border: none; width: 100%;
 #dologin td {padding: 3px; font-weight: 700; color: #5b5b71}
 #dologin td:first-child {white-space: nowrap}
 #dologin td:last-child {width: 80%}
-#dologin h1 {background: #fafaff; background: linear-gradient(180deg,#fff 50%, #f2f2ff 50%); border-bottom: 1px solid #77789f; color: #4c526f; text-transform: uppercase; letter-spacing: .1em; word-spacing: .1em; font-size: 14pt; text-align: left; padding: 12px 10px 12px 15px; margin: -9px -9px 24px}
+#dologin h1 {background: #fafaff; background: linear-gradient(180deg,#fff 50%, #f2f2ff 50%); border-bottom: 1px solid #77789f; color: var(--ink_active); text-transform: uppercase; letter-spacing: .1em; word-spacing: .1em; font-size: 14pt; text-align: left; padding: 12px 10px 12px 15px; margin: -9px -9px 24px}
 .iframed #dologin h1 {display: none}
 #dologin input[type=text], input[name="pagesize"] {text-align: left}
 #dologin input[name="user"], #dologin input[name="pass"] {padding: 5px 5px 5px 26px; background-blend-mode: luminosity}
