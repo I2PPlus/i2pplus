@@ -1494,7 +1494,7 @@ textarea#advancedsettings {margin: 0; padding-top: 3px; width: 100%; overflow-x:
 #upnpscan {margin: 1px 0 -10px; padding: 15px 25px 5px; border: var(--border); background: #000}
 #upnpstatus {margin-bottom: 7px}
 #webappconfigtext {margin: 13px 0 -2px 0}
-#webappconfiguration a::before, #i2pclientconfig a::before, #pluginmanage a::before {margin-top: -1px; width: 15px; background: var(--settings) no-repeat left center / 12px}
+#webappconfiguration a::before, #i2pclientconfig a::before, #pluginmanage a::before {margin-top: -1px; width: 15px; vertical-align: text-bottom; background: var(--settings) no-repeat left center / 12px}
 #webappconfiguration a:hover::before, #webappconfiguration a:focus::before, #i2pclientconfig a:hover::before, #i2pclientconfig a:focus::before, #config_plugins #pluginmanage a:hover::before, #pluginmanage a:focus::before {background: var(--settings_hover) no-repeat left center / 12px}
 
 /* service */
@@ -2433,7 +2433,8 @@ h1[class], h1, h1.conf.adv {padding: 13px 15px 12px 50px; min-width: 620px; font
 #routerinformation .h3navlinks {margin: 1px -2px -1px -2px}
 #routerinformation h3 span a {padding: 12px 3px 12px 12px}
 #routerinformation .h3navlinks a::before {margin-left: 0}
-#webappconfiguration a, #i2pclientconfig a, #pluginmanage a {transform: translateY(-1px)}
+#i2pclientconfig a, #pluginmanage a {transform: translateY(-1px)}
+#webappconfiguration a {padding-top: 9px}
 .tunnelBuildStatus {font-size: 90%}
 #sb_tunnelstatus .tunnelBuildStatus::before {margin: -2px 0; background-size: 12px}
 #view_profile .identicon {top: 1px; right: 1px}
@@ -2483,10 +2484,6 @@ h3 .b32 {margin-right: -16px}
 #profiles #ff {margin: -18px -6px -9px}
 }
 
-@media screen and (max-width: 1220px) {
-#peers .widescroll td.cells {font-size: 8pt}
-#help h3, #faq h3 {font-size: 10pt}
-}
 @media screen and (max-width: 1199px) {
 .tab, .tab2 {min-width: 48px}
 .tab a {padding: 4px 9px}
@@ -2499,6 +2496,9 @@ h3 .b32 {margin-right: -16px}
 #tunnels .tunnel_cap {margin: 0; padding: 3px 2px 2px; line-height: 1.2}
 .tunnel_local {width: 64px; line-height: 1.08; box-sizing: border-box}
 #tunnels .routerid, .tunnel_local {margin-right: 0}
+#peers .widescroll td.cells {font-size: 8pt}
+#help h3, #faq h3 {font-size: 10pt}
+#clientconf code {white-space: nowrap}
 #peers .idle, #peers .inout {min-width: 104px}
 #peers .skew {display: none}
 .tab, .tab2 {padding: 1px 0; min-width: 50px}
@@ -2600,6 +2600,11 @@ th {font-size: 8pt}
 .main, #news, h1, h1[class], .sorry {margin-left: 272px}
 body, .main, .main td, #news p, #news p, textarea, .main textarea, code, tt, #changelog pre, th code, .statlist a[name], .statlist b, .statlist li b, .statlist a[name]:hover, .confignav, th, #configinfo th, .main button, .main input, select, textarea, input[type=file]::file-selector-button, #news, #sidebar button, #warning2 p {font-size: 10pt}
 h3, #sidebar h3 a, th.th_title, #leasesetdebug th, #leasesetsummary th, .netdbentry th, #help, #help li, #help p, #help code, #help td, #help th {font-size: 11pt}
+.appicon {padding: 5px 0 8px; height: 35px}
+.applabel {width: 140px}
+.applabel a {max-width: 130px; overflow: hidden; text-overflow: ellipsis}
+.warning h3 {font-size: 11.5pt}
+.addtobook a::after {margin: -14px -6px -6px 0; padding-left: 0; padding-left: 8px; width: 24px; height: 30px; background-size: 16px}
 #help h2 {font-size: 14pt}
 #applinks, #sitelinks, #help h3, #sybilTask th {font-size: 12pt}
 button.control {font-size: 0}
@@ -2610,13 +2615,8 @@ input[type=submit], input[type=reset], button {padding: 8px 12px}
 #newsDisplay a, pre, #logs li, #updateAvailable, code, tt, .leaseset th {font-size: 9.5pt}
 #news .newsentry p, .subheading b, h4#updateplugins {font-size: 10.5pt}
 #sitemap h3 {font-size: 12pt}
-.warning h3 {font-size: 11.5pt}
-.addtobook a::after {margin: -14px -6px -6px 0; padding-left: 0; padding-left: 8px; width: 24px; height: 30px; background-size: 16px}
 #advancedconfig a::after {margin: -2px -6px -2px -5px}
 #advancedconfig a {padding-right: 10px}
-.appicon {padding: 5px 0 8px; height: 35px}
-.applabel {width: 140px}
-.applabel a {max-width: 130px; overflow: hidden; text-overflow: ellipsis}
 #banlist + h3.tabletitle {margin-bottom: -2px}
 #banlist li, #banlist li:first-child {min-height: 52px}
 .cells tt, #profilelist tt, #floodfills tt, #netdb .tunnel_peer tt {margin-left: 2px; margin-right: 2px; letter-spacing: .2em}
@@ -2632,6 +2632,8 @@ input[type=submit], input[type=reset], button {padding: 8px 12px}
 #graphdisplay {margin-top: 5px}
 h1[class], h1, h1.conf.adv {padding: 14px 15px 14px 65px; font-size: 20pt; background-size: 40px, 2px, 100% 4px, 100%, 164px; background-position: 15px center}
 .h3navlinks a {padding: 7px 10px 8px 17px}
+#webappconfiguration .h3navlinks a {padding-top: 9px}
+#i2pclientconfig .h3navlinks a {padding-top: 5px}
 .h3navlinks a:first-child, #config_service .h3navlinks a:last-child {margin-right: 0}
 .h3navlinks a:last-child {margin-right: 2px}
 #applinks, #sitelinks {padding: 9px 10px 8px 35px}

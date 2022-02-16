@@ -528,7 +528,7 @@ select::-moz-focus-inner {
   appearance: none;
 }
 
-.optbox.slider:not(:checked) {
+.optbox.slider:not(:checked), .optbox.slider[disabled] {
   background: linear-gradient(180deg,#400,#600) !important;
   border: 1px solid #500;
 }
