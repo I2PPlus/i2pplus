@@ -298,7 +298,7 @@ div[id^="config_"].main {padding-bottom: 14px}
 .confignav {margin: -1px -11px -1px; padding: 7px 7px 8px; font-weight: 700; line-height: 1.36; text-align: center; box-shadow: var(--bevel); background: var(--topnav); background-size: var(--topnav_size)}
 #debug .confignav {margin-bottom: -4px; z-index: 999}
 #netdb .confignav {margin-bottom: 11px}
-.tab, .tab2 {margin: 0 -3px -1px -3px; padding: 1px 0 2px; min-width: 60px; display: inline-block; position: relative; box-sizing: border-box; background: #000}
+.tab, .tab2 {margin: 0 -3px -1px -3px; padding: 1px 0 2px; min-width: 60px; display: inline-block; position: relative; box-sizing: border-box; vertical-align: middle; background: #000}
 .tab2 {z-index: 10}
 .tab:hover {z-index: 20}
 .tab2 {padding: 5px 12px; text-shadow: var(--textshadow); box-shadow: var(--highlight), inset 3px 3px 3px #010; background: radial-gradient(at center bottom, rgba(0, 128, 0, .6) 0, rgba(0, 0, 0, 0) 80%), linear-gradient(180deg,#030, #003800)}
@@ -1445,6 +1445,7 @@ th.options, #externali2cp th {padding: 7px 10px}
 .configtable td.infohelp, p.infohelp, td.infohelp, p.infowarn, td.infowarn, #debugmode, .sybilinfo, #sybilanalysis {padding: 20px 24px 20px 58px; line-height: 1.4; white-space: normal; font-weight: 400; text-align: justify; border-bottom: var(--border); border-top: var(--border); background: #000 var(--infohelp) no-repeat 15px center / 28px}
 .configtable td {padding: 6px 10px; line-height: 1.8; background: #000}
 .configtable td.tabletextarea {padding: 0}
+.h3navlinks a {display: inline-block; vertical-align: middle}
 .h3navlinks a:first-child {padding-right: 9px}
 .h3navlinks a:hover {color: var(--hover)}
 .h3navlinks a:last-child {padding-right: 5px}
@@ -1452,7 +1453,6 @@ th.options, #externali2cp th {padding: 7px 10px}
 .h3navlinks {white-space: nowrap}
 #config_logging h3 a::before, #webappconfiguration a::before, #i2pclientconfig a::before, #pluginmanage a::before {width: 19px; height: 15px; display: inline-block; vertical-align: middle; background: var(--eye) no-repeat left center / 15px; content: ""}
 #config_logging h3 a:hover::before, #config_logging h3 a:focus::before {background: var(--eye_hover) no-repeat left center / 15px}
-#config_logging h3 a, #webappconfiguration a, #i2pclientconfig a, #pluginmanage a {padding-top: 11px; display: inline-block; vertical-align: middle}
 h3.ptitle {margin-bottom: -6px}
 h3.sybils + div, h3.sybils + a[name] + table {margin-top: -1px}
 h3.sybils {margin-bottom: 10px}
@@ -2433,11 +2433,12 @@ h1[class], h1, h1.conf.adv {padding: 13px 15px 12px 50px; min-width: 620px; font
 #routerinformation .h3navlinks {margin: 1px -2px -1px -2px}
 #routerinformation h3 span a {padding: 12px 3px 12px 12px}
 #routerinformation .h3navlinks a::before {margin-left: 0}
-#webappconfiguration a, #i2pclientconfig a, #pluginmanage a {padding-top: 9px}
+#webappconfiguration a, #i2pclientconfig a, #pluginmanage a {transform: translateY(-1px)}
 .tunnelBuildStatus {font-size: 90%}
 #sb_tunnelstatus .tunnelBuildStatus::before {margin: -2px 0; background-size: 12px}
 #view_profile .identicon {top: 1px; right: 1px}
-#advancedconfig a {padding-top: 9px}
+#advancedconfig {padding-right: 6px}
+#advancedconfig a {padding: 7px 0 0; border: none}
 #jardump a[href^="https://gitlab.com/i2pplus"] {padding-left: 11px; background-size: 8px; background-position: left top}
 .log_debug, .log_info, .log_warn, .log_error, .log_crit, .log_omitted {vertical-align: middle}
 #passwordheading {margin-top: 12px}
@@ -2501,8 +2502,8 @@ h3 .b32 {margin-right: -16px}
 #peers .idle, #peers .inout {min-width: 104px}
 #peers .skew {display: none}
 .tab, .tab2 {padding: 1px 0; min-width: 50px}
-.tab2 {padding: 3px 12px}
-.tab a {padding: 2px 14px}
+.tab2 {padding: 4px 12px 5px}
+.tab a {padding: 2px 14px 5px}
 #plugininstall input[type=text] {min-width: 200px}
 #i2pupdates td:first-child {white-space: normal; width: 30%}
 td.optionsave {white-space: normal}
@@ -2630,7 +2631,7 @@ input[type=submit], input[type=reset], button {padding: 8px 12px}
 #fullhistory {margin-top: -13px; text-align: right}
 #graphdisplay {margin-top: 5px}
 h1[class], h1, h1.conf.adv {padding: 14px 15px 14px 65px; font-size: 20pt; background-size: 40px, 2px, 100% 4px, 100%, 164px; background-position: 15px center}
-.h3navlinks a {padding: 10px 10px 10px 17px}
+.h3navlinks a {padding: 7px 10px 8px 17px}
 .h3navlinks a:first-child, #config_service .h3navlinks a:last-child {margin-right: 0}
 .h3navlinks a:last-child {margin-right: 2px}
 #applinks, #sitelinks {padding: 9px 10px 8px 35px}
@@ -2694,6 +2695,7 @@ select {padding: 8px 24px 8px 8px}
 span#newtab {margin-top: 4px}
 #stacktrace p:first-of-type::first-line {font-size: 110%; font-weight: 700; font-variant: super; text-decoration: underline}
 .tab, .tab2 {line-height: 20px}
+.tab2 {padding: 6px 11px 5px 13px}
 .themechoice, .langselect {width: 140px}
 .tunnel_cap {padding: 3px 2px 2px; min-width: 18px}
 .tunneldisplay .tunnel_peer {margin: 0; min-width: 80px}
@@ -2713,4 +2715,4 @@ span#newtab {margin-top: 4px}
 }
 @media screen and (min-width: 1634px) {.leasesets_container {margin-bottom: 8px} th code {font-size: 9pt}}
 @media screen and (min-width: 1800px) {#help .confignav {margin-left: -11px; margin-right: -11px; display: flex; justify-content: center; border-left: none; border-right: none} #help .tab, #help .tab2 {margin-left: 0; margin-right: 0; flex-grow: 1} .linkcontainer .applink:last-of-type {margin-bottom: 9px}}
-@media screen and (min-width: 1840px) {div[id^="config_"] .confignav {padding: 4px 4px 5px 3px; display: flex; flex-direction: row; flex-wrap: wrap; align-content: space-evenly; justify-content: center} div[id^="config_"] .tab, div[id^="config_"] .tab2 {margin: 0 -1px -1px 0; min-width: 70px; white-space: nowrap; flex: auto; flex-basis: content; flex-grow: .06} div[id^="config_"] .tab2:first-child {border-left: none} div[id^="config_"] .tab2 {padding: 5px 6px} div[id^="config_"] .tab a {padding: 4px 6px} div[id^="config_"] .confignav {padding: 0} div[id^="config_"] .tab, div[id^="config_"] .tab2 {margin-top: -1px} div[id^="config_"] .tab:first-child {margin-left: -1px}} 
+@media screen and (min-width: 1840px) {div[id^="config_"] .confignav {padding: 4px 4px 5px 3px; display: flex; flex-direction: row; flex-wrap: wrap; align-content: space-evenly; justify-content: center} div[id^="config_"] .tab, div[id^="config_"] .tab2 {margin: 0 -1px -1px 0; min-width: 70px; white-space: nowrap; flex: auto; flex-basis: content; flex-grow: .06} div[id^="config_"] .tab2:first-child {border-left: none} div[id^="config_"] .confignav {padding: 0} div[id^="config_"] .tab, div[id^="config_"] .tab2 {margin-top: -1px} div[id^="config_"] .tab:first-child {margin-left: -1px}} 
