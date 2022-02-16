@@ -95,6 +95,7 @@ input.logout:hover {background: var(--logout_hover) no-repeat 6px center / 14px,
 .fakebutton {margin-top: 2px; padding-left: 24px; line-height: 1.3}
 .fakebutton.script {padding: 5px 7px; font-weight: 400; background: var(--btn)}
 .fakebutton:not(#settings) {float: left}
+#dologin .fakebutton {display: inline-block; margin-top: -1px}
 input.reload, input.refresh, input[name="refresh"][disabled], .fakebutton {padding: 5px 7px 5px 22px; background: var(--refresh) no-repeat 6px center / 12px, var(--btn)}
 input[name="refresh"][disabled] {margin-top: 2px}
 input.reload:hover, input.refresh:hover, .fakebutton:hover {background: var(--refresh_hover) no-repeat 6px center / 12px, var(--btn_hover)}
@@ -199,7 +200,7 @@ hr {color: #9ea8d1; background: #9ea8d1; height: 1px; border: none; width: 100%;
 #dologin hr {margin: 16px 0 4px; background: linear-gradient(90deg, rgba(119, 120, 159, 0), #1d1f4f, rgba(119, 120, 159, 0))}
 #dologin tr:last-child hr {margin-top: 3px; margin-bottom: 10px}
 .iframed #dologin tr:nth-child(6) hr {margin-top: 5px}
-#dologin tr:last-child a, #dologin tr:last-child a:visited {display: inline-block; margin: 8px -2px 6px; padding: 3px 10px; line-height: 1.1; color: #327bbf; border: 1px solid rgba(119, 120, 159, .3); border-radius: 25px; box-shadow: 0 0 1px rgba(255,255,255,0); background: linear-gradient(90deg, rgba(252,252,255,.3), #f6f6ff, rgba(252,252,255,.3)); transition: ease all .1s}
+#dologin tr:last-child a, #dologin tr:last-child a:visited {margin: 8px -2px 6px; padding: 4px 10px; display: inline-block; min-width: 140px; line-height: 1.1; font-size: 90%; color: #327bbf; border: 1px solid rgba(119, 120, 159, .3); border-radius: 25px; box-shadow: 0 0 1px rgba(255,255,255,0); background: linear-gradient(90deg, rgba(252,252,255,.3), #f6f6ff, rgba(252,252,255,.3)); transition: ease all .1s}
 #dologin tr:last-child a:hover {border: 1px solid #77789f; border: 1px solid rgba(119, 120, 159, .5); background: #f2f2ff; box-shadow: 0 0 1px #ccf; background: linear-gradient(180deg,#fafaff 50%, #e8e8ff 50%) #f2f2ff; transition: ease all .1s}
 #dologin tr:last-child a:active {border: 1px solid rgba(119, 120, 159, .3); box-shadow: inset 3px 3px 3px #779; color: rgba(65, 70, 95, .8); color: #99a5df; background: #e2e2ff; background: linear-gradient(180deg,#eaeaff 50%, #d9d9ff 50%); transition: ease all .1s}
 #dologin tr:last-child td {color: transparent; color: rgba(119, 120, 159, 0)}
@@ -239,7 +240,7 @@ tr.bottombuttons:empty {display: none}
 /* notifications */
 .notifications {margin: 0 30%; padding: 5px 10px 2px; min-width: 400px; position: fixed; top: 0; left: 0; right: 0; z-index: 9999; text-align: center; text-shadow: 0 1px 1px #000; opacity: .9; border-bottom: 2px solid #001; box-shadow: 0 1px 1px rgba(120,120,200,.3); box-shadow: 0 2px 2px rgba(100,100,200,.5); background: var(--no) right 6px top 4px no-repeat #113; background-size: 14px 14px; background-blend-mode: luminosity; cursor: crosshair}
 .iframed .notifications {margin: 6px 30% 0; padding: 5px 10px 0; border: none; border-radius: 0 0 4px 4px; box-shadow: 0 1px 2px rgba(100,100,200,.5); background: var(--no) right 6px top 5px no-repeat #113; background-size: 14px 14px}
-.notifications.msgerror, .notifications.msginfo {animation: 2s hide-up 7s ease-out forwards}
+.notifications.msgerror, .notifications.msginfo {animation: 2s hide-up 3s ease-out forwards}
 .notifications:hover {background-image: var(--no); background-blend-mode: normal}
 .notifications p.info, .notifications p.info b {font-size: 10pt; color: #fff; text-shadow: none}
 .notifications p {filter: drop-shadow(0 0 2px #000); letter-spacing: .07em; word-spacing: .2em; font-weight: 700; animation: fade-in 1s linear}
@@ -346,7 +347,7 @@ td.mailListAttachment.isAttached img {display: none}
 /* loading mail */
 #loading {padding: 15px; font-size: 10pt; text-align: center; background: #ddf; background: repeating-linear-gradient(180deg,#ddf, #eef 2px, #ddf 3px); margin: 0; border: none}
 #loading b {padding: 6px 0; display: inline-block; width: 40%; min-width: 400px; color: #fff; letter-spacing: 2px; text-shadow: 0 0 1px #001, 0 0 5px #003; border-radius: 2px; box-shadow: inset 0 0 0 1px #99b, inset 0 0 0 2px #ddf, inset 0 0 2px 3px #77a, 0 0 1px #bbb; background: #337; background: repeating-linear-gradient(45deg, #449 1px, #449 20px, #66a 20px, #77a 40px); animation: loading 1s linear infinite forwards alternate}
-select {margin: 5px; padding: 6px 24px 6px 5px; min-width: 120px; text-align: left; font-size: 9pt; color: var(--ink); border: var(--border_input); border-radius: 2px; box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1); background: var(--dropdown) no-repeat right 8px center / 10px, var(--btn); appearance: none; filter: drop-shadow(0 0 1px rgba(220,220,255,.7))}
+select {margin: 5px; padding: 5px 24px 5px 5px; min-width: 120px; text-align: left; font-size: 9pt; color: var(--ink); border: var(--border_input); border-radius: 2px; box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1); background: var(--dropdown) no-repeat right 8px center / 10px, var(--btn); appearance: none; filter: drop-shadow(0 0 1px rgba(220,220,255,.7))}
 select:-moz-focusring {outline: 1px solid transparent}
 select option {background: #fff}
 select:hover, select:active {cursor: pointer; color: var(--ink_darker); box-shadow: var(--highlight); background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover)}
@@ -356,8 +357,8 @@ select::-ms-expand {display: none}
 .folders {margin: -3px 0 0 0; float: left}
 .folders select {margin-left: 0; text-align: center}
 #viewmail {position: relative}
-#viewmail .folders {padding: 4px 6px 4px 4px; position: absolute; top: -1px; right: -1px; border: 1px solid var(--border_inner); border-radius: 0 0 0 3px; box-shadow: var(--highlight); background: linear-gradient(180deg,rgba(255,255,255,.7) 50%, rgba(240,240,255,.4) 50%), repeating-linear-gradient(180deg,#eef 1px, #eef 2px, #fff 3px)}
-input.switchto, input.moveto {padding: 6px 7px 6px 24px; background: var(--folder) no-repeat 6px center / 14px, var(--btn)}
+#viewmail .folders {padding: 5px 6px 5px 4px; position: absolute; top: -1px; right: -1px; border: 1px solid var(--border_inner); border-radius: 0 0 0 3px; box-shadow: var(--highlight); background: linear-gradient(180deg,rgba(255,255,255,.7) 50%, rgba(240,240,255,.4) 50%), repeating-linear-gradient(180deg,#eef 1px, #eef 2px, #fff 3px)}
+input.switchto, input.moveto {padding: 5px 7px 5px 24px; background: var(--folder) no-repeat 6px center / 14px, var(--btn)}
 #viewmail .moveto, #viewmail .select1 {margin-bottom: 2px}
 #viewmail .moveto {margin-right: 8px}
 #viewmail .select1 {margin-right: 0}
@@ -382,7 +383,7 @@ tr.mailbody td {border-top: 1px solid var(--border_inner)}
 @keyframes attention {from {background-position: 200%}  {background-position: 0}}
 @keyframes bar {from {width: 100%; filter:opacity(.5)}}
 @keyframes fade-in {0%,80% {filter: opacity(0)} 100% {filter: opacity(1)}}
-@keyframes hide-up {from {margin-top: 0}  {margin-top: -300px}}
+@keyframes hide-up {from {margin-top: 0} to {margin-top: -300px}}
 @keyframes loading {0% {text-shadow: 0 0 1px #001, 0 0 5px #003; background: linear-gradient(180deg,rgba(255,255,255,.2) 50%, rgba(100,100,128,.3) 50%), repeating-linear-gradient(45deg, #77a 1px, #77a 20px, #449 20px, #449 40px)} 100% {text-shadow: 0 0 1px #001, 0 0 5px #505; background: linear-gradient(180deg,rgba(255,255,255,.2) 50%, rgba(100,100,128,.3) 50%), repeating-linear-gradient(45deg, #449 1px, #449 20px, #77a 20px, #77a 40px)}}
 
 @media screen and (max-width: 1500px) {.debugHeader pre {font-size: 8.5pt} .iframed .pagenavcontainer {top: 5px} .folders select {
@@ -391,5 +392,5 @@ tr.mailbody td {border-top: 1px solid var(--border_inner)}
 @media screen and (max-width: 1000px) {#info {margin-top: 1px; padding: 3px 0 3px 6px} #infoUser {display: none} .folders {margin-top: -3px; float: left} .folders select {margin-left: -2px; padding-top: 5px; padding-bottom: 5px} .topbuttons input, .topbuttons .fakebutton, .topbuttons input.new, .topbuttons input.switchto, .topbuttons input.moveto {padding-top: 6px; padding-bottom: 7px} #info input.logout, #info input.logout:hover, #info input.logout:focus, #info input.logout:active {margin: -4px 0 -3px 4px}}
 @media screen and (max-width: 900px) {body {margin: 3px} body, td, a, button, input, p.mailbody, select {font-size: 8.5pt} th.mailListDate {white-space: nowrap; text-align: center} td.mailListDate {padding: 0; white-space: normal; width: 1%; line-height: 100%; text-align: center} .listDate {padding-bottom: 1px; text-align: center; font-weight: 700; border: none; border-bottom: 1px solid #ddd; box-shadow: none; background: none; opacity: .85} .listDate span {min-width: 0} .listTime {margin-top: 1px; margin-bottom: 2px; text-align: center; font-size: 95%} .pagenavcontainer {position: fixed; top: 13px; right: 5px} .topbuttons .pagenav td {padding: 0; width: auto} .topbuttons .pagenav input {margin: 1px} .topbuttons .pagenav td:nth-child(2) {display: none} .topbuttons input.nextpage {margin-left: 5px} #messagenav {margin: 7px 1px 0; position: fixed; float: none} .delete + .logout {display: none}}
 @media screen and (min-width: 1200px) {#info {position: absolute; left: calc(50% - 160px); float: none}}
-@media screen and (min-width: 1300px) {.iframed body, .iframed td, .iframed textarea, .iframed input, .iframed div, .iframed p.mailbody, .iframed a {font-size: 10pt} .iframed td {padding-top: 5px; padding-bottom: 5px}}
-@media screen and (min-width: 1500px) {body, td, textarea, input, div, p.mailbody, a {font-size: 10pt} th {font-size: 70%} td {padding: 3px 5px} .folders select, .fakebutton, input.reload {padding-top: 7px; padding-bottom: 7px; line-height: 1.2} input.refresh, input[name="refresh"][disabled] {padding-top: 6px; padding-bottom: 6px; line-height: 1.2} input.new {padding: 6px 7px 5px 24px}}
+@media screen and (min-width: 1300px) {body, input[type="submit"], input[type="reset"], #settings, .fakebutton, select, textarea {font-size: 10pt} .iframed td {padding-top: 5px; padding-bottom: 5px} #dologin .fakebutton {margin-top: 2px}}
+@media screen and (min-width: 1500px) {body, td, textarea, input, div, p.mailbody, a {font-size: 10pt} th {font-size: 70%} td {padding: 3px 5px}}
