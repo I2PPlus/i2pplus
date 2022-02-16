@@ -1106,7 +1106,7 @@ public class SummaryHelper extends HelperBase {
                 if (avail) {
                     buf.append("<span id=\"updateAvailable\">").append(_t("Release update available")).append("<br><i>")
                        .append(_t("Version")).append(": ").append(getUpdateVersion());
-                    buf.append("</i></span><br><button type=\"submit\" class=\"download\" name=\"updateAction\" value=\"signed\" >")
+                    buf.append("</i></span><br><button type=\"submit\" id=\"sb_downloadReleaseUpdate\" class=\"download\" name=\"updateAction\" value=\"signed\" >")
                        // Note to translators: parameter is a version, e.g. "0.8.4"
 //                       .append(_t("Download {0} Update", getUpdateVersion()))
                        .append(_t("Download I2P Update"))
@@ -1115,7 +1115,7 @@ public class SummaryHelper extends HelperBase {
                 if (devSU3Avail) {
                     buf.append("<span id=\"updateAvailable\">").append(_t("Signed development update available")).append("<br><i>")
                        .append(_t("Version")).append(": ").append(getDevSU3UpdateVersion());
-                    buf.append("</i></span><br><button type=\"submit\" class=\"download\" name=\"updateAction\" value=\"DevSU3\" >")
+                    buf.append("</i></span><br><button type=\"submit\" id=\"sb_downloadSignedDevUpdate\" class=\"download\" name=\"updateAction\" value=\"DevSU3\" >")
                        // Note to translators: parameter is a router version, e.g. "0.9.19-16"
                        // <br> is optional, to help the browser make the lines even in the button
                        // If the translation is shorter than the English, you should probably not include <br>
@@ -1130,7 +1130,7 @@ public class SummaryHelper extends HelperBase {
                     else
                         buf.append(_t("Unsigned update available").replace("update", "I2P update"));
                     buf.append("<br><i>").append(getUnsignedUpdateVersion());
-                    buf.append("</i></span><br><button type=\"submit\" class=\"download\" name=\"updateAction\" value=\"Unsigned\" >");
+                    buf.append("</i></span><br><button type=\"submit\" id=\"sb_downloadUnsignedDevUpdate\" class=\"download\" name=\"updateAction\" value=\"Unsigned\" >");
                        // Note to translators: parameter is a date and time, e.g. "02-Mar 20:34 UTC"
                        // <br> is optional, to help the browser make the lines even in the button
                        // If the translation is shorter than the English, you should probably not include <br>
@@ -1194,7 +1194,7 @@ public class SummaryHelper extends HelperBase {
                 buf.append("<p><form action=\"").append(uri).append("\" method=\"POST\">\n");
                 buf.append("<input type=\"hidden\" name=\"reseedNonce\" value=\"").append(nonce).append("\" >\n");
                 buf.append("<button type=\"submit\" title=\"").append(_t("Attempt to download router reference files (if automatic reseed has failed)"));
-                buf.append("\" class=\"reload\" value=\"Reseed\" >").append(_t("Reseed")).append("</button></form></p>\n");
+                buf.append("\" id=\"sb_manualReseed\" class=\"reload\" value=\"Reseed\" >").append(_t("Reseed")).append("</button></form></p>\n");
             }
         }
         if (buf.length() <= 0)

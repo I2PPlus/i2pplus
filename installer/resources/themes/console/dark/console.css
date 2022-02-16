@@ -369,7 +369,7 @@ input[type=file] {background: none}
 #sidebar .cancel {margin-top: 10px}
 
 /* Show text on context specific buttons (eg deferred shutdown) */
-#sidebar .reload[value="restartImmediate"], #sidebar .stop[value="shutdownImmediate"], #sidebar .reload[value="Reseed"], #sidebar .reload[value="Reseed"]:hover, #sidebar .reload[value="Reseed"]:focus {padding-left: 24px; text-indent: 0; text-align: left; text-transform: capitalize; background-size: 14px, 100%}
+#sidebar .reload[value="restartImmediate"], #sidebar .stop[value="shutdownImmediate"], #sb_manualReseed, #sb_manualReseed:hover, #sb_manualReseed:focus {padding-left: 24px; text-indent: 0; text-align: left; text-transform: capitalize; background-size: 14px, 100%}
 #sidebar .reload[value="restartImmediate"] {padding-left: 24px; background: var(--restart) no-repeat 8px center / 12px, var(--btn)}
 #sidebar .reload[value="restartImmediate"]:hover, #sidebar .reload[value="restartImmediate"]:focus {background: var(--restart_hover) no-repeat 8px center / 12px, var(--btn_hover_radial); color: #f00}
 #sidebar .cancel {text-transform: capitalize}
@@ -377,8 +377,8 @@ input[type=file] {background: none}
 #sidebar .stop[value="shutdownImmediate"]:hover, #sidebar .stop[value="shutdownImmediate"]:focus {background: var(--shutdown_hover) no-repeat 8px center / 12px, var(--btn_hover_radial)}
 #sidebar .stop[value="shutdownImmediate"]:active {background: #f60 var(--shutdown_active) no-repeat 8px center / 12px}
 #sidebar .reload[value="restartImmediate"]:active {color: #ee9; background: #f60 var(--restart_active) no-repeat 8px center / 12px}
-#sidebar .reload[value="Reseed"] {background: var(--download) no-repeat center left 6px / 14px, var(--btn)}
-#sidebar .reload[value="Reseed"]:hover, #sidebar .reload[value="Reseed"]:focus, #sidebar .reload[value="Reseed"]:active {background: var(--download_hover) no-repeat center left 6px / 14px, var(--btn_hover_radial)}
+#sb_manualReseed {background: var(--download) no-repeat center left 6px / 14px, var(--btn)}
+#sb_manualReseed:hover, #sb_manualReseed:focus, #sb_manualReseed:active {background: var(--download_hover) no-repeat center left 6px / 14px, var(--btn_hover_radial)}
 
 /* client config buttons aka project "X" */
 button.accept.control {background: var(--start) var(--center) / 14px, var(--btn)}

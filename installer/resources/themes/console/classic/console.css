@@ -319,14 +319,14 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 #sidebar .stop:hover, #sidebar .stop:focus {border: var(--border); background: var(--shutdown_hover) no-repeat center center / 14px, var(--btn_hover)}
 
 /* show text on context specific buttons (eg deferred shutdown) */
-#sidebar .reload[value="restartImmediate"], #sidebar .stop[value="shutdownImmediate"], #sidebar .reload[value="Reseed"] {padding: 6px 7px 6px 23px; min-width: 0; text-indent: 0; text-align: left; text-transform: capitalize}
+#sidebar .reload[value="restartImmediate"], #sidebar .stop[value="shutdownImmediate"], #sb_manualReseed {padding: 6px 7px 6px 23px; min-width: 0; text-indent: 0; text-align: left; text-transform: capitalize}
 #sidebar .cancel {text-transform: capitalize}
 #sidebar .reload[value="restartImmediate"] {background: var(--restart) no-repeat 8px center / 12px, var(--btn)}
 #sidebar .reload[value="restartImmediate"]:hover, #sidebar .reload[value="restartImmediate"]:focus, #sidebar .reload[value="restartImmediate"]:active {background: var(--restart_hover) no-repeat 8px center / 12px, var(--btn_hover)}
 #sidebar .stop[value="shutdownImmediate"] {background: var(--shutdown) no-repeat 8px center / 12px, var(--btn)}
 #sidebar .stop[value="shutdownImmediate"]:hover, #sidebar .stop[value="shutdownImmediate"]:focus, #sidebar .stop[value="shutdownImmediate"]:active {background: var(--shutdown_hover) no-repeat 8px center / 12px, var(--btn_hover)}
-#sidebar .reload[value="Reseed"] {background: var(--download) no-repeat 8px center / 12px, var(--btn)}
-#sidebar .reload[value="Reseed"]:hover, #sidebar .reload[value="Reseed"]:focus, #sidebar .reload[value="Reseed"]:active {background: var(--download) no-repeat 8px center / 12px, var(--btn_hover)}
+#sb_manualReseed {background: var(--download) no-repeat 8px center / 12px, var(--btn)}
+#sb_manualReseed:hover, #sb_manualReseed:focus, #sb_manualReseed:active {background: var(--download) no-repeat 8px center / 12px, var(--btn_hover)}
 #sidebar .download {background: var(--download) no-repeat 8px center / 12px, var(--btn)}
 #sidebar .download:hover, #sidebar .download:focus, #sidebar .download:active {background: var(--download) no-repeat 8px center / 12px, var(--btn_hover)}
 

@@ -778,20 +778,20 @@ button.download.control:hover, button.download.control:focus {background: var(--
 #sidebar .reload {background: var(--restart) no-repeat center center / 16px, var(--btn)}
 #sidebar .reload:hover, #sidebar .reload:focus {background: var(--shutdown_hover) no-repeat 37% center / 16px, var(--restart_hover) no-repeat 63% center / 16px, var(--btn_hover); border: 1px solid var(--hover)}
 #sidebar .reload:active, #sidebar .stop:active, #sidebar .download:active {box-shadow: var(--highlight), inset 2px 2px 2px #555}
-#sidebar .reload[value="Reseed"] {text-indent: 0; text-align: left; min-width: 0; background: var(--download) no-repeat center left 6px, var(--btn)}
-#sidebar .reload[value="Reseed"]:hover, #sidebar .reload[value="Reseed"]:focus {background: var(--download_hover) no-repeat center left 6px, var(--btn_hover); padding: 5px 7px 5px 22px}
+#sb_manualReseed {text-indent: 0; text-align: left; min-width: 0; background: var(--download) no-repeat center left 6px, var(--btn)}
+#sb_manualReseed:hover, #sb_manualReseed:focus {background: var(--download_hover) no-repeat center left 6px, var(--btn_hover); padding: 5px 7px 5px 22px}
 #sidebar .stop {background: var(--shutdown) no-repeat center center, var(--btn); background-size: 16px, 100%}
 #sidebar .stop:hover, #sidebar .stop:focus {border: 1px solid var(--hover); background: var(--shutdown_hover) no-repeat center center, var(--btn_hover); background-size: 16px, 100%}
 #sidebar .download {background: var(--download) no-repeat 6px center, var(--btn); background-size: 14px, 100%; padding: 5px 7px 5px 22px}
 #sidebar .cancel {margin-top: 10px}
-#sidebar .reload[value="restartImmediate"], #sidebar .stop[value="shutdownImmediate"], #sidebar .reload[value="Reseed"], #sidebar .reload[value="Reseed"]:hover, #sidebar .reload[value="Reseed"]:focus {padding: 5px 7px 5px 22px; min-width: 0; text-indent: 0; text-align: left; text-transform: capitalize; background-size: 14px, 100%}
+#sidebar .reload[value="restartImmediate"], #sidebar .stop[value="shutdownImmediate"], #sb_manualReseed, #sb_manualReseed:hover, #sb_manualReseed:focus {padding: 5px 7px 5px 22px; min-width: 0; text-indent: 0; text-align: left; text-transform: capitalize; background-size: 14px, 100%}
 #sidebar .cancel {text-transform: capitalize}
 #sidebar .reload[value="restartImmediate"] {background: var(--restart) no-repeat center left 6px / 12px, var(--btn)}
 #sidebar .reload[value="restartImmediate"]:hover, #sidebar .reload[value="restartImmediate"]:focus, #sidebar .reload[value="restartImmediate"]:active {background: var(--restart_hover) no-repeat center left 6px / 12px, var(--btn_hover)}
 #sidebar .stop[value="shutdownImmediate"] {background: var(--shutdown) no-repeat center left 6px / 12px, var(--btn)}
 #sidebar .stop[value="shutdownImmediate"]:hover, #sidebar .stop[value="shutdownImmediate"]:focus, #sidebar .stop[value="shutdownImmediate"]:active {background: var(--shutdown_hover) no-repeat center left 6px / 12px, var(--btn_hover)}
-#sidebar .reload[value="Reseed"] {background: var(--download) no-repeat center left 6px / 14px, var(--btn)}
-#sidebar .reload[value="Reseed"]:hover, #sidebar .reload[value="Reseed"]:focus, #sidebar .reload[value="Reseed"]:active {background: var(--download_hover) no-repeat center left 6px / 14px, var(--btn_hover)}
+#sb_manualReseed {background: var(--download) no-repeat center left 6px / 14px, var(--btn)}
+#sb_manualReseed:hover, #sb_manualReseed:focus, #sb_manualReseed:active {background: var(--download_hover) no-repeat center left 6px / 14px, var(--btn_hover)}
 #sidebar .download:hover, #sidebar .download:focus, #sidebar .download:active {padding: 5px 7px 5px 22px; background: var(--download_hover) no-repeat 6px center / 14px, var(--btn_hover)}
 
 .search input[type=text]:not(:hover)::placeholder, input[type=text]:focus::placeholder {opacity: 0}

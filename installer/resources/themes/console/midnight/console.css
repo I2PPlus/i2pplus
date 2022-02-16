@@ -602,7 +602,7 @@ button.download.control:active {
 /* Show text on context specific buttons (eg deferred shutdown) */
 
 #sidebar .reload[value="restartImmediate"], #sidebar .stop[value="shutdownImmediate"],
-#sidebar .reload[value="Reseed"], #sidebar .cancel {
+#sb_manualReseed, #sidebar .cancel {
   padding: 6px 9px 6px 25px !important;
   min-width: 0 !important;
   text-indent: 0;
@@ -639,17 +639,17 @@ button.download.control:active {
   background: var(--shutdown_hover) no-repeat left 6px center / 12px;
 }
 
-#sidebar .reload[value="Reseed"] {
+#sb_manualReseed {
   background: var(--download) no-repeat left 6px center, var(--btn_sidebar) !important;
   background-size: 14px auto, 100%, 100%, 100% !important;
 }
 
-#sidebar .reload[value="Reseed"]:hover {
+#sb_manualReseed:hover {
   padding: 6px 9px 6px 25px !important;
   background: #000 var(--download_hover) no-repeat left 6px center / 14px !important;
 }
 
-#sidebar .reload[value="Reseed"]:focus, #sidebar .reload[value="Reseed"]:active {
+#sb_manualReseed:focus, #sb_manualReseed:active {
   padding: 6px 9px 6px 25px !important;
   background: var(--hover) var(--download_hover) no-repeat left 6px center / 14px !important;
 }
