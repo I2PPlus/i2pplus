@@ -1,175 +1,81 @@
 /* Console Theme "Dark" - Mobile Override */
+/* Author: dr|z3d */
 
-body {
-  padding: 0 5px;
-  margin: 5px 0 !important;
-}
+@import url(../mobile.css);
 
-div#xhr {
-  width: 617px;
-  margin: 0 auto;
+#sb_logo, #clock {
+  margin: -8px 0 -9px;
+  width: 100%;
 }
 
-#sb_wrap {
-  position: relative;
-  float: none !important;
-  width: auto;
-  margin: 0 0 5px;
+#sb_logo, #sidebar form {
+  width: calc(100% - 20px);
 }
 
-.sb {
-  float: none;
-  width: 600px;
-  margin: 0 auto;
+#sidebar form {
+  margin: -6px 0 -8px;
+  width: calc(100% - 6px);
 }
 
-#sb_logo {
-  height: auto !important;
+#sidebar #sb_routerControl {
+  padding: 10px;
+  width: calc(100% - 20px);
 }
 
-#sb_logo + a, a[href="/summaryframe"] {
-  display: inline-block;
-  margin: 7px 0 0 !important;
-  padding: 4px 15px !important;
-  border-radius: 15px;
-  border: 1px solid #494;
+#sidebar form, #sidebar tr {
+  background: var(--topnav);
+  box-shadow: var(--bevel);
 }
 
-a[href="/summaryframe"] {
-  margin: 3px 0 2px !important;
+#sidebar table[id^="sb_"] {
+  width: 100%;
+  margin: -6px 0 -10px;
 }
 
-.sb img[src$="i2plogo.png"] {
-  width: 357px;
-  margin-top: 6px;
+#sidebar table[id^="sb_"] td {
+  padding: 7px 10px !important;
+  border-top: 1px solid #000;
 }
 
-.percentBarouter {
-  width: calc(100% - 7px);
+#sidebar td:first-child {
+  max-width: none;
 }
 
-#sb_memoryBar .percentBarInner {
-  background: linear-gradient(90deg, #0000001a, #80800033), linear-gradient(180deg,#1c943a99 0%, #092f1099 50%, #0d270799 50%, #091b0599 50%, #09150399 100%);
+#sidebar #sb_services, #sidebar #sb_internals, #sidebar #sb_advanced, #sidebar #sb_help {
+  margin: -8px 0 -10px;
+  width: 100%;
 }
 
-@media screen and (min-width: 1500px) {
-.sb {
-  width: 600px !important;
+#sidebar #sb_services a, #sidebar #sb_internals a, #sidebar #sb_advanced a {
+  box-shadow: 0 0 0 1px #131;
 }
 
-.sb table[id^="sb_"] {
-  width: 600px !important;
-}
-}
-
-.sb td,
-.sb a,
-.sb h4,
-.sb h4 a,
-.sb button {
-  font-size: 10pt !important;
+#sidebar #sb_services a {
+  padding: 4px 10px;
 }
 
-.sb h3 a {
-  font-size: 11pt !important;
-  padding: 3px 1px;
+#sidebar #sb_localtunnels td:first-child {
+  background-size: 22px;
 }
 
-.sb table,
-.sb table[id^='sb_'] {
-  min-width: 100% !important;
-  min-width: calc(100% - 1px) !important;
-  margin-bottom: -7px !important;
+#sidebar #sb_localtunnels td:last-child {
+  background-position: center center;
+  background-size: 20px;
 }
 
-#sb_general, #sb_shortgeneral, #sb_bandwidth, #sb_peers, #sb_tunnels, #sb_queue {
-  margin-bottom: -8px !important;
+#sidebar h3 {
+  margin: -7px 0 -9px;
+}
+#sidebar h3 a {
+  font-size: 12pt;
 }
 
-#sb_localtunnels {
-  margin-top: -5px !important;
+#sidebar h3::after {
+ min-height: 32px;
 }
 
-.sb table {
-  border-collapse: collapse;
-}
-
-.sb tr:nth-child(odd) td {
-  padding: 3px;
-  background: #020;
-  background: rgba(0,34,0,.5);
-}
-
-.sb tr:nth-child(even) td {
-  padding: 3px;
-  background: #000;
-  background: rgba(0,0,0,.3);
-}
-
-.sb tr td {
-  border-top: 1px inset transparent !important;
-  border-bottom: 1px inset transparent !important;
-}
-
-.sb tr:hover td {
-  border-top: 1px solid #030 !important;
-  border-bottom: 1px solid #030 !important;
-}
-
-.sb tr:hover td {
-  background: #020;
-}
-
-.sb h3,
-.sb h4,
-.sb hr {
-  margin-right: 7px !important;
-  margin-left: -10px !important;
-}
-
-.sb h4 {
-  margin: -6px 7px -8px -10px !important;
-}
-
-.sb form {
-  margin: -2px 5px -4px -11px !important;
-}
-
-.sb button[type=submit], .sb button[type=reset] {
-  margin: 5px 10px !important;
-  padding: 8px 5px !important;
-  min-width: 120px !important;
-}
-
-h1 {
-  min-width: 590px;
-  margin: 0 !important;
-}
-
-div.news {
-  min-width: 590px;
-  margin: -1px 0 0;
-}
-
-div.main {
-  min-width: 590px;
-  margin: -1px 0 5px;
-}
-
-.sorry {
-  margin: -1px 0 0 !important;
-}
-
-@media screen and (min-width: 1500px) {
-div.news {
-  margin: -1px 0 0 !important;
-}
-
-div.main {
-  margin: -1px 0 5px !important;
-}
-
-.sorry {
-  margin: -1px 0 0 !important;
-}
+#sidebar button[type="submit"], #sidebar button[type="reset"] {
+  margin: 5px;
+  padding: 12px;
+  min-width: 48%;
 }

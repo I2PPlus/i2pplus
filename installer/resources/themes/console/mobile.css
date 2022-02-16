@@ -1,0 +1,62 @@
+/* Console Global Mobile Override */
+/* Author: dr|z3d */
+
+h1, h1[class] {margin: 6px 0 -11px; min-width: 0}
+a[href="/summaryframe"] {margin: 5px 0 2px}
+#confignav, .confignav {padding: 8px}
+.confignav, .confignav a, #confignav, #confignav a {font-size: 11pt; line-height: 1.4}
+.main {margin: 10px 0 0; min-width: 0}
+#homepage #sidebar {display: none}
+.newsentry + hr + #newsStatus, .newsentry + hr + #newsStatus + #newsDisplay {margin-top: -3px; margin-bottom: -2px}
+.news, .news#news {margin: 10px 0 -11px; min-width: 0}
+.percentBarOuter {width: auto; margin: -4px 4px -4px 4px}
+.sorry {margin-left: 0}
+table[id^="sb_"] td, #sidebar #sb_localtunnels td {padding: 2px 6px 0}
+#sidebar button[type=submit], #sidebar button[type=reset] {margin: 3px 5px 0; padding: 8px 5px; min-width: 42%}
+#sidebar {float: none; width: auto; max-width: 600px; min-width: 200px; margin: 0 auto -6px; padding-left: 0; padding-right: 0}
+#sidebar h3 {padding-top: 5px; padding-bottom: 5px}
+#sidebar h3, #sidebar h3 a {font-size: 11pt}
+#sidebar h3, #sidebar h4, #sidebar hr {margin-left: 1px; margin-right: 1px}
+#sidebar hr:first-child {margin-bottom: 8px}
+#sidebar #sb_graphcontainer, #sidebar #sb_graphcontainer + script + hr, #sidebar #sb_graphcontainer + hr {display: none}
+#sidebar #sb_internals a, #sidebar #sb_advanced a, #sidebar #sb_help a {margin: 3px 3px 4px; padding: 3px 10px; border-radius: 2px; background: var(--btn); box-shadow: 0 0 1px var(--border_soft)}
+#sidebar #sb_internals a:active, #sidebar #sb_advanced a:active, #sidebar #sb_help a:active {box-shadow: var(--btn_shadow_active)}
+#sidebar #sb_internals, #sidebar #sb_advanced, #sidebar #sb_help {margin-top: -11px}
+#sidebar #sb_internals td, #sidebar #sb_advanced td, #sidebar #sb_help td {padding: 3px 4px}
+#sidebar #sb_localtunnels td {background-size: 18px}
+#sidebar #sb_localtunnels td:last-child {background-position: right 4px center}
+#sidebar #sb_logo + a, a[href="/summaryframe"] {display: inline-block; margin: 10px 0 -2px; padding: 2px 10px}
+#sidebar #sb_memoryBar {margin-bottom: -5px}
+#sidebar #sb_memoryBar .percentBarInner {background: var(--membarinner_mobile)}
+#sidebar #sb_services a {display: inline-block; width: 24%; min-width: 100px; white-space: nowrap; border: none; border-radius: 4px; padding: 4px 10px 4px 30px; background-position: 8px center; margin: 0 3px; background-color: transparent}
+#sidebar #sb_services a:link, #sidebar #sb_services a:visited {margin-top: 4px; margin-bottom: 4px; background: var(--btn)}
+#sidebar #sb_services td {border-radius: 4px}
+#sidebar #sb_services {text-align: center; border-collapse: separate; margin: -12px 0 -8px}
+#sidebar #sb_wrap {float: none; margin: 0; position: relative; width: auto}
+#sidebar table, table[id^="sb_"], #sidebar #sb_services, #sidebar #sb_internals, #sidebar #sb_advanced, #sidebar #sb_help {width: calc(100% - 4px); margin: -9px 0 -7px 2px; border-radius: 4px; border-collapse: separate; border-spacing: 0}
+#sidebar td, #sidebar h4, #sidebar a {font-size: 9pt}
+#xhr {margin-top: 9px}
+#sb_wrap {z-index: 10000; top: 8px; right: 0; overflow: hidden}
+#sb_wrap #sidebar {width: 120px; border: none; box-shadow: none; background: none; overflow: hidden; text-align: right}
+
+@media screen and (min-width: 640px) {
+#sidebar td, #sidebar td a {font-size: 11pt}
+#sidebar td {padding: 5px 8px}
+.tunnelBuildStatus, .sb_netstatus, .sb_notice, .percentBarText {font-size: 11pt}
+#sidebar #sb_services td, #sidebar #sb_internals td, #sidebar #sb_advanced td {display: grid; grid-template-columns: 1fr 1fr 1fr; grid-auto-columns: minmax(120px, auto)}
+#sidebar #sb_services td {margin-left: -4px; margin-right: -4px}
+#sidebar #sb_internals td, #sidebar #sb_advanced td {margin-bottom: -2px}
+#sidebar #sb_localtunnels a {max-width: 400px}
+#sidebar #sb_services a, #sidebar #sb_internals a, #sidebar #sb_advanced a {margin: 4px; padding-top: 4px; padding-bottom: 4px; width: auto; min-width: 120px; border-radius: 4px; box-shadow: 0 0 1px var(--border)}
+#sidebar #sb_services a:hover, #sidebar #sb_internals a:hover, #sidebar #sb_advanced a:hover {box-shadow: inset 0 0 0 1px var(--hover); background: var(--btn_hover)}
+#sidebar #sb_services a:active, #sidebar #sb_internals a:active, #sidebar #sb_advanced a:active {box-shadow: 0 0 0 1px var(--active), var(--btn_shadow_active)}
+}
+
+@media screen and (min-width: 1500px) {
+#sb_wrap {top: 12px}
+#sidebar {width: 600px} #sidebar table[id^="sb_"] {width: 600px}
+h1, h1[class] {margin: 6px 0 -12px}
+div.news {margin: 0 0 -11px}
+div.main {margin: 10px 0 0; min-width: 0}
+.sorry {margin-left: 0}
+}
