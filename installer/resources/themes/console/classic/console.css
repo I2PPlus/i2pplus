@@ -192,7 +192,7 @@ p:empty + .sb_notice {margin-top: 7px}
 .percentBarOuter:hover .percentBarText {opacity: 1; transition: ease opacity .2s}
 
 /* updates download bar */
-.sb_update b {line-height: 1.2}
+.sb_update b {margin-top: -4px; display: inline-block; line-height: 1.2}
 .sb_updatestatus {margin: -8px 2px 5px !important; padding: 3px 0 4px; display: block; font-style: italic; color: var(--ink); border: var(--border); border-top: none; border-radius: 0 0 3px 3px; box-shadow: var(--highlight); background: linear-gradient(90deg, var(--bg3), #eff2ff 30%, #eff2ff 60%, var(--bg3)); box-sizing: border-box}
 .sb_info .percentBarOuter {margin: -1px -4px -5px 2px; background: var(--updating); animation: downloadbar 3s infinite}
 .sb_info .percentBarInner {height: 16px; background: linear-gradient(180deg, rgba(255, 255, 255,.6) 0%, rgba(238, 238, 255, .6) 50%, rgba(180, 180, 255, .7) 50%, rgba(140, 140, 255, .7) 100%)}
@@ -841,7 +841,7 @@ h4#updateplugins {margin-top: -13px}
 .applink {margin: 3px; padding: 0; width: 140px; position: relative; float: left; text-align: center; border: none; border: var(--border); background: var(--bg)}
 .applink:hover {border: 1px solid var(--hover); cursor: pointer}
 .applink img, .sitemaplink img {filter: grayscale(.6)}
-.applink img {padding: 10px 46px 9px; width: auto; height: 32px; max-height: 32px; max-width: 32px}
+.applink img {margin: 0 0 -2px; padding: 10px 46px 6px; width: auto; height: 32px; max-height: 32px; max-width: 32px}
 .applink:hover img, .sitemaplink:hover img {filter: none}
 #home .app:hover a, #home .app:hover .applabel a {color: var(--hover)}
 .applink.js:hover::before {padding: 1px 3px 5px; display: inline-block; position: absolute; top: -1px; left: -1px; line-height: 1; border: 1px solid var(--hover); content: "*js"}
@@ -894,7 +894,7 @@ html[lang="es"] .sitemapLink, html[lang="es"] .sitemapLabel {width: 160px}
 .sitemapLink:hover .sitemapLabel {color: var(--hover)}
 .sitemapLink:hover, .sitemapLink:hover .sitemapLabel {border-color: var(--hover)}
 .sitemapLink:active .sitemapLabel {color: var(--bg); box-shadow: var(--btn_shadow_active); background: var(--hover)}
-.sitemapLink img {padding: 12px 10px 10px; height: 32px; width: 32px}
+.sitemapLink img {padding: 9px 10px 3px; height: 32px; width: 32px}
 .sitemapLink:hover img {filter: drop-shadow(0 0 1px var(--hover))}
 .sitemapLink:active img {transform: scale(.8)}
 
@@ -1993,7 +1993,7 @@ iframe {height: 0}
 @media screen and (max-width: 1200px) {
 .applink, .sitemapLink, .sitemapLabel {width: 120px}
 .applabel {width: 116px}
-.appicon img, .sitemapLink img {max-height: 24px; max-width: 24px; display: inline-block}
+.applink img, .sitemapLink img {height: 24px; max-height: 24px; max-width: 24px; display: inline-block}
 .eventspanel form {padding: 10px; background: var(--bg)}
 .eventspanel select {margin-right: 8px}
 h2 {font-size: 12pt}
@@ -2125,7 +2125,7 @@ button.control {padding: 14px}
 .cells tt, #profilelist tt {padding-right: 3px; margin-left: -1px; margin-right: 0}
 .confignav {padding: 0 5px}
 .applink {width: 160px}
-.applink img {padding: 10px 60px 9px}
+.applink img {padding: 9px 60px 6px}
 div.news {padding-bottom: 5px !important}
 .applabel a {padding-top: 3px}
 .applabel a, #updateAvailable, code, tt, pre, #logs li, #routerlogs li, #servicelogs li, tt, tt a, code, .bucket, .tabletextarea textarea {font-size: 9.5pt}
