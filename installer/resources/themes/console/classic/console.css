@@ -147,7 +147,7 @@ p:empty + .sb_notice {margin-top: 7px}
 #sidebar .error, .tunnelBuildStatus.rejecting {color: #900; box-shadow: inset 0 0 0 1px rgba(255,0,0,.3), 0 0 1px rgba(96,96,96,.5); background: rgba(255,110,110,.1)}
 #sidebar .hidden, #sidebar .vmcomm, .tunnelBuildStatus.hidden {background: rgba(220,220,220,.4)}
 #sidebar .firewalled {box-shadow: var(--highlight), inset 0 0 0 2px rgba(96,96,255,.2); background: repeating-linear-gradient(135deg, rgba(220,255,220,.3) 2px, rgba(255,255,220,.3) 3px, rgba(220,255,220,.3) 5px)}
-.sb_netstatus, .tunnelBuildStatus {margin: -6px 0 -7px; padding: 6px 5px; width: calc(100% - 12px); display: inline-block; vertical-align: text-bottom; line-height: 1.2; text-shadow: 0 1px 1px var(--bg); border: var(--border); box-shadow: var(--highlight), 0 0 1px rgba(96,96,96,.5)}
+.sb_netstatus, .tunnelBuildStatus {margin: -6px 0 -3px; padding: 6px 5px; width: calc(100% - 12px); display: inline-block; vertical-align: text-bottom; line-height: 1.2; text-shadow: 0 1px 1px var(--bg); border: var(--border); box-shadow: var(--highlight), 0 0 1px rgba(96,96,96,.5)}
 .sb_netstatus.testing, .sb_netstatus.running, .sb_netstatus.hidden, .sb_netstatus.firewalled {font-size: 0}
 .sb_netstatus.running:hover, .sb_netstatus.hidden:hover, .sb_netstatus.firewalled:hover, .sb_netstatus.testing:hover {font-size: inherit}
 .sb_netstatus::before {margin: 0 4px 0 -4px; height: 18px; width: 18px; vertical-align: middle; display: inline-block; content: ""}

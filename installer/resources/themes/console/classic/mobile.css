@@ -1,193 +1,57 @@
 /* Console Theme "Classic" - Mobile Override */
+/* Author: dr|z3d */
 
-body {
-  margin: 0 1px 3px !important;
+@import url(../mobile.css);
+
+#sidebar button[type="submit"], #sidebar button[type="reset"] {
+  margin: 5px;
+  padding: 12px !important;
+  min-width: 45% !important;
 }
 
-#sb_wrap {
-  margin: 0 !important;
-  width: auto !important;
-  position: absolute;
-  top: 1px;
-  right: 1px;
-  float: none;
+#sidebar h3 a {
+  font-size: 12pt;
+  letter-spacing: 0.1em;
 }
 
-.sb {
-  margin: 0 auto -6px;
+#sidebar h3::after {
+ min-height: 28px;
+ display: inline-block;
+ vertical-align: middle;
+ content: "";
+}
+
+#sidebar .percentBarOuter {
   width: auto;
-  max-width: 600px;
-  float: none;
 }
 
-#xhr {
-  margin-top: 9px !important;
+#sidebar table, table[id^="sb_"], #sidebar #sb_services, #sidebar #sb_internals, #sidebar #sb_advanced, #sidebar #sb_help {
+  width: calc(100% - 3px) !important;
+  margin: -7px -8px -7px 2px;
 }
 
-#xhr hr:first-child {
-  margin-bottom: 7px !important;
+#sidebar td {
+  border-bottom: 1px solid var(--border_softer);
 }
 
-.sb #sb_logo {
-  margin: 0 0 15px !important;
+#sidebar tr:last-child td {
+  border-bottom: none;
 }
 
-.sb #sb_logo + a {
-  display: inline-block;
+#sidebar tr:nth-child(odd) {
+  background: var(--bg3);
 }
 
-#sb_logo + a, a[href="/summaryframe"] {
-  display: inline-block;
-  margin: -3px 0 !important;
-  padding: 2px 10px;
-  border-radius: 15px;
-  border: 1px solid #7778bf;
+#sidebar #sb_services a, #sidebar #sb_internals a, #sidebar #sb_advanced a {
+  padding: 5px 8px;
+  box-shadow: 0 0 0 1px var(--border_soft);
 }
 
-a[href="/summaryframe"] {
-  margin: 2px 0 !important;
+#sidebar #sb_localtunnels {
+  width: calc(100% - 2px)
 }
 
-.sb hr:first-child {
-  margin-bottom: 11px;
-}
-
-.sb td, .sb h4, .sb a {
-  font-size: 9pt !important;
-}
-
-.sb h3, .sb h3 a {
-  font-size: 10.5pt !important;
-}
-
-.sb table, table[id^="sb_"] {
-  width: 100% !important;
-  margin: -6px 0 -7px !important;
-}
-
-table[id^="sb_"] td {
-  padding: 4px 2px !important;
-}
-
-table#sb_localtunnels {
-  margin-top: -6px !important;
-}
-
-table#sb_localtunnels td {
-  padding: 4px 2px !important;
-}
-
-#sb_localtunnels td:last-child {
-  padding-right: 4px !important;
-}
-
-table[id^="sb_"] tr:nth-child(even) td {
-  background: #eef;
-  background: rgba(240, 240, 255, .5);
-}
-
-table[id^="sb_"] tr:nth-child(odd) td {
-  background: #ddf;
-  background: rgba(220, 220, 255, .5);
-}
-
-table[id^="sb_"] tr:hover td {
-  background: #ffe !important;
-  transition: ease background 0.3s;
-}
-
-#sb_services {
-  text-align: center;
-}
-
-#sb_localtunnels td:nth-child(2) {
-  width: auto !important;
-}
-
-#sb_general, #sb_shortgeneral, #sb_bandwidth, #sb_peers, #sb_tunnels, #sb_queue {
-  margin-bottom: -7px !important;
-}
-
-#sb_internals, #sb_services, #sb_advanced {
-  margin-top: -6px !important;
-}
-
-
-#sb_internals a, #sb_services a, #sb_advanced a {
-  max-width: 600px;
-}
-
-.sb button[type=submit], .sb button[type=reset] {
-  margin: 5px 5px 3px !important;
-  padding: 8px 5px !important;
-  min-width: 120px !important;
-}
-
-h1 {
-  margin: 9px 0 -1px;
-  min-width: 510px;
-}
-
-div.news {
-  margin: 0 0 -1px;
-  min-width: 500px;
-}
-
-div.main {
-  margin: 1px 0 0;
-  min-width: 500px;
-}
-
-.sorry {
-  margin: -1px 0 0 !important;
-}
-
-.confignav {
-  padding: 3px 5px !important;
-  line-height: 180%;
-}
-
-.percentBarOuter {
-  margin: -3px auto -4px !important;
-  width: calc(100% - 8px) !important;
-}
-
-#sb_bandwidthgraph {
-  margin: -20px 0 0 !important;
-  width: calc(100% + 6px) !important;
-}
-
-#sb_graphcontainer {
-  background-size: calc(100% - 8px) 40px !important;
-  background-position: 4px -8px !important;
-}
-
-@media screen and (min-width: 1500px) {
-h1 {
-  margin: 1px 0 -1px !important;
-}
-
-div.news {
-  margin: -1px 0 0 !important;
-}
-
-div.main {
-  margin: -1px 0 !important;
-}
-
-.sorry {
-  margin: -1px 0 0 !important;
-}
-
-.sb {
-  width: 600px !important;
-}
-
-.sb #sb_logo {
-  margin-top: 2px !important;
-}
-
-.sb table[id^="sb_"] {
-  width: 600px !important;
-}
+#sidebar #sb_localtunnels td {
+  padding: 8px;
+  background-size: 20px;
 }

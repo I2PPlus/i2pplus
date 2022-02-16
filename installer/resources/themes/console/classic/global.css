@@ -59,6 +59,7 @@
   --label_focus: linear-gradient(90deg, var(--bg3), var(--bg), var(--bg3));
   --ls_target: 1px solid #5a5 !important;
   --note: #1f7096;
+  --membarinner_mobile: linear-gradient(90deg, rgba(0,255,0,.1) 65px, rgba(255,255,0,.1) 110px, rgba(255,128,0,.1) 175px, rgba(255,0,0,.1)), linear-gradient(180deg, rgba(255, 255, 255, .9), rgba(240, 240, 250,.7) 50%, rgba(220, 220, 255, .7) 50%, rgba(140, 140, 220, .9)); box-shadow: var(--highlight);
   --monospaced: Droid Sans Mono, Andale Mono, DejaVu Sans Mono, Lucida Console, monospace;
   --pad_info: 20px 25px 20px 55px;
   --reload: linear-gradient(90deg, rgba(0,0,0,0) 85%, rgba(64,255,64,.15)), linear-gradient(90deg, #bcf, #def);
