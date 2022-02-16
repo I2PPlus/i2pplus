@@ -410,6 +410,10 @@ hr:last-child {
   background: linear-gradient(180deg,rgba(0,32,0,.5), rgba(0,16,0,.5));
 }
 
+.option:last-of-type {
+  margin-bottom: 11px;
+}
+
 #warning .option h4 {
   margin: 5px 15px 24px;
 }
