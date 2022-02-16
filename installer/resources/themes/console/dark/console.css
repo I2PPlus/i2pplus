@@ -46,6 +46,7 @@ table tt {color: #990; font-size: 8.5pt}
 table hr {margin: 0 0; padding: 0 0; height: 1px; display: none; color: var(--a); border: none; background: #252}
 td {padding: 4px 6px; vertical-align: middle; border-top: var(--border_softer)}
 tr:first-child td {border-top: var(--border)}
+.applink td:first-child {border: none}
 td img {padding: 0 1px 0 2px}
 th[aria-sort] {font-style: italic}
 th {padding: 7px 2px; line-height: 1.1; text-align: center; font-size: 9pt; border-top: var(--border); border-bottom: var(--border); background: var(--th)}
