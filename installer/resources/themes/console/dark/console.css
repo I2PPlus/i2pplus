@@ -19,7 +19,7 @@ a:active tt {color: var(--active)}
 .clearer {margin-bottom: -16px; height: 0; line-height: 0; clear: left}
 code {text-align: left; font: 9pt var(--monospaced); color: #dd0}
 .footnote, .topness, .footnote hr {display: none}
-h1, #applinks, #sitelinks, #news h3, .main h3 {text-shadow: var(--textshadow); box-shadow: var(--highlight); background: var(--h1); background-size: 2px, 100% 4px, 100%, 256px; background-repeat: repeat, repeat, no-repeat, repeat}
+h1, #applinks, #sitelinks, #news h3, .main h3 {position: relative; z-index: 10; text-shadow: var(--textshadow); box-shadow: var(--highlight); background: var(--h1); background-size: 2px, 100% 4px, 100%, 256px; background-repeat: repeat, repeat, no-repeat, repeat}
 h1, .main h2, .main h3, #applinks, #sitelinks {-webkit-text-stroke: var(--stroke); box-shadow: var(--bevel)}
 h2 a:hover {color: var(--hover)}
 h2 a:visited {color: #191}
@@ -1297,7 +1297,7 @@ th code {user-select: all}
 #ipv4, #ipv6, #permabanned tr:nth-child(2) {border-top: var(--border); border-bottom: var(--border); background: var(--th)}
 
 .applink, .applabel, .statusnotes, .main, #news, .sb, .search tr, .logo, .themechoice, .themelabel, .langselect, .ui_lang {box-shadow: var(--highlight), inset 0 0 1px 1px #050}
-.applink, .sitemapLink, .themechoice, .langselect {animation: zoom .05s linear .15s both; image-rendering: optimizeQuality; will-change: transform}
+.applink, .sitemapLink {animation: zoom .05s linear .15s both; image-rendering: optimizeQuality; will-change: transform}
 .applabel, .sitemapLabel, .themelabel, .ui_lang {background: var(--glow_bottom), linear-gradient(180deg,#001900,#001000 50%,#000); animation: fade .15s ease .25s reverse both}
 
 /* home */
@@ -1446,7 +1446,7 @@ th.options, #externali2cp th {padding: 7px 10px}
 .h3navlinks a:first-child {padding-right: 9px}
 .h3navlinks a:hover {color: var(--hover)}
 .h3navlinks a:last-child {padding-right: 5px}
-.h3navlinks a {margin: -8px 0 -6px; padding: 9px 5px 9px 16px; display: inline-block; text-transform: capitalize; letter-spacing: normal; font-size: 85%; border-left: var(--border)}
+.h3navlinks a {margin: -6px 0; padding: 6px 5px 6px 16px; display: inline-block; text-transform: capitalize; letter-spacing: normal; font-size: 85%; border-left: var(--border)}
 .h3navlinks {white-space: nowrap}
 #config_logging h3 a::before, #webappconfiguration a::before, #i2pclientconfig a::before, #pluginmanage a::before {width: 19px; height: 15px; display: inline-block; vertical-align: middle; background: var(--eye) no-repeat left center / 15px; content: ""}
 #config_logging h3 a:hover::before, #config_logging h3 a:focus::before {background: var(--eye_hover) no-repeat left center / 15px}
@@ -1462,7 +1462,7 @@ p.infowarn, td.infowarn {padding: 18px 20px 18px 58px; line-height: 1.3; border:
 table.logtable, #logs #enviro {margin-top: -1px}
 td.infohelp.joinfamily {padding: 20px 24px 20px 58px}
 td.optionsave {padding: 5px; text-align: right; border-top: var(--border); background: #000}
-th .h3navlinks, #config_stats .h3navlinks, #config_webapps .h3navlinks {margin-top: 0}
+th .h3navlinks, #config_stats .h3navlinks, #config_webapps .h3navlinks {margin-top: 0; line-height: 0}
 th.th_title {padding: 8px 10px; text-align: left; background: var(--h1); background-size: 2px, 100% 4px, 100%, 128px}
 #bannedpeercount {background: #000 var(--ban) no-repeat 15px center / 28px}
 #clientsconfig {margin-top: -2px}
@@ -1475,7 +1475,7 @@ th.th_title {padding: 8px 10px; text-align: left; background: var(--h1); backgro
 #i2pclientconfig, #pconfig, #pluginfromurl, #pluginfromfile, #webappconfiguration {margin-bottom: -14px}
 .infowarn#clientconf {margin: 0 0 -2px}
 #javaclienthelp {padding: 10px 10px 10px 50px; border: var(--border); background: var(--infohelp) no-repeat 15px center}
-#loggingoptions, #addkeyring {margin-bottom: -3px; margin-top: -1px}
+#loggingoptions, #addkeyring {margin-bottom: -3px; margin-top: 0}
 #manualreseed table tr, #newfamily tr:last-child table tr {box-shadow: none}
 #netconfig th, #externali2cp th, #plugininstall th, #plugininstall2 th, .configtable th, th.th_title {padding: 7px 10px; word-spacing: .1em; letter-spacing: .08em; text-transform: uppercase; text-align: left; font-size: 10pt}
 #pluginconfig, #i2pupdates, .homelinkedit, #peerdefs {margin-top: -1px}
@@ -1536,7 +1536,7 @@ textarea#advancedsettings {margin: 0; padding-top: 3px; width: 100%; overflow-x:
 /* bandwidth */
 #config_bandwidth .h3navlinks a:active {filter: none; transform: scale(.9)}
 #config_bandwidth .h3navlinks a:hover {filter: drop-shadow(0 0 1px #f60) drop-shadow(0 0 2px #f60)}
-#config_bandwidth .h3navlinks a {margin-bottom: -9px; padding-top: 7px; width: 24px; color: transparent; background: url(../images/networkconfig.svg) no-repeat calc(100% - 8px) center / 22px; text-shadow: none; border: none; contain: paint}
+#config_bandwidth .h3navlinks a {margin-bottom: -12px; padding-top: 12px; width: 24px; color: transparent; background: url(../images/networkconfig.svg) no-repeat calc(100% - 6px) 4px / 22px; text-shadow: none; border: none; contain: paint}
 #config_bandwidth .h3navlinks {margin: -10px 0 -11px; padding: 11px 0 10px; display: inline-block; border-left: var(--border)}
 #configbandwidth img {margin: -1px 10px 0; display: inline-block}
 
@@ -2630,7 +2630,7 @@ input[type=submit], input[type=reset], button {padding: 8px 12px}
 h1[class], h1, h1.conf.adv {padding: 14px 15px 14px 65px; font-size: 20pt; background-size: 40px, 2px, 100% 4px, 100%, 164px; background-position: 15px center}
 .h3navlinks a {padding: 10px 10px 10px 17px}
 .h3navlinks a:first-child, #config_service .h3navlinks a:last-child {margin-right: 0}
-.h3navlinks a:last-child {margin-right: -2px}
+.h3navlinks a:last-child {margin-right: 2px}
 #applinks, #sitelinks {padding: 9px 10px 8px 35px}
 #applinks a::after, #sitelinks a::after {margin-left: 11px}
 h4#updateplugins {margin-top: -15px}
