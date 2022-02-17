@@ -413,7 +413,7 @@
 <%
         }  else { // haveImagegen
 %>
-<a href="details?h=${addr.name}&amp;book=${book.book}" title="<%=intl._t("More information on this entry")%>"><img width=20 height=20 src="/themes/console/images/svg/info.svg"></a>
+<a href="details?h=${addr.name}&amp;book=${book.book}" title="<%=intl._t("More information on this entry")%>"><img width=20 height=20 src="/themes/console/images/info.svg"></a>
 <%
         }
 %>

@@ -1,2295 +1,396 @@
 /* Susimail "Light" theme */
+
 /* Codename: "Corporat" */
+
 /* Author: dr|z3d */
 
 @import url(/themes/console/light/global.css);
 @import url(../images/images.css);
 @import url(images/images.css);
 
-body {
-  margin: 5px;
-  background: var(--bodybg) url(/themes/console/light/images/tile2.png);
-}
-
-/* preload button mouseovers */
-body {
-  background: url(/themes/console/light/images/tile2.png),
-  var(--compose_hover),
-  var(--login_hover),
-  var(--logout_hover),
-  var(--offline_hover),
-  var(--save_hover),
-  var(--send_hover),
-  var(--configure_hover),
-  var(--refresh_hover), var(--bodybg) !important;
-  background-size: 32px, 0, 0, 0, 0, 0, 0, 0, 0 !important;
-}
-
-body.iframed {
-  margin: 5px 0 0 0;
-  background: transparent !important;
-}
-
-.pagenav, .sort, .topbuttons, h3, .footer, .bottombuttons, .topbuttons, th img, h3, #dologin, th, #loading  {
-  user-select: none;
-}
-
-b, h3, .pagenav td, th {
-  color: #5b5b71;
-  text-shadow: 0 1px 1px #fff;
-}
-
-li {
-  margin-left: 5px;
-  margin-right: 5px;
-  line-height: 12pt;
-  font-size: 8.5pt;
-  color: var(--ink);
-}
-
-p {
-  margin-left: 15px;
-  margin-right: 15px;
-  font-size: 8.5pt;
-  color: var(--ink);
-}
-
-p.hl {
-  line-height: 18pt;
-  letter-spacing: 2pt;
-  font-size: 12pt;
-  font-weight: 700;
-}
-
-p.text {
-  margin-left: 10px;
-  margin-right: 10px;
-}
-
-p.error, p.info {
-  font-size: 10pt;
-}
-
-p.error {
-  color: #c00;
-}
-
-p.info {
-  color: #030;
-}
-
-tr.mailbody, #message_full tr:first-child {
-  box-shadow: var(--highlight);
-  background: #fafaff;
-}
-
-#mailhead tr {
-  box-shadow: none !important;
-}
-
-tr.mailbody td {
-  padding: 0;
-  width: 100%;
-  word-break: normal;
-  word-wrap: normal;
-}
-
-.mailbody p.info {
-  margin: 10px 0;
-  padding: 20px 10px;
-  width: calc(100% - 40px);
-  display: block;
-  font-weight: 700;
-  color: #900;
-  border: 1px solid #575775;
-  border-radius: 2px;
-  box-shadow: inset 0 0 1px #f00;
-  background: #ffe;
-  filter: drop-shadow(0 0 1px #999);
-}
-
-p.mailbody + p.info {
-  margin-top: -47px;
-}
-
-span.coloured {
-  color: #327bbf;
-}
-
-div.header, .iframed .header {
-  display: none;
-}
-
-div.footer {
-  margin: -6px -1px -3px;
-  border-top: none;
-  border: 1px solid #8d8daa;
-  box-shadow: var(--highlight);
-  background: linear-gradient(90deg, rgba(232,232,255,.3) 15%, rgba(255,255,255,.8) 50%, rgba(232,232,255,.3) 85%),
-    repeating-linear-gradient(180deg,#fff 1px, #ddf 2px, #fff 3px);
-}
-
-p.footer {
-  margin: 0;
-  padding: 3px;
-  line-height: 10pt;
-  text-align: center;
-  font-size: 8pt;
-  color: #449 !important;
-}
-
-p.footer a {
-  font-size: 8pt !important;
-}
-
-p.footer, p.footer b {
-  color: #449 !important;
-  text-shadow: 0 0 1px #fff;
-}
-
-.iframed .footer {
-  display: none;
-}
-
-.footer hr {
-  display: none;
-}
-
-p.mailbody {
-  margin-top: 0;
-  padding: 0 0 15px;
-  line-height: 130%;
-  text-align: left;
-  word-break: break-all; /* required to ensure super long strings don't break the layout*/
-  font: 9pt var(--monospaced);
-}
-
-a {
-  color: #327bbf;
-  text-decoration:none;
-  font-weight: 700;
-  outline: none;
-}
-
-.linkspam {
-  color: #927b40;
-}
-
-.linknew {
-  color: #327b40;
-}
-
-.linkold {
-  color: #327bbf;
-}
-
-a:hover, a:focus, tr:hover td[onclick] a {
-  text-decoration: none;
-  color: #f60 !important;
-}
-
-a:visited {
-  color: #6b97bf;
-}
-
-a:active, tr:hover td[onclick]:active a {
-  color: #f30 !important;
-}
-
-.noborder {
-  margin-left: 0;
-  margin-top: 0;
-  margin-right: 0;
-}
-
-pre {
-  font: 9pt var(--monospaced);
-  margin-left: 10px;
-  margin-right: 10px;
-}
-
-.page {
-  margin: 0;
-  padding: 10px 10px 0;
-  min-width: 600px;
-  line-height: 160% !important;
-  text-align: center;
-  font-size: 8.5pt !important;
-  color: var(--ink);
-  box-shadow: inset 0 0 0 1px rgba(185,185,198,.65);
-  border: 1px solid #575775;
-  border-radius: 2px 2px 0 0;
-  background-color: #fcfcff;
-}
-
-.iframed .page {
-  margin: 0;
-  padding: 1px;
-  min-width: 600px;
-  border: none;
-  border-radius: 0;
-  box-shadow: none;
-  background: transparent;
-}
-
-table {
-  width: 100%;
-}
-
-th {
-  font-size: 9pt;
-  font-weight: 700;
-  vertical-align: middle;
-}
-
-.spacer {
-  display: none;
-}
-
-form {
-  line-height: 160%;
-  border-top: none;
-}
-
-.header + form {
-  border: 1px solid #8d8daa;
-  border-radius: 2px 2px 0 0;
-  box-shadow: 0 0 1px 1px rgba(220,220,255,.3);
-  background: linear-gradient(180deg,#f8f8ff, #f2f2ff);
-}
-
-.iframed form {
-  margin-bottom: 8px !important;
-}
+body {margin: 5px; background: var(--bodybg) url(/themes/console/light/images/tile2.png)}
+body {background: url(/themes/console/light/images/tile2.png), var(--compose_hover), var(--login_hover), var(--logout_hover), var(--offline_hover), var(--save_hover), var(--send_hover), var(--configure_hover), var(--refresh_hover), var(--bodybg); background-size: 32px, 0, 0, 0, 0, 0, 0, 0, 0}
+body.iframed {margin: 5px 0 0 0; background: transparent}
+.pagenav, .sort, .topbuttons, h3, .footer, .bottombuttons, .topbuttons, th img, h3, #dologin, th, #loading{user-select: none}
+b, h3, .pagenav td, th {color: #5b5b71; text-shadow: 0 1px 1px #fff}
+li {margin-left: 5px; margin-right: 5px; line-height: 12pt; font-size: 8.5pt; color: var(--ink)}
+p {margin-left: 15px; margin-right: 15px; font-size: 8.5pt; color: var(--ink)}
+p.hl {line-height: 18pt; letter-spacing: 2pt; font-size: 12pt; font-weight: 700}
+p.text {margin-left: 10px; margin-right: 10px}
+p.error, p.info {font-size: 10pt}
+p.error {color: #c00}
+p.info {color: #030}
+tr.mailbody, #message_full tr:first-child {box-shadow: var(--highlight); background: #fafaff}
+#mailhead tr {box-shadow: none}
+.mailbody td {padding: 0; width: 100%; word-break: normal; word-wrap: normal}
+.mailbody p.info {margin: 10px 0; padding: 20px 10px; width: calc(100% - 40px); display: block; font-weight: 700; color: #900; border: 1px solid #575775; border-radius: 2px; box-shadow: inset 0 0 1px #f00; background: #ffe; filter: drop-shadow(0 0 1px #999)}
+p.mailbody + p.info {margin-top: -47px}
+span.coloured {color: #327bbf}
+div.header, .iframed .header {display: none}
+div.footer {margin: -6px -1px -3px; border-top: none; border: 1px solid var(--border_inner); box-shadow: var(--highlight); background: linear-gradient(90deg, rgba(232,232,255,.3) 15%, rgba(255,255,255,.8) 50%, rgba(232,232,255,.3) 85%), repeating-linear-gradient(180deg,#fff 1px, #ddf 2px, #fff 3px)}
+p.footer {margin: 0; padding: 3px; line-height: 10pt; text-align: center; font-size: 8pt; color: #449}
+p.footer a {font-size: 8pt}
+p.footer, p.footer b {color: #449; text-shadow: 0 0 1px #fff}
+.iframed .footer {display: none}
+.footer hr {display: none}
+p.mailbody {margin-top: 0; padding: 0 0 15px; line-height: 130%; text-align: left; word-break: break-all; /* required to ensure super long strings don't break the layout*/
+font: 9pt var(--monospaced)}
+a {color: #327bbf; text-decoration:none; font-weight: 700; outline: none}
+.linkspam {color: #927b40}
+.linknew {color: #327b40}
+.linkold {color: #327bbf}
+a:hover, a:focus, tr:hover td[onclick] a {text-decoration: none; color: var(--hover)}
+a:visited {color: #6b97bf}
+a:active, tr:hover td[onclick]:active a {color: var(--active)}
+a.fakebutton {font-weight: 400; color: var(--ink)}
+.noborder {margin-left: 0; margin-top: 0; margin-right: 0}
+pre {font: 9pt var(--monospaced); margin-left: 10px; margin-right: 10px}
+.page {margin: 0; padding: 10px 10px 0; min-width: 600px; line-height: 160%; text-align: center; font-size: 8.5pt; color: var(--ink); box-shadow: inset 0 0 0 1px rgba(185,185,198,.65); border: var(--border_soft); border-radius: 2px 2px 0 0; background-color: #fcfcff}
+.iframed .page {margin: 0; padding: 1px; min-width: 600px; border: none; border-radius: 0; box-shadow: none; background: transparent}
+table {width: 100%}
+th {font-size: 9pt; font-weight: 700; vertical-align: middle}
+.spacer {display: none}
+form {line-height: 160%; border-top: none}
+.header + form {border: 1px solid var(--border_inner); border-radius: 2px 2px 0 0; box-shadow: 0 0 1px 1px rgba(220,220,255,.3); background: linear-gradient(180deg,#f8f8ff, #f2f2ff)}
+.iframed form {margin-bottom: 8px}
 
 /* message view */
-
-#message_full {
-  margin: 0;
-  padding: 0 !important;
-  border-collapse: separate;
-  border-spacing: 0;
-}
-
-.iframed #message_full {
-  border-bottom: none;
-}
-
-#message_full tr:first-child {
-  background: #efefff;
-  background: rgba(220,220,255,.2);
-}
-
-#message_full tr:first-child td {
-  border-bottom: 1px solid #8d8daa;
-  background: none !important;
-}
-
-#mailhead {
-  padding: 0;
-  margin: 0;
-}
-
-#mailhead td {
-  border: none !important;
-  padding: 3px;
-}
-
-#mailhead hr, .mailbody hr {
-  display: none;
-}
-
-#mailhead tr:first-child {
-  background: none;
-}
-
-#mailhead td:first-child {
-  width: 1%;
-  min-width: 60px;
-  white-space: nowrap;
-  font-weight: 700;
-  color: #5b5b71;
-}
-
-/* end message view */
+#message_full {margin: 0; padding: 0; border-collapse: separate; border-spacing: 0}
+.iframed #message_full {border-bottom: none}
+#message_full tr:first-child {background: #efefff; background: rgba(220,220,255,.2)}
+#message_full table:not(#mailhead) tr:first-child td {border-bottom: 1px solid var(--border_inner); background: none}
+#mailhead {padding: 0; margin: 0}
+#mailhead td {padding: 3px; vertical-align: text-bottom; border: none}
+#mailhead hr, .mailbody hr {display: none}
+#mailhead tr:first-child {background: none}
+#mailhead td:first-child {width: 1%; min-width: 60px; white-space: nowrap; font-weight: 700; color: #5b5b71}
 
 /* buttons and inputs */
-
-button::-moz-focus-inner, input[type= ]::-moz-focus-inner, input[type=reset]::-moz-focus-inner {
-  outline: none;
-  border: none;
-}
-
-input, label {
-  cursor: pointer;
-}
-
-label:hover {
-  color: #000;
-}
-
-#attachedfile input[type=checkbox]:hover, #attachedfile input[type=checkbox]:focus,
-.mailListDelete input[type=checkbox]:hover, .mailListDelete input[type=checkbox]:focus {
-  filter: sepia(100%) hue-rotate(185deg) drop-shadow(0 0 2px #933);
-}
-
-input[type=text], input[type=password] {
-  cursor: text;
-  font-family: var(--bodyfont);
-  font-size: 9pt;
-}
-
-input[type=submit], input[type=reset], #settings, .fakebutton {
-  margin: 3px;
-  padding: 4px 5px;
-  font: 9pt var(--bodyfont);
-  text-decoration: none;
-  text-shadow: 0 1px 1px #fff;
-  color: var(--ink) !important;
-  border: 1px solid #9ea8d1;
-  border-radius: 2px;
-  box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
-  background: var(--btn);
-  background-size: 14px, 100% !important;
-  cursor: pointer;
-  opacity: 1;
-  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));;
-}
-
-input[type=submit]:hover, input[type=reset]:hover, input[type=submit]:focus, input[type=reset]:focus,
-#settings:hover, #settings:focus, .fakebutton:hover, .fakebutton:focus {
-  color: #222 !important;
-  border: 1px solid #f60;
-  box-shadow: var(--highlight), inset 0 -8px 3px 8px rgba(255,96,0,.02), inset 0 0 10px rgba(255,96,0,.05), 0 0 1px rgba(255,96,0,.1), 0 7px 4px -4px rgba(0,0,0,.1);
-  filter: drop-shadow(0 0 1px rgba(204, 204, 204, .8));
-  transition: ease border .7s;
-}
-
-input[type=submit]:active, input[type=reset]:active,
-#settings:active, .fakebutton:active {
-  box-shadow: var(--highlight), inset 2px 2px 2px #999;
-  color: #555 !important;
-  background-blend-mode: luminosity;
-  border: 1px solid #f30;
-}
-
-input[disabled], input[disabled]:hover, input[disabled]:focus {
-  opacity: .4;
-  cursor: default;
-  border: 1px solid #9ea8d1;
-  pointer-events: none;
-}
-
-input.cancel, #nukemail input.clearselection {
-  padding: 5px 7px 5px 22px;
-  background: var(--no) no-repeat 6px center / 12px, var(--btn) !important;
-}
-
-input.cancel:hover, #nukemail input.clearselection:hover {
-  background: var(--no) no-repeat 6px center / 12px, var(--btn_hover) !important;
-}
-
-input.clearselection {
-  padding: 5px 7px 5px 24px;
-  background: url(../images/none.png) no-repeat 6px center, var(--btn);
-}
-
-input.clearselection:hover {
-  background: url(../images/none.png) no-repeat 6px center, var(--btn_hover);
-}
-
-input.delete, input.delete_attachment, input.really_delete {
-  padding: 5px 7px 5px 24px;
-  background: var(--delete) no-repeat 6px center / 14px, var(--btn);
-}
-
-input.delete:hover, input.delete_attachment:hover, input.really_delete:hover {
-  background: var(--delete_hover) no-repeat 6px center / 14px, var(--btn_hover);
-}
-
-input.download {
-  padding: 5px 7px 5px 24px;
-  background: var(--download) no-repeat 6px center, var(--btn);
-}
-
-input.download:hover {
-  background: var(--download_hover) no-repeat 6px center, var(--btn_hover);
-}
-
-input.offline {
-  padding: 5px 7px 5px 24px;
-  background: var(--offline) no-repeat 6px center, var(--btn);
-}
-
-input.offline:hover {
-  background: var(--offline_hover) no-repeat 6px center, var(--btn_hover);
-}
-
-input.list, input.moveto, #pagenav input.switchto {
-  padding: 5px 7px 5px 24px;
-  background: var(--folder) no-repeat 6px center, var(--btn);
-}
-
-input.list:hover, input.moveto:hover, #pagenav input.switchto:hover {
-  background: var(--folder_hover) no-repeat 6px center, var(--btn_hover);
-}
-
-input.forward {
-  padding: 5px 7px 5px 24px;
-  background: var(--forward) no-repeat 6px center, var(--btn);
-}
-
-input.forward:hover {
-  background: var(--forward_hover) no-repeat 6px center, var(--btn_hover);
-}
-
-input.login {
-  padding: 5px 7px 5px 24px;
-  background: var(--login) no-repeat 6px center, var(--btn);
-}
-
-input.login:hover {
-  background: var(--login_hover) no-repeat 6px center, var(--btn_hover);
-}
-
-input.logout {
-  padding: 5px 7px 5px 24px;
-  background: var(--logout) no-repeat 6px center, var(--btn);
-}
-
-input.logout:hover {
-  background: var(--logout_hover) no-repeat 6px center, var(--btn_hover);
-}
-
-input.reload, input.refresh, input[name="refresh"][disabled], .fakebutton {
-  padding: 5px 7px 5px 22px;
-  background: var(--refresh) no-repeat 6px center / 12px, var(--btn) !important;
-}
-
-.fakebutton {
-  margin-top: 2px;
-  padding-left: 24px;
-  line-height: 1.3
-}
-
-.fakebutton:not(#settings) {
-  float: left;
-}
-
-input[name="refresh"][disabled] {
-  margin-top: 2px;
-}
-
-input.reload:hover, input.refresh:hover, .fakebutton:hover {
-  background: var(--refresh_hover) no-repeat 6px center / 12px, var(--btn_hover) !important;
-}
-
-input.invertselection {
-  padding: 5px 7px 5px 24px;
-  background: url(../images/selection.png) no-repeat 6px center, var(--btn);
-}
-
-input.invertselection:hover {
-  background: url(../images/selection.png) no-repeat 6px center, var(--btn_hover);
-}
-
-input.show {
-  padding: 5px 7px 5px 24px;
-  background: var(--yes) no-repeat 6px center / 12px, var(--btn);
-}
-
-input.show:hover {
-  padding: 5px 7px 5px 24px;
-  background: var(--yes) no-repeat 6px center / 12px, var(--btn_hover);
-}
-
-input.markall {
-  padding: 5px 7px 5px 24px;
-  background: url(../images/all.png) no-repeat 6px center, var(--btn);
-}
-
-input.markall:hover {
-  background: url(../images/all.png) no-repeat 6px center, var(--btn_hover);
-}
-
-input.new {
-  padding: 5px 7px 5px 24px;
-  background: var(--compose) no-repeat 6px center, var(--btn);
-}
-
-input.new:hover {
-  background: var(--compose_hover) no-repeat 6px center, var(--btn_hover);
-}
-
-input.reply {
-  padding: 5px 7px 5px 24px;
-  background: var(--reply) no-repeat 6px center, var(--btn);
-}
-
-input.reply:hover {
-  background: var(--reply_hover) no-repeat 6px center, var(--btn_hover);
-}
-
-input.replyall {
-  padding: 5px 7px 5px 24px;
-  background: var(--replyall) no-repeat 6px center, var(--btn);
-}
-
-input.replyall:hover {
-  background: var(--replyall_hover) no-repeat 6px center, var(--btn_hover);
-}
-
-input.markall {
-  margin-right: 0 !important;
-}
-
-input.setpagesize, input.save {
-  padding: 5px 7px 5px 24px;
-  background: var(--yes) no-repeat 6px center / 12px, var(--btn);
-}
-
-input.setpagesize {
-  padding-right: 9px !important;
-}
-
-input.send {
-  padding: 5px 10px 5px 28px;
-  background: var(--send) no-repeat 8px center, var(--btn);
-}
-
-input.send:hover {
-  background: var(--send_hover) no-repeat 8px center, var(--btn_hover);
-}
-
-input.send + input.cancel {
-  padding-right: 10px;
-}
-
-input.configure, #settings {
-  padding: 5px 7px 5px 24px;
-  background: var(--configure) no-repeat 6px center, var(--btn);
-}
-
-input.configure:hover, #settings:hover {
-  background: var(--configure_hover) no-repeat 6px center, var(--btn_hover);
-}
-
-input.saveas, input.saveasdraft {
-  padding: 5px 7px 5px 24px;
-  background: var(--save) no-repeat 6px center, var(--btn);
-}
-
-input.saveas:hover, input.saveasdraft:hover {
-  background: var(--save_hover) no-repeat 6px center, var(--btn_hover);
-}
-
-input.new_upload {
-  padding: 5px 7px 5px 24px;
-  background: var(--attach) no-repeat 6px center, var(--btn);
-}
-
-input.new_upload:hover {
-  background: var(--attach_hover) no-repeat 6px center, var(--btn_hover);
-}
-
-input.new_upload {
-  float: right;
-  margin-right: 0;
-}
-
-/* end buttons and inputs */
-
-.bottombuttoms td[colspan="4"] {
-  padding-right: 1px;
-}
+button::-moz-focus-inner, input[type= ]::-moz-focus-inner, input[type=reset]::-moz-focus-inner {outline: none; border: none}
+input, label {cursor: pointer}
+label:hover {color: #000}
+#attachedfile input[type=checkbox]:hover, #attachedfile input[type=checkbox]:focus, .mailListDelete input[type=checkbox]:hover, .mailListDelete input[type=checkbox]:focus {filter: sepia(100%) hue-rotate(185deg) drop-shadow(0 0 2px #933)}
+input[type=text], input[type=password] {cursor: text; font-family: var(--bodyfont); font-size: 9pt}
+input[type=submit], input[type=reset], #settings, .fakebutton {margin: 3px; padding: 4px 5px; font: 9pt var(--bodyfont); text-decoration: none; text-shadow: 0 1px 1px #fff; color: var(--ink); border: 1px solid #9ea8d1; border-radius: 2px; box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1); background: var(--btn); background-size: 14px, 100%; cursor: pointer; opacity: 1; filter: drop-shadow(0 0 1px rgba(220,220,255,.7));}
+input[type=submit]:hover, input[type=reset]:hover, input[type=submit]:focus, input[type=reset]:focus, #settings:hover, #settings:focus, .fakebutton:hover, .fakebutton:focus {color: #222; border: 1px solid var(--hover); box-shadow: var(--highlight), inset 0 -8px 3px 8px rgba(255,96,0,.02), inset 0 0 10px rgba(255,96,0,.05), 0 0 1px rgba(255,96,0,.1), 0 7px 4px -4px rgba(0,0,0,.1); filter: drop-shadow(0 0 1px rgba(204, 204, 204, .8)); transition: ease border .7s}
+input[type=submit]:active, input[type=reset]:active, #settings:active, .fakebutton:active {box-shadow: var(--highlight), inset 2px 2px 2px #999; color: #555; background-blend-mode: luminosity; border: 1px solid var(--active)}
+input.cancel, #nukemail input.clearselection {padding: 5px 7px 5px 22px; background: var(--no) no-repeat 6px center / 12px, var(--btn)}
+input.cancel:hover, #nukemail input.clearselection:hover {background: var(--no) no-repeat 6px center / 12px, var(--btn_hover)}
+input.clearselection {padding: 5px 7px 5px 24px; background: url(../images/none.png) no-repeat 6px center / 14px, var(--btn)}
+input.clearselection:hover {background: url(../images/none.png) no-repeat 6px center / 14px, var(--btn_hover)}
+input.delete, input.delete_attachment, input.really_delete {padding: 5px 7px 5px 24px; background: var(--delete) no-repeat 6px center / 14px, var(--btn)}
+input.delete:hover, input.delete_attachment:hover, input.really_delete:hover {background: var(--delete_hover) no-repeat 6px center / 14px, var(--btn_hover)}
+input.download {padding: 5px 7px 5px 24px; background: var(--download) no-repeat 6px center / 14px, var(--btn)}
+input.download:hover {background: var(--download_hover) no-repeat 6px center / 14px, var(--btn_hover)}
+input.offline {padding: 5px 7px 5px 24px; background: var(--offline) no-repeat 6px center / 14px, var(--btn)}
+input.offline:hover {background: var(--offline_hover) no-repeat 6px center / 14px, var(--btn_hover)}
+input.list, input.moveto, #pagenav input.switchto {padding: 5px 7px 5px 24px; background: var(--folder) no-repeat 6px center / 14px, var(--btn)}
+input.list:hover, input.moveto:hover, #pagenav input.switchto:hover {background: var(--folder_hover) no-repeat 6px center / 14px, var(--btn_hover)}
+input.forward {padding: 5px 7px 5px 24px; background: var(--forward) no-repeat 6px center / 14px, var(--btn)}
+input.forward:hover {background: var(--forward_hover) no-repeat 6px center / 14px, var(--btn_hover)}
+input.login {padding: 5px 7px 5px 24px; background: var(--login) no-repeat 6px center / 14px, var(--btn)}
+input.login:hover {background: var(--login_hover) no-repeat 6px center / 14px, var(--btn_hover)}
+input.logout {padding: 5px 7px 5px 24px; background: var(--logout) no-repeat 6px center / 14px, var(--btn)}
+input.logout:hover {background: var(--logout_hover) no-repeat 6px center / 14px, var(--btn_hover)}
+.fakebutton {margin-top: 2px; padding-left: 24px; line-height: 1.3}
+.fakebutton.script {padding: 5px 7px; font-weight: 400; background: var(--btn)}
+.fakebutton:not(#settings) {float: left}
+#dologin .fakebutton {display: inline-block; margin-top: -1px}
+input.reload, input.refresh, input[name="refresh"][disabled], .fakebutton {padding: 5px 7px 5px 22px; background: var(--refresh) no-repeat 6px center / 12px, var(--btn)}
+input[name="refresh"][disabled] {margin-top: 2px}
+input.reload:hover, input.refresh:hover, .fakebutton:hover {background: var(--refresh_hover) no-repeat 6px center / 12px, var(--btn_hover)}
+.fakebutton.script:hover {background: var(--btn_hover)}
+input.invertselection {padding: 5px 7px 5px 24px; background: url(../images/selection.png) no-repeat 6px center / 14px, var(--btn)}
+input.invertselection:hover {background: url(../images/selection.png) no-repeat 6px center / 14px, var(--btn_hover)}
+input.show {padding: 5px 7px 5px 24px; background: var(--yes) no-repeat 6px center / 12px, var(--btn)}
+input.show:hover {padding: 5px 7px 5px 24px; background: var(--yes) no-repeat 6px center / 12px, var(--btn_hover)}
+input.markall {padding: 5px 7px 5px 24px; background: url(../images/all.png) no-repeat 6px center / 14px, var(--btn)}
+input.markall:hover {background: url(../images/all.png) no-repeat 6px center / 14px, var(--btn_hover)}
+input.new {padding: 5px 7px 5px 24px; background: var(--compose) no-repeat 6px center / 14px, var(--btn)}
+input.new:hover {background: var(--compose_hover) no-repeat 6px center / 14px, var(--btn_hover)}
+input.reply {padding: 5px 7px 5px 24px; background: var(--reply) no-repeat 6px center / 14px, var(--btn)}
+input.reply:hover {background: var(--reply_hover) no-repeat 6px center / 14px, var(--btn_hover)}
+input.replyall {padding: 5px 7px 5px 24px; background: var(--replyall) no-repeat 6px center / 14px, var(--btn)}
+input.replyall:hover {background: var(--replyall_hover) no-repeat 6px center / 14px, var(--btn_hover)}
+input.markall {margin-right: 0}
+input.setpagesize, input.save {padding: 5px 7px 5px 24px; background: var(--yes) no-repeat 6px center / 12px, var(--btn)}
+input.setpagesize {padding-right: 9px}
+input.send {padding: 5px 10px 5px 28px; background: var(--send) no-repeat 8px center, var(--btn)}
+input.send:hover {background: var(--send_hover) no-repeat 8px center, var(--btn_hover)}
+input.send + input.cancel {padding-right: 10px}
+input.configure, #settings {padding: 5px 7px 5px 24px; background: var(--configure) no-repeat 6px center / 14px, var(--btn)}
+input.configure:hover, #settings:hover {background: var(--configure_hover) no-repeat 6px center / 14px, var(--btn_hover)}
+input.saveas, input.saveasdraft {padding: 5px 7px 5px 24px; background: var(--save) no-repeat 6px center / 14px, var(--btn)}
+input.saveas:hover, input.saveasdraft:hover {background: var(--save_hover) no-repeat 6px center / 14px, var(--btn_hover)}
+input.new_upload {padding: 5px 7px 5px 24px; background: var(--attach) no-repeat 6px center / 14px, var(--btn)}
+input.new_upload:hover {background: var(--attach_hover) no-repeat 6px center / 14px, var(--btn_hover)}
+input.new_upload {float: right; margin-right: 0}
+.bottombuttoms td[colspan="4"] {padding-right: 1px}
 
 /* pagenav */
-
-.pagenav tr {
-  display: table-row !important;
-  border: none;
-}
-
-.pagenav td {
-  border: none !important;
-}
-
-#messagenav {
-  float: right;
-  margin-right: -1px;
-  margin-left: -7px;
-}
-
-input.firstpage, input[name="firstpage"],
-input.firstpage[disabled]:hover, input[name="firstpage"][disabled]:hover {
-  padding: 4px 10px;
-  text-indent: -99999px;
-  background: var(--first) no-repeat center center, var(--btn);
-}
-
-input.firstpage:hover, input[name="firstpage"]:hover {
-  background: var(--first_hover) no-repeat center center, var(--btn_hover);
-}
-
-input.lastpage, input[name="lastpage"],
-input.lastpage[disabled]:hover, input[name="lastpage"][disabled]:hover {
-  padding: 4px 10px;
-  text-indent: -99999px;
-  background: var(--last) no-repeat center center, var(--btn);
-}
-
-input.lastpage:hover, input[name="lastpage"]:hover {
-  background: var(--last_hover) no-repeat center center, var(--btn_hover);
-}
-
-input.prevpage, input.prev, input[name="prev"], input[name="prevpage"],
-input.prevpage[disabled]:hover, input.prev[disabled]:hover, input[name="prev"][disabled]:hover, input[name="prevpage"][disabled]:hover {
-  padding: 4px 10px;
-  text-indent: -99999px;
-  background: var(--previous) no-repeat center center, var(--btn);
-}
-
-input[name="prev"]:hover, input[name="prevpage"]:hover {
-  background: var(--previous_hover) no-repeat center center, var(--btn_hover);
-}
-
-input.nextpage, input.next, input[name="nextpage"], input[name="next"],
-input.nextpage[disabled]:hover, input.next[disabled]:hover, input[name="nextpage"][disabled]:hover, input[name="next"][disabled]:hover {
-  padding: 4px 10px;
-  text-indent: -99999px;
-  background: var(--next) no-repeat center center, var(--btn);
-}
-
-input.nextpage:hover, input.next:hover, input[name="nextpage"]:hover {
-  background: var(--next_hover) no-repeat center center, var(--btn_hover);
-}
-
-input[disabled] {
-  pointer-events: none;
-}
-
-@supports (position: sticky) {
-  #pagenavbottom {display: none}
-}
-
-#pagenavbottom, #mailbox #pagenavbottom td {
-  border-top: 1px solid #8d8daa;
-  box-shadow: none !important;
-  position: relative;
-  z-index: 100;
-}
-
-#pagenavbottom td {
-  text-align: center !important;
-  padding: 2px;
-  background: linear-gradient(180deg,#fafaff 50%, rgba(220,220,255,.3)),
-    repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px), #fff !important;
-}
-
-#pagenavbottom table {
-  float: none;
-}
-
-.pagenavcontrols {
-  line-height: 100%;
-}
-
-.pagenavcontrols td, .bottombuttons td {
-  box-shadow: none !important;
-}
-
-.pagenavcontrols input {
-  min-width: 26px;
-  min-height: 26px;
-}
-
-.pagecount {
-  margin: 0 !important;
-  padding: 4px 0;
-  width: 70px;
-  display: inline-block;
-  text-align: center !important;
-  color: #54586f;
-  border: var(--badgeborder);
-  border-radius: 2px;
-  background: var(--badge);
-}
-
-.pagenav input[disabled] {
-  display: inline-block !important;
-}
-
-tr.bottombuttons .pagenav {
-  margin: 0;
-  width: 100%;
-}
-
-.pagenav input {
-  margin: 2px 1px !important;
-  float: none;
-}
-
-.pagenav input[name="prevpage"] {
-  margin-right: 5px !important;
-}
-
-.pagenav input[name="nextpage"] {
-  margin-left: 5px !important;
-}
-
-.pagenav input[disabled]:hover, .pagenav input[disabled]:active {
-  box-shadow: var(--highlight) !important;
-}
-
-.topbuttons div.pagenav {
-  margin-top: 10px;
-  display: inline-block;
-}
-
-.pagenavcontainer, #messagenav {
-  float: right;
-  position: absolute;
-  top: 6px;
-  right: 22px;
-}
-
-.iframed .pagenavcontainer {
-  top: 4px;
-}
-
-#messagenav {
-  right: 6px !important;
-}
-
-#messagenav > * {
-  vertical-align: middle;
-}
-
-.pagenav {
-  margin: -2px -20px -3px 0 !important;
-  padding: 2px;
-  max-width: 170px;
-  width: auto !important;
-  display: inline-block;
-  white-space: nowrap;
-  border-collapse: separate;
-  border-spacing: 0;
-}
-
-.iframed .pagenav {
-  margin-right: -5px !important;
-}
-
-.pagenav td {
-  white-space: nowrap;
-  font-size: 10pt;
-  font-weight: 700;
-  padding: 1px 2px;
-  text-align: center;
-  font-style: italic;
-}
-
-.pagenav td:first-child {
-  text-align: right;
-  width: 49%;
-}
-
-.pagenav td:last-child {
-  text-align: left;
-  width: 49%;
-}
-
-.pagenav td:nth-child(2) {
-  width: 2%;
-  white-space: nowrap;
-}
-
-.topbuttons .pagenavcontrols {
-  padding-top: 5px !important;
-}
-
-.pagenavcontrols > * {
-  vertical-align: middle;
-}
-
-/* end pagenav */
+.pagenav tr {display: table-row; border: none}
+.pagenav td {border: none}
+#messagenav {float: right; margin-right: -1px; margin-left: -7px}
+input.firstpage, input[name="firstpage"], input.firstpage[disabled]:hover, input[name="firstpage"][disabled]:hover {padding: 4px 10px; text-indent: -99999px; background: var(--first) no-repeat center center / 14px, var(--btn)}
+input.firstpage:hover, input[name="firstpage"]:hover {background: var(--first_hover) no-repeat center center / 14px, var(--btn_hover)}
+input.lastpage, input[name="lastpage"], input.lastpage[disabled]:hover, input[name="lastpage"][disabled]:hover {padding: 4px 10px; text-indent: -99999px; background: var(--last) no-repeat center center / 14px, var(--btn)}
+input.lastpage:hover, input[name="lastpage"]:hover {background: var(--last_hover) no-repeat center center / 14px, var(--btn_hover)}
+input.prevpage, input.prev, input[name="prev"], input[name="prevpage"], input.prevpage[disabled]:hover, input.prev[disabled]:hover, input[name="prev"][disabled]:hover, input[name="prevpage"][disabled]:hover {padding: 4px 10px; text-indent: -99999px; background: var(--previous) no-repeat center center / 14px, var(--btn)}
+input[name="prev"]:hover, input[name="prevpage"]:hover {background: var(--previous_hover) no-repeat center center / 14px, var(--btn_hover)}
+input.nextpage, input.next, input[name="nextpage"], input[name="next"], input.nextpage[disabled]:hover, input.next[disabled]:hover, input[name="nextpage"][disabled]:hover, input[name="next"][disabled]:hover {padding: 4px 10px; text-indent: -99999px; background: var(--next) no-repeat center center / 14px, var(--btn)}
+input.nextpage:hover, input.next:hover, input[name="nextpage"]:hover {background: var(--next_hover) no-repeat center center / 14px, var(--btn_hover)}
+input[disabled] {pointer-events: none}
+#pagenavbottom, #mailbox #pagenavbottom td {border-top: 1px solid var(--border_inner); box-shadow: none; position: relative; z-index: 100}
+#pagenavbottom td {text-align: center; padding: 2px; background: linear-gradient(180deg,#fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px), #fff}
+#pagenavbottom table {float: none}
+.pagenavcontrols {line-height: 100%}
+.pagenavcontrols td, .bottombuttons td {box-shadow: none}
+.pagenavcontrols input {min-width: 26px; min-height: 26px}
+.pagecount {margin: 0; padding: 4px 0; width: 70px; display: inline-block; text-align: center; color: #54586f; border: var(--badgeborder); border-radius: 2px; background: var(--badge)}
+.pagenav input[disabled] {display: inline-block}
+tr.bottombuttons .pagenav {margin: 0; width: 100%}
+.pagenav input {margin: 2px 1px; float: none}
+.pagenav input[name="prevpage"] {margin-right: 5px}
+.pagenav input[name="nextpage"] {margin-left: 5px}
+.pagenav input[disabled]:hover, .pagenav input[disabled]:active {box-shadow: var(--highlight)}
+.topbuttons div.pagenav {margin-top: 10px; display: inline-block}
+.pagenavcontainer, #messagenav {float: right; position: absolute; top: 6px; right: 38px}
+.iframed .pagenavcontainer {top: 1px; right 22px}
+#messagenav {right: 6px}
+#messagenav > * {vertical-align: middle}
+.pagenav {margin: -2px -20px -3px 0; padding: 2px; max-width: 170px; width: auto; display: inline-block; white-space: nowrap; border-collapse: separate; border-spacing: 0}
+.iframed .pagenav {margin-right: -5px}
+.pagenav td {white-space: nowrap; font-size: 10pt; font-weight: 700; padding: 1px 2px; text-align: center; font-style: italic}
+.pagenav td:first-child {text-align: right; width: 49%}
+.pagenav td:last-child {text-align: left; width: 49%}
+.pagenav td:nth-child(2) {padding: 3px 10px; width: 2%; white-space: nowrap}
+.topbuttons .pagenavcontrols {padding-top: 5px}
+.pagenavcontrols > * {vertical-align: middle}
+input[disabled] {opacity: .4; border: 1px solid #9ea8d1; pointer-events: none}
 
 /* list sort */
-
-.sort {
-  display: inline-block;
-  font-size: 0;
-}
-
-a.sort {
-  vertical-align: middle;
-  display: inline-block;
-  opacity: .9;
-}
-
-img.sort {
-  margin: 0;
-  padding: 2px 3px;
-  width: 10px;
-  height: 10px;
-  vertical-align: middle;
-  border: 1px solid #9ea8d1;
-  border-radius: 2px;
-  background: var(--btn);
-  filter: drop-shadow(0 0 1px rgba(204, 204, 204, .6));
-}
-
-a .sort:hover, a:focus .sort {
-  opacity: 1 !important;
-  border: 1px solid #f60;
-  background: var(--btn_hover);
-}
-
-img.sort:active {
-  box-shadow: var(--highlight), inset 2px 2px 2px #999;
-}
-
-.sort.selected, .sort.selected:active {
-  box-shadow: inset 1px 1px 1px #bbb;
-  opacity: .8;
-  mix-blend-mode: luminosity !important;
-}
-
-/* end list sort */
-
-input[type="file"] {
-  background: none;
-  font-size: 9pt;
-  padding: 5px 0;
-  max-width: 400px;
-}
-
-input[type=text], input[type=password], textarea {
-  padding: 5px !important;
-  background: #fbfbff;
-  box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6);
-  border: 1px solid #9ea8d1;
-  border-radius: 2px;
-  color: var(--ink);
-  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
-}
-
-input[type=text]:focus, input[type=password]:focus, textarea:focus {
-  color: var(--ink_darker);
-  box-shadow: 0 0 1px #89f;
-  background: #fff;
-  border: 1px solid #676c7f;
-}
-
-input[type=text][disabled] {
-  opacity: 1;
-  background: #e9e9e9;
-  background: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(220, 220, 255, .3) 3px, #fafaff 4px), #fafaff;
-  color: #4d4d5f;
-  filter: none;
-}
-
-textarea {
-  font-family: var(--monospaced);
-  font-size: 9pt;
-}
-
-hr {
-  color: #9ea8d1;
-  background: #9ea8d1;
-  height: 1px;
-  border: none;
-  width: 100%;
-  margin: 5px;
-  text-align: center;
-  opacity: .5;
-}
+.sort {display: inline-block; line-height: 1; font-size: 0}
+a.sort {vertical-align: middle; display: inline-block; opacity: .9}
+img.sort {margin: 0; padding: 2px 3px; width: 10px; height: 10px; vertical-align: middle; border: 1px solid #9ea8d1; border-radius: 2px; background: var(--btn); filter: drop-shadow(0 0 1px rgba(204, 204, 204, .6))}
+a .sort:hover, a:focus .sort {opacity: 1; border: 1px solid var(--hover); background: var(--btn_hover)}
+img.sort:active {box-shadow: var(--highlight), inset 2px 2px 2px #999}
+.sort.selected, .sort.selected:active {box-shadow: inset 1px 1px 1px #bbb; opacity: .8; mix-blend-mode: luminosity}
+input[type="file"] {background: none; font-size: 9pt; padding: 5px 0; max-width: 400px}
+input[type=text], input[type=password], textarea {padding: 5px; background: #fbfbff; box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6); border: 1px solid #9ea8d1; border-radius: 2px; color: var(--ink); filter: drop-shadow(0 0 1px rgba(220,220,255,.7))}
+input[type=text]:focus, input[type=password]:focus, textarea:focus {color: var(--ink_darker); box-shadow: 0 0 1px #89f; background: #fff; border: 1px solid #676c7f}
+input[type=text][disabled] {opacity: 1; background: #e9e9e9; background: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(220, 220, 255, .3) 3px, #fafaff 4px), #fafaff; color: #4d4d5f; filter: none}
+textarea {font-family: var(--monospaced); font-size: 9pt}
+hr {color: #9ea8d1; background: #9ea8d1; height: 1px; border: none; width: 100%; margin: 5px; text-align: center; opacity: .5}
 
 /* login */
-
-#dologin {
-  margin: 100px auto 100px;
-  padding: 10px 10px 6px;
-  width: 600px;
-  border: 1px solid #77789f;
-  border-radius: 2px;
-  box-shadow: var(--highlight), inset 0 0 2px 1px #eef, 0 0 1px rgba(100, 100, 200, .5);
-  background: linear-gradient(180deg,#fafaff, rgba(232,232,255,.5)),
-    linear-gradient(180deg,rgba(255,255,255,.7) 5%, rgba(220,220,255,.9)),
-    linear-gradient(90deg, #fff, #efefff, #fff);
-  background-size: 100%, auto 2px, 100%;
-  filter: opacity(0);
-  animation: linear fade-in .15s .6s forwards;
-}
-
-.iframed #dologin {
-  width: 70%;
-  max-width: 600px;
-  min-width: 500px;
-}
-
-@keyframes fade-in {
-  0%,80% {filter: opacity(0)}
-  100% {filter: opacity(1)}
-}
-
-.iframed #dologin table {
-  margin-top: 30px;
-}
-
-#dologin td {
-  padding: 3px;
-  font-weight: 700;
-  color: #5b5b71;
-}
-
-#dologin td:first-child {
-  white-space: nowrap;
-}
-
-#dologin td:last-child {
-  width: 80%;
-}
-
-#dologin h1 {
-  background: #fafaff;
-  background: linear-gradient(180deg,#fff 50%, #f2f2ff 50%);
-  border-bottom: 1px solid #77789f;
-  color: #4c526f;
-  text-transform: uppercase;
-  letter-spacing: .1em;
-  word-spacing: .1em;
-  font-size: 14pt;
-  text-align: left;
-  padding: 12px 10px 12px 15px;
-  margin: -9px -9px 24px;
-}
-
-.iframed #dologin h1 {
-  display: none;
-}
-
-#dologin input[type=text], input[name="pagesize"] {
-  text-align: left !important;
-}
-
-#dologin input[name="user"], #dologin input[name="pass"] {
-  padding: 5px 5px 5px 26px !important;
-  background-blend-mode: luminosity;
-}
-
-#dologin input[name="user"] {
-  background: #fbfbff var(--user) no-repeat 5px center / 14px !important;
-}
-
-#dologin input[name="pass"] {
-  background: #fbfbff var(--key) no-repeat 5px center / 14px !important;
-}
-
-#dologin input[name="user"]:focus, #dologin input[name="pass"]:focus {
-  background-color: #fff !important;
-  background-blend-mode: normal;
-}
-
-#dologin input[name="user"], #dologin input[name="pass"], #dologin input[name="host"] {
-  margin-right: 5px;
-  width: 240px;
-}
-
-#dologin hr {
-  margin: 16px 0 4px;
-  background: linear-gradient(90deg, rgba(119, 120, 159, 0), #1d1f4f, rgba(119, 120, 159, 0));
-}
-
-#dologin tr:last-child hr {
-  margin-top: 3px;
-  margin-bottom: 10px;
-}
-
-.iframed #dologin tr:nth-child(6) hr {
-  margin-top: 5px;
-}
-
-#dologin tr:last-child a, #dologin tr:last-child a:visited {
-  display: inline-block;
-  margin: 8px -2px 6px;
-  padding: 3px 10px;
-  line-height: 1.1;
-  color: #327bbf;
-  border: 1px solid rgba(119, 120, 159, .3);
-  border-radius: 25px;
-  box-shadow: 0 0 1px rgba(255,255,255,0);
-  background: linear-gradient(90deg, rgba(252,252,255,.3), #f6f6ff, rgba(252,252,255,.3));
-  transition: ease all .1s;
-}
-
-#dologin tr:last-child a:hover {
-  border: 1px solid #77789f;
-  border: 1px solid rgba(119, 120, 159, .5);
-  background: #f2f2ff;
-  box-shadow: 0 0 1px #ccf;
-  background: linear-gradient(180deg,#fafaff 50%, #e8e8ff 50%) #f2f2ff;
-  transition: ease all .1s;
-}
-
-#dologin tr:last-child a:active {
-  border: 1px solid rgba(119, 120, 159, .3);
-  box-shadow: inset 3px 3px 3px #779;
-  color: rgba(65, 70, 95, .8) !important;
-  color: #99a5df !important;
-  background: #e2e2ff;
-  background: linear-gradient(180deg,#eaeaff 50%, #d9d9ff 50%);
-  transition: ease all .1s;
-}
-
-#dologin tr:last-child td {
-  color: transparent;
-  color: rgba(119, 120, 159, 0);
-}
-
-/* end login */
-
-div.pagenav {
-  border-top: 1px solid #555;
-  padding: 10px 5px 0;
-  font-size: 9.5pt;
-  border-radius: 0 0 2px 2px;
-}
+#dologin {margin: 100px auto 100px; padding: 10px 10px 6px; width: 600px; border: 1px solid #77789f; border-radius: 2px; box-shadow: var(--highlight), inset 0 0 2px 1px #eef, 0 0 1px rgba(100, 100, 200, .5); background: linear-gradient(180deg,#fafaff, rgba(232,232,255,.5)), linear-gradient(180deg,rgba(255,255,255,.7) 5%, rgba(220,220,255,.9)), linear-gradient(90deg, #fff, #efefff, #fff); background-size: 100%, auto 2px, 100%; filter: opacity(0); animation: linear fade-in .15s .6s forwards}
+.iframed #dologin {width: 70%; max-width: 600px; min-width: 500px}
+.iframed #dologin table {margin-top: 30px}
+#dologin td {padding: 3px; font-weight: 700; color: #5b5b71}
+#dologin td:first-child {white-space: nowrap}
+#dologin td:last-child {width: 80%}
+#dologin h1 {background: #fafaff; background: linear-gradient(180deg,#fff 50%, #f2f2ff 50%); border-bottom: 1px solid #77789f; color: var(--ink_active); text-transform: uppercase; letter-spacing: .1em; word-spacing: .1em; font-size: 14pt; text-align: left; padding: 12px 10px 12px 15px; margin: -9px -9px 24px}
+.iframed #dologin h1 {display: none}
+#dologin input[type=text], input[name="pagesize"] {text-align: left}
+#dologin input[name="user"], #dologin input[name="pass"] {padding: 5px 5px 5px 26px; background-blend-mode: luminosity}
+#dologin input[name="user"] {background: #fbfbff var(--user) no-repeat 5px center / 14px}
+#dologin input[name="pass"] {background: #fbfbff var(--key) no-repeat 5px center / 14px}
+#dologin input[name="user"]:focus, #dologin input[name="pass"]:focus {background-color: #fff; background-blend-mode: normal}
+#dologin input[name="user"], #dologin input[name="pass"], #dologin input[name="host"] {margin-right: 5px; width: 240px}
+#dologin hr {margin: 16px 0 4px; background: linear-gradient(90deg, rgba(119, 120, 159, 0), #1d1f4f, rgba(119, 120, 159, 0))}
+#dologin tr:last-child hr {margin-top: 3px; margin-bottom: 10px}
+.iframed #dologin tr:nth-child(6) hr {margin-top: 5px}
+#dologin tr:last-child a, #dologin tr:last-child a:visited {margin: 8px -2px 6px; padding: 4px 10px; display: inline-block; min-width: 140px; line-height: 1.1; font-size: 90%; color: #327bbf; border: 1px solid rgba(119, 120, 159, .3); border-radius: 25px; box-shadow: 0 0 1px rgba(255,255,255,0); background: linear-gradient(90deg, rgba(252,252,255,.3), #f6f6ff, rgba(252,252,255,.3)); transition: ease all .1s}
+#dologin tr:last-child a:hover {border: 1px solid #77789f; border: 1px solid rgba(119, 120, 159, .5); background: #f2f2ff; box-shadow: 0 0 1px #ccf; background: linear-gradient(180deg,#fafaff 50%, #e8e8ff 50%) #f2f2ff; transition: ease all .1s}
+#dologin tr:last-child a:active {border: 1px solid rgba(119, 120, 159, .3); box-shadow: inset 3px 3px 3px #779; color: rgba(65, 70, 95, .8); color: #99a5df; background: #e2e2ff; background: linear-gradient(180deg,#eaeaff 50%, #d9d9ff 50%); transition: ease all .1s}
+#dologin tr:last-child td {color: transparent; color: rgba(119, 120, 159, 0)}
+div.pagenav {border-top: 1px solid #555; padding: 10px 5px 0; font-size: 9.5pt; border-radius: 0 0 2px 2px}
 
 /* configuration */
-
-textarea[name="config_text"] {
-  margin-bottom: 15px;
-  resize: none;
-  height: 310px;
-  scrollbar-color: #779 #fff;
-}
-
-h3#config {
-  margin: 0 0 20px;
-  padding: 10px;
-  text-align: center;
-  text-transform: uppercase;
-  font-size: 11pt;
-  letter-spacing: .08em;
-  word-spacing: .1em;
-  border-bottom: 1px solid #8d8daa;
-  box-shadow: var(--highlight);
-  text-shadow: 0 1px 1px #fff;
-  background: #fafaff;
-  background: linear-gradient(90deg, rgba(240,240,255,.1), rgba(252,252,252,.5), rgba(240,240,255,.1)), linear-gradient(180deg,#fafaff 50%, #f2f2ff 50%);
-}
-
-#prefsave {
-  margin-top: 4px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  border-top: 1px solid #8d8daa;
-  background: #f6f6ff;
-  box-shadow: var(--highlight);
-}
-
-.iframed #prefsave {
-  padding-bottom: 9px;
-}
-
-/* end configuration */
+textarea[name="config_text"] {margin-bottom: 15px; resize: none; height: 310px; scrollbar-color: #779 #fff}
+h3#config {margin: 0 0 20px; padding: 10px; text-align: center; text-transform: uppercase; font-size: 11pt; letter-spacing: .08em; word-spacing: .1em; border-bottom: 1px solid var(--border_inner); box-shadow: var(--highlight); text-shadow: 0 1px 1px #fff; background: #fafaff; background: linear-gradient(90deg, rgba(240,240,255,.1), rgba(252,252,252,.5), rgba(240,240,255,.1)), linear-gradient(180deg,#fafaff 50%, #f2f2ff 50%)}
+#prefsave {margin-top: 4px; padding-top: 10px; padding-bottom: 10px; border-top: 1px solid var(--border_inner); background: #f6f6ff; box-shadow: var(--highlight)}
+.iframed #prefsave {padding-bottom: 9px}
 
 /* top buttons */
+#info {margin: 4px 240px -4px 0; padding-left: 3px; padding-right: 8px; float: right; line-height: 150%; overflow: hidden; text-transform: lowercase; font-weight: 400; color: #5b5b71; border: 1px solid #bbd; border-radius: 2px; box-shadow: 0 0 1px 0 rgba(220,220,255,.3); background: var(--btn)}
+#infoUser {margin-right: 6px; padding: 2px 9px 3px 6px; display: inline-block; text-align: center; color: #54586f; font-weight: 700; border-right: 1px solid #bbd; background: var(--btn)}
+.topbuttons {margin: -1px -1px 0; padding: 4px 5px 2px; position: sticky; top: -1px; z-index: 1000; width: calc(100% - 10px); display: inline-block; vertical-align: middle; white-space: nowrap; text-align: center; font-size: 9pt; font-weight: 700; border: 1px solid var(--border_inner); box-shadow: var(--highlight); background: linear-gradient(180deg,#fcfcff 51%, #fafaff 51%, #f6f6ff 100%)}
+.topbuttons select, .topbuttons input, .topbuttons a {vertical-align: middle}
 
-#info {
-  margin: 4px 180px -4px 0;
-  padding-left: 3px;
-  padding-right: 8px;
-  float: right;
-  line-height: 150%;
-  overflow: hidden;
-  text-transform: lowercase;
-  font-weight: 400;
-  color: #5b5b71;
-  border: 1px solid #bbd;
-  border-radius: 2px;
-  box-shadow: 0 0 1px 0 rgba(220,220,255,.3);
-  background: var(--btn);
-}
-
-.iframed #info {
-  margin-right: 190px;
-}
-
-#infoUser {
-  margin-right: 6px;
-  padding: 2px 9px 3px 6px;
-  display: inline-block;
-  text-align: center;
-  color: #54586f;
-  font-weight: 700;
-  border-right: 1px solid #bbd;
-  background: var(--btn);
-}
-
-.topbuttons {
-  margin: -1px -1px 0;
-  padding: 4px 5px 2px;
-  position: sticky;
-  top: -1px;
-  z-index: 1000;
-  width: calc(100% - 10px);
-  display: inline-block;
-  vertical-align: middle;
-  white-space: nowrap;
-  text-align: center;
-  font-size: 9pt;
-  font-weight: 700;
-  border: 1px solid #8d8daa;
-  box-shadow: var(--highlight) !important;
-  background: linear-gradient(180deg,#fcfcff 51%, #fafaff 51%, #f6f6ff 100%) !important;
-}
-
-.topbuttons, .topbuttons > *, .topbuttons select, .topbuttons input {
-  vertical-align: middle !important;
-}
-
-/* float topbuttons, single line  */
-
-.topbuttons input.new, .topbuttons input.refresh, .topbuttons input[name="refresh"] {
-  float: left;
-}
-
-.topbuttons .pagenav input {
-  float: none;
-}
-
-.topbuttons input[name="pagesize"], .topbuttons .setpagesize, .topbuttons input:not(.delete)[onclick], .topbuttons .logout {
-  float: none !important;
-}
-
-input.logout, input.logout:hover, input.logout:focus, input.logout:active {
-  padding: 5px 7px 5px 24px;
-  display: inline-block;
-  float: none !important;
-  line-height: normal;
-}
-
-#info input.logout, #info input.logout:hover, #info input.logout:focus, #info input.logout:active {
-  padding: 6px 7px 6px 24px;
-  margin: -8px -8px -8px 8px !important;
-  border: none !important;
-  border-left: 1px solid #bbd !important;
-  border-radius: 0;
-  box-shadow: none !important;
-  filter: none;
-}
-
-.topbuttons input.new, .topbuttons input.refresh, .topbuttons input.reply, .topbuttons input.replyall,
-.topbuttons input.forward, .topbuttons input.saveas, .topbuttons input.delete, .topbuttons input.delete + .logout {
-  margin-top: 2px !important;
-  margin-left: 2px !important;
-  float: left !important;
-}
-
-.topbuttons input.prev, .topbuttons input[name="prev"], .topbuttons input.prevpage, .topbuttons input[name="prevpage"],
-.topbuttons input.next, .topbuttons input[name="next"], .topbuttons input.nextpage, input[name="nextpage"],
-.topbuttons input.firstpage, .topbuttons input[name="firstpage"], .topbuttons input.lastpage, .topbuttons input[name="lastpage"],
-.topbuttons input.list {
-  min-height: 26px !important;
-  min-width: 26px !important;
-  max-height: 26px !important;
-  max-width: 26px !important;
-  margin: 2px;
-}
-
-.topbuttons br {
-  display: none;
-}
-
-.topbuttons br ~ input {
-  margin: 3px 2px;
-}
-
-.topbuttons input.prev, .topbuttons input[name="prev"] {
-  margin-left: 10px;
-}
-
-.topbuttons input.list {
-  background-position: center center;
-  text-indent: -99999px;
-  padding: 5px 10px;
-}
-
-.topbuttons input[type=text] {
-  margin: 5px;
-}
-
-.bottombuttons br {
-  display: none;
-}
-
-tr.bottombuttons, .topbuttons {
-  box-shadow: var(--highlight);
-}
-
-_:-ms-lang(x), tr.bottombuttons, .topbuttons {
-  box-shadow: none !important;
-}
-
-tr.bottombuttons:last-child {
-  background: linear-gradient(180deg,#fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px), #fff !important;
-}
-
-tr.bottombuttons:empty {
-  display: none;
-}
-
-#composemail .bottombuttons {
-  background: none !important;
-  box-shadow: none !important;
-}
+/* float topbuttons, single line*/
+.topbuttons input.new, .topbuttons input.refresh, .topbuttons input[name="refresh"] {float: left}
+.topbuttons .pagenav input {float: none}
+.topbuttons input[name="pagesize"], .topbuttons .setpagesize, .topbuttons input:not(.delete)[onclick], .topbuttons .logout {float: none}
+input.logout, input.logout:hover, input.logout:focus, input.logout:active {padding: 5px 7px 5px 24px; display: inline-block; float: none; line-height: normal}
+#info input.logout, #info input.logout:hover, #info input.logout:focus, #info input.logout:active {padding: 6px 7px 6px 24px; margin: -8px -8px -8px 8px; border: none; border-left: 1px solid #bbd; border-radius: 0; box-shadow: none; filter: none}
+.topbuttons input.new, .topbuttons input.refresh, .topbuttons input.reply, .topbuttons input.replyall, .topbuttons input.forward, .topbuttons input.saveas, .topbuttons input.delete, .topbuttons input.delete + .logout {margin-top: 2px; margin-left: 2px; float: left}
+.topbuttons input.prev, .topbuttons input[name="prev"], .topbuttons input.prevpage, .topbuttons input[name="prevpage"], .topbuttons input.next, .topbuttons input[name="next"], .topbuttons input.nextpage, input[name="nextpage"], .topbuttons input.firstpage, .topbuttons input[name="firstpage"], .topbuttons input.lastpage, .topbuttons input[name="lastpage"], .topbuttons input.list {min-height: 26px; min-width: 26px; max-height: 26px; max-width: 26px; margin: 2px}
+.topbuttons br {display: none}
+.topbuttons br ~ input {margin: 3px 2px}
+.topbuttons input.prev, .topbuttons input[name="prev"] {margin-left: 10px}
+.topbuttons input.list {background-position: center center; text-indent: -99999px; padding: 5px 10px}
+.topbuttons input[type=text] {margin: 5px}
+.bottombuttons br {display: none}
+tr.bottombuttons, .topbuttons {box-shadow: var(--highlight)}
+tr.bottombuttons:last-child {background: linear-gradient(180deg,#fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px), #fff}
+tr.bottombuttons:empty {display: none}
+#composemail .bottombuttons {background: none; box-shadow: none}
 
 /* notifications */
-
-.notifications {
-  margin: 0 30%;
-  padding: 5px 10px 2px;
-  min-width: 400px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 9999;
-  text-align: center;
-  text-shadow: 0 1px 1px #000;
-  opacity: .9;
-  border-bottom: 2px solid #001;
-  box-shadow: 0 1px 1px rgba(120,120,200,.3);
-  box-shadow: 0 2px 2px rgba(100,100,200,.5);
-  background: var(--no) right 6px top 4px no-repeat #113;
-  background-size: 14px 14px !important;
-  background-blend-mode: luminosity;
-  cursor: crosshair;
-}
-
-.iframed .notifications {
-  margin: 6px 30% 0;
-  padding: 5px 10px 0;
-  border: none;
-  border-radius: 0 0 4px 4px;
-  box-shadow: 0 1px 2px rgba(100,100,200,.5);
-  background: var(--no) right 6px top 5px no-repeat #113;
-  background-size: 14px 14px !important;
-}
-
-.notifications.msgerror, .notifications.msginfo {
-  animation: 2s hide-up 7s ease-out forwards;
-}
-
-@keyframes hide-up {
-  from {margin-top: 0}
-  to {margin-top: -300px}
-}
-
-.notifications:hover {
-  background-image: var(--no);
-  background-blend-mode: normal;
-}
-
-.notifications p.info, .notifications p.info b {
-  font-size: 10pt !important;
-  color: #fff;
-  text-shadow: none !important;
-}
-
-.notifications p {
-  filter: drop-shadow(0 0 2px #000);
-  letter-spacing: .07em;
-  word-spacing: .2em;
-  font-weight: 700;
-  animation: fade-in 1s linear;
-}
-
-@keyframes fade-in {
-from {
-  filter: opacity(0)
-}
-
-to {
-  filter: opacity(1)
-}
-}
-
-p.error {
-  font-size: 10pt !important;
-}
-
-td p.error {
-  padding: 10px;
-}
-
-/* end notifications */
+.notifications {margin: 0 30%; padding: 5px 10px 2px; min-width: 400px; position: fixed; top: 0; left: 0; right: 0; z-index: 9999; text-align: center; text-shadow: 0 1px 1px #000; opacity: .9; border-bottom: 2px solid #001; box-shadow: 0 1px 1px rgba(120,120,200,.3); box-shadow: 0 2px 2px rgba(100,100,200,.5); background: var(--no) right 6px top 4px no-repeat #113; background-size: 14px 14px; background-blend-mode: luminosity; cursor: crosshair}
+.iframed .notifications {margin: 6px 30% 0; padding: 5px 10px 0; border: none; border-radius: 0 0 4px 4px; box-shadow: 0 1px 2px rgba(100,100,200,.5); background: var(--no) right 6px top 5px no-repeat #113; background-size: 14px 14px}
+.notifications.msgerror, .notifications.msginfo {animation: 2s hide-up 3s ease-out forwards}
+.notifications:hover {background-image: var(--no); background-blend-mode: normal}
+.notifications p.info, .notifications p.info b {font-size: 10pt; color: #fff; text-shadow: none}
+.notifications p {filter: drop-shadow(0 0 2px #000); letter-spacing: .07em; word-spacing: .2em; font-weight: 700; animation: fade-in 1s linear}
+p.error {font-size: 10pt}
+td p.error {padding: 10px}
 
 /* compose mail */
-
-#composemail {
-  text-align: center !important;
-  padding: 4px 8px 12px;
-  border-radius: 0 0 2px 2px;
-  background: #efefff;
-  background: linear-gradient(90deg, #efefff, #fff, #efefff);
-}
-
-.iframed #composemail {
-  border-bottom: none;
-}
-
-#composemail hr {
-  display: none;
-}
-
-#composemail textarea {
-  margin-bottom: 7px;
-  min-height: 200px;
-}
-
-#composemail textarea, #composemail input[type=text] {
-  width: calc(100% - 20px);
-  min-width: 565px;
-}
-
-#newmail {
-  width: auto;
-  margin: auto;
-}
-
-#newmail td {
-  padding: 5px;
-}
-
-#newmail td:first-child {
-  font-weight: 700;
-  color: #5b5b71;
-  padding-right: 3px;
-}
-
-#newmail label:hover {
-  color: var(--ink);
-}
-
-/* end compose mail */
-
+#composemail {text-align: center; padding: 4px 8px 12px; border-radius: 0 0 2px 2px; background: #efefff; background: linear-gradient(90deg, #efefff, #fff, #efefff)}
+.iframed #composemail {border-bottom: none}
+#composemail hr {display: none}
+#composemail textarea {margin-bottom: 7px; min-height: 200px}
+#composemail textarea, #composemail input[type=text] {width: calc(100% - 20px); min-width: 565px}
+#newmail {width: auto; margin: auto}
+#newmail td {padding: 5px}
+#newmail td:first-child {font-weight: 700; color: #5b5b71; padding-right: 3px}
+#newmail label:hover {color: var(--ink)}
 
 /* attachments */
-#addattachment td {
-  border-top: 1px solid #bbd;
-  padding-top: 7px;
-}
-
-#attachedfile {
-  padding: 4px 5px !important;
-}
-
-#newmail input[type=checkbox] {
-  margin: 0;
-}
-
-#attachedfile input[type=checkbox] {
-  margin: 1px;
-  float: right;
-}
-
-#attachedfile label {
-  padding: 5px 10px 5px 24px;
-  display: inline-block;
-  vertical-align: middle;
-  width: calc(100% - 34px);
-  min-width: 400px;
-  max-width: 600px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-style: italic;
-  border-radius: 2px 15px 15px 2px;
-  box-shadow: inset 0 0 0 1px #bbd, inset 0 0 0 2px #fff, 0 0 0 1px #eee;
-  background: var(--attach) no-repeat 7px center, linear-gradient(90deg, #f2f2ff 70%, #eef);
-}
-
-#attachedfile label:hover {
-  color: #933;
-  box-shadow: var(--highlight), inset 0 0 0 2px #955;
-  background: var(--attach_hover) no-repeat 7px center, linear-gradient(90deg, #ffe 70%, #ffd);
-}
-
-#attachedfile label:active {
-  box-shadow: var(--highlight), inset 0 0 0 2px #b33, inset 4px 4px 3px #775;
-}
-
-.attached {
-  margin: 0;
-  padding: 15px 35px 15px 35px;
-  overflow: auto !important;
-  text-align: left;
-  box-shadow: var(--highlight);
-  background: var(--attach) no-repeat 10px center / 16px, rgba(220,220,255,.2);
-}
-
-.attached img {
-  margin-top: 4px;
-  padding: 3px;
-  max-width: 100%;
-  max-width: calc(100% - 10px);
-  border: 1px solid #555;
-  border-radius: 2px;
-  background: #fff;
-  text-align: center;
-  filter: drop-shadow(0 0 1px #999);
-  image-orientation: from-image;
-}
-
-#deleteattached::before, #addattachment td:last-child::after {
-  content: "";
-  display: block;
-  height: 1px;
-  background: #bbd;
-  margin: 1px 0 2px;
-}
-
-#addattachment td:last-child::after {
-  margin: 5px 0 1px;
-}
-
-#deleteattached {
-  text-align: right;
-}
-
-#deleteattached input {
-  margin: 8px 0 0 0;
-}
-
-#imageInfo {
-  display: block;
-  width: 100%;
-  margin-top: 16px;
-  padding-top: 10px;
-  font-weight: 700;
-  border-top: 1px solid #99c;
-  text-align: right;
-}
-
-#imageInfo::before {
-  content: "";
-  display: inline-block;
-  width: 20px;
-  height: 16px;
-  vertical-align: text-bottom;
-  background: var(--package) no-repeat left center / 16px;
-}
-
-/* end attachments */
+#addattachment td {border-top: 1px solid #bbd; padding-top: 7px}
+#attachedfile {padding: 4px 5px}
+#newmail input[type=checkbox] {margin: 0}
+#attachedfile input[type=checkbox] {margin: 1px; float: right}
+#attachedfile label {padding: 5px 10px 5px 24px; display: inline-block; vertical-align: middle; width: calc(100% - 34px); min-width: 400px; max-width: 600px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-style: italic; border-radius: 2px 15px 15px 2px; box-shadow: inset 0 0 0 1px #bbd, inset 0 0 0 2px #fff, 0 0 0 1px #eee; background: var(--attach) no-repeat 7px center, linear-gradient(90deg, #f2f2ff 70%, #eef)}
+#attachedfile label:hover {color: #933; box-shadow: var(--highlight), inset 0 0 0 2px #955; background: var(--attach_hover) no-repeat 7px center, linear-gradient(90deg, #ffe 70%, #ffd)}
+#attachedfile label:active {box-shadow: var(--highlight), inset 0 0 0 2px #b33, inset 4px 4px 3px #775}
+.attached {margin: 0; padding: 15px 35px 15px 35px; overflow: auto; text-align: left; box-shadow: var(--highlight); background: var(--attach) no-repeat 10px center / 16px, rgba(220,220,255,.2)}
+.attached img {margin-top: 4px; padding: 3px; max-width: 100%; max-width: calc(100% - 10px); border: 1px solid #555; border-radius: 2px; background: #fff; text-align: center; filter: drop-shadow(0 0 1px #999); image-orientation: from-image}
+#deleteattached::before, #addattachment td:last-child::after {content: ""; display: block; height: 1px; background: #bbd; margin: 1px 0 2px}
+#addattachment td:last-child::after {margin: 5px 0 1px}
+#deleteattached {text-align: right}
+#deleteattached input {margin: 8px 0 0 0}
+#imageInfo {display: block; width: 100%; margin-top: 16px; padding-top: 10px; font-weight: 700; border-top: 1px solid #99c; text-align: right}
+#imageInfo::before {content: ""; display: inline-block; width: 20px; height: 16px; vertical-align: text-bottom; background: var(--package) no-repeat left center / 16px}
 
 /* mail list */
-
-tr.pagenavcontrols:hover .pagenavcontrols td, .topbuttons td, .topbuttons:hover td, .topbuttons tr:hover td, .topbuttons:hover td  {
-  box-shadow: none !important;
-}
-
-td {
-  color: var(--ink);
-  font-size:9pt;
-  padding: 1px 3px;
-}
-
-td[onclick] {
-  cursor: pointer;
-}
-
-tr.list0 {
-  background: #eef;
-  background: repeating-linear-gradient(45deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px), #fff;
-  background: var(--badge);
-}
-
-tr.list1 {
-  background: #f7f8ff;
-  background: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fff 5px), #fff;
-  background: var(--badge);
-}
-
-tr.list0:hover, tr.list1:hover {
-  background-color: #ffd;
-  box-shadow: var(--highlight);
-}
-
-tr.list0:hover td, tr.list1:hover td {
-  background-color: rgba(240,240,200,.4) !important;
-}
-
-_:-ms-lang(x), tr.list0:hover, tr.list1:hover {
-  box-shadow: none !important;
-}
-
-.list0 td, .list1 td {
-  box-shadow: var(--highlight);
-  background: rgba(240,240,255,.4);
-}
-
-.list0:hover td, .list1:hover td {
-  color: var(--ink);
-  box-shadow: inset 0 0 0 1px #ffe;
-  background: rgba(255,255,255,0);
-}
-
-#mailbox {
-  position: relative;
-  border-collapse: separate;
-  border-spacing: 0;
-}
-
-.iframed #mailbox {
-  margin: 0;
-}
-
-#emptymailbox {
-  padding: 10px;
-}
-
-#mailbox hr {
-  display: none;
-}
-
-#mailbox tr:nth-child(2) {
-  position: sticky;
-  top: 42px;
-  z-index: 500;
-}
-
-@supports not (-moz-appearance: none) {
-#mailbox tr:nth-child(2) {
-  position: static;
-}
-}
-
-#mailbox th {
-  padding: 6px 5px;
-  white-space: nowrap;
-  font-size: 70%;
-  color: #54586f;
-  border-bottom: 1px solid #8d8daa;
-  background: #f6f6ff;
-  background: linear-gradient(180deg,#fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
-}
-
-#mailbox th:last-child {
-  padding: 6px 0 !important;
-  background: var(--nuke) no-repeat center center / 14px, linear-gradient(180deg,#fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
-}
-
-#mailbox th.mailListFlagged {
-  background: linear-gradient(180deg,#fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
-  background-blend-mode: luminosity, normal;
-}
-
-#mailbox th.mailListAttachment, #mailbox td.mailListAttachment.isAttached {
-  background: var(--attach) no-repeat center center / 14px, linear-gradient(180deg,#fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
-}
-
-#mailbox tr:hover td.mailListAttachment.isAttached {
-  background: rgba(240,240,200,.4) var(--attach) no-repeat center center / 14px;
-}
-
-#mailbox td.mailListAttachment.isAttached img {
-  display: none;
-}
-
-#mailbox td {
-  color: #5b5b71 !important;
-}
-
-#mailbox tr td {
-  border-top: 1px solid #ccccf0;
-  border-top: 1px solid rgba(220,220,255,.8);
-}
-
-#mailbox tr:nth-child(3) td {
-  border-top: none;
-}
-
-td.mailListSender a, td.mailListSender a:hover {
-  font-weight: 400;
-  color: #5b5b71 !important;
-  line-height: 120%;
-}
-
-td.mailListSender, tr:hover td.mailListSender {
-  padding-left: 22px !important;
-  padding-right: 6px;
-  width: 1%;
-  white-space: nowrap;
-  background: var(--user) no-repeat 6px center / 12px !important;
-}
-
-tr:hover td.mailListSender {
-  background: rgba(240,240,200,.4) var(--user) no-repeat 6px center / 12px !important;
-}
-
-#mailbox tr:hover .mailListSender a {
-  color: var(--ink) !important;
-}
-
-.mailListSubject {
-  white-space: normal;
-  text-align: left;
-  word-break: normal;
-}
-
-td.mailListSubject a {
-  padding: 3px 0;
-  display: inline-block;
-}
-
-tr:hover td.mailListSubject a {
-  width: calc(100% - 2px);
-  border-radius: 2px 15px 15px 2px;
-  background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,208,.9) 20%);
-}
-
-@supports not (-moz-appearance: none) {
-td.mailListSubject a {
-  margin: -1px 0 !important;
-  padding: 5px 0 !important;
-}
-}
-
-tr:active td.mailListSubject a {
-  box-shadow: inset 2px 2px 1px #bb9;
-}
-
-#mailbox .bottombuttons td {
-  padding: 4px 4px 5px;
-  border-top: 1px solid #8d8daa;
-}
-
-.iframed #mailbox .bottombuttons td {
-  padding: 5px 3px;
-}
-
-#mailbox .bottombuttons input[type=submit][disabled] {
-  display: none;
-}
-
-.mailListFlagged {
-  min-width: 26px !important;
-  padding: 3px 0 !important;
-  text-align: center;
-}
-
-td.mailListFlagged img {
-  opacity: .7;
-  transform: scale(-1,1) skew(10deg);
-}
-
-td.mailListFlagged.new {
-  background: var(--newmail) no-repeat center center / 16px;
-}
-
-td.mailListFlagged.new img {
-  display: none;
-}
-
-tr:hover .mailListFlagged img {
-  opacity: 1;
-}
-
-td.mailListAttached {
-  padding: 3px !important;
-}
-
-.mailListCount {
-  text-align: right;
-}
-
-th.mailListDate {
-  text-align: left;
-  padding-left: 8px !important;
-}
-
-.listSize, .listDate, .mailListSender, .mailListSubject a {
-  will-change: transform;
-}
-
-.listDate, .listTime, .listClock {
-  display: inline-block;
-  white-space: nowrap;
-  text-align: right;
-}
-
-.listClock {
-  margin-top: 1px;
-  padding-left: 1px;
-  min-width: 18px;
-  vertical-align: text-top;
-  font-size: 80%;
-  text-align: left;
-  text-transform: lowercase;
-}
-
-.listDate {
-  padding: 2px;
-  min-width: 64px;
-  text-align: right;
-  font-weight: 700;
-  color: #5b5b71;
-  border: var(--badgeborder);
-  border-radius: 2px;
-  box-shadow: var(--highlight);
-  opacity: .8;
-  background: #f6f6ff;
-  background: var(--badge);
-}
-
-tr:hover .listDate {
-  border: 1px solid #afafcf;
-  opacity: .9;
-}
-
-.listDate span {
-  padding: 1px 0;
-  display: inline-block;
-  min-width: 18px;
-  text-align: center;
-  border-radius: 2px;
-}
-
-.listTime {
-  min-width: 40px;
-  opacity: .85;
-}
-
-.mailListSize {
-  padding: 3px;
-  width: 1%;
-  text-align: center;
-}
-
-td.mailListSize {
-  font-style: italic;
-  box-shadow: var(--highlight);
-}
-
-.mailListSize .unknown {
-  padding: 2px 0;
-  width: 100%;
-  display: inline-block;
-  letter-spacing: .1em;
-  text-align: center;
-}
-
-.listSize {
-  min-width: 56px;
-  vertical-align: middle;
-  display: inline-block;
-  text-align: right;
-  border: var(--badgeborder);
-  border-radius: 2px;
-  box-shadow: var(--highlight);
-  background: #f6f6ff;
-  background: linear-gradient(180deg,#f6f6ff, #e8e8ff);
-}
-
-tr:hover .listSize {
-  border: 1px solid #afafcf;
-  color: var(--ink);
-}
-
-.listSizeUnit {
-  margin: 1px 1px 1px 2px;
-  padding: 1px;
-  display: inline-block;
-  min-width: 14px;
-  color: #fff;
-  text-align: center;
-  font-size: 90% !important;
-  font-style: normal;
-  font-weight: 700;
-  text-shadow: 0 1px 1px #88c;
-  border-radius: 0 1px 1px 0;
-  background: #cce;
-}
-
-@supports not (-moz-appearance: none) {
-.listSize, .listSizeUnit {
-  font-size: 95%;
-}
-}
-
-.mailListAttachment {
-  min-width: 16px;
-}
-
-.mailListSubject {
-  padding: 3px 6px;
-}
-
-.mailListDelete, .mailListDate, .mailListSize, .mailListFlagged, .mailListAttachment {
-  width: 1%;
-  white-space: nowrap;
-  padding: 3px 6px;
-}
-
-.mailListDelete {
-  padding: 3px;
-}
-
-th.mailListDelete:empty {
-  min-width: 24px;
-}
-
-td.mailListDelete, td.mailListFlagged, td.mailListSender, td.mailListAttachment, td.mailListSubject, td.mailListDate, td.mailListSize {
-  border-right: 1px solid #ddf;
-}
-
-td.mailListDelete {
-  background: rgba(250,240,250,.5);
-}
-
-.list0 > *, .list1 > * {
-  vertical-align: middle;
-  line-height: 100%;
-}
-
-/* end mail list */
+#emptymailbox {padding: 10px}
+.iframed #mailbox {margin: 0}
+tr.list0, tr.list1 {background: var(--bg), var(--row)}
+tr.list0:hover, tr.list1:hover {background-color: #ffd; box-shadow: var(--highlight)}
+.iframed #mailbox .bottombuttons td {padding: 5px 3px}
+.list0:hover td, .list1:hover td {color: var(--ink); box-shadow: inset 0 0 0 1px #ffe}
+.listClock {margin-top: 1px; padding-left: 1px; min-width: 18px; vertical-align: text-top; font-size: 80%; text-align: left; text-transform: lowercase}
+.listDate, .listTime, .listClock {display: inline-block; white-space: nowrap; text-align: right}
+.listDate {padding: 2px; min-width: 64px; text-align: right; font-weight: 700; color: #5b5b71; border: var(--badgeborder); border-radius: 2px; box-shadow: var(--highlight); opacity: .8; background: #f6f6ff; background: var(--badge)}
+.listDate span {padding: 1px 0; display: inline-block; min-width: 18px; text-align: center; border-radius: 2px}
+.listSize, .listDate, .mailListSender, .mailListSubject a {will-change: transform}
+.listSize {min-width: 56px; vertical-align: middle; display: inline-block; text-align: right; border: var(--badgeborder); border-radius: 2px; box-shadow: var(--highlight); background: #f6f6ff; background: linear-gradient(180deg,#f6f6ff, #e8e8ff)}
+.listSizeUnit {margin: 1px 1px 1px 2px; padding: 1px; display: inline-block; min-width: 14px; color: #fff; text-align: center; font-size: 90%; font-style: normal; font-weight: 700; text-shadow: 0 1px 1px #88c; border-radius: 0 1px 1px 0; background: #cce}
+.listTime {min-width: 40px; opacity: .85}
+td {color: var(--ink); font-size: 9pt; padding: 1px 3px}
+#mailbox td {border-top: var(--border_soft)}
+.mailListAttachment {min-width: 16px}
+.mailListDelete, .mailListDate, .mailListSize, .mailListFlagged, .mailListAttachment {width: 1%; white-space: nowrap; padding: 3px 6px}
+.mailListCount {text-align: right}
+.mailListDelete {padding: 3px}
+.mailListFlagged {min-width: 26px; padding: 3px 0; text-align: center}
+.mailListSize {padding: 3px; width: 1%; text-align: center}
+.mailListSize .unknown {padding: 2px 0; width: 100%; display: inline-block; letter-spacing: .1em; text-align: center}
+.mailListSubject {padding: 3px 6px; white-space: normal; text-align: left; word-break: normal}
+td.mailListAttached {padding: 3px}
+td.mailListDelete {background: rgba(250,240,250,.5)}
+td.mailListDelete, td.mailListFlagged, td.mailListSender, td.mailListAttachment, td.mailListSubject, td.mailListDate, td.mailListSize {border-right: 1px solid #ddf}
+td.mailListFlagged.new {background: var(--newmail) no-repeat center center / 16px}
+td.mailListFlagged.new img {display: none}
+td.mailListSender a, td.mailListSender a:hover {font-weight: 400; color: #5b5b71; line-height: 120%}
+td.mailListSender, tr:hover td.mailListSender {padding-left: 22px; padding-right: 6px; width: 1%; white-space: nowrap; text-align: left; background: var(--user) no-repeat 6px center / 12px}
+td.mailListSize {font-style: italic; box-shadow: var(--highlight)}
+td.mailListSubject a {padding: 3px 0; display: inline-block}
+td[onclick] {cursor: pointer}
+td span, td a, td b {vertical-align: middle; line-height: 1}
+th.mailListDate {text-align: left; padding-left: 8px}
+th.mailListDelete:empty {min-width: 24px}
+tr:active td.mailListSubject a {box-shadow: inset 2px 2px 1px #bb9}
+tr.list0:hover td, tr.list1:hover td {background-color: rgba(240,240,200,.4)}
+tr:hover .listDate {border: 1px solid #afafcf; opacity: .9}
+tr:hover .listSize {border: 1px solid #afafcf; color: var(--ink)}
+tr:hover .mailListFlagged img {opacity: 1}
+tr:hover td.mailListSender {background: rgba(240,240,200,.4) var(--user) no-repeat 6px center / 12px}
+tr:hover td.mailListSubject a {width: calc(100% - 2px); border-radius: 2px 15px 15px 2px; background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,208,.9) 20%)}
+tr.pagenavcontrols:hover .pagenavcontrols td, .topbuttons td, .topbuttons:hover td, .topbuttons tr:hover td, .topbuttons:hover td {box-shadow: none}
+#mailbox .bottombuttons input[type=submit][disabled] {display: none}
+#mailbox .bottombuttons td {padding: 4px 4px 5px; border-top: 1px solid var(--border_inner)}
+#mailbox {position: relative; border-collapse: separate; border-spacing: 0}
+#mailbox tr:nth-child(2) {position: sticky; top: 42px; z-index: 500}
+#mailbox tr:nth-child(3) td {border-top: none}
+#mailbox th {padding: 6px 5px; white-space: nowrap; font-size: 70%; color: #54586f; border-bottom: 1px solid var(--border_inner); background: #f6f6ff; background: linear-gradient(180deg,#fcfcff 51%, #fafaff 51%, #f6f6ff 100%)}
+#mailbox th:last-child {padding: 6px 0; background: var(--nuke) no-repeat center center / 14px, linear-gradient(180deg,#fcfcff 51%, #fafaff 51%, #f6f6ff 100%)}
+#mailbox th.mailListFlagged {background: linear-gradient(180deg,#fcfcff 51%, #fafaff 51%, #f6f6ff 100%); background-blend-mode: luminosity, normal}
+#mailbox th.mailListAttachment, td.mailListAttachment.isAttached {background: var(--attach) no-repeat center center / 14px, linear-gradient(180deg,#fcfcff 51%, #fafaff 51%, #f6f6ff 100%)}
+td.mailListAttachment.isAttached img {display: none}
+#mailbox tr:hover .mailListSender a {color: var(--ink)}
+#mailbox tr:hover td.mailListAttachment.isAttached {background: rgba(240,240,200,.4) var(--attach) no-repeat center center / 14px}
+#mailbox hr {display: none}
 
 /* confirm mail delete */
-
-#confirmdelete td {
-  box-shadow: var(--highlight) !important;
-  background: repeating-linear-gradient(45deg, #900, #900 10px, #ee9 10px, #ee9 20px);
-  background-size: 400%;
-  animation: attention 360s linear infinite both;
-}
-
-#nukemail {
-  margin: 4px 4px 3px;
-  padding: 35px 20px 20px;
-  font-weight: 700;
-  font-style: italic;
-  color: #900;
-  border: 1px solid #700;
-  box-shadow: inset 0 0 0 1px #ffe, inset 0 0 1px 3px #dda;
-  background: var(--question) no-repeat center 20px / 32px, linear-gradient(180deg,#ffe, #ffffe6);
-}
-
-#nukemail.floating {
-  margin: 0 auto 1px;
-  width: 480px;
-  z-index: 2000;
-  position: absolute;
-  top: 250px;
-  left: 0;
-  right: 0;
-  box-shadow: inset 0 0 1px 1px #dda, 0 0 0 1px #fff, 0 0 2px 3px rgba(0,0,0,.4), 0 0 1000px 1000px rgba(8,0,0,.5);
-  animation: fade-in linear .5s;
-}
-
-.iframed #nukemail.floating {
-  top: auto;
-  bottom: 230px;
-  box-shadow: inset 0 0 1px 1px #dda, 0 0 0 1px #fff, 0 0 2px 2px rgba(0,0,0,.3);
-}
-
-#confirmdelete.floating td::before {
-  content: "";
-  display: inline-block;
-  width: 100%;
-  height: 100%;
-  background: #000;
-  opacity: .5;
-  position: absolute;
-  z-index: 2000;
-  top: 0;
-  left: 0;
-}
-
-@keyframes attention {
-from {
-background-position: 200%
-}
-to {
-background-position: 0;
-}
-}
-
-#nukemail br {
-  display: block;
-}
-
-#nukemail span {
-  margin: 30px auto 20px;
-  padding-bottom: 20px;
-  display: inline-block;
-  width: 100%;
-  font-size: 120%;
-  border-bottom: 1px solid #933;
-}
-
-/* end confirm delete */
+#confirmdelete td {box-shadow: var(--highlight); background: repeating-linear-gradient(45deg, #900, #900 10px, #ee9 10px, #ee9 20px); background-size: 400%; animation: attention 360s linear infinite both}
+#nukemail {margin: 4px 4px 3px; padding: 35px 20px 20px; font-weight: 700; font-style: italic; color: #900; border: 1px solid #700; box-shadow: inset 0 0 0 1px #ffe, inset 0 0 1px 3px #dda; background: var(--question) no-repeat center 20px / 32px, linear-gradient(180deg,#ffe, #ffffe6)}
+#nukemail.floating {margin: 0 auto 1px; width: 480px; z-index: 2000; position: absolute; top: 250px; left: 0; right: 0; box-shadow: inset 0 0 1px 1px #dda, 0 0 0 1px #fff, 0 0 2px 3px rgba(0,0,0,.4), 0 0 1000px 1000px rgba(8,0,0,.5); animation: fade-in linear .5s}
+.iframed #nukemail.floating {top: auto; bottom: 230px; box-shadow: inset 0 0 1px 1px #dda, 0 0 0 1px #fff, 0 0 2px 2px rgba(0,0,0,.3)}
+#confirmdelete.floating td::before {content: ""; display: inline-block; width: 100%; height: 100%; background: #000; opacity: .5; position: absolute; z-index: 2000; top: 0; left: 0}
+#nukemail br {display: block}
+#nukemail span {margin: 30px auto 20px; padding-bottom: 20px; display: inline-block; width: 100%; font-size: 120%; border-bottom: 1px solid #933}
 
 /* loading mail */
-
-#loading {
-  padding: 15px;
-  font-size: 10pt;
-  text-align: center;
-  background: #ddf;
-  background: repeating-linear-gradient(180deg,#ddf, #eef 2px, #ddf 3px);
-  margin: 0 !important;
-  border: none !important;
-}
-
-#loading b {
-  padding: 6px 0;
-  display: inline-block;
-  width: 40%;
-  min-width: 400px;
-  color: #fff;
-  letter-spacing: 2px;
-  text-shadow: 0 0 1px #001, 0 0 5px #003;
-  border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #99b, inset 0 0 0 2px #ddf, inset 0 0 2px 3px #77a, 0 0 1px #bbb;
-  background: #337;
-  background: repeating-linear-gradient(45deg, #449 1px, #449 20px, #66a 20px, #77a 40px);
-  animation: loading 1s linear infinite forwards alternate;
-}
-
-@keyframes loading {
-0% {
-  text-shadow: 0 0 1px #001, 0 0 5px #003;
-  background: linear-gradient(180deg,rgba(255,255,255,.2) 50%, rgba(100,100,128,.3) 50%), repeating-linear-gradient(45deg, #77a 1px, #77a 20px, #449 20px, #449 40px);
-}
-
-100% {
-  text-shadow: 0 0 1px #001, 0 0 5px #505;
-  background: linear-gradient(180deg,rgba(255,255,255,.2) 50%, rgba(100,100,128,.3) 50%), repeating-linear-gradient(45deg, #449 1px, #449 20px, #77a 20px, #77a 40px);
-}
-}
-
-/* end loading mail */
-
-select {
-  margin: 5px;
-  padding: 5px 24px 5px 5px !important;
-  min-width: 120px;
-  text-align: left !important;
-  font-size: 9pt;
-  color: #5b5b71;
-  border: var(--border_input);
-  border-radius: 2px;
-  box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
-  background: var(--dropdown) no-repeat right 8px center / 10px, var(--btn);
-  appearance: none;
-  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
-}
-
-@supports not (-moz-appearance: none) {
-select {
-  padding: 5px 16px 5px 6px !important;
-}
-}
-
-select:-moz-focusring {
-  outline: 1px solid transparent;
-}
-
-select option {
-  background: #fff;
-}
-
-select:hover, select:active {
-  cursor: pointer;
-  color: var(--ink_darker);
-  box-shadow: var(--highlight);
-  background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover) !important;
-}
-
-select:focus {
-  color: var(--ink_darker);
-  box-shadow: 0 0 1px #89f;
-  background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover) !important;
-}
-
-select::-moz-focus-inner {
-  outline: none !important;
-  border: none !important;
-}
-
-select::-ms-expand {
-  display: none;
-}
-
-.folders {
-  margin: -3px 0 0 0;
-  float: left;
-}
-
-.folders select {
-  margin-left: -4px;
-  text-align: center !important;
-}
-
-#viewmail {
-  position: relative;
-}
-
-#viewmail .folders {
-  padding: 4px 6px 4px 4px;
-  position: absolute;
-  top: -1px;
-  right: -1px;
-  border: 1px solid #8d8daa;
-  border-radius: 0 0 0 3px;
-  box-shadow: var(--highlight);
-  background: linear-gradient(180deg,rgba(255,255,255,.7) 50%, rgba(240,240,255,.4) 50%), repeating-linear-gradient(180deg,#eef 1px, #eef 2px, #fff 3px);
-}
-
-input.switchto, input.moveto {
-  padding: 5px 7px 5px 24px;
-  background: var(--folder) no-repeat 6px center, var(--btn);
-}
-
-#viewmail .moveto, #viewmail .select1 {
-  margin-bottom: 2px;
-}
-
-#viewmail .moveto {
-  margin-right: 8px;
-}
-
-#viewmail .select1 {
-  margin-right: 0;
-}
-
-input.switchto:hover, input.moveto:hover {
-  background: var(--folder_hover) no-repeat 6px center, var(--btn_hover);
-}
-
-#folderName {
-  font-weight: 700;
-  color: #5b5b71;
-  text-transform: capitalize;
-}
-
-input[type=text]::placeholder, input[type=password]::placeholder {
-  font-style: italic;
-  text-transform: lowercase;
-  opacity: .4;
-}
-
-input[type=text]:focus::placeholder, input[type=password]:focus::placeholder {
-  opacity: 0;
-}
-
-/* responsive layout */
-
-@media screen and (max-width: 900px) {
-  body {
-    margin: 3px;
-  }
-
-  body, td, a, button, input, p.mailbody, select {
-    font-size: 8.5pt !important;
-  }
-
-  th.mailListDate {
-    white-space: nowrap;
-    text-align: center !important;
-  }
-
-  td.mailListDate {
-    padding: 0;
-    white-space: normal !important;
-    width: 1%;
-    line-height: 100%;
-    text-align: center;
-  }
-
-  .listDate {
-    padding-bottom: 1px !important;
-    text-align: center !important;
-    font-weight: 700;
-    border: none !important;
-    border-bottom: 1px solid #ddd !important;
-    box-shadow: none !important;
-    background: none !important;
-    opacity: .85;
-}
-
-  .listDate span {
-    min-width: 0 !important;
-  }
-
-  .listTime {
-    margin-top: 1px;
-    margin-bottom: 2px;
-    text-align: center !important;
-    font-size: 95%;
-  }
-
-  .pagenavcontainer {
-    position: fixed;
-    top: 13px;
-    right: 5px !important;
-  }
-
-  .topbuttons .pagenav td {
-    padding: 0;
-    width: auto;
-  }
-
-  .topbuttons .pagenav input {
-    margin: 1px !important;
-  }
-
-  .topbuttons .pagenav td:nth-child(2) {
-    display: none;
-  }
-
-  .topbuttons input.nextpage {
-    margin-left: 5px !important;
-  }
-
-  #messagenav {
-    margin: 7px 1px 0;
-    position: fixed;
-    float: none;
-  }
-
-  .delete + .logout {
-    display: none;
-  }
-}
-
-@media screen and (max-width: 1000px) {
-  #info {
-    margin-top: 1px;
-    padding: 3px 0 3px 6px;
-  }
-
-  #infoUser {
-    display: none !important;
-  }
-
-  .topbuttons .logout, .topbuttons .logout:hover, .topbuttons .logout:focus, .topbuttons .logout:active {
-    margin: -4px 0 -3px 4px !important
-  }
-
-  .folders {
-    margin-top: -3px;
-    float: left;
-  }
-
-  .folders select {
-    margin-left: -4px !important;
-    padding-top: 4px !important;
-    padding-bottom: 4px !important;
-  }
-}
-
-@media screen and (max-width: 1300px) {
-  select {
-    font-size: 9pt;
-  }
-}
-
-@media screen and (min-width: 1300px) {
-  .iframed body, .iframed td, .iframed textarea, .iframed input, .iframed div, .iframed p.mailbody, .iframed a {
-    font-size: 10pt !important;
-  }
-
-  .iframed td {
-    padding: 3px 5px;
-  }
-}
-
-@media screen and (min-width: 1500px) {
-  body, td, textarea, input, div, p.mailbody, a {
-    font-size: 10pt !important;
-  }
-  th {font-size: 70%}
-
-  td {padding: 3px 5px}
-}
-
-/* end responsive layout */
-
-tr.mailbody td {
-  border-top: 1px solid #8d8daa !important;
-}
-
-.debugHeader:nth-child(n+3) td {
-  border-top: 1px solid #273;
-}
-
-.debugHeader {
-  background: #496;
-}
-
-.debugHeader pre {
-  margin: 4px 10px;
-  line-height: 1.3;
-  white-space: pre-wrap;
-  font-size: 9.5pt;
-  font-weight: 600;
-  color: #fff;
-  opacity: .9;
-}
-
-@media screen and (max-width: 1500px) {
-  .debugHeader pre {font-size: 8.5pt}
-}
-
-#toggle {
-  height: 20px;
-  width: 24px;
-  vertical-align: middle;
-  font-size: 0 !important;
-  border: none;
-  background: var(--show) no-repeat center center / 20px;
-  cursor: pointer;
-  mix-blend-mode: luminosity;
-}
-
-#toggle:hover {
-  mix-blend-mode: normal;
-}
-
-#toggle.hidepass {
-  background: var(--hide) no-repeat center center / 20px;
-}
-
-#toggle.showpass {
-  background: var(--show) no-repeat center center / 20px;
-}
-
-#mailbox, .page {
-  position: relative;
-}
-
-.page::after {
-  width: 0;
-  height: 3px;
-  position: absolute;
-  z-index: 999;
-  top: -6px;
-  left: -1px;
-  display: block;
-  background: #d60;
-  content: "";
-  animation: ease-in bar 2s reverse;
-  will-change: transform;
-}
-
-.iframed .page::after {
-  top: -4px;
-}
-
-@keyframes bar {
-  from {width: 100%; filter:opacity(.5)}
-}
+#loading {padding: 15px; font-size: 10pt; text-align: center; background: #ddf; background: repeating-linear-gradient(180deg,#ddf, #eef 2px, #ddf 3px); margin: 0; border: none}
+#loading b {padding: 6px 0; display: inline-block; width: 40%; min-width: 400px; color: #fff; letter-spacing: 2px; text-shadow: 0 0 1px #001, 0 0 5px #003; border-radius: 2px; box-shadow: inset 0 0 0 1px #99b, inset 0 0 0 2px #ddf, inset 0 0 2px 3px #77a, 0 0 1px #bbb; background: #337; background: repeating-linear-gradient(45deg, #449 1px, #449 20px, #66a 20px, #77a 40px); animation: loading 1s linear infinite forwards alternate}
+select {margin: 5px; padding: 5px 24px 5px 5px; min-width: 120px; text-align: left; font-size: 9pt; color: var(--ink); border: var(--border_input); border-radius: 2px; box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1); background: var(--dropdown) no-repeat right 8px center / 10px, var(--btn); appearance: none; filter: drop-shadow(0 0 1px rgba(220,220,255,.7))}
+select:-moz-focusring {outline: 1px solid transparent}
+select option {background: #fff}
+select:hover, select:active {cursor: pointer; color: var(--ink_darker); box-shadow: var(--highlight); background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover)}
+select:focus {color: var(--ink_darker); box-shadow: 0 0 1px #89f; background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover)}
+select::-moz-focus-inner {outline: none; border: none}
+select::-ms-expand {display: none}
+.folders {margin: -3px 0 0 0; float: left}
+.folders select {margin-left: 0; text-align: center}
+#viewmail {position: relative}
+#viewmail .folders {padding: 5px 6px 5px 4px; position: absolute; top: -1px; right: -1px; border: 1px solid var(--border_inner); border-radius: 0 0 0 3px; box-shadow: var(--highlight); background: linear-gradient(180deg,rgba(255,255,255,.7) 50%, rgba(240,240,255,.4) 50%), repeating-linear-gradient(180deg,#eef 1px, #eef 2px, #fff 3px)}
+input.switchto, input.moveto {padding: 5px 7px 5px 24px; background: var(--folder) no-repeat 6px center / 14px, var(--btn)}
+#viewmail .moveto, #viewmail .select1 {margin-bottom: 2px}
+#viewmail .moveto {margin-right: 8px}
+#viewmail .select1 {margin-right: 0}
+input.switchto:hover, input.moveto:hover {background: var(--folder_hover) no-repeat 6px center / 14px, var(--btn_hover)}
+#folderName {font-weight: 700; color: #5b5b71; text-transform: capitalize}
+input[type=text]::placeholder, input[type=password]::placeholder {font-style: italic; text-transform: lowercase; opacity: .4}
+input[type=text]:focus::placeholder, input[type=password]:focus::placeholder {opacity: 0}
+tr.mailbody td {border-top: 1px solid var(--border_inner)}
+
+/* mail headers */
+.debugHeader:nth-child(n+3) td {border-top: 1px solid #273}
+.debugHeader {background: #496}
+.debugHeader pre {margin: 4px 10px; line-height: 1.3; white-space: pre-wrap; font-size: 9.5pt; font-weight: 600; color: #fff; opacity: .9}
+#toggle {height: 20px; width: 24px; vertical-align: middle; font-size: 0; border: none; background: var(--show) no-repeat center center / 20px; cursor: pointer; mix-blend-mode: luminosity}
+#toggle:hover {mix-blend-mode: normal}
+#toggle.hidepass {background: var(--hide) no-repeat center center / 20px}
+#toggle.showpass {background: var(--show) no-repeat center center / 20px}
+#mailbox, .page {position: relative}
+.page::after {width: 0; height: 3px; position: absolute; z-index: 999; top: -6px; left: -1px; display: block; background: #d60; content: ""; animation: ease-in bar 2s reverse; will-change: transform}
+.iframed .page::after {top: -4px}
+
+@keyframes attention {from {background-position: 200%}  {background-position: 0}}
+@keyframes bar {from {width: 100%; filter:opacity(.5)}}
+@keyframes fade-in {0%,80% {filter: opacity(0)} 100% {filter: opacity(1)}}
+@keyframes hide-up {from {margin-top: 0} to {margin-top: -300px}}
+@keyframes loading {0% {text-shadow: 0 0 1px #001, 0 0 5px #003; background: linear-gradient(180deg,rgba(255,255,255,.2) 50%, rgba(100,100,128,.3) 50%), repeating-linear-gradient(45deg, #77a 1px, #77a 20px, #449 20px, #449 40px)} 100% {text-shadow: 0 0 1px #001, 0 0 5px #505; background: linear-gradient(180deg,rgba(255,255,255,.2) 50%, rgba(100,100,128,.3) 50%), repeating-linear-gradient(45deg, #449 1px, #449 20px, #77a 20px, #77a 40px)}}
+
+@media screen and (max-width: 1500px) {.debugHeader pre {font-size: 8.5pt} .iframed .pagenavcontainer {top: 5px} .folders select {
+  margin-left: -4px}}
+@media screen and (max-width: 1300px) {select {font-size: 9pt}}
+@media screen and (max-width: 1000px) {#info {margin-top: 1px; padding: 3px 0 3px 6px} #infoUser {display: none} .folders {margin-top: -3px; float: left} .folders select {margin-left: -2px; padding-top: 5px; padding-bottom: 5px} .topbuttons input, .topbuttons .fakebutton, .topbuttons input.new, .topbuttons input.switchto, .topbuttons input.moveto {padding-top: 6px; padding-bottom: 7px} #info input.logout, #info input.logout:hover, #info input.logout:focus, #info input.logout:active {margin: -4px 0 -3px 4px}}
+@media screen and (max-width: 900px) {body {margin: 3px} body, td, a, button, input, p.mailbody, select {font-size: 8.5pt} th.mailListDate {white-space: nowrap; text-align: center} td.mailListDate {padding: 0; white-space: normal; width: 1%; line-height: 100%; text-align: center} .listDate {padding-bottom: 1px; text-align: center; font-weight: 700; border: none; border-bottom: 1px solid #ddd; box-shadow: none; background: none; opacity: .85} .listDate span {min-width: 0} .listTime {margin-top: 1px; margin-bottom: 2px; text-align: center; font-size: 95%} .pagenavcontainer {position: fixed; top: 13px; right: 5px} .topbuttons .pagenav td {padding: 0; width: auto} .topbuttons .pagenav input {margin: 1px} .topbuttons .pagenav td:nth-child(2) {display: none} .topbuttons input.nextpage {margin-left: 5px} #messagenav {margin: 7px 1px 0; position: fixed; float: none} .delete + .logout {display: none}}
+@media screen and (min-width: 1200px) {#info {position: absolute; left: calc(50% - 160px); float: none}}
+@media screen and (min-width: 1300px) {body, input[type="submit"], input[type="reset"], #settings, .fakebutton, select, textarea {font-size: 10pt} .iframed td {padding-top: 5px; padding-bottom: 5px} #dologin .fakebutton {margin-top: 2px}}
+@media screen and (min-width: 1500px) {body, td, textarea, input, div, p.mailbody, a {font-size: 10pt} th {font-size: 70%} td {padding: 3px 5px}}

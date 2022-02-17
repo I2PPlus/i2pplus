@@ -28,7 +28,7 @@ body {
   background: rgba(230,230,240,.4);
 }
 
-* {
+input, button, textarea, select, a {
   outline: none;
 }
 

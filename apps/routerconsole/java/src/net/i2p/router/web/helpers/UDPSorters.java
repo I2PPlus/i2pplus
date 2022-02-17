@@ -287,20 +287,20 @@ class UDPSorters {
     static void appendSortLinks(StringBuilder buf, String urlBase, int sortFlags, String descr, int ascending) {
         if (ascending == FLAG_ALPHA) {  // 0
             buf.append("<span class=\"sortdown\"><a href=\"").append(urlBase).append("?transport=ssu&amp;sort=0" +
-                       "\" title=\"").append(descr).append("\"><img src=\"/themes/console/images/svg/inbound.svg\" alt=\"V\"></a></span>");
+                       "\" title=\"").append(descr).append("\"><img src=\"/themes/console/images/inbound.svg\" alt=\"V\"></a></span>");
         } else if (sortFlags == ascending) {
             buf.append(" <span class=\"sortdown\"><a href=\"").append(urlBase).append("?transport=ssu&amp;sort=").append(0-ascending);
-            buf.append("\" title=\"").append(descr).append("\"><img src=\"/themes/console/images/svg/inbound.svg\" alt=\"V\"></a></span>" +
-                       "<span class=\"sortupactive\"><b><img src=\"/themes/console/images/svg/outbound.svg\" alt=\"^\"></b></span>");
+            buf.append("\" title=\"").append(descr).append("\"><img src=\"/themes/console/images/inbound.svg\" alt=\"V\"></a></span>" +
+                       "<span class=\"sortupactive\"><b><img src=\"/themes/console/images/outbound.svg\" alt=\"^\"></b></span>");
         } else if (sortFlags == 0 - ascending) {
-            buf.append(" <span class=\"sortdownactive\"><b><img src=\"/themes/console/images/svg/inbound.svg\" alt=\"V\"></b></span><span class=\"sortup\"><a href=\"")
+            buf.append(" <span class=\"sortdownactive\"><b><img src=\"/themes/console/images/inbound.svg\" alt=\"V\"></b></span><span class=\"sortup\"><a href=\"")
                .append(urlBase).append("?transport=ssu&amp;sort=").append(ascending);
-            buf.append("\" title=\"").append(descr).append("\"><img src=\"/themes/console/images/svg/outbound.svg\" alt=\"^\"></a></span>");
+            buf.append("\" title=\"").append(descr).append("\"><img src=\"/themes/console/images/outbound.svg\" alt=\"^\"></a></span>");
         } else {
             buf.append(" <span class=\"sortdown\"><a href=\"").append(urlBase).append("?transport=ssu&amp;sort=").append(0-ascending);
-            buf.append("\" title=\"").append(descr).append("\"><img src=\"/themes/console/images/svg/inbound.svg\" alt=\"V\"></a></span>" +
+            buf.append("\" title=\"").append(descr).append("\"><img src=\"/themes/console/images/inbound.svg\" alt=\"V\"></a></span>" +
                        "<span class=\"sortup\"><a href=\"").append(urlBase).append("?transport=ssu&amp;sort=").append(ascending);
-            buf.append("\" title=\"").append(descr).append("\"><img src=\"/themes/console/images/svg/outbound.svg\" alt=\"^\"></a></span>");
+            buf.append("\" title=\"").append(descr).append("\"><img src=\"/themes/console/images/outbound.svg\" alt=\"^\"></a></span>");
         }
     }
 }

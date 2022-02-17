@@ -32,7 +32,7 @@ textarea, #subslog pre {padding: 3px 5px; width: 100%; height: 120px; line-heigh
 textarea[name="config"] {height: 250px; overflow-y: scroll; resize: none}
 textarea[cols="70"] {width: 100%; height: 40px}
 textarea:focus {filter: none}
-form[action="addressbook"] > p.buttons, #filter, #search, #visualid tr:last-child td, #buttons, #add p.buttons, #import p.buttons {box-shadow: var(--highlight), inset 0 0 2px 1px #030; background: repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px), linear-gradient(180deg,#020, #000 75%); background-size: 4px 100%, 100%}
+form[action="addressbook"] > p.buttons, #filter, #search, #visualid tr:last-child td, #buttons, #add p.buttons, #import p.buttons {box-shadow: var(--bevel); background: repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px), linear-gradient(180deg,#020, #000 75%); background-size: 4px 100%, 100%}
 form[action="addressbook"] > p.buttons {margin: -13px -3px 0; padding: 8px 5px; border: var(--border)}
 form[action="export"] > #buttons {margin-top: 15px; padding: 0 0 10px; border: var(--border); background: #000}
 input#exporthosts:active {background: #f60 var(--download_active) no-repeat center center / 16px}
@@ -49,8 +49,8 @@ input.update {margin-left: 5px}
 .fakebutton:hover, .fakebutton:focus {color: #f60}
 
 /* topnav */
-#navi{margin: -16px auto 30px; padding: 5px 3px; position: sticky; top: -1px; z-index: 999; text-align: center; border: var(--border_hard); border-radius: 0 1px 2px 2px; box-shadow: var(--highlight), 0 2px 2px 2px rgba(0,0,0,.4); background: repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,48,0,.3) 4px), var(--th), url(/themes/console/dark/images/camotile2.png); background-size: 4px 100%, 100%, 175px; background-blend-mode: normal, exclusion, normal}
-.iframed #navi{margin: -6px -15px 27px; padding: 5px 0; position: static; border: var(--border_hard); border-right: none; border-left: none; border-radius: 0; box-shadow: var(--highlight)}
+#navi {margin: -16px auto 30px; padding: 5px 3px; position: sticky; top: -1px; z-index: 999; text-align: center; border: var(--border_hard); border-radius: 0 1px 2px 2px; box-shadow: var(--bevel), 0 2px 2px 2px rgba(0,0,0,.4); background: var(--topnav)}
+.iframed #navi {margin: -6px -15px 27px; padding: 5px 0; position: static; border: var(--border_hard); border-right: none; border-left: none; border-radius: 0}
 #navi a:link {text-transform: capitalize}
 #navi a:first-child {border-radius: 2px 0 0 2px}
 #navi a:last-child {border-radius: 0 2px 2px 0}
@@ -91,19 +91,20 @@ input.update {margin-left: 5px}
 #prev:active::after, #next:active::after {transform: scale(.9)}
 
 /* headings */
-h3 {padding: 7px 10px; letter-spacing: .18em; word-spacing: .1em; font-size: 10pt; font-weight: 700; text-transform: uppercase; text-shadow: 0 0 2px #001100; color: var(--ink); border: var(--border); box-shadow: var(--highlight); -webkit-text-stroke: var(--stroke)}
+h3 {padding: 7px 10px; letter-spacing: .18em; word-spacing: .1em; font-size: 10pt; font-weight: 700; text-transform: uppercase; text-shadow: 0 0 2px #001100; color: var(--ink); border: var(--border); box-shadow: var(--bevel); -webkit-text-stroke: var(--stroke)}
 h4 {display: none;}
 .headline {margin-top: -14px}
-.headline h3, #add h3, #import h3 {padding: 10px 5px 10px 35px; text-transform: uppercase; font-size: 11.5pt; background: var(--addressbook) no-repeat 9px center, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(90deg, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(180deg,#004000, #000 75%); background-size: 20px, 100%, 4px 100%, 100%}
+.headline h3 {padding: 10px 5px 10px 35px; text-transform: uppercase; font-size: 11.5pt; background: var(--addressbook) no-repeat 9px center / 20px, var(--title)}
 .headline h3 {margin-top: -10px}
 .headline h3:first-child {margin-bottom: 24px}
 .headline h3::first-letter {font-size: 115%}
-.headline#subscriptions h3 {background: var(--subscription) 9px center no-repeat, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px), linear-gradient(180deg,#004000, #000 75%); background-size: 18px, 100%, 4px 100%, 100%}
-.headline#configure h3 {background: var(--config) no-repeat 9px center, linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px), linear-gradient(180deg,#004000, #000 75%); background-size: 20px, 100%, 4px 100%, 100%}
+.headline#subscriptions h3 {background: var(--subscription) no-repeat 9px center / 18px, var(--title)}
+.headline#configure h3 {background: var(--config) no-repeat 9px center / 20px, var(--title)}
 .headline h3:first-child + h4 {margin-top: -25px; margin-bottom: 26px}
 #addressbook.headline h3 {padding-right: 44px; contain: paint}
 #addressbook.headline {position: relative}
-#add h3, #import h3 {margin: -6px -1px 15px; padding: 8px 10px 8px 36px; font-size: 11pt}
+#add h3, #import h3 {margin: -6px -1px 15px; padding: 8px 10px 8px 34px; font-size: 11pt; background: var(--add) no-repeat 10px center / 14px, var(--title)}
+#import h3 {background: var(--download) no-repeat 10px center / 16px, var(--title)}
 #dtls .headline h3:first-child {margin-bottom: 28px}
 
 /* host list */
@@ -149,11 +150,11 @@ td.destinations {max-width: 50px; padding: 1px 8px}
 #host_list tr:hover td.destinations {color: #bb0}
 
 /* search/filter */
-#search {margin-top: -25px; margin-bottom: -14px; padding: 0 10px; border: var(--border)}
+#search {margin: -25px 0 0; padding: 0 10px; border: var(--border); box-shadow: var(--bevel)}
 #booksearch input[name=search]:focus {background: var(--search) no-repeat 9px center / 14px, var(--txt_focus); outline: none}
 #booksearch input[name=search] {padding: 7px 8px 7px 32px; min-width: 280px; background: #000 var(--search) no-repeat 9px center / 14px; background-size: 14px}
-#booksearch {padding: 5px 5px 17px; text-align: center}
-#booksearch > * {vertical-align: middle}
+#booksearch {padding: 6px; text-align: center}
+#booksearch input {vertical-align: middle; line-height: 1.3}
 #filter {margin-top: -1px; padding: 15px 5px; border: var(--border); text-align: center; background: #001000}
 #filter a, #activefilter {margin: 1px 0 2px; padding: 2px 8px; min-width: 12px; display: inline-block; line-height: 1.6; white-space: nowrap; text-transform: capitalize; font-size: 105%; box-shadow: 0 0 0 1px #030, 0 0 2px 1px rgba(0,0,0,.8), var(--highlight); background: var(--th)}
 #filter a:hover, #filter a:focus {text-decoration: none; color: #f60; text-shadow: 0 1px 1px rgba(0,0,0,.8); box-shadow: 0 0 0 1px #030, var(--highlight), inset 0 0 0 2px #930; background: #030; transform: scale(1.15)}
@@ -274,7 +275,7 @@ svg #arrow stop:last-child {stop-color: #010}
 
 /* iframe */
 .iframed #footer {display: none}
-.iframed #helpconfig, .iframed #helpsubs {margin-bottom: -1px}
+.iframed #helpconfig, .iframed #helpsubs {margin: 13px 0 -1px}
 .iframed .page {margin: 0; padding: 0 12px; background: transparent}
 .iframed .page::after {content: ""; display: inline-block; width: 100%; height: 14px; vertical-align: bottom}
 .iframed #visualid {margin-top: 16px; margin-bottom: 16px}
@@ -285,7 +286,7 @@ svg #arrow stop:last-child {stop-color: #010}
 #filtered, #results {font-size: 9.5pt}
 #filter {padding: 9px 4px 8px}
 #exporthosts {margin-top: 6px}
-#paginate {margin: -2px 6px -2px 2px}
+#paginate {margin: 0 6px 0 2px}
 #prev.inactive::after, #next.inactive::after {top: calc(50% - 6px)}
 #prev, #next, #current {font-size: 10pt}
 .iframed #prev::after, .iframed #next::after {top: calc(50% - 5px)}

@@ -42,7 +42,7 @@ body.iframed {
   margin: 6px 0 !important;
 }
 
-* {
+input, button, textarea, select, a {
   outline: none;
 }
 

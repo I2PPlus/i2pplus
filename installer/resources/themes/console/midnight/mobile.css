@@ -1,148 +1,56 @@
 /* Console Theme "Midnight" - Mobile Override */
+/* Author: dr|z3d */
 
-body {
-  padding: 0 5px;
-  margin: 5px 0 0 !important;
-}
+@import url(../mobile.css);
 
-div#xhr {
-  width: 617px;
-  margin: 0 auto;
+#sidebar table[id^="sb_"], #sidebar #sb_localtunnels {
+  width: 100%;
 }
 
-#sb_wrap {
-  position: relative;
-  float: none;
-  width: auto;
-  margin: 0 0 5px;
+#sidebar h3 {
+  padding: 8px 8px 6px;
 }
 
-.sb {
-  float: none;
-  width: 600px;
-  margin: 0 auto;
+#sidebar h3, #sidebar h3 a {
+  font-size: 12pt;
 }
 
-@media screen and (min-width: 1500px) {
-.sb {
-  width: 600px !important;
+#sidebar .percentBarOuter, #sidebar .percentBarInner, #sidebar .percentBarText {
+  height: 20px;
 }
 
-.sb table[id^="sb_"] {
-  width: 600px !important;
-}
-}
-
-#sb_logo + a, a[href="/summaryframe"] {
-  display: inline-block;
-  margin: 12px 0 0 !important;
-  padding: 4px 15px !important;
-  border-radius: 15px;
-  border: 1px solid #241f69;
+#sidebar .percentBarOuter {
+  margin: -2px 4px 2px;
+  width: calc(100% - 10px);
 }
 
-a[href="/summaryframe"] {
-  margin: 3px 0 2px !important;
+#sidebar #sb_memoryBar .percentBarInner {
+  background: var(--membarinner);
 }
 
-.sb td,
-.sb a,
-.sb h4,
-.sb h4 a,
-.sb button {
-  font-size: 10pt !important;
+#sb_internals td:first-child, #sb_advanced td:first-child, #sb_help td:first-child, .sb td:first-child {
+ max-width: none;
 }
 
-.sb h3 a {
-  font-size: 11pt !important;
-  padding: 3px 1px;
+#sidebar #sb_services a, #sidebar #sb_internals a, #sidebar #sb_advanced a {
+  padding: 5px 8px;
+  text-align: center;
+  max-width: none;
 }
 
-.sb table,
-.sb table[id^="sb_"] {
-  min-width: 100% !important;
-  min-width: calc(100% - 1px) !important;
-  margin-bottom: -6px !important;
+#sidebar #sb_routerControl button {
+  margin: 4px 3px;
+  padding: 10px;
+  min-width: calc(50% - 20px);
 }
 
-#sb_localtunnels {
-  margin-top: -5px !important;
+#sidebar #sb_localtunnels td {padding: 3px}
+
+#sb_tunnels + hr + h4 {
+  padding: 12px;
 }
 
-.sb tr:nth-child(odd) td {
-  padding: 3px;
-  background: #000100;
-}
-
-.sb tr:nth-child(even) td {
-  padding: 3px;
-  background: #000018;
-}
-
-.sb tr td {
-  border-top: 1px solid #000 !important;
-  border-bottom: 1px solid #000 !important;
-}
-
-.sb tr:hover td {
-  border-top: 1px solid #004 !important;
-  border-bottom: 1px solid #004 !important;
-}
-
-.sb tr:hover td {
-  background: #002;
-}
-
-.sb h3,
-.sb h4,
-.sb hr {
-  margin-right: 7px !important;
-  margin-left: -10px !important;
-}
-
-.sb h4 {
-  margin: -6px 7px -8px -10px !important;
-}
-
-.sb form {
-  margin: -2px 5px -4px -11px !important;
-}
-
-.sb button[type=submit], .sb button[type=reset] {
-  margin: 5px 10px !important;
-  padding: 8px 5px !important;
-  min-width: 120px !important;
-}
-
-h1 {
-  min-width: 570px;
-  margin: 0 !important;
-}
-
-div.news {
-  min-width: 580px;
-  margin: -1px 0 0;
-}
-
-div.main {
-  min-width: 580px;
-  margin: -1px 0 !important;
-}
-
-.sorry {
-  margin: -1px 0 0;
-}
-
-@media screen and (min-width: 1500px) {
-div.news {
-  margin: -1px 0 0 !important;
-}
-
-div.main {
-  margin: -1px 0 !important;
-}
-
-.sorry {
-  margin: -1px 0 0 !important;
-}
+#clock {
+  margin: -8px -9px -10px;
+  padding: 15px 0 12px;
 }

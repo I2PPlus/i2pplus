@@ -42,121 +42,121 @@ public class HomeHelper extends HelperBase {
 
     // No commas allowed in text strings!
     static final String DEFAULT_SERVICES =
-        _x("Addressbook") + S + _x("Manage your I2P hosts file here (I2P domain name resolution)") + S + "/dns" + S + I + "svg/addressbook.svg" + S +
-        _x("Graphs") + S + _x("Graph Router Performance") + S + "/graphs" + S + I + "svg/graphs.svg" + S +
-        _x("I2PMail") + S + _x("Anonymous webmail client") + S + "/webmail" + S + I + "svg/mail.svg" + S +
-        _x("Help") + S + _x("I2P Router Help") + S + "/help" + S + I + "svg/help.svg" + S +
-        _x("Manage Plugins") + S + _x("Install and configure I2P plugins") + S + "/configplugins" + S + I + "svg/pluginconfig.svg" + S +
-        _x("Network Database") + S + _x("Show list of all known I2P routers") + S + "/netdb" + S + I + "svg/globe.svg" + S +
-        _x("Router Info") + S + _x("Summary of router properties") + S + "/info" + S + I + "svg/info.svg" + S +
-        _x("Router Logs") + S + _x("Health Report") + S + "/logs" + S + I + "svg/logs.svg" + S +
-        _x("Sitemap") + S + _x("Router Sitemap") + S + "/sitemap" + S + I + "svg/sitemap.svg" + S +
-        _x("Torrents") + S + _x("Built-in anonymous BitTorrent Client") + S + "/torrents" + S + I + "svg/snark.svg" + S +
-        _x("Tunnel Manager") + S + _x("Manage server and client tunnels") + S + "/i2ptunnelmgr" + S + I + "svg/tunnelmanager.svg" + S +
-        _x("Web Server") + S + _x("Local web server for hosting your own content on I2P") + S + "http://127.0.0.1:7658/" + S + I + "svg/webserver.svg" + S +
+        _x("Addressbook") + S + _x("Manage your I2P hosts file here (I2P domain name resolution)") + S + "/dns" + S + I + "addressbook.svg" + S +
+        _x("Graphs") + S + _x("Graph Router Performance") + S + "/graphs" + S + I + "graphs.svg" + S +
+        _x("I2PMail") + S + _x("Anonymous webmail client") + S + "/webmail" + S + I + "mail.svg" + S +
+        _x("Help") + S + _x("I2P Router Help") + S + "/help" + S + I + "help.svg" + S +
+        _x("Manage Plugins") + S + _x("Install and configure I2P plugins") + S + "/configplugins" + S + I + "pluginconfig.svg" + S +
+        _x("Network Database") + S + _x("Show list of all known I2P routers") + S + "/netdb" + S + I + "globe.svg" + S +
+        _x("Router Info") + S + _x("Summary of router properties") + S + "/info" + S + I + "info.svg" + S +
+        _x("Router Logs") + S + _x("Health Report") + S + "/logs" + S + I + "logs.svg" + S +
+        _x("Sitemap") + S + _x("Router Sitemap") + S + "/sitemap" + S + I + "sitemap.svg" + S +
+        _x("Torrents") + S + _x("Built-in anonymous BitTorrent Client") + S + "/torrents" + S + I + "snark.svg" + S +
+        _x("Tunnel Manager") + S + _x("Manage server and client tunnels") + S + "/i2ptunnelmgr" + S + I + "tunnelmanager.svg" + S +
+        _x("Web Server") + S + _x("Local web server for hosting your own content on I2P") + S + "http://127.0.0.1:7658/" + S + I + "webserver.svg" + S +
         "";
 
     static final String NEWINSTALL_SERVICES =
-        _x("Addressbook") + S + _x("Manage your I2P hosts file here (I2P domain name resolution)") + S + "/dns" + S + I + "svg/addressbook.svg" + S +
-        _x("Configure Bandwidth") + S + _x("I2P Bandwidth Configuration") + S + "/config" + S + I + "svg/speedometer.svg" + S +
+        _x("Addressbook") + S + _x("Manage your I2P hosts file here (I2P domain name resolution)") + S + "/dns" + S + I + "addressbook.svg" + S +
+        _x("Configure Bandwidth") + S + _x("I2P Bandwidth Configuration") + S + "/config" + S + I + "speedometer.svg" + S +
         // FIXME wasn't escaped
-        _x("Configure UI") + S + _x("Select console theme & language & set optional console password").replace("&", "&amp;") + S + "/configui" + S + I + "svg/ui.svg" + S +
-        _x("Customize Sidebar") + S + _x("Customize the sidebar by adding or removing or repositioning elements") + S + "/configsidebar" + S + I + "svg/sidebar.svg" + S +
-        _x("Graphs") + S + _x("Graph Router Performance") + S + "/graphs" + S + I + "svg/graphs.svg" + S +
-        _x("I2PMail") + S + _x("Anonymous webmail client") + S + "/webmail" + S + I + "svg/mail.svg" + S +
-        _x("Help") + S + _x("I2P Router Help") + S + "/help" + S + I + "svg/help.svg" + S +
-        _x("Manage Plugins") + S + _x("Install and configure I2P plugins") + S + "/configplugins" + S + I + "svg/pluginconfig.svg" + S +
-        _x("Network Database") + S + _x("Show list of all known I2P routers") + S + "/netdb" + S + I + "svg/globe.svg" + S +
-        _x("Router Info") + S + _x("Summary of router properties") + S + "/info" + S + I + "svg/info.svg" + S +
-        _x("Router Logs") + S + _x("Health Report") + S + "/logs" + S + I + "svg/logs.svg" + S +
-        _x("Sitemap") + S + _x("Router Sitemap") + S + "/sitemap" + S + I + "svg/sitemap.svg" + S +
-        _x("Torrents") + S + _x("Built-in anonymous BitTorrent Client") + S + "/torrents" + S + I + "svg/snark.svg" + S +
-        _x("Tunnel Manager") + S + _x("Manage server and client tunnels") + S + "/i2ptunnelmgr" + S + I + "svg/tunnelmanager.svg" + S +
-        _x("Web Server") + S + _x("Local web server for hosting your own content on I2P") + S + "http://127.0.0.1:7658/" + S + I + "svg/webserver.svg" + S +
-        _x("Wizard") + S + _x("Configuration and bandwidth tester") + S + "/wizard" + S + I + "svg/wizard.svg" + S +
+        _x("Configure UI") + S + _x("Select console theme & language & set optional console password").replace("&", "&amp;") + S + "/configui" + S + I + "ui.svg" + S +
+        _x("Customize Sidebar") + S + _x("Customize the sidebar by adding or removing or repositioning elements") + S + "/configsidebar" + S + I + "sidebar.svg" + S +
+        _x("Graphs") + S + _x("Graph Router Performance") + S + "/graphs" + S + I + "graphs.svg" + S +
+        _x("I2PMail") + S + _x("Anonymous webmail client") + S + "/webmail" + S + I + "mail.svg" + S +
+        _x("Help") + S + _x("I2P Router Help") + S + "/help" + S + I + "help.svg" + S +
+        _x("Manage Plugins") + S + _x("Install and configure I2P plugins") + S + "/configplugins" + S + I + "pluginconfig.svg" + S +
+        _x("Network Database") + S + _x("Show list of all known I2P routers") + S + "/netdb" + S + I + "globe.svg" + S +
+        _x("Router Info") + S + _x("Summary of router properties") + S + "/info" + S + I + "info.svg" + S +
+        _x("Router Logs") + S + _x("Health Report") + S + "/logs" + S + I + "logs.svg" + S +
+        _x("Sitemap") + S + _x("Router Sitemap") + S + "/sitemap" + S + I + "sitemap.svg" + S +
+        _x("Torrents") + S + _x("Built-in anonymous BitTorrent Client") + S + "/torrents" + S + I + "snark.svg" + S +
+        _x("Tunnel Manager") + S + _x("Manage server and client tunnels") + S + "/i2ptunnelmgr" + S + I + "tunnelmanager.svg" + S +
+        _x("Web Server") + S + _x("Local web server for hosting your own content on I2P") + S + "http://127.0.0.1:7658/" + S + I + "webserver.svg" + S +
+        _x("Wizard") + S + _x("Configuration and bandwidth tester") + S + "/wizard" + S + I + "wizard.svg" + S +
         "";
 
     static final String ADVANCED_SERVICES =
-        _x("Addressbook") + S + _x("Manage your I2P hosts file here (I2P domain name resolution)") + S + "/dns" + S + I + "svg/addressbook.svg" + S +
-        _x("Advanced Config") + S + _x("Advanced router configuration") + S + "/configadvanced" + S + I + "svg/configure.svg" + S +
-        _x("Changelog") + S + _x("Recent changes") + S + "/help/changelog" + S + I + "svg/changelog.svg" + S +
-        _x("Graphs") + S + _x("Graph Router Performance") + S + "/graphs" + S + I + "svg/graphs.svg" + S +
-        _x("I2PMail") + S + _x("Anonymous webmail client") + S + "/webmail" + S + I + "svg/mail.svg" + S +
-        _x("Manage Plugins") + S + _x("Install and configure I2P plugins") + S + "/configplugins" + S + I + "svg/pluginconfig.svg" + S +
-        _x("Network Database") + S + _x("Show list of all known I2P routers") + S + "/netdb" + S + I + "svg/globe.svg" + S +
-        _x("Router Info") + S + _x("Summary of router properties") + S + "/info" + S + I + "svg/info.svg" + S +
-        _x("Router Logs") + S + _x("Health Report") + S + "/logs" + S + I + "svg/logs.svg" + S +
-        _x("Sitemap") + S + _x("Router Sitemap") + S + "/sitemap" + S + I + "svg/sitemap.svg" + S +
-        _x("Torrents") + S + _x("Built-in anonymous BitTorrent Client") + S + "/torrents" + S + I + "svg/snark.svg" + S +
-        _x("Tunnel Manager") + S + _x("Manage server and client tunnels") + S + "/i2ptunnelmgr" + S + I + "svg/tunnelmanager.svg" + S +
-        _x("Web Server") + S + _x("Local web server for hosting your own content on I2P") + S + "http://127.0.0.1:7658/" + S + I + "svg/webserver.svg" + S +
+        _x("Addressbook") + S + _x("Manage your I2P hosts file here (I2P domain name resolution)") + S + "/dns" + S + I + "addressbook.svg" + S +
+        _x("Advanced Config") + S + _x("Advanced router configuration") + S + "/configadvanced" + S + I + "configure.svg" + S +
+        _x("Changelog") + S + _x("Recent changes") + S + "/help/changelog" + S + I + "changelog.svg" + S +
+        _x("Graphs") + S + _x("Graph Router Performance") + S + "/graphs" + S + I + "graphs.svg" + S +
+        _x("I2PMail") + S + _x("Anonymous webmail client") + S + "/webmail" + S + I + "mail.svg" + S +
+        _x("Manage Plugins") + S + _x("Install and configure I2P plugins") + S + "/configplugins" + S + I + "pluginconfig.svg" + S +
+        _x("Network Database") + S + _x("Show list of all known I2P routers") + S + "/netdb" + S + I + "globe.svg" + S +
+        _x("Router Info") + S + _x("Summary of router properties") + S + "/info" + S + I + "info.svg" + S +
+        _x("Router Logs") + S + _x("Health Report") + S + "/logs" + S + I + "logs.svg" + S +
+        _x("Sitemap") + S + _x("Router Sitemap") + S + "/sitemap" + S + I + "sitemap.svg" + S +
+        _x("Torrents") + S + _x("Built-in anonymous BitTorrent Client") + S + "/torrents" + S + I + "snark.svg" + S +
+        _x("Tunnel Manager") + S + _x("Manage server and client tunnels") + S + "/i2ptunnelmgr" + S + I + "tunnelmanager.svg" + S +
+        _x("Web Server") + S + _x("Local web server for hosting your own content on I2P") + S + "http://127.0.0.1:7658/" + S + I + "webserver.svg" + S +
         "";
 
     // No commas allowed in text strings!
     static final String DEFAULT_FAVORITES =
 
 // I2P specific
-        _x("I2P Bug Reports") + S + _x("Bug tracker") + S + "http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues" + S + I + "svg/bug.svg" + S +
-        _x("I2P FAQ") + S + _x("Frequently Asked Questions") + S + "http://i2p-projekt.i2p/faq" + S + I + "svg/faq.svg" + S +
-        _x("I2P Plugins") + S + _x("zzz's plugin repository") + S + "http://stats.i2p/i2p/plugins/" + S + I + "svg/plugin.svg" + S +
-        "i2pmetrics.i2p" + S + _x("Historical infrastructure data from the I2P network") + S + "http://i2pmetrics.i2p/" + S + I + "svg/stats.svg" + S +
-        _x("Project Website") + S + _x("I2P home page") + S + "http://i2p-projekt.i2p/" + S + I + "svg/i2p.svg" + S +
-        "stats.i2p" + S + _x("I2P Network Statistics") + S + "http://stats.i2p/cgi-bin/dashboard.cgi" + S + I + "svg/stats.svg" + S +
-        _x("Javadocs") + S + _x("I2P+ API documentation") + S + "http://javadoc.skank.i2p/" + S + I + "svg/helplink.svg" + S +
+        _x("I2P Bug Reports") + S + _x("Bug tracker") + S + "http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues" + S + I + "bug.svg" + S +
+        _x("I2P FAQ") + S + _x("Frequently Asked Questions") + S + "http://i2p-projekt.i2p/faq" + S + I + "faq.svg" + S +
+        _x("I2P Plugins") + S + _x("zzz's plugin repository") + S + "http://stats.i2p/i2p/plugins/" + S + I + "plugin.svg" + S +
+        "i2pmetrics.i2p" + S + _x("Historical infrastructure data from the I2P network") + S + "http://i2pmetrics.i2p/" + S + I + "stats.svg" + S +
+        _x("Project Website") + S + _x("I2P home page") + S + "http://i2p-projekt.i2p/" + S + I + "i2p.svg" + S +
+        "stats.i2p" + S + _x("I2P Network Statistics") + S + "http://stats.i2p/cgi-bin/dashboard.cgi" + S + I + "stats.svg" + S +
+        _x("Javadocs") + S + _x("I2P+ API documentation") + S + "http://javadoc.skank.i2p/" + S + I + "helplink.svg" + S +
 
 // software repositories + filesharing
-        "cake.i2p" + S + _x("Transient server-encrypted filesharing and pastebin") + S + "http://cake.i2p/" + S + I + "svg/cake.svg" + S +
-        "fs.i2p" + S + _x("Secure filesharing service") + S + "http://fs.i2p/" + S + I + "svg/cloud.svg" + S +
-        "git.i2p" + S + _x("Community Git hosting") + S + "http://git.i2p/explore/repos" + S + I + "svg/git.svg" + S +
-        "git.idk.i2p" + S + _x("Official I2P Git repository") + S + "http://git.idk.i2p/explore/projects" + S + I + "svg/gitlab.svg" + S +
-        "sharefile.i2p" + S + _x("Secure filesharing service") + S + "http://sharefile.i2p/" + S + I + "svg/cloud.svg" + S +
-        "skank.i2p" + S + _x("Home of I2P+") + S + "http://skank.i2p/" + S + I + "svg/plus.svg" + S +
+        "cake.i2p" + S + _x("Transient server-encrypted filesharing and pastebin") + S + "http://cake.i2p/" + S + I + "cake.svg" + S +
+        "fs.i2p" + S + _x("Secure filesharing service") + S + "http://fs.i2p/" + S + I + "cloud.svg" + S +
+        "git.i2p" + S + _x("Community Git hosting") + S + "http://git.i2p/explore/repos" + S + I + "git.svg" + S +
+        "git.idk.i2p" + S + _x("Official I2P Git repository") + S + "http://git.idk.i2p/explore/projects" + S + I + "gitlab.svg" + S +
+        "sharefile.i2p" + S + _x("Secure filesharing service") + S + "http://sharefile.i2p/" + S + I + "cloud.svg" + S +
+        "skank.i2p" + S + _x("Home of I2P+") + S + "http://skank.i2p/" + S + I + "plus.svg" + S +
 
 // torrent trackers
-        _x("Chudo") + S + _x("No login Bittorrent tracker") + S + "http://torrents.chudo.i2p/" + S + I + "svg/magnet.svg" + S +
-        _x("Postman's Tracker") + S + _x("Bittorrent tracker") + S + "http://tracker2.postman.i2p/" + S + I + "svg/postman.svg" + S +
+        _x("Chudo") + S + _x("No login Bittorrent tracker") + S + "http://torrents.chudo.i2p/" + S + I + "magnet.svg" + S +
+        _x("Postman's Tracker") + S + _x("Bittorrent tracker") + S + "http://tracker2.postman.i2p/" + S + I + "postman.svg" + S +
 
 // domain name registration + uptime trackers
-        "Identiguy" + S + _x("List of active eepsites and uptime monitor") + S + "http://identiguy.i2p/" + S + I + "svg/servermonitor.svg" + S +
+        "Identiguy" + S + _x("List of active eepsites and uptime monitor") + S + "http://identiguy.i2p/" + S + I + "servermonitor.svg" + S +
         "notbob.i2p" + S + _x("List of active eepsites and uptime monitor") + S + "http://notbob.i2p/" + S + I + "notbob.png" + S +
-        "reg.i2p" + S + _x("I2P Domain Name Registration") + S + "http://reg.i2p/" + S + I + "svg/reg.svg" + S +
-        _x("zzz Domain Registry") + S + _x("I2P Domain Name Registration") + S + "http://stats.i2p/i2p/addkey.html" + S + I + "svg/registrar.svg" + S +
+        "reg.i2p" + S + _x("I2P Domain Name Registration") + S + "http://reg.i2p/" + S + I + "reg.svg" + S +
+        _x("zzz Domain Registry") + S + _x("I2P Domain Name Registration") + S + "http://stats.i2p/i2p/addkey.html" + S + I + "registrar.svg" + S +
 
 // forums + social
-        _x("Dev Forum") + S + _x("Development forum") + S + "http://zzz.i2p/" + S + I + "svg/forum.svg" + S +
-        _x("I2P Forum") + S + _x("I2P-related community forums") + S + "http://i2pforum.i2p/" + S + I + "svg/forum.svg" + S +
-        "discuss.i2p" + S + _x("File-sharing forum") + S + "http://discuss.i2p/" + S + I + "svg/forum.svg" + S +
-        "nitter" + S + _x("Alternative front-end for Twitter") + S + "http://nitter.swurl.i2p/" + S + I + "svg/twitter.svg" + S +
-        _x("novabbs.i2p") + S + _x("Rocksolid forums for the darknets") + S + "http://novabbs.i2p/" + S + I + "svg/forum.svg" + S +
-        "ramble.i2p" + S + _x("Cross-network micro-blogging &amp; forums &amp; wiki") + S + "http://ramble.i2p/" + S + I + "svg/ramble.svg" + S +
-        "teddit.i2p" + S + _x("Alternative privacy-focused front-end for Reddit") + S + "http://teddit.i2p/" + S + I + "svg/teddit.svg" + S +
-        "zeronet.i2p" + S + _x("Zeronet I2P Gateway") + S + "http://zeronet.i2p/" + S + I + "svg/zeronet.svg" + S +
-        //_x("Dancing Elephants") + S + _x("Rocksolid forums for the darknets") + S + "http://def3.i2p/" + S + I + "svg/forum.svg" + S +
-        //"query.i2p" + S + _x("The StackOverflow of I2P") + S + "http://query.i2p/" + S + I + "svg/forum.svg" + S +
+        _x("Dev Forum") + S + _x("Development forum") + S + "http://zzz.i2p/" + S + I + "forum.svg" + S +
+        _x("I2P Forum") + S + _x("I2P-related community forums") + S + "http://i2pforum.i2p/" + S + I + "forum.svg" + S +
+        "discuss.i2p" + S + _x("File-sharing forum") + S + "http://discuss.i2p/" + S + I + "forum.svg" + S +
+        "nitter" + S + _x("Alternative front-end for Twitter") + S + "http://nitter.swurl.i2p/" + S + I + "twitter.svg" + S +
+        _x("novabbs.i2p") + S + _x("Rocksolid forums for the darknets") + S + "http://novabbs.i2p/" + S + I + "forum.svg" + S +
+        "ramble.i2p" + S + _x("Cross-network micro-blogging &amp; forums &amp; wiki") + S + "http://ramble.i2p/" + S + I + "ramble.svg" + S +
+        "teddit.i2p" + S + _x("Alternative privacy-focused front-end for Reddit") + S + "http://teddit.i2p/" + S + I + "teddit.svg" + S +
+        "zeronet.i2p" + S + _x("Zeronet I2P Gateway") + S + "http://zeronet.i2p/" + S + I + "zeronet.svg" + S +
+        //_x("Dancing Elephants") + S + _x("Rocksolid forums for the darknets") + S + "http://def3.i2p/" + S + I + "forum.svg" + S +
+        //"query.i2p" + S + _x("The StackOverflow of I2P") + S + "http://query.i2p/" + S + I + "forum.svg" + S +
 
 // hosting + other services
-        _x("Pastebin") + S + _x("Encrypted I2P Pastebin") + S + "http://paste.r4sas.i2p/" + S + I + "svg/paste.svg" + S +
-        _x("radio.r4sas.i2p") + S + _x("Streaming radio service") + S + "http://radio.r4sas.i2p/" + S + I + "svg/radio.svg" + S +
-           "tube.i2p" + S + _x("Alternative front-end to Youtube") + S + "http://tube.i2p/" + S + I + "svg/tv.svg" + S +
-           "speedtest" + S + _x("Outproxy bandwidth test") + S + "http://outproxy.purokishi.i2p/speedtest/" + S + I + "svg/speedometer.svg" + S +
-           "webhosting.i2p" + S + _x("Provider of privacy respecting web hosting and VPN services") + S + "http://webhosting.i2p/" + S + I + "svg/incog.svg" + S +
-        //_x("Deep Web Radio") + S + _x("Streaming radio service") + S + "http://deepwebradio.i2p/" + S + I + "svg/radio.svg" + S +
+        _x("Pastebin") + S + _x("Encrypted I2P Pastebin") + S + "http://paste.r4sas.i2p/" + S + I + "paste.svg" + S +
+        _x("radio.r4sas.i2p") + S + _x("Streaming radio service") + S + "http://radio.r4sas.i2p/" + S + I + "radio.svg" + S +
+           "tube.i2p" + S + _x("Alternative front-end to Youtube") + S + "http://tube.i2p/" + S + I + "tv.svg" + S +
+           "speedtest" + S + _x("Outproxy bandwidth test") + S + "http://outproxy.purokishi.i2p/speedtest/" + S + I + "speedometer.svg" + S +
+           "webhosting.i2p" + S + _x("Provider of privacy respecting web hosting and VPN services") + S + "http://webhosting.i2p/" + S + I + "incog.svg" + S +
+        //_x("Deep Web Radio") + S + _x("Streaming radio service") + S + "http://deepwebradio.i2p/" + S + I + "radio.svg" + S +
 
 // search engines
-        "Legwork" + S +_x("I2P Web Search Engine") + S + "http://legwork.i2p/" + S + I + "svg/search.svg" + S +
-        "Ransack" + S +_x("I2P-based Metasearch Engine") + S + "http://ransack.i2p/" + S + I + "svg/search.svg" + S +
+        "Legwork" + S +_x("I2P Web Search Engine") + S + "http://legwork.i2p/" + S + I + "search.svg" + S +
+        "Ransack" + S +_x("I2P-based Metasearch Engine") + S + "http://ransack.i2p/" + S + I + "search.svg" + S +
 
 // wikis & reference
-        "ebooks.i2p" + S + _x("Huge collection of books &amp; magazines &amp; comics") + S + "http://ebooks.i2p/" + S + I + "svg/books.svg" + S +
-        "I2P Wiki" + S + _x("I2P-related Wiki") + S + "http://wiki.i2p-projekt.i2p/" + S + I + "svg/wiki.svg" + S +
-        //"jalibrary.i2p" + S + _x("Books &amp; courses &amp art") + S + "http://jalibrary.i2p/" + S + I + "svg/books.svg" + S +
-        //"nexus.i2p" + S + _x("Searchable science library") + S + "http://nexus.i2p/" + S + I + "svg/nexus.svg" + S +
-        _x("Psychonaut") + S + _x("Wiki relating to altered states of consciousness") + S + "http://psy.i2p/" + S + I + "svg/psy.svg" + S +
-        //"tome.i2p" + S + _x("Collection of books &amp; other reading material") + S + "http://tome.i2p/" + S + I + "svg/books.svg" + S +
+        "ebooks.i2p" + S + _x("Huge collection of books &amp; magazines &amp; comics") + S + "http://ebooks.i2p/" + S + I + "books.svg" + S +
+        "I2P Wiki" + S + _x("I2P-related Wiki") + S + "http://wiki.i2p-projekt.i2p/" + S + I + "wiki.svg" + S +
+        //"jalibrary.i2p" + S + _x("Books &amp; courses &amp art") + S + "http://jalibrary.i2p/" + S + I + "books.svg" + S +
+        //"nexus.i2p" + S + _x("Searchable science library") + S + "http://nexus.i2p/" + S + I + "nexus.svg" + S +
+        _x("Psychonaut") + S + _x("Wiki relating to altered states of consciousness") + S + "http://psy.i2p/" + S + I + "psy.svg" + S +
+        //"tome.i2p" + S + _x("Collection of books &amp; other reading material") + S + "http://tome.i2p/" + S + I + "books.svg" + S +
 
 // news + blogs
-        "LinuxFarm" + S + _x("Router performance monitoring and Linux tips") + S + "http://linuxfarm.i2p/" + S + I + "svg/linuxfarm.svg" + S +
-        _x("Planet I2P") + S + _x("I2P News") + S + "http://planet.i2p/" + S + I + "svg/planet.svg" + S +
+        "LinuxFarm" + S + _x("Router performance monitoring and Linux tips") + S + "http://linuxfarm.i2p/" + S + I + "linuxfarm.svg" + S +
+        _x("Planet I2P") + S + _x("I2P News") + S + "http://planet.i2p/" + S + I + "planet.svg" + S +
 
         "";
 

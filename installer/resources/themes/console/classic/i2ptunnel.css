@@ -658,12 +658,12 @@ textarea[name="accessList"]:focus {
 
 .multiOption#isServer {
   padding-left: 28px;
-  background: url(/themes/console/images/svg/server.svg) no-repeat 4px center / 22px;
+  background: url(/themes/console/images/server.svg) no-repeat 4px center / 22px;
 }
 
 .multiOption#isClient {
   padding-left: 28px;
-  background: url(/themes/console/images/svg/client.svg) no-repeat 4px center / 22px;
+  background: url(/themes/console/images/client.svg) no-repeat 4px center / 22px;
 }
 
 #wizardPanel input[type=checkbox], #wizardPanel input[type=radio] {
@@ -1050,7 +1050,7 @@ th .help::after {
   width: 16px;
   height: 16px;
   display: inline-block;
-  background: url(/themes/console/images/svg/helplink.svg) no-repeat center center;
+  background: url(/themes/console/images/helplink.svg) no-repeat center center;
   background-size: 16px 16px;
   content: "";
 }

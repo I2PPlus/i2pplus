@@ -439,7 +439,7 @@ public class PluginStarter implements Runnable {
                 NavHelper.setBinary(appName, decoded);
                 iconfile = "/Plugins/pluginicon?plugin=" + appName;
             } else {
-                iconfile = "/themes/console/images/svg/plugin.svg";
+                iconfile = "/themes/console/images/plugin.svg";
             }
         }
 

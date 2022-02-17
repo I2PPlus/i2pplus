@@ -90,7 +90,7 @@ label, th img, #createSection, #closelog, #pagenavbottom {
   color: white;
 }
 
-* {
+input, button, textarea, select, a {
   outline: none;
   image-rendering: -webkit-optimize-contrast;
 }

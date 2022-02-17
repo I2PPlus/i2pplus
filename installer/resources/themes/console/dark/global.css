@@ -28,13 +28,13 @@
   --btn_shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
   --camo: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cfilter id='a'%3E%3CfeTurbulence baseFrequency='.2' numOctaves='4' seed='7' stitchTiles='stitch' type='fractalNoise'/%3E%3CfeTile/%3E%3CfeComponentTransfer%3E%3CfeFuncR slope='0.9469288793103452' tableValues='0 0 0 0 1 1' type='discrete'/%3E%3CfeFuncG slope='1.1477696210488517' tableValues='0 0 0 1 1' type='discrete'/%3E%3CfeFuncB intercept='4.3091942798132177' slope='-1.9643779184626435' tableValues='0 1' type='discrete'/%3E%3CfeFuncA intercept='-3.5179822198275872' slope='3.4636819773706904' type='discrete'/%3E%3C/feComponentTransfer%3E%3CfeColorMatrix values='1 0 0 0 0 -1 1 0 0 0 -1 -1 1 0 0 0 0 0 0 1'/%3E%3CfeColorMatrix type='matrix' values='-0.08 0.42 0.09 0 0.08 -0.17 0.35 -0.08 0 0.17 -0.08 0.15 -0.04 0 0.08 0 0 0 0 1'/%3E%3C/filter%3E%3Cpath d='m-29.6-29.6h256v256h-256z' filter='url(%23a)'/%3E%3Cpath d='m-4-4h256v256h-256z' fill='%23080000' opacity='.7'/%3E%3C/svg%3E");
   --center: no-repeat center center;
-  --dotted: 1px dotted #131;
+  --dotted: 1px dotted #252;
   --download_bar: repeating-linear-gradient(135deg, #000 1px, #000 5px, #010 6px, #010 11px);
   --footer: linear-gradient(180deg,#020,#000 75%);
   --glow_bottom: radial-gradient(at center bottom, rgba(16,72,16,.3), rgba(0,0,0,0) 50%);
   --glow_bottom_hover: radial-gradient(at center bottom, rgba(255,96,0,.25), rgba(0,0,0,0) 50%);
   --glow_top: radial-gradient(at center -45px, rgba(16,72,16,.3), rgba(0,0,0,0) 85%);
-  --h1: var(--bg_title), repeating-linear-gradient(to bottom, rgba(0,24,0,.3) 2px, rgba(0,0,0,.3) 4px), linear-gradient(180deg,#020, #010 50%, #010 50%, #000), var(--camotile) #000;
+  --h1: var(--bg_title) left top / 2px, repeating-linear-gradient(to bottom, rgba(0,24,0,.3) 2px, rgba(0,0,0,.3) 4px) center center / 100% 4px, linear-gradient(180deg,#020, #010 50%, #010 50%, #000), var(--camotile) left top /  256px, #000;
   --h2: repeating-linear-gradient(90deg, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(180deg,#001800, #000 75%);
   --h3_blend: normal, normal, normal, exclusion;
   --h3_fade: linear-gradient(180deg,#005000, #000 75%);
@@ -116,7 +116,7 @@ body {
   color: var(--ink);
 }
 
-* {
+input, button, textarea, select, a {
   outline: none;
 }
 
@@ -195,6 +195,18 @@ button::-moz-focus-inner, input::-moz-focus-inner {
 
 label {
   cursor: pointer;
+}
+
+.left {
+  text-align: left;
+}
+
+.right {
+  text-align: right;
+}
+
+.center {
+  text-align: center;
 }
 
 input:disabled {
@@ -509,15 +521,16 @@ select::-moz-focus-inner {
   border-radius: 1px;
   position: relative;
   border: var(--border);
-  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px rgba(0,0,0,.5);
+  box-shadow: 0 0 0 2px #000, var(--highlight), inset 3px 3px 3px rgba(0,0,0,.5);
   background: linear-gradient(180deg,#010,#020);
   outline: none;
   transition: ease-in left .15s;
   appearance: none;
 }
 
-.optbox.slider:not(:checked) {
+.optbox.slider:not(:checked), .optbox.slider[disabled] {
   background: linear-gradient(180deg,#400,#600) !important;
+  border: 1px solid #500;
 }
 
 .optbox.slider:not(:checked):active {

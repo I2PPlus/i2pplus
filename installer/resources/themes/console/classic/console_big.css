@@ -2,7 +2,7 @@
 /* Description: Larger fontsize override for console to accomodate foreign charactersets */
 /* Author: dr|z3d */
 
-* {
+input, button, textarea, select, a {
   text-shadow: none !important;
   font-weight: 400 !important;
   font-size: 10.5pt !important;

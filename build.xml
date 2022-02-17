@@ -1712,6 +1712,13 @@
         </copy>
     </target>
 
+    <!-- readme and proxy error page files -->
+    <target name="prepProxyDocs">
+        <copy todir="pkg-temp/docs/" >
+          <fileset dir="installer/resources/proxy/" includes="*.ht" />
+        </copy>
+    </target>
+
     <target name="consoleDocs" depends="deletepkg-temp, prepConsoleDocs">
         <zip destfile="docs.zip" basedir="pkg-temp" whenempty="fail" />
     </target>
@@ -1935,7 +1942,7 @@
         -->
     </target>
 
-    <target name="prepupdatecompact" depends="build2, prepupdateEssential, prepConsoleDocUpdates, prepCertificates, prep-script-translation, truncatehistory">
+    <target name="prepupdatecompact" depends="build2, prepupdateEssential, prepProxyDocs, prepCertificates, prep-script-translation, truncatehistory">
         <copy file="build/i2psnark.jar" todir="pkg-temp/lib" />
         <copy file="build/susimail.war" todir="pkg-temp/webapps/" />
         <copy file="build/susidns.war" todir="pkg-temp/webapps/" />
