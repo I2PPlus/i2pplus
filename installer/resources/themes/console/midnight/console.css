@@ -17,11 +17,17 @@ html {background: repeating-linear-gradient(90deg, rgba(0,16,0,.5) 2px, rgba(0,0
 body {margin: 2px 0 0; padding: 0; text-align: center; font: 8.5pt/130% var(--bodyfont)}
 .sb, h1, .main, iframe {contain: layout}
 small {font-size: 9pt}
-div.clearer {margin-bottom: -16px; height: 0; clear: left; line-height: 0}
+.clearer {margin-bottom: -16px; height: 0; clear: left; line-height: 0}
 #sidebar img[src$="i2plogo.png"], #sidebar h3, .confignav, *::before, *::after, h1, h2, h3, h4, .applink, .clearer, #sidebar img, .formaction, label, #themeoptions, #helptranslate, #consolepass, .applink, #sitemapcontainer {user-select: none}
 img {border: none}
 pre {width: 98%; overflow-x: auto; text-align: left; font: 8.5pt var(--monospaced); color: var(--ink)}
-.main {background: repeating-linear-gradient(90deg, rgba(0,0,0,.4) 2px, rgba(4,4,32,.5) 4px), repeating-linear-gradient(180deg,rgba(0,0,0,.6) 2px, rgba(4,4,32,.5) 4px); background-size: 4px 100%, 100% 4px}
+.main {position: relative; background: repeating-linear-gradient(90deg, rgba(0,0,0,.4) 2px, rgba(4,4,32,.5) 4px), repeating-linear-gradient(180deg,rgba(0,0,0,.6) 2px, rgba(4,4,32,.5) 4px); background-size: 4px 100%, 100% 4px}
+.main:not(#home) td {/*padding: 4px 6px; */color: var(--ink); vertical-align: middle; border-top: var(--border_soft); border-right: var(--border_soft)}
+.main:not(#home) td:first-child {border-left: var(--border_inner)}
+.main:not(#home) tr:first-child td {border-top: var(--border_inner)}
+.main:not(#home) td:last-child {border-right: var(--border_inner)}
+.main:not(#home) tr:last-child td {border-bottom: var(--border_inner)}
+h1 {position: relative; z-index: 999}
 
 /* standard buttons and inputs */
 #sidebar h3:hover {background: linear-gradient(90deg, rgba(64,0,64,.1), rgba(96,0,96,.2), rgba(64,0,64,.1)), linear-gradient(180deg,#1d1a2d 50%, #000 50%)}
@@ -315,9 +321,6 @@ a:active #sb_graphstats {border-color: var(--active)}
 .sb_info .percentBarOuter {margin: 7px -2px -5px 0; box-shadow: inset 0 0 0 1px 000, inset 0 2px 2px 2px rgba(0,0,0,.7); background: repeating-linear-gradient(135deg, #001 1px, #001 5px, #002 6px, #002 11px); animation: downloadbar 3s infinite alternate}
 .sb_info .percentBarText {padding-top: 2px; color: var(--ink)}
 .sb_info .percentBarInner {height: 16px}
-@keyframes downloadbar {from {background: repeating-linear-gradient(135deg, #001 1px, #001 5px, #002 6px, #002 11px)}
-to {background: repeating-linear-gradient(135deg, #002 1px, #002 6px, #001 7px, #001 11px)}
-}
 
 /* network status */
 #sidebar h4 a {width: auto; vertical-align: middle; display: inline}
@@ -345,9 +348,6 @@ to {background: repeating-linear-gradient(135deg, #002 1px, #002 6px, #001 7px, 
 .sb_netstatus.running:hover, .sb_netstatus.hidden:hover, .sb_netstatus.firewalled:hover, .sb_netstatus.testing:hover {font-size: inherit}
 
 /* tunnel build status */
-@keyframes progress {from {background-position: 200%}
-to {background-position: 0}
-}
 #bandwidthTestRunning {margin: -4px 0; padding: 7px 3px; width: 100%; display: inline-block; vertical-align: middle; color: #dd8; text-shadow: 0 1px 1px #000; box-shadow: 0 0 0 1px #337, var(--highlight), inset 0 0 2px 1px #26235c; background: #001; box-sizing: border-box}
 
 /* tunnel build status */
@@ -361,7 +361,6 @@ to {background-position: 0}
 .tunnelBuildStatus.rejecting::before {background: var(--tunn_reject) no-repeat center center / 15px}
 .tunnelBuildStatus.hidden {color: #999}
 .tunnelBuildStatus.hidden::before {background: var(--tunn_hidden) no-repeat center center / 15px}
-
 
 /* console error messages */
 #error500 #sidebar hr ~ a {line-height: 2.5}
@@ -476,9 +475,6 @@ div.messages li {margin: 0 5px 0 50px; padding: 0 10px 0 0; text-align: justify;
 div.widepanel h3 {padding: 6px 10px; text-align: left; text-transform: uppercase; font-size: 10.5pt; letter-spacing: .08em; word-spacing: .1em; border: var(--border_inner); border-radius: 0}
 
 /* graphs */
-@keyframes fade {from {opacity: 1}
-to {opacity: 0}
-}
 #graphdisplay + form {display: none; opacity: 0; will-change: transform}
 #graphdisplay:hover + form, #graphdisplay + form:hover {display: block; animation: fade .5s ease .2s reverse both}
 #graphs .messages {margin-top: 15px; margin-bottom: -8px}
@@ -517,11 +513,6 @@ tr {vertical-align: middle; box-shadow: var(--highlight), inset 0 0 2px 1px #000
 tr:hover {box-shadow: none}
 .main tr:nth-child(even), #netdbversions tr:nth-child(even), #netdbtransports tr:nth-child(even), #netdbcountrylist tr:nth-child(even), #netdbtiers tr:nth-child(even), #pluginconfig table tr:nth-child(even) {vertical-align: middle; background: var(--row)}
 .main tr:nth-child(odd), #netdbversions tr:nth-child(odd), #netdbtransports tr:nth-child(odd), #netdbcountrylist tr:nth-child(odd), #netdbtiers tr:nth-child(odd), #pluginconfig tr {vertical-align: middle; background: var(--row)}
-.main:not(#home) td {/*padding: 4px 6px; */color: var(--ink); vertical-align: middle; border-top: var(--border_soft); border-right: var(--border_soft)}
-.main:not(#home) td:first-child {border-left: var(--border_inner)}
-.main:not(#home) tr:first-child td {border-top: var(--border_inner)}
-.main:not(#home) td:last-child {border-right: var(--border_inner)}
-.main:not(#home) tr:last-child td {border-bottom: var(--border_inner)}
 #sidebar tr {box-shadow: none}
 div[id^="config_"] td {padding-left: 10px; padding-right: 10px}
 #enablefull td {padding: 4px 3px 4px 6px}
@@ -1288,12 +1279,6 @@ table#jardump {margin-top: -1px; margin-bottom: 0; font-size: 8pt; border: none}
 #routerinfo td {padding: 8px 4px; width: 25%; border-bottom: 1px inset #225}
 #routerinfo td:first-child, #routerinfo td:nth-child(3) {white-space: nowrap; text-align: right}
 #routerinfo td:nth-child(2):not([colspan]) {white-space: nowrap; border-right: 1px inset #225}
-#torrents, #tunnelmgr, #webmail, #dns {line-height: 0}
-#webmail {padding: 0; background: #000; min-width: 736px}
-#torrents, #tunnelmgr {padding: 0; background: linear-gradient(180deg,#000, #001); background-size: 100% 2px}
-#torrents {min-width: 640px}
-#tunnelmgr {padding: 0 5px; min-width: 630px}
-#i2ptunnelframe {margin: -5px 0}
 
 /* debug */
 #debug h2, #debug h3 {border-radius: 0}
@@ -1414,15 +1399,6 @@ table#jardump {margin-top: -1px; margin-bottom: 0; font-size: 8pt; border: none}
 #searchbar button:active {box-shadow: var(--btn_shadow_active)}
 #searchbar input::placeholder {opacity: 0}
 #searchbar input:hover::placeholder {font-style: italic; opacity: .6}
-
-iframe.iframed {margin: 15px 0 0}
-#susimailframe {margin-top: -1px}
-#i2psnarkframe {margin-top: 0}
-#dns {padding: 0; min-width: 640px; background: #000010}
-#susidnsframe {margin-top: -2px; margin-bottom: 8px}
-.iframed #sb_wrap {display: none}
-.iframed h1 {margin: 0 5px 0 5px}
-.iframed div.sorry {margin: -1px 5px 10px 5px}
 
 /* global overrides */
 h3[id*="job"] {border: var(--border_inner); padding: 8px 10px; margin: 12px 0 10px 0; border-radius: 0; text-transform: uppercase; text-shadow: 0 0 2px #010011; letter-spacing: .08em}
@@ -2092,11 +2068,7 @@ html, body {height: 100%}
 /* sidebar ajax router down */
 #down {margin: -6px 0 -7px -3px; padding: 8px 5px; width: calc(100% - 4px); display: inline-block; font-size: 0; color: #a00; text-shadow: 0 1px 1px #000; box-shadow: 0 0 1px 0 #003, var(--highlight), inset 0 0 1px 3px #113, inset 0 0 0 4px #000, inset 0 0 7px 3px #100; background: repeating-linear-gradient(135deg, #113, #113 10px, #001 10px, #001 20px); background-position: right center; background-size: 125% 125%; animation: routerdown linear 3s forwards infinite}
 #nographs {line-height: 40px; font-size: 0}
-@keyframes routerdown {from {background-position: left center}
-}
 #down::after, #nographs::after {width: 24px; height: 24px; vertical-align: middle; display: inline-block; background: var(--update) no-repeat center center; background-size: 24px; content: ""; transform: rotate(0); animation: linear spin 3s forwards infinite; mix-blend-mode: luminosity}
-@keyframes spin {from {transform: rotate(-360deg)}
-}
 
 #lookupCondensed {display: none}
 
@@ -2312,9 +2284,6 @@ h1::first-letter {font-size: 107%}
 #graph_single .graphContainer {padding-top: 5px}
 .graphContainer:hover {box-shadow: var(--highlight), inset 0 0 2px 1px #83529f; border: 1px solid #83529f}
 .statimage, .statimage:hover, #graphs a:hover .statimage, #graph_single .statimage, #graph_single .statimage:hover {margin: 0; padding: 0; max-width: calc(100% + 4px); border: none; box-shadow: none}
-@keyframes grid-fade {from {background: repeating-linear-gradient(90deg, rgba(0,0,0,0), #003 1px, rgba(0,0,0,0) 1px, rgba(0,0,0,0) 10px), repeating-linear-gradient(180deg,#000, #003 1px, #000 1px, #000 10px)}
-to {background: repeating-linear-gradient(90deg, rgba(0,0,0,0), #000 1px, rgba(0,0,0,0) 1px, rgba(0,0,0,0) 10px), repeating-linear-gradient(180deg,#000, #000 1px, #000 1px, #000 10px)}
-}
 .graphContainer > * {vertical-align: middle}
 #updategraphs .messages {margin-bottom: 10px}
 #enablefull label {margin-top: 4px; display: inline-block}
@@ -2381,12 +2350,6 @@ to {background: repeating-linear-gradient(90deg, rgba(0,0,0,0), #000 1px, rgba(0
 #peerdefs li {line-height: 1.6}
 
 /* slide-up messages */
-@keyframes hide-up {0% {margin-top: 0; filter: opacity(1)}
-30% {filter: opacity(0)}
-100% {margin-top: -300px}
-}
-.main {position: relative}
-h1 {position: relative; z-index: 999}
 .main:not(#config_update) div.messages, #config_update #messages {margin-left: -11px; margin-right: -11px; width: calc(100% - 20px); position: absolute; top: 3px; z-index: 100; box-shadow: var(--highlight), inset 0 0 2px 1px #808; background: var(--infohelp) no-repeat 15px center, var(--close) right 6px top 6px no-repeat, #000; background-size: 28px, 14px; filter: drop-shadow(0 2px 2px rgba(0,0,0,.5)); animation: 2s hide-up 8s ease-out forwards}
 .main:not(#config_update) div.messages:hover, #config_update #messages:hover {cursor: crosshair}
 #graphs .messages {top: -16px; z-index: 999}
@@ -2399,11 +2362,6 @@ h3#bannedpeers {margin-bottom: -15px}
 #tunnels #participating a:active::after, #tunnels #peercount a:active::after {background: var(--refresh_active) no-repeat center center; transform: rotate(90deg); transition: linear transform .2s}
 #logs .tabletitle, #jobs h3, #tunnels h3[id] {position: relative; overflow: hidden}
 #logs #enviro ~ .tabletitle::after, #jobs h3::after, #tunnels h3[id]::after {content: ""; display: inline-block; width: 0; height: 1px; background: linear-gradient(90deg, #d30, #f60); position: absolute; bottom: 0; left: 0; animation: ease-out reloader 1s forwards; opacity: .4}
-@keyframes reloader {0%, 100% {width: 0}
-80%, 99% {width: 120%}
-}
-@keyframes bar {from {width: 300%}
-}
 #sb_localtunnels td[colspan="3"] {line-height: 20px; font-size: 0; background: repeating-linear-gradient(135deg, #001 1px, #001 5px, #003 6px, #003 11px)}
 h1, .main h2, #applinks, #sitelinks, .main h3 {-webkit-text-stroke: 1px rgba(179, 186, 255,.3)}
 .main h3 a {-webkit-text-stroke: 0}
@@ -2423,18 +2381,18 @@ h1, .main h2, #applinks, #sitelinks, .main h3 {-webkit-text-stroke: 1px rgba(179
 /* profiles group icons */
 #profilelist th:nth-child(4), #profilelist td:nth-child(4) {width: 15%}
 #profilelist th:nth-child(5), #profilelist td:nth-child(5) {width: 10%; min-width: 56px; white-space: nowrap}
-#profilelist .fast, #profilelist .highcap, #profilelist .integrated, #profilelist .standard, #profilelist .fast.integrated, #profilelist .highcap.integrated, #profilelist .standard.integrated {width: 56px; height: 16px; display: inline-block; font-size: 0; background-size: 16px}
 #profilelist .fast {background: var(--fast) no-repeat calc(50% - 10px) center, var(--highcap) no-repeat calc(50% + 10px) center}
-#profilelist .fast.integrated {background: var(--fast) no-repeat left center, var(--highcap) no-repeat center center, var(--integrated) no-repeat right center}
-#profilelist .highcap {background: var(--highcap) no-repeat center center}
-#profilelist .highcap.integrated {background: var(--highcap) no-repeat calc(50% - 10px) center, var(--integrated) no-repeat calc(50% + 10px) center}
-#profilelist .standard {background: var(--standard) no-repeat center center}
-#profilelist .standard.integrated {background: var(--standard) no-repeat calc(50% - 10px) center, var(--integrated) no-repeat calc(50% + 10px) center}
 .profilegroup::before {width: 20px; height: 16px; display: inline-block; vertical-align: middle; content: ""}
 .profilegroup.fast::before {background: var(--fast) no-repeat left center}
 .profilegroup.highcap::before {background: var(--highcap) no-repeat left center}
 .profilegroup.integrated::before {background: var(--integrated) no-repeat left center}
 .profilegroup.standard::before {background: var(--standard) no-repeat left center}
+#profilelist .fast.integrated {background: var(--fast) no-repeat left center, var(--highcap) no-repeat center center, var(--integrated) no-repeat right center}
+#profilelist .highcap {background: var(--highcap) no-repeat center center}
+#profilelist .highcap.integrated {background: var(--highcap) no-repeat calc(50% - 10px) center, var(--integrated) no-repeat calc(50% + 10px) center}
+#profilelist .standard {background: var(--standard) no-repeat center center}
+#profilelist .standard.integrated {background: var(--standard) no-repeat calc(50% - 10px) center, var(--integrated) no-repeat calc(50% + 10px) center}
+#profilelist .fast, #profilelist .highcap, #profilelist .integrated, #profilelist .standard, #profilelist .fast.integrated, #profilelist .highcap.integrated, #profilelist .standard.integrated {width: 56px; height: 16px; display: inline-block; font-size: 0; background-size: 16px}
 
 /* lazy loading */
 .lazy.lazyhide, .lazy.lazyhide td {opacity: 0; contain: strict}
@@ -2444,26 +2402,52 @@ h1, .main h2, #applinks, #sitelinks, .main h3 {-webkit-text-stroke: 1px rgba(179
 .leasesets_container .lazy.lazyhide, .leasesets_container .lazy.lazyhide td, .leasesets_container .lazy:not(.lazyshow) {opacity: 1; contain: none}
 #tunnelpeercount .lazy {contain: none}
 
-.viewprofile, .configpeer, .familysearch {margin: 1px 2px; padding: 4px; width: 12px; height: 12px; vertical-align: middle; display: inline-block; line-height: 0; border: 1px solid #113; box-shadow: var(--highlight); background: var(--element)}
-#profilelist .viewprofile, #profilelist .configpeer {margin: 1px}
-.netdb_header .viewprofile, .netdb_header .configpeer, .netdb_header .familysearch, .sybil_routerinfo .viewprofile, .sybil_routerinfo .configpeer, .sybil_routerinfo .familysearch {margin: 0 3px; width: 14px; height: 14px; display: inline-block}
-.viewprofile {background: var(--eye) no-repeat center center / 12px, var(--element)}
 .configpeer {background: var(--edit) no-repeat center center / 12px, var(--element)}
 .familysearch {background: var(--family) no-repeat center center / 12px, var(--element)}
-.viewprofile:hover, .viewprofile:focus {background: var(--eye_hover) no-repeat center center / 12px, var(--element)}
-.viewedit br {display: none}
-.viewprofile, .configpeer, .familysearch {font-size: 0}
-#profilelist .viewedit {padding: 1px}
-.viewedit .configpeer:hover, .viewedit .configpeer:focus {background: var(--edit_hover) no-repeat center center / 12px, var(--element)}
-.viewprofile:hover, .familysearch:hover, .configpeer:hover, .viewprofile:focus, .familysearch:focus, .configpeer:focus {border: 1px solid var(--a)}
-#profilelist .version {line-height: 1.4}
-.netdb_header {margin: 0; min-width: 100px; display: inline-block; vertical-align: middle; white-space: nowrap}
-.netdbentry th, .sybil_router th {vertical-align: middle}
 .netdbentry th:last-child > *, .sybil_router th:last-child > * {line-height: 1}
+.netdbentry th, .sybil_router th {vertical-align: middle}
 .netdbentry .tunnel_cap, .netdbentry .tier, .netdbentry .ff, .netdbentry .reachable, .netdbentry .unreachable, .netdbentry .version, .sybil_routerinfo .tunnel_cap, .sybil_routerinfo .tier, .sybil_routerinfo .ff, .sybil_routerinfo .reachable, .sybil_routerinfo .unreachable, .sybil_routerinfo .version {margin: 0 2px; padding: 0 4px; line-height: 1.6}
+.netdb_header {margin: 0; min-width: 100px; display: inline-block; vertical-align: middle; white-space: nowrap}
+.netdb_header .viewprofile, .netdb_header .configpeer, .netdb_header .familysearch, .sybil_routerinfo .viewprofile, .sybil_routerinfo .configpeer, .sybil_routerinfo .familysearch {margin: 0 3px; width: 14px; height: 14px; display: inline-block}
+#profilelist .viewprofile, #profilelist .configpeer {margin: 1px}
+#profilelist .version {line-height: 1.4}
+#profilelist .viewedit {padding: 1px}
+.viewedit br {display: none}
+.viewprofile, .configpeer, .familysearch {margin: 1px 2px; padding: 4px; width: 12px; height: 12px; vertical-align: middle; display: inline-block; line-height: 0; font-size: 0; border: 1px solid #113; box-shadow: var(--highlight); background: var(--element)}
+.viewprofile {background: var(--eye) no-repeat center center / 12px, var(--element)}
+.viewprofile:hover, .familysearch:hover, .configpeer:hover, .viewprofile:focus, .familysearch:focus, .configpeer:focus {border: 1px solid var(--a)}
+.viewedit .configpeer:hover, .viewedit .configpeer:focus {background: var(--edit_hover) no-repeat center center / 12px, var(--element)}
+.viewprofile:hover, .viewprofile:focus {background: var(--eye_hover) no-repeat center center / 12px, var(--element)}
+
+/* iframed */
 iframe {height: 0}
-#tunnelmgr, #torrents, #webmail, #dns {min-height: 4px; position: relative; overflow: hidden}
+#dns {padding: 0; min-width: 640px; background: #000010}
+.iframed div.sorry {margin: -1px 5px 10px 5px}
+.iframed h1 {margin: 0 5px 0 5px}
+.iframed #sb_wrap {display: none}
+iframe.iframed {margin: 15px 0 0}
+#i2psnarkframe {margin-top: 0}
+#i2ptunnelframe {margin: -5px 0}
+#susidnsframe {margin-top: -2px; margin-bottom: 8px}
+#susimailframe {margin-top: -1px}
+#torrents {min-width: 640px}
+#torrents, #tunnelmgr {padding: 0; background: linear-gradient(180deg,#000, #001); background-size: 100% 2px}
+#torrents, #tunnelmgr, #webmail, #dns {line-height: 0}
 #tunnelmgr::before, #torrents::before, #webmail::before, #dns::before {width: 0; height: 5px; display: block; position: absolute; top: 0; left: 0; right: 0; background: linear-gradient(180deg, rgba(255,255,255,.05) 50%, rgba(0,0,0,.2) 50%), linear-gradient(#101, #707); opacity: .7; content: ""; animation: reloader 8s ease-out .5s forwards}
+#tunnelmgr {padding: 0 5px; min-width: 630px}
+#tunnelmgr, #torrents, #webmail, #dns {min-height: 4px; position: relative; overflow: hidden}
+#webmail {padding: 0; background: #000; min-width: 736px}
+
+/* animations */
+@keyframes bar {from {width: 300%}}
+@keyframes downloadbar {from {background: repeating-linear-gradient(135deg, #001 1px, #001 5px, #002 6px, #002 11px)}to {background: repeating-linear-gradient(135deg, #002 1px, #002 6px, #001 7px, #001 11px)}}
+@keyframes fade {from {opacity: 1} to {opacity: 0}}
+@keyframes grid-fade {from {background: repeating-linear-gradient(90deg, rgba(0,0,0,0), #003 1px, rgba(0,0,0,0) 1px, rgba(0,0,0,0) 10px), repeating-linear-gradient(180deg,#000, #003 1px, #000 1px, #000 10px)}to {background: repeating-linear-gradient(90deg, rgba(0,0,0,0), #000 1px, rgba(0,0,0,0) 1px, rgba(0,0,0,0) 10px), repeating-linear-gradient(180deg,#000, #000 1px, #000 1px, #000 10px)}}
+@keyframes hide-up {0% {margin-top: 0; filter: opacity(1)} 30% {filter: opacity(0)} 100% {margin-top: -300px}}
+@keyframes progress {from {background-position: 200%}to {background-position: 0}}
+@keyframes reloader {0%, 100% {width: 0} 80%, 99% {width: 120%}}
+@keyframes routerdown {from {background-position: left center}}
+@keyframes spin {from {transform: rotate(-360deg)}}
 
 /* browser specific */
 @supports (-moz-appearance: none) {html {background-attachment: fixed}}
