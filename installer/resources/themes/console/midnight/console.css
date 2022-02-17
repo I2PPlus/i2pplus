@@ -22,7 +22,8 @@ small {font-size: 9pt}
 #sidebar img[src$="i2plogo.png"], #sidebar h3, .confignav, *::before, *::after, h1, h2, h3, h4, .applink, .clearer, #sidebar img, .formaction, label, #themeoptions, #helptranslate, #consolepass, .applink, #sitemapcontainer {user-select: none}
 img {border: none}
 pre {width: 98%; overflow-x: auto; text-align: left; font: 8.5pt var(--monospaced); color: var(--ink)}
-.main {position: relative; background: repeating-linear-gradient(90deg, rgba(0,0,0,.4) 2px, rgba(4,4,32,.5) 4px), repeating-linear-gradient(180deg,rgba(0,0,0,.6) 2px, rgba(4,4,32,.5) 4px); background-size: 4px 100%, 100% 4px}
+.main {margin: -1px 3px 5px 212px; padding: 0 10px; width: auto; min-width: 620px; position: relative; text-align: left; font-size: 9pt; color: var(--ink); border: 1px solid #26235c; box-shadow: var(--highlight), inset 0 0 2px 1px #26235c; background: repeating-linear-gradient(90deg, rgba(0,0,0,.4) 2px, rgba(4,4,32,.5) 4px), repeating-linear-gradient(180deg,rgba(0,0,0,.6) 2px, rgba(4,4,32,.5) 4px); background-size: 4px 100%, 100% 4px}
+.main, .news {box-shadow: 0 1px 5px #000, var(--highlight), inset 0 0 2px 1px #212}
 .main:not(#home):not(#sitemap) td {border-top: var(--border_soft); border-right: var(--border_soft)}
 .main:not(#home):not(#sitemap) td:first-child {border-left: var(--border_inner)}
 .main:not(#home):not(#sitemap) tr:first-child td {border-top: var(--border_inner)}
@@ -42,7 +43,6 @@ h3 {position: relative; z-index: 10; overflow: hidden}
 h3, h3.welcome, div.news h3 {margin: 10px 0 10px 0; padding: 7px 10px; letter-spacing: .08em; text-transform: uppercase; text-shadow: 0 0 2px #010011; border: var(--border_inner); border-left: 5px solid #26235c; border-radius: 0 2px 2px 0}
 div.news h3 {padding: 6px 0; box-shadow: none}
 h4 {border-bottom: 1px; border-bottom-style: solid; border-bottom-color: #26235c; padding: 0 0 10px 0; margin: 5px 0 10px 0; font-size: 11pt}
-div[id^="config_"] td {padding-left: 10px; padding-right: 10px}
 ol {padding: 1px 0 0 20px; display: inline}
 ol li:first-child {margin-top: 10px}
 ul {margin: 0; padding: 0}
@@ -56,14 +56,20 @@ th {padding: 6px 2px; line-height: 1.1; text-align: center; font-size: 9pt; colo
 tr {vertical-align: middle; box-shadow: var(--highlight), inset 0 0 2px 1px #00003a; contain: layout}
 tr:hover {box-shadow: none}
 tt {font: bold 8.5pt var(--monospaced); color: #393}
+.wideload {margin: 0}
+.widescroll {overflow: auto}
+.widescroll table {white-space: nowrap}
+.underline {border-bottom: 1px solid #efeeff; padding: 5px 0 5px 0; margin: 0 0 10px 0}
+hr {color: rgba(38, 35, 92,.7); background: rgba(38, 35, 92,.7); height: 1px; border: 0 solid rgba(38, 35, 92,.7); margin: 20px 0 10px}
+hr:last-child {margin-top: 20px; margin-bottom: 20px}
+div[id^="config_"] td {padding-left: 10px; padding-right: 10px}
 
 /* standard buttons and inputs */
 #sidebar h3:hover {background: linear-gradient(90deg, rgba(64,0,64,.1), rgba(96,0,96,.2), rgba(64,0,64,.1)), linear-gradient(180deg,#1d1a2d 50%, #000 50%)}
 textarea[cols="70"], textarea[name="levels"] {width: calc(100% - 20px)}
 #config_clients label[for="0"] {cursor: default}
 input[name="refreshInterval"] {margin-right: 3px; margin-left: 0; width: 80px; text-align: right}
-input[class="check"] {/* nudge "check for updates" button into alignment on /configupdate */
-margin-left: 10px}
+input[class="check"] {margin-left: 10px}
 #config_tunnels .cancel {display: none}
 #config_tunnels input[type=text][disabled] {width: calc(100% - 15px)}
 #config_tunnels select {width: 50%; text-align: center}
@@ -200,7 +206,7 @@ button.download.control:active {background: var(--download) no-repeat center cen
 /* sidebar */
 #sb_wrap {margin: 0 0 10px 5px; padding: 0; width: 200px; display: block; float: left; clear: left; position: absolute;/* so no interference with /home app icons */
 text-align: center; border: 0}
-#sidebar {margin-left: -3px; margin-bottom: 7px; padding: 8px 10px 8px; width: 184px; text-align: center; font-size: 8pt; color: var(--ink); border: 1px solid #26235c}
+#sidebar {margin-left: -3px; margin-bottom: 7px; padding: 8px 10px 8px; width: 184px; overflow: hidden; text-align: center; font-size: 8pt; color: var(--ink); border: 1px solid #26235c}
 #sidebar #sb_logo {height: 36px !important}
 #sidebar img[src*="i2plogo"] {margin-top: 0; margin-left: -7px; width: 190px; height: auto; font-size: 0; opacity: .7; transition: ease-out opacity .2s, ease filter .2s; filter: sepia(1) hue-rotate(180deg); filter: saturate(0) sepia(1) hue-rotate(180deg)}
 #error500 #sidebar img[src$="i2plogo.png"] {margin-bottom: -7px}
@@ -219,6 +225,8 @@ text-align: center; border: 0}
 #sidebar h4.sb_update, #sidebar h4.sb_update {padding-top: 9px; padding-bottom: 9px}
 #sidebar ul {text-align: left}
 .sb table {margin: -4px -7px -5px -8px; width: 200px; overflow: hidden; text-align: center; font-size: 8pt; border: 0; background-image: none; background-color: transparent; border-collapse: separate; border-spacing: 1px}
+#sidebar table {position: relative; max-width: none}
+#sidebar table:not(#sb_localtunnels):not(#sb_services)::before {width: 0; height: 1px; display: block; position: absolute; top: -2px; left: -1px; z-index: 99999; background: linear-gradient(to left, #717, #404); content: ""; animation: ease-in bar .1s reverse; will-change: transform}
 #sidebar tr {box-shadow: none}
 .sb td {padding: 0 2px 0 2px; max-width: 180px; word-spacing: -0.1em; border: 0; background-image: none}
 .sb td:first-child {max-width: 90px; text-transform: capitalize}
@@ -321,7 +329,9 @@ p:empty + .sb_notice {margin-top: 10px}
 #sb_newsheadings tr:last-child td {border-bottom: none}
 
 a:active #sb_graphstats {border-color: var(--active)}
-#sb_graphstats {padding: 2px 8px; display: inline-block; font-weight: 700; border: 1px solid #83529f; border-top: none; background: #001; opacity: 0; transition: ease opacity .3s}
+
+/* minigraph */
+#sb_graphstats {padding: 2px 8px; display: inline-block; position: relative; z-index: 1000; font-weight: 700; border: 1px solid #83529f; border-top: none; background: #001; opacity: 0; transition: ease opacity .3s}
 #sb_graphcontainer:hover #sb_graphstats {opacity: 1; transition: ease opacity .3s}
 #sb_graphcontainer {margin: -4px -7px -7px; padding: 0 1px; height: 44px; position: relative; z-index: 10; overflow: hidden; box-shadow: inset 0 0 0 1px #26235c, inset 0 0 0 2px #000, inset 0 0 3px 1px #004; background: repeating-linear-gradient(90deg, rgba(0,0,0,0) 14px, rgba(112,107,199,.7) 15px, rgba(0,0,0,0) 15px, rgba(0,0,0,0) 30px), repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(112,107,199,.3), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 14px)}
 #minigraph {margin: -19px -1px 0 0; width: 194px; height: 40px}
@@ -329,10 +339,6 @@ a:active #sb_graphstats {border-color: var(--active)}
 #minigraphcontainer {margin-top: -43px; margin-left: 1px; width: 204px; height: 39px; background-repeat: no-repeat; background-size: 204px 40px}
 #homepage #minigraphcontainer {margin-top: -42px; height: 38px}
 #sb_graphcontainer::before {position: absolute; top: 2px; left: -1px; width: 100%; height: 40px; content: ""; display: inline-block; background: linear-gradient(180deg,rgba(0,0,0,0), rgba(0,0,0,0), rgba(0,0,0,.3)); pointer-events: none; will-change: transform}
-#sb_graphstats {position: relative; z-index: 1000}
-#sidebar {overflow: hidden}
-#sidebar table {position: relative; max-width: none}
-#sidebar table:not(#sb_localtunnels):not(#sb_services)::before {width: 0; height: 1px; display: block; position: absolute; top: -2px; left: -1px; z-index: 99999; background: linear-gradient(to left, #717, #404); content: ""; animation: ease-in bar .1s reverse; will-change: transform}
 
 /* status bar */
 .percentBarOuter {margin: -3px 0 -6px -6px; width: 194px; position: relative; border: var(--border_inner); box-shadow: var(--highlight), inset 0 2px 2px 2px rgba(0,0,0,.45); background: repeating-linear-gradient(90deg, #000 1px, #000 2px, #003 2px, #003 4px); opacity: 1}
@@ -402,39 +408,40 @@ div.sorry hr {color: transparent; background: none; height: 1px; border-top: 1px
 #stacktrace p:first-child {padding: 10px 0 10px 44px; font-weight: 700; background: var(--err) no-repeat left center / 28px}
 
 /* news */
-.main, .news {box-shadow: 0 1px 5px #000, var(--highlight), inset 0 0 2px 1px #212}
-.main {margin: -1px 3px 5px 212px; padding: 0 10px; width: auto; min-width: 620px; text-align: left; font-size: 9pt; color: var(--ink); border: 1px solid #26235c; box-shadow: var(--highlight), inset 0 0 2px 1px #26235c}
 div[id^="config_"].main {padding-bottom: 14px}
-#config_service {padding-bottom: 0}
-#config_ui, #netdb {padding-bottom: 3px}
-.news {margin: -1px 3px 0 212px; padding: 6px 20px 5px; min-width: 600px; position: relative; z-index: 10; text-align: right; font-size: 8pt; border: 1px solid #26235c; box-shadow: 0 1px 5px #000; background: #000 var(--earth) no-repeat scroll bottom right; background-size: auto 200px}
-#news .newscontent {border: var(--border_inner); margin: -11px 0 10px; padding: 1px 12px 6px; border-radius: 0 0 2px 2px; box-shadow: var(--highlight), inset 0 0 2px 1px #191939, inset 0 0 5px 3px #001; background: var(--earth) right -50px bottom -50px no-repeat, linear-gradient(135deg, #000010, #000); background-size: 100px auto, 100%}
-#news .newsentry h3 {border: var(--border_inner); border-radius: 2px 2px 0 0}
-#news .newsentry {margin-bottom: 14px}
-#news .newsentry:first-child {margin-top: -3px}
-#news .newsentry:last-child {margin-bottom: -5px}
-.news .newsentry {margin-top: -3px}
-.news .newsentry:first-child {margin-top: -10px}
-.news h4 {border-bottom: 1px; border-bottom-style: dotted; border-bottom-color: #26235c; padding: 0 0 0 0; margin: 5px 0 10px 0; font-size: 10pt; opacity: 1; text-transform: capitalize}
-.news p, .newscontent p {margin-top: -5px; font-size: 9pt; color: var(--ink); margin-bottom: 0}
-.news p:nth-child(n+1), .newscontent p:nth-child(n+1) {margin-top: 5px}
-.news hr {margin: 8px -20px 5px}
-#newspage {margin: 18px 5px}
-#newsDisplay a {line-height: 1.2}
-#newsStatus, #news #newsDisplay a {font-size: 8pt}
-#newsStatus {float: left; color: var(--ink)}
-#newsDisplay {white-space: nowrap; margin-left: 10px}
-#news #newsDisplay {margin-right: -10px}
-#news #newsDisplay, #graphopts {color: transparent}
-#news #newsStatus {padding-top: 2px; margin-left: -10px}
-#news #newsDisplay {padding: 0 0 3px}
-#newsStatus, #news #newsDisplay, #news #newsDisplay a, #graphopts a, #routerinfo a {display: inline-block}
-#newsDisplay a, #graphopts a, #routerinfo a, .graphstat, .graphstat:visited, #routerinformation tr:nth-child(n+2) a:not(#revision) {margin: -2px; padding: 3px 15px; display: inline-block; line-height: 1; color: var(--a); border: 1px solid #113; border-radius: 15px; box-shadow: 0 0 1px rgba(0,0,0,.8), var(--highlight); background: var(--btn)}
-#newsDisplay a:hover, #newsDisplay a:focus, #graphopts a:hover, #graphopts a:focus, #routerinfo a:hover, #routerinfo a:focus, .graphstat:hover, .graphstat:focus, #routerinformation tr:nth-child(n+2) a:not(#revision):hover, #routerinformation tr:nth-child(n+2) a:not(#revision):focus {color: var(--a_hover); text-shadow: 0 1px 1px #000; border: 1px solid #000; box-shadow: 0 0 1px #000, inset 0 0 0 1px #303; background: var(--btn_hover); transition: ease box-shadow .05s}
-#newsDisplay a:active, #graphopts a:active, #routerinfo a:active, .graphstat:active, #routerinformation tr:nth-child(n+2) a:not(#revision):active {color: #83529f; text-shadow: 0 1px 1px #3c1751; box-shadow: inset 0 0 0 1px #303, inset 3px 3px 3px #14071b; background: var(--hover)}
-.news #newsDisplay, .news #newsStatus {margin-top: 3px; display: inline-block}
 .newsAuthor {padding: 0 0 0 18px; float: right; text-transform: none; font-size: 8pt; background: var(--user) no-repeat left 2px center; background-size: 12px; opacity: .7}
 .newsDate {opacity: .7}
+#newsDisplay a:active, #graphopts a:active, #routerinfo a:active, .graphstat:active, #routerinformation tr:nth-child(n+2) a:not(#revision):active {color: #83529f; text-shadow: 0 1px 1px #3c1751; box-shadow: inset 0 0 0 1px #303, inset 3px 3px 3px #14071b; background: var(--hover)}
+#newsDisplay a, #graphopts a, #routerinfo a, .graphstat, .graphstat:visited, #routerinformation tr:nth-child(n+2) a:not(#revision) {margin: -2px; padding: 3px 15px; display: inline-block; line-height: 1; color: var(--a); border: 1px solid #113; border-radius: 15px; box-shadow: 0 0 1px rgba(0,0,0,.8), var(--highlight); background: var(--btn)}
+#newsDisplay a:hover, #newsDisplay a:focus, #graphopts a:hover, #graphopts a:focus, #routerinfo a:hover, #routerinfo a:focus, .graphstat:hover, .graphstat:focus, #routerinformation tr:nth-child(n+2) a:not(#revision):hover, #routerinformation tr:nth-child(n+2) a:not(#revision):focus {color: var(--a_hover); text-shadow: 0 1px 1px #000; border: 1px solid #000; box-shadow: 0 0 1px #000, inset 0 0 0 1px #303; background: var(--btn_hover); transition: ease box-shadow .05s}
+#newsDisplay a {line-height: 1.2}
+#newsDisplay {white-space: nowrap; margin-left: 10px}
+.news h3, #newspage h3 {padding-left: 30px; text-align: left; font-size: 9.5pt; letter-spacing: .08em; color: var(--ink); padding: 6px 10px 6px 30px; background: var(--news) no-repeat left 8px center, var(--title); background-size: 16px, 4px 100%, 100%}
+.news h3 {padding-left: 23px; font-size: 11pt; border: none; border-bottom: var(--border_inner); background: var(--news) no-repeat left 1px center / 16px}
+.news h4 {border-bottom: 1px; border-bottom-style: dotted; border-bottom-color: #26235c; padding: 0 0 0 0; margin: 5px 0 10px 0; font-size: 10pt; opacity: 1; text-transform: capitalize}
+.news hr {margin: 8px -20px 5px}
+.news {margin: -1px 3px 0 212px; padding: 6px 20px 5px; min-width: 600px; position: relative; z-index: 10; text-align: right; font-size: 8pt; border: 1px solid #26235c; box-shadow: 0 1px 5px #000; background: #000 var(--earth) no-repeat scroll bottom right; background-size: auto 200px}
+#news .newscontent {border: var(--border_inner); margin: -11px 0 10px; padding: 1px 12px 6px; border-radius: 0 0 2px 2px; box-shadow: var(--highlight), inset 0 0 2px 1px #191939, inset 0 0 5px 3px #001; background: var(--earth) right -50px bottom -50px no-repeat, linear-gradient(135deg, #000010, #000); background-size: 100px auto, 100%}
+#news #newsDisplay, #graphopts {color: transparent}
+#news #newsDisplay {margin-right: -10px}
+.news #newsDisplay, .news #newsStatus {margin-top: 3px; display: inline-block}
+#news #newsDisplay {padding: 0 0 3px}
+.news .newsentry:first-child {margin-top: -10px}
+#news .newsentry:first-child {margin-top: -3px}
+#news .newsentry h3 {border: var(--border_inner); border-radius: 2px 2px 0 0}
+#news .newsentry:last-child {margin-bottom: -5px}
+#news .newsentry {margin-bottom: 14px}
+.news .newsentry {margin-top: -3px}
+#news #newsStatus {padding-top: 2px; margin-left: -10px}
+#newspage {margin: 18px 5px}
+.news p, .newscontent p {margin-top: -5px; font-size: 9pt; color: var(--ink); margin-bottom: 0}
+.news p:nth-child(n+1), .newscontent p:nth-child(n+1) {margin-top: 5px}
+#newsStatus {float: left; color: var(--ink)}
+#newsStatus, #news #newsDisplay a {font-size: 8pt}
+#newsStatus, #news #newsDisplay, #news #newsDisplay a, #graphopts a, #routerinfo a {display: inline-block}
+
+#config_service {padding-bottom: 0}
+#config_ui, #netdb {padding-bottom: 3px}
 
 .messages i {display: inline-block; float: none; text-align: left}
 .messages #newsDisplay {margin-left: 45px; display: block; text-align: right; color: transparent}
@@ -450,18 +457,13 @@ div[id^="config_"].main {padding-bottom: 14px}
 #config_update input, #config_update button, #config_update select, #config_update textarea {margin-left: 0}
 #config_update .messages {box-shadow: var(--highlight); background: var(--update) no-repeat 15px center, var(--earth) bottom right no-repeat, linear-gradient(135deg, #000020, #000); background-size: 28px, 80px auto, 100%}
 #events .messages {margin-top: 21px; margin-bottom: -16px; box-shadow: inset 0 0 0 1px #300}
-.wideload {margin: 0}
-.widescroll {overflow: auto}
-.widescroll table {white-space: nowrap}
 
-.underline {border-bottom: 1px solid #efeeff; padding: 5px 0 5px 0; margin: 0 0 10px 0}
 .infohelp tt {font-size: 9pt}
 .links {margin-top: 10px; margin-bottom: -10px; text-align: justify}
 .links b {color: #8f7959; letter-spacing: .08em; line-height: 165%}
 .links li {line-height: 1.5; text-align: justify! important; list-style-image: var(--star)}
 #enablefull td {padding: 4px 3px 4px 6px}
 #config_logging p {margin: 3px 0 0; text-align: left}
-
 
 /* top navigation */
 .confignav {margin: -1px -11px 15px; padding: 7px 5px 8px; line-height: 1.3; text-align: center; font-weight: 700; border: 1px solid #26235c; box-shadow: var(--highlight); background: linear-gradient(to bottom, rgba(0,0,64,.15), rgba(0,0,48,.15) 50%, rgba(0,0,32,.15) 50%, rgba(0,0,16,.15)), var(--th); background-size: 100%, 100% 4px, 4px 100%}
@@ -517,9 +519,8 @@ div.widepanel h3 {padding: 6px 10px; text-align: left; text-transform: uppercase
 form[action="graphs"], form[action="/updategraphs"] {margin-top: -11px; margin-bottom: 10px; padding: 10px 10px 0; border: var(--border_inner); background: #000}
 .graphspanel {padding: 0; margin: 15px 0 -15px 0; width: 100%; text-align: center; overflow: auto; background: none}
 .graphspanel a {font-size: 0}
-.graphspanel img {padding: 2px; max-width: calc(100% - 20px); vertical-align: top; box-shadow: var(--highlight), inset 0 0 2px 1px #26235c; background: rgba(0,0,0,.3)}
-.graphspanel a img {padding: 3px; margin: 5px 4px; text-align: center; opacity: .9; transition: ease border .1s}
-.graphspanel a img:hover {padding: 3px; text-align: center; box-shadow: var(--highlight), inset 0 0 2px 1px #83529f; border: 1px solid #83529f; background: #000; opacity: 1; cursor: zoom-in; transition: ease border .2s}
+.graphspanel a img {text-align: center; opacity: .9; transition: ease border .1s}
+.graphspanel a img:hover {box-shadow: var(--highlight), inset 0 0 2px 1px #83529f; background: #000; opacity: 1; cursor: zoom-in; transition: ease border .2s}
 .graphspanel form {margin-bottom: 25px; padding: 0 15px 0 15px; text-align: left}
 .graphspanel p {margin-top: 10px; padding: 10px 10px 15px; text-align: center; text-transform: capitalize; border-top: var(--border_inner)}
 .singlegraph img:hover {cursor: zoom-out}
@@ -531,10 +532,13 @@ form[action="graphs"], form[action="/updategraphs"] {margin-top: -11px; margin-b
 #graphs input[type=text] {min-width: 60px}
 #graphs input[type=text] {min-width: 70px}
 #graphs .messages {margin-top: 15px; margin-bottom: -8px}
-#graphs td.infohelp {padding: 5px 5px 5px 40px; text-align: left; border: 1px inset #120f35; border-right: none; border-left: none; background-color: #010008; background-size: 20px}
-#graphs td:nth-child(2) {width: 260px; white-space: nowrap}
+#graphs .nowrap {line-height: 3; display: inline-block}
+#graphs .nowrap b {min-width: 150px; text-align: right; display: inline-block; margin-right: 5px}
+#graphs input[type=text] {min-width: 80px}
 #graphs tr:first-child td {border: none}
 #graphs td:first-child {padding: 13px 3px 13px 5px; width: 85px; white-space: nowrap; text-align: right}
+#graphs td:nth-child(2) {width: 260px; white-space: nowrap}
+#graphs td.infohelp {padding: 5px 5px 5px 40px; text-align: left; border: 1px inset #120f35; border-right: none; border-left: none; background-color: #010008; background-size: 20px}
 #graphdisplay + form {display: none; opacity: 0; will-change: transform}
 #graphdisplay:hover + form, #graphdisplay + form:hover {display: block; animation: fade .5s ease .2s reverse both}
 #graphopts a:empty {display: none}
@@ -550,9 +554,6 @@ h3#graphinfo {margin-top: 10px; border-radius: 0; text-transform: capitalize; le
 .main tr:nth-child(even), #netdbversions tr:nth-child(even), #netdbtransports tr:nth-child(even), #netdbcountrylist tr:nth-child(even), #netdbtiers tr:nth-child(even), #pluginconfig table tr:nth-child(even) {vertical-align: middle; background: var(--row)}
 .main tr:nth-child(odd), #netdbversions tr:nth-child(odd), #netdbtransports tr:nth-child(odd), #netdbcountrylist tr:nth-child(odd), #netdbtiers tr:nth-child(odd), #pluginconfig tr {vertical-align: middle; background: var(--row)}
 .main ul {list-style-type: square}
-
-.news h3, #newspage h3 {padding-left: 30px; text-align: left; font-size: 9.5pt; letter-spacing: .08em; color: var(--ink); padding: 6px 10px 6px 30px; background: var(--news) no-repeat left 8px center, var(--title); background-size: 16px, 4px 100%, 100%}
-.news h3 {padding-left: 23px; font-size: 11pt; border: none; border-bottom: var(--border_inner); background: var(--news) no-repeat left 1px center / 16px}
 #newtab {margin-top: 2px; float: right; letter-spacing: 0; text-align: right; font-size: 8pt}
 #newtab:hover {filter: drop-shadow(0 0 3px var(--hover))}
 
@@ -574,8 +575,6 @@ p + .twocol, div[lang="de"] p + .twocol {margin: 10px 25px}
 div[lang="de"] ul.links {margin: 0 30px -10px 20px}
 div[lang] li {line-height: 1.6}
 
-hr {color: rgba(38, 35, 92,.7); background: rgba(38, 35, 92,.7); height: 1px; border: 0 solid rgba(38, 35, 92,.7); margin: 20px 0 10px}
-hr:last-child {margin-top: 20px; margin-bottom: 20px}
 .joblog hr {margin: 10px 0}
 fieldset {overflow: hidden; position: relative}
 .statusnotes {font-style: italic; font-size: 9pt; color: var(--ink); text-align: center; border: var(--border_inner); margin: -3px 0 5px 0; padding: 7px; background: linear-gradient(180deg,#010014, #010010 50%)}
@@ -1720,12 +1719,6 @@ th.options, table#externali2cp th {padding: 7px 10px}
 #cputype {display: inline-block; margin: -2px 2px -2px 0; padding: 2px 5px; font-weight: 700; text-transform: uppercase; border-radius: 2px; background: #005}
 #wrapperlogs pre {max-height: 500px; resize: none}
 
-/* graphs */
-#graphs td:first-child {font-weight: 400; text-align: left; padding: 5px 0 0}
-#graphs .nowrap b {min-width: 150px; text-align: right; display: inline-block; margin-right: 5px}
-#graphs .nowrap {line-height: 3; display: inline-block}
-#graphs input[type=text] {min-width: 80px}
-
 b.suboption {margin: 0; padding: 5px 12px 6px 10px; display: inline-block; text-shadow: 0 1px 1px #000; border: var(--border_inner); border-bottom: none; box-shadow: var(--highlight); background: linear-gradient(90deg, rgba(0,0,16,.5), rgba(0,0,0,0) 30%), linear-gradient(180deg,#141221 50%, #001 50%)}
 #config_network .optionlist:hover, #config_i2cp .optionlist:hover, #reseedssl:hover, #manualreseed .optionsingle:hover, .optiontextarea:hover, #reseed_urlselection:hover {border: var(--border_inner)}
 #config_reseed .optionsave input[type=submit] {display: inline-block}
@@ -2397,22 +2390,22 @@ h1, .main h2, #applinks, #sitelinks, .main h3 {-webkit-text-stroke: 1px rgba(179
 .leasesets_container .lazy.lazyhide, .leasesets_container .lazy.lazyhide td, .leasesets_container .lazy:not(.lazyshow) {opacity: 1; contain: none}
 #tunnelpeercount .lazy {contain: none}
 
-.configpeer {background: var(--edit) no-repeat center center / 12px, var(--element)}
-.familysearch {background: var(--family) no-repeat center center / 12px, var(--element)}
 .netdbentry th:last-child > *, .sybil_router th:last-child > * {line-height: 1}
 .netdbentry th, .sybil_router th {vertical-align: middle}
 .netdbentry .tunnel_cap, .netdbentry .tier, .netdbentry .ff, .netdbentry .reachable, .netdbentry .unreachable, .netdbentry .version, .sybil_routerinfo .tunnel_cap, .sybil_routerinfo .tier, .sybil_routerinfo .ff, .sybil_routerinfo .reachable, .sybil_routerinfo .unreachable, .sybil_routerinfo .version {margin: 0 2px; padding: 0 4px; line-height: 1.6}
 .netdb_header {margin: 0; min-width: 100px; display: inline-block; vertical-align: middle; white-space: nowrap}
-.netdb_header .viewprofile, .netdb_header .configpeer, .netdb_header .familysearch, .sybil_routerinfo .viewprofile, .sybil_routerinfo .configpeer, .sybil_routerinfo .familysearch {margin: 0 3px; width: 14px; height: 14px; display: inline-block}
-#profilelist .viewprofile, #profilelist .configpeer {margin: 1px}
-#profilelist .version {line-height: 1.4}
-#profilelist .viewedit {padding: 1px}
 .viewedit br {display: none}
 .viewprofile, .configpeer, .familysearch {margin: 1px 2px; padding: 4px; width: 12px; height: 12px; vertical-align: middle; display: inline-block; line-height: 0; font-size: 0; border: 1px solid #113; box-shadow: var(--highlight); background: var(--element)}
 .viewprofile {background: var(--eye) no-repeat center center / 12px, var(--element)}
+.configpeer {background: var(--edit) no-repeat center center / 12px, var(--element)}
+.netdb_header .viewprofile, .netdb_header .configpeer, .netdb_header .familysearch, .sybil_routerinfo .viewprofile, .sybil_routerinfo .configpeer, .sybil_routerinfo .familysearch {margin: 0 3px; width: 14px; height: 14px; display: inline-block}
+.familysearch {background: var(--family) no-repeat center center / 12px, var(--element)}
 .viewprofile:hover, .familysearch:hover, .configpeer:hover, .viewprofile:focus, .familysearch:focus, .configpeer:focus {border: 1px solid var(--a)}
 .viewedit .configpeer:hover, .viewedit .configpeer:focus {background: var(--edit_hover) no-repeat center center / 12px, var(--element)}
 .viewprofile:hover, .viewprofile:focus {background: var(--eye_hover) no-repeat center center / 12px, var(--element)}
+#profilelist .viewprofile, #profilelist .configpeer {margin: 1px}
+#profilelist .version {line-height: 1.4}
+#profilelist .viewedit {padding: 1px}
 
 /* iframed */
 iframe {height: 0}
@@ -2449,17 +2442,17 @@ iframe.iframed {margin: 15px 0 0}
 @supports not (-moz-appearance: none) {
 .applabel {padding-bottom: 2px}
 .percentBarText {padding-top: 1px}
-#manualreseed th:last-child, #manualreseed td:last-child {border-right: var(--border_inner)}
-#reseedconfig .optbox[type=radio] {margin: 4px 4px 4px 15px} #manualreseed th:last-child, #manualreseed td:last-child {border-right: var(--border_inner)}
-#reseedproxysslhostport.optionlist {columns: 1} .optionsingle#reseedproxytype {columns: 2}
-#reseedproxytype {columns: 2}
-#sb_memoryBar {margin-bottom: -6px}
 .sb_notice {margin-bottom: -6px} .sb_netstatus, .tunnelBuildStatus {margin-bottom: -4px}
-#sidebar h4 {box-shadow: none}
 .sitemapLabel {padding-bottom: 6px}
 .statlist {margin-bottom: -25px} .statlist:last-of-type {margin-bottom: -6px}
 .tab, .tab2 {margin: 0 -2px -1px -2px} .tab2 {padding: 5px 14px 5px} .tab a, .tab a:visited {padding: 4px 16px 3px}
 .tunnelBuildStatus, .tunnelBuildStatus::before {vertical-align: middle}
+#sidebar h4 {box-shadow: none}
+#sb_memoryBar {margin-bottom: -6px}
+#manualreseed th:last-child, #manualreseed td:last-child {border-right: var(--border_inner)}
+#reseedconfig .optbox[type=radio] {margin: 4px 4px 4px 15px} #manualreseed th:last-child, #manualreseed td:last-child {border-right: var(--border_inner)}
+#reseedproxysslhostport.optionlist {columns: 1} .optionsingle#reseedproxytype {columns: 2}
+#reseedproxytype {columns: 2}
 }
 
 /*responsive layout */
@@ -2469,39 +2462,39 @@ iframe.iframed {margin: 15px 0 0}
 }
 
 @media screen and (max-width: 1499px) {
-#searchbar span {margin: 0 0 -4px 0}
-.sitemapLink, .sitemapLabel, #sitemap .applink, #sitemap .applabel {width: 160px; min-width: 160px}
-.en .sitemapLink, .en .sitemapLabel, .en #sitemap .applink, .en #sitemap .applabel, .en #sitemap .applink table {width: 120px; min-width: 120px}
-#sitemap .applink img {padding-left: 62px; padding-right: 62px}
 .en #sitemap .applink img {padding-left: 35px; padding-right: 35px}
-#logs h3.tabletitle a.delete {padding-right: 16px}
-#applinks + .linkgroup .applink:last-child {margin-bottom: 12px}
-#sitelinks + .linkgroup .applink:last-child {margin-bottom: 8px}
-input.check[value$="updates"], input.check[value$="updates"]:hover, input.check[value$="updates"]:focus, input.check[value$="updates"]:active {padding-left: 26px; background-size: 14px, 100%}
-#profiles #banlist {margin-top: -3px; margin-bottom: 7px}
-#banlist li hr {margin-top: 4px}
-h3#bannedpeers {margin-bottom: -13px}
-#clock {font-size: 16pt}
-.netdbentry .tunnel_cap, .netdbentry .tier, .netdbentry .ff, .netdbentry .reachable, .netdbentry .unreachable, .netdbentry .version {padding: 2px 4px}
-#sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after, #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {min-height: 14px}
-.tunnels_client th:first-child {font-size: 0}
-.tunnels_client th:first-child::after {vertical-align: middle; line-height: 0; letter-spacing: -0.25em; font-size: 12pt; content: "\21E9\21E7"}
-#pluginconfigtext input {margin: -4px -6px 0 0}
-.tunnelBuildStatus {font-size: 90%}
-#sb_tunnelstatus .tunnelBuildStatus::before {margin: -2px 0; background-size: 12px}
-#sidebar h3 {margin-bottom: -9px; padding: 5px 0}
-#sidebar h3::before {height: 14px}
-#tunnels h3 a[href^="/configtunnels#"]::after, #tunnels h3 a[href$="i2ptunnelmgr"]::after, #logs a.configure::after, #logs a.delete::after {width: 14px; height: 14px; background-size: 12px}
-#logs a.configure::after {background-size: 14px}
-h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after, .h3navlinks a[href="/help/faq#alternative_browser"]::after {width: 16px; height: 16px; background-size: 16px}
-#config_logging h3 a::before, #webappconfiguration a::before, #i2pclientconfig a::before, #pluginmanage a::before {margin-top: -2px}
-#chooselang img, #configbandwidth img {margin-top: 0}
+.en .sitemapLink, .en .sitemapLabel, .en #sitemap .applink, .en #sitemap .applabel, .en #sitemap .applink table {width: 120px; min-width: 120px}
 h1[class], h1 {padding-left: 50px; background-size: 32px auto, 4px 100%, 100% 4px}
+input.check[value$="updates"], input.check[value$="updates"]:hover, input.check[value$="updates"]:focus, input.check[value$="updates"]:active {padding-left: 26px; background-size: 14px, 100%}
 .main h3 a {line-height: 1}
+.netdbentry .tunnel_cap, .netdbentry .tier, .netdbentry .ff, .netdbentry .reachable, .netdbentry .unreachable, .netdbentry .version {padding: 2px 4px}
+.sitemapLink, .sitemapLabel, #sitemap .applink, #sitemap .applabel {width: 160px; min-width: 160px}
+.tunnelBuildStatus {font-size: 90%}
+.tunnels_client th:first-child::after {vertical-align: middle; line-height: 0; letter-spacing: -0.25em; font-size: 12pt; content: "\21E9\21E7"}
+.tunnels_client th:first-child {font-size: 0}
+#applinks + .linkgroup .applink:last-child {margin-bottom: 12px}
+#banlist li hr {margin-top: 4px}
+#chooselang img, #configbandwidth img {margin-top: 0}
 #config_bandwidth .h3navlinks a {margin: -4px 0 0 -16px; background-size: 19px}
-#sidebarconf button img {width: 10px;  height: 10px}
+#config_logging h3 a::before, #webappconfiguration a::before, #i2pclientconfig a::before, #pluginmanage a::before {margin-top: -2px}
+h3#bannedpeers {margin-bottom: -13px}
+h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after, .h3navlinks a[href="/help/faq#alternative_browser"]::after {width: 16px; height: 16px; background-size: 16px}
+#logs a.configure::after {background-size: 14px}
+#logs h3.tabletitle a.delete {padding-right: 16px}
+#pluginconfigtext input {margin: -4px -6px 0 0}
+#profiles #banlist {margin-top: -3px; margin-bottom: 7px}
 #routerinformation .h3navlinks a {line-height: 1.4}
 #searchbar button {height: 28px}
+#searchbar span {margin: 0 0 -4px 0}
+#clock {font-size: 16pt}
+#sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after, #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {min-height: 14px}
+#sb_tunnelstatus .tunnelBuildStatus::before {margin: -2px 0; background-size: 12px}
+#sidebarconf button img {width: 10px;  height: 10px}
+#sidebar h3::before {height: 14px}
+#sidebar h3 {margin-bottom: -9px; padding: 5px 0}
+#sitelinks + .linkgroup .applink:last-child {margin-bottom: 8px}
+#sitemap .applink img {padding-left: 62px; padding-right: 62px}
+#tunnels h3 a[href^="/configtunnels#"]::after, #tunnels h3 a[href$="i2ptunnelmgr"]::after, #logs a.configure::after, #logs a.delete::after {width: 14px; height: 14px; background-size: 12px}
 }
 
 @media screen and (max-width: 1400px) {
