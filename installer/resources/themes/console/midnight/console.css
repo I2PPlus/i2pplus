@@ -434,7 +434,7 @@ div[id^="config_"].main {padding-bottom: 14px}
 .tab:hover {box-shadow: var(--highlight), inset 0 0 1px 1px rgba(112,80,112,.7); background: radial-gradient(at center bottom, rgba(96,32,96,.6) 0, rgba(0,0,0,0) 90%), var(--btn_hover)}
 .tab:hover a {color: var(--a_hover); text-shadow: 0 1px 1px #000; background: none}
 .tab:active {box-shadow: var(--highlight), inset 3px 3px 3px 1px #2d103f; background: radial-gradient(at center bottom, rgba(200, 96, 200, .8) 0, rgba(0, 0, 0, 0) 90%), linear-gradient(180deg,#501f6c, var(--hover))}
-.tab:active a, #help .tab:active a {color: var(--ink); background: none; text-shadow: none}
+.tab:active a, #help .tab:active a {color: var(--ink) !important; background: none; text-shadow: none}
 .tab2 {padding: 6px 14px; color: var(--ink); text-shadow: 0 1px 1px #000; box-shadow: var(--highlight), inset 4px 4px 4px rgba(0,0,0,.5); background: radial-gradient(at center bottom, rgba(128, 0, 128, .4) 0, rgba(0, 0, 0, 0) 90%), linear-gradient(90deg, rgba(96,0,96,.2), rgba(96,0,96,.2)), linear-gradient(180deg,#000, #1a1b2f)}
 
 #bwlimiter a, #advancedconfig a, .tabletitle a, #upnpconfig a, #servicedebug a, .ptitle a, #configstats th a, h3#graphinfo a, .h3navlinks {float: right; letter-spacing: normal; text-transform: capitalize; font-size: 9pt}
@@ -636,7 +636,7 @@ form[action="events"] {background: #000}
 .tablefooter, .tablefooter td {padding: 10px; line-height: 1.1; border-top: var(--border_inner); border-bottom: var(--border_inner); border-right: none; box-shadow: none; background: none}
 .tablefooter, .tablefooter:hover td {background: linear-gradient(180deg,#010014, #010010 50%, #010010 100%)}
 .formaction {text-align: right; margin-bottom: -5px; padding: 7px 5px}
-h3[id$="con"] {margin-bottom: -2px; padding: 8px 10px; word-spacing: .1em; letter-spacing: .08em; font-size: 10pt; border: var(--border_inner); border-radius: 0; background: var(--hover)}
+h3[id$="con"] {margin-bottom: -2px; padding: 8px 10px; word-spacing: .1em; letter-spacing: .08em; font-size: 10pt; border: var(--border_inner); border-radius: 0}
 h3[id="udpcon"] {width: auto}
 #ntcpconnections tr, #udpconnections tr, #tunnels tr, #profiles tr {box-shadow: none}
 #ntcpconnections td, #udpconnections td, #tunnels td, #profiles td {box-shadow: var(--highlight), inset 0 0 2px 0 #26235c}
@@ -1937,7 +1937,6 @@ tr:nth-child(4) .net_bwrate::before {width: 22px; background:var(--share) left t
 .netdb_tunnel {margin-right: 3px; margin-left: -3px; border-radius: 0 2px 2px 0; background: #113}
 .netdb_expiry {margin-left: 2px; margin-right: 1px}
 .tunnel_peer {margin-left: 5px}
-.tunnel_peer .routerid tt {margin-left: -3px}
 .leaseset .routerid > * {vertical-align: middle}
 .netdb_gateway img {margin: 0 -5px 0 0}
 .leaseset td:first-child .routerid img {margin-top: -1px; margin-left: 1px}
@@ -2028,7 +2027,7 @@ th .version {padding: 2px 3px}
 #floodfills td:empty {text-align: center}
 #floodfills td:empty::before, #ntcpconnections td:empty::before, #udpconnections td:empty::before, #profilelist td:empty::before {content: "‒"; display: inline-block; opacity: .8; width: 100%; text-align: center}
 #floodfills td:nth-child(3), #profilelist th:nth-last-child(3), #profilelist td:nth-last-child(3), #profilelist th:nth-last-child(4), #profilelist th:nth-last-child(5), #profilelist th:nth-last-child(6), #profilelist td:nth-last-child(4), #profilelist td:nth-last-child(5), #profilelist td:nth-last-child(6) {text-align: center}
-#floodfills td:nth-child(3) span, #profilelist td:nth-last-child(3) span, #profilelist td:nth-last-child(4) span, #profilelist td:nth-last-child(5) span, #profilelist td:nth-last-child(6) span, #profilelist td:nth-last-child(2) span {display: inline-block; text-align: right; min-width: 20px}
+#floodfills td:nth-child(3) span, #profilelist td:nth-last-child(3) span, #profilelist td:nth-last-child(5) span, #profilelist td:nth-last-child(2) span {display: inline-block; text-align: right; min-width: 20px}
 #profilelist td:nth-last-child(5) span {min-width: 40px}
 #profilelist td:nth-child(2), #floodfills td:last-child {white-space: nowrap; width: 1%}
 #profilelist td:nth-child(2) i {display: inline-block; width: 100%; text-align: center}
