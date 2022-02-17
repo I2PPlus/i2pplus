@@ -209,7 +209,7 @@ label {
   text-align: center;
 }
 
-input:disabled {
+input[disabled] {
   pointer-events: none;
 }
 
@@ -440,7 +440,6 @@ select::-moz-focus-inner {
   border: var(--border);
   box-shadow: 0 0 0 1px #000, var(--highlight), inset 3px 3px 3px 1px #000;
   background: linear-gradient(180deg,#020,#001800);
-  -moz-appearance: none;
   -webkit-appearance: inherit;
   appearance: none;
   cursor: pointer;
@@ -458,6 +457,7 @@ select::-moz-focus-inner {
   border: 1px solid #5a5 !important;
   box-shadow: 0 0 1px 1px rgba(0,0,0,.9), 0 0 0 2px rgba(255,96,0,.8), inset 0 0 0 1px #020;
   background: #000;
+  cursor: pointer;
 }
 
 .optbox:not(:checked):active {
@@ -484,7 +484,7 @@ select::-moz-focus-inner {
   opacity: 1;
   transform: scale(1);
   transition: linear transform .05s;
-  will-change: transform;
+  cursor: pointer;
 }
 
 .optbox[type=checkbox]::before {
@@ -506,7 +506,7 @@ select::-moz-focus-inner {
 .optbox[disabled] {
   box-shadow: none;
   background: #000;
-  opacity: .8;
+  opacity: .3;
   pointer-events: none;
 }
 
@@ -528,7 +528,7 @@ select::-moz-focus-inner {
   appearance: none;
 }
 
-.optbox.slider:not(:checked), .optbox.slider[disabled] {
+.optbox.slider:not(:checked), .optbox.slider:not(:checked)[disabled] {
   background: linear-gradient(180deg,#400,#600) !important;
   border: 1px solid #500;
 }

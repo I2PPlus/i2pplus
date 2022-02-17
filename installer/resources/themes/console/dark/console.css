@@ -154,6 +154,7 @@ p:empty + .sb_notice {margin-top: 9px}
 #sb_warning + hr {margin-top: 7px}
 #sidebar hr:last-child {margin-top: 5px; margin-bottom: -5px}
 .warntext {color: #b00}
+/*#sidebar tr {background: var(--topnav);}*/
 
 /* sidebar news */
 #sb_newsheadings {margin-left: -12px; margin-bottom: -7px; width: 206px; text-align: right}
@@ -2498,7 +2499,7 @@ h3 .b32 {margin-right: -16px}
 #tunnels .routerid, .tunnel_local {margin-right: 0}
 #peers .widescroll td.cells {font-size: 8pt}
 #help h3, #faq h3 {font-size: 10pt}
-#clientconf code {white-space: nowrap}
+#clientconf code {display: inline-block; white-space: nowrap}
 #peers .idle, #peers .inout {min-width: 104px}
 #peers .skew {display: none}
 .tab, .tab2 {padding: 1px 0; min-width: 50px}
