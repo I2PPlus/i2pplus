@@ -215,7 +215,6 @@ text-align: center; border: 0}
 #sb_localtunnels td:last-child {background-image: url(/themes/console/images/local_inprogress.png); background-position: right 1px center; background-repeat: no-repeat; background-size: 16px}
 #sb_localtunnels td.tunnelReady {background-image: url(/themes/console/images/local_up.png)}
 #sb_localtunnels td.tunnelRebuilding {background-image: url(/themes/console/images/local_down.png)}
-#sb_localtunnels tr:hover td {background: #1e0b28}
 #sb_localtunnels tr:hover td:first-child {border-radius: 2px 0 0 2px}
 #sb_localtunnels tr:hover td:last-child {border-radius: 0 2px 2px 0}
 #sb_localtunnels tr:active a {color: var(--active)}
@@ -310,7 +309,7 @@ a:active #sb_graphstats {border-color: var(--active)}
 .percentBarOuter {margin: -3px 0 -6px -6px; width: 194px; position: relative; border: var(--border_inner); box-shadow: var(--highlight), inset 0 2px 2px 2px rgba(0,0,0,.45); background: repeating-linear-gradient(90deg, #000 1px, #000 2px, #003 2px, #003 4px); opacity: 1}
 .percentBarOuter:hover .percentBarText {opacity: 1; transition: ease opacity .2s}
 .percentBarInner {height: 14px; max-width: 100%; box-shadow: var(--highlight), inset 0 -2px 4px rgba(0,0,0,.6); background: linear-gradient(90deg, rgba(0,0,0,0) 100px, rgba(255,0,255,.1) 160px, rgba(0,0,255,.15)), linear-gradient(180deg, #33a, #226 50%, #003 50%, #000)}
-#sb_memoryBar .percentBarInner {background: linear-gradient(90deg, rgba(0,0,0,0) 100px, rgba(255,0,255,.1) 160px, rgba(255,0,0,.15)), linear-gradient(180deg,rgba(100,100,220,.5), rgba(70,70,120,.5) 50%, rgba(0,0,50,.5) 50%, rgba(0,0,0,.5))}
+#sb_memoryBar .percentBarInner {background: var(--membarinner)}
 #sb_memoryBar.percentBarOuter {background: linear-gradient(90deg, rgba(0,0,0,0), rgba(255,0,255,.05), rgba(255,0,0,.12)), repeating-linear-gradient(90deg, #000 1px, #000 2px, #003 2px, #003 4px)}
 .percentBarText {width: 100%; font-weight: 700; text-align: center; vertical-align: middle; float: left; opacity: 0; transition: ease opacity .2s}
 #sb_memoryBar .percentBarText {padding: 2px 0 0; width: 70%; line-height: 22px; float: none; position: absolute; top: -23px; left: 15%; right: 15%; z-index: 999; font-size: 110%; border-radius: 2px; background: #115; filter: drop-shadow(0 0 1px #337) drop-shadow(0 0 1px #000)}

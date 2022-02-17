@@ -16,7 +16,7 @@
   --border_btn: 1px solid #26225c;
   --border_inner: 1px solid #1e1c4a;
   --border_input: 1px solid #27235c;
-  --border_soft: 1px solid #100e25;
+  --border_soft: 1px solid #181537;
   --btn_active: linear-gradient(180deg,#401856,#501f6c);
   --btn_hover_radial: radial-gradient(at center bottom, rgba(96, 0, 96, .4), rgba(0, 0, 0, 0) 60%);
   --btn_hover: var(--btn_hover_radial), linear-gradient(180deg,#202,#101 50%,#080008 50%,#000);
@@ -30,6 +30,7 @@
   --ink: #c9ceff;
   --label: linear-gradient(180deg,#002,#001);
   --li: #8589ad;
+  --membarinner: linear-gradient(90deg, rgba(0,0,0,0) 100px, rgba(255,0,255,.1) 160px, rgba(255,0,0,.15)), linear-gradient(180deg,rgba(100,100,220,.5), rgba(70,70,120,.5) 50%, rgba(0,0,50,.5) 50%, rgba(0,0,0,.5));
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
   --optbox: linear-gradient(180deg,#030306,#112);
   --outline: 0 0 0 1px #000;
