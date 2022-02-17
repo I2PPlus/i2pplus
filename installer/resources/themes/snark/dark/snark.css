@@ -130,7 +130,7 @@ input.disabled {color: #494; border: 1px solid #000; box-shadow: var(--btn_shado
 thead img {margin: 0 2px; padding: 0; border-radius: 0; border: 0 none transparent}
 a img:hover, a:focus img {outline: none; filter: saturate(200%) drop-shadow(0 0 1px #f60) drop-shadow(0 0 2px #f30)}
 thead a:active img {transform: scale(0.9)}
-#torrents #torrents .torrentAction {white-space: nowrap; text-align: center}
+#torrents .torrentAction {white-space: nowrap; text-align: center}
 #torrents td[colspan="10"] {white-space: normal}
 input[type=text], input[type=password], textarea, select {box-sizing: border-box; line-height: 1.3; font-size: 8.5pt}
 input[type=text], textarea[name="nofilter_newComment"] {padding: 6px 7px; transition: ease box-shadow .1s}
@@ -318,7 +318,7 @@ td.graphicStatus img {margin-top: -3px; margin-bottom: -3px; width: auto; height
 
 /* action buttons */
 #torrents .torrentAction {padding: 1px; width: 1%; white-space: nowrap; text-align: center}
-#torrents .torrentAction input[type=submit] {margin: 1px 2px; padding: 11px; min-width: 0; min-height: 0; float: none; vertical-align: middle; font-size: 0; border: 1px solid #262; border-radius: 1px; box-shadow: var(--highlight); background-position: center center; opacity: .75; cursor: pointer; will-change: transform}
+#torrents .torrentAction input {margin: 1px 2px; padding: 11px; min-width: 0; min-height: 0; float: none; vertical-align: middle; font-size: 0; border: 1px solid #262; border-radius: 1px; box-shadow: var(--highlight); background-position: center center; opacity: .75; cursor: pointer; will-change: transform}
 #torrents .actionStart {background: var(--start) no-repeat center center / 14px, var(--btnAction), var(--start_hover) no-repeat center center / 14px}
 #torrents .actionStart:hover, #torrents .actionStart:focus {background: var(--start_hover) no-repeat center center / 14px, var(--btnAction_hover)}
 #torrents .actionStop {background: var(--stop) no-repeat center center / 14px, var(--btnAction), var(--stop_hover) no-repeat center center / 14px}
@@ -330,8 +330,8 @@ td.graphicStatus img {margin-top: -3px; margin-bottom: -3px; width: auto; height
 #torrents #actionStopAll, #torrents #actionStartAll {margin-top: -1px; padding: 11px 19px}
 #torrents #actionStopAll {background: var(--stopall) no-repeat center center / auto 14px, var(--btnAction), var(--stopall_hover) no-repeat center center / auto 14px}
 #torrents #actionStartAll {background: var(--startall) no-repeat center center / auto 14px, var(--btnAction), var(--startall_hover) no-repeat center center / auto 14px}
-#torrents #actionStartAll:hover, #torrents .actionStartAll:focus {background: var(--startall_hover) no-repeat center center / auto 14px, var(--btnAction_hover)}
-#torrents #actionStopAll:hover, #torrents .actionStopAll:focus {background: var(--stopall_hover) no-repeat center center / auto 14px, var(--btnAction_hover)}
+#torrents #actionStartAll:hover, #torrents #actionStartAll:focus {background: var(--startall_hover) no-repeat center center / auto 14px, var(--btnAction_hover)}
+#torrents #actionStopAll:hover, #torrents #actionStopAll:focus {background: var(--stopall_hover) no-repeat center center / auto 14px, var(--btnAction_hover)}
 #torrents .torrentAction input:hover, #torrents .torrentAction input:focus {border: 1px solid #f60; opacity: 1; transition: ease box-shadow .1s; background-blend-mode: normal}
 #torrents .torrentAction input:active {box-shadow: var(--highlight), inset 3px 3px 3px #000; transform: scale(0.9); transition: ease transform .05s; filter: none}
 
@@ -761,9 +761,9 @@ input:checked + .toggleview:active .tab_label::after {box-shadow: 0 0 0 2px rgb(
 /* responsive layout */
 @media screen and (max-width: 1499px) {
 #expand img, #shrink img {padding-top: 6px}
-#torrents .torrentAction input[type=submit] {padding: 11px; background-size: 13px, 100%, 13px}
+#torrents .torrentAction input {padding: 11px; background-size: 13px, 100%, 13px}
 #pagenavtop.pagenavcontrols {padding: 7px 0 5px}
-#torrents .actionStopAll, #torrents .actionStartAll {padding: 11px 18px}
+#torrents #actionStopAll, #torrents #actionStartAll {padding: 11px 18px}
 #torrents .infohash {padding-left: 15px; max-width: 60px; background-size: 11px}
 .torrentInfo .infohash {padding: 5px 3px 8px 7px; background: var(--badge)}
 .torrentlink, .magnetlink {padding: 7px 5px 3px 3px}
@@ -775,8 +775,8 @@ input:checked + .toggleview:active .tab_label::after {box-shadow: 0 0 0 2px rgb(
 
 @media screen and (max-width: 1199px) {
 td.graphicStatus img {padding-left: 2px}
-#torrents .torrentAction input[type=submit] {padding: 10px; background-size: 12px, 100%, 12px}
-#torrents .actionStopAll, #torrents .actionStartAll {padding: 10px 17px}
+#torrents .torrentAction input {padding: 10px; background-size: 12px, 100%, 12px}
+#torrents #actionStopAll, #torrents #actionStartAll {margin-top: 0; padding: 10px 16px}
 #torrentDisplay label {font-size: 8.5pt}
 .configsectionpanel .snarkConfigtitle {font-size: 11pt}
 .dirInfoComplete {display: none}
