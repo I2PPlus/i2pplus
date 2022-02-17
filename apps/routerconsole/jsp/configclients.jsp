@@ -41,11 +41,11 @@
        net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
        if (net.i2p.router.startup.ClientAppConfig.isSplitConfig(ctx)) {
 %>
-<%=intl._t("To change client options, edit the files in the directory {0}.", "<code>" + net.i2p.router.startup.ClientAppConfig.configDir(ctx).getAbsolutePath() + "</code>")%>
+<%=intl._t("To change client options, edit the files in: {0}", "<code>" + net.i2p.router.startup.ClientAppConfig.configDir(ctx).getAbsolutePath() + "</code>")%>
 <%
        } else {
 %>
-<%=intl._t("To change client options, edit the file {0}.", "<code>" + net.i2p.router.startup.ClientAppConfig.configFile(ctx).getAbsolutePath() + "</code>")%>
+<%=intl._t("To change client options, edit the file: {0}", "<code>" + net.i2p.router.startup.ClientAppConfig.configFile(ctx).getAbsolutePath() + "</code>")%>
 <%
        }
 %>
