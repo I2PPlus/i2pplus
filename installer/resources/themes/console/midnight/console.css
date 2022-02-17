@@ -13,6 +13,7 @@
 --label_hover: var(--btn_hover_radial), linear-gradient(180deg,#1e0b28 50%, #0a030d 50%);
 }
 
+/* globals */
 html {background: repeating-linear-gradient(90deg, rgba(0,16,0,.5) 2px, rgba(0,0,0,.3) 4px), repeating-linear-gradient(180deg,rgba(0,0,32,.6) 2px, rgba(0,0,0,.3) 4px), var(--tile) #001; background-size: 4px 100%, 100% 4px, 171px 148px}
 body {margin: 2px 0 0; padding: 0; text-align: center; font: 8.5pt/130% var(--bodyfont)}
 .sb, h1, .main, iframe {contain: layout}
@@ -27,7 +28,34 @@ pre {width: 98%; overflow-x: auto; text-align: left; font: 8.5pt var(--monospace
 .main:not(#home):not(#sitemap) tr:first-child td {border-top: var(--border_inner)}
 .main:not(#home):not(#sitemap) td:last-child {border-right: var(--border_inner)}
 .main:not(#home):not(#sitemap) tr:last-child td {border-bottom: var(--border_inner)}
-h1 {position: relative; z-index: 999}
+a:link tt, a:visited tt {color: #4e47bf}
+a:active tt {color: #9fe9f9}
+code {text-align: left; font: 9pt var(--monospaced); color: #393}
+h1, h2, h3, h4, .confignav {box-shadow: var(--highlight)}
+h1, h2, h3, .th_title {background: var(--title); background-size: 4px 100%, 100%}
+h1 {margin: 0 3px 0 212px; padding: 13px 15px 12px; min-width: 610px; position: relative; z-index: 999; line-height: 1.2; letter-spacing: .15em; text-align: left; text-transform: uppercase; white-space: normal; font-size: 17pt; font-weight: 700; font-style: normal; color: var(--ink); text-shadow: 0 0 2px #010011; border: 1px solid #26235c; box-shadow: 0 1px 5px #000}
+h2, h2.welcome {font-size: 12pt; color: var(--ink); text-shadow: 0 0 2px #010011; letter-spacing: .05em; padding: 10px; border: var(--border_inner); border-radius: 2px; vertical-align: middle; margin: 15px 0 12px 0; text-transform: uppercase; word-wrap: break-word}
+h2 a:hover {color: var(--hover)}
+h2 a[name]:hover, h2 a[name]:active {color: var(--ink)}
+h2 a:visited {color: #190f9b}
+h3 {position: relative; z-index: 10; overflow: hidden}
+h3, h3.welcome, div.news h3 {margin: 10px 0 10px 0; padding: 7px 10px; letter-spacing: .08em; text-transform: uppercase; text-shadow: 0 0 2px #010011; border: var(--border_inner); border-left: 5px solid #26235c; border-radius: 0 2px 2px 0}
+div.news h3 {padding: 6px 0; box-shadow: none}
+h4 {border-bottom: 1px; border-bottom-style: solid; border-bottom-color: #26235c; padding: 0 0 10px 0; margin: 5px 0 10px 0; font-size: 11pt}
+div[id^="config_"] td {padding-left: 10px; padding-right: 10px}
+ol {padding: 1px 0 0 20px; display: inline}
+ol li:first-child {margin-top: 10px}
+ul {margin: 0; padding: 0}
+p {line-height: 1.6; text-align: justify}
+p:empty {display: none}
+p img:first-child {display: none}
+table hr {margin: 0 0; padding: 0 0; height: 1px; display: none; color: #26235c; border: 0 solid #26235c; background: #26235c}
+table {margin: 1px 0; padding: 1px; width: 100%; font-size: 9pt; border-collapse: collapse; border: var(--border_inner)}
+table tt, #jardump td:nth-child(4) {color: #393}
+th {padding: 6px 2px; line-height: 1.1; text-align: center; font-size: 9pt; color: var(--ink); border-top: var(--border_inner); border-bottom: var(--border_inner); background: var(--th); background-size: 100% 4px, 4px 100%}
+tr {vertical-align: middle; box-shadow: var(--highlight), inset 0 0 2px 1px #00003a; contain: layout}
+tr:hover {box-shadow: none}
+tt {font: bold 8.5pt var(--monospaced); color: #393}
 
 /* standard buttons and inputs */
 #sidebar h3:hover {background: linear-gradient(90deg, rgba(64,0,64,.1), rgba(96,0,96,.2), rgba(64,0,64,.1)), linear-gradient(180deg,#1d1a2d 50%, #000 50%)}
@@ -191,6 +219,7 @@ text-align: center; border: 0}
 #sidebar h4.sb_update, #sidebar h4.sb_update {padding-top: 9px; padding-bottom: 9px}
 #sidebar ul {text-align: left}
 .sb table {margin: -4px -7px -5px -8px; width: 200px; overflow: hidden; text-align: center; font-size: 8pt; border: 0; background-image: none; background-color: transparent; border-collapse: separate; border-spacing: 1px}
+#sidebar tr {box-shadow: none}
 .sb td {padding: 0 2px 0 2px; max-width: 180px; word-spacing: -0.1em; border: 0; background-image: none}
 .sb td:first-child {max-width: 90px; text-transform: capitalize}
 #sidebar td:first-child, #sb_localtunnels td:nth-child(2) {text-align: left}
@@ -425,6 +454,15 @@ div[id^="config_"].main {padding-bottom: 14px}
 .widescroll {overflow: auto}
 .widescroll table {white-space: nowrap}
 
+.underline {border-bottom: 1px solid #efeeff; padding: 5px 0 5px 0; margin: 0 0 10px 0}
+.infohelp tt {font-size: 9pt}
+.links {margin-top: 10px; margin-bottom: -10px; text-align: justify}
+.links b {color: #8f7959; letter-spacing: .08em; line-height: 165%}
+.links li {line-height: 1.5; text-align: justify! important; list-style-image: var(--star)}
+#enablefull td {padding: 4px 3px 4px 6px}
+#config_logging p {margin: 3px 0 0; text-align: left}
+
+
 /* top navigation */
 .confignav {margin: -1px -11px 15px; padding: 7px 5px 8px; line-height: 1.3; text-align: center; font-weight: 700; border: 1px solid #26235c; box-shadow: var(--highlight); background: linear-gradient(to bottom, rgba(0,0,64,.15), rgba(0,0,48,.15) 50%, rgba(0,0,32,.15) 50%, rgba(0,0,16,.15)), var(--th); background-size: 100%, 100% 4px, 4px 100%}
 .tab, .tab2 {margin: 0 -2px -1px -2px; padding: 2px 0; min-width: 60px; display: inline-block; border: 1px solid #26235c; box-shadow: var(--highlight); box-sizing: border-box}
@@ -437,12 +475,13 @@ div[id^="config_"].main {padding-bottom: 14px}
 .tab2 {padding: 6px 14px; color: var(--ink); text-shadow: 0 1px 1px #000; box-shadow: var(--highlight), inset 4px 4px 4px rgba(0,0,0,.5); background: radial-gradient(at center bottom, rgba(128, 0, 128, .4) 0, rgba(0, 0, 0, 0) 90%), linear-gradient(90deg, rgba(96,0,96,.2), rgba(96,0,96,.2)), linear-gradient(180deg,#000, #1a1b2f)}
 
 #bwlimiter a, #advancedconfig a, .tabletitle a, #upnpconfig a, #servicedebug a, .ptitle a, #configstats th a, h3#graphinfo a, .h3navlinks {float: right; letter-spacing: normal; text-transform: capitalize; font-size: 9pt}
-h3 {position: relative; z-index: 10; overflow: hidden}
 h3 + p, h3 + table {position: relative; z-index: 20}
 .h3navlinks {position: absolute; display: inline-block; top: 0; right: 0; vertical-align: middle}
 .h3navlinks a {margin: -1px 0; padding: 9px 16px; display: inline-block; vertical-align: middle; letter-spacing: normal; text-transform: capitalize; border-left: var(--border_inner)}
-#config_service .h3navlinks a {padding: 7px 16px}
 .h3navlinks a:nth-last-child(n+2) {margin-right: -4px}
+.h3navlinks a:hover, .h3navlinks a:focus, a:hover .b32, a:focus .b32, .signingkey a:hover, .signingkey a:focus {color: var(--a_hover)}
+.h3navlinks a:active, a:active .b32, .signingkey a:active {color: #851768}
+#config_service .h3navlinks a {padding: 7px 16px}
 #tunnels h3:first-child {margin-top: 10px}
 #tunnels h3 a:not(.lsview), #logs a.delete, #logs a.configure {font-size: 0}
 #tunnels h3 a[href^="/configtunnels#"]::after, #tunnels h3 a[href$="i2ptunnelmgr"]::after, #logs a.configure::after, #logs a.delete::after, #applinks a::after, #sitelinks a::after {padding: 0; width: 16px; height: 16px; float: right; background: var(--settings) no-repeat center center; background-size: 16px; content: ""}
@@ -505,61 +544,24 @@ form[action="graphs"], form[action="/updategraphs"] {margin-top: -11px; margin-b
 h3#graphdisplay a {text-transform: capitalize; letter-spacing: normal; font-size: 9pt; float: right}
 h3#graphinfo {margin-top: 10px; border-radius: 0; text-transform: capitalize; letter-spacing: normal; word-spacing: normal}
 
-table {margin: 1px 0; padding: 1px; width: 100%; font-size: 9pt; border-collapse: collapse; border: var(--border_inner)}
-table hr {margin: 0 0; padding: 0 0; height: 1px; display: none; color: #26235c; border: 0 solid #26235c; background: #26235c}
-th {padding: 6px 2px; line-height: 1.1; text-align: center; font-size: 9pt; color: var(--ink); border-top: var(--border_inner); border-bottom: var(--border_inner); background: var(--th); background-size: 100% 4px, 4px 100%}
-tr {vertical-align: middle; box-shadow: var(--highlight), inset 0 0 2px 1px #00003a; contain: layout}
-tr:hover {box-shadow: none}
+#jardump a tt {padding-left: 13px; background-size: 11px}
+.main a:hover, a:hover tt {color: var(--a_hover)}
+.main li {text-align: left; margin: 2px 0 2px 30px; padding: 2px 20px 2px 0; word-wrap: break-word}
 .main tr:nth-child(even), #netdbversions tr:nth-child(even), #netdbtransports tr:nth-child(even), #netdbcountrylist tr:nth-child(even), #netdbtiers tr:nth-child(even), #pluginconfig table tr:nth-child(even) {vertical-align: middle; background: var(--row)}
 .main tr:nth-child(odd), #netdbversions tr:nth-child(odd), #netdbtransports tr:nth-child(odd), #netdbcountrylist tr:nth-child(odd), #netdbtiers tr:nth-child(odd), #pluginconfig tr {vertical-align: middle; background: var(--row)}
-#sidebar tr {box-shadow: none}
-div[id^="config_"] td {padding-left: 10px; padding-right: 10px}
-#enablefull td {padding: 4px 3px 4px 6px}
-/*td img {padding: 0 1px 0 2px}*/
-td img[src$="c=a1"], td img[src$="c=a2"] {filter: drop-shadow(0 0 1px #337)}
-tt {font: bold 8.5pt var(--monospaced); color: #393}
-table tt, #jardump td:nth-child(4) {color: #393}
-#revision, #jardump a tt {padding-left: 16px; background: var(--gitlab) no-repeat left center / 13px}
-#jardump a tt {padding-left: 13px; background-size: 11px}
-.infohelp tt {font-size: 9pt}
-a:link tt, a:visited tt {color: #4e47bf}
-.main a:hover, a:hover tt {color: var(--a_hover)}
-a:active tt {color: #9fe9f9}
 .main ul {list-style-type: square}
-.main li {text-align: left; margin: 2px 0 2px 30px; padding: 2px 20px 2px 0; word-wrap: break-word}
-ol {padding: 1px 0 0 20px; display: inline}
-ol li:first-child {margin-top: 10px}
-ul {margin: 0; padding: 0}
-code {text-align: left; font: 9pt var(--monospaced); color: #393}
-.h3navlinks a:hover, .h3navlinks a:focus, a:hover .b32, a:focus .b32, .signingkey a:hover, .signingkey a:focus {color: var(--a_hover)}
-.h3navlinks a:active, a:active .b32, .signingkey a:active {color: #851768}
-.links {margin-top: 10px; margin-bottom: -10px; text-align: justify}
-.links li {line-height: 1.5; text-align: justify! important; list-style-image: var(--star)}
-.links b {color: #8f7959; letter-spacing: .08em; line-height: 165%}
-p {line-height: 1.6; text-align: justify}
-p img:first-child {display: none}
-p:empty {display: none}
-#config_logging p {margin: 3px 0 0; text-align: left}
-h1 {text-align: left; color: var(--ink); padding: 13px 15px 12px; margin: 0 3px 0 212px; font-size: 17pt; font-weight: 700; font-style: normal; text-transform: uppercase; letter-spacing: .15em; text-shadow: 0 0 2px #010011; white-space: normal; border: 1px solid #26235c; line-height: 1.2; min-width: 610px; box-shadow: 0 1px 5px #000}
-h1, h2, h3, .th_title {background: var(--title); background-size: 4px 100%, 100%}
-h1, h2, h3 {box-shadow: var(--highlight)}
-span#newtab {margin-top: 2px; float: right; letter-spacing: 0; text-align: right; font-size: 8pt}
-#newtab:hover {filter: drop-shadow(0 0 3px var(--hover))}
-h2, h2.welcome {font-size: 12pt; color: var(--ink); text-shadow: 0 0 2px #010011; letter-spacing: .05em; padding: 10px; border: var(--border_inner); border-radius: 2px; vertical-align: middle; margin: 15px 0 12px 0; text-transform: uppercase; word-wrap: break-word}
-.welcome h2 {background: url(images/favicon.svg) no-repeat right 6px center, var(--th); background-size: 24px, 4px 100%, 100%}
-h2 a:visited {color: #190f9b}
-h2 a:hover {color: var(--hover)}
-h2 a[name]:hover, h2 a[name]:active {color: var(--ink)}
-h3, h3.welcome, div.news h3 {margin: 10px 0 10px 0; padding: 7px 10px; letter-spacing: .08em; text-transform: uppercase; text-shadow: 0 0 2px #010011; border: var(--border_inner); border-left: 5px solid #26235c; border-radius: 0 2px 2px 0}
-div.news h3 {padding: 6px 0; box-shadow: none}
-h4 {border-bottom: 1px; border-bottom-style: solid; border-bottom-color: #26235c; padding: 0 0 10px 0; margin: 5px 0 10px 0; font-size: 11pt}
-.confignav {background: linear-gradient(180deg,#141221, #000008 75%)}
-h2, h3, h4, .confignav {box-shadow: var(--highlight)}
+
 .news h3, #newspage h3 {padding-left: 30px; text-align: left; font-size: 9.5pt; letter-spacing: .08em; color: var(--ink); padding: 6px 10px 6px 30px; background: var(--news) no-repeat left 8px center, var(--title); background-size: 16px, 4px 100%, 100%}
 .news h3 {padding-left: 23px; font-size: 11pt; border: none; border-bottom: var(--border_inner); background: var(--news) no-repeat left 1px center / 16px}
-.underline {border-bottom: 1px solid #efeeff; padding: 5px 0 5px 0; margin: 0 0 10px 0}
+#newtab {margin-top: 2px; float: right; letter-spacing: 0; text-align: right; font-size: 8pt}
+#newtab:hover {filter: drop-shadow(0 0 3px var(--hover))}
+
+#revision, #jardump a tt {padding-left: 16px; background: var(--gitlab) no-repeat left center / 13px}
+
+td img[src$="c=a1"], td img[src$="c=a2"] {filter: drop-shadow(0 0 1px #337)}
 
 /* welcome */
+.welcome h2 {background: url(images/favicon.svg) no-repeat right 6px center, var(--th); background-size: 24px, 4px 100%, 100%}
 .twocol {margin: 5px 0 -5px; display: block; columns: 2 400px; column-gap: 0}
 div[lang="es"] li, div[lang="pt"] li, div[lang="sv"] li, div[lang="zh"] li {list-style: none; text-align: justify}
 div[lang="pt"] li br {display: none}
