@@ -596,19 +596,22 @@ div.joblog th:first-child {text-align: left; padding-left: 6px}
 /* jobs */
 h2#jobrunners {margin-top: 0; display: none}
 #jobs h2 {border-radius: 0}
-#jobrunners ~ ol {margin-top: -11px; margin-bottom: 5px; padding: 0; width: calc(100% - 8px); display: block; border: var(--border_inner); background: #010008}
+#jobrunners ~ ol {margin-top: -11px; margin-bottom: 5px; padding: 4px 3px; width: calc(100% - 8px); display: block; border: var(--border_inner); background: #010008}
 #jobrunners ~ ol > li:last-child {margin-bottom: 0}
+h3[id*="job"] {border: var(--border_inner); padding: 8px 10px; margin: 12px 0 10px 0; border-radius: 0; text-transform: uppercase; text-shadow: 0 0 2px #010011; letter-spacing: .08em}
 h3[id*="jobs"] {margin-top: 25px; clear: both}
 table#schedjobs {margin: -6px 0 0; width: 100%}
 #jobstats {margin-bottom: 10px}
-#jobstats th, #jobstats td {padding-right: 8px; text-align: right}
-#schedjobs th:first-child, #schedjobs td:first-child, #jobstats th:first-child, #jobstats td:first-child {margin-bottom: 15px; padding-left: 10px; text-align: left; font-weight: 700}
-#schedjobs tr, #schedjobs tr:hover {background: #010008}
+#jobstats th, #jobstats td {padding: 3px 8px; text-align: right}
+#jobstats th {font-size: 90%}
+#schedjobs th:first-child, #schedjobs td:first-child, #jobstats th:first-child, #jobstats td:first-child {margin-bottom: 15px; padding-left: 8px; text-align: left; font-weight: 700}
+#schedjobs td:first-child {padding: 5px 8px 3px}
+#schedjobs tr, #schedjobs tr:hover, #schedjobs tr, #schedjobs tr:hover td {background: #010008}
 table#jobstats + hr {display: none}
 h3#totaljobstats {margin-bottom: -2px; margin-top: 10px}
 .joblog h3:first-of-type {margin-top: 0}
 #activejobs + ol {padding-bottom: 5px}
-h3#finishedjobs + ol li, h3#scheduledjobs + ol li, h3#activejobs + ol li, h3#readyjobs + ol li, #schedjobs li {margin: 3px 0; padding: 8px 3px 8px 8px; width: calc(100% - 31px); list-style: none; font-size: 95%; border: 1px solid #1e1c4a; box-shadow: var(--highlight), inset 0 0 2px 1px #225}
+h3#finishedjobs + ol li, h3#scheduledjobs + ol li, h3#activejobs + ol li, h3#readyjobs + ol li, #schedjobs li {margin: 3px 2px; padding: 8px 3px 8px 24px; width: calc(100% - 32px); list-style: none; font-size: 95%; border: 1px solid #1e1c4a; box-shadow: var(--highlight), inset 0 0 2px 1px #225}
 #activejobs + ol li, #scheduledjobs + ol li, #readyjobs + ol li, #finishedjobs + ol li, #schedjobs li {padding-left: 24px; background-image: var(--clock); background-repeat: no-repeat; background-position: 5px center; background-size: 14px}
 #activejobs + ol li {background-image: var(--start); background-size: 12px}
 #finishedjobs + ol li {background-image: var(--yes); background-size: 12px; background-position: 6px center}
@@ -618,8 +621,7 @@ table#eventlog {margin-top: -21px; margin-bottom: 10px}
 table#eventlog td {padding: 3px 10px; width: 30%}
 table#eventlog td:last-child {width: 40%}
 form[action="events"] {background: #000}
-.smallhead th, #ntcpconnections th {font-size: 8pt
-}
+.smallhead th, #ntcpconnections th {font-size: 8pt}
 .smallhead th a:hover {text-decoration: none}
 .smallhead th a img:hover {filter: drop-shadow(0 0 1px var(--hover))}
 .mediumtags {font-size: 9pt}
@@ -1103,13 +1105,6 @@ a[name="criticallogs"] + p + h3 + p + ul {margin-bottom: 15px; border: var(--bor
 #enviro td {padding: 8px 10px; font-weight: 400}
 #logs #enviro td:first-child {width: 1%; text-align: right; white-space: nowrap}
 #enviro td:last-child b {margin: 0 2px 0 6px}
-#routerinformation #enviro + h3 {margin-bottom: -3px}
-#routerinformation #upnpstatus {margin-bottom: 1px}
-#routerinformation h3 {padding-top: 10px; line-height: 1.3}
-#routerinformation .h3navlinks a {line-height: 1.7}
-#routerinformation h3#version::before, #routerinformation #enviro + h3::before, #routerinformation h3#transports::before {margin: -2px 9px 0 2px; width: 17px; height: 17px; display: inline-block; vertical-align: middle; background: url(images/favicon.svg) no-repeat center center / 17px; content: ""; filter: saturate(.5)}
-#routerinformation #enviro + h3::before {background-image: url(/themes/console/images/server.svg)}
-#routerinformation h3#transports::before {background-image: url(/themes/console/images/globe.svg)}
 #routerlogs td p, #wrapperlogs td p {margin: 0; padding: 8px 10px}
 #routerlogs tr:first-child td, #wrapperlogs tr:first-child td {border-bottom: var(--border_inner)}
 #logs .embedlink {margin: 2px 0; font-size: 85%}
@@ -1143,7 +1138,7 @@ font[color="#000099"] {/* info */
 color: var(--ink)}
 
 /*#criticallogs li, #routerlogs li {padding: 0 0 1px}*/
-#logs li {margin-right: 5px; padding: 2px 2px 7px 7px; width: calc(100% - 10px); line-height: 1.6; list-style: none; text-align: left; font: 8.5pt var(--monospaced); filter: opacity(.8)}
+#logs li {margin-right: 5px; padding: 2px 2px 7px 7px; width: calc(100% - 9px); line-height: 1.6; list-style: none; text-align: left; font: 8.5pt var(--monospaced); filter: opacity(.8)}
 #logs li:hover {filter: opacity(1); border-left-color: #449}
 #criticallogs li {width: 100%}
 #logs li:last-child::after {margin: 0; border: none}
@@ -1272,6 +1267,15 @@ table#jardump {margin-top: -1px; margin-bottom: 0; font-size: 8pt; border: none}
 #certs textarea + #end, #certs h3 + #end {margin-bottom: 14px; display: block}
 #certs h3 + #end {margin-bottom: 26px}
 #tunnels th {padding: 5px 2px}
+
+/* info */
+#routerinformation #enviro + h3 {margin-bottom: -3px}
+#routerinformation #upnpstatus {margin-bottom: 1px}
+#routerinformation h3 {padding-top: 10px; line-height: 1.3}
+#routerinformation .h3navlinks a {line-height: 1.7}
+#routerinformation h3#version::before, #routerinformation #enviro + h3::before, #routerinformation h3#transports::before {margin: -2px 9px 0 2px; width: 17px; height: 17px; display: inline-block; vertical-align: middle; background: url(images/favicon.svg) no-repeat center center / 17px; content: ""; filter: saturate(.5)}
+#routerinformation #enviro + h3::before {background-image: url(/themes/console/images/server.svg)}
+#routerinformation h3#transports::before {background-image: url(/themes/console/images/globe.svg)}
 #routerinfo p {padding: 0; margin: 11px 0 10px; border: none; filter: none}
 #routerinfo table {margin: 0}
 #routerinfo a {margin: -3px 5px -3px 0; padding: 3px 10px; display: inline-block; white-space: nowrap; font-size: smaller}
@@ -1332,7 +1336,7 @@ table#jardump {margin-top: -1px; margin-bottom: 0; font-size: 8pt; border: none}
 .footnote hr {margin: 10px 0 5px 0; height: 1px; color: #26235c; border: none; background: #26235c}
 .topness {margin: -10px 5px -5px 0; text-align: right; font-size: 7.5pt}
 
-/* begin home page */
+/* home */
 #home .welcome h2 {margin-top: 12px}
 #homepanel {margin: 0 -8px}
 #applinks, #sitelinks {margin: 11px -8px -9px -8px; padding: 7px 8px 7px 34px; font-size: 10.5pt; text-align: left; text-transform: uppercase; letter-spacing: .08em; word-spacing: .1em; letter-spacing: 2px; border: 1px solid #26235c; background: url(images/favicon.svg) no-repeat 10px center, var(--title); background-size: 16px, 4px 100%, 100%; background-blend-mode: luminosity}
@@ -1398,9 +1402,6 @@ table#jardump {margin-top: -1px; margin-bottom: 0; font-size: 8pt; border: none}
 #searchbar button:active {box-shadow: var(--btn_shadow_active)}
 #searchbar input::placeholder {opacity: 0}
 #searchbar input:hover::placeholder {font-style: italic; opacity: .6}
-
-/* global overrides */
-h3[id*="job"] {border: var(--border_inner); padding: 8px 10px; margin: 12px 0 10px 0; border-radius: 0; text-transform: uppercase; text-shadow: 0 0 2px #010011; letter-spacing: .08em}
 
 /* netdb */
 .netdbentry, .leaseset {width: 100%; margin-bottom: 10px}
