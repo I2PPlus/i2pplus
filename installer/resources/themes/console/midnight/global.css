@@ -15,7 +15,7 @@
   --border: 1px solid #26235c;
   --border_btn: 1px solid #26225c;
   --border_inner: 1px solid #1e1c4a;
-  --border_input: #27235c;
+  --border_input: 1px solid #27235c;
   --border_soft: 1px solid #100e25;
   --btn_active: linear-gradient(180deg,#401856,#501f6c);
   --btn_hover_radial: radial-gradient(at center bottom, rgba(96, 0, 96, .4), rgba(0, 0, 0, 0) 60%);
@@ -52,7 +52,7 @@ body.iframed {
 }
 
 *, :focus, :active, :checked {
-  outline: none !important;
+  outline: none;
 }
 
 a, button, input {
@@ -60,12 +60,12 @@ a, button, input {
 }
 
 :-moz-focusring {
-  outline: none !important;
+  outline: none;
 }
 
 ::selection {
   color: #fff;
-  background: rgba(34, 41, 111, .9) !important;
+  background: rgba(34, 41, 111, .9);
 }
 
 body {
@@ -123,14 +123,14 @@ input:not(:hover):not(:focus), .control:not(:hover):not(:focus) {
 
 ::placeholder, input::placeholder {
   font-size: 90%;
-  font-weight: 700 !important;
+  font-weight: 700;
   font-style: italic;
-  color: #aaf !important;
-  opacity: .4 !important;
+  color: #aaf;
+  opacity: .4;
 }
 
 :focus::placeholder {
-  opacity: 0 !important;
+  opacity: 0;
 }
 
 input {
@@ -153,8 +153,8 @@ label {
 input[type=text], input[type=password], textarea {
   padding: 6px 8px;
   box-sizing: border-box;
-  color: var(--a) !important;
-  border: 1px solid #27235c !important;
+  color: var(--a);
+  border: 1px solid #27235c;
   box-shadow: var(--highlight), 0 0 0 1px #000;
   background: #000;
   cursor: text;
@@ -170,8 +170,8 @@ input[type=text], input[type=password] {
 }
 
 input[type=text]:focus, input[type=password]:focus, textarea:focus {
-  color: var(--ink) !important;
-  border: 1px solid #6466a5 !important;
+  color: var(--ink);
+  border: 1px solid #6466a5;
   box-shadow: var(--outline), 0 0 0 2px var(--a_hover), var(--btn_shadow_active);
   background: var(--text_focus);
   transition: filter all .3s;
@@ -182,7 +182,7 @@ textarea:focus {
 }
 
 input[type=text]:disabled, input[readonly], input[readonly]:focus {
-  color: #26235c !important;
+  color: #26235c;
   border: var(--border_inner);
   box-shadow: none;
   background: linear-gradient(180deg,#000,#000019);
@@ -276,7 +276,7 @@ input[type=submit]:hover, input[type=reset]:hover, button:hover {
 input[type=submit]:active, input[type=reset]:active, button:active,
 .control:active, .control:visited:active, #settings:active,
 .fakebutton:active, .fakebutton:visited:active {
-  color: #83529f !important;
+  color: #83529f;
   text-shadow: 0 1px 1px #3c1751;
   border: 1px solid var(--hover);
   box-shadow:var(--btn_shadow_active), var(--outline);
@@ -303,7 +303,7 @@ input[type=file]::file-selector-button {
 
 input[type="file"]:hover {
   border-radius: 0 20px 20px 0;
-  background: linear-gradient(90deg, rgba(0,0,0,0), #414) !important;
+  background: linear-gradient(90deg, rgba(0,0,0,0), #414);
 }
 
 input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
@@ -319,13 +319,13 @@ input[type=file]:active::file-selector-button {
 }
 
 input[type=file]:active::file-selector-button {
-  color: #83529f !important;
+  color: #83529f;
   text-shadow: 0 1px 1px #3c1751;
   border: 1px solid var(--hover);
   box-shadow: var(--highlight), inset 3px 3px 3px #000;
   background: var(--hover);
   background-size: 14px, 100%;
-  background-blend-mode: luminosity !important;
+  background-blend-mode: luminosity;
 }
 
 select {
@@ -342,8 +342,8 @@ select {
   border: 1px solid #27235c;
   cursor: pointer;
   background: var(--dropdown) center right 10px no-repeat, var(--btn);
-  background-size: 10px auto, 100% !important;
-  filter: none !important;
+  background-size: 10px auto, 100%;
+  filter: none;
 }
 
 select option {
@@ -361,9 +361,9 @@ select option:hover, select option:focus, select option:checked {
 select:hover, select:focus, select:active {
   color: var(--a_hover);
   text-shadow: 0 1px 1px #000;
-  border: 1px solid var(--a_hover) !important;
-  background: var(--dropdown_hover) center right 10px no-repeat, var(--btn_hover) !important;
-  background-size: 10px auto, 100%, 100% !important;
+  border: 1px solid var(--a_hover);
+  background: var(--dropdown_hover) center right 10px no-repeat, var(--btn_hover);
+  background-size: 10px auto, 100%, 100%;
 }
 
 select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active {
@@ -372,13 +372,13 @@ select[disabled], select[disabled]:hover, select[disabled]:focus, select[disable
 }
 
 .optbox {
-  width: 21px !important;
-  height: 21px !important;
+  width: 21px;
+  height: 21px;
   position: relative;
-  vertical-align: middle !important;
+  vertical-align: middle;
   box-sizing: border-box;
   outline: none;
-  border: 1px solid #27235c !important;
+  border: 1px solid #27235c;
   box-shadow: var(--btn_shadow_active);
   background: var(--optbox);
   appearance: none;
@@ -401,7 +401,7 @@ select[disabled], select[disabled]:hover, select[disabled]:focus, select[disable
 }
 
 .optbox:active {
-  background: #000 !important;
+  background: #000;
 }
 
 .optbox::before {
@@ -440,10 +440,10 @@ select[disabled], select[disabled]:hover, select[disabled]:focus, select[disable
 }
 
 .optbox:hover, .optbox:focus {
-  border: 1px solid #6466a5 !important;
-  box-shadow: 0 0 0 1px rgba(101, 39, 135, .5), 0 0 2px 2px #202 !important;
+  border: 1px solid #6466a5;
+  box-shadow: 0 0 0 1px rgba(101, 39, 135, .5), 0 0 2px 2px #202;
   background: linear-gradient(180deg,#303, #414);
-  filter: drop-shadow(0 0 1px #202) !important;
+  filter: drop-shadow(0 0 1px #202);
 }
 
 .optbox[disabled] {
