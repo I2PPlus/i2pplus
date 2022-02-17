@@ -22,11 +22,11 @@ small {font-size: 9pt}
 img {border: none}
 pre {width: 98%; overflow-x: auto; text-align: left; font: 8.5pt var(--monospaced); color: var(--ink)}
 .main {position: relative; background: repeating-linear-gradient(90deg, rgba(0,0,0,.4) 2px, rgba(4,4,32,.5) 4px), repeating-linear-gradient(180deg,rgba(0,0,0,.6) 2px, rgba(4,4,32,.5) 4px); background-size: 4px 100%, 100% 4px}
-.main:not(#home) td {/*padding: 4px 6px; */color: var(--ink); vertical-align: middle; border-top: var(--border_soft); border-right: var(--border_soft)}
-.main:not(#home) td:first-child {border-left: var(--border_inner)}
-.main:not(#home) tr:first-child td {border-top: var(--border_inner)}
-.main:not(#home) td:last-child {border-right: var(--border_inner)}
-.main:not(#home) tr:last-child td {border-bottom: var(--border_inner)}
+.main:not(#home):not(#sitemap) td {/*padding: 4px 6px; */color: var(--ink); vertical-align: middle; border-top: var(--border_soft); border-right: var(--border_soft)}
+.main:not(#home):not(#sitemap) td:first-child {border-left: var(--border_inner)}
+.main:not(#home):not(#sitemap) tr:first-child td {border-top: var(--border_inner)}
+.main:not(#home):not(#sitemap) td:last-child {border-right: var(--border_inner)}
+.main:not(#home):not(#sitemap) tr:last-child td {border-bottom: var(--border_inner)}
 h1 {position: relative; z-index: 999}
 
 /* standard buttons and inputs */
@@ -184,10 +184,9 @@ text-align: center; border: 0}
 #sidebar h3 {margin: -7px -10px -10px; padding: 6px 0 4px; position: relative; z-index: 999; font-size: 9.5pt; letter-spacing: .06em; text-transform: uppercase; border: 0; border-radius: 0; background: radial-gradient(at center bottom, rgba(128, 0, 128, .15), rgba(64, 0, 64, .08) 30%, rgba(0, 0, 0, 0) 90%), linear-gradient(90deg, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)), linear-gradient(90deg, rgba(0,0,16,.1), rgba(0,0,0,0), rgba(0,0,16,.1)), linear-gradient(180deg,#0a0a1a 50%, #040414 50%)}
 #sidebar h3::before {content: ""; display: inline-block; height: 22px; vertical-align: middle; will-change: transform}
 #sidebar h3:hover {box-shadow: var(--highlight), inset 0 0 1px 1px #a5a; background: radial-gradient(at center bottom, rgba(96, 32, 96, .6) 0, rgba(0, 0, 0, 0) 80%), linear-gradient(90deg, rgba(64,0,64,.03), rgba(96,0,96,.1), rgba(64,0,64,.03)), linear-gradient(180deg,#1d1a2d 50%, #000 50%)}
-#sidebar h3:hover a {color: var(--hover)}
 #sidebar h3:active {box-shadow: var(--highlight), inset 0 0 1px 1px #737, inset 4px 4px 4px #000; background: radial-gradient(at center bottom, rgba(160,48,160,.2), rgba(0, 0, 0, 0) 35%), linear-gradient(90deg, rgba(64,0,64,.1), rgba(64,0,64,.2), rgba(64,0,64,.1)), linear-gradient(180deg,#080820, #1d1a2d)}
-#sidebar h3 a, #sidebar h3 a:visited {margin: 0; padding: 1px 0; width: calc(100% - 6px); display: inline-block; letter-spacing: .1em; color: var(--a)}
-#sidebar h3:active a, #sidebar h3:active a:visited {color: rgba(101,39,135,.7)}
+#sidebar h3 a, #sidebar h3 a:visited {margin: 0; padding: 1px 0; width: calc(100% - 6px); display: inline-block; letter-spacing: .1em}
+#sidebar h3:active a {color: var(--hover)}
 #sidebar h4 {margin: -7px -10px -9px; padding: 7px 4px; line-height: 1.2; font-size: 8pt; text-decoration: none; color: #2a1fbe; border: none; background: linear-gradient(90deg, #000010, #010010 15%, #010025 50%, #010010 85%, #000010)}
 #sidebar h4.sb_update, #sidebar h4.sb_update {padding-top: 9px; padding-bottom: 9px}
 #sidebar ul {text-align: left}
@@ -202,6 +201,7 @@ text-align: center; border: 0}
 #sb_general, #sb_shortgeneral, #sb_advancedgeneral, #sb_bandwidth, #sb_peers, #sb_peersadvanced, #sb_tunnels, #sb_queue {margin-top: -8px; margin-bottom: -9px}
 #sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after, #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {height: 16px; display: inline-block; vertical-align: bottom; content: ""}
 #sb_general td, #sb_shortgeneral td, #sb_advancedgeneral td {white-space: nowrap}
+
 #sb_localtunnels {margin-top: -6px; margin-bottom: -8px; width: 200px; border-collapse: separate; border-spacing: 0}
 #sb_localtunnels a {width: 100%; max-width: 156px; display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap}
 #sb_localtunnels img {margin: 0; padding: 0; width: 16px; height: 16px; font-size: 0; opacity: 0}
@@ -218,10 +218,11 @@ text-align: center; border: 0}
 #sb_localtunnels tr:hover td {background: #1e0b28}
 #sb_localtunnels tr:hover td:first-child {border-radius: 2px 0 0 2px}
 #sb_localtunnels tr:hover td:last-child {border-radius: 0 2px 2px 0}
+#sb_localtunnels tr:active a {color: var(--active)}
+
 #sb_services a:link, #sb_internals a:link, #sb_advanced a:link, #sb_help a:link {padding: 1px .2em; max-width: 191px; display: inline-block; line-height: 1.4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; word-break: break-all; vertical-align: middle}
 #sb_services a:hover, #sb_internals a:hover, #sb_advanced a:hover, #sb_localtunnels tr:hover, #sb_newsheadings a:hover, #sb_localtunnels tr:hover a, #sb_help a:hover, .news a:hover, #console a:hover, #help a:hover {color: var(--a_hover); border-radius: 2px; background-color: #1e0b28}
 #sb_services a:active, #sb_internals a:active, #sb_advanced a:active, #sb_help a:active, #sb_newsheadings a:active, #sb_localtunnels tr:active, .news a:active, #console a:active, #help a:active {color: var(--active); background-color: #39144f}
-#sb_localtunnels tr:active a {color: var(--active)}
 #sb_peers a, #sb_peersadvanced a, #sb_tunnels a, #sb_general a, #sb_shortgeneral a, #sb_advancedgeneral a {padding: 0; color: var(--ink)}
 #sb_peers a:hover, #sb_peers a:focus, #sb_peersadvanced a:hover, #sb_peersadvanced a:focus, #sb_tunnels a:hover, #sb_tunnels a:focus {color: var(--a)}
 #sb_peersadvanced .separator td::after {min-height: 0}
@@ -257,30 +258,29 @@ p:empty + .sb_notice {margin-top: 10px}
 #sb_services {width: 204px; margin: -7px -10px -11px; border-collapse: collapse}
 #sb_services td {padding: 0}
 #sb_services a, #sb_services a:hover, #sb_services a:active {border-bottom: 1px solid #26235c; outline: none; position: relative; z-index: 30}
-#sb_services a:hover {background: linear-gradient(90deg, var(--hover), #501f6c); background-blend-mode: normal}
+#sidebar #sb_services a:hover {color: var(--a_hover); background: #1e0b28 var(--plugin) no-repeat 5px center / 16px; background-blend-mode: normal}
 #sb_services a, #sb_services a:visited {background-blend-mode: luminosity; color: var(--a)}
-#sb_services a:active {color: var(--active); border: 1px solid transparent; box-shadow: inset -0.5px 0 0 1px #000, inset 3px 3px 2px #1e0b28; background-color: #461b5e; background-blend-mode: overlay}
 #sidebar #sb_services a {margin: 0; padding: 4px 5px 4px 27px; width: calc(100% - 33px); border: 1px solid transparent; border-radius: 0; text-align: left; text-decoration: none; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; clear: both}
 #sb_services a {background: #000010 var(--plugin) no-repeat 5px center / 16px}
-#sb_services a:hover {background: #1e0b28 var(--plugin) no-repeat 5px center; background-size: 16px}
 #sb_services a[href*="mail"] {background: #000010 var(--mail) no-repeat 6px center / 14px}
-#sb_services a[href*="mail"]:hover {background: #1e0b28 var(--mail) no-repeat 6px center / 16px}
+#sidebar #sb_services a[href*="mail"]:hover {background: #1e0b28 var(--mail) no-repeat 6px center / 14px}
 #sb_services a[href*="dns"] {background: #000010 var(--abook) no-repeat 5px center / 16px}
-#sb_services a[href*="dns"]:hover {background: #1e0b28 var(--abook) no-repeat 5px center / 16px}
+#sidebar #sb_services a[href*="dns"]:hover {background: #1e0b28 var(--abook) no-repeat 5px center / 16px}
 #sb_services a[href*="tunnel"] {background: #000010 var(--tunnman) no-repeat 5px center / 16px}
-#sb_services a[href*="tunnel"]:hover {background: #1e0b28 var(--tunnman) no-repeat 5px center / 16px}
+#sidebar #sb_services a[href*="tunnel"]:hover {background: #1e0b28 var(--tunnman) no-repeat 5px center / 16px}
 #sb_services a[href*="bote"] {background: #000010 var(--bote) no-repeat 5px center / 16px}
-#sb_services a[href*="bote"]:hover {background: #1e0b28 var(--bote) no-repeat 5px center / 16px}
+#sidebar #sb_services a[href*="bote"]:hover {background: #1e0b28 var(--bote) no-repeat 5px center / 16px}
 #sb_services a[href="/orchid/"], #sb_services a[href*="/orchid/"] {background: #000010 var(--orchid) no-repeat 5px center / 16px}
-#sb_services a[href="/orchid/"]:hover, #sb_services a[href*="/orchid/"]:hover {background: #1e0b28 var(--orchid) no-repeat 5px center / 16px}
+#sidebar #sb_services a[href="/orchid/"]:hover, #sb_services a[href*="/orchid/"]:hover {background: #1e0b28 var(--orchid) no-repeat 5px center / 16px}
 #sb_services a[href*="/outproxy"] {background: #000010 var(--socks) no-repeat 5px center / 16px}
-#sb_services a[href*="/outproxy"]:hover {background: #1e0b28 var(--socks) no-repeat 5px center / 16px}
+#sidebar #sb_services a[href*="/outproxy"]:hover {background: #1e0b28 var(--socks) no-repeat 5px center / 16px}
 #sb_services a[href*="torrents"] {background: #000010 var(--snark) no-repeat 5px center / 16px}
-#sb_services a[href*="torrents"]:hover {background: #1e0b28 var(--snark) no-repeat 5px center / 16px}
+#sidebar #sb_services a[href*="torrents"]:hover {background: #1e0b28 var(--snark) no-repeat 5px center / 16px}
 #sb_services a[href*="7658"], #sb_services a[href*="7668"] {background: #000010 var(--webserver) no-repeat 5px center / 16px}
-#sb_services a[href*="7658"]:hover, #sb_services a[href*="7668"]:hover {background: #1e0b28 var(--webserver) no-repeat 5px center / 16px}
+#sidebar #sb_services a[href*="7658"]:hover, #sb_services a[href*="7668"]:hover {background: #1e0b28 var(--webserver) no-repeat 5px center / 16px}
 #sb_services a[href*="/tracker"] {background: #000010 var(--zzzot) no-repeat 5px center / 16px}
-#sb_services a[href*="/tracker"]:hover {background: #1e0b28 var(--zzzot) no-repeat 5px center / 16px}
+#sidebar #sb_services a[href*="/tracker"]:hover {background: #1e0b28 var(--zzzot) no-repeat 5px center / 16px}
+#sidebar #sb_services a:active {color: var(--active); border: 1px solid transparent; box-shadow: var(--btn_shadow_active); background-color: #461b5e}
 
 /* sidebar news */
 #sb_newsheadings {width: 192px; margin-left: 0; margin-top: -5px; margin-bottom: -8px; text-align: right}
@@ -452,8 +452,7 @@ h3 + p, h3 + table {position: relative; z-index: 20}
 #config_logging h3 a:hover::before, #config_logging h3 a:focus::before, #version a:hover::before, #version a:focus::before {background: var(--eye_hover) no-repeat left center / 14px}
 #webappconfiguration a::before, #i2pclientconfig a::before, #pluginmanage a::before {margin-top: -1px; width: 15px; background: var(--settings) no-repeat left center / 12px}
 #webappconfiguration a:hover::before, #webappconfiguration a:focus::before, #i2pclientconfig a:hover::before, #i2pclientconfig a:focus::before, #pluginmanage a:hover::before, #pluginmanage a:focus::before {background: var(--settings_hover) no-repeat left center / 12px}
-#logs a.delete::after {margin-left: 8px; background-size: 14px}
-#logs a.delete::after {background: var(--close) no-repeat center center}
+#logs a.delete::after {margin: 0 8px; background: var(--close) no-repeat center center / 14px}
 #logs a.delete:hover::after, #logs a.delete:focus::after {background: var(--close_hover) no-repeat center center}
 #logs a.delete:active::after {background: var(--close_active) no-repeat center center; transform: scale(.85)}
 #applinks a img, #sitelinks a img {display: none}
@@ -1110,16 +1109,16 @@ a[name="criticallogs"] + p + h3 + p + ul {margin-bottom: 15px; border: var(--bor
 #routerinformation h3#version::before, #routerinformation #enviro + h3::before, #routerinformation h3#transports::before {margin: -2px 9px 0 2px; width: 17px; height: 17px; display: inline-block; vertical-align: middle; background: url(images/favicon.svg) no-repeat center center / 17px; content: ""; filter: saturate(.5)}
 #routerinformation #enviro + h3::before {background-image: url(/themes/console/images/server.svg)}
 #routerinformation h3#transports::before {background-image: url(/themes/console/images/globe.svg)}
-#routerlogs td p, #wrapperlogs td p {margin: 0}
+#routerlogs td p, #wrapperlogs td p {margin: 0; padding: 8px 10px}
 #routerlogs tr:first-child td, #wrapperlogs tr:first-child td {border-bottom: var(--border_inner)}
-#logs .embedlink {margin-right: 2px; font-size: 85%}
+#logs .embedlink {margin: 2px 0; font-size: 85%}
 #criticallogs td:empty {display: none}
 table[id$="logs"] tr:nth-child(odd){background: #010011}
 table[id$="logs"] tr:nth-child(even){background: #000}
-table[id$="logs"] ul {margin: -3px 15px -10px -18px}
+table[id$="logs"] ul {margin: 1px 17px -6px -12px}
 #wrapperlogs {margin-bottom: 10px}
 #wrapperlogs tr:last-child td {padding: 0 0 0 5px}
-#wrapperlogs pre {margin-bottom: 0; width: 100%; max-height: 600px; white-space: pre-wrap; word-wrap: break-word; color: #a2a6d1}
+#wrapperlogs pre {margin: 2px 0; width: 100%; max-height: 600px; white-space: pre-wrap; word-wrap: break-word; color: #a2a6d1}
 #logs li {margin: 0 0 0 13px; padding: 0 2px 0 8px; width: calc(100% - 6px); word-break: break-all; font-family: var(--monospaced); border-top: 1px solid rgba(64,64,80,.2); border-right: 1px solid rgba(40,40,48,.2); border-bottom: 1px solid #000; border-left: 2px solid #224; background: rgba(10,10,34,.6)}
 #logs li:nth-child(odd) {border-left: 2px solid #335; background: rgba(26,26,58,.5)}
 #logs li:last-child {margin-bottom: 7px; border-bottom: 1px solid rgba(64,64,80,.2)}
@@ -1142,10 +1141,9 @@ color: #f00}
 font[color="#000099"] {/* info */
 color: var(--ink)}
 
-#criticallogs li, #routerlogs li {padding: 0 0 1px}
-#logs li {margin-right: 5px; padding: 2px 0; width: 100%; line-height: 1.4; list-style: none; text-align: left; font: 8.5pt var(--monospaced); filter: opacity(.8)}
+/*#criticallogs li, #routerlogs li {padding: 0 0 1px}*/
+#logs li {margin-right: 5px; padding: 2px 2px 7px 7px; width: calc(100% - 10px); line-height: 1.6; list-style: none; text-align: left; font: 8.5pt var(--monospaced); filter: opacity(.8)}
 #logs li:hover {filter: opacity(1); border-left-color: #449}
-#logs li::first-line {line-height: 1.6}
 #criticallogs li {width: 100%}
 #logs li:last-child::after {margin: 0; border: none}
 #logs font[color^="#"]::before {margin-left: 0; margin-right: 5px; width: 6px; height: 6px; display: inline-block; vertical-align: calc(1px); border-radius: 50%; background: #fff; content: ""}
@@ -1382,7 +1380,7 @@ table#jardump {margin-top: -1px; margin-bottom: 0; font-size: 8pt; border: none}
 #searchbar {margin: -24px 10px -16px; padding: 8px 0 2px; width: auto; white-space: nowrap; text-align: center; box-shadow: var(--highlight), inset 0 0 2px 1px #00003a}
 #searchbar span {margin: 0 0 -5px 0; display: inline-block; position: relative; overflow: hidden; background: none}
 #searchbar table {margin: 14px auto 12px; width: auto; border-collapse: separate; border-spacing: 0; border: 1px solid #26235c; background: #000; box-shadow: var(--highlight), inset 0 0 2px 1px #26235c; animation: fade .3s ease 1s reverse both}
-#searchbar tr {box-shadow: none}
+#searchbar tr {box-shadow: none; border: none}
 #searchbar td {padding: 3px 2px; border: none; box-shadow: none; background: none}
 #searchbar input.search, #searchbar button, #searchbar select {line-height: 1.3}
 #searchbar input.search{box-shadow: var(--highlight), inset 4px 4px 4px #000}
@@ -1497,10 +1495,9 @@ p#debugmode, p.sybilinfo {margin-top: -4px}
 td.optionsave {padding: 7px 5px; text-align: right; border-top: var(--border_inner); background: var(--row)}
 #floodfillconfig form, #plugininstall form, #updateplugins form, .configtable form {margin-bottom: 0}
 h3.h3table, h3.tabletitle, h3#i2pclientconfig, h3#advancedclientconfig, h3#webappconfiguration, h3#pconfig, h3#pluginfromurl, h3#pluginfromfile, h3#updateplugins, h3#pluginmanage, h3#bannedpeers, h3.ptitle, h3#transports, h3#upnpstatus, h3.sybils, #config_keyring h3 {margin-bottom: 0; padding: 7px 10px; letter-spacing: .08em; text-transform: uppercase; border-radius: 0; border: var(--border_inner)}
-#logs h3.tabletitle {padding: 7px 0 7px 10px}
+#logs h3.tabletitle {margin: 10px 0; padding: 7px 0 7px 10px}
 .sybils#samefamily {margin-bottom: 10px}
-h3.tabletitle a {/*padding-left: 12px;*/
-letter-spacing: normal; text-transform: lowercase}
+h3.tabletitle a {letter-spacing: normal; text-transform: lowercase}
 #logs h3.tabletitle a {margin: -9px 0; padding: 10px 6px 8px 8px; display: inline-block; border-left: var(--border_inner)}
 #criticallogs + h3.tabletitle a:first-child {padding-left: 10px}
 #criticallogs + h3.tabletitle a:last-child {padding-left: 20px; padding-right: 20px}
@@ -1893,7 +1890,7 @@ tr:nth-child(4) .net_bwrate::before {width: 22px; background:var(--share) left t
 #installPluginUrl input[type=text], #installPluginFile input[type="file"] {width: 100%}
 #joinfamily td, #newfamily td {padding: 5px}
 #config_family .optionsingle td {border: none !important}
-#newfamily {margin-top: 14px}
+#newfamily {margin: 13px 0 -3px}
 #newfamily .optionsingle {padding: 5px 5px 0 45px; box-shadow: var(--highlight), inset 0 0 2px 1px #191939; background: var(--tag) no-repeat 10px center, var(--panel); background-size: 28px, 100%, 100%}
 #joinfamily .optionsingle {padding: 5px 5px 0 45px; box-shadow: var(--highlight), inset 0 0 2px 1px #191939; background: var(--key) no-repeat 10px center, var(--panel); background-size: 28px, 100%, 100%}
 #createNewFamily table, #createNewFamily tr, #createNewFamily td {border: none}
@@ -2640,7 +2637,7 @@ table[id^="sb_"], #sidebar #sb_localtunnels {width: 236px}
 #sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after, #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {min-height: 18px}
 .sb td, #sidebar a, #sidebar button, #sidebar h4, #sidebar h4 a, .smallhead, pre, #newsStatus, #newsDisplay {font-size: 9pt}
 #sidebar button.download {font-size: 10pt}
-#sidebar h3 {padding: 5px 0 2px}
+#sidebar h3 {padding: 7px 0 3px}
 #sidebar h3 a, #netdboverview tr:first-child th[colspan="3"] {font-size: 11pt}
 #sidebar button, #sidebar .stop, #sidebar .reload {min-width: 110px}
 #sidebar hr {margin-top: 9px}
@@ -2770,7 +2767,7 @@ div[id^="config_"] .confignav {padding: 0}
 div[id^="config_"] .tab, div[id^="config_"] .tab2 {margin-top: -1px}
 div[id^="config_"] .tab:first-child {margin-left: -1px}
 #enviro td {font-size: 10.5pt}
-#logs li, pre#service_logs, #routerlogs li {font-size: 9.5pt}
+#logs li, pre#service_logs, #routerlogs li {font-size: 10pt}
 h1 {padding-top: 17px;  padding-bottom: 16px;  font-size: 20pt}
 h2 {padding: 12px 10px}
 h3.h3table, h3.tabletitle, h3#i2pclientconfig, h3#advancedclientconfig, h3#webappconfiguration, h3#pconfig, h3#pluginfromurl, h3#pluginfromfile, h3#updateplugins, h3#pluginmanage, h3#bannedpeers, h3.ptitle, h3#transports, h3#upnpstatus, h3.sybils, #config_keyring h3 {padding: 9px 10px}
