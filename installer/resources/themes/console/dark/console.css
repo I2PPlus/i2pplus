@@ -2011,9 +2011,9 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 .config_experimental::after {margin-top: -10px; margin-left: -10px; min-height: 40px; min-width: 40px; display: inline-block; vertical-align: middle; background: var(--experimental) no-repeat 15px center; background-size: 16px; content: ""}
 #installPluginUrl table, #installPluginUrl tr, #installPluginUrl td, #installPluginFile table, #installPluginFile tr, #installPluginFile td, #createNewFamily table, #createNewFamily tr, #createNewFamily td, #joinfamily table, #joinfamily tr:nth-child(n+3), #joinfamily tr:nth-child(n+3) td, #joinfamily tr:nth-child(n+3) table tr {margin: 0; border: none; box-shadow: none; background: none}
 #joinfamily table, #joinfamily tr:nth-child(n+3), #joinfamily tr:nth-child(n+3) td {background: #010}
-#pluginInstall td {padding: 5px}
-#pluginInstall2 {margin-top: -13px}
-#pluginInstall .suboption, #pluginInstall2 .suboption, #config_family .suboption {padding: 2px 12px 3px 10px}
+#plugininstall td {padding: 5px}
+#plugininstall2 {margin-top: -13px}
+#plugininstall .suboption, #plugininstall2 .suboption, #config_family .suboption {padding: 2px 12px 3px 10px}
 #installPluginUrl input[type=text], #installPluginFile input[type=file], #joinfamily input[type=file], #newfamily input[type=text] {width: 100%}
 #installPluginUrl td:first-child {padding: 18px 15px 18px 58px; background: var(--link) no-repeat 15px center / 28px}
 #installPluginFile td:first-child {padding: 18px 15px 18px 58px; background: var(--files) no-repeat 15px center / 28px}
@@ -2667,7 +2667,7 @@ input[type=text], input[type=password] {padding: 7px 9px}
 #peers .routerid .flag img {margin: -3px -1px 1px}
 .percentBarOuter {width: 251px}
 #pluginconfigtext + form > input {margin-top: 3px}
-#pluginInstall2 {margin-top: -14px}
+#plugininstall2 {margin-top: -14px}
 #reseedconfig input[type=text], #reseedconfig input[type=password] {width: 250px}
 .sb table[id^="sb_"] {width: 256px}
 #sb_graphcontainer {height: 42px}
