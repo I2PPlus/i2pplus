@@ -1,5 +1,5 @@
 /* I2P TunnelManager theme: "Midnight" */
-/* Author: dr|z3d.  */
+/* Author: dr|z3d. */
 
 @import url(global.css);
 @import url(/themes/console/images/images.css);
@@ -7,1466 +7,354 @@
 @import url(/themes/console/images/i2ptunnel.css);
 
 :root {
-  --create: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%237670c2' d='M37.6 1C37 .4 36 0 35.2 0h-6.4a3.4 3.4 0 00-3.4 3.4l.1 22.1H3.3A3.4 3.4 0 000 28.8v6.4c0 1.8 1.5 3.4 3.3 3.4h22.2v22c0 1.8 1.5 3.4 3.3 3.4h6.4a3.4 3.4 0 003.4-3.4v-22h22c1.9 0 3.4-1.6 3.4-3.5v-6.3c0-1.8-1.6-3.4-3.4-3.4l-22 .1V3.3a3.4 3.4 0 00-1-2.3z'/%3E%3C/svg%3E%0A");
-  --create_hover: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%23bf2295' d='M37.6 1C37 .4 36 0 35.2 0h-6.4a3.4 3.4 0 00-3.4 3.4l.1 22.1H3.3A3.4 3.4 0 000 28.8v6.4c0 1.8 1.5 3.4 3.3 3.4h22.2v22c0 1.8 1.5 3.4 3.3 3.4h6.4a3.4 3.4 0 003.4-3.4v-22h22c1.9 0 3.4-1.6 3.4-3.5v-6.3c0-1.8-1.6-3.4-3.4-3.4l-22 .1V3.3a3.4 3.4 0 00-1-2.3z'/%3E%3C/svg%3E%0A");
-  --create_active: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%23fc1c66' d='M37.6 1C37 .4 36 0 35.2 0h-6.4a3.4 3.4 0 00-3.4 3.4l.1 22.1H3.3A3.4 3.4 0 000 28.8v6.4c0 1.8 1.5 3.4 3.3 3.4h22.2v22c0 1.8 1.5 3.4 3.3 3.4h6.4a3.4 3.4 0 003.4-3.4v-22h22c1.9 0 3.4-1.6 3.4-3.5v-6.3c0-1.8-1.6-3.4-3.4-3.4l-22 .1V3.3a3.4 3.4 0 00-1-2.3z'/%3E%3C/svg%3E%0A");
+--create: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%237670c2' d='M37.6 1C37 .4 36 0 35.2 0h-6.4a3.4 3.4 0 00-3.4 3.4l.1 22.1H3.3A3.4 3.4 0 000 28.8v6.4c0 1.8 1.5 3.4 3.3 3.4h22.2v22c0 1.8 1.5 3.4 3.3 3.4h6.4a3.4 3.4 0 003.4-3.4v-22h22c1.9 0 3.4-1.6 3.4-3.5v-6.3c0-1.8-1.6-3.4-3.4-3.4l-22 .1V3.3a3.4 3.4 0 00-1-2.3z'/%3E%3C/svg%3E%0A");
+--create_hover: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%23bf2295' d='M37.6 1C37 .4 36 0 35.2 0h-6.4a3.4 3.4 0 00-3.4 3.4l.1 22.1H3.3A3.4 3.4 0 000 28.8v6.4c0 1.8 1.5 3.4 3.3 3.4h22.2v22c0 1.8 1.5 3.4 3.3 3.4h6.4a3.4 3.4 0 003.4-3.4v-22h22c1.9 0 3.4-1.6 3.4-3.5v-6.3c0-1.8-1.6-3.4-3.4-3.4l-22 .1V3.3a3.4 3.4 0 00-1-2.3z'/%3E%3C/svg%3E%0A");
+--create_active: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%23fc1c66' d='M37.6 1C37 .4 36 0 35.2 0h-6.4a3.4 3.4 0 00-3.4 3.4l.1 22.1H3.3A3.4 3.4 0 000 28.8v6.4c0 1.8 1.5 3.4 3.3 3.4h22.2v22c0 1.8 1.5 3.4 3.3 3.4h6.4a3.4 3.4 0 003.4-3.4v-22h22c1.9 0 3.4-1.6 3.4-3.5v-6.3c0-1.8-1.6-3.4-3.4-3.4l-22 .1V3.3a3.4 3.4 0 00-1-2.3z'/%3E%3C/svg%3E%0A");
 }
 
-body {
-  margin: 5px 0 15px;
-  padding: 0;
-  text-align: center;
-  background: repeating-linear-gradient(180deg,rgba(0,0,24,.75) 3px, rgba(0,0,0,.9) 5px, rgba(0,0,0,.7) 6px), var(--tile), #000010;
-}
+body {margin: 5px 0 15px; padding: 0; text-align: center; background: repeating-linear-gradient(180deg,rgba(0,0,24,.75) 3px, rgba(0,0,0,.9) 5px, rgba(0,0,0,.7) 6px), var(--tile), #000010}
+body.iframed {margin: 0 5px; padding: 0}
+input, button, textarea, select, a {scrollbar-color: rgba(16,16,48,.8) rgba(0,0,0,0); transition: ease scrollbar-color .5s}
+*:hover {scrollbar-color: rgba(24,24,80,.8) rgba(0,0,0,.9); transition: ease scrollbar-color .2s}
+a:hover, a:visited:hover, a:focus, a:focus:hover {color: var(--a_hover)}
+a:active, a:visited:active {color: var(--active)}
+.unbold {font-weight: 400}
+h2, h3 {-webkit-text-stroke: 1px rgba(179,186,255,.3)}
+h2 a, h3 a {-webkit-text-stroke: 0}
+h2, h3, th, .buttons, .newTunnel, .control, label, .infohelp, .infowarn, .nowrap, b, #throttler td {user-select: none}
+.selectAll {user-select: all}
+.selectAll:hover {background: #003}
+div {box-sizing: border-box}
+.accesskey {display: none; text-decoration: underline}
+form {margin: 0}
+br {clear: left}
+.nowrap {margin-right: 15px; margin-left: 10px; white-space: nowrap}
+.nowrap, .nowrap > * {vertical-align: middle}
+.optionsDisabled {cursor: not-allowed}
+.optionsDisabled .optbox, .optionsDisabled label {pointer-events: none}
+.statusNotRunning {color: #d00; background: var(--tunnelStopped)}
+.statusRunning {color: #0b0; background: var(--tunnelRunning)}
+.statusStarting {color: #393; background: var(--tunnelStarting)}
+.statusStandby {color: #d30; background: var(--tunnelStandby)}
+div[class^="status"] {margin: 0; padding: 0; width: 100%; height: 24px; font-size: 0; text-align: center; background-size: auto 16px; background-position: center center; background-repeat: no-repeat}
+hr {display: none}
+#clientHost {width: 300px}
+#clientPort {width: 100px}
+.panel {margin: 8px auto; padding: 5px 3px; width: calc(100% - 14px); min-width: 540px; max-width: 1400px; overflow: hidden; text-align: left; color: #c9ceff; background: none}
+.panel:first-child {margin-top: 0}
+.panel:last-child {margin-bottom: 5px}
+.panel#clients {margin-top: -23px}
+.iframed #clients {margin-top: -20px; margin-bottom: 10px}
+.iframed .panel {margin: 16px auto -8px; width: 100%}
+.iframed#tunnelEditPage .panel, #tunnelRegistration .panel, .iframed#tunnelWizardPage .panel, #tunnelSSL.iframed .panel {margin-top: 0}
+#tunnelRegistration .panel, .iframed#tunnelWizardPage .panel, #tunnelSSL.iframed .panel, #tunnelEditPage.iframed .panel {margin-bottom: 10px}
+#messages {margin-top: -4px}
+.iframed #messages {margin-top: 0}
+#globalTunnelControl {margin: -13px auto}
+.iframed #globalTunnelControl {margin: 8px auto -26px}
+.iframed #messages + #globalTunnelControl {margin: 6px auto -26px}
+#globalTunnelControl.panel:first-child ~ .panel#clients {margin-bottom: 10px}
+#globalTunnelControl.iframed.panel:first-child ~ .panel#clients::after {width: 100%; height: 8px; display: block; content: ""}
+#serverTunnels {margin: -1px 0 10px}
+h2, h3 {margin: 12px 0 -1px; padding: 8px 10px; position: relative; z-index: 10; text-transform: uppercase; letter-spacing: .08em; word-spacing: .1em; font-size: 11pt; color: #c9ceff; border: 1px solid #26235c; box-shadow: var(--highlight); background: var(--title); background-size: 4px 100%, 100%}
+.iframed h2, .iframed h3 {margin: 14px 0 -1px}
 
-body.iframed {
-  margin: 0 5px;
-  padding: 0;
-}
-
-input, button, textarea, select, a {
-  scrollbar-color: rgba(16,16,48,.8) rgba(0,0,0,0);
-  transition: ease scrollbar-color .5s;
-}
-
-*:hover {
-  scrollbar-color: rgba(24,24,80,.8) rgba(0,0,0,.9);
-  transition: ease scrollbar-color .2s;
-}
-
-a:hover, a:visited:hover, a:focus, a:focus:hover {
-  color: var(--a_hover);
-}
-
-a:active, a:visited:active  {
-  color: var(--active) !important;
-}
-
-h2, h3, th, .buttons, .newTunnel, .control, label, .infohelp, .infowarn, .nowrap, b, #throttler td {
-  user-select: none;
-}
-
-.selectAll {
-  user-select: all;
-}
-
-.selectAll:hover {
-  background: #003;
-}
-
-div {
-  box-sizing: border-box;
-}
-
-.accesskey {
-  display: none !important;
-  text-decoration: underline;
-}
-
-form {
-  margin: 0;
-}
-
-br {
-  clear: left;
-}
-
-.statusNotRunning {
-  color: #d00;
-  background: var(--tunnelStopped);
-}
-
-.statusRunning {
-  color: #0b0;
-  background: var(--tunnelRunning);
-}
-
-.statusStarting {
-  color: #393;
-  background: var(--tunnelStarting);
-}
-
-.statusStandby {
-  color: #d30;
-  background: var(--tunnelStandby);
-}
-
-div[class^="status"] {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 24px;
-  font-size: 0 !important;
-  text-align: center;
-  background-size: auto 16px;
-  background-position: center center;
-  background-repeat: no-repeat;
-}
-
-hr {
-  display: none;
-}
-
-#clientHost {
-  width: 300px;
-}
-
-#clientPort {
-  width: 100px;
-}
-
-.panel {
-  margin: 8px auto;
-  padding: 5px 3px !important;
-  width: calc(100% - 14px);
-  min-width: 540px;
-  max-width: 1400px;
-  overflow: hidden;
-  text-align: left;
-  color: #c9ceff;
-  background: none;
-}
-
-.panel:first-child {
-  margin-top: 0;
-}
-
-.panel:last-child {
-  margin-bottom: 5px;
-}
-
-.panel#clients {
-  margin-top: -23px !important;
-}
-
-.iframed #clients {
-  margin-top: -20px !important;
-  margin-bottom: 10px !important;
-}
-
-.iframed .panel {
-  margin: 16px auto -8px !important;
-  width: 100%;
-}
-
-.iframed#tunnelEditPage .panel, #tunnelRegistration .panel, .iframed#tunnelWizardPage .panel, #tunnelSSL.iframed .panel {
-  margin-top: 0 !important;
-}
-
-#tunnelRegistration .panel, .iframed#tunnelWizardPage .panel, #tunnelSSL.iframed .panel, #tunnelEditPage.iframed .panel {
-  margin-bottom: 10px !important;
-}
-
-#messages {
-  margin-top: -4px;
-}
-
-.iframed #messages {
-  margin-top: 0 !important;
-}
-
-#globalTunnelControl {
-  margin: -13px auto;
-}
-
-.iframed #globalTunnelControl {
-  margin: 8px auto -26px !important;
-}
-
-.iframed #messages + #globalTunnelControl {
-  margin: 6px auto -26px !important;
-}
-
-#globalTunnelControl.panel:first-child ~ .panel#clients {
-  margin-bottom: 10px !important;
-}
-
-#globalTunnelControl.iframed.panel:first-child ~ .panel#clients::after {
-  width: 100%;
-  height: 8px !important;
-  display: block;
-  content: "";
-}
-
-#serverTunnels {
-  margin: -1px 0 10px;
-}
-
-h2, h3 {
-  margin: 12px 0 -1px;
-  padding: 8px 10px;
-  position: relative;
-  z-index: 10;
-  text-transform: uppercase;
-  letter-spacing: .08em;
-  word-spacing: .1em;
-  font-size: 11pt;
-  color: #c9ceff;
-  border: 1px solid #26235c;
-  box-shadow: var(--highlight);
-  background: var(--title) !important;
-  background-size: 4px 100%, 100%;
-}
-
-.iframed h2, .iframed h3 {
-  margin: 14px 0 -1px;
-}
+.base32 {max-width: 120px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; vertical-align: text-bottom}
+#clientAuth td:last-child b {margin: 0; padding: 0 8px}
+#clientAuth td:last-child {width: 1%; text-align: center}
+#clientAuth th:first-child, #clientAuth td:first-child {width: 50%}
+#clientAuth th:nth-child(2), #clientAuth td:nth-child(2) {width: auto}
+#clientAuth tr:first-child td {border-top: none}
+#keyringManager {float: right}
+select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active {margin: 0 5px; padding: 0; font-weight: 400; color: #c9ceff; border: none; box-shadow: none; background: none; cursor: default}
+#sigType[disabled] {padding-left: 16px; text-align: left; background: var(--crypto) no-repeat left center / 16px}
+#toggleInfo:hover img, #toggleInfo:focus img {mix-blend-mode: normal}
+#toggleInfo img {height: 8px; width: 12px; mix-blend-mode: luminosity}
+#toggleInfo {margin: -2px -4px 0 0; padding: 2px 5px; min-width: 0; vertical-align: middle}
+.tunnelInfo {display: none}
+.username, .password {width: calc(50% - 15px)}
+.username::placeholder, .password::placeholder {color: #c9ceff; font-size: 100%; font-style: italic; text-transform: lowercase; opacity: .4}
+#accesslistDisabled ~ textarea[name="accessList"] {display: none}
 
 /* title images */
+h2, h3 {padding-left: 30px; background-blend-mode: luminosity, normal, normal; background-size: 16px, 4px 100%, 100%}
+.panel:hover h2, .panel:hover h3 {background-blend-mode: normal, normal, normal}
+#messages h2 {background: var(--logs) no-repeat 8px center, var(--title); background-size: 16px, 4px 100%, 100%}
+#globalTunnelControl h2 {background: var(--mouse) no-repeat 8px center, var(--title); background-size: 16px, 4px 100%, 100%}
+#servers h2 {background: var(--server) no-repeat 8px center, var(--title); background-size: 16px, 4px 100%, 100%}
+#clients h2 {background: var(--client) no-repeat 8px center, var(--title); background-size: 16px, 4px 100%, 100%}
+#tunnelEditPage h2, #tunnelEditPage h3, #registration h2, #registration h3 {background: var(--settings_inert) no-repeat 8px center, var(--title); background-size: 16px, 4px 100%, 100%}
+#wizardPanel h2, #ssl h2 {background: var(--wizard) no-repeat 8px center, var(--title); background-size: 16px, 4px 100%, 100%}
+h2 span {margin-top: 4px}
 
-h2, h3 {
-  padding-left: 30px;
-  background-blend-mode: luminosity, normal, normal !important;
-  background-size: 16px, 4px 100%, 100% !important;
-}
-
-.panel:hover h2, .panel:hover h3 {
-  background-blend-mode: normal, normal, normal !important;
-}
-
-#messages h2 {
-  background: var(--logs) no-repeat 8px center, var(--title) !important;
-  background-size: 16px, 4px 100%, 100% !important;
-}
-
-#globalTunnelControl h2 {
-  background: var(--mouse) no-repeat 8px center, var(--title) !important;
-  background-size: 16px, 4px 100%, 100% !important;
-}
-
-#servers h2 {
-  background: var(--server) no-repeat 8px center, var(--title) !important;
-  background-size: 16px, 4px 100%, 100% !important;
-}
-
-#clients h2 {
-  background: var(--client) no-repeat 8px center, var(--title) !important;
-  background-size: 16px, 4px 100%, 100% !important;
-}
-
-#tunnelEditPage h2, #tunnelEditPage h3, #registration h2, #registration h3 {
-  background: var(--settings_inert) no-repeat 8px center, var(--title) !important;
-  background-size: 16px, 4px 100%, 100% !important;
-}
-
-#wizardPanel h2, #ssl h2 {
-  background: var(--wizard) no-repeat 8px center, var(--title) !important;
-  background-size: 16px, 4px 100%, 100% !important;
-}
-
-h2 span {
-  margin-top: 4px;
-}
-
-/* end title images */
-
-.iframed #globalTunnelControl h2 {
-  margin-top: 6px;
-}
-
-.panel table {
-  width: 100%;
-  border-collapse: collapse;
-  border: 1px solid #26235c;
-  margin: 0;
-}
-
-th {
-  padding: 6px 5px;
-  text-align: left;
-  text-transform: capitalize;
-  font-size: 9.5pt;
-  color: #c9ceff;
-  border-top: 1px solid #26235c;
-  border-bottom: 1px solid #26235c;
-  background: var(--title) !important;
-  background-size: 4px 100%, 100% !important;
-}
-
-th.tunnelLocation {
-  text-transform: none;
-}
-
-td {
-  border-top: 1px solid #26235c;
-  vertical-align: middle;
-  padding: 5px;
-  font-size: 9pt;
-}
-
-th:last-child, td:last-child {
-  border-right: 1px solid #26235c;
-}
-
-#throttler th:last-child, #throttler td:last-child, #wizardTunnelTypes td:last-child, table table th:last-child, table table td:last-child {
-  border-right: none;
-}
-
-td > input {
-  margin-left: 0;
-}
-
-td > b {
-  margin-right: 5px;
-  display: inline-block;
-  min-width: 30px;
-}
-
-td.infohelp {
-  padding: 10px 10px 10px 38px !important;
-  background: var(--infohelp) no-repeat 10px center;
-  background-size: 20px;
-}
-
-.tunnelConfig td {
-  width: 50%;
-}
-
-#clientTunnels tr:not(.tunnelInfo), #serverTunnels tr:not(.tunnelInfo), .tunnelConfig tr {
-  background: #000010;
-}
-
-.tunnelProperties {
-  overflow: hidden;
-  text-align: left;
-  border: 1px solid #26235c;
-  border-bottom: 1px solid #26235c !important;
-  background: #000 !important;
-}
-
-.tunnelProperties td {
-  border-top: 1px solid #26235c !important;
-}
-
-#serverTunnels {
-  margin: -1px 0 10px;
-}
-
-.tunnelProperties:hover, .tunnelProperties:hover + .tunnelInfo, .tunnelProperties:hover + .tunnelInfo + .tunnelInfo {
-  background: #140014 !important;
-}
-
-.newTunnel {
-  text-align: right;
-  border-top: 1px solid #26235c !important;
-  padding: 5px !important;
-  background: #fff;
-}
-
-.newTunnel select, .newTunnel input, .newTunnel .control {
-  margin: 2px !important;
-}
-
-.newtunnel form {
-  width: 100%;
-  text-align: right;
-}
-
-.tunnelName {
-  width: 25%;
-  min-width: 150px;
-}
-
-.tunnelName a {
-  padding: 5px 5px 5px 25px !important;
-  width: calc(100% - 20px);
-  display: inline-block;
-  font-weight: 700;
-  border: 1px solid rgba(38,35,92,.3);
-  border-radius: 3px;
-  box-shadow: var(--highlight);
-  background: var(--settings) no-repeat 6px center / 14px, linear-gradient(180deg,rgba(16,16,48,.3), rgba(0,0,16,.3));
-}
-
-.tunnelName a:hover, .tunnelName a:focus {
-  border: 1px solid #26235c;
-  background: var(--settings_hover) no-repeat 6px center / 14px, linear-gradient(180deg,#113, #001);
-  background-size: 14px, 100% !important;
-}
-
-.tunnelName a:active {
-  box-shadow: var(--highlight), inset 3px 3px 3px #000;
-  background: #001 var(--settings_active) no-repeat 6px center / 14px;
-}
-
-.tunnelType {
-  width: 25%;
-}
-
-.tunnelPreview, .tunnelPort {
-  width: 15%;
-  text-align: center;
-}
-
-.tunnelLocation, .tunnelInterface {
-  width: 20%;
-}
-
-.tunnelLocation font[color="red"] {
-  margin-left: 2px;
-}
-
-.tunnelStatus {
-  width: 10%;
-  min-width: 48px;
-  text-align: center;
-}
-
-.tunnelControl {
-  width: 5%;
-  text-align: right;
-  white-space: nowrap;
-}
-
-th.tunnelControl, .tunnelType, .tunnelLocation, .tunnelInterface {
-  text-align: center;
-}
-
-textarea {
-  margin-left: 4px;
-  margin-right: 4px;
-  resize: none;
-  box-sizing: border-box;
-  font: bold 9pt var(--monospaced);
-  border: 1px solid #302b74;
-  background: #000;
-}
-
-textarea:focus {
-  color: #c9ceff;
-  border: 1px solid #6466a5 !important;
-  box-shadow: 0 0 0 1px rgba(101, 39, 135, .5), 0 0 2px 2px #202;
-  background: #000 !important;
-  transition: ease filter .3s 0s;
-}
-
+.iframed #globalTunnelControl h2 {margin-top: 6px}
+.panel table {width: 100%; border-collapse: collapse; border: 1px solid #26235c; margin: 0}
+th {padding: 6px 5px; text-align: left; text-transform: capitalize; font-size: 9.5pt; color: #c9ceff; border-top: 1px solid #26235c; border-bottom: 1px solid #26235c; background: var(--title); background-size: 4px 100%, 100%}
+th.tunnelLocation {text-transform: none}
+td {border-top: 1px solid #26235c; vertical-align: middle; padding: 5px; font-size: 9pt}
+th:last-child, td:last-child {border-right: 1px solid #26235c}
+#throttler th:last-child, #throttler td:last-child, #wizardTunnelTypes td:last-child, table table th:last-child, table table td:last-child {border-right: none}
+td > input {margin-left: 0}
+td > b {margin-right: 5px; display: inline-block; min-width: 30px}
+td.infohelp {padding: 10px 10px 10px 38px; background: var(--infohelp) no-repeat 10px center; background-size: 20px}
+.tunnelConfig td {width: 50%}
+#clientTunnels tr:not(.tunnelInfo), #serverTunnels tr:not(.tunnelInfo), .tunnelConfig tr {background: #000010}
+.tunnelProperties {overflow: hidden; text-align: left; border: 1px solid #26235c; border-bottom: 1px solid #26235c; background: #000}
+.tunnelProperties td {border-top: 1px solid #26235c}
+#serverTunnels {margin: -1px 0 10px}
+.tunnelProperties:hover, .tunnelProperties:hover + .tunnelInfo, .tunnelProperties:hover + .tunnelInfo + .tunnelInfo {background: #140014}
+.newTunnel {text-align: right; border-top: 1px solid #26235c; padding: 5px; background: #fff}
+.newTunnel select, .newTunnel input, .newTunnel .control {margin: 2px}
+.newtunnel form {width: 100%; text-align: right}
+.tunnelName {width: 25%; min-width: 150px}
+.tunnelName a {padding: 5px 5px 5px 25px; width: calc(100% - 20px); display: inline-block; font-weight: 700; border: 1px solid rgba(38,35,92,.3); border-radius: 3px; box-shadow: var(--highlight); background: var(--settings) no-repeat 6px center / 14px, linear-gradient(180deg,rgba(16,16,48,.3), rgba(0,0,16,.3))}
+.tunnelName a:hover, .tunnelName a:focus {border: 1px solid #26235c; background: var(--settings_hover) no-repeat 6px center / 14px, linear-gradient(180deg,#113, #001); background-size: 14px, 100%}
+.tunnelName a:active {box-shadow: var(--highlight), inset 3px 3px 3px #000; background: #001 var(--settings_active) no-repeat 6px center / 14px}
+.tunnelType {width: 25%}
+.tunnelPreview, .tunnelPort {width: 15%; text-align: center}
+.tunnelLocation, .tunnelInterface {width: 20%}
+.tunnelLocation font[color="red"] {margin-left: 2px}
+.tunnelStatus {width: 10%; min-width: 48px; text-align: center}
+.tunnelControl {width: 5%; text-align: right; white-space: nowrap}
+th.tunnelControl, .tunnelType, .tunnelLocation, .tunnelInterface {text-align: center}
+textarea {margin-left: 4px; margin-right: 4px; resize: none; box-sizing: border-box; font: bold 9pt var(--monospaced); border: 1px solid #302b74; background: #000}
+textarea:focus {color: #c9ceff; border: 1px solid #6466a5; box-shadow: 0 0 0 1px rgba(101, 39, 135, .5), 0 0 2px 2px #202; background: #000; transition: ease filter .3s 0s}
 textarea#statusMessages,
 textarea#statusMessages:active,
-textarea#statusMessages:focus {
-  margin: 0;
-  padding: 2px 4px;
-  width: 100%;
-  height: 80px;
-  font-size: 8.5pt;
-  color: #69f;
-  border: none !important;
-  border-radius: 0;
-  box-shadow: var(--highlight) !important;
-}
-
-.freetext {
-  padding: 4px;
-  width: 150px;
-  font: bold 9pt var(--monospaced);
-  cursor: text;
-}
-
-.freetext[readonly], .freetext[readonly]:focus {
-  color: #669;
-  opacity: .8;
-  cursor: default;
-  border: 1px solid #302b74 !important;
-  box-shadow: inset 2px 2px 1px #000;
-  background: #000 !important;
-}
-
-input[type="hidden"], input.default {
-  display: none;
-}
-
-input, select, button, .control {
-  resize: none;
-  box-sizing: border-box;
-  text-decoration: none;
-  font-family: var(--bodyfont)
-  font-size: 9pt;
-  color: var(--ink);
-  cursor: pointer;
-}
-
-input {
-  margin: 0 2px 0 2px;
-  background-color: #002;
-  border: 1px solid #302b74;
-}
-
-.editDisabled input[type=radio], .editDisabled label {
-  cursor: not-allowed !important;
-}
-
-.editDisabled input[type=radio]:checked {
-  opacity: 1 !important;
-}
-
-.editDisabled input[type=radio]:not(:checked) {
-  opacity: .4;
-}
-
-.editDisabled .optbox:checked + span {
-  font-weight: 700;
-  text-decoration: underline;
-}
-
-a.control, input.control {
-  white-space: nowrap;
-  vertical-align: middle;
-}
-
-.control, .control:link, .control:visited, button {
-  margin: 2px !important;
-  padding: 5px 12px !important;
-  min-width: 80px !important;
-  box-sizing: border-box;
-  overflow: hidden;
-  white-space: nowrap;
-  text-decoration: none;
-  text-align: center;
-  color: var(--a);
-  background: var(--btn) !important;
-}
-
-.control:hover, .control:focus, button:hover, button:focus {
-  text-decoration: none;
-  color: var(--a_hover);
-  background: var(--btn_hover) !important;
-}
-.control:active, button:active {
-  text-decoration: none;
-  background: var(--hover) !important;
-}
-
-#serverTunnels .iconize, #clientTunnels .iconize {
-  min-width: 80px !important;
-}
-
+textarea#statusMessages:focus {margin: 0; padding: 2px 4px; width: 100%; height: 80px; font-size: 8.5pt; color: #69f; border: none; border-radius: 0; box-shadow: var(--highlight)}
+.freetext[type=text] {padding: 4px; width: 150px; font: bold 9pt var(--monospaced); cursor: text}
+.freetext[type=text][readonly], .freetext[type=text][readonly]:focus {color: #669; opacity: .8; cursor: default; border: 1px solid #302b74; box-shadow: inset 2px 2px 1px #000; background: #000}
+input[type="hidden"], input.default {display: none}
+input, select, button, .control {resize: none; box-sizing: border-box; text-decoration: none; font-family: var(--bodyfont)
+font-size: 9pt; color: var(--ink); cursor: pointer}
+input {margin: 0 2px 0 2px; background-color: #002; border: 1px solid #302b74}
+.editDisabled input[type=radio], .editDisabled label {cursor: not-allowed}
+.editDisabled input[type=radio]:checked {opacity: 1}
+.editDisabled input[type=radio]:not(:checked) {opacity: .4}
+.editDisabled .optbox:checked + span {font-weight: 700; text-decoration: underline}
+a.control, input.control {white-space: nowrap; vertical-align: middle}
+.control, .control:link, .control:visited, button {margin: 2px; padding: 5px 12px; min-width: 80px; box-sizing: border-box; overflow: hidden; white-space: nowrap; text-decoration: none; text-align: center; color: var(--a); background: var(--btn)}
+.control:hover, .control:focus, button:hover, button:focus {text-decoration: none; color: var(--a_hover); background: var(--btn_hover)}
+.control:active, button:active {text-decoration: none; background: var(--hover)}
+#serverTunnels .iconize, #clientTunnels .iconize {min-width: 80px}
 .control.start, .control.start:hover, .control.start:focus, .control.start:active,
 .control.stop, .control.stop:hover, .control.stop:focus, .control.stop:active,
 .control.preview, .control.preview:hover, .control.preview:focus, .control.preview:active,
-.control.create, .control.create:hover, .control.create:focus, .control.create:active {
-  color: transparent !important;
-  text-shadow: none;
-  background: var(--start) no-repeat center center / 15px, var(--btn), var(--start_hover), var(--start_active) !important;
-  -webkit-text-stroke: 0 !important;
-}
-
-.control.stop {
-  background: var(--stop) no-repeat center center / 14px, var(--btn), var(--stop_hover), var(--start_active) !important;
-}
-
-.control.preview {
-  background: var(--eye) no-repeat center center / 19px, var(--btn), var(--eye_hover), var(--eye_active) !important;
-}
-
-.control.create {
-  background: var(--create) no-repeat center center / 15px, var(--btn), var(--create_hover), var(--create_active) !important;
-}
-
-.control.start:hover, .control.start:focus {
-  background: var(--start_hover) no-repeat center center / 15px, var(--btn_hover) !important;
-}
-
-.control.stop:hover, .control.stop:focus {
-  background: var(--stop_hover) no-repeat center center / 14px, var(--btn_hover) !important;
-}
-
-.control.preview:hover,.control.preview:focus {
-  background: var(--eye_hover) no-repeat center center / 19px, var(--btn_hover) !important;
-}
-
-.control.create:hover,.control.create:focus {
-  background: var(--create_hover) no-repeat center center / 15px, var(--btn_hover) !important;
-}
-
-.control.start:active {
-  background: var(--hover) var(--start_active) no-repeat center center / 14px !important;
-}
-
-.control.stop:active {
-  background: var(--hover) var(--stop_active) no-repeat center center / 13px !important;
-}
-
-.control.preview:active {
-  background: var(--hover) var(--eye_active) no-repeat center center / 18px !important;
-}
-
-.control.create:active {
-  background: var(--hover) var(--create_active) no-repeat center center / 14px !important;
-}
-
-a.control {
-  display: inline-block;
-}
-
-button.control {
-  box-sizing: border-box;
-}
-
-input, select, button {
-  font-size: 9pt;
-  vertical-align: middle;
-}
-
-input {
-  float: none;
-  vertical-align: middle;
-}
-
-select {
-  text-align: left;
-  color: var(--a);
-}
-
-.buttons, .newTunnel {
-  padding: 7px 5px !important;
-  text-align: right !important;
-  border-top: 1px solid #26235c !important;
-  box-shadow: var(--highlight), inset 0 0 2px 1px #191939, inset 0 0 5px 3px #002;
-  background: linear-gradient(180deg,#001,#000);
-}
-
-.tunnelDestinationLabel {
-  margin-right: 3px;
-  min-width: 150px;
-  display: inline-block;
-  white-space: nowrap;
-  text-align: right;
-}
-
-#hostField, #leasesetKey, #userAgents {
-  margin: 0 !important;
-  width: 90% !important;
-  text-align: left !important;
-}
-
+.control.create, .control.create:hover, .control.create:focus, .control.create:active {color: transparent; text-shadow: none; background: var(--start) no-repeat center center / 15px, var(--btn), var(--start_hover), var(--start_active); -webkit-text-stroke: 0}
+.control.stop {background: var(--stop) no-repeat center center / 14px, var(--btn), var(--stop_hover), var(--start_active)}
+.control.preview {background: var(--eye) no-repeat center center / 19px, var(--btn), var(--eye_hover), var(--eye_active)}
+.control.create {background: var(--create) no-repeat center center / 15px, var(--btn), var(--create_hover), var(--create_active)}
+.control.start:hover, .control.start:focus {background: var(--start_hover) no-repeat center center / 15px, var(--btn_hover)}
+.control.stop:hover, .control.stop:focus {background: var(--stop_hover) no-repeat center center / 14px, var(--btn_hover)}
+.control.preview:hover,.control.preview:focus {background: var(--eye_hover) no-repeat center center / 19px, var(--btn_hover)}
+.control.create:hover,.control.create:focus {background: var(--create_hover) no-repeat center center / 15px, var(--btn_hover)}
+.control.start:active {background: var(--hover) var(--start_active) no-repeat center center / 14px}
+.control.stop:active {background: var(--hover) var(--stop_active) no-repeat center center / 13px}
+.control.preview:active {background: var(--hover) var(--eye_active) no-repeat center center / 18px}
+.control.create:active {background: var(--hover) var(--create_active) no-repeat center center / 14px}
+a.control {display: inline-block}
+button.control {box-sizing: border-box}
+input, select, button {font-size: 9pt; vertical-align: middle}
+input {float: none; vertical-align: middle}
+select {text-align: left; color: var(--a)}
+.buttons, .newTunnel {padding: 7px 5px; text-align: right; border-top: 1px solid #26235c; box-shadow: var(--highlight), inset 0 0 2px 1px #191939, inset 0 0 5px 3px #002; background: linear-gradient(180deg,#001,#000)}
+.tunnelDestinationLabel {margin-right: 3px; min-width: 150px; display: inline-block; white-space: nowrap; text-align: right}
+#hostField, #leasesetKey, #userAgents {margin: 0; width: 90%; text-align: left}
 #tunnelDepth, #tunnelVariance, #tunnelQuantity, #tunnelBackupQuantity,
-#tunnelDepthOut, #tunnelVarianceOut, #tunnelQuantityOut, #tunnelBackupQuantityOut {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
+#tunnelDepthOut, #tunnelVarianceOut, #tunnelQuantityOut, #tunnelBackupQuantityOut {white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
 #tunnelDepth, #tunnelVariance, #tunnelQuantity, #tunnelBackupQuantity,
 #tunnelDepthOut, #tunnelVarianceOut, #tunnelQuantityOut, #tunnelBackupQuantityOut,
-#localDestination, #customOptions, #leasesetKey, #name, #description, textarea[name="accessList"] {
-  width: 100% !important;
-  margin: 0 !important;
-  text-align: left !important;
-}
-
-#oldName {
-  min-width: 280px;
-  width: 30%;
-}
-
-select#profile, #sigType, #targetDestination {
-  width: calc(100% - 10px) !important;
-}
-
-td[colspan="2"] > select#profile {
-  width: calc(50% - 15px) !important;
-}
-
-#customOptions, #userAgents {
-  width: calc(100% - 10px) !important;
-  width: 100% !important;
-}
-
-#localDestination, textarea[name="accessList"], #hostField {
-  width: calc(100% - 5px) !important;
-  width: 100% !important;
-  margin: 3px 0 !important;
-}
-
-textarea[name="accessList"] {
-  padding: 4px 8px;
-  height: 32px !important;
-}
-
-textarea[name="accessList"]:focus {
-  height: 80px !important;
-}
-
-#filter {
-  vertical-align: top;
-}
-
-th .help {
-  font-size: 0;
-}
-
-th .help::after {
-  width: 16px;
-  height: 16px;
-  display: inline-block;
-  background: var(--helplink) no-repeat center center;
-  background-size: 16px;
-  content: "";
-}
-
-th .help:hover::after, th .help:focus::after {
-  background: var(--helplink_hover) no-repeat center center / 16px;
-}
-
-#localDestination, .authentication {
-  margin: 0 !important;
-  height: 32px !important;
-}
-
-#localDestination:focus, .authentication:focus {
-  filter: drop-shadow(0 0 1px #c9ceff);
-}
-
-#leasesetKey {
-  padding: 3px;
-  height: 24px !important;
-}
-
-.multiOption {
-  margin: 2px 10px 2px 0;
-  padding: 0;
-  display: inline-block;
-}
-
-.multiOption input {
-  vertical-align: sub;
-}
-
-.multiOption#isServer {
-  padding-left: 28px;
-  background: var(--server) no-repeat 4px center / 22px;
-}
-
-.multiOption#isClient {
-  padding-left: 28px;
-  background: var(--client) no-repeat 4px center / 22px;
-}
-
-td#throttle, #clientAuthConfig {
-  padding: 0 !important;
-}
-
-#throttler, #clientAuth {
-  border: none;
-}
-
-#throttler th {
-  padding-left: 20px;
-}
-
-#throttler td {
-  width: 20%;
-}
-
-#throttler td:first-child {
-  width: 20%;
-  white-space: nowrap;
-  text-align: right;
-}
-
-#throttler tr:first-child th {
-  border-top: none;
-}
-
-td.blankColumn {
-  width: 20% !important;
-}
-
-#throttler tr:nth-child(odd) {
-  background: #000010;
-}
-
-#throttler tr:nth-child(even) {
-  background: #000017;
-}
-
-#throttler input[type=text] {
-  width: 80px;
-}
-
-table {
-  background: #000;
-}
-
-#tunnelMessages {
-  padding: 0;
-}
-
-.required {
-  display: none;
-}
-
-input.tunnelName, input.tunnelDescriptionText, #userAgents, .tunnelDescription, #localDest {
-  width: calc(100% - 10px);
-  min-width: 280px;
-  text-overflow: ellipsis;
-}
-
-#websiteName, #privKeyFile, #targetHost, .host {
-  width: 30%;
-  min-width: 250px;
-}
-
-.port, .quantity, .period {
-  width: 80px;
-}
-
-.port[readonly] {
-  width: 120px;
-}
-
-.username, .password {
-  width: 200px;
-}
-
-.username {
-  padding-left: 26px;
-  background: var(--user) no-repeat 6px center / 14px, linear-gradient(180deg,#001, #000) !important;
-  background-blend-mode: luminosity;
-}
-
-.username:focus {
-  padding-left: 26px;
-  background: #000 var(--user) no-repeat 6px center / 14px !important;
-  background-blend-mode: normal;
-}
-
-.password {
-  padding-left: 26px;
-  background: var(--key) no-repeat 6px center / 14px, linear-gradient(180deg,#001, #000) !important;
-  background-blend-mode: luminosity;
-}
-
-
-.password:focus {
-  padding-left: 26px;
-  background: #000 var(--key) no-repeat 6px center / 14px !important;
-  background-size: 14px, 100% !important;
-  background-blend-mode: normal;
-}
-
-.proxyList {
-  width: 40%;
-  min-width: 280px;
-}
-
-#notReady, #down {
-  margin: 55px auto 50px;
-  padding: 30px;
-  width: 400px;
-  text-align: center;
-  font-weight: 700;
-  font-size: 11pt;
-  border: 1px solid #005;
-  box-shadow: var(--highlight), inset 0 0 4px 4px rgba(0,0,0,.4), 0 0 0 1px #000, 0 0 0 2px #001, 0 0 0 6px #002, 0 0 0 8px #003;
-  background: repeating-linear-gradient(180deg,#002 2px, #001 4px);
-}
-
-#down {
-  font-size: 0;
-  border: 1px solid #414;
-}
-
-#down::after {
-  width: 32px;
-  height: 32px;
-  display: inline-block;
-  vertical-align: middle;
-  background: var(--update) no-repeat center center / 32px;
-  content: "";
-  mix-blend-mode: luminosity;
-  animation: linear spin 5s forwards infinite;
-}
-
-@keyframes spin {
-  from {transform: rotate(-360deg)}
-}
-
-/* wizard specifics */
-
-#wizardPanel {
-  font-size: 10pt;
-}
-
-.iframed #wizardPanel::after {
-  height: 3px;
-  display: block;
-  content: "";
-}
-
-#wizardTable {
-  padding: 0 !important;
-}
-
-#wizardTunnelTypes td:first-child, #wizardSummary td:first-child {
-  width: 10%;
-  min-width: 150px;
-  white-space: nowrap;
-  text-align: right;
-  font-weight: 700;
-}
-
-#wizardTunnelTypes td:last-child {
-  padding: 5px 10px 5px 5px;
-  text-align: justify;
-}
-
-#wizardPanel input[type=text], #wizardPanel select {
-  margin: 8px 5px !important;
-}
-
-#wizardTunnelTypes select {
-  margin: 8px 0 !important;
-}
-
-#wizardTunnelTypes, #wizardSummary {
-  margin-top: -1px;
-  border: none;
-}
-
-#wizardTunnelTypes tr:nth-child(even), #wizardSummary tr:nth-child(even) {
-  background: #001;
-}
-
-#wizardTunnelTypes tr:nth-child(odd), #wizardSummary tr:nth-child(odd) {
-  background: #000017;
-}
-
-#wizardTunnelTypes tr:last-child {
-  background: #000;
-}
-
-#wizardPanel #name, #wizardPanel #description {
-  width: 300px !important;
-}
-
-#wizardPanel p {
-  margin: 0;
-  padding: 5px 15px;
-  line-height: 1.4;
-  text-align: justify;
-}
-
-#wizardPanel input::placeholder {
-  font-weight: 400;
-  color: #449;
-}
-
-#wizardPanel .options {
-  padding: 10px;
-}
-
-#wizardPanel .tag {
-  margin-right: 3px;
-  width: 10%;
-  min-width: 150px;
-  display: inline-block;
-  white-space: nowrap;
-  text-align: right;
-  font-weight: 700;
-}
-
-#wizardPanel select {
-  min-width: 160px;
-}
-
-#wizardPanel .infohelp p { /* wizard complete - advanced options info */
-  margin: 0;
-  padding: 0 10px 0 5px;
-}
+#localDestination, #customOptions, #leasesetKey, #name, #description, textarea[name="accessList"] {width: 100%; margin: 0; text-align: left}
+#oldName {min-width: 280px; width: 30%}
+select#profile, #sigType, #targetDestination {width: calc(100% - 10px)}
+td[colspan="2"] > select#profile {width: calc(50% - 15px)}
+#customOptions, #userAgents {width: calc(100% - 10px); width: 100%}
+#localDestination, textarea[name="accessList"], #hostField {width: calc(100% - 5px); width: 100%; margin: 3px 0}
+textarea[name="accessList"] {padding: 4px 8px; height: 32px}
+textarea[name="accessList"]:focus {height: 80px}
+#filter {vertical-align: top}
+th .help {font-size: 0}
+th .help::after {width: 16px; height: 16px; display: inline-block; background: var(--helplink) no-repeat center center; background-size: 16px; content: ""}
+th .help:hover::after, th .help:focus::after {background: var(--helplink_hover) no-repeat center center / 16px}
+#localDestination, .authentication {margin: 0; height: 32px}
+#localDestination:focus, .authentication:focus {filter: drop-shadow(0 0 1px #c9ceff)}
+#leasesetKey {padding: 3px; height: 24px}
+.multiOption {margin: 2px 10px 2px 0; padding: 0; display: inline-block}
+.multiOption input {vertical-align: sub}
+.multiOption#isServer {padding-left: 28px; background: var(--server) no-repeat 4px center / 22px}
+.multiOption#isClient {padding-left: 28px; background: var(--client) no-repeat 4px center / 22px}
+td#throttle, #clientAuthConfig {padding: 0}
+#throttler, #clientAuth {border: none}
+#throttler th {padding-left: 20px}
+#throttler td {width: 20%}
+#throttler td:first-child {width: 20%; white-space: nowrap; text-align: right}
+#throttler tr:first-child th {border-top: none}
+td.blankColumn {width: 20%}
+#throttler tr:nth-child(odd) {background: #000010}
+#throttler tr:nth-child(even) {background: #000017}
+#throttler input[type=text] {width: 80px}
+table {background: #000}
+#tunnelMessages {padding: 0}
+.required {display: none}
+input.tunnelName, input.tunnelDescriptionText, #userAgents, .tunnelDescription, #localDest {width: calc(100% - 10px); min-width: 280px; text-overflow: ellipsis}
+#websiteName, #privKeyFile, #targetHost, .host {width: 30%; min-width: 250px}
+.port, .quantity, .period {width: 80px}
+.port[readonly] {width: 120px}
+.username, .password {width: 200px}
+.username {padding-left: 26px; background: var(--user) no-repeat 6px center / 14px, linear-gradient(180deg,#001, #000); background-blend-mode: luminosity}
+.username:focus {padding-left: 26px; background: #000 var(--user) no-repeat 6px center / 14px; background-blend-mode: normal}
+.password {padding-left: 26px; background: var(--key) no-repeat 6px center / 14px, linear-gradient(180deg,#001, #000); background-blend-mode: luminosity}
+
+.password:focus {padding-left: 26px; background: #000 var(--key) no-repeat 6px center / 14px; background-size: 14px, 100%; background-blend-mode: normal}
+.proxyList {width: 40%; min-width: 280px}
+#notReady, #down {margin: 55px auto 50px; padding: 30px; width: 400px; text-align: center; font-weight: 700; font-size: 11pt; border: 1px solid #005; box-shadow: var(--highlight), inset 0 0 4px 4px rgba(0,0,0,.4), 0 0 0 1px #000, 0 0 0 2px #001, 0 0 0 6px #002, 0 0 0 8px #003; background: repeating-linear-gradient(180deg,#002 2px, #001 4px)}
+#down {font-size: 0; border: 1px solid #414}
+#down::after {width: 32px; height: 32px; display: inline-block; vertical-align: middle; background: var(--update) no-repeat center center / 32px; content: ""; mix-blend-mode: luminosity; animation: linear spin 5s forwards infinite}
+@keyframes spin {from {transform: rotate(-360deg)}
+}
+
+/* wizard */
+#wizardPanel {font-size: 10pt}
+.iframed #wizardPanel::after {height: 3px; display: block; content: ""}
+#wizardTable {padding: 0}
+#wizardTunnelTypes td:first-child, #wizardSummary td:first-child {width: 10%; min-width: 150px; white-space: nowrap; text-align: right; font-weight: 700}
+#wizardTunnelTypes td:last-child {padding: 5px 10px 5px 5px; text-align: justify}
+#wizardPanel input[type=text], #wizardPanel select {margin: 8px 5px}
+#wizardTunnelTypes select {margin: 8px 0}
+#wizardTunnelTypes, #wizardSummary {margin-top: -1px; border: none}
+#wizardTunnelTypes tr:nth-child(even), #wizardSummary tr:nth-child(even) {background: #001}
+#wizardTunnelTypes tr:nth-child(odd), #wizardSummary tr:nth-child(odd) {background: #000017}
+#wizardTunnelTypes tr:last-child {background: #000}
+#wizardPanel #name, #wizardPanel #description {width: 300px}
+#wizardPanel p {margin: 0; padding: 5px 15px; line-height: 1.4; text-align: justify}
+#wizardPanel input::placeholder {font-weight: 400; color: #449}
+#wizardPanel .options {padding: 10px}
+#wizardPanel .tag {margin-right: 3px; width: 10%; min-width: 150px; display: inline-block; white-space: nowrap; text-align: right; font-weight: 700}
+#wizardPanel select {min-width: 160px}
+#wizardPanel .infohelp p {margin: 0; padding: 0 10px 0 5px}
 
 /* more space */
-
-.tunnelConfig td, tr:not(.tunnelInfo) td {
-  padding: 6px 5px;
-  border-top: 1px solid #17142f;
-}
-
-.tunnelInfo td {
-  border: none;
-}
-
-.tunnelProperties + tr  td {
-  padding-top: 8px;
-}
-
-.tunnelProperties + tr + tr td {
-  padding-top: 0;
-  padding-bottom: 8px;
-}
-
-.tunnelInfo b, .tunnelInfo .selectAll {
-  display: inline-block;
-  vertical-align: text-bottom;
-}
-
-.tunnelInfo .selectAll {
-  max-width: 140px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-input[type=checkbox], input[type=radio] {
-  margin: 5px 3px 5px 5px;
-}
-
-.freetext, .tunnelConfig textarea, #customOptions, #userAgents, #hostField {
-  margin: 5px !important;
-}
-
+.tunnelConfig td, tr:not(.tunnelInfo) td {padding: 6px 5px; border-top: 1px solid #17142f}
+.tunnelInfo td {border: none}
+.tunnelProperties + tr td {padding-top: 8px}
+.tunnelProperties + tr + tr td {padding-top: 0; padding-bottom: 8px}
+.tunnelInfo b, .tunnelInfo .selectAll {display: inline-block; vertical-align: text-bottom}
+.tunnelInfo .selectAll {max-width: 140px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
+input[type=checkbox], input[type=radio] {margin: 5px 3px 5px 5px}
+.freetext[type=text], .tunnelConfig textarea, #customOptions, #userAgents, #hostField {margin: 5px}
 #tunnelDepth, #tunnelVariance, #tunnelQuantity, #tunnelBackupQuantity, #tunnelDepthOut, #tunnelVarianceOut,
-#tunnelQuantityOut, #tunnelBackupQuantityOut, #leasesetKey, #encryptMode {
-  margin: 5px !important;
-  width: calc(100% - 10px) !important;
-}
+#tunnelQuantityOut, #tunnelBackupQuantityOut, #leasesetKey, #encryptMode {margin: 5px; width: calc(100% - 10px)}
+.tunnelConfig select, select#profile select#connectionProfile, .selectbox {margin: 5px}
+textarea[name="accessList"], #hostField, #localDestination, .authentication {margin: 5px; width: calc(100% - 10px)}
+#customOptions, #userAgents, #leasesetKey, #filterDefinition, .clientKey, .clientName {width: calc(100% - 10px)}
+#leasesetKey, .displayText {white-space: nowrap; overflow: hidden}
+.displayText {overflow: scroll; overflow-y: hidden}
+.tunnelConfig td > b {min-width: 30px; display: inline-block; margin-left: 5px}
+.tunnelDestinationLabel b {color: #a8accf}
+.tunnelInfo {background: #020212}
+.tunnelInfo td {background: none}
+.tunnelInfo td {border-top: none; background: none; padding-top: 4px; padding-bottom: 4px}
+.tunnelInfo td:first-child {border-right: 1px solid #26235c}
+.tunnelInfo .tunnelDestination, .tunnelInfo .tunnelSig {padding-top: 8px}
+.tunnelInfo .tunnelDestinationEncrypted, .tunnelInfo .tunnelEncryption {padding-top: 0; padding-bottom: 8px}
 
-.tunnelConfig select, select#profile select#connectionProfile, .selectbox {
-  margin: 5px !important;
-}
-
-textarea[name="accessList"], #hostField, #localDestination, .authentication {
-  margin: 5px !important;
-  width: calc(100% - 10px) !important;
-}
-
-#customOptions, #userAgents, #leasesetKey, #filterDefinition, .clientKey, .clientName {
-  width: calc(100% - 10px) !important;
-}
-
-#leasesetKey, .displayText {
-  white-space: nowrap;
-  overflow: hidden;
-}
-
-.displayText {
-  overflow: scroll;
-  overflow-y: hidden !important;
-}
-
-.tunnelConfig td > b {
-  min-width: 30px;
-  display: inline-block;
-  margin-left: 5px;
-}
-
-.tunnelDestinationLabel b {
-  color: #a8accf;
-}
-
-.tunnelInfo {
-  background: #020212;
-}
-
-.tunnelInfo td {
-  background: none;
-}
-
-.tunnelInfo td {
-  border-top: none;
-  background: none;
-  padding-top: 4px !important;
-  padding-bottom: 4px !important;
-}
-
-.tunnelInfo td:first-child {
-  border-right: 1px solid #26235c;
-}
-
-.tunnelInfo .tunnelDestination, .tunnelInfo .tunnelSig {
-  padding-top: 8px !important;
-}
-
-.tunnelInfo .tunnelDestinationEncrypted, .tunnelInfo .tunnelEncryption {
-  padding-top: 0 !important;
-  padding-bottom: 8px !important;
-}
-
-/* end more space */
 
 /* TO DO: merge with main classes */
+.panel {min-width: 600px}
+label {vertical-align: sub}
+input[type=text] + label {white-space: nowrap; vertical-align: unset}
+#targetPort {margin-right: 10px}
+#privKeyFile, input[name="nofilter_blindedPassword"], #websiteName, .proxyList, .tunnelName, #altPrivKeyFile, #altlocaldest {min-width: 200px; width: 200px; width: calc(100% - 10px)}
+#oldName {width: 45%}
+.displayText {margin: 5px; padding: 4px; width: calc(100% - 10px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; word-break: break-all; font-family: var(--monospaced); color: #7171d1; border: 1px solid #302b74; background: var(--text_focus); box-shadow: var(--highlight); user-select: all}
+.displayText:hover, .displayText:focus {margin: .5px 5px; padding: 2px 4px; overflow: auto; text-overflow: clip; color: #dd0; outline: none; background: #000}
+.displayText:focus {border: 1px solid #6466a5; box-shadow: 0 0 0 1px rgba(101, 39, 135, .5), 0 0 2px 2px #202; transition: ease filter .3s}
+.displayText:empty, .displayText:empty:hover, .displayText:empty:focus {margin: 5px; padding: 4px; color: #669; border: 1px solid #302b74; box-shadow: var(--highlight); background: #000; opacity: .8; filter: none}
+.displayText:empty::before, .displayText:hover:empty::before, .displayText:focus:empty::before {min-height: 11px; display: inline-block; overflow: hidden; content: ""}
 
-.panel {
-  min-width: 600px;
-}
-
-@supports not (-moz-appearance: none) { /* fixes chrome/blink overflow issue */
-  select {
-    white-space: normal !important;
-  }
-}
-
-label {
-  vertical-align: sub;
-}
-
-input[type=text] + label {
-  white-space: nowrap;
-  vertical-align: unset;
-}
-
-#targetPort {
-  margin-right: 10px !important;
-}
-
-#privKeyFile, input[name="nofilter_blindedPassword"], #websiteName, .proxyList, .tunnelName, #altPrivKeyFile, #altlocaldest {
-  min-width: 200px;
-  width: 200px;
-  width: calc(100% - 10px);
-}
-
-#oldName {
-  width: 45% !important;
-}
-
-.displayText {
-  margin: 5px;
-  padding: 4px;
-  width: calc(100% - 10px);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  word-break: break-all;
-  font-family: var(--monospaced);
-  color: #7171d1;
-  border: 1px solid #302b74;
-  background: var(--text_focus);
-  box-shadow: var(--highlight);
-  user-select: all;
-}
-
-.displayText:hover, .displayText:focus {
-  margin: .5px 5px;
-  padding: 2px 4px;
-  overflow: auto;
-  text-overflow: clip;
-  color: #dd0;
-  outline: none;
-  background: #000;
-}
-
-.displayText:focus {
-  border: 1px solid #6466a5 !important;
-  box-shadow: 0 0 0 1px rgba(101, 39, 135, .5), 0 0 2px 2px #202;
-  transition: ease filter .3s;
-}
-
-.displayText:empty, .displayText:empty:hover, .displayText:empty:focus {
-  margin: 5px;
-  padding: 4px;
-  color: #669;
-  border: 1px solid #302b74 !important;
-  box-shadow: var(--highlight) !important;
-  background: #000;
-  opacity: .8;
-  filter: none !important;
-}
-
-.displayText:empty::before, .displayText:hover:empty::before, .displayText:focus:empty::before {
-  min-height: 11px;
-  display: inline-block;
-  overflow: hidden;
-  content: "";
-}
-
-#registration .displayText {
-  width: 500px;
-}
-
-#registration .infohelp {
-  padding-top: 15px !important;
-  padding-bottom: 15px !important;
-}
-
-#registration input[type="file"] {
-  margin-top: 5px;
-  margin-bottom: 5px;
-}
-
-#registration td {
-  padding: 8px;
-}
-
-.optionsDisabled {
-  cursor: not-allowed;
-}
-
-.optionsDisabled .optbox, .optionsDisabled label {
-  pointer-events: none !important;
-}
-
-#keyringManager {
-  float: right;
-}
-
-.tunnelInfo {
-  display: none;
-}
-
-#toggleInfo {
-  margin: -2px -4px 0 0 !important;
-  padding: 2px 5px !important;
-  min-width: 0 !important;
-  vertical-align: middle;
-}
-
-#toggleInfo img {
-  height: 8px;
-  width: 12px;
-  mix-blend-mode: luminosity;
-}
-
-#toggleInfo:hover img, #toggleInfo:focus img {
-  mix-blend-mode: normal;
-}
-
-.base32 {
-  max-width: 120px;
-  display: inline-block;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  vertical-align: text-bottom;
-}
-
-.username, .password {
-  width: calc(50% - 15px);
-}
-
-.username::placeholder, .password::placeholder {
-  color: #c9ceff;
-  font-size: 100%;
-  font-style: italic;
-  text-transform: lowercase;
-  opacity: .4;
-}
-
-.nowrap {
-  margin-right: 15px;
-  margin-left: 10px;
-  white-space: nowrap;
-}
-
-.nowrap, .nowrap > * {
-  vertical-align: middle;
-}
-
-select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active {
-  margin: 0 5px !important;
-  padding: 0;
-  font-weight: 400 !important;
-  color: #c9ceff !important;
-  border: none !important;
-  box-shadow: none !important;
-  background: none !important;
-  cursor: default;
-}
-
-#sigType[disabled] {
-  padding-left: 16px !important;
-  text-align: left;
-  background: var(--crypto) no-repeat left center / 16px !important;
-}
-
-#clientAuth th:nth-child(2), #clientAuth td:nth-child(2) {
-  width: auto;
-}
-
-#clientAuth td:last-child {
-  width: 1% !important;
-  text-align: center;
-}
-
-#clientAuth td:last-child b {
-  margin: 0;
-  padding: 0 8px;
-}
-
-#clientAuth th:first-child, #clientAuth td:first-child {
-  width: 50% !important;
-}
-
-#clientAuth tr:first-child td {
-  border-top: none;
-}
+/* registration */
+#registration .displayText {width: 500px}
+#registration .infohelp {padding-top: 15px; padding-bottom: 15px}
+#registration input[type="file"] {margin-top: 5px; margin-bottom: 5px}
+#registration td {padding: 8px}
 
 /* server tunnel options */
+#tunnelOpts td {padding: 0; width: 25%}
+#tunnelOpts table {border: none}
+#tunnelOpts table td {padding: 5px; border-bottom: 1px solid #17142f}
+#tunnelOpts table tr:first-child td {border-top: none}
+#tunnelOpts table tr:last-child td {border-bottom: none}
+#tunnelOpts table td:first-child {border-left: none}
+#tunnelOpts table td:last-child {border-right: none}
 
-#tunnelOpts td {
-  padding: 0 !important;
-  width: 25% !important;
-}
-
-#tunnelOpts table {
-  border: none;
-}
-
-#tunnelOpts table td {
-  padding: 5px !important;
-  border-bottom: 1px solid #17142f;
-}
-
-#tunnelOpts table tr:first-child td {
-  border-top: none;
-}
-
-#tunnelOpts table tr:last-child td {
-  border-bottom: none;
-}
-
-#tunnelOpts table td:first-child {
-  border-left: none;
-}
-
-#tunnelOpts table td:last-child {
-  border-right: none;
-}
-
-/* end server tunnel options */
-
-.unbold {
-  font-weight: 400;
-}
-
-#accesslistDisabled ~ textarea[name="accessList"] {
-  display: none;
-}
-
-h2, h3 {
-  -webkit-text-stroke: 1px rgba(179,186,255,.3);
-}
-
-h2 a, h3 a {
-  -webkit-text-stroke: 0 !important;
-}
+@supports not (-moz-appearance: none) {select {white-space: normal}}
 
 /* responsive layout */
-
 @media screen and (max-width: 1499px) {
-  .tunnelName a, .tunnelName a:hover, .tunnelName a:focus, .tunnelName a:active {
-    margin-left: 2px;
-    padding-left: 22px !important;
-    width: calc(100% - 40px);
-    background-size: 12px, 100% !important;
-  }
+.tunnelName a, .tunnelName a:hover, .tunnelName a:focus, .tunnelName a:active {margin-left: 2px; padding-left: 22px; width: calc(100% - 40px); background-size: 12px, 100%}
 }
-
 @media screen and (max-width: 1300px) {
-  h2, h3 {font-size: 10.5pt !important}
-  #serverTunnels .iconize, #clientTunnels .iconize {
-    padding: 12.5px 7px !important;
-    min-width: 48px !important;
-    vertical-align: middle;
-    font-size: 0;
-    background-size: 12px, 100% !important;
-  }
-  #serverTunnels .preview.iconize, #clientTunnels .preview.iconize {
-    min-width: 64px !important;
-    background-size: 16px, 100% !important;
-  }
+h2, h3 {font-size: 10.5pt}
+#serverTunnels .iconize, #clientTunnels .iconize {padding: 12.5px 7px; min-width: 48px; vertical-align: middle; font-size: 0; background-size: 12px, 100%}
+#serverTunnels .preview.iconize, #clientTunnels .preview.iconize {min-width: 64px; background-size: 16px, 100%}
 }
-
 @media screen and (max-width: 1200px) {
-  .tunnelDestinationLabel {min-width: 120px}
+.tunnelDestinationLabel {min-width: 120px}
 }
-
 @media screen and (max-width: 1100px) {
-  .nowrap {margin-right: 0 !important}
-  .nowrap .port, .nowrap .quantity, .nowrap .period {width: 50px}
-  .nowrap .multiOption {
-    margin-right: 2px !important;
-    margin-left: 0 !important;
-  }
+.nowrap {margin-right: 0}
+.nowrap .port, .nowrap .quantity, .nowrap .period {width: 50px}
+.nowrap .multiOption {margin-right: 2px; margin-left: 0}
 }
-
-@media screen and (max-width: 900px) {
-  .tunnelInfo .selectAll {max-width: 110px}
+@media screen and (max-width: 900px) {.tunnelInfo .selectAll {
+max-width: 110px}
 }
-
 @media screen and (max-width: 800px) {
-  th {font-size: 9pt}
-  .statusNotRunning, .statusRunning, .statusStarting, .statusStandby {background-size: auto 14px}
-  #leasesetKey {height: 38px !important}
-  .port, .quantity, .period {width: 60px}
-  #clientHost, .host {
-    width: 130px;
-    min-width: 130px;
-  }
-  .displayText, .displayText:empty:hover, .displayText:empty:focus {
-    width: 260px;
-    font-size: 8pt;
-  }
+th {font-size: 9pt}
+.statusNotRunning, .statusRunning, .statusStarting, .statusStandby {background-size: auto 14px}
+#leasesetKey {height: 38px}
+.port, .quantity, .period {width: 60px}
+#clientHost, .host {width: 130px; min-width: 130px}
+.displayText, .displayText:empty:hover, .displayText:empty:focus {width: 260px; font-size: 8pt}
 }
-
 @media screen and (min-width: 1000px) {
-  th {padding: 7px 5px}
-  .displayText, .displayText:empty:hover, .displayText:empty:focus {
-    width: 386px;
-  }
-  #registration .displayText {
-    width: 600px;
-  }
+th {padding: 7px 5px}
+.displayText, .displayText:empty:hover, .displayText:empty:focus {width: 386px}
+#registration .displayText {width: 600px}
 }
-
 @media screen and (min-width: 1300px) {
-  body, td, .control, select, input, textarea {font-size: 10pt !important}
-  textarea#statusMessages, textarea#statusMessages:active, textarea#statusMessages:focus {font-size: 9pt !important}
-  td {padding: 7px 5px}
-  #localDestination, .authentication {height: 34px !important}
+body, td, .control, select, input, textarea {font-size: 10pt}
+textarea#statusMessages, textarea#statusMessages:active, textarea#statusMessages:focus {font-size: 9pt}
+td {padding: 7px 5px}
+#localDestination, .authentication {height: 34px}
 }
-
 @media screen and (min-width: 1500px) {
-  body, td, .control, select, input, textarea {font-size: 10.5pt !important}
-  #tunnelMessages #statusMessages {font-size: 9.5pt !important}
-  .panel {max-width: 1800px}
-  h2, h3, th {padding: 10px 15px !important}
-  h2, h3 {
-    padding-left: 34px !important;
-    font-size: 13pt !important;
-  }
-  #messages h2, #globalTunnelControl h2, #servers h2, #clients h2, #ssl h2, #wizardPanel h2,
-  #tunnelEditPage h2, #tunnelEditPage h3, #registration h2, #registration h3 {
-    padding-left: 36px !important;
-    background-position: 10px center, center center !important;
-    background-size: 20px, 4px 100%, 100% !important;
-  }
-  th {font-size: 11pt !important}
-  th .help::after, th .help:hover::after, th .help:focus::after {
-    width: 20px;
-    height: 20px;
-    background-size: 20px 20px;
-  }
-  td {padding: 12px !important}
-  td#throttle, td#tunnelMessages {padding: 0 !important}
-  #statusMessages {
-    padding: 4px 8px !important;
-    height: 84px !important;
-    line-height: 1.3 !important;
-  }
-  .control, .control:link, .control:visited, input.control {
-    margin: 4px !important;
-    padding: 7px 12px !important;
-    min-width: 125px !important;
-  }
-  .buttons, .newTunnel {padding: 15px !important}
-  .displayText, .displayText:empty:hover, .displayText:empty:focus {width: 552px}
-  textarea[name="accessList"], #hostField, #localDestination, .authentication {margin: 6px !important}
-  #registration .displayText {width: 800px}
-  .freetext, .displayText, #leasesetKey {padding: 8px 10px !important}
-  .username, .password {
-    padding-left: 26px !important;
-    width: 300px;
-  }
-  .displayText:hover, .displayText:focus {padding: 0 !important}
-  #registration .displayText:hover, #registration .displayText:focus {padding: 4.5px 0 !important}
-  textarea[name="accessList"], #hostField, #localDestination, .authentication {width: calc(100% - 20px) !important}
-  select, .newTunnel select {
-    margin: 4px 8px 4px 4px !important;
-    padding: 7px 20px 7px 7px !important;
-    min-width: 180px;
-  }
-  .port, .quantity, .period {width: 100px}
-  div[class^="status"] {background-size: auto 20px}
-  #toggleInfo {margin: 0 -4px 0 0 !important}
-  .tunnelInfo .selectAll {max-width: none}
-  #tunnelOpts table td {padding: 8px !important}
+body, td, .control, select, input, textarea, .freetext[type=text] {font-size: 10.5pt}
+#tunnelMessages #statusMessages {font-size: 9.5pt}
+.panel {max-width: 1800px}
+h2, h3, th {padding: 10px 15px}
+h2, h3 {padding-left: 34px; font-size: 13pt}
+#messages h2, #globalTunnelControl h2, #servers h2, #clients h2, #ssl h2, #wizardPanel h2,
+#tunnelEditPage h2, #tunnelEditPage h3, #registration h2, #registration h3 {padding-left: 36px; background-position: 10px center, center center; background-size: 20px, 4px 100%, 100%}
+th {font-size: 11pt}
+th .help::after, th .help:hover::after, th .help:focus::after {width: 20px; height: 20px; background-size: 20px 20px}
+td {padding: 12px}
+td#throttle, td#tunnelMessages {padding: 0}
+#statusMessages {padding: 4px 8px; height: 84px; line-height: 1.3}
+.control, .control:link, .control:visited, input.control {margin: 4px; padding: 7px 12px; min-width: 125px}
+.buttons, .newTunnel {padding: 15px}
+.displayText, .displayText:empty:hover, .displayText:empty:focus {width: 552px}
+textarea[name="accessList"], #hostField, #localDestination, .authentication {margin: 6px}
+#registration .displayText {width: 800px}
+.freetext[type=text], .displayText, #leasesetKey {padding: 8px 10px}
+.username, .password {padding-left: 26px; width: 300px}
+.displayText:hover, .displayText:focus {padding: 0}
+#registration .displayText:hover, #registration .displayText:focus {padding: 4.5px 0}
+textarea[name="accessList"], #hostField, #localDestination, .authentication {width: calc(100% - 20px)}
+select, .newTunnel select {margin: 4px 8px 4px 4px; padding: 7px 20px 7px 7px; min-width: 180px}
+.port, .quantity, .period {width: 100px}
+div[class^="status"] {background-size: auto 20px}
+#toggleInfo {margin: 0 -4px 0 0}
+.tunnelInfo .selectAll {max-width: none}
+#tunnelOpts table td {padding: 8px}
 }
