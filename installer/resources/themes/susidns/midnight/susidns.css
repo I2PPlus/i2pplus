@@ -13,11 +13,12 @@
 body {margin: 0 10px; overflow-x: hidden; font-size: 9.5pt; background: repeating-linear-gradient(180deg,rgba(0,0,24,.75) 3px, rgba(0,0,0,.9) 5px, rgba(0,0,0,.7) 6px), var(--tile), #000010}
 body.iframed {margin: 0; padding: 0}
 .destaddress {scrollbar-color: #114 rgba(0,0,0,0); scrollbar-width: thin}
+hr {margin: 5px 0; width: 100%; height: 1px; display: none; text-align: center; color: #2d295f; border: 0px solid #2d295f; background: #2d295f}
 #navi, .buttons, #buttons, #host_list tr:first-child, #host_list img, #host_list td:nth-child(n+2) a {user-select: none}
 a:hover, a:visited:hover {color: var(--a_hover)}
 
 /* topnav */
-div#navi {margin: -13px -11px 30px; min-width: 512px; padding: 6px; position: sticky; top: -1px; z-index: 999; text-align: center; font-weight: 700; font-size: 9pt; border-bottom: 1px solid #26235c; box-shadow: var(--highlight); filter: drop-shadow(0 1px 3px #000); background: var(--title); background-size: 4px 100%, 100%}
+#navi {margin: -13px -11px 30px; min-width: 512px; padding: 6px; position: sticky; top: -1px; z-index: 999; text-align: center; font-weight: 700; font-size: 9pt; border-bottom: 1px solid #26235c; box-shadow: var(--highlight); filter: drop-shadow(0 1px 3px #000); background: var(--title); background-size: 4px 100%, 100%}
 .iframed #navi {margin: 0 0 27px; padding: 6px 5px 5px; filter: none}
 #navi a, #navi a:visited {margin: 3px 0; padding: 5px; display: inline-block; outline: none; line-height: 1.2; color: #89f; text-transform: capitalize; text-shadow: 0 1px 1px #000; border: 1px solid #224; border-radius: 1px}
 #navi a:hover, #navi a:focus {color: #a27db7; border: 1px solid #652787; box-shadow: var(--highlight), inset 0 0 1px 1px #717; opacity: 1}
@@ -35,83 +36,14 @@ div#navi {margin: -13px -11px 30px; min-width: 512px; padding: 6px; position: st
 #navi #overview:hover, #navi #overview:focus {background: var(--overview_hover) no-repeat 6px center / 14px, var(--btn_hover_radial), var(--nav_hover)}
 #navi #overview:active {background: #652787 var(--overview_hover) no-repeat 6px center / 14px}
 
-hr {margin: 5px 0; width: 100%; height: 1px; display: none; text-align: center; color: #2d295f; border: 0px solid #2d295f; background: #2d295f}
-div#filter {margin: -21px 0 -29px; padding: 12px 0 15px; text-align: center; border: 1px solid #26235c}
-div#filter + div#search {margin-top: 13px; margin-bottom: -18px; border: 1px solid #26235c}
-div#filter + div#search > form {margin: 0; padding: 0}
-#filter p, #search td {font-size: 9pt; font-weight: 700}
-td.search > * {vertical-align: middle}
-#bk h4 {display: none}
-#filter p {margin: -3px 0 -3px; padding: 12px 10px 0}
-#filter p:first-child {padding-bottom: 0}
-p#filtered {margin: -26px 0 10px}
-#search {margin-top: -1px; margin-bottom: 20px}
-#filter a:link, #filter a:visited, #activefilter {margin: 2px 0; padding: 2px 5px; display: inline-block; text-align: center; text-transform: capitalize; color: #4a42bd; border: 1px solid #26225d; background: #000}
-#activefilter {padding: 4px 8px 3px}
-#filter a:hover, #filter a:focus {color: var(--a_hover); border: 1px solid var(--a_hover); transform: scale(1.1)}
-#filter a:active {color: var(--ink); box-shadow: var(--highlight), inset 3px 3px 3px #000; background: #652787}
-#filter span a, #filter span a:hover {display: inline-block; word-spacing: normal; letter-spacing: normal; border: none; background: none; transform: none}
-#filter span a:active {background: none; box-shadow: none; color: #4f0519}
-#filter span b {margin: -3px 5px 0; line-height: .8; text-transform: uppercase; font-size: 11pt; color: #fff}
-#booksearch {margin: 0; padding: 7px 5px; text-align: center; border: 1px solid #26235c}
-p {color:var(--ink); margin: 0 0 4px; font-size: 9.5pt; text-align: justify}
-#ovrvw div#content p {margin-bottom: 10px; line-height: 1.5}
-#messages + p, p.book {padding: 20px 20px 20px 42px; border: 1px solid #26235c; background: #001 var(--addressbook) no-repeat 10px center / 24px}
-#messages {margin-bottom: 24px}
-#messages:empty {margin-top: -10px; display: none}
-span.addrhlpr {font-size: 8pt}
-h3 {padding: 7px 10px; word-spacing: .1em; letter-spacing: .08em; font-size: 10pt; font-weight: 700; color: var(--ink); text-shadow: 0 0 2px #010011; border: 1px solid #26235c; border-radius: 2px; text-transform: uppercase; box-shadow: var(--highlight); background: var(--title)}
-#content h3 {margin: 0 20px 10px; padding: 5px 10px; border: none; border-bottom: 1px dotted #2d295f; border-radius: 0; background: none}
-#content p + h3 {margin-top: 15px}
-.headline h3 {margin-top: -10px; border-radius: 2px 2px 0 0}
-.headline h3:first-child {margin-bottom: 24px; border-radius: 0}
-#content h3:first-child {margin-top: -15px; font-size: 10.5pt}
-.headline h3:first-child + h4 {margin-top: -25px; margin-bottom: 25px}
-#add h3, #import h3 {margin-top: -1px; margin-left: -11px; margin-right: -11px; padding: 8px 10px 8px 30px; font-size: 10pt; background-position: 6px center}
-#add table, #import table {width: 100%}
-#add td:last-child, #import td:last-child {width: 94%}
-.headline {margin-top: -16px}
-div#messages + p {padding: 12px 10px 8px 20px}
-div#book p {padding: 15px 15px 15px 35px}
-h4 {margin-top: -15px; margin-bottom: 30px; padding: 8px 10px; word-spacing: .1em; font-size: 9pt; border: 1px solid #26235c; background: linear-gradient(90deg, #000, #001)}
-div#messages > p.messages {padding: 10px}
-#messages p {padding: 15px 15px 15px 40px; background: var(--infohelp) no-repeat 6px center / 28px}
 a:visited {color: #4e47bf}
-th {padding: 5px 10px; text-align: left; font-size: 9pt; color: var(--ink); background: var(--title); background-size: 4px 100%, 100%}
-.iframed .book tr.head th {border-top: 1px solid #26235c; border-bottom: 1px solid #26235c}
-table.book td:first-child {font-weight: 700}
-td {padding: 5px; vertical-align: center; font-size: 9pt; color: var(--ink)}
-td.checkbox {width: 40px; text-align: center}
-.checkbox input {margin: 0}
-td.names a {font-size: 9pt}
-td > img[width="320"], td > img[src^="/imagegen"] {margin: 10px 3px; padding: 5px; width: 240px; height: 240px; border-radius: 2px; border: 1px solid #26235c; background: #000}
-img[src="/imagegen/id?s=256&c="], img[src="/imagegen/id?s=20&c="] {opacity: 0; /* hide broken identicons but ensure hostlist remains intact */
-}
+h3 {padding: 7px 10px; word-spacing: .1em; letter-spacing: .08em; font-size: 10pt; font-weight: 700; color: var(--ink); text-shadow: 0 0 2px #010011; border: 1px solid #26235c; border-radius: 2px; text-transform: uppercase; box-shadow: var(--highlight); background: var(--title)}
+h4 {margin-top: -15px; margin-bottom: 30px; padding: 8px 10px; word-spacing: .1em; font-size: 9pt; border: 1px solid #26235c; background: linear-gradient(90deg, #000, #001)}
 ol, ul {margin: 0 20px 0 10px; padding: 0px 10px; display: table-row}
 li {margin: 0; line-height: 1.5; list-style: square; font-size: 9pt; color: var(--ink)}
-#host_list tr:nth-child(odd), #host_details tr:nth-child(odd),
-#host_list tr:nth-child(even), #host_details tr:nth-child(even) {background: var(--row)}
-p.messages {margin: -15px 0 14px; padding: 5px 5px 10px; color: var(--ink); border: 1px solid #26235c; border-radius: 0}
-.iframed p.messages {margin: 5px 10px 10px}
-.help {margin-bottom: 5px; padding: 20px 30px; border: 1px solid #26235c; background: #001}
-.help h3 {margin: 10px -31px; border-radius: 0}
-.help h3:first-child {margin-top: -21px}
-.help ul li:last-child {margin-bottom: -10px}
-.help p {border: none; padding: 0}
-#helpsubs {margin: -16px 0 -11px; padding: 20px 15px 15px 48px; background: #001 var(--infohelp) no-repeat 12px center / 24px}
-.iframed #helpsubs {margin-bottom: 0}
-div#content p {padding: 0 30px; line-height: 1.4}
-p.footer {padding: 5px 0 2px; text-align: center; font-size: 8pt; border: 1px solid #113}
-#footer, .iframed #footer {display: none}
-#buttons {text-align: right; background: linear-gradient(90deg, #001, #000)}
-p.buttons, .buttons {margin: 5px 0 -5px; padding: 0 3px; text-align: right}
-p.buttons {padding: 8px 5px; border: 1px solid #26235c}
-div#book + div#buttons {margin: 9px 0 20px}
-#add p.buttons, #import p.buttons {padding: 0; border: none}
-form[action="subscriptions"] {margin: 0}
-textarea[name="config"], textarea[name="content"] {margin: -26px 0 0; resize: none; font-size: 8.5pt; border: 1px solid #26235c; border-radius: 0}
-textarea[name="config"] {height: 220px; overflow-y: scroll; resize: none}
-div#config + div#buttons, div#content + div#buttons {margin: -3px 0 12px; padding: 10px 5px; border: 1px solid #26235c; background: #001}
+th, td {font-size: 9pt}
+th {padding: 5px 10px; text-align: left; background: var(--title); background-size: 4px 100%, 100%}
+td {padding: 5px}
 
 /* svg */
 .illustrate {margin: 20px auto 15px; padding: 10px; max-width: 700px; height: auto; font-size: 10pt; border-radius: 2px; border: 1px solid #557; box-shadow: inset 0 0 0 1px #001, inset 0 0 1px 1px #889; background: #001}
@@ -131,69 +63,122 @@ svg #arrow stop:first-child {stop-color: #007}
 svg #arrow stop:nth-child(2) {stop-color: #003}
 svg #arrow stop:last-child {stop-color: #001}
 
-div#book, #emptybook {margin: -15px 0 -10px; padding: 0}
-#emptybook {margin-bottom: 20px}
-.iframed #emptybook {margin: -15px 10px 20px}
+.checkbox input {margin: 0}
+.headline h3:first-child + h4 {margin-top: -25px; margin-bottom: 25px}
+.headline h3:first-child {margin-bottom: 24px; border-radius: 0}
+.headline h3 {margin-top: -10px; border-radius: 2px 2px 0 0}
+.headline {margin-top: -16px}
+.headline + #book > table td {padding: 5px}
+.headline + #book > table td.destinations {padding: 0}
+.headline + #book > table td:first-child {width: 120px; white-space: nowrap; text-align: right}
+.help h3:first-child {margin-top: -21px}
+.help h3 {margin: 10px -31px; border-radius: 0}
+.help {margin-bottom: 5px; padding: 20px 30px; border: 1px solid #26235c; background: #001}
+.help p {border: none; padding: 0}
+.help ul li:last-child {margin-bottom: -10px}
+p {color:var(--ink); margin: 0 0 4px; font-size: 9.5pt; text-align: justify}
+p.buttons, .buttons {margin: 5px 0 -5px; padding: 0 3px; text-align: right}
+p.buttons {padding: 8px 5px; border: 1px solid #26235c}
+p.footer {padding: 5px 0 2px; text-align: center; font-size: 8pt; border: 1px solid #113}
+p#filtered {margin: -26px 0 10px}
+#search {margin-top: -1px; margin-bottom: 20px}
+.addrhlpr {font-size: 8pt}
+td.checkbox {width: 40px; text-align: center}
+td.search > * {vertical-align: middle}
+td.names a {font-size: 9pt}
+.book td:first-child {font-weight: 700}
+#activefilter {padding: 4px 8px 3px}
+#add h3, #import h3 {margin-top: -1px; margin-left: -11px; margin-right: -11px; padding: 8px 10px 8px 30px; font-size: 10pt; background-position: 6px center}
+#add p.buttons, #import p.buttons {padding: 0; border: none}
+#add table, #import table {width: 100%}
+#add td:last-child, #import td:last-child {width: 94%}
+#bk h4 {display: none}
+#book, #emptybook {margin: -15px 0 -10px; padding: 0}
+#book, #messages, #filter, #search {background: #001}
 #book table {width: 100%; border: 1px solid #26235c}
-.iframed #book table {border-top: none; border-bottom: none}
-#host_details {margin-top: -25px}
-.iframed #book #host_details {border-top: 1px solid #26235c}
 #book table th {font-size: 8.5pt; border-bottom: 1px solid #26235c; background: linear-gradient(180deg,#080818, #000008 75%)}
+#book table tr:hover {background: #1e0b28}
+#book table tr:hover textarea {color: var(--ink)}
 #book th:last-child {padding: 0; font-size: 0; background: var(--nuke) no-repeat center center / 14px, linear-gradient(180deg,#080818, #000008 75%)}
 #book td {border-bottom: var(--border_soft)}
 #book #visualid td {border-color: #26235c}
-#book table tr:hover {background: #1e0b28}
-#book table tr:hover textarea {color: var(--ink)}
-#book, #messages, #filter, #search {background: #001}
-.book th {padding-top: 6px; padding-bottom: 6px}
+#book p {padding: 15px 15px 15px 35px}
+#book + #buttons {margin: 9px 0 20px}
+#emptybook {margin-bottom: 20px}
+
+#booksearch {margin: 0; padding: 7px 5px; text-align: center; border: 1px solid #26235c}
+#buttons {text-align: right; background: linear-gradient(90deg, #001, #000)}
+#config + #buttons, #content + #buttons {margin: -3px 0 12px; padding: 10px 5px; border: 1px solid #26235c; background: #001}
+#content h3:first-child {margin-top: -15px; font-size: 10.5pt}
+#content h3 {margin: 0 20px 10px; padding: 5px 10px; border: none; border-bottom: 1px dotted #2d295f; border-radius: 0; background: none}
+#content p + h3 {margin-top: 15px}
+#content p {padding: 0 30px; line-height: 1.4}
+#filter a:active {color: var(--ink); box-shadow: var(--highlight), inset 3px 3px 3px #000; background: #652787}
+#filter a:hover, #filter a:focus {color: var(--a_hover); border: 1px solid var(--a_hover); transform: scale(1.1)}
+#filter a:link, #filter a:visited, #activefilter {margin: 2px 0; padding: 2px 5px; display: inline-block; text-align: center; text-transform: capitalize; color: #4a42bd; border: 1px solid #26225d; background: #000}
+#filter {margin: -21px 0 -29px; padding: 12px 0 15px; text-align: center; border: 1px solid #26235c}
+#filter p:first-child {padding-bottom: 0}
+#filter p {margin: -3px 0 -3px; padding: 12px 10px 0}
+#filter p, #search td {font-size: 9pt; font-weight: 700}
+#filter + #search > form {margin: 0; padding: 0}
+#filter + #search {margin-top: 13px; margin-bottom: -18px; border: 1px solid #26235c}
+#filter span a:active {background: none; box-shadow: none; color: #4f0519}
+#filter span a, #filter span a:hover {display: inline-block; word-spacing: normal; letter-spacing: normal; border: none; background: none; transform: none}
+#filter span b {margin: -3px 5px 0; line-height: .8; text-transform: uppercase; font-size: 11pt; color: #fff}
+#footer, .iframed #footer {display: none}
+form[action="subscriptions"] {margin: 0}
+#helpsubs {margin: -16px 0 -11px; padding: 20px 15px 15px 48px; background: #001 var(--infohelp) no-repeat 12px center / 24px}
+#host_list tr:nth-child(even), #host_details tr:nth-child(even) {background: var(--row)}
+img[src="/imagegen/id?s=256&c="], img[src="/imagegen/id?s=20&c="] {opacity: 0}
+#messages:empty {margin-top: -10px; display: none}
+#messages {margin-bottom: 24px}
+#messages > .messages {margin: -15px 0 14px; padding: 20px 20px 20px 50px; color: var(--ink); border: 1px solid #26235c; border-radius: 0}
+#messages + p {padding: 12px 10px 8px 20px}
+#messages p {padding: 15px 15px 15px 46px; background: var(--infohelp) no-repeat 12pxpx center / 28px}
+#messages + p, p.book {padding: 20px 20px 20px 42px; border: 1px solid #26235c; background: #001 var(--addressbook) no-repeat 10px center / 24px}
+#ovrvw #content p {margin-bottom: 10px; line-height: 1.5}
+td > img[width="320"], td > img[src^="/imagegen"] {margin: 10px 3px; padding: 5px; width: 240px; height: 240px; border-radius: 2px; border: 1px solid #26235c; background: #000}
+textarea[name="config"], textarea[name="content"] {margin: -26px 0 0; resize: none; font-size: 8.5pt; border: 1px solid #26235c; border-radius: 0}
+textarea[name="config"] {height: 220px; overflow-y: scroll; resize: none}
+
 .book td.names {width: 200px; white-space: nowrap}
 .book td:nth-child(2) {padding: 2px 0 2px 5px; width: 30px}
-.book td:nth-child(3) {padding: 2px 25px 2px 0; width: 20px; text-align: center}
-.book td:nth-child(3) a {font-size: 0}
 .book td:nth-child(3) .addrhlpr:hover {filter: drop-shadow(0 0 1px #b73fff)}
-.headline + #book > table td {padding: 5px}
-.headline + #book > table td:first-child {width: 120px; white-space: nowrap; text-align: right}
-.headline + #book > table td.destinations {padding: 0}
-#visualid {margin-top: -10px; border: 1px solid #26235c; background: #001}
-.iframed #visualid {margin-bottom: 10px}
-#visualid h3 {margin-top: -1px; border-left: none; border-right: none}
-#idAddress {text-transform: none}
-#visualid table {margin-top: -15px; margin-bottom: -1px; width: 100%; border-left: none; border-right: none; border-collapse: collapse}
-#visualid td:first-child {text-align: right}
-#visualid td[colspan="2"] {padding: 17px 9px 15px; text-align: right; border-top: 1px solid #26235c}
-.iframed #visualid td[colspan="2"] {padding: 22px 19px 20px}
-div#add, div#import {margin-top: -2px; padding: 0 10px 15px; border: 1px solid #26235c; background: #001}
-div#add {margin-top: -10px}
+.book td:nth-child(3) a {font-size: 0}
+.book td:nth-child(3) {padding: 2px 25px 2px 0; width: 20px; text-align: center}
+.book th {padding-top: 6px; padding-bottom: 6px}
+
+#add, #import {margin-top: -2px; padding: 0 10px 15px; border: 1px solid #26235c; background: #001}
+#add {margin-top: -10px}
 #add td:first-child, #import td:first-child {width: 1%; min-width: 120px; white-space: nowrap; text-align: right}
+.destinations textarea {margin: 0; padding: 1px 1px 1px 2px; width: 100%; height: 32px; resize: none; overflow-x: auto; overflow-y: hidden; border-radius: 0; border: none; border-left: var(--border_soft); border-right: 3px solid #17142f}
+.fakebutton:hover, .fakebutton:focus {background-size: auto}
+#host_details {margin-top: -25px}
+#idAddress {text-transform: none}
+
+#import input[type=file] {margin-left: -5px}
 #import table {margin-top: -10px}
 #import td:first-child {padding-left: 15px}
-input[type=file] {border: none; background: none}
-#import input[type=file] {margin-left: -5px}
-.page {margin: 10px 0; padding: 0; font-size: 9pt; color: var(--ink); background: linear-gradient(180deg,rgba(0,0,16,.2), transparent)}
-.iframed .page {margin: 1px 0 0; overflow: hidden; border: none}
-input {margin: 2px 4px 2px 0; padding: 4px}
-input[type=text] {padding: 8px}
-#search input[type=text] {margin-left: 5px; padding: 6px 6px 6px 30px; vertical-align: middle; background: #000 var(--search) no-repeat 8px center / 14px; background-blend-mode: luminosity}
-#search input[type=text]:focus {background: var(--search) no-repeat 8px center / 14px, var(--text_focus); background-blend-mode: normal}
-input[type=submit], input[type=reset], .fakebutton, .fakebutton:visited {padding: 6px 10px; min-width: 100px; text-align: center}
-input.update {margin-left: 5px}
-input[type=submit]:hover, input[type=reset]:hover,
-input[type=submit]:focus, input[type=reset]:focus,
-.fakebutton:hover, .fakebutton:focus {background-size: auto}
-textarea, #subsLog pre {padding: 3px 5px; width: 100%; height: 200px; resize: none; font: 700 8.5pt var(--monospaced); line-height: 1.4; color: #7670c2; border: 1px solid #26225d; background: #000}
-#subsLog pre {margin-top: -26px; padding-left: 10px; width: calc(100% - 17px); height: auto; white-space: pre-wrap; font-weight: 400; color: var(--ink); background: #000}
-textarea:focus::placeholder {opacity: 0}
-textarea[cols="70"] {width: 100%; height: 40px; white-space: pre-wrap}
-.destinations textarea {margin: 0; padding: 1px 1px 1px 2px; width: 100%; height: 32px; resize: none; overflow-x: auto; overflow-y: hidden; border-radius: 0; border: none; border-left: var(--border_soft); border-right: 3px solid #17142f}
-.iframed #navi {border-right: none; border-left: none}
-.iframed .headline h3, .iframed h4, .iframed #filtered, .iframed #filter, .iframed #search,
-.iframed #book, .iframed div#book + div#buttons, .iframed #add, .iframed #import,
-.iframed#sbs #content, .iframed div#config, .iframed div#config + div#buttons,
-.iframed div#content + div#buttons, .iframed #helpsubs, .iframed #helpconfig {margin-left: 10px; margin-right: 10px}
-.iframed #helpconfig {margin: -1px 10px 0}
-.iframed#subsLog div#config {margin-top: -27px; margin-bottom: -13px}
 input.export {margin-right: 4px}
-.iframed input.export {margin-right: 14px}
+input {margin: 2px 4px 2px 0; padding: 4px}
+input[type=file] {border: none; background: none}
+input[type=submit]:focus, input[type=reset]:focus,
+input[type=submit]:hover, input[type=reset]:hover,
+input[type=submit], input[type=reset], .fakebutton, .fakebutton:visited {padding: 6px 10px; min-width: 100px; text-align: center}
+input[type=text] {padding: 8px}
+input.update {margin-left: 5px}
+.page {margin: 10px 0; padding: 0; font-size: 9pt; color: var(--ink); background: linear-gradient(180deg,rgba(0,0,16,.2), transparent)}
+#search input[type=text]:focus {background: var(--search) no-repeat 8px center / 14px, var(--text_focus); background-blend-mode: normal}
+#search input[type=text] {margin-left: 5px; padding: 6px 6px 6px 30px; vertical-align: middle; background: #000 var(--search) no-repeat 8px center / 14px; background-blend-mode: luminosity}
+#subsLog pre {margin-top: -26px; padding-left: 10px; width: calc(100% - 17px); height: auto; white-space: pre-wrap; font-weight: 400; color: var(--ink); background: #000}
+textarea[cols="70"] {width: 100%; height: 40px; white-space: pre-wrap}
+textarea:focus::placeholder {opacity: 0}
+textarea, #subsLog pre {padding: 3px 5px; width: 100%; height: 200px; resize: none; font: 700 8.5pt var(--monospaced); line-height: 1.4; color: #7670c2; border: 1px solid #26225d; background: #000}
+#visualid h3 {margin-top: -1px; border-left: none; border-right: none}
+#visualid {margin-top: -10px; border: 1px solid #26235c; background: #001}
+#visualid table {margin-top: -15px; margin-bottom: -1px; width: 100%; border-left: none; border-right: none; border-collapse: collapse}
+#visualid td[colspan="2"] {padding: 17px 9px 15px; text-align: right; border-top: 1px solid #26235c}
+#visualid td:first-child {text-align: right}
 
 /* page titles */
 .headline h3, h3 {padding: 10px 5px 10px 34px; word-spacing: .1em; letter-spacing: .08em; text-transform: uppercase; font-size: 11pt; background: var(--addressbook) no-repeat 10px center, var(--title); background-size: 18px, 4px 100%, 100%}
@@ -285,7 +270,29 @@ input#exporthosts:active {text-shadow: 0 1px 1px #3C1751; box-shadow: var(--high
 #prev:not(.inactive):hover::after, #prev:not(.inactive) a:focus::after {border-color: transparent var(--hover) transparent transparent}
 #next:not(.inactive):hover::after, #next:not(.inactive) a:focus::after {border-color: transparent transparent transparent var(--hover)}
 #empty {margin: 20px 0 30px; height: 1px; background: linear-gradient(90deg, rgba(0,0,0,0), #26235c, rgba(0,0,0,0))}
+
+/* iframed */
+.iframed .page {margin: 1px 0 0; overflow: hidden; border: none}
+.iframed .headline h3, .iframed h4, .iframed #filtered, .iframed #filter, .iframed #search, .iframed #helpconfig {margin: -1px 10px 0}
+.iframed .headline h3:first-child + h4 {margin: 13px 10px 0}
+.iframed#dtls .headline h3 {margin: -1px 10px 24px}
+.iframed#subsLog .headline h3:first-child + h4 {margin: -1px 10px 26px}
+.iframed .book tr.head th {border-top: 1px solid #26235c; border-bottom: 1px solid #26235c}
+.iframed #book #host_details {border-top: 1px solid #26235c}
+.iframed #book, .iframed #book + #buttons, .iframed #book table {border-top: none; border-bottom: none}
+.iframed #emptybook {margin: -15px 10px 20px}
+.iframed #helpsubs {margin-bottom: 0}
+.iframed input.export {margin-right: 14px}
+.iframed #messages > .messages {margin: 5px 10px 10px}
+.iframed #navi {border-right: none; border-left: none}
 .iframed #published {margin-bottom: 0}
+.iframed #visualid {margin-bottom: 10px}
+.iframed #visualid td[colspan="2"] {padding: 22px 19px 20px}
+.iframed#sbs #content, .iframed #config, .iframed #config + #buttons, .iframed#subsLog #config {margin: -27px 10px -13px}
+.iframed #helpsubs, .iframed #helpconfig, .iframed #add, .iframed #import, .iframed #book, .iframed #book + #buttons {margin-left: 10px; margin-right: 10px}
+ .iframed#subsLog pre {width: calc(100% - 12px)}
+.iframed #import {margin-top: 10px;}
+.iframed #config + #buttons, .iframed #content + #buttons {margin: 12px 10px};
 
 /* responsive layout */
 @media screen and (max-width: 1000px) {
@@ -322,7 +329,7 @@ textarea, textarea[name="config"], textarea[name="content"], #subsLog pre {font-
 h3 {font-size: 12pt}
 #filter a {font-size: 11pt; min-width: 14px}
 .destinations textarea {height: 34px}
-#ovrvw div#content p {line-height: 1.6}
+#ovrvw #content p {line-height: 1.6}
 #export {padding-left: 4px; height: 40px; position: absolute; top: -1px; right: 6px}
 input#exporthosts {margin: 6px 0 -2px 2px}
 #addressbook.headline h3 {padding-right: 45px}
