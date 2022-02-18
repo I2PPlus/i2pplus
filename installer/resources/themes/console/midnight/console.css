@@ -32,9 +32,9 @@ pre {width: 98%; overflow-x: auto; text-align: left; font: 8.5pt var(--monospace
 a:link tt, a:visited tt {color: #4e47bf}
 a:active tt {color: #9fe9f9}
 code {text-align: left; font: 9pt var(--monospaced); color: #393}
-h1, h2, h3, h4, .confignav {box-shadow: var(--highlight)}
+h1, h2, h3, h4, .confignav {box-shadow: var(--bevel)}
 h1, h2, h3, .th_title {background: var(--title); background-size: 4px 100%, 100%}
-h1 {margin: 0 3px 0 212px; padding: 13px 15px 12px; min-width: 610px; position: relative; z-index: 999; line-height: 1.2; letter-spacing: .15em; text-align: left; text-transform: uppercase; white-space: normal; font-size: 17pt; font-weight: 700; font-style: normal; color: var(--ink); text-shadow: 0 0 2px #010011; border: var(--border); box-shadow: 0 1px 5px #000}
+h1 {margin: 0 3px 0 212px; padding: 13px 15px 12px; min-width: 610px; position: relative; z-index: 999; line-height: 1.2; letter-spacing: .15em; text-align: left; text-transform: uppercase; white-space: normal; font-size: 17pt; font-weight: 700; font-style: normal; color: var(--ink); text-shadow: 0 0 2px #010011; border: var(--border)}
 h2, h2.welcome {font-size: 12pt; color: var(--ink); text-shadow: 0 0 2px #010011; letter-spacing: .05em; padding: 10px; border: var(--border_inner); border-radius: 2px; vertical-align: middle; margin: 15px 0 12px 0; text-transform: uppercase; word-wrap: break-word}
 h2 a:hover {color: var(--hover)}
 h2 a[name]:hover, h2 a[name]:active {color: var(--ink)}
@@ -1599,11 +1599,11 @@ p#upnpstatus {margin-top: 10px; padding-left: 50px}
 .applink:hover .applabel {color: var(--hover); border-top: 1px solid var(--hover); background: var(--label_hover)}
 
 /* home search */
-#searchbar {margin: -24px 10px -16px; padding: 8px 0 2px; width: auto; white-space: nowrap; text-align: center; box-shadow: var(--highlight), inset 0 0 2px 1px #00003a}
-#searchbar span {margin: 0 0 -5px 0; display: inline-block; position: relative; overflow: hidden; background: none}
-#searchbar table {margin: 14px auto 12px; width: auto; border-collapse: separate; border-spacing: 0; border: var(--border); background: #000; box-shadow: var(--highlight), inset 0 0 2px 1px #26235c; animation: fade .3s ease 1s reverse both}
+#searchbar {margin: -23px 10px -16px; padding: 8px 0 2px; width: auto; white-space: nowrap; text-align: center; ; animation: fade .5s ease .7s reverse both, slide .5s ease .95s both}
+#searchbar span {margin: -1px 0 -5px; display: inline-block; position: relative; overflow: hidden; background: none}
+#searchbar table {margin: 14px auto 12px; width: auto; border-collapse: collapse; border: var(--border); background: #000}
 #searchbar tr {box-shadow: none; border: none}
-#searchbar td {padding: 3px 2px; border: none; box-shadow: none; background: none}
+#searchbar td {padding: 3px 2px; border: none; box-shadow: var(--bevel); background: none}
 #searchbar input.search, #searchbar button, #searchbar select {line-height: 1.3}
 #searchbar input.search{box-shadow: var(--highlight), inset 4px 4px 4px #000}
 #searchbar button, #searchbar select {margin: 0}
@@ -1613,7 +1613,7 @@ p#upnpstatus {margin-top: 10px; padding-left: 50px}
 #searchbar input.search {margin: 4px 4px 3px 167px; padding-left: 10px; padding-right: 44px; min-width: 240px; border: var(--border); border-left: none}
 #searchbar input.search:not(:hover)::placeholder {opacity: 0}
 #searchbar input.search:focus {padding-right: 43px; border: var(--border); filter: none}
-#searchbar button {padding: 0 3px 0 0; position: absolute; right: 5px; top: 5px; font-size: 0; height: 30px; width: 36px; min-width: 0; border: none; border-left: var(--border); background: var(--search) no-repeat center center / 14px, var(--btn); background-position: center center; background-blend-mode: luminosity}
+#searchbar button {padding: 0 3px 0 0; position: absolute; right: 5px; top: 5px; font-size: 0; height: 29px; width: 36px; min-width: 0; border: none; border-left: var(--border); background: var(--search) no-repeat center center / 14px, var(--btn); background-position: center center; background-blend-mode: luminosity}
 #searchbar button:hover, #searchbar button:focus {background-blend-mode: normal}
 #searchbar button:active {box-shadow: var(--highlight), inset 3px 3px 2px #1e0b28; background-size: 12px, 100%; background-blend-mode: luminosity}
 #searchbar button:active {box-shadow: var(--btn_shadow_active)}
@@ -2113,7 +2113,7 @@ h1.log {background: var(--h1_logs) no-repeat 10px center, var(--th)}
 h1.webapp {background: var(--h1_webapp) no-repeat 10px center, var(--th)}
 h1.debug {background: var(--h1_debug) no-repeat 10px center, var(--th)}
 h1.newspage {background: var(--h1_news) no-repeat 10px center, var(--th)}
-h1[class], h1 {padding-left: 62px; background-size: 38px auto}
+h1[class], h1 {padding-left: 62px; background-size: 38px auto, 100% 4px, 4px 100%}
 h1::first-letter {font-size: 107%}
 
 /* tunnels */
@@ -2389,6 +2389,7 @@ iframe.iframed {margin: 15px 0 0}
 @keyframes progress {from {background-position: 200%}to {background-position: 0}}
 @keyframes reloader {0%, 100% {width: 0} 80%, 99% {width: 120%}}
 @keyframes routerdown {from {background-position: left center}}
+@keyframes slide {from {transform: translateY(-20px)} to {transform: translateY(0)}}
 @keyframes spin {from {transform: rotate(-360deg)}}
 
 /* browser specific */
@@ -2439,7 +2440,7 @@ input.check[value$="updates"], input.check[value$="updates"]:hover, input.check[
 #profiles #banlist {margin-top: -3px; margin-bottom: 7px}
 #routerinformation .h3navlinks a {line-height: 1.4}
 #searchbar button {height: 28px}
-#searchbar span {margin: 0 0 -4px 0}
+#searchbar span {margin: -2px 0 -4px}
 #clock {font-size: 16pt}
 #sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after, #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {min-height: 14px}
 #sb_tunnelstatus .tunnelBuildStatus::before {margin: -2px 0; background-size: 12px}
