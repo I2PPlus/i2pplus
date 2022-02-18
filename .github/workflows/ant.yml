@@ -23,13 +23,6 @@ jobs:
 #          rm -f override.properties
 #          echo "build.built-by=GitHub Actions" >> override.properties
 #          echo "noExe=true" >> override.properties
-      - name: Build installer with Ant
-        run: ant distclean pkg
-      - name: Upload installer.jar
-        uses: actions/upload-artifact@v2
-        with:
-          name: I2P-install.jar-${{ github.sha }}
-          path: install.jar
       - name: Build i2pupdate.zip with Ant
         run: ant distclean updaterCompact
       - name: Upload i2pupdate.zip
@@ -37,17 +30,24 @@ jobs:
         with:
           name: i2pupdate.zip-${{ github.sha }}
           path: i2pupdate.zip
-      - name: Build I2PSnark standalone with Ant
-        run: ant distclean i2psnark
-      - name: Upload i2psnark-standalone.zip
+      - name: Build installer with Ant
+        run: ant pkg
+      - name: Upload installer.jar
         uses: actions/upload-artifact@v2
         with:
-          name: i2psnark-standalone.zip-${{ github.sha }}
-          path: i2psnark-standalone.zip
+          name: I2P-install.jar-${{ github.sha }}
+          path: install.jar
       - name: Build javadocs with Ant
-        run: ant distclean javadoc
+        run: ant javadoc-zip
       - name: Upload javadoc.zip
         uses: actions/upload-artifact@v2
         with:
           name: javadoc.zip-${{ github.sha }}
           path: javadoc.zip
+      - name: Build I2PSnark standalone with Ant
+        run: ant i2psnark
+      - name: Upload i2psnark-standalone.zip
+        uses: actions/upload-artifact@v2
+        with:
+          name: i2psnark-standalone.zip-${{ github.sha }}
+          path: i2psnark-standalone.zip
