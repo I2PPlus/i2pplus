@@ -2388,7 +2388,10 @@ iframe {height: 0}
 @media screen and (-webkit-min-device-pixel-ratio: 1.2) {#homepage h4::before {margin-top: -15px; margin-bottom: 4px; height: 10px; display: block; content: ""} #homepage h4 {padding-top: 7px; padding-bottom: 4px} #homepage h4 a::after {margin-bottom: -10px; margin-top: -3px}} #jardump td {word-break: break-all; max-width: 230px} #manualreseed th:last-child, #manualreseed td:last-child {border-right: var(--border)} #reseedconfig .optbox[type=radio] {margin: 4px 4px 4px 15px} #manualreseed th:last-child, #manualreseed td:last-child {border-right: var(--border)} #reseedproxysslhostport.optionlist {columns: 1} .optionsingle#reseedproxytype {columns: 2} #reseedproxytype {columns: 2} #searchbar select {padding-left: 12px}}
 
 /* responsive layout */
-@media screen and (max-width: 1599px) {#reseedproxytype {columns: 250px 3} #reseed_urlselection.optionsingle {columns: 1 auto}}
+@media screen and (max-width: 1599px) {
+#reseedproxytype {columns: 250px 3} #reseed_urlselection.optionsingle {columns: 1 auto}
+}
+
 @media screen and (max-width: 1499px) {
 .sb_netstatus.running:not(:hover)::before, .sb_netstatus.hidden:not(:hover)::before, .sb_netstatus.firewalled:not(:hover)::before, .sb_netstatus.testing:not(:hover)::before {margin: 0; height: 18px; width: 18px; background-size: 18px}
 #sidebar .reload, #sidebar .stop, #sidebar .stop:hover, #sidebar .stop:focus, #sidebar .reload[value="restartImmediate"] {background-size: 12px, 100%}
@@ -2447,6 +2450,7 @@ h1[class], h1, h1.conf.adv {padding: 13px 15px 12px 50px; min-width: 620px; font
 #searchbar span {margin: 3px 3px 0}
 #peers .routerid .flag img, #profiles .routerid .flag img {margin: 0 0 -2px}
 h3 .b32 {margin-right: -16px}
+#pluginconfigtext {margin-bottom: 10px}
 }
 
 @media screen and (max-width: 1399px) {
