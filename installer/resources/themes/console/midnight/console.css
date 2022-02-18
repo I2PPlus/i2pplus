@@ -2712,7 +2712,7 @@ div[id^="config_"] .tab, div[id^="config_"] .tab2 {margin-top: -1px}
 div[id^="config_"] .tab:first-child {margin-left: -1px}
 #enviro td {font-size: 10.5pt}
 #logs li, pre#service_logs, #routerlogs li {font-size: 10pt}
-h1 {padding-top: 17px; padding-bottom: 16px; font-size: 20pt}
+h1[class] {padding: 17px 20px 16px 64px; font-size: 20pt; background-position: 15px center}
 h2 {padding: 12px 10px}
 h3.h3table, h3.tabletitle, #i2pclientconfig, #advancedclientconfig, #webappconfiguration, #pconfig, #pluginfromurl, #pluginfromfile, #updateplugins, #pluginmanage, #bannedpeers, h3.ptitle, #transports, #upnpstatus, h3.sybils, #config_keyring h3 {padding: 9px 10px}
 #tunnels h3 a:not(.lsview), #criticallogs + h3.tabletitle a, #iptransport a, #advancedconfig a, #reseedsetup a {font-size: 0}
