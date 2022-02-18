@@ -154,6 +154,7 @@ p:empty + .sb_notice {margin-top: 9px}
 #sb_warning + hr {margin-top: 7px}
 #sidebar hr:last-child {margin-top: 5px; margin-bottom: -5px}
 .warntext {color: #b00}
+/*#sidebar tr {background: var(--topnav);}*/
 
 /* sidebar news */
 #sb_newsheadings {margin-left: -12px; margin-bottom: -7px; width: 206px; text-align: right}
@@ -2010,9 +2011,9 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 .config_experimental::after {margin-top: -10px; margin-left: -10px; min-height: 40px; min-width: 40px; display: inline-block; vertical-align: middle; background: var(--experimental) no-repeat 15px center; background-size: 16px; content: ""}
 #installPluginUrl table, #installPluginUrl tr, #installPluginUrl td, #installPluginFile table, #installPluginFile tr, #installPluginFile td, #createNewFamily table, #createNewFamily tr, #createNewFamily td, #joinfamily table, #joinfamily tr:nth-child(n+3), #joinfamily tr:nth-child(n+3) td, #joinfamily tr:nth-child(n+3) table tr {margin: 0; border: none; box-shadow: none; background: none}
 #joinfamily table, #joinfamily tr:nth-child(n+3), #joinfamily tr:nth-child(n+3) td {background: #010}
-#pluginInstall td {padding: 5px}
-#pluginInstall2 {margin-top: -13px}
-#pluginInstall .suboption, #pluginInstall2 .suboption, #config_family .suboption {padding: 2px 12px 3px 10px}
+#plugininstall td {padding: 5px}
+#plugininstall2 {margin-top: -13px}
+#plugininstall .suboption, #plugininstall2 .suboption, #config_family .suboption {padding: 2px 12px 3px 10px}
 #installPluginUrl input[type=text], #installPluginFile input[type=file], #joinfamily input[type=file], #newfamily input[type=text] {width: 100%}
 #installPluginUrl td:first-child {padding: 18px 15px 18px 58px; background: var(--link) no-repeat 15px center / 28px}
 #installPluginFile td:first-child {padding: 18px 15px 18px 58px; background: var(--files) no-repeat 15px center / 28px}
@@ -2387,65 +2388,69 @@ iframe {height: 0}
 @media screen and (-webkit-min-device-pixel-ratio: 1.2) {#homepage h4::before {margin-top: -15px; margin-bottom: 4px; height: 10px; display: block; content: ""} #homepage h4 {padding-top: 7px; padding-bottom: 4px} #homepage h4 a::after {margin-bottom: -10px; margin-top: -3px}} #jardump td {word-break: break-all; max-width: 230px} #manualreseed th:last-child, #manualreseed td:last-child {border-right: var(--border)} #reseedconfig .optbox[type=radio] {margin: 4px 4px 4px 15px} #manualreseed th:last-child, #manualreseed td:last-child {border-right: var(--border)} #reseedproxysslhostport.optionlist {columns: 1} .optionsingle#reseedproxytype {columns: 2} #reseedproxytype {columns: 2} #searchbar select {padding-left: 12px}}
 
 /* responsive layout */
-@media screen and (max-width: 1599px) {#reseedproxytype {columns: 250px 3} #reseed_urlselection.optionsingle {columns: 1 auto}}
+@media screen and (max-width: 1599px) {
+#reseedproxytype {columns: 250px 3} #reseed_urlselection.optionsingle {columns: 1 auto}
+}
+
 @media screen and (max-width: 1499px) {
-.sb_netstatus.running:not(:hover)::before, .sb_netstatus.hidden:not(:hover)::before, .sb_netstatus.firewalled:not(:hover)::before, .sb_netstatus.testing:not(:hover)::before {margin: 0; height: 18px; width: 18px; background-size: 18px}
-#sidebar .reload, #sidebar .stop, #sidebar .stop:hover, #sidebar .stop:focus, #sidebar .reload[value="restartImmediate"] {background-size: 12px, 100%}
-#sidebar .reload[value="restartImmediate"], #sidebar .reload[value="restartImmediate"]:hover, #sidebar .reload[value="restartImmediate"]:focus {margin-bottom: -6px; background-size: 10px, 100%; background-position: 9px center}
-#sidebar .reload:hover, #sidebar .reload:focus {background-size: 12px, 12px, 100%}
-h3[id*="jobs"]:first-of-type {margin-top: 21px}
-#pluginconfig {margin-top: -13px}
-#applinks a::after {margin-top: -3px}
-#sitelinks a::after {margin-top: -1px}
-#sitemapcontainer {padding: 0}
-#netdboverview th[colspan="3"] {font-size: 11pt}
-#profilelist th {white-space: normal}
-#profiles #banlist {padding: 5px 9px}
-.applink img, .sitemapLink img {height: 24px; max-height: 24px; max-width: 24px}
-.applink img:-moz-broken, .sitemapLink img:-moz-broken {background-size: 24px}
 .appicon {padding: 2px 0 0}
-.applabel {width: 116px}
 .applabel a {max-width: 112px}
-#profiles #bannedpeercount {margin: 15px 8px 0}
-#sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after, #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {min-height: 12px}
-#banlist + h3 {margin-bottom: -2px}
-.applink img {padding: 10px 40px 40px}
 .applabel {margin-top: 8px}
-#help h3, #faq h3 {font-size: 10.5pt}
-#pluginconfigtext input {margin: -5px -6px 0 0}
-.netdbStats li {margin: 1px 5px}
-.longstat.fam {margin: 2px 5px -5px}
-.netdb_header img[src="/flags.jsp?c=a0"] {margin-bottom: -4px}
-#sb_internals {border-spacing: 0}
-#sb_internals td {padding-top: 2px; padding-bottom: 2px}
-h1[class], h1, h1.conf.adv {padding: 13px 15px 12px 50px; min-width: 620px; font-size: 17pt; background-size: 32px, 2px, 100% 4px, 100%, 164px; background-position: 10px center}
-.sitemapLink, .sitemapLabel, #sitemap .applink, #sitemap .applabel {width: 160px; min-width: 160px}
-.en .sitemapLink, .en .sitemapLabel, .en #sitemap .applink, .en #sitemap .applabel, .en #sitemap .applink table {width: 120px; min-width: 120px}
-#sitemap .applink img {padding-left: 62px; padding-right: 62px}
+.applabel {width: 116px}
+.applink img:-moz-broken, .sitemapLink img:-moz-broken {background-size: 24px}
+.applink img {padding: 10px 40px 40px}
+.applink img, .sitemapLink img {height: 24px; max-height: 24px; max-width: 24px}
 .en #sitemap .applink img {padding-left: 35px; padding-right: 35px}
-#clock {padding-top: 9px; font-size: 16pt}
+.en .sitemapLink, .en .sitemapLabel, .en #sitemap .applink, .en #sitemap .applabel, .en #sitemap .applink table {width: 120px; min-width: 120px}
+h1[class], h1, h1.conf.adv {padding: 13px 15px 12px 50px; min-width: 620px; font-size: 17pt; background-size: 32px, 2px, 100% 4px, 100%, 164px; background-position: 10px center}
+h3 .b32 {margin-right: -16px}
+h3[id*="jobs"]:first-of-type {margin-top: 21px}
+.log_debug, .log_info, .log_warn, .log_error, .log_crit, .log_omitted {vertical-align: middle}
+.longstat.fam {margin: 2px 5px -5px}
 .netdbentry .tunnel_cap, .netdbentry .tier, .netdbentry .ff, .netdbentry .reachable, .netdbentry .unreachable, .netdbentry .version, .sybil_routerinfo .tunnel_cap, .sybil_routerinfo .tier, .sybil_routerinfo .ff, .sybil_routerinfo .reachable, .sybil_routerinfo .unreachable, .sybil_routerinfo .version {padding: 2px 4px}
-#tunnels .tunnel_cap {height: 15px; line-height: 15px}
-#tunnels .routerid tt {height: 18px; line-height: 18px}
-.tunnel_local {line-height: 14px}
-#tunnels .routerid + .tunnel_cap {margin-left: -2px}
-#tunnels .tunnel_local + .tunnel_cap {margin-left: 2px}
-#routerinformation .h3navlinks {margin: 1px -2px -1px -2px}
-#routerinformation h3 span a {padding: 12px 3px 12px 12px}
-#routerinformation .h3navlinks a::before {margin-left: 0}
-#i2pclientconfig a, #pluginmanage a {transform: translateY(-1px)}
-#webappconfiguration a {padding-top: 9px}
+.netdb_header img[src="/flags.jsp?c=a0"] {margin-bottom: -4px}
+.netdbStats li {margin: 1px 5px}
+.sb_netstatus.running:not(:hover)::before, .sb_netstatus.hidden:not(:hover)::before, .sb_netstatus.firewalled:not(:hover)::before, .sb_netstatus.testing:not(:hover)::before {margin: 0; height: 18px; width: 18px; background-size: 18px}
+.sitemapLink, .sitemapLabel, #sitemap .applink, #sitemap .applabel {width: 160px; min-width: 160px}
 .tunnelBuildStatus {font-size: 90%}
-#sb_tunnelstatus .tunnelBuildStatus::before {margin: -2px 0; background-size: 12px}
-#view_profile .identicon {top: 1px; right: 1px}
+.tunnel_local {line-height: 14px}
 #advancedconfig {padding-right: 6px}
 #advancedconfig a {padding: 7px 0 0; border: none}
+#applinks a::after {margin-top: -3px}
+#banlist + h3 {margin-bottom: -2px}
+#clock {padding-top: 9px; font-size: 16pt}
+#help h3, #faq h3 {font-size: 10.5pt}
+#i2pclientconfig a, #pluginmanage a {transform: translateY(-1px)}
 #jardump a[href^="https://gitlab.com/i2pplus"] {padding-left: 11px; background-size: 8px; background-position: left top}
-.log_debug, .log_info, .log_warn, .log_error, .log_crit, .log_omitted {vertical-align: middle}
+#netdboverview th[colspan="3"] {font-size: 11pt}
 #passwordheading {margin-top: 12px}
-#searchbar span {margin: 3px 3px 0}
 #peers .routerid .flag img, #profiles .routerid .flag img {margin: 0 0 -2px}
-h3 .b32 {margin-right: -16px}
+#pluginconfig {margin-top: -13px}
+#pluginconfigtext {margin-bottom: 10px}
+#pluginconfigtext input {margin: -5px -6px 0 0}
+#profilelist th {white-space: normal}
+#profiles #banlist {padding: 5px 9px}
+#profiles #bannedpeercount {margin: 15px 8px 0}
+#routerinformation .h3navlinks {margin: 1px -2px -1px -2px}
+#routerinformation .h3navlinks a::before {margin-left: 0}
+#routerinformation h3 span a {padding: 12px 3px 12px 12px}
+#sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after, #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {min-height: 12px}
+#sb_internals {border-spacing: 0}
+#sb_internals td {padding-top: 2px; padding-bottom: 2px}
+#sb_tunnelstatus .tunnelBuildStatus::before {margin: -2px 0; background-size: 12px}
+#searchbar span {margin: 3px 3px 0}
+#sidebar .reload, #sidebar .stop, #sidebar .stop:hover, #sidebar .stop:focus, #sidebar .reload[value="restartImmediate"] {background-size: 12px, 100%}
+#sidebar .reload:hover, #sidebar .reload:focus {background-size: 12px, 12px, 100%}
+#sidebar .reload[value="restartImmediate"], #sidebar .reload[value="restartImmediate"]:hover, #sidebar .reload[value="restartImmediate"]:focus {margin-bottom: -6px; background-size: 10px, 100%; background-position: 9px center}
+#sitelinks a::after {margin-top: -1px}
+#sitemap .applink img {padding-left: 62px; padding-right: 62px}
+#sitemapcontainer {padding: 0}
+#tunnels .routerid tt {height: 18px; line-height: 18px}
+#tunnels .routerid + .tunnel_cap {margin-left: -2px}
+#tunnels .tunnel_cap {height: 15px; line-height: 15px}
+#tunnels .tunnel_local + .tunnel_cap {margin-left: 2px}
+#view_profile .identicon {top: 1px; right: 1px}
+#webappconfiguration a {padding-top: 9px}
 }
 
 @media screen and (max-width: 1399px) {
@@ -2498,7 +2503,7 @@ h3 .b32 {margin-right: -16px}
 #tunnels .routerid, .tunnel_local {margin-right: 0}
 #peers .widescroll td.cells {font-size: 8pt}
 #help h3, #faq h3 {font-size: 10pt}
-#clientconf code {white-space: nowrap}
+#clientconf code {display: inline-block; white-space: nowrap}
 #peers .idle, #peers .inout {min-width: 104px}
 #peers .skew {display: none}
 .tab, .tab2 {padding: 1px 0; min-width: 50px}
@@ -2600,11 +2605,47 @@ th {font-size: 8pt}
 .main, #news, h1, h1[class], .sorry {margin-left: 272px}
 body, .main, .main td, #news p, #news p, textarea, .main textarea, code, tt, #changelog pre, th code, .statlist a[name], .statlist b, .statlist li b, .statlist a[name]:hover, .confignav, th, #configinfo th, .main button, .main input, select, textarea, input[type=file]::file-selector-button, #news, #sidebar button, #warning2 p {font-size: 10pt}
 h3, #sidebar h3 a, th.th_title, #leasesetdebug th, #leasesetsummary th, .netdbentry th, #help, #help li, #help p, #help code, #help td, #help th {font-size: 11pt}
+h1[class], h1, h1.conf.adv {padding: 14px 15px 14px 65px; font-size: 20pt; background-size: 40px, 2px, 100% 4px, 100%, 164px; background-position: 15px center}
+input.search, input.search:focus {padding: 6px 8px 6px 28px}
+input[type=text], input[type=password] {padding: 7px 9px}
+.addtobook a::after {margin: -14px -6px -6px 0; padding-left: 0; padding-left: 8px; width: 24px; height: 30px; background-size: 16px}
 .appicon {padding: 5px 0 8px; height: 35px}
 .applabel {width: 140px}
 .applabel a {max-width: 130px; overflow: hidden; text-overflow: ellipsis}
+.applink img {margin-top: -8px; padding: 10px 53px 38px}
+.cells tt, #profilelist tt, #floodfills tt, #netdb .tunnel_peer tt {margin-left: 2px; margin-right: 2px; letter-spacing: .2em}
+.h3navlinks a {padding: 7px 10px 8px 17px}
+.h3navlinks a:first-child, #config_service .h3navlinks a:last-child {margin-right: 0}
+.h3navlinks a:last-child {margin-right: 2px}
+.joblog h3 {margin-top: 7px; padding-top: 7px}
+.leaseset th {line-height: 1}
+.log_debug, .log_info, .log_warn, .log_error, .log_crit, .log_omitted {margin-bottom: -3px; min-width: 40px; max-width: 40px}
+.newsAuthor {padding-left: 18px; background-size: 13px}
+.percentBarOuter {width: 251px}
+.sb table[id^="sb_"] {width: 256px}
+.sb_info.sb_update {padding: 5px 5px 6px}
+.sb_info .percentBarOuter {margin-bottom: -16px}
+.sb_info .percentBarText {margin-top: -1px}
+.sb_info.sb_update .percentBarOuter {margin-bottom: -5px}
+.sb_netstatus, .tunnelBuildStatus {padding: 9px 3px}
+.sb_netstatus::before, .tunnelBuildStatus::before {margin: -1px 2px; height: 20px}
+.sb_update {padding-bottom: 3px}
+.search td {padding: 6px 6px 6px 5px}
+.search td:nth-child(2) {padding: 5px 8px 5px 8px}
+.search td:last-child {padding-left: 0; padding-right: 0}
+.tab, .tab2 {line-height: 20px}
+.tab2 {padding: 6px 11px 5px 13px}
+.themechoice, .langselect {width: 140px}
+.tunnel_cap {padding: 3px 2px 2px; min-width: 18px}
+.tunneldisplay .tunnel_peer {margin: 0; min-width: 80px}
+.tunneldisplay .tunnel_peer.tunnel_local {margin: 0 0 0 -1px; min-width: 77px}
+.tunneldisplay .tunnel_peer + b.tunnel_cap {margin: 0 -1px}
+.tunneldisplay .tunnel_peer.tunnel_local + b.tunnel_cap {margin-left: 1px}
+.tunnel_id {margin: 0 5px; padding: 3px 4px 2px 6px; min-width: 96px; display: inline-block; vertical-align: middle; text-align: left; border: 1px solid #030; box-shadow: var(--highlight_badge); background: var(--badge)}
+.tunnel_id:not(:empty) {background: var(--hardhat) no-repeat 5px center / 14px, var(--badge)}
+.tunnel_id:not(:empty)::before {width: 16px; height: 14px; display: inline-block; vertical-align: middle; content: ""}
+.tunnel_peer img, .routerid img {margin-bottom: -1px}
 .warning h3 {font-size: 11.5pt}
-.addtobook a::after {margin: -14px -6px -6px 0; padding-left: 0; padding-left: 8px; width: 24px; height: 30px; background-size: 16px}
 #help h2 {font-size: 14pt}
 #applinks, #sitelinks, #help h3, #sybilTask th {font-size: 12pt}
 button.control {font-size: 0}
@@ -2619,74 +2660,50 @@ input[type=submit], input[type=reset], button {padding: 8px 12px}
 #advancedconfig a {padding-right: 10px}
 #banlist + h3.tabletitle {margin-bottom: -2px}
 #banlist li, #banlist li:first-child {min-height: 52px}
-.cells tt, #profilelist tt, #floodfills tt, #netdb .tunnel_peer tt {margin-left: 2px; margin-right: 2px; letter-spacing: .2em}
 #certs.main p + p:empty + h4 {margin-top: -15px}
 #consolepass input[name="nofilter_pw"], #consolepass input[name="name"], #externali2cp input[name="nofilter_pw"], #consolepass input[name="nofilter_pw"]:focus, #consolepass input[name="name"]:focus, #externali2cp input[name="nofilter_pw"]:focus {padding: 7px 9px 7px 25px; background-position: 6px center}
 #debug .confignav, #netdb .confignav {padding: 0}
 #debug .tab, #debug .tab2, #netdb .tab, #netdb .tab2 {margin-top: -1px}
-.applink img {margin-top: -8px; padding: 10px 53px 38px}
 #error500 #sidebar img[src$="i2plogo.png"] {margin-bottom: -5px}
 #error500 #warning2.sorry {margin-top: -1px}
 #floodfills th:first-child, #floodfills td:first-child {padding-right: 3px; width: 58px}
 #fullhistory {margin-top: -13px; text-align: right}
 #graphdisplay {margin-top: 5px}
-h1[class], h1, h1.conf.adv {padding: 14px 15px 14px 65px; font-size: 20pt; background-size: 40px, 2px, 100% 4px, 100%, 164px; background-position: 15px center}
-.h3navlinks a {padding: 7px 10px 8px 17px}
 #webappconfiguration .h3navlinks a {padding-top: 9px}
 #i2pclientconfig .h3navlinks a {padding-top: 5px}
-.h3navlinks a:first-child, #config_service .h3navlinks a:last-child {margin-right: 0}
-.h3navlinks a:last-child {margin-right: 2px}
 #applinks, #sitelinks {padding: 9px 10px 8px 35px}
 #applinks a::after, #sitelinks a::after {margin-left: 11px}
 h4#updateplugins {margin-top: -15px}
 #help .confignav {padding: 0; position: sticky; top: -2px; z-index: 999; will-change: transform}
 #i2pclientconfig {margin-bottom: -15px}
-input.search, input.search:focus {padding: 6px 8px 6px 28px}
-input[type=text], input[type=password] {padding: 7px 9px}
 #searchbar input[type=text]:focus {padding-top: 7px; padding-bottom: 7px}
 #iptransport a::after, #advancedconfig a::after, #reseedsetup a::after {margin: 0 0 -3px -4px; width: 20px; height: 20px; background-size: 20px}
 #iptransport a:hover::after, #advancedconfig a:hover::after, #reseedsetup a:hover::after {background-size: 20px}
 #advancedconfig a::after {margin: -4px 0 -3px}
-.joblog h3 {margin-top: 7px; padding-top: 7px}
 #jobs h2 {margin-bottom: 3px}
-.leaseset th {line-height: 1}
-.log_debug, .log_info, .log_warn, .log_error, .log_crit, .log_omitted {margin-bottom: -3px; min-width: 40px; max-width: 40px}
 #loggingoptions input[type=text], #loggingoptions select {min-width: 240px}
 #manualreseed input[type=submit] {min-width: 140px}
 #minigraphcontainer {margin-top: -40px; margin-left: 1px; width: 258px; height: 39px; background-size: 250px 40px}
 #minigraph {margin-top: -18px; width: 252px}
 #netconfig label::before, #externali2cp td label::before, #externali2cp .nowrap::before, #reseedconfig .nowrap::before {min-height: 50px}
 #netdb .netdb_leases .flag img {margin: 1px -3px -4px}
-.newsAuthor {padding-left: 18px; background-size: 13px}
 #participating a::after, #peercount a::after {margin: -8px 0 -13px -12px; padding: 9px 6px 9px 0}
 #pconfig {margin-bottom: -15px}
 #peerprofiles.widescroll {margin-top: -12px; padding-top: 116px}
 #peers .cells:nth-child(n+2) {padding-left: 15px; padding-right: 15px}
 #netdb .flag img, #peers .routerid .flag img {margin: -3px -3px -1px; width: 20px; height: 15px}
 #peers .routerid .flag img {margin: -3px -1px 1px}
-.percentBarOuter {width: 251px}
 #pluginconfigtext + form > input {margin-top: 3px}
-#pluginInstall2 {margin-top: -14px}
+#plugininstall2 {margin-top: -14px}
 #reseedconfig input[type=text], #reseedconfig input[type=password] {width: 250px}
-.sb table[id^="sb_"] {width: 256px}
 #sb_graphcontainer {height: 42px}
-.sb_info.sb_update {padding: 5px 5px 6px}
-.sb_info .percentBarOuter {margin-bottom: -16px}
-.sb_info .percentBarText {margin-top: -1px}
-.sb_info.sb_update .percentBarOuter {margin-bottom: -5px}
 #sb_internals {margin-top: -9px}
 #sb_localtunnels a {max-width: 200px}
 #sb_memoryBar .percentBarText {margin-top: -2px}
-.sb_netstatus, .tunnelBuildStatus {padding: 9px 3px}
-.sb_netstatus::before, .tunnelBuildStatus::before {margin: -1px 2px; height: 20px}
 #sb_newsheadings {margin-left: -9px; width: 258px}
 #sb_newsheadings table {width: 254px}
 #sb_services a:link, #sb_internals a:link, #sb_advanced a:link, #sb_help a:link {max-width: 216px}
-.sb_update {padding-bottom: 3px}
 #schedjobs ul {columns: 270px auto}
-.search td {padding: 6px 6px 6px 5px}
-.search td:nth-child(2) {padding: 5px 8px 5px 8px}
-.search td:last-child {padding-left: 0; padding-right: 0}
 select {padding: 8px 24px 8px 8px}
 #sidebar button.download {width: 248px}
 #sidebar button.reload, #sidebar button.stop {min-width: 120px}
@@ -2696,18 +2713,6 @@ select {padding: 8px 24px 8px 8px}
 #sidebar {width: 240px}
 span#newtab {margin-top: 4px}
 #stacktrace p:first-of-type::first-line {font-size: 110%; font-weight: 700; font-variant: super; text-decoration: underline}
-.tab, .tab2 {line-height: 20px}
-.tab2 {padding: 6px 11px 5px 13px}
-.themechoice, .langselect {width: 140px}
-.tunnel_cap {padding: 3px 2px 2px; min-width: 18px}
-.tunneldisplay .tunnel_peer {margin: 0; min-width: 80px}
-.tunneldisplay .tunnel_peer.tunnel_local {margin: 0 0 0 -1px; min-width: 77px}
-.tunneldisplay .tunnel_peer + b.tunnel_cap {margin: 0 -1px}
-.tunneldisplay .tunnel_peer.tunnel_local + b.tunnel_cap {margin-left: 1px}
-.tunnel_id {margin: 0 5px; padding: 3px 4px 2px 6px; min-width: 96px; display: inline-block; vertical-align: middle; text-align: left; border: 1px solid #030; box-shadow: var(--highlight_badge); background: var(--badge)}
-.tunnel_id:not(:empty) {background: var(--hardhat) no-repeat 5px center / 14px, var(--badge)}
-.tunnel_id:not(:empty)::before {width: 16px; height: 14px; display: inline-block; vertical-align: middle; content: ""}
-.tunnel_peer img, .routerid img {margin-bottom: -1px}
 #tunnels #exploratory a, #tunnels h3.server a, #tunnels h3.client a {margin: -8px 0 -8px 0; padding: 7px 2px 14px 0}
 #tunnels h3 a::after {margin: -8px -8px -8px 0; padding: 9px 8px 9px 16px}
 #tunnels img[src^="/flags.jsp?"], #profiles img[src^="/flags.jsp?"], #peers img[src^="/flags.jsp?"] {margin: -3px -1px 0; width: auto; height: 14px; display: inline-block; vertical-align: middle}
@@ -2715,6 +2720,7 @@ span#newtab {margin-top: 4px}
 #udpconnections td[class="cells"]:first-child, #ntcpconnections td[class="cells"]:first-child {padding-right: 8px; width: 55px}
 #warning2.sorry {margin: -17px 5px 18px 272px}
 }
+
 @media screen and (min-width: 1634px) {.leasesets_container {margin-bottom: 8px} th code {font-size: 9pt}}
 @media screen and (min-width: 1800px) {#help .confignav {margin-left: -11px; margin-right: -11px; display: flex; justify-content: center; border-left: none; border-right: none} #help .tab, #help .tab2 {margin-left: 0; margin-right: 0; flex-grow: 1} .linkcontainer .applink:last-of-type {margin-bottom: 9px}}
 @media screen and (min-width: 1840px) {div[id^="config_"] .confignav {padding: 4px 4px 5px 3px; display: flex; flex-direction: row; flex-wrap: wrap; align-content: space-evenly; justify-content: center} div[id^="config_"] .tab, div[id^="config_"] .tab2 {margin: 0 -1px -1px 0; min-width: 70px; white-space: nowrap; flex: auto; flex-basis: content; flex-grow: .06} div[id^="config_"] .tab2:first-child {border-left: none} div[id^="config_"] .confignav {padding: 0} div[id^="config_"] .tab, div[id^="config_"] .tab2 {margin-top: -1px} div[id^="config_"] .tab:first-child {margin-left: -1px}} 

@@ -3,7 +3,7 @@
 @import url("/themes/fonts/DroidSans.css");
 
 body, pre, table, p, .plate div, h1, h2, h3, h4, th, td {
-  font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", Verdana, Helvetica, sans-serif !important;
+  font-family: var(--bodyfont) !important;
 }
 
 body, pre, table, p, .plate div {
