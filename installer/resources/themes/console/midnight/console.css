@@ -834,6 +834,7 @@ th.options, #externali2cp th {padding: 7px 10px}
 #webappconfigtext + p, p#pluginconfigtext {margin-bottom: -1px}
 #pconfig {margin-top: -4px}
 #peers .infohelp {margin-bottom: 1px}
+#pluginconfig, #i2pupdates, .homelinkedit, #peerdefs {margin-top: -1px}
 
 /* plugins */
 #availableplugins {margin: 12px 0 -1px}
@@ -847,7 +848,10 @@ th.options, #externali2cp th {padding: 7px 10px}
 #plugininstall2 {margin: 1px auto 15px; width: 100%}
 #pluginconfig table td:first-child {padding-left: 15px; width: 1%; white-space: nowrap}
 #pluginconfig td:first-child label {padding: 5px 15px 5px 26px; display: inline-block; min-width: 100px; vertical-align: middle; text-align: left; border: 1px solid #003; border-radius: 4px 15px 15px 4px; background: var(--plugin) no-repeat 5px center, var(--label); background-size: 16px, 100%; background-blend-mode: luminosity}
+#pluginconfig td:last-child table {margin: 5px 15px 5px 5px; padding: 5px; width: calc(100% - 8px)}
 #plugininstall .suboption, #plugininstall2 .suboption, #config_family .suboption {padding: 2px 12px 3px 10px}
+#plugininstall input.cancel {display: none}
+#plugininstall input[type=text] {width: 50%; min-width: 400px}
 #installPluginFile, #installPluginUrl {box-shadow: var(--highlight), inset 0 0 2px 1px #191939; background: var(--panel)}
 #installPluginFile td:first-child {padding: 10px 25px 10px 55px; border-right: none; background: var(--files) no-repeat 15px center / 28px}
 #installPluginFile td:last-child, #installPluginUrl td:last-child, #newfamily table td:last-child, #joinfamily table td:last-child {padding: 10px 5px 10px 10px; width: 1%; white-space: nowrap; text-align: right}
@@ -861,7 +865,7 @@ th.options, #externali2cp th {padding: 7px 10px}
 #webappconfig th:nth-child(2), #webappconfig th:nth-child(3) {text-align: center}
 #webappconfig th:last-child {text-align: left; padding-left: 5px}
 #webappconfig td:first-child::after {min-height: 28px; display: inline-block; vertical-align: middle; content: ""}
-#pluginconfig td:last-child table {margin: 5px 15px 5px 5px; padding: 5px; width: calc(100% - 8px)}
+#webappconfigtext {margin: 12px 0 3px 0; background: #000 var(--editclient) no-repeat 15px center / 28px}
 
 /* clients */
 #configclient {margin-top: -11px}
@@ -1116,7 +1120,7 @@ tr:nth-child(4) .net_bwrate::before {width: 22px; background:var(--share) left t
 #criticallogs + h3.tabletitle a:last-child {padding-left: 20px; padding-right: 20px}
 #externali2cp th {text-align: left}
 #floodfillconfig form, #plugininstall form, #updateplugins form, .configtable form {margin-bottom: 0}
-h3.h3table, h3.tabletitle, #i2pclientconfig, #advancedclientconfig, #webappconfiguration, #pconfig, #pluginfromurl, #pluginfromfile, #updateplugins, #pluginmanage, #bannedpeers, h3.ptitle, #transports, #upnpstatus, h3.sybils, #config_keyring h3 {margin-bottom: 0; padding: 7px 10px; letter-spacing: .08em; text-transform: uppercase; border-radius: 0; border: var(--border_inner)}
+h3.h3table, h3.tabletitle, #i2pclientconfig, #advancedclientconfig, #webappconfiguration, #pconfig, #pluginfromurl, #pluginfromfile, #updateplugins, #pluginmanage, #bannedpeers, h3.ptitle, #transports, h3.sybils, #config_keyring h3 {margin-bottom: 0; padding: 7px 10px; letter-spacing: .08em; text-transform: uppercase; border-radius: 0; border: var(--border_inner)}
 #i2pclientconfig, #pconfig, #pluginfromurl, #pluginfromfile {margin-bottom: -13px}
 h3.ptitle {margin-bottom: -6px}
 h3.tabletitle a {letter-spacing: normal; text-transform: lowercase}
@@ -1144,11 +1148,6 @@ p.infohelp, p#debugmode, p.sybilinfo, #sybilanalysis {border: var(--border_inner
 p.notfound {margin-top: -1px}
 p#javaclienthelp {padding: 10px 25px 10px 55px; border: var(--border_inner); background: var(--infohelp) no-repeat 15px center / 28px}
 
-#pluginconfig, #i2pupdates, .homelinkedit, #peerdefs {margin-top: -1px}
-#plugininstall input.cancel {display: none}
-#plugininstall input[type=text] {width: 50%; min-width: 400px}
-
-p#webappconfigtext {margin: 12px 0 3px 0; background: #000 var(--editclient) no-repeat 15px center / 28px}
 #servicelogs a {padding-left: 12px}
 th.th_title {padding: 9px 10px; text-align: left; box-shadow: var(--highlight)}
 td.optionsave {padding: 7px 5px; text-align: right; border-top: var(--border_inner); background: var(--row)}
@@ -1236,18 +1235,20 @@ form > table {font-size: 9pt}
 #netdbversions {border-left: none}
 #netdbtransports {border-left: none; border-right: none}
 #netdbcountrylist {border-right: none}
-#netdbtransports th, #netdbtransports td, #routerinformation td {padding-left: 10px; padding-right: 10px}
-#netdbversions th, #netdbtransports th, #netdbcountrylist th, #netdbtiers th {padding: 6px 5px; line-height: 1.5; border-top: none}
-#netdbtiers, #netdbtiers th {padding: 5px; border-top: none}
-#netdboverview table th:first-child, #netdboverview table td:first-child {padding-left: 8px; text-align: left}
-#netdboverview table td:last-child {width: 140px; text-align: center}
-#netdbversions td, #netdbtransports td, #netdbcountrylist td, #netdbtiers td {padding: 5px}
-#netdbcountrylist img {margin-right: 10px; padding: 0; width: 24px; height: 18px; text-align: right; font-size: 70%; border: 1px solid #114; border-radius: 3px}
-.netdb_header img[src^="/flags"] {margin: 1px 1px 0 4px; width: 28px; height: auto; vertical-align: top; border: 1px solid #225; border-radius: 3px}
-#netdbtiers td b {margin: -3px 6px -3px 0}
-table[cellspacing="30"] > tbody > tr > th[colspan="3"] {/* netdb header */
-padding: 10px; word-spacing: .1em; letter-spacing: .08em; text-transform: uppercase; font-size: 11pt}
+#netdbversions th, #netdbtransports th, #netdbcountrylist th, #netdbtiers th {/*padding: 6px 5px; line-height: 1.5; */border-top: none}
+#netdbtiers, #netdbtiers th {border-top: none}
+#netdboverview table th, #netdboverview table td {padding: 2px 15px}
+#netdboverview table th:first-child, #netdboverview table td:first-child {text-align: left}
+#netdboverview table th:last-child, #netdboverview table td:last-child {text-align: right}
+#netdboverview table td:last-child {width: 140px}
+#netdboverview table th::before, #netdboverview table td::before {min-height: 26px; display: inline-block; vertical-align: middle; content: ""}
 #netdbtransports th:first-child, #netdbcountrylist th:first-child {text-align: left}
+#netdboverview table td {border-right: none !important}
+#netdboverview table td span, #netdboverview table td b, #netdboverview table td a {margin-top: 0; margin-bottom: 0; display: inline-block; vertical-align: middle}
+#netdbtiers td b {margin: 0 6px 0 0}
+#netdbcountrylist img {margin-right: 8px; padding: 0; width: 24px; height: 18px; text-align: right; font-size: 70%; border: 1px solid #114; border-radius: 3px}
+.netdb_header img[src^="/flags"] {margin: 1px 1px 0 4px; width: 28px; height: auto; vertical-align: top; border: 1px solid #225; border-radius: 3px}
+table[cellspacing="30"] > tbody > tr > th[colspan="3"] {padding: 10px; word-spacing: .1em; letter-spacing: .08em; text-transform: uppercase; font-size: 11pt}
 
 .identicon {margin: 0 0 0 6px; vertical-align: middle}
 
@@ -1470,9 +1471,11 @@ a[href^="/profiles"] ~ table > tbody > tr > th:first-child {text-align: center}
 #certs h3 + #end {margin-bottom: 26px}
 
 /* info */
+#routerinformation {padding-bottom: 10px}
 #routerinformation #enviro + h3 {margin-bottom: -3px}
 #routerinformation #upnpstatus {margin-bottom: 1px}
 #routerinformation h3 {padding-top: 10px; line-height: 1.3}
+#routerinformation h3:first-of-type {margin-bottom: 10px}
 #routerinformation .h3navlinks a {line-height: 1.7}
 #routerinformation #version::before, #routerinformation #enviro + h3::before, #routerinformation #transports::before {margin: -2px 9px 0 2px; width: 17px; height: 17px; display: inline-block; vertical-align: middle; background: url(images/favicon.svg) no-repeat center center / 17px; content: ""; filter: saturate(.5)}
 #routerinformation #enviro + h3::before {background-image: url(/themes/console/images/server.svg)}
@@ -1480,7 +1483,11 @@ a[href^="/profiles"] ~ table > tbody > tr > th:first-child {text-align: center}
 #routerinfo p {padding: 0; margin: 11px 0 10px; border: none; filter: none}
 #routerinfo table {margin: 0}
 #routerinfo a {margin: -3px 5px -3px 0; padding: 3px 10px; display: inline-block; white-space: nowrap; font-size: smaller}
-#routerinfo td {padding: 8px 4px; width: 25%; border-bottom: 1px inset #225}
+#routerinformation tr:nth-child(n+2):not(:hover) a:not(#revision) {display: none}
+#routerinformation table:hover tr:nth-child(n+2) a:not(#revision) {display: inline; margin: -3px 0 -3px 4px}
+#routerinformation th, #routerinformation td {padding: 8px 12px}
+#routerinfo td {width: 25%; border-bottom: 1px inset #225}
+#routerinformation td:first-child {padding-left: 12px; width: 1%; min-width: 80px; max-width: 80px; white-space: nowrap}
 #routerinfo td:first-child, #routerinfo td:nth-child(3) {white-space: nowrap; text-align: right}
 #routerinfo td:nth-child(2):not([colspan]) {white-space: nowrap; border-right: 1px inset #225}
 p#upnpstatus {margin-top: 10px; padding-left: 50px}
@@ -2057,14 +2064,6 @@ html, body {height: 100%}
 #down::after, #nographs::after {width: 24px; height: 24px; vertical-align: middle; display: inline-block; background: var(--update) no-repeat center center; background-size: 24px; content: ""; transform: rotate(0); animation: linear spin 3s forwards infinite; mix-blend-mode: luminosity}
 
 #lookupCondensed {display: none}
-
-/* info */
-#routerinformation {padding-bottom: 10px}
-#routerinformation h3:first-of-type {margin-bottom: -2px}
-#routerinformation td {padding: 8px 4px}
-#routerinformation td:first-child {padding-left: 12px; width: 1%; min-width: 80px; max-width: 80px; white-space: nowrap}
-#routerinformation tr:nth-child(n+2):not(:hover) a:not(#revision) {display: none}
-#routerinformation table:hover tr:nth-child(n+2) a:not(#revision) {display: inline; margin: -3px 0 -3px 4px}
 
 #updateAvailable {margin: 3px 0; width: 100%; display: inline-block; line-height: 1.2; font-size: 9pt}
 #updateAvailable + br + button + br + #updateAvailable::before {margin: 4px 0; content: ""; display: inline-block; height: 1px; background: #113; width: calc(100% - 20px)}
