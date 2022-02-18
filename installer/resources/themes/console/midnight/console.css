@@ -604,24 +604,6 @@ form[action="events"] {background: #000}
 .tablefooter, .tablefooter td {padding: 10px; line-height: 1.1; border-top: var(--border_inner); border-bottom: var(--border_inner); border-right: none; box-shadow: none; background: none}
 .tablefooter, .tablefooter:hover td {background: linear-gradient(180deg,#010014, #010010 50%, #010010 100%)}
 .formaction {text-align: right; margin-bottom: -5px; padding: 7px 5px}
-h3[id$="con"] {margin-bottom: -2px; padding: 8px 10px; word-spacing: .1em; letter-spacing: .08em; font-size: 10pt; border: var(--border_inner); border-radius: 0}
-h3[id="udpcon"] {width: auto}
-#ntcpconnections tr, #udpconnections tr, #tunnels tr, #profiles tr {box-shadow: none}
-#ntcpconnections td, #udpconnections td, #tunnels td, #profiles td {box-shadow: var(--highlight), inset 0 0 2px 0 #26235c}
-#ntcpconnections tr:hover td, #udpconnections tr:hover td, #tunnels tr:hover td, #profiles tr:hover td {box-shadow: none}
-#udpconnections {margin-bottom: 10px; overflow-x: auto}
-#udpconnections i {line-height: 1.5; letter-spacing: .1em; font-weight: 700; font-size: 90%}
-#udpconnections tr a img {margin-top: 3px}
-#udpconnections tr:hover, #ntcpconnections tr:hover, #jobstats tr:hover, #schedjobs tr:hover, #jardump tr:hover, #sidebarconf tr:hover, #webappconfig tr:hover td, .tunneldisplay tr:hover td, #profilelist tr:hover, #floodfills tr:hover, .eventspanel tr:hover, #profiles tr:hover td {background: #202; color: #eff1ff}
-#udpconnections td > *, #ntcpconnections td > * {vertical-align: text-bottom}
-#udpconnections td:first-child, #ntcpconnections td:first-child {padding: 4px; width: 1%; white-space: nowrap}
-#udpconnections tr:hover td, #ntcpconnections tr:hover td {color: var(--ink)}
-#udpconnections tr.tablefooter td {color: var(--ink)}
-#udpconnections tr.tablefooter:hover td {border-top: var(--border_inner)}
-#udpconnections tr.tablefooter td:first-child {padding-left: 9px}
-#udpconnections td[class="cells"]:first-child, #ntcpconnections td[class="cells"]:first-child {width: 50px; white-space: nowrap; text-align: right}
-#ntcpconnections td[class="cells"]:last-child {width: 100px; font-weight: 700}
-#ntcpconnections {overflow-x: scroll}
 
 /* peers - sort icons */
 #ntcpconnections th, #udpconnections th {background: #000010}
@@ -1418,6 +1400,25 @@ a[href^="/profiles"] ~ table > tbody > tr > th {text-align: right}
 a[href^="/profiles"] ~ table > tbody > tr > th:nth-last-child(2) {text-align: center}
 a[href^="/profiles"] ~ table > tbody > tr > th:nth-child(2) {text-align: center}
 a[href^="/profiles"] ~ table > tbody > tr > th:first-child {text-align: center}
+h3[id$="con"] {margin-bottom: -2px; padding: 8px 10px; word-spacing: .1em; letter-spacing: .08em; font-size: 10pt; border: var(--border_inner); border-radius: 0}
+h3[id="udpcon"] {width: auto}
+#ntcpconnections tr, #udpconnections tr, #tunnels tr, #profiles tr {box-shadow: none}
+#ntcpconnections td, #udpconnections td, #tunnels td, #profiles td {box-shadow: var(--highlight), inset 0 0 2px 0 #26235c}
+#ntcpconnections tr:hover td, #udpconnections tr:hover td, #tunnels tr:hover td, #profiles tr:hover td {box-shadow: none}
+#udpconnections {margin-bottom: 10px; overflow-x: auto}
+#udpconnections i {line-height: 1.5; letter-spacing: .1em; font-weight: 700; font-size: 90%}
+#udpconnections tr a img {margin-top: 3px}
+#udpconnections tr:hover, #ntcpconnections tr:hover, #jobstats tr:hover, #schedjobs tr:hover, #jardump tr:hover, #sidebarconf tr:hover, #webappconfig tr:hover td, .tunneldisplay tr:hover td, #profilelist tr:hover, #floodfills tr:hover, .eventspanel tr:hover, #profiles tr:hover td {background: #202; color: #eff1ff}
+#ntcpconnections {overflow-x: scroll}
+#udpconnections td > *, #ntcpconnections td > * {vertical-align: text-bottom}
+#udpconnections td:first-child, #ntcpconnections td:first-child {padding: 4px; width: 1%; white-space: nowrap}
+#udpconnections tr:hover td, #ntcpconnections tr:hover td {color: var(--ink)}
+#udpconnections td[class="cells"]:first-child, #ntcpconnections td[class="cells"]:first-child {width: 50px; white-space: nowrap; text-align: right}
+#ntcpconnections td[class="cells"]:last-child {width: 100px; font-weight: 700}
+#ntcpconnections td.queue:empty::before {content: ""}
+#udpconnections tr.tablefooter td {color: var(--ink)}
+#udpconnections tr.tablefooter:hover td {border-top: var(--border_inner)}
+#udpconnections tr.tablefooter td:first-child {padding-left: 9px}
 
 /* jardump */
 #jardump {padding: 0; overflow: auto}
@@ -1835,7 +1836,6 @@ th code {user-select: all}
 #netdboverview td, .sybil_addresses td {line-height: 1.6}
 #netdb_ram {margin: 0 0 0 -2px; padding: 2px 6px; display: inline-block; font-size: 90%; border: var(--border_badge); border-radius: 2px; box-shadow: var(--highlight); background: var(--element)}
 
-#ntcpconnections td.queue:empty::before {content: ""}
 #profiles .ok, #ntcpconnections td.queue:empty::before {display: inline-block; font-size: 0; width: 12px; height: 12px; background-size: 11px}
 #profiles .version {margin: 0 2px}
 
@@ -2002,7 +2002,7 @@ h3.sybils + div, h3.sybils + a[name] + table {margin-top: -1px}
 #floodfills td:empty {text-align: center}
 #floodfills td:empty::before, #ntcpconnections td:empty::before, #udpconnections td:empty::before, #profilelist td:empty::before {content: "‒"; display: inline-block; opacity: .8; width: 100%; text-align: center}
 #peerprofiles.widescroll {position: relative; padding-top: 102px; margin-top: 0}
-#peer_thresholds {position: absolute; top: 0; width: 100%}
+#peer_thresholds {position: absolute; top: 5px; width: 100%}
 #profile_defs table {border: none}
 #profile_defs tr:first-child td {border-top: none}
 #profile_defs td:nth-child(2)::first-letter {text-transform:uppercase}
@@ -2621,7 +2621,7 @@ h4#updateplugins {margin-top: -15px}
 #netdboverview table th, #netdboverview table td {padding: 7px 8px}
 #newsStatus, #news #newsDisplay a, .newsAuthor {font-size: 9pt}
 #ntcpconnections th, #udpconnections th, #newsDisplay {font-size: 90%}
-#peerprofiles.widescroll {padding-top: 108px}
+#peerprofiles.widescroll {padding-top: 114px}
 .percentBarOuter {width: 210px}
 .percentBarText {margin-top: -2px; width: 230px; font-size: 10pt}
 #pluginconfig {margin-top: -15px}
