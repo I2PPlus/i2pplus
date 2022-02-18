@@ -50,10 +50,14 @@ p.infowarn, td.infowarn {background: #000 url(images/infowarn.png) no-repeat rig
 .sb_info .percentBarText {padding-top: 0; direction: ltr}
 .sb td a, .sb td:first-child {font-size: 10pt}
 #sb_services td, #sb_internals td, #sb_advanced td {text-align: center}
+#sidebar td:first-child, #sb_localtunnels td:nth-child(2) {text-align: right}
+#sidebar td:last-child {text-align: left}
 #sb_localtunnels td:nth-child(2), #sb_localtunnels a {text-align: right}
 #sb_localtunnels td:last-child {text-align: left}
 #sb_bandwidthgraph {margin: -13px -8px 0 0}
 #sb_graphcontainer {background-position: left -72px top -24px}
+#sb_newsheadings td a {font-size: 9pt; font-weight: 700}
+#sb_newsheadings td, #sb_newsheadings tr:hover td {background-position: right 4px center; padding-right: 22px; padding-left: 8px; text-align: right}
 
 /* theme selection */
 .themechoice, .langselect {float: right}
@@ -62,6 +66,10 @@ p.infowarn, td.infowarn {background: #000 url(images/infowarn.png) no-repeat rig
 .themechoice .optbox + img {border: 1px solid transparent}
 .themechoice .optbox + img, .themechoice .optbox:checked + img {margin: 5px; padding: 0}
 .themelabel {margin: 0 -5px -5px}
+
+.tunnel_id:empty + .tunnel_cap {display: inline-block; margin-left: 0; margin-right: 12px}
+.tunnel_local {margin-right: -4px; margin-left: 4px; text-align: center}
+.tunnel_peer {text-align: left}
 
 #advancedsettings p.infohelp {margin: 12px 0 -2px}
 #bandwidthconfig td:first-child:not(.infohelp) {padding: 0 5px 0 80px; background: url(/themes/console/images/info/arrow_left.png) no-repeat 30px center}
@@ -108,8 +116,6 @@ p#helptranslate, #floodfillconfig tr:first-child .infohelp {padding-right: 50px;
 #reseedsetup a {float: left}
 #reseedsetup {margin-left: 16px; margin-right: -16px}
 #reseedurl input[type=text], #reseedzip input[type="file"], #reseedcreatefile p {width: calc(100% - 20px)}
-#sb_newsheadings td a {font-size: 9pt; font-weight: 700}
-#sb_newsheadings td, #sb_newsheadings tr:hover td {background-position: right 4px center; padding-right: 22px; padding-left: 8px; text-align: right}
 #schedjobs td {text-align: center}
 select, select:hover, select:focus, select:active {background-position: left center; padding: 4px 4px 4px 16px}
 #sidebarconf select {margin-right: 0; width: calc(100% - 5px)}
@@ -121,9 +127,6 @@ select, select:hover, select:focus, select:active {background-position: left cen
 #enviro td:first-child {text-align: left}
 textarea[name="trustedKeys"] {direction: ltr}
 #tunnelconfig th {text-align: right}
-.tunnel_id:empty + .tunnel_cap {display: inline-block; margin-left: 0; margin-right: 12px}
-.tunnel_local {margin-right: -4px; margin-left: 4px; text-align: center}
-.tunnel_peer {text-align: left}
 #tunnels.main h3 a {float: left}
 #updateHelper b, #updateProxyHostPort b, #i2pupdates b {text-align: left}
 #wrapperlogs pre, table[id$="logs"] ul, .logtable ul li {direction: ltr; text-align: left}
@@ -165,8 +168,8 @@ div[lang="ar"], div[lang="ar"] code, div[lang="ar"] b {font-size: 11pt}
 .sb table[id^="sb_"], #sb_localtunnels {width: 216px}
 .sb button, .sb .stop, .sb .reload {min-width: 100px}
 .sb td:first-child {max-width: 90px}
-#sb_services {width: 220px}
 .percentBarOuter {width: 210px}
+#sb_services {width: 220px}
 #sb_newsheadings table {width: 218px}
 #sb_newsheadings td:first-child {max-width: 200px; width: 200px}
 #sb_graphcontainer {background-size: 300px 77px}
