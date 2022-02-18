@@ -18,18 +18,20 @@ jobs:
         with:
           java-version: '8'
           distribution: 'temurin'
-      - name : Generate override.properties
+#      - name : Generate override.properties
 #        run: |
 #          rm -f override.properties
 #          echo "build.built-by=GitHub Actions" >> override.properties
 #          echo "noExe=true" >> override.properties
       - name: Build installer with Ant
-        run: ant distclean pkg updaterCompact
+        run: ant distclean pkg
       - name: Upload installer.jar
         uses: actions/upload-artifact@v2
         with:
           name: I2P-install.jar-${{ github.sha }}
           path: install.jar
+      - name: Build installer with Ant
+        run: ant distclean updaterCompact
       - name: Upload i2pupdate.zip
         uses: actions/upload-artifact@v2
         with:
