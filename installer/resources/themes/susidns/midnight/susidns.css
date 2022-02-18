@@ -18,7 +18,7 @@ hr {margin: 5px 0; width: 100%; height: 1px; display: none; text-align: center; 
 a:hover, a:visited:hover {color: var(--a_hover)}
 
 /* topnav */
-#navi {margin: -13px -11px 30px; min-width: 512px; padding: 6px; position: sticky; top: -1px; z-index: 999; text-align: center; font-weight: 700; font-size: 9pt; border-bottom: 1px solid #26235c; box-shadow: var(--highlight); filter: drop-shadow(0 1px 3px #000); background: var(--title); background-size: 4px 100%, 100%}
+#navi {margin: -13px -11px 30px; min-width: 512px; padding: 6px; position: sticky; top: -1px; z-index: 999; text-align: center; font-weight: 700; font-size: 9pt; border-bottom: 1px solid #26235c; box-shadow: var(--bevel); filter: drop-shadow(0 1px 3px #000); background: var(--title); background-size: 4px 100%, 100%}
 .iframed #navi {margin: 0 0 27px; padding: 6px 5px 5px; filter: none}
 #navi a, #navi a:visited {margin: 3px 0; padding: 5px; display: inline-block; outline: none; line-height: 1.2; color: #89f; text-transform: capitalize; text-shadow: 0 1px 1px #000; border: 1px solid #224; border-radius: 1px}
 #navi a:hover, #navi a:focus {color: #a27db7; border: 1px solid #652787; box-shadow: var(--highlight), inset 0 0 1px 1px #717; opacity: 1}
@@ -28,7 +28,7 @@ a:hover, a:visited:hover {color: var(--a_hover)}
 #navi .abook:active {background: #652787 var(--abook_hover) no-repeat 6px center / 14px}
 #navi #subs {padding: 5px 8px 5px 23px; background: var(--subs) no-repeat 6px center / 14px, var(--nav)}
 #navi #subs:hover, #navi #subs:focus {background: var(--subs_hover) no-repeat 6px center / 14px, var(--btn_hover_radial), var(--nav_hover)}
-#navi #subs:active {background: #652787 var(--subs_hover) no-repeat 6px center/ 14px}
+#navi #subs:active {background: #652787 var(--subs_hover) no-repeat 6px center / 14px}
 #navi #configlink {padding: 5px 8px 5px 23px; background: var(--configure) no-repeat 6px center / 14px, var(--nav)}
 #navi #configlink:hover, #navi #configlink:focus {background: var(--configure_hover) no-repeat 6px center / 14px, var(--btn_hover_radial), var(--nav_hover)}
 #navi #configlink:active {background: #652787 var(--configure_hover) no-repeat 6px center/ 14px}
@@ -37,7 +37,8 @@ a:hover, a:visited:hover {color: var(--a_hover)}
 #navi #overview:active {background: #652787 var(--overview_hover) no-repeat 6px center / 14px}
 
 a:visited {color: #4e47bf}
-h3 {padding: 7px 10px; word-spacing: .1em; letter-spacing: .08em; font-size: 10pt; font-weight: 700; color: var(--ink); text-shadow: 0 0 2px #010011; border: 1px solid #26235c; border-radius: 2px; text-transform: uppercase; box-shadow: var(--highlight); background: var(--title)}
+h3 {padding: 7px 10px; word-spacing: .1em; letter-spacing: .08em; font-size: 10pt; font-weight: 700; color: var(--ink); text-shadow: 0 0 2px #010011; border: 1px solid #26235c; border-radius: 2px; text-transform: uppercase; box-shadow: var(--bevel); background: var(--title)}
+#content h3 {box-shadow: none}
 h4 {margin-top: -15px; margin-bottom: 30px; padding: 8px 10px; word-spacing: .1em; font-size: 9pt; border: 1px solid #26235c; background: linear-gradient(90deg, #000, #001)}
 ol, ul {margin: 0 20px 0 10px; padding: 0px 10px; display: table-row}
 li {margin: 0; line-height: 1.5; list-style: square; font-size: 9pt; color: var(--ink)}

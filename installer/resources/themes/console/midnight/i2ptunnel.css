@@ -77,7 +77,7 @@ select[disabled], select[disabled]:hover, select[disabled]:focus, select[disable
 #accesslistDisabled ~ textarea[name="accessList"] {display: none}
 
 /* title images */
-h2, h3 {padding-left: 30px; background-blend-mode: luminosity, normal, normal; background-size: 16px, 4px 100%, 100%}
+h2, h3 {padding-left: 30px; box-shadow: var(--bevel); background-size: 16px, 4px 100%, 100%; background-blend-mode: luminosity, normal, normal}
 .panel:hover h2, .panel:hover h3 {background-blend-mode: normal, normal, normal}
 #messages h2 {background: var(--logs) no-repeat 8px center, var(--title); background-size: 16px, 4px 100%, 100%}
 #globalTunnelControl h2 {background: var(--mouse) no-repeat 8px center, var(--title); background-size: 16px, 4px 100%, 100%}
@@ -157,7 +157,7 @@ button.control {box-sizing: border-box}
 input, select, button {font-size: 9pt; vertical-align: middle}
 input {float: none; vertical-align: middle}
 select {text-align: left; color: var(--a)}
-.buttons, .newTunnel {padding: 7px 5px; text-align: right; border-top: var(--border); box-shadow: var(--highlight), inset 0 0 2px 1px #191939, inset 0 0 5px 3px #002; background: linear-gradient(180deg,#001,#000)}
+.buttons, .newTunnel {padding: 7px 5px; text-align: right; border-top: var(--border); box-shadow: var(--bevel); background: linear-gradient(180deg,#001,#000)}
 .tunnelDestinationLabel {margin-right: 3px; min-width: 150px; display: inline-block; white-space: nowrap; text-align: right}
 #hostField, #leasesetKey, #userAgents {margin: 0; width: 90%; text-align: left}
 #tunnelDepth, #tunnelVariance, #tunnelQuantity, #tunnelBackupQuantity,
@@ -234,7 +234,7 @@ input.tunnelName, input.tunnelDescriptionText, #userAgents, .tunnelDescription, 
 #wizardPanel .infohelp p {margin: 0; padding: 0 10px 0 5px}
 
 /* more space */
-.tunnelConfig td, tr:not(.tunnelInfo) td {padding: 6px 5px; border-top: 1px solid #17142f}
+.tunnelConfig td, tr:not(.tunnelInfo) td:not(.buttons) {padding: 6px 5px; border-top: 1px solid #17142f}
 .tunnelInfo td {border: none}
 .tunnelProperties + tr td {padding-top: 8px}
 .tunnelProperties + tr + tr td {padding-top: 0; padding-bottom: 8px}

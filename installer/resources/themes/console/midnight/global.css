@@ -12,7 +12,7 @@
   --a_hover: #bf2295;
   --active: #fc1c66;
   --badge: linear-gradient(180deg,#080818 50%,#000 50%);
-  --text_focus: linear-gradient(180deg,#002,#000028);
+  --bevel: var(--highlight), inset 0 0 2px 1px #272759, inset 0 0 5px 3px #002;
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
   --border: 1px solid #26235c;
   --border_hover: 1px solid #83529f;
@@ -44,7 +44,8 @@
   --radial_glow_top: radial-gradient(at center -50px, rgba(96, 0, 96, .4), rgba(0, 0, 0, 0) 85%);
   --row: linear-gradient(180deg,#040414,#010010);
   --sb_bg: repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(4,4,32,.5) 4px), repeating-linear-gradient(180deg,rgba(0,0,0,.5) 2px, rgba(4,4,32,.5) 4px);
-  --th: repeating-linear-gradient(180deg, rgba(0,0,48,.5) 2px, rgba(0,0,16,.9) 4px) left center / 4px 100%, repeating-linear-gradient(90deg, #000018 2px, #000 4px) left center / 100% 4px;
+  --th: repeating-linear-gradient(180deg, rgba(0,0,72,.3) 2px, rgba(0,0,0,.4) 4px) center center / 100% 4px, repeating-linear-gradient(90deg, #002 2px, #000 4px) center center / 4px 100%;
+  --text_focus: linear-gradient(180deg,#002,#000028);
   --titlebg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 2'%3E%3Cpath fill='%23000018' d='M0 0h1v1H0z'/%3E%3Cpath d='M0 1h1v1H0z'/%3E%3C/svg%3E");
   --title: repeating-linear-gradient(90deg, rgba(0,0,48,.4) 2px, #000 4px), var(--titlebg) repeat center center / 100%, #001;
 }
