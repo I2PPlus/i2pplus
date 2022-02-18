@@ -53,6 +53,7 @@ table hr {margin: 0 0; padding: 0 0; height: 1px; display: none; color: #26235c;
 table {margin: 1px 0; padding: 1px; width: 100%; font-size: 9pt; border-collapse: collapse; border: var(--border_inner)}
 table tt, #jardump td:nth-child(4) {color: #393}
 th {padding: 6px 2px; line-height: 1.1; text-align: center; font-size: 9pt; color: var(--ink); border-top: var(--border_inner); border-bottom: var(--border_inner); background: var(--th); background-size: 100% 4px, 4px 100%}
+th code {user-select: all}
 tr {vertical-align: middle; box-shadow: var(--highlight), inset 0 0 2px 1px #00003a; contain: layout}
 tr:hover {box-shadow: none}
 tt {font: bold 8.5pt var(--monospaced); color: #393}
@@ -74,6 +75,18 @@ a[name="chelp"], a[name="help"] {pointer-events: none}
 #newtab {margin-top: 2px; float: right; letter-spacing: 0; text-align: right; font-size: 8pt}
 #newtab:hover {filter: drop-shadow(0 0 3px var(--hover))}
 .infohelp tt {font-size: 9pt}
+form > table {font-size: 9pt}
+.inbound {background: var(--in) no-repeat center center}
+.outbound {background: var(--out) no-repeat center center}
+.inbound, .outbound {display: inline-block; width: 16px; height: 16px; vertical-align: middle; background-size: 16px}
+.viewedit br {display: none}
+.viewedit .configpeer:hover, .viewedit .configpeer:focus {background: var(--edit_hover) no-repeat center center / 12px, var(--element)}
+.viewprofile, .configpeer, .familysearch {margin: 1px 2px; padding: 4px; width: 12px; height: 12px; vertical-align: middle; display: inline-block; line-height: 0; font-size: 0; border: var(--border_badge); box-shadow: var(--highlight); background: var(--element)}
+.viewprofile {background: var(--eye) no-repeat center center / 12px, var(--element)}
+.viewprofile:hover, .familysearch:hover, .configpeer:hover, .viewprofile:focus, .familysearch:focus, .configpeer:focus {border: 1px solid var(--a)}
+.viewprofile:hover, .viewprofile:focus {background: var(--eye_hover) no-repeat center center / 12px, var(--element)}
+.configpeer {background: var(--edit) no-repeat center center / 12px, var(--element)}
+.familysearch {background: var(--family) no-repeat center center / 12px, var(--element)}
 
 /* standard buttons and inputs */
 #sidebar h3:hover {background: linear-gradient(90deg, rgba(64,0,64,.1), rgba(96,0,96,.2), rgba(64,0,64,.1)), linear-gradient(180deg,#1d1a2d 50%, #000 50%)}
@@ -351,7 +364,8 @@ a:active #sb_graphstats {border-color: var(--active)}
 #sb_graphcontainer::before {position: absolute; top: 2px; left: -1px; width: 100%; height: 40px; content: ""; display: inline-block; background: linear-gradient(180deg,rgba(0,0,0,0), rgba(0,0,0,0), rgba(0,0,0,.3)); pointer-events: none; will-change: transform}
 
 /* status bar */
-.percentBarOuter {margin: -3px 0 -6px -6px; width: 194px; position: relative; border: var(--border_inner); box-shadow: var(--highlight), inset 0 2px 2px 2px rgba(0,0,0,.45); background: repeating-linear-gradient(90deg, #000 1px, #000 2px, #003 2px, #003 4px); opacity: 1}
+.percentBarOuter {position: relative; vertical-align: middle; border: var(--border_inner); box-shadow: var(--highlight), inset 0 2px 2px 2px rgba(0,0,0,.45); background: repeating-linear-gradient(90deg, #000 1px, #000 2px, #003 2px, #003 4px); opacity: 1}
+#sidebar .percentBarOuter {margin: -3px 0 -6px -6px; width: 194px}
 .percentBarOuter:hover .percentBarText {opacity: 1; transition: ease opacity .2s}
 .percentBarInner {height: 14px; max-width: 100%; box-shadow: var(--highlight), inset 0 -2px 4px rgba(0,0,0,.6); background: linear-gradient(90deg, rgba(0,0,0,0) 100px, rgba(255,0,255,.1) 160px, rgba(0,0,255,.15)), linear-gradient(180deg, #33a, #226 50%, #003 50%, #000)}
 #sb_memoryBar .percentBarInner {background: var(--membarinner)}
@@ -544,7 +558,6 @@ form[action="graphs"], form[action="/updategraphs"] {margin-top: -11px; margin-b
 td img[src$="c=a1"], td img[src$="c=a2"] {filter: drop-shadow(0 0 1px #337)}
 
 .main li:last-child {padding-bottom: 15px}
-.statusnotes {font-style: italic; font-size: 9pt; color: var(--ink); text-align: center; border: var(--border_inner); margin: -3px 0 5px 0; padding: 7px; background: linear-gradient(180deg,#010014, #010010 50%)}
 .joblog {border-radius: 2px 2px 0 0; overflow-y: hidden; margin-top: 10px}
 .joblog h3 {margin-top: 10px}
 .joblog table {margin-top: 15px; margin-left: 0; margin-bottom: 15px}
@@ -1200,15 +1213,6 @@ li.noevents {margin-top: 0; margin-bottom: 10px}
 .statsLongName {color: #37a3df; font-weight: 700}
 p#gatherstats {margin-top: 1px; margin-bottom: 25px}
 
-#exploratorytunnels {margin-top: 15px}
-h3.tabletitle + .statusnotes, table.tunneldisplay {margin-top: -1px}
-.statusnotes + .statusnotes {margin-top: -6px}
-.statusnotes:last-of-type {margin-bottom: 10px}
-form > table {font-size: 9pt}
-.inbound {background: var(--in) no-repeat center center}
-.outbound {background: var(--out) no-repeat center center}
-.inbound, .outbound {display: inline-block; width: 16px; height: 16px; vertical-align: middle; background-size: 16px}
-
 /* netdb (main section) */
 #netdb #pagenav ~ #pagenav {display: none}
 #netdboverview {margin: -4px auto 8px; background: repeating-linear-gradient(180deg,rgba(0,0,0,.7) 2px, rgba(0,0,16,.5) 4px); background-size: 100% 4px}
@@ -1720,17 +1724,21 @@ h3 .b32 {font-size: inherit}
 img + tt {letter-spacing: .15em}
 .routerid tt {min-width: 32px; display: inline-block; letter-spacing: .15em; text-align: center}
 .routerid tt, .routerid a tt {font-weight: 700}
-.tunnel_cap {margin: 1px 2px; padding: 2px 3px; min-width: 14px; display:inline-block; color: var(--ink); text-align: center; text-shadow: 0 1px 1px #000; border: 1px solid rgba(0,0,64,.2); border-radius: 2px; background: var(--element)}
+.tunnel_cap, .tier, .ff, .unreachable, .reachable, #capabilities_key b {margin: 1px 2px; padding: 2px 4px; display: inline-block; min-width: 16px; vertical-align: middle; text-align: center; border: var(--border_badge); text-shadow: 0 1px 1px #000; border-radius: 1px; box-shadow: var(--highlight); background: var(--element)}
+.tunnel_cap {padding: 2px 3px; color: var(--ink)}
 .tunnel_cap:empty {border: none}
 .tunnel_cap:empty::after {content: "?"}
 .tunnel_id {margin-left: 6px; padding-left: 13px; min-width: 78px; display: inline-block; text-align: center; background: var(--hardhat) no-repeat left center / 12px}
 .tunnel_local, span.b32, .routerid {margin-right: 2px; padding: 2px; min-width: 64px; display: inline-block; vertical-align: middle; border: var(--border_badge); border-radius: 1px; box-shadow: var(--highlight); background: var(--element)}
 span.b32 {margin: -2px 6px -2px 0; padding: 3px 8px; min-width: auto; line-height: 1}
-.tunnel_local {padding: 4px 2px; font-size: 8pt; text-transform: lowercase}
+.tunnel_local {padding: 2px; font-size: 80%; text-transform: lowercase}
 .tunnel_peer img, .routerid img {margin: 2px 4px -2px 2px; display: inline-block}
 .tunnel_peer tt {margin-left: 2px; display: inline-block}
 #tunnel_defs {margin-top: -1px; margin-bottom: 10px}
-#tunnel_defs td:first-child, #tunnel_defs td:nth-child(even) {width: 1%; white-space: nowrap}
+#tunnel_defs td {padding: 8px}
+#tunnel_defs td:first-child {display: none !important}
+#tunnel_defs td:nth-child(even) {width: 1%; white-space: nowrap}
+#tunnel_defs td:nth-last-child(2) {border-right: none !important}
 #tunnels h3.client {padding-left: 34px; background: var(--client) no-repeat 8px center, var(--title); background-size: 19px, 4px 100%, 100%}
 #tunnels h3 {padding-top: 8px; padding-bottom: 8px}
 #tunnels h3:last-of-type {padding-left: 34px; background: var(--speed) no-repeat 8px center, var(--title); background-size: 19px, 4px 100%, 100%}
@@ -1739,9 +1747,18 @@ span.b32 {margin: -2px 6px -2px 0; padding: 3px 8px; min-width: auto; line-heigh
 #tunnels h3.server {padding-left: 34px; background: var(--server) no-repeat 8px center, var(--title); background-size: 19px, 4px 100%, 100%}
 #tunnels #exploratory {padding-left: 34px; background: var(--globe) no-repeat 8px center, var(--title); background-size: 19px, 4px 100%, 100%}
 #tunnels #participating {padding-left: 34px; background: var(--share) no-repeat 8px center, var(--title); background-size: 19px, 4px 100%, 100%}
-#tunnels th {padding: 5px 2px}
-#tunnels td > * {text-align: center}
+#tunnels th {padding: 7px 2px 8px; font-size: 90%}
+#tunnels td {padding: 5px 2px}
 #tunnels .tunneldisplay .cells:nth-child(3) {white-space: nowrap}
+#tunnels .tab, #tunnels .tab2 {min-width: 140px}
+#tunnels img {font-size: 0}
+.tunneldisplay .cells {padding-top: 6px; padding-bottom: 6px}
+.tunnel_peer {margin-left: 5px}
+#exploratorytunnels {margin-top: 15px}
+.statusnotes {margin: -3px 0 5px 0; padding: 11px 10px 10px; font-size: 9pt; font-style: italic; text-align: center; border: var(--border_inner); box-shadow: var(--highlight); background: var(--notes)}
+h3.tabletitle + .statusnotes, table.tunneldisplay {margin-top: -1px}
+.statusnotes + .statusnotes {margin-top: -6px}
+.statusnotes:last-of-type {margin-bottom: 10px}
 
 /* peers */
 .cells.mtu {white-space: nowrap}
@@ -1751,6 +1768,8 @@ span.b32 {margin: -2px 6px -2px 0; padding: 3px 8px; min-width: auto; line-heigh
 .reachability {float: right; word-spacing: 0; letter-spacing: 0; text-transform: none; font-size: 80%}
 span.left, span.right {margin: 0 1px; width: 40%; display: inline-block}
 .tx .right, .rx .right, .duptx .right, .duprx .right, .cwnd .left, .cwnd .right {width: auto}
+#peers .routerid, #profiles .routerid {padding: 3px 2px; display: inline-block; vertical-align: middle; border: var(--border_badge); border-radius: 2px; background: var(--element)}
+#peers .routerid img, #profiles .routerid img {margin-right: 0}
 #peers .cells {box-shadow: none}
 #peers img[src$="bound.svg"], #profiles img[src$="bound.svg"], #tunnels img[src$="bound.svg"] {opacity: 0}
 #peers p.infohelp {margin-top: 14px}
@@ -1771,8 +1790,7 @@ span.left, span.right {margin: 0 1px; width: 40%; display: inline-block}
 #peerdefs td {padding: 3px}
 #peerdefs ul {margin: 0; width: 100%; display: inline-block; columns: 500px auto; column-gap: 0}
 
-/* netdb router address info */
-
+/* netdb */
 b.netdb_transport {display: inline-block; margin-right: 5px}
 .leasesets_container {columns: 550px 2; column-gap: 10px}
 .leasesets_container table {-webkit-column-break-inside: avoid; break-inside: avoid; page-break-inside: avoid}
@@ -1787,15 +1805,6 @@ b.netdb_transport {display: inline-block; margin-right: 5px}
 .netdb_header {margin: 0; min-width: 100px; display: inline-block; vertical-align: middle; white-space: nowrap}
 .netdb_info {margin-right: 1px}
 .netdb_name {color: #dfe2ff; text-transform: capitalize; font-weight: 700}
-th code {user-select: all}
-.viewedit br {display: none}
-.viewedit .configpeer:hover, .viewedit .configpeer:focus {background: var(--edit_hover) no-repeat center center / 12px, var(--element)}
-.viewprofile, .configpeer, .familysearch {margin: 1px 2px; padding: 4px; width: 12px; height: 12px; vertical-align: middle; display: inline-block; line-height: 0; font-size: 0; border: var(--border_badge); box-shadow: var(--highlight); background: var(--element)}
-.viewprofile {background: var(--eye) no-repeat center center / 12px, var(--element)}
-.viewprofile:hover, .familysearch:hover, .configpeer:hover, .viewprofile:focus, .familysearch:focus, .configpeer:focus {border: 1px solid var(--a)}
-.viewprofile:hover, .viewprofile:focus {background: var(--eye_hover) no-repeat center center / 12px, var(--element)}
-.configpeer {background: var(--edit) no-repeat center center / 12px, var(--element)}
-.familysearch {background: var(--family) no-repeat center center / 12px, var(--element)}
 #netdb td {border-right: none}
 #netdb code {font-weight: 400}
 
@@ -1961,11 +1970,7 @@ h3.sybils + div, h3.sybils + a[name] + table {margin-top: -1px}
 #sybilnav ul li#floodfillSummary::before {background: var(--floodfill) no-repeat center center; background-size: 16px}
 #sybilnav ul li#sameFamily::before {background: var(--family) no-repeat center center; background-size: 16px}
 
-.statusnotes {padding-top: 9px; padding-bottom: 9px; box-shadow: var(--highlight); background: linear-gradient(90deg, rgba(0,0,24,.6), rgba(0,0,8,.6), rgba(0,0,24,.6)), var(--label)}
-.tunneldisplay .cells {padding-top: 6px; padding-bottom: 6px}
-.tunnel_peer {margin-left: 5px}
 #cputype {display: inline-block; margin: -2px 2px -2px 0; padding: 2px 5px; font-weight: 700; text-transform: uppercase; border-radius: 2px; background: #005}
-#tunnels th {padding-top: 7px; padding-bottom: 8px}
 #stats ul ul {box-shadow: none; background: none}
 #wrapperlogs pre {max-height: 500px; resize: none}
 
@@ -1979,13 +1984,6 @@ h3.sybils + div, h3.sybils + a[name] + table {margin-top: -1px}
 #tunnelconfig th img {font-size: 0}
 #tunnelconfig th {text-align: left}
 #url td:first-child {padding: 15px 25px 15px 55px; border-right: none; background: var(--link) no-repeat 15px center / 28px}
-
-/* tunnels */
-#tunnels .tab, #tunnels .tab2 {min-width: 140px}
-#tunnels img {font-size: 0}
-#peers .routerid, #profiles .routerid {padding: 3px 2px; display: inline-block; vertical-align: middle; border: var(--border_badge); border-radius: 2px; background: var(--element)}
-#peers .routerid img, #profiles .routerid img {margin-right: 0}
-.tunnel_cap, .tier, .ff, .unreachable, .reachable, #capabilities_key b{margin: 1px 2px; padding: 2px 4px; display: inline-block; min-width: 16px; vertical-align: middle; text-align: center; border: var(--border_badge); border-radius: 1px; box-shadow: var(--highlight); background: var(--element)}
 
 /* profiles */
 
