@@ -48,6 +48,7 @@
 
 html, body {
   min-height: 100%;
+  color: var(--ink);
   scrollbar-color: #225 #001;
 }
 
