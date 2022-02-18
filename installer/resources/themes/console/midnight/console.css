@@ -22,9 +22,8 @@ small {font-size: 9pt}
 #sidebar img[src$="i2plogo.png"], #sidebar h3, .confignav, *::before, *::after, h1, h2, h3, h4, .applink, .clearer, #sidebar img, .formaction, label, #themeoptions, #helptranslate, #consolepass, .applink, #sitemapcontainer {user-select: none}
 img {border: none}
 pre {width: 98%; overflow-x: auto; text-align: left; font: 8.5pt var(--monospaced); color: var(--ink)}
-.main {margin: -1px 3px 5px 212px; padding: 0 10px; width: auto; min-width: 620px; position: relative; text-align: left; font-size: 9pt; color: var(--ink); border: var(--border); box-shadow: var(--highlight), inset 0 0 2px 1px #26235c; background: repeating-linear-gradient(90deg, rgba(0,0,0,.4) 2px, rgba(4,4,32,.5) 4px), repeating-linear-gradient(180deg,rgba(0,0,0,.6) 2px, rgba(4,4,32,.5) 4px); background-size: 4px 100%, 100% 4px}
-.main, .news {box-shadow: 0 1px 5px #000, var(--highlight), inset 0 0 2px 1px #212}
-.main:not(#home):not(#sitemap) td {border-top: var(--border_soft); border-right: var(--border_soft)}
+.main {margin: -1px 3px 5px 212px; padding: 0 10px; width: auto; min-width: 620px; position: relative; text-align: left; font-size: 9pt; color: var(--ink); border: var(--border); background: repeating-linear-gradient(90deg, rgba(0,0,0,.4) 2px, rgba(4,4,32,.5) 4px), repeating-linear-gradient(180deg,rgba(0,0,0,.6) 2px, rgba(4,4,32,.5) 4px); background-size: 4px 100%, 100% 4px}
+ .main:not(#home):not(#sitemap) td {border-top: var(--border_soft); border-right: var(--border_soft)}
 .main:not(#home):not(#sitemap) td:first-child {border-left: var(--border_inner)}
 .main:not(#home):not(#sitemap) tr:first-child td {border-top: var(--border_inner)}
 .main:not(#home):not(#sitemap) td:last-child {border-right: var(--border_inner)}
@@ -32,7 +31,7 @@ pre {width: 98%; overflow-x: auto; text-align: left; font: 8.5pt var(--monospace
 a:link tt, a:visited tt {color: #4e47bf}
 a:active tt {color: #9fe9f9}
 code {text-align: left; font: 9pt var(--monospaced); color: #393}
-h1, h2, h3, h4, .confignav {box-shadow: var(--bevel)}
+h1, h2, h3, h4, .confignav, .main, .news {box-shadow: var(--bevel)}
 h1, h2, h3, .th_title {background: var(--title); background-size: 4px 100%, 100%}
 h1 {margin: 0 3px 0 212px; padding: 13px 15px 12px; min-width: 610px; position: relative; z-index: 999; line-height: 1.2; letter-spacing: .15em; text-align: left; text-transform: uppercase; white-space: normal; font-size: 17pt; font-weight: 700; font-style: normal; color: var(--ink); text-shadow: 0 0 2px #010011; border: var(--border)}
 h2, h2.welcome {font-size: 12pt; color: var(--ink); text-shadow: 0 0 2px #010011; letter-spacing: .05em; padding: 10px; border: var(--border_inner); border-radius: 2px; vertical-align: middle; margin: 15px 0 12px 0; text-transform: uppercase; word-wrap: break-word}
@@ -40,8 +39,7 @@ h2 a:hover {color: var(--hover)}
 h2 a[name]:hover, h2 a[name]:active {color: var(--ink)}
 h2 a:visited {color: #190f9b}
 h3 {position: relative; z-index: 10; overflow: hidden}
-h3, h3.welcome, div.news h3 {margin: 10px 0 10px 0; padding: 7px 10px; letter-spacing: .08em; text-transform: uppercase; text-shadow: 0 0 2px #010011; border: var(--border_inner); border-left: 5px solid #26235c; border-radius: 0 2px 2px 0}
-div.news h3 {padding: 6px 0; box-shadow: none}
+h3, h3.welcome, .news h3 {margin: 10px 0 10px 0; padding: 7px 10px; letter-spacing: .08em; text-transform: uppercase; text-shadow: 0 0 2px #010011; border: var(--border_inner)}
 h4 {border-bottom: 1px; border-bottom-style: solid; border-bottom-color: #26235c; padding: 0 0 10px 0; margin: 5px 0 10px 0; font-size: 11pt}
 ol {padding: 1px 0 0 20px; display: inline}
 ol li:first-child {margin-top: 10px}
@@ -430,19 +428,17 @@ div[id^="config_"].main {padding-bottom: 14px}
 #newsDisplay a:hover, #newsDisplay a:focus, #graphopts a:hover, #graphopts a:focus, #routerinfo a:hover, #routerinfo a:focus, .graphstat:hover, .graphstat:focus, #routerinformation tr:nth-child(n+2) a:not(#revision):hover, #routerinformation tr:nth-child(n+2) a:not(#revision):focus {color: var(--a_hover); text-shadow: 0 1px 1px #000; border: 1px solid #000; box-shadow: 0 0 1px #000, inset 0 0 0 1px #303; background: var(--btn_hover); transition: ease box-shadow .05s}
 #newsDisplay a {line-height: 1.2}
 #newsDisplay {white-space: nowrap; margin-left: 10px}
-.news h3, #newspage h3 {padding-left: 30px; text-align: left; font-size: 9.5pt; letter-spacing: .08em; color: var(--ink); padding: 6px 10px 6px 30px; background: var(--news) no-repeat left 8px center, var(--title); background-size: 16px, 4px 100%, 100%}
-.news h3 {padding-left: 23px; font-size: 11pt; border: none; border-bottom: var(--border_inner); background: var(--news) no-repeat left 1px center / 16px}
 .news h4 {border-bottom: 1px; border-bottom-style: dotted; border-bottom-color: #26235c; padding: 0 0 0 0; margin: 5px 0 10px 0; font-size: 10pt; opacity: 1; text-transform: capitalize}
-.news hr {margin: 8px -20px 5px}
-.news {margin: -1px 3px 0 212px; padding: 6px 20px 5px; min-width: 600px; position: relative; z-index: 10; text-align: right; font-size: 8pt; border: var(--border); box-shadow: 0 1px 5px #000; background: #000 var(--earth) no-repeat scroll bottom right; background-size: auto 200px}
-#news .newscontent {border: var(--border_inner); margin: -11px 0 10px; padding: 1px 12px 6px; border-radius: 0 0 2px 2px; box-shadow: var(--highlight), inset 0 0 2px 1px #191939, inset 0 0 5px 3px #001; background: var(--earth) right -50px bottom -50px no-repeat, linear-gradient(135deg, #000010, #000); background-size: 100px auto, 100%}
+.news hr {margin: 18px -20px 6px}
+.news {margin: -1px 3px 0 212px; padding: 6px 20px 10px; min-width: 600px; position: relative; z-index: 10; text-align: right; font-size: 8pt; border: var(--border); box-shadow: 0 1px 5px #000; background: #000 var(--earth) no-repeat scroll bottom right; background-size: auto 200px}
+#news .newscontent {border: var(--border_inner); margin: -11px 0 10px; padding: 10px 25px 15px; box-shadow: var(--bevel); background: var(--earth) right -50px bottom -50px no-repeat, linear-gradient(135deg, #000010, #000); background-size: 100px auto, 100%}
 #news #newsDisplay, #graphopts {color: transparent}
 .news #newsDisplay, .news #newsStatus {margin-top: 3px; display: inline-block}
 #news #newsDisplay {margin-right: -10px; padding: 0 0 3px}
 .news .newsentry:first-child {margin-top: -10px}
-#news .newsentry:first-child {margin-top: -3px}
-#news .newsentry h3 {border: var(--border_inner); border-radius: 2px 2px 0 0}
 #news .newsentry:last-child {margin-bottom: -5px}
+#news.news .newsentry:first-child {margin-top: 13px}
+#news.news .newsentry:last-child {margin-bottom: 18px}
 #news .newsentry {margin-bottom: 14px}
 .news .newsentry {margin-top: -3px}
 #news #newsStatus {padding-top: 2px; margin-left: -10px}
@@ -452,6 +448,9 @@ div[id^="config_"].main {padding-bottom: 14px}
 #newsStatus, #news #newsDisplay, #news #newsDisplay a, #graphopts a, #routerinfo a {display: inline-block}
 #newsStatus, #news #newsDisplay a {font-size: 8pt}
 #newsStatus {float: left; color: var(--ink)}
+.news h3, #newspage h3 {padding-left: 30px; text-align: left; font-size: 9.5pt; letter-spacing: .08em; color: var(--ink); padding: 6px 10px 6px 30px; background: var(--news) no-repeat left 8px center, var(--title); background-size: 16px, 4px 100%, 100%}
+.news h3 {font-size: 11pt; border: none; border-bottom: var(--border_inner); background: var(--news) no-repeat 8px center / 16px}
+#news .newsentry h3 {border: var(--border_inner)}
 
 #config_ui, #netdb {padding-bottom: 3px}
 
@@ -1609,7 +1608,6 @@ p#upnpstatus {margin-top: 10px; padding-left: 50px}
 #searchbar button, #searchbar select {margin: 0}
 #searchbar button:hover, #searchbar select:hover, #searchbar button:focus, #searchbar select:focus {box-shadow: var(--highlight)}
 #searchbar select {margin: 0; padding: 6px 24px 6px 6px; width: 164px; position: absolute; left: 4px; top: 4px}
-#searchbar select:hover, #searchbar select:focus {border: 1px solid transparent}
 #searchbar input.search {margin: 4px 4px 3px 167px; padding-left: 10px; padding-right: 44px; min-width: 240px; border: var(--border); border-left: none}
 #searchbar input.search:not(:hover)::placeholder {opacity: 0}
 #searchbar input.search:focus {padding-right: 43px; border: var(--border); filter: none}
@@ -2581,8 +2579,7 @@ img.app, img#sitelinksp {margin-top: -5px; padding: 14px 61px 44px}
 .main button, .main input, select {font-size: 10pt}
 .main[id^="config_"] th, h4#updateplugins {font-size: 9.5pt}
 .main, .news, h1, #warning.sorry, #warning2.sorry {margin-left: 248px}
-.newsAuthor {padding-left: 19px; background-size: 15px}
-.news hr {margin-bottom: 6px}
+.news hr {margin-bottom: 10px}
 .news #newsStatus, .news #newsDisplay {padding-top: 2px; padding-bottom: 4px; display: inline-block}
 .sorry {margin-left: 232px}
 .subheading b {font-size: 10.5pt}
