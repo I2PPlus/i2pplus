@@ -22,19 +22,12 @@ small {font-size: 9pt}
 #sidebar img[src$="i2plogo.png"], #sidebar h3, .confignav, *::before, *::after, h1, h2, h3, h4, .applink, .clearer, #sidebar img, .formaction, label, #themeoptions, #helptranslate, #consolepass, .applink, #sitemapcontainer {user-select: none}
 img {border: none}
 pre {width: 98%; overflow-x: auto; text-align: left; font: 8.5pt var(--monospaced); color: var(--ink)}
-.main {margin: -1px 3px 5px 212px; padding: 0 10px; width: auto; min-width: 620px; position: relative; text-align: left; font-size: 9pt; color: var(--ink); border: var(--border); background: var(--bg_main)}
- .main:not(#home):not(#sitemap) td {border-top: var(--border_soft); border-right: var(--border_soft)}
-.main:not(#home):not(#sitemap) td:first-child {border-left: var(--border_inner)}
-.main:not(#home):not(#sitemap) tr:first-child td {border-top: var(--border_inner)}
-.main:not(#home):not(#sitemap) td:last-child {border-right: var(--border_inner)}
-.main:not(#home):not(#sitemap) tr:last-child td {border-bottom: var(--border_inner)}
-.main#home {padding-bottom: 3px}
 a:link tt, a:visited tt {color: #4e47bf}
 a:active tt {color: #9fe9f9}
 code {text-align: left; font: 9pt var(--monospaced); color: #393}
-h2, h3, h4, .main, .news {box-shadow: var(--bevel)}
+h2, h3, h4 {box-shadow: var(--bevel)}
 h1, h2, h3, .th_title {background: var(--title); background-size: 4px 100%, 100%}
-h1, .confignav {box-shadow: var(--bevel_h1)}
+h1, .confignav, .main, .news {box-shadow: var(--bevel_h1)}
 h1 {margin: 0 3px 0 212px; padding: 13px 15px 12px; min-width: 610px; position: relative; z-index: 999; line-height: 1.2; letter-spacing: .15em; text-align: left; text-transform: uppercase; white-space: normal; font-size: 17pt; font-weight: 700; font-style: normal; color: var(--ink); text-shadow: 0 0 2px #010011; border: var(--border)}
 h2, h2.welcome {font-size: 12pt; color: var(--ink); text-shadow: 0 0 2px #010011; letter-spacing: .05em; padding: 10px; border: var(--border_inner); border-radius: 2px; vertical-align: middle; margin: 15px 0 12px 0; text-transform: uppercase; word-wrap: break-word}
 h2 a:hover {color: var(--hover)}
@@ -42,7 +35,7 @@ h2 a[name]:hover, h2 a[name]:active {color: var(--ink)}
 h2 a:visited {color: #190f9b}
 h3 {position: relative; z-index: 10; overflow: hidden}
 h3, h3.welcome, .news h3 {margin: 10px 0 10px 0; padding: 7px 10px; letter-spacing: .08em; text-transform: uppercase; text-shadow: 0 0 2px #010011; border: var(--border_inner)}
-h4 {border-bottom: 1px; border-bottom-style: solid; border-bottom-color: #26235c; padding: 0 0 10px 0; margin: 5px 0 10px 0; font-size: 11pt}
+h4 {margin: 5px 0 10px; padding: 0 0 10px; font-size: 11pt; border-bottom: 1px; border-bottom-style: solid; border-bottom-color: #26235c}
 ol {padding: 1px 0 0 20px; display: inline}
 ol li:first-child {margin-top: 10px}
 ul {margin: 0; padding: 0}
@@ -55,15 +48,23 @@ table tt, #jardump td:nth-child(4) {color: #393}
 th {padding: 6px 2px; line-height: 1.1; text-align: center; font-size: 9pt; color: var(--ink); border-top: var(--border_inner); border-bottom: var(--border_inner); background: var(--th); background-size: 100% 4px, 4px 100%}
 th code {user-select: all}
 tr {vertical-align: middle; box-shadow: var(--highlight), inset 0 0 2px 1px #00003a; contain: layout}
+td {padding: 5px}
 tr:hover {box-shadow: none}
 tt {font: bold 8.5pt var(--monospaced); color: #393}
 .wideload {margin: 0}
 .widescroll {overflow: auto}
 .widescroll table {white-space: nowrap}
 .nowrap {white-space: nowrap}
-.underline {border-bottom: 1px solid #efeeff; padding: 5px 0 5px 0; margin: 0 0 10px 0}
+.underline {margin: 0 0 10px; padding: 5px 0; border-bottom: 1px solid #efeeff}
 hr {color: rgba(38, 35, 92,.7); background: rgba(38, 35, 92,.7); height: 1px; border: 0 solid rgba(38, 35, 92,.7); margin: 20px 0 10px}
 hr:last-child {margin-top: 20px; margin-bottom: 20px}
+.main {margin: -1px 3px 5px 212px; padding: 0 10px; width: auto; min-width: 620px; position: relative; text-align: left; font-size: 9pt; color: var(--ink); border: var(--border); background: var(--bg_main)}
+ .main:not(#home):not(#sitemap) td {border-top: var(--border_soft); border-right: var(--border_soft)}
+.main:not(#home):not(#sitemap) td:first-child {border-left: var(--border_inner)}
+.main:not(#home):not(#sitemap) tr:first-child td {border-top: var(--border_inner)}
+.main:not(#home):not(#sitemap) td:last-child {border-right: var(--border_inner)}
+.main:not(#home):not(#sitemap) tr:last-child td {border-bottom: var(--border_inner)}
+.main#home {padding-bottom: 3px}
 div[id^="config_"] td {padding-left: 10px; padding-right: 10px}
 .widepanel h3 {padding: 6px 10px; text-align: left; text-transform: uppercase; font-size: 10.5pt; letter-spacing: .08em; word-spacing: .1em; border: var(--border_inner); border-radius: 0}
 a[name="chelp"], a[name="help"] {pointer-events: none}
@@ -312,7 +313,7 @@ p:empty + .sb_notice {margin-top: 10px}
 .sb_notice + p:empty + form {margin-top: 9px}
 #sidebar form:first-child {margin: 6px 0 -5px 0}
 #sidebar p {padding: 0}
-.refresh {margin-top: -10px; margin-bottom: -4px; padding: 2px 0 0 0}
+.refresh {margin-top: -10px; margin-bottom: -4px; padding: 2px 0 0}
 #sidebar a {padding: 1px 2px; display: inline-block; line-height: 1.2; word-spacing: 0}
 #sidebar #sb_advancedgeneral a, #sidebar #sb_general a, #sidebar #sb_shortgeneral a {padding: 0; display: inline-block}
 #sidebar a:hover {color: var(--a_hover)}
@@ -360,10 +361,10 @@ p:empty + .sb_notice {margin-top: 10px}
 #sb_graphstats {padding: 2px 8px; display: inline-block; position: relative; z-index: 1000; font-weight: 700; border: var(--border_hover); border-top: none; background: #001; opacity: 0; transition: ease opacity .3s}
 a:active #sb_graphstats {border-color: var(--active)}
 #sb_graphcontainer:hover #sb_graphstats {opacity: 1; transition: ease opacity .3s}
-#sb_graphcontainer {margin: -4px -7px -7px; padding: 0 1px; height: 44px; position: relative; z-index: 10; overflow: hidden; box-shadow: inset 0 0 0 1px #26235c, inset 0 0 0 2px #000, inset 0 0 3px 1px #004; background: repeating-linear-gradient(90deg, rgba(0,0,0,0) 14px, rgba(112,107,199,.7) 15px, rgba(0,0,0,0) 15px, rgba(0,0,0,0) 30px), repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(112,107,199,.3), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 14px)}
-#minigraph {margin: -19px -1px 0 0; width: 194px; height: 40px}
+#sb_graphcontainer {margin: -6px -9px -8px; padding: 0 1px; height: 44px; position: relative; z-index: 10; overflow: hidden; box-shadow: inset 0 0 0 1px #26235c, inset 0 0 0 2px #000, inset 0 0 3px 1px #004; background: repeating-linear-gradient(90deg, rgba(0,0,0,0) 14px, rgba(112,107,199,.7) 15px, rgba(0,0,0,0) 15px, rgba(0,0,0,0) 30px), repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(112,107,199,.3), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 14px)}
+#sidebar #minigraph {margin: -19px -1px 0; width: 206px; height: 40px}
 #xhr > hr + #sb_graphcontainer > span + a > #minigraph {height: 40px}
-#minigraphcontainer {margin-top: -43px; margin-left: 1px; width: 204px; height: 39px; background-repeat: no-repeat; background-size: 204px 40px}
+#sidebar #minigraphcontainer {margin-top: -43px; margin-left: 1px; width: 204px; height: 39px; background-repeat: no-repeat; background-size: 204px 40px}
 #homepage #minigraphcontainer {margin-top: -42px; height: 38px}
 #sb_graphcontainer::before {position: absolute; top: 2px; left: -1px; width: 100%; height: 40px; content: ""; display: inline-block; background: linear-gradient(180deg,rgba(0,0,0,0), rgba(0,0,0,0), rgba(0,0,0,.3)); pointer-events: none; will-change: transform}
 
@@ -389,7 +390,7 @@ a:active #sb_graphstats {border-color: var(--active)}
 #sidebar h4 a {width: auto; vertical-align: middle; display: inline}
 .sb_netstatus, .sb_netstatus a {vertical-align: baseline}
 .sb_netstatus a:hover, .sb_netstatus a:visited:hover {color: var(--a)}
-.sb_netstatus {margin: -3px -1px -4px; padding: 7px; width: 100%; display: inline-block; line-height: 1.2; vertical-align: middle; text-shadow: 0 1px 1px #000; box-shadow: 0 0 0 1px #003, var(--highlight), inset 0 0 2px 1px #005; box-sizing: border-box}
+.sb_netstatus {margin: -3px -1px -5px; padding: 7px; width: calc(100% + 2px); display: inline-block; line-height: 1.2; vertical-align: middle; text-shadow: 0 1px 1px #000; box-shadow: 0 0 0 1px #003, var(--highlight), inset 0 0 2px 1px #005; box-sizing: border-box}
 .sb_netstatus.firewalled {color: #944; border: 1px solid #311; box-shadow: 0 0 0 1px #003, var(--highlight), inset 0 0 2px 1px #611; background: radial-gradient(circle, #200010, #000)}
 .sb_netstatus.error {color: #d00; border: 1px solid #a00; box-shadow: 0 0 0 1px #003, var(--highlight), inset 0 0 2px 1px #d00; background: radial-gradient(circle, #300000, #100000)}
 .sb_netstatus.warn, .sb_netstatus.clockskew {color: #911; border: 1px solid #400; box-shadow: 0 0 0 1px #003, var(--highlight), inset 0 0 2px 1px #700; background: radial-gradient(circle, #200000, #080000)}
@@ -435,20 +436,21 @@ a:active #sb_graphstats {border-color: var(--active)}
 div[id^="config_"].main {padding-bottom: 14px}
 .newsAuthor {padding: 0 0 0 18px; float: right; text-transform: none; font-size: 8pt; background: var(--user) no-repeat left 2px center; background-size: 12px; opacity: .7}
 .newsDate {opacity: .7}
-#newsDisplay a:active, #graphopts a:active, #routerinfo a:active, .graphstat:active, #routerinformation tr:nth-child(n+2) a:not(#revision):active {color: #83529f; text-shadow: 0 1px 1px #3c1751; box-shadow: inset 0 0 0 1px #303, inset 3px 3px 3px #14071b; background: var(--hover)}
-#newsDisplay a, #graphopts a, #routerinfo a, .graphstat, .graphstat:visited, #routerinformation tr:nth-child(n+2) a:not(#revision) {margin: -2px; padding: 3px 15px; display: inline-block; line-height: 1; color: var(--a); border: var(--border_badge); border-radius: 15px; box-shadow: 0 0 1px rgba(0,0,0,.8), var(--highlight); background: var(--btn)}
-#newsDisplay a:hover, #newsDisplay a:focus, #graphopts a:hover, #graphopts a:focus, #routerinfo a:hover, #routerinfo a:focus, .graphstat:hover, .graphstat:focus, #routerinformation tr:nth-child(n+2) a:not(#revision):hover, #routerinformation tr:nth-child(n+2) a:not(#revision):focus {color: var(--a_hover); text-shadow: 0 1px 1px #000; border: 1px solid #000; box-shadow: 0 0 1px #000, inset 0 0 0 1px #303; background: var(--btn_hover); transition: ease box-shadow .05s}
-#newsDisplay a {line-height: 1.2}
-#newsDisplay {white-space: nowrap; margin-left: 10px}
-.news h4 {border-bottom: 1px; border-bottom-style: dotted; border-bottom-color: #26235c; padding: 0 0 0 0; margin: 5px 0 10px 0; font-size: 10pt; opacity: 1; text-transform: capitalize}
+.news h4 {margin: 5px 0 10px; padding: 0; text-transform: capitalize; font-size: 10pt; border-bottom: 1px; border-bottom-style: dotted; border-bottom-color: #26235c; opacity: 1}
 .news hr {margin: 18px -20px 6px}
-.news {margin: -1px 3px 0 212px; padding: 6px 20px 10px; min-width: 600px; position: relative; z-index: 10; text-align: right; font-size: 8pt; border: var(--border); box-shadow: 0 1px 5px #000; background: #000 var(--earth) no-repeat scroll bottom right; background-size: auto 200px}
+.news {margin: -1px 3px 0 212px; padding: 6px 20px 10px; min-width: 600px; position: relative; z-index: 10; text-align: right; font-size: 8pt; border: var(--border); background: #000 var(--earth) no-repeat scroll bottom right; background-size: auto 220px}
 .news::before {content: ""; display: inline-block; position: absolute; left: 0; right: 0; top: 0; bottom: 0; z-index: 0; background: rgba(0,0,48,.4); pointer-events: none}
-#news .newscontent {border: var(--border_inner); margin: -11px 0 10px; padding: 10px 25px 15px; box-shadow: var(--bevel); background: var(--earth) right -50px bottom -50px no-repeat, linear-gradient(135deg, #000010, #000); background-size: 100px auto, 100%}
+#news .newscontent {border: var(--border_inner); margin: -11px 0 10px; padding: 10px 25px 15px; box-shadow: var(--bevel); background: var(--earth) right -50px bottom -50px no-repeat, linear-gradient(135deg, #000010, #000); background-size: 120px auto, 100%}
 #news .newscontent, #news #newsStatus, #news #newsDisplay, #news hr {position: relative; z-index: 20}
+#newsDisplay a, #graphopts a, #routerinfo a, .graphstat, .graphstat:visited, #routerinformation tr:nth-child(n+2) a:not(#revision) {margin: -2px; padding: 3px 15px; display: inline-block; line-height: 1; color: var(--a); border: var(--border_badge); border-radius: 15px; box-shadow: 0 0 1px rgba(0,0,0,.8), var(--highlight); background: var(--btn)}
+#newsDisplay a {margin: 2px 0 -4px -4px; line-height: 1.2}
+#newsDisplay a:hover, #newsDisplay a:focus, #graphopts a:hover, #graphopts a:focus, #routerinfo a:hover, #routerinfo a:focus, .graphstat:hover, .graphstat:focus, #routerinformation tr:nth-child(n+2) a:not(#revision):hover, #routerinformation tr:nth-child(n+2) a:not(#revision):focus {color: var(--a_hover); text-shadow: 0 1px 1px #000; border: 1px solid #000; box-shadow: 0 0 1px #000, inset 0 0 0 1px #303; background: var(--btn_hover); transition: ease box-shadow .05s}
+#newsDisplay a:active, #graphopts a:active, #routerinfo a:active, .graphstat:active, #routerinformation tr:nth-child(n+2) a:not(#revision):active {color: #83529f; text-shadow: 0 1px 1px #3c1751; box-shadow: inset 0 0 0 1px #303, inset 3px 3px 3px #14071b; background: var(--hover)}
+#newsDisplay {white-space: nowrap; margin-left: 10px}
 #news #newsDisplay, #graphopts {color: transparent}
 .news #newsDisplay, .news #newsStatus {margin-top: 3px; display: inline-block}
 #news #newsDisplay {margin-right: -10px; padding: 0 0 3px}
+.news #newsStatus {margin: 5px 0 -5px}
 .news .newsentry:first-child {margin-top: -10px}
 #news .newsentry:last-child {margin-bottom: -5px}
 #news.news .newsentry:first-child {margin-top: 13px}
@@ -475,7 +477,7 @@ div[id^="config_"].main {padding-bottom: 14px}
 .tab {background: linear-gradient(180deg,#112,#080818 50%, #000); box-shadow: var(--highlight), inset 0 0 1px 0 #446}
 .tab:hover {box-shadow: var(--highlight), inset 0 0 1px 1px rgba(112,80,112,.7); background: radial-gradient(at center bottom, rgba(96,32,96,.6) 0, rgba(0,0,0,0) 90%), var(--btn_hover)}
 .tab:hover a {color: var(--a_hover); text-shadow: 0 1px 1px #000; background: none}
-.tab:active {box-shadow: var(--highlight), inset 3px 3px 3px 1px #2d103f; background: radial-gradient(at center bottom, rgba(200, 96, 200, .8) 0, rgba(0, 0, 0, 0) 90%), linear-gradient(180deg,#501f6c, var(--hover))}
+.tab:active {box-shadow: var(--btn_shadow_active); background: radial-gradient(at center bottom, rgba(200, 96, 200, .8) 0, rgba(0, 0, 0, 0) 90%), linear-gradient(180deg,#501f6c, var(--hover))}
 .tab:active a, #help .tab:active a {color: var(--ink) !important; background: none; text-shadow: none}
 .tab2 {padding: 6px 14px; color: var(--ink); text-shadow: 0 1px 1px #000; box-shadow: var(--highlight), inset 4px 4px 4px rgba(0,0,0,.5); background: radial-gradient(at center bottom, rgba(128, 0, 128, .4) 0, rgba(0, 0, 0, 0) 90%), linear-gradient(90deg, rgba(96,0,96,.2), rgba(96,0,96,.2)), linear-gradient(180deg,#000, #1a1b2f)}
 
@@ -614,6 +616,7 @@ th.options {padding: 8px 5px 8px 10px; font-size: 9pt}
 #updateHelper .nowrap::after, #updateProxyHostPort .nowrap::after, #i2pupdates .nowrap::after, #bandwidthconfig .optionsingle::after, .optionlist label::before, #netconfig label::before, #externali2cp .optionlist label::before, #externali2cp .optionlist .nowrap::before, #reseedconfig .nowrap::before, #manualreseed .nowrap::before, #reseed_urlselection label::before, #reseedproxytype label::before, #graphs .nowrap::before {display: inline-block; vertical-align: middle; content: ""}
 #pconfig {margin-top: -4px}
 #pluginconfig, #i2pupdates, .homelinkedit, #peerdefs {margin-top: -1px}
+#config_peers td, #refreshsidebar td, #sidebarconf td, #netdblookup td, #config_logging td, #tunnel_defs td, #bandwidthconfig td, #oldhome td, #addkeyring td {border-right: none !important; box-shadow: none}
 
 /* home */
 .homelinkedit th:nth-child(3), .homelinkedit th:last-child {padding-left: 5px; word-spacing: 0; letter-spacing: 0; text-align: left; text-transform: none; font-size: 9pt}
@@ -688,11 +691,11 @@ tr.addnew {border-top: var(--border_inner)}
 #consolepass td {padding: 5px 10px; border-bottom: var(--border_inner)}
 #consolepass input {margin: 5px}
 #consolepass .delete {float: left}
-#consolepass td#pw_adduser {padding: 5px 10px}
+#consolepass td#pw_adduser {padding: 6px 8px}
 #consolepass input[name="name"] {margin-right: 20px}
 #consolepass input[type=password] {width: 200px}
 #submitconsolepass {margin-bottom: -2px; margin-top: -2px; border: var(--border_inner); background: #000}
-#consolepass input[name="name"], #externali2cp input[name="user"] {padding: 5px 5px 5px 26px; background: var(--user) no-repeat 5px center, linear-gradient(180deg,#000, #000019); background-size: 16px, 100%; background-blend-mode: luminosity}
+#consolepass input[name="name"], #externali2cp input[name="user"] {padding: 6px 8px 6px 26px; background: var(--user) no-repeat 5px center, linear-gradient(180deg,#000, #000019); background-size: 16px, 100%; background-blend-mode: luminosity}
 #consolepass input[name="name"]:focus, #externali2cp input[name="user"]:focus {background: #000 var(--user) no-repeat 5px center; background-size: 16px; background-blend-mode: normal}
 #consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"] {padding: 6px 8px 6px 26px; background: var(--key) no-repeat 5px center, linear-gradient(180deg,#000, #000019); background-size: 16px, 100%; background-blend-mode: luminosity}
 #consolepass input[name="nofilter_pw"]:focus, #externali2cp input[name="nofilter_pw"]:focus {background: #000 var(--key) no-repeat 5px center; background-size: 16px; background-blend-mode: normal}
@@ -728,19 +731,6 @@ tr.addnew {border-top: var(--border_inner)}
 /* service info */
 #shutdownrouter + p, #restartrouter + p, #servicedebug + p, #browseronstart + p, #runonstartup + p, #systray + p {margin: 5px 0 -20px; padding: 10px 15px 10px 50px; text-align: left; border: var(--border_inner); border-bottom: none; background: #010008 var(--infohelp) no-repeat 15px center / 28px}
 #servicedebug + p + p {margin-bottom: -21px; margin-top: 20px; padding: 10px; border: var(--border_inner); border-bottom: none; background: #010010}
-
-/* peer */
-#config_peers td, #refreshsidebar td, #sidebarconf td, #netdblookup td, #config_logging td, #tunnel_defs td, #bandwidthconfig td, #oldhome td, #addkeyring td {border-right: none !important; box-shadow: none}
-#bannedpeercount {background: #000 var(--ban) no-repeat 15px center / 28px}
-#banlist {margin: -1px 0 13px; padding: 4px; background: #000; columns: 328px auto; column-gap: 0}
-#banlist tt {margin-left: 8px; display: inline-block; line-height: 1; font-size: 90%; color: #393}
-#banlist tt a {margin-left: -4px; padding-left: 0}
-#banlist .routerid {margin-top: -3px; margin-right: -2px; padding: 1px 2px; border: none; box-shadow: none; background: none}
-#banlist li {margin: 2px 0 2px 3px; padding: 4px 5px 2px 7px; width: calc(100% - 17px); position: relative; display: inline-block; line-height: 1.5; list-style: none; text-shadow: 0 1px 1px #000; border: var(--border_inner); box-shadow: var(--highlight), inset 0 0 1px 1px #26235c; background: #002; -webkit-break-inside: avoid; break-inside: avoid; page-break-inside: avoid}
-#banlist li img {margin-left: -3px}
-#banlist li a[href^="configpeer"] {padding: 2px 1px 1px 0; line-height: 0; position: absolute; top: -1px; right: -1px; vertical-align: middle; border: var(--border_inner); box-shadow: var(--highlight), inset 0 0 1px 1px #26235c; background: var(--label); filter: none}
-#banlist li a[href^="configpeer"]:hover, #banlist li a[href^="configpeer"]:focus {box-shadow: var(--highlight); background: linear-gradient(180deg,#313 50%, #000 50%)}
-#banlist li a[href^="configpeer"]:active {box-shadow: var(--highlight), inset 3px 3px 3px 1px #2d103f; background: linear-gradient(180deg,var(--hover) 50%, #501f6c 50%)}
 
 /* net */
 #iptransport {margin-bottom: 11px}
@@ -791,6 +781,7 @@ th.options, #externali2cp th {padding: 7px 10px}
 #availableplugins {margin: 12px 0 -1px}
 #pluginconfig {margin-top: -14px}
 #pluginconfig th:first-child, #pluginconfig td:first-child {padding-left: 10px; text-align: left; white-space: nowrap}
+#pluginconfig table td:first-child {text-align: right}
 #pluginconfig tr {background: #010010}
 #pluginconfig table tr {background: var(--row)}
 #config_plugins #plugininstall td, #config_plugins #plugininstall2 td {border: none !important}
@@ -800,7 +791,7 @@ th.options, #externali2cp th {padding: 7px 10px}
 #pluginconfig table td:first-child {padding-left: 15px; width: 1%; white-space: nowrap}
 #pluginconfig td:first-child label {padding: 5px 15px 5px 26px; display: inline-block; min-width: 100px; vertical-align: middle; text-align: left; border: 1px solid #003; border-radius: 4px 15px 15px 4px; background: var(--plugin) no-repeat 5px center, var(--label); background-size: 16px, 100%; background-blend-mode: luminosity}
 #pluginconfig td:last-child table {margin: 5px 15px 5px 5px; padding: 5px; width: calc(100% - 8px)}
-#pluginconfigtext input {float: right; margin: -2px -6px 0 0}
+#pluginconfigtext input {margin: -5px -16px 0; float: right}
 #plugininstall .suboption, #plugininstall2 .suboption, #config_family .suboption {padding: 2px 12px 3px 10px}
 #plugininstall input.cancel {display: none}
 #plugininstall input[type=text] {width: 50%; min-width: 400px}
@@ -1581,6 +1572,18 @@ span.left, span.right {margin: 0 1px; width: 40%; display: inline-block}
 #peerdefs {line-height: 1.5}
 #peerdefs td {padding: 3px}
 #peerdefs ul {margin: 0; width: 100%; display: inline-block; columns: 500px auto; column-gap: 0}
+
+/* banlist */
+#bannedpeercount {background: #000 var(--ban) no-repeat 15px center / 28px}
+#banlist {margin: -1px 0 13px; padding: 4px; background: #000; columns: 328px auto; column-gap: 0}
+#banlist tt {margin-left: 8px; display: inline-block; line-height: 1; font-size: 90%; color: #393}
+#banlist tt a {margin-left: -4px; padding-left: 0}
+#profiles #banlist .routerid, #banlist .routerid {margin-top: -3px; margin-right: -2px; padding: 1px 2px; border: none; box-shadow: none; background: none}
+#banlist li {margin: 2px 0 2px 3px; padding: 4px 5px 2px 7px; width: calc(100% - 17px); position: relative; display: inline-block; line-height: 1.5; list-style: none; text-shadow: 0 1px 1px #000; border: var(--border_inner); box-shadow: var(--highlight), inset 0 0 1px 1px #26235c; background: #002; -webkit-break-inside: avoid; break-inside: avoid; page-break-inside: avoid}
+#banlist li img {margin-left: -3px}
+#banlist li a[href^="configpeer"] {padding: 2px 1px 1px 0; line-height: 0; position: absolute; top: -1px; right: -1px; vertical-align: middle; border: var(--border_inner); box-shadow: var(--highlight), inset 0 0 1px 1px #26235c; background: var(--label); filter: none}
+#banlist li a[href^="configpeer"]:hover, #banlist li a[href^="configpeer"]:focus {box-shadow: var(--highlight); background: linear-gradient(180deg,#313 50%, #000 50%)}
+#banlist li a[href^="configpeer"]:active {box-shadow: var(--btn_shadow_active); background: linear-gradient(180deg,var(--hover) 50%, #501f6c 50%)}
 
 /* netdb */
 b.netdb_transport {display: inline-block; margin-right: 5px}
@@ -2434,7 +2437,7 @@ input.check[value$="updates"], input.check[value$="updates"]:hover, input.check[
 #iptransport a::after, #advancedconfig a::after, #reseedsetup a::after, .h3navlinks a[href="/help/faq#alternative_browser"]::after {width: 16px; height: 16px; background-size: 16px}
 #logs a.configure::after {background-size: 14px}
 #logs h3.tabletitle a.delete {padding-right: 16px}
-#pluginconfigtext input {margin: -4px -6px 0 0}
+#pluginconfigtext input {margin: -5px -14px 0}
 #profiles #banlist {margin-top: -3px; margin-bottom: 7px}
 #routerinformation .h3navlinks a {line-height: 1.4}
 #searchbar button {height: 28px}
@@ -2596,14 +2599,15 @@ h4#updateplugins {margin-top: -15px}
 #help .tab {margin-top: -1px; margin-bottom: -1px; padding: 2px 0}
 #help .tab, #help .tab2 {margin-top: -1px}
 #homepage #minigraphcontainer {height: 38px}
-#homepage #minigraph {margin-top: -22px}
 #logs h3.tabletitle {padding: 12px 2px 10px 12px}
 #loggingoptions tr:nth-last-child(n+3) input[type=text], #loggingoptions tr:nth-last-child(n+3) select {min-width: 250px}
-#minigraphcontainer {margin-top: -43px; margin-left: 1px; width: 258px; height: 39px; background-size: 250px 40px}
-#minigraph {margin-top: -21px; height: 38px; width: 230px}
+#sidebar #minigraphcontainer {margin: -43px -4px 0 1px; width: 260px; height: 39px; background-size: 260px 40px; background-position: right bottom}
+#sidebar #minigraph {margin-top: -22px; margin-left: -4px; height: 38px; width: 260px}
+#homepage #minigraph {margin-top: -21px}
 #netdboverview table th, #netdboverview table td {padding: 7px 8px}
 #newsStatus, #news #newsDisplay a, .newsAuthor {font-size: 9pt}
 #news #newsStatus {padding-top: 0; margin-left: -10px}
+#news #newsDisplay a {margin-top: 0}
 #ntcpconnections th, #udpconnections th, #newsDisplay {font-size: 90%}
 #peerprofiles.widescroll {padding-top: 114px}
 .percentBarOuter {width: 210px}
@@ -2614,7 +2618,7 @@ h4#updateplugins {margin-top: -15px}
 #reseedconfig input[type=text], #reseedconfig input[type=password] {width: 250px}
 #sb_general, #sb_shortgeneral, #sb_advancedgeneral, #sb_bandwidth, #sb_peers, #sb_peersadvanced, #sb_tunnels, #sb_queue {margin-top: -7px; margin-bottom: -10px}
 #sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after, #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {min-height: 18px}
-#sb_graphcontainer {margin: -4px -7px -8px}
+#sb_graphcontainer {margin: -5px -8px -8px}
 #sb_internals, #sb_advanced, #sb_help {width: 240px}
 #sb_localtunnels a {max-width: 188px}
 #sb_memoryBar.percentBarOuter {margin: -5px -8px -8px}
@@ -2625,7 +2629,7 @@ h4#updateplugins {margin-top: -15px}
 #sb_services a {padding-top: 4px; padding-bottom: 4px}
 #sb_services {margin-bottom: -12px; width: 240px}
 .sb td, #sidebar a, #sidebar button, #sidebar h4, #sidebar h4 a, .smallhead, pre, #newsStatus, #newsDisplay {font-size: 9pt}
-select, .main input[type=submit], .main input[type=reset], .main input[type=submit]:hover, .main input[type=reset]:hover, .main input[type=submit]:focus, .main input[type=reset]:focus, .main input[type=submit]:active, .main input[type=reset]:active, input.download[value^="Dump"]:hover, input.download[value^="Dump"]:focus {padding-top: 6px; padding-bottom: 6px}
+select, .main input[type=submit], .main input[type=reset], .main input[type=submit]:hover, .main input[type=reset]:hover, .main input[type=submit]:focus, .main input[type=reset]:focus, .main input[type=submit]:active, .main input[type=reset]:active, input.download[value^="Dump"]:hover, input.download[value^="Dump"]:focus {padding-top: 7px; padding-bottom: 7px}
 #servletError .iframed #warning2, .iframed #warning2.sorry {margin: -16px 8px 10px}
 #sidebar button.download {font-size: 10pt}
 #sidebar button, #sidebar .stop, #sidebar .reload {min-width: 110px}
@@ -2646,8 +2650,7 @@ table[id^="sb_"], #sidebar #sb_localtunnels {width: 236px}
 #wizardpage #sidebar img[src$="i2plogo.png"] {margin-left: -1px; width: 223px}
 }
 
-@supports not (-moz-appearance: none) {@media screen and (min-width: 1500px) {.langselect img, .langselect .optbox:checked + img {margin-top: -6px; margin-left: -82px}
-.langselect .optbox:checked + img {margin-top: -2px; margin-left: -76px}}}
+@supports not (-moz-appearance: none) {#searchbar span {margin: -1px -1px -5px}}
 
 @media screen and (min-width: 1634px) {
 .leasesets_container {margin-bottom: 8px}
@@ -2663,8 +2666,8 @@ th code {font-size: 9pt}
 #plugininstall #url td:first-child {padding-left: 50px}
 #plugininstall2 td {padding: 8px}
 #config_service .h3navlinks a {padding: 9px 16px}
-#minigraph {width: 250px}
-#minigraphcontainer {width: 264px; background-size: 256px 40px}
+#sidebar #minigraph {margin-left: -1px; width: 252px}
+#sidebar #minigraphcontainer {width: 264px; background-size: 256px 40px}
 .main, .news, h1, #warning.sorry, #warning2.sorry {margin-left: 268px}
 #sidebar {width: 240px}
 #sidebar #sb_logo {margin-top: 1px; height: 48px !important}
