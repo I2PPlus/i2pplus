@@ -987,6 +987,7 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 #loggingoptions select[name="newlogclass"] {width: calc(100% - 185px)}
 
 /* sidebar */
+#config_summarybar h3.tabletitle:first-of-type {margin-top: -4px}
 #config_summarybar #refreshsidebar td:not(.optionsave) {padding-left: 50px; border: none; background: var(--timer) no-repeat 15px center / 28px}
 #refreshsidebar {margin-bottom: 12px}
 #refreshsidebar .optionsave {padding: 12px 8px 12px 0; background: none}
@@ -2601,7 +2602,7 @@ button.control[class], button.control[class]:hover, button.control[class]:focus 
 h4#updateplugins {margin-top: -15px}
 #help .confignav {padding: 0; position: sticky; top: 0; z-index: 999}
 #help .tab {margin-top: -1px; margin-bottom: -1px; padding: 2px 0}
-#help .tab, #help .tab2 {margin-top: -1px}
+#help .tab, #help .tab2 {margin-top: -1px
 #homepage #minigraphcontainer {height: 38px}
 #homepage #minigraph {margin-top: -22px}
 #logs h3.tabletitle {padding: 12px 2px 10px 12px}
