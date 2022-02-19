@@ -28,6 +28,7 @@ pre {width: 98%; overflow-x: auto; text-align: left; font: 8.5pt var(--monospace
 .main:not(#home):not(#sitemap) tr:first-child td {border-top: var(--border_inner)}
 .main:not(#home):not(#sitemap) td:last-child {border-right: var(--border_inner)}
 .main:not(#home):not(#sitemap) tr:last-child td {border-bottom: var(--border_inner)}
+.main#home {padding-bottom: 3px}
 a:link tt, a:visited tt {color: #4e47bf}
 a:active tt {color: #9fe9f9}
 code {text-align: left; font: 9pt var(--monospaced); color: #393}
@@ -207,6 +208,8 @@ button.download.control:active {background: var(--download) no-repeat center cen
 #sidebar .stop:hover, #sidebar .stop:focus {padding: 6px 5px; background: var(--shutdown_hover) no-repeat center center / 14px, var(--btn_hover)}
 #sidebar .stop:active {padding: 6px 5px; background: var(--shutdown) no-repeat center center / 14px, var(--btn_active)}
 #sidebar .cancel {padding: 6px 9px 6px 25px; background: var(--no) no-repeat 10px center / 10px, var(--btn_sidebar)}
+#sidebar #sb_downloadUnsignedDevUpdate, #sidebar #sb_downloadSignedDevUpdate, #sidebar #sb_downloadReleaseUpdate {padding: 6px 16px 6px 30px; margin: 4px 0 6px; font-size: 110%; border-radius: 15px; background-position: 12px center}
+#sidebar #sb_downloadUnsignedDevUpdate:active, #sidebar #sb_downloadSignedDevUpdate:active, #sidebar #sb_downloadReleaseUpdate:active {color: #7171d1; text-shadow: none; -webkit-text-stroke: 0}
 
 /* Show text on context specific buttons (eg deferred shutdown) */
 #sidebar .reload[value="restartImmediate"], #sidebar .stop[value="shutdownImmediate"], #sb_manualReseed, #sidebar .cancel {padding: 6px 9px 6px 25px; min-width: 0; text-indent: 0; text-align: left; text-transform: capitalize}
@@ -505,7 +508,7 @@ h3 + p, h3 + table {position: relative; z-index: 20}
 #i2pupdates td, #manualreseed td:not(.infohelp), #reseedconfig td:not(.infohelp), #netconfig td:not(.infohelp):not(.infowarn):not(.optionsave), #graphs td {padding: 5px}
 
 /* notifications */
-div.messages {padding: 20px 10px; margin: -4px 0 12px; font-weight: 700; font-size: 9.5pt; color: var(--ink); border: var(--border_inner); box-shadow: var(--highlight), inset 0 0 2px 1px #808; background: #000 var(--infohelp) no-repeat 15px center / 28px}
+div.messages {padding: 20px 10px 6px; margin: -4px 0 12px; font-weight: 700; font-size: 9.5pt; color: var(--ink); border: var(--border_inner); box-shadow: var(--highlight), inset 0 0 2px 1px #808; background: #000 var(--infohelp) no-repeat 15px center / 28px}
 div.messages i {padding-left: 45px; color: var(--ink)}
 div.messages span.error {color: #d6fffd}
 div.messages span.notice {font-style: italic}
