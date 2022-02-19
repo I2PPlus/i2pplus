@@ -134,7 +134,7 @@ td.names a {font-size: 9pt}
 #footer, .iframed #footer {display: none}
 form[action="subscriptions"] {margin: 0}
 #helpsubs {margin: -16px 0 -11px; padding: 20px 15px 15px 48px; background: #001 var(--infohelp) no-repeat 12px center / 24px}
-#host_list tr:nth-child(even), #host_details tr:nth-child(even) {background: var(--row)}
+#host_list tr {background: var(--row)}
 img[src="/imagegen/id?s=256&c="], img[src="/imagegen/id?s=20&c="] {opacity: 0}
 
 #messages + p, p.book {padding: 20px 20px 20px 42px; border: 1px solid #26235c; background: #001 var(--addressbook) no-repeat 10px center / 24px}
@@ -236,7 +236,7 @@ td.names:hover, #host_list td.b32link:hover, #host_list td.helper:hover, #host_l
 .info img {margin: 2px; padding: 1px; width: 24px; height: 24px; vertical-align: middle; border: 1px solid #334; border-radius: 2px; background: #000}
 .info img:hover, .names a:focus img {border: 1px solid #652787; background: #652787}
 .info a:active img, .info a:focus img {transform: rotate(45deg) scale(0.8); transition: ease all .1s 0s}
-#host_list .checkbox {width: 16px; white-space: nowrap; font-weight: 700}
+#host_list .checkbox {width: 32px; white-space: nowrap; font-weight: 700}
 #host_list .b32link, #host_list .helper {padding: 0 5px; width: 5%; white-space: nowrap; text-align: center}
 #host_list td.b32link a, #host_list td.helper a {font-size: 0}
 #host_list td.b32link a::after, #host_list td.helper a::after {width: 16px; height: 16px; display: inline-block; text-align: center; background: var(--link) no-repeat center center; cursor: pointer; content: ""}
