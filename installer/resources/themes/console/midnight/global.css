@@ -15,7 +15,7 @@
   --bevel_h1: var(--highlight), inset 0 0 2px 1px rgba(70,70,160,.9);
   --bevel: var(--highlight), inset 0 0 2px 1px rgba(70,70,160,.6);
   --bodybg: repeating-linear-gradient(90deg, rgba(0,0,36,.6) 2px, rgba(0,0,8,.4) 4px) center center / 4px 100%, repeating-linear-gradient(180deg,rgba(0,0,24,.8) 2px, rgba(0,0,0,.5) 4px) center center / 100% 4px, var(--tile) center center / 171px 148px, #001;
-  --bg_main: repeating-linear-gradient(90deg, rgba(0,0,40,.5) 2px, rgba(0,0,0,.5) 4px) center center / 4px 100%, repeating-linear-gradient(180deg,rgba(0,0,32,.5) 2px, rgba(0,0,0,.3) 4px) center center / 100% 4px;
+  --bg_main: repeating-linear-gradient(90deg, rgba(0,0,48,.5) 2px, rgba(0,0,16,.5) 4px) center center / 4px 100%, repeating-linear-gradient(180deg,rgba(0,0,40,.5) 2px, rgba(0,16,0,.3) 4px) center center / 100% 4px;
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
   --border: 1px solid #26235c;
   --border_hover: 1px solid #83529f;
@@ -30,7 +30,6 @@
   --btn: radial-gradient(at center bottom, rgba(70,65,113,.25), rgba(0,0,0,0) 80%), linear-gradient(180deg,#1e1c31,#11101c 50%,#0a0910 50%,#000);
   --btn_shadow_active: var(--highlight), inset 4px 4px 4px rgba(0,0,0,.7);
   --element: linear-gradient(180deg,#112,#000);
-  --formaction: var(--panel);
   --helpsection: repeating-linear-gradient(180deg,#080820 2px,#010010 4px);
   --highlight: inset 0 0 0 1px #000;
   --hover: #6a1698;
@@ -45,7 +44,7 @@
   --outline: 0 0 0 1px #000;
   --panel: linear-gradient(180deg,#002,#001);
   --radial_glow_top: radial-gradient(at center -50px, rgba(96, 0, 96, .4), rgba(0, 0, 0, 0) 85%);
-  --row: linear-gradient(180deg,#040414,#010010);
+  --row: linear-gradient(180deg,#080818,#010010);
   --sb_bg: repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(4,4,32,.5) 4px), repeating-linear-gradient(180deg,rgba(0,0,0,.5) 2px, rgba(4,4,32,.5) 4px);
   --th: repeating-linear-gradient(180deg, rgba(0,0,72,.3) 2px, rgba(0,0,0,.4) 4px) center center / 100% 4px, repeating-linear-gradient(90deg, #002 2px, #000 4px) center center / 4px 100%;
   --text_focus: linear-gradient(180deg,#002,#000028);
