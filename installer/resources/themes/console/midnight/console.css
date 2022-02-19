@@ -14,7 +14,7 @@
 }
 
 /* globals */
-html {background: repeating-linear-gradient(90deg, rgba(0,16,0,.5) 2px, rgba(0,0,0,.3) 4px), repeating-linear-gradient(180deg,rgba(0,0,32,.6) 2px, rgba(0,0,0,.3) 4px), var(--tile) #001; background-size: 4px 100%, 100% 4px, 171px 148px}
+html {background: repeating-linear-gradient(90deg, rgba(0,0,40,.6) 2px, rgba(0,0,8,.4) 4px), repeating-linear-gradient(180deg,rgba(0,0,32,.8) 2px, rgba(0,0,0,.3) 4px), var(--tile) #001; background-size: 4px 100%, 100% 4px, 171px 148px}
 body {margin: 2px 0 0; padding: 0; text-align: center; font: 8.5pt/130% var(--bodyfont)}
 .sb, h1, .main, iframe {contain: layout}
 small {font-size: 9pt}
@@ -492,8 +492,8 @@ h3 + p, h3 + table {position: relative; z-index: 20}
 #tunnels h3:first-child {margin-top: 10px}
 #tunnels h3 a:not(.lsview), #logs a.delete, #logs a.configure {font-size: 0}
 #tunnels h3 a[href^="/configtunnels#"]::after, #tunnels h3 a[href$="i2ptunnelmgr"]::after, #logs a.configure::after, #logs a.delete::after, #applinks a::after, #sitelinks a::after {padding: 0; width: 16px; height: 16px; float: right; background: var(--settings) no-repeat center center; background-size: 16px; content: ""}
-#tunnels h3 a[href^="/configtunnels#"]:hover::after, #tunnels h3 a[href$="i2ptunnelmgr"]:hover::after, #tunnels h3 a[href^="/configtunnels#"]:focus::after, #tunnels h3 a[href$="i2ptunnelmgr"]:focus::after, #logs a.configure:hover::after, #logs a.configure:focus::after, #applinks a:hover::after, #applinks a:focus::after, #sitelinks a:hover::after, #sitelinks a:focus::after {background: var(--settings_hover) no-repeat center center}
-#tunnels h3 a[href^="/configtunnels#"]:active::after, #tunnels h3 a[href$="i2ptunnelmgr"]:active::after, #logs a.configure:active::after, #applinks a:active::after, #sitelinks a:active::after{background: var(--settings_active) no-repeat center center; transform: rotate(90deg); transition: linear transform .2s}
+#tunnels h3 a[href^="/configtunnels#"]:hover::after, #tunnels h3 a[href$="i2ptunnelmgr"]:hover::after, #tunnels h3 a[href^="/configtunnels#"]:focus::after, #tunnels h3 a[href$="i2ptunnelmgr"]:focus::after, #logs a.configure:hover::after, #logs a.configure:focus::after, #applinks a:hover::after, #applinks a:focus::after, #sitelinks a:hover::after, #sitelinks a:focus::after {background: var(--settings_hover) no-repeat center center /  16px}
+#tunnels h3 a[href^="/configtunnels#"]:active::after, #tunnels h3 a[href$="i2ptunnelmgr"]:active::after, #logs a.configure:active::after, #applinks a:active::after, #sitelinks a:active::after{background: var(--settings_active) no-repeat center center / 16px; transform: rotate(90deg); transition: linear transform .2s}
 #config_logging h3 a::before, #webappconfiguration a::before, #i2pclientconfig a::before, #pluginmanage a::before, #version a::before {width: 18px; height: 14px; display: inline-block; vertical-align: middle; background: var(--eye) no-repeat left center / 14px; content: ""}
 #config_logging h3 a:hover::before, #config_logging h3 a:focus::before, #version a:hover::before, #version a:focus::before {background: var(--eye_hover) no-repeat left center / 14px}
 #webappconfiguration a::before, #i2pclientconfig a::before, #pluginmanage a::before {margin-top: -1px; width: 15px; background: var(--settings) no-repeat left center / 12px}
@@ -636,8 +636,6 @@ pre#activetransports {margin: 0; padding: 15px 7px 5px 15px; width: calc(100% - 
 .optionlist, .optionsingle, #reseedssl {padding: 1px 2px; border: var(--border_inner); column-gap: 1px}
 .optionlist, .optionsingle, #reseedssl, #updatehelper .optionlist:hover, #updateProxyHostPort .optionlist:hover {vertical-align: middle}
 .options input[type=checkbox], .suboption .optbox {margin: 0 3px 0 0}
-
-/* configure */
 #i2pupdates .optionsingle, #homesites.formaction, #homeapps.formaction, #oldhome tr:last-child, #bandwidthconfig .optionsave, #clientsconfig.formaction, #addkeyring tr:last-child td, #loggingoptions tr:last-child td, #webappconfigactions.formaction, #configstats .optionsave {box-shadow: var(--highlight), inset 0 0 0 2px transparent, inset 0 0 2px 1px #191939, inset 0 0 5px 3px #002; background: var(--formaction)}
 p#keyringhelp, p#webappconfig, p#availableplugins, p#pluginconfigtext, p#clientdefaultshelp, p#bwshare, p#editclients, p#upnpstatus, p#gatherstats {padding: 20px 25px 20px 55px; border: var(--border_inner); background: #000 var(--infohelp) no-repeat 15px center / 28px}
 #config_reseed p.infohelp, #config_family p.infohelp, p#tunnelconfig {margin-top: 0}
@@ -979,9 +977,10 @@ form[action="/createreseed"] > h3 {margin-bottom: -13px; padding: 10px; word-spa
 #config_logging p {margin: 3px 0 0; text-align: left}
 input[name="logfilename"], input[name="logformat"], input[name="logdateformat"], input[name="logfilesize"], select[name="defaultloglevel"], select[name="newloglevel"] {width: 125px}
 #loggingoptions td {padding: 6px}
-#loggingoptions td:first-child {padding-right: 3px; line-height: 1.2}
-#loggingoptions td:nth-child(2) {width: 170px}
+#loggingoptions td:first-child {padding-right: 10px; line-height: 1.2}
+#loggingoptions td:nth-child(2) {width: 1%; white-space: nowrap; text-align: center}
 #loggingoptions tr:nth-last-child(2) {white-space: nowrap}
+#loggingoptions tr:nth-last-child(n+3) td:last-child, #loggingoptions p {line-height: 1.4; font-size: 100%}
 #loggingoptions input[type=text], #loggingoptions select, #loggingoptions textarea {min-width: 170px; margin: 3px}
 #loggingoptions textarea {width: calc(100% - 8px); resize: none}
 #loggingoptions select[name="newlogclass"] {width: calc(100% - 185px)}
@@ -1294,7 +1293,7 @@ a[name="criticallogs"] + p + h3 + p + ul {margin-bottom: 15px; border: var(--bor
 #bugreports td {padding: 15px 25px 15px 55px; background: var(--bug) no-repeat 15px center / 28px}
 #logs a.delete:active::after {background: var(--close_active) no-repeat center center; transform: scale(.85)}
 #logs a.delete::after {margin: 0 8px; background: var(--close) no-repeat center center / 14px}
-#logs a.delete:hover::after, #logs a.delete:focus::after {background: var(--close_hover) no-repeat center center}
+#logs a.delete:hover::after, #logs a.delete:focus::after {background: var(--close_hover) no-repeat center center / 14px}
 #logs .embedlink {margin: 2px 0; font-size: 85%}
 #logs #enviro:hover #cputype {background: none}
 #logs #enviro:hover td {color: #dd0; border-top: 1px inset transparent; border-bottom: 1px inset transparent; background: #001}
@@ -2566,16 +2565,17 @@ h3.tabletitle a, #version.tabletitle a {padding-left: 18px}
 
 @media screen and (min-width: 1500px) {
 body, .main, .main td, .news p, #news p, .statusnotes, textarea, th, .applabel a, tt, code, .messages, .messages #newsStatus {font-size: 10pt}
+h1 {padding: 14px 15px 15px 62px; font-size: 19pt; background-position: 14px center}
+h2 {font-size: 14pt}
 .appicon {padding-top: 4px; height: 50px}
 .applabel a, .applabel a:hover {padding: 3px 0; max-width: 146px}
 .applabel {width: 150px}
 .applink a:link, .applink a:hover, .applink a:active, #changelog pre {font-size: 9pt}
 .applink:hover {cursor: pointer}
 .applink {min-width: 150px}
-h1 {padding: 14px 15px 15px 62px; font-size: 19pt; background-position: 14px center}
-h2 {font-size: 14pt}
+.bw_title {margin-left: -60px; margin-right: -15px; padding-left: 10px}
 .iframed .warning, .iframed #warning.sorry {margin-left: 10px; margin-right: 10px}
-img.app, img#sitelinksp {margin-top: -5px; padding: 14px 61px 44px}
+img.app, img#sitelinks {margin-top: -5px; padding: 14px 61px 44px}
 .log_debug, .log_info, .log_warn, .log_error, .log_crit, .log_omitted {margin-bottom: -3px; min-width: 40px; max-width: 40px}
 .main button, .main input, select {font-size: 10pt}
 .main[id^="config_"] th, h4#updateplugins {font-size: 9.5pt}
@@ -2585,15 +2585,14 @@ img.app, img#sitelinksp {margin-top: -5px; padding: 14px 61px 44px}
 .sorry {margin-left: 232px}
 .subheading b {font-size: 10.5pt}
 .themechoice, .langselect {width: 134px}
+.cells tt, #profilelist tt, #floodfills tt {margin-left: 1px; margin-right: 2px; font-size: 9pt}
+.joblog h3 {margin-top: 8px}
 .ui_lang {width: 138px}
 #bandwidthconfig .bw_out, #bandwidthconfig .bw_in, #bandwidthconfig .bw_share {padding-left: 60px; padding-right: 15px; min-width: 240px; background-position: 20px calc(50% + 14px)}
 #banlist {padding: 3px}
 #banlist li {width: calc(100% - 18px)}
 button.control[class], button.control[class]:hover, button.control[class]:focus {padding: 14px; font-size: 0; background-position: center center}
-.bw_title {margin-left: -60px; margin-right: -15px; padding-left: 10px}
-.cells tt, #profilelist tt, #floodfills tt {margin-left: 1px; margin-right: 2px; font-size: 9pt}
 #clientconf.infohelp {margin: 12px 0 -13px}
-.joblog h3 {margin-top: 8px}
 #externali2cp .optionlist label::before, #externali2cp .optionlist .nowrap::before, #netconfig label::before, #reseedconfig .nowrap::before, #manualreseed .nowrap::before, #graphs .nowrap::before {min-height: 50px}
 #i2pclientconfig, #pconfig, #pluginfromurl, #pluginfromfile, #clientconf.infohelp, #webappconfiguration {margin: -4px 0 -15px}
 #themeheading, #langheading, #passwordheading {font-size: 12pt}
@@ -2603,6 +2602,8 @@ h4#updateplugins {margin-top: -15px}
 #help .tab, #help .tab2 {margin-top: -1px}
 #homepage #minigraphcontainer {height: 38px}
 #homepage #minigraph {margin-top: -22px}
+#logs h3.tabletitle {padding: 12px 2px 10px 12px}
+#loggingoptions tr:nth-last-child(n+3) input[type=text], #loggingoptions tr:nth-last-child(n+3) select {min-width: 250px}
 #minigraphcontainer {margin-top: -43px; margin-left: 1px; width: 258px; height: 39px; background-size: 250px 40px}
 #minigraph {margin-top: -21px; height: 38px; width: 230px}
 #netdboverview table th, #netdboverview table td {padding: 7px 8px}
