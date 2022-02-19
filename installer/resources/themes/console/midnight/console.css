@@ -69,6 +69,7 @@ a[name="chelp"], a[name="help"] {pointer-events: none}
 .footnote, .topness {display: none}
 .main a:hover, a:hover tt {color: var(--a_hover)}
 .main li {text-align: left; margin: 2px 0 2px 30px; padding: 2px 20px 2px 0; word-wrap: break-word}
+/*.main li:last-child {padding-bottom: 15px}*/
 .main tr:nth-child(even), #netdbversions tr:nth-child(even), #netdbtransports tr:nth-child(even), #netdbcountrylist tr:nth-child(even), #netdbtiers tr:nth-child(even), #pluginconfig table tr:nth-child(even) {vertical-align: middle; background: var(--row)}
 .main tr:nth-child(odd), #netdbversions tr:nth-child(odd), #netdbtransports tr:nth-child(odd), #netdbcountrylist tr:nth-child(odd), #netdbtiers tr:nth-child(odd), #pluginconfig tr {vertical-align: middle; background: var(--row)}
 .main ul {list-style-type: square}
@@ -503,6 +504,10 @@ h3 + p, h3 + table {position: relative; z-index: 20}
 #iptransport a:hover::after, #iptransport a:focus::after, #advancedconfig a:hover::after, #advancedconfig a:focus::after, #reseedsetup a:hover::after, #reseedsetup a:focus::after, .h3navlinks a[href="/help/faq#alternative_browser"]:hover::after, .h3navlinks a[href="/help/faq#alternative_browser"]:focus::after {background: var(--helplink_hover) no-repeat center center}
 #i2pupdates td, #manualreseed td:not(.infohelp), #reseedconfig td:not(.infohelp), #netconfig td:not(.infohelp):not(.infowarn):not(.optionsave), #graphs td {padding: 5px}
 #config_reseed #reseedcreatefile td {padding: 20px 20px 20px 50px}
+#config_reseed td.optionsave, #config_reseed #reseedconfig td.optionsave, #bandwidthconfig .optionsave, #i2pupdates .optionsave, #externali2cp .optionsave, #config_advanced .optionsave, #config_ui .formaction, #graphing.formaction, #pluginconfigactions, #tunnelconfigsave, #sidebardefaults, #refreshsidebar tr, #addkeyring tr:last-child td, #clientsconfig, #homeapps, #homesites, #loggingoptions .optionsave {padding: 12px 8px; border-top: var(--border_inner) !important; box-shadow: var(--bevel); background: var(--panel); opacity: 1}
+p#upnpconfig, p#ipchange, p#ipv6config, p#tcpconfig, p#confignotes, p#defaultswork {margin-top: -12px; margin-bottom: -13px; padding: 10px; border: var(--border_inner)}
+#netconfig label, #externali2cp .optionlist label, #externali2cp .nowrap, #reseedconfig .nowrap, #updatehelper .nowrap, #updateProxyHostPort .nowrap, #i2pupdates .nowrap, #manualreseed .nowrap, #graphs .nowrap {margin: 1px 0; padding: 2px 5px 0; min-width: 480px; width: calc(100% - 10px); display: inline-block; line-height: 1; background: var(--panel)}
+#externali2cp .optionlist label::before, #externali2cp .optionlist .nowrap::before, #netconfig label::before, #reseedconfig .nowrap::before, #manualreseed .nowrap::before, #graphs .nowrap::before {min-height: 40px}
 
 /* notifications */
 .messages {padding: 20px 10px; margin: -4px 0 12px; font-weight: 700; font-size: 9.5pt; color: var(--ink); border: var(--border_inner); box-shadow: var(--highlight), inset 0 0 2px 1px #808; background: #000 var(--infohelp) no-repeat 15px center / 28px}
@@ -516,7 +521,7 @@ h3 + p, h3 + table {position: relative; z-index: 20}
 
 /* graphs */
 #graphing {margin: -8px 0 0; padding-top: 1px; border-left: none; border-right: none}
-form[action="graphs"], form[action="/updategraphs"] {margin-top: -11px; margin-bottom: 10px; padding: 10px 10px 0; border: var(--border_inner); background: #000}
+form[action="graphs"], form[action="/updategraphs"] {margin-top: -11px; margin-bottom: 10px; padding: 10px 10px 0; border: var(--border_inner); background: var(--panel)}
 .graphspanel {padding: 0; margin: 15px 0 -15px 0; width: 100%; text-align: center; overflow: auto; background: none}
 .graphspanel a {font-size: 0}
 .graphspanel a img {text-align: center; opacity: .9; transition: ease border .1s}
@@ -552,12 +557,12 @@ form[action="graphs"], form[action="/updategraphs"] {margin-top: -11px; margin-b
 #graphopts + p {display: none}
 #graphdisplay a {text-transform: capitalize; letter-spacing: normal; font-size: 9pt; float: right}
 #graphinfo {margin-top: 10px; border-radius: 0; text-transform: capitalize; letter-spacing: normal; word-spacing: normal}
-#graphs .optionlist, #graphs .optionlist:hover {border: none; box-shadow: none; padding: 0; margin: -4px -3px}
+#graphs .optionlist, #graphs .optionlist:hover {margin: -4px 2px; padding: 0; border: none; box-shadow: none}
+#graphs .optionlist .nowrap {text-align: left}
 #graphs .optionlist label {box-shadow: none; background: none}
 #graph_single .graphContainer {padding-top: 5px}
 #updategraphs .messages {margin-bottom: 10px}
-
-/*.main li:last-child {padding-bottom: 15px}*/
+#graphing.formaction {border-top: none !important}
 
 .smallhead th, #ntcpconnections th {font-size: 8pt}
 .smallhead th a:hover {text-decoration: none}
@@ -595,7 +600,7 @@ form[action="graphs"], form[action="/updategraphs"] {margin-top: -11px; margin-b
 .optionlist, .optionsingle, #reseedssl {padding: 1px 2px; border: var(--border_inner); column-gap: 1px}
 .optionlist, .optionsingle, #reseedssl, #updatehelper .optionlist:hover, #updateProxyHostPort .optionlist:hover {vertical-align: middle}
 .options input[type=checkbox], .suboption .optbox {margin: 0 3px 0 0}
-#i2pupdates .optionsingle, #homesites.formaction, #homeapps.formaction, #oldhome tr:last-child, #bandwidthconfig .optionsave, #clientsconfig.formaction, #addkeyring tr:last-child td, #loggingoptions tr:last-child td, #webappconfigactions.formaction, #configstats .optionsave {box-shadow: var(--highlight), inset 0 0 0 2px transparent, inset 0 0 2px 1px #191939, inset 0 0 5px 3px #002; background: var(--formaction)}
+#i2pupdates .optionsingle, #homesites.formaction, #homeapps.formaction, #oldhome tr:last-child, #bandwidthconfig .optionsave, #clientsconfig.formaction, #addkeyring tr:last-child td, #loggingoptions tr:last-child td, #webappconfigactions.formaction, #configstats .optionsave {box-shadow: var(--highlight), inset 0 0 0 2px transparent, inset 0 0 2px 1px #191939, inset 0 0 5px 3px #002; background: var(--panel)}
 p#keyringhelp, p#webappconfig, p#availableplugins, p#pluginconfigtext, p#clientdefaultshelp, p#bwshare, p#editclients, p#upnpstatus, p#gatherstats {padding: 20px 25px 20px 55px; border: var(--border_inner); background: #000 var(--infohelp) no-repeat 15px center / 28px}
 #config_reseed p.infohelp, #config_family p.infohelp, p#tunnelconfig {margin-top: 0}
 p#keyringhelp, #ffconf, #bwlimiter, #i2pclientconfig, .confignav + h3, #advancedclientconfig, .confignav + .infowarn, #webappconfig, #config_logging h3, #iptransport, .confignav + form > h3, #pluginmanage, .confignav + .infohelp, #statsForm > h3.ptitle, .infowarn + .infohelp {margin-top: -4px}
@@ -662,7 +667,7 @@ tr.addnew {border-top: var(--border_inner)}
 #themesettings hr {margin: 5px -7px}
 #themesettings, #langsettings {background: var(--panel)}
 #themesettings {margin: -1px 0; padding: 8px 7px 0; clear: both; border: var(--border_inner)}
-#themeui {margin: 0 -7px 0; padding: 2px 0 12px; border-top: var(--border_inner); box-shadow: var(--highlight), inset 0 0 0 2px transparent, inset 0 0 2px 1px #191939, inset 0 0 5px 3px #002; background: var(--formaction)}
+#themeui {margin: 0 -7px 0; padding: 2px 0 12px; border-top: var(--border_inner); box-shadow: var(--highlight), inset 0 0 0 2px transparent, inset 0 0 2px 1px #191939, inset 0 0 5px 3px #002; background: var(--panel)}
 #themeui .cancel, #langui .cancel, #consolepass .cancel {display: none}
 
 /* password */
@@ -730,9 +735,6 @@ tr.addnew {border-top: var(--border_inner)}
 /* net */
 #iptransport {margin-bottom: 11px}
 p#ipconfig, p#ipv4config, p#udpconfig, p#externaltcp {padding: 10px; border: var(--border_inner); border-bottom: none; background: #010010}
-p#upnpconfig, p#ipchange, p#ipv6config, p#tcpconfig, p#confignotes, p#defaultswork {margin-top: -12px; margin-bottom: -13px; padding: 10px; border: var(--border_inner)}
-#netconfig label, #externali2cp .optionlist label, #externali2cp .nowrap, #reseedconfig .nowrap, #updatehelper .nowrap, #updateProxyHostPort .nowrap, #i2pupdates .nowrap, #manualreseed .nowrap, #graphs .nowrap {margin: 1px 0; padding: 2px 5px 0; min-width: 480px; width: calc(100% - 10px); display: inline-block; line-height: 1; background: var(--panel)}
-#externali2cp .optionlist label::before, #externali2cp .optionlist .nowrap::before, #netconfig label::before, #reseedconfig .nowrap::before, #manualreseed .nowrap::before, #graphs .nowrap::before {min-height: 40px}
 #defaultswork {margin-bottom: 11px; padding: 15px 25px 15px 55px}
 #confignotes {margin-bottom: -21px; padding: 15px 25px 15px 55px; background: var(--infohelp) no-repeat 15px center / 28px}
 #bandwidthconfig {margin-bottom: 1px; padding: 5px 10px}
@@ -900,7 +902,6 @@ form[action="/createreseed"] > h3 {margin-bottom: -13px; padding: 10px; word-spa
 #config_reseed .suboption label, #externali2cp .suboption label {margin: 0 18px 0 -8px; padding: 1px 0}
 #config_reseed .suboption label:last-child, #externali2cp .suboption label {margin-right: 0}
 #config_reseed .suboption .optbox, .suboption .optbox[name="sauth"], #externali2cp .suboption .optbox {margin: -3px 3px 3px; margin-bottom: 0}
-#config_reseed td.optionsave, #config_reseed #reseedconfig td.optionsave, #bandwidthconfig .optionsave, #i2pupdates .optionsave, #externali2cp .optionsave, #config_advanced .optionsave, #config_ui .formaction, #graphing.formaction, #pluginconfigactions, #tunnelconfigsave, #sidebardefaults, #refreshsidebar tr, #addkeyring tr:last-child td, #clientsconfig, #homeapps, #homesites, #loggingoptions .optionsave {padding: 12px 8px; border-top: var(--border_inner) !important; box-shadow: var(--highlight), inset 0 0 0 2px transparent, inset 0 0 2px 1px #191939, inset 0 0 5px 3px #002; background: var(--formaction); opacity: 1}
 #config_reseed td.optionsave, #netconfig td.optionsave {padding: 12px 8px; border: var(--border_inner)}
 #config_reseed #reseedcreatefile {background: var(--createzip) no-repeat 15px center / 28px, var(--panel); text-align: justify}
 #config_reseed #reseedurl {background: var(--link) no-repeat 15px center / 28px, var(--panel)}
