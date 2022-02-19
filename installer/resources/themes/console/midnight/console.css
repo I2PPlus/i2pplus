@@ -1239,6 +1239,7 @@ p#gatherstats {margin-top: 1px; margin-bottom: 25px}
 #netdboverview table th:last-child, #netdboverview table td:last-child {text-align: right}
 #netdboverview table td:last-child {width: 140px}
 #netdboverview table th::before, #netdboverview table td::before {min-height: 34px; display: inline-block; vertical-align: middle; content: ""}
+#netdboverview table th::before {min-height: 33px}
 #netdbtransports th:first-child, #netdbcountrylist th:first-child {text-align: left}
 #netdboverview table td {border-right: none !important}
 #netdboverview table td span, #netdboverview table td b, #netdboverview table td a {margin-top: 0; margin-bottom: 0; display: inline-block; vertical-align: middle}
