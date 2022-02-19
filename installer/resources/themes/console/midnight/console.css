@@ -245,7 +245,7 @@ button.download.control:active {background: var(--download) no-repeat center cen
 #sidebar h3:active {box-shadow: var(--highlight), inset 0 0 1px 1px #737, inset 4px 4px 4px #000; background: radial-gradient(at center bottom, rgba(160,48,160,.2), rgba(0, 0, 0, 0) 35%), linear-gradient(90deg, rgba(64,0,64,.1), rgba(64,0,64,.2), rgba(64,0,64,.1)), linear-gradient(180deg,#080820, #1d1a2d)}
 #sidebar h3 a, #sidebar h3 a:visited {margin: 0; padding: 1px 0; width: calc(100% - 6px); display: inline-block; letter-spacing: .1em}
 #sidebar h3:active a {color: var(--hover)}
-#sidebar h4 {margin: -8px -11px -9px; padding: 7px 4px; line-height: 1.2; font-size: 8pt; text-decoration: none; color: #2a1fbe; border: none; box-shadow: none; background: linear-gradient(90deg, #000010, #010010 15%, #010025 50%, #010010 85%, #000010)}
+#sidebar h4 {margin: -8px -11px -9px; padding: 7px 4px; line-height: 1.2; font-size: 8pt; text-decoration: none; border: none; box-shadow: none; background: linear-gradient(90deg, #000010, #010010 15%, #010025 50%, #010010 85%, #000010)}
 #sidebar h4.sb_update, #sidebar h4.sb_update {padding-top: 9px; padding-bottom: 9px}
 #sidebar ul {text-align: left}
 .sb table {margin: -4px -7px -5px -8px; width: 200px; overflow: hidden; text-align: center; font-size: 8pt; border: 0; background-image: none; background-color: transparent; border-collapse: separate; border-spacing: 1px}
@@ -367,11 +367,11 @@ a:active #sb_graphstats {border-color: var(--active)}
 
 /* status bar */
 .percentBarOuter {position: relative; vertical-align: middle; border: var(--border_inner); box-shadow: var(--highlight), inset 0 2px 2px 2px rgba(0,0,0,.45); background: repeating-linear-gradient(90deg, #000 1px, #000 2px, #003 2px, #003 4px); opacity: 1}
-#sidebar .percentBarOuter {margin: -3px 0 -6px -6px; width: 194px}
+#sidebar .percentBarOuter {margin: 5px 0 -6px; width: calc(100% - 2px)}
 .percentBarOuter:hover .percentBarText {opacity: 1; transition: ease opacity .2s}
 .percentBarInner {height: 14px; max-width: 100%; box-shadow: var(--highlight), inset 0 -2px 4px rgba(0,0,0,.6); background: linear-gradient(90deg, rgba(0,0,0,0) 100px, rgba(255,0,255,.1) 160px, rgba(0,0,255,.15)), linear-gradient(180deg, #33a, #226 50%, #003 50%, #000)}
 #sb_memoryBar .percentBarInner {background: var(--membarinner)}
-#sb_memoryBar.percentBarOuter {background: linear-gradient(90deg, rgba(0,0,0,0), rgba(255,0,255,.05), rgba(255,0,0,.12)), repeating-linear-gradient(90deg, #000 1px, #000 2px, #003 2px, #003 4px)}
+#sb_memoryBar.percentBarOuter {margin: -5px -8px -7px; width: calc(100% + 14px); background: linear-gradient(90deg, rgba(0,0,0,0), rgba(255,0,255,.05), rgba(255,0,0,.12)), repeating-linear-gradient(90deg, #000 1px, #000 2px, #003 2px, #003 4px)}
 .percentBarText {width: 100%; font-weight: 700; text-align: center; vertical-align: middle; float: left; opacity: 0; transition: ease opacity .2s}
 #sb_memoryBar .percentBarText {padding: 2px 0 0; width: 70%; line-height: 22px; float: none; position: absolute; top: -23px; left: 15%; right: 15%; z-index: 999; font-size: 110%; border-radius: 2px; background: #115; filter: drop-shadow(0 0 1px #337) drop-shadow(0 0 1px #000)}
 #sb_memorybar .percentBarOuter:hover .percentBarText, #sb_memorybar .percentBarOuter:active .percentBarText {opacity: 1}
@@ -2435,7 +2435,7 @@ input.check[value$="updates"], input.check[value$="updates"]:hover, input.check[
 #profiles #banlist {margin-top: -3px; margin-bottom: 7px}
 #routerinformation .h3navlinks a {line-height: 1.4}
 #searchbar button {height: 28px}
-#searchbar span {margin: -2px 0 -4px}
+#searchbar span {margin: -3px -2px -4px}
 #clock {font-size: 16pt}
 #sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after, #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {min-height: 14px}
 #sb_tunnelstatus .tunnelBuildStatus::before {margin: -2px 0; background-size: 12px}
@@ -2613,6 +2613,7 @@ h4#updateplugins {margin-top: -15px}
 #sb_graphcontainer {margin: -4px -7px -8px}
 #sb_internals, #sb_advanced, #sb_help {width: 240px}
 #sb_localtunnels a {max-width: 188px}
+#sb_memoryBar.percentBarOuter {margin: -5px -8px -8px}
 #sb_newsheadings {margin-left: -1px; margin-bottom: -10px; width: 200px}
 #sb_newsheadings table {width: 218px}
 .sb_notice {margin-bottom: -8px}
@@ -2630,7 +2631,7 @@ select, .main input[type=submit], .main input[type=reset], .main input[type=subm
 #sidebar h4 {margin: -9px -11px -10px}
 #sidebar hr {margin-top: 9px}
 #sidebar img[src$="i2plogo.png"] {margin: -2px 0 -8px -8px; width: 230px; transform: none}
-#sidebar .percentBarOuter, #sidebar .percentBarInner {width: 230px}
+/*#sidebar .percentBarOuter, #sidebar .percentBarInner {width: 230px}*/
 #sidebar #sb_logo {margin-top: 2px; height: 41px !important}
 #sidebar {width: 220px}
 #sitemap h3 {font-size: 11pt}
@@ -2675,7 +2676,7 @@ th code {font-size: 9pt}
 #sb_internals td:first-child, #sb_advanced td:first-child, #sb_help td:first-child {margin: 0; width: auto}
 #sb_internals td:first-child, #sb_advanced td:first-child, #sb_help td:first-child {padding: 0 0 5px}
 #sb_advanced td:first-child {padding-bottom: 6px}
-#sidebar .percentBarOuter {width: 250px}
+/*#sidebar .percentBarOuter {width: 250px}*/
 #sidebar #sb_newsheadings table {width: 258px}
 #sb_newsheadings td:first-child {width: 240px; max-width: 240px}
 #sb_services a {padding-top: 5px; padding-bottom: 5px}
