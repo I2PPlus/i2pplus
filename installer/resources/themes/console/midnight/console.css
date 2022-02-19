@@ -59,6 +59,7 @@ tt {font: bold 8.5pt var(--monospaced); color: #393}
 .wideload {margin: 0}
 .widescroll {overflow: auto}
 .widescroll table {white-space: nowrap}
+.nowrap {white-space: nowrap}
 .underline {border-bottom: 1px solid #efeeff; padding: 5px 0 5px 0; margin: 0 0 10px 0}
 hr {color: rgba(38, 35, 92,.7); background: rgba(38, 35, 92,.7); height: 1px; border: 0 solid rgba(38, 35, 92,.7); margin: 20px 0 10px}
 hr:last-child {margin-top: 20px; margin-bottom: 20px}
@@ -422,6 +423,12 @@ a:active #sb_graphstats {border-color: var(--active)}
 .tunnelBuildStatus.hidden {color: #999}
 .tunnelBuildStatus.hidden::before {background: var(--tunn_hidden) no-repeat center center / 15px}
 
+/* update */
+#updateAvailable {margin: 3px 0; width: 100%; display: inline-block; line-height: 1.2; font-size: 9pt}
+#updateAvailable + br + button + br + #updateAvailable::before {margin: 4px 0; content: ""; display: inline-block; height: 1px; background: #113; width: calc(100% - 20px)}
+#updateAvailable + br + button + br + #updateAvailable {margin-top: 2px}
+#updateAvailable + br + button + br + #updateAvailable + br + button {margin-bottom: 5px}
+
 /* news */
 div[id^="config_"].main {padding-bottom: 14px}
 .newsAuthor {padding: 0 0 0 18px; float: right; text-transform: none; font-size: 8pt; background: var(--user) no-repeat left 2px center; background-size: 12px; opacity: .7}
@@ -456,19 +463,6 @@ div[id^="config_"].main {padding-bottom: 14px}
 #news .newsentry h3 {border: var(--border_inner)}
 
 #config_ui, #netdb {padding-bottom: 3px}
-
-.messages i {display: inline-block; float: none; text-align: left}
-.messages #newsDisplay {margin-left: 45px; display: block; text-align: right; color: transparent}
-.messages #newsDisplay a:first-child {display: none}
-.messages #newsDisplay a:last-child {display: inline-block}
-
-#jobs .joblog {margin-top: 10px; overflow: hidden}
-#jobs ol {padding: 5px 1px 5px 5px; columns: auto 400px; column-gap: 0; text-align: left}
-#jobs ol:empty {display: none}
-#jobs ol li:first-child, #schedjobs li:first-child {margin-top: 0}
-#jobs ol li {break-inside: avoid; page-break-inside: avoid; -webkit-break-inside: avoid; text-align: left; line-height: 1.5}
-#jobs #scheduledjobs + ol li {min-width: 0}
-#events .messages {margin-top: 21px; margin-bottom: -16px; box-shadow: inset 0 0 0 1px #300}
 
 /* top navigation */
 .confignav {margin: -1px -11px 15px; padding: 7px 5px 8px; line-height: 1.3; text-align: center; font-weight: 700; border: var(--border); background: linear-gradient(to bottom, rgba(0,0,64,.15), rgba(0,0,48,.15) 50%, rgba(0,0,32,.15) 50%, rgba(0,0,16,.15)), var(--th); background-size: 100%, 100% 4px, 4px 100%}
@@ -508,11 +502,14 @@ h3 + p, h3 + table {position: relative; z-index: 20}
 #i2pupdates td, #manualreseed td:not(.infohelp), #reseedconfig td:not(.infohelp), #netconfig td:not(.infohelp):not(.infowarn):not(.optionsave), #graphs td {padding: 5px}
 
 /* notifications */
-div.messages {padding: 20px 10px; margin: -4px 0 12px; font-weight: 700; font-size: 9.5pt; color: var(--ink); border: var(--border_inner); box-shadow: var(--highlight), inset 0 0 2px 1px #808; background: #000 var(--infohelp) no-repeat 15px center / 28px}
-div.messages i {padding-left: 45px; color: var(--ink)}
-div.messages span.error {color: #d6fffd}
-div.messages span.notice {font-style: italic}
-div.messages li {margin: 0 5px 0 50px; padding: 0 10px 0 0; text-align: justify; list-style: none; font-weight: 700; border: 0}
+.messages {padding: 20px 10px; margin: -4px 0 12px; font-weight: 700; font-size: 9.5pt; color: var(--ink); border: var(--border_inner); box-shadow: var(--highlight), inset 0 0 2px 1px #808; background: #000 var(--infohelp) no-repeat 15px center / 28px}
+.messages i {padding-left: 45px; display: inline-block; float: none; text-align: left}
+.messages span.error {color: #d6fffd}
+.messages span.notice {font-style: italic}
+.messages li {margin: 0 5px 0 50px; padding: 0 10px 0 0; text-align: justify; list-style: none; font-weight: 700; border: 0}
+.messages #newsDisplay {margin-left: 45px; display: block; text-align: right; color: transparent}
+.messages #newsDisplay a:first-child {display: none}
+.messages #newsDisplay a:last-child {display: inline-block}
 
 /* graphs */
 #graphing {margin: -8px 0 0; padding-top: 1px; border-left: none; border-right: none}
@@ -557,55 +554,16 @@ form[action="graphs"], form[action="/updategraphs"] {margin-top: -11px; margin-b
 #graph_single .graphContainer {padding-top: 5px}
 #updategraphs .messages {margin-bottom: 10px}
 
-td img[src$="c=a1"], td img[src$="c=a2"] {filter: drop-shadow(0 0 1px #337)}
-
 /*.main li:last-child {padding-bottom: 15px}*/
-.joblog {border-radius: 2px 2px 0 0; overflow-y: hidden; margin-top: 10px}
-.joblog h3 {margin-top: 10px}
-.joblog table {margin-top: 15px; margin-left: 0; margin-bottom: 15px}
-.joblog th:first-child {text-align: left; padding-left: 6px}
-.joblog table td:first-child {font-weight: 700}
-.joblog form:first-child {margin-top: 10px}
-.joblog br {margin-bottom: -5px}
-.joblog p {line-height: 1.4}
-.joblog hr {margin: 10px 0}
-.joblog ul {word-wrap: break-word; margin: 5px 0 -10px}
-.joblog li {word-wrap: break-word; line-height: 1.2; margin: 2px 0 2px 30px; padding: 2px 20px 2px 0}
-.joblog li:first-child {margin-top: 0; padding-top: 0}
-.joblog li:last-child {padding-bottom: 5px; margin-bottom: 0}
-.joblog ul li li li {margin-bottom: 10px}
-
-/* jobs */
-h2#jobrunners {margin-top: 0; display: none}
-#jobs h2 {border-radius: 0}
-#jobrunners ~ ol {margin-top: -11px; margin-bottom: 5px; padding: 4px 3px; width: calc(100% - 8px); display: block; border: var(--border_inner); background: #010008}
-#jobrunners ~ ol > li:last-child {margin-bottom: 0}
-h3[id*="job"] {border: var(--border_inner); padding: 8px 10px; margin: 12px 0 10px 0; border-radius: 0; text-transform: uppercase; text-shadow: 0 0 2px #010011; letter-spacing: .08em}
-h3[id*="jobs"] {margin-top: 25px; clear: both}
-#schedjobs {margin: -6px 0 0; width: 100%}
-#jobstats {margin-bottom: 10px}
-#jobstats th, #jobstats td {padding: 3px 8px; text-align: right}
-#jobstats th {font-size: 90%}
-#schedjobs th:first-child, #schedjobs td:first-child, #jobstats th:first-child, #jobstats td:first-child {margin-bottom: 15px; padding-left: 8px; text-align: left; font-weight: 700}
-#schedjobs td:first-child {padding: 5px 8px 3px}
-#schedjobs tr, #schedjobs tr:hover, #schedjobs tr, #schedjobs tr:hover td {background: #010008}
-#jobstats + hr {display: none}
-#totaljobstats {margin-bottom: -2px; margin-top: 10px}
-.joblog h3:first-of-type {margin-top: 0}
-#activejobs + ol {padding-bottom: 5px}
-#finishedjobs + ol li, #scheduledjobs + ol li, #activejobs + ol li, #readyjobs + ol li, #schedjobs li {margin: 3px 2px; padding: 8px 3px 8px 24px; width: calc(100% - 32px); list-style: none; font-size: 95%; border: 1px solid #1e1c4a; box-shadow: var(--highlight), inset 0 0 2px 1px #225}
-#activejobs + ol li, #scheduledjobs + ol li, #readyjobs + ol li, #finishedjobs + ol li, #schedjobs li {padding-left: 24px; background-image: var(--clock); background-repeat: no-repeat; background-position: 5px center; background-size: 14px}
-#activejobs + ol li {background-image: var(--start); background-size: 12px}
-#finishedjobs + ol li {background-image: var(--yes); background-size: 12px; background-position: 6px center}
 
 .smallhead th, #ntcpconnections th {font-size: 8pt}
 .smallhead th a:hover {text-decoration: none}
 .smallhead th a img:hover {filter: drop-shadow(0 0 1px var(--hover))}
 .mediumtags {font-size: 9pt}
 .cells {text-align: center}
-.tablefooter, .tablefooter td {padding: 10px; line-height: 1.1; border-top: var(--border_inner); border-bottom: var(--border_inner); border-right: none; box-shadow: none; background: none}
+.tablefooter, .tablefooter td, #jobstats tr:last-child td {padding: 10px; line-height: 1.1; border-top: var(--border_inner); border-bottom: var(--border_inner); border-right: none; box-shadow: none; background: none}
 .tablefooter, .tablefooter:hover td {background: linear-gradient(180deg,#010014, #010010 50%, #010010 100%)}
-.formaction {text-align: right; margin-bottom: -5px; padding: 7px 5px}
+.formaction {margin-bottom: -5px; padding: 7px 5px; text-align: right}
 
 /* peers - sort icons */
 #ntcpconnections th, #udpconnections th {background: #000010}
@@ -621,9 +579,7 @@ h3[id*="jobs"] {margin-top: 25px; clear: both}
 .sortupactive, .sortdownactive {border: 1px solid #005; box-shadow: inset 2px 2px 1px #000; opacity: 1}
 .sortupactive {background: var(--mv_up_hover) no-repeat center center, #005}
 .sortdownactive {background: var(--mv_down_hover) no-repeat center center, #005}
-
 .backlogged {line-height: 0; vertical-align: middle}
-pre#activetransports {margin: 0; padding: 15px 7px 5px 15px; width: calc(100% - 24px); border: var(--border_inner); background: rgba(0,0,16,.3)}
 
 /* configure */
 .optionlist {columns: 500px auto; padding-bottom: 1px}
@@ -1166,55 +1122,6 @@ td.optionsave {padding: 7px 5px; text-align: right; border-top: var(--border_inn
 #banneduntilrestart td {border-right: var(--border_inner); text-align: center}
 #ipv4, #ipv6, #permabanned tr:nth-child(2) {border-top: var(--border_inner); border-bottom: var(--border_inner); background: linear-gradient(180deg,#080818 50%, #000 50%)}
 
-/* events */
-#events h3 {margin-top: 6px; box-shadow: var(--highlight)}
-#events table {background: #001}
-#events tr {line-height: 1.4; box-shadow: none}
-#events td:first-child span {margin: 1px 0 0 -2px; display: inline-block; vertical-align: top; font-size: 80%; text-transform: lowercase}
-.eventspanel {margin-top: -10px}
-.eventspanel th {text-align: left; padding-left: 10px}
-.eventspanel table {font-size: 9pt}
-.eventspanel table td {padding: 5px 10px}
-#events form[action="events"] {margin-top: -11px; margin-bottom: 20px; padding: 10px 20px 10px; border: var(--border_inner); background: #000}
-#events form[action="events"] > br {display: none}
-form[action="events"] > .formaction {margin-bottom: -11px; margin-right: -21px; margin-left: -21px}
-#eventlog {margin-top: -21px; margin-bottom: 10px}
-#eventlog td {padding: 3px 10px; width: 30%}
-#eventlog td:last-child {width: 40%}
-
-/* error */
-#events .crashed, #events .network, #events .outofmem, #events .critical, #events .installf {background: rgba(96,0,0,.4)}
-/* warning */
-#events .watchdog, #events .reseed, #events .clockshi, #events .aborteds, #events .reachabi, #events .rekeyed, #events .changedp, #events .changeip {background: rgba(96,0,96,.3)}
-/* info */
-#events .softrest, #events .updated, #events .enabledf, #events .disabled, #events .installe, .becamefl {background: rgba(96,96,0,.3)}
-/* notice */
-#events .started, #events .stopped {background: rgba(0,64,0,.3)}
-#events tr:hover td {background: rgba(255,255,255,.1)}
-
-/* stats */
-form#statnav {border: var(--border_inner); padding: 10px 10px 10px 15px}
-h3.stats {border: var(--border_inner); border-radius: 0}
-.statlist {border: var(--border_inner); margin-bottom: -21px; margin-top: -11px; padding: 10px 0 5px; background: #000}
-.main .statlist li {list-style: none}
-.statlist:last-of-type {margin-bottom: -1px}
-.statlist a[name], .statlist b, .statlist li b, .statlist a[name]:hover {text-decoration: none; letter-spacing: normal}
-.statlist li::before {content: "\2B26\00A0"; font-size: 14pt; vertical-align: baseline}
-.statlist li {list-style: none; margin-bottom: -3px}
-.statlist li li {margin-left: 12px; margin-right: -20px; line-height: 1.5; list-style: none}
-.statlist li li::before {content: "\279F\00A0"; vertical-align: baseline}
-.statlist li li:last-child::before {content: "\27A1\00A0"}
-.statlist li li:last-child {padding-bottom: 0}
-.statlist a[href$="&showEvents=true"]::before {display: none}
-#stats form {border: var(--border_inner); padding: 10px; margin: -15px 0 10px}
-.statlist li ul {margin-top: 10px}
-.statlist li li b {margin-right: 3px}
-.noevents {margin-top: 0; margin-bottom: 10px}
-.nowrap {white-space: nowrap}
-.statsViewGraphs {margin: 2px 5px 0 0; display: block}
-.statsLongName {color: #37a3df; font-weight: 700}
-p#gatherstats {margin-top: 1px; margin-bottom: 25px}
-
 /* netdb (main section) */
 #netdb #pagenav ~ #pagenav {display: none}
 #netdboverview {margin: -4px auto 8px; background: repeating-linear-gradient(180deg,rgba(0,0,0,.7) 2px, rgba(0,0,16,.5) 4px); background-size: 100% 4px}
@@ -1435,125 +1342,6 @@ h3[id="udpcon"] {width: auto}
 #udpconnections tr.tablefooter td {color: var(--ink)}
 #udpconnections tr.tablefooter:hover td {border-top: var(--border_inner)}
 #udpconnections tr.tablefooter td:first-child {padding-left: 9px}
-
-/* jardump */
-#jardump {padding: 0; overflow: auto}
-#jardump {margin-top: -1px; margin-bottom: 0; font-size: 8pt; border: none}
-#jardump tt {letter-spacing: -.03em}
-#jardump hr {margin: 1px 0 0; width: 100%; height: 1px; display: block; background: #120f35}
-#jardump th {border-right: none; border-left: none; border-bottom-color: #26235c}
-#jardump th, #jardump td {vertical-align: middle; text-align: center}
-#jardump th:first-child {padding-left: 5px}
-#jardump th:first-child, #jardump td:first-child {text-align: left}
-#jardump .subheading {padding: 6px 5px; border-color: #26235c}
-#jardump .subheading code {font-weight: 700}
-.subheading.routerfiles {background: url(images/favicon.svg) no-repeat right 5px center, linear-gradient(90deg, #000, #000010 40%); background-size: 16px auto, 100%; background-blend-mode: luminosity, normal}
-.subheading.pluginfiles {background: var(--plugin) no-repeat right 5px center, linear-gradient(90deg, #000, #000010 40%); background-size: 16px, 100%; background-blend-mode: luminosity, normal}
-#jardump td {border-right: 1px inset #120f35}
-#jardump td:nth-child(2) {text-align: right; font-style: italic}
-#jardump td:last-child {word-break: break-all; text-align: left; border-right: none}
-#jardump tr:hover td {border: var(--border_inner); border-left: 1px solid transparent; border-right: 1px solid transparent}
-#jardump td:first-child {padding-left: 20px}
-#jardump td:first-child, #jardump tr:hover td:first-child {background-image: var(--package); background-position: 5px center; background-repeat: no-repeat; background-size: 14px}
-#jardump tr:hover td:first-child {padding-left: 21px; padding-right: 0}
-#jardump td:first-child b {padding: 4px; display: inline-block; border: 1px solid transparent; border-radius: 2px}
-#jardump tr:hover td:first-child b {width: calc(100% - 12px); border: 1px solid #001; box-shadow: 0 0 1px 0 #001; background: #004}
-#jardump tr:hover hr {background: transparent}
-#jardump td:last-child {word-break: break-all; text-align: left; border-right: none; padding: 1px 0 1px}
-.unsignedmod {padding: 2px 3px 2px 4px; margin: 0}
-#jardump tr:hover .unsignedmod:not(:empty) {background: #400; color: #fff; border-radius: 2px}
-.revision, .sha256, .unsignedmod {display: inline-block; user-select: all}
-.unsignedmod::selection {background: #f00; color: #fff}
-.unsignedmod::selection {background: #f00; color: #fff}
-.revision tt::selection, .sha256 tt::selection, #help code::selection, #configinfo th::selection, #console code::selection {background: #070; color: #fff}
-.revision tt::selection, .sha256 tt::selection, #help code::selection, #configinfo th::selection, #console code::selection {background: #070; color: #fff}
-.revision br::selection, .sha256 br::selection {background: transparent}
-.revision br::selection, .sha256 br::selection {background: transparent}
-#jardump tt {letter-spacing: -.03em; font-size: 8pt; font-weight: 400}
-#jardump a tt {padding-left: 13px; background-size: 11px}
-#revision, #jardump a tt {padding-left: 16px; background: var(--gitlab) no-repeat left center / 13px}
-
-/* certs */
-#certs {padding-top: 3px}
-#certs h3 {margin-bottom: -16px; padding: 7px 10px; border: var(--border_inner); border-radius: 0}
-#certs h4 {padding: 5px 10px; margin: 15px 0 0; border: var(--border_inner); letter-spacing: .05em; font-size: 10pt; background: linear-gradient(90deg, #000, #002)}
-#certs h3 + p {margin-top: 15px}
-#certs .infohelp {margin-top: 8px}
-#certs p:not(.infohelp) {margin-top: -1px; padding: 10px; border: var(--border_inner); background: #000}
-#certs p + h4 {margin-top: -1px}
-#certs h4 span {word-spacing: 0; letter-spacing: 0; text-transform: none; font-size: 90%}
-#certs h4 + .infohelp {margin: -1px 0 10px}
-#certs textarea {margin: -1px 0 -3px 0; width: calc(100% - 18px); border: var(--border_inner)}
-#certs textarea + #end, #certs h3 + #end {margin-bottom: 14px; display: block}
-#certs h3 + #end {margin-bottom: 26px}
-
-/* info */
-#routerinformation {padding-bottom: 10px}
-#routerinformation #enviro + h3 {margin-bottom: -3px}
-#routerinformation #upnpstatus {margin-bottom: 1px}
-#routerinformation h3 {padding-top: 10px; line-height: 1.3}
-#routerinformation h3:first-of-type {margin-bottom: 10px}
-#routerinformation .h3navlinks a {line-height: 1.7}
-#routerinformation #version::before, #routerinformation #enviro + h3::before, #routerinformation #transports::before {margin: -2px 9px 0 2px; width: 17px; height: 17px; display: inline-block; vertical-align: middle; background: url(images/favicon.svg) no-repeat center center / 17px; content: ""; filter: saturate(.5)}
-#routerinformation #enviro + h3::before {background-image: url(/themes/console/images/server.svg)}
-#routerinformation #transports::before {background-image: url(/themes/console/images/globe.svg)}
-#routerinfo p {padding: 0; margin: 11px 0 10px; border: none; filter: none}
-#routerinfo table {margin: 0}
-#routerinfo a {margin: -3px 5px -3px 0; padding: 3px 10px; display: inline-block; white-space: nowrap; font-size: smaller}
-#routerinformation tr:nth-child(n+2):not(:hover) a:not(#revision) {display: none}
-#routerinformation table:hover tr:nth-child(n+2) a:not(#revision) {display: inline; margin: -3px 0 -3px 4px}
-#routerinformation th, #routerinformation td {padding: 8px 12px}
-#routerinfo td {width: 25%; border-bottom: 1px inset #225}
-#routerinformation td:first-child {padding-left: 12px; width: 1%; min-width: 80px; max-width: 80px; white-space: nowrap}
-#routerinfo td:first-child, #routerinfo td:nth-child(3) {white-space: nowrap; text-align: right}
-#routerinfo td:nth-child(2):not([colspan]) {white-space: nowrap; border-right: 1px inset #225}
-p#upnpstatus {margin-top: 10px; padding-left: 50px}
-
-/* debug */
-#debug h2, #debug h3 {border-radius: 0}
-#debug h2 {padding: 10px; background: var(--bug) no-repeat right 5px center, var(--title); background-size: 24px, 4px 100%, 100%; background-blend-mode: luminosity, normal}
-#debug h2:first-child, #dht {margin-top: 10px}
-#debug h2 + table {margin-top: -13px}
-#debug h2 + h3, .buckets {margin-top: -13px}
-#debug h3 {padding: 6px 10px; border-width: 1px; background: var(--title); background-size: 4px 100%}
-#debug h3 + table {margin-top: -11px}
-#bucketSet code, .bucket, .b32 {font-family: var(--monospaced)}
-#bucketSet {margin: 0; line-height: 1.6}
-.bucketCount {margin-top: -6px; padding: 6px 0; background: linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,.7), rgba(0,0,0,0)), linear-gradient(180deg,#001 50%, #000 50%)}
-.bucketsContainer, .bucketCount {margin: 0; text-align: center; border: 1px solid #120f35; box-shadow: var(--highlight)}
-.bucketsContainer {margin: -1px 0 -16px; padding: 8px 8px 4px; vertical-align: middle; background: #000007}
-.buckets {margin-top: -13px; margin-bottom: 9px; max-height: 600px; overflow: auto; word-break: break-all}
-.bucket {margin: 2px; padding: 1px 4px; display: inline-block; max-width: 80px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #770; font-weight: 700; box-shadow: 0 0 0 1px #003, var(--highlight); background: #002; user-select: all}
-.bucket::selection {background: #770; color: #fff}
-.bucket:empty {display: none}
-.debug_container.buckets {line-height: 1.4}
-.debug_container:empty::after {content: "None"; display: inline-block; font-style: italic}
-.debug_container + h3, .debug_outboundsessions {margin-top: -1px}
-.debug_container {line-height: 1.6}
-.debug_container {margin-top: -11px; padding: 10px 15px; border: var(--border_inner); background: #000008}
-.debug_inboundsessions {background: var(--in) no-repeat 6px center, var(--title); background-size: 16px, 4px 100%}
-.debug_outboundsessions, .debug_inboundsessions {padding: 8px 10px 6px 28px}
-.debug_outboundsessions {margin-top: -2px; background: var(--out) no-repeat 6px center, var(--title); background-size: 16px, 4px 100%}
-#debugDHT, #debugStats, .bucketCount, #bucketSet {font-size: 110%}
-#debugDHT {margin: 1px 0 10px}
-#debug li {margin: 0; padding: 2px 0; display: inline-block; min-width: 400px; text-align: left}
-#debug_portmapper {margin-top: -4px}
-#debug .sentTags li {width: 100%; display: block}
-#debug .sentTags ul {columns: 1 auto}
-.debug_sesskey, .debug_pubkey, .skm_key td:first-child {color: #393; font-family: var(--monospaced)}
-#debugStats {margin-top: 2px; line-height: 1.5}
-.debug_targetinfo b {margin-right: 3px}
-.debug_targetinfo {line-height: 1.4}
-.debug_version {color: #060}
-#debug th {padding: 7px 10px}
-#debug th:last-child, #debug td:last-child {text-align: right}
-#debug td:last-child {vertical-align: top}
-#debug td span {max-width: 300px; display: inline-block; vertical-align: text-bottom; white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
-#debug ul, .debug_targetinfo {margin: 0; text-align: left; columns: 400px 2; column-rule: var(--border_badge); column-gap: 30px}
-#portmapper td:first-child, #sockets td:first-child {font-weight: 700}
-#portmapper td {padding: 5px 10px}
-#portmapper th, #portmapper td {text-align: left}
-.skm_key td:first-child b {font-family: var(--bodyfont); color: var(--ink)}
 
 /* home */
 #home .welcome h2 {margin-top: 12px}
@@ -1975,8 +1763,6 @@ h3.sybils + div, h3.sybils + a[name] + table {margin-top: -1px}
 #stats ul ul {box-shadow: none; background: none}
 #wrapperlogs pre {max-height: 500px; resize: none}
 
-#jobstats tr:last-child td {font-weight: 700}
-
 #profilelist td:nth-child(3) i {letter-spacing: 0}
 .routerid img {margin-right: 2px}
 #schedjobs ul {margin: 0 -5px; columns: 350px auto; column-gap: 0}
@@ -2055,47 +1841,255 @@ html, body {height: 100%}
 
 #lookupCondensed {display: none}
 
-#updateAvailable {margin: 3px 0; width: 100%; display: inline-block; line-height: 1.2; font-size: 9pt}
-#updateAvailable + br + button + br + #updateAvailable::before {margin: 4px 0; content: ""; display: inline-block; height: 1px; background: #113; width: calc(100% - 20px)}
-#updateAvailable + br + button + br + #updateAvailable {margin-top: 2px}
-#updateAvailable + br + button + br + #updateAvailable + br + button {margin-bottom: 5px}
+/* info */
+#routerinformation {padding-bottom: 10px}
+#routerinformation #enviro + h3 {margin-bottom: -3px}
+#routerinformation #upnpstatus {margin-bottom: 1px}
+#routerinformation h3 {padding-top: 10px; line-height: 1.3}
+#routerinformation h3:first-of-type {margin-bottom: 10px}
+#routerinformation .h3navlinks a {line-height: 1.7}
+#routerinformation #version::before, #routerinformation #enviro + h3::before, #routerinformation #transports::before {margin: -2px 9px 0 2px; width: 17px; height: 17px; display: inline-block; vertical-align: middle; background: url(images/favicon.svg) no-repeat center center / 17px; content: ""; filter: saturate(.5)}
+#routerinformation #enviro + h3::before {background-image: url(/themes/console/images/server.svg)}
+#routerinformation #transports::before {background-image: url(/themes/console/images/globe.svg)}
+#routerinfo p {padding: 0; margin: 11px 0 10px; border: none; filter: none}
+#routerinfo table {margin: 0}
+#routerinfo a {margin: -3px 5px -3px 0; padding: 3px 10px; display: inline-block; white-space: nowrap; font-size: smaller}
+#routerinformation tr:nth-child(n+2):not(:hover) a:not(#revision) {display: none}
+#routerinformation table:hover tr:nth-child(n+2) a:not(#revision) {display: inline; margin: -3px 0 -3px 4px}
+#routerinformation th, #routerinformation td {padding: 8px 12px}
+#routerinfo td {width: 25%; border-bottom: 1px inset #225}
+#routerinformation td:first-child {padding-left: 12px; width: 1%; min-width: 80px; max-width: 80px; white-space: nowrap}
+#routerinfo td:first-child, #routerinfo td:nth-child(3) {white-space: nowrap; text-align: right}
+#routerinfo td:nth-child(2):not([colspan]) {white-space: nowrap; border-right: 1px inset #225}
+p#upnpstatus {margin-top: 10px; padding-left: 50px}
+#activetransports {margin: 0; padding: 15px 7px 5px 15px; width: calc(100% - 24px); border: var(--border_inner); background: rgba(0,0,16,.3)}
+
+/* jardump */
+#jardump {padding: 0; overflow: auto}
+#jardump {margin-top: -1px; margin-bottom: 0; font-size: 8pt; border: none}
+#jardump tt {letter-spacing: -.03em}
+#jardump hr {margin: 1px 0 0; width: 100%; height: 1px; display: block; background: #120f35}
+#jardump th {border-right: none; border-left: none; border-bottom-color: #26235c}
+#jardump th, #jardump td {vertical-align: middle; text-align: center}
+#jardump th:first-child {padding-left: 5px}
+#jardump th:first-child, #jardump td:first-child {text-align: left}
+#jardump .subheading {padding: 6px 5px; border-color: #26235c}
+#jardump .subheading code {font-weight: 700}
+.subheading.routerfiles {background: url(images/favicon.svg) no-repeat right 5px center, linear-gradient(90deg, #000, #000010 40%); background-size: 16px auto, 100%; background-blend-mode: luminosity, normal}
+.subheading.pluginfiles {background: var(--plugin) no-repeat right 5px center, linear-gradient(90deg, #000, #000010 40%); background-size: 16px, 100%; background-blend-mode: luminosity, normal}
+#jardump td {border-right: 1px inset #120f35}
+#jardump td:nth-child(2) {text-align: right; font-style: italic}
+#jardump td:last-child {word-break: break-all; text-align: left; border-right: none}
+#jardump tr:hover td {border: var(--border_inner); border-left: 1px solid transparent; border-right: 1px solid transparent}
+#jardump td:first-child {padding-left: 20px}
+#jardump td:first-child, #jardump tr:hover td:first-child {background-image: var(--package); background-position: 5px center; background-repeat: no-repeat; background-size: 14px}
+#jardump tr:hover td:first-child {padding-left: 21px; padding-right: 0}
+#jardump td:first-child b {padding: 4px; display: inline-block; border: 1px solid transparent; border-radius: 2px}
+#jardump tr:hover td:first-child b {width: calc(100% - 12px); border: 1px solid #001; box-shadow: 0 0 1px 0 #001; background: #004}
+#jardump tr:hover hr {background: transparent}
+#jardump td:last-child {word-break: break-all; text-align: left; border-right: none; padding: 1px 0 1px}
+.unsignedmod {padding: 2px 3px 2px 4px; margin: 0}
+#jardump tr:hover .unsignedmod:not(:empty) {background: #400; color: #fff; border-radius: 2px}
+.revision, .sha256, .unsignedmod {display: inline-block; user-select: all}
+.unsignedmod::selection {background: #f00; color: #fff}
+.unsignedmod::selection {background: #f00; color: #fff}
+.revision tt::selection, .sha256 tt::selection, #help code::selection, #configinfo th::selection, #console code::selection {background: #070; color: #fff}
+.revision tt::selection, .sha256 tt::selection, #help code::selection, #configinfo th::selection, #console code::selection {background: #070; color: #fff}
+.revision br::selection, .sha256 br::selection {background: transparent}
+.revision br::selection, .sha256 br::selection {background: transparent}
+#jardump tt {letter-spacing: -.03em; font-size: 8pt; font-weight: 400}
+#jardump a tt {padding-left: 13px; background-size: 11px}
+#revision, #jardump a tt {padding-left: 16px; background: var(--gitlab) no-repeat left center / 13px}
+
+/* debug */
+#debug h2, #debug h3 {border-radius: 0}
+#debug h2 {padding: 10px; background: var(--bug) no-repeat right 5px center, var(--title); background-size: 24px, 4px 100%, 100%; background-blend-mode: luminosity, normal}
+#debug h2:first-child, #dht {margin-top: 10px}
+#debug h2 + table {margin-top: -13px}
+#debug h2 + h3, .buckets {margin-top: -13px}
+#debug h3 {padding: 6px 10px; border-width: 1px; background: var(--title); background-size: 4px 100%}
+#debug h3 + table {margin-top: -11px}
+#bucketSet code, .bucket, .b32 {font-family: var(--monospaced)}
+#bucketSet {margin: 0; line-height: 1.6}
+.bucketCount {margin-top: -6px; padding: 6px 0; background: linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,.7), rgba(0,0,0,0)), linear-gradient(180deg,#001 50%, #000 50%)}
+.bucketsContainer, .bucketCount {margin: 0; text-align: center; border: 1px solid #120f35; box-shadow: var(--highlight)}
+.bucketsContainer {margin: -1px 0 -16px; padding: 8px 8px 4px; vertical-align: middle; background: #000007}
+.buckets {margin-top: -13px; margin-bottom: 9px; max-height: 600px; overflow: auto; word-break: break-all}
+.bucket {margin: 2px; padding: 1px 4px; display: inline-block; max-width: 80px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #770; font-weight: 700; box-shadow: 0 0 0 1px #003, var(--highlight); background: #002; user-select: all}
+.bucket::selection {background: #770; color: #fff}
+.bucket:empty {display: none}
+.debug_container.buckets {line-height: 1.4}
+.debug_container:empty::after {content: "None"; display: inline-block; font-style: italic}
+.debug_container + h3, .debug_outboundsessions {margin-top: -1px}
+.debug_container {line-height: 1.6}
+.debug_container {margin-top: -11px; padding: 10px 15px; border: var(--border_inner); background: #000008}
+.debug_inboundsessions {background: var(--in) no-repeat 6px center, var(--title); background-size: 16px, 4px 100%}
+.debug_outboundsessions, .debug_inboundsessions {padding: 8px 10px 6px 28px}
+.debug_outboundsessions {margin-top: -2px; background: var(--out) no-repeat 6px center, var(--title); background-size: 16px, 4px 100%}
+#debugDHT, #debugStats, .bucketCount, #bucketSet {font-size: 110%}
+#debugDHT {margin: 1px 0 10px}
+#debug li {margin: 0; padding: 2px 0; display: inline-block; min-width: 400px; text-align: left}
+#debug_portmapper {margin-top: -4px}
+#debug .sentTags li {width: 100%; display: block}
+#debug .sentTags ul {columns: 1 auto}
+.debug_sesskey, .debug_pubkey, .skm_key td:first-child {color: #393; font-family: var(--monospaced)}
+#debugStats {margin-top: 2px; line-height: 1.5}
+.debug_targetinfo b {margin-right: 3px}
+.debug_targetinfo {line-height: 1.4}
+.debug_version {color: #060}
+#debug th {padding: 7px 10px}
+#debug th:last-child, #debug td:last-child {text-align: right}
+#debug td:last-child {vertical-align: top}
+#debug td span {max-width: 300px; display: inline-block; vertical-align: text-bottom; white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
+#debug ul, .debug_targetinfo {margin: 0; text-align: left; columns: 400px 2; column-rule: var(--border_badge); column-gap: 30px}
+#portmapper td:first-child, #sockets td:first-child {font-weight: 700}
+#portmapper td {padding: 5px 10px}
+#portmapper th, #portmapper td {text-align: left}
+.skm_key td:first-child b {font-family: var(--bodyfont); color: var(--ink)}
+
+/* certs */
+#certs {padding-top: 3px}
+#certs h3 {margin-bottom: -16px; padding: 7px 10px; border: var(--border_inner); border-radius: 0}
+#certs h4 {padding: 5px 10px; margin: 15px 0 0; border: var(--border_inner); letter-spacing: .05em; font-size: 10pt; background: linear-gradient(90deg, #000, #002)}
+#certs h3 + p {margin-top: 15px}
+#certs .infohelp {margin-top: 8px}
+#certs p:not(.infohelp) {margin-top: -1px; padding: 10px; border: var(--border_inner); background: #000}
+#certs p + h4 {margin-top: -1px}
+#certs h4 span {word-spacing: 0; letter-spacing: 0; text-transform: none; font-size: 90%}
+#certs h4 + .infohelp {margin: -1px 0 10px}
+#certs textarea {margin: -1px 0 -3px 0; width: calc(100% - 18px); border: var(--border_inner)}
+#certs textarea + #end, #certs h3 + #end {margin-bottom: 14px; display: block}
+#certs h3 + #end {margin-bottom: 26px}
 
 /* stats */
-.statlist li.statsName:first-child {margin-top: 0}
-.statlist {padding-bottom: 0}
-.statlist:last-of-type {margin-bottom: -5px}
-#stats .joblog li:last-child {margin-bottom: 12px}
-.statsName {margin: 0 6px 10px 0; padding: 10px 10px 5px 10px; width: calc(100% - 22px); display: inline-block; box-shadow: var(--highlight), inset 0 0 2px 1px #005; border: var(--border_inner); background: #000010}
-.statlist li br, .statlist li li br {display: inline-block}
-.statlist li b {font-size: 110%}
-.statsLongName {margin-left: 15px; margin-bottom: -10px; padding-bottom: 6px; width: calc(100% - 12px); display: block; border-bottom: 1px solid #27235c; opacity: .8}
-.statlist li li b {font-size: 100%}
-.statsName b {width: calc(100% - 24px)}
-.statsName b, .statsName i {display: inline-block}
-.statsName::before {content: none}
-.noevents, .statlist li li:last-child::after {margin-bottom: 0}
-.noevents::after, .statlist li li:last-child::after {padding-bottom: 0; margin-bottom: 0; border-bottom-color: transparent}
+#statnav {border: var(--border_inner); padding: 10px 10px 10px 15px}
+.graphstat {margin: 8px 4px 0 0; padding: 1px 8px 2px; font-size: 90%; line-height: 1}
+h3.stats {border: var(--border_inner); border-radius: 0}
+
+/* TODO: separate classes for jobs and stats uls */
+.joblog {border-radius: 2px 2px 0 0; overflow-y: hidden; margin-top: 10px}
+.joblog br {margin-bottom: -5px}
+.joblog form:first-child {margin-top: 10px}
+.joblog h3 {margin-top: 10px}
+.joblog hr {margin: 10px 0}
+.joblog ul {margin: 5px 0 -10px}
+.joblog li {word-wrap: break-word; line-height: 1.2; margin: 2px 0 2px 30px; padding: 2px 20px 2px 0}
+.joblog li:first-child {padding-top: 0}
+.joblog li:last-child {padding-bottom: 5px; margin-bottom: 0}
+.joblog li li li {margin-bottom: 10px}
+.joblog p {line-height: 1.4}
+.joblog table {margin-top: 15px; margin-left: 0; margin-bottom: 15px}
+.joblog table td:first-child {font-weight: 700}
+.joblog th:first-child {text-align: left; padding-left: 6px}
+.noevents {margin-top: 0; margin-bottom: 10px}
 .noevents::after {padding-bottom: 10px}
-.statlist .bullet {display: none}
-.statlist li.statsName b {padding-left: 16px; background: url(/themes/console/dark/images/link.png) left top no-repeat; background-size: 12px}
-.statlist li.statsName ul li b {padding-left: 0; background: none}
-#stats label {display: inline-block}
-#stats h3 {border-width: 1px}
-#stats .toggle_input {width: 0; height: 0; position: absolute; top: -99999px; left: -99999px; opacity: 0}
-#stats input:not(:checked) + h3, #stats input:not(:checked) + h3 + .statlist, #stats input:not(:checked) + h3 + .statlist + br {display: none}
-#stats input:checked + h3 + .statlist {margin-bottom: -3px; display: block}
-#stats form {display: none}
+.noevents, #stats .statlist li li:last-child::after {margin-bottom: 0}
+.noevents::after, #stats .statlist li li:last-child::after {padding-bottom: 0; margin-bottom: 0; border-bottom-color: transparent}
+.statsViewGraphs {margin: 2px 5px 0 0; display: block}
+.statvalue {padding: 0 2px 0 0; font-weight: 700; font-style: italic; color: #ccd1ff}
+#stats .statlist a[href$="&showEvents=true"]::before {display: none}
+#stats .statlist a[name], #stats .statlist b, #stats .statlist li b, #stats .statlist a[name]:hover {text-decoration: none; letter-spacing: normal}
+#stats .statlist {border: var(--border_inner); margin-bottom: -21px; margin-top: -11px; padding: 10px 0 5px; background: #000}
+#stats .statlist .bullet {display: none}
+#stats .statlist li {list-style: none; margin-bottom: -3px}
+#stats .statlist li ul {margin-top: 10px}
+#stats .statlist:last-of-type {margin-bottom: -5px}
+#stats .statlist {padding: 10px 20px 0}
+#stats .statlist {list-style: none}
+#stats .statlist li {margin: 0 0 10px}
+#stats .statlist li li {margin-left: 12px; margin-right: -20px; padding-left: 20px; line-height: 1.5; list-style: none}
+#stats .statlist li li:last-child {padding-bottom: 0}
+#stats .statlist li.statsName {padding: 20px 10px 10px}
+#stats .statlist li.statsName:first-child {margin-top: 0}
+#stats .statlist li b {font-size: 110%}
+#stats .statlist li li b {margin-right: 3px; font-size: 100%}
+#stats .statlist ul li:last-child b {padding-left: 0; width: auto}
+#stats .statlist li.statsName b {padding-left: 16px; background: url(/themes/console/dark/images/link.png) left top no-repeat; background-size: 12px}
+#stats .statlist li.statsName ul li b {padding-left: 0; background: none}
+#stats .statlist li:not(.statsName)::before {content: "\2B26\00A0"; font-size: 14pt; vertical-align: baseline}
+#stats .statlist li br, #stats .statlist li li br {display: inline-block}
+#stats .statlist li li::before {content: "\279F\00A0"; vertical-align: baseline}
+#stats .statlist li li:last-child::before {content: "\27A1\00A0"}
+#gatherstats {margin: 10px 10px 20px}
 #stats .confignav {position: sticky; top: -1px; z-index: 999}
+#stats form {border: var(--border_inner); padding: 10px; margin: -15px 0 10px}
+#stats form {display: none}
+#stats h3 {margin: 0 10px 8px; border-width: 1px}
+#stats .joblog li:last-child {margin-bottom: 12px}
+#stats .joblog {margin-top: -4px; margin-bottom: -10px; overflow: hidden}
+#stats label {display: inline-block}
+.statsLongName {color: #37a3df; font-weight: 700}
+.statsLongName {margin-left: 15px; margin-bottom: -10px; padding-bottom: 6px; width: calc(100% - 12px); display: block; border-bottom: 1px solid #27235c; opacity: .8}
+.statsName::before {content: none}
+.statsName b, .statsName i {display: inline-block}
+.statsName b {width: calc(100% - 24px)}
+.statsName {margin: 0 6px 10px 0; padding: 10px 10px 5px 10px; width: calc(100% - 22px); display: inline-block; box-shadow: var(--highlight), inset 0 0 2px 1px #005; border: var(--border_inner); background: #000010}
+#stats .statlist {margin: 0; padding: 0; border: none; background: none}
+#stats .tab:not(.tab2):active {color: var(--ink)}
 #stats .tab:not(.tab2) {color: var(--a)}
 #stats .tab:not(.tab2):hover {color: var(--a)}
-#stats .tab:not(.tab2):active {color: var(--ink)}
-#stats .tab, #stats .tab2 {padding: 4px 14px 6px}
-p#gatherstats {margin: 0 0 11px}
-#stats .joblog {margin-top: -4px; margin-bottom: -10px; overflow: hidden}
-#stats .statlist {margin: 0; padding: 0; border: none; background: none}
-.statvalue {padding: 0 2px 0 0; font-weight: 700; font-style: italic; color: #ccd1ff}
-.graphstat {margin: 0; padding: 1px 8px 2px; font-size: 90%; line-height: 1}
-.statlist ul li:last-child b {padding-left: 0; width: auto}
+#stats .tab, #stats .tab2 {padding: 4px 14px 6px; font-size: 90%}
+#stats .toggle_input {width: 0; height: 0; position: absolute; top: -99999px; left: -99999px; opacity: 0}
+#stats input:checked + h3 + #stats .statlist {margin-bottom: -3px; display: block}
+#stats input:not(:checked) + h3, #stats input:not(:checked) + h3 + .statlist, #stats input:not(:checked) + h3 + .statlist + br {display: none}
+
+/* jobs */
+.joblog h3:first-of-type {margin-top: 0}
+#jobs h2 {border-radius: 0}
+#jobs ul, #jobs ol, #jobs td {font-size: 95%}
+#jobs .joblog {margin-top: 10px; overflow: hidden}
+#jobs ol {padding: 5px 1px 5px 5px; columns: auto 400px; column-gap: 0; text-align: left}
+#jobs ol:empty {display: none}
+#jobs ol li:first-child, #schedjobs li:first-child {margin-top: 0}
+#jobs ol li {break-inside: avoid; page-break-inside: avoid; -webkit-break-inside: avoid; text-align: left; line-height: 1.5}
+#jobs #scheduledjobs + ol li {min-width: 0}
+h2#jobrunners {margin-top: 0; display: none}
+#jobrunners ~ ol {margin-top: -11px; margin-bottom: 5px; padding: 4px 3px; width: calc(100% - 8px); display: block; border: var(--border_inner); background: #010008}
+#jobrunners ~ ol > li:last-child {margin-bottom: 0}
+h3[id*="job"] {border: var(--border_inner); padding: 8px 10px; margin: 12px 0 10px 0; border-radius: 0; text-transform: uppercase; text-shadow: 0 0 2px #010011; letter-spacing: .08em}
+h3[id*="jobs"] {margin-top: 25px; clear: both}
+#schedjobs {margin: -6px 0 0; width: 100%}
+#jobstats {margin-bottom: 10px}
+#jobstats th, #jobstats td {padding: 3px 8px; text-align: right}
+#jobstats th {font-size: 90%}
+#schedjobs th:first-child, #schedjobs td:first-child, #jobstats th:first-child, #jobstats td:first-child {margin-bottom: 15px; padding-left: 8px; text-align: left; font-weight: 700}
+#schedjobs td:first-child {padding: 5px 8px 3px}
+#jobstats tr:last-child td {font-size: 105%; font-weight: 700; border-top: 3px solid #1e1c4a !important; background: #002}
+#schedjobs tr, #schedjobs tr:hover, #schedjobs tr, #schedjobs tr:hover td {background: #010008}
+#jobstats + hr {display: none}
+#totaljobstats {margin-bottom: -2px; margin-top: 10px}
+#activejobs + ol {padding-bottom: 5px}
+#finishedjobs + ol li, #scheduledjobs + ol li, #activejobs + ol li, #readyjobs + ol li, #schedjobs li {margin: 3px 2px; padding: 8px 3px 8px 24px; width: calc(100% - 32px); list-style: none; font-size: 95%; border: 1px solid #1e1c4a; box-shadow: var(--highlight), inset 0 0 2px 1px #225}
+#activejobs + ol li, #scheduledjobs + ol li, #readyjobs + ol li, #finishedjobs + ol li, #schedjobs li {padding-left: 24px; background-image: var(--clock); background-repeat: no-repeat; background-position: 5px center; background-size: 14px}
+#activejobs + ol li {background-image: var(--start); background-size: 12px}
+#finishedjobs + ol li {background-image: var(--yes); background-size: 12px; background-position: 6px center}
+
+/* events */
+.eventspanel {margin-top: -10px}
+.eventspanel th {text-align: left; padding-left: 10px}
+.eventspanel table {font-size: 9pt}
+.eventspanel table td {padding: 5px 10px}
+#events h3 {margin-top: 6px; box-shadow: var(--highlight)}
+#events table {background: #001}
+#events tr {line-height: 1.4; box-shadow: none}
+#events td:first-child span {margin: 1px 0 0 -2px; display: inline-block; vertical-align: top; font-size: 80%; text-transform: lowercase}
+#events .messages {margin-top: 21px; margin-bottom: -16px; box-shadow: inset 0 0 0 1px #300}
+#events form[action="events"] {margin-top: -11px; margin-bottom: 20px; padding: 10px 20px 10px; border: var(--border_inner); background: #000}
+#events form[action="events"] > br {display: none}
+form[action="events"] > .formaction {margin-bottom: -11px; margin-right: -21px; margin-left: -21px}
+#eventlog {margin-top: -21px; margin-bottom: 10px}
+#eventlog td {padding: 3px 10px; width: 30%}
+#eventlog td:last-child {width: 40%}
+
+/* error */
+#events .crashed, #events .network, #events .outofmem, #events .critical, #events .installf {background: rgba(96,0,0,.4)}
+/* warning */
+#events .watchdog, #events .reseed, #events .clockshi, #events .aborteds, #events .reachabi, #events .rekeyed, #events .changedp, #events .changeip {background: rgba(96,0,96,.3)}
+/* info */
+#events .softrest, #events .updated, #events .enabledf, #events .disabled, #events .installe, .becamefl {background: rgba(96,96,0,.3)}
+/* notice */
+#events .started, #events .stopped {background: rgba(0,64,0,.3)}
+#events tr:hover td {background: rgba(255,255,255,.1)}
 
 /* h1 icons */
 h1 {background: var(--h1_network) no-repeat 10px center, var(--th)}
@@ -2166,8 +2160,8 @@ h1::first-letter {font-size: 107%}
 #peerdefs li {line-height: 1.6}
 
 /* slide-up messages */
-.main:not(#config_update) div.messages, #config_update #messages {margin-left: -11px; margin-right: -11px; width: calc(100% - 20px); position: absolute; top: 3px; z-index: 100; box-shadow: var(--highlight), inset 0 0 2px 1px #808; background: var(--infohelp) no-repeat 15px center, var(--close) right 6px top 6px no-repeat, #000; background-size: 28px, 14px; filter: drop-shadow(0 2px 2px rgba(0,0,0,.5)); animation: 2s hide-up 8s ease-out forwards}
-.main:not(#config_update) div.messages:hover, #config_update #messages:hover {cursor: crosshair}
+.main:not(#config_update) .messages, #config_update #messages {margin-left: -11px; margin-right: -11px; width: calc(100% - 20px); position: absolute; top: 3px; z-index: 100; box-shadow: var(--highlight), inset 0 0 2px 1px #808; background: var(--infohelp) no-repeat 15px center, var(--close) right 6px top 6px no-repeat, #000; background-size: 28px, 14px; filter: drop-shadow(0 2px 2px rgba(0,0,0,.5)); animation: 2s hide-up 8s ease-out forwards}
+.main:not(#config_update) .messages:hover, #config_update #messages:hover {cursor: crosshair}
 #graphs .messages {top: -16px; z-index: 999}
 #config_homepage .tabletitle:first-of-type {margin-top: -4px}
 #bannedpeers {margin-bottom: -15px}
@@ -2400,7 +2394,7 @@ iframe.iframed {margin: 15px 0 0}
 .percentBarText {padding-top: 1px}
 .sb_notice {margin-bottom: -6px} .sb_netstatus, .tunnelBuildStatus {margin-bottom: -4px}
 .sitemapLabel {padding-bottom: 6px}
-.statlist {margin-bottom: -25px} .statlist:last-of-type {margin-bottom: -6px}
+#stats .statlist {margin-bottom: -25px} #stats .statlist:last-of-type {margin-bottom: -6px}
 .tab, .tab2 {margin: 0 -2px -1px -2px} .tab2 {padding: 5px 14px 5px} .tab a, .tab a:visited {padding: 4px 16px 3px}
 .tunnelBuildStatus, .tunnelBuildStatus::before {vertical-align: middle}
 #sidebar h4 {box-shadow: none}
@@ -2459,7 +2453,7 @@ input.check[value$="updates"], input.check[value$="updates"]:hover, input.check[
 #criticallogs + h3.tabletitle a:last-child {padding-left: 12px; padding-right: 12px}
 }
 
-@supports (columns: 2 500px) {@media screen and (max-width: 1400px) {.statlist {padding: 10px; columns: auto 500px; column-gap: 10px; text-align: center} .statsName {min-width: 0} .statlist li li {margin-left: 6px}}}
+@supports (columns: 2 500px) {@media screen and (max-width: 1400px) {#stats .statlist {padding: 10px; columns: auto 500px; column-gap: 10px; text-align: center} .statsName {min-width: 0} #stats .statlist li li {margin-left: 6px}}}
 
 @media screen and (max-width: 1360px) {
 #floodfills th:nth-child(8), #floodfills td:nth-child(8), #floodfills th:nth-child(13), #floodfills td:nth-child(13), #floodfills th:nth-child(14), #floodfills td:nth-child(14) {display: none}
@@ -2505,8 +2499,7 @@ td.optionsave, #i2pupdates td:first-child {width: 30%; white-space: normal}
 .sb_netstatus {padding: 6px 3px}
 .tab, .tab2 {min-width: 48px}
 .tab a {padding-left: 9px; padding-right: 9px}
-.news h3, #newspage h3 {padding-left: 20px; font-size: 10pt; background-size: 13px}
-#newspage h3 {padding-left: 27px; background-size: 13px, 4px 100%, 100%}
+.news h3, #newspage h3 {padding-left: 26px; font-size: 10pt; background-size: 13px}
 .appicon {height: 40px}
 .applink img {height: 24px; max-height: 24px; max-width: 24px}
 .applabel {width: 130px}
@@ -2557,7 +2550,7 @@ h3.tabletitle a, #version.tabletitle a {padding-left: 18px}
 
 @media screen and (min-width: 1400px) {
 #help #changelog pre {margin-left: 0; padding-left: 10px; width: calc(100% - 22px); overflow-y: hidden; white-space: pre-wrap; font-size: 10pt; columns: 540px auto; column-gap: 40px; column-rule: 1px dotted #26235c}
-.statlist {padding: 10px; columns: auto 540px; column-gap: 10px; text-align: center}
+#stats .statlist {padding: 10px; columns: auto 540px; column-gap: 10px; text-align: center}
 .statsName {min-width: 540px}
 }
 
