@@ -360,10 +360,10 @@ p:empty + .sb_notice {margin-top: 10px}
 #sb_graphstats {padding: 2px 8px; display: inline-block; position: relative; z-index: 1000; font-weight: 700; border: var(--border_hover); border-top: none; background: #001; opacity: 0; transition: ease opacity .3s}
 a:active #sb_graphstats {border-color: var(--active)}
 #sb_graphcontainer:hover #sb_graphstats {opacity: 1; transition: ease opacity .3s}
-#sb_graphcontainer {margin: -4px -7px -7px; padding: 0 1px; height: 44px; position: relative; z-index: 10; overflow: hidden; box-shadow: inset 0 0 0 1px #26235c, inset 0 0 0 2px #000, inset 0 0 3px 1px #004; background: repeating-linear-gradient(90deg, rgba(0,0,0,0) 14px, rgba(112,107,199,.7) 15px, rgba(0,0,0,0) 15px, rgba(0,0,0,0) 30px), repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(112,107,199,.3), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 14px)}
-#minigraph {margin: -19px -1px 0 0; width: 194px; height: 40px}
+#sb_graphcontainer {margin: -6px -9px -8px; padding: 0 1px; height: 44px; position: relative; z-index: 10; overflow: hidden; box-shadow: inset 0 0 0 1px #26235c, inset 0 0 0 2px #000, inset 0 0 3px 1px #004; background: repeating-linear-gradient(90deg, rgba(0,0,0,0) 14px, rgba(112,107,199,.7) 15px, rgba(0,0,0,0) 15px, rgba(0,0,0,0) 30px), repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(112,107,199,.3), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 14px)}
+#sidebar #minigraph {margin: -19px -1px 0; width: 206px; height: 40px}
 #xhr > hr + #sb_graphcontainer > span + a > #minigraph {height: 40px}
-#minigraphcontainer {margin-top: -43px; margin-left: 1px; width: 204px; height: 39px; background-repeat: no-repeat; background-size: 204px 40px}
+#sidebar #minigraphcontainer {margin-top: -43px; margin-left: 1px; width: 204px; height: 39px; background-repeat: no-repeat; background-size: 204px 40px}
 #homepage #minigraphcontainer {margin-top: -42px; height: 38px}
 #sb_graphcontainer::before {position: absolute; top: 2px; left: -1px; width: 100%; height: 40px; content: ""; display: inline-block; background: linear-gradient(180deg,rgba(0,0,0,0), rgba(0,0,0,0), rgba(0,0,0,.3)); pointer-events: none; will-change: transform}
 
@@ -389,7 +389,7 @@ a:active #sb_graphstats {border-color: var(--active)}
 #sidebar h4 a {width: auto; vertical-align: middle; display: inline}
 .sb_netstatus, .sb_netstatus a {vertical-align: baseline}
 .sb_netstatus a:hover, .sb_netstatus a:visited:hover {color: var(--a)}
-.sb_netstatus {margin: -3px -1px -4px; padding: 7px; width: 100%; display: inline-block; line-height: 1.2; vertical-align: middle; text-shadow: 0 1px 1px #000; box-shadow: 0 0 0 1px #003, var(--highlight), inset 0 0 2px 1px #005; box-sizing: border-box}
+.sb_netstatus {margin: -3px -1px -5px; padding: 7px; width: calc(100% + 2px); display: inline-block; line-height: 1.2; vertical-align: middle; text-shadow: 0 1px 1px #000; box-shadow: 0 0 0 1px #003, var(--highlight), inset 0 0 2px 1px #005; box-sizing: border-box}
 .sb_netstatus.firewalled {color: #944; border: 1px solid #311; box-shadow: 0 0 0 1px #003, var(--highlight), inset 0 0 2px 1px #611; background: radial-gradient(circle, #200010, #000)}
 .sb_netstatus.error {color: #d00; border: 1px solid #a00; box-shadow: 0 0 0 1px #003, var(--highlight), inset 0 0 2px 1px #d00; background: radial-gradient(circle, #300000, #100000)}
 .sb_netstatus.warn, .sb_netstatus.clockskew {color: #911; border: 1px solid #400; box-shadow: 0 0 0 1px #003, var(--highlight), inset 0 0 2px 1px #700; background: radial-gradient(circle, #200000, #080000)}
@@ -435,20 +435,21 @@ a:active #sb_graphstats {border-color: var(--active)}
 div[id^="config_"].main {padding-bottom: 14px}
 .newsAuthor {padding: 0 0 0 18px; float: right; text-transform: none; font-size: 8pt; background: var(--user) no-repeat left 2px center; background-size: 12px; opacity: .7}
 .newsDate {opacity: .7}
-#newsDisplay a:active, #graphopts a:active, #routerinfo a:active, .graphstat:active, #routerinformation tr:nth-child(n+2) a:not(#revision):active {color: #83529f; text-shadow: 0 1px 1px #3c1751; box-shadow: inset 0 0 0 1px #303, inset 3px 3px 3px #14071b; background: var(--hover)}
-#newsDisplay a, #graphopts a, #routerinfo a, .graphstat, .graphstat:visited, #routerinformation tr:nth-child(n+2) a:not(#revision) {margin: -2px; padding: 3px 15px; display: inline-block; line-height: 1; color: var(--a); border: var(--border_badge); border-radius: 15px; box-shadow: 0 0 1px rgba(0,0,0,.8), var(--highlight); background: var(--btn)}
-#newsDisplay a:hover, #newsDisplay a:focus, #graphopts a:hover, #graphopts a:focus, #routerinfo a:hover, #routerinfo a:focus, .graphstat:hover, .graphstat:focus, #routerinformation tr:nth-child(n+2) a:not(#revision):hover, #routerinformation tr:nth-child(n+2) a:not(#revision):focus {color: var(--a_hover); text-shadow: 0 1px 1px #000; border: 1px solid #000; box-shadow: 0 0 1px #000, inset 0 0 0 1px #303; background: var(--btn_hover); transition: ease box-shadow .05s}
-#newsDisplay a {line-height: 1.2}
-#newsDisplay {white-space: nowrap; margin-left: 10px}
 .news h4 {border-bottom: 1px; border-bottom-style: dotted; border-bottom-color: #26235c; padding: 0 0 0 0; margin: 5px 0 10px 0; font-size: 10pt; opacity: 1; text-transform: capitalize}
 .news hr {margin: 18px -20px 6px}
 .news {margin: -1px 3px 0 212px; padding: 6px 20px 10px; min-width: 600px; position: relative; z-index: 10; text-align: right; font-size: 8pt; border: var(--border); box-shadow: 0 1px 5px #000; background: #000 var(--earth) no-repeat scroll bottom right; background-size: auto 200px}
 .news::before {content: ""; display: inline-block; position: absolute; left: 0; right: 0; top: 0; bottom: 0; z-index: 0; background: rgba(0,0,48,.4); pointer-events: none}
 #news .newscontent {border: var(--border_inner); margin: -11px 0 10px; padding: 10px 25px 15px; box-shadow: var(--bevel); background: var(--earth) right -50px bottom -50px no-repeat, linear-gradient(135deg, #000010, #000); background-size: 100px auto, 100%}
 #news .newscontent, #news #newsStatus, #news #newsDisplay, #news hr {position: relative; z-index: 20}
+#newsDisplay a, #graphopts a, #routerinfo a, .graphstat, .graphstat:visited, #routerinformation tr:nth-child(n+2) a:not(#revision) {margin: -2px; padding: 3px 15px; display: inline-block; line-height: 1; color: var(--a); border: var(--border_badge); border-radius: 15px; box-shadow: 0 0 1px rgba(0,0,0,.8), var(--highlight); background: var(--btn)}
+#newsDisplay a {margin: 2px 0 -4px -4px; line-height: 1.2}
+#newsDisplay a:hover, #newsDisplay a:focus, #graphopts a:hover, #graphopts a:focus, #routerinfo a:hover, #routerinfo a:focus, .graphstat:hover, .graphstat:focus, #routerinformation tr:nth-child(n+2) a:not(#revision):hover, #routerinformation tr:nth-child(n+2) a:not(#revision):focus {color: var(--a_hover); text-shadow: 0 1px 1px #000; border: 1px solid #000; box-shadow: 0 0 1px #000, inset 0 0 0 1px #303; background: var(--btn_hover); transition: ease box-shadow .05s}
+#newsDisplay a:active, #graphopts a:active, #routerinfo a:active, .graphstat:active, #routerinformation tr:nth-child(n+2) a:not(#revision):active {color: #83529f; text-shadow: 0 1px 1px #3c1751; box-shadow: inset 0 0 0 1px #303, inset 3px 3px 3px #14071b; background: var(--hover)}
+#newsDisplay {white-space: nowrap; margin-left: 10px}
 #news #newsDisplay, #graphopts {color: transparent}
 .news #newsDisplay, .news #newsStatus {margin-top: 3px; display: inline-block}
 #news #newsDisplay {margin-right: -10px; padding: 0 0 3px}
+.news #newsStatus {margin: 5px 0 -5px}
 .news .newsentry:first-child {margin-top: -10px}
 #news .newsentry:last-child {margin-bottom: -5px}
 #news.news .newsentry:first-child {margin-top: 13px}
@@ -688,11 +689,11 @@ tr.addnew {border-top: var(--border_inner)}
 #consolepass td {padding: 5px 10px; border-bottom: var(--border_inner)}
 #consolepass input {margin: 5px}
 #consolepass .delete {float: left}
-#consolepass td#pw_adduser {padding: 5px 10px}
+#consolepass td#pw_adduser {padding: 6px 8px}
 #consolepass input[name="name"] {margin-right: 20px}
 #consolepass input[type=password] {width: 200px}
 #submitconsolepass {margin-bottom: -2px; margin-top: -2px; border: var(--border_inner); background: #000}
-#consolepass input[name="name"], #externali2cp input[name="user"] {padding: 5px 5px 5px 26px; background: var(--user) no-repeat 5px center, linear-gradient(180deg,#000, #000019); background-size: 16px, 100%; background-blend-mode: luminosity}
+#consolepass input[name="name"], #externali2cp input[name="user"] {padding: 6px 8px 6px 26px; background: var(--user) no-repeat 5px center, linear-gradient(180deg,#000, #000019); background-size: 16px, 100%; background-blend-mode: luminosity}
 #consolepass input[name="name"]:focus, #externali2cp input[name="user"]:focus {background: #000 var(--user) no-repeat 5px center; background-size: 16px; background-blend-mode: normal}
 #consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"] {padding: 6px 8px 6px 26px; background: var(--key) no-repeat 5px center, linear-gradient(180deg,#000, #000019); background-size: 16px, 100%; background-blend-mode: luminosity}
 #consolepass input[name="nofilter_pw"]:focus, #externali2cp input[name="nofilter_pw"]:focus {background: #000 var(--key) no-repeat 5px center; background-size: 16px; background-blend-mode: normal}
@@ -2596,14 +2597,15 @@ h4#updateplugins {margin-top: -15px}
 #help .tab {margin-top: -1px; margin-bottom: -1px; padding: 2px 0}
 #help .tab, #help .tab2 {margin-top: -1px}
 #homepage #minigraphcontainer {height: 38px}
-#homepage #minigraph {margin-top: -22px}
 #logs h3.tabletitle {padding: 12px 2px 10px 12px}
 #loggingoptions tr:nth-last-child(n+3) input[type=text], #loggingoptions tr:nth-last-child(n+3) select {min-width: 250px}
-#minigraphcontainer {margin-top: -43px; margin-left: 1px; width: 258px; height: 39px; background-size: 250px 40px}
-#minigraph {margin-top: -21px; height: 38px; width: 230px}
+#sidebar #minigraphcontainer {margin: -43px -4px 0 1px; width: 260px; height: 39px; background-size: 260px 40px; background-position: right bottom}
+#sidebar #minigraph {margin-top: -22px; margin-left: -4px; height: 38px; width: 260px}
+#homepage #minigraph {margin-top: -21px}
 #netdboverview table th, #netdboverview table td {padding: 7px 8px}
 #newsStatus, #news #newsDisplay a, .newsAuthor {font-size: 9pt}
 #news #newsStatus {padding-top: 0; margin-left: -10px}
+#news #newsDisplay a {margin-top: 0}
 #ntcpconnections th, #udpconnections th, #newsDisplay {font-size: 90%}
 #peerprofiles.widescroll {padding-top: 114px}
 .percentBarOuter {width: 210px}
@@ -2614,7 +2616,7 @@ h4#updateplugins {margin-top: -15px}
 #reseedconfig input[type=text], #reseedconfig input[type=password] {width: 250px}
 #sb_general, #sb_shortgeneral, #sb_advancedgeneral, #sb_bandwidth, #sb_peers, #sb_peersadvanced, #sb_tunnels, #sb_queue {margin-top: -7px; margin-bottom: -10px}
 #sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after, #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {min-height: 18px}
-#sb_graphcontainer {margin: -4px -7px -8px}
+#sb_graphcontainer {margin: -5px -8px -8px}
 #sb_internals, #sb_advanced, #sb_help {width: 240px}
 #sb_localtunnels a {max-width: 188px}
 #sb_memoryBar.percentBarOuter {margin: -5px -8px -8px}
@@ -2625,7 +2627,7 @@ h4#updateplugins {margin-top: -15px}
 #sb_services a {padding-top: 4px; padding-bottom: 4px}
 #sb_services {margin-bottom: -12px; width: 240px}
 .sb td, #sidebar a, #sidebar button, #sidebar h4, #sidebar h4 a, .smallhead, pre, #newsStatus, #newsDisplay {font-size: 9pt}
-select, .main input[type=submit], .main input[type=reset], .main input[type=submit]:hover, .main input[type=reset]:hover, .main input[type=submit]:focus, .main input[type=reset]:focus, .main input[type=submit]:active, .main input[type=reset]:active, input.download[value^="Dump"]:hover, input.download[value^="Dump"]:focus {padding-top: 6px; padding-bottom: 6px}
+select, .main input[type=submit], .main input[type=reset], .main input[type=submit]:hover, .main input[type=reset]:hover, .main input[type=submit]:focus, .main input[type=reset]:focus, .main input[type=submit]:active, .main input[type=reset]:active, input.download[value^="Dump"]:hover, input.download[value^="Dump"]:focus {padding-top: 7px; padding-bottom: 7px}
 #servletError .iframed #warning2, .iframed #warning2.sorry {margin: -16px 8px 10px}
 #sidebar button.download {font-size: 10pt}
 #sidebar button, #sidebar .stop, #sidebar .reload {min-width: 110px}
@@ -2646,8 +2648,7 @@ table[id^="sb_"], #sidebar #sb_localtunnels {width: 236px}
 #wizardpage #sidebar img[src$="i2plogo.png"] {margin-left: -1px; width: 223px}
 }
 
-@supports not (-moz-appearance: none) {@media screen and (min-width: 1500px) {.langselect img, .langselect .optbox:checked + img {margin-top: -6px; margin-left: -82px}
-.langselect .optbox:checked + img {margin-top: -2px; margin-left: -76px}}}
+@supports not (-moz-appearance: none) {#searchbar span {margin: -1px -1px -5px}}
 
 @media screen and (min-width: 1634px) {
 .leasesets_container {margin-bottom: 8px}
@@ -2663,8 +2664,8 @@ th code {font-size: 9pt}
 #plugininstall #url td:first-child {padding-left: 50px}
 #plugininstall2 td {padding: 8px}
 #config_service .h3navlinks a {padding: 9px 16px}
-#minigraph {width: 250px}
-#minigraphcontainer {width: 264px; background-size: 256px 40px}
+#sidebar #minigraph {margin-left: -1px; width: 252px}
+#sidebar #minigraphcontainer {width: 264px; background-size: 256px 40px}
 .main, .news, h1, #warning.sorry, #warning2.sorry {margin-left: 268px}
 #sidebar {width: 240px}
 #sidebar #sb_logo {margin-top: 1px; height: 48px !important}
