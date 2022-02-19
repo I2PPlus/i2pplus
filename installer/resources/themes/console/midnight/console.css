@@ -821,7 +821,7 @@ th.options, #externali2cp th {padding: 7px 10px}
 #clientconfig th:nth-child(3) {text-align: center}
 #clientconfig td:nth-child(3) {white-space: nowrap}
 #clientconfig th:last-child {text-align: left; padding-left: 5px}
-#clientsconfig, #webappconfigactions, #pluginconfigactions, #sidebardefaults {margin-bottom: 4px; border: var(--border_inner); background: #000}
+#clientsconfig, #webappconfigactions, #pluginconfigactions, #sidebardefaults {margin-bottom: 4px; border: var(--border_inner); background: var(--panel)}
 #webappconfigactions, #pluginconfigactions, #clientsconfig {margin-top: -2px; margin-bottom: -3px}
 #externali2cp {margin-bottom: -2px}
 .infowarn#clientconf, p#keyringhelp, #config_tunnels .infohelp {margin-bottom: 12px}
