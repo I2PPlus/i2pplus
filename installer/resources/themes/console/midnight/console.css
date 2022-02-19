@@ -323,24 +323,24 @@ p:empty + .sb_notice {margin-top: 10px}
 #sidebar #sb_services a:hover {color: var(--a_hover); background: #1e0b28 var(--plugin) no-repeat 5px center / 16px; background-blend-mode: normal}
 #sb_services a, #sb_services a:visited {background-blend-mode: luminosity; color: var(--a)}
 #sidebar #sb_services a {margin: 0; padding: 4px 5px 4px 27px; width: calc(100% - 33px); border: 1px solid transparent; border-radius: 0; text-align: left; text-decoration: none; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; clear: both}
-#sb_services a {background: #000010 var(--plugin) no-repeat 5px center / 16px}
-#sb_services a[href*="mail"] {background: #000010 var(--mail) no-repeat 6px center / 14px}
+#sb_services a {background: rgba(0,0,16,.3) var(--plugin) no-repeat 5px center / 16px}
+#sb_services a[href*="mail"] {background: rgba(0,0,16,.3) var(--mail) no-repeat 6px center / 14px}
 #sidebar #sb_services a[href*="mail"]:hover {background: #1e0b28 var(--mail) no-repeat 6px center / 14px}
-#sb_services a[href*="dns"] {background: #000010 var(--abook) no-repeat 5px center / 16px}
+#sb_services a[href*="dns"] {background: rgba(0,0,16,.3) var(--abook) no-repeat 5px center / 16px}
 #sidebar #sb_services a[href*="dns"]:hover {background: #1e0b28 var(--abook) no-repeat 5px center / 16px}
-#sb_services a[href*="tunnel"] {background: #000010 var(--tunnman) no-repeat 5px center / 16px}
+#sb_services a[href*="tunnel"] {background: rgba(0,0,16,.3) var(--tunnman) no-repeat 5px center / 16px}
 #sidebar #sb_services a[href*="tunnel"]:hover {background: #1e0b28 var(--tunnman) no-repeat 5px center / 16px}
-#sb_services a[href*="bote"] {background: #000010 var(--bote) no-repeat 5px center / 16px}
+#sb_services a[href*="bote"] {background: rgba(0,0,16,.3) var(--bote) no-repeat 5px center / 16px}
 #sidebar #sb_services a[href*="bote"]:hover {background: #1e0b28 var(--bote) no-repeat 5px center / 16px}
-#sb_services a[href="/orchid/"], #sb_services a[href*="/orchid/"] {background: #000010 var(--orchid) no-repeat 5px center / 16px}
+#sb_services a[href="/orchid/"], #sb_services a[href*="/orchid/"] {background: rgba(0,0,16,.3) var(--orchid) no-repeat 5px center / 16px}
 #sidebar #sb_services a[href="/orchid/"]:hover, #sb_services a[href*="/orchid/"]:hover {background: #1e0b28 var(--orchid) no-repeat 5px center / 16px}
-#sb_services a[href*="/outproxy"] {background: #000010 var(--socks) no-repeat 5px center / 16px}
+#sb_services a[href*="/outproxy"] {background: rgba(0,0,16,.3) var(--socks) no-repeat 5px center / 16px}
 #sidebar #sb_services a[href*="/outproxy"]:hover {background: #1e0b28 var(--socks) no-repeat 5px center / 16px}
-#sb_services a[href*="torrents"] {background: #000010 var(--snark) no-repeat 5px center / 16px}
+#sb_services a[href*="torrents"] {background: rgba(0,0,16,.3) var(--snark) no-repeat 5px center / 16px}
 #sidebar #sb_services a[href*="torrents"]:hover {background: #1e0b28 var(--snark) no-repeat 5px center / 16px}
-#sb_services a[href*="7658"], #sb_services a[href*="7668"] {background: #000010 var(--webserver) no-repeat 5px center / 16px}
+#sb_services a[href*="7658"], #sb_services a[href*="7668"] {background: rgba(0,0,16,.3) var(--webserver) no-repeat 5px center / 16px}
 #sidebar #sb_services a[href*="7658"]:hover, #sb_services a[href*="7668"]:hover {background: #1e0b28 var(--webserver) no-repeat 5px center / 16px}
-#sb_services a[href*="/tracker"] {background: #000010 var(--zzzot) no-repeat 5px center / 16px}
+#sb_services a[href*="/tracker"] {background: rgba(0,0,16,.3) var(--zzzot) no-repeat 5px center / 16px}
 #sidebar #sb_services a[href*="/tracker"]:hover {background: #1e0b28 var(--zzzot) no-repeat 5px center / 16px}
 #sidebar #sb_services a:active {color: var(--active); border: 1px solid transparent; box-shadow: var(--btn_shadow_active); background-color: #461b5e}
 
@@ -2648,7 +2648,6 @@ table[id^="sb_"], #sidebar #sb_localtunnels {width: 236px}
 #tunnels .tab, #tunnels .tab2 {line-height: 1.3}
 #webappconfig td:first-child::after {min-height: 30px}
 #wizardpage #sidebar img[src$="i2plogo.png"] {margin-left: -1px; width: 223px}
-
 }
 
 @supports not (-moz-appearance: none) {@media screen and (min-width: 1500px) {.langselect img, .langselect .optbox:checked + img {margin-top: -6px; margin-left: -82px}
