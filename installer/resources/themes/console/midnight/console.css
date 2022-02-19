@@ -32,9 +32,9 @@ pre {width: 98%; overflow-x: auto; text-align: left; font: 8.5pt var(--monospace
 a:link tt, a:visited tt {color: #4e47bf}
 a:active tt {color: #9fe9f9}
 code {text-align: left; font: 9pt var(--monospaced); color: #393}
-h2, h3, h4, .main, .news {box-shadow: var(--bevel)}
+h2, h3, h4 {box-shadow: var(--bevel)}
 h1, h2, h3, .th_title {background: var(--title); background-size: 4px 100%, 100%}
-h1, .confignav {box-shadow: var(--bevel_h1)}
+h1, .confignav, .main, .news {box-shadow: var(--bevel_h1)}
 h1 {margin: 0 3px 0 212px; padding: 13px 15px 12px; min-width: 610px; position: relative; z-index: 999; line-height: 1.2; letter-spacing: .15em; text-align: left; text-transform: uppercase; white-space: normal; font-size: 17pt; font-weight: 700; font-style: normal; color: var(--ink); text-shadow: 0 0 2px #010011; border: var(--border)}
 h2, h2.welcome {font-size: 12pt; color: var(--ink); text-shadow: 0 0 2px #010011; letter-spacing: .05em; padding: 10px; border: var(--border_inner); border-radius: 2px; vertical-align: middle; margin: 15px 0 12px 0; text-transform: uppercase; word-wrap: break-word}
 h2 a:hover {color: var(--hover)}
@@ -437,9 +437,9 @@ div[id^="config_"].main {padding-bottom: 14px}
 .newsDate {opacity: .7}
 .news h4 {border-bottom: 1px; border-bottom-style: dotted; border-bottom-color: #26235c; padding: 0 0 0 0; margin: 5px 0 10px 0; font-size: 10pt; opacity: 1; text-transform: capitalize}
 .news hr {margin: 18px -20px 6px}
-.news {margin: -1px 3px 0 212px; padding: 6px 20px 10px; min-width: 600px; position: relative; z-index: 10; text-align: right; font-size: 8pt; border: var(--border); box-shadow: 0 1px 5px #000; background: #000 var(--earth) no-repeat scroll bottom right; background-size: auto 200px}
+.news {margin: -1px 3px 0 212px; padding: 6px 20px 10px; min-width: 600px; position: relative; z-index: 10; text-align: right; font-size: 8pt; border: var(--border); background: #000 var(--earth) no-repeat scroll bottom right; background-size: auto 220px}
 .news::before {content: ""; display: inline-block; position: absolute; left: 0; right: 0; top: 0; bottom: 0; z-index: 0; background: rgba(0,0,48,.4); pointer-events: none}
-#news .newscontent {border: var(--border_inner); margin: -11px 0 10px; padding: 10px 25px 15px; box-shadow: var(--bevel); background: var(--earth) right -50px bottom -50px no-repeat, linear-gradient(135deg, #000010, #000); background-size: 100px auto, 100%}
+#news .newscontent {border: var(--border_inner); margin: -11px 0 10px; padding: 10px 25px 15px; box-shadow: var(--bevel); background: var(--earth) right -50px bottom -50px no-repeat, linear-gradient(135deg, #000010, #000); background-size: 120px auto, 100%}
 #news .newscontent, #news #newsStatus, #news #newsDisplay, #news hr {position: relative; z-index: 20}
 #newsDisplay a, #graphopts a, #routerinfo a, .graphstat, .graphstat:visited, #routerinformation tr:nth-child(n+2) a:not(#revision) {margin: -2px; padding: 3px 15px; display: inline-block; line-height: 1; color: var(--a); border: var(--border_badge); border-radius: 15px; box-shadow: 0 0 1px rgba(0,0,0,.8), var(--highlight); background: var(--btn)}
 #newsDisplay a {margin: 2px 0 -4px -4px; line-height: 1.2}
