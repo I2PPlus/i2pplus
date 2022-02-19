@@ -107,7 +107,7 @@ td.infohelp {padding: 10px 10px 10px 38px; background: var(--infohelp) no-repeat
 .newTunnel select, .newTunnel input, .newTunnel .control {margin: 2px}
 .newtunnel form {width: 100%; text-align: right}
 .tunnelName {width: 25%; min-width: 150px}
-.tunnelName a {margin-left: 5px; padding: 5px 5px 5px 25px; width: calc(100% - 20px); display: inline-block; font-weight: 700; border: var(--border_badge); border-radius: 1px 15px 15px 1px; box-shadow: var(--highlight); background: var(--settings) no-repeat 6px center / 14px, linear-gradient(180deg,rgba(16,16,48,.3), rgba(0,0,16,.3))}
+.tunnelName a {margin-left: 5px; padding: 5px 5px 5px 25px; width: calc(100% - 20px); display: inline-block; font-weight: 700; border: var(--border_soft); border-radius: 1px 15px 15px 1px; box-shadow: var(--bevel); background: var(--settings) no-repeat 6px center / 14px, linear-gradient(180deg,rgba(16,16,48,.3), rgba(0,0,16,.3))}
 .tunnelName a:hover, .tunnelName a:focus {border: var(--border); background: var(--settings_hover) no-repeat 6px center / 14px, linear-gradient(180deg,#113, #001); background-size: 14px, 100%}
 .tunnelName a:active {box-shadow: var(--highlight), inset 3px 3px 3px #000; background: #001 var(--settings_active) no-repeat 6px center / 14px}
 .tunnelType {width: 25%}
