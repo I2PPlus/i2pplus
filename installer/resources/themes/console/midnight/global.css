@@ -12,7 +12,7 @@
   --a_hover: #bf2295;
   --active: #fc1c66;
   --badge: linear-gradient(180deg,#080818 50%,#000 50%);
-  --bevel: var(--highlight), inset 0 0 2px 1px #272759, inset 0 0 5px 3px #002;
+  --bevel: var(--highlight), inset 0 0 2px 1px rgba(70,70,160,.8);
   --bg_main: repeating-linear-gradient(90deg, rgba(0,0,40,.5) 2px, rgba(0,0,0,.5) 4px) center center / 4px 100%, repeating-linear-gradient(180deg,rgba(0,0,32,.5) 2px, rgba(0,0,0,.3) 4px) center center / 100% 4px;
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
   --border: 1px solid #26235c;
