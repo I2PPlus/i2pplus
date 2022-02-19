@@ -2634,7 +2634,7 @@ select, .main input[type=submit], .main input[type=reset], .main input[type=subm
 #sidebar form {margin-bottom: -8px}
 #sidebar h3 a, #netdboverview tr:first-child th[colspan="3"] {font-size: 11pt}
 #sidebar h3 {padding: 7px 0 3px}
-#sidebar h4 {margin: -7px -10px -10px}
+#sidebar h4 {margin: -9px -11px -10px}
 #sidebar hr {margin-top: 9px}
 #sidebar img[src$="i2plogo.png"] {margin: -2px 0 -8px -8px; width: 230px; transform: none}
 #sidebar .percentBarOuter, #sidebar .percentBarInner {width: 230px}
