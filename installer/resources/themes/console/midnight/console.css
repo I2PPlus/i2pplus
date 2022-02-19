@@ -508,7 +508,7 @@ h3 + p, h3 + table {position: relative; z-index: 20}
 #i2pupdates td, #manualreseed td:not(.infohelp), #reseedconfig td:not(.infohelp), #netconfig td:not(.infohelp):not(.infowarn):not(.optionsave), #graphs td {padding: 5px}
 
 /* notifications */
-div.messages {padding: 20px 10px 6px; margin: -4px 0 12px; font-weight: 700; font-size: 9.5pt; color: var(--ink); border: var(--border_inner); box-shadow: var(--highlight), inset 0 0 2px 1px #808; background: #000 var(--infohelp) no-repeat 15px center / 28px}
+div.messages {padding: 20px 10px; margin: -4px 0 12px; font-weight: 700; font-size: 9.5pt; color: var(--ink); border: var(--border_inner); box-shadow: var(--highlight), inset 0 0 2px 1px #808; background: #000 var(--infohelp) no-repeat 15px center / 28px}
 div.messages i {padding-left: 45px; color: var(--ink)}
 div.messages span.error {color: #d6fffd}
 div.messages span.notice {font-style: italic}
@@ -559,7 +559,7 @@ form[action="graphs"], form[action="/updategraphs"] {margin-top: -11px; margin-b
 
 td img[src$="c=a1"], td img[src$="c=a2"] {filter: drop-shadow(0 0 1px #337)}
 
-.main li:last-child {padding-bottom: 15px}
+/*.main li:last-child {padding-bottom: 15px}*/
 .joblog {border-radius: 2px 2px 0 0; overflow-y: hidden; margin-top: 10px}
 .joblog h3 {margin-top: 10px}
 .joblog table {margin-top: 15px; margin-left: 0; margin-bottom: 15px}
@@ -910,7 +910,6 @@ input[type="hidden"] + p + p {border: var(--border_inner); padding: 10px; margin
 #i2pupdates td {padding-top: 6px; padding-bottom: 6px}
 #i2pupdates tr:first-child td {padding-top: 6px; padding-bottom: 6px}
 #i2pupdates td.infohelp {padding: 15px 15px 15px 46px; background-size: 24px}
-#i2pupdates td:not(.infohelp):first-child {width: 15%; white-space: nowrap; padding-left: 10px}
 #i2pupdates textarea, #i2pupdates input[type=text] {margin: 5px 5px 5px 10px; width: calc(100% - 215px); min-width: 0}
 #i2pupdates textarea {margin: 6px 6px 6px 0; width: calc(100% - 216px); height: 76px; min-height: 76px}
 #i2pupdates tr:last-child td {padding-right: 6px; background: #000}
