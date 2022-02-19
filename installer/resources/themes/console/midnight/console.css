@@ -14,7 +14,7 @@
 }
 
 /* globals */
-html {background: repeating-linear-gradient(90deg, rgba(0,0,40,.6) 2px, rgba(0,0,8,.4) 4px), repeating-linear-gradient(180deg,rgba(0,0,32,.8) 2px, rgba(0,0,0,.3) 4px), var(--tile) #001; background-size: 4px 100%, 100% 4px, 171px 148px}
+html {background: var(--bodybg)}
 body {margin: 2px 0 0; padding: 0; text-align: center; font: 8.5pt/130% var(--bodyfont)}
 .sb, h1, .main, iframe {contain: layout}
 small {font-size: 9pt}
