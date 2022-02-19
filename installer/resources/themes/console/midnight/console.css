@@ -22,7 +22,7 @@ small {font-size: 9pt}
 #sidebar img[src$="i2plogo.png"], #sidebar h3, .confignav, *::before, *::after, h1, h2, h3, h4, .applink, .clearer, #sidebar img, .formaction, label, #themeoptions, #helptranslate, #consolepass, .applink, #sitemapcontainer {user-select: none}
 img {border: none}
 pre {width: 98%; overflow-x: auto; text-align: left; font: 8.5pt var(--monospaced); color: var(--ink)}
-.main {margin: -1px 3px 5px 212px; padding: 0 10px; width: auto; min-width: 620px; position: relative; text-align: left; font-size: 9pt; color: var(--ink); border: var(--border); background: repeating-linear-gradient(90deg, rgba(0,0,0,.4) 2px, rgba(4,4,32,.5) 4px), repeating-linear-gradient(180deg,rgba(0,0,0,.6) 2px, rgba(4,4,32,.5) 4px); background-size: 4px 100%, 100% 4px}
+.main {margin: -1px 3px 5px 212px; padding: 0 10px; width: auto; min-width: 620px; position: relative; text-align: left; font-size: 9pt; color: var(--ink); border: var(--border); background: var(--bg_main)}
  .main:not(#home):not(#sitemap) td {border-top: var(--border_soft); border-right: var(--border_soft)}
 .main:not(#home):not(#sitemap) td:first-child {border-left: var(--border_inner)}
 .main:not(#home):not(#sitemap) tr:first-child td {border-top: var(--border_inner)}
@@ -225,7 +225,7 @@ button.download.control:active {background: var(--download) no-repeat center cen
 #sidebar .download:active {background: var(--hover) var(--download) no-repeat 7px center / 15px}
 
 #sb_wrap {margin: 0 0 10px 5px; padding: 0; width: 200px; display: block; float: left; clear: left; position: absolute; text-align: center; border: 0}
-#sidebar {background: var(--sb_bg); background-size: 4px 100%, 100% 4px}
+#sidebar {background: var(--bg_main); background-size: 4px 100%, 100% 4px}
 #sidebar {margin-left: -3px; margin-bottom: 7px; padding: 8px 10px 8px; width: 184px; overflow: hidden; text-align: center; font-size: 8pt; color: var(--ink); border: var(--border)}
 #sidebar #sb_logo {height: 37px !important}
 #sidebar img[src*="i2plogo"] {margin-top: 0; margin-left: -7px; width: 190px; height: auto; font-size: 0; opacity: .7; transition: ease-out opacity .2s, ease filter .2s; filter: sepia(1) hue-rotate(180deg); filter: saturate(0) sepia(1) hue-rotate(180deg)}
