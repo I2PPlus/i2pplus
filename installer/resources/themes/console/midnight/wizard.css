@@ -38,6 +38,21 @@ body {
   background-size: 12px;
 }
 
+#wizard p, #wizard td {
+  white-space: normal !important;
+}
+
+#wizard .configtable {
+  margin: 0 0 11px;
+}
+
+#wizard td {padding: 10px !important}
+
+#bandwidthconfig .bw_out, #bandwidthconfig .bw_in, #bandwidthconfig .bw_share {
+  margin: 5px !important;
+  width: 250px;
+}
+
 #bandwidthTestRunning {
   margin: 10px 0;
   padding: 10px;
@@ -46,18 +61,41 @@ body {
   font-weight: 700;
 }
 
+#wizard p:not(.infohelp) {
+  margin: -12px 0 -2px;
+  padding: 20px 20px 30px;
+  border-left: var(--border_inner);
+  border-right: var(--border_inner);
+}
+
+#wizard #bandwidthconfig td:not(.infohelp) {
+  background: #001;
+}
+
+#wizard td.optionsave {padding: 12px 10px 10px !important}
+
 #wizardpage .messages, #wizard p.infohelp {
   margin-top: 12px;
 }
 
-#wizard p.infohelp {
-  margin-bottom: 12px;
+#wizard .infohelp {
+  padding: 25px 25px 25px 55px !important;
   line-height: 1.3 !important;
 }
 
+#wizard p.infohelp {
+  margin-bottom: 12px;
+}
+
+#wizard #config_ui .infohelp {
+  padding: 20px 20px 20px 55px;
+  background: #000 url(/themes/console/images/flags.png) no-repeat 15px center / 28px;
+}
+
 #wizard .langselect {
-  margin: 0 2px 7px !important;
+  margin: 0 2px 7px;
   float: none;
+  display: inline-block;
 }
 
 #wizard #langsettings {
@@ -74,18 +112,7 @@ body {
 }
 
 .wizardbuttons {
-  margin-top: -12px;
-}
-
-#bandwidthconfig + .wizardbuttons {
-  margin-top: 1px;
-}
-
-#wizard p {
-  margin: -12px 0 -2px;
-  padding: 20px 20px 30px;
-  border-left: var(--border_inner);
-  border-right: var(--border_inner);
+  margin-top: -14px;
 }
 
 .bandwidthtester #wizard p + p {
@@ -94,7 +121,8 @@ body {
 
 @media screen and (min-width: 1500px) {
   #wizardpage #sb_logo {
-    padding: 3px 10px 9px;
+    margin-bottom: -5px;
+    padding: 0 10px;
   }
   #wizardpage #sidebar h3 {
     padding: 9px 0 6px !important;

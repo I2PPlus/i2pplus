@@ -1,3 +1,5 @@
+[![Java CI](https://github.com/vituperative/i2pplus/actions/workflows/ant.yml/badge.svg)](https://github.com/vituperative/i2pplus/actions/workflows/ant.yml)
+
 # I2P+
 
 中文版文档在[这里](README-zh.md)
