@@ -98,7 +98,7 @@ td > input {margin-left: 0}
 td > b {margin-right: 5px; display: inline-block; min-width: 30px}
 td.infohelp {padding: 10px 10px 10px 38px; background: var(--infohelp) no-repeat 10px center; background-size: 20px}
 .tunnelConfig td {width: 50%}
-#clientTunnels tr:not(.tunnelInfo), #serverTunnels tr:not(.tunnelInfo), .tunnelConfig tr {background: #000010}
+#clientTunnels tr:not(.tunnelInfo), #serverTunnels tr:not(.tunnelInfo), .tunnelConfig tr {box-shadow: var(--bevel); background: var(--panel)}
 .tunnelProperties {overflow: hidden; text-align: left; border: var(--border); border-bottom: var(--border); background: #000}
 .tunnelProperties td {border-top: var(--border)}
 #serverTunnels {margin: -1px 0 10px}
@@ -107,9 +107,9 @@ td.infohelp {padding: 10px 10px 10px 38px; background: var(--infohelp) no-repeat
 .newTunnel select, .newTunnel input, .newTunnel .control {margin: 2px}
 .newtunnel form {width: 100%; text-align: right}
 .tunnelName {width: 25%; min-width: 150px}
-.tunnelName a {margin-left: 5px; padding: 5px 5px 5px 25px; width: calc(100% - 20px); display: inline-block; font-weight: 700; border: var(--border_soft); border-radius: 1px 15px 15px 1px; box-shadow: var(--bevel); background: var(--settings) no-repeat 6px center / 14px, linear-gradient(180deg,rgba(16,16,48,.3), rgba(0,0,16,.3))}
+.tunnelName a {margin-left: 5px; padding: 5px 5px 5px 25px; width: calc(100% - 20px); display: inline-block; font-weight: 700; border: 1px solid transparent; border-radius: 1px 15px 15px 1px; background: var(--settings) no-repeat 6px center / 14px}
 .tunnelName a:hover, .tunnelName a:focus {border: var(--border); background: var(--settings_hover) no-repeat 6px center / 14px, linear-gradient(180deg,#113, #001); background-size: 14px, 100%}
-.tunnelName a:active {box-shadow: var(--highlight), inset 3px 3px 3px #000; background: #001 var(--settings_active) no-repeat 6px center / 14px}
+.tunnelName a:active {color: var(--active); border: var(--border_active); box-shadow: var(--highlight), inset 3px 3px 3px #000; background: var(--settings_active) no-repeat 6px center / 14px, var(--btn_active)}
 .tunnelType {width: 25%}
 .tunnelPreview, .tunnelPort {width: 15%; text-align: center}
 .tunnelLocation, .tunnelInterface {width: 20%}

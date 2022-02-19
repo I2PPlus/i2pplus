@@ -18,6 +18,7 @@
   --bg_main: repeating-linear-gradient(90deg, rgba(0,0,48,.5) 2px, rgba(0,0,0,.6) 4px) center center / 4px 100%, repeating-linear-gradient(180deg,rgba(0,0,40,.5) 2px, rgba(0,16,0,.3) 4px) center center / 100% 4px;
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
   --border: 1px solid #26235c;
+  --border_active: 1px solid #fc1c66;
   --border_hover: 1px solid #83529f;
   --border_badge: 1px solid #225;
   --border_btn: 1px solid #26225c;
