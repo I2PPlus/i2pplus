@@ -107,7 +107,7 @@ td.infohelp {padding: 10px 10px 10px 38px; background: var(--infohelp) no-repeat
 .newTunnel select, .newTunnel input, .newTunnel .control {margin: 2px}
 .newtunnel form {width: 100%; text-align: right}
 .tunnelName {width: 25%; min-width: 150px}
-.tunnelName a {padding: 5px 5px 5px 25px; width: calc(100% - 20px); display: inline-block; font-weight: 700; border: 1px solid rgba(38,35,92,.3); border-radius: 3px; box-shadow: var(--highlight); background: var(--settings) no-repeat 6px center / 14px, linear-gradient(180deg,rgba(16,16,48,.3), rgba(0,0,16,.3))}
+.tunnelName a {margin-left: 5px; padding: 5px 5px 5px 25px; width: calc(100% - 20px); display: inline-block; font-weight: 700; border: var(--border_badge); border-radius: 1px 15px 15px 1px; box-shadow: var(--highlight); background: var(--settings) no-repeat 6px center / 14px, linear-gradient(180deg,rgba(16,16,48,.3), rgba(0,0,16,.3))}
 .tunnelName a:hover, .tunnelName a:focus {border: var(--border); background: var(--settings_hover) no-repeat 6px center / 14px, linear-gradient(180deg,#113, #001); background-size: 14px, 100%}
 .tunnelName a:active {box-shadow: var(--highlight), inset 3px 3px 3px #000; background: #001 var(--settings_active) no-repeat 6px center / 14px}
 .tunnelType {width: 25%}
@@ -117,7 +117,7 @@ td.infohelp {padding: 10px 10px 10px 38px; background: var(--infohelp) no-repeat
 .tunnelStatus {width: 10%; min-width: 48px; text-align: center}
 .tunnelControl {width: 5%; text-align: right; white-space: nowrap}
 th.tunnelControl, .tunnelType, .tunnelLocation, .tunnelInterface {text-align: center}
-textarea {margin-left: 4px; margin-right: 4px; resize: none; box-sizing: border-box; font: bold 9pt var(--monospaced); border: 1px solid #302b74; background: #000}
+textarea {margin-left: 4px; margin-right: 4px; resize: none; box-sizing: border-box; font: bold 9pt var(--monospaced); border: 1px solid #302b74; background: #001}
 textarea:focus {color: var(--ink); border: 1px solid #6466a5; box-shadow: 0 0 0 1px rgba(101, 39, 135, .5), 0 0 2px 2px #202; background: #000; transition: ease filter .3s 0s}
 textarea#statusMessages,
 textarea#statusMessages:active,
@@ -157,7 +157,7 @@ button.control {box-sizing: border-box}
 input, select, button {font-size: 9pt; vertical-align: middle}
 input {float: none; vertical-align: middle}
 select {text-align: left; color: var(--a)}
-.buttons, .newTunnel {padding: 7px 5px; text-align: right; border-top: var(--border); box-shadow: var(--bevel); background: linear-gradient(180deg,#001,#000)}
+.buttons, .newTunnel {padding: 7px 5px; text-align: right; border-top: var(--border); box-shadow: var(--bevel); background: var(--panel)}
 .tunnelDestinationLabel {margin-right: 3px; min-width: 150px; display: inline-block; white-space: nowrap; text-align: right}
 #hostField, #leasesetKey, #userAgents {margin: 0; width: 90%; text-align: left}
 #tunnelDepth, #tunnelVariance, #tunnelQuantity, #tunnelBackupQuantity,
@@ -234,7 +234,7 @@ input.tunnelName, input.tunnelDescriptionText, #userAgents, .tunnelDescription, 
 #wizardPanel .infohelp p {margin: 0; padding: 0 10px 0 5px}
 
 /* more space */
-.tunnelConfig td, tr:not(.tunnelInfo) td:not(.buttons) {padding: 6px 5px; border-top: 1px solid #17142f}
+.tunnelConfig td, tr:not(.tunnelInfo) td:not(.buttons) {padding: 6px 5px; border-top: var(--border)}
 .tunnelInfo td {border: none}
 .tunnelProperties + tr td {padding-top: 8px}
 .tunnelProperties + tr + tr td {padding-top: 0; padding-bottom: 8px}
@@ -281,7 +281,7 @@ input[type=text] + label {white-space: nowrap; vertical-align: unset}
 /* server tunnel options */
 #tunnelOpts td {padding: 0; width: 25%}
 #tunnelOpts table {border: none}
-#tunnelOpts table td {padding: 5px; border-bottom: 1px solid #17142f}
+#tunnelOpts table td {padding: 5px; border-bottom: var(--border)}
 #tunnelOpts table tr:first-child td {border-top: none}
 #tunnelOpts table tr:last-child td {border-bottom: none}
 #tunnelOpts table td:first-child {border-left: none}
