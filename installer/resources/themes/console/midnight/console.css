@@ -471,7 +471,7 @@ div[id^="config_"].main {padding-bottom: 14px}
 #events .messages {margin-top: 21px; margin-bottom: -16px; box-shadow: inset 0 0 0 1px #300}
 
 /* top navigation */
-.confignav {margin: -1px -11px 15px; padding: 7px 5px 8px; line-height: 1.3; text-align: center; font-weight: 700; border: var(--border); box-shadow: var(--highlight); background: linear-gradient(to bottom, rgba(0,0,64,.15), rgba(0,0,48,.15) 50%, rgba(0,0,32,.15) 50%, rgba(0,0,16,.15)), var(--th); background-size: 100%, 100% 4px, 4px 100%}
+.confignav {margin: -1px -11px 15px; padding: 7px 5px 8px; line-height: 1.3; text-align: center; font-weight: 700; border: var(--border); background: linear-gradient(to bottom, rgba(0,0,64,.15), rgba(0,0,48,.15) 50%, rgba(0,0,32,.15) 50%, rgba(0,0,16,.15)), var(--th); background-size: 100%, 100% 4px, 4px 100%}
 .tab, .tab2 {margin: 0 -2px -1px -2px; padding: 2px 0; min-width: 60px; display: inline-block; border: var(--border); box-shadow: var(--highlight); box-sizing: border-box}
 .tab a, .tab a:visited {padding: 4px 16px; display: inline-block; color: var(--a)}
 .tab {background: linear-gradient(180deg,#112,#080818 50%, #000); box-shadow: var(--highlight), inset 0 0 1px 0 #446}
@@ -1257,7 +1257,7 @@ table[cellspacing="30"] > tbody > tr > th[colspan="3"] {padding: 10px; word-spac
 #netdblookup td:nth-child(even) {width: 50%}
 #closetorouter {margin-left: 6px}
 .subheading {padding: 10px; text-align: left; border: var(--border_inner); background: #000}
-.subheading b {font-size: 10pt}
+.subheading b {font-size: 10pt
 #netdblookup .optbox {margin: 10px}
 #netdblookup .optionsave {padding: 10px}
 #netdblookup tr:nth-last-child(n+3) input[type=text] {width: calc(100% - 30px)}
