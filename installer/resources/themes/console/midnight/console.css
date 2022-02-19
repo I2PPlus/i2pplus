@@ -1209,7 +1209,7 @@ h3.stats {border: var(--border_inner); border-radius: 0}
 #stats form {border: var(--border_inner); padding: 10px; margin: -15px 0 10px}
 .statlist li ul {margin-top: 10px}
 .statlist li li b {margin-right: 3px}
-li.noevents {margin-top: 0; margin-bottom: 10px}
+.noevents {margin-top: 0; margin-bottom: 10px}
 .nowrap {white-space: nowrap}
 .statsViewGraphs {margin: 2px 5px 0 0; display: block}
 .statsLongName {color: #37a3df; font-weight: 700}
@@ -1238,13 +1238,13 @@ p#gatherstats {margin-top: 1px; margin-bottom: 25px}
 #netdboverview table th:first-child, #netdboverview table td:first-child {text-align: left}
 #netdboverview table th:last-child, #netdboverview table td:last-child {text-align: right}
 #netdboverview table td:last-child {width: 140px}
-#netdboverview table th::before, #netdboverview table td::before {min-height: 34px; display: inline-block; vertical-align: middle; content: ""}
-#netdboverview table th::before {min-height: 33px}
+#netdboverview table th::before, #netdboverview table td::before {min-height: 26px; display: inline-block; vertical-align: middle; content: ""}
+#netdboverview table th::before {min-height: 25px}
 #netdbtransports th:first-child, #netdbcountrylist th:first-child {text-align: left}
 #netdboverview table td {border-right: none !important}
 #netdboverview table td span, #netdboverview table td b, #netdboverview table td a {margin-top: 0; margin-bottom: 0; display: inline-block; vertical-align: middle}
-#netdbtiers td b {margin: 0 6px 0 0}
-#netdbcountrylist img {margin-right: 8px; padding: 0; width: 24px; height: 18px; text-align: right; font-size: 70%; border: var(--border_badge); border-radius: 3px}
+#netdbtiers td b, #netdboverview table td b {margin: 0 8px 0 0; min-width: 22px}
+#netdbcountrylist img {margin: 0 8px; padding: 0; width: 24px; height: 18px; text-align: right; font-size: 70%; border: var(--border_badge); border-radius: 3px}
 .netdb_header img[src^="/flags"] {margin: 1px 1px 0 4px; width: 28px; height: auto; vertical-align: top; border: var(--border_badge); border-radius: 3px}
 table[cellspacing="30"] > tbody > tr > th[colspan="3"] {padding: 10px; word-spacing: .1em; letter-spacing: .08em; text-transform: uppercase; font-size: 11pt}
 
@@ -1257,7 +1257,7 @@ table[cellspacing="30"] > tbody > tr > th[colspan="3"] {padding: 10px; word-spac
 #netdblookup td:nth-child(even) {width: 50%}
 #closetorouter {margin-left: 6px}
 .subheading {padding: 10px; text-align: left; border: var(--border_inner); background: #000}
-.subheading b {font-size: 10pt
+.subheading b {font-size: 10pt}
 #netdblookup .optbox {margin: 10px}
 #netdblookup .optionsave {padding: 10px}
 #netdblookup tr:nth-last-child(n+3) input[type=text] {width: calc(100% - 30px)}
@@ -2062,8 +2062,8 @@ html, body {height: 100%}
 
 /* stats */
 .statlist li.statsName:first-child {margin-top: 0}
-ul.statlist {padding-bottom: 0}
-ul.statlist:last-of-type {margin-bottom: -5px}
+.statlist {padding-bottom: 0}
+.statlist:last-of-type {margin-bottom: -5px}
 #stats .joblog li:last-child {margin-bottom: 12px}
 .statsName {margin: 0 6px 10px 0; padding: 10px 10px 5px 10px; width: calc(100% - 22px); display: inline-block; box-shadow: var(--highlight), inset 0 0 2px 1px #005; border: var(--border_inner); background: #000010}
 .statlist li br, .statlist li li br {display: inline-block}
@@ -2073,17 +2073,17 @@ ul.statlist:last-of-type {margin-bottom: -5px}
 .statsName b {width: calc(100% - 24px)}
 .statsName b, .statsName i {display: inline-block}
 .statsName::before {content: none}
-li.noevents, ul.statlist li li:last-child::after {margin-bottom: 0}
-li.noevents::after, ul.statlist li li:last-child::after {padding-bottom: 0; margin-bottom: 0; border-bottom-color: transparent}
-li.noevents::after {padding-bottom: 10px}
+.noevents, .statlist li li:last-child::after {margin-bottom: 0}
+.noevents::after, .statlist li li:last-child::after {padding-bottom: 0; margin-bottom: 0; border-bottom-color: transparent}
+.noevents::after {padding-bottom: 10px}
 .statlist .bullet {display: none}
 .statlist li.statsName b {padding-left: 16px; background: url(/themes/console/dark/images/link.png) left top no-repeat; background-size: 12px}
 .statlist li.statsName ul li b {padding-left: 0; background: none}
 #stats label {display: inline-block}
 #stats h3 {border-width: 1px}
 #stats .toggle_input {width: 0; height: 0; position: absolute; top: -99999px; left: -99999px; opacity: 0}
-#stats input:not(:checked) + h3, #stats input:not(:checked) + h3 + ul.statlist, #stats input:not(:checked) + h3 + ul.statlist + br {display: none}
-#stats input:checked + h3 + ul.statlist {margin-bottom: -3px; display: block}
+#stats input:not(:checked) + h3, #stats input:not(:checked) + h3 + .statlist, #stats input:not(:checked) + h3 + .statlist + br {display: none}
+#stats input:checked + h3 + .statlist {margin-bottom: -3px; display: block}
 #stats form {display: none}
 #stats .confignav {position: sticky; top: -1px; z-index: 999}
 #stats .tab:not(.tab2) {color: var(--a)}
@@ -2092,7 +2092,7 @@ li.noevents::after {padding-bottom: 10px}
 #stats .tab, #stats .tab2 {padding: 4px 14px 6px}
 p#gatherstats {margin: 0 0 11px}
 #stats .joblog {margin-top: -4px; margin-bottom: -10px; overflow: hidden}
-#stats ul.statlist {margin: 0; padding: 0; border: none; background: none}
+#stats .statlist {margin: 0; padding: 0; border: none; background: none}
 .statvalue {padding: 0 2px 0 0; font-weight: 700; font-style: italic; color: #ccd1ff}
 .graphstat {margin: 0; padding: 1px 8px 2px; font-size: 90%; line-height: 1}
 .statlist ul li:last-child b {padding-left: 0; width: auto}
@@ -2459,7 +2459,7 @@ input.check[value$="updates"], input.check[value$="updates"]:hover, input.check[
 #criticallogs + h3.tabletitle a:last-child {padding-left: 12px; padding-right: 12px}
 }
 
-@supports (columns: 2 500px) {@media screen and (max-width: 1400px) {ul.statlist {padding: 10px; columns: auto 500px; column-gap: 10px; text-align: center} .statsName {min-width: 0} .statlist li li {margin-left: 6px}}}
+@supports (columns: 2 500px) {@media screen and (max-width: 1400px) {.statlist {padding: 10px; columns: auto 500px; column-gap: 10px; text-align: center} .statsName {min-width: 0} .statlist li li {margin-left: 6px}}}
 
 @media screen and (max-width: 1360px) {
 #floodfills th:nth-child(8), #floodfills td:nth-child(8), #floodfills th:nth-child(13), #floodfills td:nth-child(13), #floodfills th:nth-child(14), #floodfills td:nth-child(14) {display: none}
@@ -2489,7 +2489,6 @@ input.check[value$="updates"], input.check[value$="updates"]:hover, input.check[
 #netconfig label, #externali2cp td label, #externali2cp .optionlist .nowrap, #reseedconfig .nowrap {width: calc(100% - 10px)}
 .tab, .tab2 {padding: 1px 0 2px; min-width: 50px}
 .tab2 {padding: 3px 12px 4px}
-@supports not (-moz-appearance: none) {.tab2 {padding: 5px 12px 5px}}
 .tab a {padding: 2px 14px}
 #floodfills td {border-right: 1px inset #120f35}
 #floodfills td:last-child {border-right: var(--border_inner)}
@@ -2558,12 +2557,8 @@ h3.tabletitle a, #version.tabletitle a {padding-left: 18px}
 
 @media screen and (min-width: 1400px) {
 #help #changelog pre {margin-left: 0; padding-left: 10px; width: calc(100% - 22px); overflow-y: hidden; white-space: pre-wrap; font-size: 10pt; columns: 540px auto; column-gap: 40px; column-rule: 1px dotted #26235c}
-}
-
-@supports (columns: 2 500px) {@media screen and (min-width: 1400px) {ul.statlist {padding: 10px; columns: auto 540px; column-gap: 10px; text-align: center}
-.statsName {min-width: 540px}}}
-
-@media screen and (min-width: 1500px) {
+.statlist {padding: 10px; columns: auto 540px; column-gap: 10px; text-align: center}
+.statsName {min-width: 540px}
 }
 
 @media screen and (min-width: 1500px) {
@@ -2603,7 +2598,7 @@ button.control[class], button.control[class]:hover, button.control[class]:focus 
 h4#updateplugins {margin-top: -15px}
 #help .confignav {padding: 0; position: sticky; top: 0; z-index: 999}
 #help .tab {margin-top: -1px; margin-bottom: -1px; padding: 2px 0}
-#help .tab, #help .tab2 {margin-top: -1px
+#help .tab, #help .tab2 {margin-top: -1px}
 #homepage #minigraphcontainer {height: 38px}
 #homepage #minigraph {margin-top: -22px}
 #logs h3.tabletitle {padding: 12px 2px 10px 12px}
