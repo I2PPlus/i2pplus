@@ -958,13 +958,13 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 #sidebarconf button img {display: none}
 #sidebarconf th:nth-child(1), .homelinkedit th:first-child, #consolepass th:first-child {width: 5%; text-align: center; text-indent: -99999px; background: var(--nuke) no-repeat center center; background-size: 14px}
 #sidebarconf th:nth-child(2) {text-align: left}
-#sidebarconf td:first-child {width: 1%}
+#sidebarconf td:first-child {width: 1%; text-align: center}
 #sidebarconf td:nth-child(3), #sidebarconf td:nth-child(4) {padding: 0 4px; width: 1%; white-space: nowrap; border-right: none}
 #sidebarconf td:nth-child(3) {padding-right: 0; border-right: none !important}
 #sidebarconf td:nth-child(4) {padding: 0; text-align: left}
-#sidebarconf tr:last-child td {border-top: var(--border_inner); background: #000}
+#sidebarconf tr:last-child td {border-top: var(--border_inner); background: var(--panel)}
 #sidebarconf select {margin-left: 0; width: 100%}
-#sidebarconf tr:last-child td:last-child {padding-left: 0; text-align: left}
+#sidebarconf tr:last-child td:last-child {padding-left: 0; text-align: center}
 #sidebardefaults {margin-top: -2px; margin-bottom: -2px}
 .buttonTop img, .buttonBottom img, .buttonUp img, .buttonDown img {opacity: 0}
 .buttonTop {background: var(--mv_top) no-repeat center center, var(--btn)}
