@@ -1068,7 +1068,7 @@ tr:nth-child(4) .net_bwrate::before {width: 22px; background:var(--share) left t
 #config_stats .tabletitle {margin: 10px 0 -1px}
 #configstats td b {padding: 0 2px 0 0; color: var(--ink)}
 #configstats td:first-child:empty + td > label {pointer-events: none}
-#configstats td:first-child {padding: 8px; width: 1%; white-space: nowrap}
+#configstats td:first-child {padding: 8px}
 #configstats td:last-child {border-right: var(--border_inner)}
 #configstats td {padding: 8px 4px; color: #b2bcf7}
 #configstats th b {word-spacing: .1em; letter-spacing: .08em; text-transform: uppercase; font-size: 10pt}
