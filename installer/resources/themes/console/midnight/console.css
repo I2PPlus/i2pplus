@@ -981,6 +981,7 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 #loggingoptions td:nth-child(2) {width: 1%; white-space: nowrap; text-align: center}
 #loggingoptions tr:nth-last-child(2) {white-space: nowrap}
 #loggingoptions tr:nth-last-child(n+3) td:last-child, #loggingoptions p {line-height: 1.4; font-size: 100%}
+#loggingoptions p {margin: 6px 6px 5px}
 #loggingoptions input[type=text], #loggingoptions select, #loggingoptions textarea {min-width: 170px; margin: 3px}
 #loggingoptions textarea {width: calc(100% - 8px); resize: none}
 #loggingoptions select[name="newlogclass"] {width: calc(100% - 185px)}
@@ -2595,6 +2596,7 @@ button.control[class], button.control[class]:hover, button.control[class]:focus 
 #clientconf.infohelp {margin: 12px 0 -13px}
 #externali2cp .optionlist label::before, #externali2cp .optionlist .nowrap::before, #netconfig label::before, #reseedconfig .nowrap::before, #manualreseed .nowrap::before, #graphs .nowrap::before {min-height: 50px}
 #i2pclientconfig, #pconfig, #pluginfromurl, #pluginfromfile, #clientconf.infohelp, #webappconfiguration {margin: -4px 0 -15px}
+#i2pclientconfig {margin-bottom: 3px}
 #themeheading, #langheading, #passwordheading {font-size: 12pt}
 h4#updateplugins {margin-top: -15px}
 #help .confignav {padding: 0; position: sticky; top: 0; z-index: 999}
