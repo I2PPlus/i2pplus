@@ -64,6 +64,11 @@ svg #arrow stop:first-child {stop-color: #007}
 svg #arrow stop:nth-child(2) {stop-color: #003}
 svg #arrow stop:last-child {stop-color: #001}
 
+p {color:var(--ink); margin: 0 0 4px; font-size: 9.5pt; text-align: justify}
+p.buttons, .buttons {margin: 5px 0 -5px; padding: 0 3px; text-align: right}
+p.buttons {padding: 8px 5px; border: 1px solid #26235c}
+p.footer {padding: 5px 0 2px; text-align: center; font-size: 8pt; border: 1px solid #113}
+p#filtered {margin: -26px 0 10px}
 .checkbox input {margin: 0}
 .headline h3:first-child + h4 {margin-top: -25px; margin-bottom: 25px}
 .headline h3:first-child {margin-bottom: 24px; border-radius: 0}
@@ -72,16 +77,13 @@ svg #arrow stop:last-child {stop-color: #001}
 .headline + #book > table td {padding: 5px}
 .headline + #book > table td.destinations {padding: 0}
 .headline + #book > table td:first-child {width: 120px; white-space: nowrap; text-align: right}
+
 .help h3:first-child {margin-top: -21px}
 .help h3 {margin: 10px -31px; border-radius: 0}
 .help {margin-bottom: 5px; padding: 20px 30px; border: 1px solid #26235c; background: #001}
 .help p {border: none; padding: 0}
 .help ul li:last-child {margin-bottom: -10px}
-p {color:var(--ink); margin: 0 0 4px; font-size: 9.5pt; text-align: justify}
-p.buttons, .buttons {margin: 5px 0 -5px; padding: 0 3px; text-align: right}
-p.buttons {padding: 8px 5px; border: 1px solid #26235c}
-p.footer {padding: 5px 0 2px; text-align: center; font-size: 8pt; border: 1px solid #113}
-p#filtered {margin: -26px 0 10px}
+
 #search {margin-top: -1px; margin-bottom: 20px}
 .addrhlpr {font-size: 8pt}
 td.checkbox {width: 40px; text-align: center}
@@ -94,8 +96,9 @@ td.names a {font-size: 9pt}
 #add table, #import table {width: 100%}
 #add td:last-child, #import td:last-child {width: 94%}
 #bk h4 {display: none}
+
 #book, #emptybook {margin: -15px 0 -10px; padding: 0}
-#book, #messages, #filter, #search {background: #001}
+#book, #filter, #search {background: #001}
 #book table {width: 100%; border: 1px solid #26235c}
 #book table th {font-size: 8.5pt; border-bottom: 1px solid #26235c; background: linear-gradient(180deg,#080818, #000008 75%)}
 #book table tr:hover {background: #1e0b28}
@@ -114,6 +117,7 @@ td.names a {font-size: 9pt}
 #content h3 {margin: 0 20px 10px; padding: 5px 10px; border: none; border-bottom: 1px dotted #2d295f; border-radius: 0; background: none}
 #content p + h3 {margin-top: 15px}
 #content p {padding: 0 30px; line-height: 1.4}
+
 #filter a:link, #filter a:visited, #activefilter {margin: 2px 0; padding: 2px 5px; display: inline-block; text-align: center; text-transform: capitalize; color: #4a42bd; border: 1px solid #26225d; background: #000}
 #filter a:hover, #filter a:focus {color: var(--a_hover); border: 1px solid var(--a_hover); transform: scale(1.1)}
 #filter a:active {color: var(--ink); box-shadow: var(--highlight), inset 3px 3px 3px #000; background: #652787}
@@ -126,17 +130,23 @@ td.names a {font-size: 9pt}
 #filter span a:active {background: none; box-shadow: none; color: #4f0519}
 #filter span a, #filter span a:hover {display: inline-block; word-spacing: normal; letter-spacing: normal; border: none; background: none; transform: none}
 #filter span b {margin: -3px 5px 0; line-height: .8; text-transform: uppercase; font-size: 11pt; color: #fff}
+
 #footer, .iframed #footer {display: none}
 form[action="subscriptions"] {margin: 0}
 #helpsubs {margin: -16px 0 -11px; padding: 20px 15px 15px 48px; background: #001 var(--infohelp) no-repeat 12px center / 24px}
 #host_list tr:nth-child(even), #host_details tr:nth-child(even) {background: var(--row)}
 img[src="/imagegen/id?s=256&c="], img[src="/imagegen/id?s=20&c="] {opacity: 0}
+
+#messages + p, p.book {padding: 20px 20px 20px 42px; border: 1px solid #26235c; background: #001 var(--addressbook) no-repeat 10px center / 24px}
+
+/* notifications */
+#messages {position: fixed; left: 0; right: 0; top: 16px; z-index: 999}
 #messages:empty {margin-top: -10px; display: none}
-#messages {margin-bottom: 24px}
 #messages > .messages {margin: -15px 0 14px; padding: 20px 20px 20px 50px; color: var(--ink); border: 1px solid #26235c; border-radius: 0}
 #messages + p {padding: 12px 10px 8px 20px}
-#messages p {padding: 15px 15px 15px 46px; background: var(--infohelp) no-repeat 12pxpx center / 28px}
-#messages + p, p.book {padding: 20px 20px 20px 42px; border: 1px solid #26235c; background: #001 var(--addressbook) no-repeat 10px center / 24px}
+#messages p {padding: 15px 15px 15px 46px; background: var(--infohelp) no-repeat 12px center / 28px, var(--no) no-repeat right 8px top 8px / 12px, #000; background-blend-mode: normal, luminosity}
+#messages p:hover {background-blend-mode: normal; cursor: crosshair}
+
 #ovrvw #content p {margin-bottom: 10px; line-height: 1.5}
 td > img[width="320"], td > img[src^="/imagegen"] {margin: 10px 3px; padding: 5px; width: 240px; height: 240px; border-radius: 2px; border: 1px solid #26235c; background: #000}
 textarea[name="config"], textarea[name="content"] {margin: -26px 0 0; resize: none; font-size: 8.5pt; border: 1px solid #26235c; border-radius: 0}
@@ -163,9 +173,8 @@ textarea[name="config"] {height: 220px; overflow-y: scroll; resize: none}
 input.export {margin-right: 4px}
 input {margin: 2px 4px 2px 0; padding: 4px}
 input[type=file] {border: none; background: none}
-input[type=submit]:focus, input[type=reset]:focus,
-input[type=submit]:hover, input[type=reset]:hover,
 input[type=submit], input[type=reset], .fakebutton, .fakebutton:visited {padding: 6px 10px; min-width: 100px; text-align: center}
+input[type=submit]:hover, input[type=reset]:hover, input[type=submit]:focus, input[type=reset]:focus {background-size: 100%}
 input[type=text] {padding: 8px}
 input.update {margin-left: 5px}
 .page {margin: 10px 0; padding: 0; font-size: 9pt; color: var(--ink); background: linear-gradient(180deg,rgba(0,0,16,.2), transparent)}
@@ -291,9 +300,10 @@ input#exporthosts:active {text-shadow: 0 1px 1px #3C1751; box-shadow: var(--high
 .iframed #visualid td[colspan="2"] {padding: 22px 19px 20px}
 .iframed#sbs #content, .iframed #config, .iframed #config + #buttons, .iframed#subsLog #config {margin: -27px 10px -13px}
 .iframed #helpsubs, .iframed #helpconfig, .iframed #add, .iframed #import, .iframed #book, .iframed #book + #buttons {margin-left: 10px; margin-right: 10px}
- .iframed#subsLog pre {width: calc(100% - 12px)}
+.iframed#subsLog pre {width: calc(100% - 12px)}
 .iframed #import {margin-top: 10px;}
-.iframed #config + #buttons, .iframed #content + #buttons {margin: 12px 10px};
+.iframed #config + #buttons, .iframed #content + #buttons {margin: 12px 10px}
+.iframed #messages {top: -4px}
 
 /* responsive layout */
 @media screen and (max-width: 1000px) {
