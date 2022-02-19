@@ -22,13 +22,6 @@ small {font-size: 9pt}
 #sidebar img[src$="i2plogo.png"], #sidebar h3, .confignav, *::before, *::after, h1, h2, h3, h4, .applink, .clearer, #sidebar img, .formaction, label, #themeoptions, #helptranslate, #consolepass, .applink, #sitemapcontainer {user-select: none}
 img {border: none}
 pre {width: 98%; overflow-x: auto; text-align: left; font: 8.5pt var(--monospaced); color: var(--ink)}
-.main {margin: -1px 3px 5px 212px; padding: 0 10px; width: auto; min-width: 620px; position: relative; text-align: left; font-size: 9pt; color: var(--ink); border: var(--border); background: var(--bg_main)}
- .main:not(#home):not(#sitemap) td {border-top: var(--border_soft); border-right: var(--border_soft)}
-.main:not(#home):not(#sitemap) td:first-child {border-left: var(--border_inner)}
-.main:not(#home):not(#sitemap) tr:first-child td {border-top: var(--border_inner)}
-.main:not(#home):not(#sitemap) td:last-child {border-right: var(--border_inner)}
-.main:not(#home):not(#sitemap) tr:last-child td {border-bottom: var(--border_inner)}
-.main#home {padding-bottom: 3px}
 a:link tt, a:visited tt {color: #4e47bf}
 a:active tt {color: #9fe9f9}
 code {text-align: left; font: 9pt var(--monospaced); color: #393}
@@ -42,7 +35,7 @@ h2 a[name]:hover, h2 a[name]:active {color: var(--ink)}
 h2 a:visited {color: #190f9b}
 h3 {position: relative; z-index: 10; overflow: hidden}
 h3, h3.welcome, .news h3 {margin: 10px 0 10px 0; padding: 7px 10px; letter-spacing: .08em; text-transform: uppercase; text-shadow: 0 0 2px #010011; border: var(--border_inner)}
-h4 {border-bottom: 1px; border-bottom-style: solid; border-bottom-color: #26235c; padding: 0 0 10px 0; margin: 5px 0 10px 0; font-size: 11pt}
+h4 {margin: 5px 0 10px; padding: 0 0 10px; font-size: 11pt; border-bottom: 1px; border-bottom-style: solid; border-bottom-color: #26235c}
 ol {padding: 1px 0 0 20px; display: inline}
 ol li:first-child {margin-top: 10px}
 ul {margin: 0; padding: 0}
@@ -55,15 +48,23 @@ table tt, #jardump td:nth-child(4) {color: #393}
 th {padding: 6px 2px; line-height: 1.1; text-align: center; font-size: 9pt; color: var(--ink); border-top: var(--border_inner); border-bottom: var(--border_inner); background: var(--th); background-size: 100% 4px, 4px 100%}
 th code {user-select: all}
 tr {vertical-align: middle; box-shadow: var(--highlight), inset 0 0 2px 1px #00003a; contain: layout}
+td {padding: 5px}
 tr:hover {box-shadow: none}
 tt {font: bold 8.5pt var(--monospaced); color: #393}
 .wideload {margin: 0}
 .widescroll {overflow: auto}
 .widescroll table {white-space: nowrap}
 .nowrap {white-space: nowrap}
-.underline {border-bottom: 1px solid #efeeff; padding: 5px 0 5px 0; margin: 0 0 10px 0}
+.underline {margin: 0 0 10px; padding: 5px 0; border-bottom: 1px solid #efeeff}
 hr {color: rgba(38, 35, 92,.7); background: rgba(38, 35, 92,.7); height: 1px; border: 0 solid rgba(38, 35, 92,.7); margin: 20px 0 10px}
 hr:last-child {margin-top: 20px; margin-bottom: 20px}
+.main {margin: -1px 3px 5px 212px; padding: 0 10px; width: auto; min-width: 620px; position: relative; text-align: left; font-size: 9pt; color: var(--ink); border: var(--border); background: var(--bg_main)}
+ .main:not(#home):not(#sitemap) td {border-top: var(--border_soft); border-right: var(--border_soft)}
+.main:not(#home):not(#sitemap) td:first-child {border-left: var(--border_inner)}
+.main:not(#home):not(#sitemap) tr:first-child td {border-top: var(--border_inner)}
+.main:not(#home):not(#sitemap) td:last-child {border-right: var(--border_inner)}
+.main:not(#home):not(#sitemap) tr:last-child td {border-bottom: var(--border_inner)}
+.main#home {padding-bottom: 3px}
 div[id^="config_"] td {padding-left: 10px; padding-right: 10px}
 .widepanel h3 {padding: 6px 10px; text-align: left; text-transform: uppercase; font-size: 10.5pt; letter-spacing: .08em; word-spacing: .1em; border: var(--border_inner); border-radius: 0}
 a[name="chelp"], a[name="help"] {pointer-events: none}
@@ -312,7 +313,7 @@ p:empty + .sb_notice {margin-top: 10px}
 .sb_notice + p:empty + form {margin-top: 9px}
 #sidebar form:first-child {margin: 6px 0 -5px 0}
 #sidebar p {padding: 0}
-.refresh {margin-top: -10px; margin-bottom: -4px; padding: 2px 0 0 0}
+.refresh {margin-top: -10px; margin-bottom: -4px; padding: 2px 0 0}
 #sidebar a {padding: 1px 2px; display: inline-block; line-height: 1.2; word-spacing: 0}
 #sidebar #sb_advancedgeneral a, #sidebar #sb_general a, #sidebar #sb_shortgeneral a {padding: 0; display: inline-block}
 #sidebar a:hover {color: var(--a_hover)}
@@ -435,7 +436,7 @@ a:active #sb_graphstats {border-color: var(--active)}
 div[id^="config_"].main {padding-bottom: 14px}
 .newsAuthor {padding: 0 0 0 18px; float: right; text-transform: none; font-size: 8pt; background: var(--user) no-repeat left 2px center; background-size: 12px; opacity: .7}
 .newsDate {opacity: .7}
-.news h4 {border-bottom: 1px; border-bottom-style: dotted; border-bottom-color: #26235c; padding: 0 0 0 0; margin: 5px 0 10px 0; font-size: 10pt; opacity: 1; text-transform: capitalize}
+.news h4 {margin: 5px 0 10px; padding: 0; text-transform: capitalize; font-size: 10pt; border-bottom: 1px; border-bottom-style: dotted; border-bottom-color: #26235c; opacity: 1}
 .news hr {margin: 18px -20px 6px}
 .news {margin: -1px 3px 0 212px; padding: 6px 20px 10px; min-width: 600px; position: relative; z-index: 10; text-align: right; font-size: 8pt; border: var(--border); background: #000 var(--earth) no-repeat scroll bottom right; background-size: auto 220px}
 .news::before {content: ""; display: inline-block; position: absolute; left: 0; right: 0; top: 0; bottom: 0; z-index: 0; background: rgba(0,0,48,.4); pointer-events: none}
@@ -476,7 +477,7 @@ div[id^="config_"].main {padding-bottom: 14px}
 .tab {background: linear-gradient(180deg,#112,#080818 50%, #000); box-shadow: var(--highlight), inset 0 0 1px 0 #446}
 .tab:hover {box-shadow: var(--highlight), inset 0 0 1px 1px rgba(112,80,112,.7); background: radial-gradient(at center bottom, rgba(96,32,96,.6) 0, rgba(0,0,0,0) 90%), var(--btn_hover)}
 .tab:hover a {color: var(--a_hover); text-shadow: 0 1px 1px #000; background: none}
-.tab:active {box-shadow: var(--highlight), inset 3px 3px 3px 1px #2d103f; background: radial-gradient(at center bottom, rgba(200, 96, 200, .8) 0, rgba(0, 0, 0, 0) 90%), linear-gradient(180deg,#501f6c, var(--hover))}
+.tab:active {box-shadow: var(--btn_shadow_active); background: radial-gradient(at center bottom, rgba(200, 96, 200, .8) 0, rgba(0, 0, 0, 0) 90%), linear-gradient(180deg,#501f6c, var(--hover))}
 .tab:active a, #help .tab:active a {color: var(--ink) !important; background: none; text-shadow: none}
 .tab2 {padding: 6px 14px; color: var(--ink); text-shadow: 0 1px 1px #000; box-shadow: var(--highlight), inset 4px 4px 4px rgba(0,0,0,.5); background: radial-gradient(at center bottom, rgba(128, 0, 128, .4) 0, rgba(0, 0, 0, 0) 90%), linear-gradient(90deg, rgba(96,0,96,.2), rgba(96,0,96,.2)), linear-gradient(180deg,#000, #1a1b2f)}
 
@@ -780,6 +781,7 @@ th.options, #externali2cp th {padding: 7px 10px}
 #availableplugins {margin: 12px 0 -1px}
 #pluginconfig {margin-top: -14px}
 #pluginconfig th:first-child, #pluginconfig td:first-child {padding-left: 10px; text-align: left; white-space: nowrap}
+#pluginconfig table td:first-child {text-align: right}
 #pluginconfig tr {background: #010010}
 #pluginconfig table tr {background: var(--row)}
 #config_plugins #plugininstall td, #config_plugins #plugininstall2 td {border: none !important}
@@ -789,7 +791,7 @@ th.options, #externali2cp th {padding: 7px 10px}
 #pluginconfig table td:first-child {padding-left: 15px; width: 1%; white-space: nowrap}
 #pluginconfig td:first-child label {padding: 5px 15px 5px 26px; display: inline-block; min-width: 100px; vertical-align: middle; text-align: left; border: 1px solid #003; border-radius: 4px 15px 15px 4px; background: var(--plugin) no-repeat 5px center, var(--label); background-size: 16px, 100%; background-blend-mode: luminosity}
 #pluginconfig td:last-child table {margin: 5px 15px 5px 5px; padding: 5px; width: calc(100% - 8px)}
-#pluginconfigtext input {float: right; margin: -2px -6px 0 0}
+#pluginconfigtext input {margin: -5px -16px 0; float: right}
 #plugininstall .suboption, #plugininstall2 .suboption, #config_family .suboption {padding: 2px 12px 3px 10px}
 #plugininstall input.cancel {display: none}
 #plugininstall input[type=text] {width: 50%; min-width: 400px}
@@ -1581,7 +1583,7 @@ span.left, span.right {margin: 0 1px; width: 40%; display: inline-block}
 #banlist li img {margin-left: -3px}
 #banlist li a[href^="configpeer"] {padding: 2px 1px 1px 0; line-height: 0; position: absolute; top: -1px; right: -1px; vertical-align: middle; border: var(--border_inner); box-shadow: var(--highlight), inset 0 0 1px 1px #26235c; background: var(--label); filter: none}
 #banlist li a[href^="configpeer"]:hover, #banlist li a[href^="configpeer"]:focus {box-shadow: var(--highlight); background: linear-gradient(180deg,#313 50%, #000 50%)}
-#banlist li a[href^="configpeer"]:active {box-shadow: var(--highlight), inset 3px 3px 3px 1px #2d103f; background: linear-gradient(180deg,var(--hover) 50%, #501f6c 50%)}
+#banlist li a[href^="configpeer"]:active {box-shadow: var(--btn_shadow_active); background: linear-gradient(180deg,var(--hover) 50%, #501f6c 50%)}
 
 /* netdb */
 b.netdb_transport {display: inline-block; margin-right: 5px}
@@ -2435,7 +2437,7 @@ input.check[value$="updates"], input.check[value$="updates"]:hover, input.check[
 #iptransport a::after, #advancedconfig a::after, #reseedsetup a::after, .h3navlinks a[href="/help/faq#alternative_browser"]::after {width: 16px; height: 16px; background-size: 16px}
 #logs a.configure::after {background-size: 14px}
 #logs h3.tabletitle a.delete {padding-right: 16px}
-#pluginconfigtext input {margin: -4px -6px 0 0}
+#pluginconfigtext input {margin: -5px -14px 0}
 #profiles #banlist {margin-top: -3px; margin-bottom: 7px}
 #routerinformation .h3navlinks a {line-height: 1.4}
 #searchbar button {height: 28px}
