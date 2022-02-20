@@ -658,11 +658,8 @@ input.delete {
   margin: 60px auto;
   width: 600px;
   padding: 0 0 10px;
-  box-shadow: 0 0 2px 1px #000, var(--highlight), inset 0 0 0 2px #000026;
-  background: url(images/hatter_med.png) right bottom no-repeat,
-    repeating-linear-gradient(180deg,rgba(0,0,0,.9), rgba(0,0,32,.5) 2px, rgba(0,0,0,.5) 3px),
-    linear-gradient(180deg,#000016, #000006);
-  background-size: 27% auto, 100%, 100%;
+  box-shadow: var(--bevel);
+  background: var(--panel);
   filter: opacity(0);
   animation: linear fade-in .15s .6s forwards;
 }
@@ -679,8 +676,8 @@ input.delete {
   color: #bbbbcf;
   text-shadow: 0 1px 1px #000;
   border: 1px solid #211e51;
-  box-shadow: var(--highlight);
-  background: linear-gradient(180deg,#080818 50%, #000008 50%);
+  box-shadow: var(--bevel);
+  background: var(--title);
   -webkit-text-stroke: 1px rgba(0,0,0,.3);
 }
 
@@ -764,7 +761,7 @@ input.delete {
 
 #dologin tr:last-child a, #dologin tr:last-child a:visited {
   margin: 8px -2px 6px;
-  padding: 3px 10px;
+  padding: 2px 10px;
   min-width: 140px;
   display: inline-block;
   color: var(--a);
@@ -777,6 +774,7 @@ input.delete {
 
 #dologin tr:last-child a:hover {
   color: var(--a_hover);
+  border: var(--border_hover);
   box-shadow: var(--highlight), var(--btn_hover_radial), 0 0 0 1px var(--a_hover);
   background: var(--btn_hover);
   transition: ease all .2s;
@@ -1293,7 +1291,7 @@ input[type=submit][disabled]:focus, input[type=submit][disabled]:active {
 }
 
 #messagenav input {
-  background-size: 16px, 100% !important;
+  background-size: 16px, 100%, 100% !important;
 }
 
 .topbuttons #messagenav input {
@@ -1516,6 +1514,13 @@ div:not(#pagesize).topbuttons, .iframed div:not(#pagesize).topbuttons {
 
 .pagenavcontrols td:first-child, .pagenavcontrols td:last-child {
   width: 45%;
+}
+
+.pagenavcontrols td:first-child {
+  text-align: right;
+}
+.pagenavcontrols td:last-child {
+  text-align: left;
 }
 
 .pagenavcontrols input, .pagenavcontrols input:disabled,

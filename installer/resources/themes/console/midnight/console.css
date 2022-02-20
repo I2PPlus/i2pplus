@@ -2220,6 +2220,7 @@ h1, .main h2, #applinks, #sitelinks, .main h3 {-webkit-text-stroke: 1px rgba(179
 #help td {background-color: #000}
 #help h3 {padding: 6px 10px; font-size: 10pt}
 #legal, #sidebarhelp, #volunteer, #reachabilityhelp, #configurationhelp, #faq, #tunnman, #browserconfig, #reseedhelp, #troubleshoot, #newuserguide, #filterlist, #webhosting, #themeoverride, #glossary {margin: 10px 0; padding: 0 20px; border: var(--border_inner); background: #000}
+#newuserguide, #reseedhelp {padding-bottom: 20px}
 #sidebarhelp h3, #faq h3, #reseedhelp h3 {margin: 0 -21px 10px; padding: 8px 10px; word-spacing: .1em; letter-spacing: .08em; text-align: left; text-transform: uppercase; font-size: 10.5pt; border: var(--border_inner); border-radius: 0}
 #volunteer {margin: -5px 0 10px; padding: 0 20px; border: var(--border_inner); background: #000}
 #legal h2, #sidebarhelp h2, #volunteer h2, #reachabilityhelp h2, #configurationhelp h2, #themeoverride h2, #tunnman h2, #browserconfig h2, #faq h2, #reseedhelp h2, #troubleshoot h2, #newuserguide h2, #filterlist h2, #webhosting h2, #glossary h2 {margin: -1px -21px 10px; padding: 10px; text-transform: uppercase; font-size: 11pt; text-align: left; letter-spacing: .08em; word-spacing: .1em; border-radius: 0}
@@ -2297,11 +2298,12 @@ h1, .main h2, #applinks, #sitelinks, .main h3 {-webkit-text-stroke: 1px rgba(179
 
 /* changelog */
 #changelog:hover pre, #wrapperlogs:hover pre {will-change: transform}
-#changelog pre {margin-top: 11px; padding: 10px 10px 10px 20px; max-height: 600px; overflow-y: scroll; width: calc(100% - 32px); border-left: var(--border_inner); border-right: var(--border_inner); background: #000}
-#fullhistory {margin: -13px 0 9px; padding: 5px 10px; position: relative; z-index: 999; text-align: right; border: var(--border_inner); background: #000}
+#changelog pre {margin-top: 11px; padding: 10px 10px 10px 20px; max-height: 600px; overflow-y: scroll; width: calc(100% - 32px); border-left: var(--border_inner); border-right: var(--border_inner); background: rgba(0,0,16,.8)}
+#fullhistory {margin: -13px 0 9px; padding: 5px 10px; position: relative; z-index: 999; text-align: right; border: var(--border_inner); background: var(--panel)}
 #fullhistory:hover::before {background: var(--eye_hover) no-repeat left center; background-size: 16px}
 #fullhistory:active::before {background: var(--eye_active) no-repeat left center; background-size: 16px}
 #fullhistory::before {width: 19px; height: 20px; display: inline-block; vertical-align: middle; background: var(--eye) no-repeat left center; background-size: 16px; content: ""}
+#fullhistory a {font-size: 90%}
 
 /* mini faq */
 #faq h3 {padding: 8px 10px 8px 35px; word-spacing: 0; letter-spacing: 0; text-transform: none; font-size: 10.5pt; background: var(--question) no-repeat 10px 55%, var(--th); background-size: 18px, 4px 100%, 100%; background-blend-mode: luminosity, normal}
