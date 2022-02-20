@@ -173,7 +173,8 @@ label {
 input[type=text], input[type=password], textarea {
   padding: 6px 8px;
   box-sizing: border-box;
-  color: var(--a);
+  color: var(--ink_darker);
+  -webkit-text-stroke: 0;
   border: 1px solid #27235c;
   box-shadow: var(--highlight), 0 0 0 1px #000;
   background: #000;
@@ -185,9 +186,21 @@ input[type=text], input[type=password] {
   padding: 6px 8px;
   text-decoration: none;
   font: bold 9pt var(--bodyfont);
-  color: var(--ink);
-  -webkit-text-stroke: none;
   border: var(--border_input);
+}
+
+textarea {
+  margin: 10px;
+  padding: 3px 8px;
+  width: calc(100% - 15px);
+  min-height: 100px;
+  text-align: left;
+  font: 9pt var(--monospaced);
+  box-shadow: inset 1px 1px 1px 0 #000;
+  resize: none;
+  scrollbar-color: rgba(24,24,80,.8) rgba(0,0,0,0);
+  scrollbar-width: thin;
+  will-change: transform;
 }
 
 input[type=text]:focus, input[type=password]:focus, textarea:focus {
@@ -200,6 +213,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 
 textarea:focus {
   box-shadow: inset 0 0 0 1px var(--a_hover), var(--btn_shadow_active);
+  scrollbar-width: auto;
 }
 
 input[type=text]:disabled, input[readonly], input[readonly]:focus {
@@ -216,25 +230,6 @@ input[type=submit]::-moz-focus-inner,
 input[type=reset]::-moz-focus-inner {
   outline: none;
   border: none;
-}
-
-textarea {
-  margin: 10px;
-  padding: 3px 8px;
-  width: calc(100% - 15px);
-  min-height: 100px;
-  text-align: left;
-  font: 9pt var(--monospaced);
-  color: var(--ink);
-  box-shadow: inset 1px 1px 1px 0 #000;
-  resize: none;
-  scrollbar-color: rgba(24,24,80,.8) rgba(0,0,0,0);
-  scrollbar-width: thin;
-  will-change: transform;
-}
-
-textarea:focus {
-  scrollbar-width: auto;
 }
 
 input[type="file"] {
