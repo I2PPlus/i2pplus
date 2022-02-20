@@ -464,7 +464,7 @@ div[id^="config_"].main {padding-bottom: 14px}
 #newsStatus, #news #newsDisplay, #news #newsDisplay a, #graphopts a, #routerinfo a {display: inline-block}
 #newsStatus, #news #newsDisplay a {font-size: 8pt}
 #newsStatus {float: left; color: var(--ink)}
-.news h3, #newspage h3 {padding-left: 30px; text-align: left; font-size: 9.5pt; letter-spacing: .08em; color: var(--ink); padding: 6px 10px 6px 30px; background: var(--news) no-repeat left 8px center, var(--title); background-size: 16px, 4px 100%, 100%}
+.news h3, #newspage h3 {padding-left: 30px; text-align: left; font-size: 9.5pt; letter-spacing: .08em; color: var(--ink); padding: 6px 10px 6px 30px; background: var(--news) no-repeat left 9px center / 14px, var(--title)}
 .news h3 {font-size: 11pt; border: none; border-bottom: var(--border_inner); background: var(--news) no-repeat 8px center / 16px, var(--title)}
 #news .newsentry h3 {border: var(--border_inner)}
 
@@ -2509,7 +2509,9 @@ td.optionsave, #i2pupdates td:first-child {width: 30%; white-space: normal}
 .sb_netstatus {padding: 6px 3px}
 .tab, .tab2 {min-width: 48px}
 .tab a {padding-left: 9px; padding-right: 9px}
-.news h3, #newspage h3 {padding-left: 26px; font-size: 10pt; background-size: 13px}
+.news h3, #newspage h3, .newsAuthor {background-size: 11px}
+.news h3, #newspage h3 {padding-left: 26px; font-size: 9.5pt; background-position: 9px center}
+.newsAuthor {padding: 0 0 0 16px}
 .appicon {height: 40px}
 .applink img {height: 24px; max-height: 24px; max-width: 24px}
 .applabel {width: 130px}
