@@ -362,7 +362,7 @@ p:empty + .sb_notice {margin-top: 10px}
 a:active #sb_graphstats {border-color: var(--active)}
 #sb_graphcontainer:hover #sb_graphstats {opacity: 1; transition: ease opacity .3s}
 #sb_graphcontainer {margin: -6px -9px -8px; padding: 0 1px; height: 44px; position: relative; z-index: 10; overflow: hidden; box-shadow: inset 0 0 0 1px #26235c, inset 0 0 0 2px #000, inset 0 0 3px 1px #004; background: repeating-linear-gradient(90deg, rgba(0,0,0,0) 14px, rgba(112,107,199,.7) 15px, rgba(0,0,0,0) 15px, rgba(0,0,0,0) 30px), repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(112,107,199,.3), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 14px)}
-#sidebar #minigraph {margin: -19px -1px 0; width: 206px; height: 40px}
+#sidebar #minigraph {margin: -19px -1px 0; width: 198px; height: 40px}
 #xhr > hr + #sb_graphcontainer > span + a > #minigraph {height: 40px}
 #sidebar #minigraphcontainer {margin-top: -43px; margin-left: 1px; width: 204px; height: 39px; background-repeat: no-repeat; background-size: 204px 40px}
 #homepage #minigraphcontainer {margin-top: -42px; height: 38px}
