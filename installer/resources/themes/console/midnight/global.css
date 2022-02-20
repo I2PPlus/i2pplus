@@ -20,7 +20,7 @@
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
   --border: 1px solid #26235c;
   --border_active: 1px solid #fc1c66;
-  --border_hover: 1px solid #83529f;
+  --border_hover: 1px solid var(--ink_btn_active);
   --border_badge: 1px solid #225;
   --border_btn: 1px solid #26225c;
   --border_inner: 1px solid #1e1c4a;
@@ -37,6 +37,7 @@
   --highlight: inset 0 0 0 1px #000;
   --hover: #6a1698;
   --ink: #c9ceff;
+  --ink_btn_active: #83529f;
   --ink_darker: #99a3ff;
   --label: linear-gradient(180deg,#002,#001);
   --li: #8589ad;
@@ -172,7 +173,8 @@ label {
 input[type=text], input[type=password], textarea {
   padding: 6px 8px;
   box-sizing: border-box;
-  color: var(--a);
+  color: var(--ink_darker);
+  -webkit-text-stroke: 0;
   border: 1px solid #27235c;
   box-shadow: var(--highlight), 0 0 0 1px #000;
   background: #000;
@@ -182,10 +184,23 @@ input[type=text], input[type=password], textarea {
 input[type=text], input[type=password] {
   margin: 5px 10px;
   padding: 6px 8px;
-  color: var(--ink);
   text-decoration: none;
   font: bold 9pt var(--bodyfont);
   border: var(--border_input);
+}
+
+textarea {
+  margin: 10px;
+  padding: 3px 8px;
+  width: calc(100% - 15px);
+  min-height: 100px;
+  text-align: left;
+  font: 9pt var(--monospaced);
+  box-shadow: inset 1px 1px 1px 0 #000;
+  resize: none;
+  scrollbar-color: rgba(24,24,80,.8) rgba(0,0,0,0);
+  scrollbar-width: thin;
+  will-change: transform;
 }
 
 input[type=text]:focus, input[type=password]:focus, textarea:focus {
@@ -193,11 +208,12 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
   border: 1px solid #6466a5;
   box-shadow: var(--outline), 0 0 0 2px var(--a_hover), var(--btn_shadow_active);
   background: var(--text_focus);
-  transition: filter all .3s;
+  transition: ease all .3s;
 }
 
 textarea:focus {
   box-shadow: inset 0 0 0 1px var(--a_hover), var(--btn_shadow_active);
+  scrollbar-width: auto;
 }
 
 input[type=text]:disabled, input[readonly], input[readonly]:focus {
@@ -214,25 +230,6 @@ input[type=submit]::-moz-focus-inner,
 input[type=reset]::-moz-focus-inner {
   outline: none;
   border: none;
-}
-
-textarea {
-  margin: 10px;
-  padding: 3px 8px;
-  width: calc(100% - 15px);
-  min-height: 100px;
-  text-align: left;
-  font: 9pt var(--monospaced);
-  color: var(--ink);
-  box-shadow: inset 1px 1px 1px 0 #000;
-  resize: none;
-  scrollbar-color: rgba(24,24,80,.8) rgba(0,0,0,0);
-  scrollbar-width: thin;
-  will-change: transform;
-}
-
-textarea:focus {
-  scrollbar-width: auto;
 }
 
 input[type="file"] {
@@ -295,7 +292,7 @@ input[type=submit]:hover, input[type=reset]:hover, button:hover {
 input[type=submit]:active, input[type=reset]:active, button:active,
 .control:active, .control:visited:active, #settings:active,
 .fakebutton:active, .fakebutton:visited:active {
-  color: #83529f;
+  color: var(--ink_btn_active);
   text-shadow: 0 1px 1px #3c1751;
   border: 1px solid var(--hover);
   box-shadow:var(--btn_shadow_active), var(--outline);
@@ -338,7 +335,7 @@ input[type=file]:active::file-selector-button {
 }
 
 input[type=file]:active::file-selector-button {
-  color: #83529f;
+  color: var(--ink_btn_active);
   text-shadow: 0 1px 1px #3c1751;
   border: 1px solid var(--hover);
   box-shadow: var(--highlight), inset 3px 3px 3px #000;

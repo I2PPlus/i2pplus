@@ -265,7 +265,7 @@ button.download.control:active {background: var(--download) no-repeat center cen
 #sb_general, #sb_shortgeneral, #sb_advancedgeneral, #sb_bandwidth, #sb_peers, #sb_peersadvanced, #sb_tunnels, #sb_queue {margin-top: -8px; margin-bottom: -9px}
 #sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after, #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {height: 16px; display: inline-block; vertical-align: bottom; content: ""}
 #sb_general td, #sb_shortgeneral td, #sb_advancedgeneral td {white-space: nowrap}
-#clock {margin: -6px -9px -10px; padding: 8px 0 5px; position: relative; z-index: 10; font-size: 18pt; font-weight: 700; letter-spacing: .1em; box-shadow: var(--highlight), inset 0 0 1px 1px #339; opacity: .8}
+#clock {margin: -7px -10px -10px; padding: 11px 0 9px; position: relative; z-index: 10; font-size: 18pt; font-weight: 700; letter-spacing: .1em; box-shadow: var(--bevel_h1); opacity: .8}
 #clock::after {margin-left: 3px; content: "UTC"; display: inline-block; font-size: 50%; vertical-align: middle}
 
 #sb_localtunnels {margin-top: -6px; margin-bottom: -8px; width: 200px; border-collapse: separate; border-spacing: 0}
@@ -444,6 +444,7 @@ div[id^="config_"].main {padding-bottom: 14px}
 #news .newscontent, #news #newsStatus, #news #newsDisplay, #news hr {position: relative; z-index: 20}
 #newsDisplay a, #graphopts a, #routerinfo a, .graphstat, .graphstat:visited, #routerinformation tr:nth-child(n+2) a:not(#revision) {margin: -2px; padding: 3px 15px; display: inline-block; line-height: 1; color: var(--a); border: var(--border_badge); border-radius: 15px; box-shadow: 0 0 1px rgba(0,0,0,.8), var(--highlight); background: var(--btn)}
 #newsDisplay a {margin: 2px 0 -4px -4px; line-height: 1.2}
+#config_update #newsDisplay a {font-size: 90%}
 #newsDisplay a:hover, #newsDisplay a:focus, #graphopts a:hover, #graphopts a:focus, #routerinfo a:hover, #routerinfo a:focus, .graphstat:hover, .graphstat:focus, #routerinformation tr:nth-child(n+2) a:not(#revision):hover, #routerinformation tr:nth-child(n+2) a:not(#revision):focus {color: var(--a_hover); text-shadow: 0 1px 1px #000; border: 1px solid #000; box-shadow: 0 0 1px #000, inset 0 0 0 1px #303; background: var(--btn_hover); transition: ease box-shadow .05s}
 #newsDisplay a:active, #graphopts a:active, #routerinfo a:active, .graphstat:active, #routerinformation tr:nth-child(n+2) a:not(#revision):active {color: var(--ink_btn_active); text-shadow: 0 1px 1px #3c1751; box-shadow: inset 0 0 0 1px #303, inset 3px 3px 3px #14071b; background: var(--hover)}
 #newsDisplay {white-space: nowrap; margin-left: 10px}
@@ -513,8 +514,8 @@ p#upnpconfig, p#ipchange, p#ipv6config, p#tcpconfig, p#confignotes, p#defaultswo
 #externali2cp .optionlist label::before, #externali2cp .optionlist .nowrap::before, #netconfig label::before, #reseedconfig .nowrap::before, #manualreseed .nowrap::before, #graphs .nowrap::before {min-height: 40px}
 
 /* notifications */
-.messages {padding: 20px 10px; margin: -4px 0 12px; font-weight: 700; font-size: 9.5pt; color: var(--ink); border: var(--border_inner); box-shadow: var(--highlight), inset 0 0 2px 1px #808; background: #000 var(--infohelp) no-repeat 15px center / 28px}
-.messages i {padding-left: 45px; display: inline-block; float: none; text-align: left}
+.messages {padding: 20px 10px; margin: -4px 0 11px; font-weight: 700; font-size: 9.5pt; color: var(--ink); border: var(--border_inner); box-shadow: var(--highlight), inset 0 0 2px 1px #808; background: #000 var(--infohelp) no-repeat 15px center / 28px}
+.messages i {padding-left: 45px; display: inline-block; float: none; text-align: left; line-height: 2}
 .messages span.error {color: #d6fffd}
 .messages span.notice {font-style: italic}
 .messages li {margin: 0 5px 0 50px; padding: 0 10px 0 0; text-align: justify; list-style: none; font-weight: 700; border: 0}
@@ -1099,6 +1100,9 @@ td.optionsave {padding: 7px 5px; text-align: right; border-top: var(--border_inn
 #tunnelconfig th img {margin-bottom: -2px}
 #tunnelconfig th:not(.th_title)[colspan="3"] {padding: 12px 10px 12px 34px; text-transform: none; letter-spacing: 0; word-spacing: 0; text-shadow: 0 1px 1px #000; box-shadow: var(--highlight), inset 0 0 2px 1px #f00; background: var(--infowarn) no-repeat 10px center, linear-gradient(180deg,rgba(128,128,128,.05), rgba(0,0,0,.3)), repeating-linear-gradient(180deg,#400 2px, #100 4px); background-size: 18px, 100%, 100% 4px}
 #upnpscan {padding: 5px 15px; margin: -11px 0 10px; border: var(--border_inner); background: #000}
+
+.routerid img {margin-right: 2px}
+.flag {margin-right: 3px}
 
 /* configpeers banlist */
 #bannedips {margin-bottom: -5px; margin-top: -1px}
@@ -1758,7 +1762,6 @@ h3.sybils + div, h3.sybils + a[name] + table {margin-top: -1px}
 #wrapperlogs pre {max-height: 500px; resize: none}
 
 #profilelist td:nth-child(3) i {letter-spacing: 0}
-.routerid img {margin-right: 2px}
 #schedjobs ul {margin: 0 -5px; columns: 350px auto; column-gap: 0}
 #skm_dest {white-space: nowrap; font-size: smaller; text-transform: none; letter-spacing: 0}
 #stats form > * {vertical-align: middle}
@@ -2424,6 +2427,7 @@ input.check[value$="updates"], input.check[value$="updates"]:hover, input.check[
 #chooselang img, #configbandwidth img {margin-top: 0}
 #config_bandwidth .h3navlinks a {margin: -4px 0 0 -16px; background-size: 19px}
 #config_logging h3 a::before, #webappconfiguration a::before, #i2pclientconfig a::before, #pluginmanage a::before {margin-top: -2px}
+#config_update .messages i {line-height: 2}
 #bannedpeers {margin-bottom: -13px}
 #iptransport a::after, #advancedconfig a::after, #reseedsetup a::after, .h3navlinks a[href="/help/faq#alternative_browser"]::after {width: 16px; height: 16px; background-size: 16px}
 #logs a.configure::after {background-size: 14px}
@@ -2433,7 +2437,7 @@ input.check[value$="updates"], input.check[value$="updates"]:hover, input.check[
 #routerinformation .h3navlinks a {line-height: 1.4}
 #searchbar button {height: 28px}
 #searchbar span {margin: -3px -2px -4px}
-#clock {font-size: 16pt}
+#clock {margin: -7px -10px -9px; padding: 12px 0 9px; font-size: 16pt}
 #sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after, #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {min-height: 14px}
 #sb_tunnelstatus .tunnelBuildStatus::before {margin: -2px 0; background-size: 12px}
 #sidebarconf button img {width: 10px; height: 10px}
@@ -2442,6 +2446,7 @@ input.check[value$="updates"], input.check[value$="updates"]:hover, input.check[
 #sitelinks + .linkgroup .applink:last-child {margin-bottom: 8px}
 #sitemap .applink img {padding-left: 62px; padding-right: 62px}
 #tunnels h3 a[href^="/configtunnels#"]::after, #tunnels h3 a[href$="i2ptunnelmgr"]::after, #logs a.configure::after, #logs a.delete::after {width: 14px; height: 14px; background-size: 12px}
+.tunnel_peer img, .routerid img {margin: 1px 2px -1px 0}
 }
 
 @media screen and (max-width: 1400px) {
@@ -2709,6 +2714,7 @@ h2 {padding: 12px 10px}
 h3.h3table, h3.tabletitle, #i2pclientconfig, #advancedclientconfig, #webappconfiguration, #pconfig, #pluginfromurl, #pluginfromfile, #updateplugins, #pluginmanage, #bannedpeers, h3.ptitle, #transports, #upnpstatus, h3.sybils, #config_keyring h3 {padding: 9px 10px}
 #tunnels h3 a:not(.lsview), #criticallogs + h3.tabletitle a, #iptransport a, #advancedconfig a, #reseedsetup a {font-size: 0}
 #updateHelper .nowrap::after, #updateProxyHostPort .nowrap::after, #i2pupdates .nowrap::after {min-height: 60px}
+.routerid img {width: auto; height: 14px}
 }
 
 @media screen and (-webkit-min-device-pixel-ratio: 1.1) {
