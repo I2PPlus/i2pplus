@@ -1213,9 +1213,10 @@ a[name="criticallogs"] + p + h3 + p + ul {margin-bottom: 15px; border: var(--bor
 #enviro, #criticallogs, #routerlogs, #eventlogs, #wrapperlogs {margin-top: -11px}
 #enviro td:last-child b {margin: 0 2px 0 6px}
 #enviro td {padding: 8px 10px; font-weight: 400}
-#routerlogs td p, #wrapperlogs td p {margin: 0; padding: 8px 10px}
+#routerlogs td p, #wrapperlogs td p {margin: 0; padding: 2px 10px}
 #routerlogs tr:first-child td, #wrapperlogs tr:first-child td {border-bottom: var(--border_inner)}
-#routerlogs tr:last-child, #routerlogs tr:last-child td, #wrapperlogs tr:last-child {background: none}
+#routerlogs tr:last-child, #routerlogs tr:nth-child(n+2) td, #wrapperlogs tr:last-child {background: none; padding: 0}
+
 table[id$="logs"] tr:nth-child(even){background: #000}
 table[id$="logs"] tr:nth-child(odd){background: #010011}
 table[id$="logs"] ul {margin: 1px 17px -6px -12px}
