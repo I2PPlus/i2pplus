@@ -444,6 +444,7 @@ div[id^="config_"].main {padding-bottom: 14px}
 #news .newscontent, #news #newsStatus, #news #newsDisplay, #news hr {position: relative; z-index: 20}
 #newsDisplay a, #graphopts a, #routerinfo a, .graphstat, .graphstat:visited, #routerinformation tr:nth-child(n+2) a:not(#revision) {margin: -2px; padding: 3px 15px; display: inline-block; line-height: 1; color: var(--a); border: var(--border_badge); border-radius: 15px; box-shadow: 0 0 1px rgba(0,0,0,.8), var(--highlight); background: var(--btn)}
 #newsDisplay a {margin: 2px 0 -4px -4px; line-height: 1.2}
+#config_update #newsDisplay a {font-size: 90%}
 #newsDisplay a:hover, #newsDisplay a:focus, #graphopts a:hover, #graphopts a:focus, #routerinfo a:hover, #routerinfo a:focus, .graphstat:hover, .graphstat:focus, #routerinformation tr:nth-child(n+2) a:not(#revision):hover, #routerinformation tr:nth-child(n+2) a:not(#revision):focus {color: var(--a_hover); text-shadow: 0 1px 1px #000; border: 1px solid #000; box-shadow: 0 0 1px #000, inset 0 0 0 1px #303; background: var(--btn_hover); transition: ease box-shadow .05s}
 #newsDisplay a:active, #graphopts a:active, #routerinfo a:active, .graphstat:active, #routerinformation tr:nth-child(n+2) a:not(#revision):active {color: var(--ink_btn_active); text-shadow: 0 1px 1px #3c1751; box-shadow: inset 0 0 0 1px #303, inset 3px 3px 3px #14071b; background: var(--hover)}
 #newsDisplay {white-space: nowrap; margin-left: 10px}
@@ -513,8 +514,8 @@ p#upnpconfig, p#ipchange, p#ipv6config, p#tcpconfig, p#confignotes, p#defaultswo
 #externali2cp .optionlist label::before, #externali2cp .optionlist .nowrap::before, #netconfig label::before, #reseedconfig .nowrap::before, #manualreseed .nowrap::before, #graphs .nowrap::before {min-height: 40px}
 
 /* notifications */
-.messages {padding: 20px 10px; margin: -4px 0 12px; font-weight: 700; font-size: 9.5pt; color: var(--ink); border: var(--border_inner); box-shadow: var(--highlight), inset 0 0 2px 1px #808; background: #000 var(--infohelp) no-repeat 15px center / 28px}
-.messages i {padding-left: 45px; display: inline-block; float: none; text-align: left}
+.messages {padding: 20px 10px; margin: -4px 0 11px; font-weight: 700; font-size: 9.5pt; color: var(--ink); border: var(--border_inner); box-shadow: var(--highlight), inset 0 0 2px 1px #808; background: #000 var(--infohelp) no-repeat 15px center / 28px}
+.messages i {padding-left: 45px; display: inline-block; float: none; text-align: left; line-height: 2}
 .messages span.error {color: #d6fffd}
 .messages span.notice {font-style: italic}
 .messages li {margin: 0 5px 0 50px; padding: 0 10px 0 0; text-align: justify; list-style: none; font-weight: 700; border: 0}
@@ -2424,6 +2425,7 @@ input.check[value$="updates"], input.check[value$="updates"]:hover, input.check[
 #chooselang img, #configbandwidth img {margin-top: 0}
 #config_bandwidth .h3navlinks a {margin: -4px 0 0 -16px; background-size: 19px}
 #config_logging h3 a::before, #webappconfiguration a::before, #i2pclientconfig a::before, #pluginmanage a::before {margin-top: -2px}
+#config_update .messages i {line-height: 2}
 #bannedpeers {margin-bottom: -13px}
 #iptransport a::after, #advancedconfig a::after, #reseedsetup a::after, .h3navlinks a[href="/help/faq#alternative_browser"]::after {width: 16px; height: 16px; background-size: 16px}
 #logs a.configure::after {background-size: 14px}
