@@ -13,6 +13,7 @@
   --active: #fc1c66;
   --badge: linear-gradient(180deg,#080818 50%,#000 50%);
   --bevel_h1: var(--highlight), inset 0 0 2px 1px rgba(70,70,160,.9);
+  --bevel_badge: var(--highlight), inset 0 0 2px 1px #8383c9, 0 0 0 1px #000;
   --bevel: var(--highlight), inset 0 0 2px 1px rgba(70,70,160,.6);
   --bodybg: repeating-linear-gradient(90deg, rgba(0,0,36,.6) 2px, rgba(0,0,8,.4) 4px) center center / 4px 100%, repeating-linear-gradient(180deg,rgba(0,0,24,.8) 2px, rgba(0,0,0,.5) 4px) center center / 100% 4px, var(--tile) center center / 171px 148px, #001;
   --bg_main: repeating-linear-gradient(90deg, rgba(0,0,48,.5) 2px, rgba(0,0,0,.6) 4px) center center / 4px 100%, repeating-linear-gradient(180deg,rgba(0,0,40,.5) 2px, rgba(0,16,0,.3) 4px) center center / 100% 4px;
@@ -51,7 +52,7 @@
   --th: repeating-linear-gradient(180deg, rgba(0,0,72,.3) 2px, rgba(0,0,0,.4) 4px) center center / 100% 4px, repeating-linear-gradient(90deg, #002 2px, #000 4px) center center / 4px 100%;
   --text_focus: linear-gradient(180deg,#002,#000028);
   --titlebg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 2'%3E%3Cpath fill='%23000018' d='M0 0h1v1H0z'/%3E%3Cpath d='M0 1h1v1H0z'/%3E%3C/svg%3E");
-  --title: repeating-linear-gradient(90deg, rgba(0,0,80,.3) 2px, rgba(0,0,0,.2) 4px) center center / 100% 4px, var(--titlebg) center center / 100%, #001;
+  --title: linear-gradient(180deg,#002,#000);
 }
 
 html, body {
@@ -60,12 +61,17 @@ html, body {
   scrollbar-color: #225 #001;
 }
 
+body {
+  font: 9pt var(--bodyfont);
+  color: var(--ink);
+}
+
 body.iframed {
   background: none;
   overflow: hidden;
 }
 
-*, :focus, :active, :checked {
+a, input, button, select, textarea {
   outline: none;
 }
 
@@ -80,11 +86,6 @@ a, button, input {
 ::selection {
   color: #fff;
   background: rgba(34, 41, 111, .9);
-}
-
-body {
-  font: 9pt var(--bodyfont);
-  color: var(--ink);
 }
 
 a {

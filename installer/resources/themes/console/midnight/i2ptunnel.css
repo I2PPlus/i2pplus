@@ -113,7 +113,7 @@ td.infohelp {padding: 10px 10px 10px 38px; background: var(--infohelp) no-repeat
 .tunnelType {width: 25%}
 .tunnelPreview, .tunnelPort {width: 15%; text-align: center}
 .tunnelLocation, .tunnelInterface {width: 20%}
-.tunnelLocation font[color="red"] {margin-left: 2px}
+.tunnelLocation font[color="red"] {margin: 0 2px; font-size: 80%}
 .tunnelStatus {width: 10%; min-width: 48px; text-align: center}
 .tunnelControl {width: 5%; text-align: right; white-space: nowrap}
 th.tunnelControl, .tunnelType, .tunnelLocation, .tunnelInterface {text-align: center}

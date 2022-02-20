@@ -26,7 +26,7 @@ a:link tt, a:visited tt {color: #4e47bf}
 a:active tt {color: #9fe9f9}
 code {text-align: left; font: 9pt var(--monospaced); color: #393}
 h2, h3, h4 {box-shadow: var(--bevel)}
-h1, h2, h3, .th_title {background: var(--title); background-size: 4px 100%, 100%}
+h1, h2, h3, .th_title {background: var(--title)}
 h1, .confignav, .main, .news {box-shadow: var(--bevel_h1)}
 h1 {margin: 0 3px 0 212px; padding: 13px 15px 12px; min-width: 610px; position: relative; z-index: 999; line-height: 1.2; letter-spacing: .15em; text-align: left; text-transform: uppercase; white-space: normal; font-size: 17pt; font-weight: 700; font-style: normal; color: var(--ink); text-shadow: 0 0 2px #010011; border: var(--border)}
 h2, h2.welcome {font-size: 12pt; color: var(--ink); text-shadow: 0 0 2px #010011; letter-spacing: .05em; padding: 10px; border: var(--border_inner); border-radius: 2px; vertical-align: middle; margin: 15px 0 12px 0; text-transform: uppercase; word-wrap: break-word}
@@ -445,7 +445,7 @@ div[id^="config_"].main {padding-bottom: 14px}
 #newsDisplay a, #graphopts a, #routerinfo a, .graphstat, .graphstat:visited, #routerinformation tr:nth-child(n+2) a:not(#revision) {margin: -2px; padding: 3px 15px; display: inline-block; line-height: 1; color: var(--a); border: var(--border_badge); border-radius: 15px; box-shadow: 0 0 1px rgba(0,0,0,.8), var(--highlight); background: var(--btn)}
 #newsDisplay a {margin: 2px 0 -4px -4px; line-height: 1.2}
 #newsDisplay a:hover, #newsDisplay a:focus, #graphopts a:hover, #graphopts a:focus, #routerinfo a:hover, #routerinfo a:focus, .graphstat:hover, .graphstat:focus, #routerinformation tr:nth-child(n+2) a:not(#revision):hover, #routerinformation tr:nth-child(n+2) a:not(#revision):focus {color: var(--a_hover); text-shadow: 0 1px 1px #000; border: 1px solid #000; box-shadow: 0 0 1px #000, inset 0 0 0 1px #303; background: var(--btn_hover); transition: ease box-shadow .05s}
-#newsDisplay a:active, #graphopts a:active, #routerinfo a:active, .graphstat:active, #routerinformation tr:nth-child(n+2) a:not(#revision):active {color: #83529f; text-shadow: 0 1px 1px #3c1751; box-shadow: inset 0 0 0 1px #303, inset 3px 3px 3px #14071b; background: var(--hover)}
+#newsDisplay a:active, #graphopts a:active, #routerinfo a:active, .graphstat:active, #routerinformation tr:nth-child(n+2) a:not(#revision):active {color: var(--ink_btn_active); text-shadow: 0 1px 1px #3c1751; box-shadow: inset 0 0 0 1px #303, inset 3px 3px 3px #14071b; background: var(--hover)}
 #newsDisplay {white-space: nowrap; margin-left: 10px}
 #news #newsDisplay, #graphopts {color: transparent}
 .news #newsDisplay, .news #newsStatus {margin-top: 3px; display: inline-block}
@@ -464,8 +464,8 @@ div[id^="config_"].main {padding-bottom: 14px}
 #newsStatus, #news #newsDisplay, #news #newsDisplay a, #graphopts a, #routerinfo a {display: inline-block}
 #newsStatus, #news #newsDisplay a {font-size: 8pt}
 #newsStatus {float: left; color: var(--ink)}
-.news h3, #newspage h3 {padding-left: 30px; text-align: left; font-size: 9.5pt; letter-spacing: .08em; color: var(--ink); padding: 6px 10px 6px 30px; background: var(--news) no-repeat left 8px center, var(--title); background-size: 16px, 4px 100%, 100%}
-.news h3 {font-size: 11pt; border: none; border-bottom: var(--border_inner); background: var(--news) no-repeat 8px center / 16px}
+.news h3, #newspage h3 {padding-left: 30px; text-align: left; font-size: 9.5pt; letter-spacing: .08em; color: var(--ink); padding: 6px 10px 6px 30px; background: var(--news) no-repeat left 9px center / 14px, var(--title)}
+.news h3 {font-size: 11pt; border: none; border-bottom: var(--border_inner); background: var(--news) no-repeat 8px center / 16px, var(--title)}
 #news .newsentry h3 {border: var(--border_inner)}
 
 #config_ui, #netdb {padding-bottom: 3px}
@@ -528,13 +528,13 @@ form[action="graphs"], form[action="/updategraphs"] {margin-top: -11px; margin-b
 .graphspanel {padding: 0; margin: 15px 0 -15px 0; width: 100%; text-align: center; overflow: auto; background: none}
 .graphspanel a {font-size: 0}
 .graphspanel a img {text-align: center; opacity: .9; transition: ease border .1s}
-.graphspanel a img:hover {box-shadow: var(--highlight), inset 0 0 2px 1px #83529f; background: #000; opacity: 1; cursor: zoom-in; transition: ease border .2s}
+.graphspanel a img:hover {box-shadow: var(--highlight), inset 0 0 2px 1px var(--ink_btn_active); background: #000; opacity: 1; cursor: zoom-in; transition: ease border .2s}
 .graphspanel form {margin-bottom: 25px; padding: 0 15px 0 15px; text-align: left}
 .graphspanel p {margin-top: 10px; padding: 10px 10px 15px; text-align: center; text-transform: capitalize; border-top: var(--border_inner)}
 .singlegraph img:hover {cursor: zoom-out}
 .graphContainer {margin: 4px 3px; padding: 2px 1px 0; position: relative; display: inline-block; min-width: 120px; min-height: 60px; overflow: hidden; vertical-align: middle; text-align: center; border: var(--border_inner); box-shadow: var(--highlight), inset 0 0 2px 1px #26235c; max-width: calc(100% - 18px); animation: grid-fade 2s 2s ease forwards}
 .graphContainer#hidpi {padding: 4px 8px 0 8px; box-sizing: border-box}
-.graphContainer:hover {box-shadow: var(--highlight), inset 0 0 2px 1px #83529f; border: var(--border_hover)}
+.graphContainer:hover {box-shadow: var(--highlight), inset 0 0 2px 1px var(--ink_btn_active); border: var(--border_hover)}
 .statimage, .statimage:hover, #graphs a:hover .statimage, #graph_single .statimage, #graph_single .statimage:hover {margin: 0; padding: 0; max-width: calc(100% + 4px); border: none; box-shadow: none}
 .graphContainer > * {vertical-align: middle}
 #graphs form hr {margin: 0 -1px 8px}
@@ -1121,7 +1121,7 @@ td.optionsave {padding: 7px 5px; text-align: right; border-top: var(--border_inn
 #netdboverview {margin: -4px auto 8px; background: repeating-linear-gradient(180deg,rgba(0,0,0,.7) 2px, rgba(0,0,16,.5) 4px); background-size: 100% 4px}
 #netdboverview tr {background: none}
 #netdboverview table tr:hover td {background: #202}
-#netdboverview th {background: var(--title); background-size: 4px 100%, 100%}
+#netdboverview th {background: var(--title)}
 #netdboverview table th {box-shadow: none; background: linear-gradient(180deg,#080818, #000008)}
 #netdboverview td {padding: 0; background: none}
 #netdboverview td {border-left: var(--border_inner); border-right: var(--border_inner)}
@@ -1145,7 +1145,7 @@ td.optionsave {padding: 7px 5px; text-align: right; border-top: var(--border_inn
 #netdboverview table td {border-right: none !important}
 #netdboverview table td span, #netdboverview table td b, #netdboverview table td a {margin-top: 0; margin-bottom: 0; display: inline-block; vertical-align: middle}
 #netdbtiers td b, #netdboverview table td b {margin: 0 8px 0 0; min-width: 22px}
-#netdbcountrylist img {margin: 0 8px; padding: 0; width: 24px; height: 18px; text-align: right; font-size: 70%; border: var(--border_badge); border-radius: 3px}
+#netdbcountrylist img {margin: 0 8px; padding: 1px; width: 24px; height: auto; text-align: right; font-size: 70%; border-radius: 4px; border: var(--border)}
 .netdb_header img[src^="/flags"] {margin: 1px 1px 0 4px; width: 28px; height: auto; vertical-align: top; border: var(--border_badge); border-radius: 3px}
 table[cellspacing="30"] > tbody > tr > th[colspan="3"] {padding: 10px; word-spacing: .1em; letter-spacing: .08em; text-transform: uppercase; font-size: 11pt}
 
@@ -1340,8 +1340,8 @@ h3[id="udpcon"] {width: auto}
 /* home */
 #home .welcome h2 {margin-top: 12px}
 #homepanel {margin: 0 -8px}
-#applinks, #sitelinks {margin: 11px -8px -9px -8px; padding: 7px 8px 7px 34px; font-size: 10.5pt; text-align: left; text-transform: uppercase; letter-spacing: .08em; word-spacing: .1em; letter-spacing: 2px; border: var(--border); background: url(images/favicon.svg) no-repeat 10px center, var(--title); background-size: 16px, 4px 100%, 100%; background-blend-mode: luminosity}
-#sitelinks {margin-bottom: -13px; position: relative; top: -4px; clear: left; background: var(--globe) no-repeat 10px center, var(--title); background-size: 16px, 4px 100%, 100%}
+#applinks, #sitelinks {margin: 11px -8px -9px -8px; padding: 7px 8px 7px 34px; font-size: 10.5pt; text-align: left; text-transform: uppercase; letter-spacing: .08em; word-spacing: .1em; letter-spacing: 2px; border: var(--border); background: url(images/favicon.svg) no-repeat 10px center / 16px, var(--title); background-blend-mode: luminosity}
+#sitelinks {margin-bottom: -13px; position: relative; top: -4px; clear: left; background: var(--globe) no-repeat 10px center / 16px, var(--title)}
 #applinks a, #sitelinks a {width: auto; display: inline; font-size: 0}
 #applinks img, #sitelinks img {margin-top: 1px; opacity: .5}
 #applinks a img, #sitelinks a img {display: none}
@@ -1356,32 +1356,31 @@ h3[id="udpcon"] {width: auto}
 .linkcontainer {margin: 0 5px 12px; padding: 0}
 .applink {margin: 2px 3px 4px; padding: 2px 0 0; min-width: 70px; float: left; text-align: center; border: var(--border_inner); box-shadow: var(--highlight); background: var(--box); will-change: transform}
 .applink a:link, .applink a:visited, .version a:not(:hover), .version a:not(:hover):visited {width: 100%; display: inline-block; color: var(--a)}
-.applink:hover {color: var(--hover); border: 1px solid var(--hover); box-shadow: none; background: var(--radial_glow_top) #000; opacity: 1}
-.applink:active .applabel {background: var(--hover); box-shadow: var(--highlight), inset 3px 3px 2px #1e0b28; transition: ease box-shadow .05s}
-.applink:active .applabel a {color: var(--ink)}
 .applink a:link, .applink a:hover, .applink a:active {outline: none; font-size: 8.5pt}
-.applink a:focus {color: var(--hover)}
-.applink:hover a:link, .applink:hover a:visited {color: var(--hover)}
+.applabel {margin: -4px 0 0; padding: 3px 2px 4px; width: 150px; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom; white-space: nowrap; line-height: .95; color: #4e47bf; text-align: center; text-transform: lowercase; border: none; border-top: var(--border_inner); border-radius: 0 0 2px 2px; box-shadow: var(--highlight); background: linear-gradient(180deg,#141221, #001)}
+.applabel:hover {color: var(--hover); border-top: 1px solid var(--hover); background: #000}
+.applabel a, .applabel a:hover {padding: 2px 0; display: inline-block; max-width: 144px; overflow: hidden; text-overflow: ellipsis; text-decoration: none; outline: none}
+.applink:hover .applabel {color: var(--hover); border-top: 1px solid var(--hover); background: var(--label_hover)}
+.applink:hover a:link, .applink:hover a:visited, .applink a:focus {color: var(--hover)}
+.applink:hover {color: var(--hover); border: 1px solid var(--hover); box-shadow: none; background: var(--radial_glow_top) #000; opacity: 1}
+.applink:active .applabel {box-shadow: var(--btn_shadow_active); background: var(--hover); transition: ease box-shadow .05s}
+.applink:active .applabel a {color: var(--ink_btn_active); -webkit-text-stroke: 0}
 .applink:last-child {margin-bottom: 12px}
 .applink {position: relative}
 .applink:hover .appicon .extlink::after {position: absolute; top: 0; right: 0; content: ""; display: inline-block; width: 21px; height: 18px; border: 1px solid #743C93; border-top: none; border-right: none; opacity: .75; background: url(images/newtab.png) no-repeat 4px center; background-size: 12.5px 10px}
+.applink img, .sitemapLink img {filter: grayscale(1) saturate(2); filter: sepia(1) hue-rotate(180deg)}
+.applink img {margin: -3px 0 1px; padding: 9px 50px 35px; height: 32px; width: auto; max-height: 32px; max-width: 32px}
+.applink a:hover img, .applink a:focus img, .sitemapLink:hover img, a:focus > .sitemapLink img {filter: drop-shadow(0 0 1px var(--ink_btn_active))}
+.applink:hover img, .applink:focus img {filter: drop-shadow(0 0 3px var(--ink_btn_active))}
+.applink:active img {transform: scale(0.9)}
 .applink.js:hover::before {padding: 1px 4px 3px; display: inline-block; position: absolute; top: -1px; left: -1px; border: 1px solid var(--hover); content: "*js"}
 #applinks + .linkgroup .applink:last-child {margin-bottom: 14px}
 #sitelinks + .linkgroup .applink:last-child {margin-bottom: 9px}
 .linkgroup {margin: 0; padding: 16px 0; width: auto}
 .appicon {height: 45px}
-.applink img, .sitemapLink img {filter: grayscale(1) saturate(2); filter: sepia(1) hue-rotate(180deg)}
-.applink img {margin: -3px 0 1px; padding: 9px 50px 35px; height: 32px; width: auto; max-height: 32px; max-width: 32px}
-.applink a:hover img, .applink a:focus img, .sitemapLink:hover img, a:focus > .sitemapLink img {filter: drop-shadow(0 0 1px #83529f)}
-.applink:hover img, .applink:focus img {filter: drop-shadow(0 0 3px #83529f)}
-.applink:active img {transform: scale(0.9)}
 .applink table {margin: auto; width: auto; border: none; background: none}
 .applink tr {background: none; border: 0; margin: 0}
 .applink td {margin: 0; padding: 3px 0 0; border: none; background: none}
-.applabel {margin: -4px 0 0; padding: 3px 2px 4px; width: 150px; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom; white-space: nowrap; line-height: .95; color: #4e47bf; text-align: center; text-transform: lowercase; border: none; border-top: var(--border_inner); border-radius: 0 0 2px 2px; box-shadow: var(--highlight); background: linear-gradient(180deg,#141221, #001)}
-.applabel:hover {color: var(--hover); border-top: 1px solid var(--hover); background: #000}
-.applabel a, .applabel a:hover {padding: 2px 0; display: inline-block; max-width: 144px; overflow: hidden; text-overflow: ellipsis; text-decoration: none; outline: none}
-.applink:hover .applabel {color: var(--hover); border-top: 1px solid var(--hover); background: var(--label_hover)}
 
 /* home search */
 #searchbar {margin: -23px 10px -16px; padding: 8px 0 2px; width: auto; white-space: nowrap; text-align: center; ; animation: fade .5s ease .7s reverse both, slide .5s ease .95s both}
@@ -1405,40 +1404,28 @@ h3[id="udpcon"] {width: auto}
 #searchbar input:hover::placeholder {font-style: italic; opacity: .6}
 
 /* sitemap */
-#sitemapcontainer {padding: 4px 0}
-#sitemapcontainer h3:nth-child(n+2) {margin-top: 3px}
-.sitemapLink, .sitemapLabel {display: inline-block; width: 140px; text-align: center; border: var(--border_inner); background: #000}
-.sitemapLink {margin: 1px 3px 8px}
-.sitemapLabel {padding: 4px 0; display: inline-block; border: none; border-top: var(--border_inner)}
-.sitemapLink img {padding: 12px 10px 10px; height: 32px; width: 32px}
-.sitemapLink:active img {transform: scale(0.8)}
-#sitemap {padding-left: 6px; padding-right: 6px}
-#sitemapcontainer {padding: 0 0 4px}
-#sitemapcontainer h3 {margin-bottom: 6px; padding-top: 8px; padding-bottom: 8px}
-#sitemapcontainer h3:nth-child(n+2) {margin-top: 2px}
-#sitemap h3 {margin-left: -7px; margin-right: -7px; padding-left: 30px; letter-spacing: .12em; font-size: 10.5pt; border: var(--border); background: url(images/favicon.svg) no-repeat 8px center / 16px, var(--title); background-size: 16px, 4px 100%}
-#sitemap h3:nth-of-type(2) {background: var(--infobox) no-repeat 8px center, var(--title); background-size: 16px, 4px 100%}
-#sitemap h3:nth-of-type(3) {background: var(--configure) no-repeat 8px center, var(--title); background-size: 16px, 4px 100%}
-#sitemap h3:nth-of-type(4) {background: var(--help) no-repeat 8px center, var(--title); background-size: 16px, 4px 100%}
-#sitemap h3:nth-of-type(5) {background: var(--globe) no-repeat 8px center,var(--title); background-size: 16px, 4px 100%}
+#sitemap {padding: 0 6px}
+#sitemap .linkgroup {margin: 0 0 -3px; padding: 0}
 .sitemapLink, .sitemapLabel {display: inline-block; width: 180px; text-align: center; border: var(--border_inner); background: #000; will-change: transform}
-.sitemapLink {position: relative}
+.sitemapLink {margin: 1px 3px 8px; position: relative; box-shadow: var(--outline); background: var(--box)}
+.en .sitemapLink, .en .sitemapLabel {width: 136px; min-width: 136px}
 a .sitemapLink, a:visited .sitemapLink {color: var(--a)}
+.sitemapLabel {margin-bottom: -4px; padding: 6px 4px 7px; display: inline-block; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.05; font-size: 90%; text-shadow: 0 1px 1px #000; border: none; border-top: var(--border_inner); box-shadow: var(--highlight); background: linear-gradient(90deg, rgba(0,0,16,.5), rgba(0,0,0,0) 30%, rgba(16,0,16,.1)), linear-gradient(180deg,#141221, #001)}
+.sitemapLink:hover .sitemapLabel {background: var(--label_hover)}
+.sitemapLink:hover, .sitemapLink:hover .sitemapLabel {border-color: var(--hover); background: var(--radial_glow_top) #000}
 a:hover .sitemapLink {color: var(--hover)}
-.sitemapLink, .sitemapLabel, #sitemap .applink, #sitemap .applabel {width: 180px; min-width: 180px}
-.en .sitemapLink, .en .sitemapLabel, .en #sitemap .applink, .en #sitemap .applabel, .en #sitemap .applink table {width: 136px; min-width: 136px}
-#sitemap .applabel {padding: 4px 0}
-.sitemapLink, #sitemap .applink {margin: 2px 2px 6px; box-shadow: var(--outline); background: var(--box)}
-.sitemapLink:hover, .sitemapLink:hover .sitemapLabel, #sitemap .applink:hover {border-color: var(--hover); background: var(--radial_glow_top) #000}
 .sitemapLink img {padding: 12px 10px 10px; height: 32px; width: 32px; opacity: .8}
 .sitemapLink:hover img {opacity: 1; filter: drop-shadow(0 0 1px #f60)}
+.sitemapLink:active .sitemapLabel {color: var(--ink_btn_active); text-shadow: none; box-shadow: var(--btn_shadow_active); background: var(--hover)}
 .sitemapLink:active img {transform: scale(0.9)}
-.sitemapLabel {margin-bottom: -4px; padding: 6px 4px 8px; display: inline-block; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.05; font-size: 90%; text-shadow: 0 1px 1px #000; border: none; border-top: var(--border_inner); box-shadow: var(--highlight); background: linear-gradient(90deg, rgba(0,0,16,.5), rgba(0,0,0,0) 30%, rgba(16,0,16,.1)), linear-gradient(180deg,#141221, #001)}
-.sitemapLink:hover .sitemapLabel {background: var(--label_hover)}
-#sitemap .applink {float: none}
-#sitemap .applink img {padding-left: 72px; padding-right: 72px}
-.en #sitemap .applink img {padding-left: 50px; padding-right: 50px}
-#sitemap .linkgroup {margin: 0 0 -3px; padding: 0}
+#sitemapcontainer {padding: 3px 0}
+#sitemapcontainer:last-child {padding: 4px 0 2px}
+#sitemapcontainer h3 {margin: 10px -7px 8px; padding: 8px 8px 8px 30px; letter-spacing: .12em; font-size: 10.5pt; border: var(--border); background: url(images/favicon.svg) no-repeat 8px center / 16px, var(--title)}
+#sitemapcontainer h3:nth-child(n+2) {margin-top: 1px}
+#sitemapcontainer h3:nth-of-type(2) {background: var(--infobox) no-repeat 8px center / 16px, var(--title)}
+#sitemapcontainer h3:nth-of-type(3) {background: var(--configure) no-repeat 8px center / 16px, var(--title)}
+#sitemapcontainer h3:nth-of-type(4) {background: var(--help) no-repeat 8px center / 16px, var(--title)}
+#sitemapcontainer h3:nth-of-type(5) {background: var(--globe) no-repeat 8px center / 16px, var(--title)}
 
 /* netdb */
 .netdbentry, .leaseset {width: 100%; margin-bottom: 10px}
@@ -1523,14 +1510,14 @@ span.b32 {margin: -2px 6px -2px 0; padding: 3px 8px; min-width: auto; line-heigh
 #tunnel_defs td:nth-child(even) {width: 1%; white-space: nowrap}
 #tunnel_defs td:nth-last-child(2) {border-right: none !important}
 #tunnel_defs .tunnel_cap {margin: 2px 8px}
-#tunnels h3.client {padding-left: 34px; background: var(--client) no-repeat 8px center, var(--title); background-size: 19px, 4px 100%, 100%}
+#tunnels h3.client {padding-left: 34px; background: var(--client) no-repeat 8px center / 19px, var(--title)}
 #tunnels h3 {padding-top: 8px; padding-bottom: 8px}
-#tunnels h3:last-of-type {padding-left: 34px; background: var(--speed) no-repeat 8px center, var(--title); background-size: 19px, 4px 100%, 100%}
+#tunnels h3:last-of-type {padding-left: 34px; background: var(--speed) no-repeat 8px center / 19px, var(--title)}
 #tunnels h3 img {margin: 0 4px 0 0}
-#tunnels h3.ping {padding-left: 34px; background: var(--ping) no-repeat 8px center, var(--title); background-size: 19px, 4px 100%, 100%}
-#tunnels h3.server {padding-left: 34px; background: var(--server) no-repeat 8px center, var(--title); background-size: 19px, 4px 100%, 100%}
-#tunnels #exploratory {padding-left: 34px; background: var(--globe) no-repeat 8px center, var(--title); background-size: 19px, 4px 100%, 100%}
-#tunnels #participating {padding-left: 34px; background: var(--share) no-repeat 8px center, var(--title); background-size: 19px, 4px 100%, 100%}
+#tunnels h3.ping {padding-left: 34px; background: var(--ping) no-repeat 8px center / 19px, var(--title)}
+#tunnels h3.server {padding-left: 34px; background: var(--server) no-repeat 8px center / 19px, var(--title)}
+#tunnels #exploratory {padding-left: 34px; background: var(--globe) no-repeat 8px center / 19px, var(--title)}
+#tunnels #participating {padding-left: 34px; background: var(--share) no-repeat 8px center / 19px, var(--title)}
 #tunnels th {padding: 7px 2px 8px; font-size: 90%}
 #tunnels td {padding: 5px 2px}
 #tunnels .tunneldisplay .cells:nth-child(3) {white-space: nowrap}
@@ -2220,6 +2207,7 @@ h1, .main h2, #applinks, #sitelinks, .main h3 {-webkit-text-stroke: 1px rgba(179
 #help td {background-color: #000}
 #help h3 {padding: 6px 10px; font-size: 10pt}
 #legal, #sidebarhelp, #volunteer, #reachabilityhelp, #configurationhelp, #faq, #tunnman, #browserconfig, #reseedhelp, #troubleshoot, #newuserguide, #filterlist, #webhosting, #themeoverride, #glossary {margin: 10px 0; padding: 0 20px; border: var(--border_inner); background: #000}
+#newuserguide, #reseedhelp {padding-bottom: 20px}
 #sidebarhelp h3, #faq h3, #reseedhelp h3 {margin: 0 -21px 10px; padding: 8px 10px; word-spacing: .1em; letter-spacing: .08em; text-align: left; text-transform: uppercase; font-size: 10.5pt; border: var(--border_inner); border-radius: 0}
 #volunteer {margin: -5px 0 10px; padding: 0 20px; border: var(--border_inner); background: #000}
 #legal h2, #sidebarhelp h2, #volunteer h2, #reachabilityhelp h2, #configurationhelp h2, #themeoverride h2, #tunnman h2, #browserconfig h2, #faq h2, #reseedhelp h2, #troubleshoot h2, #newuserguide h2, #filterlist h2, #webhosting h2, #glossary h2 {margin: -1px -21px 10px; padding: 10px; text-transform: uppercase; font-size: 11pt; text-align: left; letter-spacing: .08em; word-spacing: .1em; border-radius: 0}
@@ -2253,20 +2241,20 @@ h1, .main h2, #applinks, #sitelinks, .main h3 {-webkit-text-stroke: 1px rgba(179
 #help h2 {font-size: 12pt}
 #help .confignav + div > h2, #help .confignav + .infohelp + div > h2 {margin-top: -5px}
 
-#configurationhelp h2, #advancedsettings h2, #filterlist h2 {padding-left: 38px; background: var(--settings_inert) no-repeat 10px center, var(--title); background-size: 20px, 4px 100%, 100%}
-#sidebarhelp h2, #reachabilityhelp h2 {padding-left: 38px; background: url(/themes/console/images/sidebar.svg) no-repeat 10px center, var(--title); background-size: 20px, 4px 100%, 100%}
-#reseedhelp h2 {padding-left: 38px; background: var(--reseed) no-repeat 10px center, var(--title); background-size: 20px, 4px 100%, 100%}
-#newuserguide h2 {padding-left: 38px; background: var(--question) no-repeat 10px center, var(--title); background-size: 20px, 4px 100%, 100%}
-#newuserguide h2 {padding-left: 38px; background: url(images/favicon.svg) no-repeat 10px center, var(--title); background-size: 20px, 4px 100%, 100%}
-#troubleshoot h2 {padding-left: 38px; background: var(--wrench) no-repeat 10px center, var(--title); background-size: 20px, 4px 100%, 100%}
-#legal h2 {padding-left: 38px; background: var(--legal) no-repeat 10px center, var(--title); background-size: 20px, 4px 100%, 100%}
-#faq h2, #glossary h2 {padding-left: 38px; background: var(--question) no-repeat 10px center, var(--title); background-size: 20px, 4px 100%, 100%}
-#webhosting h2 {padding-left: 38px; background: var(--server) no-repeat 10px center, var(--title); background-size: 20px, 4px 100%, 100%}
-#themeoverride h2 {padding-left: 38px; background: var(--ui) no-repeat 10px center, var(--title); background-size: 20px, 4px 100%, 100%}
-#browserconfig h2 {padding-left: 38px; background: var(--firefox) no-repeat 10px center, var(--title); background-size: 20px, 4px 100%, 100%}
-#tunnman h2 {padding-left: 38px; background: var(--hardhat) no-repeat 10px center, var(--title); background-size: 20px, 4px 100%, 100%}
+#configurationhelp h2, #advancedsettings h2, #filterlist h2 {padding-left: 38px; background: var(--settings_inert) no-repeat 10px center / 20px, var(--title)}
+#sidebarhelp h2, #reachabilityhelp h2 {padding-left: 38px; background: url(/themes/console/images/sidebar.svg) no-repeat 10px center / 20px, var(--title)}
+#reseedhelp h2 {padding-left: 38px; background: var(--reseed) no-repeat 10px center / 20px, var(--title)}
+#newuserguide h2 {padding-left: 38px; background: var(--question) no-repeat 10px center / 20px, var(--title)}
+#newuserguide h2 {padding-left: 38px; background: url(images/favicon.svg) no-repeat 10px center / 20px, var(--title)}
+#troubleshoot h2 {padding-left: 38px; background: var(--wrench) no-repeat 10px center / 20px, var(--title)}
+#legal h2 {padding-left: 38px; background: var(--legal) no-repeat 10px center / 20px, var(--title)}
+#faq h2, #glossary h2 {padding-left: 38px; background: var(--question) no-repeat 10px center / 20px, var(--title)}
+#webhosting h2 {padding-left: 38px; background: var(--server) no-repeat 10px center / 20px, var(--title)}
+#themeoverride h2 {padding-left: 38px; background: var(--ui) no-repeat 10px center / 20px, var(--title)}
+#browserconfig h2 {padding-left: 38px; background: var(--firefox) no-repeat 10px center / 20px, var(--title)}
+#tunnman h2 {padding-left: 38px; background: var(--hardhat) no-repeat 10px center / 20px, var(--title)}
 #changelog h2, #advancedsettings h2 {margin: 0 0 -11px; word-spacing: .1em; letter-spacing: .08em; text-align: left; text-transform: uppercase; font-size: 11pt; border-radius: 0}
-#changelog h2 {padding-left: 38px; background: var(--changelog) no-repeat 10px center, var(--title); background-size: 20px, 4px 100%, 100%}
+#changelog h2 {padding-left: 38px; background: var(--changelog) no-repeat 10px center / 20px, var(--title)}
 #advancedsettings h2 {margin-bottom: -13px}
 #advancedsettings p.infohelp {margin-top: 12px; margin-bottom: -2px}
 #advancedsettings #configinfo {margin-bottom: 9px}
@@ -2297,11 +2285,12 @@ h1, .main h2, #applinks, #sitelinks, .main h3 {-webkit-text-stroke: 1px rgba(179
 
 /* changelog */
 #changelog:hover pre, #wrapperlogs:hover pre {will-change: transform}
-#changelog pre {margin-top: 11px; padding: 10px 10px 10px 20px; max-height: 600px; overflow-y: scroll; width: calc(100% - 32px); border-left: var(--border_inner); border-right: var(--border_inner); background: #000}
-#fullhistory {margin: -13px 0 9px; padding: 5px 10px; position: relative; z-index: 999; text-align: right; border: var(--border_inner); background: #000}
+#changelog pre {margin-top: 11px; padding: 10px 10px 10px 20px; max-height: 600px; overflow-y: scroll; width: calc(100% - 32px); border-left: var(--border_inner); border-right: var(--border_inner); background: rgba(0,0,16,.8)}
+#fullhistory {margin: -13px 0 9px; padding: 5px 10px; position: relative; z-index: 999; text-align: right; border: var(--border_inner); background: var(--panel)}
 #fullhistory:hover::before {background: var(--eye_hover) no-repeat left center; background-size: 16px}
 #fullhistory:active::before {background: var(--eye_active) no-repeat left center; background-size: 16px}
 #fullhistory::before {width: 19px; height: 20px; display: inline-block; vertical-align: middle; background: var(--eye) no-repeat left center; background-size: 16px; content: ""}
+#fullhistory a {font-size: 90%}
 
 /* mini faq */
 #faq h3 {padding: 8px 10px 8px 35px; word-spacing: 0; letter-spacing: 0; text-transform: none; font-size: 10.5pt; background: var(--question) no-repeat 10px 55%, var(--th); background-size: 18px, 4px 100%, 100%; background-blend-mode: luminosity, normal}
@@ -2420,13 +2409,13 @@ iframe.iframed {margin: 15px 0 0}
 }
 
 @media screen and (max-width: 1499px) {
-.en #sitemap .applink img {padding-left: 35px; padding-right: 35px}
-.en .sitemapLink, .en .sitemapLabel, .en #sitemap .applink, .en #sitemap .applabel, .en #sitemap .applink table {width: 120px; min-width: 120px}
 h1[class], h1 {padding-left: 50px; background-size: 32px auto, 100% 4px, 4px 100%}
 input.check[value$="updates"], input.check[value$="updates"]:hover, input.check[value$="updates"]:focus, input.check[value$="updates"]:active {padding-left: 26px; background-size: 14px, 100%}
 .main h3 a {line-height: 1}
 .netdbentry .tunnel_cap, .netdbentry .tier, .netdbentry .ff, .netdbentry .reachable, .netdbentry .unreachable, .netdbentry .version {padding: 2px 4px}
-.sitemapLink, .sitemapLabel, #sitemap .applink, #sitemap .applabel {width: 160px; min-width: 160px}
+.sitemapLink, .sitemapLabel {width: 160px}
+.en .sitemapLink, .en .sitemapLabel {width: 120px; min-width: 120px}
+.sitemapLabel {margin-bottom: -3px}
 .tunnelBuildStatus {font-size: 90%}
 .tunnels_client th:first-child {font-size: 0 !important}
 .tunnels_client th:first-child::after {vertical-align: middle; line-height: 0; letter-spacing: -0.25em; font-size: 12pt; content: "\21E9\21E7"}
@@ -2507,7 +2496,9 @@ td.optionsave, #i2pupdates td:first-child {width: 30%; white-space: normal}
 .sb_netstatus {padding: 6px 3px}
 .tab, .tab2 {min-width: 48px}
 .tab a {padding-left: 9px; padding-right: 9px}
-.news h3, #newspage h3 {padding-left: 26px; font-size: 10pt; background-size: 13px}
+.news h3, #newspage h3, .newsAuthor {background-size: 11px}
+.news h3, #newspage h3 {padding-left: 26px; font-size: 9.5pt; background-position: 9px center}
+.newsAuthor {padding: 0 0 0 16px}
 .appicon {height: 40px}
 .applink img {height: 24px; max-height: 24px; max-width: 24px}
 .applabel {width: 130px}
@@ -2606,6 +2597,7 @@ h4#updateplugins {margin-top: -15px}
 #sidebar #minigraphcontainer {margin: -43px -4px 0 1px; width: 260px; height: 39px; background-size: 260px 40px; background-position: right bottom}
 #sidebar #minigraph {margin-top: -22px; margin-left: -4px; height: 38px; width: 260px}
 #homepage #minigraph {margin-top: -21px}
+#netdbcountrylist img {width: 28px; height: auto}
 #netdboverview table th, #netdboverview table td {padding: 7px 8px}
 #newsStatus, #news #newsDisplay a, .newsAuthor {font-size: 9pt}
 #news #newsStatus {padding-top: 0; margin-left: -10px}
@@ -2681,8 +2673,6 @@ th code {font-size: 9pt}
 .sb td:first-child {max-width: 120px}
 #sb_services {width: 260px}
 #sidebar #sb_internals, #sidebar #sb_advanced, #sidebar #sb_help {margin: -3px 0 -9px -7px; width: 255px}
-#sb_internals td:first-child, #sb_advanced td:first-child, #sb_help td:first-child {margin: 0; width: auto}
-#sb_internals td:first-child, #sb_advanced td:first-child, #sb_help td:first-child {padding: 0 0 5px}
 #sb_advanced td:first-child {padding-bottom: 6px}
 #sidebar #sb_newsheadings table {width: 258px}
 #sb_newsheadings td:first-child {width: 240px; max-width: 240px}

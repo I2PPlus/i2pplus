@@ -1,1586 +1,331 @@
+
 /* Susimail "Midnight" by dr|z3d */
+
 /* Thanks to Florian Kuhlmann for the hatface images. [http://www.flickr.com/photos/floriankuhlmann/] */
+
 /* Droid Sans font family and css3 compliant browser recommended for optimal results */
 
 @import url(/themes/console/midnight/global.css);
 @import url(../images/images.css);
 @import url(images/images.css);
 
-body {
-  margin: 6px 5px;
-  background: repeating-linear-gradient(180deg,rgba(0,0,24,.75) 3px, rgba(0,0,0,.9) 5px, rgba(0,0,0,.7) 6px),
-  var(--tile),
-  var(--compose_hover),
-  var(--login_hover),
-  var(--logout_hover),
-  var(--offline_hover),
-  var(--save_hover),
-  var(--send_hover),
-  var(--configure_hover),
-  var(--refresh_hover), #000010 !important;
-  background-size: 100%, 171px 148px, 0, 0, 0, 0, 0, 0, 0, 0 !important;
-}
-
-body.iframed {
-  margin: 1px 0 0;
-}
-
-.iframed form {
-  border: 1px solid transparent !important;
-}
-
-div.header {
-  padding: 8px 5px 12px 5px;
-}
-
-hr {
-  margin: 5px 0;
-  width: 100%;
-  height: 1px;
-  text-align: center;
-  color: #26225d;
-  border: 0 solid #26225d;
-  background: #26225d;
-}
-
-li, p {
-  margin-left: 15px;
-  margin-right: 15px;
-  line-height: 1.5;
-}
-
-p.info, p.error {
-  margin: 20px 20px 0 !important;
-  padding: 15px 10px 15px 45px;
-  display: block !important;
-  text-align: left;
-  border: var(--border_inner);
-  border-radius: 2px;
-  background: var(--infohelp) no-repeat 10px center / 28px,
-    linear-gradient(90deg, #000000, #010015 65%, #020018 90%);
-}
-
-p.error {
-  padding: 15px 10px 18px 60px !important;
-  display: block !important;
-  word-wrap: break-word;
-  text-align: justify;
-  font-weight: 700;
-  color: #f33;
-  border: var(--border_input_hover);
-  border-radius: 2px;
-  background: #000 var(--err) no-repeat 12px center / 28px;
-}
-
-#nukemail {
-  margin: 0 !important;
-  padding: 10px 5px 15px !important;
-  text-align: center;
-  background-image: none;
-}
-
-#nukemail span {
-  margin: 18px auto 15px;
-  display: inline-block;
-  width: 100%;
-  height: 40px;
-  font-size: 140%;
-  border-bottom: var(--border_input_hover);
-}
-
-span.coloured {
-  color: #382dc4;
-}
-
-p.footer, .iframed #footer, .footer hr {
-  display: none;
-}
-
-p.mailbody, textarea {
-  font: 9pt var(--monospaced);
-  margin: 0 5px;
-  text-align: left;
-}
-
-p.mailbody {
-  font-size: 9.5pt;
-}
-
-.header {
-  display: none;
-}
-
-.iframed .header {
-  display: none;
-}
-
-div.topbuttons {
-  margin: -1px -1px -10px -1px;
-  padding: 7px 0 8px !important;
-  font-weight: 700;
-  border: var(--border_inner);
-  border-radius: 2px 2px 0 0;
-  background: #000010;
-}
-
-.iframed .topbuttons {
-  border: none !important;
-  border-bottom: var(--border_inner) !important;
-  border-radius: 0;
-}
-
-div.topbuttons br {
-  margin-bottom: 12px !important;
-}
-
-.topbuttons input.next {
-  margin-bottom: -20px !important;
-}
-
-.bottombuttons br {
-  display: none;
-}
-
-.bottombuttons input:disabled {
-  display: none;
-}
-
-tr.spacer {
-  display: none;
-}
-
-td[colspan="7"] hr {
-  display: none;
-}
-
-#mailbox td[colspan="7"] {
-  padding: 0 !important;
-}
-
-.mailbody {
-  padding: 0 10px !important;
-}
-
-#mailbox {
-  margin-bottom: 0;
-}
-
-th.mailListDelete {
-  background: var(--nuke) no-repeat center center / 14px, linear-gradient(180deg,#080818, #001) !important;
-  font-size: 0;
-  padding: 0;
-}
-
-.mailListDelete {
-  width: 1%;
-}
-
-th.mailListFlagged {
-  background: url(../images/status.png) no-repeat center center, linear-gradient(180deg,#080818, #001) !important;
-  font-size: 0;
-  padding: 0;
-  background-blend-mode: luminosity, normal;
-}
-
-th.mailListAttachment {
-  padding: 0;
-  font-size: 0;
-  background: var(--attach) no-repeat center center / 14px, linear-gradient(180deg,#080818, #001) !important;
-}
-
-td.mailListAttachment, td.mailListFlagged {
-  width: 1%;
-  min-width: 28px;
-  text-align: center;
-}
-
-td.mailListAttachment.isAttached {
-  background-image: var(--attach);
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 14px;
-}
-
-td.mailListAttachment.isAttached img {
-  display: none;
-}
-
-td.mailListSize {
-  width: 1%;
-  white-space: nowrap;
-  text-align: right;
-}
-
-#mailbox th {
-  padding: 8px 8px 8px 3px;
-  white-space: nowrap;
-  text-transform: capitalize !important;
-  font-size: 9pt;
-  font-weight: 700 !important;
-  text-shadow: 0 1px 1px #000;
-  border-top: var(--border_inner);
-  border-bottom: none;
-}
-
-#mailbox th img:hover {
-  opacity: 1 !important;
-}
-
-th.mailListSubject {
-  text-align: left;
-}
-
-#mailbox td {
-  padding: 4px 8px;
-  border-right: var(--border_soft);
-}
-
-.bottombuttons td, .pagenav td {
-  border-right: none !important;
-}
-
-#mailbox td[colspan="3"], #mailbox td[colspan="4"] {
-  padding: 6px 0 2px !important;
-  border-top: var(--border_inner) !important;
-}
-
-#mailbox td[colspan="3"] {
-  padding-left: 6px !important;
-  padding-bottom: 6px !important;
-  border-bottom: none;
-  background: #000;
-}
-
-#mailbox td[colspan="4"] {
-  padding-right: 6px !important;
-  padding-bottom: 6px !important;
-  border-bottom: none;
-  background: #000;
-}
-
-#mailbox td[colspan="5"] br, #mailbox td[colspan="4"] br {
-  display: none;
-}
-
-#mailbox td[colspan="9"] i {
-  font-size: 10pt;
-}
-
-#mailbox tr[class^="list"]:hover {
-  cursor: pointer;
-}
-
-#mailbox td#from {
-  width: 100px;
-  white-space: nowrap;
-}
-
-#mailbox td#subject {
-  max-height: 40px;
-  overflow: hidden;
-}
-
-td#deleteattached {
-  padding-top: 5px !important;
-}
-
-#attachedfile input[type=checkbox] {
-  margin: 0 2px 0 0;
-  vertical-align: middle;
-}
-
-#attachedfile {
-  padding: 5px 5px 5px 8px !important;
-  border-bottom: 1px dotted #322e6b;
-}
-
-tr.bottombuttons:last-child td {
-  padding-bottom: 20px !important;
-  border-bottom: var(--border_inner) !important;
-}
-
-td {
-  margin: 0 5px;
-  padding: 2px;
-  font-size: 9pt;
-}
-
-.list0, .list1 {
-  background: var(--row);
-}
-
-/* mailbox display finessing */
-
-.list0 td, .list1 td {
-  padding: 4px;
-  color: #7670c2;
-  border-top: var(--border_soft);
-  border-bottom: var(--border_soft);
-}
-
-#mailbox tr:first-child th {
-  border-bottom: var(--border_inner) !important;
-}
-
-#mailbox tr:nth-child(3) td {
-  border-top: var(--border_inner) !important;
-}
-
-.mailListSubject {
-  text-align: left;
-}
-
-.list0:hover, .list1:hover, .list0:hover a, .list1:hover a {
-  color: var(--a_hover);
-  background: #1e0b28;
-}
-
-.list0:active, .list1:active, .list0:active a, .list1:active a {
-  color: var(--active);
-}
-
-.list0:hover td:nth-child(3) a, .list1:hover td:nth-child(3) a {
-  color: var(--ink) !important;
-}
-
-.list0:hover td:first-child, .list1:hover td:first-child {
-  box-shadow: inset 3px 0 0 #0b0099;
-}
-
-.list0:hover td:last-child, .list1:hover td:last-child {
-  box-shadow: inset -3px 0 0 #0b0099;
-}
-
-.list0 td:first-child, .list1 td:first-child, #mailbox th:first-child {
-  width: 1%;
-  white-space: nowrap;
-  text-align: center !important;
-}
-
-td.mailListSender {
-  padding-left: 21px !important;
-  width: 1%;
-  white-space: nowrap;
-  text-align: left;
-  background: var(--user) no-repeat 6px center / 12px;
-}
-
-.mailListSender a, .mailListDate, .mailListSize {
-  font-weight: 400 !important;
-  color: var(--ink) !important;
-}
-
-img.sort {
-  padding: 4px 5px;
-  width: 10px;
-  height: 10px;
-  vertical-align: middle;
-  font-size: 0;
-  border: var(--border_btn);
-  border-radius: 2px;
-  opacity: .6;
-}
-
-.sort.selected {
-  opacity: 1;
-}
-
-#mailbox .list0 td, #mailbox .list1 td {
-  border-bottom: none;
-}
-
-tr.bottombuttons td {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-}
-
-/* end mailbox finessing */
-
-.noborder {
-  margin-left: 0;
-  margin-top: 0;
-  margin-right: 0;
-}
-
-td:first-child {
-  font-weight: 700;
-}
-
-pre {
-  font: 9pt var(--monospaced);
-  margin-left: 1cm;
-  margin-right: 1cm;
-}
-
-.page {
-  margin: 0;
-  padding: 0;
-  min-width: 700px;
-  text-align: center;
-  font-size: 9pt !important;
-}
-
-table {
-  width: 100%;
-}
-
-th {
-  padding: 7px;
-  font-size: 9pt;
-  font-weight: 700;
-  border-bottom: var(--border_inner);
-  border-top: var(--border_inner);
-  background: linear-gradient(180deg,#080818, #001) !important;
-}
-
-form {
-  margin: 0;
-  padding-bottom: 0;
-  line-height: 1.6;
-  border: var(--border_inner);
-  background: #000010;
-}
-
-form table {
-  margin-bottom: 5px;
-}
-
-textarea {
-  background: #000;
-  color: var(--ink);
-  border: var(--border_inner);
-  padding: 5px;
-}
-
-textarea[name="config_text"] {
-  width: 580px;
-  margin: 8px 0 10px;
-  resize: none;
-  scrollbar-width: auto;
-}
+body {margin: 6px 5px; background: repeating-linear-gradient(180deg,rgba(0,0,24,.75) 3px, rgba(0,0,0,.9) 5px, rgba(0,0,0,.7) 6px), var(--tile), var(--compose_hover), var(--login_hover), var(--logout_hover), var(--offline_hover), var(--save_hover), var(--send_hover), var(--configure_hover), var(--refresh_hover), #000010; background-size: 100%, 171px 148px, 0, 0, 0, 0, 0, 0, 0, 0}
+body.iframed {margin: 1px 0 0}
+.iframed form {border: 1px solid transparent}
+div.header {padding: 8px 5px 12px 5px}
+hr {margin: 5px 0; width: 100%; height: 1px; text-align: center; color: #26225d; border: 0 solid #26225d; background: #26225d}
+li, p {margin-left: 15px; margin-right: 15px; line-height: 1.5}
+p.info, p.error {margin: 20px 20px 0; padding: 15px 10px 15px 45px; display: block; text-align: left; border: var(--border_inner); border-radius: 2px; background: var(--infohelp) no-repeat 10px center / 28px, linear-gradient(90deg, #000000, #010015 65%, #020018 90%)}
+p.error {padding: 15px 10px 18px 60px; display: block; word-wrap: break-word; text-align: justify; font-weight: 700; color: #f33; border: var(--border_input_hover); border-radius: 2px; background: #000 var(--err) no-repeat 12px center / 28px}
+#nukemail {margin: 0; padding: 10px 5px 15px; text-align: center; background-image: none}
+#nukemail span {margin: 18px auto 15px; display: inline-block; width: 100%; height: 40px; font-size: 140%; border-bottom: var(--border_input_hover)}
+span.coloured {color: #382dc4}
+p.footer, .iframed #footer, .footer hr {display: none}
+p.mailbody, textarea {font: 9pt var(--monospaced); margin: 0 5px; text-align: left}
+p.mailbody {font-size: 9.5pt}
+.header {display: none}
+.iframed .header {display: none}
+
+.topbuttons {margin: -1px -1px -10px -1px; padding: 7px 0 8px; font-weight: 700; border: var(--border_inner); border-radius: 2px 2px 0 0; background: #000010}
+.topbuttons br {margin-bottom: 12px}
+.bottombuttons br {display: none}
+.bottombuttons input:disabled {display: none !important}
+.bottombuttons td, .pagenav td {border-right: none !important}
+.iframed .topbuttons {border: none; border-bottom: var(--border_inner); border-radius: 0}
+img.sort {padding: 4px 5px; width: 10px; height: 10px; vertical-align: middle; font-size: 0; border: var(--border_btn); border-radius: 2px; opacity: .6}
+.list0 td, .list1 td {padding: 4px; color: #7670c2; border-top: var(--border_soft); border-bottom: var(--border_soft)}
+.list0:active, .list1:active, .list0:active a, .list1:active a {color: var(--active)}
+.list0:hover, .list1:hover, .list0:hover a, .list1:hover a {color: var(--a_hover); background: #1e0b28}
+.list0:hover td:first-child, .list1:hover td:first-child {box-shadow: inset 3px 0 0 #0b0099}
+.list0:hover td:last-child, .list1:hover td:last-child {box-shadow: inset -3px 0 0 #0b0099}
+.list0:hover td:nth-child(3) a, .list1:hover td:nth-child(3) a {color: var(--ink)}
+.list0, .list1 {background: var(--row)}
+.list0 td:first-child, .list1 td:first-child, #mailbox th:first-child {width: 1%; white-space: nowrap; text-align: center}
+.mailbody {padding: 0 10px}
+.mailListDelete {width: 1%}
+.mailListSender a, .mailListDate, .mailListSize {font-weight: 400; color: var(--ink)}
+.mailListSubject {text-align: left}
+.sort.selected {opacity: 1}
+td[colspan="7"] hr {display: none}
+td#deleteattached {padding-top: 5px}
+td.mailListAttachment.isAttached {background-image: var(--attach); background-repeat: no-repeat; background-position: center center; background-size: 14px}
+td.mailListAttachment.isAttached img {display: none}
+td.mailListAttachment, td.mailListFlagged {width: 1%; min-width: 28px; text-align: center}
+td.mailListSize {width: 1%; white-space: nowrap; text-align: right}
+td {margin: 0 5px; padding: 2px; font-size: 9pt}
+th.mailListAttachment {padding: 0; font-size: 0; background: var(--attach) no-repeat center center / 14px, linear-gradient(180deg,#080818, #001)}
+th.mailListDelete {background: var(--nuke) no-repeat center center / 14px, linear-gradient(180deg,#080818, #001); font-size: 0; padding: 0}
+th.mailListFlagged {background: url(../images/status.png) no-repeat center center, linear-gradient(180deg,#080818, #001); font-size: 0; padding: 0; background-blend-mode: luminosity, normal}
+th.mailListSubject {text-align: left}
+.topbuttons input.next {margin-bottom: -20px}
+tr.bottombuttons:last-child td {padding-bottom: 20px; border-bottom: var(--border_inner)}
+tr.bottombuttons td {padding-left: 0; padding-right: 0}
+tr.spacer {display: none}
+#attachedfile input[type=checkbox] {margin: 0 2px 0 0; vertical-align: middle}
+#attachedfile {padding: 5px 5px 5px 8px; border-bottom: 1px dotted #322e6b}
+#mailbox {margin-bottom: 0}
+#mailbox .list0 td, #mailbox .list1 td {border-bottom: none}
+#mailbox td {padding: 4px 8px; border-right: var(--border_soft)}
+#mailbox td[colspan="3"], #mailbox td[colspan="4"] {padding: 6px 0 2px; border-top: var(--border_inner)}
+#mailbox td[colspan="3"] {padding-left: 6px; padding-bottom: 6px; border-bottom: none; background: #000}
+#mailbox td[colspan="4"] {padding-right: 6px; padding-bottom: 6px; border-bottom: none; background: #000}
+#mailbox td[colspan="5"] br, #mailbox td[colspan="4"] br {display: none}
+#mailbox td[colspan="7"] {padding: 0}
+#mailbox td[colspan="9"] i {font-size: 10pt}
+#mailbox td#from {width: 100px; white-space: nowrap}
+#mailbox td.mailListSender {padding-left: 21px; width: 1%; white-space: nowrap; text-align: left; background: var(--user) no-repeat 6px center / 12px}
+#mailbox td#subject {max-height: 40px; overflow: hidden}
+#mailbox th {padding: 8px 8px 8px 3px; white-space: nowrap; text-transform: capitalize; font-size: 9pt; font-weight: 700; text-shadow: 0 1px 1px #000; border-top: var(--border_inner); border-bottom: none}
+#mailbox th img:hover {opacity: 1}
+#mailbox tr[class^="list"]:hover {cursor: pointer}
+#mailbox tr:first-child th {border-bottom: var(--border_inner)}
+#mailbox tr:nth-child(3) td {border-top: var(--border_inner)}
+
+.noborder {margin-left: 0; margin-top: 0; margin-right: 0}
+td:first-child {font-weight: 700}
+pre {font: 9pt var(--monospaced); margin-left: 1cm; margin-right: 1cm}
+.page {margin: 0; padding: 0; min-width: 700px; text-align: center; font-size: 9pt}
+table {width: 100%}
+th {padding: 7px; font-size: 9pt; font-weight: 700; border-bottom: var(--border_inner); border-top: var(--border_inner); background: linear-gradient(180deg,#080818, #001)}
+form {margin: 0; padding-bottom: 0; line-height: 1.6; border: var(--border_inner); background: #000010}
+form table {margin-bottom: 5px}
+textarea {background: #000; color: var(--ink); border: var(--border_inner); padding: 5px}
+textarea[name="config_text"] {width: 580px; margin: 8px 0 10px; resize: none; scrollbar-width: auto}
 
 /* compose mail */
+textarea[name="new_text"] {min-width: 581px; margin: 10px 0 10px 10; resize: vertical; text-align: left}
+td#addattach {padding-left: 5px}
+td#attachedfile {padding: 2px 0}
+#mailhead {font-size: 9pt; font-weight: 700; background: #002; border: var(--border_inner); border-left: none; border-right: none}
+.iframed #mailhead {margin-top: 3px}
+#mailhead td:first-child {width: 100px; white-space: nowrap; vertical-align: text-bottom; text-align: right}
+#mailhead td:last-child {font-weight: 400}
+#composemail {text-align: center; padding: 50px}
+#composemail table {width: auto; margin: auto}
+#composemail table td {padding: 2px 5px}
+#newmail input[type=text], #composemail textarea {width: 100%}
 
-textarea[name="new_text"] {
-  min-width: 581px;
-  margin: 10px 0 10px 10;
-  resize: vertical;
-  text-align: left;
-}
-
-td#addattach {
-  padding-left: 5px !important;
-}
-
-td#attachedfile {
-  padding: 2px 0;
-}
-
-#mailhead {
-  font-size: 9pt;
-  font-weight: 700;
-  background: #002;
-  border: var(--border_inner);
-  border-left: none;
-  border-right: none;
-}
-
-.iframed #mailhead {
-  margin-top: 3px;
-}
-
-#mailhead td:first-child {
-  width: 100px;
-  white-space: nowrap;
-  vertical-align: text-bottom;
-  text-align: right;
-}
-
-#mailhead td:last-child {
-  font-weight: 400;
-}
-
-#composemail {
-  text-align: center !important;
-  padding: 50px;
-}
-
-#composemail table {
-  width: auto;
-  margin: auto;
-}
-
-#composemail table td {
-  padding: 2px 5px;
-}
-
-#newmail input[type=text], #composemail textarea {
-  width: 100%;
-}
-
-/* end compose mail */
-
-input, label {
-  cursor: pointer;
-}
-
-input[type="file"] {
-  border: none;
-  padding: 0 !important;
-}
-
-input[type="file"]:hover {
-  color: #652787;
-  color: var(--hover);
-}
-
-input.new_upload {
-  float: right;
-}
-
-input {
-  margin: 3px;
-  padding: 2px 2px 3px !important;
-  font: bold 9pt var(--bodyfont);
-  color: #4e47bf;
-  text-align: left;
-  border: var(--border_inner);
-}
-
-input[type=submit], input.cancel, #settings,
-.fakebutton, #expand, #collapse {
-  margin: 4px 5px;
-  padding: 5px 8px !important;
-  font: bold 9pt var(--bodyfont);
-  text-align: center;
-  color: var(--a);
-  border: var(--border_btn);
-  border-radius: 1px;
-  box-shadow: var(--highlight), inset 0 0 2px 0 #559;
-  background: var(--btn);
-}
-
-.fakebutton {
-  padding-left: 27px;
-  line-height: 1.3;
-}
-
-#collapse, #expand {
-  margin: 0 8px !important;
-  vertical-align: text-bottom;
-}
-
-input[type=text], input[type=password], textarea {
-  padding: 6px 8px !important;
-}
-
-#dologin input:disabled, #dologin input:disabled:hover,
-#dologin input:disabled:active {
-  margin: 0;
-  padding-top: 3px;
-  text-align: left !important;
-  color: #9b9ebf;
-  border: none;
-  box-shadow: none;
-  background: none !important;
-  cursor: default;
-}
-
-input[name="user"], input[name="pass"] {
-  padding-left: 26px !important;
-  border: 1px solid #322e6b;
-  background: #000;
-  background-blend-mode: luminosity;
-}
-
-input[name="user"]:focus, input[name="pass"]:focus, input[type=text]:focus, textarea:focus {
-  color: var(--ink);
-}
-
-#dologin input[name="user"] {
-  background: #000 var(--user) no-repeat 6px center / 14px;
-}
-
-#dologin input[name="pass"] {
-  background: #000 var(--key) no-repeat 6px center / 14px;
-}
-
-input[name="user"]:focus, input[name="pass"]:focus {
-  background-blend-mode: normal;
-}
-
-input[name="user"]:focus {
-  background: var(--user) no-repeat 6px center / 14px, var(--text_focus) !important;
-}
-
-input[name="pass"]:focus {
-  background: var(--key) no-repeat 6px center / 14px, var(--text_focus) !important;
-}
-
-input[name="host"], input[name="pop3"], input[name="smtp"] {
-  margin-top: 3px !important;
-  display: inline !important;
-  font-family: var(--monospaced);
-  color: #652787;
-  border-radius: 0;
-  box-shadow: none;
-  background: none !important;
-}
-
-input[type=submit]:active, input.cancel:active,
-#settings:active, #settings:visited:active, .fakebutton:active,
-#expand:active, #collapse:active, #pageRefresh:active {
-  background-color: #652787 !important;
-}
-
-input.delete {
-  margin-left: 2px;
-}
-
-.page td[colspan="2"] {
-  padding: 0 0 10px 0;
-  text-align: left;
-}
-
-.page td[colspan="2"] hr {
-  display: none;
-}
+input, label {cursor: pointer}
+input[type="file"] {border: none; padding: 0}
+input[type="file"]:hover {color: #652787; color: var(--hover)}
+input.new_upload {float: right}
+input {margin: 3px; padding: 2px 2px 3px; font: bold 9pt var(--bodyfont); color: #4e47bf; text-align: left; border: var(--border_inner)}
+input[type=submit], input.cancel, #settings, .fakebutton, #expand, #collapse {margin: 4px 5px; padding: 5px 8px; font: bold 9pt var(--bodyfont); text-align: center; color: var(--a); border: var(--border_btn); border-radius: 1px; box-shadow: var(--highlight), inset 0 0 2px 0 #559; background: var(--btn)}
+.fakebutton {padding-left: 27px; line-height: 1.3}
+#collapse, #expand {margin: 0 8px; vertical-align: text-bottom}
+input[type=text], input[type=password], textarea {padding: 6px 8px}
+#dologin input:disabled, #dologin input:disabled:hover, #dologin input:disabled:active {margin: 0; padding-top: 3px; text-align: left; color: #9b9ebf; border: none; box-shadow: none; background: none; cursor: default}
+input[name="user"], input[name="pass"] {padding-left: 26px; border: 1px solid #322e6b; background: #000; background-blend-mode: luminosity}
+input[name="user"]:focus, input[name="pass"]:focus, input[type=text]:focus, textarea:focus {color: var(--ink)}
+#dologin input[name="user"] {background: #000 var(--user) no-repeat 6px center / 14px}
+#dologin input[name="pass"] {background: #000 var(--key) no-repeat 6px center / 14px}
+input[name="user"]:focus, input[name="pass"]:focus {background-blend-mode: normal}
+input[name="user"]:focus {background: var(--user) no-repeat 6px center / 14px, var(--text_focus)}
+input[name="pass"]:focus {background: var(--key) no-repeat 6px center / 14px, var(--text_focus)}
+input[name="host"], input[name="pop3"], input[name="smtp"] {margin-top: 3px; display: inline; font-family: var(--monospaced); color: #652787; border-radius: 0; box-shadow: none; background: none}
+input[type=submit]:active, input.cancel:active, #settings:active, #settings:visited:active, .fakebutton:active, #expand:active, #collapse:active, #pageRefresh:active {background-color: #652787}
+input.delete {margin-left: 2px}
+.page td[colspan="2"] {padding: 0 0 10px 0; text-align: left}
+.page td[colspan="2"] hr {display: none}
 
 /* login + misc mods */
-
-.notifications {
-  text-align: center;
-  padding: 0 0 20px;
-}
-
-#dologin {
-  border: 1px solid #211e51;
-  margin: 60px auto;
-  width: 600px;
-  padding: 0 0 10px;
-  box-shadow: 0 0 2px 1px #000, var(--highlight), inset 0 0 0 2px #000026;
-  background: url(images/hatter_med.png) right bottom no-repeat,
-    repeating-linear-gradient(180deg,rgba(0,0,0,.9), rgba(0,0,32,.5) 2px, rgba(0,0,0,.5) 3px),
-    linear-gradient(180deg,#000016, #000006);
-  background-size: 27% auto, 100%, 100%;
-  filter: opacity(0);
-  animation: linear fade-in .15s .6s forwards;
-}
-
-#dologin h1 {
-  margin: -1px -1px 15px -1px;
-  padding: 10px 16px;
-  position: relative;
-  text-transform: uppercase;
-  font-size: 14pt;
-  text-align:left;
-  letter-spacing:.08em;
-  word-spacing: .1em;
-  color: #bbbbcf;
-  text-shadow: 0 1px 1px #000;
-  border: 1px solid #211e51;
-  box-shadow: var(--highlight);
-  background: linear-gradient(180deg,#080818 50%, #000008 50%);
-  -webkit-text-stroke: 1px rgba(0,0,0,.3);
-}
-
-#dologin h1::before, #dologin h1::after {
-  display: inline-block;
-  content: "";
-}
-
-#dologin h1::before {
-  margin: -2px 9px 1px 0;
-  width: 26px;
-  height: 26px;
-  vertical-align: middle;
-  background: url(images/favicon.svg) no-repeat center center / 24px;
-  filter: saturate(.1) brightness(5) drop-shadow(0 0 1px #c9ceff);
-  opacity: .6;
-}
-
-#dologin h1::after {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: #c9ceff;
-  opacity: .5;
-  mix-blend-mode: overlay;
-}
-
-#dologin table {
-  width: 100%;
-  margin-bottom: -9px;
-  border-collapse: collapse;
-  border-spacing: 0 !important;
-}
-
-#dologin td {
-  padding: 1px 2px !important;
-}
-
-#dologin td:first-child {
-  padding-right: 5px !important;
-  width: 25%;
-  white-space: nowrap;
-}
-
-#dologin td:last-child {
-  width: 75%;
-  white-space: nowrap;
-}
-
-#dologin td[colspan="2"], #dologin td[colspan="2"] input {
-  vertical-align: middle;
-}
-
-#dologin td[colspan="2"] {
-  padding: 3px 3px 5px !important;
-  text-align: center;
-}
-
-#dologin tr:last-child td {
-  padding-bottom: 7px !important;
-}
-
-#dologin hr {
-  display: block;
-  background: rgba(0,0,68,.8);
-  box-shadow: 0 1px 0 1px rgba(0,0,0,.6);
-  margin: 10px 0 7px;
-  opacity: .5;
-}
-
-#dologin tr:last-child hr {
-  margin-top: 6px;
-  margin-bottom: 5px;
-}
-
-.iframed #dologin tr:nth-child(6) hr {
-  margin-top: 5px;
-}
-
-#dologin tr:last-child a, #dologin tr:last-child a:visited {
-  margin: 8px -2px 6px;
-  padding: 3px 10px;
-  min-width: 140px;
-  display: inline-block;
-  color: var(--a);
-  font-size: 8.5pt;
-  border: 1px solid #003;
-  border-radius: 25px;
-  box-shadow: 0 0 1px rgba(0,0,0,.8), var(--highlight);
-  background: #002;
-}
-
-#dologin tr:last-child a:hover {
-  color: var(--a_hover);
-  box-shadow: var(--highlight), var(--btn_hover_radial), 0 0 0 1px var(--a_hover);
-  background: var(--btn_hover);
-  transition: ease all .2s;
-}
-
-#dologin tr:last-child a:active {
-  color: #337 !important;
-  box-shadow: var(--btn_shadow_active);
-  background: #000020;
-  transition: ease box-shadow .1s;
-}
-
-#dologin tr:last-child td {
-  color: transparent;
-}
-
-h3#config {
-  border: var(--border_inner);
-  padding: 5px;
-  margin: 9px auto 18px auto;
-  width: 400px;
-  font-size: 10pt;
-  text-transform: uppercase;
-  letter-spacing: .08em;
-  word-spacing: .1em;
-  background: #020017;
-  border-radius: 0 0 2px 2px;
-  background: linear-gradient(90deg, rgba(0,0,16,0), rgba(16,0,16,0), rgba(0,0,16,0)),
-    linear-gradient(180deg,#191729 50%, #001 50%) !important;
-}
-
-#mailheader {
-  padding: 10px;
-  margin: 3px -1px;
-  border: var(--border_inner);
-  font-size: 10pt !important;
-  background: #020019;
-}
-
-#mailheader table {
-  min-width: 300px;
-}
-
-#mailheader table td {
-  font-size: 10pt;
-}
-
-#mailheader table td:first-child {
-  white-space: nowrap;
-  width: 20px;
-}
-
-p.mailbody {
-  margin: 0;
-  background: #000010;
-  padding: 0 20px 20px !important;
-}
-
-.mailbody + hr, #attached + hr {
-  display: none;
-}
-
-div.attached {
-  margin: 0 -1px -1px;
-  padding: 10px 10px 10px 30px !important;
-  border: var(--border_inner);
-  border-radius: 0 0 2px 2px;
-  background: #020019 var(--attach) no-repeat 5px center / 20px;
-}
-
-.iframed div.attached {
-  border-left: none;
-  border-right: none;
-  border-radius: 0;
-}
-
-.attached p.mailbody {
-  padding: 5px !important;
-  background: none;
-}
-
-.attached img {
-  border: var(--border_inner);
-  border-radius: 2px;
-  image-orientation: from-image;
-}
-
-div#emptymailbox {
-  padding: 20px 10px;
-}
+.notifications {text-align: center; padding: 0 0 20px}
+#dologin {border: var(--border); margin: 60px auto; width: 600px; padding: 0 0 10px; box-shadow: var(--bevel); background: var(--panel); filter: opacity(0); animation: linear fade-in .15s .6s forwards}
+#dologin h1 {margin: -1px -1px 15px -1px; padding: 10px 16px; position: relative; text-transform: uppercase; font-size: 14pt; text-align:left; letter-spacing:.08em; word-spacing: .1em; color: #bbbbcf; text-shadow: 0 1px 1px #000; border: var(--border); box-shadow: var(--bevel); background: var(--title); -webkit-text-stroke: 1px rgba(0,0,0,.3)}
+#dologin h1::before, #dologin h1::after {display: inline-block; content: ""}
+#dologin h1::before {margin: -2px 9px 1px 0; width: 26px; height: 26px; vertical-align: middle; background: url(images/favicon.svg) no-repeat center center / 24px; filter: saturate(.1) brightness(5) drop-shadow(0 0 1px #c9ceff); opacity: .6}
+#dologin h1::after {position: absolute; top: 0; bottom: 0; left: 0; right: 0; background: #c9ceff; opacity: .5; mix-blend-mode: overlay}
+#dologin table {width: 100%; margin-bottom: -9px; border-collapse: collapse; border-spacing: 0}
+#dologin td {padding: 1px 2px}
+#dologin td:first-child {padding-right: 5px; width: 25%; white-space: nowrap}
+#dologin td:last-child {width: 75%; white-space: nowrap}
+#dologin td[colspan="2"], #dologin td[colspan="2"] input {vertical-align: middle}
+#dologin td[colspan="2"] {padding: 3px 3px 5px; text-align: center}
+#dologin tr:last-child td {padding-bottom: 7px}
+#dologin hr {display: block; background: rgba(0,0,68,.8); box-shadow: 0 1px 0 1px rgba(0,0,0,.6); margin: 10px 0 7px; opacity: .5}
+#dologin tr:last-child hr {margin-top: 6px; margin-bottom: 5px}
+.iframed #dologin tr:nth-child(6) hr {margin-top: 5px}
+#dologin tr:last-child a, #dologin tr:last-child a:visited {margin: 8px -2px 6px; padding: 2px 10px; min-width: 140px; display: inline-block; color: var(--a); font-size: 8.5pt; border: 1px solid #003; border-radius: 25px; box-shadow: 0 0 1px rgba(0,0,0,.8), var(--highlight); background: #002}
+#dologin tr:last-child a:hover {color: var(--a_hover); border: var(--border_hover); box-shadow: var(--highlight), var(--btn_hover_radial), 0 0 0 1px var(--a_hover); background: var(--btn_hover); transition: ease all .2s}
+#dologin tr:last-child a:active {color: #337; box-shadow: var(--btn_shadow_active); background: #000020; transition: ease box-shadow .1s}
+#dologin tr:last-child td {color: transparent}
+h3#config {border: var(--border_inner); padding: 5px; margin: 9px auto 18px auto; width: 400px; font-size: 10pt; text-transform: uppercase; letter-spacing: .08em; word-spacing: .1em; background: #020017; border-radius: 0 0 2px 2px; background: linear-gradient(90deg, rgba(0,0,16,0), rgba(16,0,16,0), rgba(0,0,16,0)), linear-gradient(180deg,#191729 50%, #001 50%)}
+#mailheader {padding: 10px; margin: 3px -1px; border: var(--border_inner); font-size: 10pt; background: #020019}
+#mailheader table {min-width: 300px}
+#mailheader table td {font-size: 10pt}
+#mailheader table td:first-child {white-space: nowrap; width: 20px}
+p.mailbody {margin: 0; background: #000010; padding: 0 20px 20px}
+.mailbody + hr, #attached + hr {display: none}
+div.attached {margin: 0 -1px -1px; padding: 10px 10px 10px 30px; border: var(--border_inner); border-radius: 0 0 2px 2px; background: #020019 var(--attach) no-repeat 5px center / 20px}
+.iframed div.attached {border-left: none; border-right: none; border-radius: 0}
+.attached p.mailbody {padding: 5px; background: none}
+.attached img {border: var(--border_inner); border-radius: 2px; image-orientation: from-image}
+div#emptymailbox {padding: 20px 10px}
 
 /* pagenav */
+.pagenavcontrols td:empty {display: none}
+.pagenav td:nth-child(2) {padding: 5px 10px; width: 1%; white-space: nowrap; font-weight: 700}
+.pagenav {margin: 0 auto; width: 100%; border-top: var(--border_inner); background: #000010; user-select: none}
+.topbuttons .pagenav {border-bottom: var(--border_inner)}
+.topbuttons input, .topbuttons .fakebutton {margin-top: 4px; margin-bottom: 10px}
+#pagesize.topbuttons, #pagesize.topbuttons input {vertical-align: middle}
+#pagesize.topbuttons input {margin: 4px}
+.bottombuttons .pagenav {margin-top: -2px}
+div#bottombuttons {margin: -6px 0 15px}
+.pagenav input:disabled, .pagenav input:disabled:hover, .pagenav input:disabled:active {display: inline; border: 1px solid #3e3d4b; box-shadow: none; background: #652787; opacity: .5; cursor: default}
+.pagenavcontrols input[type=submit] {margin: 3px 1px; padding: 3px; width: 22px; height: 22px; min-width: 22px; font-size: 0}
+.pagenav input.firstpage {background: #000 var(--first) no-repeat center center}
+.pagenav input.firstpage:hover {background: #000 var(--first_hover) no-repeat center center}
+.pagenav input.firstpage:active {background: #652787 var(--first_active) no-repeat center center}
+.pagenav input[name="firstpage"]:disabled {background: #000 var(--first) no-repeat center center}
+.pagenav input.prevpage {background: #000 var(--previous) no-repeat center center}
+.pagenav input.prevpage:hover {background: #000 var(--previous_hover) no-repeat center center}
+.pagenav input.prevpage:active {background: #652787 var(--previous_active) no-repeat center center}
+.pagenav input[name="prevpage"]:disabled, .pagenav input[name="prevpage"]:hover:disabled {background: #000 var(--previous) no-repeat center center}
+.pagenav input[name="nextpage"] {background: #000 var(--next) no-repeat center center}
+.pagenav input[name="nextpage"]:hover {background: #000 var(--next_hover) no-repeat center center}
+.pagenav input[name="nextpage"]:active {background: #652787 var(--next_active) no-repeat center center}
+.pagenav input[name="nextpage"]:disabled, .pagenav input[name="nextpage"]:hover:disabled {background: #000 var(--next) no-repeat center center}
+.pagenav input.lastpage {background: #000 var(--last) no-repeat center center}
+.pagenav input.lastpage:hover {background: #000 var(--last_hover) no-repeat center center}
+.pagenav input.lastpage:active {background: #652787 var(--last_active) no-repeat center center}
+.pagenav input[name="lastpage"]:disabled, .pagenav input[name="lastpage"]:hover:disabled {background: #000 var(--last) no-repeat center center; pointer-events: none}
+.pagecount {padding: 3px 8px; box-shadow: 0 0 0 1px #000; background: linear-gradient(180deg,#113, #112)}
 
-.pagenav td:nth-child(2) {
-  padding: 5px 10px;
-  width: 1%;
-  white-space: nowrap;
-  font-weight: 700;
-}
-
-.pagenav {
-  margin: 0 auto;
-  width: 100%;
-  border-top: var(--border_inner);
-  background: #000010;
-  user-select: none;
-}
-
-.topbuttons .pagenav {
-  border-bottom: var(--border_inner);
-}
-
-.topbuttons input, .topbuttons .fakebutton {
-  margin-top: 4px;
-  margin-bottom: 10px;
-}
-
-#pagesize.topbuttons, #pagesize.topbuttons input {
-  vertical-align: middle;
-}
-
-#pagesize.topbuttons input {
-  margin: 4px;
-}
-
-.bottombuttons .pagenav {
-  margin-top: -2px;
-}
-
-div#bottombuttons { /* config page button positioning */
-  margin: -6px 0 15px;
-}
-
-.pagenav input:disabled, .pagenav input:disabled:hover, .pagenav input:disabled:active {
-  display: inline;
-  border: 1px solid #3e3d4b !important;
-  box-shadow: none !important;
-  background: #652787 !important;
-  opacity: .5;
-  cursor: default;
-}
-
-.pagenavcontrols input[type=submit] {
-  margin: 3px 1px !important;
-  padding: 3px;
-  width: 22px !important;
-  height: 22px;
-  min-width: 22px !important;
-  font-size: 0;
-}
-
-.pagenav input.firstpage {
-  background: #000 var(--first) no-repeat center center !important;
-}
-
-.pagenav input.firstpage:hover {
-  background: #000 var(--first_hover) no-repeat center center !important;
-}
-
-.pagenav input.firstpage:active {
-  background: #652787 var(--first_active) no-repeat center center !important;
-}
-
-.pagenav input[name="firstpage"]:disabled {
-  background: #000 var(--first) no-repeat center center !important;
-}
-
-.pagenav input.prevpage {
-  background: #000 var(--previous) no-repeat center center !important;
-}
-
-.pagenav input.prevpage:hover {
-  background: #000 var(--previous_hover) no-repeat center center !important;
-}
-
-.pagenav input.prevpage:active {
-  background: #652787 var(--previous_active) no-repeat center center !important;
-}
-
-.pagenav input[name="prevpage"]:disabled, .pagenav input[name="prevpage"]:hover:disabled {
-  background: #000 var(--previous) no-repeat center center !important;
-}
-
-.pagenav input[name="nextpage"] {
-  background: #000 var(--next) no-repeat center center !important;
-}
-
-.pagenav input[name="nextpage"]:hover {
-  background: #000 var(--next_hover) no-repeat center center !important;
-}
-
-.pagenav input[name="nextpage"]:active {
-  background: #652787 var(--next_active) no-repeat center center !important;
-}
-
-.pagenav input[name="nextpage"]:disabled, .pagenav input[name="nextpage"]:hover:disabled {
-  background: #000 var(--next) no-repeat center center !important;
-}
-
-.pagenav input.lastpage {
-  background: #000 var(--last) no-repeat center center !important;
-}
-
-.pagenav input.lastpage:hover {
-  background: #000 var(--last_hover) no-repeat center center !important;
-}
-
-.pagenav input.lastpage:active {
-  background: #652787 var(--last_active) no-repeat center center !important;
-}
-
-.pagenav input[name="lastpage"]:disabled, .pagenav input[name="lastpage"]:hover:disabled {
-  background: #000 var(--last) no-repeat center center !important;
-  pointer-events: none;
-}
-
-.pagecount {
-  padding: 3px 8px;
-  box-shadow: 0 0 0 1px #000;
-  background: linear-gradient(180deg,#113, #112);
-}
-/* end pagenav */
-
-#prefsave {
-  padding: 10px 10px 20px;
-}
+#prefsave {padding: 10px 10px 20px}
 
 /* illustrated buttons inc */
-
-input[type=submit], input[type=reset], .fakebutton, select {
-  line-height: 1.3;
-}
-
-input[type=submit][class], input[type=reset][class],
-input[type=submit][class]:hover, input[type=reset][class]:hover,
-input[type=submit][class]:focus, input[type=reset][class]:focus,
-#settings, #settings:hover, #settings:focus, #pageRefresh, #pageRefresh:hover, #pageRefresh:focus,
-.pagenav input[type=submit], .pagenav input[type=submit]:hover, .pagenav input[type=submit]:focus,
-.pagenav input[type=submit]:disabled, .pagenav input[type=submit]:hover:disabled, .pagenav input[type=submit]:focus:disabled {
-  display: inline-block;
-  background-size: 14px, 100%, 100% !important;
-}
-
-input.cancel, input.cancel.beforePopup, #nukemail input.clearselection {
-  padding: 6px 9px 6px 25px !important;
-  background: var(--no) no-repeat 9px center / 11px, var(--btn);
-}
-
-input.cancel:hover, input.cancel:focus, input.cancel.beforePopup:hover, input.cancel.beforePopup:focus,
-#nukemail input.clearselection:hover, #nukemail input.clearselection:focus {
-  background: var(--no) no-repeat 9px center / 11px, var(--btn_hover);
-}
-
-input.clearselection {
-  padding: 6px 9px 6px 27px !important;
-  background: url(../images/none.png) no-repeat 9px center, var(--btn);
-}
-
-input.clearselection:hover, input.clearselection:focus {
-  background: url(../images/none.png) no-repeat 9px center, var(--btn_hover_radial), var(--btn_hover);
-}
-
-input.delete, input.delete_attachment, input.really_delete {
-  padding: 6px 9px 6px 27px !important;
-  background: var(--delete) no-repeat 9px center / 14px, var(--btn);
-}
-
-input.delete:hover, input.delete_attachment:hover, input.really_delete:hover,
-input.delete:focus, input.delete_attachment:focus, input.really_delete:focus {
-  background: var(--delete_hover) no-repeat 9px center / 14px, var(--btn_hover_radial), var(--btn_hover);
-}
-
-input.download {
-  padding: 6px 9px 6px 27px !important;
-  background: var(--download) no-repeat 9px center, var(--btn);
-}
-
-input.download:hover, input.download:focus {
-  background: var(--download_hover) no-repeat 9px center, var(--btn_hover_radial), var(--btn_hover);
-}
-
-input.offline {
-  padding: 6px 9px 6px 27px !important;
-  background: var(--offline) no-repeat 9px center, var(--btn);
-}
-
-input.offline:hover, input.offline:focus {
-  background: var(--offline_hover) no-repeat 9px center, var(--btn_hover_radial), var(--btn_hover);
-}
-
-input.list, input.moveto, input.switchto {
-  padding: 6px 9px 6px 27px !important;
-  background: var(--folder) no-repeat 9px center, var(--btn);
-}
-
-input.list:hover, input.list:focus, input.moveto:hover, input.switchto:hover,
-input.switchto:focus, input.moveto:focus, input.switchto:focus   {
-  background: var(--folder_hover) no-repeat 9px center, var(--btn_hover_radial), var(--btn_hover);
-}
-
-input.forward {
-  padding: 6px 9px 6px 27px !important;
-  background: var(--forward) no-repeat 9px center, var(--btn);
-}
-
-input.forward:hover, input.forward:focus {
-  background: var(--forward_hover) no-repeat 9px center, var(--btn_hover_radial), var(--btn_hover);
-}
-
-input.login {
-  padding: 6px 9px 6px 27px !important;
-  background: var(--login) no-repeat 9px center, var(--btn);
-}
-
-input.login:hover, input.login:focus {
-  background: var(--login_hover) no-repeat 9px center, var(--btn_hover_radial), var(--btn_hover);
-}
-
-input.logout {
-  padding: 6px 9px 6px 27px !important;
-  background: var(--logout) no-repeat 9px center / 14px;
-}
-
-input.logout:hover, input.logout:focus {
-  background: var(--logout_hover) no-repeat 9px center / 14px;
-}
-
-input.reload, input.refresh, .fakebutton {
-  padding: 6px 9px 6px 27px !important;
-  background: var(--refresh) no-repeat 9px center, var(--btn);
-}
-
-input.reload:hover, input.refresh:hover,
-input.reload:focus, input.refresh:focus,
-.fakebutton:hover, .fakebutton:focus {
-  background: var(--refresh_hover) no-repeat 9px center, var(--btn_hover_radial), var(--btn_hover);
-}
-
-input.invertselection {
-  padding: 6px 9px 6px 27px !important;
-  background: url(../images/selection.png) no-repeat 9px center, var(--btn);
-}
-
-input.invertselection:hover, input.invertselection:focus {
-  background: url(../images/selection.png) no-repeat 9px center, var(--btn_hover_radial), var(--btn_hover);
-}
-
-input.show {
-  padding: 6px 9px 6px 27px !important;
-  background: var(--yes) no-repeat 9px center / 12px, var(--btn);
-}
-
-input.show:hover, input.show:focus {
-  background: var(--yes) no-repeat 9px center / 12px, var(--btn_hover_radial), var(--btn_hover);
-}
-
-.bottombuttons input.markall {
-  padding: 6px 9px 6px 27px !important;
-  background: url(../images/all.png) no-repeat 9px center / 12px, var(--btn);
-}
-
-.bottombuttons input.markall:hover, .bottombuttons input.markall:focus {
-  background: url(../images/all.png) no-repeat 9px center / 12px, var(--btn_hover_radial), var(--btn_hover);
-}
-
-input.new {
-  padding: 6px 9px 6px 27px !important;
-  background: var(--compose) no-repeat 9px center, var(--btn);
-}
-
-input.new:hover, input.new:focus {
-  background: var(--compose_hover) no-repeat 9px center, var(--btn_hover_radial), var(--btn_hover);
-}
-
-input.reply {
-  padding: 6px 9px 6px 27px !important;
-  background: var(--reply) no-repeat 9px center, var(--btn);
-}
-
-input.reply:hover, input.reply:focus {
-  background: var(--reply_hover) no-repeat 9px center, var(--btn_hover_radial), var(--btn_hover);
-}
-
-input.replyall {
-  padding: 6px 9px 6px 27px !important;
-  background: var(--replyall) no-repeat 9px center, var(--btn);
-}
-
-input.replyall:hover, input.replyall:focus {
-  background: var(--replyall_hover) no-repeat 9px center, var(--btn_hover_radial), var(--btn_hover);
-}
-
-input.setpagesize, input.save {
-  padding: 6px 9px 6px 27px !important;
-  background: var(--yes) no-repeat 9px center / 12px, var(--btn);
-}
-
-input.setpagesize:hover, input.save:hover,
-input.setpagesize:focus, input.save:focus {
-  background: var(--yes) no-repeat 9px center / 12px, var(--btn_hover_radial), var(--btn_hover);
-}
-
-input.send {
-  padding: 6px 9px 6px 27px !important;
-  background: var(--send) no-repeat 9px center, var(--btn);
-}
-
-input.send:hover, input.send:focus {
-  background: var(--send_hover) no-repeat 9px center, var(--btn_hover_radial), var(--btn_hover);
-}
-
-input.configure, #settings {
-  padding: 6px 9px 6px 27px !important;
-  vertical-align: middle;
-  background: var(--configure) no-repeat 9px center / 14px, var(--btn);
-}
-
-#settings {
-  display: inline-block;
-}
-
-input.configure:hover, input.configure:focus,
-#settings:hover, #settings:focus {
-  background: var(--configure_hover) no-repeat 9px center / 14px, var(--btn_hover_radial), var(--btn_hover);
-}
-
-input.saveas, input.saveasdraft {
-  padding: 6px 9px 6px 27px !important;
-  background: var(--save) no-repeat 9px center, var(--btn);
-}
-
-input.saveas:hover, input.saveas:focus, input.saveasdraft:hover, input.saveasdraft:focus {
-  background: var(--save_hover) no-repeat 9px center, var(--btn_hover_radial), var(--btn_hover);
-}
-
-input.new_upload {
-  padding: 6px 9px 6px 27px !important;
-  background: var(--attach) no-repeat 9px center, var(--btn);
-}
-
-input.new_upload:hover, input.new_upload:focus {
-  background: var(--attach_hover) no-repeat 9px center, var(--btn_hover_radial), var(--btn_hover);
-}
+input[type=submit], input[type=reset], .fakebutton, select {line-height: 1.3}
+input[type=submit][class], input[type=reset][class], input[type=submit][class]:hover, input[type=reset][class]:hover, input[type=submit][class]:focus, input[type=reset][class]:focus, #settings, #settings:hover, #settings:focus, #pageRefresh, #pageRefresh:hover, #pageRefresh:focus, .pagenav input[type=submit], .pagenav input[type=submit]:hover, .pagenav input[type=submit]:focus, .pagenav input[type=submit]:disabled, .pagenav input[type=submit]:hover:disabled, .pagenav input[type=submit]:focus:disabled {display: inline-block; background-size: 14px, 100%, 100%}
+input.cancel, input.cancel.beforePopup, #nukemail input.clearselection {padding: 6px 9px 6px 25px; background: var(--no) no-repeat 9px center / 11px, var(--btn)}
+input.cancel:hover, input.cancel:focus, input.cancel.beforePopup:hover, input.cancel.beforePopup:focus, #nukemail input.clearselection:hover, #nukemail input.clearselection:focus {background: var(--no) no-repeat 9px center / 11px, var(--btn_hover)}
+input.clearselection {padding: 6px 9px 6px 27px; background: url(../images/none.png) no-repeat 9px center, var(--btn)}
+input.clearselection:hover, input.clearselection:focus {background: url(../images/none.png) no-repeat 9px center, var(--btn_hover_radial), var(--btn_hover)}
+input.delete, input.delete_attachment, input.really_delete {padding: 6px 9px 6px 27px; background: var(--delete) no-repeat 9px center / 14px, var(--btn)}
+input.delete:hover, input.delete_attachment:hover, input.really_delete:hover, input.delete:focus, input.delete_attachment:focus, input.really_delete:focus {background: var(--delete_hover) no-repeat 9px center / 14px, var(--btn_hover_radial), var(--btn_hover)}
+input.download {padding: 6px 9px 6px 27px; background: var(--download) no-repeat 9px center, var(--btn)}
+input.download:hover, input.download:focus {background: var(--download_hover) no-repeat 9px center, var(--btn_hover_radial), var(--btn_hover)}
+input.offline {padding: 6px 9px 6px 27px; background: var(--offline) no-repeat 9px center, var(--btn)}
+input.offline:hover, input.offline:focus {background: var(--offline_hover) no-repeat 9px center, var(--btn_hover_radial), var(--btn_hover)}
+input.list, input.moveto, input.switchto {padding: 6px 9px 6px 27px; background: var(--folder) no-repeat 9px center, var(--btn)}
+input.list:hover, input.list:focus, input.moveto:hover, input.switchto:hover, input.switchto:focus, input.moveto:focus, input.switchto:focus {background: var(--folder_hover) no-repeat 9px center, var(--btn_hover_radial), var(--btn_hover)}
+input.forward {padding: 6px 9px 6px 27px; background: var(--forward) no-repeat 9px center, var(--btn)}
+input.forward:hover, input.forward:focus {background: var(--forward_hover) no-repeat 9px center, var(--btn_hover_radial), var(--btn_hover)}
+input.login {padding: 6px 9px 6px 27px; background: var(--login) no-repeat 9px center, var(--btn)}
+input.login:hover, input.login:focus {background: var(--login_hover) no-repeat 9px center, var(--btn_hover_radial), var(--btn_hover)}
+input.logout {padding: 6px 9px 6px 27px; background: var(--logout) no-repeat 9px center / 14px}
+input.logout:hover, input.logout:focus {background: var(--logout_hover) no-repeat 9px center / 14px}
+input.reload, input.refresh, .fakebutton {padding: 6px 9px 6px 27px; background: var(--refresh) no-repeat 9px center, var(--btn)}
+input.reload:hover, input.refresh:hover, input.reload:focus, input.refresh:focus, .fakebutton:hover, .fakebutton:focus {background: var(--refresh_hover) no-repeat 9px center, var(--btn_hover_radial), var(--btn_hover)}
+input.invertselection {padding: 6px 9px 6px 27px; background: url(../images/selection.png) no-repeat 9px center, var(--btn)}
+input.invertselection:hover, input.invertselection:focus {background: url(../images/selection.png) no-repeat 9px center, var(--btn_hover_radial), var(--btn_hover)}
+input.show {padding: 6px 9px 6px 27px; background: var(--yes) no-repeat 9px center / 12px, var(--btn)}
+input.show:hover, input.show:focus {background: var(--yes) no-repeat 9px center / 12px, var(--btn_hover_radial), var(--btn_hover)}
+.bottombuttons input.markall {padding: 6px 9px 6px 27px; background: url(../images/all.png) no-repeat 9px center / 12px, var(--btn)}
+.bottombuttons input.markall:hover, .bottombuttons input.markall:focus {background: url(../images/all.png) no-repeat 9px center / 12px, var(--btn_hover_radial), var(--btn_hover)}
+input.new {padding: 6px 9px 6px 27px; background: var(--compose) no-repeat 9px center, var(--btn)}
+input.new:hover, input.new:focus {background: var(--compose_hover) no-repeat 9px center, var(--btn_hover_radial), var(--btn_hover)}
+input.reply {padding: 6px 9px 6px 27px; background: var(--reply) no-repeat 9px center, var(--btn)}
+input.reply:hover, input.reply:focus {background: var(--reply_hover) no-repeat 9px center, var(--btn_hover_radial), var(--btn_hover)}
+input.replyall {padding: 6px 9px 6px 27px; background: var(--replyall) no-repeat 9px center, var(--btn)}
+input.replyall:hover, input.replyall:focus {background: var(--replyall_hover) no-repeat 9px center, var(--btn_hover_radial), var(--btn_hover)}
+input.setpagesize, input.save {padding: 6px 9px 6px 27px; background: var(--yes) no-repeat 9px center / 12px, var(--btn)}
+input.setpagesize:hover, input.save:hover, input.setpagesize:focus, input.save:focus {background: var(--yes) no-repeat 9px center / 12px, var(--btn_hover_radial), var(--btn_hover)}
+input.send {padding: 6px 9px 6px 27px; background: var(--send) no-repeat 9px center, var(--btn)}
+input.send:hover, input.send:focus {background: var(--send_hover) no-repeat 9px center, var(--btn_hover_radial), var(--btn_hover)}
+input.configure, #settings {padding: 6px 9px 6px 27px; vertical-align: middle; background: var(--configure) no-repeat 9px center / 14px, var(--btn)}
+#settings {display: inline-block}
+input.configure:hover, input.configure:focus, #settings:hover, #settings:focus {background: var(--configure_hover) no-repeat 9px center / 14px, var(--btn_hover_radial), var(--btn_hover)}
+input.saveas, input.saveasdraft {padding: 6px 9px 6px 27px; background: var(--save) no-repeat 9px center, var(--btn)}
+input.saveas:hover, input.saveas:focus, input.saveasdraft:hover, input.saveasdraft:focus {background: var(--save_hover) no-repeat 9px center, var(--btn_hover_radial), var(--btn_hover)}
+input.new_upload {padding: 6px 9px 6px 27px; background: var(--attach) no-repeat 9px center, var(--btn)}
+input.new_upload:hover, input.new_upload:focus {background: var(--attach_hover) no-repeat 9px center, var(--btn_hover_radial), var(--btn_hover)}
 
 /* pagenav */
+input.firstpage, input[name="firstpage"], input.firstpage[disabled]:hover, input[name="firstpage"][disabled]:hover {padding: 5px 10px; text-indent: -99999px; background: var(--first) no-repeat center center, var(--btn)}
+input.firstpage[disabled]:hover, input[name="firstpage"][disabled]:hover {background: #000 var(--first) no-repeat center center}
+input.firstpage:hover, input[name="firstpage"]:hover, input.firstpage:focus, input[name="firstpage"]:focus {background: var(--first) no-repeat center center, var(--btn_hover)}
+input.lastpage, input[name="lastpage"], input.lastpage[disabled]:hover, input[name="lastpage"][disabled]:hover, input.lastpage[disabled]:focus, input[name="lastpage"][disabled]:focus {padding: 5px 10px; text-indent: -99999px; background: var(--last) no-repeat center center, var(--btn)}
+input.lastpage:hover, input[name="lastpage"]:hover, input.lastpage:focus, input[name="lastpage"]:focus {background: var(--last) no-repeat center center, var(--btn_hover)}
+input.prevpage, input.prev, input[name="prev"], input[name="prevpage"], input.prevpage[disabled]:hover, input.prev[disabled]:hover, input[name="prev"][disabled]:hover, input[name="prevpage"][disabled]:hover, input.prevpage[disabled]:focus, input.prev[disabled]:focus, input[name="prev"][disabled]:focus, input[name="prevpage"][disabled]:focus {padding: 5px 10px; text-indent: -99999px; background: var(--previous) no-repeat center center, var(--btn)}
+input.prevpage:hover, input[name="prev"]:hover, input[name="prevpage"]:hover, input.prevpage:focus, input[name="prev"]:focus, input[name="prevpage"]:focus {background: var(--previous) no-repeat center center, var(--btn_hover)}
+input[name="nextpage"], input.next, input[name="nextpage"], input[name="next"], input[name="nextpage"][disabled]:hover, input.next[disabled]:hover, input[name="nextpage"][disabled]:hover, input[name="next"][disabled]:hover, input[name="nextpage"][disabled]:focus, input.next[disabled]:focus, input[name="nextpage"][disabled]:focus, input[name="next"][disabled]:focus {padding: 5px 10px; text-indent: -99999px; background: var(--next) no-repeat center center, var(--btn)}
+input[name="nextpage"]:hover, input.next:hover, input[name="nextpage"]:hover, input[name="nextpage"]:focus, input.next:focus, input[name="nextpage"]:focus {background: var(--next) no-repeat center center, var(--btn_hover)}
+input.prev, input[name="next"], input.prev[disabled], input[name="next"][disabled], input.prev:hover, input[name="next"]:hover, input.prev[disabled]:hover, input[name="next"][disabled]:hover {padding: 5px 15px}
+input[type=submit][disabled], input[type=submit][disabled]:hover, input[type=submit][disabled]:focus, input[type=submit][disabled]:active {padding: 5px 15px; box-shadow: none; opacity: .5; cursor: default; mix-blend-mode: luminosity}
+#messagenav input {background-size: 16px, 100%, 100%}
+.topbuttons #messagenav input {margin-bottom: 10px}
 
-input.firstpage, input[name="firstpage"],
-input.firstpage[disabled]:hover, input[name="firstpage"][disabled]:hover {
-  padding: 5px 10px !important;
-  text-indent: -99999px;
-  background: var(--first) no-repeat center center, var(--btn);
-}
+input.switchto {margin-right: 0}
 
-input.firstpage[disabled]:hover, input[name="firstpage"][disabled]:hover {
-  background: #000 var(--first) no-repeat center center !important;
-}
-
-input.firstpage:hover, input[name="firstpage"]:hover,
-input.firstpage:focus, input[name="firstpage"]:focus {
-  background: var(--first) no-repeat center center, var(--btn_hover);
-}
-
-input.lastpage, input[name="lastpage"],
-input.lastpage[disabled]:hover, input[name="lastpage"][disabled]:hover,
-input.lastpage[disabled]:focus, input[name="lastpage"][disabled]:focus {
-  padding: 5px 10px !important;
-  text-indent: -99999px;
-  background: var(--last) no-repeat center center, var(--btn);
-}
-
-input.lastpage:hover, input[name="lastpage"]:hover,
-input.lastpage:focus, input[name="lastpage"]:focus {
-  background: var(--last) no-repeat center center, var(--btn_hover);
-}
-
-input.prevpage, input.prev, input[name="prev"], input[name="prevpage"],
-input.prevpage[disabled]:hover, input.prev[disabled]:hover, input[name="prev"][disabled]:hover, input[name="prevpage"][disabled]:hover,
-input.prevpage[disabled]:focus, input.prev[disabled]:focus, input[name="prev"][disabled]:focus, input[name="prevpage"][disabled]:focus {
-  padding: 5px 10px !important;
-  text-indent: -99999px;
-  background: var(--previous) no-repeat center center, var(--btn);
-}
-
-input.prevpage:hover, input[name="prev"]:hover, input[name="prevpage"]:hover,
-input.prevpage:focus, input[name="prev"]:focus, input[name="prevpage"]:focus {
-  background: var(--previous) no-repeat center center, var(--btn_hover);
-}
-
-input[name="nextpage"], input.next, input[name="nextpage"], input[name="next"],
-input[name="nextpage"][disabled]:hover, input.next[disabled]:hover, input[name="nextpage"][disabled]:hover, input[name="next"][disabled]:hover,
-input[name="nextpage"][disabled]:focus, input.next[disabled]:focus, input[name="nextpage"][disabled]:focus, input[name="next"][disabled]:focus {
-  padding: 5px 10px !important;
-  text-indent: -99999px;
-  background: var(--next) no-repeat center center, var(--btn);
-}
-
-input[name="nextpage"]:hover, input.next:hover, input[name="nextpage"]:hover,
-input[name="nextpage"]:focus, input.next:focus, input[name="nextpage"]:focus {
-  background: var(--next) no-repeat center center, var(--btn_hover);
-}
-
-input.prev, input[name="next"], input.prev[disabled], input[name="next"][disabled],
-input.prev:hover, input[name="next"]:hover, input.prev[disabled]:hover, input[name="next"][disabled]:hover {
-  padding: 5px 15px !important;
-}
-
-input[type=submit][disabled], input[type=submit][disabled]:hover,
-input[type=submit][disabled]:focus, input[type=submit][disabled]:active {
-  padding: 5px 15px !important;
-  box-shadow: none;
-  opacity: .5;
-  cursor: default;
-  mix-blend-mode: luminosity;
-}
-
-#messagenav input {
-  background-size: 16px, 100% !important;
-}
-
-.topbuttons #messagenav input {
-  margin-bottom: 10px !important;
-}
-
-/* end pagenav */
-
-input.switchto {
-  margin-right: 0 !important;
-}
-
-/* end illustrated buttons */
-
-.topbuttons .logout, .topbuttons .logout:hover, .topbuttons .logout:focus, .topbuttons .logout:active {
-  margin: -8px -8px -8px 8px !important;
-  padding: 6px 7px 6px 24px !important;
-  display: inline-block;
-  float: none !important;
-  line-height: normal;
-  border: none !important;
-  border-left: 1px solid #001 !important;
-  border-radius: 0;
-  box-shadow: none !important;
-  filter: none;
-}
-
-.topbuttons .delete + .logout {
-  display: none;
-}
+.topbuttons .logout, .topbuttons .logout:hover, .topbuttons .logout:focus, .topbuttons .logout:active {margin: -8px -8px -8px 8px; padding: 6px 7px 6px 24px; display: inline-block; float: none; line-height: normal; border: none; border-left: 1px solid #001; border-radius: 0; box-shadow: none; filter: none}
+.topbuttons .delete + .logout {display: none}
 
 /* timedate in mail listing */
+.listDate, .listTime, .listClock {display: inline-block; white-space: nowrap; text-align: right}
+.listClock {margin-top: 1px; padding-left: 1px; min-width: 16px; vertical-align: text-top; font-size: 80%; text-align: left; text-transform: lowercase}
+.listDate {min-width: 62px; text-align: right}
+.listTime {min-width: 42px; opacity: .85}
 
-.listDate, .listTime, .listClock {
-  display: inline-block;
-  white-space: nowrap;
-  text-align: right;
-}
-
-.listClock {
-  margin-top: 1px;
-  padding-left: 1px;
-  min-width: 16px;
-  vertical-align: text-top;
-  font-size: 80%;
-  text-align: left;
-  text-transform: lowercase;
-}
-
-.listDate {
-  min-width: 62px;
-  text-align: right;
-}
-
-.listTime {
-  min-width: 42px;
-  opacity: .85;
-}
-
-/* end timedate */
-
-#info {
-  margin: 7px 0 -11px 4px !important;
-  padding: 6px 10px;
-  display: inline-block;
-  overflow: hidden;
-  font-weight: 700;
-  text-shadow: 0 1px 1px #000;
-  border-radius: 3px;
-  box-shadow: var(--highlight);
-  background: linear-gradient(180deg,#113,#080818);
-}
-
-#infoUser {
-  margin-right: 4px;
-  padding: 4px 8px 4px 0;
-  border-right: 1px solid #002;
-}
-
-select {
-  margin: 5px 10px;
-  padding: 7px 20px 7px 7px !important;
-  min-width: 110px;
-}
-
-.topbuttons .folders, .topbuttons .folders input,
-.topbuttons .folders select {
-  vertical-align: middle;
-}
-
-.topbuttons .folders {
-  margin-top: -6px;
-  margin-bottom: 2px;
-}
-
-.topbuttons .folders input,
-.topbuttons .folders select {
-  margin-top: 5px;
-  margin-bottom: 8px;
-}
-
-#pagenavbottom .folders {
-  display: none;
-}
-
-#toggle {
-  height: 20px;
-  width: 24px;
-  vertical-align: middle;
-  font-size: 0;
-  border: none;
-  background: var(--show) no-repeat center center / 20px;
-  cursor: pointer;
-  mix-blend-mode: luminosity;
-}
-
-#toggle:hover {
-  mix-blend-mode: normal;
-}
-
-#toggle.hidepass {
-  background: var(--hide) no-repeat center center / 20px;
-}
-
-#toggle.showpass {
-  background: var(--show) no-repeat center center / 20px;
-}
+#info {margin: 7px 0 -11px 4px; padding: 6px 10px; display: inline-block; overflow: hidden; font-weight: 700; text-shadow: 0 1px 1px #000; border-radius: 3px; box-shadow: var(--highlight); background: linear-gradient(180deg,#113,#080818)}
+#infoUser {margin-right: 4px; padding: 4px 8px 4px 0; border-right: 1px solid #002}
+select {margin: 5px 10px; padding: 7px 20px 7px 7px; min-width: 110px}
+.topbuttons .folders, .topbuttons .folders input, .topbuttons .folders select {vertical-align: middle}
+.topbuttons .folders {margin-top: -6px; margin-bottom: 2px}
+.topbuttons .folders input, .topbuttons .folders select {margin-top: 5px; margin-bottom: 8px}
+#pagenavbottom .folders {display: none}
+#toggle {height: 20px; width: 24px; vertical-align: middle; font-size: 0; border: none; background: var(--show) no-repeat center center / 20px; cursor: pointer; mix-blend-mode: luminosity}
+#toggle:hover {mix-blend-mode: normal}
+#toggle.hidepass {background: var(--hide) no-repeat center center / 20px}
+#toggle.showpass {background: var(--show) no-repeat center center / 20px}
 
 /* notifications */
+.notifications {margin: 0 30%; padding: 5px 10px 2px; min-width: 400px; position: fixed; top: -1px; left: 0; right: 0; z-index: 9999; text-align: center; text-shadow: 0 1px 1px #000; border: var(--border_inner); background: #113 var(--no) no-repeat right 24px top 4px / 14px; background-blend-mode: luminosity; cursor: crosshair; animation: 2s hide-up 4s ease-out forwards}
+.iframed .notifications {margin: 6px 30% 0; padding: 0 10px; top: -6px; background: #113 var(--no) no-repeat right 6px top 5px / 14px}
+.notifications:hover {background-blend-mode: normal}
+.notifications p.info, .notifications p.info b {line-height: 1.6; font-size: 10pt; color: #fff; text-shadow: none}
+.notifications p {word-spacing: .2em; letter-spacing: .07em; font-weight: 700; animation: fade-in 1s linear}
+.notifications p.info, .notifications p.error {margin: 0; text-align: center; border: none; box-shadow: none; background: none}
+p.error {font-size: 10pt}
+td p.error {padding: 10px}
+#mailbox td:last-child {border-right: none}
+.iframed #mailbox {width: calc(100% + 2px)}
+.topbuttons input, .topbuttons select, .folders input, .folders select {margin-left: 2px; margin-right: 2px}
 
-.notifications {
-  margin: 0 30%;
-  padding: 5px 10px 2px;
-  min-width: 400px;
-  position: fixed;
-  top: -1px;
-  left: 0;
-  right: 0;
-  z-index: 9999;
-  text-align: center;
-  text-shadow: 0 1px 1px #000;
-  border: var(--border_inner);
-  background: #113 var(--no) no-repeat right 24px top 4px / 14px;
-  background-blend-mode: luminosity;
-  cursor: crosshair;
-  animation: 2s hide-up 4s ease-out forwards;
-}
+div:not(#pagesize).topbuttons, .iframed div:not(#pagesize).topbuttons {border-bottom: none}
+#viewmail, #messagenav {margin-top: -8px; margin-bottom: -8px; border: none}
+#viewmail .folders {margin-top: 2px; margin-bottom: 4px; padding-bottom: 11px}
+.pagenavcontrols td:first-child, .pagenavcontrols td:last-child {width: 45%}
+.pagenavcontrols td:first-child {text-align: right}
+.pagenavcontrols td:last-child {text-align: left}
+.pagenavcontrols input, .pagenavcontrols input:disabled, .pagenavcontrols input:hover:disabled, .pagenavcontrols input:focus:disabled {padding: 5px}
+.debugHeader td {color: #cc3; border-bottom: var(--border_inner); box-shadow: var(--highlight), inset 0 0 2px 1px #991; background: repeating-linear-gradient(180deg,#000 2px, #003 4px); background-size: 100% 4px}
+.debugHeader pre {margin: 10px 20px; line-height: 1.55; white-space: pre-wrap}
+#mailhead, .iframed #mailhead {margin: -9px 0}
 
-.iframed .notifications {
-  margin: 6px 30% 0;
-  padding: 0 10px;
-  top: -6px;
-  background: #113 var(--no) no-repeat right 6px top 5px / 14px;
-}
-
-.notifications:hover {
-  background-blend-mode: normal;
-}
-
-.notifications p.info, .notifications p.info b {
-  line-height: 1.6;
-  font-size: 10pt !important;
-  color: #fff;
-  text-shadow: none !important;
-}
-
-.notifications p {
-  word-spacing: .2em;
-  letter-spacing: .07em;
-  font-weight: 700;
-  animation: fade-in 1s linear;
-}
-
-.notifications p.info, .notifications p.error {
-  margin: 0 !important;
-  text-align: center;
-  border: none;
-  box-shadow: none;
-  background: none;
-}
-
-p.error {
-  font-size: 10pt !important;
-}
-
-td p.error {
-  padding: 10px;
-}
-
-#mailbox td:last-child {
-  border-right: none;
-}
-
-.iframed #mailbox {
-  width: calc(100% + 2px);
-}
-
-.topbuttons input, .topbuttons select, .folders input, .folders select {
-  margin-left: 2px !important;
-  margin-right: 2px !important;
-}
-
-/* end notifications */
-
-div:not(#pagesize).topbuttons, .iframed div:not(#pagesize).topbuttons {
-  border-bottom: none !important;
-}
-
-#viewmail, #messagenav {
-  margin-top: -8px;
-  margin-bottom: -8px;
-  border: none !important;
-}
-
-#viewmail .folders {
-  margin-top: 2px;
-  margin-bottom: 4px;
-  padding-bottom: 11px;
-}
-
-.pagenavcontrols td:first-child, .pagenavcontrols td:last-child {
-  width: 45%;
-}
-
-.pagenavcontrols input, .pagenavcontrols input:disabled,
-.pagenavcontrols input:hover:disabled, .pagenavcontrols input:focus:disabled {
-  padding: 5px !important;
-}
-
-.debugHeader td {
-  color: #cc3;
-  border-bottom: var(--border_inner);
-  box-shadow: var(--highlight), inset 0 0 2px 1px #991;
-  background: repeating-linear-gradient(180deg,#000 2px, #003 4px);
-  background-size: 100% 4px;
-}
-
-.debugHeader pre {
-  margin: 10px 20px;
-  line-height: 1.55;
-  white-space: pre-wrap;
-}
-
-#mailhead, .iframed #mailhead {
-  margin: -9px 0;
-}
-
-@keyframes fade-in {
-  0%,80% {filter: opacity(0)}
-  100% {filter: opacity(1)}
-}
-
-@keyframes hide-up {
-  from {margin-top: 0}
-  to {margin-top: -300px}
-}
-
-@keyframes fade-in {
-  from {filter: opacity(0)}
-  to {filter: opacity(1)}
-}
+/* animations */
+@keyframes fade-in {0%,80% {filter: opacity(0)} 100% {filter: opacity(1)}}
+@keyframes hide-up {from {margin-top: 0} to {margin-top: -300px}}
+@keyframes fade-in {from {filter: opacity(0)} to {filter: opacity(1)}}
 
 /* responsive layout */
-
 @media screen and (max-width: 1200px) {
-  #dologin {width: 500px}
-  #dologin td:first-child {width: 22%}
-  #dologin td:last-child {width: 78%}
+#dologin {width: 500px}
+#dologin td:first-child {width: 22%}
+#dologin td:last-child {width: 78%}
 }
 
 @media screen and (max-width: 700px) {
-  .topbuttons input[type=submit], .topbuttons input[type="reset"] {
-    margin: 3px 5px !important;
-    min-width: 50px !important;
-  }
+.topbuttons input[type=submit], .topbuttons input[type="reset"] {margin: 3px 5px; min-width: 50px}
 }
 
 @media screen and (min-width: 1300px) {
-  .iframed body, .iframed td, .iframed textarea, .iframed div,
-  .iframed p.mailbody, .iframed input, .iframed input[type=submit],
-  .iframed input[type="reset"], .iframed p.error {font-size: 10pt !important}
-  .iframed .pagenav input {font-size: 0 !important}
+.iframed body, .iframed td, .iframed textarea, .iframed div, .iframed p.mailbody, .iframed input, .iframed input[type=submit], .iframed input[type="reset"], .iframed p.error {font-size: 10pt}
+.iframed .pagenav input {font-size: 0}
 }
 
 @media screen and (min-width: 1500px) {
-  body, td, textarea, div, p.mailbody, input, input[type=submit],
-  input[type="reset"], p.error, #settings, .fakebutton {font-size: 10pt !important}
-  #dologin tr:last-child a {font-size: 9pt}
-  .pagenav input {font-size: 0 !important}
+body, td, textarea, div, p.mailbody, input, input[type=submit], input[type="reset"], p.error, #settings, .fakebutton {font-size: 10pt}
+#dologin tr:last-child a {font-size: 9pt}
+.pagenav input {font-size: 0}
 }
