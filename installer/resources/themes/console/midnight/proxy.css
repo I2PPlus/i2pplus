@@ -158,7 +158,7 @@ button {
 button:hover, button:focus,
 select:hover, select:focus {
   color: #652787;
-  border: 1px solid #652787;
+  border: var(--border_input_hover);
   box-shadow: var(--highlight), inset 0 0 2px 1px #757;
   cursor: pointer;
 }
@@ -176,7 +176,7 @@ button:hover {
 button:active {
   color: #83529f !important;
   text-shadow: 0 1px 1px #3c1751;
-  border: 1px solid #652787;
+  border: var(--border_input_hover);
   box-shadow: var(--highlight), inset 3px 3px 3px #000;
   background: #652787;
   background-size: 12px, 100%;

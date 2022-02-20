@@ -12,17 +12,27 @@
 
 body {margin: 0 10px; overflow-x: hidden; font-size: 9.5pt; background: repeating-linear-gradient(180deg,rgba(0,0,24,.75) 3px, rgba(0,0,0,.9) 5px, rgba(0,0,0,.7) 6px), var(--tile), #000010}
 body.iframed {margin: 0; padding: 0}
-.destaddress {scrollbar-color: #114 rgba(0,0,0,0); scrollbar-width: thin}
-hr {margin: 5px 0; width: 100%; height: 1px; display: none; text-align: center; color: #2d295f; border: 0px solid #2d295f; background: #2d295f}
-#navi, .buttons, #buttons, #host_list tr:first-child, #host_list img, #host_list td:nth-child(n+2) a {user-select: none}
+h3 {padding: 7px 10px; word-spacing: .1em; letter-spacing: .08em; font-size: 10pt; font-weight: 700; color: var(--ink); text-shadow: 0 0 2px #010011; border: var(--border); text-transform: uppercase; box-shadow: var(--bevel); background: var(--title)}
+h4 {margin-top: -15px; margin-bottom: 30px; padding: 8px 10px; word-spacing: .1em; font-size: 9pt; border: var(--border); background: linear-gradient(90deg, #000, #001)}
 a:hover, a:visited:hover {color: var(--a_hover)}
+a:visited {color: #4e47bf}
+hr {margin: 5px 0; width: 100%; height: 1px; display: none; text-align: center; color: #2d295f; border: 0px solid #2d295f; background: #2d295f}
+ol, ul {margin: 0 20px 0 10px; padding: 0px 10px; display: table-row}
+li {margin: 0; line-height: 1.5; list-style: square; font-size: 9pt; color: var(--ink)}
+th, td {font-size: 9pt}
+th {padding: 5px 10px; text-align: left; background: var(--title); background-size: 4px 100%, 100%}
+td {padding: 5px}
+.page {margin: 10px 0; padding: 0; font-size: 9pt; color: var(--ink); background: linear-gradient(180deg,rgba(0,0,16,.2), transparent)}
+.destaddress {scrollbar-color: #114 rgba(0,0,0,0); scrollbar-width: thin}
+#content h3 {box-shadow: none}
+#navi, .buttons, #buttons, #host_list tr:first-child, #host_list img, #host_list td:nth-child(n+2) a {user-select: none}
 
 /* topnav */
-#navi {margin: -13px -11px 30px; min-width: 512px; padding: 6px; position: sticky; top: -1px; z-index: 999; text-align: center; font-weight: 700; font-size: 9pt; border-bottom: 1px solid #26235c; box-shadow: var(--bevel); filter: drop-shadow(0 1px 3px #000); background: var(--title); background-size: 4px 100%, 100%}
+#navi {margin: -13px -11px 30px; min-width: 512px; padding: 6px; position: sticky; top: -1px; z-index: 999; text-align: center; font-weight: 700; font-size: 9pt; border-bottom: var(--border); box-shadow: var(--bevel); filter: drop-shadow(0 1px 3px #000); background: var(--panel); background-size: 4px 100%, 100%}
 .iframed #navi {margin: 0 0 27px; padding: 6px 5px 5px; filter: none}
 #navi a, #navi a:visited {margin: 3px 0; padding: 5px; display: inline-block; outline: none; line-height: 1.2; color: #89f; text-transform: capitalize; text-shadow: 0 1px 1px #000; border: 1px solid #224; border-radius: 1px}
-#navi a:hover, #navi a:focus {color: #a27db7; border: 1px solid #652787; box-shadow: var(--highlight), inset 0 0 1px 1px #717; opacity: 1}
-#navi a:active {text-shadow: none; border: 1px solid #652787; box-shadow: var(--btn_shadow_active)}
+#navi a:hover, #navi a:focus {color: #a27db7; border: var(--border_input_hover); box-shadow: var(--highlight), inset 0 0 1px 1px #717; opacity: 1}
+#navi a:active {text-shadow: none; border: var(--border_input_hover); box-shadow: var(--btn_shadow_active)}
 #navi .abook {padding: 5px 8px 5px 23px; background: var(--abook) no-repeat 6px center / 14px, var(--nav)}
 #navi .abook:hover, #navi .abook:focus {background: var(--abook_hover) no-repeat 6px center / 14px, var(--btn_hover_radial), var(--nav_hover)}
 #navi .abook:active {background: #652787 var(--abook_hover) no-repeat 6px center / 14px}
@@ -36,37 +46,9 @@ a:hover, a:visited:hover {color: var(--a_hover)}
 #navi #overview:hover, #navi #overview:focus {background: var(--overview_hover) no-repeat 6px center / 14px, var(--btn_hover_radial), var(--nav_hover)}
 #navi #overview:active {background: #652787 var(--overview_hover) no-repeat 6px center / 14px}
 
-a:visited {color: #4e47bf}
-h3 {padding: 7px 10px; word-spacing: .1em; letter-spacing: .08em; font-size: 10pt; font-weight: 700; color: var(--ink); text-shadow: 0 0 2px #010011; border: 1px solid #26235c; border-radius: 2px; text-transform: uppercase; box-shadow: var(--bevel); background: var(--title)}
-#content h3 {box-shadow: none}
-h4 {margin-top: -15px; margin-bottom: 30px; padding: 8px 10px; word-spacing: .1em; font-size: 9pt; border: 1px solid #26235c; background: linear-gradient(90deg, #000, #001)}
-ol, ul {margin: 0 20px 0 10px; padding: 0px 10px; display: table-row}
-li {margin: 0; line-height: 1.5; list-style: square; font-size: 9pt; color: var(--ink)}
-th, td {font-size: 9pt}
-th {padding: 5px 10px; text-align: left; background: var(--title); background-size: 4px 100%, 100%}
-td {padding: 5px}
-
-/* svg */
-.illustrate {margin: 20px auto 15px; padding: 10px; max-width: 700px; height: auto; font-size: 10pt; border-radius: 2px; border: 1px solid #557; box-shadow: inset 0 0 0 1px #001, inset 0 0 1px 1px #889; background: #001}
-.iframed .illustrate {margin-bottom: 25px}
-.illustrate:hover {border: 1px solid #88a}
-svg #space, svg .subs {fill: #001; stroke: #99a3ff}
-svg .a.tooltip, svg .private {fill: #225; stroke: var(--ink)}
-svg .privatezone {fill: #002}
-svg tspan {fill: var(--ink)}
-svg tspan:hover, svg .tooltip:hover .g {fill: #272}
-svg .tooltip.link:hover {stroke: var(--hover)}
-svg a tspan:hover, svg #sublist:hover #hovershow,
-svg .a.tooltip:hover + .b > tspan, svg .a.private:hover + .b > tspan, svg a:hover .g {fill: var(--hover)}
-svg #hover stop:first-child, svg #hover2 stop:first-child {stop-color: #005}
-svg #hover stop:last-child, svg #hover2 stop:last-child {stop-color: #001}
-svg #arrow stop:first-child {stop-color: #007}
-svg #arrow stop:nth-child(2) {stop-color: #003}
-svg #arrow stop:last-child {stop-color: #001}
-
 p {color:var(--ink); margin: 0 0 4px; font-size: 9.5pt; text-align: justify}
 p.buttons, .buttons {margin: 5px 0 -5px; padding: 0 3px; text-align: right}
-p.buttons {padding: 8px 5px; border: 1px solid #26235c}
+p.buttons {padding: 8px 5px; border: var(--border)}
 p.footer {padding: 5px 0 2px; text-align: center; font-size: 8pt; border: 1px solid #113}
 p#filtered {margin: -26px 0 10px}
 .checkbox input {margin: 0}
@@ -80,7 +62,7 @@ p#filtered {margin: -26px 0 10px}
 
 .help h3:first-child {margin-top: -21px}
 .help h3 {margin: 10px -31px; border-radius: 0}
-.help {margin-bottom: 5px; padding: 20px 30px; border: 1px solid #26235c; background: #001}
+.help {margin-bottom: 5px; padding: 20px 30px; border: var(--border); background: #001}
 .help p {border: none; padding: 0}
 .help ul li:last-child {margin-bottom: -10px}
 
@@ -91,16 +73,12 @@ td.search > * {vertical-align: middle}
 td.names a {font-size: 9pt}
 .book td:first-child {font-weight: 700}
 #activefilter {padding: 4px 8px 3px}
-#add h3, #import h3 {margin-top: -1px; margin-left: -11px; margin-right: -11px; padding: 8px 10px 8px 30px; font-size: 10pt; background-position: 6px center}
-#add p.buttons, #import p.buttons {padding: 0; border: none}
-#add table, #import table {width: 100%}
-#add td:last-child, #import td:last-child {width: 94%}
 #bk h4 {display: none}
 
 #book, #emptybook {margin: -15px 0 -10px; padding: 0}
 #book, #filter, #search {background: #001}
-#book table {width: 100%; border: 1px solid #26235c}
-#book table th {font-size: 8.5pt; border-bottom: 1px solid #26235c; background: linear-gradient(180deg,#080818, #000008 75%)}
+#book table {width: 100%; border: var(--border)}
+#book table th {font-size: 8.5pt; border-bottom: var(--border); background: linear-gradient(180deg,#080818, #000008 75%)}
 #book table tr:hover {background: #1e0b28}
 #book table tr:hover textarea {color: var(--ink)}
 #book th:last-child {padding: 0; font-size: 0; background: var(--nuke) no-repeat center center / 14px, linear-gradient(180deg,#080818, #000008 75%)}
@@ -110,9 +88,11 @@ td.names a {font-size: 9pt}
 #book + #buttons {margin: 9px 0 20px}
 #emptybook {margin-bottom: 20px}
 
-#booksearch {margin: 0; padding: 7px 5px; text-align: center; border: 1px solid #26235c}
+#booksearch, #filter, #add, #import, p.buttons {box-shadow: var(--bevel); background: var(--panel)}
+
+#booksearch {margin: 0; padding: 7px 5px; text-align: center; border: var(--border)}
 #buttons {text-align: right; background: linear-gradient(90deg, #001, #000)}
-#config + #buttons, #content + #buttons {margin: -3px 0 12px; padding: 10px 5px; border: 1px solid #26235c; background: #001}
+#config + #buttons, #content + #buttons {margin: -3px 0 12px; padding: 10px 5px; border: var(--border); background: var(--panel)}
 #content h3:first-child {margin-top: -15px; font-size: 10.5pt}
 #content h3 {margin: 0 20px 10px; padding: 5px 10px; border: none; border-bottom: 1px dotted #2d295f; border-radius: 0; background: none}
 #content p + h3 {margin-top: 15px}
@@ -121,12 +101,12 @@ td.names a {font-size: 9pt}
 #filter a:link, #filter a:visited, #activefilter {margin: 2px 0; padding: 2px 5px; display: inline-block; text-align: center; text-transform: capitalize; color: #4a42bd; border: 1px solid #26225d; background: #000}
 #filter a:hover, #filter a:focus {color: var(--a_hover); border: 1px solid var(--a_hover); transform: scale(1.1)}
 #filter a:active {color: var(--ink); box-shadow: var(--highlight), inset 3px 3px 3px #000; background: #652787}
-#filter {margin: -21px 0 -29px; padding: 12px 0 15px; text-align: center; border: 1px solid #26235c}
+#filter {margin: -21px 0 -29px; padding: 17px 0 15px; text-align: center; border: var(--border)}
 #filter p:first-child {padding-bottom: 0}
 #filter p {margin: -3px 0 -3px; padding: 12px 10px 0}
 #filter p, #search td {font-size: 9pt; font-weight: 700}
 #filter + #search > form {margin: 0; padding: 0}
-#filter + #search {margin-top: 13px; margin-bottom: -18px; border: 1px solid #26235c}
+#filter + #search {margin-top: 13px; margin-bottom: -18px; border: var(--border)}
 #filter span a:active {background: none; box-shadow: none; color: #4f0519}
 #filter span a, #filter span a:hover {display: inline-block; word-spacing: normal; letter-spacing: normal; border: none; background: none; transform: none}
 #filter span b {margin: -3px 5px 0; line-height: .8; text-transform: uppercase; font-size: 11pt; color: #fff}
@@ -137,19 +117,19 @@ form[action="subscriptions"] {margin: 0}
 #host_list tr {background: var(--row)}
 img[src="/imagegen/id?s=256&c="], img[src="/imagegen/id?s=20&c="] {opacity: 0}
 
-#messages + p, p.book {padding: 20px 20px 20px 42px; border: 1px solid #26235c; background: #001 var(--addressbook) no-repeat 10px center / 24px}
+#messages + p, p.book {padding: 20px 20px 20px 42px; border: var(--border); background: #001 var(--addressbook) no-repeat 10px center / 24px}
 
 /* notifications */
 #messages {position: fixed; left: 0; right: 0; top: 16px; z-index: 999}
 #messages:empty {margin-top: -10px; display: none}
-#messages > .messages {margin: -15px 0 14px; padding: 20px 20px 20px 50px; color: var(--ink); border: 1px solid #26235c; border-radius: 0}
+#messages > .messages {margin: -15px 0 14px; padding: 20px 20px 20px 50px; color: var(--ink); border: var(--border); border-radius: 0}
 #messages + p {padding: 12px 10px 8px 20px}
 #messages p {padding: 15px 15px 15px 46px; background: var(--infohelp) no-repeat 12px center / 28px, var(--no) no-repeat right 8px top 8px / 12px, #000; background-blend-mode: normal, luminosity}
 #messages p:hover {background-blend-mode: normal; cursor: crosshair}
 
 #ovrvw #content p {margin-bottom: 10px; line-height: 1.5}
-td > img[width="320"], td > img[src^="/imagegen"] {margin: 10px 3px; padding: 5px; width: 240px; height: 240px; border-radius: 2px; border: 1px solid #26235c; background: #000}
-textarea[name="config"], textarea[name="content"] {margin: -26px 0 0; resize: none; font-size: 8.5pt; border: 1px solid #26235c; border-radius: 0}
+td > img[width="320"], td > img[src^="/imagegen"] {margin: 10px 3px; padding: 5px; width: 240px; height: 240px; border-radius: 2px; border: var(--border); background: #000}
+textarea[name="config"], textarea[name="content"] {margin: -26px 0 0; resize: none; font-size: 8.5pt; border: var(--border); border-radius: 0}
 textarea[name="config"] {height: 220px; overflow-y: scroll; resize: none}
 
 .book td.names {width: 200px; white-space: nowrap}
@@ -159,35 +139,56 @@ textarea[name="config"] {height: 220px; overflow-y: scroll; resize: none}
 .book td:nth-child(3) {padding: 2px 25px 2px 0; width: 20px; text-align: center}
 .book th {padding-top: 6px; padding-bottom: 6px}
 
-#add, #import {margin-top: -2px; padding: 0 10px 15px; border: 1px solid #26235c; background: #001}
-#add {margin-top: -10px}
-#add td:first-child, #import td:first-child {width: 1%; min-width: 120px; white-space: nowrap; text-align: right}
 .destinations textarea {margin: 0; padding: 1px 1px 1px 2px; width: 100%; height: 32px; resize: none; overflow-x: auto; overflow-y: hidden; border-radius: 0; border: none; border-left: var(--border_soft); border-right: 3px solid #17142f}
-.fakebutton:hover, .fakebutton:focus {background-size: auto}
 #host_details {margin-top: -25px}
 #idAddress {text-transform: none}
 
-#import input[type=file] {margin-left: -5px}
-#import table {margin-top: -10px}
-#import td:first-child {padding-left: 15px}
+
+/* export */
+#export {height: 39px; position: absolute; top: 0; right: 7px; border-left: var(--border)}
+#exporthosts:disabled {pointer-events: none; opacity: .5}
 input.export {margin-right: 4px}
+input#exporthosts {margin: 0 -2px 0 5px; padding: 0; width: 29px; height: 29px; min-width: 0; display: inline-block; font-size: 0; background: var(--download) no-repeat center center / 16px, linear-gradient(180deg,#010, #000)}
+input#exporthosts:hover, #addressbook input#exporthosts:focus {border: var(--border_input_hover); box-shadow: var(--highlight), inset 0 0 1px 1px #757; background: #000; background: var(--download) no-repeat center center / 16px, linear-gradient(180deg,#202 50%, #000 50%); background-blend-mode: luminosity}
+input#exporthosts:active {text-shadow: 0 1px 1px #3C1751; box-shadow: var(--highlight), inset 3px 3px 3px #000; background: #652787; background: var(--download) no-repeat center center / 16px, linear-gradient(180deg,#401856, #501f6c)}
+
+/* add / import */
+#add, #import {margin-top: -2px; padding: 0 10px 0; border: var(--border)}
+#add {margin-top: -10px}
+#add h3, #import h3 {margin-top: -1px; margin-left: -11px; margin-right: -11px; padding: 8px 10px 8px 30px; font-size: 10pt; background-position: 6px center}
+#add table, #import table {width: 100%}
+#add td:first-child, #import td:first-child {width: 1%; min-width: 120px; white-space: nowrap; text-align: right}
+#add td:last-child, #import td:last-child {width: 94%}
+#add input[type=text], #import input[type=file] {width: calc(100% - 16px)}
+#import .buttons, #add .buttons {margin: 10px -10px 0; padding: 12px 8px; border: none; border-top: var(--border)}
+ #add .buttons {margin-top: 12px}
+#import table {margin-top: -2px}
+#import input[type=file] {margin-left: -5px}
+#import td:first-child {padding-left: 15px}
+
+/* forms */
 input {margin: 2px 4px 2px 0; padding: 4px}
 input[type=file] {border: none; background: none}
 input[type=submit], input[type=reset], .fakebutton, .fakebutton:visited {padding: 6px 10px; min-width: 100px; text-align: center}
 input[type=submit]:hover, input[type=reset]:hover, input[type=submit]:focus, input[type=reset]:focus {background-size: 100%}
+.fakebutton:hover, .fakebutton:focus {background-size: auto}
 input[type=text] {padding: 8px}
 input.update {margin-left: 5px}
-.page {margin: 10px 0; padding: 0; font-size: 9pt; color: var(--ink); background: linear-gradient(180deg,rgba(0,0,16,.2), transparent)}
+input::placeholder {font-weight: 400; font-style: italic; color: var(--ink); opacity: .7}
+input:focus::placeholder {opacity: 0}
+
 #search input[type=text]:focus {background: var(--search) no-repeat 8px center / 14px, var(--text_focus); background-blend-mode: normal}
 #search input[type=text] {margin-left: 5px; padding: 6px 6px 6px 30px; vertical-align: middle; background: #000 var(--search) no-repeat 8px center / 14px; background-blend-mode: luminosity}
 #subsLog pre {margin-top: -26px; padding-left: 10px; width: calc(100% - 17px); height: auto; white-space: pre-wrap; font-weight: 400; color: var(--ink); background: #000}
 textarea[cols="70"] {width: 100%; height: 40px; white-space: pre-wrap}
 textarea:focus::placeholder {opacity: 0}
 textarea, #subsLog pre {padding: 3px 5px; width: 100%; height: 200px; resize: none; font: 700 8.5pt var(--monospaced); line-height: 1.4; color: #7670c2; border: 1px solid #26225d; background: #000}
+
+/* identicon */
 #visualid h3 {margin-top: -1px; border-left: none; border-right: none}
-#visualid {margin-top: -10px; border: 1px solid #26235c; background: #001}
+#visualid {margin-top: -10px; border: var(--border); background: #001}
 #visualid table {margin-top: -15px; margin-bottom: -1px; width: 100%; border-left: none; border-right: none; border-collapse: collapse}
-#visualid td[colspan="2"] {padding: 17px 9px 15px; text-align: right; border-top: 1px solid #26235c}
+#visualid td[colspan="2"] {padding: 17px 9px 15px; text-align: right; border-top: var(--border)}
 #visualid td:first-child {text-align: right}
 
 /* page titles */
@@ -202,7 +203,7 @@ p.book {padding: 10px 10px 10px 35px; background: var(--addressbook) no-repeat 1
 
 /* export hosts button adjustments */
 p.book {padding-left: 35px}
-#messages + p, p.book {border: 1px solid #26235c; background: #000 var(--addressbook) no-repeat 5px center / 24px}
+#messages + p, p.book {border: var(--border); background: #000 var(--addressbook) no-repeat 5px center / 24px}
 
 /* host details page */
 #host_details td {padding: 5px 10px}
@@ -234,7 +235,7 @@ td.names:hover, #host_list td.b32link:hover, #host_list td.helper:hover, #host_l
 .names a[href$=".i2p/"] {padding-right: 10px; overflow: hidden; text-overflow: ellipsis}
 .info a[href$=".i2p/"], #host_list td.b32link a, #host_list td.helper a {width: 100%; display: inline-block; vertical-align: middle}
 .info img {margin: 2px; padding: 1px; width: 24px; height: 24px; vertical-align: middle; border: 1px solid #334; border-radius: 2px; background: #000}
-.info img:hover, .names a:focus img {border: 1px solid #652787; background: #652787}
+.info img:hover, .names a:focus img {border: var(--border_input_hover); background: #652787}
 .info a:active img, .info a:focus img {transform: rotate(45deg) scale(0.8); transition: ease all .1s 0s}
 #host_list .checkbox {width: 32px; white-space: nowrap; font-weight: 700}
 #host_list .b32link, #host_list .helper {padding: 0 5px; width: 5%; white-space: nowrap; text-align: center}
@@ -250,25 +251,18 @@ td.names:hover, #host_list td.b32link:hover, #host_list td.helper:hover, #host_l
 td.destinations {max-width: 50px; border-left: var(--border_soft); border-right: var(--border_soft)}
 tr:hover td.destinations {color: #aa0}
 
-input::placeholder {font-weight: 400; font-style: italic; color: var(--ink); opacity: .7}
-input:focus::placeholder {opacity: 0}
-#add input[type=text], #import input[type=file] {width: calc(100% - 16px)}
-#import table + p.buttons, #add table + p.buttons {margin: 10px -10px -4px; padding: 12px 8px 0; border-top: 1px solid #26235c}
 #showing, #paginate {display: inline-block}
 #showing {margin-left: 4px}
 #paginate, #filtered, #results {margin-right: 4px; float: right; word-spacing: 0; letter-spacing: 0; text-transform: none}
 #addressbook.headline h3 {margin-bottom: 0; padding-right: 44px; position: relative}
-#export {height: 39px; position: absolute; top: 0; right: 7px; border-left: 1px solid #26235c}
-input#exporthosts {margin: 0 -2px 0 5px; padding: 0; width: 29px; height: 29px; min-width: 0; display: inline-block; font-size: 0; background: var(--download) no-repeat center center / 16px, linear-gradient(180deg,#010, #000)}
-#exporthosts:disabled {pointer-events: none; opacity: .5}
-input#exporthosts:hover, #addressbook input#exporthosts:focus {border: 1px solid #652787; box-shadow: var(--highlight), inset 0 0 1px 1px #757; background: #000; background: var(--download) no-repeat center center / 16px, linear-gradient(180deg,#202 50%, #000 50%); background-blend-mode: luminosity}
-input#exporthosts:active {text-shadow: 0 1px 1px #3C1751; box-shadow: var(--highlight), inset 3px 3px 3px #000; background: #652787; background: var(--download) no-repeat center center / 16px, linear-gradient(180deg,#401856, #501f6c)}
 #activefilter, .selected {font-weight: 700; color: #999; box-shadow: var(--highlight), inset 2px 2px 2px rgba(0,0,0,.9)}
 .active {color: #ff6}
-#prev, #next, #current {font-size: 11pt; text-shadow: none}
 #showing {margin-left: 6px}
 #filtered, #results {font-size: 10pt}
+
+/* paginate */
 #paginate {margin: -4px 4px 0 0; position: relative; overflow: hidden; font-size: 0; text-align: center; border: 1px solid #26225d; background: var(--title); background-size: 4px 100%, 100%}
+#prev, #next, #current {font-size: 11pt; text-shadow: none}
 #prev a, #next a, #current {box-shadow: var(--highlight)}
 #current {padding: 3px 10px; display: inline-block; vertical-align: middle; text-align: center; font-size: 11pt; color: var(--ink); border-left: 1px solid #26225d; border-right: 1px solid #26225d}
 #prev, #next {margin-top: -1px; position: relative; display: inline-block; vertical-align: middle; line-height: 0}
@@ -281,14 +275,33 @@ input#exporthosts:active {text-shadow: 0 1px 1px #3C1751; box-shadow: var(--high
 #next:not(.inactive):hover::after, #next:not(.inactive) a:focus::after {border-color: transparent transparent transparent var(--hover)}
 #empty {margin: 20px 0 30px; height: 1px; background: linear-gradient(90deg, rgba(0,0,0,0), #26235c, rgba(0,0,0,0))}
 
+/* svg */
+.illustrate {margin: 20px auto 15px; padding: 10px; max-width: 700px; height: auto; font-size: 10pt; border-radius: 2px; border: 1px solid #557; box-shadow: inset 0 0 0 1px #001, inset 0 0 1px 1px #889; background: #001}
+.iframed .illustrate {margin-bottom: 25px}
+.illustrate:hover {border: 1px solid #88a}
+svg #space, svg .subs {fill: #001; stroke: #99a3ff}
+svg .a.tooltip, svg .private {fill: #225; stroke: var(--ink)}
+svg .privatezone {fill: #002}
+svg tspan {fill: var(--ink)}
+svg tspan:hover, svg .tooltip:hover .g {fill: #272}
+svg .tooltip.link:hover {stroke: var(--hover)}
+svg a tspan:hover, svg #sublist:hover #hovershow,
+svg .a.tooltip:hover + .b > tspan, svg .a.private:hover + .b > tspan, svg a:hover .g {fill: var(--hover)}
+svg #hover stop:first-child, svg #hover2 stop:first-child {stop-color: #005}
+svg #hover stop:last-child, svg #hover2 stop:last-child {stop-color: #001}
+svg #arrow stop:first-child {stop-color: #007}
+svg #arrow stop:nth-child(2) {stop-color: #003}
+svg #arrow stop:last-child {stop-color: #001}
+
 /* iframed */
 .iframed .page {margin: 1px 0 0; overflow: hidden; border: none}
-.iframed .headline h3, .iframed h4, .iframed #filtered, .iframed #filter, .iframed #search, .iframed #helpconfig {margin: -1px 10px 0}
+.iframed .headline h3, .iframed h4, .iframed #filtered, .iframed #search, .iframed #helpconfig {margin: -1px 10px 0}
+.iframed #filter {margin: -1px 10px -29px}
 .iframed .headline h3:first-child + h4 {margin: 13px 10px 0}
 .iframed#dtls .headline h3 {margin: -1px 10px 24px}
 .iframed#subsLog .headline h3:first-child + h4 {margin: -1px 10px 26px}
-.iframed .book tr.head th {border-top: 1px solid #26235c; border-bottom: 1px solid #26235c}
-.iframed #book #host_details {border-top: 1px solid #26235c}
+.iframed .book tr.head th {border-top: var(--border); border-bottom: var(--border)}
+.iframed #book #host_details {border-top: var(--border)}
 .iframed #book, .iframed #book + #buttons, .iframed #book table {border-top: none; border-bottom: none}
 .iframed #emptybook {margin: -15px 10px 20px}
 .iframed #helpsubs {margin-bottom: 0}
@@ -312,7 +325,7 @@ input#exporthosts:active {text-shadow: 0 1px 1px #3C1751; box-shadow: var(--high
 
 @media screen and (max-width: 1200px) {
 #navi a, #navi a:visited, #navi a:hover, #navi a:focus, #navi a:active {padding-left: 21px; background-size: 12px, 100%}
-#filter {padding: 0 5px}
+#filter {padding: 0 1px}
 #filter p {margin-left: 0; margin-right: 0}
 #filter a {min-width: 6px; padding: 0 6px}
 #paginate {margin-top: -3px; margin-right: 2px}
@@ -333,9 +346,7 @@ form[action="export"]::after {height: 21px}
 }
 
 @media screen and (min-width: 1500px) {
-body, #navi a, input[type=text], select, h4, td.names a,
-#filter p, #search td, p, a, .help li, td, tt, code,
-input[type=submit], input[type=reset], .destaddress {font-size: 10.5pt}
+body, #navi a, input[type=text], select, h4, td.names a, #filter p, #search td, p, a, .help li, td, tt, code, input[type=submit], input[type=reset], .destaddress, input[type="file"], input[type="file"]::file-selector-button {font-size: 10.5pt}
 textarea, textarea[name="config"], textarea[name="content"], #subsLog pre {font-size: 10pt}
 h3 {font-size: 12pt}
 #filter a {font-size: 11pt; min-width: 14px}

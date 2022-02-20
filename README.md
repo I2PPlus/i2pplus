@@ -1,4 +1,7 @@
 [![Java CI](https://github.com/vituperative/i2pplus/actions/workflows/ant.yml/badge.svg)](https://github.com/vituperative/i2pplus/actions/workflows/ant.yml)
+[![I2P+ Update zip](https://i2pplus.github.io/download.svg)](https://gitlab.com/i2pplus/I2P.Plus/-/jobs/artifacts/master/raw/i2pupdate.zip?job=Java8)
+[![I2P+ I2PSnark standalone](https://i2pplus.github.io/i2psnarkdownload.svg)](https://gitlab.com/i2pplus/I2P.Plus/-/jobs/artifacts/master/raw/i2psnark-standalone.zip?job=Java8)
+[![I2P+ Javadocs](https://i2pplus.github.io/javadocsdownload.svg)](https://gitlab.com/i2pplus/I2P.Plus/-/jobs/artifacts/master/raw/javadoc.zip?job=Java14)
 
 # I2P+
 
