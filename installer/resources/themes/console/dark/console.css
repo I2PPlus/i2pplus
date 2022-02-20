@@ -86,7 +86,7 @@ ul {margin: 0; padding: 0}
 #sidebar td a:active {box-shadow: 0 0 0 2px rgba(0,0,0,.3), inset 2px 2px 2px rgba(0,0,0,.7)}
 #sidebar h3 {margin: -7px -10px -9px; padding: 6px 2px; letter-spacing: .08em; text-transform: uppercase; font-size: 9.5pt; border: none; border-radius: 0; box-shadow: var(--highlight), inset 0 0 1px 1px #191; background: radial-gradient(at center bottom, rgba(16, 72, 16, .4) 0, rgba(0, 0, 0, 0) 50%), var(--bg_title), linear-gradient(180deg,rgba(0,0,0,.1), rgba(0,0,0,.25) 50%, rgba(0,0,0,.75) 50%, #000), var(--h3_fade); background-size: 100%, 2px, 100%, 100%}
 #sidebar h3:hover {box-shadow: var(--highlight), inset 0 0 0 2px rgba(128,48,0,.3)}
-#sidebar h3:active {box-shadow: var(--highlight), inset 4px 4px 4px rgba(0,0,0,.7)}
+#sidebar h3:active {box-shadow: var(--depress)}
 #sidebar h3::after {min-height: 15px; display: inline-block; vertical-align: middle; content: ""}
 #sidebar h3 a, #sidebar h4 a {width: calc(100% - 5px); display: inline-block; white-space: normal}
 #sidebar h3 a {width: 100%; vertical-align: middle; line-height: 1; text-shadow: var(--textshadow)}
@@ -267,7 +267,7 @@ div[id^="config_"].main {padding-bottom: 14px}
 /* news */
 #news {margin: -1px 5px 0 226px; padding: 6px 15px 8px; min-width: 655px; font-size: 8pt; text-align: right; box-shadow: 0 1px 5px #000}
 #homepage #news {position: relative; z-index: 1; background: var(--newsbg), var(--radar) no-repeat right bottom / auto 250px, #000}
-#homepage #news::before {position: absolute; top: 0; bottom: 0; left; 0; right: 0; z-index: 5;content: ""; display: inline-block; width: 100%; height: 100%; background: rgba(0,18,0,.4)}
+#homepage #news::before {position: absolute; top: 0; bottom: 0; left: 0; right: 0; z-index: 5;content: ""; display: inline-block; width: 100%; height: 100%; background: rgba(0,18,0,.4)}
 #news .newsentry:first-child {margin-top: -3px}
 #news h3 font {letter-spacing: .2em; text-transform: none}
 #news h3, #newspage h3 {letter-spacing: .03em; text-align: left; font-size: 10pt}
@@ -1328,7 +1328,7 @@ th code {user-select: all}
 .applink:hover .applabel {color: var(--hover); border-top: 1px solid var(--hover)}
 .applink:hover img, .sitemapLink:hover img, a:focus .applink img, a:focus .sitemaplink img {opacity: 1; filter: none}
 .applink a:link, .applink a:hover, .applink a:active {text-decoration: none; outline: none}
-.applink:active .applabel, .sitemapLink:active .sitemapLabel {color: var(--ink); box-shadow: var(--highlight), inset 3px 3px 3px 1px #5f2400; background: var(--hover)}
+.applink:active .applabel, .sitemapLink:active .sitemapLabel {color: var(--ink); box-shadow: var(--depress); background: var(--hover)}
 .applink:active .applabel a {color: var(--ink)}
 .applink:active img {transform: scale(0.9)}
 .applink::after, .sitemapLink::after {width: 22px; height: 19px; position: absolute; top: -1px; right: -1px; display: inline-block; border: 1px solid #000; background: transparent; opacity: 0; content: ""; transform: scale(0)}
@@ -1356,10 +1356,10 @@ th code {user-select: all}
 #homepanel {margin: 0 -8px}
 
 /* home search */
-#searchbar {margin: -24px 10px -16px; padding: 8px 0 2px; width: auto; white-space: nowrap; text-align: center}
+#searchbar {margin: -24px 10px -16px; padding: 8px 0 2px; width: auto; white-space: nowrap; text-align: center; animation: fade .1s .5s reverse both, slide .05s linear 1s both}
 #searchbar span {margin: 5px 5px 0; padding: 1px; display: inline-block; position: relative; overflow: hidden; border: 1px solid #151; border-radius: 2px; background: none}
 #searchbar span:focus-within {box-shadow: inset -38px 0 1px 2px rgba(0,0,0,.6), inset 0 0 2px 2px rgba(0,0,0,.7), 0 0 0 1px #000, 0 0 0 2px rgba(255,96,0,.8), 0 0 0 3px rgba(144,48,0,.7); background: var(--input_txt); transition: linear box-shadow .15s}
-#searchbar table {margin: 15px auto 13px; width: auto; border-radius: 0 0 3px 3px; border-collapse: separate; border: 1px solid #151; background: #000; box-shadow: var(--highlight), inset 0 0 0 2px rgba(0,64,0,.5); animation: fade .15s .5s reverse both, slide .1s ease 1s both}
+#searchbar table {margin: 15px auto 13px; width: auto; border-radius: 0 0 3px 3px; border-collapse: separate; border: 1px solid #151; background: #000; box-shadow: var(--highlight), inset 0 0 0 2px rgba(0,64,0,.5)}
 #searchbar td {padding: 0; border: none; box-shadow: none; background: none}
 #searchbar input {margin: 2px 0 1px 198px; padding-left: 10px; padding-right: 42px; min-width: 240px; height: calc(100% + 2px); border-radius: 0; box-shadow: none; background: #000; border: none; filter: none}
 #searchbar input:focus {box-shadow: inset 4px 2px 3px 1px rgba(0,0,0,.8); border-color: #151; background: none}
@@ -1396,6 +1396,7 @@ th code {user-select: all}
 .sitemapLink img {padding: 12px 10px 10px; height: 32px; width: 32px; opacity: .8}
 .sitemapLink:active img, .sitemapLink img:active, .applink:active img, .applink img:active {transform: scale(0.9); filter: sepia(100%) drop-shadow(0 0 1px var(--hover)) drop-shadow(0 0 2px rgba(148,0,0,.5))}
 .sitemapLabel {margin: 0 0 -4px; padding: 6px 4px 8px; display: inline-block; line-height: 1.05; overflow: hidden; white-space: nowrap; box-sizing: border-box; text-overflow: ellipsis; font-size: 90%; text-shadow: var(--textshadow); border: none; border-top: var(--border); box-shadow: var(--highlight), inset 0 0 1px 1px #242}
+.sitemapLink:active .sitemapLabel, .sitemapLabel:active {box-shadow: var(--depress)}
 
 /* certs */
 #certs {padding-top: 3px; padding-bottom: 10px}
