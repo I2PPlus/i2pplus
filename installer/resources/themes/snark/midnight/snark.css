@@ -164,7 +164,7 @@ td.torrentDetails img, .dirInfo td:first-child img:not(.thumb) {width: 20px; hei
 .torrentInfo td {border-top: var(--border); border-bottom: var(--border)}
 #torrentInfoStats .nowrap, #trackers img, #trackers b {white-space: nowrap; display: inline-block; vertical-align: middle}
 .magnetlink, .torrentlink {margin: -1px 4px -1px 2px; padding: 3px; display: inline-block; line-height: 1; border: 1px solid #114; border-radius: 1px; box-shadow: inset 0 0 0 1px #101; background: linear-gradient(180deg,rgb(24, 24, 40) 50%, rgb(0, 0, 0) 50%)}
-.magnetlink:hover, .torrentlink:hover {border: 1px solid #652787; background: linear-gradient(180deg,rgb(101, 39, 135) 50%, RGB(60, 23, 81) 50%)}
+.magnetlink:hover, .torrentlink:hover {border: var(--border_input_hover); background: linear-gradient(180deg,rgb(101, 39, 135) 50%, RGB(60, 23, 81) 50%)}
 .magnetlink:active, .torrentlink:active {box-shadow: var(--highlight), inset 4px 4px 3px 1px rgb(31, 0, 47)}
 th .magnetlink img, th .torrentlink img {margin: 0}
 .infohash, .snarkAddInfo code {font-family: var(--monospaced); color: #cc0; user-select: all}
@@ -298,8 +298,8 @@ input[type=submit], input[type="reset"] {min-width: 120px}
 a.control, a.controld, a.control:hover, a.controld:hover, a.control:focus, a.controld:focus {margin: 0 5px 0 1px; min-width: 0; display: inline-block}
 a.control img, a.controld img {padding: 0; max-height: 16px; max-width: 16px; display: inline-block}
 #configs input[type=submit], .trackerconfig input[type=submit], input[name="savepri"] {text-transform: capitalize}
-input[type=submit]:hover, input[type=submit]:focus, input[type="reset"]:hover, input[type="reset"]:focus, a.control:hover, a.control:focus {color: #652787; border: 1px solid #652787; box-shadow: var(--highlight), inset 0 0 2px 1px #757; background: var(--btn_hover); cursor: pointer}
-input[type=submit]:active, input[type="reset"]:active, a.control:active {color: #83529f; text-shadow: 0 1px 1px #3c1751; border: 1px solid #652787; box-shadow: var(--btn_shadow_active); background: #652787}
+input[type=submit]:hover, input[type=submit]:focus, input[type="reset"]:hover, input[type="reset"]:focus, a.control:hover, a.control:focus {color: #652787; border: var(--border_input_hover); box-shadow: var(--highlight), inset 0 0 2px 1px #757; background: var(--btn_hover); cursor: pointer}
+input[type=submit]:active, input[type="reset"]:active, a.control:active {color: #83529f; text-shadow: 0 1px 1px #3c1751; border: var(--border_input_hover); box-shadow: var(--btn_shadow_active); background: #652787}
 a.controld {display: none}
 thead img {margin: 0 1px; padding: 0; opacity: 1; mix-blend-mode: luminosity}
 a img {filter: drop-shadow(0 0 1px #000)}
@@ -318,7 +318,7 @@ input.default {width: 1px; height: 1px; visibility: hidden}
 input[size="85"] {width: calc(100% - 150px)}
 #addSection input, #createSection input {margin-left: 5px}
 textarea {border-radius: 0}
-select:hover, select:focus, select:active {color: #652787; border: 1px solid #652787; box-shadow: var(--highlight), inset 0 0 2px 1px #757; background: var(--dropdown_hover) no-repeat right 10px center, var(--btn_hover); background-size: 10px auto, 100%}
+select:hover, select:focus, select:active {color: #652787; border: var(--border_input_hover); box-shadow: var(--highlight), inset 0 0 2px 1px #757; background: var(--dropdown_hover) no-repeat right 10px center, var(--btn_hover); background-size: 10px auto, 100%}
 select[disabled], select[disabled]:hover {color: #4e47bf; opacity: .7; cursor: not-allowed; border: 1px solid #27235f; box-shadow: none; background: #000 var(--dropdown) no-repeat right 10px center; background-size: 10px auto}
 select option {font-size: 9.5pt; font-weight: 400}
 select option:hover, select option:checked {box-shadow: inset 20px 20px #652787}
@@ -343,7 +343,7 @@ a:hover img, a:focus img {filter: drop-shadow(0 0 1px #652787); mix-blend-mode: 
 #pagenav img {height: 14px; margin: 0 3px; padding: 3px 4px 2px; background: linear-gradient(180deg,#001 50%, #181d4f 50%); border: 1px solid #171c3f; border-radius: 2px; box-shadow: var(--highlight); mix-blend-mode: luminosity}
 #pagenav img:hover, #pagenav a:focus img {mix-blend-mode: normal}
 #pagenav a:hover img {filter: none; mix-blend-mode: normal}
-#pagenav a:focus img {border: 1px solid #652787}
+#pagenav a:focus img {border: var(--border_input_hover)}
 #pagenav a img:hover {background: linear-gradient(180deg,#000 50%, #212658 50%)}
 #pagenav a img:active {box-shadow: inset 2px 2px 3px 3px #000; border: 1px solid #212658; mix-blend-mode: normal}
 #pagenavcontrols {padding: 2px 10px; display: inline-block; mix-blend-mode: luminosity}
@@ -473,12 +473,6 @@ hr.debug {margin: 3px 0 -5px; width: 100%; display: none; background: #120f35}
 
 #totals {display: inline-block; margin: 2px 0 2px 5px; font-weight: 700}
 
-/* configs */
-#configs td:nth-child(2) {white-space: nowrap}
-#configs td:first-child {min-width: 220px}
-td#bwHelp {padding-left: 30px; width: 90%; line-height: 1; background: url(images/details.svg) no-repeat left 12px center / 14px}
-td#bwHelp a {display: inline-block; white-space: nowrap; margin-left: 4px}
-
 /* torrent priorities */
 .priority {width: 1%; vertical-align: middle; white-space: nowrap; font-size: 8pt}
 .priority::after {min-height: 30px; display: inline-block; vertical-align: middle; content: ""}
@@ -541,34 +535,38 @@ td .commentAuthorName {padding-right: 8px; width: 120px; white-space: nowrap; ov
 #newRating select {width: 90%}
 #myRating td:empty {padding: 0; border-top: none; border-bottom: none}
 #myRating td:empty::after {min-height: 1px}
-.commentRating img {margin: 0 0 4px; padding: 0; width: 16px; height: 16px; font-size: 14pt; color: #FF7200; text-shadow: 0 0 1px #900; filter: none}
+.commentRating img {margin: 0 0 4px; padding: 0; width: 16px; height: 16px; font-size: 14pt; color: #ff7200; text-shadow: 0 0 1px #900; filter: none}
 
 .info_tracker {margin: 1px -1px 1px 0; padding: 1px 6px 1px 18px; display: inline-block; white-space: nowrap; max-width: 155px; vertical-align: middle; color: var(--a); border-radius: 1px; border: 1px solid #114; background: #001 var(--tracker) no-repeat left 3px center; background-size: 14px auto}
 .info_tracker a {max-width: 140px; display: inline-block; overflow: hidden; text-overflow: ellipsis}
 .info_tracker a[href*="b32.i2p"] {margin-right: -5px; max-width: 90px}
 .info_tracker:hover, .info_tracker:hover a {color: #652787}
-.info_tracker:hover {border: 1px solid #652787; background: url(images/button_tracker_hover.png) no-repeat left 3px center, linear-gradient(180deg,#000 50%, #002 50%); background-size: 14px auto, 100%}
+.info_tracker:hover {border: var(--border_input_hover); background: url(images/button_tracker_hover.png) no-repeat left 3px center, linear-gradient(180deg,#000 50%, #002 50%); background-size: 14px auto, 100%}
 .info_tracker:active, .info_tracker:active a {color: #fff}
 .info_tracker:active {color: #fff; box-shadow: 0 0 0 1px #652787, inset 3px 3px 3px #1f002f; background: #652787 url(images/button_tracker_active.png) no-repeat left 3px center; background-size: 14px auto}
 
-/* configs overhaul */
-#configs td {text-align: left; font-weight: 400; vertical-align: middle; min-width: 0}
-#configs td b, #torrentOrderControl b {margin-right: 8px; padding: 6px 10px 7px; min-width: 160px; display: inline-block; vertical-align: middle; line-height: 1.1; color: #b5bddf; text-align: right; border-radius: 15px 5px 5px 15px; box-shadow: 0 0 0 1px #000; background: linear-gradient(180deg,#113, #060619)}
-#torrentOrderControl {line-height: 1}
-#configs td label:hover b, #torrentOrderControl b:hover {color: #dfe5ff}
-#configs input, #configs select {margin-top: 0; margin-bottom: 0; vertical-align: middle}
-#configs td, #configs td:first-child {padding: 0}
-#configs tr:nth-last-child(2) td {padding: 11px 8px 0; text-align: right}
-#configs th {padding: 6px 8px; font-size: 10pt; background: var(--title); background-size: 4px 100%, 100%}
+/* configure */
 .optionlist {padding: 10px 6px 8px; margin: 0; columns: 400px 3; column-gap: 20px; box-shadow: inset 0 0 0 2px #000; background: linear-gradient(180deg,#001, #00000b); transition: ease-in-out .5s box-shadow}
 .configOption {padding: 2px 4px; width: calc(100% - 20px); display: inline-block; vertical-align: middle; text-align: left; white-space: nowrap}
 .configOption::after {content: ""; display: inline-block; height: 38px; vertical-align: middle}
-input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilter_dataDir"] {width: calc(100% - 183px)}
-input[name="nofilter_commentsName"] {max-width: 248px}
-#configs input, #configs select {margin-top: 0; margin-bottom: 0; vertical-align: middle; will-change: transform}
 .numeric {min-width: 0; width: 70px}
 .numeric:focus {text-align: center}
+input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilter_dataDir"] {width: calc(100% - 183px)}
+input[name="nofilter_commentsName"] {max-width: 248px}
+#configs th {padding: 6px 8px; font-size: 10pt; background: var(--title); background-size: 4px 100%, 100%}
+#configs td, #configs td:first-child {padding: 0}
+#configs td {text-align: left; font-weight: 400; vertical-align: middle; min-width: 0}
+#configs td:first-child {min-width: 220px}
+#configs td:nth-child(2) {white-space: nowrap}
+#configs tr:nth-last-child(2) td {padding: 11px 8px 0; text-align: right}
+#configs td b, #torrentOrderControl b {margin-right: 8px; padding: 6px 10px 7px; min-width: 160px; display: inline-block; vertical-align: middle; line-height: 1.1; color: #b5bddf; text-align: right; border-radius: 15px 5px 5px 15px; box-shadow: 0 0 0 1px #000; background: linear-gradient(180deg,#113, #060619)}
+#configs td label:hover b, #torrentOrderControl b:hover {color: #dfe5ff}
+#configs input, #configs select {margin-top: 0; margin-bottom: 0; vertical-align: middle}
+#configs input, #configs select {margin-top: 0; margin-bottom: 0; vertical-align: middle; will-change: transform}
 #snarkLang {display: inline-block; border-radius: 4px; background: #113; text-align: center; padding: 5px 10px; font-weight: 700; vertical-align: middle; margin-right: 5px; color: #fff; line-height: 1.6}
+td#bwHelp {padding-left: 30px; width: 90%; line-height: 1; background: url(images/details.svg) no-repeat left 12px center / 14px}
+td#bwHelp a {display: inline-block; white-space: nowrap; margin-left: 4px}
+#torrentOrderControl {line-height: 1}
 
 /* language overrides */
 .lang_fr .optionlist, .lang_hu .optionlist, .lang_in .optionlist, .lang_it .optionlist, .lang_sk .optionlist, .lang_nl .optionlist, .lang_pl .optionlist, .lang_pt .optionlist, .lang_ro .optionlist, .lang_sv .optionlist, .lang_tr .optionlist, .lang_uk .optionlist {columns: 500px auto; column-gap: 5px}
@@ -750,7 +748,7 @@ td.torrentAction input {margin-top: 1px}
 #torrents .actionDelete {background: var(--delete) no-repeat center center / 14px, var(--btnAction), var(--delete_hover) no-repeat center center / 14px}
 #actionStartAll {background: var(--startall) no-repeat center center / auto 14px, var(--btnAction), var(--startall_hover) no-repeat center center / auto 14px}
 #actionStopAll {background: var(--stopall) no-repeat center center / auto 14px, var(--btnAction), var(--stopall_hover) no-repeat center center / auto 14px}
-#torrents .torrentAction input:hover, #torrents .torrentAction input:focus {border: 1px solid #652787; box-shadow: var(--highlight), inset 0 0 1px 1px #717; transition: ease box-shadow .1s; background-blend-mode: normal}
+#torrents .torrentAction input:hover, #torrents .torrentAction input:focus {border: var(--border_input_hover); box-shadow: var(--highlight), inset 0 0 1px 1px #717; transition: ease box-shadow .1s; background-blend-mode: normal}
 #torrents .actionStart:hover, #torrents .actionStart:focus {background: var(--start_hover) no-repeat center center / 14px, var(--btnAction_hover)}
 #torrents .actionStop:hover, #torrents .actionStop:focus {background: var(--stop_hover) no-repeat center center / 14px, var(--btnAction_hover)}
 #torrents .actionRemove:hover, #torrents .actionRemove:focus {background: var(--remove_hover) no-repeat center center / 14px, var(--btnAction_hover)}

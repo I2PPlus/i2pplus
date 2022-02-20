@@ -28,11 +28,11 @@ td {padding: 5px}
 #navi, .buttons, #buttons, #host_list tr:first-child, #host_list img, #host_list td:nth-child(n+2) a {user-select: none}
 
 /* topnav */
-#navi {margin: -13px -11px 30px; min-width: 512px; padding: 6px; position: sticky; top: -1px; z-index: 999; text-align: center; font-weight: 700; font-size: 9pt; border-bottom: var(--border); box-shadow: var(--bevel); filter: drop-shadow(0 1px 3px #000); background: var(--title); background-size: 4px 100%, 100%}
+#navi {margin: -13px -11px 30px; min-width: 512px; padding: 6px; position: sticky; top: -1px; z-index: 999; text-align: center; font-weight: 700; font-size: 9pt; border-bottom: var(--border); box-shadow: var(--bevel); filter: drop-shadow(0 1px 3px #000); background: var(--panel); background-size: 4px 100%, 100%}
 .iframed #navi {margin: 0 0 27px; padding: 6px 5px 5px; filter: none}
 #navi a, #navi a:visited {margin: 3px 0; padding: 5px; display: inline-block; outline: none; line-height: 1.2; color: #89f; text-transform: capitalize; text-shadow: 0 1px 1px #000; border: 1px solid #224; border-radius: 1px}
-#navi a:hover, #navi a:focus {color: #a27db7; border: 1px solid #652787; box-shadow: var(--highlight), inset 0 0 1px 1px #717; opacity: 1}
-#navi a:active {text-shadow: none; border: 1px solid #652787; box-shadow: var(--btn_shadow_active)}
+#navi a:hover, #navi a:focus {color: #a27db7; border: var(--border_input_hover); box-shadow: var(--highlight), inset 0 0 1px 1px #717; opacity: 1}
+#navi a:active {text-shadow: none; border: var(--border_input_hover); box-shadow: var(--btn_shadow_active)}
 #navi .abook {padding: 5px 8px 5px 23px; background: var(--abook) no-repeat 6px center / 14px, var(--nav)}
 #navi .abook:hover, #navi .abook:focus {background: var(--abook_hover) no-repeat 6px center / 14px, var(--btn_hover_radial), var(--nav_hover)}
 #navi .abook:active {background: #652787 var(--abook_hover) no-repeat 6px center / 14px}
@@ -149,7 +149,7 @@ textarea[name="config"] {height: 220px; overflow-y: scroll; resize: none}
 #exporthosts:disabled {pointer-events: none; opacity: .5}
 input.export {margin-right: 4px}
 input#exporthosts {margin: 0 -2px 0 5px; padding: 0; width: 29px; height: 29px; min-width: 0; display: inline-block; font-size: 0; background: var(--download) no-repeat center center / 16px, linear-gradient(180deg,#010, #000)}
-input#exporthosts:hover, #addressbook input#exporthosts:focus {border: 1px solid #652787; box-shadow: var(--highlight), inset 0 0 1px 1px #757; background: #000; background: var(--download) no-repeat center center / 16px, linear-gradient(180deg,#202 50%, #000 50%); background-blend-mode: luminosity}
+input#exporthosts:hover, #addressbook input#exporthosts:focus {border: var(--border_input_hover); box-shadow: var(--highlight), inset 0 0 1px 1px #757; background: #000; background: var(--download) no-repeat center center / 16px, linear-gradient(180deg,#202 50%, #000 50%); background-blend-mode: luminosity}
 input#exporthosts:active {text-shadow: 0 1px 1px #3C1751; box-shadow: var(--highlight), inset 3px 3px 3px #000; background: #652787; background: var(--download) no-repeat center center / 16px, linear-gradient(180deg,#401856, #501f6c)}
 
 /* add / import */
@@ -235,7 +235,7 @@ td.names:hover, #host_list td.b32link:hover, #host_list td.helper:hover, #host_l
 .names a[href$=".i2p/"] {padding-right: 10px; overflow: hidden; text-overflow: ellipsis}
 .info a[href$=".i2p/"], #host_list td.b32link a, #host_list td.helper a {width: 100%; display: inline-block; vertical-align: middle}
 .info img {margin: 2px; padding: 1px; width: 24px; height: 24px; vertical-align: middle; border: 1px solid #334; border-radius: 2px; background: #000}
-.info img:hover, .names a:focus img {border: 1px solid #652787; background: #652787}
+.info img:hover, .names a:focus img {border: var(--border_input_hover); background: #652787}
 .info a:active img, .info a:focus img {transform: rotate(45deg) scale(0.8); transition: ease all .1s 0s}
 #host_list .checkbox {width: 32px; white-space: nowrap; font-weight: 700}
 #host_list .b32link, #host_list .helper {padding: 0 5px; width: 5%; white-space: nowrap; text-align: center}
@@ -295,7 +295,8 @@ svg #arrow stop:last-child {stop-color: #001}
 
 /* iframed */
 .iframed .page {margin: 1px 0 0; overflow: hidden; border: none}
-.iframed .headline h3, .iframed h4, .iframed #filtered, .iframed #filter, .iframed #search, .iframed #helpconfig {margin: -1px 10px 0}
+.iframed .headline h3, .iframed h4, .iframed #filtered, .iframed #search, .iframed #helpconfig {margin: -1px 10px 0}
+.iframed #filter {margin: -1px 10px -29px}
 .iframed .headline h3:first-child + h4 {margin: 13px 10px 0}
 .iframed#dtls .headline h3 {margin: -1px 10px 24px}
 .iframed#subsLog .headline h3:first-child + h4 {margin: -1px 10px 26px}
@@ -324,7 +325,7 @@ svg #arrow stop:last-child {stop-color: #001}
 
 @media screen and (max-width: 1200px) {
 #navi a, #navi a:visited, #navi a:hover, #navi a:focus, #navi a:active {padding-left: 21px; background-size: 12px, 100%}
-#filter {padding: 0 5px}
+#filter {padding: 0 1px}
 #filter p {margin-left: 0; margin-right: 0}
 #filter a {min-width: 6px; padding: 0 6px}
 #paginate {margin-top: -3px; margin-right: 2px}

@@ -24,6 +24,7 @@
   --border_btn: 1px solid #26225c;
   --border_inner: 1px solid #1e1c4a;
   --border_input: 1px solid #27235c;
+  --border_input_hover: 1px solid #652787;
   --border_soft: 1px solid #181537;
   --btn_active: linear-gradient(180deg,#401856,#501f6c);
   --btn_hover_radial: radial-gradient(at center bottom, rgba(96, 0, 96, .4), rgba(0, 0, 0, 0) 60%);

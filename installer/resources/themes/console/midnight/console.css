@@ -2420,7 +2420,7 @@ iframe.iframed {margin: 15px 0 0}
 @media screen and (max-width: 1499px) {
 .en #sitemap .applink img {padding-left: 35px; padding-right: 35px}
 .en .sitemapLink, .en .sitemapLabel, .en #sitemap .applink, .en #sitemap .applabel, .en #sitemap .applink table {width: 120px; min-width: 120px}
-h1[class], h1 {padding-left: 50px; background-size: 32px auto, 4px 100%, 100% 4px}
+h1[class], h1 {padding-left: 50px; background-size: 32px auto, 100% 4px, 4px 100%}
 input.check[value$="updates"], input.check[value$="updates"]:hover, input.check[value$="updates"]:focus, input.check[value$="updates"]:active {padding-left: 26px; background-size: 14px, 100%}
 .main h3 a {line-height: 1}
 .netdbentry .tunnel_cap, .netdbentry .tier, .netdbentry .ff, .netdbentry .reachable, .netdbentry .unreachable, .netdbentry .version {padding: 2px 4px}
