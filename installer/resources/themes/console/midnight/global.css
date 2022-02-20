@@ -20,7 +20,7 @@
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
   --border: 1px solid #26235c;
   --border_active: 1px solid #fc1c66;
-  --border_hover: 1px solid #83529f;
+  --border_hover: 1px solid var(--ink_btn_active);
   --border_badge: 1px solid #225;
   --border_btn: 1px solid #26225c;
   --border_inner: 1px solid #1e1c4a;
@@ -37,6 +37,7 @@
   --highlight: inset 0 0 0 1px #000;
   --hover: #6a1698;
   --ink: #c9ceff;
+  --ink_btn_active: #83529f;
   --ink_darker: #99a3ff;
   --label: linear-gradient(180deg,#002,#001);
   --li: #8589ad;
@@ -182,9 +183,10 @@ input[type=text], input[type=password], textarea {
 input[type=text], input[type=password] {
   margin: 5px 10px;
   padding: 6px 8px;
-  color: var(--ink);
   text-decoration: none;
   font: bold 9pt var(--bodyfont);
+  color: var(--ink);
+  -webkit-text-stroke: none;
   border: var(--border_input);
 }
 
@@ -193,7 +195,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
   border: 1px solid #6466a5;
   box-shadow: var(--outline), 0 0 0 2px var(--a_hover), var(--btn_shadow_active);
   background: var(--text_focus);
-  transition: filter all .3s;
+  transition: ease all .3s;
 }
 
 textarea:focus {
@@ -295,7 +297,7 @@ input[type=submit]:hover, input[type=reset]:hover, button:hover {
 input[type=submit]:active, input[type=reset]:active, button:active,
 .control:active, .control:visited:active, #settings:active,
 .fakebutton:active, .fakebutton:visited:active {
-  color: #83529f;
+  color: var(--ink_btn_active);
   text-shadow: 0 1px 1px #3c1751;
   border: 1px solid var(--hover);
   box-shadow:var(--btn_shadow_active), var(--outline);
@@ -338,7 +340,7 @@ input[type=file]:active::file-selector-button {
 }
 
 input[type=file]:active::file-selector-button {
-  color: #83529f;
+  color: var(--ink_btn_active);
   text-shadow: 0 1px 1px #3c1751;
   border: 1px solid var(--hover);
   box-shadow: var(--highlight), inset 3px 3px 3px #000;
