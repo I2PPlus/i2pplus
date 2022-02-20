@@ -265,7 +265,7 @@ button.download.control:active {background: var(--download) no-repeat center cen
 #sb_general, #sb_shortgeneral, #sb_advancedgeneral, #sb_bandwidth, #sb_peers, #sb_peersadvanced, #sb_tunnels, #sb_queue {margin-top: -8px; margin-bottom: -9px}
 #sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after, #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {height: 16px; display: inline-block; vertical-align: bottom; content: ""}
 #sb_general td, #sb_shortgeneral td, #sb_advancedgeneral td {white-space: nowrap}
-#clock {margin: -6px -9px -10px; padding: 8px 0 5px; position: relative; z-index: 10; font-size: 18pt; font-weight: 700; letter-spacing: .1em; box-shadow: var(--highlight), inset 0 0 1px 1px #339; opacity: .8}
+#clock {margin: -7px -10px -10px; padding: 11px 0 9px; position: relative; z-index: 10; font-size: 18pt; font-weight: 700; letter-spacing: .1em; box-shadow: var(--bevel_h1); opacity: .8}
 #clock::after {margin-left: 3px; content: "UTC"; display: inline-block; font-size: 50%; vertical-align: middle}
 
 #sb_localtunnels {margin-top: -6px; margin-bottom: -8px; width: 200px; border-collapse: separate; border-spacing: 0}
@@ -2433,7 +2433,7 @@ input.check[value$="updates"], input.check[value$="updates"]:hover, input.check[
 #routerinformation .h3navlinks a {line-height: 1.4}
 #searchbar button {height: 28px}
 #searchbar span {margin: -3px -2px -4px}
-#clock {font-size: 16pt}
+#clock {margin: -7px -10px -9px; padding: 12px 0 9px; font-size: 16pt}
 #sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after, #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {min-height: 14px}
 #sb_tunnelstatus .tunnelBuildStatus::before {margin: -2px 0; background-size: 12px}
 #sidebarconf button img {width: 10px; height: 10px}
