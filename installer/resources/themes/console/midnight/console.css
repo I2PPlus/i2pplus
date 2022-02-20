@@ -212,7 +212,7 @@ button.download.control:active {background: var(--download) no-repeat center cen
 #sidebar .stop:hover, #sidebar .stop:focus {padding: 6px 5px; background: var(--shutdown_hover) no-repeat center center / 14px, var(--btn_hover)}
 #sidebar .stop:active {padding: 6px 5px; background: var(--shutdown) no-repeat center center / 14px, var(--btn_active)}
 #sidebar .cancel {padding: 6px 9px 6px 25px; background: var(--no) no-repeat 10px center / 10px, var(--btn_sidebar)}
-#sidebar #sb_downloadUnsignedDevUpdate, #sidebar #sb_downloadSignedDevUpdate, #sidebar #sb_downloadReleaseUpdate {padding: 6px 16px 6px 30px; margin: 4px 0 6px; font-size: 110%; border-radius: 15px; background-position: 12px center}
+#sidebar #sb_downloadUnsignedDevUpdate, #sidebar #sb_downloadSignedDevUpdate, #sidebar #sb_downloadReleaseUpdate {padding: 5px 16px 5px 30px; margin: 4px 0 6px; font-size: 110%; border-radius: 15px; background-position: 12px center}
 #sidebar #sb_downloadUnsignedDevUpdate:active, #sidebar #sb_downloadSignedDevUpdate:active, #sidebar #sb_downloadReleaseUpdate:active {color: #7171d1; text-shadow: none; -webkit-text-stroke: 0}
 
 /* Show text on context specific buttons (eg deferred shutdown) */
@@ -362,7 +362,7 @@ p:empty + .sb_notice {margin-top: 10px}
 a:active #sb_graphstats {border-color: var(--active)}
 #sb_graphcontainer:hover #sb_graphstats {opacity: 1; transition: ease opacity .3s}
 #sb_graphcontainer {margin: -6px -9px -8px; padding: 0 1px; height: 44px; position: relative; z-index: 10; overflow: hidden; box-shadow: inset 0 0 0 1px #26235c, inset 0 0 0 2px #000, inset 0 0 3px 1px #004; background: repeating-linear-gradient(90deg, rgba(0,0,0,0) 14px, rgba(112,107,199,.7) 15px, rgba(0,0,0,0) 15px, rgba(0,0,0,0) 30px), repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(112,107,199,.3), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 14px)}
-#sidebar #minigraph {margin: -19px -1px 0; width: 206px; height: 40px}
+#sidebar #minigraph {margin: -19px -1px 0; width: 198px; height: 40px}
 #xhr > hr + #sb_graphcontainer > span + a > #minigraph {height: 40px}
 #sidebar #minigraphcontainer {margin-top: -43px; margin-left: 1px; width: 204px; height: 39px; background-repeat: no-repeat; background-size: 204px 40px}
 #homepage #minigraphcontainer {margin-top: -42px; height: 38px}
@@ -1091,9 +1091,9 @@ p#javaclienthelp {padding: 10px 25px 10px 55px; border: var(--border_inner); bac
 th.th_title {padding: 9px 10px; text-align: left; box-shadow: var(--highlight)}
 td.optionsave {padding: 7px 5px; text-align: right; border-top: var(--border_inner); background: var(--row)}
 
-#advancedsettings {margin: 1px 1px -3px 1px; width: calc(100% - 2px); resize: none; overflow-x: hidden; white-space: pre-wrap; word-break: break-all; border: none; border-radius: 0; box-shadow: var(--highlight)}
-#advancedsettings:focus {box-shadow: inset 0 0 0 1px #202}
-#advancedsettings:not(:focus) {background: repeating-linear-gradient(90deg, rgba(0,0,0,.1) 2px, rgba(0,0,32,.1) 4px), linear-gradient(180deg,rgba(0,0,0,.4), rgba(0,0,16,.4)); background-size: 4px 100%, 100%}
+#config_advanced #advancedsettings {margin: 1px 1px -3px 1px; width: calc(100% - 2px); resize: none; overflow-x: hidden; white-space: pre-wrap; word-break: break-all; border: none; border-radius: 0; box-shadow: var(--highlight)}
+#config_advanced #advancedsettings:focus {box-shadow: inset 0 0 0 1px #202}
+#config_advanced #advancedsettings:not(:focus) {background: repeating-linear-gradient(90deg, rgba(0,0,0,.1) 2px, rgba(0,0,32,.1) 4px), linear-gradient(180deg,rgba(0,0,0,.4), rgba(0,0,16,.4)); background-size: 4px 100%, 100%}
 
 #tunnelconfigsave, #homeapps {margin-bottom: -2px}
 #tunnelconfig th img {margin-bottom: -2px}
@@ -1213,9 +1213,10 @@ a[name="criticallogs"] + p + h3 + p + ul {margin-bottom: 15px; border: var(--bor
 #enviro, #criticallogs, #routerlogs, #eventlogs, #wrapperlogs {margin-top: -11px}
 #enviro td:last-child b {margin: 0 2px 0 6px}
 #enviro td {padding: 8px 10px; font-weight: 400}
-#routerlogs td p, #wrapperlogs td p {margin: 0; padding: 8px 10px}
+#routerlogs td p, #wrapperlogs td p {margin: 0; padding: 2px 10px}
 #routerlogs tr:first-child td, #wrapperlogs tr:first-child td {border-bottom: var(--border_inner)}
-#routerlogs tr:last-child, #routerlogs tr:last-child td, #wrapperlogs tr:last-child {background: none}
+#routerlogs tr:last-child, #routerlogs tr:nth-child(n+2) td, #wrapperlogs tr:last-child {background: none; padding: 0}
+
 table[id$="logs"] tr:nth-child(even){background: #000}
 table[id$="logs"] tr:nth-child(odd){background: #010011}
 table[id$="logs"] ul {margin: 1px 17px -6px -12px}
@@ -2223,9 +2224,6 @@ h1, .main h2, #applinks, #sitelinks, .main h3 {-webkit-text-stroke: 1px rgba(179
 #volunteer {margin: -5px 0 10px; padding: 0 20px; border: var(--border_inner); background: #000}
 #legal h2, #sidebarhelp h2, #volunteer h2, #reachabilityhelp h2, #configurationhelp h2, #themeoverride h2, #tunnman h2, #browserconfig h2, #faq h2, #reseedhelp h2, #troubleshoot h2, #newuserguide h2, #filterlist h2, #webhosting h2, #glossary h2 {margin: -1px -21px 10px; padding: 10px; text-transform: uppercase; font-size: 11pt; text-align: left; letter-spacing: .08em; word-spacing: .1em; border-radius: 0}
 #legal h2 + p {padding-top: 10px}
-#advancedsettings h2 {margin-bottom: -13px}
-#advancedsettings p.infohelp {margin-top: 12px; margin-bottom: -2px}
-#advancedsettings #configinfo {margin-bottom: 9px}
 #configinfo th {padding: 8px 10px; text-align: left; font-family: var(--monospaced); color: #393; background: linear-gradient(90deg, #000, #000016)}
 #configinfo td {padding: 7px 10px; text-align: justify}
 #help td.infohelp, #help td.infowarn {padding-left: 46px; background-size: 24px}
@@ -2254,20 +2252,25 @@ h1, .main h2, #applinks, #sitelinks, .main h3 {-webkit-text-stroke: 1px rgba(179
 #help_webhosting {background: var(--webserver) no-repeat 15px center, var(--helpsection); background-size: 32px, 100% 4px}
 #help h2 {font-size: 12pt}
 #help .confignav + div > h2, #help .confignav + .infohelp + div > h2 {margin-top: -5px}
-#help #advancedsettings h2:first-of-type, #help #changelog h2:first-of-type {margin-top: -4px}
-#configurationhelp h2, #advancedsettings h2, #filterlist h2 {padding-left: 38px; background: var(--settings_inert) no-repeat 8px center, var(--title); background-size: 22px, 4px 100%, 100%}
-#sidebarhelp h2, #reachabilityhelp h2 {padding-left: 38px; background: url(/themes/console/images/sidebar.svg) no-repeat 8px center, var(--title); background-size: 22px, 4px 100%, 100%}
-#reseedhelp h2 {padding-left: 38px; background: var(--reseed) no-repeat 8px center, var(--title); background-size: 22px, 4px 100%, 100%}
-#newuserguide h2 {padding-left: 38px; background: var(--question) no-repeat 8px center, var(--title); background-size: 22px, 4px 100%, 100%}
-#newuserguide h2 {padding-left: 38px; background: url(images/favicon.svg) no-repeat 8px center, var(--title); background-size: 22px, 4px 100%, 100%}
-#troubleshoot h2 {padding-left: 38px; background: var(--wrench) no-repeat 8px center, var(--title); background-size: 22px, 4px 100%, 100%}
-#legal h2 {padding-left: 38px; background: var(--legal) no-repeat 8px center, var(--title); background-size: 22px, 4px 100%, 100%}
-#changelog h2 {padding-left: 38px; background: var(--changelog) no-repeat 10px center, var(--title); background-size: 22px, 4px 100%, 100%}
-#faq h2, #glossary h2 {padding-left: 38px; background: var(--question) no-repeat 8px center, var(--title); background-size: 22px, 4px 100%, 100%}
-#webhosting h2 {padding-left: 38px; background: var(--server) no-repeat 8px center, var(--title); background-size: 22px, 4px 100%, 100%}
-#themeoverride h2 {padding-left: 38px; background: var(--ui) no-repeat 8px center, var(--title); background-size: 22px, 4px 100%, 100%}
-#browserconfig h2 {padding-left: 38px; background: var(--firefox) no-repeat 8px center, var(--title); background-size: 22px, 4px 100%, 100%}
-#tunnman h2 {padding-left: 38px; background: var(--hardhat) no-repeat 8px center, var(--title); background-size: 22px, 4px 100%, 100%}
+
+#configurationhelp h2, #advancedsettings h2, #filterlist h2 {padding-left: 38px; background: var(--settings_inert) no-repeat 10px center, var(--title); background-size: 20px, 4px 100%, 100%}
+#sidebarhelp h2, #reachabilityhelp h2 {padding-left: 38px; background: url(/themes/console/images/sidebar.svg) no-repeat 10px center, var(--title); background-size: 20px, 4px 100%, 100%}
+#reseedhelp h2 {padding-left: 38px; background: var(--reseed) no-repeat 10px center, var(--title); background-size: 20px, 4px 100%, 100%}
+#newuserguide h2 {padding-left: 38px; background: var(--question) no-repeat 10px center, var(--title); background-size: 20px, 4px 100%, 100%}
+#newuserguide h2 {padding-left: 38px; background: url(images/favicon.svg) no-repeat 10px center, var(--title); background-size: 20px, 4px 100%, 100%}
+#troubleshoot h2 {padding-left: 38px; background: var(--wrench) no-repeat 10px center, var(--title); background-size: 20px, 4px 100%, 100%}
+#legal h2 {padding-left: 38px; background: var(--legal) no-repeat 10px center, var(--title); background-size: 20px, 4px 100%, 100%}
+#faq h2, #glossary h2 {padding-left: 38px; background: var(--question) no-repeat 10px center, var(--title); background-size: 20px, 4px 100%, 100%}
+#webhosting h2 {padding-left: 38px; background: var(--server) no-repeat 10px center, var(--title); background-size: 20px, 4px 100%, 100%}
+#themeoverride h2 {padding-left: 38px; background: var(--ui) no-repeat 10px center, var(--title); background-size: 20px, 4px 100%, 100%}
+#browserconfig h2 {padding-left: 38px; background: var(--firefox) no-repeat 10px center, var(--title); background-size: 20px, 4px 100%, 100%}
+#tunnman h2 {padding-left: 38px; background: var(--hardhat) no-repeat 10px center, var(--title); background-size: 20px, 4px 100%, 100%}
+#changelog h2, #advancedsettings h2 {margin: 0 0 -11px; word-spacing: .1em; letter-spacing: .08em; text-align: left; text-transform: uppercase; font-size: 11pt; border-radius: 0}
+#changelog h2 {padding-left: 38px; background: var(--changelog) no-repeat 10px center, var(--title); background-size: 20px, 4px 100%, 100%}
+#advancedsettings h2 {margin-bottom: -13px}
+#advancedsettings p.infohelp {margin-top: 12px; margin-bottom: -2px}
+#advancedsettings #configinfo {margin-bottom: 9px}
+#help #advancedsettings h2:first-of-type, #changelog h2:first-of-type {margin-top: -4px; font-size: 12pt}
 
 /* link icons */
 .sitelink, .chatlink, .consolelink {white-space: nowrap; border-radius: 1px}
@@ -2293,7 +2296,6 @@ h1, .main h2, #applinks, #sitelinks, .main h3 {-webkit-text-stroke: 1px rgba(179
 #pageloader {top: -2px; width: 100%}
 
 /* changelog */
-#changelog h2, #advancedsettings h2 {margin: 0 0 -11px; padding: 10px; word-spacing: .1em; letter-spacing: .08em; text-align: left; text-transform: uppercase; font-size: 11pt; border-radius: 0}
 #changelog:hover pre, #wrapperlogs:hover pre {will-change: transform}
 #changelog pre {margin-top: 11px; padding: 10px 10px 10px 20px; max-height: 600px; overflow-y: scroll; width: calc(100% - 32px); border-left: var(--border_inner); border-right: var(--border_inner); background: #000}
 #fullhistory {margin: -13px 0 9px; padding: 5px 10px; position: relative; z-index: 999; text-align: right; border: var(--border_inner); background: #000}
@@ -2555,7 +2557,7 @@ h3.tabletitle a, #version.tabletitle a {padding-left: 18px}
 }
 
 @media screen and (min-width: 1400px) {
-#help #changelog pre {margin-left: 0; padding-left: 10px; width: calc(100% - 22px); overflow-y: hidden; white-space: pre-wrap; font-size: 10pt; columns: 540px auto; column-gap: 40px; column-rule: 1px dotted #26235c}
+#changelog pre {margin-left: 0; padding-left: 10px; width: calc(100% - 22px); overflow-y: hidden; white-space: pre-wrap; font-size: 10pt; columns: 540px auto; column-gap: 40px; column-rule: 1px dotted #26235c}
 #stats .statlist {padding: 10px; columns: auto 540px; column-gap: 10px; text-align: center}
 .statsName {min-width: 540px}
 }
