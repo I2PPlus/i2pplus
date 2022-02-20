@@ -16,11 +16,26 @@
 --border_filtered: var(--border);
 }
 
+/* globals */
 body {margin: 4px 2px; background: repeating-linear-gradient(180deg,rgba(0,0,24,.75) 2px, rgba(0,0,0,.7) 4px), var(--tile), var(--offline), url(images/dropdown_hover.svg), #000010; background-size: 100% 4px, 171px 148px, 0, 0, 0}
 body.iframed {margin: 1px 0; background: var(--offline), url(images/dropdown_hover.svg); background-size: 0, 0}
-.toggleview, .configTitle, .snarknavbar, img, input[type=submit], .optbox, label, th img, #createSection, #closeLog, #expand, #shrink {user-select: none}
+tt, code {font-family: var(--monospaced)}
+table {margin: 0 0 10px 0; padding: 0; width: 100%; border: none; border-spacing: 0; border-collapse: collapse}
+thead, tfoot {background: #001}
+thead {border-bottom: 1px solid #010011}
+th {padding: 8px 2px; font-size: 9pt; border-top: var(--border); border-bottom: var(--border); background: #001}
+th {background: var(--title); background-size: 4px 100%, 100%}
+th:first-child {text-align: left}
+th:first-child img {margin: 1px -2px 3px 1px}
+th:nth-child(2) img {margin: 1px 5px 3px 2px}
+tfoot th {padding-bottom: 4px}
+tfoot tr:first-child th {vertical-align: middle}
+tfoot td:first-child {padding-left: 0; text-align: left}
+tfoot img, tfoot:nth-child(2) img, tfoot:nth-child(1) img, tfoot:nth-child(3) img, tfoot:nth-child(4) img {margin: 0 2px 3px 0; padding-right: 0}
+tfoot tr:nth-child(n+1) {text-align: left}
 th img, td img, #closelog, #expand, #shrink {font-size: 0}
-.page {margin: 5px 0 0 0; padding: 0 0 12px; line-height: 1.6; text-align: center; font-size: 9pt; border: var(--border); border-radius: 0 0 2px 2px; background: #003}
+.toggleview, .configTitle, .snarknavbar, img, input[type=submit], .optbox, label, th img, #createSection, #closeLog, #expand, #shrink {user-select: none}
+.page {margin: 5px 0 0; padding: 0 0 12px; line-height: 1.6; text-align: center; font-size: 9pt; border: var(--border); border-radius: 0 0 2px 2px; background: #003}
 .iframed .page {margin: 4px 0 5px; padding: 0; border: none; border-radius: 0; box-shadow: none; background: none}
 .snarknavbar, .page {min-width: 900px}
 
@@ -70,28 +85,14 @@ th img, td img, #closelog, #expand, #shrink {font-size: 0}
 #closelog:active img, #expand:active img, #shrink:active img {box-shadow: var(--btn_shadow_active)}
 .logshim {margin-top: 10px}
 .iframed .logshim {margin-top: 20px}
-tt, code {font-family: var(--monospaced)}
-table {margin: 0 0 10px 0; padding: 0; width: 100%; border: none; border-spacing: 0; border-collapse: collapse}
-thead, tfoot {background: #001}
-thead {border-bottom: 1px solid #010011}
-th {padding: 8px 2px; font-size: 9pt; border-top: var(--border); border-bottom: var(--border); background: #001}
-th {background: var(--title); background-size: 4px 100%, 100%}
+
 #torrentInfoControl td, #setPriority th {box-shadow: var(--highlight), inset 0 0 2px 1px #191939, inset 0 0 5px 3px #002; background: linear-gradient(180deg,#000016, #000008)}
 #torrentInfoControl td {padding: 8px 5px 8px 10px; border-top: var(--border); text-align: left}
 #torrentOrderControl {float: right}
 #enableInOrder {margin-left: 8px; margin-right: 20px}
-th:first-child {text-align: left}
-th:first-child img {margin: 1px -2px 3px 1px}
-th:nth-child(2) img {margin: 1px 5px 3px 2px}
-tfoot th {padding-bottom: 4px}
-tfoot tr:first-child th {vertical-align: middle}
-tfoot td:first-child {padding-left: 0; text-align: left}
-tfoot img, tfoot:nth-child(2) img, tfoot:nth-child(1) img, tfoot:nth-child(3) img, tfoot:nth-child(4) img {margin: 0 2px 3px 0; padding-right: 0}
-tfoot tr:nth-child(n+1) {text-align: left}
-#torrents #dhtDebug th {border-top: var(--border)}
 
 /* torrents */
-#torrents {margin: 10px 0 0 0; border: none; border-collapse: separate; border-spacing: 0; background: #001}
+#torrents {margin: 10px 0 0; border: none; border-collapse: separate; border-spacing: 0; background: #001}
 .iframed #torrents {margin-top: -1px}
 #torrents th {text-align: center}
 #torrents thead th {padding: 2px 1px; border-top: none; background: linear-gradient(180deg,#001, #00000d)}
@@ -148,6 +149,21 @@ td.torrentDetails img, .dirInfo td:first-child img:not(.thumb) {width: 20px; hei
 .active td.torrentAction {background: linear-gradient(to left, rgba(0,0,0,0) 1px, #b3b 2px, rgba(0,0,0,0) 2px); animation: ease active 2s forwards}
 .peerinfo td:nth-child(4) {font-weight: 700}
 .peerinfo .torrentDownloaded {text-align: center}
+#totals {display: inline-block; margin: 2px 0 2px 5px; font-weight: 700}
+
+/* debug */
+.debugConnection {line-height: 1.3; font-family: var(--monospaced); color: #090; padding: 0 5px}
+.debugConnStat b {font-family: var(--bodyfont); color: var(--ink)}
+.debugConnStat, .debugRequests {font-family: var(--monospaced)}
+.debugConnStat {margin-right: 3px; white-space: nowrap}
+.debuginfo b {text-transform: capitalize}
+.debuginfo td:first-child {background: var(--debuginfo) no-repeat center center / 14px; background-blend-mode: luminosity}
+.from, .to {vertical-align: middle; line-height: .5; font-family: sans-serif; font-size: 12pt; font-weight: 700; text-shadow: 0 0 1px #000}
+hr.debug {margin: 3px 0 -5px; width: 100%; display: none; background: #120f35}
+#debugMode {padding: 8px; box-sizing: border-box; font-size: 0; background: var(--debug) no-repeat center center; opacity: 0}
+#debugMode:hover {opacity: 1}
+#dhtDebug th {border-top: var(--border); text-align: center; font-weight: 400; background: linear-gradient(180deg,#001, #000)}
+#torrents th a#debugMode {display: inline-block; vertical-align: middle}
 
 /* details */
 .torrentInfo th:first-child img, #torrentInfoStats img, #trackers img {margin: -1px 5px 1px 6px; max-height: 16px; mix-blend-mode: luminosity}
@@ -446,33 +462,6 @@ input:checked + label + hr + table, input:checked + label + hr + table + table {
 .peerinfo td:first-child {background: var(--peer) no-repeat center center / 18px}
 .peerinfo td, .debuginfo td {padding-top: 5px; padding-bottom: 5px}
 
-/* debug */
-#torrents th a#debugMode {display: inline-block; vertical-align: middle}
-#debugMode {padding: 8px; box-sizing: border-box; font-size: 0; background: var(--debug) no-repeat center center; opacity: 0}
-#debugMode:hover {opacity: 1}
-.debuginfo td:first-child {background: var(--debuginfo) no-repeat center center / 14px; background-blend-mode: luminosity}
-#resourceNotFound th, #resourceNotFound td {padding: 10px 5px}
-.debuginfo b {text-transform: capitalize}
-.debugConnection {line-height: 1.3; font-family: var(--monospaced); color: #090; padding: 0 5px}
-.from, .to {vertical-align: middle; line-height: .5; font-family: sans-serif; font-size: 12pt; font-weight: 700; text-shadow: 0 0 1px #000}
-.debugConnStat {margin-right: 3px; white-space: nowrap}
-.debugConnStat, .debugRequests {font-family: var(--monospaced)}
-.debugConnStat b {font-family: var(--bodyfont); color: var(--ink)}
-#dhtDebug th {border-top: var(--border); text-align: center; font-weight: 400; background: linear-gradient(180deg,#001, #000)}
-hr.debug {margin: 3px 0 -5px; width: 100%; display: none; background: #120f35}
-
-/* Resource Errors */
-.resourceError {margin-bottom: 0; border: none}
-.resourceError th {padding: 10px 10px 10px 40px; font-size: 10pt; border: none; border-bottom: var(--border); background: var(--err) no-repeat left 10px center / 24px, linear-gradient(180deg,#003, #010011)}
-.resourceError td {padding: 10px; border: none; font-size: 10pt}
-.resourceError tr:nth-child(odd) {background: #010011}
-.resourceError tr:nth-child(even) {background: #000}
-#DoesNotExist {margin-top: 10px; border: none}
-#DoesNotExist th {border-top: var(--border)}
-#NotFound {border: var(--border)}
-
-#totals {display: inline-block; margin: 2px 0 2px 5px; font-weight: 700}
-
 /* torrent priorities */
 .priority {width: 1%; vertical-align: middle; white-space: nowrap; font-size: 8pt}
 .priority::after {min-height: 30px; display: inline-block; vertical-align: middle; content: ""}
@@ -624,10 +613,9 @@ td#bwHelp a {display: inline-block; white-space: nowrap; margin-left: 4px}
 th.graphicStatus img, td.graphicStatus img {margin: 2px; width: auto; height: 22px}
 td.trackerDetails img {height: 16px}
 
-/* alternative download bar popup bar text just for our downloads in #torrents*/
-.rowOdd:not(.peerinfo) .torrentDownloaded .percentBarText, .rowEven:not(.peerinfo) .torrentDownloaded .percentBarText {padding: 3px; min-width: 140px; display: inline-block; position: relative; top: -22px; left: -32px; z-index: 999; border-radius: 2px; background: #000; filter: drop-shadow(0 0 1px var(--a)) drop-shadow(0 0 1px #000) drop-shadow(0 0 1px #113)}
-.rowOdd:not(.peerinfo) .torrentDownloaded .percentBarInner, .rowEven:not(.peerinfo) .torrentDownloaded .percentBarInner, .rowOdd:not(.peerinfo) .torrentDownloaded .percentBarOuter, .rowEven:not(.peerinfo) .torrentDownloaded .percentBarOuter {max-height: 16px; max-width: 84px}
-tr:not(.peerinfo) .torrentDownloaded .percentBarText::after {margin-left: -7px; position: absolute; top: 90%; left: 50%; border-width: 7px; border-style: solid; border-color: #000 transparent transparent transparent; content: ""}
+.torrentDownloaded .percentBarText {padding: 3px; min-width: 140px; display: inline-block; position: relative; top: -22px; left: -32px; z-index: 999; border-radius: 2px; background: #000; filter: drop-shadow(0 0 1px var(--a)) drop-shadow(0 0 1px #000) drop-shadow(0 0 1px #113)}
+.torrentDownloaded .percentBarInner, .torrentDownloaded .percentBarOuter {max-height: 16px; max-width: 84px}
+.torrentDownloaded .percentBarText::after {margin-left: -7px; position: absolute; top: 90%; left: 50%; border-width: 7px; border-style: solid; border-color: #000 transparent transparent transparent; content: ""}
 
 /* peerid + client */
 #torrents tt {display: inline-block; letter-spacing: .1em; font-family: var(--monospaced); font-weight: 700}
@@ -777,6 +765,17 @@ td.torrentAction input {margin-top: 1px}
 #torrentEdit textarea {width: 100%; height: 80px; min-height: 80px; resize: vertical}
 #torrentEdit tr:last-child input {margin-right: 0}
 #torrentEdit .info_tracker {min-width: 80px; max-width: none; text-align: left; pointer-events: none}
+
+/* Resource Errors */
+.resourceError {margin-bottom: 0; border: none}
+.resourceError th {padding: 10px 10px 10px 40px; font-size: 10pt; border: none; border-bottom: var(--border); background: var(--err) no-repeat left 10px center / 24px, linear-gradient(180deg,#003, #010011)}
+.resourceError td {padding: 10px; border: none; font-size: 10pt}
+.resourceError tr:nth-child(odd) {background: #010011}
+.resourceError tr:nth-child(even) {background: #000}
+#resourceNotFound th, #resourceNotFound td {padding: 10px 5px}
+#DoesNotExist {margin-top: 10px; border: none}
+#DoesNotExist th {border-top: var(--border)}
+#NotFound {border: var(--border)}
 
 /* animations */
 @keyframes active {from {background: linear-gradient(to left, rgba(0,0,0,0) 1px, #f5f 3px, rgba(0,0,0,0) 3px)}}
