@@ -70,7 +70,7 @@ th img, td img, #closelog, #expand, #shrink {font-size: 0}
 
 /* screenlog */
 #screenlog {margin: 0; padding: 2px 5px; width: auto; height: 56px; overflow: hidden; text-align: left; font: 700 8.5pt var(--bodyfont); color: #778; border-spacing: 0; border-bottom: var(--border); scrollbar-color: #225 #001; scrollbar-width: thin}
-#screenlog, #screenlog.expanded, #screenlog.collapsed {background: url(images/hat.png) no-repeat scroll right top, repeating-linear-gradient(180deg,rgba(0,0,16,.7) 2px, rgba(0,0,48,.5) 4px), url(/viewstat.jsp?stat=[I2PSnark]+InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true) no-repeat, linear-gradient(180deg,#001, #000008); background-size: 80px auto, 100% 4px, calc(100% - 75px) calc(100% - 8px), 100%; background-position: right -4px bottom -10px, center center, left bottom, center top; background-blend-mode: normal, overlay, normal, normal}
+#screenlog, #screenlog.expanded, #screenlog.collapsed {background: url(../ubergine/images/hat.png) no-repeat scroll right top, repeating-linear-gradient(180deg,rgba(0,0,16,.7) 2px, rgba(0,0,48,.5) 4px), url(/viewstat.jsp?stat=[I2PSnark]+InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true) no-repeat, linear-gradient(180deg,#001, #000008); background-size: 80px auto, 100% 4px, calc(100% - 75px) calc(100% - 8px), 100%; background-position: right -4px bottom -10px, center center, left bottom, center top; background-blend-mode: normal, overlay, normal, normal}
 .iframed #screenlog {margin-top: -5px}
 #screenlog:hover, #screenlog:focus {overflow: auto}
 #screenlog:focus {box-shadow: inset 0 0 0 1px #930}
