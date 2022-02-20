@@ -1145,7 +1145,7 @@ td.optionsave {padding: 7px 5px; text-align: right; border-top: var(--border_inn
 #netdboverview table td {border-right: none !important}
 #netdboverview table td span, #netdboverview table td b, #netdboverview table td a {margin-top: 0; margin-bottom: 0; display: inline-block; vertical-align: middle}
 #netdbtiers td b, #netdboverview table td b {margin: 0 8px 0 0; min-width: 22px}
-#netdbcountrylist img {margin: 0 8px; padding: 0; width: 24px; height: 18px; text-align: right; font-size: 70%; border: var(--border_badge); border-radius: 3px}
+#netdbcountrylist img {margin: 0 8px; padding: 1px; width: 24px; height: auto; text-align: right; font-size: 70%; border-radius: 4px; border: var(--border)}
 .netdb_header img[src^="/flags"] {margin: 1px 1px 0 4px; width: 28px; height: auto; vertical-align: top; border: var(--border_badge); border-radius: 3px}
 table[cellspacing="30"] > tbody > tr > th[colspan="3"] {padding: 10px; word-spacing: .1em; letter-spacing: .08em; text-transform: uppercase; font-size: 11pt}
 
@@ -2606,6 +2606,7 @@ h4#updateplugins {margin-top: -15px}
 #sidebar #minigraphcontainer {margin: -43px -4px 0 1px; width: 260px; height: 39px; background-size: 260px 40px; background-position: right bottom}
 #sidebar #minigraph {margin-top: -22px; margin-left: -4px; height: 38px; width: 260px}
 #homepage #minigraph {margin-top: -21px}
+#netdbcountrylist img {width: 28px; height: auto}
 #netdboverview table th, #netdboverview table td {padding: 7px 8px}
 #newsStatus, #news #newsDisplay a, .newsAuthor {font-size: 9pt}
 #news #newsStatus {padding-top: 0; margin-left: -10px}
