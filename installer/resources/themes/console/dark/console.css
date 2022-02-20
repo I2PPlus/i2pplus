@@ -266,7 +266,8 @@ div[id^="config_"].main {padding-bottom: 14px}
 
 /* news */
 #news {margin: -1px 5px 0 226px; padding: 6px 15px 8px; min-width: 655px; font-size: 8pt; text-align: right; box-shadow: 0 1px 5px #000}
-#homepage #news {background: var(--newsbg), var(--radar) no-repeat right bottom / auto 250px, #010; background-blend-mode: normal, normal, exclusion}
+#homepage #news {position: relative; z-index: 1; background: var(--newsbg), var(--radar) no-repeat right bottom / auto 250px, #000}
+#homepage #news::before {position: absolute; top: 0; bottom: 0; left; 0; right: 0; z-index: 5;content: ""; display: inline-block; width: 100%; height: 100%; background: rgba(0,18,0,.4)}
 #news .newsentry:first-child {margin-top: -3px}
 #news h3 font {letter-spacing: .2em; text-transform: none}
 #news h3, #newspage h3 {letter-spacing: .03em; text-align: left; font-size: 10pt}
@@ -280,6 +281,7 @@ div[id^="config_"].main {padding-bottom: 14px}
 #news p, #newscontent p {margin: 0 15px; font-size: 9pt}
 #news p:nth-child(n+2), #newscontent p:nth-child(n+2) {margin-top: 8px}
 #news hr {margin: 8px 0 5px}
+#news .newsentry, #news hr, #news #newsStatus, #news #newsDisplay {position: relative; z-index: 10}
 #news #newsStatus {padding-top: 3px; padding-bottom: 1px; float: left}
 #newsDisplay a, #graphopts a, #routerinfo a, #routerinformation tr:nth-child(n+2) a:not(#revision), #fullhistory a, .graphstat, .graphstat:visited {margin: 0 -2px; padding: 2px 10px; color: var(--a); border: 1px solid rgba(0,24,0,.5); border-radius: 15px; box-shadow: var(--highlight); background: rgba(0,48,0,.3)}
 #newsDisplay a {min-width: 90px; text-align: center}

@@ -53,7 +53,7 @@
   --navbar: linear-gradient(180deg,#1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%);
   --nav_hover: linear-gradient(180deg,#730,#620 50%,#410 50%,#000);
   --nav: linear-gradient(180deg,#002900, #000400);
-  --newsbg: var(--bg_title) left top / 2px, repeating-linear-gradient(180deg,rgba(0,0,0,.8) 2px, rgba(0,56,0,.5) 4px) repeat center center / 4px 100%;
+  --newsbg: var(--bg_title) left top / 2px, repeating-linear-gradient(180deg,rgba(0,0,0,.5) 2px, rgba(0,32,0,.5) 4px) repeat center center / 4px 100%;
   --on: #6b6, 0 0 0 1px rgba(0,0,0,.7), 0 0 1px 0 rgba(0,0,0,.5);
   --option_highlight: inset 0 0 0 1px #002500;
   --outline: 0 0 0 1px #000;
