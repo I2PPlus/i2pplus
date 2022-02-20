@@ -26,7 +26,7 @@ a:link tt, a:visited tt {color: #4e47bf}
 a:active tt {color: #9fe9f9}
 code {text-align: left; font: 9pt var(--monospaced); color: #393}
 h2, h3, h4 {box-shadow: var(--bevel)}
-h1, h2, h3, .th_title {background: var(--title); background-size: 4px 100%, 100%}
+h1, h2, h3, .th_title {background: var(--title)}
 h1, .confignav, .main, .news {box-shadow: var(--bevel_h1)}
 h1 {margin: 0 3px 0 212px; padding: 13px 15px 12px; min-width: 610px; position: relative; z-index: 999; line-height: 1.2; letter-spacing: .15em; text-align: left; text-transform: uppercase; white-space: normal; font-size: 17pt; font-weight: 700; font-style: normal; color: var(--ink); text-shadow: 0 0 2px #010011; border: var(--border)}
 h2, h2.welcome {font-size: 12pt; color: var(--ink); text-shadow: 0 0 2px #010011; letter-spacing: .05em; padding: 10px; border: var(--border_inner); border-radius: 2px; vertical-align: middle; margin: 15px 0 12px 0; text-transform: uppercase; word-wrap: break-word}
@@ -465,7 +465,7 @@ div[id^="config_"].main {padding-bottom: 14px}
 #newsStatus, #news #newsDisplay a {font-size: 8pt}
 #newsStatus {float: left; color: var(--ink)}
 .news h3, #newspage h3 {padding-left: 30px; text-align: left; font-size: 9.5pt; letter-spacing: .08em; color: var(--ink); padding: 6px 10px 6px 30px; background: var(--news) no-repeat left 8px center, var(--title); background-size: 16px, 4px 100%, 100%}
-.news h3 {font-size: 11pt; border: none; border-bottom: var(--border_inner); background: var(--news) no-repeat 8px center / 16px}
+.news h3 {font-size: 11pt; border: none; border-bottom: var(--border_inner); background: var(--news) no-repeat 8px center / 16px, var(--title)}
 #news .newsentry h3 {border: var(--border_inner)}
 
 #config_ui, #netdb {padding-bottom: 3px}
@@ -1121,7 +1121,7 @@ td.optionsave {padding: 7px 5px; text-align: right; border-top: var(--border_inn
 #netdboverview {margin: -4px auto 8px; background: repeating-linear-gradient(180deg,rgba(0,0,0,.7) 2px, rgba(0,0,16,.5) 4px); background-size: 100% 4px}
 #netdboverview tr {background: none}
 #netdboverview table tr:hover td {background: #202}
-#netdboverview th {background: var(--title); background-size: 4px 100%, 100%}
+#netdboverview th {background: var(--title)}
 #netdboverview table th {box-shadow: none; background: linear-gradient(180deg,#080818, #000008)}
 #netdboverview td {padding: 0; background: none}
 #netdboverview td {border-left: var(--border_inner); border-right: var(--border_inner)}
@@ -1340,8 +1340,8 @@ h3[id="udpcon"] {width: auto}
 /* home */
 #home .welcome h2 {margin-top: 12px}
 #homepanel {margin: 0 -8px}
-#applinks, #sitelinks {margin: 11px -8px -9px -8px; padding: 7px 8px 7px 34px; font-size: 10.5pt; text-align: left; text-transform: uppercase; letter-spacing: .08em; word-spacing: .1em; letter-spacing: 2px; border: var(--border); background: url(images/favicon.svg) no-repeat 10px center, var(--title); background-size: 16px, 4px 100%, 100%; background-blend-mode: luminosity}
-#sitelinks {margin-bottom: -13px; position: relative; top: -4px; clear: left; background: var(--globe) no-repeat 10px center, var(--title); background-size: 16px, 4px 100%, 100%}
+#applinks, #sitelinks {margin: 11px -8px -9px -8px; padding: 7px 8px 7px 34px; font-size: 10.5pt; text-align: left; text-transform: uppercase; letter-spacing: .08em; word-spacing: .1em; letter-spacing: 2px; border: var(--border); background: url(images/favicon.svg) no-repeat 10px center / 16px, var(--title); background-blend-mode: luminosity}
+#sitelinks {margin-bottom: -13px; position: relative; top: -4px; clear: left; background: var(--globe) no-repeat 10px center / 16px, var(--title)}
 #applinks a, #sitelinks a {width: auto; display: inline; font-size: 0}
 #applinks img, #sitelinks img {margin-top: 1px; opacity: .5}
 #applinks a img, #sitelinks a img {display: none}
@@ -1416,11 +1416,11 @@ h3[id="udpcon"] {width: auto}
 #sitemapcontainer {padding: 0 0 4px}
 #sitemapcontainer h3 {margin-bottom: 6px; padding-top: 8px; padding-bottom: 8px}
 #sitemapcontainer h3:nth-child(n+2) {margin-top: 2px}
-#sitemap h3 {margin-left: -7px; margin-right: -7px; padding-left: 30px; letter-spacing: .12em; font-size: 10.5pt; border: var(--border); background: url(images/favicon.svg) no-repeat 8px center / 16px, var(--title); background-size: 16px, 4px 100%}
-#sitemap h3:nth-of-type(2) {background: var(--infobox) no-repeat 8px center, var(--title); background-size: 16px, 4px 100%}
-#sitemap h3:nth-of-type(3) {background: var(--configure) no-repeat 8px center, var(--title); background-size: 16px, 4px 100%}
-#sitemap h3:nth-of-type(4) {background: var(--help) no-repeat 8px center, var(--title); background-size: 16px, 4px 100%}
-#sitemap h3:nth-of-type(5) {background: var(--globe) no-repeat 8px center,var(--title); background-size: 16px, 4px 100%}
+#sitemap h3 {margin-left: -7px; margin-right: -7px; padding-left: 30px; letter-spacing: .12em; font-size: 10.5pt; border: var(--border); background: url(images/favicon.svg) no-repeat 8px center / 16px, var(--title)}
+#sitemap h3:nth-of-type(2) {background: var(--infobox) no-repeat 8px center / 16px, var(--title)}
+#sitemap h3:nth-of-type(3) {background: var(--configure) no-repeat 8px center / 16px, var(--title)}
+#sitemap h3:nth-of-type(4) {background: var(--help) no-repeat 8px center / 16px, var(--title)}
+#sitemap h3:nth-of-type(5) {background: var(--globe) no-repeat 8px center / 16px, var(--title)}
 .sitemapLink, .sitemapLabel {display: inline-block; width: 180px; text-align: center; border: var(--border_inner); background: #000; will-change: transform}
 .sitemapLink {position: relative}
 a .sitemapLink, a:visited .sitemapLink {color: var(--a)}
@@ -1523,14 +1523,14 @@ span.b32 {margin: -2px 6px -2px 0; padding: 3px 8px; min-width: auto; line-heigh
 #tunnel_defs td:nth-child(even) {width: 1%; white-space: nowrap}
 #tunnel_defs td:nth-last-child(2) {border-right: none !important}
 #tunnel_defs .tunnel_cap {margin: 2px 8px}
-#tunnels h3.client {padding-left: 34px; background: var(--client) no-repeat 8px center, var(--title); background-size: 19px, 4px 100%, 100%}
+#tunnels h3.client {padding-left: 34px; background: var(--client) no-repeat 8px center / 19px, var(--title)}
 #tunnels h3 {padding-top: 8px; padding-bottom: 8px}
-#tunnels h3:last-of-type {padding-left: 34px; background: var(--speed) no-repeat 8px center, var(--title); background-size: 19px, 4px 100%, 100%}
+#tunnels h3:last-of-type {padding-left: 34px; background: var(--speed) no-repeat 8px center / 19px, var(--title)}
 #tunnels h3 img {margin: 0 4px 0 0}
-#tunnels h3.ping {padding-left: 34px; background: var(--ping) no-repeat 8px center, var(--title); background-size: 19px, 4px 100%, 100%}
-#tunnels h3.server {padding-left: 34px; background: var(--server) no-repeat 8px center, var(--title); background-size: 19px, 4px 100%, 100%}
-#tunnels #exploratory {padding-left: 34px; background: var(--globe) no-repeat 8px center, var(--title); background-size: 19px, 4px 100%, 100%}
-#tunnels #participating {padding-left: 34px; background: var(--share) no-repeat 8px center, var(--title); background-size: 19px, 4px 100%, 100%}
+#tunnels h3.ping {padding-left: 34px; background: var(--ping) no-repeat 8px center / 19px, var(--title)}
+#tunnels h3.server {padding-left: 34px; background: var(--server) no-repeat 8px center / 19px, var(--title)}
+#tunnels #exploratory {padding-left: 34px; background: var(--globe) no-repeat 8px center / 19px, var(--title)}
+#tunnels #participating {padding-left: 34px; background: var(--share) no-repeat 8px center / 19px, var(--title)}
 #tunnels th {padding: 7px 2px 8px; font-size: 90%}
 #tunnels td {padding: 5px 2px}
 #tunnels .tunneldisplay .cells:nth-child(3) {white-space: nowrap}
@@ -2253,20 +2253,20 @@ h1, .main h2, #applinks, #sitelinks, .main h3 {-webkit-text-stroke: 1px rgba(179
 #help h2 {font-size: 12pt}
 #help .confignav + div > h2, #help .confignav + .infohelp + div > h2 {margin-top: -5px}
 
-#configurationhelp h2, #advancedsettings h2, #filterlist h2 {padding-left: 38px; background: var(--settings_inert) no-repeat 10px center, var(--title); background-size: 20px, 4px 100%, 100%}
-#sidebarhelp h2, #reachabilityhelp h2 {padding-left: 38px; background: url(/themes/console/images/sidebar.svg) no-repeat 10px center, var(--title); background-size: 20px, 4px 100%, 100%}
-#reseedhelp h2 {padding-left: 38px; background: var(--reseed) no-repeat 10px center, var(--title); background-size: 20px, 4px 100%, 100%}
-#newuserguide h2 {padding-left: 38px; background: var(--question) no-repeat 10px center, var(--title); background-size: 20px, 4px 100%, 100%}
-#newuserguide h2 {padding-left: 38px; background: url(images/favicon.svg) no-repeat 10px center, var(--title); background-size: 20px, 4px 100%, 100%}
-#troubleshoot h2 {padding-left: 38px; background: var(--wrench) no-repeat 10px center, var(--title); background-size: 20px, 4px 100%, 100%}
-#legal h2 {padding-left: 38px; background: var(--legal) no-repeat 10px center, var(--title); background-size: 20px, 4px 100%, 100%}
-#faq h2, #glossary h2 {padding-left: 38px; background: var(--question) no-repeat 10px center, var(--title); background-size: 20px, 4px 100%, 100%}
-#webhosting h2 {padding-left: 38px; background: var(--server) no-repeat 10px center, var(--title); background-size: 20px, 4px 100%, 100%}
-#themeoverride h2 {padding-left: 38px; background: var(--ui) no-repeat 10px center, var(--title); background-size: 20px, 4px 100%, 100%}
-#browserconfig h2 {padding-left: 38px; background: var(--firefox) no-repeat 10px center, var(--title); background-size: 20px, 4px 100%, 100%}
-#tunnman h2 {padding-left: 38px; background: var(--hardhat) no-repeat 10px center, var(--title); background-size: 20px, 4px 100%, 100%}
+#configurationhelp h2, #advancedsettings h2, #filterlist h2 {padding-left: 38px; background: var(--settings_inert) no-repeat 10px center / 20px, var(--title)}
+#sidebarhelp h2, #reachabilityhelp h2 {padding-left: 38px; background: url(/themes/console/images/sidebar.svg) no-repeat 10px center / 20px, var(--title)}
+#reseedhelp h2 {padding-left: 38px; background: var(--reseed) no-repeat 10px center / 20px, var(--title)}
+#newuserguide h2 {padding-left: 38px; background: var(--question) no-repeat 10px center / 20px, var(--title)}
+#newuserguide h2 {padding-left: 38px; background: url(images/favicon.svg) no-repeat 10px center / 20px, var(--title)}
+#troubleshoot h2 {padding-left: 38px; background: var(--wrench) no-repeat 10px center / 20px, var(--title)}
+#legal h2 {padding-left: 38px; background: var(--legal) no-repeat 10px center / 20px, var(--title)}
+#faq h2, #glossary h2 {padding-left: 38px; background: var(--question) no-repeat 10px center / 20px, var(--title)}
+#webhosting h2 {padding-left: 38px; background: var(--server) no-repeat 10px center / 20px, var(--title)}
+#themeoverride h2 {padding-left: 38px; background: var(--ui) no-repeat 10px center / 20px, var(--title)}
+#browserconfig h2 {padding-left: 38px; background: var(--firefox) no-repeat 10px center / 20px, var(--title)}
+#tunnman h2 {padding-left: 38px; background: var(--hardhat) no-repeat 10px center / 20px, var(--title)}
 #changelog h2, #advancedsettings h2 {margin: 0 0 -11px; word-spacing: .1em; letter-spacing: .08em; text-align: left; text-transform: uppercase; font-size: 11pt; border-radius: 0}
-#changelog h2 {padding-left: 38px; background: var(--changelog) no-repeat 10px center, var(--title); background-size: 20px, 4px 100%, 100%}
+#changelog h2 {padding-left: 38px; background: var(--changelog) no-repeat 10px center / 20px, var(--title)}
 #advancedsettings h2 {margin-bottom: -13px}
 #advancedsettings p.infohelp {margin-top: 12px; margin-bottom: -2px}
 #advancedsettings #configinfo {margin-bottom: 9px}
@@ -2681,8 +2681,6 @@ th code {font-size: 9pt}
 .sb td:first-child {max-width: 120px}
 #sb_services {width: 260px}
 #sidebar #sb_internals, #sidebar #sb_advanced, #sidebar #sb_help {margin: -3px 0 -9px -7px; width: 255px}
-#sb_internals td:first-child, #sb_advanced td:first-child, #sb_help td:first-child {margin: 0; width: auto}
-#sb_internals td:first-child, #sb_advanced td:first-child, #sb_help td:first-child {padding: 0 0 5px}
 #sb_advanced td:first-child {padding-bottom: 6px}
 #sidebar #sb_newsheadings table {width: 258px}
 #sb_newsheadings td:first-child {width: 240px; max-width: 240px}

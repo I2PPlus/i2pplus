@@ -51,7 +51,7 @@
   --th: repeating-linear-gradient(180deg, rgba(0,0,72,.3) 2px, rgba(0,0,0,.4) 4px) center center / 100% 4px, repeating-linear-gradient(90deg, #002 2px, #000 4px) center center / 4px 100%;
   --text_focus: linear-gradient(180deg,#002,#000028);
   --titlebg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 2'%3E%3Cpath fill='%23000018' d='M0 0h1v1H0z'/%3E%3Cpath d='M0 1h1v1H0z'/%3E%3C/svg%3E");
-  --title: repeating-linear-gradient(90deg, rgba(0,0,80,.3) 2px, rgba(0,0,0,.2) 4px) center center / 100% 4px, var(--titlebg) center center / 100%, #001;
+  --title: linear-gradient(180deg,#002,#000);
 }
 
 html, body {
