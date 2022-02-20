@@ -25,8 +25,7 @@ h2 a:hover {color: var(--hover)}
 h2 a:visited {color: #191}
 h2, h3, h4 {box-shadow: var(--highlight); contain: paint}
 h2 {margin: 15px 0 12px 0; padding: 10px; vertical-align: middle; letter-spacing: .08em; word-spacing: .1em; word-wrap: break-word; text-transform: uppercase; font-size: 12pt; text-shadow: 0 0 2px #010; border: var(--border); border-radius: 2px}
-h3, th {position: relative; overflow: hidden}
-h3 {margin: 12px 0 10px 0; padding: 7px 10px; letter-spacing: .08em; text-transform: uppercase; text-shadow: 0 0 2px #010; border: var(--border)}
+h3 {margin: 12px 0 10px 0; padding: 7px 10px; position: relative; overflow: hidden; letter-spacing: .08em; text-transform: uppercase; text-shadow: 0 0 2px #010; border: var(--border)}
 h3 + table {position: relative; z-index: 0}
 h4 {margin: 5px 0 10px 0; padding: 0 0 10px 0; font-size: 11pt; border-bottom: 1px; border-bottom: var(--border_hard)}
 .hide, .hideme, #hideme {display: none}
@@ -1469,7 +1468,7 @@ table.logtable, #logs #enviro {margin-top: -1px}
 td.infohelp.joinfamily {padding: 20px 24px 20px 58px}
 td.optionsave {padding: 5px; text-align: right; border-top: var(--border); background: #000}
 th .h3navlinks, #config_stats .h3navlinks, #config_webapps .h3navlinks {margin-top: 0; line-height: 0}
-th.th_title {padding: 8px 10px; text-align: left; background: var(--h1); background-size: 2px, 100% 4px, 100%, 128px}
+th.th_title {padding: 8px 10px; position: static; text-align: left; background: var(--h1); background-size: 2px, 100% 4px, 100%, 128px}
 #bannedpeercount {background: #000 var(--ban) no-repeat 15px center / 28px}
 #clientsconfig {margin-top: -2px}
 #clientsconfig, #webappconfigactions, #pluginconfigactions {margin-bottom: -4px; padding: 5px; border: var(--border); background: #000}
@@ -1729,7 +1728,7 @@ form > table {font-size: 9pt}
 #tunnelconfig td:first-child {text-align: right; font-weight: 700; white-space: nowrap;}
 #tunnelconfig input[type=text] {margin: 6px 16px 6px 0; width: calc(100% - 4px)}
 #config_tunnels hr {display: none}
-#tunnelconfigsave {margin-top: -1px}
+#tunnelconfigsave {margin-top: 0; border-top: var(--border)}
 
 /* configlogging */
 #config_logging p {margin: 3px 0 5px; text-align: left}
