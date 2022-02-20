@@ -768,7 +768,7 @@ h3[id="udpcon"] {width: auto}
 #view_profile .viewprofile {margin-right: 6px}
 #view_profile .identicon {margin: 0; width: 27px; height: 27px; position: absolute; top: 2px; right: 2px}
 #viewprofile td {padding: 0}
-#viewprofile pre, pre#activetransports {margin: 0; padding: 20px 20px 0; width: calc(100% - 46px); line-height: 20px; letter-spacing: .05em; text-shadow: var(--textshadow); border-left: 5px solid #030; background: repeating-linear-gradient(180deg,rgba(0,8,0,.6) 0, rgba(0,8,0,.6) 20px, rgba(0,20,0,.6) 20px, rgba(0,20,0,.6) 40px); background-size: 100% 40px}
+#viewprofile pre, pre#activetransports {margin: 0; padding: 20px 20px 0; width: calc(100% - 46px); line-height: 20px; letter-spacing: .05em; text-shadow: var(--textshadow); border-left: 7px solid #242; background: repeating-linear-gradient(180deg,rgba(0,8,0,.6) 0, rgba(0,8,0,.6) 20px, rgba(0,20,0,.6) 20px, rgba(0,20,0,.6) 40px); background-size: 100% 40px}
 #viewprofile span {margin: -26px -1px -1px 0; padding: 5px; float: right; border: var(--border); background: #000}
 #profiles_overview {margin-bottom: 9px; background-image: url(../images/profile.svg)}
 #peerprofiles + h3 {margin-top: 10px}
@@ -2080,7 +2080,7 @@ input[type=text]:focus::placeholder, #homesearch input.search:focus::placeholder
 #routerinfo td:first-child, #routerinfo td:nth-child(3) {text-align: right; white-space: nowrap}
 #routerinfo td:nth-child(2):not([colspan]) {white-space: nowrap; border-right: var(--border)}
 #routerinformation {padding-bottom: 12px}
-#routerinformation h3 {margin-bottom: -1px; background: var(--title)}
+#routerinformation h3 {margin-bottom: -2px; background: var(--title)}
 #routerinformation h3 span a {padding-right: 6px; margin: -14px 0 -11px; vertical-align: middle; text-transform: capitalize}
 #routerinformation .h3navlinks {margin-top: 1px}
 #routerinformation .h3navlinks a::before {margin: 0 3px 0 -2px; width: 14px; height: 14px; display: inline-block; vertical-align: middle; background: var(--eye) no-repeat left center / 14px; content: ""}
