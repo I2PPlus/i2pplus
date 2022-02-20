@@ -602,7 +602,7 @@ td#bwHelp a {display: inline-block; white-space: nowrap; margin-left: 4px}
 
 /* torrent filter bar */
 #torrentDisplay {margin: -1px 0; padding: 0; display: block; position: sticky; top: 48px; z-index: 500; line-height: 1.5; border: var(--border); box-shadow: var(--highlight);; background: linear-gradient(180deg,#001, #00000d)}
-.iframed #torrentDisplay {margin: -1px 0 0; position: static; border-left: none; border-right: none}
+.iframed #torrentDisplay {margin: -1px 0 1px; position: static; border-left: none; border-right: none}
 #torrentDisplay input {position: absolute; opacity: 0; z-index: -1; height: 0; width: 0}
 #torrentDisplay label {padding: 1px 10px 3px; min-width: 80px; display: inline-block; font-size: 9pt; font-weight: 700; color: #89f; border-right: 1px solid #171c3f; box-shadow: var(--highlight); background: var(--badge)}
 #torrentDisplay label:hover {color: #fff; background: var(--btn_hover_radial), var(--nav_hover)}
