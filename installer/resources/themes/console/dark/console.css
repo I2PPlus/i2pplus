@@ -2645,7 +2645,7 @@ input[type=text], input[type=password] {padding: 7px 9px}
 .sb_info.sb_update .percentBarOuter {margin-bottom: -5px}
 #sidebar #restartRequired.sb_info.sb_update {padding: 3px 3px 4px}
 .sb_netstatus, .tunnelBuildStatus {padding: 9px 3px}
-.sb_netstatus::before, .tunnelBuildStatus::before {margin: -1px 2px; height: 20px}
+.sb_netstatus::before, .tunnelBuildStatus::before {margin: -1px 2px; height: 24px}
 .sb_update {padding-bottom: 3px}
 .sb_update b {margin-bottom: 2px}
 .search td {padding: 6px 6px 6px 5px}
