@@ -68,10 +68,11 @@ ul {margin: 0; padding: 0}
 .extlink::after, input, button {will-change: transform}
 
 /* sidebar */
-#sb_wrap {margin: 0 0 10px 5px; padding: 0; width: auto; display: block; position: absolute; text-align: center; will-change: transform}
+#sb_wrap {margin: 0 0 10px 5px; padding: 0; width: auto; display: block; text-align: center; will-change: transform}
 .iframed #sb_wrap {display: none}
-.sb table {margin: -5px -7px -6px -8px; padding: 1px 1px 0; width: 210px; overflow: hidden; text-align: center; font-size: 8pt; border: 0; border-collapse: separate; border-spacing: 2px; background: none;}
-#sidebar {margin-bottom: 7px; padding: 8px 10px 8px; width: 194px; text-align: center; font-size: 8pt; border: var(--border); border-radius: 3px; background: repeating-linear-gradient(90deg, rgba(0,0,0,.4) 2px, rgba(0,16,0,.3) 4px), repeating-linear-gradient(180deg,rgba(0,0,0,.8) 2px, rgba(0,16,0,.8) 4px), var(--camo) #000; background-size: 4px 100%, 100% 4px, 1800px; contain: paint}
+#xhr {width: calc(100% + 19px); margin-left: -9px; display: inline-block}
+.sb table {margin: -5px 0 -6px; padding: 1px 1px 0; overflow: hidden; text-align: center; font-size: 8pt; border: 0; border-collapse: separate; border-spacing: 2px; background: none;}
+#sidebar {padding: 8px 10px 8px; width: 194px; text-align: center; font-size: 8pt; border: var(--border); border-radius: 3px; background: repeating-linear-gradient(90deg, rgba(0,0,0,.4) 2px, rgba(0,16,0,.3) 4px), repeating-linear-gradient(180deg,rgba(0,0,0,.8) 2px, rgba(0,16,0,.8) 4px), var(--camo) #000; background-size: 4px 100%, 100% 4px, 1800px; contain: paint}
 #sb_logo {width: 100%; margin: -8px 0 -9px -10px; padding: 9px 10px 10px; display: inline-block; border-radius: 3px 3px 0 0; box-shadow: var(--bevel); background: linear-gradient(180deg,rgba(0,64,0,.3), rgba(0,24,0,.3)), repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px); background-size: 100%, 100% 4px}
 #sb_logo:hover {box-shadow: var(--highlight), inset 0 0 0 2px rgba(255,96,0,.6); background: linear-gradient(180deg,rgba(0,64,0,.6), rgba(0,24,0,.6)), repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px); background-size: 100%, 100% 4px; transition: ease background .15s}
 #sb_logo:active {box-shadow: var(--highlight), inset 0 0 0 2px rgba(255,144,0,.5), inset 6px 6px 6px rgba(0,0,0,.7); background: linear-gradient(180deg,rgba(0,32,0,.3), rgba(0,48,0,.3)), repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px)}
@@ -99,7 +100,7 @@ ul {margin: 0; padding: 0}
 .sb table:not(#sb_localtunnels):not(#sb_services):not(#sb_advanced)::before {width: 0; height: 1px; position: absolute; top: -1px; left: -1px; display: block; background: linear-gradient(90deg, #730, #940); content: ""; animation: bar .15s ease-in-out .15s reverse; backface-visibility: hidden; will-change: transform}
 #sb_peers, #sb_peersadvanced, #sb_tunnels, #sb_queue, #sb_bandwidth, #sb_general, #sb_advancedgeneral, #sb_localtunnels, #sb_advanced, #sb_internals, #sb_services {margin-top: -9px; margin-bottom: -8px; padding: 0 1px 2px; border-top: 1px solid rgba(16,64,16,.3); border-bottom: 1px solid rgba(16,64,16,.3)}
 #sb_advanced, #sb_internals, #sb_services, #sb_help {margin-top: -6px; padding: 0 1px}
-#sb_localtunnels {margin: -6px -7px -7px -8px; padding: 0}
+#sb_localtunnels {margin: -6px 0 -7px; padding: 0}
 #sb_general td, #sb_shortgeneral td, #sb_advancedgeneral td, #sb_peersadvanced td {white-space: nowrap}
 #sb_general td:first-child, #sb_shortgeneral td:first-child, #sb_advancedgeneral td:first-child, #sb_peersadvanced td:first-child {max-width: 130px}
 #sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after, #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {min-height: 14px; display: inline-block; content: ""}
@@ -155,7 +156,7 @@ p:empty + .sb_notice {margin-top: 9px}
 .warntext {color: #b00}
 
 /* sidebar news */
-#sb_newsheadings {margin-left: -12px; margin-bottom: -7px; width: 206px; text-align: right}
+#sb_newsheadings {margin-bottom: -7px}
 #sidebar.sb #sb_newsheadings table {margin: -8px 0 3px}
 #sb_newsheadings table::before {content: none}
 #sb_newsheadings a {padding: 0 3px 0 0; width: 100%; display: inline-block}
@@ -163,24 +164,24 @@ p:empty + .sb_notice {margin-top: 9px}
 #sidebar #sb_newsheadings tr:last-child td {border-bottom: none}
 
 /* mini sidebar graph */
-#sb_graphcontainer {margin: -6px -9px -8px; padding: 0 1px 1px; height: 41px; position: relative; z-index: 10; overflow: hidden; box-shadow: inset 0 0 0 1px #131, inset 0 0 0 2px #000, inset 0 0 3px 1px #040; background: repeating-linear-gradient(90deg, rgba(0,0,0,0) 14px, rgba(64,160,64,.3) 15px, rgba(0,0,0,0) 15px, rgba(0,0,0,0) 30px), repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(48,152,48,.2), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 14px)}
+#sb_graphcontainer {margin: -6px 0 -8px; padding: 0 1px 1px; width: calc(100% - 3px); height: 41px; position: relative; z-index: 10; overflow: hidden; box-shadow: inset 0 0 0 1px #131, inset 0 0 0 2px #000, inset 0 0 3px 1px #040; background: repeating-linear-gradient(90deg, rgba(0,0,0,0) 14px, rgba(64,160,64,.3) 15px, rgba(0,0,0,0) 15px, rgba(0,0,0,0) 30px), repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(48,152,48,.2), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 14px)}
 #sb_graphcontainer::after {width: calc(100% - 4px); display: inline-block; position: absolute; top: 2px; right: 2px; bottom: 2px; left: 2px; z-index: 10; box-shadow: var(--outline); background: var(--graphoverlay); content: ""; pointer-events: none}
 #sb_graphcontainer:hover a {cursor: zoom-in}
 #sb_graphstats {padding: 2px 8px; display: inline-block; position: relative; z-index: 1000; font-size: 110%; font-weight: 700; color: #050; text-shadow: none; border: var(--border_soft); border-top: none; border-radius: 0 0 2px 2px; background: #000; opacity: 0; transition: ease opacity .3s; pointer-events: none}
 #sb_graphcontainer:hover #sb_graphstats {opacity: 1; transition: ease opacity .2s}
 #minigraphcontainer {margin-top: -43px; margin-left: 1px; width: 204px; height: 39px; background-repeat: no-repeat; background-size: 204px 40px}
-#minigraph {margin-top: -18px; height: 38px; width: 208px; position: relative; z-index: 5}
+#minigraph {margin: -18px 0 0; width: 100%; height: 38px; position: relative; z-index: 5}
 #xhr > hr + #sb_graphcontainer > span + a > #minigraph {height: 39px}
 #homepage #minigraph {margin-top: -18px}
 #homepage #minigraphcontainer {margin-top: -42px; height: 38px}
 
 /* status bar */
-.percentBarOuter {margin: -3px 0 -5px -7px; width: 205px; position: relative; border: var(--border_soft); box-shadow: var(--highlight), inset 0 3px 3px rgba(0,0,0,.8); background: linear-gradient(90deg, rgba(0,128,0,.05) 45%, rgba(255,96,0,.1), rgba(255,0,0,.1)), repeating-linear-gradient(90deg, #000 1px, #000 2px, #010 2px, #010 4px); opacity: 1}
+.percentBarOuter {margin: -3px 0 -5px; width: calc(100% - 3px); position: relative; border: var(--border_soft); box-shadow: var(--highlight), inset 0 3px 3px rgba(0,0,0,.8); background: linear-gradient(90deg, rgba(0,128,0,.05) 45%, rgba(255,96,0,.1), rgba(255,0,0,.1)), repeating-linear-gradient(90deg, #000 1px, #000 2px, #010 2px, #010 4px); opacity: 1}
 .percentBarOuter:hover .percentBarText {opacity: 1; transition: ease opacity .2s}
 .percentBarInner {height: 14px; max-width: 100%; border-right: var(--border_soft); box-shadow: var(--highlight); background: linear-gradient(180deg,rgba(28, 148, 58, .6), rgba(9, 47, 16, .6) 50%, rgba(9, 27, 5, .6) 50%, rgba(9, 21, 3, .7))}
 #sb_memoryBar .percentBarInner {background: linear-gradient(90deg, rgba(0,0,0,.05), rgba(128,128,0,.15) 160px, rgba(196,0,0,.15) 180px, rgba(196,0,0,.2)), linear-gradient(180deg,rgba(28, 148, 58, .6), rgba(9, 47, 16, .6) 50%, rgba(9, 27, 5, .6) 50%, rgba(9, 21, 3, .6), rgba(0,0,0,.3))}
 .percentBarText {width: 100%; vertical-align: middle; float: left; text-align: center; font-weight: 700; opacity: 0; transition: ease opacity .2s}
-#sb_memoryBar.percentBarOuter {margin: -6px 0 -8px -9px; width: 210px}
+#sb_memoryBar.percentBarOuter {margin: -6px 0 -8px}
 #sb_memoryBar .percentBarText {width: 70%; line-height: 22px; float: none; position: absolute; top: -23px; left: 15%; right: 15%; font-size: 110%; border-radius: 3px; background: #010; filter: drop-shadow(0 0 1px #252) drop-shadow(0 0 1px #000)}
 #sb_memoryBar .percentBarText::after {width: 0; height: 0; position: absolute; left: calc(50% - 5px); bottom: -14px; border-style: solid; border-width: 8px; border-color: #010 transparent transparent transparent; content: ""}
 
@@ -203,7 +204,7 @@ h4#sb_shutdownstatus span {margin: 3px 0; display: inline-block}
 #sidebar h4 a {width: auto; display: inline}
 #sidebar #sb_warning {margin-bottom: 7px; padding: 6px 4px; background: #000; text-align: center; line-height: 1.2}
 #sb_warning + p:empty + form {margin-top: 11px; margin-bottom: -6px}
-.sb_netstatus, .tunnelBuildStatus, #bandwidthTestRunning {margin: -6px 0 -6px -1px; padding: 7px 3px; width: calc(100% + 2px); display: inline-block; vertical-align: middle; text-shadow: var(--textshadow); box-shadow: var(--highlight), inset 0 0 2px 1px #040; box-sizing: border-box}
+.sb_netstatus, .tunnelBuildStatus, #bandwidthTestRunning {margin: -7px 0 -7px -2px; padding: 9px 3px; width: calc(100% - 15px); display: inline-block; vertical-align: middle; text-shadow: var(--textshadow); box-shadow: var(--highlight), inset 0 0 2px 1px #040; box-sizing: border-box}
 #sidebar .firewalled, .tunnelBuildStatus {color: #bb7; box-shadow: var(--highlight), inset 0 0 2px 1px #040}
 #sidebar .error, .tunnelBuildStatus.rejecting, #sb_warning {color: #900; box-shadow: var(--highlight), inset 0 0 2px 1px #700, inset 0 0 0 3px #000; background: linear-gradient(90deg, rgba(96,0,0,.25), rgba(96,0,0,.1), rgba(96,0,0,.25))}
 #sidebar .warn, #sidebar .clockskew {box-shadow: var(--highlight), inset 0 0 2px 1px #730}
@@ -2626,10 +2627,8 @@ input[type=text], input[type=password] {padding: 7px 9px}
 .leaseset th {line-height: 1}
 .log_debug, .log_info, .log_warn, .log_error, .log_crit, .log_omitted {margin-bottom: -3px; min-width: 40px; max-width: 40px}
 .newsAuthor {padding-left: 18px; background-size: 13px}
-.percentBarOuter {width: 251px}
-#sb_memoryBar.percentBarOuter {margin: -6px 0 -8px -9px; width: calc(100% + 16px)}
-#sb_graphcontainer {margin: -6px -9px -8px; background: repeating-linear-gradient(90deg, rgba(0,0,0,0) 16px, rgba(64,160,64,.3) 17px, rgba(0,0,0,0) 17px, rgba(0,0,0,0) 32px), repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(48,152,48,.2), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 14px)}
-.sb table[id^="sb_"] {width: 256px}
+#sb_memoryBar.percentBarOuter {margin: -6px 0 -8px}
+#sb_graphcontainer {margin: -6px 0 -8px; background: repeating-linear-gradient(90deg, rgba(0,0,0,0) 16px, rgba(64,160,64,.3) 17px, rgba(0,0,0,0) 17px, rgba(0,0,0,0) 32px), repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(48,152,48,.2), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 14px)}
 .sb_info.sb_update {padding: 5px 5px 6px}
 .sb_info .percentBarOuter {margin-bottom: -16px}
 .sb_info .percentBarText {margin-top: -1px}
@@ -2707,8 +2706,6 @@ h4#updateplugins {margin-top: -15px}
 #sb_internals {margin-top: -9px}
 #sb_localtunnels a {max-width: 200px}
 #sb_memoryBar .percentBarText {margin-top: -2px}
-#sb_newsheadings {margin-left: -9px; width: 258px}
-#sb_newsheadings table {width: 254px}
 #sb_services a:link, #sb_internals a:link, #sb_advanced a:link, #sb_help a:link {max-width: 216px}
 #schedjobs ul {columns: 270px auto}
 select {padding: 8px 24px 8px 8px}
