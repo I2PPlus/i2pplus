@@ -2715,6 +2715,7 @@ h4#updateplugins {margin-top: -15px}
 select {padding: 8px 24px 8px 8px}
 #sidebar button.download {width: 248px}
 #sidebar button.reload, #sidebar button.stop {min-width: 120px}
+#sidebar button.cancel {min-width: 157px}
 #sidebar h3::after {min-height: 20px}
 #sidebar img[src$="i2plogo.png"] {margin: -3px 0 -8px -4px; width: 248px; transform: none}
 #sidebar #sb_logo {height: 44px !important}
