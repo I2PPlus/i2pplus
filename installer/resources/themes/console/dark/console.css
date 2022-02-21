@@ -192,7 +192,7 @@ p:empty + .sb_notice {margin-top: 9px}
 #sidebar .sb_info .percentBarOuter {margin: 5px -3px -2px; width: calc(100% + 3px); box-shadow: none; background: var(--download_bar); animation: downloadbar 3s infinite alternate}
 .sb_info .percentBarText {padding-top: 2px}
 .sb_info .percentBarInner {height: 16px}
-#sidebar #restartRequired.sb_info.sb_update {padding: 4px 6px 6px; width: calc(100% - 9px)}
+#restartRequired.sb_info.sb_update {padding: 4px 6px 6px; width: calc(100% - 13px)}
 
 /* sidebar ajax router down */
 #down {margin: -6px 0; padding: 6px 5px; width: calc(100% - 8px); display: inline-block; font-size: 0; color: #a00; text-shadow: var(--textshadow); box-shadow: 0 0 1px 0 #030, var(--highlight), inset 0 0 1px 3px #131, inset 0 0 0 4px #000, inset 0 0 7px 3px #010; background: repeating-linear-gradient(135deg, #131, #131 10px, #300 11px, #000 12px, #000 19px, #300 19px, #000 20px); background-position: right center; background-size: 125%; animation: routerdown linear 3s forwards infinite}
@@ -1363,7 +1363,7 @@ th code {user-select: all}
 #searchbar {margin: -24px 10px -16px; padding: 8px 0 2px; width: auto; white-space: nowrap; text-align: center; animation: fade .1s .5s reverse both, slide .05s linear 1s both}
 #searchbar span {margin: 5px 5px 0; padding: 1px; display: inline-block; position: relative; overflow: hidden; border: 1px solid #151; border-radius: 2px; background: none}
 #searchbar span:focus-within {box-shadow: inset -38px 0 1px 2px rgba(0,0,0,.6), inset 0 0 2px 2px rgba(0,0,0,.7), 0 0 0 1px #000, 0 0 0 2px rgba(255,96,0,.8), 0 0 0 3px rgba(144,48,0,.7); background: var(--input_txt); transition: linear box-shadow .15s}
-#searchbar table {margin: 15px auto 13px; width: auto; border-radius: 0 0 3px 3px; border-collapse: separate; border: 1px solid #151; background: #000; box-shadow: var(--highlight), inset 0 0 0 2px rgba(0,64,0,.5)}
+#searchbar table {margin: 15px auto 13px; width: auto; border-radius: 0 0 2px 2px; border-collapse: separate; border: 1px solid #151; background: var(--panel); box-shadow: var(--bevel)}
 #searchbar td {padding: 0; border: none; box-shadow: none; background: none}
 #searchbar input {margin: 2px 0 1px 198px; padding-left: 10px; padding-right: 42px; min-width: 240px; height: calc(100% + 2px); border-radius: 0; box-shadow: none; background: #000; border: none; filter: none}
 #searchbar input:focus {box-shadow: inset 4px 2px 3px 1px rgba(0,0,0,.8); border-color: #151; background: none}
@@ -2635,10 +2635,11 @@ input[type=text], input[type=password] {padding: 7px 9px}
 #sb_graphcontainer {margin: -6px 0 -8px; background: repeating-linear-gradient(90deg, rgba(0,0,0,0) 16px, rgba(64,160,64,.3) 17px, rgba(0,0,0,0) 17px, rgba(0,0,0,0) 32px), repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(48,152,48,.2), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 14px)}
 #clock {margin-left: -1px}
 .sb_info.sb_update {padding: 5px 5px 6px}
+#restartRequired.sb_info.sb_update {width: calc(100% - 7px)}
 .sb_info .percentBarOuter {margin-bottom: -16px}
 .sb_info .percentBarText {margin-top: -1px}
 .sb_info.sb_update .percentBarOuter {margin-bottom: -5px}
-#sidebar #restartRequired.sb_info.sb_update {padding: 3px}
+#sidebar #restartRequired.sb_info.sb_update {padding: 3px 3px 4px}
 .sb_netstatus, .tunnelBuildStatus {padding: 9px 3px}
 .sb_netstatus::before, .tunnelBuildStatus::before {margin: -1px 2px; height: 20px}
 .sb_update {padding-bottom: 3px}
