@@ -84,7 +84,7 @@ ul {margin: 0; padding: 0}
 #sidebar td a {-webkit-text-stroke: 0}
 #sidebar td a:hover {border-radius: 2px; box-shadow: 0 0 0 2px rgba(0,0,0,.3); background: repeating-linear-gradient(180deg,rgba(16,16,0,.5) 1px, rgba(16,16,0,.5) 2px, rgba(0,64,0,.6) 3px)}
 #sidebar td a:active {box-shadow: 0 0 0 2px rgba(0,0,0,.3), inset 2px 2px 2px rgba(0,0,0,.7)}
-#sidebar h3 {margin: -7px -10px -9px; padding: 6px 2px; letter-spacing: .08em; text-transform: uppercase; font-size: 9.5pt; border: none; border-radius: 0; box-shadow: var(--highlight), inset 0 0 1px 1px #191; background: radial-gradient(at center bottom, rgba(16, 72, 16, .4) 0, rgba(0, 0, 0, 0) 50%), var(--bg_title), linear-gradient(180deg,rgba(0,0,0,.1), rgba(0,0,0,.25) 50%, rgba(0,0,0,.75) 50%, #000), var(--h3_fade); background-size: 100%, 2px, 100%, 100%}
+#sidebar h3 {margin: -7px -1px -9px; padding: 6px 2px; width: calc(100% - 3px); letter-spacing: .08em; text-transform: uppercase; font-size: 9.5pt; border: none; border-radius: 0; box-shadow: var(--highlight), inset 0 0 1px 1px #191; background: radial-gradient(at center bottom, rgba(16, 72, 16, .4) 0, rgba(0, 0, 0, 0) 50%), var(--bg_title), linear-gradient(180deg,rgba(0,0,0,.1), rgba(0,0,0,.25) 50%, rgba(0,0,0,.75) 50%, #000), var(--h3_fade); background-size: 100%, 2px, 100%, 100%}
 #sidebar h3:hover {box-shadow: var(--highlight), inset 0 0 0 2px rgba(128,48,0,.3)}
 #sidebar h3:active {box-shadow: var(--depress)}
 #sidebar h3::after {min-height: 15px; display: inline-block; vertical-align: middle; content: ""}
@@ -176,7 +176,7 @@ p:empty + .sb_notice {margin-top: 9px}
 #homepage #minigraphcontainer {margin-top: -42px; height: 38px}
 
 /* status bar */
-.percentBarOuter {margin: -3px 0 -5px; width: calc(100% + 3px); position: relative; border: var(--border_soft); box-shadow: var(--highlight), inset 0 3px 3px rgba(0,0,0,.8); background: linear-gradient(90deg, rgba(0,128,0,.05) 45%, rgba(255,96,0,.1), rgba(255,0,0,.1)), repeating-linear-gradient(90deg, #000 1px, #000 2px, #010 2px, #010 4px); opacity: 1}
+.percentBarOuter {margin: -3px 0 -5px; width: calc(100% - 3px); position: relative; border: var(--border_soft); box-shadow: var(--highlight), inset 0 3px 3px rgba(0,0,0,.8); background: linear-gradient(90deg, rgba(0,128,0,.05) 45%, rgba(255,96,0,.1), rgba(255,0,0,.1)), repeating-linear-gradient(90deg, #000 1px, #000 2px, #010 2px, #010 4px); opacity: 1}
 .percentBarOuter:hover .percentBarText {opacity: 1; transition: ease opacity .2s}
 .percentBarInner {height: 14px; max-width: 100%; border-right: var(--border_soft); box-shadow: var(--highlight); background: linear-gradient(180deg,rgba(28, 148, 58, .6), rgba(9, 47, 16, .6) 50%, rgba(9, 27, 5, .6) 50%, rgba(9, 21, 3, .7))}
 #sb_memoryBar .percentBarInner {background: linear-gradient(90deg, rgba(0,0,0,.05), rgba(128,128,0,.15) 160px, rgba(196,0,0,.15) 180px, rgba(196,0,0,.2)), linear-gradient(180deg,rgba(28, 148, 58, .6), rgba(9, 47, 16, .6) 50%, rgba(9, 27, 5, .6) 50%, rgba(9, 21, 3, .6), rgba(0,0,0,.3))}
