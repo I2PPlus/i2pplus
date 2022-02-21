@@ -170,8 +170,8 @@ public class NTCPTransport extends TransportImpl {
         //_context.statManager().createRateStat("ntcp.connectFailedInvalidPort", "", "Transport [NTCP]", RATES);
         //_context.statManager().createRateStat("ntcp.bidRejectedLocalAddress", "", "Transport [NTCP]", RATES);
         //_context.statManager().createRateStat("ntcp.bidRejectedNoNTCPAddress", "", "Transport [NTCP]", RATES);
-        _context.statManager().createRateStat("ntcp.connectFailedTimeout", "Failed connection attempt timeouts to NTCP peer", "Transport [NTCP]", RATES);
-        _context.statManager().createRateStat("ntcp.connectFailedTimeoutIOE", "Failed connection attempt timeouts to NTCP peer (IO error)", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.connectFailedTimeout", "Failed connection attempts to NTCP peer", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.connectFailedTimeoutIOE", "Failed connection attempts to NTCP peer (IO error)", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.connectFailedUnresolved", "Unresolved connection attempts to NTCP peer", "Transport [NTCP]", RATES);
         //_context.statManager().createRateStat("ntcp.connectImmediate", "", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.connectSuccessful", "Successful connection attempts to NTCP peer", "Transport [NTCP]", RATES);

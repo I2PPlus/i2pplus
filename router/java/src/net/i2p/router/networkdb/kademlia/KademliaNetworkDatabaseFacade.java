@@ -770,7 +770,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
             boolean isHidden = _context.router().isHidden() || _context.getBooleanProperty("router.hiddenMode");
             String v = ri.getVersion();
-            String MIN_VERSION = "0.9.51";
+            String MIN_VERSION = "0.9.52";
             Hash us = _context.routerHash();
             boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
                                      ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||

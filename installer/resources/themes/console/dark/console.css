@@ -68,10 +68,11 @@ ul {margin: 0; padding: 0}
 .extlink::after, input, button {will-change: transform}
 
 /* sidebar */
-#sb_wrap {margin: 0 0 10px 5px; padding: 0; width: auto; display: block; position: absolute; text-align: center; will-change: transform}
+#sb_wrap {margin: 0 0 10px 5px; padding: 0; width: auto; display: block; text-align: center; will-change: transform}
 .iframed #sb_wrap {display: none}
-.sb table {margin: -5px -7px -6px -8px; padding: 1px 1px 0; width: 210px; overflow: hidden; text-align: center; font-size: 8pt; border: 0; border-collapse: separate; border-spacing: 2px; background: none;}
-#sidebar {margin-bottom: 7px; padding: 8px 10px 8px; width: 194px; text-align: center; font-size: 8pt; border: var(--border); border-radius: 3px; background: repeating-linear-gradient(90deg, rgba(0,0,0,.4) 2px, rgba(0,16,0,.3) 4px), repeating-linear-gradient(180deg,rgba(0,0,0,.8) 2px, rgba(0,16,0,.8) 4px), var(--camo) #000; background-size: 4px 100%, 100% 4px, 1800px; contain: paint}
+#xhr {width: calc(100% + 19px); margin-left: -9px; display: inline-block}
+.sb table {margin: -5px 0 -6px; padding: 1px 1px 0; overflow: hidden; text-align: center; font-size: 8pt; border: 0; border-collapse: separate; border-spacing: 2px; background: none;}
+#sidebar {padding: 8px 10px 8px; width: 194px; text-align: center; font-size: 8pt; border: var(--border); border-radius: 3px; background: repeating-linear-gradient(90deg, rgba(0,0,0,.4) 2px, rgba(0,16,0,.3) 4px), repeating-linear-gradient(180deg,rgba(0,0,0,.8) 2px, rgba(0,16,0,.8) 4px), var(--camo) #000; background-size: 4px 100%, 100% 4px, 1800px; contain: paint}
 #sb_logo {width: 100%; margin: -8px 0 -9px -10px; padding: 9px 10px 10px; display: inline-block; border-radius: 3px 3px 0 0; box-shadow: var(--bevel); background: linear-gradient(180deg,rgba(0,64,0,.3), rgba(0,24,0,.3)), repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px); background-size: 100%, 100% 4px}
 #sb_logo:hover {box-shadow: var(--highlight), inset 0 0 0 2px rgba(255,96,0,.6); background: linear-gradient(180deg,rgba(0,64,0,.6), rgba(0,24,0,.6)), repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px); background-size: 100%, 100% 4px; transition: ease background .15s}
 #sb_logo:active {box-shadow: var(--highlight), inset 0 0 0 2px rgba(255,144,0,.5), inset 6px 6px 6px rgba(0,0,0,.7); background: linear-gradient(180deg,rgba(0,32,0,.3), rgba(0,48,0,.3)), repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px)}
@@ -83,7 +84,7 @@ ul {margin: 0; padding: 0}
 #sidebar td a {-webkit-text-stroke: 0}
 #sidebar td a:hover {border-radius: 2px; box-shadow: 0 0 0 2px rgba(0,0,0,.3); background: repeating-linear-gradient(180deg,rgba(16,16,0,.5) 1px, rgba(16,16,0,.5) 2px, rgba(0,64,0,.6) 3px)}
 #sidebar td a:active {box-shadow: 0 0 0 2px rgba(0,0,0,.3), inset 2px 2px 2px rgba(0,0,0,.7)}
-#sidebar h3 {margin: -7px -10px -9px; padding: 6px 2px; letter-spacing: .08em; text-transform: uppercase; font-size: 9.5pt; border: none; border-radius: 0; box-shadow: var(--highlight), inset 0 0 1px 1px #191; background: radial-gradient(at center bottom, rgba(16, 72, 16, .4) 0, rgba(0, 0, 0, 0) 50%), var(--bg_title), linear-gradient(180deg,rgba(0,0,0,.1), rgba(0,0,0,.25) 50%, rgba(0,0,0,.75) 50%, #000), var(--h3_fade); background-size: 100%, 2px, 100%, 100%}
+#sidebar h3 {margin: -7px -1px -9px; padding: 6px 2px; width: calc(100% - 3px); letter-spacing: .08em; text-transform: uppercase; font-size: 9.5pt; border: none; border-radius: 0; box-shadow: var(--highlight), inset 0 0 1px 1px #191; background: radial-gradient(at center bottom, rgba(16, 72, 16, .4) 0, rgba(0, 0, 0, 0) 50%), var(--bg_title), linear-gradient(180deg,rgba(0,0,0,.1), rgba(0,0,0,.25) 50%, rgba(0,0,0,.75) 50%, #000), var(--h3_fade); background-size: 100%, 2px, 100%, 100%}
 #sidebar h3:hover {box-shadow: var(--highlight), inset 0 0 0 2px rgba(128,48,0,.3)}
 #sidebar h3:active {box-shadow: var(--depress)}
 #sidebar h3::after {min-height: 15px; display: inline-block; vertical-align: middle; content: ""}
@@ -91,15 +92,15 @@ ul {margin: 0; padding: 0}
 #sidebar h3 a {width: 100%; vertical-align: middle; line-height: 1; text-shadow: var(--textshadow)}
 #sidebar h3:hover a {color: var(--hover)}
 #sidebar h3:active {transition: ease box-shadow .01s}
-#sidebar h4 {margin: -6px -9px -8px; padding: 6px 1px; line-height: 1.2; font-size: 8pt; text-decoration: none; color: #2b2; border: 0; border-bottom: none; box-shadow: inset 0 0 0 1px #121, inset 0 0 5px 2px #000; background: linear-gradient(90deg, #001900, #001000 5%, #000 50%, #001000 95%, #001900)}
-#clock {margin: -7px -10px -9px; padding: 8px 0; position: relative; line-height: 1; letter-spacing: .1em; font-size: 18pt; font-weight: 700; color: #ffa; text-shadow: var(--textshadow); box-shadow: var(--bevel); background: repeating-linear-gradient(180deg,rgba(255,255,255,.05) 2px, rgba(0,16,0,.2) 4px), linear-gradient(90deg, #010, #000, #010); -webkit-text-stroke: 1px rgba(220,220,128,.5); opacity: .9}
+#sidebar h4 {margin: -6px -1px -8px; padding: 6px 1px; width: calc(100% - 1px); line-height: 1.2; font-size: 8pt; text-decoration: none; color: #2b2; border: none; box-shadow: var(--bevel), inset 0 0 0 3px #000, inset 0 0 5px 5px rgba(0,0,0,.5); background: rgba(0,64,0,.3)}
+#clock {margin: -7px 0 -9px -1px; padding: 8px 0; position: relative; line-height: 1; letter-spacing: .1em; font-size: 18pt; font-weight: 700; color: #ffa; text-shadow: var(--textshadow); box-shadow: var(--bevel); background: repeating-linear-gradient(180deg,rgba(255,255,255,.05) 2px, rgba(0,16,0,.2) 4px), linear-gradient(90deg, #010, #000, #010); -webkit-text-stroke: 1px rgba(220,220,128,.5); opacity: .9}
 #clock::before {content: ""; position: absolute; top: 0; left: 0; height: 100%; width: 100%; box-shadow: var(--bevel); background: repeating-linear-gradient(90deg, rgba(0,0,0,.3) 2px, rgba(0,16,0,.2) 4px)}
 #clock::after {margin-left: 3px; content: "UTC"; display: inline-block; font-size: 50%; vertical-align: middle}
 .sb table, #sidebar form {position: relative; background: repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.1) 2px, rgba(0,16,0,.1) 3px)}
 .sb table:not(#sb_localtunnels):not(#sb_services):not(#sb_advanced)::before {width: 0; height: 1px; position: absolute; top: -1px; left: -1px; display: block; background: linear-gradient(90deg, #730, #940); content: ""; animation: bar .15s ease-in-out .15s reverse; backface-visibility: hidden; will-change: transform}
 #sb_peers, #sb_peersadvanced, #sb_tunnels, #sb_queue, #sb_bandwidth, #sb_general, #sb_advancedgeneral, #sb_localtunnels, #sb_advanced, #sb_internals, #sb_services {margin-top: -9px; margin-bottom: -8px; padding: 0 1px 2px; border-top: 1px solid rgba(16,64,16,.3); border-bottom: 1px solid rgba(16,64,16,.3)}
 #sb_advanced, #sb_internals, #sb_services, #sb_help {margin-top: -6px; padding: 0 1px}
-#sb_localtunnels {margin: -6px -7px -7px -8px; padding: 0}
+#sb_localtunnels {margin: -6px 0 -7px; padding: 0}
 #sb_general td, #sb_shortgeneral td, #sb_advancedgeneral td, #sb_peersadvanced td {white-space: nowrap}
 #sb_general td:first-child, #sb_shortgeneral td:first-child, #sb_advancedgeneral td:first-child, #sb_peersadvanced td:first-child {max-width: 130px}
 #sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after, #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {min-height: 14px; display: inline-block; content: ""}
@@ -153,10 +154,9 @@ p:empty + .sb_notice {margin-top: 9px}
 #sb_warning + hr {margin-top: 7px}
 #sidebar hr:last-child {margin-top: 5px; margin-bottom: -5px}
 .warntext {color: #b00}
-/*#sidebar tr {background: rgba(0,16,0,.2)}*/
 
 /* sidebar news */
-#sb_newsheadings {margin-left: -12px; margin-bottom: -7px; width: 206px; text-align: right}
+#sb_newsheadings {margin-bottom: -7px}
 #sidebar.sb #sb_newsheadings table {margin: -8px 0 3px}
 #sb_newsheadings table::before {content: none}
 #sb_newsheadings a {padding: 0 3px 0 0; width: 100%; display: inline-block}
@@ -164,33 +164,36 @@ p:empty + .sb_notice {margin-top: 9px}
 #sidebar #sb_newsheadings tr:last-child td {border-bottom: none}
 
 /* mini sidebar graph */
-#sb_graphcontainer {margin: -5px -8px -7px; padding: 0 1px 1px; height: 41px; position: relative; z-index: 10; overflow: hidden; box-shadow: inset 0 0 0 1px #131, inset 0 0 0 2px #000, inset 0 0 3px 1px #040; background: repeating-linear-gradient(90deg, rgba(0,0,0,0) 14px, rgba(64,160,64,.3) 15px, rgba(0,0,0,0) 15px, rgba(0,0,0,0) 30px), repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(48,152,48,.2), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 14px)}
+#sb_graphcontainer {margin: -6px 0 -8px; padding: 0 1px 1px; width: calc(100% - 3px); height: 41px; position: relative; z-index: 10; overflow: hidden; box-shadow: inset 0 0 0 1px #131, inset 0 0 0 2px #000, inset 0 0 3px 1px #040; background: repeating-linear-gradient(90deg, rgba(0,0,0,0) 14px, rgba(64,160,64,.3) 15px, rgba(0,0,0,0) 15px, rgba(0,0,0,0) 30px), repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(48,152,48,.2), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 14px)}
 #sb_graphcontainer::after {width: calc(100% - 4px); display: inline-block; position: absolute; top: 2px; right: 2px; bottom: 2px; left: 2px; z-index: 10; box-shadow: var(--outline); background: var(--graphoverlay); content: ""; pointer-events: none}
 #sb_graphcontainer:hover a {cursor: zoom-in}
 #sb_graphstats {padding: 2px 8px; display: inline-block; position: relative; z-index: 1000; font-size: 110%; font-weight: 700; color: #050; text-shadow: none; border: var(--border_soft); border-top: none; border-radius: 0 0 2px 2px; background: #000; opacity: 0; transition: ease opacity .3s; pointer-events: none}
 #sb_graphcontainer:hover #sb_graphstats {opacity: 1; transition: ease opacity .2s}
 #minigraphcontainer {margin-top: -43px; margin-left: 1px; width: 204px; height: 39px; background-repeat: no-repeat; background-size: 204px 40px}
-#minigraph {margin-top: -17px; height: 38px; width: 204px; position: relative; z-index: 5; opacity: .9}
+#minigraph {margin: -18px 0 0; width: 100%; height: 38px; position: relative; z-index: 5}
 #xhr > hr + #sb_graphcontainer > span + a > #minigraph {height: 39px}
 #homepage #minigraph {margin-top: -18px}
 #homepage #minigraphcontainer {margin-top: -42px; height: 38px}
 
 /* status bar */
-.percentBarOuter {margin: -3px 0 -5px -7px; width: 205px; position: relative; border: var(--border_soft); box-shadow: var(--highlight), inset 0 3px 3px rgba(0,0,0,.8); background: linear-gradient(90deg, rgba(0,128,0,.05) 45%, rgba(255,96,0,.1), rgba(255,0,0,.1)), repeating-linear-gradient(90deg, #000 1px, #000 2px, #010 2px, #010 4px); opacity: 1}
+.percentBarOuter {margin: -3px 0 -5px; width: calc(100% - 3px); position: relative; border: var(--border_soft); box-shadow: var(--highlight), inset 0 3px 3px rgba(0,0,0,.8); background: linear-gradient(90deg, rgba(0,128,0,.05) 45%, rgba(255,96,0,.1), rgba(255,0,0,.1)), repeating-linear-gradient(90deg, #000 1px, #000 2px, #010 2px, #010 4px); opacity: 1}
 .percentBarOuter:hover .percentBarText {opacity: 1; transition: ease opacity .2s}
 .percentBarInner {height: 14px; max-width: 100%; border-right: var(--border_soft); box-shadow: var(--highlight); background: linear-gradient(180deg,rgba(28, 148, 58, .6), rgba(9, 47, 16, .6) 50%, rgba(9, 27, 5, .6) 50%, rgba(9, 21, 3, .7))}
 #sb_memoryBar .percentBarInner {background: linear-gradient(90deg, rgba(0,0,0,.05), rgba(128,128,0,.15) 160px, rgba(196,0,0,.15) 180px, rgba(196,0,0,.2)), linear-gradient(180deg,rgba(28, 148, 58, .6), rgba(9, 47, 16, .6) 50%, rgba(9, 27, 5, .6) 50%, rgba(9, 21, 3, .6), rgba(0,0,0,.3))}
 .percentBarText {width: 100%; vertical-align: middle; float: left; text-align: center; font-weight: 700; opacity: 0; transition: ease opacity .2s}
+#sb_memoryBar.percentBarOuter {margin: -6px 0 -8px}
 #sb_memoryBar .percentBarText {width: 70%; line-height: 22px; float: none; position: absolute; top: -23px; left: 15%; right: 15%; font-size: 110%; border-radius: 3px; background: #010; filter: drop-shadow(0 0 1px #252) drop-shadow(0 0 1px #000)}
 #sb_memoryBar .percentBarText::after {width: 0; height: 0; position: absolute; left: calc(50% - 5px); bottom: -14px; border-style: solid; border-width: 8px; border-color: #010 transparent transparent transparent; content: ""}
 
 /* update bar */
-#sidebar .sb_update {padding: 7px 5px 5px}
-.sb_update b {color: var(--ink)}
-.sb_updatestatus {margin: -8px -6px -2px; padding: 5px 2px; line-height: 1.3; font-style: italic; border-bottom: var(--border); box-shadow: var(--highlight), inset 0 0 2px 1px #030}
-.sb_info .percentBarOuter {margin: 6px -2px -3px -3px; box-shadow: none; background: var(--download_bar); animation: downloadbar 3s infinite alternate}
+#sidebar .sb_update {padding: 7px 5px 0}
+.sb_update b {margin: 3px 0 1px; display: inline-block;color: var(--ink)}
+.sb_updatestatus {margin: -8px -6px -2px; padding: 5px 2px; width: calc(100% + 7px); line-height: 1.3; font-style: italic; border-bottom: var(--border); box-shadow: var(--bevel)}
+#sidebar .sb_info .percentBarOuter {margin: 3px -4px 0; width: calc(100% - 2px); box-shadow: none; background: var(--download_bar); animation: downloadbar 3s infinite alternate}
 .sb_info .percentBarText {padding-top: 2px}
 .sb_info .percentBarInner {height: 16px}
+#restartRequired.sb_info.sb_update {padding: 4px 6px 6px; width: calc(100% - 11px)}
+#sidebar #sb_downloadReleaseUpdate {margin-bottom: -8px}
 
 /* sidebar ajax router down */
 #down {margin: -6px 0; padding: 6px 5px; width: calc(100% - 8px); display: inline-block; font-size: 0; color: #a00; text-shadow: var(--textshadow); box-shadow: 0 0 1px 0 #030, var(--highlight), inset 0 0 1px 3px #131, inset 0 0 0 4px #000, inset 0 0 7px 3px #010; background: repeating-linear-gradient(135deg, #131, #131 10px, #300 11px, #000 12px, #000 19px, #300 19px, #000 20px); background-position: right center; background-size: 125%; animation: routerdown linear 3s forwards infinite}
@@ -199,18 +202,23 @@ p:empty + .sb_notice {margin-top: 9px}
 #nographs::after {margin: 22px 15px 18px; width: 48px; height: 48px; background-size: 48px}
 
 /* network status */
-h4#sb_shutdownstatus span {margin: 3px 0; display: inline-block}
+#sb_shutdownStatus {width: calc(100% - 3px)}
+#sb_shutdownStatus span {margin: 3px 0; display: inline-block}
 #sidebar h4 a {width: auto; display: inline}
 #sidebar #sb_warning {margin-bottom: 7px; padding: 6px 4px; background: #000; text-align: center; line-height: 1.2}
 #sb_warning + p:empty + form {margin-top: 11px; margin-bottom: -6px}
-.sb_netstatus, .tunnelBuildStatus, #bandwidthTestRunning {margin: -5px 0; padding: 7px 3px; width: 100%; display: inline-block; vertical-align: middle; text-shadow: var(--textshadow); box-shadow: var(--highlight), inset 0 0 2px 1px #040; box-sizing: border-box}
-#sidebar .firewalled, .tunnelBuildStatus {color: #bb7; box-shadow: var(--highlight), inset 0 0 2px 1px #040}
-#sidebar .error, .tunnelBuildStatus.rejecting, #sb_warning {color: #900; box-shadow: var(--highlight), inset 0 0 2px 1px #700, inset 0 0 0 3px #000; background: linear-gradient(90deg, rgba(96,0,0,.25), rgba(96,0,0,.1), rgba(96,0,0,.25))}
-#sidebar .warn, #sidebar .clockskew {box-shadow: var(--highlight), inset 0 0 2px 1px #730}
-#sidebar .testing, .tunnelBuildStatus.starting, #sb_localtunnels td[colspan="3"] {color: #aa3; box-shadow: var(--highlight), inset 0 0 2px 1px #bb0, inset 0 0 0 3px #000; background: repeating-linear-gradient(135deg, rgba(0,0,0,.5), rgba(0,0,0,.5) 10px, rgba(32,32,0,.5) 10px, rgba(32,32,0,.5) 20px); background-size: 400%}
+#sb_status, .sb_netstatus, .tunnelBuildStatus, #bandwidthTestRunning {display: inline-block; vertical-align: middle; vertical-align: -moz-middle-with-baseline; vertical-align: -webkit-baseline-middle; text-shadow: var(--textshadow); box-sizing: border-box}
+#sidebar #sb_status {margin: -9px 0 -9px -1px; width: calc(100% + 1px); box-shadow: var(--note_shadow)}
+#sidebar #sb_tunnelstatus {margin: -7px 0 -9px -1px; width: calc(100% - 1px); box-shadow: var(--note_shadow)}
+#sidebar .sb_netstatus, #sidebar .tunnelBuildStatus {margin: -3px auto; padding: 8px 2px; display: block; width: calc(100% - 4px)}
+#sidebar .tunnelBuildStatus {padding: 10px 2px 8px}
+#sidebar .firewalled, .tunnelBuildStatus {color: #bb7; box-shadow: var(--bevel)}
+#sidebar .error, .tunnelBuildStatus.rejecting, #sb_warning {color: #900; box-shadow: var(--highlight), inset 0 0 2px 1px #700; background: rgba(96,0,0,.3)}
+.sb_netstatus.running, #sidebar .warn, #sidebar .clockskew {box-shadow: var(--highlight), inset 0 0 2px 1px #730; background: rgba(126,48,0,.3)}
+#sidebar .testing, .tunnelBuildStatus.starting, #sb_localtunnels td[colspan="3"] {color: #aa3; box-shadow: var(--highlight), inset 0 0 2px 1px #bb0; background: repeating-linear-gradient(135deg, rgba(0,0,0,.5), rgba(0,0,0,.5) 10px, rgba(32,32,0,.5) 10px, rgba(32,32,0,.5) 20px); background-size: 400%}
 #sidebar .hidden, #sidebar .vmcomm, .tunnelBuildStatus.hidden {color: #999; box-shadow: var(--highlight), inset 0 0 2px 1px #777}
-.vmcomm {box-shadow: var(--highlight), inset 0 0 1px 1px #aaa, inset 0 0 0 2px rgba(0,0,0,.7); background: linear-gradient(90deg, #141414, #080808, #141414)}
-#sidebar .running, .tunnelBuildStatus.active {box-shadow: var(--highlight), inset 0 0 2px 1px #060; background: rgba(64,255,64,.02)}
+.vmcomm {box-shadow: var(--highlight), inset 0 0 1px 1px #aaa, inset 0 0 0 2px rgba(0,0,0,.7); background: rgba(92,92,92,.3)}
+#sidebar .running, .tunnelBuildStatus.active {box-shadow: var(--highlight), inset 0 0 2px 1px rgba(0,128,0,.7); background: linear-gradient(to right, rgba(0,0,0,.3), rgba(64,128,64,.1) 25%, rgba(64,128,64,.1) 75%, rgba(0,0,0,.3))}
 #bandwidthTestRunning {background: repeating-linear-gradient(90deg, rgba(0,0,0,.3), rgba(0,0,0,.3) 10px, rgba(0,32,0,.3) 10px, rgba(0,32,0,.3) 20px) #010; background-size: 400%; animation: progress 120s 3s linear infinite both}
 .sb_netstatus::before, .tunnelBuildStatus::before {margin: 0 2px 0 -4px; height: 18px; width: 18px; display: inline-block; vertical-align: middle; content: ""}
 .sb_netstatus::before {background-size: 16px}
@@ -228,7 +236,7 @@ h4#sb_shutdownstatus span {margin: 3px 0; display: inline-block}
 
 /* tunnel build status */
 .tunnelBuildStatus {color: #ee9}
-.tunnelBuildStatus::before {margin: 0; width: 16px; height: 16px; display: inline-block; vertical-align: middle; border-radius: 50%; content: ""; transform: scale(.7)}
+.tunnelBuildStatus::before {margin: 0 1px; width: 16px; height: 16px; display: inline-block; vertical-align: middle; border-radius: 50%; content: ""; transform: scale(.7) translateY(-1px)}
 .tunnelBuildStatus.accepting {color: #507750}
 .tunnelBuildStatus.accepting::before {background: var(--tunn_ready) var(--center) / 15px}
 .tunnelBuildStatus.active {color: #58ce3a}
@@ -365,7 +373,7 @@ input[type=file] {background: none}
 #sidebar .reload {background: var(--restart) no-repeat center center / 16px, var(--btn)}
 #sidebar .reload:hover, #sidebar .reload:focus {border: 1px solid #f60; background: var(--shutdown_hover) no-repeat 37% center / 16px, var(--restart_hover) no-repeat 63% center / 16px, var(--btn_hover_radial)}
 #sidebar .reload:active {border: 1px solid #f60; background: var(--shutdown_active) no-repeat 37% center / 16px, var(--restart_active) no-repeat 63% center / 16px, #f60}
-#sidebar .reload:active, #sidebar .stop:active, #sidebar .download:active {box-shadow: var(--highlight), inset 2px 2px 2px #555; background-color: #f60}
+#sidebar .reload:active, #sidebar .stop:active, #sidebar .download:active {box-shadow: var(--btn_shadow_active); background-color: var(--hover)}
 #sidebar .stop {background: var(--shutdown) no-repeat center center, var(--btn); background-size: 16px, 100%}
 #sidebar .stop:hover, #sidebar .stop:focus {background: var(--shutdown_hover) no-repeat center center / 16px, var(--btn_hover_radial)}
 #sidebar .stop:active {background: #f60 var(--shutdown_active) no-repeat center center / 16px}
@@ -408,7 +416,8 @@ button.control {margin: 3px; padding: 15px; min-width: 0; font-size: 0}
 .sidebarlogo {text-align: center}
 #sidebar button.reload, #sidebar button.stop, #sidebar button.cancel {margin: 3px 2px; min-width: 97px; text-transform: capitalize}
 #sidebar button.download {width: 202px}
-#updateAvailable {margin: 0 0 3px; width: 100%; display: inline-block; line-height: 1.2; color: #dd3; font-size: 9pt; text-shadow: var(--textshadow); opacity: .9}
+#sidebar button.cancel {min-width: 151px}
+#updateAvailable {margin: 0 0 3px; padding: 4px 0 0; width: 100%; display: inline-block; line-height: 1.2; color: #dd3; font-size: 9pt; text-shadow: var(--textshadow); opacity: .9}
 #updateAvailable + br + button + br + #updateAvailable::before {margin: 2px 0 4px; width: 100%; height: 1px; display: inline-block; background: #020; content: ""}
 #updateAvailable + br + button + br + #updateAvailable {margin-top: 2px}
 
@@ -1359,7 +1368,7 @@ th code {user-select: all}
 #searchbar {margin: -24px 10px -16px; padding: 8px 0 2px; width: auto; white-space: nowrap; text-align: center; animation: fade .1s .5s reverse both, slide .05s linear 1s both}
 #searchbar span {margin: 5px 5px 0; padding: 1px; display: inline-block; position: relative; overflow: hidden; border: 1px solid #151; border-radius: 2px; background: none}
 #searchbar span:focus-within {box-shadow: inset -38px 0 1px 2px rgba(0,0,0,.6), inset 0 0 2px 2px rgba(0,0,0,.7), 0 0 0 1px #000, 0 0 0 2px rgba(255,96,0,.8), 0 0 0 3px rgba(144,48,0,.7); background: var(--input_txt); transition: linear box-shadow .15s}
-#searchbar table {margin: 15px auto 13px; width: auto; border-radius: 0 0 3px 3px; border-collapse: separate; border: 1px solid #151; background: #000; box-shadow: var(--highlight), inset 0 0 0 2px rgba(0,64,0,.5)}
+#searchbar table {margin: 15px auto 13px; width: auto; border-radius: 0 0 2px 2px; border-collapse: separate; border: 1px solid #151; background: var(--panel); box-shadow: var(--bevel)}
 #searchbar td {padding: 0; border: none; box-shadow: none; background: none}
 #searchbar input {margin: 2px 0 1px 198px; padding-left: 10px; padding-right: 42px; min-width: 240px; height: calc(100% + 2px); border-radius: 0; box-shadow: none; background: #000; border: none; filter: none}
 #searchbar input:focus {box-shadow: inset 4px 2px 3px 1px rgba(0,0,0,.8); border-color: #151; background: none}
@@ -1855,9 +1864,12 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 #enablefull input[type=submit] {float: right}
 #configstats .graphableStat td {padding: 4px 6px; white-space: normal}
 #configstats label {position: relative; font-size: 90%}
-#configstats label::after {padding: 4px 8px; position: absolute; top: -26px; left: 0; z-index: 10; display: none; white-space: nowrap; font-size: 110%; color: #eeb; border: 1px solid #030; border-radius: 1px; box-shadow: 0 0 1px 1px #000; background: #000; content: attr(data-tooltip)}
+#configstats label::after {padding: 4px 8px; position: absolute; top: -26px; left: -20px; z-index: 10; display: none; white-space: nowrap; font-size: 110%; color: #eeb; border: 1px solid #030; border-radius: 1px; box-shadow: 0 0 1px 1px #000; background: #000; content: attr(data-tooltip)}
 #configstats label:hover::after {display: inline-block}
 #statconfig {margin: 0 auto 10px}
+#configstats .graphableStat td {padding: 5px 4px; display: flex; flex-wrap: wrap; width: 100%}
+#configstats label {margin: -1px 1px}
+#configstats label::after {font-size: 95%}
 
 /* bandwidth */
 #bandwidthconfig {margin-bottom: -4px; padding: 5px 10px}
@@ -1905,6 +1917,7 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 #config_update .suboption label[for="newsThroughProxy"] {margin-right: 20px}
 #config_update b.suboption {padding: 3px 8px 4px 10px}
 #config_update .suboption .optbox {margin: -2px 3px 0 -5px}
+#config_update .tabletitle {margin-bottom: -2px}
 #updateHelper select {margin-left: 10px; max-width: calc(100% - 220px)}
 #updateProxyHostPort input {max-width: 200px}
 #updateHelper b, #updateProxyHostPort b, #i2pupdates b {margin-right: 9px; min-width: 190px; display: inline-block; text-align: right}
@@ -2440,7 +2453,8 @@ h3[id*="jobs"]:first-of-type {margin-top: 21px}
 #sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after, #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {min-height: 12px}
 #sb_internals {border-spacing: 0}
 #sb_internals td {padding-top: 2px; padding-bottom: 2px}
-#sb_tunnelstatus .tunnelBuildStatus::before {margin: -2px 0; background-size: 12px}
+#sb_tunnelstatus .tunnelBuildStatus::before {background-size: 12px}
+#sidebar button.cancel {margin-top: 10px}
 #searchbar span {margin: 3px 3px 0}
 #sidebar .reload, #sidebar .stop, #sidebar .stop:hover, #sidebar .stop:focus, #sidebar .reload[value="restartImmediate"] {background-size: 12px, 100%}
 #sidebar .reload:hover, #sidebar .reload:focus {background-size: 12px, 12px, 100%}
@@ -2493,8 +2507,9 @@ h3[id*="jobs"]:first-of-type {margin-top: 21px}
 }
 
 @media screen and (max-width: 1199px) {
-.tab, .tab2 {min-width: 48px}
-.tab a {padding: 4px 9px}
+.tab, .tab2 {padding: 1px 0; min-width: 50px}
+.tab2 {padding: 4px 12px 5px}
+.tab a {padding: 2px 14px 5px}
 #participatingtunnels .statusnotes:last-of-type {margin-bottom: 6px}
 #tunnels .tunneldisplay .cells {padding-left: 2px; padding-right: 2px}
 #tunnels .tunneldisplay .cells .tunnel_id {display: none}
@@ -2509,9 +2524,6 @@ h3[id*="jobs"]:first-of-type {margin-top: 21px}
 #clientconf code {display: inline-block; white-space: nowrap}
 #peers .idle, #peers .inout {min-width: 104px}
 #peers .skew {display: none}
-.tab, .tab2 {padding: 1px 0; min-width: 50px}
-.tab2 {padding: 4px 12px 5px}
-.tab a {padding: 2px 14px 5px}
 #plugininstall input[type=text] {min-width: 200px}
 #i2pupdates td:first-child {white-space: normal; width: 30%}
 td.optionsave {white-space: normal}
@@ -2624,17 +2636,18 @@ input[type=text], input[type=password] {padding: 7px 9px}
 .leaseset th {line-height: 1}
 .log_debug, .log_info, .log_warn, .log_error, .log_crit, .log_omitted {margin-bottom: -3px; min-width: 40px; max-width: 40px}
 .newsAuthor {padding-left: 18px; background-size: 13px}
-.percentBarOuter {width: 251px}
-#sb_memoryBar {margin: -6px 0 -8px -9px; width: calc(100% + 16px)}
-#sb_graphcontainer {margin: -6px -9px -8px; background: repeating-linear-gradient(90deg, rgba(0,0,0,0) 16px, rgba(64,160,64,.3) 17px, rgba(0,0,0,0) 17px, rgba(0,0,0,0) 32px), repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(48,152,48,.2), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 14px)}
-.sb table[id^="sb_"] {width: 256px}
+#sb_memoryBar.percentBarOuter {margin: -6px 0 -8px}
+#sb_graphcontainer {margin: -6px 0 -8px; background: repeating-linear-gradient(90deg, rgba(0,0,0,0) 16px, rgba(64,160,64,.3) 17px, rgba(0,0,0,0) 17px, rgba(0,0,0,0) 32px), repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(48,152,48,.2), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 14px)}
+#clock {margin-left: -1px}
 .sb_info.sb_update {padding: 5px 5px 6px}
+#restartRequired.sb_info.sb_update {width: calc(100% - 5px)}
 .sb_info .percentBarOuter {margin-bottom: -16px}
 .sb_info .percentBarText {margin-top: -1px}
 .sb_info.sb_update .percentBarOuter {margin-bottom: -5px}
-.sb_netstatus, .tunnelBuildStatus {padding: 9px 3px}
-.sb_netstatus::before, .tunnelBuildStatus::before {margin: -1px 2px; height: 20px}
+#sidebar #restartRequired.sb_info.sb_update {padding: 3px 3px 4px}
+.sb_netstatus::before, .tunnelBuildStatus::before {margin: 0 2px}
 .sb_update {padding-bottom: 3px}
+.sb_update b {margin-bottom: 2px}
 .search td {padding: 6px 6px 6px 5px}
 .search td:nth-child(2) {padding: 5px 8px 5px 8px}
 .search td:last-child {padding-left: 0; padding-right: 0}
@@ -2705,13 +2718,12 @@ h4#updateplugins {margin-top: -15px}
 #sb_internals {margin-top: -9px}
 #sb_localtunnels a {max-width: 200px}
 #sb_memoryBar .percentBarText {margin-top: -2px}
-#sb_newsheadings {margin-left: -9px; width: 258px}
-#sb_newsheadings table {width: 254px}
 #sb_services a:link, #sb_internals a:link, #sb_advanced a:link, #sb_help a:link {max-width: 216px}
 #schedjobs ul {columns: 270px auto}
 select {padding: 8px 24px 8px 8px}
 #sidebar button.download {width: 248px}
 #sidebar button.reload, #sidebar button.stop {min-width: 120px}
+#sidebar button.cancel {min-width: 157px}
 #sidebar h3::after {min-height: 20px}
 #sidebar img[src$="i2plogo.png"] {margin: -3px 0 -8px -4px; width: 248px; transform: none}
 #sidebar #sb_logo {height: 44px !important}
@@ -2724,8 +2736,9 @@ span#newtab {margin-top: 4px}
 #tunnels .tab, #tunnels .tab2 {line-height: 1.3}
 #udpconnections td[class="cells"]:first-child, #ntcpconnections td[class="cells"]:first-child {padding-right: 8px; width: 55px}
 #warning2.sorry {margin: -17px 5px 18px 272px}
+/*#sidebar .sb_netstatus {width: calc(100% + 1px)}*/
+#sb_status {margin: -9px 0 -7px}
 }
-
 @media screen and (min-width: 1634px) {.leasesets_container {margin-bottom: 8px} th code {font-size: 9pt}}
 @media screen and (min-width: 1800px) {#help .confignav {margin-left: -11px; margin-right: -11px; display: flex; justify-content: center; border-left: none; border-right: none} #help .tab, #help .tab2 {margin-left: 0; margin-right: 0; flex-grow: 1} .linkcontainer .applink:last-of-type {margin-bottom: 9px}}
 @media screen and (min-width: 1840px) {div[id^="config_"] .confignav {padding: 4px 4px 5px 3px; display: flex; flex-direction: row; flex-wrap: wrap; align-content: space-evenly; justify-content: center} div[id^="config_"] .tab, div[id^="config_"] .tab2 {margin: 0 -1px -1px 0; min-width: 70px; white-space: nowrap; flex: auto; flex-basis: content; flex-grow: .06} div[id^="config_"] .tab2:first-child {border-left: none} div[id^="config_"] .confignav {padding: 0} div[id^="config_"] .tab, div[id^="config_"] .tab2 {margin-top: -1px} div[id^="config_"] .tab:first-child {margin-left: -1px}} 
