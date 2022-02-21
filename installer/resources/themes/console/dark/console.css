@@ -70,8 +70,8 @@ ul {margin: 0; padding: 0}
 /* sidebar */
 #sb_wrap {margin: 0 0 10px 5px; padding: 0; width: auto; display: block; position: absolute; text-align: center; will-change: transform}
 .iframed #sb_wrap {display: none}
-.sb table {margin: -5px -7px -6px -8px; padding: 1px 1px 0; width: 210px; overflow: hidden; text-align: center; font-size: 8pt; border: 0; border-collapse: separate; border-spacing: 2px; background: none}
-#sidebar {margin-bottom: 7px; padding: 8px 10px 8px; width: 194px; text-align: center; font-size: 8pt; border: var(--border); border-radius: 3px; box-shadow: 0 1px 5px #000; background: repeating-linear-gradient(90deg, rgba(0,0,0,.4) 2px, rgba(0,16,0,.3) 4px), repeating-linear-gradient(180deg,rgba(0,0,0,.8) 2px, rgba(0,16,0,.8) 4px), var(--camo) #000; background-size: 4px 100%, 100% 4px, 1800px}
+.sb table {margin: -5px -7px -6px -8px; padding: 1px 1px 0; width: 210px; overflow: hidden; text-align: center; font-size: 8pt; border: 0; border-collapse: separate; border-spacing: 2px; background: none;}
+#sidebar {margin-bottom: 7px; padding: 8px 10px 8px; width: 194px; text-align: center; font-size: 8pt; border: var(--border); border-radius: 3px; background: repeating-linear-gradient(90deg, rgba(0,0,0,.4) 2px, rgba(0,16,0,.3) 4px), repeating-linear-gradient(180deg,rgba(0,0,0,.8) 2px, rgba(0,16,0,.8) 4px), var(--camo) #000; background-size: 4px 100%, 100% 4px, 1800px; contain: paint}
 #sb_logo {width: 100%; margin: -8px 0 -9px -10px; padding: 9px 10px 10px; display: inline-block; border-radius: 3px 3px 0 0; box-shadow: var(--bevel); background: linear-gradient(180deg,rgba(0,64,0,.3), rgba(0,24,0,.3)), repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px); background-size: 100%, 100% 4px}
 #sb_logo:hover {box-shadow: var(--highlight), inset 0 0 0 2px rgba(255,96,0,.6); background: linear-gradient(180deg,rgba(0,64,0,.6), rgba(0,24,0,.6)), repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px); background-size: 100%, 100% 4px; transition: ease background .15s}
 #sb_logo:active {box-shadow: var(--highlight), inset 0 0 0 2px rgba(255,144,0,.5), inset 6px 6px 6px rgba(0,0,0,.7); background: linear-gradient(180deg,rgba(0,32,0,.3), rgba(0,48,0,.3)), repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px)}
@@ -92,11 +92,11 @@ ul {margin: 0; padding: 0}
 #sidebar h3:hover a {color: var(--hover)}
 #sidebar h3:active {transition: ease box-shadow .01s}
 #sidebar h4 {margin: -6px -9px -8px; padding: 6px 1px; line-height: 1.2; font-size: 8pt; text-decoration: none; color: #2b2; border: 0; border-bottom: none; box-shadow: inset 0 0 0 1px #121, inset 0 0 5px 2px #000; background: linear-gradient(90deg, #001900, #001000 5%, #000 50%, #001000 95%, #001900)}
-#clock {margin: -7px -10px -9px; padding: 8px 0; position: relative; line-height: 1; letter-spacing: .1em; font-size: 18pt; font-weight: 700; color: #ffa; text-shadow: var(--textshadow); box-shadow: var(--highlight), inset 0 0 1px 1px #050; background: repeating-linear-gradient(180deg,rgba(255,255,255,.05) 2px, rgba(0,16,0,.2) 4px), linear-gradient(90deg, #010, #000, #010); -webkit-text-stroke: 1px rgba(220,220,128,.5); opacity: .9}
-#clock::before {content: ""; position: absolute; top: 0; left: 0; height: 100%; width: 100%; box-shadow: var(--highlight), inset 0 0 1px 1px #050; background: repeating-linear-gradient(90deg, rgba(0,0,0,.3) 2px, rgba(0,16,0,.2) 4px)}
+#clock {margin: -7px -10px -9px; padding: 8px 0; position: relative; line-height: 1; letter-spacing: .1em; font-size: 18pt; font-weight: 700; color: #ffa; text-shadow: var(--textshadow); box-shadow: var(--bevel); background: repeating-linear-gradient(180deg,rgba(255,255,255,.05) 2px, rgba(0,16,0,.2) 4px), linear-gradient(90deg, #010, #000, #010); -webkit-text-stroke: 1px rgba(220,220,128,.5); opacity: .9}
+#clock::before {content: ""; position: absolute; top: 0; left: 0; height: 100%; width: 100%; box-shadow: var(--bevel); background: repeating-linear-gradient(90deg, rgba(0,0,0,.3) 2px, rgba(0,16,0,.2) 4px)}
 #clock::after {margin-left: 3px; content: "UTC"; display: inline-block; font-size: 50%; vertical-align: middle}
 .sb table, #sidebar form {position: relative; background: repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.1) 2px, rgba(0,16,0,.1) 3px)}
-.sb table:not(#sb_localtunnels):not(#sb_services):not(#sb_advanced)::before {width: 0; height: 1px; position: absolute; top: -1px; left: -1px; display: block; background: linear-gradient(90deg, #730, #940); content: ""; animation: bar .15s ease-in-out .15s reverse; will-change: transform}
+.sb table:not(#sb_localtunnels):not(#sb_services):not(#sb_advanced)::before {width: 0; height: 1px; position: absolute; top: -1px; left: -1px; display: block; background: linear-gradient(90deg, #730, #940); content: ""; animation: bar .15s ease-in-out .15s reverse; backface-visibility: hidden; will-change: transform}
 #sb_peers, #sb_peersadvanced, #sb_tunnels, #sb_queue, #sb_bandwidth, #sb_general, #sb_advancedgeneral, #sb_localtunnels, #sb_advanced, #sb_internals, #sb_services {margin-top: -9px; margin-bottom: -8px; padding: 0 1px 2px; border-top: 1px solid rgba(16,64,16,.3); border-bottom: 1px solid rgba(16,64,16,.3)}
 #sb_advanced, #sb_internals, #sb_services, #sb_help {margin-top: -6px; padding: 0 1px}
 #sb_localtunnels {margin: -6px -7px -7px -8px; padding: 0}
@@ -140,7 +140,7 @@ ul {margin: 0; padding: 0}
 .sb_notice + .sb_notice {margin-top: -5px}
 p:empty + .sb_notice {margin-top: 9px}
 #sidebar tr {border: none; background-image: none; background-color: transparent}
-#sidebar form {margin: -7px -10px -9px; padding: 4px 3px; box-shadow: var(--highlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000}
+#sidebar form {margin: -7px -10px -9px; padding: 4px 3px; box-shadow: var(--bevel)}
 #sidebar form:first-child {margin: 6px 0 -5px 0}
 #sidebar p {padding: 0}
 #sidebar a:link, #sidebar a:visited {word-spacing: .05em}
@@ -153,7 +153,7 @@ p:empty + .sb_notice {margin-top: 9px}
 #sb_warning + hr {margin-top: 7px}
 #sidebar hr:last-child {margin-top: 5px; margin-bottom: -5px}
 .warntext {color: #b00}
-/*#sidebar tr {background: var(--topnav);}*/
+/*#sidebar tr {background: rgba(0,16,0,.2)}*/
 
 /* sidebar news */
 #sb_newsheadings {margin-left: -12px; margin-bottom: -7px; width: 206px; text-align: right}
@@ -165,11 +165,12 @@ p:empty + .sb_notice {margin-top: 9px}
 
 /* mini sidebar graph */
 #sb_graphcontainer {margin: -5px -8px -7px; padding: 0 1px 1px; height: 41px; position: relative; z-index: 10; overflow: hidden; box-shadow: inset 0 0 0 1px #131, inset 0 0 0 2px #000, inset 0 0 3px 1px #040; background: repeating-linear-gradient(90deg, rgba(0,0,0,0) 14px, rgba(64,160,64,.3) 15px, rgba(0,0,0,0) 15px, rgba(0,0,0,0) 30px), repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(48,152,48,.2), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 14px)}
+#sb_graphcontainer::after {width: calc(100% - 4px); display: inline-block; position: absolute; top: 2px; right: 2px; bottom: 2px; left: 2px; z-index: 10; box-shadow: var(--outline); background: var(--graphoverlay); content: ""; pointer-events: none}
 #sb_graphcontainer:hover a {cursor: zoom-in}
 #sb_graphstats {padding: 2px 8px; display: inline-block; position: relative; z-index: 1000; font-size: 110%; font-weight: 700; color: #050; text-shadow: none; border: var(--border_soft); border-top: none; border-radius: 0 0 2px 2px; background: #000; opacity: 0; transition: ease opacity .3s; pointer-events: none}
 #sb_graphcontainer:hover #sb_graphstats {opacity: 1; transition: ease opacity .2s}
 #minigraphcontainer {margin-top: -43px; margin-left: 1px; width: 204px; height: 39px; background-repeat: no-repeat; background-size: 204px 40px}
-#minigraph {margin-top: -17px; height: 38px; width: 204px; opacity: .9}
+#minigraph {margin-top: -17px; height: 38px; width: 204px; position: relative; z-index: 5; opacity: .9}
 #xhr > hr + #sb_graphcontainer > span + a > #minigraph {height: 39px}
 #homepage #minigraph {margin-top: -18px}
 #homepage #minigraphcontainer {margin-top: -42px; height: 38px}
@@ -462,7 +463,7 @@ input[type=file]::file-selector-button {font-size: 8.5pt}
 .tunnel_cap:empty {box-shadow: none}
 
 /* graphs */
-.graphContainer {margin: 4px 3px; padding: 4px 0; max-width: calc(100% - 18px); min-width: 140px; min-height: 60px; position: relative; display: inline-block; overflow: hidden; vertical-align: middle; text-align: center; border: var(--border); box-shadow: var(--highlight), inset 0 0 1px 1px #050; animation: ease grid-fade 2s forwards}
+.graphContainer {margin: 4px 3px; padding: 4px 0; max-width: calc(100% - 18px); min-width: 140px; min-height: 60px; position: relative; display: inline-block; overflow: hidden; vertical-align: middle; text-align: center; border: var(--border); box-shadow: var(--bevel); animation: ease grid-fade 2s forwards}
 .graphspanel {margin: 11px 0 -15px 0; padding: 0; width: 100%; overflow: hidden; text-align: center; background: none}
 .graphspanel form {margin-bottom: 25px; padding: 0 15px 0 15px; text-align: left}
 .graphspanel img {padding: 2px; vertical-align: top}
@@ -1300,8 +1301,8 @@ th code {user-select: all}
 #banneduntilrestart td {border-right: var(--border); text-align: center}
 #ipv4, #ipv6, #permabanned tr:nth-child(2) {border-top: var(--border); border-bottom: var(--border); background: var(--th)}
 
-.applink, .applabel, .statusnotes, .main, #news, .sb, .search tr, .logo, .themechoice, .themelabel, .langselect, .ui_lang {box-shadow: var(--highlight), inset 0 0 1px 1px #050}
-.applink, .sitemapLink {animation: zoom .05s linear .15s both; image-rendering: optimizeQuality; will-change: transform}
+.applink, .applabel, .statusnotes, .main, #news, .sb, .search tr, .logo, .themechoice, .themelabel, .langselect, .ui_lang {box-shadow: var(--bevel)}
+.appicon, .sitemapLink img {animation: zoom .15s linear .3s both; backface-visibility: hidden; will-change: transform}
 .applabel, .sitemapLabel, .themelabel, .ui_lang {background: var(--glow_bottom), linear-gradient(180deg,#001900,#001000 50%,#000); animation: fade .15s ease .25s reverse both}
 
 /* home */
@@ -2371,7 +2372,7 @@ iframe {height: 0}
 .iframed div.sorry {margin: -1px 5px 10px 5px}
 
 /* animations */
-@keyframes bar {from {width: calc(100%)}}
+@keyframes bar {from {width: calc(200%)}}
 @keyframes downloadbar {from {background: var(--download_bar)} to {background: repeating-linear-gradient(135deg, #010 1px, #010 6px, #000 7px, #000 11px)}}
 @keyframes fade {from {filter: opacity(1)} to {filter: opacity(0)}}
 @keyframes hide-up {0% {margin-top: 0; filter: opacity(1)} 30% {filter: opacity(0)} 100% {margin-top: -300px}}
@@ -2624,6 +2625,8 @@ input[type=text], input[type=password] {padding: 7px 9px}
 .log_debug, .log_info, .log_warn, .log_error, .log_crit, .log_omitted {margin-bottom: -3px; min-width: 40px; max-width: 40px}
 .newsAuthor {padding-left: 18px; background-size: 13px}
 .percentBarOuter {width: 251px}
+#sb_memoryBar {margin: -6px 0 -8px -9px; width: calc(100% + 16px)}
+#sb_graphcontainer {margin: -6px -9px -8px; background: repeating-linear-gradient(90deg, rgba(0,0,0,0) 16px, rgba(64,160,64,.3) 17px, rgba(0,0,0,0) 17px, rgba(0,0,0,0) 32px), repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(48,152,48,.2), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 14px)}
 .sb table[id^="sb_"] {width: 256px}
 .sb_info.sb_update {padding: 5px 5px 6px}
 .sb_info .percentBarOuter {margin-bottom: -16px}
@@ -2686,7 +2689,7 @@ h4#updateplugins {margin-top: -15px}
 #loggingoptions input[type=text], #loggingoptions select {min-width: 240px}
 #manualreseed input[type=submit] {min-width: 140px}
 #minigraphcontainer {margin-top: -40px; margin-left: 1px; width: 258px; height: 39px; background-size: 250px 40px}
-#minigraph {margin-top: -18px; width: 252px}
+#minigraph {margin-top: -18px; width: 254px}
 #netconfig label::before, #externali2cp td label::before, #externali2cp .nowrap::before, #reseedconfig .nowrap::before {min-height: 50px}
 #netdb .netdb_leases .flag img {margin: 1px -3px -4px}
 #participating a::after, #peercount a::after {margin: -8px 0 -13px -12px; padding: 9px 6px 9px 0}
