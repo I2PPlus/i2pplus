@@ -241,9 +241,9 @@ public class ProfileOrganizer {
             return null;
         }
 
-        if (VersionComparator.comp(version, "0.9.51") < 0) {
+        if (VersionComparator.comp(version, "0.9.52") < 0) {
             if (_log.shouldLog(Log.INFO))
-                _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> older than 0.9.51");
+                _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> older than 0.9.52");
            return null;
         }
 
