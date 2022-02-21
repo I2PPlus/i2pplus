@@ -192,7 +192,8 @@ p:empty + .sb_notice {margin-top: 9px}
 #sidebar .sb_info .percentBarOuter {margin: 5px -3px -2px; width: calc(100% + 3px); box-shadow: none; background: var(--download_bar); animation: downloadbar 3s infinite alternate}
 .sb_info .percentBarText {padding-top: 2px}
 .sb_info .percentBarInner {height: 16px}
-#restartRequired.sb_info.sb_update {padding: 4px 6px 6px; width: calc(100% - 13px)}
+#restartRequired.sb_info.sb_update {padding: 4px 6px 6px; width: calc(100% - 11px)}
+#sidebar #sb_downloadReleaseUpdate {margin-bottom: -8px}
 
 /* sidebar ajax router down */
 #down {margin: -6px 0; padding: 6px 5px; width: calc(100% - 8px); display: inline-block; font-size: 0; color: #a00; text-shadow: var(--textshadow); box-shadow: 0 0 1px 0 #030, var(--highlight), inset 0 0 1px 3px #131, inset 0 0 0 4px #000, inset 0 0 7px 3px #010; background: repeating-linear-gradient(135deg, #131, #131 10px, #300 11px, #000 12px, #000 19px, #300 19px, #000 20px); background-position: right center; background-size: 125%; animation: routerdown linear 3s forwards infinite}
@@ -370,7 +371,7 @@ input[type=file] {background: none}
 #sidebar .reload {background: var(--restart) no-repeat center center / 16px, var(--btn)}
 #sidebar .reload:hover, #sidebar .reload:focus {border: 1px solid #f60; background: var(--shutdown_hover) no-repeat 37% center / 16px, var(--restart_hover) no-repeat 63% center / 16px, var(--btn_hover_radial)}
 #sidebar .reload:active {border: 1px solid #f60; background: var(--shutdown_active) no-repeat 37% center / 16px, var(--restart_active) no-repeat 63% center / 16px, #f60}
-#sidebar .reload:active, #sidebar .stop:active, #sidebar .download:active {box-shadow: var(--highlight), inset 2px 2px 2px #555; background-color: #f60}
+#sidebar .reload:active, #sidebar .stop:active, #sidebar .download:active {box-shadow: var(--btn_shadow_active); background-color: var(--hover)}
 #sidebar .stop {background: var(--shutdown) no-repeat center center, var(--btn); background-size: 16px, 100%}
 #sidebar .stop:hover, #sidebar .stop:focus {background: var(--shutdown_hover) no-repeat center center / 16px, var(--btn_hover_radial)}
 #sidebar .stop:active {background: #f60 var(--shutdown_active) no-repeat center center / 16px}
@@ -414,7 +415,7 @@ button.control {margin: 3px; padding: 15px; min-width: 0; font-size: 0}
 #sidebar button.reload, #sidebar button.stop, #sidebar button.cancel {margin: 3px 2px; min-width: 97px; text-transform: capitalize}
 #sidebar button.download {width: 202px}
 #sidebar button.cancel {min-width: 151px}
-#updateAvailable {margin: 0 0 3px; width: 100%; display: inline-block; line-height: 1.2; color: #dd3; font-size: 9pt; text-shadow: var(--textshadow); opacity: .9}
+#updateAvailable {margin: 0 0 3px; padding: 4px 0 0; width: 100%; display: inline-block; line-height: 1.2; color: #dd3; font-size: 9pt; text-shadow: var(--textshadow); opacity: .9}
 #updateAvailable + br + button + br + #updateAvailable::before {margin: 2px 0 4px; width: 100%; height: 1px; display: inline-block; background: #020; content: ""}
 #updateAvailable + br + button + br + #updateAvailable {margin-top: 2px}
 
@@ -2638,7 +2639,7 @@ input[type=text], input[type=password] {padding: 7px 9px}
 #sb_graphcontainer {margin: -6px 0 -8px; background: repeating-linear-gradient(90deg, rgba(0,0,0,0) 16px, rgba(64,160,64,.3) 17px, rgba(0,0,0,0) 17px, rgba(0,0,0,0) 32px), repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(48,152,48,.2), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 14px)}
 #clock {margin-left: -1px}
 .sb_info.sb_update {padding: 5px 5px 6px}
-#restartRequired.sb_info.sb_update {width: calc(100% - 7px)}
+#restartRequired.sb_info.sb_update {width: calc(100% - 5px)}
 .sb_info .percentBarOuter {margin-bottom: -16px}
 .sb_info .percentBarText {margin-top: -1px}
 .sb_info.sb_update .percentBarOuter {margin-bottom: -5px}
