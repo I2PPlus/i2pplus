@@ -1908,6 +1908,7 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 #config_update .suboption label[for="newsThroughProxy"] {margin-right: 20px}
 #config_update b.suboption {padding: 3px 8px 4px 10px}
 #config_update .suboption .optbox {margin: -2px 3px 0 -5px}
+#config_update .tabletitle {margin-bottom: -2px}
 #updateHelper select {margin-left: 10px; max-width: calc(100% - 220px)}
 #updateProxyHostPort input {max-width: 200px}
 #updateHelper b, #updateProxyHostPort b, #i2pupdates b {margin-right: 9px; min-width: 190px; display: inline-block; text-align: right}
@@ -2496,8 +2497,9 @@ h3[id*="jobs"]:first-of-type {margin-top: 21px}
 }
 
 @media screen and (max-width: 1199px) {
-.tab, .tab2 {min-width: 48px}
-.tab a {padding: 4px 9px}
+.tab, .tab2 {padding: 1px 0; min-width: 50px}
+.tab2 {padding: 4px 12px 5px}
+.tab a {padding: 2px 14px 5px}
 #participatingtunnels .statusnotes:last-of-type {margin-bottom: 6px}
 #tunnels .tunneldisplay .cells {padding-left: 2px; padding-right: 2px}
 #tunnels .tunneldisplay .cells .tunnel_id {display: none}
@@ -2512,9 +2514,6 @@ h3[id*="jobs"]:first-of-type {margin-top: 21px}
 #clientconf code {display: inline-block; white-space: nowrap}
 #peers .idle, #peers .inout {min-width: 104px}
 #peers .skew {display: none}
-.tab, .tab2 {padding: 1px 0; min-width: 50px}
-.tab2 {padding: 4px 12px 5px}
-.tab a {padding: 2px 14px 5px}
 #plugininstall input[type=text] {min-width: 200px}
 #i2pupdates td:first-child {white-space: normal; width: 30%}
 td.optionsave {white-space: normal}
