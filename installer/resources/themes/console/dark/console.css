@@ -92,7 +92,7 @@ ul {margin: 0; padding: 0}
 #sidebar h3 a {width: 100%; vertical-align: middle; line-height: 1; text-shadow: var(--textshadow)}
 #sidebar h3:hover a {color: var(--hover)}
 #sidebar h3:active {transition: ease box-shadow .01s}
-#sidebar h4 {margin: -6px 0 -8px; padding: 6px 1px; line-height: 1.2; font-size: 8pt; text-decoration: none; color: #2b2; border: 0; border-bottom: none; box-shadow: inset 0 0 0 1px #121, inset 0 0 5px 2px #000; background: linear-gradient(90deg, #001900, #001000 5%, #000 50%, #001000 95%, #001900)}
+#sidebar h4 {margin: -6px -1px -8px; padding: 6px 1px; width: calc(100% - 1px); line-height: 1.2; font-size: 8pt; text-decoration: none; color: #2b2; border: none; box-shadow: var(--bevel), inset 0 0 0 3px #000, inset 0 0 5px 5px rgba(0,0,0,.5); background: rgba(0,64,0,.3)}
 #clock {margin: -7px 0 -9px -1px; padding: 8px 0; position: relative; line-height: 1; letter-spacing: .1em; font-size: 18pt; font-weight: 700; color: #ffa; text-shadow: var(--textshadow); box-shadow: var(--bevel); background: repeating-linear-gradient(180deg,rgba(255,255,255,.05) 2px, rgba(0,16,0,.2) 4px), linear-gradient(90deg, #010, #000, #010); -webkit-text-stroke: 1px rgba(220,220,128,.5); opacity: .9}
 #clock::before {content: ""; position: absolute; top: 0; left: 0; height: 100%; width: 100%; box-shadow: var(--bevel); background: repeating-linear-gradient(90deg, rgba(0,0,0,.3) 2px, rgba(0,16,0,.2) 4px)}
 #clock::after {margin-left: 3px; content: "UTC"; display: inline-block; font-size: 50%; vertical-align: middle}
@@ -206,14 +206,14 @@ p:empty + .sb_notice {margin-top: 9px}
 #sidebar h4 a {width: auto; display: inline}
 #sidebar #sb_warning {margin-bottom: 7px; padding: 6px 4px; background: #000; text-align: center; line-height: 1.2}
 #sb_warning + p:empty + form {margin-top: 11px; margin-bottom: -6px}
-.sb_netstatus, .tunnelBuildStatus, #bandwidthTestRunning {margin: -7px 0 -7px -3px; padding: 9px 3px; width: calc(100% + 4px); display: inline-block; vertical-align: middle; text-shadow: var(--textshadow); box-shadow: var(--highlight), inset 0 0 2px 1px #040; box-sizing: border-box}
-#sidebar .firewalled, .tunnelBuildStatus {color: #bb7; box-shadow: var(--highlight), inset 0 0 2px 1px #040}
-#sidebar .error, .tunnelBuildStatus.rejecting, #sb_warning {color: #900; box-shadow: var(--highlight), inset 0 0 2px 1px #700, inset 0 0 0 3px #000; background: linear-gradient(90deg, rgba(96,0,0,.25), rgba(96,0,0,.1), rgba(96,0,0,.25))}
-#sidebar .warn, #sidebar .clockskew {box-shadow: var(--highlight), inset 0 0 2px 1px #730}
+.sb_netstatus, .tunnelBuildStatus, #bandwidthTestRunning {margin: -9px 0 -7px -3px; padding: 9px 3px; width: calc(100% + 4px); display: inline-block; vertical-align: middle; vertical-align: -moz-middle-with-baseline; vertical-align: -webkit-baseline-middle; text-shadow: var(--textshadow); box-shadow: var(--bevel); box-sizing: border-box}
+#sidebar .firewalled, .tunnelBuildStatus {color: #bb7; box-shadow: var(--bevel)}
+#sidebar .error, .tunnelBuildStatus.rejecting, #sb_warning {color: #900; box-shadow: var(--highlight), inset 0 0 2px 1px #700, inset 0 0 0 3px #000; background: rgba(96,0,0,.3)}
+.sb_netstatus.running, #sidebar .warn, #sidebar .clockskew {box-shadow: var(--highlight), inset 0 0 2px 1px #730}
 #sidebar .testing, .tunnelBuildStatus.starting, #sb_localtunnels td[colspan="3"] {color: #aa3; box-shadow: var(--highlight), inset 0 0 2px 1px #bb0, inset 0 0 0 3px #000; background: repeating-linear-gradient(135deg, rgba(0,0,0,.5), rgba(0,0,0,.5) 10px, rgba(32,32,0,.5) 10px, rgba(32,32,0,.5) 20px); background-size: 400%}
 #sidebar .hidden, #sidebar .vmcomm, .tunnelBuildStatus.hidden {color: #999; box-shadow: var(--highlight), inset 0 0 2px 1px #777}
-.vmcomm {box-shadow: var(--highlight), inset 0 0 1px 1px #aaa, inset 0 0 0 2px rgba(0,0,0,.7); background: linear-gradient(90deg, #141414, #080808, #141414)}
-#sidebar .running, .tunnelBuildStatus.active {box-shadow: var(--bevel); background: rgba(64,255,64,.02)}
+.vmcomm {box-shadow: var(--highlight), inset 0 0 1px 1px #aaa, inset 0 0 0 2px rgba(0,0,0,.7); background: rgba(32,32,32,.5)}
+#sidebar .running, .tunnelBuildStatus.active {box-shadow: var(--bevel); background: rgba(64,128,64,.1)}
 #bandwidthTestRunning {background: repeating-linear-gradient(90deg, rgba(0,0,0,.3), rgba(0,0,0,.3) 10px, rgba(0,32,0,.3) 10px, rgba(0,32,0,.3) 20px) #010; background-size: 400%; animation: progress 120s 3s linear infinite both}
 .sb_netstatus::before, .tunnelBuildStatus::before {margin: 0 2px 0 -4px; height: 18px; width: 18px; display: inline-block; vertical-align: middle; content: ""}
 .sb_netstatus::before {background-size: 16px}
