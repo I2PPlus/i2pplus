@@ -63,12 +63,12 @@ class UDPSender {
         _context.statManager().createRateStat("udp.pushTime", "Time taken for a UDP packet get pushed out", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.sendQueueSize", "Number of packets queued on the UDP sender", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.sendQueueFailed", "Failed to add a new packet to the queue", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendQueueTrimmed", "Stale packets removed from queue (duration = remaining)", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.sendQueueTrimmed", "Stale packets removed from queue", "Transport [UDP]", UDPTransport.RATES);
 //        _context.statManager().createRequiredRateStat("udp.sendPacketSize", "Size of sent packets (bytes)", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.sendPacketSize", "Size of sent packets (bytes)", "Transport [UDP]", UDPTransport.RATES);
         //_context.statManager().createRateStat("udp.socketSendTime", "How long the actual socket.send took", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.sendBWThrottleTime", "How long send is blocked by bandwidth throttle", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendACKTime", "How long an ACK packet is blocked for (duration = Lifetime)", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.sendACKTime", "How long an ACK packet is blocked for", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.sendFailsafe", "Time bandwidth limiter is stuck", "Transport [UDP]", new long[] { 24*60*60*1000L });
         // used in RouterWatchdog
         if (fullStats())

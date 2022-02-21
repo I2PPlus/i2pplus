@@ -22,9 +22,9 @@ public class MessageValidator {
         _log = context.logManager().getLog(MessageValidator.class);
         _context = context;
         long[] rates = new long[] { 60*1000, 60*60*1000, 24*60*60*1000 };
-        context.statManager().createRateStat("router.duplicateMessageId", "Note that a duplicate messageId was received", "Router",
+        context.statManager().createRateStat("router.duplicateMessageId", "Duplicate messageId received", "Router",
                                              rates);
-        context.statManager().createRateStat("router.invalidMessageTime", "Note that a message outside the valid range was received", "Router",
+        context.statManager().createRateStat("router.invalidMessageTime", "Message outside valid range received", "Router",
                                              rates);
     }
 
