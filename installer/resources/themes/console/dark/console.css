@@ -227,6 +227,7 @@ p:empty + .sb_notice {margin-top: 9px}
 .sb_netstatus.running:not(:hover)::before, .sb_netstatus.hidden:not(:hover)::before, .sb_netstatus.firewalled:not(:hover)::before, .sb_netstatus.testing:not(:hover)::before {margin: -1px 0; height: 20px; width: 20px; background-size: 20px}
 .sb_netstatus.testing, .sb_netstatus.running, .sb_netstatus.hidden, .sb_netstatus.firewalled {font-size: 0}
 .sb_netstatus.running:hover, .sb_netstatus.hidden:hover, .sb_netstatus.firewalled:hover, .sb_netstatus.testing:hover {font-size: inherit}
+#sidebar #restartRequired.sb_info.sb_update {padding: 4px 6px 6px}
 
 /* tunnel build status */
 .tunnelBuildStatus {color: #ee9}
@@ -2637,6 +2638,7 @@ input[type=text], input[type=password] {padding: 7px 9px}
 .sb_info .percentBarOuter {margin-bottom: -16px}
 .sb_info .percentBarText {margin-top: -1px}
 .sb_info.sb_update .percentBarOuter {margin-bottom: -5px}
+#sidebar #restartRequired.sb_info.sb_update {padding: 4px 6px}
 .sb_netstatus, .tunnelBuildStatus {padding: 9px 3px}
 .sb_netstatus::before, .tunnelBuildStatus::before {margin: -1px 2px; height: 20px}
 .sb_update {padding-bottom: 3px}
