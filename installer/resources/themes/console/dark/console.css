@@ -206,14 +206,16 @@ p:empty + .sb_notice {margin-top: 9px}
 #sidebar h4 a {width: auto; display: inline}
 #sidebar #sb_warning {margin-bottom: 7px; padding: 6px 4px; background: #000; text-align: center; line-height: 1.2}
 #sb_warning + p:empty + form {margin-top: 11px; margin-bottom: -6px}
-.sb_netstatus, .tunnelBuildStatus, #bandwidthTestRunning {margin: -9px 0 -7px -3px; padding: 9px 3px; width: calc(100% + 4px); display: inline-block; vertical-align: middle; vertical-align: -moz-middle-with-baseline; vertical-align: -webkit-baseline-middle; text-shadow: var(--textshadow); box-shadow: var(--bevel); box-sizing: border-box}
+#sb_status, .sb_netstatus, .tunnelBuildStatus, #bandwidthTestRunning {margin: -9px 0 -7px -3px; padding: 9px 3px; width: calc(100% + 4px); display: inline-block; vertical-align: middle; vertical-align: -moz-middle-with-baseline; vertical-align: -webkit-baseline-middle; text-shadow: var(--textshadow); box-shadow: var(--bevel); box-sizing: border-box}
+#sidebar #sb_status {margin: -5px 1px -7px 0; width: calc(100% - 1px); box-shadow: var(--outline), var(--bevel), inset 0 0 7px 4px rgba(0,0,0,.8)}
+.sb_netstatus {display: inline-block; width: calc(100% - 2px); padding: 4px 3px; box-shadow: none !important}
 #sidebar .firewalled, .tunnelBuildStatus {color: #bb7; box-shadow: var(--bevel)}
 #sidebar .error, .tunnelBuildStatus.rejecting, #sb_warning {color: #900; box-shadow: var(--highlight), inset 0 0 2px 1px #700, inset 0 0 0 3px #000; background: rgba(96,0,0,.3)}
-.sb_netstatus.running, #sidebar .warn, #sidebar .clockskew {box-shadow: var(--highlight), inset 0 0 2px 1px #730}
+.sb_netstatus.running, #sidebar .warn, #sidebar .clockskew {box-shadow: var(--highlight), inset 0 0 2px 1px #730; background: rgba(126,48,0,.3)}
 #sidebar .testing, .tunnelBuildStatus.starting, #sb_localtunnels td[colspan="3"] {color: #aa3; box-shadow: var(--highlight), inset 0 0 2px 1px #bb0, inset 0 0 0 3px #000; background: repeating-linear-gradient(135deg, rgba(0,0,0,.5), rgba(0,0,0,.5) 10px, rgba(32,32,0,.5) 10px, rgba(32,32,0,.5) 20px); background-size: 400%}
 #sidebar .hidden, #sidebar .vmcomm, .tunnelBuildStatus.hidden {color: #999; box-shadow: var(--highlight), inset 0 0 2px 1px #777}
 .vmcomm {box-shadow: var(--highlight), inset 0 0 1px 1px #aaa, inset 0 0 0 2px rgba(0,0,0,.7); background: rgba(32,32,32,.5)}
-#sidebar .running, .tunnelBuildStatus.active {box-shadow: var(--bevel); background: rgba(64,128,64,.1)}
+#sidebar .running, .tunnelBuildStatus.active {box-shadow: var(--bevel_hard); background: linear-gradient(to right, rgba(0,0,0,.3), rgba(64,128,64,.1), rgba(0,0,0,.3))}
 #bandwidthTestRunning {background: repeating-linear-gradient(90deg, rgba(0,0,0,.3), rgba(0,0,0,.3) 10px, rgba(0,32,0,.3) 10px, rgba(0,32,0,.3) 20px) #010; background-size: 400%; animation: progress 120s 3s linear infinite both}
 .sb_netstatus::before, .tunnelBuildStatus::before {margin: 0 2px 0 -4px; height: 18px; width: 18px; display: inline-block; vertical-align: middle; content: ""}
 .sb_netstatus::before {background-size: 16px}
@@ -2449,6 +2451,7 @@ h3[id*="jobs"]:first-of-type {margin-top: 21px}
 #sb_internals {border-spacing: 0}
 #sb_internals td {padding-top: 2px; padding-bottom: 2px}
 #sb_tunnelstatus .tunnelBuildStatus::before {margin: -2px 0; background-size: 12px}
+#sidebar #sb_status {margin: -7px -2px -8px -3px; padding: 9px 2px; width: calc(100% + 1px)}
 #sidebar button.cancel {margin-top: 10px}
 #searchbar span {margin: 3px 3px 0}
 #sidebar .reload, #sidebar .stop, #sidebar .stop:hover, #sidebar .stop:focus, #sidebar .reload[value="restartImmediate"] {background-size: 12px, 100%}
@@ -2732,8 +2735,9 @@ span#newtab {margin-top: 4px}
 #tunnels .tab, #tunnels .tab2 {line-height: 1.3}
 #udpconnections td[class="cells"]:first-child, #ntcpconnections td[class="cells"]:first-child {padding-right: 8px; width: 55px}
 #warning2.sorry {margin: -17px 5px 18px 272px}
+#sidebar .sb_netstatus {width: calc(100% + 1px)}
+#sb_status {margin: -9px 0 -7px}
 }
-
 @media screen and (min-width: 1634px) {.leasesets_container {margin-bottom: 8px} th code {font-size: 9pt}}
 @media screen and (min-width: 1800px) {#help .confignav {margin-left: -11px; margin-right: -11px; display: flex; justify-content: center; border-left: none; border-right: none} #help .tab, #help .tab2 {margin-left: 0; margin-right: 0; flex-grow: 1} .linkcontainer .applink:last-of-type {margin-bottom: 9px}}
 @media screen and (min-width: 1840px) {div[id^="config_"] .confignav {padding: 4px 4px 5px 3px; display: flex; flex-direction: row; flex-wrap: wrap; align-content: space-evenly; justify-content: center} div[id^="config_"] .tab, div[id^="config_"] .tab2 {margin: 0 -1px -1px 0; min-width: 70px; white-space: nowrap; flex: auto; flex-basis: content; flex-grow: .06} div[id^="config_"] .tab2:first-child {border-left: none} div[id^="config_"] .confignav {padding: 0} div[id^="config_"] .tab, div[id^="config_"] .tab2 {margin-top: -1px} div[id^="config_"] .tab:first-child {margin-left: -1px}} 
