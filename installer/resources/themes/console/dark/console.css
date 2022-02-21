@@ -189,9 +189,10 @@ p:empty + .sb_notice {margin-top: 9px}
 #sidebar .sb_update {padding: 7px 5px 5px}
 .sb_update b {margin: 3px 0 1px; display: inline-block;color: var(--ink)}
 .sb_updatestatus {margin: -8px -6px -2px; padding: 5px 2px; width: calc(100% + 7px); line-height: 1.3; font-style: italic; border-bottom: var(--border); box-shadow: var(--bevel)}
-.sb_info .percentBarOuter {margin: 5px -3px -2px; box-shadow: none; background: var(--download_bar); animation: downloadbar 3s infinite alternate}
+#sidebar .sb_info .percentBarOuter {margin: 5px -3px -2px; width: calc(100% + 3px); box-shadow: none; background: var(--download_bar); animation: downloadbar 3s infinite alternate}
 .sb_info .percentBarText {padding-top: 2px}
 .sb_info .percentBarInner {height: 16px}
+#sidebar #restartRequired.sb_info.sb_update {padding: 4px 6px 6px; width: calc(100% - 9px)}
 
 /* sidebar ajax router down */
 #down {margin: -6px 0; padding: 6px 5px; width: calc(100% - 8px); display: inline-block; font-size: 0; color: #a00; text-shadow: var(--textshadow); box-shadow: 0 0 1px 0 #030, var(--highlight), inset 0 0 1px 3px #131, inset 0 0 0 4px #000, inset 0 0 7px 3px #010; background: repeating-linear-gradient(135deg, #131, #131 10px, #300 11px, #000 12px, #000 19px, #300 19px, #000 20px); background-position: right center; background-size: 125%; animation: routerdown linear 3s forwards infinite}
@@ -227,7 +228,6 @@ p:empty + .sb_notice {margin-top: 9px}
 .sb_netstatus.running:not(:hover)::before, .sb_netstatus.hidden:not(:hover)::before, .sb_netstatus.firewalled:not(:hover)::before, .sb_netstatus.testing:not(:hover)::before {margin: -1px 0; height: 20px; width: 20px; background-size: 20px}
 .sb_netstatus.testing, .sb_netstatus.running, .sb_netstatus.hidden, .sb_netstatus.firewalled {font-size: 0}
 .sb_netstatus.running:hover, .sb_netstatus.hidden:hover, .sb_netstatus.firewalled:hover, .sb_netstatus.testing:hover {font-size: inherit}
-#sidebar #restartRequired.sb_info.sb_update {padding: 4px 6px 6px}
 
 /* tunnel build status */
 .tunnelBuildStatus {color: #ee9}
@@ -2638,7 +2638,7 @@ input[type=text], input[type=password] {padding: 7px 9px}
 .sb_info .percentBarOuter {margin-bottom: -16px}
 .sb_info .percentBarText {margin-top: -1px}
 .sb_info.sb_update .percentBarOuter {margin-bottom: -5px}
-#sidebar #restartRequired.sb_info.sb_update {padding: 4px 6px}
+#sidebar #restartRequired.sb_info.sb_update {padding: 3px}
 .sb_netstatus, .tunnelBuildStatus {padding: 9px 3px}
 .sb_netstatus::before, .tunnelBuildStatus::before {margin: -1px 2px; height: 20px}
 .sb_update {padding-bottom: 3px}
