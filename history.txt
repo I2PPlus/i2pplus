@@ -1,12 +1,72 @@
+2022-02-21 I2P+ 1.7.0+ released
+
+2022-02-20 dr|z3d
+ * Console: Finish overhaul of dark and midnight console themes
+
+2022-02-14 dr|z3d
+ * Console: Move console-specific images to top level images/ dir
+
+2022-02-13 dr|z3d
+ * Console:
+
+2022-02-12 dr|z3d
+ * Console:
+   - Redo selectors for div.app and friends for more specificity
+   - Add note to label on /configsidebar about '0 to disable'
+   - Add note to infohelp on /configui about resetting lost password
+
+2022-02-12 dr|z3d
+ * I2PSnark: Migrate some selector classes to ids; shorten various selectors
+
+2022-02-12 dr|z3d
+ * Console: Refactor and fix dark theme arabic override
+
+2022-02-09 dr|z3d
+ * Console:
+   - Migrate language flags on /configui to svgs
+   - Add time.sntpServerList on help/advancedsettings and link from faq
+   - Add spacer column to /configtunnels and adjust css accordingly
+
 2022-02-09 zzz
  * NTCP: Fixes for SSU disabled
+
+2022-02-07 dr|z3d
+ * Console: Remove obsolete td align attribute, replace with align classes
+ * Logging: Add milliseconds to default log date format
+
+2022-02-06 dr|z3d
+ * I2PSnark: Reduce height of peer download bars
+
+2022-02-06 dr|z3d
+ * I2PSnark: Move peer percentage downloaded indicator to tooltip
+
+2022-02-03 dr|z3d
+ * Console:
+   - Add links to exploratory, client, fast and highcap in sidebar
+   - Add slider checkboxes for webapps/clients/plugins pages
 
 2022-02-03 zzz
  * SSU: Don't bid on connection to buggy routers
  * Tunnels: Avoid buggy routers
 
+2022-02-02 dr|z3d
+ * I2PTunnel: Increase first-line header timeout (was 20, now 30s)
+
+2022-02-01 dr|z3d
+ * Console: Embed Socks Outproxy plugin in iframe if embed apps enabled
+
+2022-01-31 dr|z3d
+ * eepsite: Reduce log retention to 7 days (was 90); increase max threads
+ * Console/I2PSnark: Remove unused javascript files
+ * I2PTunnel: Iconize tunnel control buttons
+ * Console/Webapps: Harden CSP headers
+
 2022-01-30 zzz
  * Reseed, DoH: Fixes for IPv6-only
+
+2022-01-28 dr|z3d
+ * Router: Increase max remote looksup when floodfill (was 30, now 50)
+ * Console: use proxy.css for in-console errors and migrate css rules
 
 2022-01-26 zzz
  * NTCP: Clock skew handling improvements
@@ -19,8 +79,38 @@
  * UDP: Pass priority through the packet builder,
    add priority to UDP-Sender queue
 
+2022-01-23 dr|z3d
+ * Console: Add Mbit/s indication for allocated shared bandwidth
+ * Console/Webapps: Migration of theme-based shared css rules to global.css
+
 2022-01-21 zzz
  * Util: Fix leak of SimpleTimer2 shutdown task
+
+2022-01-21 dr|z3d
+ * Router: Increase verify floodfill store timeout (was 20s, now 30s)
+
+2022-01-18 dr|z3d
+ * Wrapper:
+   - Adjust deadlock detection interval to 5m (new installs)
+   - Reduce restart delay to 10s (new installs)
+ * I2PSnark:
+   - Increase short timeout on torrent fetch
+   - Convert known b32 ad b64 addresses to hostname in router logs
+
+2022-01-17 dr|z3d
+ * Console: Add custom Socks Outproxy sidebar icon (light/midnight)
+
+2022-01-15 dr|z3d
+ * Console: Don't display OS specific strings in Java version on /jars
+
+2022-01-13 dr|z3d
+ * Console: Display icon only for various network states in sidebar
+   unless mouseover
+
+2022-01-09 dr|z3d
+ * Console:
+   - Only show peers on /peers if we've talked to them in the last minute
+   - Merge outbound queue and backlogged columns on /peers
 
 2022-01-06 zzz
  * Router: Prevent deadlock at startup
@@ -39,6 +129,9 @@
  * i2pcontrol: Handle more router states mapping to i2pcontrol states
  * i2ptunnel: Add hooks to get the session from the contoller
 
+2021-12-28 dr|z3d
+ * I2PSnark: Display version in screenlog at startup if standalone
+
 2021-12-28 zzz
  * Console: Partial string case-insensitive match for netdb family search
  * i2ptunnel: Add IRC filter support for IRCv3 message tags
@@ -55,11 +148,30 @@
          in client-side AppContext SimpleSession
  * i2psnark: Standalone fixes for router startup/shutdown
 
+2021-12-26 dr|z3d
+ * RRD4J: Add minimum values to graph legend
+ * Console: Display IP address for blocklisted peers in banlist
+
+2021-12-25 dr|z3d
+ * I2PSnark: Remove torrent status label column
+ * Streaming: Increase default tags to send (was 32, now 40)
+
+2021-12-23 dr|z3d
+ * I2PSnark: Use K/s notation instead of Kps
+
 2021-12-23 zzz
  * i2psnark: Various standalone fixes
 
 2021-12-21 zzz
  * Transport: Async NTCP writes (MR !43)
+
+2021-12-19 dr|z3d
+ * Console:
+   - Add link to gwhois.org for netdb ip addresses
+   - Display indicator for balinsted routers in netdb router listing
+
+2021-12-18 dr|z3d
+ * Router: Increase per-peer timeouts for LeaseSet republish job
 
 2021-12-18 zzz
  * Tunnels:
