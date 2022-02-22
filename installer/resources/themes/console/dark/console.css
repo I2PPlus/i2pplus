@@ -23,7 +23,7 @@ h1, #applinks, #sitelinks, #news h3, .main h3 {position: relative; z-index: 10; 
 h1, .main h2, .main h3, #applinks, #sitelinks {-webkit-text-stroke: var(--stroke); box-shadow: var(--bevel)}
 h2 a:hover {color: var(--hover)}
 h2 a:visited {color: #191}
-h2, h3, h4 {box-shadow: var(--highlight); contain: paint}
+h2, h3, h4 {contain: paint}
 h2 {margin: 15px 0 12px 0; padding: 10px; vertical-align: middle; letter-spacing: .08em; word-spacing: .1em; word-wrap: break-word; text-transform: uppercase; font-size: 12pt; text-shadow: 0 0 2px #010; border: var(--border); border-radius: 2px}
 h3 {margin: 12px 0 10px 0; padding: 7px 10px; position: relative; overflow: hidden; letter-spacing: .08em; text-transform: uppercase; text-shadow: 0 0 2px #010; border: var(--border)}
 h3 + table {position: relative; z-index: 0}
