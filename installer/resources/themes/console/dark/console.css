@@ -961,7 +961,11 @@ h3.tabletitle + .statusnotes, table.tunneldisplay {margin-top: -1px}
 #netdb #netdbcountrylist a {padding: 2px 0; width: 100%; display: inline-block}
 #netdboverview {margin-bottom: 10px}
 #netdb #netdboverview th, #netdb #netdboverview tr, #netdb #netdboverview td {line-height: 1; box-shadow: none}
+#netdboverview td, .sybil_addresses td {line-height: 1.6}
+#netdb #netdboverview td {border-right: var(--border)}
+#netdboverview td {background: repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px); background-size: 4px 100%}
 #netdboverview table th, #netdboverview table td {padding: 6px 8px}
+#netdboverview table tr:last-child td {border-bottom: var(--border)}
 #netdbversions, #netdbtransports, #netdbcountrylist, #netdbtiers {margin: -1px 0 0; border: var(--border_soft); border-right: none; border-left: none}
 #netdbversions, #netdbtransports, #netdbtiers {border-right: none}
 #netdbcountrylist {border-right: none; border-bottom: none}
@@ -978,16 +982,16 @@ h3.tabletitle + .statusnotes, table.tunneldisplay {margin-top: -1px}
 #netdboverview table th:last-child, #netdboverview table td:last-child {text-align: right}
 #netdbversions tbody tr:first-child td, #netdbcountrylist tbody tr:first-child td, #netdbtiers tbody tr:first-child td {border-top: var(--border)}
 #netdbtiers th {border-bottom: none}
-#netdboverview #netdbtiers tr:last-child td {border-bottom: none}
 #netdboverview table th, #netdboverview table td {padding: 5px 12px}
 #netdboverview table th {font-size: 95%}
 #netdboverview table th:first-child::before, #netdboverview table td:first-child::before {min-height: 26px; display: inline-block; vertical-align: middle; content: ""}
 #netdboverview #netdbversions td, #netdboverview #netdbtransports td, #netdboverview #netdbcountrylist td, #netdboverview #netdbtiers td {border-right: none; border-left: none}
 #netdbcountrylist td, #netdbversions td, #netdbtransports td, #netdbtiers td {background: none; border-bottom: var(--border_softer)}
+#netdboverview #netdbcountrylist tr:last-child td {border-bottom: none}
+#netdboverview #netdbtiers tr:last-child td {border-bottom: none}
+#netdb #netdbtransports tr:first-child th {border-top: var(--border)}
 #netdbtransports td:last-child, #netdbtiers td:last-child {width: 30%; text-align: center}
 #netdbversions .version {min-width: 48px}
-#netdboverview td, .sybil_addresses td {line-height: 1.6}
-#netdboverview td {background: repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px); background-size: 4px 100%}
 #netdbtiers a {margin: 0 8px 0 0; padding: 0 4px; min-width: 20px}
 table[cellspacing="30"] > tbody > tr > th[colspan="3"] {padding: 10px; text-transform: uppercase; font-size: 11pt; letter-spacing: .08em; word-spacing: .1em}
 table[cellspacing="30"] > tbody > tr > td {padding: 8px}
