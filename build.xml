@@ -28,7 +28,6 @@
         <echo message=" buildProperties                              Echo build properties for current build" />
         <echo message=" bumpBuildTime                                Update core/java/src/net/i2p/time/BuildTime.java with today's date" />
         <echo message=" buildAddressbook                             Build Addressbook .jar component &#10140; ./build/addressbook.jar" />
-        <echo message=" buildBOB                                     Build BOB .jar component &#10140; ./build/BOB.jar" />
         <echo message=" buildCore                                    Build i2p .jar component &#10140; ./build/i2p.jar" />
         <echo message=" buildDesktopGui                              Build standalone DesktopGUI &#10140; ./build/desktopgui.jar" />
         <echo message=" buildI2PControl                              Build I2PControl .war component &#10140; ./build/jsonrpc.war" />
@@ -61,7 +60,6 @@
         <echo message=" installer-windows / installer5-windows       Build Windows GUI installer (IzPack4 / IzPack5) &#10140; ./i2pinstall&#8230;windows.exe" />
         <echo message=" javadoc                                      Create javadocs for project &#10140; ./build/javadoc &amp; ./javadoc.zip" />
         <echo message=" javadoc-test                                 Javadocs for unit test classes &#10140; ./build/javadoc-test" />
-        <echo message=" justBOB                                      Build a standalone BOB-one.jar &#10140; ./BOB-one.jar" />
         <echo message=" pkg                                          Run &apos;distclean&apos; then package everything up (updater, installer)" />
         <echo message=" pkg-portable-win32                           Build a minimal, portable install for Win32 &#10140; ./portable-win32.zip" />
         <echo message=" poupdate-source                              Update the .po files for translators (requires jsp files to be compiled first)
@@ -337,11 +335,6 @@
             <arg value="+%s" />
         </exec>
         <echo message="Epoch is: ${epoch}" />
-    </target>
-
-    <target name="buildBOB" depends="buildMinistreaming" >
-        <ant dir="apps/BOB/" target="jar" />
-        <copy file="apps/BOB/dist/BOB.jar" todir="build/" />
     </target>
 
     <target name="buildSAM" depends="buildMinistreaming" >
@@ -1169,7 +1162,6 @@
         <delete dir="installer/lib/izpack5/patches/java/build" quiet="true" />
         <delete file="syndie-standalone.zip" failonerror="false" quiet="true" />
         <delete file="i2psnark-standalone.zip" failonerror="false" quiet="true" />
-        <delete file="BOB-one.jar" failonerror="false" quiet="true" />
         <delete file="core/java/cobertura.ser"/>
         <delete file="javadoc.zip" />
         <delete file="i2p.fba" />
@@ -1192,7 +1184,6 @@
         <ant dir="apps/streaming/java/" target="distclean" />
         <ant dir="apps/i2ptunnel/java/" target="distclean" />
         <ant dir="apps/sam/java/" target="distclean" />
-        <ant dir="apps/BOB" target="clean" />
         <ant dir="apps/desktopgui" target="clean" />
         <ant dir="apps/routerconsole/java/" target="distclean" />
         <ant dir="apps/addressbook/" target="distclean" />
@@ -1557,7 +1548,7 @@
     <target name="preplicenses" depends="preplicenses-unlesspkg" >
         <copy file="LICENSE.txt" todir="pkg-temp/" />
         <copy todir="pkg-temp/licenses/" >
-          <fileset dir="licenses/" excludes="COPYING-BOB.txt" />
+          <fileset dir="licenses/" />
         </copy>
         <copy file="apps/imagegen/identicon/README.md" tofile="pkg-temp/licenses/LICENSE-Identicon.txt" />
         <copy file="apps/desktopgui/LICENSE" tofile="pkg-temp/licenses/LICENSE-DesktopGUI.txt" />
@@ -2355,10 +2346,6 @@
 
     <target name="slackpkg">
         <ant dir="Slackware/i2p/" target="slackpkg" />
-    </target>
-    <target name="justBOB" depends="builddepSmall, jbigi">
-        <ant dir="apps/BOB/" target="onejar" />
-        <copy file="apps/BOB/dist/BOB-one.jar" todir="." />
     </target>
 
     <target name="sloccount.report">
