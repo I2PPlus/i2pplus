@@ -218,7 +218,7 @@ p:empty + .sb_notice {margin-top: 9px}
 #sidebar .testing, .tunnelBuildStatus.starting, #sb_localtunnels td[colspan="3"] {color: #aa3; box-shadow: var(--highlight), inset 0 0 2px 1px #bb0; background: repeating-linear-gradient(135deg, rgba(0,0,0,.5), rgba(0,0,0,.5) 10px, rgba(56,56,0,.5) 10px, rgba(48,48,0,.5) 20px); background-size: 400%}
 #sidebar .hidden, #sidebar .vmcomm, .tunnelBuildStatus.hidden {color: #999; box-shadow: var(--highlight), inset 0 0 2px 1px #777}
 .vmcomm {box-shadow: var(--highlight), inset 0 0 1px 1px #aaa, inset 0 0 0 2px rgba(0,0,0,.7); background: rgba(92,92,92,.3)}
-#sidebar .running, .tunnelBuildStatus.active {box-shadow: var(--highlight), inset 0 0 2px 1px rgba(0,128,0,.7); background: repeating-linear-gradient(180deg, rgba(0,0,0,.3) 2px, rgba(0,64,0,.3) 4px) center center / 100% 4px, var(--glow_top), linear-gradient(to right, rgba(16,40,15,.5), rgba(0,0,0,.9), rgba(16,40,15,.5))}
+#sidebar .running, .tunnelBuildStatus.active {box-shadow: var(--highlight), inset 0 0 2px 1px rgba(0,192,0,.7); background: repeating-linear-gradient(180deg, rgba(0,0,0,.8) 2px, rgba(0,64,0,.3) 4px) center center / 100% 4px, var(--glow_top), linear-gradient(to right, rgba(16,40,15,.5), rgba(0,0,0,.9), rgba(16,40,15,.5))}
 #bandwidthTestRunning {background: repeating-linear-gradient(90deg, rgba(0,0,0,.3), rgba(0,0,0,.3) 10px, rgba(0,32,0,.3) 10px, rgba(0,32,0,.3) 20px) #010; background-size: 400%; animation: progress 120s 3s linear infinite both}
 .sb_netstatus::before, .tunnelBuildStatus::before {margin: 0 2px 0 -4px; height: 18px; width: 18px; display: inline-block; vertical-align: middle; content: ""}
 .sb_netstatus::before {background-size: 16px}
@@ -2427,6 +2427,7 @@ h3[id*="jobs"]:first-of-type {margin-top: 21px}
 .netdbentry .tunnel_cap, .netdbentry .tier, .netdbentry .ff, .netdbentry .reachable, .netdbentry .unreachable, .netdbentry .version, .sybil_routerinfo .tunnel_cap, .sybil_routerinfo .tier, .sybil_routerinfo .ff, .sybil_routerinfo .reachable, .sybil_routerinfo .unreachable, .sybil_routerinfo .version {padding: 2px 4px}
 .netdb_header img[src="/flags.jsp?c=a0"] {margin-bottom: -4px}
 .netdbStats li {margin: 1px 5px}
+.newsAuthor {padding-top: 2px}
 .sb_netstatus.running:not(:hover)::before, .sb_netstatus.hidden:not(:hover)::before, .sb_netstatus.firewalled:not(:hover)::before, .sb_netstatus.testing:not(:hover)::before {margin: 0; height: 18px; width: 18px; background-size: 18px}
 .sitemapLink, .sitemapLabel, #sitemap .applink, #sitemap .applabel {width: 160px; min-width: 160px}
 .tunnelBuildStatus {font-size: 90%}
