@@ -215,22 +215,22 @@ p:empty + .sb_notice {margin-top: 9px}
 #sidebar .firewalled, .tunnelBuildStatus {color: #bb7; box-shadow: var(--bevel)}
 #sidebar .error, .tunnelBuildStatus.rejecting, #sb_warning {color: #900; box-shadow: var(--highlight), inset 0 0 2px 1px #700; background: rgba(96,0,0,.3)}
 .sb_netstatus.running, #sidebar .warn, #sidebar .clockskew {box-shadow: var(--highlight), inset 0 0 2px 1px #730; background: rgba(126,48,0,.3)}
-#sidebar .testing, .tunnelBuildStatus.starting, #sb_localtunnels td[colspan="3"] {color: #aa3; box-shadow: var(--highlight), inset 0 0 2px 1px #bb0; background: repeating-linear-gradient(135deg, rgba(0,0,0,.5), rgba(0,0,0,.5) 10px, rgba(32,32,0,.5) 10px, rgba(32,32,0,.5) 20px); background-size: 400%}
+#sidebar .testing, .tunnelBuildStatus.starting, #sb_localtunnels td[colspan="3"] {color: #aa3; box-shadow: var(--highlight), inset 0 0 2px 1px #bb0; background: repeating-linear-gradient(135deg, rgba(0,0,0,.5), rgba(0,0,0,.5) 10px, rgba(56,56,0,.5) 10px, rgba(48,48,0,.5) 20px); background-size: 400%}
 #sidebar .hidden, #sidebar .vmcomm, .tunnelBuildStatus.hidden {color: #999; box-shadow: var(--highlight), inset 0 0 2px 1px #777}
 .vmcomm {box-shadow: var(--highlight), inset 0 0 1px 1px #aaa, inset 0 0 0 2px rgba(0,0,0,.7); background: rgba(92,92,92,.3)}
-#sidebar .running, .tunnelBuildStatus.active {box-shadow: var(--highlight), inset 0 0 2px 1px rgba(0,128,0,.7); background: linear-gradient(to right, rgba(0,0,0,.3), rgba(64,128,64,.1) 25%, rgba(64,128,64,.1) 75%, rgba(0,0,0,.3))}
+#sidebar .running, .tunnelBuildStatus.active {box-shadow: var(--highlight), inset 0 0 2px 1px rgba(0,128,0,.7); background: linear-gradient(to right, rgba(0,0,0,.5), rgba(16,40,15,.3) 25%, rgba(16,40,15,.3) 75%, rgba(0,0,0,.5))}
 #bandwidthTestRunning {background: repeating-linear-gradient(90deg, rgba(0,0,0,.3), rgba(0,0,0,.3) 10px, rgba(0,32,0,.3) 10px, rgba(0,32,0,.3) 20px) #010; background-size: 400%; animation: progress 120s 3s linear infinite both}
 .sb_netstatus::before, .tunnelBuildStatus::before {margin: 0 2px 0 -4px; height: 18px; width: 18px; display: inline-block; vertical-align: middle; content: ""}
 .sb_netstatus::before {background-size: 16px}
 .sb_netstatus.error::before {background: var(--net_error) var(--center)}
 .sb_netstatus.warn::before {background: var(--net_warning) var(--center)}
-.sb_netstatus.testing::before {background: var(--net_starting) var(--center)}
+.sb_netstatus.testing::before {background: var(--net_starting) var(--center); filter: drop-shadow(0 0 2px #000) drop-shadow(0 0 4px #000) drop-shadow(0 0 10px rgba(255,255,0,.3))}
 .sb_netstatus.hidden::before {background: var(--net_hidden) var(--center)}
-.sb_netstatus.running::before {background: var(--net_ok) var(--center)}
-.sb_netstatus.firewalled::before {background: var(--net_firewalled) var(--center)}
+.sb_netstatus.running::before {background: var(--net_ok) var(--center); filter: drop-shadow(0 0 4px #000) drop-shadow(0 0 12px rgba(96,255,96,.3))}
+.sb_netstatus.firewalled::before {background: var(--net_firewalled) var(--center); filter: drop-shadow(0 0 4px #000) drop-shadow(0 0 12px rgba(255,72,72,.4))}
 .sb_netstatus.vmcomm::before {background: var(--net_vm) var(--center)}
 .sb_netstatus.clockskew::before {background: var(--net_clockskew) var(--center)}
-.sb_netstatus.running:not(:hover)::before, .sb_netstatus.hidden:not(:hover)::before, .sb_netstatus.firewalled:not(:hover)::before, .sb_netstatus.testing:not(:hover)::before {margin: -1px 0; height: 20px; width: 20px; background-size: 20px}
+.sb_netstatus.running:not(:hover)::before, .sb_netstatus.hidden:not(:hover)::before, .sb_netstatus.firewalled:not(:hover)::before, .sb_netstatus.testing:not(:hover)::before {margin: -3px 0; height: 24px; width: 40px; background-size: 20px}
 .sb_netstatus.testing, .sb_netstatus.running, .sb_netstatus.hidden, .sb_netstatus.firewalled {font-size: 0}
 .sb_netstatus.running:hover, .sb_netstatus.hidden:hover, .sb_netstatus.firewalled:hover, .sb_netstatus.testing:hover {font-size: inherit}
 
