@@ -206,7 +206,7 @@ td > b {margin-right: 5px; display: inline-block; min-width: 30px}
 .tunnelPreview {text-align: left}
 .tunnelPreview, .tunnelPort {width: 15%; text-align: center}
 .tunnelLocation, .tunnelInterface {width: 20%}
-.tunnelLocation font[color="red"] {margin-left: 3px}
+.tunnelLocation font[color="red"] {margin: 0 3px; font-size: 80%}
 .tunnelStatus {text-align: center; width: 10%; min-width: 48px}
 .tunnelControl {width: 5%; text-align: right; white-space: nowrap}
 #clientTunnels tr, #serverTunnels tr, .tunnelConfig tr {background: rgba(0,4,0,.4)}

@@ -186,8 +186,7 @@ public class PluginStarter implements Runnable {
                 if (loop++ > 180) return;
             }
             // wait for proxy
-//            mgr.update(TYPE_DUMMY, 3*60*1000);
-            mgr.update(TYPE_DUMMY, 15*60*1000);
+            mgr.update(TYPE_DUMMY, 3*60*1000);
             mgr.notifyProgress(null, Messages.getString("Checking for plugin updates", ctx));
             loop = 0;
             do {
