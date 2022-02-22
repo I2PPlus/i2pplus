@@ -192,7 +192,7 @@ p:empty + .sb_notice {margin-top: 9px}
 #sidebar .sb_info .percentBarOuter {margin: 3px -4px 0; width: calc(100% - 2px); box-shadow: none; background: var(--download_bar); animation: downloadbar 3s infinite alternate}
 .sb_info .percentBarText {padding-top: 2px}
 .sb_info .percentBarInner {height: 16px}
-#restartRequired.sb_info.sb_update {padding: 4px 6px 6px; width: calc(100% - 11px)}
+#restartRequired.sb_info.sb_update {padding: 4px 6px 6px; width: calc(100% - 11px); box-shadow: var(--bevel_hard), inset 0 0 0 3px #000, inset 0 0 5px 5px rgba(0,0,0,.5)}
 #sidebar #sb_downloadReleaseUpdate {margin-bottom: -8px}
 
 /* sidebar ajax router down */
@@ -2644,7 +2644,7 @@ input[type=text], input[type=password] {padding: 7px 9px}
 .sb_info .percentBarOuter {margin-bottom: -16px}
 .sb_info .percentBarText {margin-top: -1px}
 .sb_info.sb_update .percentBarOuter {margin-bottom: -5px}
-#sidebar #restartRequired.sb_info.sb_update {padding: 3px 3px 4px}
+#sidebar #restartRequired.sb_info.sb_update {padding: 5px 3px 7px; text-shadow: 0 1px 1px #000}
 .sb_netstatus::before, .tunnelBuildStatus::before {margin: 0 2px}
 .sb_update {padding-bottom: 3px}
 .sb_update b {margin-bottom: 2px}
