@@ -209,11 +209,6 @@ class PacketHandler {
                 if (packet == null) break; // keepReading is probably false, or bind failed...
 
                 packet.received();
-                //if (_log.shouldLog(Log.DEBUG))
-                //    _log.debug("UDP packet received: " + packet);
-                _state = 4;
-                //long queueTime = packet.getLifetime();
-                //long handleStart = _context.clock().now();
                 try {
                     handlePacket(_reader, packet);
                 } catch (RuntimeException e) {
@@ -249,7 +244,6 @@ class PacketHandler {
                     // Group 2: Inbound Establishment
                     if (_log.shouldLog(Log.DEBUG))
                         _log.debug("Packet received IS for an Inbound establishment");
-                    _state = 12;
                     receivePacket(reader, packet, est);
                 } else {
                     //if (_log.shouldLog(Log.DEBUG))
@@ -259,7 +253,6 @@ class PacketHandler {
                         // Group 3: Outbound Establishment
                         if (_log.shouldLog(Log.DEBUG))
                             _log.debug("Packet received IS for an Outbound establishment");
-                        _state = 14;
                         receivePacket(reader, packet, oest);
                     } else {
                         // Group 4: New conn or needs fallback
@@ -308,7 +301,6 @@ class PacketHandler {
                         if (est != null) {
                             if (_log.shouldLog(Log.DEBUG))
                                 _log.debug("Packet from an existing peer IS for an Inbound establishment");
-                            _state = 22;
                             receivePacket(reader, packet, est, false);
                         } else {
                             if (_log.shouldLog(Log.WARN))
