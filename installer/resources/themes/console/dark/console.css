@@ -164,16 +164,13 @@ p:empty + .sb_notice {margin-top: 9px}
 #sidebar #sb_newsheadings tr:last-child td {border-bottom: none}
 
 /* mini sidebar graph */
-#sb_graphcontainer {margin: -6px 0 -8px; padding: 0 1px 1px; width: calc(100% - 3px); height: 41px; position: relative; z-index: 10; overflow: hidden; box-shadow: inset 0 0 0 1px #131, inset 0 0 0 2px #000, inset 0 0 3px 1px #040; background: repeating-linear-gradient(90deg, rgba(0,0,0,0) 15px, rgba(64,160,64,.3) 16px, rgba(0,0,0,0) 16px, rgba(0,0,0,0) 31px), repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(48,152,48,.2), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 14px)}
+#sb_graphcontainer {margin: -6px 0 -8px; padding: 0 1px 1px; width: calc(100% - 3px); height: 44px; position: relative; z-index: 10; overflow: hidden; box-shadow: inset 0 0 0 1px #131, inset 0 0 0 2px #000, inset 0 0 3px 1px #040; background: repeating-linear-gradient(90deg, rgba(0,0,0,0) 15px, rgba(64,160,64,.3) 16px, rgba(0,0,0,0) 16px, rgba(0,0,0,0) 31px), repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(48,152,48,.2), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 14px)}
 #sb_graphcontainer::after {width: calc(100% - 4px); display: inline-block; position: absolute; top: 2px; right: 2px; bottom: 2px; left: 2px; z-index: 10; box-shadow: var(--outline), var(--bevel_hard); background: var(--graphoverlay); content: ""; pointer-events: none}
 #sb_graphcontainer:hover a {cursor: zoom-in}
 #sb_graphstats {padding: 2px 8px; display: inline-block; position: relative; z-index: 1000; font-size: 110%; font-weight: 700; color: #050; text-shadow: none; border: var(--border_soft); border-top: none; border-radius: 0 0 2px 2px; background: #000; opacity: 0; transition: ease opacity .3s; pointer-events: none}
 #sb_graphcontainer:hover #sb_graphstats {opacity: 1; transition: ease opacity .2s}
-#minigraphcontainer {margin-top: -43px; margin-left: 1px; width: 204px; height: 39px; background-repeat: no-repeat; background-size: 204px 40px}
-#minigraph {margin: -18px 0 0; width: 100%; height: 38px; position: relative; z-index: 5}
-#xhr > hr + #sb_graphcontainer > span + a > #minigraph {height: 39px}
-#homepage #minigraph {margin-top: -18px}
-#homepage #minigraphcontainer {margin-top: -42px; height: 38px}
+#minigraphcontainer {margin-top: -43px; margin-left: 1px; width: 204px; height: 44px; background-repeat: no-repeat; background-size: 204px 40px}
+#minigraph {margin: -15px 0 0; width: 100%; height: 36px; position: relative; z-index: 5}
 
 /* status bar */
 .percentBarOuter {margin: -3px 0 -5px; width: calc(100% - 3px); position: relative; border: var(--border_soft); box-shadow: var(--highlight), inset 0 3px 3px rgba(0,0,0,.8); background: linear-gradient(90deg, rgba(0,128,0,.05) 45%, rgba(255,96,0,.1), rgba(255,0,0,.1)), repeating-linear-gradient(90deg, #000 1px, #000 2px, #010 2px, #010 4px); opacity: 1}
@@ -2638,7 +2635,7 @@ input[type=text], input[type=password] {padding: 7px 9px}
 .log_debug, .log_info, .log_warn, .log_error, .log_crit, .log_omitted {margin-bottom: -3px; min-width: 40px; max-width: 40px}
 .newsAuthor {padding-left: 18px; background-size: 13px}
 #sb_memoryBar.percentBarOuter {margin: -6px 0 -8px}
-#sb_graphcontainer {margin: -6px 0 -8px; background: repeating-linear-gradient(90deg, rgba(0,0,0,0) 16px, rgba(64,160,64,.3) 17px, rgba(0,0,0,0) 17px, rgba(0,0,0,0) 32px), repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(48,152,48,.2), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 14px)}
+#sb_graphcontainer {margin: -6px 0 -8px; background: repeating-linear-gradient(90deg, rgba(0,0,0,0) 16px, rgba(64,160,64,.3) 17px, rgba(0,0,0,0) 17px, rgba(0,0,0,0) 32px), repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(48,152,48,.2), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 16px)}
 #clock {margin-left: -1px}
 .sb_info.sb_update {padding: 5px 5px 6px}
 .sb_info .percentBarText {margin-top: -1px}
@@ -2699,7 +2696,7 @@ h4#updateplugins {margin-top: -15px}
 #loggingoptions input[type=text], #loggingoptions select {min-width: 240px}
 #manualreseed input[type=submit] {min-width: 140px}
 #minigraphcontainer {margin-top: -40px; margin-left: 1px; width: 258px; height: 39px; background-size: 250px 40px}
-#minigraph {margin-top: -18px; width: 254px}
+#minigraph {margin-top: -16px; width: 254px; height: 43px}
 #netconfig label::before, #externali2cp td label::before, #externali2cp .nowrap::before, #reseedconfig .nowrap::before {min-height: 50px}
 #netdb .netdb_leases .flag img {margin: 1px -3px -4px}
 #participating a::after, #peercount a::after {margin: -8px 0 -13px -12px; padding: 9px 6px 9px 0}
@@ -2711,7 +2708,7 @@ h4#updateplugins {margin-top: -15px}
 #pluginconfigtext + form > input {margin-top: 3px}
 #plugininstall2 {margin-top: -14px}
 #reseedconfig input[type=text], #reseedconfig input[type=password] {width: 250px}
-#sb_graphcontainer {height: 42px}
+#sb_graphcontainer {height: 50px}
 #sb_internals {margin-top: -9px}
 #sb_localtunnels a {max-width: 200px}
 #sb_memoryBar .percentBarText {margin-top: -2px}
