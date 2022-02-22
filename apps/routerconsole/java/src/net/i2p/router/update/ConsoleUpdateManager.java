@@ -199,10 +199,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             List<URI> updateSources = uuh.getUpdateSources();
             if (updateSources != null) {
                 VersionAvailable newVA;
-                if (SystemVersion.isJava8())
-                    newVA = new VersionAvailable(newVersion, "", HTTP, updateSources);
-                else
-                    newVA = new VersionAvailable(newVersion, "Requires Java 8");
+                newVA = new VersionAvailable(newVersion, "", HTTP, updateSources);
                 _available.put(new UpdateItem(ROUTER_UNSIGNED, ""), newVA);
             }
         }
@@ -216,10 +213,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                 List<URI> updateSources = dsuh.getUpdateSources();
                 if (updateSources != null) {
                     VersionAvailable newVA;
-                    if (SystemVersion.isJava8())
-                        newVA = new VersionAvailable(newVersion, "", HTTP, updateSources);
-                    else
-                        newVA = new VersionAvailable(newVersion, "Requires Java 8");
+                    newVA = new VersionAvailable(newVersion, "", HTTP, updateSources);
                     _available.put(new UpdateItem(ROUTER_DEV_SU3, ""), newVA);
                 }
             } else {
@@ -906,7 +900,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         if (type == ROUTER_SIGNED_SU3 && _cmgr != null) {
             NotificationService ns = (NotificationService) _cmgr.getRegisteredApp("desktopgui");
             if (ns != null) {
-                ns.notify("Router", null, Log.INFO, _t("Router"), 
+                ns.notify("Router", null, Log.INFO, _t("Router"),
                           _t("Update available") + ": " + _t("Version {0}", newVersion),
                           null);
             }
