@@ -35,7 +35,7 @@ tr {contain: layout}
 /* topnav */
 .snarknavbar {margin: 0 0 -6px; padding: 9px 0; min-width: 888px; position: sticky; top: -2px; z-index: 999; text-align: center; border: var(--border); box-shadow: var(--highlight), inset 0 0 1px 1px #050; background: var(--topnav); background-size: var(--topnav_size); will-change: transform}
 .iframed .snarknavbar {margin-top: -2px; padding: 8px 0 7px; position: static}
-#top a:not(:hover):not(:focus):not(:active), #top a:not(:hover):not(:focus):not(:active):visited {color: #32ff32}
+.snarknavbar a:not(:hover):not(:focus):not(:active), #top a:not(:hover):not(:focus):not(:active):visited {color: #32ff32}
 .nav_main {border-radius: 1px 0 0 1px; padding-left: 24px; background: #000 var(--snark) no-repeat 7px center}
 .nav_forum {background: #000 var(--forum) no-repeat 7px center}
 .nav_tracker {background: #000 var(--tracker) no-repeat 7px center}
@@ -411,7 +411,7 @@ hr.debug {margin: 1px 0 -5px; width: 100%; background: linear-gradient(90deg,#00
 .snarkComments {margin-top: -1px; border-top: 1px solid #151}
 .snarkComments th {text-align: left}
 .snarkCommentInfo th, .snarkComments th {padding: 8px 5px; white-space: normal}
-.snarkCommentInfo th {padding: 2px 5px 2px 30px; background: var(--comment) no-repeat 8px center / 14px, var(--title)}
+.snarkCommentInfo th {padding: 2px 5px 2px 30px; text-align: left; background: var(--comment) no-repeat 8px center / 14px, var(--title)}
 .snarkCommentInfo tr:nth-child(even), .snarkComments tr:nth-child(odd) {background: #001800}
 .snarkCommentInfo tr:nth-child(odd), .snarkComments tr:nth-child(even) {border-top: 1px solid #000; background: #001400}
 .snarkCommentInfo td, .snarkComments td {padding: 8px 5px}
@@ -429,7 +429,7 @@ td.commentRating {padding-left: 2px; padding-right: 0; width: 80px; white-space:
 .snarkCommentInfo td:first-child, .snarkComments td:first-child {padding-right: 2px; width: 160px; min-width: 160px}
 .commentAuthor {padding-right: 0; text-align: left}
 .commentAuthorName {padding: 0 0 0 22px; vertical-align: middle; font-weight: 700; border-radius: 2px; background: var(--user) no-repeat 4px center / 14px}
-td .commentAuthorName {margin: 0 0 0 4px; padding: 0 4px 0 22px; min-width: 120px; max-width: 120px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; vertical-align: middle; font-size: 90%; border: 1px solid #002800; box-shadow: var(--outline); background: var(--user) no-repeat 4px center, linear-gradient(180deg,rgba(0,48,0,.5), rgba(0,16,0,.5)); background-size: 14px, 100%}
+td .commentAuthorName {margin: 0 0 0 4px; padding: 0 4px 0 22px; min-width: 120px; max-width: 120px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; vertical-align: middle; text-align: left; font-size: 90%; border: 1px solid #002800; box-shadow: var(--outline); background: var(--user) no-repeat 4px center, linear-gradient(180deg,rgba(0,48,0,.5), rgba(0,16,0,.5)); background-size: 14px, 100%}
 .commentText {width: 90%; text-align: left; white-space: normal}
 .commentText:empty + .commentDelete {background: none}
 .commentWrapper {border: 1px solid rgba(0,48,0,.2); margin: 2px 0; padding: 10px 10px 10px 29px; box-shadow: var(--highlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000800; background: #010 var(--comment) no-repeat 9px center / 14px; background-blend-mode: luminosity}
@@ -439,7 +439,7 @@ td .commentAuthorName {margin: 0 0 0 4px; padding: 0 4px 0 22px; min-width: 120p
 #commentDeleteAction td {padding: 10px 6px; box-shadow: var(--highlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000800}
 .commentAction, .commentDelete {padding-left: 0; width: 1%; white-space: nowrap}
 .addCommentText, .commentText {padding-right: 0}
-.commentDelete {padding: 8px 6px 8px 24px; text-align: left; background: var(--nuke) no-repeat 2px center; background-size: 16px}
+#commentSection .commentDelete {padding: 8px 6px 8px 24px; text-align: left; background: var(--nuke) no-repeat 2px center; background-size: 16px}
 #newRating td {padding-top: 10px; padding-bottom: 10px; border-top: var(--border)}
 #newRating select {width: 90%}
 #myRating {border-top: var(--border); border-bottom: var(--border)}
@@ -448,11 +448,12 @@ td .commentAuthorName {margin: 0 0 0 4px; padding: 0 4px 0 22px; min-width: 120p
 .commentRating img {padding: 0; width: 14px; height: 14px; color: #ff7200; text-shadow: 0 0 1px #900; filter: none}
 #commentstoggle {margin-left: 10px; display: inline-block; vertical-align: middle}
 #commentstoggle input {margin: 0; display: inline-block; line-height: 1}
-#nameRequired, .commentAuthorName {display: inline-block; vertical-align: middle; line-height: 24px}
+#nameRequired, .commentAuthorName {display: inline-block; vertical-align: middle; line-height: 28px}
 #nameRequired {margin-right: 5px; float: right}
 #metacomment {padding: 0; line-height: 1.4; text-align: justify}
 #metacomment div {padding: 4px 4px 4px 0; overflow-y: auto}
-#metacomment .commentWrapper {margin: 5px 4px; padding: 9px 10px 10px; box-shadow: var(--highlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000800; background: #010}
+#metacomment .commentWrapper {margin: 5px 4px; padding: 12px 15px 14px; box-shadow: var(--bevel); background: #010}
+#showRatings td[colspan] {text-align: left}
 
 /* files */
 #snarkFiles table {margin-bottom: -1px}
