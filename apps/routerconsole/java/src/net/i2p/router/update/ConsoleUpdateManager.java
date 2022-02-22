@@ -22,6 +22,7 @@ import net.i2p.I2PAppContext;
 import net.i2p.app.ClientAppManager;
 import net.i2p.app.ClientAppState;
 import static net.i2p.app.ClientAppState.*;
+import net.i2p.app.NotificationService;
 import net.i2p.crypto.SU3File;
 import net.i2p.crypto.TrustedUpdate;
 import net.i2p.data.DataHelper;
@@ -901,6 +902,15 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
 
         if (!shouldUpdate)
             return false;
+
+        if (type == ROUTER_SIGNED_SU3 && _cmgr != null) {
+            NotificationService ns = (NotificationService) _cmgr.getRegisteredApp("desktopgui");
+            if (ns != null) {
+                ns.notify("Router", null, Log.INFO, _t("Router"), 
+                          _t("Update available") + ": " + _t("Version {0}", newVersion),
+                          null);
+            }
+        }
 
         String msg = null;
         switch (type) {
