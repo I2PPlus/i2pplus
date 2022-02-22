@@ -186,7 +186,7 @@ p:empty + .sb_notice {margin-top: 9px}
 #sb_memoryBar .percentBarText::after {width: 0; height: 0; position: absolute; left: calc(50% - 5px); bottom: -14px; border-style: solid; border-width: 8px; border-color: #010 transparent transparent transparent; content: ""}
 
 /* update bar */
-#sidebar .sb_update {padding: 7px 5px 0}
+#sidebar .sb_update {padding: 7px 5px}
 .sb_update b {margin: 3px 0 1px; display: inline-block;color: var(--ink)}
 .sb_updatestatus {margin: -8px -6px -2px; padding: 5px 2px; width: calc(100% + 7px); line-height: 1.3; font-style: italic; border-bottom: var(--border); box-shadow: var(--bevel)}
 #sidebar .sb_info .percentBarOuter {margin: 3px -4px 0; width: calc(100% - 2px); box-shadow: none; background: var(--download_bar); animation: downloadbar 3s infinite alternate}
@@ -277,15 +277,16 @@ div[id^="config_"].main {padding-bottom: 14px}
 #homepage #news {position: relative; z-index: 1; background: var(--newsbg), var(--radar) no-repeat right bottom / auto 250px, #000}
 #homepage #news::before {position: absolute; top: 0; bottom: 0; left: 0; right: 0; z-index: 5;content: ""; display: inline-block; width: 100%; height: 100%; background: rgba(0,18,0,.4)}
 #news .newsentry:first-child {margin-top: -3px}
-#news h3 font {letter-spacing: .2em; text-transform: none}
-#news h3, #newspage h3 {letter-spacing: .03em; text-align: left; font-size: 10pt}
-#news h3 {padding: 6px 8px 6px 30px; word-spacing: 0; letter-spacing: .08em; border: none; border-bottom: var(--border); box-shadow: var(--bevel); background: var(--news) no-repeat 8px center, var(--h1); background-size: 15px, 2px, 4px 100%, 175px; background-blend-mode: normal, exclusion, exclusion, overlay}
-#homepage #news h3 {box-shadow: none; background: var(--news) no-repeat 8px center / 15px}
-#newspage .newsentry {margin-bottom: 14px; padding-bottom: 10px; box-shadow: 0 0 0 1px #242, 0 0 2px 2px #000, var(--highlight), inset 0 0 2px 0 #030; background: var(--newsbg) #000}
-#newspage .newsentry:first-child {margin-top: -2px}
+#news .newsentry h3 font {letter-spacing: .2em; text-transform: none}
+#news .newsentry h3, #newspage .newsentry h3 {letter-spacing: .03em; text-align: left; font-size: 10pt}
+#news .newsentry h3 {padding: 8px 8px 8px 32px; word-spacing: 0; letter-spacing: .08em; border: none; border-bottom: var(--border); box-shadow: var(--bevel); background: var(--news) no-repeat 12px center, var(--h1); background-size: 13px, 2px, 4px 100%, 175px; background-blend-mode: normal, exclusion, exclusion, overlay}
+#homepage .newsentry h3 {margin-top: 8px; box-shadow: none; background: var(--news) no-repeat 8px center / 15px}
+#newspage .newsentry h3 {margin: 8px -15px 20px}
+#newspage .newsentry {margin-bottom: 14px; padding: 0 15px 20px; box-shadow: 0 0 0 1px #242, 0 0 2px 2px #000, var(--highlight), inset 0 0 2px 0 #030; background: var(--newsbg) #000}
+#newspage .newsentry:first-child {margin-top: -4px}
 #newspage .newsentry:last-child {margin-bottom: -4px}
 #news li {margin: 0 0 5px; padding: 5px 5px 5px 0; vertical-align: middle; word-wrap: break-word; list-style: none; text-align: justify; text-transform: capitalize; color: var(--a); font-size: 9.5pt; font-weight: 700; border-bottom: var(--dotted)}
-#news h4 {margin: 5px 0 10px; padding: 0; text-transform: capitalize; font-size: 10pt; border-bottom: var(--dotted); opacity: 1}
+#news .newsentry h4 {margin: 5px 0 10px; padding: 0; text-transform: capitalize; font-size: 10pt; border-bottom: var(--dotted); opacity: 1}
 #news p, #newscontent p {margin: 0 15px; font-size: 9pt}
 #news p:nth-child(n+2), #newscontent p:nth-child(n+2) {margin-top: 8px}
 #news hr {margin: 8px 0 5px}
@@ -301,7 +302,7 @@ div[id^="config_"].main {padding-bottom: 14px}
 .messages #newsDisplay a:last-child {font-size: smaller}
 #news #newsDisplay, #graphopts {color: transparent}
 #newsStatus, #news #newsDisplay, #news #newsDisplay a {display: inline-block}
-.newsAuthor {padding: 1px 0 0 18px; float: right; font-size: 8pt; text-transform: none; background: var(--user) no-repeat 2px center / 12px; opacity: .7}
+.newsAuthor {margin-right: 2px; padding: 0 0 0 18px; float: right; font-size: 8pt; text-transform: none; background: var(--user) no-repeat 2px center / 12px; opacity: .7}
 .newsDate {opacity: .9}
 #newspage {margin: 18px 5px}
 
