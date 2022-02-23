@@ -2631,6 +2631,8 @@ td#bwHelp a {
   background: #efe6e0;
 }
 
+#showRatings td[colspan] {text-align: left}
+
 .snarkCommentInfo tr:nth-child(odd), .snarkComments tr:nth-child(even) {
   background: #efe6e0;
 }
@@ -2815,8 +2817,7 @@ td .commentAuthorName {
 }
 
 #myRating td:empty::after { /* hides My Ratings row when Ratings disabled  */
-  min-height: 0 !important;
-  padding: 0 !important;
+  display: none;
 }
 
 /* end Comments section */
