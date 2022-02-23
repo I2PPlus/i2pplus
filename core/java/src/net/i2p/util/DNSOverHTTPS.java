@@ -64,8 +64,12 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
     // consecutive failures
     private static final ObjectCounter<String> fails = new ObjectCounter<String>();
 
-    // ESR version of Firefox, same as Tor Browser
-    private static final String UA_CLEARNET = "Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101 Firefox/91.0";
+    /**
+     *  ESR version of Firefox, same as Tor Browser
+     *
+     *  @since public since 0.9.54 for i2ptunnel
+     */
+    public static final String UA_CLEARNET = "Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101 Firefox/91.0";
 
     private static final int MAX_RESPONSE_SIZE = 2048;
     private static final boolean DEBUG = false;
@@ -411,7 +415,7 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
                 synchronized(cache) {
                     cache.put(host, new Result(data, expires));
                 }
-                        log("Received answer: " + host + ' ' + ttl + ' ' + data + " in " + (end - fetchStart) + "ms");
+                log("Received answer: " + host + ' ' + ttl + ' ' + data + " in " + (end - fetchStart) + "ms");
                 return data;
             } catch (Exception e) {
                 log("Fail parsing", e);
