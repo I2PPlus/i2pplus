@@ -1447,7 +1447,7 @@ th code {user-select: all}
 .infohel#flags {padding: 18px 15px 18px 58px; background: #000 url(/themes/console/images/info/flags.png) no-repeat 15px center / 28px}
 #enablefullstats, #gatherstats {padding: 18px 15px 18px 58px; background: #000 var(--stats) no-repeat 15px center / 28px}
 #config_family .infohelp {padding: 18px 15px 18px 58px; background: #000 var(--family) no-repeat 15px center / 28px}
-#consolepass tr:first-child td {padding: 18px 15px 18px 58px; background: #000 var(--useradd) no-repeat 15px center; background-size: 28px, 100%}
+#consolepass tr:first-child td {padding: 18px 15px 18px 58px; white-space: normal; background: #000 var(--useradd) no-repeat 15px center /28px}
 form[action="events"] {padding: 10px 10px 10px 50px; background: #000 var(--logs) no-repeat 15px center; background-size: 28px}
 
 th.options, #externali2cp th {padding: 7px 10px}
