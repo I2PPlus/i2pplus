@@ -419,6 +419,10 @@ tr.configerror {box-shadow: var(--highlight), inset 0 -1px 0 1px #000, inset -1p
   .control {
     padding: 8px 12px 8px;
   }
+  .control.iconize {
+    padding: 9px 12px 9px;
+    line-height: 1.1;
+  }
   select {
     padding: 8px 24px 8px 8px;
   }
