@@ -4231,6 +4231,9 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {
     margin: -3px 0 -2px !important;
     padding: 4px 0 6px !important;
   }
+  .snarkCommented {
+    top: -3px;
+  }
   .torrentAction input[type=submit] {
     padding: 11px !important;
     background-size: 13px, 100%, 13px !important;
@@ -4397,9 +4400,6 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {
   }
   .dirInfo .percentBarText, .dirInfo .percentBarOuter, .peerinfo .percentBarOuter, .peerinfo .percentBarText {
     width: 70px !important;
-  }
-  #torrents tt {
-    background: none;
   }
   .dirInfo thead img {
     max-height: 18px;
@@ -4941,10 +4941,10 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {
     margin-bottom: -3px !important;
   }
   .torrentDetails img[src$="rateme.svg"] {
-    margin-top: -5px !important;
+    margin-top: -4px !important;
     margin-right: -3px !important;
-    width: 12px !important;
-    height: 12px !important;
+    width: 11px !important;
+    height: 11px !important;
   }
   img[src$="details.png"] {
     max-height: 18px;
