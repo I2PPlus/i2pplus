@@ -460,7 +460,7 @@ td#bwHelp a {margin-left: 3px; display: inline-block; white-space: nowrap; line-
 .snarkComments {margin-top: -1px}
 .snarkComments tr:last-child, #mediaContainer tr:last-child, .snarkCommentInfo tr:last-child {border-bottom: var(--border)}
 .snarkCommentInfo th, .snarkComments th, #mediaContainer th {padding: 8px 5px}
-.snarkCommentInfo th, #mediaContainer th {padding-left: 30px; background: var(--comment) no-repeat scroll 8px center / 16px, var(--th)}
+#commentSection .snarkCommentInfo th, #mediaContainer th {padding-left: 30px; background: var(--comment) no-repeat scroll 8px center / 16px, var(--th)}
 #mediaContainer th {background: url(/i2psnark/.resources/icons/film.png) no-repeat 8px center, var(--th)}
 #mediaContainer th.audio {background: url(/i2psnark/.resources/icons/music.png) no-repeat 8px center, var(--th)}
 .newTab {margin: 3px 4px -2px; float: right}
@@ -497,12 +497,13 @@ td.commentAuthor .commentAuthorName {padding: 2px 5px 2px 24px; width: 125px; wh
 .addCommentText, .commentText {padding-right: 0}
 .commentText:empty + .commentDelete {background: none}
 .commentAction input[type=submit] {margin-top: 3px; margin-bottom: 3px}
-.commentDelete {background: var(--nuke) no-repeat scroll 2px center / 14px; text-align: left; padding-left: 24px}
+#commentSection .commentDelete {background: var(--nuke) no-repeat scroll 2px center / 14px; text-align: left; padding-left: 24px}
 #newRating td:first-child {text-align: center}
 #newRating select {width: 90%}
 #myRating td:empty {padding: 0; border-top: none; border-bottom: none}
 #myRating td:empty::after {min-height: 1px}
 .commentRating img {padding: 0; font-size: 14pt; color: #FF7200; text-shadow: 0 0 1px #900; filter: none}
+#showRatings td[colspan]{text-align: left}
 
 .info_tracker {margin: 0 2px; padding: 1px 6px 1px 18px; display: inline-block; white-space: nowrap; max-width: 155px; vertical-align: middle; overflow: hidden; text-overflow: ellipsis; color: #bbf; border-radius: 1px; box-shadow: 0 0 0 1px #ccf; background: var(--bg2) var(--tracker) no-repeat left 3px center / 14px}
 .info_tracker:hover, .info_tracker:hover a {color: var(--hover)}

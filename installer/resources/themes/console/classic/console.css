@@ -716,7 +716,7 @@ td, #externali2cp td, #config_keyring td, #config_logging td, #config_network td
 
 /* configui password */
 #consolepass th:nth-child(2) {text-align: left}
-#consolepass tr:first-child td {padding: var(--pad_info); background: var(--bg) var(--useradd) var(--bgpos_info)}
+#consolepass tr:first-child td {padding: var(--pad_info); white-space: normal; background: var(--bg) var(--useradd) var(--bgpos_info)}
 #consolepass td {padding: 5px 10px; font-size: 9pt; white-space: nowrap}
 #consolepass input {margin: 5px}
 #consolepass input[name="name"] {margin-right: 20px}

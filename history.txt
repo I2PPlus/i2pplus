@@ -6,9 +6,6 @@
 2022-02-14 dr|z3d
  * Console: Move console-specific images to top level images/ dir
 
-2022-02-13 dr|z3d
- * Console:
-
 2022-02-12 dr|z3d
  * Console:
    - Redo selectors for div.app and friends for more specificity

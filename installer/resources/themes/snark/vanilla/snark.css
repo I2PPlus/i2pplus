@@ -1603,7 +1603,7 @@ input[type=submit], .trackerconfig input[type=submit], input[name="savepri"], se
 }
 
 .toggleview, #tab_config {
-  margin: 0 0 -3px !important;
+  margin: -1px auto -3px;
   padding: 4px 1px 2px;
   min-width: 280px;
   display: inline-block;
@@ -2268,8 +2268,11 @@ code, tt {
 /* toggle create/add panel view */
 
 .mainsection .toggleview {
-  margin-top: -10px !important;
-  display: inline-block;
+  margin: -10px auto 0;
+  display: block;
+  width: 20%;
+  min-width: 300px;
+  max-width: 600px;
 }
 
 input.toggle_input { /* hide checkbox and use label as faux panel heading */
@@ -2631,6 +2634,8 @@ td#bwHelp a {
   background: #efe6e0;
 }
 
+#showRatings td[colspan] {text-align: left}
+
 .snarkCommentInfo tr:nth-child(odd), .snarkComments tr:nth-child(even) {
   background: #efe6e0;
 }
@@ -2815,8 +2820,7 @@ td .commentAuthorName {
 }
 
 #myRating td:empty::after { /* hides My Ratings row when Ratings disabled  */
-  min-height: 0 !important;
-  padding: 0 !important;
+  display: none;
 }
 
 /* end Comments section */
@@ -4230,6 +4234,9 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {
     margin: -3px 0 -2px !important;
     padding: 4px 0 6px !important;
   }
+  .snarkCommented {
+    top: -3px;
+  }
   .torrentAction input[type=submit] {
     padding: 11px !important;
     background-size: 13px, 100%, 13px !important;
@@ -4396,9 +4403,6 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {
   }
   .dirInfo .percentBarText, .dirInfo .percentBarOuter, .peerinfo .percentBarOuter, .peerinfo .percentBarText {
     width: 70px !important;
-  }
-  #torrents tt {
-    background: none;
   }
   .dirInfo thead img {
     max-height: 18px;
@@ -4940,10 +4944,10 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {
     margin-bottom: -3px !important;
   }
   .torrentDetails img[src$="rateme.svg"] {
-    margin-top: -5px !important;
+    margin-top: -4px !important;
     margin-right: -3px !important;
-    width: 12px !important;
-    height: 12px !important;
+    width: 11px !important;
+    height: 11px !important;
   }
   img[src$="details.png"] {
     max-height: 18px;

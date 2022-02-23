@@ -117,7 +117,7 @@ th img, td img, #closelog, #expand, #shrink {font-size: 0}
 .trackerDetails img, .torrentDetails img, .dirInfo td:first-child img:not(.thumb) {margin: 0; padding: 3px; border: 1px solid transparent}
 td.trackerDetails img {opacity: .75}
 td.trackerDetails a:hover img, td.trackerDetails a:focus img {opacity: 1}
-td.torrentDetails img, .dirInfo td:first-child img:not(.thumb) {width: 20px; height: 20px; max-width: 20px; max-height: 20px}
+td.torrentDetails img:not([src$="rateme.svg"]), .dirInfo td:first-child img:not(.thumb) {width: 20px; height: 20px; max-width: 20px; max-height: 20px}
 .dirInfo td:first-child img {margin: 0 2px}
 .trackerDetails a:hover img, .trackerDetails a:focus img, .torrentDetails a:hover img:not([src$="rateme.svg"]), .torrentDetails a:focus img:not([src$="rateme.svg"]), .commentDetails a:hover img, .commentDetails img:hover, .commentDetails a:focus img, .dirInfo td:first-child a:hover img:not(.thumb), .dirInfo td:first-child a:focus img:not(.thumb) {border: 1px solid var(--hover); box-shadow: inset 0 0 0 1px #001; background: linear-gradient(180deg,#007 50%, #001 50%); filter: none}
 .trackerDetails a:active img, .torrentDetails a:active img:not([src$="rateme.svg"]), .dirInfo td:first-child a:active img {border: 1px solid var(--active); box-shadow: inset 3px 3px 3px 3px #000; transform: scale(0.9)}
@@ -486,23 +486,23 @@ input:checked + label + hr + table, input:checked + label + hr + table + table {
 .newTab:hover, .newTab:focus {filter: sepia(1) saturate(0) invert(1) drop-shadow(0 0 2px #f60)}
 .iframed .snarkCommentInfo, .iframed .snarkComments {border-left: none; border-right: none}
 .iframed .snarkCommentInfo {margin-top: 10px}
-.snarkComments {margin-top: -1px; border-top: 1px solid #12111f}
+#dirlist #commentSection .snarkComments {margin-top: -1px; border-top: 1px solid #12111f}
 .snarkCommentInfo th {padding: 2px 5px 2px 30px; background: url(images/comment.png) no-repeat 8px center, linear-gradient(180deg,#121225, #00000d)}
 #mediaContainer th {padding: 10px 5px 10px 30px; background: url(/i2psnark/.resources/icons/film.png) no-repeat 8px center, linear-gradient(180deg,#121225, #00000d)}
 .snarkCommentInfo tr:nth-child(even), .snarkComments tr:nth-child(odd) {background: #010010; border-bottom: var(--border_inner)}
 .snarkCommentInfo tr:nth-child(odd), .snarkComments tr:nth-child(even) {background: #000016; border-bottom: var(--border_inner)}
 .snarkCommentInfo tr:last-child td, .iframed .snarkCommentInfo tr:last-child td {border-bottom: 2px solid #113}
 .snarkCommentInfo th {padding: 4px 10px}
-.snarkCommentInfo td, .snarkComments td {padding: 8px 5px}
+.snarkCommentInfo td, .snarkComments td {padding: 5px}
 .snarkCommentInfo td:first-child {white-space: nowrap}
 .snarkCommentInfo td:first-child {font-weight: 700}
-.snarkCommentInfo td:first-child::after, .snarkComments td:first-child::after {content: ""; display: inline-block; min-height: 32px; vertical-align: middle}
+.snarkCommentInfo td:first-child::after, .snarkComments td:first-child::after {content: ""; display: inline-block; min-height: 22px; vertical-align: middle}
 .snarkCommentInfo input.accept {float: right; margin-right: 5px}
-.snarkCommentInfo textarea {font-family: var(--bodyfont); font-weight: 400; width: 100%; min-height: 64px; height: 64px; resize: vertical}
+.snarkCommentInfo textarea {margin: 0 0 -3px; font-family: var(--bodyfont); font-weight: 400; width: 100%; min-height: 64px; height: 64px; resize: vertical}
 .snarkComments th {text-align: left}
 .commentRating, .commentAuthor {width: 1%}
 #nameRequired {float: right; margin-right: 5px}
-.commentRating {padding-right: 10px}
+.commentRating {padding-right: 10px; text-align: left}
 .commentRating img {margin: 0; padding: 0}
 .snarkCommentInfo td:first-child, .snarkComments td:first-child {width: 160px; min-width: 160px; padding-right: 2px}
 .snarkComments td {white-space: nowrap}
@@ -511,7 +511,7 @@ th .commentAuthorName {margin-right: -10px; padding-right: 6px; font-size: 90%}
 td .commentAuthorName {padding-right: 8px; width: 120px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left}
 .commentText {white-space: normal; text-align: justify; width: 90%}
 .commentText:empty + .commentDelete {background: none}
-.commentWrapper {margin: 2px 0; padding: 12px 10px 12px 34px; text-align: left; border: var(--border_inner); border-radius: 3px; box-shadow: var(--highlight), 0 0 1px 0 rgba(0,0,0,.3); background: #113 var(--comment) no-repeat scroll 12px center / 16px; background-blend-mode: luminosity}
+.commentWrapper {margin: 2px 0; padding: 12px 10px 12px 34px; text-align: left; white-space: normal; line-height: 1.3; border: var(--border_inner); border-radius: 3px; box-shadow: var(--highlight), 0 0 1px 0 rgba(0,0,0,.3); background: #113 var(--comment) no-repeat scroll 12px center / 16px; background-blend-mode: luminosity}
 #commentsConfig .optbox {vertical-align: middle}
 .snarkComments select {margin-right: 0}
 #commentDeleteAction {border-top: var(--border); background: linear-gradient(180deg,#000018, #00000d)}
@@ -519,12 +519,12 @@ td .commentAuthorName {padding-right: 8px; width: 120px; white-space: nowrap; ov
 .commentAction, .commentDelete {width: 1%; white-space: nowrap; padding-left: 0}
 .addCommentText, .commentText {padding-right: 0}
 .commentAction input[type=submit] {margin-top: 10px; margin-bottom: 10px}
-.commentDelete {padding-left: 22px; text-align: center; background: var(--nuke) no-repeat scroll 2px center / 14px}
+#commentSection .commentDelete {padding-left: 22px; text-align: center; background: var(--nuke) no-repeat scroll 2px center / 14px}
 #newRating td {padding-top: 10px; padding-bottom: 10px}
 #newRating select {width: 90%}
-#myRating td:empty {padding: 0; border-top: none; border-bottom: none}
-#myRating td:empty::after {min-height: 1px}
+#myRating td:empty {display: none}
 .commentRating img {margin: 0 0 4px; padding: 0; width: 16px; height: 16px; font-size: 14pt; color: #ff7200; text-shadow: 0 0 1px #900; filter: none}
+#showRatings td[colspan]{text-align: left}
 
 .info_tracker, .info_tracker a { display: inline-block; vertical-align: middle}
 .info_tracker {margin: 1px -1px 1px 0; padding: 1px 6px 1px 18px; display: inline-block; white-space: nowrap; max-width: 155px; color: var(--a); border-radius: 1px; border: var(--border_soft); background: #001 var(--tracker) no-repeat 3px center; background-size: 14px}
@@ -688,7 +688,7 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {co
 #metainfo {padding: 5px 10px 4px 4px; border: 1px solid #334; box-shadow: inset 0 0 0 1px #001, 0 0 2px 2px rgba(0,0,0,.7); background: #181828}
 #completion:not(:hover) #metainfo {display: none}
 #completion:hover #metainfo {position: absolute; top: 28px; left: -120px; display: inline-block}
-#metacomment .commentWrapper {margin: 6px; padding: 10px 10px 10px 34px; border-color: #003; border-radius: 0; box-shadow: var(--highlight), 0 0 1px 0 rgba(0,0,0,.3); background: #000024 var(--forum) no-repeat 10px center / 16px auto}
+#metacomment .commentWrapper {margin: 6px; padding: 10px 10px 10px 34px; color: var(--ink); border-color: #003; border-radius: 0; box-shadow: var(--highlight), 0 0 1px 0 rgba(0,0,0,.3); background: #000024 var(--forum) no-repeat 10px center / 16px auto}
 
 /* table sort indicators */
 .sortIcon {position: relative}
@@ -764,7 +764,7 @@ td.torrentAction input {margin-top: 1px}
 #torrentEdit th:first-child:not([colspan]), #torrentEdit td:first-child:not([colspan]) {width: 20%; text-align: right}
 #torrentEdit th:first-child[colspan] {text-align: left}
 #torrentEdit th:nth-child(2), #torrentEdit td:nth-child(2) {width: 30%; text-align: left}
-#addCommentText {padding: 18px 20px; text-align: center}
+#addCommentText {padding: 18px 15px; text-align: center}
 #torrentEdit textarea {width: 100%; height: 80px; min-height: 80px; resize: vertical}
 #torrentEdit tr:last-child input {margin-right: 0}
 #torrentEdit .info_tracker {min-width: 80px; max-width: none; text-align: left; pointer-events: none}
