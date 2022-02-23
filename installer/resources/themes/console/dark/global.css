@@ -576,7 +576,7 @@ select::-moz-focus-inner {
 }
 
 label:hover .optbox.slider[disabled],
-.optbox:hover, label[disabled]:hover .optbox {
+.optbox[disabled]:hover, label[disabled]:hover .optbox {
   pointer-events: none;
 }
 
