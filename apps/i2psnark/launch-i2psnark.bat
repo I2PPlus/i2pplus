@@ -6,4 +6,5 @@ REM I2PSnark will be accessible at: http://127.0.0.1:8002/
 
 set I2P="."
 java -jar "%I2P%/i2psnark.jar"
-start http://127.0.0.1:8002
+REM Uncomment the following if I2PSnark doesn't automatically open in a browser on launch
+REM start http://127.0.0.1:8002

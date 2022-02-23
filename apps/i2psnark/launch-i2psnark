@@ -35,14 +35,13 @@ raiseopenfilesulimit
 I2P="."
 java -jar "$I2P/i2psnark.jar"
 
-sleep 3
-
-echo "Launching I2PSnark in default browser..."
-
-if [[ "$OSTYPE" == "linux-gnu"* ]] || [["$OSTYPE" == "bsd"*]]
-then
-    xdg-open http://127.0.0.1:8002
-elif [[ "$OSTYPE" == "darwin"* ]]
-then
-    open http://127.0.0.1:8002
-fi
+# Uncomment the following if I2PSnark doesn't automatically open in a browser on launch
+# echo "Launching I2PSnark in default browser..."
+#
+# if [[ "$OSTYPE" == "linux-gnu"* ]] || [["$OSTYPE" == "bsd"*]]
+# then
+#     xdg-open http://127.0.0.1:8002
+# elif [[ "$OSTYPE" == "darwin"* ]]
+# then
+#     open http://127.0.0.1:8002
+# fi
