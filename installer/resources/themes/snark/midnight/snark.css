@@ -117,7 +117,7 @@ th img, td img, #closelog, #expand, #shrink {font-size: 0}
 .trackerDetails img, .torrentDetails img, .dirInfo td:first-child img:not(.thumb) {margin: 0; padding: 3px; border: 1px solid transparent}
 td.trackerDetails img {opacity: .75}
 td.trackerDetails a:hover img, td.trackerDetails a:focus img {opacity: 1}
-td.torrentDetails img, .dirInfo td:first-child img:not(.thumb) {width: 20px; height: 20px; max-width: 20px; max-height: 20px}
+td.torrentDetails img:not([src$="rateme.svg"]), .dirInfo td:first-child img:not(.thumb) {width: 20px; height: 20px; max-width: 20px; max-height: 20px}
 .dirInfo td:first-child img {margin: 0 2px}
 .trackerDetails a:hover img, .trackerDetails a:focus img, .torrentDetails a:hover img:not([src$="rateme.svg"]), .torrentDetails a:focus img:not([src$="rateme.svg"]), .commentDetails a:hover img, .commentDetails img:hover, .commentDetails a:focus img, .dirInfo td:first-child a:hover img:not(.thumb), .dirInfo td:first-child a:focus img:not(.thumb) {border: 1px solid var(--hover); box-shadow: inset 0 0 0 1px #001; background: linear-gradient(180deg,#007 50%, #001 50%); filter: none}
 .trackerDetails a:active img, .torrentDetails a:active img:not([src$="rateme.svg"]), .dirInfo td:first-child a:active img {border: 1px solid var(--active); box-shadow: inset 3px 3px 3px 3px #000; transform: scale(0.9)}
