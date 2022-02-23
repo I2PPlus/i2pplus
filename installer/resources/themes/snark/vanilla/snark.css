@@ -1603,7 +1603,7 @@ input[type=submit], .trackerconfig input[type=submit], input[name="savepri"], se
 }
 
 .toggleview, #tab_config {
-  margin: 0 0 -3px !important;
+  margin: -1px auto -3px;
   padding: 4px 1px 2px;
   min-width: 280px;
   display: inline-block;
@@ -2268,8 +2268,11 @@ code, tt {
 /* toggle create/add panel view */
 
 .mainsection .toggleview {
-  margin-top: -10px !important;
-  display: inline-block;
+  margin: -10px auto 0;
+  display: block;
+  width: 20%;
+  min-width: 300px;
+  max-width: 600px;
 }
 
 input.toggle_input { /* hide checkbox and use label as faux panel heading */
