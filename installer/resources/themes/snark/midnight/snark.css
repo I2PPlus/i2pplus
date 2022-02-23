@@ -502,7 +502,7 @@ input:checked + label + hr + table, input:checked + label + hr + table + table {
 .snarkComments th {text-align: left}
 .commentRating, .commentAuthor {width: 1%}
 #nameRequired {float: right; margin-right: 5px}
-.commentRating {padding-right: 10px}
+.commentRating {padding-right: 10px; text-align: left}
 .commentRating img {margin: 0; padding: 0}
 .snarkCommentInfo td:first-child, .snarkComments td:first-child {width: 160px; min-width: 160px; padding-right: 2px}
 .snarkComments td {white-space: nowrap}
