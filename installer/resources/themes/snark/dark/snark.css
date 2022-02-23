@@ -80,7 +80,7 @@ tr {contain: layout}
 .logshim {margin-top: -10px}
 #screenlog + .logshim {margin-top: 10px}
 
-th, #showRatings {padding: 3px 2px; white-space: nowrap; vertical-align: middle; font-size: 9pt; border-top: var(--border); border-bottom: var(--border); background: var(--title); background-size: 4px 100%, 100%}
+th, #showRatings {padding: 3px 2px; white-space: nowrap; vertical-align: middle; font-size: 9pt; border-top: var(--border); border-bottom: var(--border); background: var(--th)}
 #addSection td:first-child, #createSection td:first-child, .snarkCommentInfo td:first-child, .snarkComments td:first-child {text-align: right}
 th#torrentSort {text-align: right}
 #pagenav, th.torrentETA, th.torrentDownloaded, th.torrentUploaded, th.RateDown, th.RateUp, th.SnarkTorrentAction {text-align: center}
@@ -411,7 +411,7 @@ hr.debug {margin: 1px 0 -5px; width: 100%; background: linear-gradient(90deg,#00
 .snarkComments {margin-top: -1px; border-top: 1px solid #151}
 .snarkComments th {text-align: left}
 .snarkCommentInfo th, .snarkComments th {padding: 8px 5px; white-space: normal}
-.snarkCommentInfo th {padding: 2px 5px 2px 30px; text-align: left; background: var(--comment) no-repeat 8px center / 14px, var(--title)}
+.snarkCommentInfo th {padding: 2px 5px 2px 30px; text-align: left; background: var(--comment) no-repeat 8px center / 14px, var(--th)}
 .snarkCommentInfo tr:nth-child(even), .snarkComments tr:nth-child(odd) {background: #001800}
 .snarkCommentInfo tr:nth-child(odd), .snarkComments tr:nth-child(even) {border-top: 1px solid #000; background: #001400}
 .snarkCommentInfo td, .snarkComments td {padding: 8px 5px}
@@ -447,7 +447,7 @@ td .commentAuthorName {margin: 0 0 0 4px; padding: 0 4px 0 22px; min-width: 120p
 #myRating td:empty::after {min-height: 1px}
 .commentRating img {padding: 0; width: 14px; height: 14px; color: #ff7200; text-shadow: 0 0 1px #900; filter: none}
 #commentstoggle {margin-left: 10px; display: inline-block; vertical-align: middle}
-#commentstoggle input {margin: 0; display: inline-block; line-height: 1}
+#commentstoggle input {margin: 0; display: inline-block; line-height: 1; font-size: 90%}
 #nameRequired, .commentAuthorName {display: inline-block; vertical-align: middle; line-height: 28px}
 #nameRequired {margin-right: 5px; float: right}
 #metacomment {padding: 0; line-height: 1.4; text-align: justify}
@@ -689,9 +689,10 @@ input[name="nofilter_commentsName"] {max-width: 248px}
 #editSection hr {margin-bottom: 0}
 #torrentEdit {margin: 10px 0 0}
 #torrentEdit tr:not(:last-child):hover {background: #030}
-#torrentEdit th, #torrentEdit td {padding: 8px 20px; width: 25%; text-align: center; border-top: var(--border_soft); border-bottom: var(--border_soft)}
+#torrentEdit th, #torrentEdit td {padding: 8px 10px; width: 25%; text-align: center; border-top: var(--border_soft); border-bottom: var(--border_soft)}
 #torrentEdit th:first-child:not([colspan]), #torrentEdit td:first-child {width: 20%; text-align: right}
 #torrentEdit th:nth-child(2), #torrentEdit td:nth-child(2) {width: 30%; text-align: left}
+#torrentEdit .header th {text-align: left}
 #addCommentText {padding: 18px 20px; text-align: center; border-bottom: var(--border)}
 #torrentEdit textarea {margin: 0; width: 100%; height: 80px; min-height: 80px; resize: vertical}
 #torrentEdit textarea[readonly], #torrentEdit textarea[readonly]:focus {border: var(--border_soft)}
