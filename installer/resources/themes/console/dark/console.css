@@ -231,7 +231,7 @@ p:empty + .sb_notice {margin-top: 9px}
 
 /* tunnel build status */
 .tunnelBuildStatus {color: #ee9}
-.tunnelBuildStatus::before {margin: 0 1px; width: 16px; height: 16px; display: inline-block; vertical-align: middle; border-radius: 50%; content: ""; transform: scale(.7) translateY(-1px)}
+.tunnelBuildStatus::before {margin: 0 1px 0 -5px; width: 16px; height: 16px; display: inline-block; vertical-align: middle; border-radius: 50%; content: ""; transform: scale(.7) translateY(-1px)}
 .tunnelBuildStatus.accepting {color: #507750}
 .tunnelBuildStatus.accepting::before {background: var(--tunn_ready) var(--center) / 15px}
 .tunnelBuildStatus.active {color: #58ce3a}
@@ -2662,6 +2662,7 @@ input[type=text], input[type=password] {padding: 7px 9px}
 .tunnel_id:not(:empty) {background: var(--hardhat) no-repeat 5px center / 14px, var(--badge)}
 .tunnel_id:not(:empty)::before {width: 16px; height: 14px; display: inline-block; vertical-align: middle; content: ""}
 .tunnel_peer img, .routerid img {margin-bottom: -1px}
+.tunnelBuildStatus::before {margin: 0 1px 0 -8px}
 .warning h3 {font-size: 11.5pt}
 #help h2 {font-size: 14pt}
 #applinks, #sitelinks, #help h3, #sybilTask th {font-size: 12pt}
