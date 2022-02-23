@@ -11,8 +11,9 @@
   --bevel: var(--highlight), inset 0 0 0 2px rgba(32,92,32,.35);
   --bevel_hard: var(--highlight), inset 0 0 0 2px rgba(32,80,32,.6);
   --bg_dots: repeating-linear-gradient(90deg, rgba(0,8,0,.5) 2px, rgba(0,16,0,.5) 4px), repeating-linear-gradient(180deg,#000 2px, #010 4px);
-  --bg_title: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2 1'%3E%3Cpath fill='%2300180088' d='M0 0h1v1H0z'/%3E%3Cpath fill='%2300000050' d='M1 0h1v1H1z'/%3E%3C/svg%3E");;
+  --bg_title: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2 1'%3E%3Cpath fill='%2300180088' d='M0 0h1v1H0z'/%3E%3Cpath fill='%2300000050' d='M1 0h1v1H1z'/%3E%3C/svg%3E");
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
+  --bodybg: var(--bg_title) center center / 2px, var(--hstripe) fixed center center / 4px 100%;
   --border: 1px solid #242;
   --border_hard: 1px solid #252;
   --border_hover: 1px solid #f60;
@@ -51,6 +52,7 @@
   --ink: #ee9;
   --input_txt: linear-gradient(180deg,#000800,#001800);
   --label: linear-gradient(180deg,#001800 50%,#000 50%);
+  --mainbg: repeating-linear-gradient(90deg, rgba(0,0,0,.8) 2px, rgba(0,24,0,.7) 4px) center center / 4px 100%, repeating-linear-gradient(180deg,rgba(0,0,0,.8) 2px, rgba(0,24,0,.7) 4px) center center / 100% 4px, var(--camo) center center / 2048px;
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
   --msg: linear-gradient(180deg,#010,#000400);
   --navbar: linear-gradient(180deg,#1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%);
@@ -73,6 +75,7 @@
   --txt_focus: linear-gradient(180deg,#001800,#001000);
   --txt_shadow: 0 1px 1px #000;
   --vstripe: repeating-linear-gradient(180deg,rgba(0,0,0,.9) 2px, rgba(0,16,0,.9) 4px);
+  --hstripe: repeating-linear-gradient(180deg,#000 2px, #001400 4px);
 }
 
 html, body {
@@ -92,13 +95,13 @@ html {
 }
 
 body {
-  background: var(--vstripe), var(--camo), #000 !important;
-  background-size: 100% 4px, 2048px !important;
+  background: var(--hstripe);
+  background-size: 100% 4px, 2048px;
 }
 
 body.iframed {
-  background: var(--vstripe) #000 !important;
-  background-size: 100% 4px !important;
+  background: var(--vstripe) #000;
+  background-size: 100% 4px;
 }
 
 ::selection {
