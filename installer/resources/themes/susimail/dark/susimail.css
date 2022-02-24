@@ -7,9 +7,9 @@
 @import url(images/images.css);
 
 html {background: none}
-body, input, select, .fakebutton {font-family: var(--bodyfont)}
+body {margin: 5px; min-width: 920px}
+body, input, select, .fakebutton {vertical-align: middle; font-family: var(--bodyfont); font-size: 9pt}
 pre, textarea, p.mailbody {font-family: var(--monospaced)}
-body {margin: 5px; min-width: 920px; font-size: 9pt}
 body.iframed {margin: -1px -1px -5px}
 body.iframed {background: var(--compose_hover), var(--login_hover), var(--logout_hover), var(--offline_hover), var(--save_hover), var(--send_hover), var(--configure_hover), var(--refresh_hover), var(--dropdown_hover), transparent; background-size: 0}
 .pagenav, .sort, .topbuttons, h3, .footer, .bottombuttons, .topbuttons, th img, h3, #dologin, th, #loading{user-select: none}
@@ -20,6 +20,9 @@ p.text {margin-left: 10px; margin-right: 10px}
 p.error, p.info {font-size: 10pt}
 p.error {color: #c00}
 p.info {color: #030}
+p.footer {margin: 0; line-height: 10pt; text-align: center; padding: 5px 3px; color: #373}
+p.footer, p.footer a {font-size: 8pt}
+p.footer, p.footer b {color: #373; text-shadow: 0 0 1px #000}
 tr.mailbody, #message_full tr:first-child {background: #000800}
 #message_full tr:first-child {box-shadow: var(--highlight), inset 0 0 2px 1px #030}
 #mailhead tr {box-shadow: none}
@@ -29,30 +32,27 @@ p.mailbody + p.info {margin-top: -48px}
 span.coloured {color: #327bbf}
 div.header, .iframed .header {display: none}
 div.footer {margin: 0 -1px -1px; border-top: none; border: var(--border); box-shadow: var(--highlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000; background: linear-gradient(90deg, #000800 15%, #000 50%, #000800 85%)}
-p.footer {margin: 0; line-height: 10pt; text-align: center; padding: 5px 3px; color: #373}
-p.footer, p.footer a {font-size: 8pt}
-p.footer, p.footer b {color: #373; text-shadow: 0 0 1px #000}
 .iframed .footer {display: none}
 hr {margin: 5px; width: 100%; height: 1px; border: none; background: #252; opacity: .5}
 .footer hr {display: none}
 p.mailbody {margin-top: 0; padding: 0 0 15px; word-break: break-all; /* required to ensure super long strings don't break the layout */
-line-height: 1.3; text-align: left; font-size: 9pt; color: #b5b774}
-.linkspam {color: #300}
-.linknew {color: #5a5}
-.linkold {color: #494}
+line-height: 1.3; text-align: left; color: #b5b774}
 a:hover, a:focus, tr:hover td[onclick] a {text-decoration: none; color: var(--hover)}
 a:visited {color: #252}
 a:active, tr:hover td[onclick]:active a {color: var(--active)}
+.linkspam {color: #300}
+.linknew {color: #5a5}
+.linkold {color: #494}
 .noborder {margin-left: 0; margin-top: 0; margin-right: 0}
-pre {font-size: 9pt; margin-left: 10px; margin-right: 10px}
-.page {margin: 0; padding: 10px 10px 0; min-width: 600px; line-height: 1.6; text-align: center; font-size: 8.5pt; color: var(--ink); box-shadow: var(--highlight); border: var(--border); border-radius: 1px; background-color: rgba(0,80,0,.3)}
-.iframed .page {margin: 0; padding: 1px; min-width: 620px; border: none; border-radius: 0; background-color: rgba(0,16,0,.3)}
-th {font-size: 9pt; font-weight: 700; vertical-align: middle}
+pre {margin-left: 10px; margin-right: 10px}
+.page {margin: 0; padding: 10px 10px 0; min-width: 600px; line-height: 1.6; text-align: center; color: var(--ink); box-shadow: var(--highlight); border: var(--border); border-radius: 1px}
+.iframed .page {margin: 0; padding: 1px; min-width: 620px; border: none; border-radius: 0}
+th {font-weight: 700; vertical-align: middle}
 .spacer {display: none}
 form {line-height: 1.6; border-top: none}
-.header + form {border: var(--border); box-shadow: 0 0 1px 1px #000; background: rgba(0,0,0,.5)}
+.header + form {border: var(--border); box-shadow: 0 0 1px 1px #000}
 .iframed form {margin-bottom: 8px; border: none; box-shadow: none}
-.iframed .header + form {margin-bottom: -10px; padding-bottom: 17px; background: none}
+.iframed .header + form {margin-bottom: -10px; padding-bottom: 17px}
 
 /* message view */
 .debugHeader {display: table-row}
@@ -75,8 +75,7 @@ form {line-height: 1.6; border-top: none}
 
 /* buttons and inputs */
 label:hover {color: #000}
-input[type=text], input[type=password] {font-size: 9pt}
-input[type=submit], input[type=reset], #settings, .topbuttons .fakebutton {margin: 3px; padding: 7px 6px; min-width: 0; font-size: 8.5pt; background: var(--btn); background-size: 12px, 100%; cursor: pointer}
+input[type=submit], input[type=reset], #settings, .topbuttons .fakebutton {margin: 3px; padding: 7px 6px; min-width: 0; background: var(--btn); background-size: 12px, 100%; cursor: pointer}
 #dologin input[type=submit], #dologin #settings {line-height: 1.25}
 input.cancel, #nukemail input.clearselection {padding: 7px 14px 7px 27px; background: var(--no) no-repeat 10px center / 12px, var(--btn)}
 input.cancel:hover, #nukemail input.clearselection:hover, input.cancel:focus, #nukemail input.clearselection:focus {background: var(--no_hover) no-repeat 10px center / 12px, var(--btn_hover)}
@@ -106,7 +105,7 @@ input.login:active {background: #f60 var(--login_active) no-repeat 10px center /
 input.logout {padding: 7px 14px 7px 28px; background: var(--logout) no-repeat 10px center / 14px, var(--btn)}
 input.logout:hover, input.logout:focus {background: var(--logout_hover) no-repeat 10px center / 14px, var(--btn_hover)}
 input.logout:active {background: #f60 var(--logout_active) no-repeat 10px center / 14px}
-#info input.logout, #info input.logout:hover, #info input.logout:focus, #info input.logout:active {margin: -8px -8px -8px 8px; padding-right: 10px; float: none; line-height: normal; border: none; border-left: 1px solid #131; border-radius: 0; box-shadow: none; background: var(--logout) no-repeat 10px center / 14px, var(--badge); filter: none}
+#info input.logout, #info input.logout:hover, #info input.logout:focus, #info input.logout:active {margin: -11px -4px -8px 12px; padding-right: 10px; float: none; line-height: normal; border: none; border-left: 1px solid #131; border-radius: 0; box-shadow: none; background: var(--logout) no-repeat 10px center / 14px, var(--badge); filter: none}
 #info input.logout:hover, #info input.logout:focus {background: var(--logout_hover) no-repeat 10px center / 14px, var(--badge)}
 #info input.logout:active {box-shadow: var(--btn_shadow_active); background: #f60 var(--logout_active) no-repeat 10px center / 14px}
 input.reload, input.refresh, input[name="refresh"][disabled], .topbuttons .fakebutton {padding: 7px 11px 7px 28px; background: var(--refresh) no-repeat 10px center / 13px, var(--btn)}
@@ -228,13 +227,13 @@ img.sort:active {box-shadow: var(--highlight), inset 2px 2px 2px #000}
 .sort.selected, .sort.selected:active {box-shadow: inset 1px 1px 1px #000; opacity: .8; mix-blend-mode: luminosity}
 
 /* login */
-#dologin {margin: 52px auto 42px; padding: 10px 10px 1px; width: 600px; border: 1px solid #151; border-radius: 2px; box-shadow: var(--highlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000, 0 0 0 1px #000, 0 0 3px 3px rgba(0,0,0,.8); background: linear-gradient(180deg,rgba(0,0,0,0), rgba(0,0,0,.3)), repeating-linear-gradient(180deg,rgba(0,0,0,.9), rgba(0,32,0,.3) 1px, rgba(0,32,0,.4) 2px), url(images/hatter_med.png) no-repeat right bottom / auto 40%, #000; filter: opacity(0); animation: linear fade-in .15s 1.35s forwards}
+#dologin {margin: 52px auto 42px; padding: 10px 10px 1px; width: 600px; border: var(--border); border-radius: 2px; box-shadow: var(--bevel); background: var(--mainbg); animation: linear fade-in .15s 1.35s both}
 .iframed #dologin {margin: 52px auto 42px}
 .iframed #dologin table {margin-top: 30px}
 #dologin td {padding: 3px; font-weight: 700; color: var(--ink)}
 #dologin td:first-child {width: 25%; white-space: nowrap}
 #dologin td:last-child {width: 75%}
-#dologin h1 {margin: -10px -10px 8px; padding: 15px 10px 12px 15px; letter-spacing: .1em; word-spacing: .1em; text-transform: uppercase; text-align: left; font-size: 14pt; color: var(--ink); border-bottom: var(--border); box-shadow: var(--highlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000;; background: var(--th)}
+#dologin h1 {margin: -10px -10px 8px; padding: 5px 10px 7px 15px; letter-spacing: .1em; word-spacing: .1em; text-transform: uppercase; text-align: left; font-size: 13pt; color: var(--ink); border-bottom: var(--border); box-shadow: var(--highlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000;; background: var(--th)}
 .iframed #dologin h1 {display: none}
 #dologin input[type=text], input[name="pagesize"] {text-align: left}
 #dologin input[name="user"], #dologin input[name="pass"] {padding: 7px 7px 7px 28px; background-blend-mode: luminosity}
@@ -247,8 +246,8 @@ img.sort:active {box-shadow: var(--highlight), inset 2px 2px 2px #000}
 #dologin tr:last-child hr {margin-top: 3px}
 #dologin table {margin-top: 20px}
 .iframed #dologin tr:nth-child(6) hr {margin-top: 5px}
-#dologin tr:last-child a {margin: 12px -4px 8px; padding: 3px 15px; min-width: 120px; display: inline-block; color: #494; text-shadow: var(--txt_shadow); border-radius: 25px; box-shadow: 0 0 0 1px #010; background: radial-gradient(at center bottom, #010, rgba(0,16,0,.3), #000 40%); transition: ease all .05s}
-#dologin tr:last-child a:hover {box-shadow: 0 0 0 1px #020; background: var(--th); transition: ease all .1s}
+#dologin tr:last-child a {margin: 12px -4px 8px; padding: 3px 15px; min-width: 120px; display: inline-block; color: #373; text-shadow: var(--txt_shadow); border-radius: 25px; background: var(--glow_bottom); transition: ease all .05s}
+#dologin tr:last-child a:hover {color: #494; box-shadow: 0 0 0 1px #020; background: var(--glow_bottom), var(--th); transition: ease all .1s}
 #dologin tr:last-child a:active {color: #f90; box-shadow: 0 0 1px #020, inset 3px 3px 3px #000; transition: ease all .05s}
 #dologin tr:last-child td {color: transparent}
 #toggle {height: 20px; width: 24px; min-width: 0; vertical-align: middle; font-size: 0; border: none; box-shadow: none; background: var(--show) no-repeat center center / 20px; cursor: pointer; mix-blend-mode: luminosity}
@@ -438,15 +437,14 @@ body:not(.iframed) #mailbox tr:nth-child(2) {top: 47px}
 @media screen and (max-width: 1000px) {
 #dologin {width: 60%; min-width: 480px; display: inline-block}
 body {margin: 3px}
-body, td, a, button, input, p.mailbody {font-size: 8.5pt}
+body, td, a, button, .fakebutton, input, p.mailbody {font-size: 8.5pt}
 th.mailListDate {white-space: nowrap; text-align: center}
 td.mailListDate {width: 1%; line-height: 1; white-space: normal; text-align: center}
 .listDate {padding-bottom: 1px; text-align: center; font-weight: 700; border: none; border-bottom: 1px solid rgba(0,64,0,.4); box-shadow: none; opacity: .85; background: none}
 .listDate span {min-width: 0}
 .listTime {text-align: center; font-size: 95%}
 input.switchto, input.switchto:hover, input.switchto:focus, #serverRefresh, #info input.logout, #info input.logout:hover, #info input.logout:focus {width: 20px; line-height: 14px; font-size: 0; background-position: center center}
-#info input.logout, #info input.logout:hover, #info input.logout:focus {margin-right: -11px}
-#info {margin: 3px 4px -8px -380px; padding: 1px 8px 0 3px; display: inline-block; float: none}
+#info {margin: 3px 4px -8px; padding: 1px 8px 0 3px; display: inline-block; float: none}
 .topbuttons input[type="submit"], .topbuttons input[type="reset"], .topbuttons .fakebutton, .topbuttons select {margin: 2px; vertical-align: middle}
 .topbuttons input.new {margin: 2px 1px 2px 0}
 .topbuttons select {margin-left: -2px}
@@ -456,11 +454,11 @@ input.switchto, input.switchto:hover, input.switchto:focus, #serverRefresh, #inf
 @media screen and (max-width: 900px) {
 .pagenavcontainer {position: fixed; top: 8px; right: 5px}
 #infoUser {display: none}
-#info {margin-left: -486px; padding: 3px 0 3px 8px}
+#info {padding: 3px 0 3px 8px}
 }
 
 @media screen and (min-width: 1300px) {
-.iframed body, .iframed td, .iframed textarea, .iframed input, .iframed div, .iframed p.mailbody, .iframed th, .iframed a {font-size: 10pt}
+.iframed body, .iframed td, .iframed textarea, .iframed input, .iframed div, .iframed p.mailbody, .iframed th, .iframed a {font-size: 9.5pt}
 .iframed td:not(.mailListSender) {padding: 3px 5px}
 }
 
