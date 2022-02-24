@@ -14,10 +14,9 @@ body.iframed {margin: -1px -1px -5px}
 body.iframed {background: var(--compose_hover), var(--login_hover), var(--logout_hover), var(--offline_hover), var(--save_hover), var(--send_hover), var(--configure_hover), var(--refresh_hover), var(--dropdown_hover), transparent; background-size: 0}
 .pagenav, .sort, .topbuttons, h3, .footer, .bottombuttons, .topbuttons, th img, h3, #dologin, th, #loading{user-select: none}
 b, h3, .pagenav td, th {color: var(--ink); text-shadow: var(--txt_shadow)}
-li {margin-left: 5px; margin-right: 5px; line-height: 12pt; font-size: 8.5pt; color: var(--ink)}
-p {margin-left: 15px; margin-right: 15px; font-size: 8.5pt; color: var(--ink)}
+li {margin-left: 5px; margin-right: 5px; line-height: 12pt; color: var(--ink)}
+p {margin-left: 15px; margin-right: 15px; color: var(--ink)}
 p.text {margin-left: 10px; margin-right: 10px}
-p.error, p.info {font-size: 10pt}
 p.error {color: #c00}
 p.info {color: #030}
 p.footer {margin: 0; line-height: 10pt; text-align: center; padding: 5px 3px; color: #373}
@@ -44,7 +43,7 @@ a:active, tr:hover td[onclick]:active a {color: var(--active)}
 .linknew {color: #5a5}
 .linkold {color: #494}
 .noborder {margin-left: 0; margin-top: 0; margin-right: 0}
-pre {margin-left: 10px; margin-right: 10px}
+pre {margin-left: 10px; margin-right: 10px; font-size: 9pt}
 .page {margin: 0; padding: 10px 10px 0; min-width: 600px; line-height: 1.6; text-align: center; color: var(--ink); box-shadow: var(--highlight); border: var(--border); border-radius: 1px}
 .iframed .page {margin: 0; padding: 1px; min-width: 620px; border: none; border-radius: 0}
 th {font-weight: 700; vertical-align: middle}
@@ -57,7 +56,7 @@ form {line-height: 1.6; border-top: none}
 /* message view */
 .debugHeader {display: table-row}
 .debugHeader td {border-top: var(--border)}
-.debugHeader pre {margin: 5px 3px 6px 10px; line-height: 1.3; white-space: pre-wrap; word-break: break-all; font-size: 9.5pt; color: #bb0; text-shadow: var(--txt_shadow); opacity: .9}
+.debugHeader pre {margin: 5px 3px 6px 10px; line-height: 1.3; white-space: pre-wrap; word-break: break-all; color: #bb0; text-shadow: var(--txt_shadow); opacity: .9}
 .debugHeader td {box-shadow: var(--highlight), inset 0 0 2px 1px #030; background: rgba(0,0,0,.4)}
 #message_full {margin: 0; padding: 0; border-collapse: separate; border-spacing: 0}
 .iframed #message_full {margin-bottom: -9px; border-bottom: none}
@@ -156,18 +155,17 @@ input.switchto:hover, input.moveto:hover, input.switchto:focus, input.moveto:foc
 input.switchto:active, input.moveto:active {background: #f60 var(--folder_active) no-repeat 10px center / 14px}
 input[disabled] {opacity: .4; pointer-events: none}
 input[type=file]::file-selector-button {margin: 2px 3px; padding: 4px 2px}
-select {font-size: 8.5pt}
 .topbuttons .select2 {margin: 0 -2px; padding: 7px 24px 7px 8px}
 input:active, .fakebutton:active {text-shadow: none}
 .bottombuttoms td[colspan="4"] {padding-right: 1px}
-input[type="file"] {padding: 5px 0; max-width: 400px; font-size: 9pt; background: none}
+input[type="file"] {padding: 5px 0; max-width: 400px; background: none}
 input[type=text], input[type=password], textarea {border-radius: 1px}
 input[name="new_from"] {box-shadow: none; color: var(--ink)}
 textarea {font-size: 9pt}
 input[type=text]::placeholder, input[type=password]::placeholder {text-transform: lowercase}
 
 /* pagenav */
-div.pagenav {padding: 10px 5px 0; font-size: 9.5pt; border-top: 1px solid #555; border-radius: 0 0 2px 2px}
+div.pagenav {padding: 10px 5px 0; border-top: 1px solid #555; border-radius: 0 0 2px 2px}
 .pagenav tr {display: table-row; border: none}
 .pagenav td {border: none}
 #messagenav {margin-right: -1px; margin-left: -7px; float: right}
@@ -265,7 +263,7 @@ h3#config {margin: 0 0 20px; padding: 10px; text-align: center; text-transform: 
 /* top buttons */
 #info {margin: 4px 140px 0 4px; padding: 0 8px 0 3px; float: right; line-height: 1.5; text-transform: lowercase; font-weight: 400; color: var(--ink); border: 1px solid #131; border-radius: 2px; box-shadow: 0 0 1px 0 #000; background: var(--badge)}
 #infoUser {margin-right: 6px; padding: 3px 8px 4px 20px; display: inline-block; text-align: center; font-weight: 700; color: var(--ink); border-right: 1px solid #131; background: var(--user) no-repeat 2px center / 15px}
-.topbuttons {margin: -1px -1px 0; padding: 5px 5px 4px; width: calc(100% - 10px); min-width: 800px; display: inline-block; vertical-align: middle; white-space: nowrap; text-align: center; font-size: 9pt; font-weight: 700; border: var(--border); box-shadow: var(--bevel); background: var(--th)}
+.topbuttons {margin: -1px -1px 0; padding: 5px 5px 4px; width: calc(100% - 10px); min-width: 800px; display: inline-block; vertical-align: middle; white-space: nowrap; text-align: center; font-weight: 700; border: var(--border); box-shadow: var(--bevel); background: var(--th)}
 .topbuttons#readmail {padding: 5px 5px 8px}
 body:not(.iframed) .topbuttons {position: sticky; top: -1px; z-index: 1000; background: var(--topnav); background-size: var(--topnav_size)}
 .iframed .topbuttons {border-left: none; border-right: none}
@@ -295,7 +293,7 @@ tr.bottombuttons:empty {display: none}
 .notifications:hover {background: #020 var(--no_hover) no-repeat right 6px top 6px / 14px}
 .notifications p.info, .notifications p.info b {text-align: center; font-size: 10pt; text-shadow: none; color: var(--ink)}
 .notifications p {letter-spacing: .07em; word-spacing: .2em; font-weight: 700; text-shadow: var(--txt_shadow); animation: fade-in 1s linear}
-p.error {font-size: 9.5pt; text-align: center}
+p.error {text-align: center}
 td p.error {padding: 10px}
 
 /* compose mail */
@@ -332,7 +330,7 @@ tr.list0, tr.list1 {background: var(--row)}
 tr.list0:hover, tr.list1:hover {background-color: #030; box-shadow: var(--highlight)}
 th.mailListDate {padding-left: 8px; text-align: left}
 th.mailListDelete:empty {min-width: 24px}
-td {color: var(--ink); font-size:9pt; padding: 1px 3px}
+td {padding: 1px 3px; color: var(--ink)}
 tr.mailbody td {border-top: var(--border)}
 td[onclickloc] {cursor: pointer}
 .list0 td, .list1 td {box-shadow: var(--highlight)}
@@ -436,8 +434,7 @@ body:not(.iframed) #mailbox tr:nth-child(2) {top: 47px}
 
 @media screen and (max-width: 1000px) {
 #dologin {width: 60%; min-width: 480px; display: inline-block}
-body {margin: 3px}
-body, td, a, button, .fakebutton, input, p.mailbody {font-size: 8.5pt}
+body {margin: 3px; font-size: 8.5pt}
 th.mailListDate {white-space: nowrap; text-align: center}
 td.mailListDate {width: 1%; line-height: 1; white-space: normal; text-align: center}
 .listDate {padding-bottom: 1px; text-align: center; font-weight: 700; border: none; border-bottom: 1px solid rgba(0,64,0,.4); box-shadow: none; opacity: .85; background: none}
@@ -458,12 +455,12 @@ input.switchto, input.switchto:hover, input.switchto:focus, #serverRefresh, #inf
 }
 
 @media screen and (min-width: 1300px) {
-.iframed body, .iframed td, .iframed textarea, .iframed input, .iframed div, .iframed p.mailbody, .iframed th, .iframed a {font-size: 9.5pt}
+body, input, select, .fakebutton {font-size: 9.5pt}
 .iframed td:not(.mailListSender) {padding: 3px 5px}
 }
 
 @media screen and (min-width: 1500px) {
-body, td, textarea, input, div, p.mailbody, th, a, .fakebutton, #settings, #pageRefresh, select {font-size: 10pt}
+body, input, select, .fakebutton {font-size: 10pt}
 a[class^="link"] {font-size: 95%}
 p.footer, p.footer a {line-height: 12pt; font-size: 9pt}
 p.mailbody + p.info {margin-top: -53px}
@@ -475,5 +472,4 @@ td {padding: 3px 5px}
 #messagenav {top: 9px}
 #viewmail .folders {top: -1px}
 .iframed #prefsave {margin-bottom: -11px}
-.topbuttons .select2 {line-height: 1.1}
 }
