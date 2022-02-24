@@ -314,9 +314,11 @@ public class PeerHelper extends HelperBase {
         }
 
         StringBuilder buf = new StringBuilder(4*1024);
-        buf.append("<div id=\"ntcp\">\n<h3 id=\"ntcpcon\">").append(_t("NTCP connections")).append(":&nbsp; ").append(peers.size());
-        buf.append(" / ").append(nt.getMaxConnections());
-        buf.append("&nbsp;<span class=\"reachability\">").append(_t("Status")).append(": ")
+        buf.append("<div id=\"ntcp\">\n<h3 id=\"ntcpcon\" title=\"")
+           .append(_t("Current / maximum permitted")).append("\">")
+           .append(_t("NTCP connections")).append(":&nbsp; ").append(peers.size())
+           .append(" / ").append(nt.getMaxConnections())
+           .append("&nbsp;<span class=\"reachability\">").append(_t("Status")).append(": ")
            .append(nt.getReachabilityStatus().toLocalizedStatusString(_context)).append("</span></h3>\n")
            .append("<div class=\"widescroll\">\n<table id=\"ntcpconnections\">\n");
         if (peers.size() != 0) {
@@ -482,7 +484,9 @@ public class PeerHelper extends HelperBase {
         int numRTTPeers = 0;
 
         StringBuilder buf = new StringBuilder(4*1024);
-        buf.append("<div id=\"udp\">\n<h3 id=\"udpcon\">").append(_t("UDP connections")).append(":&nbsp; ").append(peers.size())
+        buf.append("<div id=\"udp\">\n<h3 id=\"udpcon\" title=\"")
+           .append(_t("Current / maximum permitted")).append("\">")
+           .append(_t("UDP connections")).append(":&nbsp; ").append(peers.size())
            .append(" / ").append(ut.getMaxConnections());
         //buf.append(". ").append(_t("Timeout")).append(": ").append(DataHelper.formatDuration2(_expireTimeout));
         final boolean isAdvanced = isAdvanced();
