@@ -1307,23 +1307,23 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             routerInfo.getPublished() < now - 4*60*60*1000l && !us.equals(routerInfo.getIdentity().getHash()))
                 return "RouterInfo [" + routerId + "] is K or L tier and was published over 4 hours ago";
 
-        if (expireRI != null) {
+        if (expireRI != null && !us.equals(routerInfo.getIdentity().getHash())) {
             if (upLongEnough && (routerInfo.getPublished() < now - Long.valueOf(expireRI)*60*60*1000l) ) {
                 long age = _context.clock().now() - routerInfo.getPublished();
                 return "RouterInfo [" + routerId + "] was published " + DataHelper.formatDuration(age) + " ago";
             }
         } else {
-                if (upLongEnough && (routerInfo.getPublished() < now - ROUTER_INFO_EXPIRATION) ) {
+                if (upLongEnough && (routerInfo.getPublished() < now - ROUTER_INFO_EXPIRATION) && !us.equals(routerInfo.getIdentity().getHash())) {
                     long age = _context.clock().now() - routerInfo.getPublished();
                     return "RouterInfo [" + routerId + "] was published " + DataHelper.formatDuration(age) + " ago";
                 }
         }
         if (!routerInfo.isCurrent(ROUTER_INFO_EXPIRATION_SHORT)) {
             for (RouterAddress ra : routerInfo.getAddresses()) {
-                if (routerInfo.getTargetAddresses("NTCP", "NTCP2").isEmpty() && ra.getOption("ihost0") == null) {
+                if (routerInfo.getTargetAddresses("NTCP", "NTCP2").isEmpty() && ra.getOption("ihost0") == null && !us.equals(routerInfo.getIdentity().getHash())) {
                     return "Router [" + routerId + "] is SSU only without introducers and was published over 45 minutes ago";
                 } else {
-                    if (routerInfo.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0)
+                    if (routerInfo.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 && !us.equals(routerInfo.getIdentity().getHash()))
                     return "Router [" + routerId + "] is unreachable on any transport and was published over 45 minutes ago";
                 }
             }

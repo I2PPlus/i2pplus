@@ -326,7 +326,7 @@ td.graphicStatus img {margin-top: -3px; margin-bottom: -3px; width: auto; height
 #torrents .actionRemove:hover, #torrents .actionRemove:focus {background: var(--remove_hover) no-repeat center center / 14px, var(--btnAction_hover)}
 #torrents .actionDelete {background: var(--delete) no-repeat center center / 14px, var(--btnAction), var(--delete_hover) no-repeat center center / 14px}
 #torrents .actionDelete:hover, #torrents .actionDelete:focus {background: var(--delete_hover) no-repeat center center / 14px, var(--btnAction_hover)}
-#torrents #actionStopAll, #torrents #actionStartAll {margin-top: -1px; padding: 11px 19px}
+#torrents #actionStopAll, #torrents #actionStartAll {padding: 11px 19px}
 #torrents #actionStopAll {background: var(--stopall) no-repeat center center / auto 14px, var(--btnAction), var(--stopall_hover) no-repeat center center / auto 14px}
 #torrents #actionStartAll {background: var(--startall) no-repeat center center / auto 14px, var(--btnAction), var(--startall_hover) no-repeat center center / auto 14px}
 #torrents #actionStartAll:hover, #torrents #actionStartAll:focus {background: var(--startall_hover) no-repeat center center / auto 14px, var(--btnAction_hover)}
