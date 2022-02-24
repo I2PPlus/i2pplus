@@ -258,16 +258,16 @@ img.sort:active {box-shadow: var(--highlight), inset 2px 2px 2px #000}
 /* configuration */
 textarea[name="config_text"] {margin: 0 auto 15px; padding: 0 5px; resize: none; width: 600px; min-width: 0; height: 370px; line-height: 20px; border: var(--border); box-shadow: 0 0 2px 2px rgba(0,0,0,.5); background: repeating-linear-gradient(180deg,#000800, #000800 20px, #000 20px, #000 40px)}
 textarea[name="config_text"]:focus {border: var(--border); box-shadow: var(--highlight), 0 0 0 1px rgba(255,96,0,.15); background: repeating-linear-gradient(180deg,#010, #010 20px, #000800 20px, #000800 40px)}
-h3#config {margin: 0 0 20px; padding: 10px; text-align: center; text-transform: uppercase; font-size: 11pt; letter-spacing: .08em; word-spacing: .1em; border-bottom: var(--border); box-shadow: var(--highlight); text-shadow: var(--txt_shadow); background: var(--th)}
-#prefsave {margin-top: 4px; padding-top: 10px; padding-bottom: 10px; border-top: var(--border); box-shadow: var(--highlight); background: #010}
-.iframed #prefsave {margin-bottom: -10px; padding-bottom: 10px; box-shadow: none}
+h3#config {margin: 0 0 20px; padding: 10px; text-align: center; text-transform: uppercase; font-size: 11pt; letter-spacing: .08em; word-spacing: .1em; border-bottom: var(--border); box-shadow: var(--bevel); text-shadow: var(--txt_shadow); background: var(--th)}
+#prefsave {margin-top: 4px; padding-top: 10px; padding-bottom: 10px; border-top: var(--border); box-shadow: var(--bevel); background: var(--th)}
+.iframed #prefsave {margin-bottom: -10px; padding-bottom: 10px}
 
 /* top buttons */
 #info {margin: 4px 140px 0 4px; padding: 0 8px 0 3px; float: right; line-height: 1.5; text-transform: lowercase; font-weight: 400; color: var(--ink); border: 1px solid #131; border-radius: 2px; box-shadow: 0 0 1px 0 #000; background: var(--badge)}
 #infoUser {margin-right: 6px; padding: 3px 8px 4px 20px; display: inline-block; text-align: center; font-weight: 700; color: var(--ink); border-right: 1px solid #131; background: var(--user) no-repeat 2px center / 15px}
-.topbuttons {margin: -1px -1px 0; padding: 5px 5px 4px; width: calc(100% - 10px); min-width: 800px; display: inline-block; vertical-align: middle; white-space: nowrap; text-align: center; font-size: 9pt; font-weight: 700; border: var(--border); box-shadow: var(--bevel); background: var(--topnav)}
+.topbuttons {margin: -1px -1px 0; padding: 5px 5px 4px; width: calc(100% - 10px); min-width: 800px; display: inline-block; vertical-align: middle; white-space: nowrap; text-align: center; font-size: 9pt; font-weight: 700; border: var(--border); box-shadow: var(--bevel); background: var(--th)}
 .topbuttons#readmail {padding: 5px 5px 8px}
-body:not(.iframed) .topbuttons {position: sticky; top: -1px; z-index: 1000}
+body:not(.iframed) .topbuttons {position: sticky; top: -1px; z-index: 1000; background: var(--topnav); background-size: var(--topnav_size)}
 .iframed .topbuttons {border-left: none; border-right: none}
 .topbuttons > * {vertical-align: middle}
 
@@ -289,7 +289,7 @@ tr.bottombuttons:empty {display: none}
 #composemail .bottombuttons {background: none; box-shadow: none}
 
 /* notifications */
-.notifications {margin: 0 30%; padding: 0 10px 2px; min-width: 360px; position: fixed; top: 0; left: 0; right: 0; z-index: 9999; text-align: center; font-size: 90%; text-shadow: var(--txt_shadow); border: 1px solid #000; border-top: none; box-shadow: 0 2px 2px 1px rgba(0,0,0,.5), inset 0 0 0 1px #040; background: #020 var(--no) no-repeat right 6px top 6px / 14px; cursor: crosshair; animation: 2s hide-up 7s ease-out forwards}
+.notifications {margin: 0 30%; padding: 0 10px 2px; min-width: 360px; position: fixed; top: 0; left: 0; right: 0; z-index: 9999; text-align: center; font-size: 90%; text-shadow: var(--txt_shadow); border: 1px solid #000; border-top: none; box-shadow: 0 2px 2px 1px rgba(0,0,0,.5), inset 0 0 0 1px #040; background: #020 var(--no) no-repeat right 6px top 6px / 14px; cursor: crosshair; animation: 2s hide-up 4s ease-out forwards}
 .iframed .notifications {margin: -1px 30% 0; border: var(--border); border-top: none; border-radius: 0 0 2px 2px; box-shadow: 0 2px 2px 1px rgba(0,0,0,.5), inset 0 0 0 1px #010}
 .notifications.msgerror {margin: 0 20%}
 .notifications:hover {background: #020 var(--no_hover) no-repeat right 6px top 6px / 14px}
@@ -474,4 +474,6 @@ td {padding: 3px 5px}
 #mailbox th {font-size: 70%}
 #messagenav {top: 9px}
 #viewmail .folders {top: -1px}
+.iframed #prefsave {margin-bottom: -11px}
+.topbuttons .select2 {line-height: 1.1}
 }

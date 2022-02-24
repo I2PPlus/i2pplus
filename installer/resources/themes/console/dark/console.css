@@ -126,7 +126,6 @@ ul {margin: 0; padding: 0}
 #sidebar td {padding: 0 2px 0 2px; word-spacing: -0.1em; text-shadow: var(--textshadow); border: 0;}
 #sidebar td:first-child {max-width: 90px; overflow: hidden; text-transform: capitalize}
 #sb_advanced, #sb_advanced td, #sb_internals, #sb_internals td, #sb_services, #sb_services td {padding-left: 0; padding-right: 0}
-#sb_internals td, #sb_services td, #sb_advanced td, #sb_help td {color: #595}
 #sb_peers tr:hover td, #sb_tunnels tr:hover td, #sb_queue tr:hover td, #sb_bandwidth tr:hover td, #sb_general tr:hover td, #sb_advancedgeneral tr:hover td {color: #ff5; background: rgba(0,48,0,.2)}
 #sb_services img {display: none}
 #sb_internals a, #sb_services a, #sb_advanced a, #sb_help a {padding: 1px 3px; display: inline-block; vertical-align: middle}
@@ -2375,7 +2374,7 @@ iframe {height: 0}
 #main#embedded {padding: 0}
 #rawtext_frame {margin: 0}
 #webmail::before, #dns::before {top: -1px}
-#susimailframe, #i2psnarkframe {margin: 0; background: #000800}
+#susimailframe, #i2psnarkframe {margin: 0; box-shadow: var(--bevel); background: #000800}
 #susidnsframe {margin: 0 0 -3px}
 #i2psnarkframe {margin-bottom: -2px}
 #i2ptunnelframe {margin: 0 0 -5px}
