@@ -44,7 +44,7 @@ a:active, tr:hover td[onclick]:active a {color: var(--active)}
 .linkold {color: #494}
 .noborder {margin-left: 0; margin-top: 0; margin-right: 0}
 pre {margin-left: 10px; margin-right: 10px; font-size: 9pt}
-.page {margin: 0; padding: 10px 10px 0; min-width: 600px; line-height: 1.6; text-align: center; color: var(--ink); box-shadow: var(--highlight); border: var(--border); border-radius: 1px}
+.page {margin: 0; padding: 10px; min-width: 600px; line-height: 1.6; text-align: center; color: var(--ink); box-shadow: var(--highlight); border: var(--border); border-radius: 1px}
 .iframed .page {margin: 0; padding: 1px; min-width: 620px; border: none; border-radius: 0}
 th {font-weight: 700; vertical-align: middle}
 .spacer {display: none}
@@ -231,7 +231,7 @@ img.sort:active {box-shadow: var(--highlight), inset 2px 2px 2px #000}
 #dologin td {padding: 3px; font-weight: 700; color: var(--ink)}
 #dologin td:first-child {width: 25%; white-space: nowrap}
 #dologin td:last-child {width: 75%}
-#dologin h1 {margin: -10px -10px 8px; padding: 5px 10px 7px 15px; letter-spacing: .1em; word-spacing: .1em; text-transform: uppercase; text-align: left; font-size: 13pt; color: var(--ink); border-bottom: var(--border); box-shadow: var(--highlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000;; background: var(--th)}
+#dologin h1 {margin: -10px -10px 8px; padding: 7px 10px 5px 15px; letter-spacing: .1em; word-spacing: .1em; text-transform: uppercase; text-align: left; font-size: 13pt; color: var(--ink); border-bottom: var(--border); box-shadow: var(--bevel), inset 0 0 2px 1px #040, inset 0 0 0 3px #000;; background: var(--th)}
 .iframed #dologin h1 {display: none}
 #dologin input[type=text], input[name="pagesize"] {text-align: left}
 #dologin input[name="user"], #dologin input[name="pass"] {padding: 7px 7px 7px 28px; background-blend-mode: luminosity}
