@@ -44,7 +44,7 @@ a:active, tr:hover td[onclick]:active a {color: var(--active)}
 .linkold {color: #494}
 .noborder {margin-left: 0; margin-top: 0; margin-right: 0}
 pre {margin-left: 10px; margin-right: 10px; font-size: 9pt}
-.page {margin: 0; padding: 10px 10px 0; min-width: 600px; line-height: 1.6; text-align: center; color: var(--ink); box-shadow: var(--highlight); border: var(--border); border-radius: 1px}
+.page {margin: 0; padding: 10px; min-width: 600px; line-height: 1.6; text-align: center; color: var(--ink); box-shadow: var(--highlight); border: var(--border); border-radius: 1px}
 .iframed .page {margin: 0; padding: 1px; min-width: 620px; border: none; border-radius: 0}
 th {font-weight: 700; vertical-align: middle}
 .spacer {display: none}
@@ -225,13 +225,12 @@ img.sort:active {box-shadow: var(--highlight), inset 2px 2px 2px #000}
 .sort.selected, .sort.selected:active {box-shadow: inset 1px 1px 1px #000; opacity: .8; mix-blend-mode: luminosity}
 
 /* login */
-#dologin {margin: 52px auto 42px; padding: 10px 10px 1px; width: 600px; border: var(--border); border-radius: 2px; box-shadow: var(--bevel); background: var(--mainbg); animation: linear fade-in .15s 1.35s both}
-.iframed #dologin {margin: 52px auto 42px}
-.iframed #dologin table {margin-top: 30px}
+#dologin {margin: 50px auto; padding: 10px 10px 1px; width: 600px; border: var(--border); border-radius: 2px; box-shadow: var(--bevel); background: var(--mainbg); animation: linear fade-in .15s 1.35s both}
+.iframed #dologin {margin: 60px auto 50px}
 #dologin td {padding: 3px; font-weight: 700; color: var(--ink)}
 #dologin td:first-child {width: 25%; white-space: nowrap}
 #dologin td:last-child {width: 75%}
-#dologin h1 {margin: -10px -10px 8px; padding: 5px 10px 7px 15px; letter-spacing: .1em; word-spacing: .1em; text-transform: uppercase; text-align: left; font-size: 13pt; color: var(--ink); border-bottom: var(--border); box-shadow: var(--highlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000;; background: var(--th)}
+#dologin h1 {margin: -10px -10px 8px; padding: 7px 10px 5px 15px; letter-spacing: .1em; word-spacing: .1em; text-transform: uppercase; text-align: left; font-size: 13pt; color: var(--ink); border-bottom: var(--border); box-shadow: var(--bevel), inset 0 0 2px 1px #040, inset 0 0 0 3px #000;; background: var(--th)}
 .iframed #dologin h1 {display: none}
 #dologin input[type=text], input[name="pagesize"] {text-align: left}
 #dologin input[name="user"], #dologin input[name="pass"] {padding: 7px 7px 7px 28px; background-blend-mode: luminosity}
@@ -248,7 +247,7 @@ img.sort:active {box-shadow: var(--highlight), inset 2px 2px 2px #000}
 #dologin tr:last-child a:hover {color: #494; box-shadow: 0 0 0 1px #020; background: var(--glow_bottom), var(--th); transition: ease all .1s}
 #dologin tr:last-child a:active {color: #f90; box-shadow: 0 0 1px #020, inset 3px 3px 3px #000; transition: ease all .05s}
 #dologin tr:last-child td {color: transparent}
-#toggle {height: 20px; width: 24px; min-width: 0; vertical-align: middle; font-size: 0; border: none; box-shadow: none; background: var(--show) no-repeat center center / 20px; cursor: pointer; mix-blend-mode: luminosity}
+#toggle {margin: 0; height: 20px; width: 20px; min-width: 0; vertical-align: middle; font-size: 0; border: none; box-shadow: none; background: var(--show) no-repeat center center / 20px; cursor: pointer; mix-blend-mode: luminosity}
 #toggle.hidepass {background: var(--hide) no-repeat center center / 20px}
 #toggle:hover {mix-blend-mode: normal}
 #toggle.showpass {background: var(--show) no-repeat center center / 20px}
