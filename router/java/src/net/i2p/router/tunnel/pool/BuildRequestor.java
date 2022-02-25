@@ -286,7 +286,7 @@ abstract class BuildRequestor {
             if (log.shouldLog(Log.INFO))
                 log.info("Sending tunnel build request directly to [" + cfg.getPeer(1).toBase64().substring(0,6)
                           + "] for " + cfg + " waiting for the reply of " + cfg.getReplyMessageId()
-                          + " via IB tunnel " + pairedTunnel
+                          + " via " + pairedTunnel
                           + " with [MsgID " + msg.getUniqueId() + "]");
             // send it directly to the first hop
             // Add some fuzz to the TBM expiration to make it harder to guess how many hops
