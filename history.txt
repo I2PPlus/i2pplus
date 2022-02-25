@@ -4,6 +4,9 @@
 2022-02-24 zzz
  * SSU: SSU2 classes and keys (WIP)
 
+2022-02-23 dr|z3d
+ * Console/I2PSnark: Fix dysfunctional checkbox sliders
+
 2022-02-23 zzz
  * i2psnark: Load sytem mime types if available
  * SSU: More SSU2 prep and support (WIP)
