@@ -331,7 +331,7 @@ public class GraphHelper extends FormHandler {
             }
             _out.write("&amp;hideLegend=" + hideLegend
                        + "&amp;time=" + System.currentTimeMillis()
-                       + "\"></a></span>\n</div><p id=\"graphopts\">\n");
+                       + "\"></a></span>\n</div>\n<p id=\"graphopts\">\n");
 
             if (_width < MAX_X && _height < MAX_Y) {
                 _out.write(link(_stat, _showEvents, _periodCount, _end, _width * 3 / 2, _height * 3 / 2));
@@ -405,7 +405,7 @@ public class GraphHelper extends FormHandler {
                 _out.write(_showEvents ? _t("Plot averages") : _t("plot events"));
             _out.write("</a>");
 
-            _out.write("</p><p><i>" + _t("All times are UTC.") + "</i></p>\n");
+            _out.write("\n</p>\n");
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
@@ -466,8 +466,11 @@ public class GraphHelper extends FormHandler {
             _out.write("</select></span><br>\n<span class=\"nowrap\">\n<b>");
 
             _out.write(_t("Plot type") + ":</b> ");
-            _out.write("<label><input type=\"radio\" class=\"optbox\" name=\"showEvents\" value=\"false\" " + (_showEvents ? "" : HelperBase.CHECKED) + ">" + _t("Averages") + "</label>&nbsp;&nbsp;&nbsp;");
-            _out.write ("<label><input type=\"radio\" class=\"optbox\" name=\"showEvents\" value=\"true\" "+ (_showEvents ? HelperBase.CHECKED : "") + ">" + _t("Events") + "</label></span><br>\n<span class=\"nowrap\">\n<b>");
+            _out.write("<label><input type=\"radio\" class=\"optbox\" name=\"showEvents\" value=\"false\" " +
+                       (_showEvents ? "" : HelperBase.CHECKED) + ">" + _t("Averages") + "</label>&nbsp;&nbsp;&nbsp;");
+            _out.write("<label><input type=\"radio\" class=\"optbox\" name=\"showEvents\" value=\"true\" " +
+                       (_showEvents ? HelperBase.CHECKED : "") + ">" + _t("Events") +
+                       "</label></span><br>\n<span class=\"nowrap\">\n<b>");
             _out.write(_t("Hide legend") + ":</b> ");
             _out.write("<label><input type=\"checkbox\" class=\"optbox\" value=\"true\" name=\"hideLegend\"");
             boolean hideLegend = _context.getProperty(PROP_LEGEND, DEFAULT_LEGEND);
@@ -480,7 +483,8 @@ public class GraphHelper extends FormHandler {
             if (persistent)
                 _out.write(HelperBase.CHECKED);
             _out.write(">" + _t("Store graph data on disk") + "</label></span>\n</div>\n</td></tr>\n</table>\n" +
-                       "<hr>\n<div class=\"formaction\" id=\"graphing\"><input type=\"submit\" class=\"accept\" value=\"" + _t("Save settings and redraw graphs") + "\"></div>\n</form>\n");
+                       "<hr>\n<div class=\"formaction\" id=\"graphing\"><input type=\"submit\" class=\"accept\" value=\"" +
+                       _t("Save settings and redraw graphs") + "\"></div>\n</form>\n");
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
