@@ -140,11 +140,11 @@ class OutboundReceiver implements TunnelGateway.Receiver {
             super(ctx);
         }
 
-        public String getName() { return "OBGW send fail"; }
+        public String getName() { return "OBGW Send Failure"; }
 
         public void runJob() {
             if (_log.shouldWarn())
-                _log.warn("send to " + _config.getPeer(1)
+                _log.warn("Send to " + _config.getPeer(1)
                            + " failed for " + _config);
             _config.tunnelFailedFirstHop();
         }
