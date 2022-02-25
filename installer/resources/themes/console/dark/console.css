@@ -772,7 +772,7 @@ h3[id="udpcon"] {width: auto}
 #view_profile .viewprofile {margin-right: 6px}
 #view_profile .identicon {margin: 0; width: 27px; height: 27px; position: absolute; top: 2px; right: 2px}
 #viewprofile td {padding: 0}
-#viewprofile pre, pre#activetransports {margin: 0; padding: 20px 20px 0; width: calc(100% - 46px); line-height: 20px; letter-spacing: .05em; text-shadow: var(--textshadow); border-left: 7px solid #242; background: repeating-linear-gradient(180deg,rgba(0,8,0,.6) 0, rgba(0,8,0,.6) 20px, rgba(0,20,0,.6) 20px, rgba(0,20,0,.6) 40px); background-size: 100% 40px}
+#viewprofile pre, pre#activetransports {margin: 0; padding: 20px 20px 0; width: calc(100% - 48px); line-height: 20px; letter-spacing: .05em; text-shadow: var(--textshadow); border-left: 7px solid #242; background: repeating-linear-gradient(180deg,rgba(0,8,0,.6) 0, rgba(0,8,0,.6) 20px, rgba(0,20,0,.6) 20px, rgba(0,20,0,.6) 40px); background-size: 100% 40px}
 #viewprofile span {margin: -26px -1px -1px 0; padding: 5px; float: right; border: var(--border); background: #000}
 #profiles_overview {margin-bottom: 9px; background-image: url(../images/profile.svg)}
 #peerprofiles + h3 {margin-top: 10px}
@@ -1682,12 +1682,10 @@ form[action="/createreseed"] > h3 {margin-bottom: -13px; padding: 10px; word-spa
 #manualreseed .optionsingle table, #manualreseed .optionsingle tr, #manualreseed .optionsingle td {background: none; border: none; box-shadow: none}
 #manualreseed .optionsingle td:last-child {padding-right: 3px; width: 1%; white-space: nowrap; text-align: right}
 #manualreseed input[type=submit] {margin-right: 0; min-width: 120px}
-#reseedurl {background: #010 var(--link) no-repeat 16px center / 28px}
-#reseedurl:hover {background: #002500 var(--link) no-repeat 16px center / 28px}
-#reseedzip {background: #010 var(--files) no-repeat 16px center / 28px}
-#reseedzip:hover {background: #002500 var(--files) no-repeat 16px center / 28px}
-#reseedcreatefile {text-align: justify; background: #010 var(--package) no-repeat 16px center / 28px}
-#reseedcreatefile:hover {background: #002500 var(--package) no-repeat 16px center / 28px}
+#config_reseed #reseedurl {background: #010 var(--link) no-repeat 16px center / 28px}
+#config_reseed #reseedzip {background: #010 var(--files) no-repeat 16px center / 28px}
+#config_reseed #reseedcreatefile {text-align: justify; background: #010 var(--package) no-repeat 16px center / 28px}
+#config_reseed #reseedurl:hover, #config_reseed #reseedzip:hover, #config_reseed #reseedcreatefile:hover {background-color: #002500}
 #reseedcreatefile p {margin: 0 10px; padding-top: 0; padding-bottom: 0; display: inline-block; line-height: 1.3}
 #reseedurl input[type=text], #reseedzip input[type=file], #reseedcreatefile p, #manualreseed input[type=text] {width: calc(100% - 5px)}
 
