@@ -207,12 +207,12 @@ class OutboundEstablishState {
             _currentState = OutboundState.OB_STATE_UNKNOWN;
         }
     }
-    
+
     /**
      * @since 0.9.54
      */
     public int getVersion() { return 1; }
-    
+
     public synchronized OutboundState getState() { return _currentState; }
 
     /** @return if previously complete */
@@ -528,7 +528,7 @@ class OutboundEstablishState {
         boolean valid = _context.dsa().verifySignature(_receivedSignature, signed, _remotePeer.getSigningPublicKey());
         if (_log.shouldLog(Log.DEBUG) || (_log.shouldLog(Log.WARN) && !valid)) {
             StringBuilder buf = new StringBuilder(128);
-            buf.append("Signed session created\n* ");
+            buf.append("Signed session created");
             buf.append("\n* Signature: ").append(Base64.encode(_receivedSignature.getData()));
             buf.append("\n* Signed on: ").append(new Date(_receivedSignedOnTime));
             buf.append("Alice: ").append(Addresses.toString(_aliceIP, _alicePort));
