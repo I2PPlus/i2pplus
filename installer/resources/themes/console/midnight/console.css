@@ -558,9 +558,8 @@ form[action="graphs"], form[action="/updategraphs"] {margin-top: -11px; margin-b
 #graphopts a:empty {display: none}
 #graphopts a {margin: 3px -2px; text-transform: capitalize}
 #graphopts {margin: 30px -10px 0; padding: 10px 0 8px; text-align: center; border-top: var(--border_inner); background: rgba(0,0,16,.5)}
-#graphopts + p {display: none}
 #graphdisplay a {text-transform: capitalize; letter-spacing: normal; font-size: 9pt; float: right}
-#graphinfo {margin-top: 10px; border-radius: 0; text-transform: capitalize; letter-spacing: normal; word-spacing: normal}
+#graphinfo {margin: 20px 10px; border-radius: 0; text-transform: capitalize; letter-spacing: normal; word-spacing: normal; font-size: 110%}
 #graphs .optionlist, #graphs .optionlist:hover {margin: -4px 2px; padding: 0; border: none; box-shadow: none}
 #graphs .optionlist .nowrap {text-align: left}
 #graphs .optionlist label {box-shadow: none; background: none}

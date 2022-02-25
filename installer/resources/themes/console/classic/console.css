@@ -978,7 +978,7 @@ p.infohelp + hr, p.infohelp + p + hr, #tunnelconfig + hr {display: none}
 /* graphs */
 
 .graphContainer {margin: 4px 3px; padding: 2px 1px 0; max-width: calc(100% - 18px); min-height: 60px; position: relative; display: inline-block; overflow: hidden; vertical-align: middle; text-align: center; border: var(--border); box-shadow: 0 0 1px 1px #e8e8f8; background: var(--bg); animation: ease zoom .1s forwards}
-.graphContainer > * {vertical-align: middle}
+.graphContainer img {vertical-align: middle}
 .graphContainer#hidpi {padding-right: 8px; padding-left: 4px; box-sizing: border-box}
 .graphContainer:hover {border: 1px solid var(--hover)}
 .graphContainer:active {box-shadow: var(--btn_shadow_active)}
@@ -1005,6 +1005,7 @@ p.infohelp + hr, p.infohelp + p + hr, #tunnelconfig + hr {display: none}
 #updategraphs .messages {margin-bottom: -11px}
 #nographs {font-size: 0}
 #nographs::after {width: 36px; height: 36px; background-size: 32px}
+#graphdisplay a {margin-top: 2px}
 
 /* graph options */
 #graphs form {padding: 0}

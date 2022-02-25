@@ -47,6 +47,11 @@ textarea:focus {scrollbar-color: #a7a7be rgba(255,255,255,.4)}
 #news a + tt {margin-left: 4px}
 th[aria-sort] {font-style: italic}
 #peers img[src$="bound.svg"], #profiles img[src$="bound.svg"], #tunnels img[src$="bound.svg"] {opacity: 0}
+h3#advancedconfig a, h3#bwlimiter a, h3.tabletitle a, h3.ptitle a, th a.script, th#upnpconfig a, h3#graphinfo a, #graphdisplay a, .h3navlinks {margin-top: -2px; float: right; font-size: 8.5pt; letter-spacing: 0; text-transform: capitalize}
+#bwlimiter a, #i2pclientconfig a, #config_logging h3 a, #graphdisplay a, #version a, #logs h3 a, #tunnels h3 a:not(.lsview), #advancedconfig a, #iptransport a, #reseedsetup a, #graphinfo a, #config_service h3 a, .h3navlinks a {margin: -6px -5px; padding: 6px 10px; display: inline-block; vertical-align: top; text-transform: capitalize; border: none; border-left: 1px solid var(--border_inner); border-radius: 0; background: linear-gradient(180deg,#f8f8ff 60%, #dedeff)}
+#config_clients #i2pclientconfig a {margin-top: -8px}
+#bwlimiter a, #i2pclientconfig a, #config_logging h3 a, #graphdisplay a, #version a, #tunnels h3 a, #advancedconfig a, #iptransport a, #reseedsetup a, #graphinfo a, #config_service h3 a, .h3navlinks a {margin: -5px -5px -9px; padding: 12px 14px 8px; box-shadow: var(--highlight); background: linear-gradient(180deg,#fff 48%, #efefff 48%)}
+#routerinformation .h3navlinks a, #config_logging .h3navlinks a {margin-top: -7px}
 
 /* sidebar */
 #sb_wrap {margin: 0 0 10px; padding: 0; width: 200px; display: block; position: absolute; float: left; clear: left; text-align: center; border: 0}
@@ -366,12 +371,13 @@ hr + #newsStatus, hr + #newsStatus + #newsDisplay {padding-top: 1px}
 .graphspanel {text-align: center; margin: 15px 0 -15px}
 .singlegraph img:hover {cursor: zoom-out}
 #graphdisplay {border-radius: 0; border-width: 1px; box-shadow: none; filter: none}
+#graphdisplay a {margin-top: -9px}
 #graphdisplay a:hover {color: #f70}
+#graph_single #graphinfo a {margin-top: -8px}
 #graphing {margin: 8px -11px -11px}
 #graphopts a {margin: 3px -2px; padding: 1px 10px; display: inline-block; line-height: 1.4}
 #graphopts a:empty {display: none}
 #graphopts {margin: 30px -14px -9px; padding: 10px 0 9px; text-align: center; text-transform: capitalize; border-top: 1px solid #77789f; box-shadow: var(--highlight); background: repeating-linear-gradient(135deg, rgba(248,248,255,.6) 2px, rgba(220, 220, 255, .3) 3px, #f8f8ff 5px), #f8f8ff; filter: drop-shadow(0 0 1px #ccc)}
-#graphopts + p {text-align: right; display: none}
 #graphs form {border: 1px solid var(--border_inner); padding: 10px; margin: -16px 0 5px}
 #graph_single h3 {margin: 15px 0 0}
 #graph_single .graphspanel {margin: 9px -9px -20px}
@@ -1601,10 +1607,6 @@ div[id^="config_"].main {padding-bottom: 16px}
 b.suboption {margin: 0; padding: 5px 10px; display: inline-block; text-shadow: 0 1px 1px #fff; border-radius: 3px 3px 0 0; border: 1px solid var(--border_inner); border-bottom: none; box-shadow: var(--highlight); background: var(--suboption); filter: drop-shadow(0 0 1px rgba(220,220,255,.7))}
 #bwlimiter a:active, #i2pclientconfig a:active, #config_logging h3 a:active, #graphdisplay a:active, #version a:active, #logs h3 a:active, #tunnels h3 a:not(.lsview):active, #advancedconfig a:active, #iptransport a:active, #reseedsetup a:active, #graphinfo a:active, .h3navlinks a:active {box-shadow: inset 2px 2px 1px #aab}
 #bwlimiter a:hover, #i2pclientconfig a:hover, #config_logging h3 a:hover, #graphdisplay a:hover, #version a:hover, #logs h3 a:hover, #tunnels h3 a:not(.lsview):hover, #advancedconfig a:hover, #iptransport a:hover, #reseedsetup a:hover, #config_service h3 a:hover, .h3navlinks a:hover {background: #fff linear-gradient(180deg,#fff 48%, rgba(255, 232, 191, .6) 48%, rgba(239, 217, 179, .4)); filter: none}
-#bwlimiter a, #i2pclientconfig a, #config_logging h3 a, #graphdisplay a, #version a, #logs h3 a, #tunnels h3 a:not(.lsview), #advancedconfig a, #iptransport a, #reseedsetup a, #graphinfo a, #config_service h3 a, .h3navlinks a {margin: -6px -5px; padding: 6px 10px; display: inline-block; vertical-align: top; text-transform: capitalize; border: none; border-left: 1px solid var(--border_inner); border-radius: 0; background: linear-gradient(180deg,#f8f8ff 60%, #dedeff)}
-#config_clients #i2pclientconfig a {margin-top: -8px}
-#bwlimiter a, #i2pclientconfig a, #config_logging h3 a, #graphdisplay a, #version a, #tunnels h3 a, #advancedconfig a, #iptransport a, #reseedsetup a, #graphinfo a, #config_service h3 a, .h3navlinks a {margin: -5px -5px -9px; padding: 12px 14px 8px; box-shadow: var(--highlight); background: linear-gradient(180deg,#fff 48%, #efefff 48%)}
-#routerinformation .h3navlinks a, #config_logging .h3navlinks a {margin-top: -7px}
 #clientsconfig input.add {float: left}
 #config_logging h3 a::before, #webappconfiguration a::before, #routerinformation #version a::before, #i2pclientconfig a::before, #pluginmanage a::before {width: 18px; height: 13px; display: inline-block; vertical-align: middle; background: var(--eye) no-repeat left center / 14px; content: ""}
 #config_logging h3 a:hover::before, #config_logging h3 a:focus::before, #routerinformation #version a:hover::before, #routerinformation #version a:focus::before {background: var(--eye_hover) no-repeat left center / 14px}
@@ -1619,7 +1621,6 @@ b.suboption {margin: 0; padding: 5px 10px; display: inline-block; text-shadow: 0
 #externali2cp input[name="port"] {margin-left: 6px}
 #externali2cp .suboption label {margin-left: -4px}
 h3#advancedclientconfig, p#webappconfigtext, p#pluginconfigtext, p#clientconf.infowarn, p#profiles_overview, h3#pluginmanage {margin-bottom: -2px}
-h3#advancedconfig a, h3#bwlimiter a, h3.tabletitle a, h3.ptitle a, th a.script, th#upnpconfig a, h3#graphinfo a, h3#graphdisplay a, .h3navlinks {margin-top: -2px; float: right; font-size: 8.5pt; letter-spacing: 0; text-transform: capitalize}
 #config_advanced h3#advancedconfig a {margin-top: -6px}
 h3#bwlimiter a:active::before {transform: scale(.9)}
 h3#bwlimiter a::before {margin: -3px 0; content: ""; display: inline-block; width: 20px; height: 20px; background: url(/themes/console/images/networkconfig.svg) no-repeat center center; vertical-align: middle}
@@ -2273,6 +2274,8 @@ p#pluginconfigtext {margin-top: 11px}
 #config_clients #i2pclientconfig a, #config_bandwidth #bwlimiter .h3navlinks {margin-top: -4px}
 #consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"], #reseedconfig input[type="password"] {width: 184px}
 .statsLongName {margin-bottom: 0}
+#graphdisplay a {margin-top: -5px}
+#graph_single #graphinfo a {margin-top: -6px}
 }
 
 @media screen and (max-width: 1480px) {

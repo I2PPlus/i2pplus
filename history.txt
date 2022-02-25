@@ -1,7 +1,33 @@
+2022-02-25 zzz
+ * Sybil: Family analysis improvements
+
+2022-02-24 zzz
+ * SSU: SSU2 classes and keys (WIP)
+
+2022-02-23 dr|z3d
+ * Console/I2PSnark: Fix dysfunctional checkbox sliders
+
+2022-02-23 zzz
+ * i2psnark: Load sytem mime types if available
+ * SSU: More SSU2 prep and support (WIP)
+
+2022-02-22 zzz
+ * BOB: Remove source
+ * Crypto: Prep for SSU2
+ * NetDB: Prevent rare deadlock via FloodfillMonitorJob at startup
+ * NTCP: Reduce max writer threads
+ * SSU: PacketHandler cleanup (prep for SSU2)
+ * SSU: Start of SSU2 support
+ * Update: Add notification for new version
+ * Util: Speed up PRNG nextInt() and nextLong()
+
 2022-02-21 I2P+ 1.7.0+ released
 
 2022-02-20 dr|z3d
  * Console: Finish overhaul of dark and midnight console themes
+
+2022-02-17 zzz
+ * i2psnark standalone: Increase open files ulimit
 
 2022-02-14 dr|z3d
  * Console: Move console-specific images to top level images/ dir
