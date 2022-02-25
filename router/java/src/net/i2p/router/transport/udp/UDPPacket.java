@@ -190,7 +190,7 @@ class UDPPacket implements CDPQEntry {
     public long getSeqNum() { return _seqNum; }
 
 
-    
+
   /****
     public void writeData(byte src[], int offset, int len) {
         verifyNotReleased();
@@ -420,7 +420,7 @@ class UDPPacket implements CDPQEntry {
         StringBuilder buf = new StringBuilder(256);
         buf.append("\n* Address: ");
         buf.append(Addresses.toString(_packet.getAddress().getAddress(), _packet.getPort()));
-        buf.append("; Size: ");
+        buf.append("\n* Size: ");
         buf.append(_packet.getLength());
         buf.append(" bytes");
         //buf.append(" id=").append(System.identityHashCode(this));
