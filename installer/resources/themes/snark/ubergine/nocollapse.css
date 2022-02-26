@@ -50,7 +50,7 @@ input:not(:checked) + .toggleview > img, #commentSection input:not(:checked) + .
 }
 
 #addSection:hover table, #createSection:hover table:not(#trackerselect),
-.configsection .configTitle, .toggleview {
+#configSection .configTitle, .toggleview {
   will-change: auto !important;
 }
 

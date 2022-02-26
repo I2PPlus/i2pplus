@@ -7,9 +7,9 @@
 
 html {background: none}
 body, input, input[type=submit], input[type=reset], .fakebutton, #hostNotes td:last-child, #hostNotes textarea {font-family: var(--bodyfont)}
-textarea, #helpconfig li b, .destaddress {font-family: var(--monospaced)}
 body {margin: 0 10px; padding-top: 5px; min-width: 650px; line-height: 1.2; background: repeating-linear-gradient(90deg, rgba(0,16,0,.5) 2px, rgba(0,25,0,.5) 4px), repeating-linear-gradient(180deg,#000 2px, #020 4px), #010; background-size: 4px 100%, 100% 4px}
 body.iframed {margin: 0; background: none}
+textarea, #helpconfig li b, .destaddress {font-family: var(--monospaced)}
 ::selection {background: rgba(0,187,0,.99); color: #000; text-shadow: none}
 a:link, #filter a:visited {color: #494; text-decoration: none; font-weight: 700; outline: none}
 a:visited {color: #7b7; text-decoration: none}
@@ -40,7 +40,7 @@ input#exporthosts:hover {background: #000 var(--download_hover) no-repeat center
 input#exporthosts {margin: 7px 6px 0 4px; padding: 0; width: 28px; height: 28px; min-width: 0; display: inline-block; font-size: 0; background: var(--download) no-repeat center center / 16px, var(--th)}
 input {margin: 2px 4px 2px 0; padding: 5px; min-width: 64px; text-align: left; font-size: 8.5pt; color: #494; border: var(--border_hard); border-radius: 1px; background: none}
 input[type=file]::file-selector-button {margin: 5px 10px 2px 2px; padding: 6px 12px; min-width: 92px}
-input[type=submit], input[type=reset], .fakebutton {margin: 5px 2px; padding: 8px 12px; min-width: 92px}
+input[type=submit], input[type=reset], .fakebutton {margin: 5px 2px}
 input[type=submit]:last-of-type, input[type=reset]:last-of-type {margin-right: 5px}
 input[type=text] {padding: 7px}
 input.update {margin-left: 5px}
@@ -117,7 +117,7 @@ td.checkbox {padding: 3px 10px; width: 1%}
 .destaddress:hover, textarea:hover {scrollbar-color: rgba(24,80,24,.9) rgba(0,0,0,.9)}
 .destaddress::selection {background: rgba(255,255,0,.99)}
 .destaddress, textarea {scrollbar-color: rgba(16,48,16,.4) rgba(0,0,0,0)}
-#book + #buttons {margin-top: 3px; padding: 0 0 10px; border: var(--border); background: #000}
+#book + #buttons {margin-top: 3px; padding: 0 0 10px; border: var(--border)}
 #book, #emptybook {margin: -29px 0 -5px; padding: 0}
 #empty {margin-top: -4px; width: 100%; border-bottom: var(--border)}
 #emptybook {margin-bottom: -7px}
@@ -127,7 +127,7 @@ td.checkbox {padding: 3px 10px; width: 1%}
 #book table th {padding: 10px 0; border-bottom: var(--border)}
 #book th:last-child {background: var(--nuke) no-repeat center center / 15px}
 #book tr.head {background: linear-gradient(180deg,rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(90deg, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px), linear-gradient(180deg,#002000, #000 75%); background-size: 100%, 4px 100%, 100%}
-#host_list tr:nth-child(odd), #host_details tr:nth-child(odd), #host_list tr:nth-child(even), #host_details tr:nth-child(even) {background: var(--row)}
+#host_list tr, #host_details tr {background: var(--row)}
 #host_list th {padding: 6px 9px}
 #host_list td {padding: 4px 8px; border-right: 1px solid #131; border-bottom: 1px solid #131; box-shadow: var(--highlight), inset 0 0 2px 0 #040}
 #host_list tr:hover td {border-right: 1px solid transparent; box-shadow: none}
@@ -167,13 +167,12 @@ p#filtered {margin: -27px 0 10px; padding: 12px 10px 8px 20px; font-size: 10pt; 
 #activefilter {margin: 1px 1px 2px; padding: 3px 10px 2px; color: var(--ink); text-shadow: 0 -1px 1px rgba(0,0,0,.8); box-shadow: 0 0 0 1px #252, var(--btn_shadow_active) !important; background: #030}
 
 /* add/import/export */
-#add, #import {margin-top: 23px; padding: 0 0 10px; border: var(--border); background: #000}
-#add, #import {box-shadow: var(--highlight), inset 0 0 2px 1px #030; background: repeating-linear-gradient(180deg,rgba(0,0,0,.8), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), url(/themes/console/dark/images/camotile2.png)}
+#add, #import {margin-top: 23px; padding: 0 0 10px; border: var(--border); box-shadow: var(--bevel); background: var(--th)}
 #import {margin-top: 18px}
-#add table, #import table {margin: -15px 0 -4px; padding: 6px 3px; width: 100%; border-collapse: separate; border-top: 1px solid rgba(0,48,0,.5); border-bottom: 1px solid rgba(0,48,0,.5); border-spacing: 0}
+#add table, #import table {margin: -15px auto -4px; padding: 6px 3px; width: 100%; border-collapse: separate; border-spacing: 0}
 #add input[type=text], #import input[type=file] {width: calc(100% - 20px)}
-#add p.buttons, #import p.buttons {margin: 5px 0 -10px; padding: 5px 5px 4px; border-top: var(--border)}
-#add td:first-child, #import table td:first-child {width: 100px; white-space: nowrap; text-align: right}
+#add .buttons, #import .buttons {margin: 5px 0 -10px; padding: 5px 5px 4px; border-top: var(--border)}
+#add td:first-child, #import td:first-child {width: 100px; white-space: nowrap; text-align: right}
 #add td:last-child, #import td:last-child {padding-right: 5px}
 #import input[type=file] {border: none; background: none}
 #exporthosts:disabled {pointer-events: none; opacity: .5}
@@ -319,7 +318,7 @@ textarea[name="config"] {height: 280px}
 }
 
 @media screen and (min-width: 1500px) {
-body, input[type=submit], input[type=reset], .fakebutton, input, select, h4, td.names a, li, #filter a, #filter span a, #host_details td, #search td, .destaddress {font-size: 10pt}
+body, input[type=submit], input[type=reset], input[type=file]::file-selector-button, .fakebutton, input, select, h4, td.names a, li, #filter a, #filter span a, td, .destaddress {font-size: 10pt}
 th, pre {font-size: 9pt}
 input[type=submit], input[type=reset], .fakebutton {padding: 8px 12px 8px}
 input[type=text] {padding: 8px}

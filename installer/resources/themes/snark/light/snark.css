@@ -1181,7 +1181,7 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
   font-size: 9pt;
 }
 
-.toggleview, .configsection .configTitle {
+.toggleview, #configSection .configTitle {
   will-change: transform;
 }
 
@@ -1210,7 +1210,7 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
   color: #446;
 }
 
-.configsectionpanel .configTitle {
+.configPanel .configTitle {
   padding: 6px 0;
   min-width: 400px;
   line-height: 1.3;
@@ -1756,12 +1756,12 @@ img[src$="details.png"] {
   display: inline-block;
 }
 
-#createSection td:first-child, #addSection td:first-child, .configsectionpanel td:first-child {
+#createSection td:first-child, #addSection td:first-child, .configPanel td:first-child {
   width: auto !important;
   text-align: right;
 }
 
-.configsectionpanel td:first-child {
+.configPanel td:first-child {
   padding-right: 5px;
 }
 
@@ -1848,7 +1848,7 @@ body:not(.iframed) #commentSection {
   margin-bottom: -6px !important;
 }
 
-#createSection, #addSection, .configsection, .configsectionpanel {
+#createSection, #addSection, #configSection, .configPanel {
   padding: 0 10px;
   text-align: center;
   border: var(--border_soft);
@@ -1870,7 +1870,7 @@ body:not(.iframed) #commentSection {
   background: linear-gradient(180deg,#fafaff,#e0e0ef);
 }
 
-.configsectionpanel {
+.configPanel {
   background: linear-gradient(180deg,#f8f8ff,#f2f2ff) !important;
 }
 
@@ -1878,21 +1878,21 @@ body:not(.iframed) #commentSection {
   background: var(--panel_iframed);
 }
 
-.configsection {
+#configSection {
   margin: 0;
   padding-bottom: 13px;
   background: #fff;
 }
 
-.iframed .configsection, .iframed .configsectionpanel, .iframed form:last-child .configsectionpanel {
+.iframed #configSection, .iframed .configPanel, .iframed form:last-child .configPanel {
   background: var(--panel_iframed);
 }
 
-.iframed .configsectionpanel, .iframed form:last-child .configsectionpanel {
+.iframed .configPanel, .iframed form:last-child .configPanel {
   background: var(--panel_iframed);
 }
 
-.configsectionpanel#trackers, .mainsection#snarkInfo {
+.configPanel#trackers, .mainsection#snarkInfo {
   margin-top: -1px !important;
 }
 
@@ -1904,7 +1904,7 @@ body:not(.iframed) #commentSection {
   margin-top: -9px !important;
 }
 
-.iframed .configsection, .iframed #trackers, .iframed .mainsection#snarkInfo {
+.iframed #configSection, .iframed #trackers, .iframed .mainsection#snarkInfo {
   margin-bottom: 1px !important;
 }
 
@@ -1916,32 +1916,32 @@ body:not(.iframed) #commentSection {
   padding-bottom: 6px !important;
 }
 
-.iframed .configsection, .iframed .snarkCommentInfo, .iframed #trackers {
+.iframed #configSection, .iframed .snarkCommentInfo, .iframed #trackers {
   border-bottom: none !important;
 }
 
-.configsectionpanel {
+.configPanel {
   margin: -2px 0 0;
   box-shadow: var(--highlight), inset 0 0 2px 1px #ddf;
   background: linear-gradient(to top, rgba(224, 224, 255, .5),#f4f4ff 5%,#f4f4ff 95%, rgba(224, 224, 255, .5));
 }
 
-form:last-child .configsectionpanel {
+form:last-child .configPanel {
   margin-top: 10px;
   background: linear-gradient(to top, rgba(224, 224, 255, .5),#f4f4ff 10%,#f4f4ff 90%, rgba(224, 224, 255, .5));
 }
 
-.configsectionpanel table {
+.configPanel table {
   border-collapse: separate;
 }
 
-.configsectionpanel tr:nth-last-child(2) td {
+.configPanel tr:nth-last-child(2) td {
   padding: 5px 0 0 0;
   text-align: right !important;
   border-top: 1px solid #fff;
 }
 
-.configsectionpanel tr:last-child {
+.configPanel tr:last-child {
   display: none;
 }
 
@@ -1949,7 +1949,7 @@ form:last-child .configsectionpanel {
   border-bottom: var(--border_soft);
 }
 
-#createSection, #addSection, .configsection, .configsectionpanel {
+#createSection, #addSection, #configSection, .configPanel {
   margin-bottom: -1px;
   border-left: none;
   border-right: none;
@@ -2081,7 +2081,7 @@ form:last-child .configsectionpanel {
 
 /* end new torrent -> tracker select */
 
-.configsection a {
+#configSection a {
   color: #55a;
   font-weight: 700;
 }
@@ -2689,7 +2689,7 @@ td.commentAuthor .commentAuthorName {
 
 /* end Comments section */
 
-.knowntracker .optbox[type=radio] {
+.knownTracker .optbox[type=radio] {
   margin: 2px 10px !important;
 }
 
@@ -3091,11 +3091,11 @@ input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilte
   padding: 0;
 }
 
-.knowntracker:hover, .knowntracker:hover td {
+.knownTracker:hover, .knownTracker:hover td {
   background: #ffb !important;
 }
 
-.knowntracker a {
+.knownTracker a {
   display: inline-block;
   white-space: nowrap;
   overflow: hidden;
@@ -3185,11 +3185,11 @@ input:checked + .toggleview:active .tab_label::after {
   transition: linear transform .15s;
 }
 
-.toggleview, .configsection .configTitle a {
+.toggleview, #configSection .configTitle a {
   font-size: 0 !important;
 }
 
-.toggleview, .configsection .configTitle {
+.toggleview, #configSection .configTitle {
   text-align: center;
   width: 300px;
 }
@@ -3515,11 +3515,11 @@ td.trackerDetails {
 
 /* end peer + client */
 
-#lowersection > .configsection {
+#lowersection > #configSection {
   margin-top: 10px;
 }
 
-#lowersection > #createSection + .configsection {
+#lowersection > #createSection + #configSection {
   margin-top: 0;
 }
 
@@ -4431,7 +4431,7 @@ td.torrentAction input[type=submit] {
   .trackerconfig th:nth-child(7), .trackerconfig td:nth-child(7) {
     padding-left: 50px !important;
   }
-  .trackerhome, .trackerannounce, .knowntracker a {
+  .trackerhome, .trackerannounce, .knownTracker a {
     width: 300px !important;
     max-width: 300px !important;
   }
@@ -4532,7 +4532,7 @@ td.torrentAction input[type=submit] {
   .torrentDownloaded, .torrentUploaded, .RateDown, .RateUp {
     min-width: 76px;
   }
-  .trackerhome, .trackerannounce, .knowntracker a {
+  .trackerhome, .trackerannounce, .knownTracker a {
     width: 400px !important;
     max-width: 400px !important;
   }
@@ -4543,7 +4543,7 @@ td.torrentAction input[type=submit] {
   #torrentInfoStats .nowrap {
     margin-right: 6px;
   }
-  .trackerhome, .trackerannounce, .knowntracker a {
+  .trackerhome, .trackerannounce, .knownTracker a {
     width: 400px !important;
     max-width: 400px !important;
   }

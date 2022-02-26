@@ -25,7 +25,7 @@ input, button, textarea, select, a {
 }
 
 input[type], select, select option, td, td a, #screenlog li, #screenlog li a, textarea, input.r, input[name="nofilter_dataDir"],
-.configsectionpanel, .configsectionpanel td, .snarkNewTorrent, .snarkNewTorrent td, #configs td, .trackerconfig td {
+.configPanel, .configPanel td, .snarkNewTorrent, .snarkNewTorrent td, #configs td, .trackerconfig td {
   font-size: 10.5pt !important;
 }
 
@@ -64,7 +64,7 @@ a.control, input[type=submit], input.accept, th, #trackerselect tr:first-child t
   font-size: 12pt !important;
 }
 
-.configsectionpanel .configTitle, .configsectionpanel .configTitle:hover, .configsectionpanel .configTitle:active {
+.configPanel .configTitle, .configPanel .configTitle:hover, .configPanel .configTitle:active {
   padding-top: 4px;
   padding-bottom: 2px;
   font-size: 14pt !important;
@@ -72,11 +72,11 @@ a.control, input[type=submit], input.accept, th, #trackerselect tr:first-child t
   font-variant: normal !important;
 }
 
-.configsection .configTitle a img {
+#configSection .configTitle a img {
   margin-left: 6px !important;
 }
 
-.configsectionpanel .configTitle img {
+.configPanel .configTitle img {
   margin-top: -4px !important;
   margin-bottom: 0 !important;
   display: inline-block;
@@ -110,7 +110,7 @@ a.control, input[type=submit], input.accept, th, #trackerselect tr:first-child t
   height: 14px !important;
 }
 
-.knowntracker a {
+.knownTracker a {
   max-width: 220px;
   overflow: hidden;
   text-overflow: ellipsis;

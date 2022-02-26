@@ -234,8 +234,8 @@ input[type=submit], input[type=reset], button, .control, select, .fakebutton {
 }
 
 input[type=submit], input[type=reset], button, .control, .fakebutton, .fakebutton:visited {
-  margin: 5px;
-  padding: 7px 12px;
+  margin: 5px 2px;
+  padding: 8px 12px;
   min-width: 110px;
   text-align: center;
   text-decoration: none;
