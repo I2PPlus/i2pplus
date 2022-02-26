@@ -40,8 +40,8 @@ import java.util.Date;
  *
  */
 public class PeerState {
-    private final RouterContext _context;
-    private final Log _log;
+    protected final RouterContext _context;
+    protected final Log _log;
     /**
      * The peer are we talking to.  This should be set as soon as this
      * state is created if we are initiating a connection, but if we are
