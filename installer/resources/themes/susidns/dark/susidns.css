@@ -117,7 +117,7 @@ td.checkbox {padding: 3px 10px; width: 1%}
 .destaddress:hover, textarea:hover {scrollbar-color: rgba(24,80,24,.9) rgba(0,0,0,.9)}
 .destaddress::selection {background: rgba(255,255,0,.99)}
 .destaddress, textarea {scrollbar-color: rgba(16,48,16,.4) rgba(0,0,0,0)}
-#book + #buttons {margin-top: 3px; padding: 0 0 10px; border: var(--border); background: #000}
+#book + #buttons {margin-top: 3px; padding: 0 0 10px; border: var(--border)}
 #book, #emptybook {margin: -29px 0 -5px; padding: 0}
 #empty {margin-top: -4px; width: 100%; border-bottom: var(--border)}
 #emptybook {margin-bottom: -7px}
@@ -167,8 +167,7 @@ p#filtered {margin: -27px 0 10px; padding: 12px 10px 8px 20px; font-size: 10pt; 
 #activefilter {margin: 1px 1px 2px; padding: 3px 10px 2px; color: var(--ink); text-shadow: 0 -1px 1px rgba(0,0,0,.8); box-shadow: 0 0 0 1px #252, var(--btn_shadow_active) !important; background: #030}
 
 /* add/import/export */
-#add, #import {margin-top: 23px; padding: 0 0 10px; border: var(--border); background: #000}
-#add, #import {box-shadow: var(--highlight), inset 0 0 2px 1px #030; background: repeating-linear-gradient(180deg,rgba(0,0,0,.8), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), url(/themes/console/dark/images/camotile2.png)}
+#add, #import {margin-top: 23px; padding: 0 0 10px; border: var(--border); box-shadow: var(--highlight), inset 0 0 2px 1px #030; background: var(--th)}
 #import {margin-top: 18px}
 #add table, #import table {margin: -15px 0 -4px; padding: 6px 3px; width: 100%; border-collapse: separate; border-top: 1px solid rgba(0,48,0,.5); border-bottom: 1px solid rgba(0,48,0,.5); border-spacing: 0}
 #add input[type=text], #import input[type=file] {width: calc(100% - 20px)}
