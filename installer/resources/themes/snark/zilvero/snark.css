@@ -127,7 +127,7 @@ a:hover, a:focus, .configTitle a:hover, .toggleview:hover, .trackerName a:visite
 	background: var(--btn);
 }
 
-.toggleview:hover, .configsection .configTitle:hover {
+.toggleview:hover, #configSection .configTitle:hover {
 	background: var(--btn_hover);
 }
 
@@ -1290,7 +1290,7 @@ tt {
 	font-size: 11pt !important;
 }
 
-.toggleview:active, .configsection .configTitle:active {
+.toggleview:active, #configSection .configTitle:active {
 	color: #bbb !important;
 	box-shadow: var(--highlight), inset 3px 3px 3px #bbb !important;
 }
@@ -1320,11 +1320,11 @@ tt {
 	width: 30%;
 }
 
-#addSection, #createSection, .configsection, .configsectionpanel {
+#addSection, #createSection, #configSection, .configPanel {
 	border: var(--border);
 }
 
-#addSection, #createSection, .configsection, .configsectionpanel,
+#addSection, #createSection, #configSection, .configPanel,
 .snarkConfig, .snarknavbar, #screenlog, #torrentDisplay, .pagenavcontrols {
 	box-shadow: var(--highlight);
 	background: #eee;
@@ -1338,7 +1338,7 @@ tt {
 }
 
 #addSection:hover, #createSection:hover, #addSection:hover .toggleview, #createSection:hover .toggleview,
-.configsection .configTitle:hover, #torrentDisplay label:hover, .mainsection:hover .toggleview {
+#configSection .configTitle:hover, #torrentDisplay label:hover, .mainsection:hover .toggleview {
 	box-shadow: inset 0 0 0 1px rgba(200,32,48,.5), inset 0 0 0 2px #fff;
 	transition: ease box-shadow .3s;
 }
@@ -2638,12 +2638,12 @@ td.graphicStatus img {
 	float: none !important;
 }
 
-#addSection table, #createSection table, .configsection table, .configsectionpanel table {
+#addSection table, #createSection table, #configSection table, .configPanel table {
 	border: none;
 	background: none;
 }
 
-.configsection, #createSection {
+#configSection, #createSection {
 	margin-top: 5px;
 }
 
@@ -2652,7 +2652,7 @@ td.graphicStatus img {
 }
 
 @supports (-moz-user-select: all) {
-	.configsection, #addSection, #createSection {
+	#configSection, #addSection, #createSection {
 		margin-top: -1px !important;
 	}
 }

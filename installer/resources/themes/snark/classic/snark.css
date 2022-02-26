@@ -48,7 +48,7 @@ tfoot tr:first-child th {vertical-align: middle; color: var(--ink_light)}
 tfoot td:first-child {padding-left: 0; text-align: left}
 tfoot th {padding-bottom: 4px}
 tr, .navbar, .mainsection, .lowersection {contain: layout}
-.iframed .snarknavbar, .iframed .mainsection, .iframed #addSection, .iframed #createSection, .iframed .configsection, .iframed .configsectionpanel {border-right: none; border-left: none; border-radius: 0}
+.iframed .snarknavbar, .iframed .mainsection, .iframed #addSection, .iframed #createSection, .iframed #configSection, .iframed .configPanel {border-right: none; border-left: none; border-radius: 0}
 #torrentDisplay label, #addTracker, #addTracker + tr, .toggleview, .configTitle, .snarknavbar, img, input {user-select: none}
 
 /* infohash */
@@ -358,16 +358,16 @@ tr:hover .txBarInner {background: linear-gradient(180deg,#efe,#dfd)}
 .configTitle:hover, .toggleview:hover, input.toggle_input:focus + .toggleview {background: var(--btn_hover2); color: var(--hover)}
 .configTitle:active, .toggleview:active {box-shadow: var(--highlight), inset 3px 3px 3px #99a, 0 0 0 0 var(--bg)}
 .configTitle:active .tab_label, .toggleview:active .tab_label, .configTitle .tab_label:active, .toggleview .tab_label:active {display: inline-block; color: #f93; text-shadow: 0 0 1px var(--bg); transform: scale(.95) translateY(1px)}
-.configTitle, .toggleview, .configsectionpanel .configTitle:hover {margin: 0 0 -4px; padding: 3px 1px; min-width: 260px; line-height: 1.5; vertical-align: middle; letter-spacing: .08em; font-size: 11pt; font-weight: 700; display: inline-block; text-transform: uppercase; border: var(--border); border-top: none; border-radius: 0 0 4px 4px; box-shadow: var(--title_shadow); background: var(--nav); transition: ease box-shadow .05s}
-.configsectionpanel .configTitle, .configsectionpanel .configTitle:hover, .configsectionpanel .configTitle:active {background: var(--navbar)}
+.configTitle, .toggleview, .configPanel .configTitle:hover {margin: 0 0 -4px; padding: 3px 1px; min-width: 260px; line-height: 1.5; vertical-align: middle; letter-spacing: .08em; font-size: 11pt; font-weight: 700; display: inline-block; text-transform: uppercase; border: var(--border); border-top: none; border-radius: 0 0 4px 4px; box-shadow: var(--title_shadow); background: var(--nav); transition: ease box-shadow .05s}
+.configPanel .configTitle, .configPanel .configTitle:hover, .configPanel .configTitle:active {background: var(--navbar)}
 .configTitle a {display: inline-block; width: 100%}
 .iframed .configTitle a {padding-bottom: 0}
-.configsectionpanel .configTitle, .configsectionpanel .configTitle:hover {color: #676788; pointer-events: none}
-.configsection .configTitle {margin-bottom: -2px}
+.configPanel .configTitle, .configPanel .configTitle:hover {color: #676788; pointer-events: none}
+#configSection .configTitle {margin-bottom: -2px}
 .configTitle a, .configTitle a:visited, .toggleview {outline: none; color: #676799; text-shadow: 0 1px 1px var(--bg)}
 .configTitle a:hover, .configTitle a:focus, .toggleview:hover, .toggleview:hover .tab_label, .toggleview:focus, .toggleview:focus .tab_label {color: var(--hover); text-shadow: none; transition: ease box-shadow .05s}
 .configTitle a:active, input:active + .toggleview {color: #f90}
-.configsectionpanel > .snarkConfig {font-size: 10pt; width: 100%; padding-top: 0}
+.configPanel > .snarkConfig {font-size: 10pt; width: 100%; padding-top: 0}
 
 #createSection td:first-child, #addSection td:first-child {padding-right: 5px; padding-left: 5px; width: 120px; white-space: nowrap; font-weight: 700}
 #createSection td:nth-child(n+2), #addSection td:nth-child(n+2) {text-align: left}
@@ -377,17 +377,17 @@ tr:hover .txBarInner {background: linear-gradient(180deg,#efe,#dfd)}
 #addSection table, #createSection table:not(#trackerselect) {animation: slide-in .1s ease-out, fade-in .5s linear; position: relative; will-change: transform}
 .iframed #addSection table, .iframed #createSection table:not(#trackerselect) {animation: fade-in .2s ease-out; will-change: transform}
 .snarkAddInfo code {animation: fade-in .5s ease-out}
-.mainsection, #createSection, #addSection, .configsection, .configsectionpanel {word-wrap: break-word; text-align: center; border: var(--border); background: var(--bg)}
-#createSection, #addSection, .configsection {border-radius: 3px; box-shadow: var(--highlight); background-blend-mode: luminosity}
-.iframed #createSection, .iframed #addSection, .iframed .configsection {border-radius: 0}
+.mainsection, #createSection, #addSection, #configSection, .configPanel {word-wrap: break-word; text-align: center; border: var(--border); background: var(--bg)}
+#createSection, #addSection, #configSection {border-radius: 3px; box-shadow: var(--highlight); background-blend-mode: luminosity}
+.iframed #createSection, .iframed #addSection, .iframed #configSection {border-radius: 0}
 .mainsection {margin: 0; padding: 0; border-bottom: none; background: none}
 .mainsection + .mainsection {margin: -1px 0}
 #createSection {margin: 0 0 9px 0; padding: 0 10px; background: var(--bg3); background: var(--section)}
 #addSection {margin: 9px 0; padding: 0 10px; background: var(--bg3); background: var(--section)}
-.configsection {margin: 0; padding: 0 10px 12px 10px; background: var(--bg3); background: var(--section)}
-.configsectionpanel {margin: 9px 0 0 0; padding: 0; background: linear-gradient(180deg,var(--bg),var(--bg3) 40px,var(--bg))}
+#configSection {margin: 0; padding: 0 10px 12px 10px; background: var(--bg3); background: var(--section)}
+.configPanel {margin: 9px 0 0 0; padding: 0; background: linear-gradient(180deg,var(--bg),var(--bg3) 40px,var(--bg))}
 .iframed #addSection, .iframed #new, .iframed #addSection, .iframed #createSection {margin-top: -1px}
-.iframed #new, .iframed #new + .configsection {margin-top: -11px}
+.iframed #new, .iframed #new + #configSection {margin-top: -11px}
 #addSection table, #createSection table {margin-top: -5px}
 
 /* toggle create/add panel view */
@@ -425,7 +425,7 @@ input#toggle_addtorrent:checked + label + hr + table, input#toggle_createtorrent
 .optbox[name="add_tracker_type"] {cursor: pointer}
 .snarkConfig tr:last-child {border: var(--border)}
 .snarkConfig input[type=submit] {margin: 3px 2px 3px 5px; min-width: 100px; text-align: center}
-.configsectionpanel td:first-child {padding-right: 10px; padding-left: 5px; font-weight: 700}
+.configPanel td:first-child {padding-right: 10px; padding-left: 5px; font-weight: 700}
 .trackerconfig th {padding-top: 6px; padding-bottom: 6px; min-width: 50px}
 .trackerconfig th:first-child {background: var(--nuke) no-repeat scroll center center / 14px, linear-gradient(180deg,var(--bg),var(--bg3))}
 .trackerconfig th:last-child, .trackerconfig td:last-child {padding-left: 10px}
@@ -442,10 +442,10 @@ input#toggle_addtorrent:checked + label + hr + table, input#toggle_createtorrent
 .snarkConfig table tr:first-child {border-top: var(--border)}
 .trackerconfig th:nth-child(n+4), .trackerconfig th:nth-child(n+5), .trackerconfig td:nth-child(n+4), .trackerconfig td:nth-child(n+5) {text-align: center}
 .trackerconfig th, .trackerconfig td, .trackerconfig th:last-child, .trackerconfig td:last-child {text-align: left}
-.configsectionpanel tr:last-child td[colspan="3"] {display: none}
-.configsectionpanel td[colspan="5"] {border-top: var(--border)}
+.configPanel tr:last-child td[colspan="3"] {display: none}
+.configPanel td[colspan="5"] {border-top: var(--border)}
 .snarkConfig tr:nth-last-child(2) {background: none}
-.snarkConfig tr:nth-last-child(2) td, .configsectionpanel td[colspan="5"] {padding: 8px 8px 0; text-align: right; border-top: var(--border)}
+.snarkConfig tr:nth-last-child(2) td, .configPanel td[colspan="5"] {padding: 8px 8px 0; text-align: right; border-top: var(--border)}
 .snarkConfig tr {border: none}
 .trackerconfig table {border: none}
 #bwHelp i {padding-left: 5px}
@@ -672,7 +672,7 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {co
 th #nameRequired, th .commentAuthorName {margin-top: 8px; vertical-align: middle}
 #metacomment {padding: 0; line-height: 1.4; text-align: justify}
 #metacomment div {padding: 0 4px; max-height: 80px; overflow-y: auto}
-.iframed .configsection, .iframed #trackers, .iframed .mainsection#snarkInfo {margin-bottom: -6px}
+.iframed #configSection, .iframed #trackers, .iframed .mainsection#snarkInfo {margin-bottom: -6px}
 .iframed #torrentInfoControl td {border-left: none; border-right: none}
 
 /* comment indicator */
@@ -752,16 +752,16 @@ th #nameRequired, th .commentAuthorName {margin-top: 8px; vertical-align: middle
 
 @media screen and (max-width: 1100px) {
 .toggleview, .configTitle {font-size: 9.5pt}
-.configsectionpanel .configTitle {padding-top: 2px}
+.configPanel .configTitle {padding-top: 2px}
 .dirInfo th a img, .dirInfo th img{max-height: 18px; width: auto}
 body {margin: 3px}
 .page {padding: 4px}
 .logshim {margin-top: -5px}
 .snarkNav, .snarkNav:hover, .snarkNav:focus {background-size: 14px, 100%}
 .nav_main {padding-left: 22px}
-#addSection, #createSection, .configsection, .configsectionpanel {margin-top: 4px; margin-bottom: 4px}
-.iframed #new, .iframed #new + .configsection {margin-top: -5px}
-.configsection, .configsectionpanel:last-child {margin-bottom: 0}
+#addSection, #createSection, #configSection, .configPanel {margin-top: 4px; margin-bottom: 4px}
+.iframed #new, .iframed #new + #configSection {margin-top: -5px}
+#configSection, .configPanel:last-child {margin-bottom: 0}
 .dirInfo {margin-top: 4px}
 .dirInfoComplete {display: none}
 .percentBarText, .percentBarOuter {width: 100px; line-height: 15px}
@@ -814,7 +814,7 @@ td.graphicStatus img {margin-left: 1px}
 .toggleview, .configTitle {padding-top: 3px; padding-bottom: 3px}
 .configTitle {margin-bottom: -3px}
 .toggleview, .configTitle, .configTitle a {font-size: 9pt}
-#configs td:first-child, .configsectionpanel input[name="nofilter_dataDir"], .configsectionpanel textarea {min-width: 150px; max-width: 50%}
+#configs td:first-child, .configPanel input[name="nofilter_dataDir"], .configPanel textarea {min-width: 150px; max-width: 50%}
 .trackerconfig a, .trackerconfig input[type=text] {max-width: 150px}
 #trackerselect td a {max-width: 200px}
 .torrentInfo {position: relative; z-index: 10}
@@ -846,7 +846,7 @@ body, th, td, table a, input, input[type=text], input.r, input[name="nofilter_da
 .snarkNav {font-size: 11pt}
 .snarkNav {padding-left: 25px}
 .percentDownloaded {pointer-events: none; /* hide tooltip */}
-.configTitle, .toggleview, .configsectionpanel .configTitle, .configsectionpanel .configTitle:hover {min-width: 300px}
+.configTitle, .toggleview, .configPanel .configTitle, .configPanel .configTitle:hover {min-width: 300px}
 }
 
 @media screen and (min-width: 1200px) {

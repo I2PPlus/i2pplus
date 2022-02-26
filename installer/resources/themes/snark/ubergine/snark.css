@@ -1644,7 +1644,7 @@ th.priority br, #torrents thead th br {
 
 /* panel titles */
 
-.configsectionpanel .configTitle {
+.configPanel .configTitle {
   padding: 4px 1px 3px;
   min-width: 500px;
   font: bold 10pt var(--bodyfont);
@@ -1662,7 +1662,7 @@ th.priority br, #torrents thead th br {
 }
 
 @supports not (-moz-appearance: none) {
-  .configsectionpanel .configTitle {
+  .configPanel .configTitle {
     padding: 5px 1px 4px !important;
     color: rgba(255,240,255,.75) !important;
     text-transform: uppercase;
@@ -1670,7 +1670,7 @@ th.priority br, #torrents thead th br {
   }
 }
 
-.configsectionpanel .configTitle img {
+.configPanel .configTitle img {
   animation: slide-right .25s linear forwards;
 }
 
@@ -1685,8 +1685,8 @@ th.priority br, #torrents thead th br {
   }
 }
 
-.iframed .configsectionpanel .configTitle, .iframed .configsectionpanel .configTitle:hover,
-.iframed .configsectionpanel .configTitle:active {
+.iframed .configPanel .configTitle, .iframed .configPanel .configTitle:hover,
+.iframed .configPanel .configTitle:active {
   box-shadow: inset 0 0 1px #868 !important;
 }
 
@@ -1701,7 +1701,7 @@ th.priority br, #torrents thead th br {
   font-size: 120%;
 }
 
-.configsection .configTitle, .toggleview {
+#configSection .configTitle, .toggleview {
   padding: 3px 1px !important;
   width: 320px !important;
   min-width: 0 !important;
@@ -1725,7 +1725,7 @@ th.priority br, #torrents thead th br {
   display: block;
 }
 
-.iframed .configsection .configTitle, .iframed .toggleview {
+.iframed #configSection .configTitle, .iframed .toggleview {
   border: 1px solid #878;
   border-bottom: 1px solid #767;
   border-top: none;
@@ -1734,27 +1734,27 @@ th.priority br, #torrents thead th br {
   transition: none;
 }
 
-.configsection .configTitle:hover, .toggleview:hover, input:focus + .toggleview {
+#configSection .configTitle:hover, .toggleview:hover, input:focus + .toggleview {
   background: linear-gradient(180deg,#656, #323 51%, #202 51%, #101) !important;
   box-shadow: inset 0 0 1px #939 !important;
 }
 
-.iframed .configsection .configTitle:hover, .iframed .toggleview:hover,
+.iframed #configSection .configTitle:hover, .iframed .toggleview:hover,
 .iframed input:focus + .toggleview {
   box-shadow: inset 0 0 1px #434, inset 0 -2px 0 2px rgba(0,0,0,.5) !important;
 }
 
-.configsection .configTitle:active, .toggleview:active {
+#configSection .configTitle:active, .toggleview:active {
   box-shadow: inset 0 0 1px #7f2f7f, inset 4px 4px 3px 3px #101 !important;
   background: linear-gradient(0deg,#212,#101) !important;
   transition: ease box-shadow .05s;
 }
 
-.iframed .configsection .configTitle:active, .iframed .toggleview:active {
+.iframed #configSection .configTitle:active, .iframed .toggleview:active {
   box-shadow: inset 0 0 1px #838, inset 4px 4px 3px 2px #101 !important;
 }
 
-.iframed .configsection, .iframed .configsectionpanel#trackers, .iframed .mainsection#snarkInfo {
+.iframed #configSection, .iframed .configPanel#trackers, .iframed .mainsection#snarkInfo {
   margin-bottom: 0;
 }
 
@@ -2345,7 +2345,7 @@ img:hover {
   animation: fade-in .05s ease-out;
 }
 
-#createSection, #addSection, .configsection, .configsectionpanel, .section, .mainsection {
+#createSection, #addSection, #configSection, .configPanel, .section, .mainsection {
   margin: 0 0 10px 0;
   padding: 0 10px;
   word-wrap: break-word;
@@ -2384,11 +2384,11 @@ img:hover {
   .section, .mainsection {padding-top: 9px}
 }
 
-.configsection {
+#configSection {
   padding: 0 10px 13px;
 }
 
-.configsectionpanel tr:nth-last-child(2) td {
+.configPanel tr:nth-last-child(2) td {
   padding-top: 10px !important;
   text-align: right !important;
   border-top: 1px solid #57415f;
@@ -2398,20 +2398,20 @@ img:hover {
   border-top: none;
 }
 
-.configsectionpanel, .configsectionpanel td, .snarkNewTorrent, .snarkNewTorrent td,
+.configPanel, .configPanel td, .snarkNewTorrent, .snarkNewTorrent td,
 select, input, input.r, input[name="nofilter_dataDir"], a.control {
   font: 9pt var(--bodyfont);
 }
 
 .iframed .mainsection, .iframed #createSection, .iframed #addSection,
-.iframed .configsection, .iframed .configsectionpanel {
+.iframed #configSection, .iframed .configPanel {
   border-radius: 0;
   box-shadow: inset 0 0 1px 0 #ffeffd;
   filter: none;
   background-blend-mode: luminosity, normal;
 }
 
-.iframed #createSection, .iframed #addSection, .iframed .configsection, .iframed .configsectionpanel,
+.iframed #createSection, .iframed #addSection, .iframed #configSection, .iframed .configPanel,
 .iframed .mainsection#commentSection {
   margin-top: -11px;
 }
@@ -2470,21 +2470,21 @@ select, input, input.r, input[name="nofilter_dataDir"], a.control {
   width: 80%;
 }
 
-.configsectionpanel input[type=text], .configsectionpanel select, .configsectionpanel input.r,
-.configsectionpanel input[name="nofilter_dataDir"] {
+.configPanel input[type=text], .configPanel select, .configPanel input.r,
+.configPanel input[name="nofilter_dataDir"] {
   margin-left: 0;
   font-size: 8pt;
 }
 
-.configsectionpanel input[type=checkbox] {
+.configPanel input[type=checkbox] {
   margin-left: 0;
 }
 
-.configsectionpanel tr:last-child {
+.configPanel tr:last-child {
   display: none;
 }
 
-#createSection form, .configsection form, #addSection form {
+#createSection form, #configSection form, #addSection form {
   margin-top: 1px;
   color: #ddd !important;
 }
@@ -5428,10 +5428,10 @@ td.torrentAction input[type=submit] {
     margin-left: 4px !important;
     white-space: nowrap;
   }
-  .configsectionpanel .configTitle {
+  .configPanel .configTitle {
     font-size: 11pt !important;
   }
-  .configsection .configTitle, .toggleview {
+  #configSection .configTitle, .toggleview {
     padding: 0 5px 1px !important;
   }
   .tab_label::after {
@@ -5464,7 +5464,7 @@ td.torrentAction input[type=submit] {
   .section, .mainsection {
     padding: 6px;
   }
-  .mainsection, #addSection, #createSection, .configsection, .configsectionpanel {
+  .mainsection, #addSection, #createSection, #configSection, .configPanel {
     margin-bottom: 6px !important;
   }
   #editSection {
@@ -5695,15 +5695,15 @@ td.torrentAction input[type=submit] {
   #addSection td:first-child, #createSection td:first-child {
     width: 20%;
   }
-  .configsectionpanel .configTitle {
+  .configPanel .configTitle {
     min-width: 340px !important;
   }
-  .configsectionpanel .configTitle {
+  .configPanel .configTitle {
     font-size: 9.5pt !important;
     font-variant: normal !important;
     text-transform: uppercase;
   }
-  .toggleview, .configsection .configTitle {
+  .toggleview, #configSection .configTitle {
     width: 260px !important;
     min-width: 260px !important;
   }
@@ -5714,7 +5714,7 @@ td.torrentAction input[type=submit] {
   #configs td, #addSection td, #createSection td, input, input[name="nofilter_dataDir"], select, textarea {
     font-size: 8.5pt !important;
   }
-  #configs td:first-child, .configsectionpanel input[name="nofilter_dataDir"], .configsectionpanel textarea {
+  #configs td:first-child, .configPanel input[name="nofilter_dataDir"], .configPanel textarea {
     min-width: 150px !important;
   }
   .trackerconfig a, .trackerconfig input[type=text], #addtracker input[type=text] {
@@ -5889,7 +5889,7 @@ td.torrentAction input[type=submit] {
 
 @media screen and (min-width: 1050px) {
   .iframed .page {margin-bottom: 0}
-  .iframed .configsection .configTitle {margin-bottom: 0 !important}
+  .iframed #configSection .configTitle {margin-bottom: 0 !important}
   #torrents a:not(#debugMode), th, td {font-size: 9pt !important}
   .mainsection td {
     padding-top: 3px !important;
@@ -5988,7 +5988,7 @@ td.torrentAction input[type=submit] {
     margin: -3px 5px 0 !important;
     max-height: 18px !important;
   }
-  .configsectionpanel .configTitle img, #trackers .configTitle img {
+  .configPanel .configTitle img, #trackers .configTitle img {
     margin: -2px -2px 0 0 !important;
   }
   #torrentInfoStats .nowrap {
@@ -6046,12 +6046,12 @@ td.torrentAction input[type=submit] {
   #torrentlist {
     margin-top: -2px !important;
   }
-  .configsectionpanel .configTitle, .configsectionpanel .configTitle:hover {
+  .configPanel .configTitle, .configPanel .configTitle:hover {
     padding: 6px 5px 5px;
     min-width: 600px !important;
     font-size: 11pt !important;
   }
-  .configsection .configTitle, .toggleview {
+  #configSection .configTitle, .toggleview {
     width: 400px !important;
     padding: 3px 0 !important;
   }
@@ -6095,9 +6095,9 @@ td.torrentAction input[type=submit] {
     margin-top: 0;
     font-size: 8pt !important;
   }
-  .configsectionpanel textarea {height: 30px}
+  .configPanel textarea {height: 30px}
   .dirInfoComplete {margin-right: 3px}
-  .configsectionpanel, .configsectionpanel td, .snarkNewTorrent, .snarkNewTorrent td,
+  .configPanel, .configPanel td, .snarkNewTorrent, .snarkNewTorrent td,
   select, input, input.r, input[name="nofilter_dataDir"] {
     font-size: 10pt !important;
   }
@@ -6177,7 +6177,7 @@ td.torrentAction input[type=submit] {
 
 @media screen and (min-width: 1500px) {
   @supports not (-moz-appearance: none) {
-    .configsectionpanel .configTitle, .configsectionpanel .configTitle:hover {
+    .configPanel .configTitle, .configPanel .configTitle:hover {
       font-size: 12.5pt !important;
     }
     select {
@@ -6196,7 +6196,7 @@ td.torrentAction input[type=submit] {
 }
 
 @media screen and (-webkit-min-device-pixel-ratio: 1.2) {
-  .configsection .configTitle, .toggleview {
+  #configSection .configTitle, .toggleview {
     padding-bottom: 2px !important;
   }
 }
