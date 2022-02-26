@@ -433,6 +433,7 @@ textarea[cols="70"], textarea[name="levels"] {width: calc(100% - 20px)}
 textarea#advancedsettings:focus {box-shadow: var(--highlight), inset 0 0 2px 1px var(--hover); filter: none}
 textarea[readonly]:focus {font-weight: 400; box-shadow: var(--highlight)}
 input[type=submit], input[type=reset], select, button {font-size: 8.5pt}
+input[type=submit], input[type=reset], input[type=file]::file-selector-button, button {margin: 5px}
 input[type=file]::file-selector-button {font-size: 8.5pt}
 .joblog {margin-top: 15px; text-align: justify; border-radius: 4px 4px 0 0; }
 .joblog h3 {margin-top: 10px}
