@@ -9,7 +9,7 @@ a[href="/summaryframe"] {margin: 5px 0 2px}
 #homepage #sidebar {display: none}
 .newsentry + hr + #newsStatus, .newsentry + hr + #newsStatus + #newsDisplay {margin-top: -3px; margin-bottom: -2px}
 .news, .news#news {margin: 10px 0 -11px; min-width: 0}
-.percentBarOuter {width: auto; margin: -4px 4px -4px 4px}
+#sidebar .percentBarOuter {margin: -4px auto -6px; width: calc(100% - 28px)}
 .sorry {margin-left: 0}
 table[id^="sb_"] td, #sidebar #sb_localtunnels td {padding: 2px 6px 0}
 #sidebar button[type=submit], #sidebar button[type=reset] {margin: 3px 5px 0; padding: 8px 5px; min-width: 42%}
@@ -36,10 +36,11 @@ table[id^="sb_"] td, #sidebar #sb_localtunnels td {padding: 2px 6px 0}
 #sidebar table, table[id^="sb_"], #sidebar #sb_services, #sidebar #sb_internals, #sidebar #sb_advanced, #sidebar #sb_help {width: calc(100% - 4px); margin: -9px 0 -7px 2px; border-radius: 4px; border-collapse: separate; border-spacing: 0}
 #sidebar td, #sidebar h4, #sidebar a {font-size: 9pt}
 #xhr {margin-top: 9px}
-#sb_wrap {z-index: 10000; top: 8px; right: 0; overflow: hidden}
+#sb_wrap {position: absolute; z-index: 10000; top: 8px; right: 0; overflow: hidden}
 #sb_wrap #sidebar {width: 120px; border: none; box-shadow: none; background: none; overflow: hidden; text-align: right}
 
 @media screen and (min-width: 640px) {
+h1, h1[class] {margin: 6px 0 -11px}
 #sidebar td, #sidebar td a {font-size: 11pt}
 #sidebar td {padding: 5px 8px}
 .tunnelBuildStatus, .sb_netstatus, .sb_notice, .percentBarText {font-size: 11pt}

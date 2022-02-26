@@ -3,6 +3,10 @@
 
 @import url(../mobile.css);
 
+:root {
+  --membarinner_mobile: linear-gradient(90deg, rgba(0,0,0,.05), rgba(128,128,0,.15) 300px, rgba(196,0,0,.15) 400px, rgba(196,0,0,.2)), linear-gradient(180deg,rgba(28, 148, 58, .6), rgba(9, 47, 16, .6) 50%, rgba(9, 27, 5, .6) 50%, rgba(9, 21, 3, .6), rgba(0,0,0,.3));
+}
+
 #sb_logo, #clock {
   margin: -8px 0 -9px;
   width: 100%;
@@ -10,6 +14,11 @@
 
 #sb_logo, #sidebar form {
   width: calc(100% - 20px);
+}
+
+#sb_logo {
+  margin-bottom: -18px;
+  display: block;
 }
 
 #sidebar form {
@@ -28,8 +37,8 @@
 }
 
 #sidebar table[id^="sb_"] {
-  width: 100%;
-  margin: -6px 0 -10px;
+  width: calc(100% - 17px);
+  margin: -7px auto -11px;
 }
 
 #sidebar table[id^="sb_"] td {
