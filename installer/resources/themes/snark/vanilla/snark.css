@@ -53,14 +53,14 @@ a:active, a:visited:active, th a:active, th a:visited:active, td a:active, td a:
 .snarkNav:active {text-shadow: none; box-shadow: var(--highlight), inset 2px 2px 3px 1px #59513b, 0 0 0 1px rgba(77, 69, 62, .1); transition: ease box-shadow .01s}
 
 .nav_main {background: var(--b_snark) no-repeat 9px center / 16px, var(--nav), var(--b_snark_hover) no-repeat 9px center / 16px, var(--b_snark_active) no-repeat 9px center / 16px}
+.nav_main:hover, .nav_main:focus {background: var(--b_snark_hover) no-repeat 9px center / 18px, var(--nav_hover); background-size: 18px, 100%}
+.nav_main:active {background: var(--b_snark_active) no-repeat 9px center, var(--nav_active); background-size: 18px, 100%}
 .nav_forum {background: var(--b_forum) no-repeat 12px center/ 17px, var(--nav), var(--b_forum_hover), var(--b_forum_active)}
 .nav_tracker {background: var(--b_tracker) no-repeat 12px center/ 17px, var(--nav), var(--b_tracker_hover), var(--b_tracker_active)}
 .nav_search {background: var(--b_search) no-repeat 12px center/ 17px, var(--nav), var(--b_search_hover), var(--b_search_active)}
-.nav_main:hover, .nav_main:focus {background: var(--b_snark_hover) no-repeat 9px center / 18px, var(--nav_hover); background-size: 18px, 100%}
 .nav_forum:hover, .nav_forum:focus {background: var(--b_forum_hover) no-repeat 12px center/ 17px, var(--nav_hover)}
 .nav_tracker:hover, .nav_tracker:focus {background: var(--b_tracker_hover) no-repeat 12px center/ 17px, var(--nav_hover)}
 .nav_search:hover, .nav_search:focus {background: var(--b_search_hover) no-repeat 12px center/ 17px, var(--nav_hover)}
-.nav_main:active {background: var(--b_snark_active) no-repeat 9px center, var(--nav_active); background-size: 18px, 100%}
 .nav_forum:active {background: var(--b_forum_active) no-repeat 12px center/ 17px, var(--nav_active)}
 .nav_tracker:active {background: var(--b_tracker_active) no-repeat 12px center/ 17px, var(--nav_active)}
 .nav_search:active {background: var(--b_search_active) no-repeat 12px center/ 17px, var(--nav_active)}
@@ -243,13 +243,10 @@ thead img.disable, img.disable:hover {opacity: .4}
 
 /* download bars */
 .torrentDownloaded {padding: 2px 5px; width: 1%; max-width: 120px; text-align: center}
-.percentBarOuter, .percentBarText {width: 110px}
-.dirInfo .percentBarText, .dirInfo .percentBarOuter {width: 90px}
+.percentBarOuter, .percentBarText {width: 84px}
 .percentBarOuter {margin: 0; display: inline-block; border: 1px solid #998; border-radius: 1px; box-shadow: var(--highlight), inset 2px 2px 3px rgba(0,0,0,.4); background: repeating-linear-gradient(135deg, #fff7ef 1px, #fff7ef 5px, #efdfd1 6px, #efdfd1 11px); opacity: 1}
 .peerinfo .percentBarOuter, .peerinfo .percentBarInner {height: 12px}
 .inactive .percentBarOuter {background: repeating-linear-gradient(90deg, #f8f2ec 1px, #f8f2ec 5px, #f2e5d9 6px, #f2e5d9 11px)}
-.peerinfo .percentBarOuter, .peerinfo .percentBarText {width: 84px}
-.peerinfo .percentBarText {padding: 1px; color: #3f3927}
 .percentBarInner, .uploaded {height: 16px; vertical-align: middle; border: none; border-right: 1px solid #998; border-radius: 1px; box-shadow: var(--highlight); background: linear-gradient(180deg,rgba(255,247,239, .8) 50%, rgba(207,193,181,.9) 50%, rgba(207,193,181,1))}
 .uploaded {padding: 0 2px 3px; min-width: 68px; display: inline-block; position: relative; border: 1px solid #998; border-left-width: 5px; box-shadow: inset 0 0 0 1px #efefef, inset 0 3px 3px rgba(0,0,0,.3); background: repeating-linear-gradient(90deg,#e0c6b8,#e0c6b8 10%,#ffdecc 10%,#ffdecc 20%)}
 .active.seeding .uploaded {background: repeating-linear-gradient(90deg,#d8b8a6,#d8b8a6 5%,#f7d0ba 5%,#f7d0ba 10%); background-size: 200%; animation: uploading .5s linear 4s 1 reverse}
@@ -841,12 +838,10 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {co
 #actionStopAll, #actionStartAll {padding: 10px 17px}
 }
 
-@supports not (-moz-appearance: none) {@media screen and (max-width: 1200px) {.peerinfo .torrentDownloaded .percentBarText {line-height: normal}}}
-
 @media screen and (max-width: 1000px) {
-.snarkNav {padding: 4px 8px 4px 24px; background-size: 15px auto, 100%, 100%; background-position: 8px center, center center, center center}
+.snarkNav {padding: 4px 8px 4px 24px; background-size: 15px, 100%, 100%; background-position: 8px center, center center, center center}
 .nav_main {padding: 4px 8px 4px 23px; background-position: 6px center, center center, center center}
-.nav_tracker {padding: 4px 8px 4px 20px; background-position: 5px center, center center, center center}
+.nav_tracker, .nav_tracker:hover, .nav_tracker:focus, .nav_tracker:active, .nav_forum, .nav_forum:hover, .nav_forum:focus, .nav_forum:active {padding: 4px 8px 4px 20px;background-size: 15px, 100%, 100%; background-position: 5px center, center center, center center}
 #torrents td[colspan="10"] {white-space: normal}
 #torrents thead th a img[src$="showpeers.png"] {display: none}
 .configsectionpanel .configTitle, .configsectionpanel .configTitle:hover {font-size: 10pt}
@@ -867,7 +862,7 @@ td.graphicStatus img {width: auto; height: 18px}
 .knownTracker a, #trackerselect td a {max-width: 200px; display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap}
 #trackerselect td a {max-width: 350px}
 .newTab {margin: -1px 4px 0}
-.rowOdd:not(.peerinfo) .torrentDownloaded .percentBarText, .rowEven:not(.peerinfo) .torrentDownloaded .percentBarText {padding: 4px 3px 2px; min-width: 130px; top: -16px; left: -26px}
+.percentBarText {padding: 4px 3px 2px; min-width: 130px; top: -16px; left: -26px}
 }
 
 @media screen and (max-width: 800px) {
