@@ -141,7 +141,7 @@ td.torrentDetails img:not([src$="rateme.svg"]), .dirInfo td:first-child img:not(
 #torrents tfoot th {padding: 6px 4px; background: #000}
 #torrents tfoot tr:first-child th {padding: 4px; vertical-align: middle}
 #torrents tfoot tr:first-child th:first-child {text-align: left}
-#torrents tr:hover, .knowntracker:hover, #trackerselect tr:nth-child(n+2):hover, #dirInfo tr:hover, #trackerselect tr:nth-child(n+2):hover td {background: #1e0b28}
+#torrents tr:hover, .knownTracker:hover, #trackerselect tr:nth-child(n+2):hover, #dirInfo tr:hover, #trackerselect tr:nth-child(n+2):hover td {background: #1e0b28}
 .dirInfo tr:hover, #torrentEdit tr:hover {box-shadow: var(--highlight), inset 0 0 1px 1px #414; background-color: #180018}
 #torrents tr:hover td, .dirInfo tr:hover td {color: #ccd1ff}
 .torrentETA {padding-left: 3px; padding-right: 6px; text-align: center; font-style: italic; color: #7b74e0}
@@ -595,7 +595,7 @@ td#bwHelp a {display: inline-block; white-space: nowrap; margin-left: 4px}
 
 /* tracker config */
 .trackerconfig {margin-bottom: 7px}
-.knowntracker a {display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 220px; width: 220px}
+.knownTracker a {display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 220px; width: 220px}
 .trackerhome, .trackerannounce {width: 260px}
 .snarkConfig .trackerconfig tr:nth-last-child(2) td {padding: 8px 8px 0}
 #addtracker td {border-top: var(--border)}
@@ -881,7 +881,7 @@ a, th, thead th, tfoot th, td, select, select option, .snarkAddInfo, .snarkFileN
 .percentDownloaded {pointer-events: none}
 #closelog img, #expand img, #shrink img {margin-top: -2px; width: 13px}
 .trackerconfig th:last-child, .trackerconfig td:last-child {padding-left: 50px}
-.trackerhome, .trackerannounce, .knowntracker a {width: 300px; max-width: 300px}
+.trackerhome, .trackerannounce, .knownTracker a {width: 300px; max-width: 300px}
 .trackerconfig input.trackername {max-width: 180px; width: 180px}
 }
 
@@ -916,7 +916,7 @@ code, tt {font-size: 10pt}
 thead img, thead img:hover {max-height: 22px}
 .torrentInfo th:first-child img, #torrentInfoStats img, #trackers img {max-height: 18px}
 .torrentInfo .infohash {padding: 3px 0 3px 20px; max-width: 130px; background-size: 14px}
-.trackerhome, .trackerannounce, .knowntracker a {width: 400px; max-width: 400px}
+.trackerhome, .trackerannounce, .knownTracker a {width: 400px; max-width: 400px}
 td.trackerDetails img {margin: 0 3px; padding: 3px; width: 18px; height: 18px; max-height: 18px}
 td.torrentDetails img, .dirInfo td:first-child img:not(.thumb) {margin: -2px 0; width: 24px; height: 24px; max-width: 24px; max-height: 24px}
 .dirInfo tr:nth-child(n+2) td:first-child img:not(.thumb) {margin-top: -2px; margin-bottom: -1px; width: 22px; max-width: 22px; height: 22px; max-height: 22px}

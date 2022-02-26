@@ -141,7 +141,7 @@ a.control, input[type=submit], input.accept, th {
   height: 14px !important;
 }
 
-.knowntracker a {
+.knownTracker a {
   max-width: 220px;
   overflow: hidden;
   text-overflow: ellipsis;

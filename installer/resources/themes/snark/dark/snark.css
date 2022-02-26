@@ -630,7 +630,7 @@ input[name="nofilter_commentsName"] {max-width: 248px}
 .trackerconfig .delete, .trackerconfig .reload {float: left}
 .trackerconfig input.delete {margin-left: 3px; margin-right: 5px}
 .trackerhome, .trackerannounce {width: 260px}
-.knowntracker a {width: 220px; max-width: 220px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
+.knownTracker a {width: 220px; max-width: 220px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
 
 /* tooltip */
 #bwHelp {margin-left: -184px; padding: 15px 15px 15px 55px; width: 320px; display: block; position: absolute; bottom: 125%; left: 0; z-index: 999; visibility: hidden; white-space: normal; text-align: center; font-size: 10pt; font-weight: 700; border-radius: 3px; background: #030 url(/i2psnark/.resources/icons/favicon.svg) no-repeat 10px center / 28px; opacity: 0; filter: drop-shadow(0 0 1px #000); will-change: transform}
@@ -898,7 +898,7 @@ th.torrentUploaded a img {display: inline-block}
 #configs a {margin-left: 4px; white-space: nowrap}
 .configPanel .configTitle, .configPanel .configTitle:hover, .configPanel .configTitle:active {font-size: 11pt}
 .trackerconfig th:last-child, .trackerconfig td:last-child {padding-left: 50px}
-.trackerhome, .trackerannounce, .knowntracker a {width: 300px; max-width: 300px}
+.trackerhome, .trackerannounce, .knownTracker a {width: 300px; max-width: 300px}
 .trackerconfig input.trackername {max-width: 180px; width: 180px}
 td.peerCount b {padding: 4px 3px; min-width: 104px; display: inline-block; position: relative; line-height: 1; text-align: center; font-size: 95%; text-shadow: 0 1px 1px #000; -webkit-text-stroke: 0; border-radius: 2px; background: #ac5390; filter: drop-shadow(0 0 1px #000)}
 td.peerCount b .left, td.peerCount b .right {margin: 0 1px; padding: 2px 3px 1px; min-width: 38px; display: inline-block; text-align: center; color: #eee; border-radius: 1px; box-shadow: 0 0 0 1px rgba(16,0,16,.5), inset 2px 2px 2px rgba(0,0,0,.3); background: linear-gradient(180deg,rgba(32,0,32,.3), rgba(16,0,16,.3))}
@@ -964,8 +964,8 @@ th.peerCount a img {margin-left: -20px}
 .torrentName:active a, .snarkFileName:active a {box-shadow: inset 4px 4px 4px rgba(0,8,0,.8)}
 .torrentUploaded, .RateDown, .RateUp {min-width: 76px; text-align: center}
 .trackerDetails, .SnarkTorrentDetails {width: 1%}
-.trackerhome, .trackerannounce, .knowntracker a {width: 400px; max-width: 400px}
-.trackerhome, .trackerannounce, .knowntracker a {width: 400px; max-width: 400px}
+.trackerhome, .trackerannounce, .knownTracker a {width: 400px; max-width: 400px}
+.trackerhome, .trackerannounce, .knownTracker a {width: 400px; max-width: 400px}
 #configs td:first-child::after {min-height: 28px}
 #torrents {margin-bottom: 11px}
 #torrents td.torrentDetails img:not([src$="rateme.svg"]), .dirInfo td:first-child img:not(.thumb) {width: 22px; height: 22px}

@@ -3729,7 +3729,7 @@ input[name="nofilter_commentsName"] {
   border-right: var(--border_hard);
 }
 
-.knowntracker a {
+.knownTracker a {
   display: inline-block;
   white-space: nowrap;
   overflow: hidden;
@@ -5383,8 +5383,8 @@ td.torrentAction input[type=submit] {
   #actionStopAll:active, #actionStartAll:active {
     background-size: auto 10px, 100% !important;
   }
-  .lang_de .knowntracker a, .lang_de .trackerhome, .lang_de .trackerannounce, .lang_de .trackerconfig input[type=text],
-  .lang_ru .knowntracker a, .lang_ru .trackerhome, .lang_ru .trackerannounce, .lang_ru .trackerconfig input[type=text] {
+  .lang_de .knownTracker a, .lang_de .trackerhome, .lang_de .trackerannounce, .lang_de .trackerconfig input[type=text],
+  .lang_ru .knownTracker a, .lang_ru .trackerhome, .lang_ru .trackerannounce, .lang_ru .trackerconfig input[type=text] {
     width: 180px !important;
     max-width: 180px !important;
     min-width: 0 !important;
@@ -5945,7 +5945,7 @@ td.torrentAction input[type=submit] {
   .trackerconfig th:last-child, .trackerconfig td:last-child {
     padding-left: 50px !important;
   }
-  .trackerhome, .trackerannounce, .knowntracker a {
+  .trackerhome, .trackerannounce, .knownTracker a {
     width: 300px !important;
     max-width: 300px !important;
   }
@@ -6122,7 +6122,7 @@ td.torrentAction input[type=submit] {
   .configOption::after {height: 40px}
   .torrentDownloaded, .torrentUploaded,
   .RateDown, .RateUp {min-width: 76px}
-  .trackerhome, .trackerannounce, .knowntracker a {
+  .trackerhome, .trackerannounce, .knownTracker a {
     width: 400px !important;
     max-width: 400px !important;
   }

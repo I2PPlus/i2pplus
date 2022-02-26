@@ -163,8 +163,8 @@ tr:not(.peerinfo) .torrentUploaded:empty::after {display: inline; font-size: 9pt
 .mainsection .noneLoaded td {padding: 10px; text-align: center; font-weight: 700; color: #cfc7c2}
 .noneLoaded i::before {margin: 1px 3px 0 0; width: 10px; height: 10px; display: inline-block; vertical-align: top; background: var(--bullet) no-repeat center center / 10px; content: ""}
 
-.rowEven, #torrentEdit tr:nth-child(odd) {background: #dfd6d1}
-.rowOdd, #torrentEdit tr:nth-child(even) {background: #efe6e0}
+.rowEven, #torrentEdit tr:nth-child(odd), .knownTracker:nth-child(odd) {background: #dfd6d1}
+.rowOdd, #torrentEdit tr:nth-last-child(even), .knownTracker:nth-child(even) {background: #efe6e0}
 .rowOdd td, .rowEven td, .ParentDir, .peerinfo td, #torrentEdit td {border-top: 1px solid #fff5ef; border-bottom: 1px solid rgba(111,83,62,.6)}
 .rowOdd:last-child td, .rowEven:last-child td {border-bottom: none}
 .filtered td, #filterResults td {border-top: none; border-bottom: 1px solid rgba(111,83,62,.6); background: linear-gradient(180deg,#f5f2f0, #eae4e1)}
@@ -529,8 +529,6 @@ td .commentAuthorName {margin-left: 8px; width: 120px; overflow: hidden; text-ov
 #configs td:first-child {min-width: 240px; width: 25%; font-weight: 700; text-align: right}
 #configs tr:nth-last-child(2) td, .trackerconfig tr:nth-last-child(2) td {border-top: 1px solid #efe6e0}
 #configs tr:nth-last-child(4) td, .trackerconfig tr:nth-last-child(4) td {border-bottom: 1px solid #4f3d36}
-.trackerconfig tr:nth-last-child(5) td {padding: 0; font-size: 0; border-bottom: 1px solid #4f3d36}
-.trackerconfig tr:nth-last-child(4) td {padding-top: 5px; border-top: 1px solid #efe6e0}
 #configs input:disabled, #configs input:disabled:hover, #configs input:disabled:focus {box-shadow: none; cursor: not-allowed; opacity: .7}
 td#bwHelp {padding-left: 28px; width: 90%; line-height: 1; background: url(images/details.svg) no-repeat left 10px center / 14px}
 td#bwHelp a {margin-left: 4px; display: inline-block; white-space: nowrap; font-style: normal}
@@ -589,18 +587,20 @@ input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilte
 #bwHoverHelp:hover + #bwHelp {padding: 20px; display: block; float: left; position: fixed; top: 48px; left: 0; z-index: 9999; white-space: nowrap; text-align: center; font-size: 12pt; border-bottom: 5px solid #212; border-top: 5px solid #212; box-shadow: 0 1px 3px #101; background: #313}
 
 /* tracker config */
-.trackerconfig {margin-top: 5px}
-.knowntracker:nth-child(odd) {background: #e8dfda}
-.knowntracker:nth-child(even) {background: #e0d9d5}
-.knowntracker:first-child:hover, .knowntracker:first-child:hover td {background: none}
-.knowntracker:hover, .knowntracker:hover td {background: #f9efcf}
-.knowntracker td:nth-child(2) {font-weight: 700; opacity: .9}
-.knowntracker:hover td:nth-child(2) {opacity: 1}
-.knowntracker td:first-child {border-left: var(--border_hard)}
-.knowntracker td:last-child {border-right: var(--border_hard)}
-.knowntracker a {display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 220px; width: 220px}
-.trackerhome, .trackerannounce {width: 260px}
 #addtracker td {padding-top: 5px; padding-bottom: 6px}
+.trackerconfig {margin-top: -3px}
+.trackerconfig tr:nth-last-child(5) td {padding: 0; line-height: 0; font-size: 0; border-bottom: 1px solid #4f3d36}
+.trackerconfig tr:nth-last-child(4) td {padding-top: 5px; border-top: 1px solid #efe6e0}
+.knownTracker:nth-child(odd) {background: #e8dfda}
+.knownTracker:nth-child(even) {background: #e0d9d5}
+.knownTracker:first-child:hover, .knownTracker:first-child:hover td {background: none}
+.knownTracker:hover, .knownTracker:hover td {background: #f9efcf}
+.knownTracker td:nth-child(2) {font-weight: 700; opacity: .9}
+.knownTracker:hover td:nth-child(2) {opacity: 1}
+.knownTracker td:first-child {padding-left: 3px; border-left: var(--border_hard)}
+.knownTracker td:last-child {border-right: var(--border_hard)}
+.knownTracker a {display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 220px; width: 220px}
+.trackerhome, .trackerannounce {width: 260px}
 .trackerconfig .delete, .trackerconfig .reload {float: left}
 .trackerconfig input.delete {margin-left: 0; margin-right: 8px}
 
@@ -832,8 +832,8 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {co
 .snarkCommentInfo td, .snarkComments td {padding: 5px}
 .snarkComments .commentDate {padding-left: 20px}
 .canhide {display: none}
-.lang_ru .trackerhome, .lang_ru .trackerannounce, .lang_ru .knowntracker a {width: 150px; max-width: 150px}
-.lang_de .trackerhome, .lang_de .trackerannounce, .lang_de .knowntracker a, .lang_pl .trackerhome, .lang_pl .trackerannounce, .lang_pl .knowntracker a {width: 180px; max-width: 180px}
+.lang_ru .trackerhome, .lang_ru .trackerannounce, .lang_ru .knownTracker a {width: 150px; max-width: 150px}
+.lang_de .trackerhome, .lang_de .trackerannounce, .lang_de .knownTracker a, .lang_pl .trackerhome, .lang_pl .trackerannounce, .lang_pl .knownTracker a {width: 180px; max-width: 180px}
 .torrentAction input[type=submit] {padding: 10px; background-size: 12px, 100%, 12px}
 #actionStopAll, #actionStartAll {padding: 10px 17px}
 }
@@ -935,7 +935,7 @@ thead a img, thead img {max-height: 21px}
 .mainsection .snarkComments .commentDelete {padding-left: 24px}
 .mainsection .snarkComments .commentDate {padding-left: 20px}
 .trackerconfig th:last-child, .trackerconfig td:nth-child(7) {padding-left: 50px}
-.trackerhome, .trackerannounce, .knowntracker a {width: 300px; max-width: 300px}
+.trackerhome, .trackerannounce, .knownTracker a {width: 300px; max-width: 300px}
 .trackerconfig input.trackername {width: 180px; max-width: 180px}
 td.peerCount {padding-left: 0; padding-right: 3px; width: 1%; white-space: nowrap; font-weight: 700}
 td.peerCount b {padding: 4px 3px; min-width: 104px; display: inline-block; position: relative; line-height: 1; text-align: center; font-size: 95%; color: #ddd; text-shadow: 0 1px 1px #000; -webkit-text-stroke: 0; border-radius: 2px; background: #ac5390; filter: drop-shadow(0 0 1px #000)}
@@ -999,7 +999,7 @@ thead a img, thead img {max-height: 22px}
 .dirInfo td:nth-child(n+2) {padding-left: 10px; padding-right: 10px}
 tr#torrentInfoStats td {padding-top: 5px; padding-bottom: 5px}
 .debugConnection {margin: 0 4px; padding: 2px 3px; display: inline-block; vertical-align: middle; font-family: var(--monospaced); font-weight: 700; color: #fff; border-radius: 2px; background: #967158}
-.trackerhome, .trackerannounce, .knowntracker a {width: 400px; max-width: 400px}
+.trackerhome, .trackerannounce, .knownTracker a {width: 400px; max-width: 400px}
 td.torrentDetails img, .dirInfo td:first-child img:not(.thumb) {width: 22px; height: 22px}
 td.torrentDetails img {margin-top: -3px; margin-bottom: -3px}
 .torrentDetails img[src$="rateme.svg"] {margin-top: -4px; margin-right: -3px; width: 11px; height: 11px}
@@ -1012,5 +1012,5 @@ img[src$="details.png"] {max-height: 18px}
 #configs th {font-size: 10pt}
 #fullscreen, #embed {font-size: 8.5pt}
 .torrentDownloaded, .torrentUploaded, .RateDown, .RateUp {min-width: 76px}
-.trackerhome, .trackerannounce, .knowntracker a {width: 400px; max-width: 400px}
+.trackerhome, .trackerannounce, .knownTracker a {width: 400px; max-width: 400px}
 }

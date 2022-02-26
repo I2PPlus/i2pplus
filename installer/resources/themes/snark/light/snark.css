@@ -2689,7 +2689,7 @@ td.commentAuthor .commentAuthorName {
 
 /* end Comments section */
 
-.knowntracker .optbox[type=radio] {
+.knownTracker .optbox[type=radio] {
   margin: 2px 10px !important;
 }
 
@@ -3091,11 +3091,11 @@ input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilte
   padding: 0;
 }
 
-.knowntracker:hover, .knowntracker:hover td {
+.knownTracker:hover, .knownTracker:hover td {
   background: #ffb !important;
 }
 
-.knowntracker a {
+.knownTracker a {
   display: inline-block;
   white-space: nowrap;
   overflow: hidden;
@@ -4431,7 +4431,7 @@ td.torrentAction input[type=submit] {
   .trackerconfig th:nth-child(7), .trackerconfig td:nth-child(7) {
     padding-left: 50px !important;
   }
-  .trackerhome, .trackerannounce, .knowntracker a {
+  .trackerhome, .trackerannounce, .knownTracker a {
     width: 300px !important;
     max-width: 300px !important;
   }
@@ -4532,7 +4532,7 @@ td.torrentAction input[type=submit] {
   .torrentDownloaded, .torrentUploaded, .RateDown, .RateUp {
     min-width: 76px;
   }
-  .trackerhome, .trackerannounce, .knowntracker a {
+  .trackerhome, .trackerannounce, .knownTracker a {
     width: 400px !important;
     max-width: 400px !important;
   }
@@ -4543,7 +4543,7 @@ td.torrentAction input[type=submit] {
   #torrentInfoStats .nowrap {
     margin-right: 6px;
   }
-  .trackerhome, .trackerannounce, .knowntracker a {
+  .trackerhome, .trackerannounce, .knownTracker a {
     width: 400px !important;
     max-width: 400px !important;
   }

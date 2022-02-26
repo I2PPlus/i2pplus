@@ -2922,7 +2922,7 @@ input[name="i2cpOpts"], input[name="nofilter_dataDir"] {
 	.torrentDownloaded, .torrentUploaded, .RateDown, .RateUp {
 		min-width: 76px;
 	}
-	.trackerhome, .trackerannounce, .knowntracker a {
+	.trackerhome, .trackerannounce, .knownTracker a {
 		width: 400px !important;
 		max-width: 400px !important;
 	}
