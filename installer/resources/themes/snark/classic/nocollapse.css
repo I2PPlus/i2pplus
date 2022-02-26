@@ -30,19 +30,19 @@ input:checked + .toggleview, input:not(:checked) + .toggleview {
   transform: none !important;
 }
 
-#configSection .configTitle a {
+.configsection .configTitle a {
   padding: 1px 0 !important;
   margin: 0 auto !important;
   text-align: center !important;
   display: block;
 }
 
-#configSection .configTitle a img {
+.configsection .configTitle a img {
   margin: -2px -2px 0 0 !important;
   padding: 0 !important;
 }
 
-.toggleview img, #configSection .configTitle img {
+.toggleview img, .configsection .configTitle img {
   margin: 0 !important;
   padding: 0 !important;
   text-align: center !important;

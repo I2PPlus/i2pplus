@@ -1181,7 +1181,7 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
   font-size: 9pt;
 }
 
-.toggleview, #configSection .configTitle {
+.toggleview, .configsection .configTitle {
   will-change: transform;
 }
 
@@ -1210,7 +1210,7 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
   color: #446;
 }
 
-.configPanel .configTitle {
+.configsectionpanel .configTitle {
   padding: 6px 0;
   min-width: 400px;
   line-height: 1.3;
@@ -1756,12 +1756,12 @@ img[src$="details.png"] {
   display: inline-block;
 }
 
-#createSection td:first-child, #addSection td:first-child, .configPanel td:first-child {
+#createSection td:first-child, #addSection td:first-child, .configsectionpanel td:first-child {
   width: auto !important;
   text-align: right;
 }
 
-.configPanel td:first-child {
+.configsectionpanel td:first-child {
   padding-right: 5px;
 }
 
@@ -1848,7 +1848,7 @@ body:not(.iframed) #commentSection {
   margin-bottom: -6px !important;
 }
 
-#createSection, #addSection, #configSection, .configPanel {
+#createSection, #addSection, .configsection, .configsectionpanel {
   padding: 0 10px;
   text-align: center;
   border: var(--border_soft);
@@ -1870,7 +1870,7 @@ body:not(.iframed) #commentSection {
   background: linear-gradient(180deg,#fafaff,#e0e0ef);
 }
 
-.configPanel {
+.configsectionpanel {
   background: linear-gradient(180deg,#f8f8ff,#f2f2ff) !important;
 }
 
@@ -1878,21 +1878,21 @@ body:not(.iframed) #commentSection {
   background: var(--panel_iframed);
 }
 
-#configSection {
+.configsection {
   margin: 0;
   padding-bottom: 13px;
   background: #fff;
 }
 
-.iframed #configSection, .iframed .configPanel, .iframed form:last-child .configPanel {
+.iframed .configsection, .iframed .configsectionpanel, .iframed form:last-child .configsectionpanel {
   background: var(--panel_iframed);
 }
 
-.iframed .configPanel, .iframed form:last-child .configPanel {
+.iframed .configsectionpanel, .iframed form:last-child .configsectionpanel {
   background: var(--panel_iframed);
 }
 
-.configPanel#trackers, .mainsection#snarkInfo {
+.configsectionpanel#trackers, .mainsection#snarkInfo {
   margin-top: -1px !important;
 }
 
@@ -1904,7 +1904,7 @@ body:not(.iframed) #commentSection {
   margin-top: -9px !important;
 }
 
-.iframed #configSection, .iframed #trackers, .iframed .mainsection#snarkInfo {
+.iframed .configsection, .iframed #trackers, .iframed .mainsection#snarkInfo {
   margin-bottom: 1px !important;
 }
 
@@ -1916,32 +1916,32 @@ body:not(.iframed) #commentSection {
   padding-bottom: 6px !important;
 }
 
-.iframed #configSection, .iframed .snarkCommentInfo, .iframed #trackers {
+.iframed .configsection, .iframed .snarkCommentInfo, .iframed #trackers {
   border-bottom: none !important;
 }
 
-.configPanel {
+.configsectionpanel {
   margin: -2px 0 0;
   box-shadow: var(--highlight), inset 0 0 2px 1px #ddf;
   background: linear-gradient(to top, rgba(224, 224, 255, .5),#f4f4ff 5%,#f4f4ff 95%, rgba(224, 224, 255, .5));
 }
 
-form:last-child .configPanel {
+form:last-child .configsectionpanel {
   margin-top: 10px;
   background: linear-gradient(to top, rgba(224, 224, 255, .5),#f4f4ff 10%,#f4f4ff 90%, rgba(224, 224, 255, .5));
 }
 
-.configPanel table {
+.configsectionpanel table {
   border-collapse: separate;
 }
 
-.configPanel tr:nth-last-child(2) td {
+.configsectionpanel tr:nth-last-child(2) td {
   padding: 5px 0 0 0;
   text-align: right !important;
   border-top: 1px solid #fff;
 }
 
-.configPanel tr:last-child {
+.configsectionpanel tr:last-child {
   display: none;
 }
 
@@ -1949,7 +1949,7 @@ form:last-child .configPanel {
   border-bottom: var(--border_soft);
 }
 
-#createSection, #addSection, #configSection, .configPanel {
+#createSection, #addSection, .configsection, .configsectionpanel {
   margin-bottom: -1px;
   border-left: none;
   border-right: none;
@@ -2081,7 +2081,7 @@ form:last-child .configPanel {
 
 /* end new torrent -> tracker select */
 
-#configSection a {
+.configsection a {
   color: #55a;
   font-weight: 700;
 }
@@ -3185,11 +3185,11 @@ input:checked + .toggleview:active .tab_label::after {
   transition: linear transform .15s;
 }
 
-.toggleview, #configSection .configTitle a {
+.toggleview, .configsection .configTitle a {
   font-size: 0 !important;
 }
 
-.toggleview, #configSection .configTitle {
+.toggleview, .configsection .configTitle {
   text-align: center;
   width: 300px;
 }
@@ -3515,11 +3515,11 @@ td.trackerDetails {
 
 /* end peer + client */
 
-#lowersection > #configSection {
+#lowersection > .configsection {
   margin-top: 10px;
 }
 
-#lowersection > #createSection + #configSection {
+#lowersection > #createSection + .configsection {
   margin-top: 0;
 }
 

@@ -30,7 +30,7 @@ thead, thead:hover tr {border-bottom: 1px solid #101}
 tr {contain: layout}
 #torrents, .dirInfo, #videoTitle {position: relative}
 #torrents::before, #screenLog::before, .dirInfo::before, .dirInfo::before, #videoTitle::before {width: 0; height: 1px; display: block; position: absolute; top: 1px; left: 0; z-index: 1000; background: rgba(255,96,0,.4); animation: ease-in bar .5s reverse; content: ""; will-change: transform}
-.iframed .snarknavbar, .iframed .mainsection, .iframed #addSection, .iframed #createSection, .iframed #configSection, .iframed .configPanel {border-left: none; border-right: none; border-radius: 0}
+.iframed .snarknavbar, .iframed .mainsection, .iframed #addSection, .iframed #createSection, .iframed .configsection, .iframed .configsectionpanel {border-left: none; border-right: none; border-radius: 0}
 
 /* topnav */
 .snarknavbar {margin: 0 0 -6px; padding: 9px 0; min-width: 888px; position: sticky; top: -2px; z-index: 999; text-align: center; border: var(--border); box-shadow: var(--highlight), inset 0 0 1px 1px #050; background: var(--topnav); background-size: var(--topnav_size); will-change: transform}
@@ -111,12 +111,12 @@ th#torrentSort {text-align: right}
 .configTitle, .toggleview {margin: 0 0 -3px; min-width: 300px; display: inline-block; font-size: 0; border: var(--border); border-radius: 0 0 3px 3px; border-top: none; box-shadow: var(--highlight), inset 0 0 0 2px rgba(0,0,0,.1), 0 1px 1px #000; background: linear-gradient(180deg,#001800,#000800 50%,#000)}
 .iframed .configTitle, .iframed .toggleview {border-radius: 0}
 .configTitle {margin-bottom: -2px}
-#configSection .configTitle:hover, .toggleview:hover, input.toggle_input:focus + .toggleview {background: linear-gradient(180deg,#030,#010 50%,#000); mix-blend-mode: exclusion; transition: ease all .1s}
+.configsection .configTitle:hover, .toggleview:hover, input.toggle_input:focus + .toggleview {background: linear-gradient(180deg,#030,#010 50%,#000); mix-blend-mode: exclusion; transition: ease all .1s}
 .configTitle:hover a, .configTitle a:focus {color: #f60; transition: ease all .1s}
 .configTitle:active, .toggleview:active {background: var(--th); box-shadow: var(--btn_shadow_active); transition: linear box-shadow .1s}
-#trackers .snarkConfig .configTitle::before, .configPanel .configTitle::before {margin-right: 3px; width: 18px; height: 18px; display: inline-block; vertical-align: middle; background: var(--configure) no-repeat scroll left calc(50% - 1px) / 16px; opacity: .8; content: ""}
-.configPanel .configTitle {margin: -1px -1px -14px; padding: 8px; display: block; letter-spacing: 0.2em; text-align: left; text-transform: uppercase; font-variant: normal; font-size: 10.5pt; font-weight: 700; border-top: var(--border); box-shadow: var(--highlight); background: linear-gradient(135deg,#000,#000800); mix-blend-mode: normal; filter: none; pointer-events: none}
-.iframed .configPanel .configTitle {margin: -1px 0 -16px; border-left: none; border-right: none}
+#trackers .snarkConfig .configTitle::before, .configsectionpanel .configTitle::before {margin-right: 3px; width: 18px; height: 18px; display: inline-block; vertical-align: middle; background: var(--configure) no-repeat scroll left calc(50% - 1px) / 16px; opacity: .8; content: ""}
+.configsectionpanel .configTitle {margin: -1px -1px -14px; padding: 8px; display: block; letter-spacing: 0.2em; text-align: left; text-transform: uppercase; font-variant: normal; font-size: 10.5pt; font-weight: 700; border-top: var(--border); box-shadow: var(--highlight); background: linear-gradient(135deg,#000,#000800); mix-blend-mode: normal; filter: none; pointer-events: none}
+.iframed .configsectionpanel .configTitle {margin: -1px 0 -16px; border-left: none; border-right: none}
 .snarkConfig {font-size: 10pt; width: 100%}
 .snarkConfig i {padding-left: 5px}
 form {margin-bottom: 0}
@@ -140,7 +140,7 @@ input[type=text]:hover, input.r:hover {cursor: text}
 input[type=text]:focus, textarea:focus {color: var(--ink); border: 1px solid #373; box-shadow: var(--highlight), inset 4px 4px 4px #000, 0 0 0 1px rgba(255,96,0,.3); background: linear-gradient(180deg,#001800,#001000); transition: ease box-shadow .1s}
 input[name="nofilter_commentsName"] {width: 250px; overflow: hidden; text-overflow: ellipsis}
 input[name="nofilter_commentsName"]:focus::placeholder {opacity: 0}
-.configPanel input[type=text], #configs select {margin-top: 4px; margin-bottom: 4px}
+.configsectionpanel input[type=text], #configs select {margin-top: 4px; margin-bottom: 4px}
 thead img, thead img:hover {max-height: 20px; opacity: .8}
 th a img, th a:visited img {opacity: 1}
 select {min-width: 120px}
@@ -204,13 +204,13 @@ input.trackerhome, input.trackerannounce {width: 210px}
 #createSection table[border="0"] {margin-bottom: 15px}
 #createSection td:first-child, #addSection td:first-child {padding-right: 5px; padding-left: 5px; font-weight: 700; width: 120px}
 #createSection td:nth-child(n+2), #addSection td:nth-child(n+2) {text-align: left}
-.configPanel td:first-child {padding-right: 10px; padding-left: 5px; font-weight: 700}
+.configsectionpanel td:first-child {padding-right: 10px; padding-left: 5px; font-weight: 700}
 #addtracker td {padding-top: 8px; padding-bottom: 8px; border-top: var(--border); background: var(--th)}
 .trackerconfig table {border: none}
-.section, .mainsection, #createSection, #addSection, #configSection, .configPanel {background: #000; border: var(--border); text-align: center}
-#createSection, #addSection, #configSection {box-shadow: inset 0 0 5px 2px #000}
+.section, .mainsection, #createSection, #addSection, .configsection, .configsectionpanel {background: #000; border: var(--border); text-align: center}
+#createSection, #addSection, .configsection {box-shadow: inset 0 0 5px 2px #000}
 .section, .mainsection {margin: 0; padding: 0; border-bottom: none}
-#createSection, #addSection, #configSection, .configPanel, #snarkFiles, #commentSection, #editSection {background: repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px), repeating-linear-gradient(180deg,rgba(0,0,0,.8) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(180deg,rgba(0,16,0,.4), rgba(0,0,0,.5)), url(/themes/console/dark/images/camotile2.png); background-size: 4px 100%, 100%, 100%, 175px}
+#createSection, #addSection, .configsection, .configsectionpanel, #snarkFiles, #commentSection, #editSection {background: repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px), repeating-linear-gradient(180deg,rgba(0,0,0,.8) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(180deg,rgba(0,16,0,.4), rgba(0,0,0,.5)), url(/themes/console/dark/images/camotile2.png); background-size: 4px 100%, 100%, 100%, 175px}
 #createSection {margin: -1px 0 10px; padding: 0 10px}
 #addSection {margin: -1px 0 0; padding: 0 10px}
 .snarkAddInfo code {user-select: all}
@@ -562,9 +562,9 @@ td.fileStatus {background: rgba(0,32,0,.2)}
 /* configure */
 .configOption {padding: 2px 4px; display: inline-block; vertical-align: middle; text-align: left; white-space: nowrap; width: calc(100% - 20px)}
 .configOption::after {height: 36px; display: inline-block; vertical-align: middle; content: ""}
-#configSection table {color: #ffb}
-#configSection a {text-shadow: 0 1px 1px #000; font-weight: 700}
-#configSection a:hover {color: #f60; text-decoration: none}
+.configsection table {color: #ffb}
+.configsection a {text-shadow: 0 1px 1px #000; font-weight: 700}
+.configsection a:hover {color: #f60; text-decoration: none}
 .optionlist {margin: 0 0 -24px; padding: 8px 6px; box-shadow: inset 0 0 0 2px #000; background: repeating-linear-gradient(180deg,rgba(0,0,0,.5) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px), linear-gradient(180deg,rgba(0,17,0,.7), rgba(0,6,0,.7)), url(/themes/console/dark/images/camotile2.png); transition: ease-in-out .5s box-shadow; columns: 400px 3; column-gap: 20px}
 .optionlist:hover {box-shadow: inset 0 0 0 1px rgba(95,95,0,.8); transition: ease-in-out .5s box-shadow}
 .snarkConfig input[type=submit] {margin: 3px 2px 3px 5px; text-align: center; min-width: 100px}
@@ -576,13 +576,13 @@ td.fileStatus {background: rgba(0,32,0,.2)}
 .snarkConfig table tr:first-child {border-top: var(--border)}
 #configs td:first-child {padding-left: 15px; line-height: .8; width: 25%}
 #configs .spacer, .trackerconfig .spacer {display: none}
-.configPanel td[colspan="5"] {border-top: var(--border)}
+.configsectionpanel td[colspan="5"] {border-top: var(--border)}
 .snarkConfig tr:nth-last-child(2), .snarkConfig tr:hover:nth-last-child(2) {background: none}
 .snarkConfig tr:nth-last-child(2) td, #configs td[colspan="5"] {text-align: right; padding: 11px 15px 0; border-top: var(--border)}
 .snarkConfig tr {border: none}
-#configSection {margin: -11px 0 0; padding: 0 10px 12px}
-.configPanel {margin: -1px 0 0; padding: 0}
-.mainsection + form > .configPanel:first-child {margin-top: 9px}
+.configsection {margin: -11px 0 0; padding: 0 10px 12px}
+.configsectionpanel {margin: -1px 0 0; padding: 0}
+.mainsection + form > .configsectionpanel:first-child {margin-top: 9px}
 .knownTracker input[type=radio], .knownTracker input[type=radio][disabled], .knownTracker input[type=radio]:hover, .knownTracker input[type=radio]:focus {opacity: .3; cursor: default}
 .knownTracker input[type=radio]:checked, .knownTracker input[type=radio]:checked:hover {opacity: .5}
 .knownTracker input[type=radio][disabled], .knownTracker input[type=radio][disabled]:hover {opacity: .1}
@@ -679,11 +679,11 @@ input[name="nofilter_commentsName"] {max-width: 248px}
 .RateUp, .torrentUploaded {font-style: italic}
 
 /* sections */
-.iframed #configSection, .iframed #trackers, .iframed .mainsection#snarkInfo {margin-bottom: -6px}
-.iframed #configSection {border-radius: 0 0 4px 4px}
-#mainsection + #lowersection > #configSection {margin-top: -1px}
-#mainsection + #lowersection #createSection + #configSection {margin-top: -11px; padding-bottom: 14px}
-.snarknavbar, #createSection, #addSection, #configSection, .configPanel, .optionlist, .routerdown {box-shadow: var(--highlight), inset 0 0 1px 1px #252}
+.iframed .configsection, .iframed #trackers, .iframed .mainsection#snarkInfo {margin-bottom: -6px}
+.iframed .configsection {border-radius: 0 0 4px 4px}
+#mainsection + #lowersection > .configsection {margin-top: -1px}
+#mainsection + #lowersection #createSection + .configsection {margin-top: -11px; padding-bottom: 14px}
+.snarknavbar, #createSection, #addSection, .configsection, .configsectionpanel, .optionlist, .routerdown {box-shadow: var(--highlight), inset 0 0 1px 1px #252}
 
 /* torrent edit */
 #editSection hr {margin-bottom: 0}
@@ -712,8 +712,8 @@ input:checked + .toggleview + hr + table, input:checked + .toggleview + hr + tab
 /* tabs */
 #dhtDebugPanel .toggleview:hover {mix-blend-mode: normal}
 #dhtDebugPanel .toggleview:active {border-top: var(--border); margin-top: -1px}
-.toggleview, #configSection .configTitle {min-width: 340px; text-align: center; will-change: transform}
-.toggleview, #configSection .configTitle a {font-size: 0}
+.toggleview, .configsection .configTitle {min-width: 340px; text-align: center; will-change: transform}
+.toggleview, .configsection .configTitle a {font-size: 0}
 .configTitle a {display: inline-block; width: 100%}
 .tab_label::after {margin: 3px; padding: 3px; width: 18px; height: 18px; display: inline-block; vertical-align: middle; border: 2px solid #000; border-radius: 50%; box-shadow: 0 0 1px 1px rgba(32,0,48,.5); background-size: 16px, 100%; content: ""; mix-blend-mode: luminosity; pointer-events: none; will-change: transform}
 .toggleview:hover .tab_label::after, #tab_config:hover .tab_label::after {mix-blend-mode: normal; filter: drop-shadow(0 0 1px #f30)}
@@ -756,7 +756,7 @@ input:checked + .toggleview:active .tab_label::after {box-shadow: 0 0 0 2px rgb(
 
 /* browser specific */
 @supports (justify-content: center) {.snarknavbar {display: flex; justify-content: center} .snarkNav, .snarkNav:visited {margin-left: 0; margin-right: 0}}
-@supports not (-moz-appearance: none) {.percentBarText {padding: 0}.iframed .percentBarText, .iframed .percentBarText:hover, .iframed .percentBarText:focus {transition: none} .page, .configPanel, #setPriority, #torrentInfoControl, .commentAction[colspan="5"] {background: repeating-linear-gradient(90deg, rgba(0,0,0,.4), rgba(0,0,0,.4) 2px, rgba(0,32,0,.4) 3px), repeating-linear-gradient(180deg,rgba(0,0,0,.8), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), url(/themes/console/dark/images/camotile2.png) #000; background-blend-mode: normal} .debuginfo, .debuginfo td:last-child {border-right: var(--border)}}
+@supports not (-moz-appearance: none) {.percentBarText {padding: 0}.iframed .percentBarText, .iframed .percentBarText:hover, .iframed .percentBarText:focus {transition: none} .page, .configsectionpanel, #setPriority, #torrentInfoControl, .commentAction[colspan="5"] {background: repeating-linear-gradient(90deg, rgba(0,0,0,.4), rgba(0,0,0,.4) 2px, rgba(0,32,0,.4) 3px), repeating-linear-gradient(180deg,rgba(0,0,0,.8), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), url(/themes/console/dark/images/camotile2.png) #000; background-blend-mode: normal} .debuginfo, .debuginfo td:last-child {border-right: var(--border)}}
 
 /* responsive layout */
 @media screen and (max-width: 1499px) {
@@ -775,7 +775,7 @@ input:checked + .toggleview:active .tab_label::after {box-shadow: 0 0 0 2px rgb(
 
 @media screen and (max-width: 1199px) {
 .clientid {line-height: 1.8}
-.configPanel .snarkConfigtitle {font-size: 11pt}
+.configsectionpanel .snarkConfigtitle {font-size: 11pt}
 .dirInfoComplete {display: none}
 .fileStatus img[src*="clock"] {margin-top: 4px}
 .knownTracker a, #trackerselect a {display: inline-block; max-width: 210px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
@@ -842,7 +842,7 @@ th#torrentSort {text-align: center}
 .torrentDetails {padding-left: 3px}
 #totals {margin-left: 2px}
 #addSection td:first-child, #createSection td:first-child {width: 20%}
-.toggleview, #configSection .configTitle {width: 280px; min-width: 280px}
+.toggleview, .configsection .configTitle {width: 280px; min-width: 280px}
 .snarkConfigSection .configTitle {font-size: 10pt}
 .trackerconfig a, .trackerconfig input[type=text] {max-width: 150px}
 #trackerselect td a {max-width: 200px}
@@ -862,7 +862,7 @@ th a img {max-height: 16px}
 td .commentAuthorName {margin-left: 1px; min-width: 84px; max-width: 84px}
 .snarkComments .commentDelete {padding-left: 0; background: none}
 #dhtDebugInner {margin-top: -20px}
-.iframed .configPanel .configTitle {padding-bottom: 6px}
+.iframed .configsectionpanel .configTitle {padding-bottom: 6px}
 }
 
 @media screen and (min-width: 1000px) {
@@ -890,13 +890,13 @@ body, #torrents td, .snarkAddInfo, th, td,code, textarea, input, input[type=subm
 #torrents thead th {padding-top: 4px; padding-bottom: 5px; border-bottom: var(--border)}
 th.torrentUploaded img {display: none}
 th.torrentUploaded a img {display: inline-block}
-.configPanel .snarkConfigtitle {font-size: 12pt}
+.configsectionpanel .snarkConfigtitle {font-size: 12pt}
 .trackerDetails {padding-left: 6px}
 .torrentDownloaded {padding: 0 8px; white-space: nowrap; text-align: center}
 .percentDownloaded {pointer-events: none}
 #configs td:first-child::after {min-height: 26px}
 #configs a {margin-left: 4px; white-space: nowrap}
-.configPanel .configTitle, .configPanel .configTitle:hover, .configPanel .configTitle:active {font-size: 11pt}
+.configsectionpanel .configTitle, .configsectionpanel .configTitle:hover, .configsectionpanel .configTitle:active {font-size: 11pt}
 .trackerconfig th:last-child, .trackerconfig td:last-child {padding-left: 50px}
 .trackerhome, .trackerannounce, .knowntracker a {width: 300px; max-width: 300px}
 .trackerconfig input.trackername {max-width: 180px; width: 180px}
@@ -932,16 +932,16 @@ td.peerCount b:hover a[href*="?p="]:hover::after, td.peerCount b:hover a[href*="
 @media screen and (min-width: 1500px) {
 body, #torrents td, .snarkAddInfo, th, td,code, textarea, input, input[type=submit], input[type=reset], input[type=text], select, button, a {font-size: 10pt}
 #screenlog li, #screenlog li a, #ourDest tt, #screenlog, #screenlog a {font-size: 9pt}
-#addSection, #createSection, #configSection {margin-left: -11px; margin-right: -11px}
+#addSection, #createSection, .configsection {margin-left: -11px; margin-right: -11px}
 #screenlog {margin: -11px -11px 0}
 #closelog, #expand, #shrink {margin-top: -4px}
 #closelog img, #expand img, #shrink img {margin-top: -1px; padding: 5px 6px}
 .iframed #closelog, .iframed #expand, .iframed #shrink {margin-top: -1px}
 .configOption::after {height: 40px}
-#configSection .configTitle, .toggleview {min-width: 380px}
-#configSection {margin-bottom: -11px}
+.configsection .configTitle, .toggleview {min-width: 380px}
+.configsection {margin-bottom: -11px}
 .debugConnection {line-height: 1.5}
-.iframed #addSection, .iframed #createSection, .iframed #configSection {margin-left: 0; margin-right: 0}
+.iframed #addSection, .iframed #createSection, .iframed .configsection {margin-left: 0; margin-right: 0}
 .iframed .page #snarkInfo ~ .mainsection {margin: -11px 0 10px}
 .iframed #screenlog {margin: 0; position: static}
 .iframed #snarkInfo + #snarkFiles {margin-top: -11px}

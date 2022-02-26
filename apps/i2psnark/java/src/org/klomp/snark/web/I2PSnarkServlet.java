@@ -2890,7 +2890,7 @@ public class I2PSnarkServlet extends BasicServlet {
 // configuration
 
         out.write("<form action=\"" + _contextPath + "/configure#top\" method=\"POST\">\n" +
-                  "<div class=\"configPanel lang_" + lang + "\"><div class=\"snarkConfig\">\n");
+                  "<div class=\"configsectionpanel lang_" + lang + "\"><div class=\"snarkConfig\">\n");
         writeHiddenInputs(out, req, "Save");
         out.write("<span class=\"configTitle\">");
         out.write(_t("Configuration"));
@@ -3277,7 +3277,7 @@ public class I2PSnarkServlet extends BasicServlet {
     private void writeTrackerForm(PrintWriter out, HttpServletRequest req) throws IOException {
         StringBuilder buf = new StringBuilder(1024);
         buf.append("<form action=\"" + _contextPath + "/configure#top\" method=\"POST\">\n" +
-                   "<div class=\"configPanel\" id=\"trackers\"><div class=\"snarkConfig\">\n");
+                   "<div class=\"configsectionpanel\" id=\"trackers\"><div class=\"snarkConfig\">\n");
         writeHiddenInputs(buf, req, "Save2");
         buf.append("<span class=\"configTitle\">");
 //        toThemeImg(buf, "config");
@@ -3369,7 +3369,7 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     private void writeConfigLink(PrintWriter out) throws IOException {
-        out.write("\n<div id=\"configSection\">\n<span class=\"snarkConfig\">" +
+        out.write("\n<div class=\"configsection\">\n<span class=\"snarkConfig\">" +
                   "<span id=\"tab_config\" class=\"configTitle\"><a href=\"configure\"><span class=\"tab_label\">");
 //        out.write(toThemeImg("config"));
 //        out.write(' ');

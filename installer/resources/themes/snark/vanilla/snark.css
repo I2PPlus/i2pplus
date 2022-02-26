@@ -42,7 +42,7 @@ a:link, a:visited {text-decoration: none; color: #cf0f00}
 th a:hover, th a:visited:hover, th a:focus, th a:visited:focus, td a:hover, td a:visited:hover, td a:focus, td a:visited:focus {color: #df0067; filter: none}
 a:active, a:visited:active, th a:active, th a:visited:active, td a:active, td a:visited:active {color: #f00}
 .toggleview, .configTitle, .snarknavbar, img, input[type=submit], .optbox[type=radio], .optbox[type=checkbox], label, th img, #createSection, #closelog, #pagenavbottom {user-select: none}
-.snarknavbar, #screenlog, #addSection, #createSection, .configPanel {contain: content}
+.snarknavbar, #screenlog, #addSection, #createSection, .configsectionpanel {contain: content}
 
 /* top nav */
 .snarknavbar {margin: -11px 0 10px 0; padding: 12px 10px 11px; position: sticky; top: -2px; z-index: 999; width: 70%; border: var(--border); border-radius: 0 0 2px 2px; box-shadow: var(--highlight), 0 0 0 1px rgba(111,96,90,.3); background: linear-gradient(180deg,#efefef 50%, #cfc7c2 53%); text-align: center; transition: ease width .5s .5s}
@@ -309,8 +309,8 @@ input[type=submit], .trackerconfig input[type=submit], input[name="savepri"], se
 .toggleview, #tab_config {margin: -1px auto -3px; padding: 4px 1px 2px; min-width: 300px; display: inline-block; vertical-align: middle; text-shadow: 0 0 1px #fff5ef; color: #444039; border: 1px solid #111; border-top: none; box-shadow: 0 0 2px rgba(77, 69, 62, .3), var(--highlight); background: linear-gradient(90deg, rgba(0,0,0,0), rgba(255, 255, 255, .2) 20%, rgba(255, 255, 255, .2) 80%, rgba(0,0,0,0)),linear-gradient(180deg,#fff7ef 50%, rgba(207, 193, 181, .6) 50%), repeating-linear-gradient(135deg, #75604e 1px, #a09286 1px, #bfafa2 2px)}
 #tab_config:hover, .toggleview:hover, input.toggle_input:focus + .toggleview {background: linear-gradient(180deg,#ffeadf 50%, #cfb6a8 50%)}
 #tab_config {margin-top: 0; padding-top: 3px}
-.configPanel .configTitle, .configPanel .configTitle:hover, .configPanel .configTitle:active, .configPanel .configTitle:focus {margin: 0 -11px; padding: 5px 8px 5px 29px; display: block; letter-spacing: .15em; text-align: left; text-transform: uppercase; font-size: 11pt; font-weight: 700; color: #4d2200; border: 1px solid #1f1400; border-top: none; border-radius: 2px 2px 0 0; box-shadow: var(--highlight); background: var(--snark) no-repeat 8px center, radial-gradient(circle at left bottom, #f9f8f2, #f7f6ee 400px); background-size: 18px, 100%; background-blend-mode: luminosity}
-.iframed .configPanel .configTitle, .iframed .configPanel .configTitle:hover, .iframed .configPanel .configTitle:active {border-radius: 0}
+.configsectionpanel .configTitle, .configsectionpanel .configTitle:hover, .configsectionpanel .configTitle:active, .configsectionpanel .configTitle:focus {margin: 0 -11px; padding: 5px 8px 5px 29px; display: block; letter-spacing: .15em; text-align: left; text-transform: uppercase; font-size: 11pt; font-weight: 700; color: #4d2200; border: 1px solid #1f1400; border-top: none; border-radius: 2px 2px 0 0; box-shadow: var(--highlight); background: var(--snark) no-repeat 8px center, radial-gradient(circle at left bottom, #f9f8f2, #f7f6ee 400px); background-size: 18px, 100%; background-blend-mode: luminosity}
+.iframed .configsectionpanel .configTitle, .iframed .configsectionpanel .configTitle:hover, .iframed .configsectionpanel .configTitle:active {border-radius: 0}
 .configTitle a {width: 100%; display: inline-block}
 .toggleview img, .snarkConfig .configTitle img {display: none; opacity: 0}
 .toggleview:hover::after, .toggleview:focus::after, #tab_config a:hover::after, #tab_config a:focus::after {mix-blend-mode: normal}
@@ -387,29 +387,29 @@ a:hover img, a:focus img {filter: drop-shadow(0 0 1px #df0067); mix-blend-mode: 
 .fileStatus img[src*="clock"] {mix-blend-mode: normal}
 #addSection table, #createSection table {animation: fade-in .2s ease-in}
 .snarkAddInfo code {animation: fade-in .5s linear}
-#createSection, #addSection, #configSection, .configPanel, .section, .mainsection {margin: 0 0 10px 0; padding: 0 10px; text-align: center; word-wrap: break-word; color: #ddd; border: 1px solid #1f1400; border-radius: 2px; box-shadow: var(--highlight), 0 0 1px 0 rgba(77,61,51,.3); background: #dfd7d1}
+#createSection, #addSection, .configsection, .configsectionpanel, .section, .mainsection {margin: 0 0 10px 0; padding: 0 10px; text-align: center; word-wrap: break-word; color: #ddd; border: 1px solid #1f1400; border-radius: 2px; box-shadow: var(--highlight), 0 0 1px 0 rgba(77,61,51,.3); background: #dfd7d1}
 .section, .mainsection {padding: 10px; background: var(--panel)}
 .mainsection#media {padding-top: 0}
 .iframed #snarkInfo ~ .mainsection {margin-top: -1px}
 .iframed #snarkInfo ~ #commentSection {margin-top: -11px; margin-bottom: 1px}
-#createSection, #addSection, #configSection, .configPanel, #mainsection + form .configPanel {background: var(--panel)}
-#configSection {padding: 0 10px 13px}
-#mainsection + form .configPanel {background-size: 100%}
-.configPanel table {margin-bottom: 8px}
-.configPanel td, .snarkNewTorrent td, select, select option, input, textarea, input[name="nofilter_dataDir"], .configPanel th {font-family: var(--bodyfont); font-size: 9pt}
-.iframed .mainsection, .iframed #createSection, .iframed #addSection, .iframed #configSection, .iframed .configPanel {border-radius: 0; box-shadow: var(--highlight), inset 0 0 2px 0 #ffefe6}
-.iframed #createSection, .iframed #addSection, .iframed #configSection, .iframed .configPanel {margin-top: -11px}
-#addSection table, #createSection table, .configPanel table {border: none}
+#createSection, #addSection, .configsection, .configsectionpanel, #mainsection + form .configsectionpanel {background: var(--panel)}
+.configsection {padding: 0 10px 13px}
+#mainsection + form .configsectionpanel {background-size: 100%}
+.configsectionpanel table {margin-bottom: 8px}
+.configsectionpanel td, .snarkNewTorrent td, select, select option, input, textarea, input[name="nofilter_dataDir"], .configsectionpanel th {font-family: var(--bodyfont); font-size: 9pt}
+.iframed .mainsection, .iframed #createSection, .iframed #addSection, .iframed .configsection, .iframed .configsectionpanel {border-radius: 0; box-shadow: var(--highlight), inset 0 0 2px 0 #ffefe6}
+.iframed #createSection, .iframed #addSection, .iframed .configsection, .iframed .configsectionpanel {margin-top: -11px}
+#addSection table, #createSection table, .configsectionpanel table {border: none}
 #addSection td:first-child, #createSection td:first-child {width: 120px; text-align: right; font-weight: 700}
 #createSection td:nth-child(n+2), #addSection td:nth-child(n+2) {text-align: left}
 #addSection tr:first-child td:last-child {white-space: nowrap}
 #addSection input[type=text], #createSection input[type=text] {width: calc(100% - 200px)}
 .snarkConfig tr:nth-last-child(4) td, .trackerconfig tr:nth-last-child(4) td {padding-bottom: 10px}
 .snarkConfig tr:nth-last-child(2) td, .trackerconfig tr:nth-last-child(2) td {padding-top: 10px; border-top: var(--border_hard)}
-.configPanel tr:nth-last-child(2) td:last-child {padding-right: 0}
-.configPanel tr:last-child td, .snarkConfig tr:nth-last-child(3) {display: none}
-.configPanel tr:nth-last-child(2) td {text-align: right}
-#createSection form, #configSection form, #addSection form {color: #ddd}
+.configsectionpanel tr:nth-last-child(2) td:last-child {padding-right: 0}
+.configsectionpanel tr:last-child td, .snarkConfig tr:nth-last-child(3) {display: none}
+.configsectionpanel tr:nth-last-child(2) td {text-align: right}
+#createSection form, .configsection form, #addSection form {color: #ddd}
 code, tt {padding: 0 1px; font-family: var(--monospaced); font-size: 8.5pt; font-weight: 700; color: #313; user-select: all}
 .routerdown {color: #7f4c0f}
 .trackerconfig {margin-top: 11px; text-align: left; border-collapse: separate; border-spacing: 0}
@@ -691,7 +691,7 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {co
 .commentAuthorName {max-width: 120px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
 #metacomment {padding: 0; line-height: 1.4; text-align: justify}
 #metacomment div {padding: 4px 4px 4px 0}
-.iframed #configSection, .iframed #trackers, .iframed .mainsection#snarkInfo {margin-bottom: 0}
+.iframed .configsection, .iframed #trackers, .iframed .mainsection#snarkInfo {margin-bottom: 0}
 
 /* comment indicator */
 .snarkFiletype {position: relative; vertical-align: middle}
@@ -844,7 +844,7 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {co
 .nav_tracker, .nav_tracker:hover, .nav_tracker:focus, .nav_tracker:active, .nav_forum, .nav_forum:hover, .nav_forum:focus, .nav_forum:active {padding: 4px 8px 4px 20px;background-size: 15px, 100%, 100%; background-position: 5px center, center center, center center}
 #torrents td[colspan="10"] {white-space: normal}
 #torrents thead th a img[src$="showpeers.png"] {display: none}
-.configPanel .configTitle, .configPanel .configTitle:hover {font-size: 10pt}
+.configsectionpanel .configTitle, .configsectionpanel .configTitle:hover {font-size: 10pt}
 td.graphicStatus img {width: auto; height: 18px}
 .rowOdd td, .rowEven td {padding-top: 3px; padding-bottom: 3px}
 .torrentName a {max-width: 320px}
@@ -972,7 +972,7 @@ body, #torrents td, .snarkAddInfo, th, td, .snarkFileName, a.control, input[type
 textarea {font-size: 9pt}
 tt, #torrents tt, #screenlog {font-size: 9pt}
 #screenlog {height: 60px}
-.snarkAddInfo, .configPanel td, .snarkNewTorrent td, .configPanel th, .configPanel td, .snarkNewTorrent td, select, select option, input, textarea, input[name="nofilter_dataDir"] {font-size: 10pt}
+.snarkAddInfo, .configsectionpanel td, .snarkNewTorrent td, .configsectionpanel th, .configsectionpanel td, .snarkNewTorrent td, select, select option, input, textarea, input[name="nofilter_dataDir"] {font-size: 10pt}
 .snarkNav {font-size: 11.5pt; background-size: 17px, 100%, 100%}
 .snarkNav:first-child, .snarkNav:hover:first-child {padding-left: 28px; background-size: 17px, 100%, 100%}
 .nav_main, .nav_main:hover, .nav_main:focus, .nav_main:active, .nav_forum,.nav_forum:hover, .nav_forum:focus, .nav_forum:active {padding-left: 27px}
@@ -990,7 +990,7 @@ td.graphicStatus img {width: auto; height: 23px}
 .torrentUploaded {padding-left: 5px}
 .RateUp {padding-right: 15px}
 thead a img, thead img {max-height: 22px}
-.configTitle, .configTitle:hover, .configPanel .configTitle, .configPanel .configTitle:hover, .configPanel .configTitle:active, .toggleview {min-width: 300px}
+.configTitle, .configTitle:hover, .configsectionpanel .configTitle, .configsectionpanel .configTitle:hover, .configsectionpanel .configTitle:active, .toggleview {min-width: 300px}
 .configTitle a {padding: 1px 0}
 .mainsection td, .peerinfo td {padding-top: 2px; padding-bottom: 2px}
 .peerinfo tt {margin: 1px 4px}
