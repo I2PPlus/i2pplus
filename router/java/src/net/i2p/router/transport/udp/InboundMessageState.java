@@ -192,6 +192,7 @@ class InboundMessageState implements CDQEntry {
                 _log.debug("Received fragment " + fragmentNum + " for [MsgID " + _messageId
                            + "] again - old size is: " + _fragments[fragmentNum].getValid()
                            + " and new size is: " + data.readMessageFragmentSize(dataFragment));
+        }
         return true;
     }
 
