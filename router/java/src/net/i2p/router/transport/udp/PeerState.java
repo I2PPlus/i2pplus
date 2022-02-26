@@ -48,7 +48,7 @@ public class PeerState {
      * receiving the connection this will be set only after the connection
      * is established.
      */
-    private final Hash _remotePeer;
+    protected final Hash _remotePeer;
     /**
      * The AES key used to verify packets, set only after the connection is
      * established.
@@ -194,7 +194,7 @@ public class PeerState {
     private boolean _mayDisconnect;
 
     /** list of InboundMessageState for active message */
-    private final Map<Long, InboundMessageState> _inboundMessages;
+    protected final Map<Long, InboundMessageState> _inboundMessages;
 
     /**
      *  Mostly messages that have been transmitted and are awaiting acknowledgement,
@@ -214,7 +214,7 @@ public class PeerState {
     /** when the retransmit timer is about to trigger */
     private long _retransmitTimer;
 
-    private final UDPTransport _transport;
+    protected final UDPTransport _transport;
 
     /** have we migrated away from this peer to another newer one? */
     private volatile boolean _dead;
