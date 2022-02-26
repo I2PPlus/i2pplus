@@ -132,7 +132,7 @@ a.control, input.control {white-space: nowrap; vertical-align: middle}
 .tunnelDescriptionLabel, .tunnelDestinationLabel {margin-right: 3px; min-width: 150px; display: inline-block; white-space: nowrap; text-align: right}
 #hostField, #leasesetKey, #userAgents {margin: 0; width: 90%; text-align: left}
 #tunnelDepth, #tunnelVariance, #tunnelQuantity, #tunnelBackupQuantity, #tunnelDepthOut, #tunnelVarianceOut, #tunnelQuantityOut, #tunnelBackupQuantityOut, #encryptMode {white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
-#tunnelDepth, #tunnelVariance, #tunnelQuantity, #tunnelBackupQuantity, #tunnelDepthOut, #tunnelVarianceOut, #tunnelQuantityOut, #tunnelBackupQuantityOut, #localDestination, #customOptions, #leasesetKey, #name, #description, textarea[name="accessList"] {margin: 0; width: 100%; text-align: left}
+#tunnelDepth, #tunnelVariance, #tunnelQuantity, #tunnelBackupQuantity, #tunnelDepthOut, #tunnelVarianceOut, #tunnelQuantityOut, #tunnelBackupQuantityOut, #localDestination, #customOptions, #leasesetKey, #name, #description, textarea[name="accessList"] {margin: 0; width: calc(100% - 10px); text-align: left}
 #oldName {width: 30%; min-width: 280px}
 #oldName::placeholder {color: #ee9; opacity: .5}
 #oldName:focus::placeholder {opacity: 0}
