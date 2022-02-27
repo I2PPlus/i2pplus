@@ -103,6 +103,8 @@ ul {margin: 0; padding: 0}
 #sb_peers, #sb_peersadvanced, #sb_tunnels, #sb_queue, #sb_bandwidth, #sb_general, #sb_advancedgeneral, #sb_localtunnels, #sb_advanced, #sb_internals, #sb_services {margin: -6px auto -8px; border-top: 1px solid rgba(16,64,16,.5); border-bottom: 1px solid rgba(16,64,16,.5)}
 #sb_advanced, #sb_internals, #sb_services, #sb_help {margin-top: -6px}
 #sb_general td, #sb_shortgeneral td, #sb_advancedgeneral td, #sb_peersadvanced td {white-space: nowrap}
+#sb_peers tr:nth-child(odd), #sb_peersadvanced tr:nth-child(odd), #sb_tunnels tr:nth-child(odd), #sb_queue tr:nth-child(odd), #sb_bandwidth tr:nth-child(odd), #sb_general tr:nth-child(odd), #sb_advancedgeneral tr:nth-child(odd) {background: rgba(0,0,0,.2)}
+#sb_peers tr td, #sb_peersadvanced tr td, #sb_tunnels tr td, #sb_queue tr td, #sb_bandwidth tr td, #sb_general tr td, #sb_advancedgeneral tr td {line-height: 1.55}
 #sb_general td:first-child, #sb_shortgeneral td:first-child, #sb_advancedgeneral td:first-child, #sb_peersadvanced td:first-child {max-width: 130px}
 #sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after, #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {min-height: 14px; display: inline-block; vertical-align: middle; content: ""}
 #sidebar td:first-child, #sb_localtunnels td:nth-child(2) {text-align: left}
