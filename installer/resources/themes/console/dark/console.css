@@ -94,7 +94,7 @@ ul {margin: 0; padding: 0}
 #sidebar h3 a {width: 100%; vertical-align: middle; line-height: 1; text-shadow: var(--textshadow)}
 #sidebar h3:hover a {color: var(--hover)}
 #sidebar h3:active {transition: ease box-shadow .01s}
-#sidebar h4 {margin: -6px -1px -9px; padding: 6px 1px; width: calc(100% - 1px); line-height: 1.2; font-size: 8pt; text-decoration: none; color: #2b2; border: none; box-shadow: var(--bevel), inset 0 0 0 3px #000, inset 0 0 5px 5px rgba(0,0,0,.5); background: rgba(0,64,0,.3)}
+#sidebar h4 {margin: -6px -1px -9px; padding: 6px 1px; width: calc(100% - 9px); line-height: 1.2; font-size: 8pt; text-decoration: none; color: #2b2; border: none; box-shadow: var(--bevel), inset 0 0 0 3px #000, inset 0 0 5px 5px rgba(0,0,0,.5); background: rgba(0,64,0,.3)}
 #clock {margin: -7px 0 -9px -1px; padding: 8px 0; position: relative; line-height: 1; letter-spacing: .1em; font-size: 18pt; font-weight: 700; color: #ffa; text-shadow: var(--textshadow); box-shadow: var(--bevel); background: repeating-linear-gradient(180deg,rgba(255,255,255,.05) 2px, rgba(0,16,0,.2) 4px), linear-gradient(90deg, #010, #000, #010); -webkit-text-stroke: 1px rgba(220,220,128,.5); opacity: .9}
 #clock::before {content: ""; position: absolute; top: 0; left: 0; height: 100%; width: 100%; box-shadow: var(--bevel); background: repeating-linear-gradient(90deg, rgba(0,0,0,.3) 2px, rgba(0,16,0,.2) 4px)}
 #clock::after {margin-left: 3px; content: "UTC"; display: inline-block; font-size: 50%; vertical-align: middle}
@@ -187,6 +187,7 @@ p:empty + .sb_notice {margin-top: 9px}
 .sb_info .percentBarText {padding-top: 2px}
 .sb_info .percentBarInner {height: 16px}
 #restartRequired.sb_info.sb_update {margin-top: -7px; padding: 5px 5px 7px; width: calc(100% - 9px); box-shadow: var(--bevel_hard), inset 0 0 0 3px #000, inset 0 0 5px 5px rgba(0,0,0,.5)}
+#contactserver {margin-bottom: -12px; display: block}
 
 /* sidebar ajax router down */
 #down {margin: -6px 0; padding: 6px 5px; width: calc(100% - 8px); display: inline-block; font-size: 0; color: #a00; text-shadow: var(--textshadow); box-shadow: 0 0 1px 0 #030, var(--highlight), inset 0 0 1px 3px #131, inset 0 0 0 4px #000, inset 0 0 7px 3px #010; background: repeating-linear-gradient(135deg, #131, #131 10px, #300 11px, #000 12px, #000 19px, #300 19px, #000 20px); background-position: right center; background-size: 125%; animation: routerdown linear 3s forwards infinite}
