@@ -84,7 +84,7 @@ ul {margin: 0; padding: 0}
 #sidebar td:first-child {max-width: 90px; overflow: hidden; text-transform: capitalize}
 #sidebar td b:not(::selection), .infohelp b:not(::selection) {color: #ffffa8; -webkit-text-stroke: 1px rgba(0,0,0,.4)}
 #sidebar td a {-webkit-text-stroke: 0}
-#sidebar td a:hover {border-radius: 2px; box-shadow: 0 0 0 2px rgba(0,0,0,.3); background: repeating-linear-gradient(180deg,rgba(16,16,0,.5) 1px, rgba(16,16,0,.5) 2px, rgba(0,64,0,.6) 3px)}
+#sidebar table:not(#sb_localtunnels) td a:hover {border-radius: 2px; box-shadow: 0 0 0 2px rgba(0,0,0,.3); background: repeating-linear-gradient(180deg,rgba(16,16,0,.5) 1px, rgba(16,16,0,.5) 2px, rgba(0,64,0,.6) 3px)}
 #sidebar td a:active {box-shadow: 0 0 0 2px rgba(0,0,0,.3), inset 2px 2px 2px rgba(0,0,0,.7)}
 #sidebar h3 {margin: -7px -1px -9px; padding: 6px 2px; width: calc(100% - 3px); letter-spacing: .08em; text-transform: uppercase; font-size: 9.5pt; border: none; border-radius: 0; box-shadow: var(--highlight), inset 0 0 1px 1px #191; background: radial-gradient(at center bottom, rgba(16, 72, 16, .4) 0, rgba(0, 0, 0, 0) 50%), var(--bg_title), linear-gradient(180deg,rgba(0,0,0,.1), rgba(0,0,0,.25) 50%, rgba(0,0,0,.75) 50%, #000), var(--h3_fade); background-size: 100%, 2px, 100%, 100%}
 #sidebar h3:hover {box-shadow: var(--highlight), inset 0 0 0 2px rgba(128,48,0,.3)}
@@ -103,15 +103,19 @@ ul {margin: 0; padding: 0}
 #sb_peers, #sb_peersadvanced, #sb_tunnels, #sb_queue, #sb_bandwidth, #sb_general, #sb_advancedgeneral, #sb_localtunnels, #sb_advanced, #sb_internals, #sb_services {margin: -6px auto -8px; border-top: 1px solid rgba(16,64,16,.5); border-bottom: 1px solid rgba(16,64,16,.5)}
 #sb_advanced, #sb_internals, #sb_services, #sb_help {margin-top: -6px}
 #sb_general td, #sb_shortgeneral td, #sb_advancedgeneral td, #sb_peersadvanced td {white-space: nowrap}
-#sb_peers tr:nth-child(odd), #sb_peersadvanced tr:nth-child(odd), #sb_tunnels tr:nth-child(odd), #sb_queue tr:nth-child(odd), #sb_bandwidth tr:nth-child(odd), #sb_general tr:nth-child(odd), #sb_advancedgeneral tr:nth-child(odd) {background: rgba(0,0,0,.2)}
-#sb_peers tr td, #sb_peersadvanced tr td, #sb_tunnels tr td, #sb_queue tr td, #sb_bandwidth tr td, #sb_general tr td, #sb_advancedgeneral tr td {line-height: 1.55}
+#sb_peers tr:nth-child(odd), #sb_peersadvanced tr:nth-child(odd), #sb_tunnels tr:nth-child(odd), #sb_queue tr:nth-child(odd), #sb_bandwidth tr:nth-child(odd), #sb_general tr:nth-child(odd), #sb_advancedgeneral tr:nth-child(odd), #sb_localtunnels tr:nth-child(odd) {background: var(--sb_row)}
+#sb_peers tr:nth-child(even), #sb_peersadvanced tr:nth-child(even), #sb_tunnels tr:nth-child(even), #sb_queue tr:nth-child(even), #sb_bandwidth tr:nth-child(even), #sb_general tr:nth-child(even), #sb_advancedgeneral tr:nth-child(even), #sb_localtunnels tr:nth-child(even) {background: var(--sb_row_alt)}
+#sb_peers td, #sb_peersadvanced td, #sb_tunnels td, #sb_queue td, #sb_bandwidth td, #sb_general td, #sb_advancedgeneral td {line-height: 1.6}
+#sb_peers tr:nth-child(n+2), #sb_peersadvanced tr:nth-child(n+2), #sb_tunnels tr:nth-child(n+2), #sb_queue tr:nth-child(n+2), #sb_bandwidth tr:nth-child(n+2), #sb_general tr:nth-child(n+2), #sb_advancedgeneral tr:nth-child(n+2), #sb_localtunnels tr:nth-child(n+2) {border-top: 1px solid rgba(0,0,0,.7)}
+#sb_peers tr:nth-last-child(n+2), #sb_peersadvanced tr:nth-last-child(n+2), #sb_tunnels tr:nth-last-child(n+2), #sb_queue tr:nth-last-child(n+2), #sb_bandwidth tr:nth-last-child(n+2), #sb_general tr:nth-last-child(n+2), #sb_advancedgeneral tr:nth-last-child(n+2), #sb_localtunnels tr:nth-last-child(n+2) {border-bottom: 1px solid rgba(0,0,0,.7)}
+#sb_peers tr:hover, #sb_tunnels tr:hover, #sb_queue tr:hover, #sb_bandwidth tr:hover, #sb_general tr:hover, #sb_advancedgeneral tr:hover, #sb_localtunnels tr:hover {color: #ff5; background: rgba(16,64,16,.4)}
 #sb_general td:first-child, #sb_shortgeneral td:first-child, #sb_advancedgeneral td:first-child, #sb_peersadvanced td:first-child {max-width: 130px}
 #sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after, #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {min-height: 14px; display: inline-block; vertical-align: middle; content: ""}
 #sidebar td:first-child, #sb_localtunnels td:nth-child(2) {text-align: left}
 #sidebar td:last-child {text-align: right}
 #sidebar #sb_internals td, #sidebar #sb_advanced td, #sidebar #sb_services td, #sidebar #sb_help td {text-align: center}
 #sb_localtunnels tr:last-child td:first-child {background-position: center center}
-#sb_localtunnels td {padding: 1px 0 1px 0; line-height: 1}
+#sb_localtunnels td {padding: 1px 0 1px 0; line-height: 1.1}
 #sb_localtunnels td:first-child {padding: 1px 0 1px 6px; width: 16px; text-align: left; background: var(--client) var(--center) / 16px}
 #sb_localtunnels td[colspan="3"] {line-height: 20px; font-size: 0}
 #sb_localtunnels td.ping {background-image: var(--ping)}
@@ -121,11 +125,9 @@ ul {margin: 0; padding: 0}
 #sb_localtunnels td.tunnelRebuilding {background: var(--local_down) no-repeat right 4px center / 16px}
 #sb_localtunnels td::after {min-height: 10px; display: inline-block; vertical-align: middle; content: ""}
 #sb_localtunnels a {padding: 2px 0; width: 100%; max-width: 156px; display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; border-radius: 0 10px 10px 0; box-shadow: none}
-#sb_localtunnels a:hover {background: linear-gradient(90deg, rgba(0,0,0,0), rgba(0,48,0,.5))}
 #sb_localtunnels a:active {box-shadow: inset 2px 2px 2px #000; background: linear-gradient(90deg, rgba(0,0,0,0), #020)}
 #sb_localtunnels img {width: 16px; height: 16px; vertical-align: middle; font-size: 0; opacity: 0; mix-blend-mode: overlay}
 #sb_localtunnels img::after {width: 19px; height: 16px; display: inline-block; vertical-align: middle; content: ""}
-#sb_peers tr:hover td, #sb_tunnels tr:hover td, #sb_queue tr:hover td, #sb_bandwidth tr:hover td, #sb_general tr:hover td, #sb_advancedgeneral tr:hover td {color: #ff5; background: rgba(0,48,0,.2)}
 #sb_services img {display: none}
 #sb_internals a, #sb_services a, #sb_advanced a, #sb_help a {padding: 1px 3px; display: inline-block; vertical-align: middle}
 #sb_version {margin-top: 6px; margin-bottom: 5px}
@@ -1218,7 +1220,7 @@ th code {user-select: all}
 .threatpoints + ul li a {max-width: 200px; display: inline-block; vertical-align: text-bottom; white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
 .threatpoints.hot {background: var(--eye_threat) no-repeat 8px center / 20px, var(--hot) no-repeat right 2px center / 24px, linear-gradient(90deg, #000, #000800 80%, #001000)}
 .sybilscan table, .sybilscan tr {border: none; background: none}
-.sybilscan tr td {border: none}
+.sybilscan td {border: none}
 .sybil_info, p.family, .threatpoints, p.hashdist, #sybil_totals, p.notfound {margin: 3px 0; padding: 5px 5px 5px 33px; font-weight: 700; color: #cc0; border: var(--border); box-shadow: inset 0 0 0 1px #300; background: var(--eye) no-repeat 8px center / 16px, linear-gradient(90deg, #000, #000800 80%, #001000)}
 .sybil_info, #sybil_totals {margin-bottom: 10px; padding-left: 35px; background-image: var(--eye_threat); background-size: 20px, 100%}
 .sybilinfo {line-height: 1.4}
