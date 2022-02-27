@@ -238,8 +238,8 @@ img.sort:active {box-shadow: var(--highlight), inset 2px 2px 2px #000}
 #dologin input[name="pass"] {background: #000 var(--key) no-repeat 7px center / 16px}
 #dologin input[name="user"]:focus, #dologin input[name="pass"]:focus {background-color: #010; background-blend-mode: normal}
 #dologin input[name="user"], #dologin input[name="pass"], #dologin input[name="host"] {margin-right: 5px}
-#dologin hr {margin: 0 0 4px; background: linear-gradient(90deg, rgba(0,0,0,0), rgba(0,64,0,.8) 45%, rgba(0,64,0,.8) 55%, rgba(0,0,0,0))}
-#dologin hr:first-of-type {margin-top: 16px}
+#dologin hr {margin: 0 0 4px; background: linear-gradient(90deg, rgba(0,0,0,0), rgba(0,128,0,.8) 45%, rgba(0,128,0,.8) 55%, rgba(0,0,0,0))}
+#dologin hr:first-of-type {margin-top: 10px}
 #dologin tr:last-child hr {margin-top: 3px}
 #dologin table {margin-top: 20px}
 .iframed #dologin tr:nth-child(6) hr {margin-top: 5px}

@@ -258,7 +258,7 @@ thead img.disable, img.disable:hover {opacity: .4}
 .torrentDownloaded .percentBarInner {background: linear-gradient(90deg, rgba(255,64,0,.4) 20px, rgba(255,255,0,.4) 50px, rgba(0,255,0,.4)), linear-gradient(180deg,rgba(255,255,255,.1), rgba(0,0,0,.1)), rgba(255,255,255,.5)}
 .inactive .torrentDownloaded .percentBarInner {background: linear-gradient(90deg, rgba(128,32,0,.15) 20px, rgba(128,128,0,.15) 50px, rgba(0,128,0,.15)), linear-gradient(180deg,rgba(255,255,255,.1), rgba(0,0,0,.1)), rgba(255,255,255,.5)}
 .dirInfo .percentBarInner {background: linear-gradient(180deg,rgba(255,247,239,.75) 50%, rgba(207,193,181,.8) 50%, rgba(207,193,181,.9)), linear-gradient(90deg, rgba(255,100,0,.5) 30px, rgba(255,255,0,.5) 60px, rgba(0,255,0,.5))}
-.peerinfo .percentBarInner {height: 14px; background: linear-gradient(180deg,rgba(255,255,255,.1), rgba(0,0,0,.1)), rgba(255,255,255,.5)}
+.peerinfo .percentBarInner {background: linear-gradient(180deg,rgba(255,255,255,.1), rgba(0,0,0,.1)), rgba(255,255,255,.5)}
 .percentBarText, .percentBarOuter {text-align: center; vertical-align: middle}
 .percentBarText {z-index: 999; white-space: nowrap; vertical-align: middle; text-align: center; font-weight: 700; color: #395; opacity: 0; transition: ease opacity .15s}
 .inactive .percentBarText {color: #777}
@@ -664,7 +664,7 @@ td.torrentDetails {padding-left: 6px}
 #ourDest tt, .peerinfo tt {margin: 1px 1px 1px 4px; padding: 0 4px 0 6px; display: inline-block; background: #3f271b}
 .peerclient, .peerinfo tt, .clientid {display: inline-block; vertical-align: middle; line-height: 1.2}
 .peerinfo tt {margin-left: 1px; padding: 2px 5px; box-shadow: none; opacity: .8}
-.clientid {margin: 0 1px 0 -3px; padding: 2px 4px 2px 0; width: 55px; display: inline-block; overflow: hidden; white-space: nowrap; vertical-align: middle; text-overflow: ellipsis; font-size: 90%; text-align: center; border-radius: 0 2px 2px 0; background: #cfc7c2}
+.clientid {margin: 0 1px 0 -3px; padding: 2px 4px 2px 0; width: 58px; display: inline-block; overflow: hidden; white-space: nowrap; vertical-align: middle; text-overflow: ellipsis; font-size: 90%; text-align: center; border-radius: 0 2px 2px 0; background: #cfc7c2}
 .clientVersion {display: none}
 .peerinfo td > * {vertical-align: middle}
 
@@ -993,7 +993,7 @@ thead a img, thead img {max-height: 22px}
 .configTitle, .configTitle:hover, .configPanel .configTitle, .configPanel .configTitle:hover, .configPanel .configTitle:active, .toggleview {min-width: 300px}
 .configTitle a {padding: 1px 0}
 .mainsection td, .peerinfo td {padding-top: 2px; padding-bottom: 2px}
-.peerinfo tt {margin: 1px 4px}
+.peerinfo tt {margin: 1px 4px 1px 1px}
 .dirInfoComplete {margin-right: 4px}
 .mainsection .torrentInfo td {padding-top: 4px; padding-bottom: 4px}
 .dirInfo td:nth-child(n+2) {padding-left: 10px; padding-right: 10px}

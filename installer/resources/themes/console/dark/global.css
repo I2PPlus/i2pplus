@@ -83,13 +83,6 @@ html, body {
   background: #000;
 }
 
-@supports not (-moz-appearance: none) {
-  html, body {
-    background: repeating-linear-gradient(180deg,#010 2px, #000 4px) #000 !important;
-    background-size: 100% 4px !important;
-  }
-}
-
 html {
   scrollbar-color: rgba(16,72,16,.8) rgba(0,16,0,.5);
 }
@@ -133,8 +126,8 @@ input, button, textarea, select, a {
   background: rgba(0,187,0,.8) !important;
 }
 
-:-moz-broken { /* hides broken images (e.g. missing graphs) in Firefox */
-  display: none !important;
+:-moz-broken {
+  display: none;
 }
 
 input::placeholder {
@@ -270,25 +263,25 @@ button:active, .control:active, .fakebutton:active {
 
 input[type=file] {
   margin: 5px 8px;
-  padding: 0 !important;
+  padding: 0;
   font-weight: 400;
   color: var(--ink);
   box-shadow: none;
-  border: none !important;
+  border: none;
   background: #000;
   cursor: pointer;
 }
 
 input[type=file]:hover {
   border-radius: 0 15px 15px 0 !important;
-  background: linear-gradient(90deg, rgba(0,0,0,0), #000) !important;
+  background: linear-gradient(90deg, rgba(0,0,0,0), #000);
 }
 
 input[type=file]:hover, input[type=file]:active {
   color: var(--hover);
 }
 
-input[type=file]::file-selector-button {\
+input[type=file]::file-selector-button {
   margin: 2px 10px 2px 3px;
   padding: 7px 12px;
   min-width: 75px;
@@ -341,8 +334,8 @@ input[type=text], input[type=password] {
 input[type=text]:disabled, input[type=text]:disabled:active,
 input[readonly="readonly"] {
   color: #161 !important;
-  border: 1px solid #141 !important;
-  background: #000 !important;
+  border: 1px solid #141;
+  background: #000;
 }
 
 textarea {
@@ -365,7 +358,7 @@ textarea[disabled] {
 }
 
 input[type=text]:focus, input[type=password]:focus, textarea:focus {
-  color: var(--ink) !important;
+  color: var(--ink);
   border: 1px solid #373;
   box-shadow: var(--btn_shadow_active);
   background: var(--input_txt);
@@ -376,8 +369,8 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 
 input[readonly]:focus {
   font-weight: 400;
-  color: #161 !important;
-  filter: none !important;
+  color: #161;
+  filter: none;
 }
 
 select {
@@ -392,7 +385,7 @@ select {
   box-shadow: var(--btn_shadow);
   border: 1px solid #000;
   border-radius: 2px;
-  background: var(--dropdown) no-repeat right 10px center / 10px, var(--btn) !important;
+  background: var(--dropdown) no-repeat right 10px center / 10px, var(--btn);
   cursor: pointer;
   -moz-appearance: none;
   -webkit-appearance: none;
@@ -407,14 +400,14 @@ select:hover, select:focus {
 select:hover, select:focus, select:active {
   color: var(--hover);
   box-shadow: var(--btn_shadow_hover);
-  background: #000 var(--dropdown_hover) no-repeat right 10px center / 10px !important;
+  background: #000 var(--dropdown_hover) no-repeat right 10px center / 10px;
 }
 
 select[disabled], select[disabled]:hover {
-  color: #494 !important;
+  color: #494;
   border: none;
   box-shadow: var(--btn_shadow);
-  background: var(--dropdown) no-repeat right 10px center, var(--btn) / 10px !important;
+  background: var(--dropdown) no-repeat right 10px center, var(--btn) / 10px;
   opacity: .7;
   cursor: not-allowed;
 }
@@ -431,8 +424,8 @@ select:-moz-focusring {
 }
 
 select::-moz-focus-inner {
-  outline: none !important;
-  border: none !important;
+  outline: none;
+  border: none;
 }
 
 .optbox {
@@ -461,7 +454,7 @@ select::-moz-focus-inner {
 }
 
 .optbox:hover, .optbox:focus {
-  border: 1px solid #5a5 !important;
+  border: 1px solid #5a5;
   box-shadow: 0 0 1px 1px rgba(0,0,0,.9), 0 0 0 2px rgba(255,96,0,.8), inset 0 0 0 1px #020;
   background: #000;
   cursor: pointer;
@@ -523,8 +516,8 @@ select::-moz-focus-inner {
 }
 
 .optbox.slider[type=checkbox], .optbox.slider[type=checkbox]:hover, .optbox.slider[type=checkbox]:focus {
-  width: 40px !important;
-  height: 21px !important;
+  width: 40px;
+  height: 21px;
   border-radius: 1px;
   position: relative;
   z-index: 100;
@@ -537,16 +530,16 @@ select::-moz-focus-inner {
 }
 
 .optbox.slider:not(:checked), .optbox.slider:not(:checked)[disabled] {
-  background: linear-gradient(180deg,#400,#600) !important;
+  background: linear-gradient(180deg,#400,#600);
   border: 1px solid #500;
 }
 
 .optbox.slider:not(:checked):active {
-  background: linear-gradient(180deg,#060,#080) !important;
+  background: linear-gradient(180deg,#060,#080);
 }
 
 .optbox.slider:checked:active {
-  background: linear-gradient(180deg,#800,#a00) !important;
+  background: linear-gradient(180deg,#800,#a00);
 }
 
 .optbox.slider:not([disabled]):hover, .optbox.slider:not([disabled]):focus  {
@@ -568,9 +561,9 @@ select::-moz-focus-inner {
   box-shadow: inset 0 0 0 1px #373, inset 0 0 0 2px #000, 0 2px 5px rgba(0,0,0,.2);
   background: linear-gradient(180deg,#373,#252);
   content: "";
-  transform: scale(.85) !important;
+  transform: scale(.85);
   transition: ease-in left .15s;
-  opacity: 1 !important;
+  opacity: 1;
 }
 
 .optbox.slider:not([disabled]):not(:checked)::before, .optbox.slider:not([disabled]):active:checked::before {

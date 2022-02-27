@@ -119,7 +119,7 @@ a.control, input.control {white-space: nowrap; vertical-align: middle}
 .newtunnel form {width: 100%; text-align: right}
 .newTunnel, .newTunnel > *, .newTunnel form > * {vertical-align: middle}
 .freetext {width: 150px; font: 8.5pt var(--monospaced)}
-.freetext.tunnelDescriptionText, .freetext.tunnelName, #privKeyFile, #websiteName, .proxyList, #localDest, #altlocaldest, #altPrivKeyFile {width: calc(100% - 10px)}
+.freetext.tunnelDescriptionText, .freetext.tunnelName, #privKeyFile, #websiteName, .proxyList, #localDest, #altlocaldest, #privKeyFile, #altPrivKeyFile, #customOptions, #userAgents, #leasesetKey, #filterDefinition {margin: 5px; width: calc(100% - 10px)}
 .freetext[readonly], .freetext[readonly]:focus {background: #000; box-shadow: inset 2px 2px 1px #000; color: #885; cursor: default; border: var(--border_hard); opacity: .8}
 .username[type=text] {background: #000 var(--user) no-repeat 6px center / 16px; background-size: 16px}
 .password[type=password] {background: #000 var(--key) no-repeat 6px center / 16px}
@@ -132,7 +132,7 @@ a.control, input.control {white-space: nowrap; vertical-align: middle}
 .tunnelDescriptionLabel, .tunnelDestinationLabel {margin-right: 3px; min-width: 150px; display: inline-block; white-space: nowrap; text-align: right}
 #hostField, #leasesetKey, #userAgents {margin: 0; width: 90%; text-align: left}
 #tunnelDepth, #tunnelVariance, #tunnelQuantity, #tunnelBackupQuantity, #tunnelDepthOut, #tunnelVarianceOut, #tunnelQuantityOut, #tunnelBackupQuantityOut, #encryptMode {white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
-#tunnelDepth, #tunnelVariance, #tunnelQuantity, #tunnelBackupQuantity, #tunnelDepthOut, #tunnelVarianceOut, #tunnelQuantityOut, #tunnelBackupQuantityOut, #localDestination, #customOptions, #leasesetKey, #name, #description, textarea[name="accessList"] {margin: 0; width: 100%; text-align: left}
+#tunnelDepth, #tunnelVariance, #tunnelQuantity, #tunnelBackupQuantity, #tunnelDepthOut, #tunnelVarianceOut, #tunnelQuantityOut, #tunnelBackupQuantityOut, #localDestination, #customOptions, #leasesetKey, #name, #description, textarea[name="accessList"] {margin: 0; width: calc(100% - 10px); text-align: left}
 #oldName {width: 30%; min-width: 280px}
 #oldName::placeholder {color: #ee9; opacity: .5}
 #oldName:focus::placeholder {opacity: 0}
@@ -141,21 +141,18 @@ a.control, input.control {white-space: nowrap; vertical-align: middle}
 #throttler, #clientAuth {border: none}
 #clientAuth {margin-bottom: -1px}
 #tunnelMessages {padding: 0}
-input.tunnelName, input.tunnelDescription, #userAgents {width: 80%; min-width: 280px; text-overflow: ellipsis}
-#privKeyFile, #targetHost, .host {width: 30%; min-width: 250px}
+#targetHost, .host {width: 30%; min-width: 250px}
 .port, .quantity, .period {width: 70px}
 .freetext, .tunnelConfig textarea, #customOptions, #userAgents, #hostField {margin: 5px; cursor: text}
-#tunnelDepth, #tunnelVariance, #tunnelQuantity, #tunnelBackupQuantity, #tunnelDepthOut, #tunnelVarianceOut, #sigType, .clientKey, .clientName, #tunnelQuantityOut, #tunnelBackupQuantityOut, #leasesetKey, #encryptMode, select#profile, input[name="nofilter_blindedPassword"], textarea[name="accessList"], #hostField, #localDestination, .authentication {margin: 5px; width: calc(100% - 10px)}
+#tunnelDepth, #tunnelVariance, #tunnelQuantity, #tunnelBackupQuantity, #tunnelDepthOut, #tunnelVarianceOut, #sigType, .clientKey, .clientName, #tunnelQuantityOut, #tunnelBackupQuantityOut, #leasesetKey, #encryptMode, select#profile, input[name="nofilter_blindedPassword"], textarea[name="accessList"], #hostField, #localDestination, .authentication, input.tunnelName, input.tunnelDescription, #userAgents {margin: 5px; width: calc(100% - 10px)}
 .tunnelConfig select, select#profile, select#connectionProfile {margin: 5px}
-#customOptions, #userAgents, #leasesetKey, #filterDefinition {width: calc(100% - 10px)}
 #serverTunnels .iconize, #clientTunnels .iconize {min-width: 76px}
 #targetPort {margin-right: 10px}
-#privKeyFile {min-width: 200px; width: 200px; width: calc(100% - 54px)}
 .displayText, .displayText:empty:hover, .displayText:empty:focus {margin: 5px; padding: 6px; width: 290px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; word-break: break-all; font-family: var(--monospaced); border: var(--border_hard); border-radius: 1px; box-shadow: var(--highlight); background: linear-gradient(180deg,#000 0%, #010 100%); user-select: all}
 .displayText:hover, .displayText:focus {margin: .5px 5px; padding: 3px; overflow: auto; text-overflow: clip; color: #ff0; box-shadow: 0 0 1px #494; background: #000; outline: none}
 .displayText:empty, .displayText:empty:hover, .displayText:empty:focus {color: #885; box-shadow: var(--highlight); background: #000; opacity: .8}
 .displayText:empty::before {min-height: 11px; display: inline-block; content: ""}
-#sigType[disabled] {padding-left: 14px; background: var(--crypto) no-repeat left center / 16px}
+#sigType[disabled] {padding-left: 14px; color: var(--ink); background: var(--crypto) no-repeat left center / 16px}
 #tunnelRegistration .displayText, #tunnelRegistration .displayText:hover {margin: 3px 0; padding: 5px 8px; height: auto; overflow: hidden}.username[type=text], .password[type=password], .filemanager[type=text] {padding-left: 28px; width: 200px; box-shadow: var(--highlight), inset 4px 4px 4px #000, 0 0 0 1px #000}
 @supports not (-moz-appearance: none) {select {white-space: normal}}
 

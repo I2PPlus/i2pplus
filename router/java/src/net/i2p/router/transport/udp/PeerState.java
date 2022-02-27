@@ -48,7 +48,7 @@ public class PeerState {
      * receiving the connection this will be set only after the connection
      * is established.
      */
-    private final Hash _remotePeer;
+    protected final Hash _remotePeer;
     /**
      * The AES key used to verify packets, set only after the connection is
      * established.
@@ -139,7 +139,7 @@ public class PeerState {
      */
     private volatile int _slowStartThreshold;
     /** what IP is the peer sending and receiving packets on? */
-    private final byte[] _remoteIP;
+    protected final byte[] _remoteIP;
     /** cached IP address */
     private volatile InetAddress _remoteIPAddress;
     /** what port is the peer sending and receiving packets on? */
@@ -162,7 +162,7 @@ public class PeerState {
      */
     private long _theyRelayToUsAs;
     /** what is the largest packet we can currently send to the peer? */
-    private int _mtu;
+    protected int _mtu;
     private int _mtuReceive;
     /** what is the largest packet we will ever send to the peer? */
     private int _largeMTU;
@@ -194,7 +194,7 @@ public class PeerState {
     private boolean _mayDisconnect;
 
     /** list of InboundMessageState for active message */
-    private final Map<Long, InboundMessageState> _inboundMessages;
+    protected final Map<Long, InboundMessageState> _inboundMessages;
 
     /**
      *  Mostly messages that have been transmitted and are awaiting acknowledgement,
@@ -214,7 +214,7 @@ public class PeerState {
     /** when the retransmit timer is about to trigger */
     private long _retransmitTimer;
 
-    private final UDPTransport _transport;
+    protected final UDPTransport _transport;
 
     /** have we migrated away from this peer to another newer one? */
     private volatile boolean _dead;
@@ -404,8 +404,6 @@ public class PeerState {
         _keyEstablishedTime = now;
         _lastSendTime = now;
         _lastReceiveTime = now;
-        _currentACKs = new ConcurrentHashSet<Long>();
-        _currentACKsResend = new LinkedBlockingQueue<ResendACK>();
         _slowStartThreshold = MAX_SEND_WINDOW_BYTES/2;
         _receivePeriodBegin = now;
         _remoteIP = addr.getAddress().getAddress();
@@ -438,11 +436,14 @@ public class PeerState {
         _inboundMessages = new HashMap<Long, InboundMessageState>(8);
         _outboundMessages = new CachedIteratorCollection<OutboundMessageState>();
         _outboundQueue = new PriBlockingQueue<OutboundMessageState>(ctx, "UDP-PeerState", 32);
-        _ackedMessages = new AckedMessages();
         _remotePeer = remotePeer;
         _isInbound = isInbound;
         _remoteHostId = new RemoteHostId(_remoteIP, _remotePort);
         _bwEstimator = new SimpleBandwidthEstimator(ctx, this);
+        // Unused in SSU2
+        _currentACKs = null;
+        _currentACKsResend = null;
+        _ackedMessages = null;
     }
     
     /**

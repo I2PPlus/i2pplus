@@ -2669,7 +2669,7 @@ input[type=submit], input[type=reset], button {padding: 8px 12px}
 #news .newsentry p, .subheading b, h4#updateplugins {font-size: 10.5pt}
 #sitemap h3 {font-size: 12pt}
 #advancedconfig a::after {margin: -2px -6px -2px -5px}
-#advancedconfig a {padding-right: 10px}
+#advancedconfig a {padding: 10px 4px 8px 13px}
 #banlist + h3.tabletitle {margin-bottom: -2px}
 #banlist li, #banlist li:first-child {min-height: 52px}
 #certs.main p + p:empty + h4 {margin-top: -15px}
