@@ -242,7 +242,7 @@ td#throttle, #clientAuthConfig {padding: 0}
 td.blankColumn {width: 20%}
 #throttler tr:nth-child(odd) {background: rgba(0,16,0,.7)}
 #throttler tr:nth-child(even) {background: rgba(0,8,0,.7)}
-#throttler input[type=text] {width: 80px}
+#throttler input[type=text] {width: 80px; margin-right: 3px}
 
 /* server tunnel options */
 #tunnelOpts td {padding: 0; width: 25%}
@@ -301,151 +301,68 @@ tr.configerror {box-shadow: var(--highlight), inset 0 -1px 0 1px #000, inset -1p
 @keyframes spin {from {transform: rotate(-360deg)}}
 
 /* responsive layout */
-
 @media screen and (max-width: 1500px) {
-  h2, h3 {
-    font-size: 11.5pt;
-  }
+h2, h3 {font-size: 11.5pt}
 }
 
 @media screen and (max-width: 1300px) {
-  #serverTunnels .control.iconize, #clientTunnels .control.iconize {
-    padding: 14px 7px;
-    min-width: 48px;
-    vertical-align: middle;
-    font-size: 0;
-    background-size: 12px, 100%;
-  }
-  #serverTunnels .preview.iconize, #clientTunnels .preview.iconize {
-    min-width: 48px;
-    background-size: 16px, 100%;
-  }
-  .iframed .buttons, .iframed .newTunnel {
-    padding: 5px 6px;
-  }
+#serverTunnels .control.iconize, #clientTunnels .control.iconize {padding: 14px 7px; min-width: 48px; vertical-align: middle; font-size: 0; background-size: 12px, 100%}
+#serverTunnels .preview.iconize, #clientTunnels .preview.iconize {min-width: 48px; background-size: 16px, 100%}
+.iframed .buttons, .iframed .newTunnel {padding: 5px 6px}
 }
 
 @media screen and (max-width: 1200px) {
-  .tunnelName a {
-    background-position: 5px center;
-    background-size: 13px;
-  }
+.tunnelName a {background-position: 5px center; background-size: 13px}
 }
 
 @media screen and (max-width: 1100px) {
-  .nowrap {
-    margin-right: 10px;
-  }
-  .nowrap .port, .nowrap .quantity, .nowrap .period {
-    width: 60px;
-  }
-  .nowrap .multiOption {
-    margin-right: 3px;
-  }
+.nowrap {margin-right: 10px}
+.nowrap .port, .nowrap .quantity, .nowrap .period {width: 60px}
+.nowrap .multiOption {margin-right: 3px}
 }
 
 @media screen and (max-width: 1000px) {
-  .nowrap .port, .nowrap .quantity, .nowrap .period {
-    width: 40px;
-  }
+#throttler td {white-space: nowrap; font-size: 90%}
+td.blankColumn {padding-right: 8px; width: 2%}
+.nowrap .port, .nowrap .quantity, .nowrap .period {width: 40px}
 }
 
 @media screen and (max-width: 900px) {
-  .tunnelInfo .selectAll {
-    max-width: 110px;
-  }
+.tunnelInfo .selectAll {max-width: 110px}
 }
 
 @media screen and (max-width: 800px) {
-  .statusNotRunning, .statusRunning, .statusStarting, .statusStandby {
-    background-size: auto 14px;
-  }
-  .port, .quantity, .period {
-    width: 60px;
-  }
-  #clientHost, .host {
-    width: 140px;
-    min-width: 140px;
-  }
-  .displayText, .displayText:empty:hover, .displayText:empty:focus {
-    width: 260px;
-    font-size: 8pt;
-  }
-  #reachableBy {
-    min-width: 0;
-  }
-  .port {
-    width: 50px;
-  }
+.statusNotRunning, .statusRunning, .statusStarting, .statusStandby {background-size: auto 14px}
+.port, .quantity, .period {width: 60px}
+#clientHost, .host {width: 140px; min-width: 140px}
+.displayText, .displayText:empty:hover, .displayText:empty:focus {width: 260px; font-size: 8pt}
+#reachableBy {min-width: 0}
+.port {width: 50px}
 }
 
 @media screen and (min-width: 1000px) {
-  .displayText, .displayText:empty:hover, .displayText:empty:focus {
-    width: 386px;
-  }
-
-  #registration .displayText {
-    width: 600px;
-  }
+.displayText, .displayText:empty:hover, .displayText:empty:focus {width: 386px}
+#registration .displayText {width: 600px}
 }
 
 @media screen and (min-width: 1500px) {
-  body, td, a, button, input, input[type="submit"], input[type="reset"], .control, a.control, select, .freetext, textarea {
-    font-size: 10pt;
-  }
-  h2, h3 {
-    font-size: 12.5pt;
-  }
-  #messages h2, #globalTunnelControl h2,
-  #servers h2, #clients h2, #tunnelEditPage h2, #tunnelEditPage h3,
-  #registration h2, #registration h3, #wizardPanel h2, #ssl h2 {
-    padding: 10.5px 10px 9.5px 40px;
-    background-position: 10px center;
-    background-size: 22px auto, 4px 100%, 100%;
-  }
-  textarea#statusMessages, textarea#statusMessages:active, textarea#statusMessages:focus {
-    font-size: 9pt;
-  }
-  div[class^="status"] {
-    height: 18px;
-    background-size: auto 18px;
-  }
-  .tunnelInfo .selectAll {
-    max-width: none;
-  }
-  .control {
-    padding: 8px 12px 8px;
-  }
-  .control.iconize {
-    padding: 9px 12px 9px;
-    line-height: 1.1;
-  }
-  select {
-    padding: 8px 24px 8px 8px;
-  }
-  th {
-    font-size: 10pt;
-  }
-  th .help::after, th .help:hover::after, th .help:focus::after {
-    width: 20px;
-    height: 20px;
-    background-size: 20px 20px;
-  }
-  .displayText, .displayText:empty:hover, .displayText:empty:focus {
-    width: 552px;
-  }
-  #registration .displayText {
-    width: 800px;
-  }
-  .tunnelControl .control {
-    margin: 3px -3px 3px 0;
-  }
-  #globalTunnelControl #toggleInfo {
-    margin: -5px -4px 0 0;
-    background-size: 10px;
-  }
-  #globalTunnelControl #toggleInfo img {
-    width: 17px;
-    height: 17px;
-  }
+body, td, a, button, input, input[type="submit"], input[type="reset"], .control, a.control, select, .freetext, textarea {font-size: 10pt}
+h2, h3 {font-size: 12.5pt}
+#messages h2, #globalTunnelControl h2,
+#servers h2, #clients h2, #tunnelEditPage h2, #tunnelEditPage h3,
+#registration h2, #registration h3, #wizardPanel h2, #ssl h2 {
+padding: 10.5px 10px 9.5px 40px; background-position: 10px center; background-size: 22px auto, 4px 100%, 100%}
+textarea#statusMessages, textarea#statusMessages:active, textarea#statusMessages:focus {font-size: 9pt}
+div[class^="status"] {height: 18px; background-size: auto 18px}
+.tunnelInfo .selectAll {max-width: none}
+.control {padding: 8px 12px 8px}
+.control.iconize {padding: 9px 12px 9px; line-height: 1.1}
+select {padding: 8px 24px 8px 8px}
+th {font-size: 10pt}
+th .help::after, th .help:hover::after, th .help:focus::after {width: 20px; height: 20px; background-size: 20px 20px}
+.displayText, .displayText:empty:hover, .displayText:empty:focus {width: 552px}
+#registration .displayText {width: 800px}
+.tunnelControl .control {margin: 3px -3px 3px 0}
+#globalTunnelControl #toggleInfo {margin: -5px -4px 0 0; background-size: 10px}
+#globalTunnelControl #toggleInfo img {width: 17px; height: 17px}
 }
