@@ -3335,7 +3335,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             skews.add(Long.valueOf(peer.getClockSkew() / 1000));
         }
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("UDP transport returning " + skews.size() + " peer clock skew results");
+            _log.debug("UDP transport returned " + skews.size() + " peer clock skew results");
         return skews;
     }
 
