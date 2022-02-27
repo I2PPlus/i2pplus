@@ -462,7 +462,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         return _fragments;
     }
 
-    
+
     /**
      *  Pick a port if not previously configured, so that TransportManager may
      *  call getRequestedPort() before we've started to get a best-guess of what our
@@ -2180,7 +2180,8 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             // c++ bug thru 2.36.0/0.9.49, will disconnect inbound session after 5 seconds
             int cost = addr.getCost();
             if (cost == 10) {
-                if (VersionComparator.comp(toAddress.getVersion(), "0.9.49") <= 0) {
+//                if (VersionComparator.comp(toAddress.getVersion(), "0.9.49") <= 0) {
+                if (VersionComparator.comp(toAddress.getVersion(), "0.9.52") <= 0) {
                     //if (_log.shouldDebug())
                     //    _log.debug("Not bidding to: " + toAddress);
                     markUnreachable(to);
@@ -3361,7 +3362,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
     X25519KeyFactory getXDHFactory() {
         return _xdhFactory;
     }
-    
+
     /**
      *  @return the SSU HMAC
      *  @since 0.9.42
