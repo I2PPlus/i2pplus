@@ -1,3 +1,7 @@
+2022-02-27 dr|z3d
+ * Router: Mark i2pd routers older than 0.9.53 as unreachable to mitigate
+   i2pd SSU2 handling bug
+
 2022-02-25 zzz
  * Sybil: Family analysis improvements
 
