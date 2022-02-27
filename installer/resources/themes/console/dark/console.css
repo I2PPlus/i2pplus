@@ -100,17 +100,16 @@ ul {margin: 0; padding: 0}
 #clock::after {margin-left: 3px; content: "UTC"; display: inline-block; font-size: 50%; vertical-align: middle}
 .sb table, #sidebar form {position: relative; background: repeating-linear-gradient(90deg, rgba(0,80,0,.1) 2px, rgba(0,16,0,.1) 4px)}
 .sb table:not(#sb_localtunnels):not(#sb_services):not(#sb_advanced)::before {width: 0; height: 1px; position: absolute; top: -1px; left: -1px; display: block; background: linear-gradient(90deg, #730, #940); content: ""; animation: bar .15s ease-in-out .15s reverse; backface-visibility: hidden; will-change: transform}
-#sb_peers, #sb_peersadvanced, #sb_tunnels, #sb_queue, #sb_bandwidth, #sb_general, #sb_advancedgeneral, #sb_localtunnels, #sb_advanced, #sb_internals, #sb_services {margin: -6px auto -8px; border-top: 1px solid rgba(16,64,16,.5); border-bottom: 1px solid rgba(16,64,16,.5)}
+#sb_peers, #sb_peersadvanced, #sb_tunnels, #sb_queue, #sb_bandwidth, #sb_general, #sb_advancedgeneral, #sb_localtunnels, #sb_advanced, #sb_internals, #sb_services, #sb_newsheadings table {margin: -6px auto -8px; border-top: 1px solid rgba(16,64,16,.5); border-bottom: 1px solid rgba(16,64,16,.5)}
 #sb_advanced, #sb_internals, #sb_services, #sb_help {margin-top: -6px}
 #sb_general td, #sb_shortgeneral td, #sb_advancedgeneral td, #sb_peersadvanced td {white-space: nowrap}
-#sb_peers tr:nth-child(odd), #sb_peersadvanced tr:nth-child(odd), #sb_tunnels tr:nth-child(odd), #sb_queue tr:nth-child(odd), #sb_bandwidth tr:nth-child(odd), #sb_general tr:nth-child(odd), #sb_advancedgeneral tr:nth-child(odd), #sb_localtunnels tr:nth-child(odd) {background: var(--sb_row)}
-#sb_peers tr:nth-child(even), #sb_peersadvanced tr:nth-child(even), #sb_tunnels tr:nth-child(even), #sb_queue tr:nth-child(even), #sb_bandwidth tr:nth-child(even), #sb_general tr:nth-child(even), #sb_advancedgeneral tr:nth-child(even), #sb_localtunnels tr:nth-child(even) {background: var(--sb_row_alt)}
+#sb_peers tr, #sb_peersadvanced tr, #sb_tunnels tr, #sb_queue tr, #sb_bandwidth tr, #sb_general tr, #sb_advancedgeneral tr, #sb_localtunnels tr {background: var(--sb_row)}
 #sb_peers td, #sb_peersadvanced td, #sb_tunnels td, #sb_queue td, #sb_bandwidth td, #sb_general td, #sb_advancedgeneral td {line-height: 1.6}
-#sb_peers tr:nth-child(n+2), #sb_peersadvanced tr:nth-child(n+2), #sb_tunnels tr:nth-child(n+2), #sb_queue tr:nth-child(n+2), #sb_bandwidth tr:nth-child(n+2), #sb_general tr:nth-child(n+2), #sb_advancedgeneral tr:nth-child(n+2), #sb_localtunnels tr:nth-child(n+2) {border-top: 1px solid rgba(0,0,0,.7)}
-#sb_peers tr:nth-last-child(n+2), #sb_peersadvanced tr:nth-last-child(n+2), #sb_tunnels tr:nth-last-child(n+2), #sb_queue tr:nth-last-child(n+2), #sb_bandwidth tr:nth-last-child(n+2), #sb_general tr:nth-last-child(n+2), #sb_advancedgeneral tr:nth-last-child(n+2), #sb_localtunnels tr:nth-last-child(n+2) {border-bottom: 1px solid rgba(0,0,0,.7)}
+#sb_peers tr:nth-child(n+2), #sb_peersadvanced tr:nth-child(n+2), #sb_tunnels tr:nth-child(n+2), #sb_queue tr:nth-child(n+2), #sb_bandwidth tr:nth-child(n+2), #sb_general tr:nth-child(n+2), #sb_advancedgeneral tr:nth-child(n+2), #sb_localtunnels tr:nth-child(n+2) {border-top: 1px solid rgba(16,64,16,.2)}
+#sb_peers tr:nth-last-child(n+2), #sb_peersadvanced tr:nth-last-child(n+2), #sb_tunnels tr:nth-last-child(n+2), #sb_queue tr:nth-last-child(n+2), #sb_bandwidth tr:nth-last-child(n+2), #sb_general tr:nth-last-child(n+2), #sb_advancedgeneral tr:nth-last-child(n+2), #sb_localtunnels tr:nth-last-child(n+2) {border-bottom: 1px solid rgba(16,64,16,.2)}
 #sb_peers tr:hover, #sb_tunnels tr:hover, #sb_queue tr:hover, #sb_bandwidth tr:hover, #sb_general tr:hover, #sb_advancedgeneral tr:hover, #sb_localtunnels tr:hover {color: #ff5; background: rgba(16,64,16,.4)}
 #sb_general td:first-child, #sb_shortgeneral td:first-child, #sb_advancedgeneral td:first-child, #sb_peersadvanced td:first-child {max-width: 130px}
-#sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after, #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {min-height: 14px; display: inline-block; vertical-align: middle; content: ""}
+#sb_general td::before, #sb_shortgeneral td::before, #sb_advancedgeneral td::before, #sb_bandwidth td::before, #sb_peers td::before, #sb_peersadvanced td::before, #sb_tunnels td::before, #sb_queue td::before {min-height: 20px; display: inline-block; vertical-align: middle; content: ""}
 #sidebar td:first-child, #sb_localtunnels td:nth-child(2) {text-align: left}
 #sidebar td:last-child {text-align: right}
 #sidebar #sb_internals td, #sidebar #sb_advanced td, #sidebar #sb_services td, #sidebar #sb_help td {text-align: center}
@@ -139,12 +138,12 @@ ul {margin: 0; padding: 0}
 #sb_notice.hide + hr, #sb_updatesection.hide + hr {display: none}
 .sb_notice + .sb_notice {margin-top: -5px}
 p:empty + .sb_notice {margin-top: 9px}
-#sidebar tr {border: none; background-image: none; background-color: transparent}
 #sidebar form {margin: -7px -10px -9px; padding: 4px 3px; box-shadow: var(--bevel)}
 #sidebar form:first-child {margin: 6px 0 -5px 0}
 #sidebar p {padding: 0}
 #sidebar a:link, #sidebar a:visited {word-spacing: .05em}
-#sidebar #sb_peers a:not(:hover):not(:focus):not(:active), #sidebar #sb_peersadvanced a:not(:hover):not(:focus):not(:active), #sidebar #sb_tunnels a:not(:hover):not(:focus):not(:active), #sidebar #sb_general a:not(:hover):not(:focus):not(:active), #sidebar #sb_shortgeneral a:not(:hover):not(:focus):not(:active), #sidebar #sb_advancedgeneral a:not(:hover):not(:focus):not(:active) {color: var(--ink)}
+#sidebar #sb_peers a:not(:hover):not(:focus):not(:active), #sidebar #sb_peersadvanced a:not(:hover):not(:focus):not(:active), #sidebar #sb_tunnels a:not(:hover):not(:focus):not(:active), #sidebar #sidebar #sb_general a:not(:hover):not(:focus):not(:active), #sidebar #sb_shortgeneral a:not(:hover):not(:focus):not(:active), #sidebar #sb_advancedgeneral a:not(:hover):not(:focus):not(:active) {color: var(--ink)}
+#sidebar #sb_general tr:hover a:not(:hover):not(:focus):not(:active), #sidebar #sb_shortgeneral tr:hover a:not(:hover):not(:focus):not(:active), #sidebar #sb_advancedgeneral tr:hover a:not(:hover):not(:focus):not(:active), #sidebar #sb_peers tr:hover a:not(:hover):not(:focus):not(:active), #sidebar #sb_tunnels tr:hover a:not(:hover):not(:focus):not(:active) {color: #ff5}
 #sidebar .refresh {margin-top: -10px; margin-bottom: -4px; padding: 2px 0 0 0}
 #sb_warning {margin-left: -10px; margin-right: -10px; border-bottom: var(--border)}
 #sb_warning a {color: #900}
@@ -2447,7 +2446,7 @@ h3[id*="jobs"]:first-of-type {margin-top: 21px}
 #routerinformation .h3navlinks {margin: 1px -2px -1px -2px}
 #routerinformation .h3navlinks a::before {margin-left: 0}
 #routerinformation h3 span a {padding: 12px 3px 12px 12px}
-#sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after, #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {min-height: 12px}
+#sb_general td::before, #sb_shortgeneral td::before, #sb_advancedgeneral td::before, #sb_bandwidth td::before, #sb_peers td::before, #sb_peersadvanced td::before, #sb_tunnels td::before, #sb_queue td::before {min-height: 18px}
 #sidebar table:not#(#sb_localtunnels) td {padding: 1px 5px}
 #sb_tunnelstatus .tunnelBuildStatus::before {background-size: 12px}
 #sidebar button.cancel {margin-top: 10px}
