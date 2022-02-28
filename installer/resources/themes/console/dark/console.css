@@ -80,7 +80,7 @@ ul {margin: 0; padding: 0}
 #sidebar img[src$="i2plogo.png"]:hover {filter: saturate(1); transition: ease filter .1s}
 #sidebar img[src$="i2plogo.png"]:active {filter: sepia(1) hue-rotate(45deg) saturate(2) opacity(.65) drop-shadow(0 0 1px rgba(156,32,0,.3)); transform: scale(.97); transition: none}
 #sidebar input[type=text] {text-align: right; box-shadow: inset 1px 1px 1px 0 #000}
-#sidebar td {padding: 1px 6px; word-spacing: -0.1em; text-shadow: var(--textshadow); border: 0}
+#sidebar td {padding: 1px 8px; word-spacing: -0.1em; text-shadow: var(--textshadow); border: 0}
 #sidebar td:first-child {max-width: 90px; overflow: hidden; text-transform: capitalize}
 #sidebar td b:not(::selection), .infohelp b:not(::selection) {color: #ffffa8; -webkit-text-stroke: 1px rgba(0,0,0,.4)}
 #sidebar table:not(#sb_localtunnels) td b, #sidebar td span, #sidebar #sb_localtunnels a {margin: 2px 0; display: inline-block; vertical-align: middle}
@@ -2453,6 +2453,7 @@ h3[id*="jobs"]:first-of-type {margin-top: 21px}
 #sb_tunnelstatus .tunnelBuildStatus::before {background-size: 12px}
 #sidebar button.cancel {margin-top: 10px}
 #searchbar span {margin: 3px 3px 0}
+#sidebar td {padding: 1px 6px}
 #sidebar .reload, #sidebar .stop, #sidebar .stop:hover, #sidebar .stop:focus, #sidebar .reload[value="restartImmediate"] {background-size: 12px, 100%}
 #sidebar .reload:hover, #sidebar .reload:focus {background-size: 12px, 12px, 100%}
 #sidebar .reload[value="restartImmediate"], #sidebar .reload[value="restartImmediate"]:hover, #sidebar .reload[value="restartImmediate"]:focus {margin-bottom: -6px; background-size: 10px, 100%; background-position: 9px center}
