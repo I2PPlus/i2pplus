@@ -177,7 +177,8 @@ p:empty + .sb_notice {margin-top: 9px}
 #sb_memoryBar .percentBarInner {background: linear-gradient(90deg, rgba(0,0,0,.05), rgba(128,128,0,.15) 160px, rgba(196,0,0,.15) 180px, rgba(196,0,0,.2)), linear-gradient(180deg,rgba(28, 148, 58, .6), rgba(9, 47, 16, .6) 50%, rgba(9, 27, 5, .6) 50%, rgba(9, 21, 3, .6), rgba(0,0,0,.3))}
 .percentBarText {width: 100%; vertical-align: middle; float: left; text-align: center; font-weight: 700; opacity: 0; transition: ease opacity .2s}
 #sb_memoryBar.percentBarOuter {margin: -6px 0 -8px}
-#sb_memoryBar .percentBarText {width: 70%; line-height: 22px; float: none; position: absolute; top: -23px; left: 15%; right: 15%; font-size: 110%; border-radius: 3px; background: #010; filter: drop-shadow(0 0 1px #252) drop-shadow(0 0 1px #000)}
+#sb_memoryBar .percentBarText {width: 70%; line-height: 22px; float: none; position: absolute; top: -23px; left: 15%; right: 15%; font-size: 110%; border-radius: 3px; background: #010; filter: drop-shadow(0 0 1px #252) drop-shadow(0 0 1px #000); transition: opacity .2s ease}
+#sb_memoryBar.percentBarOuter:hover .percentBarText {transition: opacity .2s ease .5s}
 #sb_memoryBar .percentBarText::after {width: 0; height: 0; position: absolute; left: calc(50% - 5px); bottom: -14px; border-style: solid; border-width: 8px; border-color: #010 transparent transparent transparent; content: ""}
 
 /* update bar */
@@ -2643,6 +2644,7 @@ input[type=text], input[type=password] {padding: 7px 9px}
 .sb_netstatus::before, .tunnelBuildStatus::before {margin: 0 2px}
 .sb_update {padding-bottom: 3px}
 .sb_update b {margin-bottom: 2px}
+#sidebar button.reload, #sidebar button.stop, #sidebar button.cancel {padding-top: 10px; padding-bottom: 10px}
 .search td {padding: 6px 6px 6px 5px}
 .search td:nth-child(2) {padding: 5px 8px 5px 8px}
 .search td:last-child {padding-left: 0; padding-right: 0}
