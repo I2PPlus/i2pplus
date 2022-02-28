@@ -158,7 +158,7 @@ p:empty + .sb_notice {margin-top: 9px}
 #sb_newsheadings {margin-bottom: -7px}
 #sb_newsheadings table::before {content: none}
 #sb_newsheadings a {padding: 0 3px 0 0; width: 100%; display: inline-block}
-#sidebar #sb_newsheadings td {padding: 2px 5px 2px 23px; text-align: left; border-bottom: var(--border_soft); background: var(--newsbullet) no-repeat 4px center / 14px}
+#sidebar #sb_newsheadings td {padding: 5px 5px 5px 25px; text-align: left; border-bottom: var(--border_soft); background: var(--newsbullet) no-repeat 6px center / 14px}
 #sidebar #sb_newsheadings tr:last-child td {border-bottom: none}
 
 /* mini sidebar graph */
@@ -2450,7 +2450,7 @@ h3[id*="jobs"]:first-of-type {margin-top: 21px}
 #routerinformation .h3navlinks a::before {margin-left: 0}
 #routerinformation h3 span a {padding: 12px 3px 12px 12px}
 #sb_general td::before, #sb_shortgeneral td::before, #sb_advancedgeneral td::before, #sb_bandwidth td::before, #sb_peers td::before, #sb_peersadvanced td::before, #sb_tunnels td::before, #sb_queue td::before {min-height: 18px}
-#sidebar table:not(#sb_localtunnels) td {padding: 1px 5px}
+#sidebar table:not(#sb_localtunnels):not(#sb_newsheadings table) td {padding: 1px 5px}
 #sb_localtunnels td:first-child {width: 18px}
 #sb_tunnelstatus .tunnelBuildStatus::before {background-size: 12px}
 #sidebar button.cancel {margin-top: 10px}
