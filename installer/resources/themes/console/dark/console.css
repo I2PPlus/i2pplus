@@ -414,7 +414,7 @@ button.control {margin: 3px; padding: 15px; min-width: 0; font-size: 0}
 #sidebar button.reload, #sidebar button.stop, #sidebar button.cancel {margin: 3px 2px; min-width: 97px; text-transform: capitalize}
 #sidebar button.download {width: 202px}
 #sidebar button.cancel {min-width: 151px}
-#updateAvailable {margin: 0 0 3px; padding: 4px 0 0; width: 100%; display: inline-block; line-height: 1.2; color: #dd3; font-size: 9pt; text-shadow: var(--textshadow); opacity: .9}
+#updateAvailable {margin: 0; padding: 4px 0 0; width: calc(100% - 20px); display: inline-block; line-height: 1.2; color: #dd3; font-size: 9pt; text-shadow: var(--textshadow); opacity: .9}
 #updateAvailable + br + button + br + #updateAvailable::before {margin: 2px 0 4px; width: 100%; height: 1px; display: inline-block; background: #252; content: ""}
 #updateAvailable + br + button + br + #updateAvailable {margin-top: -10px}
 
@@ -2718,7 +2718,7 @@ h4#updateplugins {margin-top: -15px}
 #sb_services a:link, #sb_internals a:link, #sb_advanced a:link, #sb_help a:link {max-width: 216px}
 #schedjobs ul {columns: 270px auto}
 select {padding: 8px 24px 8px 8px}
-#sidebar button.download {width: 248px; line-height: 1.4}
+#sidebar button.download {margin-bottom: 2px; width: calc(100% - 25px); line-height: 1.4}
 #sidebar button.reload, #sidebar button.stop {min-width: 120px}
 #sidebar button.cancel {min-width: 157px}
 #sidebar h3::after {min-height: 20px}
