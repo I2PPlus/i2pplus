@@ -2115,7 +2115,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
     void send(UDPPacket packet) {
         if (_pusher != null) {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Sending packet: " + packet);
+                _log.debug("Sending direct packet... " + packet);
             _pusher.send(packet);
         } else {
             _log.error("No pusher", new Exception());
