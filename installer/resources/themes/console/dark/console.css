@@ -71,8 +71,8 @@ ul {margin: 0; padding: 0}
 #sb_wrap {margin: 0 0 10px 5px; padding: 0; display: block; text-align: center; will-change: transform}
 .iframed #sb_wrap {display: none}
 #xhr {margin: 0 auto 0 -9px; display: block; width: calc(100% + 19px)}
-.sb table {margin: -5px auto -6px; padding: 1px 1px 0; overflow: hidden; text-align: center; font-size: 8pt; border: 0; border-collapse: collapse; background: none}
-#sidebar {padding: 8px 10px 8px; width: 194px; text-align: center; font-size: 8pt; border: var(--border); border-radius: 3px; background: var(--mainbg); contain: paint}
+.sb table {margin: -5px auto -6px -1px; width: calc(100% + 1px); overflow: hidden; text-align: center; font-size: 8pt; border: none; border-collapse: collapse; box-shadow: var(--bevel)}
+#sidebar {padding: 8px 10px 8px; width: 194px; text-align: center; font-size: 8pt; border: var(--border); border-radius: 3px; box-shadow: var(--bevel_hard); background: var(--mainbg); contain: paint}
 #sb_logo {width: 100%; margin: -8px 0 -9px -10px; padding: 9px 10px 10px; display: inline-block; border-radius: 3px 3px 0 0; box-shadow: var(--bevel); background: linear-gradient(180deg,rgba(0,64,0,.3), rgba(0,24,0,.3)), repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px); background-size: 100%, 100% 4px}
 #sb_logo:hover {box-shadow: var(--highlight), inset 0 0 0 2px rgba(255,96,0,.6); background: linear-gradient(180deg,rgba(0,64,0,.6), rgba(0,24,0,.6)), repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px); background-size: 100%, 100% 4px; transition: ease background .15s}
 #sb_logo:active {box-shadow: var(--highlight), inset 0 0 0 2px rgba(255,144,0,.5), inset 6px 6px 6px rgba(0,0,0,.7); background: linear-gradient(180deg,rgba(0,32,0,.3), rgba(0,48,0,.3)), repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px)}
@@ -80,11 +80,11 @@ ul {margin: 0; padding: 0}
 #sidebar img[src$="i2plogo.png"]:hover {filter: saturate(1); transition: ease filter .1s}
 #sidebar img[src$="i2plogo.png"]:active {filter: sepia(1) hue-rotate(45deg) saturate(2) opacity(.65) drop-shadow(0 0 1px rgba(156,32,0,.3)); transform: scale(.97); transition: none}
 #sidebar input[type=text] {text-align: right; box-shadow: inset 1px 1px 1px 0 #000}
-#sidebar td {padding: 1px 5px; word-spacing: -0.1em; text-shadow: var(--textshadow); border: 0}
+#sidebar td {padding: 1px 6px; word-spacing: -0.1em; text-shadow: var(--textshadow); border: 0}
 #sidebar td:first-child {max-width: 90px; overflow: hidden; text-transform: capitalize}
 #sidebar td b:not(::selection), .infohelp b:not(::selection) {color: #ffffa8; -webkit-text-stroke: 1px rgba(0,0,0,.4)}
+#sidebar table:not(#sb_localtunnels) td b, #sidebar td span, #sidebar #sb_localtunnels a {margin: 2px 0; display: inline-block; vertical-align: middle}
 #sidebar td a {-webkit-text-stroke: 0}
-#sidebar table:not(#sb_localtunnels) td a:hover {border-radius: 2px; box-shadow: 0 0 0 2px rgba(0,0,0,.3); background: repeating-linear-gradient(180deg,rgba(16,16,0,.5) 1px, rgba(16,16,0,.5) 2px, rgba(0,64,0,.6) 3px)}
 #sidebar td a:active {box-shadow: 0 0 0 2px rgba(0,0,0,.3), inset 2px 2px 2px rgba(0,0,0,.7)}
 #sidebar h3 {margin: -7px -1px -9px; padding: 6px 2px; width: calc(100% - 3px); letter-spacing: .08em; text-transform: uppercase; font-size: 9.5pt; border: none; border-radius: 0; box-shadow: var(--highlight), inset 0 0 1px 1px #191; background: radial-gradient(at center bottom, rgba(16, 72, 16, .4) 0, rgba(0, 0, 0, 0) 50%), var(--bg_title), linear-gradient(180deg,rgba(0,0,0,.1), rgba(0,0,0,.25) 50%, rgba(0,0,0,.75) 50%, #000), var(--h3_fade); background-size: 100%, 2px, 100%, 100%}
 #sidebar h3:hover {box-shadow: var(--highlight), inset 0 0 0 2px rgba(128,48,0,.3)}
@@ -95,13 +95,14 @@ ul {margin: 0; padding: 0}
 #sidebar h3:hover a {color: var(--hover)}
 #sidebar h3:active {transition: ease box-shadow .01s}
 #sidebar h4 {margin: -6px -1px -9px; padding: 6px 1px; width: calc(100% - 9px); line-height: 1.2; font-size: 8pt; text-decoration: none; color: #2b2; border: none; box-shadow: var(--bevel), inset 0 0 0 3px #000, inset 0 0 5px 5px rgba(0,0,0,.5); background: rgba(0,64,0,.3)}
+#sidebar #sb_shutdownStatus {width: calc(100% - 1px)}
 #clock {margin: -7px 0 -9px -1px; padding: 8px 0; position: relative; line-height: 1; letter-spacing: .1em; font-size: 18pt; font-weight: 700; color: #ffa; text-shadow: var(--textshadow); box-shadow: var(--bevel); background: repeating-linear-gradient(180deg,rgba(255,255,255,.05) 2px, rgba(0,16,0,.2) 4px), linear-gradient(90deg, #010, #000, #010); -webkit-text-stroke: 1px rgba(220,220,128,.5); opacity: .9}
 #clock::before {content: ""; position: absolute; top: 0; left: 0; height: 100%; width: 100%; box-shadow: var(--bevel); background: repeating-linear-gradient(90deg, rgba(0,0,0,.3) 2px, rgba(0,16,0,.2) 4px)}
 #clock::after {margin-left: 3px; content: "UTC"; display: inline-block; font-size: 50%; vertical-align: middle}
-.sb table, #sidebar form {position: relative; background: repeating-linear-gradient(90deg, rgba(0,80,0,.1) 2px, rgba(0,16,0,.1) 4px)}
 .sb table:not(#sb_localtunnels):not(#sb_services):not(#sb_advanced)::before {width: 0; height: 1px; position: absolute; top: -1px; left: -1px; display: block; background: linear-gradient(90deg, #730, #940); content: ""; animation: bar .15s ease-in-out .15s reverse; backface-visibility: hidden; will-change: transform}
-#sb_peers, #sb_peersadvanced, #sb_tunnels, #sb_queue, #sb_bandwidth, #sb_general, #sb_advancedgeneral, #sb_localtunnels, #sb_advanced, #sb_internals, #sb_services, #sb_newsheadings table {margin: -6px auto -8px; border-top: 1px solid rgba(16,64,16,.5); border-bottom: 1px solid rgba(16,64,16,.5)}
-#sb_advanced, #sb_internals, #sb_services, #sb_help {margin-top: -6px}
+#sb_peers, #sb_peersadvanced, #sb_tunnels, #sb_queue, #sb_bandwidth, #sb_general, #sb_advancedgeneral, #sb_localtunnels, #sb_advanced, #sb_internals, #sb_services, #sb_newsheadings table {margin: -7px auto -9px -1px}
+#sb_localtunnels {margin-bottom: -8px}
+#sb_advanced, #sb_internals, #sb_services, #sb_help {margin-top: -7px}
 #sb_general td, #sb_shortgeneral td, #sb_advancedgeneral td, #sb_peersadvanced td {white-space: nowrap}
 #sb_peers tr, #sb_peersadvanced tr, #sb_tunnels tr, #sb_queue tr, #sb_bandwidth tr, #sb_general tr, #sb_advancedgeneral tr, #sb_localtunnels tr {background: var(--sb_row)}
 #sb_peers td, #sb_peersadvanced td, #sb_tunnels td, #sb_queue td, #sb_bandwidth td, #sb_general td, #sb_advancedgeneral td {line-height: 1.6}
@@ -109,12 +110,12 @@ ul {margin: 0; padding: 0}
 #sb_peers tr:nth-last-child(n+2), #sb_peersadvanced tr:nth-last-child(n+2), #sb_tunnels tr:nth-last-child(n+2), #sb_queue tr:nth-last-child(n+2), #sb_bandwidth tr:nth-last-child(n+2), #sb_general tr:nth-last-child(n+2), #sb_advancedgeneral tr:nth-last-child(n+2), #sb_localtunnels tr:nth-last-child(n+2) {border-bottom: 1px solid rgba(16,64,16,.2)}
 #sb_peers tr:hover, #sb_tunnels tr:hover, #sb_queue tr:hover, #sb_bandwidth tr:hover, #sb_general tr:hover, #sb_advancedgeneral tr:hover, #sb_localtunnels tr:hover {color: #ff5; background: rgba(16,64,16,.4)}
 #sb_general td:first-child, #sb_shortgeneral td:first-child, #sb_advancedgeneral td:first-child, #sb_peersadvanced td:first-child {max-width: 130px}
-#sb_general td::before, #sb_shortgeneral td::before, #sb_advancedgeneral td::before, #sb_bandwidth td::before, #sb_peers td::before, #sb_peersadvanced td::before, #sb_tunnels td::before, #sb_queue td::before {min-height: 20px; display: inline-block; vertical-align: middle; content: ""}
+#sb_general td::before, #sb_shortgeneral td::before, #sb_advancedgeneral td::before, #sb_bandwidth td::before, #sb_peers td::before, #sb_peersadvanced td::before, #sb_tunnels td::before, #sb_queue td::before, #sb_localtunnels td::before {min-height: 22px; display: inline-block; vertical-align: middle; content: ""}
 #sidebar td:first-child, #sb_localtunnels td:nth-child(2) {text-align: left}
 #sidebar td:last-child {text-align: right}
-#sidebar #sb_internals td, #sidebar #sb_advanced td, #sidebar #sb_services td, #sidebar #sb_help td {text-align: center}
+#sidebar #sb_internals td, #sidebar #sb_advanced td, #sidebar #sb_services td, #sidebar #sb_help td {padding: 4px 5px 6px; text-align: center}
 #sb_localtunnels tr:last-child td:first-child {background-position: center center}
-#sb_localtunnels td {padding: 1px 0 1px 0; line-height: 1.1}
+#sb_localtunnels td {padding: 1px 0; line-height: 1.2}
 #sb_localtunnels td:first-child {padding: 1px 0 1px 6px; width: 16px; text-align: left; background: var(--client) var(--center) / 16px}
 #sb_localtunnels td[colspan="3"] {line-height: 20px; font-size: 0}
 #sb_localtunnels td.ping {background-image: var(--ping)}
@@ -123,7 +124,7 @@ ul {margin: 0; padding: 0}
 #sb_localtunnels td.tunnelReady {background: var(--local_up) no-repeat right 4px center / 16px}
 #sb_localtunnels td.tunnelRebuilding {background: var(--local_down) no-repeat right 4px center / 16px}
 #sb_localtunnels td::after {min-height: 10px; display: inline-block; vertical-align: middle; content: ""}
-#sb_localtunnels a {padding: 2px 0; width: 100%; max-width: 156px; display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; border-radius: 0 10px 10px 0; box-shadow: none}
+#sb_localtunnels a {padding: 2px 0; width: 100%; max-width: 156px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; border-radius: 0 10px 10px 0; box-shadow: none}
 #sb_localtunnels a:active {box-shadow: inset 2px 2px 2px #000; background: linear-gradient(90deg, rgba(0,0,0,0), #020)}
 #sb_localtunnels img {width: 16px; height: 16px; vertical-align: middle; font-size: 0; opacity: 0; mix-blend-mode: overlay}
 #sb_localtunnels img::after {width: 19px; height: 16px; display: inline-block; vertical-align: middle; content: ""}
@@ -148,7 +149,7 @@ p:empty + .sb_notice {margin-top: 9px}
 #sb_warning {margin-left: -10px; margin-right: -10px; border-bottom: var(--border)}
 #sb_warning a {color: #900}
 #sb_warning + #sb_notice {margin-top: -6px}
-#sidebar hr {margin: 9px -10px 7px -10px; height: 1px; background: #252}
+#sidebar hr {margin: 9px 0 7px -1px; height: 1px; background: #252}
 #sb_warning + hr {margin-top: 7px}
 #sidebar hr:last-child {margin-top: 5px; margin-bottom: -5px}
 .warntext {color: #b00}
@@ -161,7 +162,7 @@ p:empty + .sb_notice {margin-top: 9px}
 #sidebar #sb_newsheadings tr:last-child td {border-bottom: none}
 
 /* mini sidebar graph */
-#sb_graphcontainer {margin: -6px 0 -8px; padding: 0 1px 1px; width: calc(100% - 3px); height: 44px; position: relative; z-index: 10; overflow: hidden; box-shadow: inset 0 0 0 1px #131, inset 0 0 0 2px #000, inset 0 0 3px 1px #040; background: repeating-linear-gradient(90deg, rgba(0,0,0,0) 15px, rgba(64,160,64,.3) 16px, rgba(0,0,0,0) 16px, rgba(0,0,0,0) 31px), repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(48,152,48,.2), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 14px)}
+#sb_graphcontainer {margin: -6px 0 -8px; padding: 0 1px 1px; width: calc(100% - 3px); height: 44px; position: relative; z-index: 10; overflow: hidden; box-shadow: var(--outline), inset 0 0 0 1px #131, inset 0 0 0 2px #000, inset 0 0 3px 1px #040; background: repeating-linear-gradient(90deg, rgba(0,0,0,0) 15px, rgba(64,160,64,.3) 16px, rgba(0,0,0,0) 16px, rgba(0,0,0,0) 31px), repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(48,152,48,.2), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 14px)}
 #sb_graphcontainer::after {width: calc(100% - 4px); display: inline-block; position: absolute; top: 2px; right: 2px; bottom: 2px; left: 2px; z-index: 10; box-shadow: var(--outline), var(--bevel_hard), inset 0 0 0 2px #242; background: var(--graphoverlay); content: ""; pointer-events: none}
 #sb_graphcontainer:hover a {cursor: zoom-in}
 #sb_graphstats {padding: 2px 8px; display: inline-block; position: relative; z-index: 1000; font-size: 110%; font-weight: 700; color: #050; text-shadow: none; border: var(--border_soft); border-top: none; border-radius: 0 0 2px 2px; background: #000; opacity: 0; transition: ease opacity .3s; pointer-events: none}
