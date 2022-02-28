@@ -115,16 +115,16 @@ ul {margin: 0; padding: 0}
 #sidebar td:last-child {text-align: right}
 #sidebar #sb_internals td, #sidebar #sb_advanced td, #sidebar #sb_services td, #sidebar #sb_help td {padding: 4px 5px 6px; text-align: center}
 #sb_localtunnels tr:last-child td:first-child {background-position: center center}
-#sb_localtunnels td {padding: 1px 0; line-height: 1.2}
-#sb_localtunnels td:first-child {padding: 1px 0 1px 6px; width: 16px; text-align: left; background: var(--client) var(--center) / 16px}
+#sb_localtunnels td {padding: 2px 0; line-height: 1.2}
+#sb_localtunnels td:first-child {padding: 2px 0 2px 9px; width: 20px; text-align: left; background: var(--client) var(--center) / 16px}
 #sb_localtunnels td[colspan="3"] {line-height: 20px; font-size: 0}
 #sb_localtunnels td.ping {background-image: var(--ping)}
 #sb_localtunnels td.tunnelServer {background-image: var(--server)}
-#sb_localtunnels td:last-child {padding: 1px 6px 1px 0; width: 1%; text-align: right; background: var(--local_inprogress) no-repeat right 4px center / 16px}
-#sb_localtunnels td.tunnelReady {background: var(--local_up) no-repeat right 4px center / 16px}
-#sb_localtunnels td.tunnelRebuilding {background: var(--local_down) no-repeat right 4px center / 16px}
-#sb_localtunnels td::after {min-height: 10px; display: inline-block; vertical-align: middle; content: ""}
-#sb_localtunnels a {padding: 2px 0; width: 100%; max-width: 156px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; border-radius: 0 10px 10px 0; box-shadow: none}
+#sb_localtunnels td:last-child {padding: 2px 6px 2px 0; width: 1%; text-align: right; background: var(--local_inprogress) no-repeat right 6px center / 16px}
+#sb_localtunnels td.tunnelReady {background: var(--local_up) no-repeat right 5px center / 16px}
+#sb_localtunnels td.tunnelRebuilding {background: var(--local_down) no-repeat right 5px center / 16px}
+#sidebar #sb_localtunnels td::before {min-height: 16px}
+#sidebar #sb_localtunnels a {padding: 3px 0; width: 100%; max-width: 156px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 1; border-radius: 0 10px 10px 0; box-shadow: none}
 #sb_localtunnels a:active {box-shadow: inset 2px 2px 2px #000; background: linear-gradient(90deg, rgba(0,0,0,0), #020)}
 #sb_localtunnels img {width: 16px; height: 16px; vertical-align: middle; font-size: 0; opacity: 0; mix-blend-mode: overlay}
 #sb_localtunnels img::after {width: 19px; height: 16px; display: inline-block; vertical-align: middle; content: ""}
