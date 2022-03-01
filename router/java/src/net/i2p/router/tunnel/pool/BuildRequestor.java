@@ -277,7 +277,7 @@ abstract class BuildRequestor {
             }
 
             if (log.shouldLog(Log.INFO))
-                log.info("Sending the tunnel build request [MsgID" + msg.getUniqueId() + "] out the tunnel " + pairedTunnel + " to ["
+                log.info("Sending the tunnel build request [MsgID" + msg.getUniqueId() + "] from " + pairedTunnel + " to ["
                           + ibgw.toBase64().substring(0,6) + "] for " + cfg + " waiting for the reply of "
                           + cfg.getReplyMessageId());
             // send it out a tunnel targeting the first hop
