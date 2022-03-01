@@ -266,7 +266,7 @@ thead img.disable, img.disable:hover {opacity: .4}
 .dirInfo .percentBarText {padding: 1px 0}
 .percentBarText:hover, .percentBarText:focus {opacity: .9; transition: ease opacity .15s; filter: none}
 .iframed .percentBarText, .iframed .percentBarText:hover, .iframed .percentBarText:focus {transition: none}
-.percentBarComplete {padding: 1px 0; display: inline-block; min-width: 84px; line-height: 1.2; text-align: center; border-radius: 20px; box-shadow: inset 0 0 0 1px #b5a79b, inset 0 2px 2px 2px rgba(239,231,224,.3), inset 0 -2px 2px 2px rgba(236,200,172,.3); background: linear-gradient(180deg,#fffbef, #dfd7d1)}
+.percentBarComplete {padding: 1px 0; display: inline-block; min-width: 84px; line-height: 1.4; text-align: center; border-radius: 20px; box-shadow: inset 0 0 0 1px #b5a79b, inset 0 2px 2px 2px rgba(239,231,224,.3), inset 0 -2px 2px 2px rgba(236,200,172,.3); background: linear-gradient(180deg,#fffbef, #dfd7d1)}
 .active .percentBarComplete {color: #ad681f; box-shadow: inset 0 0 0 1px #b5a79b, inset 0 2px 2px 2px rgba(239,231,224,.6), inset 0 -2px 2px 2px rgba(236,200,172,.6); background: radial-gradient(at center bottom, rgba(220,180,0,.1) 10%, rgba(0, 0, 0, 0) 70%), linear-gradient(180deg,#fffbef, #f0d6c2)}
 
 .peerSeed img {font-size: 0; opacity: .7; transform: scale(1)}
@@ -629,8 +629,8 @@ td.peerCount {padding-left: 2px; padding-right: 2px; width: 1%; min-width: 40px;
 .peerCount .right {padding-right: 2px; text-align: right}
 
 /* alternative download bar popup bar text just for our downloads in #torrents*/
-.rowOdd:not(.peerinfo) .torrentDownloaded .percentBarText, .rowEven:not(.peerinfo) .torrentDownloaded .percentBarText {padding: 3px; min-width: 140px; display: inline-block; position: relative; top: -22px; left: -32px; border-radius: 2px; background: #ffe; filter: drop-shadow(0 0 1px #776)}
-.rowOdd:not(.peerinfo) .torrentDownloaded .percentBarInner, .rowEven:not(.peerinfo) .torrentDownloaded .percentBarInner, .rowOdd:not(.peerinfo) .torrentDownloaded .percentBarOuter, .rowEven:not(.peerinfo) .torrentDownloaded .percentBarOuter {max-height: 14px; max-width: 84px}
+.percentBarText {padding: 3px; min-width: 140px; display: inline-block; position: relative; top: -22px; left: -32px; border-radius: 2px; background: #ffe; filter: drop-shadow(0 0 1px #776)}
+.percentBarInner, .percentBarOuter {max-width: 84px}
 .rowOdd:not(.peerinfo) .torrentDownloaded .percentBarText::after, .rowEven:not(.peerinfo) .torrentDownloaded .percentBarText::after {margin-left: -7px; position: absolute; top: 90%; left: 50%; border-width: 7px; border-style: solid; border-color: #ffe transparent transparent transparent; content: ""}
 
 
@@ -677,7 +677,7 @@ tfoot .RateDown:not(:empty)::before, tfoot .torrentDownloaded:not(:empty)::befor
 tfoot .RateDown:not(:empty)::before, tfoot .torrentDownloaded:not(:empty)::before {content: "\27A4"; transform: rotate(90deg) scaleX(.6)}
 tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {content: "\27A4"; transform: rotate(-90deg) scaleX(.6)}
 .torrentUploaded .left {min-width: 12px}
-.RateDown .left, .RateUp .left, .torrentUploaded .left, .RateDown .right, .RateUp .right, .torrentUploaded .right {min-width: 22px; display: inline-block; text-align: left}
+.RateDown .left, .RateUp .left, .torrentUploaded .left, .RateDown .right, .RateUp .right, .torrentUploaded .right {min-width: 22px; display: inline-block; vertical-align: middle; text-align: left}
 .RateDown .right, .RateUp .right, .torrentUploaded .right {min-width: 40px; text-align: right}
 .torrentUploaded .left {min-width: 12px}
 .choked .left, .choked .right {display: none}
@@ -835,7 +835,7 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {co
 .lang_ru .trackerhome, .lang_ru .trackerannounce, .lang_ru .knownTracker a {width: 150px; max-width: 150px}
 .lang_de .trackerhome, .lang_de .trackerannounce, .lang_de .knownTracker a, .lang_pl .trackerhome, .lang_pl .trackerannounce, .lang_pl .knownTracker a {width: 180px; max-width: 180px}
 .torrentAction input[type=submit] {padding: 10px; background-size: 12px, 100%, 12px}
-#actionStopAll, #actionStartAll {padding: 10px 17px}
+#actionStopAll, #actionStartAll {padding: 9px 17px}
 }
 
 @media screen and (max-width: 1000px) {
@@ -845,11 +845,11 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {co
 #torrents td[colspan="10"] {white-space: normal}
 #torrents thead th a img[src$="showpeers.png"] {display: none}
 .configPanel .configTitle, .configPanel .configTitle:hover {font-size: 10pt}
-td.graphicStatus img {width: auto; height: 18px}
-.rowOdd td, .rowEven td {padding-top: 3px; padding-bottom: 3px}
+td.graphicStatus img {width: auto; height: 19px}
+.rowOdd td, .rowEven td {padding-top: 2px; padding-bottom: 2px}
 .torrentName a {max-width: 320px}
 .magnetLabel {max-width: 320px; display: inline-block; vertical-align: middle; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
-.percentBarOuter, .percentBarText {width: 100px}
+.percentBarOuter, .percentBarText, .percentBarComplete {max-width: 80px}
 .fileStatus .percentBarText {font-size: 8pt}
 .percentBarOuter, .percentBarInner {height: 14px}
 .percentBarText {line-height: 15px}
@@ -873,7 +873,6 @@ td.graphicStatus img {width: auto; height: 18px}
 .snarkNav, .snarkNav:visited, #configs td, #configs input, #configs select {font-size: 8pt}
 .torrentETA a img, .trackerDetails a img {display: none}
 .graphicStatus {padding-left: 3px}
-.graphicStatus img {height: 17px}
 #torrents th.peerCount img, .torrentUploaded, .RateUp {display: none}
 #torrents th img {max-height: 18px}
 .peerCount a, .peerCount a:hover, .peerCount a:focus, .peerCount a:visited, .peerCount a:visited:hover, .peerCount a:visited:focus {color: #4d2200; cursor: text}
