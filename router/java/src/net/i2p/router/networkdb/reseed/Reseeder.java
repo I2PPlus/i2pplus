@@ -68,9 +68,9 @@ public class Reseeder {
     /** if false, use su3 only, and disable fallback reading directory index and individual dat files */
     private static final boolean ENABLE_NON_SU3 = false;
     //private static final int MIN_RI_WANTED = 100;
-    private static final int MIN_RI_WANTED = 500;
+    private static final int MIN_RI_WANTED = 600;
     //private static final int MIN_RESEED_SERVERS = 2;
-    private static final int MIN_RESEED_SERVERS = 8;
+    private static final int MIN_RESEED_SERVERS = 9;
     // network ID cross-check, proposal 147, as of 0.9.42
     private static final String NETID_PARAM = "?netid=";
 
@@ -116,6 +116,8 @@ public class Reseeder {
         //
         // https url:port, ending with "/"                    certificates/reseed/                 certificates/ssl/                 notes
         // ----------------------------------                 ---------------------------------    ------------------------------    --------------------------
+        "https://www2.mk16.de/"                     + ',' +   // i2p-reseed_at_mk16.de.crt         CA
+        "https://reseed-fr.i2pd.xyz/"               + ',' +   // r4sas-reseed_at_mail.i2p.crt      CA
         "https://reseed-pl.i2pd.xyz/"               + ',' +   // r4sas-reseed_at_mail.i2p.crt      CA
         "https://reseed.diva.exchange/"             + ',' +   // reseed_at_diva.exchange.crt       CA
         "https://reseed.i2pgit.org/"                + ',' +   // hankhill19580_at_gmail.com.crt    CA                                Java 8+
@@ -234,8 +236,7 @@ public class Reseeder {
             if (fetched <= 0)
                 throw new IOException("No seeds extracted");
             if (errors <= 0) {
-                _checker.setStatus(
-                    _t("Imported {0} router infos.", fetched));
+                _checker.setStatus(_t("Imported {0} router infos.", fetched));
             } else {
                 _checker.setStatus(
                     _t("Imported {0} router infos ({1} errors).", fetched, errors));
