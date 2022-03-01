@@ -71,11 +71,11 @@ abstract class BuildRequestor {
      *
      */
 //    static final int REQUEST_TIMEOUT = 13*1000;
-    static final int REQUEST_TIMEOUT = 4*1000;
+    static final int REQUEST_TIMEOUT = 8*1000;
 
     /** make this shorter than REQUEST_TIMEOUT */
 //    private static final int FIRST_HOP_TIMEOUT = 10*1000;
-    private static final int FIRST_HOP_TIMEOUT = 3*1000;
+    private static final int FIRST_HOP_TIMEOUT = 5*1000;
 
     /** some randomization is added on to this */
 //    private static final int BUILD_MSG_TIMEOUT = 60*1000;
@@ -277,7 +277,7 @@ abstract class BuildRequestor {
             }
 
             if (log.shouldLog(Log.INFO))
-                log.info("Sending the tunnel build request [MsgID" + msg.getUniqueId() + "] from " + pairedTunnel + " to ["
+                log.info("Sending the tunnel build request [MsgID" + msg.getUniqueId() + "] via " + pairedTunnel + " to ["
                           + ibgw.toBase64().substring(0,6) + "] for " + cfg + " waiting for the reply of "
                           + cfg.getReplyMessageId());
             // send it out a tunnel targeting the first hop
