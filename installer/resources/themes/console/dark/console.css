@@ -2450,9 +2450,10 @@ h3[id*="jobs"]:first-of-type {margin-top: 21px}
 #routerinformation .h3navlinks a::before {margin-left: 0}
 #routerinformation h3 span a {padding: 12px 3px 12px 12px}
 #sb_general td::before, #sb_shortgeneral td::before, #sb_advancedgeneral td::before, #sb_bandwidth td::before, #sb_peers td::before, #sb_peersadvanced td::before, #sb_tunnels td::before, #sb_queue td::before {min-height: 18px}
-#sidebar table:not(#sb_localtunnels):not(#sb_newsheadings table) td {padding: 1px 3px}
-#sidebar table:not(#sb_localtunnels):not(#sb_newsheadings table) td:first-child {padding: 1px 3px 1px 6px}
-#sidebar table:not(#sb_localtunnels):not(#sb_newsheadings table) td:last-child {padding: 1px 6px 1px 3px}
+#sidebar table:not(#sb_localtunnels):not(#sb_newsheadings table):not(#sb_services):not(#sb_internals):not(#sb_advanced) td {padding: 1px 3px}
+#sidebar table:not(#sb_localtunnels):not(#sb_newsheadings table):not(#sb_services):not(#sb_internals):not(#sb_advanced) td:first-child {padding: 1px 3px 1px 6px}
+#sidebar table:not(#sb_localtunnels):not(#sb_newsheadings table):not(#sb_services):not(#sb_internals):not(#sb_advanced) td:last-child {padding: 1px 6px 1px 3px}
+#sidebar #sb_services td, #sidebar #sb_internals td, #sidebar #sb_advanced td {padding: 4px}
 #sb_localtunnels td {line-height: 1}
 #sb_localtunnels td:first-child {width: 18px}
 #sidebar #sb_localtunnels td[colspan="3"] {width: 100%; background-size: 400%}
