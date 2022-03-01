@@ -2,6 +2,7 @@ package net.i2p.router.transport.udp;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -407,10 +408,20 @@ class EstablishmentManager {
                     // don't ask if they are indirect
                     boolean requestIntroduction = allowExtendedOptions && !isIndirect &&
                                                   _transport.introducersMaybeRequired(TransportUtil.isIPv6(ra));
+                    int version = _transport.getSSUVersion(ra);
+                    if (version == 1) {
                     state = new OutboundEstablishState(_context, maybeTo, to,
                                                        toIdentity, allowExtendedOptions,
                                                        requestIntroduction,
                                                        sessionKey, addr, _transport.getDHFactory());
+                    } else if (version == 2) {
+                        state = new OutboundEstablishState2(_context, _transport, maybeTo, to,
+                                                            toIdentity, requestIntroduction, sessionKey, ra, addr);
+                    } else {
+                        // shouldn't happen
+                        _transport.failed(msg, "OB to bad addr? " + ra);
+                        return;
+                    }
                     OutboundEstablishState oldState = _outboundStates.putIfAbsent(to, state);
                     boolean isNew = oldState == null;
                     if (isNew) {
@@ -476,8 +487,11 @@ class EstablishmentManager {
     /**
      * Got a SessionRequest (initiates an inbound establishment)
      *
+     * SSU 1 only.
+     *
+     * @param state as looked up in PacketHandler, but probably null unless retransmitted
      */
-    void receiveSessionRequest(RemoteHostId from, UDPPacketReader reader) {
+    void receiveSessionRequest(RemoteHostId from, InboundEstablishState state, UDPPacketReader reader) {
         if (!TransportUtil.isValidPort(from.getPort()) || !_transport.isValid(from.getIP())) {
             if (_log.shouldLog(Log.WARN))
                 _log.warn("Received invalid SessionRequest from: " + from);
@@ -486,7 +500,8 @@ class EstablishmentManager {
 
         boolean isNew = false;
 
-            InboundEstablishState state = _inboundStates.get(from);
+            if (state == null)
+                state = _inboundStates.get(from);
             if (state == null) {
                 // TODO this is insufficient to prevent DoSing, especially if
                 // IP spoofing is used. For further study.
@@ -550,11 +565,109 @@ class EstablishmentManager {
     }
 
     /**
+     * Got a SessionRequest OR a TokenRequest (initiates an inbound establishment)
+     *
+     * SSU 2 only.
+     * @param state as looked up in PacketHandler, but null unless retransmitted or retry sent
+     * @param packet header decrypted only
+     * @since 0.9.54
+     */
+    void receiveSessionOrTokenRequest(RemoteHostId from, InboundEstablishState2 state, UDPPacket packet) {
+        if (!TransportUtil.isValidPort(from.getPort()) || !_transport.isValid(from.getIP())) {
+            if (_log.shouldWarn())
+                _log.warn("Receive session request from invalid: " + from);
+            return;
+        }
+        boolean isNew = false;
+        if (state == null) {
+            // TODO this is insufficient to prevent DoSing, especially if
+            // IP spoofing is used. For further study.
+            if (!shouldAllowInboundEstablishment()) {
+                if (_log.shouldWarn())
+                    _log.warn("Dropping inbound establish, increase " + PROP_MAX_CONCURRENT_ESTABLISH);
+                _context.statManager().addRateData("udp.establishDropped", 1);
+                return; // drop the packet
+            }
+            if (_context.blocklist().isBlocklisted(from.getIP())) {
+                if (_log.shouldWarn())
+                    _log.warn("Receive session request from blocklisted IP: " + from);
+                _context.statManager().addRateData("udp.establishBadIP", 1);
+                return; // drop the packet
+            }
+            if (!_transport.allowConnection())
+                return; // drop the packet
+            try {
+                state = new InboundEstablishState2(_context, _transport, packet);
+            } catch (GeneralSecurityException gse) {
+                if (_log.shouldWarn())
+                    _log.warn("Corrupt Session/Token Request from: " + from, gse);
+                _context.statManager().addRateData("udp.establishDropped", 1);
+                return;
+            }
+
+          /**** TODO
+            if (_replayFilter.add(state.getReceivedX(), 0, 8)) {
+                if (_log.shouldLog(Log.WARN))
+                    _log.warn("Duplicate X in session request from: " + from);
+                _context.statManager().addRateData("udp.dupDHX", 1);
+                return; // drop the packet
+            }
+          ****/
+
+            InboundEstablishState oldState = _inboundStates.putIfAbsent(from, state);
+            isNew = oldState == null;
+            if (!isNew) {
+                // whoops, somebody beat us to it, throw out the state we just created
+                if (oldState.getVersion() == 2)
+                    state = (InboundEstablishState2) oldState;
+                // else don't cast, this is only for printing below
+            }
+        } else {
+            try {
+                state.receiveSessionRequestAfterRetry(packet);
+            } catch (GeneralSecurityException gse) {
+                if (_log.shouldWarn())
+                    _log.warn("Corrupt Session Request after Retry from: " + state, gse);
+                return;
+            }
+        }
+
+        if (isNew) {
+          /**** TODO
+            // Don't offer to relay to privileged ports.
+            // Only offer for an IPv4 session.
+            // TODO if already we have their RI, only offer if they need it (no 'C' cap)
+            // if extended options, only if they asked for it
+            if (state.isIntroductionRequested() &&
+                state.getSentPort() >= 1024 &&
+                _transport.canIntroduce(state.getSentIP().length == 16)) {
+                // ensure > 0
+                long tag = 1 + _context.random().nextLong(MAX_TAG_VALUE);
+                state.setSentRelayTag(tag);
+            } else {
+                // we got an IB even though we were firewalled, hidden, not high cap, etc.
+            }
+          ****/
+            if (_log.shouldInfo())
+                _log.info("Received NEW session/token request " + state);
+        } else {
+            if (_log.shouldDebug())
+                _log.debug("Receive DUP session/token request from: " + state);
+        }
+        notifyActivity();
+    }
+    
+    /** 
      * got a SessionConfirmed (should only happen as part of an inbound
      * establishment)
+     *
+     * SSU 1 only.
+     *
+     * @param state as looked up in PacketHandler, if null is probably retransmitted
      */
-    void receiveSessionConfirmed(RemoteHostId from, UDPPacketReader reader) {
-        InboundEstablishState state = _inboundStates.get(from);
+    void receiveSessionConfirmed(RemoteHostId from, InboundEstablishState state, UDPPacketReader reader) {
+        if (state == null)
+            state = _inboundStates.get(from);
         if (state != null) {
             state.receiveSessionConfirmed(reader.getSessionConfirmedReader());
             notifyActivity();
@@ -567,11 +680,40 @@ class EstablishmentManager {
     }
 
     /**
+     * got a SessionConfirmed (should only happen as part of an inbound 
+     * establishment) 
+     *
+     * SSU 2 only.
+     * @param state non-null
+     * @param packet header decrypted only
+     * @since 0.9.54
+     */
+    void receiveSessionConfirmed(InboundEstablishState2 state, UDPPacket packet) {
+        try {
+            state.receiveSessionConfirmed(packet);
+        } catch (GeneralSecurityException gse) {
+            if (_log.shouldWarn())
+                _log.warn("Corrupt Session Confirmed on: " + state, gse);
+            state.fail();
+            return;
+        }
+        // we are done, go right to ps2
+        handleCompletelyEstablished(state);
+        notifyActivity();
+        if (_log.shouldLog(Log.DEBUG))
+            _log.debug("Receive session confirmed from: " + state);
+    }
+    
+    /**
      * Got a SessionCreated (in response to our outbound SessionRequest)
      *
+     * SSU 1 only.
+     *
+     * @param state as looked up in PacketHandler, if null is probably retransmitted
      */
-    void receiveSessionCreated(RemoteHostId from, UDPPacketReader reader) {
-        OutboundEstablishState state = _outboundStates.get(from);
+    void receiveSessionCreated(RemoteHostId from, OutboundEstablishState state, UDPPacketReader reader) {
+        if (state == null)
+            state = _outboundStates.get(from);
         if (state != null) {
             state.receiveSessionCreated(reader.getSessionCreatedReader());
             notifyActivity();
@@ -581,6 +723,49 @@ class EstablishmentManager {
             if (_log.shouldLog(Log.WARN))
                 _log.warn("Received possible duplicate SessionCreated from: " + from);
         }
+    }
+
+    /**
+     * Got a SessionCreated (in response to our outbound SessionRequest)
+     *
+     * SSU 2 only.
+     *
+     * @param state non-null
+     * @param packet header decrypted only
+     * @since 0.9.54
+     */
+    void receiveSessionCreated(OutboundEstablishState2 state, UDPPacket packet) {
+        try {
+            state.receiveSessionCreated(packet);
+        } catch (GeneralSecurityException gse) {
+            if (_log.shouldWarn())
+                _log.warn("Corrupt Session Created on: " + state, gse);
+            state.fail();
+            return;
+        }
+        notifyActivity();
+        if (_log.shouldLog(Log.DEBUG))
+            _log.debug("Receive session created from: " + state);
+    }
+    
+    /**
+     * Got a Retry (in response to our outbound SessionRequest or TokenRequest)
+     *
+     * SSU 2 only.
+     * @since 0.9.54
+     */
+    void receiveRetry(OutboundEstablishState2 state, UDPPacket packet) {
+        try {
+            state.receiveSessionCreated(packet);
+        } catch (GeneralSecurityException gse) {
+            if (_log.shouldWarn())
+                _log.warn("Corrupt Retry from: " + state, gse);
+            state.fail();
+            return;
+        }
+        notifyActivity();
+        if (_log.shouldLog(Log.DEBUG))
+            _log.debug("Receive retry from: " + state);
     }
 
     /**
@@ -724,25 +909,35 @@ class EstablishmentManager {
         if (state.isComplete()) return;
 
         RouterIdentity remote = state.getConfirmedIdentity();
-        PeerState peer = new PeerState(_context, _transport,
-                                       state.getSentIP(), state.getSentPort(), remote.calculateHash(), true, state.getRTT());
-        peer.setCurrentCipherKey(state.getCipherKey());
-        peer.setCurrentMACKey(state.getMACKey());
-        peer.setWeRelayToThemAs(state.getSentRelayTag());
-        // Lookup the peer's MTU from the netdb, since it isn't included in the protocol setup (yet)
-        // TODO if we don't have RI then we will get it shortly, but too late.
-        // Perhaps netdb should notify transport when it gets a new RI...
-        RouterInfo info = _context.netDb().lookupRouterInfoLocally(remote.calculateHash());
-        if (info != null) {
-            RouterAddress addr = _transport.getTargetAddress(info);
-            if (addr != null) {
-                String smtu = addr.getOption(UDPAddress.PROP_MTU);
-                if (smtu != null) {
-                    try {
-                        boolean isIPv6 = state.getSentIP().length == 16;
-                        int mtu = MTU.rectify(isIPv6, Integer.parseInt(smtu));
-                        peer.setHisMTU(mtu);
-                    } catch (NumberFormatException nfe) {}
+        PeerState peer;
+        int version = state.getVersion();
+        if (version == 1) {
+            peer = new PeerState(_context, _transport,
+                                 state.getSentIP(), state.getSentPort(), remote.calculateHash(), true, state.getRTT());
+            peer.setCurrentCipherKey(state.getCipherKey());
+            peer.setCurrentMACKey(state.getMACKey());
+            peer.setWeRelayToThemAs(state.getSentRelayTag());
+        } else {
+            InboundEstablishState2 state2 = (InboundEstablishState2) state;
+            peer = state2.getPeerState();
+        }
+
+        if (version == 1) {
+            // Lookup the peer's MTU from the netdb, since it isn't included in the protocol setup (yet)
+            // TODO if we don't have RI then we will get it shortly, but too late.
+            // Perhaps netdb should notify transport when it gets a new RI...
+            RouterInfo info = _context.netDb().lookupRouterInfoLocally(remote.calculateHash());
+            if (info != null) {
+                RouterAddress addr = _transport.getTargetAddress(info);
+                if (addr != null) {
+                    String smtu = addr.getOption(UDPAddress.PROP_MTU);
+                    if (smtu != null) {
+                        try {
+                            boolean isIPv6 = state.getSentIP().length == 16;
+                            int mtu = MTU.rectify(isIPv6, Integer.parseInt(smtu));
+                            peer.setHisMTU(mtu);
+                        } catch (NumberFormatException nfe) {}
+                    }
                 }
             }
         }
@@ -842,11 +1037,18 @@ class EstablishmentManager {
         if (claimed != null)
             _outboundByClaimedAddress.remove(claimed, state);
         _outboundByHash.remove(remote.calculateHash(), state);
-        PeerState peer = new PeerState(_context, _transport,
+        int version = state.getVersion();
+        PeerState peer;
+        if (version == 1) {
+            peer = new PeerState(_context, _transport,
                                        state.getSentIP(), state.getSentPort(), remote.calculateHash(), false, state.getRTT());
         peer.setCurrentCipherKey(state.getCipherKey());
         peer.setCurrentMACKey(state.getMACKey());
         peer.setTheyRelayToUsAs(state.getReceivedRelayTag());
+        } else {
+            OutboundEstablishState2 state2 = (OutboundEstablishState2) state;
+            peer = state2.getPeerState();
+        }
         int mtu = state.getRemoteAddress().getMTU();
         if (mtu > 0)
             peer.setHisMTU(mtu);
@@ -861,12 +1063,12 @@ class EstablishmentManager {
 
         _context.statManager().addRateData("udp.outboundEstablishTime", state.getLifetime());
         DatabaseStoreMessage dbsm = null;
-        if (!state.isFirstMessageOurDSM()) {
-            dbsm = getOurInfo();
-        } else if (_log.shouldLog(Log.INFO)) {
-            _log.info("Skipping publish: " + state);
+        if (version == 1) {
+            if (!state.isFirstMessageOurDSM()) {
+                dbsm = getOurInfo();
+            }
         }
-
+        
         List<OutNetMessage> msgs = new ArrayList<OutNetMessage>(8);
         OutNetMessage msg;
         while ((msg = state.getNextQueuedMessage()) != null) {
@@ -914,6 +1116,9 @@ class EstablishmentManager {
         if (_log.shouldLog(Log.DEBUG))
             _log.debug("Sending SessionCreated to: " + state);
 
+        int version = state.getVersion();
+        UDPPacket pkt;
+        if (version == 1) {
         try {
             state.generateSessionKey();
         } catch (DHSessionKeyBuilder.InvalidPublicParameterException ippe) {
@@ -923,9 +1128,18 @@ class EstablishmentManager {
             state.fail();
             return;
         }
-        UDPPacket pkt = _builder.buildSessionCreatedPacket(state,
+            pkt = _builder.buildSessionCreatedPacket(state,
                                                            _transport.getExternalPort(state.getSentIP().length == 16),
                                                            _transport.getIntroKey());
+        } else {
+            // if already sent, get from the state to retx
+            InboundEstablishState2 state2 = (InboundEstablishState2) state;
+            InboundEstablishState.InboundState istate = state2.getState();
+            if (istate == IB_STATE_CREATED_SENT)
+                pkt = state2.getRetransmitSessionCreatedPacket();
+            else
+                pkt = _builder2.buildSessionCreatedPacket((InboundEstablishState2) state);
+        }
         if (pkt == null) {
             if (_log.shouldLog(Log.WARN))
                 _log.warn("Peer " + state + " sent us an invalid IP?");
@@ -934,7 +1148,9 @@ class EstablishmentManager {
             return;
         }
         _transport.send(pkt);
-        state.createdPacketSent();
+        if (version == 1)
+            state.createdPacketSent();
+        // else PacketBuilder2 told the state
     }
 
     /**
@@ -943,14 +1159,28 @@ class EstablishmentManager {
     private void sendRequest(OutboundEstablishState state) {
         if (_log.shouldLog(Log.DEBUG))
             _log.debug("Sent SessionRequest " + state);
-        UDPPacket packet = _builder.buildSessionRequestPacket(state);
+        int version = state.getVersion();
+        UDPPacket packet;
+        if (version == 1) {
+            packet = _builder.buildSessionRequestPacket(state);
+        } else {
+            // if already sent, get from the state to retx
+            OutboundEstablishState2 state2 = (OutboundEstablishState2) state;
+            OutboundEstablishState.OutboundState ostate = state2.getState();
+            if (ostate == OB_STATE_REQUEST_SENT)
+                packet = state2.getRetransmitSessionRequestPacket();
+            else
+                packet = _builder2.buildSessionRequestPacket(state2);
+        }
         if (packet != null) {
             _transport.send(packet);
         } else {
             if (_log.shouldLog(Log.WARN))
                 _log.warn("Unable to build a SessionRequest packet for: " + state);
         }
-        state.requestSent();
+        if (version == 1)
+            state.requestSent();
+        // else PacketBuilder2 told the state
     }
 
     /**
@@ -1107,19 +1337,41 @@ class EstablishmentManager {
         // gives us the opportunity to "detect" our external addr
         _transport.externalAddressReceived(state.getRemoteIdentity().calculateHash(), state.getReceivedIP(), state.getReceivedPort());
 
+        int version = state.getVersion();
+        UDPPacket packets[];
+        if (version == 1) {
         // signs if we havent signed yet
         state.prepareSessionConfirmed();
-
-        // BUG - handle null return
-        UDPPacket packets[] = _builder.buildSessionConfirmedPackets(state, _context.router().getRouterInfo().getIdentity());
+            packets = _builder.buildSessionConfirmedPackets(state, _context.router().getRouterInfo().getIdentity());
+        } else {
+            OutboundEstablishState2 state2 = (OutboundEstablishState2) state;
+            OutboundEstablishState.OutboundState ostate = state2.getState();
+            // shouldn't happen, we go straight to confirmed after sending
+            if (ostate == OB_STATE_CONFIRMED_COMPLETELY)
+                return;
+            packets = _builder2.buildSessionConfirmedPackets(state2, _context.router().getRouterInfo());
+        }
+        if (packets == null) {
+            state.fail();
+            return;
+        }
 
         if (_log.shouldLog(Log.DEBUG))
             _log.debug("Sending SessionConfirmed to: " + state);
 
-        for (int i = 0; i < packets.length; i++)
+        for (int i = 0; i < packets.length; i++) {
             _transport.send(packets[i]);
+        }
 
+        if (version == 1) {
         state.confirmedPacketsSent();
+        } else {
+            // save for retx
+            OutboundEstablishState2 state2 = (OutboundEstablishState2) state;
+            state2.confirmedPacketsSent(packets);
+            // we are done, go right to ps2
+            handleCompletelyEstablished(state2);
+        }
     }
 
     /**

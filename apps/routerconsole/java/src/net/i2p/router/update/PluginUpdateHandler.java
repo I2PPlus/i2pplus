@@ -87,7 +87,7 @@ class PluginUpdateHandler implements Checker, Updater {
 
         UpdateRunner update = new PluginUpdateRunner(_context, _mgr, updateSources, appName, oldVersion);
         // set status before thread to ensure UI feedback
-        _mgr.notifyProgress(update, "<b>" + _mgr._t("Updating") + "</b>");
+        _mgr.notifyProgress(update, "<span id=\"contactserver\"><b>" + _mgr._t("Contacting plugin update server") + "&hellip;</b></span>");
         return update;
     }
 }

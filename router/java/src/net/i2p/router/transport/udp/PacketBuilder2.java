@@ -283,7 +283,7 @@ class PacketBuilder2 {
      */
     public UDPPacket buildTokenRequestPacket(OutboundEstablishState2 state) {
         long n = _context.random().signedNextInt() & 0xFFFFFFFFL;
-        UDPPacket packet = buildLongPacketHeader(state.getSendConnID(), n, SESSION_REQUEST_FLAG_BYTE,
+        UDPPacket packet = buildLongPacketHeader(state.getSendConnID(), n, TOKEN_REQUEST_FLAG_BYTE,
                                                  state.getRcvConnID(), 0);
         DatagramPacket pkt = packet.getPacket();
 
@@ -292,7 +292,7 @@ class PacketBuilder2 {
             packet.release();
             return null;
         }
-        InetAddress to = null;
+        InetAddress to;
         try {
             to = InetAddress.getByAddress(toIP);
         } catch (UnknownHostException uhe) {
@@ -309,6 +309,7 @@ class PacketBuilder2 {
         setTo(packet, to, state.getSentPort());
         packet.setMessageType(TYPE_SREQ);
         packet.setPriority(PRIORITY_HIGH);
+        state.tokenRequestSent(pkt);
         return packet;
     }
     
@@ -319,7 +320,8 @@ class PacketBuilder2 {
      * @return ready to send packet, or null if there was a problem
      */
     public UDPPacket buildSessionRequestPacket(OutboundEstablishState2 state) {
-        UDPPacket packet = buildLongPacketHeader(state.getSendConnID(), 0, SESSION_REQUEST_FLAG_BYTE,
+        long n = _context.random().signedNextInt() & 0xFFFFFFFFL;
+        UDPPacket packet = buildLongPacketHeader(state.getSendConnID(), n, SESSION_REQUEST_FLAG_BYTE,
                                                  state.getRcvConnID(), state.getToken());
         DatagramPacket pkt = packet.getPacket();
 
@@ -328,7 +330,7 @@ class PacketBuilder2 {
             packet.release();
             return null;
         }
-        InetAddress to = null;
+        InetAddress to;
         try {
             to = InetAddress.getByAddress(toIP);
         } catch (UnknownHostException uhe) {
@@ -345,6 +347,7 @@ class PacketBuilder2 {
         setTo(packet, to, state.getSentPort());
         packet.setMessageType(TYPE_SREQ);
         packet.setPriority(PRIORITY_HIGH);
+        state.requestSent(pkt);
         return packet;
     }
     
@@ -355,7 +358,8 @@ class PacketBuilder2 {
      * @return ready to send packet, or null if there was a problem
      */
     public UDPPacket buildSessionCreatedPacket(InboundEstablishState2 state) {
-        UDPPacket packet = buildLongPacketHeader(state.getSendConnID(), 0, SESSION_CREATED_FLAG_BYTE,
+        long n = _context.random().signedNextInt() & 0xFFFFFFFFL;
+        UDPPacket packet = buildLongPacketHeader(state.getSendConnID(), n, SESSION_CREATED_FLAG_BYTE,
                                                  state.getRcvConnID(), state.getToken());
         DatagramPacket pkt = packet.getPacket();
         
@@ -365,10 +369,10 @@ class PacketBuilder2 {
         encryptSessionCreated(packet, state.getHandshakeState(), state.getSendHeaderEncryptKey1(),
                               state.getSendHeaderEncryptKey2(), state.getSentRelayTag(), state.getNextToken(),
                               sentIP, port);
-        state.createdPacketSent();
         pkt.setSocketAddress(state.getSentAddress());
         packet.setMessageType(TYPE_CREAT);
         packet.setPriority(PRIORITY_HIGH);
+        state.createdPacketSent(pkt);
         return packet;
     }
     
@@ -390,10 +394,10 @@ class PacketBuilder2 {
         encryptRetry(packet, state.getSendHeaderEncryptKey1(), n, state.getSendHeaderEncryptKey1(),
                      state.getSendHeaderEncryptKey2(),
                      sentIP, port);
-        state.retryPacketSent();
         pkt.setSocketAddress(state.getSentAddress());
         packet.setMessageType(TYPE_CREAT);
         packet.setPriority(PRIORITY_HIGH);
+        state.retryPacketSent();
         return packet;
     }
     
@@ -449,7 +453,6 @@ class PacketBuilder2 {
             len = info.length;
         }
 
-
         UDPPacket packets[] = new UDPPacket[numFragments];
         packets[0] = buildSessionConfirmedPacket(state, numFragments, info, len, gzip);
         if (numFragments > 1) {
@@ -460,7 +463,7 @@ class PacketBuilder2 {
             // TODO numFragments > 1 requires shift to data phase
             throw new IllegalArgumentException("TODO");
         }
-        state.confirmedPacketsSent();
+        state.confirmedPacketsSent(packets);
         return packets;
     }
 
@@ -470,10 +473,10 @@ class PacketBuilder2 {
      * @return ready to send packet, or null if there was a problem
      */
     private UDPPacket buildSessionConfirmedPacket(OutboundEstablishState2 state, int numFragments, byte ourInfo[], int len, boolean gzip) {
-        UDPPacket packet = buildShortPacketHeader(state.getSendConnID(), 1, SESSION_CONFIRMED_FLAG_BYTE);
+        UDPPacket packet = buildShortPacketHeader(state.getSendConnID(), 0, SESSION_CONFIRMED_FLAG_BYTE);
         DatagramPacket pkt = packet.getPacket();
 
-        InetAddress to = null;
+        InetAddress to;
         try {
             to = InetAddress.getByAddress(state.getSentIP());
         } catch (UnknownHostException uhe) {
@@ -836,7 +839,7 @@ class PacketBuilder2 {
         byte data[] = pkt.getData();
         int off = pkt.getOffset();
         try {
-            List<Block> blocks = new ArrayList<Block>(4);
+            List<Block> blocks = new ArrayList<Block>(3);
             Block block = new SSU2Payload.DateTimeBlock(_context);
             int len = block.getTotalLength();
             blocks.add(block);
@@ -847,8 +850,7 @@ class PacketBuilder2 {
             block = getPadding(len, 1280);
             len += block.getTotalLength();
             blocks.add(block);
-            byte[] payload = new byte[len];
-            SSU2Payload.writePayload(payload, 0, blocks);
+            SSU2Payload.writePayload(data, off + LONG_HEADER_SIZE, blocks);
 
             ChaChaPolyCipherState chacha = new ChaChaPolyCipherState();
             chacha.initializeKey(chachaKey, 0);
@@ -878,7 +880,7 @@ class PacketBuilder2 {
         byte data[] = pkt.getData();
         int off = pkt.getOffset();
         try {
-            List<Block> blocks = new ArrayList<Block>(4);
+            List<Block> blocks = new ArrayList<Block>(2);
             Block block = new SSU2Payload.DateTimeBlock(_context);
             int len = block.getTotalLength();
             blocks.add(block);
@@ -886,14 +888,13 @@ class PacketBuilder2 {
             block = getPadding(len, 1280);
             len += block.getTotalLength();
             blocks.add(block);
-            byte[] payload = new byte[len];
-            SSU2Payload.writePayload(payload, 0, blocks);
+            SSU2Payload.writePayload(data, off + LONG_HEADER_SIZE, blocks);
 
             ChaChaPolyCipherState chacha = new ChaChaPolyCipherState();
             chacha.initializeKey(chachaKey, 0);
             chacha.setNonce(n);
             chacha.encryptWithAd(data, off, LONG_HEADER_SIZE,
-                                 data, off + LONG_HEADER_SIZE, data, off + LONG_HEADER_SIZE, len - LONG_HEADER_SIZE);
+                                 data, off + LONG_HEADER_SIZE, data, off + LONG_HEADER_SIZE, len);
 
             pkt.setLength(pkt.getLength() + len + MAC_LEN);
         } catch (RuntimeException re) {
@@ -905,7 +906,7 @@ class PacketBuilder2 {
                 _log.error("Bad token req msg out", gse);
             throw new RuntimeException("Bad token req msg out", gse);
         }
-        SSU2Header.encryptHandshakeHeader(packet, hdrKey1, hdrKey2);
+        SSU2Header.encryptLongHeader(packet, hdrKey1, hdrKey2);
     }
 
     /**

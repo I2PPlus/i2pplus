@@ -909,7 +909,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
      * @return the valid version 1 or 2, or 0 if unusable
      * @since 0.9.54
      */
-    private int getSSUVersion(RouterAddress addr) {
+    int getSSUVersion(RouterAddress addr) {
         int rv;
         String style = addr.getTransportStyle();
         if (style.equals(STYLE)) {
@@ -2115,7 +2115,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
     void send(UDPPacket packet) {
         if (_pusher != null) {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Sending packet: " + packet);
+                _log.debug("Sending direct packet... " + packet);
             _pusher.send(packet);
         } else {
             _log.error("No pusher", new Exception());

@@ -1,7 +1,9 @@
 package net.i2p.router.transport.udp;
 
 import java.net.DatagramPacket;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.UnknownHostException;
 import java.security.GeneralSecurityException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -44,8 +46,19 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     private final byte[] _rcvHeaderEncryptKey2;
     private final SSU2Bitfield _receivedMessages;
     private final SSU2Bitfield _ackedMessages;
+    private byte[] _sessConfForReTX;
 
+    // As SSU
+    public static final int MIN_SSU_IPV4_MTU = 1292;
+    public static final int MAX_SSU_IPV4_MTU = 1484;
+    public static final int DEFAULT_SSU_IPV4_MTU = MAX_SSU_IPV4_MTU;
+    public static final int MIN_SSU_IPV6_MTU = 1280;
+    public static final int MAX_SSU_IPV6_MTU = 1488;
+    public static final int DEFAULT_SSU_IPV6_MTU = MIN_SSU_IPV6_MTU;  // should always be published
+    // As SSU2
     public static final int MIN_MTU = 1280;
+    public static final int MAX_MTU = 1500;
+    public static final int DEFAULT_MTU = MAX_MTU;
 
     /**
      *  @param rtt from the EstablishState, or 0 if not available
@@ -65,6 +78,9 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         _rcvHeaderEncryptKey2 = rcvHdrKey2;
         _receivedMessages = new SSU2Bitfield(256, 0);
         _ackedMessages = new SSU2Bitfield(256, 0);
+        // For outbound, SessionConfirmed is packet 0
+        if (!isInbound)
+            _packetNumber.set(1);
     }
 
     // SSU 1 overrides
@@ -120,7 +136,11 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
 
     // SSU 2 things
 
-    long getNextPacketNumber() { return _packetNumber.incrementAndGet(); }
+    /**
+     * Next outbound packet number,
+     * starts at 1 for Alice (0 is Session Confirmed) and 0 for Bob
+     */
+    long getNextPacketNumber() { return _packetNumber.getAndIncrement(); }
     long getSendConnID() { return _sendConnID; }
     long getRcvConnID() { return _rcvConnID; }
     /** caller must sync on returned object when encrypting */
@@ -132,6 +152,9 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     SSU2Bitfield getReceivedMessages() { return _receivedMessages; }
     SSU2Bitfield getAckedMessages() { return _ackedMessages; }
 
+    /**
+     *  @param packet fully encrypted, header and body decryption will be done here
+     */
     void receivePacket(UDPPacket packet) {
         DatagramPacket dpacket = packet.getPacket();
         byte[] data = dpacket.getData();
@@ -157,6 +180,14 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             if (header.getType() != DATA_FLAG_BYTE) {
                 if (_log.shouldWarn())
                     _log.warn("bad data pkt type " + (header.getType() & 0xff) + " on " + this);
+                // TODO if it's early:
+                // If inbound, could be a retransmitted Session Confirmed,
+                // ack it again.
+                // If outbound, and Session Confirmed is not acked yet,
+                // could be a retransmitted Session Created,
+                // retransmit Session Confirmed.
+                // Alternatively, could be a new Session Request or Token Request,
+                // we didn't know the session has disconnected yet.
                 return;
             }
             long n = header.getPacketNumber();
@@ -332,5 +363,34 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      */
     void fragmentsSent(long pktNum, List<PacketBuilder.Fragment> fragments) {
 
+    }
+
+    /**
+     * note that we just sent the SessionConfirmed packets
+     * and save them for retransmission
+     */
+    public synchronized void confirmedPacketsSent(byte[] data) {
+        if (_sessConfForReTX == null)
+            _sessConfForReTX = data;
+    }
+
+    /**
+     * @return null if not sent or already got the ack
+     */
+    public synchronized UDPPacket[] getRetransmitSessionConfirmedPackets() {
+        if (_sessConfForReTX == null)
+            return null;
+        UDPPacket packet = UDPPacket.acquire(_context, false);
+        UDPPacket[] rv = new UDPPacket[1];
+        rv[0] = packet;
+        DatagramPacket pkt = packet.getPacket();
+        byte data[] = pkt.getData();
+        int off = pkt.getOffset();
+        System.arraycopy(_sessConfForReTX, 0, data, off, _sessConfForReTX.length);
+        pkt.setAddress(_remoteIPAddress);
+        pkt.setPort(_remotePort);
+        packet.setMessageType(PacketBuilder2.TYPE_CONF);
+        packet.setPriority(PacketBuilder2.PRIORITY_HIGH);
+        return rv;
     }
 }

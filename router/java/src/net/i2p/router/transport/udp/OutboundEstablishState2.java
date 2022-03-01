@@ -7,6 +7,7 @@ import java.net.SocketAddress;
 import java.net.UnknownHostException;
 import java.security.GeneralSecurityException;
 
+import com.southernstorm.noise.protocol.ChaChaPolyCipherState;
 import com.southernstorm.noise.protocol.CipherState;
 import com.southernstorm.noise.protocol.CipherStatePair;
 import com.southernstorm.noise.protocol.HandshakeState;
@@ -16,9 +17,11 @@ import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.SessionKey;
 import net.i2p.data.i2np.I2NPMessage;
+import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.RouterContext;
+import static net.i2p.router.transport.udp.SSU2Util.*;
 import net.i2p.util.Addresses;
 import net.i2p.util.Log;
 
@@ -36,6 +39,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     private final UDPTransport _transport;
     private final long _sendConnID;
     private final long _rcvConnID;
+    private final RouterAddress _routerAddress;
     private long _token;
     private HandshakeState _handshakeState;
     private final byte[] _sendHeaderEncryptKey1;
@@ -44,7 +48,12 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     private byte[] _rcvHeaderEncryptKey2;
     private final byte[] _rcvRetryHeaderEncryptKey2;
     private int _mtu;
+    private byte[] _sessReqForReTX;
+    private byte[] _sessConfForReTX;
+    private long _timeReceived;
+
     private static final boolean SET_TOKEN = false;
+    private static final long MAX_SKEW = 2*60*1000L;
 
     /**
      *  @param claimedAddress an IP/port based RemoteHostId, or null if unknown
@@ -56,10 +65,9 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
      *  @param addr non-null
      */
     public OutboundEstablishState2(RouterContext ctx, UDPTransport transport, RemoteHostId claimedAddress,
-                                  RemoteHostId remoteHostId, int mtu,
-                                  RouterIdentity remotePeer, byte[] publicKey,
-                                  boolean needIntroduction,
-                                  SessionKey introKey, UDPAddress addr) {
+                                   RemoteHostId remoteHostId, RouterIdentity remotePeer,
+                                   boolean needIntroduction,
+                                   SessionKey introKey, RouterAddress ra, UDPAddress addr) throws IllegalArgumentException {
         super(ctx, claimedAddress, remoteHostId, remotePeer, needIntroduction, introKey, addr);
         _transport = transport;
         if (claimedAddress != null) {
@@ -68,10 +76,31 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
             } catch (UnknownHostException uhe) {
                 throw new IllegalArgumentException("bad IP", uhe);
             }
-            _mtu = mtu;
-        } else {
-            _mtu = PeerState.MIN_IPV6_MTU;
         }
+        // We need the MTU so the Session Confirmed can fit the RI in
+        int mtu = addr.getMTU();
+        if (mtu == 0) {
+            if (ra.getTransportStyle().equals("SSU2")) {
+                mtu = PeerState2.DEFAULT_MTU;
+            } else {
+                if (_bobIP.length == 16)
+                    mtu = PeerState2.DEFAULT_SSU_IPV6_MTU;
+                else
+                    mtu = PeerState2.DEFAULT_SSU_IPV4_MTU;
+            }
+        } else {
+            // TODO if too small, give up now
+            if (ra.getTransportStyle().equals("SSU2")) {
+                mtu = Math.min(Math.max(mtu, PeerState2.MIN_MTU), PeerState2.MAX_MTU);
+            } else {
+                if (_bobIP.length == 16)
+                    mtu = Math.min(Math.max(mtu, PeerState2.MIN_SSU_IPV6_MTU), PeerState2.MAX_SSU_IPV6_MTU);
+                else
+                    mtu = Math.min(Math.max(mtu, PeerState2.MIN_SSU_IPV4_MTU), PeerState2.MAX_SSU_IPV4_MTU);
+            }
+        }
+        _mtu = mtu;
+        // TODO if RI too big, give up now
         if (addr.getIntroducerCount() > 0) {
             if (_log.shouldLog(Log.DEBUG))
                 _log.debug("new outbound establish to " + remotePeer.calculateHash() + ", with address: " + addr);
@@ -80,21 +109,19 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
             _currentState = OutboundState.OB_STATE_UNKNOWN;
         }
 
-        // SSU2
-        createNewState(publicKey);
-
         _sendConnID = ctx.random().nextLong();
         // rcid == scid is not allowed
         long rcid;
         do {
             rcid = ctx.random().nextLong();
         } while (_sendConnID == rcid);
-        if (SET_TOKEN) {
-            do {
-                _token = ctx.random().nextLong();
-            } while (_token == 0);
-        }
         _rcvConnID = rcid;
+
+        _token = _transport.getEstablisher().getOutboundToken(_remotePeer.calculateHash());
+        _routerAddress = ra;
+        if (_token != 0)
+            createNewState(ra);
+
         byte[] ik = introKey.getData();
         _sendHeaderEncryptKey1 = ik;
         _rcvHeaderEncryptKey1 = ik;
@@ -103,7 +130,15 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         _rcvRetryHeaderEncryptKey2 = ik;
     }
 
-    private void createNewState(byte[] publicKey) {
+    private void createNewState(RouterAddress addr) {
+        String ss = addr.getOption("s");
+        if (ss == null)
+            throw new IllegalArgumentException("no SSU2 S");
+        byte[] publicKey = Base64.decode(ss);
+        if (publicKey == null)
+            throw new IllegalArgumentException("bad SSU2 S");
+        if (publicKey.length != 32)
+            throw new IllegalArgumentException("bad SSU2 S len");
         try {
             _handshakeState = new HandshakeState(HandshakeState.PATTERN_ID_XK_SSU2, HandshakeState.INITIATOR, _transport.getXDHFactory());
         } catch (GeneralSecurityException gse) {
@@ -117,17 +152,18 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     public synchronized void restart(long token) {
         _token = token;
         HandshakeState old = _handshakeState;
-        byte[] pub = new byte[32];
-        old.getRemotePublicKey().getPublicKey(pub, 0);
-        createNewState(pub);
-        old.destroy();
+        if (old != null) {
+            // TODO pass the old keys over to createNewState()
+            old.destroy();
+        }
+        createNewState(_routerAddress);
         //_rcvHeaderEncryptKey2 will be set after the Session Request message is created
         _rcvHeaderEncryptKey2 = null;
     }
 
-    private void processPayload(byte[] payload, int length, boolean isHandshake) throws GeneralSecurityException {
+    private void processPayload(byte[] payload, int offset, int length, boolean isHandshake) throws GeneralSecurityException {
         try {
-            int blocks = SSU2Payload.processPayload(_context, this, payload, 0, length, isHandshake);
+            int blocks = SSU2Payload.processPayload(_context, this, payload, offset, length, isHandshake);
             System.out.println("Processed " + blocks + " blocks");
         } catch (Exception e) {
             throw new GeneralSecurityException("Session Created payload error", e);
@@ -139,7 +175,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     /////////////////////////////////////////////////////////
 
     public void gotDateTime(long time) {
-        System.out.println("Got DATE block: " + DataHelper.formatTime(time));
+        _timeReceived = time;
     }
 
     public void gotOptions(byte[] options, boolean isHandshake) {
@@ -201,6 +237,11 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     // end payload callbacks
     /////////////////////////////////////////////////////////
     
+    // SSU 1 unsupported things
+
+
+    // SSU 2 things
+
     @Override
     public int getVersion() { return 2; }
     public long getSendConnID() { return _sendConnID; }
@@ -226,6 +267,36 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     /** what is the largest packet we can send to the peer? */
     public int getMTU() { return _mtu; }
 
+    public synchronized void receiveRetry(UDPPacket packet) throws GeneralSecurityException {
+        ////// TODO state check
+        DatagramPacket pkt = packet.getPacket();
+        int off = pkt.getOffset();
+        int len = pkt.getLength();
+        byte data[] = pkt.getData();
+        _timeReceived = 0;
+        try {
+            // decrypt in-place
+            ChaChaPolyCipherState chacha = new ChaChaPolyCipherState();
+            chacha.initializeKey(_rcvHeaderEncryptKey1, 0);
+            long n = DataHelper.fromLong(data, off + PKT_NUM_OFFSET, 4);
+            chacha.setNonce(n);
+            chacha.decryptWithAd(data, off, LONG_HEADER_SIZE,
+                                 data, off + LONG_HEADER_SIZE, data, off + LONG_HEADER_SIZE, len - LONG_HEADER_SIZE);
+            processPayload(data, off + LONG_HEADER_SIZE, len - (LONG_HEADER_SIZE + MAC_LEN), true);
+        } catch (GeneralSecurityException gse) {
+            if (_log.shouldDebug())
+                _log.debug("Retry error", gse);
+            throw gse;
+        }
+        if (_timeReceived == 0)
+            throw new GeneralSecurityException("No DateTime block in Session/Token Request");
+        long skew = _establishBegin - _timeReceived;
+        if (skew > MAX_SKEW || skew < 0 - MAX_SKEW)
+            throw new GeneralSecurityException("Skew exceeded in Session/Token Request: " + skew);
+        createNewState(_routerAddress);
+        ////// TODO state change
+    }
+
     public synchronized void receiveSessionCreated(UDPPacket packet) throws GeneralSecurityException {
         ////// todo fix state check
         if (_currentState == OutboundState.OB_STATE_VALIDATION_FAILED) {
@@ -241,13 +312,13 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         int off = pkt.getOffset();
         int len = pkt.getLength();
         byte data[] = pkt.getData();
-        _handshakeState.mixHash(data, off, 32);
+        _handshakeState.mixHash(data, off, LONG_HEADER_SIZE);
         if (_log.shouldDebug())
             _log.debug("State after mixHash 2: " + _handshakeState);
 
-        byte[] payload = new byte[len - 80]; // 32 hdr, 32 eph. key, 16 MAC
+        // decrypt in-place
         try {
-            _handshakeState.readMessage(data, off + 32, len - 32, payload, 0);
+            _handshakeState.readMessage(data, off + LONG_HEADER_SIZE, len - LONG_HEADER_SIZE, data, off + LONG_HEADER_SIZE);
         } catch (GeneralSecurityException gse) {
             if (_log.shouldDebug())
                 _log.debug("Session create error, State at failure: " + _handshakeState + '\n' + net.i2p.util.HexDump.dump(data, off, len), gse);
@@ -255,7 +326,14 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         }
         if (_log.shouldDebug())
             _log.debug("State after sess cr: " + _handshakeState);
-        processPayload(payload, payload.length, true);
+        _timeReceived = 0;
+        processPayload(data, off + LONG_HEADER_SIZE, len - (LONG_HEADER_SIZE + KEY_LEN + MAC_LEN), true);
+        if (_timeReceived == 0)
+            throw new GeneralSecurityException("No DateTime block in Session/Token Request");
+        long skew = _establishBegin - _timeReceived;
+        if (skew > MAX_SKEW || skew < 0 - MAX_SKEW)
+            throw new GeneralSecurityException("Skew exceeded in Session/Token Request: " + skew);
+        _sessReqForReTX = null;
         _sendHeaderEncryptKey2 = SSU2Util.hkdf(_context, _handshakeState.getChainingKey(), "SessionConfirmed");
 
         if (_currentState == OutboundState.OB_STATE_UNKNOWN ||
@@ -271,14 +349,92 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     }
 
     /**
-     * note that we just sent the SessionRequest packet
+     * note that we just sent the SessionConfirmed packets
+     * and save them for retransmission
      */
-    @Override
-    public synchronized void requestSent() {
-        /// TODO store pkt for retx
+    public synchronized void tokenRequestSent(DatagramPacket packet) {
+        if (_currentState == OutboundState.OB_STATE_UNKNOWN)
+            _currentState = OutboundState.OB_STATE_TOKEN_REQUEST_SENT;
+        else if (_currentState == OutboundState.OB_STATE_RETRY_RECEIVED)
+            _currentState = OutboundState.OB_STATE_REQUEST_SENT_NEW_TOKEN;
+        // don't bother saving for retx, just make a new one every time
+    }
+
+    /**
+     * note that we just sent the SessionRequest packet
+     * and save it for retransmission
+     */
+    public synchronized void requestSent(DatagramPacket pkt) {
+        if (_sessReqForReTX == null) {
+            // store pkt for retx
+            byte data[] = pkt.getData();
+            int off = pkt.getOffset();
+            int len = pkt.getLength();
+            _sessReqForReTX = new byte[len];
+            System.arraycopy(data, off, _sessReqForReTX, 0, len);
+        }
         if (_rcvHeaderEncryptKey2 == null)
             _rcvHeaderEncryptKey2 = SSU2Util.hkdf(_context, _handshakeState.getChainingKey(), "SessCreateHeader");
-        super.requestSent();
+        requestSent();
+    }
+
+    /**
+     * note that we just sent the SessionConfirmed packets
+     * and save them for retransmission
+     */
+    public synchronized void confirmedPacketsSent(UDPPacket[] packets) {
+        if (_sessConfForReTX == null) {
+            // store pkt for retx
+            // only one supported right now
+            DatagramPacket pkt = packets[0].getPacket();
+            byte data[] = pkt.getData();
+            int off = pkt.getOffset();
+            int len = pkt.getLength();
+            _sessConfForReTX = new byte[len];
+            System.arraycopy(data, off, _sessConfForReTX, 0, len);
+            if (_rcvHeaderEncryptKey2 == null)
+                _rcvHeaderEncryptKey2 = SSU2Util.hkdf(_context, _handshakeState.getChainingKey(), "SessCreateHeader");
+
+            // TODO split(), create PeerState2
+        }
+        confirmedPacketsSent();
+    }
+
+    /**
+     * @return null if not sent or already got the session created
+     */
+    public synchronized UDPPacket getRetransmitSessionRequestPacket() {
+        if (_sessReqForReTX == null)
+            return null;
+        UDPPacket packet = UDPPacket.acquire(_context, false);
+        DatagramPacket pkt = packet.getPacket();
+        byte data[] = pkt.getData();
+        int off = pkt.getOffset();
+        System.arraycopy(_sessReqForReTX, 0, data, off, _sessReqForReTX.length);
+        InetAddress to;
+        try {
+            to = InetAddress.getByAddress(_bobIP);
+        } catch (UnknownHostException uhe) {
+            if (_log.shouldLog(Log.ERROR))
+                _log.error("How did we think this was a valid IP?  " + _remoteHostId);
+            packet.release();
+            return null;
+        }
+        pkt.setAddress(to);
+        pkt.setPort(_bobPort);
+        packet.setMessageType(PacketBuilder2.TYPE_SREQ);
+        packet.setPriority(PacketBuilder2.PRIORITY_HIGH);
+        requestSent();
+        return packet;
+    }
+
+    /**
+     * @return null we have not sent the session confirmed
+     */
+    public synchronized PeerState2 getPeerState() {
+        // TODO
+        // set confirmed pkt data
+        return null;
     }
 
     @Override

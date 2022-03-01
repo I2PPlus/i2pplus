@@ -122,7 +122,7 @@ public class UDPEndpointTestStandalone {
                 UDPPacket packet = builder.buildPacket(data, localhost, _endpoints[curPeer].getListenPort());
                 int outstanding = _sentNotReceived.size() + 1;
                 _sentNotReceived.add(new ByteArray(data));
-                _log.debug("Sending packet: " + curPacket + " with " + sz + " byte payload, outstanding " + outstanding);
+                _log.debug("Sending test packet: " + curPacket + " with " + sz + " byte payload, outstanding " + outstanding);
                 try {
                     _endpoint.send(packet);
                 } catch (Exception e) {

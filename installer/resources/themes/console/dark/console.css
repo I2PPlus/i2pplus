@@ -29,7 +29,7 @@ h3 + table {position: relative; z-index: 0}
 h4 {margin: 5px 0 10px 0; padding: 0 0 10px 0; font-size: 11pt; border-bottom: 1px; border-bottom: var(--border_hard)}
 .hide, .hideme, #hideme {display: none}
 hr:last-child {margin-top: 20px; margin-bottom: 20px}
-hr {margin: 20px 0 10px; height: 1px; border: 0 solid #242; background: #242}
+hr {margin: 20px 0 10px; height: 1px; border: none; background: #242}
 i {padding-right: 2px}
 .main h3 a {-webkit-text-stroke: 0}
 .main li {margin: 2px 0 2px 30px; padding: 2px 10px 2px 0; word-wrap: break-word; text-align: left}
@@ -67,11 +67,12 @@ ul {margin: 0; padding: 0}
 .extlink::after, input, button {will-change: transform}
 
 /* sidebar */
-#sb_wrap {margin: 0 0 10px 5px; padding: 0; width: auto; display: block; text-align: center; will-change: transform}
+#sbwrap, #sidebar, #xhr {width: 194px}
+#sb_wrap {margin: 0 0 10px 5px; padding: 0; display: block; text-align: center; will-change: transform}
 .iframed #sb_wrap {display: none}
-#xhr {width: calc(100% + 19px); margin-left: -9px; display: inline-block}
-.sb table {margin: -5px 0 -6px; padding: 1px 1px 0; overflow: hidden; text-align: center; font-size: 8pt; border: 0; border-collapse: separate; border-spacing: 2px; background: none;}
-#sidebar {padding: 8px 10px 8px; width: 194px; text-align: center; font-size: 8pt; border: var(--border); border-radius: 3px; background: var(--mainbg); /*repeating-linear-gradient(90deg, rgba(0,0,0,.4) 2px, rgba(0,16,0,.3) 4px), repeating-linear-gradient(180deg,rgba(0,0,0,.8) 2px, rgba(0,16,0,.8) 4px), var(--camo) #000*/; background-size: 4px 100%, 100% 4px, 1800px; contain: paint}
+#xhr {margin: 0 auto 0 -9px; display: block; width: calc(100% + 19px)}
+.sb table {margin: -5px auto -6px -1px; width: calc(100% + 1px); position: relative; overflow: hidden; text-align: center; font-size: 8pt; border: none; border-collapse: collapse; box-shadow: var(--bevel_hard)}
+#sidebar {padding: 8px 10px 8px; width: 194px; text-align: center; font-size: 8pt; border: var(--border); border-radius: 3px; background: var(--mainbg); contain: paint}
 #sb_logo {width: 100%; margin: -8px 0 -9px -10px; padding: 9px 10px 10px; display: inline-block; border-radius: 3px 3px 0 0; box-shadow: var(--bevel); background: linear-gradient(180deg,rgba(0,64,0,.3), rgba(0,24,0,.3)), repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px); background-size: 100%, 100% 4px}
 #sb_logo:hover {box-shadow: var(--highlight), inset 0 0 0 2px rgba(255,96,0,.6); background: linear-gradient(180deg,rgba(0,64,0,.6), rgba(0,24,0,.6)), repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px); background-size: 100%, 100% 4px; transition: ease background .15s}
 #sb_logo:active {box-shadow: var(--highlight), inset 0 0 0 2px rgba(255,144,0,.5), inset 6px 6px 6px rgba(0,0,0,.7); background: linear-gradient(180deg,rgba(0,32,0,.3), rgba(0,48,0,.3)), repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px)}
@@ -79,9 +80,13 @@ ul {margin: 0; padding: 0}
 #sidebar img[src$="i2plogo.png"]:hover {filter: saturate(1); transition: ease filter .1s}
 #sidebar img[src$="i2plogo.png"]:active {filter: sepia(1) hue-rotate(45deg) saturate(2) opacity(.65) drop-shadow(0 0 1px rgba(156,32,0,.3)); transform: scale(.97); transition: none}
 #sidebar input[type=text] {text-align: right; box-shadow: inset 1px 1px 1px 0 #000}
+#sidebar td {padding: 1px 8px; word-spacing: -0.1em; text-shadow: var(--textshadow); border: 0}
+#sidebar td:first-child {max-width: 90px; overflow: hidden; text-transform: capitalize}
 #sidebar td b:not(::selection), .infohelp b:not(::selection) {color: #ffffa8; -webkit-text-stroke: 1px rgba(0,0,0,.4)}
+#sidebar table:not(#sb_localtunnels) td b, #sidebar td span {margin: -2px 0 2px; display: inline-block; vertical-align: text-top}
+#sidebar table:not(#sb_localtunnels) tr:first-child td b, #sidebar tr:first-child td span {margin: 0 0 1px}
+#sidebar table:not(#sb_localtunnels) tr:last-child td b, #sidebar tr:last-child td span {margin: -2px 0 3px}
 #sidebar td a {-webkit-text-stroke: 0}
-#sidebar td a:hover {border-radius: 2px; box-shadow: 0 0 0 2px rgba(0,0,0,.3); background: repeating-linear-gradient(180deg,rgba(16,16,0,.5) 1px, rgba(16,16,0,.5) 2px, rgba(0,64,0,.6) 3px)}
 #sidebar td a:active {box-shadow: 0 0 0 2px rgba(0,0,0,.3), inset 2px 2px 2px rgba(0,0,0,.7)}
 #sidebar h3 {margin: -7px -1px -9px; padding: 6px 2px; width: calc(100% - 3px); letter-spacing: .08em; text-transform: uppercase; font-size: 9.5pt; border: none; border-radius: 0; box-shadow: var(--highlight), inset 0 0 1px 1px #191; background: radial-gradient(at center bottom, rgba(16, 72, 16, .4) 0, rgba(0, 0, 0, 0) 50%), var(--bg_title), linear-gradient(180deg,rgba(0,0,0,.1), rgba(0,0,0,.25) 50%, rgba(0,0,0,.75) 50%, #000), var(--h3_fade); background-size: 100%, 2px, 100%, 100%}
 #sidebar h3:hover {box-shadow: var(--highlight), inset 0 0 0 2px rgba(128,48,0,.3)}
@@ -91,78 +96,73 @@ ul {margin: 0; padding: 0}
 #sidebar h3 a {width: 100%; vertical-align: middle; line-height: 1; text-shadow: var(--textshadow)}
 #sidebar h3:hover a {color: var(--hover)}
 #sidebar h3:active {transition: ease box-shadow .01s}
-#sidebar h4 {margin: -6px -1px -9px; padding: 6px 1px; width: calc(100% - 1px); line-height: 1.2; font-size: 8pt; text-decoration: none; color: #2b2; border: none; box-shadow: var(--bevel), inset 0 0 0 3px #000, inset 0 0 5px 5px rgba(0,0,0,.5); background: rgba(0,64,0,.3)}
+#sidebar h4 {margin: -6px -1px -9px; padding: 6px 1px; width: calc(100% - 9px); line-height: 1.2; font-size: 8pt; text-decoration: none; color: #2b2; border: none; box-shadow: var(--bevel), inset 0 0 0 3px #000, inset 0 0 5px 5px rgba(0,0,0,.5); background: rgba(0,64,0,.3)}
+#sidebar #sb_shutdownStatus {width: calc(100% - 1px)}
 #clock {margin: -7px 0 -9px -1px; padding: 8px 0; position: relative; line-height: 1; letter-spacing: .1em; font-size: 18pt; font-weight: 700; color: #ffa; text-shadow: var(--textshadow); box-shadow: var(--bevel); background: repeating-linear-gradient(180deg,rgba(255,255,255,.05) 2px, rgba(0,16,0,.2) 4px), linear-gradient(90deg, #010, #000, #010); -webkit-text-stroke: 1px rgba(220,220,128,.5); opacity: .9}
 #clock::before {content: ""; position: absolute; top: 0; left: 0; height: 100%; width: 100%; box-shadow: var(--bevel); background: repeating-linear-gradient(90deg, rgba(0,0,0,.3) 2px, rgba(0,16,0,.2) 4px)}
 #clock::after {margin-left: 3px; content: "UTC"; display: inline-block; font-size: 50%; vertical-align: middle}
-.sb table, #sidebar form {position: relative; background: repeating-linear-gradient(90deg, rgba(0,80,0,.1) 1px, rgba(0,16,0,.1) 2px, rgba(0,16,0,.1) 3px)}
 .sb table:not(#sb_localtunnels):not(#sb_services):not(#sb_advanced)::before {width: 0; height: 1px; position: absolute; top: -1px; left: -1px; display: block; background: linear-gradient(90deg, #730, #940); content: ""; animation: bar .15s ease-in-out .15s reverse; backface-visibility: hidden; will-change: transform}
-#sb_peers, #sb_peersadvanced, #sb_tunnels, #sb_queue, #sb_bandwidth, #sb_general, #sb_advancedgeneral, #sb_localtunnels, #sb_advanced, #sb_internals, #sb_services {margin-top: -9px; margin-bottom: -8px; padding: 0 1px 2px; border-top: 1px solid rgba(16,64,16,.3); border-bottom: 1px solid rgba(16,64,16,.3)}
-#sb_advanced, #sb_internals, #sb_services, #sb_help {margin-top: -6px; padding: 0 1px}
-#sb_localtunnels {margin: -6px 0 -7px; padding: 0}
+#sb_peers, #sb_peersadvanced, #sb_tunnels, #sb_queue, #sb_bandwidth, #sb_general, #sb_advancedgeneral, #sb_localtunnels, #sb_advanced, #sb_internals, #sb_services, #sb_newsheadings table {margin: -7px auto -9px -1px}
+#sb_localtunnels {margin-bottom: -8px}
+#sb_advanced, #sb_internals, #sb_services, #sb_help {margin-top: -7px}
 #sb_general td, #sb_shortgeneral td, #sb_advancedgeneral td, #sb_peersadvanced td {white-space: nowrap}
+#sb_peers tr, #sb_peersadvanced tr, #sb_tunnels tr, #sb_queue tr, #sb_bandwidth tr, #sb_general tr, #sb_advancedgeneral tr, #sb_localtunnels tr {background: var(--sb_row)}
+#sb_peers td, #sb_peersadvanced td, #sb_tunnels td, #sb_queue td, #sb_bandwidth td, #sb_general td, #sb_advancedgeneral td {line-height: 1.6}
+#sb_peers tr:nth-child(n+2), #sb_peersadvanced tr:nth-child(n+2), #sb_tunnels tr:nth-child(n+2), #sb_queue tr:nth-child(n+2), #sb_bandwidth tr:nth-child(n+2), #sb_general tr:nth-child(n+2), #sb_advancedgeneral tr:nth-child(n+2), #sb_localtunnels tr:nth-child(n+2) {border-top: 1px solid rgba(16,64,16,.2)}
+#sb_peers tr:nth-last-child(n+2), #sb_peersadvanced tr:nth-last-child(n+2), #sb_tunnels tr:nth-last-child(n+2), #sb_queue tr:nth-last-child(n+2), #sb_bandwidth tr:nth-last-child(n+2), #sb_general tr:nth-last-child(n+2), #sb_advancedgeneral tr:nth-last-child(n+2), #sb_localtunnels tr:nth-last-child(n+2) {border-bottom: 1px solid rgba(16,64,16,.2)}
+#sb_peers tr:hover, #sb_tunnels tr:hover, #sb_queue tr:hover, #sb_bandwidth tr:hover, #sb_general tr:hover, #sb_advancedgeneral tr:hover, #sb_localtunnels tr:hover {color: #ff5; background: rgba(16,64,16,.4)}
 #sb_general td:first-child, #sb_shortgeneral td:first-child, #sb_advancedgeneral td:first-child, #sb_peersadvanced td:first-child {max-width: 130px}
-#sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after, #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {min-height: 14px; display: inline-block; content: ""}
+#sb_general td::before, #sb_shortgeneral td::before, #sb_advancedgeneral td::before, #sb_bandwidth td::before, #sb_peers td::before, #sb_peersadvanced td::before, #sb_tunnels td::before, #sb_queue td::before, #sb_localtunnels td::before {min-height: 22px; display: inline-block; vertical-align: middle; content: ""}
 #sidebar td:first-child, #sb_localtunnels td:nth-child(2) {text-align: left}
 #sidebar td:last-child {text-align: right}
-#sidebar #sb_internals td, #sidebar #sb_advanced td, #sidebar #sb_services td, #sidebar #sb_help td {text-align: center}
-#sb_localtunnels tr:first-child td {padding-top: 0}
-#sb_localtunnels tr:last-child td {padding-bottom: 0}
+#sidebar #sb_internals td, #sidebar #sb_advanced td, #sidebar #sb_services td, #sidebar #sb_help td {padding: 4px 5px 6px; text-align: center}
+#sb_localtunnels td {padding: 2px 0; line-height: 1.4}
+#sb_localtunnels td:first-child {padding: 2px 0 2px 9px; width: 20px; text-align: left; background: var(--client) var(--center) / 16px}
+#sb_localtunnels td[colspan="3"] {width: 100%; background-size: 400%}
 #sb_localtunnels tr:last-child td:first-child {background-position: center center}
-#sb_localtunnels td {line-height: 1}
-#sb_localtunnels td:first-child {padding: 1px 0; width: 16px; text-align: left; background: var(--client) var(--center) / 16px}
-#sb_localtunnels td[colspan="3"] {line-height: 20px; font-size: 0}
+#sb_localtunnels td[colspan="3"] {line-height: 12px; font-size: 0}
 #sb_localtunnels td.ping {background-image: var(--ping)}
 #sb_localtunnels td.tunnelServer {background-image: var(--server)}
-#sb_localtunnels td:last-child {padding-right: 0; width: 1%; text-align: right; background: var(--local_inprogress) no-repeat right 1px center / 16px}
-#sb_localtunnels td.tunnelReady {background-image: var(--local_up)}
-#sb_localtunnels td.tunnelRebuilding {background-image: var(--local_down)}
-#sb_localtunnels td::after {min-height: 10px; display: inline-block; vertical-align: middle; content: ""}
-#sb_localtunnels a {padding: 2px 0; width: 100%; max-width: 156px; display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; border-radius: 0 10px 10px 0; box-shadow: none}
-#sb_localtunnels a:hover {background: linear-gradient(90deg, rgba(0,0,0,0), rgba(0,48,0,.5))}
+#sb_localtunnels td:last-child {padding: 2px 6px 2px 0; width: 1%; min-width: 18px; text-align: right; background: var(--local_inprogress) no-repeat right 6px center / 16px}
+#sb_localtunnels td.tunnelReady {background: var(--local_up) no-repeat right 5px center / 16px}
+#sb_localtunnels td.tunnelRebuilding {background: var(--local_down) no-repeat right 5px center / 16px}
+#sidebar #sb_localtunnels a {margin-top: -1px; padding: 3px 0; width: 100%; max-width: 156px; display: inline-block; vertical-align: middle; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 1; border-radius: 0 10px 10px 0; box-shadow: none}
 #sb_localtunnels a:active {box-shadow: inset 2px 2px 2px #000; background: linear-gradient(90deg, rgba(0,0,0,0), #020)}
-#sb_localtunnels img {width: 16px; height: 16px; vertical-align: middle; font-size: 0; opacity: 0; mix-blend-mode: overlay}
-#sb_localtunnels img::after {width: 19px; height: 16px; display: inline-block; vertical-align: middle; content: ""}
-#sidebar td {padding: 0 2px 0 2px; word-spacing: -0.1em; text-shadow: var(--textshadow); border: 0;}
-#sidebar td:first-child {max-width: 90px; overflow: hidden; text-transform: capitalize}
-#sb_advanced, #sb_advanced td, #sb_internals, #sb_internals td, #sb_services, #sb_services td {padding-left: 0; padding-right: 0}
-#sb_peers tr:hover td, #sb_tunnels tr:hover td, #sb_queue tr:hover td, #sb_bandwidth tr:hover td, #sb_general tr:hover td, #sb_advancedgeneral tr:hover td {color: #ff5; background: rgba(0,48,0,.2)}
-#sb_services img {display: none}
+#sb_services img, #sb_localtunnels img {display: none}
 #sb_internals a, #sb_services a, #sb_advanced a, #sb_help a {padding: 1px 3px; display: inline-block; vertical-align: middle}
 #sb_version {margin-top: 6px; margin-bottom: 5px}
 #sb_uptime {margin-bottom: -5px}
 #sb_services a:link, #sb_internals a:link, #sb_advanced a:link, #sb_help a:link {max-width: 192px; word-break: break-all; line-height: 1.4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
 #sb_peersadvanced .separator td::after {min-height: 0}
 #sidebar .separator hr, #sidebar .separator hr:last-child {margin: 4px 0 3px; height: 1px; display: block; border-bottom: 1px dotted #141; background: transparent}
-.sb_notice {margin: -5px -8px -7px; padding: 7px 8px 8px; line-height: 1.1; font-weight: 700; box-shadow: var(--highlight), inset 0 0 2px 1px #040, 0 0 0 1px #030; background: #010}
+.sb_notice {margin: -5px 0 -7px -1px; padding: 9px 8px; line-height: 1.1; font-weight: 700; box-shadow: var(--note_shadow), inset 0 0 2px 1px #040, 0 0 0 1px #030; background: #010}
 #sb_notice.hide + hr, #sb_updatesection.hide + hr {display: none}
 .sb_notice + .sb_notice {margin-top: -5px}
 p:empty + .sb_notice {margin-top: 9px}
-#sidebar tr {border: none; background-image: none; background-color: transparent}
 #sidebar form {margin: -7px -10px -9px; padding: 4px 3px; box-shadow: var(--bevel)}
 #sidebar form:first-child {margin: 6px 0 -5px 0}
 #sidebar p {padding: 0}
 #sidebar a:link, #sidebar a:visited {word-spacing: .05em}
-#sidebar #sb_peers a:not(:hover):not(:focus):not(:active), #sidebar #sb_peersadvanced a:not(:hover):not(:focus):not(:active), #sidebar #sb_tunnels a:not(:hover):not(:focus):not(:active), #sidebar #sb_general a:not(:hover):not(:focus):not(:active), #sidebar #sb_shortgeneral a:not(:hover):not(:focus):not(:active), #sidebar #sb_advancedgeneral a:not(:hover):not(:focus):not(:active) {color: var(--ink)}
+#sidebar #sb_peers a:not(:hover):not(:focus):not(:active), #sidebar #sb_peersadvanced a:not(:hover):not(:focus):not(:active), #sidebar #sb_tunnels a:not(:hover):not(:focus):not(:active), #sidebar #sidebar #sb_general a:not(:hover):not(:focus):not(:active), #sidebar #sb_shortgeneral a:not(:hover):not(:focus):not(:active), #sidebar #sb_advancedgeneral a:not(:hover):not(:focus):not(:active) {color: var(--ink)}
+#sidebar #sb_general tr:hover a:not(:hover):not(:focus):not(:active), #sidebar #sb_shortgeneral tr:hover a:not(:hover):not(:focus):not(:active), #sidebar #sb_advancedgeneral tr:hover a:not(:hover):not(:focus):not(:active), #sidebar #sb_peers tr:hover a:not(:hover):not(:focus):not(:active), #sidebar #sb_tunnels tr:hover a:not(:hover):not(:focus):not(:active) {color: #ff5}
 #sidebar .refresh {margin-top: -10px; margin-bottom: -4px; padding: 2px 0 0 0}
 #sb_warning {margin-left: -10px; margin-right: -10px; border-bottom: var(--border)}
 #sb_warning a {color: #900}
 #sb_warning + #sb_notice {margin-top: -6px}
-#sidebar hr {margin: 9px -10px 7px -10px; height: 1px; background: #252}
+#sidebar hr {margin: 9px 0 7px -1px; height: 1px; background: #252}
 #sb_warning + hr {margin-top: 7px}
 #sidebar hr:last-child {margin-top: 5px; margin-bottom: -5px}
 .warntext {color: #b00}
 
 /* sidebar news */
 #sb_newsheadings {margin-bottom: -7px}
-#sidebar.sb #sb_newsheadings table {margin: -8px 0 3px}
 #sb_newsheadings table::before {content: none}
 #sb_newsheadings a {padding: 0 3px 0 0; width: 100%; display: inline-block}
-#sidebar #sb_newsheadings td {padding: 2px 5px 2px 23px; text-align: left; border-bottom: var(--border_soft); background: var(--newsbullet) no-repeat 4px center / 14px}
+#sidebar #sb_newsheadings td {padding: 5px 5px 5px 25px; text-align: left; border-bottom: var(--border_soft); background: var(--newsbullet) no-repeat 6px center / 14px}
 #sidebar #sb_newsheadings tr:last-child td {border-bottom: none}
 
 /* mini sidebar graph */
-#sb_graphcontainer {margin: -6px 0 -8px; padding: 0 1px 1px; width: calc(100% - 3px); height: 44px; position: relative; z-index: 10; overflow: hidden; box-shadow: inset 0 0 0 1px #131, inset 0 0 0 2px #000, inset 0 0 3px 1px #040; background: repeating-linear-gradient(90deg, rgba(0,0,0,0) 15px, rgba(64,160,64,.3) 16px, rgba(0,0,0,0) 16px, rgba(0,0,0,0) 31px), repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(48,152,48,.2), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 14px)}
+#sb_graphcontainer {margin: -6px 0 -8px; padding: 0 1px 1px; width: calc(100% - 3px); height: 44px; position: relative; z-index: 10; overflow: hidden; box-shadow: var(--outline), inset 0 0 0 1px #131, inset 0 0 0 2px #000, inset 0 0 3px 1px #040; background: repeating-linear-gradient(90deg, rgba(0,0,0,0) 15px, rgba(64,160,64,.3) 16px, rgba(0,0,0,0) 16px, rgba(0,0,0,0) 31px), repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(48,152,48,.2), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 14px)}
 #sb_graphcontainer::after {width: calc(100% - 4px); display: inline-block; position: absolute; top: 2px; right: 2px; bottom: 2px; left: 2px; z-index: 10; box-shadow: var(--outline), var(--bevel_hard), inset 0 0 0 2px #242; background: var(--graphoverlay); content: ""; pointer-events: none}
 #sb_graphcontainer:hover a {cursor: zoom-in}
 #sb_graphstats {padding: 2px 8px; display: inline-block; position: relative; z-index: 1000; font-size: 110%; font-weight: 700; color: #050; text-shadow: none; border: var(--border_soft); border-top: none; border-radius: 0 0 2px 2px; background: #000; opacity: 0; transition: ease opacity .3s; pointer-events: none}
@@ -177,17 +177,19 @@ p:empty + .sb_notice {margin-top: 9px}
 #sb_memoryBar .percentBarInner {background: linear-gradient(90deg, rgba(0,0,0,.05), rgba(128,128,0,.15) 160px, rgba(196,0,0,.15) 180px, rgba(196,0,0,.2)), linear-gradient(180deg,rgba(28, 148, 58, .6), rgba(9, 47, 16, .6) 50%, rgba(9, 27, 5, .6) 50%, rgba(9, 21, 3, .6), rgba(0,0,0,.3))}
 .percentBarText {width: 100%; vertical-align: middle; float: left; text-align: center; font-weight: 700; opacity: 0; transition: ease opacity .2s}
 #sb_memoryBar.percentBarOuter {margin: -6px 0 -8px}
-#sb_memoryBar .percentBarText {width: 70%; line-height: 22px; float: none; position: absolute; top: -23px; left: 15%; right: 15%; font-size: 110%; border-radius: 3px; background: #010; filter: drop-shadow(0 0 1px #252) drop-shadow(0 0 1px #000)}
+#sb_memoryBar .percentBarText {width: 70%; line-height: 22px; float: none; position: absolute; top: -23px; left: 15%; right: 15%; font-size: 110%; border-radius: 3px; background: #010; filter: drop-shadow(0 0 1px #252) drop-shadow(0 0 1px #000); transition: opacity .2s ease}
+#sb_memoryBar.percentBarOuter:hover .percentBarText {transition: opacity .2s ease .5s}
 #sb_memoryBar .percentBarText::after {width: 0; height: 0; position: absolute; left: calc(50% - 5px); bottom: -14px; border-style: solid; border-width: 8px; border-color: #010 transparent transparent transparent; content: ""}
 
 /* update bar */
-#sidebar .sb_update {padding: 7px 5px 22px; position: relative;}
+#sidebar .sb_update {padding: 7px 5px 22px; width: calc(100% - 1px); position: relative}
 .sb_update b {margin: 3px 0 1px; display: inline-block;color: var(--ink)}
 .sb_updatestatus {margin: -7px -5px -2px; padding: 5px 2px; width: calc(100% - 2px); line-height: 1.3; font-style: italic; border-bottom: var(--border); box-shadow: var(--bevel)}
 #sidebar .sb_info .percentBarOuter {margin: 0 !important; width: calc(100% - 12px); display: inline-block; position: absolute; left: 1px; right: 1px; bottom: 1px; box-shadow: none; background: var(--download_bar); animation: downloadbar 3s infinite alternate}
 .sb_info .percentBarText {padding-top: 2px}
 .sb_info .percentBarInner {height: 16px}
 #restartRequired.sb_info.sb_update {margin-top: -7px; padding: 5px 5px 7px; width: calc(100% - 9px); box-shadow: var(--bevel_hard), inset 0 0 0 3px #000, inset 0 0 5px 5px rgba(0,0,0,.5)}
+#contactserver {margin-bottom: -12px; display: block}
 
 /* sidebar ajax router down */
 #down {margin: -6px 0; padding: 6px 5px; width: calc(100% - 8px); display: inline-block; font-size: 0; color: #a00; text-shadow: var(--textshadow); box-shadow: 0 0 1px 0 #030, var(--highlight), inset 0 0 1px 3px #131, inset 0 0 0 4px #000, inset 0 0 7px 3px #010; background: repeating-linear-gradient(135deg, #131, #131 10px, #300 11px, #000 12px, #000 19px, #300 19px, #000 20px); background-position: right center; background-size: 125%; animation: routerdown linear 3s forwards infinite}
@@ -202,7 +204,7 @@ p:empty + .sb_notice {margin-top: 9px}
 #sidebar #sb_warning {margin-bottom: 7px; padding: 6px 4px; background: #000; text-align: center; line-height: 1.2}
 #sb_warning + p:empty + form {margin-top: 11px; margin-bottom: -6px}
 #sb_status, .sb_netstatus, .tunnelBuildStatus, #bandwidthTestRunning {display: inline-block; vertical-align: middle; vertical-align: -moz-middle-with-baseline; vertical-align: -webkit-baseline-middle; text-shadow: var(--textshadow); box-sizing: border-box}
-#sidebar #sb_status {margin: -9px 0 -9px -1px; width: calc(100% + 1px); box-shadow: var(--note_shadow)}
+#sidebar #sb_status {margin: -6px 2px -8px -1px; width: calc(100% - 1px); box-shadow: var(--note_shadow)}
 #sidebar #sb_tunnelstatus {margin: -7px 0 -9px -1px; width: calc(100% - 1px); box-shadow: var(--note_shadow)}
 #sidebar .sb_netstatus, #sidebar .tunnelBuildStatus {margin: -3px auto; padding: 8px 2px; display: block; width: calc(100% - 4px)}
 #sidebar .tunnelBuildStatus {padding: 10px 2px 8px}
@@ -412,7 +414,7 @@ button.control {margin: 3px; padding: 15px; min-width: 0; font-size: 0}
 #sidebar button.reload, #sidebar button.stop, #sidebar button.cancel {margin: 3px 2px; min-width: 97px; text-transform: capitalize}
 #sidebar button.download {width: 202px}
 #sidebar button.cancel {min-width: 151px}
-#updateAvailable {margin: 0 0 3px; padding: 4px 0 0; width: 100%; display: inline-block; line-height: 1.2; color: #dd3; font-size: 9pt; text-shadow: var(--textshadow); opacity: .9}
+#updateAvailable {margin: 0; padding: 4px 0 0; width: calc(100% - 20px); display: inline-block; line-height: 1.2; color: #dd3; font-size: 9pt; text-shadow: var(--textshadow); opacity: .9}
 #updateAvailable + br + button + br + #updateAvailable::before {margin: 2px 0 4px; width: 100%; height: 1px; display: inline-block; background: #252; content: ""}
 #updateAvailable + br + button + br + #updateAvailable {margin-top: -10px}
 
@@ -1220,7 +1222,7 @@ th code {user-select: all}
 .threatpoints + ul li a {max-width: 200px; display: inline-block; vertical-align: text-bottom; white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
 .threatpoints.hot {background: var(--eye_threat) no-repeat 8px center / 20px, var(--hot) no-repeat right 2px center / 24px, linear-gradient(90deg, #000, #000800 80%, #001000)}
 .sybilscan table, .sybilscan tr {border: none; background: none}
-.sybilscan tr td {border: none}
+.sybilscan td {border: none}
 .sybil_info, p.family, .threatpoints, p.hashdist, #sybil_totals, p.notfound {margin: 3px 0; padding: 5px 5px 5px 33px; font-weight: 700; color: #cc0; border: var(--border); box-shadow: inset 0 0 0 1px #300; background: var(--eye) no-repeat 8px center / 16px, linear-gradient(90deg, #000, #000800 80%, #001000)}
 .sybil_info, #sybil_totals {margin-bottom: 10px; padding-left: 35px; background-image: var(--eye_threat); background-size: 20px, 100%}
 .sybilinfo {line-height: 1.4}
@@ -1306,7 +1308,7 @@ th code {user-select: all}
 #banneduntilrestart td {border-right: var(--border); text-align: center}
 #ipv4, #ipv6, #permabanned tr:nth-child(2) {border-top: var(--border); border-bottom: var(--border); background: var(--th)}
 
-.applink, .applabel, .statusnotes, .main, #news, .sb, .search tr, .logo, .themechoice, .themelabel, .langselect, .ui_lang {box-shadow: var(--bevel)}
+.applink, .applabel, .statusnotes, .main, #news, .search tr, .logo, .themechoice, .themelabel, .langselect, .ui_lang {box-shadow: var(--bevel)}
 .appicon, .sitemapLink img {animation: zoom .15s linear .3s both; backface-visibility: hidden; will-change: transform}
 .applabel, .sitemapLabel, .themelabel, .ui_lang {background: var(--glow_bottom), linear-gradient(180deg,#001900,#001000 50%,#000); animation: fade .15s ease .25s reverse both}
 
@@ -2112,8 +2114,8 @@ input[type=text]:focus::placeholder, #homesearch input.search:focus::placeholder
 #logs h3 a:first-of-type::after {margin-right: -3px}
 #logs h3 + table {position: relative; z-index: 1}
 #logs a.delete {margin-left: 8px}
-#logs a.delete::after {background: var(--close) var(--center); background-size: 14px}
-#logs a.delete:hover::after {background: var(--close_hover) var(--center)}
+#logs a.delete::after {background: var(--close) var(--center) / 14px}
+#logs a.delete:hover::after {background: var(--close_hover) var(--center) / 14px}
 #logs a.configure:active::after {transform: rotate(90deg); transition: linear transform .2s}
 #logs a.delete:active::after {opacity: .7; transform: scale(.85)}
 #logs pre, #logs li {font-weight: 700}
@@ -2127,7 +2129,7 @@ input[type=text]:focus::placeholder, #homesearch input.search:focus::placeholder
 #logs #enviro:hover td {color: #9d0; border-top: 1px inset transparent; border-bottom: 1px inset transparent; border-right: 1px inset transparent; box-shadow: none; background: #010}
 #logs #enviro td {padding: 7px 10px; font-weight: 400; border-right: 1px inset #131; box-shadow: var(--highlight)}
 #logs #enviro td:first-child {width: 1%; white-space: nowrap; text-align: right}
-#enviro #revision {padding-left: 14px; background: var(--gitlab) no-repeat left center; background-size: 11px}
+#enviro #revision {padding-left: 14px; background: var(--gitlab) no-repeat left center / 11px}
 #criticallogs td , #routerlogs td, #eventlogs td, #wrapperlogs td {padding: 5px 10px; font-weight: 400; border-top: var(--border)}
 #routerlogs td p, #wrapperlogs td p {margin: 0}
 #logs .embedlink {margin-top: 1px; font-size: 85%}
@@ -2447,9 +2449,14 @@ h3[id*="jobs"]:first-of-type {margin-top: 21px}
 #routerinformation .h3navlinks {margin: 1px -2px -1px -2px}
 #routerinformation .h3navlinks a::before {margin-left: 0}
 #routerinformation h3 span a {padding: 12px 3px 12px 12px}
-#sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after, #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {min-height: 12px}
-#sb_internals {border-spacing: 0}
-#sb_internals td {padding-top: 2px; padding-bottom: 2px}
+#sb_general td::before, #sb_shortgeneral td::before, #sb_advancedgeneral td::before, #sb_bandwidth td::before, #sb_peers td::before, #sb_peersadvanced td::before, #sb_tunnels td::before, #sb_queue td::before {min-height: 18px}
+#sidebar table:not(#sb_localtunnels):not(#sb_newsheadings table) td {padding: 1px 3px}
+#sidebar table:not(#sb_localtunnels):not(#sb_newsheadings table) td:first-child {padding: 1px 3px 1px 6px}
+#sidebar table:not(#sb_localtunnels):not(#sb_newsheadings table) td:last-child {padding: 1px 6px 1px 3px}
+#sb_localtunnels td {line-height: 1}
+#sb_localtunnels td:first-child {width: 18px}
+#sidebar #sb_localtunnels td[colspan="3"] {width: 100%; background-size: 400%}
+#sb_localtunnels td:last-child {background-size: 14px}
 #sb_tunnelstatus .tunnelBuildStatus::before {background-size: 12px}
 #sidebar button.cancel {margin-top: 10px}
 #searchbar span {margin: 3px 3px 0}
@@ -2559,6 +2566,7 @@ h4 span[style="float: right;"] .unbold {max-width: 300px}
 }
 
 @media screen and (max-width: 1000px) {
+#sb_wrap {position: absolute}
 #tunnels .tunneldisplay td:nth-child(n+2) span, #tunnels .tunneldisplay .cells tt {margin: 1px; padding: 0; display: inline-block; vertical-align: middle; line-height: 1.2; border: none; box-shadow: none; background: none}
 #tunnels .tunneldisplay .cells span.inbound, #tunnels .tunneldisplay .cells span.outbound {margin: 1px; padding: 0; display: inline-block; vertical-align: middle; line-height: 1.2}
 span.inbound, span.outbound {background-size: 12px}
@@ -2641,6 +2649,8 @@ input[type=text], input[type=password] {padding: 7px 9px}
 .sb_netstatus::before, .tunnelBuildStatus::before {margin: 0 2px}
 .sb_update {padding-bottom: 3px}
 .sb_update b {margin-bottom: 2px}
+#sb_localtunnels td:first-child {background-size: 18px}
+#sidebar button.reload, #sidebar button.stop, #sidebar button.cancel {padding-top: 10px; padding-bottom: 10px}
 .search td {padding: 6px 6px 6px 5px}
 .search td:nth-child(2) {padding: 5px 8px 5px 8px}
 .search td:last-child {padding-left: 0; padding-right: 0}
@@ -2709,13 +2719,12 @@ h4#updateplugins {margin-top: -15px}
 #plugininstall2 {margin-top: -14px}
 #reseedconfig input[type=text], #reseedconfig input[type=password] {width: 250px}
 #sb_graphcontainer {height: 50px}
-#sb_internals {margin-top: -9px}
 #sb_localtunnels a {max-width: 200px}
 #sb_memoryBar .percentBarText {margin-top: -2px}
 #sb_services a:link, #sb_internals a:link, #sb_advanced a:link, #sb_help a:link {max-width: 216px}
 #schedjobs ul {columns: 270px auto}
 select {padding: 8px 24px 8px 8px}
-#sidebar button.download {width: 248px; line-height: 1.4}
+#sidebar button.download {margin-bottom: 2px; width: calc(100% - 25px); line-height: 1.4}
 #sidebar button.reload, #sidebar button.stop {min-width: 120px}
 #sidebar button.cancel {min-width: 157px}
 #sidebar h3::after {min-height: 20px}
