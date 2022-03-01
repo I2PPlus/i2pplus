@@ -81,6 +81,7 @@ abstract class BuildRequestor {
 //    private static final int BUILD_MSG_TIMEOUT = 60*1000;
     private static final int BUILD_MSG_TIMEOUT = 15*1000;
 
+//    private static final int MAX_CONSECUTIVE_CLIENT_BUILD_FAILS = 6;
     private static final int MAX_CONSECUTIVE_CLIENT_BUILD_FAILS = 5;
 
     /**
