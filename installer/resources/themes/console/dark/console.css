@@ -139,7 +139,7 @@ ul {margin: 0; padding: 0}
 #sb_notice.hide + hr, #sb_updatesection.hide + hr {display: none}
 .sb_notice + .sb_notice {margin-top: -5px}
 p:empty + .sb_notice {margin-top: 9px}
-#sidebar form {margin: -7px -10px -9px; padding: 4px 3px; box-shadow: var(--bevel)}
+#sidebar form {margin: -7px 0 -9px -1px; padding: 4px 3px; box-shadow: var(--bevel); background: var(--sb_row)}
 #sidebar form:first-child {margin: 6px 0 -5px 0}
 #sidebar p {padding: 0}
 #sidebar a:link, #sidebar a:visited {word-spacing: .05em}
@@ -204,7 +204,7 @@ p:empty + .sb_notice {margin-top: 9px}
 #sidebar #sb_warning {margin-bottom: 7px; padding: 6px 4px; background: #000; text-align: center; line-height: 1.2}
 #sb_warning + p:empty + form {margin-top: 11px; margin-bottom: -6px}
 #sb_status, .sb_netstatus, .tunnelBuildStatus, #bandwidthTestRunning {display: inline-block; vertical-align: middle; vertical-align: -moz-middle-with-baseline; vertical-align: -webkit-baseline-middle; text-shadow: var(--textshadow); box-sizing: border-box}
-#sidebar #sb_status {margin: -6px 2px -8px -1px; width: calc(100% - 1px); box-shadow: var(--note_shadow)}
+#sidebar #sb_status {margin: -6px 0 -8px -1px; width: calc(100% - 1px); box-shadow: var(--note_shadow)}
 #sidebar #sb_tunnelstatus {margin: -7px 0 -9px -1px; width: calc(100% - 1px); box-shadow: var(--note_shadow)}
 #sidebar .sb_netstatus, #sidebar .tunnelBuildStatus {margin: -3px auto; padding: 8px 2px; display: block; width: calc(100% - 4px)}
 #sidebar .tunnelBuildStatus {padding: 10px 2px 8px}
