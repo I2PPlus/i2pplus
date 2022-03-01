@@ -831,6 +831,7 @@ td.torrentAction input {margin-top: 1px}
 #torrents .torrentDetails img {margin-left: 3px}
 #torrents .infohash {width: 60px}
 #trackerselect a {max-width: 280px}
+#ourDest tt {line-height: 1.25}
 }
 
 @media screen and (max-width: 1000px) {
