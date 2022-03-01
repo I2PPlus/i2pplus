@@ -2114,8 +2114,8 @@ input[type=text]:focus::placeholder, #homesearch input.search:focus::placeholder
 #logs h3 a:first-of-type::after {margin-right: -3px}
 #logs h3 + table {position: relative; z-index: 1}
 #logs a.delete {margin-left: 8px}
-#logs a.delete::after {background: var(--close) var(--center); background-size: 14px}
-#logs a.delete:hover::after {background: var(--close_hover) var(--center)}
+#logs a.delete::after {background: var(--close) var(--center) / 14px}
+#logs a.delete:hover::after {background: var(--close_hover) var(--center) / 14px}
 #logs a.configure:active::after {transform: rotate(90deg); transition: linear transform .2s}
 #logs a.delete:active::after {opacity: .7; transform: scale(.85)}
 #logs pre, #logs li {font-weight: 700}
@@ -2129,7 +2129,7 @@ input[type=text]:focus::placeholder, #homesearch input.search:focus::placeholder
 #logs #enviro:hover td {color: #9d0; border-top: 1px inset transparent; border-bottom: 1px inset transparent; border-right: 1px inset transparent; box-shadow: none; background: #010}
 #logs #enviro td {padding: 7px 10px; font-weight: 400; border-right: 1px inset #131; box-shadow: var(--highlight)}
 #logs #enviro td:first-child {width: 1%; white-space: nowrap; text-align: right}
-#enviro #revision {padding-left: 14px; background: var(--gitlab) no-repeat left center; background-size: 11px}
+#enviro #revision {padding-left: 14px; background: var(--gitlab) no-repeat left center / 11px}
 #criticallogs td , #routerlogs td, #eventlogs td, #wrapperlogs td {padding: 5px 10px; font-weight: 400; border-top: var(--border)}
 #routerlogs td p, #wrapperlogs td p {margin: 0}
 #logs .embedlink {margin-top: 1px; font-size: 85%}
