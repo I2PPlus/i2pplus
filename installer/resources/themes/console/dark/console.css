@@ -86,6 +86,7 @@ ul {margin: 0; padding: 0}
 #sidebar table:not(#sb_localtunnels) td b, #sidebar td span {margin: -2px 0 2px; display: inline-block; vertical-align: text-top}
 #sidebar table:not(#sb_localtunnels) tr:first-child td b, #sidebar tr:first-child td span {margin: 0 0 1px}
 #sidebar table:not(#sb_localtunnels) tr:last-child td b, #sidebar tr:last-child td span {margin: -2px 0 3px}
+#sidebar .digits span {animation: textglow .1s linear}
 #sidebar td a {-webkit-text-stroke: 0}
 #sidebar td a:active {box-shadow: 0 0 0 2px rgba(0,0,0,.3), inset 2px 2px 2px rgba(0,0,0,.7)}
 #sidebar h3 {margin: -7px -1px -9px; padding: 6px 2px; width: calc(100% - 3px); letter-spacing: .08em; text-transform: uppercase; font-size: 9.5pt; border: none; border-radius: 0; box-shadow: var(--highlight), inset 0 0 1px 1px #191; background: radial-gradient(at center bottom, rgba(16, 72, 16, .4) 0, rgba(0, 0, 0, 0) 50%), var(--bg_title), linear-gradient(180deg,rgba(0,0,0,.1), rgba(0,0,0,.25) 50%, rgba(0,0,0,.75) 50%, #000), var(--h3_fade); background-size: 100%, 2px, 100%, 100%}
@@ -101,7 +102,7 @@ ul {margin: 0; padding: 0}
 #clock {margin: -7px 0 -9px -1px; padding: 8px 0; position: relative; line-height: 1; letter-spacing: .1em; font-size: 18pt; font-weight: 700; color: #ffa; text-shadow: var(--textshadow); box-shadow: var(--bevel); background: repeating-linear-gradient(180deg,rgba(255,255,255,.05) 2px, rgba(0,16,0,.2) 4px), linear-gradient(90deg, #010, #000, #010); -webkit-text-stroke: 1px rgba(220,220,128,.5); opacity: .9}
 #clock::before {content: ""; position: absolute; top: 0; left: 0; height: 100%; width: 100%; box-shadow: var(--bevel); background: repeating-linear-gradient(90deg, rgba(0,0,0,.3) 2px, rgba(0,16,0,.2) 4px)}
 #clock::after {margin-left: 3px; content: "UTC"; display: inline-block; font-size: 50%; vertical-align: middle}
-.sb table:not(#sb_localtunnels):not(#sb_services):not(#sb_advanced)::before {width: 0; height: 1px; position: absolute; top: -1px; left: -1px; display: block; background: linear-gradient(90deg, #730, #940); content: ""; animation: bar .15s ease-in-out .15s reverse; backface-visibility: hidden; will-change: transform}
+.sb table:not(#sb_localtunnels):not(#sb_services):not(#sb_advanced)::before {width: 0; height: 1px; position: absolute; top: -1px; left: -1px; display: block; background: repeating-linear-gradient(90deg, #f60 2px, rgba(0,0,0,0) 4px), linear-gradient(90deg, #930, #f60); content: ""; animation: bar .15s ease-in-out .15s reverse; backface-visibility: hidden; will-change: transform}
 #sb_peers, #sb_peersadvanced, #sb_tunnels, #sb_queue, #sb_bandwidth, #sb_general, #sb_advancedgeneral, #sb_localtunnels, #sb_advanced, #sb_internals, #sb_services, #sb_newsheadings table {margin: -7px auto -9px -1px}
 #sb_localtunnels {margin-bottom: -8px}
 #sb_advanced, #sb_internals, #sb_services, #sb_help {margin-top: -7px}
@@ -2395,6 +2396,7 @@ iframe {height: 0}
 @keyframes scaleY {from {transform: scaleY(0)} to {transform: scaleY(1)}}
 @keyframes slide {from {transform: translateY(-20px)} to {transform: translateY(0)}}
 @keyframes spin {from {transform: rotate(-360deg)}}
+@keyframes textglow {from {text-shadow: 0 0 1px #995}}
 @keyframes zoom {from {transform: scale(0); opacity: 0} to {scale: scale(1); opacity: 1}}
 
 /* chrome overrides */
