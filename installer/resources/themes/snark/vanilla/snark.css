@@ -813,7 +813,9 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {co
 .torrentAction input[type=submit] {padding: 11px; background-size: 13px, 100%, 13px}
 .torrentAction input[type=submit]:active {background-size: 11px, 100%}
 #actionStopAll, #actionStartAll {padding: 11px 18px}
+#totals tt {line-height: 1.5}
 #dhtDebugInner {margin-top: -21px}
+tfoot .RateDown:not(:empty)::before, tfoot .torrentDownloaded:not(:empty)::before, tfoot .RateUp:not(:empty)::before, tfoot .torrentUploaded:not(:empty)::before {margin-top: 3px}
 }
 
 @media screen and (max-width: 1200px) {
