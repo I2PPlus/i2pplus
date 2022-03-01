@@ -83,7 +83,9 @@ ul {margin: 0; padding: 0}
 #sidebar td {padding: 1px 8px; word-spacing: -0.1em; text-shadow: var(--textshadow); border: 0}
 #sidebar td:first-child {max-width: 90px; overflow: hidden; text-transform: capitalize}
 #sidebar td b:not(::selection), .infohelp b:not(::selection) {color: #ffffa8; -webkit-text-stroke: 1px rgba(0,0,0,.4)}
-#sidebar table:not(#sb_localtunnels) td b, #sidebar td span, #sidebar #sb_localtunnels a {margin: 1px 0; display: inline-block; vertical-align: middle}
+#sidebar table:not(#sb_localtunnels) td b, #sidebar td span {margin: -2px 0 2px; display: inline-block; vertical-align: text-top}
+#sidebar table:not(#sb_localtunnels) tr:first-child td b, #sidebar tr:first-child td span {margin: 0 0 1px}
+#sidebar table:not(#sb_localtunnels) tr:last-child td b, #sidebar tr:last-child td span {margin: -2px 0 3px}
 #sidebar td a {-webkit-text-stroke: 0}
 #sidebar td a:active {box-shadow: 0 0 0 2px rgba(0,0,0,.3), inset 2px 2px 2px rgba(0,0,0,.7)}
 #sidebar h3 {margin: -7px -1px -9px; padding: 6px 2px; width: calc(100% - 3px); letter-spacing: .08em; text-transform: uppercase; font-size: 9.5pt; border: none; border-radius: 0; box-shadow: var(--highlight), inset 0 0 1px 1px #191; background: radial-gradient(at center bottom, rgba(16, 72, 16, .4) 0, rgba(0, 0, 0, 0) 50%), var(--bg_title), linear-gradient(180deg,rgba(0,0,0,.1), rgba(0,0,0,.25) 50%, rgba(0,0,0,.75) 50%, #000), var(--h3_fade); background-size: 100%, 2px, 100%, 100%}
@@ -115,16 +117,15 @@ ul {margin: 0; padding: 0}
 #sidebar td:last-child {text-align: right}
 #sidebar #sb_internals td, #sidebar #sb_advanced td, #sidebar #sb_services td, #sidebar #sb_help td {padding: 4px 5px 6px; text-align: center}
 #sb_localtunnels tr:last-child td:first-child {background-position: center center}
-#sb_localtunnels td {padding: 2px 0; line-height: 1.2}
+#sb_localtunnels td {padding: 2px 0; line-height: 1.4}
 #sb_localtunnels td:first-child {padding: 2px 0 2px 9px; width: 20px; text-align: left; background: var(--client) var(--center) / 16px}
-#sb_localtunnels td[colspan="3"] {line-height: 20px; font-size: 0}
+#sb_localtunnels td[colspan="3"] {line-height: 16px; font-size: 0}
 #sb_localtunnels td.ping {background-image: var(--ping)}
 #sb_localtunnels td.tunnelServer {background-image: var(--server)}
-#sb_localtunnels td:last-child {padding: 2px 6px 2px 0; width: 1%; text-align: right; background: var(--local_inprogress) no-repeat right 6px center / 16px}
-#sb_localtunnels td.tunnelReady {background: var(--local_up) no-repeat right 5px center / 16px}
-#sb_localtunnels td.tunnelRebuilding {background: var(--local_down) no-repeat right 5px center / 16px}
-#sidebar #sb_localtunnels td::before {min-height: 16px}
-#sidebar #sb_localtunnels a {padding: 3px 0; width: 100%; max-width: 156px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 1; border-radius: 0 10px 10px 0; box-shadow: none}
+#sb_localtunnels td:last-child {padding: 2px 6px 2px 0; width: 1%; text-align: right; background: var(--local_inprogress) no-repeat right 6px center / 15px}
+#sb_localtunnels td.tunnelReady {background: var(--local_up) no-repeat right 5px center / 15px}
+#sb_localtunnels td.tunnelRebuilding {background: var(--local_down) no-repeat right 5px center / 15px}
+#sidebar #sb_localtunnels a {margin-top: -1px; padding: 3px 0; width: 100%; max-width: 156px; display: inline-block; vertical-align: middle; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 1; border-radius: 0 10px 10px 0; box-shadow: none}
 #sb_localtunnels a:active {box-shadow: inset 2px 2px 2px #000; background: linear-gradient(90deg, rgba(0,0,0,0), #020)}
 #sb_localtunnels img {width: 16px; height: 16px; vertical-align: middle; font-size: 0; opacity: 0; mix-blend-mode: overlay}
 #sb_localtunnels img::after {width: 19px; height: 16px; display: inline-block; vertical-align: middle; content: ""}
@@ -2450,7 +2451,10 @@ h3[id*="jobs"]:first-of-type {margin-top: 21px}
 #routerinformation .h3navlinks a::before {margin-left: 0}
 #routerinformation h3 span a {padding: 12px 3px 12px 12px}
 #sb_general td::before, #sb_shortgeneral td::before, #sb_advancedgeneral td::before, #sb_bandwidth td::before, #sb_peers td::before, #sb_peersadvanced td::before, #sb_tunnels td::before, #sb_queue td::before {min-height: 18px}
-#sidebar table:not(#sb_localtunnels):not(#sb_newsheadings table) td {padding: 1px 5px}
+#sidebar table:not(#sb_localtunnels):not(#sb_newsheadings table) td {padding: 1px 3px}
+#sidebar table:not(#sb_localtunnels):not(#sb_newsheadings table) td:first-child {padding: 1px 3px 1px 6px}
+#sidebar table:not(#sb_localtunnels):not(#sb_newsheadings table) td:last-child {padding: 1px 6px 1px 3px}
+#sb_localtunnels td {line-height: 1}
 #sb_localtunnels td:first-child {width: 18px}
 #sb_tunnelstatus .tunnelBuildStatus::before {background-size: 12px}
 #sidebar button.cancel {margin-top: 10px}
