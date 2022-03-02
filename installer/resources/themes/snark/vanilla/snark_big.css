@@ -88,7 +88,7 @@ select, a.control, input[type=submit], input.accept, th, #trackerselect tr:first
   mix-blend-mode: hard-light;
 }
 
-.torrentInfo th, .dirInfo th, #totals, .snarkCommentInfo th, #configs th {
+.torrentInfo th, .dirInfo th, #totals, #commentInfo th, #configs th {
   font-size: 11pt !important;
 }
 

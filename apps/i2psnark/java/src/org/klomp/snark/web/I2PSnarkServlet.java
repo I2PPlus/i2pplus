@@ -2126,7 +2126,7 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write(statusString);
 
         // (i) icon column
-        out.write("</b></td>\n<td class=\"trackerDetails\">");
+        out.write("</b></td>\n<td class=\"trackerLink\">");
         if (isValid) {
             String announce = meta.getAnnounce();
             if (announce == null)
@@ -4767,7 +4767,7 @@ public class I2PSnarkServlet extends BasicServlet {
             CommentSet comments = snark.getComments();
             boolean canRate = esc && _manager.util().getCommentsName().length() > 0;
 
-            buf.append("<table class=\"snarkCommentInfo\">\n<tr><th colspan=\"3\">")
+            buf.append("<table id=\"commentInfo\">\n<tr><th colspan=\"3\">")
                .append(_t("Ratings and Comments").replace("and", "&amp;"))
                .append("&nbsp;&nbsp;&nbsp;");
             if (esc && !canRate) {
@@ -4881,7 +4881,7 @@ public class I2PSnarkServlet extends BasicServlet {
             if (iter != null) {
                 SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 fmt.setTimeZone(SystemVersion.getSystemTimeZone(_context));
-                buf.append("<table class=\"snarkComments\">\n");
+                buf.append("<table id=\"userComments\">\n");
 
                 while (iter.hasNext()) {
                     Comment c = iter.next();
