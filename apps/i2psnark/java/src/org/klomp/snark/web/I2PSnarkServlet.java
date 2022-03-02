@@ -5029,6 +5029,8 @@ public class I2PSnarkServlet extends BasicServlet {
             icon = "apple";
         else if (plc.endsWith(".iso") || plc.endsWith(".nrg"))
             icon = "cd";
+        else if (plc.endsWith(".sh"))
+            icon = "shell";
         else if (plc.contains(".css.") || plc.endsWith(".css") || plc.endsWith(".js") ||
                  plc.endsWith(".cgi") || plc.endsWith(".pl") || plc.endsWith(".py") ||
                  plc.endsWith(".php") || plc.endsWith(".h") || plc.endsWith(".cpp") ||
@@ -5038,6 +5040,7 @@ public class I2PSnarkServlet extends BasicServlet {
             icon = "hash";
         else if (mime.equals("application/x-bittorrent"))
             icon = "magnet";
+                    else if (mime.equals("application/x-bittorrent"))
         else
             icon = "generic";
         return icon;
