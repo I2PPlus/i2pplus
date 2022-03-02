@@ -113,7 +113,9 @@ th img, td img, #closelog, #expand, #shrink {font-size: 0}
 #torrents tfoot th br {margin-left: 20px; display: inline-block}
 #torrents td {padding: 5px 1px; line-height: 1.2; text-align: left}
 #torrents td[colspan="10"] {padding: 2px}
-.trackerDetails, .torrentDetails {padding-left: 0; padding-right: 0; width: 1%; text-align: center; font-weight: 700}
+#torrents .trackerDetails, #torrents .torrentDetails {width: 1%; text-align: center; font-weight: 700}
+#torrents .trackerDetails {padding-left: 4px; padding-right: 0}
+#torrents .torrentDetails {padding-left: 0; padding-right: 2px}
 .trackerDetails img, .torrentDetails img, .dirInfo td:first-child img:not(.thumb) {margin: 0; padding: 3px; border: 1px solid transparent}
 td.trackerDetails img {opacity: .75}
 td.trackerDetails a:hover img, td.trackerDetails a:focus img {opacity: 1}
@@ -122,7 +124,7 @@ td.torrentDetails img:not([src$="rateme.svg"]), .dirInfo td:first-child img:not(
 .trackerDetails a:hover img, .trackerDetails a:focus img, .torrentDetails a:hover img:not([src$="rateme.svg"]), .torrentDetails a:focus img:not([src$="rateme.svg"]), .commentDetails a:hover img, .commentDetails img:hover, .commentDetails a:focus img, .dirInfo td:first-child a:hover img:not(.thumb), .dirInfo td:first-child a:focus img:not(.thumb) {border: 1px solid var(--hover); box-shadow: inset 0 0 0 1px #001; background: linear-gradient(180deg,#007 50%, #001 50%); filter: none}
 .trackerDetails a:active img, .torrentDetails a:active img:not([src$="rateme.svg"]), .dirInfo td:first-child a:active img {border: 1px solid var(--active); box-shadow: inset 3px 3px 3px 3px #000; transform: scale(0.9)}
 .torrentDetails a:active img[src$="rateme.svg"] {transform: scale(0.9)}
-.graphicStatus {padding: 2px; width: 1%; white-space: nowrap; text-align: center}
+#torrents .graphicStatus {padding: 2px; width: 1%; white-space: nowrap; text-align: center}
 .torrentETA, .torrentUploaded, .RateDown, .RateUp {width: 5%; min-width: 40px; white-space: nowrap; text-align: center; font-weight: 700}
 .torrentName {padding-left: 4px; line-height: 1.1}
 .torrentName a, .dirInfo .snarkFileName a {padding: 3px 0; width: 100%; display: inline-block; font-weight: 700}
@@ -134,7 +136,7 @@ td.torrentDetails img:not([src$="rateme.svg"]), .dirInfo td:first-child img:not(
 .torrentDownloaded {padding: 0 5px; white-space: nowrap; font-weight: 700}
 .torrentUploaded, .RateUp, .RateDown {padding-right: 8px; padding-left: 8px; min-width: 80px; text-align: center; color: #9fa4c6}
 #torrentsimg {padding: 2px; width: auto}
-#torrents a {width: 100%; display: inline-block}
+#torrents a {width: 100%; display: inline-block; vertical-align: middle}
 #torrents th a {display: inline}
 #torrents th img {padding: 2px}
 #torrents thead th:last-child img {padding: 2px}
@@ -826,14 +828,17 @@ td.torrentAction input {margin-top: 1px}
 #pagenavcontrols {transform: translateX(40px)}
 #torrents .torrentAction input, #torrents .torrentAction input:hover, #torrents .torrentAction input, #torrents .torrentAction input:focus {padding: 10px; background-size: 12px, 100%}
 #torrents th.torrentAction input, #torrents th.torrentAction input:hover, #torrents th.torrentAction input, #torrents th.torrentAction input:focus {padding: 10px; background-size: auto 12px, 100%, 100%}
+#torrents .torrentDetails img {margin-left: 0}
 #torrents .infohash {width: 60px}
 #trackerselect a {max-width: 280px}
+#ourDest tt {line-height: 1.25}
 }
 
 @media screen and (max-width: 1000px) {
 .rowOdd:not(.peerinfo) .torrentDownloaded .percentBarText, .rowEven:not(.peerinfo) .torrentDownloaded .percentBarText {min-width: 120px; top: -22px; left: -22px}
 #torrents .trackerDetails {padding: 0; width: 0; min-width: 0; font-size: 0}
 .trackerDetails img {display: none}
+#torrents .torrentDetails img {margin: -4px 0 -4px 3px}
 #mediaContainer th .newTab {margin: 0 4px}
 #torrentDisplay {top: 49px; display: flex}
 #torrentDisplay, #torrentDisplay label[for="all"] {border-left: none}
@@ -846,7 +851,7 @@ td, th, td a, input {font-size: 9pt}
 #torrents td:nth-child(2) {white-space: nowrap}
 #torrents td[colspan="10"] {white-space: normal}
 b.alwaysShow {display: inline}
-#torrents td:first-child img {max-height: 18px}
+#torrents td:first-child img {max-height: 20px}
 .snarknavbar, .page {min-width: 600px}
 .snarkNav:first-child {padding-left: 26px}
 #pagenavcontrols {transform: translateX(52px)}
@@ -856,7 +861,6 @@ b.alwaysShow {display: inline}
 .torrentName a, .snarkFileName a {word-break: break-all}
 .torrentUploaded, .RateUp, tfoot .torrentAction, .debuginfo {display: none}
 tfoot .torrentDownloaded, tfoot .RateDown {font-size: 0}
-#screenlog li:first-child::after {content: "minimode"; font-size: 8pt; float: right; vertical-align: middle; position: relative; bottom: -42px; right: -20px; background: rgba(0,0,48,.4); padding: 1px 4px 2px; border-radius: 4px 0 0 4px; z-index: 0}
 input[name="nofilter_dataDir"] {width: 350px; max-width: 350px}
 input.trackerhome, input.trackerannounce, .knownTracker a, #trackerselect a {max-width: 130px}
 #configs td:first-child {min-width: 150px}
@@ -917,10 +921,10 @@ thead img, thead img:hover {max-height: 22px}
 .torrentInfo th:first-child img, #torrentInfoStats img, #trackers img {max-height: 18px}
 .torrentInfo .infohash {padding: 3px 0 3px 20px; max-width: 130px; background-size: 14px}
 .trackerhome, .trackerannounce, .knownTracker a {width: 400px; max-width: 400px}
-td.trackerDetails img {margin: 0 3px; padding: 3px; width: 18px; height: 18px; max-height: 18px}
-td.torrentDetails img, .dirInfo td:first-child img:not(.thumb) {margin: -2px 0; width: 24px; height: 24px; max-width: 24px; max-height: 24px}
+#torrents td.trackerDetails img {margin: 0 1px; padding: 2px; width: 18px; height: 18px; max-height: 18px}
+#torrents td.torrentDetails img, .dirInfo td:first-child img:not(.thumb) {margin: -2px 0; width: 24px; height: 24px; max-width: 24px; max-height: 24px}
 .dirInfo tr:nth-child(n+2) td:first-child img:not(.thumb) {margin-top: -2px; margin-bottom: -1px; width: 22px; max-width: 22px; height: 22px; max-height: 22px}
-.torrentDetails img[src$="rateme.svg"] {margin-top: -3px; margin-right: -3px; width: 12px; height: 12px}
+#torrents .torrentDetails img[src$="rateme.svg"] {margin-top: -3px; margin-right: -3px; width: 12px; height: 12px}
 .percentBarComplete {padding-top: 3px}
 #torrentDisplay {margin-top: 9px}
 .iframed #torrentDisplay {margin: -10px 0 -1px}

@@ -86,6 +86,7 @@ ul {margin: 0; padding: 0}
 #sidebar table:not(#sb_localtunnels) td b, #sidebar td span {margin: -2px 0 2px; display: inline-block; vertical-align: text-top}
 #sidebar table:not(#sb_localtunnels) tr:first-child td b, #sidebar tr:first-child td span {margin: 0 0 1px}
 #sidebar table:not(#sb_localtunnels) tr:last-child td b, #sidebar tr:last-child td span {margin: -2px 0 3px}
+/*#sidebar .digits span {animation: textglow .1s linear}*/
 #sidebar td a {-webkit-text-stroke: 0}
 #sidebar td a:active {box-shadow: 0 0 0 2px rgba(0,0,0,.3), inset 2px 2px 2px rgba(0,0,0,.7)}
 #sidebar h3 {margin: -7px -1px -9px; padding: 6px 2px; width: calc(100% - 3px); letter-spacing: .08em; text-transform: uppercase; font-size: 9.5pt; border: none; border-radius: 0; box-shadow: var(--highlight), inset 0 0 1px 1px #191; background: radial-gradient(at center bottom, rgba(16, 72, 16, .4) 0, rgba(0, 0, 0, 0) 50%), var(--bg_title), linear-gradient(180deg,rgba(0,0,0,.1), rgba(0,0,0,.25) 50%, rgba(0,0,0,.75) 50%, #000), var(--h3_fade); background-size: 100%, 2px, 100%, 100%}
@@ -101,7 +102,7 @@ ul {margin: 0; padding: 0}
 #clock {margin: -7px 0 -9px -1px; padding: 8px 0; position: relative; line-height: 1; letter-spacing: .1em; font-size: 18pt; font-weight: 700; color: #ffa; text-shadow: var(--textshadow); box-shadow: var(--bevel); background: repeating-linear-gradient(180deg,rgba(255,255,255,.05) 2px, rgba(0,16,0,.2) 4px), linear-gradient(90deg, #010, #000, #010); -webkit-text-stroke: 1px rgba(220,220,128,.5); opacity: .9}
 #clock::before {content: ""; position: absolute; top: 0; left: 0; height: 100%; width: 100%; box-shadow: var(--bevel); background: repeating-linear-gradient(90deg, rgba(0,0,0,.3) 2px, rgba(0,16,0,.2) 4px)}
 #clock::after {margin-left: 3px; content: "UTC"; display: inline-block; font-size: 50%; vertical-align: middle}
-.sb table:not(#sb_localtunnels):not(#sb_services):not(#sb_advanced)::before {width: 0; height: 1px; position: absolute; top: -1px; left: -1px; display: block; background: linear-gradient(90deg, #730, #940); content: ""; animation: bar .15s ease-in-out .15s reverse; backface-visibility: hidden; will-change: transform}
+.sb table:not(#sb_localtunnels):not(#sb_services):not(#sb_advanced)::before {width: 0; height: 1px; position: absolute; top: -1px; left: -1px; display: block; background: repeating-linear-gradient(90deg, #f60 2px, rgba(0,0,0,0) 4px), linear-gradient(90deg, #930, #f60); content: ""; animation: bar .15s ease-in-out .1s reverse; backface-visibility: hidden; will-change: transform}
 #sb_peers, #sb_peersadvanced, #sb_tunnels, #sb_queue, #sb_bandwidth, #sb_general, #sb_advancedgeneral, #sb_localtunnels, #sb_advanced, #sb_internals, #sb_services, #sb_newsheadings table {margin: -7px auto -9px -1px}
 #sb_localtunnels {margin-bottom: -8px}
 #sb_advanced, #sb_internals, #sb_services, #sb_help {margin-top: -7px}
@@ -139,7 +140,7 @@ ul {margin: 0; padding: 0}
 #sb_notice.hide + hr, #sb_updatesection.hide + hr {display: none}
 .sb_notice + .sb_notice {margin-top: -5px}
 p:empty + .sb_notice {margin-top: 9px}
-#sidebar form {margin: -7px -10px -9px; padding: 4px 3px; box-shadow: var(--bevel)}
+#sidebar form {margin: -7px 0 -9px -1px; padding: 4px 3px; box-shadow: var(--bevel); background: var(--sb_row)}
 #sidebar form:first-child {margin: 6px 0 -5px 0}
 #sidebar p {padding: 0}
 #sidebar a:link, #sidebar a:visited {word-spacing: .05em}
@@ -199,12 +200,12 @@ p:empty + .sb_notice {margin-top: 9px}
 
 /* network status */
 #sb_shutdownStatus {width: calc(100% - 3px)}
-#sb_shutdownStatus span {margin: 3px 0; display: inline-block}
+#sb_shutdownStatus span {margin: 3px 0; padding: 2px 4px; display: inline-block}
 #sidebar h4 a {width: auto; display: inline}
 #sidebar #sb_warning {margin-bottom: 7px; padding: 6px 4px; background: #000; text-align: center; line-height: 1.2}
 #sb_warning + p:empty + form {margin-top: 11px; margin-bottom: -6px}
 #sb_status, .sb_netstatus, .tunnelBuildStatus, #bandwidthTestRunning {display: inline-block; vertical-align: middle; vertical-align: -moz-middle-with-baseline; vertical-align: -webkit-baseline-middle; text-shadow: var(--textshadow); box-sizing: border-box}
-#sidebar #sb_status {margin: -6px 2px -8px -1px; width: calc(100% - 1px); box-shadow: var(--note_shadow)}
+#sidebar #sb_status {margin: -6px 0 -8px -1px; width: calc(100% - 1px); box-shadow: var(--note_shadow)}
 #sidebar #sb_tunnelstatus {margin: -7px 0 -9px -1px; width: calc(100% - 1px); box-shadow: var(--note_shadow)}
 #sidebar .sb_netstatus, #sidebar .tunnelBuildStatus {margin: -3px auto; padding: 8px 2px; display: block; width: calc(100% - 4px)}
 #sidebar .tunnelBuildStatus {padding: 10px 2px 8px}
@@ -412,7 +413,7 @@ button.control {margin: 3px; padding: 15px; min-width: 0; font-size: 0}
 
 .sidebarlogo {text-align: center}
 #sidebar button.reload, #sidebar button.stop, #sidebar button.cancel {margin: 3px 2px; min-width: 97px; text-transform: capitalize}
-#sidebar button.download {width: 202px}
+#sidebar button.download {margin-bottom: 3px; width: calc(100% - 10px)}
 #sidebar button.cancel {min-width: 151px}
 #updateAvailable {margin: 0; padding: 4px 0 0; width: calc(100% - 20px); display: inline-block; line-height: 1.2; color: #dd3; font-size: 9pt; text-shadow: var(--textshadow); opacity: .9}
 #updateAvailable + br + button + br + #updateAvailable::before {margin: 2px 0 4px; width: 100%; height: 1px; display: inline-block; background: #252; content: ""}
@@ -2383,7 +2384,7 @@ iframe {height: 0}
 .iframed div.sorry {margin: -1px 5px 10px 5px}
 
 /* animations */
-@keyframes bar {from {width: calc(200%)}}
+@keyframes bar {from {width: calc(300%)}}
 @keyframes downloadbar {from {background: var(--download_bar)} to {background: repeating-linear-gradient(135deg, #010 1px, #010 6px, #000 7px, #000 11px)}}
 @keyframes fade {from {filter: opacity(1)} to {filter: opacity(0)}}
 @keyframes hide-up {0% {margin-top: 0; filter: opacity(1)} 30% {filter: opacity(0)} 100% {margin-top: -300px}}
@@ -2395,6 +2396,7 @@ iframe {height: 0}
 @keyframes scaleY {from {transform: scaleY(0)} to {transform: scaleY(1)}}
 @keyframes slide {from {transform: translateY(-20px)} to {transform: translateY(0)}}
 @keyframes spin {from {transform: rotate(-360deg)}}
+@keyframes textglow {from {text-shadow: 0 0 1px #995}}
 @keyframes zoom {from {transform: scale(0); opacity: 0} to {scale: scale(1); opacity: 1}}
 
 /* chrome overrides */
@@ -2450,9 +2452,10 @@ h3[id*="jobs"]:first-of-type {margin-top: 21px}
 #routerinformation .h3navlinks a::before {margin-left: 0}
 #routerinformation h3 span a {padding: 12px 3px 12px 12px}
 #sb_general td::before, #sb_shortgeneral td::before, #sb_advancedgeneral td::before, #sb_bandwidth td::before, #sb_peers td::before, #sb_peersadvanced td::before, #sb_tunnels td::before, #sb_queue td::before {min-height: 18px}
-#sidebar table:not(#sb_localtunnels):not(#sb_newsheadings table) td {padding: 1px 3px}
-#sidebar table:not(#sb_localtunnels):not(#sb_newsheadings table) td:first-child {padding: 1px 3px 1px 6px}
-#sidebar table:not(#sb_localtunnels):not(#sb_newsheadings table) td:last-child {padding: 1px 6px 1px 3px}
+#sidebar table:not(#sb_localtunnels):not(#sb_newsheadings table):not(#sb_services):not(#sb_internals):not(#sb_advanced) td {padding: 1px 3px}
+#sidebar table:not(#sb_localtunnels):not(#sb_newsheadings table):not(#sb_services):not(#sb_internals):not(#sb_advanced) td:first-child {padding: 1px 3px 1px 6px}
+#sidebar table:not(#sb_localtunnels):not(#sb_newsheadings table):not(#sb_services):not(#sb_internals):not(#sb_advanced) td:last-child {padding: 1px 6px 1px 3px}
+#sidebar #sb_services td, #sidebar #sb_internals td, #sidebar #sb_advanced td {padding: 4px}
 #sb_localtunnels td {line-height: 1}
 #sb_localtunnels td:first-child {width: 18px}
 #sidebar #sb_localtunnels td[colspan="3"] {width: 100%; background-size: 400%}
@@ -2724,8 +2727,9 @@ h4#updateplugins {margin-top: -15px}
 #sb_services a:link, #sb_internals a:link, #sb_advanced a:link, #sb_help a:link {max-width: 216px}
 #schedjobs ul {columns: 270px auto}
 select {padding: 8px 24px 8px 8px}
-#sidebar button.download {margin-bottom: 2px; width: calc(100% - 25px); line-height: 1.4}
-#sidebar button.reload, #sidebar button.stop {min-width: 120px}
+#sidebar button.download {margin-bottom: 5px; line-height: 1.4}
+#sidebar button.reload, #sidebar button.stop {margin: 4px 2px 3px; width: calc(50% - 8px)}
+#sidebar .reload[value="restartImmediate"] {width: auto; min-width: 157px}
 #sidebar button.cancel {min-width: 157px}
 #sidebar h3::after {min-height: 20px}
 #sidebar img[src$="i2plogo.png"] {margin: -3px 0 -8px -4px; width: 248px; transform: none}

@@ -59,7 +59,7 @@ class FloodfillMonitorJob extends JobImpl {
         if (!getContext().commSystem().isRunning()) {
             // Avoid deadlock in the transports through here via Router.rebuildRouterInfo() at startup
             if (_log.shouldWarn())
-                _log.warn("Floodfill Monitor before comm system started");
+                _log.warn("Attempted to initialize Floodfill Monitor before comm system started, requeuing...");
             requeue(100);
             return;
         }
