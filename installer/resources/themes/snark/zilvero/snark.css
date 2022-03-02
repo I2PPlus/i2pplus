@@ -760,15 +760,11 @@ td.graphicStatus img {
 	background: #fff;
 }
 
-.dirInfo tr:last-child td {
-	padding-bottom: 7px;
-}
-
 .ParentDir {
 	background: #fafafa;
 }
 
-.snarkCommentInfo, .snarkComments, #mediaContainer {
+#commentSection .snarkCommentInfo, #commentSection .snarkComments, #mediaContainer {
 	margin-top: -1px;
 }
 
@@ -2438,7 +2434,8 @@ tr:not(.peerinfo) .torrentUploaded:empty::after {
 	margin-top: 1px;
 }
 
-#torrentEdit {
+#editSection #torrentEdit {
+	margin-bottom: 5px;
 	width: 100%;
 }
 
@@ -2488,8 +2485,8 @@ tr:not(.peerinfo) .torrentUploaded:empty::after {
 	margin-bottom: -7px;
 }
 
-#commentSection {
-	margin-top: -2px;
+#snarkInfo ~ #commentSection {
+	margin-top: -7px;
 	margin-bottom: 1px;
 }
 
