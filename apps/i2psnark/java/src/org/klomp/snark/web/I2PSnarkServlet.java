@@ -5040,7 +5040,6 @@ public class I2PSnarkServlet extends BasicServlet {
             icon = "hash";
         else if (mime.equals("application/x-bittorrent"))
             icon = "magnet";
-                    else if (mime.equals("application/x-bittorrent"))
         else
             icon = "generic";
         return icon;
