@@ -321,10 +321,6 @@ td {
 	border-bottom: var(--border);
 }
 
-.peerinfo td {
-	background-color: #fffffd;
-}
-
 .peerinfo:hover td, #torrentEdit tr:hover td {
 	background-color: #bfb8b3;
 }
@@ -458,6 +454,10 @@ td.peerCount:empty::after {
 	width: 8px;
 	height: 8px;
 	background: var(--ink);
+}
+
+.peerinfo {
+	background-color: #fffffd;
 }
 
 .peerinfo td {
@@ -1146,7 +1146,6 @@ tt {
 }
 
 .knownTracker input[disabled] {
-	display: inline;
 	opacity: .5;
 }
 
