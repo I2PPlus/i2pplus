@@ -5,7 +5,7 @@ input, button, textarea, select, a {
   line-height: 120% !important;
 }
 
-.iframed .snarknavbar {
+.iframed #navbar {
   padding-bottom: 14px !important;
 }
 
@@ -100,7 +100,7 @@ select, a.control, input[type=submit], input.accept, th, #trackerselect tr:first
   mix-blend-mode: hard-light;
 }
 
-.torrentInfo th, .dirInfo th, #totals, .snarkCommentInfo th, #configs th {
+.torrentInfo th, .dirInfo th, #totals, #commentInfo th, #configs th {
   font-size: 11pt !important;
 }
 

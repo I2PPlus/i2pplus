@@ -394,7 +394,7 @@ public class I2PSnarkServlet extends BasicServlet {
         String time = String.valueOf(now);
 */
         if (isConfigure) {
-            out.write("<div class=\"snarknavbar\" id=\"top\">\n<a href=\"" + _contextPath + "/\" title=\"");
+            out.write("<div id=\"navbar\">\n<a href=\"" + _contextPath + "/\" title=\"");
             out.write(_t("Torrents"));
             out.write("\" class=\"snarkNav nav_main\">");
             if (_contextName.equals(DEFAULT_NAME))
@@ -403,7 +403,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 out.write(_contextName);
             out.write("</a>\n");
         } else {
-            out.write("<div class=\"snarknavbar\" id=\"top\">\n<a href=\"" + _contextPath + '/' + peerString + "\" title=\"");
+            out.write("<div id=\"navbar\">\n<a href=\"" + _contextPath + '/' + peerString + "\" title=\"");
             out.write(_t("Refresh page"));
             out.write("\" class=\"snarkNav nav_main\">");
             if (_contextName.equals(DEFAULT_NAME))
@@ -2126,7 +2126,7 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write(statusString);
 
         // (i) icon column
-        out.write("</b></td>\n<td class=\"trackerDetails\">");
+        out.write("</b></td>\n<td class=\"trackerLink\">");
         if (isValid) {
             String announce = meta.getAnnounce();
             if (announce == null)
@@ -2764,7 +2764,7 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write(":<td><input type=\"text\" name=\"nofilter_newURL\" size=\"85\" value=\"" + newURL + "\" spellcheck=\"false\"");
         out.write(" title=\"");
         out.write(_t("Enter the torrent file download URL (I2P only), magnet link, or info hash"));
-        out.write("\">\n");
+        out.write("\" required>\n");
         // not supporting from file at the moment, since the file name passed isn't always absolute (so it may not resolve)
         //out.write("From file: <input type=\"file\" name=\"newFile\" size=\"50\" value=\"" + newFile + "\" /><br>");
         out.write("<input type=\"submit\" class=\"add\" value=\"");
@@ -2797,7 +2797,7 @@ public class I2PSnarkServlet extends BasicServlet {
                   + "\" spellcheck=\"false\" title=\"");
         out.write(_t("File or directory to seed (full path or within the directory {0} )",
                     _manager.getDataDir().getAbsolutePath() + File.separatorChar));
-        out.write("\" > <input type=\"submit\" class=\"create\" value=\"");
+        out.write("\" required> <input type=\"submit\" class=\"create\" value=\"");
         out.write(_t("Create torrent"));
         out.write("\" name=\"foo\" >");
         out.write("</td></tr>\n");
@@ -3669,7 +3669,7 @@ public class I2PSnarkServlet extends BasicServlet {
             //buf.append("<script src=\"").append(_contextPath).append(WARBASE + "js/setPriority.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\" async></script>\n");
             //buf.append("<script src=\"/themes/setPriority.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n"); // debugging
         buf.append("</head>\n<body class=\"lang_" + lang + "\">\n" +
-                   "<center>\n<div class=\"snarknavbar\"><a href=\"").append(_contextPath).append("/\" title=\"Torrents\"" +
+                   "<center>\n<div id=\"navbar\"><a href=\"").append(_contextPath).append("/\" title=\"Torrents\"" +
                    " class=\"snarkNav nav_main\">");
         if (_contextName.equals(DEFAULT_NAME))
             buf.append(_t("I2PSnark"));
@@ -4767,7 +4767,7 @@ public class I2PSnarkServlet extends BasicServlet {
             CommentSet comments = snark.getComments();
             boolean canRate = esc && _manager.util().getCommentsName().length() > 0;
 
-            buf.append("<table class=\"snarkCommentInfo\">\n<tr><th colspan=\"3\">")
+            buf.append("<table id=\"commentInfo\">\n<tr><th colspan=\"3\">")
                .append(_t("Ratings and Comments").replace("and", "&amp;"))
                .append("&nbsp;&nbsp;&nbsp;");
             if (esc && !canRate) {
@@ -4881,7 +4881,7 @@ public class I2PSnarkServlet extends BasicServlet {
             if (iter != null) {
                 SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 fmt.setTimeZone(SystemVersion.getSystemTimeZone(_context));
-                buf.append("<table class=\"snarkComments\">\n");
+                buf.append("<table id=\"userComments\">\n");
 
                 while (iter.hasNext()) {
                     Comment c = iter.next();
@@ -5029,6 +5029,8 @@ public class I2PSnarkServlet extends BasicServlet {
             icon = "apple";
         else if (plc.endsWith(".iso") || plc.endsWith(".nrg"))
             icon = "cd";
+        else if (plc.endsWith(".sh"))
+            icon = "shell";
         else if (plc.contains(".css.") || plc.endsWith(".css") || plc.endsWith(".js") ||
                  plc.endsWith(".cgi") || plc.endsWith(".pl") || plc.endsWith(".py") ||
                  plc.endsWith(".php") || plc.endsWith(".h") || plc.endsWith(".cpp") ||

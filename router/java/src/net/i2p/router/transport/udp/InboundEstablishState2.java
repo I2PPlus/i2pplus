@@ -155,7 +155,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     private void processPayload(byte[] payload, int offset, int length, boolean isHandshake) throws GeneralSecurityException {
         try {
             int blocks = SSU2Payload.processPayload(_context, this, payload, offset, length, isHandshake);
-            System.out.println("Processed " + blocks + " blocks");
+            if (_log.shouldDebug())
+                _log.debug("Processed " + blocks + " blocks");
         } catch (Exception e) {
             _log.error("IES2 payload error\n" + net.i2p.util.HexDump.dump(payload, 0, length), e);
             throw new GeneralSecurityException("IES2 payload error", e);
@@ -171,13 +172,17 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     public void gotOptions(byte[] options, boolean isHandshake) {
-        System.out.println("Got OPTIONS block");
+        if (_log.shouldDebug())
+            _log.debug("Got OPTIONS block");
     }
 
     public void gotRI(RouterInfo ri, boolean isHandshake, boolean flood) throws DataFormatException {
-        System.out.println("Got RI block: " + ri);
+        if (_log.shouldDebug())
+            _log.debug("Got RI block: " + ri);
         if (isHandshake)
             throw new DataFormatException("RI in Sess Req");
+        if (_receivedUnconfirmedIdentity != null)
+            throw new DataFormatException("DUP RI in Sess Conf");
         _receivedUnconfirmedIdentity = ri.getIdentity();
         if (ri.getNetworkId() != _context.router().getNetworkID()) {
             // TODO ban
@@ -234,11 +239,13 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
 
         _receivedConfirmedIdentity = _receivedUnconfirmedIdentity;
         _sendHeaderEncryptKey1 = ik;
+        createPeerState();
         //_sendHeaderEncryptKey2 calculated below
     }
 
     public void gotRIFragment(byte[] data, boolean isHandshake, boolean flood, boolean isGzipped, int frag, int totalFrags) {
-            System.out.println("Got RI fragment " + frag + " of " + totalFrags);
+        if (_log.shouldDebug())
+            _log.debug("Got RI fragment " + frag + " of " + totalFrags);
         if (isHandshake)
             throw new IllegalStateException("RI in Sess Req");
     }
@@ -248,11 +255,13 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     public void gotIntroKey(byte[] key) {
-        System.out.println("Got Intro key: " + Base64.encode(key));
+        if (_log.shouldDebug())
+            _log.debug("Got Intro key: " + Base64.encode(key));
     }
 
     public void gotRelayTagRequest() {
-        System.out.println("Got relay tag request");
+        if (_log.shouldDebug())
+            _log.debug("Got relay tag request");
     }
 
     public void gotRelayTag(long tag) {
@@ -266,19 +275,25 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     public void gotI2NP(I2NPMessage msg) {
-        System.out.println("Got I2NP block: " + msg);
+        if (_log.shouldDebug())
+            _log.debug("Got I2NP block: " + msg);
         if (getState() != InboundState.IB_STATE_CREATED_SENT)
             throw new IllegalStateException("I2NP in Sess Req");
         if (_receivedConfirmedIdentity == null)
             throw new IllegalStateException("RI must be first");
+        // pass to PeerState2
+        _pstate.gotI2NP(msg);
     }
 
     public void gotFragment(byte[] data, int off, int len, long messageID, int frag, boolean isLast) throws DataFormatException {
-        System.out.println("Got FRAGMENT block: " + messageID);
+        if (_log.shouldDebug())
+            _log.debug("Got FRAGMENT block: " + messageID);
         if (getState() != InboundState.IB_STATE_CREATED_SENT)
             throw new IllegalStateException("I2NP in Sess Req");
         if (_receivedConfirmedIdentity == null)
             throw new IllegalStateException("RI must be first");
+        // pass to PeerState2
+        _pstate.gotFragment(data, off, len, messageID, frag, isLast);
     }
 
     public void gotACK(long ackThru, int acks, byte[] ranges) {
@@ -290,7 +305,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     public void gotUnknown(int type, int len) {
-        System.out.println("Got UNKNOWN block, type: " + type + " len: " + len);
+        if (_log.shouldDebug())
+            _log.debug("Got UNKNOWN block, type: " + type + " len: " + len);
     }
 
     public void gotPadding(int paddingLength, int frameLength) {
@@ -443,6 +459,19 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         if (_receivedConfirmedIdentity == null)
             throw new GeneralSecurityException("No RI in Session Confirmed");
 
+        // createPeerState() called from gotRI()
+
+        _currentState = InboundState.IB_STATE_CONFIRMED_COMPLETELY;
+        packetReceived();
+        return _pstate;
+    }
+
+    /**
+     *  Creates the PeerState and stores in _pstate.
+     *  Called from gotRI() so that we can pass any I2NP messages
+     *  or fragments immediately to the PeerState.
+     */
+    private void createPeerState() {
         // split()
         // The CipherStates are from d_ab/d_ba,
         // not from k_ab/k_ba, so there's no use for
@@ -462,9 +491,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         ChaChaPolyCipherState sender = new ChaChaPolyCipherState();
         sender.initializeKey(d_ba, 0);
         ChaChaPolyCipherState rcvr = new ChaChaPolyCipherState();
-        sender.initializeKey(d_ab, 0);
+        rcvr.initializeKey(d_ab, 0);
         if (_log.shouldDebug())
-            _log.debug("Generated Chain key:              " + Base64.encode(ckd) +
+            _log.debug("split()\nGenerated Chain key:              " + Base64.encode(ckd) +
                        "\nGenerated split key for A->B:     " + Base64.encode(k_ab) +
                        "\nGenerated split key for B->A:     " + Base64.encode(k_ba) +
                        "\nGenerated encrypt key for A->B:   " + Base64.encode(d_ab) +
@@ -481,9 +510,6 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                                  true, _rtt, sender, rcvr,
                                  _sendConnID, _rcvConnID,
                                  _sendHeaderEncryptKey1, h_ba, h_ab);
-        _currentState = InboundState.IB_STATE_CONFIRMED_COMPLETELY;
-        packetReceived();
-        return _pstate;
     }
 
     /**

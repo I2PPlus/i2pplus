@@ -86,7 +86,9 @@ ul {margin: 0; padding: 0}
 #sidebar table:not(#sb_localtunnels) td b, #sidebar td span {margin: -2px 0 2px; display: inline-block; vertical-align: text-top}
 #sidebar table:not(#sb_localtunnels) tr:first-child td b, #sidebar tr:first-child td span {margin: 0 0 1px}
 #sidebar table:not(#sb_localtunnels) tr:last-child td b, #sidebar tr:last-child td span {margin: -2px 0 3px}
-/*#sidebar .digits span {animation: textglow .1s linear}*/
+#sidebar tr td.digits span {margin: 0; vertical-align: middle}
+#sidebar tr:first-child td.digits span {margin: 2px 0 1px}
+#sidebar tr:last-child td.digits span {margin: 0 0 1px}
 #sidebar td a {-webkit-text-stroke: 0}
 #sidebar td a:active {box-shadow: 0 0 0 2px rgba(0,0,0,.3), inset 2px 2px 2px rgba(0,0,0,.7)}
 #sidebar h3 {margin: -7px -1px -9px; padding: 6px 2px; width: calc(100% - 3px); letter-spacing: .08em; text-transform: uppercase; font-size: 9.5pt; border: none; border-radius: 0; box-shadow: var(--highlight), inset 0 0 1px 1px #191; background: radial-gradient(at center bottom, rgba(16, 72, 16, .4) 0, rgba(0, 0, 0, 0) 50%), var(--bg_title), linear-gradient(180deg,rgba(0,0,0,.1), rgba(0,0,0,.25) 50%, rgba(0,0,0,.75) 50%, #000), var(--h3_fade); background-size: 100%, 2px, 100%, 100%}

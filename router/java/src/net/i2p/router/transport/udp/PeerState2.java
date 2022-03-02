@@ -78,9 +78,15 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         _rcvHeaderEncryptKey2 = rcvHdrKey2;
         _receivedMessages = new SSU2Bitfield(256, 0);
         _ackedMessages = new SSU2Bitfield(256, 0);
-        // For outbound, SessionConfirmed is packet 0
-        if (!isInbound)
+        if (isInbound) {
+            // Send immediate ack of Session Confirmed
+            _receivedMessages.set(0);
+            UDPPacket ack = transport.getBuilder2().buildACK(this);
+            transport.send(ack);
+        } else {
+            // For outbound, SessionConfirmed is packet 0
             _packetNumber.set(1);
+        }
     }
 
     // SSU 1 overrides
@@ -117,6 +123,25 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         // 40 + 8 + 16 + 3 + 5 + 16 = 88 (IPv6)
         return (_remoteIP.length == 4 ? PacketBuilder2.MIN_DATA_PACKET_OVERHEAD : PacketBuilder2.MIN_IPV6_DATA_PACKET_OVERHEAD) +
                DATA_FOLLOWON_EXTRA_SIZE; // Followon fragment block overhead (5)
+    }
+
+    /**
+     *  All acks have been sent.
+     */
+    @Override
+    void clearWantedACKSendSince() {
+        // TODO
+        //if (  )
+        //    _wantACKSendSince = 0;
+    }
+
+    /**
+     *  We received the message specified completely.
+     *  @param bytes if less than or equal to zero, message is a duplicate.
+     */
+    @Override
+    void messageFullyReceived(Long messageId, int bytes) {
+        // TODO
     }
 
     // SSU 1 unsupported things
@@ -160,6 +185,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         byte[] data = dpacket.getData();
         int off = dpacket.getOffset();
         int len = dpacket.getLength();
+        if (_log.shouldDebug())
+            _log.debug("Packet before header decryption:\n" + HexDump.dump(data, off, len));
         try {
             if (len < MIN_DATA_LEN) {
                 if (_log.shouldWarn())
@@ -192,10 +219,14 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             }
             long n = header.getPacketNumber();
             SSU2Header.acceptTrialDecrypt(packet, header);
+            if (_log.shouldDebug())
+                _log.debug("Packet " + n + " after header decryption:\n" + HexDump.dump(data, off, len));
             synchronized (_rcvCha) {
                 _rcvCha.setNonce(n);
                 // decrypt in-place
                 _rcvCha.decryptWithAd(header.data, data, off + SHORT_HEADER_SIZE, data, off + SHORT_HEADER_SIZE, len - SHORT_HEADER_SIZE);
+                if (_log.shouldDebug())
+                    _log.debug("Packet " + n + " after full decryption:\n" + HexDump.dump(data, off, len - MAC_LEN));
                 if (_receivedMessages.set(n)) {
                     if (_log.shouldWarn())
                         _log.warn("dup pkt rcvd " + n + " on " + this);
@@ -203,6 +234,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                 }
             }
             int payloadLen = len - (SHORT_HEADER_SIZE + MAC_LEN);
+            if (_log.shouldInfo())
+                _log.info("New pkt rcvd " + n + " on " + this);
             processPayload(data, off + SHORT_HEADER_SIZE, payloadLen);
             packetReceived(payloadLen);
         } catch (GeneralSecurityException gse) {
@@ -220,7 +253,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         try {
             int blocks = SSU2Payload.processPayload(_context, this, payload, offset, length, false);
         } catch (Exception e) {
-            throw new GeneralSecurityException("Session Created payload error", e);
+            throw new GeneralSecurityException("Data payload error", e);
         }
     }
 
@@ -258,13 +291,18 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     public void gotI2NP(I2NPMessage msg) {
+        if (_log.shouldDebug())
+            _log.debug("Got I2NP block: " + msg);
         // 9 byte header
         int size = msg.getMessageSize() - 7;
+        messageFullyReceived(msg.getUniqueId(), size);
         // complete message, skip IMF and MessageReceiver
         _transport.messageReceived(msg, null, _remotePeer, 0, size);
     }
 
-    public void gotFragment(byte[] data, int off, int len, long messageId,int frag, boolean isLast) throws DataFormatException {
+    public void gotFragment(byte[] data, int off, int len, long messageId, int frag, boolean isLast) throws DataFormatException {
+        if (_log.shouldDebug())
+            _log.debug("Got FRAGMENT block: " + messageId + " fragment " + frag + " isLast? " + isLast);
         InboundMessageState state;
         boolean messageComplete = false;
         boolean messageExpired = false;
@@ -305,12 +343,22 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     public void gotACK(long ackThru, int acks, byte[] ranges) {
+        if (_log.shouldDebug()) {
+            if (ranges != null)
+                _log.debug("Got ACK block: " + SSU2Bitfield.toString(ackThru, acks, ranges, ranges.length / 2));
+            else
+                _log.debug("Got ACK block: " + SSU2Bitfield.toString(ackThru, acks, null, 0));
+        }
     }
 
     public void gotTermination(int reason, long count) {
+        if (_log.shouldDebug())
+            _log.debug("Got TERMINATION block, reason: " + reason + " count: " + count);
     }
 
     public void gotUnknown(int type, int len) {
+        if (_log.shouldDebug())
+            _log.debug("Got UNKNOWN block, type: " + type + " len: " + len);
     }
 
     public void gotPadding(int paddingLength, int frameLength) {

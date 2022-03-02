@@ -166,7 +166,8 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     private void processPayload(byte[] payload, int offset, int length, boolean isHandshake) throws GeneralSecurityException {
         try {
             int blocks = SSU2Payload.processPayload(_context, this, payload, offset, length, isHandshake);
-            System.out.println("Processed " + blocks + " blocks");
+            if (_log.shouldDebug())
+                _log.debug("Processed " + blocks + " blocks");
         } catch (Exception e) {
             throw new GeneralSecurityException("Session Created payload error", e);
         }
@@ -181,7 +182,8 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     }
 
     public void gotOptions(byte[] options, boolean isHandshake) {
-        System.out.println("Got OPTIONS block");
+        if (_log.shouldDebug())
+            _log.debug("Got OPTIONS block");
     }
 
     public void gotRI(RouterInfo ri, boolean isHandshake, boolean flood) throws DataFormatException {
@@ -193,11 +195,13 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     }
 
     public void gotAddress(byte[] ip, int port) {
-        System.out.println("Got ADDRESS block: " + Addresses.toString(ip, port));
+        if (_log.shouldDebug())
+            _log.debug("Got ADDRESS block: " + Addresses.toString(ip, port));
     }
 
     public void gotIntroKey(byte[] key) {
-        System.out.println("Got Intro key: " + Base64.encode(key));
+        if (_log.shouldDebug())
+            _log.debug("Got Intro key: " + Base64.encode(key));
     }
 
     public void gotRelayTagRequest() {
@@ -205,7 +209,8 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     }
 
     public void gotRelayTag(long tag) {
-        System.out.println("Got relay tag " + tag);
+        if (_log.shouldDebug())
+            _log.debug("Got relay tag " + tag);
     }
 
     public void gotToken(long token, long expires) {
@@ -229,7 +234,8 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     }
 
     public void gotUnknown(int type, int len) {
-        System.out.println("Got UNKNOWN block, type: " + type + " len: " + len);
+        if (_log.shouldDebug())
+            _log.debug("Got UNKNOWN block, type: " + type + " len: " + len);
     }
 
     public void gotPadding(int paddingLength, int frameLength) {
@@ -418,15 +424,15 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
             ChaChaPolyCipherState sender = new ChaChaPolyCipherState();
             sender.initializeKey(d_ab, 0);
             ChaChaPolyCipherState rcvr = new ChaChaPolyCipherState();
-            sender.initializeKey(d_ba, 0);
+            rcvr.initializeKey(d_ba, 0);
             if (_log.shouldDebug())
-                _log.debug("Generated Chain key:              " + Base64.encode(ckd) +
+                _log.debug("split()\nGenerated Chain key:              " + Base64.encode(ckd) +
                            "\nGenerated split key for A->B:     " + Base64.encode(k_ab) +
                            "\nGenerated split key for B->A:     " + Base64.encode(k_ba) +
                            "\nGenerated encrypt key for A->B:   " + Base64.encode(d_ab) +
                            "\nGenerated encrypt key for B->A:   " + Base64.encode(d_ba) +
-                           "\nIntro key for Alice:              " + Base64.encode(_sendHeaderEncryptKey1) +
-                           "\nIntro key for Bob:                " + Base64.encode(_rcvHeaderEncryptKey1) +
+                           "\nIntro key for Alice:              " + Base64.encode(_transport.getSSU2StaticIntroKey()) +
+                           "\nIntro key for Bob:                " + Base64.encode(_sendHeaderEncryptKey1) +
                            "\nGenerated header key 2 for A->B:  " + Base64.encode(h_ab) +
                            "\nGenerated header key 2 for B->A:  " + Base64.encode(h_ba));
             _handshakeState.destroy();
