@@ -63,7 +63,7 @@ input, button, textarea, select, a {
 	background: #b23;
 }
 
-.snarknavbar, img, a img, #configs, .toggleview, .configTitle, label {
+#navbar, img, a img, #configs, .toggleview, .configTitle, label {
 	user-select: none;
 }
 
@@ -76,7 +76,7 @@ input, button, textarea, select, a {
 	background-size: 248px;
 }
 
-.iframed .page, .iframed .snarknavbar {
+.iframed .page, .iframed #navbar {
 	border: none;
 }
 
@@ -131,7 +131,7 @@ a:hover, a:focus, .configTitle a:hover, .toggleview:hover, .trackerName a:visite
 	background: var(--btn_hover);
 }
 
-.snarknavbar a, #tab_config a:not(:hover):not(:focus):not(:active),
+#navbar a, #tab_config a:not(:hover):not(:focus):not(:active),
 #tab_config a:not(:hover):not(:focus):not(:active):visited, .toggleview, a.control, a.control:visited {
 	color: #777;
 }
@@ -281,18 +281,18 @@ td {
 	background: #eee;
 }
 
-.snarknavbar, table, #screenlog {
+#navbar, table, #screenlog {
 	border: var(--border);
 	background: #eee;
 }
 
-.snarknavbar {
+#navbar {
 	margin-bottom: -1px;
 	padding: 5px;
 	font-size: 11pt;
 }
 
-.iframed .snarknavbar {
+.iframed #navbar {
 	margin: 0 -1px;
 	padding: 5px 5px 4px;
 }
@@ -1314,7 +1314,7 @@ tt {
 }
 
 #addSection, #createSection, #configSection, .configPanel,
-.snarkConfig, .snarknavbar, #screenlog, #torrentDisplay, .pagenavcontrols {
+.snarkConfig, #navbar, #screenlog, #torrentDisplay, .pagenavcontrols {
 	box-shadow: var(--highlight);
 	background: #eee;
 	background: var(--noise), linear-gradient(180deg,#fafafa, #eee);

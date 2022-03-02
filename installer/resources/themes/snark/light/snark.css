@@ -28,7 +28,7 @@ body.iframed {
   background: none;
 }
 
-body:not(.iframed) .snarknavbar, body:not(.iframed) .page {
+body:not(.iframed) #navbar, body:not(.iframed) .page {
   border: 1px solid rgba(168,168,192,.4) !important;
   border-radius: 0 !important;
   box-shadow: 0 0 0 1px rgba(96,96,128,.7) !important;
@@ -99,7 +99,7 @@ input, button, textarea, select, a {
   text-shadow: none;
 }
 
-.toggleview, .configTitle, .snarknavbar, img, input[type=submit], input[type=radio], input[type=checkbox],
+.toggleview, .configTitle, #navbar, img, input[type=submit], input[type=radio], input[type=checkbox],
 label, th img, #createSection, #closelog, #expand, #shrink, #pagenavbottom, #configs {
   user-select: none;
 }
@@ -138,7 +138,7 @@ button::-moz-focus-inner, input::-moz-focus-inner {
 
 /* top navigation */
 
-.snarknavbar {
+#navbar {
   margin: 0 auto -6px !important;
   padding: 8px 10px 7px;
   position: sticky;
@@ -154,7 +154,7 @@ button::-moz-focus-inner, input::-moz-focus-inner {
   background: var(--th);
  }
 
-.iframed .snarknavbar {
+.iframed #navbar {
   margin: -5px -1px -6px !important;
   padding-top: 6px;
   padding-bottom: 6px;
@@ -184,8 +184,7 @@ button::-moz-focus-inner, input::-moz-focus-inner {
   transition: ease-in box-shadow .1s;
 }
 
-#top.snarknavbar a, #top.snarknavbar a:visited,
-.snarknavbar a, .snarknavbar a:visited {
+#navbar a, #navbar a:visited {
   color: #559;
 }
 
@@ -4145,7 +4144,7 @@ td.torrentAction input[type=submit] {
   .page {
     min-width: 600px !important;
   }
-  .snarknavbar, #screenlog {
+  #navbar, #screenlog {
     min-width: 580px !important;
   }
   #screenlog li, #screenlog li a {
@@ -4458,7 +4457,7 @@ td.torrentAction input[type=submit] {
 }
 
 @media screen and (min-width: 1500px) {
-  .iframed .snarknavbar {
+  .iframed #navbar {
     padding-top: 7px !important;
     padding-bottom: 8px !important;
   }

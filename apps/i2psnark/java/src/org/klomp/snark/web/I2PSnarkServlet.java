@@ -394,7 +394,7 @@ public class I2PSnarkServlet extends BasicServlet {
         String time = String.valueOf(now);
 */
         if (isConfigure) {
-            out.write("<div class=\"snarknavbar\" id=\"top\">\n<a href=\"" + _contextPath + "/\" title=\"");
+            out.write("<div id=\"navbar\">\n<a href=\"" + _contextPath + "/\" title=\"");
             out.write(_t("Torrents"));
             out.write("\" class=\"snarkNav nav_main\">");
             if (_contextName.equals(DEFAULT_NAME))
@@ -403,7 +403,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 out.write(_contextName);
             out.write("</a>\n");
         } else {
-            out.write("<div class=\"snarknavbar\" id=\"top\">\n<a href=\"" + _contextPath + '/' + peerString + "\" title=\"");
+            out.write("<div id=\"navbar\">\n<a href=\"" + _contextPath + '/' + peerString + "\" title=\"");
             out.write(_t("Refresh page"));
             out.write("\" class=\"snarkNav nav_main\">");
             if (_contextName.equals(DEFAULT_NAME))
@@ -3669,7 +3669,7 @@ public class I2PSnarkServlet extends BasicServlet {
             //buf.append("<script src=\"").append(_contextPath).append(WARBASE + "js/setPriority.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\" async></script>\n");
             //buf.append("<script src=\"/themes/setPriority.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n"); // debugging
         buf.append("</head>\n<body class=\"lang_" + lang + "\">\n" +
-                   "<center>\n<div class=\"snarknavbar\"><a href=\"").append(_contextPath).append("/\" title=\"Torrents\"" +
+                   "<center>\n<div id=\"navbar\"><a href=\"").append(_contextPath).append("/\" title=\"Torrents\"" +
                    " class=\"snarkNav nav_main\">");
         if (_contextName.equals(DEFAULT_NAME))
             buf.append(_t("I2PSnark"));

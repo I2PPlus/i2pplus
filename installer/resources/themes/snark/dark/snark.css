@@ -23,19 +23,19 @@ a:hover, a:focus {color: #f40}
 code {padding: 0 2px; font-size: 8.5pt; color: #ff6}
 .newTab {margin: 1px 4px -2px; float: right; filter: sepia(1) saturate(0) invert(1)}
 .newTab:hover, .newTab:focus {filter: sepia(1) saturate(0) invert(1) drop-shadow(0 0 2px #f60)}
-.toggleview, .configTitle, .snarknavbar, img, input[type=submit], input[type=radio], input[type=checkbox], label, th img, #createSection, #closelog, #pagenav {user-select: none}
+.toggleview, .configTitle, #navbar, img, input[type=submit], input[type=radio], input[type=checkbox], label, th img, #createSection, #closelog, #pagenav {user-select: none}
 table {margin: 0 0 10px; padding: 0; border: none; border-collapse: collapse}
 thead, thead:hover tr, tfoot {background: #000}
 thead, thead:hover tr {border-bottom: 1px solid #101}
 tr {contain: layout}
 #torrents, .dirInfo, #videoTitle {position: relative}
 #torrents::before, #screenLog::before, .dirInfo::before, .dirInfo::before, #videoTitle::before {width: 0; height: 1px; display: block; position: absolute; top: 1px; left: 0; z-index: 1000; background: rgba(255,96,0,.4); animation: ease-in bar .5s reverse; content: ""; will-change: transform}
-.iframed .snarknavbar, .iframed .mainsection, .iframed #addSection, .iframed #createSection, .iframed #configSection, .iframed .configPanel {border-left: none; border-right: none; border-radius: 0}
+.iframed #navbar, .iframed .mainsection, .iframed #addSection, .iframed #createSection, .iframed #configSection, .iframed .configPanel {border-left: none; border-right: none; border-radius: 0}
 
 /* topnav */
-.snarknavbar {margin: 0 0 -6px; padding: 9px 0; min-width: 888px; position: sticky; top: -2px; z-index: 999; text-align: center; border: var(--border); box-shadow: var(--highlight), inset 0 0 1px 1px #050; background: var(--topnav); background-size: var(--topnav_size); will-change: transform}
-.iframed .snarknavbar {margin-top: -2px; padding: 8px 0 7px; position: static}
-.snarknavbar a:not(:hover):not(:focus):not(:active), #top a:not(:hover):not(:focus):not(:active):visited {color: #32ff32}
+#navbar {margin: 0 0 -6px; padding: 9px 0; min-width: 888px; position: sticky; top: -2px; z-index: 999; text-align: center; border: var(--border); box-shadow: var(--highlight), inset 0 0 1px 1px #050; background: var(--topnav); background-size: var(--topnav_size); will-change: transform}
+.iframed #navbar {margin-top: -2px; padding: 8px 0 7px; position: static}
+#navbar a:not(:hover):not(:focus):not(:active) {color: #32ff32}
 .nav_main {border-radius: 1px 0 0 1px; padding-left: 24px; background: #000 var(--snark) no-repeat 7px center}
 .nav_forum {background: #000 var(--forum) no-repeat 7px center}
 .nav_tracker {background: #000 var(--tracker) no-repeat 7px center}
@@ -683,7 +683,7 @@ input[name="nofilter_commentsName"] {max-width: 248px}
 .iframed #configSection {border-radius: 0 0 4px 4px}
 #mainsection + #lowersection > #configSection {margin-top: -1px}
 #mainsection + #lowersection #createSection + #configSection {margin-top: -11px; padding-bottom: 14px}
-.snarknavbar, #createSection, #addSection, #configSection, .configPanel, .optionlist, .routerdown {box-shadow: var(--highlight), inset 0 0 1px 1px #252}
+#navbar, #createSection, #addSection, #configSection, .configPanel, .optionlist, .routerdown {box-shadow: var(--highlight), inset 0 0 1px 1px #252}
 
 /* torrent edit */
 #editSection hr {margin-bottom: 0}
@@ -755,7 +755,7 @@ input:checked + .toggleview:active .tab_label::after {box-shadow: 0 0 0 2px rgb(
 @keyframes uploading {from {background-position: left center} to {background-position: 20% center}}
 
 /* browser specific */
-@supports (justify-content: center) {.snarknavbar {display: flex; justify-content: center} .snarkNav, .snarkNav:visited {margin-left: 0; margin-right: 0}}
+@supports (justify-content: center) {#navbar {display: flex; justify-content: center} .snarkNav, .snarkNav:visited {margin-left: 0; margin-right: 0}}
 @supports not (-moz-appearance: none) {.percentBarText {padding: 0}.iframed .percentBarText, .iframed .percentBarText:hover, .iframed .percentBarText:focus {transition: none} .page, .configPanel, #setPriority, #torrentInfoControl, .commentAction[colspan="5"] {background: repeating-linear-gradient(90deg, rgba(0,0,0,.4), rgba(0,0,0,.4) 2px, rgba(0,32,0,.4) 3px), repeating-linear-gradient(180deg,rgba(0,0,0,.8), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), url(/themes/console/dark/images/camotile2.png) #000; background-blend-mode: normal} .debuginfo, .debuginfo td:last-child {border-right: var(--border)}}
 
 /* responsive layout */
@@ -824,7 +824,7 @@ b.alwaysShow {display: none}
 /* mini-mode */
 @media screen and (max-width: 800px) {
 .page {min-width: 650px}
-.snarknavbar {min-width: 648px}
+#navbar {min-width: 648px}
 .torrentETA a img, .trackerLink a img {display: none}
 .graphicStatus {padding-left: 2px; max-width: 20px}
 th.graphicStatus {padding-left: 5px}
@@ -882,7 +882,7 @@ body, #torrents td, .snarkAddInfo, th, td,code, textarea, input, input[type=subm
 }
 
 @media screen and (min-width: 1200px) {
-.iframed .snarknavbar {padding-bottom: 8px}
+.iframed #navbar {padding-bottom: 8px}
 .snarkNav {font-size: 11pt}
 .snarkNav, .snarkNav:hover, .snarkNav:focus, .snarkNav:active {padding-left: 24px; background-size: 16px, 100%}
 .snarkNav:first-child {padding-left: 25px}

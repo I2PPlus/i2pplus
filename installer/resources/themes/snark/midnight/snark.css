@@ -34,17 +34,17 @@ tfoot td:first-child {padding-left: 0; text-align: left}
 tfoot img, tfoot:nth-child(2) img, tfoot:nth-child(1) img, tfoot:nth-child(3) img, tfoot:nth-child(4) img {margin: 0 2px 3px 0; padding-right: 0}
 tfoot tr:nth-child(n+1) {text-align: left}
 th img, td img, #closelog, #expand, #shrink {font-size: 0}
-.toggleview, .configTitle, .snarknavbar, img, input[type=submit], .optbox, label, th img, #createSection, #closeLog, #expand, #shrink {user-select: none}
+.toggleview, .configTitle, #navbar, img, input[type=submit], .optbox, label, th img, #createSection, #closeLog, #expand, #shrink {user-select: none}
 .page {margin: 5px 0 0; padding: 0 0 12px; line-height: 1.6; text-align: center; font-size: 9pt; border: var(--border); border-radius: 0 0 2px 2px; background: #003}
 .iframed .page {margin: 4px 0 5px; padding: 0; border: none; border-radius: 0; box-shadow: none; background: none}
-.snarknavbar, .page {min-width: 900px}
+#navbar, .page {min-width: 900px}
 
 /* topnav */
-.snarknavbar {margin: 0 0 -6px; padding: 10px 0; position: sticky; top: -1px; z-index: 999; word-spacing: 1px; letter-spacing: .15em; text-align: center; border: var(--border); border-radius: 2px 2px 0 0; background: var(--panel); background-size: 4px 100%, 100%; will-change: transform}
-.snarknavbar a, .snarknavbar a:visited {color: #89f}
-.snarknavbar a:hover, .snarknavbar a:visited:hover, .snarknavbar a:focus, .snarknavbar a:visited:focus {z-index: 999; text-decoration: none; color: #fff; text-shadow: none; border-color: #652787}
-.snarknavbar a:active, .snarknavbar a:visited:active {color: #8634b2; text-shadow: none; -webkit-text-stroke: 0; box-shadow: var(--btn_shadow_active); transition: ease box-shadow .1s}
-.iframed .snarknavbar {margin: -1px 0 5px; position: static; border: none; border-bottom: var(--border); border-radius: 0}
+#navbar {margin: 0 0 -6px; padding: 10px 0; position: sticky; top: -1px; z-index: 999; word-spacing: 1px; letter-spacing: .15em; text-align: center; border: var(--border); border-radius: 2px 2px 0 0; background: var(--panel); background-size: 4px 100%, 100%; will-change: transform}
+#navbar a, #navbar a:visited {color: #89f}
+#navbar a:hover, #navbar a:visited:hover, #navbar a:focus, #navbar a:visited:focus {z-index: 999; text-decoration: none; color: #fff; text-shadow: none; border-color: #652787}
+#navbar a:active, #navbar a:visited:active {color: #8634b2; text-shadow: none; -webkit-text-stroke: 0; box-shadow: var(--btn_shadow_active); transition: ease box-shadow .1s}
+.iframed #navbar {margin: -1px 0 5px; position: static; border: none; border-bottom: var(--border); border-radius: 0}
 .snarkNav {margin: 0 -2px; padding: 4px 9px 4px 26px; position: relative; font-size: 9pt; font-weight: 700; text-decoration: none; text-transform: uppercase; text-shadow: 0 0 1px #000; border: var(--border_btn); border-radius: 0; box-shadow: var(--highlight), inset 0 0 1px 0 #446; background: var(--tracker) no-repeat 9px center, var(--nav), var(--tracker_hover), var(--tracker_active); transition: ease box-shadow .1s; animation: fade-in .5s ease .5s both; will-change: transform}
 .snarkNav::before, .snarkNav::after {width: 1px; height: 1px; display: inline-block; vertical-align: middle; content: ""}
 .snarkNav:first-child, .snarkNav[href*="i2psnark"]:last-child {padding-left: 27px}
@@ -66,7 +66,7 @@ th img, td img, #closelog, #expand, #shrink {font-size: 0}
 .snarkNav:first-child {border-radius: 1px 0 0 1px}
 .snarkNav[href*="i2psnark"] {border-radius: 1px}
 .snarkNav, .snarkNav:hover, .snarkNav:focus, .snarkNav:active, .snarkNav:active, .nav_search:hover, .nav_search:focus, .nav_forum:hover, .nav_forum:focus, .nav_main:hover, .nav_main:focus {background-size: 15px, 100%, 100%, 100%}
-@supports (justify-content: center) {.snarknavbar {display: flex; justify-content: center} .snarkNav {margin-left: -1px; margin-right: -1px}}
+@supports (justify-content: center) {#navbar {display: flex; justify-content: center} .snarkNav {margin-left: -1px; margin-right: -1px}}
 
 /* screenlog */
 #screenlog {margin: 0; padding: 2px 5px; width: auto; height: 56px; overflow: hidden; text-align: left; font: 700 8.5pt var(--bodyfont); color: #778; border-spacing: 0; border-bottom: var(--border); scrollbar-color: #225 #001; scrollbar-width: thin}
@@ -852,7 +852,7 @@ td, th, td a, input {font-size: 9pt}
 #torrents td[colspan="10"] {white-space: normal}
 b.alwaysShow {display: inline}
 #torrents td:first-child img {max-height: 20px}
-.snarknavbar, .page {min-width: 600px}
+#navbar, .page {min-width: 600px}
 .snarkNav:first-child {padding-left: 26px}
 #pagenavcontrols {transform: translateX(52px)}
 .iframed #pagenavcontrols {transform: translateX(44px)}

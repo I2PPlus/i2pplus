@@ -41,13 +41,13 @@ a:link, a:visited {text-decoration: none; color: #cf0f00}
 #commentInfo th a:link, td a:link {word-wrap: break-word; text-decoration: none; font-weight: 700; color: #cf0f00}
 th a:hover, th a:visited:hover, th a:focus, th a:visited:focus, td a:hover, td a:visited:hover, td a:focus, td a:visited:focus {color: #df0067; filter: none}
 a:active, a:visited:active, th a:active, th a:visited:active, td a:active, td a:visited:active {color: #f00}
-.toggleview, .configTitle, .snarknavbar, img, input[type=submit], .optbox[type=radio], .optbox[type=checkbox], label, th img, #createSection, #closelog, #pagenavbottom {user-select: none}
-.snarknavbar, #screenlog, #addSection, #createSection, .configPanel {contain: content}
+.toggleview, .configTitle, #navbar, img, input[type=submit], .optbox[type=radio], .optbox[type=checkbox], label, th img, #createSection, #closelog, #pagenavbottom {user-select: none}
+#navbar, #screenlog, #addSection, #createSection, .configPanel {contain: content}
 
 /* top nav */
-.snarknavbar {margin: -11px 0 10px 0; padding: 12px 10px 11px; position: sticky; top: -2px; z-index: 999; width: 70%; border: var(--border); border-radius: 0 0 2px 2px; box-shadow: var(--highlight), 0 0 0 1px rgba(111,96,90,.3); background: linear-gradient(180deg,#efefef 50%, #cfc7c2 53%); text-align: center; transition: ease width .5s .5s}
-.iframed .snarknavbar {margin: -6px 0; padding-top: 10px; position: static; width: auto; border-radius: 0; box-shadow: var(--highlight); background: var(--th)}
-.snarknavbar a:not(:hover):not(:focus):not(:active) {color: #3f271b}
+#navbar {margin: -11px 0 10px 0; padding: 12px 10px 11px; position: sticky; top: -2px; z-index: 999; width: 70%; border: var(--border); border-radius: 0 0 2px 2px; box-shadow: var(--highlight), 0 0 0 1px rgba(111,96,90,.3); background: linear-gradient(180deg,#efefef 50%, #cfc7c2 53%); text-align: center; transition: ease width .5s .5s}
+.iframed #navbar {margin: -6px 0; padding-top: 10px; position: static; width: auto; border-radius: 0; box-shadow: var(--highlight); background: var(--th)}
+#navbar a:not(:hover):not(:focus):not(:active) {color: #3f271b}
 .snarkNav, .snarkNav:visited {margin: -3px -4px -4px 0; padding: 4px 10px 4px 28px; display: inline-block; position: relative; z-index: 30; line-height: 1.3; font: bold 10pt var(--bodyfont); color: #3f271b; text-shadow: 0 0 1px #fff5ef; text-decoration: none; text-transform: uppercase; letter-spacing: .08em; border: var(--border); border-radius: 0; box-shadow: var(--highlight), inset 0 0 0 rgba(0,0,0,0), 0 0 0 1px rgba(77, 69, 62, .1); background-size: 17px, 100%, 100%, 17px, 17px; background-position: 12px center, center center, center center; background-repeat: no-repeat; animation: fade-in .25s ease .5s both}
 .snarkNav:hover, .snarkNav:focus {z-index: 50; color: #930; text-decoration: none; text-shadow: none; box-shadow: var(--highlight), inset 0 0 0 rgba(0,0,0,0), 0 0 0 1px rgba(77, 69, 62, .1)}
 .snarkNav:active {text-shadow: none; box-shadow: var(--highlight), inset 2px 2px 3px 1px #59513b, 0 0 0 1px rgba(77, 69, 62, .1); transition: ease box-shadow .01s}
@@ -798,7 +798,7 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {co
 @keyframes uploading {from {background-position: left center} to {background-position: 20% center}}
 
 /* browser specific */
-@supports (justify-content: center) {.snarknavbar {display: flex; justify-content: center}}
+@supports (justify-content: center) {#navbar {display: flex; justify-content: center}}
 @supports (display: flex) {#torrentDisplay {display: flex} #torrentDisplay label {min-width: 0; flex-grow: 1} #torrentDisplay label[for="all"] {border-left: none} #torrentDisplay label:last-child {border-right: none}}
 @supports (animation: ease all .1s) {.ascending, .descending {filter: opacity(0); animation: ease fade-in .2s .6s forwards}}
 @supports not (-moz-appearance: none) {.peerinfo .torrentDownloaded .percentBarText {line-height: normal}}
@@ -818,7 +818,7 @@ tfoot .RateDown:not(:empty)::before, tfoot .torrentDownloaded:not(:empty)::befor
 }
 
 @media screen and (max-width: 1200px) {
-.snarknavbar {width: calc(100% - 22px); transition: ease width .5s .5s}
+#navbar {width: calc(100% - 22px); transition: ease width .5s .5s}
 .peerinfo td, .debuginfo td {padding-top: 2px; padding-bottom: 2px}
 .trackerLink {padding: 0; width: 0; max-width: 0; min-width: 0; font-size: 0}
 .trackerLink img {display: none}
@@ -867,7 +867,7 @@ td.graphicStatus img {width: auto; height: 19px}
 }
 
 @media screen and (max-width: 800px) {
-.page, .snarknavbar {min-width: 650px}
+.page, #navbar {min-width: 650px}
 .mainsection {padding: 8px}
 #screenlog {margin-bottom: 8px}
 .logshim {margin-top: -8px}

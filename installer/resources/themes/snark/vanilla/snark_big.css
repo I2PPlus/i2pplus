@@ -5,7 +5,7 @@ input, button, textarea, select, a {
   line-height: 120% !important;
 }
 
-.iframed .snarknavbar {
+.iframed #navbar {
   padding-bottom: 15px !important;
 }
 

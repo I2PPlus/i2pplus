@@ -48,8 +48,8 @@ tfoot tr:first-child th {vertical-align: middle; color: var(--ink_light)}
 tfoot td:first-child {padding-left: 0; text-align: left}
 tfoot th {padding-bottom: 4px}
 tr, .navbar, .mainsection, .lowersection {contain: layout}
-.iframed .snarknavbar, .iframed .mainsection, .iframed #addSection, .iframed #createSection, .iframed #configSection, .iframed .configPanel {border-right: none; border-left: none; border-radius: 0}
-#torrentDisplay label, #addTracker, #addTracker + tr, .toggleview, .configTitle, .snarknavbar, img, input {user-select: none}
+.iframed #navbar, .iframed .mainsection, .iframed #addSection, .iframed #createSection, .iframed #configSection, .iframed .configPanel {border-right: none; border-left: none; border-radius: 0}
+#torrentDisplay label, #addTracker, #addTracker + tr, .toggleview, .configTitle, #navbar, img, input {user-select: none}
 
 /* infohash */
 .infohash {margin-right: 1px; vertical-align: middle; font-family: var(--monospaced); color: #070; border-radius: 1px; user-select: all}
@@ -92,8 +92,8 @@ a.control img {margin: -1px 3px 1px 2px; height: 14px; width: 14px}
 a.controld {display: none}
 
 /* top nav */
-.snarknavbar {margin: 0 0 -6px; padding: 8px 0; min-width: 906px; position: sticky; top: -1px; z-index: 999; text-align: center; text-transform: uppercase; font-size: 11.5pt; font-weight: 700; box-shadow: var(--highlight); border: var(--border); border-radius: 3px 3px 0 0; background: var(--navbar)}
-.iframed .snarknavbar {margin-top: -1px; padding: 8px 0; position: static; border-top: none; border-radius: 0}
+#navbar {margin: 0 0 -6px; padding: 8px 0; min-width: 906px; position: sticky; top: -1px; z-index: 999; text-align: center; text-transform: uppercase; font-size: 11.5pt; font-weight: 700; box-shadow: var(--highlight); border: var(--border); border-radius: 3px 3px 0 0; background: var(--navbar)}
+.iframed #navbar {margin-top: -1px; padding: 8px 0; position: static; border-top: none; border-radius: 0}
 .snarkNav {box-shadow: var(--highlight), 0 0 1px rgba(200,200,200,.6)}
 .snarkNav, .snarkNav:visited {margin: -1px -2px -1px -3px; padding: 5px 7px 5px 23px; display: inline-block; line-height: 1.1; letter-spacing: .1em; text-transform: uppercase; font-size: 9pt; font-weight: 700; text-decoration: none; color: var(--nav_a); border: var(--border); opacity: .85}
 .snarkNav:last-child {border-radius: 0 3px 3px 0}
@@ -719,7 +719,7 @@ th #nameRequired, th .commentAuthorName {margin-top: 8px; vertical-align: middle
 @keyframes activity {0%, 100% {background-position: left center} 50% {background-position: center center}}
 @keyframes scale {0%,100% {transform: scale(1)} 50% {transform: scale(1.3)}}
 
-@supports not (-moz-appearance: none) {.snarknavbar {padding-top: 9px} .percentBarText {line-height: 16px} .iframed .percentBarText, .iframed .percentBarText:hover, .iframed .percentBarText:focus {transition: none}}
+@supports not (-moz-appearance: none) {#navbar {padding-top: 9px} .percentBarText {line-height: 16px} .iframed .percentBarText, .iframed .percentBarText:hover, .iframed .percentBarText:focus {transition: none}}
 
 /* responsive layout */
 @media screen and (max-width: 1499px) {
@@ -794,7 +794,7 @@ td#bwHelp {background: url(images/details.svg) no-repeat left 10px center / 14px
 
 @media screen and (max-width: 800px) {
 .page {min-width: 680px}
-.snarknavbar {min-width: 688px}
+#navbar {min-width: 688px}
 .snarkNav.nav_main:not(:last-child), .snarkNav.nav_forum {padding-left: 8px; width: 12px; text-indent: -999999px; color: transparent}
 .torrentETA a img, .trackerLink a img {display: none}
 .ascending, .descending {top: -12px}
