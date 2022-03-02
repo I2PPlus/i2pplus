@@ -1022,8 +1022,8 @@ td.peerCount:empty::after {display: none}
 
 @media screen and (max-width: 1180px) {
 #navbar {margin-bottom: 6px; width: calc(100% - 22px); min-width: 600px; transition: ease width .5s .5s}
-.snarkNav, .snarkNav:visited, .iframed .snarkNav:link, .iframed .snarkNav:visited {padding: 4px 8px 4px 22px; background-size: 15px auto, 100%; background-position: 6px 50%, center center}
-.snarkNav.nav_main, .snarkNav:last-child[href="/i2psnark/"] {padding-left: 24px}
+#navbar a, #navbar a:hover, #navbar a:focus, #navbar a:active {padding: 4px 8px 4px 22px; background-size: 15px auto, 100%; background-position: 6px 50%, center center}
+.snarkNav.nav_main, .snarkNav:last-child[href="/i2psnark/"] {padding-left: 32px}
 .iframed #pagenavtop {margin-top: 3px}
 .torrentName a {max-width: 320px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
 .canhide {display: none}
@@ -1235,9 +1235,9 @@ code {font-size: 10pt}
 .iframed #navbar {padding: 12px 10px 10px}
 #navbar img {margin: -2px -9px 0 -5px}
 .snarkNav:first-child:not(:last-child) {padding-left: 32px}
-#torrents .nav_main[href="/i2psnark/"] {padding-left: 36px}
+.nav_main[href="/i2psnark/"] {padding-left: 36px}
 .snarkNav:first-child:not(:last-child) {background-position: 11px center, center center}
-#torrents .nav_main[href="/i2psnark/"], .snarkNav:last-child[href="/i2psnark/"] {background-position: 8px center, center center}
+.nav_main[href="/i2psnark/"], .snarkNav:last-child[href="/i2psnark/"], .nav_main[href="/i2psnark/"]:hover, .snarkNav:last-child[href="/i2psnark/"]:hover, .nav_main[href="/i2psnark/"]:focus, .snarkNav:last-child[href="/i2psnark/"]:focus {padding-left: 32px; background-position: 11px center, center center}
 #navbar a {font-size: 12pt}
 #screenlog {height: 60px}
 #screenlog li, #screenlog li a {font-size: 9.5pt}
