@@ -107,7 +107,7 @@ th img, td img, #closelog, #expand, #shrink {font-size: 0}
 #torrents tfoot th:nth-child(2) {text-align: center}
 #torrents th:nth-child(n+4) {text-align: center}
 #torrents tfoot th, #torrents tfoot th tt {font-weight: 700}
-#torrents tfoot th tt {margin-left: 2px}
+#torrents tfoot th tt {margin-left: 4px}
 #torrents tfoot th:nth-child(3) {text-align: center}
 #torrents tfoot th {vertical-align: top}
 #torrents tfoot th br {margin-left: 20px; display: inline-block}
@@ -910,6 +910,7 @@ code, tt {font-size: 10pt}
 #screenlog {height: 54px}
 .torrentDownloaded {white-space: nowrap; padding: 0 10px}
 #torrents td {padding-top: 4px; padding-bottom: 4px}
+td.graphicStatus img {margin-left: 1px; height: 24px}
 .page {padding: 10px; box-shadow: var(--highlight), inset 0 0 2px 1px #337; background: repeating-linear-gradient(90deg, #000 2px, #000028 4px); background-size: 4px 100%}
 .iframed .page {background: none}
 #createSection, #addSection, #configSection, .configPanel, #screenlog, #torrents, .dirInfo, .torrentInfo {border: var(--border)}
