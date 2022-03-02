@@ -828,7 +828,7 @@ td.torrentAction input {margin-top: 1px}
 #pagenavcontrols {transform: translateX(40px)}
 #torrents .torrentAction input, #torrents .torrentAction input:hover, #torrents .torrentAction input, #torrents .torrentAction input:focus {padding: 10px; background-size: 12px, 100%}
 #torrents th.torrentAction input, #torrents th.torrentAction input:hover, #torrents th.torrentAction input, #torrents th.torrentAction input:focus {padding: 10px; background-size: auto 12px, 100%, 100%}
-#torrents .torrentDetails img {margin-left: 3px}
+#torrents .torrentDetails img {margin-left: 0}
 #torrents .infohash {width: 60px}
 #trackerselect a {max-width: 280px}
 #ourDest tt {line-height: 1.25}
@@ -838,6 +838,7 @@ td.torrentAction input {margin-top: 1px}
 .rowOdd:not(.peerinfo) .torrentDownloaded .percentBarText, .rowEven:not(.peerinfo) .torrentDownloaded .percentBarText {min-width: 120px; top: -22px; left: -22px}
 #torrents .trackerDetails {padding: 0; width: 0; min-width: 0; font-size: 0}
 .trackerDetails img {display: none}
+#torrents .torrentDetails img {margin: -4px 0 -4px 3px}
 #mediaContainer th .newTab {margin: 0 4px}
 #torrentDisplay {top: 49px; display: flex}
 #torrentDisplay, #torrentDisplay label[for="all"] {border-left: none}
@@ -850,7 +851,7 @@ td, th, td a, input {font-size: 9pt}
 #torrents td:nth-child(2) {white-space: nowrap}
 #torrents td[colspan="10"] {white-space: normal}
 b.alwaysShow {display: inline}
-#torrents td:first-child img {max-height: 18px}
+#torrents td:first-child img {max-height: 20px}
 .snarknavbar, .page {min-width: 600px}
 .snarkNav:first-child {padding-left: 26px}
 #pagenavcontrols {transform: translateX(52px)}
@@ -860,7 +861,6 @@ b.alwaysShow {display: inline}
 .torrentName a, .snarkFileName a {word-break: break-all}
 .torrentUploaded, .RateUp, tfoot .torrentAction, .debuginfo {display: none}
 tfoot .torrentDownloaded, tfoot .RateDown {font-size: 0}
-#screenlog li:first-child::after {content: "minimode"; font-size: 8pt; float: right; vertical-align: middle; position: relative; bottom: -42px; right: -20px; background: rgba(0,0,48,.4); padding: 1px 4px 2px; border-radius: 4px 0 0 4px; z-index: 0}
 input[name="nofilter_dataDir"] {width: 350px; max-width: 350px}
 input.trackerhome, input.trackerannounce, .knownTracker a, #trackerselect a {max-width: 130px}
 #configs td:first-child {min-width: 150px}
