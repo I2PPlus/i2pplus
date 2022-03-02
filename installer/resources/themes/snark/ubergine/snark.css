@@ -581,14 +581,6 @@ td.graphicStatus img::before {
   padding-bottom: 3px;
 }
 
-#torrents thead th:nth-child(2) img {
-  margin-bottom: 2px;
-}
-
-@supports not (-moz-appearance: none) {
-#torrents thead th:nth-child(2) img {margin-bottom: 0 !important}
-}
-
 .graphicStatus {
   width: 1%;
   white-space: nowrap;
@@ -4250,7 +4242,7 @@ th img:hover {
 }
 
 th.peerCount img {
-  margin-left: -12px !important;
+  margin-left: -4px !important;
 }
 
 #torrentSort {
