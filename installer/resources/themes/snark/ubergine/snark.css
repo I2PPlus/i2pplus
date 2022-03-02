@@ -834,7 +834,7 @@ td:first-child {
   position: absolute;
   display: inline-block;
   z-index: 20;
-  top: -2px;
+  top: -7px;
   right: 2px;
 }
 
@@ -6061,6 +6061,9 @@ td.torrentAction input[type=submit] {
   }
   .peerinfo tt {
     display: inline-block;
+  }
+  .snarkCommented {
+    top: -6px;
   }
   .torrentName a {
     max-width: none;
