@@ -224,7 +224,7 @@ abstract class BuildRequestor {
         }
         if (pairedTunnel == null) {
             if (log.shouldLog(Log.WARN))
-                log.warn("Tunnel build failed; couldn't find a paired tunnel " + cfg);
+                log.warn("Tunnel build failed - couldn't find a paired tunnel " + cfg);
             exec.buildComplete(cfg, OTHER_FAILURE);
             // Not even an exploratory tunnel? We are in big trouble.
             // Let's not spin through here too fast.
@@ -240,7 +240,7 @@ abstract class BuildRequestor {
         //long createTime = System.currentTimeMillis()-beforeCreate;
         if (msg == null) {
             if (log.shouldLog(Log.WARN))
-                log.warn("Tunnel build failed; couldn't create the tunnel build message " + cfg);
+                log.warn("Tunnel build failed - couldn't create the tunnel build message " + cfg);
             exec.buildComplete(cfg, OTHER_FAILURE);
             return false;
         }
@@ -278,7 +278,7 @@ abstract class BuildRequestor {
             }
 
             if (log.shouldLog(Log.INFO))
-                log.info("Sending the tunnel build request [MsgID" + msg.getUniqueId() + "] via " + pairedTunnel + " to ["
+                log.info("Sending tunnel build request [MsgID " + msg.getUniqueId() + "] via " + pairedTunnel + " to ["
                           + ibgw.toBase64().substring(0,6) + "] for " + cfg + " waiting for the reply of "
                           + cfg.getReplyMessageId());
             // send it out a tunnel targeting the first hop
@@ -287,7 +287,7 @@ abstract class BuildRequestor {
             ctx.tunnelDispatcher().dispatchOutbound(msg, pairedTunnel.getSendTunnelId(0), ibgw);
         } else {
             if (log.shouldLog(Log.INFO))
-                log.info("Sending tunnel build request directly to [" + cfg.getPeer(1).toBase64().substring(0,6)
+                log.info("Sending tunnel build request direct to [" + cfg.getPeer(1).toBase64().substring(0,6)
                           + "] for " + cfg + " waiting for the reply of " + cfg.getReplyMessageId()
                           + " via " + pairedTunnel
                           + " with [MsgID " + msg.getUniqueId() + "]");
@@ -317,7 +317,7 @@ abstract class BuildRequestor {
                 } else {
                     // non-EC client, shouldn't happen, checked at top of createTunnelBuildMessage() below
                     if (log.shouldWarn())
-                        log.warn("Unsupported SKM for garlic reply to: " + cfg);
+                        log.warn("Unsupported SessionKeyManager for garlic reply to: " + cfg);
                 }
                 cfg.setGarlicReplyKeys(null);
             }
