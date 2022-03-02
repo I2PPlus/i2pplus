@@ -465,8 +465,7 @@ td.peerCount:empty::after {
 }
 
 .peerinfo td:first-child {
-	background: var(--client) no-repeat center center;
-	background-size: 14px;
+	background: var(--client) no-repeat center center / 20px;
 }
 
 #ourDest, .peerclient {
@@ -2285,7 +2284,7 @@ tr:not(.peerinfo) .torrentUploaded:empty::after {
 .clientid {
 	margin: 1px 0 1px -2px;
 	padding: 0 3px;
-	width: 68px;
+	width: 70px;
 	display: inline-block;
 	white-space: nowrap;
 	overflow: hidden;
