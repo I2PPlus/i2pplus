@@ -68,7 +68,7 @@ class RefreshRoutersJob extends JobImpl {
         Random rand = new Random();
         long lag = getContext().jobQueue().getMaxLag();
         int netDbCount = getContext().netDb().getKnownRouters();
-        if (_facade.isInitialized() && lag < 500 && getContext().commSystem().getStatus() != Status.DISCONNECTED && netDbCount < 10000) {
+        if (_facade.isInitialized() && lag < 500 && getContext().commSystem().getStatus() != Status.DISCONNECTED && netDbCount < 5000) {
             if (_routers == null || _routers.isEmpty()) {
                 // make a list of all routers, floodfill first
                 _routers = _facade.getFloodfillPeers();
@@ -84,7 +84,7 @@ class RefreshRoutersJob extends JobImpl {
                 _routers = null;
                 if (getContext().router().getUptime() < 60*60*1000) {
                     RESTART_DELAY_MS = 60*1000;
-                } else if (netDbCount > 10000 && getContext().router().getUptime() > 60*60*1000) {
+                } else if (netDbCount > 5000 && getContext().router().getUptime() > 60*60*1000) {
                     RESTART_DELAY_MS *= 12;
                 } else if (netDbCount > 3000) {
                     RESTART_DELAY_MS *= rand.nextInt(12) + 1;
@@ -94,8 +94,8 @@ class RefreshRoutersJob extends JobImpl {
                 } else {
                     requeue(RESTART_DELAY_MS);
                 }
-                if (netDbCount > 10000)
-                    _log.info("Finished refreshing NetDb; over 8000 known routers, job will rerun in " + (RESTART_DELAY_MS / 1000 / 60) + "m");
+                if (netDbCount > 5000)
+                    _log.info("Finished refreshing NetDb; over 5000 known routers, job will rerun in " + (RESTART_DELAY_MS / 1000 / 60) + "m");
                 else
                     _log.info("Finished refreshing NetDb routers; job will rerun in " + (RESTART_DELAY_MS / 1000) + "s");
                 return;
@@ -178,21 +178,21 @@ class RefreshRoutersJob extends JobImpl {
                 }
             }
         } else {
-            if (netDbCount > 10000) {
-                _log.info("Over 10,000 known routers, suspending Refresh Routers job");
+            if (netDbCount > 8000) {
+                _log.info("Over 8000 known routers, suspending Refresh Routers job...");
             } else if (lag > 500) {
                 _log.info("Job lag over 500ms, suspending Refresh Routers job");
             } else if (getContext().commSystem().getStatus() == Status.DISCONNECTED) {
-                _log.info("Network disconnected, suspending Refresh Routers job");
+                _log.info("Network disconnected, suspending Refresh Routers job...");
             }
         }
 
         int randomDelay = (1500 * (rand.nextInt(3) + 1)) + rand.nextInt(1000) + rand.nextInt(1000) + (rand.nextInt(1000) * (rand.nextInt(3) + 1)); // max 9.5 seconds
         String refresh = getContext().getProperty("router.refreshRouterDelay");
-        if (netDbCount > 10000) {
+        if (netDbCount > 6000) {
             randomDelay = 15*60*1000;
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Over 10,000 known peers, queuing next RouterInfo check to run in 15 minutes");
+                _log.debug("Over 6000 known peers, queuing next RouterInfo check to run in 15 minutes...");
         } else if (refresh == null) {
             if (getContext().jobQueue().getMaxLag() > 150 || getContext().throttle().getMessageDelay() > 750)
                 randomDelay = randomDelay * (rand.nextInt(3) + 1);
