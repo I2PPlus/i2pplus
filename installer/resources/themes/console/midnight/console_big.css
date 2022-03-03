@@ -7,11 +7,13 @@
 .sb h3 {padding: 2px 4px}
 .sb h3, .sb h3 a {font-size: 11.5pt}
 .sb h4, .sb h4 a {font-size: 10.5pt; letter-spacing: 0}
-.sb table, #sb_localtunnels {margin: -5px 0 -5px 1px; width: 200px; font-size: 9pt}
-.sb table a:link, .sb table a:visited {font-size: 11pt}
-#sb_internals a, #sb_services a, #sb_advanced a {font-size: 11pt}
+#sidebar td {font-size: 9pt}
+#sb_internals, #sb_advanced, #sb_help {width: calc(100% + 9px); overflow: visibile}
+#sb_internals td:first-child, #sb_advanced td:first-child, #sb_help td:first-child {margin: 0}
+#sidebar td a {line-height: 1.4; font-size: 10pt}
 #sb_newsheadings a {margin-top: 0}
 #sb_notice, #sb_notice a {font-size: 10pt}
+.tunnelBuildStatus::before {margin-top: -2px; vertical-align: middle}
 
 button.search {white-space: nowrap; font-size: 11pt}
 #newsDisplay, #newsDisplay a, #newsStatus {font-size: 11pt}
@@ -55,9 +57,7 @@ div.main, div.main p, div.news p {line-height: 140%}
 div.joblog li i {font-weight: normaL}
 b, div.joblog b {font-size: 110%}
 p, div[id^="config_"] th, #consolepass tr:first-child td {font-size: 11pt}
-input[type=submit], input[type="reset"], input[type=submit]:hover, input[type="reset"]:hover, input[type=submit]:active, input[type="reset"]:active, input[type=submit]:focus, input[type="reset"]:focus, input.reload[value="Force garbage collection"], input.reload[value="Force garbage collection"]:hover {padding-top: 2px; display: inline-block; font-size: 12pt; font-weight: 400; line-height: 140%; letter-spacing: .05em; background-position: 8px 6px, center center}
-input[type=submit]:active, input[type="reset"]:active, input.reload[value="Force garbage collection"]:active {padding-top: 3px; padding-bottom: 1px; background-position: 8px 7px, center center}
-#sb_graphcontainer {margin: -8px 0 -3px; background-position: left -72px top -10px; box-shadow: inset 0 8px 0 2px #fff}
+input[type=submit], input[type="reset"], input[type=submit]:hover, input[type="reset"]:hover, input[type=submit]:active, input[type="reset"]:active, input[type=submit]:focus, input[type="reset"]:focus, input.reload[value="Force garbage collection"], input.reload[value="Force garbage collection"]:hover {display: inline-block; font-size: 12pt; font-weight: 400; line-height: 140%; letter-spacing: .05em}
 .sb hr {position: relative; z-index: 999}
 p tt {font-size: 10pt}
 h3#pluginmanage {margin-bottom: -15px}
@@ -69,17 +69,10 @@ input[type=text], input[type=password], textarea {font-size: 11pt}
 .logo a:link {font-size: 11pt}
 }
 @media screen and (min-width: 1500px) {
-.sb, .sb .xhr {font: 9.5pt/125%; width: 210px}
-.sb #sb_logo {height: 40px}
-.sb #sb_logo img {width: 212px; margin-top: -2px; margin-left: -4px}
-#sb_graphcontainer {margin-top: -7px; margin-bottom: -5px; background-size: 300px 78px; background-position: left -68px top -10px}
-.sb table, #sb_localtunnels, .sb table[id^="sb_"], #sb_localtunnels {width: 226px}
-#sb_services {width: 230px}
-.percentBarOuter {width: 220px}
+.sb, .sb .xhr {font: 9.5pt/125%}
 .sb .stop, .sb .reload {min-width: 106px}
 h1 {font-size: 20pt; padding: 14px 15px 16px}
 span#newtab {margin-top: 4px}
-.main, h1, .news, .sorry {margin-left: 238px}
 .newsentry h3 > * {font-size: 11pt}
 .newsAuthor {font-size: 10pt; font-weight: 700; background-position: 2px center}
 .applink a:link, .applink a:hover, .applink a:active {font-size: 11pt}
@@ -96,7 +89,6 @@ input[type=submit], input[type="reset"], input[type=submit]:hover, input[type="r
 }
 
 @media screen and (min-width: 1840px) {
-#sb_graphcontainer {margin-bottom: -3px}
 .applink {min-width: 164px; margin: 3px 4px 5px}
 .applabel {width: 160px}
 .applabel a, .applabel a:hover {max-width: 154px}
