@@ -216,7 +216,7 @@ audio::-webkit-media-controls-enclosure {border-radius: 0; filter: invert(1)}
 video::-webkit-media-controls-panel {display: none}
 video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-panel {display: flex}
 .snarkNewTorrent {font-size: 9pt}
-.toggleview, #configSection .configTitle {will-change: transform}
+.toggleview, #tab_config {will-change: transform}
 .configTitle, .toggleview {margin: 0 0 -3px 0; padding: 3px 15px; min-width: 260px; display: inline-block; text-transform: uppercase; font-size: 10pt; font-weight: 700; color: #559; border: var(--border_soft); border-top: 0; border-radius: 0 0 3px 3px; box-shadow: 0 1px 2px rgba(220,220,255,.7), var(--highlight);
 background: linear-gradient(180deg,#fff 50%,#f2f2ff 50%)}
 .configTitle:active, .toggleview:active {box-shadow: var(--highlight), inset 2px 2px 3px #7f756f}
@@ -279,6 +279,8 @@ thead a:active img {transform: scale(.9); filter: hue-rotate(45deg) drop-shadow(
 #addSection input[type=text], #createSection input[type=text] {width: 80%}
 #addSection tr:first-child td > *, #createSection tr:first-child td > * {vertical-align: middle}
 thead img.disable, img.disable:hover {opacity: .4}
+input[type=text], textarea {color: var(--ink_lighter)}
+input[type=text]:focus, textarea:focus {color: var(--ink_light)}
 input[type=text] {font-weight: 700}
 input[type=text]:disabled {opacity: .5}
 input[type=text], input.r, input[name="nofilter_dataDir"], textarea, select {padding: 5px 7px; min-width: 120px; font-size: 9pt}
@@ -363,8 +365,6 @@ form:last-child .configPanel {margin-top: 10px}
 .iframed #trackerselect tr:nth-child(n+2) td:last-child {border-right: var(--border_soft)}
 .iframed #trackerselect tr:nth-child(n+2):hover {background: #ffd}
 #trackerselect tr:last-child:hover td:nth-child(n+3) {background: transparent}
-
-#configSection a {color: #55a; font-weight: 700}
 code, tt {font-size: 8.5pt; color: #070; font-weight: 700; font-family: var(--monospaced)}
 .trackerconfig {text-align: left; width: 100%; border-collapse: separate; border-spacing: 0}
 .trackerconfig tr:first-child {filter: drop-shadow(0 0 1px rgba(220,220,255,.7))}
@@ -561,7 +561,7 @@ input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilte
 .trackerconfig input.delete, .trackerconfig input.reload {float: left}
 
 /* iconized panel tabs */
-.configTitle a {display: inline-block; width: 100%}
+#tab_config a {width: 100%; display: inline-block; vertical-align: middle}
 .tab_label::after {margin: 1px; padding: 2px; width: 18px; height: 18px; display: inline-block; vertical-align: middle; background: #f00; border-radius: 50%; border: var(--border_soft); box-shadow: inset 0 0 0 1px #fff; content: ""; mix-blend-mode: luminosity; filter: none; pointer-events: none; will-change: transform}
 #tab_addtorrent .tab_label::after {background: var(--add) no-repeat scroll center center / 16px, linear-gradient(180deg,#f8f8ff 50%,#e2e2ff 50%,#bbf)}
 #tab_newtorrent .tab_label::after {background: var(--create) no-repeat scroll right 2px top 2px / 16px, linear-gradient(180deg,#f8f8ff 50%,#e2e2ff 50%,#bbf)}
@@ -572,8 +572,8 @@ input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilte
 .toggleview:hover .tab_label::after, input:focus + .toggleview .tab_label::after, #tab_config:hover .tab_label::after {border: 1px solid var(--hover); box-shadow: inset 0 0 0 1px #fff, 0 0 1px 1px rgba(255,96,0,.3); background-color: #fff; mix-blend-mode: normal}
 .toggleview:active .tab_label::after, #tab_config:active .tab_label::after {transform: rotate(90deg) scale(.9); transition: ease transform .15s}
 input:checked + .toggleview:active .tab_label::after {transform: rotate(-90deg) scale(.9); transition: linear transform .15s}
-.toggleview, #configSection .configTitle a {font-size: 0}
-.toggleview, #configSection .configTitle {text-align: center; width: 300px}
+.toggleview, #tab_config a {font-size: 0}
+.toggleview, #tab_config {text-align: center; width: 300px}
 th img {filter: none; opacity: .85}
 #torrents th img {max-height: 22px}
 td.graphicStatus img {margin-top: -2px; margin-bottom: -2px; height: 22px; display: inline-block}
