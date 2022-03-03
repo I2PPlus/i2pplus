@@ -31,6 +31,7 @@ h4 {font-size: 13pt}
 h1, h2, h3, h4 {letter-spacing: .08em; word-spacing: .1em}
 .infohelp, .infowarn, .infowarn b, #helptranslate {letter-spacing: .1em; word-spacing: .2em}
 .suboption {display: inline-block; margin-bottom: 5px}
+.applabel a, #sitemapLink {font-size: 9pt}
 
 div.tunnels a {font-size: 12pt}
 div.tunnels td:first-child, div.tunnels td:last-child{width: 16px}
@@ -41,7 +42,6 @@ div.main, div.main p, div.news p {line-height: 140%}
 .joblog b {color: #003; font-size: 110%}
 table code {font-size: 120%}
 .tab, .tab2 {font-size: 11pt}
-.applabel a {padding: 0 2px 6px; letter-spacing: 0; word-spacing: 0}
 .themelabel, .ui_lang {font-size: 12pt; font-weight: 400; overflow: hidden; text-overflow: hidden; padding-bottom: 4px}
 .ui_lang {font-size: 9pt}
 #themeui.formaction {margin-top: 8px}
@@ -126,10 +126,8 @@ p#fullhistory {padding: 8px 10px}
 @media screen and (min-width: 1500px) {
 body, .main, .main td, .news p, #news p, .main li b, div.joblog li, .themelabel, .applabel a, .statusnotes, #peerdefs, #profile_defs, #thresholds, #configinfo, .infohelp, .infowarn, button, input, select, textarea, code, tt, pre, .netdbentry th, .configtable th, ul.statlist a[name], ul.statlist b, ul.statlist li b, ul.statlist a[name]:hover, div.messages, th {font-size: 12pt}
 .sb td, .sb a, .sb button, .sb h4, .sb h4 a, div.news, #banlist li {font-size: 11pt}
+.applabel a, #sitemapLink {font-size: 9.5pt}
 .sb h3 {padding-top: 2px; padding-bottom: 2px}
-.applabel {padding: 3px 2px 4px}
-.newsheadings {margin-left: -2px; margin-right: 0}
-.newsheadings ul {width: 178px}
 }
 
 @media screen and (max-width: 1500px) {
