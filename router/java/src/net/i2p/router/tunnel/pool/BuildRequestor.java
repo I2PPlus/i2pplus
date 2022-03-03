@@ -187,7 +187,7 @@ abstract class BuildRequestor {
                 // This prevents us from being stuck for 10 minutes if the client pool
                 // has exactly one tunnel in the other direction and it's bad
                 if (log.shouldWarn())
-                    log.warn(fails + " consecutive build timeouts for " + cfg + ", using exploratory tunnel");
+                    log.warn(fails + " consecutive build timeouts for " + cfg + ", using Exploratory tunnel");
             }
             if (pairedTunnel == null) {
                 if (isInbound) {
@@ -279,8 +279,8 @@ abstract class BuildRequestor {
 
             if (log.shouldLog(Log.INFO))
                 log.info("Sending tunnel build request [MsgID " + msg.getUniqueId() + "] via " + pairedTunnel + " to ["
-                          + ibgw.toBase64().substring(0,6) + "] for " + cfg + " waiting for the reply of "
-                          + cfg.getReplyMessageId());
+                          + ibgw.toBase64().substring(0,6) + "] for " + cfg + " Waiting for reply of "
+                          + cfg.getReplyMessageId() + "...");
             // send it out a tunnel targeting the first hop
             // TODO - would be nice to have a TunnelBuildFirstHopFailJob queued if the
             // pairedTunnel is zero-hop, but no way to do that?
@@ -288,7 +288,7 @@ abstract class BuildRequestor {
         } else {
             if (log.shouldLog(Log.INFO))
                 log.info("Sending tunnel build request direct to [" + cfg.getPeer(1).toBase64().substring(0,6)
-                          + "] for " + cfg + " waiting for the reply of " + cfg.getReplyMessageId()
+                          + "] for " + cfg + " Waiting for reply of " + cfg.getReplyMessageId()
                           + " via " + pairedTunnel
                           + " with [MsgID " + msg.getUniqueId() + "]");
             // send it directly to the first hop
