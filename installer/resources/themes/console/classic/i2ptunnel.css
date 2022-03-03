@@ -31,7 +31,7 @@ hr {display: none}
 .freetext[readonly], .freetext[readonly]:focus {color: #757a8a; box-shadow: inset 1px 1px 1px #ddd; background: #eff0ff}
 #clientHost {width: 300px}
 #clientPort {width: 100px}
-.control, .control:link, .control:visited, button {margin: 2px 4px; padding: 4px 3px; min-width: 60px; overflow: hidden; white-space: nowrap; vertical-align: middle; text-align: center; text-decoration: none; font-style: normal; font-weight: 400; color: #5e626e; border: var(--border); border-radius: 3px; background: var(--btn)}
+.control, .control:link, .control:visited, button {margin: 2px 4px; padding: 6px 8px; min-width: 60px; overflow: hidden; white-space: nowrap; vertical-align: middle; text-align: center; text-decoration: none; font-style: normal; font-weight: 400; color: #5e626e; border: var(--border); border-radius: 3px; background: var(--btn)}
 .control:hover, .control:focus, button:hover, button:focus {text-decoration: none; color: var(--ink); border: var(--border); box-shadow: var(--btn_shadow_hover); background: var(--btn_hover)}
 .control:active, button:active {border: var(--border); box-shadow: var(--btn_shadow_active)}
 #serverTunnels .iconize, #clientTunnels .iconize {padding: 6px 8px; min-width: 80px}
