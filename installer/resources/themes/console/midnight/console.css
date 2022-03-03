@@ -122,9 +122,9 @@ input.accept[value^="Show"]:active, input.check[value^="View"]:active, input.sho
 input.accept, button.accept {padding: 6px 9px 6px 25px; background: var(--yes) no-repeat 8px center / 12px, var(--btn)}
 input.accept:hover, input.accept:focus {background: var(--yes) no-repeat 8px center / 12px, var(--btn_hover)}
 input.accept:active {padding: 6px 9px 6px 25px; background: var(--yes) no-repeat 8px center / 12px, var(--btn_active)}
-input.cancel {padding: 6px 9px 6px 25px; background: var(--no) no-repeat 10px center / 10px, var(--btn)}
-input.cancel:hover, input.cancel:focus {background: var(--no) no-repeat 10px center / 10px, var(--btn_hover)}
-input.cancel:active {background: var(--no) no-repeat 10px center / 10px, var(--btn_active)}
+input.cancel[type=submit] {padding: 6px 9px 6px 25px; background: var(--no) no-repeat 10px center / 10px, var(--btn)}
+input.cancel[type=submit]:hover, input.cancel:focus {background: var(--no) no-repeat 10px center / 10px, var(--btn_hover)}
+input.cancel[type=submit]:active {background: var(--no) no-repeat 10px center / 10px, var(--btn_active)}
 input.cancel[value^="Hide"], input.delete[value^="Do not view"], input.hideconsole {padding: 6px 9px 6px 25px; background: var(--hide) no-repeat 8px center / 14px, var(--btn)}
 input.cancel[value^="Hide"]:hover, input.delete[value^="Do not view"]:hover, input.cancel[value^="Hide"]:focus, input.delete[value^="Do not view"]:focus, input.hideconsole:hover, input.hideconsole:focus {background: var(--hide) no-repeat 8px center / 14px, var(--btn_hover)}
 input.cancel[value^="Hide"]:active, input.delete[value^="Do not view"]:active, input.hideconsole:active {padding: 6px 9px 6px 25px; background: var(--hide) no-repeat 8px center / 14px, var(--btn_active)}
@@ -152,14 +152,14 @@ input.download[value$="from file"]:active, input.download[value$="from File"]:ac
 input.download[value^="Dump"] {padding: 6px 9px 6px 25px; background: var(--bug) no-repeat 8px center / 14px, var(--btn)}
 input.download[value^="Dump"]:hover, input.download[value^="Dump"]:focus {padding: 6px 9px 6px 25px; background: var(--bug) no-repeat 8px center / 14px, var(--btn_hover)}
 input.download[value^="Dump"]:active {padding: 6px 9px 6px 25px; background: var(--bug) no-repeat 8px center / 14px, var(--btn_active)}
-input.go, input[value="GO"] {padding: 6px 9px 6px 25px; background: var(--go) no-repeat 8px center / 14px, var(--btn)}
-input.go:hover, input[value="GO"]:hover, input.go:focus, input[value="GO"]:focus {background: var(--go) no-repeat 8px center / 14px, var(--btn_hover)}
-input.go:active, input[value="GO"]:active {padding: 6px 9px 6px 25px; background: var(--go) no-repeat 8px center / 14px, var(--btn_active)}
+input.go[type=submit], input[value="GO"] {padding: 6px 9px 6px 25px; background: var(--go) no-repeat 8px center / 14px, var(--btn)}
+input.go[type=submit]:hover, input[value="GO"]:hover, input.go:focus, input[value="GO"]:focus {background: var(--go) no-repeat 8px center / 14px, var(--btn_hover)}
+input.go[type=submit]:active, input[value="GO"]:active {padding: 6px 9px 6px 25px; background: var(--go) no-repeat 8px center / 14px, var(--btn_active)}
 input.go[value^="Create"] {padding: 6px 9px 6px 25px; background: var(--wizard) no-repeat 8px center / 15px, var(--btn)}
 input.go[value^="Create"]:hover, input.go[value^="Create"]:focus {background: var(--wizard) no-repeat 8px center / 15px, var(--btn_hover)}
 input.go[value^="Create"]:active {padding: 6px 9px 6px 25px; background: var(--wizard) no-repeat 8px center / 15px, var(--btn_active)}
-input.back {padding: 6px 7px 6px 23px; background: var(--back) no-repeat 6px center / 14px, var(--btn)}
-input.back:hover, input.back:focus {background: var(--hover) var(--back) no-repeat 6px center / 14px}
+input.back[type=submit] {padding: 6px 7px 6px 23px; background: var(--back) no-repeat 6px center / 14px, var(--btn)}
+input.back[type=submit]:hover, input.back:focus {background: var(--hover) var(--back) no-repeat 6px center / 14px}
 input.reload {padding: 6px 9px 6px 25px; background: var(--reset) no-repeat 8px center / 14px, var(--btn)}
 input.reload:hover, input.reload:focus {background: var(--reset_hover) no-repeat 8px center / 14px, var(--btn_hover)}
 input.reload:active {padding: 6px 9px 6px 25px; background: var(--reset_active) no-repeat 8px center / 14px, var(--btn_active)}
@@ -479,7 +479,7 @@ div[id^="config_"].main {padding-bottom: 14px}
 .tab:hover {box-shadow: var(--highlight), inset 0 0 1px 1px rgba(112,80,112,.7); background: radial-gradient(at center bottom, rgba(96,32,96,.6) 0, rgba(0,0,0,0) 90%), var(--btn_hover)}
 .tab:hover a {color: var(--a_hover); text-shadow: 0 1px 1px #000; background: none}
 .tab:active {box-shadow: var(--btn_shadow_active); background: radial-gradient(at center bottom, rgba(200, 96, 200, .8) 0, rgba(0, 0, 0, 0) 90%), linear-gradient(180deg,#501f6c, var(--hover))}
-.tab:active a, #help .tab:active a {color: var(--ink) !important; background: none; text-shadow: none}
+.tab:active a, #help .tab:active a {color: var(--ink); background: none; text-shadow: none}
 .tab2 {padding: 6px 14px; color: var(--ink); text-shadow: 0 1px 1px #000; box-shadow: var(--highlight), inset 4px 4px 4px rgba(0,0,0,.5); background: radial-gradient(at center bottom, rgba(128, 0, 128, .4) 0, rgba(0, 0, 0, 0) 90%), linear-gradient(90deg, rgba(96,0,96,.2), rgba(96,0,96,.2)), linear-gradient(180deg,#000, #1a1b2f)}
 
 #bwlimiter a, #advancedconfig a, .tabletitle a, #upnpconfig a, #servicedebug a, .ptitle a, #configstats th a, #graphinfo a, .h3navlinks {float: right; letter-spacing: normal; text-transform: capitalize; font-size: 9pt}
@@ -565,7 +565,7 @@ form[action="graphs"], form[action="/updategraphs"] {margin-top: -11px; margin-b
 #graphs .optionlist label {box-shadow: none; background: none}
 #graph_single .graphContainer {padding-top: 5px}
 #updategraphs .messages {margin-bottom: 10px}
-#graphing.formaction {border-top: none !important}
+#graphing {border-top: none !important}
 
 .smallhead th, #ntcpconnections th {font-size: 8pt}
 .smallhead th a:hover {text-decoration: none}
@@ -2645,7 +2645,6 @@ select, .main input[type=submit], .main input[type=reset], .main input[type=subm
 table[id^="sb_"], #sidebar #sb_localtunnels {width: 236px}
 #tunnels .tab, #tunnels .tab2 {line-height: 1.3}
 #webappconfig td:first-child::after {min-height: 30px}
-#wizardpage #sidebar img[src$="i2plogo.png"] {margin-left: -1px; width: 223px}
 }
 
 @supports not (-moz-appearance: none) {#searchbar span {margin: -1px -1px -5px}}
