@@ -2,7 +2,7 @@
 /* fixes a browser engine bug present in Konqueror, Midori, Qupzilla et al */
 
 input.toggle_input + label + hr + table {
-	display: table !important;
+	display: table;
 }
 
 input.toggle_input:checked + label + hr + table, input.toggle_input + label + hr + table {
@@ -10,11 +10,11 @@ input.toggle_input:checked + label + hr + table, input.toggle_input + label + hr
 }
 
 .toggleview:hover, .toggleview:active, #addSection:hover .toggleview, #createSection:hover .toggleview {
-	color: #777 !important;
-	cursor: default !important;
-	background: linear-gradient(180deg,#fff 50%, #efefef 50%) !important;
+	color: #777;
+	cursor: default;
+	background: linear-gradient(180deg,#fff 50%, #efefef 50%);
 }
 
 #addSection:hover, #createSection:hover, #addSection:hover .toggleview, #createSection:hover .toggleview {
-	box-shadow: inset 0 0 0 1px #fff !important;
+	box-shadow: inset 0 0 0 1px #fff;
 }

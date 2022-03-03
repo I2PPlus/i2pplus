@@ -1,120 +1,31 @@
+/* I2P+ Dark theme wizard specifics */
+/* Author: dr|z3d, 2022 */
+
 @import url(global.css);
 
-html#consolewizard {
-  background: var(--vstripe) #000 !important;
-}
+html#consolewizard {background: var(--vstripe) #000}
+body#wizardpage {background: none}
+#wizardpage .sb h3, #wizardpage .sb h3:hover, #wizardpage .sb h3:active {background: var(--h3), var(--navbar); box-shadow: var(--lowlight); mix-blend-mode: normal}
+#wizard h3:first-of-type {margin-top: 10px}
+#wizard h3 {border-left-width: 1px; border-radius: 0}
+#wizard p {margin: -10px 0; padding: 10px 15px; border-left: var(--border); border-right: var(--border)}
+#wizard p.infohelp {margin: 10px 0 0}
+#wizard p:last-of-type {padding-bottom: 20px}
+#wizardpage .sb form {margin: 0; padding: 3px 0 7px; box-shadow: none}
+#wizardpage h3 + .configtable {margin-top: -11px}
+#bandwidthTestRunning {margin: 10px 0; padding: 10px; text-align: center; font-style: italic; font-weight: 700; border: var(--border)}
+#wizardpage #bandwidthconfig tr:nth-child(n+2) td:last-child:not(.infohelp) {background: #000800}
+#setupwizard .langselect {float: none}
+#config_ui + .wizardbuttons {margin: -11px 0 -4px}
+.wizardbuttons {margin-bottom: -4px}
+#wizardpage .langselect {margin: 3px 0 4px 4px}
+#wizardpage #langsettings {padding: 7px 6px}
+#wizardpage td {line-height: 1.4}
+#setupwizard input[name="skipbw"], #setupwizard input[name="cancelbw"] {float: left}
+#wizardpage .yes, #wizardpage .no {font-size: 0; display: inline-block; width: 20px; height: 20px}
+#wizardpage .yes {background: var(--yes) no-repeat center center / 12px}
+#wizardpage .no {background: var(--no) no-repeat center center / 11px}
+#wizardpage #messages {animation: 1s hide-up 5s ease-out forwards}
+#wizardpage #messages li {padding: 0; text-align: center}
 
-body#wizardpage {
-  background: none !important;
-}
-
-#wizardpage .sb h3, #wizardpage .sb h3:hover, #wizardpage .sb h3:active {
-  background: var(--h3), var(--navbar) !important;
-  box-shadow: var(--lowlight) !important;
-  mix-blend-mode: normal !important;
-}
-
-#wizard h3:first-of-type {
-  margin-top: 10px;
-}
-
-#wizard h3 {
-  border-left-width: 1px;
-  border-radius: 0;
-}
-
-#wizard p {
-  margin: -10px 0;
-  padding: 10px 15px;
-  border-left: var(--border);
-  border-right: var(--border);
-}
-
-#wizard p.infohelp {
-  margin: 10px 0 0;
-}
-
-#wizard p:last-of-type {
-  padding-bottom: 20px;
-}
-
-#wizardpage .sb form {
-  margin: 0;
-  padding: 3px 0 7px;
-  box-shadow: none;
-}
-
-#wizardpage h3 + .configtable {
-  margin-top: -11px;
-}
-
-#bandwidthTestRunning {
-  margin: 10px 0;
-  padding: 10px;
-  text-align: center;
-  font-style: italic;
-  font-weight: 700;
-  border: var(--border);
-}
-
-#wizardpage #bandwidthconfig tr:nth-child(n+2) td:last-child:not(.infohelp) {
-  background: #000800 !important;
-}
-
-#setupwizard .langselect {
-  float: none;
-}
-
-#config_ui + .wizardbuttons {
-  margin: -11px 0 -4px;
-}
-
-.wizardbuttons {
-  margin-bottom: -4px;
-}
-
-#wizardpage .langselect {
-  margin: 3px 0 4px 4px;
-}
-
-#wizardpage #langsettings {
-  padding: 7px 6px;
-}
-
-#wizardpage td {
-  line-height: 140%;
-}
-
-#setupwizard input[name="skipbw"], #setupwizard input[name="cancelbw"] {
-  float: left;
-}
-
-#wizardpage .yes, #wizardpage .no {
-  font-size: 0;
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-}
-
-#wizardpage .yes {
-  background: var(--yes) no-repeat center center / 12px;
-}
-
-#wizardpage .no {
-  background: var(--no) no-repeat center center / 11px;
-}
-
-#wizardpage #messages {
-  animation: 1s hide-up 5s ease-out forwards !important;
-}
-
-#wizardpage #messages li {
-  padding: 0 !important;
-  text-align: center !important;
-}
-
-@media screen and (min-width: 1500px) {
-  #wizardpage #sb_logo {
-    padding: 9px 10px 16px;
-  }
-}
+@media screen and (min-width: 1500px) {#wizardpage #sb_logo {padding: 9px 10px 16px}}

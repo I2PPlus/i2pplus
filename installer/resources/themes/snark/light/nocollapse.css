@@ -2,48 +2,48 @@
 /* fixes a browser engine bug present in Konqueror, Midori, Qupzilla et al */
 
 input:not(checked) + label + hr + table, input:not(checked) + label + hr + table + table {
-  display: table !important;
+  display: table;
 }
 
 .configTitle {
-  border-radius: 0 0 3px 3px !important;
+  border-radius: 0 0 3px 3px;
 }
 
 input:checked + .toggleview, input:not(:checked) + .toggleview,
 .toggleview, .toggleview:hover, .toggleview:active {
-  cursor: default !important;
+  cursor: default;
 }
 
 div[class] .toggleview img, div[class] .toggleview:hover img, div[class] .toggleview img:hover, div[class] .toggleview img:active, div[class] .toggleview:active img {
-  margin: 0 !important;
-  padding: 5px !important;
-  border: none !important;
-  box-shadow: none !important;
-  background: none !important;
+  margin: 0;
+  padding: 5px;
+  border: none;
+  box-shadow: none;
+  background: none;
   background: #020;
-  mix-blend-mode: normal !important;
-  transform: none !important;
-  filter: none !important;
+  mix-blend-mode: normal;
+  transform: none;
+  filter: none;
 }
 
 div[class] .toggleview, div[class] .toggleview:hover, div[class] .toggleview:active,
 div[class] input:checked + .toggleview, div[class] input:not(:checked) + .toggleview {
-  margin-bottom: -6px !important;
-  padding: 3px 0 !important;
-  font-size: 0 !important;
-  box-shadow: inset 0 0 0 1px #fff !important;
-  background: linear-gradient(180deg,#fff, #eef) !important;
+  margin-bottom: -6px;
+  padding: 3px 0;
+  font-size: 0;
+  box-shadow: inset 0 0 0 1px #fff;
+  background: linear-gradient(180deg,#fff, #eef);
 }
 
 #configSection .configTitle a {
-  padding: 1px 0 !important;
-  margin: 0 auto !important;
-  text-align: center !important;
+  padding: 1px 0;
+  margin: 0 auto;
+  text-align: center;
   display: block;
 }
 
 .mainsection input:checked + label + hr + table, .mainsection input:not(checked) + label + hr + table {
-  margin-top: -14px !important;
+  margin-top: -14px;
 }
 
 .mainsection input:checked + .toggleview, .mainsection input:not(checked) + .toggleview {
@@ -51,9 +51,9 @@ div[class] input:checked + .toggleview, div[class] input:not(:checked) + .toggle
 }
 
 .mainsection table {
-  display: table !important;
+  display: table;
 }
 
 .mainsection {
-  margin-top: -5px !important;
+  margin-top: -5px;
 }

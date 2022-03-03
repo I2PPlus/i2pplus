@@ -79,7 +79,7 @@ abstract class BuildRequestor {
 
     /** some randomization is added on to this */
 //    private static final int BUILD_MSG_TIMEOUT = 60*1000;
-    private static final int BUILD_MSG_TIMEOUT = 15*1000;
+    private static final int BUILD_MSG_TIMEOUT = 40*1000;
 
 //    private static final int MAX_CONSECUTIVE_CLIENT_BUILD_FAILS = 6;
     private static final int MAX_CONSECUTIVE_CLIENT_BUILD_FAILS = 5;
@@ -187,7 +187,7 @@ abstract class BuildRequestor {
                 // This prevents us from being stuck for 10 minutes if the client pool
                 // has exactly one tunnel in the other direction and it's bad
                 if (log.shouldWarn())
-                    log.warn(fails + " consecutive build timeouts for " + cfg + ", using exploratory tunnel");
+                    log.warn(fails + " consecutive build timeouts for " + cfg + ", using Exploratory tunnel");
             }
             if (pairedTunnel == null) {
                 if (isInbound) {
@@ -279,8 +279,8 @@ abstract class BuildRequestor {
 
             if (log.shouldLog(Log.INFO))
                 log.info("Sending tunnel build request [MsgID " + msg.getUniqueId() + "] via " + pairedTunnel + " to ["
-                          + ibgw.toBase64().substring(0,6) + "] for " + cfg + " waiting for the reply of "
-                          + cfg.getReplyMessageId());
+                          + ibgw.toBase64().substring(0,6) + "] for " + cfg + " Waiting for reply of "
+                          + cfg.getReplyMessageId() + "...");
             // send it out a tunnel targeting the first hop
             // TODO - would be nice to have a TunnelBuildFirstHopFailJob queued if the
             // pairedTunnel is zero-hop, but no way to do that?
@@ -288,13 +288,14 @@ abstract class BuildRequestor {
         } else {
             if (log.shouldLog(Log.INFO))
                 log.info("Sending tunnel build request direct to [" + cfg.getPeer(1).toBase64().substring(0,6)
-                          + "] for " + cfg + " waiting for the reply of " + cfg.getReplyMessageId()
+                          + "] for " + cfg + " Waiting for reply of " + cfg.getReplyMessageId()
                           + " via " + pairedTunnel
                           + " with [MsgID " + msg.getUniqueId() + "]");
             // send it directly to the first hop
             // Add some fuzz to the TBM expiration to make it harder to guess how many hops
             // or placement in the tunnel
-            msg.setMessageExpiration(ctx.clock().now() + BUILD_MSG_TIMEOUT + ctx.random().nextLong(20*1000));
+//            msg.setMessageExpiration(ctx.clock().now() + BUILD_MSG_TIMEOUT + ctx.random().nextLong(20*1000));
+            msg.setMessageExpiration(ctx.clock().now() + BUILD_MSG_TIMEOUT + ctx.random().nextLong(20*1000) + ctx.random().nextLong(20*1000));
             // We set the OutNetMessage expiration much shorter, so that the
             // TunnelBuildFirstHopFailJob fires before the 13s build expiration.
             RouterInfo peer = ctx.netDb().lookupRouterInfoLocally(cfg.getPeer(1));

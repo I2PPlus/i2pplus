@@ -4,37 +4,37 @@ input#toggle_addtorrent:not(checked) + label + hr + table, input#toggle_createto
 input#toggle_addtorrent:checked + label + hr + table, input#toggle_createtorrent:checked + label + hr + table,
 input#toggle_createtorrent:checked + label + hr + table, input#toggle_createtorrent:checked + label + hr + table + table,
 input#toggle_createtorrent:not(:checked) + label + hr + table, input#toggle_createtorrent:not(:checked) + label + hr + table + table {
-  display: table !important;
+  display: table;
 }
 
 .mainsection[id] table {
-  display: table !important;
+  display: table;
 }
 
 .mainsection[id] table:first-child {
-  margin-top: 10px !important;
+  margin-top: 10px;
 }
 
 .mainsection[id] hr {
-  margin-bottom: 7px !important;
+  margin-bottom: 7px;
 }
 
 .toggleview, .toggleview:hover, .toggleview:focus, .toggleview:active {
-  cursor: default !important;
+  cursor: default;
   border: 1px solid #212;
   border-bottom: 1px solid #101;
   border-top: none;
-  background: linear-gradient(180deg,#656, #323 51%, #202 51%, #101) !important;
-  box-shadow: inset 0 0 1px #838 !important;
-  filter: drop-shadow(0 1px 1px rgba(17,0,17,.6)) !important;
+  background: linear-gradient(180deg,#656, #323 51%, #202 51%, #101);
+  box-shadow: inset 0 0 1px #838;
+  filter: drop-shadow(0 1px 1px rgba(17,0,17,.6));
 }
 
 .iframed .toggleview, .iframed .toggleview:hover, .iframed .toggleview:focus, .iframed .toggleview:active {
   border: 1px solid #878;
   border-bottom: 1px solid #767;
   border-top: none;
-  box-shadow: inset 0 0 1px #535 !important;
-  filter: drop-shadow(0 1px 2px #101) !important;
+  box-shadow: inset 0 0 1px #535;
+  filter: drop-shadow(0 1px 2px #101);
 }
 
 .toggleview img, .toggleview img:active, .toggleview:hover img,
@@ -42,22 +42,22 @@ input#toggle_createtorrent:not(:checked) + label + hr + table, input#toggle_crea
 .mainsection[id] .toggleview img, .mainsection[id] .toggleview img:active, .mainsection[id]:hover .toggleview img,
 .mainsection[id] .toggleview:focus img, .mainsection[id] .toggleview img:active, .mainsection[id] .toggleview:active img,
 input:not(:checked) + .toggleview > img, #commentSection input:not(:checked) + .toggleview > img {
-  background: linear-gradient(180deg,#767 50%, #323 50%, #212) !important;
-  mix-blend-mode: normal !important;
-  transform: none !important;
-  filter: none !important;
-  box-shadow: none !important;
+  background: linear-gradient(180deg,#767 50%, #323 50%, #212);
+  mix-blend-mode: normal;
+  transform: none;
+  filter: none;
+  box-shadow: none;
 }
 
 #addSection:hover table, #createSection:hover table:not(#trackerselect),
 #configSection .configTitle, .toggleview {
-  will-change: auto !important;
+  will-change: auto;
 }
 
 #addSection table, #createSection table:not(#trackerselect) {
-  animation: none !important;
+  animation: none;
 }
 
 .toggle_input {
-  display: none !important;
+  display: none;
 }

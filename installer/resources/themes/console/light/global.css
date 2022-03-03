@@ -2,6 +2,7 @@
 /* Author: (c) dr|z3d 2022 */
 
 @import url(/themes/fonts/DroidSans.css);
+@import url(/themes/console/images/images.css);
 @import url(../images/itooplus.css);
 
 :root {
@@ -37,7 +38,7 @@
   --ink_darker: #19191f;
   --ink_light: #5b5b71;
   --ink_lighter: #71718e;
-  --input_shadow: var(--highlight), inset 2px 2px 2px rgba(0,0,0,.25);
+  --input_shadow: inset 2px 2px 2px rgba(0,0,0,.15);
   --membarinner_mobile: linear-gradient(180deg,rgba(255, 255, 255,.6), rgba(238, 238, 255, .6) 50%, rgba(180, 180, 255, .7) 50%, rgba(140, 140, 255, .7));
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
   --outline: 0 0 0 1px #000;

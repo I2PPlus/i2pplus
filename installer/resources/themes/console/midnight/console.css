@@ -260,7 +260,7 @@ button.download.control:active {background: var(--download) no-repeat center cen
 #sidebar td:first-child, #sb_localtunnels td:nth-child(2) {text-align: left}
 #sidebar td:last-child {text-align: right}
 #sidebar #sb_internals td, #sidebar #sb_advanced td, #sidebar #sb_services td, #sidebar #sb_help td {text-align: center}
-#sb_internals, #sb_advanced, #sb_help {margin: -5px -6px -5px -10px; width: 204px; border-collapse: collapse}
+#sb_internals, #sb_advanced, #sb_help {margin: -5px -6px -5px -10px; border-collapse: collapse}
 #sb_internals td:first-child, #sb_advanced td:first-child, #sb_help td:first-child {margin: 0 -10px; padding: 0 0 2px; width: 106%; max-width: 240px; display: inline-block}
 #sb_general, #sb_shortgeneral, #sb_advancedgeneral, #sb_bandwidth, #sb_peers, #sb_peersadvanced, #sb_tunnels, #sb_queue {margin-top: -8px; margin-bottom: -9px}
 #sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after, #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {height: 16px; display: inline-block; vertical-align: bottom; content: ""}

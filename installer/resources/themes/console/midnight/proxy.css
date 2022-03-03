@@ -113,7 +113,7 @@ div.logo hr {
   background: radial-gradient(at center bottom, rgba(128, 0, 128, .15), rgba(64, 0, 64, .08) 30%, rgba(0, 0, 0, 0) 90%),
     linear-gradient(90deg, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)),
     linear-gradient(90deg, rgba(0,0,16,.1), rgba(0,0,0,0), rgba(0,0,16,.1)),
-    linear-gradient(180deg,#0a0a1a 50%, #040414 50%) !important;
+    linear-gradient(180deg,#0a0a1a 50%, #040414 50%);
 }
 
 .logo hr ~ a:hover {
@@ -121,14 +121,14 @@ div.logo hr {
   box-shadow: var(--highlight);
   background: radial-gradient(at center bottom, rgba(96, 32, 96, .6) 0, rgba(0, 0, 0, 0) 80%),
     linear-gradient(90deg, rgba(64,0,64,.03), rgba(96,0,96,.1), rgba(64,0,64,.03)),
-    linear-gradient(180deg,#1d1a2d 50%, #000 50%) !important;
+    linear-gradient(180deg,#1d1a2d 50%, #000 50%);
 }
 
 .logo hr ~ a:active {
   box-shadow: var(--highlight), inset 0 0 1px 1px #737, inset 0 0 0 3px #101, inset 5px 5px 5px 2px #000;
   background: radial-gradient(at center bottom, rgba(160,48,160,.2), rgba(0, 0, 0, 0) 35%),
     linear-gradient(90deg, rgba(64,0,64,.1), rgba(64,0,64,.2), rgba(64,0,64,.1)),
-    linear-gradient(180deg,#080820, #1d1a2d) !important;
+    linear-gradient(180deg,#080820, #1d1a2d);
 }
 
 .formaction {
@@ -152,7 +152,7 @@ button {
   vertical-align: middle;
   border: 1px solid #27235c;
   background: #000;
-  background: var(--button) !important;
+  background: var(--button);
 }
 
 button:hover, button:focus,
@@ -164,7 +164,7 @@ select:hover, select:focus {
 }
 
 button {
-  min-width: 0 !important;
+  min-width: 0;
   background-size: 12px, 100%;
 }
 
@@ -174,30 +174,30 @@ button:hover {
 }
 
 button:active {
-  color: #83529f !important;
+  color: #83529f;
   text-shadow: 0 1px 1px #3c1751;
   border: var(--border_input_hover);
   box-shadow: var(--highlight), inset 3px 3px 3px #000;
   background: #652787;
   background-size: 12px, 100%;
-  background-blend-mode: luminosity !important;
+  background-blend-mode: luminosity;
 }
 
 button.go, button.accept {
-  padding: 7px 9px 7px 25px !important;
-  background: var(--yes) no-repeat 8px center, var(--button) !important;
-  background-size: 12px, 100% !important;
+  padding: 7px 9px 7px 25px;
+  background: var(--yes) no-repeat 8px center, var(--button);
+  background-size: 12px, 100%;
 }
 
 button.go:hover, button.go:focus,
 button.accept:hover, button.accept:focus {
-  background: var(--yes) no-repeat 8px center, var(--button_hover) !important;
-  background-size: 12px, 100% !important;
+  background: var(--yes) no-repeat 8px center, var(--button_hover);
+  background-size: 12px, 100%;
 }
 
 button.go:active, button.accept:active {
-  background: var(--yes) no-repeat 8px center, var(--button_active) !important;
-  background-size: 12px, 100% !important;
+  background: var(--yes) no-repeat 8px center, var(--button_active);
+  background-size: 12px, 100%;
 }
 
 .warning {
@@ -222,7 +222,7 @@ button.go:active, button.accept:active {
 }
 
 .iframed .warning, #servletError .iframed #warning2 {
-  margin-left: 20px !important;
+  margin-left: 20px;
 }
 
 #proxy_error {
@@ -230,11 +230,11 @@ button.go:active, button.accept:active {
 }
 
 #proxy_error .warning p:first-of-type {
-  padding-top: 15px !important;
+  padding-top: 15px;
 }
 
 #proxy_error .warning p:last-of-type {
-  padding-bottom: 5px !important;
+  padding-bottom: 5px;
 }
 
 #proxy_error p + a {
@@ -268,7 +268,7 @@ button.go:active, button.accept:active {
   text-align: left;
   font-size: 105%;
   border-bottom: 1px solid rgba(38, 35, 92,.7);
-  box-shadow: none !important;
+  box-shadow: none;
 }
 
 #warning td {
@@ -285,7 +285,7 @@ button.go:active, button.accept:active {
 }
 
 #warning_localhost + .proxyfooter {
-  display: none !important;
+  display: none;
 }
 
 #denied {
@@ -377,16 +377,16 @@ hr {
 }
 
 #proxyNewHost textarea {
-  margin: 0 !important;
-  padding: 0 !important;
+  margin: 0;
+  padding: 0;
   height: 6em;
-  width: 100% !important;
+  width: 100%;
   overflow: auto;
   white-space: pre-wrap;
   word-break: break-all;
   border: none;
-  box-shadow: none !important;
-  background: none !important;
+  box-shadow: none;
+  background: none;
   resize: none;
 }
 
@@ -414,8 +414,8 @@ hr {
 }
 
 .option .formaction {
-  margin: 20px -20px 0 !important;
-  padding: 12px 10px !important;
+  margin: 20px -20px 0;
+  padding: 12px 10px;
   border-top: 1px solid #225;
   background: #002;
 }
@@ -434,17 +434,17 @@ hr {
   }
 
   .logo hr ~ a {
-    margin: -8px -3px 12px !important;
-    padding: 6px 8px !important;
+    margin: -8px -3px 12px;
+    padding: 6px 8px;
     min-width: 110px;
     position: relative;
     background: #225;
   }
 
   .warning {
-    margin-left: 20px !important;
-    padding-left: 25px !important;
-    background: #000 !important;
+    margin-left: 20px;
+    padding-left: 25px;
+    background: #000;
  }
 
   .warning h3 {
@@ -461,12 +461,12 @@ hr {
 
 @media screen and (min-width: 800px) {
   .logo hr + a {
-    margin-top: -20px !important;
+    margin-top: -20px;
   }
 
   .logo hr ~ a {
     margin: 0 -11px -1px;
-    padding: 10px 4px !important;
+    padding: 10px 4px;
     display: inline-block;
   }
 }

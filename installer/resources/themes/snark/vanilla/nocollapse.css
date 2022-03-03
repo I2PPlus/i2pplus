@@ -3,25 +3,25 @@
 
 input#toggle_addtorrent:not(checked) + label + hr + table, input#toggle_createtorrent:not(checked) + label + hr + table,
 input#toggle_addtorrent:checked + label + hr + table, input#toggle_createtorrent:checked + label + hr + table {
-  display: table !important;
+  display: table;
 }
 
 label.toggleview, label.toggleview:hover, label.toggleview:active, .toggle_input:focus + .toggleview {
-  background: linear-gradient(180deg,#fff7ef, #cfc1b5) !important;
-  color: #930 !important;
-  cursor: default !important;
-  box-shadow: 0 0 2px #4d453e, inset 0 0 0 1px #efe6e0 !important;
-  font-size: 0 !important;
-  min-width: 200px !important;
-  width: 200px !important;
+  background: linear-gradient(180deg,#fff7ef, #cfc1b5);
+  color: #930;
+  cursor: default;
+  box-shadow: 0 0 2px #4d453e, inset 0 0 0 1px #efe6e0;
+  font-size: 0;
+  min-width: 200px;
+  width: 200px;
 }
 
 label.toggleview img, .toggle_input:focus + label.toggleview img, label.toggleview:hover img, label.toggleview img:active, label.toggleview:active img {
-  mix-blend-mode: luminosity !important;
+  mix-blend-mode: luminosity;
 }
 
 label.toggleview img:active, label.toggleview:active img {
-  transform: none !important;
-  mix-blend-mode: luminosity !important;
+  transform: none;
+  mix-blend-mode: luminosity;
 }
 
