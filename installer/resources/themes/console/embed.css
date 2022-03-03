@@ -1,9 +1,14 @@
 /* global embedded page override */
 
-@import url("/themes/fonts/DroidSans.css");
+@import url(/themes/fonts/DroidSans.css);
+
+:root {
+--bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
+--monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
+}
 
 body, pre, table, p, .plate div, h1, h2, h3, h4, th, td {
-  font-family: var(--bodyfont) !important;
+  font-family: var(--bodyfont);
 }
 
 body, pre, table, p, .plate div {
@@ -12,17 +17,13 @@ body, pre, table, p, .plate div {
 
 pre {
   white-space: pre-wrap;
-  font-family: "Droid Sans Mono", "DejaVu Sans Mono", "Noto Mono", "Lucida Console", monospace !important;
-}
-
-.rawtext {
-/*  overflow-y: auto !important;*/
+  font-family: var(--monospaced);
 }
 
 .rawtext pre, #rawtext_frame {
-  font-family: "Droid Sans Mono", "DejaVu Sans Mono", "Noto Mono", "Lucida Console", monospace !important;
-  font-size: 9.5pt !important;
-  padding: 20px 30px 30px !important;
+  font-family: var(--monospaced);
+  font-size: 9.5pt;
+  padding: 20px 30px 30px;
   word-break: break-all;
 }
 
@@ -30,9 +31,9 @@ pre {
 
 .light select {
   margin: 5px;
-  padding: 4px 16px 4px 4px !important;
+  padding: 4px 16px 4px 4px;
   min-width: 60px;
-  text-align: left !important;
+  text-align: left;
   font-size: 9pt;
   color: #484e6a;
   border: 1px solid #999daf;
@@ -59,7 +60,7 @@ pre {
   box-shadow: inset 0 0 0 1px #fff, inset 0 0 0 1px #fff;
   background: #eee;
   background: linear-gradient(180deg,#fff, #efefff);
-  background-size: 14px auto, 100% 100% !important;
+  background-size: 14px auto, 100% 100%;
   opacity: 1;
   filter: drop-shadow(0 0 1px #ccf);
 }
@@ -87,12 +88,12 @@ pre {
   margin: -10px -8px;
   padding: 20px;
   line-height: 20px;
-  color: #333339 !important;
+  color: #333339;
   background: repeating-linear-gradient(180deg,#7878ff33, #d2d2ff66 1px, #d2d2ff66 19px, #7878ff33 19px, #f0f0ff66 20px, #f0f0ff66 40px);
 }
 
 .rawtext.light pre, .rawtext.classic pre {
-  padding: 0 10px 5px !important;
+  padding: 0 10px 5px;
   border-left: 14px solid #eef;
   border-bottom: 16px solid #eef;
   border-right: 14px solid #eef;
@@ -101,7 +102,7 @@ pre {
 
 .rawtext.dark pre {
   margin: -20px 0;
-  padding: 40px 20px !important;
+  padding: 40px 20px;
   line-height: 20px;
   background: repeating-linear-gradient(180deg,#010, #010 20px, #001800 20px, #001800 40px);
   width: calc(100% - 44px);
@@ -112,7 +113,7 @@ pre {
 
 .rawtext.midnight pre {
   margin: -20px 0;
-  padding: 0 20px 30px !important;
+  padding: 0 20px 30px;
 }
 
 .light h3 + pre {
@@ -143,7 +144,7 @@ pre {
 }
 
 .midnight, .midnight h1, .midnight h2, .midnight h3, .midnight div, .midnight p {
-  color: #c9ceff !important;
+  color: #c9ceff;
 }
 
 /* midnight */
@@ -153,43 +154,41 @@ pre {
   padding: 20px;
   line-height: 20px;
   white-space: pre-wrap;
-  color: #c9ceff !important;
+  color: #c9ceff;
   background: repeating-linear-gradient(180deg,#000, #001 1px, #001 19px, #000 19px, #002 20px, #002 40px);
 }
 
 /* bwscheduler */
 
 html.bwscheduler, body.bwscheduler {
-  background: none !important;
+  background: none;
 }
 
 .bwscheduler .plate {
-  border-radius: 0 !important;
-  width: calc(100% - 40px) !important;
-  max-width: 100% !important;
-/*  max-height: 100% !important;
-  height: 100% !important;*/
-  margin: 0 auto !important;
-  padding: 20px 0 !important;
-  text-align: center !important;
-  background: #111 !important;
+  border-radius: 0;
+  width: calc(100% - 40px);
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 20px 0;
+  text-align: center;
+  background: #111;
   background: linear-gradient(180deg,#111, #000);
-  background: none !important;
+  background: none;
   text-align: center;
   vertical-align: top;
 }
 
 .plate h1 {
-  margin: 0 0 10px !important;
-  padding: 10px 0 !important;
+  margin: 0 0 10px;
+  padding: 10px 0;
   width: 100%;
   border-bottom: 1px solid #333;
   color: transparent;
 }
 
 .plate h1 p {
-  margin: 0 !important;
-  padding: 0 !important;
+  margin: 0;
+  padding: 0;
   display: none;
 }
 
@@ -199,43 +198,43 @@ html.bwscheduler, body.bwscheduler {
 }
 
 .plate div:not(.round-button):not(.weekday_container):not(.conatiner_header):not(.outer):not(.inner):not(.bwaction) {
-  float: none !important;
-  max-width: 35% !important;
-  display: inline-block !important;
-  vertical-align: top !important;
+  float: none;
+  max-width: 35%;
+  display: inline-block;
+  vertical-align: top;
 }
 
 .plate div:not(.round-button):not(.weekday_container):not(.conatiner_header):not(.outer):not(.inner):not(.bwaction) {
-  border-radius: 0 !important;
-  border-width: 1px !important;
+  border-radius: 0;
+  border-width: 1px;
   background: linear-gradient(180deg,#222, #111);
 }
 
 .plate .round-button + div, .plate h1 {
-  padding: 0 !important;
-  margin: 0 !important;
-  width: 0 !important;
-  min-width: 0 !important;
-  display: none !important;
+  padding: 0;
+  margin: 0;
+  width: 0;
+  min-width: 0;
+  display: none;
 }
 
 .weekday_container, .conatiner_header, .outer {
-  min-height: 0 !important;
+  min-height: 0;
   text-align: center;
-  background: #111 !important;
+  background: #111;
 }
 
 .weekday_container {
-  margin: 6px !important;
-  height: auto !important;
-  min-height: 200px !important;
-  min-width: 120px !important;
-  display: inline-block !important;
-  float: none !important;
-  vertical-align: top !important;
-  border: 1px solid #222 !important;
+  margin: 6px;
+  height: auto;
+  min-height: 200px;
+  min-width: 120px;
+  display: inline-block;
+  float: none;
+  vertical-align: top;
+  border: 1px solid #222;
   box-shadow: 0 0 1px 1px rgba(0,0,0,.4);
-  background: #080808 !important;
+  background: #080808;
 }
 
 .plate::after {
@@ -250,28 +249,28 @@ html.bwscheduler, body.bwscheduler {
 
 .conatiner_header {
   padding: 4px 0;
-  height: auto !important;
+  height: auto;
   vertical-align: middle;
-  background: linear-gradient(180deg,#222 50%, #111 50%) !important;
+  background: linear-gradient(180deg,#222 50%, #111 50%);
 }
 
 .conatiner_header b {
-  letter-spacing: .08em !important;
+  letter-spacing: .08em;
 }
 
 .outer {
-  border: 1px solid transparent !important;
-  border-top: 1px solid #222 !important;
+  border: 1px solid transparent;
+  border-top: 1px solid #222;
 }
 
 .bwaction {
-  background: #111 !important;
+  background: #111;
   position: relative;
   z-index: 999;
-  border: none !important;
-  border-bottom: 1px solid #222 !important;
-  padding: 4px 0 !important;
-  font-size: 90% !important;
+  border: none;
+  border-bottom: 1px solid #222;
+  padding: 4px 0;
+  font-size: 90%;
 }
 
 .bwaction a {
@@ -280,81 +279,81 @@ html.bwscheduler, body.bwscheduler {
 }
 
 .plate div[style*="border-color: white"] {
-  border: 1px solid #222 !important;
+  border: 1px solid #222;
   color: #777;
   box-shadow: inset 0 0 0 1px #000, 0 0 1px 1px rgba(0,0,0,.4);
-  vertical-align: middle !important;
-  line-height: 200% !important;
+  vertical-align: middle;
+  line-height: 200%;
 }
 
 .plate div[style*="border-color: white"] form {
-  vertical-align: middle !important;
+  vertical-align: middle;
 }
 
 .plate div[style*="border-color: white"] form:first-of-type {
-  padding-top: 15px !important;
+  padding-top: 15px;
 }
 
 /* light/classic */
 
 .bwscheduler.light .round-button {
-  background: #779 !important;
-  border-color: #7778bf !important;
-  box-shadow: none !important;
-  mix-blend-mode: luminosity !important;
+  background: #779;
+  border-color: #7778bf;
+  box-shadow: none;
+  mix-blend-mode: luminosity;
 }
 
 .bwscheduler.light .plate {
-  color: #393947 !important;
+  color: #393947;
 }
 
 .bwscheduler.light .weekday_container,
 .bwscheduler.light .conatiner_header, .bwscheduler.light .outer {
-  background: #ddf !important;
-  color: #393947 !important;
+  background: #ddf;
+  color: #393947;
 }
 
 .bwscheduler.light .weekday_container, .bwscheduler.light .conatiner_header, .bwscheduler.light .outer {
-  background: #ddf !important;
+  background: #ddf;
 }
 
 .bwscheduler.light .weekday_container {
-  border: 1px solid #8d8daa !important;
+  border: 1px solid #8d8daa;
   box-shadow: inset 0 0 0 1px #fff, 0 0 1px 1px rgba(220,220,255,.4);
-  background: #e0e0ff !important;
-  background: linear-gradient(180deg,#e8e8ff, #d8d8ff) !important;
+  background: #e0e0ff;
+  background: linear-gradient(180deg,#e8e8ff, #d8d8ff);
 }
 
 .bwscheduler.light .conatiner_header {
-  color: #54586f !important;
+  color: #54586f;
   text-shadow: 0 1px 1px #fff,0 -1px 1px #e2e2ff, 0 2px 1px #ddf;
-  background: #e7e7ff linear-gradient(180deg,#fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)) !important;
+  background: #e7e7ff linear-gradient(180deg,#fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4));
 }
 
 .bwscheduler.light .outer {
-  border-top-color: #7778bf !important;
+  border-top-color: #7778bf;
 }
 
 .bwscheduler.light .bwaction, .bwscheduler.light .outer {
-  background: #eef !important;
+  background: #eef;
 }
 
 .bwscheduler.light .bwaction {
-  border-bottom-color: #7778bf !important;
+  border-bottom-color: #7778bf;
 }
 
 .bwscheduler.light .plate div[style*="border-color: white"] {
-  border: 1px solid #8d8daa !important;
+  border: 1px solid #8d8daa;
   box-shadow: inset 0 0 0 1px #fff, 0 0 1px 1px rgba(220,220,255,.4);
-  background: #f2f2ff !important;
-  background: linear-gradient(180deg,#f2f2ff, #e8e8ff) !important;
-  color: #26262f !important;
-  padding: 10px 10px 8px !important;
+  background: #f2f2ff;
+  background: linear-gradient(180deg,#f2f2ff, #e8e8ff);
+  color: #26262f;
+  padding: 10px 10px 8px;
 }
 
 .bwscheduler.light .plate::after {
-  background: #7778bf !important;
-  box-shadow: none !important;
+  background: #7778bf;
+  box-shadow: none;
 }
 
 .bwscheduler.light .plate div[style*="border-color: white"] ul, .bwscheduler.light .plate div[style*="border-color: white"] li {
@@ -366,7 +365,7 @@ html.bwscheduler, body.bwscheduler {
 
 .bwscheduler.light .plate div[style*="border-color: white"] ul {
   padding: 0 10px;
-  margin-top: -5px !important;
+  margin-top: -5px;
 }
 
 .bwscheduler.light .plate div[style*="border-color: white"] li:first-child::after {
@@ -380,7 +379,7 @@ html.bwscheduler, body.bwscheduler {
 
 .bwscheduler .light .plate div[style*="border-color: white"] form {
   margin: 0;
-  padding: 0 !important;
+  padding: 0;
 }
 
 .bwscheduler .light button, .bwscheduler .light input[type=submit] {
@@ -389,7 +388,7 @@ html.bwscheduler, body.bwscheduler {
 }
 
 .bwscheduler .bwaction {
-  font-size: 100% !important;
+  font-size: 100%;
 }
 
 .light .bwscheduler .bwaction {
@@ -411,30 +410,30 @@ html.bwscheduler, body.bwscheduler {
 /* midnight */
 
 .bwscheduler.midnight .weekday_container, .bwscheduler.midnight .plate div[style*="border-color: white"] {
-  border-color: #26225d !important;
+  border-color: #26225d;
 }
 
 .bwscheduler.midnight .bwaction {
-  border-bottom-color: #26225d !important;
+  border-bottom-color: #26225d;
 }
 
 .bwscheduler.midnight .outer {
-  border-top-color: #26225d !important;
+  border-top-color: #26225d;
 }
 
 .bwscheduler.midnight .conatiner_header {
-  color: #c9ceff !important;
-  background: linear-gradient(180deg,#191729 50%, #001 50%) !important;
+  color: #c9ceff;
+  background: linear-gradient(180deg,#191729 50%, #001 50%);
 }
 
 .bwscheduler.midnight .plate::after {
-  background: #26225d !important;
+  background: #26225d;
  }
 
 /* imagegen */
 
 #imagegen h1 {
-  display: none !important;
+  display: none;
 }
 
 /* bote */

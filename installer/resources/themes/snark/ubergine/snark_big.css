@@ -1,21 +1,21 @@
 @media screen and (min-width: 0) and (max-width: 4000px) {
 input, button, textarea, select, a {
-  font-weight: 400 !important;
-  font-family: "Noto Sans", "Droid Sans", "Roboto Sans", Ubuntu, "Segoe UI", "Lucida Grande", Helvetica, Arial, Verdana, sans-serif !important;
-  line-height: 120% !important;
+  font-weight: 400;
+  font-family: "Noto Sans", "Droid Sans", "Roboto Sans", Ubuntu, "Segoe UI", "Lucida Grande", Helvetica, Arial, Verdana, sans-serif;
+  line-height: 120%;
 }
 
 .snarkNav, #pagenav {
-  font-weight: 700 !important;
+  font-weight: 700;
 }
 
 .iframed .snarkNav:link {
-  padding-top: 4px !important;
+  padding-top: 4px;
 }
 
 .snarkNav.nav_main:link {
-  background-size: 17px auto, 100% 100% !important;
-  padding-left: 31px !important;
+  background-size: 17px auto, 100% 100%;
+  padding-left: 31px;
 }
 
 #screenlog li::before {
@@ -24,39 +24,39 @@ input, button, textarea, select, a {
 }
 
 #torrents thead img {
-  min-height: 13px !important;
+  min-height: 13px;
 }
 
 .snarkAddInfo {
-  font-size: 10pt !important;
+  font-size: 10pt;
 }
 
 .snarkAddInfo code, #pagenav, #trackerselect tr:first-child td, .clientid {
-  font-size: 9.5pt !important;
-  font-weight: 400 !important;
+  font-size: 9.5pt;
+  font-weight: 400;
 }
 
 .clientid {
-  font-size: 8pt !important;
+  font-size: 8pt;
 }
 
 input[type], select, select option, td, td a, #screenlog li, #screenlog li a, textarea, input.r, input[name="nofilter_dataDir"],
 .configPanel, .configPanel td, .snarkNewTorrent, .snarkNewTorrent td, .snarkAddInfo,
 #configs td, .trackerconfig td {
-  font-size: 10.5pt !important;
+  font-size: 10.5pt;
 }
 
 th.torrentDownloaded, th.torrentUploaded, th.RateDown, th.RateUp,
 td.torrentDownloaded, td.torrentUploaded, td.RateDown, td.RateUp, .torrentName a:link {
-  font-size: 10pt !important;
+  font-size: 10pt;
 }
 
 th.torrentDownloaded, th.torrentUploaded, th.RateDown, th.RateUp {
-  font-weight: 700 !important;
+  font-weight: 700;
 }
 
 input[type], select, a.control {
-  line-height: 130% !important;
+  line-height: 130%;
 }
 
 select {
@@ -65,26 +65,26 @@ select {
 }
 
 a.control, input[type=submit], input.accept {
-  padding-top: 2px !important;
-  padding-bottom: 2px !important;
-  text-transform: uppercase !important;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  text-transform: uppercase;
   letter-spacing: .05em;
 }
 
 a.control, input[type=submit], input.accept, th {
-  font-weight: 400 !important;
-  font-size: 12pt !important;
+  font-weight: 400;
+  font-size: 12pt;
 }
 
 .configPanel .configTitle, .configPanel .configTitle:hover, .configPanel .configTitle:active {
   padding-top: 8px;
-  font-size: 14pt !important;
-  text-transform: uppercase !important;
-  font-variant: normal !important;
+  font-size: 14pt;
+  text-transform: uppercase;
+  font-variant: normal;
 }
 
 .configPanel .configTitle img {
-  margin-top: -2px !important;
+  margin-top: -2px;
   display: inline-block;
   height: 24px;
   width: 24px;
@@ -92,18 +92,18 @@ a.control, input[type=submit], input.accept, th {
 }
 
 .torrentInfo th, .dirInfo th, #totals, #commentInfo th, #configs th {
-  font-size: 11pt !important;
+  font-size: 11pt;
 }
 
 #pagecount {
   padding-top: 3px;
   padding-bottom: 4px;
-  font-weight: 700 !important;
+  font-weight: 700;
 }
 
 .torrentUploaded {
-  text-align: center !important;
-  padding-right: 10px !important;
+  text-align: center;
+  padding-right: 10px;
 }
 
 .percentBarText {
@@ -115,30 +115,30 @@ a.control, input[type=submit], input.accept, th {
 }
 
 #torrents tt {
-  letter-spacing: .2em !important;
-  font-weight: 700 !important;
+  letter-spacing: .2em;
+  font-weight: 700;
 }
 
 #torrents td tt {
-  padding: 0 3px !important;
+  padding: 0 3px;
   min-width: 38px;
   text-align: center;
-  font-size: 8.5pt !important;
+  font-size: 8.5pt;
 }
 
 #configs td {
-  line-height: 200% !important;
-  padding-top: 4px !important;
-  padding-bottom: 4px !important;
+  line-height: 200%;
+  padding-top: 4px;
+  padding-bottom: 4px;
 }
 
 #embed, #fullscreen {
-  margin: -6px -4px -28px !important;
-  padding: 8px 9px 7px 10px !important;
+  margin: -6px -4px -28px;
+  padding: 8px 9px 7px 10px;
 }
 
 #embed::after {
-  height: 14px !important;
+  height: 14px;
 }
 
 .knownTracker a {
@@ -163,27 +163,27 @@ a.control, input[type=submit], input.accept, th {
 
 #configs td b {
   padding-right: 8px;
-  min-width: 185px !important;
-  letter-spacing: .08em !important;
+  min-width: 185px;
+  letter-spacing: .08em;
 }
 
 #configs input[name="nofilter_dataDir"], input[name="i2cpOpts"], input[name="nofilter_commentsName"] {
-  width: calc(100% - 205px) !important;
+  width: calc(100% - 205px);
 }
 }
 
 @media screen and (max-width: 800px) {
   #torrents thead img {
-    min-height: 10px !important;
+    min-height: 10px;
   }
 }
 
 @media screen and (max-width: 1400px) {
   .iframed #torrents td.torrentName a {
-    max-width: 400px !important;
-    display: inline-block; !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
+    max-width: 400px;
+    display: inline-block;;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }

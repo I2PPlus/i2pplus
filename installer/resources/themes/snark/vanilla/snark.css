@@ -43,6 +43,9 @@ th a:hover, th a:visited:hover, th a:focus, th a:visited:focus, td a:hover, td a
 a:active, a:visited:active, th a:active, th a:visited:active, td a:active, td a:visited:active {color: #f00}
 .toggleview, .configTitle, #navbar, img, input[type=submit], .optbox[type=radio], .optbox[type=checkbox], label, th img, #createSection, #closelog, #pagenavbottom {user-select: none}
 #navbar, #screenlog, #addSection, #createSection, .configPanel {contain: content}
+.left {text-align: left}
+.center {text-align: center}
+.right {text-align: right}
 
 /* top nav */
 #navbar {margin: -11px 0 10px 0; padding: 12px 10px 11px; position: sticky; top: -2px; z-index: 999; width: 70%; border: var(--border); border-radius: 0 0 2px 2px; box-shadow: var(--highlight), 0 0 0 1px rgba(111,96,90,.3); background: linear-gradient(180deg,#efefef 50%, #cfc7c2 53%); text-align: center; transition: ease width .5s .5s}
@@ -290,18 +293,6 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
 .snarkNewTorrent {font-size: 9pt}
 .snarkAddInfo {margin-top: 7px; padding-left: 20px; min-height: 16px; display: inline-block; background: url(images/details.svg) no-repeat left center / 14px}
 .snarkAddInfo code {font-size: 9pt}
-#trackerselect {margin: 10px 0 5px 0; width: calc(100% - 202px); border: var(--border_hard); margin-left: 5px; border-collapse: separate; border-spacing: 0; border-radius: 2px; box-shadow: 0 0 2px 1px rgba(77, 69, 62, .3)}
-#trackerselect tr:first-child td {padding-top: 7px; padding-bottom: 7px; font-weight: 700}
-#trackerselect td {white-space: nowrap; text-align: center}
-#trackerselect tr:nth-child(n+2) td {border-right: var(--border_hard); border-right: 1px solid rgba(111, 83, 62, .5)}
-#trackerselect tr:nth-child(n+2) td:last-child {border-right: none}
-#trackerselect td:first-child, #trackerselect td:last-child {width: 30%}
-#trackerselect td:nth-child(2), #trackerselect td:nth-child(3) {min-width: 60px; max-width: 200px}
-.trackerconfig tr:first-child {font-weight: 700}
-#trackerselect tr:first-child td {background: var(--th); border-bottom: var(--border_hard)}
-#trackerselect tr:nth-child(n+2):hover td {background: #f9efcf}
-#trackerselect td:first-child, #trackerselect td:last-child {width: 20%; font-weight: 400}
-#trackerselect .optbox[type=radio], #trackerselect .optbox[type=checkbox] {margin: 4px}
 input[type=submit], .trackerconfig input[type=submit], input[name="savepri"], select[name="theme"] {text-transform: capitalize}
 
 /* panel titles */
@@ -402,6 +393,19 @@ a:hover img, a:focus img {filter: drop-shadow(0 0 1px #df0067); mix-blend-mode: 
 #addSection table, #createSection table, .configPanel table {border: none}
 #addSection td:first-child, #createSection td:first-child {width: 120px; text-align: right; font-weight: 700}
 #createSection td:nth-child(n+2), #addSection td:nth-child(n+2) {text-align: left}
+#createSection #trackerselect th, #createSection #trackerselect td {text-align: center}
+#createSection #trackerselect {margin: 10px 0 5px 0; width: calc(100% - 202px); border: var(--border_hard); margin-left: 5px; border-collapse: separate; border-spacing: 0; border-radius: 2px; box-shadow: 0 0 2px 1px rgba(77, 69, 62, .3)}
+#trackerselect tr:first-child td {padding-top: 7px; padding-bottom: 7px; font-weight: 700}
+#trackerselect td {white-space: nowrap; text-align: center}
+#trackerselect tr:nth-child(n+2) td {border-right: var(--border_hard); border-right: 1px solid rgba(111, 83, 62, .5)}
+#trackerselect tr:nth-child(n+2) td:last-child {border-right: none}
+#trackerselect td:first-child, #trackerselect td:last-child {width: 30%}
+#trackerselect td:nth-child(2), #trackerselect td:nth-child(3) {min-width: 60px; max-width: 200px}
+.trackerconfig tr:first-child {font-weight: 700}
+#trackerselect tr:first-child td {background: var(--th); border-bottom: var(--border_hard)}
+#trackerselect tr:nth-child(n+2):hover td {background: #f9efcf}
+#trackerselect td:first-child, #trackerselect td:last-child {width: 20%; font-weight: 400}
+#trackerselect .optbox[type=radio], #trackerselect .optbox[type=checkbox] {margin: 4px}
 #addSection tr:first-child td:last-child {white-space: nowrap}
 #addSection input[type=text], #createSection input[type=text] {width: calc(100% - 200px)}
 .snarkConfig tr:nth-last-child(4) td, .trackerconfig tr:nth-last-child(4) td {padding-bottom: 10px}
