@@ -173,8 +173,8 @@ th.snarkFileSize {text-align: center}
 .dirInfo .fileStatus img {margin: 0 3px}
 .fileStatus img[src*="clock"] {margin-top: 2px}
 .percentBarOuter, .uploaded {margin: 0 auto; border: var(--border_soft); box-shadow: var(--highlight), inset 0 3px 3px rgba(0,0,0,.2); background: repeating-linear-gradient(135deg, rgba(238, 238, 255,.7) 1px, rgba(238, 238, 255, .7) 5px, rgba(221, 221, 255, .7) 6px, rgba(221, 221, 255, .7) 11px); background-size: 200%; background-position: center center}
-.uploaded {padding: 1px 2px; min-width: 68px; display: inline-block; position: relative; border-left-width: 5px; background: linear-gradient(0deg,rgba(255,255,255,.3),rgba(192,192,192,.3)), repeating-linear-gradient(90deg,#f8f8ff,#f8f8ff 5%,#d2d2ff 5%,#e2e2ff 10%)}
-.active.seeding .uploaded {background: linear-gradient(0deg,rgba(255,255,255,.3),rgba(192,192,192,.3)), repeating-linear-gradient(90deg,#efe,#efe 5%,#beb 5%,#beb 10%); animation: uploading .5s linear 4s 1 reverse}
+.uploaded {padding: 1px 2px; min-width: 68px; display: inline-block; position: relative; border-left-width: 5px; background: linear-gradient(0deg,rgba(255,255,255,.3),rgba(192,192,192,.3)), repeating-linear-gradient(90deg,#f8f8ff,#f8f8ff 5%,#d2d2ff 5%,#e2e2ff 10%); background-size: 200%}
+.active.seeding .uploaded {background: linear-gradient(0deg,rgba(255,255,255,.3),rgba(192,192,192,.3)), repeating-linear-gradient(90deg,#efe,#efe 5%,#beb 5%,#beb 10%); background-size: 200%; animation: uploading .5s linear 4s 1 reverse}
 .txBarInner {height: calc(100% - 2px); display: inline-block; position: absolute; top: 1px; left: 1px; box-shadow: inset 0 3px 3px rgba(0,0,0,.2); background: linear-gradient(90deg, rgba(192,192,255,.4), rgba(160,160,255,.4))}
 .txBarInner[style="width: calc(100% - 2px)"] {box-shadow: 0 0 0 1px #fff, inset 0 2px 2px 3px rgba(255,255,255,.3); background: linear-gradient(180deg, rgba(255,255,255,.3), rgba(220,220,255,.1) 50%, rgba(0,0,16,.05) 50%, rgba(0,0,64,.1)), linear-gradient(90deg, rgba(220,220,255,.4), rgba(192,192,255,.4))}
 .active.seeding .txBarInner {background: linear-gradient(90deg, rgba(80,255,160,.6), rgba(96,255,192,.6))}
