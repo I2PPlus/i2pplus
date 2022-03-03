@@ -305,6 +305,7 @@ button.download.control:active {background: var(--download) no-repeat center cen
 p:empty + .sb_notice {margin-top: 10px}
 #sb_warning + p:empty + form {margin-top: 11px; margin-bottom: -7px}
 .sb_netstatus hr, #sidebar .sb_netstatus hr:last-child {margin: 3px 0 6px}
+#sb_shutdownStatus span {margin: 2px 0 -1px; display: inline-block; font-size: 90%; color: #57f; opacity: .7}
 
 /* sidebar stacked tables fix */
 #sb_localid + #sb_version {margin-top: 6px; margin-bottom: 5px}
