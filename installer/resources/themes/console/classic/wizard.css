@@ -1,9 +1,7 @@
 /* I2P+ Classic theme wizard specifics */
 /* Author: dr|z3d, 2022 */
 
-#wizardpage .sb #sb_logo {
-  height: 39px !important;
-}
+#wizardpage #sidebar #sb_logo {height: 44px !important}
 
 #wizardpage .yes, #wizardpage .no {
   width: 20px;
@@ -20,43 +18,51 @@
   background: var(--no) no-repeat center center;
 }
 
-#wizard #langsettings {
+#langsettings {
   margin-bottom: -1px;
   padding: 6px 8px 5px;
 }
 
-#wizard .langselect {
+#langsettings label {
+  display: inline-block;
+}
+
+.langselect {
   margin: 3px 2px 4px;
   float: none;
 }
 
-#wizard .optionsave {
+.optionsave {
   border: 1px solid var(--border);
   background: none;
 }
 
-#wizard #flags.infohelp {
+#flags.infohelp {
   margin-top: 0;
 }
 
-#wizard #bandwidth ~ p {
+#bandwidth ~ p {
   margin-top: 0;
   margin-bottom: 0;
-  border-left: 1px solid var(--border);
-  border-right: 1px solid var(--border);
+  border-left: var(--border);
+  border-right: var(--border);
 }
 
-#wizard #bandwidth + h3 + p {
+#bandwidth + h3 + p {
   margin-top: -11px;
   padding-top: 12px;
 }
 
-#wizard #bandwidth + h3 + p + p + p {
+#bandwidth + h3 + p + p + p {
   padding-bottom: 12px;
 }
 
-#wizard #bandwidth.infohelp {
+#bandwidth.infohelp {
   margin-top: 0;
+}
+
+#bandwidth ~ .wizardbuttons {
+  margin-bottom: 10px;
 }
 
 #messages + form > #bandwidth.infohelp {
