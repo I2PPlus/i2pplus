@@ -21,8 +21,8 @@
 }
 
 #wizard #langsettings {
-  margin-bottom: -1px !important;
-  padding: 6px 8px 5px !important;
+  margin-bottom: -1px;
+  padding: 6px 8px 5px;
 }
 
 #wizard .langselect {
@@ -31,7 +31,7 @@
 }
 
 #wizard .optionsave {
-  border: 1px solid var(--border) !important;
+  border: 1px solid var(--border);
   background: none;
 }
 
@@ -47,7 +47,7 @@
 }
 
 #wizard #bandwidth + h3 + p {
-  margin-top: -11px !important;
+  margin-top: -11px;
   padding-top: 12px;
 }
 
@@ -56,11 +56,11 @@
 }
 
 #wizard #bandwidth.infohelp {
-  margin-top: 0 !important;
+  margin-top: 0;
 }
 
 #messages + form > #bandwidth.infohelp {
-  margin-top: 14px !important;
+  margin-top: 14px;
 }
 
 #bandwidthTestRunning {

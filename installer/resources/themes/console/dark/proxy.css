@@ -15,12 +15,12 @@ html, body {
 }
 
 html {
-  background: var(--bg_dots) !important;
+  background: var(--bg_dots);
   background-size: 4px 100%, 100% 4px;
 }
 
 body {
-  background: none !important;
+  background: none;
 }
 
 body#proxy_error {
@@ -50,7 +50,7 @@ body::before {
 
 ::selection {
   color: #000;
-  background: rgba(220,220,0,.9) !important;
+  background: rgba(220,220,0,.9);
 }
 
 .logo, button, h3, h4 {
@@ -178,15 +178,15 @@ hr:last-child {
 }
 
 .iframed#servletError .warning, .iframed#servletError #warning2 {
-   margin: 5px !important;
+   margin: 5px;
 }
 
 .iframed#servletError .warning + #warning2 {
-  margin: -3px 4px 5px !important;
+  margin: -3px 4px 5px;
 }
 
 .iframed#servletError {
-  overflow-y: auto !important;
+  overflow-y: auto;
 }
 
 #servleterror .warning h3 {
@@ -216,7 +216,7 @@ hr:last-child {
 }
 
 #warning h3 + p {
-  margin-top: 30px !important;
+  margin-top: 30px;
 }
 
 #proxyrequest {
@@ -271,7 +271,7 @@ hr:last-child {
 }
 
 #warning hr {
-  margin: 20px 0 !important;
+  margin: 20px 0;
 }
 
 #warning_localhost {
@@ -289,7 +289,7 @@ hr:last-child {
 }
 
 #warning_localhost + .proxyfooter {
-  display: none !important;
+  display: none;
 }
 
 #warning .formaction {
@@ -342,7 +342,7 @@ hr:last-child {
 #warning h4 {
   text-align: left;
   font-size: 10pt;
-  box-shadow: none !important;
+  box-shadow: none;
 }
 
 #warning p + .formaction {
@@ -369,8 +369,8 @@ hr:last-child {
 }
 
 #proxyNewHost td {
-  padding: 8px !important;
-  font-size: 10pt !important;
+  padding: 8px;
+  font-size: 10pt;
   border: 1px solid #131;
   background: #000;
 }
@@ -395,8 +395,8 @@ hr:last-child {
 }
 
 #proxyNewAddressHelper #warning hr {
-  margin-left: -6px !important;
-  margin-right: -6px !important;
+  margin-left: -6px;
+  margin-right: -6px;
 }
 
 #proxyNewAddressHelper #warning h3 + p, #proxyNewAddressHelper #proxyNewHost {
@@ -427,8 +427,8 @@ hr:last-child {
 }
 
 .option .formaction {
-  margin: 20px -20px 0 !important;
-  padding: 12px 10px !important;
+  margin: 20px -20px 0;
+  padding: 12px 10px;
   border-top: 1px solid #252;
   background: #010;
 }
@@ -446,15 +446,15 @@ hr:last-child {
 
 @media screen and (max-width: 800px) {
   #warning {
-    margin-left: 20px !important;
-    margin-top: 140px !important;
-    padding: 5px 20px 15px !important;
-    background: repeating-linear-gradient(180deg,rgba(0,0,0,.8) 2px, rgba(0,32,0,.8) 4px), url(images/camotile2.png) !important;
-    background-size: 100% 4px, auto !important;
+    margin-left: 20px;
+    margin-top: 140px;
+    padding: 5px 20px 15px;
+    background: repeating-linear-gradient(180deg,rgba(0,0,0,.8) 2px, rgba(0,32,0,.8) 4px), url(images/camotile2.png);
+    background-size: 100% 4px, auto;
   }
   #proxyNewAddressHelper #warning {
-    margin-top: 30px !important;
-    padding-bottom: 5px !important;
+    margin-top: 30px;
+    padding-bottom: 5px;
   }
   #proxyNewAddressHelper #warning h3 + p, #proxyNewAddressHelper #proxyNewHost {
     margin-left: 0;
@@ -464,37 +464,37 @@ hr:last-child {
     width: 100%;
   }
   #proxyerror #warning {
-    margin-top: 20px !important;
+    margin-top: 20px;
   }
   #warning h3 {
-    margin: -4px -19px 10px !important;
+    margin: -4px -19px 10px;
   }
   #warning h3 + p {
-    margin-top: 15px !important;
+    margin-top: 15px;
   }
   .logo {
     margin: 0 16px;
-    width: calc(100% - 53px) !important;
+    width: calc(100% - 53px);
     min-width: 330px;
     position: absolute;
     top: 16px;
     z-index: 999;
   }
   .logo a {
-    margin-top: 10px !important;
-    padding: 2px 5px !important;
-    width: auto !important;
+    margin-top: 10px;
+    padding: 2px 5px;
+    width: auto;
   }
   .logo a img {
     margin-bottom: -4px;
     margin-top: -2px;
-    padding: 0 !important;
+    padding: 0;
   }
   .logo a:nth-child(n+2) {
-    border: none !important;
+    border: none;
   }
   #jumplinks {
-    margin-bottom: 0 !important;
+    margin-bottom: 0;
   }
 }
 
@@ -513,7 +513,7 @@ hr:last-child {
   }
   .proxyfooter p {
     margin: 5px 0;
-    line-height: 130% !important;
+    line-height: 130%;
     text-align: right;
   }
   #warning {

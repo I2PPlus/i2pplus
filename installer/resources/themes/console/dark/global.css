@@ -124,7 +124,7 @@ input, button, textarea, select, a {
 ::selection {
   color: #000;
   text-shadow: none;
-  background: rgba(0,187,0,.8) !important;
+  background: rgba(0,187,0,.8);
 }
 
 :-moz-broken {
@@ -246,7 +246,7 @@ input[type=submit]:hover, input[type=reset]:hover,
 input[type=submit]:focus, input[type=reset]:focus,
 button:hover, button:focus, .control:hover, .control:focus,
 .fakebutton:hover, .fakebutton:focus {
-  color: var(--hover) !important;
+  color: var(--hover);
   border: 1px solid var(--hover);
   box-shadow: var(--btn_shadow_hover);
   background: var(--btn_hover_radial);
@@ -255,7 +255,7 @@ button:hover, button:focus, .control:hover, .control:focus,
 
 input[type=submit]:active, input[type=reset]:active,
 button:active, .control:active, .fakebutton:active {
-  color: var(--ink) !important;
+  color: var(--ink);
   text-shadow: none;
   border: 1px solid var(--hover);
   box-shadow: var(--btn_shadow_active);
@@ -274,7 +274,7 @@ input[type=file] {
 }
 
 input[type=file]:hover {
-  border-radius: 0 15px 15px 0 !important;
+  border-radius: 0 15px 15px 0;
   background: linear-gradient(90deg, rgba(0,0,0,0), #000);
 }
 
@@ -334,7 +334,7 @@ input[type=text], input[type=password] {
 
 input[type=text]:disabled, input[type=text]:disabled:active,
 input[readonly="readonly"] {
-  color: #161 !important;
+  color: #161;
   border: 1px solid #141;
   background: #000;
 }
@@ -433,7 +433,7 @@ select::-moz-focus-inner {
   position: relative;
   width: 20px;
   height: 20px;
-  min-width: 0 !important;
+  min-width: 0;
   display: inline-block;
   vertical-align: middle;
   box-sizing: border-box;
@@ -468,7 +468,7 @@ select::-moz-focus-inner {
 
 .optbox:checked:active {
   box-shadow: 0 0 1px 1px rgba(0,0,0,.9), 0 0 0 2px rgba(255,0,0,.8), inset 0 0 0 1px #020;
-  background: linear-gradient(0deg,#900,#f00) !important;
+  background: linear-gradient(0deg,#900,#f00);
 }
 
 .optbox::before {

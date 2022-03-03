@@ -5,8 +5,8 @@
 
 #sidebar button[type="submit"], #sidebar button[type="reset"] {
   margin: 5px;
-  padding: 12px !important;
-  min-width: 45% !important;
+  padding: 12px;
+  min-width: 45%;
 }
 
 #sidebar h3 a {
@@ -26,7 +26,7 @@
 }
 
 #sidebar table, table[id^="sb_"], #sidebar #sb_services, #sidebar #sb_internals, #sidebar #sb_advanced, #sidebar #sb_help {
-  width: calc(100% - 3px) !important;
+  width: calc(100% - 3px);
   margin: -7px -8px -7px 2px;
 }
 
