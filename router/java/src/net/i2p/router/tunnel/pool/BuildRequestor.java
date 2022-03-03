@@ -79,7 +79,7 @@ abstract class BuildRequestor {
 
     /** some randomization is added on to this */
 //    private static final int BUILD_MSG_TIMEOUT = 60*1000;
-    private static final int BUILD_MSG_TIMEOUT = 15*1000;
+    private static final int BUILD_MSG_TIMEOUT = 40*1000;
 
 //    private static final int MAX_CONSECUTIVE_CLIENT_BUILD_FAILS = 6;
     private static final int MAX_CONSECUTIVE_CLIENT_BUILD_FAILS = 5;
@@ -294,7 +294,8 @@ abstract class BuildRequestor {
             // send it directly to the first hop
             // Add some fuzz to the TBM expiration to make it harder to guess how many hops
             // or placement in the tunnel
-            msg.setMessageExpiration(ctx.clock().now() + BUILD_MSG_TIMEOUT + ctx.random().nextLong(20*1000));
+//            msg.setMessageExpiration(ctx.clock().now() + BUILD_MSG_TIMEOUT + ctx.random().nextLong(20*1000));
+            msg.setMessageExpiration(ctx.clock().now() + BUILD_MSG_TIMEOUT + ctx.random().nextLong(20*1000) + ctx.random().nextLong(20*1000));
             // We set the OutNetMessage expiration much shorter, so that the
             // TunnelBuildFirstHopFailJob fires before the 13s build expiration.
             RouterInfo peer = ctx.netDb().lookupRouterInfoLocally(cfg.getPeer(1));
