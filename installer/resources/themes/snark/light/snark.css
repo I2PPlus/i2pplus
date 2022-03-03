@@ -600,7 +600,7 @@ td.trackerLink img {height: 16px}
 .peerinfo.active .percentBarOuter {animation: downloadbar 1s 3s linear forwards reverse}
 #torrents tr.active:hover td, #torrents tr.downloading.active:hover td, #torrents tr.active:hover td.torrentETA, #torrents tr.active:hover td.torrentUploaded {background-color: transparent}
 .snarktTorrentPeerCount, .snarkTorrentPeers, .peerdata, .peerinfo td:nth-child(2), .debuginfo td:nth-child(2) {white-space: nowrap; padding-left: 0}
-td.trackerLink {padding-left: 6px; padding-right: 6px}
+td.trackerLink {padding-left: 5px; padding-right: 1px}
 
 /* pagenav */
 .pagenavcontrols, .pagenavcontrols::before, #pagecount {display: inline-block; vertical-align: middle}
@@ -896,6 +896,7 @@ th.torrentETA, th.torrentDownloaded, th.torrentUploaded, th.RateDown, th.RateUp,
 .debuginfo td {padding-top: 4px; padding-bottom: 4px; word-spacing: 0; font-size: 10pt}
 .torrentInfo .infohash {padding: 4px 4px 5px 20px; background: #f8f8ff var(--hash) no-repeat 4px center / 14px}
 #ourDest {margin: -1px 0 0 3px}
+td.trackerLink img {height: 18px}
 td.torrentDetails img, .dirInfo td:first-child img:not(.thumb) {width: 22px; height: 22px; max-width: 22px; max-height: 22px}
 .torrentDetails img[src$="rateme.svg"] {margin-top: -1px; margin-right: -1px; width: 11px; height: 11px}
 .torrentDownloaded, .torrentUploaded, .RateDown, .RateUp {min-width: 76px}
