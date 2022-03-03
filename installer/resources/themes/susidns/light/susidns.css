@@ -52,7 +52,7 @@ h3, h4, th, #filter span, #paginate #current {color: #5b5b71}
 h3 {font-size: 11pt; box-shadow: var(--highlight)}
 .headline h3 {font-size: 11.5pt; background: #fcfcff var(--addressbook) no-repeat 7px calc(50% + 2px) / 20px}
 .headline#subscriptions h3 {background: #fcfcff var(--subscription) no-repeat 6px center / 18px}
-#subscriptions a {float: right}
+#subscriptions a {margin: 2px 2px 0 0; float: right; font-size: 80%}
 .headline#configure h3 {background: #fcfcff var(--config) no-repeat 7px calc(50% + 1px) / 18px}
 .headline#subscriptions h3, .headline#configure h3, .headline#addressbook h3, .headline h3 {margin: -8px -5px -6px; padding: 9px 5px 8px 30px}
 #dtls .headline h3 {margin-bottom: 3px}
@@ -130,12 +130,12 @@ svg {opacity: .9}
 #bk.iframed #published.page {padding-bottom: 3px}
 input[type=text], input[type=password], textarea {padding: 5px; font-family: var(--bodyfont); color: #4f4f63; border: var(--border_input); border-radius: 2px; box-shadow: var(--highlight), inset 3px 3px 3px rgba(0,0,48,.2); background: #fbfbff; filter: drop-shadow(0 0 1px rgba(220,220,255,.7))}
 input[type=text]:focus, input[type=password]:focus, textarea:focus {color: var(--ink_darker); border: 1px solid #676c7f; box-shadow: 0 0 1px #89f; background: #fff}
-textarea, #subslog pre {padding: 1px 3px; width: 100%; font-family: var(--monospaced); font-size: 9pt; color: #4f4f63; border-radius: 2px; border: var(--border_input); resize: none; scrollbar-color: #a7a7be rgba(255,255,255,.4); will-change: transform}
+textarea, #subsLog pre {padding: 1px 3px; width: 100%; font-family: var(--monospaced); font-size: 9pt; color: #4f4f63; border-radius: 2px; border: var(--border_input); resize: none; scrollbar-color: #a7a7be rgba(255,255,255,.4); will-change: transform}
 #content textarea, #host_details textarea{margin: 0 0 0 -15px; width: 100%; border: none; box-shadow: none; resize: none; filter: none}
 .iframed #content textarea {margin: 0; border: 1px solid #8d8daa}
-textarea[name="config"], textarea[name="content"], #subslog pre {padding: 3px 6px; width: 100%; border: 1px solid #8d8daa; border-radius: 0; box-shadow: none; background: #fafaff; filter: none}
-#subslog pre {margin: 0 0 -5px; padding-left: 10px; width: calc(100% - 18px); line-height: 15px; white-space: pre-wrap; box-shadow: inset 0 0 0 1px #fafaff; background: url(/themes/snark/ubergine/images/hat.png) right 10px bottom -8px no-repeat, linear-gradient(90deg, #7e7fb9, #ccf 1px, #ccf 6px, #fafaff 6px); background-size: auto 160px, 100%}
-#subslog.iframed pre {margin-bottom: 10px}
+textarea[name="config"], textarea[name="content"], #subsLog pre {margin: auto; padding: 3px 6px; width: 100%; border: 1px solid #8d8daa; border-radius: 0; box-shadow: none; background: #fafaff; filter: none}
+#subsLog pre {margin: 0 0 -5px; padding-left: 10px; width: calc(100% - 18px); line-height: 15px; white-space: pre-wrap; box-shadow: inset 0 0 0 1px #fafaff; background: url(/themes/snark/ubergine/images/hat.png) right 10px bottom -8px no-repeat, linear-gradient(90deg, #7e7fb9, #ccf 1px, #ccf 6px, #fafaff 6px); background-size: auto 160px, 100%}
+#subsLog.iframed pre {margin-bottom: 10px}
 textarea[name="config"]:focus, textarea[name="content"]:focus {background: #fff}
 textarea[name="destination"] {width: calc(100% + 10px)}
 #config + #buttons {margin: -2px 0 10px; border: 1px solid #8d8daa; background: linear-gradient(180deg,#fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px), #fff}
@@ -316,7 +316,7 @@ input.search[type=submit] {padding: 6px 5px}
 }
 
 @media screen and (max-width: 680px) {#navi {padding: 5px 3px}
-#navi a.abook, #navi a#configlink, #navi a#overview, #navi a#subs {padding: 3px 5px; background: var(--nav) #fff}
+#navi a.abook, #navi a#configlink, #navi a#overview, #navi a#subs, #navi a.abook:hover, #navi a#configlink:hover, #navi a#overview:hover, #navi a#subs:hover, #navi a.abook:focus, #navi a#configlink:focus, #navi a#overview:focus, #navi a#subs:focus {padding: 3px 10px; min-width: 50px; background: var(--nav) #fff}
 #visualid img[src^="/imagegen"] {width: 228px; height: 228px}
 }
 
