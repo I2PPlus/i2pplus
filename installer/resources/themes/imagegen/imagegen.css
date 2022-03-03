@@ -6,23 +6,27 @@
 --dropdown: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m5.29 17.93 26.71 28.14 26.71-28.14' fill='none' stroke='%235e626e' stroke-linecap='round' stroke-linejoin='round' stroke-width='10'/%3E%3C/svg%3E");
 --dropdown_hover: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m5.29 17.93 26.71 28.14 26.71-28.14' fill='none' stroke='%2341444d' stroke-linecap='round' stroke-linejoin='round' stroke-width='10'/%3E%3C/svg%3E");
 --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
+--highlight: inset 0 0 0 1px #fff;
+--th: linear-gradient(90deg, #efefff,#fff 10%,#fff 90%,#efefff);
+--btn: linear-gradient(180deg,#fff,#f2f2ff);
+--btn_hover: linear-gradient(180deg,#ddd, #fff);
 }
 
 html {padding: 10px; border-right: 1px solid #99c; background: #ddddef url(/themes/console/classic/images/bg0.png); background: linear-gradient(180deg,rgba(255,255,255,.4), rgba(255,255,255,.2)), url(/themes/console/classic/images/bg0.png) left top / 120px, #ddddef; scrollbar-color: #779 #dde}
-body {padding: 10px 20px; min-width: 660px; max-width: 1200px; font: 10pt/130% var(--bodyfont); color: #4f4f63; border-radius: 1px; box-shadow: inset 0 0 0 1px #fff, 0 0 0 1px #99c, 0 0 2px 2px rgba(0,0,0,.05); background: rgba(230,230,240,.4)}
+body {padding: 10px 20px; min-width: 660px; max-width: 1200px; font: 10pt/130% var(--bodyfont); color: #4f4f63; border-radius: 1px; box-shadow: var(--highlight), 0 0 0 1px #99c, 0 0 2px 2px rgba(0,0,0,.05); background: rgba(230,230,240,.4)}
 input, button, textarea, select, a {outline: none}
-h1 {padding: 8px 10px; font-size: 14pt; border: 1px solid #77789f; border-radius: 2px; background: #fff}
-h2 {padding: 5px 10px; font-size: 11pt; border: 1px solid #77789f; border-radius: 2px; background: #fff}
-h1, h2 {margin-bottom: 10px; letter-spacing: .08em; word-spacing: .1em; text-transform: uppercase; text-shadow: 1px 1px 1px #fff; box-shadow: inset 0 0 0 1px #fff, 0 0 1px #ccc; background: linear-gradient(180deg,#fff 50%, #eef 50%)}
+h1, h2 {margin-bottom: 10px; letter-spacing: .08em; word-spacing: .1em; text-transform: uppercase; text-shadow: 1px 1px 1px #fff;  border: 1px solid #77789f; border-radius: 2px; box-shadow: var(--highlight), 0 0 1px #ccc; background: linear-gradient(180deg,#fff 50%,#eef 50%)}
+h1 {padding: 8px 10px; font-size: 14pt}
+h2 {padding: 5px 10px; font-size: 11pt}
 p {margin: 20px; line-height: 130%; text-align: justify; font-size: 105%}
 a:link, a:visited {color: #338; text-decoration: none; outline: none}
 a:hover, a:focus {color: #f60}
 a:active {color: #f90; text-decoration: underline}
 .reference {padding-right: 14px; background: url(/themes/console/classic/images/newtab.png) no-repeat top 2px right / 12px 10px}
-img {margin: 5px; padding: 1px; border: 1px solid #77789f; border-radius: 2px; box-shadow: inset 0 0 0 1px #fff, 0 0 1px #ccc; background: #fff; animation: fade-in ease 1s}
+img {margin: 5px; padding: 1px; border: 1px solid #77789f; border-radius: 2px; box-shadow: var(--highlight), 0 0 1px #ccc; background: #fff; animation: fade-in ease 1s}
 table {margin: 0 auto; border-collapse: separate; border-spacing: 10px}
-th {height: 16px; text-align: center; font-weight: 400; border: 1px solid #77789f; border-radius: 2px; box-shadow: inset 0 0 0 1px #fff, 0 0 1px #ccc; background: #fff}
-th.title {padding: 5px; white-space: nowrap; font-size: 11pt; font-weight: 700; background: linear-gradient(90deg, #efefff, #fff 10%, #fff 90%, #efefff)}
+th {height: 16px; text-align: center; font-weight: 400; border: 1px solid #77789f; border-radius: 2px; box-shadow: var(--highlight), 0 0 1px #ccc; background: #fff}
+th.title {padding: 5px; white-space: nowrap; font-size: 11pt; font-weight: 700; background: var(--th)}
 td {padding: 0 5px; text-align: center; vertical-align: top}
 hr {margin-top: 10px; height: 1px; border: none; border-bottom: 1px solid #fff; background: #7e7fb9}
 iframe {margin: 5px; width: 358px; height: 358px; overflow: hidden; border: none; border-radius: 1px; box-shadow: 0 0 0 1px #77789f, 0 0 1px 1px #aaa; background: #fff; animation: fade-in-iframe ease 1s}
@@ -31,23 +35,23 @@ iframe {margin: 5px; width: 358px; height: 358px; overflow: hidden; border: none
 #nav {text-align: right}
 form {margin: 15px auto 0; padding-top: 0; min-width: 640px; border-top: 1px solid #8d8daa}
 form > * {vertical-align: middle}
-.formtitle {margin: -1px auto 10px; padding: 4px 5px; width: 400px; word-spacing: .1em; letter-spacing: .2em; text-transform: uppercase; font-size: 11pt; font-weight: 700; border: 1px solid #8d8daa; border-radius: 0 0 2px 2px; box-shadow: inset 0 0 0 1px #fff, 0 1px 1px #dde; background: #fff; background: linear-gradient(90deg, #efefff, #fff 10%, #fff 90%, #efefff); text-rendering: optimizeLegibility}
+.formtitle {margin: -1px auto 10px; padding: 4px 5px; width: 400px; word-spacing: .1em; letter-spacing: .2em; text-transform: uppercase; font-size: 11pt; font-weight: 700; border: 1px solid #8d8daa; border-radius: 0 0 2px 2px; box-shadow: var(--highlight), 0 1px 1px #dde; background: #fff; background: var(--th); text-rendering: optimizeLegibility}
 input, button, select {margin: 5px 3px; font: 10pt/130% var(--bodyfont)}
-button, select {box-shadow: inset 0 0 0 1px #fff, 0 0 1px #aaa; cursor: pointer}
+button, select {box-shadow: var(--highlight), 0 0 1px #aaa; cursor: pointer}
 button::-moz-focus-inner {border: none; outline: none}
-button {padding: 4.5px 8px; display: inline-block; color: #333; border: 1px solid #99b; border-radius: 2px; box-shadow: inset 0 0 0 1px #fff; background: #fff; background: linear-gradient(180deg,#fff, #f2f2ff)}
+button {padding: 4.5px 8px; display: inline-block; color: #333; border: 1px solid #99b; border-radius: 2px; box-shadow: var(--highlight); background: #fff; background: var(--btn)}
 button > * {vertical-align: middle}
-button:hover, button:focus {color: #111; border: 1px solid #89f; background: linear-gradient(180deg,#ddd, #fff); filter: drop-shadow(0 0 1px #89f)}
-button:active {color: #333; border: 1px solid #999; box-shadow: inset 3px 3px 3px #555; box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 3px #555}
+button:hover, button:focus {color: #111; border: 1px solid #89f; background: var(--btn_hover); filter: drop-shadow(0 0 1px #89f)}
+button:active {color: #333; border: 1px solid #999; box-shadow: inset 3px 3px 3px #555; box-shadow: var(--highlight), inset 3px 3px 3px #555}
 input[type=text] {padding: 4px 5px; color: #444; border: 1px solid #99b; border-radius: 2px; box-shadow: inset 3px 3px 3px #ddd; background: #fff}
 input[type=text]:focus {color: #222; border: 1px solid #999; box-shadow: none; filter: drop-shadow(0 0 1px #89f)}
 input[type=text]::placeholder {font-size: 95%; font-style: italic}
 input[type=text]:focus::placeholder {opacity: 0}
-select {padding: 4px 24px 4px 4px; vertical-align: middle; text-overflow: ellipsis; color: #333; border: 1px solid #99b; border-radius: 2px; box-shadow: 0 0 0 1px #fff inset, 0 0 1px 0 #ddd; background: var(--dropdown) no-repeat right 8px center / 10px, linear-gradient(180deg,#fff, #f2f2ff); appearance: none}
+select {padding: 4px 24px 4px 4px; vertical-align: middle; text-overflow: ellipsis; color: #333; border: 1px solid #99b; border-radius: 2px; box-shadow: var(--highlight), 0 0 1px 0 #ddd; background: var(--dropdown) no-repeat right 8px center / 10px, var(--btn); appearance: none}
 select option {background: #fff}
 select:focus, select:active {color: #111; border: 1px solid #89f; outline: none}
-select:hover, select:active {background: var(--dropdown_hover) no-repeat right 8px center / 10px, linear-gradient(180deg,#ddd 0%, #fff 100%)}
-select:focus {box-shadow: 0 0 0 1px #89f; background: var(--dropdown_hover) no-repeat right 8px center / 10px, linear-gradient(180deg,#ddd 0%, #fff 100%)}
+select:hover, select:active {background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover)}
+select:focus {box-shadow: 0 0 0 1px #89f; background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover)}
 
 @keyframes fade-in {from {filter: opacity(0); transform: scale(0)} to {filter: opacity(1); transform: scale(1)}}
 @keyframes fade-in-iframe {from {filter: opacity(0); transform: scale(0)} to {filter: opacity(1); transform: scale(1)}}
