@@ -79,7 +79,7 @@ body::before {
 .logo a:nth-child(n+2):active {
   color: #f60;
   border-radius: 4px;
-  box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 3px #999 !important;
+  box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 3px #999;
 }
 
 .logo a:hover {
@@ -116,15 +116,15 @@ body::before {
 }
 
 .warning a:link, .warning a:visited {
-  color: #f60 !important;
+  color: #f60;
 }
 
 .warning a:hover, .warning a:focus, .warning a:visited:focus {
-  color: #d30 !important;
+  color: #d30;
 }
 
 .warning a:active {
-  color: #900 !important;
+  color: #900;
 }
 
 .warning hr {
@@ -160,7 +160,7 @@ body::before {
   border-top: 1px solid #fb7;
   border-bottom: 1px solid #fb7;
   padding-bottom: 10px;
-  background: #ffe !important;
+  background: #ffe;
   padding-left: 15px;
   font-size: 10.5pt;
   margin-top: 20px;
@@ -175,7 +175,7 @@ body::before {
   border: none;
   border-bottom: 1px solid #fb7;
   word-spacing: .1em;
-  background: #ffe var(--err) no-repeat 8px center / auto 60% !important;
+  background: #ffe var(--err) no-repeat 8px center / auto 60%;
 }
 
 .warning p {
@@ -191,7 +191,7 @@ body::before {
   resize: none;
   white-space: pre-wrap;
   word-break: break-all;
-  height: 100% !important;
+  height: 100%;
   font-size: 8pt;
   border: none;
 }
@@ -211,7 +211,7 @@ table {
 }
 
 .warning tr {
-  background: #ffe !important;
+  background: #ffe;
   border: 1px solid #fb7;
 }
 
@@ -230,7 +230,7 @@ table {
 }
 
 #proxyNewAddressHelper .warning {
-  padding-bottom: 0 !important;
+  padding-bottom: 0;
 }
 
 #proxyNewHost {
@@ -238,7 +238,7 @@ table {
 }
 
 #proxyNewHost td {
-  padding: 8px !important;
+  padding: 8px;
 }
 
 #proxyNewHost td:first-child {
@@ -270,7 +270,7 @@ table {
 }
 
 .warning h4 {
-  box-shadow: none !important;
+  box-shadow: none;
   text-align: left;
   font-size: 10pt;
   margin: 0 -18px -5px;
@@ -357,7 +357,7 @@ button[type=submit]:active {
 }
 
 .sorry p {
-  padding: 0 !important;
+  padding: 0;
 }
 
 #warning2 {
@@ -394,21 +394,21 @@ button[type=submit]:active {
   .logo {
     float: none;
     position: absolute;
-    top: 10px !important;
-    margin: 0 5px !important;
+    top: 10px;
+    margin: 0 5px;
     display: block;
-    background-size: 200px auto !important;
+    background-size: 200px auto;
     min-width: 530px;
     width: calc(100% - 36px);
   }
 
   .warning {
-    margin: 140px 5px 0 !important;
+    margin: 140px 5px 0;
   }
 
   #proxyerror .warning {
-    margin-top: 10px !important;
-    padding-bottom: 10px !important;
+    margin-top: 10px;
+    padding-bottom: 10px;
   }
 
   .warning h3:first-child {
@@ -424,11 +424,11 @@ button[type=submit]:active {
 
 @media screen and (min-width: 1500px) {
   body, p, td, button, input, select {
-    font-size: 10pt !important;
+    font-size: 10pt;
   }
 
   #warning {
-    margin-left: 252px !important;
+    margin-left: 252px;
   }
   #error500 .sb img[src$="i2plogo.png"] {
     margin: -2px 0 -5px -2px;
@@ -440,7 +440,7 @@ button[type=submit]:active {
   }
 
   #error500 .sorry {
-    margin-left: 252px !important;
+    margin-left: 252px;
   }
 
   #servletError #warning2.sorry, #servletError #warning.warning {
@@ -448,10 +448,10 @@ button[type=submit]:active {
   }
 
   #servletError #warning.warning {
-    margin-bottom: 15px !important;
+    margin-bottom: 15px;
   }
 
   #servletError.iframed #warning.warning {
-    margin: 0 0 5px !important;
+    margin: 0 0 5px;
   }
 }

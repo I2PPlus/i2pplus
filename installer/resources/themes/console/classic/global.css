@@ -57,7 +57,7 @@
   --ink_hover: #104e99;
   --ink_light: #5e626e;
   --label_focus: linear-gradient(90deg, var(--bg3), var(--bg), var(--bg3));
-  --ls_target: 1px solid #5a5 !important;
+  --ls_target: 1px solid #5a5;
   --note: #1f7096;
   --membarinner_mobile: linear-gradient(90deg, rgba(0,255,0,.1) 65px, rgba(255,255,0,.1) 110px, rgba(255,128,0,.1) 175px, rgba(255,0,0,.1)), linear-gradient(180deg, rgba(255, 255, 255, .9), rgba(240, 240, 250,.7) 50%, rgba(220, 220, 255, .7) 50%, rgba(140, 140, 220, .9)); box-shadow: var(--highlight);
   --monospaced: Droid Sans Mono, Andale Mono, DejaVu Sans Mono, Lucida Console, monospace;
@@ -77,7 +77,7 @@
 
 html, body {
   min-height: 100%;
-  box-shadow: none !important;
+  box-shadow: none;
 }
 
 html {
@@ -93,7 +93,7 @@ body {
 body.iframed {
   margin: 0;
   overflow: hidden; /* webkit fix */
-  background: none !important;
+  background: none;
 }
 
 ::selection {
@@ -219,7 +219,7 @@ select {
 }
 
 @supports not (-moz-appearance: none) {
-  select {padding: 5px 20px 5px 8px !important}
+  select {padding: 5px 20px 5px 8px}
 }
 
 select:hover, select:active, select:focus {
@@ -230,8 +230,8 @@ select:hover, select:active, select:focus {
 }
 
 select:focus {
-  background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover) !important;
-  outline: none !important;
+  background: var(--dropdown_hover) no-repeat right 8px center / 10px, var(--btn_hover);
+  outline: none;
 }
 
 select option {
@@ -364,21 +364,21 @@ input[type=radio]:checked::before {
 }
 
 .optbox:not([disabled]):hover, .optbox:not([disabled]):focus {
-  border: 1px solid var(--hover) !important;
+  border: 1px solid var(--hover);
   background: var(--bg);
 }
 
 .optbox[disabled], .optbox:hover[disabled],
 .optbox:focus[disabled], .optbox:active[disabled], label:hover > .optbox[disabled] {
-  border: var(--border) !important;
+  border: var(--border);
   opacity: .5;
   pointer-events: none;
 }
 
 /* sliders */
 .optbox.slider[type=checkbox], .optbox.slider, .optbox.slider:hover, .optbox.slider:focus {
-  width: 40px !important;
-  height: 21px !important;
+  width: 40px;
+  height: 21px;
   border-radius: 1px;
   position: relative;
   box-shadow: inset 0 0 0 1px #f2f2ff, inset 3px 3px 3px rgba(0,0,0,.2);
@@ -389,15 +389,15 @@ input[type=radio]:checked::before {
 }
 
 .optbox.slider:checked {
-  background: linear-gradient(180deg,#393, #4a4) !important;
+  background: linear-gradient(180deg,#393, #4a4);
 }
 
 .optbox.slider:not(:checked):active {
-  background: linear-gradient(180deg,#393, #4a4) !important;
+  background: linear-gradient(180deg,#393, #4a4);
 }
 
 .optbox.slider:checked:active {
-  background: linear-gradient(180deg,#cf0f00, #f00) !important;
+  background: linear-gradient(180deg,#cf0f00, #f00);
 }
 
 .optbox.slider:hover, ..optbox.slider {
@@ -423,7 +423,7 @@ input[type=radio]:checked::before {
 }
 
 .optbox.slider:checked::before {
-  left: 18px !important;
+  left: 18px;
 }
 
 .optbox[disabled] {

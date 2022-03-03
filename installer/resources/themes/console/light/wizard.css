@@ -3,7 +3,7 @@
 
 #wizardpage #sidebar div[style="height: 36px"] {
   margin-top: 4px;
-  margin-bottom: 13px !important;
+  margin-bottom: 13px;
 }
 
 #wizardpage #sidebar div {
@@ -11,7 +11,7 @@
 }
 
 #wizardpage #sidebar div + hr, #wizardpage #sidebar h3 + hr {
-  display: none !important;
+  display: none;
 }
 
 #wizardpage #sidebar h3 {
@@ -63,7 +63,7 @@
 }
 
 #wizardpage .wizardbuttons {
-  margin-bottom: -8px !important;
+  margin-bottom: -8px;
 }
 
 #bandwidthTestRunning {

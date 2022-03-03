@@ -360,7 +360,7 @@ hr {
 }
 
 .sorry hr, .sorry hr:last-child {
-  margin: 10px 0 !important;
+  margin: 10px 0;
   height: 1px;
   color: #558;
   background: linear-gradient(90deg, #558, #77a);
@@ -381,12 +381,12 @@ hr {
 }
 
 #servletError #warning2 {
-  margin: -32px 12px 15px 232px !important;
-  text-align: left !important;
+  margin: -32px 12px 15px 232px;
+  text-align: left;
 }
 
 .iframed#servletError #warning2 {
-  margin: -6px 10px 15px !important;
+  margin: -6px 10px 15px;
 }
 
 #warning2 h3 {
@@ -399,7 +399,7 @@ hr {
 }
 
 #warning2 p + h3 {
-  margin-top: -10px !important;
+  margin-top: -10px;
 }
 
 #warning2 b {
@@ -446,7 +446,7 @@ hr {
 }
 
 #error500 #sidebar hr ~ a {
-  padding: 5px 0 !important;
+  padding: 5px 0;
   display: inline-block;
   font-size: 9.5pt;
 }
