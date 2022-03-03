@@ -1,151 +1,31 @@
 @media screen and (min-width: 0) and (max-width: 4000px) {
-input, button, textarea, select, a {
-  font-weight: 400;
-  font-family: "Noto Sans", "Droid Sans", "Roboto Sans", Ubuntu, "Segoe UI", "Lucida Grande", Helvetica, Arial, Verdana, sans-serif;
-  line-height: 120%;
-}
-
-.snarkNav:link, .iframed .snarkNav:link {
-  font-weight: 700;
-  padding-bottom: 5px;
-}
-
-.iframed .snarkNav:link {
-  font-weight: 700;
-  padding-top: 3px;
-}
-
-#screenlog li::before {
-  width: 15px;
-  background-size: 11px 11px;
-}
-
-#screenlog li, .iframed #screenlog li {
-  font-weight: 400;
-}
-
-input[type], select, select option, td, td a, #screenlog li, #screenlog li a, textarea, input.r, input[name="nofilter_dataDir"],
-.configPanel, .configPanel td, .snarkNewTorrent, .snarkNewTorrent td, #configs td, .trackerconfig td {
-  font-size: 10.5pt;
-}
-
-.snarkAddInfo, .snarkAddInfo code {
-  font-size: 10.5pt;
-}
-
-th.torrentDownloaded, th.torrentUploaded, th.RateDown, th.RateUp,
-td.torrentDownloaded, td.torrentUploaded, td.RateDown, td.RateUp, .torrentName a:link,
-th#pagenav {
-  font-size: 10pt;
-}
-
-th.torrentDownloaded, th.torrentUploaded, th.RateDown, th.RateUp {
-  font-weight: 700;
-}
-
-input[type], select, a.control {
-  line-height: 130%;
-}
-
-select {
-  padding-top: 1px;
-  padding-bottom: 1px;
-}
-
-a.control, input[type=submit], input.accept {
-  padding-top: 2px;
-  padding-bottom: 2px;
-  text-transform: uppercase;
-  letter-spacing: .05em;
-}
-
-a.control, input[type=submit], input.accept, th, #trackerselect tr:first-child td {
-  font-weight: 400;
-  font-size: 12pt;
-}
-
-.configPanel .configTitle, .configPanel .configTitle:hover, .configPanel .configTitle:active {
-  padding-top: 4px;
-  padding-bottom: 2px;
-  font-size: 14pt;
-  text-transform: uppercase;
-  font-variant: normal;
-}
-
-#configSection .configTitle a img {
-  margin-left: 6px;
-}
-
-.configPanel .configTitle img {
-  margin-top: -4px;
-  margin-bottom: 0;
-  display: inline-block;
-  height: 20px;
-  width: 20px;
-  mix-blend-mode: hard-light;
-}
-
-.torrentInfo th, .dirInfo th, #totals, #commentInfo th, #configs th {
-  font-size: 11pt;
-  font-weight: 400;
-}
-
-#torrents tt {
-  font-size: 9.5pt;
-}
-
-#configs td {
-  line-height: 200%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-#embed, #fullscreen {
-  margin: -7px -4px -27px;
-  padding: 8px 9px 7px 10px;
-  font-size: 9.5pt;
-}
-
-#embed::after {
-  height: 14px;
-}
-
-.knownTracker a {
-  max-width: 220px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: inline-block;
-  white-space: nowrap;
-}
-
-.optionlist {
-  columns: 500px auto;
-  column-gap: 5px;
-}
-
-.configOption::after {
-  content: "";
-  display: inline-block;
-  height: 40px;
-  vertical-align: middle;
-}
-
-#configs td b {
-  letter-spacing: .08em;
-  min-width: 180px;
-}
-
-#configs input[name="nofilter_dataDir"], input[name="i2cpOpts"], input[name="nofilter_commentsName"] {
-  width: calc(100% - 200px);
-}
+input, button, textarea, select, a {font-weight: 400; font-family: Noto Sans, Open Sans, Segoe UI, Droid Sans, Roboto Sans, Ubuntu, Lucida Grande, Helvetica, Arial, Verdana, sans-serif; line-height: 1.2}
+.snarkNav:link, .iframed .snarkNav:link {font-weight: 700; padding-bottom: 5px}
+.iframed .snarkNav:link {padding-top: 3px}
+#screenlog li::before {width: 15px; background-size: 11px}
+#screenlog li, .iframed #screenlog li {font-weight: 400}
+input[type], select, select option, td, td a, #screenlog li, #screenlog li a, textarea, input.r, input[name="nofilter_dataDir"], .configPanel, .configPanel td, .snarkNewTorrent, .snarkNewTorrent td, #configs td, .trackerconfig td {font-size: 10.5pt}
+.snarkAddInfo, .snarkAddInfo code {font-size: 10.5pt}
+th.torrentDownloaded, th.torrentUploaded, th.RateDown, th.RateUp, td.torrentDownloaded, td.torrentUploaded, td.RateDown, td.RateUp, .torrentName a:link, th#pagenav {font-size: 10pt}
+th.torrentDownloaded, th.torrentUploaded, th.RateDown, th.RateUp {font-weight: 700}
+input[type], select, a.control {line-height: 1.5}
+a.control, input[type=submit], input.accept {padding-top: 2px; padding-bottom: 2px; text-transform: uppercase; letter-spacing: .05em}
+a.control, input[type=submit], input.accept, th, #trackerselect tr:first-child td {font-weight: 400; font-size: 12pt}
+.configPanel .configTitle, .configPanel .configTitle:hover, .configPanel .configTitle:active {padding-top: 4px; padding-bottom: 2px; font-size: 14pt; text-transform: uppercase; font-variant: normal}
+#configSection .configTitle a img {margin-left: 6px}
+.configPanel .configTitle img {margin-top: -4px; margin-bottom: 0; display: inline-block; height: 20px; width: 20px; mix-blend-mode: hard-light}
+.torrentInfo th, .dirInfo th, #totals, #commentInfo th, #configs th {font-size: 11pt; font-weight: 400}
+#torrents tt {font-size: 9.5pt}
+#configs td {line-height: 200%; padding-top: 4px; padding-bottom: 4px}
+#embed, #fullscreen {margin: -3px -4px -4px; padding: 8px 9px 7px 10px; font-size: 9.5pt}
+#embed::after {height: 14px}
+.knownTracker a {max-width: 220px; overflow: hidden; text-overflow: ellipsis; display: inline-block; white-space: nowrap}
+.optionlist {columns: 500px auto; column-gap: 5px}
+.configOption::after {content: ""; display: inline-block; height: 40px; vertical-align: middle}
+#configs td b {letter-spacing: .08em; min-width: 180px}
+#configs input[name="nofilter_dataDir"], input[name="i2cpOpts"], input[name="nofilter_commentsName"] {width: calc(100% - 200px)}
 }
 
 @media screen and (max-width: 1400px) {
-.iframed #torrents td.torrentName a {
-  max-width: 400px;
-  display: inline-block;;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+.iframed #torrents td.torrentName a {max-width: 400px; display: inline-block;; white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
 }
