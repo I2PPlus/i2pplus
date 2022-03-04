@@ -1839,8 +1839,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         String link = linkify(torrent).replace(" ", "%20").replace("a%20href", "a href");
         if (!dontAutoStart && shouldAutoStart() && running) {
             if (!_util.connected()) {
-//                addMessage(_t("Connecting to I2P").replace("I2P", "I2P+") + "...");
-                addMessage(_t("Connecting to I2P").replace("Connecting to I2P", "Initializing I2PSnark and opening tunnels") + "...");
+                String msg = _t("Initializing I2PSnark and opening tunnels") + "...";
                 if (!_context.isRouterContext())
                     System.out.println(msg);
                 boolean ok = _util.connect();
@@ -2784,8 +2783,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                             System.out.println(msg);
                         }
                     }
-                    // polling period for scanning data dir for new content
-                    try { Thread.sleep(30*1000); } catch (InterruptedException ie) {}
+                }
+                // polling period for scanning data dir for new content
+                try { Thread.sleep(30*1000); } catch (InterruptedException ie) {}
             }
         }
     }
