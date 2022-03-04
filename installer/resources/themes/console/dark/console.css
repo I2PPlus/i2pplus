@@ -2640,8 +2640,8 @@ input[type=text], input[type=password] {padding: 7px 9px}
 .applink img {margin-top: -8px; padding: 10px 53px 38px}
 .cells tt, #profilelist tt, #floodfills tt, #netdb .tunnel_peer tt {margin-left: 2px; margin-right: 2px; letter-spacing: .2em}
 .h3navlinks a {padding: 7px 10px 8px 17px}
-.h3navlinks a:first-child, #config_service .h3navlinks a:last-child {margin-right: 0}
 .h3navlinks a:last-child {margin-right: 2px}
+.h3navlinks a:first-child, #config_service .h3navlinks a:last-child, #config_reseed .h3navlinks a:last-child {margin-right: 0}
 .joblog h3 {margin-top: 7px; padding-top: 7px}
 .leaseset th {line-height: 1}
 .log_debug, .log_info, .log_warn, .log_error, .log_crit, .log_omitted {margin-bottom: -3px; min-width: 40px; max-width: 40px}
