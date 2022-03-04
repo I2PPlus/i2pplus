@@ -42,7 +42,8 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
     private final RouterIdentity _from;
     private Hash _fromHash;
     private final FloodfillNetworkDatabaseFacade _facade;
-    private final static int REPLY_TIMEOUT = 60*1000;
+//    private final static int REPLY_TIMEOUT = 60*1000;
+    private final static int REPLY_TIMEOUT = 45*1000;
     private final static int MESSAGE_PRIORITY = OutNetMessage.PRIORITY_NETDB_REPLY;
 
     /**
