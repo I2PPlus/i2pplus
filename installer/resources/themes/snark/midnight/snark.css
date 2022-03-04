@@ -234,8 +234,8 @@ tr:hover .percentBarText {opacity: .9}
 /* download bars */
 .torrentDownloaded {width: 1%; padding: 3px 5px}
 .dirInfo .fileStatus img {margin: 0 3px}
-.percentBarOuter {margin: 3px auto; vertical-align: middle; border: 1px solid #225; box-shadow: 0 0 1px 1px rgba(0,0,0,.8), var(--highlight), inset 2px 2px 2px rgba(0,0,0,.9); background: repeating-linear-gradient(135deg, #001 1px, #001 5px, #112 6px, #113 11px)}
-.active .percentBarOuter {animation: uploading 1s linear 3s both; backface-visibility: hidden; will-change: transform; background: repeating-linear-gradient(135deg, #001, #001 5px, #112 5px, #113 10px) left center / 200%}
+.percentBarOuter {margin: 3px auto; vertical-align: middle; border: 1px solid #225; box-shadow: 0 0 1px 1px rgba(0,0,0,.8), var(--highlight), inset 3px 3px 3px rgba(0,0,0,.9); background: repeating-linear-gradient(135deg, #001 1px, #001 5px, #112 6px, #113 11px)}
+.active .percentBarOuter {animation: uploading 1s ease 3s forwards; backface-visibility: hidden; will-change: transform; background: repeating-linear-gradient(135deg, #001, #001 5px, #112 5px, #113 10px) left center / 200%}
 .active.downloading .percentBarOuter {background: linear-gradient(to left, rgba(0, 255, 0, .2), rgba(255, 255, 0, .2), rgba(255, 0, 0, .2)) center center / 100%, repeating-linear-gradient(135deg, #001, #001 5px, #112 5px, #113 10px) left center / 200%; animation: downloading 1s linear 3s both}
 .percentBarInner {height: 100%; border: none; border-right: 1px solid #225; border-radius: 1px; box-shadow: var(--highlight); background: linear-gradient(180deg, #33a, #226 50%, #003 50%, #000) right center / 200%; opacity: .8}
 .peerinfo .percentBarOuter {opacity: .8}
@@ -650,7 +650,7 @@ td.trackerLink img {height: 16px}
 .RateDown .right, .RateUp .right, .torrentUploaded .right {min-width: 40px; text-align: right}
 .uploaded, .txBarInner {position: relative; overflow: hidden; box-shadow: 0 0 0 1px rgba(0,0,0,.8), inset 3px 3px 3px rgba(0,0,0,.8)}
 .uploaded {padding: 3px 0 1px; min-width: 68px; display: inline-block; vertical-align: middle; font-weight: 700; color: #a7acff; text-shadow: 0 1px 1px #000, 0 0 2px #337; border: 1px solid #181858; border-left-width: 5px; box-shadow: var(--highlight), 0 0 0 1px #000, inset 3px 3px 3px rgba(0,0,0,.8); background: repeating-linear-gradient(90deg,#000,#000 5%,#080848 5%,#080848 10%); background-size: 200%}
-.active .uploaded {background: repeating-linear-gradient(90deg,#000,#000 5%,#303 5%,#505 10%); background-size: 200%; animation: uploading .5s linear 4s 1 reverse}
+.active .uploaded {background: repeating-linear-gradient(90deg,#000,#000 5%,#303 5%,#505 10%); background-size: 200%; animation: uploading .5s linear 4s 1 forwards reverse}
 tr:hover .uploaded {border-color: #181878}
 .txBarInner {height: calc(100% - 2px); display: inline-block; position: absolute; top: 1px; left: 1px; z-index: 1; background: rgba(192,48,192,.25); box-shadow: inset 3px 3px 3px rgba(0,0,0,.8); border: none}
 .txBarInner[style="width: calc(100% - 2px)"] {box-shadow: 0 0 0 1px #000, inset 0 2px 3px 2px rgba(255,255,255,.1)}
@@ -660,6 +660,9 @@ tr:hover .uploaded {border-color: #181878}
 .torrentUploaded .right {margin-right: -1px; padding-left: 3px}
 .choked .left, .choked .right {display: none}
 .RateDown, .RateUp, .torrentUploaded {text-align: center}
+.peerinfo .RateDown .left, .peerinfo .RateDown .right, .peerinfo .RateUp .left, .peerinfo .RateUp .right {opacity: .5}
+.peerinfo .RateDown.ten .left, .peerinfo .RateDown.ten .right, .peerinfo .RateUp.ten .left, .peerinfo .RateUp.ten .right {opacity: .75}
+.RateDown.hundred .left, .RateDown.hundred .right, .RateUp.hundred .left, .RateUp.hundred .right {opacity: 1}
 tfoot .RateDown:not(:empty)::before, tfoot .torrentDownloaded:not(:empty)::before, tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {margin-top: -3px; margin-right: 3px; display: inline-block; line-height: 0; vertical-align: middle; font-size: 90%; text-shadow: 0 0 1px #101}
 tfoot .RateDown:not(:empty)::before, tfoot .torrentDownloaded:not(:empty)::before {content: "\27A4"; transform: rotate(90deg) scaleX(0.6)}
 tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {content: "\27A4"; transform: rotate(-90deg) scaleX(0.6)}
