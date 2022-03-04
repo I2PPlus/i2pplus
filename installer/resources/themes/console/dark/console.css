@@ -2627,7 +2627,7 @@ th {font-size: 8pt}
 }
 
 @media screen and (min-width: 1500px) {
-.main, #news, h1, h1[class], .sorry {margin-left: 272px}
+.main, #news, h1, h1[class], .sorry, h1 + .sorry, #console_404 .sorry {margin-left: 272px}
 body, .main, .main td, #news p, #news p, textarea, .main textarea, code, tt, #changelog pre, th code, .statlist a[name], .statlist b, .statlist li b, .statlist a[name]:hover, .confignav, th, #configinfo th, .main button, .main input, select, textarea, input[type=file]::file-selector-button, #news, #sidebar button, #warning2 p {font-size: 10pt}
 h3, #sidebar h3 a, th.th_title, #leasesetdebug th, #leasesetsummary th, .netdbentry th, #help, #help li, #help p, #help code, #help td, #help th {font-size: 11pt}
 h1[class], h1, h1.conf.adv {padding: 14px 15px 14px 65px; font-size: 20pt; background-size: 40px, 2px, 100% 4px, 100%, 164px; background-position: 15px center}
