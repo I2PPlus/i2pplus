@@ -506,6 +506,7 @@ public class PeerHelper extends HelperBase {
                 appendSortLinks(buf, urlBase, sortFlags, _t("Sort by peer hash"), FLAG_ALPHA);
             buf.append("</th><th class=\"direction\" nowrap title=\"").append(_t("Direction/Introduction")).append("\">").append(_t("Dir"))
                .append("</th><th class=\"ipv6\" nowrap>").append(_t("IPv6"))
+               .append("</th><th class=\"ssuversion nowrap>").append_t("Version"))
                .append("</th><th class=\"idle\" nowrap title=\"").append(_t("Peer inactivity")).append("\">").append(_t("Idle")).append("<br>");
             appendSortLinks(buf, urlBase, sortFlags, _t("Sort by idle inbound"), FLAG_IDLE_IN);
             buf.append("<span style=\"vertical-align: bottom;\"> / </span>");
@@ -616,6 +617,8 @@ public class PeerHelper extends HelperBase {
             else
                 buf.append("");
             buf.append("</td>");
+
+            buf.append("<td class=\"cells ssuversion\">").append(peer.getVersion()).append("</td>");
 
             long idleIn = Math.max(now-peer.getLastReceiveTime(), 0);
             long idleOut = Math.max(now-peer.getLastSendTime(), 0);
