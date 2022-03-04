@@ -678,16 +678,14 @@ h3[id="udpcon"] {width: auto}
 #udpconnections tr a img {margin-top: 3px}
 #udpconnections tr:hover, #ntcpconnections tr:hover, #jobstats tr:hover, #schedjobs tr:hover, #netdboverview table tr:hover, #portfaq tr:hover, .tunneldisplay tr:hover, #tunnels tr:hover {background: #020}
 #udpconnections tr:hover td, #ntcpconnections tr:hover td, .tunneldisplay tr:hover td {color: var(--ink)}
-#udpconnections th {padding: 5px 2px; vertical-align: top}
-#udpconnections th:nth-child(6), #udpconnections th:nth-child(7), #udpconnections th:nth-child(n+9) {text-align: right}
-#udpconnections th:nth-child(n+13), #udpconnections .tablefooter th:nth-child(n+10), #udpconnections td:nth-child(n+13), #udpconnections .tablefooter td:nth-child(n+10) {padding-right: 1%}
+#udpconnections th {padding: 5px 2px; vertical-align: top; text-align: center}
+#udpconnections td:nth-child(n+13), #udpconnections .tablefooter td:nth-child(n+10) {padding-right: 1%}
 #udpconnections td[class="cells"]:first-child, #ntcpconnections td[class="cells"]:first-child {text-align: right}
 #udpconnections td:first-child {width: 1%; padding: 2px 4px; white-space: nowrap}
 #udpconnections .tablefooter td, #ntcpconnections .tablefooter td {padding-top: 7px; padding-bottom: 7px; color: var(--ink); text-align: center}
 #udpconnections .tablefooter td:first-child, #ntcpconnections .tablefooter td:first-child {padding-left: 6px; text-align: left}
 #udpconnections .tablefooter:hover td {border-top: var(--border)}
 #udpconnections .tablefooter td:first-child {padding-left: 9px}
-#udpconnections .tablefooter td:nth-child(9) {text-align: center}
 #udpconnections .tablefooter td, #ntcpconnections .tablefooter td {padding-left: 5px; padding-right: 5px}
 #peerdefs {margin-bottom: 11px}
 #peerdefs td {padding: 4px; line-height: 1.4; background: repeating-linear-gradient(180deg,#000, #000 1px, #000800 2px, #000800 3px)}
