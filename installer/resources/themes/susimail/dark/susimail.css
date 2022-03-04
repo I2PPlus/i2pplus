@@ -253,7 +253,7 @@ img.sort:active {box-shadow: var(--highlight), inset 2px 2px 2px #000}
 #toggle.showpass {background: var(--show) no-repeat center center / 20px}
 
 /* configuration */
-textarea[name="config_text"] {margin: 0 auto 15px; padding: 0 5px; resize: none; width: 600px; min-width: 0; height: 370px; line-height: 20px; border: var(--border); box-shadow: 0 0 2px 2px rgba(0,0,0,.5); background: repeating-linear-gradient(180deg,#000800, #000800 20px, #000 20px, #000 40px)}
+textarea[name="config_text"] {margin: 0 auto 15px; padding: 0 5px; resize: none; width: 600px; min-width: 0; height: 370px; line-height: 20px; border: var(--border); box-shadow: 0 0 2px 2px rgba(0,0,0,.5); background: repeating-linear-gradient(180deg,#000800, #000800 20px, #000 20px, #000 40px); animation: fade-in .1s ease .3s both, scaleY .05s ease .5s both}
 textarea[name="config_text"]:focus {border: var(--border); box-shadow: var(--highlight), 0 0 0 1px rgba(255,96,0,.15); background: repeating-linear-gradient(180deg,#010, #010 20px, #000800 20px, #000800 40px)}
 h3#config {margin: 0 0 20px; padding: 10px; text-align: center; text-transform: uppercase; font-size: 11pt; letter-spacing: .08em; word-spacing: .1em; border-bottom: var(--border); box-shadow: var(--bevel); text-shadow: var(--txt_shadow); background: var(--th)}
 #prefsave {margin-top: 4px; padding-top: 10px; padding-bottom: 10px; border-top: var(--border); box-shadow: var(--bevel); background: var(--th)}
@@ -413,6 +413,7 @@ tr.pagenavcontrols:hover .pagenavcontrols td, .topbuttons td, .topbuttons:hover 
 @keyframes fade-in {0%,80% {filter: opacity(0)} 100% {filter: opacity(1)}}
 @keyframes hide-up {from {margin-top: 0} to {margin-top: -300px}}
 @keyframes loading {0% {background: linear-gradient(180deg,rgba(255,255,255,.2) 50%, rgba(0,0,0,.3) 50%), repeating-linear-gradient(45deg, #020 1px, #020 20px, #000 20px, #000 40px)} 100% {background: linear-gradient(180deg,rgba(255,255,255,.2) 50%, rgba(0,0,0,.3) 50%),repeating-linear-gradient(45deg, #000 1px, #000 20px, #020 20px, #020 40px)}}
+@keyframes scaleY {from {transform: scaleY(0)} to {transform: scaleY(1)}
 @supports (position: sticky) {#pagenavbottom {display: none}}
 
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
@@ -459,7 +460,7 @@ body, input, select, .fakebutton {font-size: 9.5pt}
 }
 
 @media screen and (min-width: 1500px) {
-body, input, select, .fakebutton {font-size: 10pt}
+body, input, select, .fakebutton, textarea[name="config_text"] {font-size: 10pt}
 a[class^="link"] {font-size: 95%}
 p.footer, p.footer a {line-height: 12pt; font-size: 9pt}
 p.mailbody + p.info {margin-top: -53px}
