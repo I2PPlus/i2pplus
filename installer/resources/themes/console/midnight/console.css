@@ -1207,10 +1207,12 @@ a[name="criticallogs"] + p + h3 + p + ul {margin-bottom: 15px; border: var(--bor
 #logs #enviro:hover td {color: #dd0; border-top: 1px inset transparent; border-bottom: 1px inset transparent; background: #001}
 #logs #enviro:hover {user-select: all; cursor: text}
 #logs #enviro td:first-child {width: 1%; text-align: right; white-space: nowrap}
-#logs li {margin: 0 0 0 13px; padding: 0 2px 0 8px; width: calc(100% - 6px); word-break: break-all; font-family: var(--monospaced); border-top: 1px solid rgba(64,64,80,.2); border-right: 1px solid rgba(40,40,48,.2); border-bottom: 1px solid #000; border-left: 2px solid #224; background: rgba(10,10,34,.6)}
+#logs li {margin: 0 5px 0 13px; padding: 2px 2px 2px 7px; width: calc(100% - 9px); word-break: break-all; list-style: none; text-align: left; font: 8.5pt/1.5 var(--monospaced); border-top: 1px solid rgba(64,64,80,.2); border-right: 1px solid rgba(40,40,48,.2); border-bottom: 1px solid #000; border-left: 2px solid #224; background: rgba(10,10,34,.6); opacity: .8}
+#logs li:hover {border-left-color: #449; background: #113; opacity: 1}
 #logs li:nth-child(odd) {border-left: 2px solid #335; background: rgba(26,26,58,.5)}
+#logs li:last-child::after {margin: 0; border: none}
 #logs li:last-child {margin-bottom: 7px; border-bottom: 1px solid rgba(64,64,80,.2)}
-#logs li:hover {background: #113}
+#criticallogs li {width: 100%}
 #criticallogs li:last-child, #routerlogs li:last-child {padding-bottom: 8px}
 #criticallogs td:empty {display: none}
 #criticallogs tr:first-child {display: none}
@@ -1229,6 +1231,8 @@ table[id$="logs"] ul {margin: 1px 17px -6px -12px}
 #wrapperlogs pre {margin: 2px 0; width: 100%; max-height: 600px; white-space: pre-wrap; word-wrap: break-word; color: #a2a6d1}
 #wrapperlogs tr:last-child td {padding: 0 0 0 5px; background: rgba(10,10,34,.6)}
 
+.log_debug, .log_info, .log_warn, .log_error, .log_crit, .log_omitted {padding: 1px 2px; min-width: 36px; max-width: 36px; display: inline-block; overflow: hidden; line-height: .9; white-space: nowrap; text-overflow: ellipsis; text-align: center; color: #000; border-radius: 2px}
+
 /* Override error log colors */
 font[color="#006600"] {/* debug/notify */
 color: var(--ink); opacity: .8}
@@ -1241,27 +1245,16 @@ color: #f00}
 font[color="#000099"] {/* info */
 color: var(--ink)}
 
-/*#criticallogs li, #routerlogs li {padding: 0 0 1px}*/
-#logs li {margin-right: 5px; padding: 2px 2px 7px 7px; width: calc(100% - 9px); line-height: 1.6; list-style: none; text-align: left; font: 8.5pt var(--monospaced); filter: opacity(.8)}
-#logs li:hover {filter: opacity(1); border-left-color: #449}
-#criticallogs li {width: 100%}
-#logs li:last-child::after {margin: 0; border: none}
 #logs font[color^="#"]::before {margin-left: 0; margin-right: 5px; width: 6px; height: 6px; display: inline-block; vertical-align: calc(1px); border-radius: 50%; background: #fff; content: ""}
-.log_debug, .log_info, .log_warn, .log_error, .log_crit, .log_omitted {padding: 1px 2px; min-width: 36px; max-width: 36px; display: inline-block; overflow: hidden; line-height: .9; white-space: nowrap; text-overflow: ellipsis; text-align: center; color: #000; border-radius: 2px}
-
 /* critical */
 #logs li font[color="#cc0000"]::before, .log_crit {background: #f00}
-
 /* debug */
 #logs li font[color="#006600"]::before, .log_debug, .log_omitted {background: var(--ink); opacity: .8}
 .log_omitted {font-weight: 700}
-
 /* error */
 #logs li font[color="#ff3300"]::before, .log_error {background: #d00}
-
 /* warning */
 #logs li font[color="#bf00df"]::before, .log_warn {background: #848}
-
 /* info */
 #logs li font[color="#000099"]::before, .log_info {background: var(--ink)}
 
@@ -2048,7 +2041,7 @@ h3[id*="jobs"] {margin-top: 25px; clear: both}
 #schedjobs {margin: -6px 0 0; width: 100%}
 #jobstats {margin-bottom: 10px}
 #jobstats th, #jobstats td {padding: 3px 8px; text-align: right}
-#jobstats th {font-size: 90%}
+#jobstats th {padding: 5px 8px; font-size: 90%}
 #schedjobs th:first-child, #schedjobs td:first-child, #jobstats th:first-child, #jobstats td:first-child {margin-bottom: 15px; padding-left: 8px; text-align: left; font-weight: 700}
 #schedjobs td:first-child {padding: 5px 8px 3px}
 #jobstats tr:last-child td {font-size: 105%; font-weight: 700; border-top: 3px solid #1e1c4a !important; background: #002}
