@@ -1841,20 +1841,29 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             if (!_util.connected()) {
 //                addMessage(_t("Connecting to I2P").replace("I2P", "I2P+") + "...");
                 addMessage(_t("Connecting to I2P").replace("Connecting to I2P", "Initializing I2PSnark and opening tunnels") + "...");
+                if (!_context.isRouterContext())
+                    System.out.println(msg);
                 boolean ok = _util.connect();
                 if (!ok) {
-                    if (_context.isRouterContext())
+                    if (_context.isRouterContext()) {
                         addMessage(_t("Unable to connect to I2P"));
-                    else
-                        addMessage(_t("Error connecting to I2P - check your I2CP settings!") + ' ' + _util.getI2CPHost() + ':' + _util.getI2CPPort());
+                    } else {
+                        msg = _t("Error connecting to I2P - check your I2CP settings!") + ' ' + _util.getI2CPHost() + ':' + _util.getI2CPPort();
+                        addMessage(msg);
+                        System.out.println(msg);
+                    }
                     // this would rename the torrent to .BAD
                     //return false;
                 }
             }
             torrent.startTorrent();
             addMessageNoEscape(_t("Torrent added and started: {0}", link));
+            if (!_context.isRouterContext())
+                System.out.println(_t("Torrent added and started: {0}", torrent.getBaseName()));
         } else {
             addMessageNoEscape(_t("Torrent added: {0}", link));
+            if (!_context.isRouterContext())
+                System.out.println(_t("Torrent added: {0}", torrent.getBaseName()));
         }
         return true;
     }
@@ -2680,6 +2689,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     // Test if the router is there
                     // For standalone, this will probe the router every 60 seconds if not connected
                     boolean oldOK = routerOK;
+                    // standalone, first time only
+                    if (doMagnets && !_context.isRouterContext())
+                        System.out.println(_t("Connecting to I2P") + ' ' + _util.getI2CPHost() + ':' + _util.getI2CPPort());
                     routerOK = getBWLimit();
                     if (routerOK) {
                         autostart = shouldAutoStart();
@@ -2690,17 +2702,29 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                                 String prop = config.getProperty(PROP_META_RUNNING);
                                 if (prop == null || Boolean.parseBoolean(prop)) {
                                     if (!_util.connected()) {
-                                        addMessage(_t("Connecting to I2P"));
+                                        String msg = _t("Connecting to I2P");
+                                        addMessage(msg);
+                                        if (!_context.isRouterContext())
+                                            System.out.println(msg + ' ' + _util.getI2CPHost() + ':' + _util.getI2CPPort());
                                         // getBWLimit() was successful so this should work
                                         boolean ok = _util.connect();
                                         if (!ok) {
-                                            if (_context.isRouterContext())
+                                            if (_context.isRouterContext()) {
                                                 addMessage(_t("Unable to connect to I2P"));
-                                            else
-                                                addMessage(_t("Error connecting to I2P - check your I2CP settings!") + ' ' + _util.getI2CPHost() + ':' + _util.getI2CPPort());
+                                            } else {
+                                                msg = _t("Error connecting to I2P - check your I2CP settings!") + ' ' + _util.getI2CPHost() + ':' + _util.getI2CPPort();
+                                                addMessage(msg);
+                                                System.out.println(msg);
+                                            }
                                             routerOK = false;
                                             autostart = false;
                                             break;
+                                        } else {
+                                            if (!_context.isRouterContext()) {
+                                                msg = "Connected to I2P at " + ' ' + _util.getI2CPHost() + ':' + _util.getI2CPPort();
+                                                addMessage(msg);
+                                                System.out.println(msg);
+                                            }
                                         }
                                     }
                                     addMessageNoEscape(_t("Starting up torrent {0}", linkify(snark)));
@@ -2752,15 +2776,16 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     if (ok)
                         cleanupTorrentStatus();
                     if (!routerOK) {
-                        if (_context.isRouterContext())
+                        if (_context.isRouterContext()) {
                             addMessage(_t("Unable to connect to I2P"));
-                        else
-                            addMessage(_t("Error connecting to I2P - check your I2CP settings!") + ' ' + _util.getI2CPHost() + ':' + _util.getI2CPPort());
+                        } else {
+                            String msg = _t("Error connecting to I2P - check your I2CP settings!") + ' ' + _util.getI2CPHost() + ':' + _util.getI2CPPort();
+                            addMessage(msg);
+                            System.out.println(msg);
+                        }
                     }
-                }
-                // polling period for scanning data dir for new content
-//                try { Thread.sleep(60*1000); } catch (InterruptedException ie) {}
-                try { Thread.sleep(30*1000); } catch (InterruptedException ie) {}
+                    // polling period for scanning data dir for new content
+                    try { Thread.sleep(30*1000); } catch (InterruptedException ie) {}
             }
         }
     }

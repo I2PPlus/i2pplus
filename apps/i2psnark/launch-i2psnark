@@ -1,12 +1,15 @@
-#!/bin/bash
+#!/bin/sh
 #
-# This launches I2PSnark and jetty in a separate jvm.
+# This launches i2psnark and jetty in a separate jvm.
 # The file jetty-i2psnark.xml must be present in the current directory.
-# I2PSnark will be accessible at http://127.0.0.1:8002/
+# i2psnark will be accessible at http://127.0.0.1:8002/
 #
 
 # Raise the soft open files soft ulimit to this value, if able
 OPEN_FILES_ULIMIT=2048
+
+# Increase memory to 512 MB
+JAVA_OPTS='-Xmx512m'
 
 raiseopenfilesulimit() {
     OPEN_FILES_SOFT=`ulimit -S -n` 2> /dev/null || return
@@ -33,15 +36,4 @@ raiseopenfilesulimit() {
 raiseopenfilesulimit
 
 I2P="."
-java -jar "$I2P/i2psnark.jar"
-
-# Uncomment the following if I2PSnark doesn't automatically open in a browser on launch
-# echo "Launching I2PSnark in default browser..."
-#
-# if [[ "$OSTYPE" == "linux-gnu"* ]] || [["$OSTYPE" == "bsd"*]]
-# then
-#     xdg-open http://127.0.0.1:8002
-# elif [[ "$OSTYPE" == "darwin"* ]]
-# then
-#     open http://127.0.0.1:8002
-# fi
+java $JAVA_OPTS -jar "$I2P/i2psnark.jar"
