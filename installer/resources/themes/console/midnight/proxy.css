@@ -109,6 +109,7 @@ div.logo hr {
 }
 
 .logo hr ~ a {
+  line-height: 2;
   border: 1px solid #225;
   background: radial-gradient(at center bottom, rgba(128, 0, 128, .15), rgba(64, 0, 64, .08) 30%, rgba(0, 0, 0, 0) 90%),
     linear-gradient(90deg, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)),
@@ -243,7 +244,7 @@ button.go:active, button.accept:active {
 }
 
 #proxy_error hr {
-  margin-bottom: 20px;
+  margin-bottom: 0;
 }
 
 .warning p, .warning a {
