@@ -303,7 +303,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         _log = _context.logManager().getLog(SnarkManager.class);
         _messages = new UIMessages(MAX_MESSAGES);
         _util = new I2PSnarkUtil(_context, ctxName, this);
-        DEFAULT_AUTO_START = !ctx.isRouterContext();
+//        DEFAULT_AUTO_START = !ctx.isRouterContext();
+        DEFAULT_AUTO_START = true;
         String cfile = ctxName + CONFIG_FILE_SUFFIX;
         File configFile = new File(cfile);
         if (!configFile.isAbsolute())
