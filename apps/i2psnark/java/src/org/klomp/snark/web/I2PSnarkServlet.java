@@ -310,15 +310,14 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean collapsePanels = _manager.util().collapsePanels();
         setHTMLHeaders(resp, cspNonce, false);
         PrintWriter out = resp.getWriter();
-        boolean isStandalone = !_context.isRouterContext();
         out.write(DOCTYPE + "<html>\n" +
                   "<head>\n" +
                   "<meta charset=\"utf-8\">\n" +
                   "<meta name=\"viewport\" content=\"width=device-width\">\n" +
-                  "<link rel=\"preload\" href=\"/themes/fonts/DroidSans.css\" as=\"style\">\n" +
+//                  "<link rel=\"preload\" href=\"/themes/fonts/DroidSans.css\" as=\"style\">\n" +
                   "<link rel=\"preload\" href=\"" + _themePath + "images/images.css?" + CoreVersion.VERSION + "\" as=\"style\">\n" +
                   "<link rel=\"shortcut icon\" href=\"" + _contextPath + WARBASE + "icons/favicon.svg\">\n");
-        if (!isStandalone)
+        if (!isStandalone())
             out.write("<link rel=\"preload\" href=\"/js/iframeResizer/iframeResizer.contentWindow.js?" + CoreVersion.VERSION + "\" as=\"script\">");
         out.write("<title>");
         if (_contextName.equals(DEFAULT_NAME))
@@ -376,7 +375,8 @@ public class I2PSnarkServlet extends BasicServlet {
         // selected theme inserted here
         out.write(HEADER_A + _themePath + HEADER_B + "\n");
         out.write(HEADER_A + _themePath + HEADER_I + "\n"); // load css image assets
-        out.write(HEADER_A + _themePath + HEADER_Z + "\n"); // optional override.css for version-persistent user edits
+        if (!isStandalone())
+            out.write(HEADER_A + _themePath + HEADER_Z + "\n"); // optional override.css for version-persistent user edits
 
         // larger fonts for cjk translations
         String lang = (Translate.getLanguage(_manager.util().getContext()));
@@ -450,6 +450,7 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("<div class=\"logshim\"></div>\n</div>\n");
             writeConfigForm(out, req);
             writeTrackerForm(out, req);
+//            out.write("<script src=\".resources/js/previewTheme.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
         } else {
             boolean canWrite;
             synchronized(this) {
@@ -476,7 +477,10 @@ public class I2PSnarkServlet extends BasicServlet {
             }
             out.write("</div>\n");
         }
-        out.write(FOOTER);
+        if (!isStandalone())
+            out.write(FOOTER);
+        else
+            out.write(FTR_STD);
     }
 
     /**
@@ -2915,7 +2919,7 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write(_t("Theme"));
         out.write("</b> \n");
         if (_manager.getUniversalTheming()) {
-            out.write("<select name='theme' disabled=\"disabled\" title=\"");
+            out.write("<select id=\"themeSelect\" name=\"theme\" disabled=\"disabled\" title=\"");
             out.write(_t("To change themes manually, disable universal theming"));
             out.write("\"><option>");
             out.write(_manager.getTheme());
@@ -2928,7 +2932,7 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write(_t("Configure"));
             out.write("]</a></span><br>");
         } else {
-            out.write("<select name='theme'>");
+            out.write("<select id=\"themeSelect\" name=\"theme\">");
             String theme = _manager.getTheme();
             String[] themes = _manager.getThemes();
             Arrays.sort(themes);
@@ -3520,16 +3524,17 @@ public class I2PSnarkServlet extends BasicServlet {
 
     private static final String DOCTYPE = "<!DOCTYPE HTML>\n";
     private static final String HEADER_A = "<link href=\"";
-    private static final String HEADER_B = "snark.css?" + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\" >";
-    private static final String HEADER_C = "nocollapse.css?" + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\" >";
-    private static final String HEADER_D = "snark_big.css?" + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\" >";
-    private static final String HEADER_I = "images/images.css?" + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\" >";
-    private static final String HEADER_Z = "override.css\" rel=\"stylesheet\" type=\"text/css\" >";
+    private static final String HEADER_B = "snark.css?" + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\" id=\"snarkTheme\">";
+    private static final String HEADER_C = "nocollapse.css?" + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\">";
+    private static final String HEADER_D = "snark_big.css?" + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\">";
+    private static final String HEADER_I = "images/images.css?" + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\">";
+    private static final String HEADER_Z = "override.css\" rel=\"stylesheet\" type=\"text/css\">";
     private static final String TABLE_HEADER = "<table border=\"0\" id=\"torrents\" width=\"100%\" >\n" + "<thead id=\"snarkHead\">\n";
     private static final String FOOTER = "</div>\n</center>\n<span id=\"endOfPage\" data-iframe-height></span>\n" +
                                          "<script type=\"text/javascript\" src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" +
                                          CoreVersion.VERSION + "\" id=\"iframeResizer\"></script>\n" +
                                          "<style type=\"text/css\">body{opacity: 1 !important}</style>\n</body>\n</html>";
+    private static final String FTR_STD = "</div>\n</center><style type=\"text/css\">body{opacity: 1 !important}</style>\n</body>\n</html>";
 
     /**
      * Modded heavily from the Jetty version in Resource.java,
@@ -3661,7 +3666,8 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append(HEADER_A).append(_themePath).append(HEADER_D);
         }
         buf.append(HEADER_A + _themePath + HEADER_I).append("\n"); // images.css
-        buf.append(HEADER_A + _themePath + HEADER_Z).append("\n"); // optional override.css for version-persistent user edits
+        if (!isStandalone())
+            buf.append(HEADER_A + _themePath + HEADER_Z).append("\n"); // optional override.css for version-persistent user edits
         // hide javascript-dependent buttons when js is unavailable
         buf.append("<noscript><style type=\"text/css\">.script{display:none}</style></noscript>\n")
            .append("<link rel=\"shortcut icon\" href=\"" + _contextPath + WARBASE + "icons/favicon.svg\">\n");
@@ -4169,7 +4175,10 @@ public class I2PSnarkServlet extends BasicServlet {
             }
             if (includeForm)
                 buf.append("</form>\n");
+            if (!isStandalone())
                 buf.append(FOOTER);
+            else
+                buf.append(FTR_STD);
             return buf.toString();
         }
 
@@ -4565,7 +4574,10 @@ public class I2PSnarkServlet extends BasicServlet {
                        "}\n" +
                        "</script>\n");
         }
-        buf.append(FOOTER);
+        if (!isStandalone())
+            buf.append(FOOTER);
+        else
+            buf.append(FTR_STD);
         return buf.toString();
     }
 
@@ -5619,6 +5631,18 @@ public class I2PSnarkServlet extends BasicServlet {
                 return false;
         }
         return true;
+    }
+
+    /**
+     *  Are we running in standalone mode?
+     *
+     *  @since 0.9.54+
+     */
+    private boolean isStandalone() {
+        if (_context.isRouterContext())
+            return false;
+        else
+            return true;
     }
 }
 

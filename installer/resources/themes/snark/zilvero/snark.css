@@ -26,7 +26,7 @@
 html {
 	border-right: var(--border);
 	background: repeating-linear-gradient(180deg,#ddd 2px,#bbb 4px) #bbb;
-	background-size: 248px, 100% 4px;
+	background-size: 100% 4px;
 	scrollbar-color: #999 #eee;
 }
 
@@ -73,7 +73,7 @@ input, button, textarea, select, a {
 	border: var(--border);
 	box-shadow: var(--highlight);
 	background: #ddd;
-	background-size: 248px;
+	animation: fade-in .05s ease .7s both;
 }
 
 .iframed .page, .iframed #navbar {
@@ -362,11 +362,6 @@ td {
 
 #filterResults, #filterResults td {
 	animation: disappear .1s linear 2s both;
-}
-
-@keyframes disappear {
-	from {visibility: visible}
-	to {visibility: collapse}
 }
 
 #torrents thead th, #torrents tfoot th, tr:hover #torrents thead th, tr:hover #torrents tfoot th {
@@ -1294,7 +1289,6 @@ tt {
 
 .page form + form {
 	margin-top: -5px;
-	background: #f00;
 }
 
 .configTitle a {
@@ -2103,11 +2097,6 @@ select {
 	animation: progress 1s linear both;
 }
 
-@keyframes progress {
-	from {background-position: 0}
-	to {background-position: -12px}
-}
-
 #torrents thead img {
 	vertical-align: middle
 }
@@ -2579,11 +2568,6 @@ tr:not(.peerinfo) .torrentUploaded:empty::after {
 	right: -14px;
 }
 
-@keyframes fade-in {
-	0% {filter: opacity(0)}
-	100% {filter: opacity(1)}
-}
-
 .ascending, .descending {
 	filter: opacity(0);
 	animation: ease fade-in .2s .6s forwards;
@@ -2612,20 +2596,10 @@ td.graphicStatus img {
 	animation: ease-in-out active .5s 3s forwards;
 }
 
-@keyframes active {
-	from {background: linear-gradient(270deg, #f3c 3px, rgba(0,0,0,0) 3px)}
-	to {background: linear-gradient(270deg, #cb4dcb 3px, rgba(0,0,0,0) 3px)}
-}
-
 .active.downloading .torrentAction, .active.downloading:hover .torrentAction,
 .active.RX .torrentAction, .active.RX:hover .torrentAction {
 	background: var(--td_dl);
 	animation: ease-in-out downloading .5s 3s forwards;
-}
-
-@keyframes downloading {
-	from {background: var(--td_dl)}
-	to {background: linear-gradient(270deg, #7f7 3px, rgba(0,0,0,0) 3px)}
 }
 
 #addSection input[type=submit], #createSection input[type=submit] {
@@ -2704,18 +2678,20 @@ td.graphicStatus img {
 }
 
 #configs .suboption {
-	padding: 5px 10px;
+	padding: 5px 6px;
 	text-align: left;
-	font-size: 90%;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	font-size: 110%;
 	border: var(--border);
 }
 
 #configs .suboption::before {
-	width: 24px;
-	height: 18px;
+	width: 22px;
+	height: 16px;
 	display: inline-block;
 	vertical-align: middle;
-	background: url(/i2psnark/.resources/icons/nopeers.svg) no-repeat left center / auto 18px;
+	background: url(/i2psnark/.resources/icons/nopeers.svg) no-repeat left center / auto 16px;
 	opacity: .8;
 	content: "";
 }
@@ -2724,6 +2700,8 @@ td.graphicStatus img {
 	margin-top: 4px;
 	font-size: 85%;
 	vertical-align: middle;
+	letter-spacing: 0;
+	text-transform: none;
 }
 
 #configs .optionList {
@@ -2799,6 +2777,31 @@ input[name="i2cpOpts"], input[name="nofilter_dataDir"] {
 
 #torrents .torrentAction input:active, #actionStartAll:active, #actionStopAll:active {
 	background-size: auto 12px;
+}
+
+@keyframes disappear {
+	from {visibility: visible}
+	to {visibility: collapse}
+}
+
+@keyframes progress {
+	from {background-position: 0}
+	to {background-position: -12px}
+}
+
+@keyframes fade-in {
+	0% {filter: opacity(0)}
+	100% {filter: opacity(1)}
+}
+
+@keyframes active {
+	from {background: linear-gradient(270deg, #f3c 3px, rgba(0,0,0,0) 3px)}
+	to {background: linear-gradient(270deg, #cb4dcb 3px, rgba(0,0,0,0) 3px)}
+}
+
+@keyframes downloading {
+	from {background: var(--td_dl)}
+	to {background: linear-gradient(270deg, #7f7 3px, rgba(0,0,0,0) 3px)}
 }
 
 @media screen and (max-width: 1499px) {
@@ -2903,7 +2906,7 @@ input[name="i2cpOpts"], input[name="nofilter_dataDir"] {
 }
 
 @media screen and (min-width: 1500px) {
-	body, td, th, span, table a, input[type=submit], input[type=text], textarea {
+	body, td, th:not(.suboption), span, table a, input[type=submit], input[type=text], textarea {
 	font-size: 9.5pt;
 	}
 	td.graphicStatus img {

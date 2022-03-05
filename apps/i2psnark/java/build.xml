@@ -262,16 +262,10 @@
         <copy todir="build/standalone-resources/.resources/themes/snark" >
             <fileset dir="../../../installer/resources/themes/snark/" />
         </copy>
-        <mkdir dir="build/standalone-resources/.resources/fonts" />
-        <copy todir="build/standalone-resources/.resources/fonts" >
+        <mkdir dir="build/standalone-resources/.resources/themes/snark/fonts" />
+        <copy todir="build/standalone-resources/.resources/themes/snark/fonts" >
             <fileset dir="../../../installer/resources/themes/fonts/" />
         </copy>
-        <replace dir="build/standalone-resources/.resources/fonts"
-            summary="true"
-            token="url(/themes/fonts/"
-            value="url(/i2psnark/.resources/fonts/" >
-            <include name="DroidSans.css" />
-        </replace>
         <replace dir="build/standalone-resources/.resources/themes/snark"
             summary="true"
             token="url(/themes/console/classic/images/"
@@ -308,10 +302,32 @@
             value="url(/i2psnark/.resources/themes/snark/ubergine/images/" >
             <include name="**/*.css" />
         </replace>
+        <replace dir="build/standalone-resources/.resources/themes/snark"
+            summary="true"
+            token="url(/themes/console/classic/"
+            value="url(/i2psnark/.resources/themes/snark/classic/" >
+            <include name="**/*.css" />
+        </replace>
+        <replace dir="build/standalone-resources/.resources/themes/snark"
+            summary="true"
+            token="url(/themes/console/dark/"
+            value="url(/i2psnark/.resources/themes/snark/dark/" >
+            <include name="**/*.css" />
+        </replace>
+        <replace dir="build/standalone-resources/.resources/themes/snark"
+            summary="true"
+            token="url(/themes/console/light/"
+            value="url(/i2psnark/.resources/themes/snark/light/" >
+            <include name="**/*.css" />
+        </replace>
+        <replace dir="build/standalone-resources/.resources/themes/snark"
+            summary="true"
+            token="url(/themes/console/midnight/"
+            value="url(/i2psnark/.resources/themes/snark/midnight/" >
+            <include name="**/*.css" />
+        </replace>
 
         <!-- Rather than pulling in all the console theme images, let's just specify the ones we need -->
-        <copy file="../../../installer/resources/themes/fonts/DroidSans.css"
-              todir="build/standalone-resources/.resources/fonts" />
         <copy file="../../../installer/resources/themes/console/dark/images/camotile2.png"
               todir="build/standalone-resources/.resources/themes/snark/dark/images" />
         <copy file="../../../installer/resources/themes/console/classic/images/bg0.png"
@@ -322,14 +338,44 @@
               todir="build/standalone-resources/.resources/themes/snark/classic" />
         <copy file="../../../installer/resources/themes/console/dark/global.css"
               todir="build/standalone-resources/.resources/themes/snark/dark" />
+        <copy file="../../../installer/resources/themes/console/dark/chromescroll.css"
+              todir="build/standalone-resources/.resources/themes/snark/dark" />
         <copy file="../../../installer/resources/themes/console/midnight/global.css"
               todir="build/standalone-resources/.resources/themes/snark/midnight" />
         <copy file="../../../installer/resources/themes/console/midnight/images/tile.css"
-              todir="build/standalone-resources/.resources/themes/midnight/images" />
+              todir="build/standalone-resources/.resources/themes/snark/midnight/images" />
+        <copy file="../../../installer/resources/themes/console/midnight/chromescroll.css"
+              todir="build/standalone-resources/.resources/themes/snark/midnight" />
+        <replace dir="build/standalone-resources/.resources/themes/snark"
+            summary="true"
+            token="url(/themes/fonts/"
+            value="url(/i2psnark/.resources/themes/snark/fonts/" >
+            <include name="**/*.css" />
+        </replace>
+        <replace dir="build/standalone-resources/.resources/themes/snark"
+            summary="true"
+            token="@import url(../images/images.css);"
+            value="" >
+            <include name="**/*.css" />
+        </replace>
+        <replace dir="build/standalone-resources/.resources/themes/snark"
+            summary="true"
+            token="@import url(../images/itooplus.css);"
+            value="" >
+            <include name="**/*.css" />
+        </replace>
 
         <mkdir dir="build/standalone-resources/.resources/js" />
         <copy file="../../routerconsole/jsp/js/ajax.js" todir="build/standalone-resources/.resources/js" />
-
+<!--
+        <copy file="../resources/js/previewTheme.js" todir="build/standalone-resources/.resources/js" />
+        <replace dir="build/standalone-resources/.resources/js"
+            summary="true"
+            token="/themes/"
+            value="/i2psnark/.resources/themes/" >
+            <include name="previewTheme.js" />
+        </replace>
+-->
         <zip destfile="../i2psnark.war" update="true" duplicate="preserve" >
             <fileset dir="build/standalone-resources" />
         </zip>

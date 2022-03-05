@@ -164,7 +164,7 @@ tr:not(.peerinfo) .torrentUploaded:empty::after {display: inline; font-size: 9pt
 #torrents th:empty, #torrents td:empty {padding: 0; width: 0; min-width: 0; font-size: 0}
 .noneLoaded, .noneLoaded:hover td {background: #5f4e41}
 .mainsection .noneLoaded td {padding: 10px; text-align: center; font-weight: 700; color: #cfc7c2}
-.noneLoaded i::before {margin: 1px 3px 0 0; width: 10px; height: 10px; display: inline-block; vertical-align: top; background: var(--bullet) no-repeat center center / 10px; content: ""}
+.noneLoaded i::before {margin: -3px 3px 0 0; width: 11px; height: 11px; display: inline-block; vertical-align: middle; background: var(--bullet) no-repeat center center / 11px; content: ""}
 
 .rowEven, #torrentEdit tr:nth-child(odd), .knownTracker:nth-child(odd) {background: #dfd6d1}
 .rowOdd, #torrentEdit tr:nth-last-child(even), .knownTracker:nth-child(even) {background: #efe6e0}
