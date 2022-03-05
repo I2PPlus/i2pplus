@@ -344,7 +344,7 @@ div[class^="status"] {background-size: auto 20px}
 .port, .quantity, .period {width: 100px}
 .tunnelInfo .selectAll {max-width: none}
 .freetext.username, .freetext.password {padding-left: 26px; width: 300px}
-select, .newTunnel select {margin: 4px 8px 4px 4px; padding: 7px 20px 7px 7px; min-width: 180px}
+select, .newTunnel select {margin: 4px 8px 4px 4px; padding: 6px 20px 6px 7px; min-width: 180px}
 #messages h2, #globalTunnelControl h2, #servers h2, #clients h2, #ssl h2, #wizardPanel h2, #tunnelEditPage h2, #tunnelEditPage h3, #registration h2, #registration h3 {padding-left: 36px; background-position: 10px center, center center; background-size: 20px, 4px 100%, 100%}
 #registration .displayText:hover, #registration .displayText:focus {padding: 4.5px 0}
 #registration .displayText {width: 800px}

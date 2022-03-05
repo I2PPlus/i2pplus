@@ -380,7 +380,7 @@ tr.mailbody td {border-top: 1px solid var(--border_inner)}
 .page::after {width: 0; height: 3px; position: absolute; z-index: 999; top: -6px; left: -1px; display: block; background: #d60; content: ""; animation: ease-in bar 2s reverse; will-change: transform}
 .iframed .page::after {top: -4px}
 
-@keyframes attention {from {background-position: 200%}  {background-position: 0}}
+@keyframes attention {from {background-position: 200%} {background-position: 0}}
 @keyframes bar {from {width: 100%; filter:opacity(.5)}}
 @keyframes fade-in {0%,80% {filter: opacity(0)} 100% {filter: opacity(1)}}
 @keyframes hide-up {from {margin-top: 0} to {margin-top: -300px}}

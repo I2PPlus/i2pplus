@@ -398,7 +398,7 @@ public class TunnelDispatcher implements Service {
         if (cfg.isInbound()) {
             TunnelId recvId = cfg.getConfig(cfg.getLength()-1).getReceiveTunnel();
             if (_log.shouldLog(Log.INFO))
-                _log.info("Removing our own Inbound tunnel\n* " + cfg);
+                _log.info("Removing our own Inbound tunnel...\n* " + cfg);
             TunnelParticipant participant = _participants.remove(recvId);
             if (participant == null) {
                 _inboundGateways.remove(recvId);
@@ -417,7 +417,7 @@ public class TunnelDispatcher implements Service {
             }
         } else {
             if (_log.shouldLog(Log.INFO))
-                _log.info("Removing our own Outbound tunnel\n*  " + cfg);
+                _log.info("Removing our own Outbound tunnel...\n*  " + cfg);
             TunnelId outId = cfg.getConfig(0).getSendTunnel();
             TunnelGateway gw = _outboundGateways.remove(outId);
             if (gw != null) {
@@ -445,7 +445,7 @@ public class TunnelDispatcher implements Service {
         boolean removed = (null != _participatingConfig.remove(recvId));
         if (removed) {
             if (_log.shouldLog(Log.INFO))
-                _log.info("Removing Participating tunnel config " + cfg /* , new Exception() */ );
+                _log.info("Removing Participating tunnel config... " + cfg /* , new Exception() */ );
         } else {
             // this is normal, this can get called twice
             if (_log.shouldLog(Log.DEBUG))
@@ -885,7 +885,7 @@ public class TunnelDispatcher implements Service {
                 if (exp < now) {
                     _configs.poll();
                     if (_log.shouldLog(Log.INFO))
-                        _log.info("Expiring Participating tunnel: " + cur);
+                        _log.info("Expiring Participating tunnel... " + cur);
                     remove(cur);
                 } else {
                     if (exp < nextTime)

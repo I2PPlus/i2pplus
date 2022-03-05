@@ -23,7 +23,7 @@ class RequestThrottler {
     private static final int MIN_LIMIT = 45 / LIFETIME_PORTION;
     private static final int MAX_LIMIT = 165 / LIFETIME_PORTION;
 //    private static final int PERCENT_LIMIT = 12 / LIFETIME_PORTION;
-    private static final int PERCENT_LIMIT = 24 / LIFETIME_PORTION;
+    private static final int PERCENT_LIMIT = 60 / LIFETIME_PORTION;
     private static final long CLEAN_TIME = 11*60*1000 / LIFETIME_PORTION;
 
     RequestThrottler(RouterContext ctx) {
@@ -39,6 +39,10 @@ class RequestThrottler {
         int limit = Math.max(MIN_LIMIT, Math.min(MAX_LIMIT, numTunnels * PERCENT_LIMIT / 100));
         int count = counter.increment(h);
         boolean rv = count > limit;
+        if (rv) {
+            if (_log.shouldWarn())
+                _log.warn("Throttling tunnel requests from [" + h.toBase64().substring(0,6) + "]");
+        }
 /*
         if (rv && count == 2 * limit) {
             context.banlist().banlistRouter(h, "Excess tunnel requests", null, null, context.clock().now() + 30*60*1000);

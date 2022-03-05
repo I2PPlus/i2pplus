@@ -678,16 +678,14 @@ h3[id="udpcon"] {width: auto}
 #udpconnections tr a img {margin-top: 3px}
 #udpconnections tr:hover, #ntcpconnections tr:hover, #jobstats tr:hover, #schedjobs tr:hover, #netdboverview table tr:hover, #portfaq tr:hover, .tunneldisplay tr:hover, #tunnels tr:hover {background: #020}
 #udpconnections tr:hover td, #ntcpconnections tr:hover td, .tunneldisplay tr:hover td {color: var(--ink)}
-#udpconnections th {padding: 5px 2px; vertical-align: top}
-#udpconnections th:nth-child(6), #udpconnections th:nth-child(7), #udpconnections th:nth-child(n+9) {text-align: right}
-#udpconnections th:nth-child(n+13), #udpconnections .tablefooter th:nth-child(n+10), #udpconnections td:nth-child(n+13), #udpconnections .tablefooter td:nth-child(n+10) {padding-right: 1%}
+#udpconnections th {padding: 5px 2px; vertical-align: top; text-align: center}
+#udpconnections td:nth-child(n+13), #udpconnections .tablefooter td:nth-child(n+10) {padding-right: 1%}
 #udpconnections td[class="cells"]:first-child, #ntcpconnections td[class="cells"]:first-child {text-align: right}
 #udpconnections td:first-child {width: 1%; padding: 2px 4px; white-space: nowrap}
 #udpconnections .tablefooter td, #ntcpconnections .tablefooter td {padding-top: 7px; padding-bottom: 7px; color: var(--ink); text-align: center}
 #udpconnections .tablefooter td:first-child, #ntcpconnections .tablefooter td:first-child {padding-left: 6px; text-align: left}
 #udpconnections .tablefooter:hover td {border-top: var(--border)}
 #udpconnections .tablefooter td:first-child {padding-left: 9px}
-#udpconnections .tablefooter td:nth-child(9) {text-align: center}
 #udpconnections .tablefooter td, #ntcpconnections .tablefooter td {padding-left: 5px; padding-right: 5px}
 #peerdefs {margin-bottom: 11px}
 #peerdefs td {padding: 4px; line-height: 1.4; background: repeating-linear-gradient(180deg,#000, #000 1px, #000800 2px, #000800 3px)}
@@ -2627,7 +2625,7 @@ th {font-size: 8pt}
 }
 
 @media screen and (min-width: 1500px) {
-.main, #news, h1, h1[class], .sorry {margin-left: 272px}
+.main, #news, h1, h1[class], .sorry, h1 + .sorry, #console_404 .sorry {margin-left: 272px}
 body, .main, .main td, #news p, #news p, textarea, .main textarea, code, tt, #changelog pre, th code, .statlist a[name], .statlist b, .statlist li b, .statlist a[name]:hover, .confignav, th, #configinfo th, .main button, .main input, select, textarea, input[type=file]::file-selector-button, #news, #sidebar button, #warning2 p {font-size: 10pt}
 h3, #sidebar h3 a, th.th_title, #leasesetdebug th, #leasesetsummary th, .netdbentry th, #help, #help li, #help p, #help code, #help td, #help th {font-size: 11pt}
 h1[class], h1, h1.conf.adv {padding: 14px 15px 14px 65px; font-size: 20pt; background-size: 40px, 2px, 100% 4px, 100%, 164px; background-position: 15px center}
@@ -2640,8 +2638,8 @@ input[type=text], input[type=password] {padding: 7px 9px}
 .applink img {margin-top: -8px; padding: 10px 53px 38px}
 .cells tt, #profilelist tt, #floodfills tt, #netdb .tunnel_peer tt {margin-left: 2px; margin-right: 2px; letter-spacing: .2em}
 .h3navlinks a {padding: 7px 10px 8px 17px}
-.h3navlinks a:first-child, #config_service .h3navlinks a:last-child {margin-right: 0}
 .h3navlinks a:last-child {margin-right: 2px}
+.h3navlinks a:first-child, #config_service .h3navlinks a:last-child, #config_reseed .h3navlinks a:last-child {margin-right: 0}
 .joblog h3 {margin-top: 7px; padding-top: 7px}
 .leaseset th {line-height: 1}
 .log_debug, .log_info, .log_warn, .log_error, .log_crit, .log_omitted {margin-bottom: -3px; min-width: 40px; max-width: 40px}

@@ -122,9 +122,9 @@ input.accept[value^="Show"]:active, input.check[value^="View"]:active, input.sho
 input.accept, button.accept {padding: 6px 9px 6px 25px; background: var(--yes) no-repeat 8px center / 12px, var(--btn)}
 input.accept:hover, input.accept:focus {background: var(--yes) no-repeat 8px center / 12px, var(--btn_hover)}
 input.accept:active {padding: 6px 9px 6px 25px; background: var(--yes) no-repeat 8px center / 12px, var(--btn_active)}
-input.cancel {padding: 6px 9px 6px 25px; background: var(--no) no-repeat 10px center / 10px, var(--btn)}
-input.cancel:hover, input.cancel:focus {background: var(--no) no-repeat 10px center / 10px, var(--btn_hover)}
-input.cancel:active {background: var(--no) no-repeat 10px center / 10px, var(--btn_active)}
+input.cancel[type=reset], input.cancel[type=submit] {padding: 6px 9px 6px 25px; background: var(--no) no-repeat 10px center / 10px, var(--btn)}
+input.cancel[type=reset]:hover, input.cancel[type=submit]:hover, input.cancel[type=reset]:focus, input.cancel[type=submit]:focus {background: var(--no) no-repeat 10px center / 10px, var(--btn_hover)}
+input.cancel[type=reset]:active, input.cancel[type=submit]:active {background: var(--no) no-repeat 10px center / 10px, var(--btn_active)}
 input.cancel[value^="Hide"], input.delete[value^="Do not view"], input.hideconsole {padding: 6px 9px 6px 25px; background: var(--hide) no-repeat 8px center / 14px, var(--btn)}
 input.cancel[value^="Hide"]:hover, input.delete[value^="Do not view"]:hover, input.cancel[value^="Hide"]:focus, input.delete[value^="Do not view"]:focus, input.hideconsole:hover, input.hideconsole:focus {background: var(--hide) no-repeat 8px center / 14px, var(--btn_hover)}
 input.cancel[value^="Hide"]:active, input.delete[value^="Do not view"]:active, input.hideconsole:active {padding: 6px 9px 6px 25px; background: var(--hide) no-repeat 8px center / 14px, var(--btn_active)}
@@ -152,14 +152,14 @@ input.download[value$="from file"]:active, input.download[value$="from File"]:ac
 input.download[value^="Dump"] {padding: 6px 9px 6px 25px; background: var(--bug) no-repeat 8px center / 14px, var(--btn)}
 input.download[value^="Dump"]:hover, input.download[value^="Dump"]:focus {padding: 6px 9px 6px 25px; background: var(--bug) no-repeat 8px center / 14px, var(--btn_hover)}
 input.download[value^="Dump"]:active {padding: 6px 9px 6px 25px; background: var(--bug) no-repeat 8px center / 14px, var(--btn_active)}
-input.go, input[value="GO"] {padding: 6px 9px 6px 25px; background: var(--go) no-repeat 8px center / 14px, var(--btn)}
-input.go:hover, input[value="GO"]:hover, input.go:focus, input[value="GO"]:focus {background: var(--go) no-repeat 8px center / 14px, var(--btn_hover)}
-input.go:active, input[value="GO"]:active {padding: 6px 9px 6px 25px; background: var(--go) no-repeat 8px center / 14px, var(--btn_active)}
+input.go[type=submit], input[value="GO"] {padding: 6px 9px 6px 25px; background: var(--go) no-repeat 8px center / 14px, var(--btn)}
+input.go[type=submit]:hover, input[value="GO"]:hover, input.go:focus, input[value="GO"]:focus {background: var(--go) no-repeat 8px center / 14px, var(--btn_hover)}
+input.go[type=submit]:active, input[value="GO"]:active {padding: 6px 9px 6px 25px; background: var(--go) no-repeat 8px center / 14px, var(--btn_active)}
 input.go[value^="Create"] {padding: 6px 9px 6px 25px; background: var(--wizard) no-repeat 8px center / 15px, var(--btn)}
 input.go[value^="Create"]:hover, input.go[value^="Create"]:focus {background: var(--wizard) no-repeat 8px center / 15px, var(--btn_hover)}
 input.go[value^="Create"]:active {padding: 6px 9px 6px 25px; background: var(--wizard) no-repeat 8px center / 15px, var(--btn_active)}
-input.back {padding: 6px 7px 6px 23px; background: var(--back) no-repeat 6px center / 14px, var(--btn)}
-input.back:hover, input.back:focus {background: var(--hover) var(--back) no-repeat 6px center / 14px}
+input.back[type=submit] {padding: 6px 7px 6px 23px; background: var(--back) no-repeat 6px center / 14px, var(--btn)}
+input.back[type=submit]:hover, input.back:focus {background: var(--hover) var(--back) no-repeat 6px center / 14px}
 input.reload {padding: 6px 9px 6px 25px; background: var(--reset) no-repeat 8px center / 14px, var(--btn)}
 input.reload:hover, input.reload:focus {background: var(--reset_hover) no-repeat 8px center / 14px, var(--btn_hover)}
 input.reload:active {padding: 6px 9px 6px 25px; background: var(--reset_active) no-repeat 8px center / 14px, var(--btn_active)}
@@ -305,6 +305,7 @@ button.download.control:active {background: var(--download) no-repeat center cen
 p:empty + .sb_notice {margin-top: 10px}
 #sb_warning + p:empty + form {margin-top: 11px; margin-bottom: -7px}
 .sb_netstatus hr, #sidebar .sb_netstatus hr:last-child {margin: 3px 0 6px}
+#sb_shutdownStatus span {margin: 2px 0 -1px; display: inline-block; font-size: 90%; color: #57f; opacity: .7}
 
 /* sidebar stacked tables fix */
 #sb_localid + #sb_version {margin-top: 6px; margin-bottom: 5px}
@@ -479,7 +480,7 @@ div[id^="config_"].main {padding-bottom: 14px}
 .tab:hover {box-shadow: var(--highlight), inset 0 0 1px 1px rgba(112,80,112,.7); background: radial-gradient(at center bottom, rgba(96,32,96,.6) 0, rgba(0,0,0,0) 90%), var(--btn_hover)}
 .tab:hover a {color: var(--a_hover); text-shadow: 0 1px 1px #000; background: none}
 .tab:active {box-shadow: var(--btn_shadow_active); background: radial-gradient(at center bottom, rgba(200, 96, 200, .8) 0, rgba(0, 0, 0, 0) 90%), linear-gradient(180deg,#501f6c, var(--hover))}
-.tab:active a, #help .tab:active a {color: var(--ink) !important; background: none; text-shadow: none}
+.tab:active a, #help .tab:active a {color: var(--ink); background: none; text-shadow: none}
 .tab2 {padding: 6px 14px; color: var(--ink); text-shadow: 0 1px 1px #000; box-shadow: var(--highlight), inset 4px 4px 4px rgba(0,0,0,.5); background: radial-gradient(at center bottom, rgba(128, 0, 128, .4) 0, rgba(0, 0, 0, 0) 90%), linear-gradient(90deg, rgba(96,0,96,.2), rgba(96,0,96,.2)), linear-gradient(180deg,#000, #1a1b2f)}
 
 #bwlimiter a, #advancedconfig a, .tabletitle a, #upnpconfig a, #servicedebug a, .ptitle a, #configstats th a, #graphinfo a, .h3navlinks {float: right; letter-spacing: normal; text-transform: capitalize; font-size: 9pt}
@@ -565,7 +566,7 @@ form[action="graphs"], form[action="/updategraphs"] {margin-top: -11px; margin-b
 #graphs .optionlist label {box-shadow: none; background: none}
 #graph_single .graphContainer {padding-top: 5px}
 #updategraphs .messages {margin-bottom: 10px}
-#graphing.formaction {border-top: none !important}
+#graphing {border-top: none !important}
 
 .smallhead th, #ntcpconnections th {font-size: 8pt}
 .smallhead th a:hover {text-decoration: none}
@@ -1013,7 +1014,7 @@ tr:nth-child(4) .net_bwrate::before {width: 22px; background:var(--share) left t
 #configstats label {position: relative; font-size: 90%}
 #configstats {margin-bottom: -2px}
 #configstats .optbox {margin: 0; padding: 0; vertical-align: middle}
-#configstats .optbox:not(:checked) + label > .stattograph b  {font-style: italic; color: rgba(201,206,255,.7)}
+#configstats .optbox:not(:checked) + label > .stattograph b {font-style: italic; color: rgba(201,206,255,.7)}
 #config_stats .tabletitle:first-of-type {margin-top: -4px}
 #config_stats .tabletitle {margin: 10px 0 -1px}
 #configstats td b {padding: 0 2px 0 0; color: var(--ink)}
@@ -1206,10 +1207,12 @@ a[name="criticallogs"] + p + h3 + p + ul {margin-bottom: 15px; border: var(--bor
 #logs #enviro:hover td {color: #dd0; border-top: 1px inset transparent; border-bottom: 1px inset transparent; background: #001}
 #logs #enviro:hover {user-select: all; cursor: text}
 #logs #enviro td:first-child {width: 1%; text-align: right; white-space: nowrap}
-#logs li {margin: 0 0 0 13px; padding: 0 2px 0 8px; width: calc(100% - 6px); word-break: break-all; font-family: var(--monospaced); border-top: 1px solid rgba(64,64,80,.2); border-right: 1px solid rgba(40,40,48,.2); border-bottom: 1px solid #000; border-left: 2px solid #224; background: rgba(10,10,34,.6)}
+#logs li {margin: 0 5px 0 13px; padding: 2px 2px 2px 7px; width: calc(100% - 9px); word-break: break-all; list-style: none; text-align: left; font: 8.5pt/1.5 var(--monospaced); border-top: 1px solid rgba(64,64,80,.2); border-right: 1px solid rgba(40,40,48,.2); border-bottom: 1px solid #000; border-left: 2px solid #224; background: rgba(10,10,34,.6); opacity: .8}
+#logs li:hover {border-left-color: #449; background: #113; opacity: 1}
 #logs li:nth-child(odd) {border-left: 2px solid #335; background: rgba(26,26,58,.5)}
+#logs li:last-child::after {margin: 0; border: none}
 #logs li:last-child {margin-bottom: 7px; border-bottom: 1px solid rgba(64,64,80,.2)}
-#logs li:hover {background: #113}
+#criticallogs li {width: 100%}
 #criticallogs li:last-child, #routerlogs li:last-child {padding-bottom: 8px}
 #criticallogs td:empty {display: none}
 #criticallogs tr:first-child {display: none}
@@ -1228,6 +1231,8 @@ table[id$="logs"] ul {margin: 1px 17px -6px -12px}
 #wrapperlogs pre {margin: 2px 0; width: 100%; max-height: 600px; white-space: pre-wrap; word-wrap: break-word; color: #a2a6d1}
 #wrapperlogs tr:last-child td {padding: 0 0 0 5px; background: rgba(10,10,34,.6)}
 
+.log_debug, .log_info, .log_warn, .log_error, .log_crit, .log_omitted {padding: 1px 2px; min-width: 36px; max-width: 36px; display: inline-block; overflow: hidden; line-height: .9; white-space: nowrap; text-overflow: ellipsis; text-align: center; color: #000; border-radius: 2px}
+
 /* Override error log colors */
 font[color="#006600"] {/* debug/notify */
 color: var(--ink); opacity: .8}
@@ -1240,27 +1245,16 @@ color: #f00}
 font[color="#000099"] {/* info */
 color: var(--ink)}
 
-/*#criticallogs li, #routerlogs li {padding: 0 0 1px}*/
-#logs li {margin-right: 5px; padding: 2px 2px 7px 7px; width: calc(100% - 9px); line-height: 1.6; list-style: none; text-align: left; font: 8.5pt var(--monospaced); filter: opacity(.8)}
-#logs li:hover {filter: opacity(1); border-left-color: #449}
-#criticallogs li {width: 100%}
-#logs li:last-child::after {margin: 0; border: none}
 #logs font[color^="#"]::before {margin-left: 0; margin-right: 5px; width: 6px; height: 6px; display: inline-block; vertical-align: calc(1px); border-radius: 50%; background: #fff; content: ""}
-.log_debug, .log_info, .log_warn, .log_error, .log_crit, .log_omitted {padding: 1px 2px; min-width: 36px; max-width: 36px; display: inline-block; overflow: hidden; line-height: .9; white-space: nowrap; text-overflow: ellipsis; text-align: center; color: #000; border-radius: 2px}
-
 /* critical */
 #logs li font[color="#cc0000"]::before, .log_crit {background: #f00}
-
 /* debug */
 #logs li font[color="#006600"]::before, .log_debug, .log_omitted {background: var(--ink); opacity: .8}
 .log_omitted {font-weight: 700}
-
 /* error */
 #logs li font[color="#ff3300"]::before, .log_error {background: #d00}
-
 /* warning */
 #logs li font[color="#bf00df"]::before, .log_warn {background: #848}
-
 /* info */
 #logs li font[color="#000099"]::before, .log_info {background: var(--ink)}
 
@@ -2047,7 +2041,7 @@ h3[id*="jobs"] {margin-top: 25px; clear: both}
 #schedjobs {margin: -6px 0 0; width: 100%}
 #jobstats {margin-bottom: 10px}
 #jobstats th, #jobstats td {padding: 3px 8px; text-align: right}
-#jobstats th {font-size: 90%}
+#jobstats th {padding: 5px 8px; font-size: 90%}
 #schedjobs th:first-child, #schedjobs td:first-child, #jobstats th:first-child, #jobstats td:first-child {margin-bottom: 15px; padding-left: 8px; text-align: left; font-weight: 700}
 #schedjobs td:first-child {padding: 5px 8px 3px}
 #jobstats tr:last-child td {font-size: 105%; font-weight: 700; border-top: 3px solid #1e1c4a !important; background: #002}
@@ -2645,7 +2639,6 @@ select, .main input[type=submit], .main input[type=reset], .main input[type=subm
 table[id^="sb_"], #sidebar #sb_localtunnels {width: 236px}
 #tunnels .tab, #tunnels .tab2 {line-height: 1.3}
 #webappconfig td:first-child::after {min-height: 30px}
-#wizardpage #sidebar img[src$="i2plogo.png"] {margin-left: -1px; width: 223px}
 }
 
 @supports not (-moz-appearance: none) {#searchbar span {margin: -1px -1px -5px}}

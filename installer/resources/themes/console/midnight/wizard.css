@@ -30,6 +30,7 @@ body {height: calc(100% - 2px)}
 .bandwidthtester #wizard p + p {padding-top: 0}
 
 @media screen and (min-width: 1500px) {
+#wizardpage #sidebar #sb_logo img {margin-left: -1px; width: 223px}
 #wizardpage #sb_logo {margin-bottom: -5px; padding: 0 10px}
 #wizardpage #sidebar h3 {padding: 9px 0 6px; font-size: 11pt}
 }

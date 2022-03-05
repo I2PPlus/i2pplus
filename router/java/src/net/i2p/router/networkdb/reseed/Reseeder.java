@@ -68,9 +68,9 @@ public class Reseeder {
     /** if false, use su3 only, and disable fallback reading directory index and individual dat files */
     private static final boolean ENABLE_NON_SU3 = false;
     //private static final int MIN_RI_WANTED = 100;
-    private static final int MIN_RI_WANTED = 600;
+    private static final int MIN_RI_WANTED = 800;
     //private static final int MIN_RESEED_SERVERS = 2;
-    private static final int MIN_RESEED_SERVERS = 9;
+    private static final int MIN_RESEED_SERVERS = 10;
     // network ID cross-check, proposal 147, as of 0.9.42
     private static final String NETID_PARAM = "?netid=";
 

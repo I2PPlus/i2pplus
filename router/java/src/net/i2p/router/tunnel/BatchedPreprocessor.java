@@ -274,11 +274,11 @@ class BatchedPreprocessor extends TrivialPreprocessor {
                         _pendingSince = _context.clock().now();
                         _context.statManager().addRateData("tunnel.batchFlushRemaining", pending.size(), beforeSize);
                         if (_log.shouldLog(Log.INFO))
-                            display(allocated, pending, "\n* Flushed, some remain");
+                            display(allocated, pending, "\n* Flushed pending messages in buffer, some remain...");
 
                         if (timingBuf != null) {
                             long now = System.currentTimeMillis();
-                            timingBuf.append("\n* Flushed, some remain (displayed to now: " + (now - afterDisplayed) + ")");
+                            timingBuf.append("\n* Flushed messages in buffer, some remain (displayed to now: " + (now - afterDisplayed) + ")");
                             timingBuf.append(" Total time: " + (now - start));
                             _log.debug(timingBuf.toString());
                         }
@@ -292,11 +292,11 @@ class BatchedPreprocessor extends TrivialPreprocessor {
                         if (batchCount > 1)
                             _context.statManager().addRateData("tunnel.batchCount", batchCount);
                         if (_log.shouldLog(Log.INFO))
-                            display(allocated, pending, "Flushed " + (beforeSize) + ", none remaining after " + delayAmount + "ms");
+                            display(allocated, pending, "Flushed messages: " + (beforeSize) + ", none remaining after " + delayAmount + "ms");
 
                         if (timingBuf != null) {
                             long now = System.currentTimeMillis();
-                            timingBuf.append(" Flushed, none remain (displayed to now: " + (now - afterDisplayed) + ")");
+                            timingBuf.append(" Flushed all messages in buffer, none remain (displayed to now: " + (now - afterDisplayed) + ")");
                             timingBuf.append(" Total time: " + (now - start));
                             _log.debug(timingBuf.toString());
                         }
@@ -312,7 +312,7 @@ class BatchedPreprocessor extends TrivialPreprocessor {
                         _context.statManager().addRateData("tunnel.batchCount", batchCount);
                     // not yet time to send the delayed flush
                     if (_log.shouldLog(Log.INFO))
-                        display(allocated, pending, "Not flushing");
+                        display(allocated, pending, "Not flushing pending messages in buffer (too early)");
 
                     if (timingBuf != null) {
                         long now = System.currentTimeMillis();
@@ -426,7 +426,7 @@ class BatchedPreprocessor extends TrivialPreprocessor {
             }
         }
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Sent " + startAt + ":" + sendThrough + " out of " + pending + " in [MsgID " + msgId + "]");
+            _log.debug("Sent " + startAt + ":" + sendThrough + " out of " + pending + " messages in [MsgID " + msgId + "]");
     }
 
     /**
