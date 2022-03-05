@@ -144,11 +144,11 @@ a:hover, a:focus, .configTitle a:hover, .toggleview:hover, .trackerName a:visite
 	background: #fff;
 }
 
-.snarkNav:hover, .configTitle a:hover {
+#navbar a:hover, .configTitle a:hover {
 	color: var(--a);
 }
 
-.snarkNav:active, .configTitle a, .configTitle a:active,
+#navbar a:active, .configTitle a, .configTitle a:active,
 .toggleview:active, #torrentDisplay label:active {
 	color: #bbb;
 }
