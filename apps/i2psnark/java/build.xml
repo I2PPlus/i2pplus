@@ -367,6 +367,7 @@
 
         <mkdir dir="build/standalone-resources/.resources/js" />
         <copy file="../../routerconsole/jsp/js/ajax.js" todir="build/standalone-resources/.resources/js" />
+<!--
         <copy file="../resources/js/previewTheme.js" todir="build/standalone-resources/.resources/js" />
         <replace dir="build/standalone-resources/.resources/js"
             summary="true"
@@ -374,7 +375,7 @@
             value="/i2psnark/.resources/themes/" >
             <include name="previewTheme.js" />
         </replace>
-
+-->
         <zip destfile="../i2psnark.war" update="true" duplicate="preserve" >
             <fileset dir="build/standalone-resources" />
         </zip>
