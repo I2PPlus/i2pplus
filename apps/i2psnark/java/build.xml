@@ -308,6 +308,30 @@
             value="url(/i2psnark/.resources/themes/snark/ubergine/images/" >
             <include name="**/*.css" />
         </replace>
+        <replace dir="build/standalone-resources/.resources/themes/snark"
+            summary="true"
+            token="url(/themes/console/classic/"
+            value="url(/i2psnark/.resources/themes/snark/classic/" >
+            <include name="**/*.css" />
+        </replace>
+        <replace dir="build/standalone-resources/.resources/themes/snark"
+            summary="true"
+            token="url(/themes/console/dark/"
+            value="url(/i2psnark/.resources/themes/snark/dark/" >
+            <include name="**/*.css" />
+        </replace>
+        <replace dir="build/standalone-resources/.resources/themes/snark"
+            summary="true"
+            token="url(/themes/console/light/"
+            value="url(/i2psnark/.resources/themes/snark/light/" >
+            <include name="**/*.css" />
+        </replace>
+        <replace dir="build/standalone-resources/.resources/themes/snark"
+            summary="true"
+            token="url(/themes/console/midnight/"
+            value="url(/i2psnark/.resources/themes/snark/midnight/" >
+            <include name="**/*.css" />
+        </replace>
 
         <!-- Rather than pulling in all the console theme images, let's just specify the ones we need -->
         <copy file="../../../installer/resources/themes/fonts/DroidSans.css"
