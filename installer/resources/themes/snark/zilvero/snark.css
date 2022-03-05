@@ -1085,11 +1085,6 @@ input[type=checkbox]:checked:hover::before, input[type=checkbox]:checked:focus::
 	background: #b32;
 }
 
-.iframed input[type=radio]:checked::before {
-	top: 24%;
-	left: 23%;
-}
-
 input[type=checkbox]:not(:checked), input[type=radio]:not(:checked) {
 	box-shadow: inset 2px 2px 2px #bbb;
 }
