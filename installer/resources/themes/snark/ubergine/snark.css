@@ -99,6 +99,8 @@ thead th, .torrentInfo th, #torrentEdit th {background: var(--th)}
 #torrents thead {filter: drop-shadow(0 1px 1px #101)}
 th .infohash {vertical-align: middle; font-size: 9pt}
 th:first-child {padding-left: 2px; text-align: left}
+td {padding: 2px 4px; font-size: 8pt; color: #ddd}
+td:first-child {text-align: right}
 tfoot td:first-child {padding-left: 0; text-align: left}
 .headerstatus {text-align: center}
 .mainsection .ParentDir {padding: 0 3px; border: var(--border_hard); text-align: left; background: linear-gradient(180deg,#101, #170017)}
@@ -161,8 +163,6 @@ th.torrentUploaded a img {display: inline-block}
 .idle::after, .choked::after {width: 8px; height: 8px; display: inline-block; border-radius: 50%; background: #373; content: ""}
 .choked::after {background: #900}
 
-td {padding: 2px 4px; font-size: 8pt; color: #ddd}
-td:first-child {text-align: right}
 .trackerLink img {opacity: .75}
 .trackerLink a img:hover, .trackerLink a img:focus {opacity: 1}
 .trackerLink, .torrentDetails {padding-left: 0; padding-right: 0; width: 1%; white-space: nowrap; text-align: center; font-weight: 700}
