@@ -1075,12 +1075,21 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         _util.setEnableLightbox(Boolean.parseBoolean(_config.getProperty(PROP_ENABLE_LIGHTBOX,
                                           Boolean.toString(I2PSnarkUtil.DEFAULT_ENABLE_LIGHTBOX))));
         File dd = getDataDir();
+
         if (dd.isDirectory()) {
-            if (!dd.canWrite())
-                addMessage(_t("No write permissions for data directory") + ": " + dd);
+            if (!dd.canWrite()) {
+                String msg = _t("No write permissions for data directory") + ": " + dd;
+                addMessage(msg);
+                if (!_context.isRouterContext())
+                    System.out.println(" • " + msg);
+            }
         } else {
-            if (!dd.mkdirs())
-                addMessage(_t("Data directory cannot be created") + ": " + dd);
+            if (!dd.mkdirs()) {
+                String msg = _t("Data directory cannot be created") + ": " + dd;
+                addMessage(msg);
+                if (!_context.isRouterContext())
+                    System.out.println(" • " + msg);
+            }
         }
         initTrackerMap();
     }
@@ -1144,9 +1153,15 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     _util.setMaxUploaders(limit);
                     changed = true;
                     _config.setProperty(PROP_UPLOADERS_TOTAL, Integer.toString(limit));
-                    addMessage(_t("Total uploaders limit changed to {0}", limit));
+                    String msg = _t("Total uploaders limit changed to {0}", limit);
+                    addMessage(msg);
+                    if (!_context.isRouterContext())
+                        System.out.println(" • " + msg);
                 } else {
-                    addMessage(_t("Minimum total uploaders limit is {0}", Snark.MIN_TOTAL_UPLOADERS));
+                    String msg = _t("Minimum total uploaders limit is {0}", Snark.MIN_TOTAL_UPLOADERS);
+                    addMessage(msg);
+                    if (!_context.isRouterContext())
+                        System.out.println(" • " + msg);
                 }
             }
         }
@@ -1841,7 +1856,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             if (!_util.connected()) {
                 String msg = _t("Initializing I2PSnark and opening tunnels") + "...";
                 if (!_context.isRouterContext())
-                    System.out.println(msg);
+                    System.out.println(" • " + msg);
                 boolean ok = _util.connect();
                 if (!ok) {
                     if (_context.isRouterContext()) {
@@ -1849,7 +1864,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     } else {
                         msg = _t("Error connecting to I2P - check your I2CP settings!") + ' ' + _util.getI2CPHost() + ':' + _util.getI2CPPort();
                         addMessage(msg);
-                        System.out.println(msg);
+                        System.out.println(" • " + msg);
                     }
                     // this would rename the torrent to .BAD
                     //return false;
@@ -2690,7 +2705,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     boolean oldOK = routerOK;
                     // standalone, first time only
                     if (doMagnets && !_context.isRouterContext())
-                        System.out.println(_t("Connecting to I2P") + ' ' + _util.getI2CPHost() + ':' + _util.getI2CPPort());
+                        System.out.println(" • " + _t("Connecting to I2P") + ' ' + _util.getI2CPHost() + ':' + _util.getI2CPPort());
                     routerOK = getBWLimit();
                     if (routerOK) {
                         autostart = shouldAutoStart();
@@ -2701,7 +2716,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                                 String prop = config.getProperty(PROP_META_RUNNING);
                                 if (prop == null || Boolean.parseBoolean(prop)) {
                                     if (!_util.connected()) {
-                                        String msg = _t("Connecting to I2P");
+                                        String msg = _t("Connecting to I2P") + "...";
                                         addMessage(msg);
                                         if (!_context.isRouterContext())
                                             System.out.println(msg + ' ' + _util.getI2CPHost() + ':' + _util.getI2CPPort());
@@ -2713,7 +2728,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                                             } else {
                                                 msg = _t("Error connecting to I2P - check your I2CP settings!") + ' ' + _util.getI2CPHost() + ':' + _util.getI2CPPort();
                                                 addMessage(msg);
-                                                System.out.println(msg);
+                                                System.out.println(" • " + msg);
                                             }
                                             routerOK = false;
                                             autostart = false;
@@ -2721,8 +2736,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                                         } else {
                                             if (!_context.isRouterContext()) {
                                                 msg = "Connected to I2P at " + ' ' + _util.getI2CPHost() + ':' + _util.getI2CPPort();
-                                                addMessage(msg);
-                                                System.out.println(msg);
+                                                System.out.println(" • " + msg);
                                             }
                                         }
                                     }
@@ -2737,8 +2751,16 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                                     }
                                 }
                             }
-                            if (routerOK)
-                                addMessage(_t("Up bandwidth limit is {0} KBps", _util.getMaxUpBW()));
+                            if (routerOK) {
+                                String msg = _t("Up bandwidth limit is {0} KBps", _util.getMaxUpBW());
+                                addMessage(msg);
+/*
+                                if (!_context.isRouterContext()) {
+                                    System.out.println(" • " + _t("Connected to I2P at ") + _util.getI2CPHost() + ':' + _util.getI2CPPort());
+                                    System.out.println(" • " + msg);
+                                }
+*/
+                            }
                         }
                     } else {
                         autostart = false;
@@ -2780,7 +2802,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                         } else {
                             String msg = _t("Error connecting to I2P - check your I2CP settings!") + ' ' + _util.getI2CPHost() + ':' + _util.getI2CPPort();
                             addMessage(msg);
-                            System.out.println(msg);
+                            System.out.println(" • " + msg);
                         }
                     }
                 }

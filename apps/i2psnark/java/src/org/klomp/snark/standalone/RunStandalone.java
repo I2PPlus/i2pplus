@@ -16,7 +16,7 @@ import net.i2p.jetty.JettyStart;
  *  @since moved from ../web and fixed in 0.9.27
  */
 public class RunStandalone {
-    
+
     private final JettyStart _jettyStart;
     private final I2PAppContext _context;
     private int _port = 8002;
@@ -44,12 +44,12 @@ public class RunStandalone {
         _jettyStart = new JettyStart(_context, null, new String[] { xml.getAbsolutePath() } );
         if (args.length > 1) {
             _port = Integer.parseInt(args[1]);
-        } 
+        }
         if (args.length > 0) {
             _host = args[0];
         }
     }
-    
+
     /**
      *  Usage: RunStandalone [host [port]] (but must match what's in the jetty-i2psnark.xml file)
      */
@@ -63,11 +63,11 @@ public class RunStandalone {
             System.exit(1);
         }
     }
-    
+
     public void start() {
         try {
             String url = "http://" + _host + ':' + _port + "/i2psnark/";
-            System.out.println("Starting i2psnark at " + url);
+            System.out.println(" • Starting I2PSnark at: " + url);
             _jettyStart.startup();
             try {
                Thread.sleep(1000);
@@ -78,11 +78,11 @@ public class RunStandalone {
             e.printStackTrace();
         }
     }
-    
+
     public void stop() {
         _jettyStart.shutdown(null);
     }
-    
+
     /** @since 0.9.27 */
     public synchronized static void shutdown() {
         if (_instance != null)
