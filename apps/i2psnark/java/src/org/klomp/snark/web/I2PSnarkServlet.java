@@ -315,7 +315,7 @@ public class I2PSnarkServlet extends BasicServlet {
                   "<head>\n" +
                   "<meta charset=\"utf-8\">\n" +
                   "<meta name=\"viewport\" content=\"width=device-width\">\n" +
-                  "<link rel=\"preload\" href=\"/themes/fonts/DroidSans.css\" as=\"style\">\n" +
+//                  "<link rel=\"preload\" href=\"/themes/fonts/DroidSans.css\" as=\"style\">\n" +
                   "<link rel=\"preload\" href=\"" + _themePath + "images/images.css?" + CoreVersion.VERSION + "\" as=\"style\">\n" +
                   "<link rel=\"shortcut icon\" href=\"" + _contextPath + WARBASE + "icons/favicon.svg\">\n");
         if (!isStandalone)
@@ -450,6 +450,7 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("<div class=\"logshim\"></div>\n</div>\n");
             writeConfigForm(out, req);
             writeTrackerForm(out, req);
+//            out.write("<script src=\".resources/js/previewTheme.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
         } else {
             boolean canWrite;
             synchronized(this) {
@@ -2915,7 +2916,7 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write(_t("Theme"));
         out.write("</b> \n");
         if (_manager.getUniversalTheming()) {
-            out.write("<select name='theme' disabled=\"disabled\" title=\"");
+            out.write("<select id=\"themeSelect\" name=\"theme\" disabled=\"disabled\" title=\"");
             out.write(_t("To change themes manually, disable universal theming"));
             out.write("\"><option>");
             out.write(_manager.getTheme());
@@ -2928,7 +2929,7 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write(_t("Configure"));
             out.write("]</a></span><br>");
         } else {
-            out.write("<select name='theme'>");
+            out.write("<select id=\"themeSelect\" name=\"theme\">");
             String theme = _manager.getTheme();
             String[] themes = _manager.getThemes();
             Arrays.sort(themes);
@@ -3520,11 +3521,11 @@ public class I2PSnarkServlet extends BasicServlet {
 
     private static final String DOCTYPE = "<!DOCTYPE HTML>\n";
     private static final String HEADER_A = "<link href=\"";
-    private static final String HEADER_B = "snark.css?" + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\" >";
-    private static final String HEADER_C = "nocollapse.css?" + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\" >";
-    private static final String HEADER_D = "snark_big.css?" + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\" >";
-    private static final String HEADER_I = "images/images.css?" + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\" >";
-    private static final String HEADER_Z = "override.css\" rel=\"stylesheet\" type=\"text/css\" >";
+    private static final String HEADER_B = "snark.css?" + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\" id=\"snarkTheme\">";
+    private static final String HEADER_C = "nocollapse.css?" + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\">";
+    private static final String HEADER_D = "snark_big.css?" + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\">";
+    private static final String HEADER_I = "images/images.css?" + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\">";
+    private static final String HEADER_Z = "override.css\" rel=\"stylesheet\" type=\"text/css\">";
     private static final String TABLE_HEADER = "<table border=\"0\" id=\"torrents\" width=\"100%\" >\n" + "<thead id=\"snarkHead\">\n";
     private static final String FOOTER = "</div>\n</center>\n<span id=\"endOfPage\" data-iframe-height></span>\n" +
                                          "<script type=\"text/javascript\" src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" +

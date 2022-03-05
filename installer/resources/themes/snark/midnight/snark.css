@@ -130,7 +130,7 @@ td.torrentDetails img:not([src$="rateme.svg"]), .dirInfo td:first-child img:not(
 .torrentName a, .dirInfo .snarkFileName a {padding: 3px 0; width: 100%; display: inline-block; font-weight: 700}
 .torrentName a:hover, .snarkFileName a:hover {border-radius: 0 15px 15px 0; background: linear-gradient(90deg, rgba(0,0,0,0), rgba(16,0,16,.5) 40%)}
 .torrentName a:active, .snarkFileName a:active {color: var(--active); box-shadow: inset 3px 3px 3px 3px rgba(0,0,0,.3)}
-.noneLoaded td {text-align: center; font-weight: 700; border-bottom: var(--border); background: #001}
+#torrents .noneLoaded td {text-align: center; font-weight: 700; border-bottom: var(--border); background: #001}
 .noneLoaded i {padding: 10px; display: inline-block}
 .RateUp, .RateDown, .torrentDownloaded, .torrentUploaded {padding: 0 3px; line-height: .9}
 .torrentDownloaded {padding: 0 5px; white-space: nowrap; font-weight: 700}

@@ -13,7 +13,7 @@
   font-weight: 700;
   font-style: normal;
   font-display: swap;
-  src: url("/themes/fonts/DroidSans/DroidSans-Bold.woff2") format("woff2"), local("Droid Sans Bold"), local("DroidSans-Bold");
+  src: url(/themes/fonts/DroidSans/DroidSans-Bold.woff2) format("woff2"), local("Droid Sans Bold"), local("DroidSans-Bold");
 }
 
 @font-face {
