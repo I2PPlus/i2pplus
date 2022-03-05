@@ -110,7 +110,7 @@ p:empty + .sb_notice {margin-top: 7px}
 #sb_localtunnels td:nth-child(2) {padding-left: 0; min-width: 156px}
 #sb_localtunnels td:last-child {padding-right: 2px; width: 12px; text-align: right}
 #sb_localtunnels td:first-child, #sb_localtunnels tr:hover td:first-child {background: var(--client) no-repeat center center / 16px}
-#sb_localtunnels td.tunnelServer, #sb_localtunnels tr:hover td.tunnelServer  {background: var(--server) no-repeat center center / 16px}
+#sb_localtunnels td.tunnelServer, #sb_localtunnels tr:hover td.tunnelServer {background: var(--server) no-repeat center center / 16px}
 #sb_localtunnels td.ping, #sb_localtunnels tr:hover td.ping {background: var(--ping) no-repeat center center / 16px}
 #sb_localtunnels td:last-child, #sb_localtunnels tr:hover td:last-child {background: var(--local_inprogress) no-repeat right 1px center / 16px}
 #sb_localtunnels td.tunnelReady, #sb_localtunnels tr:hover td.tunnelReady {background-image: var(--local_up)}
@@ -1621,7 +1621,7 @@ b.suboption {margin: 0; padding: 5px 10px; position: relative; z-index: 10; disp
 /* configreseed */
 #config_reseed .reload, #config_reseed .download {float: left}
 #reseedconfig th label, #i2pupdates th label {vertical-align: text-top}
-#reseedconfig .nowrap b, #externali2cp .nowrap b  {margin: 0 3px 0 5px; min-width: 120px; display: inline-block; text-align: right}
+#reseedconfig .nowrap b, #externali2cp .nowrap b {margin: 0 3px 0 5px; min-width: 120px; display: inline-block; text-align: right}
 #reseedconfig th[colspan="2"], #i2pupdates th[colspan="2"] {padding: 8px; vertical-align: middle}
 #reseedconfig th label, #i2pupdates th label {margin-right: 10px}
 #reseedconfig td:first-child label {white-space: nowrap; display: inline-block}
@@ -1860,8 +1860,8 @@ li .flag + tt {margin-right: -6px}
 span.b32 {margin-right: 5px; padding: 2px 4px; float: right; line-height: 1.2; letter-spacing: .1em; font-family: var(--monospaced); font-size: 80%; color: var(--code); box-shadow: 0 0 0 1px var(--border_color), var(--highlight); background: var(--th); opacity: .8}
 .b32:hover {opacity: 1}
 .b32:active {box-shadow: 0 0 0 1px var(--border_color), var(--btn_shadow_active)}
-.inbound, .outbound  {width: 16px; height: 16px; display: inline-block; vertical-align: middle; background: var(--in) no-repeat center center / 16px}
-.outbound  {background: var(--out) no-repeat center center / 16px}
+.inbound, .outbound {width: 16px; height: 16px; display: inline-block; vertical-align: middle; background: var(--in) no-repeat center center / 16px}
+.outbound {background: var(--out) no-repeat center center / 16px}
 .inbound.small, .outbound.small {background-size: 12px; background-position: center center}
 .small img {margin: 0; padding: 0}
 .direction .small {width: 12px; margin-left: -2px}

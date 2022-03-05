@@ -46,7 +46,7 @@ tr.list0 td, tr.list1 td {
      border-top: 1px solid rgba(240,240,240,0.5);
 }
 
-tr.list1 td, tr.list1 a, .list1 td:nth-child(3) a, .list1 td:nth-child(4) img  {
+tr.list1 td, tr.list1 a, .list1 td:nth-child(3) a, .list1 td:nth-child(4) img {
      background: rgba(245,245,245,0.5) !important;
      -webkit-print-color-adjust: exact;
 }

@@ -765,7 +765,7 @@ td.torrentAction input {margin-top: 1px}
 #editSection hr {margin-top: 5px}
 #torrentEdit {margin: 10px 0 0}
 #torrentEdit th, #torrentEdit td {padding: 8px 20px; width: 25%; text-align: center; border-bottom: var(--border_soft)}
-#torrentEdit th, #torrentEdit #addCommentText  {border-bottom: var(--border); border-top: var(--border)}
+#torrentEdit th, #torrentEdit #addCommentText {border-bottom: var(--border); border-top: var(--border)}
 #torrentEdit th:first-child:not([colspan]), #torrentEdit td:first-child:not([colspan]) {width: 20%; text-align: right}
 #torrentEdit th:first-child[colspan] {text-align: left}
 #torrentEdit th:nth-child(2), #torrentEdit td:nth-child(2) {width: 30%; text-align: left}

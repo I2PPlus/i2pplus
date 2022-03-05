@@ -442,7 +442,7 @@ label:not([disabled]):hover {
   color: var(--ink_dark);
 }
 
-label[disabled], label[disabled]:hover  {
+label[disabled], label[disabled]:hover {
   opacity: .45;
 }
 

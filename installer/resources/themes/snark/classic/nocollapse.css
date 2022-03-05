@@ -5,7 +5,7 @@ input:not(checked) + label + hr + table, input:not(checked) + label + hr + table
   display: table;
 }
 
-.toggleview, .mainsection[id] input:not(:checked) + .toggleview, .mainsection[id] input:checked + .toggleview  {
+.toggleview, .mainsection[id] input:not(:checked) + .toggleview, .mainsection[id] input:checked + .toggleview {
   margin-bottom: -6px;
   padding: 3px 0;
   min-width: 200px;

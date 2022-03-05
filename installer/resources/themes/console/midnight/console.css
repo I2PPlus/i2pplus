@@ -1014,7 +1014,7 @@ tr:nth-child(4) .net_bwrate::before {width: 22px; background:var(--share) left t
 #configstats label {position: relative; font-size: 90%}
 #configstats {margin-bottom: -2px}
 #configstats .optbox {margin: 0; padding: 0; vertical-align: middle}
-#configstats .optbox:not(:checked) + label > .stattograph b  {font-style: italic; color: rgba(201,206,255,.7)}
+#configstats .optbox:not(:checked) + label > .stattograph b {font-style: italic; color: rgba(201,206,255,.7)}
 #config_stats .tabletitle:first-of-type {margin-top: -4px}
 #config_stats .tabletitle {margin: 10px 0 -1px}
 #configstats td b {padding: 0 2px 0 0; color: var(--ink)}
