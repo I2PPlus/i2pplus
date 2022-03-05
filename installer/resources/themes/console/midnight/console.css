@@ -122,9 +122,9 @@ input.accept[value^="Show"]:active, input.check[value^="View"]:active, input.sho
 input.accept, button.accept {padding: 6px 9px 6px 25px; background: var(--yes) no-repeat 8px center / 12px, var(--btn)}
 input.accept:hover, input.accept:focus {background: var(--yes) no-repeat 8px center / 12px, var(--btn_hover)}
 input.accept:active {padding: 6px 9px 6px 25px; background: var(--yes) no-repeat 8px center / 12px, var(--btn_active)}
-input.cancel[type=reset] {padding: 6px 9px 6px 25px; background: var(--no) no-repeat 10px center / 10px, var(--btn)}
-input.cancel[type=reset]:hover, input.cancel:focus {background: var(--no) no-repeat 10px center / 10px, var(--btn_hover)}
-input.cancel[type=reset]:active {background: var(--no) no-repeat 10px center / 10px, var(--btn_active)}
+input.cancel[type=reset], input.cancel[type=submit] {padding: 6px 9px 6px 25px; background: var(--no) no-repeat 10px center / 10px, var(--btn)}
+input.cancel[type=reset]:hover, input.cancel[type=submit]:hover, input.cancel[type=reset]:focus, input.cancel[type=submit]:focus {background: var(--no) no-repeat 10px center / 10px, var(--btn_hover)}
+input.cancel[type=reset]:active, input.cancel[type=submit]:active {background: var(--no) no-repeat 10px center / 10px, var(--btn_active)}
 input.cancel[value^="Hide"], input.delete[value^="Do not view"], input.hideconsole {padding: 6px 9px 6px 25px; background: var(--hide) no-repeat 8px center / 14px, var(--btn)}
 input.cancel[value^="Hide"]:hover, input.delete[value^="Do not view"]:hover, input.cancel[value^="Hide"]:focus, input.delete[value^="Do not view"]:focus, input.hideconsole:hover, input.hideconsole:focus {background: var(--hide) no-repeat 8px center / 14px, var(--btn_hover)}
 input.cancel[value^="Hide"]:active, input.delete[value^="Do not view"]:active, input.hideconsole:active {padding: 6px 9px 6px 25px; background: var(--hide) no-repeat 8px center / 14px, var(--btn_active)}
