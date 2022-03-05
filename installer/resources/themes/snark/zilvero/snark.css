@@ -2678,19 +2678,20 @@ td.graphicStatus img {
 }
 
 #configs .suboption {
-	padding: 5px 10px;
+	padding: 5px 6px;
 	text-align: left;
 	letter-spacing: 0.1em;
 	text-transform: uppercase;
+	font-size: 110%;
 	border: var(--border);
 }
 
 #configs .suboption::before {
-	width: 24px;
-	height: 18px;
+	width: 22px;
+	height: 16px;
 	display: inline-block;
 	vertical-align: middle;
-	background: url(/i2psnark/.resources/icons/nopeers.svg) no-repeat left center / auto 18px;
+	background: url(/i2psnark/.resources/icons/nopeers.svg) no-repeat left center / auto 16px;
 	opacity: .8;
 	content: "";
 }
@@ -2905,7 +2906,7 @@ input[name="i2cpOpts"], input[name="nofilter_dataDir"] {
 }
 
 @media screen and (min-width: 1500px) {
-	body, td, th, span, table a, input[type=submit], input[type=text], textarea {
+	body, td, th:not(.suboption), span, table a, input[type=submit], input[type=text], textarea {
 	font-size: 9.5pt;
 	}
 	td.graphicStatus img {

@@ -262,8 +262,8 @@
         <copy todir="build/standalone-resources/.resources/themes/snark" >
             <fileset dir="../../../installer/resources/themes/snark/" />
         </copy>
-        <mkdir dir="build/standalone-resources/.resources/themes/fonts" />
-        <copy todir="build/standalone-resources/.resources/themes/fonts" >
+        <mkdir dir="build/standalone-resources/.resources/themes/snark/fonts" />
+        <copy todir="build/standalone-resources/.resources/themes/snark/fonts" >
             <fileset dir="../../../installer/resources/themes/fonts/" />
         </copy>
         <replace dir="build/standalone-resources/.resources/themes/snark"
@@ -328,10 +328,6 @@
         </replace>
 
         <!-- Rather than pulling in all the console theme images, let's just specify the ones we need -->
-<!--
-        <copy file="../../../installer/resources/themes/fonts/DroidSans.css"
-              todir="build/standalone-resources/.resources/themes/fonts" />
--->
         <copy file="../../../installer/resources/themes/console/dark/images/camotile2.png"
               todir="build/standalone-resources/.resources/themes/snark/dark/images" />
         <copy file="../../../installer/resources/themes/console/classic/images/bg0.png"
@@ -350,10 +346,22 @@
               todir="build/standalone-resources/.resources/themes/snark/midnight/images" />
         <copy file="../../../installer/resources/themes/console/midnight/chromescroll.css"
               todir="build/standalone-resources/.resources/themes/snark/midnight" />
-        <replace dir="build/standalone-resources/.resources/themes"
+        <replace dir="build/standalone-resources/.resources/themes/snark"
             summary="true"
             token="url(/themes/fonts/"
-            value="url(/i2psnark/.resources/themes/fonts/" >
+            value="url(/i2psnark/.resources/themes/snark/fonts/" >
+            <include name="**/*.css" />
+        </replace>
+        <replace dir="build/standalone-resources/.resources/themes/snark"
+            summary="true"
+            token="@import url(../images/images.css);"
+            value="" >
+            <include name="**/*.css" />
+        </replace>
+        <replace dir="build/standalone-resources/.resources/themes/snark"
+            summary="true"
+            token="@import url(../images/itooplus.css);"
+            value="" >
             <include name="**/*.css" />
         </replace>
 

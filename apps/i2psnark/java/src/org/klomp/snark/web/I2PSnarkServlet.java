@@ -310,7 +310,6 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean collapsePanels = _manager.util().collapsePanels();
         setHTMLHeaders(resp, cspNonce, false);
         PrintWriter out = resp.getWriter();
-        boolean isStandalone = !_context.isRouterContext();
         out.write(DOCTYPE + "<html>\n" +
                   "<head>\n" +
                   "<meta charset=\"utf-8\">\n" +
@@ -318,7 +317,7 @@ public class I2PSnarkServlet extends BasicServlet {
 //                  "<link rel=\"preload\" href=\"/themes/fonts/DroidSans.css\" as=\"style\">\n" +
                   "<link rel=\"preload\" href=\"" + _themePath + "images/images.css?" + CoreVersion.VERSION + "\" as=\"style\">\n" +
                   "<link rel=\"shortcut icon\" href=\"" + _contextPath + WARBASE + "icons/favicon.svg\">\n");
-        if (!isStandalone)
+        if (!isStandalone())
             out.write("<link rel=\"preload\" href=\"/js/iframeResizer/iframeResizer.contentWindow.js?" + CoreVersion.VERSION + "\" as=\"script\">");
         out.write("<title>");
         if (_contextName.equals(DEFAULT_NAME))
@@ -376,7 +375,8 @@ public class I2PSnarkServlet extends BasicServlet {
         // selected theme inserted here
         out.write(HEADER_A + _themePath + HEADER_B + "\n");
         out.write(HEADER_A + _themePath + HEADER_I + "\n"); // load css image assets
-        out.write(HEADER_A + _themePath + HEADER_Z + "\n"); // optional override.css for version-persistent user edits
+        if (!isStandalone())
+            out.write(HEADER_A + _themePath + HEADER_Z + "\n"); // optional override.css for version-persistent user edits
 
         // larger fonts for cjk translations
         String lang = (Translate.getLanguage(_manager.util().getContext()));
@@ -477,7 +477,10 @@ public class I2PSnarkServlet extends BasicServlet {
             }
             out.write("</div>\n");
         }
-        out.write(FOOTER);
+        if (!isStandalone())
+            out.write(FOOTER);
+        else
+            out.write(FTR_STD);
     }
 
     /**
@@ -3531,6 +3534,7 @@ public class I2PSnarkServlet extends BasicServlet {
                                          "<script type=\"text/javascript\" src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" +
                                          CoreVersion.VERSION + "\" id=\"iframeResizer\"></script>\n" +
                                          "<style type=\"text/css\">body{opacity: 1 !important}</style>\n</body>\n</html>";
+    private static final String FTR_STD = "</div>\n</center><style type=\"text/css\">body{opacity: 1 !important}</style>\n</body>\n</html>";
 
     /**
      * Modded heavily from the Jetty version in Resource.java,
@@ -3662,7 +3666,8 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append(HEADER_A).append(_themePath).append(HEADER_D);
         }
         buf.append(HEADER_A + _themePath + HEADER_I).append("\n"); // images.css
-        buf.append(HEADER_A + _themePath + HEADER_Z).append("\n"); // optional override.css for version-persistent user edits
+        if (!isStandalone())
+            buf.append(HEADER_A + _themePath + HEADER_Z).append("\n"); // optional override.css for version-persistent user edits
         // hide javascript-dependent buttons when js is unavailable
         buf.append("<noscript><style type=\"text/css\">.script{display:none}</style></noscript>\n")
            .append("<link rel=\"shortcut icon\" href=\"" + _contextPath + WARBASE + "icons/favicon.svg\">\n");
@@ -4170,7 +4175,10 @@ public class I2PSnarkServlet extends BasicServlet {
             }
             if (includeForm)
                 buf.append("</form>\n");
+            if (!isStandalone())
                 buf.append(FOOTER);
+            else
+                buf.append(FTR_STD);
             return buf.toString();
         }
 
@@ -4566,7 +4574,10 @@ public class I2PSnarkServlet extends BasicServlet {
                        "}\n" +
                        "</script>\n");
         }
-        buf.append(FOOTER);
+        if (!isStandalone())
+            buf.append(FOOTER);
+        else
+            buf.append(FTR_STD);
         return buf.toString();
     }
 
@@ -5620,6 +5631,18 @@ public class I2PSnarkServlet extends BasicServlet {
                 return false;
         }
         return true;
+    }
+
+    /**
+     *  Are we running in standalone mode?
+     *
+     *  @since 0.9.54+
+     */
+    private boolean isStandalone() {
+        if (_context.isRouterContext())
+            return false;
+        else
+            return true;
     }
 }
 

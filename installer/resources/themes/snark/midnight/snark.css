@@ -17,8 +17,8 @@
 }
 
 /* globals */
-body {margin: 4px 2px; background: repeating-linear-gradient(180deg,rgba(0,0,24,.75) 2px, rgba(0,0,0,.7) 4px), var(--tile), var(--offline), url(images/dropdown_hover.svg), #000010; background-size: 100% 4px, 171px 148px, 0, 0, 0}
-body.iframed {margin: 1px 0; background: var(--offline), url(images/dropdown_hover.svg); background-size: 0, 0}
+body {margin: 4px 2px; background: repeating-linear-gradient(180deg,rgba(0,0,24,.75) 2px, rgba(0,0,0,.7) 4px), var(--tile), var(--offline), #000010; background-size: 100% 4px, 171px 148px, 0}
+body.iframed {margin: 1px 0; background: var(--offline); background-size: 0}
 tt, code {font-family: var(--monospaced)}
 table {margin: 0 0 10px 0; padding: 0; width: 100%; border: none; border-spacing: 0; border-collapse: collapse}
 thead, tfoot {background: #001}
