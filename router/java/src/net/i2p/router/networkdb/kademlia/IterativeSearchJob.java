@@ -183,7 +183,10 @@ public class IterativeSearchJob extends FloodSearchJob {
         _totalSearchLimit = ctx.getProperty("netdb.searchLimit", totalSearchLimit);
         _ipSet = new MaskedIPSet(2 * (_totalSearchLimit + EXTRA_PEERS));
         _singleSearchTime = ctx.getProperty("netdb.singleSearchTime", SINGLE_SEARCH_TIME);
-        _maxConcurrent = ctx.router().getUptime() > 30*60*1000 ? ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT) : 2;
+        if (isLease)
+            _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT);
+        else
+            _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", 1);
         _unheardFrom = new HashSet<Hash>(CONCURRENT_SEARCHES);
         _failedPeers = new HashSet<Hash>(_totalSearchLimit);
         _skippedPeers = new HashSet<Hash>(4);
