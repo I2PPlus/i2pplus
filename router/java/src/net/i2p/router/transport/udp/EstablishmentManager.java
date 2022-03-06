@@ -780,6 +780,9 @@ class EstablishmentManager {
 
     /**
      * Got a SessionDestroy on an established conn
+     *
+     * SSU 1 or 2
+     *
      * @since 0.8.1
      */
     void receiveSessionDestroy(RemoteHostId from, PeerState state) {
@@ -790,6 +793,9 @@ class EstablishmentManager {
 
     /**
      * Got a SessionDestroy during outbound establish
+     *
+     * SSU 1 or 2
+     *
      * @since 0.8.1
      */
     void receiveSessionDestroy(RemoteHostId from, OutboundEstablishState state) {
@@ -805,6 +811,9 @@ class EstablishmentManager {
      * TODO - PacketHandler won't look up inbound establishes
      * As this packet was essentially unauthenticated (i.e. intro key, not session key)
      * we just log it as it could be spoofed.
+     *
+     * SSU 1 or 2
+     *
      * @since 0.8.1
      */
     void receiveSessionDestroy(RemoteHostId from) {
