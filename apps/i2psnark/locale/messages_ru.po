@@ -31,7 +31,7 @@ msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-05 14:34+0000\n"
-"PO-Revision-Date: 2020-02-12 17:20+0000\n"
+"PO-Revision-Date: 2022-03-06 03:37+0000\n"
 "Last-Translator: cthat\n"
 "Language-Team: Russian (Russia) (http://www.transifex.com/otf/I2P/language/"
 "ru_RU/)\n"
@@ -39,9 +39,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
-"%100>=11 && n%100<=14)? 2 : 3);\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
+"(n%100>=11 && n%100<=14)? 2 : 3);\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: ../java/src/org/klomp/snark/IdleChecker.java:76
 msgid "No more torrents running."
@@ -649,7 +650,7 @@ msgstr "Настройки"
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:327
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1061
 msgid "Debug Mode"
-msgstr ""
+msgstr "Отладка"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:329
 msgid "Anonymous BitTorrent Client"
@@ -690,7 +691,7 @@ msgstr "Обновить страницу"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:411
 msgid "Forum"
-msgstr ""
+msgstr "форум"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:436
 msgid "Click \"Add torrent\" button to fetch torrent"
@@ -1325,7 +1326,7 @@ msgstr ""
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2389
 msgid "seconds"
-msgstr ""
+msgstr "секунд(ы)"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2400
 msgid "Seed"
@@ -1455,7 +1456,7 @@ msgstr "нет"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2890
 msgid "User Interface"
-msgstr ""
+msgstr "Пользовательский интерфейс"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2893
 msgid "Switch to Embedded Mode"
@@ -1898,7 +1899,7 @@ msgstr "Ресурс"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4108
 msgid "Audio file: "
-msgstr ""
+msgstr "Аудио файл: "
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4114
 #, fuzzy
@@ -1940,7 +1941,7 @@ msgstr "File not found in torrent?"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4320
 msgid "Unrecognized"
-msgstr ""
+msgstr "Непризнанный"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4373
 msgid "Preview"
