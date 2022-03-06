@@ -47,7 +47,7 @@ msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-05 14:42+0000\n"
-"PO-Revision-Date: 2020-05-13 22:50+0000\n"
+"PO-Revision-Date: 2022-03-06 03:31+0000\n"
 "Last-Translator: gmind\n"
 "Language-Team: Russian (Russia) (http://www.transifex.com/otf/I2P/language/"
 "ru_RU/)\n"
@@ -55,9 +55,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
-"%100>=11 && n%100<=14)? 2 : 3);\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
+"(n%100>=11 && n%100<=14)? 2 : 3);\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: ../../../router/java/src/net/i2p/router/Blocklist.java:271
 #, java-format
@@ -83,12 +84,13 @@ msgstr "Начальная загрузка из файла"
 #: ../../../router/java/src/net/i2p/router/networkdb/reseed/Reseeder.java:241
 #, java-format
 msgid "Imported {0} router infos."
-msgstr ""
+msgstr "Импортированные {0} информационных файлов маршрутизатора."
 
 #: ../../../router/java/src/net/i2p/router/networkdb/reseed/Reseeder.java:244
 #, java-format
 msgid "Imported {0} router infos ({1} errors)."
 msgstr ""
+"Импортированные {0} информационных файлов маршрутизатора ( {1} ошибки)."
 
 #: ../../../router/java/src/net/i2p/router/networkdb/reseed/Reseeder.java:352
 #, fuzzy
@@ -122,7 +124,7 @@ msgstr "Начальная загрузка не удалась."
 #: ../../../router/java/src/net/i2p/router/networkdb/reseed/Reseeder.java:406
 #, java-format
 msgid "For assistance, see the {0}"
-msgstr ""
+msgstr "Для помощи см {0}"
 
 #: ../../../router/java/src/net/i2p/router/networkdb/reseed/Reseeder.java:407
 msgid "reseed help"
@@ -1091,7 +1093,7 @@ msgid ""
 "If the problem persists, verify that you have cookies enabled in your "
 "browser."
 msgstr ""
-"Если проблема сохраняется, проверьте, что у Вас разрешены cookies в браузере"
+"Если проблема сохраняется, проверьте, что у Вас разрешены cookies в браузере."
 
 #: ../java/src/net/i2p/router/web/NewsHelper.java:302
 #, java-format
@@ -1452,7 +1454,7 @@ msgstr "Необходимо указать файл"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:512
 msgid "Install from file failed"
-msgstr "Не удалось установить из файла "
+msgstr "Не удалось установить из файла"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:527
 #, java-format
@@ -1710,9 +1712,8 @@ msgstr "Торренты"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/i2ptunnelmgr_jsp.java:469
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/i2ptunnelmgr_jsp.java:477
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:524
-#, fuzzy
 msgid "Tunnel Manager"
-msgstr "Задержка туннелей"
+msgstr "Менеджер туннеля"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:251
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:45
@@ -2722,7 +2723,7 @@ msgid ""
 "error logs."
 msgstr ""
 "Ошибка сохранения конфигурации (применена, но не сохранена) — смотрите "
-"журналы ошибок"
+"журналы ошибок."
 
 #. * dummies for translation
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:16
@@ -3793,7 +3794,7 @@ msgstr "запущен {0} назад"
 
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:77
 msgid "Just finished jobs"
-msgstr "Только что завершенные задачи "
+msgstr "Только что завершенные задачи"
 
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:82
 #, java-format
@@ -4869,7 +4870,7 @@ msgstr "Скорость"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:98
 msgid "Low Latency"
-msgstr ""
+msgstr "Низкая задержка"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:99
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:304
@@ -4884,7 +4885,7 @@ msgstr "Интеграция"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:101
 msgid "View/Edit"
-msgstr "Просмотр/редакт."
+msgstr "Просмотр/редакт"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:175
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:210
@@ -5137,7 +5138,7 @@ msgstr "пиковая скорость (байт/с) узла на одном �
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:490
 msgid "latency"
-msgstr ""
+msgstr "Задержка"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:492
 msgid ""
@@ -5369,7 +5370,7 @@ msgstr "Дополнительные ссылки"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:73
 msgid "UTC Clock"
-msgstr ""
+msgstr "UTC часы"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:163
 msgid "I2P Router Help &amp; FAQ"
@@ -5401,11 +5402,11 @@ msgstr "Укороченная версия секции часто задава
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:208
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:734
 msgid "New Users"
-msgstr ""
+msgstr "Новые пользователи"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:211
 msgid "A gentle introduction to I2P"
-msgstr ""
+msgstr "Мягкое введение в I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:220
 #, fuzzy
@@ -5501,7 +5502,7 @@ msgstr "Помощь и часто задаваемые вопросы о мар
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:469
 msgid "Info"
-msgstr ""
+msgstr "Информация"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:472
 msgid "Router information including transport addresses and UPnP scan"
@@ -5549,7 +5550,7 @@ msgstr "Отобразить существующие туннели и сост
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:543
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configadvanced_jsp.java:454
 msgid "Advanced Configuration"
-msgstr "Дополнительные настройки "
+msgstr "Дополнительные настройки"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:556
 msgid "API"
@@ -5826,7 +5827,7 @@ msgstr "Доля транзита"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1176
 msgid "What's in the router's job queue?"
-msgstr "Просмотр очереди заданий маршрутизатора"
+msgstr "Что в очереди работы маршрутизатора?"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1183
 msgid "Indicates router performance"
@@ -6091,7 +6092,7 @@ msgid ""
 "Attempt to download router reference files (if automatic reseed has failed)"
 msgstr ""
 "Попытаться скачать ссылочные файлы маршрутизатора (если не удалось "
-"автоматически произвести начальную загрузку) "
+"автоматически произвести начальную загрузку)"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1197
 msgid "Reseed"
@@ -6271,7 +6272,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:373
 msgid "threat points"
-msgstr ""
+msgstr "Оценка угроз"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:374
 msgid "Enforce block for"
@@ -6353,7 +6354,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:554
 msgid "Threat Points"
-msgstr ""
+msgstr "Оценка угроз"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:572
 #, fuzzy
@@ -6447,19 +6448,19 @@ msgstr "Floodfill"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:825
 msgid "MIN"
-msgstr ""
+msgstr "Мин."
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:826
 msgid "AVG"
-msgstr ""
+msgstr "Среднее"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:827
 msgid "MEDIAN"
-msgstr ""
+msgstr "медиана"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:828
 msgid "MAX"
-msgstr ""
+msgstr "Макс."
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:905
 msgid "Show all routers for this family in NetDb"
@@ -6531,7 +6532,7 @@ msgstr "Автообновление (с)"
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:157
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:399
 msgid "Data transferred"
-msgstr ""
+msgstr "Данные переданы"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:157
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:399
@@ -7122,7 +7123,7 @@ msgstr "Ограничение скорости"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:560
 msgid "Advanced Network Configuration"
-msgstr "Дополнительные сетевые настройки "
+msgstr "Дополнительные сетевые настройки"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:562
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:630
@@ -7161,7 +7162,7 @@ msgstr "Килобайт/секунду (на прием)"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:583
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:649
 msgid "Upload Speed"
-msgstr ""
+msgstr "Скорость загрузки"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:589
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:655
@@ -7205,7 +7206,7 @@ msgid ""
 "bandwidth. "
 msgstr ""
 "Пожалуйста, увеличьте долю транзитного трафика, указав бóльшую пропускную "
-"способность."
+"способность"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:611
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:676
@@ -7249,11 +7250,11 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configadvanced_jsp.java:564
 msgid "This router is currently a floodfill participant."
-msgstr "Этот маршрутизатор сейчас участвует в floodfill"
+msgstr "Этот маршрутизатор сейчас участвует в floodfill."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configadvanced_jsp.java:572
 msgid "This router is not currently a floodfill participant."
-msgstr "Этот маршрутизатор сейчас не участвует в floodfill"
+msgstr "Этот маршрутизатор сейчас не участвует в floodfill."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configadvanced_jsp.java:581
 msgid "Enrollment"
@@ -7450,7 +7451,7 @@ msgstr "Дополнительные настройки "
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/home_jsp.java:445
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:762
 msgid "Sites of Interest"
-msgstr ""
+msgstr "Сайты интересов"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configi2cp_jsp.java:288
 #, fuzzy
@@ -7783,12 +7784,12 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confignet_jsp.java:633
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confignet_jsp.java:675
 msgid "This is an experimental feature"
-msgstr ""
+msgstr "Экспериментальный"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confignet_jsp.java:635
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confignet_jsp.java:677
 msgid "Experimental"
-msgstr "экспериментальный режим"
+msgstr "Экспериментальный"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confignet_jsp.java:637
 msgid "IPv6 Configuration"
@@ -8017,8 +8018,8 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:559
 msgid ""
-"To enable the configuration of reseed urls, activate the console's <a href="
-"\"/help/advancedsettings\">Advanced mode</a>."
+"To enable the configuration of reseed urls, activate the console's <a "
+"href=\"/help/advancedsettings\">Advanced mode</a>."
 msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:565
@@ -8322,7 +8323,7 @@ msgstr "Статус туннеля"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configtunnels_jsp.java:557
 msgid "The default settings work for most people."
-msgstr "Большинству пользователей подойдут настройки по умолчанию. "
+msgstr "Большинству пользователей подойдут настройки по умолчанию."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configtunnels_jsp.java:559
 msgid "There is a fundamental tradeoff between anonymity and performance."
@@ -8839,7 +8840,7 @@ msgstr "Программный брандмауэр мешает коррект�
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help_005fru_jsp.java:485
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help_jsp.java:497
 msgid "Bugs in the device's UPnP implementation"
-msgstr "UPnP в устройстве реализован с ошибками "
+msgstr "UPnP в устройстве реализован с ошибками"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:469
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help_005far_jsp.java:489
@@ -8859,7 +8860,7 @@ msgstr "Несколько маршрутизаторов/брандмауэро
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help_005fru_jsp.java:489
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help_jsp.java:501
 msgid "UPnP device change, reset, or address change"
-msgstr "Смена/сброс UPnP-устройства или изменение адреса "
+msgstr "Смена/сброс UPnP-устройства или изменение адреса"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:473
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help_005far_jsp.java:493
@@ -8930,9 +8931,8 @@ msgid "Web Browser Configuration"
 msgstr "Конфигурация веб-приложений"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:487
-#, fuzzy
 msgid "The Tunnel Manager"
-msgstr "Задержка туннелей"
+msgstr "Менеджер туннеля"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:489
 msgid ""
@@ -8984,7 +8984,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:443
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:726
 msgid "Glossary"
-msgstr ""
+msgstr "Глоссарий"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:445
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:724
@@ -9812,7 +9812,7 @@ msgid ""
 msgstr ""
 "Если у Вас разрешены входящие TCP-соединения при заблокированном TCP-порте, "
 "то другие маршрутизаторы не смогут к Вам подсоединиться по TCP. Это повредит "
-"производительности сети. "
+"производительности сети."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:511
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help_005far_jsp.java:559
@@ -10285,7 +10285,7 @@ msgstr "Новости"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/news_jsp.java:444
 msgid "Latest News"
-msgstr " Последние новости"
+msgstr "Последние новости"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/nowebapp_jsp.java:289
 msgid "WebApp Not Found"
@@ -11239,15 +11239,15 @@ msgstr "Завершено"
 #~ "Extra display options are provided in the <a href=\"/netdb\">Network "
 #~ "Database section</a>."
 #~ msgstr ""
-#~ "Дополнительные параметры отображения предоставляются в <a href=\"/netdb"
-#~ "\">Network Database section</a>."
+#~ "Дополнительные параметры отображения предоставляются в <a href=\"/"
+#~ "netdb\">Network Database section</a>."
 
 #~ msgid "This will also enable the installation of unsigned updates."
 #~ msgstr "Это также позволит установить неподписанные обновления"
 
 #~ msgid ""
-#~ "You may also wish to enable the advanced sidebar section on the <a href="
-#~ "\"/configsidebar\">Sidebar Configuration page</a>."
+#~ "You may also wish to enable the advanced sidebar section on the <a "
+#~ "href=\"/configsidebar\">Sidebar Configuration page</a>."
 #~ msgstr ""
 #~ "Вы также можете включить расширенный раздел боковой панели на<a href=\"/"
 #~ "configsidebar\">Sidebar Configuration page</a>."
@@ -11270,8 +11270,8 @@ msgstr "Завершено"
 #~ "Additional searches may then be added on the <a href=\"/confighome\">home "
 #~ "configuration page</a>."
 #~ msgstr ""
-#~ "Дополнительные поиски могут быть добавлены на <a href=\"/confighome"
-#~ "\">домашней странице конфигурации.</a>"
+#~ "Дополнительные поиски могут быть добавлены на <a href=\"/"
+#~ "confighome\">домашней странице конфигурации.</a>"
 
 #~ msgid ""
 #~ "Determines the maximum number of participating tunnels the router will "
@@ -11631,8 +11631,8 @@ msgstr "Завершено"
 #~ msgid ""
 #~ "If you would like to help improve or translate the documentation, or help "
 #~ "with other aspects of the project, please see the documentation for <a "
-#~ "href=\"http://i2p-projekt.i2p/en/get-involved\" target=\"_blank"
-#~ "\">volunteers.</a>"
+#~ "href=\"http://i2p-projekt.i2p/en/get-involved\" "
+#~ "target=\"_blank\">volunteers.</a>"
 #~ msgstr ""
 #~ "Если вы хотите помочь улучшить или перевести документацию или помочь с "
 #~ "другими аспектами проекта, пожалуйста, ознакомьтесь с документацией для "
@@ -11652,21 +11652,21 @@ msgstr "Завершено"
 #~ msgstr "Информация боковой панели"
 
 #~ msgid ""
-#~ "Many of the stats on the sidebar may be <a href=\"configstats"
-#~ "\">configured</a> to be <a href=\"graphs\">graphed</a> for further "
-#~ "analysis."
+#~ "Many of the stats on the sidebar may be <a "
+#~ "href=\"configstats\">configured</a> to be <a href=\"graphs\">graphed</a> "
+#~ "for further analysis."
 #~ msgstr ""
-#~ "Большинство счётчиков на панели могут быть  <a href=\"configstats"
-#~ "\">настроены</a> для <a href=\"graphs\">построения графиков</a> для "
-#~ "дальнейшего анализа."
+#~ "Большинство счётчиков на панели могут быть  <a "
+#~ "href=\"configstats\">настроены</a> для <a href=\"graphs\">построения "
+#~ "графиков</a> для дальнейшего анализа."
 
 #~ msgid ""
 #~ "You may also customize the sections that appear on the Sidebar and their "
 #~ "positioning on the <a href=\"configsidebar\">Sidebar Configuration page</"
 #~ "a>."
 #~ msgstr ""
-#~ "Также вы можете настроить блоки панели и их расположение на <a href="
-#~ "\"configsidebar\">странице настроек панели</a>."
+#~ "Также вы можете настроить блоки панели и их расположение на <a "
+#~ "href=\"configsidebar\">странице настроек панели</a>."
 
 #~ msgid ""
 #~ "This section indicates your average bandwidth speeds and total usage for "
@@ -11682,8 +11682,8 @@ msgstr "Завершено"
 #~ "You may change your bandwidth limits on the <a href=\"config\">Bandwidth "
 #~ "Configuration page</a>."
 #~ msgstr ""
-#~ "Вы можете изменять ограничение полосы пропускания на  <a href=\"config"
-#~ "\">странице настроек ограничения полосы пропускания</a>."
+#~ "Вы можете изменять ограничение полосы пропускания на  <a "
+#~ "href=\"config\">странице настроек ограничения полосы пропускания</a>."
 
 #~ msgid ""
 #~ "The first number is the number of peers your router has sent or received "
@@ -11821,11 +11821,11 @@ msgstr "Завершено"
 #~ "узлами. "
 
 #~ msgid ""
-#~ "The best way to stay connected to the network is to <a href=\"/config"
-#~ "\">share more bandwidth</a>."
+#~ "The best way to stay connected to the network is to <a href=\"/"
+#~ "config\">share more bandwidth</a>."
 #~ msgstr ""
-#~ "Лучший способ оставаться подключенным к сети — <a href=\"/config"
-#~ "\">увеличить разделяемую пропускную способность</a>."
+#~ "Лучший способ оставаться подключенным к сети — <a href=\"/"
+#~ "config\">увеличить разделяемую пропускную способность</a>."
 
 #~ msgid ""
 #~ "I am missing lots of hosts in my addressbook. What are some good "
@@ -11859,11 +11859,11 @@ msgstr "Завершено"
 #~ "Вот некоторые другие ссылки подписки на общедоступную адресную книгу."
 
 #~ msgid ""
-#~ "You may wish to add one or two to your <a href=\"/susidns/subscriptions"
-#~ "\">subscription list</a>."
+#~ "You may wish to add one or two to your <a href=\"/susidns/"
+#~ "subscriptions\">subscription list</a>."
 #~ msgstr ""
-#~ "Вы можете добавить один или два в свой <a href=\"/susidns/subscriptions"
-#~ "\">список подписки</a>."
+#~ "Вы можете добавить один или два в свой <a href=\"/susidns/"
+#~ "subscriptions\">список подписки</a>."
 
 #~ msgid ""
 #~ "Note that subscribing to a hosts.txt service is an act of trust, as a "
@@ -12036,8 +12036,8 @@ msgstr "Завершено"
 #~ "The selected port is shown on the <a href=\"/confignet\">Network "
 #~ "Configuration page</a>."
 #~ msgstr ""
-#~ "Выбранный порт отображается на странице <a href=\"/confignet"
-#~ "\">конфигурации сети</a>."
+#~ "Выбранный порт отображается на странице <a href=\"/"
+#~ "confignet\">конфигурации сети</a>."
 
 #~ msgid "I2P Router Job Queue"
 #~ msgstr "Очередь заданий маршрутизатора I2P"
@@ -12092,12 +12092,12 @@ msgstr "Завершено"
 
 #~ msgid ""
 #~ "You may also limit the total number by setting <code>router."
-#~ "maxParticipatingTunnels=nnn</code> on the <a href=\"configadvanced"
-#~ "\">Advanced configuration page</a>."
+#~ "maxParticipatingTunnels=nnn</code> on the <a "
+#~ "href=\"configadvanced\">Advanced configuration page</a>."
 #~ msgstr ""
 #~ "Вы также можете ограничить общее количество, установив <code>router."
-#~ "maxParticipatingTunnels = nnn</code> на странице <a href=\"configadvanced"
-#~ "\">расширенной конфигурации</a>."
+#~ "maxParticipatingTunnels = nnn</code> на странице <a "
+#~ "href=\"configadvanced\">расширенной конфигурации</a>."
 
 #~ msgid ""
 #~ "The number of participating tunnels you route for others, divided by the "

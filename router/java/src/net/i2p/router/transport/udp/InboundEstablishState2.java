@@ -77,9 +77,6 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         //_sendHeaderEncryptKey2 set below
         //_rcvHeaderEncryptKey2 set below
         _introductionRequested = false; // todo
-        //_bobIP = TODO
-        //if (_log.shouldLog(Log.DEBUG))
-        //    _log.debug("Receive sessionRequest, BobIP = " + Addresses.toString(_bobIP));
         int off = pkt.getOffset();
         int len = pkt.getLength();
         byte data[] = pkt.getData();
@@ -107,12 +104,18 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         } else if (type == SESSION_REQUEST_FLAG_BYTE &&
                    (token == 0 ||
                     (ENFORCE_TOKEN && !_transport.getEstablisher().isInboundTokenValid(_remoteHostId, token)))) {
+            if (_log.shouldInfo())
+                _log.info("Invalid token " + token + " in session request from: " + _aliceSocketAddress);
             _currentState = InboundState.IB_STATE_REQUEST_BAD_TOKEN_RECEIVED;
             _sendHeaderEncryptKey2 = introKey;
+            // Generate token for the retry.
+            // We do NOT register it with the EstablishmentManager, it must be used immediately.
             do {
                 token = ctx.random().nextLong();
             } while (token == 0);
             _token = token;
+            // do NOT bother to init the handshake state and decrypt the payload
+            _timeReceived = _establishBegin;
         } else {
             // fast MSB check for key < 2^255
             if ((data[off + LONG_HEADER_SIZE + KEY_LEN - 1] & 0x80) != 0)
@@ -140,6 +143,10 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             processPayload(data, off + LONG_HEADER_SIZE, len - (LONG_HEADER_SIZE + KEY_LEN + MAC_LEN), true);
             _sendHeaderEncryptKey2 = SSU2Util.hkdf(_context, _handshakeState.getChainingKey(), "SessCreateHeader");
             _currentState = InboundState.IB_STATE_REQUEST_RECEIVED;
+        }
+        if (_currentState == InboundState.IB_STATE_FAILED) {
+            // termination block received
+            throw new GeneralSecurityException("Termination block in Session/Token Request");
         }
         if (_timeReceived == 0)
             throw new GeneralSecurityException("No DateTime block in Session/Token Request");
@@ -251,7 +258,11 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     public void gotAddress(byte[] ip, int port) {
-        throw new IllegalStateException("Address in Handshake");
+        if (_log.shouldDebug())
+            _log.debug("Got Address: " + Addresses.toString(ip, port));
+        _bobIP = ip;
+        // final, see super
+        //_bobPort = port;
     }
 
     public void gotIntroKey(byte[] key) {
@@ -301,7 +312,11 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     public void gotTermination(int reason, long count) {
-        throw new IllegalStateException("Termination in Handshake");
+        if (_log.shouldWarn())
+            _log.warn("Got TERMINATION block, reason: " + reason + " count: " + count);
+        // this sets the state to FAILED
+        fail();
+        _transport.getEstablisher().receiveSessionDestroy(_remoteHostId);
     }
 
     public void gotUnknown(int type, int len) {
@@ -356,8 +371,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         }
         _createdSentCount++;
         _nextSend = _lastSend + delay;
-        if ( (_currentState == InboundState.IB_STATE_UNKNOWN) || (_currentState == InboundState.IB_STATE_REQUEST_RECEIVED) )
-            _currentState = InboundState.IB_STATE_CREATED_SENT;
+        _currentState = InboundState.IB_STATE_CREATED_SENT;
     }
 
     
@@ -368,6 +382,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             throw new IllegalStateException("Bad state for Retry Sent: " + _currentState);
         _currentState = InboundState.IB_STATE_RETRY_SENT;
         _lastSend = _context.clock().now();
+        // Won't really be transmitted, they have 3 sec to respond or
+        // EstablishmentManager.handleInbound() will fail the connection
+        _nextSend = _lastSend + RETRANSMIT_DELAY;
     }
 
     /**
@@ -409,6 +426,11 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             _log.debug("State after sess req: " + _handshakeState);
         _timeReceived = 0;
         processPayload(data, off + LONG_HEADER_SIZE, len - (LONG_HEADER_SIZE + KEY_LEN + MAC_LEN), true);
+        packetReceived();
+        if (_currentState == InboundState.IB_STATE_FAILED) {
+            // termination block received
+            throw new GeneralSecurityException("Termination block in Session Request");
+        }
         if (_timeReceived == 0)
             throw new GeneralSecurityException("No DateTime block in Session Request");
         long skew = _establishBegin - _timeReceived;
@@ -417,8 +439,6 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         _sendHeaderEncryptKey2 = SSU2Util.hkdf(_context, _handshakeState.getChainingKey(), "SessCreateHeader");
         _currentState = InboundState.IB_STATE_REQUEST_RECEIVED;
         _rtt = (int) ( _context.clock().now() - _lastSend );
-
-        packetReceived();
     }
 
     /**
@@ -454,6 +474,11 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         if (_log.shouldDebug())
             _log.debug("State after sess conf: " + _handshakeState);
         processPayload(data, off + SHORT_HEADER_SIZE, len - (SHORT_HEADER_SIZE + KEY_LEN + MAC_LEN + MAC_LEN), false);
+        packetReceived();
+        if (_currentState == InboundState.IB_STATE_FAILED) {
+            // termination block received
+            throw new GeneralSecurityException("Termination block in Session Confirmed");
+        }
         _sessCrForReTX = null;
 
         if (_receivedConfirmedIdentity == null)
@@ -462,7 +487,6 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         // createPeerState() called from gotRI()
 
         _currentState = InboundState.IB_STATE_CONFIRMED_COMPLETELY;
-        packetReceived();
         return _pstate;
     }
 
@@ -539,17 +563,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         byte data[] = pkt.getData();
         int off = pkt.getOffset();
         System.arraycopy(_sessCrForReTX, 0, data, off, _sessCrForReTX.length);
-        InetAddress to;
-        try {
-            to = InetAddress.getByAddress(_aliceIP);
-        } catch (UnknownHostException uhe) {
-            if (_log.shouldLog(Log.ERROR))
-                _log.error("How did we think this was a valid IP?  " + _remoteHostId);
-            packet.release();
-            return null;
-        }
-        pkt.setAddress(to);
-        pkt.setPort(_alicePort);
+        pkt.setSocketAddress(_aliceSocketAddress);
         packet.setMessageType(PacketBuilder2.TYPE_CONF);
         packet.setPriority(PacketBuilder2.PRIORITY_HIGH);
         createdPacketSent();

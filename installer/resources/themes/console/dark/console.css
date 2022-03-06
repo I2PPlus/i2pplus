@@ -100,7 +100,7 @@ ul {margin: 0; padding: 0}
 #sidebar h3:hover a {color: var(--hover)}
 #sidebar h3:active {transition: ease box-shadow .01s}
 #sidebar h4 {margin: -6px -1px -9px; padding: 6px 1px; width: calc(100% - 9px); line-height: 1.2; font-size: 8pt; text-decoration: none; color: #2b2; border: none; box-shadow: var(--bevel), inset 0 0 0 3px #000, inset 0 0 5px 5px rgba(0,0,0,.5); background: rgba(0,64,0,.3)}
-#sidebar #sb_shutdownStatus {width: calc(100% - 1px)}
+#sidebar #sb_shutdownStatus {margin-top: -7px; width: calc(100% - 1px)}
 #clock {margin: -7px 0 -9px -1px; padding: 8px 0; position: relative; line-height: 1; letter-spacing: .1em; font-size: 18pt; font-weight: 700; color: #ffa; text-shadow: var(--textshadow); box-shadow: var(--bevel); background: repeating-linear-gradient(180deg,rgba(255,255,255,.05) 2px, rgba(0,16,0,.2) 4px), linear-gradient(90deg, #010, #000, #010); -webkit-text-stroke: 1px rgba(220,220,128,.5); opacity: .9}
 #clock::before {content: ""; position: absolute; top: 0; left: 0; height: 100%; width: 100%; box-shadow: var(--bevel); background: repeating-linear-gradient(90deg, rgba(0,0,0,.3) 2px, rgba(0,16,0,.2) 4px)}
 #clock::after {margin-left: 3px; content: "UTC"; display: inline-block; font-size: 50%; vertical-align: middle}

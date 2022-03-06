@@ -87,7 +87,6 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final String PROP_ADVANCED = "routerconsole.advanced";
 
     String cspNonce = Integer.toHexString(_context.random().nextInt());
-
     public I2PSnarkServlet() {
         super();
     }
@@ -314,7 +313,6 @@ public class I2PSnarkServlet extends BasicServlet {
                   "<head>\n" +
                   "<meta charset=\"utf-8\">\n" +
                   "<meta name=\"viewport\" content=\"width=device-width\">\n" +
-//                  "<link rel=\"preload\" href=\"/themes/fonts/DroidSans.css\" as=\"style\">\n" +
                   "<link rel=\"preload\" href=\"" + _themePath + "images/images.css?" + CoreVersion.VERSION + "\" as=\"style\">\n" +
                   "<link rel=\"shortcut icon\" href=\"" + _contextPath + WARBASE + "icons/favicon.svg\">\n");
         if (!isStandalone())
@@ -375,8 +373,14 @@ public class I2PSnarkServlet extends BasicServlet {
         // selected theme inserted here
         out.write(HEADER_A + _themePath + HEADER_B + "\n");
         out.write(HEADER_A + _themePath + HEADER_I + "\n"); // load css image assets
-        if (!isStandalone())
+        String themeBase = net.i2p.I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath() +
+                           java.io.File.separatorChar + "docs" + java.io.File.separatorChar + "themes" +
+                           java.io.File.separatorChar + "snark" + java.io.File.separatorChar + _manager.getTheme() +
+                           java.io.File.separatorChar;
+        File override = new File(themeBase + "override.css");
+        if (!isStandalone() && override.exists()) {
             out.write(HEADER_A + _themePath + HEADER_Z + "\n"); // optional override.css for version-persistent user edits
+        }
 
         // larger fonts for cjk translations
         String lang = (Translate.getLanguage(_manager.util().getContext()));
@@ -3666,8 +3670,14 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append(HEADER_A).append(_themePath).append(HEADER_D);
         }
         buf.append(HEADER_A + _themePath + HEADER_I).append("\n"); // images.css
-        if (!isStandalone())
+        String themeBase = net.i2p.I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath() +
+                           java.io.File.separatorChar + "docs" + java.io.File.separatorChar + "themes" +
+                           java.io.File.separatorChar + "snark" + java.io.File.separatorChar + _manager.getTheme() +
+                           java.io.File.separatorChar;
+        File override = new File(themeBase + "override.css");
+        if (!isStandalone() && override.exists()) {
             buf.append(HEADER_A + _themePath + HEADER_Z).append("\n"); // optional override.css for version-persistent user edits
+        }
         // hide javascript-dependent buttons when js is unavailable
         buf.append("<noscript><style type=\"text/css\">.script{display:none}</style></noscript>\n")
            .append("<link rel=\"shortcut icon\" href=\"" + _contextPath + WARBASE + "icons/favicon.svg\">\n");
