@@ -450,7 +450,7 @@ input[type=file]::file-selector-button {font-size: 8.5pt}
 .joblog ol li:first-child {margin-top: 2px}
 .joblog li:last-child {padding-bottom: 10px}
 .joblog ul li li li {margin-bottom: 10px}
-.joblog ul li li:last-child {margin-bottom: -30px}
+.joblog ul li li:last-child {margin-bottom: -15px}
 .joblog form:first-child {margin-top: 10px}
 .joblog table {margin-top: 15px; margin-left: 0; margin-bottom: 15px}
 .joblog table td:first-child {font-weight: 700}
@@ -954,8 +954,8 @@ h3.tabletitle + .statusnotes, table.tunneldisplay {margin-top: -1px}
 #participating a::after, #peercount a::after {margin: -10px 0 -15px -12px; padding: 9px 2px 9px 0}
 
 /* netdb */
-#netdb #netdbcountrylist img {margin: 0 10px 0 5px; padding: 0; width: 24px; height: 18px; box-shadow: var(--outline), 0 0 0 2px #020; background: #000}
-#netdb #netdbcountrylist a:hover img {box-shadow: var(--outline), 0 0 0 2px #f60; transform: scale(1.1)}
+#netdb #netdbcountrylist img {margin: 0 10px 0 5px; padding: 0; width: 24px; height: 18px; box-shadow: var(--outline), 0 0 0 2px var(--a); background: #000}
+#netdb #netdbcountrylist a:hover img {box-shadow: var(--outline), 0 0 0 2px var(--hover); transform: scale(1.1)}
 #netdb #netdbcountrylist a {padding: 2px 0; width: 100%; display: inline-block}
 #netdboverview {margin-bottom: 10px}
 #netdb #netdboverview th, #netdb #netdboverview tr, #netdb #netdboverview td {line-height: 1; box-shadow: none}
@@ -1360,6 +1360,7 @@ th code {user-select: all}
 #homepage .main h4 {contain: paint}
 #homepage .main h4 a {margin: -9px 0 -10px; padding: 14px 4px 12px; border-left: var(--border)}
 #homepage #home #chooselang, #homepage #home #configbandwidth {margin: -9px 8px -10px 16px; padding: 10px 4px 10px 14px}
+#homepage #home #configbandwidth {margin-right: -17px; padding-left: 3px}
 #homepage #applinks a {margin: -13px 0 -12px}
 #homepage #sitelinks a {margin: -14px 0 -10px}
 #homepanel {margin: 0 -8px}
@@ -2026,8 +2027,7 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 .config_experimental::after {margin-top: -10px; margin-left: -10px; min-height: 40px; min-width: 40px; display: inline-block; vertical-align: middle; background: var(--experimental) no-repeat 15px center; background-size: 16px; content: ""}
 #installPluginUrl table, #installPluginUrl tr, #installPluginUrl td, #installPluginFile table, #installPluginFile tr, #installPluginFile td, #createNewFamily table, #createNewFamily tr, #createNewFamily td, #joinfamily table, #joinfamily tr:nth-child(n+3), #joinfamily tr:nth-child(n+3) td, #joinfamily tr:nth-child(n+3) table tr {margin: 0; border: none; box-shadow: none; background: none}
 #joinfamily table, #joinfamily tr:nth-child(n+3), #joinfamily tr:nth-child(n+3) td {background: #010}
-#plugininstall td {padding: 5px}
-#plugininstall2 {margin-top: -13px}
+#plugininstall2 {margin-top: -11px}
 #plugininstall .suboption, #plugininstall2 .suboption, #config_family .suboption {padding: 2px 12px 3px 10px}
 #installPluginUrl input[type=text], #installPluginFile input[type=file], #joinfamily input[type=file], #newfamily input[type=text] {width: 100%}
 #installPluginUrl td:first-child {padding: 18px 15px 18px 58px; background: var(--link) no-repeat 15px center / 28px}
@@ -2588,7 +2588,8 @@ table:not(:first-of-type).netdbentry th:first-child, table:not(:first-of-type).n
 .bw_title {margin: 2px -6px -2px -3px; font-size: 10pt}
 #updateHelper select {max-width: 200px}
 #reseedconfig tr:nth-child(3) td label {padding: 5px 4px 5px 0; width: calc(100% - 4px)}
-.encDests code {max-width: 140px}}
+.encDests code {max-width: 140px}
+}
 
 @media screen and (max-width: 900px) {
 #ntcpconnections th:last-child {font-size: 0}
@@ -2719,7 +2720,6 @@ h4#updateplugins {margin-top: -15px}
 #netdb .flag img, #peers .routerid .flag img {margin: -3px -3px -1px; width: 20px; height: 15px}
 #peers .routerid .flag img {margin: -3px -1px 1px}
 #pluginconfigtext + form > input {margin-top: 3px}
-#plugininstall2 {margin-top: -14px}
 #reseedconfig input[type=text], #reseedconfig input[type=password] {width: 250px}
 #sb_graphcontainer {height: 50px}
 #sb_localtunnels a {max-width: 200px}

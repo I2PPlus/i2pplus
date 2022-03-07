@@ -307,6 +307,9 @@ class OutboundMessageState implements CDPQEntry {
         return rv;
     }
 
+    /**
+     * @return true if the fragment has not been ACKed
+     */
     public synchronized boolean needsSending(int fragment) {
         return (_fragmentAcks & mask(fragment)) != 0;
     }
@@ -325,6 +328,18 @@ class OutboundMessageState implements CDPQEntry {
             if (bitfield.received(i))
                 _fragmentAcks &= ~mask(i);
         }
+        return isComplete();
+    }
+
+    /**
+     * Ack this fragment number.
+     * For SSU 2 only.
+     *
+     * @return true if the message was completely ACKed
+     * @since 0.9.54
+     */
+    public synchronized boolean acked(int fragmentNum) {
+        _fragmentAcks &= ~mask(fragmentNum);
         return isComplete();
     }
 
