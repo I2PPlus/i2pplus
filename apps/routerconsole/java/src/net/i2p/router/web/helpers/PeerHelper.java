@@ -758,7 +758,7 @@ public class PeerHelper extends HelperBase {
       if (numPeers > 0) {
         buf.append("<tr class=\"tablefooter\"><td class=\"peer\"><b>")
            .append(ngettext("{0} peer", "{0} peers", peers.size()))
-           .append("</b></td><td class=\"direction\">&nbsp;</td><td class=\"ipv6\">&nbsp;</td><td class=\"idle\">&nbsp;</td>" +
+           .append("</b></td><td class=\"direction\">&nbsp;</td><td class=\"ipv6\">&nbsp;</td><td class=\"ssuversion\">&nbsp;</td><td class=\"idle\">&nbsp;</td>" +
                    "<td class=\"inout\" nowrap><span class=\"right\"><b>");
         String bwin = formatKBps(bpsIn).replace(".00", "");
         String bwout = formatKBps(bpsOut).replace(".00", "");
