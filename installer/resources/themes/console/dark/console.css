@@ -1360,6 +1360,7 @@ th code {user-select: all}
 #homepage .main h4 {contain: paint}
 #homepage .main h4 a {margin: -9px 0 -10px; padding: 14px 4px 12px; border-left: var(--border)}
 #homepage #home #chooselang, #homepage #home #configbandwidth {margin: -9px 8px -10px 16px; padding: 10px 4px 10px 14px}
+#homepage #home #configbandwidth {margin-right: -17px; padding-left: 3px}
 #homepage #applinks a {margin: -13px 0 -12px}
 #homepage #sitelinks a {margin: -14px 0 -10px}
 #homepanel {margin: 0 -8px}
