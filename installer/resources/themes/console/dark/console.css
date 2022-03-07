@@ -954,8 +954,8 @@ h3.tabletitle + .statusnotes, table.tunneldisplay {margin-top: -1px}
 #participating a::after, #peercount a::after {margin: -10px 0 -15px -12px; padding: 9px 2px 9px 0}
 
 /* netdb */
-#netdb #netdbcountrylist img {margin: 0 10px 0 5px; padding: 0; width: 24px; height: 18px; box-shadow: var(--outline), 0 0 0 2px #020; background: #000}
-#netdb #netdbcountrylist a:hover img {box-shadow: var(--outline), 0 0 0 2px #f60; transform: scale(1.1)}
+#netdb #netdbcountrylist img {margin: 0 10px 0 5px; padding: 0; width: 24px; height: 18px; box-shadow: var(--outline), 0 0 0 2px var(--a); background: #000}
+#netdb #netdbcountrylist a:hover img {box-shadow: var(--outline), 0 0 0 2px var(--hover); transform: scale(1.1)}
 #netdb #netdbcountrylist a {padding: 2px 0; width: 100%; display: inline-block}
 #netdboverview {margin-bottom: 10px}
 #netdb #netdboverview th, #netdb #netdboverview tr, #netdb #netdboverview td {line-height: 1; box-shadow: none}
