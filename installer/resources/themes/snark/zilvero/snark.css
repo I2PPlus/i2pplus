@@ -205,7 +205,7 @@ tfoot .RateUp:not(:empty)::before, tfoot .torrentUploaded:not(:empty)::before {c
 .torrentDownloaded {width: 1%}
 #torrents td, #torrents th {padding: 5px}
 #torrents td:empty, #torrents th:empty {padding: 3px; width: 0; min-width: 0; font-size: 0}
-#torrents td img {margin: -3px 0}
+#torrents td img {margin: -1px 0; vertical-align: middle}
 #torrents td.torrentDownloaded, #torrents td.torrentUploaded, .torrentAction {width: 1%; white-space: nowrap}
 #torrents td.torrentName {padding-left: 8px; width: 99%; font-weight: 700; white-space: normal}
 #torrents td {width: 1%; white-space: nowrap}
@@ -436,7 +436,7 @@ tr:not(.peerinfo) .torrentUploaded:empty::after {content: "‒"; display: inline
 
 /* comment indicator */
 .snarkFiletype {position: relative; vertical-align: middle}
-.snarkCommented {display: inline-block; position: absolute; top: -6px; right: 0; z-index: 20; line-height: 0; font-size: 0}
+.snarkCommented {display: inline-block; position: absolute; top: -3px; right: 0; z-index: 20; line-height: 0; font-size: 0}
 .snarkCommented img {padding: 0; height: 9px; width: auto}
 
 #snarkInfo ~ .mainsection, #snarkInfo + #editSection {margin: -1px 0 -6px; border: var(--border)}
@@ -554,7 +554,7 @@ input[name="i2cpOpts"], input[name="nofilter_dataDir"] {width: calc(100% - 220px
 th img {max-height: 20px}
 td.graphicStatus {background-size: 24px auto}
 #torrents .infohash {width: 60px}
-.snarkCommented {top: -3px; right: 1px}
+.snarkCommented {top: -1px; right: 1px}
 .peerclient {width: 90px}
 }
 
@@ -597,7 +597,7 @@ body, td, th:not(.suboption), span, table a, input[type=submit], input[type=text
 td.graphicStatus img {width: 26px; height: 26px}
 .torrentETA:not(:empty), .RateUp:not(:empty), .RateDown:not(:empty), .torrentUploaded:not(:empty) {min-width: 50px}
 td.torrentDetails img:not([src$="rateme.svg"]), .dirInfo td:first-child img:not(.thumb) {width: 23px; height: 23px}
-.torrentDetails img[src$="rateme.svg"] {margin-top: -6px; margin-right: -2px; width: 12px; height: 12px}
+.snarkCommented img {width: 11px; height: 11px}
 .torrentDownloaded, .torrentUploaded, .RateDown, .RateUp {min-width: 76px}
 .trackerhome, .trackerannounce, .knownTracker a {width: 400px; max-width: 400px}
 #torrents td:empty, #torrents th:empty {padding: 5px; width: 0; min-width: 0; font-size: 0}
