@@ -450,7 +450,7 @@ input[type=file]::file-selector-button {font-size: 8.5pt}
 .joblog ol li:first-child {margin-top: 2px}
 .joblog li:last-child {padding-bottom: 10px}
 .joblog ul li li li {margin-bottom: 10px}
-.joblog ul li li:last-child {margin-bottom: -30px}
+.joblog ul li li:last-child {margin-bottom: -15px}
 .joblog form:first-child {margin-top: 10px}
 .joblog table {margin-top: 15px; margin-left: 0; margin-bottom: 15px}
 .joblog table td:first-child {font-weight: 700}
