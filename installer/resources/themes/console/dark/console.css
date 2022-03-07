@@ -2587,7 +2587,8 @@ table:not(:first-of-type).netdbentry th:first-child, table:not(:first-of-type).n
 .bw_title {margin: 2px -6px -2px -3px; font-size: 10pt}
 #updateHelper select {max-width: 200px}
 #reseedconfig tr:nth-child(3) td label {padding: 5px 4px 5px 0; width: calc(100% - 4px)}
-.encDests code {max-width: 140px}}
+.encDests code {max-width: 140px}
+}
 
 @media screen and (max-width: 900px) {
 #ntcpconnections th:last-child {font-size: 0}
