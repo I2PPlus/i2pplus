@@ -414,7 +414,7 @@ tr:not(.peerinfo) .torrentUploaded:empty::after {content: "‒"; display: inline
 .peerclient, .peerclient tt, .clientid {line-height: 1.4; vertical-align: middle}
 .peerclient {padding-right: 0; width: 92px}
 .peerclient tt {margin: 0 3px 0 1px}
-.clientid {margin: 0 0 1px -2px; padding: 1px 2px; width: 52px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; vertical-align: middle; text-align: center; font-size: 90%; background: #ddd}
+.clientid {margin: 0 0 1px -2px; padding: 1px 2px; width: 50px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; vertical-align: middle; text-align: center; font-size: 90%; background: #ddd}
 .peerdata > * {vertical-align: middle}
 .priority input[type=radio] {text-align: left; margin: 3px}
 .priority input[type=radio]:not(:checked):not(:hover) {opacity: .7}
@@ -555,6 +555,7 @@ th img {max-height: 20px}
 td.graphicStatus {background-size: 24px auto}
 #torrents .infohash {width: 60px}
 .snarkCommented {top: -3px; right: 1px}
+.peerclient {width: 90px}
 }
 
 @media screen and (max-width: 1200px) {
@@ -604,5 +605,4 @@ td.torrentDetails img:not([src$="rateme.svg"]), .dirInfo td:first-child img:not(
 #torrentInfoStats .nowrap {margin-right: 6px}
 .torrentAction input {padding: 11px}
 #actionStopAll, #actionStartAll {padding: 11px 18px}
-.clientid {width: 68px}
 }
