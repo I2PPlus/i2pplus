@@ -47,7 +47,7 @@ msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-07 02:50+0000\n"
-"PO-Revision-Date: 2022-03-07 02:48+0000\n"
+"PO-Revision-Date: 2022-03-07 03:01+0000\n"
 "Last-Translator: gmind\n"
 "Language-Team: Russian (Russia) (http://www.transifex.com/otf/I2P/language/"
 "ru_RU/)\n"
@@ -3782,9 +3782,8 @@ msgid "Target"
 msgstr "Больше"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:206
-#, fuzzy
 msgid "Interval"
-msgstr "внутренний"
+msgstr "Интервал"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:209
 #, fuzzy
@@ -5517,9 +5516,8 @@ msgid "I2P Router Sitemap"
 msgstr "Справка маршрутизатора I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:423
-#, fuzzy
 msgid "Internals"
-msgstr "внутренний"
+msgstr "свойства"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:431
 msgid "Certs"
@@ -10112,9 +10110,8 @@ msgstr "Анонимный почтовый клиент с веб-интерф�
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:531
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/webmail_jsp.java:484
-#, fuzzy
 msgid "Webmail"
-msgstr "веб-почта"
+msgstr "е-мейл"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:533
 #, fuzzy
