@@ -4045,11 +4045,11 @@ public class I2PSnarkServlet extends BasicServlet {
             if (meta != null) {
                 String com = meta.getComment();
                 if (com != null && com.length() > 0) {
-                    if (com.length() > 4000)
-                        com = com.substring(0, 4000) + "&hellip;";
+                    if (com.length() > 5000)
+                        com = com.substring(0, 5000) + "&hellip;";
                     buf.append("<tr><td id=\"metacomment\" colspan=\"3\">");
                     buf.append("<div class=\"commentWrapper\">")
-                       .append(DataHelper.stripHTML(com).replace("\r\n", "<br>").replace("\n", "<br>"))
+                       .append(DataHelper.stripHTML(com).replace("\r\n", "<br>").replace("\n", "<br>").replace("&apos;", "&#39;"))
                        .append("</div></td></tr>\n");
                 }
             }
