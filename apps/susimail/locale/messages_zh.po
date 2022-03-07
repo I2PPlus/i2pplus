@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-05 14:35+0000\n"
+"POT-Creation-Date: 2022-03-07 02:50+0000\n"
 "PO-Revision-Date: 2019-04-24 14:21+0000\n"
 "Last-Translator: zzzi2p\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/otf/I2P/language/"
@@ -24,6 +24,17 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+
+#: src/src/i2p/susi/webmail/MailCache.java:529
+#: src/src/i2p/susi/webmail/WebMail.java:2415
+#, java-format
+msgid "{0} new message"
+msgid_plural "{0} new messages"
+msgstr[0] "{0} 封新邮件"
+
+#: src/src/i2p/susi/webmail/MailCache.java:532
+msgid "Email"
+msgstr "电子邮箱"
 
 #: src/src/i2p/susi/webmail/MailPart.java:321
 #, java-format
@@ -190,7 +201,7 @@ msgid "end forwarded mail"
 msgstr "转信结束"
 
 #: src/src/i2p/susi/webmail/WebMail.java:1299
-#: src/src/i2p/susi/webmail/WebMail.java:3653
+#: src/src/i2p/susi/webmail/WebMail.java:3615
 msgid "Could not fetch mail body."
 msgstr "无法获取邮件正文。"
 
@@ -216,7 +227,7 @@ msgstr "找不到附件."
 #: src/src/i2p/susi/webmail/WebMail.java:1623
 #: src/src/i2p/susi/webmail/WebMail.java:1625
 #: src/src/i2p/susi/webmail/WebMail.java:2313
-#: src/src/i2p/susi/webmail/WebMail.java:3659
+#: src/src/i2p/susi/webmail/WebMail.java:3621
 msgid "Message not found."
 msgstr "未找到消息。"
 
@@ -245,13 +256,13 @@ msgid "Invalid pagesize number, resetting to default value."
 msgstr "无效的每页数，重置为默认值。"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2291
-#: src/src/i2p/susi/webmail/WebMail.java:3186
+#: src/src/i2p/susi/webmail/WebMail.java:3166
 msgid "Login"
 msgstr "登录"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2293
 #: src/src/i2p/susi/webmail/WebMail.java:2431
-#: src/src/i2p/susi/webmail/WebMail.java:3203
+#: src/src/i2p/susi/webmail/WebMail.java:3183
 #, fuzzy
 msgid "Loading messages, please wait..."
 msgstr "加载邮件中，请稍候……"
@@ -263,7 +274,7 @@ msgid_plural "{0} messages"
 msgstr[0] "{0} 封邮件"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2303
-#: src/src/i2p/susi/webmail/WebMail.java:3404
+#: src/src/i2p/susi/webmail/WebMail.java:3384
 msgid "No messages"
 msgstr "没有邮件"
 
@@ -282,12 +293,6 @@ msgstr "配置"
 #: src/src/i2p/susi/webmail/WebMail.java:2329
 msgid "I2PMail"
 msgstr ""
-
-#: src/src/i2p/susi/webmail/WebMail.java:2415
-#, java-format
-msgid "{0} new message"
-msgid_plural "{0} new messages"
-msgstr[0] "{0} 封新邮件"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2418
 msgid "No new messages"
@@ -313,8 +318,8 @@ msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr ""
 
 #: src/src/i2p/susi/webmail/WebMail.java:2652
-#: src/src/i2p/susi/webmail/WebMail.java:3320
-#: src/src/i2p/susi/webmail/WebMail.java:3610
+#: src/src/i2p/susi/webmail/WebMail.java:3300
+#: src/src/i2p/susi/webmail/WebMail.java:3590
 msgid "no subject"
 msgstr "没有主题"
 
@@ -362,258 +367,258 @@ msgid "Save as Draft"
 msgstr "保存为草稿"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2989
-#: src/src/i2p/susi/webmail/WebMail.java:3429
-#: src/src/i2p/susi/webmail/WebMail.java:3519
-#: src/src/i2p/susi/webmail/WebMail.java:3711
+#: src/src/i2p/susi/webmail/WebMail.java:3409
+#: src/src/i2p/susi/webmail/WebMail.java:3499
+#: src/src/i2p/susi/webmail/WebMail.java:3673
 msgid "Cancel"
 msgstr "取消"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3080
-#: src/src/i2p/susi/webmail/WebMail.java:3271
-#: src/src/i2p/susi/webmail/WebMail.java:3621
+#: src/src/i2p/susi/webmail/WebMail.java:3077
+#: src/src/i2p/susi/webmail/WebMail.java:3251
+#: src/src/i2p/susi/webmail/WebMail.java:3595
 msgid "From"
 msgstr "发件人"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3085
-#: src/src/i2p/susi/webmail/WebMail.java:3271
-#: src/src/i2p/susi/webmail/WebMail.java:3626
+#: src/src/i2p/susi/webmail/WebMail.java:3080
+#: src/src/i2p/susi/webmail/WebMail.java:3251
+#: src/src/i2p/susi/webmail/WebMail.java:3597
 msgid "To"
 msgstr "收件人"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3089
-#: src/src/i2p/susi/webmail/WebMail.java:3632
+#: src/src/i2p/susi/webmail/WebMail.java:3082
+#: src/src/i2p/susi/webmail/WebMail.java:3600
 msgid "Cc"
 msgstr "抄送"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3093
+#: src/src/i2p/susi/webmail/WebMail.java:3084
 msgid "Bcc"
 msgstr "密件抄送"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3097
-#: src/src/i2p/susi/webmail/WebMail.java:3273
-#: src/src/i2p/susi/webmail/WebMail.java:3637
+#: src/src/i2p/susi/webmail/WebMail.java:3086
+#: src/src/i2p/susi/webmail/WebMail.java:3253
+#: src/src/i2p/susi/webmail/WebMail.java:3602
 msgid "Subject"
 msgstr "主题"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3110
+#: src/src/i2p/susi/webmail/WebMail.java:3092
 msgid "Add Attachment"
 msgstr "添加附件"
 
 #. TODO: reset button label to "add attachment" when no attachments are visible (currently counts attachments added per session)
-#: src/src/i2p/susi/webmail/WebMail.java:3113
+#: src/src/i2p/susi/webmail/WebMail.java:3095
 #, fuzzy
 msgid "Add attachment"
 msgstr "添加附件"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3120
+#: src/src/i2p/susi/webmail/WebMail.java:3102
 msgid "Attachments"
 msgstr "附件"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3132
+#: src/src/i2p/susi/webmail/WebMail.java:3113
 msgid "Delete selected attachments"
 msgstr "删除所选的附件"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3149
+#: src/src/i2p/susi/webmail/WebMail.java:3129
 #, fuzzy
 msgid "I2PMail Login"
 msgstr "邮件登录"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3153
+#: src/src/i2p/susi/webmail/WebMail.java:3133
 msgid "User"
 msgstr "用户"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3154
+#: src/src/i2p/susi/webmail/WebMail.java:3134
 #, fuzzy
 msgid "Username"
 msgstr "用户"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3158
-#: src/src/i2p/susi/webmail/WebMail.java:3159
+#: src/src/i2p/susi/webmail/WebMail.java:3138
+#: src/src/i2p/susi/webmail/WebMail.java:3139
 msgid "Password"
 msgstr "密码"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3161
+#: src/src/i2p/susi/webmail/WebMail.java:3141
 msgid "Toggle password visibility"
 msgstr ""
 
-#: src/src/i2p/susi/webmail/WebMail.java:3167
+#: src/src/i2p/susi/webmail/WebMail.java:3147
 msgid "Host"
 msgstr "主机"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3172
+#: src/src/i2p/susi/webmail/WebMail.java:3152
 msgid "POP3 Port"
 msgstr "POP3 端口"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3177
+#: src/src/i2p/susi/webmail/WebMail.java:3157
 msgid "SMTP Port"
 msgstr "SMTP 端口"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3186
+#: src/src/i2p/susi/webmail/WebMail.java:3166
 msgid "Read Mail Offline"
 msgstr "脱机阅读邮件"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3187
-#: src/src/i2p/susi/webmail/WebMail.java:3433
+#: src/src/i2p/susi/webmail/WebMail.java:3167
+#: src/src/i2p/susi/webmail/WebMail.java:3413
 msgid "Settings"
 msgstr "设置"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3192
+#: src/src/i2p/susi/webmail/WebMail.java:3172
 #, fuzzy
 msgid "Learn about I2PMail"
 msgstr "了解 I2P 邮件"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3193
+#: src/src/i2p/susi/webmail/WebMail.java:3173
 msgid "Create Account"
 msgstr "创建帐户"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3218
-#: src/src/i2p/susi/webmail/WebMail.java:3543
+#: src/src/i2p/susi/webmail/WebMail.java:3198
+#: src/src/i2p/susi/webmail/WebMail.java:3523
 msgid "New"
 msgstr "新建"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3231
+#: src/src/i2p/susi/webmail/WebMail.java:3211
 msgid "Check Mail"
 msgstr "检查邮件"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3239
+#: src/src/i2p/susi/webmail/WebMail.java:3219
 msgid "Refresh Page"
 msgstr ""
 
-#: src/src/i2p/susi/webmail/WebMail.java:3252
+#: src/src/i2p/susi/webmail/WebMail.java:3232
 #, java-format
 msgid "1 Message"
 msgid_plural "{0} Messages"
 msgstr[0] "{0} 封邮件"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3252
-#: src/src/i2p/susi/webmail/WebMail.java:3555
-#: src/src/i2p/susi/webmail/WebMail.java:3714
+#: src/src/i2p/susi/webmail/WebMail.java:3232
+#: src/src/i2p/susi/webmail/WebMail.java:3535
+#: src/src/i2p/susi/webmail/WebMail.java:3676
 msgid "Logout"
 msgstr "注销"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3270
-#: src/src/i2p/susi/webmail/WebMail.java:3617
+#: src/src/i2p/susi/webmail/WebMail.java:3250
+#: src/src/i2p/susi/webmail/WebMail.java:3594
 msgid "Date"
 msgstr "日期"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3275
+#: src/src/i2p/susi/webmail/WebMail.java:3255
 msgid "Size"
 msgstr "大小"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3276
+#: src/src/i2p/susi/webmail/WebMail.java:3256
 msgid "Mark for deletion"
 msgstr "标记为删除"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3373
+#: src/src/i2p/susi/webmail/WebMail.java:3353
 msgid "Message has an attachment"
 msgstr "邮件带有附件"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3383
+#: src/src/i2p/susi/webmail/WebMail.java:3363
 msgid "Message is new"
 msgstr "是新邮件"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3385
+#: src/src/i2p/susi/webmail/WebMail.java:3365
 msgid "Message is spam"
 msgstr "邮件是垃圾邮件"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3394
+#: src/src/i2p/susi/webmail/WebMail.java:3374
 #, fuzzy
 msgid "Message body not downloaded"
 msgstr "消息ID无效。"
 
 #. TODO ngettext
-#: src/src/i2p/susi/webmail/WebMail.java:3427
+#: src/src/i2p/susi/webmail/WebMail.java:3407
 msgid "Really delete the marked messages?"
 msgstr "真要删除标记的邮件？"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3428
+#: src/src/i2p/susi/webmail/WebMail.java:3408
 msgid "Yes, really delete them!"
 msgstr "是的，立刻删除！"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3434
+#: src/src/i2p/susi/webmail/WebMail.java:3414
 msgid "Delete Selected"
 msgstr "删除所选"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3435
+#: src/src/i2p/susi/webmail/WebMail.java:3415
 msgid "Mark All"
 msgstr "全部标记"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3436
+#: src/src/i2p/susi/webmail/WebMail.java:3416
 msgid "Clear All"
 msgstr "全部清除"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3449
+#: src/src/i2p/susi/webmail/WebMail.java:3429
 msgid "Change to Folder"
 msgstr "更改到文件夹"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3457
+#: src/src/i2p/susi/webmail/WebMail.java:3437
 msgid "First"
 msgstr "第一页"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3458
-#: src/src/i2p/susi/webmail/WebMail.java:3567
+#: src/src/i2p/susi/webmail/WebMail.java:3438
+#: src/src/i2p/susi/webmail/WebMail.java:3547
 msgid "Previous"
 msgstr "上一页"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3467
-#: src/src/i2p/susi/webmail/WebMail.java:3582
+#: src/src/i2p/susi/webmail/WebMail.java:3447
+#: src/src/i2p/susi/webmail/WebMail.java:3562
 msgid "Next"
 msgstr "下一页"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3468
+#: src/src/i2p/susi/webmail/WebMail.java:3448
 msgid "Last"
 msgstr "最后一页"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3517
+#: src/src/i2p/susi/webmail/WebMail.java:3497
 msgid "Really delete this message?"
 msgstr "真的要删除此邮件？"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3518
+#: src/src/i2p/susi/webmail/WebMail.java:3498
 msgid "Yes, really delete it!"
 msgstr "是的，立刻删除！"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3546
+#: src/src/i2p/susi/webmail/WebMail.java:3526
 msgid "Reply"
 msgstr "回复"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3547
+#: src/src/i2p/susi/webmail/WebMail.java:3527
 msgid "Reply All"
 msgstr "回复所有人"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3548
+#: src/src/i2p/susi/webmail/WebMail.java:3528
 msgid "Forward"
 msgstr "转寄"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3549
+#: src/src/i2p/susi/webmail/WebMail.java:3529
 msgid "Save As"
 msgstr "另存为"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3551
-#: src/src/i2p/susi/webmail/WebMail.java:3553
+#: src/src/i2p/susi/webmail/WebMail.java:3531
+#: src/src/i2p/susi/webmail/WebMail.java:3533
 msgid "Delete"
 msgstr "删除"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3579
+#: src/src/i2p/susi/webmail/WebMail.java:3559
 msgid "Back to Folder"
 msgstr "返回到文件夹"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3600
+#: src/src/i2p/susi/webmail/WebMail.java:3580
 msgid "Move to Folder"
 msgstr "移动到文件夹"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3698
+#: src/src/i2p/susi/webmail/WebMail.java:3660
 msgid "Folder Page Size"
 msgstr "文件夹页面大小"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3699
+#: src/src/i2p/susi/webmail/WebMail.java:3661
 msgid "Set"
 msgstr "设置"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3701
+#: src/src/i2p/susi/webmail/WebMail.java:3663
 msgid "Advanced Configuration"
 msgstr "高级配置"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3712
+#: src/src/i2p/susi/webmail/WebMail.java:3674
 msgid "Save Configuration"
 msgstr "保存配置"
 
@@ -653,9 +658,6 @@ msgstr "邮件被拒绝"
 
 #~ msgid "User logged out."
 #~ msgstr "用户已登出。"
-
-#~ msgid "Email"
-#~ msgstr "电子邮箱"
 
 #~ msgid "Folder"
 #~ msgstr "文件夹"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-05 14:34+0000\n"
+"POT-Creation-Date: 2022-03-07 02:50+0000\n"
 "PO-Revision-Date: 2019-07-01 23:39+0000\n"
 "Last-Translator: magnifico\n"
 "Language-Team: Persian (http://www.transifex.com/otf/I2P/language/fa/)\n"
@@ -41,7 +41,7 @@ msgstr ""
 msgid ""
 "You can also run the bandwidth test via the {0}Setup Wizard{1} to help with "
 "determining your bandwidth, and a guide for new users and additional "
-"documentation is available in the {2}help section{1}."
+"documentation including an FAQ is available in the {2}help section{1}."
 msgstr ""
 
 msgid "Also you can setup your browser to use the I2P proxy to reach eepsites."
@@ -62,13 +62,8 @@ msgstr ""
 
 #, java-format
 msgid ""
-"Once you have a \"Shared Clients\" destination indicated on the sidebar, "
-"please {0}check out{1} our {2}FAQ{3}."
-msgstr ""
-
-#, java-format
-msgid ""
-"Point your IRC client to {0}localhost:6668{1} and say hi to us on {2}#i2p{3}."
+"Point your IRC client to {0}localhost:6668{1} and say hi to us on {2}"
+"#saltR{3}."
 msgstr ""
 
 #~ msgid "Congratulations on getting I2P installed!"

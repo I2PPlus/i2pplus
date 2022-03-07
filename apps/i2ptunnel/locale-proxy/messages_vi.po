@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-05 14:34+0000\n"
+"POT-Creation-Date: 2022-03-07 02:50+0000\n"
 "PO-Revision-Date: 2019-10-12 14:15+0000\n"
 "Last-Translator: zzzi2p\n"
 "Language-Team: Vietnamese (http://www.transifex.com/otf/I2P/language/vi/)\n"
@@ -483,161 +483,161 @@ msgid ""
 "browser."
 msgstr ""
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:695
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:697
 msgid "This seems to be a bad destination:"
 msgstr "tên hay điểm đến"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:696
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:698
 msgid "i2paddresshelper cannot help you with a destination like that!"
 msgstr ""
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:768
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:770
 #, java-format
 msgid ""
 "To visit the destination in your addressbook, click <a href=\"{0}\">here</"
-"a>. To visit the conflicting addresshelper destination, click <a href="
-"\"{1}\">here</a>."
+"a>. To visit the conflicting addresshelper destination, click <a "
+"href=\"{1}\">here</a>."
 msgstr ""
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:778
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:780
 #, java-format
 msgid "Destination for {0} in addressbook"
 msgstr ""
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:781
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:783
 msgid "Conflicting address helper destination"
 msgstr ""
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1244
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1251
 msgid "Corrupt Base32 address"
 msgstr ""
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1327
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1334
 msgid "Destination LeaseSet not found"
 msgstr ""
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1464
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1471
 msgid "Host"
 msgstr "Máy chủ"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1468
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1526
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1475
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1533
 msgid "Base32"
 msgstr ""
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1472
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1479
 msgid "Destination"
 msgstr "Đích đến"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1477
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1484
 #, java-format
 msgid "Continue to {0} without saving"
 msgstr ""
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1478
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1485
 msgid ""
 "You can browse to the site without saving it to the addressbook. The address "
 "will be remembered until you restart your I2P router."
 msgstr ""
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1479
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1486
 msgid "Continue without saving"
 msgstr ""
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1486
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1493
 #, java-format
 msgid "Save {0} to router address book and continue to website"
 msgstr ""
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1487
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1494
 msgid ""
 "This address will be saved to your Router addressbook where your "
 "subscription-based addresses are stored."
 msgstr ""
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1489
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1496
 msgid ""
 "If you want to keep track of sites you have added manually, add to your "
 "Master or Private addressbook instead."
 msgstr ""
 
 #. FIXME wasn't escaped
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1492
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1564
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1499
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1571
 msgid "Save & continue"
 msgstr ""
 
 #. only blockfile supports multiple books
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1498
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1505
 #, java-format
 msgid "Save {0} to master addressbook and continue to website"
 msgstr ""
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1499
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1506
 msgid ""
 "This address will be saved to your Master addressbook. Select this option "
 "for addresses you wish to keep separate from the main router address book, "
 "but don't mind publishing."
 msgstr ""
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1503
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1510
 #, java-format
 msgid "Save {0} to private addressbook and continue to website"
 msgstr ""
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1504
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1511
 msgid ""
 "This address will be saved to your Private addressbook, ensuring it is never "
 "published."
 msgstr ""
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1529
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1536
 msgid "Base32 address requires lookup password"
 msgstr ""
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1531
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1538
 msgid "Base32 address requires encryption key"
 msgstr ""
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1533
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1540
 msgid "Base32 address requires encryption key and lookup password"
 msgstr ""
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1535
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1542
 msgid "Base32 address decryption failure, check encryption key"
 msgstr ""
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1546
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1553
 msgid "Generate"
 msgstr "Phát ra"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1547
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1554
 msgid "Encryption key"
 msgstr ""
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1548
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1555
 msgid ""
 "You must either enter a PSK encryption key provided by the server operator, "
 "or generate a DH encryption key and send that to the server operator."
 msgstr ""
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1549
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1556
 msgid "Ask the server operator for help."
 msgstr ""
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1550
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1557
 msgid "Enter PSK encryption key"
 msgstr ""
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1552
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1559
 msgid "Generate new DH encryption key"
 msgstr ""
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1558
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1565
 msgid "Lookup password"
 msgstr ""
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1559
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1566
 msgid "You must enter the password provided by the server operator."
 msgstr ""
 

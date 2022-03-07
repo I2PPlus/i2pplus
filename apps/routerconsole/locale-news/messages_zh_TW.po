@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-05 14:34+0000\n"
+"POT-Creation-Date: 2022-03-07 02:50+0000\n"
 "PO-Revision-Date: 2017-06-30 21:33+0000\n"
 "Last-Translator: 黃彥儒 <r1235613@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/otf/I2P/language/"
@@ -41,7 +41,7 @@ msgstr "在您等候的同時，煩請在{2}設定頁面{3}裡{0}調整您的頻
 msgid ""
 "You can also run the bandwidth test via the {0}Setup Wizard{1} to help with "
 "determining your bandwidth, and a guide for new users and additional "
-"documentation is available in the {2}help section{1}."
+"documentation including an FAQ is available in the {2}help section{1}."
 msgstr ""
 
 msgid "Also you can setup your browser to use the I2P proxy to reach eepsites."
@@ -64,17 +64,18 @@ msgstr "您可以在 {0}I2P 瀏覽器之代理伺服器設定頁面{1}中找到�
 
 #, fuzzy, java-format
 msgid ""
-"Once you have a \"Shared Clients\" destination indicated on the sidebar, "
-"please {0}check out{1} our {2}FAQ{3}."
-msgstr ""
-"當您的左方出現「共享客戶端」目的地清單時，請 {0}參考{1}我們的 {2}FAQ{3}。"
-
-#, java-format
-msgid ""
-"Point your IRC client to {0}localhost:6668{1} and say hi to us on {2}#i2p{3}."
+"Point your IRC client to {0}localhost:6668{1} and say hi to us on {2}"
+"#saltR{3}."
 msgstr ""
 "將您的 IRC 客戶端連線指向 {0}localhost:6668{1} 並且在 {2}#i2p{3} 上面跟我們打"
 "聲招呼。"
+
+#, fuzzy, java-format
+#~ msgid ""
+#~ "Once you have a \"Shared Clients\" destination indicated on the sidebar, "
+#~ "please {0}check out{1} our {2}FAQ{3}."
+#~ msgstr ""
+#~ "當您的左方出現「共享客戶端」目的地清單時，請 {0}參考{1}我們的 {2}FAQ{3}。"
 
 #~ msgid "Congratulations on getting I2P installed!"
 #~ msgstr "恭喜您成功安裝了 I2P ！"
