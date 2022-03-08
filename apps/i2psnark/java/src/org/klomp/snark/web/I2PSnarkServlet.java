@@ -4996,9 +4996,11 @@ public class I2PSnarkServlet extends BasicServlet {
             mime = "";
         if (mime.equals("text/html") || plc.endsWith(".jsp"))
             icon = "html";
+        else if (plc.endsWith(".srt"))
+            icon = "srt";
         else if (mime.equals("text/plain") || mime.equals("text/x-sfv") ||
                  mime.equals("application/rtf") || plc.endsWith(".md") ||
-                 plc.endsWith(".ini") || plc.endsWith(".srt") || plc.endsWith(".nfo"))
+                 plc.endsWith(".ini") || plc.endsWith(".nfo"))
             icon = "text";
         else if  (mime.equals("application/epub+zip") ||
                  mime.equals("application/x-mobipocket-ebook") ||
