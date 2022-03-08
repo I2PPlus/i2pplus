@@ -19,6 +19,7 @@
 --border_filtered: none;
 --a: #d23;
 --tr: var(--bg), linear-gradient(180deg,#fefefe,#ededed);
+--th: var(--bg), linear-gradient(180deg,#fff,#ddd);
 --td_dl: linear-gradient(270deg, #3d3 3px, rgba(0,0,0,0) 3px);
 --row_filtered: #fafafa;
 --bullet: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='31' fill='%23384'/%3E%3Cg stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' transform='matrix(.90207 0 0 .90192 3.3 3.4)'%3E%3Cpath id='a' fill='%23fff' stroke='%23fff' stroke-dasharray='none' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.1' d='M31.7 2.2c-2.8 7-7.9 13.3-8 20.5.2 4.1 2.6 7.1 5.7 8.9-15 0-14.6 12.8-22.4 16.8 12.2 0 20.8 1.8 24.7-6v.1V2.3s0 0 0 0zM7 48.4h-.1 0z'/%3E%3Cuse xlink:href='%23a' width='100%25' height='100%25' transform='matrix(-1 0 0 1 63.6 0)'/%3E%3C/g%3E%3C/svg%3E");
@@ -41,7 +42,7 @@ form {margin: 0}
 table {border-collapse: separate; border-spacing: 0; background: #eee}
 table table {border: none}
 tr {contain: layout}
-th {padding-top: 7px; padding-bottom: 7px; vertical-align: middle; border-top: var(--border); border-bottom: var(--border)}
+th {padding-top: 7px; padding-bottom: 7px; vertical-align: middle; border-top: var(--border); border-bottom: var(--border); background: var(--th)}
 th img {max-height: 24px}
 thead img {font-size: 0}
 thead a img:hover {filter: drop-shadow(0 0 1px #b23) drop-shadow(0 0 1px #b23)}
@@ -393,7 +394,7 @@ input.toggle_input:checked + label + hr + table {margin-top: 20px; display: tabl
 
 /* comments */
 #commentInfo th, #mediaContainer th {padding-left: 5px; text-align: left}
-#commentInfo th {padding: 2px 0 2px 5px}
+#commentInfo th {padding: 2px 0 2px 5px; border-top: none}
 #commentInfo td:first-child, #commentInfo td:last-child, .commentDate {width: 1%; white-space: nowrap}
 #mediaContainer td {padding: 20px 15px; text-align: center}
 #mediaContainer video {width: auto; max-width: calc(100% - 20px)}
@@ -455,17 +456,17 @@ tr:not(.peerinfo) .torrentUploaded:empty::after {content: "‒"; display: inline
 #snarkInfo ~ .mainsection, #snarkInfo + #editSection {margin: -1px 0 -6px; border: var(--border)}
 #snarkInfo ~ .mainsection table {border: none}
 #snarkInfo ~ .mainsection input:checked + .toggleview + hr + table {margin-top: -7px; margin-bottom: 0}
-#snarkInfo ~ #editSection input:checked + .toggleview + hr + table {margin-top: 1px}
-#editSection #torrentEdit {margin-bottom: 5px; width: 100%}
+#snarkInfo ~ #editSection #torrentEdit {margin: -7px 0 5px; width: 100%}
 #torrentEdit tr:first-child td {padding-top: 12px}
 #torrentEdit th, #torrentEdit td {text-align: center; width: 25%}
 #torrentEdit tbody th:first-child, #torrentEdit tbody td:first-child:not(#addCommentText) {padding-left: 20px; width: 20%; text-align: left}
 #torrentEdit th:nth-child(2), #torrentEdit td:nth-child(2) {width: 30%; text-align: left}
-#torrentEdit tfoot td {padding-bottom: 12px; text-align: center; border-top: var(--border); background: var(--th)}
+#torrentEdit tfoot td, #torrentEdit tfoot tr:hover td {padding-bottom: 12px; text-align: center; border-top: var(--border); background: var(--th)}
 #stopfirst {display: inline-block; font-weight: 700}
 #stopfirst::before {width: 14px; height: 12px; display: inline-block; vertical-align: middle; background: url(images/details.svg) no-repeat left center / 12px; content: ""; filter: saturate(0)}
 #snarkInfo ~ #commentSection input:not(:checked) + .toggleview {margin-bottom: -7px}
-#snarkInfo ~ #commentSection {margin-top: -7px; margin-bottom: 1px}
+#snarkInfo ~ #commentSection {margin: 1px 0}
+body:not(.iframed) #snarkInfo ~ #commentSection {margin-top: -7px}
 #commentSection table:last-child {margin-bottom: 0}
 .snarkFilename .targetfile, .snarkFilename:hover .tags, .snarkFileName a:empty {display: none}
 .snarkFilename:hover .targetfile {display: inline-block}
@@ -506,7 +507,7 @@ tr:not(.peerinfo) .torrentUploaded:empty::after {content: "‒"; display: inline
 #configs .spacer {display: none}
 #configs .suboption a {margin-top: 2px; font-size: 80%; vertical-align: middle; letter-spacing: 0; text-transform: none}
 #configs .suboption::before {width: 22px; height: 16px; display: inline-block; vertical-align: middle; background: url(/i2psnark/.resources/icons/nopeers.svg) no-repeat left center / auto 16px; opacity: .8; content: ""}
-#configs .suboption {padding: 5px 6px; text-align: left; letter-spacing: 0.1em; text-transform: uppercase; font-size: 110%; border: var(--border)}
+#configs .suboption {padding: 5px 6px; text-align: left; letter-spacing: 0.1em; text-transform: uppercase; font-size: 110%; border: var(--border); background: var(--th)}
 #configs td:first-child {padding-right: 10px; text-align: left}
 #configs, .trackerconfig {margin: 10px 10px 0; width: 80%; width: calc(100% - 20px)}
 #configs tr:nth-last-child(2) td {padding: 8px 0 11px; border-top: var(--border)}
@@ -520,6 +521,7 @@ input[name="i2cpOpts"], input[name="nofilter_dataDir"] {width: calc(100% - 220px
 .optionlist {columns: 2 600px}
 .page form + form {margin-top: -5px}
 .snarkConfig .configTitle, .toggleview a {color: #777}
+.snarkConfig .configTitle {background: radial-gradient(circle at top, #fff 70%, #ddd)}
 .tab_label, .configTitle, .configTitle a {font-size: 11pt}
 #tab_torrentedit {margin: -1px -1px -3px}
 .toggleview, .configTitle {margin: -1px; padding: 8px 5px; display: block; text-transform: uppercase; font-weight: 700; border: var(--border); display: block; transition: ease box-shadow .3s}
@@ -532,7 +534,7 @@ input[name="i2cpOpts"], input[name="nofilter_dataDir"] {width: calc(100% - 220px
 .trackerconfig input[type=submit] {margin-top: 7px; margin-bottom: 6px}
 .trackerConfig {margin-top: 11px}
 .trackerconfig th {border-bottom: none}
-.trackerconfig th:first-child {background: var(--nuke) no-repeat center center; background-size: 14px}
+.trackerconfig th:first-child {background: var(--nuke) no-repeat center center / 14px, var(--th)}
 .trackerconfig th:first-child, .knownTracker td:first-child, #addtracker td:first-child {border-left: var(--border)}
 .trackerConfig th {font-size: 9pt; border-bottom: none}
 .trackerconfig th:last-child, .knownTracker td:last-child, #addtracker td:last-child {border-right: var(--border)}
@@ -608,4 +610,5 @@ td.torrentDetails img:not([src$="rateme.svg"]), .dirInfo td:first-child img:not(
 #torrentInfoStats .nowrap {margin-right: 6px}
 .torrentAction input {padding: 11px}
 #actionStopAll, #actionStartAll {padding: 11px 18px}
+#snarkInfo ~ #commentSection input:not(:checked) + .toggleview {margin-bottom: -8px}
 }
