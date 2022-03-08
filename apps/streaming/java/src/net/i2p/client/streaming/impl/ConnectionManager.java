@@ -71,6 +71,12 @@ class ConnectionManager {
 //    private static final int DROP_OVER_LIMIT = 3;
     private static final int DROP_OVER_LIMIT = 2;
 
+    /* @since 0.9.54+ */
+    private static final String PROP_ENABLE_PONG_DELAY = "i2p.streaming.enablePongDelay";
+    private static final boolean DEFAULT_ENABLE_PONG_DELAY = false;
+    private static final int MAX_PONG_DELAY = 50;
+    static final String PROP_MAX_PONG_DELAY = "i2p.streaming.maxPongDelay";
+
     // https://stackoverflow.com/questions/16022624/examples-of-http-api-rate-limiting-http-response-headers
     // RFC 6585
     private static final String LIMIT_HTTP_RESPONSE =
@@ -398,7 +404,6 @@ class ConnectionManager {
      */
     public boolean receivePing(Connection con, Packet ping) {
         Destination dest = ping.getOptionalFrom();
-        int randomDelay = (_context.random().nextInt(400) + 3) / 2;
         if (dest == null)
             return false;
         if (con == null) {
@@ -406,14 +411,14 @@ class ConnectionManager {
             Reason why = shouldRejectConnection(ping);
             if (why != null) {
                 if ((!_defaultOptions.getDisableRejectLogging()) || _log.shouldLog(Log.WARN))
-                    _log.logAlways(Log.WARN, "Dropping ping: " + why + "\n* " + dest.calculateHash());
+                    _log.logAlways(Log.WARN, "Dropping ping: " + why + "\n* From: " + dest.toBase32());
                 return false;
             }
         } else {
             // in-connection ping to a 3rd party ???
             if (!dest.equals(con.getRemotePeer())) {
-                _log.logAlways(Log.WARN, "Dropping ping from " + con.getRemotePeer().calculateHash() +
-                                         " to " + dest.calculateHash());
+                _log.logAlways(Log.WARN, "Dropping ping to 3rd party from: " + con.getRemotePeer().toBase32() +
+                                         "\n* Target: " + dest.toBase32());
                 return false;
             }
         }
@@ -429,10 +434,18 @@ class ConnectionManager {
                 payload.setValid(MAX_PONG_PAYLOAD);
             pong.setPayload(payload);
         }
-        try { Thread.sleep(randomDelay); } catch (InterruptedException ie) {}
-        if (_log.shouldInfo())
-            _log.info("Responding to ping from [" + dest.calculateHash().toBase64().substring(0,6) +
-                      "] with random delay of " + randomDelay + "ms");
+
+        int pongDelay = _context.getProperty(PROP_MAX_PONG_DELAY, MAX_PONG_DELAY);
+        int randomDelay = _context.random().nextInt(pongDelay);
+        boolean enableDelay = _context.getProperty(PROP_ENABLE_PONG_DELAY, DEFAULT_ENABLE_PONG_DELAY);
+        if (enableDelay) {
+            try { Thread.sleep(randomDelay); } catch (InterruptedException ie) {}
+            if (_log.shouldInfo())
+                _log.info("Sending pong to: " + dest.toBase32() + " with random delay of " + randomDelay + "ms");
+        } else {
+            if (_log.shouldInfo())
+                _log.info("Sending pong to: " + dest.toBase32());
+        }
         _outboundQueue.enqueue(pong);
         return true;
     }
