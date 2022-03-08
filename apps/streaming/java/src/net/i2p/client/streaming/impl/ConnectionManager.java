@@ -398,6 +398,7 @@ class ConnectionManager {
      */
     public boolean receivePing(Connection con, Packet ping) {
         Destination dest = ping.getOptionalFrom();
+        int randomDelay = (_context.random().nextInt(400) + 3) / 2;
         if (dest == null)
             return false;
         if (con == null) {
@@ -428,7 +429,6 @@ class ConnectionManager {
                 payload.setValid(MAX_PONG_PAYLOAD);
             pong.setPayload(payload);
         }
-        int randomDelay = _context.random().nextInt(1000);
         try { Thread.sleep(randomDelay); } catch (InterruptedException ie) {}
         if (_log.shouldInfo())
             _log.info("Responding to ping from [" + dest.calculateHash().toBase64().substring(0,6) +
