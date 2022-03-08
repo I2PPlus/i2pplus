@@ -1004,6 +1004,7 @@ td.peerCount b .left, td.peerCount b .right {min-width: 32px}
 #torrents .infohash {width: 60px}
 .magnetLabel {max-width: 260px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
 .tab_label::after {margin: 4px 0 1px; width: 16px; height: 16px; background-size: 14px}
+.iframed #tab_files .tab_label::after {margin: 7px 0 1px}
 }
 
 @media screen and (min-width: 900px) and (max-width: 1499px) {
@@ -1031,8 +1032,8 @@ td.peerCount:empty::after {display: none}
 .canhide {display: none}
 #totals {margin-left: 4px; white-space: nowrap}
 .configPanel .configTitle {font-size: 11pt}
-#configSection .configTitle, .toggleview {padding: 0 5px 3px}
-.tab_label::after, #tab_comments .tab_label::after, #tab_torrentedit .tab_label::after {width: 15px; height: 15px; background-size: 13px}
+#configSection .configTitle, .iframed .toggleview {padding: 0 5px 3px}
+.tab_label::after, #tab_addtorrent .tab_label::after, #tab_newtorrent .tab_label::after, #tab_config .tab_label::after, #tab_comments .tab_label::after, #tab_files .tab_label::after, #tab_torrentedit .tab_label::after, #tab_addtorrent:hover .tab_label::after, #tab_newtorrent:hover .tab_label::after, #tab_config:hover .tab_label::after, #tab_comments:hover .tab_label::after, #tab_torrentedit:hover .tab_label::after {width: 15px; height: 15px; background-size: 13px}
 .dirInfoComplete {display: none}
 #commentDeleteAction td {padding-top: 4px}
 #trackerselect td {font-size: 9pt}
@@ -1076,7 +1077,6 @@ b.alwaysShow {display: inline}
 #trackerselect td a {max-width: 350px}
 .priorityIndicator img[src*="clock"] {margin-top: 0}
 .peerinfo td:first-child {background-position: right 3px center}
-.iframed .mainsection#snarkFiles {margin-top: -7px}
 #commentInfo, #mediaContainer {margin-top: 6px}
 #torrentDisplay {margin-top: 1px; margin-bottom: 1px; padding: 0; display: flex; border-bottom: none}
 #torrentDisplay label {flex-grow: 1.1}
