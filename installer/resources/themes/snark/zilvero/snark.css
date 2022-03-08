@@ -330,7 +330,8 @@ video::-webkit-media-controls-panel {display: none}
 video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-panel {display: flex}
 
 /* sections */
-#commentSection #commentInfo, #commentSection #userComments, #mediaContainer {margin-top: -1px}
+#commentSection #userComments, #mediaContainer {margin-top: -1px}
+#commentSection #commentInfo {margin-top: -7px}
 .torrentInfo, #commentInfo {border-top: none}
 .commentRating {width: 1%; white-space: nowrap}
 #commentstoggle input {float: none}
