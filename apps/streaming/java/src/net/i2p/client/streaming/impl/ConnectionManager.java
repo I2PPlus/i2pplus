@@ -351,16 +351,16 @@ class ConnectionManager {
         int mtu = opts.getMaxMessageSize();
         if (size < mtu) {
             if (_log.shouldInfo())
-                _log.info("Reducing MTU for IB conn to " + size
-                          + " from " + mtu);
+                _log.info("Reducing MTU for Inbound connection to " + size
+                          + " bytes from " + mtu);
             opts.setMaxMessageSize(size);
             opts.setMaxInitialMessageSize(size);
         } else if (size > opts.getMaxInitialMessageSize()) {
             if (size > mtu)
                 size = mtu;
             if (_log.shouldInfo())
-                _log.info("Increasing MTU for IB conn to " + size
-                          + " from " + mtu);
+                _log.info("Increasing MTU for Inbound connection to " + size
+                          + " bytes from " + mtu);
             if (size != mtu)
                 opts.setMaxMessageSize(size);
             opts.setMaxInitialMessageSize(size);
@@ -428,6 +428,11 @@ class ConnectionManager {
                 payload.setValid(MAX_PONG_PAYLOAD);
             pong.setPayload(payload);
         }
+        int randomDelay = _context.random().nextInt(1000);
+        try { Thread.sleep(randomDelay); } catch (InterruptedException ie) {}
+        if (_log.shouldInfo())
+            _log.info("Responding to ping from [" + dest.calculateHash().toBase64().substring(0,6) +
+                      "] with random delay of " + randomDelay + "ms");
         _outboundQueue.enqueue(pong);
         return true;
     }
