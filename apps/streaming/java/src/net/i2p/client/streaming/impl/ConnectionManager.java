@@ -364,11 +364,11 @@ class ConnectionManager {
         } else if (size > opts.getMaxInitialMessageSize()) {
             if (size > mtu)
                 size = mtu;
-            if (_log.shouldInfo())
-                _log.info("Increasing MTU for Inbound connection to " + size
-                          + " bytes from " + mtu);
-            if (size != mtu)
+            if (size != mtu) {
                 opts.setMaxMessageSize(size);
+                if (_log.shouldInfo())
+                    _log.info("Increasing MTU for Inbound connection to " + size + " bytes from " + mtu);
+            }
             opts.setMaxInitialMessageSize(size);
         }
 
