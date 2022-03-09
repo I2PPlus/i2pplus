@@ -1371,10 +1371,10 @@ th code {user-select: all}
 #searchbar span:focus-within {box-shadow: inset -38px 0 1px 2px rgba(0,0,0,.6), inset 0 0 2px 2px rgba(0,0,0,.7), 0 0 0 1px #000, 0 0 0 2px rgba(255,96,0,.8), 0 0 0 3px rgba(144,48,0,.7); background: var(--input_txt); transition: linear box-shadow .15s}
 #searchbar table {margin: 15px auto 13px; width: auto; border-radius: 0 0 2px 2px; border-collapse: separate; border: 1px solid #151; background: var(--panel); box-shadow: var(--bevel)}
 #searchbar td {padding: 0; border: none; box-shadow: none; background: none}
-#searchbar input {margin: 2px 0 1px 198px; padding-left: 10px; padding-right: 42px; min-width: 240px; height: calc(100% + 2px); border-radius: 0; box-shadow: none; background: #000; border: none; filter: none}
-#searchbar input:focus {box-shadow: inset 4px 2px 3px 1px rgba(0,0,0,.8); border-color: #151; background: none}
-#searchbar input::placeholder {opacity: 0}
-#searchbar input:hover::placeholder {font-style: italic; opacity: .6}
+#searchbar input[type=text] {margin: 1px 0 -2px 198px; padding-left: 10px; padding-right: 42px; min-width: 240px; height: calc(100% + 2px); border-radius: 0; box-shadow: none; background: #000; border: none; filter: none}
+#searchbar input[type=text]:hover::placeholder {font-style: italic; opacity: .3}
+#searchbar input[type=text]:focus {box-shadow: inset 4px 2px 3px 1px rgba(0,0,0,.8); border-color: #151; background: none}
+#searchbar input[type=text]::placeholder, #searchbar input[type=text]:focus::placeholder {opacity: 0}
 #searchbar button, #searchbar select, #searchbar input[type=text] {margin-top: -2px; height: calc(100% + 6px); box-sizing: border-box; border-top: none; border-bottom: none}
 #searchbar button, #searchbar select {margin: -2px 0 0; box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000}
 #searchbar button {padding: 0 3px 0 0; position: absolute; right: -1px; top: -1px; font-size: 0; width: 38px; min-width: 0; border: none; border-right: 1px solid var(--border); border-radius: 0 2px 2px 0; background: var(--search) var(--center) / 14px, var(--btn); background-blend-mode: luminosity}
