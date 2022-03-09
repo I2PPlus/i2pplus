@@ -9,8 +9,8 @@
 --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, Bitstream Vera Sans, Verdana, sans-serif;
 --ink: #555;
 --bg: url("data:image/svg+xml,%3Csvg height='4' viewBox='0 0 4 4' width='4' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m1 3h1v1h-1zm2-2h1v1h-1z' fill='%23e2e2ff' fill-opacity='.5'/%3E%3C/svg%3E");
---btn: linear-gradient(180deg,#fff 50%, #f4f4f4 50%);
---btn_hover: linear-gradient(180deg,#fff 50%, #f0f0f0 50%);
+--btn: linear-gradient(180deg,#fff, #eee);
+--btn_hover: linear-gradient(180deg,#fff, #ddd);
 --btn_active: linear-gradient(180deg,#f2f2f2, #f8f8f8);
 --btn_shadow_active: var(--highlight), inset 3px 3px 3px rgba(0,0,0,.4);
 --highlight: inset 0 0 0 1px #fff;
@@ -186,7 +186,7 @@ input[type=submit]:active, a.control:active, .snarkNav:active, #torrentDisplay l
 #ourDest {margin-left: 3px; line-height: 1.3}
 .peerclient {width: 120px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
 .peerCount {font-weight: 700}
-.peerCount b {min-width: 64px; display: inline-block; line-height: 1.6; border-radius: 3px; box-shadow: 0 0 0 1px #bbb, var(--highlight); background: linear-gradient(180deg, #fff, #ddd)}
+.peerCount b {min-width: 64px; display: inline-block; line-height: 1.6; border-radius: 1px; box-shadow: 0 0 0 1px #bbb, var(--highlight); background: linear-gradient(180deg, #f2f2f2, #eee)}
 .active .peerCount b {background: linear-gradient(180deg, #fff, #edd)}
 .peerCount .left, .peerCount .right {min-width: 22px; display: inline-block; text-align: center}
 .peerinfo {background-color: #fffffd}
@@ -257,12 +257,12 @@ tr:hover .magnetLabel {opacity: 1}
 #torrents .torrentAction {padding-right: 4px}
 #torrents .torrentAction input {margin: 0 2px; padding: 11px; display: inline-block; min-width: 0; float: none; font-size: 0; border-radius: 2px; box-shadow: inset 0 0 0 1px #fff; background-blend-mode: luminosity}
 #torrents #actionStopAll, #torrents #actionStartAll {padding: 10px 16px}
-#torrents .actionStart {background: #eee var(--start) no-repeat center center / 14px}
-#torrents .actionStop {background: #eee var(--stop) no-repeat center center / 14px}
-#torrents .actionRemove {background: #eee var(--remove) no-repeat center center / 14px}
-#torrents .actionDelete {background: #eee var(--delete) no-repeat center center / 14px}
-#torrents #actionStartAll {background: #eee var(--startall) no-repeat center center / auto 14px}
-#torrents #actionStopAll {background: #eee var(--stopall) no-repeat center center / auto 14px}
+#torrents .actionStart {background: var(--start) no-repeat center center / 14px, var(--btn)}
+#torrents .actionStop {background: var(--stop) no-repeat center center / 14px, var(--btn)}
+#torrents .actionRemove {background: var(--remove) no-repeat center center / 14px, var(--btn)}
+#torrents .actionDelete {background: var(--delete) no-repeat center center / 14px, var(--btn)}
+#torrents #actionStartAll {background: var(--startall) no-repeat center center / auto 14px, var(--btn)}
+#torrents #actionStopAll {background: var(--stopall) no-repeat center center / auto 14px, var(--btn)}
 #torrents .torrentAction input:hover {background-blend-mode: normal}
 #torrents .torrentAction input:active, #actionStartAll:active, #actionStopAll:active {background-size: auto 12px}
 .active .torrentAction, .active:hover .torrentAction {background: linear-gradient(270deg, #cb4dcb 3px, rgba(0,0,0,0) 3px); animation: ease-in-out active .5s 3s forwards}
