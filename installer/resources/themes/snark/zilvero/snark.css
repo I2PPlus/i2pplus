@@ -435,7 +435,7 @@ input.toggle_input:checked + label + hr + table {margin-top: 20px; display: tabl
 .idle::after, .choked::after {margin: 0 20px; width: 8px; height: 8px; display: inline-block; border-radius: 50%; background: #373; content: ""}
 .choked::after {background: #900}
 .torrentUploaded .left {min-width: 12px}
-#torrents .torrentETA, #torrents .RateDown, #torrents .RateUp {padding: 2px 8px; min-width: 80px; text-align: center; font-weight: 700; animation: expand .15s ease both}
+#torrents .torrentETA, #torrents .RateDown, #torrents .RateUp {padding: 2px 8px; min-width: 80px; text-align: center; font-weight: 700}
 .RateDown .left, .RateUp .left, .torrentUploaded .left, .RateDown .right, .RateUp .right, .torrentUploaded .right {min-width: 22px; display: inline-block; text-align: left}
 .RateDown .right, .RateUp .right, .torrentUploaded .right {min-width: 40px; text-align: right}
 .torrentUploaded .left {min-width: 12px}
@@ -505,11 +505,11 @@ body:not(.iframed) #snarkInfo ~ #commentSection {margin-top: -7px}
 .configOption label:hover {color: #222}
 .configOption {margin-top: 3px; margin-bottom: 3px; display: inline-block}
 .configOption > * {vertical-align: middle}
-#bwHoverHelp img {height: 16px; width: 16px; margin: 0 4px; vertical-align: text-top;}
+#bwHoverHelp img {height: 16px; width: 16px; margin: 0 4px; vertical-align: text-top}
 #snarkLang {margin-right: 4px; padding: 4px 8px; font-weight: 700; border-radius: 1px; background: #ddd}
 #addtracker td {padding-top: 10px; padding-bottom: 8px; border-top: var(--border); background: #fff}
 #configs a[href^="/config"] {font-size: 0}
-#configs a[href^="/config"]::after {content: ""; display: inline-block; width: 16px; height: 16px; vertical-align: middle; background: var(--config) no-repeat scroll center center / 16px}
+#configs a[href^="/config"]::after {width: 16px; height: 16px; display: inline-block; vertical-align: middle; background: var(--config) no-repeat center center / 16px; content: ""}
 #configs .accept {margin-right: 0}
 #configs input {margin-left: 0}
 #configs .optionList {margin: 4px 8px}
@@ -526,7 +526,9 @@ input[name="i2cpOpts"], input[name="nofilter_dataDir"] {width: calc(100% - 220px
 .knownTracker input[disabled] {opacity: .5}
 .knownTracker + .spacer, #addtracker ~ .spacer, .knownTracker + .spacer td, #addtracker ~ .spacer td {display: none}
 .knownTracker + .spacer td, #addtracker + .spacer td {padding: 4px 0; font-size: 0; border-bottom: var(--border)}
-.knownTracker td {min-width: 100px}
+#trackers .knownTracker td {min-width: 100px}
+#trackers .knownTracker td, #trackers #addtracker td, #trackers .trackerconfig td[colspan="7"] {border-bottom: none}
+#trackers #addtracker td {padding-top: 10px; padding-bottom: 10px}
 .optionlist {columns: 2 600px}
 .page form + form {margin-top: -5px}
 .snarkConfig .configTitle, .toggleview a {color: #777}
@@ -559,7 +561,6 @@ input[name="i2cpOpts"], input[name="nofilter_dataDir"] {width: calc(100% - 220px
 @keyframes fade-in {0% {filter: opacity(0)} 100% {filter: opacity(1)}}
 @keyframes active {from {background: linear-gradient(270deg, #f3c 3px, rgba(0,0,0,0) 3px)} to {background: linear-gradient(270deg, #cb4dcb 3px, rgba(0,0,0,0) 3px)}}
 @keyframes downloading {from {background: var(--td_dl)} to {background: linear-gradient(270deg, #7f7 3px, rgba(0,0,0,0) 3px)}}
-@keyframes expand {from {padding: 0; width: 0; min-width: 0}}
 
 @supports (-moz-user-select: all) {#torrentSort img {margin-right: -3px} #configSection, #addSection, #createSection {margin-top: -1px}}
 
