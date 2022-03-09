@@ -185,7 +185,9 @@ input[type=submit]:active, a.control:active, .snarkNav:active, #torrentDisplay l
 #ourDest {margin-left: 3px; line-height: 1.3}
 .peerclient {width: 120px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
 .peerCount {font-weight: 700}
-.peerCount .right {min-width: 18px; text-align: right; display: inline-block}
+.peerCount b {min-width: 64px; display: inline-block; line-height: 1.6; border-radius: 3px; box-shadow: 0 0 0 1px #bbb, var(--highlight); background: linear-gradient(180deg, #fff, #ddd)}
+.active .peerCount b {background: linear-gradient(180deg, #fff, #edd)}
+.peerCount .left, .peerCount .right {min-width: 22px; display: inline-block; text-align: center}
 .peerinfo {background-color: #fffffd}
 .peerinfo td {border-bottom: 1px solid #bbb}
 .peerinfo td:first-child {background: var(--client) no-repeat center center / 20px}
@@ -243,6 +245,7 @@ tr.active.downloading:not(.peerinfo):hover .percentBarInner {background: #47d16a
 .infohash {padding: 0 3px 0 15px; width: 100px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; vertical-align: middle; color: #393; font-family: var(--monospaced); border-radius: 1px; background: #fff var(--hash) no-repeat left center / 12px; user-select: all}
 .infohash::selection {background: #393}
 .magnetLabel {margin-left: 3px; padding-left: 14px; padding-right: 2px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; vertical-align: middle; line-height: 1.1; background: var(--tag) no-repeat left center / 12px; opacity: .8}
+tr:hover .magnetLabel {opacity: 1}
 .noneLoaded td, .noneLoaded:hover td {text-align: center; font-size: 10pt; font-weight: 700; padding: 15px; background: #eee}
 .routerdown {padding: 15px 10px; font-size: 120%; text-shadow: 0 1px 1px #fff; border: var(--border); box-shadow: var(--highlight), inset 0 0 2px 1px #ddd; background: repeating-linear-gradient(135deg, #eee, #eee 20px, #fff 20px, #fff 40px)}
 #torrents .infohash {padding: 2px 4px 2px 18px; display: inline-block; border-radius: 1px; box-shadow: 0 0 0 1px #7a7, var(--highlight); background: var(--hash) no-repeat 4px center / 12px, linear-gradient(180deg,#efe,#e6ffe6)}
@@ -432,7 +435,7 @@ input.toggle_input:checked + label + hr + table {margin-top: 20px; display: tabl
 .idle::after, .choked::after {margin: 0 20px; width: 8px; height: 8px; display: inline-block; border-radius: 50%; background: #373; content: ""}
 .choked::after {background: #900}
 .torrentUploaded .left {min-width: 12px}
-#torrents .torrentETA, #torrents .RateDown, #torrents .RateUp {padding: 2px 8px; min-width: 80px; text-align: center; font-weight: 700}
+#torrents .torrentETA, #torrents .RateDown, #torrents .RateUp {padding: 2px 8px; min-width: 80px; text-align: center; font-weight: 700; animation: expand .15s ease both}
 .RateDown .left, .RateUp .left, .torrentUploaded .left, .RateDown .right, .RateUp .right, .torrentUploaded .right {min-width: 22px; display: inline-block; text-align: left}
 .RateDown .right, .RateUp .right, .torrentUploaded .right {min-width: 40px; text-align: right}
 .torrentUploaded .left {min-width: 12px}
@@ -556,9 +559,9 @@ input[name="i2cpOpts"], input[name="nofilter_dataDir"] {width: calc(100% - 220px
 @keyframes fade-in {0% {filter: opacity(0)} 100% {filter: opacity(1)}}
 @keyframes active {from {background: linear-gradient(270deg, #f3c 3px, rgba(0,0,0,0) 3px)} to {background: linear-gradient(270deg, #cb4dcb 3px, rgba(0,0,0,0) 3px)}}
 @keyframes downloading {from {background: var(--td_dl)} to {background: linear-gradient(270deg, #7f7 3px, rgba(0,0,0,0) 3px)}}
+@keyframes expand {from {padding: 0; width: 0; min-width: 0}}
 
-@supports (-moz-user-select: all) {#torrentSort img {margin-right: -3px}}
-@supports (-moz-user-select: all) {#configSection, #addSection, #createSection {margin-top: -1px}}
+@supports (-moz-user-select: all) {#torrentSort img {margin-right: -3px} #configSection, #addSection, #createSection {margin-top: -1px}}
 
 @media screen and (max-width: 1499px) {
 th img {max-height: 20px}
