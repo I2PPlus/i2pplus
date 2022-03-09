@@ -20,6 +20,7 @@
 --softborder: 0 0 0 1px #bbb;
 --a: #d23;
 --tr: var(--bg), linear-gradient(180deg,#fefefe,#ededed);
+--tr_hover: #dcd8d5;
 --th: var(--bg), linear-gradient(180deg,#fff,#ddd);
 --td_dl: linear-gradient(270deg, #3d3 3px, rgba(0,0,0,0) 3px);
 --row_filtered: #fafafa;
@@ -61,13 +62,13 @@ hr {background: transparent; color: transparent; height: 0; border: none}
 .configTitle, .toggleview, .snarkNav {letter-spacing: .1em; text-transform: uppercase}
 .rowOdd, .torrentInfo tr:nth-child(odd), #trackerselect tr:nth-child(2n+2), .knownTracker:nth-child(odd), #mediaContainer th, #commentInfo tr:first-child, #torrentEdit tr:nth-child(even) {background: #fafafa}
 .noneLoaded td {border-bottom: var(--border)}
-.peerinfo:hover td, #torrentEdit tr:hover td {background-color: #bfb8b3}
+.peerinfo:hover td, #torrentEdit tr:hover td {background-color: var(--tr_hover)}
 .rowEven, .torrentInfo tr:nth-child(even), #trackerselect tr:nth-child(2n+3), .knownTracker:nth-child(even) {background: #f0f0f0}
 .rowOdd, .rowEven {background: var(--tr)}
 .torrentInfo td {padding-top: 5px; padding-bottom: 5px}
 .torrentInfo tr:last-child td {border-top: var(--border)}
 .rowOdd td, .rowEven td, #filterResults td {border-top: 1px solid #fff; border-bottom: var(--border)}
-#torrents tr:hover, .dirInfo tr:hover, #trackerselect tr:nth-child(n+2):hover {background: #bfb8b3}
+#torrents tr:hover, .dirInfo tr:hover, #trackerselect tr:nth-child(n+2):hover {background: var(--tr_hover)}
 .dirInfo .ParentDir a, .dirInfo .snarkFileName a, #torrents .torrentName a {padding: 2px 0; display: inline-block; width: 100%}
 #torrents tr:hover th, .dirInfo tr:hover th {color: #333; background: #eee}
 .dirInfo, .torrentInfo, #userComments, #commentInfo, #mediaContainer {width: 100%}
@@ -268,7 +269,7 @@ tr:hover .magnetLabel {opacity: 1}
 
 /* status bars */
 .percentBarComplete {padding: 1px 0; width: 84px; text-align: center; font-weight: 700; color: #fff; text-shadow: 0 1px 1px #333; border: var(--border_hard); box-shadow: inset 0 0 0 1px #ddd; background: #708ca9}
-.percentBarInner, .uploaded {height: 16px; vertical-align: middle; border-right: var(--border_hard); box-shadow: inset 0 0 0 1px #eee; background: #bfb8b3}
+.percentBarInner, .uploaded {height: 16px; vertical-align: middle; border-right: var(--border_hard); box-shadow: inset 0 0 0 1px #eee; background: var(--tr_hover)}
 .percentBarOuter, .percentbarInner, .percentBarText {font-weight: 700}
 .percentBarInner {background: #7b9d84}
 .percentBarOuter {border: var(--border_hard); box-shadow: var(--btn_shadow_active); background: #eee}
@@ -284,7 +285,7 @@ tr:hover .percentBarComplete {background: #538ac6}
 tr:hover .percentBarText {line-height: 1.2; color: #333; opacity: 1}
 .txBarInner {height: calc(100% - 2px); display: inline-block; position: absolute; top: 1px; left: 1px; box-shadow: inset 0 3px 3px rgba(0,0,0,.3); background: linear-gradient(90deg,#f70,#f40); opacity: .25}
 .txBarText {margin-top: 1px; display: inline-block; position: relative; z-index: 5; font-weight: 700}
-.uploaded {min-width: 68px; height: auto; display: inline-block; position: relative; border: var(--border_hard); border-left-width: 5px; box-shadow: var(--btn_shadow_active)}
+.uploaded {min-width: 68px; height: auto; display: inline-block; position: relative; border: var(--border_hard); border-left-width: 5px; box-shadow: var(--btn_shadow_active); background: repeating-linear-gradient(90deg, #d1cbc7, #d1cbc7 10%, #b9b1ac 10%, #b9b1ac 20%)}
 
 /* details */
 .dirInfo {margin-top: -1px}
@@ -292,7 +293,7 @@ tr:hover .percentBarText {line-height: 1.2; color: #333; opacity: 1}
 .dirInfo th:first-child, .dirInfo td:first-child {padding-left: 10px; text-align: left}
 .dirInfo th.snarkFileSize {text-align: right; padding-right: 10px}
 .fileStatus {min-width: 40px; text-align: center}
-.fileStatus img[src$="tick.svg"] {padding: 2px; width: 12px; height: 12px; border-radius: 50%; background: #272}
+.fileStatus img[src$="tick.svg"] {padding: 4px; width: 10px; height: 10px; border-radius: 50%; background: #474}
 .fileStatus .percentBarOuter, .fileStatus .percentBarInner, .fileStatus .percentBarText {width: 80px}
 .fileStatus .percentBarOuter {margin: 0 auto}
 .knownTracker input[type=radio]:disabled {opacity: .3}
@@ -521,7 +522,7 @@ body:not(.iframed) #snarkInfo ~ #commentSection {margin-top: -7px}
 #configs, .trackerconfig {margin: 10px 10px 0; width: 80%; width: calc(100% - 20px)}
 #configs tr:nth-last-child(2) td {padding: 8px 0 11px; border-top: var(--border)}
 input[name="i2cpOpts"], input[name="nofilter_dataDir"] {width: calc(100% - 220px)}
-#trackers td {padding: 6px 4px 4px; border-top: var(--border); border-bottom: var(--border)}
+#trackers td {padding: 6px 4px 4px; border-top: var(--border)}
 .knownTracker:hover td {background: #ccc}
 .knownTracker input[disabled] {opacity: .5}
 .knownTracker + .spacer, #addtracker ~ .spacer, .knownTracker + .spacer td, #addtracker ~ .spacer td {display: none}
