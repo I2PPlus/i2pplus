@@ -1606,7 +1606,7 @@ div[id^="config_"].main {padding-bottom: 16px}
 #bandwidthconfig .optionsingle:hover, #reseedproxytype label:hover {background-color: #ffd}
 b.suboption {margin: 0; padding: 5px 10px; display: inline-block; text-shadow: 0 1px 1px #fff; border-radius: 3px 3px 0 0; border: 1px solid var(--border_inner); border-bottom: none; box-shadow: var(--highlight); background: var(--suboption); filter: drop-shadow(0 0 1px rgba(220,220,255,.7))}
 #bwlimiter a:active, #i2pclientconfig a:active, #config_logging h3 a:active, #graphdisplay a:active, #version a:active, #logs h3 a:active, #tunnels h3 a:not(.lsview):active, #advancedconfig a:active, #iptransport a:active, #reseedsetup a:active, #graphinfo a:active, .h3navlinks a:active {box-shadow: inset 2px 2px 1px #aab}
-#bwlimiter a:hover, #i2pclientconfig a:hover, #config_logging h3 a:hover, #graphdisplay a:hover, #version a:hover, #logs h3 a:hover, #tunnels h3 a:not(.lsview):hover, #advancedconfig a:hover, #iptransport a:hover, #reseedsetup a:hover, #config_service h3 a:hover, .h3navlinks a:hover {background: #fff linear-gradient(180deg,#fff 48%, rgba(255, 232, 191, .6) 48%, rgba(239, 217, 179, .4)); filter: none}
+#bwlimiter a:hover, #i2pclientconfig a:hover, #config_logging h3 a:hover, #graphdisplay a:hover, #version a:hover, #logs h3 a:hover, #tunnels h3 a:not(.lsview):hover, #advancedconfig a:hover, #iptransport a:hover, #reseedsetup a:hover, #config_service h3 a:hover, .h3navlinks a:hover {filter: none}
 #clientsconfig input.add {float: left}
 #config_logging h3 a::before, #webappconfiguration a::before, #routerinformation #version a::before, #i2pclientconfig a::before, #pluginmanage a::before {width: 18px; height: 13px; display: inline-block; vertical-align: middle; background: var(--eye) no-repeat left center / 14px; content: ""}
 #config_logging h3 a:hover::before, #config_logging h3 a:focus::before, #routerinformation #version a:hover::before, #routerinformation #version a:focus::before {background: var(--eye_hover) no-repeat left center / 14px}
@@ -2479,7 +2479,7 @@ h3#bwlimiter a {margin-top: -8px}
 #configstats td::before {min-height: 24px}
 #error500 #sidebar img[src$="i2plogo.png"] {margin-top: -1px; margin-left: -3px; width: 232px}
 form[action="configplugins"] input.reload {margin-top: 1px; margin-right: 4px}
-h3.ptitle, h3#webappconfiguration, h3#i2pclientconfig, p#clientconf.infohelp, #config_stats h3 {margin-bottom: -13px}
+h3.ptitle, h3#webappconfiguration, h3#i2pclientconfig, p#clientconf.infohelp, #config_stats h3 {margin-bottom: -14px}
 h3#pconfig, h3#restartrouter, p#tunnelconfig {margin-bottom: -15px}
 #helptoc b {font-size: 120%}
 .homelinkedit th:first-child, #sidebarconf th:first-child, #consolepass th:first-child {font-size: 0}
@@ -2529,7 +2529,8 @@ h3#pconfig, h3#restartrouter, p#tunnelconfig {margin-bottom: -15px}
 #udpconnections .cells {border-left: none; border-right: none}
 #updateHelper .nowrap::after, #updateProxyHostPort .nowrap::after, #i2pupdates .nowrap::after {min-height: 60px}
 #xhr > hr + #sb_shortgeneral {margin-top: -7px}
-#webappconfiguration a, #config_plugins .h3navlinks a {margin-top: -8px}
+#webappconfiguration a, #config_plugins .h3navlinks a {margin-top: -8px; padding: 12px 8px 8px}
+#config_plugins .h3navlinks a[href="configclients"] {margin-right: -8px}
 }
 
 @media screen and (min-width: 1634px) {
