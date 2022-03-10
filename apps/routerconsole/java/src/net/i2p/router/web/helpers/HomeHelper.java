@@ -296,6 +296,8 @@ public class HomeHelper extends HelperBase {
                 url = SummaryBarRenderer.getEepsiteURL(pm);
                 if (url == null)
                     continue;
+                else
+                    url = app.url + "\" target=\"_blank\" class=\"extlink";
             // embed plugins in the console
             } else if ((app.url.contains("bote") && !app.url.contains(".i2p") && (embedApps))) {
                 url = "/embed?url=/i2pbote&amp;name=BoteMail";
@@ -334,16 +336,13 @@ public class HomeHelper extends HelperBase {
                        "<div class=\"appicon\">" +
                        // usability: add tabindex -1 so we avoid 2 tabs per app
                        "<a href=\"").append(url).append("\" tabindex=\"-1\">" +
-                       "<img alt=\"\" title=\"").append(app.desc).append("\" style=\"max-width: 32px; max-height: 32px;\" src=\"").append(app.icon)
+                       "<img alt=\"\" title=\"").append(app.desc).append("\" style=\"max-width: 32px; max-height: 32px;\" " +
+                       "src=\"").append(app.icon)
                // version the icons because they may change
-               .append(app.icon.contains("?") ? "&amp;" : "?").append(CoreVersion.VERSION).append("\"></a>" +
-                       "</div>\n" +
-                       "<table><tr><td>" +
-                       "<div class=\"applabel\">" +
-                       "<a href=\"").append(url).append("\" title=\"").append(app.desc).append("\">").append(app.name).append("</a>" +
-                       "</div>" +
-                       "</td></tr></table>\n" +
-                       "</div>");
+               //.append(app.icon.contains("?") ? "&amp;" : "?").append(CoreVersion.VERSION)
+               .append("\"></a></div>\n<table><tr><td><div class=\"applabel\"><a href=\"")
+               .append(url).append("\" title=\"").append(app.desc).append("\">").append(app.name)
+               .append("</a></div></td></tr></table>\n</div>");
             }
             buf.append("</div>\n");
             return buf.toString();
