@@ -135,6 +135,7 @@ public class HomeHelper extends HelperBase {
         //"query.i2p" + S + _x("The StackOverflow of I2P") + S + "http://query.i2p/" + S + I + "forum.svg" + S +
 
 // hosting + other services
+           "major.i2p" + S + _x("IRC Logs for multiple networks") + S + "http://major.i2p/" + S + I + "major.svg" + S +
         _x("Pastebin") + S + _x("Encrypted I2P Pastebin") + S + "http://paste.r4sas.i2p/" + S + I + "paste.svg" + S +
         _x("radio.r4sas.i2p") + S + _x("Streaming radio service") + S + "http://radio.r4sas.i2p/" + S + I + "radio.svg" + S +
            "tube.i2p" + S + _x("Alternative front-end to Youtube") + S + "http://tube.i2p/" + S + I + "tv.svg" + S +
@@ -160,6 +161,14 @@ public class HomeHelper extends HelperBase {
 
         "";
 
+/*
+    static final String FAVORITES_RU =
+        "333.i2p" + S + _x("i2pd development forums") + S + "http://333.i2p/" + S + I + "forum.svg" + S +
+
+        "";
+
+    static final String DEFAULT_FAVORITES_RU = DEFAULT_FAVORITES.replace("\"\";", "") + FAVORITES_RU;
+*/
 
     public boolean shouldShowWelcome() {
         return _context.getProperty(Messages.PROP_LANG) == null;
@@ -193,7 +202,12 @@ public class HomeHelper extends HelperBase {
     }
 
     public String getFavorites() {
-        return homeTable(PROP_FAVORITES, DEFAULT_FAVORITES, null);
+/*
+        if (_context.getProperty(Messages.PROP_LANG) == "ru")
+            return homeTable(PROP_FAVORITES, DEFAULT_FAVORITES_RU, null);
+        else
+*/
+            return homeTable(PROP_FAVORITES, DEFAULT_FAVORITES, null);
     }
 
     public String getConfigServices() {
