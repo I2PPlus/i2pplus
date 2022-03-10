@@ -505,7 +505,7 @@ class SSU2Payload {
         }
 
         public int writeData(byte[] tgt, int off) {
-            DataHelper.toLong(tgt, off, 4, now / 1000);
+            DataHelper.toLong(tgt, off, 4, (now + 500) / 1000);
             return off + 4;
         }
     }
@@ -581,6 +581,11 @@ class SSU2Payload {
             tgt[off++] = (byte) a;
             System.arraycopy(r, 0, tgt, off, rc * 2);
             return off + (rc * 2);
+        }
+
+        @Override
+        public String toString() {
+            return SSU2Bitfield.toString(t, a, r, rc);
         }
     }
 

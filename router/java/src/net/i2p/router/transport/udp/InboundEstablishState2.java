@@ -25,6 +25,7 @@ import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.RouterContext;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
+import net.i2p.router.transport.TransportImpl;
 import static net.i2p.router.transport.udp.SSU2Util.*;
 import net.i2p.util.Addresses;
 import net.i2p.util.Log;
@@ -51,6 +52,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     private byte[] _rcvHeaderEncryptKey2;
     private byte[] _sessCrForReTX;
     private long _timeReceived;
+    // not adjusted for RTT
+    private long _skew;
+    private int _mtu;
     private PeerState2 _pstate;
     
     // testing
@@ -150,9 +154,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         }
         if (_timeReceived == 0)
             throw new GeneralSecurityException("No DateTime block in Session/Token Request");
-        long skew = _establishBegin - _timeReceived;
-        if (skew > MAX_SKEW || skew < 0 - MAX_SKEW)
-            throw new GeneralSecurityException("Skew exceeded in Session/Token Request: " + skew);
+        _skew = _establishBegin - _timeReceived;
+        if (_skew > MAX_SKEW || _skew < 0 - MAX_SKEW)
+            throw new GeneralSecurityException("Skew exceeded in Session/Token Request: " + _skew);
         packetReceived();
     }
 
@@ -195,15 +199,32 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             // TODO ban
             throw new DataFormatException("SSU2 network ID mismatch");
         }
+
+        // try to find the right address, because we need the MTU
+        boolean isIPv6 = _aliceIP.length == 16;
         List<RouterAddress> addrs = _transport.getTargetAddresses(ri);
         RouterAddress ra = null;
         for (RouterAddress addr : addrs) {
-            // skip NTCP w/o "s"
+            // skip SSU 1 address w/o "s"
             if (addrs.size() > 1 && addr.getTransportStyle().equals("SSU") && addr.getOption("s") == null)
                 continue;
+            String host = addr.getHost();
+            if (host == null)
+                host = "";
+            String caps = addr.getOption(UDPAddress.PROP_CAPACITY);
+            if (caps == null)
+                caps = "";
+            if (isIPv6) {
+                if (!host.contains(":") && !caps.contains(TransportImpl.CAP_IPV6))
+                    continue;
+            } else {
+                if (!host.contains(".") && !caps.contains(TransportImpl.CAP_IPV4))
+                    continue;
+            }
             ra = addr;
             break;
         }
+
         if (ra == null)
             throw new DataFormatException("no SSU2 addr");
         String siv = ra.getOption("i");
@@ -224,6 +245,33 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             throw new DataFormatException("bad SSU2 S len");
         if (!"2".equals(ra.getOption("v")))
             throw new DataFormatException("bad SSU2 v");
+
+        String smtu = ra.getOption(UDPAddress.PROP_MTU);
+        int mtu = 0;
+        try {
+            mtu = Integer.parseInt(smtu);
+        } catch (NumberFormatException nfe) {}
+        if (mtu == 0) {
+            if (ra.getTransportStyle().equals(UDPTransport.STYLE2)) {
+                mtu = PeerState2.DEFAULT_MTU;
+            } else {
+                if (isIPv6)
+                    mtu = PeerState2.DEFAULT_SSU_IPV6_MTU;
+                else
+                    mtu = PeerState2.DEFAULT_SSU_IPV4_MTU;
+            }
+        } else {
+            // TODO if too small, give up now
+            if (ra.getTransportStyle().equals(UDPTransport.STYLE2)) {
+                mtu = Math.min(Math.max(mtu, PeerState2.MIN_MTU), PeerState2.MAX_MTU);
+            } else {
+                if (isIPv6)
+                    mtu = Math.min(Math.max(mtu, PeerState2.MIN_SSU_IPV6_MTU), PeerState2.MAX_SSU_IPV6_MTU);
+                else
+                    mtu = Math.min(Math.max(mtu, PeerState2.MIN_SSU_IPV4_MTU), PeerState2.MAX_SSU_IPV4_MTU);
+            }
+        }
+        _mtu = mtu;
 
         Hash h = _receivedUnconfirmedIdentity.calculateHash();
         try {
@@ -433,12 +481,13 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         }
         if (_timeReceived == 0)
             throw new GeneralSecurityException("No DateTime block in Session Request");
-        long skew = _establishBegin - _timeReceived;
-        if (skew > MAX_SKEW || skew < 0 - MAX_SKEW)
-            throw new GeneralSecurityException("Skew exceeded in Session Request: " + skew);
+        // _nextSend is now(), from packetReceived()
+        _skew = _nextSend - _timeReceived;
+        if (_skew > MAX_SKEW || _skew < 0 - MAX_SKEW)
+            throw new GeneralSecurityException("Skew exceeded in Session Request: " + _skew);
         _sendHeaderEncryptKey2 = SSU2Util.hkdf(_context, _handshakeState.getChainingKey(), "SessCreateHeader");
         _currentState = InboundState.IB_STATE_REQUEST_RECEIVED;
-        _rtt = (int) ( _context.clock().now() - _lastSend );
+        _rtt = (int) (_nextSend - _lastSend);
     }
 
     /**
@@ -534,6 +583,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                                  true, _rtt, sender, rcvr,
                                  _sendConnID, _rcvConnID,
                                  _sendHeaderEncryptKey1, h_ba, h_ab);
+        // PS2.super adds CLOCK_SKEW_FUDGE that doesn't apply here
+        _pstate.adjustClockSkew(_skew - (_rtt / 2) - PeerState.CLOCK_SKEW_FUDGE);
+        _pstate.setHisMTU(_mtu);
     }
 
     /**

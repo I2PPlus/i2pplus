@@ -959,7 +959,7 @@ class EstablishmentManager {
                     }
                 }
             }
-        }
+        }  // else IES2 sets PS2 MTU
         // 0 is the default
         //peer.setTheyRelayToUsAs(0);
 
@@ -1060,17 +1060,18 @@ class EstablishmentManager {
         PeerState peer;
         if (version == 1) {
             peer = new PeerState(_context, _transport,
-                                       state.getSentIP(), state.getSentPort(), remote.calculateHash(), false, state.getRTT());
+                                 state.getSentIP(), state.getSentPort(), remote.calculateHash(), false, state.getRTT());
         peer.setCurrentCipherKey(state.getCipherKey());
         peer.setCurrentMACKey(state.getMACKey());
         peer.setTheyRelayToUsAs(state.getReceivedRelayTag());
+            int mtu = state.getRemoteAddress().getMTU();
+            if (mtu > 0)
+                peer.setHisMTU(mtu);
         } else {
             OutboundEstablishState2 state2 = (OutboundEstablishState2) state;
+            // OES2 sets PS2 MTU
             peer = state2.getPeerState();
         }
-        int mtu = state.getRemoteAddress().getMTU();
-        if (mtu > 0)
-            peer.setHisMTU(mtu);
         // 0 is the default
         //peer.setWeRelayToThemAs(0);
 

@@ -38,7 +38,7 @@ i {padding-right: 2px}
 ol li:first-child {margin-top: 10px}
 ol {padding: 1px 0 0 20px; display: inline}
 pre {width: 98%}
-#sb_logo, #sidebar h3, #clock, form, .confignav, *::before, *::after, h1, h2, h3, #applinks, #sitelinks, #sb_internals, #sb_services, #sb_advanced, .applink, .sitemaplink, #sitemapcontainer, .langselect, .themechoice {user-select: none}
+#sb_logo, #sidebar h3, #clock, form, .confignav, *::before, *::after, h1, h2, h3, #applinks, #sitelinks, #sb_internals, #sb_services, #sb_advanced, .applink, .sitemapLink, #sitemapcontainer, .langselect, .themechoice {user-select: none}
 table {margin: 1px 0; padding: 1px; width: 100%; font-size: 9pt; border: var(--border); border-collapse: collapse}
 table tt {color: #990; font-size: 8.5pt}
 table hr {margin: 0 0; padding: 0 0; height: 1px; display: none; color: var(--a); border: none; background: #252}
@@ -1311,13 +1311,13 @@ th code {user-select: all}
 
 .applink, .applabel, .statusnotes, .main, #news, .search tr, .logo, .themechoice, .themelabel, .langselect, .ui_lang {box-shadow: var(--bevel)}
 .appicon, .sitemapLink img {animation: zoom .15s linear .3s both; backface-visibility: hidden; will-change: transform}
-.applabel, .sitemapLabel, .themelabel, .ui_lang {background: var(--glow_bottom), linear-gradient(180deg,#001900,#001000 50%,#000); animation: fade .15s ease .25s reverse both}
+.applabel, .sitemapLabel, .themelabel, .ui_lang {background: var(--glow_bottom), linear-gradient(180deg,#001900,#001000 50%,#000); animation: fade .1s ease .35s reverse; backface-visibility: hidden}
+.applink, .sitemapLink {position: relative}
 
 /* home */
 .linkgroup {margin: 0 0 10px; padding: 16px 0; width: auto}
 .linkcontainer .applink:last-of-type {margin-bottom: 7px}
 .linkcontainer {margin: 0 0 10px; padding: 0 3px}
-#sitelinks + .linkgroup .applabel a {text-transform: none}
 .applink a:link, .applink a:visited {padding: 2px; display: inline-block; color: var(--a)}
 .appicon {height: 32px; padding: 0 0 6px}
 .applabel a {padding: 2px 2px 3px; max-width: 146px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: capitalize; text-shadow: var(--textshadow)}
@@ -1330,17 +1330,18 @@ th code {user-select: all}
 .applink:hover, .sitemapLink:hover, .themechoice:hover, .langselect:hover {background: radial-gradient(circle at center -90px, rgba(255,96,0,.3), #000 70%), #000}
 .applink:hover, .applink:hover .applabel, .applink:hover .extlink::after, .sitemapLink.extlink:hover::after, .themechoice:hover, .themechoice:hover .themelabel, .langselect:hover, .langselect:hover .ui_lang {box-shadow: var(--highlight), inset 0 0 1px 1px #730}
 .applink:hover {color: var(--hover); border: 1px solid var(--hover); opacity: 1}
-.applink:hover::after, .sitemapLink:hover::after {border: 1px solid #f50; background: #000 var(--newtab_hover) no-repeat 4.5px center / 13px 11px; opacity: 1; transform: scale(1); pointer-events: none}
 .applink:hover a:link, .applink:hover a:visited {color: var(--hover)}
 .applink:hover .applabel, .sitemapLink:hover .sitemapLabel, .themechoice:hover .themelabel, .langselect:hover .ui_lang {background: var(--glow_bottom_hover) #000}
 .applink:hover .applabel {color: var(--hover); border-top: 1px solid var(--hover)}
-.applink:hover img, .sitemapLink:hover img, a:focus .applink img, a:focus .sitemaplink img {opacity: 1; filter: none}
+.applink:hover img, .sitemapLink:hover img, a:focus .applink img, a:focus .sitemapLink img {opacity: 1; filter: none}
 .applink a:link, .applink a:hover, .applink a:active {text-decoration: none; outline: none}
 .applink:active .applabel, .sitemapLink:active .sitemapLabel {color: var(--ink); box-shadow: var(--depress); background: var(--hover)}
 .applink:active .applabel a {color: var(--ink)}
 .applink:active img {transform: scale(0.9)}
-.applink::after, .sitemapLink::after {width: 22px; height: 19px; position: absolute; top: -1px; right: -1px; display: inline-block; border: 1px solid #000; background: transparent; opacity: 0; content: ""; transform: scale(0)}
-.applink img, .sitemapLink img {filter: sepia(100%) hue-rotate(70deg) grayscale(.3); animation: zoom .1s linear .35s both; backface-visibility: hidden}
+.appicon .extlink::after, .sitemapLink.extlink::after {width: 22px; height: 19px; position: absolute; top: -1px; right: -1px; display: inline-block; border: 1px solid #000; background: transparent; opacity: 0; content: ""; transform: scale(0)}
+.appicon .extlink::after {top: -3px}
+.applink:hover .extlink::after, .sitemapLink.extlink:hover::after {border: 1px solid #f50; background: #000 var(--newtab_hover) no-repeat 4.5px center / 13px 11px; opacity: 1; transform: scale(1); pointer-events: none}
+.applink img, .sitemapLink img {filter: sepia(100%) hue-rotate(70deg) grayscale(.3)}
 .applink img:-moz-broken, .sitemapLink img:-moz-broken {background: url(/themes/console/images/plus.svg) no-repeat center center / 32px}
 .applink img {margin: -4px 0 1px; padding: 10px 52px 38px; width: auto; height: 32px; max-width: 32px; max-height: 32px}
 .applink.js:hover::before {padding: 1px 4px 3px; display: inline-block; position: absolute; top: -1px; left: -1px; border: 1px solid var(--hover); box-shadow: var(--highlight), inset 0 0 1px 1px #730; content: "*js"}
@@ -1371,10 +1372,10 @@ th code {user-select: all}
 #searchbar span:focus-within {box-shadow: inset -38px 0 1px 2px rgba(0,0,0,.6), inset 0 0 2px 2px rgba(0,0,0,.7), 0 0 0 1px #000, 0 0 0 2px rgba(255,96,0,.8), 0 0 0 3px rgba(144,48,0,.7); background: var(--input_txt); transition: linear box-shadow .15s}
 #searchbar table {margin: 15px auto 13px; width: auto; border-radius: 0 0 2px 2px; border-collapse: separate; border: 1px solid #151; background: var(--panel); box-shadow: var(--bevel)}
 #searchbar td {padding: 0; border: none; box-shadow: none; background: none}
-#searchbar input {margin: 2px 0 1px 198px; padding-left: 10px; padding-right: 42px; min-width: 240px; height: calc(100% + 2px); border-radius: 0; box-shadow: none; background: #000; border: none; filter: none}
-#searchbar input:focus {box-shadow: inset 4px 2px 3px 1px rgba(0,0,0,.8); border-color: #151; background: none}
-#searchbar input::placeholder {opacity: 0}
-#searchbar input:hover::placeholder {font-style: italic; opacity: .6}
+#searchbar input[type=text] {margin: 1px 0 -2px 198px; padding-left: 10px; padding-right: 42px; min-width: 240px; height: calc(100% + 2px); border-radius: 0; box-shadow: none; background: #000; border: none; filter: none}
+#searchbar input[type=text]:hover::placeholder {font-style: italic; opacity: .3}
+#searchbar input[type=text]:focus {box-shadow: inset 4px 2px 3px 1px rgba(0,0,0,.8); border-color: #151; background: none}
+#searchbar input[type=text]::placeholder, #searchbar input[type=text]:focus::placeholder {opacity: 0}
 #searchbar button, #searchbar select, #searchbar input[type=text] {margin-top: -2px; height: calc(100% + 6px); box-sizing: border-box; border-top: none; border-bottom: none}
 #searchbar button, #searchbar select {margin: -2px 0 0; box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000}
 #searchbar button {padding: 0 3px 0 0; position: absolute; right: -1px; top: -1px; font-size: 0; width: 38px; min-width: 0; border: none; border-right: 1px solid var(--border); border-radius: 0 2px 2px 0; background: var(--search) var(--center) / 14px, var(--btn); background-blend-mode: luminosity}
@@ -2191,7 +2192,7 @@ a[href^="/netdb"]:hover span {color: var(--hover)}
 #config_peers tr:last-child {background: #000}
 #config_peers tr:last-child td {background: none}
 #netdboverview tr:hover, #logs #enviro:hover td, .tunneldisplay tr:hover td, #profilelist tr:hover td, #graphs .formaction, #events tr:hover, #config_peers #bannedips td {box-shadow: none}
-#themesettings, #consolepass, #langsettings, #pw_adduser {background: none; /*background: repeating-linear-gradient(180deg,rgba(0,0,0,.8), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), var(--camotile) #000*/}
+#themesettings, #consolepass, #langsettings, #pw_adduser {background: var(--bg_dots)}
 #config_ui .formaction {background: #000}
 #config_peers .optionsave, #refreshsidebar .optionsave {box-shadow: none}
 #refreshsidebar tr:first-child {box-shadow: var(--highlight), inset 0 -1px 0 1px #000, inset 0 0 1px 1px #030, inset 0 -1px 1px 1px #030}

@@ -419,7 +419,10 @@ class UDPPacket implements CDPQEntry {
 
     @Override
     public String toString() {
-        verifyNotReleased();
+        synchronized(this) {
+            if (_released)
+                return "RELEASED PACKET";
+        }
         StringBuilder buf = new StringBuilder(256);
         buf.append("\n* Address: ");
         buf.append(Addresses.toString(_packet.getAddress().getAddress(), _packet.getPort()));

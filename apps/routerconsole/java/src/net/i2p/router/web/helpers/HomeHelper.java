@@ -130,11 +130,12 @@ public class HomeHelper extends HelperBase {
         _x("novabbs.i2p") + S + _x("Rocksolid forums for the darknets") + S + "http://novabbs.i2p/" + S + I + "forum.svg" + S +
         "ramble.i2p" + S + _x("Cross-network micro-blogging &amp; forums &amp; wiki") + S + "http://ramble.i2p/" + S + I + "ramble.svg" + S +
         "teddit.i2p" + S + _x("Alternative privacy-focused front-end for Reddit") + S + "http://teddit.i2p/" + S + I + "teddit.svg" + S +
-        "zeronet.i2p" + S + _x("Zeronet I2P Gateway") + S + "http://zeronet.i2p/" + S + I + "zeronet.svg" + S +
+        //"zeronet.i2p" + S + _x("Zeronet I2P Gateway") + S + "http://zeronet.i2p/" + S + I + "zeronet.svg" + S +
         //_x("Dancing Elephants") + S + _x("Rocksolid forums for the darknets") + S + "http://def3.i2p/" + S + I + "forum.svg" + S +
         //"query.i2p" + S + _x("The StackOverflow of I2P") + S + "http://query.i2p/" + S + I + "forum.svg" + S +
 
 // hosting + other services
+           "major.i2p" + S + _x("IRC Logs for multiple networks") + S + "http://major.i2p/" + S + I + "major.svg" + S +
         _x("Pastebin") + S + _x("Encrypted I2P Pastebin") + S + "http://paste.r4sas.i2p/" + S + I + "paste.svg" + S +
         _x("radio.r4sas.i2p") + S + _x("Streaming radio service") + S + "http://radio.r4sas.i2p/" + S + I + "radio.svg" + S +
            "tube.i2p" + S + _x("Alternative front-end to Youtube") + S + "http://tube.i2p/" + S + I + "tv.svg" + S +
@@ -160,6 +161,14 @@ public class HomeHelper extends HelperBase {
 
         "";
 
+/*
+    static final String FAVORITES_RU =
+        "333.i2p" + S + _x("i2pd development forums") + S + "http://333.i2p/" + S + I + "forum.svg" + S +
+
+        "";
+
+    static final String DEFAULT_FAVORITES_RU = DEFAULT_FAVORITES.replace("\"\";", "") + FAVORITES_RU;
+*/
 
     public boolean shouldShowWelcome() {
         return _context.getProperty(Messages.PROP_LANG) == null;
@@ -193,7 +202,12 @@ public class HomeHelper extends HelperBase {
     }
 
     public String getFavorites() {
-        return homeTable(PROP_FAVORITES, DEFAULT_FAVORITES, null);
+/*
+        if (_context.getProperty(Messages.PROP_LANG) == "ru")
+            return homeTable(PROP_FAVORITES, DEFAULT_FAVORITES_RU, null);
+        else
+*/
+            return homeTable(PROP_FAVORITES, DEFAULT_FAVORITES, null);
     }
 
     public String getConfigServices() {
@@ -296,6 +310,8 @@ public class HomeHelper extends HelperBase {
                 url = SummaryBarRenderer.getEepsiteURL(pm);
                 if (url == null)
                     continue;
+                else
+                    url = app.url + "\" target=\"_blank\" class=\"extlink";
             // embed plugins in the console
             } else if ((app.url.contains("bote") && !app.url.contains(".i2p") && (embedApps))) {
                 url = "/embed?url=/i2pbote&amp;name=BoteMail";
@@ -334,16 +350,12 @@ public class HomeHelper extends HelperBase {
                        "<div class=\"appicon\">" +
                        // usability: add tabindex -1 so we avoid 2 tabs per app
                        "<a href=\"").append(url).append("\" tabindex=\"-1\">" +
-                       "<img alt=\"\" title=\"").append(app.desc).append("\" style=\"max-width: 32px; max-height: 32px;\" src=\"").append(app.icon)
-               // version the icons because they may change
-               .append(app.icon.contains("?") ? "&amp;" : "?").append(CoreVersion.VERSION).append("\"></a>" +
-                       "</div>\n" +
-                       "<table><tr><td>" +
-                       "<div class=\"applabel\">" +
-                       "<a href=\"").append(url).append("\" title=\"").append(app.desc).append("\">").append(app.name).append("</a>" +
-                       "</div>" +
-                       "</td></tr></table>\n" +
-                       "</div>");
+                       "<img alt=\"\" title=\"").append(app.desc).append("\" src=\"").append(app.icon)
+               // don't version the icons to avoid double-caching where they're used in css
+               //.append(app.icon.contains("?") ? "&amp;" : "?").append(CoreVersion.VERSION)
+               .append("\" width=\"32\" height=\"32\"></a></div>\n<table><tr><td><div class=\"applabel\"><a href=\"")
+               .append(url).append("\" title=\"").append(app.desc).append("\">").append(app.name)
+               .append("</a></div></td></tr></table>\n</div>");
             }
             buf.append("</div>\n");
             return buf.toString();
@@ -370,7 +382,7 @@ public class HomeHelper extends HelperBase {
             buf.append(app.name.replace(" ", "_").replace("\'", ""))
                .append("\"></td>");
             if (app.icon != null) {
-                buf.append("<td><img height=\"16\" alt=\"\" src=\"").append(app.icon).append("\">");
+                buf.append("<td><img width=\"20\" height=\"20\" alt=\"\" src=\"").append(app.icon).append("\">");
             } else {
                 buf.append("<td class=\"noicon\">");
             }

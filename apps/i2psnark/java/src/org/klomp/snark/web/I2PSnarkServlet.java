@@ -4045,11 +4045,11 @@ public class I2PSnarkServlet extends BasicServlet {
             if (meta != null) {
                 String com = meta.getComment();
                 if (com != null && com.length() > 0) {
-                    if (com.length() > 4000)
-                        com = com.substring(0, 4000) + "&hellip;";
+                    if (com.length() > 5000)
+                        com = com.substring(0, 5000) + "&hellip;";
                     buf.append("<tr><td id=\"metacomment\" colspan=\"3\">");
                     buf.append("<div class=\"commentWrapper\">")
-                       .append(DataHelper.stripHTML(com).replace("\r\n", "<br>").replace("\n", "<br>"))
+                       .append(DataHelper.stripHTML(com).replace("\r\n", "<br>").replace("\n", "<br>").replace("&apos;", "&#39;"))
                        .append("</div></td></tr>\n");
                 }
             }
@@ -4996,9 +4996,11 @@ public class I2PSnarkServlet extends BasicServlet {
             mime = "";
         if (mime.equals("text/html") || plc.endsWith(".jsp"))
             icon = "html";
+        else if (plc.endsWith(".srt"))
+            icon = "srt";
         else if (mime.equals("text/plain") || mime.equals("text/x-sfv") ||
                  mime.equals("application/rtf") || plc.endsWith(".md") ||
-                 plc.endsWith(".ini") || plc.endsWith(".srt") || plc.endsWith(".nfo"))
+                 plc.endsWith(".ini") || plc.endsWith(".nfo"))
             icon = "text";
         else if  (mime.equals("application/epub+zip") ||
                  mime.equals("application/x-mobipocket-ebook") ||

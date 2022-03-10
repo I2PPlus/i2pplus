@@ -840,9 +840,9 @@ h4#updateplugins {margin-top: -13px}
 .linkcontainer {margin: 0 -15px -9px}
 .applink {margin: 3px; padding: 0; width: 140px; position: relative; float: left; text-align: center; border: none; border: var(--border); background: var(--bg)}
 .applink:hover {border: 1px solid var(--hover); cursor: pointer}
-.applink img, .sitemaplink img {filter: grayscale(.6)}
+.applink img, .sitemapLink img {filter: grayscale(.6)}
 .applink img {margin: 0 0 -2px; padding: 10px 46px 6px; width: auto; height: 32px; max-height: 32px; max-width: 32px}
-.applink:hover img, .sitemaplink:hover img {filter: none}
+.applink:hover img, .sitemapLink:hover img {filter: none}
 #home .app:hover a, #home .app:hover .applabel a {color: var(--hover)}
 .applink.js:hover::before {padding: 1px 3px 5px; display: inline-block; position: absolute; top: -1px; left: -1px; line-height: 1; border: 1px solid var(--hover); content: "*js"}
 .applink:active img {transform: scale(.9)}

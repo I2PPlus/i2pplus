@@ -116,8 +116,9 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
 
     /**
      *  how much payload data can we shove in there?
-     *  Does NOT leave any room for acks, we'll fit them in when we can.
-     *  This is 5 bytes too low for first or only fragment.
+     *  This is 5 bytes too low for first or only fragment,
+     *  because the 9 byte I2NP header is included in that fragment.
+     *  Does NOT leave any room for acks with a full-size fragment.
      *
      *  @return MTU - 68 (IPv4), MTU - 88 (IPv6)
      */
@@ -127,13 +128,14 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         // 40 + 8 + 16 + 3 + 5 + 16 = 88 (IPv6)
         return _mtu -
                (_remoteIP.length == 4 ? PacketBuilder2.MIN_DATA_PACKET_OVERHEAD : PacketBuilder2.MIN_IPV6_DATA_PACKET_OVERHEAD) -
-               DATA_FOLLOWON_EXTRA_SIZE; // Followon fragment block overhead (5)
+               (SSU2Payload.BLOCK_HEADER_SIZE + DATA_FOLLOWON_EXTRA_SIZE);
     }
 
     /**
      *  Packet overhead
-     *  Does NOT leave any room for acks, we'll fit them in when we can.
-     *  This is 5 bytes too high for first or only fragment.
+     *  This is 5 bytes too high for first or only fragment,
+     *  because the 9 byte I2NP header is included in that fragment.
+     *  Does NOT leave any room for acks with a full-size fragment.
      *
      *  @return 68 (IPv4), 88 (IPv6)
      */
@@ -142,7 +144,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         // 20 + 8 + 16 + 3 + 5 + 16 = 68 (IPv4)
         // 40 + 8 + 16 + 3 + 5 + 16 = 88 (IPv6)
         return (_remoteIP.length == 4 ? PacketBuilder2.MIN_DATA_PACKET_OVERHEAD : PacketBuilder2.MIN_IPV6_DATA_PACKET_OVERHEAD) +
-               DATA_FOLLOWON_EXTRA_SIZE; // Followon fragment block overhead (5)
+               SSU2Payload.BLOCK_HEADER_SIZE + DATA_FOLLOWON_EXTRA_SIZE;
     }
 
     /**
@@ -232,8 +234,9 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     byte[] getRcvHeaderEncryptKey2() { return _rcvHeaderEncryptKey2; }
 
     SSU2Bitfield getReceivedMessages() {
-        if (_log.shouldDebug())
-            _log.debug("Sending acks " + _receivedMessages + " on " + this);
+        // logged in PacketBuilder2
+        //if (_log.shouldDebug())
+        //    _log.debug("Sending acks " + _receivedMessages + " on " + this);
         return _receivedMessages;
     }
     SSU2Bitfield getAckedMessages() { return _ackedMessages; }
@@ -286,17 +289,20 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                 _rcvCha.setNonce(n);
                 // decrypt in-place
                 _rcvCha.decryptWithAd(header.data, data, off + SHORT_HEADER_SIZE, data, off + SHORT_HEADER_SIZE, len - SHORT_HEADER_SIZE);
-                //if (_log.shouldDebug())
-                //    _log.debug("Packet " + n + " after full decryption:\n" + HexDump.dump(data, off, len - MAC_LEN));
-                if (_receivedMessages.set(n)) {
-                    if (_log.shouldWarn())
-                        _log.warn("dup pkt rcvd " + n + " on " + this);
-                    return;
+            }
+            //if (_log.shouldDebug())
+            //    _log.debug("Packet " + n + " after full decryption:\n" + HexDump.dump(data, off, len - MAC_LEN));
+            if (_receivedMessages.set(n)) {
+                synchronized(this) {
+                    _packetsReceivedDuplicate++;
                 }
+                if (_log.shouldWarn())
+                    _log.warn("dup pkt rcvd: " + n + " on " + this);
+                return;
             }
             int payloadLen = len - (SHORT_HEADER_SIZE + MAC_LEN);
             if (_log.shouldInfo())
-                _log.info("New pkt rcvd " + n + " on " + this);
+                _log.info("New " + len + " byte pkt " + n + " rcvd on " + this);
             processPayload(data, off + SHORT_HEADER_SIZE, payloadLen);
             packetReceived(payloadLen);
         } catch (GeneralSecurityException gse) {
@@ -321,6 +327,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     /////////////////////////////////////////////////////////
 
     public void gotDateTime(long time) {
+        // super adds CLOCK_SKEW_FUDGE that doesn't apply here
+        adjustClockSkew((_context.clock().now() - time) - CLOCK_SKEW_FUDGE);
     }
 
     public void gotOptions(byte[] options, boolean isHandshake) {
@@ -365,6 +373,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         InboundMessageState state;
         boolean messageComplete = false;
         boolean messageExpired = false;
+        boolean messageDup = false;
 
         synchronized (_inboundMessages) {
             state = _inboundMessages.get(messageId);
@@ -372,22 +381,34 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                 state = new InboundMessageState(_context, messageId, _remotePeer, data, off, len, frag, isLast);
                 _inboundMessages.put(messageId, state);
             } else {
-                boolean fragmentOK = state.receiveFragment(data, off, len, frag, isLast);
-                if (!fragmentOK)
-                    return;
-                if (state.isComplete()) {
-                    messageComplete = true;
-                    _inboundMessages.remove(messageId);
-                } else if (state.isExpired()) {
-                    messageExpired = true;
-                    _inboundMessages.remove(messageId);
+                messageDup = state.hasFragment(frag);
+                if (!messageDup) {
+                    boolean fragmentOK = state.receiveFragment(data, off, len, frag, isLast);
+                    if (!fragmentOK)
+                        return;
+                    if (state.isComplete()) {
+                        messageComplete = true;
+                        _inboundMessages.remove(messageId);
+                    } else if (state.isExpired()) {
+                        messageExpired = true;
+                        _inboundMessages.remove(messageId);
+                    }
                 }
             }
         }
 
+        if (messageDup) {
+            synchronized(this) {
+                _packetsReceivedDuplicate++;
+            }
+            if (_log.shouldWarn())
+                _log.warn("dup fragment rcvd: " + frag + " for " + state);
+            return;
+        }
+
         if (messageComplete) {
-            messageFullyReceived(messageId, state.getCompleteSize());
-            if (_log.shouldDebug())
+                messageFullyReceived(messageId, state.getCompleteSize());
+                if (_log.shouldDebug())
                 _log.debug("Message received completely!  " + state);
             _context.statManager().addRateData("udp.receivedCompleteTime", state.getLifetime(), state.getLifetime());
             _context.statManager().addRateData("udp.receivedCompleteFragments", state.getFragmentCount(), state.getLifetime());
@@ -609,7 +630,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             }
             UDPPacket ack = _transport.getBuilder2().buildACK(PeerState2.this);
             if (_log.shouldDebug())
-                _log.debug("Sending acks to " + PeerState2.this);
+                _log.debug("ACKTimer sending acks to " + PeerState2.this);
             _transport.send(ack);
         }
     }

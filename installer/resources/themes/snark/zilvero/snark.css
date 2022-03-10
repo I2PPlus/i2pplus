@@ -8,19 +8,25 @@
 --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
 --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, Bitstream Vera Sans, Verdana, sans-serif;
 --ink: #555;
+--bar: repeating-linear-gradient(90deg, #d1cbc7, #d1cbc7 10%, #b9b1ac 10%, #b9b1ac 20%);
+--bar_active: repeating-linear-gradient(135deg, #9fc69f 1px, #9fc69f 6px, #81e481 6px, #81e481 11px);
 --bg: url("data:image/svg+xml,%3Csvg height='4' viewBox='0 0 4 4' width='4' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m1 3h1v1h-1zm2-2h1v1h-1z' fill='%23e2e2ff' fill-opacity='.5'/%3E%3C/svg%3E");
---btn: linear-gradient(180deg,#fff 50%, #f4f4f4 50%);
---btn_hover: linear-gradient(180deg,#fff 50%, #f0f0f0 50%);
+--btn: linear-gradient(180deg,#fff, #eee);
+--btn_hover: linear-gradient(180deg,#fff, #ddd);
 --btn_active: linear-gradient(180deg,#f2f2f2, #f8f8f8);
 --btn_shadow_active: var(--highlight), inset 3px 3px 3px rgba(0,0,0,.4);
 --highlight: inset 0 0 0 1px #fff;
 --border: 1px solid #aaa;
 --border_hard: 1px solid #777;
 --border_filtered: none;
+--softborder: 0 0 0 1px #bbb;
 --a: #d23;
 --tr: var(--bg), linear-gradient(180deg,#fefefe,#ededed);
+--tr_hover: #dcd8d5;
+--th: var(--bg), linear-gradient(180deg,#fff,#ddd);
 --td_dl: linear-gradient(270deg, #3d3 3px, rgba(0,0,0,0) 3px);
 --row_filtered: #fafafa;
+--bullet: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='31' fill='%23384'/%3E%3Cg stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' transform='matrix(.90207 0 0 .90192 3.3 3.4)'%3E%3Cpath id='a' fill='%23fff' stroke='%23fff' stroke-dasharray='none' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.1' d='M31.7 2.2c-2.8 7-7.9 13.3-8 20.5.2 4.1 2.6 7.1 5.7 8.9-15 0-14.6 12.8-22.4 16.8 12.2 0 20.8 1.8 24.7-6v.1V2.3s0 0 0 0zM7 48.4h-.1 0z'/%3E%3Cuse xlink:href='%23a' width='100%25' height='100%25' transform='matrix(-1 0 0 1 63.6 0)'/%3E%3C/g%3E%3C/svg%3E");
 }
 
 html {border-right: var(--border); background: repeating-linear-gradient(180deg,#ddd 2px,#bbb 4px) #bbb; background-size: 100% 4px; scrollbar-color: #999 #eee}
@@ -40,7 +46,7 @@ form {margin: 0}
 table {border-collapse: separate; border-spacing: 0; background: #eee}
 table table {border: none}
 tr {contain: layout}
-th {padding-top: 7px; padding-bottom: 7px; vertical-align: middle; border-top: var(--border); border-bottom: var(--border)}
+th {padding-top: 7px; padding-bottom: 7px; vertical-align: middle; border-top: var(--border); border-bottom: var(--border); background: var(--th)}
 th img {max-height: 24px}
 thead img {font-size: 0}
 thead a img:hover {filter: drop-shadow(0 0 1px #b23) drop-shadow(0 0 1px #b23)}
@@ -54,6 +60,20 @@ hr {background: transparent; color: transparent; height: 0; border: none}
 .snarkNav, .toggleview, .configTitle, .suboption, input[type=submit], a.control {font-weight: 700; box-shadow: var(--highlight); background: var(--btn)}
 .toggleview:hover, #configSection .configTitle:hover {background: var(--btn_hover)}
 #navbar a, #tab_config a:not(:hover):not(:focus):not(:active), #tab_config a:not(:hover):not(:focus):not(:active):visited, .toggleview, a.control, a.control:visited {color: #777}
+.configTitle img {display: none}
+.configTitle, .toggleview, .snarkNav {letter-spacing: .1em; text-transform: uppercase}
+.rowOdd, .torrentInfo tr:nth-child(odd), #trackerselect tr:nth-child(2n+2), .knownTracker:nth-child(odd), #mediaContainer th, #commentInfo tr:first-child, #torrentEdit tr:nth-child(even) {background: #fafafa}
+.noneLoaded td {border-bottom: var(--border)}
+.peerinfo:hover td, #torrentEdit tr:hover td {background-color: var(--tr_hover)}
+.rowEven, .torrentInfo tr:nth-child(even), #trackerselect tr:nth-child(2n+3), .knownTracker:nth-child(even) {background: #f0f0f0}
+.rowOdd, .rowEven {background: var(--tr)}
+.torrentInfo td {padding-top: 5px; padding-bottom: 5px}
+.torrentInfo tr:last-child td {border-top: var(--border)}
+.rowOdd td, .rowEven td, #filterResults td {border-top: 1px solid #fff; border-bottom: var(--border)}
+#torrents tr:hover, .dirInfo tr:hover, #trackerselect tr:nth-child(n+2):hover {background: var(--tr_hover)}
+.dirInfo .ParentDir a, .dirInfo .snarkFileName a, #torrents .torrentName a {padding: 2px 0; display: inline-block; width: 100%}
+#torrents tr:hover th, .dirInfo tr:hover th {color: #333; background: #eee}
+.dirInfo, .torrentInfo, #userComments, #commentInfo, #mediaContainer {width: 100%}
 
 /* inputs */
 input[type=submit]::-moz-focus-inner, input[type=reset]::-moz-focus-inner {border: none; outline: none}
@@ -71,7 +91,8 @@ input[type=submit], a.control {margin: 2px 4px; float: right; color: var(--ink);
 .control, .control:visited {padding-top: 5px; padding-bottom: 4px; font-weight: 400}
 .control:hover {background: #930; color: white; text-decoration: none}
 .control:active {background: #f30}
-.control img, .controld, input[disabled] {display: none}
+.control img, .controld {display: none}
+input[disabled] {opacity: .5}
 input[type=text] {margin: 1px 2px; padding: 5px; color: #444; font-weight: 700; border: var(--border); border-radius: 1px; box-shadow: inset 2px 2px 2px #bbb; background: #f8f8f8}
 input[type=text]:focus {color: #b23; box-shadow: inset 0 0 0 1px #d30; background: #fff}
 select {margin: 2px 4px 2px 0; padding: 6px 16px 6px 6px; min-width: 120px; color: var(--ink); font: bold 9pt var(--bodyfont); border: var(--border); border-radius: 3px; background: var(--dropdown) no-repeat right 6px center / 10px, var(--btn); appearance: none}
@@ -96,6 +117,8 @@ textarea:focus {background: #fff}
 textarea[name="nofilter_newComment"] {margin: 7px 0 7px 2px; padding: 3px; width: 100%; height: 40px; min-height: 40px; resize: vertical; box-shadow: inset 2px 2px 2px #ddd; border: var(--border)}
 textarea[name="nofilter_newComment"]:focus {min-height: 64px; box-shadow: inset 0 0 0 1px #b32}
 #torrentEdit textarea {height: 80px; min-height: 80px}
+#filesPublic {margin-right: 199px}
+.knownTracker .optbox, #addtracker .optbox {vertical-align: middle; margin-top: 1px; margin-bottom: 1px}
 
 /* navbar */
 .snarkNav, .snarkNav:visited {margin: 2px -3px; display: inline-block; font-weight: 700; border: var(--border); background: #fff}
@@ -120,26 +143,9 @@ textarea[name="nofilter_newComment"]:focus {min-height: 64px; box-shadow: inset 
 .snarkNav, .snarkNav:hover, .snarkNav:focus, .snarkNav:active {padding: 5px 11px 5px 28px; background-size: 16px, 100%, 100%; background-position: 10px center; background-repeat: no-repeat, repeat}
 .snarkNav:hover {border: 1px solid var(--a); position: relative; z-index: 2; box-shadow: var(--highlight)}
 input[type=submit]:active, a.control:active, .snarkNav:active, #torrentDisplay label:active {color: #bbb; box-shadow: var(--btn_shadow_active)}
-#torrents tr:hover th, .dirInfo tr:hover th {color: #333; background: #eee}
 #navbar, table, #screenlog {border: var(--border); background: #eee}
 #navbar {margin-bottom: -1px; padding: 5px; font-size: 11pt}
 .iframed #navbar {margin: 0 -1px; padding: 5px 5px 4px}
-.configTitle img {display: none}
-.configTitle, .toggleview, .snarkNav {letter-spacing: .1em; text-transform: uppercase}
-.rowOdd, .torrentInfo tr:nth-child(odd), #trackerselect tr:nth-child(2n+2), .knownTracker:nth-child(odd), #mediaContainer th, #commentInfo tr:first-child, #torrentEdit tr:nth-child(even) {background: #fafafa}
-.noneLoaded td {border-bottom: var(--border)}
-.peerinfo:hover td, #torrentEdit tr:hover td {background-color: #bfb8b3}
-.rowEven, .torrentInfo tr:nth-child(even), #trackerselect tr:nth-child(2n+3), .knownTracker:nth-child(even) {background: #f0f0f0}
-.rowOdd, .rowEven {background: var(--tr)}
-.torrentInfo td {padding-top: 8px; padding-bottom: 8px}
-.torrentInfo tr:last-child td {border-top: var(--border)}
-.rowOdd td, .rowEven td, #filterResults td {border-top: 1px solid #fff; border-bottom: var(--border)}
-#trackers td {border-top: var(--border)}
-#torrents tr:hover, .dirInfo tr:hover, #trackerselect tr:nth-child(n+2):hover {background: #bfb8b3}
-#embed, #fullscreen {float: right}
-.iframed #embed, #fullscreen {display: none}
-.iframed #fullscreen {display: inline-block}
-.dirInfo .ParentDir a, .dirInfo .snarkFileName a, #torrents .torrentName a {padding: 2px 0; display: inline-block; width: 100%}
 
 /* screenlog */
 #closelog, #expand, #shrink {margin-right: 5px; position: sticky; top: 0; float: right; mix-blend-mode: luminosity}
@@ -149,8 +155,9 @@ input[type=submit]:active, a.control:active, .snarkNav:active, #torrentDisplay l
 #closelog img:hover, #expand img:hover, #shrink img:hover {background: #fff}
 #screenlog {margin-bottom: -1px; height: 60px; overflow: hidden; line-height: 1.15; font-size: 9pt; text-align: left; box-shadow: var(--highlight); background: #f2f2f2; background: url(../ubergine/images/hat.png) right -4px bottom -10px no-repeat, linear-gradient(180deg,#fff,#eee); background-size: auto 80px, 100%; contain: paint}
 #screenlog:hover {overflow-y: auto}
-#screenlog ul {margin: 2px 0 0 -20px; list-style-type: square; color: #384; font-weight: 700; contain: size}
-#screenlog li, #screenlog li a {line-height: 1.25}
+#screenlog ul {margin: 1px 20px 0 -37px; list-style: none; color: #384; font-weight: 700; contain: size}
+#screenlog li, #screenlog li a {line-height: 1.2}
+#screenlog li::before {margin: -2px 3px 0 0; width: 10px; height: 10px; content: ""; display: inline-block; vertical-align: middle; background: var(--bullet) no-repeat left center / 10px}
 
 /* pagenav */
 .pagenavcontrols {padding: 5px; border: var(--border); border-bottom: none}
@@ -181,7 +188,9 @@ input[type=submit]:active, a.control:active, .snarkNav:active, #torrentDisplay l
 #ourDest {margin-left: 3px; line-height: 1.3}
 .peerclient {width: 120px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
 .peerCount {font-weight: 700}
-.peerCount .right {min-width: 18px; text-align: right; display: inline-block}
+.peerCount b {min-width: 64px; display: inline-block; line-height: 1.6; border-radius: 1px; box-shadow: 0 0 0 1px #bbb, var(--highlight); background: linear-gradient(180deg, #f2f2f2, #eee)}
+.active .peerCount b {background: linear-gradient(180deg, #fff, #edd)}
+.peerCount .left, .peerCount .right {min-width: 22px; display: inline-block; text-align: center}
 .peerinfo {background-color: #fffffd}
 .peerinfo td {border-bottom: 1px solid #bbb}
 .peerinfo td:first-child {background: var(--client) no-repeat center center / 20px}
@@ -193,9 +202,6 @@ td.torrentDetails img:not([src$="rateme.svg"]), .dirInfo td:first-child img:not(
 td.torrentDetails a:active img, .dirInfo td:first-child a:active img:not(.thumb) {transform: scale(.9); filter: saturate(.5)}
 td.torrentDetails a:hover img, td.torrentDetails a:focus img, .dirInfo td:first-child a:hover img:not(.thumb), .dirInfo td:first-child a:focus img:not(.thumb) {filter: drop-shadow(0 0 1px var(--a)) drop-shadow(0 0 2px rgba(96,0.0,.7)); transform: scale(1.1)}
 td.torrentDownloaded {width: 1%; text-align: center}
-tfoot .RateDown:not(:empty)::before, tfoot .torrentDownloaded:not(:empty)::before, tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {margin-right: 1px; margin-top: -3px; display: inline-block; vertical-align: middle; line-height: 0; font-size: 80%}
-tfoot .RateDown:not(:empty)::before, tfoot .torrentDownloaded:not(:empty)::before {content: "\27A4"; transform: rotate(90deg) scaleX(0.6)}
-tfoot .RateUp:not(:empty)::before, tfoot .torrentUploaded:not(:empty)::before {content: "\27A4"; transform: rotate(-90deg) scaleX(0.6)}
 .tooltipped {display: inline-block; position: relative; z-index: 99; content: ""}
 .tooltipped:hover {filter: drop-shadow(0 0 1px rgba(0,0,0,.2))}
 .tooltipped:hover::before, .tooltipped:active::before, .tooltipped:hover::after, .tooltipped:active::after {position: absolute; display: inline-block}
@@ -204,17 +210,21 @@ tfoot .RateUp:not(:empty)::before, tfoot .torrentUploaded:not(:empty)::before {c
 .torrentDetails {padding-right: 0}
 .torrentDownloaded {width: 1%}
 #torrents td, #torrents th {padding: 5px}
+#torrents th.peerCount img {margin-left: 8px}
+#torrents thead th, #torrents tfoot th, tr:hover #torrents thead th, tr:hover #torrents tfoot th {background: #fff}
+#torrents thead th {white-space: nowrap; text-align: center; font-size: 8pt; border-top: none}
+#torrents thead img {vertical-align: middle}
+#torrents thead a img {display: inline-block}
 #torrents td:empty, #torrents th:empty {padding: 3px; width: 0; min-width: 0; font-size: 0}
 #torrents td img {margin: -1px 0; vertical-align: middle}
 #torrents td.torrentDownloaded, #torrents td.torrentUploaded, .torrentAction {width: 1%; white-space: nowrap}
 #torrents td.torrentName {padding-left: 8px; width: 99%; font-weight: 700; white-space: normal}
 #torrents td {width: 1%; white-space: nowrap}
-#torrents thead th, #torrents tfoot th, tr:hover #torrents thead th, tr:hover #torrents tfoot th {background: #fff}
-#torrents thead th {white-space: nowrap; text-align: center; font-size: 8pt; border-top: none}
 #torrents tfoot th {padding: 8px 5px; border-top: none; border-bottom: none; background: #fff}
 #torrents tfoot tr:first-child th:nth-child(n+2) {text-align: center; white-space: nowrap}
-#torrents th.peerCount img {margin-left: 8px}
-tr.active.downloading:not(.peerinfo):hover .percentBarInner {background: #47d16a}
+tfoot .RateDown:not(:empty)::before, tfoot .torrentDownloaded:not(:empty)::before, tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before {margin-right: 1px; margin-top: -3px; display: inline-block; vertical-align: middle; line-height: 0; font-size: 80%}
+tfoot .RateDown:not(:empty)::before, tfoot .torrentDownloaded:not(:empty)::before {content: "\27A4"; transform: rotate(90deg) scaleX(0.6)}
+tfoot .RateUp:not(:empty)::before, tfoot .torrentUploaded:not(:empty)::before {content: "\27A4"; transform: rotate(-90deg) scaleX(0.6)}
 .snarkCommented {display: inline-block; vertical-align: top; margin: -2px -3px 0 0}
 .snarkCommented img {width: 10px; height: 10px; display: inline-block; vertical-align: top; position: relative; z-index: 10}
 .torrentName a, .dirInfo .snarkFileName a {padding: 4px 0; font-weight: 700; font-style: normal}
@@ -230,17 +240,42 @@ td.RateDown, td.RateUp, td.RateDown span, td.RateUp span {font-style: italic}
 .graphicStatus {width: 48px}
 td.graphicStatus img {width: 24px}
 .peerinfo .graphicStatus {background-size: 18px}
-.active .torrentAction, .active:hover .torrentAction {background: linear-gradient(270deg, #cb4dcb 3px, rgba(0,0,0,0) 3px); animation: ease-in-out active .5s 3s forwards}
 .active.downloading .torrentAction, .active.downloading:hover .torrentAction, .active.RX .torrentAction, .active.RX:hover .torrentAction {background: var(--td_dl); animation: ease-in-out downloading .5s 3s forwards}
-.magnetlink, .torrentlink {margin-left: 4px}
-.magnetlink img, .torrentlink img {filter: none}
+.canhide {display: none}
+.infohash {padding: 0 3px 0 15px; width: 100px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; vertical-align: middle; color: #393; font-family: var(--monospaced); border-radius: 1px; background: #fff var(--hash) no-repeat left center / 12px; user-select: all}
+.infohash::selection {background: #393}
+.magnetLabel {margin-left: 3px; padding-left: 14px; padding-right: 2px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; vertical-align: middle; line-height: 1.1; background: var(--tag) no-repeat left center / 12px; opacity: .8}
+tr:hover .magnetLabel {opacity: 1}
+.noneLoaded td, .noneLoaded:hover td {text-align: center; font-size: 10pt; font-weight: 700; padding: 15px; background: #eee}
+.routerdown {padding: 15px 10px; font-size: 120%; text-shadow: 0 1px 1px #fff; border: var(--border); box-shadow: var(--highlight), inset 0 0 2px 1px #ddd; background: repeating-linear-gradient(135deg, #eee, #eee 20px, #fff 20px, #fff 40px)}
+#torrents .infohash {padding: 2px 4px 2px 18px; display: inline-block; border-radius: 1px; box-shadow: 0 0 0 1px #7a7, var(--highlight); background: var(--hash) no-repeat 4px center / 12px, linear-gradient(180deg,#efe,#e6ffe6)}
+#totals {margin-left: 3px; white-space: nowrap}
+
+/* action buttons */
+.torrentAction {padding-right: 5px; white-space: nowrap}
+#torrents .torrentAction {padding-right: 4px}
+#torrents .torrentAction input {margin: 0 2px; padding: 11px; display: inline-block; min-width: 0; float: none; font-size: 0; border-radius: 2px; box-shadow: inset 0 0 0 1px #fff; background-blend-mode: luminosity}
+#torrents #actionStopAll, #torrents #actionStartAll {padding: 10px 16px}
+#torrents .actionStart {background: var(--start) no-repeat center center / 14px, var(--btn)}
+#torrents .actionStop {background: var(--stop) no-repeat center center / 14px, var(--btn)}
+#torrents .actionRemove {background: var(--remove) no-repeat center center / 14px, var(--btn)}
+#torrents .actionDelete {background: var(--delete) no-repeat center center / 14px, var(--btn)}
+#torrents #actionStartAll {background: var(--startall) no-repeat center center / auto 14px, var(--btn)}
+#torrents #actionStopAll {background: var(--stopall) no-repeat center center / auto 14px, var(--btn)}
+#torrents .torrentAction input:hover {background-blend-mode: normal}
+#torrents .torrentAction input:active, #actionStartAll:active, #actionStopAll:active {background-size: auto 12px}
+.active .torrentAction, .active:hover .torrentAction {background: linear-gradient(270deg, #cb4dcb 3px, rgba(0,0,0,0) 3px); animation: ease-in-out active .5s 3s forwards}
 
 /* status bars */
 .percentBarComplete {padding: 1px 0; width: 84px; text-align: center; font-weight: 700; color: #fff; text-shadow: 0 1px 1px #333; border: var(--border_hard); box-shadow: inset 0 0 0 1px #ddd; background: #708ca9}
-.percentBarInner, .uploaded {height: 16px; vertical-align: middle; border-right: var(--border_hard); box-shadow: inset 0 0 0 1px #eee; background: #bfb8b3}
+.percentBarInner, .uploaded {height: 16px; vertical-align: middle; border-right: var(--border_hard); box-shadow: inset 0 0 0 1px #eee; background: var(--tr_hover)}
 .percentBarOuter, .percentbarInner, .percentBarText {font-weight: 700}
 .percentBarInner {background: #7b9d84}
-.percentBarOuter {border: var(--border_hard); box-shadow: var(--btn_shadow_active); background: #eee}
+.percentBarOuter {border: var(--border_hard); box-shadow: var(--btn_shadow_active); background: var(--bar)}
+.active .percentBarOuter {background: repeating-linear-gradient(135deg, #eee 1px, #eee 6px, #fff 6px, #fff 11px); background-size: 400% 400%; will-change: transform}
+tr:not(.peerinfo).active.downloading .percentBarOuter {background: var(--bar_active)}
+tr:not(.peerinfo).active.downloading:hover .percentBarInner {background: #47d16a}
+.active.downloading .percentBarOuter {animation: progress 1s linear both}
 .percentBarText {opacity: 0}
 .peerinfo .percentBarOuter, .peerinfo .percentBarInner {height: 9px}
 .peerinfo .percentBarInner {background: #e8dab0}
@@ -253,22 +288,50 @@ tr:hover .percentBarComplete {background: #538ac6}
 tr:hover .percentBarText {line-height: 1.2; color: #333; opacity: 1}
 .txBarInner {height: calc(100% - 2px); display: inline-block; position: absolute; top: 1px; left: 1px; box-shadow: inset 0 3px 3px rgba(0,0,0,.3); background: linear-gradient(90deg,#f70,#f40); opacity: .25}
 .txBarText {margin-top: 1px; display: inline-block; position: relative; z-index: 5; font-weight: 700}
-.uploaded {min-width: 68px; height: auto; display: inline-block; position: relative; border: var(--border_hard); border-left-width: 5px; box-shadow: var(--btn_shadow_active)}
+.uploaded {min-width: 68px; height: auto; display: inline-block; position: relative; border: var(--border_hard); border-left-width: 5px; box-shadow: var(--btn_shadow_active); background: var(--bar)}
 
 /* details */
-.dirInfo, .torrentInfo, #userComments, #commentInfo, #mediaContainer {width: 100%}
 .dirInfo {margin-top: -1px}
 .dirInfo th {background: #fff}
+.dirInfo th:first-child, .dirInfo td:first-child {padding-left: 10px; text-align: left}
+.dirInfo th.snarkFileSize {text-align: right; padding-right: 10px}
+.fileStatus {min-width: 40px; text-align: center}
+.fileStatus img[src$="tick.svg"] {padding: 4px; width: 10px; height: 10px; border-radius: 50%; background: #474}
+.fileStatus .percentBarOuter, .fileStatus .percentBarInner, .fileStatus .percentBarText {width: 80px}
+.fileStatus .percentBarOuter {margin: 0 auto}
+.knownTracker input[type=radio]:disabled {opacity: .3}
 .ParentDir {border-bottom: var(--border); background: #fafafa}
 .ParentDir img {display: none}
-.torrentName {font-style: italic}
+#setPriority th {padding: 6px 3px 10px; text-align: right; border-top: none}
+.priority {padding-right: 5px; white-space: nowrap; text-align: right}
+.priorityIndicator {display: none}
+.priority input[type=radio] {text-align: left; margin: 3px}
+.priority input[type=radio]:not(:checked):not(:hover) {opacity: .7}
+.priorityHigh, .priorityNormal, .prioritySkip {padding: 0; width: 52px; display: inline-block; vertical-align: middle; overflow: hidden; text-align: left; font-size: 0; color: transparent}
+.priorityHigh {background: url(/i2psnark/.resources/icons/clock_red.png) no-repeat left 26px center / 18px}
+.priorityNormal {background: url(/i2psnark/.resources/icons/clock.png) no-repeat left 26px center / 18px}
+.prioritySkip {background: url(/i2psnark/.resources/icons/block.png) no-repeat left 26px center / 18px}
+.priority {padding: 5px; width: 1%; text-align: center; white-space: nowrap}
+.dirInfo img[src$="priority.png"] {margin: 0}
 .snarkFileName {width: 90%}
-.priority {white-space: nowrap}
-.knownTracker input[type=radio]:disabled {opacity: .3}
+.torrentName {font-style: italic}
+.torrentInfo th:first-child, .torrentInfo td:first-child {padding-left: 4px; text-align: left; font-weight: inherit}
+.torrentInfo th:last-child {text-align: right; padding-right: 6px}
+#torrentInfo .infohash {padding: 2px 2px 2px 17px; box-shadow: var(--highlight), var(--softborder); background-position: 3px center}
+.torrentInfo th:first-child img, #torrentInfoStats img, #trackers img {margin: 0 6px}
+.torrentInfo img {max-height: 16px; vertical-align: text-top; filter: saturate(0)}
+.magnetlink img, .torrentlink img {padding: 1.5px 4px; vertical-align: middle; box-shadow: var(--highlight), var(--softborder); filter: none}
+.torrentInfo .nowrap {display: inline-block; white-space: nowrap; line-height: 1.6}
+#torrentInfoStats img[src$="head_tx.png"], #torrentInfoStats img[src$="head_rx.png"] {margin-right: 3px}
+#torrentOrderControl b {display: inline-block}
+#torrentOrderControl b, #torrentOrderControl input[type=checkbox] {margin: 6px 4px 0 3px; vertical-align: middle}
+#torrentOrderControl {float: right}
 #torrentOrderControl input[type=checkbox], #torrentOrderControl input[type=checkbox]:checked, #torrentOrderControl input[type=checkbox][disabled], #torrentOrderControl input[type=checkbox][disabled]:checked {border: 1px solid #bbb}
+#torrentOrderControl label:hover {cursor: pointer}
+#torrentInfoControl .stoptorrent {float: left}
 .thumb, audio, video {margin: 1px 0 2px -5px; padding: 2px; border: var(--border_hard); box-shadow: inset 0 0 0 2px #fff}
-.thumb {max-width: 80px}
 audio, video {width: 240px; background: #000}
+.thumb {max-width: 80px}
 .thumb:hover, .thumb:focus, audio:hover, audio:focus, video:hover, video:focus {border: 1px solid var(--a)}
 video:fullscreen, video:fullscreen:hover, video:fullscreen:focus {padding: 0; border: none; box-shadow: none}
 video::-webkit-media-controls-timeline {padding: 0 16px 16px}
@@ -278,7 +341,8 @@ video::-webkit-media-controls-panel {display: none}
 video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-panel {display: flex}
 
 /* sections */
-#commentSection #commentInfo, #commentSection #userComments, #mediaContainer {margin-top: -1px}
+#commentSection #userComments, #mediaContainer {margin-top: -1px}
+#commentSection #commentInfo {margin-top: -7px}
 .torrentInfo, #commentInfo {border-top: none}
 .commentRating {width: 1%; white-space: nowrap}
 #commentstoggle input {float: none}
@@ -293,6 +357,7 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
 #addSection {margin-top: -1px}
 #addSection input[type=submit], #createSection input[type=submit] {margin-right: 0; min-width: 110px; float: none; vertical-align: middle}
 #addSection input[type=text], #createSection input[type=text] {width: calc(100% - 126px); vertical-align: middle}
+body:not(.lang_en) #addSection input[type=text], #createSection input[type=text] {width: calc(100% - 172px)}
 #addSection table, #createSection table, #configSection table, .configPanel table {border: none; background: none}
 #addSection td:first-child, #createSection td:first-child {white-space: nowrap; min-width: 120px}
 #addSection td:first-child {padding-right: 10px; text-align: right; font-weight: 700}
@@ -322,31 +387,15 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
 input.toggle_input + label + hr + table {display: none}
 input.toggle_input:checked + label + hr + table {margin-top: 20px; display: table}
 
-.torrentInfo img {max-height: 16px; vertical-align: text-top; filter: saturate(0)}
-.torrentInfo th:first-child img, #torrentInfoStats img, #trackers img {margin: 0 4px 0 6px}
-#torrentInfoStats img[src$="head_tx.png"], #torrentInfoStats img[src$="head_rx.png"] {margin-right: 3px}
-.torrentInfo th:last-child {text-align: right; padding-right: 5px}
-.torrentInfo .nowrap {display: inline-block; white-space: nowrap; line-height: 1.6}
-.dirInfo th:first-child, .dirInfo td:first-child {padding-left: 10px; text-align: left}
-.dirInfo th:nth-last-child(2) {text-align: right; padding-right: 5px}
-.fileStatus {min-width: 40px; text-align: center}
-.fileStatus .percentBarOuter, .fileStatus .percentBarInner, .fileStatus .percentBarText {width: 80px}
-.fileStatus .percentBarOuter {margin: 0 auto}
-.priority {padding-right: 5px; text-align: right}
-.priorityIndicator {display: none}
-#torrentOrderControl {float: right}
-#torrentOrderControl label:hover {cursor: pointer}
-#torrentOrderControl b, #torrentOrderControl input[type=checkbox] {margin: 6px 4px 0 3px; vertical-align: middle}
-#torrentOrderControl b {display: inline-block}
-
 /* debug */
 #debugMode {width: 50px; line-height: 1; white-space: normal; font-size: 70%; opacity: 0}
 #debugMode:hover {opacity: 1}
 #dhtDebug hr {display: none}
 #torrents #dhtDebug th {padding: 3px 8px 5px; text-align: center; font-weight: 400; border-top: var(--border)}
 
-.info_tracker {margin: 0 1px 4px; padding: 0 4px; display: inline-block; background: #fff; color: #930; border-radius: 1px}
-.info_tracker a {display: inline-block; vertical-align: text-bottom}
+.info_tracker {margin: 0 1px; padding: 0 4px; display: inline-block; vertical-align: middle; background: #fff; color: #930; border-radius: 1px}
+.info_tracker a {display: inline-block}
+#trackers .info_tracker {vertical-align: text-bottom}
 .info_tracker a[href*=".b32"] {max-width: 80px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap}
 #torrentEdit .info_tracker, #torrentEdit .info_tracker a {font-weight: 400; color: var(--ink); background: none; pointer-events: none}
 .fileIcon {width: 1%}
@@ -356,7 +405,7 @@ input.toggle_input:checked + label + hr + table {margin-top: 20px; display: tabl
 
 /* comments */
 #commentInfo th, #mediaContainer th {padding-left: 5px; text-align: left}
-#commentInfo th {padding: 2px 0 2px 5px}
+#commentInfo th {padding: 2px 0 2px 5px; border-top: none}
 #commentInfo td:first-child, #commentInfo td:last-child, .commentDate {width: 1%; white-space: nowrap}
 #mediaContainer td {padding: 20px 15px; text-align: center}
 #mediaContainer video {width: auto; max-width: calc(100% - 20px)}
@@ -366,7 +415,8 @@ input.toggle_input:checked + label + hr + table {margin-top: 20px; display: tabl
 #newRating td:first-child {padding: 8px 5px; text-align: center}
 #showRatings td {padding: 8px 5px; border-top: var(--border)}
 #showRatings td:first-child {text-align: right; font-weight: 700}
-.commentWrapper {margin: 5px 0; padding: 5px; box-shadow: 0 0 0 1px #ccc, inset 0 0 0 1px #f2f2f2; background: #ddd}
+.commentWrapper {margin: 6px; padding: 9px 10px 10px; box-shadow: 0 0 0 1px #ccc, inset 0 0 0 1px #f2f2f2; background: #ddd}
+.commentText .commentWrapper {margin: 5px 0}
 .commentAuthor {padding: 8px 5px}
 .commentAuthorName {padding-left: 21px; display: inline-block; vertical-align: middle; white-space: nowrap; line-height: 23px; font-weight: 700; background: var(--user) no-repeat 4px center; background-size: 14px}
 .commentAuthor .commentAuthorName {width: calc(100% - 20px); overflow: hidden; text-overflow: ellipsis; border-radius: 1px; box-shadow: inset 0 0 0 1px #bbb; background: #fff var(--user) no-repeat 4px center; background-size: 14px}
@@ -374,21 +424,6 @@ input.toggle_input:checked + label + hr + table {margin-top: 20px; display: tabl
 #torrentSort {text-align: right}
 #torrentSort img {margin-right: 7px}
 #newRating td:first-child, .commentAuthor {width: 200px}
-#totals {margin-left: 3px; white-space: nowrap}
-.canhide {display: none}
-.noneLoaded td, .noneLoaded:hover td {text-align: center; font-size: 10pt; font-weight: 700; padding: 15px; background: #eee}
-.infohash {padding: 0 3px 0 15px; width: 100px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; vertical-align: middle; color: #393; font-family: var(--monospaced); border-radius: 1px; background: #fff var(--hash) no-repeat left center / 12px; user-select: all}
-#torrents .infohash {padding: 2px 4px 2px 18px; display: inline-block; border-radius: 1px; box-shadow: 0 0 0 1px #7a7, var(--highlight); background: var(--hash) no-repeat 4px center / 12px, linear-gradient(180deg,#efe, #e6ffe6)}
-.magnetLabel {margin-left: 3px; padding-left: 14px; padding-right: 2px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; vertical-align: middle; line-height: 1.1; background: var(--tag) no-repeat left center / 12px}
-.knownTracker .optbox, #addtracker .optbox {vertical-align: middle; margin-top: 1px; margin-bottom: 1px}
-.torrentInfo th:first-child, .torrentInfo td:first-child {padding-left: 4px; text-align: left; font-weight: inherit}
-#torrentInfoControl .stoptorrent {float: left}
-.routerdown {padding: 15px 10px; font-size: 120%; text-shadow: 0 1px 1px #fff; border: var(--border); box-shadow: var(--highlight), inset 0 0 2px 1px #ddd; background: repeating-linear-gradient(135deg, #eee, #eee 20px, #fff 20px, #fff 40px)}
-.active .percentBarOuter {background: repeating-linear-gradient(135deg, #eee 1px, #eee 6px, #fff 6px, #fff 11px); background-size: 400% 400%; will-change: transform}
-.active.downloading .percentBarOuter {animation: progress 1s linear both}
-#torrents thead img {vertical-align: middle}
-#torrents thead a img {display: inline-block}
-.torrentAction {padding-right: 5px}
 
 /* tooltip */
 #bwHelp {visibility: hidden; background: #fff url(/i2psnark/.resources/icons/favicon.svg) no-repeat 10px center / 28px; text-align: center; padding: 15px 15px 15px 55px; border-radius: 3px; width: 320px; position: absolute; z-index: 2000; bottom: 125%; left: 0; margin-left: -183px; display: block; white-space: normal; font-size: 10pt; filter: drop-shadow(0 0 1px #999); opacity: 0}
@@ -416,15 +451,6 @@ tr:not(.peerinfo) .torrentUploaded:empty::after {content: "‒"; display: inline
 .peerclient tt {margin: 0 3px 0 1px}
 .clientid {margin: 0 0 1px -2px; padding: 1px 2px; width: 50px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; vertical-align: middle; text-align: center; font-size: 90%; background: #ddd}
 .peerdata > * {vertical-align: middle}
-.priority input[type=radio] {text-align: left; margin: 3px}
-.priority input[type=radio]:not(:checked):not(:hover) {opacity: .7}
-.priorityHigh, .priorityNormal, .prioritySkip {padding: 0; width: 52px; display: inline-block; vertical-align: middle; overflow: hidden; text-align: left; font-size: 0; color: transparent; background-size: 18px}
-.priorityHigh {background: url(/i2psnark/.resources/icons/clock_red.png) no-repeat left 26px center}
-.priorityNormal {background: url(/i2psnark/.resources/icons/clock.png) no-repeat left 26px center}
-.prioritySkip {background: url(/i2psnark/.resources/icons/block.png) no-repeat left 26px center}
-.priority {padding: 5px; width: 1%; text-align: center; white-space: nowrap}
-#setPriority th {text-align: right}
-.dirInfo img[src$="priority.png"] {margin: 0}
 
 /* filter bar */
 #torrentDisplay {margin-bottom: -1px; border: var(--border)}
@@ -442,17 +468,19 @@ tr:not(.peerinfo) .torrentUploaded:empty::after {content: "‒"; display: inline
 #snarkInfo ~ .mainsection, #snarkInfo + #editSection {margin: -1px 0 -6px; border: var(--border)}
 #snarkInfo ~ .mainsection table {border: none}
 #snarkInfo ~ .mainsection input:checked + .toggleview + hr + table {margin-top: -7px; margin-bottom: 0}
-#snarkInfo ~ #editSection input:checked + .toggleview + hr + table {margin-top: 1px}
-#editSection #torrentEdit {margin-bottom: 5px; width: 100%}
+.iframed #snarkInfo ~ #snarkFiles {margin-bottom: -9px}
+#snarkInfo ~ #editSection #torrentEdit {margin: -7px 0 5px; width: 100%}
 #torrentEdit tr:first-child td {padding-top: 12px}
 #torrentEdit th, #torrentEdit td {text-align: center; width: 25%}
 #torrentEdit tbody th:first-child, #torrentEdit tbody td:first-child:not(#addCommentText) {padding-left: 20px; width: 20%; text-align: left}
 #torrentEdit th:nth-child(2), #torrentEdit td:nth-child(2) {width: 30%; text-align: left}
-#torrentEdit tfoot td {padding-bottom: 12px; text-align: center; border-top: var(--border); background: var(--th)}
+#torrentEdit tfoot td, #torrentEdit tfoot tr:hover td {padding-bottom: 12px; text-align: center; border-top: var(--border); background: var(--th)}
 #stopfirst {display: inline-block; font-weight: 700}
-#stopfirst::before {width: 14px; height: 12px; display: inline-block; vertical-align: middle; background: url(images/details.svg) no-repeat left center / 12px; content: ""; filter: saturate(0)}
-#snarkInfo ~ #commentSection input:not(:checked) + .toggleview {margin-bottom: -7px}
-#snarkInfo ~ #commentSection {margin-top: -7px; margin-bottom: 1px}
+#stopfirst::before {margin-top: -2px; width: 15px; height: 12px; display: inline-block; vertical-align: middle; background: url(images/details.svg) no-repeat left center / 12px; content: ""; filter: saturate(0)}
+#snarkInfo ~ #snarkFiles input:not(:checked) + #tab_files, #snarkInfo ~ #commentSection input:not(:checked) + .toggleview {margin-bottom: -7px}
+#snarkInfo ~ #snarkFiles input:checked + #tab_files {margin-bottom: -8px}
+#snarkInfo ~ #commentSection {margin: 7px 0 1px}
+body:not(.iframed) #snarkInfo ~ #commentSection {margin-top: -7px}
 #commentSection table:last-child {margin-bottom: 0}
 .snarkFilename .targetfile, .snarkFilename:hover .tags, .snarkFileName a:empty {display: none}
 .snarkFilename:hover .targetfile {display: inline-block}
@@ -460,7 +488,6 @@ tr:not(.peerinfo) .torrentUploaded:empty::after {content: "‒"; display: inline
 #metainfo {padding: 4px 8px 4px 4px; line-height: 1.5; white-space: nowrap; border: 1px solid #aaa; box-shadow: var(--highlight); background: #ffe}
 #completion:not(:hover) #metainfo {display: none}
 #completion:hover #metainfo {display: inline-block; position: absolute; top: 24px; left: -120px}
-#metacomment .commentWrapper {margin: 6px; padding: 9px 10px 10px; box-shadow: 0 0 0 1px #ccc, inset 0 0 0 1px #f2f2f2; background: #ddd}
 
 /* table sort indicators */
 .sortIcon {position: relative; display: inline-block}
@@ -473,38 +500,45 @@ tr:not(.peerinfo) .torrentUploaded:empty::after {content: "‒"; display: inline
 .ascending, .descending {filter: opacity(0); animation: ease fade-in .2s .6s forwards}
 
 /* configure */
+#embed, #fullscreen {float: right}
+.iframed #embed, #fullscreen {display: none}
+.iframed #fullscreen {display: inline-block}
 .configOption::after {min-height: 34px; display: inline-block; vertical-align: middle; content: ""}
 .configOption b::after {margin-right: 5px; display: inline-block; font-weight: 700; content: ":"}
-.configOption b {padding: 5px 5px 5px 8px; min-width: 200px; display: inline-block; border-radius: 3px 1px 1px 3px; background: linear-gradient(90deg, #ddd, rgba(0,0,0,0) 95%)}
+.configOption b {padding: 5px 5px 5px 8px; min-width: 200px; display: inline-block; border-radius: 3px; background: linear-gradient(90deg, #dfdbdb, rgba(0,0,0,0) 101%)}
 .configOption label:hover {color: #222}
 .configOption {margin-top: 3px; margin-bottom: 3px; display: inline-block}
 .configOption > * {vertical-align: middle}
-#bwHoverHelp img {height: 16px; width: 16px; margin: 0 4px; vertical-align: text-top;}
+#bwHoverHelp img {height: 16px; width: 16px; margin: 0 4px; vertical-align: text-top}
 #snarkLang {margin-right: 4px; padding: 4px 8px; font-weight: 700; border-radius: 1px; background: #ddd}
 #addtracker td {padding-top: 10px; padding-bottom: 8px; border-top: var(--border); background: #fff}
 #configs a[href^="/config"] {font-size: 0}
-#configs a[href^="/config"]::after {content: ""; display: inline-block; width: 16px; height: 16px; vertical-align: middle; background: var(--config) no-repeat scroll center center / 16px}
+#configs a[href^="/config"]::after {width: 16px; height: 16px; display: inline-block; vertical-align: middle; background: var(--config) no-repeat center center / 16px; content: ""}
 #configs .accept {margin-right: 0}
 #configs input {margin-left: 0}
 #configs .optionList {margin: 4px 8px}
 #configs .spacer {display: none}
-#configs .suboption a {margin-top: 4px; font-size: 85%; vertical-align: middle; letter-spacing: 0; text-transform: none}
+#configs .suboption a {margin-top: 2px; font-size: 80%; vertical-align: middle; letter-spacing: 0; text-transform: none}
 #configs .suboption::before {width: 22px; height: 16px; display: inline-block; vertical-align: middle; background: url(/i2psnark/.resources/icons/nopeers.svg) no-repeat left center / auto 16px; opacity: .8; content: ""}
-#configs .suboption {padding: 5px 6px; text-align: left; letter-spacing: 0.1em; text-transform: uppercase; font-size: 110%; border: var(--border)}
+#configs .suboption {padding: 5px 6px; text-align: left; letter-spacing: 0.1em; text-transform: uppercase; font-size: 110%; border: var(--border); background: var(--th)}
 #configs td:first-child {padding-right: 10px; text-align: left}
 #configs, .trackerconfig {margin: 10px 10px 0; width: 80%; width: calc(100% - 20px)}
 #configs tr:nth-last-child(2) td {padding: 8px 0 11px; border-top: var(--border)}
 input[name="i2cpOpts"], input[name="nofilter_dataDir"] {width: calc(100% - 220px)}
+#trackers td {padding: 6px 4px 4px; border-top: var(--border)}
 .knownTracker:hover td {background: #ccc}
 .knownTracker input[disabled] {opacity: .5}
 .knownTracker + .spacer, #addtracker ~ .spacer, .knownTracker + .spacer td, #addtracker ~ .spacer td {display: none}
 .knownTracker + .spacer td, #addtracker + .spacer td {padding: 4px 0; font-size: 0; border-bottom: var(--border)}
-.knownTracker td {min-width: 100px}
+#trackers .knownTracker td {min-width: 100px}
+#trackers .knownTracker td, #trackers #addtracker td, #trackers .trackerconfig td[colspan="7"] {border-bottom: none}
+#trackers #addtracker td {padding-top: 10px; padding-bottom: 10px}
 .optionlist {columns: 2 600px}
 .page form + form {margin-top: -5px}
 .snarkConfig .configTitle, .toggleview a {color: #777}
+.snarkConfig .configTitle, .toggleview {background: radial-gradient(circle at top, #fff 70%, #ddd)}
 .tab_label, .configTitle, .configTitle a {font-size: 11pt}
-#tab_torrentedit {margin: -1px -1px -3px}
+#tab_torrentedit {margin: -1px -1px -2px}
 .toggleview, .configTitle {margin: -1px; padding: 8px 5px; display: block; text-transform: uppercase; font-weight: 700; border: var(--border); display: block; transition: ease box-shadow .3s}
 .trackerConfig .add {margin-right: 0}
 .trackerconfig .add {margin-right: -3px}
@@ -515,7 +549,7 @@ input[name="i2cpOpts"], input[name="nofilter_dataDir"] {width: calc(100% - 220px
 .trackerconfig input[type=submit] {margin-top: 7px; margin-bottom: 6px}
 .trackerConfig {margin-top: 11px}
 .trackerconfig th {border-bottom: none}
-.trackerconfig th:first-child {background: var(--nuke) no-repeat center center; background-size: 14px}
+.trackerconfig th:first-child {background: var(--nuke) no-repeat center center / 14px, var(--th)}
 .trackerconfig th:first-child, .knownTracker td:first-child, #addtracker td:first-child {border-left: var(--border)}
 .trackerConfig th {font-size: 9pt; border-bottom: none}
 .trackerconfig th:last-child, .knownTracker td:last-child, #addtracker td:last-child {border-right: var(--border)}
@@ -526,29 +560,13 @@ input[name="i2cpOpts"], input[name="nofilter_dataDir"] {width: calc(100% - 220px
 .trackerHome, .trackerAnnounce {width: 220px}
 .trackerName {width: 140px}
 
-/* action buttons */
-.torrentAction {white-space: nowrap}
-#torrents .torrentAction {padding-right: 4px}
-#torrents .torrentAction input {margin: 0 2px; padding: 11px; display: inline-block; min-width: 0; float: none; font-size: 0; border-radius: 2px; box-shadow: inset 0 0 0 1px #fff; background-blend-mode: luminosity}
-#torrents #actionStopAll, #torrents #actionStartAll {padding: 10px 16px}
-#torrents .actionStart {background: #eee var(--start) no-repeat center center / 14px}
-#torrents .actionStop {background: #eee var(--stop) no-repeat center center / 14px}
-#torrents .actionRemove {background: #eee var(--remove) no-repeat center center / 14px}
-#torrents .actionDelete {background: #eee var(--delete) no-repeat center center / 14px}
-#torrents #actionStartAll {background: #eee var(--startall) no-repeat center center / auto 14px}
-#torrents #actionStopAll {background: #eee var(--stopall) no-repeat center center / auto 14px}
-#torrents .torrentAction input:hover {background-blend-mode: normal}
-#torrents .torrentAction input:active, #actionStartAll:active, #actionStopAll:active {background-size: auto 12px}
-
 @keyframes disappear {from {visibility: visible} to {visibility: collapse}}
 @keyframes progress {from {background-position: 0} to {background-position: -12px}}
 @keyframes fade-in {0% {filter: opacity(0)} 100% {filter: opacity(1)}}
 @keyframes active {from {background: linear-gradient(270deg, #f3c 3px, rgba(0,0,0,0) 3px)} to {background: linear-gradient(270deg, #cb4dcb 3px, rgba(0,0,0,0) 3px)}}
 @keyframes downloading {from {background: var(--td_dl)} to {background: linear-gradient(270deg, #7f7 3px, rgba(0,0,0,0) 3px)}}
 
-@supports (-moz-user-select: all) {#screenlog ul {margin-left: -24px}}
-@supports (-moz-user-select: all) {#torrentSort img {margin-right: -3px}}
-@supports (-moz-user-select: all) {#configSection, #addSection, #createSection {margin-top: -1px}}
+@supports (-moz-user-select: all) {#torrentSort img {margin-right: -3px} #configSection, #addSection, #createSection {margin-top: -1px}}
 
 @media screen and (max-width: 1499px) {
 th img {max-height: 20px}
@@ -556,6 +574,7 @@ td.graphicStatus {background-size: 24px auto}
 #torrents .infohash {width: 60px}
 .snarkCommented {top: -1px; right: 1px}
 .peerclient {width: 90px}
+#screenlog li::before {margin-top: -1px}
 }
 
 @media screen and (max-width: 1200px) {
@@ -601,8 +620,11 @@ td.torrentDetails img:not([src$="rateme.svg"]), .dirInfo td:first-child img:not(
 .torrentDownloaded, .torrentUploaded, .RateDown, .RateUp {min-width: 76px}
 .trackerhome, .trackerannounce, .knownTracker a {width: 400px; max-width: 400px}
 #torrents td:empty, #torrents th:empty {padding: 5px; width: 0; min-width: 0; font-size: 0}
-.torrentInfo th:first-child img, #torrentinfostats img, #trackers img {margin: -3px 5px 0; max-height: 18px}
+.torrentInfo img {max-height: 18px}
+.torrentInfo img, .torrentInfo th:first-child img, #torrentinfostats img, #trackers img {margin: 0 6px; max-height: 18px}
+.torrentInfo th a img {margin: 0 0 0 4px}
 #torrentInfoStats .nowrap {margin-right: 6px}
 .torrentAction input {padding: 11px}
 #actionStopAll, #actionStartAll {padding: 11px 18px}
+#snarkInfo ~ #commentSection input:not(:checked) + .toggleview {margin-bottom: -8px}
 }
