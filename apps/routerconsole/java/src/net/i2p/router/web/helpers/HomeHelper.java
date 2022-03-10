@@ -336,11 +336,10 @@ public class HomeHelper extends HelperBase {
                        "<div class=\"appicon\">" +
                        // usability: add tabindex -1 so we avoid 2 tabs per app
                        "<a href=\"").append(url).append("\" tabindex=\"-1\">" +
-                       "<img alt=\"\" title=\"").append(app.desc).append("\" style=\"max-width: 32px; max-height: 32px;\" " +
-                       "src=\"").append(app.icon)
-               // version the icons because they may change
+                       "<img alt=\"\" title=\"").append(app.desc).append("\" src=\"").append(app.icon)
+               // don't version the icons to avoid double-caching where they're used in css
                //.append(app.icon.contains("?") ? "&amp;" : "?").append(CoreVersion.VERSION)
-               .append("\"></a></div>\n<table><tr><td><div class=\"applabel\"><a href=\"")
+               .append("\" width=\"32\" height=\"32\"></a></div>\n<table><tr><td><div class=\"applabel\"><a href=\"")
                .append(url).append("\" title=\"").append(app.desc).append("\">").append(app.name)
                .append("</a></div></td></tr></table>\n</div>");
             }
@@ -369,7 +368,7 @@ public class HomeHelper extends HelperBase {
             buf.append(app.name.replace(" ", "_").replace("\'", ""))
                .append("\"></td>");
             if (app.icon != null) {
-                buf.append("<td><img height=\"16\" alt=\"\" src=\"").append(app.icon).append("\">");
+                buf.append("<td><img width=\"20\" height="\"20\" alt=\"\" src=\"").append(app.icon).append("\">");
             } else {
                 buf.append("<td class=\"noicon\">");
             }

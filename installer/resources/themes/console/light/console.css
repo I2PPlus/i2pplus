@@ -525,7 +525,7 @@ div[id^="config"] tr:last-child td, #events tr:last-child td, #profiles tr:last-
 #chooselang::after, #configbandwidth::after {content: none}
 #chooselang img, #configbandwidth img {margin: -9px -5px -8px 20px; padding-top: 11px; display: inline-block; opacity: .8}
 #chooselang img {margin-right: 10px}
-.applink:not(:hover) a:not(:hover):not(:focus):not(:active), .applink:not(:hover) a:not(:hover):not(:focus):not(:active):visited, .sitemaplink:not(:hover):not(:focus):not(:active) {color: #4b689b}
+.applink:not(:hover) a:not(:hover):not(:focus):not(:active), .applink:not(:hover) a:not(:hover):not(:focus):not(:active):visited, .sitemapLink:not(:hover):not(:focus):not(:active) {color: #4b689b}
 #applinks:hover img, #sitelinks:hover img, #sitemap h3:hover img, #sitemap h3 img:hover {opacity: 1; transition: ease all .3s}
 .linkcontainer {margin: 0}
 .linkgroup {margin: 5px 0; padding: 0; width: auto}
@@ -541,7 +541,7 @@ div[id^="config"] tr:last-child td, #events tr:last-child td, #profiles tr:last-
 .applink:active .applabel, .sitemapLink:active .sitemapLabel {box-shadow: var(--highlight), inset 3px 3px 3px rgba(0,0,0,.2); background: var(--hover)}
 .applink:active img {transform: scale(.9)}
 .applink:hover a:link, .applink:hover a:visited {color: var(--hover)}
-.applink:hover .appicon .extlink::after, .sitemaplink.extlink:hover::after {position: absolute; top: -1px; right: -1px; content: ""; display: inline-block; width: 21px; height: 18px; border: 1px solid #f50; border-radius: 0 2px 0 2px; background: url(images/newtab.png) no-repeat 4.5px center / 12.5px 10px; opacity: .75}
+.applink:hover .appicon .extlink::after, .sitemapLink.extlink:hover::after {position: absolute; top: -1px; right: -1px; content: ""; display: inline-block; width: 21px; height: 18px; border: 1px solid #f50; border-radius: 0 2px 0 2px; background: url(images/newtab.png) no-repeat 4.5px center / 12.5px 10px; opacity: .75}
 .applink:hover .applabel, .sitemapLink:hover .sitemapLabel {border-color: var(--hover); background: linear-gradient(180deg,#fff 50%, #ffe8bf 50%, #efd9b3); box-shadow: var(--highlight)}
 .applink:hover img.app, .app:hover img {opacity: 1; filter: drop-shadow(0 0 1px var(--hover)); transition: ease filter .2s}
 .applink:hover, .sitemapLink:hover {border: 1px solid var(--hover); background: #fff; box-shadow: none; cursor: pointer}
@@ -571,7 +571,7 @@ div.search + .linkcontainer {margin: -15px 0 0}
 #searchbar input:hover:not(:focus)::placeholder {font-style: italic; opacity: .6}
 
 /* sitemap */
-.sitemaplink {position: relative}
+.sitemapLink {position: relative}
 #sitemap table.search {margin-bottom: -15px}
 #sitemapcontainer {padding: 4px 0 0}
 #sitemapcontainer h3 {margin: 14px 0 10px}
@@ -1386,7 +1386,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 #wrapperlogs pre {max-height: 500px; box-shadow: inset 0 0 0 1px #ddf, inset 0 0 0 2px #fff; background: url(/themes/snark/ubergine/images/hat.png) no-repeat right -3px bottom -3px / auto 120px, #f3f3ff}
 .homelinkedit th, .homelinkedit td {padding-left: 10px; padding-right: 10px}
 .homelinkedit th:first-child, #sidebarconf th:first-child, #consolepass th:first-child {width: 5%; text-align: center; font-size: 0; background: var(--nuke) no-repeat center center / 16px, linear-gradient(180deg,#fcfcff 51%, #fafaff 51%, #f6f6ff 100%)}
-.homelinkedit tr:nth-last-child(n+2) td:nth-child(2) {width: 1%; max-width: 32px; min-width: 32px}
+.homelinkedit tr:nth-last-child(n+2) td:nth-child(2) {width: 1%; max-width: 32px; min-width: 32px; text-align: center}
 .homelinkedit tr:last-child td:first-child {text-align: right}
 .homelinkedit td:first-child .optbox {margin: 5px 0}
 .homelinkedit input[type=text], #sidebarconf select {margin-left: 0}

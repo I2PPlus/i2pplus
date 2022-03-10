@@ -38,7 +38,7 @@ i {padding-right: 2px}
 ol li:first-child {margin-top: 10px}
 ol {padding: 1px 0 0 20px; display: inline}
 pre {width: 98%}
-#sb_logo, #sidebar h3, #clock, form, .confignav, *::before, *::after, h1, h2, h3, #applinks, #sitelinks, #sb_internals, #sb_services, #sb_advanced, .applink, .sitemaplink, #sitemapcontainer, .langselect, .themechoice {user-select: none}
+#sb_logo, #sidebar h3, #clock, form, .confignav, *::before, *::after, h1, h2, h3, #applinks, #sitelinks, #sb_internals, #sb_services, #sb_advanced, .applink, .sitemapLink, #sitemapcontainer, .langselect, .themechoice {user-select: none}
 table {margin: 1px 0; padding: 1px; width: 100%; font-size: 9pt; border: var(--border); border-collapse: collapse}
 table tt {color: #990; font-size: 8.5pt}
 table hr {margin: 0 0; padding: 0 0; height: 1px; display: none; color: var(--a); border: none; background: #252}
@@ -1333,7 +1333,7 @@ th code {user-select: all}
 .applink:hover a:link, .applink:hover a:visited {color: var(--hover)}
 .applink:hover .applabel, .sitemapLink:hover .sitemapLabel, .themechoice:hover .themelabel, .langselect:hover .ui_lang {background: var(--glow_bottom_hover) #000}
 .applink:hover .applabel {color: var(--hover); border-top: 1px solid var(--hover)}
-.applink:hover img, .sitemapLink:hover img, a:focus .applink img, a:focus .sitemaplink img {opacity: 1; filter: none}
+.applink:hover img, .sitemapLink:hover img, a:focus .applink img, a:focus .sitemapLink img {opacity: 1; filter: none}
 .applink a:link, .applink a:hover, .applink a:active {text-decoration: none; outline: none}
 .applink:active .applabel, .sitemapLink:active .sitemapLabel {color: var(--ink); box-shadow: var(--depress); background: var(--hover)}
 .applink:active .applabel a {color: var(--ink)}
