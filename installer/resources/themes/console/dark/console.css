@@ -1159,7 +1159,8 @@ th code {user-select: all}
 .leaseset th code {font-size: 8.5pt}
 .lsdest, .leaseset th:last-child a[href$="i2p/"] {margin-left: 3px; padding: 2px 4px 4px; display: inline-block; border: 1px solid #020; border-radius: 2px; box-shadow: var(--outline); background: var(--badge)}
 .lsdest {padding-left: 22px; border-radius: 0; border-left-width: 4px; border-right-width: 4px; background: var(--hardhat) no-repeat 4px center / 14px, var(--badge)}
-.lsdest.published {margin-right: 5px; padding-left: 38px; background: var(--hardhat) no-repeat 4px center / 14px, var(--globe) no-repeat 22px center / 12px, var(--badge)}
+.leaseset th:last-child a, .lsdest.published {margin-right: 5px}
+.lsdest.published {padding-left: 38px; background: var(--hardhat) no-repeat 4px center / 14px, var(--globe) no-repeat 22px center / 12px, var(--badge)}
 .leaseset th:last-child a[href$="i2p/"] {padding-left: 22px; background: var(--link) no-repeat 5px center / 12px, var(--badge)}
 .addtobook {text-align: right}
 .addtobook a {font-size: 0}
