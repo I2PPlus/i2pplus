@@ -1159,7 +1159,7 @@ th code {user-select: all}
 .leaseset th code {font-size: 8.5pt}
 .lsdest, .leaseset th:last-child a[href$="i2p/"] {margin-left: 3px; padding: 2px 4px 4px; display: inline-block; border: 1px solid #020; border-radius: 2px; box-shadow: var(--outline); background: var(--badge)}
 .lsdest {padding-left: 22px; border-radius: 0; border-left-width: 4px; border-right-width: 4px; background: var(--hardhat) no-repeat 4px center / 14px, var(--badge)}
-.lsdest.published {padding-left: 38px; background: var(--hardhat) no-repeat 4px center / 14px, var(--globe) no-repeat 22px center / 12px, var(--badge)}
+.lsdest.published {margin-right: 5px; padding-left: 38px; background: var(--hardhat) no-repeat 4px center / 14px, var(--globe) no-repeat 22px center / 12px, var(--badge)}
 .leaseset th:last-child a[href$="i2p/"] {padding-left: 22px; background: var(--link) no-repeat 5px center / 12px, var(--badge)}
 .addtobook {text-align: right}
 .addtobook a {font-size: 0}
@@ -1321,6 +1321,7 @@ th code {user-select: all}
 .applink a:link, .applink a:visited {padding: 2px; display: inline-block; color: var(--a)}
 .appicon {height: 32px; padding: 0 0 6px}
 .applabel a {padding: 2px 2px 3px; max-width: 146px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: capitalize; text-shadow: var(--textshadow)}
+.applabel a[href*=".i2p"] {text-transform: none}
 .applabel:hover {color: var(--hover); border-top: 1px solid var(--hover)}
 .applabel {margin: 2px 0 0; padding: 3px 2px 2px; width: 155px; line-height: 1.2; vertical-align: bottom; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 8.5pt; color: var(--a); border: none; border-top: var(--border_hard); border-radius: 0 0 2px 2px}
 .applink table {margin: auto; width: auto; border: none; background: none}
