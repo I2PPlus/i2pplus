@@ -368,7 +368,7 @@ public class HomeHelper extends HelperBase {
             buf.append(app.name.replace(" ", "_").replace("\'", ""))
                .append("\"></td>");
             if (app.icon != null) {
-                buf.append("<td><img width=\"20\" height="\"20\" alt=\"\" src=\"").append(app.icon).append("\">");
+                buf.append("<td><img width=\"20\" height=\"20\" alt=\"\" src=\"").append(app.icon).append("\">");
             } else {
                 buf.append("<td class=\"noicon\">");
             }
