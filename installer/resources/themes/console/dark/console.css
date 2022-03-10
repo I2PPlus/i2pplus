@@ -1312,12 +1312,12 @@ th code {user-select: all}
 .applink, .applabel, .statusnotes, .main, #news, .search tr, .logo, .themechoice, .themelabel, .langselect, .ui_lang {box-shadow: var(--bevel)}
 .appicon, .sitemapLink img {animation: zoom .15s linear .3s both; backface-visibility: hidden; will-change: transform}
 .applabel, .sitemapLabel, .themelabel, .ui_lang {background: var(--glow_bottom), linear-gradient(180deg,#001900,#001000 50%,#000); animation: fade .15s ease .25s reverse both}
+.applink, .sitemapLink {position: relative}
 
 /* home */
 .linkgroup {margin: 0 0 10px; padding: 16px 0; width: auto}
 .linkcontainer .applink:last-of-type {margin-bottom: 7px}
 .linkcontainer {margin: 0 0 10px; padding: 0 3px}
-#sitelinks + .linkgroup .applabel a {text-transform: none}
 .applink a:link, .applink a:visited {padding: 2px; display: inline-block; color: var(--a)}
 .appicon {height: 32px; padding: 0 0 6px}
 .applabel a {padding: 2px 2px 3px; max-width: 146px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: capitalize; text-shadow: var(--textshadow)}
@@ -1330,7 +1330,6 @@ th code {user-select: all}
 .applink:hover, .sitemapLink:hover, .themechoice:hover, .langselect:hover {background: radial-gradient(circle at center -90px, rgba(255,96,0,.3), #000 70%), #000}
 .applink:hover, .applink:hover .applabel, .applink:hover .extlink::after, .sitemapLink.extlink:hover::after, .themechoice:hover, .themechoice:hover .themelabel, .langselect:hover, .langselect:hover .ui_lang {box-shadow: var(--highlight), inset 0 0 1px 1px #730}
 .applink:hover {color: var(--hover); border: 1px solid var(--hover); opacity: 1}
-.applink:hover::after, .sitemapLink:hover::after {border: 1px solid #f50; background: #000 var(--newtab_hover) no-repeat 4.5px center / 13px 11px; opacity: 1; transform: scale(1); pointer-events: none}
 .applink:hover a:link, .applink:hover a:visited {color: var(--hover)}
 .applink:hover .applabel, .sitemapLink:hover .sitemapLabel, .themechoice:hover .themelabel, .langselect:hover .ui_lang {background: var(--glow_bottom_hover) #000}
 .applink:hover .applabel {color: var(--hover); border-top: 1px solid var(--hover)}
@@ -1339,7 +1338,9 @@ th code {user-select: all}
 .applink:active .applabel, .sitemapLink:active .sitemapLabel {color: var(--ink); box-shadow: var(--depress); background: var(--hover)}
 .applink:active .applabel a {color: var(--ink)}
 .applink:active img {transform: scale(0.9)}
-.applink::after, .sitemapLink::after {width: 22px; height: 19px; position: absolute; top: -1px; right: -1px; display: inline-block; border: 1px solid #000; background: transparent; opacity: 0; content: ""; transform: scale(0)}
+.appicon .extlink::after, .sitemapLink.extlink::after {width: 22px; height: 19px; position: absolute; top: -1px; right: -1px; display: inline-block; border: 1px solid #000; background: transparent; opacity: 0; content: ""; transform: scale(0)}
+.appicon .extlink::after {top: -3px}
+.applink:hover .extlink::after, .sitemapLink.extlink:hover::after {border: 1px solid #f50; background: #000 var(--newtab_hover) no-repeat 4.5px center / 13px 11px; opacity: 1; transform: scale(1); pointer-events: none}
 .applink img, .sitemapLink img {filter: sepia(100%) hue-rotate(70deg) grayscale(.3); animation: zoom .1s linear .35s both; backface-visibility: hidden}
 .applink img:-moz-broken, .sitemapLink img:-moz-broken {background: url(/themes/console/images/plus.svg) no-repeat center center / 32px}
 .applink img {margin: -4px 0 1px; padding: 10px 52px 38px; width: auto; height: 32px; max-width: 32px; max-height: 32px}
