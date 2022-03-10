@@ -421,8 +421,8 @@ class BasicServlet extends HttpServlet
 
         long ct = content.getCacheTime();
         if (ct >= 0) {
-            if (ctype.contains("javascript") || ctype.contains("text/") || ctype.contains("image/") ||
-                ctype.contains("font"))
+            if (ctype != null && (ctype.contains("javascript") || ctype.contains("text/") || ctype.contains("image/") ||
+                ctype.contains("font")))
                 response.setHeader("Cache-Control", "private, max-age=" + ct + ", immutable");
             else
                 response.setHeader("Cache-Control", "no-cache, private, max-age=" + ct);
