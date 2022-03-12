@@ -53,7 +53,7 @@ class ConnectionAcceptor implements Runnable
   // protocol errors before blacklisting.
   private static final int MAX_BAD = 1;
 //  private static final long BAD_CLEAN_INTERVAL = 30*60*1000;
-  private static final long BAD_CLEAN_INTERVAL = 20*60*1000;
+  private static final long BAD_CLEAN_INTERVAL = 15*60*1000;
 
   /**
    *  Multitorrent. Caller MUST call startAccepting()

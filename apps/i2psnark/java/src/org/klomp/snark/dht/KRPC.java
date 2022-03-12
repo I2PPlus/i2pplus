@@ -133,7 +133,8 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     /** Max number of peers to return. BEP 5 doesn't say.
      * We'll use more than I2PSnarkUtil.MAX_CONNECTIONS since lots could be old.
      */
-    private static final int MAX_WANT = I2PSnarkUtil.MAX_CONNECTIONS * 3 / 2;
+//    private static final int MAX_WANT = I2PSnarkUtil.MAX_CONNECTIONS * 3 / 2;
+    private static final int MAX_WANT = I2PSnarkUtil.MAX_CONNECTIONS * 3;
 
     /** overloads error codes which start with 201 */
     private static final int REPLY_NONE = 0;
@@ -158,7 +159,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
 //    private static final long EXPLORE_TIME = 877*1000;
     private static final long EXPLORE_TIME = 10*60*1000;
 //    private static final long BLACKLIST_CLEAN_TIME = 17*60*1000;
-    private static final long BLACKLIST_CLEAN_TIME = 15*60*1000;
+    private static final long BLACKLIST_CLEAN_TIME = 5*60*1000;
     private static final int BLACKLIST_MAX_PEERS = 500;
 //    private static final long NODES_SAVE_TIME = 3*60*60*1000;
     private static final long NODES_SAVE_TIME = 30*60*1000; // frequency of save of local dht node list
