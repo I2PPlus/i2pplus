@@ -175,7 +175,7 @@ class TimedWeightedPriorityMessageQueue implements MessageQueue, OutboundMessage
                         // even if this is true, we might be able to safely
                         // wait, but it doesn't hurt to loop again.
                         if (_log.shouldLog(Log.DEBUG))
-                            _log.debug("Wait for activity (up to " + remaining + "ms)");
+                            _log.debug("Waiting for activity (up to " + remaining + "ms)");
                         if (blockUntil < 0)
                             _nextLock.wait();
                         else
