@@ -18,7 +18,8 @@ public class NID extends SHA1Hash {
     private long lastSeen;
     private int fails;
 
-    private static final int MAX_FAILS = 2;
+//    private static final int MAX_FAILS = 2;
+    private static final int MAX_FAILS = 5;
 
     public NID() {
         super(null);

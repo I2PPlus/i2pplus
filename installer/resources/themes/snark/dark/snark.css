@@ -394,7 +394,7 @@ tr:hover .percentBarText {opacity: 1}
 hr.debug {margin: 1px 0 -5px; width: 100%; background: linear-gradient(90deg,#000700,#131,#000700); display: none}
 #debugMode {margin-top: -2px; padding: 8px; display: inline-block; vertical-align: middle; line-height: 0; box-sizing: border-box; font-size: 0; background: var(--debug) no-repeat center center; opacity: 0}
 #debugMode:hover {opacity: 1}
-#dhtDebug th {text-align: center}
+#torrents #dhtDebug th {text-align: center}
 
 /* priority */
 .priority {width: 1%; max-width: 160px; vertical-align: middle; font-size: 8pt}

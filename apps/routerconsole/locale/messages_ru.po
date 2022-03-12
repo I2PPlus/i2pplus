@@ -47,7 +47,7 @@ msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-07 02:50+0000\n"
-"PO-Revision-Date: 2022-03-07 03:01+0000\n"
+"PO-Revision-Date: 2022-03-10 04:14+0000\n"
 "Last-Translator: gmind\n"
 "Language-Team: Russian (Russia) (http://www.transifex.com/otf/I2P/language/"
 "ru_RU/)\n"
@@ -151,9 +151,8 @@ msgstr ""
 
 #: ../../../router/java/src/net/i2p/router/networkdb/reseed/Reseeder.java:664
 #: ../../../router/java/src/net/i2p/router/networkdb/reseed/Reseeder.java:801
-#, fuzzy
 msgid "Contacting reseed host"
-msgstr "Идет запуск начальной загрузки"
+msgstr "Связаться с хостом"
 
 #: ../../../router/java/src/net/i2p/router/networkdb/reseed/Reseeder.java:723
 #, java-format
@@ -1321,9 +1320,8 @@ msgstr "Семейство"
 #. _out.write(_t("none"));
 #. _out.write("</p>\n");
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:138
-#, fuzzy
 msgid "Console"
-msgstr "Консоль маршрутизатора I2P"
+msgstr "Консоль маршрутизатора I2P+"
 
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:144
 msgid ""
@@ -3544,9 +3542,8 @@ msgid "Official I2P Git repository"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:113
-#, fuzzy
 msgid "Home of I2P+"
-msgstr "Добро пожаловать в I2P"
+msgstr "Дом I2P+"
 
 #. torrent trackers
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:116
@@ -3811,9 +3808,8 @@ msgid "Development updates enabled"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:219
-#, fuzzy
 msgid "Started"
-msgstr "запущено"
+msgstr "Начал"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:221
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:713
@@ -4211,9 +4207,8 @@ msgid "Configure peer"
 msgstr "Конфигурация узла"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1086
-#, fuzzy
 msgid "Memory usage"
-msgstr "Индикатор использования памяти"
+msgstr "Использование памяти"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1091
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:331
@@ -4276,9 +4271,8 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1214
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1288
-#, fuzzy
 msgid "Capabilities"
-msgstr "Емкость"
+msgstr "Характеристики"
 
 #. hide version as already in the header
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1216
@@ -5396,9 +5390,8 @@ msgstr "Статус туннеля"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:70
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:705
-#, fuzzy
 msgid "Service Tunnels"
-msgstr "Локальные туннели"
+msgstr "Обслуживание туннелей"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:71
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1322
@@ -5420,9 +5413,8 @@ msgstr "Справка и FAQ маршрутизатора I2P"
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:173
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:463
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:705
-#, fuzzy
 msgid "Advanced Settings"
-msgstr "Дополнительные ссылки"
+msgstr "Расширенные настройки"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:175
 msgid "A guide to some of the less-used configuration settings"
@@ -5475,9 +5467,8 @@ msgid "Webhosting"
 msgstr "Проверяем"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:247
-#, fuzzy
 msgid "An introduction to hosting websites on the I2P network"
-msgstr "Краткая информация о боковой панели маршрутизатора"
+msgstr "Введение в веб-хостинг"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:295
 msgid "I2PControl"
@@ -6558,9 +6549,8 @@ msgstr "Данные переданы"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:159
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:401
-#, fuzzy
 msgid "Expiry"
-msgstr "Истекает"
+msgstr "Срок действия"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:159
 msgid "Role"
@@ -6704,9 +6694,8 @@ msgid "Lookup address on gwhois.org"
 msgstr "Пароль для промежуточного запроса"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:591
-#, fuzzy
 msgid "unique peers"
-msgstr "Конфигурация узла"
+msgstr "уникальные сверстники"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:592
 #, fuzzy
@@ -6822,9 +6811,8 @@ msgid "Browser launch at startup"
 msgstr "Запуск браузера при старте I2P"
 
 #: ../java/strings/Strings.java:31
-#, fuzzy
 msgid "I2P+ Router Console"
-msgstr "Консоль маршрутизатора I2P"
+msgstr "Консоль маршрутизатора I2P+"
 
 #: ../java/strings/Strings.java:32
 msgid "Open Router Console in web browser at startup"
@@ -6911,9 +6899,8 @@ msgid "light"
 msgstr "Светлая"
 
 #: ../java/strings/Strings.java:61
-#, fuzzy
 msgid "midnight"
-msgstr "Светлая"
+msgstr "полночь"
 
 #: ../java/strings/Strings.java:62
 msgid "vanilla"
@@ -7291,9 +7278,8 @@ msgid "Are you sure you want to delete {0}?"
 msgstr "Вы действительно хотите удалить {0}?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configclients_jsp.java:476
-#, fuzzy
 msgid "Router Clients"
-msgstr "Консоль маршрутизатора I2P"
+msgstr "Консоль маршрутизатора I2P+"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configclients_jsp.java:578
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configplugins_jsp.java:583
@@ -8699,15 +8685,13 @@ msgstr "Дополнительные настройки"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:465
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:691
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:741
-#, fuzzy
 msgid "User Interface"
-msgstr "Интерфейс I2CP"
+msgstr "Пользовательский интерфейс"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:469
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:457
-#, fuzzy
 msgid "Tunnel Filtering"
-msgstr "Задержка туннелей"
+msgstr "Туннельная фильтрация"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:471
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:477
@@ -9581,9 +9565,8 @@ msgid "Troubleshooting"
 msgstr "Решение проблем"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:459
-#, fuzzy
 msgid "Introduction to Tunnel Filtering"
-msgstr "Краткая информация о боковой панели маршрутизатора"
+msgstr "Введение в туннельную фильтрацию"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:471
 msgid "Reachability Help"
@@ -10151,9 +10134,8 @@ msgid "Router homepage"
 msgstr "Журналы маршрутизатора"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:565
-#, fuzzy
 msgid "Home"
-msgstr "Домашняя страница"
+msgstr "Дома"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:567
 msgid "View news relating to I2P"
@@ -10217,9 +10199,8 @@ msgid "Customize homepage"
 msgstr "Настроить боковую панель"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:631
-#, fuzzy
 msgid "Homepage"
-msgstr "Домашняя страница"
+msgstr "Главная страница"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:633
 #, fuzzy
@@ -10341,9 +10322,8 @@ msgid "What to do in the event I2P isn't working"
 msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:735
-#, fuzzy
 msgid "Introduction to tunnel filters"
-msgstr "Краткая информация о боковой панели маршрутизатора"
+msgstr "Введение в туннельную фильтрацию"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:737
 #, fuzzy
