@@ -1025,7 +1025,7 @@ th > img[src^="/imagegen"], .identicon {margin: 0 0 0 3px; height: 26px; width: 
 .netdb_info.host::selection, .netdb_info.port::selection {color: #fff; background: #770}
 .netdb_addresses ul {margin: 0; padding: 0; width: 100%; display: inline-block; columns: auto; column-gap: 5px}
 .netdb_addresses li, .netdb_ouraddresses {margin: 2px 5px 2px 0; padding: 2px 5px; vertical-align: middle; border: 1px solid #020; background: #000b00}
-.netdb_addresses .nowrap {margin: 0 2px 0 0; vertical-align: middle}
+.netdb_addresses .nowrap {margin: 0 2px 0 0; display: inline-block; vertical-align: middle}
 .netdb_info + b {margin-left: 15px}
 .netdb_ouraddresses:empty {display: none}
 .netdb_ouraddresses .netdb_transport {margin: -1px 5px 0 -6px; padding: 2px; display: inline-block}
