@@ -339,7 +339,7 @@ class BuildExecutor implements Runnable {
 
     /** Set 1.5 * LOOP_TIME < BuildRequestor.REQUEST_TIMEOUT/4 - margin */
 //    private static final int LOOP_TIME = SystemVersion.isSlow() ? 1000 : 800;
-    private static final int LOOP_TIME = SystemVersion.isSlow() ? 1000 : 750;
+    private static final int LOOP_TIME = SystemVersion.isSlow() ? 1000 : 400;
 
     public void run() {
         _isRunning = true;
