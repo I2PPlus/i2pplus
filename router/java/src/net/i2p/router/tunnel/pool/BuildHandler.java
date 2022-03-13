@@ -636,7 +636,7 @@ class BuildHandler implements Runnable {
             _nextPeer = nextPeer;
         }
 
-        public String getName() { return "Timeout Finding Peer for Tunnel Join"; }
+        public String getName() { return "Timeout Locating Peer for Tunnel Join"; }
 
         public void runJob() {
             // decrement in-progress counter
@@ -647,7 +647,7 @@ class BuildHandler implements Runnable {
                 Hash from = _state.fromHash;
                 if (from == null && _state.from != null)
                     from = _state.from.calculateHash();
-                _log.info("Next hop lookup failure " + _req
+                _log.info("Timeout (" + NEXT_HOP_LOOKUP_TIMEOUT / 1000 + "s) locating peer for next hop " + _req
                           + "\n* From: " + from
                           + " [MsgID " + _state.msg.getUniqueId() + "]");
             }
