@@ -208,7 +208,7 @@ class BuildExecutor implements Runnable {
             for (int i = 0; i < expired.size(); i++) {
                 PooledTunnelCreatorConfig cfg = expired.get(i);
                 if (_log.shouldLog(Log.INFO))
-                    _log.info("Timeout waiting for tunnel build reply -> " + cfg);
+                    _log.info("Timeout (" + BuildRequestor.REQUEST_TIMEOUT / 1000 + "s) waiting for tunnel build reply -> " + cfg);
 
                 // Iterate through peers in the tunnel, get their bandwidth tiers,
                 // record for each that a peer of the given tier expired
@@ -339,7 +339,7 @@ class BuildExecutor implements Runnable {
 
     /** Set 1.5 * LOOP_TIME < BuildRequestor.REQUEST_TIMEOUT/4 - margin */
 //    private static final int LOOP_TIME = SystemVersion.isSlow() ? 1000 : 800;
-    private static final int LOOP_TIME = SystemVersion.isSlow() ? 1000 : 400;
+    private static final int LOOP_TIME = (SystemVersion.isSlow() && SystemVersion.getCores() < 6) ? 1000 : 300;
 
     public void run() {
         _isRunning = true;
@@ -468,7 +468,8 @@ class BuildExecutor implements Runnable {
                                     //if (_log.shouldLog(Log.DEBUG))
                                     //    _log.debug("Nothin' doin (allowed=" + allowed + ", wanted=" + wanted.size() + ", pending=" + pendingRemaining + "), wait for a while");
                                     //if (allowed <= 0)
-                                        _currentlyBuilding.wait((LOOP_TIME/2) + _context.random().nextInt(LOOP_TIME));
+                                    int delay = (SystemVersion.getCores() < 8 || SystemVersion.isSlow()) ? LOOP_TIME / 2 + _context.random().nextInt(LOOP_TIME) : LOOP_TIME / 2;
+                                    _currentlyBuilding.wait(delay);
                                     //else // wanted <= 0
                                     //    _currentlyBuilding.wait(_context.random().nextInt(30*1000));
                                 }
