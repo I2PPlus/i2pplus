@@ -503,8 +503,8 @@ class EstablishmentManager {
      */
     void receiveSessionRequest(RemoteHostId from, InboundEstablishState state, UDPPacketReader reader) {
         if (!TransportUtil.isValidPort(from.getPort()) || !_transport.isValid(from.getIP())) {
-            if (_log.shouldLog(Log.WARN))
-                _log.warn("Received invalid SessionRequest from: " + from);
+            if (_log.shouldLog(Log.INFO))
+                _log.info("Received invalid SessionRequest from: " + from);
             return;
         }
 
@@ -523,8 +523,8 @@ class EstablishmentManager {
                 }
 
                 if (_context.blocklist().isBlocklisted(from.getIP())) {
-                    if (_log.shouldLog(Log.WARN))
-                        _log.warn("Received SessionRequest from blocklisted IP address: " + from);
+                    if (_log.shouldInfo())
+                        _log.info("Received SessionRequest from blocklisted IP address: " + from);
                     _context.statManager().addRateData("udp.establishBadIP", 1);
                     return; // drop the packet
                 }
@@ -599,8 +599,8 @@ class EstablishmentManager {
                 return; // drop the packet
             }
             if (_context.blocklist().isBlocklisted(from.getIP())) {
-                if (_log.shouldWarn())
-                    _log.warn("Receive session request from blocklisted IP: " + from);
+                if (_log.shouldInfo())
+                    _log.info("Received session request from blocklisted IP: " + from);
                 _context.statManager().addRateData("udp.establishBadIP", 1);
                 return; // drop the packet
             }
@@ -684,8 +684,8 @@ class EstablishmentManager {
             if (_log.shouldLog(Log.DEBUG))
                 _log.debug("Received SessionConfirmed from: " + state);
         } else {
-            if (_log.shouldLog(Log.WARN))
-                _log.warn("Received possible duplicate SessionConfirmed from: " + from);
+            if (_log.shouldInfo())
+                _log.info("Received possible duplicate SessionConfirmed from: " + from);
         }
     }
 
@@ -730,8 +730,8 @@ class EstablishmentManager {
             if (_log.shouldLog(Log.DEBUG))
                 _log.debug("Received SessionCreated from: " + state);
         } else {
-            if (_log.shouldLog(Log.WARN))
-                _log.warn("Received possible duplicate SessionCreated from: " + from);
+            if (_log.shouldLog(Log.INFO))
+                _log.info("Received possible duplicate SessionCreated from: " + from);
         }
     }
 
@@ -1429,7 +1429,8 @@ class EstablishmentManager {
         } else {
             // save for retx
             OutboundEstablishState2 state2 = (OutboundEstablishState2) state;
-            state2.confirmedPacketsSent(packets);
+            // PacketBuilder2 told the state
+            //state2.confirmedPacketsSent(packets);
             // we are done, go right to ps2
             handleCompletelyEstablished(state2);
         }
