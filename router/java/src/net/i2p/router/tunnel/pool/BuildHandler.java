@@ -85,18 +85,20 @@ class BuildHandler implements Runnable {
 //    private static final int MIN_QUEUE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 18 : 36;
 //    private static final int MAX_QUEUE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 192 : 384;
     private static final int MIN_QUEUE = 8;
-    private static final int MAX_QUEUE = 384;
+    private static final int MAX_QUEUE = 256;
     private static final String PROP_MAX_QUEUE = "router.buildHandlerMaxQueue";
 
     private static final int NEXT_HOP_LOOKUP_TIMEOUT = 15*1000;
     private static final int PRIORITY = OutNetMessage.PRIORITY_BUILD_REPLY;
 
     /** limits on concurrent next-hop RI lookup */
-    private static final int MIN_LOOKUP_LIMIT = 10;
-    private static final int MAX_LOOKUP_LIMIT = 100;
+//    private static final int MIN_LOOKUP_LIMIT = 10;
+//    private static final int MAX_LOOKUP_LIMIT = 100;
+    private static final int MIN_LOOKUP_LIMIT = 16;
+    private static final int MAX_LOOKUP_LIMIT = 128;
     /** limit lookups to this % of current participating tunnels */
 //    private static final int PERCENT_LOOKUP_LIMIT = 3;
-    private static final int PERCENT_LOOKUP_LIMIT = 2;
+    private static final int PERCENT_LOOKUP_LIMIT = 5;
 
     /**
      *  This must be high, as if we timeout the send we remove the tunnel from
@@ -105,8 +107,7 @@ class BuildHandler implements Runnable {
      *  all the traffic in TunnelDispatcher.dispatch(TunnelDataMessage msg, Hash recvFrom).
      *  10s was not enough.
      */
-//    private static final int NEXT_HOP_SEND_TIMEOUT = 25*1000;
-    private static final int NEXT_HOP_SEND_TIMEOUT = 20*1000;
+    private static final int NEXT_HOP_SEND_TIMEOUT = 25*1000;
 
     private static final long MAX_REQUEST_FUTURE = 5*60*1000;
     /** must be > 1 hour due to rounding down */
