@@ -1829,8 +1829,8 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 #plugininstall table, #plugininstall2 table {width: 100%; border-spacing: 0; border-collapse: separate}
 #plugininstall table tr, #plugininstall2 table tr {box-shadow: none; background: linear-gradient(180deg,#001800, #010)}
 #plugininstall table tr:hover, #plugininstall2 table tr:hover {box-shadow: var(--highlight)}
-#pluginconfigtext {padding: 20px 24px 20px 58px; background: var(--pluginconfig) no-repeat 15px center / 28px, var(--msg_nohat)}
-#pluginconfigtext input {float: right; margin: -6px -6px 0 0}
+#pluginconfigtext {padding: 20px 18px 20px 58px; background: var(--pluginconfig) no-repeat 15px center / 28px, var(--msg_nohat)}
+#pluginconfigtext input {margin: -5px -6px 0 0; float: right}
 
 /* stats */
 .stattograph {margin: 3px 1px; padding: 6px 8px 6px 12px; width: 220px; position: relative; display: inline-block; font-size: 90%; text-align: left; color: #252; border: 1px solid #020; border-left-width: 3px; border-radius: 1px; box-sizing: border-box; background: #000}
