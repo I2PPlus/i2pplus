@@ -335,7 +335,7 @@ class OutboundMessageFragments {
                         // gets called regularly
                         int toWait = Math.min(Math.max(nextSendDelay, 10), MAX_WAIT);
                         if (_log.shouldLog(Log.DEBUG))
-                            _log.debug("Waiting for " + toWait + "ms before sending next packet...");
+                            _log.debug("Waiting for " + toWait + "ms before sending next message...");
 
                         nextSendDelay = Integer.MAX_VALUE;
                         // wait.. or somethin'
