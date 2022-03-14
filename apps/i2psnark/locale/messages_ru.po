@@ -31,7 +31,7 @@ msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-07 02:50+0000\n"
-"PO-Revision-Date: 2022-03-07 02:40+0000\n"
+"PO-Revision-Date: 2022-03-14 05:51+0000\n"
 "Last-Translator: cthat\n"
 "Language-Team: Russian (Russia) (http://www.transifex.com/otf/I2P/language/"
 "ru_RU/)\n"
@@ -65,9 +65,8 @@ msgstr "Magnet"
 #: ../java/src/org/klomp/snark/SnarkManager.java:1863
 #: ../java/src/org/klomp/snark/SnarkManager.java:2727
 #: ../java/src/org/klomp/snark/SnarkManager.java:2801
-#, fuzzy
 msgid "Unable to connect to I2P"
-msgstr "Не удалось пересоединиться с использованием старых настроек I2CP!"
+msgstr "Невозможно подключиться к I2P"
 
 #: ../java/src/org/klomp/snark/Snark.java:597
 #: ../java/src/org/klomp/snark/SnarkManager.java:1865
@@ -288,11 +287,11 @@ msgstr "Фильтр-бар отключен."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1480
 msgid "Lightbox enabled for image thumbnails."
-msgstr ""
+msgstr "Lightbox включен для миниатюр изображений."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1482
 msgid "Lightbox disabled for image thumbnails."
-msgstr ""
+msgstr "Lightbox отключен для миниатюр изображений."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1490
 msgid "Add and Create sections enabled on all torrent listing pages."
@@ -423,7 +422,7 @@ msgstr "ОШИБКА - нехватка памяти, невозможно со�
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1857
 msgid "Initializing I2PSnark and opening tunnels"
-msgstr ""
+msgstr "Инициализация I2PSnark и открытия туннелей"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1874
 #: ../java/src/org/klomp/snark/SnarkManager.java:1876
@@ -736,11 +735,11 @@ msgstr "очистить сообщения"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:543
 msgid "Expand"
-msgstr ""
+msgstr "Расширять"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:547
 msgid "Shrink"
-msgstr ""
+msgstr "Сокращать"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:555
 #, java-format
@@ -751,7 +750,7 @@ msgstr ""
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:556
 msgid "page refresh"
-msgstr ""
+msgstr "oбновить страницу"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:565
 #, fuzzy
@@ -934,9 +933,8 @@ msgid "Our destination (identity) for this session"
 msgstr "Мой адрес назначения в этой сессии"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:997
-#, fuzzy
 msgid "Dest."
-msgstr "Адрес назначения"
+msgstr "Назначения"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1031
 msgid "Estimated download time for all torrents"
@@ -948,9 +946,8 @@ msgid "Data downloaded this session"
 msgstr "Не скачивать этот файл"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1047
-#, fuzzy
 msgid "Total download speed"
-msgstr "Не скачивать этот файл"
+msgstr "Общая скорость загрузки"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1053
 msgid "Total data uploaded (for listed torrents)"
@@ -963,11 +960,11 @@ msgstr "Ограничение количества слотов отдачи"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1075
 msgid "Enable Debug Mode"
-msgstr ""
+msgstr "Включить режим отладки"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1079
 msgid "Disable Debug Mode"
-msgstr ""
+msgstr "Отключить режим отладки"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1080
 #, fuzzy
@@ -1334,11 +1331,11 @@ msgstr "Неизвестный"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2409
 msgid "inactive"
-msgstr ""
+msgstr "неактивный"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2412
 msgid "Inactive"
-msgstr ""
+msgstr "Неактивный"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2413
 msgid "seconds"
@@ -1563,12 +1560,11 @@ msgstr ""
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3039
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3048
 msgid "requires javascript"
-msgstr ""
+msgstr "tребуется JavaScript"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3043
-#, fuzzy
 msgid "Enable lightbox"
-msgstr "Включить рейтинги"
+msgstr "Включить Lightbox"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3047
 msgid "Use a lightbox to display images when thumbnails are clicked"
@@ -1587,7 +1583,7 @@ msgstr ""
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3064
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4181
 msgid "Comments &amp; Ratings"
-msgstr ""
+msgstr "Комментарии и рейтинги"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3068
 msgid "Enable Ratings"
@@ -1651,7 +1647,7 @@ msgstr "пиров"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3129
 msgid "Use open trackers also"
-msgstr "Дополнительно использовать открытые трекеры"
+msgstr "Используйте открытые трекеры"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3133
 msgid ""
@@ -1719,7 +1715,7 @@ msgstr ""
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3215
 msgid "Max files per torrent"
-msgstr ""
+msgstr "Максимальные файлы на торрент"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3217
 msgid ""
@@ -1729,9 +1725,8 @@ msgid ""
 msgstr ""
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3224
-#, fuzzy
 msgid "Tunnel Configuration"
-msgstr "Настройки"
+msgstr "Конфигурация туннеля"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3230
 msgid "Inbound Settings"
@@ -1941,9 +1936,8 @@ msgid "Audio Playlist"
 msgstr "Плейлист аудио"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4359
-#, fuzzy
 msgid "Not found"
-msgstr "Ресурс не найден"
+msgstr "Не найден"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4359
 msgid "Torrent not found?"
@@ -2098,11 +2092,11 @@ msgstr "Подробная информация"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5453
 msgid "Torrent must be stopped in order to edit"
-msgstr ""
+msgstr "Торрент должен быть остановлен, чтобы редактировать"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5459
 msgid "Save Changes"
-msgstr ""
+msgstr "Сохранить изменения"
 
 #. shouldn't happen
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5471
