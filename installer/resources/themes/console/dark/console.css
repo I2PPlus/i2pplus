@@ -996,11 +996,11 @@ table[cellspacing="30"] > tbody > tr > td {padding: 8px}
 table[cellspacing="30"] > tbody > tr > td > table > tbody > tr > th:first-child {padding: 5px; text-align: left}
 table[cellspacing="30"] > tbody > tr > td:first-child > table > tbody > tr > th:first-child {text-align: center}
 .version a:hover, .version a:focus, a:hover .version, a:focus .version, a:hover .tier, a:focus .tier {color: var(--hover)}
-#netdb .version {margin: 0 2px; padding: 2.5px 8px; vertical-align: middle; line-height: 1.2}
-#netdb .netdbentry th .version {vertical-align: inherit}
+#netdb .version {margin: 0 2px; padding: 0 8px; vertical-align: middle}
+/*#netdb .netdbentry th .version {vertical-align: inherit}*/
 
 /* netdb */
-.netdb_header img[src^="/flags"] {margin-top: 1px; width: 30px; height: auto; vertical-align: middle; border: 1px solid #030; box-shadow: var(--outline)}
+.netdb_header img[src^="/flags"] {width: auto; height: 20px; vertical-align: middle; border: 1px solid #030; box-shadow: var(--outline)}
 th > img[src^="/imagegen"], .identicon {margin: 0 0 0 3px; height: 26px; width: 26px; border: var(--border)}
 .netdbentry tr:nth-child(2) td:last-child b, .netdbentry .familyname, .netdbStats li, .netdbStats b, #netdb .netdbentry th b, #netdb .netdbentry td:first-child b, #netdb .netdbentry th code, #netdb .sybil_routerinfo th code, #netdb .leaseset th code, .netdb_addresses li, .netdb_ouraddresses, .netdb_ouraddresses .netdb_transport {display: inline-block}
 .netdbentry tr:nth-child(2) td:last-child {text-align: right; white-space: nowrap; min-width: 140px}
@@ -1034,7 +1034,6 @@ th > img[src^="/imagegen"], .identicon {margin: 0 0 0 3px; height: 26px; width: 
 .familysearch img {margin-right: 0; margin-left: 0}
 .netdb_header .configpeer, .netdb_header .configpeer {margin-right: 5px}
 .viewprofile + .viewfullentry, .viewfullentry + .configpeer, .viewprofile + .configpeer {margin-left: -7px}
-.netdb_header img[src="/flags.jsp?c=a0"] {margin-bottom: -5px; margin-right: 0; display: inline-block; opacity: .8}
 .version, #netdbtiers a {margin: 0; padding: 1px 5px; display: inline-block; text-align: center; font-weight: 700; box-shadow: var(--outline); background: var(--badge)}
 .version {display: inline-block; line-height: 1.4}
 .netdbentry .version {padding: 3px 8px}
@@ -1045,7 +1044,6 @@ th > img[src^="/imagegen"], .identicon {margin: 0 0 0 3px; height: 26px; width: 
 .signingkey.encryption {padding-left: 20px; background: var(--lock) no-repeat 5px center / 12px, var(--badge)}
 .leaseset th:last-child, .leasesets_container .leaseset tr:nth-child(2) {font-size: 90%}
 #netdb .netdbStats b {margin-right: 2px; margin-left: 0; text-align: left; color: var(--ink)}
-#netdb .netdbentry th {padding-top: 6px; padding-bottom: 6px}
 #netdb .netdbentry th b, #netdb .netdbentry td:first-child b {min-width: 80px; text-align: right}
 #netdb .netdbentry th code, #netdb .sybil_routerinfo th code, #netdb .leaseset th code {margin: 0 5px 0 0; padding: 1px 4px 2px; font-family: var(--bodyfont); font-weight: 700; letter-spacing: .12em; color: #bb0; text-shadow: none; border-radius: 2px; box-shadow: var(--outline); background: var(--badge)}
 #netdb .sybil_routerinfo th code, #netdb .leaseset th code {margin-left: 3px}
@@ -1053,12 +1051,11 @@ th > img[src^="/imagegen"], .identicon {margin: 0 0 0 3px; height: 26px; width: 
 #netdb .sybil_routerinfo th span, #netdb .sybil_routerinfo th a {vertical-align: middle}
 #netdb .netdbentry th code:hover, #netdb .netdbentry th code:active, .leaseset th code:hover, #netdb .sybil_routerinfo th code:hover, #netdb .sybil_routerinfo th code:active {width: auto}
 #netdb .netdbentry th code::selection, #netdb .sybil_routerinfo th code::selection, .leaseset th code::selection {color: #fff; background: #070}
-#netdb_ourinfo .version {margin: 0 4px; padding: 3px 6px}
+#netdb .netdbentry th a {display: inline-block}
 #distance {color: #dd0}
-#sybil_ourinfo .unreachable, #netdb_ourinfo .unreachable {display: none}
-#netdb_ram {margin: 0 1px 0 0; padding: 1px 8px; display: inline-block; vertical-align: middle; line-height: 1.6; background: var(--badge)}
-.netdb_header .viewprofile, .netdb_header .configpeer, .netdb_header .familysearch, .sybil_routerinfo .viewprofile, .sybil_routerinfo .configpeer, .sybil_routerinfo .familysearch {margin: 3px; width: 14px; height: 14px}
-.netdbentry .tunnel_cap, .netdbentry .tier, .netdbentry .ff, .netdbentry .reachable, .netdbentry .unreachable, .netdbentry .version, .sybil_routerinfo .tunnel_cap, .sybil_routerinfo .tier, .sybil_routerinfo .ff, .sybil_routerinfo .reachable, .sybil_routerinfo .unreachable, .sybil_routerinfo .version {margin: 0 2px; padding: 0 4px; line-height: 1.6}
+#netdb_ram {margin: 0 1px 0 0; padding: 1.5px 8px; display: inline-block; line-height: 1.5; background: var(--badge)}
+.netdb_header .viewprofile, .netdb_header .configpeer, .netdb_header .familysearch, .sybil_routerinfo .viewprofile, .sybil_routerinfo .configpeer, .sybil_routerinfo .familysearch {margin: 3px; padding: 4px 8px; vertical-align: middle}
+.netdbentry .tunnel_cap, .netdbentry .tier, .netdbentry .ff, .netdbentry .reachable, .netdbentry .unreachable, .netdbentry .version, .sybil_routerinfo .tunnel_cap, .sybil_routerinfo .tier, .sybil_routerinfo .ff, .sybil_routerinfo .reachable, .sybil_routerinfo .unreachable, .sybil_routerinfo .version {margin: 0 2px; padding: 2px 4px; vertical-align: middle}
 a.configpeer {background: var(--edit) var(--center) / 12px, var(--badge)}
 .configpeer:hover, .configpeer:focus {background: var(--edit_hover) var(--center) / 12px, var(--badge)}
 .viewedit br {display: none}
@@ -1068,7 +1065,6 @@ a.configpeer {background: var(--edit) var(--center) / 12px, var(--badge)}
 .viewprofile:hover, .viewprofile:focus {background: var(--eye_hover) var(--center) / 12px, var(--badge)}
 .netdb_header {margin: 0; padding: 0 3px; min-width: 100px; display: inline-block; vertical-align: middle; line-height: 0}
 .netdb_header img[src^="/flags"] {margin: 0 0 0 4px}
-.netdb_header img[src="/flags.jsp?c=a0"] {margin-top: 2px}
 .familysearch {background: var(--family) var(--center) / 12px, var(--badge)}
 .netdbentry th {padding: 5px 6px; text-align: left; font-weight: 400}
 .netdbentry th:last-child {padding: 5px; width: 50px; white-space: nowrap; text-align: right}
