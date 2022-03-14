@@ -538,7 +538,7 @@ h3[id*="jobs"] {clear: both; margin-top: 25px}
 #jobstats + hr {display: none}
 #totaljobstats {margin-bottom: -2px; margin-top: 10px}
 #jobs ol {column-gap: 4px}
-#jobs li, #jobs li:first-child {margin: 0 4px; padding: 8px 6px; width: calc(100% - 8px); list-style: none; box-shadow: var(--highlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000; background: linear-gradient(180deg,#000b00, #000600)}
+#jobs li, #jobs li:first-child {margin: 0 4px; padding: 8px 6px; width: calc(100% - 8px); list-style: none; box-shadow: var(--bevel), inset 0 0 0 3px #000; background: linear-gradient(180deg,#000b00, #000600)}
 #finishedjobs ol + #scheduledjobs + ol {margin-bottom: -1px}
 
 /* stats */
@@ -774,7 +774,7 @@ h3[id="udpcon"] {width: auto}
 #viewprofile td {padding: 0}
 #viewprofile pre, pre#activetransports {margin: 0; padding: 20px 20px 0; width: calc(100% - 48px); line-height: 20px; letter-spacing: .05em; text-shadow: var(--textshadow); border-left: 7px solid #242; background: repeating-linear-gradient(180deg,rgba(0,8,0,.6) 0, rgba(0,8,0,.6) 20px, rgba(0,20,0,.6) 20px, rgba(0,20,0,.6) 40px); background-size: 100% 40px}
 #viewprofile span {margin: -26px -1px -1px 0; padding: 5px; float: right; border: var(--border); background: #000}
-#profiles_overview {margin-bottom: 9px; background-image: url(../images/profile.svg)}
+#profiles_overview {margin-bottom: 9px; background: url(../images/profile.svg) no-repeat 15px center / 28px, var(--msg)}
 #peerprofiles + h3 {margin-top: 10px}
 #profiles .version {margin: 0 2px}
 #profiles .ok, #ntcpconnections td.queue:empty::before {width: 12px; height: 12px; display: inline-block; vertical-align: middle; font-size: 0; background-size: 9px}
@@ -1282,7 +1282,7 @@ th code {user-select: all}
 #bannedpeers {margin-top: 15px}
 #banlist {margin: -1px 0 13px; padding: 8px 5px; columns: 328px auto; column-gap: 8px; column-rule: var(--dotted); border: var(--border); background: none}
 #profiles #banlist {margin: 3px -8px -1px; padding: 5px 0; border: none}
-#banlist li, #banlist li:first-child {margin: 4px 8px; padding: 6px 8px 6px 10px; width: calc(100% - 16px); min-height: 48px; display: inline-block; position: relative; list-style: none; text-shadow: var(--textshadow); border: 1px solid #121; box-shadow: 0 0 2px 2px rgba(0,0,0,.8), var(--highlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000; background: linear-gradient(180deg,#000b00, #000600); box-sizing: border-box; -webkit-break-inside: avoid; break-inside: avoid; page-break-inside: avoid}
+#banlist li, #banlist li:first-child {margin: 4px 8px; padding: 6px 8px 6px 10px; width: calc(100% - 16px); min-height: 48px; display: inline-block; position: relative; list-style: none; text-shadow: var(--textshadow); border: 1px solid #121; box-shadow: 0 0 2px 2px rgba(0,0,0,.8), var(--bevel), inset 0 0 0 3px #000; background: linear-gradient(180deg,#000b00, #000600); box-sizing: border-box; -webkit-break-inside: avoid; break-inside: avoid; page-break-inside: avoid}
 #banlist li::first-line {color: #bb8}
 #banlist .routerid, #banlist .routerid .flag {padding: 0; vertical-align: middle; border: none}
 #banlist .routerid {margin: -1px 1px 1px 0}
@@ -1485,7 +1485,7 @@ td.infohelp.joinfamily {padding: 20px 24px 20px 58px}
 td.optionsave {padding: 5px; text-align: right; border-top: var(--border); background: #000}
 th .h3navlinks, #config_stats .h3navlinks, #config_webapps .h3navlinks {margin-top: 0; line-height: 0}
 th.th_title {padding: 8px 10px; position: static; text-align: left; background: var(--h1); background-size: 2px, 100% 4px, 100%, 128px}
-#bannedpeercount {background: #000 var(--ban) no-repeat 15px center / 28px}
+#bannedpeercount {background: var(--ban) no-repeat 15px center / 28px, var(--msg)}
 #clientsconfig {margin-top: -2px}
 #clientsconfig, #webappconfigactions, #pluginconfigactions {margin-bottom: -4px; padding: 5px; border: var(--border); background: #000}
 
@@ -1495,7 +1495,6 @@ th.th_title {padding: 8px 10px; position: static; text-align: left; background: 
 #floodfillconfig form, #plugininstall form, #updateplugins form, .configtable form {margin-bottom: 0}
 #i2pclientconfig, #pconfig, #pluginfromurl, #pluginfromfile, #webappconfiguration {margin-bottom: -14px}
 .infowarn#clientconf {margin: 0 0 -2px}
-#javaclienthelp {padding: 10px 10px 10px 50px; border: var(--border); background: var(--infohelp) no-repeat 15px center}
 #loggingoptions, #addkeyring {margin-bottom: -3px; margin-top: 0}
 #manualreseed table tr, #newfamily tr:last-child table tr {box-shadow: none}
 #netconfig th, #externali2cp th, #plugininstall th, #plugininstall2 th, .configtable th, th.th_title {padding: 7px 10px; word-spacing: .1em; letter-spacing: .08em; text-transform: uppercase; text-align: left; font-size: 10pt}
@@ -1533,7 +1532,7 @@ th.th_title {padding: 8px 10px; position: static; text-align: left; background: 
 #config_service a[href$="#alternative_browser"] img {display: none}
 #config_service a[href$="#alternative_browser"]::after, #iptransport a::after, #advancedconfig a::after, #reseedsetup a::after {background: var(--helplink) var(--center)}
 #config_service a[href$="#alternative_browser"]:hover::after, #iptransport a:hover::after, #advancedconfig a:hover::after, #reseedsetup a:hover::after {background: var(--helplink_hover) var(--center)}
-#config_service a[href$="#alternative_browser"]::after {margin: -3px 0 -4px -3px; padding: 4px 0 2px; width: 18px; height: 18px; display: inline-block; vertical-align: middle; background-size: 18px; content: ""}
+#config_service a[href$="#alternative_browser"]::after {margin: -4px 0 -4px -3px; padding: 4px 0 2px; width: 18px; height: 18px; display: inline-block; vertical-align: middle; background-size: 18px; content: ""}
 #iptransport a, #advancedconfig a, #reseedsetup a {font-size: 0}
 #iptransport a, th#upnpconfig a, #bwlimiter a, #config_stats h3 a, #config_logging h3 a, #graphdisplay a, #logs h3 a, #advancedconfig a, .h3navlinks, #reseedsetup a {float: right}
 #iptransport a:hover::after, #advancedconfig a:hover::after, #reseedsetup a:hover::after {background: var(--helplink_hover) var(--center) / 18px}
@@ -1681,7 +1680,7 @@ form[action="/createreseed"] > h3 {margin-bottom: -13px; padding: 10px; word-spa
 #config_network .optionlist:hover, #config_i2cp .optionlist:hover, #reseedssl:hover, #manualreseed .optionsingle:hover, .optiontextarea:hover, #reseed_urlselection:hover {border: var(--border); box-shadow: var(--option_highlight); transition: ease box-shadow .5s}
 #manualreseed {margin: -1px 0 -4px; background: none}
 #manualreseed td {padding: 5px; border-bottom: var(--border)}
-#manualreseed td.infohelp {padding: 20px 24px 20px 58px; box-shadow: var(--highlight), inset 0 0 2px 1px #040; background: #000 var(--infohelp) no-repeat 15px center / 28px}
+#manualreseed td.infohelp {padding: 20px 24px 20px 58px; box-shadow: var(--bevel); background: url(../images/reseed.svg) no-repeat 15px center / 28px, var(--msg)}
 #manualreseed tr:nth-last-child(2) td.infohelp {padding: 20px 24px 20px 58px; background: #000 var(--package) no-repeat 15px center / 28px}
 #manualreseed .optionsingle {padding: 5px 5px 0 45px}
 #manualreseed .optionlist input[type=text], #manualreseed .optionlist input[type=file] {width: 50%; min-width: 0; max-width: 50%}
@@ -1695,7 +1694,7 @@ form[action="/createreseed"] > h3 {margin-bottom: -13px; padding: 10px; word-spa
 #reseedcreatefile p {margin: 0 10px; padding-top: 0; padding-bottom: 0; display: inline-block; line-height: 1.3}
 #reseedurl input[type=text], #reseedzip input[type=file], #reseedcreatefile p, #manualreseed input[type=text] {width: calc(100% - 5px)}
 
-#shutdown, #restart, #systray, #runonstart, #dumpthreads, #browserstart {margin-top: -12px; margin-bottom: 5px; padding: 5px; border: var(--border); background: #000}
+#shutdown, #restart, #systray, #runonstart, #dumpthreads, #browserstart {margin-top: -11px; margin-bottom: 5px; padding: 5px; border: var(--border); background: #000}
 #netconfig .suboption, #externali2cp .suboption {padding-top: 3px; padding-bottom: 3px}
 #externali2cp td {padding: 5px}
 
@@ -2046,8 +2045,8 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 #joinfamily tr:nth-child(3) td table td {background-color: #010}
 #joinfamily .optionsingle {padding: 5px 5px 0 45px; box-shadow: inset 0 0 0 1px #010, inset 0 0 2px 1px #191939; background: #010 var(--key) no-repeat 10px center; background-size: 28px, 100%, 100%}
 #joinfamily .optionsingle:hover, #joinfamily .optionsingle:hover tr, #joinfamily .optionsingle:hover td, #newfamily .optionsingle:hover, #newfamily .optionsingle:hover tr, #newfamily .optionsingle:hover td {background-color: #020; transition: ease background .1s}
-#joinfamily .infohelp {box-shadow: var(--highlight), inset 0 0 2px 1px #040; background: var(--joinfamily) no-repeat 15px center / 28px, var(--msg)}
-#newfamily .infohelp {box-shadow: var(--highlight), inset 0 0 2px 1px #040; background: var(--newfamily) no-repeat 15px center / 28px, var(--msg)}
+#joinfamily .infohelp {box-shadow: var(--bevel); background: var(--joinfamily) no-repeat 15px center / 28px, var(--msg)}
+#newfamily .infohelp {box-shadow: var(--bevel); background: var(--newfamily) no-repeat 15px center / 28px, var(--msg)}
 #config_service .infohelp {text-align: left}
 #pluginconfig th:first-child {text-align: center}
 #pluginconfig td:first-child label {margin-left: 6px; padding: 3px 5px 3px 24px; min-width: 100px; display: inline-block; text-align: left; font-weight: 700; border-radius: 2px 15px 15px 2px; box-shadow: 0 0 0 1px #010, 0 0 0 2px rgba(0,0,0,.7); background: var(--plugin) no-repeat 5px center / 14px, linear-gradient(180deg,#020, #000); background-blend-mode: luminosity}

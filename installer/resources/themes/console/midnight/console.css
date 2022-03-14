@@ -1086,7 +1086,6 @@ p.infowarn, td.infowarn, p.infohelp, td.infohelp {line-height: 1.6; background-s
 p.infowarn, td.infowarn, #sybilanalysis {padding: 20px 25px 20px 55px; border: var(--border_inner); background: var(--infowarn) no-repeat 15px center, linear-gradient(180deg,rgba(128,128,128,.05), rgba(0,0,0,.3)), repeating-linear-gradient(180deg,#200 2px, #000 4px); background-size: 28px, 100%, 100% 4px}
 p.infohelp, p#debugmode, p.sybilinfo, #sybilanalysis {border: var(--border_inner)}
 p.notfound {margin-top: -1px}
-p#javaclienthelp {padding: 10px 25px 10px 55px; border: var(--border_inner); background: var(--infohelp) no-repeat 15px center / 28px}
 
 #servicelogs a {padding-left: 12px}
 th.th_title {padding: 9px 10px; text-align: left; box-shadow: var(--highlight)}
