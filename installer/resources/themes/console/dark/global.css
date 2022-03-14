@@ -10,6 +10,7 @@
   --badge: linear-gradient(180deg,#020,#010);
   --bevel: var(--highlight), inset 0 0 0 2px rgba(32,92,32,.35);
   --bevel_hard: var(--highlight), inset 0 0 0 2px rgba(32,80,32,.6);
+  --bevel_warn: var(--highlight), inset 0 0 2px 1px #900;
   --bg_dots: repeating-linear-gradient(90deg, rgba(0,8,0,.5) 2px, rgba(0,16,0,.5) 4px) center center / 4px 100%, repeating-linear-gradient(180deg,#000 2px, #010 4px) center center / 100% 4px;
   --bg_title: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2 1'%3E%3Cpath fill='%2300180088' d='M0 0h1v1H0z'/%3E%3Cpath fill='%2300000050' d='M1 0h1v1H1z'/%3E%3C/svg%3E");
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
@@ -54,7 +55,9 @@
   --label: linear-gradient(180deg,#001800 50%,#000 50%);
   --mainbg: repeating-linear-gradient(90deg, rgba(0,0,0,.8) 2px, rgba(0,24,0,.7) 4px) center center / 4px 100%, repeating-linear-gradient(180deg,rgba(0,0,0,.8) 2px, rgba(0,24,0,.7) 4px) center center / 100% 4px, var(--camo) center center / 2048px;
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
-  --msg: linear-gradient(180deg,#010,#000400);
+  --msg: repeating-linear-gradient(180deg,rgba(0,0,0,.6) 2px, rgba(0,32,0,.3) 4px) center center / 100% 4px, var(--hat) no-repeat right 2px bottom -2px / auto 56px, linear-gradient(180deg,#010,#000400);
+  --msg_nohat: repeating-linear-gradient(180deg,rgba(0,0,0,.6) 2px, rgba(0,32,0,.3) 4px) center center / 100% 4px, linear-gradient(180deg,#010,#000400);
+  --msg_warn: repeating-linear-gradient(180deg,rgba(0,0,0,.6) 2px, rgba(96,0,0,.3) 4px) center center / 100% 4px, var(--hat) no-repeat right 2px bottom -2px / auto 56px, linear-gradient(180deg,#100,#040000);
   --navbar: linear-gradient(180deg,#1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%);
   --nav_hover: linear-gradient(180deg,#730,#620 50%,#410 50%,#000);
   --nav: linear-gradient(180deg,#002900, #000400);
