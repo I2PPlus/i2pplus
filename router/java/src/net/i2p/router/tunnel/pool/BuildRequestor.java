@@ -32,6 +32,7 @@ import net.i2p.router.tunnel.HopConfig;
 import net.i2p.router.tunnel.TunnelCreatorConfig;
 import static net.i2p.router.tunnel.pool.BuildExecutor.Result.*;
 import net.i2p.util.Log;
+import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
 /**
@@ -70,18 +71,18 @@ abstract class BuildRequestor {
      *  so can we use a successfully built tunnel anyway.
      *
      */
-//    static final int REQUEST_TIMEOUT = 13*1000;
-    static final int REQUEST_TIMEOUT = 8*1000;
+//    static final int REQUEST_TIMEOUT = SystemVersion.isSlow() ? 10*1000 : 5*1000;
+    static final int REQUEST_TIMEOUT = SystemVersion.isSlow() ? 9*1000 : 5*1000;
 
     /** make this shorter than REQUEST_TIMEOUT */
 //    private static final int FIRST_HOP_TIMEOUT = 10*1000;
-    private static final int FIRST_HOP_TIMEOUT = 5*1000;
+    private static final int FIRST_HOP_TIMEOUT = SystemVersion.isSlow() ? 7*1000 : 5*1000;
 
     /** some randomization is added on to this */
     private static final int BUILD_MSG_TIMEOUT = 60*1000;
 
 //    private static final int MAX_CONSECUTIVE_CLIENT_BUILD_FAILS = 6;
-    private static final int MAX_CONSECUTIVE_CLIENT_BUILD_FAILS = 5;
+    private static final int MAX_CONSECUTIVE_CLIENT_BUILD_FAILS = 3;
 
     /**
      *  "paired tunnels" means using a client's own inbound tunnel to receive the

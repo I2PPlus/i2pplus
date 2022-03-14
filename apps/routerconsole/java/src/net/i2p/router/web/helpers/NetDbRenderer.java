@@ -1147,7 +1147,7 @@ class NetDbRenderer {
                     String name = (String) e.getKey();
                     String val = (String) e.getValue();
                     // hide keys which are dupes of the router hash displayed in header, and ntcp version
-                    if (name.contains("key") || name.contains("itag") || name.contains("iexp") || name.equals("v")) {
+                    if (name.contains("key") || name.contains("itag") || name.contains("iexp") || (name.equals("v") && style.equals("NTCP"))) {
                         buf.append("<span class=\"hide\"><span class=\"nowrap\"><span class=\"netdb_name\">")
                            .append(_t(DataHelper.stripHTML(name)))
                            .append(":</span> <span class=\"netdb_info\">").append(DataHelper.stripHTML(val)).append("</span></span></span>");

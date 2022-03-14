@@ -80,7 +80,6 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         _rcvHeaderEncryptKey1 = introKey;
         //_sendHeaderEncryptKey2 set below
         //_rcvHeaderEncryptKey2 set below
-        _introductionRequested = false; // todo
         int off = pkt.getOffset();
         int len = pkt.getLength();
         byte data[] = pkt.getData();
@@ -91,6 +90,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         int type = data[off + TYPE_OFFSET] & 0xff;
         long token = DataHelper.fromLong8(data, off + TOKEN_OFFSET);
         if (type == TOKEN_REQUEST_FLAG_BYTE) {
+            if (_log.shouldInfo())
+                _log.info("Got token request from: " + _aliceSocketAddress);
             _currentState = InboundState.IB_STATE_TOKEN_REQUEST_RECEIVED;
             // decrypt in-place
             ChaChaPolyCipherState chacha = new ChaChaPolyCipherState();
@@ -319,12 +320,43 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     public void gotRelayTagRequest() {
+        if (!ENABLE_RELAY)
+            return;
         if (_log.shouldDebug())
             _log.debug("Got relay tag request");
+        _introductionRequested = true;
     }
 
     public void gotRelayTag(long tag) {
-        throw new IllegalStateException("Relay tag in Handshake");
+        // shouldn't happen for inbound
+    }
+
+    public void gotRelayRequest(byte[] data) {
+        if (!ENABLE_RELAY)
+            return;
+        if (_receivedConfirmedIdentity == null)
+            throw new IllegalStateException("RI must be first");
+    }
+
+    public void gotRelayResponse(int status, byte[] data) {
+        if (!ENABLE_RELAY)
+            return;
+        if (_receivedConfirmedIdentity == null)
+            throw new IllegalStateException("RI must be first");
+    }
+
+    public void gotRelayIntro(Hash aliceHash, byte[] data) {
+        if (!ENABLE_RELAY)
+            return;
+        if (_receivedConfirmedIdentity == null)
+            throw new IllegalStateException("RI must be first");
+    }
+
+    public void gotPeerTest(int msg, int status, Hash h, byte[] data) {
+        if (!ENABLE_PEER_TEST)
+            return;
+        if (_receivedConfirmedIdentity == null)
+            throw new IllegalStateException("RI must be first");
     }
 
     public void gotToken(long token, long expires) {
@@ -430,9 +462,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             throw new IllegalStateException("Bad state for Retry Sent: " + _currentState);
         _currentState = InboundState.IB_STATE_RETRY_SENT;
         _lastSend = _context.clock().now();
-        // Won't really be transmitted, they have 3 sec to respond or
+        // Won't really be retransmitted, they have 9 sec to respond or
         // EstablishmentManager.handleInbound() will fail the connection
-        _nextSend = _lastSend + RETRANSMIT_DELAY;
+        _nextSend = _lastSend + (3 * RETRANSMIT_DELAY);
     }
 
     /**
@@ -441,6 +473,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     public synchronized void receiveSessionRequestAfterRetry(UDPPacket packet) throws GeneralSecurityException {
         if (_currentState != InboundState.IB_STATE_RETRY_SENT)
             throw new GeneralSecurityException("Bad state for Session Request after Retry: " + _currentState);
+        if (_log.shouldInfo())
+            _log.info("Got session request after retry from: " + _aliceSocketAddress);
         DatagramPacket pkt = packet.getPacket();
         SocketAddress from = pkt.getSocketAddress();
         if (!from.equals(_aliceSocketAddress))
@@ -615,6 +649,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         byte data[] = pkt.getData();
         int off = pkt.getOffset();
         System.arraycopy(_sessCrForReTX, 0, data, off, _sessCrForReTX.length);
+        pkt.setLength(_sessCrForReTX.length);
         pkt.setSocketAddress(_aliceSocketAddress);
         packet.setMessageType(PacketBuilder2.TYPE_CONF);
         packet.setPriority(PacketBuilder2.PRIORITY_HIGH);

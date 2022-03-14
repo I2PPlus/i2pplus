@@ -39,7 +39,7 @@ class OutboundEstablishState {
     private byte _receivedY[];
     protected byte _aliceIP[];
     protected int _alicePort;
-    private long _receivedRelayTag;
+    protected long _receivedRelayTag;
     private long _receivedSignedOnTime;
     private SessionKey _sessionKey;
     private SessionKey _macKey;
@@ -122,7 +122,7 @@ class OutboundEstablishState {
      *  Transmissions at 0, 3, 9 sec
      *  Previously: 1500 (0, 1.5, 4.5, 10.5)
      */
-    private static final long RETRANSMIT_DELAY = 3000;
+    protected static final long RETRANSMIT_DELAY = 3000;
 
     /** max delay including backoff */
     private static final long MAX_DELAY = 15*1000;

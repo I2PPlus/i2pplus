@@ -88,8 +88,8 @@ th#torrentSort {text-align: right}
 #torrents thead {box-shadow: none}
 
 /* filter bar*/
-#filterResults, #filterResults td {animation: disappear .1s linear 2s both}
-#filterResults td, #filterResults tr:hover td {padding: 8px 8px 16px; text-align: center; vertical-align: middle; line-height: 2.5; font-weight: 700; font-style: italic; border-bottom: var(--border); background: linear-gradient(180deg,#002000,#001000)}
+#filterResults, #filterResults td {animation: disappear .1s linear 2.5s both}
+#torrents #filterResults td, #torrents #filterResults tr:hover td {padding: 4px 8px 8px; text-align: center; vertical-align: middle; line-height: 2.5; font-weight: 700; font-style: italic; border-bottom: var(--border); background: linear-gradient(180deg,#002000,#001000)}
 #torrents .noneLoaded, #torrents .noneLoaded:hover {font-size: 10pt; font-weight: 700; border-bottom: var(--border); background: #000}
 #torrents .noneLoaded td, #torrents .noneLoaded:hover td {padding: 10px; text-align: center; background: transparent}
 .noneLoaded i {padding: 15px 10px; display: inline-block; font-size: 115%}

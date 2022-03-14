@@ -249,7 +249,7 @@ input[type="file"]:hover, input[type="file"]:active {
 
 button, input[type=submit], input[type=reset], select, .control, .fakebutton, .fakebutton:visited {
   border-radius: 1px;
-  box-shadow: var(--highlight), inset 0 0 2px 0 #559;
+  box-shadow: var(--highlight), inset 0 0 2px 0 #559, inset 0 0 1px 1px rgba(85,85,153,.5);
   background: 8px 5px no-repeat, var(--btn);
   cursor: pointer;
 }
@@ -279,7 +279,7 @@ input[type=submit]:focus, input[type=reset]:focus, select:hover, select:focus,
 #settings:hover, #settings:focus {
   color: var(--a_hover);
   border: 1px solid var(--a_hover);
-  box-shadow: var(--highlight), inset 0 0 2px 1px #757;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #757, inset 0 0 2px 2px rgba(119,85,119,.5);
   background: var(--btn_hover_radial), var(--btn_hover);
   cursor: pointer;
 }

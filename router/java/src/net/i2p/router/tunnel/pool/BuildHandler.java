@@ -85,18 +85,20 @@ class BuildHandler implements Runnable {
 //    private static final int MIN_QUEUE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 18 : 36;
 //    private static final int MAX_QUEUE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 192 : 384;
     private static final int MIN_QUEUE = 8;
-    private static final int MAX_QUEUE = 384;
+    private static final int MAX_QUEUE = 256;
     private static final String PROP_MAX_QUEUE = "router.buildHandlerMaxQueue";
 
     private static final int NEXT_HOP_LOOKUP_TIMEOUT = 15*1000;
     private static final int PRIORITY = OutNetMessage.PRIORITY_BUILD_REPLY;
 
     /** limits on concurrent next-hop RI lookup */
-    private static final int MIN_LOOKUP_LIMIT = 10;
-    private static final int MAX_LOOKUP_LIMIT = 100;
+//    private static final int MIN_LOOKUP_LIMIT = 10;
+//    private static final int MAX_LOOKUP_LIMIT = 100;
+    private static final int MIN_LOOKUP_LIMIT = 16;
+    private static final int MAX_LOOKUP_LIMIT = 128;
     /** limit lookups to this % of current participating tunnels */
 //    private static final int PERCENT_LOOKUP_LIMIT = 3;
-    private static final int PERCENT_LOOKUP_LIMIT = 2;
+    private static final int PERCENT_LOOKUP_LIMIT = 5;
 
     /**
      *  This must be high, as if we timeout the send we remove the tunnel from
@@ -635,7 +637,7 @@ class BuildHandler implements Runnable {
             _nextPeer = nextPeer;
         }
 
-        public String getName() { return "Timeout Finding Peer for Tunnel Join"; }
+        public String getName() { return "Timeout Locating Peer for Tunnel Join"; }
 
         public void runJob() {
             // decrement in-progress counter
@@ -646,7 +648,7 @@ class BuildHandler implements Runnable {
                 Hash from = _state.fromHash;
                 if (from == null && _state.from != null)
                     from = _state.from.calculateHash();
-                _log.info("Next hop lookup failure " + _req
+                _log.info("Timeout (" + NEXT_HOP_LOOKUP_TIMEOUT / 1000 + "s) locating peer for next hop " + _req
                           + "\n* From: " + from
                           + " [MsgID " + _state.msg.getUniqueId() + "]");
             }

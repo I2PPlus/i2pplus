@@ -72,7 +72,7 @@ public class PeerState {
     private SessionKey _nextCipherKey;
 
     /** when were the current cipher and MAC keys established/rekeyed? */
-    private final long _keyEstablishedTime;
+    protected final long _keyEstablishedTime;
 
     /**
      *  How far off is the remote peer from our clock, in milliseconds?
@@ -1734,10 +1734,12 @@ public class PeerState {
                 }
             }
         }
+      /****
         if ( rv == null && _log.shouldLog(Log.DEBUG))
             _log.debug("Nothing to send to [" + _remotePeer.toBase64().substring(0,6) + "] with " + _outboundMessages.size() +
                        " bytes / " + _outboundQueue.size() + " bytes remaining in queue" +
                        "\n* Retransmit in: " + (_retransmitTimer - now) + "ms");
+       ****/
         return rv;
     }
 

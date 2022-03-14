@@ -503,8 +503,8 @@ class EstablishmentManager {
      */
     void receiveSessionRequest(RemoteHostId from, InboundEstablishState state, UDPPacketReader reader) {
         if (!TransportUtil.isValidPort(from.getPort()) || !_transport.isValid(from.getIP())) {
-            if (_log.shouldLog(Log.WARN))
-                _log.warn("Received invalid SessionRequest from: " + from);
+            if (_log.shouldLog(Log.INFO))
+                _log.info("Received invalid SessionRequest from: " + from);
             return;
         }
 
@@ -523,8 +523,8 @@ class EstablishmentManager {
                 }
 
                 if (_context.blocklist().isBlocklisted(from.getIP())) {
-                    if (_log.shouldLog(Log.WARN))
-                        _log.warn("Received SessionRequest from blocklisted IP address: " + from);
+                    if (_log.shouldInfo())
+                        _log.info("Received SessionRequest from blocklisted IP address: " + from);
                     _context.statManager().addRateData("udp.establishBadIP", 1);
                     return; // drop the packet
                 }
@@ -599,8 +599,8 @@ class EstablishmentManager {
                 return; // drop the packet
             }
             if (_context.blocklist().isBlocklisted(from.getIP())) {
-                if (_log.shouldWarn())
-                    _log.warn("Receive session request from blocklisted IP: " + from);
+                if (_log.shouldInfo())
+                    _log.info("Received session request from blocklisted IP: " + from);
                 _context.statManager().addRateData("udp.establishBadIP", 1);
                 return; // drop the packet
             }
@@ -643,26 +643,20 @@ class EstablishmentManager {
         }
 
         if (isNew) {
-          /**** TODO
-            // Don't offer to relay to privileged ports.
-            // Only offer for an IPv4 session.
-            // TODO if already we have their RI, only offer if they need it (no 'C' cap)
-            // if extended options, only if they asked for it
-            if (state.isIntroductionRequested() &&
-                state.getSentPort() >= 1024 &&
-                _transport.canIntroduce(state.getSentIP().length == 16)) {
-                // ensure > 0
-                long tag = 1 + _context.random().nextLong(MAX_TAG_VALUE);
-                state.setSentRelayTag(tag);
-            } else {
-                // we got an IB even though we were firewalled, hidden, not high cap, etc.
-            }
-          ****/
             if (_log.shouldInfo())
                 _log.info("Received NEW session/token request " + state);
         } else {
             if (_log.shouldDebug())
                 _log.debug("Receive DUP session/token request from: " + state);
+        }
+        // call for both Session and Token request, why not
+        if (SSU2Util.ENABLE_RELAY &&
+            state.isIntroductionRequested() &&
+            state.getSentRelayTag() == 0 &&     // only set once
+            state.getSentPort() >= 1024 &&
+            _transport.canIntroduce(state.getSentIP().length == 16)) {
+            long tag = 1 + _context.random().nextLong(MAX_TAG_VALUE);
+            state.setSentRelayTag(tag);
         }
         notifyActivity();
     }
@@ -684,8 +678,8 @@ class EstablishmentManager {
             if (_log.shouldLog(Log.DEBUG))
                 _log.debug("Received SessionConfirmed from: " + state);
         } else {
-            if (_log.shouldLog(Log.WARN))
-                _log.warn("Received possible duplicate SessionConfirmed from: " + from);
+            if (_log.shouldInfo())
+                _log.info("Received possible duplicate SessionConfirmed from: " + from);
         }
     }
 
@@ -730,8 +724,8 @@ class EstablishmentManager {
             if (_log.shouldLog(Log.DEBUG))
                 _log.debug("Received SessionCreated from: " + state);
         } else {
-            if (_log.shouldLog(Log.WARN))
-                _log.warn("Received possible duplicate SessionCreated from: " + from);
+            if (_log.shouldLog(Log.INFO))
+                _log.info("Received possible duplicate SessionCreated from: " + from);
         }
     }
 
@@ -1063,7 +1057,6 @@ class EstablishmentManager {
                                  state.getSentIP(), state.getSentPort(), remote.calculateHash(), false, state.getRTT());
         peer.setCurrentCipherKey(state.getCipherKey());
         peer.setCurrentMACKey(state.getMACKey());
-        peer.setTheyRelayToUsAs(state.getReceivedRelayTag());
             int mtu = state.getRemoteAddress().getMTU();
             if (mtu > 0)
                 peer.setHisMTU(mtu);
@@ -1072,6 +1065,7 @@ class EstablishmentManager {
             // OES2 sets PS2 MTU
             peer = state2.getPeerState();
         }
+        peer.setTheyRelayToUsAs(state.getReceivedRelayTag());
         // 0 is the default
         //peer.setWeRelayToThemAs(0);
 
@@ -1429,7 +1423,8 @@ class EstablishmentManager {
         } else {
             // save for retx
             OutboundEstablishState2 state2 = (OutboundEstablishState2) state;
-            state2.confirmedPacketsSent(packets);
+            // PacketBuilder2 told the state
+            //state2.confirmedPacketsSent(packets);
             // we are done, go right to ps2
             handleCompletelyEstablished(state2);
         }

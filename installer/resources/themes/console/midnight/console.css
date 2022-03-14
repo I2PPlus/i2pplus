@@ -1609,7 +1609,8 @@ b.netdb_transport {display: inline-block; margin-right: 5px}
 .netdbstats .hide + hr {display: none}
 .netdbstats hr#expl, .netdbstats hr#hrd {display: block}
 .netdbStats hr, .sybil_routerinfo hr {margin: 2px 0; display: block; color: transparent; opacity: .5; border-bottom: 1px solid #224; background: none}
-.netdbStats li {margin: 0 10px 0 0; padding: 1px 0; max-width: 210px; white-space: normal; line-height: 1.4; vertical-align: middle; list-style: none}
+.netdbStats li {margin: 0 10px 0 0; padding: 1px 0; max-width: 210px; white-space: normal; line-height: 1.4; vertical-align: middle; list-style: none; text-align: left}
+.netdbStats li.hide + hr {display: none}
 .netdbStats li .bullet:last-of-type {opacity: 0}
 .netdb_tunnel {margin-right: 3px; margin-left: -3px; border-radius: 0 2px 2px 0; background: #113}
 .signingkey.encryption {padding-left: 18px; background: var(--lock) 4px calc(50% - 1px) no-repeat, var(--element); background-size: 12px, 100%}
@@ -1625,7 +1626,7 @@ b.netdb_transport {display: inline-block; margin-right: 5px}
 #netdb .netdbentry th code, #netdb .sybil_routerinfo th code, #netdb .leaseset th code {margin: 2px 5px 2px 7px; padding: 2px 5px 3px; font-family: var(--bodyfont); font-weight: 700; font-size: 90%; letter-spacing: .12em; color: #090; text-shadow: none; border-radius: 2px; box-shadow: var(--outline); background: var(--element)}
 #netdb .netdbentry th code::selection, #netdb .sybil_routerinfo th code::selection, .leaseset th code::selection {color: #fff; background: #007}
 #netdb .netdbStats b {margin-right: 2px; margin-left: 0; text-align: left}
-#netdb .version {margin: 0 8px 0 3px}
+#netdb .version {margin: 0 8px 0 3px; vertical-align: middle}
 #netdboverview .version {line-height: 1.2}
 #netdboverview .version::before {margin: -2px 0; min-height: 18px; display: inline-block; vertical-align: middle; content: ""}
 #netdb_ourinfo .version {margin-right: 4px}
@@ -1706,13 +1707,14 @@ h3.sybils + div, h3.sybils + a[name] + table {margin-top: -1px}
 .sybilinfo_container, .threatpoints + ul {padding: 4px 5px; columns: 400px 5; column-gap: 0}
 .sybilinfo_familyname {display: inline-block; vertical-align: top; max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
 .sybilinfo_params {padding: 0; border-bottom: var(--border_inner)}
-.sybil_routerinfo b.netdb_transport {margin-left: -13px; margin-right: 0}
+.sybil_routerinfo b.netdb_transport {margin-right: 0}
 .sybil_routerinfo p {margin: 0; padding: 0; width: 100%; line-height: 1.5; break-inside: avoid; page-break-inside: avoid; -webkit-column-break-inside: avoid}
 .sybil_routerinfo tr:last-child {border-top: none}
-.sybil_routerinfo th img[src^="/flags"] {margin-right: 5px; width: 16px; height: 11px}
+.sybil_routerinfo th img[src^="/flags"] {margin-right: 5px; width: auto; height: 23px}
 .sybil_routerinfo td[colspan="3"] {white-space: normal}
 .sybil_routerinfo td:first-child, .netdbentry td:first-child {padding-right: 10px; text-align: right}
-.sybil_routerinfo table td:last-child {border-right: none}
+.sybil_routerinfo table td:last-child {text-align: left; border-right: none}
+#netdb .sybil_addresses {padding-right: 0}
 .sybil_routerinfo hr {margin: -2px 0}
 .sybil_routerinfo .netdb_header img[src^="/flags.jsp?c="] {margin: 0 5px 0 3px}
 .sybil_routerinfo .netdbheader {padding: 3px; text-align: right; margin-right: 0}

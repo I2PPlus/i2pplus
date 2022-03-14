@@ -16,6 +16,7 @@ import net.i2p.crypto.HKDF;
 import net.i2p.data.Base64;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
+import net.i2p.data.Hash;
 import net.i2p.data.SessionKey;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.data.router.RouterAddress;
@@ -215,8 +216,27 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     }
 
     public void gotRelayTag(long tag) {
+        if (!ENABLE_RELAY)
+            return;
         if (_log.shouldDebug())
             _log.debug("Got relay tag " + tag);
+        _receivedRelayTag = tag;
+    }
+
+    public void gotRelayRequest(byte[] data) {
+        // won't be called, SSU2Payload will throw
+    }
+
+    public void gotRelayResponse(int status, byte[] data) {
+        // won't be called, SSU2Payload will throw
+    }
+
+    public void gotRelayIntro(Hash aliceHash, byte[] data) {
+        // won't be called, SSU2Payload will throw
+    }
+
+    public void gotPeerTest(int msg, int status, Hash h, byte[] data) {
+        // won't be called, SSU2Payload will throw
     }
 
     public void gotToken(long token, long expires) {
@@ -404,7 +424,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     }
 
     /**
-     * note that we just sent the SessionConfirmed packets
+     * Note that we just sent a token request packet.
      * and save them for retransmission
      */
     public synchronized void tokenRequestSent(DatagramPacket packet) {
@@ -420,6 +440,8 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
      * and save it for retransmission
      */
     public synchronized void requestSent(DatagramPacket pkt) {
+        OutboundState old = _currentState;
+        requestSent();
         if (_sessReqForReTX == null) {
             // store pkt for retx
             byte data[] = pkt.getData();
@@ -427,11 +449,15 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
             int len = pkt.getLength();
             _sessReqForReTX = new byte[len];
             System.arraycopy(data, off, _sessReqForReTX, 0, len);
+            if (_requestSentCount > 1) {
+                // fixup the counter and delay because we also called
+                // requestSent() when sending the token request
+                _requestSentCount = 1;
+                _nextSend = _lastSend + RETRANSMIT_DELAY;
+            }
         }
         if (_rcvHeaderEncryptKey2 == null)
             _rcvHeaderEncryptKey2 = SSU2Util.hkdf(_context, _handshakeState.getChainingKey(), "SessCreateHeader");
-        OutboundState old = _currentState;
-        requestSent();
         if (old == OutboundState.OB_STATE_RETRY_RECEIVED)
             _currentState = OutboundState.OB_STATE_REQUEST_SENT_NEW_TOKEN;
     }
@@ -514,6 +540,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         byte data[] = pkt.getData();
         int off = pkt.getOffset();
         System.arraycopy(_sessReqForReTX, 0, data, off, _sessReqForReTX.length);
+        pkt.setLength(_sessReqForReTX.length);
         pkt.setSocketAddress(_bobSocketAddress);
         packet.setMessageType(PacketBuilder2.TYPE_SREQ);
         packet.setPriority(PacketBuilder2.PRIORITY_HIGH);

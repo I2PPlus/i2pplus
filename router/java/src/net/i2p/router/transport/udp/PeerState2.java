@@ -5,6 +5,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.security.GeneralSecurityException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.ConcurrentHashMap;
@@ -55,6 +56,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      */
     private final SSU2Bitfield _ackedMessages;
     private final ConcurrentHashMap<Long, List<PacketBuilder.Fragment>> _sentMessages;
+    private long _sentMessagesLastExpired;
 
     // Session Confirmed retransmit
     private byte[] _sessConfForReTX;
@@ -76,7 +78,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     private static final int BITFIELD_SIZE = 512;
     private static final int MAX_SESS_CONF_RETX = 6;
     private static final int SESS_CONF_RETX_TIME = 1000;
-
+    private static final long SENT_MESSAGES_CLEAN_TIME = 60*1000;
 
 
     /**
@@ -98,6 +100,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         _receivedMessages = new SSU2Bitfield(BITFIELD_SIZE, 0);
         _ackedMessages = new SSU2Bitfield(BITFIELD_SIZE, 0);
         _sentMessages = new ConcurrentHashMap<Long, List<PacketBuilder.Fragment>>(32);
+        _sentMessagesLastExpired = _keyEstablishedTime;
         if (isInbound) {
             // Send immediate ack of Session Confirmed
             _receivedMessages.set(0);
@@ -169,6 +172,37 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
+     * Overridden to expire unacked packets in _sentMessages.
+     * These will remain unacked if lost; fragments will be retransmitted
+     * in a new packet.
+     *
+     * @return number of active outbound messages remaining
+     */
+    @Override
+    int finishMessages(long now) {
+        if (now >= _sentMessagesLastExpired + SENT_MESSAGES_CLEAN_TIME) {
+            _sentMessagesLastExpired = now;
+            if (!_sentMessages.isEmpty()) {
+                if (_log.shouldDebug())
+                    _log.debug("finishMessages() over " + _sentMessages.size() + " pending acks");
+                loop:
+                for (Iterator<List<PacketBuilder.Fragment>> iter = _sentMessages.values().iterator(); iter.hasNext(); ) {
+                    List<PacketBuilder.Fragment> frags = iter.next();
+                    for (PacketBuilder.Fragment f : frags) {
+                        OutboundMessageState state = f.state;
+                        if (!state.isComplete() && !state.isExpired(now))
+                            continue loop;
+                    }
+                    iter.remove();
+                    if (_log.shouldWarn())
+                        _log.warn("Cleaned from sentMessages: " + frags);
+                }
+            }
+        }
+        return super.finishMessages(now);
+    }
+
+    /**
      *  Overridden to retransmit SessionConfirmed also
      */
     @Override
@@ -237,6 +271,10 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         // logged in PacketBuilder2
         //if (_log.shouldDebug())
         //    _log.debug("Sending acks " + _receivedMessages + " on " + this);
+        synchronized(this) {
+            // cancel the ack timer
+            _wantACKSendSince = 0;
+        }
         return _receivedMessages;
     }
     SSU2Bitfield getAckedMessages() { return _ackedMessages; }
@@ -348,9 +386,41 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     public void gotRelayTagRequest() {
+        if (!ENABLE_RELAY)
+            return;
     }
 
     public void gotRelayTag(long tag) {
+        if (!ENABLE_RELAY)
+            return;
+        long old = getTheyRelayToUsAs();
+        if (old != 0) {
+            if (_log.shouldWarn())
+                _log.warn("Got new tag " + tag + " but had previous tag " + old + " on " + this);
+            return;
+        }
+        setTheyRelayToUsAs(tag);
+        _transport.getIntroManager().add(this);
+    }
+
+    public void gotRelayRequest(byte[] data) {
+        if (!ENABLE_RELAY)
+            return;
+    }
+
+    public void gotRelayResponse(int status, byte[] data) {
+        if (!ENABLE_RELAY)
+            return;
+    }
+
+    public void gotRelayIntro(Hash aliceHash, byte[] data) {
+        if (!ENABLE_RELAY)
+            return;
+    }
+
+    public void gotPeerTest(int msg, int status, Hash h, byte[] data) {
+        if (!ENABLE_PEER_TEST)
+            return;
     }
 
     public void gotToken(long token, long expires) {
@@ -570,6 +640,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         byte data[] = pkt.getData();
         int off = pkt.getOffset();
         System.arraycopy(_sessConfForReTX, 0, data, off, _sessConfForReTX.length);
+        pkt.setLength(_sessConfForReTX.length);
         pkt.setAddress(_remoteIPAddress);
         pkt.setPort(_remotePort);
         packet.setMessageType(PacketBuilder2.TYPE_CONF);

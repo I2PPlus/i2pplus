@@ -76,6 +76,7 @@ class IntroductionManager {
     private final Log _log;
     private final UDPTransport _transport;
     private final PacketBuilder _builder;
+    private final PacketBuilder2 _builder2;
     /** map of relay tag to PeerState that should receive the introduction */
     private final Map<Long, PeerState> _outbound;
     /** map of relay tag to PeerState who have given us introduction tags */
@@ -107,6 +108,7 @@ class IntroductionManager {
         _log = ctx.logManager().getLog(IntroductionManager.class);
         _transport = transport;
         _builder = transport.getBuilder();
+        _builder2 = transport.getBuilder2();
         _outbound = new ConcurrentHashMap<Long, PeerState>(MAX_OUTBOUND);
         _inbound = new ConcurrentHashMap<Long, PeerState>(MAX_INBOUND);
         _recentHolePunches = new HashSet<InetAddress>(16);
@@ -124,7 +126,7 @@ class IntroductionManager {
     public void add(PeerState peer) {
         if (peer == null) return;
         // Skip SSU2 until we have support for relay
-        if (peer.getVersion() != 1)
+        if (peer.getVersion() != 1 && !SSU2Util.ENABLE_RELAY)
             return;
         // let's not use an introducer on a privileged port, sounds like trouble
         if (!TransportUtil.isValidPort(peer.getRemotePort()))
@@ -396,7 +398,12 @@ class IntroductionManager {
                 if (_log.shouldLog(Log.INFO))
                     _log.info("Pinging introducer: " + cur);
                 cur.setLastSendTime(now);
-                _transport.send(_builder.buildPing(cur));
+                UDPPacket ping;
+                if (cur.getVersion() == 2)
+                    ping = _builder2.buildPing((PeerState2) cur);
+                else
+                    ping = _builder.buildPing(cur);
+                _transport.send(ping);
             }
         }
     }
