@@ -73,8 +73,7 @@
   --textshadow: 0 1px 1px rgba(0,0,0,.8);
   --th: linear-gradient(180deg,#010,#000);
   --title: var(--bg_title) center center / 2px, repeating-linear-gradient(180deg, rgba(0,48,0,.4) 2px, rgba(0,0,0,.8) 4px) center center / 100% 4px, linear-gradient(180deg, rgba(0,64,0,.6), rgba(0,0,0,.9)), var(--camo) center center / 2048px;
-  --topnav: repeating-linear-gradient(90deg, rgba(0,0,0,.4) 2px, rgba(0,32,0,.7) 4px), linear-gradient(180deg,rgba(0,16,0,.8),#000), var(--camo) repeat;
-  --topnav_size: 4px 100%, 100%, 2048px;
+  --topnav: repeating-linear-gradient(90deg, rgba(0,0,0,.4) 2px, rgba(0,32,0,.7) 4px) center center / 4px 100%, linear-gradient(180deg,rgba(0,16,0,.8),#000), var(--camo) repeat center center / 2048px;
   --tr: linear-gradient(180deg,#001400,#000600);
   --txt_focus: linear-gradient(180deg,#001800,#001000);
   --txt_shadow: 0 1px 1px #000;

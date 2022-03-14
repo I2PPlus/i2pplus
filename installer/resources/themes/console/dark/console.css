@@ -290,7 +290,7 @@ div[id^="config_"].main {padding-bottom: 14px}
 #newspage {margin: 18px 5px}
 
 /* top navigation */
-.confignav {margin: -1px -11px -1px; padding: 7px 7px 8px; font-weight: 700; line-height: 1.36; text-align: center; box-shadow: var(--bevel); background: var(--topnav); background-size: var(--topnav_size)}
+.confignav {margin: -1px -11px -1px; padding: 7px 7px 8px; font-weight: 700; line-height: 1.36; text-align: center; box-shadow: var(--bevel); background: var(--topnav)}
 #debug .confignav {margin-bottom: -4px; z-index: 999}
 #netdb .confignav {margin-bottom: 11px}
 .tab, .tab2 {margin: 0 -3px -1px -3px; padding: 1px 0 2px; min-width: 60px; display: inline-block; position: relative; box-sizing: border-box; vertical-align: middle; background: #000}

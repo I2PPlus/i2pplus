@@ -33,7 +33,7 @@ tr {contain: layout}
 .iframed #navbar, .iframed .mainsection, .iframed #addSection, .iframed #createSection, .iframed #configSection, .iframed .configPanel {border-left: none; border-right: none; border-radius: 0}
 
 /* topnav */
-#navbar {margin: 0 0 -6px; padding: 9px 0; min-width: 888px; position: sticky; top: -2px; z-index: 999; text-align: center; border: var(--border); box-shadow: var(--highlight), inset 0 0 1px 1px #050; background: var(--topnav); background-size: var(--topnav_size); will-change: transform}
+#navbar {margin: 0 0 -6px; padding: 9px 0; min-width: 888px; position: sticky; top: -2px; z-index: 999; text-align: center; border: var(--border); box-shadow: var(--highlight), inset 0 0 1px 1px #050; background: var(--topnav); will-change: transform}
 .iframed #navbar {margin-top: -2px; padding: 8px 0 7px; position: static}
 #navbar a:not(:hover):not(:focus):not(:active) {color: #32ff32}
 .nav_main {border-radius: 1px 0 0 1px; padding-left: 24px; background: #000 var(--snark) no-repeat 7px center}
