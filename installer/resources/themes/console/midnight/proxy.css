@@ -367,6 +367,10 @@ form[action="http://proxy.i2p/add"] {
   margin-right: -6px;
 }
 
+#proxyNewAddressHelper .logo hr {
+  margin: 11px -11px 0;
+}
+
 #proxyNewHost {
   border-collapse: collapse;
 }
