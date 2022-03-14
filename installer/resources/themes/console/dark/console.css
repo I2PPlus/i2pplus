@@ -247,23 +247,6 @@ p:empty + .sb_notice {margin-top: 9px}
 .tunnelBuildStatus.hidden {color: #999}
 .tunnelBuildStatus.hidden::before {background: var(--tunn_hidden) var(--center) / 15px}
 
-/* console error messages */
-h1 + .sorry, #console_404 .sorry {margin: -1px 5px 10px 226px; padding: 20px 20px 20px 70px; min-width: 595px; word-wrap: break-word; text-align: justify; font-size: 10pt; border: var(--border); border-radius: 0 0 4px 4px; box-shadow: var(--highlight), inset 0 0 0 2px #600, inset 0 0 0 3px #000; background: var(--err) no-repeat 15px 45%, linear-gradient(180deg,rgba(255,255,255,.05), rgba(0,0,0,.4)), repeating-linear-gradient(180deg,rgba(0,0,0,.4) 2px, rgba(0,48,0,.7) 4px); background-size: 44px, 100%, 100% 4px}
-#error500 #warning.sorry {border-radius: 0}
-.sorry p {line-height: 1.3}
-#warning2 {margin: -17px 2px 18px 226px; padding: 10px 20px 5px; min-width: 610px; background: #010}
-#error500 #sidebar a {line-height: 2}
-#error500 #warning2 {border: var(--border_hard); background: repeating-linear-gradient(180deg,rgba(0,0,0,.7) 2px, rgba(0,32,0,.7) 4px) top left; background-size: 100% 4px}
-#error500 #stacktrace {margin-top: 20px; margin-bottom: 20px}
-#error500 #warning2 p:first-child {text-decoration: none}
-#warning2 h3 {margin: -11px -20px 0; padding: 10px; text-align: left; border-width: 1px; border-radius: 0; border-left: none; border-right: none; box-shadow: inset 0 0 0 1px #700}
-#warning2 p {font-size: 9pt; text-align: left}
-#stacktrace p:first-of-type {margin-top: 20px}
-#stacktrace p {margin-bottom: 40px}
-#warning2 p + h3 {margin-top: -5px}
-#warning2 b {margin-right: 5px; min-width: 140px; display: inline-block; line-height: 1.5; text-align: right}
-.sorry hr {margin: 10px 0; height: 1px; color: var(--ink); border-top: 1px solid var(--ink); background: var(--ink); opacity: .7}
-
 /* main section */
 .sb, .main, h1, #news, .confignav, .tab, .tab2, table.search, .applink, .sitemapLink, .sitemapLabel {border: var(--border_hard)}
 .main, #news, h1, .sorry {margin-left: 226px}
@@ -415,7 +398,9 @@ button.control {margin: 3px; padding: 15px; min-width: 0; font-size: 0}
 
 .sidebarlogo {text-align: center}
 #sidebar button.reload, #sidebar button.stop, #sidebar button.cancel {margin: 3px 2px; min-width: 97px; text-transform: capitalize}
-#sidebar button.download {margin-bottom: 3px; width: calc(100% - 10px)}
+#sidebar button.download {margin: 5px 0 4px; padding: 5px 12px; width: calc(100% - 20px); border-radius: 20px; border: 1px solid #151; box-shadow: var(--highlight), inset 0 0 3px 1px #000, inset 0 2px 5px 2px #030, 0 0 2px 1px #000; background: linear-gradient(180deg, #010, #000)}
+#sidebar button.download:hover, #sidebar button.download:focus {border: 1px solid #f60; box-shadow: inset 0 0 0 2px rgba(255,96,0,.05), inset 0 0 3px 1px #520, inset 0 2px 5px 2px #730; background: linear-gradient(180deg, #520, #000)}
+#sidebar button.download:active {color: rgba(255,96,0,.5); text-shadow: 0 -1px 1px rgba(0,0,0,.7); box-shadow: var(--btn_shadow_active); background: linear-gradient(180deg, #310, #520)}
 #sidebar button.cancel {min-width: 151px}
 #updateAvailable {margin: 0; padding: 4px 0 0; width: calc(100% - 20px); display: inline-block; line-height: 1.2; color: #dd3; font-size: 9pt; text-shadow: var(--textshadow); opacity: .9}
 #updateAvailable + br + button + br + #updateAvailable::before {margin: 2px 0 4px; width: 100%; height: 1px; display: inline-block; background: #252; content: ""}
@@ -2388,6 +2373,23 @@ iframe {height: 0}
 .iframed h1 {margin: 0 5px 0 5px}
 .iframed div.sorry {margin: -1px 5px 10px 5px}
 
+/* console error pages */
+h1 + .sorry, #console_404 .sorry {margin: -1px 5px 10px 226px; padding: 20px 20px 20px 70px; min-width: 595px; word-wrap: break-word; text-align: justify; font-size: 10pt; border: var(--border); border-radius: 0 0 4px 4px; box-shadow: var(--highlight), inset 0 0 0 2px #600, inset 0 0 0 3px #000; background: var(--err) no-repeat 15px 45%, linear-gradient(180deg,rgba(255,255,255,.05), rgba(0,0,0,.4)), repeating-linear-gradient(180deg,rgba(0,0,0,.4) 2px, rgba(0,48,0,.7) 4px); background-size: 44px, 100%, 100% 4px}
+#error500 #warning.sorry {border-radius: 0}
+.sorry p {line-height: 1.3}
+#warning2 {margin: -17px 2px 18px 226px; padding: 10px 20px 5px; min-width: 610px; background: #010}
+#error500 #sidebar a {line-height: 2}
+#error500 #warning2 {border: var(--border_hard); background: repeating-linear-gradient(180deg,rgba(0,0,0,.7) 2px, rgba(0,32,0,.7) 4px) top left; background-size: 100% 4px}
+#error500 #stacktrace {margin-top: 20px; margin-bottom: 20px}
+#error500 #warning2 p:first-child {text-decoration: none}
+#warning2 h3 {margin: -11px -20px 0; padding: 10px; text-align: left; border-width: 1px; border-radius: 0; border-left: none; border-right: none; box-shadow: inset 0 0 0 1px #700}
+#warning2 p {font-size: 9pt; text-align: left}
+#stacktrace p:first-of-type {margin-top: 20px}
+#stacktrace p {margin-bottom: 40px}
+#warning2 p + h3 {margin-top: -5px}
+#warning2 b {margin-right: 5px; min-width: 140px; display: inline-block; line-height: 1.5; text-align: right}
+.sorry hr {margin: 10px 0; height: 1px; color: var(--ink); border-top: 1px solid var(--ink); background: var(--ink); opacity: .7}
+
 /* animations */
 @keyframes bar {from {width: calc(300%)}}
 @keyframes downloadbar {from {background: var(--download_bar)} to {background: repeating-linear-gradient(135deg, #010 1px, #010 6px, #000 7px, #000 11px)}}
@@ -2752,6 +2754,7 @@ span#newtab {margin-top: 4px}
 #warning2.sorry {margin: -17px 5px 18px 272px}
 #sb_status {margin: -9px 0 -7px}
 }
+
 @media screen and (min-width: 1634px) {.leasesets_container {margin-bottom: 8px} th code {font-size: 9pt}}
 @media screen and (min-width: 1800px) {#help .confignav {margin-left: -11px; margin-right: -11px; display: flex; justify-content: center; border-left: none; border-right: none} #help .tab, #help .tab2 {margin-left: 0; margin-right: 0; flex-grow: 1} .linkcontainer .applink:last-of-type {margin-bottom: 9px}}
 @media screen and (min-width: 1840px) {div[id^="config_"] .confignav {padding: 4px 4px 5px 3px; display: flex; flex-direction: row; flex-wrap: wrap; align-content: space-evenly; justify-content: center} div[id^="config_"] .tab, div[id^="config_"] .tab2 {margin: 0 -1px -1px 0; min-width: 70px; white-space: nowrap; flex: auto; flex-basis: content; flex-grow: .06} div[id^="config_"] .tab2:first-child {border-left: none} div[id^="config_"] .confignav {padding: 0} div[id^="config_"] .tab, div[id^="config_"] .tab2 {margin-top: -1px} div[id^="config_"] .tab:first-child {margin-left: -1px}} 
