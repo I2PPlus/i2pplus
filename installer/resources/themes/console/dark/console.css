@@ -1914,6 +1914,7 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 #i2pupdates .optbox {margin-left: 10px}
 #i2pupdates input[name*="URL"], #i2pupdates textarea {width: calc(100% - 17px)}
 #i2pupdates textarea, #i2pupdates input[type=text] {margin: 5px 5px 5px 10px; width: calc(100% - 216px); min-width: 0}
+#i2pupdates input[type=text]:read-only {pointer-events: none}
 #i2pupdates textarea {height: 76px; min-height: 32px}
 #i2pupdates textarea {margin: 6px 0 6px 10px; padding: 3px 5px; height: 76px; min-height: 76px}
 #i2pupdates .optiontextarea .nowrap::after {content: none}

@@ -336,10 +336,11 @@ input[type=text], input[type=password] {
 }
 
 input[type=text]:disabled, input[type=text]:disabled:active,
-input[readonly="readonly"] {
+input[readonly="readonly"], input[readonly="readonly"]:focus {
   color: #161;
   border: 1px solid #141;
   background: #000;
+  box-shadow: var(--highlight);
 }
 
 textarea {
