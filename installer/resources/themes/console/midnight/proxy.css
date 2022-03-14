@@ -339,8 +339,14 @@ hr {
 }
 
 .warning p + .formaction {
-  margin: 0 0 20px;
+  margin: 15px -5px;
   padding: 0;
+  border: none;
+  background: none;
+}
+
+form[action="http://proxy.i2p/add"] {
+  margin-bottom: 15px;
 }
 
 .proxyfooter {
