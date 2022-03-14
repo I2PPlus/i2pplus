@@ -1170,7 +1170,7 @@ th code {user-select: all}
 #leasesetdebug td:nth-child(odd) {width: 200px; white-space: nowrap; text-align: right; border-right: 1px inset #131}
 #leasesetdebug td:nth-child(even) {white-space: nowrap; text-align: left}
 #leasesetdebug td:nth-child(2) {width: 10px}
-#noleasesets, #notinitialized, .netdbnotfound {margin-bottom: 10px; padding: 18px 15px 18px 58px; text-align: left; border: var(--border); background: #000 var(--infohelp) no-repeat 15px center / 28px}
+#noleasesets, #notinitialized, .netdbnotfound {margin-bottom: 10px; padding: 20px 24px 20px 58px; text-align: left; border: var(--border); background: #000 var(--infohelp) no-repeat 15px center / 28px}
 
 /* sybils */
 .sybil_distance th {padding: 5px; text-align: left; font-size: 90%}
@@ -1246,7 +1246,7 @@ th code {user-select: all}
 #sybilTask input[type=checkbox] {margin: 14px 8px}
 #sybil_totals {font-weight: 400}
 #sybilnav, #sybils_summary {margin-bottom: 10px; padding: 10px; line-height: 1.6; border: var(--border); background: #000}
-#sybils_summary {padding: 18px 15px 18px 58px; line-height: 2; background: #000 var(--floodfill) no-repeat 18px center / 28px}
+#sybils_summary {padding: 20px 24px 20px 58px; line-height: 2; background: #000 var(--floodfill) no-repeat 18px center / 28px}
 #sybilnav {margin: -12px -11px 10px; padding: 6px 5px; overflow: hidden; border: var(--border); box-shadow: var(--highlight), inset 0 0 2px 1px #030; columns: 5 200px; column-gap: 4px}
 #sybilnav li {-webkit-column-break-inside: avoid; break-inside: avoid; page-break-before: right}
 #sybilnav ul {margin: 0}
@@ -1432,27 +1432,27 @@ th code {user-select: all}
 /* configure */
 
 /* infohelp/warn */
-#bugreports td.infohelp {padding: 18px 15px 18px 58px; background: var(--bug) no-repeat 15px center / 28px, var(--msg)}
-#debugmode {padding: 18px 15px 18px 58px; background: var(--bug) no-repeat 15px center / 28px, var(--msg)}
-.sybilinfo {margin: 8px 0; padding: 18px 15px 18px 58px; background: var(--sybil) no-repeat 15px center / 28px, var(--msg)}
+#bugreports td.infohelp {padding: 20px 24px 20px 58px; background: var(--bug) no-repeat 15px center / 28px, var(--msg)}
+#debugmode {padding: 20px 24px 20px 58px; background: var(--bug) no-repeat 15px center / 28px, var(--msg)}
+.sybilinfo {margin: 8px 0; padding: 20px 24px 20px 58px; background: var(--sybil) no-repeat 15px center / 28px, var(--msg)}
 .sybilinfo.experimental {background: var(--experimental) no-repeat 15px center / 28px, var(--msg)}
 #bandwidthconfig tr:first-child .infohelp, #bandwidth.infohelp {padding: 20px 24px 20px 58px; background: var(--speed) no-repeat 15px center / 28px, var(--msg)}
-#addkeyring td.infohelp {padding: 18px 15px 18px 58px; background: var(--keys) no-repeat 15px center / 28px, var(--msg)}
-#floodfillconfig tr:first-child .infohelp {padding: 18px 15px 18px 58px; background: var(--floodfill) no-repeat 15px center / 28px, var(--msg)}
+#addkeyring td.infohelp {padding: 20px 24px 20px 58px; background: var(--keys) no-repeat 15px center / 28px, var(--msg)}
+#floodfillconfig tr:first-child .infohelp {padding: 20px 24px 20px 58px; background: var(--floodfill) no-repeat 15px center / 28px, var(--msg)}
 #floodfillconfig tr:nth-child(2) td {padding: 12px 10px 12px 18px}
 #floodfillconfig tr:nth-child(2) b {margin-right: 10px}
-#clientconf.infohelp, #webappconfigtext.infohelp {padding: 18px 15px 18px 58px; position: relative; z-index: 10; background: var(--editclient) no-repeat 15px center / 28px, var(--msg)}
-#config_peers tr:nth-child(3) td.infohelp {padding: 18px 15px 18px 58px; background: var(--ban) no-repeat 15px center / 28px, var(--msg)}
-#shutdownrouter + p.infohelp {padding: 18px 15px 18px 58px; background: var(--power) no-repeat 15px center / 28px, var(--msg_nohat)}
-#restartrouter + p.infohelp, #config_family .infohelp.needrestart {padding: 18px 15px 18px 58px; background: var(--reboot) no-repeat 15px center / 28px, var(--msg_nohat)}
-#systray + p.infohelp {padding: 18px 15px 18px 58px; background: var(--systray) no-repeat 15px center / 28px, var(--msg_nohat)}
-#servicedebug + p.infohelp {padding: 18px 15px 18px 58px; background: var(--bug) no-repeat 15px center / 28px, var(--msg_nohat)}
-#browseronstart + p.infohelp, .infohelp#webbrowser {padding: 18px 15px 18px 58px; background: var(--firefox) no-repeat 15px center / 28px, var(--msg_nohat)}
-#config_reseed p.infohelp {padding: 18px 15px 18px 58px; background: var(--reseed) no-repeat 15px center / 28px, var(--msg)}
-.infohelp#flags {padding: 18px 15px 18px 58px; background: url(/themes/console/images/info/flags.png) no-repeat 15px center / 28px, var(--msg)}
-#enablefullstats, #gatherstats {padding: 18px 15px 18px 58px; background: var(--stats) no-repeat 15px center / 28px, var(--msg)}
-#config_family .infohelp {padding: 18px 15px 18px 58px; background: var(--family) no-repeat 15px center / 28px, var(--msg)}
-#consolepass tr:first-child td {padding: 18px 15px 18px 58px; white-space: normal; background: var(--useradd) no-repeat 15px center / 28px, var(--msg)}
+#clientconf.infohelp, #webappconfigtext.infohelp {padding: 20px 24px 20px 58px; position: relative; z-index: 10; background: var(--editclient) no-repeat 15px center / 28px, var(--msg)}
+#config_peers tr:nth-child(3) td.infohelp {padding: 20px 24px 20px 58px; background: var(--ban) no-repeat 15px center / 28px, var(--msg)}
+#shutdownrouter + p.infohelp {padding: 20px 24px 20px 58px; background: var(--power) no-repeat 15px center / 28px, var(--msg_nohat)}
+#restartrouter + p.infohelp, #config_family .infohelp.needrestart {padding: 20px 24px 20px 58px; background: var(--reboot) no-repeat 15px center / 28px, var(--msg_nohat)}
+#systray + p.infohelp {padding: 20px 24px 20px 58px; background: var(--systray) no-repeat 15px center / 28px, var(--msg_nohat)}
+#servicedebug + p.infohelp {padding: 20px 24px 20px 58px; background: var(--bug) no-repeat 15px center / 28px, var(--msg_nohat)}
+#browseronstart + p.infohelp, .infohelp#webbrowser {padding: 20px 24px 20px 58px; background: var(--firefox) no-repeat 15px center / 28px, var(--msg_nohat)}
+#config_reseed p.infohelp {padding: 20px 24px 20px 58px; background: var(--reseed) no-repeat 15px center / 28px, var(--msg)}
+.infohelp#flags {padding: 20px 24px 20px 58px; background: url(/themes/console/images/info/flags.png) no-repeat 15px center / 28px, var(--msg)}
+#enablefullstats, #gatherstats {padding: 20px 24px 20px 58px; background: var(--stats) no-repeat 15px center / 28px, var(--msg)}
+#config_family .infohelp {padding: 20px 24px 20px 58px; background: var(--family) no-repeat 15px center / 28px, var(--msg)}
+#consolepass tr:first-child td {padding: 20px 24px 20px 58px; white-space: normal; background: var(--useradd) no-repeat 15px center / 28px, var(--msg)}
 form[action="events"] {padding: 10px 10px 10px 50px; background: var(--logs) no-repeat 15px center; background-size: 28px, var(--msg)}
 
 th.options, #externali2cp th {padding: 7px 10px}
@@ -1522,7 +1522,7 @@ th.th_title {padding: 8px 10px; position: static; text-align: left; background: 
 #config_service .messages {margin: 10px -4px 14px}
 #config_service form {margin: -15px -4px 12px; vertical-align: top; columns: 500px 2; column-gap: 4px}
 .service_container {margin: 0 2px -10px; width: calc(100% - 4px); display: inline-block; -webkit-column-break-inside: avoid; break-inside: avoid; page-break-inside: avoid; will-change: transform}
-.service_container .infohelp {padding: 18px 15px 18px 58px}
+.service_container .infohelp {padding: 20px 24px 20px 58px}
 .service_container h3 a {font-size: 0; float: right}
 #config_service .confignav {margin-bottom: 10px}
 #config_service .h3navlinks {margin-top: 0}
@@ -1645,8 +1645,8 @@ tr.addnew, tr.addnew:hover {border-top: var(--border); background: #000800}
 #config_family th {word-spacing: .1em; letter-spacing: .1em; text-transform: uppercase; background: var(--h1); background-size: 2px, 100%, 100%}
 #newfamily, #leavefamily {margin-bottom: 10px}
 #leavefamily {margin-top: 14px}
-#exportfamily tr:nth-child(2) td:first-child {padding: 18px 15px 18px 58px; background: #000 var(--joinfamily) no-repeat 15px center / 28px}
-#leavefamily tr:last-child td:first-child {padding: 18px 15px 18px 58px; background: #000 var(--leavefamily) no-repeat 15px center / 28px}
+#exportfamily tr:nth-child(2) td:first-child {padding: 20px 24px 20px 58px; background: #000 var(--joinfamily) no-repeat 15px center / 28px}
+#leavefamily tr:last-child td:first-child {padding: 20px 24px 20px 58px; background: #000 var(--leavefamily) no-repeat 15px center / 28px}
 
 /* reseed */
 form[action="/createreseed"] > h3 {margin-bottom: -13px; padding: 10px; word-spacing: .1em; letter-spacing: .08em; font-size: 10.5pt; border: var(--border); border-radius: 0; background: linear-gradient(90deg, #000, #001000 70%, #001300 90%)}
@@ -1681,8 +1681,8 @@ form[action="/createreseed"] > h3 {margin-bottom: -13px; padding: 10px; word-spa
 #config_network .optionlist:hover, #config_i2cp .optionlist:hover, #reseedssl:hover, #manualreseed .optionsingle:hover, .optiontextarea:hover, #reseed_urlselection:hover {border: var(--border); box-shadow: var(--option_highlight); transition: ease box-shadow .5s}
 #manualreseed {margin: -1px 0 -4px; background: none}
 #manualreseed td {padding: 5px; border-bottom: var(--border)}
-#manualreseed td.infohelp {padding: 18px 15px 18px 58px; box-shadow: var(--highlight), inset 0 0 2px 1px #040; background: #000 var(--infohelp) no-repeat 15px center / 28px}
-#manualreseed tr:nth-last-child(2) td.infohelp {padding: 18px 15px 18px 58px; background: #000 var(--package) no-repeat 15px center / 28px}
+#manualreseed td.infohelp {padding: 20px 24px 20px 58px; box-shadow: var(--highlight), inset 0 0 2px 1px #040; background: #000 var(--infohelp) no-repeat 15px center / 28px}
+#manualreseed tr:nth-last-child(2) td.infohelp {padding: 20px 24px 20px 58px; background: #000 var(--package) no-repeat 15px center / 28px}
 #manualreseed .optionsingle {padding: 5px 5px 0 45px}
 #manualreseed .optionlist input[type=text], #manualreseed .optionlist input[type=file] {width: 50%; min-width: 0; max-width: 50%}
 #manualreseed .optionsingle table, #manualreseed .optionsingle tr, #manualreseed .optionsingle td {background: none; border: none; box-shadow: none}
@@ -1703,7 +1703,7 @@ form[action="/createreseed"] > h3 {margin-bottom: -13px; padding: 10px; word-spa
 #iptransport {margin-bottom: 11px}
 #defaultswork {margin-bottom: 11px; padding: 15px 10px 15px 45px}
 #upnpconfig, #ipchange, #ipv6config, #tcpconfig, #confignotes, #defaultswork {margin-top: -12px; margin-bottom: -13px; padding: 10px/*; border: var(--border)*/}
-#confignotes {margin-bottom: -21px; padding: 18px 15px 18px 58px; background: var(--infohelp) no-repeat 15px center}
+#confignotes {margin-bottom: -21px; padding: 20px 24px 20px 58px; background: var(--infohelp) no-repeat 15px center}
 #netconfig tr:first-child td.infohelp {background-image: url(/themes/console/images/networkconfig.svg)}
 #netconfig .optbox {margin: 8px 6px; display: inline-block}
 #netconfig input[type=text] {transition: ease width .1s; will-change: transform}
@@ -1820,16 +1820,16 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 #pluginconfig td:last-child table td:first-child {text-align: right}
 #pluginconfig td:last-child table tr {background: rgba(0,0,0,.2)}
 #pluginconfig table td:last-child {text-align: left}
-#plugininstall .infohelp {padding: 18px 15px 18px 58px; background: #000 var(--plugin) no-repeat 15px center / 28px}
-#plugininstall tr:nth-child(3) td:nth-last-child(2) {padding: 18px 15px 18px 58px; background: var(--link) no-repeat 15px center; background-size: 28px}
-#plugininstall tr:nth-child(5) td:nth-last-child(2) {padding: 18px 15px 18px 58px; background: var(--files) no-repeat 15px center; background-size: 28px}
+#plugininstall .infohelp {padding: 20px 24px 20px 58px; background: var(--plugin) no-repeat 15px center / 28px, var(--msg)}
+#plugininstall tr:nth-child(3) td:nth-last-child(2) {padding: 20px 24px 20px 58px; background: var(--link) no-repeat 15px center / 28px}
+#plugininstall tr:nth-child(5) td:nth-last-child(2) {padding: 20px 24px 20px 58px; background: var(--files) no-repeat 15px center / 28px}
 #plugininstall input[type=text] {width: 50%; min-width: 400px}
 #plugininstall input.cancel {display: none}
 #plugininstall td, #plugininstall2 td, #config_family td:not(.infohelp) {padding: 5px}
 #plugininstall table, #plugininstall2 table {width: 100%; border-spacing: 0; border-collapse: separate}
 #plugininstall table tr, #plugininstall2 table tr {box-shadow: none; background: linear-gradient(180deg,#001800, #010)}
 #plugininstall table tr:hover, #plugininstall2 table tr:hover {box-shadow: var(--highlight)}
-#pluginconfigtext {padding: 18px 15px 18px 58px; background: #000 var(--pluginconfig) no-repeat 15px center / 28px}
+#pluginconfigtext {padding: 20px 24px 20px 58px; background: var(--pluginconfig) no-repeat 15px center / 28px, var(--msg_nohat)}
 #pluginconfigtext input {float: right; margin: -6px -6px 0 0}
 
 /* stats */
@@ -2035,8 +2035,8 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 #plugininstall2 {margin-top: -11px}
 #plugininstall .suboption, #plugininstall2 .suboption, #config_family .suboption {padding: 2px 12px 3px 10px}
 #installPluginUrl input[type=text], #installPluginFile input[type=file], #joinfamily input[type=file], #newfamily input[type=text] {width: 100%}
-#installPluginUrl td:first-child {padding: 18px 15px 18px 58px; background: var(--link) no-repeat 15px center / 28px}
-#installPluginFile td:first-child {padding: 18px 15px 18px 58px; background: var(--files) no-repeat 15px center / 28px}
+#installPluginUrl td:first-child {padding: 20px 24px 20px 58px; background: var(--link) no-repeat 15px center / 28px}
+#installPluginFile td:first-child {padding: 20px 24px 20px 58px; background: var(--files) no-repeat 15px center / 28px}
 
 /* configfamily */
 #config_family .confignav {margin-bottom: 12px}
@@ -2130,7 +2130,7 @@ input[type=text]:focus::placeholder, #homesearch input.search:focus::placeholder
 #criticallogs ul:empty {display: none}
 #logs #enviro, #criticallogs, #routerlogs, #eventlogs, #wrapperlogs {margin-top: -1px}
 #bugreports {margin-top: 11px}
-#bugreports td {padding: 18px 15px 18px 58px; background: var(--infohelp) no-repeat 15px center}
+#bugreports td {padding: 20px 24px 20px 58px; background: var(--infohelp) no-repeat 15px center}
 #logs #enviro:hover {user-select: all; cursor: text}
 #logs #enviro:hover td {color: #9d0; border-top: 1px inset transparent; border-bottom: 1px inset transparent; border-right: 1px inset transparent; box-shadow: none; background: #010}
 #logs #enviro td {padding: 7px 10px; font-weight: 400; border-right: 1px inset #131; box-shadow: var(--highlight)}
