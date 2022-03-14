@@ -391,7 +391,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         _context.statManager().createRateStat("udp.dropPeerDroplist", "Number of current peers experiencing dropped packets when new peer is added to list", "Transport [UDP]", RATES);
         _context.statManager().createRateStat("udp.dropPeerConsecutiveFailures", "Number of consecutive failed sends to a peer we attempted before giving up and reestablishing a new session (lifetime is inactivity period)", "Transport [UDP]", RATES);
         _context.statManager().createRateStat("udp.inboundIPv4Conn", "Inbound IPv4 UDP Connection", "Transport [UDP]", RATES);
-        _context.statManager().createRateStat("udp.inboundIPv6Conn", "Inbound IPv4 UDP Connection", "Transport [UDP]", RATES);
+        _context.statManager().createRateStat("udp.inboundIPv6Conn", "Inbound IPv6 UDP Connection", "Transport [UDP]", RATES);
         // following are for PacketBuider
         //_context.statManager().createRateStat("udp.packetAuthTime", "Time to encrypt and MAC a packet for sending", "Transport [UDP]", RATES);
         //_context.statManager().createRateStat("udp.packetAuthTimeSlow", "Time to encrypt and MAC a packet for sending (when its slow)", "Transport [UDP]", RATES);
