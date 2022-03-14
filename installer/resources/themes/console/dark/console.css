@@ -131,7 +131,8 @@ ul {margin: 0; padding: 0}
 #sb_localtunnels td.tunnelRebuilding {background: var(--local_down) no-repeat right 5px center / 16px}
 #sidebar #sb_localtunnels a {margin-top: -1px; padding: 3px 0; width: 100%; max-width: 156px; display: inline-block; vertical-align: middle; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 1; border-radius: 0 10px 10px 0; box-shadow: none}
 #sb_localtunnels a:active {box-shadow: inset 2px 2px 2px #000; background: linear-gradient(90deg, rgba(0,0,0,0), #020)}
-#sb_services img, #sb_localtunnels img {display: none}
+#sb_services img {display: none}
+#sb_localtunnels img {opacity: 0}
 #sb_internals a, #sb_services a, #sb_advanced a, #sb_help a {padding: 1px 3px; display: inline-block; vertical-align: middle}
 #sb_version {margin-top: 6px; margin-bottom: 5px}
 #sb_uptime {margin-bottom: -5px}
@@ -374,6 +375,16 @@ input[type=file] {background: none}
 #sb_manualReseed {background: var(--download) no-repeat center left 6px / 14px, var(--btn)}
 #sb_manualReseed:hover, #sb_manualReseed:focus, #sb_manualReseed:active {background: var(--download_hover) no-repeat center left 6px / 14px, var(--btn_hover_radial)}
 
+.sidebarlogo {text-align: center}
+#sidebar button.reload, #sidebar button.stop, #sidebar button.cancel {margin: 3px 2px; min-width: 97px; text-transform: capitalize}
+#sidebar button.download {margin: 5px 0 4px; padding: 6px 12px; width: calc(100% - 20px); border-radius: 20px; border: 1px solid #151; box-shadow: inset 0 0 2px 0 rgba(16,56,16,.2), inset 0 -2px 4px 0 rgba(0,0,0,.4), inset 0 0 3px 1px rgba(32,80,32,.2), inset 0 2px 5px 2px rgba(0,48,0,.7), 0 0 2px 1px #000; background: var(--glow_bottom), linear-gradient(180deg, #000a00, #000400)}
+#sidebar button.download:hover, #sidebar button.download:focus {border: 1px solid #f60; box-shadow: inset 0 0 0 2px rgba(255,96,0,.1), inset 0 0 3px 1px rgba(179,71,0,.3), inset 0 1px 7px 0 rgba(230,92,0,.1), inset 0 -3px 4px 0 rgba(0,0,0,.7), 0 0 2px 1px #000; background: linear-gradient(180deg, rgba(255,96,0,.01), rgba(230,88,0,.01), rgba(77,29,0,.01)), var(--glow_bottom_hover), linear-gradient(180deg, #520, #000)}
+#sidebar button.download:active {color: rgba(255,96,0,.5); text-shadow: 0 -1px 1px rgba(0,0,0,.7); box-shadow: var(--btn_shadow_active), 0 0 2px 1px #000; background: linear-gradient(180deg, #310, #520)}
+#sidebar button.cancel {min-width: 151px}
+#updateAvailable {margin: 0; padding: 4px 0 0; width: calc(100% - 20px); display: inline-block; line-height: 1.2; color: #dd3; font-size: 9pt; text-shadow: var(--textshadow); opacity: .9}
+#updateAvailable + br + button + br + #updateAvailable::before {margin: 2px 0 4px; width: 100%; height: 1px; display: inline-block; background: #252; content: ""}
+#updateAvailable + br + button + br + #updateAvailable {margin-top: -10px}
+
 /* client config buttons aka project "X" */
 button.accept.control {background: var(--start) var(--center) / 14px, var(--btn)}
 button.accept.control:hover, button.accept.control:focus {background: #000 var(--start_hover) var(--center) / 14px}
@@ -395,16 +406,6 @@ button.download.control:hover, button.download.control:focus {background: #000 v
 button.download.control:active {background: var(--hover) var(--download_active) var(--center) / 14px}
 button.control:active {background-size: 12px; transition: ease background .05s}
 button.control {margin: 3px; padding: 15px; min-width: 0; font-size: 0}
-
-.sidebarlogo {text-align: center}
-#sidebar button.reload, #sidebar button.stop, #sidebar button.cancel {margin: 3px 2px; min-width: 97px; text-transform: capitalize}
-#sidebar button.download {margin: 5px 0 4px; padding: 6px 12px; width: calc(100% - 20px); border-radius: 20px; border: 1px solid #151; box-shadow: inset 0 0 1px 0 rgba(16,126,16,.5), inset 0 0 3px 1px rgba(16,64,16,.3), inset 0 2px 5px 2px #030, 0 0 2px 1px #000; background: var(--glow_top), linear-gradient(180deg, #010, #000)}
-#sidebar button.download:hover, #sidebar button.download:focus {border: 1px solid #f60; box-shadow: inset 0 0 0 2px rgba(255,96,0,.05), inset 0 0 3px 1px #520, inset 0 1px 7px 0 rgba(255,96,0,.5), inset 0 -3px 4px 0 rgba(0,0,0,.7); background: linear-gradient(180deg, rgba(255,96,0,.01), rgba(230,88,0,.01), rgba(77,29,0,.01)), linear-gradient(180deg, #520, #000)}
-#sidebar button.download:active {color: rgba(255,96,0,.5); text-shadow: 0 -1px 1px rgba(0,0,0,.7); box-shadow: var(--btn_shadow_active); background: linear-gradient(180deg, #310, #520)}
-#sidebar button.cancel {min-width: 151px}
-#updateAvailable {margin: 0; padding: 4px 0 0; width: calc(100% - 20px); display: inline-block; line-height: 1.2; color: #dd3; font-size: 9pt; text-shadow: var(--textshadow); opacity: .9}
-#updateAvailable + br + button + br + #updateAvailable::before {margin: 2px 0 4px; width: 100%; height: 1px; display: inline-block; background: #252; content: ""}
-#updateAvailable + br + button + br + #updateAvailable {margin-top: -10px}
 
 .joblog hr {margin: 10px 0}
 .wideload > a[href^="tunnels"] ~ hr, .wideload > a[href^="/susidns/"] ~ hr {margin: 10px 0}
