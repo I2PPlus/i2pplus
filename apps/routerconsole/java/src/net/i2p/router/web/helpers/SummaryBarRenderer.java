@@ -361,7 +361,7 @@ class SummaryBarRenderer {
                .append(_t("Configure startup of clients and webapps (services); manually start dormant services"))
                .append("\">")
                .append(_t("Services"))
-               .append("</a></h3>\n<hr class=\"b\">\n<table id=\"sb_services\">\n<tr>\n<td>");
+               .append("</a></h3>\n<hr class=\"b\">\n<table id=\"sb_services\" class=\"volatile\">\n<tr>\n<td>");
             for (String row : svcs.values()) {
                 buf.append(row);
             }
@@ -409,7 +409,7 @@ class SummaryBarRenderer {
         DateFormat dfmt = new SimpleDateFormat(FORMAT, Locale.UK);
         TimeZone utc = TimeZone.getTimeZone("GMT");
         dfmt.setTimeZone(utc);
-        buf.append("<div id=\"clock\">")
+        buf.append("<div id=\"clock\" class=\"volatile\">")
            .append(dfmt.format(new Date()))
            .append("</div>");
         return buf.toString();
@@ -422,7 +422,7 @@ class SummaryBarRenderer {
            .append("\">")
            .append(_t("Internals"))
            .append("</a></h3>\n<hr class=\"b\">\n" +
-                   "<table id=\"sb_internals\">\n<tr>\n<td>\n");
+                   "<table id=\"sb_internals\" class=\"volatile\">\n<tr>\n<td>\n");
 
         // Store all items in map so they are sorted by translated name, then output
         Map<String, String> svcs = new TreeMap<String, String>(Collator.getInstance());
@@ -624,7 +624,7 @@ class SummaryBarRenderer {
            .append(_t("Router Info"))
            .append("</a></h3>\n<hr class=\"b\">\n" +
 
-                   "<table id=\"sb_general\">" +
+                   "<table id=\"sb_general\" class=\"volatile\">" +
                    "<tr title=\"")
            .append(_t("The version of the I2P software we are running"))
            .append("\">" +
@@ -650,7 +650,7 @@ class SummaryBarRenderer {
     public String renderShortRouterInfoHTML() {
         if (_helper == null) return "";
         StringBuilder buf = new StringBuilder(512);
-        buf.append("<table id=\"sb_shortgeneral\">" +
+        buf.append("<table id=\"sb_shortgeneral\" class=\"volatile\">" +
                    "<tr title=\"")
            .append(_t("The version of the I2P software we are running"))
            .append("\">" +
@@ -684,7 +684,7 @@ class SummaryBarRenderer {
            .append(_t("Router Info"))
            .append("</a></h3>\n<hr class=\"b\">\n" +
 
-                   "<table id=\"sb_advancedgeneral\">\n" +
+                   "<table id=\"sb_advancedgeneral\" class=\"volatile\">\n" +
                    "<tr title=\"")
            .append(_t("The version of the I2P software we are running"))
            .append("\">" +
@@ -748,7 +748,7 @@ class SummaryBarRenderer {
         if (_helper == null) return "";
         StringBuilder buf = new StringBuilder(512);
         SummaryHelper.NetworkStateMessage reachability = _helper.getReachability();
-        buf.append("<h4 id=\"sb_status\"><span class=\"sb_netstatus ");
+        buf.append("<h4 id=\"sb_status\"><span class=\"sb_netstatus volatile ");
         switch (reachability.getState()) {
             case VMCOMM:
                 buf.append("vmcomm");
@@ -806,9 +806,9 @@ class SummaryBarRenderer {
 //        if ("".equals(updateStatus)) return "";
         StringBuilder buf = new StringBuilder(512);
         if (_helper == null || "".equals(updateStatus)) {
-            buf.append("<div id=\"sb_updatesection\" class=\"hide\"></div>\n");
+            buf.append("<div id=\"sb_updatesection\" class=\"hide volatile\"></div>\n");
         } else {
-            buf.append("<div id=\"sb_updatesection\">\n")
+            buf.append("<div id=\"sb_updatesection\" class=\"volatile\">\n")
                .append("<h3 id=\"sb_updatestatus\"><a href=\"/configupdate\" target=\"_top\" title=\"")
                .append(_t("Configure I2P Updates"))
                .append("\">")
@@ -834,7 +834,7 @@ class SummaryBarRenderer {
            .append(_t("Peers"))
            .append("</a></h3>\n<hr class=\"b\">\n" +
 
-                   "<table id=\"sb_peers\">\n" +
+                   "<table id=\"sb_peers\" class=\"volatile\">\n" +
 
                    "<tr title=\"");
         if (isAdvanced())
@@ -923,7 +923,7 @@ class SummaryBarRenderer {
            .append(_t("Peers"))
            .append("</a></h3>\n<hr class=\"b\">\n" +
 
-                   "<table id=\"sb_peersadvanced\">\n" +
+                   "<table id=\"sb_peersadvanced\" class=\"volatile\">\n" +
 
                    "<tr title=\"")
            .append(_t("Peers we've been talking to in the last few minutes/last hour").replace("last few minutes/last hour", "last minute / last hour"))
@@ -1019,7 +1019,7 @@ class SummaryBarRenderer {
            .append("\" target=\"_top\">")
            .append(_t("Bandwidth in/out"))
            .append("</a></h3>\n<hr class=\"b\">" +
-                   "<table id=\"sb_bandwidth\">\n" +
+                   "<table id=\"sb_bandwidth\" class=\"volatile\">\n" +
 
                    "<tr><td><b>")
            .append(DataHelper.formatDuration2(3 * 1000).replace("3&nbsp;sec", _t("Current")))  // lie and say 3 sec since 1 sec would appear as 1000 ms
@@ -1096,7 +1096,7 @@ class SummaryBarRenderer {
            .append("\">")
            .append(_t("Tunnels"))
            .append("</a></h3>\n<hr class=\"b\">\n" +
-                   "<table id=\"sb_tunnels\">\n");
+                   "<table id=\"sb_tunnels\" class=\"volatile\">\n");
         if (_helper.getInboundClientTunnels() > 0 || _helper.getOutboundClientTunnels() > 0) {
             buf.append("<tr title=\"")
                .append(_t("Tunnels we are using to provide or access services on the network")).append(" (").append(_t("inbound / outbound")).append(")")
@@ -1180,7 +1180,7 @@ class SummaryBarRenderer {
            .append("\">")
            .append(_t("Congestion"))
            .append("</a></h3>\n<hr class=\"b\">\n" +
-                   "<table id=\"sb_queue\">\n" +
+                   "<table id=\"sb_queue\" class=\"volatile\">\n" +
 
                    "<tr title=\"")
            .append(_t("Indicates router performance"))
@@ -1252,7 +1252,7 @@ class SummaryBarRenderer {
     public String renderTunnelStatusHTML() {
         if (_helper == null) return "";
         StringBuilder buf = new StringBuilder(50);
-        buf.append("<h4 id=\"sb_tunnelstatus\"><span class=\"tunnelBuildStatus");
+        buf.append("<h4 id=\"sb_tunnelstatus\" class=\"volatile\"><span class=\"tunnelBuildStatus");
         if (_t(_helper.getTunnelStatus()).contains(("Starting up")))
             buf.append(" starting\" title=\"").append(_t("No participating tunnels requests are accepted for the first 10 minutes while router stabilizes"));
         if (_t(_helper.getTunnelStatus()).contains(("Shutting down")))
