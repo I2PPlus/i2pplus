@@ -34,6 +34,7 @@
     if (ctx.getProperty("routerconsole.lang") != null)
         lang = ctx.getProperty("routerconsole.lang");
 %>
+<!DOCTYPE HTML>
 <html lang="<%=lang%>">
 <head><meta charset="utf-8"></head>
 <body id="sb">
