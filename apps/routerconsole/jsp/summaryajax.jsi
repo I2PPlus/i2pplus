@@ -9,17 +9,13 @@
   var repeat;
   if (refresh > 0) {
     window.requestAnimationFrame(refreshSidebar);
-    if (visibility == "visible") {
-      function runTimer() {
-        var repeat = setTimeout(function updateSidebar() {
-          window.requestAnimationFrame(refreshSidebar);
-          setTimeout(updateSidebar, <%=intl.getRefresh()%> * 1000);
-        }, <%=intl.getRefresh()%> * 1000);
-      }
-      runTimer();
-    } else {
-      clearTimeout(repeat);
+    function runTimer() {
+      var repeat = setTimeout(function updateSidebar() {
+        window.requestAnimationFrame(refreshSidebar);
+        setTimeout(updateSidebar, <%=intl.getRefresh()%> * 1000);
+      }, <%=intl.getRefresh()%> * 1000);
     }
+    runTimer();
   }
 </script>
 <%
