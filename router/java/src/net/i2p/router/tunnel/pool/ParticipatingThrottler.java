@@ -37,10 +37,10 @@ class ParticipatingThrottler {
     private static final int LIFETIME_PORTION = 3;
 //    private static final int MIN_LIMIT = 18 / LIFETIME_PORTION;
 //    private static final int MAX_LIMIT = 66 / LIFETIME_PORTION;
-    private static final int MIN_LIMIT = 180 / LIFETIME_PORTION;
-    private static final int MAX_LIMIT = 660 / LIFETIME_PORTION;
+    private static final int MIN_LIMIT = 200 / LIFETIME_PORTION;
+    private static final int MAX_LIMIT = 800 / LIFETIME_PORTION;
 //    private static final int PERCENT_LIMIT = 12 / LIFETIME_PORTION;
-    private static final int PERCENT_LIMIT = 48 / LIFETIME_PORTION;
+    private static final int PERCENT_LIMIT = 60 / LIFETIME_PORTION;
     private static final long CLEAN_TIME = 11*60*1000 / LIFETIME_PORTION;
 
     public enum Result { ACCEPT, REJECT, DROP }
